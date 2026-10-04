@@ -14,9 +14,8 @@ static int report_error(const char *code, const char *message,
                         const char *argument, int status)
 {
     const NLDiagnosticNote note = {argument, NULL};
-    const NLDiagnostic diagnostic = {
-        NL_DIAG_ERROR, "cli", code, message, NULL, &note, 1
-    };
+    const NLDiagnostic diagnostic = {NL_DIAG_ERROR, "cli", code, message,
+                                     NULL,          &note, 1};
     return nl_diagnostic_render(stderr, &diagnostic) ? status : 1;
 }
 
@@ -31,12 +30,14 @@ int main(int argc, char **argv)
     }
     if (strcmp(argv[1], "--version") == 0) {
         return fputs("newlangc 0.1.0 (P0 bootstrap)\n", stdout) >= 0 &&
-               fflush(stdout) == 0 ? 0 : 1;
+                       fflush(stdout) == 0
+                   ? 0
+                   : 1;
     }
     if (argv[1][0] == '-') {
         return report_error("P0-CLI-OPTION", "unknown option", argv[1], 2);
     }
     return report_error("P0-COMPILE-UNSUPPORTED",
-                        "source compilation is not implemented in P0",
-                        argv[1], 3);
+                        "source compilation is not implemented in P0", argv[1],
+                        3);
 }
