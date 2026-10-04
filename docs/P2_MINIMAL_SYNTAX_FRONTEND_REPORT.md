@@ -1,9 +1,17 @@
 # P2 — Minimal Syntax Frontend
 
-Status: implementation/local validation complete; P2 review gate. No merge or P3
+Status: **P2 READY FOR REVIEW**; P2 review gate. No merge or P3
 work is authorized by this milestone. Branch: `p2-minimal-syntax-frontend`.
 Base: main `5a948621f6ddbcf9172f76628ff96cdd59fe6eca`, the merged P1 PR #3.
-PR/current-head CI evidence will be added after publication.
+PR: [#4](https://github.com/wakairo/NewLang_Compiler/pull/4), open against main,
+unmerged. Implementation head: `991b689b7f0c1c508b24905372774e52a5f81130`.
+Its [PR-triggered run](https://github.com/wakairo/NewLang_Compiler/actions/runs/37215927335)
+passed all four jobs, including fresh Ubuntu bootstrap and Clang format check.
+The report revision is validated again before handoff: authoritative final-head
+SHA/run URL are recorded in the PR description and
+[current-head checks](https://github.com/wakairo/NewLang_Compiler/pull/4/checks).
+Use `git rev-parse HEAD` for the report-bearing commit; the report does not
+attempt to embed its own commit hash. Final handoff requires those checks green.
 
 ## Inputs, authority and audit
 
@@ -108,6 +116,17 @@ No input-dependent assert, recursive destruction, process abort, unsigned size
 growth or lexeme-as-C-string operation is used. No general allocator/arena,
 parser macro DSL, universal AST, symbol table or semantic compatibility layer.
 
+Changed files (13):
+
+- `include/newlang/{syntax,parser}.h`, `src/{syntax,parser}.c` and
+  `src/syntax_internal.h`: public contracts and concrete modules.
+- `tests/unit/parser_test.c`, `tests/support/syntax_check.h`,
+  `tests/integration/syntax_frontend_test.{c,py}`: unit/public-invariant and
+  source-file integration coverage.
+- `CMakeLists.txt`: module targets and seven normal CTests.
+- `README.md`, `docs/P2_MINIMAL_SYNTAX_CONTRACT.md`, this report: status,
+  pre-implementation audit, architecture/evidence/handoff.
+
 ## Tests and reproducibility
 
 Six unit groups test type, expression/binding, loan, ownership, limits and
@@ -157,6 +176,7 @@ and UBSan halt-on-error remain enabled.
 | Clang UBSan | 20/20 PASS, halt-on-error |
 | GCC Release / NDEBUG | 20/20 PASS, CHECK assertions active |
 | Locked bootstrap / clang-format check | PASS |
+| PR-triggered Ubuntu GCC / Clang / ASan / UBSan | All four PASS; final-head checks linked above |
 
 Reproduce using README bootstrap/activation, then configure/build/CTest for the
 four existing build directories. Release additionally:
@@ -198,6 +218,6 @@ P3 can consume identifiers, ordinary calls, single bindings, capability types
 and loan headers directly through immutable views **without reparsing them**.
 Loan body contents deliberately remain opaque and require a later adjudicated
 body parser before semantic traversal. Full programs outside these fragments are
-not ready. Recommendation: P2 ready for review after current-head CI; P3 work
+not ready. Recommendation: P2 ready for review with current-head CI; P3 work
 starts only after the human review/merge gate. No P3, semantic checker, typed IR,
 LLVM lowering, M8.3 semantics or public dump modes were implemented.
