@@ -53,6 +53,11 @@ message(STATUS "LLVM C API ${llvm_version}: ${llvm_shared}")
 add_library(newlang_diagnostic STATIC src/diagnostic.c)
 target_include_directories(newlang_diagnostic PUBLIC include)
 target_link_libraries(newlang_diagnostic PUBLIC newlang_options)
+add_library(newlang_source STATIC src/source.c)
+target_include_directories(newlang_source PUBLIC include)
+target_link_libraries(newlang_source PUBLIC newlang_options)
+add_library(newlang_lexer STATIC src/lexer.c)
+target_link_libraries(newlang_lexer PUBLIC newlang_source)
 add_executable(newlangc src/main.c)
 target_link_libraries(newlangc PRIVATE newlang_diagnostic)
 
@@ -62,6 +67,23 @@ if(BUILD_TESTING)
     add_executable(diagnostic_test tests/unit/diagnostic_test.c)
     target_link_libraries(diagnostic_test PRIVATE newlang_diagnostic)
     add_test(NAME diagnostics.unit COMMAND diagnostic_test)
+
+    add_executable(source_test tests/unit/source_test.c)
+    target_link_libraries(source_test PRIVATE newlang_source)
+    # Linux-only fault injection in tests; no production allocator interface.
+    target_link_options(source_test PRIVATE -Wl,--wrap=malloc)
+    add_test(NAME source.unit COMMAND source_test)
+
+    add_executable(lexer_test tests/unit/lexer_test.c)
+    target_link_libraries(lexer_test PRIVATE newlang_lexer)
+    add_test(NAME lexer.unit COMMAND lexer_test)
+
+    add_executable(lexical_frontend_test tests/integration/lexical_frontend_test.c)
+    target_link_libraries(lexical_frontend_test PRIVATE newlang_lexer)
+    target_link_options(lexical_frontend_test PRIVATE -Wl,--wrap=realloc)
+    add_test(NAME source_lexer.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/lexical_frontend_test.py"
+        "$<TARGET_FILE:lexical_frontend_test>")
 
     add_executable(llvm_smoke tests/integration/llvm_smoke.c)
     target_link_libraries(llvm_smoke PRIVATE newlang_options newlang_llvm)
