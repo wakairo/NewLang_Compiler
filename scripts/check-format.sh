@@ -13,5 +13,4 @@ if (("${#files[@]}" == 0)); then
   exit 0
 fi
 
-"$formatter" -i "${files[@]}"
-git diff --exit-code -- "${files[@]}"
+"$formatter" --dry-run --Werror "${files[@]}"
