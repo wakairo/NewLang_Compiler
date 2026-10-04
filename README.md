@@ -2,20 +2,25 @@
 
 NewLang production compiler, written in C17 with LLVM as the primary backend.
 
-**P0 and Pre-P1 are complete and merged.** P1 adds an owned source-byte buffer,
-canonical byte spans, and a streaming lexer for an explicitly limited ASCII
-atom subset. NewLang source compilation is not implemented end-to-end; lexical
-scanning does not imply language acceptance. P1 stops for review before P2.
+**P0, Pre-P1 and P1 are complete and merged.** P2 adds four minimal syntax
+fragment parsers over P1's preserved source bytes, canonical byte spans and
+streaming ASCII atoms: types, expressions, single bindings and lexical loans.
+Parsed shape does not imply semantic acceptance or end-to-end compilation.
+P2 stops for review before P3.
 
 ## Authority
 
 In order: **N** Draft 17.4 (language semantics), **N** Backend Contract v0.4
-(backend obligations), **A** M7 adjudication/closure, **O** frozen M7.5 Python
-oracle, **F** F0 bridge / [NewLang_FormalProof](https://github.com/wakairo/NewLang_FormalProof),
+(backend obligations), **A** adjudicated M8 surface decisions, then M7 closure,
+**F** F0 bridge / [NewLang_FormalProof](https://github.com/wakairo/NewLang_FormalProof),
+**O** frozen M7.5 Python oracle,
 **I** this C implementation. The Charter and Handoff Manifest are project
 policy, not language semantics. All input snapshots are byte-preserved under
 `docs/` and `docs/reference/`; `INPUT_ARTIFACTS.json` records their SHA-256 hashes.
-M7 is closed. No M8+ semantics are anticipated here. Lean is not a dependency.
+M7 is closed. P2 uses the explicit M8.1/M8.2 surface forms supplied in the P2
+handoff; standalone M8 artifact/hash verification is not claimed. No M8.3
+semantics are anticipated. Lean is not a dependency. See the
+[P2 grammar and authority audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md).
 
 ## Fresh setup
 
@@ -92,8 +97,9 @@ cmake --build build-ubsan --parallel 2
 ctest --test-dir build-ubsan --output-on-failure
 ```
 
-Each configuration runs the same **13 CTests**: source and lexer module unit
-tests, file-source -> lexer integration, diagnostic unit checks, six CLI
+Each configuration runs the same **20 CTests**: source and lexer module unit
+tests, six parser unit groups, file-source -> lexer/parser integration,
+diagnostic unit checks, six CLI
 cases (each invoked twice), valid LLVM C API module/IR, artifact integrity, and
 frozen-oracle smoke. ASan includes leak detection; UBSan stops on the first
 failure. Imported LLVM binaries are not rebuilt with sanitizers; our C targets
@@ -114,6 +120,10 @@ artifact is produced. Output I/O failure exits 1.
 - `include/newlang/{source,token,lexer}.h`, `src/{source,lexer}.c`: immutable
   owned source bytes/name, checked half-open spans, non-owning atom tokens and
   allocation-free streaming lexer. Keyword/comment/encoding rules remain open.
+- `include/newlang/{syntax,parser}.h`, `src/{syntax,parser}.c`: owned immutable
+  syntax trees borrowing source, one-token lookahead, checked failure cleanup,
+  structured first diagnostics and four standalone fragment entries. Loan
+  bodies retain balanced byte regions; their contents are not parsed.
 - `tests/unit/`, `tests/integration/`: C unit / LLVM checks and CLI/artifact tests.
 - `oracle/`, `tests/oracle/`: untouched M7.5 archive, identity, and isolated adapter.
 - `scripts/`: reproducible bootstrap, dependency lock, formatter/fmt-check helpers.
@@ -129,9 +139,12 @@ artifact is produced. Output I/O failure exits 1.
   lexical spec holes; the scanner subset is not normative NewLang grammar.
 - `docs/P1_SOURCE_LEXICAL_FRONTEND_REPORT.md`: contracts, test evidence, findings
   and P2 readiness/adjudication requirements.
+- `docs/P2_MINIMAL_SYNTAX_CONTRACT.md`: pre-implementation grammar audit,
+  lexical/contextual-word profile, coverage/error distinctions and limits.
+- `docs/P2_MINIMAL_SYNTAX_FRONTEND_REPORT.md`: ownership, tests and P3 handoff.
 - `docs/`: historical [P0 toolchain decisions](docs/P0_TOOLCHAIN_DECISIONS.md),
   [P0 architecture](docs/P0_ARCHITECTURE.md), and [P0 report](docs/P0_REPORT.md).
 
-There is still no parser, AST, type checker, checked IR, LLVM lowering,
+There is still no full-program parser, semantic AST/type checker, checked IR, LLVM lowering,
 optimization framework, broad FFI, concurrency, separate compilation,
-self-hosting, public token-dump mode, or speculative M8+ implementation.
+self-hosting, public token/AST-dump mode, or speculative M8.3 implementation.
