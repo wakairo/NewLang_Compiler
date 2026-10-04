@@ -40,7 +40,7 @@ and reproducibility checks rather than assuming newer is safer.
 |---|---|---|---|
 | 19.1.7 | 2025-01-14 | Original signed/checksum-locked packages, LLVM C headers/shared library/config and full P0 matrix work | Reject as the new baseline: no required capability or host advantage over tested 23; outside apt.llvm.org's stated last-two-releases maintenance focus; adds a later migration across already-known C API changes |
 | 22.1.8 | 2026-06-16 | Signed Noble/Trixie indexes contain all ten SDK packages; 24 representative C declarations present; unchanged P0 smoke compiled/linked/verified against Noble 22.1.8 on Cloud | Valid fallback, rejected because 23 also meets the requirements with no P0 API adjustment, and starts on the current stable major with a longer relative maintenance horizon |
-| 23.1.2 | 2026-09-22 | Official latest non-prerelease at review time; signed indexes contain all ten SDK packages; 24 representative C declarations present; tag-matching SDK and unchanged smoke verified on Cloud | Select after GCC/Clang/ASan/UBSan and fresh Ubuntu PR CI validation |
+| 23.1.2 | 2026-09-22 | Official latest non-prerelease at review time; signed indexes contain all ten SDK packages; 24 representative C declarations present; tag-matching SDK and unchanged smoke verified on Cloud | Selected: GCC/Clang/ASan/UBSan and fresh Ubuntu PR CI all pass |
 
 Selection criteria: supported C API, exact stable source identity, complete
 reviewable package set, Linux x86_64/Ubuntu 24.04 runtime compatibility, rootless

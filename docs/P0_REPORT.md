@@ -1,6 +1,6 @@
 # P0 — Production Compiler Bootstrap report
 
-Status: LLVM 23.1.2 local validation **green**; updated PR CI pending.
+Status: LLVM 23.1.2 local validation and fresh Ubuntu PR CI **green**.
 P0 review gate only. P1 work is not authorized by this milestone.
 
 ## 1. Repository, branch, PR
@@ -36,7 +36,7 @@ change pins. Bootstrap is rootless on the supplied Debian 13 Cloud base.
 Observed Cloud host: Debian GNU/Linux 13, Linux x86_64, **GCC 14.2.0**,
 **Clang 23.1.2**, **LLVM 23.1.2**, **CMake 3.31.6**, **GNU Make 4.4.1**,
 **Python 3.12.14**. Updated Ubuntu 24.04 CI selects GCC 13 and the same pinned
-Clang / LLVM 23.1.2; its current-head result is recorded after the actual run.
+Clang / LLVM 23.1.2; all four jobs succeed in the run recorded below.
 Host OS runtimes follow signed distro packages; this is not bit-identical OS
 pinning. WSL2 execution is not independently validated.
 
@@ -68,8 +68,11 @@ layer is introduced. Ordinary bootstrap/build never discover or update pins.
 rebuilt with fresh CMake dependency/compiler discovery to remove the old LLVM 19
 cache. All **40/40 CTest executions PASS** with the existing ten-test suite.
 All normative/policy/oracle snapshot hashes still match; tests and production
-C source are unchanged by this review. Bootstrap repeatability and updated PR
-CI are rechecked before the final review verdict.
+C source are unchanged by this review. Bootstrap repeated successfully without
+changing pins. Fresh Ubuntu PR-triggered GCC/Clang/ASan/UBSan all pass. CMake
+caches/compile commands confirm the LLVM 23 link target, strict C17 flags and
+the intended sanitizer flags, so the old LLVM 19 outputs are not reused as
+evidence. The existing Debian auxiliary tool pins are unchanged.
 
 ## 8–10. Structure, executable and diagnostics
 
@@ -120,17 +123,22 @@ from signed Ubuntu repositories, downloads checksum-locked LLVM binaries,
 configures/builds C, and runs all 10 CTests. Checkout action pinned to verified
 v4.2.2 commit `11bd71901bbe5b1630ceea73d27597364c9af683`. No auto-merge action.
 The initial LLVM 19 [run 37196049092](https://github.com/wakairo/NewLang_Compiler/actions/runs/37196049092)
-is historical evidence only, not validation of the new baseline. Updated LLVM 23
-PR run/commit and results are recorded after execution. Current-head CI must be
-green before concluding this review; the PR check panel is authoritative for
-subsequent report-only revisions too. Each job runs all ten CTests.
+is historical evidence only, not validation of the new baseline. LLVM 23
+PR-triggered [run 37198087232](https://github.com/wakairo/NewLang_Compiler/actions/runs/37198087232)
+for baseline implementation commit `8349940ba6b0e4857b82faa255a5a7ab6b90c94b`
+completed **success** with all four **GCC, Clang, ASan, UBSan** jobs and all
+bootstrap/configure/build/test steps successful (GitHub Actions API evidence).
+Each job runs all ten CTests. Subsequent report-only revisions also require
+their own current-head PR CI; the PR check panel and final PR description
+record that latest commit/run rather than treating this earlier run as enough.
 
 Reproduce from repository root with README commands:
 `python3 scripts/bootstrap.py`, `. .deps/activate.sh`, CMake `--fresh` configure/build,
 `ctest --test-dir build-gcc --output-on-failure`. Separate build directories
 select GCC/Clang/address/undefined. Dependencies remain in filesystem snapshots;
 activation must run again in future shells. No long-running service is needed.
-Cloud `install_script` and `start_skill` were saved in the environment draft and
+Cloud `install_script` and `start_skill` were refreshed for LLVM 23.1.2 in the
+environment draft and
 the installation commands exercised successfully. They cover working directory,
 bootstrap, per-shell activation, GCC build/10-test readiness, optional validation
 configurations and use of the existing isolated checkout. Saving is not
@@ -148,7 +156,7 @@ validation remains future work. Additional review findings:
 - **COMPILER-PORTABILITY:** reported 23.1.2 was not enough to establish exact
   stable source identity for the Noble package. Resolved using tag-matching
   Trixie SDK plus a locked private Z3 runtime and checked Ubuntu C++ runtime.
-  Fresh Ubuntu CI must verify this userspace ABI reuse before acceptance.
+  Fresh Ubuntu PR CI verifies this userspace ABI reuse in all four jobs.
 - **COMPILER-IMPLEMENTATION:** initial version rationale omitted current stable
   candidates; replaced with explicit release/package/API/contract comparison
   and dedicated reviewed upgrade policy. LLVM 23 branch opcode changes are
@@ -169,16 +177,18 @@ after human/ChatGPT review, not automatically started. This task stops at P0.
 
 ## Completion gate evidence
 
-The original P0 criteria A–AB were met before this additional baseline review.
-For LLVM 23, local toolchain/implementation/scope criteria are revalidated;
-current-head Ubuntu PR CI remains required before declaring the review complete:
+User P0 criteria **A–AB are met with the reviewed LLVM 23.1.2 baseline**:
 dedicated repository and committed references (A–D), C/reproducible toolchain
 (E–I), GCC/Clang/strict warnings/sanitizers (J–N), CLI/diagnostics/LLVM/test/oracle
 infrastructure (O–T), green PR-triggered CI and open unmerged branch PR (U–W),
 and all non-goal/scope/semantic-review boundaries (X–AB).
 
-The initial LLVM 19 fresh Ubuntu bootstrap was verified; updated LLVM 23 CI is
-pending. Current Cloud setup is verified;
+Updated LLVM 23 fresh Ubuntu bootstrap/CI and current Cloud setup are verified;
 publication and restoration in a new Cloud task are not claimed. WSL2 execution
 and the full 466-test oracle suite remain optional unrun checks. P1 requires
 review approval and a separately chosen scope; this task has stopped at P0.
+
+The additional LLVM baseline review is complete. P0 is technically ready for
+merge once the final report revision's current-head PR CI is green and the
+reviewer accepts this selection. Codex does not merge or begin P1. Normative
+documents, oracle, semantic implementation and P0 scope remain unchanged.
