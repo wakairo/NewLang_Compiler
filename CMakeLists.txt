@@ -29,12 +29,12 @@ if(NOT NEWLANG_SANITIZER STREQUAL "none")
         -fsanitize=${NEWLANG_SANITIZER} -fno-sanitize-recover=all)
 endif()
 
-find_program(LLVM_CONFIG NAMES llvm-config-19 REQUIRED)
+find_program(LLVM_CONFIG NAMES llvm-config-23 REQUIRED)
 execute_process(COMMAND "${LLVM_CONFIG}" --version
     OUTPUT_VARIABLE llvm_version OUTPUT_STRIP_TRAILING_WHITESPACE
     COMMAND_ERROR_IS_FATAL ANY)
-if(NOT llvm_version STREQUAL "19.1.7")
-    message(FATAL_ERROR "LLVM must be exactly 19.1.7; found ${llvm_version}")
+if(NOT llvm_version STREQUAL "23.1.2")
+    message(FATAL_ERROR "LLVM must be exactly 23.1.2; found ${llvm_version}")
 endif()
 execute_process(COMMAND "${LLVM_CONFIG}" --includedir
     OUTPUT_VARIABLE llvm_include OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -42,7 +42,7 @@ execute_process(COMMAND "${LLVM_CONFIG}" --includedir
 execute_process(COMMAND "${LLVM_CONFIG}" --libdir
     OUTPUT_VARIABLE llvm_libdir OUTPUT_STRIP_TRAILING_WHITESPACE
     COMMAND_ERROR_IS_FATAL ANY)
-find_library(llvm_shared NAMES LLVM-19 LLVM
+find_library(llvm_shared NAMES LLVM-23 LLVM
     PATHS "${llvm_libdir}" NO_DEFAULT_PATH REQUIRED)
 add_library(newlang_llvm SHARED IMPORTED)
 set_target_properties(newlang_llvm PROPERTIES

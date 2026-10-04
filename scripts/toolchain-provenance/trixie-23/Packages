@@ -1,0 +1,2016 @@
+Package: bolt-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 175868
+Depends: libc6 (>= 2.38), libgcc-s1 (>= 4.3), libstdc++6 (>= 12), libz3-4 (>= 4.13.3), libzstd1 (>= 1.5.5), zlib1g (>= 1:1.2.0), libbolt-23-dev (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/bolt-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 38624996
+SHA256: df9770c3f89cefc404e118bd7e78ae6df1f17532986b081ab61dd4b82b84b29e
+SHA1: 576b3b2273a09837d442c48419d6f56f06f2ba9d
+MD5sum: 36851152f9e088e0e05e56234c1e4bc7
+Description: Post-link optimizer
+ It achieves the improvements by optimizing application's code layout based on
+ execution profile gathered by sampling profiler.
+
+Package: bolt-23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 148218
+Depends: bolt-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/bolt-23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 129505600
+SHA256: e1b4933759af3a74cd8a21de80bd0e2fd77d448e80e6e19bc8724e287f8537b8
+SHA1: a1ecdfa9b207d68f769cbabbea0870c6a236fbc3
+MD5sum: b5d65933011b9659977d27abd9f3aa1f
+Description: debug symbols for bolt-23
+Build-Ids: 09d236e1f26601184eeafc1a5392198538ecc75e bb0cdb0621c5160cd920a6333fe830374dc92f6a f8fd91a6973b9fcd8a33219b35f66b57f2dceb6f ffde6289a691b2f9c767c1fc3eef8087e81acd21
+
+Package: clang-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 535
+Depends: libc6 (>= 2.34), libclang-cpp23 (>= 1:23.1.2~++20260920034005+85ac56026243), libgcc-s1 (>= 3.0), libllvm23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libstdc++6 (>= 11), libstdc++-14-dev, libgcc-14-dev, libobjc-14-dev, libclang-common-23-dev (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), llvm-23-linker-tools (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libclang1-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libc6-dev, binutils
+Recommends: llvm-23-dev, python3, clang-tools-23
+Suggests: clang-23-doc, wasi-libc
+Provides: c++-compiler, c-compiler, objc++-compiler, objc-compiler
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/clang-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 175140
+SHA256: 956ce817b505f5bbdefdac394e6057731ddc10fa830a961591b9e91716fc264b
+SHA1: 5c52856980aee81f47c88921e4fc5eb6c830dda6
+MD5sum: 376950678bc29b8603b4dfab1c5637c1
+Description: C, C++ and Objective-C compiler
+ Clang project is a C, C++, Objective C and Objective C++ front-end
+ based on the LLVM compiler. Its goal is to offer a replacement to the
+ GNU Compiler Collection (GCC).
+ .
+ Clang implements all of the ISO C++ 1998, 11, 14 and 17 standards and also
+ provides most of the support of C++20.
+
+Package: clang-23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 371
+Depends: clang-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/clang-23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 280964
+SHA256: f67d51e29a828ae84489fa565639f14d8d44c96d4e7746ea402831ce82f6b7fa
+SHA1: f81e67a3c1708dad0df91d63145cfcb9d6dc22dc
+MD5sum: b9e8243095d4e1757299f0a5ec879eb4
+Description: debug symbols for clang-23
+Build-Ids: 3380d4c2dea5f9a3c0b25ff35ecfb68650b70c0e 63af812ac8d7ba02e13599d32ebf1bfded0b2929
+
+Package: clang-23-doc
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: all
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 14759
+Depends: libjs-mathjax
+Multi-Arch: foreign
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: doc
+Filename: pool/main/l/llvm-toolchain-23/clang-23-doc_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_all.deb
+Size: 4289260
+SHA256: 297e7120394e8d0a265bee7de9b10b3ade6258be8d2490d8f83c232c15569e1d
+SHA1: 0ff44fd4e6be27a9c96043bc44066824b90f4f6c
+MD5sum: 63be07521c341b9919296a1af56793bd
+Description: C, C++ and Objective-C compiler - Documentation
+ Clang project is a C, C++, Objective C and Objective C++ front-end
+ based on the LLVM compiler. Its goal is to offer a replacement to the
+ GNU Compiler Collection (GCC).
+ .
+ Clang implements all of the ISO C++ 1998, 11, 14 and 17 standards and also
+ provides most of the support of C++20.
+ .
+ This package contains the documentation.
+
+Package: clang-23-examples
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: all
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 97
+Multi-Arch: foreign
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: doc
+Filename: pool/main/l/llvm-toolchain-23/clang-23-examples_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_all.deb
+Size: 65920
+SHA256: 449fbe41d1a2103a559b08f5e194990ec68e3d15bb622baf7f2bd5969d120e47
+SHA1: c305419a380eb37df9053b9fb82d94f591149869
+MD5sum: 4fed135c10f3c359a585d7409cc08afe
+Description: Clang examples
+ Clang project is a C, C++, Objective C and Objective C++ front-end
+ based on the LLVM compiler. Its goal is to offer a replacement to the
+ GNU Compiler Collection (GCC).
+ .
+ Clang implements all of the ISO C++ 1998, 11, 14 and 17 standards and also
+ provides most of the support of C++20.
+ .
+ This package contains the Clang examples.
+
+Package: clang-format-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 252
+Depends: libc6 (>= 2.34), libclang-cpp23 (>= 1:23.1.2~++20260920034005+85ac56026243), libgcc-s1 (>= 3.0), libllvm23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libstdc++6 (>= 11), python3
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/clang-format-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 106116
+SHA256: c9d22323f0cd62f05566c515e1106065b693c5f1aa1f5919d25f95b31c13fb80
+SHA1: 224cce145734022961fa479f8cf30472c5999245
+MD5sum: af1ace821befeb1ce5b938aac19d5f1f
+Description: Tool to format C/C++/Obj-C code
+ Clang-format is both a library and a stand-alone tool with the goal of
+ automatically reformatting C++ sources files according to configurable
+ style guides. To do so, clang-format uses Clang's Lexer to transform an
+ input file into a token stream and then changes all the whitespace around
+ those tokens. The goal is for clang-format to both serve both as a user
+ tool (ideally with powerful IDE integrations) and part of other
+ refactoring tools, e.g. to do a reformatting of all the lines changed
+ during a renaming.
+ .
+ This package also provides vim and emacs plugins.
+
+Package: clang-format-23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 96
+Depends: clang-format-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/clang-format-23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 64716
+SHA256: a3ac605bed3f6c826b843c7acfbcb51d99100a4a9cb7d24ad9255f6a73be7a09
+SHA1: 8f1fef87686ba6e5672483d9b607d7ddf0b34c60
+MD5sum: 532de8ebbf92a689cb979f9750c1d6c5
+Description: debug symbols for clang-format-23
+Build-Ids: 0e3c41eb42e0e6b433ea3824feea989072b289a1
+
+Package: clang-tidy-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 12341
+Depends: libc6 (>= 2.38), libclang-cpp23 (>= 1:23.1.2~++20260920034005+85ac56026243), libgcc-s1 (>= 3.0), libllvm23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libstdc++6 (>= 11), python3, libclang-common-23-dev (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), clang-tools-23, python3-yaml
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/clang-tidy-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 2086408
+SHA256: b25c2150bd6b66031e85ddced3d62069974f48903bb034fa8fb98d525049af82
+SHA1: 8519f01a5c80a40c7f25347c8dffd51c31e1bfe2
+MD5sum: 844e3ef5a68abab9f728f99ee161c2f2
+Description: clang-based C++ linter tool
+ Provide an extensible framework for diagnosing and fixing typical programming
+ errors, like style violations, interface misuse, or bugs that can be deduced
+ via static analysis. clang-tidy is modular and provides a convenient interface
+ for writing new checks.
+
+Package: clang-tidy-23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 19234
+Depends: clang-tidy-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/clang-tidy-23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 14161804
+SHA256: ea7324b2664255337f628b76f4d02cc1340e450ad3e166e5561ef0a42af11cbe
+SHA1: 4142b88133613c026bdabf10c9d98a9d712f494e
+MD5sum: e96319a242b78aa47e98a3d5ea440b29
+Description: debug symbols for clang-tidy-23
+Build-Ids: 80eeecd8a238dc97dbf0a6227424605340b440be
+
+Package: clang-tools-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 42362
+Depends: libc6 (>= 2.38), libclang-cpp23 (>= 1:23.1.2~++20260920034005+85ac56026243), libclang1-23 (>= 1:21.1.4), libgcc-s1 (>= 3.3), libllvm23, libstdc++6 (>= 12), libxml2 (>= 2.7.4), libz3-4 (>= 4.13.3), libzstd1 (>= 1.5.5), zlib1g (>= 1:1.1.4), clang-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), python3:any
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/clang-tools-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 9757620
+SHA256: 924f3450647e4dc6b70bcc8b7d544cab961426929c1ab0a2c2477eb0daf4d18b
+SHA1: 17457ce0ff215d56c78396dbd256600604fafef9
+MD5sum: 25444981f20d4b9f44524ec4bfb977a2
+Description: clang-based tools for C/C++ developments
+ Clang project is a C, C++, Objective C and Objective C++ front-end
+ based on the LLVM compiler. Its goal is to offer a replacement to the
+ GNU Compiler Collection (GCC).
+ .
+ Clang implements all of the ISO C++ 1998, 11, 14 and 17 standards and also
+ provides most of the support of C++20.
+ .
+ This package contains some clang-based tools like scan-build, etc.
+
+Package: clang-tools-23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 46175
+Depends: clang-tools-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/clang-tools-23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 37801244
+SHA256: 18ea1f7c9976cb7d6e65e216fd8a2cd8f4bb719262caa372c740010b4132915a
+SHA1: 2fb583b4ae48f8782081c0480e15d510622782dd
+MD5sum: 3ddd972a6b0d9e1748bc860259a88ad8
+Description: debug symbols for clang-tools-23
+Build-Ids: 04e4d2f317995e8538863cdcc383ade22c27adef 1611552bc59093eab04ddb7815bf2d886898d7a5 21babe4746348df088ef9bfd70398a0e88959760 335d4117708bf3bd6053cecc10e710039cf520c6 356dc600bb9c2a95132d5f94089105266f122934 3feea61a5fe8e1d49e418f014eda5a31cec60d80 5d503facf3fe116135d586fa1ffae4ee627332d6 67414d41c62eba874cea1d3128eb4ddf467c367b 6825d3ad5251aefe1a209a9c6d9fb20fab14748f 749e93426466eb95af8b9bf5104352ca76a7f63b 79ae10928be9a2be676cacedb82899543dae0ce5 815624f9e19870bd437246682b214582a88bc3c1 83dc9bf1ff6f06e4dad681bda115ceba9860cbd9 848a04d1025de6f158d3b3c2eaf8c3f339fa4db3 8505cbc5c156d55070c3e0941fe250aec2316661 9447069625f9d6a6088694bb58321f806717aeff c8f276691879e3a44f5571ff9df152c48b64d846 c96989ce1228e69b0b8e3c822e67cccd9ac0f1d0 cc32a1b3a415b46b4782c7f7636e7a9c9548918a d8f01751ada7ed168c81012db0111aee78e80f75 e2a0ceb3eb580d0755bcf5f3acc56c7cecb17849 e6bf7d1173b5ac70e549148278af36461b278a9c e73d2b5c25b82552e24591533280192bebcae456 e9be633a43c0e596a12df3f01da71bb5c2450021 fb1befa31b6117ebaeac5ea1cde629a4bf36a308
+
+Package: clangd-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 17743
+Depends: libc6 (>= 2.38), libclang-cpp23 (>= 1:23.1.2~++20260920034005+85ac56026243), libgcc-s1 (>= 3.0), libllvm23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libstdc++6 (>= 12), libclang-common-23-dev (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/clangd-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 3460096
+SHA256: 1c3b591b862f5a01c8bcad93ba5c843d095939037218109043f35ebacca601b8
+SHA1: e477e3b0b65d83d1cee65b75eb66dadb8b470150
+MD5sum: 1c7c03dbd1cf0ddd8ac69ecab6360b4e
+Description: Language server that provides IDE-like features to editors
+ clangd understands your C++ code and adds smart features to your editor:
+  - code completion
+  - compile errors
+  - go-to-definition
+  - and more.
+ .
+ clangd is a language server that implements the Language Server Protocol;
+ it can work with many editors through a plugin.
+
+Package: clangd-23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 27511
+Depends: clangd-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/clangd-23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 20264840
+SHA256: a5b99bdf7540a7db7e45ef7715fa1e1befe82b582a826d40dbbee989a196dec5
+SHA1: a736b1a439a82b96c438e3194aae6caa6ac9a2c5
+MD5sum: 067c52a52e6daaa10ceb35c359696ac1
+Description: debug symbols for clangd-23
+Build-Ids: 9a2e72db75520f03dabdefa5f845649620379e5e
+
+Package: flang-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 117788
+Depends: libc6 (>= 2.38), libclang-cpp23 (>= 1:23.1.2~++20260920034005+85ac56026243), libgcc-s1 (>= 3.0), libllvm23, libmlir-23 (>= 1:23.1.2~++20260920034005+85ac56026243), libquadmath0 (>= 4.6), libstdc++6 (>= 11), libstdc++-14-dev, libgcc-14-dev, libflang-23-dev (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Provides: fortran-compiler, gfortran-mod-15
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/flang-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 18389464
+SHA256: 62c66cb795e87a0675b13007d064076ed13a60bb0c3b03d304bfff5f9008461e
+SHA1: 62bb5bfc65977db90c41cdc1bc1d58f1b1ba38bf
+MD5sum: 63148fcdc1845fdbee85b75fd577ae3a
+Description: Fortran compiler
+ Ground-up implementation of a Fortran front end written in
+ modern C++.
+ .
+ While it is capable of generating executables for a number
+ of examples, some functionalities are still missing.
+
+Package: flang-23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 315174
+Depends: flang-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/flang-23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 199319384
+SHA256: 4447e91a7c9447bb9b8685ee264ffd2731cb7a68a799f9cc34d3bc20ce2dc028
+SHA1: e8bebb9dcbf3574c5553ac2036a9ed2549452d36
+MD5sum: 7008103cbfeb54b222bb20988ee9bc35
+Description: debug symbols for flang-23
+Build-Ids: 4f6b724516df761673272ebfe9964504000e619a 6e2c62a906d410f14241ecbfb1d8df829898722e 9b310bc3d723a6aa228ebcaeacb6e929a3f668b9 aa6c2150ccb4b4614ff0504e6a994894e17a7274 eed92b0480af7852f657311dbd654eaca283ea68 ffdf21df8554c039b7e211240535999c462c75c4
+
+Package: libbolt-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 107
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libbolt-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 70840
+SHA256: e6bab51b96300400ba8b0caaaeba69f121b688fca2390fc99d95d9bab738f8b7
+SHA1: f5cae9cb16213dafe7d89e77de15a5ef9b58cf4c
+MD5sum: f88b34c44368b713449fdf4555a33a4e
+Description: Post-link optimizer
+ It achieves the improvements by optimizing application's code layout based on
+ execution profile gathered by sampling profiler.
+
+Package: libc++-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 17471
+Depends: libc++1 (>= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libc++abi-23-dev (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Conflicts: libc++-x.y-dev
+Breaks: libc++1 (<< 1:22~++20251113081817)
+Replaces: libc++-x.y-dev, libc++1 (<< 1:22~++20251113081817)
+Provides: libc++-x.y-dev
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libc++-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 1583868
+SHA256: 857c6c07ba67970b714787a53281a55cb354939e1a83043d207b78605a94dc05
+SHA1: 0f39c7a4463dc1466968749235a7d08ddf66519e
+MD5sum: c98855d4d27b94eea6dcf4b6a90595ce
+Description: LLVM C++ Standard library (development files)
+ libc++ is another implementation of the C++ standard library
+ .
+ Features and Goals
+ .
+   * Correctness as defined by the C++ standards.
+   * Fast execution.
+   * Minimal memory use.
+   * Fast compile times.
+   * ABI compatibility with gcc's libstdc++ for some low-level features such
+     as exception objects, rtti and memory allocation.
+   * Extensive unit tests.
+
+Package: libc++-23-dev-wasm32
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: all
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 16699
+Depends: wasi-libc, libc++abi-23-dev-wasm32
+Conflicts: libc++-x.y-dev-wasm32
+Replaces: libc++-x.y-dev-wasm32
+Provides: libc++-x.y-dev-wasm32
+Multi-Arch: foreign
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libc++-23-dev-wasm32_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_all.deb
+Size: 1791796
+SHA256: 40aed5bbce3d40906d52cacd284b2314f104d0e1977b296b4ad0138a906950eb
+SHA1: 97fb381e954bb74bb0418bb040a9ef9d82e3b451
+MD5sum: b1c7673be293d80a5d21b5d91b8b108a
+Description: LLVM C++ Standard library (WASI)
+ libc++ is another implementation of the C++ standard library
+ .
+ Features and Goals
+ .
+   * Correctness as defined by the C++ standards.
+   * Fast execution.
+   * Minimal memory use.
+   * Fast compile times.
+   * ABI compatibility with gcc's libstdc++ for some low-level features such
+     as exception objects, rtti and memory allocation.
+   * Extensive unit tests.
+ .
+ This package provides a version for the 32-bit WebAssembly System Interface.
+
+Package: libc++1
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 1274
+Depends: libc++abi1 (>= 1:23.1.0), libc6 (>= 2.38), libgcc-s1 (>= 3.0)
+Suggests: clang
+Conflicts: libc++-x.y
+Breaks: libc++1-14, libc++1-19, libc++1-21, libc++abi1-14, libc++abi1-19
+Replaces: libc++-x.y, libc++1-21
+Provides: libc++-x.y
+Multi-Arch: same
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libs
+Filename: pool/main/l/llvm-toolchain-23/libc++1_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 357436
+SHA256: f6306dba13d71a8a4080b65eb7e3294ad8d06eee0b6c77d134d36279da6138bc
+SHA1: 14f8b60e4b19d34e7772583c1f22966316a0da41
+MD5sum: c416c3d918966766d120db05a19c1934
+Description: LLVM C++ Standard library
+ libc++ is another implementation of the C++ standard library.
+ .
+ Features and Goals
+ .
+   * Correctness as defined by the C++ standards.
+   * Fast execution.
+   * Minimal memory use.
+   * Fast compile times.
+   * ABI compatibility with gcc's libstdc++ for some low-level features such
+     as exception objects, rtti and memory allocation.
+   * Extensive unit tests.
+
+Package: libc++1-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 691
+Depends: libc++1 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Multi-Arch: same
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/libc++1-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 453736
+SHA256: d358e3d165821d6b97ea1435211a4dec6b9e4cf2bd660f564d4fe45b05b3173c
+SHA1: 13bde51e6c1a9f9eb7338061c254a600ff515aa1
+MD5sum: 90a32742fb7453a71fd135fdeffcf90b
+Description: debug symbols for libc++1
+Build-Ids: c65670476fbe265861f0f92f3a00b6e7cb431851
+
+Package: libc++abi-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 746
+Depends: libc++abi1 (>= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Conflicts: libc++abi-x.y-dev
+Breaks: libc++abi-dev (<= 44), libc++abi1 (<< 1:22~++20251113081817)
+Replaces: libc++abi-x.y-dev, libc++abi1 (<< 1:22~++20251113081817)
+Provides: libc++abi-x.y-dev
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libc++abi-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 143744
+SHA256: b5b91e8fcbf9bbed0a4b2aa715d3f51973df1c3006ab49ecb68ea663c249671f
+SHA1: 70b267626e89b8da4183e8e5aa9511e8b1da21b0
+MD5sum: 2f4f7f94a8d1d01ea1939b3faf9c9717
+Description: LLVM low level support for a standard C++ library (development files)
+ libc++abi is another implementation of low level support for a standard C++
+ library.
+ .
+ Features and Goals
+ .
+   * Correctness as defined by the C++ standards.
+   * Provide a portable sublayer to ease the porting of libc++
+
+Package: libc++abi-23-dev-wasm32
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: all
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 763
+Depends: wasi-libc
+Conflicts: libc++abi-x.y-dev-wasm32
+Replaces: libc++abi-x.y-dev-wasm32
+Provides: libc++abi-x.y-dev-wasm32
+Multi-Arch: foreign
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libc++abi-23-dev-wasm32_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_all.deb
+Size: 220460
+SHA256: f8b025dbcdd4f8260e7e3cb4f4912f649cdd3953fce1905bbe0e8bf4acea2ac0
+SHA1: ac98d73b08b310076dc5d4b0074a33f994ac6fa9
+MD5sum: fdedb1d0cb8dd63357ad893b12ce52bf
+Description: LLVM low level support for a standard C++ library (WASI)
+ libc++abi is another implementation of low level support for a standard C++
+ library.
+ .
+ Features and Goals
+ .
+   * Correctness as defined by the C++ standards.
+   * Provide a portable sublayer to ease the porting of libc++
+ .
+ This package provides a version for the 32-bit WebAssembly System Interface.
+
+Package: libc++abi1
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 328
+Depends: libc6 (>= 2.18), libgcc-s1 (>= 3.0)
+Conflicts: libc++abi-x.y
+Breaks: libc++abi1-14, libc++abi1-19, libc++abi1-21
+Replaces: libc++abi-x.y, libc++abi1-21
+Provides: libc++abi-x.y
+Multi-Arch: same
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libs
+Filename: pool/main/l/llvm-toolchain-23/libc++abi1_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 119288
+SHA256: 499142b713ab8672812d9cb6bbd86b210bed6ff4619230eec03a59295b562477
+SHA1: 08d9c946cf94fd7b06729e07d109b70feb43fd55
+MD5sum: 7521605610654df1e9877e18380530f7
+Description: LLVM low level support for a standard C++ library
+ libc++abi is another implementation of low level support for a standard C++
+ library.
+ .
+ Features and Goals
+ .
+   * Correctness as defined by the C++ standards.
+   * Provide a portable sublayer to ease the porting of libc++
+
+Package: libc++abi1-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 195
+Depends: libc++abi1 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Multi-Arch: same
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/libc++abi1-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 103804
+SHA256: 85c9595ac9b0f0d22eeaa8e7e7ae6f3076724650c5d03f7ef1154f5d23a77deb
+SHA1: 727761b12aab0f98368c629c16dbba6b10c430f8
+MD5sum: a43e7121e62a252d6188cd39b286f26a
+Description: debug symbols for libc++abi1
+Build-Ids: efe7b6b5e98a0ff936ea1fd43c0b7284d00cc44c
+
+Package: libclang-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 316222
+Depends: libstdc++-14-dev, libgcc-14-dev, libobjc-14-dev, libclang1-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libclang-common-23-dev (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libclang-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 30618304
+SHA256: 9a663aab14a0b963496d0dcd10d0cf9bbd3921a2c5fd102fe9bae8d738f5ff4f
+SHA1: e5ac90941dca5b69800caf5b0e27af705414c5b2
+MD5sum: 0b8f51f7f100be6d7af9173c5367ccdd
+Description: Clang library - Development package
+ Clang project is a C, C++, Objective C and Objective C++ front-end
+ based on the LLVM compiler. Its goal is to offer a replacement to the
+ GNU Compiler Collection (GCC).
+ .
+ Clang implements all of the ISO C++ 1998, 11, 14 and 17 standards and also
+ provides most of the support of C++20.
+ .
+ This package contains the Clang headers to develop extensions over
+ libclang1-23.
+
+Package: libclang-common-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 14915
+Recommends: libclang-rt-23-dev
+Multi-Arch: same
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libclang-common-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 822996
+SHA256: 66fe3bd4b5c4a9a3debb7f845c9cdfdcded5e3e85b0a7a7b9380bee2f1d1f51b
+SHA1: 1407f2349f8b219e5842026f046f90aed03d4e44
+MD5sum: 88bdae62777ae8465d5bac57e7f68dff
+Description: Clang library - Common development package
+ Clang project is a C, C++, Objective C and Objective C++ front-end
+ based on the LLVM compiler. Its goal is to offer a replacement to the
+ GNU Compiler Collection (GCC).
+ .
+ Clang implements all of the ISO C++ 1998, 11, 14 and 17 standards and also
+ provides most of the support of C++20.
+ .
+ This package contains the Clang generic headers.
+
+Package: libclang-cpp23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 64258
+Depends: libc6 (>= 2.38), libgcc-s1 (>= 3.0), libllvm23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libstdc++6 (>= 12)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libs
+Filename: pool/main/l/llvm-toolchain-23/libclang-cpp23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 13772412
+SHA256: 5e1a40ca4fbbcb4e6d483b51174ed8370d3cf7ff823ff41e56b13f950efd5d51
+SHA1: bb3f89869a3b8d89594ddd32a1417e786e0cb1cd
+MD5sum: 7ec268f07563e2d200d15ac5d82537bd
+Description: C++ interface to the Clang library
+ Clang project is a C, C++, Objective C and Objective C++ front-end
+ based on the LLVM compiler. Its goal is to offer a replacement to the
+ GNU Compiler Collection (GCC).
+ .
+ Clang implements all of the ISO C++ 1998, 11, 14 and 17 standards and also
+ provides most of the support of C++20.
+ .
+ This package contains the Clang C++ library.
+ .
+ The C++ Interface to Clang provides an API that exposes
+ facilities for parsing source code into an abstract syntax tree (AST),
+ loading already-parsed ASTs, traversing the AST, associating physical source
+ locations with elements within the AST, and other facilities that support
+ Clang-based development tools.
+
+Package: libclang-cpp23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 66560
+Depends: libclang-cpp23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/libclang-cpp23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 52199352
+SHA256: 2191c2ebe215ef4810670c642394c33a6c574a5f82b0c8b9e6248434330ca071
+SHA1: 84592a1ae4784cd25e46cdb49036f4524b52afe0
+MD5sum: 097a7b2d98e53cdd1e8f1fd92e293174
+Description: debug symbols for libclang-cpp23
+Build-Ids: 1b32871d8b470130d54fd4243c6cc0b7852f38da
+
+Package: libclang-cpp23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 72
+Depends: libstdc++-14-dev, libgcc-14-dev, libclang-cpp23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libclang-cpp23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 57236
+SHA256: 2e490d6776ef125673f7de00b1ff9f743fc7226bf3a167ba82b18cd5d075b924
+SHA1: 9b366d1815bf5479976f7e0660ecdefca3191499
+MD5sum: a20daa5a71ecfb52b2e841d4fb47c15d
+Description: C++ interface to the Clang library
+ Clang project is a C, C++, Objective C and Objective C++ front-end
+ based on the LLVM compiler. Its goal is to offer a replacement to the
+ GNU Compiler Collection (GCC).
+ .
+ Clang implements all of the ISO C++ 1998, 11, 14 and 17 standards and also
+ provides most of the support of C++20.
+ .
+ This package contains the Clang C++ library.
+ .
+ The C++ Interface to Clang provides an API that exposes
+ facilities for parsing source code into an abstract syntax tree (AST),
+ loading already-parsed ASTs, traversing the AST, associating physical source
+ locations with elements within the AST, and other facilities that support
+ Clang-based development tools.
+ .
+ This package contains symlinks without a version number, which needed by
+ linker at build time.
+
+Package: libclang-rt-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 52228
+Depends: lib32stdc++6 (>= 4.1.1), libc6 (>= 2.38), libc6-i386 (>= 2.38), libstdc++6 (>= 4.1.1)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libclang-rt-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 4302192
+SHA256: 1d7e53f9913bbe77c5876f3c66e4876f6d3cac4fc420627a83d98bbc9da1168b
+SHA1: edebc87192db1c61716d2723d29afd3f41c4992c
+MD5sum: 974307a7492eae56f4cc71521957c915
+Description: Compiler-rt - development package
+ This package provides various libraries:
+ .
+   * builtins - Simple libraries that provide implementation of the
+     low-level target-specific hooks required by code generation
+     and other runtime components.
+   * sanitizer runtimes - AddressSanitizer, ThreadSanitizer,
+     UndefinedBehaviorSanitizer, MemorySanitizer, LeakSanitizer
+     DataFlowSanitizer, etc
+   * profile - Library which is used to collect coverage information.
+
+Package: libclang-rt-23-dev-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 5451
+Depends: libclang-rt-23-dev (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/libclang-rt-23-dev-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 3399404
+SHA256: 9984b8a4fa2378c45e6a996c3115c07433f6882c79e917f257ffb648389f0489
+SHA1: aac6cb8878e8b9391ea7ec40e5b6523f32f98350
+MD5sum: fe6969d91c3b6873a44e3a69b71f4dee
+Description: debug symbols for libclang-rt-23-dev
+Build-Ids: 0cd18e59516de7a1f86d4e0983454f4c79c06c0c 3d47b951c62bae66cfb1d9ea63e539cf6332609c 4a49c9fcd6413028b0e1e5938cc7c5464d29e4cb 538d8aa1b676023ebb287d75693eb845d2f432c8 55e038f0c19bb7362806a117696ac9d156eeaaa4 69a67d8d04791b3c14d569cb84eca183c148871c 7d631da6797aabf78b1101fdddc9fbe23192e115 8350b5827823ab21d8378e8a3dd2cdc42c844196 8f479233228cc5b7107201c04916352996451e13 9998ed3643e0a2b66cab28cbb33d1a6b46905304 b8a39b75ae209361b4cd2f2d59ec37367c759b17 d3cc166db18f228b8c9214ff3fed2bdb8033fae6 d76f9f02b712781ced927cfafcde29aa2dcb8898 d7d14385f7dc5354422d45ab0888e988ba97b8d3
+
+Package: libclang-rt-23-dev-wasm32
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: all
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 316
+Multi-Arch: foreign
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libclang-rt-23-dev-wasm32_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_all.deb
+Size: 97860
+SHA256: 6d78b434f27acf79749ab7ada7f268b23ebc654c5179a9f2579a1d52517cc0c2
+SHA1: 98c90ebdf00c3404b38c58876eaaef2dab8f62ed
+MD5sum: 6f652102bbc20f08965eee39c7b92956
+Description: Compiler-rt - wasm32 builtins
+ Provides the compiler-rt builtins for WebAssembly 32 bits
+
+Package: libclang-rt-23-dev-wasm64
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: all
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 323
+Multi-Arch: foreign
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libclang-rt-23-dev-wasm64_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_all.deb
+Size: 98132
+SHA256: 336731735892e871639705987e9b56b3d08a0813aa4c4229578dbd4c50bfd955
+SHA1: fdb3ba4006bd4ecb4c1939ee0f1ddbc799d0a062
+MD5sum: ea50f1abfbf4195b1de4c6cd91ffef21
+Description: Compiler-rt - wasm64 builtins
+ Provides the compiler-rt builtins for WebAssembly 64 bits
+
+Package: libclang-rt-23-dev-win
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: all
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 1451
+Multi-Arch: foreign
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libclang-rt-23-dev-win_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_all.deb
+Size: 254656
+SHA256: 2595e35f333b18f3e1db5c5994a2c24762c1f41f40cd45fb8d8f4b24da813cda
+SHA1: 08ac7e43f1da687740cc378c6bdeb6206e867b35
+MD5sum: 7a3d73706081fe4d5e7b85b0c02e417e
+Description: Compiler-rt - Windows builtins
+ Provides the compiler-rt builtins for Windows
+
+Package: libclang1-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 36485
+Depends: libc6 (>= 2.38), libgcc-s1 (>= 3.0), libllvm23, libstdc++6 (>= 12)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libs
+Filename: pool/main/l/llvm-toolchain-23/libclang1-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 8528136
+SHA256: 26fe35b870d983e1511309a9e352107aa7a861c947d999f0113ccf2c8a8daf75
+SHA1: bdecc76a2fe86dd4da2ab5b58f85f8208cc2645f
+MD5sum: 6f4b8468142b73b68f7ab4fc54d5b1c4
+Description: C interface to the Clang library
+ Clang project is a C, C++, Objective C and Objective C++ front-end
+ based on the LLVM compiler. Its goal is to offer a replacement to the
+ GNU Compiler Collection (GCC).
+ .
+ Clang implements all of the ISO C++ 1998, 11, 14 and 17 standards and also
+ provides most of the support of C++20.
+ .
+ This package contains the Clang library.
+ .
+ The C Interface to Clang provides a relatively small API that exposes
+ facilities for parsing source code into an abstract syntax tree (AST),
+ loading already-parsed ASTs, traversing the AST, associating physical source
+ locations with elements within the AST, and other facilities that support
+ Clang-based development tools.
+
+Package: libclang1-23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 41168
+Depends: libclang1-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Breaks: libclang1-23-dbg
+Replaces: libclang1-23-dbg
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/libclang1-23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 34008628
+SHA256: d6e9290ec3038a17d60958dbf49cc6b76618bda13c59bf0505d5521fa08acaa0
+SHA1: 03281661adb2a795bb9e2a88f8518624d6033086
+MD5sum: df3bd2115c426ac00387d07a41c9e930
+Description: debug symbols for libclang1-23
+Build-Ids: 371d0746cdf3a9eceb91c6ff69334fc057132715
+
+Package: libclc-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: all
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 24677
+Depends: libclc-23-dev (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libclang-common-23-dev
+Conflicts: libclc-x.y
+Breaks: libclc-amdgcn, libclc-ptx, libclc-r600
+Replaces: libclc-amdgcn, libclc-ptx, libclc-r600, libclc-x.y
+Provides: libclc-x.y
+Multi-Arch: foreign
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libs
+Filename: pool/main/l/llvm-toolchain-23/libclc-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_all.deb
+Size: 2957808
+SHA256: ae8c7a7e363e78ce5e9d61a95e881225c04a4b9e1e69bc428200b84d700a6752
+SHA1: 8ac5b39768476303da5bb3a9db289eddc0c1f4b4
+MD5sum: dd78c39363f62c0d0b33b87a3195bdf9
+Description: OpenCL C language implementation - platform support
+ libclc is an open implementation of the OpenCL C programming language,
+ as specified by the OpenCL 1.1 Specification.
+ .
+ This package contains support for the amdgcn (AMD GPU), PTX and r600
+ platforms.
+
+Package: libclc-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: all
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 65
+Conflicts: libclc-x.y-dev
+Breaks: libclc-dev
+Replaces: libclc-dev, libclc-x.y-dev
+Provides: libclc-x.y-dev
+Multi-Arch: foreign
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libclc-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_all.deb
+Size: 56812
+SHA256: 71f1e97618ebfef4ecabb818685d30c47624a31bd78e87667b757429214cb22b
+SHA1: cb0a9bdcb92c50f1bf651f7754bdd36426ac5388
+MD5sum: e6b1f584ce7efba9dcc38a9cdf1645ae
+Description: OpenCL C language implementation - development files
+ libclc is an open implementation of the OpenCL C programming language,
+ as specified by the OpenCL 1.1 Specification.
+ .
+ This package contains development header files.
+
+Package: libflang-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 779602
+Depends: libstdc++-14-dev, libgcc-14-dev
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libflang-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 24472460
+SHA256: c9e9a18ad6a3a9cf6ed75c9810490dcf860a4569bbd0d756e8cd5ed8c903c751
+SHA1: 0faac414b853547f7a3c06dde0fb1a7da9955374
+MD5sum: 3287be95132573ecef1695e99d004274
+Description: Flang library - Development package
+ Ground-up implementation of a Fortran front end written in
+ modern C++.
+ .
+ While it is capable of generating executables for a number
+ of examples, some functionalities are still missing.
+ .
+ This package contains the flang libraries and headers.
+
+Package: libfuzzer-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 888
+Depends: clang-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libfuzzer-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 209012
+SHA256: cca74fbbf145988ebb1fb865a40f3e16caae4bec7930ee8b33b1536f8b452710
+SHA1: 4b4624d00ac92d552503d5a60b16059147eca845
+MD5sum: 6a50a70e4a936096a71d527de118283c
+Description: Library for coverage-guided fuzz testing
+ LibFuzzer is a library for in-process, coverage-guided, evolutionary fuzzing
+ of other libraries.
+ .
+ LibFuzzer is similar in concept to American Fuzzy Lop (AFL), but it performs
+ all of its fuzzing inside a single process. This in-process fuzzing can be
+ more restrictive and fragile, but is potentially much faster as there is no
+ overhead for process start-up.
+ .
+ The fuzzer is linked with the library under test, and feeds fuzzed inputs to
+ the library via a specific fuzzing entrypoint (aka 'target function'); the
+ fuzzer then tracks which areas of the code are reached, and generates mutations
+ on the corpus of input data in order to maximize the code coverage. The code
+ coverage information for libFuzzer is provided by LLVM's SanitizerCoverage
+ instrumentation.
+
+Package: liblld-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 15685
+Depends: libllvm23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libs
+Filename: pool/main/l/llvm-toolchain-23/liblld-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 1941724
+SHA256: 13497ad69057adc5b6a1e61e76aefe511667db3bd02039f0194708b919ab56e9
+SHA1: 4e039d76cb2d1c0a4bc7b5d0de7b49f222765d69
+MD5sum: 33e7ebcf3a4ba3a4694f2ae07a3608f5
+Description: LLVM-based linker, library
+ LLD is a new, high-performance linker. It is built as a set of reusable
+ components which highly leverage existing libraries in the larger LLVM
+ Project.
+ .
+ This package contains the LLD runtime library.
+
+Package: liblld-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 144
+Depends: lld-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), liblld-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libzstd-dev, zlib1g-dev
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/liblld-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 73216
+SHA256: ce40424e6a502ffad5cf28bfa3b5855d599460aa655b9adefb473c005e82bba5
+SHA1: 2d379dfad7e0478c880af20a576f887c648271f6
+MD5sum: 09ac76c5e58eda1c696acb663050b060
+Description: LLVM-based linker, header files
+ LLD is a new, high-performance linker. It is built as a set of reusable
+ components which highly leverage existing libraries in the larger LLVM
+ Project.
+ .
+ This package provides the header files to build extension over lld.
+
+Package: liblldb-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 20687
+Depends: libc6 (>= 2.38), libclang-cpp23 (>= 1:23.1.2~++20260920034005+85ac56026243), libcurl4t64 (>= 7.16.2), libedit2 (>= 3.1-20140620-0), libgcc-s1 (>= 3.0), libipt2 (>= 2.0), libllvm23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libncurses6 (>= 6), libpython3.13 (>= 3.13.0~rc3), libstdc++6 (>= 12), libtinfo6 (>= 6), libxml2 (>= 2.7.4), zlib1g (>= 1:1.1.4)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libs
+Filename: pool/main/l/llvm-toolchain-23/liblldb-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 4914804
+SHA256: 4afe6e8f802044a3b5b61fde87c857819221393a7471a294416ea3ef835a5e43
+SHA1: b37000cfabee324af93cd981a26bcd5558dced32
+MD5sum: 6bee0317c83e8205d26903678904fdea
+Description: Next generation, high-performance debugger, library
+ LLDB is a next generation, high-performance debugger. It is built as a set of
+ reusable components which highly leverage existing libraries in the larger LLVM
+ Project, such as the Clang expression parser and LLVM disassembler.
+ .
+ This package contains the LLDB runtime library.
+
+Package: liblldb-23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 22821
+Depends: liblldb-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Breaks: liblldb-23-dbg
+Replaces: liblldb-23-dbg
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/liblldb-23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 18109372
+SHA256: c26c762034936dff41f8e5fbb864e38742e64435cae1b50dd7dee269f1213580
+SHA1: 1be1f1f3dd5763f858ff58a6fd068f340d0d4bf3
+MD5sum: 084f48dc48420dedbb0cbc7777fbb8ec
+Description: debug symbols for liblldb-23
+Build-Ids: 082feca0d3769efdb39e7734a500170f597c69a9 6fb4045ea978fc3e53ad870bc9b68ec41eb827c5
+
+Package: liblldb-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 4108
+Depends: lldb-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/liblldb-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 677152
+SHA256: dc037ccd6f77d8e1f2b81b5f7053e3e323377849e02e42ac4068010e28fa9a2b
+SHA1: 3a443a8efd89075afafbc7f066bb1456683d852c
+MD5sum: 610d721f51aac15015906d2b1cfd489e
+Description: Next generation, high-performance debugger, header files
+ LLDB is a next generation, high-performance debugger. It is built as a set of
+ reusable components which highly leverage existing libraries in the larger LLVM
+ Project, such as the Clang expression parser and LLVM disassembler.
+ .
+ This package provides the header files to build extension over lldb.
+
+Package: libllvm-23-ocaml-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 1878
+Depends: libbigarray-compat-ocaml-dev-hryr0, libctypes-ocaml-dev-3uda3, libintegers-ocaml-dev-vio08, libstdlib-ocaml-dev-m4xw9, ocaml-5.3.0, llvm-23-dev (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Suggests: llvm-23-doc
+Conflicts: libllvm-x.y-ocaml-dev
+Replaces: libllvm-x.y-ocaml-dev
+Provides: libllvm-23-ocaml-dev-5gaf1, libllvm-x.y-ocaml-dev
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: ocaml
+Filename: pool/main/l/llvm-toolchain-23/libllvm-23-ocaml-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 725832
+SHA256: b2014d94d5f8aa9e8976a0ab55c7b8cd50742cda3b019e13f4e444d18ffd9f95
+SHA1: f5a71e1732743ddc8e727dff9248572099f96f52
+MD5sum: 318a60e541d7a8a1510b9ac805bb6761
+Description: Modular compiler and toolchain technologies, OCaml bindings
+ LLVM is a collection of libraries and tools that make it easy to build
+ compilers, optimizers, just-in-time code generators, and many other
+ compiler-related programs.
+ .
+ LLVM uses a single, language-independent virtual instruction set both
+ as an offline code representation (to communicate code between
+ compiler phases and to run-time systems) and as the compiler internal
+ representation (to analyze and transform programs). This persistent
+ code representation allows a common set of sophisticated compiler
+ techniques to be applied at compile-time, link-time, install-time,
+ run-time, or "idle-time" (between program runs).
+ .
+ This package provides the OCaml bindings to develop applications using llvm.
+
+Package: libllvm23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 151011
+Depends: libc6 (>= 2.38), libedit2 (>= 2.11-20080614-0), libffi8 (>= 3.4), libgcc-s1 (>= 4.3), libstdc++6 (>= 12), libxml2 (>= 2.7.4), libz3-4 (>= 4.13.3), libzstd1 (>= 1.5.5), zlib1g (>= 1:1.2.0)
+Multi-Arch: same
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libs
+Filename: pool/main/l/llvm-toolchain-23/libllvm23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 30730828
+SHA256: d363638cd9594ae8be342866a6acf83beca080d07b8be27befd2759a78571e29
+SHA1: abc0fddcf68cf4a0d54db91fc50a46b554a4cd73
+MD5sum: 9f92a5c3b76d28f25c8731fff74a87fc
+Description: Modular compiler and toolchain technologies, runtime library
+ LLVM is a collection of libraries and tools that make it easy to build
+ compilers, optimizers, just-in-time code generators, and many other
+ compiler-related programs.
+ .
+ This package contains the LLVM runtime library.
+
+Package: libllvm23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 105957
+Depends: libllvm23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Breaks: libllvm23-dbg
+Replaces: libllvm23-dbg
+Multi-Arch: same
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/libllvm23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 88924000
+SHA256: 2cdf77efc366db995b9d068bc0b0090b571fc0b7f0d7bef70291eedb8bd6be5e
+SHA1: a012dd277b13240adb87f75bceb50945f062b3e2
+MD5sum: e040e6abf6f79bc63b8470173d310554
+Description: debug symbols for libllvm23
+Build-Ids: 5de225fb352eeabc268f883f872d3afe8f3ab5ea
+
+Package: libllvmlibc-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 7115
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libllvmlibc-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 577192
+SHA256: 76021927f02495c7ca621fb00cdc8487e828f103861cccd797099c572416cfd7
+SHA1: f22709a4a7378c42a00bbfb993de38399c30c0cb
+MD5sum: 890341251910e5edb5c9d3656e670bbc
+Description: LLVM C Library - dev package
+ Implementation of the C standard library targeting C17 and above.
+ .
+ This is an experimental project. Don't use in production.
+
+Package: libmlir-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 115185
+Depends: libc6 (>= 2.38), libgcc-s1 (>= 3.0), libllvm23, libstdc++6 (>= 12)
+Conflicts: libmlir-x.y
+Replaces: libmlir-x.y
+Provides: libmlir-x.y
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libs
+Filename: pool/main/l/llvm-toolchain-23/libmlir-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 17501124
+SHA256: 14a300deb949d4d19e81be47e18de2f228a038df392d3ae8543023868a5a41db
+SHA1: ece8e952e5a7f7438e81c9f2e67db584eacab46f
+MD5sum: 869c274f3e1a1d88eddb0dfa8dd8ebff
+Description: Multi-Level Intermediate Representation library
+ Novel approach to building reusable and extensible compiler infrastructure.
+ MLIR aims to address software fragmentation, improve compilation for
+ heterogeneous hardware, significantly reduce the cost of building domain
+ specific compilers, and aid in connecting existing compilers together.
+
+Package: libmlir-23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 123084
+Depends: libmlir-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/libmlir-23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 73788672
+SHA256: 3725666fde1eb21d2b21ab1302078cfd842c1ed053933a99b4c55188381b7bb7
+SHA1: b752d399bf13eb28b113df31a3685c16d06eb3dd
+MD5sum: 1c275fb88e7136bbb265e2b32960ad06
+Description: debug symbols for libmlir-23
+Build-Ids: 14b7c53dfa67e9a7852c4dfee8e593642ffe011a 19dfb7d95749ebb34b90836b27d132730b7971c8 2a297d4df8f3f155ed6ff9aec94adb5fc0527e2f 3a82189c01f1ecd27b16ef651c81bc3bbdf9d119 70ec833f1b3a52b923e65c82af06ea6710be9627 8aeb188e1b30d36f7f3734dc5268c92c3f0ec6c6 8eefe5b4dffbeb2cdef42cf6723231352e1a4375 9966cdae651135ceeb5fcb621bbace761c07248f d6e078ff9ca55a2c906b1987f85a703823e3f2a9
+
+Package: libmlir-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 569424
+Depends: libmlir-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Conflicts: libmlir-x.y-dev
+Breaks: libmlir-dev
+Replaces: libmlir-dev, libmlir-x.y-dev
+Provides: libmlir-x.y-dev
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libmlir-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 35854580
+SHA256: d0bda7956c76f5e19a55219d67d1e99f2edbca8f86da85f791b9311b2d5130a1
+SHA1: d984504142b1b7d657cab797835653af61e3ea8b
+MD5sum: 02fcd730570408298b7fe966c64f25a6
+Description: Multi-Level Intermediate Representation library
+ Novel approach to building reusable and extensible compiler infrastructure.
+ MLIR aims to address software fragmentation, improve compilation for
+ heterogeneous hardware, significantly reduce the cost of building domain
+ specific compilers, and aid in connecting existing compilers together.
+
+Package: liboffload-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 1649
+Depends: libc6 (>= 2.38), libgcc-s1 (>= 3.0), libllvm23, libomp5 (>= 1:21.1), libstdc++6 (>= 13.1)
+Conflicts: liboffload-x.y
+Replaces: liboffload-x.y
+Provides: liboffload-x.y
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/liboffload-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 367044
+SHA256: 8526ac32924b970463df25cc6f094c273d8853faf9c2741b3d579c50c9b92f7e
+SHA1: 91cb06c7c28697d11dd386aa96201397d49a6148
+MD5sum: 51c840f6d6b06dd1d6d35e7e2b8e5783
+Description: Offload Library
+ The offload library facilitates efficient task distribution by offloading
+ specific computational tasks from the CPU to alternative hardware accelerators
+ such as GPUs or FPGAs.
+
+Package: liboffload-23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 1782
+Depends: liboffload-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/liboffload-23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 1408872
+SHA256: 40aa92636aa491c4c9d8fe3a3306f2d821d9dc75bce1d9ef88844edc48a9ff22
+SHA1: 8df92b115e8685c377e54cc3937497d9caadb70b
+MD5sum: 8da5559aae2cd9c101d3808709e5da8f
+Description: debug symbols for liboffload-23
+Build-Ids: c73daff1b03d69136ce9d1513dd8a8c82a5df784 d22119dac88f529cbf1bc7b3be46c08b83afa352
+
+Package: liboffload-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 1598
+Depends: liboffload-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libc6 (>= 2.38), libgcc-s1 (>= 3.3), libllvm23, libomp5 (>= 0.20131209), libstdc++6 (>= 11), libz3-4 (>= 4.13.3), libzstd1 (>= 1.5.5), zlib1g (>= 1:1.1.4)
+Conflicts: liboffload-x.y-dev
+Replaces: liboffload-x.y-dev
+Provides: liboffload-x.y-dev
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/liboffload-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 517080
+SHA256: c3e772867993ee2f1c03aba1d551971faaae682c47c05b439ac0dd6dd9b6d953
+SHA1: 8a815af241f46f47bdc34487996ec34f7aaaf6c9
+MD5sum: 9437c6bdee550538bf9f33de183a68ed
+Description: Offload Library - Development Package
+ The offload library facilitates efficient task distribution by offloading
+ specific computational tasks from the CPU to alternative hardware accelerators
+ such as GPUs or FPGAs.
+ .
+ This development package includes headers and other resources needed for
+ building applications that utilize the offload runtime.
+
+Package: liboffload-23-dev-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 1247
+Depends: liboffload-23-dev (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/liboffload-23-dev-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 964540
+SHA256: e38d3163cc687d73e389f77567043761ac35b48363b4dedabc082539d9491d13
+SHA1: 7bc94e11cbbfe01afbfab2558fd69b299cfc4983
+MD5sum: 2c4709e4157dbe3b0f9c1af85df02464
+Description: debug symbols for liboffload-23-dev
+Build-Ids: 47c7452a8bd046a67b41349d1e27266ac2d2a1dc c503a15cc742c411b6034f8763f2c83d28f8fc4d
+
+Package: libomp-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 601
+Depends: libomp5 (>= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libc6 (>= 2.38), libgcc-s1 (>= 3.0), libpython3.13 (>= 3.13.0~rc3), libstdc++6 (>= 13.1)
+Suggests: libomp-23-doc
+Conflicts: libomp-x.y-dev
+Breaks: libomp-dev (<< 3.7-1), libomp5 (<< 1:22~++20251113081817)
+Replaces: libomp-x.y-dev, libomp5 (<< 1:22~++20251113081817)
+Provides: libomp-x.y-dev
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libomp-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 144376
+SHA256: fe3ae9041009c26c1fa4bafb51656fe26225b4d37dcf4583696c289dbbaaca0d
+SHA1: 8023c1ab9c7a1306e38827dec87f533da491c209
+MD5sum: e5f9d024171eab96f33f0ebc67a7cd33
+Description: LLVM OpenMP runtime - dev package
+ The runtime is the part of the OpenMP implementation that your code is
+ linked against, and that manages the multiple threads in an OpenMP program
+ while it is executing.
+
+Package: libomp-23-dev-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 114
+Depends: libomp-23-dev (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/libomp-23-dev-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 68508
+SHA256: 175a38458474179d41bd65c7eed556cc4a62088bd8381b78299d89084cb1aea9
+SHA1: 8e8ff64763ee97cf04784224f7f55930914a2084
+MD5sum: f6d93a93abf5c3213057f517073e6531
+Description: debug symbols for libomp-23-dev
+Build-Ids: 1f9809671206de940894d1520c043658db1c0a83 693d40c58f09789a0a02ed6ae9fd1bdafaa2523d d8662dceea293755af1d6d234c40cc7c7d93d9bc
+
+Package: libomp-23-doc
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: all
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 15099
+Depends: libjs-jquery
+Breaks: libiomp-x.y-doc
+Replaces: libiomp-x.y-doc
+Multi-Arch: foreign
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: doc
+Filename: pool/main/l/llvm-toolchain-23/libomp-23-doc_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_all.deb
+Size: 1104508
+SHA256: 39fbec83c0942d54e9f9cfd8a89e218e4309f494e84c74e68aa9684d8a3f4d8b
+SHA1: 9ed17a595d68dc7a77976592a7b2dd13c980d559
+MD5sum: 1731d3c324e13fbc2c8582623e963d86
+Description: LLVM OpenMP runtime - Documentation
+ The runtime is the part of the OpenMP implementation that your code is
+ linked against, and that manages the multiple threads in an OpenMP program
+ while it is executing.
+ .
+ This package contains the documentation of this package.
+
+Package: libomp5
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 1324
+Depends: libc6 (>= 2.38)
+Conflicts: libomp-x.y
+Replaces: libomp-x.y
+Provides: libomp-x.y
+Multi-Arch: same
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/libomp5_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 441504
+SHA256: ba94e143f0a55cb7e233bf3d8efd1f38d55f606c6d92226eb5873d1ceb9b0d70
+SHA1: 507c0fb8d998c3ab186a83311add310808abad8c
+MD5sum: ed8dabe7465211e6ee49be613decf23b
+Description: LLVM OpenMP runtime
+ The runtime is the part of the OpenMP implementation that your code is
+ linked against, and that manages the multiple threads in an OpenMP program
+ while it is executing.
+
+Package: libomp5-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 551
+Depends: libomp5 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Multi-Arch: same
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/libomp5-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 369124
+SHA256: f35c46bb7cbde4b318a8aa886e9f40683d8d1f23841dfcc459cbd9087ef2791f
+SHA1: ef3ae360984407b26c0dfe8915cf09c4982d0dfe
+MD5sum: ac623507d0b7413fac905e0a0e2d4fd4
+Description: debug symbols for libomp5
+Build-Ids: 1206391a6e99e91f585da9ef0614449c6eb54d91
+
+Package: libpolly-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 16158
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libpolly-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 1762248
+SHA256: 6e21e90426f3a21fe5ffb8f0bb09c3698b5904b1623e6ad455e68095e5c493e0
+SHA1: a06f58c8ebe0d090b30643048efcbaddae33429c
+MD5sum: 8c38c798588ecd6116f1f3d6e0e23224
+Description: High-level loop and data-locality optimizer
+ Uses an abstract mathematical representation based on integer polyhedra
+ to analyze and optimize the memory access pattern of a program
+
+Package: libunwind-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 390
+Depends: llvm-libunwind1 (>= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Conflicts: libunwind-dev, libunwind-x.y-dev
+Breaks: llvm-libunwind1 (<< 1:22~++20251113081817)
+Replaces: libunwind-dev, libunwind-x.y-dev, llvm-libunwind1 (<< 1:22~++20251113081817)
+Provides: libunwind-x.y-dev
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libdevel
+Filename: pool/main/l/llvm-toolchain-23/libunwind-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 95676
+SHA256: ae45df7b1d767f8906a462f0032ffd42d135b74b3c5103725c18952b710cd179
+SHA1: 121eb5228edd2a9da796bd5de754e81b7b305072
+MD5sum: d12b0c27a81c804eaa07f79787716b4a
+Description: LLVM unwinder, not compatible with glibc
+ llvm-libunwind is the LLVM unwinder, with platform support for DWARF
+ unwind info, SjLj, and ARM EHABI. Using it for packaging work inside
+ Debian is not recommended, incompatible with glibc.
+ .
+ The low level libunwind API was designed to work either in-process (aka local)
+ or to operate on another process (aka remote), but only the local path has
+ been implemented. Remote unwinding remains as future work.
+
+Package: lld-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 6129
+Depends: libc6 (>= 2.34), libgcc-s1 (>= 3.0), libllvm23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libstdc++6 (>= 12), libzstd1 (>= 1.5.5), zlib1g (>= 1:1.2.2)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/lld-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 1513848
+SHA256: 7d4a3b8c8f71eef5ae403462f710023da4d49c38480426a14cba6a351d31a428
+SHA1: 4775466b42414b79046449303dad2b92fd101c0e
+MD5sum: e13c167fbf656d52ac6d2dcc9adbd393
+Description: LLVM-based linker
+ LLD is a new, high-performance linker. It is built as a set of reusable
+ components which highly leverage existing libraries in the larger LLVM
+ Project.
+
+Package: lld-23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 5993
+Depends: lld-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/lld-23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 4803168
+SHA256: e9d872a72a6a10b02bec1df530eebf7e6c00303770c2b13eb423b1de660c8320
+SHA1: 13a998814d9a6e9aedc8c43e3c4d9dc29672f594
+MD5sum: b946947f204c193af9c88c3c054a253d
+Description: debug symbols for lld-23
+Build-Ids: 6aeb5e1e349137592f4ae8d367e046d585e75eba
+
+Package: lldb-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 6139
+Depends: libc6 (>= 2.38), libclang-cpp23 (>= 1:23.1.2~++20260920034005+85ac56026243), libedit2 (>= 2.11-20080614-0), libgcc-s1 (>= 3.3), liblldb-23, libllvm23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libncurses6 (>= 6), libstdc++6 (>= 12), libtinfo6 (>= 6), libxml2 (>= 2.6.27), libz3-4 (>= 4.13.3), libzstd1 (>= 1.5.5), zlib1g (>= 1:1.1.4), python3-lldb-23
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/lldb-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 1660956
+SHA256: 11a4cb69dcfc0d86ff502bfc5ca583fd73e74cad3494e2e8eaa832e963c92da4
+SHA1: 2a9e1e6b5e7b788c8df187055e5edcfcf727ccb0
+MD5sum: bcf25e27e3818d74a757f2531d7c9c0b
+Description: Next generation, high-performance debugger
+ LLDB is a next generation, high-performance debugger. It is built as a set of
+ reusable components which highly leverage existing libraries in the larger LLVM
+ Project, such as the Clang expression parser and LLVM disassembler.
+
+Package: lldb-23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 13689
+Depends: lldb-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/lldb-23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 12225348
+SHA256: 1100dbdb93b48e4eb01b4bd090b56c9c15c2e08d4ecc4fc0c4fff039abdd8d55
+SHA1: 0ded61e0b5c56ca451d7045b49abc0be6f8dcc96
+MD5sum: e07fb1947f15df068bb924d11830c869
+Description: debug symbols for lldb-23
+Build-Ids: 0826d9d7cf509ca0d2940d1ba5d1278abbfc3d3b 1428f54c76e8cbb18cc70afa3e62d06fd317ff5a 40b0d4943da0a0e7c25041f25f8da8ac7c890766 5783ec5d330fc2977632669565f94d783490b807 5ec96056285c58b00c47ee58145ec425defdcf6f 8a3e70a5572dcdc41d6e981fc7398f81e22fcd46 d83413bc60f684723aa1108b5da94101514377bb dbfc8d151c6a82f9999794461155203f91078072
+
+Package: llvm-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 89628
+Depends: llvm-23-runtime (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), llvm-23-linker-tools (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libc6 (>= 2.38), libcurl4t64 (>= 7.16.2), libgcc-s1 (>= 4.3), libllvm23, libpfm4, libstdc++6 (>= 12), libz3-4 (>= 4.13.3), libzstd1 (>= 1.5.5), zlib1g (>= 1:1.2.0)
+Recommends: llvm-23-dev
+Suggests: llvm-23-doc
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/llvm-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 19710760
+SHA256: 357db4823058de7e87afb400db159709615eafb07a2ef218aabaa7a14804ad72
+SHA1: f8cfb6b9e491c160377c6fd69182c24e7deb2cae
+MD5sum: 20130e3328ac47f171f6fce116dcd07d
+Description: Modular compiler and toolchain technologies
+ LLVM is a collection of libraries and tools that make it easy to build
+ compilers, optimizers, just-in-time code generators, and many other
+ compiler-related programs.
+ .
+ LLVM uses a single, language-independent virtual instruction set both
+ as an offline code representation (to communicate code between
+ compiler phases and to run-time systems) and as the compiler internal
+ representation (to analyze and transform programs). This persistent
+ code representation allows a common set of sophisticated compiler
+ techniques to be applied at compile-time, link-time, install-time,
+ run-time, or "idle-time" (between program runs).
+ .
+ The strengths of the LLVM infrastructure are its extremely
+ simple design (which makes it easy to understand and use),
+ source-language independence, powerful mid-level optimizer, automated
+ compiler debugging support, extensibility, and its stability and
+ reliability. LLVM is currently being used to host a wide variety of
+ academic research projects and commercial projects. LLVM includes C
+ and C++ front-ends, a front-end for a Forth-like language (Stacker),
+ a young scheme front-end, and Java support is in development. LLVM can
+ generate code for X96, SparcV10, PowerPC or many other architectures.
+
+Package: llvm-23-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 90047
+Depends: llvm-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/llvm-23-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 77905828
+SHA256: 09f1a27438a887b0717dfc273db88fa52a72b997b3903db4fd5c1fa5f647d6f1
+SHA1: 74e590ed0388a1eda8899ceb102222d6655569f1
+MD5sum: ef8f6188bf20ec7352a7cb3b4e53aa37
+Description: debug symbols for llvm-23
+Build-Ids: 106c6d7572534ce797829cbdd3d2984a5487e2ea 1cc394f6f104fabb670e4196ba45e8750236e24c 1e713711630f28eefa09e5e3fd6c63431d416c00 206bd3bf8bc2290112b1bc82e9b3bd5fa606337c 221a2840eb179fedb7c5a6456dfdf8da7cabed7a 2827d8bfee66573b08284026500ec41caaae4417 2cae6becff114a760626037b01565bbe72e1dc6b 2d1675f29806c68740b2656e6941ff3fc3e0f377 2e16c8f2e26f00f034f29346045469b55a64d9de 32504ac1bb474dba67cce826ebb7e90682543bd8 35a2a8d13a4a0bb0a4fd5df5ff9afd315ae216ff 384d9d75713cbb27d64da38c41af62a549bdac86 3cf0d4b96fdadf7e0a9164324687ca480fbd9408 3ede86831865466e92eb1b67619d86271186e62f 40fcff7d28cfc093a4f5741ecd7314f9378f4957 4569f1275b98ccb898e933f1e52a84760645da44 467a0c13472e5c7d41633f6dd9d1f6a944f65281 48ec20457023ab8de748ff3ee788f39ad2858c86 4a8a517d83469ddbc3d84e2f3313559256274460 4b883ff2bf515d964c08fce1d904b6ff274aae9b 4d435541945f43f35c78d8699902af0268fe3811 4e5e5559fc45463b1f0cbf75012d6abadb73248c 507b428a71662c863f66fad97d46bb45a493848c 551e8f5e0d0656e6d7edcdf1de2b0ca3f5b8d5f5 5c4a8a998640bd01fcd365bc0d589eb8c279412b 6649fdbd7972297a40f1298581b1c7db220c4ab9 6a8356b0b965d068387376777060769aeab5a79c 6b9202a67c791a24fed1d6046a5db8d08c1004d4 700fe698a94c2152666bc3dc448da92c162f0cbc 76768f6dc210c82692104a028b2a39bd87ac1623 7857fab72b2bc22678fbd6367c697a6a9fd41035 7d226c4aa65c463aa83cf9f1ffc0ed1dde4e6f66 7e76493d03c98c058ac3ad18d6d153da0873eb99 8122ca83270e062c22c0f2440a86cbbed53ec88c 82d8cf835755d58b453c9fa2e71289ff8ecbf4e3 83452d58550938dd31cb3b9efb941cb55506b136 8aeb2b602ea2fae54b9bad0b3c257829bf247f96 916a598a58c0b7e2f4ec691244ddb51f7754257d 9199ceffe744c1596f4facb7e44aac2c14ddab5d 91d992517bc7cf30f01680614ea221e587a7c906 9589e64b3e0c1cae47cca850b8b74483ff030abb 975a57769e7c28610e818ef4ed2f53590d35d76d 97f9ead1c54c1323a45fac7cd56393663621d3a9 9c853e4f64a86101ab6ec70e8ecd3555bed01584 9d09f8f652dfca93c0eee986df6c92a9c9de50df a4aa86e41275baf43c80dc5d14b152378afe7419 a5c1e8314029b160bc574a33105e2552aff1de5a aa2e78ea65f175e2e0c1ea2230dd46273ac1d101 b0262cc9d99c448c7106cf09b5b81e01f8521218 b75ce98bd9508b58d413ecf4b2cbc943c61ca916 b9a109d714b2148acc327cabc242016fbe2c87e7 ba88b97d3c272a9da46c1efb17d65431685c794c bd4a357830c38efec591fd781c42cb894521e32e c181f9d717ec16500d0249a557feed371af382ab c8551f79fa13a3d34975d8baee2f096ce755717a ca40eb61206f36b2b80cfb863fa550c523f0723f cf5394907e8e6985ca542f08860bfc1f48fb1301 d1c7e2f9520e46753bff0dec0003eaf31984ecc9 d20014663cf2f20b4abf7ea55c946862198a12a4 d20e5554ac100a0c4d9f3c78064afba06c0c57e9 d352748c326aa7d45bee38301d52465938d2e2a5 d5abeaca2e1301c73f6d232b9970952938f9c5d6 d73daf5aaa2b43433ad5b922b1676516d0595bd7 e63d9c944f5e505c1f9bdf4585510399aa1aedeb e6e5debcb12bdc4f83f82a24320c813dc822fd1d f266cbc8d3e5aa01c223e6d8a84a4d92e82a78b0 f32c61a297add718a87e7fc874860ca812767414 f34f18597fed566461231a0fc7565df81898fa2d f3fd1362c013cda7505a88b19c704c82f6bacb59 f80efc0bf15f7c556aded18fdb28bdf089a86033 f8404e68978b15827f95c04edc0888507ca11e56 fbd4780f393de144c5d2d2a3b453cf5233202cff fdb2420f4701e545f3088ea22c11608bc8233f55
+
+Package: llvm-23-dev
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 414597
+Depends: libc6 (>= 2.2.5), libgcc-s1 (>= 3.0), libllvm23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libstdc++6 (>= 4.1.1), libffi-dev, llvm-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libncurses-dev, llvm-23-tools (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libclang-cpp23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), libxml2-dev, libz3-dev
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/llvm-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 51737032
+SHA256: 8bf4c23e982bf4cb6c53964b29ad3f09c8922b1157d0cd7c1ae96f463549002b
+SHA1: 37e5aeaef05188bbeb2cb482a54915ed7e943001
+MD5sum: 4b02ec3c7a992a3be0b7cdceef3241dc
+Description: Modular compiler and toolchain technologies, libraries and headers
+ LLVM is a collection of libraries and tools that make it easy to build
+ compilers, optimizers, just-in-time code generators, and many other
+ compiler-related programs.
+ .
+ LLVM uses a single, language-independent virtual instruction set both
+ as an offline code representation (to communicate code between
+ compiler phases and to run-time systems) and as the compiler internal
+ representation (to analyze and transform programs). This persistent
+ code representation allows a common set of sophisticated compiler
+ techniques to be applied at compile-time, link-time, install-time,
+ run-time, or "idle-time" (between program runs).
+ .
+ This package provides the libraries and headers to develop applications
+ using llvm.
+
+Package: llvm-23-dev-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 15
+Depends: llvm-23-dev (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/llvm-23-dev-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 2304
+SHA256: 30b9eb0a1659ee40d99da9fa8dce808ae6d17e9d4bf95cb97782db5897d26e09
+SHA1: 389784fdb0d7aeed2b2461cf098346f6415a5688
+MD5sum: 8e0eacd91aa2f843643cc1d7990ae830
+Description: debug symbols for llvm-23-dev
+Build-Ids: 61cd596c0db4cfa8091261b93951ebe6b9e1ac74
+
+Package: llvm-23-doc
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: all
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 64685
+Depends: libjs-jquery, libjs-underscore
+Multi-Arch: foreign
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: doc
+Filename: pool/main/l/llvm-toolchain-23/llvm-23-doc_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_all.deb
+Size: 9240912
+SHA256: a92ba6edfa177cb7fd3704134d0a73ac0b189e27f45e91d93c4cb2fb6ee59c65
+SHA1: 4e38cc67e0439384679609fd8c73abadbfaafd19
+MD5sum: a5d4f26f9ad9f9ae6083268f4ad7ca53
+Description: Modular compiler and toolchain technologies, documentation
+ LLVM is a collection of libraries and tools that make it easy to build
+ compilers, optimizers, just-in-time code generators, and many other
+ compiler-related programs.
+ .
+ LLVM uses a single, language-independent virtual instruction set both
+ as an offline code representation (to communicate code between
+ compiler phases and to run-time systems) and as the compiler internal
+ representation (to analyze and transform programs). This persistent
+ code representation allows a common set of sophisticated compiler
+ techniques to be applied at compile-time, link-time, install-time,
+ run-time, or "idle-time" (between program runs).
+ .
+ This package contains all documentation (extensive).
+
+Package: llvm-23-examples
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: all
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 493
+Depends: llvm-23-dev (>= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76), llvm-23-dev (<< 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76+c~)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: doc
+Filename: pool/main/l/llvm-toolchain-23/llvm-23-examples_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_all.deb
+Size: 299388
+SHA256: 4f47178c26e596ae7f67ccb07ce041bb11b3ff60d33a5c1b9400b778982a1096
+SHA1: e22ad233ca572d72a00d135571a9709f1453edde
+MD5sum: ff945cc636dbde1c90fa7609a7ae6cc8
+Description: Modular compiler and toolchain technologies, examples
+ LLVM is a collection of libraries and tools that make it easy to build
+ compilers, optimizers, just-in-time code generators, and many other
+ compiler-related programs.
+ .
+ LLVM uses a single, language-independent virtual instruction set both
+ as an offline code representation (to communicate code between
+ compiler phases and to run-time systems) and as the compiler internal
+ representation (to analyze and transform programs). This persistent
+ code representation allows a common set of sophisticated compiler
+ techniques to be applied at compile-time, link-time, install-time,
+ run-time, or "idle-time" (between program runs).
+ .
+ This package contains examples for using LLVM, both in developing
+ extensions to LLVM and in using it to compile code.
+
+Package: llvm-23-linker-tools
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 4028
+Depends: libc6 (>= 2.38), libgcc-s1 (>= 3.0), libllvm23, libstdc++6 (>= 11)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/llvm-23-linker-tools_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 1253180
+SHA256: 8a3af089f1a9bd64a1d915428800a49f6f9767a2697b43a6eee29f862ed3c67e
+SHA1: 03fbb56c610719011e6ce65c6e3c842b692d8b2a
+MD5sum: d7963600d6ef92251abcc39bcf4683e4
+Description: Modular compiler and toolchain technologies - Plugins
+ LLVM is a collection of libraries and tools that make it easy to build
+ compilers, optimizers, just-in-time code generators, and many other
+ compiler-related programs.
+ .
+ This package contains the LLVMgold and LLVMPolly linker plugins.
+
+Package: llvm-23-linker-tools-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 3537
+Depends: llvm-23-linker-tools (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/llvm-23-linker-tools-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 2927072
+SHA256: 569602cca2ac653358d97509c447afec4435cae4f297b56e8494512eb23dbbb7
+SHA1: c0fb126d279455e4e036b2cdd0decff2d541d8bf
+MD5sum: 851fab754b255a99cc8069acbafdf310
+Description: debug symbols for llvm-23-linker-tools
+Build-Ids: 1bc8c431459b03533ec0d863827d25fd4b62b6da ba3cbcfbd4aef101697df67562d216e2bb103b32 f86c253dfcea4a0d8bd514c36fef9acc64332c46
+
+Package: llvm-23-runtime
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 1880
+Depends: libc6 (>= 2.38), libgcc-s1 (>= 3.3), libllvm23, libstdc++6 (>= 12), libz3-4 (>= 4.13.3), libzstd1 (>= 1.5.5), zlib1g (>= 1:1.1.4)
+Recommends: binfmt-support | systemd
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/llvm-23-runtime_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 631308
+SHA256: c94aec95ab4183732c9061819aa7015972d29e5e9966309aa0ad4273139fbd24
+SHA1: f99e5bf205af08539abbbd3a8a242e8a3216ade1
+MD5sum: bb171d2358d474fd398aba0afa90b4cb
+Description: Modular compiler and toolchain technologies, IR interpreter
+ LLVM is a collection of libraries and tools that make it easy to build
+ compilers, optimizers, just-in-time code generators, and many other
+ compiler-related programs.
+ .
+ LLVM uses a single, language-independent virtual instruction set both
+ as an offline code representation (to communicate code between
+ compiler phases and to run-time systems) and as the compiler internal
+ representation (to analyze and transform programs). This persistent
+ code representation allows a common set of sophisticated compiler
+ techniques to be applied at compile-time, link-time, install-time,
+ run-time, or "idle-time" (between program runs).
+ .
+ This package provides the minimal required to execute programs in LLVM
+ format.
+
+Package: llvm-23-runtime-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 1653
+Depends: llvm-23-runtime (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/llvm-23-runtime-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 1276240
+SHA256: ce38d7fbed9999ee7df4516b9d0a6040b0853404467fc3b6a1a72aa94b171632
+SHA1: 955cc6cea772df3a7866f1f1af386e385c1f3894
+MD5sum: e1c7c403c31f279a326bc77257674b58
+Description: debug symbols for llvm-23-runtime
+Build-Ids: 3f6eb20d92996ff52ba0ed114fdd515e8c3534b3 8453f951b666ddaf00c8e25d265caa61aa475bd0
+
+Package: llvm-23-tools
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 2222
+Depends: libc6 (>= 2.38), libgcc-s1 (>= 3.3), libllvm23, libstdc++6 (>= 11), libz3-4 (>= 4.13.3), libzstd1 (>= 1.5.5), zlib1g (>= 1:1.1.4), python3:any, python3-pygments, python3-yaml
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/llvm-23-tools_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 504780
+SHA256: bdf3867dcb58258a4c5dbbcfe49761662ae695aece1a28f390f1eff78f6ac29b
+SHA1: 58b0b6bfb40285938ee3e05fa03ccb1d1230a310
+MD5sum: 036a90b795ef5b16a9a1c67b7f60ebad
+Description: Modular compiler and toolchain technologies, tools
+ LLVM is a collection of libraries and tools that make it easy to build
+ compilers, optimizers, just-in-time code generators, and many other
+ compiler-related programs.
+ .
+ LLVM uses a single, language-independent virtual instruction set both
+ as an offline code representation (to communicate code between
+ compiler phases and to run-time systems) and as the compiler internal
+ representation (to analyze and transform programs). This persistent
+ code representation allows a common set of sophisticated compiler
+ techniques to be applied at compile-time, link-time, install-time,
+ run-time, or "idle-time" (between program runs).
+ .
+ This package provides tools for testing.
+
+Package: llvm-23-tools-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 4690
+Depends: llvm-23-tools (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/llvm-23-tools-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 4272976
+SHA256: 82d9fec93cb83443aea2b70f0fdd955be01c90207dbf352af4247482c8fb3108
+SHA1: 272dba58ac063d572355291b3b507f936177da48
+MD5sum: 39407520240de85d79ae6f3a47787c52
+Description: debug symbols for llvm-23-tools
+Build-Ids: 04745bfd1ab43493848039f5e64da07fbfe62f7d 2252fac705b5626e0985a7acbb6c8c1d0f982cd8 2ce6a5dfead13a00f74401899fa67dcec6d1f419 68c87173e78fb1197997544b4150a322d0dcfde8 d50a5a9bf75c49d68d625fe4e922701e3badb301 de3c25520fd307cc5541809f215ad314e77b3fc7 ff16d27bde72fc095d3d52448f164bf2ec900d74
+
+Package: llvm-libunwind1
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 126
+Depends: libc6 (>= 2.34)
+Conflicts: libunwind-x.y
+Breaks: libunwind-21
+Replaces: libunwind-21, libunwind-x.y
+Provides: libunwind-x.y
+Multi-Arch: same
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: libs
+Filename: pool/main/l/llvm-toolchain-23/llvm-libunwind1_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 76276
+SHA256: c0bdaa4dd08a391240d7e7deef49c6f4e124db0c096f038643958941f5926fca
+SHA1: 3cb39bf1b5ee11b1f8b2c2e03c0881c45ae9cbc6
+MD5sum: 887dc66efb4c5788cdf4709cff8c442a
+Description: LLVM unwinder, not compatible with glibc
+ llvm-libunwind is the LLVM unwinder, with platform support for DWARF
+ unwind info, SjLj, and ARM EHABI. Using it for packaging work inside
+ Debian is not recommended, incompatible with glibc.
+ .
+ The low level libunwind API was designed to work either in-process (aka local)
+ or to operate on another process (aka remote), but only the local path has
+ been implemented. Remote unwinding remains as future work.
+
+Package: llvm-libunwind1-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 39
+Depends: llvm-libunwind1 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Multi-Arch: same
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/llvm-libunwind1-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 19612
+SHA256: e42f167bf24075d59557d7a14f7e844d31ae486988136395cd3d009a5be3e028
+SHA1: 5d4bed3f2db6efddbd2c71ba868ec7de7f78851d
+MD5sum: 16e33d373549a19ddc5c79c2f1a2f50d
+Description: debug symbols for llvm-libunwind1
+Build-Ids: 7ebcbc65c90d68d40a842b47be52d6c12cb2a92b
+
+Package: mlir-23-tools
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 180672
+Depends: libc6 (>= 2.38), libgcc-s1 (>= 3.3), libllvm23, libmlir-23 (>= 1:23.1.2~++20260920034005+85ac56026243), libstdc++6 (>= 12), libz3-4 (>= 4.13.3), libzstd1 (>= 1.5.5), zlib1g (>= 1:1.1.4)
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: devel
+Filename: pool/main/l/llvm-toolchain-23/mlir-23-tools_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 28402896
+SHA256: 7283159aaa507e670af52cb6674acf0385fb5da9c8fd2116a303279e9f723c74
+SHA1: b8afa005e25e355cb05768da53b50ae3f4cd2e2c
+MD5sum: e2c142eb5b70d50582d1c1cea4343e70
+Description: Multi-Level Intermediate Representation tools
+ Novel approach to building reusable and extensible compiler infrastructure.
+ MLIR aims to address software fragmentation, improve compilation for
+ heterogeneous hardware, significantly reduce the cost of building domain
+ specific compilers, and aid in connecting existing compilers together.
+ .
+ This package provides tools.
+
+Package: mlir-23-tools-dbgsym
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 254094
+Depends: mlir-23-tools (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Priority: optional
+Section: debug
+Filename: pool/main/l/llvm-toolchain-23/mlir-23-tools-dbgsym_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 161591956
+SHA256: 2139b6aa5256e784d12f3eb7ad7732754fc8f2104b985ba254ea570596ea244a
+SHA1: 16b5f2122c14d294a970af9a7b7ee248b25df958
+MD5sum: 9dc677772ba3aff0d0b5dcec138c1e95
+Description: debug symbols for mlir-23-tools
+Build-Ids: 0d5a941eb435573995ad994c7140d5da737f895e 110928a634f1ae0ab72c681d333106ab3d0efa20 31a6f44e209655c93a9eec266623935f5dfd81f7 3f1df4f6c30363358926d45e7f817ce25ea9c15f 406b187ea9306fa456b2d39a0d91073fe5e36597 448e0c018746445fcabc5b4969095e22393bed5b 4d32a9e612e187c94e213a1676b00d505291de2c 5514c69da44f869b1e3a352f14448e70eee3ddc8 571d1dcf8f74ea2db9b50382ca7000bbfbb892a9 5e032f2fc78b1444bf3e1ae25fbfd429ccb7c71b 5e1edfb8217ae97e09fd107ec332f5eb89d3bfa5 66179709c23c74ca1053ae5ff34aaa1620cf6296 670734f3bc079c0956fa5282bef193a2c629a200 86b599fd698cffca5c9c7c7dbe49db9166168941 9b8ff600ec5fb0961211522287b98569fac4d058 a211c16212b2647a134cd9344ab42e3d47e8293e b0c3fad895c581c6220acf1584b8fb5abcea8b62 bb14ab0f76d4c632cd079a1180d77e8fe2cb2b07 fddaf5234fe492c8d7029ad2dc8594877f1eca93
+
+Package: python3-clang-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 221
+Depends: python3:any, libclang-23-dev
+Conflicts: python-clang-x.y
+Replaces: python-clang-x.y
+Provides: python-clang-x.y
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: python
+Filename: pool/main/l/llvm-toolchain-23/python3-clang-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 87604
+SHA256: ba20b3376b59cf30bd3e6d59d8530d620650bdbecc10dfc0c2e208e3f4eff85b
+SHA1: 596aa4d784edd7954a9e043a64d55bb43747ccaa
+MD5sum: b2c9905255ee788c212cad2a771ad98a
+Description: Clang Python Bindings
+ Clang project is a C, C++, Objective C and Objective C++ front-end
+ based on the LLVM compiler. Its goal is to offer a replacement to the
+ GNU Compiler Collection (GCC).
+ .
+ Clang implements all of the ISO C++ 1998, 11, 14 and 17 standards and also
+ provides most of the support of C++20.
+ .
+ This binding package provides access to the Clang compiler and libraries.
+
+Package: python3-lldb-23
+Source: llvm-toolchain-23
+Version: 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76
+Architecture: amd64
+Maintainer: LLVM Packaging Team <pkg-llvm-team@lists.alioth.debian.org>
+Installed-Size: 1113
+Depends: python3 (<< 3.14), python3 (>= 3.13~), python3:any, liblldb-23 (= 1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76)
+Conflicts: python3-lldb-x.y
+Replaces: python3-lldb-x.y
+Provides: python3-lldb-x.y
+Homepage: https://www.llvm.org/
+Priority: optional
+Section: python
+Filename: pool/main/l/llvm-toolchain-23/python3-lldb-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb
+Size: 204468
+SHA256: 5e3f24bfa79da161a1d4f75dd1eed687f1a5b59f7ef601fac44bd3680701c212
+SHA1: 8508b6ffd6ee7c6c86ad5dac69b804cb345bc590
+MD5sum: 20a5df46c53676a904f71bbae394cc0c
+Description: Next generation, high-performance debugger, python3 lib
+ LLDB is a next generation, high-performance debugger. It is built as a set of
+ reusable components which highly leverage existing libraries in the larger LLVM
+ Project, such as the Clang expression parser and LLVM disassembler.
+ .
+ This binding package provides access to lldb.
+

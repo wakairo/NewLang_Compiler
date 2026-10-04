@@ -27,30 +27,38 @@ On Ubuntu 24.04, install base prerequisites from its signed package repositories
 sudo apt-get update
 sudo apt-get install --no-install-recommends -y \
   gcc-13 g++-13 make cmake python3 dpkg \
-  libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+  libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
 ```
 
 The Codex Debian 13 base already supplies GCC 14, make, Python, dpkg, and LLVM
 runtime dependencies. Bootstrap supplies the missing Clang/LLVM development
-tools, sanitizer runtimes, and CMake there without root privileges.
+tools, sanitizer runtimes, and CMake there without root privileges. Both hosts
+use the tag-matching Trixie LLVM SDK in the private prefix; Ubuntu additionally
+receives checksum-locked Z3 4.13.3. Its system `libstdc++6` must be >=14 (from
+normal Ubuntu updates), independently of using GCC 13 as the C compiler.
+Bootstrap checks that prerequisite; it never replaces system libc/libstdc++.
 
 From the repository root:
 
 ```sh
 python3 scripts/bootstrap.py
 . .deps/activate.sh
-CC=gcc cmake -S . -B build-gcc -DCMAKE_BUILD_TYPE=Debug
+CC=gcc cmake --fresh -S . -B build-gcc -DCMAKE_BUILD_TYPE=Debug
 cmake --build build-gcc --parallel 2
 ctest --test-dir build-gcc --output-on-failure
 ./build-gcc/newlangc --version
 ```
 
 Bootstrap downloads reviewed binary packages into ignored `.deps/`, verifies
-each SHA-256, and extracts a content-addressed toolchain. Exact LLVM **19.1.7**
+each SHA-256, and extracts a content-addressed toolchain. Exact LLVM **23.1.2**
 and OS-specific package versions/hashes live in `scripts/toolchain-lock.json`.
 It does not build LLVM from source, run package maintainer scripts, or update
 pins. Activation is needed in each new shell/task; processes are not retained.
-Network destinations: `deb.debian.org` (Debian), `apt.llvm.org` (Ubuntu LLVM),
+The SDK source commit matches the official `llvmorg-23.1.2` tag. Upgrades require
+a dedicated reviewed PR; ordinary bootstrap/build never change the release.
+`cmake --fresh` refreshes compiler/LLVM discovery when upgrading an existing
+build directory from LLVM 19; build/test commands themselves reuse valid outputs.
+Network destinations: `deb.debian.org` (auxiliary OS packages), `apt.llvm.org` (LLVM SDK),
 Ubuntu package mirrors (Ubuntu prerequisites), and GitHub / `api.github.com`
 for repository/PR operations. No application credentials or services are needed.
 
@@ -58,15 +66,15 @@ for repository/PR operations. No application credentials or services are needed.
 
 ```sh
 . .deps/activate.sh
-CC=clang-19 cmake -S . -B build-clang -DCMAKE_BUILD_TYPE=Debug
+CC=clang-23 cmake --fresh -S . -B build-clang -DCMAKE_BUILD_TYPE=Debug
 cmake --build build-clang --parallel 2
 ctest --test-dir build-clang --output-on-failure
 
-CC=clang-19 cmake -S . -B build-asan -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_SANITIZER=address
+CC=clang-23 cmake --fresh -S . -B build-asan -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_SANITIZER=address
 cmake --build build-asan --parallel 2
 ctest --test-dir build-asan --output-on-failure
 
-CC=clang-19 cmake -S . -B build-ubsan -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_SANITIZER=undefined
+CC=clang-23 cmake --fresh -S . -B build-ubsan -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_SANITIZER=undefined
 cmake --build build-ubsan --parallel 2
 ctest --test-dir build-ubsan --output-on-failure
 ```

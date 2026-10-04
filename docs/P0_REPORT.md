@@ -1,6 +1,6 @@
 # P0 — Production Compiler Bootstrap report
 
-Status: local validation and PR-triggered fresh Ubuntu CI **green**.
+Status: LLVM 23.1.2 local validation **green**; updated PR CI pending.
 P0 review gate only. P1 work is not authorized by this milestone.
 
 ## 1. Repository, branch, PR
@@ -28,19 +28,48 @@ govern scope only. All versioned inputs and archive hashes appear in
 ## 4–7. Toolchain
 
 See `P0_TOOLCHAIN_DECISIONS.md` for C17 vs C23 and CMake vs Meson vs Make.
-C17 and CMake/CTest selected; extensions disabled. LLVM C API **19.1.7** and
-Clang **19.1.7** pinned by exact OS-specific package versions, URLs and SHA-256.
+C17 and CMake/CTest selected; extensions disabled. LLVM C API **23.1.2** and
+Clang **23.1.2** pinned by exact package versions, URLs and SHA-256.
 Signature-verified metadata was used to create the lock. Ordinary builds cannot
 change pins. Bootstrap is rootless on the supplied Debian 13 Cloud base.
 
 Observed Cloud host: Debian GNU/Linux 13, Linux x86_64, **GCC 14.2.0**,
-**Clang 19.1.7**, **LLVM 19.1.7**, **CMake 3.31.6**, **GNU Make 4.4.1**,
-**Python 3.12.14**. Ubuntu 24.04 CI validates GCC 13 and the same pinned Clang /
-LLVM 19.1.7. The API confirms successful job steps; raw CI log downloads were
-blocked by the current runtime egress policy, so exact Ubuntu GCC patch, CMake
-and Python runtime versions are not independently transcribed here.
+**Clang 23.1.2**, **LLVM 23.1.2**, **CMake 3.31.6**, **GNU Make 4.4.1**,
+**Python 3.12.14**. Updated Ubuntu 24.04 CI selects GCC 13 and the same pinned
+Clang / LLVM 23.1.2; its current-head result is recorded after the actual run.
 Host OS runtimes follow signed distro packages; this is not bit-identical OS
 pinning. WSL2 execution is not independently validated.
+
+### LLVM baseline additional review — 2026-10-04
+
+Evaluated **19.1.7, 22.1.8, 23.1.2**, confirming official stable releases,
+signed package indexes, complete SDK artifacts, representative C declarations,
+release/API policy, and M7 compatibility. Final selection: **23.1.2**. The
+older initial selection lacked a comparison against current stable LLVM; it
+has been superseded, not retained merely because it already worked.
+
+23 provides the required C API without any smoke-source adjustment. Its known
+branch opcode/operand churn does not affect P0. 22 also runs the unchanged
+smoke and is the valid fallback; 19 has no P0 host/API advantage over 23 and
+would incur a later migration. Detailed comparison, rejection reasons, support
+limits and dedicated reviewed upgrade policy are in `P0_TOOLCHAIN_DECISIONS.md`.
+
+Source/package identity matters: Noble's 23.1.2 packaging build is the release
+tag's immediate parent; selected Trixie SDK source revision
+`85ac560262434c9ccfc0c183ec22d4138ed647fb` matches `llvmorg-23.1.2` exactly.
+Both hosts use that same SDK in a private prefix. Ubuntu also receives locked
+Z3 4.13.3 and must provide system libstdc++6 >=14 from signed Ubuntu updates.
+SDK headers/shared library/config/Clang/sanitizer artifacts remain complete;
+TLS, signed metadata provenance, per-artifact SHA-256 and rootless extraction
+are preserved. No system runtime replacement, source build or compatibility
+layer is introduced. Ordinary bootstrap/build never discover or update pins.
+
+`llvm-config-23 --version` prints **23.1.2**. GCC, Clang 23, ASan and UBSan were
+rebuilt with fresh CMake dependency/compiler discovery to remove the old LLVM 19
+cache. All **40/40 CTest executions PASS** with the existing ten-test suite.
+All normative/policy/oracle snapshot hashes still match; tests and production
+C source are unchanged by this review. Bootstrap repeatability and updated PR
+CI are rechecked before the final review verdict.
 
 ## 8–10. Structure, executable and diagnostics
 
@@ -85,21 +114,19 @@ exercised directly. Dependency caches and outputs are ignored local state.
 
 ## 15–16. CI and reproducibility
 
-`p0.yml` requires PR-triggered Ubuntu 24.04 jobs for GCC 13, Clang 19.1.7,
+`p0.yml` requires PR-triggered Ubuntu 24.04 jobs for GCC 13, Clang 23.1.2,
 ASan and UBSan. Each starts from checkout, installs explicit base prerequisites
 from signed Ubuntu repositories, downloads checksum-locked LLVM binaries,
 configures/builds C, and runs all 10 CTests. Checkout action pinned to verified
 v4.2.2 commit `11bd71901bbe5b1630ceea73d27597364c9af683`. No auto-merge action.
-PR-triggered [run 37196049092](https://github.com/wakairo/NewLang_Compiler/actions/runs/37196049092)
-for implementation commit `a7f665fbd207b4e1c53efdcd6b714f172de576b6` completed
-successfully. All four jobs (**GCC, Clang, ASan, UBSan**) and each prerequisite,
-bootstrap, configure/build/test step are **success**, confirmed through GitHub
-Actions API. The workflow runs the same 10-test suite in each fresh runner.
-Push-triggered run 37196048629 also succeeded. Subsequent report-only revisions
-receive their own PR checks; the PR check panel is the current-head authority.
+The initial LLVM 19 [run 37196049092](https://github.com/wakairo/NewLang_Compiler/actions/runs/37196049092)
+is historical evidence only, not validation of the new baseline. Updated LLVM 23
+PR run/commit and results are recorded after execution. Current-head CI must be
+green before concluding this review; the PR check panel is authoritative for
+subsequent report-only revisions too. Each job runs all ten CTests.
 
 Reproduce from repository root with README commands:
-`python3 scripts/bootstrap.py`, `. .deps/activate.sh`, CMake configure/build,
+`python3 scripts/bootstrap.py`, `. .deps/activate.sh`, CMake `--fresh` configure/build,
 `ctest --test-dir build-gcc --output-on-failure`. Separate build directories
 select GCC/Clang/address/undefined. Dependencies remain in filesystem snapshots;
 activation must run again in future shells. No long-running service is needed.
@@ -116,8 +143,18 @@ No COMPILER-SPEC-HOLE / COMPILER-SPEC-AMBIGUITY discovered or silently encoded:
 P0 has no source-semantic implementation. COMPILER-IMPLEMENTATION decisions are
 the toolchain selection, borrowed diagnostic records and archive-based oracle.
 COMPILER-PORTABILITY limits: Linux x86_64 baseline only; WSL2/native other-host
-validation remains future work. Rootless extraction replaces privileged system
-installation on Cloud while preserving artifact verification.
+validation remains future work. Additional review findings:
+
+- **COMPILER-PORTABILITY:** reported 23.1.2 was not enough to establish exact
+  stable source identity for the Noble package. Resolved using tag-matching
+  Trixie SDK plus a locked private Z3 runtime and checked Ubuntu C++ runtime.
+  Fresh Ubuntu CI must verify this userspace ABI reuse before acceptance.
+- **COMPILER-IMPLEMENTATION:** initial version rationale omitted current stable
+  candidates; replaced with explicit release/package/API/contract comparison
+  and dedicated reviewed upgrade policy. LLVM 23 branch opcode changes are
+  recorded for future review, not implemented speculatively.
+- No COMPILER-LOWERING, SPEC-HOLE or SPEC-AMBIGUITY requiring NewLang contract
+  changes was discovered. Draft 17.4 and Backend Contract v0.4 are unchanged.
 
 ## 18–19. Non-goals and P1 assessment
 
@@ -132,13 +169,16 @@ after human/ChatGPT review, not automatically started. This task stops at P0.
 
 ## Completion gate evidence
 
-User completion criteria **A–AB are met for the P0 implementation/review gate**:
+The original P0 criteria A–AB were met before this additional baseline review.
+For LLVM 23, local toolchain/implementation/scope criteria are revalidated;
+current-head Ubuntu PR CI remains required before declaring the review complete:
 dedicated repository and committed references (A–D), C/reproducible toolchain
 (E–I), GCC/Clang/strict warnings/sanitizers (J–N), CLI/diagnostics/LLVM/test/oracle
 infrastructure (O–T), green PR-triggered CI and open unmerged branch PR (U–W),
 and all non-goal/scope/semantic-review boundaries (X–AB).
 
-Fresh Ubuntu runner bootstrap is verified. Current Cloud setup is verified;
+The initial LLVM 19 fresh Ubuntu bootstrap was verified; updated LLVM 23 CI is
+pending. Current Cloud setup is verified;
 publication and restoration in a new Cloud task are not claimed. WSL2 execution
 and the full 466-test oracle suite remain optional unrun checks. P1 requires
 review approval and a separately chosen scope; this task has stopped at P0.

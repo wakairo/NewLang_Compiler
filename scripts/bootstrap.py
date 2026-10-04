@@ -40,8 +40,16 @@ def main() -> None:
     release = platform.freedesktop_os_release()
     target = f"{release['ID']}-{release['VERSION_ID']}-x86_64"
     lock = json.loads(LOCK.read_text())
+    llvm_major = lock["llvm_version"].split(".")[0]
     if target not in lock["platforms"]:
         raise SystemExit(f"No reviewed toolchain lock for {target}")
+    if target == "ubuntu-24.04-x86_64":
+        # The tag-matching Trixie SDK uses the locked Z3 4.13.3 runtime on
+        # Ubuntu too. Its GLIBCXX_3.4.32 requirement needs the distro's GCC 14
+        # runtime, independently of using GCC 13 as the C host compiler.
+        runtime = run(["dpkg-query", "-W", "-f=${Version}", "libstdc++6"])
+        if subprocess.run(["dpkg", "--compare-versions", runtime, "ge", "14"]).returncode:
+            raise SystemExit("Ubuntu requires libstdc++6 >=14; install README prerequisites")
     identity = hashlib.sha256(LOCK.read_bytes()).hexdigest()[:16]
     prefix = ROOT / ".deps/toolchains" / f"{target}-{identity}"
     cache = ROOT / ".deps/downloads"
@@ -72,10 +80,11 @@ def main() -> None:
     environment["LD_LIBRARY_PATH"] = libdir + (
         os.pathsep + environment["LD_LIBRARY_PATH"]
         if environment.get("LD_LIBRARY_PATH") else "")
-    llvm = run([str(prefix / "usr/bin/llvm-config-19"), "--version"], environment)
+    llvm_config = prefix / f"usr/bin/llvm-config-{llvm_major}"
+    llvm = run([str(llvm_config), "--version"], environment)
     if llvm != lock["llvm_version"]:
         raise SystemExit(f"LLVM version mismatch: {llvm}")
-    clang = run([str(prefix / "usr/bin/clang-19"), "--version"], environment)
+    clang = run([str(prefix / f"usr/bin/clang-{llvm_major}"), "--version"], environment)
     cmake = run(["cmake", "--version"], environment)
     gcc = run(["gcc", "-dumpfullversion"], environment)
     print(f"LLVM {llvm}\n{clang.splitlines()[0]}\n"
@@ -90,7 +99,7 @@ def main() -> None:
         f"export PATH={shlex.quote(bindir)}:\"$PATH\"\n" +
         f"export LD_LIBRARY_PATH={shlex.quote(libdir)}"
         '"${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"\n' +
-        f"export LLVM_CONFIG={shlex.quote(str(prefix / 'usr/bin/llvm-config-19'))}\n")
+        f"export LLVM_CONFIG={shlex.quote(str(llvm_config))}\n")
     completed.write_text(identity + "\n")
     print("Bootstrap verified. Run: . .deps/activate.sh")
 
