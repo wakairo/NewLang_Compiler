@@ -1,0 +1,54 @@
+name: Compiler validation
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: GCC
+            compiler: gcc-13
+            sanitizer: none
+          - name: Clang
+            compiler: clang-23
+            sanitizer: none
+          - name: ASan
+            compiler: clang-23
+            sanitizer: address
+          - name: UBSan
+            compiler: clang-23
+            sanitizer: undefined
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Host prerequisites from signed Ubuntu repositories
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            gcc-13 g++-13 make cmake python3 dpkg \
+            libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap checksum-locked LLVM 23.1.2
+        run: python3 scripts/bootstrap.py
+      - name: Check C formatting
+        if: matrix.name == 'Clang'
+        run: |
+          . .deps/activate.sh
+          bash scripts/check-format.sh
+      - name: Configure, build, and test
+        env:
+          CC: ${{ matrix.compiler }}
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug \
+            -DNEWLANG_SANITIZER=${{ matrix.sanitizer }}
+          cmake --build build --parallel 2
+          ctest --test-dir build --output-on-failure
