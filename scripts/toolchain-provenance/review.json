@@ -1,0 +1,28 @@
+{
+  "review_date": "2026-10-04",
+  "selected_version": "23.1.2",
+  "selected_source_commit": "85ac560262434c9ccfc0c183ec22d4138ed647fb",
+  "sdk_package_source": "apt.llvm.org/trixie llvm-toolchain-trixie-23",
+  "ubuntu_runtime": "checksum-locked libz3-4 4.13.3-1; system libstdc++6 >=14 required",
+  "candidates": [
+    {
+      "version": "19.1.7",
+      "release_url": "https://github.com/llvm/llvm-project/releases/tag/llvmorg-19.1.7",
+      "representative_c_api_declarations_present": 24
+    },
+    {
+      "version": "22.1.8",
+      "release_url": "https://github.com/llvm/llvm-project/releases/tag/llvmorg-22.1.8",
+      "representative_c_api_declarations_present": 24,
+      "published_at": "2026-06-16T13:48:55Z",
+      "prerelease": false
+    },
+    {
+      "version": "23.1.2",
+      "release_url": "https://github.com/llvm/llvm-project/releases/tag/llvmorg-23.1.2",
+      "representative_c_api_declarations_present": 24,
+      "published_at": "2026-09-22T06:49:10Z",
+      "prerelease": false
+    }
+  ]
+}
