@@ -5,6 +5,10 @@ Branch: `p1-lexical-frontend`, based on verified latest main / merged Pre-P1
 milestones; their reports/snapshots have not been rewritten. P1 review only:
 Codex must not merge this PR or begin P2.
 
+PR: [#3](https://github.com/wakairo/NewLang_Compiler/pull/3), open against main,
+unmerged. Implementation and initial fresh Ubuntu PR CI are green; final
+current-head evidence is tracked in the PR description/checks as below.
+
 ## Scope and audit
 
 Implemented source bytes -> NLSource -> NLLexer -> NLToken. No parser, AST,
@@ -154,11 +158,19 @@ build-ubsan, using address/undefined sanitizer settings as before.
 
 ## PR / current-head CI gate
 
-PR against main will be recorded after creation. Current-head PR-triggered CI
-must pass GCC, Clang (including format step), ASan and UBSan with the entire
-13-test suite. The PR description and final handoff record the exact current
-head SHA/run URL; earlier green commits are not sufficient merge evidence.
-This report is not permission to merge or begin P2.
+Fresh Ubuntu 24.04 PR-triggered
+[run 37204009773](https://github.com/wakairo/NewLang_Compiler/actions/runs/37204009773)
+at implementation head `b13c05a5da63b0f4d3e1ad0504b5b7d415f1d56f` completed
+**success**: GCC, Clang, ASan, UBSan jobs, bootstrap and configure/build/test
+steps all pass, including Clang's non-modifying format check. Each job executes
+the normal 13-test suite with the three new tests; nothing is skipped.
+
+The report-only revision also requires its own successful current-head run.
+[Current-head PR checks](https://github.com/wakairo/NewLang_Compiler/pull/3/checks)
+and the PR description/final handoff record that final exact SHA/run URL;
+the earlier implementation run above is not substituted for that evidence.
+Current-head validation must remain green for reviewer acceptance. This report
+is not permission to merge or begin P2.
 
 ## NewLang-aware C observations
 
@@ -183,9 +195,12 @@ remain explicit adjudication work, rather than silently resolved in C.
 
 ## Completion and P2 readiness
 
-Implementation/location/token/test/non-goal criteria E–AW have local evidence;
-branch A exists. PR B / unmerged C / current-head CI D are the remaining remote
-review gate until documented below. Existing P0 regression and oracle pass.
+All P1 criteria **A–AW** have implementation, documentation, local matrix and
+fresh PR CI evidence, subject to rechecking the final report-only revision's
+current-head CI at handoff. Branch/PR are dedicated, main is untouched and the
+PR remains open/unmerged. Existing P0 regression and oracle pass. The open
+language-level lexical findings are intentionally outside the P1 subset and
+do not block this software foundation milestone.
 
 P2 has an engineering foundation for a minimal syntax subset: stable bytes,
 streaming atoms, spans, failure contracts and direct tests. Faithful complete
