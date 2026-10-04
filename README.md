@@ -1,8 +1,10 @@
 # NewLang Compiler
 
-Production compiler **P0 bootstrap**, written in C17. This establishes the
-development loop; it does not compile NewLang source yet. P0 stops for human /
-ChatGPT review before P1. Work is on `p0-bootstrap`; do not merge automatically.
+NewLang production compiler, written in C17 with LLVM as the primary backend.
+
+**P0 bootstrap is complete and merged.** The repository is now in the pre-P1
+foundation stage. It still does not compile NewLang source; substantial frontend
+implementation begins only after the pre-P1 foundation is reviewed.
 
 ## Authority
 
@@ -62,6 +64,16 @@ Network destinations: `deb.debian.org` (auxiliary OS packages), `apt.llvm.org` (
 Ubuntu package mirrors (Ubuntu prerequisites), and GitHub / `api.github.com`
 for repository/PR operations. No application credentials or services are needed.
 
+The same locked LLVM toolchain provides `clang-format-23` 23.1.2. Mechanical
+C/H formatting is repository policy:
+
+```sh
+bash scripts/format.sh        # rewrite tracked C/H files
+bash scripts/check-format.sh  # verify without modifying
+```
+
+CI runs the non-modifying check.
+
 ## Other validated configurations
 
 ```sh
@@ -99,11 +111,18 @@ artifact is produced. Output I/O failure exits 1.
 - `include/newlang/diagnostic.h`, `src/`: small borrowed-data diagnostic API and CLI.
 - `tests/unit/`, `tests/integration/`: C unit / LLVM checks and CLI/artifact tests.
 - `oracle/`, `tests/oracle/`: untouched M7.5 archive, identity, and isolated adapter.
-- `scripts/`: reproducible bootstrap and dependency lock.
-- `.github/workflows/p0.yml`: PR-triggered GCC, Clang, ASan, UBSan matrix.
-- `docs/`: [toolchain decisions](docs/P0_TOOLCHAIN_DECISIONS.md),
-  [architecture](docs/P0_ARCHITECTURE.md), and [P0 report](docs/P0_REPORT.md).
+- `scripts/`: reproducible bootstrap, dependency lock, formatter/fmt-check helpers.
+- `.github/workflows/compiler-ci.yml`: PR-triggered GCC, Clang, ASan, UBSan validation plus
+  pinned clang-format checking.
+- `docs/NewLang_Aware_C_Guidelines.md`: production C implementation discipline.
+- `docs/NewLang_Compiler_Testing_Strategy.md`: unit/integration/oracle/end-to-end test policy.
+- `docs/NewLang_Compiler_Review_Guidelines.md`: shared review contract.
+- `docs/PRE_P1_SOURCE_INPUT_AND_LOCATION_CONTRACT.md`: preserved-byte and canonical source-span
+  foundation.
+- `docs/PRE_P1_FOUNDATION_DECISIONS.md`: pre-P1 decisions and explicit deferrals.
+- `docs/`: historical [P0 toolchain decisions](docs/P0_TOOLCHAIN_DECISIONS.md),
+  [P0 architecture](docs/P0_ARCHITECTURE.md), and [P0 report](docs/P0_REPORT.md).
 
-There is no lexer/parser/type checker, checked IR, optimization, FFI, concurrency,
-separate compilation, self-hosting, or speculative M8+ implementation. See the
-Charter for the complete non-goals. P1 requires a separate review and scope decision.
+There is still no lexer/parser/type checker, checked IR, optimization framework, broad FFI,
+concurrency, separate compilation, self-hosting, or speculative M8+ implementation. P1 scope
+must be chosen and reviewed separately.

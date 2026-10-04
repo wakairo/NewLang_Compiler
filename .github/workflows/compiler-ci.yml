@@ -1,9 +1,9 @@
-name: P0 validation
+name: Compiler validation
 
 on:
   pull_request:
   push:
-    branches: [p0-bootstrap]
+    branches: [main]
 
 permissions:
   contents: read
@@ -38,6 +38,11 @@ jobs:
             libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
       - name: Bootstrap checksum-locked LLVM 23.1.2
         run: python3 scripts/bootstrap.py
+      - name: Check C formatting
+        if: matrix.name == 'Clang'
+        run: |
+          . .deps/activate.sh
+          bash scripts/check-format.sh
       - name: Configure, build, and test
         env:
           CC: ${{ matrix.compiler }}

@@ -2,27 +2,26 @@
 
 static bool range_valid(const NLSourceRange *range)
 {
-    return range == NULL ||
-           (range->path != NULL && range->start_line > 0 &&
-            range->start_column > 0 && range->end_column > 0 &&
-            (range->end_line > range->start_line ||
-             (range->end_line == range->start_line &&
-              range->end_column >= range->start_column)));
+    return range == NULL || (range->path != NULL && range->start_line > 0 &&
+                             range->start_column > 0 && range->end_column > 0 &&
+                             (range->end_line > range->start_line ||
+                              (range->end_line == range->start_line &&
+                               range->end_column >= range->start_column)));
 }
 
 static bool render_range(FILE *stream, const NLSourceRange *range)
 {
-    return range == NULL ||
-           fprintf(stream, "%s:%zu:%zu-%zu:%zu: ", range->path,
-                   range->start_line, range->start_column,
-                   range->end_line, range->end_column) >= 0;
+    return range == NULL || fprintf(stream, "%s:%zu:%zu-%zu:%zu: ", range->path,
+                                    range->start_line, range->start_column,
+                                    range->end_line, range->end_column) >= 0;
 }
 
 bool nl_diagnostic_render(FILE *stream, const NLDiagnostic *diagnostic)
 {
     if (stream == NULL || diagnostic == NULL || diagnostic->message == NULL ||
         diagnostic->severity < NL_DIAG_NOTE ||
-        diagnostic->severity > NL_DIAG_ERROR || !range_valid(diagnostic->range) ||
+        diagnostic->severity > NL_DIAG_ERROR ||
+        !range_valid(diagnostic->range) ||
         (diagnostic->note_count > 0 && diagnostic->notes == NULL)) {
         return false;
     }

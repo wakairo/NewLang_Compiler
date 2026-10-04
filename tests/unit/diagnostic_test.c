@@ -31,19 +31,23 @@ static bool expect_render(const NLDiagnostic *diagnostic, bool valid,
 int main(void)
 {
     const NLSourceRange range = {"sample.nl", 2, 3, 2, 8};
-    const NLDiagnosticNote notes[] = {
-        {"related source", &range}, {"follow-up", NULL}
-    };
-    NLDiagnostic diagnostic = {
-        NL_DIAG_ERROR, "implementation", "P0-TEST", "primary", &range, notes, 2
-    };
-    if (!expect_render(&diagnostic, true,
+    const NLDiagnosticNote notes[] = {{"related source", &range},
+                                      {"follow-up", NULL}};
+    NLDiagnostic diagnostic = {NL_DIAG_ERROR,
+                               "implementation",
+                               "P0-TEST",
+                               "primary",
+                               &range,
+                               notes,
+                               2};
+    if (!expect_render(
+            &diagnostic, true,
             "sample.nl:2:3-2:8: error(implementation)[P0-TEST]: primary\n"
             "sample.nl:2:3-2:8: note: related source\nnote: follow-up\n")) {
         return 1;
     }
-    diagnostic = (NLDiagnostic){NL_DIAG_WARNING, NULL, NULL, "warning",
-                                NULL, NULL, 0};
+    diagnostic =
+        (NLDiagnostic){NL_DIAG_WARNING, NULL, NULL, "warning", NULL, NULL, 0};
     if (!expect_render(&diagnostic, true, "warning: warning\n")) {
         return 1;
     }

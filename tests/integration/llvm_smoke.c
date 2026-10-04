@@ -12,7 +12,8 @@ int main(void)
     if (context == NULL) {
         return 1;
     }
-    LLVMModuleRef const module = LLVMModuleCreateWithNameInContext("p0", context);
+    LLVMModuleRef const module =
+        LLVMModuleCreateWithNameInContext("p0", context);
     LLVMBuilderRef const builder = LLVMCreateBuilderInContext(context);
     char *verification = NULL; /* Owned LLVM message; disposed below. */
     char *ir = NULL;
@@ -21,7 +22,8 @@ int main(void)
     }
     LLVMTypeRef const integer = LLVMInt32TypeInContext(context); /* Borrowed. */
     LLVMTypeRef const signature = LLVMFunctionType(integer, NULL, 0, 0);
-    LLVMValueRef const function = LLVMAddFunction(module, "p0_answer", signature);
+    LLVMValueRef const function =
+        LLVMAddFunction(module, "p0_answer", signature);
     LLVMBasicBlockRef const entry =
         LLVMAppendBasicBlockInContext(context, function, "entry");
     LLVMPositionBuilderAtEnd(builder, entry);
@@ -38,7 +40,8 @@ int main(void)
         goto cleanup;
     }
     status = puts("LLVM C API smoke: verified p0_answer returning i32 42") >= 0
-                 ? 0 : 1;
+                 ? 0
+                 : 1;
 
 cleanup:
     if (ir != NULL) {

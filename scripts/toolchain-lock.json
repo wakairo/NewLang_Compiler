@@ -13,6 +13,12 @@
           "sha256": "956ce817b505f5bbdefdac394e6057731ddc10fa830a961591b9e91716fc264b"
         },
         {
+          "name": "clang-format-23",
+          "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
+          "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/clang-format-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
+          "sha256": "c9d22323f0cd62f05566c515e1106065b693c5f1aa1f5919d25f95b31c13fb80"
+        },
+        {
           "name": "libclang-common-23-dev",
           "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
           "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/libclang-common-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
@@ -107,6 +113,12 @@
           "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
           "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/clang-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
           "sha256": "956ce817b505f5bbdefdac394e6057731ddc10fa830a961591b9e91716fc264b"
+        },
+        {
+          "name": "clang-format-23",
+          "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
+          "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/clang-format-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
+          "sha256": "c9d22323f0cd62f05566c515e1106065b693c5f1aa1f5919d25f95b31c13fb80"
         },
         {
           "name": "libclang-common-23-dev",

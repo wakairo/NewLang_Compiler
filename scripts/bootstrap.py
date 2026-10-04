@@ -85,9 +85,12 @@ def main() -> None:
     if llvm != lock["llvm_version"]:
         raise SystemExit(f"LLVM version mismatch: {llvm}")
     clang = run([str(prefix / f"usr/bin/clang-{llvm_major}"), "--version"], environment)
+    clang_format = run([str(prefix / f"usr/bin/clang-format-{llvm_major}"), "--version"], environment)
+    if lock["llvm_version"] not in clang_format:
+        raise SystemExit(f"clang-format version mismatch: {clang_format}")
     cmake = run(["cmake", "--version"], environment)
     gcc = run(["gcc", "-dumpfullversion"], environment)
-    print(f"LLVM {llvm}\n{clang.splitlines()[0]}\n"
+    print(f"LLVM {llvm}\n{clang.splitlines()[0]}\n{clang_format.splitlines()[0]}\n"
           f"GCC {gcc}\n{cmake.splitlines()[0]}\nPython {platform.python_version()}")
 
     # Activation is required for shared libraries and compiler executables.
