@@ -1,14 +1,14 @@
 # P0 — Production Compiler Bootstrap report
 
-Status: local validation green; PR/fresh-runner CI evidence pending below.
+Status: local validation and PR-triggered fresh Ubuntu CI **green**.
 P0 review gate only. P1 work is not authorized by this milestone.
 
 ## 1. Repository, branch, PR
 
 - Repository: https://github.com/wakairo/NewLang_Compiler (existing empty remote).
 - Minimal seed `18d2107` creates main with README/.gitignore only.
-- Production work: `p0-bootstrap` -> `main`; PR link and final CI evidence will
-  be recorded after creation. No production work is committed directly to main.
+- Production work: `p0-bootstrap` -> `main`; [PR #1](https://github.com/wakairo/NewLang_Compiler/pull/1)
+  is open, ready for review. No production work is committed directly to main.
 - PR remains open and must not be self-merged.
 
 ## 2–3. Artifacts and authority
@@ -35,7 +35,10 @@ change pins. Bootstrap is rootless on the supplied Debian 13 Cloud base.
 
 Observed Cloud host: Debian GNU/Linux 13, Linux x86_64, **GCC 14.2.0**,
 **Clang 19.1.7**, **LLVM 19.1.7**, **CMake 3.31.6**, **GNU Make 4.4.1**,
-**Python 3.12.14**. GCC 13 / Ubuntu 24.04 fresh CI evidence is recorded later.
+**Python 3.12.14**. Ubuntu 24.04 CI validates GCC 13 and the same pinned Clang /
+LLVM 19.1.7. The API confirms successful job steps; raw CI log downloads were
+blocked by the current runtime egress policy, so exact Ubuntu GCC patch, CMake
+and Python runtime versions are not independently transcribed here.
 Host OS runtimes follow signed distro packages; this is not bit-identical OS
 pinning. WSL2 execution is not independently validated.
 
@@ -87,14 +90,25 @@ ASan and UBSan. Each starts from checkout, installs explicit base prerequisites
 from signed Ubuntu repositories, downloads checksum-locked LLVM binaries,
 configures/builds C, and runs all 10 CTests. Checkout action pinned to verified
 v4.2.2 commit `11bd71901bbe5b1630ceea73d27597364c9af683`. No auto-merge action.
-Fresh-runner CI has not yet been claimed; result/URLs will be recorded below.
+PR-triggered [run 37196049092](https://github.com/wakairo/NewLang_Compiler/actions/runs/37196049092)
+for implementation commit `a7f665fbd207b4e1c53efdcd6b714f172de576b6` completed
+successfully. All four jobs (**GCC, Clang, ASan, UBSan**) and each prerequisite,
+bootstrap, configure/build/test step are **success**, confirmed through GitHub
+Actions API. The workflow runs the same 10-test suite in each fresh runner.
+Push-triggered run 37196048629 also succeeded. Subsequent report-only revisions
+receive their own PR checks; the PR check panel is the current-head authority.
 
 Reproduce from repository root with README commands:
 `python3 scripts/bootstrap.py`, `. .deps/activate.sh`, CMake configure/build,
 `ctest --test-dir build-gcc --output-on-failure`. Separate build directories
 select GCC/Clang/address/undefined. Dependencies remain in filesystem snapshots;
 activation must run again in future shells. No long-running service is needed.
-Cloud install/start instructions are saved separately in environment settings.
+Cloud `install_script` and `start_skill` were saved in the environment draft and
+the installation commands exercised successfully. They cover working directory,
+bootstrap, per-shell activation, GCC build/10-test readiness, optional validation
+configurations and use of the existing isolated checkout. Saving is not
+publication or validation in a newly restored Codex task. Review/save and publish
+remain user actions in environment settings. No application secret is required.
 
 ## 17. COMPILER-* findings
 
@@ -118,6 +132,13 @@ after human/ChatGPT review, not automatically started. This task stops at P0.
 
 ## Completion gate evidence
 
-Local implementation/toolchain criteria B–T and scope criteria X–AB are met.
-Dedicated existing repository A is available. PR/CI criteria U–W will be recorded
-after the actual PR and PR-triggered checks; no merge is authorized.
+User completion criteria **A–AB are met for the P0 implementation/review gate**:
+dedicated repository and committed references (A–D), C/reproducible toolchain
+(E–I), GCC/Clang/strict warnings/sanitizers (J–N), CLI/diagnostics/LLVM/test/oracle
+infrastructure (O–T), green PR-triggered CI and open unmerged branch PR (U–W),
+and all non-goal/scope/semantic-review boundaries (X–AB).
+
+Fresh Ubuntu runner bootstrap is verified. Current Cloud setup is verified;
+publication and restoration in a new Cloud task are not claimed. WSL2 execution
+and the full 466-test oracle suite remain optional unrun checks. P1 requires
+review approval and a separately chosen scope; this task has stopped at P0.
