@@ -1,0 +1,61 @@
+Codename: llvm-toolchain-noble-19
+Date: Thu, 19 Feb 2026 22:37:07 UTC
+Architectures: amd64 s390x arm64
+Components: main
+MD5Sum:
+ 163c486ee7d302fb3f273abd179fe085 66289 main/binary-amd64/Packages
+ 9baf5fec3d7280b508eed830b76c145b 12684 main/binary-amd64/Packages.gz
+ 063287201b2354699acfe229a752201d 36 main/binary-amd64/Release
+ d41d8cd98f00b204e9800998ecf8427e 0 main/debian-installer/binary-amd64/Packages
+ 7029066c27ac6f5ef18d660d5741979a 20 main/debian-installer/binary-amd64/Packages.gz
+ 9be820f819f7f50b24c03c264cf9872f 57204 main/binary-s390x/Packages
+ a472d33e84ed0d0b2218d1dffdc64b8c 10901 main/binary-s390x/Packages.gz
+ 74caf93adbcd9adc7f2d00960fd75a78 36 main/binary-s390x/Release
+ d41d8cd98f00b204e9800998ecf8427e 0 main/debian-installer/binary-s390x/Packages
+ 7029066c27ac6f5ef18d660d5741979a 20 main/debian-installer/binary-s390x/Packages.gz
+ e3c8fa338c95fdc837dc3353afe8d2aa 66223 main/binary-arm64/Packages
+ cf6cf12cda0443cec12338ed7bc8b5c0 12684 main/binary-arm64/Packages.gz
+ e89c28b1abf5bb6bbd1e9a3ebe9fe004 36 main/binary-arm64/Release
+ d41d8cd98f00b204e9800998ecf8427e 0 main/debian-installer/binary-arm64/Packages
+ 7029066c27ac6f5ef18d660d5741979a 20 main/debian-installer/binary-arm64/Packages.gz
+ 8a053f5ff879bf0c461e3ff50c7415aa 8079 main/source/Sources
+ dd2879ae1fd1c274c968bda4d0b7850e 2072 main/source/Sources.gz
+ 92f9b0ec8b2656847b612632542f1735 37 main/source/Release
+SHA1:
+ 74a251b886d9d3a91b810322cdbcc01e495098d2 66289 main/binary-amd64/Packages
+ a169697fad9fe200904c73d762d34eab7834ce39 12684 main/binary-amd64/Packages.gz
+ f9082edea14092794f38390390e06abf8a922f7d 36 main/binary-amd64/Release
+ da39a3ee5e6b4b0d3255bfef95601890afd80709 0 main/debian-installer/binary-amd64/Packages
+ 46c6643f07aa7f6bfe7118de926b86defc5087c4 20 main/debian-installer/binary-amd64/Packages.gz
+ a89614c96aa1405b153f953677ec07f54da26c92 57204 main/binary-s390x/Packages
+ 0538df0c89c091b0230792f8b5d86d67a34da610 10901 main/binary-s390x/Packages.gz
+ 021a15411aaaba5192d518dbc2ef6b97e200eabd 36 main/binary-s390x/Release
+ da39a3ee5e6b4b0d3255bfef95601890afd80709 0 main/debian-installer/binary-s390x/Packages
+ 46c6643f07aa7f6bfe7118de926b86defc5087c4 20 main/debian-installer/binary-s390x/Packages.gz
+ 76007a41b6bfd04112af04242cd7fbd053d6405d 66223 main/binary-arm64/Packages
+ e08b733fc6ae03b01d4356d8f9ba0996d915bbef 12684 main/binary-arm64/Packages.gz
+ 26519fde445e683e74519b33601c3901c8a45e3b 36 main/binary-arm64/Release
+ da39a3ee5e6b4b0d3255bfef95601890afd80709 0 main/debian-installer/binary-arm64/Packages
+ 46c6643f07aa7f6bfe7118de926b86defc5087c4 20 main/debian-installer/binary-arm64/Packages.gz
+ 17157e7a25c935c2c0ecd3bfe4570bd3e505688f 8079 main/source/Sources
+ 731b41551b581b0c6de4100aa67b22e4ade531aa 2072 main/source/Sources.gz
+ 6bf4af37ca3d5dec33f6438d83b5c1483de0833a 37 main/source/Release
+SHA256:
+ 048d93ba74f5bd647899503a36aef7e39019c5cb9e62202160cb94e00bb5985f 66289 main/binary-amd64/Packages
+ 77a4c9a2c492354ff9b59819a407759e72790ca026f1cc1bb3c2c351551cd327 12684 main/binary-amd64/Packages.gz
+ f4aafa353a338baedf9e98523c13d7ffeda979ec3cf745f9fad977dd770595c8 36 main/binary-amd64/Release
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/debian-installer/binary-amd64/Packages
+ 59869db34853933b239f1e2219cf7d431da006aa919635478511fabbfc8849d2 20 main/debian-installer/binary-amd64/Packages.gz
+ 390569118929acde8410c0116bda61d41eba4d6da4cd188d754bb3bc36a99f21 57204 main/binary-s390x/Packages
+ 3f88d54c28955df2df9da75b72451851c200dfc2120d60281de96d8e6202cab0 10901 main/binary-s390x/Packages.gz
+ a953ab7d6eb2eec2572b494283ce90d32621357f77f09fe189ebd0d4e06470ef 36 main/binary-s390x/Release
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/debian-installer/binary-s390x/Packages
+ 59869db34853933b239f1e2219cf7d431da006aa919635478511fabbfc8849d2 20 main/debian-installer/binary-s390x/Packages.gz
+ 58a9c5737c086f010b78470ac7d76184b51c3788f66720dd6c90a0e99350936f 66223 main/binary-arm64/Packages
+ cfdd7bf7610f5368840fd840e8f033cd75821d1050ca2c48bda97e30dca2601b 12684 main/binary-arm64/Packages.gz
+ 1d2a5a16922021225a06cc93f71f6e6008afdf7049fe22e22d7e98be73c59edf 36 main/binary-arm64/Release
+ e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855 0 main/debian-installer/binary-arm64/Packages
+ 59869db34853933b239f1e2219cf7d431da006aa919635478511fabbfc8849d2 20 main/debian-installer/binary-arm64/Packages.gz
+ 506271ae9b1ca972bd69ed670cd5155e80d1d22d06edc49dfcd003193a258546 8079 main/source/Sources
+ 5cac50841a2dff1fc8019e8e38ece8774805485a3475af0a0e87798599cdf404 2072 main/source/Sources.gz
+ 4e2108e8de58972a48b94535ab5f7e553edddf6b18462bf8ba44584b1161a0d9 37 main/source/Release

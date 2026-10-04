@@ -1,0 +1,79 @@
+{
+  "bundle": "NewLang M7 backend/interop closure",
+  "semantic_baseline_in": "NewLang v0 Draft 17.3",
+  "semantic_baseline_out": "NewLang v0 Draft 17.4",
+  "executable_baseline": "NewLang Front-End Prototype M7.5",
+  "classification": "M7.3-M7.5 adjudication; no new semantic mechanism",
+  "decisions": {
+    "normative_clarifications": [
+      "native aggregate/sum has no implicit C ABI representation identity",
+      "foreign representation/ABI information is not itself a semantic summary"
+    ],
+    "already_normative_unchanged": [
+      "write != exclusive",
+      "external BackingRegion import obligation",
+      "Unknown external-call boundary",
+      "foreign bytes != semantic ValuePackage",
+      "future privileged lifetime-start reservation"
+    ],
+    "backend_contract_only": [
+      "LLVM alias/capture/lifetime attributes",
+      "target ABI classification",
+      "Checked MIR proof-origin separation",
+      "generated C shim strategy"
+    ],
+    "deferred": [
+      "persistent function pointer API",
+      "normative basic FFI surface",
+      "general external/static backing API",
+      "retained/asynchronous callback semantics",
+      "foreign nonlocal-control semantics",
+      "general multi-view backing/MMIO",
+      "safe partial/in-place construction",
+      "general source-visible effect system"
+    ],
+    "implementation_later": [
+      "direct target C aggregate classifier",
+      "direct by-value aggregate varargs lowering"
+    ]
+  },
+  "validation": {
+    "canonical_m75_pytest": "PASS (466 tests; rerun exit 0 during consolidation)",
+    "canonical_m75_compileall": "PASS",
+    "draft17_4_stale_unresolved_checks": "PASS",
+    "draft17_3_to_17_4_diff_lines": 155,
+    "code_changes_in_consolidation": 0
+  },
+  "files": [
+    {
+      "path": "NewLang_Backend_Contract_v0_4.md",
+      "size_bytes": 24518,
+      "sha256": "f7803fb15cb6b092cccab0880eeb7e543bfcddbf2f6d2bae80922c07d37cec95"
+    },
+    {
+      "path": "NewLang_M7_Adjudication_Resolution.md",
+      "size_bytes": 6922,
+      "sha256": "37a09439cfc2d46e8fcb2ed3d636bf45fbfeaaf271adeeb4c8ad4e2c48263fd1"
+    },
+    {
+      "path": "NewLang_M7_Backend_Interop_Consolidation_REPORT.md",
+      "size_bytes": 4926,
+      "sha256": "4ae520121dd1abc85b6214554e25a2a246fc0841dd8486f0865efa398637a950"
+    },
+    {
+      "path": "NewLang_v0_spec_Draft17_3_to_Draft17_4.diff",
+      "size_bytes": 10176,
+      "sha256": "f7dd15d804ce1b8c552ed4655642930b7b74daa05f3f6741ef34b664bb8014cf"
+    },
+    {
+      "path": "NewLang_v0_spec_Draft17_4.md",
+      "size_bytes": 255210,
+      "sha256": "a552468ec3d96a79d17495fb251f63475c752ee0a8ee1e1ffa5bf9a887818c12"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 791,
+      "sha256": "829f56e4a70526f4e81f954cdfe09bca347602631a65f0f350cf0974b345b1b7"
+    }
+  ]
+}
