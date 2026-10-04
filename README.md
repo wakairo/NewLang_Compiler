@@ -2,9 +2,10 @@
 
 NewLang production compiler, written in C17 with LLVM as the primary backend.
 
-**P0 bootstrap is complete and merged.** The repository is now in the pre-P1
-foundation stage. It still does not compile NewLang source; substantial frontend
-implementation begins only after the pre-P1 foundation is reviewed.
+**P0 and Pre-P1 are complete and merged.** P1 adds an owned source-byte buffer,
+canonical byte spans, and a streaming lexer for an explicitly limited ASCII
+atom subset. NewLang source compilation is not implemented end-to-end; lexical
+scanning does not imply language acceptance. P1 stops for review before P2.
 
 ## Authority
 
@@ -91,7 +92,8 @@ cmake --build build-ubsan --parallel 2
 ctest --test-dir build-ubsan --output-on-failure
 ```
 
-Each configuration runs the same **10 CTests**: diagnostic unit checks, six CLI
+Each configuration runs the same **13 CTests**: source and lexer module unit
+tests, file-source -> lexer integration, diagnostic unit checks, six CLI
 cases (each invoked twice), valid LLVM C API module/IR, artifact integrity, and
 frozen-oracle smoke. ASan includes leak detection; UBSan stops on the first
 failure. Imported LLVM binaries are not rebuilt with sanitizers; our C targets
@@ -109,6 +111,9 @@ artifact is produced. Output I/O failure exits 1.
 ## Layout and review
 
 - `include/newlang/diagnostic.h`, `src/`: small borrowed-data diagnostic API and CLI.
+- `include/newlang/{source,token,lexer}.h`, `src/{source,lexer}.c`: immutable
+  owned source bytes/name, checked half-open spans, non-owning atom tokens and
+  allocation-free streaming lexer. Keyword/comment/encoding rules remain open.
 - `tests/unit/`, `tests/integration/`: C unit / LLVM checks and CLI/artifact tests.
 - `oracle/`, `tests/oracle/`: untouched M7.5 archive, identity, and isolated adapter.
 - `scripts/`: reproducible bootstrap, dependency lock, formatter/fmt-check helpers.
@@ -120,9 +125,13 @@ artifact is produced. Output I/O failure exits 1.
 - `docs/PRE_P1_SOURCE_INPUT_AND_LOCATION_CONTRACT.md`: preserved-byte and canonical source-span
   foundation.
 - `docs/PRE_P1_FOUNDATION_DECISIONS.md`: pre-P1 decisions and explicit deferrals.
+- `docs/P1_LEXICAL_CONTRACT_AUDIT.md`: fixed/subset/deferred distinctions and
+  lexical spec holes; the scanner subset is not normative NewLang grammar.
+- `docs/P1_SOURCE_LEXICAL_FRONTEND_REPORT.md`: contracts, test evidence, findings
+  and P2 readiness/adjudication requirements.
 - `docs/`: historical [P0 toolchain decisions](docs/P0_TOOLCHAIN_DECISIONS.md),
   [P0 architecture](docs/P0_ARCHITECTURE.md), and [P0 report](docs/P0_REPORT.md).
 
-There is still no lexer/parser/type checker, checked IR, optimization framework, broad FFI,
-concurrency, separate compilation, self-hosting, or speculative M8+ implementation. P1 scope
-must be chosen and reviewed separately.
+There is still no parser, AST, type checker, checked IR, LLVM lowering,
+optimization framework, broad FFI, concurrency, separate compilation,
+self-hosting, public token-dump mode, or speculative M8+ implementation.
