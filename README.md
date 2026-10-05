@@ -19,7 +19,7 @@ and project process documents are policy/evidence, not language semantics.
 [F0 / NewLang_FormalProof](https://github.com/wakairo/NewLang_FormalProof) and the
 frozen M7.5 Python oracle are evidence; Lean is not a build dependency.
 M7, P4/R1/F1.4/F1.5, P5 and R2 are reviewed/closed. Final pre-M9
-Semantic Sync runs under Issue #29; M9/LLVM/production relocation remain not started.
+Semantic Sync is recorded in Issue #29; later tracks start only through separate Coordination handoffs.
 See the [P2 grammar audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md),
 [P3 semantic contract](docs/P3_SEMANTIC_SLICE_CONTRACT.md),
 [P4 raw-storage contract](docs/P4_RAW_STORAGE_SEMANTIC_SLICE_CONTRACT.md) and
