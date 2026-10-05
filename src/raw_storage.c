@@ -579,10 +579,10 @@ NLCheckStatus nl_raw_apply(NLSemanticContext *c, const NLRawOperation *op,
                               "split cut exceeds Storage length");
             }
             if (cut == 0 || cut == first.length) {
-                return reject(&raw, NL_CHECK_SEMANTIC_UNSUPPORTED, op->span,
-                              "P4-ZERO-SPLIT-DEFERRED",
-                              "empty split endpoint responsibility is not "
-                              "decided by this implementation");
+                return reject(&raw, NL_CHECK_SEMANTIC_ERROR, op->span,
+                              "P4-SPLIT-ENDPOINT",
+                              "split cut must be strictly inside non-empty "
+                              "Storage range");
             }
             end_value(c, inputs[0]);
             status =
