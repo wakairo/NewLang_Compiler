@@ -3528,7 +3528,7 @@ operation中だけconflicting useがsuspendされ、operation終了後に再びu
 これはlifetime-ending authority requirementを弱めるものではない。
 child exclusive refは、引き続きtarget rootのgoverning domainと同じdomainを参照しなければならない。
 
-は対象 **lifetime-root** object incarnationのlifetimeを終了し、
+`take` は対象 **lifetime-root** object incarnationのlifetimeを終了し、
 
 - old semantic value `T`
 - 同じ BackingRegion / range のtyped placeに対する definitely-empty `slot<T>` claim
