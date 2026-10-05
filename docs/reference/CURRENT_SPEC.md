@@ -3,7 +3,7 @@
 The canonical NewLang v0 specification on a branch is the Draft named here.
 
 ```text
-NewLang_v0_spec_Draft17_9.md
+NewLang_v0_spec_Draft17_10.md
 ```
 
 Repository policy:
@@ -14,4 +14,4 @@ Repository policy:
 - A newer Draft on an unmerged branch is a candidate until that branch is reviewed and merged into `main`.
 - Prompts handed to M / F / P tracks should cite the `main` commit SHA and this file before relying on conversational memory.
 
-Draft 17.9 adds the targeted source-surface closure required by P5 on top of Draft 17.8.
+Draft 17.10 adds the targeted M9.1 closed-sum constructor / match source profile on top of Draft 17.9 without changing the existing sum semantics.
