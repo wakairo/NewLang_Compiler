@@ -3,7 +3,9 @@
 ## Authority / scope
 
 開始時にremote mainを確認し、`aacb53b3cc599276125e7420d7cb4a5dbae19b5c`から
-`p4-raw-storage-semantic-slice`を作成した。canonicalは
+`p4-raw-storage-semantic-slice`を作成した。repositoryは
+[wakairo/NewLang_Compiler](https://github.com/wakairo/NewLang_Compiler)、
+[PR #9](https://github.com/wakairo/NewLang_Compiler/pull/9)はopen/unmerged。canonicalは
 `docs/reference/CURRENT_SPEC.md` → `NewLang_v0_spec_Draft17_6.md`。
 Draft > Backend Contract v0.4 > merged M/P/F evidence > task prompt > history。
 reference snapshots、CURRENT_SPEC、Python oracle、Draftを変更していない。
@@ -142,8 +144,10 @@ bash scripts/check-format.sh
 ```
 
 PR CIはfresh Ubuntu 24.04でGCC/Clang/ASan/UBSanの同じ38 CTestsを実行し、
-Clang jobがformatを検査する。current-head CI run URL/statusとexact SHAはPR本文と
-最終handoffに記録する。古いgreen runをcurrent-headの代わりにしない。
+Clang jobがformatを検査する。GCC/Clang/ASan/UBSanとformatはPASS。
+[PR #9 current-head checks](https://github.com/wakairo/NewLang_Compiler/pull/9/checks)を
+CI結果の正とし、run URL/statusとexact SHAをPR本文と最終handoffへ記録する。
+文書のみの更新後もcurrent-head CIを確認し、古いgreen runを代用しない。
 
 ## Findings / bounded limits
 
@@ -163,7 +167,7 @@ Clang jobがformatを検査する。current-head CI run URL/statusとexact SHA�
   Definedだがconstant value未知の場合はUnspecifiedとせず、soundなDefined-unknownを維持する。
 - **COMPILER-IMPLEMENTATION-LIMIT**: 各context table 4096 entries、全regionのraw intervals
   4096、host size_t/native x86_64 profile。legacy abstract slotにはexplicit backingがないため
-  erase_slotはunsupported。P3のref/slot/domain payload nesting、exclusive mode-changing
+  erase_slotはunsupported。P3のptr/ref/slot/domain/unit root payloadの支持範囲、exclusive mode-changing
   compatibility、loose exclusive contextual conversion、loan-body checkingのdeferralsを維持する。
 - **COMPILER-PERFORMANCE**: candidateはcontext全体をcloneし、occupancy disjointnessは
   bounded pairwise check。P4はwhole-program range solverやscalable incremental engineを主張しない。
@@ -173,6 +177,7 @@ canonical Draft変更が必要な矛盾も発見していない。仕様を実�
 
 ## Review handoff
 
-P4 IMPLEMENTATION COMPLETE。P4 READY FOR REVIEWはrequired current-head CI greenを確認して
-handoffする。review gateで停止し、CodexはPRをmergeせず、P5 / M8.4 frontend / relocation /
+P4 IMPLEMENTATION COMPLETE。P4 READY FOR REVIEW。
+required current-head CI greenを確認してhandoffし、review gateで停止する。
+CodexはPRをmergeせず、P5 / M8.4 frontend / relocation /
 LLVM workを開始しない。commit/runの正はGit history / PR checksであり、文書に別のchange logを持たない。
