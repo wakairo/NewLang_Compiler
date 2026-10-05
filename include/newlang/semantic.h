@@ -18,6 +18,12 @@ typedef size_t NLPlaceId;
 typedef size_t NLIncarnationId;
 typedef size_t NLValueFactId;
 typedef size_t NLScopeId;
+typedef size_t NLBackingRegionId; /* never a numeric address or authority */
+
+typedef struct {
+    NLBackingRegionId region;
+    size_t start, length;
+} NLBackingRange;
 
 typedef enum {
     NL_CHECK_OK,
@@ -34,7 +40,13 @@ typedef enum {
     NL_TYPE_NOMINAL,
     NL_TYPE_PTR,
     NL_TYPE_REF,
-    NL_TYPE_SLOT
+    NL_TYPE_SLOT,
+    NL_TYPE_ALLOCATION,
+    NL_TYPE_STORAGE,
+    NL_TYPE_BYTE,
+    NL_TYPE_U8,
+    NL_TYPE_USIZE,
+    NL_TYPE_ADDR
 } NLSemanticTypeKind;
 typedef struct {
     NLSemanticTypeKind kind;
@@ -43,7 +55,15 @@ typedef struct {
     NLTypeId target;
     NLAccessSyntax access;
     bool is_exclusive;
+    bool layout_known;
+    size_t size, alignment; /* compiler/target facts, not aggregate ABI */
 } NLSemanticTypeView;
+
+typedef struct {
+    NLTypeId type;
+    bool known;
+    size_t value;
+} NLScalarValue;
 
 typedef enum {
     NL_AVAILABLE,
@@ -80,6 +100,10 @@ typedef struct {
     NLDomainId domain; /* LifetimeDomain value identity only */
     NLReferenceFacts reference;
     NLPlaceId slot_place; /* unique empty typed occupancy responsibility */
+    NLBackingRegionId allocation_region; /* final-deallocation authority */
+    NLBackingRange occupancy; /* Storage/slot responsibility, value-owned */
+    bool scalar_known;
+    size_t scalar_value;
 } NLSemanticValueView;
 typedef struct {
     NLAvailability availability;
@@ -95,6 +119,7 @@ typedef struct {
     NLIncarnationId incarnation;
     NLValueFactId current_fact;
     NLValueId current_value;
+    NLBackingRange placement; /* live root only; not part of its value */
 } NLSemanticPlaceView;
 typedef struct {
     bool live;
@@ -110,6 +135,7 @@ typedef struct {
     size_t types, bindings, values, places, domains, scopes, functions;
     NLIncarnationId last_incarnation;
     NLValueFactId last_value_fact;
+    size_t backing_regions, raw_intervals;
 } NLSemanticSnapshot;
 typedef struct {
     NLDiagnostic diagnostic;
@@ -121,18 +147,26 @@ typedef struct {
 #define NL_SEMANTIC_MAX_PARAMETERS 128
 #define NL_SEMANTIC_MAX_DEPTH 128
 
-/* Context owns names/tables/packages. It registers unit/LifetimeDomain types
- * and a fixed semantic prelude, separate from parser keywords. Names passed
- * below are borrowed NUL-terminated host API strings, copied on success.
- * Every mutating API is transactional. Failures leave observable state and
- * output IDs unchanged. Owner slots must be initialized NULL. NULL destruction
- * is allowed; no globals/LLVM/oracle/Lean dependencies or source declarations.
- * IDs/views are meaningful only in their original live context. Getters copy
- * views (no pointer into mutable storage); IDs survive successful mutations. */
+/* Context owns names/tables/packages. It registers unit/LifetimeDomain and P4
+ * scalar/authority types and a fixed semantic prelude, separate from parser
+ * keywords. Names passed below are borrowed NUL-terminated host API strings,
+ * copied on success. Every mutating API is transactional. Failures leave
+ * observable state and output IDs unchanged. Owner slots must be initialized
+ * NULL. NULL destruction is allowed; no globals/LLVM/oracle/Lean dependencies
+ * or source declarations. IDs/views are meaningful only in their original live
+ * context. Getters copy views (no pointer into mutable storage); IDs survive
+ * successful mutations. */
 NLCheckStatus nl_semantic_create(NLSemanticContext **out_context);
 void nl_semantic_destroy(NLSemanticContext *context);
 NLTypeId nl_semantic_unit_type(const NLSemanticContext *context);
 NLTypeId nl_semantic_domain_type(const NLSemanticContext *context);
+NLTypeId nl_semantic_core_type(const NLSemanticContext *, NLSemanticTypeKind);
+/* Trusted, stable target layout facts. A known layout cannot be revised by an
+ * ordinary check/registration; zero-sized storable layouts are invalid. */
+NLCheckStatus nl_semantic_set_layout(NLSemanticContext *, NLTypeId, size_t size,
+                                     size_t alignment);
+NLCheckStatus nl_semantic_seed_scalar(NLSemanticContext *, const char *name,
+                                      NLScalarValue, NLSymbolId *out);
 bool nl_semantic_type_view(const NLSemanticContext *, NLTypeId,
                            NLSemanticTypeView *);
 bool nl_semantic_binding_view(const NLSemanticContext *, NLSymbolId,
@@ -156,10 +190,12 @@ NLCheckStatus nl_semantic_compound_type(NLSemanticContext *, NLSemanticTypeKind,
                                         NLTypeId target, NLAccessSyntax access,
                                         bool is_exclusive, NLTypeId *out);
 /* Trusted fixture/context facts, not source declarations or a proof of physical
- * storage. Scalar seeds require nominal/unit types (domain has its own seed).
- * Root sites are distinct/disjoint flat typed sites; independent_root=false
- * exists for negative fixtures. References may explicitly have stale/unknown/
- * invalid facts, which safe operations check rather than assume away. */
+ * storage. Value seeds permit nominal/unit and scalar types; explicit known
+ * scalars use seed_scalar. Allocation/Storage cannot be seeded (domain has its
+ * own seed). Root sites are distinct/disjoint flat typed sites;
+ * independent_root=false exists for negative fixtures. References may
+ * explicitly have stale/unknown/ invalid facts, which safe operations check
+ * rather than assume away. */
 NLCheckStatus nl_semantic_seed_value(NLSemanticContext *, const char *name,
                                      NLTypeId, NLDependencyKnowledge,
                                      NLSymbolId *out);

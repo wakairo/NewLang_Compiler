@@ -195,7 +195,9 @@ static bool reference_live(Check *check, NLValueId value, NLSourceSpan span)
         return false;
     }
     const NLSemanticPlaceView p = c->places[v.reference.place - 1];
-    if (!p.live || p.incarnation != v.reference.incarnation) {
+    if (!p.live || p.incarnation != v.reference.incarnation ||
+        (p.placement.region != 0 &&
+         !c->regions[p.placement.region - 1].view.live)) {
         fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P3-STALE-POINTER",
              "pointer/ref does not refer to a current live incarnation");
         return false;
@@ -280,27 +282,32 @@ static NLSymbolId available(Check *check, NLSourceSpan name)
     return symbol;
 }
 
-static NLCheckedNodeId identifier(Check *check, const NLSyntaxView *syntax)
+static NLCheckedNodeId binding_use(Check *check, NLSymbolId symbol,
+                                   NLSourceSpan span, NLSourceSpan name)
 {
     NLSemanticContext *const c = check->context;
-    const NLSymbolId symbol = available(check, syntax->data.name);
     if (symbol == 0) {
+        return 0;
+    }
+    if (c->bindings[symbol - 1].view.availability != NL_AVAILABLE) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P3-USE-AFTER-CONSUME",
+             "use of consumed semantic binding");
         return 0;
     }
     const NLSemanticBindingView binding = c->bindings[symbol - 1].view;
     const NLSemanticTypeView type = c->types[binding.type - 1].view;
     const NLSemanticValueView original = c->values[binding.value - 1];
     if (type.kind == NL_TYPE_REF &&
-        !reference_live(check, binding.value, syntax->span)) {
+        !reference_live(check, binding.value, span)) {
         return 0;
     }
     NLValueId value = binding.value;
     if (type.is_copy) {
-        if (!host(check, nl_sem_new_value(c, original, &value), syntax->span)) {
+        if (!host(check, nl_sem_new_value(c, original, &value), span)) {
             return 0;
         }
     } else {
-        if (conflicts(check, binding.place, false, true, 0, syntax->span)) {
+        if (conflicts(check, binding.place, false, true, 0, span)) {
             return 0;
         }
         c->bindings[symbol - 1].view.availability = NL_CONSUMED;
@@ -312,8 +319,8 @@ static NLCheckedNodeId identifier(Check *check, const NLSyntaxView *syntax)
         c->values[value - 1].owner_place = 0;
     }
     return add(check, (NLCheckedNodeView){.kind = NL_CHECKED_IDENTIFIER,
-                                          .span = syntax->span,
-                                          .name = syntax->data.name,
+                                          .span = span,
+                                          .name = name,
                                           .type = binding.type,
                                           .symbol = symbol,
                                           .value_use = type.is_copy
@@ -321,6 +328,12 @@ static NLCheckedNodeId identifier(Check *check, const NLSyntaxView *syntax)
                                                            : NL_VALUE_CONSUMED,
                                           .result_count = 1,
                                           .results = {{binding.type, value}}});
+}
+
+static NLCheckedNodeId identifier(Check *check, const NLSyntaxView *syntax)
+{
+    return binding_use(check, available(check, syntax->data.name), syntax->span,
+                       syntax->data.name);
 }
 
 static bool ref_compatible(NLSemanticTypeView actual,
@@ -335,16 +348,15 @@ static bool ref_compatible(NLSemanticTypeView actual,
 
 static NLCheckedNodeId expression(Check *, const NLSyntaxNode *);
 
-static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
-                                NLTypeId expected)
+static NLCheckedNodeId binding_argument(Check *check, NLSymbolId symbol,
+                                        NLTypeId expected, NLSourceSpan span,
+                                        NLSourceSpan name)
 {
-    const NLSyntaxView *const node = nl_syntax_node_view(syntax);
     NLSemanticContext *const c = check->context;
-    if (expected != 0 && node->kind == NL_SYNTAX_EXPR_NAME) {
-        const NLSymbolId symbol = available(check, node->data.name);
-        if (symbol == 0) {
-            return 0;
-        }
+    if (c->bindings[symbol - 1].view.availability != NL_AVAILABLE) {
+        return binding_use(check, symbol, span, name);
+    }
+    if (expected != 0) {
         const NLSemanticBindingView binding = c->bindings[symbol - 1].view;
         const NLSemanticTypeView actual = c->types[binding.type - 1].view;
         const NLSemanticTypeView wanted = c->types[expected - 1].view;
@@ -352,7 +364,7 @@ static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
             wanted.kind == NL_TYPE_REF && actual.target == wanted.target &&
             actual.access == NL_ACCESS_WRITE &&
             wanted.access == NL_ACCESS_READ) {
-            fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, node->span,
+            fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, span,
                  "P3-EXCLUSIVE-MODE-UNSUPPORTED",
                  "exclusive mode-changing argument compatibility is not "
                  "established by the call-local reborrow rule alone");
@@ -360,11 +372,11 @@ static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
         }
         if (actual.kind == NL_TYPE_REF && actual.is_exclusive &&
             ref_compatible(actual, wanted)) {
-            if (!reference_live(check, binding.value, node->span)) {
+            if (!reference_live(check, binding.value, span)) {
                 return 0;
             }
             if (conflicts(check, c->values[binding.value - 1].reference.place,
-                          true, false, binding.value, node->span)) {
+                          true, false, binding.value, span)) {
                 return 0;
             }
             NLScopeId child_scope;
@@ -372,7 +384,7 @@ static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
                       nl_sem_new_scope(
                           c, c->values[binding.value - 1].reference.scope, true,
                           &child_scope),
-                      node->span)) {
+                      span)) {
                 return 0;
             }
             c->scopes[child_scope - 1].parent_authority = binding.value;
@@ -380,13 +392,13 @@ static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
             child.type = expected;
             child.reference.scope = child_scope;
             NLValueId value;
-            if (!host(check, nl_sem_new_value(c, child, &value), node->span)) {
+            if (!host(check, nl_sem_new_value(c, child, &value), span)) {
                 return 0;
             }
             return add(check,
                        (NLCheckedNodeView){.kind = NL_CHECKED_IDENTIFIER,
-                                           .span = node->span,
-                                           .name = node->data.name,
+                                           .span = span,
+                                           .name = name,
                                            .type = expected,
                                            .symbol = symbol,
                                            .value_use = NL_VALUE_REBORROWED,
@@ -396,7 +408,13 @@ static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
                                            .results = {{expected, value}}});
         }
     }
-    const NLCheckedNodeId id = expression(check, syntax);
+    return binding_use(check, symbol, span, name);
+}
+
+static NLCheckedNodeId parameter_match(Check *check, NLCheckedNodeId id,
+                                       NLTypeId expected)
+{
+    NLSemanticContext *const c = check->context;
     if (id == 0 || expected == 0) {
         return id;
     }
@@ -406,7 +424,7 @@ static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
         return id;
     }
     if (checked->result_count != 1) {
-        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, node->span,
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, view(check, id)->span,
              "P3-ARGUMENT-RESULTS",
              "argument needs one result; multi-result receiving is outside P3");
         return 0;
@@ -421,9 +439,28 @@ static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
         checked->contextually_weakened = true;
         return id;
     }
-    fail(check, NL_CHECK_SEMANTIC_ERROR, node->span, "P3-TYPE-MISMATCH",
+    fail(check, NL_CHECK_SEMANTIC_ERROR, view(check, id)->span,
+         "P3-TYPE-MISMATCH",
          "argument semantic type does not match selected parameter");
     return 0;
+}
+
+static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
+                                NLTypeId expected)
+{
+    const NLSyntaxView *const node = nl_syntax_node_view(syntax);
+    NLCheckedNodeId id;
+    if (node->kind == NL_SYNTAX_EXPR_NAME) {
+        const NLSymbolId symbol = available(check, node->data.name);
+        if (symbol == 0) {
+            return 0;
+        }
+        id = binding_argument(check, symbol, expected, node->span,
+                              node->data.name);
+    } else {
+        id = expression(check, syntax);
+    }
+    return parameter_match(check, id, expected);
 }
 
 static NLTypeId write_parameter(Check *check, const NLSyntaxNode *syntax)
@@ -504,12 +541,14 @@ static NLDomainId domain_reference(Check *check, NLValueId value,
 
 static bool scalar_root_type(Check *check, NLTypeId type, NLSourceSpan span)
 {
-    if (check->context->types[type - 1].view.kind != NL_TYPE_NOMINAL ||
-        type == 2) {
+    const NLSemanticTypeKind kind = check->context->types[type - 1].view.kind;
+    if ((kind != NL_TYPE_NOMINAL || type == 2) && kind != NL_TYPE_STORAGE &&
+        kind != NL_TYPE_ALLOCATION && kind != NL_TYPE_BYTE &&
+        kind != NL_TYPE_U8 && kind != NL_TYPE_USIZE && kind != NL_TYPE_ADDR) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, span,
              "P3-ROOT-PAYLOAD-UNSUPPORTED",
-             "P3 root transitions support flat user-nominal payloads; core "
-             "authority nesting is deferred");
+             "root transitions support flat payloads; nested ref/slot/domain "
+             "payloads require additional checking");
         return false;
     }
     return true;
@@ -530,6 +569,19 @@ static bool write_ref(Check *check, NLValueId value, NLSourceSpan span)
     }
     return !conflicts(check, check->context->values[value - 1].reference.place,
                       false, false, value, span);
+}
+
+/* Bindings designate places. Change(place) updates their current package;
+ * historical package IDs must not be reused by a later identifier move. */
+static void refresh_bindings(Check *check, NLPlaceId place)
+{
+    NLSemanticContext *const c = check->context;
+    for (size_t i = 0; i < c->binding_count; ++i) {
+        if (c->bindings[i].view.place == place &&
+            c->bindings[i].view.availability == NL_AVAILABLE) {
+            c->bindings[i].view.value = c->places[place - 1].current_value;
+        }
+    }
 }
 
 static bool primitive(Check *check, NLCheckedNodeId call,
@@ -657,7 +709,8 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                  "slot destination is not definitely empty with matching type");
             return false;
         }
-        if (!host(check, nl_sem_install(c, place, incoming, domain), span)) {
+        if (!host(check, nl_sem_install(c, place, incoming, domain), span) ||
+            !host(check, nl_raw_start_root(c, slot, place), span)) {
             return false;
         }
         const NLTypeId type = compound(check, NL_TYPE_PTR, slot_type.target,
@@ -729,6 +782,7 @@ static bool primitive(Check *check, NLCheckedNodeId call,
             return false;
         }
         c->places[place - 1].live = false;
+        c->places[place - 1].placement = (NLBackingRange){0};
         c->places[place - 1].current_value = 0;
         c->places[place - 1].current_fact = 0;
         c->places[place - 1].governing_domain = 0;
@@ -744,7 +798,8 @@ static bool primitive(Check *check, NLCheckedNodeId call,
             check,
             (NLSemanticValueView){.type = slot_type, .slot_place = place},
             span);
-        if (slot == 0) {
+        if (slot == 0 ||
+            !host(check, nl_raw_end_root(c, old.placement, slot), span)) {
             return false;
         }
         operation.type = kind == NL_CHECKED_TAKE ? old.type : slot_type;
@@ -793,6 +848,8 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                 c->places[other - 1].current_fact = second_fact;
                 c->values[other_value - 1].owner_place = place;
                 c->values[old.current_value - 1].owner_place = other;
+                refresh_bindings(check, place);
+                refresh_bindings(check, other);
             }
         } else {
             if (c->values[second - 1].type != old.type) {
@@ -820,6 +877,7 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                 kind == NL_CHECKED_REPLACE ? NL_CARRIER_LOOSE
                                            : NL_CARRIER_ENDED;
             c->values[old.current_value - 1].owner_place = 0;
+            refresh_bindings(check, place);
             if (kind == NL_CHECKED_REPLACE) {
                 operation.type = old.type;
                 operation.result_count = 1;
@@ -919,7 +977,9 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         }
         if (function.kind == NL_CHECKED_REGISTERED_CALL &&
             (expected == 2 ||
-             c->types[expected - 1].view.kind == NL_TYPE_SLOT)) {
+             c->types[expected - 1].view.kind == NL_TYPE_SLOT ||
+             c->types[expected - 1].view.kind == NL_TYPE_STORAGE ||
+             c->types[expected - 1].view.kind == NL_TYPE_ALLOCATION)) {
             fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED,
                  nl_syntax_node_view(argument_syntax)->span,
                  "P3-AUTHORITY-SUMMARY-UNSUPPORTED",
@@ -1252,6 +1312,9 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
              "semantic checker did not produce an artifact");
         goto failure;
     }
+    if (!host(&check, nl_raw_validate(check.context), root->span)) {
+        goto failure;
+    }
     nl_sem_commit(context, check.context);
     *out = check.artifact;
     return NL_CHECK_OK;
@@ -1326,4 +1389,193 @@ bool nl_check_diagnostic_render(FILE *stream, const NLSource *source,
     NLDiagnostic rendered = diagnostic->diagnostic;
     rendered.range = &range;
     return nl_diagnostic_render(stream, &rendered);
+}
+
+static size_t raw_operand_count(NLRawOperationKind kind)
+{
+    if (kind == NL_RAW_ALLOCATE || kind == NL_RAW_BYTE_TO_U8 ||
+        kind == NL_RAW_U8_TO_BYTE) {
+        return 0;
+    }
+    return kind == NL_RAW_DEALLOCATE || kind == NL_RAW_MERGE ||
+                   kind == NL_RAW_COPY_BYTES
+               ? 2
+               : 1;
+}
+
+static NLCheckedNodeId raw_argument(Check *check, NLRawOperand operand,
+                                    NLTypeId expected, NLValueId prior)
+{
+    NLSemanticContext *const c = check->context;
+    NLCheckedNodeId id;
+    if (operand.binding != 0) {
+        id = binding_argument(check, operand.binding, expected, operand.span,
+                              operand.span);
+    } else {
+        const NLSemanticValueView original = c->values[operand.loose - 1];
+        const NLSemanticTypeView type = c->types[original.type - 1].view;
+        if (original.carrier != NL_CARRIER_LOOSE ||
+            (!type.is_copy && operand.loose == prior)) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, operand.span,
+                 "P4-LOOSE-RESPONSIBILITY",
+                 "operand is not a unique loose value responsibility");
+            return 0;
+        }
+        if (type.kind == NL_TYPE_REF &&
+            !reference_live(check, operand.loose, operand.span)) {
+            return 0;
+        }
+        if (type.kind == NL_TYPE_REF && type.is_exclusive &&
+            expected != original.type) {
+            fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, operand.span,
+                 "P4-LOOSE-EXCLUSIVE-UNSUPPORTED",
+                 "exclusive contextual reborrow requires a binding");
+            return 0;
+        }
+        NLValueId value = operand.loose;
+        if (type.is_copy &&
+            !host(check, nl_sem_new_value(c, original, &value), operand.span)) {
+            return 0;
+        }
+        id = add(check, (NLCheckedNodeView){
+                            .kind = NL_CHECKED_IDENTIFIER,
+                            .span = operand.span,
+                            .type = original.type,
+                            .value_use = type.is_copy ? NL_VALUE_COPIED
+                                                      : NL_VALUE_CONSUMED,
+                            .result_count = 1,
+                            .results = {{original.type, value}}});
+    }
+    return parameter_match(check, id, expected);
+}
+
+NLCheckStatus nl_semantic_check_raw_operation(NLSemanticContext *context,
+                                              const NLRawOperation *operation,
+                                              NLCheckedFragment **out,
+                                              NLCheckDiagnostic *diagnostic)
+{
+    static const NLCheckedKind kinds[] = {NL_CHECKED_ALLOCATE,
+                                          NL_CHECKED_DEALLOCATE,
+                                          NL_CHECKED_SPLIT,
+                                          NL_CHECKED_MERGE,
+                                          NL_CHECKED_INTO_SLOT,
+                                          NL_CHECKED_ERASE_SLOT,
+                                          NL_CHECKED_STORAGE_LEN,
+                                          NL_CHECKED_STORAGE_ADDR,
+                                          NL_CHECKED_STORAGE_READ_BYTE,
+                                          NL_CHECKED_STORAGE_WRITE_BYTE,
+                                          NL_CHECKED_COPY_RAW_BYTES,
+                                          NL_CHECKED_BYTE_TO_U8,
+                                          NL_CHECKED_U8_TO_BYTE};
+    if (context == NULL || operation == NULL || out == NULL || *out != NULL ||
+        (unsigned)operation->kind >= sizeof(kinds) / sizeof(kinds[0]) ||
+        (operation->source != NULL &&
+         !nl_source_span_valid(operation->source, operation->span))) {
+        return NL_CHECK_INTERNAL_ERROR;
+    }
+    const size_t count = raw_operand_count(operation->kind);
+    for (size_t i = 0; i < count; ++i) {
+        const NLRawOperand operand = operation->operands[i];
+        if ((operand.binding == 0) == (operand.loose == 0) ||
+            operand.binding > context->binding_count ||
+            operand.loose > context->value_count ||
+            (operation->source != NULL &&
+             !nl_source_span_valid(operation->source, operand.span))) {
+            return NL_CHECK_INTERNAL_ERROR;
+        }
+    }
+    Check check = {.source = operation->source};
+    if (!host(&check, nl_sem_clone(context, &check.context), operation->span)) {
+        goto failure;
+    }
+    check.artifact = malloc(sizeof(*check.artifact));
+    if (check.artifact == NULL) {
+        (void)host(&check, NL_CHECK_OUT_OF_MEMORY, operation->span);
+        goto failure;
+    }
+    *check.artifact =
+        (NLCheckedFragment){.source = check.source, .context = context};
+    NLSemanticContext *const c = check.context;
+    for (size_t i = 0; i < c->value_count; ++i) {
+        if (c->values[i].carrier != NL_CARRIER_ENDED &&
+            c->values[i].dependencies != NL_DEPENDENCY_FREE) {
+            fail(
+                &check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, operation->span,
+                "P3-DEPENDENCIES-UNSUPPORTED",
+                "hidden semantic dependencies are outside the supported slice");
+            goto failure;
+        }
+    }
+    check.artifact->root =
+        add(&check, (NLCheckedNodeView){.kind = kinds[operation->kind],
+                                        .span = operation->span});
+    if (check.artifact->root == 0) {
+        goto failure;
+    }
+    NLCheckedNodeId args[2] = {0};
+    NLValueId values[2] = {0};
+    const NLTypeId storage = nl_semantic_core_type(c, NL_TYPE_STORAGE);
+    for (size_t i = 0; i < count; ++i) {
+        NLTypeId expected = storage;
+        if (operation->kind == NL_RAW_DEALLOCATE && i == 0) {
+            expected = nl_semantic_core_type(c, NL_TYPE_ALLOCATION);
+        } else if (operation->kind == NL_RAW_ERASE_SLOT) {
+            expected = 0;
+        } else if (operation->kind >= NL_RAW_STORAGE_LEN &&
+                   operation->kind <= NL_RAW_COPY_BYTES) {
+            expected = compound(&check, NL_TYPE_REF, storage, NL_ACCESS_READ,
+                                false, operation->operands[i].span);
+        }
+        if (check.status != NL_CHECK_OK) {
+            goto failure;
+        }
+        args[i] =
+            raw_argument(&check, operation->operands[i], expected, values[0]);
+        if (args[i] == 0) {
+            goto failure;
+        }
+        values[i] = one_result(&check, args[i]);
+        if (values[i] == 0) {
+            goto failure;
+        }
+        const NLSemanticTypeView actual =
+            c->types[c->values[values[i] - 1].type - 1].view;
+        if (actual.kind == NL_TYPE_REF &&
+            (!reference_live(&check, values[i], operation->operands[i].span) ||
+             conflicts(&check, c->values[values[i] - 1].reference.place, false,
+                       false, values[i], operation->operands[i].span))) {
+            goto failure;
+        }
+        if (i == 0) {
+            view(&check, check.artifact->root)->first_argument = args[i];
+        } else {
+            view(&check, args[i - 1])->next_argument = args[i];
+        }
+        ++view(&check, check.artifact->root)->argument_count;
+    }
+    check.status =
+        nl_raw_apply(c, operation, values, view(&check, check.artifact->root),
+                     &check.diagnostic);
+    if (check.status != NL_CHECK_OK) {
+        goto failure;
+    }
+    for (size_t i = 0; i < count; ++i) {
+        if (view(&check, args[i])->reborrow_scope != 0) {
+            c->scopes[view(&check, args[i])->reborrow_scope - 1].active = false;
+        }
+        end_temporary(&check, values[i]);
+    }
+    if (!host(&check, nl_raw_validate(c), operation->span)) {
+        goto failure;
+    }
+    nl_sem_commit(context, c);
+    *out = check.artifact;
+    return NL_CHECK_OK;
+failure:
+    nl_semantic_destroy(check.context);
+    nl_checked_destroy(check.artifact);
+    if (diagnostic != NULL) {
+        *diagnostic = check.diagnostic;
+    }
+    return check.status;
 }
