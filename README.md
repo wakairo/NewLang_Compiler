@@ -6,7 +6,7 @@ NewLang production compiler, written in C17 with LLVM as the primary backend.
 slice: independent result receiving, lexical blocks and registered aggregate
 construction/whole destructuring. It connects parsed source to P3/P4's existing
 transactional checker, scoped reborrows and raw-storage responsibilities.
-P5 stops at PR review; sum/match and broader frontend work remain deferred.
+P5 is reviewed/merged and CLOSED; sum/match and broader frontend work remain deferred.
 
 ## Authority
 
