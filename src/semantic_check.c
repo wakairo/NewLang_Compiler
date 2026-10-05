@@ -765,6 +765,16 @@ static bool primitive(Check *check, NLCheckedNodeId call,
         }
         const NLPlaceId place = token.reference.place;
         const NLSemanticPlaceView old = c->places[place - 1];
+        if (kind == NL_CHECKED_TAKE &&
+            (!token.reference.readable ||
+             (old.placement.region != 0 &&
+              !c->regions[old.placement.region - 1].view.ordinary_read))) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, view(check, args[0])->span,
+                 "P4-TAKE-BACKING-READ",
+                 "take requires source ordinary read access to materialize "
+                 "the current value");
+            return false;
+        }
         if (!old.independent_root) {
             fail(check, NL_CHECK_SEMANTIC_ERROR, view(check, args[0])->span,
                  "P3-NOT-LIFETIME-ROOT",
