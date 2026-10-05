@@ -171,6 +171,9 @@ copied with checked length/allocation; IDs/facts never wrap/revive on successful
 history. Loan scopes are inactive plans; body contents remain opaque and their
 nonescape is unproved. Pointer exclusive-write loan and exclusive input to
 ptr_from_ref stay explicitly unsupported without additional adjudicated evidence.
+Exclusive stability in a loan header needs a body-extent reborrow plan and
+returns unsupported, rather than treating the compatible authority as illegal;
+ordinary stability headers and call-local compatible reborrows remain supported.
 
 Diagnostics keep static borrowed code/category/message plus canonical primary
 span. Unknown names, consumed values, incompatible types, false known evidence

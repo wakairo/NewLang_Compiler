@@ -757,6 +757,11 @@ static bool loan_tests(void)
     CHECK(nl_semantic_end_scope(f.context, stability_scope) == NL_CHECK_OK);
     CHECK(test_rejected(f.context, "loan read p using stable as r {}",
                         TEST_LOAN, NL_CHECK_SEMANTIC_ERROR, "P3-DEAD-SCOPE"));
+    CHECK(test_domain_ref(&f, "exclusive_stable", NL_ACCESS_READ, true, &stable,
+                          NULL));
+    CHECK(test_rejected(f.context, "loan read p using exclusive_stable as r {}",
+                        TEST_LOAN, NL_CHECK_SEMANTIC_UNSUPPORTED,
+                        "P3-EXCLUSIVE-STABILITY-UNSUPPORTED"));
     nl_semantic_destroy(f.context);
     return true;
 }

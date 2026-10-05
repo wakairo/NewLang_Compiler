@@ -1081,6 +1081,13 @@ static NLCheckedNodeId loan(Check *check, const NLSyntaxView *syntax)
         }
         const NLSemanticBindingView stable_binding =
             c->bindings[stability - 1].view;
+        if (c->types[stable_binding.type - 1].view.is_exclusive) {
+            fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, stable_span,
+                 "P3-EXCLUSIVE-STABILITY-UNSUPPORTED",
+                 "exclusive loan stability requires a body-extent reborrow "
+                 "plan outside the P3 header subset");
+            return 0;
+        }
         domain =
             domain_reference(check, stable_binding.value, false, stable_span);
         if (domain == 0) {

@@ -1,7 +1,7 @@
 # P3 — First Semantic Vertical Slice
 
-Date: 2026-10-05 (Asia/Tokyo). Implementation and local validation complete;
-PR/current-head CI evidence is recorded below as it becomes available.
+Date: 2026-10-05 (Asia/Tokyo). **P3 READY FOR REVIEW.**
+Implementation, local matrix and PR validation evidence are recorded below.
 This is a bounded fragment checker, not a full NewLang semantic frontend.
 
 ## Repository and authority
@@ -9,7 +9,9 @@ This is a bounded fragment checker, not a full NewLang semantic frontend.
 - Repository: https://github.com/wakairo/NewLang_Compiler
 - Branch: `p3-first-semantic-vertical-slice`, based on merged P2/main
   `cd229877d550e913260ad5a79627b65c1eb405d0` (P2 PR #4).
-- P3 PR / final CI: pending publication; no PR has been merged by this task.
+- P3 PR: [#5](https://github.com/wakairo/NewLang_Compiler/pull/5), OPEN.
+  No PR has been merged by this task. Current head and final run evidence live
+  in the PR validation section / [current checks](https://github.com/wakairo/NewLang_Compiler/pull/5/checks).
 - User P3 handoff SHA-256:
   `c55d2d35769144735098bc0d1e4210682fe84017a547494d8a761649323236a9`.
 - Draft 17.4 / Backend Contract v0.4 snapshots and input identity manifest are
@@ -128,7 +130,9 @@ Local `using`, missing ptr stability, wrong domain, dead/stale or known invalid
 facts and proven conflicts are semantic errors. Missing provenance/scope/alias
 knowledge is an analysis precision limit. Stability's ordinary write -> read is
 recorded compatibility, not a new source borrow. Nested ref/slot local-source
-loans and exclusive stability forms are outside this narrow header contract.
+loans and exclusive stability forms return explicit unsupported results. The
+exclusive-stability header needs a body-extent reborrow plan; it is not declared
+semantically illegal and is separate from supported call-local reborrows.
 
 ## Registered calls and proved boundary
 
@@ -188,7 +192,7 @@ checks remain active with NDEBUG.
   weakening/reverse rejection, exclusive reborrow/sequential reuse/nested
   suspension, dead child/parent scope rules.
 - `semantic_domain`: constructor/move identity/finalization/live-root refusal,
-  read-ref ptr derivation, scope-independent ptr and unchanged referent identity.
+  read/write-ref ptr derivation, scope-independent ptr and unchanged referent identity.
 - `semantic_transition`: initialize/typed slot/stability/rollback, take/destroy
   including non-Discardable take and refusal of non-Discardable destroy, wrong
   domain/nonroot/stale pointer, sequential ending reuse, separate result
@@ -197,7 +201,8 @@ checks remain active with NDEBUG.
   and preserved incarnations/domains.
 - `semantic_loan`: four local/three ptr positive forms, ptr exclusive-write
   unsupported, matching stability/currentness/access, local/missing using,
-  active exclusive conflict, ordinary-write alias and ended stability.
+  active exclusive conflict, ordinary-write alias, ended stability and explicit
+  unsupported exclusive-stability header.
 - `semantic_failure`: hidden/unknown markers, unsupported summaries, unknown/
   invalid provenance/access, left-to-right rollback, fresh domain/root/fact
   rollback, repeated failure, allocation failure and host entry/parameter limits.
@@ -211,7 +216,9 @@ checks remain active with NDEBUG.
 
 Baseline main: bootstrap/format PASS, GCC and Clang **20/20 PASS** before code.
 Local host: Debian 13 Linux x86_64; GCC 14.2.0, Clang/LLVM/clang-format 23.1.2,
-C17, CMake/CTest 3.31.6, Python 3.12.14. Toolchain/bootstrap locks are unchanged.
+C17, CMake/CTest 3.31.6, Python 3.12.14. Ubuntu 24.04 PR jobs report
+GCC 13.3.0 and Python 3.12.3, with the same locked LLVM/Clang and CMake.
+Toolchain/bootstrap locks are unchanged.
 
 | Final configuration | Local result |
 |---|---|
@@ -248,8 +255,14 @@ ctest --test-dir build-release --output-on-failure
 Existing Ubuntu 24.04 PR workflow discovers the new tests automatically in GCC,
 Clang, ASan and UBSan jobs. Its pinned actions, exact LLVM bootstrap, sanitizer
 options and original tests remain intact. Local Release/NDEBUG is additional
-validation. Final current-head CI must include the final documentation commit;
-previous green runs alone are insufficient.
+validation. Implementation run [37251168999](https://github.com/wakairo/NewLang_Compiler/actions/runs/37251168999)
+passed all four Ubuntu 24.04 PR jobs at
+`337aaeacc75f22d5d61dee76f206b022ebff08fc`, each 27/27. This is explicitly
+pre-final-documentation evidence. After the final report/unsupported-classification
+commit, the full local matrix and PR-triggered workflow are rerun. The final
+current-head SHA/run URL and green job results are recorded in the PR body and
+completion response, with live current checks linked above; earlier green runs
+alone are not final-head evidence.
 
 ## Findings and review gate
 
@@ -264,8 +277,8 @@ previous green runs alone are insufficient.
 | COMPILER-LOWERING | No new finding/lowering; M7 backend constraints preserved |
 | COMPILER-PORTABILITY | Existing Linux x86_64 toolchain and test linker wrapping boundary unchanged; WSL2 not separately executed |
 
-P3 scope is implemented and ready for human/ChatGPT review when current-head CI
-is green. P2 remains syntax-only; no full program/body checker, M8.3/M8.4 grammar,
+P3 scope is implemented; stop at **P3 READY FOR REVIEW** after final current-head
+checks are green, for human/ChatGPT review. P2 remains syntax-only; no full program/body checker, M8.3/M8.4 grammar,
 effect/dependency solver, raw storage/FFI/relocation, MIR or LLVM lowering was
 added. Next: review this slice and its limitations before selecting a separately
 reviewed P4 scope. This task does not start P4 or merge its PR.
