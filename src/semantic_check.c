@@ -349,6 +349,16 @@ static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
         const NLSemanticTypeView actual = c->types[binding.type - 1].view;
         const NLSemanticTypeView wanted = c->types[expected - 1].view;
         if (actual.kind == NL_TYPE_REF && actual.is_exclusive &&
+            wanted.kind == NL_TYPE_REF && actual.target == wanted.target &&
+            actual.access == NL_ACCESS_WRITE &&
+            wanted.access == NL_ACCESS_READ) {
+            fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, node->span,
+                 "P3-EXCLUSIVE-MODE-UNSUPPORTED",
+                 "exclusive mode-changing argument compatibility is not "
+                 "established by the call-local reborrow rule alone");
+            return 0;
+        }
+        if (actual.kind == NL_TYPE_REF && actual.is_exclusive &&
             ref_compatible(actual, wanted)) {
             if (!reference_live(check, binding.value, node->span)) {
                 return 0;

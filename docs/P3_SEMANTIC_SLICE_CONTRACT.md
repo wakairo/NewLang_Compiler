@@ -7,7 +7,7 @@ Branch: `p3-first-semantic-vertical-slice`. Base/main:
 
 ## Authority and scope
 
-Draft 17.4 > Backend Contract v0.4 > adjudicated M8.1–M8.4 decisions >
+Draft 17.5 (17.4 + normative reborrow clarification) > Backend Contract v0.4 > adjudicated M8.1–M8.4 decisions >
 reviewed FormalProof > M7/M7.5 evidence > frozen Python oracle > production.
 The P3 task supplies the scope and selected closed surfaces; its attachment is
 not a replacement normative language specification. Standalone M8 adjudication
@@ -125,19 +125,31 @@ The user supplied the explicit resolution on 2026-10-05: for an already-selected
 compatible reference parameter/primitive operand, an existing exclusive-ref
 binding is operation/call-locally reborrowed under §11.4 + §12 before the ordinary
 non-Copy-transfer rule (§4.2 / §18.2) is considered. This is clarification of the
-existing rule, not a new normative semantics change. M8 artifact source wording
-is incomplete; the finding is now **DOCUMENTATION-GAP, no ambiguity blocker**.
+existing rule, not a new normative semantics change. The original M8 artifact source wording
+gap is **DOCUMENTATION-GAP, no ambiguity blocker**. The later Draft 17.5 sync
+described below supplies the explicit normative wording.
 
 Implementation: a fresh child scope and child authority package reference the
 same referent/incarnation/domain; the parent is suspended only during the child
 extent. Later argument evaluation cannot conflict with that live child. At
 operation return the child ends, the outer binding remains Available and can be
 used sequentially. Selected exclusive/ordinary ref parameters can reborrow
-compatible exclusive authority (same mode, or read from write); this is not
+compatible exclusive authority with the same access mode; this is not
 ordinary Copy weakening or an implicit T -> ref<T> borrow. Core take/destroy
 expect exclusive read-domain authority. Artifact records the scoped reborrow;
 returned user-call ref/affine-core-authority summaries remain outside P3.
 No historical Draft/oracle snapshot is rewritten to hide the gap.
+
+During final validation upstream PR #6 added Draft 17.5 and its review resolution
+at `10f4ffe5a02c846e4079b56e9254fc4b4e38f0de`. These byte-preserved documents
+were incorporated from main and inspected against Draft 17.4: the delta is
+explicit call-boundary clarification (§12.1, §14.2–3, §18.2), not new semantics.
+Draft 17.5 is now the normative baseline for this review packet. Its reborrow
+rule does not create otherwise-unestablished exclusive mode compatibility. P3
+therefore returns unsupported for exclusive write-to-read argument mode changes
+rather than copying the ordinary weakening rule onto exclusive types. Compatible
+same-mode exclusive/ordinary child reborrows and ordinary Copy write-to-read
+remain supported. Ordinary `let e2 = ending` still consumes/transfers ending.
 
 ## Concrete P3 state/ownership boundary
 

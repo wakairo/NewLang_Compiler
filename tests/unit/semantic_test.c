@@ -247,6 +247,39 @@ static bool compatibility_tests(void)
     CHECK(test_rejected(f.context, "uses(ending)", TEST_EXPRESSION,
                         NL_CHECK_SEMANTIC_ERROR, "P3-DEAD-SCOPE"));
     nl_semantic_destroy(f.context);
+    f = (TestSemantic){0};
+    CHECK(test_semantic_create(&f));
+    CHECK(test_domain_ref(&f, "ending", NL_ACCESS_WRITE, true, &ending, NULL));
+    CHECK(nl_semantic_binding_view(f.context, ending, &b));
+    const NLValueId package = b.value;
+    NLTypeId read_domain, exclusive_read_domain;
+    CHECK(nl_semantic_compound_type(
+              f.context, NL_TYPE_REF, nl_semantic_domain_type(f.context),
+              NL_ACCESS_READ, false, &read_domain) == NL_CHECK_OK);
+    CHECK(nl_semantic_compound_type(
+              f.context, NL_TYPE_REF, nl_semantic_domain_type(f.context),
+              NL_ACCESS_READ, true, &exclusive_read_domain) == NL_CHECK_OK);
+    CHECK(nl_semantic_register_function(f.context, "reads", &read_domain, 1,
+                                        f.copy, false, false) == NL_CHECK_OK);
+    CHECK(nl_semantic_register_function(f.context, "exclusive_reads",
+                                        &exclusive_read_domain, 1, f.copy,
+                                        false, false) == NL_CHECK_OK);
+    CHECK(test_rejected(f.context, "reads(ending)", TEST_EXPRESSION,
+                        NL_CHECK_SEMANTIC_UNSUPPORTED,
+                        "P3-EXCLUSIVE-MODE-UNSUPPORTED"));
+    CHECK(test_rejected(f.context, "exclusive_reads(ending)", TEST_EXPRESSION,
+                        NL_CHECK_SEMANTIC_UNSUPPORTED,
+                        "P3-EXCLUSIVE-MODE-UNSUPPORTED"));
+    CHECK(test_run(f.context, "let transferred = ending", TEST_BINDING,
+                   NL_CHECK_OK, NULL, &c));
+    CHECK(nl_semantic_binding_view(f.context, ending, &b) &&
+          b.availability == NL_CONSUMED);
+    CHECK(nl_semantic_binding_view(f.context, test_root(&c)->symbol, &b) &&
+          b.availability == NL_AVAILABLE && b.value == package);
+    CHECK(nl_checked_node_view(c.artifact, test_root(&c)->initializer)
+              ->value_use == NL_VALUE_CONSUMED);
+    test_checked_destroy(&c);
+    nl_semantic_destroy(f.context);
     return true;
 }
 

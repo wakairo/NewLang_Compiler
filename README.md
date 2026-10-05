@@ -10,13 +10,14 @@ program checker or end-to-end compilation. P3 stops for review before P4.
 
 ## Authority
 
-In order: **N** Draft 17.4 (language semantics), **N** Backend Contract v0.4
+In order: **N** Draft 17.5 (Draft 17.4 semantics plus exclusive-reborrow clarification), **N** Backend Contract v0.4
 (backend obligations), **A** adjudicated M8 surface decisions, then M7 closure,
 **F** F0 bridge / [NewLang_FormalProof](https://github.com/wakairo/NewLang_FormalProof),
 **O** frozen M7.5 Python oracle,
 **I** this C implementation. The Charter and Handoff Manifest are project
-policy, not language semantics. All input snapshots are byte-preserved under
-`docs/` and `docs/reference/`; `INPUT_ARTIFACTS.json` records their SHA-256 hashes.
+policy, not language semantics. Historical input snapshots and the separately reviewed Draft 17.5 are byte-preserved under
+`docs/` and `docs/reference/`; `INPUT_ARTIFACTS.json` records original handoff hashes; the P3 report records the
+Draft 17.5 / review-resolution identities introduced upstream by PR #6.
 M7 is closed. P2/P3 use the explicit M8.1/M8.2 surface forms supplied in their
 handoffs; standalone M8 artifact/hash verification is not claimed. No M8.3
 semantics are anticipated. Lean is not a dependency. See the

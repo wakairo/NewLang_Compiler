@@ -14,15 +14,23 @@ This is a bounded fragment checker, not a full NewLang semantic frontend.
   in the PR validation section / [current checks](https://github.com/wakairo/NewLang_Compiler/pull/5/checks).
 - User P3 handoff SHA-256:
   `c55d2d35769144735098bc0d1e4210682fe84017a547494d8a761649323236a9`.
-- Draft 17.4 / Backend Contract v0.4 snapshots and input identity manifest are
-  unchanged. Relevant rules: Draft §§4, 11.4, 12, 13.4/13.7/13.8, 14.1–3,
+- Historical Draft 17.4 / Backend Contract v0.4 snapshots and input identity
+  manifest are unchanged. Normative baseline is now the upstream-reviewed
+  Draft 17.5 clarification, incorporated from main PR #6 at
+  `10f4ffe5a02c846e4079b56e9254fc4b4e38f0de`. Its diff was inspected: no semantic
+  delta; explicit §12.1 / §14.2–3 / §18.2 call-boundary wording only.
+  Draft 17.5 SHA-256:
+  `055b5383b5c5a749ba3c3e5709afb90565fa4e778c9939bac9533b74c94666e9`;
+  review resolution SHA-256:
+  `f77289b78c0f2bba24e6006071d49241c586a25eaf7807b2c8498118f2c6744c`. Relevant rules: Draft §§4, 11.4, 12, 13.4/13.7/13.8, 14.1–3,
   17.4, 18.2; selected M8.1/M8.2 forms are supplied by the user handoff.
 - Authority: normative language > normative backend > adjudicated surfaces >
   reviewed formal evidence > historical M7/oracle evidence > implementation.
   Standalone M8 artifacts were not available for independent hash verification.
 - The user's explicit ENDING-ARG-01 clarification applies existing §11.4 + §12
   before ordinary non-Copy transfer at selected compatible ref operands. This
-  closes the semantic blocker; incomplete artifact wording is a DOCUMENTATION-GAP.
+  closes the semantic blocker; the original M8 wording gap is historical DOCUMENTATION-GAP. Draft 17.5
+  now provides the explicit normative wording; no semantic blocker remains.
   The [contract and authority audit](P3_SEMANTIC_SLICE_CONTRACT.md) preserves the
   evidence, minimal two-root example and resolution. No historical spec is edited.
 
@@ -147,7 +155,12 @@ need richer summaries and are unsupported.
 
 Ordinary `ref<write,T>` -> selected `ref<read,T>` is allowed and recorded; the
 reverse is rejected. Existing exclusive authority uses its scoped reborrow
-mechanism first at compatible selected ref operands. Standalone uses are not
+mechanism first at compatible same-mode selected ref operands. The new §12.1
+clarification does not establish new exclusive type compatibility: exclusive
+write-to-read argument mode changes are explicitly unsupported in P3, rather
+than being assumed from ordinary Copy weakening. Ordinary exclusive-ref binding
+transfer (`let e2 = ending`) still consumes the old binding and preserves package
+identity; both distinctions are regression-tested. Standalone uses are not
 Copy weakening; T -> ref<T> is never synthesized. Any surviving package marked
 hidden/unknown dependency rejects the whole fragment, including a nominally
 no-op swap. This deliberately avoids proving safety from incomplete summaries.
@@ -190,7 +203,8 @@ checks remain active with NDEBUG.
 - `semantic_value_use`: Copy twice/fresh packages, non-Copy transfer/use-after,
   duplicate binding, exact calls/arity/names, no implicit borrow, ordinary mode
   weakening/reverse rejection, exclusive reborrow/sequential reuse/nested
-  suspension, dead child/parent scope rules.
+  suspension, ordinary exclusive transfer, conservative unsupported exclusive
+  mode changes and dead child/parent scope rules.
 - `semantic_domain`: constructor/move identity/finalization/live-root refusal,
   read/write-ref ptr derivation, scope-independent ptr and unchanged referent identity.
 - `semantic_transition`: initialize/typed slot/stability/rollback, take/destroy
@@ -258,7 +272,9 @@ options and original tests remain intact. Local Release/NDEBUG is additional
 validation. Implementation run [37251168999](https://github.com/wakairo/NewLang_Compiler/actions/runs/37251168999)
 passed all four Ubuntu 24.04 PR jobs at
 `337aaeacc75f22d5d61dee76f206b022ebff08fc`, each 27/27. This is explicitly
-pre-final-documentation evidence. After the final report/unsupported-classification
+pre-final-documentation evidence. Run [37251445160](https://github.com/wakairo/NewLang_Compiler/actions/runs/37251445160)
+also passed all four jobs at `41d65bf60ef82ea230182eaf32b350c27d87a6d1`.
+Both precede the final Draft 17.5 reference/compatibility sync. After that final
 commit, the full local matrix and PR-triggered workflow are rerun. The final
 current-head SHA/run URL and green job results are recorded in the PR body and
 completion response, with live current checks linked above; earlier green runs
@@ -269,9 +285,9 @@ alone are not final-head evidence.
 | Classification | Result |
 |---|---|
 | COMPILER-SPEC-HOLE | No new blocker; inherited lexical/open surfaces unchanged |
-| COMPILER-SPEC-AMBIGUITY | ENDING-ARG-01 resolved by explicit user clarification, no blocker; DOCUMENTATION-GAP remains for artifact wording |
+| COMPILER-SPEC-AMBIGUITY | ENDING-ARG-01 resolved by explicit user clarification, no blocker; original M8 DOCUMENTATION-GAP recorded; Draft 17.5 normative sync supplies explicit wording |
 | COMPILER-IMPLEMENTATION | No known unresolved defect after validation |
-| COMPILER-IMPLEMENTATION-LIMIT | Header-only loans, free dependencies, flat nominal root payloads, limited call summaries/receiving; ptr exclusive-write and exclusive ptr_from_ref inputs explicitly unsupported |
+| COMPILER-IMPLEMENTATION-LIMIT | Header-only loans, free dependencies, flat nominal root payloads, limited call summaries/receiving; ptr exclusive-write and exclusive ptr_from_ref inputs, exclusive mode-changing arguments explicitly unsupported |
 | COMPILER-DIAGNOSTIC | Role-based first diagnostics tested; no new blocker |
 | COMPILER-PERFORMANCE | Deep copy / linear registry scans favor rollback clarity; bounded fixtures, no whole-program scalability claim or optimization work |
 | COMPILER-LOWERING | No new finding/lowering; M7 backend constraints preserved |
