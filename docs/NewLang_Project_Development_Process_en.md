@@ -93,6 +93,47 @@ A report is not a substitute for this process.
 Prefer **targeted reopen** when a concrete problem can be isolated.
 Do not reopen a whole milestone merely because one workload exposes one local surface gap.
 
+
+### 4.1 Cross-track communication
+
+Durable, referenceable communication between tracks should normally use **GitHub Issues as the primary channel**.
+Prompts and chat may be used to launch or control work, but the full handoff should not live only in conversation history. Prefer a thin launch instruction that points the receiving track to the corresponding Issue.
+
+As a default, use one Issue for one bounded task, finding, or revalidation scope.
+When relevant, keep the following together in that Issue:
+
+- authority such as canonical repository, main SHA, and `CURRENT_SPEC.md`;
+- scope and non-goals;
+- questions, requested work, and stop conditions for the receiving track;
+- findings, counterexamples, and CI / proof / implementation evidence;
+- Coordination adjudication;
+- closure, reopen, and downstream revalidation state.
+
+Actual repository changes are reviewed in PRs, and the Issue should link to the relevant PR.
+Issue/PR discussion, reports, and prompts are evidence and coordination records; they do not override the canonical specification by themselves.
+
+Because multiple tracks currently use the same GitHub account, substantive Issue bodies and comments written on behalf of a track should identify the speaker near the beginning:
+
+```text
+Track: Coordination
+Track: M
+Track: F
+Track: P
+Track: R
+```
+
+The goal is later traceability of whose judgment, finding, or question is being recorded; no strict machine-readable format is required.
+
+Questions, answers, additional evidence, and adjudication within the same scope should normally be appended to the existing Issue rather than relying on references such as “that earlier prompt” or conversation history.
+If the scope materially changes, create a new Issue and link it from the original one.
+
+Do not create an Issue for every trivial exchange.
+Small implementation discussion or follow-up within one bounded task should remain in the existing Issue or PR.
+
+For Red Team work, the independence rules in §7 take precedence.
+A first-pass attack Issue should contain only the deliberately narrow input allowed at that stage and should not pre-seed M/F/P rationale or conclusions.
+After first-pass findings are recorded, additional evidence may be appended to the same Issue or supplied through an explicitly linked follow-up Issue.
+
 ## 5. Finding classification
 
 Use categories such as:
