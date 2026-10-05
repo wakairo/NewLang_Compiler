@@ -6,19 +6,19 @@ NewLang production compiler, written in C17 with LLVM as the primary backend.
 slice: independent result receiving, lexical blocks and registered aggregate
 construction/whole destructuring. It connects parsed source to P3/P4's existing
 transactional checker, scoped reborrows and raw-storage responsibilities.
-P5 is reviewed/merged and CLOSED; sum/match and broader frontend work remain deferred.
+P5 is reviewed/merged and CLOSED. Draft 17.10 fixes the minimal closed-sum constructor/match source profile; production sum/match support remains deferred to a later P milestone.
 
 ## Authority
 
 The canonical language authority is the Draft selected by
-`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.9**), followed by reviewed
+`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.10**), followed by reviewed
 process/backend contracts and merged implementation/formal evidence.
 Historical reports, the task prompt and conversation do not override the Draft.
 Backend Contract v0.4 defines backend obligations. The Charter, Handoff Manifest
 and project process documents are policy/evidence, not language semantics.
 [F0 / NewLang_FormalProof](https://github.com/wakairo/NewLang_FormalProof) and the
 frozen M7.5 Python oracle are evidence; Lean is not a build dependency.
-M7, P4/R1/F1.4/F1.5, P5 and R2 are reviewed/closed. Final pre-M9
+M7, P4/R1/F1.4/F1.5, P5, R2 and M9.1 are reviewed/closed. Final pre-M9
 Semantic Sync is recorded in Issue #29; later tracks start only through separate Coordination handoffs.
 See the [P2 grammar audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md),
 [P3 semantic contract](docs/P3_SEMANTIC_SLICE_CONTRACT.md),
@@ -173,4 +173,4 @@ artifact is produced. Output I/O failure exits 1.
 There is still no full-program parser or semantic checker, typed MIR, LLVM lowering,
 optimization framework, broad FFI, concurrency, separate compilation,
 self-hosting, public token/AST-dump mode, or full M8.4 frontend. The P5 module slice supports canonical receiving/block/aggregate
-forms; sum/match and declarations remain deferred. The CLI compile path remains unsupported.
+forms; Draft 17.10 fixes the closed-sum constructor/match source profile, but production sum/match and declarations remain unsupported. The CLI compile path remains unsupported.
