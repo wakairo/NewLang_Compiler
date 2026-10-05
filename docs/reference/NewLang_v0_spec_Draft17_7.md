@@ -1942,8 +1942,10 @@ address 比較が必要なら `addr(p)` を用いる。
 - required alignment
 - sufficient range
 - required read/write access
-- 対象 incarnation が governing `LifetimeDomain` `D` に属する
-- stability evidence として渡された ordinary domain ref が **同じ `D`** を参照する
+- 対象 incarnation がcurrent governing identity `D` に属する
+- stability evidence が **同じ `D`** の継続を保証する
+  - programmer-visible `LifetimeDomain` の場合はordinary domain refが同じ `D` を参照する
+  - §13.7のimplicit local governing identityの場合はcompiler-managed hidden stability evidenceでよい
 - 対象がconditional subobjectなら、そのspecific occurrenceがcurrentにliveであり、必要なsemantic dependencyを生成refへ付与できる
 - 生成される `ref` のすべての use が、その stability evidence / semantic dependency の有効scope内にある
 
@@ -3708,6 +3710,7 @@ ordinary safe v0 coreでは、`slot<T>`からtyped root lifetimeを開始するs
 そのようなfuture transitionは少なくとも:
 
 - destinationのunique empty occupancy responsibilityを消費する
+- destination representationを成立させるために必要なtarget/platform access contractを満たす
 - fresh root incarnation / placement / governing-domain relation / current-value factsを作る
 - fixed / conditional structural stateをordinary lifetime-start semanticsに従ってfreshに作る
 - lifetime-start完了後にのみ最初のsafe provenance-bearing `ptr<T>`を公開する
