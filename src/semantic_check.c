@@ -714,8 +714,8 @@ static bool primitive(Check *check, NLCheckedNodeId call,
             const NLSemanticBackingView backing =
                 c->regions[slot_value.occupancy.region - 1].view;
             if (!backing.ordinary_write) {
-                fail(check, NL_CHECK_SEMANTIC_ERROR,
-                     view(check, args[0])->span, "P4-INITIALIZE-BACKING-WRITE",
+                fail(check, NL_CHECK_SEMANTIC_ERROR, view(check, args[0])->span,
+                     "P4-INITIALIZE-BACKING-WRITE",
                      "typed initialize requires destination backing write "
                      "access");
                 return false;
