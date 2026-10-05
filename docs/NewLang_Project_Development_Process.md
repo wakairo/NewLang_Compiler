@@ -92,6 +92,47 @@ reportはこのprocessの代替にはならない。
 具体的な問題を局所化できる場合は **targeted reopen** を優先する。
 一つのworkloadで一つのlocal surface gapが見つかっただけで、milestone全体を再openしない。
 
+
+### 4.1 Track間コミュニケーション
+
+track間の継続的・参照可能なコミュニケーションは、原則として **GitHub Issueを主経路** とする。
+promptやchatは作業開始・制御のために使ってよいが、handoffの全内容を会話だけへ閉じ込めず、可能な限り対応するIssueを指す薄い起動指示にする。
+
+一つのboundedなtask / finding / revalidationには、原則として一つのIssueを用いる。
+そのIssueには必要に応じて次を集約する。
+
+- canonical repository / main SHA / `CURRENT_SPEC.md` 等のauthority
+- scopeとnon-goals
+- receiving trackへの質問・依頼・stop condition
+- finding、counterexample、CI / proof / implementation evidence
+- Coordinationによるadjudication
+- closure / reopen / downstream revalidationの状態
+
+実際のrepository変更はPRでreviewし、IssueはそのPRを参照する。
+IssueやPR上の議論・report・promptは証拠とcoordination recordであり、それ自体がcanonical specificationを上書きしない。
+
+現状は複数trackが同じGitHub accountを使用するため、trackを代表して書くsubstantiveなIssue本文・コメントでは、冒頭付近に発言主体を明示する。
+
+```text
+Track: Coordination
+Track: M
+Track: F
+Track: P
+Track: R
+```
+
+後から読んだときに誰の判断・finding・質問か識別できればよく、厳密な機械可読formatは要求しない。
+
+同じscope内の質問、回答、追加証拠、裁定はできるだけ既存Issueのcommentへ追記し、「あのときのprompt」やconversation historyだけを参照点にしない。
+scopeが実質的に変わった場合は新しいIssueを作り、元Issueからlinkする。
+
+ただしIssueを細かな発言ごとに乱立させない。
+単純な実装上のやり取りや一つのbounded task内の追補は既存Issue / PRへまとめる。
+
+Red Teamについては§7の独立性を優先する。
+first-pass attack用Issueには、その時点で許可された狭い入力だけを置き、M/F/Pのrationaleや過去の結論を先回りして混ぜない。
+first-pass finding後に追加情報を解禁する場合は、同じIssueへ追記するか、明示的にlinkしたfollow-up Issueで扱う。
+
 ## 5. Finding分類
 
 必要に応じて次のような分類を用いる。
