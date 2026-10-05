@@ -2,18 +2,16 @@
 
 Date: 2026-10-05 (Asia/Tokyo). Status: pre-implementation contract; the authority
 audit gate is resolved by the user's explicit clarification below.
-Branch: `p3-first-semantic-vertical-slice`. Base/main:
-`cd229877d550e913260ad5a79627b65c1eb405d0` (merged P2 PR #4, verified remotely).
+Branch: `p3-first-semantic-vertical-slice`. Originally based on merged P2; synchronized before final review with compiler `main` `365b9001a0eba0eddc795145d7d7d903131b5e8f`.
 
 ## Authority and scope
 
-Draft 17.5 (17.4 + normative reborrow clarification) > Backend Contract v0.4 > adjudicated M8.1–M8.4 decisions >
+`docs/reference/CURRENT_SPEC.md` -> canonical Draft 17.6 > Backend Contract v0.4 > adjudicated M8 surface decisions >
 reviewed FormalProof > M7/M7.5 evidence > frozen Python oracle > production.
-The P3 task supplies the scope and selected closed surfaces; its attachment is
-not a replacement normative language specification. Standalone M8 adjudication
-documents are not in the checkout or the supplied attachment. No independent
-verification of those documents is claimed. No normative or historical document
-has been changed.
+The P3 task supplies only a bounded implementation scope and does not replace the
+canonical language specification. Draft 17.6 inherits the Draft 17.5 exclusive-reborrow
+clarification used here and adds M8.3R raw-byte semantics outside the P3 slice.
+Synchronizing with current main therefore changes authority/version context, not P3 semantics.
 
 The supported target is P2 syntax -> explicit context -> checked representation
 for nominal/ptr/ref/slot/unit types, value use, registered calls, the nine selected
@@ -126,8 +124,8 @@ compatible reference parameter/primitive operand, an existing exclusive-ref
 binding is operation/call-locally reborrowed under §11.4 + §12 before the ordinary
 non-Copy-transfer rule (§4.2 / §18.2) is considered. This is clarification of the
 existing rule, not a new normative semantics change. The original M8 artifact source wording
-gap is **DOCUMENTATION-GAP, no ambiguity blocker**. The later Draft 17.5 sync
-described below supplies the explicit normative wording.
+gap is historical **DOCUMENTATION-GAP, no ambiguity blocker**. The canonical
+Draft now contains the explicit normative wording.
 
 Implementation: a fresh child scope and child authority package reference the
 same referent/incarnation/domain; the parent is suspended only during the child
@@ -140,13 +138,13 @@ expect exclusive read-domain authority. Artifact records the scoped reborrow;
 returned user-call ref/affine-core-authority summaries remain outside P3.
 No historical Draft/oracle snapshot is rewritten to hide the gap.
 
-During final validation upstream PR #6 added Draft 17.5 and its review resolution
-at `10f4ffe5a02c846e4079b56e9254fc4b4e38f0de`. These byte-preserved documents
-were incorporated from main and inspected against Draft 17.4: the delta is
-explicit call-boundary clarification (§12.1, §14.2–3, §18.2), not new semantics.
-Draft 17.5 is now the normative baseline for this review packet. Its reborrow
-rule does not create otherwise-unestablished exclusive mode compatibility. P3
-therefore returns unsupported for exclusive write-to-read argument mode changes
+The canonical baseline is now Draft 17.6 via `CURRENT_SPEC.md`.
+Draft 17.6 preserves the Draft 17.5 call-boundary clarification (§12.1, §14.2–3, §18.2),
+so the P3 exclusive-reborrow interpretation is unchanged. Draft 17.6's new M8.3R
+raw-byte semantics are outside the P3 implementation boundary.
+
+The reborrow rule does not create otherwise-unestablished exclusive mode compatibility.
+P3 therefore returns unsupported for exclusive write-to-read argument mode changes
 rather than copying the ordinary weakening rule onto exclusive types. Compatible
 same-mode exclusive/ordinary child reborrows and ordinary Copy write-to-read
 remain supported. Ordinary `let e2 = ending` still consumes/transfers ending.
