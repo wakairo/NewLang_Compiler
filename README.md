@@ -2,28 +2,28 @@
 
 NewLang production compiler, written in C17 with LLVM as the primary backend.
 
-**P0 through P3 are complete and merged.** P4 adds a programmatic raw-storage
-semantic slice: BackingRegion/range responsibility, Allocation/Storage/slot
-cycles, byte definedness and overlap-safe raw copies. P3's context, scoped
-reborrows and transactional checking remain the foundation. Source grammar
-and opaque loan bodies are unchanged. P4 stops for review before P5.
+**P0 through P4 are complete and merged.** P5 adds the Draft 17.9 closed source
+slice: independent result receiving, lexical blocks and registered aggregate
+construction/whole destructuring. It connects parsed source to P3/P4's existing
+transactional checker, scoped reborrows and raw-storage responsibilities.
+P5 stops at PR review; sum/match and broader frontend work remain deferred.
 
 ## Authority
 
-In order: **N** the canonical Draft selected by `docs/reference/CURRENT_SPEC.md`
-(currently Draft 17.6), **N** Backend Contract v0.4 (backend obligations),
-**A** adjudicated M8 surface decisions, then M7 closure,
-**F** F0 bridge / [NewLang_FormalProof](https://github.com/wakairo/NewLang_FormalProof),
-**O** frozen M7.5 Python oracle,
-**I** this C implementation. The Charter, Handoff Manifest and project process
-documents are policy/evidence, not language semantics. For P4, canonical Draft
-and Backend Contract precede merged M/P/F evidence, the task prompt and
-conversation history. M7 remains closed. P4 implements the bounded M8.3/M8.3R
-semantic slice without M8.4 receiving/aggregate syntax or LLVM lowering.
-Lean is not a dependency. See the
-[P2 grammar audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md),
-[P3 semantic contract](docs/P3_SEMANTIC_SLICE_CONTRACT.md) and
-[P4 raw-storage contract](docs/P4_RAW_STORAGE_SEMANTIC_SLICE_CONTRACT.md).
+The canonical language authority is the Draft selected by
+`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.9**), followed by reviewed
+process/backend contracts and merged implementation/formal evidence.
+Historical reports, the task prompt and conversation do not override the Draft.
+Backend Contract v0.4 defines backend obligations. The Charter, Handoff Manifest
+and project process documents are policy/evidence, not language semantics.
+[F0 / NewLang_FormalProof](https://github.com/wakairo/NewLang_FormalProof) and the
+frozen M7.5 Python oracle are evidence; Lean is not a build dependency.
+M7, P4/R1/F1.4 and Semantic Sync #22 remain closed. P5 runs under Issue #23
+without F1.5/M9/LLVM/relocation or a new Red Team task.
+See the [P2 grammar audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md),
+[P3 semantic contract](docs/P3_SEMANTIC_SLICE_CONTRACT.md),
+[P4 raw-storage contract](docs/P4_RAW_STORAGE_SEMANTIC_SLICE_CONTRACT.md) and
+[P5 source contract](docs/P5_SOURCE_FRONTEND_SLICE_CONTRACT.md).
 
 ## Fresh setup
 
@@ -100,17 +100,17 @@ cmake --build build-ubsan --parallel 2
 ctest --test-dir build-ubsan --output-on-failure
 ```
 
-Each configuration runs the same **38 CTests**: source and lexer module unit
+Each configuration runs the same **45 CTests**: source and lexer module unit
 tests, six parser unit groups, file-source -> lexer/parser integration,
 six P3 semantic unit groups and source -> parser -> checker integration,
 ten raw-storage unit groups and the raw -> typed -> raw -> deallocate cycle,
+six P5 source-slice unit groups and source -> checked lifetime/aggregate integration,
 diagnostic unit checks, six CLI
 cases (each invoked twice), valid LLVM C API module/IR, artifact integrity, and
 frozen-oracle smoke. ASan includes leak detection; UBSan stops on the first
 failure. Imported LLVM binaries are not rebuilt with sanitizers; our C targets
-are instrumented. Required checks are these four configurations and PR CI.
-GCC Release/NDEBUG is also validated locally using the same CTest suite (see
-[P4 report](docs/P4_RAW_STORAGE_SEMANTIC_SLICE_REPORT.md)).
+are instrumented. Required checks are these configurations plus GCC Release/NDEBUG and PR CI
+(see [P5 report](docs/P5_SOURCE_FRONTEND_SLICE_REPORT.md)).
 The historical 466-test oracle suite and formal proofs are optional evidence;
 P0 does not claim to reproduce them in C.
 
@@ -129,7 +129,8 @@ artifact is produced. Output I/O failure exits 1.
   allocation-free streaming lexer. Keyword/comment/encoding rules remain open.
 - `include/newlang/{syntax,parser}.h`, `src/{syntax,parser}.c`: owned immutable
   syntax trees borrowing source, one-token lookahead, checked failure cleanup,
-  structured first diagnostics and four standalone fragment entries. Loan
+  structured first diagnostics, four P2 fragment entries and the Draft 17.9 P5
+  source-fragment entry for blocks/receiving/registered aggregate forms. Loan
   bodies retain balanced byte regions; their contents are not parsed.
 - `include/newlang/{semantic,checked}.h`, `src/{semantic,semantic_check,checked}.c`:
   owning fixture context, canonical types/packages/places/scopes, transactional
@@ -140,7 +141,7 @@ artifact is produced. Output I/O failure exits 1.
 - `tests/unit/`, `tests/integration/`: C unit / LLVM checks and CLI/artifact tests.
 - `oracle/`, `tests/oracle/`: untouched M7.5 archive, identity, and isolated adapter.
 - `scripts/`: reproducible bootstrap, dependency lock, formatter/fmt-check helpers.
-- `.github/workflows/compiler-ci.yml`: PR-triggered GCC, Clang, ASan, UBSan validation plus
+- `.github/workflows/compiler-ci.yml`: PR-triggered GCC Debug/Release, Clang, ASan, UBSan validation plus
   pinned clang-format checking.
 - `docs/NewLang_Aware_C_Guidelines.md`: production C implementation discipline.
 - `docs/NewLang_Compiler_Testing_Strategy.md`: unit/integration/oracle/end-to-end test policy.
@@ -163,9 +164,13 @@ artifact is produced. Output I/O failure exits 1.
   definedness/access, ownership/failure contracts and bounded deferrals.
 - `docs/P4_RAW_STORAGE_SEMANTIC_SLICE_REPORT.md`: coverage, validation, findings
   and P4 review handoff.
+- `docs/P5_SOURCE_FRONTEND_SLICE_CONTRACT.md`: Draft 17.9 selected source profile,
+  receiving/block/aggregate ownership, transaction contracts and limits.
+- `docs/P5_SOURCE_FRONTEND_SLICE_REPORT.md`: module inventory, tests and review handoff.
 - `docs/`: historical [P0 toolchain decisions](docs/P0_TOOLCHAIN_DECISIONS.md),
   [P0 architecture](docs/P0_ARCHITECTURE.md), and [P0 report](docs/P0_REPORT.md).
 
 There is still no full-program parser or semantic checker, typed MIR, LLVM lowering,
 optimization framework, broad FFI, concurrency, separate compilation,
-self-hosting, public token/AST-dump mode, or M8.4 frontend / P5 implementation.
+self-hosting, public token/AST-dump mode, or full M8.4 frontend. The P5 module slice supports canonical receiving/block/aggregate
+forms; sum/match and declarations remain deferred. The CLI compile path remains unsupported.

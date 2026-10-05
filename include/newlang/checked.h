@@ -31,13 +31,21 @@ typedef enum {
     NL_CHECKED_STORAGE_WRITE_BYTE,
     NL_CHECKED_COPY_RAW_BYTES,
     NL_CHECKED_BYTE_TO_U8,
-    NL_CHECKED_U8_TO_BYTE
+    NL_CHECKED_U8_TO_BYTE,
+    NL_CHECKED_BLOCK,
+    NL_CHECKED_STATEMENT,
+    NL_CHECKED_MULTI_BINDING,
+    NL_CHECKED_RECEIVER,
+    NL_CHECKED_AGGREGATE,
+    NL_CHECKED_AGGREGATE_FIELD,
+    NL_CHECKED_AGGREGATE_BINDING
 } NLCheckedKind;
 typedef enum {
     NL_VALUE_USE_NONE,
     NL_VALUE_COPIED,
     NL_VALUE_CONSUMED,
-    NL_VALUE_REBORROWED
+    NL_VALUE_REBORROWED,
+    NL_VALUE_RECEIVED /* produced responsibility -> binding, never a Copy-use */
 } NLValueUse;
 typedef struct {
     NLTypeId type;
@@ -70,6 +78,8 @@ typedef struct {
     NLCheckedNodeId first_argument, next_argument;
     size_t argument_count;
     NLCheckedNodeId initializer;
+    NLCheckedNodeId first_item, next_item, tail;
+    size_t item_count, field_index; /* field_index is declaration order */
     size_t
         result_count; /* 0 = unit/no responsibility; 1 or 2 separate values */
     NLCheckedResult results[2];

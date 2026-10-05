@@ -17,10 +17,13 @@ typedef struct {
 typedef struct {
     char *name;
     NLSemanticTypeView view;
+    char *field_names[NL_SEMANTIC_MAX_FIELDS];
+    NLTypeId field_types[NL_SEMANTIC_MAX_FIELDS];
 } NLTypeEntry;
 typedef struct {
     char *name;
     NLSemanticBindingView view;
+    bool hidden; /* lexical scope ended; stable historical IDs remain */
 } NLBindingEntry;
 typedef struct {
     const char *name; /* static for prelude; owned for registered entries */
@@ -71,6 +74,10 @@ NLCheckStatus nl_sem_install(NLSemanticContext *, NLPlaceId, NLValueId,
                              NLDomainId);
 NLCheckStatus nl_sem_bind(NLSemanticContext *, const char *, NLValueId,
                           NLSymbolId *);
+NLCheckStatus nl_sem_bind_in_scope(NLSemanticContext *, const char *, NLValueId,
+                                   size_t binding_floor, NLSymbolId *);
+NLCheckStatus nl_sem_copy_value(NLSemanticContext *, NLValueId, NLValueId *);
+void nl_sem_end_value(NLSemanticContext *, NLValueId);
 NLCheckStatus nl_sem_new_domain(NLSemanticContext *, NLDomainId *, NLValueId *);
 NLCheckStatus nl_sem_new_scope(NLSemanticContext *, NLScopeId, bool,
                                NLScopeId *);

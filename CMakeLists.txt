@@ -125,6 +125,17 @@ if(BUILD_TESTING)
     target_link_libraries(raw_storage_cycle_test PRIVATE newlang_semantic newlang_parser)
     add_test(NAME raw_storage_cycle.integration COMMAND raw_storage_cycle_test)
 
+    add_executable(source_slice_test tests/unit/source_slice_test.c)
+    target_link_libraries(source_slice_test PRIVATE newlang_semantic newlang_parser)
+    target_link_options(source_slice_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    foreach(group parser binding receiving aggregate failure diagnostic)
+        add_test(NAME p5_${group}.unit COMMAND source_slice_test ${group})
+    endforeach()
+
+    add_executable(source_slice_frontend_test tests/integration/source_slice_frontend_test.c)
+    target_link_libraries(source_slice_frontend_test PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME p5_source_checked.integration COMMAND source_slice_frontend_test)
+
     add_executable(llvm_smoke tests/integration/llvm_smoke.c)
     target_link_libraries(llvm_smoke PRIVATE newlang_options newlang_llvm)
     add_test(NAME llvm.c_api COMMAND llvm_smoke)

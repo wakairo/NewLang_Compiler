@@ -8,6 +8,7 @@ typedef struct {
     NLCheckedFragment *artifact;
     const NLSource *source;
     size_t depth;
+    size_t binding_floor;
     NLCheckStatus status;
     NLCheckDiagnostic diagnostic;
 } Check;
@@ -66,9 +67,10 @@ static bool equal_name(Check *check, NLSourceSpan span, const char *name)
 
 static NLSymbolId resolve_binding(Check *check, NLSourceSpan span)
 {
-    for (size_t i = 0; i < check->context->binding_count; ++i) {
-        if (equal_name(check, span, check->context->bindings[i].name)) {
-            return i + 1;
+    for (size_t i = check->context->binding_count; i > 0; --i) {
+        if (!check->context->bindings[i - 1].hidden &&
+            equal_name(check, span, check->context->bindings[i - 1].name)) {
+            return i;
         }
     }
     fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P3-UNKNOWN-BINDING",
@@ -296,14 +298,13 @@ static NLCheckedNodeId binding_use(Check *check, NLSymbolId symbol,
     }
     const NLSemanticBindingView binding = c->bindings[symbol - 1].view;
     const NLSemanticTypeView type = c->types[binding.type - 1].view;
-    const NLSemanticValueView original = c->values[binding.value - 1];
     if (type.kind == NL_TYPE_REF &&
         !reference_live(check, binding.value, span)) {
         return 0;
     }
     NLValueId value = binding.value;
     if (type.is_copy) {
-        if (!host(check, nl_sem_new_value(c, original, &value), span)) {
+        if (!host(check, nl_sem_copy_value(c, binding.value, &value), span)) {
             return 0;
         }
     } else {
@@ -508,8 +509,7 @@ static NLValueId new_value(Check *check, NLSemanticValueView value,
 
 static void end_temporary(Check *check, NLValueId value)
 {
-    check->context->values[value - 1].carrier = NL_CARRIER_ENDED;
-    check->context->values[value - 1].owner_place = 0;
+    nl_sem_end_value(check->context, value);
 }
 
 static NLDomainId domain_reference(Check *check, NLValueId value,
@@ -542,9 +542,10 @@ static NLDomainId domain_reference(Check *check, NLValueId value,
 static bool scalar_root_type(Check *check, NLTypeId type, NLSourceSpan span)
 {
     const NLSemanticTypeKind kind = check->context->types[type - 1].view.kind;
-    if ((kind != NL_TYPE_NOMINAL || type == 2) && kind != NL_TYPE_STORAGE &&
-        kind != NL_TYPE_ALLOCATION && kind != NL_TYPE_BYTE &&
-        kind != NL_TYPE_U8 && kind != NL_TYPE_USIZE && kind != NL_TYPE_ADDR) {
+    if (check->context->types[type - 1].view.field_count != 0 ||
+        ((kind != NL_TYPE_NOMINAL || type == 2) && kind != NL_TYPE_STORAGE &&
+         kind != NL_TYPE_ALLOCATION && kind != NL_TYPE_BYTE &&
+         kind != NL_TYPE_U8 && kind != NL_TYPE_USIZE && kind != NL_TYPE_ADDR)) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, span,
              "P3-ROOT-PAYLOAD-UNSUPPORTED",
              "root transitions support flat payloads; nested ref/slot/domain "
@@ -1058,6 +1059,11 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
     return id;
 }
 
+static NLCheckedNodeId source_binding(Check *, const NLSyntaxView *);
+static NLCheckedNodeId source_statement(Check *, const NLSyntaxView *);
+static NLCheckedNodeId source_block(Check *, const NLSyntaxView *);
+static NLCheckedNodeId aggregate(Check *, const NLSyntaxView *);
+
 static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
 {
     const NLSyntaxView *const node = nl_syntax_node_view(syntax);
@@ -1069,6 +1075,10 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         result = identifier(check, node);
     } else if (node->kind == NL_SYNTAX_EXPR_CALL) {
         result = call(check, node);
+    } else if (node->kind == NL_SYNTAX_BLOCK) {
+        result = source_block(check, node);
+    } else if (node->kind == NL_SYNTAX_AGGREGATE) {
+        result = aggregate(check, node);
     } else {
         fail(check, NL_CHECK_INTERNAL_ERROR, node->span, "P3-INTERNAL",
              "expected expression syntax");
@@ -1129,6 +1139,406 @@ static NLCheckedNodeId binding(Check *check, const NLSyntaxView *syntax)
                                           .type = initialized.type,
                                           .symbol = symbol,
                                           .initializer = initializer});
+}
+
+static char *source_name_copy(Check *check, NLSourceSpan span)
+{
+    NLSourceView bytes;
+    if (!nl_source_view(check->source, span, &bytes)) {
+        (void)host(check, NL_CHECK_INTERNAL_ERROR, span);
+        return NULL;
+    }
+    char *name = malloc(bytes.length + 1);
+    if (name == NULL) {
+        (void)host(check, NL_CHECK_OUT_OF_MEMORY, span);
+        return NULL;
+    }
+    memcpy(name, bytes.bytes, bytes.length);
+    name[bytes.length] = 0;
+    return name;
+}
+
+static bool fresh_name(Check *check, const char *name, NLSourceSpan span)
+{
+    for (size_t i = check->binding_floor; i < check->context->binding_count;
+         ++i) {
+        if (!check->context->bindings[i].hidden &&
+            strcmp(name, check->context->bindings[i].name) == 0) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P5-DUPLICATE-BINDING",
+                 "binding name already exists in current lexical scope");
+            return false;
+        }
+    }
+    return true;
+}
+
+static NLTypeId aggregate_type(Check *check, NLSourceSpan name)
+{
+    for (size_t i = 0; i < check->context->type_count; ++i) {
+        const NLTypeEntry *entry = &check->context->types[i];
+        if (entry->name != NULL && equal_name(check, name, entry->name)) {
+            if (entry->view.field_count == 0) {
+                fail(
+                    check, NL_CHECK_SEMANTIC_UNSUPPORTED, name,
+                    "P5-AGGREGATE-SHAPE-UNSUPPORTED",
+                    "type has no registered aggregate shape in selected slice");
+                return 0;
+            }
+            return i + 1;
+        }
+    }
+    fail(check, NL_CHECK_SEMANTIC_ERROR, name, "P5-UNKNOWN-AGGREGATE",
+         "unknown registered aggregate type");
+    return 0;
+}
+
+static bool aggregate_fields(Check *check, NLTypeId type,
+                             const NLSyntaxNode *fields, size_t count,
+                             bool construction,
+                             size_t indices[NL_SEMANTIC_MAX_FIELDS])
+{
+    const NLTypeEntry *entry = &check->context->types[type - 1];
+    bool seen[NL_SEMANTIC_MAX_FIELDS] = {false};
+    size_t n = 0;
+    for (const NLSyntaxNode *f = fields; f != NULL;
+         f = nl_syntax_next_argument(f)) {
+        const NLSyntaxView *v = nl_syntax_node_view(f);
+        const NLSourceSpan name =
+            construction ? v->data.binding.name : v->data.name;
+        size_t index = entry->view.field_count;
+        for (size_t j = 0; j < entry->view.field_count; ++j) {
+            if (equal_name(check, name, entry->field_names[j])) {
+                index = j;
+                break;
+            }
+        }
+        if (index == entry->view.field_count || seen[index]) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, name, "P5-AGGREGATE-FIELD",
+                 "unknown or duplicate aggregate field");
+            return false;
+        }
+        seen[index] = true;
+        indices[n++] = index;
+    }
+    if (count != entry->view.field_count || n != count) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR,
+             fields == NULL ? (NLSourceSpan){0, 0}
+                            : nl_syntax_node_view(fields)->span,
+             "P5-AGGREGATE-FIELD-COUNT",
+             "all aggregate fields must occur exactly once");
+        return false;
+    }
+    return true;
+}
+
+static NLCheckedNodeId aggregate(Check *check, const NLSyntaxView *syntax)
+{
+    const NLTypeId type =
+        aggregate_type(check, syntax->data.aggregate.type_name);
+    if (type == 0)
+        return 0;
+    size_t indices[NL_SEMANTIC_MAX_FIELDS];
+    if (!aggregate_fields(check, type, syntax->data.aggregate.fields,
+                          syntax->data.aggregate.count, true, indices))
+        return 0;
+    NLSemanticContext *c = check->context;
+    NLSemanticValueView package = {.type = type,
+                                   .field_count = syntax->data.aggregate.count};
+    const NLCheckedNodeId id =
+        add(check, (NLCheckedNodeView){.kind = NL_CHECKED_AGGREGATE,
+                                       .span = syntax->span,
+                                       .name = syntax->data.aggregate.type_name,
+                                       .type = type});
+    if (id == 0)
+        return 0;
+    NLCheckedNodeId previous = 0;
+    size_t n = 0;
+    for (const NLSyntaxNode *f = syntax->data.aggregate.fields; f != NULL;
+         f = nl_syntax_next_argument(f), ++n) {
+        const NLSyntaxView *field = nl_syntax_node_view(f);
+        const NLCheckedNodeId init =
+            expression(check, field->data.binding.initializer);
+        if (init == 0)
+            return 0;
+        const NLValueId value = one_result(check, init);
+        if (value == 0)
+            return 0;
+        const size_t index = indices[n];
+        if (c->values[value - 1].type !=
+            c->types[type - 1].field_types[index]) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, view(check, init)->span,
+                 "P5-FIELD-TYPE",
+                 "aggregate initializer type differs from registered field");
+            return 0;
+        }
+        package.fields[index] = value;
+        const NLCheckedNodeId field_id =
+            add(check, (NLCheckedNodeView){.kind = NL_CHECKED_AGGREGATE_FIELD,
+                                           .span = field->span,
+                                           .name = field->data.binding.name,
+                                           .initializer = init,
+                                           .field_index = index,
+                                           .type = c->values[value - 1].type});
+        if (field_id == 0)
+            return 0;
+        if (previous == 0)
+            view(check, id)->first_argument = field_id;
+        else
+            view(check, previous)->next_argument = field_id;
+        previous = field_id;
+        ++view(check, id)->argument_count;
+    }
+    const NLValueId value = new_value(check, package, syntax->span);
+    if (value == 0)
+        return 0;
+    for (size_t f = 0; f < package.field_count; ++f) {
+        c->values[package.fields[f] - 1].carrier = NL_CARRIER_AGGREGATE;
+        c->values[package.fields[f] - 1].aggregate_owner = value;
+        c->values[package.fields[f] - 1].owner_place = 0;
+    }
+    view(check, id)->result_count = 1;
+    view(check, id)->results[0] = (NLCheckedResult){type, value};
+    return id;
+}
+
+static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
+{
+    const bool multi = syntax->kind == NL_SYNTAX_MULTI_BINDING;
+    const bool destructure = syntax->kind == NL_SYNTAX_AGGREGATE_BINDING;
+    const size_t count = multi         ? syntax->data.multi_binding.count
+                         : destructure ? syntax->data.aggregate.count
+                                       : 1;
+    if (count > NL_SEMANTIC_MAX_FIELDS) {
+        fail(check, NL_CHECK_RESOURCE_LIMIT, syntax->span, "P5-RECEIVER-LIMIT",
+             "P5 receiver budget exceeded");
+        return 0;
+    }
+    const NLSyntaxNode *receivers = multi ? syntax->data.multi_binding.receivers
+                                    : destructure
+                                        ? syntax->data.aggregate.fields
+                                        : NULL;
+    const NLSyntaxNode *initializer =
+        multi         ? syntax->data.multi_binding.initializer
+        : destructure ? syntax->data.aggregate.initializer
+                      : syntax->data.binding.initializer;
+    NLTypeId type = 0;
+    size_t indices[NL_SEMANTIC_MAX_FIELDS] = {0};
+    if (destructure) {
+        type = aggregate_type(check, syntax->data.aggregate.type_name);
+        if (type == 0 ||
+            !aggregate_fields(check, type, receivers, count, false, indices))
+            return 0;
+    }
+    char *names[NL_SEMANTIC_MAX_FIELDS] = {NULL};
+    NLSourceSpan spans[NL_SEMANTIC_MAX_FIELDS];
+    NLCheckedNodeId result = 0;
+    const NLSyntaxNode *r = receivers;
+    for (size_t i = 0; i < count; ++i) {
+        spans[i] = receivers == NULL ? syntax->data.binding.name
+                                     : nl_syntax_node_view(r)->data.name;
+        names[i] = source_name_copy(check, spans[i]);
+        if (names[i] == NULL || !fresh_name(check, names[i], spans[i]))
+            goto cleanup;
+        for (size_t j = 0; j < i; ++j) {
+            if (strcmp(names[i], names[j]) == 0) {
+                fail(check, NL_CHECK_SEMANTIC_ERROR, spans[i],
+                     "P5-DUPLICATE-RECEIVER",
+                     "result receivers must be distinct");
+                goto cleanup;
+            }
+        }
+        if (r != NULL)
+            r = nl_syntax_next_argument(r);
+    }
+    const NLCheckedNodeId init = expression(check, initializer);
+    if (init == 0)
+        goto cleanup;
+    NLCheckedNodeView rhs = *view(check, init);
+    NLValueId values[NL_SEMANTIC_MAX_FIELDS] = {0};
+    if (destructure) {
+        if (rhs.result_count != 1 || rhs.results[0].type != type) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, view(check, init)->span,
+                 "P5-DESTRUCTURE-TYPE",
+                 "destructuring RHS must be the selected aggregate");
+            goto cleanup;
+        }
+        const NLValueId aggregate_value = rhs.results[0].value;
+        const NLSemanticValueView original =
+            check->context->values[aggregate_value - 1];
+        if (original.field_count != count) {
+            fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
+                 "P5-AGGREGATE-VALUE-UNSUPPORTED",
+                 "aggregate member packages are unavailable");
+            goto cleanup;
+        }
+        /* Complete whole-value destruction, not a partial-move binding state.
+         */
+        check->context->values[aggregate_value - 1].carrier = NL_CARRIER_ENDED;
+        for (size_t i = 0; i < count; ++i) {
+            values[i] = original.fields[indices[i]];
+            check->context->values[values[i] - 1].carrier = NL_CARRIER_LOOSE;
+            check->context->values[values[i] - 1].aggregate_owner = 0;
+        }
+    } else if (!multi && rhs.result_count == 0 && rhs.type == 1) {
+        values[0] =
+            new_value(check, (NLSemanticValueView){.type = 1}, syntax->span);
+        if (values[0] == 0)
+            goto cleanup;
+    } else {
+        if (rhs.result_count != count) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span,
+                 "P5-RESULT-ARITY",
+                 "receiver count must exactly match independent checked "
+                 "results");
+            goto cleanup;
+        }
+        for (size_t i = 0; i < count; ++i)
+            values[i] = rhs.results[i].value;
+    }
+    result = add(check, (NLCheckedNodeView){
+                            .kind = multi         ? NL_CHECKED_MULTI_BINDING
+                                    : destructure ? NL_CHECKED_AGGREGATE_BINDING
+                                                  : NL_CHECKED_BINDING,
+                            .span = syntax->span,
+                            .initializer = init,
+                            .type = 1});
+    if (result == 0)
+        goto cleanup;
+    NLCheckedNodeId previous = 0;
+    for (size_t i = 0; i < count; ++i) {
+        NLSymbolId symbol = 0;
+        if (!host(check,
+                  nl_sem_bind_in_scope(check->context, names[i], values[i],
+                                       check->binding_floor, &symbol),
+                  spans[i])) {
+            result = 0;
+            goto cleanup;
+        }
+        const NLCheckedNodeId receiver =
+            add(check, (NLCheckedNodeView){
+                           .kind = NL_CHECKED_RECEIVER,
+                           .span = spans[i],
+                           .name = spans[i],
+                           .value_use = NL_VALUE_RECEIVED,
+                           .symbol = symbol,
+                           .type = check->context->values[values[i] - 1].type,
+                           .field_index = indices[i]});
+        if (receiver == 0) {
+            result = 0;
+            goto cleanup;
+        }
+        if (previous == 0)
+            view(check, result)->first_argument = receiver;
+        else
+            view(check, previous)->next_argument = receiver;
+        previous = receiver;
+        ++view(check, result)->argument_count;
+        if (!multi && !destructure) {
+            view(check, result)->symbol = symbol;
+            view(check, result)->name = spans[i];
+        }
+    }
+cleanup:
+    for (size_t i = 0; i < count; ++i)
+        free(names[i]);
+    return result;
+}
+
+static bool discard_results(Check *check, NLCheckedNodeId id)
+{
+    const NLCheckedNodeView node = *view(check, id);
+    for (size_t r = 0; r < node.result_count; ++r) {
+        if (!check->context->types[node.results[r].type - 1]
+                 .view.is_discardable) {
+            fail(
+                check, NL_CHECK_SEMANTIC_ERROR, node.span,
+                "P5-DISCARDABLE-REQUIRED",
+                "expression statement cannot discard a non-Discardable result");
+            return false;
+        }
+    }
+    for (size_t r = 0; r < node.result_count; ++r)
+        end_temporary(check, node.results[r].value);
+    return true;
+}
+
+static NLCheckedNodeId source_statement(Check *check,
+                                        const NLSyntaxView *syntax)
+{
+    const NLCheckedNodeId init =
+        expression(check, syntax->data.statement.expression);
+    if (init == 0 || !discard_results(check, init))
+        return 0;
+    return add(check, (NLCheckedNodeView){.kind = NL_CHECKED_STATEMENT,
+                                          .span = syntax->span,
+                                          .initializer = init,
+                                          .type = 1});
+}
+
+static NLCheckedNodeId source_block(Check *check, const NLSyntaxView *syntax)
+{
+    NLSemanticContext *c = check->context;
+    const size_t previous_floor = check->binding_floor;
+    const size_t floor = c->binding_count;
+    check->binding_floor = floor;
+    const NLCheckedNodeId id = add(
+        check, (NLCheckedNodeView){
+                   .kind = NL_CHECKED_BLOCK, .span = syntax->span, .type = 1});
+    if (id == 0)
+        goto cleanup;
+    NLCheckedNodeId previous = 0;
+    for (const NLSyntaxNode *item = syntax->data.block.items; item != NULL;
+         item = nl_syntax_next_argument(item)) {
+        const NLSyntaxView *v = nl_syntax_node_view(item);
+        const NLCheckedNodeId child = v->kind == NL_SYNTAX_STATEMENT
+                                          ? source_statement(check, v)
+                                          : source_binding(check, v);
+        if (child == 0)
+            goto cleanup;
+        if (previous == 0)
+            view(check, id)->first_item = child;
+        else
+            view(check, previous)->next_item = child;
+        previous = child;
+        ++view(check, id)->item_count;
+    }
+    if (syntax->data.block.tail != NULL) {
+        const NLCheckedNodeId tail = expression(check, syntax->data.block.tail);
+        if (tail == 0)
+            goto cleanup;
+        const NLCheckedNodeView result = *view(check, tail);
+        view(check, id)->tail = tail;
+        view(check, id)->type = result.type;
+        view(check, id)->result_count = result.result_count;
+        memcpy(view(check, id)->results, result.results,
+               sizeof(result.results));
+    }
+    for (size_t i = floor; i < c->binding_count; ++i) {
+        NLBindingEntry *entry = &c->bindings[i];
+        if (entry->hidden)
+            continue;
+        if (entry->view.availability == NL_AVAILABLE) {
+            if (!c->types[entry->view.type - 1].view.is_discardable) {
+                fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span,
+                     "P5-SCOPE-OBLIGATION",
+                     "non-Discardable local remains available at block exit");
+                goto cleanup;
+            }
+            if (conflicts(check, entry->view.place, false, true, 0,
+                          syntax->span))
+                goto cleanup;
+            end_temporary(check, entry->view.value);
+            c->places[entry->view.place - 1].live = false;
+            c->places[entry->view.place - 1].current_value = 0;
+            c->places[entry->view.place - 1].current_fact = 0;
+            c->places[entry->view.place - 1].governing_domain = 0;
+            entry->view.availability = NL_CONSUMED;
+        }
+        entry->hidden = true;
+    }
+cleanup:
+    check->binding_floor = previous_floor;
+    return check->status == NL_CHECK_OK ? id : 0;
 }
 
 static NLCheckedNodeId loan(Check *check, const NLSyntaxView *syntax)
@@ -1269,7 +1679,8 @@ typedef enum {
     CHECK_TYPE,
     CHECK_EXPRESSION,
     CHECK_BINDING,
-    CHECK_LOAN
+    CHECK_LOAN,
+    CHECK_SOURCE
 } Entry;
 
 static NLCheckStatus check_fragment(NLSemanticContext *context,
@@ -1289,6 +1700,12 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
         (entry == CHECK_EXPRESSION && root->kind != NL_SYNTAX_EXPR_NAME &&
          root->kind != NL_SYNTAX_EXPR_CALL) ||
         (entry == CHECK_BINDING && root->kind != NL_SYNTAX_BINDING) ||
+        (entry == CHECK_SOURCE && root->kind != NL_SYNTAX_EXPR_NAME &&
+         root->kind != NL_SYNTAX_EXPR_CALL && root->kind != NL_SYNTAX_BINDING &&
+         root->kind != NL_SYNTAX_MULTI_BINDING &&
+         root->kind != NL_SYNTAX_AGGREGATE_BINDING &&
+         root->kind != NL_SYNTAX_AGGREGATE && root->kind != NL_SYNTAX_BLOCK &&
+         root->kind != NL_SYNTAX_STATEMENT) ||
         (entry == CHECK_LOAN && root->kind != NL_SYNTAX_LOAN)) {
         return NL_CHECK_INTERNAL_ERROR;
     }
@@ -1325,6 +1742,16 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
         check.artifact->root = expression(&check, nl_syntax_tree_root(tree));
     } else if (entry == CHECK_BINDING) {
         check.artifact->root = binding(&check, root);
+    } else if (entry == CHECK_SOURCE) {
+        if (root->kind == NL_SYNTAX_BINDING ||
+            root->kind == NL_SYNTAX_MULTI_BINDING ||
+            root->kind == NL_SYNTAX_AGGREGATE_BINDING)
+            check.artifact->root = source_binding(&check, root);
+        else if (root->kind == NL_SYNTAX_STATEMENT)
+            check.artifact->root = source_statement(&check, root);
+        else
+            check.artifact->root =
+                expression(&check, nl_syntax_tree_root(tree));
     } else {
         check.artifact->root = loan(&check, root);
     }
@@ -1378,6 +1805,14 @@ NLCheckStatus nl_semantic_check_loan_header(NLSemanticContext *c,
                                             NLCheckDiagnostic *d)
 {
     return check_fragment(c, t, out, d, CHECK_LOAN);
+}
+
+NLCheckStatus nl_semantic_check_source_fragment(NLSemanticContext *c,
+                                                const NLSyntaxTree *t,
+                                                NLCheckedFragment **out,
+                                                NLCheckDiagnostic *d)
+{
+    return check_fragment(c, t, out, d, CHECK_SOURCE);
 }
 
 bool nl_check_diagnostic_render(FILE *stream, const NLSource *source,

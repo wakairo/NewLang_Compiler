@@ -55,6 +55,13 @@ NLParseStatus nl_parser_parse_loan_fragment(NLParser *parser,
                                             NLSyntaxTree **out_tree,
                                             NLParseDiagnostic *out_diagnostic);
 
+/* Draft 17.9 closed source profile: binding / expression / lexical block.
+ * P2 entry points above retain their original subset. No sum/match, aggregate
+ * declarations, operators, callable declarations or opaque loan body parsing.
+ * Same ownership, reset, resource and failure contracts as fragment APIs. */
+NLParseStatus nl_parser_parse_source_fragment(NLParser *, NLSyntaxTree **,
+                                              NLParseDiagnostic *);
+
 /* Synchronous adapter to existing renderer: byte columns/LF line presentation
  * only, CRLF one physical newline, tabs/lone CR one byte column. The diagnostic
  * and source are borrowed for the call; false on invalid span/output failure.
