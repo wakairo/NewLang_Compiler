@@ -12,7 +12,8 @@ typedef enum {
     TEST_TYPE,
     TEST_EXPRESSION,
     TEST_BINDING,
-    TEST_LOAN
+    TEST_LOAN,
+    TEST_SOURCE
 } TestEntry;
 typedef NLParseStatus (*TestParse)(NLParser *, NLSyntaxTree **,
                                    NLParseDiagnostic *);
@@ -22,14 +23,16 @@ static inline TestParse test_parse(TestEntry entry)
 {
     const TestParse entries[] = {
         nl_parser_parse_type_fragment, nl_parser_parse_expression_fragment,
-        nl_parser_parse_binding_fragment, nl_parser_parse_loan_fragment};
+        nl_parser_parse_binding_fragment, nl_parser_parse_loan_fragment,
+        nl_parser_parse_source_fragment};
     return entries[entry];
 }
 static inline TestCheck test_check(TestEntry entry)
 {
     const TestCheck entries[] = {
         nl_semantic_check_type, nl_semantic_check_expression,
-        nl_semantic_check_binding, nl_semantic_check_loan_header};
+        nl_semantic_check_binding, nl_semantic_check_loan_header,
+        nl_semantic_check_source_fragment};
     return entries[entry];
 }
 
@@ -143,8 +146,8 @@ static inline bool test_type_equal(NLSemanticTypeView a, NLSemanticTypeView b)
     return a.kind == b.kind && a.is_copy == b.is_copy &&
            a.is_discardable == b.is_discardable && a.target == b.target &&
            a.access == b.access && a.is_exclusive == b.is_exclusive &&
-           a.layout_known == b.layout_known && a.size == b.size &&
-           a.alignment == b.alignment;
+           a.layout_known == b.layout_known && a.field_count == b.field_count &&
+           a.size == b.size && a.alignment == b.alignment;
 }
 static inline bool test_reference_equal(NLReferenceFacts a, NLReferenceFacts b)
 {
@@ -246,6 +249,9 @@ static inline bool test_unchanged(NLSemanticContext *context,
         const NLSemanticValueView x = before->values[i], y = after.values[i];
         CHECK(x.type == y.type && x.carrier == y.carrier &&
               x.owner_place == y.owner_place &&
+              x.aggregate_owner == y.aggregate_owner &&
+              x.field_count == y.field_count &&
+              memcmp(x.fields, y.fields, sizeof(x.fields)) == 0 &&
               x.dependencies == y.dependencies && x.domain == y.domain &&
               x.slot_place == y.slot_place &&
               x.allocation_region == y.allocation_region &&

@@ -515,6 +515,329 @@ static NLSyntaxNode *loan(NLParser *parser)
     return result;
 }
 
+/* P5 uses a separate closed entry so P2's unsupported classifications remain
+ * stable. Lists use the existing intrusive, tree-owned source-order link. */
+static NLSyntaxNode *source_expression(NLParser *parser);
+static NLSyntaxNode *source_binding(NLParser *parser);
+
+static void link_node(NLSyntaxNode **head, NLSyntaxNode **tail,
+                      NLSyntaxNode *item)
+{
+    if (*tail == NULL) {
+        *head = item;
+    } else {
+        (*tail)->argument_next = item;
+    }
+    *tail = item;
+}
+
+static NLSyntaxNode *source_name(NLParser *parser, NLSyntaxKind kind,
+                                 bool reject_wildcard)
+{
+    if (!peek(parser))
+        return NULL;
+    if (punct(parser, '(') || punct(parser, '[') || punct(parser, '{') ||
+        punct(parser, '.') || (reject_wildcard && word(parser, "_"))) {
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+             "P5-PATTERN-UNSUPPORTED",
+             "nested/rest/wildcard pattern outside P5");
+        return NULL;
+    }
+    if (parser->token.kind != NL_TOKEN_WORD) {
+        fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+             "P5-EXPECTED-NAME", "expected receiver or field name");
+        return NULL;
+    }
+    const NLSourceSpan span = parser->token.span;
+    consume(parser);
+    NLSyntaxNode *result = node(parser, kind, span);
+    if (result != NULL)
+        result->view.data.name = span;
+    return result;
+}
+
+static NLSyntaxNode *source_block(NLParser *parser)
+{
+    const NLSourceSpan start = parser->token.span;
+    consume(parser);
+    NLSyntaxNode *result = node(parser, NL_SYNTAX_BLOCK, start);
+    NLSyntaxNode *head = NULL, *tail = NULL;
+    if (result == NULL)
+        return NULL;
+    while (peek(parser) && !punct(parser, '}')) {
+        const bool is_binding = word(parser, "let");
+        NLSyntaxNode *item =
+            is_binding ? source_binding(parser) : source_expression(parser);
+        if (item == NULL)
+            return NULL;
+        if (!punct(parser, ';')) {
+            if (!is_binding && punct(parser, '}')) {
+                result->view.data.block.tail = item;
+                break;
+            }
+            fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+                 "P5-EXPECTED-ITEM-END", "non-tail block item requires ;");
+            return NULL;
+        }
+        const size_t end = parser->token.span.end_byte;
+        consume(parser);
+        if (!is_binding) {
+            NLSyntaxNode *statement =
+                node(parser, NL_SYNTAX_STATEMENT,
+                     (NLSourceSpan){item->view.span.start_byte, end});
+            if (statement == NULL)
+                return NULL;
+            statement->view.data.statement.expression = item;
+            item = statement;
+        }
+        link_node(&head, &tail, item);
+        ++result->view.data.block.item_count;
+    }
+    result->view.data.block.items = head;
+    const size_t end = parser->token.span.end_byte;
+    if (!expect_punct(parser, '}', "P5-EXPECTED-BLOCK-END", "expected }"))
+        return NULL;
+    result->view.span.end_byte = end;
+    return result;
+}
+
+static NLSyntaxNode *source_expression(NLParser *parser)
+{
+    if (!enter(parser))
+        return NULL;
+    NLSyntaxNode *result = NULL;
+    if (punct(parser, '{')) {
+        result = source_block(parser);
+        goto done;
+    }
+    if (parser->token.kind != NL_TOKEN_WORD) {
+        fail(parser,
+             expression_extension(parser) ? NL_PARSE_SYNTAX_UNSUPPORTED
+                                          : NL_PARSE_SYNTAX_ERROR,
+             parser->token.span, "P5-EXPECTED-EXPRESSION",
+             "expected name, call, registered aggregate or lexical block");
+        goto done;
+    }
+    const NLSourceSpan name = parser->token.span;
+    consume(parser);
+    if (punct(parser, '{')) {
+        consume(parser);
+        result = node(parser, NL_SYNTAX_AGGREGATE, name);
+        if (result == NULL)
+            goto done;
+        result->view.data.aggregate.type_name = name;
+        NLSyntaxNode *head = NULL, *tail = NULL;
+        if (punct(parser, '}')) {
+            fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+                 "P5-EMPTY-AGGREGATE", "aggregate requires at least one field");
+            goto done;
+        }
+        for (;;) {
+            NLSyntaxNode *field = source_name(parser, NL_SYNTAX_FIELD, false);
+            if (field == NULL)
+                goto done;
+            const NLSourceSpan field_name = field->view.data.name;
+            if (punct(parser, ',') || punct(parser, '}')) {
+                fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+                     "P5-FIELD-SHORTHAND-UNSUPPORTED",
+                     "field shorthand construction outside P5");
+                goto done;
+            }
+            if (!expect_punct(parser, ':', "P5-EXPECTED-FIELD-COLON",
+                              "field initializer requires :"))
+                goto done;
+            NLSyntaxNode *value = source_expression(parser);
+            if (value == NULL)
+                goto done;
+            field->view.data.binding.name = field_name;
+            field->view.data.binding.initializer = value;
+            field->view.span.end_byte = value->view.span.end_byte;
+            link_node(&head, &tail, field);
+            ++result->view.data.aggregate.count;
+            if (!punct(parser, ','))
+                break;
+            consume(parser);
+            if (punct(parser, '}'))
+                break;
+        }
+        result->view.data.aggregate.fields = head;
+        const size_t end = parser->token.span.end_byte;
+        if (!expect_punct(parser, '}', "P5-EXPECTED-AGGREGATE-END",
+                          "expected , or }"))
+            goto done;
+        result->view.span.end_byte = end;
+    } else if (punct(parser, '(')) {
+        consume(parser);
+        result = node(parser, NL_SYNTAX_EXPR_CALL, name);
+        if (result == NULL)
+            goto done;
+        result->view.data.call.callee = name;
+        NLSyntaxNode *head = NULL, *tail = NULL;
+        if (!punct(parser, ')')) {
+            for (;;) {
+                NLSyntaxNode *arg = source_expression(parser);
+                if (arg == NULL)
+                    goto done;
+                link_node(&head, &tail, arg);
+                ++result->view.data.call.argument_count;
+                if (!punct(parser, ','))
+                    break;
+                consume(parser);
+                if (punct(parser, ')')) {
+                    fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED,
+                         parser->token.span, "P2-TRAILING-COMMA",
+                         "trailing call comma outside selected subset");
+                    goto done;
+                }
+            }
+        }
+        result->view.data.call.arguments = head;
+        if (expression_extension(parser) && !punct(parser, ')')) {
+            fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+                 "P5-EXPRESSION-UNSUPPORTED",
+                 "call argument extension outside P5");
+            goto done;
+        }
+        const size_t end = parser->token.span.end_byte;
+        if (!expect_punct(parser, ')', "P5-EXPECTED-CALL-END",
+                          "expected , or )"))
+            goto done;
+        result->view.span.end_byte = end;
+    } else {
+        result = node(parser, NL_SYNTAX_EXPR_NAME, name);
+        if (result != NULL)
+            result->view.data.name = name;
+    }
+    if (peek(parser) && expression_extension(parser) && !punct(parser, ';')) {
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+             "P5-EXPRESSION-UNSUPPORTED", "expression extension outside P5");
+    }
+done:
+    --parser->depth;
+    return parser->status == NL_PARSE_OK ? result : NULL;
+}
+
+static NLSyntaxNode *source_binding(NLParser *parser)
+{
+    const size_t start = parser->token.span.start_byte;
+    consume(parser); /* contextual let */
+    NLSyntaxNode *result = NULL, *head = NULL, *tail = NULL;
+    size_t count = 0;
+    if (punct(parser, '(')) {
+        consume(parser);
+        result =
+            node(parser, NL_SYNTAX_MULTI_BINDING, (NLSourceSpan){start, start});
+        if (result == NULL)
+            return NULL;
+        for (;;) {
+            NLSyntaxNode *name = source_name(parser, NL_SYNTAX_RECEIVER, true);
+            if (name == NULL)
+                return NULL;
+            link_node(&head, &tail, name);
+            ++count;
+            if (!punct(parser, ','))
+                break;
+            consume(parser);
+        }
+        if (count < 2) {
+            fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+                 "P5-RECEIVER-COUNT",
+                 "receiver list requires at least two names");
+            return NULL;
+        }
+        if (!expect_punct(parser, ')', "P5-EXPECTED-RECEIVER-END",
+                          "expected , or )"))
+            return NULL;
+        result->view.data.multi_binding.receivers = head;
+        result->view.data.multi_binding.count = count;
+    } else {
+        NLSyntaxNode *first = source_name(parser, NL_SYNTAX_RECEIVER, false);
+        if (first == NULL)
+            return NULL;
+        const NLSourceSpan name = first->view.data.name;
+        if (punct(parser, '{')) {
+            consume(parser);
+            result = node(parser, NL_SYNTAX_AGGREGATE_BINDING,
+                          (NLSourceSpan){start, start});
+            if (result == NULL)
+                return NULL;
+            for (;;) {
+                NLSyntaxNode *field =
+                    source_name(parser, NL_SYNTAX_RECEIVER, false);
+                if (field == NULL)
+                    return NULL;
+                link_node(&head, &tail, field);
+                ++count;
+                if (punct(parser, ':') || punct(parser, '{') ||
+                    punct(parser, '(') || punct(parser, '.')) {
+                    fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED,
+                         parser->token.span, "P5-PATTERN-UNSUPPORTED",
+                         "renaming/nested pattern outside P5");
+                    return NULL;
+                }
+                if (!punct(parser, ','))
+                    break;
+                consume(parser);
+                if (punct(parser, '}'))
+                    break;
+            }
+            if (!expect_punct(parser, '}', "P5-EXPECTED-PATTERN-END",
+                              "expected , or }"))
+                return NULL;
+            result->view.data.aggregate.type_name = name;
+            result->view.data.aggregate.fields = head;
+            result->view.data.aggregate.count = count;
+        } else {
+            result =
+                node(parser, NL_SYNTAX_BINDING, (NLSourceSpan){start, start});
+            if (result == NULL)
+                return NULL;
+            result->view.data.binding.name = name;
+        }
+    }
+    if (punct(parser, ':')) {
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+             "P5-ANNOTATION-UNSUPPORTED", "binding annotation outside P5");
+        return NULL;
+    }
+    if (!expect_punct(parser, '=', "P5-EXPECTED-BINDING-EQUAL", "expected ="))
+        return NULL;
+    NLSyntaxNode *initializer = source_expression(parser);
+    if (initializer == NULL)
+        return NULL;
+    result->view.span.end_byte = initializer->view.span.end_byte;
+    if (result->view.kind == NL_SYNTAX_BINDING)
+        result->view.data.binding.initializer = initializer;
+    else if (result->view.kind == NL_SYNTAX_MULTI_BINDING)
+        result->view.data.multi_binding.initializer = initializer;
+    else
+        result->view.data.aggregate.initializer = initializer;
+    return result;
+}
+
+static NLSyntaxNode *source_fragment(NLParser *parser)
+{
+    if (!peek(parser))
+        return NULL;
+    const bool is_binding = word(parser, "let");
+    NLSyntaxNode *result =
+        is_binding ? source_binding(parser) : source_expression(parser);
+    if (result != NULL && punct(parser, ';')) {
+        const size_t end = parser->token.span.end_byte;
+        consume(parser);
+        if (!is_binding) {
+            NLSyntaxNode *statement =
+                node(parser, NL_SYNTAX_STATEMENT,
+                     (NLSourceSpan){result->view.span.start_byte, end});
+            if (statement == NULL)
+                return NULL;
+            statement->view.data.statement.expression = result;
+            result = statement;
+        }
+    }
+    return result;
+}
+
 typedef NLSyntaxNode *(*Fragment)(NLParser *parser);
 
 static NLParseStatus fragment(NLParser *parser, NLSyntaxTree **out_tree,
@@ -602,6 +925,13 @@ NLParseStatus nl_parser_parse_loan_fragment(NLParser *parser,
                                             NLParseDiagnostic *out_diagnostic)
 {
     return fragment(parser, out_tree, out_diagnostic, loan);
+}
+
+NLParseStatus nl_parser_parse_source_fragment(NLParser *parser,
+                                              NLSyntaxTree **out,
+                                              NLParseDiagnostic *diagnostic)
+{
+    return fragment(parser, out, diagnostic, source_fragment);
 }
 
 bool nl_parse_diagnostic_render(FILE *stream, const NLSource *source,

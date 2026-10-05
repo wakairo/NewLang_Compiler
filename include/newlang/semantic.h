@@ -10,6 +10,9 @@ typedef struct NLCheckedFragment NLCheckedFragment;
 /* Stable, append-only, context-local identities; zero is absent/invalid.
  * Identity categories are distinct contracts even though C uses size_t.
  * Never mix IDs from different contexts or categories. */
+#define NL_SEMANTIC_MAX_FIELDS                                                 \
+    16 /* P5 implementation budget, not language limit */
+
 typedef size_t NLTypeId;
 typedef size_t NLSymbolId;
 typedef size_t NLValueId;
@@ -56,6 +59,7 @@ typedef struct {
     NLAccessSyntax access;
     bool is_exclusive;
     bool layout_known;
+    size_t field_count; /* registered aggregate shape; zero for flat types */
     size_t size, alignment; /* compiler/target facts, not aggregate ABI */
 } NLSemanticTypeView;
 
@@ -82,7 +86,8 @@ typedef enum {
 typedef enum {
     NL_CARRIER_LOOSE,
     NL_CARRIER_PLACE,
-    NL_CARRIER_ENDED
+    NL_CARRIER_ENDED,
+    NL_CARRIER_AGGREGATE
 } NLValueCarrier;
 typedef struct {
     NLPlaceId place;
@@ -102,6 +107,11 @@ typedef struct {
     NLPlaceId slot_place; /* unique empty typed occupancy responsibility */
     NLBackingRegionId allocation_region; /* final-deallocation authority */
     NLBackingRange occupancy; /* Storage/slot responsibility, value-owned */
+    NLValueId
+        aggregate_owner; /* member package carrier, not place/incarnation */
+    size_t field_count;
+    NLValueId
+        fields[NL_SEMANTIC_MAX_FIELDS]; /* declaration order; owned members */
     bool scalar_known;
     size_t scalar_value;
 } NLSemanticValueView;
@@ -186,6 +196,18 @@ NLSymbolId nl_semantic_find_binding(const NLSemanticContext *,
 NLCheckStatus nl_semantic_nominal(NLSemanticContext *, const char *name,
                                   bool is_copy, bool is_discardable,
                                   NLTypeId *out);
+typedef struct {
+    const char *name; /* borrowed during registration; context copies it */
+    NLTypeId type;
+} NLAggregateField;
+/* Fixed flat nominal aggregate fixture; no source declaration/physical layout.
+ * Properties derive from all fields. This slice supports dependency-free flat
+ * nominal/scalar members, not nested aggregates or authority/capability fields.
+ * Unsupported kinds are reported, never treated as invalid language. */
+NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *, const char *,
+                                             const NLAggregateField *, size_t,
+                                             NLTypeId *out);
+
 NLCheckStatus nl_semantic_compound_type(NLSemanticContext *, NLSemanticTypeKind,
                                         NLTypeId target, NLAccessSyntax access,
                                         bool is_exclusive, NLTypeId *out);
@@ -255,6 +277,13 @@ NLCheckStatus nl_semantic_check_loan_header(NLSemanticContext *,
                                             const NLSyntaxTree *,
                                             NLCheckedFragment **out,
                                             NLCheckDiagnostic *);
+/* Draft 17.9 selected closed source profile; same candidate/artifact ownership
+ * contracts. Blocks introduce lexical scopes and check non-Discardable exits.
+ */
+NLCheckStatus nl_semantic_check_source_fragment(NLSemanticContext *,
+                                                const NLSyntaxTree *,
+                                                NLCheckedFragment **,
+                                                NLCheckDiagnostic *);
 bool nl_check_diagnostic_render(FILE *, const NLSource *,
                                 const NLCheckDiagnostic *);
 

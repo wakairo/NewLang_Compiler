@@ -19,6 +19,10 @@ jobs:
           - name: GCC
             compiler: gcc-13
             sanitizer: none
+          - name: GCC Release
+            compiler: gcc-13
+            sanitizer: none
+            build_type: Release
           - name: Clang
             compiler: clang-23
             sanitizer: none
@@ -48,7 +52,7 @@ jobs:
           CC: ${{ matrix.compiler }}
         run: |
           . .deps/activate.sh
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug \
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type || 'Debug' }} \
             -DNEWLANG_SANITIZER=${{ matrix.sanitizer }}
           cmake --build build --parallel 2
           ctest --test-dir build --output-on-failure
