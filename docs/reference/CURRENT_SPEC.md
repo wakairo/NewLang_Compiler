@@ -3,7 +3,7 @@
 The canonical NewLang v0 specification on a branch is the Draft named here.
 
 ```text
-NewLang_v0_spec_Draft17_6.md
+NewLang_v0_spec_Draft17_7.md
 ```
 
 Repository policy:
@@ -14,4 +14,4 @@ Repository policy:
 - A newer Draft on an unmerged branch is a candidate until that branch is reviewed and merged into `main`.
 - Prompts handed to M / F / P tracks should cite the `main` commit SHA and this file before relying on conversational memory.
 
-Draft 17.6 integrates the M8.3R raw Storage scalar byte bridge on top of Draft 17.5.
+Draft 17.7 applies the targeted R1 closure fixes on top of Draft 17.6.
