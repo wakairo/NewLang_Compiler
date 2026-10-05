@@ -62,6 +62,10 @@ add_library(newlang_syntax STATIC src/syntax.c)
 target_link_libraries(newlang_syntax PUBLIC newlang_source)
 add_library(newlang_parser STATIC src/parser.c)
 target_link_libraries(newlang_parser PUBLIC newlang_syntax newlang_lexer newlang_diagnostic)
+add_library(newlang_checked STATIC src/checked.c)
+target_link_libraries(newlang_checked PUBLIC newlang_syntax)
+add_library(newlang_semantic STATIC src/semantic.c src/semantic_check.c)
+target_link_libraries(newlang_semantic PUBLIC newlang_checked newlang_diagnostic)
 add_executable(newlangc src/main.c)
 target_link_libraries(newlangc PRIVATE newlang_diagnostic)
 
@@ -100,6 +104,16 @@ if(BUILD_TESTING)
     add_test(NAME source_parser.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/syntax_frontend_test.py"
         "$<TARGET_FILE:syntax_frontend_test>")
+
+    add_executable(semantic_test tests/unit/semantic_test.c)
+    target_link_libraries(semantic_test PRIVATE newlang_semantic newlang_parser)
+    target_link_options(semantic_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    foreach(group type value_use domain transition loan failure)
+        add_test(NAME semantic_${group}.unit COMMAND semantic_test ${group})
+    endforeach()
+    add_executable(semantic_frontend_test tests/integration/semantic_frontend_test.c)
+    target_link_libraries(semantic_frontend_test PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME source_semantic.integration COMMAND semantic_frontend_test)
 
     add_executable(llvm_smoke tests/integration/llvm_smoke.c)
     target_link_libraries(llvm_smoke PRIVATE newlang_options newlang_llvm)

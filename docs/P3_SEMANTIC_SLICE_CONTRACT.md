@@ -1,7 +1,7 @@
-# P3 semantic slice contract — authority audit pending
+# P3 semantic slice contract
 
-Date: 2026-10-05 (Asia/Tokyo). Status: **BLOCKED at the exclusive-authority
-argument adjudication gate; no P3 semantic implementation yet**.
+Date: 2026-10-05 (Asia/Tokyo). Status: pre-implementation contract; the authority
+audit gate is resolved by the user's explicit clarification below.
 Branch: `p3-first-semantic-vertical-slice`. Base/main:
 `cd229877d550e913260ad5a79627b65c1eb405d0` (merged P2 PR #4, verified remotely).
 
@@ -21,7 +21,7 @@ core operations and loan acquisition headers. P2 parser/nodes remain syntax-only
 No M8.3/M8.4 grammar expansion, loan body traversal, dependency/effect solver,
 typed MIR, LLVM lowering, public dump mode or P4 belongs in this task.
 
-## Agreed requirements; not implemented
+## Implementation requirements
 
 - Context owns its semantic tables and state; multiple contexts must be
   independent. Type, symbol, value, domain, place/incarnation and scope identities
@@ -60,7 +60,7 @@ typed MIR, LLVM lowering, public dump mode or P4 belongs in this task.
   error remain distinct. Canonical byte spans identify the affected source role.
   Neither semantic lifetime nor exclusivity is an LLVM optimizer promise.
 
-## COMPILER-SPEC-AMBIGUITY: ENDING-ARG-01
+## ENDING-ARG-01 audit and resolution
 
 The task explicitly requires auditing whether the ending argument is consumed
 or operation-locally reborrowed before implementing take/destroy (§116–117,
@@ -117,14 +117,65 @@ Evidence:
   F0.6 abstract remaining scoped applicability. These proofs do not resolve the
   canonical argument mapping. Lean was not built and is not a dependency.
 
-Resolution needed: the existing M8.1 decision that selects this mapping, or an
-explicit source-semantic adjudication. If operation-local reborrow is selected,
-it must define the child/parent extent, outer binding post-state and nested
-argument evaluation lifetime; if ordinary consume is selected, it must describe
-how the advertised sequential authority reuse is expressed in the supported
-source subset. P3 must not invent this rule from implementation convenience.
+The audit requested an explicit source mapping with child/parent extent, outer
+binding post-state and nested argument evaluation lifetime before implementation.
+The resolution below provides that mapping; this is no longer a pending gate.
 
-Until that decision is supplied, the ending-argument transition remains
-unimplemented. No new conflicting normative rule is alleged: this finding is
-an unresolved application/mapping question, not a claim that §4.2 and §12
-contradict each other.
+The user supplied the explicit resolution on 2026-10-05: for an already-selected
+compatible reference parameter/primitive operand, an existing exclusive-ref
+binding is operation/call-locally reborrowed under §11.4 + §12 before the ordinary
+non-Copy-transfer rule (§4.2 / §18.2) is considered. This is clarification of the
+existing rule, not a new normative semantics change. M8 artifact source wording
+is incomplete; the finding is now **DOCUMENTATION-GAP, no ambiguity blocker**.
+
+Implementation: a fresh child scope and child authority package reference the
+same referent/incarnation/domain; the parent is suspended only during the child
+extent. Later argument evaluation cannot conflict with that live child. At
+operation return the child ends, the outer binding remains Available and can be
+used sequentially. Selected exclusive/ordinary ref parameters can reborrow
+compatible exclusive authority (same mode, or read from write); this is not
+ordinary Copy weakening or an implicit T -> ref<T> borrow. Core take/destroy
+expect exclusive read-domain authority. Artifact records the scoped reborrow;
+returned user-call ref/affine-core-authority summaries remain outside P3.
+No historical Draft/oracle snapshot is rewritten to hide the gap.
+
+## Concrete P3 state/ownership boundary
+
+Use one small owning semantic context with append-only bounded tables and copied
+host-registration names. Candidate checks deep-copy concrete context tables;
+complete success swaps candidate state into the original context address.
+Failure releases candidate and artifact. Registrations also follow this rule.
+This intentionally favors explicit rollback over optimization for the first
+slice; a general DB/allocator/effect framework is unnecessary.
+
+Bindings have compiler-managed local carrier places (implicit governing domain
+represented by zero), separate from ref/ptr referents. Scalar nominal/unit
+fixtures, Domain values, slots, pointers and references have explicit package
+identity/carrier roles. Root transitions currently support flat user-nominal
+payloads. Nested primitive-authority payloads and returned core capability
+summaries are semantic unsupported; never guessed from a type-only signature.
+Hidden/unknown dependency markers on any surviving package reject the whole
+fragment with ANALYSIS_PRECISION_LIMIT. Explicit ref scopes/liveness/conflicts
+are checked separately; no full Value/Occurrence dependency algebra is claimed.
+
+Checked artifacts own a bounded flat array of views with artifact-local child
+indices, snapshot result IDs and canonical spans. They hold no syntax-node
+pointers and survive tree destruction. Context IDs need the original live
+context for interpretation; optional text access needs the live source.
+Destruction needs neither and does not discard semantic result responsibility.
+Expression results remain loose packages until explicitly forwarded/bound.
+
+Limits: 4096 entries per context table/checked artifact, 128 registered parameters
+and recursive checking levels. These are implementation budgets. Names are
+copied with checked length/allocation; IDs/facts never wrap/revive on successful
+history. Loan scopes are inactive plans; body contents remain opaque and their
+nonescape is unproved. Pointer exclusive-write loan and exclusive input to
+ptr_from_ref stay explicitly unsupported without additional adjudicated evidence.
+
+Diagnostics keep static borrowed code/category/message plus canonical primary
+span. Unknown names, consumed values, incompatible types, false known evidence
+and violated closed preconditions are semantic errors. Missing analysis facts
+are precision limits; unimplemented summaries/receiving/forms are unsupported;
+OOM/resource failures are host errors. Invalid API owner slots leave all outputs
+unchanged. Fixed semantic prelude names cannot be re-registered by the flat
+function registry; local binding names remain a separate value namespace.
