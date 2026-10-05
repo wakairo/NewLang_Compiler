@@ -18,8 +18,8 @@ Backend Contract v0.4 defines backend obligations. The Charter, Handoff Manifest
 and project process documents are policy/evidence, not language semantics.
 [F0 / NewLang_FormalProof](https://github.com/wakairo/NewLang_FormalProof) and the
 frozen M7.5 Python oracle are evidence; Lean is not a build dependency.
-M7, P4/R1/F1.4 and Semantic Sync #22 remain closed. P5 runs under Issue #23
-without F1.5/M9/LLVM/relocation or a new Red Team task.
+M7, P4/R1/F1.4/F1.5, P5 and R2 are reviewed/closed. Final pre-M9
+Semantic Sync is recorded in Issue #29; later tracks start only through separate Coordination handoffs.
 See the [P2 grammar audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md),
 [P3 semantic contract](docs/P3_SEMANTIC_SLICE_CONTRACT.md),
 [P4 raw-storage contract](docs/P4_RAW_STORAGE_SEMANTIC_SLICE_CONTRACT.md) and
