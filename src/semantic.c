@@ -74,6 +74,7 @@ void nl_semantic_destroy(NLSemanticContext *context)
     free(context->domains);
     free(context->scopes);
     free(context->functions);
+    nl_raw_dispose(context);
     free(context);
 }
 
@@ -175,6 +176,10 @@ NLCheckStatus nl_sem_clone(const NLSemanticContext *source,
             }
         }
     }
+    status = nl_raw_clone(source, copy);
+    if (status != NL_CHECK_OK) {
+        goto failure;
+    }
     *out = copy;
     return NL_CHECK_OK;
 failure:
@@ -243,6 +248,30 @@ NLCheckStatus nl_semantic_create(NLSemanticContext **out_context)
     status = nominal(context, "LifetimeDomain", false, false, &type_id);
     if (status != NL_CHECK_OK) {
         goto failure;
+    }
+    static const struct {
+        const char *name;
+        NLSemanticTypeKind kind;
+        bool copy;
+    } core[] = {{"Allocation", NL_TYPE_ALLOCATION, false},
+                {"Storage", NL_TYPE_STORAGE, false},
+                {"byte", NL_TYPE_BYTE, true},
+                {"u8", NL_TYPE_U8, true},
+                {"usize", NL_TYPE_USIZE, true},
+                {"addr", NL_TYPE_ADDR, true}};
+    for (size_t i = 0; i < sizeof(core) / sizeof(core[0]); ++i) {
+        status = nominal(context, core[i].name, core[i].copy, core[i].copy,
+                         &type_id);
+        if (status != NL_CHECK_OK) {
+            goto failure;
+        }
+        NLSemanticTypeView *const type = &context->types[type_id - 1].view;
+        type->kind = core[i].kind;
+        if (core[i].kind == NL_TYPE_BYTE || core[i].kind == NL_TYPE_U8) {
+            type->layout_known = true;
+            type->size = 1;
+            type->alignment = 1;
+        }
     }
     static const NLFunctionEntry prelude[] = {
         {.name = "LifetimeDomain",
@@ -340,10 +369,17 @@ bool nl_semantic_snapshot(const NLSemanticContext *c, NLSemanticSnapshot *out)
     if (c == NULL || out == NULL) {
         return false;
     }
-    *out = (NLSemanticSnapshot){
-        c->type_count,     c->binding_count,    c->value_count,
-        c->place_count,    c->domain_count,     c->scope_count,
-        c->function_count, c->last_incarnation, c->last_value_fact};
+    *out = (NLSemanticSnapshot){.types = c->type_count,
+                                .bindings = c->binding_count,
+                                .values = c->value_count,
+                                .places = c->place_count,
+                                .domains = c->domain_count,
+                                .scopes = c->scope_count,
+                                .functions = c->function_count,
+                                .last_incarnation = c->last_incarnation,
+                                .last_value_fact = c->last_value_fact,
+                                .backing_regions = c->region_count,
+                                .raw_intervals = c->raw_interval_count};
     return true;
 }
 NLSymbolId nl_semantic_find_binding(const NLSemanticContext *c,
@@ -605,7 +641,10 @@ NLCheckStatus nl_semantic_seed_value(NLSemanticContext *c, const char *name,
          dependencies != NL_DEPENDENCIES_UNKNOWN)) {
         return NL_CHECK_INTERNAL_ERROR;
     }
-    if ((c->types[type - 1].view.kind != NL_TYPE_NOMINAL && type != 1) ||
+    const NLSemanticTypeKind kind = c->types[type - 1].view.kind;
+    if ((kind != NL_TYPE_NOMINAL && kind != NL_TYPE_BYTE &&
+         kind != NL_TYPE_U8 && kind != NL_TYPE_USIZE && kind != NL_TYPE_ADDR &&
+         type != 1) ||
         type == 2) {
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
     }
@@ -868,4 +907,82 @@ NLCheckStatus nl_semantic_register_function(NLSemanticContext *c,
         free(params);
     }
     return finish_candidate(c, candidate, status);
+}
+
+NLTypeId nl_semantic_core_type(const NLSemanticContext *c,
+                               NLSemanticTypeKind kind)
+{
+    if (c != NULL && kind != NL_TYPE_NOMINAL && kind != NL_TYPE_PTR &&
+        kind != NL_TYPE_REF && kind != NL_TYPE_SLOT) {
+        for (size_t i = 0; i < c->type_count; ++i) {
+            if (c->types[i].view.kind == kind) {
+                return i + 1;
+            }
+        }
+    }
+    return 0;
+}
+
+NLCheckStatus nl_semantic_set_layout(NLSemanticContext *c, NLTypeId type,
+                                     size_t size, size_t alignment)
+{
+    if (c == NULL || type == 0 || type > c->type_count) {
+        return NL_CHECK_INTERNAL_ERROR;
+    }
+    if (size == 0 || alignment == 0) {
+        return NL_CHECK_SEMANTIC_ERROR;
+    }
+    const NLSemanticTypeView old = c->types[type - 1].view;
+    if (old.layout_known) {
+        return old.size == size && old.alignment == alignment
+                   ? NL_CHECK_OK
+                   : NL_CHECK_SEMANTIC_ERROR;
+    }
+    NLSemanticContext *candidate = NULL;
+    NLCheckStatus status = nl_sem_clone(c, &candidate);
+    if (status == NL_CHECK_OK) {
+        candidate->types[type - 1].view.layout_known = true;
+        candidate->types[type - 1].view.size = size;
+        candidate->types[type - 1].view.alignment = alignment;
+    }
+    return finish_candidate(c, candidate, status);
+}
+
+NLCheckStatus nl_semantic_seed_scalar(NLSemanticContext *c, const char *name,
+                                      NLScalarValue scalar, NLSymbolId *out)
+{
+    if (c == NULL || name == NULL || name[0] == 0 || out == NULL ||
+        scalar.type == 0 || scalar.type > c->type_count) {
+        return NL_CHECK_INTERNAL_ERROR;
+    }
+    const NLSemanticTypeKind kind = c->types[scalar.type - 1].view.kind;
+    if (kind != NL_TYPE_BYTE && kind != NL_TYPE_U8 && kind != NL_TYPE_USIZE &&
+        kind != NL_TYPE_ADDR) {
+        return NL_CHECK_SEMANTIC_UNSUPPORTED;
+    }
+    if (scalar.known && (kind == NL_TYPE_BYTE || kind == NL_TYPE_U8) &&
+        scalar.value > 255) {
+        return NL_CHECK_SEMANTIC_ERROR;
+    }
+    NLSemanticContext *candidate = NULL;
+    NLCheckStatus status = nl_sem_clone(c, &candidate);
+    NLValueId value = 0;
+    NLSymbolId symbol = 0;
+    if (status == NL_CHECK_OK) {
+        status = nl_sem_new_value(
+            candidate,
+            (NLSemanticValueView){.type = scalar.type,
+                                  .scalar_known = scalar.known,
+                                  .scalar_value =
+                                      scalar.known ? scalar.value : 0},
+            &value);
+    }
+    if (status == NL_CHECK_OK) {
+        status = nl_sem_bind(candidate, name, value, &symbol);
+    }
+    status = finish_candidate(c, candidate, status);
+    if (status == NL_CHECK_OK) {
+        *out = symbol;
+    }
+    return status;
 }

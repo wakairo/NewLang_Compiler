@@ -18,7 +18,20 @@ typedef enum {
     NL_CHECKED_REPLACE,
     NL_CHECKED_STORE,
     NL_CHECKED_SWAP,
-    NL_CHECKED_LOAN_HEADER
+    NL_CHECKED_LOAN_HEADER,
+    NL_CHECKED_ALLOCATE,
+    NL_CHECKED_DEALLOCATE,
+    NL_CHECKED_SPLIT,
+    NL_CHECKED_MERGE,
+    NL_CHECKED_INTO_SLOT,
+    NL_CHECKED_ERASE_SLOT,
+    NL_CHECKED_STORAGE_LEN,
+    NL_CHECKED_STORAGE_ADDR,
+    NL_CHECKED_STORAGE_READ_BYTE,
+    NL_CHECKED_STORAGE_WRITE_BYTE,
+    NL_CHECKED_COPY_RAW_BYTES,
+    NL_CHECKED_BYTE_TO_U8,
+    NL_CHECKED_U8_TO_BYTE
 } NLCheckedKind;
 typedef enum {
     NL_VALUE_USE_NONE,
@@ -60,6 +73,9 @@ typedef struct {
     size_t
         result_count; /* 0 = unit/no responsibility; 1 or 2 separate values */
     NLCheckedResult results[2];
+    bool has_scalar_result; /* raw observations do not mint ValuePackages */
+    NLScalarValue scalar_result;
+    size_t raw_offsets[2], raw_count; /* resolved constant selections */
     NLCheckedLoanPlan loan;
 } NLCheckedNodeView;
 

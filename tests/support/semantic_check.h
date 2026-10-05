@@ -3,6 +3,7 @@
 
 #include "newlang/checked.h"
 #include "newlang/parser.h"
+#include "newlang/raw_storage.h"
 #include "test.h"
 
 #include <string.h>
@@ -141,13 +142,19 @@ static inline bool test_type_equal(NLSemanticTypeView a, NLSemanticTypeView b)
 {
     return a.kind == b.kind && a.is_copy == b.is_copy &&
            a.is_discardable == b.is_discardable && a.target == b.target &&
-           a.access == b.access && a.is_exclusive == b.is_exclusive;
+           a.access == b.access && a.is_exclusive == b.is_exclusive &&
+           a.layout_known == b.layout_known && a.size == b.size &&
+           a.alignment == b.alignment;
 }
 static inline bool test_reference_equal(NLReferenceFacts a, NLReferenceFacts b)
 {
     return a.place == b.place && a.incarnation == b.incarnation &&
            a.scope == b.scope && a.provenance == b.provenance &&
            a.readable == b.readable && a.writable == b.writable;
+}
+static inline bool test_range_equal(NLBackingRange a, NLBackingRange b)
+{
+    return a.region == b.region && a.start == b.start && a.length == b.length;
 }
 static inline bool test_place_equal(NLSemanticPlaceView a,
                                     NLSemanticPlaceView b)
@@ -156,7 +163,8 @@ static inline bool test_place_equal(NLSemanticPlaceView a,
            a.independent_root == b.independent_root &&
            a.governing_domain == b.governing_domain &&
            a.incarnation == b.incarnation && a.current_fact == b.current_fact &&
-           a.current_value == b.current_value;
+           a.current_value == b.current_value &&
+           test_range_equal(a.placement, b.placement);
 }
 
 /* Snapshot public state, not private layout or allocation capacities. Small
@@ -170,6 +178,8 @@ typedef struct {
     NLSemanticPlaceView places[256];
     NLSemanticDomainView domains[256];
     NLSemanticScopeView scopes[256];
+    NLSemanticBackingView regions[16];
+    NLRawRepView raw[16][64];
 } TestState;
 static inline bool test_state(NLSemanticContext *context, TestState *state)
 {
@@ -195,6 +205,18 @@ static inline bool test_state(NLSemanticContext *context, TestState *state)
     for (size_t i = 0; i < c.scopes; ++i) {
         CHECK(nl_semantic_scope_view(context, i + 1, &state->scopes[i]));
     }
+    CHECK(c.backing_regions <= 16);
+    for (size_t i = 0; i < c.backing_regions; ++i) {
+        CHECK(nl_semantic_backing_view(context, i + 1, &state->regions[i]));
+        const NLSemanticBackingView r = state->regions[i];
+        if (r.live) {
+            CHECK(r.size <= 64);
+            for (size_t j = 0; j < r.size; ++j) {
+                CHECK(nl_semantic_raw_rep_view(context, i + 1, j,
+                                               &state->raw[i][j]));
+            }
+        }
+    }
     return true;
 }
 static inline bool test_unchanged(NLSemanticContext *context,
@@ -208,7 +230,9 @@ static inline bool test_unchanged(NLSemanticContext *context,
           a.domains == b.domains && a.scopes == b.scopes &&
           a.functions == b.functions &&
           a.last_incarnation == b.last_incarnation &&
-          a.last_value_fact == b.last_value_fact);
+          a.last_value_fact == b.last_value_fact &&
+          a.backing_regions == b.backing_regions &&
+          a.raw_intervals == b.raw_intervals);
     for (size_t i = 0; i < a.types; ++i) {
         CHECK(test_type_equal(before->types[i], after.types[i]));
     }
@@ -224,6 +248,10 @@ static inline bool test_unchanged(NLSemanticContext *context,
               x.owner_place == y.owner_place &&
               x.dependencies == y.dependencies && x.domain == y.domain &&
               x.slot_place == y.slot_place &&
+              x.allocation_region == y.allocation_region &&
+              test_range_equal(x.occupancy, y.occupancy) &&
+              x.scalar_known == y.scalar_known &&
+              x.scalar_value == y.scalar_value &&
               test_reference_equal(x.reference, y.reference));
     }
     for (size_t i = 0; i < a.places; ++i) {
@@ -238,6 +266,22 @@ static inline bool test_unchanged(NLSemanticContext *context,
               before->scopes[i].parent == after.scopes[i].parent &&
               before->scopes[i].parent_authority ==
                   after.scopes[i].parent_authority);
+    }
+    for (size_t i = 0; i < a.backing_regions; ++i) {
+        const NLSemanticBackingView x = before->regions[i],
+                                    y = after.regions[i];
+        CHECK(x.live == y.live && x.size == y.size &&
+              x.alignment == y.alignment &&
+              x.ordinary_read == y.ordinary_read &&
+              x.ordinary_write == y.ordinary_write &&
+              x.address_known == y.address_known && x.address == y.address);
+        if (x.live) {
+            for (size_t j = 0; j < x.size; ++j) {
+                const NLRawRepView u = before->raw[i][j], v = after.raw[i][j];
+                CHECK(u.validity == v.validity &&
+                      u.value_known == v.value_known && u.value == v.value);
+            }
+        }
     }
     return true;
 }
