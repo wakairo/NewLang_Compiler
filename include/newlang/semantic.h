@@ -21,6 +21,8 @@ typedef size_t NLPlaceId;
 typedef size_t NLIncarnationId;
 typedef size_t NLValueFactId;
 typedef size_t NLScopeId;
+typedef size_t
+    NLOccurrenceId; /* conditional memory occurrence, never value-owned */
 typedef size_t NLBackingRegionId; /* never a numeric address or authority */
 
 typedef struct {
@@ -49,7 +51,8 @@ typedef enum {
     NL_TYPE_BYTE,
     NL_TYPE_U8,
     NL_TYPE_USIZE,
-    NL_TYPE_ADDR
+    NL_TYPE_ADDR,
+    NL_TYPE_SUM
 } NLSemanticTypeKind;
 typedef struct {
     NLSemanticTypeKind kind;
@@ -59,7 +62,8 @@ typedef struct {
     NLAccessSyntax access;
     bool is_exclusive;
     bool layout_known;
-    size_t field_count; /* registered aggregate shape; zero for flat types */
+    size_t variant_count; /* registered closed sum, zero otherwise */
+    size_t field_count;   /* registered aggregate shape; zero for flat types */
     size_t size, alignment; /* compiler/target facts, not aggregate ABI */
 } NLSemanticTypeView;
 
@@ -87,7 +91,8 @@ typedef enum {
     NL_CARRIER_LOOSE,
     NL_CARRIER_PLACE,
     NL_CARRIER_ENDED,
-    NL_CARRIER_AGGREGATE
+    NL_CARRIER_AGGREGATE,
+    NL_CARRIER_SUM
 } NLValueCarrier;
 typedef struct {
     NLPlaceId place;
@@ -96,6 +101,8 @@ typedef struct {
     NLProvenance provenance;
     bool readable;
     bool writable;
+    NLOccurrenceId
+        occurrence_dependency; /* refs only, separate from provenance */
 } NLReferenceFacts;
 typedef struct {
     NLTypeId type;
@@ -112,6 +119,9 @@ typedef struct {
     size_t field_count;
     NLValueId
         fields[NL_SEMANTIC_MAX_FIELDS]; /* declaration order; owned members */
+    size_t variant; /* one-based registered variant; zero means unknown */
+    NLValueId sum_payload,
+        sum_owner; /* owned package, no occurrence identity */
     bool scalar_known;
     size_t scalar_value;
 } NLSemanticValueView;
@@ -129,6 +139,8 @@ typedef struct {
     NLIncarnationId incarnation;
     NLValueFactId current_fact;
     NLValueId current_value;
+    NLOccurrenceId payload_occurrence; /* live sum root only */
+    NLPlaceId parent_sum;     /* conditional subplace, not independent root */
     NLBackingRange placement; /* live root only; not part of its value */
 } NLSemanticPlaceView;
 typedef struct {
@@ -145,7 +157,7 @@ typedef struct {
     size_t types, bindings, values, places, domains, scopes, functions;
     NLIncarnationId last_incarnation;
     NLValueFactId last_value_fact;
-    size_t backing_regions, raw_intervals;
+    size_t backing_regions, raw_intervals, occurrences;
 } NLSemanticSnapshot;
 typedef struct {
     NLDiagnostic diagnostic;
@@ -207,6 +219,26 @@ typedef struct {
 NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *, const char *,
                                              const NLAggregateField *, size_t,
                                              NLTypeId *out);
+
+#define NL_SEMANTIC_MAX_VARIANTS 16 /* host budget, not language limit */
+typedef struct {
+    const char *name; /* borrowed registration input; copied on success */
+    NLTypeId payload; /* zero: payloadless; otherwise exactly one type */
+} NLSumVariant;
+typedef struct {
+    bool live;
+    NLPlaceId root, payload_place;
+    size_t variant;
+} NLSemanticOccurrenceView;
+/* Concrete nominal registry. Flat payloads only in P6; no source declarations,
+ * nested sums, aggregates or ref/ptr payloads. Static traits use every variant.
+ * Value copies own independent payload packages. Historical occurrences never
+ * travel with a semantic value package. All mutations remain transactional. */
+NLCheckStatus nl_semantic_register_sum(NLSemanticContext *, const char *,
+                                       const NLSumVariant *, size_t,
+                                       NLTypeId *);
+bool nl_semantic_occurrence_view(const NLSemanticContext *, NLOccurrenceId,
+                                 NLSemanticOccurrenceView *);
 
 NLCheckStatus nl_semantic_compound_type(NLSemanticContext *, NLSemanticTypeKind,
                                         NLTypeId target, NLAccessSyntax access,
@@ -277,8 +309,9 @@ NLCheckStatus nl_semantic_check_loan_header(NLSemanticContext *,
                                             const NLSyntaxTree *,
                                             NLCheckedFragment **out,
                                             NLCheckDiagnostic *);
-/* Draft 17.9 selected closed source profile; same candidate/artifact ownership
- * contracts. Blocks introduce lexical scopes and check non-Discardable exits.
+/* Draft 17.10 selected closed source profile; same candidate/artifact ownership
+ * contracts. Blocks check lexical exits; registered sums support constructor/
+ * match, with owned hypothetical arm evidence and conservative common joining.
  */
 NLCheckStatus nl_semantic_check_source_fragment(NLSemanticContext *,
                                                 const NLSyntaxTree *,

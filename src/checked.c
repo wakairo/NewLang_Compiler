@@ -27,6 +27,11 @@ NLCheckStatus nl_checked_add(NLCheckedFragment *fragment,
 void nl_checked_destroy(NLCheckedFragment *fragment)
 {
     if (fragment != NULL) {
+        for (size_t i = 0; i < fragment->arm_count; ++i)
+            nl_checked_destroy(fragment->arms[i].artifact);
+        free(fragment->arms);
+        if (fragment->destroy_context != NULL)
+            fragment->destroy_context((NLSemanticContext *)fragment->context);
         free(fragment->nodes);
         free(fragment);
     }
@@ -58,4 +63,18 @@ const NLSource *nl_checked_source(const NLCheckedFragment *fragment)
 const NLSemanticContext *nl_checked_context(const NLCheckedFragment *fragment)
 {
     return fragment == NULL ? NULL : fragment->context;
+}
+
+const NLCheckedFragment *nl_checked_match_arm(const NLCheckedFragment *f,
+                                              NLCheckedNodeId match,
+                                              size_t index)
+{
+    if (f != NULL)
+        for (size_t i = 0; i < f->arm_count; ++i)
+            if (f->arms[i].match == match) {
+                if (index == 0)
+                    return f->arms[i].artifact;
+                --index;
+            }
+    return NULL;
 }

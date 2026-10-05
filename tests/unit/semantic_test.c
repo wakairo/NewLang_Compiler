@@ -859,7 +859,7 @@ static bool failure_tests(void)
     CHECK(test_domain_ref(&f, "stable", NL_ACCESS_READ, false, &stable, NULL));
     CHECK(nl_semantic_seed_reference(
               f.context, "unknown_ptr", pointer_type,
-              (NLReferenceFacts){0, 0, 0, NL_PROVENANCE_UNKNOWN, true, true},
+              (NLReferenceFacts){0, 0, 0, NL_PROVENANCE_UNKNOWN, true, true, 0},
               &p) == NL_CHECK_OK);
     CHECK(test_rejected(f.context, "loan read unknown_ptr using stable as r {}",
                         TEST_LOAN, NL_CHECK_ANALYSIS_PRECISION_LIMIT,
@@ -867,7 +867,7 @@ static bool failure_tests(void)
     CHECK(nl_semantic_seed_reference(
               f.context, "invalid_ptr", pointer_type,
               (NLReferenceFacts){place, root.incarnation, 0,
-                                 NL_PROVENANCE_INVALID, true, true},
+                                 NL_PROVENANCE_INVALID, true, true, 0},
               &p) == NL_CHECK_OK);
     CHECK(test_rejected(f.context, "loan read invalid_ptr using stable as r {}",
                         TEST_LOAN, NL_CHECK_SEMANTIC_ERROR,
@@ -875,7 +875,7 @@ static bool failure_tests(void)
     CHECK(nl_semantic_seed_reference(f.context, "no_write", pointer_type,
                                      (NLReferenceFacts){place, root.incarnation,
                                                         0, NL_PROVENANCE_VALID,
-                                                        true, false},
+                                                        true, false, 0},
                                      &p) == NL_CHECK_OK);
     CHECK(test_rejected(f.context, "loan write no_write using stable as r {}",
                         TEST_LOAN, NL_CHECK_SEMANTIC_ERROR, "P3-ACCESS"));

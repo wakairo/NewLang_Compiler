@@ -62,8 +62,12 @@ static inline bool test_run(NLSemanticContext *context, const char *text,
     NLSyntaxTree *syntax = NULL;
     CHECK(nl_parser_create(out->source, &parser) == NL_PARSE_OK);
     CHECK(test_parse(entry)(parser, &syntax, NULL) == NL_PARSE_OK);
-    CHECK(test_check(entry)(context, syntax, &out->artifact,
-                            &out->diagnostic) == expected);
+    const NLCheckStatus status =
+        test_check(entry)(context, syntax, &out->artifact, &out->diagnostic);
+    if (status != expected)
+        fprintf(stderr, "%s: check %d expected %d (%s)\n", text, status,
+                expected, out->diagnostic.diagnostic.code);
+    CHECK(status == expected);
     nl_syntax_tree_destroy(syntax);
     nl_parser_destroy(parser);
     if (expected == NL_CHECK_OK) {
@@ -124,7 +128,7 @@ static inline bool test_reference(NLSemanticContext *context, const char *name,
     CHECK(nl_semantic_seed_reference(
               context, name, type,
               (NLReferenceFacts){place, p.incarnation, scope,
-                                 NL_PROVENANCE_VALID, true, true},
+                                 NL_PROVENANCE_VALID, true, true, 0},
               out) == NL_CHECK_OK);
     if (out_scope != NULL) {
         *out_scope = scope;
@@ -147,13 +151,16 @@ static inline bool test_type_equal(NLSemanticTypeView a, NLSemanticTypeView b)
            a.is_discardable == b.is_discardable && a.target == b.target &&
            a.access == b.access && a.is_exclusive == b.is_exclusive &&
            a.layout_known == b.layout_known && a.field_count == b.field_count &&
-           a.size == b.size && a.alignment == b.alignment;
+           a.variant_count == b.variant_count && a.size == b.size &&
+           a.alignment == b.alignment;
 }
 static inline bool test_reference_equal(NLReferenceFacts a, NLReferenceFacts b)
 {
     return a.place == b.place && a.incarnation == b.incarnation &&
-           a.scope == b.scope && a.provenance == b.provenance &&
-           a.readable == b.readable && a.writable == b.writable;
+           a.scope == b.scope &&
+           a.occurrence_dependency == b.occurrence_dependency &&
+           a.provenance == b.provenance && a.readable == b.readable &&
+           a.writable == b.writable;
 }
 static inline bool test_range_equal(NLBackingRange a, NLBackingRange b)
 {
@@ -167,6 +174,8 @@ static inline bool test_place_equal(NLSemanticPlaceView a,
            a.governing_domain == b.governing_domain &&
            a.incarnation == b.incarnation && a.current_fact == b.current_fact &&
            a.current_value == b.current_value &&
+           a.payload_occurrence == b.payload_occurrence &&
+           a.parent_sum == b.parent_sum &&
            test_range_equal(a.placement, b.placement);
 }
 
@@ -181,6 +190,7 @@ typedef struct {
     NLSemanticPlaceView places[256];
     NLSemanticDomainView domains[256];
     NLSemanticScopeView scopes[256];
+    NLSemanticOccurrenceView occurrences[256];
     NLSemanticBackingView regions[16];
     NLRawRepView raw[16][64];
 } TestState;
@@ -208,6 +218,10 @@ static inline bool test_state(NLSemanticContext *context, TestState *state)
     for (size_t i = 0; i < c.scopes; ++i) {
         CHECK(nl_semantic_scope_view(context, i + 1, &state->scopes[i]));
     }
+    CHECK(c.occurrences <= 256);
+    for (size_t i = 0; i < c.occurrences; ++i)
+        CHECK(nl_semantic_occurrence_view(context, i + 1,
+                                          &state->occurrences[i]));
     CHECK(c.backing_regions <= 16);
     for (size_t i = 0; i < c.backing_regions; ++i) {
         CHECK(nl_semantic_backing_view(context, i + 1, &state->regions[i]));
@@ -235,7 +249,7 @@ static inline bool test_unchanged(NLSemanticContext *context,
           a.last_incarnation == b.last_incarnation &&
           a.last_value_fact == b.last_value_fact &&
           a.backing_regions == b.backing_regions &&
-          a.raw_intervals == b.raw_intervals);
+          a.raw_intervals == b.raw_intervals && a.occurrences == b.occurrences);
     for (size_t i = 0; i < a.types; ++i) {
         CHECK(test_type_equal(before->types[i], after.types[i]));
     }
@@ -250,7 +264,8 @@ static inline bool test_unchanged(NLSemanticContext *context,
         CHECK(x.type == y.type && x.carrier == y.carrier &&
               x.owner_place == y.owner_place &&
               x.aggregate_owner == y.aggregate_owner &&
-              x.field_count == y.field_count &&
+              x.field_count == y.field_count && x.variant == y.variant &&
+              x.sum_payload == y.sum_payload && x.sum_owner == y.sum_owner &&
               memcmp(x.fields, y.fields, sizeof(x.fields)) == 0 &&
               x.dependencies == y.dependencies && x.domain == y.domain &&
               x.slot_place == y.slot_place &&
@@ -272,6 +287,12 @@ static inline bool test_unchanged(NLSemanticContext *context,
               before->scopes[i].parent == after.scopes[i].parent &&
               before->scopes[i].parent_authority ==
                   after.scopes[i].parent_authority);
+    }
+    for (size_t i = 0; i < a.occurrences; ++i) {
+        NLSemanticOccurrenceView x = before->occurrences[i],
+                                 y = after.occurrences[i];
+        CHECK(x.live == y.live && x.root == y.root &&
+              x.payload_place == y.payload_place && x.variant == y.variant);
     }
     for (size_t i = 0; i < a.backing_regions; ++i) {
         const NLSemanticBackingView x = before->regions[i],

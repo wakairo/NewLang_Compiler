@@ -11,6 +11,7 @@ struct NLParser {
     NLToken token;
     bool have_token;
     size_t depth;
+    bool match_scrutinee;
     NLSyntaxTree *tree; /* Owned only while a fragment call is active. */
     NLParseStatus status;
     NLParseDiagnostic failure;
@@ -601,11 +602,114 @@ static NLSyntaxNode *source_block(NLParser *parser)
     return result;
 }
 
+static NLSyntaxNode *source_match(NLParser *parser)
+{
+    const NLSourceSpan start = parser->token.span;
+    consume(parser);
+    const bool previous = parser->match_scrutinee;
+    parser->match_scrutinee = true;
+    NLSyntaxNode *scrutinee = source_expression(parser);
+    parser->match_scrutinee = previous;
+    if (scrutinee == NULL ||
+        !expect_punct(parser, '{', "P6-MATCH-OPEN", "expected match {"))
+        return NULL;
+    NLSyntaxNode *result = node(parser, NL_SYNTAX_MATCH, start);
+    if (result == NULL)
+        return NULL;
+    result->view.data.match.scrutinee = scrutinee;
+    NLSyntaxNode *head = NULL, *tail = NULL;
+    while (peek(parser) && !punct(parser, '}')) {
+        if (word(parser, "_") || parser->token.kind == NL_TOKEN_DIGITS) {
+            fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+                 "P6-PATTERN-UNSUPPORTED",
+                 "wildcard/literal arms are outside the closed pattern forms");
+            return NULL;
+        }
+        NLSyntaxNode *pattern = source_name(parser, NL_SYNTAX_MATCH_ARM, true);
+        if (pattern == NULL)
+            return NULL;
+        pattern->view.data.arm.variant = pattern->view.data.name;
+        if (punct(parser, '(')) {
+            consume(parser);
+            pattern->view.data.arm.payload = true;
+            pattern->view.data.arm.wildcard = word(parser, "_");
+            if (peek(parser) && parser->token.kind != NL_TOKEN_WORD &&
+                !punct(parser, ')')) {
+                fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+                     "P6-PATTERN-UNSUPPORTED",
+                     "general payload patterns are outside P6");
+                return NULL;
+            }
+            NLSyntaxNode *binding =
+                source_name(parser, NL_SYNTAX_RECEIVER, false);
+            if (binding == NULL)
+                return NULL;
+            pattern->view.data.arm.binding = binding->view.data.name;
+            if (punct(parser, '(') || punct(parser, '{') ||
+                punct(parser, '.')) {
+                fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+                     "P6-PATTERN-UNSUPPORTED",
+                     "nested/qualified patterns are outside P6");
+                return NULL;
+            }
+            if (!expect_punct(parser, ')', "P6-PATTERN-END",
+                              "expected single binding or _"))
+                return NULL;
+        }
+        if (!punct(parser, '=')) {
+            bool general =
+                punct(parser, '.') || punct(parser, '|') || word(parser, "if");
+            fail(parser,
+                 general ? NL_PARSE_SYNTAX_UNSUPPORTED : NL_PARSE_SYNTAX_ERROR,
+                 parser->token.span,
+                 general ? "P6-PATTERN-UNSUPPORTED" : "P6-ARROW",
+                 general
+                     ? "only unqualified closed variant patterns are supported"
+                     : "match requires =>");
+            return NULL;
+        }
+        size_t arrow_end = parser->token.span.end_byte;
+        consume(parser);
+        if (!punct(parser, '>') || parser->token.span.start_byte != arrow_end) {
+            fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span, "P6-ARROW",
+                 "match requires adjacent =>");
+            return NULL;
+        }
+        consume(parser);
+        if (!punct(parser, '{')) {
+            fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+                 "P6-ARM-BLOCK", "match arm requires lexical block");
+            return NULL;
+        }
+        NLSyntaxNode *body = source_expression(parser);
+        if (body == NULL)
+            return NULL;
+        pattern->view.data.arm.body = body;
+        pattern->view.span.end_byte = body->view.span.end_byte;
+        link_node(&head, &tail, pattern);
+        ++result->view.data.match.arm_count;
+        if (!punct(parser, ','))
+            break;
+        consume(parser);
+    }
+    result->view.data.match.arms = head;
+    const size_t end = parser->token.span.end_byte;
+    if (!expect_punct(parser, '}', "P6-ARM-SEPARATOR",
+                      "expected comma or match }"))
+        return NULL;
+    result->view.span.end_byte = end;
+    return result;
+}
+
 static NLSyntaxNode *source_expression(NLParser *parser)
 {
     if (!enter(parser))
         return NULL;
     NLSyntaxNode *result = NULL;
+    if (word(parser, "match")) {
+        result = source_match(parser);
+        goto done;
+    }
     if (punct(parser, '{')) {
         result = source_block(parser);
         goto done;
@@ -620,7 +724,50 @@ static NLSyntaxNode *source_expression(NLParser *parser)
     }
     const NLSourceSpan name = parser->token.span;
     consume(parser);
-    if (punct(parser, '{')) {
+    if (punct(parser, '.')) {
+        consume(parser);
+        NLSyntaxNode *variant = source_name(parser, NL_SYNTAX_RECEIVER, false);
+        if (variant == NULL)
+            goto done;
+        result = node(parser, NL_SYNTAX_SUM_CONSTRUCTOR, name);
+        if (result == NULL)
+            goto done;
+        result->view.data.constructor.qualifier = name;
+        result->view.data.constructor.variant = variant->view.data.name;
+        result->view.span.end_byte = variant->view.span.end_byte;
+        if (punct(parser, '(')) {
+            result->view.data.constructor.parentheses = true;
+            consume(parser);
+            const bool previous = parser->match_scrutinee;
+            parser->match_scrutinee = false;
+            NLSyntaxNode *head = NULL, *tail = NULL;
+            if (!punct(parser, ')')) {
+                for (;;) {
+                    NLSyntaxNode *arg = source_expression(parser);
+                    if (arg == NULL)
+                        break;
+                    link_node(&head, &tail, arg);
+                    ++result->view.data.constructor.argument_count;
+                    if (!punct(parser, ','))
+                        break;
+                    consume(parser);
+                    if (punct(parser, ')')) {
+                        fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+                             "P6-CONSTRUCTOR-COMMA",
+                             "constructor has no trailing comma");
+                        break;
+                    }
+                }
+            }
+            parser->match_scrutinee = previous;
+            result->view.data.constructor.arguments = head;
+            size_t end = parser->token.span.end_byte;
+            if (!expect_punct(parser, ')', "P6-CONSTRUCTOR-END",
+                              "expected constructor )"))
+                goto done;
+            result->view.span.end_byte = end;
+        }
+    } else if (punct(parser, '{') && !parser->match_scrutinee) {
         consume(parser);
         result = node(parser, NL_SYNTAX_AGGREGATE, name);
         if (result == NULL)
@@ -675,7 +822,10 @@ static NLSyntaxNode *source_expression(NLParser *parser)
         NLSyntaxNode *head = NULL, *tail = NULL;
         if (!punct(parser, ')')) {
             for (;;) {
+                const bool previous = parser->match_scrutinee;
+                parser->match_scrutinee = false;
                 NLSyntaxNode *arg = source_expression(parser);
+                parser->match_scrutinee = previous;
                 if (arg == NULL)
                     goto done;
                 link_node(&head, &tail, arg);
@@ -708,7 +858,8 @@ static NLSyntaxNode *source_expression(NLParser *parser)
         if (result != NULL)
             result->view.data.name = name;
     }
-    if (peek(parser) && expression_extension(parser) && !punct(parser, ';')) {
+    if (peek(parser) && expression_extension(parser) && !punct(parser, ';') &&
+        !(parser->match_scrutinee && punct(parser, '{'))) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
              "P5-EXPRESSION-UNSUPPORTED", "expression extension outside P5");
     }

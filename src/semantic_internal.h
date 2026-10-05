@@ -19,6 +19,8 @@ typedef struct {
     NLSemanticTypeView view;
     char *field_names[NL_SEMANTIC_MAX_FIELDS];
     NLTypeId field_types[NL_SEMANTIC_MAX_FIELDS];
+    char *variant_names[NL_SEMANTIC_MAX_VARIANTS];
+    NLTypeId variant_types[NL_SEMANTIC_MAX_VARIANTS];
 } NLTypeEntry;
 typedef struct {
     char *name;
@@ -34,6 +36,8 @@ typedef struct {
     bool caller_effects, hidden_dependencies;
 } NLFunctionEntry;
 struct NLSemanticContext {
+    NLSemanticOccurrenceView *occurrences;
+    size_t occurrence_count;
     NLTypeEntry *types;
     size_t type_count;
     NLBindingEntry *bindings;
@@ -53,12 +57,19 @@ struct NLSemanticContext {
     NLRawRegionEntry *regions;
     size_t region_count, raw_interval_count;
 };
+typedef struct {
+    NLCheckedNodeId match;
+    struct NLCheckedFragment *artifact; /* owns hypothetical arm context */
+} NLCheckedArm;
 struct NLCheckedFragment {
     const NLSource *source;
     const NLSemanticContext *context;
     NLCheckedNodeView *nodes;
     size_t count, capacity;
     NLCheckedNodeId root;
+    NLCheckedArm *arms;
+    size_t arm_count;
+    void (*destroy_context)(NLSemanticContext *); /* arm snapshots only */
 };
 
 /* Concrete candidate state helpers; no general allocator/transaction DSL. */
@@ -84,6 +95,12 @@ NLCheckStatus nl_sem_new_scope(NLSemanticContext *, NLScopeId, bool,
 NLCheckStatus nl_sem_fresh_fact(NLSemanticContext *, NLValueFactId *);
 NLCheckStatus nl_checked_add(NLCheckedFragment *, NLCheckedNodeView,
                              NLCheckedNodeId *);
+
+NLCheckStatus nl_sum_validate(const NLSemanticContext *);
+NLCheckStatus nl_sum_attach(NLSemanticContext *, NLPlaceId);
+void nl_sum_detach(NLSemanticContext *, NLPlaceId);
+NLCheckStatus nl_sum_payload_changed(NLSemanticContext *, NLPlaceId);
+bool nl_sum_authority(const NLSemanticContext *, NLTypeId);
 
 void nl_raw_dispose(NLSemanticContext *);
 NLCheckStatus nl_raw_clone(const NLSemanticContext *, NLSemanticContext *);

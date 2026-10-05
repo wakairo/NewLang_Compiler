@@ -58,6 +58,7 @@ static bool parser_tests(void)
 {
     const char *valid[] = {
         "{}",
+        "match x {None=>{x}}", /* canonical P6 syntax, formerly unsupported */
         "{ x; x }",
         "{ let x = y; x }",
         "{let(a,b)=take(p,d); let Pair{a,b,}=pair; Pair{b:b,a:a,}}",
@@ -80,7 +81,6 @@ static bool parser_tests(void)
                                  "let Pair{a:renamed,b}=p",
                                  "x+y",
                                  "Option<u32>.None",
-                                 "match x {None=>{x}}",
                                  "struct Pair{a:T}",
                                  "{ |x:T| x }",
                                  "let [a,b]=x",

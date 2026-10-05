@@ -2,16 +2,15 @@
 
 NewLang production compiler, written in C17 with LLVM as the primary backend.
 
-**P0 through P4 are complete and merged.** P5 adds the Draft 17.9 closed source
-slice: independent result receiving, lexical blocks and registered aggregate
-construction/whole destructuring. It connects parsed source to P3/P4's existing
-transactional checker, scoped reborrows and raw-storage responsibilities.
-P5 is reviewed/merged and CLOSED; sum/match and broader frontend work remain deferred.
+**P0 through P5 are complete and merged.** P6 adds the Draft 17.10 bounded
+registered closed-sum source slice: qualified constructors, consuming/borrowed
+match, conditional payload occurrences and conservative branch joining.
+P6 remains at the review gate; broader frontend and lowering work are deferred.
 
 ## Authority
 
 The canonical language authority is the Draft selected by
-`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.9**), followed by reviewed
+`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.10**), followed by reviewed
 process/backend contracts and merged implementation/formal evidence.
 Historical reports, the task prompt and conversation do not override the Draft.
 Backend Contract v0.4 defines backend obligations. The Charter, Handoff Manifest
@@ -23,7 +22,8 @@ Semantic Sync is recorded in Issue #29; later tracks start only through separate
 See the [P2 grammar audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md),
 [P3 semantic contract](docs/P3_SEMANTIC_SLICE_CONTRACT.md),
 [P4 raw-storage contract](docs/P4_RAW_STORAGE_SEMANTIC_SLICE_CONTRACT.md) and
-[P5 source contract](docs/P5_SOURCE_FRONTEND_SLICE_CONTRACT.md).
+[P5 source contract](docs/P5_SOURCE_FRONTEND_SLICE_CONTRACT.md) and
+[P6 sum contract](docs/P6_CLOSED_SUM_SOURCE_SLICE_CONTRACT.md).
 
 ## Fresh setup
 
@@ -100,17 +100,18 @@ cmake --build build-ubsan --parallel 2
 ctest --test-dir build-ubsan --output-on-failure
 ```
 
-Each configuration runs the same **45 CTests**: source and lexer module unit
+Each configuration runs the same **53 CTests**: source and lexer module unit
 tests, six parser unit groups, file-source -> lexer/parser integration,
 six P3 semantic unit groups and source -> parser -> checker integration,
 ten raw-storage unit groups and the raw -> typed -> raw -> deallocate cycle,
 six P5 source-slice unit groups and source -> checked lifetime/aggregate integration,
+seven P6 sum-slice unit groups and source -> checked match integration,
 diagnostic unit checks, six CLI
 cases (each invoked twice), valid LLVM C API module/IR, artifact integrity, and
 frozen-oracle smoke. ASan includes leak detection; UBSan stops on the first
 failure. Imported LLVM binaries are not rebuilt with sanitizers; our C targets
 are instrumented. Required checks are these configurations plus GCC Release/NDEBUG and PR CI
-(see [P5 report](docs/P5_SOURCE_FRONTEND_SLICE_REPORT.md)).
+(see [P6 report](docs/P6_CLOSED_SUM_SOURCE_SLICE_REPORT.md)).
 The historical 466-test oracle suite and formal proofs are optional evidence;
 P0 does not claim to reproduce them in C.
 
@@ -130,11 +131,13 @@ artifact is produced. Output I/O failure exits 1.
 - `include/newlang/{syntax,parser}.h`, `src/{syntax,parser}.c`: owned immutable
   syntax trees borrowing source, one-token lookahead, checked failure cleanup,
   structured first diagnostics, four P2 fragment entries and the Draft 17.9 P5
-  source-fragment entry for blocks/receiving/registered aggregate forms. Loan
+  source-fragment entry for blocks/receiving/registered aggregate forms plus the
+  Draft 17.10 constructor/match forms. Loan
   bodies retain balanced byte regions; their contents are not parsed.
-- `include/newlang/{semantic,checked}.h`, `src/{semantic,semantic_check,checked}.c`:
+- `include/newlang/{semantic,checked}.h`, `src/{semantic,semantic_check,sum,checked}.c`:
   owning fixture context, canonical types/packages/places/scopes, transactional
-  checker and immutable checked fragments; no LLVM linkage or syntax pointers.
+  checker, conditional occurrence ownership and immutable checked fragments
+  (including owned hypothetical arm snapshots); no LLVM linkage or syntax pointers.
 - `include/newlang/raw_storage.h`, `src/raw_storage.c`: programmatic successful
   allocation/claim transitions, scalar byte observations and owned raw interval
   summaries. Compiler metadata only; no platform allocator or runtime bitmap.
