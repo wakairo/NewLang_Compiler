@@ -709,6 +709,20 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                  "slot destination is not definitely empty with matching type");
             return false;
         }
+        bool readable = true, writable = true;
+        if (slot_value.occupancy.region != 0) {
+            const NLSemanticBackingView backing =
+                c->regions[slot_value.occupancy.region - 1].view;
+            if (!backing.ordinary_write) {
+                fail(check, NL_CHECK_SEMANTIC_ERROR, view(check, args[0])->span,
+                     "P4-INITIALIZE-BACKING-WRITE",
+                     "typed initialize requires destination backing write "
+                     "access");
+                return false;
+            }
+            readable = backing.ordinary_read;
+            writable = backing.ordinary_write;
+        }
         if (!host(check, nl_sem_install(c, place, incoming, domain), span) ||
             !host(check, nl_raw_start_root(c, slot, place), span)) {
             return false;
@@ -725,8 +739,8 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                 .reference = {.place = place,
                               .incarnation = c->places[place - 1].incarnation,
                               .provenance = NL_PROVENANCE_VALID,
-                              .readable = true,
-                              .writable = true}},
+                              .readable = readable,
+                              .writable = writable}},
             span);
         if (result == 0) {
             return false;
