@@ -10,17 +10,17 @@ program checker or end-to-end compilation. P3 stops for review before P4.
 
 ## Authority
 
-In order: **N** Draft 17.5 (Draft 17.4 semantics plus exclusive-reborrow clarification), **N** Backend Contract v0.4
-(backend obligations), **A** adjudicated M8 surface decisions, then M7 closure,
+In order: **N** the canonical Draft selected by `docs/reference/CURRENT_SPEC.md`
+(currently Draft 17.6), **N** Backend Contract v0.4 (backend obligations),
+**A** adjudicated M8 surface decisions, then M7 closure,
 **F** F0 bridge / [NewLang_FormalProof](https://github.com/wakairo/NewLang_FormalProof),
 **O** frozen M7.5 Python oracle,
-**I** this C implementation. The Charter and Handoff Manifest are project
-policy, not language semantics. Historical input snapshots and the separately reviewed Draft 17.5 are byte-preserved under
-`docs/` and `docs/reference/`; `INPUT_ARTIFACTS.json` records original handoff hashes; the P3 report records the
-Draft 17.5 / review-resolution identities introduced upstream by PR #6.
-M7 is closed. P2/P3 use the explicit M8.1/M8.2 surface forms supplied in their
-handoffs; standalone M8 artifact/hash verification is not claimed. No M8.3
-semantics are anticipated. Lean is not a dependency. See the
+**I** this C implementation. The Charter, Handoff Manifest and project process
+documents are policy/evidence, not language semantics. P3 is synchronized with
+current `main`; Draft 17.6 preserves Draft 17.5's exclusive-reborrow clarification
+and adds M8.3R raw-byte semantics outside the P3 implementation scope.
+M7 is closed. P2/P3 implement only the explicit M8.1/M8.2 subset selected by
+the P3 handoff; no M8.3/M8.3R implementation is claimed. Lean is not a dependency. See the
 [P2 grammar audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md) and
 [P3 semantic contract / exclusive reborrow clarification](docs/P3_SEMANTIC_SLICE_CONTRACT.md).
 
