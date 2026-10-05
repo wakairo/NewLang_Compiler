@@ -451,8 +451,7 @@ static bool access_tests(void)
                         TEST_EXPRESSION, NL_CHECK_SEMANTIC_ERROR,
                         "P4-INITIALIZE-BACKING-WRITE"));
 
-    NLSymbolId wo_a, wo_s, wo_empty, wo_incoming, wo_stable, wo_p,
-        wo_ending;
+    NLSymbolId wo_a, wo_s, wo_empty, wo_incoming, wo_stable, wo_p, wo_ending;
     NLScopeId wo_stable_scope, wo_ending_scope;
     CHECK(
         raw_allocate(c, 4, 4, false, true, "wo_a", "wo_s", &wo_a, &wo_s, NULL));
