@@ -2,10 +2,11 @@
 
 > English companion to the primary Japanese document: `NewLang_Project_Development_Process.md`
 >
-> Status: Initial operating policy (v0.1)
+> Status: Initial operating policy
 >
 > This document describes the current cross-track development process for NewLang.
 > It is intentionally lightweight and may be revised as the project learns.
+> Git commit history is the source of truth for change history; this document does not maintain a separate change log or version history.
 
 ## 1. Purpose
 
@@ -33,6 +34,9 @@ Design reports, proof reports, compiler reports, experiments, deep research, and
 They do not override the canonical Draft by themselves.
 
 If an important decision exists only in a report or conversation, it should be promoted through a reviewed Draft revision before being treated as normative.
+
+UTF-8-managed project documents should normally use Japanese as the primary language, with an English companion when useful.
+For commit messages and other text that appears prominently in shell/toolchain workflows, prefer English ASCII for portability and operational simplicity.
 
 ## 3. Track responsibilities
 
@@ -224,9 +228,3 @@ For the current phase:
 3. perform a Semantic Sync Review before substantial M9 work;
 4. use an independent Red Team pass around that sync point or another similarly high-value boundary;
 5. revise this process document when actual project experience shows a better operating model.
-
----
-
-Version history:
-
-- **v0.1** — Initial operating policy after M8 closure. Introduces canonical-authority discipline, cross-track feedback, targeted reopen, semantic sync reviews, and an intentionally lightweight independent Red Team model.
