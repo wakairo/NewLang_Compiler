@@ -2,25 +2,27 @@
 
 NewLang production compiler, written in C17 with LLVM as the primary backend.
 
-**P0, Pre-P1 and P1 are complete and merged.** P2 adds four minimal syntax
-fragment parsers over P1's preserved source bytes, canonical byte spans and
-streaming ASCII atoms: types, expressions, single bindings and lexical loans.
-Parsed shape does not imply semantic acceptance or end-to-end compilation.
-P2 stops for review before P3.
+**P0 through P2 are complete and merged.** P3 adds a bounded semantic fragment
+checker over P2 types, expressions, single bindings and loan headers: explicit
+context/package/root state, nine core operations, exact registered calls and
+transactional failure handling. Loan bodies remain opaque. This is not a full
+program checker or end-to-end compilation. P3 stops for review before P4.
 
 ## Authority
 
-In order: **N** Draft 17.4 (language semantics), **N** Backend Contract v0.4
-(backend obligations), **A** adjudicated M8 surface decisions, then M7 closure,
+In order: **N** the canonical Draft selected by `docs/reference/CURRENT_SPEC.md`
+(currently Draft 17.6), **N** Backend Contract v0.4 (backend obligations),
+**A** adjudicated M8 surface decisions, then M7 closure,
 **F** F0 bridge / [NewLang_FormalProof](https://github.com/wakairo/NewLang_FormalProof),
 **O** frozen M7.5 Python oracle,
-**I** this C implementation. The Charter and Handoff Manifest are project
-policy, not language semantics. All input snapshots are byte-preserved under
-`docs/` and `docs/reference/`; `INPUT_ARTIFACTS.json` records their SHA-256 hashes.
-M7 is closed. P2 uses the explicit M8.1/M8.2 surface forms supplied in the P2
-handoff; standalone M8 artifact/hash verification is not claimed. No M8.3
-semantics are anticipated. Lean is not a dependency. See the
-[P2 grammar and authority audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md).
+**I** this C implementation. The Charter, Handoff Manifest and project process
+documents are policy/evidence, not language semantics. P3 is synchronized with
+current `main`; Draft 17.6 preserves Draft 17.5's exclusive-reborrow clarification
+and adds M8.3R raw-byte semantics outside the P3 implementation scope.
+M7 is closed. P2/P3 implement only the explicit M8.1/M8.2 subset selected by
+the P3 handoff; no M8.3/M8.3R implementation is claimed. Lean is not a dependency. See the
+[P2 grammar audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md) and
+[P3 semantic contract / exclusive reborrow clarification](docs/P3_SEMANTIC_SLICE_CONTRACT.md).
 
 ## Fresh setup
 
@@ -97,13 +99,16 @@ cmake --build build-ubsan --parallel 2
 ctest --test-dir build-ubsan --output-on-failure
 ```
 
-Each configuration runs the same **20 CTests**: source and lexer module unit
+Each configuration runs the same **27 CTests**: source and lexer module unit
 tests, six parser unit groups, file-source -> lexer/parser integration,
+six semantic unit groups and source -> parser -> checker integration,
 diagnostic unit checks, six CLI
 cases (each invoked twice), valid LLVM C API module/IR, artifact integrity, and
 frozen-oracle smoke. ASan includes leak detection; UBSan stops on the first
 failure. Imported LLVM binaries are not rebuilt with sanitizers; our C targets
 are instrumented. Required checks are these four configurations and PR CI.
+GCC Release/NDEBUG is also validated locally using the same CTest suite (see
+[P3 report](docs/P3_FIRST_SEMANTIC_VERTICAL_SLICE_REPORT.md)).
 The historical 466-test oracle suite and formal proofs are optional evidence;
 P0 does not claim to reproduce them in C.
 
@@ -124,6 +129,9 @@ artifact is produced. Output I/O failure exits 1.
   syntax trees borrowing source, one-token lookahead, checked failure cleanup,
   structured first diagnostics and four standalone fragment entries. Loan
   bodies retain balanced byte regions; their contents are not parsed.
+- `include/newlang/{semantic,checked}.h`, `src/{semantic,semantic_check,checked}.c`:
+  owning fixture context, canonical types/packages/places/scopes, transactional
+  checker and immutable checked fragments; no LLVM linkage or syntax pointers.
 - `tests/unit/`, `tests/integration/`: C unit / LLVM checks and CLI/artifact tests.
 - `oracle/`, `tests/oracle/`: untouched M7.5 archive, identity, and isolated adapter.
 - `scripts/`: reproducible bootstrap, dependency lock, formatter/fmt-check helpers.
@@ -142,9 +150,13 @@ artifact is produced. Output I/O failure exits 1.
 - `docs/P2_MINIMAL_SYNTAX_CONTRACT.md`: pre-implementation grammar audit,
   lexical/contextual-word profile, coverage/error distinctions and limits.
 - `docs/P2_MINIMAL_SYNTAX_FRONTEND_REPORT.md`: ownership, tests and P3 handoff.
+- `docs/P3_SEMANTIC_SLICE_CONTRACT.md`: authority audit, scoped reborrow rule,
+  ownership/transaction contracts and conservative limits.
+- `docs/P3_FIRST_SEMANTIC_VERTICAL_SLICE_REPORT.md`: operation/loan matrices,
+  proved/unproved boundary, tests and P3 review handoff.
 - `docs/`: historical [P0 toolchain decisions](docs/P0_TOOLCHAIN_DECISIONS.md),
   [P0 architecture](docs/P0_ARCHITECTURE.md), and [P0 report](docs/P0_REPORT.md).
 
-There is still no full-program parser, semantic AST/type checker, checked IR, LLVM lowering,
+There is still no full-program parser or semantic checker, typed MIR, LLVM lowering,
 optimization framework, broad FFI, concurrency, separate compilation,
 self-hosting, public token/AST-dump mode, or speculative M8.3 implementation.
