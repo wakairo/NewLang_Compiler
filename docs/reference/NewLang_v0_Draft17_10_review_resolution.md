@@ -4,8 +4,8 @@ Track: M
 
 この文書は Compiler Issue #32 / M9.1 で行った、closed nominal sum の constructor / match exact source profile に対する targeted source-surface adjudication を記録する。
 
-normative authority はこの文書ではなく、review / merge後に `docs/reference/CURRENT_SPEC.md` が選択する canonical Draft である。
-本candidate branchでは `CURRENT_SPEC.md` を Draft 17.10 へ向ける。
+normative authority はこの文書ではなく、`docs/reference/CURRENT_SPEC.md` が選択する canonical Draft である。
+Draft 17.10 はPR #33でreview・merge済みで、current `main` の `CURRENT_SPEC.md` が選択している。
 
 ## Scope
 
@@ -257,5 +257,5 @@ Draft 17.10 / M9.1 は以下を行わない。
 
 ## Disposition
 
-M9.1 candidateはsource-only closureとしてreviewへ渡せる。
-P/F/Rおよび次M milestoneはCoordination review前には開始しない。
+M9.1はsource-only closureとしてreview・merge済みでCLOSEDである。
+このclosure自体はP/F/Rおよび次M milestoneを開始しない。

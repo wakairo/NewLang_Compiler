@@ -1,6 +1,6 @@
 # P6 — Closed-sum source slice report
 
-Status: P6 implementation review packet。Git historyを変更履歴の正とする。
+Status: P6 reviewed/merged / CLOSED。Git historyを変更履歴の正とする。
 
 ## Base / authority / Phase A
 
@@ -99,6 +99,6 @@ reportへのself-referential SHA埋め込みはせず、PR headのexact evidence
 - COMPILER-IMPLEMENTATION / COMPILER-DIAGNOSTIC: bounded grammar / ownership / deterministic diagnosticsを実装してtest。新たな仕様上のblockerなし。
 
 P6はbounded source→checked evidenceであり、runtime execution / machine layout / whole-program correctnessを主張しない。
-R3/F2/M9.2/LLVM/relocationは開始していない。PRはopenのままreviewを待ち、自身ではmergeしない。
+PR #36 exact head `8674590f2082f16ef2bda56584941363a6c26f06` はCoordination reviewをPASSし、mainへmerge済みである。R3/F2/M9.2/LLVM/relocationはこのclosure自体では開始しない。
 
-**P6 IMPLEMENTATION COMPLETE / P6 READY FOR REVIEW** は全validationとexact-head CI確認後のIssue/PR記録により確定する。
+**P6 CLOSED**。exact-head validation/review/merge evidenceはIssue #35とPR #36を正とする。

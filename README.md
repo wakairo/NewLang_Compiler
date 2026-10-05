@@ -2,10 +2,10 @@
 
 NewLang production compiler, written in C17 with LLVM as the primary backend.
 
-**P0 through P5 are complete and merged.** P6 adds the Draft 17.10 bounded
+**P0 through P6 are complete and merged.** P6 adds the Draft 17.10 bounded
 registered closed-sum source slice: qualified constructors, consuming/borrowed
 match, conditional payload occurrences and conservative branch joining.
-P6 remains at the review gate; broader frontend and lowering work are deferred.
+P6 is reviewed/merged and CLOSED; broader frontend and lowering work remain deferred.
 
 ## Authority
 
@@ -17,7 +17,7 @@ Backend Contract v0.4 defines backend obligations. The Charter, Handoff Manifest
 and project process documents are policy/evidence, not language semantics.
 [F0 / NewLang_FormalProof](https://github.com/wakairo/NewLang_FormalProof) and the
 frozen M7.5 Python oracle are evidence; Lean is not a build dependency.
-M7, P4/R1/F1.4/F1.5, P5 and R2 are reviewed/closed. Final pre-M9
+M7, P4/R1/F1.4/F1.5, P5, R2, M9.1 and P6 are reviewed/closed. Final pre-M9
 Semantic Sync is recorded in Issue #29; later tracks start only through separate Coordination handoffs.
 See the [P2 grammar audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md),
 [P3 semantic contract](docs/P3_SEMANTIC_SLICE_CONTRACT.md),
@@ -175,5 +175,4 @@ artifact is produced. Output I/O failure exits 1.
 
 There is still no full-program parser or semantic checker, typed MIR, LLVM lowering,
 optimization framework, broad FFI, concurrency, separate compilation,
-self-hosting, public token/AST-dump mode, or full M8.4 frontend. The P5 module slice supports canonical receiving/block/aggregate
-forms; sum/match and declarations remain deferred. The CLI compile path remains unsupported.
+self-hosting, public token/AST-dump mode, or a full-program frontend. The P6 module slice supports canonical receiving/block/aggregate forms plus registered closed-sum constructor/match; source declarations and broader frontend forms remain unsupported. The CLI compile path remains unsupported.
