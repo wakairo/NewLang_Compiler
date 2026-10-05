@@ -1,5 +1,7 @@
 # NewLang Project Development Process
 
+> English companion to the primary Japanese document: `NewLang_Project_Development_Process.md`
+>
 > Status: Initial operating policy (v0.1)
 >
 > This document describes the current cross-track development process for NewLang.
