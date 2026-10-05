@@ -8167,7 +8167,9 @@ Draft 17.4で特に残すProvisional / Deferred / implementation-later事項:
    - shared / aliased / device viewをsafe `BackingRegion`へpromotionしないruleもnormative
    - v0 target validationではminimal experimental platform / unchecked hookを使用してよい
    - general ergonomic import/adoption API、multi-view model、device/MMIO semanticsはfuture workとする
-7. sum declaration / constructor の最終surface spelling
+7. general sum declaration の最終surface spelling
+   - Draft 17.10でknown closed sumに対するqualified constructor + match exact source profileは固定した
+   - general sum declaration grammar自体は引き続きProvisional
 8. `consume_array` の最終surface spelling
    - whole-value / exact-once / no-partial-move semanticsは§25.2aでDraft 17.2 closure
 9. explicit trap / abort / halt primitive
