@@ -20,7 +20,10 @@ typedef enum {
     NL_SYNTAX_FIELD,
     NL_SYNTAX_MULTI_BINDING,
     NL_SYNTAX_AGGREGATE_BINDING,
-    NL_SYNTAX_AGGREGATE
+    NL_SYNTAX_AGGREGATE,
+    NL_SYNTAX_SUM_CONSTRUCTOR,
+    NL_SYNTAX_MATCH,
+    NL_SYNTAX_MATCH_ARM
 } NLSyntaxKind;
 
 /* Requested source spelling only: not checked access permission/authority. */
@@ -71,6 +74,21 @@ typedef struct {
             const NLSyntaxNode *fields, *initializer;
             size_t count;
         } aggregate;
+        struct {
+            NLSourceSpan qualifier, variant;
+            const NLSyntaxNode *arguments;
+            size_t argument_count;
+            bool parentheses;
+        } constructor;
+        struct {
+            const NLSyntaxNode *scrutinee, *arms;
+            size_t arm_count;
+        } match;
+        struct {
+            NLSourceSpan variant, binding;
+            bool payload, wildcard;
+            const NLSyntaxNode *body;
+        } arm;
         struct {
             NLAccessSyntax access;
             bool is_exclusive;

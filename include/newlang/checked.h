@@ -38,7 +38,10 @@ typedef enum {
     NL_CHECKED_RECEIVER,
     NL_CHECKED_AGGREGATE,
     NL_CHECKED_AGGREGATE_FIELD,
-    NL_CHECKED_AGGREGATE_BINDING
+    NL_CHECKED_AGGREGATE_BINDING,
+    NL_CHECKED_SUM_CONSTRUCTOR,
+    NL_CHECKED_MATCH,
+    NL_CHECKED_MATCH_ARM
 } NLCheckedKind;
 typedef enum {
     NL_VALUE_USE_NONE,
@@ -67,7 +70,9 @@ typedef struct {
 } NLCheckedLoanPlan;
 typedef struct {
     NLCheckedKind kind;
-    NLSourceSpan span, name;
+    NLSourceSpan span, name, qualifier;
+    size_t variant;
+    bool borrowed_match;
     NLTypeId type;
     NLSymbolId symbol;
     size_t function; /* resolved prelude/registered signature identity */
@@ -101,5 +106,14 @@ const NLCheckedNodeView *nl_checked_node_view(const NLCheckedFragment *,
                                               NLCheckedNodeId);
 const NLSource *nl_checked_source(const NLCheckedFragment *);
 const NLSemanticContext *nl_checked_context(const NLCheckedFragment *);
+
+/* Borrowed arm evidence in source order. Its semantic IDs belong exclusively
+ * to nl_checked_context(arm), an artifact-owned hypothetical branch snapshot.
+ * They never identify public-context values. The parent owns/destroys arms and
+ * their contexts; source lifetime must cover both. Nested matches are outside
+ * the bounded P6 slice. */
+const NLCheckedFragment *nl_checked_match_arm(const NLCheckedFragment *,
+                                              NLCheckedNodeId match,
+                                              size_t index);
 
 #endif

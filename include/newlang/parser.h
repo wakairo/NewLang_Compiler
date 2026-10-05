@@ -55,10 +55,11 @@ NLParseStatus nl_parser_parse_loan_fragment(NLParser *parser,
                                             NLSyntaxTree **out_tree,
                                             NLParseDiagnostic *out_diagnostic);
 
-/* Draft 17.9 closed source profile: binding / expression / lexical block.
- * P2 entry points above retain their original subset. No sum/match, aggregate
- * declarations, operators, callable declarations or opaque loan body parsing.
- * Same ownership, reset, resource and failure contracts as fragment APIs. */
+/* Draft 17.10 closed source profile: P5 bindings/blocks/aggregates plus
+ * qualified sum constructors and match with the three closed variant patterns.
+ * P2 entries retain their original subset. No sum/aggregate/callable
+ * declarations, general patterns, operators or opaque loan body parsing. Same
+ * ownership, reset, resource and failure contracts as fragment APIs. */
 NLParseStatus nl_parser_parse_source_fragment(NLParser *, NLSyntaxTree **,
                                               NLParseDiagnostic *);
 

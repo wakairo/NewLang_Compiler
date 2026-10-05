@@ -57,6 +57,8 @@ void nl_semantic_destroy(NLSemanticContext *context)
     }
     for (size_t i = 0; i < context->type_count; ++i) {
         free(context->types[i].name);
+        for (size_t v = 0; v < context->types[i].view.variant_count; ++v)
+            free(context->types[i].variant_names[v]);
         for (size_t f = 0; f < context->types[i].view.field_count; ++f) {
             free(context->types[i].field_names[f]);
         }
@@ -70,6 +72,7 @@ void nl_semantic_destroy(NLSemanticContext *context)
             free(context->functions[i].parameters);
         }
     }
+    free(context->occurrences);
     free(context->types);
     free(context->bindings);
     free(context->values);
@@ -102,7 +105,15 @@ NLCheckStatus nl_sem_clone(const NLSemanticContext *source,
             copy->types[i] = (NLTypeEntry){.view = source->types[i].view};
             memcpy(copy->types[i].field_types, source->types[i].field_types,
                    sizeof(copy->types[i].field_types));
+            memcpy(copy->types[i].variant_types, source->types[i].variant_types,
+                   sizeof(copy->types[i].variant_types));
             ++copy->type_count;
+            for (size_t v = 0; v < source->types[i].view.variant_count; ++v) {
+                status = copy_name(source->types[i].variant_names[v],
+                                   &copy->types[i].variant_names[v]);
+                if (status != NL_CHECK_OK)
+                    goto failure;
+            }
             for (size_t f = 0; f < source->types[i].view.field_count; ++f) {
                 status = copy_name(source->types[i].field_names[f],
                                    &copy->types[i].field_names[f]);
@@ -188,6 +199,12 @@ NLCheckStatus nl_sem_clone(const NLSemanticContext *source,
             }
         }
     }
+    status = copy_array(source->occurrences, source->occurrence_count,
+                        sizeof(*copy->occurrences), &storage);
+    if (status != NL_CHECK_OK)
+        goto failure;
+    copy->occurrences = storage;
+    copy->occurrence_count = source->occurrence_count;
     status = nl_raw_clone(source, copy);
     if (status != NL_CHECK_OK) {
         goto failure;
@@ -391,7 +408,8 @@ bool nl_semantic_snapshot(const NLSemanticContext *c, NLSemanticSnapshot *out)
                                 .last_incarnation = c->last_incarnation,
                                 .last_value_fact = c->last_value_fact,
                                 .backing_regions = c->region_count,
-                                .raw_intervals = c->raw_interval_count};
+                                .raw_intervals = c->raw_interval_count,
+                                .occurrences = c->occurrence_count};
     return true;
 }
 NLSymbolId nl_semantic_find_binding(const NLSemanticContext *c,
@@ -458,6 +476,7 @@ NLCheckStatus nl_sem_new_value(NLSemanticContext *c, NLSemanticValueView value,
     value.carrier = NL_CARRIER_LOOSE;
     value.owner_place = 0;
     value.aggregate_owner = 0;
+    value.sum_owner = 0;
     c->values[c->value_count++] = value;
     *out = c->value_count;
     return NL_CHECK_OK;
@@ -491,7 +510,7 @@ NLCheckStatus nl_sem_install(NLSemanticContext *c, NLPlaceId place,
     p->governing_domain = domain;
     c->values[value - 1].carrier = NL_CARRIER_PLACE;
     c->values[value - 1].owner_place = place;
-    return NL_CHECK_OK;
+    return nl_sum_attach(c, place);
 }
 
 NLCheckStatus nl_sem_new_place(NLSemanticContext *c, NLTypeId type,
@@ -575,6 +594,15 @@ NLCheckStatus nl_sem_copy_value(NLSemanticContext *c, NLValueId source,
         c->values[member - 1].aggregate_owner = id;
         c->values[id - 1].fields[f] = member;
     }
+    if (original.sum_payload != 0) {
+        NLValueId payload;
+        status = nl_sem_copy_value(c, original.sum_payload, &payload);
+        if (status != NL_CHECK_OK)
+            return status;
+        c->values[payload - 1].carrier = NL_CARRIER_SUM;
+        c->values[payload - 1].sum_owner = id;
+        c->values[id - 1].sum_payload = payload;
+    }
     *out = id;
     return NL_CHECK_OK;
 }
@@ -582,6 +610,8 @@ NLCheckStatus nl_sem_copy_value(NLSemanticContext *c, NLValueId source,
 void nl_sem_end_value(NLSemanticContext *c, NLValueId value)
 {
     const NLSemanticValueView original = c->values[value - 1];
+    if (original.sum_payload != 0)
+        nl_sem_end_value(c, original.sum_payload);
     for (size_t f = 0; f < original.field_count; ++f) {
         c->values[original.fields[f] - 1].carrier = NL_CARRIER_ENDED;
         c->values[original.fields[f] - 1].aggregate_owner = 0;
@@ -589,6 +619,7 @@ void nl_sem_end_value(NLSemanticContext *c, NLValueId value)
     c->values[value - 1].carrier = NL_CARRIER_ENDED;
     c->values[value - 1].owner_place = 0;
     c->values[value - 1].aggregate_owner = 0;
+    c->values[value - 1].sum_owner = 0;
 }
 
 NLCheckStatus nl_sem_new_domain(NLSemanticContext *c, NLDomainId *out_domain,
@@ -638,6 +669,8 @@ static NLCheckStatus finish_candidate(NLSemanticContext *c,
                                       NLSemanticContext *candidate,
                                       NLCheckStatus status)
 {
+    if (status == NL_CHECK_OK)
+        status = nl_sum_validate(candidate);
     if (status == NL_CHECK_OK) {
         nl_sem_commit(c, candidate);
     } else {
@@ -834,6 +867,7 @@ NLCheckStatus nl_semantic_seed_reference(NLSemanticContext *c, const char *name,
     if (c == NULL || name == NULL || name[0] == 0 || out == NULL || type == 0 ||
         type > c->type_count || facts.place > c->place_count ||
         facts.scope > c->scope_count ||
+        facts.occurrence_dependency > c->occurrence_count ||
         (facts.provenance != NL_PROVENANCE_UNKNOWN &&
          facts.provenance != NL_PROVENANCE_VALID &&
          facts.provenance != NL_PROVENANCE_INVALID)) {
@@ -841,7 +875,8 @@ NLCheckStatus nl_semantic_seed_reference(NLSemanticContext *c, const char *name,
     }
     const NLSemanticTypeKind kind = c->types[type - 1].view.kind;
     if ((kind != NL_TYPE_PTR && kind != NL_TYPE_REF) ||
-        (kind == NL_TYPE_PTR && facts.scope != 0)) {
+        (kind == NL_TYPE_PTR &&
+         (facts.scope != 0 || facts.occurrence_dependency != 0))) {
         return NL_CHECK_INTERNAL_ERROR;
     }
     NLSemanticContext *candidate = NULL;
@@ -1026,7 +1061,7 @@ NLTypeId nl_semantic_core_type(const NLSemanticContext *c,
                                NLSemanticTypeKind kind)
 {
     if (c != NULL && kind != NL_TYPE_NOMINAL && kind != NL_TYPE_PTR &&
-        kind != NL_TYPE_REF && kind != NL_TYPE_SLOT) {
+        kind != NL_TYPE_REF && kind != NL_TYPE_SLOT && kind != NL_TYPE_SUM) {
         for (size_t i = 0; i < c->type_count; ++i) {
             if (c->types[i].view.kind == kind) {
                 return i + 1;
@@ -1098,4 +1133,63 @@ NLCheckStatus nl_semantic_seed_scalar(NLSemanticContext *c, const char *name,
         *out = symbol;
     }
     return status;
+}
+
+NLCheckStatus nl_semantic_register_sum(NLSemanticContext *c, const char *name,
+                                       const NLSumVariant *variants,
+                                       size_t count, NLTypeId *out)
+{
+    if (c == NULL || name == NULL || name[0] == 0 || variants == NULL ||
+        out == NULL)
+        return NL_CHECK_INTERNAL_ERROR;
+    if (count == 0)
+        return NL_CHECK_SEMANTIC_ERROR;
+    if (count > NL_SEMANTIC_MAX_VARIANTS)
+        return NL_CHECK_RESOURCE_LIMIT;
+    bool copy = true, discard = true;
+    for (size_t i = 0; i < count; ++i) {
+        if (variants[i].name == NULL || variants[i].name[0] == 0 ||
+            variants[i].payload > c->type_count)
+            return NL_CHECK_INTERNAL_ERROR;
+        for (size_t j = 0; j < i; ++j)
+            if (strcmp(variants[i].name, variants[j].name) == 0)
+                return NL_CHECK_SEMANTIC_ERROR;
+        if (variants[i].payload != 0) {
+            const NLSemanticTypeView t = c->types[variants[i].payload - 1].view;
+            if (t.kind == NL_TYPE_SUM || t.field_count != 0 ||
+                t.kind == NL_TYPE_REF || t.kind == NL_TYPE_PTR)
+                return NL_CHECK_SEMANTIC_UNSUPPORTED;
+            copy = copy && t.is_copy;
+            discard = discard && t.is_discardable;
+        }
+    }
+    NLSemanticContext *candidate = NULL;
+    NLTypeId id = 0;
+    NLCheckStatus status = nl_sem_clone(c, &candidate);
+    if (status == NL_CHECK_OK)
+        status = nominal(candidate, name, copy, discard, &id);
+    if (status == NL_CHECK_OK) {
+        NLTypeEntry *e = &candidate->types[id - 1];
+        e->view.kind = NL_TYPE_SUM;
+        e->view.variant_count = count;
+        for (size_t i = 0; i < count; ++i) {
+            e->variant_types[i] = variants[i].payload;
+            status = copy_name(variants[i].name, &e->variant_names[i]);
+            if (status != NL_CHECK_OK)
+                break;
+        }
+    }
+    status = finish_candidate(c, candidate, status);
+    if (status == NL_CHECK_OK)
+        *out = id;
+    return status;
+}
+
+bool nl_semantic_occurrence_view(const NLSemanticContext *c, NLOccurrenceId id,
+                                 NLSemanticOccurrenceView *out)
+{
+    if (c == NULL || out == NULL || id == 0 || id > c->occurrence_count)
+        return false;
+    *out = c->occurrences[id - 1];
+    return true;
 }
