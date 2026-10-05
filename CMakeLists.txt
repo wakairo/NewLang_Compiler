@@ -58,6 +58,10 @@ target_include_directories(newlang_source PUBLIC include)
 target_link_libraries(newlang_source PUBLIC newlang_options)
 add_library(newlang_lexer STATIC src/lexer.c)
 target_link_libraries(newlang_lexer PUBLIC newlang_source)
+add_library(newlang_syntax STATIC src/syntax.c)
+target_link_libraries(newlang_syntax PUBLIC newlang_source)
+add_library(newlang_parser STATIC src/parser.c)
+target_link_libraries(newlang_parser PUBLIC newlang_syntax newlang_lexer newlang_diagnostic)
 add_executable(newlangc src/main.c)
 target_link_libraries(newlangc PRIVATE newlang_diagnostic)
 
@@ -84,6 +88,18 @@ if(BUILD_TESTING)
     add_test(NAME source_lexer.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/lexical_frontend_test.py"
         "$<TARGET_FILE:lexical_frontend_test>")
+
+    add_executable(parser_test tests/unit/parser_test.c)
+    target_link_libraries(parser_test PRIVATE newlang_parser)
+    target_link_options(parser_test PRIVATE -Wl,--wrap=malloc)
+    foreach(group type expression loan ownership limits diagnostics)
+        add_test(NAME parser_${group}.unit COMMAND parser_test ${group})
+    endforeach()
+    add_executable(syntax_frontend_test tests/integration/syntax_frontend_test.c)
+    target_link_libraries(syntax_frontend_test PRIVATE newlang_parser)
+    add_test(NAME source_parser.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/syntax_frontend_test.py"
+        "$<TARGET_FILE:syntax_frontend_test>")
 
     add_executable(llvm_smoke tests/integration/llvm_smoke.c)
     target_link_libraries(llvm_smoke PRIVATE newlang_options newlang_llvm)
