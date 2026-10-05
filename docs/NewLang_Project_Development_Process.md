@@ -1,9 +1,10 @@
 # NewLang プロジェクト開発運用方針
 
-> Status: 初版運用方針 (v0.1)
+> Status: 初版運用方針
 >
 > この文書は、NewLangにおける複数track横断の現在の開発運用を定める。
 > 意図的に軽量な初版であり、projectの経験に応じて今後改訂してよい。
+> 変更履歴はGitのcommit historyを正とし、この文書内に別のchange log / Version historyを持たない。
 >
 > English companion: `NewLang_Project_Development_Process_en.md`
 
@@ -228,9 +229,3 @@ closure後に新しい問題が出た場合は、より深い矛盾が示され�
 3. substantiveなM9作業の前にSemantic Sync Reviewを行う。
 4. そのsync point付近、または同等のhigh-value boundaryでindependent Red Team passを行う。
 5. 実際の運用経験からより良いmodelが得られたら、この文書自体を改訂する。
-
----
-
-## Version history
-
-- **v0.1** — M8 closure後の初版。canonical-authority discipline、cross-track feedback、targeted reopen、Semantic Sync Review、軽量なindependent Red Team modelを導入。
