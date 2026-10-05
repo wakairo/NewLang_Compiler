@@ -436,8 +436,8 @@ static bool access_tests(void)
      */
     CHECK(nl_semantic_set_layout(c, f.copy, 4, 4) == NL_CHECK_OK);
     NLSymbolId ro_a, ro_s, ro_empty, ro_incoming, ro_stable;
-    CHECK(raw_allocate(c, 4, 4, true, false, "ro_a", "ro_s", &ro_a,
-                       &ro_s, NULL));
+    CHECK(
+        raw_allocate(c, 4, 4, true, false, "ro_a", "ro_s", &ro_a, &ro_s, NULL));
     NLCheckedNodeView ro_slot;
     CHECK(raw_run(c,
                   (NLRawOperation){.kind = NL_RAW_INTO_SLOT,
@@ -454,8 +454,8 @@ static bool access_tests(void)
                         "P4-INITIALIZE-BACKING-WRITE"));
 
     NLSymbolId wo_a, wo_s, wo_empty, wo_incoming, wo_stable;
-    CHECK(raw_allocate(c, 4, 4, false, true, "wo_a", "wo_s", &wo_a,
-                       &wo_s, NULL));
+    CHECK(
+        raw_allocate(c, 4, 4, false, true, "wo_a", "wo_s", &wo_a, &wo_s, NULL));
     NLCheckedNodeView wo_slot;
     CHECK(raw_run(c,
                   (NLRawOperation){.kind = NL_RAW_INTO_SLOT,
