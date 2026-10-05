@@ -430,6 +430,52 @@ static bool access_tests(void)
                        (NLRawOperation){.kind = NL_RAW_STORAGE_LEN,
                                         .operands = {raw_binding(s)}},
                        NL_CHECK_SEMANTIC_ERROR, "P3-TYPE-MISMATCH"));
+
+    /* Draft 17.7: typed initialize needs destination write access, and the
+     * persistent ptr inherits backing read/write access rather than gaining it.
+     */
+    CHECK(nl_semantic_set_layout(c, f.copy, 4, 4) == NL_CHECK_OK);
+    NLSymbolId ro_a, ro_s, ro_empty, ro_incoming, ro_stable;
+    CHECK(raw_allocate(c, 4, 4, true, false, "ro_a", "ro_s", &ro_a, &ro_s,
+                       NULL));
+    NLCheckedNodeView ro_slot;
+    CHECK(raw_run(c,
+                  (NLRawOperation){.kind = NL_RAW_INTO_SLOT,
+                                   .operands = {raw_binding(ro_s)},
+                                   .data.slot_target = f.copy},
+                  &ro_slot));
+    CHECK(raw_bind(c, "ro_empty", ro_slot.results[0].value, &ro_empty));
+    CHECK(nl_semantic_seed_value(c, "ro_incoming", f.copy, NL_DEPENDENCY_FREE,
+                                 &ro_incoming) == NL_CHECK_OK);
+    CHECK(test_domain_ref(&f, "ro_stable", NL_ACCESS_READ, false, &ro_stable,
+                          NULL));
+    CHECK(test_rejected(c, "initialize(ro_empty,ro_incoming,ro_stable)",
+                        TEST_EXPRESSION, NL_CHECK_SEMANTIC_ERROR,
+                        "P4-INITIALIZE-BACKING-WRITE"));
+
+    NLSymbolId wo_a, wo_s, wo_empty, wo_incoming, wo_stable;
+    CHECK(raw_allocate(c, 4, 4, false, true, "wo_a", "wo_s", &wo_a, &wo_s,
+                       NULL));
+    NLCheckedNodeView wo_slot;
+    CHECK(raw_run(c,
+                  (NLRawOperation){.kind = NL_RAW_INTO_SLOT,
+                                   .operands = {raw_binding(wo_s)},
+                                   .data.slot_target = f.copy},
+                  &wo_slot));
+    CHECK(raw_bind(c, "wo_empty", wo_slot.results[0].value, &wo_empty));
+    CHECK(nl_semantic_seed_value(c, "wo_incoming", f.copy, NL_DEPENDENCY_FREE,
+                                 &wo_incoming) == NL_CHECK_OK);
+    CHECK(test_domain_ref(&f, "wo_stable", NL_ACCESS_READ, false, &wo_stable,
+                          NULL));
+    TestChecked initialized = {0};
+    CHECK(test_run(c, "initialize(wo_empty,wo_incoming,wo_stable)",
+                   TEST_EXPRESSION, NL_CHECK_OK, NULL, &initialized));
+    const NLValueId ptr = test_root(&initialized)->results[0].value;
+    NLSemanticValueView ptr_view;
+    CHECK(nl_semantic_value_view(c, ptr, &ptr_view) &&
+          !ptr_view.reference.readable && ptr_view.reference.writable);
+    test_checked_destroy(&initialized);
+
     nl_semantic_destroy(c);
     return true;
 }
