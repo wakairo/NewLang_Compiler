@@ -1,95 +1,99 @@
-# NewLang Project Development Process
+# NewLang プロジェクト開発運用方針
 
-> Status: Initial operating policy (v0.1)
+> Status: 初版運用方針 (v0.1)
 >
-> This document describes the current cross-track development process for NewLang.
-> It is intentionally lightweight and may be revised as the project learns.
+> この文書は、NewLangにおける複数track横断の現在の開発運用を定める。
+> 意図的に軽量な初版であり、projectの経験に応じて今後改訂してよい。
+>
+> English companion: `NewLang_Project_Development_Process_en.md`
 
-## 1. Purpose
+## 1. 目的
 
-NewLang is developed through several partially independent tracks:
+NewLangは、部分的に独立した複数trackで開発する。
 
-- **M — Specification / design**
-- **F — Formal proof / semantic formalization**
-- **P — Production compiler implementation**
-- **R — Independent red-team review**
-- **Coordination — cross-track adjudication and sequencing**
+- **M — 仕様策定 / 設計**
+- **F — 形式証明 / 意味論の形式化**
+- **P — production compiler実装**
+- **R — 独立Red Team review**
+- **Coordination — track間の裁定・同期・順序決定**
 
-The goal is not to make the tracks agree by construction.
-The goal is to let different forms of evidence challenge the same language design and feed concrete findings back into the canonical specification.
+目的は、各trackを最初から同じ結論へ揃えることではない。
+異なる種類の証拠で同じlanguage designを攻撃し、具体的なfindingをcanonical specificationへ戻すことを目的とする。
 
-## 2. Canonical authority
+## 2. 正本（canonical authority）
 
-The normative semantic specification is the Draft named by:
+normativeな意味論仕様は、次が指すDraftとする。
 
 ```text
 NewLang_Compiler/main
 docs/reference/CURRENT_SPEC.md
 ```
 
-Design reports, proof reports, compiler reports, experiments, deep research, and conversation history are evidence.
-They do not override the canonical Draft by themselves.
+設計report、proof report、compiler report、experiment、Deep Research、conversation historyは証拠であり、単独ではcanonical Draftを上書きしない。
 
-If an important decision exists only in a report or conversation, it should be promoted through a reviewed Draft revision before being treated as normative.
+重要なdecisionがreportや会話にしか存在しない場合は、review済みDraft revisionを経てmainへmergeされた時点でnormativeとする。
 
-## 3. Track responsibilities
+UTF-8で問題なく管理できる文書は日本語を基本とし、必要に応じて英語版を併記する。
+一方、shell操作やtoolchain上で前面に現れるcommit message等は、互換性・可搬性を優先して英語ASCIIを基本とする。
 
-### M — Specification / design
+## 3. 各trackの責務
 
-M explores and adjudicates language semantics and source surface.
-It should prefer small, orthogonal mechanisms and targeted reopen over broad redesign.
+### M — 仕様策定 / 設計
 
-M should not advance indefinitely ahead of implementation and formalization.
-As a practical default, M should normally stay within roughly one major semantic milestone of P/F unless coordination records a reason to run further ahead.
+Mはlanguage semanticsとsource surfaceを検討・裁定する。
+大規模な再設計より、小さく直交的なmechanismとtargeted reopenを優先する。
 
-### F — Formal proof
+Mだけが実装・形式化より無制限に先行しない。
+coordinationが明示的な理由を記録しない限り、実務上の目安としてP/Fより概ね1 major semantic milestoneを超えて先行しない。
 
-F formalizes selected semantic claims and searches for contradictions, missing invariants, and hidden assumptions.
+### F — 形式証明
 
-Formalization is evidence about the specification, not an authority above it.
-Do not preserve a language rule merely because it makes an existing proof convenient.
+Fは選択されたsemantic claimを形式化し、矛盾、欠けたinvariant、hidden assumptionを探す。
 
-### P — Production compiler
+形式化は仕様に対する証拠であって、仕様より上位のauthorityではない。
+既存proofを保ちやすいという理由だけでlanguage ruleを維持しない。
 
-P tests whether the canonical semantics can be represented, diagnosed, checked, and eventually lowered in a realistic compiler.
+### P — production compiler
 
-Implementation difficulty is valuable feedback, but backend convenience alone should not redefine source semantics.
+Pはcanonical semanticsを現実的なcompilerで表現・診断・検査し、最終的にloweringできるかを検証する。
+
+implementation difficultyは重要なfeedbackだが、backend convenienceだけを理由にsource semanticsを変更しない。
 
 ### Coordination
 
-Coordination owns:
+Coordinationは少なくとも以下を担う。
 
-- authority/version synchronization;
-- milestone sequencing;
-- classification and severity of findings;
-- deciding KEEP / CLOSE / TARGETED REOPEN;
-- deciding when a Draft revision is required;
-- deciding when M should pause for P/F catch-up.
+- authority / version synchronization
+- milestone sequencing
+- findingのclassificationとseverity整理
+- KEEP / CLOSE / TARGETED REOPENの裁定
+- Draft revisionの要否判定
+- Mを止めてP/Fのcatch-upを待つかの判断
 
-## 4. Standard feedback loop
+## 4. 標準feedback loop
 
-Specification changes should normally follow:
+仕様変更は原則として次の流れを取る。
 
 ```text
 Finding
   -> classification
   -> severity
   -> minimal reopen target
-  -> design/adjudication
+  -> design / adjudication
   -> candidate Draft
   -> review / CI
   -> merge to main
   -> targeted downstream revalidation
 ```
 
-A report is not a substitute for this process.
+reportはこのprocessの代替にはならない。
 
-Prefer **targeted reopen** when a concrete problem can be isolated.
-Do not reopen a whole milestone merely because one workload exposes one local surface gap.
+具体的な問題を局所化できる場合は **targeted reopen** を優先する。
+一つのworkloadで一つのlocal surface gapが見つかっただけで、milestone全体を再openしない。
 
-## 5. Finding classification
+## 5. Finding分類
 
-Use categories such as:
+必要に応じて次のような分類を用いる。
 
 ```text
 CORE-SEMANTIC-GAP
@@ -105,126 +109,128 @@ FORMAL-HOLE
 FORMAL-AMBIGUITY
 ```
 
-Severity should be separated from classification.
-A compiler-precision problem is not automatically a language-design problem.
+classificationとseverityは分けて扱う。
+例えばcompiler precisionの不足は、自動的にlanguage-design問題を意味しない。
 
-## 6. Synchronization points
+## 6. Semantic Sync Review
 
-At meaningful boundaries, pause new semantic invention and run a **Semantic Sync Review**.
+重要な区切りでは、新しいsemantic inventionを一時停止し、**Semantic Sync Review**を行う。
 
-A sync review should record at least:
+最低限、次を確認する。
 
-- canonical Draft and main SHA;
-- M milestone state;
-- P implementation coverage;
-- F proof coverage;
-- unresolved contradictions or precision gaps;
-- Deferred features relevant to the next milestone;
-- whether M is too far ahead of P/F;
-- recommended next cross-track sequence.
+- canonical Draftとmain SHA
+- M milestoneの状態
+- Pの実装coverage
+- Fのproof coverage
+- 未解決のcontradiction / precision gap
+- 次milestoneに関係するDeferred項目
+- MがP/Fより先行しすぎていないか
+- 次のcross-track sequence
 
-Typical sync points include closure of a major M milestone or before starting another major semantic family.
+典型的な実施時点は、major M milestoneのclosure後、または新しいmajor semantic familyを開始する前とする。
 
-## 7. Independent Red Team
+## 7. 独立Red Team
 
-The Red Team exists to reduce common-mode failure across M/F/P, especially when the same people or AI systems participate in multiple tracks.
+Red Teamは、同じ人間・AI・設計上の前提がM/F/Pへ横断的に入り込むことで起こるcommon-mode failureを減らすために置く。
 
-### 7.1 Independence principle
+### 7.1 独立性の基本
 
-The Red Team should begin from a deliberately narrow input set:
+Red Teamの初期入力は意図的に狭くする。
 
 ```text
 canonical Draft
 +
 selected representative workloads / attack questions
 +
-minimal necessary repository context
+必要最小限のrepository context
 ```
 
-It should **not normally begin by reading M/F/P conclusions, rationale, closure reports, or prior debates**.
-The point is to avoid inheriting the same framing before forming an independent attack.
+初回attackの前には、原則としてM/F/Pの結論、設計意図、closure report、過去の議論を先に読ませない。
+既存trackのframingをそのまま継承する前に、独自に仕様を読んで壊すためである。
 
-### 7.2 Communication during the attack phase
+### 7.2 Attack phase中のcommunication
 
-During the initial attack phase:
+初回attack中は次を原則とする。
 
-- Red Team should not participate in continuous design discussion with M/F/P.
-- It may ask factual clarification questions when the Draft is genuinely ambiguous.
-- Such questions should normally go through Coordination rather than becoming an iterative design conversation with the originating track.
-- Coordination should answer with canonical references where possible, not with persuasive design rationale.
+- Red TeamはM/F/Pとの継続的なdesign discussionへ参加しない。
+- Draft自体が本当に曖昧な場合は、事実確認の質問をしてよい。
+- 質問は原則としてoriginating trackへ直接投げ続けず、Coordinationを経由する。
+- Coordinationは可能な限りcanonical textへの参照で答え、設計を説得するための長いrationaleは先に与えない。
 
-This is not strict information isolation.
-It is a way to delay exposure to the project's preferred explanation until after the reviewer has formed its own model.
+これは完全な情報隔離を目的としない。
+Red Teamが自分自身のmodelとfirst-pass findingを作るまで、project側のpreferred explanationへの露出を遅らせるための運用である。
 
-### 7.3 After initial findings
+### 7.3 First-pass finding後
 
-After the Red Team records its first-pass findings:
+Red Teamがfirst-pass findingsを記録した後は、必要に応じて次を許可する。
 
-- it may inspect M/F/P reports and experiments;
-- it may test whether an apparent problem is already covered by evidence;
-- M/F/P may rebut findings with concrete specification text, proof, or implementation evidence;
-- Coordination adjudicates the result.
+- M/F/P reportやexperiment evidenceを読む
+- apparent problemが既存evidenceで既に反証されているか確認する
+- M/F/Pがspec text、proof、implementation evidenceで反論する
+- Coordinationが最終的に裁定する
 
-Red Team findings are evidence, not normative decisions.
+Red Team findingも証拠であり、それ自体がnormative decisionではない。
 
-### 7.4 When to run Red Team review
+### 7.4 Red Teamを使う時点
 
-Do not run a full Red Team pass on every minor edit.
-Use it at higher-value boundaries, for example:
+minor editごとにfull Red Team reviewを行う必要はない。
+例えば次のようなhigh-value boundaryで使う。
 
-- before a major semantic milestone begins;
-- after a large closure such as M8;
-- before promoting a substantially broader Draft;
-- when M/F/P all agree unusually easily on a risky mechanism;
-- when a mechanism has high blast radius across lifetime, authority, provenance, or raw memory.
+- major semantic milestoneを始める前
+- M8のような大きなclosure後
+- substantially broader Draftへ進む前
+- risky mechanismについてM/F/Pが不自然なほど容易に同意した場合
+- lifetime / authority / provenance / raw memory等へ広いblast radiusを持つmechanism
 
-### 7.5 Red Team prompt style
+### 7.5 Red Team promptの基本
 
-Prefer prompts such as:
+例えば次のように依頼する。
 
-> Read the canonical Draft as an independent systems-language reviewer. Do not assume prior project decisions are correct. Find concrete workloads or invariants that break the current design. Distinguish specification gaps from compiler/library/runtime limitations. Do not redesign the language unless a concrete failure requires it.
+> canonical Draftを独立したsystems-language reviewerとして読んでください。過去のproject decisionが正しいとは仮定しないでください。現在設計を壊す具体的workloadまたはinvariantを探してください。仕様gapとcompiler/library/runtime上の制約を分離してください。具体的failureが必要としない限り、先にlanguage redesignを始めないでください。
 
-Do not ask the Red Team to confirm that the current design is good.
+「現在案が良いことを確認してください」という依頼は避ける。
 
-## 8. Avoiding correlated validation
+## 8. 相関したvalidationを避ける
 
-Different tracks should use different questions:
+各trackは異なる問いを持つ。
 
 ```text
-M: Is this the smallest practical rule?
-F: Is the rule internally coherent and provable where expected?
-P: Can a production compiler represent and diagnose it faithfully?
-R: What breaks if we ignore the project's preferred interpretation?
+M: これは最小で実用的なruleか？
+F: ruleは内部整合し、期待される性質を形式化できるか？
+P: production compilerで忠実に表現・診断・検査できるか？
+R: projectのpreferred interpretationを知らずに読むと、何が壊れるか？
 ```
 
-Passing all tracks increases confidence, but does not prove the design is complete.
+全trackを通過することはconfidenceを高めるが、設計の完全性を証明するものではない。
 
 ## 9. Closure discipline
 
-A milestone may close when its stated representative workloads and invariants pass and remaining issues are correctly classified outside the reopen threshold.
+milestoneは、指定したrepresentative workload / invariantを通過し、残件がreopen threshold外へ正しく分類された時点でcloseしてよい。
 
-Closure means:
+Closureの意味は:
 
-> the mechanism is adequate for the current v0 target and evidence set.
+> 現在のv0 targetとevidence setに対して、そのmechanismが十分である。
 
-It does not mean:
+であり、
 
-> the API or syntax can never change again.
+> APIやsyntaxが今後一切変わらない。
 
-After closure, new issues should reopen only the smallest affected scope unless a deeper contradiction is demonstrated.
+ことではない。
 
-## 10. Current operating preference
+closure後に新しい問題が出た場合は、より深い矛盾が示されない限り最小のaffected scopeだけをreopenする。
 
-For the current phase:
+## 10. 現在の運用方針
 
-1. review and merge pending P/F milestones before starting another large M semantic milestone;
-2. let P and F catch up enough to pressure-test the recently closed specification;
-3. perform a Semantic Sync Review before substantial M9 work;
-4. use an independent Red Team pass around that sync point or another similarly high-value boundary;
-5. revise this process document when actual project experience shows a better operating model.
+現在のphaseでは次を優先する。
+
+1. 新しい大きなM milestoneを始める前に、pending P/F milestoneをreview・mergeする。
+2. 直近で閉じたspecificationをP/Fが十分pressure-testできる程度にcatch upさせる。
+3. substantiveなM9作業の前にSemantic Sync Reviewを行う。
+4. そのsync point付近、または同等のhigh-value boundaryでindependent Red Team passを行う。
+5. 実際の運用経験からより良いmodelが得られたら、この文書自体を改訂する。
 
 ---
 
-Version history:
+## Version history
 
-- **v0.1** — Initial operating policy after M8 closure. Introduces canonical-authority discipline, cross-track feedback, targeted reopen, semantic sync reviews, and an intentionally lightweight independent Red Team model.
+- **v0.1** — M8 closure後の初版。canonical-authority discipline、cross-track feedback、targeted reopen、Semantic Sync Review、軽量なindependent Red Team modelを導入。
