@@ -4008,7 +4008,7 @@ v0 coreはconceptualな:
 
 ```text
 metadata says vacant -> mint slot<T>
-metadata says empty  -> mint whole Storage
+metadata says fully raw/vacant -> mint whole Storage
 ```
 
 という一般authority reconstructionを定義しない。
@@ -4764,7 +4764,7 @@ sourceがordinary lifetime rootなら:
 - destinationには別object incarnationが開始
 - destination placement backing relationはdestination local/storageからfreshに決まる
 - destination governing-domain relationはdestination lifetime-start側のexplicit/implicit domainからfreshに決まる
-- source empty storage claimはcompiler-managed localなら内部処理してよい
+- source側に残るvacant/raw Storage responsibilityはcompiler-managed localなら内部処理してよい
 
 value内部がcarryする`Storage` / `Allocation` / ptr provenance / backing dependency等は
 semantic value packageの一部として通常どおりtransferする。
