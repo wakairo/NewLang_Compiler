@@ -119,7 +119,6 @@ Draftを実装都合で変更せず、P4/R1/F1.4/Sync #22のsemantic closureをr
 
 ## Review gate
 
-branch: `p5-source-frontend-slice`。dedicated PRをmainに対して作成し、
-current-head CIを確認してIssue #23へP5 READY FOR REVIEWを記録する。
+P5はPR #26でreviewされmainへmerge済みで、Issue #23をCLOSEDへ進める。
 Git history / PR current-head checksをcommit/runの正とし、文書内に別のchange historyを持たない。
-PRはmergeしない。F1.5/M9/LLVM/relocation/新規Red Teamへ進まない。
+このclosure自体はF1.5/M9/LLVM/relocation/新規Red Teamを開始しない。
