@@ -434,6 +434,7 @@ static bool access_tests(void)
      */
     CHECK(nl_semantic_set_layout(c, f.copy, 4, 4) == NL_CHECK_OK);
     NLSymbolId ro_a, ro_s, ro_empty, ro_incoming, ro_stable;
+    NLScopeId ro_stable_scope;
     CHECK(
         raw_allocate(c, 4, 4, true, false, "ro_a", "ro_s", &ro_a, &ro_s, NULL));
     NLCheckedNodeView ro_slot;
@@ -446,10 +447,11 @@ static bool access_tests(void)
     CHECK(nl_semantic_seed_value(c, "ro_incoming", f.copy, NL_DEPENDENCY_FREE,
                                  &ro_incoming) == NL_CHECK_OK);
     CHECK(test_domain_ref(&f, "ro_stable", NL_ACCESS_READ, false, &ro_stable,
-                          NULL));
+                          &ro_stable_scope));
     CHECK(test_rejected(c, "initialize(ro_empty,ro_incoming,ro_stable)",
                         TEST_EXPRESSION, NL_CHECK_SEMANTIC_ERROR,
                         "P4-INITIALIZE-BACKING-WRITE"));
+    CHECK(nl_semantic_end_scope(c, ro_stable_scope) == NL_CHECK_OK);
 
     NLSymbolId wo_a, wo_s, wo_empty, wo_incoming, wo_stable, wo_p, wo_ending;
     NLScopeId wo_stable_scope, wo_ending_scope;
