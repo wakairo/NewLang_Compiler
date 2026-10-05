@@ -7,30 +7,26 @@ This is a bounded fragment checker, not a full NewLang semantic frontend.
 ## Repository and authority
 
 - Repository: https://github.com/wakairo/NewLang_Compiler
-- Branch: `p3-first-semantic-vertical-slice`, based on merged P2/main
-  `cd229877d550e913260ad5a79627b65c1eb405d0` (P2 PR #4).
+- Branch: `p3-first-semantic-vertical-slice`; implementation originally branched
+  from merged P2, then synchronized with canonical compiler `main`
+  `365b9001a0eba0eddc795145d7d7d903131b5e8f` before final review.
 - P3 PR: [#5](https://github.com/wakairo/NewLang_Compiler/pull/5), OPEN.
-  No PR has been merged by this task. Current head and final run evidence live
+  No P3 merge has been performed by this task. Current head and final run evidence live
   in the PR validation section / [current checks](https://github.com/wakairo/NewLang_Compiler/pull/5/checks).
 - User P3 handoff SHA-256:
   `c55d2d35769144735098bc0d1e4210682fe84017a547494d8a761649323236a9`.
-- Historical Draft 17.4 / Backend Contract v0.4 snapshots and input identity
-  manifest are unchanged. Normative baseline is now the upstream-reviewed
-  Draft 17.5 clarification, incorporated from main PR #6 at
-  `10f4ffe5a02c846e4079b56e9254fc4b4e38f0de`. Its diff was inspected: no semantic
-  delta; explicit §12.1 / §14.2–3 / §18.2 call-boundary wording only.
-  Draft 17.5 SHA-256:
-  `055b5383b5c5a749ba3c3e5709afb90565fa4e778c9939bac9533b74c94666e9`;
-  review resolution SHA-256:
-  `f77289b78c0f2bba24e6006071d49241c586a25eaf7807b2c8498118f2c6744c`. Relevant rules: Draft §§4, 11.4, 12, 13.4/13.7/13.8, 14.1–3,
-  17.4, 18.2; selected M8.1/M8.2 forms are supplied by the user handoff.
-- Authority: normative language > normative backend > adjudicated surfaces >
+- Canonical language authority is selected by `docs/reference/CURRENT_SPEC.md`,
+  which at synchronization time points to `NewLang_v0_spec_Draft17_6.md`.
+  Draft 17.6 preserves the Draft 17.5 exclusive-reborrow clarification used by P3.
+  Its M8.3R raw-byte additions (`byte`, raw scalar byte access and `RawDefined`)
+  are outside this bounded M8.1/M8.2 P3 slice and therefore require no P3 code delta.
+  Relevant rules for this slice remain Draft §§4, 11.4, 12, 13.4/13.7/13.8,
+  14.1–3, 17.4 and 18.2.
+- Authority: canonical Draft > normative backend > adjudicated surfaces >
   reviewed formal evidence > historical M7/oracle evidence > implementation.
-  Standalone M8 artifacts were not available for independent hash verification.
-- The user's explicit ENDING-ARG-01 clarification applies existing §11.4 + §12
-  before ordinary non-Copy transfer at selected compatible ref operands. This
-  closes the semantic blocker; the original M8 wording gap is historical DOCUMENTATION-GAP. Draft 17.5
-  now provides the explicit normative wording; no semantic blocker remains.
+- ENDING-ARG-01 is no longer an external clarification dependency: the canonical
+  Draft includes the explicit call/primitive exclusive-reborrow wording inherited
+  from Draft 17.5. No semantic blocker remains.
   The [contract and authority audit](P3_SEMANTIC_SLICE_CONTRACT.md) preserves the
   evidence, minimal two-root example and resolution. No historical spec is edited.
 
@@ -274,8 +270,9 @@ passed all four Ubuntu 24.04 PR jobs at
 `337aaeacc75f22d5d61dee76f206b022ebff08fc`, each 27/27. This is explicitly
 pre-final-documentation evidence. Run [37251445160](https://github.com/wakairo/NewLang_Compiler/actions/runs/37251445160)
 also passed all four jobs at `41d65bf60ef82ea230182eaf32b350c27d87a6d1`.
-Both precede the final Draft 17.5 reference/compatibility sync. After that final
-commit, the full local matrix and PR-triggered workflow are rerun. The final
+Both precede the Draft 17.5 reference/compatibility sync. The branch was later
+synchronized with canonical main / Draft 17.6; after the final authority-sync
+commit, the full PR-triggered workflow is rerun. The final
 current-head SHA/run URL and green job results are recorded in the PR body and
 completion response, with live current checks linked above; earlier green runs
 alone are not final-head evidence.
@@ -285,7 +282,7 @@ alone are not final-head evidence.
 | Classification | Result |
 |---|---|
 | COMPILER-SPEC-HOLE | No new blocker; inherited lexical/open surfaces unchanged |
-| COMPILER-SPEC-AMBIGUITY | ENDING-ARG-01 resolved by explicit user clarification, no blocker; original M8 DOCUMENTATION-GAP recorded; Draft 17.5 normative sync supplies explicit wording |
+| COMPILER-SPEC-AMBIGUITY | No blocker; canonical Draft 17.6 includes the Draft 17.5 exclusive-reborrow clarification that resolved ENDING-ARG-01 |
 | COMPILER-IMPLEMENTATION | No known unresolved defect after validation |
 | COMPILER-IMPLEMENTATION-LIMIT | Header-only loans, free dependencies, flat nominal root payloads, limited call summaries/receiving; ptr exclusive-write and exclusive ptr_from_ref inputs, exclusive mode-changing arguments explicitly unsupported |
 | COMPILER-DIAGNOSTIC | Role-based first diagnostics tested; no new blocker |
