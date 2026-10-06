@@ -1,6 +1,6 @@
 # P7 — Ref-valued match-result join contract
 
-Status: bounded production contract / review対象。Git historyを変更履歴の正とする。
+Status: bounded production contract / reviewed with P7 closure。Git historyを変更履歴の正とする。
 
 ## Authority / Phase A
 
@@ -105,4 +105,4 @@ sourceにscope-ending/function frontendを追加しない。
 
 canonical Draft、parser/lexer、LLVM/backend、toolchain/lock/workflowは変更しない。
 M9.3/F2/R4/relocation/FFI/一般CFG/新source annotationsへ進まない。
-P7 READY FOR REVIEWで停止し、人間/Coordination review前にmergeしない。
+P7はPR #42でreview・merge済みでCLOSEDである。後続trackは別のCoordination handoffを待つ。
