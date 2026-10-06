@@ -104,6 +104,10 @@ typedef struct {
     NLOccurrenceId
         occurrence_dependency; /* refs only, separate from provenance */
 } NLReferenceFacts;
+/* Bounded may-set, not a language limit. Inline facts are owned by the value
+ * table; no borrowed pointers or branch snapshot IDs. When count != 0 the
+ * singular reference field is absent and must not be used by consumers. */
+#define NL_SEMANTIC_MAX_REF_ALTERNATIVES 16
 typedef struct {
     NLTypeId type;
     NLValueCarrier carrier;
@@ -111,6 +115,8 @@ typedef struct {
     NLDependencyKnowledge dependencies;
     NLDomainId domain; /* LifetimeDomain value identity only */
     NLReferenceFacts reference;
+    size_t reference_count; /* zero: concrete reference; nonzero: joined ref */
+    NLReferenceFacts references[NL_SEMANTIC_MAX_REF_ALTERNATIVES];
     NLPlaceId slot_place; /* unique empty typed occupancy responsibility */
     NLBackingRegionId allocation_region; /* final-deallocation authority */
     NLBackingRange occupancy; /* Storage/slot responsibility, value-owned */
@@ -268,6 +274,13 @@ NLCheckStatus nl_semantic_seed_reference(NLSemanticContext *, const char *name,
                                          NLSymbolId *out);
 NLCheckStatus nl_semantic_scope(NLSemanticContext *, NLScopeId parent,
                                 bool active, NLScopeId *out);
+/* Join ordinary flat ref packages already belonging to THIS public context.
+ * Produces an owned loose Copy package with a bounded complete fact may-set.
+ * Exact static types required. Every alternative must be live. No branch IDs,
+ * implicit borrow, memory-state join, write mutation or ptr conversion. */
+NLCheckStatus nl_semantic_join_references(NLSemanticContext *,
+                                          const NLValueId *values, size_t count,
+                                          NLValueId *out);
 NLCheckStatus nl_semantic_end_scope(NLSemanticContext *, NLScopeId);
 /* Transfer a loose result responsibility into a fixture binding; this does not
  * implement multi-result source receiving syntax or silently discard results.

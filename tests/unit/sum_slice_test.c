@@ -326,7 +326,7 @@ static bool borrowed_tests(void)
         &f, "match ro {Some(payload)=>{replace(payload,next);},None=>{}}",
         NL_CHECK_SEMANTIC_ERROR, "P3-TYPE-MISMATCH"));
     CHECK(rejected(&f, "match rw {Some(payload)=>{payload},None=>{ro}}",
-                   NL_CHECK_SEMANTIC_UNSUPPORTED, "P6-ESCAPING-PAYLOAD-REF"));
+                   NL_CHECK_SEMANTIC_ERROR, "P6-RESULT-JOIN"));
     CHECK(rejected(&f, "match rw {Some(_)=>{store(rw,Option.None);},None=>{}}",
                    NL_CHECK_ANALYSIS_PRECISION_LIMIT, "P6-JOIN-PRECISION"));
     NLSymbolId ending;

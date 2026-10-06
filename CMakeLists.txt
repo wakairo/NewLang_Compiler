@@ -147,6 +147,17 @@ if(BUILD_TESTING)
     target_link_libraries(sum_frontend_test PRIVATE newlang_semantic newlang_parser)
     add_test(NAME p6_source_checked.integration COMMAND sum_frontend_test)
 
+    add_executable(ref_join_test tests/unit/ref_join_test.c)
+    target_link_libraries(ref_join_test PRIVATE newlang_semantic newlang_parser)
+    target_link_options(ref_join_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    foreach(group lifecycle boundary invalid identity failure)
+        add_test(NAME p7_${group}.unit COMMAND ref_join_test ${group})
+    endforeach()
+
+    add_executable(ref_join_frontend_test tests/integration/ref_join_frontend_test.c)
+    target_link_libraries(ref_join_frontend_test PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME p7_source_checked.integration COMMAND ref_join_frontend_test)
+
     add_executable(llvm_smoke tests/integration/llvm_smoke.c)
     target_link_libraries(llvm_smoke PRIVATE newlang_options newlang_llvm)
     add_test(NAME llvm.c_api COMMAND llvm_smoke)

@@ -387,6 +387,11 @@ static NLCheckStatus observed_claim(Raw *raw, NLValueId ref, size_t argument,
                                     NLBackingRange *out)
 {
     const NLSemanticValueView v = raw->context->values[ref - 1];
+    if (v.reference_count != 0)
+        return reject(raw, NL_CHECK_ANALYSIS_PRECISION_LIMIT,
+                      raw->operation->operands[argument].span,
+                      "P7-SINGULAR-REF-PRECISION",
+                      "raw observation needs a concrete ref");
     const NLValueId current =
         raw->context->places[v.reference.place - 1].current_value;
     return raw_claim(raw, current, argument, out);

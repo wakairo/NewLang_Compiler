@@ -273,7 +273,10 @@ static inline bool test_unchanged(NLSemanticContext *context,
               test_range_equal(x.occupancy, y.occupancy) &&
               x.scalar_known == y.scalar_known &&
               x.scalar_value == y.scalar_value &&
-              test_reference_equal(x.reference, y.reference));
+              test_reference_equal(x.reference, y.reference) &&
+              x.reference_count == y.reference_count);
+        for (size_t j = 0; j < x.reference_count; ++j)
+            CHECK(test_reference_equal(x.references[j], y.references[j]));
     }
     for (size_t i = 0; i < a.places; ++i) {
         CHECK(test_place_equal(before->places[i], after.places[i]));
