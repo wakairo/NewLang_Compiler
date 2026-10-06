@@ -28,7 +28,11 @@ typedef enum {
     NL_SYNTAX_FUNCTION_UNIT,
     NL_SYNTAX_FUNCTION,
     NL_SYNTAX_PARAMETER,
-    NL_SYNTAX_RETURN /* dedicated block item; data.statement.expression */
+    NL_SYNTAX_RETURN, /* dedicated block item; data.statement.expression */
+    NL_SYNTAX_LOOP,
+    NL_SYNTAX_LOOP_PARAMETER,
+    NL_SYNTAX_CONTINUE,
+    NL_SYNTAX_BREAK
 } NLSyntaxKind;
 
 /* Requested source spelling only: not checked access permission/authority. */
@@ -98,6 +102,10 @@ typedef struct {
             size_t argument_count;
             bool parentheses;
         } constructor;
+        struct {
+            const NLSyntaxNode *parameters, *body;
+            size_t count;
+        } loop;
         struct {
             const NLSyntaxNode *condition, *then_block, *else_block;
         } conditional;

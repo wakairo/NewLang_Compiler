@@ -78,7 +78,8 @@ typedef struct {
     struct NLCheckedFragment *artifact; /* owns hypothetical arm context */
 } NLCheckedArm;
 struct NLCheckedFragment {
-    NLControlExits *exits; /* owned complete finite control evidence */
+    NLControlExits *loop_returns; /* owned early loop Return evidence */
+    NLControlExits *exits;        /* owned complete finite control evidence */
     NLControlTarget *function_target; /* owned boundary identity, if any */
     const NLSource *source;
     const NLSemanticContext *context;

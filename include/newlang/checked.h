@@ -45,6 +45,9 @@ typedef enum {
     NL_CHECKED_IF_ARM,
     NL_CHECKED_MATCH_ARM,
     NL_CHECKED_RETURN,
+    NL_CHECKED_LOOP,
+    NL_CHECKED_CONTINUE,
+    NL_CHECKED_BREAK,
     NL_CHECKED_UNIT
 } NLCheckedKind;
 typedef enum {
@@ -85,6 +88,9 @@ typedef struct {
                       */
     size_t normal_arms;       /* finite branch count, excludes return edges */
     NLCheckedResult returned; /* RETURN responsibility, not a normal result */
+    bool header_inductive; /* LOOP only: abstract-input transfer + all backedges
+                            */
+    size_t continue_edges, break_edges, return_edges;
     NLValueUse value_use;
     bool contextually_weakened;
     NLTypeId parameter_type;
@@ -130,6 +136,11 @@ const NLCheckedFragment *nl_checked_match_arm(const NLCheckedFragment *,
 const NLCheckedFragment *nl_checked_if_arm(const NLCheckedFragment *,
                                            NLCheckedNodeId conditional,
                                            size_t index);
+
+/* Borrowed abstract iteration body. All IDs belong to its owned context;
+ * header_inductive is published only after complete source transfer/closure. */
+const NLCheckedFragment *nl_checked_loop_body(const NLCheckedFragment *,
+                                              NLCheckedNodeId loop);
 
 /* Owned body evidence retains its plan source. Semantic IDs use the SAME
  * public context as the call, never a hypothetical formal context. Namespace

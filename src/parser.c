@@ -558,6 +558,101 @@ static NLSyntaxNode *source_name(NLParser *parser, NLSyntaxKind kind,
     return result;
 }
 
+static NLSyntaxNode *source_continue(NLParser *parser)
+{
+    const NLSourceSpan start = parser->token.span;
+    consume(parser);
+    if (!expect_punct(parser, '(', "P14-CONTINUE-OPEN", "continue requires ("))
+        return NULL;
+    NLSyntaxNode *result = node(parser, NL_SYNTAX_CONTINUE, start),
+                 *head = NULL, *tail = NULL;
+    if (result == NULL)
+        return NULL;
+    const bool fence = parser->match_scrutinee;
+    parser->match_scrutinee = false;
+    while (peek(parser) && !punct(parser, ')')) {
+        NLSyntaxNode *arg = source_expression(parser);
+        if (arg == NULL)
+            goto failed;
+        link_node(&head, &tail, arg);
+        ++result->view.data.call.argument_count;
+        if (!punct(parser, ','))
+            break;
+        consume(parser);
+        if (punct(parser, ')')) {
+            fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+                 "P14-TRAILING-COMMA",
+                 "control lists do not allow trailing comma");
+            goto failed;
+        }
+    }
+    result->view.data.call.arguments = head;
+    if (!expect_punct(parser, ')', "P14-CONTINUE-CLOSE", "continue requires )"))
+        goto failed;
+    parser->match_scrutinee = fence;
+    return result;
+failed:
+    parser->match_scrutinee = fence;
+    return NULL;
+}
+
+static NLSyntaxNode *source_loop(NLParser *parser)
+{
+    const NLSourceSpan start = parser->token.span;
+    consume(parser);
+    if (!expect_punct(parser, '(', "P14-LOOP-OPEN",
+                      "loop requires parameter parentheses"))
+        return NULL;
+    NLSyntaxNode *result = node(parser, NL_SYNTAX_LOOP, start), *head = NULL,
+                 *tail = NULL;
+    if (result == NULL)
+        return NULL;
+    const bool fence = parser->match_scrutinee;
+    parser->match_scrutinee = false;
+    while (peek(parser) && !punct(parser, ')')) {
+        NLSyntaxNode *param =
+            source_name(parser, NL_SYNTAX_LOOP_PARAMETER, true);
+        if (param == NULL)
+            goto failed;
+        param->view.data.binding.name = param->view.data.name;
+        if (!expect_punct(parser, '=', "P14-LOOP-INITIALIZER",
+                          "loop parameter requires ="))
+            goto failed;
+        param->view.data.binding.initializer = source_expression(parser);
+        if (param->view.data.binding.initializer == NULL)
+            goto failed;
+        link_node(&head, &tail, param);
+        ++result->view.data.loop.count;
+        if (!punct(parser, ','))
+            break;
+        consume(parser);
+        if (punct(parser, ')')) {
+            fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+                 "P14-TRAILING-COMMA",
+                 "loop list does not allow trailing comma");
+            goto failed;
+        }
+    }
+    result->view.data.loop.parameters = head;
+    if (!expect_punct(parser, ')', "P14-LOOP-CLOSE", "loop requires )"))
+        goto failed;
+    if (!punct(parser, '{')) {
+        fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+             "P14-LOOP-BLOCK", "loop requires lexical block");
+        goto failed;
+    }
+    result->view.data.loop.body = source_expression(parser);
+    if (result->view.data.loop.body == NULL)
+        goto failed;
+    result->view.span.end_byte =
+        nl_syntax_node_view(result->view.data.loop.body)->span.end_byte;
+    parser->match_scrutinee = fence;
+    return result;
+failed:
+    parser->match_scrutinee = fence;
+    return NULL;
+}
+
 static NLSyntaxNode *source_block(NLParser *parser)
 {
     const NLSourceSpan start = parser->token.span;
@@ -569,35 +664,48 @@ static NLSyntaxNode *source_block(NLParser *parser)
     while (peek(parser) && !punct(parser, '}')) {
         const bool is_binding = word(parser, "let");
         const bool is_return = word(parser, "return");
+        const bool is_break = word(parser, "break");
+        const bool is_continue = word(parser, "continue");
         const NLSourceSpan return_start = parser->token.span;
-        if (is_return)
+        if (is_return || is_break)
             consume(parser);
-        if (is_return && punct(parser, ';')) {
+        if ((is_return || is_break) && punct(parser, ';')) {
             fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
-                 "P9-BARE-RETURN", "return requires an expression");
+                 is_break ? "P14-BARE-BREAK" : "P9-BARE-RETURN",
+                 "terminator requires an expression");
             return NULL;
         }
-        NLSyntaxNode *item =
-            is_binding ? source_binding(parser) : source_expression(parser);
+        NLSyntaxNode *item = is_continue  ? source_continue(parser)
+                             : is_binding ? source_binding(parser)
+                                          : source_expression(parser);
         if (item == NULL)
             return NULL;
         if (!punct(parser, ';')) {
-            if (!is_binding && !is_return && punct(parser, '}')) {
+            if (!is_binding && !is_return && !is_break && !is_continue &&
+                punct(parser, '}')) {
                 result->view.data.block.tail = item;
                 break;
             }
             fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
-                 is_return ? "P9-RETURN-SEMICOLON" : "P5-EXPECTED-ITEM-END",
+                 is_return                   ? "P9-RETURN-SEMICOLON"
+                 : (is_break || is_continue) ? "P14-CONTROL-SEMICOLON"
+                                             : "P5-EXPECTED-ITEM-END",
                  "non-tail block item requires ;");
             return NULL;
         }
         const size_t end = parser->token.span.end_byte;
         consume(parser);
-        if (!is_binding) {
+        if (is_continue) {
+            item->view.span.end_byte = end;
+        } else if (!is_binding) {
             NLSyntaxNode *statement =
-                node(parser, is_return ? NL_SYNTAX_RETURN : NL_SYNTAX_STATEMENT,
-                     (NLSourceSpan){is_return ? return_start.start_byte
-                                              : item->view.span.start_byte,
+                node(parser,
+                     is_return  ? NL_SYNTAX_RETURN
+                     : is_break ? NL_SYNTAX_BREAK
+                                : NL_SYNTAX_STATEMENT,
+                     (NLSourceSpan){(is_return || is_break)
+                                        ? return_start.start_byte
+                                        : item->view.span.start_byte,
                                     end});
             if (statement == NULL)
                 return NULL;
@@ -768,6 +876,16 @@ static NLSyntaxNode *source_expression(NLParser *parser)
     if (!enter(parser))
         return NULL;
     NLSyntaxNode *result = NULL;
+    if (word(parser, "loop")) {
+        result = source_loop(parser);
+        goto done;
+    }
+    if (word(parser, "continue") || word(parser, "break")) {
+        fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+             "P14-CONTROL-ITEM",
+             "continue/break are dedicated terminating block items");
+        goto done;
+    }
     if (word(parser, "if")) {
         result = source_if(parser);
         goto done;

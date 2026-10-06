@@ -5,7 +5,7 @@
 #include <string.h>
 
 /* Borrowed bytes; pure ordinary-namespace admission, not lexer tokenization
- * or member-label policy. Draft 17.15 fixes this exact, case-sensitive set. */
+ * or member-label policy. Draft 17.17 fixes this exact, case-sensitive set. */
 typedef enum {
     NL_NAME_ADMISSIBLE,
     NL_NAME_CORE_UNIT,
@@ -22,7 +22,10 @@ static inline NLOrdinaryNameClass nl_ordinary_name_class(const void *bytes,
         (length == 6 && memcmp(bytes, "return", 6) == 0) ||
         (length == 5 && memcmp(bytes, "match", 5) == 0) ||
         (length == 2 && memcmp(bytes, "if", 2) == 0) ||
-        (length == 4 && memcmp(bytes, "else", 4) == 0))
+        (length == 4 && memcmp(bytes, "else", 4) == 0) ||
+        (length == 4 && memcmp(bytes, "loop", 4) == 0) ||
+        (length == 8 && memcmp(bytes, "continue", 8) == 0) ||
+        (length == 5 && memcmp(bytes, "break", 5) == 0))
         return NL_NAME_RESERVED_STRUCTURAL;
     return NL_NAME_ADMISSIBLE;
 }
