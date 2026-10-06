@@ -19,8 +19,8 @@ void *__wrap_realloc(void *p, size_t n)
         return NULL;
     return __real_realloc(p, n);
 }
-static const char *const structural[] = {"fn",    "let", "return",
-                                         "match", "if",  "else"};
+static const char *const structural[] = {
+    "fn", "let", "return", "match", "if", "else", "loop", "continue", "break"};
 static const char *const code = "P12-RESERVED-STRUCTURAL-NAME";
 
 static bool source_header_reject(NLSemanticContext *c, const char *text,
@@ -328,7 +328,7 @@ static bool member(void)
         "return_",   "match_", "fn2",    "match_value", "unit_", "units",
         "Unit",      "ptr",    "ref",    "read",        "write", "exclusive",
         "using",     "If",     "Else",   "if_",         "else_", "if2",
-        "elsewhere", "loop",   "break",  "continue"};
+        "elsewhere", "loops",  "breaks", "continues"};
     for (size_t i = 0; i < sizeof(near) / sizeof(near[0]); ++i) {
         CHECK(nl_ordinary_name_class(near[i], strlen(near[i])) ==
               NL_NAME_ADMISSIBLE);

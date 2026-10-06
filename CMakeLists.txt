@@ -198,6 +198,13 @@ if(BUILD_TESTING)
         add_test(NAME p14_pre_${group}.unit COMMAND control_test ${group})
     endforeach()
 
+    add_executable(loop_test tests/unit/loop_test.c)
+    target_link_libraries(loop_test PRIVATE newlang_semantic newlang_parser)
+    target_link_options(loop_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    foreach(workload RANGE 1 40)
+        add_test(NAME p14_w${workload}.unit COMMAND loop_test ${workload})
+    endforeach()
+
     add_executable(if_test tests/unit/if_test.c)
     target_link_libraries(if_test PRIVATE newlang_semantic newlang_parser)
     target_link_options(if_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)

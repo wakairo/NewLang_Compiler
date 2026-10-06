@@ -16,10 +16,16 @@ P11 adds Draft 17.13's bounded top-level non-generic `fn` declarations, whole-un
 
 P13 adds Draft 17.15's minimal core `bool` and exact `if (expression) { ... } else { ... }`, finite normal/return joins and if/else ordinary-name reservation. Distinct non-Copy conditional identities remain structured precision rejections. [P13 report](docs/P13_IF_SOURCE_SEMANTIC_SLICE_REPORT.md) records the review scope.
 
+P14 adds exact Draft 17.17 `loop (...) { ... }`, `continue(...);` and `break expression;`
+with unknown Copy-carried slots, an exact captured frame, all-edge closure and finite
+Break/ref joins. Rich cyclic correlations remain structured precision rejections.
+[P14 contract](docs/P14_LOOP_SOURCE_SEMANTIC_SLICE_CONTRACT.md) and
+[P14 report](docs/P14_LOOP_SOURCE_SEMANTIC_SLICE_REPORT.md) define the bounded review scope.
+
 ## Authority
 
 The canonical language authority is the Draft selected by
-`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.15**), followed by reviewed
+`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.17**), followed by reviewed
 process/backend contracts and merged implementation/formal evidence.
 Historical reports, the task prompt and conversation do not override the Draft.
 Backend Contract v0.4 defines backend obligations. The Charter, Handoff Manifest
@@ -123,6 +129,7 @@ three P10 unit-name admission/builtin/failure groups,
 seven P11 declaration/visibility/body/failure/precision/resource groups,
 four P12 structural-name ingress/header/member/failure groups (including if/else),
 nine P13 bool/if grammar/outcome/identity/ref/effect/nesting/failure/resource groups,
+forty P14 isolated loop source/control/header/join/ownership/OOM workloads,
 diagnostic unit checks, six CLI
 cases (each invoked twice), valid LLVM C API module/IR, artifact integrity, and
 frozen-oracle smoke. ASan includes leak detection; UBSan stops on the first

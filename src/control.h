@@ -26,6 +26,15 @@ typedef struct NLControlState NLControlState;
 NLCheckStatus nl_control_state_create(const NLSemanticContext *,
                                       NLControlState **);
 NLCheckStatus nl_control_state_fork(const NLControlState *, NLControlState **);
+/* Capture a checked transfer with the entry's nominal origin certificate. */
+NLCheckStatus nl_control_state_capture(const NLControlState *,
+                                       const NLSemanticContext *,
+                                       NLControlState **);
+/* Drop only ended iteration-local bindings/places/scopes after escape checking.
+ */
+NLCheckStatus nl_control_state_project(const NLControlState *,
+                                       const NLSemanticContext *,
+                                       NLControlState **);
 NLSemanticContext *nl_control_state_context(NLControlState *); /* borrowed */
 void nl_control_state_destroy(NLControlState *);
 
@@ -89,6 +98,12 @@ typedef struct NLLoopHeader NLLoopHeader;
 NLCheckStatus nl_loop_header_create(const NLControlState *, NLControlTarget *,
                                     const NLValueId *, size_t count,
                                     bool wide_copy, NLLoopHeader **);
+/* Source checker widens slots while keeping the captured memory frame exact. */
+NLCheckStatus nl_loop_header_create_bounded(const NLControlState *,
+                                            NLControlTarget *,
+                                            const NLValueId *, size_t,
+                                            bool wide_slots, bool wide_memory,
+                                            NLLoopHeader **);
 void nl_loop_header_destroy(NLLoopHeader *);
 NLCheckStatus nl_loop_header_includes(const NLLoopHeader *,
                                       const NLControlState *, const NLValueId *,

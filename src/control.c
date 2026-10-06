@@ -26,7 +26,7 @@ struct NLLoopHeader {
     NLControlTarget *target;
     size_t count;
     NLValueId slots[NL_CONTROL_MAX_SLOTS];
-    bool wide;
+    bool wide, wide_memory;
 };
 
 NLCheckStatus nl_control_target_create(NLControlTargetKind kind,
@@ -103,6 +103,61 @@ NLCheckStatus nl_control_state_fork(const NLControlState *s,
         return status;
     }
     *out = next;
+    return NL_CHECK_OK;
+}
+NLCheckStatus nl_control_state_capture(const NLControlState *entry,
+                                       const NLSemanticContext *c,
+                                       NLControlState **out)
+{
+    if (entry == NULL)
+        return nl_control_state_create(c, out);
+    if (c == NULL || out == NULL || *out != NULL)
+        return NL_CHECK_INTERNAL_ERROR;
+    if (entry->origin->owners == SIZE_MAX)
+        return NL_CHECK_RESOURCE_LIMIT;
+    NLControlState *s = malloc(sizeof(*s));
+    if (s == NULL)
+        return NL_CHECK_OUT_OF_MEMORY;
+    *s = (NLControlState){.origin = entry->origin};
+    ++s->origin->owners;
+    NLCheckStatus status = nl_sem_clone(c, &s->context);
+    if (status != NL_CHECK_OK) {
+        nl_control_state_destroy(s);
+        return status;
+    }
+    *out = s;
+    return NL_CHECK_OK;
+}
+NLCheckStatus nl_control_state_project(const NLControlState *entry,
+                                       const NLSemanticContext *c,
+                                       NLControlState **out)
+{
+    if (entry == NULL || c == NULL || out == NULL || *out != NULL)
+        return NL_CHECK_INTERNAL_ERROR;
+    const NLSemanticContext *a = entry->context;
+    if (a->binding_count > c->binding_count ||
+        a->place_count > c->place_count || a->scope_count > c->scope_count)
+        return NL_CHECK_INTERNAL_ERROR;
+    NLCheckStatus status =
+        nl_sem_function_exit(c, a->scope_count, a->place_count);
+    if (status != NL_CHECK_OK)
+        return status;
+    for (size_t i = a->binding_count; i < c->binding_count; ++i)
+        if (!c->bindings[i].hidden ||
+            c->bindings[i].view.availability != NL_CONSUMED)
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    for (size_t i = a->place_count; i < c->place_count; ++i)
+        if (c->places[i].live)
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    status = nl_control_state_capture(entry, c, out);
+    if (status != NL_CHECK_OK)
+        return status;
+    NLSemanticContext *b = (*out)->context;
+    for (size_t i = a->binding_count; i < b->binding_count; ++i)
+        free(b->bindings[i].name);
+    b->binding_count = a->binding_count;
+    b->place_count = a->place_count;
+    b->scope_count = a->scope_count;
     return NL_CHECK_OK;
 }
 NLSemanticContext *nl_control_state_context(NLControlState *s)
@@ -377,6 +432,15 @@ NLCheckStatus nl_loop_header_create(const NLControlState *entry,
                                     const NLValueId *ids, size_t count,
                                     bool wide, NLLoopHeader **out)
 {
+    return nl_loop_header_create_bounded(entry, target, ids, count, wide, wide,
+                                         out);
+}
+NLCheckStatus nl_loop_header_create_bounded(const NLControlState *entry,
+                                            NLControlTarget *target,
+                                            const NLValueId *ids, size_t count,
+                                            bool wide, bool wide_memory,
+                                            NLLoopHeader **out)
+{
     if (entry == NULL || target == NULL || target->kind != NL_TARGET_LOOP ||
         out == NULL || *out != NULL)
         return NL_CHECK_INTERNAL_ERROR;
@@ -386,7 +450,8 @@ NLCheckStatus nl_loop_header_create(const NLControlState *entry,
     NLLoopHeader *h = malloc(sizeof(*h));
     if (h == NULL)
         return NL_CHECK_OUT_OF_MEMORY;
-    *h = (NLLoopHeader){.count = count, .wide = wide};
+    *h = (NLLoopHeader){
+        .count = count, .wide = wide, .wide_memory = wide_memory};
     if (count != 0)
         memcpy(h->slots, ids, count * sizeof(*ids));
     status = nl_control_state_fork(entry, &h->entry);
@@ -488,7 +553,7 @@ NLCheckStatus nl_loop_header_includes(const NLLoopHeader *h,
              x.placement.start != y.placement.start ||
              x.placement.length != y.placement.length))
             return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
-        if (!h->wide || !flat(a, x.type) ||
+        if (!h->wide_memory || !flat(a, x.type) ||
             !a->types[x.type - 1].view.is_copy || x.current_value == 0 ||
             y.current_value == 0 ||
             a->values[x.current_value - 1].dependencies != NL_DEPENDENCY_FREE ||

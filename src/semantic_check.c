@@ -3,6 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct LoopControl {
+    struct LoopControl *parent; /* borrowed lexical target stack */
+    NLControlTarget *target;
+    NLControlState *entry;
+    NLLoopHeader *header;
+    NLTypeId types[NL_CONTROL_MAX_SLOTS];
+    size_t count, bindings, places, scopes;
+} LoopControl;
+
 typedef struct Check {
     const struct Check *caller; /* borrowed synchronous active call chain */
     NLSemanticContext *context;
@@ -17,8 +26,11 @@ typedef struct Check {
     bool in_function_body, definition, terminated;
     NLTypeId function_result;
     size_t function_binding_floor, function_scope_floor, function_place_floor;
+    size_t function_value_prefix;
+    NLValueFactId function_fact_prefix;
     NLCheckedResult
-        returned; /* compatibility summary, never exit classification */
+        returned;      /* compatibility summary, never exit classification */
+    LoopControl *loop; /* synchronous borrowed nearest-loop context */
     NLControlTarget *function_target; /* borrowed active function identity */
     size_t arm_floor;
     bool has_arm_floor, in_match_arm;
@@ -1271,6 +1283,8 @@ static NLCheckedNodeId aggregate(Check *, const NLSyntaxView *);
 static NLCheckedNodeId sum_constructor(Check *, const NLSyntaxView *);
 static NLCheckedNodeId sum_match(Check *, const NLSyntaxView *);
 static NLCheckedNodeId source_if(Check *, const NLSyntaxView *);
+static NLCheckedNodeId source_loop(Check *, const NLSyntaxView *);
+static NLCheckedNodeId source_control(Check *, const NLSyntaxView *);
 
 static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
 {
@@ -1282,7 +1296,8 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
     if (check->in_function_body && node->kind != NL_SYNTAX_EXPR_NAME &&
         node->kind != NL_SYNTAX_EXPR_CALL && node->kind != NL_SYNTAX_BLOCK &&
         node->kind != NL_SYNTAX_SUM_CONSTRUCTOR &&
-        node->kind != NL_SYNTAX_MATCH && node->kind != NL_SYNTAX_IF) {
+        node->kind != NL_SYNTAX_MATCH && node->kind != NL_SYNTAX_IF &&
+        node->kind != NL_SYNTAX_LOOP) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, node->span,
              "P8-BODY-PROFILE",
              "expression needs a richer relative body analysis");
@@ -1305,6 +1320,8 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         result = sum_match(check, node);
     } else if (node->kind == NL_SYNTAX_IF) {
         result = source_if(check, node);
+    } else if (node->kind == NL_SYNTAX_LOOP) {
+        result = source_loop(check, node);
     } else if (node->kind == NL_SYNTAX_AGGREGATE) {
         result = aggregate(check, node);
     } else {
@@ -1785,7 +1802,10 @@ static NLCheckedNodeId source_return(Check *check, const NLSyntaxView *syntax)
     check->returned = value.result_count == 0 ? (NLCheckedResult){.type = 1}
                                               : value.results[0];
     NLControlState *post = NULL;
-    if (!host(check, nl_control_state_create(check->context, &post),
+    if (!host(check,
+              nl_control_state_capture(check->loop == NULL ? NULL
+                                                           : check->loop->entry,
+                                       check->context, &post),
               syntax->span))
         return 0;
     const NLCheckStatus recorded = nl_control_exit_append(
@@ -1820,14 +1840,17 @@ static NLCheckedNodeId source_block(Check *check, const NLSyntaxView *syntax)
          item = nl_syntax_next_argument(item)) {
         const NLSyntaxView *v = nl_syntax_node_view(item);
         if (check->in_function_body && v->kind != NL_SYNTAX_BINDING &&
-            v->kind != NL_SYNTAX_STATEMENT && v->kind != NL_SYNTAX_RETURN) {
+            v->kind != NL_SYNTAX_STATEMENT && v->kind != NL_SYNTAX_RETURN &&
+            v->kind != NL_SYNTAX_CONTINUE && v->kind != NL_SYNTAX_BREAK) {
             fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, v->span,
                  "P8-BODY-PROFILE",
                  "body receiving pattern needs richer relative analysis");
             goto cleanup;
         }
         const NLCheckedNodeId child =
-            v->kind == NL_SYNTAX_RETURN      ? source_return(check, v)
+            v->kind == NL_SYNTAX_CONTINUE || v->kind == NL_SYNTAX_BREAK
+                ? source_control(check, v)
+            : v->kind == NL_SYNTAX_RETURN    ? source_return(check, v)
             : v->kind == NL_SYNTAX_STATEMENT ? source_statement(check, v)
                                              : source_binding(check, v);
         if (child == 0)
@@ -1865,6 +1888,12 @@ cleanup:
     return check->status == NL_CHECK_OK ? id : 0;
 }
 
+/* A finite alternative can combine divergence with real Return edges. An
+ * absent compatibility cache is not an empty exit set or a fake unit return.
+ * This bounded summary requires flat Copy output and an exact caller frame. */
+static bool zero_normal_returns(Check *check, NLTypeId declared,
+                                NLCheckedNodeId body, NLSourceSpan span);
+
 static bool body_result(Check *check, NLTypeId declared, NLCheckedNodeId body,
                         NLSourceSpan span)
 {
@@ -1880,9 +1909,7 @@ static bool body_result(Check *check, NLTypeId declared, NLCheckedNodeId body,
             return true;
         if (check->returned.type == declared)
             return true;
-        fail(check, NL_CHECK_INTERNAL_ERROR, span, "P9-RETURN-INTERNAL",
-             "terminated body lost its checked function result");
-        return false;
+        return zero_normal_returns(check, declared, body, span);
     }
     if (result.type != declared || result.result_count > 1 ||
         (result.result_count == 0 && declared != 1)) {
@@ -1907,6 +1934,8 @@ static bool function_block(Check *check, const NLSyntaxView *syntax)
               syntax->span))
         return false;
     check->function_target = check->artifact->function_target;
+    check->function_value_prefix = check->context->value_count;
+    check->function_fact_prefix = check->context->last_value_fact;
     check->artifact->root = source_block(check, syntax);
     if (check->artifact->root == 0 ||
         !body_result(check, check->function_result, check->artifact->root,
@@ -2591,6 +2620,12 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
                                          evidence[i]->exits),
                   syntax->span))
             return 0;
+    for (size_t i = 0; i < 2; ++i)
+        if (!host(check,
+                  nl_control_exits_union(&check->artifact->loop_returns,
+                                         evidence[i]->loop_returns),
+                  syntax->span))
+            return 0;
     view(check, id)->normal_arms = normal;
     if (normal == 0 && !(nl_control_exits_only_return(evidence[0]->exits,
                                                       check->function_target) &&
@@ -2609,10 +2644,14 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
         /* Replay establishes only the public normal state. Its exit proof was
          * already retained from both forked arms; do not duplicate that set. */
         NLControlExits *proof = check->artifact->exits;
+        NLControlExits *loop_proof = check->artifact->loop_returns;
         check->artifact->exits = NULL;
+        check->artifact->loop_returns = NULL;
         NLCheckedNodeId body = expression(check, arms[sole]);
         nl_control_exits_destroy(check->artifact->exits);
         check->artifact->exits = proof;
+        nl_control_exits_destroy(check->artifact->loop_returns);
+        check->artifact->loop_returns = loop_proof;
         if (body == 0)
             return 0;
         const NLCheckedNodeView result = *view(check, body);
@@ -2855,6 +2894,31 @@ static bool join_if_function_exits(Check *check)
                           check->context->value_count,
                           check->context->last_value_fact, &found, changed))
         return false;
+    for (size_t i = 0;
+         i < nl_control_exits_count(check->artifact->loop_returns); ++i) {
+        const NLControlExitView *edge =
+            nl_control_exit_view(check->artifact->loop_returns, i);
+        const NLSemanticContext *b =
+            nl_control_state_context((NLControlState *)edge->state);
+        if (edge->values[0].type != final.type ||
+            !flat_copy(check->context, final.type)) {
+            if_precision(check, root.span);
+            return false;
+        }
+        for (size_t j = 0; j < check->function_place_floor; ++j) {
+            const NLSemanticPlaceView a = check->context->places[j],
+                                      other = b->places[j];
+            if (!same_place_frame(a, other) ||
+                a.current_value != other.current_value ||
+                a.current_fact != other.current_fact ||
+                a.current_value > check->function_value_prefix ||
+                a.current_fact > check->function_fact_prefix) {
+                if_precision(check, root.span);
+                return false;
+            }
+        }
+        found = true;
+    }
     if (!found)
         return true;
     for (size_t i = 0; i < check->function_place_floor; ++i)
@@ -2873,6 +2937,580 @@ static bool join_if_function_exits(Check *check)
     } else if (root.result_count != 0)
         view(check, check->artifact->root)->results[0] = final;
     return true;
+}
+
+static bool zero_normal_returns(Check *check, NLTypeId declared,
+                                NLCheckedNodeId body, NLSourceSpan span)
+{
+    NLSemanticContext *c = check->context;
+    if (!flat_copy(c, declared) || c->region_count != 0)
+        goto precision;
+    for (size_t k = 0; k < nl_control_exits_count(check->artifact->exits);
+         ++k) {
+        const NLControlExitView *e =
+            nl_control_exit_view(check->artifact->exits, k);
+        const NLSemanticContext *b =
+            nl_control_state_context((NLControlState *)e->state);
+        for (size_t j = 0; j < check->function_place_floor; ++j)
+            if (!same_place_frame(c->places[j], b->places[j]) ||
+                c->places[j].current_value != b->places[j].current_value ||
+                c->places[j].current_fact != b->places[j].current_fact ||
+                c->places[j].current_value > check->function_value_prefix ||
+                c->places[j].current_fact > check->function_fact_prefix)
+                goto precision;
+        for (size_t j = 0; j < check->function_scope_floor; ++j)
+            if (!same_scope(c->scopes[j], b->scopes[j]))
+                goto precision;
+        if (c->domain_count != b->domain_count)
+            goto precision;
+        for (size_t j = 0; j < c->domain_count; ++j)
+            if (c->domains[j].live != b->domains[j].live)
+                goto precision;
+        for (size_t j = check->function_binding_floor; j < c->binding_count;
+             ++j)
+            if (!c->bindings[j].hidden &&
+                c->bindings[j].view.availability == NL_AVAILABLE &&
+                !c->types[c->bindings[j].view.type - 1].view.is_copy &&
+                (j >= b->binding_count ||
+                 b->bindings[j].view.availability != NL_CONSUMED ||
+                 c->bindings[j].view.value != b->bindings[j].view.value ||
+                 b->values[c->bindings[j].view.value - 1].carrier !=
+                     NL_CARRIER_ENDED))
+                goto precision;
+    }
+    for (size_t j = check->function_binding_floor; j < c->binding_count; ++j)
+        if (!c->bindings[j].hidden &&
+            c->bindings[j].view.availability == NL_AVAILABLE &&
+            !c->types[c->bindings[j].view.type - 1].view.is_copy) {
+            NLCheckedNodeId use = binding_use(check, j + 1, span, span);
+            if (use == 0)
+                return false;
+            end_temporary(check, view(check, use)->results[0].value);
+        }
+    if (!end_bindings(check, check->function_binding_floor, span))
+        return false;
+    for (size_t j = 0; j < c->value_count; ++j) {
+        if (c->types[c->values[j].type - 1].view.is_copy ||
+            c->values[j].carrier != NL_CARRIER_LOOSE)
+            continue;
+        if (j >= check->function_value_prefix)
+            goto precision;
+        bool ended = true;
+        for (size_t k = 0; k < nl_control_exits_count(check->artifact->exits);
+             ++k) {
+            const NLControlExitView *e =
+                nl_control_exit_view(check->artifact->exits, k);
+            const NLSemanticContext *b =
+                nl_control_state_context((NLControlState *)e->state);
+            if (b->values[j].carrier != NL_CARRIER_ENDED)
+                ended = false;
+        }
+        if (ended)
+            nl_sem_end_value(c, j + 1);
+    }
+    check->returned = (NLCheckedResult){
+        declared,
+        declared == 1
+            ? 0
+            : new_value(check, (NLSemanticValueView){.type = declared}, span)};
+    view(check, body)->returned = check->returned;
+    return check->status == NL_CHECK_OK;
+precision:
+    fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+         "P14-ZERO-NORMAL-RETURN-PRECISION",
+         "zero-normal function Return alternatives need a richer result/frame "
+         "join");
+    return false;
+}
+
+/* P14: a single abstract transfer, not a concrete first iteration. Copy
+ * carried slots are top; the captured outer frame is an exact invariant.
+ * Closure checks every retained Continue snapshot against that same H. */
+static void loop_precision(Check *check, NLSourceSpan span)
+{
+    fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span, "P14-LOOP-PRECISION",
+         "cyclic identity/dependency or memory correlation is not "
+         "representable");
+}
+static NLCheckedResult loop_operand(Check *check, NLCheckedNodeId id,
+                                    NLSourceSpan span, bool materialize_unit)
+{
+    const NLCheckedNodeView v = *view(check, id);
+    if (v.type == 1 && v.result_count == 0) {
+        NLValueId value =
+            materialize_unit
+                ? new_value(check, (NLSemanticValueView){.type = 1}, span)
+                : 0;
+        return (NLCheckedResult){1, value};
+    }
+    if (v.result_count != 1) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P14-ONE-VALUE",
+             "loop receiving requires exactly one normal value");
+        return (NLCheckedResult){0};
+    }
+    return v.results[0];
+}
+static NLCheckedNodeId source_control(Check *check, const NLSyntaxView *syntax)
+{
+    const bool continuing = syntax->kind == NL_SYNTAX_CONTINUE;
+    LoopControl *loop = check->loop;
+    if (loop == NULL) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span,
+             "P14-CONTROL-CONTEXT",
+             "continue/break requires an active lexical loop target");
+        return 0;
+    }
+    size_t count = continuing ? syntax->data.call.argument_count : 1;
+    if (continuing && count != loop->count) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span, "P14-CONTINUE-ARITY",
+             "continue arguments must match the loop parameter count");
+        return 0;
+    }
+    NLCheckedResult results[NL_CONTROL_MAX_SLOTS] = {{0}};
+    const NLSyntaxNode *operand = continuing
+                                      ? syntax->data.call.arguments
+                                      : syntax->data.statement.expression;
+    NLCheckedNodeId first = 0;
+    for (size_t i = 0; i < count; ++i) {
+        NLCheckedNodeId child = expression(check, operand);
+        if (child == 0 || check->terminated)
+            return child;
+        if (first == 0)
+            first = child;
+        results[i] = loop_operand(
+            check, child, nl_syntax_node_view(operand)->span, continuing);
+        if (check->status != NL_CHECK_OK)
+            return 0;
+        if (continuing && results[i].type != loop->types[i]) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span,
+                 "P14-CONTINUE-TYPE",
+                 "continue value must have the exact parameter static type");
+            return 0;
+        }
+        if (continuing)
+            operand = nl_syntax_next_argument(operand);
+    }
+    const NLSemanticContext *entry = nl_control_state_context(loop->entry);
+    if (continuing)
+        for (size_t i = 0; i < loop->bindings; ++i)
+            if (!entry->types[entry->bindings[i].view.type - 1].view.is_copy &&
+                entry->bindings[i].view.availability !=
+                    check->context->bindings[i].view.availability) {
+                fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span,
+                     "P14-CONTINUE-AVAILABILITY",
+                     "captured outer non-Copy availability must equal loop "
+                     "entry");
+                return 0;
+            }
+    if (!end_bindings(check, loop->bindings, syntax->span))
+        return 0;
+    NLControlState *post = NULL;
+    NLCheckStatus status =
+        nl_control_state_project(loop->entry, check->context, &post);
+    if (status != NL_CHECK_OK) {
+        fail(check, status, syntax->span, "P14-ITERATION-ESCAPE",
+             "iteration-local responsibility/dependency cannot survive this "
+             "edge");
+        return 0;
+    }
+    status = nl_control_exit_append(
+        &check->artifact->exits, continuing ? NL_EXIT_CONTINUE : NL_EXIT_BREAK,
+        loop->target, post, results, count);
+    nl_control_state_destroy(post);
+    if (!host(check, status, syntax->span))
+        return 0;
+    check->terminated = true;
+    check->returned = (NLCheckedResult){0};
+    return add(check,
+               (NLCheckedNodeView){.kind = continuing ? NL_CHECKED_CONTINUE
+                                                      : NL_CHECKED_BREAK,
+                                   .span = syntax->span,
+                                   .initializer = first,
+                                   .terminates = true});
+}
+
+static bool loop_return_frame(Check *check, const LoopControl *loop,
+                              const NLControlExitView *edge, NLSourceSpan span)
+{
+    const NLSemanticContext *a = nl_control_state_context(loop->entry);
+    const NLSemanticContext *b =
+        nl_control_state_context((NLControlState *)edge->state);
+    if (!nl_control_target_same(edge->target, check->function_target) ||
+        !flat_copy(a, edge->values[0].type))
+        goto precision;
+    for (size_t i = 0; i < check->function_place_floor; ++i)
+        if (!same_place_frame(a->places[i], b->places[i]) ||
+            a->places[i].current_value != b->places[i].current_value ||
+            a->places[i].current_fact != b->places[i].current_fact)
+            goto precision;
+    for (size_t i = 0; i < check->function_scope_floor; ++i)
+        if (!same_scope(a->scopes[i], b->scopes[i]))
+            goto precision;
+    if (a->region_count != 0 || a->domain_count != b->domain_count)
+        goto precision;
+    for (size_t i = 0; i < a->domain_count; ++i)
+        if (a->domains[i].live != b->domains[i].live)
+            goto precision;
+    return true;
+precision:
+    loop_precision(check, span);
+    return false;
+}
+
+static NLCheckedNodeId source_loop(Check *check, const NLSyntaxView *syntax)
+{
+    const size_t count = syntax->data.loop.count;
+    if (count > NL_CONTROL_MAX_SLOTS) {
+        (void)host(check, NL_CHECK_RESOURCE_LIMIT, syntax->span);
+        return 0;
+    }
+    LoopControl loop = {.parent = check->loop, .count = count};
+    char *names[NL_CONTROL_MAX_SLOTS] = {NULL};
+    NLValueId slots[NL_CONTROL_MAX_SLOTS] = {0};
+    NLCheckedFragment *body_artifact = NULL;
+    NLSemanticContext *body_context = NULL;
+    NLCheckedNodeId id = 0;
+    size_t i = 0;
+    for (const NLSyntaxNode *p = syntax->data.loop.parameters; p != NULL;
+         p = nl_syntax_next_argument(p), ++i) {
+        const NLSyntaxView *param = nl_syntax_node_view(p);
+        if (!lexical_source_name(check, param->data.binding.name))
+            goto cleanup;
+        names[i] = source_name_copy(check, param->data.binding.name);
+        if (names[i] == NULL)
+            goto cleanup;
+        for (size_t j = 0; j < i; ++j)
+            if (strcmp(names[i], names[j]) == 0) {
+                fail(check, NL_CHECK_SEMANTIC_ERROR, param->span,
+                     "P14-DUPLICATE-PARAMETER",
+                     "loop parameters must have distinct names");
+                goto cleanup;
+            }
+    }
+    /* No parameter is introduced into the outer initializer namespace. */
+    i = 0;
+    for (const NLSyntaxNode *p = syntax->data.loop.parameters; p != NULL;
+         p = nl_syntax_next_argument(p), ++i) {
+        const NLSyntaxView *param = nl_syntax_node_view(p);
+        NLCheckedNodeId init =
+            expression(check, param->data.binding.initializer);
+        if (init == 0)
+            goto cleanup;
+        if (check->terminated) {
+            id = init;
+            goto cleanup;
+        }
+        NLCheckedResult value = loop_operand(check, init, param->span, true);
+        if (check->status != NL_CHECK_OK)
+            goto cleanup;
+        loop.types[i] = value.type;
+        slots[i] = value.value;
+    }
+    NLSemanticContext *c = check->context;
+    loop.bindings = c->binding_count;
+    loop.places = c->place_count;
+    loop.scopes = c->scope_count;
+    if (!host(check, nl_control_target_create(NL_TARGET_LOOP, &loop.target),
+              syntax->span) ||
+        !host(check, nl_control_state_create(c, &loop.entry), syntax->span))
+        goto cleanup;
+    NLCheckStatus status = nl_loop_header_create_bounded(
+        loop.entry, loop.target, slots, count, true, false, &loop.header);
+    /* Rich finite entries need no cyclic abstraction if no Continue exists.
+     * Preserve their entry facts; never claim cyclic closure for them. */
+    if (status != NL_CHECK_ANALYSIS_PRECISION_LIMIT &&
+        !host(check, status, syntax->span))
+        goto cleanup;
+    if (!host(check, nl_sem_clone(c, &body_context), syntax->span))
+        goto cleanup;
+    body_artifact = malloc(sizeof(*body_artifact));
+    if (body_artifact == NULL) {
+        (void)host(check, NL_CHECK_OUT_OF_MEMORY, syntax->span);
+        goto cleanup;
+    }
+    *body_artifact =
+        (NLCheckedFragment){.source = check->source,
+                            .context = body_context,
+                            .destroy_context = nl_semantic_destroy};
+    body_context = NULL; /* artifact owns it from here */
+    Check body = *check;
+    body.context = (NLSemanticContext *)body_artifact->context;
+    body.artifact = body_artifact;
+    body.loop = &loop;
+    body.binding_floor = body.arm_floor = loop.bindings;
+    body.has_arm_floor = true;
+    for (i = 0; i < count; ++i) {
+        NLValueId value = slots[i];
+        if (flat_copy(body.context, loop.types[i]))
+            value =
+                new_value(&body, (NLSemanticValueView){.type = loop.types[i]},
+                          syntax->span);
+        NLSymbolId symbol = 0;
+        if (value == 0 ||
+            !host(&body,
+                  nl_sem_bind_in_scope(body.context, names[i], value,
+                                       loop.bindings, &symbol),
+                  syntax->span))
+            goto body_failure;
+    }
+    body.artifact->root = expression(&body, syntax->data.loop.body);
+    if (body.artifact->root == 0)
+        goto body_failure;
+    if (!body.terminated) {
+        fail(&body, NL_CHECK_SEMANTIC_ERROR, syntax->span,
+             "P14-BODY-FALLTHROUGH",
+             "loop body may not complete normally; explicit control exit "
+             "required");
+        goto body_failure;
+    }
+    bool recurrent = false;
+    for (i = 0; i < nl_control_exits_count(body.artifact->exits); ++i)
+        if (nl_control_exit_view(body.artifact->exits, i)->kind ==
+            NL_EXIT_CONTINUE)
+            recurrent = true;
+    status =
+        recurrent
+            ? (loop.header == NULL
+                   ? NL_CHECK_ANALYSIS_PRECISION_LIMIT
+                   : nl_loop_header_closure(loop.header, body.artifact->exits))
+            : NL_CHECK_OK;
+    if (status != NL_CHECK_OK) {
+        if (status == NL_CHECK_ANALYSIS_PRECISION_LIMIT)
+            loop_precision(&body, syntax->span);
+        else
+            fail(&body, status, syntax->span, "P14-CONTINUE-INVARIANT",
+                 "a continue successor fails the header's exact invariant");
+        goto body_failure;
+    }
+    size_t breaks = 0, continues = 0, returns = 0;
+    const NLControlExitView *first_break = NULL;
+    for (i = 0; i < nl_control_exits_count(body.artifact->exits); ++i) {
+        const NLControlExitView *edge =
+            nl_control_exit_view(body.artifact->exits, i);
+        if (edge->kind == NL_EXIT_CONTINUE) {
+            ++continues;
+        } else if (edge->kind == NL_EXIT_BREAK &&
+                   nl_control_target_same(edge->target, loop.target)) {
+            ++breaks;
+            if (first_break == NULL)
+                first_break = edge;
+        } else if (edge->kind == NL_EXIT_RETURN) {
+            if (!loop_return_frame(check, &loop, edge, syntax->span))
+                goto cleanup;
+            ++returns;
+            if (!host(check,
+                      nl_control_exit_append(
+                          &check->artifact->exits, NL_EXIT_RETURN,
+                          check->function_target, edge->state, edge->values, 1),
+                      syntax->span) ||
+                !host(check,
+                      nl_control_exit_append(
+                          &check->artifact->loop_returns, NL_EXIT_RETURN,
+                          check->function_target, edge->state, edge->values, 1),
+                      syntax->span))
+                goto cleanup;
+        } else {
+            (void)host(check, NL_CHECK_INTERNAL_ERROR, syntax->span);
+            goto cleanup;
+        }
+    }
+    if (loop.parent != NULL && continues != 0) {
+        loop_precision(check, syntax->span); /* no nested convergence claim */
+        goto cleanup;
+    }
+    id = add(check, (NLCheckedNodeView){.kind = NL_CHECKED_LOOP,
+                                        .span = syntax->span,
+                                        .header_inductive = true,
+                                        .continue_edges = continues,
+                                        .break_edges = breaks,
+                                        .return_edges = returns});
+    if (id == 0)
+        goto cleanup;
+    if (breaks == 0) {
+        check->terminated = true;
+        check->returned = (NLCheckedResult){0};
+        if (returns != 0) {
+            /* Publish only the common function-exit ownership effect. There
+             * is no normal loop state: Continue remains solely in its H. */
+            for (size_t j = check->function_binding_floor; j < loop.bindings;
+                 ++j) {
+                if (c->bindings[j].hidden ||
+                    c->bindings[j].view.availability != NL_AVAILABLE ||
+                    c->types[c->bindings[j].view.type - 1].view.is_copy)
+                    continue;
+                for (size_t k = 0;
+                     k < nl_control_exits_count(body.artifact->exits); ++k) {
+                    const NLControlExitView *e =
+                        nl_control_exit_view(body.artifact->exits, k);
+                    if (e->kind != NL_EXIT_RETURN)
+                        continue;
+                    const NLSemanticContext *b =
+                        nl_control_state_context((NLControlState *)e->state);
+                    if (b->bindings[j].view.availability != NL_CONSUMED ||
+                        b->bindings[j].view.value !=
+                            c->bindings[j].view.value) {
+                        loop_precision(check, syntax->span);
+                        goto cleanup;
+                    }
+                }
+                NLCheckedNodeId used =
+                    binding_use(check, j + 1, syntax->span, syntax->span);
+                if (used == 0)
+                    goto cleanup;
+                end_temporary(check, view(check, used)->results[0].value);
+            }
+            if (!end_bindings(check, check->function_binding_floor,
+                              syntax->span))
+                goto cleanup;
+            NLTypeId type = check->function_result;
+            check->returned = (NLCheckedResult){
+                type, type == 1 ? 0
+                                : new_value(check,
+                                            (NLSemanticValueView){.type = type},
+                                            syntax->span)};
+            if (type != 1 && check->returned.value == 0)
+                goto cleanup;
+        }
+        view(check, id)->terminates = true;
+        view(check, id)->returned = check->returned;
+    } else {
+        const NLTypeId type = first_break->values[0].type;
+        const NLSemanticContext *first =
+            nl_control_state_context((NLControlState *)first_break->state);
+        NLValueId value = first_break->values[0].value;
+        bool changed[NL_SEMANTIC_MAX_ENTRIES] = {false};
+        NLSemanticValueView ref_join = {.type = type};
+        if (type > c->type_count) {
+            loop_precision(check, syntax->span);
+            goto cleanup;
+        }
+        const bool ref = join_ref_type(c, type);
+        for (i = 0; i < nl_control_exits_count(body.artifact->exits); ++i) {
+            const NLControlExitView *edge =
+                nl_control_exit_view(body.artifact->exits, i);
+            if (edge->kind != NL_EXIT_BREAK)
+                continue;
+            const NLSemanticContext *post =
+                nl_control_state_context((NLControlState *)edge->state);
+            if (edge->values[0].type != type) {
+                fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span,
+                     "P14-BREAK-TYPE",
+                     "all normal break results must have the same static type");
+                goto cleanup;
+            }
+            for (size_t j = 0; j < loop.bindings; ++j)
+                if (!c->types[c->bindings[j].view.type - 1].view.is_copy &&
+                    first->bindings[j].view.availability !=
+                        post->bindings[j].view.availability) {
+                    fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span,
+                         "P14-BREAK-AVAILABILITY",
+                         "break exits disagree on captured non-Copy "
+                         "availability");
+                    goto cleanup;
+                }
+            if (!arm_frame(check, c, post, 0, loop.places, loop.scopes, changed,
+                           syntax->span))
+                goto cleanup;
+            if (ref) {
+                Check branch = *check;
+                branch.context = (NLSemanticContext *)post;
+                if (edge->values[0].value == 0 ||
+                    !rebase_ref_result(check, &branch, c, edge->values[0].value,
+                                       0, 0, (NLReferenceFacts){0}, &ref_join,
+                                       syntax->span)) {
+                    if (branch.status != NL_CHECK_OK) {
+                        check->status = branch.status;
+                        check->diagnostic = branch.diagnostic;
+                    }
+                    goto cleanup;
+                }
+            } else if (!flat_copy(c, type)) {
+                /* No affine phi made from static type or coincident private
+                 * IDs. */
+                if (value == 0 || value != edge->values[0].value ||
+                    value > c->value_count ||
+                    c->values[value - 1].type != type ||
+                    c->values[value - 1].dependencies != NL_DEPENDENCY_FREE ||
+                    post->values[value - 1].dependencies !=
+                        NL_DEPENDENCY_FREE ||
+                    post->values[value - 1].carrier != NL_CARRIER_LOOSE) {
+                    loop_precision(check, syntax->span);
+                    goto cleanup;
+                }
+            } else if (edge->values[0].value != 0 &&
+                       post->values[edge->values[0].value - 1].dependencies !=
+                           NL_DEPENDENCY_FREE) {
+                loop_precision(check, syntax->span);
+                goto cleanup;
+            }
+        }
+        for (size_t j = 0; j < loop.bindings; ++j)
+            if (!c->types[c->bindings[j].view.type - 1].view.is_copy &&
+                c->bindings[j].view.availability == NL_AVAILABLE &&
+                first->bindings[j].view.availability == NL_CONSUMED &&
+                binding_use(check, j + 1, syntax->span, syntax->span) == 0)
+                goto cleanup;
+        for (size_t j = 0; j < loop.places; ++j)
+            if (changed[j] && !widen_place(check, j, syntax->span))
+                goto cleanup;
+        /* End consumed public-prefix affine packages only when every normal
+         * Break certificate proves that ending. Never duplicate a body owner.
+         */
+        for (size_t j = 0; j < c->value_count; ++j) {
+            if (c->types[c->values[j].type - 1].view.is_copy ||
+                c->values[j].carrier != NL_CARRIER_LOOSE || j + 1 == value)
+                continue;
+            bool ended = true;
+            for (size_t k = 0; k < nl_control_exits_count(body.artifact->exits);
+                 ++k) {
+                const NLControlExitView *e =
+                    nl_control_exit_view(body.artifact->exits, k);
+                if (e->kind != NL_EXIT_BREAK)
+                    continue;
+                const NLSemanticContext *b =
+                    nl_control_state_context((NLControlState *)e->state);
+                if (j >= b->value_count ||
+                    b->values[j].carrier != NL_CARRIER_ENDED)
+                    ended = false;
+            }
+            if (ended)
+                nl_sem_end_value(c, j + 1);
+        }
+        if (ref) {
+            if (ref_join.reference_count == 0) {
+                loop_precision(check, syntax->span);
+                goto cleanup;
+            }
+            ref_join.reference = ref_join.references[0];
+            value = new_value(check, ref_join, syntax->span);
+        } else if (flat_copy(c, type)) {
+            value = type == 1
+                        ? 0
+                        : new_value(check, (NLSemanticValueView){.type = type},
+                                    syntax->span);
+        }
+        if (check->status != NL_CHECK_OK)
+            goto cleanup;
+        view(check, id)->type = type;
+        view(check, id)->result_count = value == 0 ? 0 : 1;
+        view(check, id)->results[0] = (NLCheckedResult){type, value};
+    }
+    if (!save_arm(check, id, body_artifact, syntax->span))
+        goto cleanup;
+    body_artifact = NULL;
+    goto cleanup;
+body_failure:
+    check->status = body.status;
+    check->diagnostic = body.diagnostic;
+cleanup:
+    for (i = 0; i < count; ++i)
+        free(names[i]);
+    nl_checked_destroy(body_artifact);
+    nl_semantic_destroy(body_context);
+    nl_loop_header_destroy(loop.header);
+    nl_control_state_destroy(loop.entry);
+    nl_control_target_destroy(loop.target);
+    return check->status == NL_CHECK_OK ? id : 0;
 }
 
 /* P9's bounded finite function plan: zero or one normal arm. Guarded
@@ -3047,6 +3685,11 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
                                          branch.artifact->exits),
                   a->span))
             goto failure;
+        if (!host(check,
+                  nl_control_exits_union(&check->artifact->loop_returns,
+                                         branch.artifact->loop_returns),
+                  a->span))
+            goto failure;
         if (branch.artifact->root == 0 ||
             !save_arm(check, id, branch.artifact, a->span))
             goto failure;
@@ -3062,6 +3705,12 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
             nl_semantic_destroy(branch.context);
         return 0;
     }
+    if (check->loop != NULL && normal == 0) {
+        check->terminated = true;
+        check->returned = (NLCheckedResult){0};
+        view(check, id)->terminates = true;
+        return id;
+    }
     if (normal > 1) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
              "P9-CONTINUATION-PRECISION",
@@ -3071,15 +3720,16 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
     /* Registration checks the sole normal continuation, or all return exits.
      * A real call applies only its proven concrete variant against actual IDs.
      */
-    size_t chosen_index =
-        check->definition ? (normal == 0 ? 0 : normal_index) : actual_index;
+    size_t chosen_index = (check->definition || check->loop != NULL)
+                              ? (normal == 0 ? 0 : normal_index)
+                              : actual_index;
     const NLSyntaxView *chosen_arm = nl_syntax_node_view(arms[chosen_index]);
     Check chosen = *check;
     chosen.in_match_arm = true;
     chosen.binding_floor = chosen.arm_floor = c->binding_count;
     chosen.has_arm_floor = true;
     if (!function_arm(&chosen, chosen_arm, input, variants[chosen_index],
-                      check->definition))
+                      check->definition || check->loop != NULL))
         goto chosen_failure;
     NLCheckedNodeId body = expression(&chosen, chosen_arm->data.arm.body);
     if (body == 0)
@@ -3106,7 +3756,7 @@ chosen_failure:
 
 static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
 {
-    if (check->in_function_body)
+    if (check->in_function_body || check->loop != NULL)
         return function_match(check, s);
     if (check->in_match_arm) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span, "P6-NESTED-MATCH",
@@ -3796,7 +4446,8 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
          root->kind != NL_SYNTAX_AGGREGATE &&
          root->kind != NL_SYNTAX_SUM_CONSTRUCTOR &&
          root->kind != NL_SYNTAX_MATCH && root->kind != NL_SYNTAX_IF &&
-         root->kind != NL_SYNTAX_BLOCK && root->kind != NL_SYNTAX_STATEMENT) ||
+         root->kind != NL_SYNTAX_LOOP && root->kind != NL_SYNTAX_BLOCK &&
+         root->kind != NL_SYNTAX_STATEMENT) ||
         (entry == CHECK_LOAN && root->kind != NL_SYNTAX_LOAN)) {
         return NL_CHECK_INTERNAL_ERROR;
     }

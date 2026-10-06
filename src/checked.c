@@ -27,6 +27,7 @@ NLCheckStatus nl_checked_add(NLCheckedFragment *fragment,
 void nl_checked_destroy(NLCheckedFragment *fragment)
 {
     if (fragment != NULL) {
+        nl_control_exits_destroy(fragment->loop_returns);
         nl_control_exits_destroy(fragment->exits);
         nl_control_target_destroy(fragment->function_target);
         for (size_t i = 0; i < fragment->arm_count; ++i)
@@ -94,6 +95,15 @@ const NLCheckedFragment *nl_checked_if_arm(const NLCheckedFragment *f,
     const NLCheckedNodeView *v = nl_checked_node_view(f, conditional);
     return v != NULL && v->kind == NL_CHECKED_IF
                ? nl_checked_match_arm(f, conditional, index)
+               : NULL;
+}
+
+const NLCheckedFragment *nl_checked_loop_body(const NLCheckedFragment *f,
+                                              NLCheckedNodeId loop)
+{
+    const NLCheckedNodeView *v = nl_checked_node_view(f, loop);
+    return v != NULL && v->kind == NL_CHECKED_LOOP
+               ? nl_checked_match_arm(f, loop, 0)
                : NULL;
 }
 
