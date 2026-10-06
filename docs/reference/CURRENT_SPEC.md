@@ -14,4 +14,4 @@ Repository policy:
 - A newer Draft on an unmerged branch is a candidate until that branch is reviewed and merged into `main`.
 - Prompts handed to M / F / P tracks should cite the `main` commit SHA and this file before relying on conversational memory.
 
-Draft 17.14 adds the targeted M9.9 contextual source-word / ordinary-name disambiguation rule on top of Draft 17.13. The current `fn`, `let`, `return`, and `match` spellings remain admissible ordinary lexical names and are interpreted as contextual syntax only when their closed distinguishing shape is established; exact `unit` remains the distinguished non-shadowable core spelling.
+Draft 17.14 adds the targeted M9.9 structural source-word / ordinary-name rule on top of Draft 17.13. The current `fn`, `let`, `return`, and `match` spellings are reserved from the ordinary lexical namespace as a small structural set, without requiring lexer-wide keyword tokenization or automatically reserving field/variant/member namespaces; exact `unit` remains a separate distinguished non-shadowable core spelling.
