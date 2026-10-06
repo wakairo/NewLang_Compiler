@@ -17,7 +17,9 @@ typedef struct Check {
     bool in_function_body, definition, terminated;
     NLTypeId function_result;
     size_t function_binding_floor, function_scope_floor, function_place_floor;
-    NLCheckedResult returned;
+    NLCheckedResult
+        returned; /* compatibility summary, never exit classification */
+    NLControlTarget *function_target; /* borrowed active function identity */
     size_t arm_floor;
     bool has_arm_floor, in_match_arm;
     NLCheckStatus status;
@@ -1782,6 +1784,16 @@ static NLCheckedNodeId source_return(Check *check, const NLSyntaxView *syntax)
     }
     check->returned = value.result_count == 0 ? (NLCheckedResult){.type = 1}
                                               : value.results[0];
+    NLControlState *post = NULL;
+    if (!host(check, nl_control_state_create(check->context, &post),
+              syntax->span))
+        return 0;
+    const NLCheckStatus recorded = nl_control_exit_append(
+        &check->artifact->exits, NL_EXIT_RETURN, check->function_target, post,
+        &check->returned, 1);
+    nl_control_state_destroy(post);
+    if (!host(check, recorded, syntax->span))
+        return 0;
     check->terminated = true;
     return add(check, (NLCheckedNodeView){.kind = NL_CHECKED_RETURN,
                                           .span = syntax->span,
@@ -1857,7 +1869,15 @@ static bool body_result(Check *check, NLTypeId declared, NLCheckedNodeId body,
                         NLSourceSpan span)
 {
     const NLCheckedNodeView result = *view(check, body);
+    if (!host(check,
+              nl_control_function_boundary(
+                  check->artifact->exits, check->function_target, declared,
+                  check->function_scope_floor, check->function_place_floor),
+              span))
+        return false;
     if (check->terminated) {
+        if (nl_control_exits_count(check->artifact->exits) == 0)
+            return true;
         if (check->returned.type == declared)
             return true;
         fail(check, NL_CHECK_INTERNAL_ERROR, span, "P9-RETURN-INTERNAL",
@@ -1881,11 +1901,21 @@ static bool join_if_function_exits(Check *);
 
 static bool function_block(Check *check, const NLSyntaxView *syntax)
 {
+    if (!host(check,
+              nl_control_target_create(NL_TARGET_FUNCTION,
+                                       &check->artifact->function_target),
+              syntax->span))
+        return false;
+    check->function_target = check->artifact->function_target;
     check->artifact->root = source_block(check, syntax);
     if (check->artifact->root == 0 ||
         !body_result(check, check->function_result, check->artifact->root,
                      syntax->span))
         return false;
+    /* Divergence has no function-exit post-state to validate or clean up. */
+    if (check->terminated &&
+        nl_control_exits_count(check->artifact->exits) == 0)
+        return true;
     const NLCheckStatus status =
         nl_sem_function_exit(check->context, check->function_scope_floor,
                              check->function_place_floor);
@@ -2048,7 +2078,14 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     }
     caller->artifact->body_calls = calls;
     const NLCheckedNodeView result = *view(&body, body.artifact->root);
-    view(caller, call_id)->type = function->result;
+    const bool no_exit =
+        body.terminated && nl_control_exits_count(body.artifact->exits) == 0;
+    if (no_exit) {
+        caller->terminated = true;
+        caller->returned = (NLCheckedResult){0};
+        view(caller, call_id)->terminates = true;
+    }
+    view(caller, call_id)->type = no_exit ? 0 : function->result;
     view(caller, call_id)->result_count =
         body.terminated ? (body.returned.value != 0 ? 1 : 0)
                         : result.result_count;
@@ -2548,13 +2585,34 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
             nl_semantic_destroy(branch.context);
         return 0;
     }
+    for (size_t i = 0; i < 2; ++i)
+        if (!host(check,
+                  nl_control_exits_union(&check->artifact->exits,
+                                         evidence[i]->exits),
+                  syntax->span))
+            return 0;
     view(check, id)->normal_arms = normal;
+    if (normal == 0 && !(nl_control_exits_only_return(evidence[0]->exits,
+                                                      check->function_target) &&
+                         nl_control_exits_only_return(
+                             evidence[1]->exits, check->function_target))) {
+        check->terminated = true;
+        check->returned = (NLCheckedResult){0};
+        view(check, id)->terminates = true;
+        return id;
+    }
     if (normal == 1) {
         /* Reapply the ONLY normal edge against candidate IDs. This is not a
          * known-condition choice: both arms and all return exits were checked.
          * Early-return evidence is also joined at the enclosing function exit.
          */
+        /* Replay establishes only the public normal state. Its exit proof was
+         * already retained from both forked arms; do not duplicate that set. */
+        NLControlExits *proof = check->artifact->exits;
+        check->artifact->exits = NULL;
         NLCheckedNodeId body = expression(check, arms[sole]);
+        nl_control_exits_destroy(check->artifact->exits);
+        check->artifact->exits = proof;
         if (body == 0)
             return 0;
         const NLCheckedNodeView result = *view(check, body);
@@ -2722,7 +2780,8 @@ static bool if_exit_evidence(Check *check, const NLCheckedFragment *artifact,
         const NLValueFactId arm_facts = fact_prefix < arm->branch_fact_prefix
                                             ? fact_prefix
                                             : arm->branch_fact_prefix;
-        if (!result->terminates) {
+        if (!result->terminates ||
+            !nl_control_exits_only_return(arm->exits, check->function_target)) {
             if (!if_exit_evidence(check, arm, final, arm_prefix, arm_facts,
                                   found, changed))
                 return false;
@@ -2983,6 +3042,11 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
                                          .result_count = result.result_count,
                                          .results = {result.results[0]},
                                          .returned = branch.returned});
+        if (!host(check,
+                  nl_control_exits_union(&check->artifact->exits,
+                                         branch.artifact->exits),
+                  a->span))
+            goto failure;
         if (branch.artifact->root == 0 ||
             !save_arm(check, id, branch.artifact, a->span))
             goto failure;

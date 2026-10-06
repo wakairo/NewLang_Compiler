@@ -1,6 +1,7 @@
 #ifndef NEWLANG_SEMANTIC_INTERNAL_H
 #define NEWLANG_SEMANTIC_INTERNAL_H
 
+#include "control.h"
 #include "newlang/checked.h"
 #include "newlang/raw_storage.h"
 #include "ordinary_name.h"
@@ -77,6 +78,8 @@ typedef struct {
     struct NLCheckedFragment *artifact; /* owns hypothetical arm context */
 } NLCheckedArm;
 struct NLCheckedFragment {
+    NLControlExits *exits; /* owned complete finite control evidence */
+    NLControlTarget *function_target; /* owned boundary identity, if any */
     const NLSource *source;
     const NLSemanticContext *context;
     NLCheckedNodeView *nodes;
