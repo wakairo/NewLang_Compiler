@@ -177,6 +177,13 @@ if(BUILD_TESTING)
     endforeach()
     add_test(NAME p9_decoder.integration COMMAND return_test workload)
 
+    add_executable(unit_name_test tests/unit/unit_name_test.c)
+    target_link_libraries(unit_name_test PRIVATE newlang_semantic newlang_parser)
+    target_link_options(unit_name_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    foreach(group admission builtin failure)
+        add_test(NAME p10_${group}.unit COMMAND unit_name_test ${group})
+    endforeach()
+
     add_executable(argument_compatibility_test tests/unit/argument_compatibility_test.c)
     target_link_libraries(argument_compatibility_test PRIVATE newlang_semantic newlang_parser)
     add_test(NAME r4_01_argument_compatibility.unit COMMAND argument_compatibility_test)
