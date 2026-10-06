@@ -3046,7 +3046,7 @@ normative modelは概念的なhidden SSA phi / block argumentまたはmemory-sta
 
 ```text
 r =
-    if cond {
+    if (cond) {
         ref_a        // depends on F_a
     } else {
         ref_b        // depends on F_b
@@ -3059,7 +3059,7 @@ hidden:
 memory current-value stateでも同様に:
 
 ```text
-if cond {
+if (cond) {
     replace(P, a)
 } else {
     replace(P, b)
@@ -8200,7 +8200,7 @@ loop は loop-carried state を parameter values として明示する value-pro
 ```text
 let result =
     loop (i = u32(0), acc = u32(0)) {
-        if i == n {
+        if (i == n) {
             break acc
         } else {
             continue(i + u32(1), acc + i)
