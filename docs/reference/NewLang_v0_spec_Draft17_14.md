@@ -12,40 +12,38 @@
 
 ## Draft 17.14 の主変更
 
-Draft 17.14 は、R6-01 / M9.9で確認された contextual source word と ordinary lexical name の
-source-disambiguation gapを局所的に閉じる
-**targeted source/name-disambiguation revision** である。
+Draft 17.14 は、R6-01 / M9.9で確認された structural source word と ordinary lexical name の
+source/name-admissibility gapを局所的に閉じる
+**targeted ordinary-name reservation revision** である。
 
 Draft 17.13までの ownership / lifetime / dependency / call / return / whole-unit visibility semantics は変更しない。
-本revisionは、current closed source profileで ordinary lexical name と同じword tokenを共有する
-`fn` / `let` / `return` / `match` の解釈規則だけを固定する。
+本revisionは、current closed source profileの骨格を作る
+`fn` / `let` / `return` / `match` と ordinary lexical namespace の関係だけを固定する。
 
-1. **contextual source wordをordinary lexical nameから予約しない**
-   - `fn` / `let` / `return` / `match` は、current closed profileではordinary lexical nameとして引き続きadmissible。
-   - lexer-level keyword tokenやgeneral reserved-name tableを導入しない。
-   - exact `unit` は従来どおり§4.9のdistinguished core spellingであり、このcontextual ruleの対象外。
+1. **small structural setをordinary lexical namespaceから予約する**
+   - current reserved structural spellingsはexactly `fn` / `let` / `return` / `match`。
+   - ordinary function / parameter / local binding等、ordinary lexical namespaceへこれらのexact spellingを導入してはならない。
+   - このsetはcurrent closed profileのtargeted setであり、future keyword inventoryを先取りしない。
 
-2. **closed constructのdistinguishing shapeが成立した時だけcontextual interpretationへcommitする**
-   - spelling単独ではsyntax introducerと決めない。
-   - current syntactic positionと、そのclosed constructをordinary name/expressionから一意に分けるshapeが成立した場合だけcontextual constructとして扱う。
-   - distinguishing shapeへcommitした後のsyntax errorをordinary-name parseへfallbackして救済してはならない。
+2. **lexer-wide keyword redesignは要求しない**
+   - lexerはこれらを他のwordと同じtoken classで表現してよい。
+   - restrictionはordinary lexical source-name admissibilityで適用してよい。
+   - parser implementationへdedicated keyword token kindを要求しない。
 
-3. **current exact disambiguationを固定する**
-   - `fn name(` はtop-level ordinary-function declaration prefix。lexical block内では同prefixはunsupported local declaration。`fn(` はordinary call/name path。
-   - `let` は§27 / §16のclosed receiver shapeがmandatory `=` まで成立した時だけbinding introducer。`let(...)` がreceiver+`=` shapeを作らない場合はordinary call/name path。
-   - return-enabled blockで `return expression;` が成立した時だけterminating return item。`return(...)` はordinary call path、`return;` はbare return terminatorではない。
-   - `match expression {` が成立した時だけmatch expression。`match(...)` はordinary call path。
+3. **member/nominal namespaceまで自動的に予約しない**
+   - field / variant / member label等、ordinary lexical bindingを導入しない別namespaceのspellingは本revisionだけで一律禁止しない。
+   - ただしmember/payload spellingをfresh ordinary local bindingへ受けるsource formでは、そのlocal binding nameに本structural setを使えない。
 
-4. **ordinary name reachabilityをsource grammar全体で保つ**
-   - function name / parameter / ordinary local等に `fn` / `let` / `return` / `match` を使っても、
-     non-contextual expression positionでは通常のordinary lookupへ到達できなければならない。
-   - field / variant / member labelをこのruleで予約しない。
+4. **structural source interpretationを安定化する**
+   - `fn` / `let` / `return` / `match` をordinary call/nameとして温存するための
+     distinguishing-shape / fallback規則は持たない。
+   - current grammarでこれらがstructural introducerとして現れる位置では、そのstructural meaningを持つ。
+   - malformed structural syntaxをordinary-name parseへfallbackして別programとして救済しない。
 
-5. **future grammarは既存valid ordinary-call spellingをretroactiveに奪わない**
-   - grouping expression、generic call、qualification等を将来追加する場合も、
-     本revisionでordinary callとして確定した `fn(...)` / `let(...)` / `return(...)` / `match(...)` を
-     spellingだけを理由にcontextual syntaxへ再解釈しない。
-   - future syntax固有の新しいambiguityは、そのfeature導入時に局所裁定する。
+5. **`unit` は別のdistinguished-core caseとして維持する**
+   - `unit` もordinary lexical namespaceへ導入できないが、理由はstructural source wordだからではない。
+   - §4.9どおりcore singleton type/valueを直接表すdistinguished spellingである。
+   - structural reserved setと `unit` はlexer token classを共有してよいが、semantic categoryを混同しない。
 
 ## Draft 17.13 の主変更
 
@@ -1632,6 +1630,10 @@ source spellingのexact ruleとして、`unit` は **distinguished core spelling
 これはgeneral keyword-system redesignではない。
 lexerは `unit` を他のwordと同じtoken classで表現してよく、
 restrictionはsource-name admissibility / name resolutionで適用してよい。
+
+§21.8の `fn` / `let` / `return` / `match` structural reserved setとはcategoryが異なる。
+それらはsource grammarの骨格を安定化するためordinary lexical namespaceから予約されるのに対し、
+`unit` はcore singleton type/value identityを直接表すdistinguished spellingとして予約される。
 
 field name / variant name等、ordinary lexical bindingを導入しないnominal/member namespaceのspellingまで
 本ruleだけで一律に予約しない。
@@ -4383,9 +4385,10 @@ let Pair { a, b } = pair;
 - patternはそのaggregateの全fieldをexactly once指定する。
 - duplicate / missing / unknown fieldはcompile error。
 - pattern中の各 `field_name` は同名のfresh local bindingも導入するshorthandとする。
-- そのfresh local binding nameには§4.9のname-admissibility ruleを適用するため、
-  `let Type { unit } = expression` はfield label自体ではなく、同名local binding `unit` を導入しようとする点で不受理。
-- field label `unit` 自体を一般に禁止するruleは本revisionでは追加しない。
+- そのfresh local binding nameには§4.9および§21.8のordinary-name admissibility ruleを適用する。
+  従って `let Type { unit } = expression` に加え、
+  `let Type { match } = expression` 等もfield label自体ではなく、同名のreserved ordinary local bindingを導入しようとする点で不受理。
+- field label `unit` / `fn` / `let` / `return` / `match` 自体を一般に禁止するruleは本revisionでは追加しない。
 - renaming / rest / nested patternはこのformに含めない。
 - RHSは一度だけ評価し、whole aggregate valueを得た後にdestructureする。
 - RHSがordinary bindingのnon-Copy aggregateならそのbinding全体をconsumeする。
@@ -4959,14 +4962,11 @@ parameter :=
 
 ここで:
 
-- `fn` はこのtop-level declarationを導入するcontextual source word。
-  ただしspelling `fn` 自体はordinary lexical nameとしてreservedではない。
-  §21.8のcontextual-word ruleにより、top-levelで `fn` + ordinary `function_name` + `(` のprefixが成立した時だけ
-  ordinary-function declarationへcommitする。
-  lexical block内で同prefixが現れた場合はnested/local declarationとして不受理だが、
-  `fn(...)` はordinary expression/call pathである。
+- `fn` はこのtop-level declarationを導入するstructural source wordであり、§21.8のcurrent structural reserved setに属する。
+  lexer-wide keyword token classは要求しないが、exact spelling `fn` をordinary lexical nameとして導入してはならない。
 - `function_name` / `parameter_name` はordinary lexical source nameであり、
-  §4.9のname-admissibility ruleに従うためexact spelling `unit` を導入できない。
+  §4.9のdistinguished spelling `unit` および§21.8のcurrent structural reserved set
+  `fn` / `let` / `return` / `match` を使用できない。
 - parameter nameは同一function signature内で互いにdistinctでなければならない。
 - zero parameterはexactly `()`。
 - parameter listのtrailing commaは本closed profileでは許可しない。
@@ -5302,12 +5302,11 @@ block_item := binding ';'
 
 - newline / CRLF は従来どおりtoken間whitespaceであり、item terminatorではない。
 - non-tail `binding` / `expression` itemは `;` で終了する。
-- `let` / `return` は§21.8のcontextual source-word ruleに従う。
-  `let` は§27.1 / §27.1a / §16.1のclosed binding receiver shapeがmandatory `=` まで成立した時だけ
-  binding itemへcommitする。それ以外の `let` spellingはordinary expression/name pathを失わない。
-- explicit return itemはexactly `return expression;` であり、return-enabled block-item positionで
-  このcomplete closed shapeが成立した時だけterminating return itemへcommitする。
-  `return(...)` はordinary call pathであり、`return;` はbare return terminatorではない。
+- `let` / `return` は§21.8のcurrent structural reserved setに属し、ordinary lexical nameとして導入できない。
+  従ってblock-item positionで `let` はclosed binding formのintroducer、`return` はreturn-enabled contextの
+  terminating return formのintroducerとして扱い、同spellingのordinary call/name interpretationとの競合を作らない。
+- explicit return itemはexactly `return expression;` であり、semicolonは常に必須。
+  `return(...)` をordinary function callとして解釈するsource routeは本closed profileに存在しない。
 - `return expression` はtail expressionではない。block末尾でもsemicolonを省略できない。
 - bare return terminatorは本closed profileに含めない。unit resultを明示的にreturnする場合は `return unit;` を用いる。
 - block末尾のsemicolon無しordinary expressionだけがtail expressionになり得る。
@@ -5634,57 +5633,46 @@ ordinary lexical namespaceへ `unit` を導入するsource formはname-admissibi
 この例外は `unit` のtargeted source ruleであり、
 他のordinary nameについてbuiltin-first lookupやgeneral reserved-name tableを導入しない。
 
-### current contextual source-word disambiguation
+### current structural source-word reservation
 
-current closed source profileでは、`fn` / `let` / `return` / `match` は
-lexer上ordinary nameと同じword token classを共有し、**spellingだけではordinary lexical nameとしてreservedにならない**。
-
-ordinary lexical name admissibility、source parsing、semantic lookupは別段階である。
-
-- lexer token classがwordであること自体はordinary-name admissibilityを決めない。
-- exact `unit` だけは§4.9どおりordinary lexical namespaceへ導入不可のdistinguished core spelling。
-- `fn` / `let` / `return` / `match` はordinary function / parameter / local等のnameとしてadmissible。
-- parser/source interpretationは、現在位置で**そのclosed contextual constructをordinary expression/nameから一意に区別するdistinguishing shape**
-  が成立した場合だけcontextual constructへcommitする。
-- distinguishing shapeへcommitした後に後続syntaxがinvalidだった場合、ordinary-name interpretationへfallbackして
-  malformed contextual constructを別のvalid programとして救済してはならない。
-
-current exact distinguishing shapesは:
+current closed source profileでは、次のsmall structural setを
+**ordinary lexical namespaceへ導入できないsource spelling** とする。
 
 ```text
-fn:
-    top-level  'fn' ordinary_name '('
-    -> ordinary-function declarationへcommit
-
-let:
-    'let' closed_binding_receiver '='
-    -> ordinary bindingへcommit
-
-return:
-    return-enabled block-item positionで
-    'return' expression ';'
-    -> terminating return itemへcommit
-
-match:
-    'match' expression '{'
-    -> match expressionへcommit
+fn
+let
+return
+match
 ```
 
-補足:
+このsetはcurrent v0 source grammarの骨格を作るdeclaration / binding / control / expression introducerだけを対象とする。
+general future keyword inventoryではない。
 
-- lexical block内の `fn ordinary_name (` はnested/local function declaration shapeとして認識した上で不受理。
-  `fn(...)` はordinary call/name path。
-- `let(...)` は、内容が§27.1aのreceiver listを構成して後続 `=` まで到達した場合だけmulti-result binding。
-  `=` を伴わない `let(...)` はordinary call/name path。
-- `return(...)` はordinary call/name path。
-  `return;` はterminating bare returnではなく、ordinary name `return` がsemanticにresolveする場合は
-  ordinary expression statementとして扱い得る。
-- `match(...)` はordinary call/name path。
-- whitespaceそのものをcontextual/ordinaryのdisambiguatorにしない。
-  `->` / `=>` 等、別節でadjacencyを明示したpunctuator ruleだけがそのadjacencyを要求する。
+ordinary lexical name admissibility、lexer token class、member namespace、semantic lookupは別段階である。
 
-このruleはparser implementationに固定個数tokenのlookahead、backtracking、特定AST strategyを要求しない。
-observable source interpretationが上記と同値ならよい。
+- lexerは `fn` / `let` / `return` / `match` を他のwordと同じtoken classで表現してよい。
+  dedicated keyword token kindはnormative requirementではない。
+- ordinary function name、parameter、ordinary local binding、multi-result receiver、
+  aggregate destructuringが導入するfresh local、match payload binding等、
+  ordinary lexical namespaceへnameを導入するsource formでは上記4 spellingを使用できない。
+- source parserは、上記spellingをordinary lexical nameとして到達可能に保つための
+  distinguishing-shape / backtracking / fallback semanticsを提供する必要がない。
+  current grammarでstructural introducerとして現れる位置では、そのstructural source meaningを持つ。
+- malformed `fn` declaration、`let` binding、`return` item、`match` expressionを
+  同spellingのordinary lexical nameとしてfallback解釈して別のvalid programへ変えてはならない。
+- field name / variant name / member label等、ordinary lexical namespaceではない別namespaceまで
+  本ruleだけで一律に予約しない。
+  ただし、そのmember/payload spellingをfresh ordinary lexical bindingへ受けるsource formでは
+  receiver binding nameとして上記4 spellingを使用できない。
+
+§4.9の `unit` は本structural setに含めない。
+`unit` もordinary lexical namespaceへ導入できないが、
+core singleton type/valueを直接表すdistinguished core spellingであり、reservationのsemantic reasonが異なる。
+
+本区別により、狭い文法位置だけで意味を持つtype/modifier-like wordまで自動的にordinary-name reservationへ昇格させない。
+例えばcurrent frontendでtype/loan syntaxに現れる `ptr` / `ref` / `read` / `write` / `exclusive` / `using` 等は、
+それぞれのclosed grammatical positionのruleに従い、本structural setへ自動追加しない。
+将来新しいstructural source wordをordinary lexical namespaceから予約する場合は、そのfeature導入時に個別に裁定する。
 
 dependent associated lookupとordinary lexical candidateを同一candidate setに混ぜない。
 
@@ -7473,11 +7461,11 @@ payload current semantic value:
 
 `match` はvalue-producing expression。
 
-source word `match` 自体はordinary lexical nameとしてreservedではない。
-§21.8に従い、`match expression {` のdistinguishing shapeが成立した時だけ
-このmatch expressionへcommitする。
-従って `match(...)` はordinary call/name pathであり、
-ordinary function/local等としてspelling `match` を導入した場合も対応するordinary expression useへ到達できる。
+source word `match` は§21.8のcurrent structural reserved setに属し、
+ordinary function / parameter / local等のordinary lexical nameとして導入できない。
+従ってexpression positionの `match` は本closed match expressionのstructural introducerであり、
+同spellingのordinary free-function call `match(...)` へfallbackするsource routeは持たない。
+field / variant / member labelとしての `match` まで本ruleだけで一律に予約しない。
 
 Draft 17.10でexact closed source formを次に固定する。
 
@@ -7554,7 +7542,9 @@ unknown variantやscrutineeとは別sumにだけ存在するvariantはsemantic p
 
 `binding_name` はfresh ordinary binding nameであり、selected armのlexical blockへ入る直前に成立し、
 そのarm body内だけでscopeを持つ。
-§4.9のname-admissibility ruleにより、payload binding nameとしてexact spelling `unit` は使用できない。
+§4.9および§21.8のordinary-name admissibility ruleにより、payload binding nameとして
+exact spelling `unit` / `fn` / `let` / `return` / `match` は使用できない。
+このrestrictionはpayloadのfresh ordinary bindingに適用するもので、variant label自体を同じsetで一律予約しない。
 他arm、scrutinee expression、match後のcommon continuationへそのbinding自体を漏らさない。
 
 exact spelling `_` はこのclosed profileでは `Variant(_)` のpayload-discard markerとしてだけ特別扱いする。
@@ -7914,13 +7904,13 @@ let x = expression
 
 の形で生成し、必ず initializer を持つ。
 
-source word `let` 自体はordinary lexical nameとしてreservedではない。
-§21.8に従い、ordinary single bindingでは `let ordinary_name =` のprefixが成立した時にbindingへcommitする。
-§27.1a multi-result / §16.1 aggregate destructuringも、それぞれのclosed receiver shapeの後に
-mandatory `=` が成立した時にbindingへcommitする。
-それ以外の `let` spellingはordinary expression/name pathを失わない。
+source word `let` は§21.8のcurrent structural reserved setに属し、
+ordinary lexical nameとして導入できない。
+block-item positionではclosed binding formのstructural introducerとして扱い、
+ordinary function/local name `let` とのsource ambiguityを作らない。
 
-binding nameはordinary lexical nameであり、§4.9のdistinguished core spelling `unit` を使用できない。
+binding nameはordinary lexical nameであり、§4.9のdistinguished core spelling `unit` および
+§21.8のcurrent structural reserved set `fn` / `let` / `return` / `match` を使用できない。
 従って:
 
 ```text
@@ -7965,7 +7955,8 @@ let (value, empty) = take(p, ending);
 - RHSのchecked result countはreceiver countとexactly一致しなければならない。
 - resultはchecked result orderに従ってleft-to-rightにreceiverへ対応する。
 - receiver名は互いにdistinctで、current lexical scopeに対するfresh binding名でなければならない。
-- receiver名に§4.9のdistinguished core spelling `unit` を使用してはならない。
+- receiver名に§4.9のdistinguished core spelling `unit` または
+  §21.8のcurrent structural reserved set `fn` / `let` / `return` / `match` を使用してはならない。
 - receiver bindingはRHS内ではscopeに入らない。
 - RHS evaluation / semantic applicability / arity check / receivingの全てが成功した後に、全receiver bindingが一括してAvailableになる。
 - failure時に一部receiverだけを成立させてはならない。
