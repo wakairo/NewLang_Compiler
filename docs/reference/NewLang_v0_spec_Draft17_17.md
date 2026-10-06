@@ -1708,9 +1708,9 @@ ordinary expression で binding を value として使用する場合:
 ```text
 let y = x
 f(x)
-return x
-break x
-continue(x)
+return x;
+break x;
+continue(x);
 ```
 
 は同じ value-use rule に従う。
