@@ -52,7 +52,8 @@ typedef enum {
     NL_TYPE_U8,
     NL_TYPE_USIZE,
     NL_TYPE_ADDR,
-    NL_TYPE_SUM
+    NL_TYPE_SUM,
+    NL_TYPE_BOOL
 } NLSemanticTypeKind;
 typedef struct {
     NLSemanticTypeKind kind;

@@ -14,10 +14,12 @@ P10 enforces Draft 17.12's exact `unit` ordinary lexical name reservation while 
 P12 enforces Draft 17.14 ordinary-name reservation for `fn`, `let`, `return`, and `match`, with diagnostics distinct from core `unit` and member labels preserved.
 P11 adds Draft 17.13's bounded top-level non-generic `fn` declarations, whole-unit signature visibility and acyclic body calls. Recursive body analysis remains an explicit precision limit.
 
+P13 adds Draft 17.15's minimal core `bool` and exact `if (expression) { ... } else { ... }`, finite normal/return joins and if/else ordinary-name reservation. Distinct non-Copy conditional identities remain structured precision rejections. [P13 report](docs/P13_IF_SOURCE_SEMANTIC_SLICE_REPORT.md) records the review scope.
+
 ## Authority
 
 The canonical language authority is the Draft selected by
-`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.14**), followed by reviewed
+`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.15**), followed by reviewed
 process/backend contracts and merged implementation/formal evidence.
 Historical reports, the task prompt and conversation do not override the Draft.
 Backend Contract v0.4 defines backend obligations. The Charter, Handoff Manifest
@@ -107,7 +109,7 @@ cmake --build build-ubsan --parallel 2
 ctest --test-dir build-ubsan --output-on-failure
 ```
 
-Each configuration runs the same **86 CTests**: source and lexer module unit
+Each configuration runs the same **95 CTests**: source and lexer module unit
 tests, six parser unit groups, file-source -> lexer/parser integration,
 six P3 semantic unit groups and source -> parser -> checker integration,
 ten raw-storage unit groups and the raw -> typed -> raw -> deallocate cycle,
@@ -119,7 +121,8 @@ a targeted R4-01 argument-compatibility regression,
 six P9 return syntax/transfer/exit/failure/effects/availability unit groups and Result-like decoder integration,
 three P10 unit-name admission/builtin/failure groups,
 seven P11 declaration/visibility/body/failure/precision/resource groups,
-four P12 structural-name ingress/header/member/failure groups,
+four P12 structural-name ingress/header/member/failure groups (including if/else),
+nine P13 bool/if grammar/outcome/identity/ref/effect/nesting/failure/resource groups,
 diagnostic unit checks, six CLI
 cases (each invoked twice), valid LLVM C API module/IR, artifact integrity, and
 frozen-oracle smoke. ASan includes leak detection; UBSan stops on the first
@@ -146,7 +149,7 @@ artifact is produced. Output I/O failure exits 1.
   syntax trees borrowing source, one-token lookahead, checked failure cleanup,
   structured first diagnostics, four P2 fragment entries and the Draft 17.9 P5
   source-fragment entry for blocks/receiving/registered aggregate forms plus the
-  Draft 17.10 constructor/match forms and Draft 17.13 fn-only function-unit entry. Loan
+  Draft 17.10 constructor/match forms, Draft 17.13 fn-only function-unit entry and Draft 17.15 exact if. Loan
   bodies retain balanced byte regions; their contents are not parsed.
 - `include/newlang/{semantic,checked}.h`, `src/{semantic,semantic_check,sum,checked}.c`:
   owning fixture context, canonical types/packages/places/scopes, transactional
@@ -196,6 +199,8 @@ artifact is produced. Output I/O failure exits 1.
 - `docs/P8_REGISTERED_FUNCTION_BODY_SLICE_REPORT.md`: W1–W4 disposition, tests, limits and review handoff.
 - `docs/P9_EXPLICIT_RETURN_SLICE_CONTRACT.md`: terminating block items, function exit, bounded match flow, ownership and source limits.
 - `docs/P9_EXPLICIT_RETURN_SLICE_REPORT.md`: Phase A, W1/W2, destructive/rollback tests and exact-head review handoff.
+- `docs/P13_IF_SOURCE_SEMANTIC_SLICE_CONTRACT.md`: finite if outcome/identity/dependency, durable ownership and precision contract.
+- `docs/P13_IF_SOURCE_SEMANTIC_SLICE_REPORT.md`: Phase A, W1–W17, rollback/OOM, validation and review handoff.
 - `docs/P12_STRUCTURAL_NAME_RESERVATION_REPORT.md`: admission audit/classification, parser ordering, namespace regression and rollback/OOM evidence.
 - `docs/P11_FUNCTION_DECLARATION_SOURCE_CONTRACT.md`: bounded source/unit API and durable body ownership/precision contracts.
 - `docs/P11_FUNCTION_DECLARATION_SOURCE_REPORT.md`: Phase A, break-test evidence and review handoff.
@@ -207,4 +212,4 @@ artifact is produced. Output I/O failure exits 1.
 
 There is still no full-program parser or semantic checker, typed MIR, LLVM lowering,
 optimization framework, broad FFI, concurrency, separate compilation,
-self-hosting, public token/AST-dump mode, or a full-program frontend. The module slice supports canonical receiving/block/aggregate forms, registered closed-sum constructor/match, bounded dependency-aware ref results and registered body calls with P9 explicit-return lexical blocks. Source declarations and broader frontend forms remain unsupported. The CLI compile path remains unsupported.
+self-hosting, public token/AST-dump mode, or a full-program frontend. The module slice supports canonical receiving/block/aggregate forms, registered closed-sum constructor/match, bounded dependency-aware ref results and registered body calls with P9 explicit-return lexical blocks. Only the fn-only declaration-unit profile is supported; broader frontend forms remain unsupported. The CLI compile path remains unsupported.
