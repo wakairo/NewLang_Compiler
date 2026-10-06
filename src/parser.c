@@ -567,25 +567,37 @@ static NLSyntaxNode *source_block(NLParser *parser)
         return NULL;
     while (peek(parser) && !punct(parser, '}')) {
         const bool is_binding = word(parser, "let");
+        const bool is_return = word(parser, "return");
+        const NLSourceSpan return_start = parser->token.span;
+        if (is_return)
+            consume(parser);
+        if (is_return && punct(parser, ';')) {
+            fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+                 "P9-BARE-RETURN", "return requires an expression");
+            return NULL;
+        }
         NLSyntaxNode *item =
             is_binding ? source_binding(parser) : source_expression(parser);
         if (item == NULL)
             return NULL;
         if (!punct(parser, ';')) {
-            if (!is_binding && punct(parser, '}')) {
+            if (!is_binding && !is_return && punct(parser, '}')) {
                 result->view.data.block.tail = item;
                 break;
             }
             fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
-                 "P5-EXPECTED-ITEM-END", "non-tail block item requires ;");
+                 is_return ? "P9-RETURN-SEMICOLON" : "P5-EXPECTED-ITEM-END",
+                 "non-tail block item requires ;");
             return NULL;
         }
         const size_t end = parser->token.span.end_byte;
         consume(parser);
         if (!is_binding) {
             NLSyntaxNode *statement =
-                node(parser, NL_SYNTAX_STATEMENT,
-                     (NLSourceSpan){item->view.span.start_byte, end});
+                node(parser, is_return ? NL_SYNTAX_RETURN : NL_SYNTAX_STATEMENT,
+                     (NLSourceSpan){is_return ? return_start.start_byte
+                                              : item->view.span.start_byte,
+                                    end});
             if (statement == NULL)
                 return NULL;
             statement->view.data.statement.expression = item;
@@ -706,6 +718,12 @@ static NLSyntaxNode *source_expression(NLParser *parser)
     if (!enter(parser))
         return NULL;
     NLSyntaxNode *result = NULL;
+    if (word(parser, "return")) {
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+             "P9-RETURN-ITEM",
+             "return is a terminating block item, not an expression");
+        goto done;
+    }
     if (word(parser, "match")) {
         result = source_match(parser);
         goto done;

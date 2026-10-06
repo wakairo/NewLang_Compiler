@@ -41,7 +41,9 @@ typedef enum {
     NL_CHECKED_AGGREGATE_BINDING,
     NL_CHECKED_SUM_CONSTRUCTOR,
     NL_CHECKED_MATCH,
-    NL_CHECKED_MATCH_ARM
+    NL_CHECKED_MATCH_ARM,
+    NL_CHECKED_RETURN,
+    NL_CHECKED_UNIT
 } NLCheckedKind;
 typedef enum {
     NL_VALUE_USE_NONE,
@@ -77,6 +79,10 @@ typedef struct {
     NLSymbolId symbol;
     size_t function; /* resolved prelude/registered signature identity */
     bool body_backed;
+    bool terminates; /* no normal outgoing edge; type 0 means absent, not never
+                      */
+    size_t normal_arms; /* bounded function match: excludes return edges */
+    NLCheckedResult returned; /* RETURN responsibility, not a normal result */
     NLValueUse value_use;
     bool contextually_weakened;
     NLTypeId parameter_type;

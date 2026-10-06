@@ -10,7 +10,10 @@ typedef struct {
     size_t depth;
     size_t binding_floor, namespace_floor;
     size_t body_function;
-    bool in_function_body;
+    bool in_function_body, definition, terminated;
+    NLTypeId function_result;
+    size_t function_binding_floor, function_scope_floor, function_place_floor;
+    NLCheckedResult returned;
     size_t arm_floor;
     bool has_arm_floor, in_match_arm;
     NLCheckStatus status;
@@ -530,6 +533,8 @@ static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
     } else {
         id = expression(check, syntax);
     }
+    if (check->terminated)
+        return id;
     return parameter_match(check, id, expected);
 }
 
@@ -1135,7 +1140,12 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
             return 0;
         }
         arguments[i] = argument(check, argument_syntax, expected);
-        if (arguments[i] == 0) {
+        if (arguments[i] == 0)
+            return 0;
+        if (check->terminated) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                 "P9-OPERAND-TERMINATION",
+                 "termination with pending call operands is outside P9");
             return 0;
         }
         if (function.kind == NL_CHECKED_REGISTERED_CALL) {
@@ -1204,7 +1214,10 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         }
         for (size_t r = 0; r < argument_view.result_count; ++r) {
             const NLValueId value = argument_view.results[r].value;
-            bool forwarded = c->values[value - 1].carrier == NL_CARRIER_PLACE;
+            const NLValueCarrier carrier = c->values[value - 1].carrier;
+            bool forwarded = carrier == NL_CARRIER_PLACE ||
+                             carrier == NL_CARRIER_SUM ||
+                             carrier == NL_CARRIER_AGGREGATE;
             for (size_t s = 0; s < view(check, id)->result_count; ++s) {
                 forwarded =
                     forwarded || view(check, id)->results[s].value == value;
@@ -1232,7 +1245,9 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
     }
     NLCheckedNodeId result = 0;
     if (check->in_function_body && node->kind != NL_SYNTAX_EXPR_NAME &&
-        node->kind != NL_SYNTAX_EXPR_CALL && node->kind != NL_SYNTAX_BLOCK) {
+        node->kind != NL_SYNTAX_EXPR_CALL && node->kind != NL_SYNTAX_BLOCK &&
+        node->kind != NL_SYNTAX_SUM_CONSTRUCTOR &&
+        node->kind != NL_SYNTAX_MATCH) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, node->span,
              "P8-BODY-PROFILE",
              "expression needs a richer relative body analysis");
@@ -1240,7 +1255,11 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         return 0;
     }
     if (node->kind == NL_SYNTAX_EXPR_NAME) {
-        result = identifier(check, node);
+        result = equal_name(check, node->data.name, "unit")
+                     ? add(check, (NLCheckedNodeView){.kind = NL_CHECKED_UNIT,
+                                                      .span = node->span,
+                                                      .type = 1})
+                     : identifier(check, node);
     } else if (node->kind == NL_SYNTAX_EXPR_CALL) {
         result = call(check, node);
     } else if (node->kind == NL_SYNTAX_BLOCK) {
@@ -1525,6 +1544,10 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
     const NLCheckedNodeId init = expression(check, initializer);
     if (init == 0)
         goto cleanup;
+    if (check->terminated) {
+        result = init;
+        goto cleanup;
+    }
     NLCheckedNodeView rhs = *view(check, init);
     NLValueId values[NL_SEMANTIC_MAX_FIELDS] = {0};
     if (destructure) {
@@ -1639,12 +1662,93 @@ static NLCheckedNodeId source_statement(Check *check,
 {
     const NLCheckedNodeId init =
         expression(check, syntax->data.statement.expression);
-    if (init == 0 || !discard_results(check, init))
+    if (init == 0)
+        return 0;
+    if (check->terminated)
+        return init;
+    if (!discard_results(check, init))
         return 0;
     return add(check, (NLCheckedNodeView){.kind = NL_CHECKED_STATEMENT,
                                           .span = syntax->span,
                                           .initializer = init,
                                           .type = 1});
+}
+
+static bool end_bindings(Check *check, size_t floor, NLSourceSpan span)
+{
+    NLSemanticContext *c = check->context;
+    for (size_t i = floor; i < c->binding_count; ++i) {
+        NLBindingEntry *entry = &c->bindings[i];
+        if (entry->hidden)
+            continue;
+        if (entry->view.availability == NL_AVAILABLE) {
+            if (!c->types[entry->view.type - 1].view.is_discardable) {
+                fail(check, NL_CHECK_SEMANTIC_ERROR, span,
+                     "P5-SCOPE-OBLIGATION",
+                     "non-Discardable local remains available at block exit");
+                return false;
+            }
+            if (conflicts(check, entry->view.place, false, true, 0, span))
+                return false;
+            nl_sum_detach(c, entry->view.place);
+            end_temporary(check, entry->view.value);
+            c->places[entry->view.place - 1].live = false;
+            c->places[entry->view.place - 1].current_value = 0;
+            c->places[entry->view.place - 1].current_fact = 0;
+            c->places[entry->view.place - 1].governing_domain = 0;
+            entry->view.availability = NL_CONSUMED;
+        }
+        entry->hidden = true;
+    }
+    return true;
+}
+
+/* The one common return boundary; unit has no package, not a synthetic result.
+ */
+static NLCheckedNodeId source_return(Check *check, const NLSyntaxView *syntax)
+{
+    if (!check->in_function_body) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
+             "P9-RETURN-CONTEXT",
+             "return requires a registered ordinary function body");
+        return 0;
+    }
+    NLCheckedNodeId expression_id =
+        expression(check, syntax->data.statement.expression);
+    if (expression_id == 0 || check->terminated)
+        return expression_id;
+    const NLCheckedNodeView value = *view(check, expression_id);
+    if (value.type != 0 &&
+        check->context->types[value.type - 1].view.kind == NL_TYPE_REF) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
+             "P9-REF-RETURN",
+             "ordinary ref cannot escape as a function result");
+        return 0;
+    }
+    if (value.type != check->function_result || value.result_count > 1 ||
+        (value.result_count == 0 && value.type != 1)) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span, "P9-RETURN-TYPE",
+             "return expression must exactly match the function result");
+        return 0;
+    }
+    if (!end_bindings(check, check->function_binding_floor, syntax->span))
+        return 0;
+    NLCheckStatus status =
+        nl_sem_function_exit(check->context, check->function_scope_floor,
+                             check->function_place_floor);
+    if (status != NL_CHECK_OK) {
+        fail(check, status, syntax->span, "P9-RETURN-DEPENDENCY",
+             "return state depends on an ending function-local scope/place");
+        return 0;
+    }
+    check->returned = value.result_count == 0 ? (NLCheckedResult){.type = 1}
+                                              : value.results[0];
+    check->terminated = true;
+    return add(check, (NLCheckedNodeView){.kind = NL_CHECKED_RETURN,
+                                          .span = syntax->span,
+                                          .initializer = expression_id,
+                                          .terminates = true,
+                                          .returned = check->returned});
 }
 
 static NLCheckedNodeId source_block(Check *check, const NLSyntaxView *syntax)
@@ -1665,15 +1769,16 @@ static NLCheckedNodeId source_block(Check *check, const NLSyntaxView *syntax)
          item = nl_syntax_next_argument(item)) {
         const NLSyntaxView *v = nl_syntax_node_view(item);
         if (check->in_function_body && v->kind != NL_SYNTAX_BINDING &&
-            v->kind != NL_SYNTAX_STATEMENT) {
+            v->kind != NL_SYNTAX_STATEMENT && v->kind != NL_SYNTAX_RETURN) {
             fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, v->span,
                  "P8-BODY-PROFILE",
                  "body receiving pattern needs richer relative analysis");
             goto cleanup;
         }
-        const NLCheckedNodeId child = v->kind == NL_SYNTAX_STATEMENT
-                                          ? source_statement(check, v)
-                                          : source_binding(check, v);
+        const NLCheckedNodeId child =
+            v->kind == NL_SYNTAX_RETURN      ? source_return(check, v)
+            : v->kind == NL_SYNTAX_STATEMENT ? source_statement(check, v)
+                                             : source_binding(check, v);
         if (child == 0)
             goto cleanup;
         if (previous == 0)
@@ -1682,8 +1787,10 @@ static NLCheckedNodeId source_block(Check *check, const NLSyntaxView *syntax)
             view(check, previous)->next_item = child;
         previous = child;
         ++view(check, id)->item_count;
+        if (check->terminated)
+            break;
     }
-    if (syntax->data.block.tail != NULL) {
+    if (!check->terminated && syntax->data.block.tail != NULL) {
         const NLCheckedNodeId tail = expression(check, syntax->data.block.tail);
         if (tail == 0)
             goto cleanup;
@@ -1694,47 +1801,111 @@ static NLCheckedNodeId source_block(Check *check, const NLSyntaxView *syntax)
         memcpy(view(check, id)->results, result.results,
                sizeof(result.results));
     }
-    for (size_t i = floor; i < c->binding_count; ++i) {
-        NLBindingEntry *entry = &c->bindings[i];
-        if (entry->hidden)
-            continue;
-        if (entry->view.availability == NL_AVAILABLE) {
-            if (!c->types[entry->view.type - 1].view.is_discardable) {
-                fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span,
-                     "P5-SCOPE-OBLIGATION",
-                     "non-Discardable local remains available at block exit");
-                goto cleanup;
-            }
-            if (conflicts(check, entry->view.place, false, true, 0,
-                          syntax->span))
-                goto cleanup;
-            nl_sum_detach(c, entry->view.place);
-            end_temporary(check, entry->view.value);
-            c->places[entry->view.place - 1].live = false;
-            c->places[entry->view.place - 1].current_value = 0;
-            c->places[entry->view.place - 1].current_fact = 0;
-            c->places[entry->view.place - 1].governing_domain = 0;
-            entry->view.availability = NL_CONSUMED;
-        }
-        entry->hidden = true;
+    if (!check->terminated && !end_bindings(check, floor, syntax->span))
+        goto cleanup;
+    if (check->terminated) {
+        view(check, id)->type = 0;
+        view(check, id)->result_count = 0;
+        view(check, id)->terminates = true;
+        view(check, id)->returned = check->returned;
     }
 cleanup:
     check->binding_floor = previous_floor;
     return check->status == NL_CHECK_OK ? id : 0;
 }
 
-static bool body_result(Check *check, const NLFunctionEntry *function,
-                        NLCheckedNodeId body, NLSourceSpan span)
+static bool body_result(Check *check, NLTypeId declared, NLCheckedNodeId body,
+                        NLSourceSpan span)
 {
     const NLCheckedNodeView result = *view(check, body);
-    if (result.type != function->result || result.result_count > 1 ||
-        (result.result_count == 0 && function->result != 1)) {
+    if (check->terminated) {
+        if (check->returned.type == declared)
+            return true;
+        fail(check, NL_CHECK_INTERNAL_ERROR, span, "P9-RETURN-INTERNAL",
+             "terminated body lost its checked function result");
+        return false;
+    }
+    if (result.type != declared || result.result_count > 1 ||
+        (result.result_count == 0 && declared != 1)) {
         fail(
             check, NL_CHECK_SEMANTIC_ERROR, span, "P8-BODY-RESULT",
             "normal body result must exactly match the declared single result");
         return false;
     }
     return true;
+}
+
+/* Both registered plans and trusted host-known body fixtures use the same
+ * source control/result/exit path. Call-site publication remains transactional.
+ */
+static bool function_block(Check *check, const NLSyntaxView *syntax)
+{
+    check->artifact->root = source_block(check, syntax);
+    if (check->artifact->root == 0 ||
+        !body_result(check, check->function_result, check->artifact->root,
+                     syntax->span))
+        return false;
+    const NLCheckStatus status =
+        nl_sem_function_exit(check->context, check->function_scope_floor,
+                             check->function_place_floor);
+    if (status != NL_CHECK_OK) {
+        fail(check, status, syntax->span, "P8-EXIT-DEPENDENCY",
+             "surviving state depends on an ending function-local scope/place");
+        return false;
+    }
+    for (size_t i = check->function_scope_floor;
+         i < check->context->scope_count; ++i)
+        check->context->scopes[i].active = false;
+    return true;
+}
+
+NLCheckStatus nl_sem_check_function_block(NLSemanticContext *context,
+                                          const NLSyntaxTree *tree,
+                                          NLFunctionBoundary boundary,
+                                          NLCheckedFragment **out,
+                                          NLCheckDiagnostic *diagnostic)
+{
+    if (context == NULL || tree == NULL || out == NULL || *out != NULL ||
+        boundary.result == 0 || boundary.result > context->type_count ||
+        boundary.bindings > context->binding_count ||
+        boundary.scopes > context->scope_count ||
+        boundary.places > context->place_count)
+        return NL_CHECK_INTERNAL_ERROR;
+    const NLSyntaxView *syntax = nl_syntax_node_view(nl_syntax_tree_root(tree));
+    if (syntax == NULL || syntax->kind != NL_SYNTAX_BLOCK)
+        return NL_CHECK_INTERNAL_ERROR;
+    Check check = {.source = nl_syntax_tree_source(tree),
+                   .in_function_body = true,
+                   .function_result = boundary.result,
+                   .binding_floor = boundary.bindings,
+                   .namespace_floor = boundary.bindings,
+                   .arm_floor = boundary.bindings,
+                   .has_arm_floor = true,
+                   .function_binding_floor = boundary.bindings,
+                   .function_scope_floor = boundary.scopes,
+                   .function_place_floor = boundary.places};
+    if (!host(&check, nl_sem_clone(context, &check.context), syntax->span))
+        goto failure;
+    check.artifact = malloc(sizeof(*check.artifact));
+    if (check.artifact == NULL) {
+        (void)host(&check, NL_CHECK_OUT_OF_MEMORY, syntax->span);
+        goto failure;
+    }
+    *check.artifact =
+        (NLCheckedFragment){.source = check.source, .context = context};
+    if (!function_block(&check, syntax) ||
+        !host(&check, nl_sum_validate(check.context), syntax->span) ||
+        !host(&check, nl_raw_validate(check.context), syntax->span))
+        goto failure;
+    nl_sem_commit(context, check.context);
+    *out = check.artifact;
+    return NL_CHECK_OK;
+failure:
+    nl_semantic_destroy(check.context);
+    nl_checked_destroy(check.artifact);
+    if (diagnostic != NULL)
+        *diagnostic = check.diagnostic;
+    return check.status;
 }
 
 static bool run_body(Check *caller, NLCheckedNodeId call_id,
@@ -1752,6 +1923,10 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                   .arm_floor = binding_floor,
                   .has_arm_floor = true,
                   .in_function_body = true,
+                  .function_result = function->result,
+                  .function_binding_floor = binding_floor,
+                  .function_scope_floor = scope_floor,
+                  .function_place_floor = place_floor,
                   .body_function = view(caller, call_id)->function};
     body.artifact = malloc(sizeof(*body.artifact));
     if (body.artifact == NULL) {
@@ -1790,24 +1965,9 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                   (NLSourceSpan){0}))
             goto failure;
     }
-    body.artifact->root = source_block(
-        &body,
-        nl_syntax_node_view(nl_syntax_tree_root(function->body->syntax)));
-    if (body.artifact->root == 0 ||
-        !body_result(
-            &body, function, body.artifact->root,
-            nl_syntax_node_view(nl_syntax_tree_root(function->body->syntax))
-                ->span))
+    if (!function_block(&body, nl_syntax_node_view(nl_syntax_tree_root(
+                                   function->body->syntax))))
         goto failure;
-    const NLCheckStatus exit_status =
-        nl_sem_function_exit(c, scope_floor, place_floor);
-    if (exit_status != NL_CHECK_OK) {
-        fail(&body, exit_status, (NLSourceSpan){0}, "P8-EXIT-DEPENDENCY",
-             "surviving state depends on an ending function-local scope/place");
-        goto failure;
-    }
-    for (size_t i = scope_floor; i < c->scope_count; ++i)
-        c->scopes[i].active = false;
     /* Save owned checked body evidence; no source expansion into caller nodes.
      */
     if (caller->artifact->body_count == 64) {
@@ -1830,10 +1990,15 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     }
     caller->artifact->body_calls = calls;
     const NLCheckedNodeView result = *view(&body, body.artifact->root);
-    view(caller, call_id)->type = result.type;
-    view(caller, call_id)->result_count = result.result_count;
-    memcpy(view(caller, call_id)->results, result.results,
-           sizeof(result.results));
+    view(caller, call_id)->type = function->result;
+    view(caller, call_id)->result_count =
+        body.terminated ? (body.returned.value != 0 ? 1 : 0)
+                        : result.result_count;
+    if (body.terminated)
+        view(caller, call_id)->results[0] = body.returned;
+    else
+        memcpy(view(caller, call_id)->results, result.results,
+               sizeof(result.results));
     caller->artifact->bodies[count] = body.artifact;
     caller->artifact->body_calls[count] = call_id;
     ++caller->artifact->body_count;
@@ -1895,6 +2060,12 @@ static NLCheckedNodeId sum_constructor(Check *check, const NLSyntaxView *s)
     NLValueId payload = 0;
     if (payload_type != 0) {
         init = expression(check, s->data.constructor.arguments);
+        if (check->terminated) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
+                 "P9-OPERAND-TERMINATION",
+                 "termination with a pending constructor is outside P9");
+            return 0;
+        }
         if (init == 0 || (payload = one_result(check, init)) == 0)
             return 0;
         if (c->values[payload - 1].type != payload_type) {
@@ -2200,8 +2371,231 @@ static bool rebase_ref_result(Check *public_check, Check *branch,
     return true;
 }
 
+/* P9's bounded finite function plan: zero or one normal arm. Guarded
+ * snapshots prove every arm/exit; only actual plan evaluation mutates the
+ * candidate. Hypothetical IDs/post-state are never imported. */
+static bool function_arm(Check *check, const NLSyntaxView *arm, NLValueId input,
+                         size_t variant, bool hypothetical)
+{
+    NLSemanticContext *c = check->context;
+    const NLTypeId type = c->values[input - 1].type;
+    const NLTypeId payload_type = c->types[type - 1].variant_types[variant - 1];
+    NLValueId sum = input, payload = c->values[sum - 1].sum_payload;
+    if (c->values[sum - 1].variant != variant) {
+        if (!hypothetical) {
+            (void)host(check, NL_CHECK_INTERNAL_ERROR, arm->span);
+            return false;
+        }
+        nl_sem_end_value(c, sum);
+        payload =
+            payload_type == 0
+                ? 0
+                : new_value(check, (NLSemanticValueView){.type = payload_type},
+                            arm->span);
+        if (check->status != NL_CHECK_OK)
+            return false;
+        sum = new_value(check,
+                        (NLSemanticValueView){.type = type,
+                                              .variant = variant,
+                                              .sum_payload = payload},
+                        arm->span);
+        if (sum == 0)
+            return false;
+        if (payload != 0) {
+            c->values[payload - 1].carrier = NL_CARRIER_SUM;
+            c->values[payload - 1].sum_owner = sum;
+        }
+    }
+    if (payload != 0) {
+        if (arm->data.arm.wildcard)
+            nl_sem_end_value(c, payload);
+        else {
+            c->values[payload - 1].carrier = NL_CARRIER_LOOSE;
+            c->values[payload - 1].sum_owner = 0;
+            char *name = source_name_copy(check, arm->data.arm.binding);
+            if (name == NULL)
+                return false;
+            NLSymbolId symbol;
+            NLCheckStatus status = nl_sem_bind_in_scope(
+                c, name, payload, check->binding_floor, &symbol);
+            free(name);
+            if (!host(check, status, arm->span))
+                return false;
+        }
+    }
+    c->values[sum - 1].carrier = NL_CARRIER_ENDED;
+    c->values[sum - 1].sum_payload = 0;
+    return true;
+}
+
+static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
+{
+    if (check->in_match_arm) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
+             "P6-NESTED-MATCH",
+             "nested match joins are outside this bounded slice");
+        return 0;
+    }
+    NLCheckedNodeId init = expression(check, syntax->data.match.scrutinee);
+    if (init == 0 || check->terminated)
+        return init;
+    NLValueId input = one_result(check, init);
+    if (input == 0)
+        return 0;
+    NLSemanticContext *c = check->context;
+    const NLSemanticValueView value = c->values[input - 1];
+    const NLTypeId type = value.type;
+    if (c->types[type - 1].view.kind != NL_TYPE_SUM || value.variant == 0) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+             "P9-MATCH-PRECISION",
+             "function match requires a concrete registered sum value");
+        return 0;
+    }
+    bool seen[NL_SEMANTIC_MAX_VARIANTS] = {false};
+    size_t variants[NL_SEMANTIC_MAX_VARIANTS] = {0}, count = 0;
+    const NLSyntaxNode *arms[NL_SEMANTIC_MAX_VARIANTS] = {0};
+    for (const NLSyntaxNode *arm = syntax->data.match.arms; arm != NULL;
+         arm = nl_syntax_next_argument(arm)) {
+        const NLSyntaxView *a = nl_syntax_node_view(arm);
+        size_t variant = sum_variant(check, type, a->data.arm.variant);
+        if (variant == 0)
+            return 0;
+        if (seen[variant - 1]) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, a->span, "P6-EXHAUSTIVENESS",
+                 "duplicate variant arm");
+            return 0;
+        }
+        seen[variant - 1] = true;
+        NLTypeId payload = c->types[type - 1].variant_types[variant - 1];
+        if ((payload != 0) != a->data.arm.payload) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, a->span, "P6-PATTERN-SHAPE",
+                 "pattern payload shape does not match variant");
+            return 0;
+        }
+        if (payload != 0 && a->data.arm.wildcard &&
+            !c->types[payload - 1].view.is_discardable) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, a->span, "P6-PAYLOAD-DISCARD",
+                 "wildcard requires Discardable payload");
+            return 0;
+        }
+        arms[count] = arm;
+        variants[count++] = variant;
+    }
+    if (count != c->types[type - 1].view.variant_count) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span, "P6-EXHAUSTIVENESS",
+             "every variant requires exactly one arm");
+        return 0;
+    }
+    NLCheckedNodeId id =
+        add(check, (NLCheckedNodeView){.kind = NL_CHECKED_MATCH,
+                                       .span = syntax->span,
+                                       .initializer = init,
+                                       .item_count = count});
+    if (id == 0)
+        return 0;
+    size_t normal = 0, normal_index = 0, actual_index = 0;
+    for (size_t i = 0; i < count; ++i) {
+        if (variants[i] == value.variant)
+            actual_index = i;
+        const NLSyntaxView *a = nl_syntax_node_view(arms[i]);
+        Check branch = *check;
+        branch.context = NULL;
+        branch.artifact = NULL;
+        branch.in_match_arm = true;
+        branch.binding_floor = branch.arm_floor = c->binding_count;
+        branch.has_arm_floor = true;
+        if (!host(&branch, nl_sem_clone(c, &branch.context), a->span))
+            goto failure;
+        branch.artifact = malloc(sizeof(*branch.artifact));
+        if (branch.artifact == NULL) {
+            (void)host(&branch, NL_CHECK_OUT_OF_MEMORY, a->span);
+            goto failure;
+        }
+        *branch.artifact =
+            (NLCheckedFragment){.source = check->source,
+                                .context = branch.context,
+                                .destroy_context = nl_semantic_destroy};
+        if (!function_arm(&branch, a, input, variants[i], true))
+            goto failure;
+        NLCheckedNodeId body = expression(&branch, a->data.arm.body);
+        if (body == 0)
+            goto failure;
+        if (!branch.terminated) {
+            ++normal;
+            normal_index = i;
+        }
+        const NLCheckedNodeView result = *view(&branch, body);
+        branch.artifact->root = add(
+            &branch, (NLCheckedNodeView){.kind = NL_CHECKED_MATCH_ARM,
+                                         .span = a->span,
+                                         .variant = variants[i],
+                                         .initializer = body,
+                                         .terminates = branch.terminated,
+                                         .type = result.type,
+                                         .result_count = result.result_count,
+                                         .results = {result.results[0]},
+                                         .returned = branch.returned});
+        if (branch.artifact->root == 0 ||
+            !save_arm(check, id, branch.artifact, a->span))
+            goto failure;
+        continue;
+    failure:
+        if (branch.status != NL_CHECK_OK) {
+            check->status = branch.status;
+            check->diagnostic = branch.diagnostic;
+        }
+        if (branch.artifact != NULL)
+            nl_checked_destroy(branch.artifact);
+        else
+            nl_semantic_destroy(branch.context);
+        return 0;
+    }
+    if (normal > 1) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+             "P9-CONTINUATION-PRECISION",
+             "multiple normal function-match states require a richer join");
+        return 0;
+    }
+    /* Registration checks the sole normal continuation, or all return exits.
+     * A real call applies only its proven concrete variant against actual IDs.
+     */
+    size_t chosen_index =
+        check->definition ? (normal == 0 ? 0 : normal_index) : actual_index;
+    const NLSyntaxView *chosen_arm = nl_syntax_node_view(arms[chosen_index]);
+    Check chosen = *check;
+    chosen.in_match_arm = true;
+    chosen.binding_floor = chosen.arm_floor = c->binding_count;
+    chosen.has_arm_floor = true;
+    if (!function_arm(&chosen, chosen_arm, input, variants[chosen_index],
+                      check->definition))
+        goto chosen_failure;
+    NLCheckedNodeId body = expression(&chosen, chosen_arm->data.arm.body);
+    if (body == 0)
+        goto chosen_failure;
+    check->terminated = chosen.terminated;
+    check->returned = chosen.returned;
+    view(check, id)->normal_arms = normal;
+    view(check, id)->terminates = chosen.terminated;
+    view(check, id)->returned = chosen.returned;
+    view(check, id)->tail = body;
+    if (!chosen.terminated) {
+        const NLCheckedNodeView result = *view(check, body);
+        view(check, id)->type = result.type;
+        view(check, id)->result_count = result.result_count;
+        memcpy(view(check, id)->results, result.results,
+               sizeof(result.results));
+    }
+    return id;
+chosen_failure:
+    check->status = chosen.status;
+    check->diagnostic = chosen.diagnostic;
+    return 0;
+}
+
 static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
 {
+    if (check->in_function_body)
+        return function_match(check, s);
     if (check->in_match_arm) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span, "P6-NESTED-MATCH",
              "nested match joins are outside this bounded slice");
@@ -3086,6 +3480,8 @@ static NLCheckedNodeId raw_argument(Check *check, NLRawOperand operand,
                             .result_count = 1,
                             .results = {{original.type, value}}});
     }
+    if (check->terminated)
+        return id;
     return parameter_match(check, id, expected);
 }
 
@@ -3285,6 +3681,14 @@ static bool body_signature_type(const NLSemanticContext *c, NLTypeId type,
     if (body_plain_type(c, type))
         return true;
     const NLSemanticTypeView t = c->types[type - 1].view;
+    if (t.kind == NL_TYPE_SUM) {
+        for (size_t i = 0; i < t.variant_count; ++i) {
+            NLTypeId payload = c->types[type - 1].variant_types[i];
+            if (payload != 0 && !body_plain_type(c, payload))
+                return false;
+        }
+        return true;
+    }
     return ((t.kind == NL_TYPE_PTR) ||
             (parameter && t.kind == NL_TYPE_REF && !t.is_exclusive)) &&
            body_plain_type(c, t.target);
@@ -3315,6 +3719,7 @@ static bool check_definition(Check *registration, size_t function_id)
 {
     Check definition = {.source = registration->source,
                         .in_function_body = true,
+                        .definition = true,
                         .body_function = function_id,
                         .has_arm_floor = true};
     const NLSourceSpan span =
@@ -3328,6 +3733,7 @@ static bool check_definition(Check *registration, size_t function_id)
     NLSemanticContext *c = definition.context;
     clear_definition_state(c);
     const NLFunctionEntry function = c->functions[function_id - 1];
+    definition.function_result = function.result;
     NLValueId values[NL_SEMANTIC_MAX_PARAMETERS] = {0};
     /* These formal sites supply type/ownership checking only. No proof of
      * formal disjointness is retained; EVERY call rechecks actual relations. */
@@ -3354,11 +3760,28 @@ static bool check_definition(Check *registration, size_t function_id)
                 true,  t.kind == NL_TYPE_PTR || t.access == NL_ACCESS_WRITE,
                 0};
         }
+        if (t.kind == NL_TYPE_SUM) {
+            value.variant = 1;
+            NLTypeId payload_type = c->types[type - 1].variant_types[0];
+            if (payload_type != 0) {
+                value.sum_payload = new_value(
+                    &definition, (NLSemanticValueView){.type = payload_type},
+                    span);
+                if (value.sum_payload == 0)
+                    goto failure;
+            }
+        }
         values[i] = new_value(&definition, value, span);
+        if (values[i] != 0 && value.sum_payload != 0) {
+            c->values[value.sum_payload - 1].carrier = NL_CARRIER_SUM;
+            c->values[value.sum_payload - 1].sum_owner = values[i];
+        }
         if (values[i] == 0)
             goto failure;
     }
     const size_t scope_floor = c->scope_count, place_floor = c->place_count;
+    definition.function_scope_floor = scope_floor;
+    definition.function_place_floor = place_floor;
     for (size_t i = 0; i < function.count; ++i) {
         NLSymbolId symbol;
         if (!host(&definition,
@@ -3374,19 +3797,9 @@ static bool check_definition(Check *registration, size_t function_id)
     }
     *definition.artifact =
         (NLCheckedFragment){.source = definition.source, .context = c};
-    definition.artifact->root = source_block(
-        &definition,
-        nl_syntax_node_view(nl_syntax_tree_root(function.body->syntax)));
-    if (definition.artifact->root == 0 ||
-        !body_result(&definition, &function, definition.artifact->root, span))
+    if (!function_block(&definition, nl_syntax_node_view(nl_syntax_tree_root(
+                                         function.body->syntax))))
         goto failure;
-    const NLCheckStatus exit_status =
-        nl_sem_function_exit(c, scope_floor, place_floor);
-    if (exit_status != NL_CHECK_OK) {
-        fail(&definition, exit_status, span, "P8-EXIT-DEPENDENCY",
-             "surviving state depends on an ending function-local scope/place");
-        goto failure;
-    }
     if (!host(&definition, nl_sum_validate(c), span) ||
         !host(&definition, nl_raw_validate(c), span))
         goto failure;
