@@ -540,7 +540,7 @@ NLCheckStatus nl_sem_new_place(NLSemanticContext *c, NLTypeId type,
 
 bool nl_sem_lexical_name_admissible(const void *bytes, size_t length)
 {
-    return length != 4 || memcmp(bytes, "unit", 4) != 0;
+    return nl_ordinary_name_class(bytes, length) == NL_NAME_ADMISSIBLE;
 }
 
 NLCheckStatus nl_sem_bind_in_scope(NLSemanticContext *c, const char *name,
@@ -700,6 +700,8 @@ NLCheckStatus nl_semantic_nominal(NLSemanticContext *c, const char *name,
     if (c == NULL || name == NULL || name[0] == 0 || out == NULL) {
         return NL_CHECK_INTERNAL_ERROR;
     }
+    if (!nl_sem_lexical_name_admissible(name, strlen(name)))
+        return NL_CHECK_SEMANTIC_ERROR;
     NLSemanticContext *candidate = NULL;
     NLCheckStatus status = nl_sem_clone(c, &candidate);
     NLTypeId id = 0;
@@ -1035,6 +1037,8 @@ NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *c,
     if (c == NULL || name == NULL || name[0] == 0 || fields == NULL ||
         out == NULL)
         return NL_CHECK_INTERNAL_ERROR;
+    if (!nl_sem_lexical_name_admissible(name, strlen(name)))
+        return NL_CHECK_SEMANTIC_ERROR;
     if (count == 0)
         return NL_CHECK_SEMANTIC_ERROR;
     if (count > NL_SEMANTIC_MAX_FIELDS)
@@ -1162,6 +1166,8 @@ NLCheckStatus nl_semantic_register_sum(NLSemanticContext *c, const char *name,
     if (c == NULL || name == NULL || name[0] == 0 || variants == NULL ||
         out == NULL)
         return NL_CHECK_INTERNAL_ERROR;
+    if (!nl_sem_lexical_name_admissible(name, strlen(name)))
+        return NL_CHECK_SEMANTIC_ERROR;
     if (count == 0)
         return NL_CHECK_SEMANTIC_ERROR;
     if (count > NL_SEMANTIC_MAX_VARIANTS)

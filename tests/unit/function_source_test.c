@@ -137,10 +137,9 @@ static bool grammar(void)
           NL_SYNTAX_BLOCK);
     nl_syntax_tree_destroy(tree);
     nl_source_destroy(source);
-    /* fn remains contextual and can be an ordinary function call name. */
-    CHECK(unit_register(f.context, "fn fn()->unit{} fn use_fn()->unit{fn();}",
-                        NL_CHECK_OK, NULL));
-    CHECK(body_ok(f.context, "use_fn()"));
+    /* Draft 17.14 supersedes P11's ordinary fn-name acceptance. */
+    CHECK(malformed("fn fn()->unit{} fn use_fn()->unit{fn();}",
+                    NL_PARSE_SYNTAX_ERROR, "P12-RESERVED-STRUCTURAL-NAME"));
     nl_semantic_destroy(f.context);
     return true;
 }

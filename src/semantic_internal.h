@@ -3,9 +3,11 @@
 
 #include "newlang/checked.h"
 #include "newlang/raw_storage.h"
+#include "ordinary_name.h"
 
 /* Borrowed spelling; only ordinary lexical names, never member labels.
- * Draft 17.12 reserves exact unit without changing lexer token categories. */
+ * Draft 17.14 preserves core/structural reasons without changing lexer tokens.
+ */
 bool nl_sem_lexical_name_admissible(const void *bytes, size_t length);
 
 typedef struct {

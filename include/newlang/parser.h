@@ -66,7 +66,9 @@ NLParseStatus nl_parser_parse_source_fragment(NLParser *, NLSyntaxTree **,
 /* Draft 17.13 bounded fn-only top-level container, one or more declarations.
  * Same reset/ownership/budget contracts as fragments. Bodies/types reuse their
  * existing grammar; no general top-level item language or generic declarations.
- * Multiple trees may be collected as one semantic unit by the semantic API. */
+ * Draft 17.14 structural function/parameter names reject before type/body
+ * parsing with P12-RESERVED-STRUCTURAL-NAME. Core unit retains P10 semantic
+ * admission. Multiple trees may form one semantic unit via the semantic API. */
 NLParseStatus nl_parser_parse_function_unit(NLParser *, NLSyntaxTree **,
                                             NLParseDiagnostic *);
 
