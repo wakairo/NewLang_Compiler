@@ -8191,7 +8191,7 @@ inner matchのnormal resultだけがその `if` armのlexical-block resultとし
 
 本profileは `if let` / pattern condition / match guard / ternary conditional / short-circuit boolean syntaxを追加しない。
 
-## 27.5 loop expression## 27.5 loop expression
+## 27.5 loop expression
 
 loop は loop-carried state を parameter values として明示する value-producing control construct である。
 
