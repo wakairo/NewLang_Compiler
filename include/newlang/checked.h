@@ -76,6 +76,7 @@ typedef struct {
     NLTypeId type;
     NLSymbolId symbol;
     size_t function; /* resolved prelude/registered signature identity */
+    bool body_backed;
     NLValueUse value_use;
     bool contextually_weakened;
     NLTypeId parameter_type;
@@ -115,5 +116,11 @@ const NLSemanticContext *nl_checked_context(const NLCheckedFragment *);
 const NLCheckedFragment *nl_checked_match_arm(const NLCheckedFragment *,
                                               NLCheckedNodeId match,
                                               size_t index);
+
+/* Owned body evidence retains its plan source. Semantic IDs use the SAME
+ * public context as the call, never a hypothetical formal context. Namespace
+ * locals are hidden/ended after completion; stable historical IDs remain. */
+const NLCheckedFragment *nl_checked_call_body(const NLCheckedFragment *,
+                                              NLCheckedNodeId call);
 
 #endif

@@ -5,7 +5,9 @@ NewLang production compiler, written in C17 with LLVM as the primary backend.
 **P0 through P7 are complete and merged.** P6 adds the Draft 17.10 bounded
 registered closed-sum source slice, and P7 adds bounded dependency-aware
 ref-valued match-result joins without changing canonical semantics.
-P7 is reviewed/merged and CLOSED; broader frontend and lowering work remain deferred.
+P7 is reviewed/merged and CLOSED. P8 adds host-registered non-generic block bodies,
+definition-time validation and body-sensitive direct known calls; **P8 review is pending**.
+Source `fn`/`return` and broader frontend/lowering work remain deferred.
 
 ## Authority
 
@@ -100,19 +102,20 @@ cmake --build build-ubsan --parallel 2
 ctest --test-dir build-ubsan --output-on-failure
 ```
 
-Each configuration runs the same **59 CTests**: source and lexer module unit
+Each configuration runs the same **64 CTests**: source and lexer module unit
 tests, six parser unit groups, file-source -> lexer/parser integration,
 six P3 semantic unit groups and source -> parser -> checker integration,
 ten raw-storage unit groups and the raw -> typed -> raw -> deallocate cycle,
 six P5 source-slice unit groups and source -> checked lifetime/aggregate integration,
 seven P6 sum-slice unit groups and source -> checked match integration,
 five P7 ref-join unit groups and PW1–PW5 source -> checked integration,
+four P8 body-registration/exit/ownership/rollback unit groups and body-sensitive direct-call integration,
 diagnostic unit checks, six CLI
 cases (each invoked twice), valid LLVM C API module/IR, artifact integrity, and
 frozen-oracle smoke. ASan includes leak detection; UBSan stops on the first
 failure. Imported LLVM binaries are not rebuilt with sanitizers; our C targets
 are instrumented. Required checks are these configurations plus GCC Release/NDEBUG and PR CI
-(see [P7 report](docs/P7_REF_VALUED_MATCH_RESULT_JOIN_REPORT.md)).
+(see [P8 report](docs/P8_REGISTERED_FUNCTION_BODY_SLICE_REPORT.md)).
 The historical 466-test oracle suite and formal proofs are optional evidence;
 P0 does not claim to reproduce them in C.
 
@@ -139,6 +142,10 @@ artifact is produced. Output I/O failure exits 1.
   owning fixture context, canonical types/packages/places/scopes, transactional
   checker, bounded complete ref-result alternatives, conditional occurrence ownership and immutable checked fragments
   (including owned hypothetical arm snapshots); no LLVM linkage or syntax pointers.
+- `src/function_body.c`: owned registered-body plans and function-exit dependency checking.
+  Host registration supplies named exact signatures and existing lexical-block bodies;
+  body-backed direct calls preserve actual alias/dependency relations and tail package identity.
+  Ordinary ref results, core-authority signatures and body call chains remain limited.
 - `include/newlang/raw_storage.h`, `src/raw_storage.c`: programmatic successful
   allocation/claim transitions, scalar byte observations and owned raw interval
   summaries. Compiler metadata only; no platform allocator or runtime bitmap.
@@ -174,9 +181,12 @@ artifact is produced. Output I/O failure exits 1.
 - `docs/P7_REF_VALUED_MATCH_RESULT_JOIN_CONTRACT.md`: public rebasing, complete ref alternatives,
   downstream uses, ownership/rollback and precision boundaries.
 - `docs/P7_REF_VALUED_MATCH_RESULT_JOIN_REPORT.md`: PW1–PW5, destructive tests and P7 review handoff.
+- `docs/P8_REGISTERED_FUNCTION_BODY_SLICE_CONTRACT.md`: registered body profile, formal/actual
+  checking, alias/exit invariants and durable ownership/rollback contracts.
+- `docs/P8_REGISTERED_FUNCTION_BODY_SLICE_REPORT.md`: W1–W4 disposition, tests, limits and review handoff.
 - `docs/`: historical [P0 toolchain decisions](docs/P0_TOOLCHAIN_DECISIONS.md),
   [P0 architecture](docs/P0_ARCHITECTURE.md), and [P0 report](docs/P0_REPORT.md).
 
 There is still no full-program parser or semantic checker, typed MIR, LLVM lowering,
 optimization framework, broad FFI, concurrency, separate compilation,
-self-hosting, public token/AST-dump mode, or a full-program frontend. The P7 module slice supports canonical receiving/block/aggregate forms plus registered closed-sum constructor/match and bounded dependency-aware ref results; source declarations and broader frontend forms remain unsupported. The CLI compile path remains unsupported.
+self-hosting, public token/AST-dump mode, or a full-program frontend. The module slice supports canonical receiving/block/aggregate forms, registered closed-sum constructor/match, bounded dependency-aware ref results and P8 registered body calls. Source declarations and broader frontend forms remain unsupported. The CLI compile path remains unsupported.

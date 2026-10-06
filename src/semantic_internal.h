@@ -27,6 +27,14 @@ typedef struct {
     NLSemanticBindingView view;
     bool hidden; /* lexical scope ended; stable historical IDs remain */
 } NLBindingEntry;
+typedef struct NLFunctionBody {
+    size_t owners;
+    NLSource *source;
+    NLSyntaxTree *syntax;
+    char *parameter_names[NL_SEMANTIC_MAX_PARAMETERS];
+    size_t count;
+} NLFunctionBody; /* immutable plan; only ownership count is mutable */
+
 typedef struct {
     const char *name; /* static for prelude; owned for registered entries */
     NLCheckedKind kind;
@@ -34,6 +42,7 @@ typedef struct {
     size_t count;
     NLTypeId result;
     bool caller_effects, hidden_dependencies;
+    NLFunctionBody *body; /* owned retained plan, NULL for signature-only */
 } NLFunctionEntry;
 struct NLSemanticContext {
     NLSemanticOccurrenceView *occurrences;
@@ -70,6 +79,11 @@ struct NLCheckedFragment {
     NLCheckedArm *arms;
     size_t arm_count;
     void (*destroy_context)(NLSemanticContext *); /* arm snapshots only */
+    struct NLCheckedFragment **bodies;
+    NLCheckedNodeId *body_calls;
+    size_t body_count;
+    NLFunctionBody *body_owner;
+    void (*release_body)(NLFunctionBody *);
 };
 
 /* All ref consumers either iterate this may-set or explicitly reject it.
@@ -82,6 +96,15 @@ static inline NLReferenceFacts nl_sem_ref_fact(NLSemanticValueView v, size_t i)
 {
     return v.reference_count == 0 ? v.reference : v.references[i];
 }
+
+NLCheckStatus nl_body_create(const NLSyntaxTree *, const NLFunctionParameter *,
+                             size_t, NLFunctionBody **);
+NLCheckStatus nl_body_retain(NLFunctionBody *);
+void nl_body_release(NLFunctionBody *);
+/* Surviving packages after body/parameter cleanup may not reference newly
+ * ending local scopes/places. Used by registration, real calls and fixtures. */
+NLCheckStatus nl_sem_function_exit(const NLSemanticContext *,
+                                   size_t scope_floor, size_t place_floor);
 
 /* Concrete candidate state helpers; no general allocator/transaction DSL. */
 NLCheckStatus nl_sem_clone(const NLSemanticContext *, NLSemanticContext **);
