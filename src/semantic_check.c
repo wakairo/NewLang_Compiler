@@ -1888,6 +1888,12 @@ cleanup:
     return check->status == NL_CHECK_OK ? id : 0;
 }
 
+/* A finite alternative can combine divergence with real Return edges. An
+ * absent compatibility cache is not an empty exit set or a fake unit return.
+ * This bounded summary requires flat Copy output and an exact caller frame. */
+static bool zero_normal_returns(Check *check, NLTypeId declared,
+                                NLCheckedNodeId body, NLSourceSpan span);
+
 static bool body_result(Check *check, NLTypeId declared, NLCheckedNodeId body,
                         NLSourceSpan span)
 {
@@ -1903,9 +1909,7 @@ static bool body_result(Check *check, NLTypeId declared, NLCheckedNodeId body,
             return true;
         if (check->returned.type == declared)
             return true;
-        fail(check, NL_CHECK_INTERNAL_ERROR, span, "P9-RETURN-INTERNAL",
-             "terminated body lost its checked function result");
-        return false;
+        return zero_normal_returns(check, declared, body, span);
     }
     if (result.type != declared || result.result_count > 1 ||
         (result.result_count == 0 && declared != 1)) {
@@ -2933,6 +2937,90 @@ static bool join_if_function_exits(Check *check)
     } else if (root.result_count != 0)
         view(check, check->artifact->root)->results[0] = final;
     return true;
+}
+
+static bool zero_normal_returns(Check *check, NLTypeId declared,
+                                NLCheckedNodeId body, NLSourceSpan span)
+{
+    NLSemanticContext *c = check->context;
+    if (!flat_copy(c, declared) || c->region_count != 0)
+        goto precision;
+    for (size_t k = 0; k < nl_control_exits_count(check->artifact->exits);
+         ++k) {
+        const NLControlExitView *e =
+            nl_control_exit_view(check->artifact->exits, k);
+        const NLSemanticContext *b =
+            nl_control_state_context((NLControlState *)e->state);
+        for (size_t j = 0; j < check->function_place_floor; ++j)
+            if (!same_place_frame(c->places[j], b->places[j]) ||
+                c->places[j].current_value != b->places[j].current_value ||
+                c->places[j].current_fact != b->places[j].current_fact ||
+                c->places[j].current_value > check->function_value_prefix ||
+                c->places[j].current_fact > check->function_fact_prefix)
+                goto precision;
+        for (size_t j = 0; j < check->function_scope_floor; ++j)
+            if (!same_scope(c->scopes[j], b->scopes[j]))
+                goto precision;
+        if (c->domain_count != b->domain_count)
+            goto precision;
+        for (size_t j = 0; j < c->domain_count; ++j)
+            if (c->domains[j].live != b->domains[j].live)
+                goto precision;
+        for (size_t j = check->function_binding_floor; j < c->binding_count;
+             ++j)
+            if (!c->bindings[j].hidden &&
+                c->bindings[j].view.availability == NL_AVAILABLE &&
+                !c->types[c->bindings[j].view.type - 1].view.is_copy &&
+                (j >= b->binding_count ||
+                 b->bindings[j].view.availability != NL_CONSUMED ||
+                 c->bindings[j].view.value != b->bindings[j].view.value ||
+                 b->values[c->bindings[j].view.value - 1].carrier !=
+                     NL_CARRIER_ENDED))
+                goto precision;
+    }
+    for (size_t j = check->function_binding_floor; j < c->binding_count; ++j)
+        if (!c->bindings[j].hidden &&
+            c->bindings[j].view.availability == NL_AVAILABLE &&
+            !c->types[c->bindings[j].view.type - 1].view.is_copy) {
+            NLCheckedNodeId use = binding_use(check, j + 1, span, span);
+            if (use == 0)
+                return false;
+            end_temporary(check, view(check, use)->results[0].value);
+        }
+    if (!end_bindings(check, check->function_binding_floor, span))
+        return false;
+    for (size_t j = 0; j < c->value_count; ++j) {
+        if (c->types[c->values[j].type - 1].view.is_copy ||
+            c->values[j].carrier != NL_CARRIER_LOOSE)
+            continue;
+        if (j >= check->function_value_prefix)
+            goto precision;
+        bool ended = true;
+        for (size_t k = 0; k < nl_control_exits_count(check->artifact->exits);
+             ++k) {
+            const NLControlExitView *e =
+                nl_control_exit_view(check->artifact->exits, k);
+            const NLSemanticContext *b =
+                nl_control_state_context((NLControlState *)e->state);
+            if (b->values[j].carrier != NL_CARRIER_ENDED)
+                ended = false;
+        }
+        if (ended)
+            nl_sem_end_value(c, j + 1);
+    }
+    check->returned = (NLCheckedResult){
+        declared,
+        declared == 1
+            ? 0
+            : new_value(check, (NLSemanticValueView){.type = declared}, span)};
+    view(check, body)->returned = check->returned;
+    return check->status == NL_CHECK_OK;
+precision:
+    fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+         "P14-ZERO-NORMAL-RETURN-PRECISION",
+         "zero-normal function Return alternatives need a richer result/frame "
+         "join");
+    return false;
 }
 
 /* P14: a single abstract transfer, not a concrete first iteration. Copy

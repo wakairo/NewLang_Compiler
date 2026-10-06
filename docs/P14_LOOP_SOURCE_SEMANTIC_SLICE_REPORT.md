@@ -46,7 +46,7 @@ first-entry shortcut / single-successor selection / affine type-only identity / 
 | W24–W25 | Copy Break、inconsistent Break static type rejection |
 | W26 | complete two-origin ref result alternatives / scopes |
 | W27 | distinct private affine Break results を precision reject |
-| W28 | unreachable useを実行せず zero normal、non-Copy-result function divergenceにfake resultなし |
+| W28 | unreachable useを実行せず zero normal、non-Copy-result function divergenceにfake resultなし、divergence + real Copy/unit Return join |
 | W29 | Return/Continue/Break mix、Return-only function ownership消費、terminating initializer |
 | W30 | nested block / IF が nearest targetを継承 |
 | W31 | all MATCH arms + sole-normal continuation の両 Continue を保持 |

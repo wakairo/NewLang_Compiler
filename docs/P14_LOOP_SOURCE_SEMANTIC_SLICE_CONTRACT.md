@@ -104,6 +104,9 @@ result は flat Copy / unit、caller frame は unchanged を要求する。funct
 全 early-loop Return と最終 result/frame を比較し、Copy result を unknown に join する。
 Return-only loop は全 Return certificate が証明する function-local affine consumption
 を反映する。Continue の post-state を function exit として採用しない。
+有限 branch の divergence + real Return も zero-normal として区別し、flat Copy/unit と
+exact caller frame / common local consumption の範囲で function result をまとめる。
+empty exit set へ unit を追加する経路はない。
 
 ## Precision / resource / rollback
 

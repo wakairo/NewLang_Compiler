@@ -162,6 +162,8 @@ static bool workload(size_t w)
     case 8:
         ok = rejected(&f, "loop(a=owner,b=owner){continue(a,b);}",
                       NL_CHECK_SEMANTIC_ERROR, "P3-USE-AFTER-CONSUME");
+        CHECK(rejected(&f, "loop(a=consume(owner),b=owner){continue(a,b);}",
+                       NL_CHECK_SEMANTIC_ERROR, "P3-USE-AFTER-CONSUME"));
         break;
     case 9:
         ok = evidence(&f, "loop(){if(cond){continue();}else{continue();}}", 2,
@@ -229,6 +231,14 @@ static bool workload(size_t w)
             NLSemanticBindingView b;
             CHECK(body_binding(f.c, "result", &b));
             CHECK(b.availability == NL_AVAILABLE);
+        }
+        CHECK(seed(&f, "third", f.owner));
+        {
+            NLSemanticBindingView b;
+            CHECK(body_binding(f.c, "third", &b));
+            NLValueId package = b.value;
+            CHECK(accepted(&f, "loop(o=third){consume(o);break unit;}"));
+            CHECK(f.c->values[package - 1].carrier == NL_CARRIER_ENDED);
         }
         break;
     case 21:
@@ -301,6 +311,21 @@ static bool workload(size_t w)
             CHECK(test_root(&a)->terminates && test_root(&a)->type == 0 &&
                   test_root(&a)->result_count == 0);
             test_checked_destroy(&a);
+        }
+        {
+            const NLFunctionParameter p[] = {
+                {"flag", f.boolean}, {"v", f.copy}, {"o", f.owner}};
+            CHECK(register_body(
+                f.c, "mixed_diverge", p, 3, f.copy,
+                "{if(flag){loop(){continue();}}else{consume(o);return v;}}",
+                NL_CHECK_OK, NULL));
+            CHECK(accepted(&f, "mixed_diverge(cond,x,owner)"));
+            const NLFunctionParameter flag[] = {{"flag", f.boolean}};
+            CHECK(register_body(
+                f.c, "zero_unit", flag, 1, 1,
+                "{if(flag){loop(){continue();}}else{return unit;}}",
+                NL_CHECK_OK, NULL));
+            CHECK(accepted(&f, "zero_unit(cond)"));
         }
         break;
     case 29: {
@@ -427,7 +452,9 @@ static bool failure(void)
         "loop(a=x,b=y){if(cond){continue(b,a);}else{break a;}}",
         "loop(o=owner){if(cond){continue(o);}else{break o;}}",
         "loop(){loop(){break unit;};break x;}",
-        "loop(){if(cond){break a;}else{break b;}}", "return_path(cond,x)"};
+        "loop(){if(cond){break a;}else{break b;}}",
+        "return_path(cond,x)",
+        "mixed_zero(cond,x)"};
     for (size_t t = 0; t < sizeof(texts) / sizeof(texts[0]); ++t) {
         Fixture f = {0};
         CHECK(setup(&f));
@@ -447,6 +474,14 @@ static bool failure(void)
                 f.c, "return_path", params, 2, f.copy,
                 "{loop(i=v){if(flag){return i;}else{continue(next(i));}}}",
                 NL_CHECK_OK, NULL));
+        }
+        if (t == 5) {
+            const NLFunctionParameter params[] = {{"flag", f.boolean},
+                                                  {"v", f.copy}};
+            CHECK(
+                register_body(f.c, "mixed_zero", params, 2, f.copy,
+                              "{if(flag){loop(){continue();}}else{return v;}}",
+                              NL_CHECK_OK, NULL));
         }
         NLSource *source = NULL;
         NLSyntaxTree *tree = NULL;
