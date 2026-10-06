@@ -80,8 +80,8 @@ static bool registration(void)
                         "{let local=x;local}", NL_CHECK_OK, NULL));
     CHECK(body_ok(f.context, "let y=local_copy(x)"));
     CHECK(nl_semantic_find_binding(f.context, "local") == 0);
-    /* No declaration/return grammar is introduced by host registration. */
-    const char *unsupported[] = {"fn f() {}", "{return x;}"};
+    /* P9 adds return items only under registered function context. */
+    const char *unsupported[] = {"fn f() {}"};
     for (size_t i = 0; i < sizeof(unsupported) / sizeof(unsupported[0]); ++i) {
         NLSource *source = NULL;
         NLParser *parser = NULL;

@@ -146,4 +146,20 @@ NLCheckStatus nl_raw_apply(NLSemanticContext *, const NLRawOperation *,
                            const NLValueId inputs[2], NLCheckedNodeView *,
                            NLCheckDiagnostic *);
 
+/* Trusted host-known ordinary-function boundary, INTERNAL ONLY. The caller
+ * constructs/owns the semantic setup; these floors define which scopes/places
+ * end at function exit. No source declaration/context admission is exposed.
+ * Clone/check/commit; failure leaves context and *out unchanged. Tree/source
+ * borrowed, source must outlive the owned returned checked artifact.
+ */
+typedef struct {
+    NLTypeId result;
+    size_t bindings, scopes, places;
+} NLFunctionBoundary;
+NLCheckStatus nl_sem_check_function_block(NLSemanticContext *,
+                                          const NLSyntaxTree *,
+                                          NLFunctionBoundary,
+                                          NLCheckedFragment **,
+                                          NLCheckDiagnostic *);
+
 #endif

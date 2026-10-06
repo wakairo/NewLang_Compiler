@@ -23,7 +23,8 @@ typedef enum {
     NL_SYNTAX_AGGREGATE,
     NL_SYNTAX_SUM_CONSTRUCTOR,
     NL_SYNTAX_MATCH,
-    NL_SYNTAX_MATCH_ARM
+    NL_SYNTAX_MATCH_ARM,
+    NL_SYNTAX_RETURN /* dedicated block item; data.statement.expression */
 } NLSyntaxKind;
 
 /* Requested source spelling only: not checked access permission/authority. */
