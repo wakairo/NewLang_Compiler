@@ -3,7 +3,7 @@
 The canonical NewLang v0 specification on a branch is the Draft named here.
 
 ```text
-NewLang_v0_spec_Draft17_15.md
+NewLang_v0_spec_Draft17_16.md
 ```
 
 Repository policy:
@@ -14,4 +14,4 @@ Repository policy:
 - A newer Draft on an unmerged branch is a candidate until that branch is reviewed and merged into `main`.
 - Prompts handed to M / F / P tracks should cite the `main` commit SHA and this file before relying on conversational memory.
 
-Draft 17.15 adds the targeted M9.11 exact minimal value-producing `if` source profile on top of Draft 17.14. The exact form is `if (expression) lexical_block else lexical_block`: condition parentheses and `else` are mandatory, direct `else if` sugar and no-`else` forms remain outside the closed profile, and exact `if` / `else` join the ordinary lexical structural-reserved set without requiring lexer-wide keyword tokenization or member-label reservation.
+Draft 17.16 adds the targeted M9.13 hybrid cyclic-state loop-header semantic contract on top of Draft 17.15. Language reference semantics remains concrete reachable execution/state semantics, while a compiler may prove safety with any sound inductive header post-fixpoint: type/affine/scope/captured outer non-Copy availability stay exact edge invariants, while changing package identity, hidden dependency, and outer Copy/current-value state may use sound cyclic abstraction, may-sets, Unknown, widening, or conservative precision rejection. Zero-break loops have zero normal outgoing edges without inventing bottom/never/unit. Exact loop/continue/break source grammar and structural-word reservation remain deferred.
