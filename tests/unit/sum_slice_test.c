@@ -421,16 +421,21 @@ static bool lifetime_tests(void)
     NLTypeId sum;
     CHECK(option(&f, "AffineOption", f.discardable, &sum));
     CHECK(seed(&f, "incoming", f.discardable));
-    NLSymbolId ending, slot;
+    NLSymbolId ending, slot, stable;
+    NLScopeId ending_scope, stable_scope;
     NLPlaceId target;
-    CHECK(test_domain_ref(&f, "ending", NL_ACCESS_READ, true, &ending, NULL));
+    CHECK(test_domain_ref(&f, "stable", NL_ACCESS_READ, false, &stable,
+                          &stable_scope));
     CHECK(nl_semantic_seed_slot(f.context, "vacant", sum, &slot, &target) ==
           NL_CHECK_OK);
     CHECK(
-        ok(&f, "let p=initialize(vacant,AffineOption.Some(incoming),ending)"));
+        ok(&f, "let p=initialize(vacant,AffineOption.Some(incoming),stable)"));
     NLSemanticPlaceView before, after;
     CHECK(nl_semantic_place_view(f.context, target, &before) && before.live &&
           before.payload_occurrence != 0);
+    CHECK(nl_semantic_end_scope(f.context, stable_scope) == NL_CHECK_OK);
+    CHECK(test_domain_ref(&f, "ending", NL_ACCESS_READ, true, &ending,
+                          &ending_scope));
     CHECK(ok(&f, "let(old,empty)=take(p,ending)"));
     CHECK(nl_semantic_place_view(f.context, target, &after) && !after.live &&
           after.payload_occurrence == 0);
@@ -440,12 +445,17 @@ static bool lifetime_tests(void)
           !occurrence.live);
     CHECK(rejected(&f, "take(p,ending)", NL_CHECK_SEMANTIC_ERROR,
                    "P3-STALE-POINTER"));
-    CHECK(ok(&f, "let fresh=initialize(empty,old,ending)"));
+    CHECK(nl_semantic_end_scope(f.context, ending_scope) == NL_CHECK_OK);
+    CHECK(test_domain_ref(&f, "stable2", NL_ACCESS_READ, false, &stable,
+                          &stable_scope));
+    CHECK(ok(&f, "let fresh=initialize(empty,old,stable2)"));
     CHECK(nl_semantic_place_view(f.context, target, &after) && after.live &&
           after.incarnation != before.incarnation &&
           after.payload_occurrence != before.payload_occurrence);
     NLOccurrenceId fresh = after.payload_occurrence;
-    CHECK(ok(&f, "let final_empty=destroy(fresh,ending)"));
+    CHECK(nl_semantic_end_scope(f.context, stable_scope) == NL_CHECK_OK);
+    CHECK(test_domain_ref(&f, "ending2", NL_ACCESS_READ, true, &ending, NULL));
+    CHECK(ok(&f, "let final_empty=destroy(fresh,ending2)"));
     CHECK(nl_semantic_place_view(f.context, target, &after) && !after.live &&
           after.payload_occurrence == 0);
     CHECK(nl_semantic_occurrence_view(f.context, fresh, &occurrence) &&

@@ -169,6 +169,10 @@ if(BUILD_TESTING)
     target_link_libraries(function_body_frontend_test PRIVATE newlang_semantic newlang_parser)
     add_test(NAME p8_source_checked.integration COMMAND function_body_frontend_test)
 
+    add_executable(argument_compatibility_test tests/unit/argument_compatibility_test.c)
+    target_link_libraries(argument_compatibility_test PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME r4_01_argument_compatibility.unit COMMAND argument_compatibility_test)
+
     add_executable(llvm_smoke tests/integration/llvm_smoke.c)
     target_link_libraries(llvm_smoke PRIVATE newlang_options newlang_llvm)
     add_test(NAME llvm.c_api COMMAND llvm_smoke)

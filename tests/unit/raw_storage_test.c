@@ -964,9 +964,42 @@ static bool reborrow_tests(void)
     NLScopeId scope;
     CHECK(test_reference(c, "ending", holder.place, NL_TYPE_REF, NL_ACCESS_READ,
                          true, &ending, &scope));
+    const NLRawOperation rejected[] = {
+        {.kind = NL_RAW_STORAGE_LEN, .operands = {raw_binding(ending)}},
+        {.kind = NL_RAW_STORAGE_ADDR, .operands = {raw_binding(ending)}},
+        {.kind = NL_RAW_STORAGE_READ_BYTE,
+         .operands = {raw_binding(ending)},
+         .data.byte_offset = {true, 0}},
+        {.kind = NL_RAW_STORAGE_WRITE_BYTE,
+         .operands = {raw_binding(ending)},
+         .data.write = {{true, 0},
+                        {nl_semantic_core_type(c, NL_TYPE_BYTE), true, 11}}},
+        {.kind = NL_RAW_COPY_BYTES,
+         .operands = {raw_binding(ending), raw_binding(ending)},
+         .data.copy = {{true, 0}, {true, 0}, {true, 1}}}};
+    for (size_t i = 0; i < sizeof(rejected) / sizeof(rejected[0]); ++i)
+        CHECK(raw_rejected(c, rejected[i], NL_CHECK_SEMANTIC_ERROR,
+                           "P3-TYPE-MISMATCH"));
+    /* Ordinary child construction is an independent host fixture operation,
+     * not an automatic adaptation of the exclusive actual at the call. */
+    NLSemanticBindingView parent;
+    NLSemanticValueView authority;
+    CHECK(nl_semantic_binding_view(c, ending, &parent) &&
+          parent.availability == NL_AVAILABLE);
+    CHECK(nl_semantic_value_view(c, parent.value, &authority));
+    NLScopeId child_scope;
+    CHECK(nl_semantic_scope(c, scope, true, &child_scope) == NL_CHECK_OK);
+    NLTypeId ordinary;
+    CHECK(nl_semantic_compound_type(c, NL_TYPE_REF, holder.type, NL_ACCESS_READ,
+                                    false, &ordinary) == NL_CHECK_OK);
+    NLReferenceFacts facts = authority.reference;
+    facts.scope = child_scope;
+    NLSymbolId child;
+    CHECK(nl_semantic_seed_reference(c, "child", ordinary, facts, &child) ==
+          NL_CHECK_OK);
     for (size_t i = 0; i < 2; ++i) {
         NLRawOperation op = {.kind = NL_RAW_STORAGE_LEN,
-                             .operands = {raw_binding(ending)}};
+                             .operands = {raw_binding(child)}};
         NLCheckedFragment *artifact = NULL;
         CHECK(nl_semantic_check_raw_operation(c, &op, &artifact, NULL) ==
               NL_CHECK_OK);
@@ -975,29 +1008,22 @@ static bool reborrow_tests(void)
         const NLCheckedNodeView *arg =
             nl_checked_node_view(artifact, root->first_argument);
         CHECK(root->scalar_result.known && root->scalar_result.value == 4 &&
-              arg->value_use == NL_VALUE_REBORROWED &&
-              arg->reborrow_scope != scope);
-        NLSemanticScopeView child;
-        CHECK(nl_semantic_scope_view(c, arg->reborrow_scope, &child) &&
-              !child.active);
-        NLSemanticBindingView parent;
-        CHECK(nl_semantic_binding_view(c, ending, &parent) &&
-              parent.availability == NL_AVAILABLE);
+              arg->value_use == NL_VALUE_COPIED && arg->reborrow_scope == 0);
         nl_checked_destroy(artifact);
     }
-    CHECK(raw_write(c, ending, 0, true, 11));
-    CHECK(raw_read(c, ending, 0, true, 11));
-    /* One exclusive parent cannot supply two simultaneously live children. */
+    CHECK(raw_write(c, child, 0, true, 11));
+    CHECK(raw_read(c, child, 0, true, 11));
     CHECK(raw_rejected(
         c,
         (NLRawOperation){.kind = NL_RAW_COPY_BYTES,
-                         .operands = {raw_binding(ending), raw_binding(ending)},
+                         .operands = {raw_binding(child), raw_binding(ending)},
                          .data.copy = {{true, 0}, {true, 0}, {true, 1}}},
-        NL_CHECK_SEMANTIC_ERROR, "P3-SUSPENDED-AUTHORITY"));
+        NL_CHECK_SEMANTIC_ERROR, "P3-TYPE-MISMATCH"));
+    CHECK(nl_semantic_end_scope(c, child_scope) == NL_CHECK_OK);
     CHECK(nl_semantic_end_scope(c, scope) == NL_CHECK_OK);
     CHECK(raw_rejected(c,
                        (NLRawOperation){.kind = NL_RAW_STORAGE_LEN,
-                                        .operands = {raw_binding(ending)}},
+                                        .operands = {raw_binding(child)}},
                        NL_CHECK_SEMANTIC_ERROR, "P3-DEAD-SCOPE"));
     nl_semantic_destroy(c);
     return true;
