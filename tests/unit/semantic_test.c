@@ -459,7 +459,8 @@ static bool ending_tests(void)
     CHECK(test_semantic_create(&f));
     NLPlaceId first, second;
     NLValueId first_value, second_value;
-    NLSymbolId p1, p2, ending;
+    NLSymbolId p1, p2, ending, stable;
+    NLScopeId ending_scope, stable_scope;
     CHECK(nl_semantic_seed_root(f.context, f.linear, f.domain, true,
                                 NL_DEPENDENCY_FREE, &first,
                                 &first_value) == NL_CHECK_OK);
@@ -470,7 +471,8 @@ static bool ending_tests(void)
                          false, &p1, NULL));
     CHECK(test_reference(f.context, "p2", second, NL_TYPE_PTR, NL_ACCESS_READ,
                          false, &p2, NULL));
-    CHECK(test_domain_ref(&f, "ending", NL_ACCESS_READ, true, &ending, NULL));
+    CHECK(test_domain_ref(&f, "ending", NL_ACCESS_READ, true, &ending,
+                          &ending_scope));
     CHECK(test_rejected(f.context, "destroy(p1,ending)", TEST_EXPRESSION,
                         NL_CHECK_SEMANTIC_ERROR, "P3-DISCARDABLE-REQUIRED"));
     CHECK(test_rejected(f.context, "let one = take(p1,ending)", TEST_BINDING,
@@ -536,7 +538,13 @@ static bool ending_tests(void)
                                   &recovered) == NL_CHECK_OK);
     CHECK(nl_semantic_bind_result(f.context, "vacant", result.results[1].value,
                                   &vacant) == NL_CHECK_OK);
-    CHECK(test_run(f.context, "initialize(vacant,recovered,ending)",
+    CHECK(test_rejected(f.context, "initialize(vacant,recovered,ending)",
+                        TEST_EXPRESSION, NL_CHECK_SEMANTIC_ERROR,
+                        "P3-TYPE-MISMATCH"));
+    CHECK(nl_semantic_end_scope(f.context, ending_scope) == NL_CHECK_OK);
+    CHECK(test_domain_ref(&f, "stable", NL_ACCESS_READ, false, &stable,
+                          &stable_scope));
+    CHECK(test_run(f.context, "initialize(vacant,recovered,stable)",
                    TEST_EXPRESSION, NL_CHECK_OK, NULL, &c));
     CHECK(nl_semantic_place_view(f.context, first, &root) && root.live &&
           root.current_value == first_value);
@@ -546,7 +554,9 @@ static bool ending_tests(void)
     CHECK(nl_semantic_binding_view(f.context, ending, &b) &&
           b.availability == NL_AVAILABLE);
     test_checked_destroy(&c);
-    CHECK(test_rejected(f.context, "take(p1,ending)", TEST_EXPRESSION,
+    CHECK(nl_semantic_end_scope(f.context, stable_scope) == NL_CHECK_OK);
+    CHECK(test_domain_ref(&f, "ending2", NL_ACCESS_READ, true, &ending, NULL));
+    CHECK(test_rejected(f.context, "take(p1,ending2)", TEST_EXPRESSION,
                         NL_CHECK_SEMANTIC_ERROR, "P3-STALE-POINTER"));
     nl_semantic_destroy(f.context);
     return true;

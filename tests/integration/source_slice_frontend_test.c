@@ -38,36 +38,50 @@ static bool source_cycle(bool readable)
     NLSemanticPlaceView before, after;
     CHECK(nl_semantic_place_view(c, place, &before) && before.live);
     if (readable) {
-        const char *text =
-            "{let(v,s)=take(p,ending); let q=initialize(s,v,ending);"
-            "let(v2,s2)=take(q,ending); let q2=initialize(s2,v2,ending); q2}";
-        CHECK(test_run(c, text, TEST_SOURCE, NL_CHECK_OK, NULL, &a));
+        /* Ordinary stability and exclusive ending scopes are explicitly
+         * alternated by the host. Source calls do not synthesize ordinary
+         * children from ending; all receiving/transitions remain parsed. */
+        const char *takes[] = {"let(v1,s1)=take(p,ending)",
+                               "let(v2,s2)=take(q1,ending2)"};
+        const char *initializations[] = {"let q1=initialize(s1,v1,stable2)",
+                                         "let fresh=initialize(s2,v2,stable3)"};
+        const char *stability_names[] = {"stable2", "stable3"};
+        const char *ending_names[] = {"ending2", "ending3"};
+        size_t children = 0;
+        for (size_t n = 0; n < 2; ++n) {
+            CHECK(test_run(c, takes[n], TEST_SOURCE, NL_CHECK_OK, NULL, &a));
+            for (size_t i = 1; i <= nl_checked_node_count(a.artifact); ++i) {
+                const NLCheckedNodeView *node =
+                    nl_checked_node_view(a.artifact, i);
+                if (node->reborrow_scope != 0) {
+                    NLSemanticScopeView child;
+                    CHECK(nl_semantic_scope_view(c, node->reborrow_scope,
+                                                 &child) &&
+                          !child.active);
+                    CHECK(node->value_use == NL_VALUE_REBORROWED);
+                    ++children;
+                }
+            }
+            test_checked_destroy(&a);
+            CHECK(nl_semantic_end_scope(c, ending_scope) == NL_CHECK_OK);
+            CHECK(test_domain_ref(&f, stability_names[n], NL_ACCESS_READ, false,
+                                  &stable, &stable_scope));
+            CHECK(test_run(c, initializations[n], TEST_SOURCE, NL_CHECK_OK,
+                           NULL, &a));
+            for (size_t i = 1; i <= nl_checked_node_count(a.artifact); ++i)
+                CHECK(nl_checked_node_view(a.artifact, i)->reborrow_scope == 0);
+            test_checked_destroy(&a);
+            CHECK(nl_semantic_end_scope(c, stable_scope) == NL_CHECK_OK);
+            CHECK(test_domain_ref(&f, ending_names[n], NL_ACCESS_READ, true,
+                                  &ending, &ending_scope));
+        }
+        CHECK(children == 2); /* take only; initialize uses ordinary evidence */
         CHECK(nl_semantic_place_view(c, place, &after) && after.live &&
               after.incarnation != before.incarnation &&
               after.placement.region == region);
-        size_t takes = 0, children = 0;
-        for (size_t i = 1; i <= nl_checked_node_count(a.artifact); ++i) {
-            const NLCheckedNodeView *node = nl_checked_node_view(a.artifact, i);
-            if (node->kind == NL_CHECKED_TAKE)
-                ++takes;
-            if (node->reborrow_scope != 0) {
-                NLSemanticScopeView child;
-                CHECK(nl_semantic_scope_view(c, node->reborrow_scope, &child) &&
-                      !child.active);
-                CHECK(node->value_use == NL_VALUE_REBORROWED);
-                ++children;
-            }
-        }
-        CHECK(takes == 2 &&
-              children == 4); /* take + initialize, all call-local */
-        CHECK(nl_semantic_find_binding(c, "v") == 0 &&
-              nl_semantic_find_binding(c, "s") == 0);
-        NLSymbolId fresh;
-        CHECK(raw_bind(c, "fresh", test_root(&a)->results[0].value, &fresh));
-        test_checked_destroy(&a);
-        CHECK(test_rejected(c, "let(v,s)=take(p,ending)", TEST_SOURCE,
+        CHECK(test_rejected(c, "let(v,s)=take(p,ending3)", TEST_SOURCE,
                             NL_CHECK_SEMANTIC_ERROR, "P3-STALE-POINTER"));
-        CHECK(test_run(c, "let final_empty=destroy(fresh,ending)", TEST_SOURCE,
+        CHECK(test_run(c, "let final_empty=destroy(fresh,ending3)", TEST_SOURCE,
                        NL_CHECK_OK, NULL, &a));
     } else {
         CHECK(test_rejected(c, "let(v,s)=take(p,ending)", TEST_SOURCE,

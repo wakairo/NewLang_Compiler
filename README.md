@@ -102,7 +102,7 @@ cmake --build build-ubsan --parallel 2
 ctest --test-dir build-ubsan --output-on-failure
 ```
 
-Each configuration runs the same **64 CTests**: source and lexer module unit
+Each configuration runs the same **65 CTests**: source and lexer module unit
 tests, six parser unit groups, file-source -> lexer/parser integration,
 six P3 semantic unit groups and source -> parser -> checker integration,
 ten raw-storage unit groups and the raw -> typed -> raw -> deallocate cycle,
@@ -110,6 +110,7 @@ six P5 source-slice unit groups and source -> checked lifetime/aggregate integra
 seven P6 sum-slice unit groups and source -> checked match integration,
 five P7 ref-join unit groups and PW1–PW5 source -> checked integration,
 four P8 body-registration/exit/ownership/rollback unit groups and body-sensitive direct-call integration,
+a targeted R4-01 argument-compatibility regression,
 diagnostic unit checks, six CLI
 cases (each invoked twice), valid LLVM C API module/IR, artifact integrity, and
 frozen-oracle smoke. ASan includes leak detection; UBSan stops on the first
@@ -184,6 +185,8 @@ artifact is produced. Output I/O failure exits 1.
 - `docs/P8_REGISTERED_FUNCTION_BODY_SLICE_CONTRACT.md`: registered body profile, formal/actual
   checking, alias/exit invariants and durable ownership/rollback contracts.
 - `docs/P8_REGISTERED_FUNCTION_BODY_SLICE_REPORT.md`: W1–W4 disposition, tests, limits and review handoff.
+- `docs/R4_01_ARGUMENT_COMPATIBILITY_FIX_REPORT.md`: shared exclusive/ordinary argument fix,
+  canonical test corrections and targeted validation.
 - `docs/`: historical [P0 toolchain decisions](docs/P0_TOOLCHAIN_DECISIONS.md),
   [P0 architecture](docs/P0_ARCHITECTURE.md), and [P0 report](docs/P0_REPORT.md).
 

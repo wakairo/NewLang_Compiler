@@ -398,8 +398,9 @@ static bool ref_compatible(NLSemanticTypeView actual,
 {
     return actual.kind == NL_TYPE_REF && expected.kind == NL_TYPE_REF &&
            actual.target == expected.target &&
+           actual.is_exclusive == expected.is_exclusive &&
            (actual.access == expected.access ||
-            (actual.access == NL_ACCESS_WRITE &&
+            (!actual.is_exclusive && actual.access == NL_ACCESS_WRITE &&
              expected.access == NL_ACCESS_READ));
 }
 
@@ -425,6 +426,16 @@ static NLCheckedNodeId binding_argument(Check *check, NLSymbolId symbol,
                  "P3-EXCLUSIVE-MODE-UNSUPPORTED",
                  "exclusive mode-changing argument compatibility is not "
                  "established by the call-local reborrow rule alone");
+            return 0;
+        }
+        /* Section 12.1 requires an exclusive selected parameter. Reject
+         * ordinary adaptation before creating a child or consuming authority;
+         * independently constructed ordinary children use the ordinary path. */
+        if (actual.kind == NL_TYPE_REF && actual.is_exclusive &&
+            wanted.kind == NL_TYPE_REF && !wanted.is_exclusive) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P3-TYPE-MISMATCH",
+                 "exclusive actual cannot automatically fit an ordinary ref "
+                 "parameter");
             return 0;
         }
         if (actual.kind == NL_TYPE_REF && actual.is_exclusive &&
