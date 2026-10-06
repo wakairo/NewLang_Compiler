@@ -12,7 +12,7 @@ Backend Contract v0.4、merged evidence、[Issue #47](https://github.com/wakairo
 
 対象は§18.1–18.8、§13.5a/c、§19.1、§27のbounded ordinary-function slice。
 source `fn` declaration / explicit `return` / bare returnのsurfaceは追加しない。
-M9.4/F2/R4/LLVM lowering/production relocationは開始しない。
+P8はPR #48でreview・merge済みでCLOSEDである。後続trackは別のCoordination handoffを待つ。
 
 ## Host registration boundary
 

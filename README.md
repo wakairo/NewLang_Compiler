@@ -6,7 +6,7 @@ NewLang production compiler, written in C17 with LLVM as the primary backend.
 registered closed-sum source slice, and P7 adds bounded dependency-aware
 ref-valued match-result joins without changing canonical semantics.
 P7 is reviewed/merged and CLOSED. P8 adds host-registered non-generic block bodies,
-definition-time validation and body-sensitive direct known calls; **P8 review is pending**.
+definition-time validation and body-sensitive direct known calls; **P8 is reviewed/merged and CLOSED**.
 Source `fn`/`return` and broader frontend/lowering work remain deferred.
 
 ## Authority

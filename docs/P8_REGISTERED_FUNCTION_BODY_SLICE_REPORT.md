@@ -1,6 +1,6 @@
 # P8 registered function body slice report
 
-Track: P。**P8 implementation complete; review pending.**
+Track: P。**P8 reviewed/merged / CLOSED.**
 
 ## Authority / artifacts
 
@@ -99,7 +99,5 @@ bash scripts/check-format.sh
 - W4 source construction limit: real local scope negative/safe restoreはinternal fixtureで検証。
   canonical semantic gapとして扱わず、source loan closureを開かない。
 
-P8はbounded sliceのreviewへ引き渡す。mergeしない。
-M9.4/F2/R4/LLVM/production relocationおよび次milestoneは開始しない。
-
-**P8 READY FOR REVIEW**
+PR #48 exact head `3b35b5d6103f02308c3bbf395a7b8d23d1736bdc` はCoordination reviewをPASSし、mainへmerge済みである。
+**P8 CLOSED**。このclosure自体ではM9.4/F2/R4/LLVM/production relocationを開始しない。
