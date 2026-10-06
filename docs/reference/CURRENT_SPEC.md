@@ -3,7 +3,7 @@
 The canonical NewLang v0 specification on a branch is the Draft named here.
 
 ```text
-NewLang_v0_spec_Draft17_11.md
+NewLang_v0_spec_Draft17_12.md
 ```
 
 Repository policy:
@@ -14,4 +14,4 @@ Repository policy:
 - A newer Draft on an unmerged branch is a candidate until that branch is reviewed and merged into `main`.
 - Prompts handed to M / F / P tracks should cite the `main` commit SHA and this file before relying on conversational memory.
 
-Draft 17.11 adds the targeted M9.5 explicit-return lexical-block source profile for host-known ordinary-function bodies on top of Draft 17.10 without changing the existing ordinary-function ownership, dependency, or function-exit semantics. Source ordinary-function declaration grammar remains outside this closure.
+Draft 17.12 adds the targeted M9.6 `unit` source-name reservation / shadowing clarification on top of Draft 17.11. The exact spelling `unit` is a distinguished core type/value spelling and cannot be introduced into the ordinary lexical namespace; lexer-wide keyword redesign and unrelated member-name reservation remain outside this closure.
