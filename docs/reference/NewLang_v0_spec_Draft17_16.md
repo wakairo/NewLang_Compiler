@@ -8701,8 +8701,6 @@ first-iteration-only stateをlater iterationへそのまま再利用するoptimi
 
 ---
 
-# 28.---
-
 # 28. compilation unit / nominal identity / future modules
 
 ## 28.1 v0 semantic compilation unit
