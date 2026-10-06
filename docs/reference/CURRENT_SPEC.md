@@ -3,7 +3,7 @@
 The canonical NewLang v0 specification on a branch is the Draft named here.
 
 ```text
-NewLang_v0_spec_Draft17_12.md
+NewLang_v0_spec_Draft17_13.md
 ```
 
 Repository policy:
@@ -14,4 +14,4 @@ Repository policy:
 - A newer Draft on an unmerged branch is a candidate until that branch is reviewed and merged into `main`.
 - Prompts handed to M / F / P tracks should cite the `main` commit SHA and this file before relying on conversational memory.
 
-Draft 17.12 adds the targeted M9.6 `unit` source-name reservation / shadowing clarification on top of Draft 17.11. The exact spelling `unit` is a distinguished core type/value spelling and cannot be introduced into the ordinary lexical namespace; lexer-wide keyword redesign and unrelated member-name reservation remain outside this closure.
+Draft 17.13 adds the targeted M9.8 exact minimal non-generic ordinary-function declaration source profile on top of Draft 17.12. It fixes the `fn name(parameters) -> ResultType { ... }` top-level form, order-independent visibility of bounded ordinary-function signatures within one semantic compilation unit, forward-reference behavior, duplicate-name rules, and recursion name-resolution separation, while leaving generic/associated-function source syntax and existing function semantics unchanged.
