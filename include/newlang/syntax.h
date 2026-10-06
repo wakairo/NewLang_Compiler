@@ -23,6 +23,7 @@ typedef enum {
     NL_SYNTAX_AGGREGATE,
     NL_SYNTAX_SUM_CONSTRUCTOR,
     NL_SYNTAX_MATCH,
+    NL_SYNTAX_IF,
     NL_SYNTAX_MATCH_ARM,
     NL_SYNTAX_FUNCTION_UNIT,
     NL_SYNTAX_FUNCTION,
@@ -97,6 +98,9 @@ typedef struct {
             size_t argument_count;
             bool parentheses;
         } constructor;
+        struct {
+            const NLSyntaxNode *condition, *then_block, *else_block;
+        } conditional;
         struct {
             const NLSyntaxNode *scrutinee, *arms;
             size_t arm_count;

@@ -84,6 +84,8 @@ struct NLCheckedFragment {
     NLCheckedNodeId root;
     NLCheckedArm *arms;
     size_t arm_count;
+    NLValueFactId branch_fact_prefix; /* original current-value facts */
+    size_t branch_value_prefix; /* proven original IDs for IF exit rebasing */
     void (*destroy_context)(NLSemanticContext *); /* arm snapshots only */
     struct NLCheckedFragment **bodies;
     NLCheckedNodeId *body_calls;

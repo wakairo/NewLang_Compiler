@@ -714,11 +714,69 @@ static NLSyntaxNode *source_match(NLParser *parser)
     return result;
 }
 
+static NLSyntaxNode *source_if(NLParser *parser)
+{
+    const NLSourceSpan start = parser->token.span;
+    consume(parser);
+    if (!expect_punct(parser, '(', "P13-IF-OPEN", "if requires (condition)"))
+        return NULL;
+    const bool previous = parser->match_scrutinee;
+    parser->match_scrutinee = false;
+    NLSyntaxNode *condition = source_expression(parser);
+    parser->match_scrutinee = previous;
+    if (condition == NULL ||
+        !expect_punct(parser, ')', "P13-IF-CLOSE", "if condition requires )"))
+        return NULL;
+    if (!punct(parser, '{')) {
+        fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span, "P13-IF-THEN",
+             "if requires a then lexical block");
+        return NULL;
+    }
+    parser->match_scrutinee = false;
+    NLSyntaxNode *then_block = source_expression(parser);
+    parser->match_scrutinee = previous;
+    if (then_block == NULL)
+        return NULL;
+    if (!word(parser, "else")) {
+        fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span, "P13-IF-ELSE",
+             "if requires else and a lexical block");
+        return NULL;
+    }
+    consume(parser);
+    if (!punct(parser, '{')) {
+        fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+             "P13-IF-ELSE-BLOCK", "else requires a lexical block; no else if");
+        return NULL;
+    }
+    parser->match_scrutinee = false;
+    NLSyntaxNode *else_block = source_expression(parser);
+    parser->match_scrutinee = previous;
+    if (else_block == NULL)
+        return NULL;
+    NLSyntaxNode *result = node(parser, NL_SYNTAX_IF, start);
+    if (result != NULL) {
+        result->view.span.end_byte = else_block->view.span.end_byte;
+        result->view.data.conditional.condition = condition;
+        result->view.data.conditional.then_block = then_block;
+        result->view.data.conditional.else_block = else_block;
+    }
+    return result;
+}
+
 static NLSyntaxNode *source_expression(NLParser *parser)
 {
     if (!enter(parser))
         return NULL;
     NLSyntaxNode *result = NULL;
+    if (word(parser, "if")) {
+        result = source_if(parser);
+        goto done;
+    }
+    if (word(parser, "else")) {
+        fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+             "P13-ELSE-CONTEXT", "else is only valid after an if then block");
+        goto done;
+    }
     if (word(parser, "fn")) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
              "P11-LOCAL-DECLARATION", "fn declaration is top-level only");

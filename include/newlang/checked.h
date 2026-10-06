@@ -41,6 +41,8 @@ typedef enum {
     NL_CHECKED_AGGREGATE_BINDING,
     NL_CHECKED_SUM_CONSTRUCTOR,
     NL_CHECKED_MATCH,
+    NL_CHECKED_IF,
+    NL_CHECKED_IF_ARM,
     NL_CHECKED_MATCH_ARM,
     NL_CHECKED_RETURN,
     NL_CHECKED_UNIT
@@ -81,7 +83,7 @@ typedef struct {
     bool body_backed;
     bool terminates; /* no normal outgoing edge; type 0 means absent, not never
                       */
-    size_t normal_arms; /* bounded function match: excludes return edges */
+    size_t normal_arms;       /* finite branch count, excludes return edges */
     NLCheckedResult returned; /* RETURN responsibility, not a normal result */
     NLValueUse value_use;
     bool contextually_weakened;
@@ -118,10 +120,16 @@ const NLSemanticContext *nl_checked_context(const NLCheckedFragment *);
  * to nl_checked_context(arm), an artifact-owned hypothetical branch snapshot.
  * They never identify public-context values. The parent owns/destroys arms and
  * their contexts; source lifetime must cover both. Nested matches are outside
- * the bounded P6 slice. */
+ * the bounded P6 slice; nested IF evidence is supported. */
 const NLCheckedFragment *nl_checked_match_arm(const NLCheckedFragment *,
                                               NLCheckedNodeId match,
                                               size_t index);
+
+/* IF arm snapshots use the same ownership/public-ID separation as match.
+ * Index 0 is then, 1 is else. Nested IF evidence is recursively owned. */
+const NLCheckedFragment *nl_checked_if_arm(const NLCheckedFragment *,
+                                           NLCheckedNodeId conditional,
+                                           size_t index);
 
 /* Owned body evidence retains its plan source. Semantic IDs use the SAME
  * public context as the call, never a hypothetical formal context. Namespace

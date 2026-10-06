@@ -191,6 +191,13 @@ if(BUILD_TESTING)
         add_test(NAME p12_${group}.unit COMMAND structural_name_test ${group})
     endforeach()
 
+    add_executable(if_test tests/unit/if_test.c)
+    target_link_libraries(if_test PRIVATE newlang_semantic newlang_parser)
+    target_link_options(if_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    foreach(group grammar bool flow identity ref effects nested failure limits)
+        add_test(NAME p13_${group}.unit COMMAND if_test ${group})
+    endforeach()
+
     add_executable(unit_name_test tests/unit/unit_name_test.c)
     target_link_libraries(unit_name_test PRIVATE newlang_semantic newlang_parser)
     target_link_options(unit_name_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)

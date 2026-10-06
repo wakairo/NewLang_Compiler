@@ -85,6 +85,16 @@ const NLCheckedFragment *nl_checked_match_arm(const NLCheckedFragment *f,
     return NULL;
 }
 
+const NLCheckedFragment *nl_checked_if_arm(const NLCheckedFragment *f,
+                                           NLCheckedNodeId conditional,
+                                           size_t index)
+{
+    const NLCheckedNodeView *v = nl_checked_node_view(f, conditional);
+    return v != NULL && v->kind == NL_CHECKED_IF
+               ? nl_checked_match_arm(f, conditional, index)
+               : NULL;
+}
+
 const NLCheckedFragment *nl_checked_call_body(const NLCheckedFragment *f,
                                               NLCheckedNodeId call)
 {

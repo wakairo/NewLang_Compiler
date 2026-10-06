@@ -295,7 +295,8 @@ NLCheckStatus nl_semantic_create(NLSemanticContext **out_context)
                 {"byte", NL_TYPE_BYTE, true},
                 {"u8", NL_TYPE_U8, true},
                 {"usize", NL_TYPE_USIZE, true},
-                {"addr", NL_TYPE_ADDR, true}};
+                {"addr", NL_TYPE_ADDR, true},
+                {"bool", NL_TYPE_BOOL, true}};
     for (size_t i = 0; i < sizeof(core) / sizeof(core[0]); ++i) {
         status = nominal(context, core[i].name, core[i].copy, core[i].copy,
                          &type_id);
@@ -750,9 +751,9 @@ NLCheckStatus nl_semantic_seed_value(NLSemanticContext *c, const char *name,
         return NL_CHECK_INTERNAL_ERROR;
     }
     const NLSemanticTypeKind kind = c->types[type - 1].view.kind;
-    if ((kind != NL_TYPE_NOMINAL && kind != NL_TYPE_BYTE &&
-         kind != NL_TYPE_U8 && kind != NL_TYPE_USIZE && kind != NL_TYPE_ADDR &&
-         type != 1) ||
+    if ((kind != NL_TYPE_NOMINAL && kind != NL_TYPE_BOOL &&
+         kind != NL_TYPE_BYTE && kind != NL_TYPE_U8 && kind != NL_TYPE_USIZE &&
+         kind != NL_TYPE_ADDR && type != 1) ||
         type == 2 || c->types[type - 1].view.field_count != 0) {
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
     }
@@ -815,8 +816,9 @@ NLCheckStatus nl_semantic_seed_root(NLSemanticContext *c, NLTypeId type,
          dependencies != NL_DEPENDENCIES_UNKNOWN)) {
         return NL_CHECK_INTERNAL_ERROR;
     }
-    if (c->types[type - 1].view.kind != NL_TYPE_NOMINAL || type == 2 ||
-        c->types[type - 1].view.field_count != 0) {
+    if ((c->types[type - 1].view.kind != NL_TYPE_NOMINAL &&
+         c->types[type - 1].view.kind != NL_TYPE_BOOL) ||
+        type == 2 || c->types[type - 1].view.field_count != 0) {
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
     }
     NLSemanticContext *candidate = NULL;
@@ -1050,9 +1052,9 @@ NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *c,
             return NL_CHECK_INTERNAL_ERROR;
         const NLSemanticTypeView t = c->types[fields[f].type - 1].view;
         if (t.field_count != 0 || fields[f].type == 2 ||
-            (t.kind != NL_TYPE_NOMINAL && t.kind != NL_TYPE_BYTE &&
-             t.kind != NL_TYPE_U8 && t.kind != NL_TYPE_USIZE &&
-             t.kind != NL_TYPE_ADDR))
+            (t.kind != NL_TYPE_NOMINAL && t.kind != NL_TYPE_BOOL &&
+             t.kind != NL_TYPE_BYTE && t.kind != NL_TYPE_U8 &&
+             t.kind != NL_TYPE_USIZE && t.kind != NL_TYPE_ADDR))
             return NL_CHECK_SEMANTIC_UNSUPPORTED;
         for (size_t j = 0; j < f; ++j)
             if (strcmp(fields[f].name, fields[j].name) == 0)

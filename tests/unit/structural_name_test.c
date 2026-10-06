@@ -19,7 +19,8 @@ void *__wrap_realloc(void *p, size_t n)
         return NULL;
     return __real_realloc(p, n);
 }
-static const char *const structural[] = {"fn", "let", "return", "match"};
+static const char *const structural[] = {"fn",    "let", "return",
+                                         "match", "if",  "else"};
 static const char *const code = "P12-RESERVED-STRUCTURAL-NAME";
 
 static bool source_header_reject(NLSemanticContext *c, const char *text,
@@ -82,7 +83,7 @@ static bool ingress(void)
     CHECK(test_reference(f.context, "read", ob.place, NL_TYPE_REF,
                          NL_ACCESS_READ, false, &read, NULL));
     char text[512];
-    for (size_t i = 0; i < 4; ++i) {
+    for (size_t i = 0; i < sizeof(structural) / sizeof(structural[0]); ++i) {
         const char *name = structural[i];
         CHECK(nl_ordinary_name_class(name, strlen(name)) ==
               NL_NAME_RESERVED_STRUCTURAL);
@@ -228,7 +229,7 @@ static bool header(void)
         f.context, "fn match()->unit{unit} fn caller()->unit{match()}", "match",
         3));
     char text[512];
-    for (size_t i = 0; i < 4; ++i) {
+    for (size_t i = 0; i < sizeof(structural) / sizeof(structural[0]); ++i) {
         const char *name = structural[i];
         const char *prefix = "fn valid()->unit{unit} fn ";
         (void)snprintf(text, sizeof(text), "%s%s()->unit{unit}", prefix, name);
@@ -238,9 +239,9 @@ static bool header(void)
                        name);
         CHECK(source_header_reject(f.context, text, name, strlen(prefix)));
     }
-    const char *malformed[] = {"fn()",     "{fn();}",   "let()",
-                               "{let();}", "return()",  "{return();}",
-                               "match()",  "{match();}"};
+    const char *malformed[] = {
+        "fn()",    "{fn();}",    "let()", "{let();}", "return()", "{return();}",
+        "match()", "{match();}", "if()",  "{if();}",  "else()",   "{else();}"};
     for (size_t i = 0; i < sizeof(malformed) / sizeof(malformed[0]); ++i) {
         NLSource *source = NULL;
         NLParser *parser = NULL;
@@ -285,27 +286,30 @@ static bool member(void)
     NLSymbolId x;
     CHECK(nl_semantic_seed_value(f.context, "x", f.copy, NL_DEPENDENCY_FREE,
                                  &x) == NL_CHECK_OK);
-    const NLSumVariant variants[] = {
-        {"fn", 0}, {"let", 0}, {"return", 0}, {"match", 0}, {"unit", 0}};
+    const NLSumVariant variants[] = {{"fn", 0},    {"let", 0},  {"return", 0},
+                                     {"match", 0}, {"unit", 0}, {"if", 0},
+                                     {"else", 0}};
     NLTypeId code_type, record;
-    CHECK(nl_semantic_register_sum(f.context, "Code", variants, 5,
+    CHECK(nl_semantic_register_sum(f.context, "Code", variants, 7,
                                    &code_type) == NL_CHECK_OK);
-    const NLAggregateField fields[] = {{"fn", f.copy},
-                                       {"let", f.copy},
-                                       {"return", f.copy},
-                                       {"match", f.copy},
-                                       {"unit", f.copy}};
-    CHECK(nl_semantic_register_aggregate(f.context, "Record", fields, 5,
+    const NLAggregateField fields[] = {{"fn", f.copy},     {"let", f.copy},
+                                       {"return", f.copy}, {"match", f.copy},
+                                       {"unit", f.copy},   {"if", f.copy},
+                                       {"else", f.copy}};
+    CHECK(nl_semantic_register_aggregate(f.context, "Record", fields, 7,
                                          &record) == NL_CHECK_OK);
-    CHECK(body_ok(f.context,
-                  "let record=Record{fn:x,let:x,return:x,match:x,unit:x}"));
+    CHECK(body_ok(
+        f.context,
+        "let record=Record{fn:x,let:x,return:x,match:x,unit:x,if:x,else:x}"));
     CHECK(register_unit_ok(
         f.context, "fn run(s:Code)->unit{let copy=s;match copy{fn=>{return "
                    "unit;},let=>{return unit;},return=>{return "
-                   "unit;},match=>{return unit;},unit=>{return unit;}};}"));
-    const char *labels[] = {"fn", "let", "return", "match", "unit"};
+                   "unit;},match=>{return unit;},unit=>{return "
+                   "unit;},if=>{return unit;},else=>{return unit;}};}"));
+    const char *labels[] = {"fn",   "let", "return", "match",
+                            "unit", "if",  "else"};
     char text[512];
-    for (size_t i = 0; i < 5; ++i) {
+    for (size_t i = 0; i < sizeof(labels) / sizeof(labels[0]); ++i) {
         (void)snprintf(text, sizeof(text), "let chosen%zu=Code.%s", i,
                        labels[i]);
         CHECK(body_ok(f.context, text));
@@ -314,16 +318,17 @@ static bool member(void)
         (void)snprintf(text, sizeof(text),
                        "match "
                        "chosen%zu{fn=>{unit},let=>{unit},return=>{unit},match=>"
-                       "{unit},unit=>{unit}}",
+                       "{unit},unit=>{unit},if=>{unit},else=>{unit}}",
                        i);
         CHECK(body_ok(f.context, text));
         CHECK(nl_semantic_find_binding(f.context, labels[i]) == 0);
     }
-    const char *near[] = {"Fn",    "Let",         "Return",  "Match",
-                          "fn_",   "let_",        "return_", "match_",
-                          "fn2",   "match_value", "unit_",   "units",
-                          "Unit",  "ptr",         "ref",     "read",
-                          "write", "exclusive",   "using"};
+    const char *near[] = {
+        "Fn",        "Let",    "Return", "Match",       "fn_",   "let_",
+        "return_",   "match_", "fn2",    "match_value", "unit_", "units",
+        "Unit",      "ptr",    "ref",    "read",        "write", "exclusive",
+        "using",     "If",     "Else",   "if_",         "else_", "if2",
+        "elsewhere", "loop",   "break",  "continue"};
     for (size_t i = 0; i < sizeof(near) / sizeof(near[0]); ++i) {
         CHECK(nl_ordinary_name_class(near[i], strlen(near[i])) ==
               NL_NAME_ADMISSIBLE);
