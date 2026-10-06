@@ -24,6 +24,9 @@ typedef enum {
     NL_SYNTAX_SUM_CONSTRUCTOR,
     NL_SYNTAX_MATCH,
     NL_SYNTAX_MATCH_ARM,
+    NL_SYNTAX_FUNCTION_UNIT,
+    NL_SYNTAX_FUNCTION,
+    NL_SYNTAX_PARAMETER,
     NL_SYNTAX_RETURN /* dedicated block item; data.statement.expression */
 } NLSyntaxKind;
 
@@ -41,6 +44,19 @@ typedef struct {
     NLSyntaxKind kind;
     NLSourceSpan span;
     union {
+        struct {
+            const NLSyntaxNode *declarations;
+            size_t count;
+        } function_unit;
+        struct {
+            NLSourceSpan name;
+            const NLSyntaxNode *parameters, *result, *body;
+            size_t count;
+        } function;
+        struct {
+            NLSourceSpan name;
+            const NLSyntaxNode *type;
+        } parameter;
         NLSourceSpan name; /* TYPE_NAME / EXPR_NAME / RECEIVER. */
         struct {
             const NLSyntaxNode *target;
@@ -112,7 +128,8 @@ const NLSource *nl_syntax_tree_source(const NLSyntaxTree *tree);
 const NLSyntaxNode *nl_syntax_tree_root(const NLSyntaxTree *tree);
 const NLSyntaxView *nl_syntax_node_view(const NLSyntaxNode *node);
 
-/* Walk call arguments, block items, receivers or aggregate fields in source
+/* Walk call arguments, block items, receivers, aggregate fields, function
+ * declarations or parameters in source
  * order; NULL terminates. Non-argument nodes have no next argument. All getters
  * return NULL for a NULL input. */
 const NLSyntaxNode *nl_syntax_next_argument(const NLSyntaxNode *node);

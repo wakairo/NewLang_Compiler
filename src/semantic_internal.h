@@ -103,6 +103,9 @@ static inline NLReferenceFacts nl_sem_ref_fact(NLSemanticValueView v, size_t i)
 
 NLCheckStatus nl_body_create(const NLSyntaxTree *, const NLFunctionParameter *,
                              size_t, NLFunctionBody **);
+NLCheckStatus nl_body_create_span(const NLSource *, NLSourceSpan,
+                                  const NLFunctionParameter *, size_t,
+                                  NLFunctionBody **);
 NLCheckStatus nl_body_retain(NLFunctionBody *);
 void nl_body_release(NLFunctionBody *);
 /* Surviving packages after body/parameter cleanup may not reference newly

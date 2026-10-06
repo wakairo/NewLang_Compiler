@@ -63,6 +63,13 @@ NLParseStatus nl_parser_parse_loan_fragment(NLParser *parser,
 NLParseStatus nl_parser_parse_source_fragment(NLParser *, NLSyntaxTree **,
                                               NLParseDiagnostic *);
 
+/* Draft 17.13 bounded fn-only top-level container, one or more declarations.
+ * Same reset/ownership/budget contracts as fragments. Bodies/types reuse their
+ * existing grammar; no general top-level item language or generic declarations.
+ * Multiple trees may be collected as one semantic unit by the semantic API. */
+NLParseStatus nl_parser_parse_function_unit(NLParser *, NLSyntaxTree **,
+                                            NLParseDiagnostic *);
+
 /* Synchronous adapter to existing renderer: byte columns/LF line presentation
  * only, CRLF one physical newline, tabs/lone CR one byte column. The diagnostic
  * and source are borrowed for the call; false on invalid span/output failure.

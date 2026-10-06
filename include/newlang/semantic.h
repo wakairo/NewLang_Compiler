@@ -306,13 +306,31 @@ typedef struct {
  * existing lexical BLOCK. Owns a durable syntax/source plan independent of the
  * caller's tree/source/parameter names. Body calls are interpreted against
  * actual facts in a transactional context; no textual substitution. Invalid
- * uncalled bodies reject. No source fn/return, overloads or recursion. */
+ * uncalled bodies reject. Acyclic body calls share this model; recursive
+ * analysis is precision-rejected. No overloads or generic declarations. */
 NLCheckStatus nl_semantic_register_function_body(NLSemanticContext *,
                                                  const char *name,
                                                  const NLFunctionParameter *,
                                                  size_t count, NLTypeId result,
                                                  const NLSyntaxTree *body,
                                                  NLCheckDiagnostic *diagnostic);
+
+/* Bounded Draft 17.13 fn-only semantic unit. Input array/trees/sources are
+ * borrowed only for this synchronous call. All signatures and owned bodies
+ * are established in a private candidate before definition checking; commit
+ * only after every declaration succeeds. Success leaves diagnostic untouched.
+ * Failure leaves public state unchanged and reports input index + source span.
+ * Durable plans survive destruction of input trees/sources/array. No module,
+ * driver, separate-compilation or source nominal-type declaration machinery.
+ * Names are collected in deterministic spelling order; IDs are not file IDs. */
+#define NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS 128
+typedef struct {
+    size_t input_index;
+    NLCheckDiagnostic diagnostic;
+} NLFunctionUnitDiagnostic;
+NLCheckStatus nl_semantic_register_function_unit(
+    NLSemanticContext *, const NLSyntaxTree *const *inputs, size_t count,
+    NLFunctionUnitDiagnostic *diagnostic);
 
 /* Borrow input tree only for synchronous check; never reparse source. All
  * checks clone candidate state and commit on complete success only. Success

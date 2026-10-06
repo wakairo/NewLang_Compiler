@@ -3,13 +3,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef struct {
+typedef struct Check {
+    const struct Check *caller; /* borrowed synchronous active call chain */
     NLSemanticContext *context;
     NLCheckedFragment *artifact;
     const NLSource *source;
     size_t depth;
     size_t binding_floor, namespace_floor;
-    size_t body_function;
+    size_t body_function, body_steps;
+    size_t *body_budget; /* borrowed counter for this synchronous body walk */
     bool in_function_body, definition, terminated;
     NLTypeId function_result;
     size_t function_binding_floor, function_scope_floor, function_place_floor;
@@ -1061,12 +1063,16 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         return 0;
     }
     const NLFunctionEntry function = c->functions[function_id - 1];
-    if (check->in_function_body && function.body != NULL) {
-        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->data.call.callee,
-             function_id == check->body_function ? "P8-RECURSION-UNSUPPORTED"
-                                                 : "P8-NESTED-BODY-CALL",
-             "body-backed call chains/recursion are outside P8");
-        return 0;
+    if (function.body != NULL) {
+        for (const Check *active = check; active != NULL;
+             active = active->caller) {
+            if (active->body_function == function_id) {
+                fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                     "P11-RECURSIVE-ANALYSIS-PRECISION",
+                     "resolved recursive body requires SCC summary analysis");
+                return 0;
+            }
+        }
     }
     if (check->in_function_body &&
         function.kind != NL_CHECKED_REGISTERED_CALL &&
@@ -1938,11 +1944,23 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                      const NLFunctionEntry *function,
                      const NLCheckedNodeId *arguments)
 {
+    if (caller->body_budget == NULL)
+        caller->body_budget = &caller->body_steps;
+    if (*caller->body_budget >= NL_SEMANTIC_MAX_ENTRIES) {
+        fail(caller, NL_CHECK_RESOURCE_LIMIT, view(caller, call_id)->span,
+             "P11-BODY-WORK-LIMIT", "bounded body-call work budget exceeded");
+        return false;
+    }
+    ++*caller->body_budget;
     NLSemanticContext *c = caller->context;
     const size_t binding_floor = c->binding_count, scope_floor = c->scope_count,
                  place_floor = c->place_count;
     const NLSourceSpan call_span = view(caller, call_id)->span;
-    Check body = {.context = c,
+    Check body = {.caller = caller,
+                  .body_budget = caller->body_budget,
+                  .depth = caller->depth,
+                  .definition = caller->definition,
+                  .context = c,
                   .source = function->body->source,
                   .binding_floor = binding_floor,
                   .namespace_floor = binding_floor,
@@ -3751,11 +3769,13 @@ static void clear_definition_state(NLSemanticContext *c)
 
 static bool check_definition(Check *registration, size_t function_id)
 {
-    Check definition = {.source = registration->source,
-                        .in_function_body = true,
-                        .definition = true,
-                        .body_function = function_id,
-                        .has_arm_floor = true};
+    Check definition = {
+        .source =
+            registration->context->functions[function_id - 1].body->source,
+        .in_function_body = true,
+        .definition = true,
+        .body_function = function_id,
+        .has_arm_floor = true};
     const NLSourceSpan span =
         nl_syntax_node_view(
             nl_syntax_tree_root(
@@ -3925,5 +3945,193 @@ failure:
     nl_semantic_destroy(check.context);
     if (diagnostic != NULL)
         *diagnostic = check.diagnostic;
+    return check.status;
+}
+
+/* Narrow declaration collection, not a general call graph or module system. */
+typedef struct {
+    const NLSyntaxTree *tree;
+    const NLSyntaxView *syntax;
+    size_t input, function;
+    char *name;
+    /* Names owned by this collection until copied into a durable body. */
+    NLFunctionParameter parameters[NL_SEMANTIC_MAX_PARAMETERS];
+} FunctionDeclaration;
+
+static int declaration_order(const void *a, const void *b)
+{
+    const FunctionDeclaration *left = a, *right = b;
+    return strcmp(left->name, right->name);
+}
+
+NLCheckStatus nl_semantic_register_function_unit(
+    NLSemanticContext *context, const NLSyntaxTree *const *inputs, size_t count,
+    NLFunctionUnitDiagnostic *diagnostic)
+{
+    if (context == NULL || inputs == NULL || count == 0)
+        return NL_CHECK_INTERNAL_ERROR;
+    for (size_t i = 0; i < count; ++i) {
+        if (inputs[i] == NULL ||
+            nl_syntax_node_view(nl_syntax_tree_root(inputs[i]))->kind !=
+                NL_SYNTAX_FUNCTION_UNIT)
+            return NL_CHECK_INTERNAL_ERROR;
+    }
+    Check check = {.source = nl_syntax_tree_source(inputs[0])};
+    FunctionDeclaration *declarations = NULL;
+    size_t total = 0, input = 0;
+    if (!host(&check, nl_sem_clone(context, &check.context), (NLSourceSpan){0}))
+        goto failure;
+    for (input = 0; input < count; ++input) {
+        check.source = nl_syntax_tree_source(inputs[input]);
+        const NLSyntaxView *root =
+            nl_syntax_node_view(nl_syntax_tree_root(inputs[input]));
+        for (const NLSyntaxNode *n = root->data.function_unit.declarations;
+             n != NULL; n = nl_syntax_next_argument(n)) {
+            const NLSyntaxView *s = nl_syntax_node_view(n);
+            if (total == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS) {
+                (void)host(&check, NL_CHECK_RESOURCE_LIMIT, s->span);
+                goto failure;
+            }
+            if (!lexical_source_name(&check, s->data.function.name))
+                goto failure;
+            FunctionDeclaration *storage =
+                realloc(declarations, (total + 1) * sizeof(*storage));
+            if (storage == NULL) {
+                (void)host(&check, NL_CHECK_OUT_OF_MEMORY, s->span);
+                goto failure;
+            }
+            declarations = storage;
+            declarations[total] = (FunctionDeclaration){
+                .tree = inputs[input], .syntax = s, .input = input};
+            FunctionDeclaration *d = &declarations[total++];
+            d->name = source_name_copy(&check, s->data.function.name);
+            if (d->name == NULL)
+                goto failure;
+        }
+    }
+    qsort(declarations, total, sizeof(*declarations), declaration_order);
+    /* Exact signature installation is private until ALL definitions succeed. */
+    for (size_t i = 0; i < total; ++i) {
+        FunctionDeclaration *d = &declarations[i];
+        input = d->input;
+        check.source = nl_syntax_tree_source(d->tree);
+        const NLSyntaxView *s = d->syntax;
+        if (i != 0 && strcmp(d->name, declarations[i - 1].name) == 0)
+            goto duplicate;
+        for (size_t j = 0; j < check.context->function_count; ++j)
+            if (strcmp(d->name, check.context->functions[j].name) == 0)
+                goto duplicate;
+        for (size_t j = 0; j < check.context->binding_count; ++j)
+            if (!check.context->bindings[j].hidden &&
+                strcmp(d->name, check.context->bindings[j].name) == 0)
+                goto duplicate;
+        /* Host-established nominal declarations share the ordinary top-level
+         * namespace. Core type spellings do not become new reserved words. */
+        for (size_t j = 2; j < check.context->type_count; ++j) {
+            const NLTypeEntry *t = &check.context->types[j];
+            if ((t->view.kind == NL_TYPE_NOMINAL ||
+                 t->view.kind == NL_TYPE_SUM) &&
+                t->name != NULL && strcmp(d->name, t->name) == 0)
+                goto duplicate;
+        }
+        if (s->data.function.count > NL_SEMANTIC_MAX_PARAMETERS) {
+            (void)host(&check, NL_CHECK_RESOURCE_LIMIT, s->span);
+            goto failure;
+        }
+        NLTypeId types[NL_SEMANTIC_MAX_PARAMETERS] = {0};
+        size_t parameter = 0;
+        for (const NLSyntaxNode *n = s->data.function.parameters; n != NULL;
+             n = nl_syntax_next_argument(n), ++parameter) {
+            const NLSyntaxView *p = nl_syntax_node_view(n);
+            if (!lexical_source_name(&check, p->data.parameter.name))
+                goto failure;
+            char *name = source_name_copy(&check, p->data.parameter.name);
+            if (name == NULL)
+                goto failure;
+            d->parameters[parameter].name = name;
+            for (size_t j = 0; j < parameter; ++j) {
+                if (strcmp(name, d->parameters[j].name) == 0) {
+                    fail(&check, NL_CHECK_SEMANTIC_ERROR,
+                         p->data.parameter.name, "P11-DUPLICATE-PARAMETER",
+                         "duplicate fn parameter name");
+                    goto failure;
+                }
+            }
+            const NLTypeId type = check_type(&check, p->data.parameter.type);
+            if (type == 0)
+                goto failure;
+            if (!body_signature_type(check.context, type, true))
+                goto signature_limit;
+            types[parameter] = type;
+            d->parameters[parameter].type = type;
+        }
+        const NLTypeId result = check_type(&check, s->data.function.result);
+        if (result == 0)
+            goto failure;
+        if (!body_signature_type(check.context, result, false))
+            goto signature_limit;
+        if (!host(&check,
+                  nl_semantic_register_function(check.context, d->name, types,
+                                                parameter, result, false,
+                                                false),
+                  s->span))
+            goto failure;
+        d->function = check.context->function_count;
+        continue;
+    duplicate:
+        fail(&check, NL_CHECK_SEMANTIC_ERROR, s->data.function.name,
+             "P11-DUPLICATE-FUNCTION",
+             "ordinary declaration name already established");
+        goto failure;
+    signature_limit:
+        fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
+             "P8-SIGNATURE-PRECISION",
+             "signature needs unsupported body analysis");
+        goto failure;
+    }
+    /* Never interpret a source definition as a coarse signature-only call. */
+    for (size_t i = 0; i < total; ++i) {
+        const FunctionDeclaration *d = &declarations[i];
+        input = d->input;
+        check.source = nl_syntax_tree_source(d->tree);
+        const NLSourceSpan span =
+            nl_syntax_node_view(d->syntax->data.function.body)->span;
+        if (!host(&check,
+                  nl_body_create_span(
+                      check.source, span, d->parameters,
+                      d->syntax->data.function.count,
+                      &check.context->functions[d->function - 1].body),
+                  span))
+            goto failure;
+    }
+    for (size_t i = 0; i < total; ++i) {
+        const FunctionDeclaration *d = &declarations[i];
+        input = d->input;
+        if (!check_definition(&check, d->function)) {
+            const size_t start =
+                nl_syntax_node_view(d->syntax->data.function.body)
+                    ->span.start_byte;
+            check.diagnostic.span.start_byte += start;
+            check.diagnostic.span.end_byte += start;
+            goto failure;
+        }
+    }
+    check.source = nl_syntax_tree_source(inputs[0]);
+    input = 0;
+    if (!host(&check, nl_sum_validate(check.context), (NLSourceSpan){0}) ||
+        !host(&check, nl_raw_validate(check.context), (NLSourceSpan){0}))
+        goto failure;
+    nl_sem_commit(context, check.context);
+    check.context = NULL;
+failure:
+    for (size_t i = 0; i < total; ++i) {
+        free(declarations[i].name);
+        for (size_t j = 0; j < NL_SEMANTIC_MAX_PARAMETERS; ++j)
+            free((void *)declarations[i].parameters[j].name);
+    }
+    free(declarations);
+    nl_semantic_destroy(check.context);
+    if (check.status != NL_CHECK_OK && diagnostic != NULL)
+        *diagnostic = (NLFunctionUnitDiagnostic){input, check.diagnostic};
     return check.status;
 }
