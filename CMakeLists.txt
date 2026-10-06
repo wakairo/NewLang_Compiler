@@ -184,6 +184,13 @@ if(BUILD_TESTING)
         add_test(NAME p11_${group}.unit COMMAND function_source_test ${group})
     endforeach()
 
+    add_executable(structural_name_test tests/unit/structural_name_test.c)
+    target_link_libraries(structural_name_test PRIVATE newlang_semantic newlang_parser)
+    target_link_options(structural_name_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    foreach(group ingress header member failure)
+        add_test(NAME p12_${group}.unit COMMAND structural_name_test ${group})
+    endforeach()
+
     add_executable(unit_name_test tests/unit/unit_name_test.c)
     target_link_libraries(unit_name_test PRIVATE newlang_semantic newlang_parser)
     target_link_options(unit_name_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)

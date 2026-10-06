@@ -178,7 +178,9 @@ typedef struct {
 /* Context owns names/tables/packages. It registers unit/LifetimeDomain and P4
  * scalar/authority types and a fixed semantic prelude, separate from parser
  * keywords. Names passed below are borrowed NUL-terminated host API strings,
- * copied on success. Every mutating API is transactional. Failures leave
+ * copied on success. Ordinary binding/function/type-declaration names satisfy
+ * current lexical admissibility; field/variant labels use their separate
+ * namespace. Every mutating API is transactional. Failures leave
  * observable state and output IDs unchanged. Owner slots must be initialized
  * NULL. NULL destruction is allowed; no globals/LLVM/oracle/Lean dependencies
  * or source declarations. IDs/views are meaningful only in their original live

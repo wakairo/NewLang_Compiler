@@ -1,5 +1,6 @@
 #include "newlang/parser.h"
 #include "newlang/lexer.h"
+#include "ordinary_name.h"
 #include "syntax_internal.h"
 
 #include <stdlib.h>
@@ -566,20 +567,6 @@ static NLSyntaxNode *source_block(NLParser *parser)
     if (result == NULL)
         return NULL;
     while (peek(parser) && !punct(parser, '}')) {
-        /* fn is contextual: keep fn() as an ordinary call spelling. */
-        if (word(parser, "fn")) {
-            const NLParser saved = *parser;
-            consume(parser);
-            const bool declaration =
-                peek(parser) && parser->token.kind == NL_TOKEN_WORD;
-            *parser = saved;
-            if (declaration) {
-                fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
-                     "P11-LOCAL-DECLARATION",
-                     "fn declaration is top-level only");
-                return NULL;
-            }
-        }
         const bool is_binding = word(parser, "let");
         const bool is_return = word(parser, "return");
         const NLSourceSpan return_start = parser->token.span;
@@ -732,6 +719,11 @@ static NLSyntaxNode *source_expression(NLParser *parser)
     if (!enter(parser))
         return NULL;
     NLSyntaxNode *result = NULL;
+    if (word(parser, "fn")) {
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+             "P11-LOCAL-DECLARATION", "fn declaration is top-level only");
+        goto done;
+    }
     if (word(parser, "return")) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
              "P9-RETURN-ITEM",
@@ -1021,13 +1013,33 @@ static NLSyntaxNode *source_fragment(NLParser *parser)
     return result;
 }
 
+/* Header admission precedes body parsing: R6-01 must fail at its first
+ * declaration name, before a later malformed same-spelling call is parsed.
+ * Core unit keeps its existing P10 semantic admission path. */
+static bool structural_name(NLParser *parser, NLSourceSpan span)
+{
+    NLSourceView bytes;
+    if (!nl_source_view(parser->source, span, &bytes)) {
+        fail(parser, NL_PARSE_INTERNAL_ERROR, span, "P2-INTERNAL",
+             "invalid name span");
+        return false;
+    }
+    const NLOrdinaryNameClass kind =
+        nl_ordinary_name_class(bytes.bytes, bytes.length);
+    if (kind != NL_NAME_RESERVED_STRUCTURAL)
+        return true;
+    fail(parser, NL_PARSE_SYNTAX_ERROR, span, nl_ordinary_name_code(kind),
+         nl_ordinary_name_message(kind));
+    return false;
+}
+
 static NLSyntaxNode *function_declaration(NLParser *parser)
 {
     const NLSourceSpan start = parser->token.span;
     if (!expect_word(parser, "fn", "P11-DECLARATION", "expected top-level fn"))
         return NULL;
     NLSyntaxNode *name = source_name(parser, NL_SYNTAX_FUNCTION, false);
-    if (name == NULL)
+    if (name == NULL || !structural_name(parser, name->view.data.name))
         return NULL;
     name->view.data.function.name = name->view.data.name;
     if (punct(parser, '<')) {
@@ -1044,7 +1056,8 @@ static NLSyntaxNode *function_declaration(NLParser *parser)
         do {
             NLSyntaxNode *parameter =
                 source_name(parser, NL_SYNTAX_PARAMETER, false);
-            if (parameter == NULL)
+            if (parameter == NULL ||
+                !structural_name(parser, parameter->view.data.name))
                 return NULL;
             parameter->view.data.parameter.name = parameter->view.data.name;
             if (!expect_punct(parser, ':', "P11-PARAMETER-COLON",

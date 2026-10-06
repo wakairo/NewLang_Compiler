@@ -11,12 +11,13 @@ P9 implements the Draft 17.11 dedicated `return expression;` item in registered
 ordinary-function lexical blocks, with bounded zero/one-normal-arm match flow.
 [P9 review evidence](docs/P9_EXPLICIT_RETURN_SLICE_REPORT.md) records the scope and limits.
 P10 enforces Draft 17.12's exact `unit` ordinary lexical name reservation while preserving builtin values and member labels.
+P12 enforces Draft 17.14 ordinary-name reservation for `fn`, `let`, `return`, and `match`, with diagnostics distinct from core `unit` and member labels preserved.
 P11 adds Draft 17.13's bounded top-level non-generic `fn` declarations, whole-unit signature visibility and acyclic body calls. Recursive body analysis remains an explicit precision limit.
 
 ## Authority
 
 The canonical language authority is the Draft selected by
-`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.13**), followed by reviewed
+`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.14**), followed by reviewed
 process/backend contracts and merged implementation/formal evidence.
 Historical reports, the task prompt and conversation do not override the Draft.
 Backend Contract v0.4 defines backend obligations. The Charter, Handoff Manifest
@@ -106,7 +107,7 @@ cmake --build build-ubsan --parallel 2
 ctest --test-dir build-ubsan --output-on-failure
 ```
 
-Each configuration runs the same **82 CTests**: source and lexer module unit
+Each configuration runs the same **86 CTests**: source and lexer module unit
 tests, six parser unit groups, file-source -> lexer/parser integration,
 six P3 semantic unit groups and source -> parser -> checker integration,
 ten raw-storage unit groups and the raw -> typed -> raw -> deallocate cycle,
@@ -118,6 +119,7 @@ a targeted R4-01 argument-compatibility regression,
 six P9 return syntax/transfer/exit/failure/effects/availability unit groups and Result-like decoder integration,
 three P10 unit-name admission/builtin/failure groups,
 seven P11 declaration/visibility/body/failure/precision/resource groups,
+four P12 structural-name ingress/header/member/failure groups,
 diagnostic unit checks, six CLI
 cases (each invoked twice), valid LLVM C API module/IR, artifact integrity, and
 frozen-oracle smoke. ASan includes leak detection; UBSan stops on the first
@@ -139,7 +141,7 @@ artifact is produced. Output I/O failure exits 1.
 - `include/newlang/diagnostic.h`, `src/`: small borrowed-data diagnostic API and CLI.
 - `include/newlang/{source,token,lexer}.h`, `src/{source,lexer}.c`: immutable
   owned source bytes/name, checked half-open spans, non-owning atom tokens and
-  allocation-free streaming lexer. Keyword/comment/encoding rules remain open.
+  allocation-free streaming lexer. Structural ordinary-name admission is separate from word tokenization; broader comment/encoding rules remain bounded.
 - `include/newlang/{syntax,parser}.h`, `src/{syntax,parser}.c`: owned immutable
   syntax trees borrowing source, one-token lookahead, checked failure cleanup,
   structured first diagnostics, four P2 fragment entries and the Draft 17.9 P5
@@ -194,6 +196,7 @@ artifact is produced. Output I/O failure exits 1.
 - `docs/P8_REGISTERED_FUNCTION_BODY_SLICE_REPORT.md`: W1–W4 disposition, tests, limits and review handoff.
 - `docs/P9_EXPLICIT_RETURN_SLICE_CONTRACT.md`: terminating block items, function exit, bounded match flow, ownership and source limits.
 - `docs/P9_EXPLICIT_RETURN_SLICE_REPORT.md`: Phase A, W1/W2, destructive/rollback tests and exact-head review handoff.
+- `docs/P12_STRUCTURAL_NAME_RESERVATION_REPORT.md`: admission audit/classification, parser ordering, namespace regression and rollback/OOM evidence.
 - `docs/P11_FUNCTION_DECLARATION_SOURCE_CONTRACT.md`: bounded source/unit API and durable body ownership/precision contracts.
 - `docs/P11_FUNCTION_DECLARATION_SOURCE_REPORT.md`: Phase A, break-test evidence and review handoff.
 - `docs/P10_UNIT_NAME_RESERVATION_REPORT.md`: name-admission audit/rule, builtin/member preservation, rollback/OOM and review evidence.

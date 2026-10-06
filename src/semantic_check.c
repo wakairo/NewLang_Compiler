@@ -77,10 +77,11 @@ static bool equal_name(Check *check, NLSourceSpan span, const char *name)
 static bool lexical_name(Check *check, const void *bytes, size_t length,
                          NLSourceSpan span)
 {
-    if (nl_sem_lexical_name_admissible(bytes, length))
+    const NLOrdinaryNameClass kind = nl_ordinary_name_class(bytes, length);
+    if (kind == NL_NAME_ADMISSIBLE)
         return true;
-    fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P10-RESERVED-NAME",
-         "unit is a core spelling and cannot be an ordinary lexical name");
+    fail(check, NL_CHECK_SEMANTIC_ERROR, span, nl_ordinary_name_code(kind),
+         nl_ordinary_name_message(kind));
     return false;
 }
 
