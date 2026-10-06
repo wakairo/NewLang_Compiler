@@ -72,6 +72,26 @@ static bool equal_name(Check *check, NLSourceSpan span, const char *name)
     return length == view.length && memcmp(view.bytes, name, length) == 0;
 }
 
+static bool lexical_name(Check *check, const void *bytes, size_t length,
+                         NLSourceSpan span)
+{
+    if (nl_sem_lexical_name_admissible(bytes, length))
+        return true;
+    fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P10-RESERVED-NAME",
+         "unit is a core spelling and cannot be an ordinary lexical name");
+    return false;
+}
+
+static bool lexical_source_name(Check *check, NLSourceSpan span)
+{
+    NLSourceView bytes;
+    if (!nl_source_view(check->source, span, &bytes)) {
+        (void)host(check, NL_CHECK_INTERNAL_ERROR, span);
+        return false;
+    }
+    return lexical_name(check, bytes.bytes, bytes.length, span);
+}
+
 static NLSymbolId resolve_binding(Check *check, NLSourceSpan span)
 {
     for (size_t i = check->context->binding_count; i > check->namespace_floor;
@@ -523,7 +543,8 @@ static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
 {
     const NLSyntaxView *const node = nl_syntax_node_view(syntax);
     NLCheckedNodeId id;
-    if (node->kind == NL_SYNTAX_EXPR_NAME) {
+    if (node->kind == NL_SYNTAX_EXPR_NAME &&
+        !equal_name(check, node->data.name, "unit")) {
         const NLSymbolId symbol = available(check, node->data.name);
         if (symbol == 0) {
             return 0;
@@ -541,7 +562,8 @@ static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
 static NLTypeId write_parameter(Check *check, const NLSyntaxNode *syntax)
 {
     const NLSyntaxView *const node = nl_syntax_node_view(syntax);
-    if (node->kind != NL_SYNTAX_EXPR_NAME) {
+    if (node->kind != NL_SYNTAX_EXPR_NAME ||
+        equal_name(check, node->data.name, "unit")) {
         return 0;
     }
     const NLSymbolId symbol = available(check, node->data.name);
@@ -1280,6 +1302,8 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
 
 static NLCheckedNodeId binding(Check *check, const NLSyntaxView *syntax)
 {
+    if (!lexical_source_name(check, syntax->data.binding.name))
+        return 0;
     /* Resolve names from spans, not tokens or reparsed text. This sole name
      * copy becomes registry ownership; lexemes elsewhere remain borrowed. */
     NLSourceView name;
@@ -1351,6 +1375,8 @@ static char *source_name_copy(Check *check, NLSourceSpan span)
 
 static bool fresh_name(Check *check, const char *name, NLSourceSpan span)
 {
+    if (!lexical_name(check, name, strlen(name), span))
+        return false;
     for (size_t i = check->binding_floor; i < check->context->binding_count;
          ++i) {
         if (!check->context->bindings[i].hidden &&
@@ -2457,6 +2483,9 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
     for (const NLSyntaxNode *arm = syntax->data.match.arms; arm != NULL;
          arm = nl_syntax_next_argument(arm)) {
         const NLSyntaxView *a = nl_syntax_node_view(arm);
+        if (a->data.arm.payload && !a->data.arm.wildcard &&
+            !lexical_source_name(check, a->data.arm.binding))
+            return 0;
         size_t variant = sum_variant(check, type, a->data.arm.variant);
         if (variant == 0)
             return 0;
@@ -2651,6 +2680,9 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
     for (const NLSyntaxNode *arm = s->data.match.arms; arm != NULL;
          arm = nl_syntax_next_argument(arm)) {
         const NLSyntaxView *a = nl_syntax_node_view(arm);
+        if (a->data.arm.payload && !a->data.arm.wildcard &&
+            !lexical_source_name(check, a->data.arm.binding))
+            return 0;
         size_t v = sum_variant(check, type, a->data.arm.variant);
         if (v == 0)
             return 0;
@@ -3108,6 +3140,8 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
 
 static NLCheckedNodeId loan(Check *check, const NLSyntaxView *syntax)
 {
+    if (!lexical_source_name(check, syntax->data.loan.binding))
+        return 0;
     NLSemanticContext *const c = check->context;
     const NLSourceSpan source_span =
         nl_syntax_node_view(syntax->data.loan.source)->span;
@@ -3833,12 +3867,17 @@ NLCheckStatus nl_semantic_register_function_body(
              "function body must be the existing exact lexical block");
         goto failure;
     }
+    if (!lexical_name(&check, name, strlen(name), root->span))
+        goto failure;
     if (!body_signature_type(context, result, false))
         goto signature_limit;
     for (size_t i = 0; i < count; ++i) {
         if (parameters[i].name == NULL || parameters[i].name[0] == 0 ||
             parameters[i].type == 0 || parameters[i].type > context->type_count)
             return NL_CHECK_INTERNAL_ERROR;
+        if (!lexical_name(&check, parameters[i].name,
+                          strlen(parameters[i].name), root->span))
+            goto failure;
         if (!body_signature_type(context, parameters[i].type, true))
             goto signature_limit;
         for (size_t j = 0; j < i; ++j)

@@ -538,10 +538,17 @@ NLCheckStatus nl_sem_new_place(NLSemanticContext *c, NLTypeId type,
     return value == 0 ? NL_CHECK_OK : nl_sem_install(c, *out, value, domain);
 }
 
+bool nl_sem_lexical_name_admissible(const void *bytes, size_t length)
+{
+    return length != 4 || memcmp(bytes, "unit", 4) != 0;
+}
+
 NLCheckStatus nl_sem_bind_in_scope(NLSemanticContext *c, const char *name,
                                    NLValueId value, size_t floor,
                                    NLSymbolId *out)
 {
+    if (!nl_sem_lexical_name_admissible(name, strlen(name)))
+        return NL_CHECK_SEMANTIC_ERROR;
     for (size_t i = floor; i < c->binding_count; ++i) {
         if (!c->bindings[i].hidden && strcmp(c->bindings[i].name, name) == 0)
             return NL_CHECK_SEMANTIC_ERROR;
@@ -969,6 +976,8 @@ NLCheckStatus nl_semantic_register_function(NLSemanticContext *c,
         result > c->type_count) {
         return NL_CHECK_INTERNAL_ERROR;
     }
+    if (!nl_sem_lexical_name_admissible(name, strlen(name)))
+        return NL_CHECK_SEMANTIC_ERROR;
     if (count > NL_SEMANTIC_MAX_PARAMETERS) {
         return NL_CHECK_RESOURCE_LIMIT;
     }

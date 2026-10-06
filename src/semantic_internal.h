@@ -4,6 +4,10 @@
 #include "newlang/checked.h"
 #include "newlang/raw_storage.h"
 
+/* Borrowed spelling; only ordinary lexical names, never member labels.
+ * Draft 17.12 reserves exact unit without changing lexer token categories. */
+bool nl_sem_lexical_name_admissible(const void *bytes, size_t length);
+
 typedef struct {
     size_t start, length;
     NLRawRepView state;
