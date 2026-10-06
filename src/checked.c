@@ -27,6 +27,8 @@ NLCheckStatus nl_checked_add(NLCheckedFragment *fragment,
 void nl_checked_destroy(NLCheckedFragment *fragment)
 {
     if (fragment != NULL) {
+        nl_control_exits_destroy(fragment->exits);
+        nl_control_target_destroy(fragment->function_target);
         for (size_t i = 0; i < fragment->arm_count; ++i)
             nl_checked_destroy(fragment->arms[i].artifact);
         free(fragment->arms);
@@ -103,4 +105,9 @@ const NLCheckedFragment *nl_checked_call_body(const NLCheckedFragment *f,
             if (f->body_calls[i] == call)
                 return f->bodies[i];
     return NULL;
+}
+
+const NLControlExits *nl_checked_control_exits(const NLCheckedFragment *f)
+{
+    return f == NULL ? NULL : f->exits;
 }
