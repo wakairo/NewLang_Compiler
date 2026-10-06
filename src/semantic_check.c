@@ -8,7 +8,9 @@ typedef struct {
     NLCheckedFragment *artifact;
     const NLSource *source;
     size_t depth;
-    size_t binding_floor;
+    size_t binding_floor, namespace_floor;
+    size_t body_function;
+    bool in_function_body;
     size_t arm_floor;
     bool has_arm_floor, in_match_arm;
     NLCheckStatus status;
@@ -69,7 +71,8 @@ static bool equal_name(Check *check, NLSourceSpan span, const char *name)
 
 static NLSymbolId resolve_binding(Check *check, NLSourceSpan span)
 {
-    for (size_t i = check->context->binding_count; i > 0; --i) {
+    for (size_t i = check->context->binding_count; i > check->namespace_floor;
+         --i) {
         if (!check->context->bindings[i - 1].hidden &&
             equal_name(check, span, check->context->bindings[i - 1].name)) {
             return i;
@@ -1000,6 +1003,10 @@ static bool primitive(Check *check, NLCheckedNodeId call,
     return true;
 }
 
+static NLCheckedNodeId source_block(Check *, const NLSyntaxView *);
+static bool run_body(Check *, NLCheckedNodeId, const NLFunctionEntry *,
+                     const NLCheckedNodeId *);
+
 static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
 {
     NLSemanticContext *const c = check->context;
@@ -1016,24 +1023,41 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         return 0;
     }
     const NLFunctionEntry function = c->functions[function_id - 1];
+    if (check->in_function_body && function.body != NULL) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->data.call.callee,
+             function_id == check->body_function ? "P8-RECURSION-UNSUPPORTED"
+                                                 : "P8-NESTED-BODY-CALL",
+             "body-backed call chains/recursion are outside P8");
+        return 0;
+    }
+    if (check->in_function_body &&
+        function.kind != NL_CHECKED_REGISTERED_CALL &&
+        function.kind != NL_CHECKED_PTR_FROM_REF &&
+        function.kind != NL_CHECKED_REPLACE &&
+        function.kind != NL_CHECKED_STORE && function.kind != NL_CHECKED_SWAP) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
+             "P8-BODY-OPERATION",
+             "operation is outside the bounded function body profile");
+        return 0;
+    }
     if (syntax->data.call.argument_count != function.count) {
         fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->data.call.callee,
              "P3-ARITY", "argument count differs from resolved signature");
         return 0;
     }
-    if (function.caller_effects) {
+    if (function.body == NULL && function.caller_effects) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->data.call.callee,
              "P3-EFFECT-SUMMARY-UNSUPPORTED",
              "caller-visible function effects are outside P3");
         return 0;
     }
-    if (function.hidden_dependencies) {
+    if (function.body == NULL && function.hidden_dependencies) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->data.call.callee,
              "P3-DEPENDENCIES-UNSUPPORTED",
              "function dependency summary is outside P3");
         return 0;
     }
-    if (function.kind == NL_CHECKED_REGISTERED_CALL &&
+    if (function.body == NULL && function.kind == NL_CHECKED_REGISTERED_CALL &&
         ((c->types[function.result - 1].view.kind != NL_TYPE_NOMINAL &&
           function.result != 1) ||
          function.result == 2)) {
@@ -1047,7 +1071,8 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         add(check, (NLCheckedNodeView){.kind = function.kind,
                                        .span = syntax->span,
                                        .name = syntax->data.call.callee,
-                                       .function = function_id});
+                                       .function = function_id,
+                                       .body_backed = function.body != NULL});
     if (id == 0) {
         return 0;
     }
@@ -1113,7 +1138,8 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
                 if (!reference_live(check, value,
                                     view(check, arguments[i])->span))
                     return 0;
-                if (c->values[value - 1].reference_count != 0 &&
+                if (function.body == NULL &&
+                    c->values[value - 1].reference_count != 0 &&
                     (c->types[expected - 1].view.access != NL_ACCESS_READ ||
                      function.caller_effects || function.hidden_dependencies)) {
                     fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT,
@@ -1124,7 +1150,8 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
                 }
             }
         }
-        if (function.kind == NL_CHECKED_REGISTERED_CALL && expected != 0 &&
+        if (function.body == NULL &&
+            function.kind == NL_CHECKED_REGISTERED_CALL && expected != 0 &&
             c->types[expected - 1].view.kind == NL_TYPE_REF &&
             c->types[c->types[expected - 1].view.target - 1].view.kind ==
                 NL_TYPE_SUM &&
@@ -1151,7 +1178,8 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         ++view(check, id)->argument_count;
         argument_syntax = nl_syntax_next_argument(argument_syntax);
     }
-    if (!primitive(check, id, arguments)) {
+    if (!(function.body != NULL ? run_body(check, id, &function, arguments)
+                                : primitive(check, id, arguments))) {
         return 0;
     }
     /* Finish each call-local child only at the call's return, after all later
@@ -1192,6 +1220,14 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         return 0;
     }
     NLCheckedNodeId result = 0;
+    if (check->in_function_body && node->kind != NL_SYNTAX_EXPR_NAME &&
+        node->kind != NL_SYNTAX_EXPR_CALL && node->kind != NL_SYNTAX_BLOCK) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, node->span,
+             "P8-BODY-PROFILE",
+             "expression needs a richer relative body analysis");
+        --check->depth;
+        return 0;
+    }
     if (node->kind == NL_SYNTAX_EXPR_NAME) {
         result = identifier(check, node);
     } else if (node->kind == NL_SYNTAX_EXPR_CALL) {
@@ -1617,6 +1653,13 @@ static NLCheckedNodeId source_block(Check *check, const NLSyntaxView *syntax)
     for (const NLSyntaxNode *item = syntax->data.block.items; item != NULL;
          item = nl_syntax_next_argument(item)) {
         const NLSyntaxView *v = nl_syntax_node_view(item);
+        if (check->in_function_body && v->kind != NL_SYNTAX_BINDING &&
+            v->kind != NL_SYNTAX_STATEMENT) {
+            fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, v->span,
+                 "P8-BODY-PROFILE",
+                 "body receiving pattern needs richer relative analysis");
+            goto cleanup;
+        }
         const NLCheckedNodeId child = v->kind == NL_SYNTAX_STATEMENT
                                           ? source_statement(check, v)
                                           : source_binding(check, v);
@@ -1667,6 +1710,131 @@ static NLCheckedNodeId source_block(Check *check, const NLSyntaxView *syntax)
 cleanup:
     check->binding_floor = previous_floor;
     return check->status == NL_CHECK_OK ? id : 0;
+}
+
+static bool body_result(Check *check, const NLFunctionEntry *function,
+                        NLCheckedNodeId body, NLSourceSpan span)
+{
+    const NLCheckedNodeView result = *view(check, body);
+    if (result.type != function->result || result.result_count > 1 ||
+        (result.result_count == 0 && function->result != 1)) {
+        fail(
+            check, NL_CHECK_SEMANTIC_ERROR, span, "P8-BODY-RESULT",
+            "normal body result must exactly match the declared single result");
+        return false;
+    }
+    return true;
+}
+
+static bool run_body(Check *caller, NLCheckedNodeId call_id,
+                     const NLFunctionEntry *function,
+                     const NLCheckedNodeId *arguments)
+{
+    NLSemanticContext *c = caller->context;
+    const size_t binding_floor = c->binding_count, scope_floor = c->scope_count,
+                 place_floor = c->place_count;
+    const NLSourceSpan call_span = view(caller, call_id)->span;
+    Check body = {.context = c,
+                  .source = function->body->source,
+                  .binding_floor = binding_floor,
+                  .namespace_floor = binding_floor,
+                  .arm_floor = binding_floor,
+                  .has_arm_floor = true,
+                  .in_function_body = true,
+                  .body_function = view(caller, call_id)->function};
+    body.artifact = malloc(sizeof(*body.artifact));
+    if (body.artifact == NULL) {
+        (void)host(caller, NL_CHECK_OUT_OF_MEMORY, call_span);
+        return false;
+    }
+    *body.artifact = (NLCheckedFragment){.source = body.source,
+                                         .context = caller->artifact->context};
+    if (!host(&body, nl_body_retain(function->body), (NLSourceSpan){0}))
+        goto failure;
+    body.artifact->body_owner = function->body;
+    body.artifact->release_body = nl_body_release;
+    for (size_t i = 0; i < function->count; ++i) {
+        const NLCheckedNodeView argument = *view(caller, arguments[i]);
+        NLValueId value =
+            argument.result_count == 1 ? argument.results[0].value : 0;
+        if (value == 0) {
+            value = new_value(&body, (NLSemanticValueView){.type = 1},
+                              (NLSourceSpan){0});
+            if (value == 0)
+                goto failure;
+        }
+        /* Contextual ordinary write->read compatibility produces a fresh
+         * parameter capability, retaining all facts and the caller package. */
+        if (c->values[value - 1].type != function->parameters[i]) {
+            NLSemanticValueView weakened = c->values[value - 1];
+            weakened.type = function->parameters[i];
+            value = new_value(&body, weakened, (NLSourceSpan){0});
+            if (value == 0)
+                goto failure;
+        }
+        NLSymbolId symbol;
+        if (!host(&body,
+                  nl_sem_bind_in_scope(c, function->body->parameter_names[i],
+                                       value, binding_floor, &symbol),
+                  (NLSourceSpan){0}))
+            goto failure;
+    }
+    body.artifact->root = source_block(
+        &body,
+        nl_syntax_node_view(nl_syntax_tree_root(function->body->syntax)));
+    if (body.artifact->root == 0 ||
+        !body_result(
+            &body, function, body.artifact->root,
+            nl_syntax_node_view(nl_syntax_tree_root(function->body->syntax))
+                ->span))
+        goto failure;
+    const NLCheckStatus exit_status =
+        nl_sem_function_exit(c, scope_floor, place_floor);
+    if (exit_status != NL_CHECK_OK) {
+        fail(&body, exit_status, (NLSourceSpan){0}, "P8-EXIT-DEPENDENCY",
+             "surviving state depends on an ending function-local scope/place");
+        goto failure;
+    }
+    for (size_t i = scope_floor; i < c->scope_count; ++i)
+        c->scopes[i].active = false;
+    /* Save owned checked body evidence; no source expansion into caller nodes.
+     */
+    if (caller->artifact->body_count == 64) {
+        (void)host(&body, NL_CHECK_RESOURCE_LIMIT, (NLSourceSpan){0});
+        goto failure;
+    }
+    const size_t count = caller->artifact->body_count;
+    NLCheckedFragment **bodies =
+        realloc(caller->artifact->bodies, (count + 1) * sizeof(*bodies));
+    if (bodies == NULL) {
+        (void)host(&body, NL_CHECK_OUT_OF_MEMORY, (NLSourceSpan){0});
+        goto failure;
+    }
+    caller->artifact->bodies = bodies;
+    NLCheckedNodeId *calls =
+        realloc(caller->artifact->body_calls, (count + 1) * sizeof(*calls));
+    if (calls == NULL) {
+        (void)host(&body, NL_CHECK_OUT_OF_MEMORY, (NLSourceSpan){0});
+        goto failure;
+    }
+    caller->artifact->body_calls = calls;
+    const NLCheckedNodeView result = *view(&body, body.artifact->root);
+    view(caller, call_id)->type = result.type;
+    view(caller, call_id)->result_count = result.result_count;
+    memcpy(view(caller, call_id)->results, result.results,
+           sizeof(result.results));
+    caller->artifact->bodies[count] = body.artifact;
+    caller->artifact->body_calls[count] = call_id;
+    ++caller->artifact->body_count;
+    return true;
+failure:
+    /* Report a body diagnostic at the CALL site. The detailed definition
+     * diagnostic has already been checked against its own source at
+     * registration. */
+    fail(caller, body.status, call_span, body.diagnostic.diagnostic.code,
+         body.diagnostic.diagnostic.message);
+    nl_checked_destroy(body.artifact);
+    return false;
 }
 
 /* P6 is a finite branch checker, not a general CFG/relational solver. Arm
@@ -3089,5 +3257,210 @@ NLCheckStatus nl_semantic_join_references(NLSemanticContext *context,
     }
 done:
     nl_semantic_destroy(check.context);
+    return check.status;
+}
+
+static bool body_plain_type(const NLSemanticContext *c, NLTypeId type)
+{
+    const NLSemanticTypeView t = c->types[type - 1].view;
+    return t.field_count == 0 && type != 2 &&
+           (t.kind == NL_TYPE_NOMINAL || t.kind == NL_TYPE_UNIT ||
+            t.kind == NL_TYPE_BYTE || t.kind == NL_TYPE_U8 ||
+            t.kind == NL_TYPE_USIZE || t.kind == NL_TYPE_ADDR);
+}
+static bool body_signature_type(const NLSemanticContext *c, NLTypeId type,
+                                bool parameter)
+{
+    if (body_plain_type(c, type))
+        return true;
+    const NLSemanticTypeView t = c->types[type - 1].view;
+    return ((t.kind == NL_TYPE_PTR) ||
+            (parameter && t.kind == NL_TYPE_REF && !t.is_exclusive)) &&
+           body_plain_type(c, t.target);
+}
+
+/* Definition checking must not depend on any caller's runtime/fixture state. */
+static void clear_definition_state(NLSemanticContext *c)
+{
+    for (size_t i = 0; i < c->binding_count; ++i)
+        free(c->bindings[i].name);
+    free(c->bindings);
+    free(c->values);
+    free(c->places);
+    free(c->domains);
+    free(c->scopes);
+    free(c->occurrences);
+    nl_raw_dispose(c);
+    NLTypeEntry *types = c->types;
+    NLFunctionEntry *functions = c->functions;
+    const size_t type_count = c->type_count, function_count = c->function_count;
+    *c = (NLSemanticContext){.types = types,
+                             .type_count = type_count,
+                             .functions = functions,
+                             .function_count = function_count};
+}
+
+static bool check_definition(Check *registration, size_t function_id)
+{
+    Check definition = {.source = registration->source,
+                        .in_function_body = true,
+                        .body_function = function_id,
+                        .has_arm_floor = true};
+    const NLSourceSpan span =
+        nl_syntax_node_view(
+            nl_syntax_tree_root(
+                registration->context->functions[function_id - 1].body->syntax))
+            ->span;
+    if (!host(&definition,
+              nl_sem_clone(registration->context, &definition.context), span))
+        goto failure;
+    NLSemanticContext *c = definition.context;
+    clear_definition_state(c);
+    const NLFunctionEntry function = c->functions[function_id - 1];
+    NLValueId values[NL_SEMANTIC_MAX_PARAMETERS] = {0};
+    /* These formal sites supply type/ownership checking only. No proof of
+     * formal disjointness is retained; EVERY call rechecks actual relations. */
+    for (size_t i = 0; i < function.count; ++i) {
+        const NLTypeId type = function.parameters[i];
+        const NLSemanticTypeView t = c->types[type - 1].view;
+        NLSemanticValueView value = {.type = type};
+        if (t.kind == NL_TYPE_REF || t.kind == NL_TYPE_PTR) {
+            NLValueId referent = new_value(
+                &definition, (NLSemanticValueView){.type = t.target}, span);
+            NLPlaceId place;
+            if (referent == 0 ||
+                !host(&definition,
+                      nl_sem_new_place(c, t.target, 0, true, referent, &place),
+                      span))
+                goto failure;
+            NLScopeId scope = 0;
+            if (t.kind == NL_TYPE_REF &&
+                !host(&definition, nl_sem_new_scope(c, 0, true, &scope), span))
+                goto failure;
+            value.reference = (NLReferenceFacts){
+                place, c->places[place - 1].incarnation,
+                scope, NL_PROVENANCE_VALID,
+                true,  t.kind == NL_TYPE_PTR || t.access == NL_ACCESS_WRITE,
+                0};
+        }
+        values[i] = new_value(&definition, value, span);
+        if (values[i] == 0)
+            goto failure;
+    }
+    const size_t scope_floor = c->scope_count, place_floor = c->place_count;
+    for (size_t i = 0; i < function.count; ++i) {
+        NLSymbolId symbol;
+        if (!host(&definition,
+                  nl_sem_bind_in_scope(c, function.body->parameter_names[i],
+                                       values[i], 0, &symbol),
+                  span))
+            goto failure;
+    }
+    definition.artifact = malloc(sizeof(*definition.artifact));
+    if (definition.artifact == NULL) {
+        (void)host(&definition, NL_CHECK_OUT_OF_MEMORY, span);
+        goto failure;
+    }
+    *definition.artifact =
+        (NLCheckedFragment){.source = definition.source, .context = c};
+    definition.artifact->root = source_block(
+        &definition,
+        nl_syntax_node_view(nl_syntax_tree_root(function.body->syntax)));
+    if (definition.artifact->root == 0 ||
+        !body_result(&definition, &function, definition.artifact->root, span))
+        goto failure;
+    const NLCheckStatus exit_status =
+        nl_sem_function_exit(c, scope_floor, place_floor);
+    if (exit_status != NL_CHECK_OK) {
+        fail(&definition, exit_status, span, "P8-EXIT-DEPENDENCY",
+             "surviving state depends on an ending function-local scope/place");
+        goto failure;
+    }
+    if (!host(&definition, nl_sum_validate(c), span) ||
+        !host(&definition, nl_raw_validate(c), span))
+        goto failure;
+    nl_checked_destroy(definition.artifact);
+    nl_semantic_destroy(c);
+    return true;
+failure:
+    registration->status = definition.status;
+    registration->diagnostic = definition.diagnostic;
+    nl_checked_destroy(definition.artifact);
+    nl_semantic_destroy(definition.context);
+    return false;
+}
+
+NLCheckStatus nl_semantic_register_function_body(
+    NLSemanticContext *context, const char *name,
+    const NLFunctionParameter *parameters, size_t count, NLTypeId result,
+    const NLSyntaxTree *syntax, NLCheckDiagnostic *diagnostic)
+{
+    if (context == NULL || name == NULL || name[0] == 0 || syntax == NULL ||
+        (count != 0 && parameters == NULL) || result == 0 ||
+        result > context->type_count)
+        return NL_CHECK_INTERNAL_ERROR;
+    if (count > NL_SEMANTIC_MAX_PARAMETERS)
+        return NL_CHECK_RESOURCE_LIMIT;
+    const NLSyntaxView *root = nl_syntax_node_view(nl_syntax_tree_root(syntax));
+    Check check = {.source = nl_syntax_tree_source(syntax)};
+    NLTypeId types[NL_SEMANTIC_MAX_PARAMETERS] = {0};
+    if (root->kind != NL_SYNTAX_BLOCK) {
+        fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, root->span, "P8-BODY-BLOCK",
+             "function body must be the existing exact lexical block");
+        goto failure;
+    }
+    if (!body_signature_type(context, result, false))
+        goto signature_limit;
+    for (size_t i = 0; i < count; ++i) {
+        if (parameters[i].name == NULL || parameters[i].name[0] == 0 ||
+            parameters[i].type == 0 || parameters[i].type > context->type_count)
+            return NL_CHECK_INTERNAL_ERROR;
+        if (!body_signature_type(context, parameters[i].type, true))
+            goto signature_limit;
+        for (size_t j = 0; j < i; ++j)
+            if (strcmp(parameters[i].name, parameters[j].name) == 0) {
+                fail(&check, NL_CHECK_SEMANTIC_ERROR, root->span,
+                     "P8-DUPLICATE-PARAMETER",
+                     "function parameter names must be unique");
+                goto failure;
+            }
+        types[i] = parameters[i].type;
+    }
+    for (size_t i = 0; i < context->function_count; ++i)
+        if (strcmp(name, context->functions[i].name) == 0) {
+            fail(&check, NL_CHECK_SEMANTIC_ERROR, root->span,
+                 "P8-DUPLICATE-FUNCTION",
+                 "function name is already registered");
+            goto failure;
+        }
+    if (!host(&check, nl_sem_clone(context, &check.context), root->span))
+        goto failure;
+    if (!host(&check,
+              nl_semantic_register_function(check.context, name, types, count,
+                                            result, false, false),
+              root->span))
+        goto failure;
+    const size_t function_id = check.context->function_count;
+    if (!host(&check,
+              nl_body_create(syntax, parameters, count,
+                             &check.context->functions[function_id - 1].body),
+              root->span))
+        goto failure;
+    if (!check_definition(&check, function_id))
+        goto failure;
+    if (!host(&check, nl_sum_validate(check.context), root->span) ||
+        !host(&check, nl_raw_validate(check.context), root->span))
+        goto failure;
+    nl_sem_commit(context, check.context);
+    return NL_CHECK_OK;
+signature_limit:
+    fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, root->span,
+         "P8-SIGNATURE-PRECISION",
+         "body signature needs unsupported authority/ref-result/structural "
+         "analysis");
+failure:
+    nl_semantic_destroy(check.context);
+    if (diagnostic != NULL)
+        *diagnostic = check.diagnostic;
     return check.status;
 }

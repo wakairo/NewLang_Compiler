@@ -70,6 +70,7 @@ void nl_semantic_destroy(NLSemanticContext *context)
         if (context->functions[i].kind == NL_CHECKED_REGISTERED_CALL) {
             free((void *)context->functions[i].name);
             free(context->functions[i].parameters);
+            nl_body_release(context->functions[i].body);
         }
     }
     free(context->occurrences);
@@ -184,6 +185,13 @@ NLCheckStatus nl_sem_clone(const NLSemanticContext *source,
             if (original->kind == NL_CHECKED_REGISTERED_CALL) {
                 copy->functions[i].name = NULL;
                 copy->functions[i].parameters = NULL;
+                copy->functions[i].body = NULL;
+                if (original->body != NULL) {
+                    status = nl_body_retain(original->body);
+                    if (status != NL_CHECK_OK)
+                        goto failure;
+                    copy->functions[i].body = original->body;
+                }
                 char *name = NULL;
                 status = copy_name(original->name, &name);
                 copy->functions[i].name = name;
@@ -996,10 +1004,13 @@ NLCheckStatus nl_semantic_register_function(NLSemanticContext *c,
     if (status == NL_CHECK_OK) {
         candidate->functions = storage;
         candidate->functions[candidate->function_count++] =
-            (NLFunctionEntry){owned_name,  NL_CHECKED_REGISTERED_CALL,
-                              params,      count,
-                              result,      effects,
-                              dependencies};
+            (NLFunctionEntry){.name = owned_name,
+                              .kind = NL_CHECKED_REGISTERED_CALL,
+                              .parameters = params,
+                              .count = count,
+                              .result = result,
+                              .caller_effects = effects,
+                              .hidden_dependencies = dependencies};
     } else {
         free(owned_name);
         free(params);

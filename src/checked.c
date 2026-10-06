@@ -30,6 +30,12 @@ void nl_checked_destroy(NLCheckedFragment *fragment)
         for (size_t i = 0; i < fragment->arm_count; ++i)
             nl_checked_destroy(fragment->arms[i].artifact);
         free(fragment->arms);
+        for (size_t i = 0; i < fragment->body_count; ++i)
+            nl_checked_destroy(fragment->bodies[i]);
+        free(fragment->bodies);
+        free(fragment->body_calls);
+        if (fragment->release_body != NULL)
+            fragment->release_body(fragment->body_owner);
         if (fragment->destroy_context != NULL)
             fragment->destroy_context((NLSemanticContext *)fragment->context);
         free(fragment->nodes);
@@ -76,5 +82,15 @@ const NLCheckedFragment *nl_checked_match_arm(const NLCheckedFragment *f,
                     return f->arms[i].artifact;
                 --index;
             }
+    return NULL;
+}
+
+const NLCheckedFragment *nl_checked_call_body(const NLCheckedFragment *f,
+                                              NLCheckedNodeId call)
+{
+    if (f != NULL)
+        for (size_t i = 0; i < f->body_count; ++i)
+            if (f->body_calls[i] == call)
+                return f->bodies[i];
     return NULL;
 }

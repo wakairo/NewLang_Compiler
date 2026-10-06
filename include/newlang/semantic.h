@@ -298,6 +298,22 @@ NLCheckStatus nl_semantic_register_function(NLSemanticContext *,
                                             bool caller_effects,
                                             bool hidden_dependencies);
 
+typedef struct {
+    const char *name; /* borrowed for registration; copied on success */
+    NLTypeId type;
+} NLFunctionParameter;
+/* Definition-time checked, non-generic, exact single result. Root must be the
+ * existing lexical BLOCK. Owns a durable syntax/source plan independent of the
+ * caller's tree/source/parameter names. Body calls are interpreted against
+ * actual facts in a transactional context; no textual substitution. Invalid
+ * uncalled bodies reject. No source fn/return, overloads or recursion. */
+NLCheckStatus nl_semantic_register_function_body(NLSemanticContext *,
+                                                 const char *name,
+                                                 const NLFunctionParameter *,
+                                                 size_t count, NLTypeId result,
+                                                 const NLSyntaxTree *body,
+                                                 NLCheckDiagnostic *diagnostic);
+
 /* Borrow input tree only for synchronous check; never reparse source. All
  * checks clone candidate state and commit on complete success only. Success
  * returns a caller-owned immutable checked artifact and leaves diagnostic
