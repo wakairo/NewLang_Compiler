@@ -72,6 +72,17 @@ struct NLCheckedFragment {
     void (*destroy_context)(NLSemanticContext *); /* arm snapshots only */
 };
 
+/* All ref consumers either iterate this may-set or explicitly reject it.
+ * A concrete fact remains the P3 representation when reference_count == 0. */
+static inline size_t nl_sem_ref_count(NLSemanticValueView v)
+{
+    return v.reference_count == 0 ? 1 : v.reference_count;
+}
+static inline NLReferenceFacts nl_sem_ref_fact(NLSemanticValueView v, size_t i)
+{
+    return v.reference_count == 0 ? v.reference : v.references[i];
+}
+
 /* Concrete candidate state helpers; no general allocator/transaction DSL. */
 NLCheckStatus nl_sem_clone(const NLSemanticContext *, NLSemanticContext **);
 void nl_sem_commit(NLSemanticContext *, NLSemanticContext *);

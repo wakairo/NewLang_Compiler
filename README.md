@@ -100,18 +100,19 @@ cmake --build build-ubsan --parallel 2
 ctest --test-dir build-ubsan --output-on-failure
 ```
 
-Each configuration runs the same **53 CTests**: source and lexer module unit
+Each configuration runs the same **59 CTests**: source and lexer module unit
 tests, six parser unit groups, file-source -> lexer/parser integration,
 six P3 semantic unit groups and source -> parser -> checker integration,
 ten raw-storage unit groups and the raw -> typed -> raw -> deallocate cycle,
 six P5 source-slice unit groups and source -> checked lifetime/aggregate integration,
 seven P6 sum-slice unit groups and source -> checked match integration,
+five P7 ref-join unit groups and PW1–PW5 source -> checked integration,
 diagnostic unit checks, six CLI
 cases (each invoked twice), valid LLVM C API module/IR, artifact integrity, and
 frozen-oracle smoke. ASan includes leak detection; UBSan stops on the first
 failure. Imported LLVM binaries are not rebuilt with sanitizers; our C targets
 are instrumented. Required checks are these configurations plus GCC Release/NDEBUG and PR CI
-(see [P6 report](docs/P6_CLOSED_SUM_SOURCE_SLICE_REPORT.md)).
+(see [P7 report](docs/P7_REF_VALUED_MATCH_RESULT_JOIN_REPORT.md)).
 The historical 466-test oracle suite and formal proofs are optional evidence;
 P0 does not claim to reproduce them in C.
 
@@ -136,7 +137,7 @@ artifact is produced. Output I/O failure exits 1.
   bodies retain balanced byte regions; their contents are not parsed.
 - `include/newlang/{semantic,checked}.h`, `src/{semantic,semantic_check,sum,checked}.c`:
   owning fixture context, canonical types/packages/places/scopes, transactional
-  checker, conditional occurrence ownership and immutable checked fragments
+  checker, bounded complete ref-result alternatives, conditional occurrence ownership and immutable checked fragments
   (including owned hypothetical arm snapshots); no LLVM linkage or syntax pointers.
 - `include/newlang/raw_storage.h`, `src/raw_storage.c`: programmatic successful
   allocation/claim transitions, scalar byte observations and owned raw interval
@@ -170,9 +171,12 @@ artifact is produced. Output I/O failure exits 1.
 - `docs/P5_SOURCE_FRONTEND_SLICE_CONTRACT.md`: Draft 17.9 selected source profile,
   receiving/block/aggregate ownership, transaction contracts and limits.
 - `docs/P5_SOURCE_FRONTEND_SLICE_REPORT.md`: module inventory, tests and review handoff.
+- `docs/P7_REF_VALUED_MATCH_RESULT_JOIN_CONTRACT.md`: public rebasing, complete ref alternatives,
+  downstream uses, ownership/rollback and precision boundaries.
+- `docs/P7_REF_VALUED_MATCH_RESULT_JOIN_REPORT.md`: PW1–PW5, destructive tests and P7 review handoff.
 - `docs/`: historical [P0 toolchain decisions](docs/P0_TOOLCHAIN_DECISIONS.md),
   [P0 architecture](docs/P0_ARCHITECTURE.md), and [P0 report](docs/P0_REPORT.md).
 
 There is still no full-program parser or semantic checker, typed MIR, LLVM lowering,
 optimization framework, broad FFI, concurrency, separate compilation,
-self-hosting, public token/AST-dump mode, or a full-program frontend. The P6 module slice supports canonical receiving/block/aggregate forms plus registered closed-sum constructor/match; source declarations and broader frontend forms remain unsupported. The CLI compile path remains unsupported.
+self-hosting, public token/AST-dump mode, or a full-program frontend. The P7 module slice supports canonical receiving/block/aggregate forms plus registered closed-sum constructor/match and bounded dependency-aware ref results; source declarations and broader frontend forms remain unsupported. The CLI compile path remains unsupported.

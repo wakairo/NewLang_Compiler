@@ -181,40 +181,41 @@ static bool suspended(const NLSemanticContext *c, NLValueId value)
     return false;
 }
 
-static bool reference_live(Check *check, NLValueId value, NLSourceSpan span)
+static bool reference_fact_live(Check *check, NLValueId value,
+                                NLReferenceFacts fact, NLSourceSpan span)
 {
     NLSemanticContext *const c = check->context;
     const NLSemanticValueView v = c->values[value - 1];
     const NLSemanticTypeView type = c->types[v.type - 1].view;
-    if (v.reference.provenance == NL_PROVENANCE_UNKNOWN ||
-        v.reference.place == 0) {
+    if (fact.provenance == NL_PROVENANCE_UNKNOWN || fact.place == 0 ||
+        fact.place > c->place_count) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
              "P3-UNKNOWN-PROVENANCE",
              "safe operation needs proven pointer/ref provenance");
         return false;
     }
-    if (v.reference.provenance != NL_PROVENANCE_VALID) {
+    if (fact.provenance != NL_PROVENANCE_VALID) {
         fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P3-INVALID-PROVENANCE",
              "pointer/ref provenance is invalid");
         return false;
     }
-    const NLSemanticPlaceView p = c->places[v.reference.place - 1];
+    const NLSemanticPlaceView p = c->places[fact.place - 1];
     if (type.kind == NL_TYPE_REF && p.parent_sum != 0 &&
-        (v.reference.occurrence_dependency == 0 ||
-         v.reference.occurrence_dependency !=
+        (fact.occurrence_dependency == 0 ||
+         fact.occurrence_dependency !=
              c->places[p.parent_sum - 1].payload_occurrence)) {
         fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P6-OCCURRENCE-DEPENDENCY",
              "conditional payload ref needs its current occurrence dependency");
         return false;
     }
-    if (v.reference.occurrence_dependency != 0 &&
-        (v.reference.occurrence_dependency > c->occurrence_count ||
-         !c->occurrences[v.reference.occurrence_dependency - 1].live)) {
+    if (fact.occurrence_dependency != 0 &&
+        (fact.occurrence_dependency > c->occurrence_count ||
+         !c->occurrences[fact.occurrence_dependency - 1].live)) {
         fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P6-DEAD-OCCURRENCE",
              "payload occurrence has ended");
         return false;
     }
-    if (!p.live || p.incarnation != v.reference.incarnation ||
+    if (!p.live || p.incarnation != fact.incarnation ||
         (p.placement.region != 0 &&
          !c->regions[p.placement.region - 1].view.live)) {
         fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P3-STALE-POINTER",
@@ -227,12 +228,12 @@ static bool reference_live(Check *check, NLValueId value, NLSourceSpan span)
         return false;
     }
     if (type.kind == NL_TYPE_REF) {
-        if (v.reference.scope == 0) {
+        if (fact.scope == 0) {
             fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
                  "P3-UNKNOWN-SCOPE", "ref scope evidence is unknown");
             return false;
         }
-        if (!scope_active(c, v.reference.scope)) {
+        if (!scope_active(c, fact.scope)) {
             fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P3-DEAD-SCOPE",
                  "ref scope has ended");
             return false;
@@ -242,12 +243,33 @@ static bool reference_live(Check *check, NLValueId value, NLSourceSpan span)
                  "exclusive parent has a live conflicting child reborrow");
             return false;
         }
-        if (!v.reference.readable ||
-            (type.access == NL_ACCESS_WRITE && !v.reference.writable)) {
+        if (!fact.readable ||
+            (type.access == NL_ACCESS_WRITE && !fact.writable)) {
             fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P3-ACCESS",
                  "reference access evidence does not permit requested mode");
             return false;
         }
+    }
+    return true;
+}
+
+static bool reference_live(Check *check, NLValueId value, NLSourceSpan span)
+{
+    const NLSemanticValueView v = check->context->values[value - 1];
+    for (size_t i = 0; i < nl_sem_ref_count(v); ++i)
+        if (!reference_fact_live(check, value, nl_sem_ref_fact(v, i), span))
+            return false;
+    return true;
+}
+
+static bool concrete_ref(Check *check, NLValueId value, NLSourceSpan span)
+{
+    if (check->context->values[value - 1].reference_count != 0) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+             "P7-SINGULAR-REF-PRECISION",
+             "operation requires a concrete referent; joined ref facts are "
+             "retained");
+        return false;
     }
     return true;
 }
@@ -265,34 +287,38 @@ static bool conflicts(Check *check, NLPlaceId place, bool exclusive,
             t.kind != NL_TYPE_REF) {
             continue;
         }
-        if (v.reference.scope != 0 && !scope_active(c, v.reference.scope)) {
-            continue;
-        }
-        if (t.is_exclusive && suspended(c, i + 1)) {
-            continue;
-        }
-        if (v.reference.occurrence_dependency != 0 &&
-            c->occurrences[v.reference.occurrence_dependency - 1].root ==
-                place &&
-            c->occurrences[v.reference.occurrence_dependency - 1].live) {
-            fail(
-                check, NL_CHECK_SEMANTIC_ERROR, span, "P6-OCCURRENCE-CONFLICT",
-                "whole-sum transition would end a live payload ref dependency");
-            return true;
-        }
-        if (v.reference.place == 0 || v.reference.scope == 0) {
-            if (exclusive || ending || t.is_exclusive) {
-                fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
-                     "P3-UNKNOWN-ALIAS",
-                     "unknown live ref facts cannot prove "
-                     "acquisition/transition safety");
+        for (size_t alternative = 0; alternative < nl_sem_ref_count(v);
+             ++alternative) {
+            const NLReferenceFacts fact = nl_sem_ref_fact(v, alternative);
+            if (fact.scope != 0 && !scope_active(c, fact.scope)) {
+                continue;
+            }
+            if (t.is_exclusive && suspended(c, i + 1)) {
+                continue;
+            }
+            if (fact.occurrence_dependency != 0 &&
+                c->occurrences[fact.occurrence_dependency - 1].root == place &&
+                c->occurrences[fact.occurrence_dependency - 1].live) {
+                fail(check, NL_CHECK_SEMANTIC_ERROR, span,
+                     "P6-OCCURRENCE-CONFLICT",
+                     "whole-sum transition would end a live payload ref "
+                     "dependency");
                 return true;
             }
-        } else if (v.reference.place == place &&
-                   (exclusive || ending || t.is_exclusive)) {
-            fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P3-REF-CONFLICT",
-                 "operation conflicts with a live reference capability");
-            return true;
+            if (fact.place == 0 || fact.scope == 0) {
+                if (exclusive || ending || t.is_exclusive) {
+                    fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+                         "P3-UNKNOWN-ALIAS",
+                         "unknown live ref facts cannot prove "
+                         "acquisition/transition safety");
+                    return true;
+                }
+            } else if (fact.place == place &&
+                       (exclusive || ending || t.is_exclusive)) {
+                fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P3-REF-CONFLICT",
+                     "operation conflicts with a live reference capability");
+                return true;
+            }
         }
     }
     return false;
@@ -403,6 +429,8 @@ static NLCheckedNodeId binding_argument(Check *check, NLSymbolId symbol,
             if (!reference_live(check, binding.value, span)) {
                 return 0;
             }
+            if (!concrete_ref(check, binding.value, span))
+                return 0;
             if (conflicts(check, c->values[binding.value - 1].reference.place,
                           true, false, binding.value, span)) {
                 return 0;
@@ -555,6 +583,8 @@ static NLDomainId domain_reference(Check *check, NLValueId value,
     if (!reference_live(check, value, span)) {
         return 0;
     }
+    if (!concrete_ref(check, value, span))
+        return 0;
     const NLValueId package = c->places[v.reference.place - 1].current_value;
     const NLDomainId domain = c->values[package - 1].domain;
     if (domain == 0 || domain > c->domain_count ||
@@ -596,6 +626,8 @@ static bool write_ref(Check *check, NLValueId value, NLSourceSpan span)
     if (!reference_live(check, value, span)) {
         return false;
     }
+    if (!concrete_ref(check, value, span))
+        return false;
     return !conflicts(check, check->context->values[value - 1].reference.place,
                       false, false, value, span);
 }
@@ -686,6 +718,8 @@ static bool primitive(Check *check, NLCheckedNodeId call,
         if (!reference_live(check, value, view(check, args[0])->span)) {
             return false;
         }
+        if (!concrete_ref(check, value, view(check, args[0])->span))
+            return false;
         const NLTypeId type =
             compound(check, NL_TYPE_PTR, t.target, NL_ACCESS_READ, false, span);
         if (type == 0) {
@@ -1067,6 +1101,28 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         arguments[i] = argument(check, argument_syntax, expected);
         if (arguments[i] == 0) {
             return 0;
+        }
+        if (function.kind == NL_CHECKED_REGISTERED_CALL) {
+            const NLCheckedNodeView argument_view = *view(check, arguments[i]);
+            const NLValueId value = argument_view.result_count == 1
+                                        ? argument_view.results[0].value
+                                        : 0;
+            if (value != 0 &&
+                c->types[c->values[value - 1].type - 1].view.kind ==
+                    NL_TYPE_REF) {
+                if (!reference_live(check, value,
+                                    view(check, arguments[i])->span))
+                    return 0;
+                if (c->values[value - 1].reference_count != 0 &&
+                    (c->types[expected - 1].view.access != NL_ACCESS_READ ||
+                     function.caller_effects || function.hidden_dependencies)) {
+                    fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT,
+                         view(check, arguments[i])->span, "P7-CALL-PRECISION",
+                         "joined ref argument requires read-only/no-effect "
+                         "call");
+                    return 0;
+                }
+            }
         }
         if (function.kind == NL_CHECKED_REGISTERED_CALL && expected != 0 &&
             c->types[expected - 1].view.kind == NL_TYPE_REF &&
@@ -1800,6 +1856,171 @@ static bool save_arm(Check *check, NLCheckedNodeId match,
     return true;
 }
 
+/* P7 keeps complete facts as a finite may-set. Sorting/deduplication is only
+ * canonicalization, never a choice of one incoming referent. */
+static int ref_order(NLReferenceFacts a, NLReferenceFacts b)
+{
+    const size_t left[] = {
+        a.place,    a.incarnation,          a.scope, a.provenance, a.readable,
+        a.writable, a.occurrence_dependency};
+    const size_t right[] = {
+        b.place,    b.incarnation,          b.scope, b.provenance, b.readable,
+        b.writable, b.occurrence_dependency};
+    for (size_t i = 0; i < sizeof(left) / sizeof(left[0]); ++i)
+        if (left[i] != right[i])
+            return left[i] < right[i] ? -1 : 1;
+    return 0;
+}
+
+static bool ref_alternative(Check *check, NLSemanticValueView *join,
+                            NLReferenceFacts fact, NLSourceSpan span)
+{
+    size_t i = 0;
+    while (i < join->reference_count &&
+           ref_order(join->references[i], fact) < 0)
+        ++i;
+    if (i < join->reference_count && ref_order(join->references[i], fact) == 0)
+        return true;
+    if (join->reference_count == NL_SEMANTIC_MAX_REF_ALTERNATIVES) {
+        (void)host(check, NL_CHECK_RESOURCE_LIMIT, span);
+        return false;
+    }
+    for (size_t j = join->reference_count; j > i; --j)
+        join->references[j] = join->references[j - 1];
+    join->references[i] = fact;
+    ++join->reference_count;
+    return true;
+}
+
+static bool join_ref_type(const NLSemanticContext *c, NLTypeId type)
+{
+    const NLSemanticTypeView t = c->types[type - 1].view;
+    if (t.kind != NL_TYPE_REF || t.is_exclusive)
+        return false;
+    const NLSemanticTypeView target = c->types[t.target - 1].view;
+    return target.field_count == 0 && t.target != 2 &&
+           (target.kind == NL_TYPE_NOMINAL || target.kind == NL_TYPE_BYTE ||
+            target.kind == NL_TYPE_U8 || target.kind == NL_TYPE_USIZE ||
+            target.kind == NL_TYPE_ADDR);
+}
+
+static bool ref_join_precision(Check *check, NLSourceSpan span)
+{
+    fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+         "P7-REF-JOIN-PRECISION",
+         "ref join cannot prove public stable origin/scope or unchanged "
+         "incoming state");
+    return false;
+}
+
+static bool same_scope(NLSemanticScopeView a, NLSemanticScopeView b)
+{
+    return a.active == b.active && a.parent == b.parent &&
+           a.parent_authority == b.parent_authority;
+}
+
+static bool rebase_ref_result(Check *public_check, Check *branch,
+                              const NLSemanticContext *guard, NLValueId output,
+                              NLPlaceId root, NLScopeId child_scope,
+                              NLReferenceFacts parent,
+                              NLSemanticValueView *join, NLSourceSpan span)
+{
+    const NLSemanticContext *c = public_check->context, *b = branch->context;
+    const NLSemanticValueView result = b->values[output - 1];
+    if (result.type > c->type_count || !join_ref_type(c, result.type))
+        return ref_join_precision(branch, span);
+    /* This bounded result join has no memory-state phi. Guard refinement is
+     * arm-owned; operation effects on public-prefix state must be absent. */
+    for (size_t i = 0; i < c->place_count; ++i) {
+        const NLSemanticPlaceView before = guard->places[i],
+                                  after = b->places[i];
+        if (!same_place_frame(before, after) ||
+            before.current_fact != after.current_fact ||
+            before.payload_occurrence != after.payload_occurrence ||
+            before.current_value != after.current_value)
+            return ref_join_precision(branch, span);
+    }
+    for (size_t i = 0; i < c->scope_count; ++i)
+        if (!same_scope(c->scopes[i], b->scopes[i]))
+            return ref_join_precision(branch, span);
+    for (size_t i = 0; i < c->binding_count; ++i)
+        if (guard->bindings[i].view.availability !=
+            b->bindings[i].view.availability)
+            return ref_join_precision(branch, span);
+    if (!reference_live(branch, output, span))
+        return false;
+    for (size_t k = 0; k < nl_sem_ref_count(result); ++k) {
+        const NLReferenceFacts f = nl_sem_ref_fact(result, k);
+        bool imported = false;
+        /* Existing facts require an actual public package origin, unchanged
+         * public prefix scope/place incarnation and occurrence identity. IDs
+         * that merely happen to have the same number cannot pass this proof. */
+        for (size_t i = 0; i < c->value_count && !imported; ++i) {
+            const NLSemanticValueView old = c->values[i];
+            if (old.carrier == NL_CARRIER_ENDED || old.type != result.type)
+                continue;
+            for (size_t j = 0; j < nl_sem_ref_count(old); ++j) {
+                if (ref_order(f, nl_sem_ref_fact(old, j)) != 0)
+                    continue;
+                if (f.place == 0 || f.place > c->place_count || f.scope == 0 ||
+                    f.scope > c->scope_count || !scope_active(c, f.scope) ||
+                    !same_place_frame(c->places[f.place - 1],
+                                      b->places[f.place - 1]))
+                    continue;
+                if (f.occurrence_dependency != 0 &&
+                    (f.occurrence_dependency > c->occurrence_count ||
+                     !c->occurrences[f.occurrence_dependency - 1].live ||
+                     c->places[f.place - 1].parent_sum == 0 ||
+                     c->places[c->places[f.place - 1].parent_sum - 1]
+                             .payload_occurrence != f.occurrence_dependency))
+                    continue;
+                if (!ref_alternative(branch, join, f, span))
+                    return false;
+                imported = true;
+                break;
+            }
+        }
+        if (imported)
+            continue;
+        /* Borrowed pattern derivation is proven structurally against its
+         * guard, then rebuilt using PUBLIC root/occurrence/place/parent scope.
+         * The arm's short lexical child scope never escapes. */
+        if (root == 0 || child_scope == 0 || f.scope != child_scope)
+            return ref_join_precision(branch, span);
+        const NLOccurrenceId guarded =
+            guard->places[root - 1].payload_occurrence;
+        if (guarded == 0 || f.occurrence_dependency != guarded ||
+            f.place != guard->occurrences[guarded - 1].payload_place ||
+            f.incarnation != guard->places[f.place - 1].incarnation ||
+            f.provenance != NL_PROVENANCE_VALID ||
+            f.readable != parent.readable || f.writable != parent.writable ||
+            !scope_active(c, parent.scope))
+            return ref_join_precision(branch, span);
+        const NLSemanticPlaceView public_root = c->places[root - 1];
+        const size_t actual_variant =
+            c->values[public_root.current_value - 1].variant;
+        if (actual_variant != guard->occurrences[guarded - 1].variant) {
+            /* Exact unchanged current variant proves this payload edge
+             * unreachable. No hypothetical public occurrence is minted. */
+            continue;
+        }
+        const NLOccurrenceId public_occurrence = public_root.payload_occurrence;
+        if (public_occurrence == 0 ||
+            !c->occurrences[public_occurrence - 1].live)
+            return ref_join_precision(branch, span);
+        const NLPlaceId public_child =
+            c->occurrences[public_occurrence - 1].payload_place;
+        NLReferenceFacts rebased = f;
+        rebased.place = public_child;
+        rebased.incarnation = c->places[public_child - 1].incarnation;
+        rebased.scope = parent.scope;
+        rebased.occurrence_dependency = public_occurrence;
+        if (!ref_alternative(branch, join, rebased, span))
+            return false;
+    }
+    return true;
+}
+
 static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
 {
     if (check->in_match_arm) {
@@ -1826,6 +2047,8 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
     }
     if (borrowed && !reference_live(check, scrutinee, s->span))
         return 0;
+    if (borrowed && !concrete_ref(check, scrutinee, s->span))
+        return 0;
     NLPlaceId root = borrowed ? input.reference.place : 0;
     if (borrowed) {
         /* A live external occurrence ref implies a relational variant fact.
@@ -1833,17 +2056,19 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
          * conservatively instead of checking an inconsistent guarded state. */
         for (size_t i = 0; i < c->value_count; ++i) {
             const NLSemanticValueView v = c->values[i];
-            if (v.carrier != NL_CARRIER_ENDED &&
-                c->types[v.type - 1].view.kind == NL_TYPE_REF &&
-                v.reference.occurrence_dependency != 0 &&
-                scope_active(c, v.reference.scope) &&
-                c->occurrences[v.reference.occurrence_dependency - 1].root ==
-                    root) {
-                fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
-                     "P6-EXTERNAL-OCCURRENCE",
-                     "pre-existing payload ref needs a relational "
-                     "variant-aware branch guard");
-                return 0;
+            if (v.carrier == NL_CARRIER_ENDED ||
+                c->types[v.type - 1].view.kind != NL_TYPE_REF)
+                continue;
+            for (size_t k = 0; k < nl_sem_ref_count(v); ++k) {
+                const NLReferenceFacts f = nl_sem_ref_fact(v, k);
+                if (f.occurrence_dependency != 0 && scope_active(c, f.scope) &&
+                    c->occurrences[f.occurrence_dependency - 1].root == root) {
+                    fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
+                         "P6-EXTERNAL-OCCURRENCE",
+                         "pre-existing payload ref needs a relational "
+                         "variant-aware branch guard");
+                    return 0;
+                }
             }
         }
     }
@@ -1884,6 +2109,16 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
              "known");
         return 0;
     }
+    if (borrowed) {
+        for (size_t i = 0; i < sum_type.variant_count; ++i) {
+            const NLTypeId payload = c->types[type - 1].variant_types[i];
+            if (payload != 0 &&
+                compound(check, NL_TYPE_REF, payload, input_type.access, false,
+                         s->span) == 0)
+                return 0;
+        }
+    }
+    NLSemanticValueView joined_ref = {0};
     NLCheckedNodeId id =
         add(check, (NLCheckedNodeView){.kind = NL_CHECKED_MATCH,
                                        .span = s->span,
@@ -2026,8 +2261,6 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
         NLCheckedNodeId body = expression(&branch, a->data.arm.body);
         if (body == 0)
             goto arm_failure;
-        if (payload_scope != 0)
-            b->scopes[payload_scope - 1].active = false;
         const NLCheckedNodeView body_view = *view(&branch, body);
         if (body_view.result_count > 1) {
             match_precision(&branch, a->span);
@@ -2080,11 +2313,10 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
         identity_result = identity_result && identity;
         if (result_count != 0 &&
             b->types[branch_type - 1].view.kind == NL_TYPE_REF) {
-            fail(&branch, NL_CHECK_SEMANTIC_UNSUPPORTED, a->span,
-                 "P6-ESCAPING-PAYLOAD-REF",
-                 "escaping ref match results are outside the bounded scope "
-                 "join");
-            goto arm_failure;
+            if (!rebase_ref_result(
+                    check, &branch, guard, body_view.results[0].value, root,
+                    payload_scope, input.reference, &joined_ref, a->span))
+                goto arm_failure;
         }
         if (!arm_frame(&branch, guard, b, root, c->place_count, c->scope_count,
                        changed, a->span))
@@ -2136,6 +2368,8 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
                 }
             }
         }
+        if (payload_scope != 0)
+            b->scopes[payload_scope - 1].active = false;
         branch.artifact->root = add(
             &branch, (NLCheckedNodeView){.kind = NL_CHECKED_MATCH_ARM,
                                          .span = a->span,
@@ -2163,7 +2397,20 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
             nl_semantic_destroy(branch.context);
         return 0;
     }
-    if (result_count != 0 && !flat_copy(c, result_type) && !identity_result) {
+    /* A compound type created only inside an arm is not a public identity,
+     * even if a second clone happens to allocate the same numeric TypeId. */
+    if (result_type > c->type_count) {
+        match_precision(check, s->span);
+        return 0;
+    }
+    const bool ref_result =
+        result_count != 0 && c->types[result_type - 1].view.kind == NL_TYPE_REF;
+    if (ref_result && joined_ref.reference_count == 0) {
+        (void)ref_join_precision(check, s->span);
+        return 0;
+    }
+    if (result_count != 0 && !flat_copy(c, result_type) && !identity_result &&
+        !ref_result) {
         match_precision(check, s->span);
         return 0;
     }
@@ -2268,9 +2515,14 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
         }
     } else {
         nl_sem_end_value(c, scrutinee);
-        if (result_count != 0)
-            output = new_value(
-                check, (NLSemanticValueView){.type = result_type}, s->span);
+        if (result_count != 0) {
+            joined_ref.type = result_type;
+            output = new_value(check,
+                               ref_result
+                                   ? joined_ref
+                                   : (NLSemanticValueView){.type = result_type},
+                               s->span);
+        }
         if (check->status != NL_CHECK_OK)
             return 0;
     }
@@ -2751,6 +3003,7 @@ NLCheckStatus nl_semantic_check_raw_operation(NLSemanticContext *context,
             c->types[c->values[values[i] - 1].type - 1].view;
         if (actual.kind == NL_TYPE_REF &&
             (!reference_live(&check, values[i], operation->operands[i].span) ||
+             !concrete_ref(&check, values[i], operation->operands[i].span) ||
              conflicts(&check, c->values[values[i] - 1].reference.place, false,
                        false, values[i], operation->operands[i].span))) {
             goto failure;
@@ -2787,5 +3040,54 @@ failure:
     if (diagnostic != NULL) {
         *diagnostic = check.diagnostic;
     }
+    return check.status;
+}
+
+NLCheckStatus nl_semantic_join_references(NLSemanticContext *context,
+                                          const NLValueId *values, size_t count,
+                                          NLValueId *out)
+{
+    if (context == NULL || values == NULL || count == 0 || out == NULL)
+        return NL_CHECK_INTERNAL_ERROR;
+    if (count > NL_SEMANTIC_MAX_ENTRIES)
+        return NL_CHECK_RESOURCE_LIMIT;
+    for (size_t i = 0; i < count; ++i)
+        if (values[i] == 0 || values[i] > context->value_count)
+            return NL_CHECK_INTERNAL_ERROR;
+    Check check = {0};
+    check.status = nl_sem_clone(context, &check.context);
+    if (check.status != NL_CHECK_OK)
+        return check.status;
+    NLSemanticValueView join = {.type = context->values[values[0] - 1].type};
+    if (!join_ref_type(context, join.type)) {
+        check.status = NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        goto done;
+    }
+    for (size_t i = 0; i < count; ++i) {
+        const NLSemanticValueView v = check.context->values[values[i] - 1];
+        if (v.carrier == NL_CARRIER_ENDED || v.type != join.type) {
+            check.status = NL_CHECK_SEMANTIC_ERROR;
+            goto done;
+        }
+        if (!reference_live(&check, values[i], (NLSourceSpan){0}))
+            goto done;
+        for (size_t j = 0; j < nl_sem_ref_count(v); ++j)
+            if (!ref_alternative(&check, &join, nl_sem_ref_fact(v, j),
+                                 (NLSourceSpan){0}))
+                goto done;
+    }
+    NLValueId result;
+    check.status = nl_sem_new_value(check.context, join, &result);
+    if (check.status == NL_CHECK_OK)
+        check.status = nl_sum_validate(check.context);
+    if (check.status == NL_CHECK_OK)
+        check.status = nl_raw_validate(check.context);
+    if (check.status == NL_CHECK_OK) {
+        nl_sem_commit(context, check.context);
+        check.context = NULL;
+        *out = result;
+    }
+done:
+    nl_semantic_destroy(check.context);
     return check.status;
 }
