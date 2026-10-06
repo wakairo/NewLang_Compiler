@@ -1,6 +1,6 @@
 # P7 — Ref-valued match-result join report
 
-Status: P7 implementation / review handoff。Git historyを変更履歴の正とする。
+Status: P7 reviewed/merged / CLOSED。Git historyを変更履歴の正とする。
 
 ## Base / authority
 
@@ -95,5 +95,5 @@ GitHub APIで確認し、run URL/jobsをIssueとPR本文に記録する。過去
   ptr-valued matchはsupportを増やさずprecision rejectし、同じ数値IDを二つのcloneが生成するnegative witnessを追加した。
 - 未解決の `COMPILER-IMPLEMENTATION` failureなし。OOM/resource/semantic failureのatomicityを維持。
 
-READYはexact-head CIがgreenであることを条件とする。P7 READY FOR REVIEWで停止する。
-PRをmergeせず、M9.3/F2/R4/LLVM/relocationを開始しない。
+PR #42 exact head `fdf547378a6d7a81a87554a232a6c7f0049d7791` はCoordination reviewをPASSし、mainへmerge済みである。
+**P7 CLOSED**。このclosure自体ではM9.3/F2/R4/LLVM/relocationを開始しない。

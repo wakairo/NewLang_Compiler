@@ -2,10 +2,10 @@
 
 NewLang production compiler, written in C17 with LLVM as the primary backend.
 
-**P0 through P6 are complete and merged.** P6 adds the Draft 17.10 bounded
-registered closed-sum source slice: qualified constructors, consuming/borrowed
-match, conditional payload occurrences and conservative branch joining.
-P6 is reviewed/merged and CLOSED; broader frontend and lowering work remain deferred.
+**P0 through P7 are complete and merged.** P6 adds the Draft 17.10 bounded
+registered closed-sum source slice, and P7 adds bounded dependency-aware
+ref-valued match-result joins without changing canonical semantics.
+P7 is reviewed/merged and CLOSED; broader frontend and lowering work remain deferred.
 
 ## Authority
 
@@ -17,8 +17,8 @@ Backend Contract v0.4 defines backend obligations. The Charter, Handoff Manifest
 and project process documents are policy/evidence, not language semantics.
 [F0 / NewLang_FormalProof](https://github.com/wakairo/NewLang_FormalProof) and the
 frozen M7.5 Python oracle are evidence; Lean is not a build dependency.
-M7, P4/R1/F1.4/F1.5, P5, R2, M9.1 and P6 are reviewed/closed. Final pre-M9
-Semantic Sync is recorded in Issue #29; later tracks start only through separate Coordination handoffs.
+M7, P4/R1/F1.4/F1.5, P5, R2, M9.1/P6/R3/M9.2/P7 are reviewed/closed.
+Semantic Sync checkpoints and later track starts are recorded through separate Coordination handoffs.
 See the [P2 grammar audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md),
 [P3 semantic contract](docs/P3_SEMANTIC_SLICE_CONTRACT.md),
 [P4 raw-storage contract](docs/P4_RAW_STORAGE_SEMANTIC_SLICE_CONTRACT.md) and
