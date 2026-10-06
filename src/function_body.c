@@ -22,9 +22,9 @@ void nl_body_release(NLFunctionBody *body)
     nl_source_destroy(body->source);
     free(body);
 }
-NLCheckStatus nl_body_create(const NLSyntaxTree *syntax,
-                             const NLFunctionParameter *parameters,
-                             size_t count, NLFunctionBody **out)
+NLCheckStatus nl_body_create_span(const NLSource *source, NLSourceSpan span,
+                                  const NLFunctionParameter *parameters,
+                                  size_t count, NLFunctionBody **out)
 {
     NLFunctionBody *body = malloc(sizeof(*body));
     if (body == NULL)
@@ -40,10 +40,11 @@ NLCheckStatus nl_body_create(const NLSyntaxTree *syntax,
         }
         memcpy(body->parameter_names[i], parameters[i].name, length + 1);
     }
-    const NLSource *source = nl_syntax_tree_source(syntax);
     NLSourceView bytes;
-    (void)nl_source_view(source, (NLSourceSpan){0, nl_source_length(source)},
-                         &bytes);
+    if (!nl_source_view(source, span, &bytes)) {
+        status = NL_CHECK_INTERNAL_ERROR;
+        goto failure;
+    }
     NLSourceStatus source_status = nl_source_create(
         bytes.bytes, bytes.length, nl_source_name(source), &body->source);
     if (source_status != NL_SOURCE_OK) {
@@ -75,6 +76,16 @@ NLCheckStatus nl_body_create(const NLSyntaxTree *syntax,
 failure:
     nl_body_release(body);
     return status;
+}
+
+NLCheckStatus nl_body_create(const NLSyntaxTree *syntax,
+                             const NLFunctionParameter *parameters,
+                             size_t count, NLFunctionBody **out)
+{
+    const NLSource *source = nl_syntax_tree_source(syntax);
+    return nl_body_create_span(source,
+                               (NLSourceSpan){0, nl_source_length(source)},
+                               parameters, count, out);
 }
 
 NLCheckStatus nl_sem_function_exit(const NLSemanticContext *c,

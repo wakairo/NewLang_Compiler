@@ -11,12 +11,12 @@ P9 implements the Draft 17.11 dedicated `return expression;` item in registered
 ordinary-function lexical blocks, with bounded zero/one-normal-arm match flow.
 [P9 review evidence](docs/P9_EXPLICIT_RETURN_SLICE_REPORT.md) records the scope and limits.
 P10 enforces Draft 17.12's exact `unit` ordinary lexical name reservation while preserving builtin values and member labels.
-Source `fn` declarations and broader frontend/lowering work remain deferred.
+P11 adds Draft 17.13's bounded top-level non-generic `fn` declarations, whole-unit signature visibility and acyclic body calls. Recursive body analysis remains an explicit precision limit.
 
 ## Authority
 
 The canonical language authority is the Draft selected by
-`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.12**), followed by reviewed
+`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.13**), followed by reviewed
 process/backend contracts and merged implementation/formal evidence.
 Historical reports, the task prompt and conversation do not override the Draft.
 Backend Contract v0.4 defines backend obligations. The Charter, Handoff Manifest
@@ -106,7 +106,7 @@ cmake --build build-ubsan --parallel 2
 ctest --test-dir build-ubsan --output-on-failure
 ```
 
-Each configuration runs the same **75 CTests**: source and lexer module unit
+Each configuration runs the same **82 CTests**: source and lexer module unit
 tests, six parser unit groups, file-source -> lexer/parser integration,
 six P3 semantic unit groups and source -> parser -> checker integration,
 ten raw-storage unit groups and the raw -> typed -> raw -> deallocate cycle,
@@ -117,6 +117,7 @@ four P8 body-registration/exit/ownership/rollback unit groups and body-sensitive
 a targeted R4-01 argument-compatibility regression,
 six P9 return syntax/transfer/exit/failure/effects/availability unit groups and Result-like decoder integration,
 three P10 unit-name admission/builtin/failure groups,
+seven P11 declaration/visibility/body/failure/precision/resource groups,
 diagnostic unit checks, six CLI
 cases (each invoked twice), valid LLVM C API module/IR, artifact integrity, and
 frozen-oracle smoke. ASan includes leak detection; UBSan stops on the first
@@ -143,7 +144,7 @@ artifact is produced. Output I/O failure exits 1.
   syntax trees borrowing source, one-token lookahead, checked failure cleanup,
   structured first diagnostics, four P2 fragment entries and the Draft 17.9 P5
   source-fragment entry for blocks/receiving/registered aggregate forms plus the
-  Draft 17.10 constructor/match forms. Loan
+  Draft 17.10 constructor/match forms and Draft 17.13 fn-only function-unit entry. Loan
   bodies retain balanced byte regions; their contents are not parsed.
 - `include/newlang/{semantic,checked}.h`, `src/{semantic,semantic_check,sum,checked}.c`:
   owning fixture context, canonical types/packages/places/scopes, transactional
@@ -152,7 +153,7 @@ artifact is produced. Output I/O failure exits 1.
 - `src/function_body.c`: owned registered-body plans and function-exit dependency checking.
   Host registration supplies named exact signatures and existing lexical-block bodies;
   body-backed direct calls preserve actual alias/dependency relations and tail package identity.
-  Ordinary ref results, core-authority signatures and body call chains remain limited.
+  Source declaration units reuse those plans. Ordinary ref results, core-authority signatures and recursive body analysis remain limited.
 - `include/newlang/raw_storage.h`, `src/raw_storage.c`: programmatic successful
   allocation/claim transitions, scalar byte observations and owned raw interval
   summaries. Compiler metadata only; no platform allocator or runtime bitmap.
@@ -193,6 +194,8 @@ artifact is produced. Output I/O failure exits 1.
 - `docs/P8_REGISTERED_FUNCTION_BODY_SLICE_REPORT.md`: W1–W4 disposition, tests, limits and review handoff.
 - `docs/P9_EXPLICIT_RETURN_SLICE_CONTRACT.md`: terminating block items, function exit, bounded match flow, ownership and source limits.
 - `docs/P9_EXPLICIT_RETURN_SLICE_REPORT.md`: Phase A, W1/W2, destructive/rollback tests and exact-head review handoff.
+- `docs/P11_FUNCTION_DECLARATION_SOURCE_CONTRACT.md`: bounded source/unit API and durable body ownership/precision contracts.
+- `docs/P11_FUNCTION_DECLARATION_SOURCE_REPORT.md`: Phase A, break-test evidence and review handoff.
 - `docs/P10_UNIT_NAME_RESERVATION_REPORT.md`: name-admission audit/rule, builtin/member preservation, rollback/OOM and review evidence.
 - `docs/R4_01_ARGUMENT_COMPATIBILITY_FIX_REPORT.md`: shared exclusive/ordinary argument fix,
   canonical test corrections and targeted validation.

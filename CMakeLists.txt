@@ -177,6 +177,13 @@ if(BUILD_TESTING)
     endforeach()
     add_test(NAME p9_decoder.integration COMMAND return_test workload)
 
+    add_executable(function_source_test tests/unit/function_source_test.c)
+    target_link_libraries(function_source_test PRIVATE newlang_semantic newlang_parser)
+    target_link_options(function_source_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    foreach(group grammar names visibility precision behavior failure limits)
+        add_test(NAME p11_${group}.unit COMMAND function_source_test ${group})
+    endforeach()
+
     add_executable(unit_name_test tests/unit/unit_name_test.c)
     target_link_libraries(unit_name_test PRIVATE newlang_semantic newlang_parser)
     target_link_options(unit_name_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)

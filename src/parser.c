@@ -566,6 +566,20 @@ static NLSyntaxNode *source_block(NLParser *parser)
     if (result == NULL)
         return NULL;
     while (peek(parser) && !punct(parser, '}')) {
+        /* fn is contextual: keep fn() as an ordinary call spelling. */
+        if (word(parser, "fn")) {
+            const NLParser saved = *parser;
+            consume(parser);
+            const bool declaration =
+                peek(parser) && parser->token.kind == NL_TOKEN_WORD;
+            *parser = saved;
+            if (declaration) {
+                fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+                     "P11-LOCAL-DECLARATION",
+                     "fn declaration is top-level only");
+                return NULL;
+            }
+        }
         const bool is_binding = word(parser, "let");
         const bool is_return = word(parser, "return");
         const NLSourceSpan return_start = parser->token.span;
@@ -1007,6 +1021,121 @@ static NLSyntaxNode *source_fragment(NLParser *parser)
     return result;
 }
 
+static NLSyntaxNode *function_declaration(NLParser *parser)
+{
+    const NLSourceSpan start = parser->token.span;
+    if (!expect_word(parser, "fn", "P11-DECLARATION", "expected top-level fn"))
+        return NULL;
+    NLSyntaxNode *name = source_name(parser, NL_SYNTAX_FUNCTION, false);
+    if (name == NULL)
+        return NULL;
+    name->view.data.function.name = name->view.data.name;
+    if (punct(parser, '<')) {
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+             "P11-GENERIC-DECLARATION",
+             "generic fn declaration outside profile");
+        return NULL;
+    }
+    if (!expect_punct(parser, '(', "P11-PARAMETERS",
+                      "expected fn parameters ("))
+        return NULL;
+    NLSyntaxNode *head = NULL, *tail = NULL;
+    if (!punct(parser, ')')) {
+        do {
+            NLSyntaxNode *parameter =
+                source_name(parser, NL_SYNTAX_PARAMETER, false);
+            if (parameter == NULL)
+                return NULL;
+            parameter->view.data.parameter.name = parameter->view.data.name;
+            if (!expect_punct(parser, ':', "P11-PARAMETER-COLON",
+                              "expected parameter :"))
+                return NULL;
+            NLSyntaxNode *t = type(parser);
+            if (t == NULL)
+                return NULL;
+            parameter->view.data.parameter.type = t;
+            parameter->view.span.end_byte = t->view.span.end_byte;
+            link_node(&head, &tail, parameter);
+            ++name->view.data.function.count;
+            if (!punct(parser, ','))
+                break;
+            consume(parser);
+            if (punct(parser, ')')) {
+                fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+                     "P11-TRAILING-COMMA",
+                     "fn parameters forbid trailing comma");
+                return NULL;
+            }
+        } while (peek(parser));
+    }
+    name->view.data.function.parameters = head;
+    if (!expect_punct(parser, ')', "P11-PARAMETERS",
+                      "expected parameter comma or )"))
+        return NULL;
+    if (!punct(parser, '-')) {
+        if (peek(parser))
+            fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+                 "P11-RESULT-ARROW", "explicit result arrow -> required");
+        return NULL;
+    }
+    const size_t arrow_end = parser->token.span.end_byte;
+    consume(parser);
+    if (!punct(parser, '>') || parser->token.span.start_byte != arrow_end) {
+        if (peek(parser))
+            fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+                 "P11-RESULT-ARROW", "result arrow must be adjacent ->");
+        return NULL;
+    }
+    consume(parser);
+    name->view.data.function.result = type(parser);
+    if (name->view.data.function.result == NULL)
+        return NULL;
+    if (!punct(parser, '{')) {
+        if (peek(parser))
+            fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span, "P11-BODY",
+                 "fn requires lexical block body");
+        return NULL;
+    }
+    name->view.data.function.body = source_expression(parser);
+    if (name->view.data.function.body == NULL)
+        return NULL;
+    name->view.span = (NLSourceSpan){
+        start.start_byte,
+        nl_syntax_node_view(name->view.data.function.body)->span.end_byte};
+    if (punct(parser, ';')) {
+        fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+             "P11-DECLARATION-SEMICOLON", "no semicolon after fn body");
+        return NULL;
+    }
+    return name;
+}
+
+static NLSyntaxNode *function_unit(NLParser *parser)
+{
+    NLSyntaxNode *root =
+        node(parser, NL_SYNTAX_FUNCTION_UNIT,
+             (NLSourceSpan){0, nl_source_length(parser->source)});
+    if (root == NULL)
+        return NULL;
+    NLSyntaxNode *head = NULL, *tail = NULL;
+    while (peek(parser) && parser->token.kind != NL_TOKEN_EOF) {
+        NLSyntaxNode *declaration = function_declaration(parser);
+        if (declaration == NULL)
+            return NULL;
+        link_node(&head, &tail, declaration);
+        ++root->view.data.function_unit.count;
+    }
+    if (parser->status != NL_PARSE_OK)
+        return NULL;
+    if (head == NULL) {
+        fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+             "P11-DECLARATION", "expected at least one fn declaration");
+        return NULL;
+    }
+    root->view.data.function_unit.declarations = head;
+    return root;
+}
+
 typedef NLSyntaxNode *(*Fragment)(NLParser *parser);
 
 static NLParseStatus fragment(NLParser *parser, NLSyntaxTree **out_tree,
@@ -1137,4 +1266,11 @@ bool nl_parse_diagnostic_render(FILE *stream, const NLSource *source,
     NLDiagnostic rendered = diagnostic->diagnostic;
     rendered.range = &range;
     return nl_diagnostic_render(stream, &rendered);
+}
+
+NLParseStatus nl_parser_parse_function_unit(NLParser *parser,
+                                            NLSyntaxTree **out,
+                                            NLParseDiagnostic *diagnostic)
+{
+    return fragment(parser, out, diagnostic, function_unit);
 }

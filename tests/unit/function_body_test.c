@@ -46,8 +46,8 @@ static bool registration(void)
     CHECK(body_ok(f.context, "noop()"));
     CHECK(register_body(f.context, "noop", NULL, 0, 1, "{}",
                         NL_CHECK_SEMANTIC_ERROR, "P8-DUPLICATE-FUNCTION"));
-    CHECK(register_body(f.context, "statements", copy, 1, 1, "{x;noop();}",
-                        NL_CHECK_SEMANTIC_UNSUPPORTED, "P8-NESTED-BODY-CALL"));
+    CHECK(register_body(f.context, "nested_statements", copy, 1, 1,
+                        "{x;noop();}", NL_CHECK_OK, NULL));
     CHECK(nl_semantic_register_function(f.context, "unit_fixture", NULL, 0, 1,
                                         false, false) == NL_CHECK_OK);
     CHECK(register_body(f.context, "statements", copy, 1, 1,
@@ -56,13 +56,14 @@ static bool registration(void)
     CHECK(nl_semantic_seed_value(f.context, "x", f.copy, NL_DEPENDENCY_FREE,
                                  &x) == NL_CHECK_OK);
     CHECK(body_ok(f.context, "statements(x)"));
+    CHECK(body_ok(f.context, "nested_statements(x)"));
     CHECK(register_body(f.context, "capture", NULL, 0, f.copy, "{x}",
                         NL_CHECK_SEMANTIC_ERROR, "P3-UNKNOWN-BINDING"));
     CHECK(register_body(f.context, "rebind", copy, 1, f.copy, "{let x=x;x}",
                         NL_CHECK_SEMANTIC_ERROR, "P5-DUPLICATE-BINDING"));
     CHECK(register_body(f.context, "self", copy, 1, f.copy, "{self(x)}",
-                        NL_CHECK_SEMANTIC_UNSUPPORTED,
-                        "P8-RECURSION-UNSUPPORTED"));
+                        NL_CHECK_ANALYSIS_PRECISION_LIMIT,
+                        "P11-RECURSIVE-ANALYSIS-PRECISION"));
     CHECK(register_body(f.context, "nonblock", copy, 1, f.copy, "x",
                         NL_CHECK_SEMANTIC_UNSUPPORTED, "P8-BODY-BLOCK"));
     CHECK(nl_semantic_register_function(f.context, "effects", &f.copy, 1, 1,
