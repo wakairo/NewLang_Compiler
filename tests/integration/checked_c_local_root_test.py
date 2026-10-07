@@ -72,7 +72,8 @@ def main() -> None:
         )
         write_ref = (
             re.search(
-                rf"uint8_t \*const (nl_local_\d+) = &{mutable_root[1]};",
+                rf"(?m)^\s*uint8_t \*const (nl_local_\d+) = &"
+                rf"{mutable_root[1]};$",
                 mutated,
             )
             if mutable_root
@@ -91,7 +92,7 @@ def main() -> None:
             or replace_old[2] != write_ref[1]
             or f"*{write_ref[1]} = 9;" not in mutated
         ):
-            raise SystemExit(f"stable-root lowering lost root/write/replace identity:\n{mutated}")
+            raise SystemExit("stable-root lowering lost root/write/replace identity")
         scalar_result = re.search(r"uint8_t (nl_loan_result_\d+);", mutated)
         old_binding = (
             re.search(
