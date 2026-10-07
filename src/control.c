@@ -533,6 +533,7 @@ NLCheckStatus nl_loop_header_includes(const NLLoopHeader *h,
         if (x.type == y.type && x.live == y.live &&
             x.independent_root == y.independent_root &&
             x.governing_domain == y.governing_domain &&
+            x.implicit_local == y.implicit_local &&
             x.incarnation == y.incarnation &&
             x.current_fact == y.current_fact &&
             x.current_value == y.current_value &&
@@ -549,6 +550,7 @@ NLCheckStatus nl_loop_header_includes(const NLLoopHeader *h,
             x.parent_sum != y.parent_sum ||
             x.payload_occurrence != y.payload_occurrence ||
             x.governing_domain != y.governing_domain ||
+            x.implicit_local != y.implicit_local ||
             (x.placement.region != y.placement.region ||
              x.placement.start != y.placement.start ||
              x.placement.length != y.placement.length))

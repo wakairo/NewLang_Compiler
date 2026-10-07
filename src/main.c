@@ -13,7 +13,7 @@ static const char help[] =
     "NewLang production compiler P0 bootstrap.\n"
     "  --version  Print the deterministic compiler version.\n"
     "  --help     Print this help.\n"
-    "  SOURCE     Validate North Star V0/V1/AVS and emit Checked-C to stdout.\n"
+    "  SOURCE     Validate V0/V1/AVS/local-root and emit Checked-C to stdout.\n"
     "Checked-C is a bounded bootstrap/reference execution path; LLVM remains "
     "the planned primary backend.\n";
 
@@ -167,6 +167,89 @@ static bool v1_emit_scalar(FILE *stream, const NLCheckedNodeView *value)
 static bool v0_validate_node(const NLCheckedFragment *, NLCheckedNodeId,
                              V0Program *);
 
+/* Bounded capability lowering is authorized by completed checked loans.
+ * This lookup finds C carrier names only, never proves pointer safety. */
+static bool gate_type(const NLCheckedFragment *f, NLTypeId id,
+                      NLSemanticTypeKind kind, const V0Program *p)
+{
+    NLSemanticTypeView t;
+    return nl_semantic_type_view(nl_checked_context(f), id, &t) &&
+           t.kind == kind && t.target == p->u8 &&
+           (kind != NL_TYPE_REF ||
+            (!t.is_exclusive && t.access == NL_ACCESS_READ));
+}
+static bool gate_identifier(const NLCheckedFragment *f,
+                            const NLCheckedNodeView *v, const V0Program *p)
+{
+    if (v == NULL || v->kind != NL_CHECKED_IDENTIFIER || v->symbol == 0 ||
+        v->value_use != NL_VALUE_COPIED || v->result_count != 1)
+        return false;
+    for (size_t i = 1; i <= nl_checked_node_count(f); ++i) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, i);
+        if (gate_type(f, v->type, NL_TYPE_REF, p) &&
+            n->kind == NL_CHECKED_LOAN_HEADER && n->loan.implicit_local &&
+            n->loan.body_nonescape_proved && n->loan.ref_symbol == v->symbol)
+            return true;
+        if (gate_type(f, v->type, NL_TYPE_PTR, p) &&
+            n->kind == NL_CHECKED_RECEIVER && n->symbol == v->symbol &&
+            n->type == v->type)
+            return true;
+    }
+    return false;
+}
+static bool gate_ptr(const NLCheckedFragment *f, NLCheckedNodeId id,
+                     const V0Program *p)
+{
+    const NLCheckedNodeView *v = nl_checked_node_view(f, id);
+    if (v == NULL || !gate_type(f, v->type, NL_TYPE_PTR, p) ||
+        v->result_count != 1)
+        return false;
+    if (v->kind == NL_CHECKED_IDENTIFIER)
+        return gate_identifier(f, v, p);
+    const NLCheckedNodeView *arg = nl_checked_node_view(f, v->first_argument);
+    return v->kind == NL_CHECKED_PTR_FROM_REF && v->argument_count == 1 &&
+           v->has_reference_result && v->reference_result.scope == 0 &&
+           v->reference_result.provenance == NL_PROVENANCE_VALID &&
+           gate_identifier(f, arg, p) &&
+           gate_type(f, arg->type, NL_TYPE_REF, p);
+}
+static bool gate_loan(const NLCheckedFragment *f, const NLCheckedNodeView *v,
+                      V0Program *p)
+{
+    const NLCheckedNodeView *body = nl_checked_node_view(f, v->initializer);
+    if (!v->loan.implicit_local || !v->loan.body_nonescape_proved ||
+        !v->loan.normal_result_forwarded || v->loan.ref_symbol == 0 ||
+        v->loan.scope == 0 || v->loan.place == 0 || v->loan.incarnation == 0 ||
+        v->loan.access != NL_ACCESS_READ || v->loan.is_exclusive ||
+        body == NULL || body->kind != NL_CHECKED_BLOCK || body->terminates ||
+        body->result_count != v->result_count || v->result_count > 1)
+        return false;
+    bool source_local = false;
+    for (size_t i = 1; i <= nl_checked_node_count(f); ++i) {
+        const NLCheckedNodeView *r = nl_checked_node_view(f, i);
+        if (r->kind == NL_CHECKED_RECEIVER && r->symbol == v->loan.source &&
+            (v->loan.from_ptr ? gate_type(f, r->type, NL_TYPE_PTR, p)
+                              : r->type == p->u8))
+            source_local = true;
+    }
+    if (!source_local)
+        return false;
+    if (v->result_count == 1) {
+        const NLCheckedNodeView *tail = nl_checked_node_view(f, body->tail);
+        if (v->results[0].value != body->results[0].value ||
+            !gate_ptr(f, body->tail, p) || !tail->has_reference_result ||
+            tail->reference_result.place != v->loan.place ||
+            tail->reference_result.incarnation != v->loan.incarnation)
+            return false;
+        /* Keep this C profile to the loan's outer root. A valid persistent
+         * token for a body-local ended root must not become an indeterminate
+         * C pointer read; richer token representation is a later slice. */
+    }
+    if (v->result_count == 0 && v->type != p->unit)
+        return false;
+    return v0_validate_node(f, v->initializer, p);
+}
+
 static bool v0_validate_call(const NLCheckedFragment *fragment,
                              NLCheckedNodeId id, V0Program *program)
 {
@@ -217,7 +300,12 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
     switch (view->kind) {
     case NL_CHECKED_U8_LITERAL:
     case NL_CHECKED_IDENTIFIER:
-        return v1_scalar(fragment, id, program);
+        return v1_scalar(fragment, id, program) ||
+               gate_ptr(fragment, id, program);
+    case NL_CHECKED_PTR_FROM_REF:
+        return gate_ptr(fragment, id, program);
+    case NL_CHECKED_LOAN_HEADER:
+        return gate_loan(fragment, view, program);
     case NL_CHECKED_AGGREGATE_BINDING:
         return avs_destructuring(fragment, view, program);
     case NL_CHECKED_BINDING: {
@@ -230,7 +318,9 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                ((receiver->type == program->u8 &&
                  v1_scalar(fragment, view->initializer, program)) ||
                 (avs_shape(fragment, receiver->type, program) &&
-                 avs_construction(fragment, view->initializer, program)));
+                 avs_construction(fragment, view->initializer, program)) ||
+                (gate_type(fragment, receiver->type, NL_TYPE_PTR, program) &&
+                 v0_validate_node(fragment, view->initializer, program)));
     }
     case NL_CHECKED_BLOCK:
         return v0_validate_block(fragment, view, program);
@@ -298,6 +388,55 @@ static bool avs_emit_initializer(FILE *stream,
     return fputs("}", stream) >= 0;
 }
 
+static bool gate_emit_ptr(FILE *stream, const NLCheckedFragment *f,
+                          const NLCheckedNodeView *v)
+{
+    if (v->kind == NL_CHECKED_LOAN_HEADER)
+        return fprintf(stream, "nl_loan_result_%zu", v->loan.scope) >= 0;
+    if (v->kind == NL_CHECKED_PTR_FROM_REF)
+        v = nl_checked_node_view(f, v->first_argument);
+    return v != NULL && v->kind == NL_CHECKED_IDENTIFIER &&
+           fprintf(stream, "nl_local_%zu", v->symbol) >= 0;
+}
+static bool gate_emit_loan(FILE *stream, const NLCheckedFragment *f,
+                           const NLCheckedNodeView *v, size_t depth)
+{
+    const NLCheckedNodeView *body = nl_checked_node_view(f, v->initializer);
+    if (v->result_count == 1 &&
+        (!v0_indent(stream, depth) ||
+         fprintf(stream, "const uint8_t *nl_loan_result_%zu;\n",
+                 v->loan.scope) < 0))
+        return false;
+    if (!v0_indent(stream, depth) || fputs("{\n", stream) < 0 ||
+        !v0_indent(stream, depth + 1) ||
+        fprintf(stream, "const uint8_t *const nl_local_%zu = %snl_local_%zu;\n",
+                v->loan.ref_symbol, v->loan.from_ptr ? "" : "&",
+                v->loan.source) < 0 ||
+        !v0_indent(stream, depth + 1) ||
+        fprintf(stream, "(void)nl_local_%zu;\n", v->loan.ref_symbol) < 0)
+        return false;
+    for (NLCheckedNodeId i = body->first_item; i != 0;) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, i);
+        if (!v0_emit_node(stream, f, i, depth + 1))
+            return false;
+        i = n->next_item;
+    }
+    if (v->result_count == 1) {
+        if (!v0_indent(stream, depth + 1) ||
+            fprintf(stream, "nl_loan_result_%zu = ", v->loan.scope) < 0 ||
+            !gate_emit_ptr(stream, f, nl_checked_node_view(f, body->tail)) ||
+            fputs(";\n", stream) < 0)
+            return false;
+    } else if (body->tail != 0 &&
+               !v0_emit_node(stream, f, body->tail, depth + 1))
+        return false;
+    if (!v0_indent(stream, depth) || fputs("}\n", stream) < 0)
+        return false;
+    return v->result_count == 0 ||
+           (v0_indent(stream, depth) &&
+            fprintf(stream, "(void)nl_loan_result_%zu;\n", v->loan.scope) >= 0);
+}
+
 static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                          NLCheckedNodeId id, size_t depth)
 {
@@ -308,8 +447,14 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     switch (view->kind) {
     case NL_CHECKED_U8_LITERAL:
     case NL_CHECKED_IDENTIFIER:
+    case NL_CHECKED_PTR_FROM_REF:
         return v0_indent(stream, depth) && fputs("(void)", stream) >= 0 &&
-               v1_emit_scalar(stream, view) && fputs(";\n", stream) >= 0;
+               (view->kind == NL_CHECKED_PTR_FROM_REF
+                    ? gate_emit_ptr(stream, fragment, view)
+                    : v1_emit_scalar(stream, view)) &&
+               fputs(";\n", stream) >= 0;
+    case NL_CHECKED_LOAN_HEADER:
+        return gate_emit_loan(stream, fragment, view, depth);
     case NL_CHECKED_AGGREGATE_BINDING: {
         const NLCheckedNodeView *rhs =
             nl_checked_node_view(fragment, view->initializer);
@@ -336,12 +481,28 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     case NL_CHECKED_BINDING: {
         const NLCheckedNodeView *initializer =
             nl_checked_node_view(fragment, view->initializer);
-        if (initializer == NULL || !v0_indent(stream, depth))
+        if (initializer == NULL)
+            return false;
+        if (initializer->kind == NL_CHECKED_LOAN_HEADER &&
+            !gate_emit_loan(stream, fragment, initializer, depth))
+            return false;
+        if (!v0_indent(stream, depth))
             return false;
         if (initializer->kind == NL_CHECKED_AGGREGATE) {
             if (fprintf(stream, "const nl_type_%zu nl_local_%zu = ",
                         initializer->type, view->symbol) < 0 ||
                 !avs_emit_initializer(stream, fragment, initializer))
+                return false;
+        } else if (initializer->kind == NL_CHECKED_LOAN_HEADER ||
+                   initializer->kind == NL_CHECKED_PTR_FROM_REF ||
+                   (initializer->kind == NL_CHECKED_IDENTIFIER &&
+                    !initializer->has_scalar_result &&
+                    initializer->type !=
+                        nl_semantic_core_type(nl_checked_context(fragment),
+                                              NL_TYPE_U8))) {
+            if (fprintf(stream, "const uint8_t *const nl_local_%zu = ",
+                        view->symbol) < 0 ||
+                !gate_emit_ptr(stream, fragment, initializer))
                 return false;
         } else if (fprintf(stream,
                            "const uint8_t nl_local_%zu = ", view->symbol) < 0 ||

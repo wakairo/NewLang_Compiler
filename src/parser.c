@@ -653,10 +653,8 @@ failed:
     return NULL;
 }
 
-static NLSyntaxNode *source_block(NLParser *parser)
+static NLSyntaxNode *source_block_contents(NLParser *parser, NLSourceSpan start)
 {
-    const NLSourceSpan start = parser->token.span;
-    consume(parser);
     NLSyntaxNode *result = node(parser, NL_SYNTAX_BLOCK, start);
     NLSyntaxNode *head = NULL, *tail = NULL;
     if (result == NULL)
@@ -720,6 +718,64 @@ static NLSyntaxNode *source_block(NLParser *parser)
     if (!expect_punct(parser, '}', "P5-EXPECTED-BLOCK-END", "expected }"))
         return NULL;
     result->view.span.end_byte = end;
+    return result;
+}
+
+static NLSyntaxNode *source_block(NLParser *parser)
+{
+    const NLSourceSpan start = parser->token.span;
+    consume(parser);
+    return source_block_contents(parser, start);
+}
+
+/* Provisional §13.8 simple-name read profile. No general loan operand grammar
+ * or ordinary lexical keyword reservation is introduced. */
+static NLSyntaxNode *source_local_loan(NLParser *parser, NLSourceSpan start,
+                                       bool from_ptr)
+{
+    consume(parser); /* ( */
+    if (!peek(parser) || parser->token.kind != NL_TOKEN_WORD) {
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+             "LOCAL-LOAN-PROFILE",
+             "only the simple-name loan profile is implemented");
+        return NULL;
+    }
+    NLSyntaxNode *operand = source_name(parser, NL_SYNTAX_EXPR_NAME, false);
+    if (operand == NULL)
+        return NULL;
+    if (!punct(parser, ')')) {
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+             "LOCAL-LOAN-PROFILE", "loan operand must be a simple local name");
+        return NULL;
+    }
+    consume(parser);
+    const NLSourceSpan open = parser->token.span;
+    if (!punct(parser, '{')) {
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+             "LOCAL-LOAN-PROFILE",
+             "same-spelling general call policy is outside this profile");
+        return NULL;
+    }
+    if (!expect_punct(parser, '{', "LOCAL-LOAN-BODY", "expected loan body") ||
+        !expect_punct(parser, '|', "LOCAL-LOAN-BINDER", "expected |ref_name|"))
+        return NULL;
+    NLSyntaxNode *binder = source_name(parser, NL_SYNTAX_RECEIVER, true);
+    if (binder == NULL ||
+        !expect_punct(parser, '|', "LOCAL-LOAN-BINDER", "expected closing |"))
+        return NULL;
+    NLSyntaxNode *body = source_block_contents(parser, open);
+    if (body == NULL)
+        return NULL;
+    NLSyntaxNode *result =
+        node(parser, NL_SYNTAX_LOCAL_READ_LOAN,
+             (NLSourceSpan){start.start_byte, body->view.span.end_byte});
+    if (result != NULL) {
+        result->view.data.loan.source = operand;
+        result->view.data.loan.binding = binder->view.data.name;
+        result->view.data.loan.body = body;
+        result->view.data.loan.from_ptr = from_ptr;
+        result->view.data.loan.access = NL_ACCESS_READ;
+    }
     return result;
 }
 
@@ -923,8 +979,14 @@ static NLSyntaxNode *source_expression(NLParser *parser)
         goto done;
     }
     const bool u8_literal = word(parser, "u8");
+    const bool read_loan = word(parser, "loan_read");
+    const bool ptr_loan = word(parser, "loan_read_ptr");
     const NLSourceSpan name = parser->token.span;
     consume(parser);
+    if ((read_loan || ptr_loan) && punct(parser, '(')) {
+        result = source_local_loan(parser, name, ptr_loan);
+        goto done;
+    }
     if (punct(parser, '.')) {
         consume(parser);
         NLSyntaxNode *variant = source_name(parser, NL_SYNTAX_RECEIVER, false);

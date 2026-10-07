@@ -25,7 +25,7 @@ Break/ref joins. Rich cyclic correlations remain structured precision rejections
 ## Authority
 
 The canonical language authority is the Draft selected by
-`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.17**), followed by reviewed
+`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.18**), followed by reviewed
 process/backend contracts and merged implementation/formal evidence.
 Historical reports, the task prompt and conversation do not override the Draft.
 Backend Contract v0.4 defines backend obligations. The Charter, Handoff Manifest
@@ -272,3 +272,31 @@ See [AVS contract](docs/NORTH_STAR_AVS_CONTRACT.md) and
 There is still no full-program parser or semantic checker, typed MIR, LLVM lowering,
 optimization framework, broad FFI, concurrency, separate compilation,
 self-hosting, public token/AST-dump mode, or a full-program frontend. The module slice supports canonical receiving/block/aggregate forms, registered closed-sum constructor/match, bounded dependency-aware ref results and registered body calls with P9 explicit-return lexical blocks. Only the fn-only declaration-unit profile is supported; broader frontend forms remain unsupported. The CLI compile path remains unsupported.
+
+## Local-root ptr/ref product gate
+
+The Draft 17.18 Provisional read-only profile now checks real lexical loan bodies:
+
+```newlang
+fn main() -> unit {
+    let x = u8(7);
+    let p = loan_read(x) { |r| ptr_from_ref(r) };
+    loan_read_ptr(p) { |r2| ptr_from_ref(r2); unit };
+    unit
+}
+```
+
+The ptr package is received after the first loan ends. Reacquisition requires
+provenance matching the still-live source local incarnation and its implicit
+stability authority; a ptr token alone provides no access authority. Returning
+the scoped ref rejects with `P8-EXIT-DEPENDENCY`; reacquiring after the local
+ends rejects with `P3-STALE-POINTER`. Both reject before C emission.
+
+Only simple-name u8 local roots and local `ptr<u8>` receiving/use enter this
+Checked-C gate. Ordinary local names remain admissible; language-wide policy
+for same-spelling declarations/calls remains Provisional. Profile-external
+loans and richer accepted checked results remain explicitly unsupported.
+C addresses are execution representation, never the semantic safety oracle.
+See [gate contract](docs/NORTH_STAR_LOCAL_ROOT_CONTRACT.md) and
+[gate evidence](docs/NORTH_STAR_LOCAL_ROOT_REPORT.md). Field mutation, raw storage,
+recursive Node, cJSON and later slices are not enabled by this gate.

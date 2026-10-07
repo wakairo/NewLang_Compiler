@@ -74,7 +74,9 @@ typedef struct {
     NLScopeId scope, dependency_scope;
     bool prevent_lifetime_end;
     bool prevent_conflicting_access;
-    bool body_nonescape_proved; /* always false in P3 */
+    bool body_nonescape_proved; /* false for header-only P3 */
+    bool implicit_local, from_ptr, normal_result_forwarded;
+    NLSymbolId ref_symbol; /* resolved body-local binder, not source text */
 } NLCheckedLoanPlan;
 typedef struct {
     NLCheckedKind kind;
@@ -109,6 +111,8 @@ typedef struct {
     NLScalarValue scalar_result;
     size_t raw_offsets[2], raw_count; /* resolved constant selections */
     NLCheckedLoanPlan loan;
+    bool has_reference_result;
+    NLReferenceFacts reference_result; /* checked ptr_from_ref facts */
 } NLCheckedNodeView;
 
 /* Owned artifact, immutable after success. Nodes borrow artifact until destroy.
