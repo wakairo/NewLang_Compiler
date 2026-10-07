@@ -161,7 +161,9 @@ Product/value strategy is recorded in
 the current North Star contract in
 [`docs/NewLang_North_Star_Product_Validation.md`](docs/NewLang_North_Star_Product_Validation.md),
 and long-horizon C-replacement coverage in
-[`docs/NewLang_C_Replacement_Coverage_Map.md`](docs/NewLang_C_Replacement_Coverage_Map.md). The normal integration test compiles emitted C17
+[`docs/NewLang_C_Replacement_Coverage_Map.md`](docs/NewLang_C_Replacement_Coverage_Map.md).
+
+The normal integration test compiles emitted C17
 with the configured host C compiler and executes the resulting native program.
 
 V1 adds only the positive-decimal `u8(DIGITS)` path and immutable u8 locals/use:
