@@ -4284,10 +4284,10 @@ direct_local_write_loan
   LLVM `noalias`相当の保証を導入しない。
 - same placeを指すordinary refsが他にliveでも、それだけでwrite loanやmutationを禁止しない。
   actual mutationの合法性は§13.5a / §13.5b / §17.4のexisting dependency/effect conflict ruleで判定する。
-- `loan_write` spellingはIssue #113のbounded product profileだけでsource meaningを固定する。
-  richer operand/type profile、general/final write-loan syntax、same-spelling ordinary declarationとの
-  language-wide parser/name policyは本revisionでは固定せず、profile外を本revisionだけで
-  language-invalidとは決めない。
+- Draft 17.19の `loan_write(local_name)` spellingはIssue #113のdirect-local bounded profileとして維持する。
+  Draft 17.20は§17.1でregistered Pairのone-level fixed-fieldだけを別のclosed profileとして追加する。
+  それ以外のricher operand/type profile、general/final write-loan syntax、same-spelling ordinary declarationとの
+  language-wide parser/name policyは固定せず、profile外を本revisionだけでlanguage-invalidとは決めない。
 
 #### loan normal-result forwarding
 
