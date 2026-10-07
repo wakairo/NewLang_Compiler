@@ -262,8 +262,9 @@ static bool source(void)
     CHECK(c->values[a - 1].fields[0] != c->values[b - 1].fields[0]);
     CHECK(c->values[c->values[a - 1].fields[0] - 1].sum_payload !=
           c->values[c->values[b - 1].fields[0] - 1].sum_payload);
-    CHECK(test_rejected(c, "n@next", TEST_SOURCE, NL_CHECK_SEMANTIC_UNSUPPORTED,
-                        "FIELD-PROFILE"));
+    CHECK(test_rejected(c, "n@payload", TEST_SOURCE,
+                        NL_CHECK_SEMANTIC_UNSUPPORTED,
+                        "NODE-LINK-FIELD-PROFILE"));
     nl_semantic_destroy(c);
     return true;
 }

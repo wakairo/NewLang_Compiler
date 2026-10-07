@@ -126,8 +126,20 @@ NLCheckStatus nl_sum_validate(const NLSemanticContext *c)
         if (c->types[r.type - 1].view.kind != NL_TYPE_SUM || !r.live)
             continue;
         const NLSemanticValueView v = c->values[r.current_value - 1];
-        if (v.type != r.type || v.carrier != NL_CARRIER_PLACE ||
-            v.owner_place != i + 1)
+        /* A fixed-field place is a borrowed view of an aggregate-owned sum,
+         * not a second package owner. Validate the exact ownership path. */
+        const bool field_owned =
+            r.parent_aggregate != 0 && nl_fixed_live(c, i + 1) &&
+            nl_recursive_local_type(c,
+                                    c->places[r.parent_aggregate - 1].type) &&
+            r.parent_field_index == 0 && v.carrier == NL_CARRIER_AGGREGATE &&
+            v.owner_place == 0 &&
+            v.aggregate_owner ==
+                c->places[r.parent_aggregate - 1].current_value &&
+            c->values[v.aggregate_owner - 1].fields[0] == r.current_value;
+        if (v.type != r.type ||
+            (!field_owned &&
+             (v.carrier != NL_CARRIER_PLACE || v.owner_place != i + 1)))
             return NL_CHECK_INTERNAL_ERROR;
         if ((v.sum_payload == 0) != (r.payload_occurrence == 0))
             return NL_CHECK_INTERNAL_ERROR;

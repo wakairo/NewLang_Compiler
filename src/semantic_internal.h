@@ -146,6 +146,7 @@ NLCheckStatus nl_sem_new_scope(NLSemanticContext *, NLScopeId, bool,
                                NLScopeId *);
 NLCheckStatus nl_sem_fresh_fact(NLSemanticContext *, NLValueFactId *);
 bool nl_fixed_type(const NLSemanticContext *, NLTypeId);
+bool nl_recursive_local_type(const NLSemanticContext *, NLTypeId);
 /* Private transaction helpers. No header is committed until unit completion.
  * Strings/arrays are borrowed for the call; successful types own copies. */
 NLCheckStatus nl_sem_nominal(NLSemanticContext *, const char *, bool, bool,

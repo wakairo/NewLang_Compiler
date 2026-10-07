@@ -645,8 +645,7 @@ void nl_sem_end_value(NLSemanticContext *c, NLValueId value)
     if (original.sum_payload != 0)
         nl_sem_end_value(c, original.sum_payload);
     for (size_t f = 0; f < original.field_count; ++f) {
-        c->values[original.fields[f] - 1].carrier = NL_CARRIER_ENDED;
-        c->values[original.fields[f] - 1].aggregate_owner = 0;
+        nl_sem_end_value(c, original.fields[f]);
     }
     c->values[value - 1].carrier = NL_CARRIER_ENDED;
     c->values[value - 1].owner_place = 0;

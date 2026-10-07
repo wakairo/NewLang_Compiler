@@ -2,8 +2,32 @@
 #include <stdint.h>
 #include <string.h>
 
+/* Exactly the completed §16.3 shape, selected by nominal metadata, not its
+ * source name. The committed recursive link is declaration index zero. */
+bool nl_recursive_local_type(const NLSemanticContext *c, NLTypeId type)
+{
+    if (type == 0 || type > c->type_count)
+        return false;
+    const NLTypeEntry *t = &c->types[type - 1];
+    if (!t->recursive_header || t->incomplete ||
+        t->view.kind != NL_TYPE_NOMINAL || t->view.field_count != 2 ||
+        !t->view.is_copy || !t->view.is_discardable)
+        return false;
+    const NLTypeId link = t->field_types[0];
+    if (link == 0 || link > c->type_count)
+        return false;
+    const NLTypeId ptr = c->types[link - 1].option_target;
+    return ptr != 0 && ptr <= c->type_count &&
+           c->types[link - 1].view.kind == NL_TYPE_SUM &&
+           c->types[ptr - 1].view.kind == NL_TYPE_PTR &&
+           c->types[ptr - 1].view.target == type &&
+           t->field_types[1] == nl_semantic_core_type(c, NL_TYPE_U8);
+}
+
 bool nl_fixed_type(const NLSemanticContext *c, NLTypeId type)
 {
+    if (nl_recursive_local_type(c, type))
+        return true;
     if (type == 0 || type > c->type_count)
         return false;
     const NLTypeEntry *t = &c->types[type - 1];
@@ -52,6 +76,9 @@ NLCheckStatus nl_fixed_attach(NLSemanticContext *c, NLPlaceId root)
                                   .parent_field_index = i};
         c->places[root - 1].fixed_fields[i] = child;
         ++c->places[root - 1].fixed_field_count;
+        s = nl_sum_attach(c, child);
+        if (s != NL_CHECK_OK)
+            return s;
     }
     return NL_CHECK_OK;
 }
@@ -60,6 +87,7 @@ void nl_fixed_detach(NLSemanticContext *c, NLPlaceId root)
 {
     for (size_t i = 0; i < c->places[root - 1].fixed_field_count; ++i) {
         const NLPlaceId id = c->places[root - 1].fixed_fields[i];
+        nl_sum_detach(c, id);
         c->places[id - 1].live = false;
         c->places[id - 1].current_value = 0;
         c->places[id - 1].current_fact = 0;
@@ -201,6 +229,9 @@ NLCheckStatus nl_fixed_change(NLSemanticContext *c, NLPlaceId child,
     if ((s = nl_sem_fresh_fact(c, &cf)) != NL_CHECK_OK ||
         (s = nl_sem_fresh_fact(c, &rf)) != NL_CHECK_OK)
         return s;
+    /* The aggregate remains the sole owner of the Option package. Its fixed
+     * child hosts a conditional occurrence, which whole-Option Change ends. */
+    nl_sum_detach(c, child);
     c->values[id - 1].carrier = NL_CARRIER_PLACE;
     c->values[id - 1].owner_place = root;
     for (size_t i = 0; i < next.field_count; ++i) {
@@ -213,6 +244,8 @@ NLCheckStatus nl_fixed_change(NLSemanticContext *c, NLPlaceId child,
         discard ? NL_CARRIER_ENDED : NL_CARRIER_LOOSE;
     c->values[p.current_value - 1].aggregate_owner = 0;
     c->values[p.current_value - 1].owner_place = 0;
+    if (discard)
+        nl_sem_end_value(c, p.current_value);
     c->values[old - 1].carrier =
         NL_CARRIER_ENDED; /* transfer, not recursive end */
     c->values[old - 1].owner_place = 0;
@@ -220,7 +253,7 @@ NLCheckStatus nl_fixed_change(NLSemanticContext *c, NLPlaceId child,
     c->places[root - 1].current_fact = rf;
     c->places[child - 1].current_value = incoming;
     c->places[child - 1].current_fact = cf;
-    return NL_CHECK_OK;
+    return nl_sum_attach(c, child);
 }
 
 NLCheckStatus nl_fixed_validate(const NLSemanticContext *c)
