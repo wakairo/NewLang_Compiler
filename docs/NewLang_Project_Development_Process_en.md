@@ -16,6 +16,7 @@ NewLang is developed through several partially independent tracks:
 - **F — Formal proof / semantic formalization**
 - **P — Production compiler implementation**
 - **R — Independent red-team review**
+- **V — Value / Product Validation**
 - **Coordination — cross-track adjudication and sequencing**
 
 The goal is not to make the tracks agree by construction.
@@ -33,7 +34,16 @@ docs/reference/CURRENT_SPEC.md
 Design reports, proof reports, compiler reports, experiments, deep research, and conversation history are evidence.
 They do not override the canonical Draft by themselves.
 
-If an important decision exists only in a report or conversation, it should be promoted through a reviewed Draft revision before being treated as normative.
+The repository-level authorities for product, targeting, and value validation are the primary Japanese documents:
+
+```text
+docs/NewLang_Product_Value_Strategy.md
+docs/NewLang_North_Star_Product_Validation.md
+docs/NewLang_C_Replacement_Coverage_Map.md
+```
+
+They govern product strategy, not normative language semantics.
+If an important semantic decision exists only in a report or conversation, it should be promoted through a reviewed Draft revision before being treated as normative.
 
 UTF-8-managed project documents should normally use Japanese as the primary language, with an English companion when useful.
 For commit messages and other text that appears prominently in shell/toolchain workflows, prefer English ASCII for portability and operational simplicity.
@@ -60,6 +70,12 @@ Do not preserve a language rule merely because it makes an existing proof conven
 P tests whether the canonical semantics can be represented, diagnosed, checked, and eventually lowered in a realistic compiler.
 
 Implementation difficulty is valuable feedback, but backend convenience alone should not redefine source semantics.
+
+### V — Value / Product Validation
+
+V defines target users, workloads, workflows, value hypotheses, North Star experiments, pre-registered PASS / FAIL criteria, anti-gaming rules, human obligations, and topology-preservation evidence. It also tracks the long-horizon practical C-replacement envelope without broadening the current beachhead, including no-foreclosure risk for Deferred capabilities.
+
+V does not independently decide canonical language semantics, Draft revisions, implementation architecture, formal-proof strategy, or final merge/milestone sequencing. See the primary Japanese `NewLang_Product_Value_Strategy.md`.
 
 ### Coordination
 
@@ -120,6 +136,7 @@ Track: M
 Track: F
 Track: P
 Track: R
+Track: V
 ```
 
 The goal is later traceability of whose judgment, finding, or question is being recorded; no strict machine-readable format is required.
@@ -167,6 +184,7 @@ A sync review should record at least:
 - F proof coverage;
 - unresolved contradictions or precision gaps;
 - Deferred features relevant to the next milestone;
+- V's current value hypothesis, product evidence, and strategic coverage risks;
 - whether M is too far ahead of P/F;
 - recommended next cross-track sequence.
 
@@ -238,6 +256,7 @@ Do not ask the Red Team to confirm that the current design is good.
 Different tracks should use different questions:
 
 ```text
+V: Whose problem improves, and what evidence would count as value?
 M: Is this the smallest practical rule?
 F: Is the rule internally coherent and provable where expected?
 P: Can a production compiler represent and diagnose it faithfully?
