@@ -45,6 +45,8 @@ docs/NewLang_C_Replacement_Coverage_Map.md
 They govern product strategy, not normative language semantics.
 If an important semantic decision exists only in a report or conversation, it should be promoted through a reviewed Draft revision before being treated as normative.
 
+The [Design-Intent Ledger](NewLang_Design_Intent_Ledger.md) is a **non-normative index of historical proposals and unresolved intent**, not a replacement for the canonical Draft. The mandatory pre-decision check and review procedure is [NewLang Design Decision Procedure](NewLang_Design_Decision_Procedure.md).
+
 UTF-8-managed project documents should normally use Japanese as the primary language, with an English companion when useful.
 For commit messages and other text that appears prominently in shell/toolchain workflows, prefer English ASCII for portability and operational simplicity.
 
@@ -53,6 +55,7 @@ For commit messages and other text that appears prominently in shell/toolchain w
 ### M — Specification / design
 
 M explores and adjudicates language semantics and source surface.
+Before selecting or revising a source/API/semantic rule, apply the historical design-intent gate in §4.2.
 It should prefer small, orthogonal mechanisms and targeted reopen over broad redesign.
 
 M should not advance indefinitely ahead of implementation and formalization.
@@ -86,6 +89,7 @@ Coordination owns:
 - classification and severity of findings;
 - deciding KEEP / CLOSE / TARGETED REOPEN;
 - deciding when a Draft revision is required;
+- verifying historical design-intent checks at authorization and independent PR review (§4.2);
 - deciding when M should pause for P/F catch-up.
 
 ## 4. Standard feedback loop
@@ -119,6 +123,7 @@ As a default, use one Issue for one bounded task, finding, or revalidation scope
 When relevant, keep the following together in that Issue:
 
 - authority such as canonical repository, main SHA, and `CURRENT_SPEC.md`;
+- for design selection, the §4.2 historical audit (Ledger IDs, earlier alternatives and reasoned disposition);
 - scope and non-goals;
 - questions, requested work, and stop conditions for the receiving track;
 - findings, counterexamples, and CI / proof / implementation evidence;
@@ -150,6 +155,28 @@ Small implementation discussion or follow-up within one bounded task should rema
 For Red Team work, the independence rules in §7 take precedence.
 A first-pass attack Issue should contain only the deliberately narrow input allowed at that stage and should not pre-seed M/F/P rationale or conclusions.
 After first-pass findings are recorded, additional evidence may be appended to the same Issue or supplied through an explicitly linked follow-up Issue.
+
+### 4.2 Required historical design-intent gate
+
+**Procedure:** [NewLang_Design_Decision_Procedure.md](NewLang_Design_Decision_Procedure.md)
+
+**Historical index:** [NewLang_Design_Intent_Ledger.md](NewLang_Design_Intent_Ledger.md)
+
+When M or Coordination selects/changes source syntax, API or semantic rules, or promotes a
+Deferred/Provisional experiment into a normative design, read the Ledger and compare relevant
+earlier proposals, prior Draft/Issue evidence and the current canonical specification **before
+choosing the new rule**. Document **KEEP / INTENTIONALLY REPLACE / DEFER**, with rationale,
+compatibility and no-foreclosure consequences. A missing Ledger entry is not proof that no old
+proposal existed.
+
+During independent Coordination review, **BLOCK** a design-changing PR if it omits a material
+historical comparison, silently replaces a known alternative, or claims N/A despite changing
+language design. The PR template prompts for the audit, but filling a form alone is not review.
+Faithful P/F implementation or mechanical changes may state a justified **N/A**.
+
+**Blind Red Team independence takes precedence (§7):** R first-pass reviewers must not receive
+earlier design intent, ledger rationale or M/F/P reports before first-pass disposition.
+M and Coordination perform the historical checks without contaminating R's initial attack.
 
 ## 5. Finding classification
 
@@ -186,7 +213,8 @@ A sync review should record at least:
 - Deferred features relevant to the next milestone;
 - V's current value hypothesis, product evidence, and strategic coverage risks;
 - whether M is too far ahead of P/F;
-- recommended next cross-track sequence.
+- recommended next cross-track sequence;
+- relevant unresolved Ledger intents and §4.2 historical audit state for the next design milestone.
 
 Typical sync points include closure of a major M milestone or before starting another major semantic family.
 
