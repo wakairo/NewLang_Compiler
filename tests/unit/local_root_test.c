@@ -214,8 +214,7 @@ static bool mutation(void)
     NLSemanticBindingView pb;
     NLSemanticValueView pv;
     CHECK(nl_semantic_binding_view(c, p, &pb));
-    CHECK(nl_semantic_value_view(c, pb.value, &pv) &&
-          pv.reference.place == before.current_value ? false : true);
+    CHECK(nl_semantic_value_view(c, pb.value, &pv));
     CHECK(pv.reference.place == xb.place &&
           pv.reference.incarnation == before.incarnation &&
           pv.dependencies == NL_DEPENDENCY_FREE);
@@ -236,10 +235,16 @@ static bool mutation(void)
           write_loan->loan.incarnation == before.incarnation);
     NLSemanticBindingView wb;
     NLSemanticTypeView wt;
+    NLSemanticValueView wv;
     CHECK(nl_semantic_binding_view(c, write_loan->loan.ref_symbol, &wb));
     CHECK(nl_semantic_type_view(c, wb.type, &wt) &&
           wt.kind == NL_TYPE_REF && wt.access == NL_ACCESS_WRITE &&
           !wt.is_exclusive);
+    CHECK(nl_semantic_value_view(c, wb.value, &wv) &&
+          wv.reference.place == xb.place &&
+          wv.reference.incarnation == before.incarnation &&
+          wv.reference.scope == write_loan->loan.scope &&
+          wv.reference.readable && wv.reference.writable);
 
     const NLCheckedNodeView *write_body =
         nl_checked_node_view(old_checked.artifact, write_loan->initializer);
