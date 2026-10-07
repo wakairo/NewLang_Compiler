@@ -48,7 +48,8 @@ typedef enum {
     NL_CHECKED_LOOP,
     NL_CHECKED_CONTINUE,
     NL_CHECKED_BREAK,
-    NL_CHECKED_UNIT
+    NL_CHECKED_UNIT,
+    NL_CHECKED_U8_LITERAL
 } NLCheckedKind;
 typedef enum {
     NL_VALUE_USE_NONE,
@@ -103,7 +104,8 @@ typedef struct {
     size_t
         result_count; /* 0 = unit/no responsibility; 1 or 2 separate values */
     NLCheckedResult results[2];
-    bool has_scalar_result; /* raw observations do not mint ValuePackages */
+    bool has_scalar_result; /* U8_LITERAL owns checked value evidence; raw
+                              observations do not mint ValuePackages. */
     NLScalarValue scalar_result;
     size_t raw_offsets[2], raw_count; /* resolved constant selections */
     NLCheckedLoanPlan loan;

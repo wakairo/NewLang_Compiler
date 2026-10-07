@@ -32,7 +32,8 @@ typedef enum {
     NL_SYNTAX_LOOP,
     NL_SYNTAX_LOOP_PARAMETER,
     NL_SYNTAX_CONTINUE,
-    NL_SYNTAX_BREAK
+    NL_SYNTAX_BREAK,
+    NL_SYNTAX_U8_LITERAL /* V1 positive decimal profile only */
 } NLSyntaxKind;
 
 /* Requested source spelling only: not checked access permission/authority. */
@@ -62,7 +63,8 @@ typedef struct {
             NLSourceSpan name;
             const NLSyntaxNode *type;
         } parameter;
-        NLSourceSpan name; /* TYPE_NAME / EXPR_NAME / RECEIVER. */
+        NLSourceSpan u8_digits; /* U8_LITERAL: unchecked decimal payload. */
+        NLSourceSpan name;      /* TYPE_NAME / EXPR_NAME / RECEIVER. */
         struct {
             const NLSyntaxNode *target;
         } ptr_type;

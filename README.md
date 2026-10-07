@@ -144,18 +144,36 @@ P0 does not claim to reproduce them in C.
 `--version` prints `newlangc 0.1.0 (P0 bootstrap)`. `--help` (also no arguments)
 prints usage; both exit 0. Invalid options / argument counts exit 2.
 
-For a source path, the North Star V0 path reads the actual source, parses the
+For a source path, the North Star V0/V1 path reads the actual source, parses the
 existing fn-only function unit, registers/checks it with the production semantic
 checker, then checks an ordinary zero-argument `main()` call selected only by
 the driver. Only after those checks succeed does `newlangc` emit the bounded
 Checked-C representation to stdout. Semantic rejection emits no C bytes.
-Accepted checked constructs outside the V0 emitter report
-`V0-BACKEND-UNSUPPORTED`.
+Accepted checked constructs outside the V0/V1 emitter report
+`V1-BACKEND-UNSUPPORTED`.
 
 The Checked-C path is a bounded bootstrap/reference execution vehicle for the
-North Star V0 subset; it is not a general C backend and does not replace LLVM as
+North Star V0/V1 subset; it is not a general C backend and does not replace LLVM as
 the planned primary backend. The normal integration test compiles emitted C17
 with the configured host C compiler and executes the resulting native program.
+
+V1 adds only the positive-decimal `u8(DIGITS)` path and immutable u8 locals/use:
+
+```newlang
+fn main() -> unit {
+    let x = u8(7);
+    x;
+    unit
+}
+```
+
+The NewLang checker validates the mathematical value against 0..255 and stores
+core u8/value evidence. Checked-C emits that checked value, never reparses the
+literal. `u8(256)` and bare `7` reject before emission. `u8(-1)` remains
+**Deferred / unchanged**, outside the V1 acceptance claim. No numeric semantics,
+other integer families or C representation guarantees are added.
+See [V1 contract](docs/NORTH_STAR_V1_TYPED_SCALAR_CONTRACT.md) and
+[V1 report](docs/NORTH_STAR_V1_TYPED_SCALAR_REPORT.md).
 
 ## Layout and review
 

@@ -922,6 +922,7 @@ static NLSyntaxNode *source_expression(NLParser *parser)
              "expected name, call, registered aggregate or lexical block");
         goto done;
     }
+    const bool u8_literal = word(parser, "u8");
     const NLSourceSpan name = parser->token.span;
     consume(parser);
     if (punct(parser, '.')) {
@@ -1015,6 +1016,25 @@ static NLSyntaxNode *source_expression(NLParser *parser)
         result->view.span.end_byte = end;
     } else if (punct(parser, '(')) {
         consume(parser);
+        /* Recognize only the authorized positive-DIGITS profile. Other
+         * operands keep the existing call path; negative spelling is Deferred.
+         */
+        if (u8_literal && peek(parser) &&
+            parser->token.kind == NL_TOKEN_DIGITS) {
+            result = node(parser, NL_SYNTAX_U8_LITERAL, name);
+            if (result == NULL)
+                goto done;
+            result->view.data.u8_digits = parser->token.span;
+            consume(parser);
+            if (!peek(parser))
+                goto done;
+            const size_t end = parser->token.span.end_byte;
+            if (!expect_punct(parser, ')', "V1-U8-LITERAL-END",
+                              "expected ) after u8 decimal payload"))
+                goto done;
+            result->view.span.end_byte = end;
+            goto done;
+        }
         result = node(parser, NL_SYNTAX_EXPR_CALL, name);
         if (result == NULL)
             goto done;
