@@ -3,7 +3,7 @@
 The canonical NewLang v0 specification on a branch is the Draft named here.
 
 ```text
-NewLang_v0_spec_Draft17_18.md
+NewLang_v0_spec_Draft17_19.md
 ```
 
 Repository policy:
@@ -14,4 +14,4 @@ Repository policy:
 - A newer Draft on an unmerged branch is a candidate until that branch is reviewed and merged into `main`.
 - Prompts handed to M / F / P tracks should cite the `main` commit SHA and this file before relying on conversational memory.
 
-Draft 17.18 adds the Issue #108 targeted loan normal-result / bounded local-root ptr/ref source clarification on top of Draft 17.17 with semantic delta 0. Exactly-once loan normal completion checks scope-exit compatibility, ends the loan scope, then forwards the unchanged body result package into ordinary value flow; scoped refs therefore cannot escape while a `ptr<T>` produced from a ref may survive when no blocking loan-scope dependency remains. A Provisional North Star-only read profile maps `loan_read(local) { |r| ... }`, `ptr_from_ref(r)`, and `loan_read_ptr(p) { |r| ... }` to the existing §10.1/§10.2/§11.1/§13.7 semantics without programmer-visible `LifetimeDomain` plumbing. General/final loan syntax, write spellings, field projection/mutation, raw storage, and broader parser/name policy remain unresolved.
+Draft 17.19 adds the Issue #113 targeted bounded ordinary write-loan source clarification on top of Draft 17.18 with semantic delta 0. A Provisional North-Star-only `loan_write(local) { |w| ... }` form is admitted only for a direct current lexical local root of core `u8`; `w` is exactly ordinary `ref<write,u8>`, not exclusive authority. It reuses the local implicit governing identity, exactly-once loan scope, and Draft 17.18 normal-result forwarding unchanged. Existing dependency/effect conflict rules remain authoritative, and canonical `replace` changes the current value/fact while preserving root incarnation, so a preexisting ptr to that same live incarnation remains potentially reacquirable. Other write-loan types/places, final loan syntax, field projection/mutation, raw storage, and broader parser/name policy remain unresolved.
