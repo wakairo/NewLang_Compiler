@@ -38,7 +38,7 @@ statusはlanguage validityを意味しない。
 | persistent ptr + scoped ref | BEACHHEAD-VERIFIED | local-root gateでlocatorがscopeを越え、safe accessはscope/livenessに従うことを検証。 |
 | stale ptr after EndRoot | BEACHHEAD-VERIFIED | ptr token自体は残り得るがsafe reacquisitionはrejectする境界を検証。 |
 | lifetime-preserving mutation / replace | SEMANTIC-BASIS | `replace`はcurrent value/factを変えincarnationを維持するcanonical basisあり。actual-source write acquisitionのproduct gateは別途必要。 |
-| ordinary write loan source mapping | STRATEGIC-GAP | write ref semantics自体は存在するが、current North-Star actual-source mappingは未確定。targeted Mで閉じる対象。 |
+| ordinary write loan source mapping | SEMANTIC-BASIS | Draft 17.19でNorth-Star-onlyのdirect lexical-local `u8` mappingをsemantic delta 0でcanonical化。actual-source production/product evidenceはstable-root mutation gateで未検証。 |
 | field projection | SEMANTIC-BASIS | safe typed projectionはcanonical。general source profile / product evidenceは未完了。 |
 | field mutation | SEMANTIC-BASIS | field-level Change / replace-storeのsemantic basisはある。actual-source projection + write pathは未検証。 |
 | recursive nominal / intrusive graph shape | STRATEGIC-GAP | cJSON等へ重要。declarationだけではfalse progressになり得るため、construction/mutation/topologyを伴うwitnessが必要。 |
