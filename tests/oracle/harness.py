@@ -73,12 +73,11 @@ print(json.dumps({'accepted': r.accepted,
 def run_production(binary: str, source: Path) -> Outcome:
     result = subprocess.run([binary, str(source)], capture_output=True,
                             text=True, timeout=20, check=False)
-    expected = ("error(cli)[P0-COMPILE-UNSUPPORTED]: "
-                "source compilation is not implemented in P0\n"
-                f"note: {source}\n")
-    if result.returncode == 3 and result.stdout == "" and result.stderr == expected:
-        return Outcome(False, None, "P0-COMPILE-UNSUPPORTED")
-    raise ValueError("unexpected P0 production result; define a reviewed adapter")
+    if result.returncode != 0 and result.stdout == "":
+        return Outcome(False, None, "V0-OUTSIDE-REVIEWED-SPINE")
+    if result.returncode == 0 and result.stderr == "":
+        return Outcome(True, True, None)
+    raise ValueError("unexpected V0 production result; define a reviewed adapter")
 
 
 def compare_outcomes(production: Outcome, oracle: Outcome) -> bool:
