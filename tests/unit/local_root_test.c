@@ -306,8 +306,7 @@ static bool negatives(void)
     CHECK(test_rejected(c, "{let x=u8(7);let bad=loan_read(x){|r|r};unit}",
                         TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
                         "P8-EXIT-DEPENDENCY"));
-    const char *write_escape =
-        "{let x=u8(7);let bad=loan_write(x){|w|w};unit}";
+    const char *write_escape = "{let x=u8(7);let bad=loan_write(x){|w|w};unit}";
     CHECK(test_rejected(c, write_escape, TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
                         "P8-EXIT-DEPENDENCY"));
     CHECK(test_rejected(c,
