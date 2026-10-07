@@ -235,7 +235,7 @@ if(BUILD_TESTING)
     add_executable(local_root_test tests/unit/local_root_test.c)
     target_link_libraries(local_root_test PRIVATE newlang_semantic newlang_parser)
     target_link_options(local_root_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
-    foreach(group parser evidence negatives conflict resource failures)
+    foreach(group parser evidence mutation negatives conflict resource failures)
         add_test(NAME local_root_${group}.unit COMMAND local_root_test ${group})
     endforeach()
     add_test(NAME local_root_checked_c.integration

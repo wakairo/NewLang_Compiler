@@ -1363,7 +1363,8 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         node->kind != NL_SYNTAX_MATCH && node->kind != NL_SYNTAX_IF &&
         node->kind != NL_SYNTAX_LOOP && node->kind != NL_SYNTAX_U8_LITERAL &&
         node->kind != NL_SYNTAX_AGGREGATE &&
-        node->kind != NL_SYNTAX_LOCAL_READ_LOAN) {
+        node->kind != NL_SYNTAX_LOCAL_READ_LOAN &&
+        node->kind != NL_SYNTAX_LOCAL_WRITE_LOAN) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, node->span,
              "P8-BODY-PROFILE",
              "expression needs a richer relative body analysis");
@@ -1390,7 +1391,8 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         result = source_if(check, node);
     } else if (node->kind == NL_SYNTAX_LOOP) {
         result = source_loop(check, node);
-    } else if (node->kind == NL_SYNTAX_LOCAL_READ_LOAN) {
+    } else if (node->kind == NL_SYNTAX_LOCAL_READ_LOAN ||
+               node->kind == NL_SYNTAX_LOCAL_WRITE_LOAN) {
         result = source_local_loan(check, node);
     } else if (node->kind == NL_SYNTAX_AGGREGATE) {
         result = aggregate(check, node);
@@ -4361,8 +4363,9 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
     return id;
 }
 
-/* §13.8 read-only source gate. The implicit authority is the source-local
- * place/current incarnation, never a domain-zero fixture or ptr existence. */
+/* §13.8 / Draft 17.19 bounded local source gates. The implicit authority is
+ * the source-local place/current incarnation, never a domain-zero fixture or
+ * ptr existence. Write remains ordinary/non-exclusive mutation authority. */
 static NLCheckedNodeId source_local_loan(Check *check, const NLSyntaxView *s)
 {
     NLSemanticContext *c = check->context;
@@ -4372,7 +4375,14 @@ static NLCheckedNodeId source_local_loan(Check *check, const NLSyntaxView *s)
         return 0;
     const NLSemanticBindingView binding = c->bindings[source - 1].view;
     const NLSemanticTypeView type = c->types[binding.type - 1].view;
+    const bool write = s->data.loan.access == NL_ACCESS_WRITE;
     NLPlaceId place = binding.place;
+    if (write && s->data.loan.from_ptr) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, operand,
+             "LOCAL-LOAN-PROFILE",
+             "bounded write loan requires a direct lexical local");
+        return 0;
+    }
     if (s->data.loan.from_ptr) {
         if (type.kind != NL_TYPE_PTR) {
             fail(check, NL_CHECK_SEMANTIC_ERROR, operand, "P3-PTR-REQUIRED",
@@ -4421,8 +4431,8 @@ static NLCheckedNodeId source_local_loan(Check *check, const NLSyntaxView *s)
     if (name == NULL)
         return 0;
     const size_t bindings = c->binding_count, scopes = c->scope_count;
-    const NLTypeId ref_type =
-        compound(check, NL_TYPE_REF, root.type, NL_ACCESS_READ, false, s->span);
+    const NLTypeId ref_type = compound(check, NL_TYPE_REF, root.type,
+                                       s->data.loan.access, false, s->span);
     NLScopeId scope = 0;
     NLSymbolId ref_symbol = 0;
     NLCheckedNodeId id = 0;
@@ -4436,7 +4446,8 @@ static NLCheckedNodeId source_local_loan(Check *check, const NLSyntaxView *s)
                                             .incarnation = root.incarnation,
                                             .scope = scope,
                                             .provenance = NL_PROVENANCE_VALID,
-                                            .readable = true}},
+                                            .readable = true,
+                                            .writable = write}},
         s->span);
     if (ref == 0 ||
         !host(check, nl_sem_bind_in_scope(c, name, ref, bindings, &ref_symbol),
@@ -4449,7 +4460,7 @@ static NLCheckedNodeId source_local_loan(Check *check, const NLSyntaxView *s)
                                           .place = place,
                                           .incarnation = root.incarnation,
                                           .scope = scope,
-                                          .access = NL_ACCESS_READ,
+                                          .access = s->data.loan.access,
                                           .prevent_lifetime_end = true,
                                           .implicit_local = true,
                                           .from_ptr = s->data.loan.from_ptr,
