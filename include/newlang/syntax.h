@@ -39,7 +39,9 @@ typedef enum {
     NL_SYNTAX_AVS_STRUCT, /* bounded D2 declaration, not general struct syntax
                            */
     NL_SYNTAX_LOCAL_READ_LOAN,
-    NL_SYNTAX_LOCAL_WRITE_LOAN /* Draft 17.19 bounded direct-local u8 write */
+    NL_SYNTAX_LOCAL_WRITE_LOAN, /* Draft 17.19 bounded direct-local u8 write */
+    NL_SYNTAX_RECURSIVE_STRUCT, /* avs_struct union; exact Option<ptr<H>>,u8 */
+    NL_SYNTAX_OPTION_PTR /* ptr_type union; target is a nominal name only */
 } NLSyntaxKind;
 
 /* Requested source spelling only: not checked access permission/authority. */
@@ -112,6 +114,7 @@ typedef struct {
         } aggregate;
         struct {
             NLSourceSpan qualifier, variant;
+            const NLSyntaxNode *type; /* optional exact Option<ptr<H>> */
             const NLSyntaxNode *arguments;
             size_t argument_count;
             bool parentheses;

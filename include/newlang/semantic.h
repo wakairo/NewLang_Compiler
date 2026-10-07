@@ -217,6 +217,8 @@ NLCheckStatus nl_semantic_seed_scalar(NLSemanticContext *, const char *name,
                                       NLScalarValue, NLSymbolId *out);
 bool nl_semantic_type_view(const NLSemanticContext *, NLTypeId,
                            NLSemanticTypeView *);
+/* Header-only observation; does not expose incomplete shape/properties. */
+bool nl_semantic_type_completion(const NLSemanticContext *, NLTypeId, bool *);
 bool nl_semantic_binding_view(const NLSemanticContext *, NLSymbolId,
                               NLSemanticBindingView *);
 bool nl_semantic_value_view(const NLSemanticContext *, NLValueId,

@@ -218,6 +218,16 @@ See the [fixed-field contract](docs/FIXED_FIELD_PRODUCT_GATE_CONTRACT.md) and
 
 ## Layout and review
 
+Draft 17.21 catch-up adds one bounded recursive declaration category:
+`struct Node { next: Option<ptr<Node>>, payload: u8 }` (names are not built-ins).
+The checker creates a private incomplete nominal header, resolves the exact
+Option/ptr link, rejects unbroken value-containment cycles and completes the same
+identity once before checking bodies. None-link construction is semantically
+accepted; recursive topology remains outside Checked-C, with explicit backend
+unsupported. Node field source and allocation are deferred.
+See the [contract](docs/DRAFT_17_21_PRODUCTION_CONTRACT.md) and
+[report](docs/DRAFT_17_21_PRODUCTION_REPORT.md).
+
 - `include/newlang/diagnostic.h`, `src/`: small borrowed-data diagnostic API and CLI.
 - `include/newlang/{source,token,lexer}.h`, `src/{source,lexer}.c`: immutable
   owned source bytes/name, checked half-open spans, non-owning atom tokens and

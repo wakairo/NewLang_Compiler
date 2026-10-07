@@ -179,6 +179,35 @@ static NLTypeId check_type(Check *check, const NLSyntaxNode *syntax)
         if (result == 0) {
             fail(check, NL_CHECK_SEMANTIC_ERROR, node->span, "P3-UNKNOWN-TYPE",
                  "unknown semantic type name");
+        } else if (check->context->types[result - 1].incomplete) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, node->span,
+                 "REC-INCOMPLETE-TYPE",
+                 "incomplete header has no ordinary type use");
+            result = 0;
+        }
+    } else if (node->kind == NL_SYNTAX_OPTION_PTR) {
+        const NLSyntaxView *target =
+            nl_syntax_node_view(node->data.ptr_type.target);
+        NLTypeId header = 0;
+        for (size_t i = 0; i < check->context->type_count; ++i)
+            if (check->context->types[i].name != NULL &&
+                equal_name(check, target->data.name,
+                           check->context->types[i].name))
+                header = i + 1;
+        if (header == 0) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, target->span,
+                 "P3-UNKNOWN-TYPE", "unknown recursive target name");
+        } else if (!check->context->types[header - 1].recursive_header) {
+            fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, target->span,
+                 "REC-SELF-TARGET",
+                 "exact Option target requires the bounded nominal header");
+        } else {
+            NLTypeId ptr = compound(check, NL_TYPE_PTR, header, NL_ACCESS_READ,
+                                    false, node->span);
+            if (ptr != 0)
+                (void)host(check,
+                           nl_recursive_option(check->context, ptr, &result),
+                           node->span);
         }
     } else if (node->kind == NL_SYNTAX_TYPE_PTR ||
                node->kind == NL_SYNTAX_TYPE_REF) {
@@ -1389,6 +1418,9 @@ static NLCheckedNodeId source_statement(Check *, const NLSyntaxView *);
 static NLCheckedNodeId source_block(Check *, const NLSyntaxView *);
 static bool avs_type(const NLSemanticContext *c, NLTypeId type)
 {
+    if (c->types[type - 1].recursive_header && !c->types[type - 1].incomplete)
+        return true; /* exactly completed declaration profile, not general
+                        aggregate */
     const NLSemanticTypeView t = c->types[type - 1].view;
     const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
     return t.kind == NL_TYPE_NOMINAL && t.field_count == 2 && t.is_copy &&
@@ -1734,6 +1766,12 @@ static NLTypeId aggregate_type(Check *check, NLSourceSpan name)
     for (size_t i = 0; i < check->context->type_count; ++i) {
         const NLTypeEntry *entry = &check->context->types[i];
         if (entry->name != NULL && equal_name(check, name, entry->name)) {
+            if (entry->incomplete) {
+                fail(check, NL_CHECK_SEMANTIC_ERROR, name,
+                     "REC-INCOMPLETE-TYPE",
+                     "aggregate construction needs completion");
+                return 0;
+            }
             if (entry->view.field_count == 0) {
                 fail(
                     check, NL_CHECK_SEMANTIC_UNSUPPORTED, name,
@@ -2492,7 +2530,19 @@ static NLCheckedNodeId sum_constructor(Check *check, const NLSyntaxView *s)
 {
     NLSemanticContext *c = check->context;
     NLTypeId type = 0;
-    for (size_t i = 0; i < c->type_count; ++i)
+    if (s->data.constructor.type != NULL) {
+        type = check_type(check, s->data.constructor.type);
+        if (type == 0)
+            return 0;
+        const NLTypeId ptr = c->types[type - 1].option_target;
+        if (ptr == 0 ||
+            c->types[c->types[ptr - 1].view.target - 1].incomplete) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "REC-INCOMPLETE-TYPE",
+                 "Option value construction needs header completion");
+            return 0;
+        }
+    }
+    for (size_t i = 0; type == 0 && i < c->type_count; ++i)
         if (c->types[i].name != NULL &&
             equal_name(check, s->data.constructor.qualifier,
                        c->types[i].name)) {
@@ -4934,6 +4984,7 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
         nl_syntax_node_view(nl_syntax_tree_root(tree));
     if (root == NULL ||
         (entry == CHECK_TYPE && root->kind != NL_SYNTAX_TYPE_NAME &&
+         root->kind != NL_SYNTAX_OPTION_PTR &&
          root->kind != NL_SYNTAX_TYPE_PTR &&
          root->kind != NL_SYNTAX_TYPE_REF) ||
         (entry == CHECK_EXPRESSION && root->kind != NL_SYNTAX_EXPR_NAME &&
@@ -5646,6 +5697,62 @@ cleanup:
     return ok;
 }
 
+static bool register_recursive(Check *check, const NLSyntaxView *s)
+{
+    if (!lexical_source_name(check, s->data.avs_struct.name))
+        return false;
+    char *name = source_name_copy(check, s->data.avs_struct.name);
+    char *labels[2] = {NULL, NULL};
+    bool ok = false;
+    if (name == NULL)
+        return false;
+    for (size_t i = 0; i < check->context->function_count; ++i)
+        if (strcmp(name, check->context->functions[i].name) == 0)
+            goto collision;
+    for (size_t i = 0; i < check->context->binding_count; ++i)
+        if (!check->context->bindings[i].hidden &&
+            strcmp(name, check->context->bindings[i].name) == 0)
+            goto collision;
+    NLTypeId header = 0;
+    const NLCheckStatus created =
+        nl_recursive_header(check->context, name, &header);
+    if (created == NL_CHECK_SEMANTIC_ERROR)
+        goto collision;
+    if (!host(check, created, s->span))
+        goto cleanup;
+    NLAggregateField fields[2] = {{0}};
+    const NLSyntaxNode *n = s->data.avs_struct.fields;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLSyntaxView *f = nl_syntax_node_view(n);
+        fields[i].type = check_type(check, f->data.parameter.type);
+        if (fields[i].type == 0)
+            goto cleanup;
+        labels[i] = source_name_copy(check, f->data.parameter.name);
+        if (labels[i] == NULL)
+            goto cleanup;
+        fields[i].name = labels[i];
+        n = nl_syntax_next_argument(n);
+    }
+    const NLTypeId ptr =
+        check->context->types[fields[0].type - 1].option_target;
+    if (ptr == 0 || check->context->types[ptr - 1].view.target != header) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span, "REC-SELF-TARGET",
+             "link target must be the same nominal identity");
+        goto cleanup;
+    }
+    ok = host(check, nl_recursive_complete(check->context, header, fields, 2),
+              s->span);
+    goto cleanup;
+collision:
+    fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "REC-DECL-DUPLICATE",
+         "recursive declaration conflicts with an established name");
+cleanup:
+    free(name);
+    free(labels[0]);
+    free(labels[1]);
+    return ok;
+}
+
 NLCheckStatus nl_semantic_register_function_unit(
     NLSemanticContext *context, const NLSyntaxTree *const *inputs, size_t count,
     NLFunctionUnitDiagnostic *diagnostic)
@@ -5660,6 +5767,8 @@ NLCheckStatus nl_semantic_register_function_unit(
     }
     Check check = {.source = nl_syntax_tree_source(inputs[0])};
     FunctionDeclaration *declarations = NULL;
+    const NLSyntaxView *recursive = NULL;
+    size_t recursive_input = 0;
     size_t total = 0, input = 0;
     if (!host(&check, nl_sem_clone(context, &check.context), (NLSourceSpan){0}))
         goto failure;
@@ -5670,6 +5779,18 @@ NLCheckStatus nl_semantic_register_function_unit(
         for (const NLSyntaxNode *n = root->data.function_unit.declarations;
              n != NULL; n = nl_syntax_next_argument(n)) {
             const NLSyntaxView *s = nl_syntax_node_view(n);
+            if (s->kind == NL_SYNTAX_RECURSIVE_STRUCT) {
+                if (recursive != NULL) {
+                    fail(&check, NL_CHECK_SEMANTIC_ERROR, s->span,
+                         "REC-DECL-DUPLICATE",
+                         "at most one bounded recursive declaration per "
+                         "semantic unit");
+                    goto failure;
+                }
+                recursive = s;
+                recursive_input = input;
+                continue;
+            }
             if (s->kind == NL_SYNTAX_AVS_STRUCT) {
                 if (count != 1 || n != root->data.function_unit.declarations) {
                     fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
@@ -5702,7 +5823,16 @@ NLCheckStatus nl_semantic_register_function_unit(
                 goto failure;
         }
     }
-    qsort(declarations, total, sizeof(*declarations), declaration_order);
+    if (recursive != NULL) {
+        check.source = nl_syntax_tree_source(inputs[recursive_input]);
+        input = recursive_input;
+        if (!register_recursive(&check, recursive))
+            goto failure;
+    }
+    if (!host(&check, nl_recursive_validate(check.context), (NLSourceSpan){0}))
+        goto failure;
+    if (total != 0)
+        qsort(declarations, total, sizeof(*declarations), declaration_order);
     /* Exact signature installation is private until ALL definitions succeed. */
     for (size_t i = 0; i < total; ++i) {
         FunctionDeclaration *d = &declarations[i];
