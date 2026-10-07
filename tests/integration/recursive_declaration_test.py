@@ -28,8 +28,8 @@ def main() -> None:
                  "fn main()->unit{let n=Node{next:Option<ptr<Node>>::Some(u8(7)),payload:u8(7)};unit}",
                  "P6-PAYLOAD-TYPE")
         negative(root, compiler, "field", decl +
-                 "fn main()->unit{let n=Node{next:Option<ptr<Node>>::None,payload:u8(7)};n@next;unit}",
-                 "FIELD-PROFILE")
+                 "fn main()->unit{let n=Node{next:Option<ptr<Node>>::None,payload:u8(7)};n@payload;unit}",
+                 "NODE-LINK-FIELD-PROFILE")
         negative(root, compiler, "legacy", decl +
                  "fn main()->unit{let n=Node{next:Option<ptr<Node>>.None,payload:u8(7)};unit}",
                  "SOURCE-DOT-RESERVED")

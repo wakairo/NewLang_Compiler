@@ -224,7 +224,12 @@ The checker creates a private incomplete nominal header, resolves the exact
 Option/ptr link, rejects unbroken value-containment cycles and completes the same
 identity once before checking bodies. None-link construction is semantically
 accepted; recursive topology remains outside Checked-C, with explicit backend
-unsupported. Node field source and allocation are deferred.
+unsupported. Draft 17.23's semantic-only catch-up accepts the completed nominal's
+declared link via `local@link`, its scoped ordinary write loan, and Node lexical-root
+read / persistent-ptr read reacquisition. Payload/general fields and allocation
+remain outside this profile; recursive Node Checked-C emission remains unsupported.
+The actual-source witness and rule/evidence mapping are in
+[the Node link report](docs/DRAFT_17_23_NODE_LINK_SEMANTIC_REPORT.md).
 See the [contract](docs/DRAFT_17_21_PRODUCTION_CONTRACT.md) and
 [report](docs/DRAFT_17_21_PRODUCTION_REPORT.md).
 

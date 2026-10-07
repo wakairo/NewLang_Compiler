@@ -75,6 +75,7 @@ typedef struct {
     NLValueFactId parent_fact, child_fact, parent_post_fact, child_post_fact;
     NLAccessSyntax access;
     NLValueId old_value, new_value;
+    NLOccurrenceId payload_occurrence, post_payload_occurrence;
 } NLCheckedField;
 typedef struct {
     NLSymbolId source, stability;

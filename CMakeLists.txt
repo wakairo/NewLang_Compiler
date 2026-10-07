@@ -255,6 +255,18 @@ if(BUILD_TESTING)
     add_executable(u8_literal_test tests/unit/u8_literal_test.c)
     add_executable(fixed_field_test tests/unit/fixed_field_test.c)
     add_executable(recursive_type_test tests/unit/recursive_type_test.c)
+    add_executable(node_link_test tests/unit/node_link_test.c)
+    target_link_libraries(node_link_test PRIVATE newlang_semantic newlang_parser)
+    target_link_options(node_link_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    foreach(group evidence transitions dependencies negatives liveness resource failures)
+        add_test(NAME node_link_${group}.unit COMMAND node_link_test ${group}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_link_semantic.nl")
+    endforeach()
+    add_test(NAME node_link_source.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/node_link_source_test.py"
+        "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_link_semantic.nl")
     target_link_libraries(recursive_type_test PRIVATE newlang_semantic newlang_parser)
     target_link_options(recursive_type_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
     foreach(group parser identity source cycle negatives failures)
