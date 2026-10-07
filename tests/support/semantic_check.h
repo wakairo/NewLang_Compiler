@@ -171,6 +171,7 @@ static inline bool test_place_equal(NLSemanticPlaceView a,
 {
     return a.type == b.type && a.live == b.live &&
            a.independent_root == b.independent_root &&
+           a.implicit_local == b.implicit_local &&
            a.governing_domain == b.governing_domain &&
            a.incarnation == b.incarnation && a.current_fact == b.current_fact &&
            a.current_value == b.current_value &&

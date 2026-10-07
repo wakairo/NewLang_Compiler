@@ -34,7 +34,9 @@ typedef enum {
     NL_SYNTAX_CONTINUE,
     NL_SYNTAX_BREAK,
     NL_SYNTAX_U8_LITERAL, /* V1 positive decimal profile only */
-    NL_SYNTAX_AVS_STRUCT /* bounded D2 declaration, not general struct syntax */
+    NL_SYNTAX_AVS_STRUCT, /* bounded D2 declaration, not general struct syntax
+                           */
+    NL_SYNTAX_LOCAL_READ_LOAN
 } NLSyntaxKind;
 
 /* Requested source spelling only: not checked access permission/authority. */
@@ -128,6 +130,8 @@ typedef struct {
             const NLSyntaxNode *body;
         } arm;
         struct {
+            bool from_ptr; /* Draft 17.18 bounded local-root profile only */
+            const NLSyntaxNode *body;
             NLAccessSyntax access;
             bool is_exclusive;
             const NLSyntaxNode *source;

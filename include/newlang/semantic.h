@@ -142,6 +142,8 @@ typedef struct {
     NLTypeId type;
     bool live;
     bool independent_root;
+    bool implicit_local; /* source-created scalar root; place/incarnation is
+                           its nominal implicit governing identity */
     NLDomainId governing_domain; /* zero: implicit compiler-managed local */
     NLIncarnationId incarnation;
     NLValueFactId current_fact;
