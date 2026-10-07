@@ -66,9 +66,9 @@ static bool parser(void)
     source = NULL;
     syntax = NULL;
     CHECK(tree(mutation_witness, true, &source, &syntax));
-    f = nl_syntax_node_view(
-        nl_syntax_node_view(nl_syntax_tree_root(syntax))
-            ->data.function_unit.declarations);
+    const NLSyntaxView *function_unit =
+        nl_syntax_node_view(nl_syntax_tree_root(syntax));
+    f = nl_syntax_node_view(function_unit->data.function_unit.declarations);
     block = nl_syntax_node_view(f->data.function.body);
     const NLSyntaxNode *third = block->data.block.items;
     third = nl_syntax_next_argument(third);
@@ -86,9 +86,12 @@ static bool parser(void)
     nl_source_destroy(source);
 
     const char *outside[] = {"loan_read(x.field){|r|unit}",
-                             "loan_read_ptr(make()){|r|unit}", "loan_read()",
-                             "loan_read(x)", "loan_write(x.field){|w|unit}",
-                             "loan_write(make()){|w|unit}", "loan_write()",
+                             "loan_read_ptr(make()){|r|unit}",
+                             "loan_read()",
+                             "loan_read(x)",
+                             "loan_write(x.field){|w|unit}",
+                             "loan_write(make()){|w|unit}",
+                             "loan_write()",
                              "loan_write(x)"};
     for (size_t i = 0; i < sizeof(outside) / sizeof(outside[0]); ++i) {
         source = NULL;
@@ -237,8 +240,8 @@ static bool mutation(void)
     NLSemanticTypeView wt;
     NLSemanticValueView wv;
     CHECK(nl_semantic_binding_view(c, write_loan->loan.ref_symbol, &wb));
-    CHECK(nl_semantic_type_view(c, wb.type, &wt) &&
-          wt.kind == NL_TYPE_REF && wt.access == NL_ACCESS_WRITE &&
+    CHECK(nl_semantic_type_view(c, wb.type, &wt));
+    CHECK(wt.kind == NL_TYPE_REF && wt.access == NL_ACCESS_WRITE &&
           !wt.is_exclusive);
     CHECK(nl_semantic_value_view(c, wb.value, &wv) &&
           wv.reference.place == xb.place &&
@@ -262,9 +265,10 @@ static bool mutation(void)
     NLSemanticValueView current;
     CHECK(nl_semantic_binding_view(c, x, &after_x));
     CHECK(nl_semantic_place_view(c, after_x.place, &after) && after.live);
-    CHECK(after_x.place == xb.place && after.incarnation == before.incarnation &&
-          after.governing_domain == before.governing_domain &&
-          after.current_fact != before.current_fact);
+    CHECK(after_x.place == xb.place);
+    CHECK(after.incarnation == before.incarnation);
+    CHECK(after.governing_domain == before.governing_domain);
+    CHECK(after.current_fact != before.current_fact);
     CHECK(nl_semantic_value_view(c, after.current_value, &current) &&
           current.scalar_known && current.scalar_value == 9);
     CHECK(nl_semantic_binding_view(c, p, &pb));
@@ -279,8 +283,7 @@ static bool mutation(void)
           old_bound.scalar_known && old_bound.scalar_value == 7);
 
     TestChecked reacquire = {0};
-    CHECK(test_run(c,
-                   "loan_read_ptr(p){|r2|ptr_from_ref(r2);unit}",
+    CHECK(test_run(c, "loan_read_ptr(p){|r2|ptr_from_ref(r2);unit}",
                    TEST_SOURCE, NL_CHECK_OK, NULL, &reacquire));
     const NLCheckedNodeView *second = test_root(&reacquire);
     CHECK(second->kind == NL_CHECKED_LOAN_HEADER && second->loan.from_ptr &&
@@ -303,9 +306,10 @@ static bool negatives(void)
     CHECK(test_rejected(c, "{let x=u8(7);let bad=loan_read(x){|r|r};unit}",
                         TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
                         "P8-EXIT-DEPENDENCY"));
-    CHECK(test_rejected(
-        c, "{let x=u8(7);let bad=loan_write(x){|w|w};unit}", TEST_SOURCE,
-        NL_CHECK_SEMANTIC_ERROR, "P8-EXIT-DEPENDENCY"));
+    CHECK(test_rejected(c,
+                        "{let x=u8(7);let bad=loan_write(x){|w|w};unit}",
+                        TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
+                        "P8-EXIT-DEPENDENCY"));
     CHECK(test_rejected(c,
                         "{let p={let "
                         "x=u8(7);loan_read(x){|r|ptr_from_ref(r)}};loan_read_"
