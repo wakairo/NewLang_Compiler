@@ -519,7 +519,8 @@ NLCheckStatus nl_sem_install(NLSemanticContext *c, NLPlaceId place,
     p->governing_domain = domain;
     c->values[value - 1].carrier = NL_CARRIER_PLACE;
     c->values[value - 1].owner_place = place;
-    return nl_sum_attach(c, place);
+    NLCheckStatus attached = nl_sum_attach(c, place);
+    return attached == NL_CHECK_OK ? nl_fixed_attach(c, place) : attached;
 }
 
 NLCheckStatus nl_sem_new_place(NLSemanticContext *c, NLTypeId type,
