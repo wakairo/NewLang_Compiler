@@ -728,10 +728,10 @@ static NLSyntaxNode *source_block(NLParser *parser)
     return source_block_contents(parser, start);
 }
 
-/* Provisional §13.8 simple-name read profile. No general loan operand grammar
- * or ordinary lexical keyword reservation is introduced. */
+/* Provisional §13.8 simple-name local profiles. No general loan operand
+ * grammar or ordinary lexical keyword reservation is introduced. */
 static NLSyntaxNode *source_local_loan(NLParser *parser, NLSourceSpan start,
-                                       bool from_ptr)
+                                       bool from_ptr, NLAccessSyntax access)
 {
     consume(parser); /* ( */
     if (!peek(parser) || parser->token.kind != NL_TOKEN_WORD) {
@@ -767,14 +767,16 @@ static NLSyntaxNode *source_local_loan(NLParser *parser, NLSourceSpan start,
     if (body == NULL)
         return NULL;
     NLSyntaxNode *result =
-        node(parser, NL_SYNTAX_LOCAL_READ_LOAN,
+        node(parser,
+             access == NL_ACCESS_WRITE ? NL_SYNTAX_LOCAL_WRITE_LOAN
+                                       : NL_SYNTAX_LOCAL_READ_LOAN,
              (NLSourceSpan){start.start_byte, body->view.span.end_byte});
     if (result != NULL) {
         result->view.data.loan.source = operand;
         result->view.data.loan.binding = binder->view.data.name;
         result->view.data.loan.body = body;
         result->view.data.loan.from_ptr = from_ptr;
-        result->view.data.loan.access = NL_ACCESS_READ;
+        result->view.data.loan.access = access;
     }
     return result;
 }
@@ -981,10 +983,13 @@ static NLSyntaxNode *source_expression(NLParser *parser)
     const bool u8_literal = word(parser, "u8");
     const bool read_loan = word(parser, "loan_read");
     const bool ptr_loan = word(parser, "loan_read_ptr");
+    const bool write_loan = word(parser, "loan_write");
     const NLSourceSpan name = parser->token.span;
     consume(parser);
-    if ((read_loan || ptr_loan) && punct(parser, '(')) {
-        result = source_local_loan(parser, name, ptr_loan);
+    if ((read_loan || ptr_loan || write_loan) && punct(parser, '(')) {
+        result = source_local_loan(parser, name, ptr_loan,
+                                   write_loan ? NL_ACCESS_WRITE
+                                              : NL_ACCESS_READ);
         goto done;
     }
     if (punct(parser, '.')) {
