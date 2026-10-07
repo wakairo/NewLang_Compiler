@@ -130,9 +130,9 @@ seven P11 declaration/visibility/body/failure/precision/resource groups,
 four P12 structural-name ingress/header/member/failure groups (including if/else),
 nine P13 bool/if grammar/outcome/identity/ref/effect/nesting/failure/resource groups,
 forty P14 isolated loop source/control/header/join/ownership/OOM workloads,
-diagnostic unit checks, six CLI
-cases (each invoked twice), valid LLVM C API module/IR, artifact integrity, and
-frozen-oracle smoke. ASan includes leak detection; UBSan stops on the first
+diagnostic unit checks, five CLI option/help cases (each invoked twice), one
+North Star V0 Checked-C source/check/emission/host-execution integration test,
+valid LLVM C API module/IR, artifact integrity, and frozen-oracle smoke. ASan includes leak detection; UBSan stops on the first
 failure. Imported LLVM binaries are not rebuilt with sanitizers; our C targets
 are instrumented. Required checks are these configurations plus GCC Release/NDEBUG and PR CI
 (see [P10 report](docs/P10_UNIT_NAME_RESERVATION_REPORT.md)).
@@ -142,9 +142,20 @@ P0 does not claim to reproduce them in C.
 ## CLI contract
 
 `--version` prints `newlangc 0.1.0 (P0 bootstrap)`. `--help` (also no arguments)
-prints usage; both exit 0. Invalid options / argument counts exit 2. A source
-path exits 3 with `P0-COMPILE-UNSUPPORTED`; no source is read and no output
-artifact is produced. Output I/O failure exits 1.
+prints usage; both exit 0. Invalid options / argument counts exit 2.
+
+For a source path, the North Star V0 path reads the actual source, parses the
+existing fn-only function unit, registers/checks it with the production semantic
+checker, then checks an ordinary zero-argument `main()` call selected only by
+the driver. Only after those checks succeed does `newlangc` emit the bounded
+Checked-C representation to stdout. Semantic rejection emits no C bytes.
+Accepted checked constructs outside the V0 emitter report
+`V0-BACKEND-UNSUPPORTED`.
+
+The Checked-C path is a bounded bootstrap/reference execution vehicle for the
+North Star V0 subset; it is not a general C backend and does not replace LLVM as
+the planned primary backend. The normal integration test compiles emitted C17
+with the configured host C compiler and executes the resulting native program.
 
 ## Layout and review
 
