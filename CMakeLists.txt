@@ -238,6 +238,8 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
     add_test(NAME artifacts.integrity COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/artifact_test.py")
+    add_test(NAME oracle.adapter COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/adapter_test.py")
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
