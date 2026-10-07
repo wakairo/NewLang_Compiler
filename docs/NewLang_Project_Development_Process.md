@@ -16,6 +16,7 @@ NewLangは、部分的に独立した複数trackで開発する。
 - **F — 形式証明 / 意味論の形式化**
 - **P — production compiler実装**
 - **R — 独立Red Team review**
+- **V — Value / Product Validation**
 - **Coordination — track間の裁定・同期・順序決定**
 
 目的は、各trackを最初から同じ結論へ揃えることではない。
@@ -32,7 +33,16 @@ docs/reference/CURRENT_SPEC.md
 
 設計report、proof report、compiler report、experiment、Deep Research、conversation historyは証拠であり、単独ではcanonical Draftを上書きしない。
 
-重要なdecisionがreportや会話にしか存在しない場合は、review済みDraft revisionを経てmainへmergeされた時点でnormativeとする。
+product / targeting / value-validationのproject-level正本は次のrepository文書とする。
+
+```text
+docs/NewLang_Product_Value_Strategy.md
+docs/NewLang_North_Star_Product_Validation.md
+docs/NewLang_C_Replacement_Coverage_Map.md
+```
+
+これらはproduct strategyのauthorityであり、language semanticsのnormative Draftを上書きしない。
+重要なsemantic decisionがreportや会話にしか存在しない場合は、review済みDraft revisionを経てmainへmergeされた時点でnormativeとする。
 
 UTF-8で問題なく管理できる文書は日本語を基本とし、必要に応じて英語版を併記する。
 一方、shell操作やtoolchain上で前面に現れるcommit message等は、互換性・可搬性を優先して英語ASCIIを基本とする。
@@ -59,6 +69,13 @@ Fは選択されたsemantic claimを形式化し、矛盾、欠けたinvariant�
 Pはcanonical semanticsを現実的なcompilerで表現・診断・検査し、最終的にloweringできるかを検証する。
 
 implementation difficultyは重要なfeedbackだが、backend convenienceだけを理由にsource semanticsを変更しない。
+
+### V — Value / Product Validation
+
+Vはtarget user / workload / workflowを具体化し、value hypothesis、North Star、PASS / FAIL criteria、anti-gaming rule、human obligation、topology preservation等をproduct evidenceとして管理する。
+また、current beachheadを不必要に広げずにpractical C-replacement envelopeを長期監査し、Deferred capabilityが将来のC-class workloadを不必要にforecloseしないかを確認する。
+
+Vはcanonical language semantics、Draft revision、implementation architecture、formal proof strategy、merge / milestone sequencingを単独では決めない。詳細は `NewLang_Product_Value_Strategy.md` を参照する。
 
 ### Coordination
 
@@ -119,6 +136,7 @@ Track: M
 Track: F
 Track: P
 Track: R
+Track: V
 ```
 
 後から読んだときに誰の判断・finding・質問か識別できればよく、厳密な機械可読formatは要求しない。
@@ -166,6 +184,7 @@ classificationとseverityは分けて扱う。
 - Fのproof coverage
 - 未解決のcontradiction / precision gap
 - 次milestoneに関係するDeferred項目
+- Vのcurrent value hypothesis / product evidence / strategic coverage risk
 - MがP/Fより先行しすぎていないか
 - 次のcross-track sequence
 
@@ -237,6 +256,7 @@ minor editごとにfull Red Team reviewを行う必要はない。
 各trackは異なる問いを持つ。
 
 ```text
+V: 誰の何が改善されれば価値があるか？
 M: これは最小で実用的なruleか？
 F: ruleは内部整合し、期待される性質を形式化できるか？
 P: production compilerで忠実に表現・診断・検査できるか？
