@@ -4692,7 +4692,8 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
          root->kind != NL_SYNTAX_LOOP && root->kind != NL_SYNTAX_BLOCK &&
          root->kind != NL_SYNTAX_STATEMENT &&
          root->kind != NL_SYNTAX_U8_LITERAL &&
-         root->kind != NL_SYNTAX_LOCAL_READ_LOAN) ||
+         root->kind != NL_SYNTAX_LOCAL_READ_LOAN &&
+         root->kind != NL_SYNTAX_LOCAL_WRITE_LOAN) ||
         (entry == CHECK_LOAN && root->kind != NL_SYNTAX_LOAN)) {
         return NL_CHECK_INTERNAL_ERROR;
     }
