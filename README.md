@@ -144,16 +144,16 @@ P0 does not claim to reproduce them in C.
 `--version` prints `newlangc 0.1.0 (P0 bootstrap)`. `--help` (also no arguments)
 prints usage; both exit 0. Invalid options / argument counts exit 2.
 
-For a source path, the North Star V0/V1 path reads the actual source, parses the
-existing fn-only function unit, registers/checks it with the production semantic
+For a source path, the North Star V0/V1/AVS path reads the actual source, parses the
+bounded source function unit, registers/checks it with the production semantic
 checker, then checks an ordinary zero-argument `main()` call selected only by
 the driver. Only after those checks succeed does `newlangc` emit the bounded
 Checked-C representation to stdout. Semantic rejection emits no C bytes.
-Accepted checked constructs outside the V0/V1 emitter report
+Accepted checked constructs outside the V0/V1/AVS emitter report
 `V1-BACKEND-UNSUPPORTED`.
 
 The Checked-C path is a bounded bootstrap/reference execution vehicle for the
-North Star V0/V1 subset; it is not a general C backend and does not replace LLVM as
+North Star V0/V1/AVS subset; it is not a general C backend and does not replace LLVM as
 the planned primary backend. The normal integration test compiles emitted C17
 with the configured host C compiler and executes the resulting native program.
 
@@ -174,6 +174,29 @@ literal. `u8(256)` and bare `7` reject before emission. `u8(-1)` remains
 other integer families or C representation guarantees are added.
 See [V1 contract](docs/NORTH_STAR_V1_TYPED_SCALAR_CONTRACT.md) and
 [V1 report](docs/NORTH_STAR_V1_TYPED_SCALAR_REPORT.md).
+
+AVS adds one optional leading source declaration with exactly two core-u8 fields:
+
+```newlang
+struct Pair { left: u8, right: u8, }
+fn main() -> unit {
+    let p = Pair { left: u8(7), right: u8(9), };
+    let Pair { left, right } = p;
+    left;
+    right;
+    unit
+}
+```
+
+This is the bounded D2 profile authorized by Issue #105, not general aggregate
+declaration grammar. The existing checker registers the nominal shape, derives
+Copy/Discardable and checks complete named-field construction/whole destructuring.
+Checked nominal IDs, field indices and scalar values drive synthetic C struct
+representation; source names and native layout do not become C ABI guarantees.
+Only one leading declaration in one source unit is supported. Richer declaration
+profiles and accepted constructs outside the emitter remain explicitly unsupported.
+See [AVS contract](docs/NORTH_STAR_AVS_CONTRACT.md) and
+[AVS report](docs/NORTH_STAR_AVS_REPORT.md).
 
 ## Layout and review
 

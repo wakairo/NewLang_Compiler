@@ -7,7 +7,7 @@ HELP = (
     "NewLang production compiler P0 bootstrap.\n"
     "  --version  Print the deterministic compiler version.\n"
     "  --help     Print this help.\n"
-    "  SOURCE     Validate North Star V0/V1 and emit Checked-C to stdout.\n"
+    "  SOURCE     Validate North Star V0/V1/AVS and emit Checked-C to stdout.\n"
     "Checked-C is a bounded bootstrap/reference execution path; LLVM remains "
     "the planned primary backend.\n"
 )

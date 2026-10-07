@@ -221,13 +221,19 @@ typedef struct {
     const char *name; /* borrowed during registration; context copies it */
     NLTypeId type;
 } NLAggregateField;
-/* Fixed flat nominal aggregate fixture; no source declaration/physical layout.
+/* Fixed flat nominal aggregate registry; no physical layout.
  * Properties derive from all fields. This slice supports dependency-free flat
  * nominal/scalar members, not nested aggregates or authority/capability fields.
  * Unsupported kinds are reported, never treated as invalid language. */
 NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *, const char *,
                                              const NLAggregateField *, size_t,
                                              NLTypeId *out);
+/* Declaration-order semantic identity/type, never physical offset/layout.
+ * out receives a view on success only; its name borrows context until the next
+ * successful mutation or destruction. Checked-C reads types/indices, not names.
+ */
+bool nl_semantic_aggregate_field_view(const NLSemanticContext *, NLTypeId,
+                                      size_t index, NLAggregateField *out);
 
 #define NL_SEMANTIC_MAX_VARIANTS 16 /* host budget, not language limit */
 typedef struct {
@@ -324,7 +330,9 @@ NLCheckStatus nl_semantic_register_function_body(NLSemanticContext *,
  * only after every declaration succeeds. Success leaves diagnostic untouched.
  * Failure leaves public state unchanged and reports input index + source span.
  * Durable plans survive destruction of input trees/sources/array. No module,
- * driver, separate-compilation or source nominal-type declaration machinery.
+ * driver or separate-compilation machinery. AVS D2 permits one leading,
+ * two-u8-field nominal declaration in one input; it is registered in the same
+ * candidate before body checking, not a general type declaration model.
  * Names are collected in deterministic spelling order; IDs are not file IDs. */
 #define NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS 128
 typedef struct {

@@ -13,7 +13,7 @@ static const char help[] =
     "NewLang production compiler P0 bootstrap.\n"
     "  --version  Print the deterministic compiler version.\n"
     "  --help     Print this help.\n"
-    "  SOURCE     Validate North Star V0/V1 and emit Checked-C to stdout.\n"
+    "  SOURCE     Validate North Star V0/V1/AVS and emit Checked-C to stdout.\n"
     "Checked-C is a bounded bootstrap/reference execution path; LLVM remains "
     "the planned primary backend.\n";
 
@@ -35,7 +35,7 @@ typedef struct {
     V0Function functions[NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS];
     size_t count;
     size_t entry_function;
-    NLTypeId unit, u8;
+    NLTypeId unit, u8, aggregate;
 } V0Program;
 
 static V0Function *v0_find_function(V0Program *program, size_t function)
@@ -66,11 +66,93 @@ static bool v1_scalar(const NLCheckedFragment *fragment, NLCheckedNodeId id,
      * binding in this owned body. Lexical visibility is checker-established. */
     for (size_t i = 1; i <= nl_checked_node_count(fragment); ++i) {
         const NLCheckedNodeView *binding = nl_checked_node_view(fragment, i);
-        if (binding != NULL && binding->kind == NL_CHECKED_BINDING &&
-            binding->symbol == v->symbol)
+        if (binding != NULL && binding->kind == NL_CHECKED_RECEIVER &&
+            binding->type == program->u8 && binding->symbol == v->symbol)
             return true;
     }
     return false;
+}
+
+/* Only one flat two-u8 nominal representation. The associated checked
+ * context supplies semantic shape facts; no names or layout are consulted. */
+static bool avs_shape(const NLCheckedFragment *fragment, NLTypeId type,
+                      V0Program *program)
+{
+    const NLSemanticContext *context = nl_checked_context(fragment);
+    NLSemanticTypeView t;
+    if (!nl_semantic_type_view(context, type, &t) ||
+        t.kind != NL_TYPE_NOMINAL || t.field_count != 2 || !t.is_copy ||
+        !t.is_discardable ||
+        (program->aggregate != 0 && program->aggregate != type))
+        return false;
+    for (size_t i = 0; i < 2; ++i) {
+        NLAggregateField field;
+        if (!nl_semantic_aggregate_field_view(context, type, i, &field) ||
+            field.type != program->u8)
+            return false;
+    }
+    program->aggregate = type;
+    return true;
+}
+
+static bool avs_construction(const NLCheckedFragment *fragment,
+                             NLCheckedNodeId id, V0Program *program)
+{
+    const NLCheckedNodeView *aggregate = nl_checked_node_view(fragment, id);
+    if (aggregate == NULL || aggregate->kind != NL_CHECKED_AGGREGATE ||
+        aggregate->result_count != 1 || aggregate->argument_count != 2 ||
+        !avs_shape(fragment, aggregate->type, program))
+        return false;
+    bool seen[2] = {false, false};
+    NLCheckedNodeId field = aggregate->first_argument;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedNodeView *v = nl_checked_node_view(fragment, field);
+        if (v == NULL || v->kind != NL_CHECKED_AGGREGATE_FIELD ||
+            v->field_index >= 2 || seen[v->field_index] ||
+            v->type != program->u8 ||
+            !v1_scalar(fragment, v->initializer, program))
+            return false;
+        seen[v->field_index] = true;
+        field = v->next_argument;
+    }
+    return field == 0;
+}
+
+static bool avs_destructuring(const NLCheckedFragment *fragment,
+                              const NLCheckedNodeView *binding,
+                              V0Program *program)
+{
+    const NLCheckedNodeView *rhs =
+        nl_checked_node_view(fragment, binding->initializer);
+    if (binding->argument_count != 2 || rhs == NULL ||
+        rhs->kind != NL_CHECKED_IDENTIFIER ||
+        rhs->value_use != NL_VALUE_COPIED || rhs->result_count != 1 ||
+        rhs->symbol == 0 || !avs_shape(fragment, rhs->type, program))
+        return false;
+    bool local = false;
+    for (size_t i = 1; i <= nl_checked_node_count(fragment); ++i) {
+        const NLCheckedNodeView *v = nl_checked_node_view(fragment, i);
+        const NLCheckedNodeView *r =
+            v == NULL ? NULL
+                      : nl_checked_node_view(fragment, v->first_argument);
+        if (v != NULL && v->kind == NL_CHECKED_BINDING &&
+            v->symbol == rhs->symbol && r != NULL && r->type == rhs->type)
+            local = true;
+    }
+    if (!local)
+        return false;
+    bool seen[2] = {false, false};
+    NLCheckedNodeId receiver = binding->first_argument;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedNodeView *v = nl_checked_node_view(fragment, receiver);
+        if (v == NULL || v->kind != NL_CHECKED_RECEIVER || v->symbol == 0 ||
+            v->type != program->u8 || v->field_index >= 2 ||
+            seen[v->field_index])
+            return false;
+        seen[v->field_index] = true;
+        receiver = v->next_argument;
+    }
+    return receiver == 0;
 }
 
 static bool v1_emit_scalar(FILE *stream, const NLCheckedNodeView *value)
@@ -136,6 +218,8 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
     case NL_CHECKED_U8_LITERAL:
     case NL_CHECKED_IDENTIFIER:
         return v1_scalar(fragment, id, program);
+    case NL_CHECKED_AGGREGATE_BINDING:
+        return avs_destructuring(fragment, view, program);
     case NL_CHECKED_BINDING: {
         const NLCheckedNodeView *receiver =
             nl_checked_node_view(fragment, view->first_argument);
@@ -143,8 +227,10 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                view->symbol != 0 && receiver != NULL &&
                receiver->kind == NL_CHECKED_RECEIVER &&
                receiver->symbol == view->symbol &&
-               receiver->type == program->u8 &&
-               v1_scalar(fragment, view->initializer, program);
+               ((receiver->type == program->u8 &&
+                 v1_scalar(fragment, view->initializer, program)) ||
+                (avs_shape(fragment, receiver->type, program) &&
+                 avs_construction(fragment, view->initializer, program)));
     }
     case NL_CHECKED_BLOCK:
         return v0_validate_block(fragment, view, program);
@@ -194,6 +280,24 @@ static bool v0_emit_block(FILE *stream, const NLCheckedFragment *fragment,
     return v0_indent(stream, depth) && fputs("}\n", stream) >= 0;
 }
 
+static bool avs_emit_initializer(FILE *stream,
+                                 const NLCheckedFragment *fragment,
+                                 const NLCheckedNodeView *aggregate)
+{
+    if (fputs("{ ", stream) < 0)
+        return false;
+    for (NLCheckedNodeId id = aggregate->first_argument; id != 0;) {
+        const NLCheckedNodeView *field = nl_checked_node_view(fragment, id);
+        const NLCheckedNodeView *value =
+            nl_checked_node_view(fragment, field->initializer);
+        if (fprintf(stream, ".f%zu = ", field->field_index) < 0 ||
+            !v1_emit_scalar(stream, value) || fputs(", ", stream) < 0)
+            return false;
+        id = field->next_argument;
+    }
+    return fputs("}", stream) >= 0;
+}
+
 static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                          NLCheckedNodeId id, size_t depth)
 {
@@ -206,13 +310,44 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     case NL_CHECKED_IDENTIFIER:
         return v0_indent(stream, depth) && fputs("(void)", stream) >= 0 &&
                v1_emit_scalar(stream, view) && fputs(";\n", stream) >= 0;
+    case NL_CHECKED_AGGREGATE_BINDING: {
+        const NLCheckedNodeView *rhs =
+            nl_checked_node_view(fragment, view->initializer);
+        if (!v0_indent(stream, depth) ||
+            fprintf(stream,
+                    "const nl_type_%zu nl_destructure_%zu = nl_local_%zu;\n",
+                    rhs->type, id, rhs->symbol) < 0)
+            return false;
+        for (NLCheckedNodeId receiver = view->first_argument; receiver != 0;) {
+            const NLCheckedNodeView *v =
+                nl_checked_node_view(fragment, receiver);
+            if (!v0_indent(stream, depth) ||
+                fprintf(
+                    stream,
+                    "const uint8_t nl_local_%zu = nl_destructure_%zu.f%zu;\n",
+                    v->symbol, id, v->field_index) < 0 ||
+                !v0_indent(stream, depth) ||
+                fprintf(stream, "(void)nl_local_%zu;\n", v->symbol) < 0)
+                return false;
+            receiver = v->next_argument;
+        }
+        return true;
+    }
     case NL_CHECKED_BINDING: {
         const NLCheckedNodeView *initializer =
             nl_checked_node_view(fragment, view->initializer);
-        if (initializer == NULL || !v0_indent(stream, depth) ||
-            fprintf(stream, "const uint8_t nl_local_%zu = ", view->symbol) <
-                0 ||
-            !v1_emit_scalar(stream, initializer) || fputs(";\n", stream) < 0)
+        if (initializer == NULL || !v0_indent(stream, depth))
+            return false;
+        if (initializer->kind == NL_CHECKED_AGGREGATE) {
+            if (fprintf(stream, "const nl_type_%zu nl_local_%zu = ",
+                        initializer->type, view->symbol) < 0 ||
+                !avs_emit_initializer(stream, fragment, initializer))
+                return false;
+        } else if (fprintf(stream,
+                           "const uint8_t nl_local_%zu = ", view->symbol) < 0 ||
+                   !v1_emit_scalar(stream, initializer))
+            return false;
+        if (fputs(";\n", stream) < 0)
             return false;
         /* Suppress C unused-local warnings even when NewLang never reads this
          * Discardable binding. This emits no language-level operation. */
@@ -239,9 +374,16 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
 
 static bool v0_emit_c(FILE *stream, const V0Program *program)
 {
-    if (fputs("/* North Star V0/V1 Checked-C reference output. */\n#include "
-              "<stdint.h>\n\n",
-              stream) < 0)
+    if (fputs(
+            "/* North Star V0/V1/AVS Checked-C reference output. */\n#include "
+            "<stdint.h>\n\n",
+            stream) < 0)
+        return false;
+
+    if (program->aggregate != 0 &&
+        fprintf(stream,
+                "typedef struct { uint8_t f0; uint8_t f1; } nl_type_%zu;\n\n",
+                program->aggregate) < 0)
         return false;
 
     for (size_t i = 0; i < program->count; ++i)

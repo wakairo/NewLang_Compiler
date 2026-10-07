@@ -33,7 +33,8 @@ typedef enum {
     NL_SYNTAX_LOOP_PARAMETER,
     NL_SYNTAX_CONTINUE,
     NL_SYNTAX_BREAK,
-    NL_SYNTAX_U8_LITERAL /* V1 positive decimal profile only */
+    NL_SYNTAX_U8_LITERAL, /* V1 positive decimal profile only */
+    NL_SYNTAX_AVS_STRUCT /* bounded D2 declaration, not general struct syntax */
 } NLSyntaxKind;
 
 /* Requested source spelling only: not checked access permission/authority. */
@@ -50,6 +51,12 @@ typedef struct {
     NLSyntaxKind kind;
     NLSourceSpan span;
     union {
+        struct {
+            NLSourceSpan name;
+            const NLSyntaxNode
+                *fields; /* PARAMETER nodes; labels, not bindings */
+            size_t count;
+        } avs_struct;
         struct {
             const NLSyntaxNode *declarations;
             size_t count;
