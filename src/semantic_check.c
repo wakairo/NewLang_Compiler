@@ -4447,7 +4447,8 @@ static NLCheckedNodeId source_local_loan(Check *check, const NLSyntaxView *s)
                                             .incarnation = root.incarnation,
                                             .scope = scope,
                                             .provenance = NL_PROVENANCE_VALID,
-                                            .readable = true}},
+                                            .readable = true,
+                                            .writable = write}},
         s->span);
     if (ref == 0 ||
         !host(check, nl_sem_bind_in_scope(c, name, ref, bindings, &ref_symbol),
@@ -4460,7 +4461,7 @@ static NLCheckedNodeId source_local_loan(Check *check, const NLSyntaxView *s)
                                           .place = place,
                                           .incarnation = root.incarnation,
                                           .scope = scope,
-                                          .access = NL_ACCESS_READ,
+                                          .access = s->data.loan.access,
                                           .prevent_lifetime_end = true,
                                           .implicit_local = true,
                                           .from_ptr = s->data.loan.from_ptr,
