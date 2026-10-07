@@ -230,9 +230,10 @@ static bool direct_write_root(void)
 
     const NLCheckedNodeView *body =
         nl_checked_node_view(artifact, loan->initializer);
+    CHECK(body != NULL);
     const NLCheckedNodeView *replace =
         nl_checked_node_view(artifact, body->tail);
-    CHECK(body != NULL && replace != NULL &&
+    CHECK(replace != NULL &&
           replace->kind == NL_CHECKED_REPLACE && replace->result_count == 1 &&
           loan->result_count == 1 &&
           replace->results[0].value == loan->results[0].value);
