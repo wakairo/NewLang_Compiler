@@ -91,7 +91,7 @@ def main() -> None:
             or replace_old[2] != write_ref[1]
             or f"*{write_ref[1]} = 9;" not in mutated
         ):
-            raise SystemExit("stable-root lowering lost root/write/replace identity")
+            raise SystemExit(f"stable-root lowering lost root/write/replace identity:\n{mutated}")
         scalar_result = re.search(r"uint8_t (nl_loan_result_\d+);", mutated)
         old_binding = (
             re.search(
