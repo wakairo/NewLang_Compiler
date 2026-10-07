@@ -234,8 +234,7 @@ static bool gate_replace(const NLCheckedFragment *f, NLCheckedNodeId id,
     const NLCheckedNodeView *ref = nl_checked_node_view(f, v->first_argument);
     const NLCheckedNodeView *value =
         ref == NULL ? NULL : nl_checked_node_view(f, ref->next_argument);
-    if (ref == NULL || value == NULL ||
-        ref->kind != NL_CHECKED_IDENTIFIER)
+    if (ref == NULL || value == NULL || ref->kind != NL_CHECKED_IDENTIFIER)
         return false;
     return (required_ref == 0 || ref->symbol == required_ref) &&
            gate_ref_type(f, ref->type, NL_ACCESS_WRITE, p) &&
