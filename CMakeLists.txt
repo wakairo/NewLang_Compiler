@@ -232,6 +232,16 @@ if(BUILD_TESTING)
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/cli_test.py"
             "$<TARGET_FILE:newlangc>" "${case}")
     endforeach()
+    add_executable(u8_literal_test tests/unit/u8_literal_test.c)
+    target_link_libraries(u8_literal_test PRIVATE newlang_semantic newlang_parser)
+    target_link_options(u8_literal_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    foreach(group parser values body failures)
+        add_test(NAME u8_${group}.unit COMMAND u8_literal_test ${group})
+    endforeach()
+    add_test(NAME north_star_v1_checked_c.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_v1_test.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
     add_test(NAME north_star_v0_checked_c.integration
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_v0_test.py"

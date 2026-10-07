@@ -13,7 +13,7 @@ static const char help[] =
     "NewLang production compiler P0 bootstrap.\n"
     "  --version  Print the deterministic compiler version.\n"
     "  --help     Print this help.\n"
-    "  SOURCE     Validate North Star V0 and emit Checked-C to stdout.\n"
+    "  SOURCE     Validate North Star V0/V1 and emit Checked-C to stdout.\n"
     "Checked-C is a bounded bootstrap/reference execution path; LLVM remains "
     "the planned primary backend.\n";
 
@@ -35,7 +35,7 @@ typedef struct {
     V0Function functions[NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS];
     size_t count;
     size_t entry_function;
-    NLTypeId unit;
+    NLTypeId unit, u8;
 } V0Program;
 
 static V0Function *v0_find_function(V0Program *program, size_t function)
@@ -44,6 +44,42 @@ static V0Function *v0_find_function(V0Program *program, size_t function)
         if (program->functions[i].function == function)
             return &program->functions[i];
     return NULL;
+}
+
+/* V1 consumes only immutable checked evidence. Neither syntax trees nor
+ * source bytes enter scalar lowering. Symbol IDs produce safe C local names. */
+static bool v1_scalar(const NLCheckedFragment *fragment, NLCheckedNodeId id,
+                      const V0Program *program)
+{
+    const NLCheckedNodeView *v = nl_checked_node_view(fragment, id);
+    if (v == NULL || v->type != program->u8 || v->result_count != 1 ||
+        v->results[0].type != program->u8 || v->terminates)
+        return false;
+    if (v->kind == NL_CHECKED_U8_LITERAL)
+        return v->has_scalar_result && v->scalar_result.known &&
+               v->scalar_result.type == program->u8 &&
+               v->scalar_result.value <= 255;
+    if (v->kind != NL_CHECKED_IDENTIFIER || v->symbol == 0 ||
+        v->value_use != NL_VALUE_COPIED)
+        return false;
+    /* Exclude host-known parameters/seeds: the C local must have a source
+     * binding in this owned body. Lexical visibility is checker-established. */
+    for (size_t i = 1; i <= nl_checked_node_count(fragment); ++i) {
+        const NLCheckedNodeView *binding = nl_checked_node_view(fragment, i);
+        if (binding != NULL && binding->kind == NL_CHECKED_BINDING &&
+            binding->symbol == v->symbol)
+            return true;
+    }
+    return false;
+}
+
+static bool v1_emit_scalar(FILE *stream, const NLCheckedNodeView *value)
+{
+    if (value->kind == NL_CHECKED_U8_LITERAL)
+        return fprintf(stream, "%zu", value->scalar_result.value) >= 0;
+    if (value->kind == NL_CHECKED_IDENTIFIER)
+        return fprintf(stream, "nl_local_%zu", value->symbol) >= 0;
+    return false;
 }
 
 static bool v0_validate_node(const NLCheckedFragment *, NLCheckedNodeId,
@@ -97,6 +133,19 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
         return false;
 
     switch (view->kind) {
+    case NL_CHECKED_U8_LITERAL:
+    case NL_CHECKED_IDENTIFIER:
+        return v1_scalar(fragment, id, program);
+    case NL_CHECKED_BINDING: {
+        const NLCheckedNodeView *receiver =
+            nl_checked_node_view(fragment, view->first_argument);
+        return view->type == program->unit && view->argument_count == 1 &&
+               view->symbol != 0 && receiver != NULL &&
+               receiver->kind == NL_CHECKED_RECEIVER &&
+               receiver->symbol == view->symbol &&
+               receiver->type == program->u8 &&
+               v1_scalar(fragment, view->initializer, program);
+    }
     case NL_CHECKED_BLOCK:
         return v0_validate_block(fragment, view, program);
     case NL_CHECKED_STATEMENT:
@@ -153,6 +202,23 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
         return false;
 
     switch (view->kind) {
+    case NL_CHECKED_U8_LITERAL:
+    case NL_CHECKED_IDENTIFIER:
+        return v0_indent(stream, depth) && fputs("(void)", stream) >= 0 &&
+               v1_emit_scalar(stream, view) && fputs(";\n", stream) >= 0;
+    case NL_CHECKED_BINDING: {
+        const NLCheckedNodeView *initializer =
+            nl_checked_node_view(fragment, view->initializer);
+        if (initializer == NULL || !v0_indent(stream, depth) ||
+            fprintf(stream, "const uint8_t nl_local_%zu = ", view->symbol) <
+                0 ||
+            !v1_emit_scalar(stream, initializer) || fputs(";\n", stream) < 0)
+            return false;
+        /* Suppress C unused-local warnings even when NewLang never reads this
+         * Discardable binding. This emits no language-level operation. */
+        return v0_indent(stream, depth) &&
+               fprintf(stream, "(void)nl_local_%zu;\n", view->symbol) >= 0;
+    }
     case NL_CHECKED_BLOCK:
         return v0_emit_block(stream, fragment, view, depth);
     case NL_CHECKED_STATEMENT:
@@ -173,8 +239,9 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
 
 static bool v0_emit_c(FILE *stream, const V0Program *program)
 {
-    if (fputs("/* North Star V0 Checked-C reference output. */\n\n", stream) <
-        0)
+    if (fputs("/* North Star V0/V1 Checked-C reference output. */\n#include "
+              "<stdint.h>\n\n",
+              stream) < 0)
         return false;
 
     for (size_t i = 0; i < program->count; ++i)
@@ -290,12 +357,13 @@ static int compile_v0(const char *path)
 
     const NLCheckedNodeId root = nl_checked_root(entry);
     const NLCheckedNodeView *root_view = nl_checked_node_view(entry, root);
-    V0Program program = {.unit = nl_semantic_unit_type(context)};
+    V0Program program = {.unit = nl_semantic_unit_type(context),
+                         .u8 = nl_semantic_core_type(context, NL_TYPE_U8)};
     if (root_view == NULL || !v0_validate_call(entry, root, &program)) {
-        result = report_error(
-            "V0-BACKEND-UNSUPPORTED",
-            "accepted program uses a construct outside the V0 Checked-C spine",
-            path, 4);
+        result = report_error("V1-BACKEND-UNSUPPORTED",
+                              "accepted program uses a construct outside the "
+                              "V0/V1 Checked-C spine",
+                              path, 4);
         goto cleanup;
     }
     program.entry_function = root_view->function;

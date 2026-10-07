@@ -1286,6 +1286,52 @@ static NLCheckedNodeId source_if(Check *, const NLSyntaxView *);
 static NLCheckedNodeId source_loop(Check *, const NLSyntaxView *);
 static NLCheckedNodeId source_control(Check *, const NLSyntaxView *);
 
+/* The source payload is decimal mathematical-integer evidence, not a C
+ * conversion. Keep the accumulator bounded by 255: arbitrarily long payloads
+ * cannot overflow the host, truncate, or wrap. No signed/general numeric IR. */
+static NLCheckedNodeId u8_literal(Check *check, const NLSyntaxView *syntax)
+{
+    NLSourceView digits;
+    if (!nl_source_view(check->source, syntax->data.u8_digits, &digits) ||
+        digits.length == 0) {
+        fail(check, NL_CHECK_INTERNAL_ERROR, syntax->span, "P3-INTERNAL",
+             "invalid u8 literal payload span");
+        return 0;
+    }
+    size_t value = 0;
+    for (size_t i = 0; i < digits.length; ++i) {
+        const unsigned char digit = digits.bytes[i];
+        if (digit < '0' || digit > '9') {
+            fail(check, NL_CHECK_INTERNAL_ERROR, syntax->span, "P3-INTERNAL",
+                 "expected decimal u8 payload");
+            return 0;
+        }
+        const size_t n = digit - '0';
+        if (value > (255 - n) / 10) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span,
+                 "V1-U8-LITERAL-RANGE", "u8 literal is outside 0..255");
+            return 0;
+        }
+        value = value * 10 + n;
+    }
+    const NLTypeId type = nl_semantic_core_type(check->context, NL_TYPE_U8);
+    const NLValueId package = new_value(
+        check,
+        (NLSemanticValueView){
+            .type = type, .scalar_known = true, .scalar_value = value},
+        syntax->span);
+    if (package == 0)
+        return 0;
+    return add(check,
+               (NLCheckedNodeView){.kind = NL_CHECKED_U8_LITERAL,
+                                   .span = syntax->span,
+                                   .type = type,
+                                   .result_count = 1,
+                                   .results = {{type, package}},
+                                   .has_scalar_result = true,
+                                   .scalar_result = {type, true, value}});
+}
+
 static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
 {
     const NLSyntaxView *const node = nl_syntax_node_view(syntax);
@@ -1297,7 +1343,7 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         node->kind != NL_SYNTAX_EXPR_CALL && node->kind != NL_SYNTAX_BLOCK &&
         node->kind != NL_SYNTAX_SUM_CONSTRUCTOR &&
         node->kind != NL_SYNTAX_MATCH && node->kind != NL_SYNTAX_IF &&
-        node->kind != NL_SYNTAX_LOOP) {
+        node->kind != NL_SYNTAX_LOOP && node->kind != NL_SYNTAX_U8_LITERAL) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, node->span,
              "P8-BODY-PROFILE",
              "expression needs a richer relative body analysis");
@@ -1310,6 +1356,8 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
                                                       .span = node->span,
                                                       .type = 1})
                      : identifier(check, node);
+    } else if (node->kind == NL_SYNTAX_U8_LITERAL) {
+        result = u8_literal(check, node);
     } else if (node->kind == NL_SYNTAX_EXPR_CALL) {
         result = call(check, node);
     } else if (node->kind == NL_SYNTAX_BLOCK) {
@@ -4447,7 +4495,8 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
          root->kind != NL_SYNTAX_SUM_CONSTRUCTOR &&
          root->kind != NL_SYNTAX_MATCH && root->kind != NL_SYNTAX_IF &&
          root->kind != NL_SYNTAX_LOOP && root->kind != NL_SYNTAX_BLOCK &&
-         root->kind != NL_SYNTAX_STATEMENT) ||
+         root->kind != NL_SYNTAX_STATEMENT &&
+         root->kind != NL_SYNTAX_U8_LITERAL) ||
         (entry == CHECK_LOAN && root->kind != NL_SYNTAX_LOAN)) {
         return NL_CHECK_INTERNAL_ERROR;
     }
