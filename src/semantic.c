@@ -103,7 +103,11 @@ NLCheckStatus nl_sem_clone(const NLSemanticContext *source,
             goto failure;
         }
         for (size_t i = 0; i < source->type_count; ++i) {
-            copy->types[i] = (NLTypeEntry){.view = source->types[i].view};
+            copy->types[i] = (NLTypeEntry){
+                .view = source->types[i].view,
+                .incomplete = source->types[i].incomplete,
+                .recursive_header = source->types[i].recursive_header,
+                .option_target = source->types[i].option_target};
             memcpy(copy->types[i].field_types, source->types[i].field_types,
                    sizeof(copy->types[i].field_types));
             memcpy(copy->types[i].variant_types, source->types[i].variant_types,
@@ -232,7 +236,7 @@ void nl_sem_commit(NLSemanticContext *context, NLSemanticContext *candidate)
     nl_semantic_destroy(candidate);
 }
 
-static NLCheckStatus nominal(NLSemanticContext *context, const char *name,
+NLCheckStatus nl_sem_nominal(NLSemanticContext *context, const char *name,
                              bool is_copy, bool discardable, NLTypeId *out)
 {
     if (is_copy && !discardable) {
@@ -277,12 +281,13 @@ NLCheckStatus nl_semantic_create(NLSemanticContext **out_context)
     }
     *context = (NLSemanticContext){0};
     NLTypeId type_id;
-    NLCheckStatus status = nominal(context, "unit", true, true, &type_id);
+    NLCheckStatus status =
+        nl_sem_nominal(context, "unit", true, true, &type_id);
     if (status != NL_CHECK_OK) {
         goto failure;
     }
     context->types[0].view.kind = NL_TYPE_UNIT;
-    status = nominal(context, "LifetimeDomain", false, false, &type_id);
+    status = nl_sem_nominal(context, "LifetimeDomain", false, false, &type_id);
     if (status != NL_CHECK_OK) {
         goto failure;
     }
@@ -298,8 +303,8 @@ NLCheckStatus nl_semantic_create(NLSemanticContext **out_context)
                 {"addr", NL_TYPE_ADDR, true},
                 {"bool", NL_TYPE_BOOL, true}};
     for (size_t i = 0; i < sizeof(core) / sizeof(core[0]); ++i) {
-        status = nominal(context, core[i].name, core[i].copy, core[i].copy,
-                         &type_id);
+        status = nl_sem_nominal(context, core[i].name, core[i].copy,
+                                core[i].copy, &type_id);
         if (status != NL_CHECK_OK) {
             goto failure;
         }
@@ -351,7 +356,8 @@ NLTypeId nl_semantic_domain_type(const NLSemanticContext *context)
 bool nl_semantic_type_view(const NLSemanticContext *c, NLTypeId id,
                            NLSemanticTypeView *out)
 {
-    if (c == NULL || out == NULL || id == 0 || id > c->type_count) {
+    if (c == NULL || out == NULL || id == 0 || id > c->type_count ||
+        c->types[id - 1].incomplete) {
         return false;
     }
     *out = c->types[id - 1].view;
@@ -445,6 +451,11 @@ NLCheckStatus nl_sem_compound(NLSemanticContext *c, NLSemanticTypeKind kind,
         (kind != NL_TYPE_REF && (exclusive || access != NL_ACCESS_READ))) {
         return NL_CHECK_INTERNAL_ERROR;
     }
+    /* Only direct ptr<H> participates before H completion. */
+    if (!nl_recursive_value_type(c, target) &&
+        !(kind == NL_TYPE_PTR && c->types[target - 1].incomplete &&
+          c->types[target - 1].recursive_header))
+        return NL_CHECK_SEMANTIC_UNSUPPORTED;
     for (size_t i = 0; i < c->type_count; ++i) {
         const NLSemanticTypeView view = c->types[i].view;
         if (view.kind == kind && view.target == target &&
@@ -475,6 +486,8 @@ NLCheckStatus nl_sem_compound(NLSemanticContext *c, NLSemanticTypeKind kind,
 NLCheckStatus nl_sem_new_value(NLSemanticContext *c, NLSemanticValueView value,
                                NLValueId *out)
 {
+    if (!nl_recursive_value_type(c, value.type))
+        return NL_CHECK_SEMANTIC_ERROR;
     void *storage = NULL;
     NLCheckStatus status =
         append_storage(c->values, c->value_count, sizeof(*c->values), &storage);
@@ -527,6 +540,8 @@ NLCheckStatus nl_sem_new_place(NLSemanticContext *c, NLTypeId type,
                                NLDomainId domain, bool root, NLValueId value,
                                NLPlaceId *out)
 {
+    if (!nl_recursive_value_type(c, type))
+        return NL_CHECK_SEMANTIC_ERROR;
     void *storage = NULL;
     NLCheckStatus status =
         append_storage(c->places, c->place_count, sizeof(*c->places), &storage);
@@ -592,7 +607,8 @@ NLCheckStatus nl_sem_bind(NLSemanticContext *c, const char *name,
     return nl_sem_bind_in_scope(c, name, value, 0, out);
 }
 
-/* P5 members are flat; copies allocate fresh packages for every member. */
+/* Copy owned members (including the bounded Option member) and payloads;
+ * package ownership is never shared by two aggregate copies. */
 NLCheckStatus nl_sem_copy_value(NLSemanticContext *c, NLValueId source,
                                 NLValueId *out)
 {
@@ -603,8 +619,7 @@ NLCheckStatus nl_sem_copy_value(NLSemanticContext *c, NLValueId source,
         return status;
     for (size_t f = 0; f < original.field_count; ++f) {
         NLValueId member;
-        status =
-            nl_sem_new_value(c, c->values[original.fields[f] - 1], &member);
+        status = nl_sem_copy_value(c, original.fields[f], &member);
         if (status != NL_CHECK_OK)
             return status;
         c->values[member - 1].carrier = NL_CARRIER_AGGREGATE;
@@ -708,7 +723,7 @@ NLCheckStatus nl_semantic_nominal(NLSemanticContext *c, const char *name,
     NLCheckStatus status = nl_sem_clone(c, &candidate);
     NLTypeId id = 0;
     if (status == NL_CHECK_OK) {
-        status = nominal(candidate, name, copy, discardable, &id);
+        status = nl_sem_nominal(candidate, name, copy, discardable, &id);
     }
     status = finish_candidate(c, candidate, status);
     if (status == NL_CHECK_OK) {
@@ -986,6 +1001,8 @@ NLCheckStatus nl_semantic_register_function(NLSemanticContext *c,
     if (count > NL_SEMANTIC_MAX_PARAMETERS) {
         return NL_CHECK_RESOURCE_LIMIT;
     }
+    if (!nl_recursive_value_type(c, result))
+        return NL_CHECK_SEMANTIC_ERROR;
     if (c->types[result - 1].view.field_count != 0) {
         return NL_CHECK_SEMANTIC_UNSUPPORTED; /* no opaque aggregate result mint
                                                */
@@ -994,6 +1011,8 @@ NLCheckStatus nl_semantic_register_function(NLSemanticContext *c,
         if (parameters[i] == 0 || parameters[i] > c->type_count) {
             return NL_CHECK_INTERNAL_ERROR;
         }
+        if (!nl_recursive_value_type(c, parameters[i]))
+            return NL_CHECK_SEMANTIC_ERROR;
     }
     for (size_t i = 0; i < c->function_count; ++i) {
         if (strcmp(c->functions[i].name, name) == 0) {
@@ -1051,6 +1070,8 @@ NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *c,
         if (fields[f].name == NULL || fields[f].name[0] == 0 ||
             fields[f].type == 0 || fields[f].type > c->type_count)
             return NL_CHECK_INTERNAL_ERROR;
+        if (c->types[fields[f].type - 1].incomplete)
+            return NL_CHECK_SEMANTIC_ERROR;
         const NLSemanticTypeView t = c->types[fields[f].type - 1].view;
         if (t.field_count != 0 || fields[f].type == 2 ||
             (t.kind != NL_TYPE_NOMINAL && t.kind != NL_TYPE_BOOL &&
@@ -1067,7 +1088,7 @@ NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *c,
     NLCheckStatus status = nl_sem_clone(c, &candidate);
     NLTypeId id = 0;
     if (status == NL_CHECK_OK)
-        status = nominal(candidate, name, copy, discard, &id);
+        status = nl_sem_nominal(candidate, name, copy, discard, &id);
     if (status == NL_CHECK_OK) {
         NLTypeEntry *entry = &candidate->types[id - 1];
         entry->view.field_count = count;
@@ -1119,6 +1140,8 @@ NLCheckStatus nl_semantic_set_layout(NLSemanticContext *c, NLTypeId type,
     if (size == 0 || alignment == 0) {
         return NL_CHECK_SEMANTIC_ERROR;
     }
+    if (c->types[type - 1].incomplete)
+        return NL_CHECK_SEMANTIC_ERROR;
     const NLSemanticTypeView old = c->types[type - 1].view;
     if (old.layout_known) {
         return old.size == size && old.alignment == alignment
@@ -1196,6 +1219,8 @@ NLCheckStatus nl_semantic_register_sum(NLSemanticContext *c, const char *name,
             if (strcmp(variants[i].name, variants[j].name) == 0)
                 return NL_CHECK_SEMANTIC_ERROR;
         if (variants[i].payload != 0) {
+            if (c->types[variants[i].payload - 1].incomplete)
+                return NL_CHECK_SEMANTIC_ERROR;
             const NLSemanticTypeView t = c->types[variants[i].payload - 1].view;
             if (t.kind == NL_TYPE_SUM || t.field_count != 0 ||
                 t.kind == NL_TYPE_REF || t.kind == NL_TYPE_PTR)
@@ -1208,7 +1233,7 @@ NLCheckStatus nl_semantic_register_sum(NLSemanticContext *c, const char *name,
     NLTypeId id = 0;
     NLCheckStatus status = nl_sem_clone(c, &candidate);
     if (status == NL_CHECK_OK)
-        status = nominal(candidate, name, copy, discard, &id);
+        status = nl_sem_nominal(candidate, name, copy, discard, &id);
     if (status == NL_CHECK_OK) {
         NLTypeEntry *e = &candidate->types[id - 1];
         e->view.kind = NL_TYPE_SUM;

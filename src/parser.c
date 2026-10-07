@@ -174,6 +174,41 @@ static bool mode(NLParser *parser, NLAccessSyntax *out_mode)
     return true;
 }
 
+/* Exact Draft 17.21 link only; current token is < after Option. */
+static NLSyntaxNode *option_ptr(NLParser *parser, NLSourceSpan start)
+{
+    if (!expect_punct(parser, '<', "REC-TYPE-PROFILE",
+                      "expected Option<ptr<H>>") ||
+        !word(parser, "ptr"))
+        goto profile;
+    consume(parser);
+    if (!expect_punct(parser, '<', "REC-TYPE-PROFILE", "expected ptr<H>") ||
+        !peek(parser) || parser->token.kind != NL_TOKEN_WORD)
+        goto profile;
+    NLSyntaxNode *target =
+        node(parser, NL_SYNTAX_TYPE_NAME, parser->token.span);
+    if (target == NULL)
+        return NULL;
+    target->view.data.name = parser->token.span;
+    consume(parser);
+    if (!expect_punct(parser, '>', "REC-TYPE-PROFILE", "expected ptr close") ||
+        !peek(parser))
+        goto profile;
+    const size_t end = parser->token.span.end_byte;
+    if (!expect_punct(parser, '>', "REC-TYPE-PROFILE", "expected Option close"))
+        goto profile;
+    NLSyntaxNode *result = node(parser, NL_SYNTAX_OPTION_PTR,
+                                (NLSourceSpan){start.start_byte, end});
+    if (result != NULL)
+        result->view.data.ptr_type.target = target;
+    return result;
+profile:
+    fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+         "REC-TYPE-PROFILE",
+         "only exact Option<ptr<nominal>> is in this slice");
+    return NULL;
+}
+
 static NLSyntaxNode *type(NLParser *parser)
 {
     if (!enter(parser)) {
@@ -199,10 +234,15 @@ static NLSyntaxNode *type(NLParser *parser)
         }
     }
     const NLSourceSpan name_span = parser->token.span;
+    const bool is_option = word(parser, "Option");
     const bool is_ptr = word(parser, "ptr");
     const bool is_ref = word(parser, "ref");
     consume(parser);
     if (!peek(parser)) {
+        goto done;
+    }
+    if (!is_exclusive && is_option && punct(parser, '<')) {
+        result = option_ptr(parser, name_span);
         goto done;
     }
     if (!is_ptr && !is_ref && punct(parser, '<')) {
@@ -994,6 +1034,7 @@ static NLSyntaxNode *source_expression(NLParser *parser)
              "expected name, call, registered aggregate or lexical block");
         goto done;
     }
+    const bool exact_option = word(parser, "Option");
     const bool u8_literal = word(parser, "u8");
     const bool read_loan = word(parser, "loan_read");
     const bool ptr_loan = word(parser, "loan_read_ptr");
@@ -1006,14 +1047,30 @@ static NLSyntaxNode *source_expression(NLParser *parser)
         result = source_local_loan(parser, name, ptr_loan, access);
         goto done;
     }
+    NLSyntaxNode *option_type = NULL;
+    if (exact_option && punct(parser, '<')) {
+        option_type = option_ptr(parser, name);
+        if (option_type == NULL)
+            goto done;
+        if (!punct(parser, '.')) {
+            fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+                 "REC-CONSTRUCTOR-PROFILE",
+                 "exact Option type requires a constructor");
+            goto done;
+        }
+    }
     if (punct(parser, '.')) {
         consume(parser);
         NLSyntaxNode *variant = source_name(parser, NL_SYNTAX_RECEIVER, false);
         if (variant == NULL)
             goto done;
-        result = node(parser, NL_SYNTAX_DOTTED, name);
+        result = node(parser,
+                      option_type == NULL ? NL_SYNTAX_DOTTED
+                                          : NL_SYNTAX_SUM_CONSTRUCTOR,
+                      name);
         if (result == NULL)
             goto done;
+        result->view.data.constructor.type = option_type;
         result->view.data.constructor.qualifier = name;
         result->view.data.constructor.variant = variant->view.data.name;
         result->view.span.end_byte = variant->view.span.end_byte;
@@ -1400,8 +1457,8 @@ static NLSyntaxNode *function_declaration(NLParser *parser)
     return name;
 }
 
-/* Issue #105 D2 profile: one leading, two-u8-field source shape only.
- * No general declaration ordering, recursion or nominal-property grammar. */
+/* Issue #105 two-u8 profile and Draft 17.21 exact Option<ptr<H>>,u8 profile.
+ * No general aggregate/property grammar; ordering is category-specific. */
 static NLSyntaxNode *avs_struct(NLParser *parser)
 {
     const NLSourceSpan start = parser->token.span;
@@ -1420,17 +1477,25 @@ static NLSyntaxNode *avs_struct(NLParser *parser)
         if (label == NULL || !expect_punct(parser, ':', "AVS-DECL-COLON",
                                            "expected : after field label"))
             return NULL;
-        if (!word(parser, "u8")) {
+        NLSyntaxNode *type = NULL;
+        if (i == 0 && word(parser, "Option")) {
+            const NLSourceSpan option = parser->token.span;
+            consume(parser);
+            type = option_ptr(parser, option);
+            decl->view.kind = NL_SYNTAX_RECURSIVE_STRUCT;
+        } else if (word(parser, "u8")) {
+            type = node(parser, NL_SYNTAX_TYPE_NAME, parser->token.span);
+            if (type != NULL)
+                type->view.data.name = parser->token.span;
+            consume(parser);
+        } else {
             fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
-                 "AVS-DECL-PROFILE", "AVS declaration fields must be core u8");
+                 "AVS-DECL-PROFILE",
+                 "only two-u8 or exact Option<ptr<H>>,u8 profile");
             return NULL;
         }
-        NLSyntaxNode *type =
-            node(parser, NL_SYNTAX_TYPE_NAME, parser->token.span);
         if (type == NULL)
             return NULL;
-        type->view.data.name = parser->token.span;
-        consume(parser);
         NLSyntaxNode *field =
             node(parser, NL_SYNTAX_PARAMETER, label->view.span);
         if (field == NULL)
@@ -1448,7 +1513,7 @@ static NLSyntaxNode *avs_struct(NLParser *parser)
         consume(parser);
     if (!punct(parser, '}')) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
-             "AVS-DECL-PROFILE", "AVS declaration has exactly two u8 fields");
+             "AVS-DECL-PROFILE", "bounded declaration has exactly two fields");
         return NULL;
     }
     decl->view.span.end_byte = parser->token.span.end_byte;
@@ -1465,30 +1530,39 @@ static NLSyntaxNode *function_unit(NLParser *parser)
     if (root == NULL)
         return NULL;
     NLSyntaxNode *head = NULL, *tail = NULL;
-    size_t functions = 0;
-    if (word(parser, "struct")) {
-        NLSyntaxNode *decl = avs_struct(parser);
-        if (decl == NULL)
-            return NULL;
-        link_node(&head, &tail, decl);
-        ++root->view.data.function_unit.count;
-    }
+    size_t functions = 0, recursive = 0;
+    bool avs = false;
     while (peek(parser) && parser->token.kind != NL_TOKEN_EOF) {
-        if (word(parser, "struct")) {
-            fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
-                 "AVS-DECL-PROFILE", "AVS permits only one leading struct");
-            return NULL;
-        }
-        NLSyntaxNode *declaration = function_declaration(parser);
+        const bool structure = word(parser, "struct");
+        NLSyntaxNode *declaration =
+            structure ? avs_struct(parser) : function_declaration(parser);
         if (declaration == NULL)
             return NULL;
+        if (structure) {
+            if (declaration->view.kind == NL_SYNTAX_RECURSIVE_STRUCT) {
+                if (avs)
+                    goto struct_profile;
+                ++recursive;
+            } else {
+                if (avs || recursive != 0 || functions != 0)
+                    goto struct_profile;
+                avs = true;
+            }
+        } else {
+            ++functions;
+        }
         link_node(&head, &tail, declaration);
         ++root->view.data.function_unit.count;
-        ++functions;
+        continue;
+    struct_profile:
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, declaration->view.span,
+             "AVS-DECL-PROFILE",
+             "AVS remains one leading struct; recursive category is separate");
+        return NULL;
     }
     if (parser->status != NL_PARSE_OK)
         return NULL;
-    if (functions == 0) {
+    if (functions == 0 && recursive == 0) {
         fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
              "P11-DECLARATION", "expected at least one fn declaration");
         return NULL;

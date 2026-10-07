@@ -23,6 +23,9 @@ typedef struct {
 
 typedef struct {
     char *name;
+    bool incomplete, recursive_header;
+    NLTypeId
+        option_target; /* canonical Option instantiation argument, not name */
     NLSemanticTypeView view;
     char *field_names[NL_SEMANTIC_MAX_FIELDS];
     NLTypeId field_types[NL_SEMANTIC_MAX_FIELDS];
@@ -143,6 +146,17 @@ NLCheckStatus nl_sem_new_scope(NLSemanticContext *, NLScopeId, bool,
                                NLScopeId *);
 NLCheckStatus nl_sem_fresh_fact(NLSemanticContext *, NLValueFactId *);
 bool nl_fixed_type(const NLSemanticContext *, NLTypeId);
+/* Private transaction helpers. No header is committed until unit completion.
+ * Strings/arrays are borrowed for the call; successful types own copies. */
+NLCheckStatus nl_sem_nominal(NLSemanticContext *, const char *, bool, bool,
+                             NLTypeId *);
+NLCheckStatus nl_recursive_header(NLSemanticContext *, const char *,
+                                  NLTypeId *);
+NLCheckStatus nl_recursive_option(NLSemanticContext *, NLTypeId, NLTypeId *);
+NLCheckStatus nl_recursive_complete(NLSemanticContext *, NLTypeId,
+                                    const NLAggregateField *, size_t);
+NLCheckStatus nl_recursive_validate(const NLSemanticContext *);
+bool nl_recursive_value_type(const NLSemanticContext *, NLTypeId);
 NLCheckStatus nl_fixed_attach(NLSemanticContext *, NLPlaceId);
 void nl_fixed_detach(NLSemanticContext *, NLPlaceId);
 NLCheckStatus nl_fixed_validate(const NLSemanticContext *);
