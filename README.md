@@ -154,7 +154,16 @@ Accepted checked constructs outside the V0/V1/AVS emitter report
 
 The Checked-C path is a bounded bootstrap/reference execution vehicle for the
 North Star V0/V1/AVS subset; it is not a general C backend and does not replace LLVM as
-the planned primary backend. The normal integration test compiles emitted C17
+the planned primary backend.
+
+Product/value strategy is recorded in
+[`docs/NewLang_Product_Value_Strategy.md`](docs/NewLang_Product_Value_Strategy.md),
+the current North Star contract in
+[`docs/NewLang_North_Star_Product_Validation.md`](docs/NewLang_North_Star_Product_Validation.md),
+and long-horizon C-replacement coverage in
+[`docs/NewLang_C_Replacement_Coverage_Map.md`](docs/NewLang_C_Replacement_Coverage_Map.md).
+
+The normal integration test compiles emitted C17
 with the configured host C compiler and executes the resulting native program.
 
 V1 adds only the positive-decimal `u8(DIGITS)` path and immutable u8 locals/use:
