@@ -5,6 +5,11 @@ static const char witness[] =
     "fn main()->unit{let x=u8(7);"
     "let p=loan_read(x){|r|ptr_from_ref(r)};"
     "loan_read_ptr(p){|r2|ptr_from_ref(r2);unit};unit}";
+static const char mutation_witness[] =
+    "fn main()->unit{let x=u8(7);"
+    "let p=loan_read(x){|r|ptr_from_ref(r)};"
+    "let old=loan_write(x){|w|replace(w,u8(9))};old;"
+    "loan_read_ptr(p){|r2|ptr_from_ref(r2);unit};unit}";
 
 void *__real_malloc(size_t);
 void *__real_realloc(void *, size_t);
@@ -57,9 +62,34 @@ static bool parser(void)
     CHECK(loan->kind == NL_SYNTAX_LOCAL_READ_LOAN && loan->data.loan.from_ptr);
     nl_syntax_tree_destroy(syntax);
     nl_source_destroy(source);
+
+    source = NULL;
+    syntax = NULL;
+    CHECK(tree(mutation_witness, true, &source, &syntax));
+    f = nl_syntax_node_view(
+        nl_syntax_node_view(nl_syntax_tree_root(syntax))
+            ->data.function_unit.declarations);
+    block = nl_syntax_node_view(f->data.function.body);
+    const NLSyntaxNode *third = block->data.block.items;
+    third = nl_syntax_next_argument(third);
+    third = nl_syntax_next_argument(third);
+    const NLSyntaxView *old_binding = nl_syntax_node_view(third);
+    loan = nl_syntax_node_view(old_binding->data.binding.initializer);
+    CHECK(loan->kind == NL_SYNTAX_LOCAL_WRITE_LOAN &&
+          loan->data.loan.access == NL_ACCESS_WRITE &&
+          !loan->data.loan.from_ptr);
+    body = nl_syntax_node_view(loan->data.loan.body);
+    CHECK(body->kind == NL_SYNTAX_BLOCK && body->data.block.tail != NULL);
+    CHECK(nl_syntax_node_view(body->data.block.tail)->kind ==
+          NL_SYNTAX_EXPR_CALL);
+    nl_syntax_tree_destroy(syntax);
+    nl_source_destroy(source);
+
     const char *outside[] = {"loan_read(x.field){|r|unit}",
                              "loan_read_ptr(make()){|r|unit}", "loan_read()",
-                             "loan_read(x)"};
+                             "loan_read(x)", "loan_write(x.field){|w|unit}",
+                             "loan_write(make()){|w|unit}", "loan_write()",
+                             "loan_write(x)"};
     for (size_t i = 0; i < sizeof(outside) / sizeof(outside[0]); ++i) {
         source = NULL;
         syntax = NULL;
@@ -158,6 +188,109 @@ static bool evidence(void)
     nl_semantic_destroy(c);
     return true;
 }
+static bool mutation(void)
+{
+    NLSemanticContext *c = NULL;
+    CHECK(nl_semantic_create(&c) == NL_CHECK_OK);
+
+    TestChecked x_checked = {0};
+    CHECK(test_run(c, "let x=u8(7);", TEST_SOURCE, NL_CHECK_OK, NULL,
+                   &x_checked));
+    const NLSymbolId x = test_root(&x_checked)->symbol;
+    NLSemanticBindingView xb;
+    NLSemanticPlaceView before;
+    NLSemanticValueView initial;
+    CHECK(nl_semantic_binding_view(c, x, &xb));
+    CHECK(nl_semantic_place_view(c, xb.place, &before) && before.live &&
+          before.implicit_local && before.independent_root &&
+          before.governing_domain == 0);
+    CHECK(nl_semantic_value_view(c, before.current_value, &initial) &&
+          initial.scalar_known && initial.scalar_value == 7);
+
+    TestChecked p_checked = {0};
+    CHECK(test_run(c, "let p=loan_read(x){|r|ptr_from_ref(r)};", TEST_SOURCE,
+                   NL_CHECK_OK, NULL, &p_checked));
+    const NLSymbolId p = test_root(&p_checked)->symbol;
+    NLSemanticBindingView pb;
+    NLSemanticValueView pv;
+    CHECK(nl_semantic_binding_view(c, p, &pb));
+    CHECK(nl_semantic_value_view(c, pb.value, &pv) &&
+          pv.reference.place == before.current_value ? false : true);
+    CHECK(pv.reference.place == xb.place &&
+          pv.reference.incarnation == before.incarnation &&
+          pv.dependencies == NL_DEPENDENCY_FREE);
+
+    TestChecked old_checked = {0};
+    CHECK(test_run(c, "let old=loan_write(x){|w|replace(w,u8(9))};",
+                   TEST_SOURCE, NL_CHECK_OK, NULL, &old_checked));
+    const NLCheckedNodeView *old_binding = test_root(&old_checked);
+    const NLCheckedNodeView *write_loan =
+        nl_checked_node_view(old_checked.artifact, old_binding->initializer);
+    CHECK(write_loan != NULL && write_loan->kind == NL_CHECKED_LOAN_HEADER &&
+          write_loan->loan.access == NL_ACCESS_WRITE &&
+          !write_loan->loan.is_exclusive && !write_loan->loan.from_ptr &&
+          write_loan->loan.implicit_local &&
+          write_loan->loan.body_nonescape_proved &&
+          write_loan->loan.normal_result_forwarded &&
+          write_loan->loan.place == xb.place &&
+          write_loan->loan.incarnation == before.incarnation);
+    NLSemanticBindingView wb;
+    NLSemanticTypeView wt;
+    CHECK(nl_semantic_binding_view(c, write_loan->loan.ref_symbol, &wb));
+    CHECK(nl_semantic_type_view(c, wb.type, &wt) &&
+          wt.kind == NL_TYPE_REF && wt.access == NL_ACCESS_WRITE &&
+          !wt.is_exclusive);
+
+    const NLCheckedNodeView *write_body =
+        nl_checked_node_view(old_checked.artifact, write_loan->initializer);
+    const NLCheckedNodeView *replace =
+        nl_checked_node_view(old_checked.artifact, write_body->tail);
+    CHECK(replace != NULL && replace->kind == NL_CHECKED_REPLACE &&
+          replace->result_count == 1 &&
+          replace->results[0].value == write_loan->results[0].value);
+    NLSemanticValueView old_value;
+    CHECK(nl_semantic_value_view(c, replace->results[0].value, &old_value) &&
+          old_value.scalar_known && old_value.scalar_value == 7);
+
+    NLSemanticBindingView after_x;
+    NLSemanticPlaceView after;
+    NLSemanticValueView current;
+    CHECK(nl_semantic_binding_view(c, x, &after_x));
+    CHECK(nl_semantic_place_view(c, after_x.place, &after) && after.live);
+    CHECK(after_x.place == xb.place && after.incarnation == before.incarnation &&
+          after.governing_domain == before.governing_domain &&
+          after.current_fact != before.current_fact);
+    CHECK(nl_semantic_value_view(c, after.current_value, &current) &&
+          current.scalar_known && current.scalar_value == 9);
+    CHECK(nl_semantic_binding_view(c, p, &pb));
+    CHECK(nl_semantic_value_view(c, pb.value, &pv) &&
+          pv.reference.place == after_x.place &&
+          pv.reference.incarnation == after.incarnation);
+
+    NLSemanticBindingView oldb;
+    NLSemanticValueView old_bound;
+    CHECK(nl_semantic_binding_view(c, old_binding->symbol, &oldb));
+    CHECK(nl_semantic_value_view(c, oldb.value, &old_bound) &&
+          old_bound.scalar_known && old_bound.scalar_value == 7);
+
+    TestChecked reacquire = {0};
+    CHECK(test_run(c,
+                   "loan_read_ptr(p){|r2|ptr_from_ref(r2);unit}",
+                   TEST_SOURCE, NL_CHECK_OK, NULL, &reacquire));
+    const NLCheckedNodeView *second = test_root(&reacquire);
+    CHECK(second->kind == NL_CHECKED_LOAN_HEADER && second->loan.from_ptr &&
+          second->loan.access == NL_ACCESS_READ &&
+          second->loan.place == after_x.place &&
+          second->loan.incarnation == after.incarnation);
+
+    test_checked_destroy(&reacquire);
+    test_checked_destroy(&old_checked);
+    test_checked_destroy(&p_checked);
+    test_checked_destroy(&x_checked);
+    nl_semantic_destroy(c);
+    return true;
+}
+
 static bool negatives(void)
 {
     NLSemanticContext *c = NULL;
@@ -165,6 +298,9 @@ static bool negatives(void)
     CHECK(test_rejected(c, "{let x=u8(7);let bad=loan_read(x){|r|r};unit}",
                         TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
                         "P8-EXIT-DEPENDENCY"));
+    CHECK(test_rejected(
+        c, "{let x=u8(7);let bad=loan_write(x){|w|w};unit}", TEST_SOURCE,
+        NL_CHECK_SEMANTIC_ERROR, "P8-EXIT-DEPENDENCY"));
     CHECK(test_rejected(c,
                         "{let p={let "
                         "x=u8(7);loan_read(x){|r|ptr_from_ref(r)}};loan_read_"
@@ -406,6 +542,8 @@ int main(int argc, char **argv)
         return parser() ? 0 : 1;
     if (strcmp(argv[1], "evidence") == 0)
         return evidence() ? 0 : 1;
+    if (strcmp(argv[1], "mutation") == 0)
+        return mutation() ? 0 : 1;
     if (strcmp(argv[1], "negatives") == 0)
         return negatives() ? 0 : 1;
     if (strcmp(argv[1], "conflict") == 0)
