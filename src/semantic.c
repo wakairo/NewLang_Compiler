@@ -1083,6 +1083,18 @@ NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *c,
     return status;
 }
 
+bool nl_semantic_aggregate_field_view(const NLSemanticContext *c, NLTypeId type,
+                                      size_t index, NLAggregateField *out)
+{
+    if (c == NULL || out == NULL || type == 0 || type > c->type_count ||
+        index >= c->types[type - 1].view.field_count)
+        return false;
+    const NLTypeEntry *entry = &c->types[type - 1];
+    *out = (NLAggregateField){entry->field_names[index],
+                              entry->field_types[index]};
+    return true;
+}
+
 NLTypeId nl_semantic_core_type(const NLSemanticContext *c,
                                NLSemanticTypeKind kind)
 {

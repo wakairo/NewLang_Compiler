@@ -68,7 +68,11 @@ NLParseStatus nl_parser_parse_source_fragment(NLParser *, NLSyntaxTree **,
  * existing grammar; no general top-level item language or generic declarations.
  * Draft 17.14 structural function/parameter names reject before type/body
  * parsing with P12-RESERVED-STRUCTURAL-NAME. Core unit retains P10 semantic
- * admission. Multiple trees may form one semantic unit via the semantic API. */
+ * admission. Multiple fn-only trees may form one semantic unit via the API.
+ * AVS D2 adds one optional leading struct NAME { LABEL:u8, LABEL:u8 [,] }.
+ * Exactly two fields, one source unit; this is not general aggregate
+ * declaration grammar or a decision about type-declaration ordering/forward
+ * references. */
 NLParseStatus nl_parser_parse_function_unit(NLParser *, NLSyntaxTree **,
                                             NLParseDiagnostic *);
 

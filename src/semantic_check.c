@@ -1279,6 +1279,15 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
 static NLCheckedNodeId source_binding(Check *, const NLSyntaxView *);
 static NLCheckedNodeId source_statement(Check *, const NLSyntaxView *);
 static NLCheckedNodeId source_block(Check *, const NLSyntaxView *);
+static bool avs_type(const NLSemanticContext *c, NLTypeId type)
+{
+    const NLSemanticTypeView t = c->types[type - 1].view;
+    const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
+    return t.kind == NL_TYPE_NOMINAL && t.field_count == 2 && t.is_copy &&
+           t.is_discardable && c->types[type - 1].field_types[0] == u8 &&
+           c->types[type - 1].field_types[1] == u8;
+}
+
 static NLCheckedNodeId aggregate(Check *, const NLSyntaxView *);
 static NLCheckedNodeId sum_constructor(Check *, const NLSyntaxView *);
 static NLCheckedNodeId sum_match(Check *, const NLSyntaxView *);
@@ -1343,7 +1352,8 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         node->kind != NL_SYNTAX_EXPR_CALL && node->kind != NL_SYNTAX_BLOCK &&
         node->kind != NL_SYNTAX_SUM_CONSTRUCTOR &&
         node->kind != NL_SYNTAX_MATCH && node->kind != NL_SYNTAX_IF &&
-        node->kind != NL_SYNTAX_LOOP && node->kind != NL_SYNTAX_U8_LITERAL) {
+        node->kind != NL_SYNTAX_LOOP && node->kind != NL_SYNTAX_U8_LITERAL &&
+        node->kind != NL_SYNTAX_AGGREGATE) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, node->span,
              "P8-BODY-PROFILE",
              "expression needs a richer relative body analysis");
@@ -1534,6 +1544,12 @@ static NLCheckedNodeId aggregate(Check *check, const NLSyntaxView *syntax)
         aggregate_type(check, syntax->data.aggregate.type_name);
     if (type == 0)
         return 0;
+    if (check->in_function_body && !avs_type(check->context, type)) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
+             "P8-BODY-PROFILE",
+             "function-body aggregate admission is bounded to two u8 fields");
+        return 0;
+    }
     size_t indices[NL_SEMANTIC_MAX_FIELDS];
     if (!aggregate_fields(check, type, syntax->data.aggregate.fields,
                           syntax->data.aggregate.count, true, indices))
@@ -1625,6 +1641,12 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
         if (type == 0 ||
             !aggregate_fields(check, type, receivers, count, false, indices))
             return 0;
+        if (check->in_function_body && !avs_type(check->context, type)) {
+            fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
+                 "P8-BODY-PROFILE",
+                 "function-body destructuring is bounded to two u8 fields");
+            return 0;
+        }
     }
     char *names[NL_SEMANTIC_MAX_FIELDS] = {NULL};
     NLSourceSpan spans[NL_SEMANTIC_MAX_FIELDS];
@@ -1888,6 +1910,7 @@ static NLCheckedNodeId source_block(Check *check, const NLSyntaxView *syntax)
          item = nl_syntax_next_argument(item)) {
         const NLSyntaxView *v = nl_syntax_node_view(item);
         if (check->in_function_body && v->kind != NL_SYNTAX_BINDING &&
+            v->kind != NL_SYNTAX_AGGREGATE_BINDING &&
             v->kind != NL_SYNTAX_STATEMENT && v->kind != NL_SYNTAX_RETURN &&
             v->kind != NL_SYNTAX_CONTINUE && v->kind != NL_SYNTAX_BREAK) {
             fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, v->span,
@@ -5130,6 +5153,66 @@ static int declaration_order(const void *a, const void *b)
     return strcmp(left->name, right->name);
 }
 
+/* Bounded source plumbing into the existing transactional registry. */
+static bool register_avs(Check *check, const NLSyntaxView *s)
+{
+    if (!lexical_source_name(check, s->data.avs_struct.name))
+        return false;
+    char *name = source_name_copy(check, s->data.avs_struct.name);
+    char *labels[2] = {NULL, NULL};
+    NLAggregateField fields[2] = {{0}};
+    bool ok = false;
+    if (name == NULL)
+        return false;
+    if (s->data.avs_struct.count != 2)
+        goto profile;
+    const NLSyntaxNode *n = s->data.avs_struct.fields;
+    for (size_t i = 0; i < 2; ++i) {
+        if (n == NULL)
+            goto profile;
+        const NLSyntaxView *f = nl_syntax_node_view(n);
+        const NLTypeId type = check_type(check, f->data.parameter.type);
+        if (type == 0)
+            goto cleanup;
+        if (type != nl_semantic_core_type(check->context, NL_TYPE_U8))
+            goto profile;
+        labels[i] = source_name_copy(check, f->data.parameter.name);
+        if (labels[i] == NULL)
+            goto cleanup;
+        fields[i] = (NLAggregateField){labels[i], type};
+        n = nl_syntax_next_argument(n);
+    }
+    if (n != NULL)
+        goto profile;
+    /* Reuse the existing ordinary top-level namespace collision policy. */
+    for (size_t i = 0; i < check->context->function_count; ++i)
+        if (strcmp(name, check->context->functions[i].name) == 0)
+            goto collision;
+    for (size_t i = 0; i < check->context->binding_count; ++i)
+        if (!check->context->bindings[i].hidden &&
+            strcmp(name, check->context->bindings[i].name) == 0)
+            goto collision;
+    NLTypeId type = 0;
+    const NLCheckStatus status =
+        nl_semantic_register_aggregate(check->context, name, fields, 2, &type);
+    if (status == NL_CHECK_SEMANTIC_ERROR)
+        goto collision;
+    ok = host(check, status, s->span);
+    goto cleanup;
+collision:
+    fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "AVS-DECL-REGISTRATION",
+         "aggregate name or fields conflict with established identities");
+    goto cleanup;
+profile:
+    fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span, "AVS-DECL-PROFILE",
+         "AVS declaration requires exactly two core u8 fields");
+cleanup:
+    free(name);
+    free(labels[0]);
+    free(labels[1]);
+    return ok;
+}
+
 NLCheckStatus nl_semantic_register_function_unit(
     NLSemanticContext *context, const NLSyntaxTree *const *inputs, size_t count,
     NLFunctionUnitDiagnostic *diagnostic)
@@ -5154,6 +5237,17 @@ NLCheckStatus nl_semantic_register_function_unit(
         for (const NLSyntaxNode *n = root->data.function_unit.declarations;
              n != NULL; n = nl_syntax_next_argument(n)) {
             const NLSyntaxView *s = nl_syntax_node_view(n);
+            if (s->kind == NL_SYNTAX_AVS_STRUCT) {
+                if (count != 1 || n != root->data.function_unit.declarations) {
+                    fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
+                         "AVS-UNIT-PROFILE",
+                         "AVS declarations require a single source unit");
+                    goto failure;
+                }
+                if (!register_avs(&check, s))
+                    goto failure;
+                continue;
+            }
             if (total == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS) {
                 (void)host(&check, NL_CHECK_RESOURCE_LIMIT, s->span);
                 goto failure;

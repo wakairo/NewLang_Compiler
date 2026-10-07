@@ -1319,6 +1319,63 @@ static NLSyntaxNode *function_declaration(NLParser *parser)
     return name;
 }
 
+/* Issue #105 D2 profile: one leading, two-u8-field source shape only.
+ * No general declaration ordering, recursion or nominal-property grammar. */
+static NLSyntaxNode *avs_struct(NLParser *parser)
+{
+    const NLSourceSpan start = parser->token.span;
+    consume(parser);
+    NLSyntaxNode *name = source_name(parser, NL_SYNTAX_RECEIVER, true);
+    if (name == NULL || !expect_punct(parser, '{', "AVS-DECL-OPEN",
+                                      "expected { after AVS nominal name"))
+        return NULL;
+    NLSyntaxNode *decl = node(parser, NL_SYNTAX_AVS_STRUCT, start);
+    if (decl == NULL)
+        return NULL;
+    decl->view.data.avs_struct.name = name->view.data.name;
+    NLSyntaxNode *head = NULL, *tail = NULL;
+    for (size_t i = 0; i < 2; ++i) {
+        NLSyntaxNode *label = source_name(parser, NL_SYNTAX_RECEIVER, false);
+        if (label == NULL || !expect_punct(parser, ':', "AVS-DECL-COLON",
+                                           "expected : after field label"))
+            return NULL;
+        if (!word(parser, "u8")) {
+            fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+                 "AVS-DECL-PROFILE", "AVS declaration fields must be core u8");
+            return NULL;
+        }
+        NLSyntaxNode *type =
+            node(parser, NL_SYNTAX_TYPE_NAME, parser->token.span);
+        if (type == NULL)
+            return NULL;
+        type->view.data.name = parser->token.span;
+        consume(parser);
+        NLSyntaxNode *field =
+            node(parser, NL_SYNTAX_PARAMETER, label->view.span);
+        if (field == NULL)
+            return NULL;
+        field->view.data.parameter.name = label->view.data.name;
+        field->view.data.parameter.type = type;
+        field->view.span.end_byte = type->view.span.end_byte;
+        link_node(&head, &tail, field);
+        ++decl->view.data.avs_struct.count;
+        if (i == 0 && !expect_punct(parser, ',', "AVS-DECL-COMMA",
+                                    "expected , between AVS fields"))
+            return NULL;
+    }
+    if (punct(parser, ','))
+        consume(parser);
+    if (!punct(parser, '}')) {
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+             "AVS-DECL-PROFILE", "AVS declaration has exactly two u8 fields");
+        return NULL;
+    }
+    decl->view.span.end_byte = parser->token.span.end_byte;
+    consume(parser);
+    decl->view.data.avs_struct.fields = head;
+    return decl;
+}
+
 static NLSyntaxNode *function_unit(NLParser *parser)
 {
     NLSyntaxNode *root =
@@ -1327,16 +1384,30 @@ static NLSyntaxNode *function_unit(NLParser *parser)
     if (root == NULL)
         return NULL;
     NLSyntaxNode *head = NULL, *tail = NULL;
+    size_t functions = 0;
+    if (word(parser, "struct")) {
+        NLSyntaxNode *decl = avs_struct(parser);
+        if (decl == NULL)
+            return NULL;
+        link_node(&head, &tail, decl);
+        ++root->view.data.function_unit.count;
+    }
     while (peek(parser) && parser->token.kind != NL_TOKEN_EOF) {
+        if (word(parser, "struct")) {
+            fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+                 "AVS-DECL-PROFILE", "AVS permits only one leading struct");
+            return NULL;
+        }
         NLSyntaxNode *declaration = function_declaration(parser);
         if (declaration == NULL)
             return NULL;
         link_node(&head, &tail, declaration);
         ++root->view.data.function_unit.count;
+        ++functions;
     }
     if (parser->status != NL_PARSE_OK)
         return NULL;
-    if (head == NULL) {
+    if (functions == 0) {
         fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
              "P11-DECLARATION", "expected at least one fn declaration");
         return NULL;
