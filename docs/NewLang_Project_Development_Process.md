@@ -44,6 +44,11 @@ docs/NewLang_C_Replacement_Coverage_Map.md
 これらはproduct strategyのauthorityであり、language semanticsのnormative Draftを上書きしない。
 重要なsemantic decisionがreportや会話にしか存在しない場合は、review済みDraft revisionを経てmainへmergeされた時点でnormativeとする。
 
+旧案・未解決設計意図の参照先は [NewLang Design-Intent Ledger](NewLang_Design_Intent_Ledger.md) とする。
+**Ledgerはnon-normative evidence indexであり、現在のDraftを上書きしない。**
+設計判断を選択・変更する前の必須照合手順は
+[NewLang 設計判断手順](NewLang_Design_Decision_Procedure.md) に定める。
+
 UTF-8で問題なく管理できる文書は日本語を基本とし、必要に応じて英語版を併記する。
 一方、shell操作やtoolchain上で前面に現れるcommit message等は、互換性・可搬性を優先して英語ASCIIを基本とする。
 
@@ -52,6 +57,8 @@ UTF-8で問題なく管理できる文書は日本語を基本とし、必要に
 ### M — 仕様策定 / 設計
 
 Mはlanguage semanticsとsource surfaceを検討・裁定する。
+**新しいsource/semantic/API裁定の前に§4.2のhistorical design-intent gateを実施する。**
+過去のnon-normative案を機械的に採用する義務はなく、維持・理由付き変更・Deferredを選択できる。
 大規模な再設計より、小さく直交的なmechanismとtargeted reopenを優先する。
 
 Mだけが実装・形式化より無制限に先行しない。
@@ -86,6 +93,7 @@ Coordinationは少なくとも以下を担う。
 - findingのclassificationとseverity整理
 - KEEP / CLOSE / TARGETED REOPENの裁定
 - Draft revisionの要否判定
+- 設計変更前・independent PR review時のhistorical design-intent gate (§4.2)
 - Mを止めてP/Fのcatch-upを待つかの判断
 
 ## 4. 標準feedback loop
@@ -119,6 +127,7 @@ promptやchatは作業開始・制御のために使ってよいが、handoffの
 そのIssueには必要に応じて次を集約する。
 
 - canonical repository / main SHA / `CURRENT_SPEC.md` 等のauthority
+- source/API/semantic裁定なら§4.2の履歴照合結果（Ledger ID、旧案、KEEP/REPLACE/DEFERと理由）
 - scopeとnon-goals
 - receiving trackへの質問・依頼・stop condition
 - finding、counterexample、CI / proof / implementation evidence
@@ -150,6 +159,31 @@ scopeが実質的に変わった場合は新しいIssueを作り、元Issueか�
 Red Teamについては§7の独立性を優先する。
 first-pass attack用Issueには、その時点で許可された狭い入力だけを置き、M/F/Pのrationaleや過去の結論を先回りして混ぜない。
 first-pass finding後に追加情報を解禁する場合は、同じIssueへ追記するか、明示的にlinkしたfollow-up Issueで扱う。
+
+### 4.2 Historical design-intent gate（設計判断の必須照合）
+
+**必須手順:** [NewLang_Design_Decision_Procedure.md](NewLang_Design_Decision_Procedure.md)
+
+**旧案索引:** [NewLang_Design_Intent_Ledger.md](NewLang_Design_Intent_Ledger.md)
+
+対象: Track Mのnew/changed source syntax・API・semantic selection、Provisional/Deferredのnormative化、
+およびCoordinationによるscope authorization / candidate Draft acceptance。
+Track Pの実装が既存canonical規則を変更する場合も同じgateに戻す。
+faithful implementation、proofや純粋なmechanical/CI変更は理由付き `N/A` としてよい。
+
+**起動時/preflight:** 現canonical §、関連Ledger ID、過去の設計候補・実験・旧Draft/Issueを確認し、
+新規案を `KEEP / INTENTIONALLY REPLACE / DEFER` から選び、理由と互換性・no-foreclosure影響を記録する。
+Ledgerに載っていないことは「旧案が無い」という根拠ではない。
+
+**独立Coordination review:** 必要な履歴比較が無い、旧案を無説明で置換した、
+または `N/A` が設計変更を隠しているsource/API/semantic candidateは **BLOCK** する。
+台帳の該当entryは設計変更PRと同期する。ただしledgerはauthorityではない。
+PR作成時には`.github/PULL_REQUEST_TEMPLATE.md`が照合記入を促す。
+**PRテンプレートを記入したという形式だけではreview完了としない。**
+
+**Red Team first-pass独立性との両立:** §7を優先する。
+blind R reviewerにはfirst-pass disposition前に本ledgerや旧M/P rationaleを読ませない。
+M/Coordinationがpreflightを行い、R first-passの独立性を損なわない順序で照合する。
 
 ## 5. Finding分類
 
@@ -187,6 +221,7 @@ classificationとseverityは分けて扱う。
 - Vのcurrent value hypothesis / product evidence / strategic coverage risk
 - MがP/Fより先行しすぎていないか
 - 次のcross-track sequence
+- 次のsource/semantic milestoneに関係するLedgerの未決定・Deferred項目と§4.2照合状態
 
 典型的な実施時点は、major M milestoneのclosure後、または新しいmajor semantic familyを開始する前とする。
 
