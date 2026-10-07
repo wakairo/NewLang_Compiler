@@ -35,12 +35,13 @@ registered AVS `Pair { left: u8, right: u8 }` localに限って次のclosed prof
    - §13.8のexactly-once scope / nonescape / normal-result forwardingをそのまま再利用する。
 
 3. **field-vs-sum dotted spellingをboundedに分離する**
-   - simple `name.member` expressionでleft `name` がin-scope ordinary lexical localへ解決される場合、
-     本bounded profileではfixed-field routeとして解決する。
-   - そのlocalのstatic nominal type / field resolutionが本profileを満たさなければfield-source errorとし、
-     same tokensをsum constructorへfallbackしない。
-   - ordinary localへ解決されない場合に限り、既存§26.3の `sum_type.variant_name` constructor routeを適用し得る。
-   - constructor routeを選んだ後のresolution failureも従来どおりfield/member routeへfallbackしない。
+   - simple `name.member` expressionでは、left `name` のordinary lexical value-binding candidateと、
+     既存§26.3のsum-type candidateを別categoryとして解決する。
+   - value-binding categoryだけが成立する場合はbounded fixed-field route、
+     sum-type categoryだけが成立する場合はexisting constructor routeを選ぶ。
+   - 同じleft spellingが両categoryで成立する場合は本bounded profileではambiguity errorとし、
+     新しいvalue-vs-type precedenceを導入しない。
+   - category選択後のunknown field / wrong nominal base / unknown variant等を他categoryへfallbackしない。
    - frontendはsemantic resolution後にfield accessをbase binding identity + opaque ProjectionId + field typeへ固定し、
      backendへsource tokenのreparseやC offset-derived authorityを要求しない。
 
@@ -5071,17 +5072,32 @@ known-disjoint sibling `Value(S)` dependencyは、LのChangeだけを理由に�
 
 #### dotted source disambiguation
 
-本bounded profileでは `simple_name.member_name` のleft `simple_name` をまず
-ordinary lexical **value binding** として解決する。
+expression positionの `simple_name.member_name` について、frontendはleft `simple_name` を
+少なくとも次の二つの既存categoryに対して独立に分類する。
 
-- in-scope ordinary localへ解決され、そのstatic typeが本profileのregistered Pairなら、
-  fixed-field routeを選び、そのPairのfield setだけから `member_name` を解決する。
-- localへ解決された後にwrong nominal base / unknown field / non-profile shapeだった場合は
-  bounded field-source errorであり、same token sequenceをsum constructorとしてfallback解釈しない。
-- left simple nameがordinary lexical value bindingへ解決されない場合に限り、
-  §26.3のexisting `sum_type '.' variant_name` productionが適用可能である。
-- sum constructor routeを選んだ後のunknown variant / wrong sum / arity errorを
-  field/member accessへfallbackして救済しない。
+```text
+value candidate:
+    in-scope ordinary lexical local binding
+
+type candidate:
+    §26.3でsum_typeになり得るconcrete closed nominal sum type
+```
+
+resolution rule:
+
+- value candidateだけが成立する場合、本bounded fixed-field routeを選ぶ。
+  そのlocalのstatic typeはregistered Pairでなければならず、
+  `member_name` はそのPairのdeclared field setだけから解決する。
+- type candidateだけが成立する場合、§26.3のexisting sum-constructor routeを選ぶ。
+- 同じleft spellingについてvalue candidateとtype candidateが両方成立する場合、
+  本bounded profileでは **ambiguous dotted source** としてrejectする。
+  value-first / type-first等の新しいnamespace precedenceを導入しない。
+- categoryを選んだ後のwrong nominal base / unknown field / unknown variant / arity errorを、
+  他categoryへfallbackして別programとして救済しない。
+- candidateがどちらも成立しない場合もordinary member lookup等へfallbackしない。
+
+`loan_write(local_name.field_name)` はouter `loan_write` production自体が
+bounded fixed-field designatorを要求するため、sum-constructor candidateをoperandとして受理しない。
 
 このdisambiguationは本closed one-level profileだけのsource ruleであり、
 general member lookup / methods / ADL / implicit dereference / arbitrary-place grammarを導入しない。
