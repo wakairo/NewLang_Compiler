@@ -67,8 +67,7 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
     if (program->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
         return false;
 
-    program->functions[program->count++] =
-        (V0Function){call->function, body};
+    program->functions[program->count++] = (V0Function){call->function, body};
     return v0_validate_node(body, nl_checked_root(body), program);
 }
 
@@ -137,8 +136,7 @@ static bool v0_emit_block(FILE *stream, const NLCheckedFragment *fragment,
     NLCheckedNodeId item = block->first_item;
     while (item != 0) {
         const NLCheckedNodeView *view = nl_checked_node_view(fragment, item);
-        if (view == NULL ||
-            !v0_emit_node(stream, fragment, item, depth + 1))
+        if (view == NULL || !v0_emit_node(stream, fragment, item, depth + 1))
             return false;
         item = view->next_item;
     }
@@ -189,9 +187,8 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
 
     for (size_t i = 0; i < program->count; ++i) {
         const V0Function function = program->functions[i];
-        const NLCheckedNodeView *root =
-            nl_checked_node_view(function.body,
-                                 nl_checked_root(function.body));
+        const NLCheckedNodeView *root = nl_checked_node_view(
+            function.body, nl_checked_root(function.body));
         if (root == NULL ||
             fprintf(stream, "static void nl_fn_%zu(void)\n",
                     function.function) < 0 ||
@@ -247,16 +244,15 @@ static int compile_v0(const char *path)
         result = report_error("V0-PARSER", "cannot create parser", path, 1);
         goto cleanup;
     }
-    parse =
-        nl_parser_parse_function_unit(parser, &unit, &parse_diagnostic);
+    parse = nl_parser_parse_function_unit(parser, &unit, &parse_diagnostic);
     if (parse != NL_PARSE_OK) {
         result = render_parse_failure(source, &parse_diagnostic);
         goto cleanup;
     }
 
     if (nl_semantic_create(&context) != NL_CHECK_OK) {
-        result =
-            report_error("V0-CHECKER", "cannot create semantic context", path, 1);
+        result = report_error("V0-CHECKER", "cannot create semantic context",
+                              path, 1);
         goto cleanup;
     }
 
@@ -272,8 +268,8 @@ static int compile_v0(const char *path)
     if (nl_source_create(entry_text, sizeof(entry_text) - 1, "<v0-entry>",
                          &entry_source) != NL_SOURCE_OK ||
         nl_parser_create(entry_source, &entry_parser) != NL_PARSE_OK) {
-        result =
-            report_error("V0-ENTRY", "cannot create checked entry call", path, 1);
+        result = report_error("V0-ENTRY", "cannot create checked entry call",
+                              path, 1);
         goto cleanup;
     }
 
