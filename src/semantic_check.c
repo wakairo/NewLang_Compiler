@@ -1436,7 +1436,7 @@ static NLCheckedNodeId source_loop(Check *, const NLSyntaxView *);
 static NLCheckedNodeId source_local_loan(Check *, const NLSyntaxView *);
 static NLCheckedNodeId source_control(Check *, const NLSyntaxView *);
 
-static NLSymbolId dotted_binding(Check *check, NLSourceSpan name)
+static NLSymbolId field_binding(Check *check, NLSourceSpan name)
 {
     for (size_t i = check->context->binding_count; i > check->namespace_floor;
          --i)
@@ -1451,7 +1451,7 @@ static bool fixed_selection(Check *check, const NLSyntaxView *s,
 {
     NLSemanticContext *c = check->context;
     const NLSymbolId symbol =
-        dotted_binding(check, s->data.constructor.qualifier);
+        field_binding(check, s->data.field_designator.base);
     if (symbol == 0 || !nl_fixed_type(c, c->bindings[symbol - 1].view.type)) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span, "FIELD-PROFILE",
              "field base requires a direct registered Pair local");
@@ -1467,18 +1467,12 @@ static bool fixed_selection(Check *check, const NLSyntaxView *s,
     }
     size_t index = p.fixed_field_count;
     for (size_t i = 0; i < p.fixed_field_count; ++i)
-        if (equal_name(check, s->data.constructor.variant,
+        if (equal_name(check, s->data.field_designator.field,
                        c->types[b.type - 1].field_names[i]))
             index = i;
     if (index == p.fixed_field_count) {
         fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "FIELD-UNKNOWN-FIELD",
              "field is not declared by the selected Pair");
-        return false;
-    }
-    if (s->data.constructor.parentheses ||
-        s->data.constructor.argument_count != 0) {
-        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span, "FIELD-PROFILE",
-             "field reads are not method calls");
         return false;
     }
     const NLPlaceId child = p.fixed_fields[index];
@@ -1505,33 +1499,9 @@ static bool fixed_selection(Check *check, const NLSyntaxView *s,
     return true;
 }
 
-static NLCheckedNodeId dotted(Check *check, const NLSyntaxView *s)
+static NLCheckedNodeId field_read(Check *check, const NLSyntaxView *s)
 {
     NLSemanticContext *c = check->context;
-    const NLSymbolId symbol =
-        dotted_binding(check, s->data.constructor.qualifier);
-    const bool field =
-        symbol != 0 && nl_fixed_type(c, c->bindings[symbol - 1].view.type);
-    bool sum = false;
-    for (size_t i = 0; i < c->type_count; ++i)
-        if (c->types[i].view.kind == NL_TYPE_SUM && c->types[i].name != NULL &&
-            equal_name(check, s->data.constructor.qualifier, c->types[i].name))
-            sum = true;
-    if (field && sum) {
-        fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "FIELD-DOTTED-AMBIGUOUS",
-             "dotted base is both a Pair local and a closed sum type");
-        return 0;
-    }
-    if (sum)
-        return sum_constructor(check, s);
-    if (!field) {
-        fail(check,
-             symbol == 0 ? NL_CHECK_SEMANTIC_ERROR
-                         : NL_CHECK_SEMANTIC_UNSUPPORTED,
-             s->span, symbol == 0 ? "P6-SUM-QUALIFIER" : "FIELD-PROFILE",
-             "dotted source has no supported field or sum category");
-        return 0;
-    }
     NLCheckedField evidence;
     if (!fixed_selection(check, s, NL_ACCESS_READ, &evidence))
         return 0;
@@ -1611,9 +1581,9 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
     if (check->in_function_body && node->kind != NL_SYNTAX_EXPR_NAME &&
         node->kind != NL_SYNTAX_EXPR_CALL && node->kind != NL_SYNTAX_BLOCK &&
         node->kind != NL_SYNTAX_SUM_CONSTRUCTOR &&
-        node->kind != NL_SYNTAX_DOTTED && node->kind != NL_SYNTAX_MATCH &&
-        node->kind != NL_SYNTAX_IF && node->kind != NL_SYNTAX_LOOP &&
-        node->kind != NL_SYNTAX_U8_LITERAL &&
+        node->kind != NL_SYNTAX_FIELD_DESIGNATOR &&
+        node->kind != NL_SYNTAX_MATCH && node->kind != NL_SYNTAX_IF &&
+        node->kind != NL_SYNTAX_LOOP && node->kind != NL_SYNTAX_U8_LITERAL &&
         node->kind != NL_SYNTAX_AGGREGATE &&
         node->kind != NL_SYNTAX_LOCAL_READ_LOAN &&
         node->kind != NL_SYNTAX_LOCAL_WRITE_LOAN) {
@@ -1651,8 +1621,8 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         result = source_block(check, node);
     } else if (node->kind == NL_SYNTAX_SUM_CONSTRUCTOR) {
         result = sum_constructor(check, node);
-    } else if (node->kind == NL_SYNTAX_DOTTED) {
-        result = dotted(check, node);
+    } else if (node->kind == NL_SYNTAX_FIELD_DESIGNATOR) {
+        result = field_read(check, node);
     } else if (node->kind == NL_SYNTAX_MATCH) {
         result = sum_match(check, node);
     } else if (node->kind == NL_SYNTAX_IF) {
@@ -4666,9 +4636,9 @@ static NLCheckedNodeId source_local_loan(Check *check, const NLSyntaxView *s)
 {
     NLSemanticContext *c = check->context;
     const NLSyntaxView *operand_node = nl_syntax_node_view(s->data.loan.source);
-    const bool field = operand_node->kind == NL_SYNTAX_DOTTED;
+    const bool field = operand_node->kind == NL_SYNTAX_FIELD_DESIGNATOR;
     const NLSourceSpan operand =
-        field ? operand_node->data.constructor.qualifier : operand_node->span;
+        field ? operand_node->data.field_designator.base : operand_node->span;
     NLCheckedField field_evidence = {0};
     if (field &&
         !fixed_selection(check, operand_node, NL_ACCESS_WRITE, &field_evidence))
@@ -4996,9 +4966,10 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
          root->kind != NL_SYNTAX_AGGREGATE_BINDING &&
          root->kind != NL_SYNTAX_AGGREGATE &&
          root->kind != NL_SYNTAX_SUM_CONSTRUCTOR &&
-         root->kind != NL_SYNTAX_DOTTED && root->kind != NL_SYNTAX_MATCH &&
-         root->kind != NL_SYNTAX_IF && root->kind != NL_SYNTAX_LOOP &&
-         root->kind != NL_SYNTAX_BLOCK && root->kind != NL_SYNTAX_STATEMENT &&
+         root->kind != NL_SYNTAX_FIELD_DESIGNATOR &&
+         root->kind != NL_SYNTAX_MATCH && root->kind != NL_SYNTAX_IF &&
+         root->kind != NL_SYNTAX_LOOP && root->kind != NL_SYNTAX_BLOCK &&
+         root->kind != NL_SYNTAX_STATEMENT &&
          root->kind != NL_SYNTAX_U8_LITERAL &&
          root->kind != NL_SYNTAX_LOCAL_READ_LOAN &&
          root->kind != NL_SYNTAX_LOCAL_WRITE_LOAN) ||

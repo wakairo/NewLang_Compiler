@@ -174,13 +174,13 @@ static bool names(void)
                         NL_CHECK_SEMANTIC_ERROR, "P9-RETURN-TYPE"));
     CHECK(unit_register(f.context, "fn valid()->unit{}", NL_CHECK_OK, NULL));
     CHECK(body_ok(f.context, "valid()"));
-    CHECK(test_rejected(f.context, "CopyT.valid()", TEST_SOURCE,
+    CHECK(test_rejected(f.context, "CopyT::valid()", TEST_SOURCE,
                         NL_CHECK_SEMANTIC_ERROR, "P6-SUM-QUALIFIER"));
     NLTypeId labels;
     const NLSumVariant member[] = {{"valid", 0}};
     CHECK(nl_semantic_register_sum(f.context, "Labels", member, 1, &labels) ==
           NL_CHECK_OK);
-    CHECK(body_ok(f.context, "let member=Labels.valid"));
+    CHECK(body_ok(f.context, "let member=Labels::valid"));
     CHECK(unit_register(f.context, "fn valid()->unit{}",
                         NL_CHECK_SEMANTIC_ERROR, "P11-DUPLICATE-FUNCTION"));
     nl_semantic_destroy(f.context);
@@ -357,8 +357,8 @@ static bool behavior(void)
                         "fn decoder(s:Choice,x:CopyT)->CopyT{match "
                         "s{Fail=>{return x;},Good=>{x}}}",
                         NL_CHECK_OK, NULL));
-    CHECK(body_ok(f.context, "let fail=Choice.Fail"));
-    CHECK(body_ok(f.context, "let good=Choice.Good"));
+    CHECK(body_ok(f.context, "let fail=Choice::Fail"));
+    CHECK(body_ok(f.context, "let good=Choice::Good"));
     CHECK(body_ok(f.context, "let result_fail=caller(fail,y)"));
     CHECK(body_ok(f.context, "let result_good=caller(good,y)"));
     CHECK(unit_register(f.context, "fn exit_unit()->unit{return unit;}",

@@ -558,7 +558,7 @@ static bool integration(void)
                         "{match tag {A=>{return x;},B=>{return x;},}}",
                         NL_CHECK_OK, NULL));
     TestChecked matched = {0};
-    CHECK(test_run(c, "matched(Tag.A,byte_value)", TEST_SOURCE, NL_CHECK_OK,
+    CHECK(test_run(c, "matched(Tag::A,byte_value)", TEST_SOURCE, NL_CHECK_OK,
                    NULL, &matched));
     const NLCheckedFragment *body = nl_checked_call_body(
         matched.artifact, nl_checked_root(matched.artifact));

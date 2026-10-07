@@ -8,9 +8,9 @@ from checked_c_v0_test import negative, positive, run
 DECL = "struct Pair{left:u8,right:u8}\n"
 BODY = """fn main()->unit {
 let p=Pair{left:u8(7),right:u8(9)};
-let before=p.left;
-let old=loan_write(p.left){|w|replace(w,u8(11))};
-let after=p.left;let sibling=p.right;
+let before=p@left;
+let old=loan_write(p@left){|w|replace(w,u8(11))};
+let after=p@left;let sibling=p@right;
 let Pair{left,right}=p;
 before;old;after;sibling;left;right;unit
 }"""
@@ -36,27 +36,38 @@ def main() -> None:
             raise SystemExit("before/after field read must remain actual member reads")
         if "Pair" in c or "left" in c or "right" in c or "offsetof" in c:
             raise SystemExit("source labels/layout leaked into semantic lowering")
-        positive(root, compiler, cc, "right", DECL + BODY.replace("p.left", "p.right"))
+        positive(root, compiler, cc, "right", DECL + BODY.replace("p@left", "p@right"))
         positive(root, compiler, cc, "reordered", DECL + BODY.replace(
             "left:u8(7),right:u8(9)", "right:u8(9),left:u8(7)"))
         positive(root, compiler, cc, "standalone", DECL +
-                 "fn main()->unit{let p=Pair{left:u8(7),right:u8(9)};p.left;p.right;unit}")
+                 "fn main()->unit{let p=Pair{left:u8(7),right:u8(9)};p@left;p@right;unit}")
         positive(root, compiler, cc, "sequential", DECL +
                  "fn main()->unit{let p=Pair{left:u8(7),right:u8(9)};"
-                 "loan_write(p.left){|w|replace(w,u8(11));unit};"
-                 "loan_write(p.left){|w|replace(w,u8(13));unit};p.left;unit}")
+                 "loan_write(p@left){|w|replace(w,u8(11));unit};"
+                 "loan_write(p@left){|w|replace(w,u8(13));unit};p@left;unit}")
         cases = [
-            ("unknown", "let bad=p.nope;unit", "FIELD-UNKNOWN-FIELD"),
-            ("wrongtype", "loan_write(p.left){|w|replace(w,unit)};unit", "P3-TYPE-MISMATCH"),
-            ("authority", "replace(p.left,u8(11));unit", "P3-WRITE-REF-REQUIRED"),
-            ("escape", "let bad=loan_write(p.left){|w|w};unit", "P8-EXIT-DEPENDENCY"),
-            ("range", "loan_write(p.left){|w|replace(w,u8(256))};unit", "V1-U8-LITERAL-RANGE"),
+            ("legacy", "p.left;unit", "SOURCE-DOT-RESERVED"),
+            ("legacyloan", "loan_write(p.left){|w|unit};unit", "LOCAL-LOAN-PROFILE"),
+            ("colonloan", "loan_write(p::left){|w|unit};unit", "LOCAL-LOAN-PROFILE"),
+            ("valuequalifier", "p::left;unit", "P6-SUM-QUALIFIER"),
+            ("receiver", "p.left(unit);unit", "SOURCE-DOT-RESERVED"),
+            ("module", "Foo::make(unit);unit", "P6-SUM-QUALIFIER"),
+            ("nested", "p@left@right;unit", "P5-EXPRESSION-UNSUPPORTED"),
+            ("wrongbase", "let x=u8(7);x@left;unit", "FIELD-PROFILE"),
+            ("ptrbase", "let x=u8(7);let token=loan_read(x){|r|ptr_from_ref(r)};token@left;unit", "FIELD-PROFILE"),
+            ("refbase", "let x=u8(7);loan_read(x){|r|r@left};unit", "FIELD-PROFILE"),
+            ("arbitrarybase", "u8(7)@left;unit", "P5-EXPECTED-ITEM-END"),
+            ("unknown", "let bad=p@nope;unit", "FIELD-UNKNOWN-FIELD"),
+            ("wrongtype", "loan_write(p@left){|w|replace(w,unit)};unit", "P3-TYPE-MISMATCH"),
+            ("authority", "replace(p@left,u8(11));unit", "P3-WRITE-REF-REQUIRED"),
+            ("escape", "let bad=loan_write(p@left){|w|w};unit", "P8-EXIT-DEPENDENCY"),
+            ("range", "loan_write(p@left){|w|replace(w,u8(256))};unit", "V1-U8-LITERAL-RANGE"),
         ]
         for name, body, code in cases:
             negative(root, compiler, name, DECL +
                      f"fn main()->unit{{let p=Pair{{left:u8(7),right:u8(9)}};{body}}}", code)
         for name, body in [
-            ("store", "loan_write(p.left){|w|store(w,u8(11));unit};unit"),
+            ("store", "loan_write(p@left){|w|store(w,u8(11));unit};unit"),
             ("call", "let value=u8fn();unit"),
         ]:
             source = root / f"{name}.nl"

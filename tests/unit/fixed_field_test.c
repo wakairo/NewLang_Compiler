@@ -7,12 +7,12 @@ static const char declaration[] =
     "struct Pair{left:u8,right:u8}fn unused()->unit{unit}";
 static const char creation[] = "let p=Pair{left:u8(7),right:u8(9)};";
 static const char change[] =
-    "let old=loan_write(p.left){|w|replace(w,u8(11))};";
+    "let old=loan_write(p@left){|w|replace(w,u8(11))};";
 static const char witness[] =
     "struct Pair{left:u8,right:u8}fn main()->unit{"
-    "let p=Pair{left:u8(7),right:u8(9)};let before=p.left;"
-    "let old=loan_write(p.left){|w|replace(w,u8(11))};"
-    "let after=p.left;let sibling=p.right;let Pair{left,right}=p;"
+    "let p=Pair{left:u8(7),right:u8(9)};let before=p@left;"
+    "let old=loan_write(p@left){|w|replace(w,u8(11))};"
+    "let after=p@left;let sibling=p@right;let Pair{left,right}=p;"
     "before;old;after;sibling;left;right;unit}";
 
 void *__real_malloc(size_t);
@@ -79,8 +79,16 @@ static bool binding_scalar(NLSemanticContext *c, const char *name, size_t value)
 }
 static bool parser_tests(void)
 {
-    const char *outside[] = {"p.left.right", "make().left",
-                             "loan_write(p.left.right){|w|unit}"};
+    const char *outside[] = {"p@left@right",
+                             "make()@left",
+                             "{p}@left",
+                             "p@left()",
+                             "loan_write(p@left@right){|w|unit}",
+                             "p.left",
+                             "p.left()",
+                             "x.f(unit)",
+                             "loan_write(p.left){|w|unit}",
+                             "loan_write(p::left){|w|unit}"};
     for (size_t i = 0; i < sizeof(outside) / sizeof(outside[0]); ++i) {
         NLSource *source = NULL;
         NLParser *parser = NULL;
@@ -120,13 +128,13 @@ static bool parser_tests(void)
             const NLSyntaxView *binding = nl_syntax_node_view(before);
             CHECK(
                 nl_syntax_node_view(binding->data.binding.initializer)->kind ==
-                NL_SYNTAX_DOTTED);
+                NL_SYNTAX_FIELD_DESIGNATOR);
             binding = nl_syntax_node_view(nl_syntax_next_argument(before));
             const NLSyntaxView *loan =
                 nl_syntax_node_view(binding->data.binding.initializer);
             CHECK(loan->kind == NL_SYNTAX_LOCAL_WRITE_LOAN &&
                   nl_syntax_node_view(loan->data.loan.source)->kind ==
-                      NL_SYNTAX_DOTTED);
+                      NL_SYNTAX_FIELD_DESIGNATOR);
         } else {
             CHECK(status == NL_PARSE_OUT_OF_MEMORY && tree == NULL);
             CHECK(nl_parser_parse_function_unit(parser, &tree, NULL) ==
@@ -158,7 +166,7 @@ static bool state(void)
     CHECK(l.parent_incarnation == before.incarnation &&
           l.current_value == c->values[pb.value - 1].fields[0]);
     CHECK(c->values[l.current_value - 1].carrier == NL_CARRIER_AGGREGATE);
-    CHECK(run_ok(c, "let before=p.left;"));
+    CHECK(run_ok(c, "let before=p@left;"));
     CHECK(binding_scalar(c, "before", 7));
     CHECK(run_ok(c, "let q=p;")); /* independent Copy, semantic-only control */
     CHECK(run_ok(c, change));
@@ -174,16 +182,16 @@ static bool state(void)
           after.current_value);
     CHECK(c->values[before.current_value - 1].carrier == NL_CARRIER_ENDED);
     CHECK(nl_fixed_validate(c) == NL_CHECK_OK);
-    CHECK(run_ok(c, "let after=p.left;"));
-    CHECK(run_ok(c, "let sibling=p.right;"));
+    CHECK(run_ok(c, "let after=p@left;"));
+    CHECK(run_ok(c, "let sibling=p@right;"));
     CHECK(binding_scalar(c, "old", 7) && binding_scalar(c, "after", 11) &&
           binding_scalar(c, "sibling", 9));
     CHECK(run_ok(c, "let Pair{left,right}=p;"));
     CHECK(binding_scalar(c, "left", 11) && binding_scalar(c, "right", 9));
-    CHECK(run_ok(c, "let qleft=q.left;"));
+    CHECK(run_ok(c, "let qleft=q@left;"));
     CHECK(binding_scalar(c, "qleft", 7));
     CHECK(c->bindings[symbol - 1].view.availability == NL_AVAILABLE);
-    CHECK(run_ok(c, "loan_write(p.left){|w|replace(w,u8(13))}"));
+    CHECK(run_ok(c, "loan_write(p@left){|w|replace(w,u8(13))}"));
     CHECK(c->places[left - 1].incarnation == l.incarnation);
     CHECK(test_place_equal(r, c->places[right - 1]));
     nl_semantic_destroy(c);
@@ -348,49 +356,71 @@ static bool negatives(void)
 {
     NLSemanticContext *c = NULL;
     CHECK(setup(&c));
-    CHECK(test_rejected(c, "p.nope", TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
+    CHECK(test_rejected(c, "p@nope", TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
                         "FIELD-UNKNOWN-FIELD"));
-    CHECK(test_rejected(c, "loan_write(p.nope){|w|unit}", TEST_SOURCE,
+    CHECK(test_rejected(c, "loan_write(p@nope){|w|unit}", TEST_SOURCE,
                         NL_CHECK_SEMANTIC_ERROR, "FIELD-UNKNOWN-FIELD"));
-    CHECK(test_rejected(c, "replace(p.left,u8(11))", TEST_SOURCE,
+    CHECK(test_rejected(c, "replace(p@left,u8(11))", TEST_SOURCE,
                         NL_CHECK_SEMANTIC_ERROR, "P3-WRITE-REF-REQUIRED"));
-    CHECK(test_rejected(c, "loan_write(p.left){|w|replace(w,unit)}",
+    CHECK(test_rejected(c, "loan_write(p@left){|w|replace(w,unit)}",
                         TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
                         "P3-TYPE-MISMATCH"));
-    CHECK(test_rejected(c, "loan_write(p.left){|w|w}", TEST_SOURCE,
+    CHECK(test_rejected(c, "loan_write(p@left){|w|w}", TEST_SOURCE,
                         NL_CHECK_SEMANTIC_ERROR, "P8-EXIT-DEPENDENCY"));
-    CHECK(test_rejected(c, "p.left()", TEST_SOURCE,
+    CHECK(test_rejected(c, "p::left", TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
+                        "P6-SUM-QUALIFIER")); /* no value-base fallback */
+    CHECK(test_rejected(c, "Pair::left", TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
+                        "P6-SUM-QUALIFIER"));
+    CHECK(test_rejected(c, "Foo::make(unit)", TEST_SOURCE,
+                        NL_CHECK_SEMANTIC_ERROR, "P6-SUM-QUALIFIER"));
+    CHECK(test_rejected(c, "missing@left", TEST_SOURCE,
                         NL_CHECK_SEMANTIC_UNSUPPORTED, "FIELD-PROFILE"));
     CHECK(run_ok(c, "let x=u8(7);"));
-    CHECK(test_rejected(c, "x.left", TEST_SOURCE, NL_CHECK_SEMANTIC_UNSUPPORTED,
+    CHECK(test_rejected(c, "x@left", TEST_SOURCE, NL_CHECK_SEMANTIC_UNSUPPORTED,
                         "FIELD-PROFILE"));
-    CHECK(test_rejected(c, "loan_write(x.left){|w|unit}", TEST_SOURCE,
+    CHECK(test_rejected(c, "loan_write(x@left){|w|unit}", TEST_SOURCE,
                         NL_CHECK_SEMANTIC_UNSUPPORTED, "FIELD-PROFILE"));
     CHECK(run_ok(c, "let token=loan_read(x){|r|ptr_from_ref(r)};"));
-    CHECK(test_rejected(c, "token.left", TEST_SOURCE,
+    CHECK(test_rejected(c, "token@left", TEST_SOURCE,
+                        NL_CHECK_SEMANTIC_UNSUPPORTED, "FIELD-PROFILE"));
+    CHECK(test_rejected(c, "loan_read(x){|r|r@left}", TEST_SOURCE,
                         NL_CHECK_SEMANTIC_UNSUPPORTED, "FIELD-PROFILE"));
     CHECK(register_source(
         c, "struct Other{left:u8,right:u8}fn other()->unit{unit}"));
     CHECK(run_ok(c, "let other_pair=Other{left:u8(7),right:u8(9)};"));
-    CHECK(test_rejected(c, "other_pair.left", TEST_SOURCE,
+    CHECK(test_rejected(c, "other_pair@left", TEST_SOURCE,
                         NL_CHECK_SEMANTIC_UNSUPPORTED, "FIELD-PROFILE"));
     NLTypeId sum;
     const NLSumVariant variants[] = {{"left", 0}};
     CHECK(nl_semantic_register_sum(c, "x", variants, 1, &sum) == NL_CHECK_OK);
-    CHECK(test_rejected(c, "x.nope", TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
+    CHECK(test_rejected(c, "x::nope", TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
                         "P6-UNKNOWN-VARIANT"));
-    CHECK(run_ok(c, "x.left")); /* sum category, not scalar-local fallback */
+    CHECK(run_ok(c, "x::left")); /* type category, not scalar-local fallback */
+    CHECK(test_rejected(c, "x@left", TEST_SOURCE, NL_CHECK_SEMANTIC_UNSUPPORTED,
+                        "FIELD-PROFILE"));
     CHECK(nl_semantic_register_sum(c, "p", variants, 1, &sum) == NL_CHECK_OK);
-    CHECK(test_rejected(c, "p.left", TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
-                        "FIELD-DOTTED-AMBIGUOUS"));
-    CHECK(test_rejected(c, "p.nope", TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
-                        "FIELD-DOTTED-AMBIGUOUS"));
+    TestChecked field = {0}, constructor = {0};
+    CHECK(test_run(c, "p@left", TEST_SOURCE, NL_CHECK_OK, NULL, &field));
+    CHECK(test_root(&field)->kind == NL_CHECKED_FIELD_READ &&
+          test_root(&field)->type == nl_semantic_core_type(c, NL_TYPE_U8) &&
+          test_root(&field)->field.present &&
+          test_root(&field)->scalar_result.value == 7);
+    CHECK(test_run(c, "p::left", TEST_SOURCE, NL_CHECK_OK, NULL, &constructor));
+    CHECK(test_root(&constructor)->kind == NL_CHECKED_SUM_CONSTRUCTOR &&
+          test_root(&constructor)->type == sum &&
+          !test_root(&constructor)->field.present);
+    test_checked_destroy(&field);
+    test_checked_destroy(&constructor);
+    CHECK(test_rejected(c, "p@nope", TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
+                        "FIELD-UNKNOWN-FIELD"));
+    CHECK(test_rejected(c, "p::nope", TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
+                        "P6-UNKNOWN-VARIANT"));
     CHECK(run_ok(c, change)); /* write designator selects field, not sum */
     const NLPlaceId root =
         c->bindings[nl_semantic_find_binding(c, "p") - 1].view.place;
     c->places[root - 1].live =
         false; /* invalid/stale pre-state destruction control */
-    CHECK(test_rejected(c, "loan_write(p.left){|w|unit}", TEST_SOURCE,
+    CHECK(test_rejected(c, "loan_write(p@left){|w|unit}", TEST_SOURCE,
                         NL_CHECK_SEMANTIC_ERROR, "FIELD-STALE-BASE"));
     nl_semantic_destroy(c);
     c = NULL;
@@ -400,7 +430,7 @@ static bool negatives(void)
     NLSymbolId exclusive;
     CHECK(test_reference(c, "exclusive", p, NL_TYPE_REF, NL_ACCESS_READ, true,
                          &exclusive, NULL));
-    CHECK(test_rejected(c, "p.left", TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
+    CHECK(test_rejected(c, "p@left", TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
                         "P3-REF-CONFLICT"));
     CHECK(test_rejected(c, "let q=p;", TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR,
                         "P3-REF-CONFLICT"));
@@ -449,8 +479,8 @@ static bool failures(void)
     nl_parser_destroy(unit_parser);
     nl_source_destroy(unit_source);
     const char *operations[] = {
-        creation, "let copied=p.left;",
-        change,   "{let old=loan_write(p.left){|w|replace(w,u8(11))};old;unit}",
+        creation, "let copied=p@left;",
+        change,   "{let old=loan_write(p@left){|w|replace(w,u8(11))};old;unit}",
         change,   "main()"};
     for (size_t op = 0; op < sizeof(operations) / sizeof(operations[0]); ++op) {
         bool success = false;

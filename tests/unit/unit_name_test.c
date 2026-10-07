@@ -85,7 +85,7 @@ static bool admission(void)
     CHECK(nl_semantic_register_sum(f.context, "Option", variants, 2, &option) ==
           NL_CHECK_OK);
     CHECK(seed(&f, "payload2", f.linear));
-    CHECK(body_ok(f.context, "let option=Option.Some(payload2)"));
+    CHECK(body_ok(f.context, "let option=Option::Some(payload2)"));
     CHECK(rejected(f.context, "match option {Some(unit)=>{unit},None=>{unit}}",
                    TEST_SOURCE));
     NLSemanticBindingView option_binding;
@@ -183,7 +183,7 @@ static bool builtin(void)
     const NLSumVariant labels[] = {{"unit", 0}, {"Other", 0}};
     CHECK(nl_semantic_register_sum(f.context, "Flag", labels, 2, &flag) ==
           NL_CHECK_OK);
-    CHECK(body_ok(f.context, "let flag=Flag.unit"));
+    CHECK(body_ok(f.context, "let flag=Flag::unit"));
     CHECK(body_ok(f.context, "match flag {unit=>{unit},Other=>{unit}}"));
     CHECK(seed(&f, "x", f.copy));
     NLTypeId record;
@@ -255,7 +255,7 @@ static bool failure(void)
     const NLSumVariant variants[] = {{"Some", f.copy}, {"None", 0}};
     CHECK(nl_semantic_register_sum(f.context, "Option", variants, 2, &option) ==
           NL_CHECK_OK);
-    CHECK(body_ok(f.context, "let option=Option.Some(x)"));
+    CHECK(body_ok(f.context, "let option=Option::Some(x)"));
     CHECK(check_faults(f.context,
                        "match option {Some(unit)=>{unit},None=>{unit}}",
                        NL_CHECK_SEMANTIC_ERROR));

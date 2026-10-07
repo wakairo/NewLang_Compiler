@@ -24,6 +24,7 @@ static bool punctuation(unsigned char byte)
     case ':':
     case ';':
     case '.':
+    case '@':
     case '+':
     case '-':
     case '*':

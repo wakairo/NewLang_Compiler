@@ -21,8 +21,7 @@ typedef enum {
     NL_SYNTAX_MULTI_BINDING,
     NL_SYNTAX_AGGREGATE_BINDING,
     NL_SYNTAX_AGGREGATE,
-    NL_SYNTAX_DOTTED, /* neutral one-level source; constructor union, resolved
-                        to fixed field or sum by the checker */
+    NL_SYNTAX_FIELD_DESIGNATOR, /* exact local@field; field_designator union */
     NL_SYNTAX_SUM_CONSTRUCTOR,
     NL_SYNTAX_MATCH,
     NL_SYNTAX_IF,
@@ -112,6 +111,9 @@ typedef struct {
             const NLSyntaxNode *fields, *initializer;
             size_t count;
         } aggregate;
+        struct {
+            NLSourceSpan base, field;
+        } field_designator;
         struct {
             NLSourceSpan qualifier, variant;
             const NLSyntaxNode *type; /* optional exact Option<ptr<H>> */

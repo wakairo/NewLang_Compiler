@@ -366,11 +366,11 @@ static bool workload(size_t w)
         CHECK(nl_semantic_register_sum(f.c, "Choice", variants, 2, &choice) ==
               NL_CHECK_OK);
         ok = evidence(&f,
-                      "loop(){match Choice.A{A=>{continue();},B=>{break x;}}}",
+                      "loop(){match Choice::A{A=>{continue();},B=>{break x;}}}",
                       1, 1, 0);
         CHECK(evidence(&f,
                        "loop(i=x){match "
-                       "Choice.A{A=>{continue(i);},B=>{unit}};continue(y);}",
+                       "Choice::A{A=>{continue(i);},B=>{unit}};continue(y);}",
                        2, 0, 0));
         break;
     }

@@ -78,9 +78,12 @@ static bool parse(const char *text, NLParseStatus expected)
         fprintf(stderr, "%s: parse %d expected %d (%s)\n", text, status,
                 expected, d.diagnostic.code);
     CHECK(status == expected);
-    if (tree != NULL)
+    if (tree != NULL) {
         CHECK(nl_syntax_tree_root(tree) != NULL);
-    else
+        if (strncmp(text, "Option", 6) == 0)
+            CHECK(nl_syntax_node_view(nl_syntax_tree_root(tree))->kind ==
+                  NL_SYNTAX_SUM_CONSTRUCTOR);
+    } else
         CHECK(nl_source_span_valid(source, d.span));
     nl_syntax_tree_destroy(tree);
     nl_parser_destroy(parser);
@@ -89,34 +92,41 @@ static bool parse(const char *text, NLParseStatus expected)
 }
 static bool parser_tests(void)
 {
-    const char *valid[] = {"Option.None",
-                           "Option.Some(x)",
-                           "Option.Some()",
-                           "Option.None(x,y)",
+    const char *valid[] = {"Option::None",
+                           "Option::Some(x)",
+                           "Option \n:: Some(x)",
+                           "Option::Some()",
+                           "Option::None(x,y)",
                            "match x {}",
                            "match x {None=>{},Some(y)=>{y},}",
                            "match f(x) {Some(_)=>{},None=>{}}",
-                           "match Option.None {None=>{}}",
+                           "match Option::None {None=>{}}",
                            "match {x} {None=>{}}"};
     for (size_t i = 0; i < sizeof(valid) / sizeof(valid[0]); ++i)
         CHECK(parse(valid[i], NL_PARSE_OK));
-    const char *bad[] = {"match x {None = > {}}",
-                         "match x {None =\n> {}}",
-                         "match x {Some(y)=>{} None=>{}}",
-                         "match x {None=>x}",
-                         "Option.Some(x,)",
-                         "match x {None=>{}",
-                         "match x {Some()=>{}}"};
+    const char *bad[] = {
+        "Option: :Some(x)",       "Option:\n:Some(x)",
+        "Option:Some(x)",         "match x {None = > {}}",
+        "match x {None =\n> {}}", "match x {Some(y)=>{} None=>{}}",
+        "match x {None=>x}",      "Option::Some(x,)",
+        "match x {None=>{}",      "match x {Some()=>{}}"};
     for (size_t i = 0; i < sizeof(bad) / sizeof(bad[0]); ++i)
         CHECK(parse(bad[i], NL_PARSE_SYNTAX_ERROR));
-    const char *unsupported[] = {"match x {_=>{}}",
+    const char *unsupported[] = {"Option.None",
+                                 "Option.Some(x)",
+                                 "Option::Some(x).f()",
+                                 "Option<u32>.None",
+                                 "Option<u32>::None",
+                                 "Result<u32,Error>::Ok(x)",
+                                 "match x {_=>{}}",
                                  "match x {Some(Some(y))=>{}}",
-                                 "match x {Other.Some(y)=>{}}",
+                                 "match x {Other::Some(y)=>{}}",
                                  "match x {Some(y) if g =>{}}",
                                  "sum Option {None,Some(T)}",
                                  "match x {Some(y)|None=>{}}"};
     for (size_t i = 0; i < sizeof(unsupported) / sizeof(unsupported[0]); ++i)
         CHECK(parse(unsupported[i], NL_PARSE_SYNTAX_UNSUPPORTED));
+    CHECK(parse("Option:/*gap*/:Some(x)", NL_PARSE_LEXICALLY_UNSUPPORTED));
     return true;
 }
 static bool registry_tests(void)
@@ -153,7 +163,7 @@ static bool registry_tests(void)
                                    &sentinel) == NL_CHECK_SEMANTIC_UNSUPPORTED);
     CHECK(test_unchanged(f.context, &before));
     CHECK(seed(&f, "x", f.copy));
-    CHECK(ok(&f, "let c = CopySum.Some(x)"));
+    CHECK(ok(&f, "let c = CopySum::Some(x)"));
     TestChecked a = {0};
     CHECK(run(&f, "c", &a));
     NLValueId value = test_root(&a)->results[0].value;
@@ -177,29 +187,29 @@ static bool registry_tests(void)
           NL_CHECK_OK);
     owned_name[0] = 'X';
     owned_variant[0] = 'X';
-    CHECK(ok(&f, "match OwnedSum.Only(x) {Only(v)=>{v}}"));
-    CHECK(rejected(&f, "CopySum.Only(x)", NL_CHECK_SEMANTIC_ERROR,
+    CHECK(ok(&f, "match OwnedSum::Only(x) {Only(v)=>{v}}"));
+    CHECK(rejected(&f, "CopySum::Only(x)", NL_CHECK_SEMANTIC_ERROR,
                    "P6-UNKNOWN-VARIANT"));
-    CHECK(rejected(&f, "CopySum.Unknown(missing)", NL_CHECK_SEMANTIC_ERROR,
+    CHECK(rejected(&f, "CopySum::Unknown(missing)", NL_CHECK_SEMANTIC_ERROR,
                    "P6-UNKNOWN-VARIANT"));
-    CHECK(rejected(&f, "CopySum.Some(x,x)", NL_CHECK_SEMANTIC_ERROR,
+    CHECK(rejected(&f, "CopySum::Some(x,x)", NL_CHECK_SEMANTIC_ERROR,
                    "P6-CONSTRUCTOR-SHAPE"));
-    CHECK(rejected(&f, "CopySum.Unknown(x)", NL_CHECK_SEMANTIC_ERROR,
+    CHECK(rejected(&f, "CopySum::Unknown(x)", NL_CHECK_SEMANTIC_ERROR,
                    "P6-UNKNOWN-VARIANT"));
-    CHECK(rejected(&f, "CopyT.Some(x)", NL_CHECK_SEMANTIC_ERROR,
+    CHECK(rejected(&f, "CopyT::Some(x)", NL_CHECK_SEMANTIC_ERROR,
                    "P6-SUM-QUALIFIER"));
-    CHECK(rejected(&f, "Unknown.Some(x)", NL_CHECK_SEMANTIC_ERROR,
+    CHECK(rejected(&f, "Unknown::Some(x)", NL_CHECK_SEMANTIC_ERROR,
                    "P6-SUM-QUALIFIER"));
-    CHECK(rejected(&f, "CopySum.Some", NL_CHECK_SEMANTIC_ERROR,
+    CHECK(rejected(&f, "CopySum::Some", NL_CHECK_SEMANTIC_ERROR,
                    "P6-CONSTRUCTOR-SHAPE"));
-    CHECK(rejected(&f, "CopySum.Some()", NL_CHECK_SEMANTIC_ERROR,
+    CHECK(rejected(&f, "CopySum::Some()", NL_CHECK_SEMANTIC_ERROR,
                    "P6-CONSTRUCTOR-SHAPE"));
-    CHECK(rejected(&f, "CopySum.None()", NL_CHECK_SEMANTIC_ERROR,
+    CHECK(rejected(&f, "CopySum::None()", NL_CHECK_SEMANTIC_ERROR,
                    "P6-CONSTRUCTOR-SHAPE"));
-    CHECK(rejected(&f, "CopySum.None(x,x)", NL_CHECK_SEMANTIC_ERROR,
+    CHECK(rejected(&f, "CopySum::None(x,x)", NL_CHECK_SEMANTIC_ERROR,
                    "P6-CONSTRUCTOR-SHAPE"));
     CHECK(seed(&f, "wrong", f.discardable));
-    CHECK(rejected(&f, "CopySum.Some(wrong)", NL_CHECK_SEMANTIC_ERROR,
+    CHECK(rejected(&f, "CopySum::Some(wrong)", NL_CHECK_SEMANTIC_ERROR,
                    "P6-PAYLOAD-TYPE"));
     test_checked_destroy(&a);
     nl_semantic_destroy(f.context);
@@ -218,7 +228,7 @@ static bool consuming_tests(void)
     CHECK(nl_semantic_register_function(f.context, "recover", &f.discardable, 1,
                                         f.copy, false, false) == NL_CHECK_OK);
     CHECK(seed(&f, "header", f.linear) && seed(&f, "error", f.discardable));
-    CHECK(ok(&f, "let result = ResultHeaderError.Ok(header)"));
+    CHECK(ok(&f, "let result = ResultHeaderError::Ok(header)"));
     TestChecked a = {0};
     CHECK(
         run(&f, "match result {Ok(h)=>{accept(h)},Err(e)=>{recover(e)},}", &a));
@@ -244,7 +254,7 @@ static bool consuming_tests(void)
     test_checked_destroy(&a);
     NLTypeId copy_sum;
     CHECK(option(&f, "Option", f.copy, &copy_sum) && seed(&f, "x", f.copy));
-    CHECK(ok(&f, "let c=Option.Some(x)"));
+    CHECK(ok(&f, "let c=Option::Some(x)"));
     CHECK(ok(&f, "match c {Some(_)=>{},None=>{}}"));
     CHECK(nl_semantic_binding_view(
               f.context, nl_semantic_find_binding(f.context, "c"), &binding) &&
@@ -283,7 +293,7 @@ static bool borrowed_tests(void)
     NLTypeId sum;
     CHECK(option(&f, "Option", f.copy, &sum) && seed(&f, "x", f.copy) &&
           seed(&f, "next", f.copy));
-    CHECK(ok(&f, "let state = Option.Some(x)"));
+    CHECK(ok(&f, "let state = Option::Some(x)"));
     NLSemanticPlaceView before, after;
     NLPlaceId root;
     CHECK(place(&f, "state", &before, &root) &&
@@ -319,15 +329,15 @@ static bool borrowed_tests(void)
     test_checked_destroy(&a);
     CHECK(rejected(&f,
                    "match rw "
-                   "{Some(payload)=>{store(rw,Option.None);},None=>{store(rw,"
-                   "Option.None);}}",
+                   "{Some(payload)=>{store(rw,Option::None);},None=>{store(rw,"
+                   "Option::None);}}",
                    NL_CHECK_SEMANTIC_ERROR, "P6-OCCURRENCE-CONFLICT"));
     CHECK(rejected(
         &f, "match ro {Some(payload)=>{replace(payload,next);},None=>{}}",
         NL_CHECK_SEMANTIC_ERROR, "P3-TYPE-MISMATCH"));
     CHECK(rejected(&f, "match rw {Some(payload)=>{payload},None=>{ro}}",
                    NL_CHECK_SEMANTIC_ERROR, "P6-RESULT-JOIN"));
-    CHECK(rejected(&f, "match rw {Some(_)=>{store(rw,Option.None);},None=>{}}",
+    CHECK(rejected(&f, "match rw {Some(_)=>{store(rw,Option::None);},None=>{}}",
                    NL_CHECK_ANALYSIS_PRECISION_LIMIT, "P6-JOIN-PRECISION"));
     NLSymbolId ending;
     CHECK(test_domain_ref(&f, "ending", NL_ACCESS_READ, true, &ending, NULL));
@@ -336,10 +346,9 @@ static bool borrowed_tests(void)
         "match rw "
         "{Some(payload)=>{take(ptr_from_ref(payload),ending);},None=>{}}",
         NL_CHECK_SEMANTIC_ERROR, "P3-NOT-LIFETIME-ROOT"));
-    CHECK(ok(
-        &f,
-        "match rw "
-        "{Some(_)=>{store(rw,Option.None);},None=>{store(rw,Option.None);}}"));
+    CHECK(ok(&f, "match rw "
+                 "{Some(_)=>{store(rw,Option::None);},None=>{store(rw,Option::"
+                 "None);}}"));
     CHECK(nl_semantic_place_view(f.context, root, &after) &&
           after.payload_occurrence == 0 &&
           after.incarnation == before.incarnation);
@@ -347,9 +356,9 @@ static bool borrowed_tests(void)
                                       &occurrence) &&
           !occurrence.live);
     /* W4: Some -> same Some resets occurrence, never the root incarnation. */
-    CHECK(ok(&f, "store(rw,Option.Some(x))"));
+    CHECK(ok(&f, "store(rw,Option::Some(x))"));
     CHECK(nl_semantic_place_view(f.context, root, &before));
-    CHECK(run(&f, "replace(rw,Option.Some(next))", &a));
+    CHECK(run(&f, "replace(rw,Option::Some(next))", &a));
     CHECK(nl_semantic_place_view(f.context, root, &after) &&
           after.incarnation == before.incarnation &&
           after.payload_occurrence != before.payload_occurrence);
@@ -393,7 +402,7 @@ static bool borrowed_tests(void)
                    NL_CHECK_ANALYSIS_PRECISION_LIMIT,
                    "P6-EXTERNAL-OCCURRENCE"));
     CHECK(nl_semantic_end_scope(f.context, child_scope) == NL_CHECK_OK);
-    CHECK(ok(&f, "store(rw,Option.Some(x))"));
+    CHECK(ok(&f, "store(rw,Option::Some(x))"));
     CHECK(test_rejected(f.context, "loan read stale using ro as r {}",
                         TEST_LOAN, NL_CHECK_SEMANTIC_ERROR,
                         "P3-STALE-POINTER"));
@@ -429,7 +438,7 @@ static bool lifetime_tests(void)
     CHECK(nl_semantic_seed_slot(f.context, "vacant", sum, &slot, &target) ==
           NL_CHECK_OK);
     CHECK(
-        ok(&f, "let p=initialize(vacant,AffineOption.Some(incoming),stable)"));
+        ok(&f, "let p=initialize(vacant,AffineOption::Some(incoming),stable)"));
     NLSemanticPlaceView before, after;
     CHECK(nl_semantic_place_view(f.context, target, &before) && before.live &&
           before.payload_occurrence != 0);
@@ -493,7 +502,7 @@ static bool storage_tests(void)
                                   &bytes) == NL_CHECK_OK);
     NLValueId storage_value = produced->results[1].value;
     nl_checked_destroy(raw);
-    CHECK(ok(&f, "let state=OptionStorage.Some(bytes)"));
+    CHECK(ok(&f, "let state=OptionStorage::Some(bytes)"));
     CHECK(rejected(&f, "match state {Some(_)=>{},None=>{}}",
                    NL_CHECK_SEMANTIC_ERROR, "P6-PAYLOAD-DISCARD"));
     NLSemanticPlaceView p;
@@ -501,7 +510,7 @@ static bool storage_tests(void)
     CHECK(place(&f, "state", &p, &root) &&
           ref(&f, "rw", root, NL_ACCESS_WRITE));
     CHECK(ok(&f, "match rw {Some(_)=>{},None=>{}}"));
-    CHECK(rejected(&f, "store(rw,OptionStorage.None)", NL_CHECK_SEMANTIC_ERROR,
+    CHECK(rejected(&f, "store(rw,OptionStorage::None)", NL_CHECK_SEMANTIC_ERROR,
                    "P3-DISCARDABLE-REQUIRED"));
     /* End the host ref scope before consuming the source carrier. */
     NLSemanticBindingView r;
@@ -510,9 +519,9 @@ static bool storage_tests(void)
         f.context, nl_semantic_find_binding(f.context, "rw"), &r));
     CHECK(nl_semantic_value_view(f.context, r.value, &rv));
     CHECK(nl_semantic_end_scope(f.context, rv.reference.scope) == NL_CHECK_OK);
-    CHECK(ok(&f,
-             "let moved=match state "
-             "{Some(s)=>{OptionStorage.Some(s)},None=>{OptionStorage.None}}"));
+    CHECK(ok(
+        &f, "let moved=match state "
+            "{Some(s)=>{OptionStorage::Some(s)},None=>{OptionStorage::None}}"));
     NLSemanticPlaceView moved;
     CHECK(place(&f, "moved", &moved, &root));
     NLSemanticValueView mv;
@@ -523,20 +532,20 @@ static bool storage_tests(void)
           member.occupancy.region != 0 && member.carrier == NL_CARRIER_PLACE);
     /* None is still statically non-Discardable. No synthetic Storage is minted.
      */
-    CHECK(ok(&f, "let empty=OptionStorage.None"));
+    CHECK(ok(&f, "let empty=OptionStorage::None"));
     CHECK(rejected(&f, "match empty {Some(_)=>{},None=>{}}",
                    NL_CHECK_SEMANTIC_ERROR, "P6-PAYLOAD-DISCARD"));
     CHECK(place(&f, "empty", &p, &root) &&
           ref(&f, "empty_rw", root, NL_ACCESS_WRITE));
-    CHECK(rejected(&f, "store(empty_rw,OptionStorage.None)",
+    CHECK(rejected(&f, "store(empty_rw,OptionStorage::None)",
                    NL_CHECK_SEMANTIC_ERROR, "P3-DISCARDABLE-REQUIRED"));
     CHECK(nl_semantic_binding_view(
         f.context, nl_semantic_find_binding(f.context, "empty_rw"), &r));
     CHECK(nl_semantic_value_view(f.context, r.value, &rv));
     CHECK(nl_semantic_end_scope(f.context, rv.reference.scope) == NL_CHECK_OK);
-    CHECK(ok(&f,
-             "let empty2=match empty "
-             "{Some(s)=>{OptionStorage.Some(s)},None=>{OptionStorage.None}}"));
+    CHECK(ok(
+        &f, "let empty2=match empty "
+            "{Some(s)=>{OptionStorage::Some(s)},None=>{OptionStorage::None}}"));
     CHECK(place(&f, "empty2", &p, &root));
     CHECK(nl_semantic_value_view(f.context, p.current_value, &mv) &&
           mv.variant == 2 && mv.sum_payload == 0);
@@ -583,7 +592,7 @@ static bool failure_tests(void)
     CHECK(test_semantic_create(&f));
     NLTypeId sum;
     CHECK(option(&f, "Option", f.copy, &sum) && seed(&f, "x", f.copy));
-    CHECK(ok(&f, "let state=Option.Some(x)"));
+    CHECK(ok(&f, "let state=Option::Some(x)"));
     NLSemanticPlaceView p;
     NLPlaceId root;
     CHECK(place(&f, "state", &p, &root) &&
@@ -660,11 +669,12 @@ static bool failure_tests(void)
         NL_CHECK_SEMANTIC_ERROR, "P3-UNKNOWN-BINDING"));
     CHECK(nl_semantic_find_binding(f.context, "partial") == 0 &&
           nl_semantic_find_binding(f.context, "payload") == 0);
-    CHECK(check_oom(&f, "let fresh=Option.Some(x)"));
-    CHECK(check_oom(&f, "let returned=replace(rw,Option.Some(x))"));
-    CHECK(check_oom(&f, "match rw "
-                        "{Some(_)=>{store(rw,Option.Some(x));},None=>{store(rw,"
-                        "Option.Some(x));}}"));
+    CHECK(check_oom(&f, "let fresh=Option::Some(x)"));
+    CHECK(check_oom(&f, "let returned=replace(rw,Option::Some(x))"));
+    CHECK(check_oom(&f,
+                    "match rw "
+                    "{Some(_)=>{store(rw,Option::Some(x));},None=>{store(rw,"
+                    "Option::Some(x));}}"));
     char large[4096] = "{";
     for (size_t i = 0; i < 33; ++i)
         strcat(large, "match rw {Some(_)=>{},None=>{}};");

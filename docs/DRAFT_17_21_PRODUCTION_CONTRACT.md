@@ -3,7 +3,8 @@
 Track: P
 
 Base main: `46e07d7f627fc037dc794c3edb28d720815ca196`。
-`CURRENT_SPEC.md` → Draft 17.21、特に§16.3とexisting aggregate/sum semanticsを正とする。
+Initial authorityはDraft 17.21。Current `CURRENT_SPEC.md` → Draft 17.22の
+§16.3とexisting aggregate/sum semanticsを正とする。constructor punctuationは`::`。
 本taskはdeclaration/type-graph constructionのbounded catch-upであり、recursive topology
 execution、Node field source、allocation/lifecycleへ進まない。
 
@@ -12,7 +13,7 @@ execution、Node field source、allocation/lifecycleへ進まない。
 ```newlang
 struct Node { next: Option<ptr<Node>>, payload: u8, }
 fn main()->unit {
-    let n=Node{next:Option<ptr<Node>>.None,payload:u8(7)};
+    let n=Node{next:Option<ptr<Node>>::None,payload:u8(7)};
     let Node{next,payload}=n;
     next;payload;unit
 }
@@ -26,7 +27,7 @@ categoryだけがdeclaration-only file／function前後／physical input permuta
 
 parserは専用recursive declaration / exact Option type nodeを生成する。arbitrary Foo<T>、
 signed/general type grammar、mutual declarations、methods/layoutは導入しない。
-§16.3.3のexact `Option<ptr<H>>.None` / `.Some(p)`はexisting constructor checkerへ接続する。
+§16.3.3のexact `Option<ptr<H>>::None` / `::Some(p)`はexisting constructor checkerへ接続する。
 Node field lookup/writeは既存Pair-only gateの外であり、unsupportedのまま。
 
 ## Header / completion boundary

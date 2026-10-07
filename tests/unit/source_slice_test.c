@@ -80,7 +80,7 @@ static bool parser_tests(void)
                                  "let(a,(b,c))=f()",
                                  "let Pair{a:renamed,b}=p",
                                  "x+y",
-                                 "Option<u32>.None",
+                                 "Option<u32>::None",
                                  "struct Pair{a:T}",
                                  "{ |x:T| x }",
                                  "let [a,b]=x",

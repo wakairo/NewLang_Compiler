@@ -198,7 +198,7 @@ static bool bool_type(void)
     NLTypeId sum;
     CHECK(nl_semantic_register_sum(f.context, "BoolBox", variants, 2, &sum) ==
           NL_CHECK_OK);
-    CHECK(body_ok(f.context, "let bb=BoolBox.Yes(cond)"));
+    CHECK(body_ok(f.context, "let bb=BoolBox::Yes(cond)"));
     const NLAggregateField fields[] = {{"flag", boolean}};
     NLTypeId record;
     CHECK(nl_semantic_register_aggregate(f.context, "FlagBox", fields, 1,
@@ -574,7 +574,7 @@ static bool nested(void)
     NLTypeId tag;
     CHECK(nl_semantic_register_sum(f.context, "Tag", variants, 2, &tag) ==
           NL_CHECK_OK);
-    CHECK(body_ok(f.context, "let tag=Tag.A"));
+    CHECK(body_ok(f.context, "let tag=Tag::A"));
     CHECK(body_ok(f.context, "if(cond){match tag{A=>{x},B=>{y}}}else{y}"));
     CHECK(body_ok(f.context, "match tag{A=>{if(cond){x}else{y}},B=>{x}}"));
     CHECK(register_unit(

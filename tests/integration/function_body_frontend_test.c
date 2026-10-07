@@ -148,7 +148,7 @@ static bool readonly_join(void)
                         "{let copy=ref;observe(copy);}", NL_CHECK_OK, NULL));
     CHECK(join_ok(&f, "let chosen=match r {Some(v)=>{v},None=>{fallback}}"));
     CHECK(body_ok(f.sem.context, "inspect(chosen)"));
-    CHECK(join_reject(&f, "store(rw,Option.None)", NL_CHECK_SEMANTIC_ERROR,
+    CHECK(join_reject(&f, "store(rw,Option::None)", NL_CHECK_SEMANTIC_ERROR,
                       "P6-OCCURRENCE-CONFLICT"));
     CHECK(nl_semantic_end_scope(f.sem.context, f.a_scope) == NL_CHECK_OK);
     CHECK(join_reject(&f, "inspect(chosen)", NL_CHECK_SEMANTIC_ERROR,

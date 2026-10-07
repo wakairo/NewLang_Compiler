@@ -296,12 +296,12 @@ done:
 static bool expression_extension(NLParser *parser)
 {
     return parser->token.kind == NL_TOKEN_DIGITS || punct(parser, '.') ||
-           punct(parser, '<') || punct(parser, '+') || punct(parser, '-') ||
-           punct(parser, '*') || punct(parser, '/') || punct(parser, '%') ||
-           punct(parser, '=') || punct(parser, '!') || punct(parser, '&') ||
-           punct(parser, '|') || punct(parser, '?') || punct(parser, '[') ||
-           punct(parser, '{') || punct(parser, '(') || punct(parser, '>') ||
-           punct(parser, ':') || punct(parser, ';');
+           punct(parser, '@') || punct(parser, '<') || punct(parser, '+') ||
+           punct(parser, '-') || punct(parser, '*') || punct(parser, '/') ||
+           punct(parser, '%') || punct(parser, '=') || punct(parser, '!') ||
+           punct(parser, '&') || punct(parser, '|') || punct(parser, '?') ||
+           punct(parser, '[') || punct(parser, '{') || punct(parser, '(') ||
+           punct(parser, '>') || punct(parser, ':') || punct(parser, ';');
 }
 
 static NLSyntaxNode *expression(NLParser *parser)
@@ -783,23 +783,24 @@ static NLSyntaxNode *source_local_loan(NLParser *parser, NLSourceSpan start,
     NLSyntaxNode *operand = source_name(parser, NL_SYNTAX_EXPR_NAME, false);
     if (operand == NULL)
         return NULL;
-    if (access == NL_ACCESS_WRITE && !from_ptr && punct(parser, '.')) {
+    if (access == NL_ACCESS_WRITE && !from_ptr && punct(parser, '@')) {
         consume(parser);
         NLSyntaxNode *field = source_name(parser, NL_SYNTAX_RECEIVER, false);
         if (field == NULL)
             return NULL;
         NLSyntaxNode *selection =
-            node(parser, NL_SYNTAX_DOTTED, operand->view.span);
+            node(parser, NL_SYNTAX_FIELD_DESIGNATOR, operand->view.span);
         if (selection == NULL)
             return NULL;
-        selection->view.data.constructor.qualifier = operand->view.data.name;
-        selection->view.data.constructor.variant = field->view.data.name;
+        selection->view.data.field_designator.base = operand->view.data.name;
+        selection->view.data.field_designator.field = field->view.data.name;
         selection->view.span.end_byte = field->view.span.end_byte;
         operand = selection;
     }
     if (!punct(parser, ')')) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
-             "LOCAL-LOAN-PROFILE", "loan operand must be a simple local name");
+             "LOCAL-LOAN-PROFILE",
+             "loan operand must be a simple local or bounded local@field");
         return NULL;
     }
     consume(parser);
@@ -879,7 +880,7 @@ static NLSyntaxNode *source_match(NLParser *parser)
                 return NULL;
             pattern->view.data.arm.binding = binding->view.data.name;
             if (punct(parser, '(') || punct(parser, '{') ||
-                punct(parser, '.')) {
+                punct(parser, '.') || punct(parser, ':')) {
                 fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
                      "P6-PATTERN-UNSUPPORTED",
                      "nested/qualified patterns are outside P6");
@@ -890,8 +891,8 @@ static NLSyntaxNode *source_match(NLParser *parser)
                 return NULL;
         }
         if (!punct(parser, '=')) {
-            bool general =
-                punct(parser, '.') || punct(parser, '|') || word(parser, "if");
+            bool general = punct(parser, '.') || punct(parser, ':') ||
+                           punct(parser, '|') || word(parser, "if");
             fail(parser,
                  general ? NL_PARSE_SYNTAX_UNSUPPORTED : NL_PARSE_SYNTAX_ERROR,
                  parser->token.span,
@@ -1052,7 +1053,7 @@ static NLSyntaxNode *source_expression(NLParser *parser)
         option_type = option_ptr(parser, name);
         if (option_type == NULL)
             goto done;
-        if (!punct(parser, '.')) {
+        if (!punct(parser, ':') && !punct(parser, '.')) {
             fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
                  "REC-CONSTRUCTOR-PROFILE",
                  "exact Option type requires a constructor");
@@ -1060,14 +1061,37 @@ static NLSyntaxNode *source_expression(NLParser *parser)
         }
     }
     if (punct(parser, '.')) {
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+             "SOURCE-DOT-RESERVED",
+             ". is reserved; use bounded local@field or SumType::Variant");
+        goto done;
+    }
+    if (option_type == NULL && punct(parser, '@')) {
+        consume(parser);
+        NLSyntaxNode *field = source_name(parser, NL_SYNTAX_RECEIVER, false);
+        if (field == NULL)
+            goto done;
+        result =
+            node(parser, NL_SYNTAX_FIELD_DESIGNATOR,
+                 (NLSourceSpan){name.start_byte, field->view.span.end_byte});
+        if (result == NULL)
+            goto done;
+        result->view.data.field_designator.base = name;
+        result->view.data.field_designator.field = field->view.data.name;
+    } else if (punct(parser, ':')) {
+        const size_t first_end = parser->token.span.end_byte;
+        consume(parser);
+        if (!punct(parser, ':') || parser->token.span.start_byte != first_end) {
+            fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
+                 "SUM-CONSTRUCTOR-SEPARATOR",
+                 "sum constructor requires adjacent ::");
+            goto done;
+        }
         consume(parser);
         NLSyntaxNode *variant = source_name(parser, NL_SYNTAX_RECEIVER, false);
         if (variant == NULL)
             goto done;
-        result = node(parser,
-                      option_type == NULL ? NL_SYNTAX_DOTTED
-                                          : NL_SYNTAX_SUM_CONSTRUCTOR,
-                      name);
+        result = node(parser, NL_SYNTAX_SUM_CONSTRUCTOR, name);
         if (result == NULL)
             goto done;
         result->view.data.constructor.type = option_type;

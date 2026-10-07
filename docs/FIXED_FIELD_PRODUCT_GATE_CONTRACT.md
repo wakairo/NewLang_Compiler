@@ -3,7 +3,8 @@
 Track: P
 
 Base main: `12d49d049aae6831ce42a7a0b7b55934f01d9a2a`。
-Canonical: `docs/reference/CURRENT_SPEC.md` → Draft 17.20。
+Initial implementation authority: Draft 17.20。Current canonical:
+`docs/reference/CURRENT_SPEC.md` → Draft 17.22。
 本書はbounded production contractであり、canonical Draftを変更しない。
 Semantic delta = 0。
 
@@ -11,14 +12,15 @@ Semantic delta = 0。
 
 Draft §17.1のclosed profileを接続する。current direct lexical localの
 registered nominal `Pair { left: u8, right: u8 }`だけに、one-level Copy read
-`p.left` / `p.right`とordinary `loan_write(p.left){|w|...}`を許す。
+`p@left` / `p@right`とordinary `loan_write(p@left){|w|...}`を許す。
 declaration orderをfield indexとして保持し、initializer orderには依存しない。
 他のAVS construction/destructuringは従来のcoverageを維持する。
 
-parserはneutral dotted nodeを作り、checkerがfield / closed-sum categoryを
-独立に判定する。両方が候補なら`FIELD-DOTTED-AMBIGUOUS`。選択後のunknown
-field/variantを他categoryへfallbackしない。write designatorはfield category
-だけを選択する。nested / arbitrary-expression / ptr base、method syntaxはこの
+parserはdedicated field-designator nodeとsum-constructor nodeを別々に作る。
+`@`はfield、adjacent `::`はclosed sumだけを選択する。同spellingのvalue/typeが
+あってもambiguityはない。unknown field/variantを他categoryへfallbackしない。
+旧dot routeは不受理。write designatorはfield categoryだけを選択する。
+nested / arbitrary-expression / ptr base、method syntaxはこの
 slice外。新keyword、general member lookup、Non-Copy partial moveを導入しない。
 
 ## Ownershipとidentity

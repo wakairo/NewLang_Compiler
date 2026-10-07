@@ -76,7 +76,7 @@ static bool ingress(void)
     const NLSumVariant variants[] = {{"Some", f.copy}, {"None", 0}};
     CHECK(nl_semantic_register_sum(f.context, "Option", variants, 2, &option) ==
           NL_CHECK_OK);
-    CHECK(body_ok(f.context, "let option=Option.Some(x)"));
+    CHECK(body_ok(f.context, "let option=Option::Some(x)"));
     NLSemanticBindingView ob;
     CHECK(body_binding(f.context, "option", &ob));
     NLSymbolId read;
@@ -310,7 +310,7 @@ static bool member(void)
                             "unit", "if",  "else"};
     char text[512];
     for (size_t i = 0; i < sizeof(labels) / sizeof(labels[0]); ++i) {
-        (void)snprintf(text, sizeof(text), "let chosen%zu=Code.%s", i,
+        (void)snprintf(text, sizeof(text), "let chosen%zu=Code::%s", i,
                        labels[i]);
         CHECK(body_ok(f.context, text));
         (void)snprintf(text, sizeof(text), "run(chosen%zu)", i);
@@ -417,7 +417,7 @@ static bool failure(void)
     const NLSumVariant variants[] = {{"Some", f.copy}, {"None", 0}};
     CHECK(nl_semantic_register_sum(f.context, "Option", variants, 2, &option) ==
           NL_CHECK_OK);
-    CHECK(body_ok(f.context, "let option=Option.Some(x)"));
+    CHECK(body_ok(f.context, "let option=Option::Some(x)"));
     CHECK(check_faults(f.context, "{store(rw,x);let fn=unit;}", false));
     CHECK(check_faults(f.context, "let(first,return)=unknown()", false));
     CHECK(check_faults(f.context, "let Record{ok,match}=record", false));
