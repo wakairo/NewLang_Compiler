@@ -37,8 +37,8 @@ statusはlanguage validityを意味しない。
 | nominal aggregate value | BEACHHEAD-VERIFIED | bounded aggregate construction / whole destructuringをactual sourceで検証。layout保証とは分離。 |
 | persistent ptr + scoped ref | BEACHHEAD-VERIFIED | local-root gateでlocatorがscopeを越え、safe accessはscope/livenessに従うことを検証。 |
 | stale ptr after EndRoot | BEACHHEAD-VERIFIED | ptr token自体は残り得るがsafe reacquisitionはrejectする境界を検証。 |
-| lifetime-preserving mutation / replace | SEMANTIC-BASIS | `replace`はcurrent value/factを変えincarnationを維持するcanonical basisあり。actual-source write acquisitionのproduct gateは別途必要。 |
-| ordinary write loan source mapping | SEMANTIC-BASIS | Draft 17.19でNorth-Star-onlyのdirect lexical-local `u8` mappingをsemantic delta 0でcanonical化。actual-source production/product evidenceはstable-root mutation gateで未検証。 |
+| lifetime-preserving mutation / replace | BEACHHEAD-VERIFIED | stable-root mutation gateでactual source `loan_write` + canonical `replace` によりvalue/fact変更・same root incarnation維持・preexisting ptrの後続safe reacquisitionをproduction vertical pathで検証済み。 |
+| ordinary write loan source mapping | BEACHHEAD-VERIFIED | Draft 17.19のNorth-Star-only direct lexical-local `u8` mappingをstable-root mutation gateでactual source -> production checker -> Checked-C/nativeまで検証。ordinary `ref<write,u8>` / non-exclusiveを維持。 |
 | field projection | SEMANTIC-BASIS | safe typed projectionはcanonical。general source profile / product evidenceは未完了。 |
 | field mutation | SEMANTIC-BASIS | field-level Change / replace-storeのsemantic basisはある。actual-source projection + write pathは未検証。 |
 | recursive nominal / intrusive graph shape | STRATEGIC-GAP | cJSON等へ重要。declarationだけではfalse progressになり得るため、construction/mutation/topologyを伴うwitnessが必要。 |
