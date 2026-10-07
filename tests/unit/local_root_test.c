@@ -191,6 +191,71 @@ static bool evidence(void)
     nl_semantic_destroy(c);
     return true;
 }
+static bool direct_write_root(void)
+{
+    NLSemanticContext *c = NULL;
+    CHECK(nl_semantic_create(&c) == NL_CHECK_OK);
+
+    TestChecked x_checked = {0};
+    CHECK(test_run(c, "let x=u8(7);", TEST_SOURCE, NL_CHECK_OK, NULL,
+                   &x_checked));
+    const NLSymbolId x = test_root(&x_checked)->symbol;
+    NLSemanticBindingView xb;
+    NLSemanticPlaceView before;
+    CHECK(nl_semantic_binding_view(c, x, &xb));
+    CHECK(nl_semantic_place_view(c, xb.place, &before) && before.live &&
+          before.implicit_local && before.independent_root);
+
+    NLSource *source = NULL;
+    NLSyntaxTree *syntax = NULL;
+    CHECK(tree("loan_write(x){|w|replace(w,u8(9))}", false, &source, &syntax));
+    const NLSyntaxView *parsed =
+        nl_syntax_node_view(nl_syntax_tree_root(syntax));
+    CHECK(parsed != NULL && parsed->kind == NL_SYNTAX_LOCAL_WRITE_LOAN &&
+          parsed->data.loan.access == NL_ACCESS_WRITE &&
+          !parsed->data.loan.from_ptr);
+
+    NLCheckedFragment *artifact = NULL;
+    CHECK(nl_semantic_check_source_fragment(c, syntax, &artifact, NULL) ==
+          NL_CHECK_OK);
+    const NLCheckedNodeView *loan =
+        nl_checked_node_view(artifact, nl_checked_root(artifact));
+    CHECK(loan != NULL && loan->kind == NL_CHECKED_LOAN_HEADER &&
+          loan->loan.access == NL_ACCESS_WRITE && !loan->loan.is_exclusive &&
+          !loan->loan.from_ptr && loan->loan.implicit_local &&
+          loan->loan.place == xb.place &&
+          loan->loan.incarnation == before.incarnation &&
+          loan->loan.body_nonescape_proved &&
+          loan->loan.normal_result_forwarded);
+
+    const NLCheckedNodeView *body =
+        nl_checked_node_view(artifact, loan->initializer);
+    const NLCheckedNodeView *replace =
+        nl_checked_node_view(artifact, body->tail);
+    CHECK(body != NULL && replace != NULL &&
+          replace->kind == NL_CHECKED_REPLACE && replace->result_count == 1 &&
+          loan->result_count == 1 &&
+          replace->results[0].value == loan->results[0].value);
+    NLSemanticValueView old_value;
+    CHECK(nl_semantic_value_view(c, loan->results[0].value, &old_value) &&
+          old_value.scalar_known && old_value.scalar_value == 7);
+
+    NLSemanticPlaceView after;
+    NLSemanticValueView current;
+    CHECK(nl_semantic_place_view(c, xb.place, &after) && after.live &&
+          after.incarnation == before.incarnation &&
+          after.current_fact != before.current_fact);
+    CHECK(nl_semantic_value_view(c, after.current_value, &current) &&
+          current.scalar_known && current.scalar_value == 9);
+
+    nl_checked_destroy(artifact);
+    nl_syntax_tree_destroy(syntax);
+    nl_source_destroy(source);
+    test_checked_destroy(&x_checked);
+    nl_semantic_destroy(c);
+    return true;
+}
+
 static bool mutation(void)
 {
     NLSemanticContext *c = NULL;
@@ -550,6 +615,8 @@ int main(int argc, char **argv)
         return parser() ? 0 : 1;
     if (strcmp(argv[1], "evidence") == 0)
         return evidence() ? 0 : 1;
+    if (strcmp(argv[1], "direct_write_root") == 0)
+        return direct_write_root() ? 0 : 1;
     if (strcmp(argv[1], "mutation") == 0)
         return mutation() ? 0 : 1;
     if (strcmp(argv[1], "negatives") == 0)
