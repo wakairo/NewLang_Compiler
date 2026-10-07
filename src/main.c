@@ -226,11 +226,10 @@ static bool gate_replace(const NLCheckedFragment *f, NLCheckedNodeId id,
 {
     const NLCheckedNodeView *v = nl_checked_node_view(f, id);
     if (v == NULL || v->kind != NL_CHECKED_REPLACE ||
-        v->argument_count != 2 || v->result_count != 1 || v->type != p->u8 ||
-        v->results[0].type != p->u8)
+        v->argument_count != 2 || v->result_count != 1 ||
+        v->type != p->u8 || v->results[0].type != p->u8)
         return false;
-    const NLCheckedNodeView *ref =
-        nl_checked_node_view(f, v->first_argument);
+    const NLCheckedNodeView *ref = nl_checked_node_view(f, v->first_argument);
     const NLCheckedNodeView *value =
         ref == NULL ? NULL : nl_checked_node_view(f, ref->next_argument);
     return ref != NULL && value != NULL &&
@@ -249,8 +248,8 @@ static bool gate_loan(const NLCheckedFragment *f, const NLCheckedNodeView *v,
         v->loan.scope == 0 || v->loan.place == 0 || v->loan.incarnation == 0 ||
         (v->loan.access != NL_ACCESS_READ &&
          v->loan.access != NL_ACCESS_WRITE) ||
-        v->loan.is_exclusive || (write && v->loan.from_ptr) ||
-        body == NULL || body->kind != NL_CHECKED_BLOCK || body->terminates ||
+        v->loan.is_exclusive || (write && v->loan.from_ptr) || body == NULL ||
+        body->kind != NL_CHECKED_BLOCK || body->terminates ||
         body->result_count != v->result_count || v->result_count > 1)
         return false;
     bool source_local = false;
@@ -509,7 +508,8 @@ static bool gate_emit_loan(FILE *stream, const NLCheckedFragment *f,
                         v->loan.scope, body->tail) < 0)
                 return false;
         } else if (!v0_indent(stream, depth + 1) ||
-                   fprintf(stream, "nl_loan_result_%zu = ", v->loan.scope) < 0 ||
+                   fprintf(stream, "nl_loan_result_%zu = ",
+                           v->loan.scope) < 0 ||
                    !gate_emit_ptr(stream, f,
                                   nl_checked_node_view(f, body->tail)) ||
                    fputs(";\n", stream) < 0) {
@@ -611,12 +611,12 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                    initializer->loan.access == NL_ACCESS_WRITE) {
             if (fprintf(stream, "%suint8_t nl_local_%zu = nl_loan_result_%zu",
                         gate_symbol_written(fragment, view->symbol) ? ""
-                                                                  : "const ",
+                                                                   : "const ",
                         view->symbol, initializer->loan.scope) < 0)
                 return false;
         } else if (fprintf(stream, "%suint8_t nl_local_%zu = ",
                            gate_symbol_written(fragment, view->symbol) ? ""
-                                                                     : "const ",
+                                                                      : "const ",
                            view->symbol) < 0 ||
                    !v1_emit_scalar(stream, initializer))
             return false;
