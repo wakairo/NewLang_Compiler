@@ -3,7 +3,7 @@
 The canonical NewLang v0 specification on a branch is the Draft named here.
 
 ```text
-NewLang_v0_spec_Draft17_17.md
+NewLang_v0_spec_Draft17_18.md
 ```
 
 Repository policy:
@@ -14,4 +14,4 @@ Repository policy:
 - A newer Draft on an unmerged branch is a candidate until that branch is reviewed and merged into `main`.
 - Prompts handed to M / F / P tracks should cite the `main` commit SHA and this file before relying on conversational memory.
 
-Draft 17.17 adds the targeted M9.14 exact minimal loop / continue / break source profile on top of Draft 17.16 without changing its HYBRID cyclic semantics. The exact loop form is `loop '(' [name '=' expression (',' name '=' expression)*] ')' lexical_block`; zero parameters use `loop ()`. Parameter types come from initializer result types, all initializers evaluate left-to-right in the outer pre-loop lexical environment, and new parameter bindings enter scope only for the iteration body. `continue(...);` and `break expression;` are dedicated terminating block items, nearest active loop targeting is lexical and does not cross callable/loan/function boundaries, and `loop` / `continue` / `break` join the ordinary lexical structural-reserved set without globally reserving member labels.
+Draft 17.18 adds the Issue #108 targeted loan normal-result / bounded local-root ptr/ref source clarification on top of Draft 17.17 with semantic delta 0. Exactly-once loan normal completion checks scope-exit compatibility, ends the loan scope, then forwards the unchanged body result package into ordinary value flow; scoped refs therefore cannot escape while a `ptr<T>` produced from a ref may survive when no blocking loan-scope dependency remains. A Provisional North Star-only read profile maps `loan_read(local) { |r| ... }`, `ptr_from_ref(r)`, and `loan_read_ptr(p) { |r| ... }` to the existing §10.1/§10.2/§11.1/§13.7 semantics without programmer-visible `LifetimeDomain` plumbing. General/final loan syntax, write spellings, field projection/mutation, raw storage, and broader parser/name policy remain unresolved.
