@@ -3,7 +3,7 @@
 The canonical NewLang v0 specification on a branch is the Draft named here.
 
 ```text
-NewLang_v0_spec_Draft17_20.md
+NewLang_v0_spec_Draft17_21.md
 ```
 
 Repository policy:
@@ -14,4 +14,4 @@ Repository policy:
 - A newer Draft on an unmerged branch is a candidate until that branch is reviewed and merged into `main`.
 - Prompts handed to M / F / P tracks should cite the `main` commit SHA and this file before relying on conversational memory.
 
-Draft 17.20 adds the Issue #128 targeted bounded fixed-field source clarification on top of Draft 17.19 with semantic delta 0. For the registered AVS `Pair { left: u8, right: u8 }` direct lexical local only, `local.field` is a one-level Copy field read and `loan_write(local.field) { |w| ... }` yields exactly ordinary `ref<write,u8>` to that fixed subobject. The source rule explicitly separates value-local field resolution from the existing type-qualified sum-constructor route without introducing a general member-expression system. Field `replace` uses the existing `Change(field)` / structural current-state rules: root and fixed-field incarnations are preserved, the target and ancestor value facts refresh, and the known-disjoint sibling fact is preserved. Nested/general member access, aggregate-wide write loans, ptr-field source forms, recursive nominal/link mutation, raw storage, and general/final loan syntax remain unresolved.
+Draft 17.21 adds the Issue #142 targeted recursive nominal identity/completion rule on top of Draft 17.20. A bounded recursive aggregate declaration may receive a stable incomplete nominal header before field-type resolution; while incomplete, that identity may participate only as the direct target of `ptr<Header>` in this closed profile. `ptr` is the only selected recursion-breaking constructor. After exact `Option<ptr<Header>>` resolution and value-containment-cycle validation, the aggregate is completed exactly once and structural Copy/Discardable properties are derived. Unbroken by-value cycles are rejected, completion is transactional, and the bounded declaration category is collected independent of physical source order. The first experiment uses canonical `Option<ptr<Node>>` through one exact source form rather than adding nullable pointers, a dedicated optional-pointer feature, or a general generic frontend. Draft 17.20 Pair-only field read/write source mapping remains unchanged. Allocation/lifecycle, recursive Node production implementation, general recursive types, general generic frontend, FFI, and separate compilation remain Deferred.
