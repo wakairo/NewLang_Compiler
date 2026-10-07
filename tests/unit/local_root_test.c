@@ -233,9 +233,8 @@ static bool direct_write_root(void)
     CHECK(body != NULL);
     const NLCheckedNodeView *replace =
         nl_checked_node_view(artifact, body->tail);
-    CHECK(replace != NULL &&
-          replace->kind == NL_CHECKED_REPLACE && replace->result_count == 1 &&
-          loan->result_count == 1 &&
+    CHECK(replace != NULL && replace->kind == NL_CHECKED_REPLACE &&
+          replace->result_count == 1 && loan->result_count == 1 &&
           replace->results[0].value == loan->results[0].value);
     NLSemanticValueView old_value;
     CHECK(nl_semantic_value_view(c, loan->results[0].value, &old_value) &&
