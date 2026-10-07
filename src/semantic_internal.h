@@ -142,6 +142,32 @@ NLCheckStatus nl_sem_new_domain(NLSemanticContext *, NLDomainId *, NLValueId *);
 NLCheckStatus nl_sem_new_scope(NLSemanticContext *, NLScopeId, bool,
                                NLScopeId *);
 NLCheckStatus nl_sem_fresh_fact(NLSemanticContext *, NLValueFactId *);
+bool nl_fixed_type(const NLSemanticContext *, NLTypeId);
+NLCheckStatus nl_fixed_attach(NLSemanticContext *, NLPlaceId);
+void nl_fixed_detach(NLSemanticContext *, NLPlaceId);
+NLCheckStatus nl_fixed_validate(const NLSemanticContext *);
+NLCheckStatus nl_sem_validate(const NLSemanticContext *);
+bool nl_fixed_overlap(const NLSemanticContext *, NLPlaceId, NLPlaceId);
+bool nl_fixed_live(const NLSemanticContext *, NLPlaceId);
+NLCheckStatus nl_fixed_dependencies(const NLSemanticContext *);
+NLCheckStatus nl_fixed_change_dependencies(const NLSemanticContext *, NLPlaceId,
+                                           NLValueId discarded);
+NLCheckStatus nl_fixed_end_dependencies(const NLSemanticContext *, NLPlaceId,
+                                        size_t ending_binding_floor);
+NLCheckStatus nl_fixed_change(NLSemanticContext *, NLPlaceId, NLValueId, bool);
+static inline bool nl_fixed_frame_same(NLSemanticPlaceView a,
+                                       NLSemanticPlaceView b)
+{
+    if (a.parent_aggregate != b.parent_aggregate ||
+        a.parent_incarnation != b.parent_incarnation ||
+        a.parent_field_index != b.parent_field_index ||
+        a.fixed_field_count != b.fixed_field_count)
+        return false;
+    for (size_t i = 0; i < NL_SEMANTIC_MAX_FIELDS; ++i)
+        if (a.fixed_fields[i] != b.fixed_fields[i])
+            return false;
+    return true;
+}
 NLCheckStatus nl_checked_add(NLCheckedFragment *, NLCheckedNodeView,
                              NLCheckedNodeId *);
 

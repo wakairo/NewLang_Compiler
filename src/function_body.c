@@ -95,8 +95,20 @@ NLCheckStatus nl_sem_function_exit(const NLSemanticContext *c,
         const NLSemanticValueView v = c->values[i];
         if (v.carrier == NL_CARRIER_ENDED)
             continue;
-        if (v.dependencies != NL_DEPENDENCY_FREE)
+        if (v.dependencies != NL_DEPENDENCY_FREE &&
+            v.dependencies != NL_EXACT_VALUE_DEPENDENCIES)
             return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        if (v.dependencies == NL_EXACT_VALUE_DEPENDENCIES) {
+            if (v.value_dependency_count == 0 ||
+                v.value_dependency_count > NL_SEMANTIC_MAX_VALUE_DEPENDENCIES)
+                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+            for (size_t d = 0; d < v.value_dependency_count; ++d)
+                if (v.value_dependencies[d].place > place_floor ||
+                    !nl_fixed_live(c, v.value_dependencies[d].place) ||
+                    c->places[v.value_dependencies[d].place - 1].current_fact !=
+                        v.value_dependencies[d].fact)
+                    return NL_CHECK_SEMANTIC_ERROR;
+        }
         if (c->types[v.type - 1].view.kind != NL_TYPE_REF)
             continue;
         for (size_t j = 0; j < nl_sem_ref_count(v); ++j) {

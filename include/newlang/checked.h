@@ -49,7 +49,8 @@ typedef enum {
     NL_CHECKED_CONTINUE,
     NL_CHECKED_BREAK,
     NL_CHECKED_UNIT,
-    NL_CHECKED_U8_LITERAL
+    NL_CHECKED_U8_LITERAL,
+    NL_CHECKED_FIELD_READ
 } NLCheckedKind;
 typedef enum {
     NL_VALUE_USE_NONE,
@@ -62,6 +63,19 @@ typedef struct {
     NLTypeId type;
     NLValueId value;
 } NLCheckedResult;
+/* Point-in-time checked evidence; locals may be ended in the final context.
+ * All IDs belong to this fragment's context, never a C address/offset. */
+typedef struct {
+    bool present, dependency_compatible;
+    NLSymbolId base;
+    NLTypeId nominal, type;
+    size_t index;
+    NLPlaceId parent, child;
+    NLIncarnationId parent_incarnation, child_incarnation;
+    NLValueFactId parent_fact, child_fact, parent_post_fact, child_post_fact;
+    NLAccessSyntax access;
+    NLValueId old_value, new_value;
+} NLCheckedField;
 typedef struct {
     NLSymbolId source, stability;
     NLSourceSpan binding, body_open, body_interior, body_close;
@@ -111,6 +125,7 @@ typedef struct {
     NLScalarValue scalar_result;
     size_t raw_offsets[2], raw_count; /* resolved constant selections */
     NLCheckedLoanPlan loan;
+    NLCheckedField field;
     bool has_reference_result;
     NLReferenceFacts reference_result; /* checked ptr_from_ref facts */
 } NLCheckedNodeView;

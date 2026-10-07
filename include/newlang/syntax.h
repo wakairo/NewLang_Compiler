@@ -21,6 +21,8 @@ typedef enum {
     NL_SYNTAX_MULTI_BINDING,
     NL_SYNTAX_AGGREGATE_BINDING,
     NL_SYNTAX_AGGREGATE,
+    NL_SYNTAX_DOTTED, /* neutral one-level source; constructor union, resolved
+                        to fixed field or sum by the checker */
     NL_SYNTAX_SUM_CONSTRUCTOR,
     NL_SYNTAX_MATCH,
     NL_SYNTAX_IF,

@@ -177,6 +177,12 @@ static inline bool test_place_equal(NLSemanticPlaceView a,
            a.current_value == b.current_value &&
            a.payload_occurrence == b.payload_occurrence &&
            a.parent_sum == b.parent_sum &&
+           a.parent_aggregate == b.parent_aggregate &&
+           a.parent_incarnation == b.parent_incarnation &&
+           a.parent_field_index == b.parent_field_index &&
+           a.fixed_field_count == b.fixed_field_count &&
+           memcmp(a.fixed_fields, b.fixed_fields, sizeof(a.fixed_fields)) ==
+               0 &&
            test_range_equal(a.placement, b.placement);
 }
 
@@ -268,8 +274,11 @@ static inline bool test_unchanged(NLSemanticContext *context,
               x.field_count == y.field_count && x.variant == y.variant &&
               x.sum_payload == y.sum_payload && x.sum_owner == y.sum_owner &&
               memcmp(x.fields, y.fields, sizeof(x.fields)) == 0 &&
-              x.dependencies == y.dependencies && x.domain == y.domain &&
-              x.slot_place == y.slot_place &&
+              x.dependencies == y.dependencies &&
+              x.value_dependency_count == y.value_dependency_count &&
+              memcmp(x.value_dependencies, y.value_dependencies,
+                     sizeof(x.value_dependencies)) == 0 &&
+              x.domain == y.domain && x.slot_place == y.slot_place &&
               x.allocation_region == y.allocation_region &&
               test_range_equal(x.occupancy, y.occupancy) &&
               x.scalar_known == y.scalar_known &&

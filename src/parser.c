@@ -743,6 +743,20 @@ static NLSyntaxNode *source_local_loan(NLParser *parser, NLSourceSpan start,
     NLSyntaxNode *operand = source_name(parser, NL_SYNTAX_EXPR_NAME, false);
     if (operand == NULL)
         return NULL;
+    if (access == NL_ACCESS_WRITE && !from_ptr && punct(parser, '.')) {
+        consume(parser);
+        NLSyntaxNode *field = source_name(parser, NL_SYNTAX_RECEIVER, false);
+        if (field == NULL)
+            return NULL;
+        NLSyntaxNode *selection =
+            node(parser, NL_SYNTAX_DOTTED, operand->view.span);
+        if (selection == NULL)
+            return NULL;
+        selection->view.data.constructor.qualifier = operand->view.data.name;
+        selection->view.data.constructor.variant = field->view.data.name;
+        selection->view.span.end_byte = field->view.span.end_byte;
+        operand = selection;
+    }
     if (!punct(parser, ')')) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
              "LOCAL-LOAN-PROFILE", "loan operand must be a simple local name");
@@ -997,7 +1011,7 @@ static NLSyntaxNode *source_expression(NLParser *parser)
         NLSyntaxNode *variant = source_name(parser, NL_SYNTAX_RECEIVER, false);
         if (variant == NULL)
             goto done;
-        result = node(parser, NL_SYNTAX_SUM_CONSTRUCTOR, name);
+        result = node(parser, NL_SYNTAX_DOTTED, name);
         if (result == NULL)
             goto done;
         result->view.data.constructor.qualifier = name;

@@ -81,8 +81,15 @@ typedef enum {
 typedef enum {
     NL_DEPENDENCY_FREE,
     NL_HIDDEN_DEPENDENCIES,
-    NL_DEPENDENCIES_UNKNOWN
+    NL_DEPENDENCIES_UNKNOWN,
+    NL_EXACT_VALUE_DEPENDENCIES /* bounded internal ValueFact evidence */
 } NLDependencyKnowledge;
+/* Internal precision budget, never a source-visible effect annotation. */
+#define NL_SEMANTIC_MAX_VALUE_DEPENDENCIES 4
+typedef struct {
+    NLPlaceId place;
+    NLValueFactId fact;
+} NLValueDependency;
 typedef enum {
     NL_PROVENANCE_UNKNOWN,
     NL_PROVENANCE_VALID,
@@ -114,6 +121,8 @@ typedef struct {
     NLValueCarrier carrier;
     NLPlaceId owner_place; /* carrier location, not pointer/ref referent */
     NLDependencyKnowledge dependencies;
+    size_t value_dependency_count;
+    NLValueDependency value_dependencies[NL_SEMANTIC_MAX_VALUE_DEPENDENCIES];
     NLDomainId domain; /* LifetimeDomain value identity only */
     NLReferenceFacts reference;
     size_t reference_count; /* zero: concrete reference; nonzero: joined ref */
@@ -142,14 +151,20 @@ typedef struct {
     NLTypeId type;
     bool live;
     bool independent_root;
-    bool implicit_local; /* source-created scalar root; place/incarnation is
-                           its nominal implicit governing identity */
+    bool implicit_local; /* source-created bounded local root; place/incarnation
+                           is its nominal implicit governing identity */
     NLDomainId governing_domain; /* zero: implicit compiler-managed local */
     NLIncarnationId incarnation;
     NLValueFactId current_fact;
     NLValueId current_value;
     NLOccurrenceId payload_occurrence; /* live sum root only */
-    NLPlaceId parent_sum;     /* conditional subplace, not independent root */
+    NLPlaceId parent_sum; /* conditional subplace, not independent root */
+    /* Fixed child is a NON-OWNING view of parent.current.fields[index].
+     * Member ownership remains NL_CARRIER_AGGREGATE. No layout/ABI facts. */
+    NLPlaceId parent_aggregate;
+    NLIncarnationId parent_incarnation;
+    size_t parent_field_index, fixed_field_count;
+    NLPlaceId fixed_fields[NL_SEMANTIC_MAX_FIELDS];
     NLBackingRange placement; /* live root only; not part of its value */
 } NLSemanticPlaceView;
 typedef struct {

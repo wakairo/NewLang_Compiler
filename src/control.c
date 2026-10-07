@@ -530,7 +530,7 @@ NLCheckStatus nl_loop_header_includes(const NLLoopHeader *h,
     }
     for (size_t i = 0; i < a->place_count; ++i) {
         NLSemanticPlaceView x = a->places[i], y = b->places[i];
-        if (x.type == y.type && x.live == y.live &&
+        if (nl_fixed_frame_same(x, y) && x.type == y.type && x.live == y.live &&
             x.independent_root == y.independent_root &&
             x.governing_domain == y.governing_domain &&
             x.implicit_local == y.implicit_local &&
@@ -544,8 +544,8 @@ NLCheckStatus nl_loop_header_includes(const NLLoopHeader *h,
             x.placement.length == y.placement.length &&
             x.current_value <= o->values && x.current_fact <= o->facts)
             continue;
-        if (x.type != y.type || x.live != y.live ||
-            x.incarnation != y.incarnation ||
+        if (!nl_fixed_frame_same(x, y) || x.type != y.type ||
+            x.live != y.live || x.incarnation != y.incarnation ||
             x.independent_root != y.independent_root ||
             x.parent_sum != y.parent_sum ||
             x.payload_occurrence != y.payload_occurrence ||

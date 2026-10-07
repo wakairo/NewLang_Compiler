@@ -89,7 +89,7 @@ static bool parser(void)
                              "loan_read_ptr(make()){|r|unit}",
                              "loan_read()",
                              "loan_read(x)",
-                             "loan_write(x.field){|w|unit}",
+                             "loan_write(x.field.nested){|w|unit}",
                              "loan_write(make()){|w|unit}",
                              "loan_write()",
                              "loan_write(x)"};

@@ -46,6 +46,31 @@ static V0Function *v0_find_function(V0Program *program, size_t function)
     return NULL;
 }
 
+/* Shared resolved projection predicate. Point-in-time proof is supplied by
+ * the checker; final local liveness is not a replay of that proof. */
+static bool bounded_field(const NLCheckedFragment *f, const NLCheckedField *e,
+                          const V0Program *p)
+{
+    if (!e->present || !e->dependency_compatible || e->base == 0 ||
+        e->type != p->u8 || e->nominal != p->aggregate || e->index >= 2 ||
+        e->parent == 0 || e->child == 0 || e->parent == e->child ||
+        e->parent_incarnation == 0 || e->child_incarnation == 0 ||
+        e->parent_fact == 0 || e->child_fact == 0)
+        return false;
+    NLAggregateField field;
+    if (!nl_semantic_aggregate_field_view(nl_checked_context(f), e->nominal,
+                                          e->index, &field) ||
+        field.type != p->u8)
+        return false;
+    for (size_t i = 1; i <= nl_checked_node_count(f); ++i) {
+        const NLCheckedNodeView *v = nl_checked_node_view(f, i);
+        if (v->kind == NL_CHECKED_RECEIVER && v->symbol == e->base &&
+            v->type == e->nominal)
+            return true;
+    }
+    return false;
+}
+
 /* V1 consumes only immutable checked evidence. Neither syntax trees nor
  * source bytes enter scalar lowering. Symbol IDs produce safe C local names. */
 static bool v1_scalar(const NLCheckedFragment *fragment, NLCheckedNodeId id,
@@ -59,6 +84,10 @@ static bool v1_scalar(const NLCheckedFragment *fragment, NLCheckedNodeId id,
         return v->has_scalar_result && v->scalar_result.known &&
                v->scalar_result.type == program->u8 &&
                v->scalar_result.value <= 255;
+    if (v->kind == NL_CHECKED_FIELD_READ)
+        return v->value_use == NL_VALUE_COPIED &&
+               v->field.access == NL_ACCESS_READ &&
+               bounded_field(fragment, &v->field, program);
     if (v->kind != NL_CHECKED_IDENTIFIER || v->symbol == 0 ||
         v->value_use != NL_VALUE_COPIED)
         return false;
@@ -161,6 +190,9 @@ static bool v1_emit_scalar(FILE *stream, const NLCheckedNodeView *value)
         return fprintf(stream, "%zu", value->scalar_result.value) >= 0;
     if (value->kind == NL_CHECKED_IDENTIFIER)
         return fprintf(stream, "nl_local_%zu", value->symbol) >= 0;
+    if (value->kind == NL_CHECKED_FIELD_READ)
+        return fprintf(stream, "nl_local_%zu.f%zu", value->field.base,
+                       value->field.index) >= 0;
     return false;
 }
 
@@ -231,6 +263,14 @@ static bool gate_replace(const NLCheckedFragment *f, NLCheckedNodeId id,
         return false;
     if (v->type != p->u8 || v->results[0].type != p->u8)
         return false;
+    if (v->field.present &&
+        (!bounded_field(f, &v->field, p) ||
+         v->field.access != NL_ACCESS_WRITE ||
+         v->field.old_value != v->results[0].value ||
+         v->field.parent_post_fact == 0 || v->field.child_post_fact == 0 ||
+         v->field.parent_post_fact == v->field.parent_fact ||
+         v->field.child_post_fact == v->field.child_fact))
+        return false;
     const NLCheckedNodeView *ref = nl_checked_node_view(f, v->first_argument);
     const NLCheckedNodeView *value =
         ref == NULL ? NULL : nl_checked_node_view(f, ref->next_argument);
@@ -254,12 +294,19 @@ static bool gate_loan(const NLCheckedFragment *f, const NLCheckedNodeView *v,
         body->kind != NL_CHECKED_BLOCK || body->terminates ||
         body->result_count != v->result_count || v->result_count > 1)
         return false;
+    if (v->field.present &&
+        (!write || !bounded_field(f, &v->field, p) ||
+         v->field.access != NL_ACCESS_WRITE ||
+         v->loan.source != v->field.base || v->loan.place != v->field.child ||
+         v->loan.incarnation != v->field.child_incarnation))
+        return false;
     bool source_local = false;
     for (size_t i = 1; i <= nl_checked_node_count(f); ++i) {
         const NLCheckedNodeView *r = nl_checked_node_view(f, i);
         if (r->kind == NL_CHECKED_RECEIVER && r->symbol == v->loan.source &&
-            (v->loan.from_ptr ? gate_type(f, r->type, NL_TYPE_PTR, p)
-                              : r->type == p->u8))
+            (v->loan.from_ptr
+                 ? gate_type(f, r->type, NL_TYPE_PTR, p)
+                 : r->type == (v->field.present ? v->field.nominal : p->u8)))
             source_local = true;
     }
     if (!source_local)
@@ -335,6 +382,7 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
         return false;
 
     switch (view->kind) {
+    case NL_CHECKED_FIELD_READ:
     case NL_CHECKED_U8_LITERAL:
     case NL_CHECKED_IDENTIFIER:
         return v1_scalar(fragment, id, program) ||
@@ -484,8 +532,11 @@ static bool gate_emit_loan(FILE *stream, const NLCheckedFragment *f,
         !v0_indent(stream, depth + 1))
         return false;
     if (write) {
-        if (fprintf(stream, "uint8_t *const nl_local_%zu = &nl_local_%zu;\n",
-                    v->loan.ref_symbol, v->loan.source) < 0)
+        if (fprintf(stream, "uint8_t *const nl_local_%zu = &nl_local_%zu",
+                    v->loan.ref_symbol, v->loan.source) < 0 ||
+            (v->field.present &&
+             fprintf(stream, ".f%zu", v->field.index) < 0) ||
+            fputs(";\n", stream) < 0)
             return false;
     } else if (fprintf(stream,
                        "const uint8_t *const nl_local_%zu = %snl_local_%zu;\n",
@@ -549,6 +600,7 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
         return false;
 
     switch (view->kind) {
+    case NL_CHECKED_FIELD_READ:
     case NL_CHECKED_U8_LITERAL:
     case NL_CHECKED_IDENTIFIER:
     case NL_CHECKED_PTR_FROM_REF:
@@ -597,7 +649,8 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
         if (!v0_indent(stream, depth))
             return false;
         if (initializer->kind == NL_CHECKED_AGGREGATE) {
-            if (fprintf(stream, "const nl_type_%zu nl_local_%zu = ",
+            if (fprintf(stream,
+                        "%snl_type_%zu nl_local_%zu = ", scalar_qualifier,
                         initializer->type, view->symbol) < 0 ||
                 !avs_emit_initializer(stream, fragment, initializer))
                 return false;

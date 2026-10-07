@@ -1,5 +1,6 @@
 #include "semantic_internal.h"
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -260,7 +261,7 @@ static bool reference_fact_live(Check *check, NLValueId value,
              "payload occurrence has ended");
         return false;
     }
-    if (!p.live || p.incarnation != fact.incarnation ||
+    if (!nl_fixed_live(c, fact.place) || p.incarnation != fact.incarnation ||
         (p.placement.region != 0 &&
          !c->regions[p.placement.region - 1].view.live)) {
         fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P3-STALE-POINTER",
@@ -358,7 +359,7 @@ static bool conflicts(Check *check, NLPlaceId place, bool exclusive,
                          "acquisition/transition safety");
                     return true;
                 }
-            } else if (fact.place == place &&
+            } else if (nl_fixed_overlap(c, fact.place, place) &&
                        (exclusive || ending || t.is_exclusive)) {
                 fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P3-REF-CONFLICT",
                      "operation conflicts with a live reference capability");
@@ -401,14 +402,25 @@ static NLCheckedNodeId binding_use(Check *check, NLSymbolId symbol,
     }
     NLValueId value = binding.value;
     if (type.is_copy) {
+        if (nl_fixed_type(c, binding.type) &&
+            conflicts(check, binding.place, false, false, 0, span))
+            return 0;
         if (!host(check, nl_sem_copy_value(c, binding.value, &value), span)) {
             return 0;
         }
     } else {
+        const NLCheckStatus ending =
+            nl_fixed_end_dependencies(c, binding.place, SIZE_MAX);
+        if (ending != NL_CHECK_OK) {
+            fail(check, ending, span, "FIELD-END-DEPENDENCY",
+                 "surviving value depends on the ending root");
+            return 0;
+        }
         if (conflicts(check, binding.place, false, true, 0, span)) {
             return 0;
         }
         nl_sum_detach(c, binding.place);
+        nl_fixed_detach(c, binding.place);
         c->bindings[symbol - 1].view.availability = NL_CONSUMED;
         c->places[binding.place - 1].live = false;
         c->places[binding.place - 1].current_value = 0;
@@ -784,6 +796,13 @@ static bool primitive(Check *check, NLCheckedNodeId call,
         }
         if (!concrete_ref(check, value, view(check, args[0])->span))
             return false;
+        if (ref.dependencies != NL_DEPENDENCY_FREE) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+                 "P3-DEPENDENCIES-UNSUPPORTED",
+                 "ptr conversion does not preserve this value dependency "
+                 "evidence");
+            return false;
+        }
         const NLTypeId type =
             compound(check, NL_TYPE_PTR, t.target, NL_ACCESS_READ, false, span);
         if (type == 0) {
@@ -937,7 +956,15 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                  "P3-DISCARDABLE-REQUIRED", "destroy requires Discardable(T)");
             return false;
         }
+        const NLCheckStatus end_status =
+            nl_fixed_end_dependencies(c, place, SIZE_MAX);
+        if (end_status != NL_CHECK_OK) {
+            fail(check, end_status, span, "FIELD-END-DEPENDENCY",
+                 "surviving value depends on ending root");
+            return false;
+        }
         nl_sum_detach(c, place);
+        nl_fixed_detach(c, place);
         if (kind == NL_CHECKED_DESTROY)
             nl_sem_end_value(c, old.current_value);
         c->places[place - 1].live = false;
@@ -973,6 +1000,19 @@ static bool primitive(Check *check, NLCheckedNodeId call,
     } else if (kind == NL_CHECKED_REPLACE || kind == NL_CHECKED_STORE ||
                kind == NL_CHECKED_SWAP) {
         const NLValueId first = one_result(check, args[0]);
+        if (first != 0 && kind != NL_CHECKED_SWAP &&
+            c->types[c->values[first - 1].type - 1].view.kind == NL_TYPE_REF &&
+            c->values[first - 1].reference_count == 0) {
+            const NLPlaceId target = c->values[first - 1].reference.place;
+            if (target != 0 && target <= c->place_count &&
+                c->places[target - 1].parent_aggregate != 0 &&
+                view(check, args[1])->type != c->places[target - 1].type) {
+                fail(check, NL_CHECK_SEMANTIC_ERROR, view(check, args[1])->span,
+                     "P3-TYPE-MISMATCH",
+                     "new value type differs from fixed field type");
+                return false;
+            }
+        }
         const NLValueId second = one_result(check, args[1]);
         if (first == 0 || second == 0 ||
             !write_ref(check, first, view(check, args[0])->span)) {
@@ -984,6 +1024,12 @@ static bool primitive(Check *check, NLCheckedNodeId call,
             return false;
         }
         if (kind == NL_CHECKED_SWAP) {
+            if (old.parent_aggregate != 0) {
+                fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, span,
+                     "FIELD-SWAP-PROFILE",
+                     "fixed-field swap is outside the bounded mutation slice");
+                return false;
+            }
             if (c->types[old.type - 1].view.kind == NL_TYPE_SUM ||
                 old.parent_sum != 0) {
                 fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, span,
@@ -995,6 +1041,12 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                 return false;
             }
             const NLPlaceId other = c->values[second - 1].reference.place;
+            if (c->places[other - 1].parent_aggregate != 0) {
+                fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, span,
+                     "FIELD-SWAP-PROFILE",
+                     "fixed-field swap is outside the bounded mutation slice");
+                return false;
+            }
             if (c->places[other - 1].type != old.type) {
                 fail(check, NL_CHECK_SEMANTIC_ERROR, view(check, args[1])->span,
                      "P3-TYPE-MISMATCH", "swap referent types differ");
@@ -1034,6 +1086,54 @@ static bool primitive(Check *check, NLCheckedNodeId call,
             if (c->types[old.type - 1].view.kind == NL_TYPE_SUM &&
                 conflicts(check, place, false, false, first, span))
                 return false;
+            const NLCheckStatus dep = nl_fixed_change_dependencies(
+                c, place, kind == NL_CHECKED_STORE ? old.current_value : 0);
+            if (dep != NL_CHECK_OK) {
+                fail(check, dep, span, "FIELD-VALUE-DEPENDENCY",
+                     "Change conflicts with a surviving current-value "
+                     "dependency");
+                return false;
+            }
+            if (old.parent_aggregate != 0) {
+                const NLPlaceId root = old.parent_aggregate;
+                const NLSemanticPlaceView before = c->places[root - 1];
+                NLCheckedField evidence = {.present = true,
+                                           .dependency_compatible = true,
+                                           .nominal = before.type,
+                                           .type = old.type,
+                                           .index = old.parent_field_index,
+                                           .parent = root,
+                                           .child = place,
+                                           .parent_incarnation =
+                                               before.incarnation,
+                                           .child_incarnation = old.incarnation,
+                                           .parent_fact = before.current_fact,
+                                           .child_fact = old.current_fact,
+                                           .access = NL_ACCESS_WRITE,
+                                           .old_value = old.current_value,
+                                           .new_value = second};
+                for (size_t i = 0; i < c->binding_count; ++i)
+                    if (!c->bindings[i].hidden &&
+                        c->bindings[i].view.place == root)
+                        evidence.base = i + 1;
+                if (!host(check,
+                          nl_fixed_change(c, place, second,
+                                          kind == NL_CHECKED_STORE),
+                          span))
+                    return false;
+                evidence.parent_post_fact = c->places[root - 1].current_fact;
+                evidence.child_post_fact = c->places[place - 1].current_fact;
+                operation.field = evidence;
+                refresh_bindings(check, root);
+                if (kind == NL_CHECKED_REPLACE) {
+                    operation.type = old.type;
+                    operation.result_count = 1;
+                    operation.results[0] =
+                        (NLCheckedResult){old.type, old.current_value};
+                }
+                *view(check, call) = operation;
+                return true;
+            }
             NLValueFactId fact;
             if (!host(check, nl_sem_fresh_fact(c, &fact), span)) {
                 return false;
@@ -1304,6 +1404,125 @@ static NLCheckedNodeId source_loop(Check *, const NLSyntaxView *);
 static NLCheckedNodeId source_local_loan(Check *, const NLSyntaxView *);
 static NLCheckedNodeId source_control(Check *, const NLSyntaxView *);
 
+static NLSymbolId dotted_binding(Check *check, NLSourceSpan name)
+{
+    for (size_t i = check->context->binding_count; i > check->namespace_floor;
+         --i)
+        if (!check->context->bindings[i - 1].hidden &&
+            equal_name(check, name, check->context->bindings[i - 1].name))
+            return i;
+    return 0;
+}
+
+static bool fixed_selection(Check *check, const NLSyntaxView *s,
+                            NLAccessSyntax access, NLCheckedField *out)
+{
+    NLSemanticContext *c = check->context;
+    const NLSymbolId symbol =
+        dotted_binding(check, s->data.constructor.qualifier);
+    if (symbol == 0 || !nl_fixed_type(c, c->bindings[symbol - 1].view.type)) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span, "FIELD-PROFILE",
+             "field base requires a direct registered Pair local");
+        return false;
+    }
+    const NLSemanticBindingView b = c->bindings[symbol - 1].view;
+    const NLSemanticPlaceView p = c->places[b.place - 1];
+    if (b.availability != NL_AVAILABLE || !p.live || !p.implicit_local ||
+        !p.independent_root || p.parent_aggregate != 0 || p.parent_sum != 0) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "FIELD-STALE-BASE",
+             "field base is not a current live direct lexical local");
+        return false;
+    }
+    size_t index = p.fixed_field_count;
+    for (size_t i = 0; i < p.fixed_field_count; ++i)
+        if (equal_name(check, s->data.constructor.variant,
+                       c->types[b.type - 1].field_names[i]))
+            index = i;
+    if (index == p.fixed_field_count) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "FIELD-UNKNOWN-FIELD",
+             "field is not declared by the selected Pair");
+        return false;
+    }
+    if (s->data.constructor.parentheses ||
+        s->data.constructor.argument_count != 0) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span, "FIELD-PROFILE",
+             "field reads are not method calls");
+        return false;
+    }
+    const NLPlaceId child = p.fixed_fields[index];
+    if (!nl_fixed_live(c, child)) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "FIELD-STALE-CHILD",
+             "fixed field incarnation has ended");
+        return false;
+    }
+    const NLSemanticPlaceView f = c->places[child - 1];
+    *out = (NLCheckedField){.present = true,
+                            .dependency_compatible = true,
+                            .base = symbol,
+                            .nominal = b.type,
+                            .type = f.type,
+                            .index = index,
+                            .parent = b.place,
+                            .child = child,
+                            .parent_incarnation = p.incarnation,
+                            .child_incarnation = f.incarnation,
+                            .parent_fact = p.current_fact,
+                            .child_fact = f.current_fact,
+                            .access = access,
+                            .old_value = f.current_value};
+    return true;
+}
+
+static NLCheckedNodeId dotted(Check *check, const NLSyntaxView *s)
+{
+    NLSemanticContext *c = check->context;
+    const NLSymbolId symbol =
+        dotted_binding(check, s->data.constructor.qualifier);
+    const bool field =
+        symbol != 0 && nl_fixed_type(c, c->bindings[symbol - 1].view.type);
+    bool sum = false;
+    for (size_t i = 0; i < c->type_count; ++i)
+        if (c->types[i].view.kind == NL_TYPE_SUM && c->types[i].name != NULL &&
+            equal_name(check, s->data.constructor.qualifier, c->types[i].name))
+            sum = true;
+    if (field && sum) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "FIELD-DOTTED-AMBIGUOUS",
+             "dotted base is both a Pair local and a closed sum type");
+        return 0;
+    }
+    if (sum)
+        return sum_constructor(check, s);
+    if (!field) {
+        fail(check,
+             symbol == 0 ? NL_CHECK_SEMANTIC_ERROR
+                         : NL_CHECK_SEMANTIC_UNSUPPORTED,
+             s->span, symbol == 0 ? "P6-SUM-QUALIFIER" : "FIELD-PROFILE",
+             "dotted source has no supported field or sum category");
+        return 0;
+    }
+    NLCheckedField evidence;
+    if (!fixed_selection(check, s, NL_ACCESS_READ, &evidence))
+        return 0;
+    if (conflicts(check, evidence.child, false, false, 0, s->span))
+        return 0;
+    NLValueId copy;
+    if (!host(check, nl_sem_copy_value(c, evidence.old_value, &copy), s->span))
+        return 0;
+    const NLSemanticValueView v = c->values[copy - 1];
+    return add(check,
+               (NLCheckedNodeView){
+                   .kind = NL_CHECKED_FIELD_READ,
+                   .span = s->span,
+                   .type = evidence.type,
+                   .symbol = evidence.base,
+                   .value_use = NL_VALUE_COPIED,
+                   .field = evidence,
+                   .result_count = 1,
+                   .results = {{evidence.type, copy}},
+                   .has_scalar_result = v.scalar_known,
+                   .scalar_result = {v.type, v.scalar_known, v.scalar_value}});
+}
+
 /* The source payload is decimal mathematical-integer evidence, not a C
  * conversion. Keep the accumulator bounded by 255: arbitrarily long payloads
  * cannot overflow the host, truncate, or wrap. No signed/general numeric IR. */
@@ -1360,8 +1579,9 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
     if (check->in_function_body && node->kind != NL_SYNTAX_EXPR_NAME &&
         node->kind != NL_SYNTAX_EXPR_CALL && node->kind != NL_SYNTAX_BLOCK &&
         node->kind != NL_SYNTAX_SUM_CONSTRUCTOR &&
-        node->kind != NL_SYNTAX_MATCH && node->kind != NL_SYNTAX_IF &&
-        node->kind != NL_SYNTAX_LOOP && node->kind != NL_SYNTAX_U8_LITERAL &&
+        node->kind != NL_SYNTAX_DOTTED && node->kind != NL_SYNTAX_MATCH &&
+        node->kind != NL_SYNTAX_IF && node->kind != NL_SYNTAX_LOOP &&
+        node->kind != NL_SYNTAX_U8_LITERAL &&
         node->kind != NL_SYNTAX_AGGREGATE &&
         node->kind != NL_SYNTAX_LOCAL_READ_LOAN &&
         node->kind != NL_SYNTAX_LOCAL_WRITE_LOAN) {
@@ -1370,6 +1590,20 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
              "expression needs a richer relative body analysis");
         --check->depth;
         return 0;
+    }
+    if (node->kind == NL_SYNTAX_MATCH || node->kind == NL_SYNTAX_IF ||
+        node->kind == NL_SYNTAX_LOOP) {
+        for (size_t i = 0; i < check->context->value_count; ++i)
+            if (check->context->values[i].carrier != NL_CARRIER_ENDED &&
+                check->context->values[i].dependencies ==
+                    NL_EXACT_VALUE_DEPENDENCIES) {
+                fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, node->span,
+                     "FIELD-DEPENDENCY-CONTROL-PRECISION",
+                     "exact ValueFact evidence is not admitted by this control "
+                     "join");
+                --check->depth;
+                return 0;
+            }
     }
     if (node->kind == NL_SYNTAX_EXPR_NAME) {
         result = equal_name(check, node->data.name, "unit")
@@ -1385,6 +1619,8 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         result = source_block(check, node);
     } else if (node->kind == NL_SYNTAX_SUM_CONSTRUCTOR) {
         result = sum_constructor(check, node);
+    } else if (node->kind == NL_SYNTAX_DOTTED) {
+        result = dotted(check, node);
     } else if (node->kind == NL_SYNTAX_MATCH) {
         result = sum_match(check, node);
     } else if (node->kind == NL_SYNTAX_IF) {
@@ -1752,8 +1988,10 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
             goto cleanup;
         }
         if (!multi && !destructure &&
-            check->context->values[values[i] - 1].type ==
-                nl_semantic_core_type(check->context, NL_TYPE_U8))
+            (check->context->values[values[i] - 1].type ==
+                 nl_semantic_core_type(check->context, NL_TYPE_U8) ||
+             nl_fixed_type(check->context,
+                           check->context->values[values[i] - 1].type)))
             check->context
                 ->places[check->context->bindings[symbol - 1].view.place - 1]
                 .implicit_local = true;
@@ -1836,9 +2074,17 @@ static bool end_bindings(Check *check, size_t floor, NLSourceSpan span)
                      "non-Discardable local remains available at block exit");
                 return false;
             }
+            const NLCheckStatus ending =
+                nl_fixed_end_dependencies(c, entry->view.place, floor);
+            if (ending != NL_CHECK_OK) {
+                fail(check, ending, span, "FIELD-END-DEPENDENCY",
+                     "surviving value depends on ending local");
+                return false;
+            }
             if (conflicts(check, entry->view.place, false, true, 0, span))
                 return false;
             nl_sum_detach(c, entry->view.place);
+            nl_fixed_detach(c, entry->view.place);
             end_temporary(check, entry->view.value);
             c->places[entry->view.place - 1].live = false;
             c->places[entry->view.place - 1].current_value = 0;
@@ -2087,7 +2333,7 @@ NLCheckStatus nl_sem_check_function_block(NLSemanticContext *context,
     *check.artifact =
         (NLCheckedFragment){.source = check.source, .context = context};
     if (!function_block(&check, syntax) ||
-        !host(&check, nl_sum_validate(check.context), syntax->span) ||
+        !host(&check, nl_sem_validate(check.context), syntax->span) ||
         !host(&check, nl_raw_validate(check.context), syntax->span))
         goto failure;
     nl_sem_commit(context, check.context);
@@ -2332,7 +2578,7 @@ static void match_precision(Check *check, NLSourceSpan span)
 
 static bool same_place_frame(NLSemanticPlaceView a, NLSemanticPlaceView b)
 {
-    return a.type == b.type && a.live == b.live &&
+    return nl_fixed_frame_same(a, b) && a.type == b.type && a.live == b.live &&
            a.incarnation == b.incarnation &&
            a.independent_root == b.independent_root &&
            a.parent_sum == b.parent_sum &&
@@ -4369,14 +4615,21 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
 static NLCheckedNodeId source_local_loan(Check *check, const NLSyntaxView *s)
 {
     NLSemanticContext *c = check->context;
-    const NLSourceSpan operand = nl_syntax_node_view(s->data.loan.source)->span;
+    const NLSyntaxView *operand_node = nl_syntax_node_view(s->data.loan.source);
+    const bool field = operand_node->kind == NL_SYNTAX_DOTTED;
+    const NLSourceSpan operand =
+        field ? operand_node->data.constructor.qualifier : operand_node->span;
+    NLCheckedField field_evidence = {0};
+    if (field &&
+        !fixed_selection(check, operand_node, NL_ACCESS_WRITE, &field_evidence))
+        return 0;
     const NLSymbolId source = available(check, operand);
     if (source == 0)
         return 0;
     const NLSemanticBindingView binding = c->bindings[source - 1].view;
     const NLSemanticTypeView type = c->types[binding.type - 1].view;
     const bool write = s->data.loan.access == NL_ACCESS_WRITE;
-    NLPlaceId place = binding.place;
+    NLPlaceId place = field ? field_evidence.child : binding.place;
     if (write && s->data.loan.from_ptr) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, operand,
              "LOCAL-LOAN-PROFILE",
@@ -4406,14 +4659,17 @@ static NLCheckedNodeId source_local_loan(Check *check, const NLSyntaxView *s)
         place = ptr.reference.place;
     }
     const NLSemanticPlaceView root = c->places[place - 1];
+    const NLSemanticPlaceView stability_root =
+        field ? c->places[field_evidence.parent - 1] : root;
     bool visible = false;
     for (size_t i = check->namespace_floor; i < c->binding_count; ++i)
         if (!c->bindings[i].hidden &&
             c->bindings[i].view.availability == NL_AVAILABLE &&
-            c->bindings[i].view.place == place)
+            c->bindings[i].view.place ==
+                (field ? field_evidence.parent : place))
             visible = true;
-    if (!root.implicit_local || !visible || !root.live ||
-        root.governing_domain != 0 || !root.independent_root ||
+    if (!stability_root.implicit_local || !visible || !root.live ||
+        root.governing_domain != 0 || !stability_root.independent_root ||
         root.parent_sum != 0 || root.placement.region != 0 ||
         root.type != nl_semantic_core_type(c, NL_TYPE_U8)) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, operand,
@@ -4456,6 +4712,7 @@ static NLCheckedNodeId source_local_loan(Check *check, const NLSyntaxView *s)
     id = add(check,
              (NLCheckedNodeView){.kind = NL_CHECKED_LOAN_HEADER,
                                  .span = s->span,
+                                 .field = field_evidence,
                                  .loan = {.source = source,
                                           .place = place,
                                           .incarnation = root.incarnation,
@@ -4688,9 +4945,9 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
          root->kind != NL_SYNTAX_AGGREGATE_BINDING &&
          root->kind != NL_SYNTAX_AGGREGATE &&
          root->kind != NL_SYNTAX_SUM_CONSTRUCTOR &&
-         root->kind != NL_SYNTAX_MATCH && root->kind != NL_SYNTAX_IF &&
-         root->kind != NL_SYNTAX_LOOP && root->kind != NL_SYNTAX_BLOCK &&
-         root->kind != NL_SYNTAX_STATEMENT &&
+         root->kind != NL_SYNTAX_DOTTED && root->kind != NL_SYNTAX_MATCH &&
+         root->kind != NL_SYNTAX_IF && root->kind != NL_SYNTAX_LOOP &&
+         root->kind != NL_SYNTAX_BLOCK && root->kind != NL_SYNTAX_STATEMENT &&
          root->kind != NL_SYNTAX_U8_LITERAL &&
          root->kind != NL_SYNTAX_LOCAL_READ_LOAN &&
          root->kind != NL_SYNTAX_LOCAL_WRITE_LOAN) ||
@@ -4708,15 +4965,13 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
     }
     *check.artifact =
         (NLCheckedFragment){.source = check.source, .context = context};
-    for (size_t i = 0; i < check.context->value_count; ++i) {
-        if (check.context->values[i].carrier != NL_CARRIER_ENDED &&
-            check.context->values[i].dependencies != NL_DEPENDENCY_FREE) {
-            fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, root->span,
-                 "P3-DEPENDENCIES-UNSUPPORTED",
-                 "hidden semantic dependency checking is outside P3 supported "
-                 "slice");
-            goto failure;
-        }
+    const NLCheckStatus dependency_status =
+        nl_fixed_dependencies(check.context);
+    if (dependency_status != NL_CHECK_OK) {
+        fail(&check, dependency_status, root->span,
+             "P3-DEPENDENCIES-UNSUPPORTED",
+             "semantic dependency evidence is unknown, unsupported or stale");
+        goto failure;
     }
     if (entry == CHECK_TYPE) {
         const NLTypeId type = check_type(&check, nl_syntax_tree_root(tree));
@@ -4751,7 +5006,7 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
              "semantic checker did not produce an artifact");
         goto failure;
     }
-    if (!host(&check, nl_sum_validate(check.context), root->span) ||
+    if (!host(&check, nl_sem_validate(check.context), root->span) ||
         !host(&check, nl_raw_validate(check.context), root->span)) {
         goto failure;
     }
@@ -5016,7 +5271,7 @@ NLCheckStatus nl_semantic_check_raw_operation(NLSemanticContext *context,
         }
         end_temporary(&check, values[i]);
     }
-    if (!host(&check, nl_sum_validate(c), operation->span) ||
+    if (!host(&check, nl_sem_validate(c), operation->span) ||
         !host(&check, nl_raw_validate(c), operation->span)) {
         goto failure;
     }
@@ -5058,6 +5313,10 @@ NLCheckStatus nl_semantic_join_references(NLSemanticContext *context,
             check.status = NL_CHECK_SEMANTIC_ERROR;
             goto done;
         }
+        if (v.dependencies != NL_DEPENDENCY_FREE) {
+            check.status = NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+            goto done;
+        }
         if (!reference_live(&check, values[i], (NLSourceSpan){0}))
             goto done;
         for (size_t j = 0; j < nl_sem_ref_count(v); ++j)
@@ -5068,7 +5327,7 @@ NLCheckStatus nl_semantic_join_references(NLSemanticContext *context,
     NLValueId result;
     check.status = nl_sem_new_value(check.context, join, &result);
     if (check.status == NL_CHECK_OK)
-        check.status = nl_sum_validate(check.context);
+        check.status = nl_sem_validate(check.context);
     if (check.status == NL_CHECK_OK)
         check.status = nl_raw_validate(check.context);
     if (check.status == NL_CHECK_OK) {
@@ -5217,7 +5476,7 @@ static bool check_definition(Check *registration, size_t function_id)
     if (!function_block(&definition, nl_syntax_node_view(nl_syntax_tree_root(
                                          function.body->syntax))))
         goto failure;
-    if (!host(&definition, nl_sum_validate(c), span) ||
+    if (!host(&definition, nl_sem_validate(c), span) ||
         !host(&definition, nl_raw_validate(c), span))
         goto failure;
     nl_checked_destroy(definition.artifact);
@@ -5294,7 +5553,7 @@ NLCheckStatus nl_semantic_register_function_body(
         goto failure;
     if (!check_definition(&check, function_id))
         goto failure;
-    if (!host(&check, nl_sum_validate(check.context), root->span) ||
+    if (!host(&check, nl_sem_validate(check.context), root->span) ||
         !host(&check, nl_raw_validate(check.context), root->span))
         goto failure;
     nl_sem_commit(context, check.context);
@@ -5552,7 +5811,7 @@ NLCheckStatus nl_semantic_register_function_unit(
     }
     check.source = nl_syntax_tree_source(inputs[0]);
     input = 0;
-    if (!host(&check, nl_sum_validate(check.context), (NLSourceSpan){0}) ||
+    if (!host(&check, nl_sem_validate(check.context), (NLSourceSpan){0}) ||
         !host(&check, nl_raw_validate(check.context), (NLSourceSpan){0}))
         goto failure;
     nl_sem_commit(context, check.context);
