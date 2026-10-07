@@ -987,9 +987,9 @@ static NLSyntaxNode *source_expression(NLParser *parser)
     const NLSourceSpan name = parser->token.span;
     consume(parser);
     if ((read_loan || ptr_loan || write_loan) && punct(parser, '(')) {
-        result = source_local_loan(
-            parser, name, ptr_loan,
-            write_loan ? NL_ACCESS_WRITE : NL_ACCESS_READ);
+        const NLAccessSyntax access =
+            write_loan ? NL_ACCESS_WRITE : NL_ACCESS_READ;
+        result = source_local_loan(parser, name, ptr_loan, access);
         goto done;
     }
     if (punct(parser, '.')) {
