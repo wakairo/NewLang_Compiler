@@ -35,13 +35,13 @@ registered AVS `Pair { left: u8, right: u8 }` localに限って次のclosed prof
    - §13.8のexactly-once scope / nonescape / normal-result forwardingをそのまま再利用する。
 
 3. **field-vs-sum dotted spellingをboundedに分離する**
-   - simple `name.member` expressionでは、left `name` のordinary lexical value-binding candidateと、
-     既存§26.3のsum-type candidateを別categoryとして解決する。
-   - value-binding categoryだけが成立する場合はbounded fixed-field route、
+   - simple `name.member` expressionでは、left `name` がregistered AVS Pairのordinary lexical localとして成立する
+     bounded field candidateと、既存§26.3のsum-type candidateを別categoryとして解決する。
+   - field categoryだけが成立する場合はbounded fixed-field route、
      sum-type categoryだけが成立する場合はexisting constructor routeを選ぶ。
    - 同じleft spellingが両categoryで成立する場合は本bounded profileではambiguity errorとし、
      新しいvalue-vs-type precedenceを導入しない。
-   - category選択後のunknown field / wrong nominal base / unknown variant等を他categoryへfallbackしない。
+   - category選択後のunknown field / unknown variant等を他categoryへfallbackしない。
    - frontendはsemantic resolution後にfield accessをbase binding identity + opaque ProjectionId + field typeへ固定し、
      backendへsource tokenのreparseやC offset-derived authorityを要求しない。
 
@@ -5076,8 +5076,9 @@ expression positionの `simple_name.member_name` について、frontendはleft 
 少なくとも次の二つの既存categoryに対して独立に分類する。
 
 ```text
-value candidate:
+field candidate:
     in-scope ordinary lexical local binding
+    whose static type is the registered AVS Pair
 
 type candidate:
     §26.3でsum_typeになり得るconcrete closed nominal sum type
@@ -5085,14 +5086,13 @@ type candidate:
 
 resolution rule:
 
-- value candidateだけが成立する場合、本bounded fixed-field routeを選ぶ。
-  そのlocalのstatic typeはregistered Pairでなければならず、
+- field candidateだけが成立する場合、本bounded fixed-field routeを選び、
   `member_name` はそのPairのdeclared field setだけから解決する。
 - type candidateだけが成立する場合、§26.3のexisting sum-constructor routeを選ぶ。
-- 同じleft spellingについてvalue candidateとtype candidateが両方成立する場合、
+- 同じleft spellingについてfield candidateとtype candidateが両方成立する場合、
   本bounded profileでは **ambiguous dotted source** としてrejectする。
   value-first / type-first等の新しいnamespace precedenceを導入しない。
-- categoryを選んだ後のwrong nominal base / unknown field / unknown variant / arity errorを、
+- categoryを選んだ後のunknown field / unknown variant / arity errorを、
   他categoryへfallbackして別programとして救済しない。
 - candidateがどちらも成立しない場合もordinary member lookup等へfallbackしない。
 
