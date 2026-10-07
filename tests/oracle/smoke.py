@@ -35,4 +35,4 @@ with frozen_oracle() as oracle:
         pass
     else:
         raise SystemExit("differential harness counted unsupported as agreement")
-print("M7.5 oracle: 4 fixtures + CLI passed; production differential is explicitly unsupported")
+print("M7.5 oracle: 4 fixtures + CLI passed; production differential remains outside reviewed V0 overlap")
