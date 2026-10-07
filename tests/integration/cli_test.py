@@ -7,7 +7,9 @@ HELP = (
     "NewLang production compiler P0 bootstrap.\n"
     "  --version  Print the deterministic compiler version.\n"
     "  --help     Print this help.\n"
-    "Source compilation is not implemented in P0.\n"
+    "  SOURCE     Validate North Star V0 and emit Checked-C to stdout.\n"
+    "Checked-C is a bounded bootstrap/reference execution path; LLVM remains "
+    "the planned primary backend.\n"
 )
 CASES = {
     "version": (["--version"], 0, "newlangc 0.1.0 (P0 bootstrap)\n", ""),
