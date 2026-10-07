@@ -67,7 +67,7 @@ target_link_libraries(newlang_checked PUBLIC newlang_syntax)
 add_library(newlang_semantic STATIC src/semantic.c src/semantic_check.c src/sum.c src/raw_storage.c src/function_body.c src/control.c)
 target_link_libraries(newlang_semantic PUBLIC newlang_checked newlang_diagnostic newlang_parser)
 add_executable(newlangc src/main.c)
-target_link_libraries(newlangc PRIVATE newlang_diagnostic)
+target_link_libraries(newlangc PRIVATE newlang_semantic newlang_diagnostic)
 
 include(CTest)
 if(BUILD_TESTING)
@@ -227,11 +227,15 @@ if(BUILD_TESTING)
     target_link_libraries(llvm_smoke PRIVATE newlang_options newlang_llvm)
     add_test(NAME llvm.c_api COMMAND llvm_smoke)
 
-    foreach(case version help no_arguments invalid_option extra_argument unsupported)
+    foreach(case version help no_arguments invalid_option extra_argument)
         add_test(NAME cli.${case} COMMAND "${Python3_EXECUTABLE}"
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/cli_test.py"
             "$<TARGET_FILE:newlangc>" "${case}")
     endforeach()
+    add_test(NAME north_star_v0_checked_c.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_v0_test.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
     add_test(NAME artifacts.integrity COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/artifact_test.py")
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
