@@ -86,8 +86,7 @@ static bool v0_validate_block(const NLCheckedFragment *fragment,
     }
     if (count != block->item_count)
         return false;
-    return block->tail == 0 ||
-           v0_validate_node(fragment, block->tail, program);
+    return block->tail == 0 || v0_validate_node(fragment, block->tail, program);
 }
 
 static bool v0_validate_node(const NLCheckedFragment *fragment,
@@ -187,8 +186,8 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
 
     for (size_t i = 0; i < program->count; ++i) {
         const V0Function function = program->functions[i];
-        const NLCheckedNodeView *root = nl_checked_node_view(
-            function.body, nl_checked_root(function.body));
+        const NLCheckedNodeView *root =
+            nl_checked_node_view(function.body, nl_checked_root(function.body));
         if (root == NULL ||
             fprintf(stream, "static void nl_fn_%zu(void)\n",
                     function.function) < 0 ||
