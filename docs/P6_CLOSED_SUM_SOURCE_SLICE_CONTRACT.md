@@ -5,7 +5,9 @@ Status: production review contract。言語仕様の代替ではない。
 ## Authority / scope
 
 開始時 main は `2b327edc000a913a49adb7cfd5f78a95c1e931b8`。
-`docs/reference/CURRENT_SPEC.md` が指す Draft 17.10 の §26、§17.4、§19.1 を正本とする。
+初期implementation authorityはDraft 17.10。現在は
+`docs/reference/CURRENT_SPEC.md` が指すDraft 17.22の§26、§17.4、§19.1を正本とする。
+constructor punctuationは`::`、semantic contractは不変。
 Backend Contract v0.4、review済み運用方針、merged P/F/R evidence が続く。
 [Issue #35](https://github.com/wakairo/NewLang_Compiler/issues/35) と
 [Phase A audit](https://github.com/wakairo/NewLang_Compiler/issues/35#issuecomment-5995873897)
@@ -23,7 +25,7 @@ C17 / toolchain / parser旧4 entry / CLI / raw-memory semantics は既存基盤�
 | --- | --- | --- |
 | 登録 | nominal type、1–16 variants、payloadless / unary、同一sum内の名前一意、全payload型によるCopy/Discardableのconjunction | source sum declaration、generic instantiation、nested sum、aggregate/ref/ptr payload はsemantic unsupported。16はhost budget |
 | payload | flat nominal/unit/scalar、既存Storage/Allocation/slot/LifetimeDomainのvalue package | core authorityの一般user-call移送 / 合流はsummary不足としてunsupported / precision |
-| constructor | `Sum.Variant` / `Sum.Variant(expr)`、exact qualification、variant resolution後のshape/arity、ordinary value use | inference / associated/member lookupへのfallbackなし。invalid shapeはsemantic error |
+| constructor | `Sum::Variant` / `Sum::Variant(expr)`、adjacent `::`、exact qualification、variant resolution後のshape/arity、ordinary value use | inference / associated/member lookupへのfallbackなし。invalid shapeはsemantic error。current punctuationはDraft 17.22 |
 | match syntax | `match expr { Variant => block, Variant(name) => block, Variant(_) => block, }` | standalone wildcard、qualified/nested/guard/OR/literal/general pattern はsyntax unsupported |
 | punctuation | `=>`のbyte adjacency、comma、optional trailing comma、newlineはwhitespace | missing/non-adjacent arrow、missing separator、non-block bodyはsyntax error |
 | patterns | static sum自身のvariant resolution、exactly-once exhaustiveness、payload shape | empty arm listはparseしてsemantic exhaustiveness error。known current variantでも全armを検査 |

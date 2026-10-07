@@ -207,9 +207,9 @@ profiles and accepted constructs outside the emitter remain explicitly unsupport
 See [AVS contract](docs/NORTH_STAR_AVS_CONTRACT.md) and
 [AVS report](docs/NORTH_STAR_AVS_REPORT.md).
 
-Draft 17.20's fixed-field gate additionally supports one-level `p.left` /
-`p.right` Copy reads on a direct source `Pair` local and an ordinary scoped
-`loan_write(p.left){|w|replace(w,u8(11))}`. The checker tracks non-owning fixed
+The fixed-field gate uses Draft 17.22's one-level `p@left` /
+`p@right` Copy reads on a direct source `Pair` local and an ordinary scoped
+`loan_write(p@left){|w|replace(w,u8(11))}`. The checker tracks non-owning fixed
 subplaces, refreshes target/parent current facts, and preserves the sibling.
 Checked-C emits actual member reads/write and captures the old result before
 mutation. Unknown dependencies and unsupported profiles stop explicitly.
@@ -227,6 +227,15 @@ accepted; recursive topology remains outside Checked-C, with explicit backend
 unsupported. Node field source and allocation are deferred.
 See the [contract](docs/DRAFT_17_21_PRODUCTION_CONTRACT.md) and
 [report](docs/DRAFT_17_21_PRODUCTION_REPORT.md).
+
+Draft 17.22 separates bounded field `local@field` and closed-sum
+`SumType::Variant` / `SumType::Variant(expr)` syntax. The two colons must be
+adjacent. Exact recursive Option constructors use `Option<ptr<Node>>::None`
+or `::Some(p)`; other generic forms remain outside the frontend profile.
+Legacy dot routes and receiver/member calls are rejected without fallback.
+Existing field/sum semantics and Checked-C evidence are preserved. See the
+[migration contract](docs/DRAFT_17_22_SOURCE_PUNCTUATION_CONTRACT.md) and
+[report](docs/DRAFT_17_22_SOURCE_PUNCTUATION_REPORT.md).
 
 - `include/newlang/diagnostic.h`, `src/`: small borrowed-data diagnostic API and CLI.
 - `include/newlang/{source,token,lexer}.h`, `src/{source,lexer}.c`: immutable

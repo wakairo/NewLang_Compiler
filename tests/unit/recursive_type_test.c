@@ -4,11 +4,11 @@
 
 static const char decl[] = "struct Node{next:Option<ptr<Node>>,payload:u8,}";
 static const char body[] =
-    "fn main()->unit{let n=Node{next:Option<ptr<Node>>.None,payload:u8(7)};"
+    "fn main()->unit{let n=Node{next:Option<ptr<Node>>::None,payload:u8(7)};"
     "let Node{next,payload}=n;next;payload;unit}";
 static const char witness[] =
     "struct Node{next:Option<ptr<Node>>,payload:u8,}"
-    "fn main()->unit{let n=Node{next:Option<ptr<Node>>.None,payload:u8(7)};"
+    "fn main()->unit{let n=Node{next:Option<ptr<Node>>::None,payload:u8(7)};"
     "let Node{next,payload}=n;next;payload;unit}";
 void *__real_malloc(size_t);
 void *__real_realloc(void *, size_t);
@@ -184,10 +184,10 @@ static bool source(void)
     const char *variants[] = {
         witness,
         "fn main()->unit{let "
-        "n=Node{next:Option<ptr<Node>>.None,payload:u8(7)};unit}struct "
+        "n=Node{next:Option<ptr<Node>>::None,payload:u8(7)};unit}struct "
         "Node{next:Option<ptr<Node>>,payload:u8}",
         "struct Cell{tail:Option<ptr<Cell>>,data:u8}fn main()->unit{let "
-        "c=Cell{tail:Option<ptr<Cell>>.None,data:u8(7)};unit}"};
+        "c=Cell{tail:Option<ptr<Cell>>::None,data:u8(7)};unit}"};
     for (size_t k = 0; k < 3; ++k) {
         NLSemanticContext *c = NULL;
         CHECK(nl_semantic_create(&c) == NL_CHECK_OK);
@@ -242,17 +242,17 @@ static bool source(void)
           c->types[named(c, "Node") - 1].field_types[0]);
     CHECK(c->type_count == types_before);
     test_checked_destroy(&type_evidence);
-    CHECK(run(c, "let n=Node{next:Option<ptr<Node>>.None,payload:u8(7)};"));
+    CHECK(run(c, "let n=Node{next:Option<ptr<Node>>::None,payload:u8(7)};"));
     const NLPlaceId place =
         c->bindings[nl_semantic_find_binding(c, "n") - 1].view.place;
     NLSymbolId token;
     CHECK(test_reference(c, "token", place, NL_TYPE_PTR, NL_ACCESS_READ, false,
                          &token, NULL));
-    CHECK(run(c, "let link=Option<ptr<Node>>.Some(token);"));
+    CHECK(run(c, "let link=Option<ptr<Node>>::Some(token);"));
     CHECK(c->occurrence_count == 1);
     CHECK(run(
         c,
-        "let linked=Node{next:Option<ptr<Node>>.Some(token),payload:u8(9)};"));
+        "let linked=Node{next:Option<ptr<Node>>::Some(token),payload:u8(9)};"));
     CHECK(run(c, "let copied=linked;"));
     CHECK(nl_sem_validate(c) == NL_CHECK_OK);
     const NLValueId a =
@@ -262,7 +262,7 @@ static bool source(void)
     CHECK(c->values[a - 1].fields[0] != c->values[b - 1].fields[0]);
     CHECK(c->values[c->values[a - 1].fields[0] - 1].sum_payload !=
           c->values[c->values[b - 1].fields[0] - 1].sum_payload);
-    CHECK(test_rejected(c, "n.next", TEST_SOURCE, NL_CHECK_SEMANTIC_UNSUPPORTED,
+    CHECK(test_rejected(c, "n@next", TEST_SOURCE, NL_CHECK_SEMANTIC_UNSUPPORTED,
                         "FIELD-PROFILE"));
     nl_semantic_destroy(c);
     return true;

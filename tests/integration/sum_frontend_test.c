@@ -25,15 +25,15 @@ static bool workload(void)
                                  &next) == NL_CHECK_OK);
     TestChecked a = {0};
     CHECK(test_run(f.context,
-                   "{let result=Result.Failure(error);match result "
+                   "{let result=Result::Failure(error);match result "
                    "{Success(h)=>{success(h)},Failure(e)=>{failure(e)},}}",
                    TEST_SOURCE, NL_CHECK_OK, NULL, &a));
     CHECK(test_root(&a)->result_count == 1 && test_root(&a)->type == f.copy);
     test_checked_destroy(&a);
     CHECK(nl_semantic_find_binding(f.context, "result") == 0 &&
           nl_semantic_find_binding(f.context, "h") == 0);
-    CHECK(test_run(f.context, "let state=Option.None", TEST_SOURCE, NL_CHECK_OK,
-                   NULL, &a));
+    CHECK(test_run(f.context, "let state=Option::None", TEST_SOURCE,
+                   NL_CHECK_OK, NULL, &a));
     NLSemanticBindingView binding;
     CHECK(nl_semantic_binding_view(f.context, test_root(&a)->symbol, &binding));
     test_checked_destroy(&a);
@@ -60,7 +60,7 @@ static bool workload(void)
         nl_semantic_value_view(nl_checked_context(arm), payload.value, &ref) &&
         ref.reference.occurrence_dependency != 0);
     test_checked_destroy(&a);
-    CHECK(test_run(f.context, "store(rw,Option.Some(next))", TEST_SOURCE,
+    CHECK(test_run(f.context, "store(rw,Option::Some(next))", TEST_SOURCE,
                    NL_CHECK_OK, NULL, &a));
     test_checked_destroy(&a);
     CHECK(nl_semantic_place_view(f.context, binding.place, &p) &&

@@ -86,9 +86,9 @@ zeroではall-return、oneではそのarmだけがcontinuationを検証する。
 {
     let header = match parsed {
         Ok(h) => { h },
-        Err(e) => { return ResultPacketError.Err(e); },
+        Err(e) => { return ResultPacketError::Err(e); },
     };
-    return ResultPacketError.Ok(header);
+    return ResultPacketError::Ok(header);
 }
 ```
 

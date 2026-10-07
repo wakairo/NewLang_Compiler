@@ -37,7 +37,7 @@ static bool syntax_test(void)
     tree = NULL;
     CHECK(body_tree(
         "{let header=match parse(input) {Ok(h)=>{h},Err(e)=>{return "
-        "ResultPacketError.Err(e);}};return ResultPacketError.Ok(header);}",
+        "ResultPacketError::Err(e);}};return ResultPacketError::Ok(header);}",
         &source, &tree));
     nl_syntax_tree_destroy(tree);
     nl_source_destroy(source);
@@ -157,8 +157,8 @@ static bool result_type(TestSemantic *f, NLTypeId *result)
 }
 static const char decoder_body[] =
     "{let header=match parsed {Ok(h)=>{h},"
-    "Err(e)=>{return ResultPacketError.Err(e); e; unknown}};"
-    "return ResultPacketError.Ok(header); unknown}";
+    "Err(e)=>{return ResultPacketError::Err(e); e; unknown}};"
+    "return ResultPacketError::Ok(header); unknown}";
 static bool workload_test(void)
 {
     TestSemantic f = {0};
@@ -168,25 +168,25 @@ static bool workload_test(void)
     NLFunctionParameter p[] = {{"parsed", result}};
     CHECK(register_body(f.context, "decode", p, 1, result, decoder_body,
                         NL_CHECK_OK, NULL));
-    CHECK(
-        register_body(f.context, "both_return", p, 1, result,
-                      "{match parsed {Ok(h)=>{return ResultPacketError.Ok(h);},"
-                      "Err(e)=>{{return ResultPacketError.Err(e);}}}; unknown}",
-                      NL_CHECK_OK, NULL));
+    CHECK(register_body(
+        f.context, "both_return", p, 1, result,
+        "{match parsed {Ok(h)=>{return ResultPacketError::Ok(h);},"
+        "Err(e)=>{{return ResultPacketError::Err(e);}}}; unknown}",
+        NL_CHECK_OK, NULL));
     CHECK(register_body(f.context, "bad_other_arm", p, 1, result,
                         "{match parsed {Ok(h)=>{return h;},"
-                        "Err(e)=>{return ResultPacketError.Err(e);}}}",
+                        "Err(e)=>{return ResultPacketError::Err(e);}}}",
                         NL_CHECK_SEMANTIC_ERROR, "P9-RETURN-TYPE"));
     CHECK(nl_semantic_register_function(f.context, "make_packet", NULL, 0,
                                         f.copy, false, false) == NL_CHECK_OK);
-    CHECK(
-        register_body(f.context, "missing_obligation", p, 1, result,
-                      "{match parsed {Ok(h)=>{return ResultPacketError.Ok(h);},"
-                      "Err(e)=>{return ResultPacketError.Ok(make_packet());}}}",
-                      NL_CHECK_SEMANTIC_ERROR, "P5-SCOPE-OBLIGATION"));
+    CHECK(register_body(
+        f.context, "missing_obligation", p, 1, result,
+        "{match parsed {Ok(h)=>{return ResultPacketError::Ok(h);},"
+        "Err(e)=>{return ResultPacketError::Ok(make_packet());}}}",
+        NL_CHECK_SEMANTIC_ERROR, "P5-SCOPE-OBLIGATION"));
     NLFunctionParameter error_param[] = {{"error", f.linear}};
     CHECK(register_body(f.context, "wrap_error", error_param, 1, result,
-                        "{return ResultPacketError.Err(error);}", NL_CHECK_OK,
+                        "{return ResultPacketError::Err(error);}", NL_CHECK_OK,
                         NULL));
     NLSymbolId wrapped_symbol;
     CHECK(nl_semantic_seed_value(f.context, "wrapped_error", f.linear,
@@ -213,7 +213,7 @@ static bool workload_test(void)
             NLSemanticBindingView payload;
             CHECK(nl_semantic_binding_view(f.context, symbol, &payload));
             (void)snprintf(text, sizeof(text),
-                           "let parsed%zu%zu=ResultPacketError.%s(%s)", fn,
+                           "let parsed%zu%zu=ResultPacketError::%s(%s)", fn,
                            variant, variant == 1 ? "Ok" : "Err", seed);
             CHECK(body_ok(f.context, text));
             (void)snprintf(output, sizeof(output), "out%zu%zu", fn, variant);
@@ -379,7 +379,7 @@ static bool failure_test(void)
     NLSymbolId error;
     CHECK(nl_semantic_seed_value(f.context, "error", f.linear,
                                  NL_DEPENDENCY_FREE, &error) == NL_CHECK_OK);
-    CHECK(body_ok(f.context, "let parsed=ResultPacketError.Err(error)"));
+    CHECK(body_ok(f.context, "let parsed=ResultPacketError::Err(error)"));
     source = NULL;
     tree = NULL;
     CHECK(body_tree("let out=decode(parsed)", &source, &tree));
@@ -551,7 +551,7 @@ static bool availability_test(void)
             NLSemanticBindingView before, after;
             CHECK(nl_semantic_binding_view(f.context, symbol, &before));
             (void)snprintf(output, sizeof(output), "chosen%zu%zu", fn, arm);
-            (void)snprintf(text, sizeof(text), "let %s=%s(Choice.%s,%s)",
+            (void)snprintf(text, sizeof(text), "let %s=%s(Choice::%s,%s)",
                            output, functions[fn], cases[arm], input);
             CHECK(body_ok(f.context, text));
             CHECK(body_binding(f.context, output, &after) &&
@@ -576,7 +576,7 @@ static bool availability_test(void)
                         "unit;},Later=>{r}};observe(kept);return unit;}",
                         NL_CHECK_OK, NULL));
     TestChecked a = {0};
-    CHECK(test_run(f.context, "observe_later(Choice.Later,read_ref)",
+    CHECK(test_run(f.context, "observe_later(Choice::Later,read_ref)",
                    TEST_SOURCE, NL_CHECK_OK, NULL, &a));
     const NLCheckedFragment *body =
         nl_checked_call_body(a.artifact, nl_checked_root(a.artifact));
@@ -597,7 +597,7 @@ static bool availability_test(void)
     CHECK(matches == 1);
     test_checked_destroy(&a);
     CHECK(nl_semantic_end_scope(f.context, read_scope) == NL_CHECK_OK);
-    CHECK(test_rejected(f.context, "observe_later(Choice.Later,read_ref)",
+    CHECK(test_rejected(f.context, "observe_later(Choice::Later,read_ref)",
                         TEST_SOURCE, NL_CHECK_SEMANTIC_ERROR, "P3-DEAD-SCOPE"));
     /* Owned guarded proof artifacts have an explicit bounded capacity. */
     char many[4096] = "{";

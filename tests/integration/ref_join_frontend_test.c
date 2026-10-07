@@ -46,19 +46,19 @@ static bool payload_result(bool some, bool reversed)
     CHECK(join_value(&f, "copied", &copied) &&
           join_facts_equal(chosen, copied));
     if (some) {
-        CHECK(join_reject(&f, "store(rw,Option.None)", NL_CHECK_SEMANTIC_ERROR,
+        CHECK(join_reject(&f, "store(rw,Option::None)", NL_CHECK_SEMANTIC_ERROR,
                           "P6-OCCURRENCE-CONFLICT"));
-        CHECK(join_reject(&f, "replace(rw,Option.None)",
+        CHECK(join_reject(&f, "replace(rw,Option::None)",
                           NL_CHECK_SEMANTIC_ERROR, "P6-OCCURRENCE-CONFLICT"));
     } else {
-        CHECK(join_ok(&f, "store(rw,Option.Some(x))"));
+        CHECK(join_ok(&f, "store(rw,Option::Some(x))"));
         CHECK(join_ok(&f, "observe(copied)"));
     }
     if (some) {
         /* Ending the fallback scope must not hide the still-live payload
          * alternative from a whole-sum conflict check. */
         CHECK(nl_semantic_end_scope(f.sem.context, f.a_scope) == NL_CHECK_OK);
-        CHECK(join_reject(&f, "store(rw,Option.None)", NL_CHECK_SEMANTIC_ERROR,
+        CHECK(join_reject(&f, "store(rw,Option::None)", NL_CHECK_SEMANTIC_ERROR,
                           "P6-OCCURRENCE-CONFLICT"));
     } else {
         CHECK(nl_semantic_end_scope(f.sem.context, f.parent_scope) ==
@@ -109,14 +109,14 @@ static bool wildcard(void)
     CHECK(join_value(&f, "chosen", &chosen) && chosen.reference_count == 2);
     for (size_t i = 0; i < chosen.reference_count; ++i)
         CHECK(chosen.references[i].occurrence_dependency == 0);
-    CHECK(join_ok(&f, "{store(rw,Option.None);observe(chosen);}"));
+    CHECK(join_ok(&f, "{store(rw,Option::None);observe(chosen);}"));
     /* Discarding an ordinary ref result must release its dependency packages.
      */
-    CHECK(join_ok(&f, "store(rw,Option.Some(x));"));
+    CHECK(join_ok(&f, "store(rw,Option::Some(x));"));
     CHECK(join_ok(
         &f,
         "{let local=match r {Some(v)=>{v},None=>{fallback}};observe(local);}"));
-    CHECK(join_ok(&f, "store(rw,Option.None);"));
+    CHECK(join_ok(&f, "store(rw,Option::None);"));
     nl_semantic_destroy(f.sem.context);
     return true;
 }

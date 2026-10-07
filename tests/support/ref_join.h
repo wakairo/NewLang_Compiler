@@ -43,8 +43,8 @@ static inline bool join_create(JoinFixture *f, bool some)
                                  NL_DEPENDENCY_FREE, &x) == NL_CHECK_OK);
     CHECK(nl_semantic_seed_value(f->sem.context, "y", f->sem.copy,
                                  NL_DEPENDENCY_FREE, &y) == NL_CHECK_OK);
-    CHECK(join_ok(f,
-                  some ? "let state=Option.Some(x)" : "let state=Option.None"));
+    CHECK(join_ok(f, some ? "let state=Option::Some(x)"
+                          : "let state=Option::None"));
     NLSemanticBindingView binding;
     CHECK(join_binding(f, "state", &binding));
     f->root = binding.place;

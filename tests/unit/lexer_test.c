@@ -73,7 +73,7 @@ static bool supported_sequences(void)
         {NL_TOKEN_PUNCTUATION, {13, 14}}, {NL_TOKEN_EOF, {16, 16}}};
     CHECK(sequence(" fn x->i32(-2)\r\n", 16, mixed,
                    sizeof(mixed) / sizeof(mixed[0])));
-    const char *const marks = "(){}[],:;.+-*/%<>=!&|?";
+    const char *const marks = "(){}[],:;.@+-*/%<>=!&|?";
     NLToken expected[32];
     const size_t length = strlen(marks);
     CHECK(length + 1 <= sizeof(expected) / sizeof(expected[0]));
@@ -110,7 +110,7 @@ static bool unsupported_bytes(void)
             (value >= '0' && value <= '9') || value == '_' || value == ' ' ||
             value == '\t' || value == '\n' ||
             (value != 0 &&
-             strchr("(){}[],:;.+-*/%<>=!&|?", (int)value) != NULL)) {
+             strchr("(){}[],:;.@+-*/%<>=!&|?", (int)value) != NULL)) {
             continue;
         }
         unsigned char input[] = {'a', ' ', byte, 'z'};

@@ -216,7 +216,7 @@ static bool arm_identity(void)
     CHECK(nl_semantic_snapshot(f.sem.context, &after) &&
           after.occurrences == before.occurrences &&
           after.scopes == before.scopes);
-    CHECK(join_ok(&f, "store(rw,Option.Some(x))"));
+    CHECK(join_ok(&f, "store(rw,Option::Some(x))"));
     /* Owned arm snapshot remains independent after a public transaction. */
     NLSemanticValueView still_hypothetical;
     CHECK(nl_semantic_value_view(nl_checked_context(arm), pattern_binding.value,
