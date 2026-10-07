@@ -15,7 +15,7 @@ Change summary and stop condition:
 ## Historical design audit (§4.2)
 
 <!-- Required for new/changed language semantics, source syntax, API, or promoting a Deferred/Provisional choice. -->
-- [ ] I checked [Design Decision Procedure](../docs/NewLang_Design_Decision_Procedure.md) and the [Design-Intent Ledger](../docs/NewLang_Design_Intent_Ledger.md), **or** this is a faithful implementation/mechanical change and N/A is justified below.
+- [ ] I checked [Design Decision Procedure](https://github.com/wakairo/NewLang_Compiler/blob/main/docs/NewLang_Design_Decision_Procedure.md) and the [Design-Intent Ledger](https://github.com/wakairo/NewLang_Compiler/blob/main/docs/NewLang_Design_Intent_Ledger.md), **or** this is a faithful implementation/mechanical change and N/A is justified below.
 - [ ] Relevant old proposals/prototypes/old Drafts were compared, **or** searched scope and evidence limitations are stated.
 - [ ] The decision is explicit (KEEP / INTENTIONALLY REPLACE / DEFER / N/A) with reasons.
 - [ ] Source compatibility and future no-foreclosure risks were assessed, **or** N/A is justified.
