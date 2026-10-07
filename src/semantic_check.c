@@ -4431,9 +4431,8 @@ static NLCheckedNodeId source_local_loan(Check *check, const NLSyntaxView *s)
     if (name == NULL)
         return 0;
     const size_t bindings = c->binding_count, scopes = c->scope_count;
-    const NLTypeId ref_type =
-        compound(check, NL_TYPE_REF, root.type, s->data.loan.access, false,
-                 s->span);
+    const NLTypeId ref_type = compound(check, NL_TYPE_REF, root.type,
+                                       s->data.loan.access, false, s->span);
     NLScopeId scope = 0;
     NLSymbolId ref_symbol = 0;
     NLCheckedNodeId id = 0;
