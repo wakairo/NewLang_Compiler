@@ -33,13 +33,13 @@ looped = source.split("fn main() -> unit {", 1)[0] + "fn main() -> unit {loop ()
 # profile-valid positives have explicit input classification, never an
 # outcome-based fallback after unexpected checker/native failure.
 cases = [
-    ("canonical", source, 4, "V1-BACKEND-UNSUPPORTED"),
-    ("renamed", source.replace("Node", "Cell").replace("next", "link").replace("payload", "datum"), 4, "V1-BACKEND-UNSUPPORTED"),
-    ("values", source.replace("u8(1)", "u8(11)").replace("u8(2)", "u8(37)"), 4, "V1-BACKEND-UNSUPPORTED"),
-    ("binding-alias", source.replace("let allocation_h = allocation;", "let owned=allocation; let allocation_h=owned;").replace("head_w@next", "writer@next").replace("replace(writer@next", "let writer=head_w; replace(writer@next"), 4, "V1-BACKEND-UNSUPPORTED"),
-    ("selected-operands", source.replace("let head_w = ref_from_ptr(write, ptr_h, stable_h);", "let p=ptr_h; let s=stable_h; let head_w=ref_from_ptr(write,p,s);"), 4, "V1-BACKEND-UNSUPPORTED"),
-    ("reverse-inner", reversed_arms, 4, "V1-BACKEND-UNSUPPORTED"),
-    ("continuation", continuation, 4, "V1-BACKEND-UNSUPPORTED"),
+    ("canonical", source, 0, ""),
+    ("renamed", source.replace("Node", "Cell").replace("next", "link").replace("payload", "datum"), 0, ""),
+    ("values", source.replace("u8(1)", "u8(11)").replace("u8(2)", "u8(37)"), 0, ""),
+    ("binding-alias", source.replace("let allocation_h = allocation;", "let owned=allocation; let allocation_h=owned;").replace("head_w@next", "writer@next").replace("replace(writer@next", "let writer=head_w; replace(writer@next"), 0, ""),
+    ("selected-operands", source.replace("let head_w = ref_from_ptr(write, ptr_h, stable_h);", "let p=ptr_h; let s=stable_h; let head_w=ref_from_ptr(write,p,s);"), 0, ""),
+    ("reverse-inner", reversed_arms, 0, ""),
+    ("continuation", continuation, 0, ""),
     ("none-leak-head", source.replace(head_cleanup, "", 1), 3, "ALLOCATED-CAPTURED-JOIN-PRECISION"),
     ("some-leak-head", source.rsplit(head_cleanup, 1)[0] + source.rsplit(head_cleanup, 1)[1], 3, "ALLOCATED-CAPTURED-JOIN-PRECISION"),
     ("omit-head-release", source.replace("deallocate(allocation_h, full_h);", "", 1), 3, "P5-SCOPE-OBLIGATION"),
@@ -81,12 +81,13 @@ with tempfile.TemporaryDirectory(prefix="two-heap-semantic-") as directory:
         path = root / (name + ".nl")
         path.write_text(text)
         r = subprocess.run([compiler, str(path)], capture_output=True, text=True)
-        assert r.returncode == status and diagnostic in r.stderr, (name, r.returncode, r.stderr)
+        assert r.returncode == status and (not r.stderr if status == 0 else diagnostic in r.stderr), (name, r.returncode, r.stderr)
         retry = subprocess.run([compiler, str(path)], capture_output=True, text=True)
         assert (r.returncode, r.stdout, r.stderr) == (retry.returncode, retry.stdout, retry.stderr), name
-        assert not r.stdout and not list(root.glob("*.c")) and not list(root.glob("*.o"))
+        assert (bool(r.stdout) if status == 0 else not r.stdout)
+        assert not list(root.glob("*.c")) and not list(root.glob("*.o"))
         assert not list(root.glob("*.exe"))
-        if status == 4:
+        if status == 0:
             inspected = subprocess.run([evidence, str(path)], capture_output=True, text=True)
             assert inspected.returncode == 0, (name, inspected.stderr)
 print(f"{len(cases)} explicit full-source two-heap controls passed")

@@ -344,9 +344,9 @@ static bool fields(const char *path)
           !c->domains[0].live && !c->domains[1].live);
     char *output = NULL;
     size_t length = 999;
-    CHECK(nl_checked_c_node(n.entry, &output, &length) ==
-              NL_NODE_C_UNSUPPORTED &&
-          output == NULL && length == 999);
+    CHECK(nl_checked_c_node(n.entry, &output, &length) == NL_NODE_C_OK &&
+          output != NULL && length == strlen(output));
+    free(output);
     node_checked_destroy(&n);
     return true;
 }

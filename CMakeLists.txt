@@ -294,6 +294,19 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/allocated_node_semantic.nl")
     add_executable(allocated_checked_probe tests/integration/allocated_checked_probe.c)
     target_link_libraries(allocated_checked_probe PRIVATE newlang_semantic newlang_parser)
+    add_executable(two_heap_checked_probe tests/integration/two_heap_checked_probe.c)
+    target_link_libraries(two_heap_checked_probe PRIVATE newlang_semantic newlang_parser)
+    add_executable(two_heap_backend_test tests/unit/two_heap_backend_test.c)
+    target_link_libraries(two_heap_backend_test PRIVATE newlang_checked_c_node newlang_parser)
+    target_link_options(two_heap_backend_test PRIVATE -Wl,--wrap=malloc)
+    add_test(NAME two_heap_backend_lifecycle.unit COMMAND two_heap_backend_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/two_heap_semantic.nl")
+    add_test(NAME two_heap_backend.unit COMMAND heap_link_backend_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/two_heap_semantic.nl")
+    add_test(NAME two_heap_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/two_heap_native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:two_heap_checked_probe>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/two_heap_semantic.nl" "${NEWLANG_SANITIZER}")
     add_executable(two_heap_test tests/unit/two_heap_test.c)
     target_link_libraries(two_heap_test PRIVATE newlang_checked_c_node newlang_parser)
     add_test(NAME two_heap_fields.unit COMMAND two_heap_test
