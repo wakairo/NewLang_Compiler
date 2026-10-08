@@ -166,3 +166,49 @@ NLCheckStatus nl_allocated_grant(NLSemanticContext *c, NLTypeId option,
     event->results[0] = (NLCheckedResult){option, sum};
     return NL_CHECK_OK;
 }
+
+/* Type registration only: no concrete root, region, domain, value or grant. */
+NLCheckStatus nl_live_tail_registry(NLSemanticContext *c, NLTypeId h,
+                                    NLTypeId *out)
+{
+    if (!nl_recursive_local_type(c, h))
+        return NL_CHECK_SEMANTIC_UNSUPPORTED;
+    for (size_t i = 0; i < c->type_count; ++i) {
+        if (c->types[i].live_tail_target == h) {
+            *out = i + 1;
+            return NL_CHECK_OK;
+        }
+        if (c->types[i].name != NULL &&
+            strcmp(c->types[i].name, "LiveTail") == 0)
+            return NL_CHECK_SEMANTIC_ERROR;
+    }
+    for (size_t i = 0; i < c->function_count; ++i)
+        if (strcmp(c->functions[i].name, "LiveTail") == 0)
+            return NL_CHECK_SEMANTIC_ERROR;
+    for (size_t i = 0; i < c->binding_count; ++i)
+        if (!c->bindings[i].hidden &&
+            strcmp(c->bindings[i].name, "LiveTail") == 0)
+            return NL_CHECK_SEMANTIC_ERROR;
+    NLTypeId ptr, t;
+    NLCheckStatus s =
+        nl_sem_compound(c, NL_TYPE_PTR, h, NL_ACCESS_READ, false, &ptr);
+    if (s != NL_CHECK_OK)
+        return s;
+    s = nl_sem_nominal(c, "LiveTail", false, false, &t);
+    if (s != NL_CHECK_OK)
+        return s;
+    c->types[t - 1].live_tail_target = h;
+    c->types[t - 1].view.field_count = 3;
+    const NLTypeId fields[] = {ptr,
+                               nl_semantic_core_type(c, NL_TYPE_ALLOCATION),
+                               nl_semantic_domain_type(c)};
+    const char *names[] = {"owned_ptr", "owned_allocation", "owned_domain"};
+    for (size_t i = 0; i < 3; ++i) {
+        c->types[t - 1].field_types[i] = fields[i];
+        s = string_copy(names[i], &c->types[t - 1].field_names[i]);
+        if (s != NL_CHECK_OK)
+            return s;
+    }
+    *out = t;
+    return NL_CHECK_OK;
+}

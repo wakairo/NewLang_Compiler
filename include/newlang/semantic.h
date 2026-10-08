@@ -188,10 +188,12 @@ typedef struct {
     NLSourceSpan span;
 } NLCheckDiagnostic;
 
-/* Draft 17.27 §18.1a only. These are symbolic entry obligations, NOT facts
- * or authority values. Parameter origins are the three ordered signature
- * positions; no concrete root/region/domain identity occurs in a definition.
- * The finite post-state follows the checked primitive order below. */
+/* Draft17.27 §18.1a / Draft17.28 §18.1b closed conditional definitions.
+ * These are unproved obligations, NOT concrete facts or authority. Tail p/a/d
+ * origins are positions 0/1/2 for the terminal receiver, 1/2/3 for the
+ * producer; producer position 0 additionally requires the separate current head
+ * link. A terminal definition has the finite release steps below; a live-return
+ * definition has zero such steps and must preserve the original live root. */
 typedef enum {
     NL_OWNER_READ_ROOT,
     NL_OWNER_END_ROOT,
@@ -212,6 +214,8 @@ enum {
 };
 typedef struct {
     bool definition_checked;
+    bool live_return,
+        head_link_required; /* §18.1b obligations, not entry facts */
     NLTypeId target;
     unsigned requirements;
     size_t step_count;

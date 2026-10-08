@@ -180,10 +180,28 @@ static NLTypeId check_type(Check *check, const NLSyntaxNode *syntax)
                 break;
             }
         }
-        if (result == 0) {
+        if (result == 0 && equal_name(check, node->data.name, "LiveTail")) {
+            NLTypeId h = 0;
+            for (size_t i = 0; i < check->context->type_count; ++i)
+                if (nl_recursive_local_type(check->context, i + 1))
+                    h = i + 1;
+            const NLCheckStatus status =
+                nl_live_tail_registry(check->context, h, &result);
+            if (status == NL_CHECK_SEMANTIC_ERROR)
+                fail(check, status, node->span, "P208-LIVETAIL-NAME",
+                     "compiler-known LiveTail conflicts with a declared name");
+            else if (status == NL_CHECK_SEMANTIC_UNSUPPORTED)
+                fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, node->span,
+                     "P208-TYPE-PROFILE",
+                     "LiveTail requires one completed H source profile");
+            else
+                (void)host(check, status, node->span);
+        }
+        if (result == 0 && check->status == NL_CHECK_OK) {
             fail(check, NL_CHECK_SEMANTIC_ERROR, node->span, "P3-UNKNOWN-TYPE",
                  "unknown semantic type name");
-        } else if (check->context->types[result - 1].incomplete) {
+        } else if (result != 0 &&
+                   check->context->types[result - 1].incomplete) {
             fail(check, NL_CHECK_SEMANTIC_ERROR, node->span,
                  "REC-INCOMPLETE-TYPE",
                  "incomplete header has no ordinary type use");
@@ -1350,6 +1368,171 @@ static bool owner_entry(Check *check, NLCheckedNodeId id,
     return true;
 }
 
+/* §18.1b proof in the current caller world, before any callee execution.
+ * This complements, never substitutes for, independent symbolic definition. */
+static bool producer_entry(Check *check, NLCheckedNodeId id,
+                           const NLFunctionEntry *function,
+                           const NLCheckedNodeId *arguments)
+{
+    NLSemanticContext *c = check->context;
+    const NLSourceSpan span = view(check, id)->span;
+    const NLTypedOwnerDefinition d = function->body->owner_definition;
+    if (!d.definition_checked || !d.live_return || !d.head_link_required ||
+        d.requirements != NL_OWNER_ALL_REQUIREMENTS || d.step_count != 0) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+             "P208-CALL-DEFINITION",
+             "incomplete independent producer requirements");
+        return false;
+    }
+    NLValueId values[4];
+    for (size_t i = 0; i < 4; ++i) {
+        values[i] = one_result(check, arguments[i]);
+        if (values[i] == 0)
+            return false;
+        const NLCheckedNodeView a = *view(check, arguments[i]);
+        if (i != 0 &&
+            (a.kind != NL_CHECKED_IDENTIFIER || a.symbol == 0 ||
+             a.value_use != (i == 1 ? NL_VALUE_COPIED : NL_VALUE_CONSUMED))) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+                 "P208-CALL-TRANSFER",
+                 "tail requires original available value carriers");
+            return false;
+        }
+    }
+    check->status =
+        nl_owner_relations(c, values + 1, &d, span, &check->diagnostic);
+    if (check->status != NL_CHECK_OK)
+        return false;
+    const NLReferenceFacts tail = c->values[values[1] - 1].reference;
+    if (!reference_live(check, values[1], span) ||
+        !host(check, nl_raw_validate(c), span) ||
+        conflicts(check, tail.place, false, true, 0, span))
+        return false;
+    NLCheckStatus blockers = nl_fixed_end_dependencies(c, tail.place, SIZE_MAX);
+    if (blockers != NL_CHECK_OK) {
+        fail(check, blockers, span, "P208-CALL-BLOCKER",
+             "surviving tail dependency prevents future recovery");
+        return false;
+    }
+    const NLCheckedNodeView a = *view(check, arguments[0]);
+    const NLSemanticValueView head = c->values[values[0] - 1];
+    const NLReferenceFacts h = head.reference;
+    if (a.kind != NL_CHECKED_FIELD_REF || !a.field.present ||
+        a.field.index != 0 || head.reference_count != 0 ||
+        head.dependencies != NL_DEPENDENCY_FREE ||
+        head.value_dependency_count != 0 ||
+        !reference_live(check, values[0], span) ||
+        !write_ref(check, values[0], span)) {
+        if (check->status == NL_CHECK_OK)
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+                 "P208-CALL-HEAD-PROJECTION",
+                 "current source-projected write link ref required");
+        return false;
+    }
+    if (h.place == 0 || h.place > c->place_count)
+        return false;
+    const NLSemanticPlaceView field = c->places[h.place - 1];
+    if (field.parent_aggregate == 0 || field.parent_field_index != 0 ||
+        field.parent_aggregate != a.field.parent || h.place != a.field.child ||
+        field.incarnation != a.field.child_incarnation ||
+        field.current_fact != a.field.child_fact) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P208-CALL-HEAD",
+             "head projection is not current");
+        return false;
+    }
+    const NLSemanticPlaceView hp = c->places[field.parent_aggregate - 1],
+                              tp = c->places[tail.place - 1];
+    const NLDomainId domain = c->values[values[3] - 1].domain;
+    bool scoped = false;
+    /* An enclosing source loan may belong to an ancestor artifact across a
+     * finite match fork. Prove its current Domain capability in this world,
+     * never by searching just one branch's syntactic node list. */
+    for (size_t n = 0; n < c->value_count; ++n) {
+        const NLSemanticValueView stable = c->values[n];
+        const NLSemanticTypeView st = c->types[stable.type - 1].view;
+        const NLReferenceFacts sf = stable.reference;
+        if (stable.carrier != NL_CARRIER_ENDED &&
+            stable.dependencies == NL_DEPENDENCY_FREE &&
+            stable.value_dependency_count == 0 && st.kind == NL_TYPE_REF &&
+            st.target == 2 && !st.is_exclusive && stable.reference_count == 0 &&
+            sf.scope == h.scope && sf.provenance == NL_PROVENANCE_VALID &&
+            sf.readable && sf.place != 0 && sf.place <= c->place_count) {
+            const NLSemanticPlaceView dp = c->places[sf.place - 1];
+            if (dp.live && dp.incarnation == sf.incarnation && dp.type == 2 &&
+                dp.current_value != 0 &&
+                c->values[dp.current_value - 1].domain == hp.governing_domain)
+                scoped = true;
+        }
+    }
+    if (!scoped || !scope_active(c, h.scope) ||
+        !nl_fixed_live(c, field.parent_aggregate) || hp.type != d.target ||
+        !hp.independent_root || hp.incarnation != a.field.parent_incarnation ||
+        hp.placement.region == 0 ||
+        hp.placement.region == tp.placement.region ||
+        hp.governing_domain == 0 || hp.governing_domain == domain ||
+        !c->domains[hp.governing_domain - 1].live ||
+        !c->regions[hp.placement.region - 1].view.live ||
+        !c->regions[hp.placement.region - 1].view.ordinary_write ||
+        !c->regions[hp.placement.region - 1].view.ordinary_read ||
+        field.current_value == 0) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P208-CALL-HEAD",
+             "distinct live head backing/domain scoped write relation missing");
+        return false;
+    }
+    const NLSemanticValueView option = c->values[field.current_value - 1];
+    if (option.variant != 2 || option.sum_payload == 0) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P208-CALL-HEAD-VALUE",
+             "head link must currently be Some of tail");
+        return false;
+    }
+    const NLSemanticValueView payload = c->values[option.sum_payload - 1];
+    const NLReferenceFacts pf = payload.reference;
+    if (payload.reference_count != 0 ||
+        payload.dependencies != NL_DEPENDENCY_FREE ||
+        payload.value_dependency_count != 0 ||
+        payload.type != c->values[values[1] - 1].type ||
+        pf.provenance != NL_PROVENANCE_VALID || pf.place != tail.place ||
+        pf.incarnation != tail.incarnation || pf.scope != tail.scope ||
+        pf.occurrence_dependency != tail.occurrence_dependency ||
+        pf.readable != tail.readable || pf.writable != tail.writable) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P208-CALL-HEAD-VALUE",
+             "head Some payload has different source provenance");
+        return false;
+    }
+    for (size_t i = 0; i < c->place_count; ++i)
+        if (c->places[i].live && c->places[i].independent_root &&
+            c->places[i].governing_domain == domain && i + 1 != tail.place) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P208-CALL-DOMAIN-ROOTS",
+                 "tail domain governs unrelated live root");
+            return false;
+        }
+    if (check->artifact->producer_entry != NULL) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+             "P208-CALL-PRECISION", "one producer per bounded path");
+        return false;
+    }
+    if (!host(check, nl_sem_clone(c, &check->artifact->producer_entry), span))
+        return false;
+    check->artifact->producer_call = id;
+    check->artifact->destroy_producer_world = nl_semantic_destroy;
+    view(check, id)->producer.definition = d;
+    view(check, id)->producer.entry_proved = true;
+    view(check, id)->producer.entry_world = check->artifact->producer_entry;
+    view(check, id)->producer.root = tail.place;
+    view(check, id)->producer.incarnation = tail.incarnation;
+    view(check, id)->producer.range = tp.placement;
+    view(check, id)->producer.domain = domain;
+    view(check, id)->producer.head_domain = hp.governing_domain;
+    view(check, id)->producer.head = a.field;
+    view(check, id)->producer.head_before = field.current_value;
+    view(check, id)->producer.head_before_fact = field.current_fact;
+    for (size_t i = 0; i < 4; ++i) {
+        view(check, id)->producer.inputs[i] = values[i];
+        view(check, id)->producer.donor[i] = view(check, arguments[i])->symbol;
+    }
+    return true;
+}
+
 static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
 {
     NLSemanticContext *const c = check->context;
@@ -1426,7 +1609,8 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         return 0;
     }
     if (function.body == NULL && function.kind == NL_CHECKED_REGISTERED_CALL &&
-        ((c->types[function.result - 1].view.kind != NL_TYPE_NOMINAL &&
+        (c->types[function.result - 1].view.field_count != 0 ||
+         (c->types[function.result - 1].view.kind != NL_TYPE_NOMINAL &&
           c->types[function.result - 1].view.kind != NL_TYPE_BOOL &&
           function.result != 1) ||
          function.result == 2)) {
@@ -1480,7 +1664,7 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
             return 0;
         }
         if (function.kind == NL_CHECKED_REGISTERED_CALL &&
-            !function.owner_receiver &&
+            !function.owner_receiver && !function.owner_producer &&
             (expected == 2 ||
              c->types[expected - 1].view.kind == NL_TYPE_SLOT ||
              c->types[expected - 1].view.kind == NL_TYPE_STORAGE ||
@@ -1553,6 +1737,9 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         ++view(check, id)->argument_count;
         argument_syntax = nl_syntax_next_argument(argument_syntax);
     }
+    if (function.owner_producer &&
+        !producer_entry(check, id, &function, arguments))
+        return 0;
     if (function.owner_receiver &&
         !owner_entry(check, id, &function, arguments))
         return 0;
@@ -2158,7 +2345,19 @@ static NLCheckedNodeId aggregate(Check *check, const NLSyntaxView *syntax)
         aggregate_type(check, syntax->data.aggregate.type_name);
     if (type == 0)
         return 0;
-    if (check->in_function_body && !avs_type(check->context, type)) {
+    const bool live_tail =
+        check->context->types[type - 1].live_tail_target != 0;
+    const bool producer =
+        check->body_function != 0 &&
+        check->context->functions[check->body_function - 1].owner_producer;
+    if (live_tail && (!producer || !check->allocated_slice)) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
+             "P208-CONSTRUCTOR-CONTEXT",
+             "LiveTail construction requires a proved producer call");
+        return 0;
+    }
+    if (check->in_function_body && !avs_type(check->context, type) &&
+        !live_tail) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
              "P8-BODY-PROFILE",
              "function-body aggregate admission is bounded to two u8 fields");
@@ -2215,6 +2414,14 @@ static NLCheckedNodeId aggregate(Check *check, const NLSyntaxView *syntax)
         previous = field_id;
         ++view(check, id)->argument_count;
     }
+    if (live_tail) {
+        const NLTypedOwnerDefinition d =
+            c->functions[check->body_function - 1].body->owner_definition;
+        check->status = nl_owner_relations(c, package.fields, &d, syntax->span,
+                                           &check->diagnostic);
+        if (check->status != NL_CHECK_OK)
+            return 0;
+    }
     const NLValueId value = new_value(check, package, syntax->span);
     if (value == 0)
         return 0;
@@ -2257,7 +2464,8 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
             return 0;
         if (check->in_function_body && !avs_type(check->context, type) &&
             !(check->allocated_slice &&
-              check->context->types[type - 1].one_backing_target != 0)) {
+              (check->context->types[type - 1].one_backing_target != 0 ||
+               check->context->types[type - 1].live_tail_target != 0))) {
             fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
                  "P8-BODY-PROFILE",
                  "function-body destructuring is bounded to two u8 fields");
@@ -2300,6 +2508,17 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
                  "P5-DESTRUCTURE-TYPE",
                  "destructuring RHS must be the selected aggregate");
             goto cleanup;
+        }
+        if (check->context->types[type - 1].live_tail_target != 0) {
+            const NLCheckedNodeId source = check->artifact->producer_call;
+            if (source == 0 || !view(check, source)->producer.return_proved ||
+                view(check, source)->producer.result != rhs.results[0].value) {
+                fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                     "P208-DESTRUCTURE-ORIGIN",
+                     "whole LiveTail receiving requires checked producer "
+                     "return in this world");
+                goto cleanup;
+            }
         }
         const NLValueId aggregate_value = rhs.results[0].value;
         const NLSemanticValueView original =
@@ -2750,8 +2969,10 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                   .function_scope_floor = scope_floor,
                   .function_place_floor = place_floor,
                   .body_function = view(caller, call_id)->function};
-    body.allocated_slice = function->owner_receiver &&
-                           view(caller, call_id)->owner_call.entry_proved;
+    body.allocated_slice = (function->owner_receiver &&
+                            view(caller, call_id)->owner_call.entry_proved) ||
+                           (function->owner_producer &&
+                            view(caller, call_id)->producer.entry_proved);
     body.artifact = malloc(sizeof(*body.artifact));
     if (body.artifact == NULL) {
         (void)host(caller, NL_CHECK_OUT_OF_MEMORY, call_span);
@@ -2788,6 +3009,12 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                                        value, binding_floor, &symbol),
                   (NLSourceSpan){0}))
             goto failure;
+        if (function->owner_producer) {
+            view(caller, call_id)->producer.parameters[i] = symbol;
+            if (i == 3)
+                c->places[c->bindings[symbol - 1].view.place - 1]
+                    .implicit_local = true;
+        }
         if (function->owner_receiver) {
             view(caller, call_id)->owner_call.parameters[i] = symbol;
             if (i == 2)
@@ -2798,6 +3025,75 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     if (!function_block(&body, nl_syntax_node_view(nl_syntax_tree_root(
                                    function->body->syntax))))
         goto failure;
+    if (function->owner_producer) {
+        const NLCheckedNodeView proof = *view(caller, call_id);
+        const NLCheckedResult result =
+            body.terminated ? body.returned
+                            : view(&body, body.artifact->root)->results[0];
+        const NLSemanticValueView package = result.value == 0
+                                                ? (NLSemanticValueView){0}
+                                                : c->values[result.value - 1];
+        const NLSemanticPlaceView root = c->places[proof.producer.root - 1],
+                                  head =
+                                      c->places[proof.producer.head.parent - 1],
+                                  link =
+                                      c->places[proof.producer.head.child - 1];
+        bool preserved =
+            result.type == function->result && package.field_count == 3 &&
+            root.live && root.incarnation == proof.producer.incarnation &&
+            root.placement.region == proof.producer.range.region &&
+            root.placement.start == proof.producer.range.start &&
+            root.placement.length == proof.producer.range.length &&
+            root.governing_domain == proof.producer.domain &&
+            c->regions[proof.producer.range.region - 1].view.live &&
+            c->domains[proof.producer.domain - 1].live && head.live &&
+            head.incarnation == proof.producer.head.parent_incarnation &&
+            head.governing_domain == proof.producer.head_domain && link.live &&
+            link.incarnation == proof.producer.head.child_incarnation &&
+            link.current_fact != proof.producer.head_before_fact &&
+            link.current_value != 0 &&
+            c->values[link.current_value - 1].variant == 1 &&
+            link.payload_occurrence == 0 &&
+            c->values[proof.producer.head_before - 1].carrier ==
+                NL_CARRIER_ENDED &&
+            package.dependencies == NL_DEPENDENCY_FREE &&
+            package.value_dependency_count == 0;
+        for (size_t i = 0; i < 3 && preserved; ++i) {
+            const NLSemanticValueView member = c->values[package.fields[i] - 1];
+            preserved = member.carrier == NL_CARRIER_AGGREGATE &&
+                        member.aggregate_owner == result.value &&
+                        member.dependencies == NL_DEPENDENCY_FREE &&
+                        member.value_dependency_count == 0;
+            if (i == 0)
+                preserved =
+                    preserved && member.reference_count == 0 &&
+                    member.reference.provenance == NL_PROVENANCE_VALID &&
+                    member.reference.place == proof.producer.root &&
+                    member.reference.incarnation == proof.producer.incarnation;
+            else
+                preserved = preserved &&
+                            package.fields[i] == proof.producer.inputs[i + 1] &&
+                            c->bindings[proof.producer.donor[i + 1] - 1]
+                                    .view.availability == NL_CONSUMED &&
+                            c->bindings[proof.producer.parameters[i + 1] - 1]
+                                    .view.availability == NL_CONSUMED;
+        }
+        if (!preserved) {
+            fail(&body, NL_CHECK_ANALYSIS_PRECISION_LIMIT, (NLSourceSpan){0},
+                 "P208-CALL-RETURN",
+                 "exact original live tail/head/result relation unproved");
+            goto failure;
+        }
+        if (!host(&body, nl_sem_clone(c, &caller->artifact->producer_return),
+                  call_span))
+            goto failure;
+        view(caller, call_id)->producer.result = result.value;
+        view(caller, call_id)->producer.head_after = link.current_value;
+        view(caller, call_id)->producer.head_after_fact = link.current_fact;
+        view(caller, call_id)->producer.return_proved = true;
+        view(caller, call_id)->producer.return_world =
+            caller->artifact->producer_return;
+    }
     if (function->owner_receiver) {
         const NLCheckedNodeView proof = *view(caller, call_id);
         const NLSemanticPlaceView root = c->places[proof.owner_call.root - 1];
@@ -6447,10 +6743,12 @@ static void clear_definition_state(NLSemanticContext *c)
 static bool check_definition(Check *registration, size_t function_id)
 {
     NLFunctionEntry *entry = &registration->context->functions[function_id - 1];
-    if (entry->owner_receiver) {
+    if (entry->owner_receiver || entry->owner_producer) {
         registration->status = nl_owner_definition(
             registration->context, entry->body,
-            registration->context->types[entry->parameters[0] - 1].view.target,
+            registration->context
+                ->types[entry->parameters[entry->owner_producer ? 1 : 0] - 1]
+                .view.target,
             &entry->body->owner_definition, &registration->diagnostic);
         return registration->status == NL_CHECK_OK;
     }
@@ -6846,7 +7144,7 @@ NLCheckStatus nl_semantic_register_function_unit(
     if (total != 0)
         qsort(declarations, total, sizeof(*declarations), declaration_order);
     /* Exact signature installation is private until ALL definitions succeed. */
-    size_t owner_receivers = 0;
+    size_t owner_receivers = 0, owner_producers = 0;
     for (size_t i = 0; i < total; ++i) {
         FunctionDeclaration *d = &declarations[i];
         input = d->input;
@@ -6904,7 +7202,18 @@ NLCheckStatus nl_semantic_register_function_unit(
             goto failure;
         const bool owner =
             nl_owner_signature(check.context, types, parameter, result);
-        if (owner) {
+        const bool producer =
+            nl_producer_signature(check.context, types, parameter, result);
+        if (producer) {
+            if (recursive == NULL || count != 1 || owner_producers != 0 ||
+                strcmp(d->name, "main") == 0) {
+                fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
+                     "P208-SIGNATURE-PROFILE",
+                     "requires one same-unit H producer");
+                goto failure;
+            }
+            ++owner_producers;
+        } else if (owner) {
             if (recursive == NULL || count != 1 || owner_receivers != 0 ||
                 strcmp(d->name, "main") == 0) {
                 fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
@@ -6928,6 +7237,7 @@ NLCheckStatus nl_semantic_register_function_unit(
             goto failure;
         d->function = check.context->function_count;
         check.context->functions[d->function - 1].owner_receiver = owner;
+        check.context->functions[d->function - 1].owner_producer = producer;
         continue;
     duplicate:
         fail(&check, NL_CHECK_SEMANTIC_ERROR, s->data.function.name,
@@ -6938,6 +7248,12 @@ NLCheckStatus nl_semantic_register_function_unit(
         fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
              "P8-SIGNATURE-PRECISION",
              "signature needs unsupported body analysis");
+        goto failure;
+    }
+    if (owner_producers != 0 && owner_receivers != 1) {
+        fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, (NLSourceSpan){0},
+             "P208-UNIT-PROFILE",
+             "live-tail profile requires a distinct known terminal receiver");
         goto failure;
     }
     /* Never interpret a source definition as a coarse signature-only call. */
@@ -6961,7 +7277,8 @@ NLCheckStatus nl_semantic_register_function_unit(
     for (size_t pass = 0; pass < 2; ++pass)
         for (size_t i = 0; i < total; ++i) {
             const FunctionDeclaration *d = &declarations[i];
-            if (check.context->functions[d->function - 1].owner_receiver !=
+            if ((check.context->functions[d->function - 1].owner_receiver ||
+                 check.context->functions[d->function - 1].owner_producer) !=
                 (pass == 0))
                 continue;
             input = d->input;

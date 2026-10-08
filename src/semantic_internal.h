@@ -24,8 +24,8 @@ typedef struct {
 typedef struct {
     char *name;
     bool incomplete, recursive_header;
-    NLTypeId allocated_target,
-        one_backing_target; /* closed Draft17.24 registry */
+    NLTypeId allocated_target, one_backing_target,
+        live_tail_target; /* closed allocation/result registry */
     NLTypeId
         option_target; /* canonical Option instantiation argument, not name */
     NLSemanticTypeView view;
@@ -54,7 +54,7 @@ typedef struct {
     NLTypeId *parameters;
     size_t count;
     NLTypeId result;
-    bool caller_effects, hidden_dependencies, owner_receiver;
+    bool caller_effects, hidden_dependencies, owner_receiver, owner_producer;
     NLFunctionBody *body; /* owned retained plan, NULL for signature-only */
 } NLFunctionEntry;
 struct NLSemanticContext {
@@ -84,6 +84,10 @@ typedef struct {
     struct NLCheckedFragment *artifact; /* owns hypothetical arm context */
 } NLCheckedArm;
 struct NLCheckedFragment {
+    NLSemanticContext *producer_entry,
+        *producer_return; /* owned actual worlds */
+    NLCheckedNodeId producer_call;
+    void (*destroy_producer_world)(NLSemanticContext *);
     NLSemanticContext *owner_entry; /* exact pre-callee actual world snapshot */
     NLCheckedNodeId owner_entry_call;
     void (*destroy_owner_entry)(NLSemanticContext *);
@@ -130,6 +134,9 @@ NLCheckStatus nl_body_create_span(const NLSource *, NLSourceSpan,
                                   NLFunctionBody **);
 NLCheckStatus nl_body_retain(NLFunctionBody *);
 void nl_body_release(NLFunctionBody *);
+NLCheckStatus nl_live_tail_registry(NLSemanticContext *, NLTypeId, NLTypeId *);
+bool nl_producer_signature(const NLSemanticContext *, const NLTypeId *, size_t,
+                           NLTypeId);
 bool nl_owner_signature(const NLSemanticContext *, const NLTypeId *, size_t,
                         NLTypeId);
 /* Independent symbolic checking: read-only registry, no concrete value/place
