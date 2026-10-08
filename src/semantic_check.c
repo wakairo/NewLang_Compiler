@@ -35,6 +35,7 @@ typedef struct Check {
     NLControlTarget *function_target; /* borrowed active function identity */
     size_t arm_floor;
     bool has_arm_floor, in_match_arm;
+    size_t allocation_depth; /* bounded owned path, maximum two trials */
     bool allocated_slice; /* owned Some world, never a runtime success claim */
     NLCheckStatus status;
     NLCheckDiagnostic diagnostic;
@@ -4225,7 +4226,8 @@ static bool node_unit_arm_frame(const NLSemanticContext *before,
         before->region_count != after->region_count)
         return false;
     for (size_t i = 0; i < before->domain_count; ++i)
-        if (before->domains[i].live != after->domains[i].live)
+        if (before->domains[i].live != after->domains[i].live ||
+            before->domains[i].value != after->domains[i].value)
             return false;
     for (size_t i = 0; i < before->region_count; ++i) {
         const NLRawRegionEntry *a = &before->regions[i],
@@ -4286,14 +4288,56 @@ static bool node_unit_arm_frame(const NLSemanticContext *before,
     return true;
 }
 
+/* Exact ancestor-prefix equivalence; suffix claims must all be closed.
+ * Post-fork numeric IDs are never compared across worlds or imported. */
+bool nl_allocated_post_matches(const NLSemanticContext *expected,
+                               const NLSemanticContext *arm,
+                               const NLCheckedNodeView *result)
+{
+    if (result->result_count == 1 &&
+        (result->results[0].value == 0 ||
+         result->results[0].value > arm->value_count ||
+         result->results[0].type != 1 ||
+         arm->values[result->results[0].value - 1].type != 1))
+        return false;
+    if (arm->region_count < expected->region_count ||
+        arm->domain_count < expected->domain_count ||
+        arm->place_count < expected->place_count ||
+        arm->value_count < expected->value_count ||
+        arm->binding_count < expected->binding_count ||
+        arm->scope_count < expected->scope_count ||
+        arm->occurrence_count < expected->occurrence_count ||
+        nl_sem_validate(arm) != NL_CHECK_OK)
+        return false;
+    for (size_t j = expected->region_count; j < arm->region_count; ++j)
+        if (arm->regions[j].view.live)
+            return false;
+    for (size_t j = expected->domain_count; j < arm->domain_count; ++j)
+        if (arm->domains[j].live)
+            return false;
+    for (size_t j = expected->place_count; j < arm->place_count; ++j)
+        if (arm->places[j].live)
+            return false;
+    for (size_t j = expected->value_count; j < arm->value_count; ++j)
+        if (arm->values[j].carrier != NL_CARRIER_ENDED &&
+            !arm->types[arm->values[j].type - 1].view.is_discardable)
+            return false;
+    NLSemanticContext prefix = *arm;
+    prefix.region_count = expected->region_count;
+    prefix.domain_count = expected->domain_count;
+    return node_unit_arm_frame(expected, &prefix, 0, result);
+}
+
 static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
 {
     const NLSyntaxView *trial =
         nl_syntax_node_view(syntax->data.match.scrutinee);
-    if (check->allocated_slice) {
-        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, trial->span,
-             "ALLOCATED-NESTING-PRECISION",
-             "nested allocation worlds are outside this gate");
+    if (check->allocation_depth >= 2 ||
+        (check->allocation_depth != 0 && !check->allocated_slice) ||
+        check->artifact->captured_post != NULL) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, trial->span,
+             "ALLOCATED-CARDINALITY-PROFILE",
+             "only two nested same-H allocation trials are supported");
         return 0;
     }
     NLTypeId h = check_type(check, trial->data.call.type), option = 0;
@@ -4344,11 +4388,27 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
                                    .match_binding_prefix = c->binding_count});
     if (id == 0)
         return 0;
+    NLSemanticContext *closed_prefix = NULL;
+    NLCheckedNodeView certificate = {0};
+    if (check->allocated_slice) {
+        NLCheckStatus s =
+            nl_allocated_closed_prefix(c, &closed_prefix, &certificate);
+        if (s != NL_CHECK_OK) {
+            if (s == NL_CHECK_ANALYSIS_PRECISION_LIMIT)
+                fail(check, s, trial->span, "ALLOCATED-CAPTURE-PRECISION",
+                     "nested trial requires one dependency-free live captured "
+                     "head with exact allocation/domain owners");
+            else
+                (void)host(check, s, trial->span);
+            return 0;
+        }
+    }
     for (size_t i = 0; i < 2; ++i) {
         Check branch = *check;
         branch.context = NULL;
         branch.artifact = NULL;
-        branch.allocated_slice = i == 1;
+        branch.allocated_slice = check->allocated_slice || i == 1;
+        branch.allocation_depth = check->allocation_depth + 1;
         branch.in_match_arm = true;
         branch.binding_floor = branch.arm_floor = c->binding_count;
         branch.has_arm_floor = true;
@@ -4378,27 +4438,15 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         if (body == 0)
             goto failure;
         NLCheckedNodeView result = *view(&branch, body);
-        NLSemanticContext projected = *branch.context;
-        bool closed = true;
-        for (size_t j = c->region_count; j < projected.region_count; ++j)
-            closed &= !projected.regions[j].view.live;
-        for (size_t j = c->domain_count; j < projected.domain_count; ++j)
-            closed &= !projected.domains[j].live;
-        for (size_t j = c->place_count; j < projected.place_count; ++j)
-            closed &= !projected.places[j].live;
-        for (size_t j = c->value_count; j < projected.value_count; ++j)
-            if (projected.values[j].carrier != NL_CARRIER_ENDED &&
-                !projected.types[projected.values[j].type - 1]
-                     .view.is_discardable)
-                closed = false;
-        projected.region_count = c->region_count;
-        projected.domain_count = c->domain_count;
-        if (!closed || branch.terminated ||
-            !node_unit_arm_frame(c, &projected, 0, &result)) {
+        const NLSemanticContext *expected =
+            closed_prefix != NULL ? closed_prefix : c;
+        if (branch.terminated ||
+            !nl_allocated_post_matches(expected, branch.context, &result)) {
             fail(&branch, NL_CHECK_ANALYSIS_PRECISION_LIMIT, arms[i]->span,
-                 "ALLOCATED-CLOSED-WORLD-PRECISION",
-                 "each allocation world must close its responsibilities and "
-                 "preserve the captured frame");
+                 closed_prefix != NULL ? "ALLOCATED-CAPTURED-JOIN-PRECISION"
+                                       : "ALLOCATED-CLOSED-WORLD-PRECISION",
+                 "each allocation world must close its own responsibilities "
+                 "and prove the exact captured-prefix post-state");
             goto failure;
         }
         branch.artifact->root =
@@ -4409,7 +4457,8 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
                                              .initializer = event,
                                              .tail = body,
                                              .type = 1,
-                                             .normal_frame_unchanged = true});
+                                             .normal_frame_unchanged =
+                                                 closed_prefix == NULL});
         if (branch.artifact->root == 0 ||
             !save_arm(check, id, branch.artifact, arms[i]->span))
             goto failure;
@@ -4423,11 +4472,34 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
             nl_checked_destroy(branch.artifact);
         else
             nl_semantic_destroy(branch.context);
+        nl_semantic_destroy(closed_prefix);
         return 0;
+    }
+    if (closed_prefix != NULL) {
+        /* Both arms proved this ancestor-derived target. No arm is selected. */
+        NLSemanticContext *continuation = NULL;
+        if (!host(check, nl_sem_clone(closed_prefix, &continuation),
+                  syntax->span)) {
+            nl_semantic_destroy(closed_prefix);
+            return 0;
+        }
+        nl_sem_commit(c, continuation);
+        check->artifact->captured_post = closed_prefix;
+        check->artifact->captured_match = id;
+        check->artifact->destroy_captured_post = nl_semantic_destroy;
+        NLCheckedNodeView *v = view(check, id);
+        v->captured_frame_closed = certificate.captured_frame_closed;
+        v->captured_backing = certificate.captured_backing;
+        v->captured_root = certificate.captured_root;
+        v->captured_incarnation = certificate.captured_incarnation;
+        v->captured_domain = certificate.captured_domain;
+        v->captured_allocation = certificate.captured_allocation;
+        v->captured_domain_binding = certificate.captured_domain_binding;
     }
     view(check, id)->type = 1;
     view(check, id)->normal_arms = 2;
-    view(check, id)->normal_frame_unchanged = true;
+    view(check, id)->normal_frame_unchanged =
+        !certificate.captured_frame_closed;
     return id;
 }
 
