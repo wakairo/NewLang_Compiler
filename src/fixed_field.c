@@ -24,6 +24,20 @@ bool nl_recursive_local_type(const NLSemanticContext *c, NLTypeId type)
            t->field_types[1] == nl_semantic_core_type(c, NL_TYPE_U8);
 }
 
+bool nl_semantic_recursive_local_type(const NLSemanticContext *c, NLTypeId type)
+{
+    return c != NULL && nl_recursive_local_type(c, type);
+}
+
+bool nl_semantic_recursive_link_types(const NLSemanticContext *c, NLTypeId type,
+                                      NLTypeId *pointer)
+{
+    if (pointer == NULL || !nl_semantic_recursive_local_type(c, type))
+        return false;
+    *pointer = c->types[c->types[type - 1].field_types[0] - 1].option_target;
+    return true;
+}
+
 bool nl_fixed_type(const NLSemanticContext *c, NLTypeId type)
 {
     if (nl_recursive_local_type(c, type))

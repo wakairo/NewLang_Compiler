@@ -98,6 +98,11 @@ typedef struct {
     NLSourceSpan span, name, qualifier;
     size_t variant;
     bool borrowed_match;
+    /* MATCH: every normal arm proved identical to the incoming public frame.
+     * Only symbols in this prefix can be mapped to ancestor C carriers;
+     * arm-local symbols belong to the separately owned arm context. */
+    bool normal_frame_unchanged;
+    size_t match_binding_prefix;
     NLTypeId type;
     NLSymbolId symbol;
     size_t function; /* resolved prelude/registered signature identity */

@@ -223,11 +223,16 @@ Draft 17.21 catch-up adds one bounded recursive declaration category:
 The checker creates a private incomplete nominal header, resolves the exact
 Option/ptr link, rejects unbroken value-containment cycles and completes the same
 identity once before checking bodies. None-link construction is semantically
-accepted; recursive topology remains outside Checked-C, with explicit backend
-unsupported. Draft 17.23's semantic-only catch-up accepts the completed nominal's
+accepted. Draft 17.23's semantic catch-up accepts the completed nominal's
 declared link via `local@link`, its scoped ordinary write loan, and Node lexical-root
 read / persistent-ptr read reacquisition. Payload/general fields and allocation
-remain outside this profile; recursive Node Checked-C emission remains unsupported.
+remain outside this profile. The bounded two-lexical-root Checked-C gate emits
+real local Node addresses, tagged Option copies/replacements, and runtime
+Some/None selection with checked read reacquisition. Its separate read-only
+native observer asserts pointer identity, old packages and sibling preservation;
+this is an intermediate product gate, not a general recursive backend or
+North Star PASS. See the [native topology contract](docs/DRAFT_17_23_NODE_EXECUTABLE_CONTRACT.md)
+and [report](docs/DRAFT_17_23_NODE_EXECUTABLE_REPORT.md).
 The actual-source witness and rule/evidence mapping are in
 [the Node link report](docs/DRAFT_17_23_NODE_LINK_SEMANTIC_REPORT.md).
 See the [contract](docs/DRAFT_17_21_PRODUCTION_CONTRACT.md) and

@@ -1,4 +1,5 @@
 #include "newlang/checked.h"
+#include "newlang/checked_c_node.h"
 #include "newlang/diagnostic.h"
 #include "newlang/parser.h"
 #include "newlang/semantic.h"
@@ -6,6 +7,7 @@
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 static const char help[] =
@@ -831,6 +833,26 @@ static int compile_v0(const char *path)
     V0Program program = {.unit = nl_semantic_unit_type(context),
                          .u8 = nl_semantic_core_type(context, NL_TYPE_U8)};
     if (root_view == NULL || !v0_validate_call(entry, root, &program)) {
+        char *node_c = NULL;
+        size_t node_length = 0;
+        const NLNodeCStatus status =
+            nl_checked_c_node(entry, &node_c, &node_length);
+        if (status == NL_NODE_C_OK) {
+            result = fwrite(node_c, 1, node_length, stdout) == node_length &&
+                             fflush(stdout) == 0
+                         ? 0
+                         : report_error("V0-C-OUTPUT",
+                                        "failed to emit Checked-C", path, 1);
+            free(node_c);
+            goto cleanup;
+        }
+        if (status == NL_NODE_C_OUT_OF_MEMORY ||
+            status == NL_NODE_C_RESOURCE_LIMIT) {
+            result = report_error("NODE-C-RESOURCE",
+                                  "bounded Checked-C emission resource failure",
+                                  path, 1);
+            goto cleanup;
+        }
         result = report_error("V1-BACKEND-UNSUPPORTED",
                               "accepted program uses a construct outside the "
                               "V0/V1 Checked-C spine",

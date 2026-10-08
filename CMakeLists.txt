@@ -66,8 +66,10 @@ add_library(newlang_checked STATIC src/checked.c)
 target_link_libraries(newlang_checked PUBLIC newlang_syntax)
 add_library(newlang_semantic STATIC src/semantic.c src/semantic_check.c src/recursive_type.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/control.c)
 target_link_libraries(newlang_semantic PUBLIC newlang_checked newlang_diagnostic newlang_parser)
+add_library(newlang_checked_c_node STATIC src/checked_c_node.c)
+target_link_libraries(newlang_checked_c_node PUBLIC newlang_semantic)
 add_executable(newlangc src/main.c)
-target_link_libraries(newlangc PRIVATE newlang_semantic newlang_diagnostic)
+target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic newlang_diagnostic)
 
 include(CTest)
 if(BUILD_TESTING)
@@ -256,12 +258,26 @@ if(BUILD_TESTING)
     add_executable(fixed_field_test tests/unit/fixed_field_test.c)
     add_executable(recursive_type_test tests/unit/recursive_type_test.c)
     add_executable(node_link_test tests/unit/node_link_test.c)
+    add_executable(node_checked_probe tests/integration/node_checked_probe.c)
+    target_link_libraries(node_checked_probe PRIVATE newlang_semantic)
+    add_executable(checked_c_node_test tests/unit/checked_c_node_test.c)
+    target_link_libraries(checked_c_node_test PRIVATE newlang_checked_c_node)
+    target_link_options(checked_c_node_test PRIVATE -Wl,--wrap=malloc)
+    add_test(NAME checked_c_node.unit COMMAND checked_c_node_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_link_semantic.nl")
     target_link_libraries(node_link_test PRIVATE newlang_semantic newlang_parser)
     target_link_options(node_link_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
     foreach(group evidence transitions dependencies negatives liveness resource failures)
         add_test(NAME node_link_${group}.unit COMMAND node_link_test ${group}
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_link_semantic.nl")
     endforeach()
+    add_test(NAME node_topology.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/node_topology_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:node_checked_probe>"
+        "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_link_semantic.nl"
+        "${NEWLANG_SANITIZER}")
     add_test(NAME node_link_source.integration
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/node_link_source_test.py"

@@ -1,0 +1,16 @@
+#ifndef NEWLANG_CHECKED_C_NODE_H
+#define NEWLANG_CHECKED_C_NODE_H
+#include "newlang/checked.h"
+typedef enum {
+    NL_NODE_C_OK,
+    NL_NODE_C_UNSUPPORTED,
+    NL_NODE_C_OUT_OF_MEMORY,
+    NL_NODE_C_RESOURCE_LIMIT
+} NLNodeCStatus;
+/* Borrow the completed entry artifact/context. Return caller-owned (free)
+ * staged C into an initialized NULL slot on success ONLY; failure leaves both
+ * output slots untouched. Exact bounded two-lexical-root topology, not a
+ * recursive backend. */
+NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *, char **out,
+                                size_t *length);
+#endif

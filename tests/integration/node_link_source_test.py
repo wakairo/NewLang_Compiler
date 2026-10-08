@@ -1,4 +1,4 @@
-"""Actual-source semantic gate; recursive Node emission is still unsupported."""
+"""Actual-source rejection boundary; native topology is tested separately."""
 from pathlib import Path
 import sys
 import tempfile
@@ -17,6 +17,15 @@ def unsupported(root: Path, compiler: str, name: str, text: str) -> None:
         raise SystemExit(f"{name}: lost semantic/backend boundary: {first}")
 
 
+def accepted(root: Path, compiler: str, name: str, text: str) -> None:
+    source = root / f"{name}.nl"
+    source.write_text(text, encoding="utf-8")
+    first, second = run([compiler, str(source)]), run([compiler, str(source)])
+    if (first.returncode or first.stderr or second.returncode or
+            not first.stdout or first.stdout != second.stdout):
+        raise SystemExit(f"{name}: bounded source/evidence/backend failure: {first} {second}")
+
+
 def main() -> None:
     compiler, witness = sys.argv[1:]
     declaration = "struct Node{next:Option<ptr<Node>>,payload:u8}"
@@ -26,8 +35,8 @@ def main() -> None:
     with tempfile.TemporaryDirectory(prefix="newlang-node-link-") as temp:
         root = Path(temp)
         actual = Path(witness).read_text(encoding="utf-8")
-        unsupported(root, compiler, "two_roots", actual)
-        unsupported(root, compiler, "same_variant", declaration +
+        accepted(root, compiler, "two_roots", actual)
+        accepted(root, compiler, "same_variant", declaration +
                     "fn main()->unit{" + prefix +
                     "let a=loan_write(head@next){|w|replace(w,Option<ptr<Node>>::Some(p))};"
                     "let b=loan_write(head@next){|w|replace(w,Option<ptr<Node>>::Some(p))};"
@@ -38,6 +47,14 @@ def main() -> None:
                     "let p=loan_read(c){|r|ptr_from_ref(r)};"
                     "loan_write(c@link){|w|replace(w,Option<ptr<Cell>>::Some(p))};"
                     "c@link;loan_read_ptr(p){|r|unit};unit}")
+        unsupported(root, compiler, "three_roots", declaration +
+                    "fn main()->unit{" + prefix +
+                    "let third=Node{next:Option<ptr<Node>>::None,payload:u8(3)};unit}")
+        unsupported(root, compiler, "whole_node_copy", declaration +
+                    "fn main()->unit{" + prefix + "let copy=head;unit}")
+        unsupported(root, compiler, "nonempty_loan_body", declaration +
+                    "fn main()->unit{" + prefix +
+                    "loan_write(head@next){|w|unit;replace(w,Option<ptr<Node>>::None)};unit}")
         controls = [
             ("payload", "head@payload;", "NODE-LINK-FIELD-PROFILE"),
             ("unknown", "head@absent;", "FIELD-UNKNOWN-FIELD"),
@@ -60,8 +77,8 @@ def main() -> None:
                  "loan_read(n){|r|ptr_from_ref(r)}};loan_read_ptr(p){|r|unit};unit}",
                  "P3-STALE-POINTER")
         if any(path.suffix != ".nl" for path in root.iterdir()):
-            raise SystemExit("semantic-only gate left a C/object/executable artifact")
-    print("Node @link: actual source/evidence accepted; deterministic backend unsupported; no C/native output")
+            raise SystemExit("rejection-boundary test left a C/object/executable artifact")
+    print("Node @link: bounded two-root C accepted; invalid source and unsupported profile emit no C/native output")
 
 
 if __name__ == "__main__":
