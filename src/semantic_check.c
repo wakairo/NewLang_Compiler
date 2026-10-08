@@ -3885,8 +3885,10 @@ cleanup:
  * snapshots prove every arm/exit; only actual plan evaluation mutates the
  * candidate. Hypothetical IDs/post-state are never imported. */
 static bool function_arm(Check *check, const NLSyntaxView *arm, NLValueId input,
-                         size_t variant, bool hypothetical)
+                         size_t variant, bool hypothetical, NLSymbolId *binder)
 {
+    if (binder != NULL)
+        *binder = 0;
     NLSemanticContext *c = check->context;
     const NLTypeId type = c->values[input - 1].type;
     const NLTypeId payload_type = c->types[type - 1].variant_types[variant - 1];
@@ -3931,6 +3933,8 @@ static bool function_arm(Check *check, const NLSyntaxView *arm, NLValueId input,
             free(name);
             if (!host(check, status, arm->span))
                 return false;
+            if (binder != NULL)
+                *binder = symbol;
         }
     }
     c->values[sum - 1].carrier = NL_CARRIER_ENDED;
@@ -4081,6 +4085,7 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
         add(check, (NLCheckedNodeView){.kind = NL_CHECKED_MATCH,
                                        .span = syntax->span,
                                        .initializer = init,
+                                       .match_binding_prefix = c->binding_count,
                                        .item_count = count});
     if (id == 0)
         return 0;
@@ -4109,7 +4114,8 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
             (NLCheckedFragment){.source = check->source,
                                 .context = branch.context,
                                 .destroy_context = nl_semantic_destroy};
-        if (!function_arm(&branch, a, input, variants[i], true))
+        NLSymbolId binder = 0;
+        if (!function_arm(&branch, a, input, variants[i], true, &binder))
             goto failure;
         NLCheckedNodeId body = expression(&branch, a->data.arm.body);
         if (body == 0)
@@ -4128,6 +4134,7 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
             &branch, (NLCheckedNodeView){.kind = NL_CHECKED_MATCH_ARM,
                                          .span = a->span,
                                          .variant = variants[i],
+                                         .symbol = binder,
                                          .initializer = body,
                                          .terminates = branch.terminated,
                                          .type = result.type,
@@ -4169,6 +4176,7 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
         if (node_unit_join) {
             end_temporary(check, input);
             view(check, id)->normal_arms = normal;
+            view(check, id)->normal_frame_unchanged = true;
             view(check, id)->type = 1;
             return id;
         }
@@ -4189,7 +4197,7 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
     chosen.binding_floor = chosen.arm_floor = c->binding_count;
     chosen.has_arm_floor = true;
     if (!function_arm(&chosen, chosen_arm, input, variants[chosen_index],
-                      check->definition || check->loop != NULL))
+                      check->definition || check->loop != NULL, NULL))
         goto chosen_failure;
     NLCheckedNodeId body = expression(&chosen, chosen_arm->data.arm.body);
     if (body == 0)
