@@ -7399,7 +7399,7 @@ fn receive_and_release_tail(
     tail_allocation: Allocation,
     tail_life: LifetimeDomain
 ) -> unit {
-    loan_read(tail_life) { |stable_t| {
+    loan_read(tail_life) { |stable_t|
         let tail_r = ref_from_ptr(read, tail_ptr, stable_t);
         unit
     };
