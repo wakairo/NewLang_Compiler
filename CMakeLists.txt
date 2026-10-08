@@ -294,6 +294,16 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/allocated_node_semantic.nl")
     add_executable(allocated_checked_probe tests/integration/allocated_checked_probe.c)
     target_link_libraries(allocated_checked_probe PRIVATE newlang_semantic newlang_parser)
+    add_executable(handoff_backend_test tests/unit/handoff_backend_test.c)
+    target_link_libraries(handoff_backend_test PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(handoff_backend_test PRIVATE -Wl,--wrap=malloc)
+    add_test(NAME live_tail_handoff_backend.unit COMMAND handoff_backend_test "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/live_tail_handoff.nl")
+    add_executable(handoff_checked_probe tests/integration/handoff_checked_probe.c)
+    target_link_libraries(handoff_checked_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME live_tail_handoff_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/handoff_native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:handoff_checked_probe>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/live_tail_handoff.nl" "${NEWLANG_SANITIZER}")
     add_executable(typed_owner_test tests/unit/typed_owner_test.c)
     target_link_libraries(typed_owner_test PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
     target_link_options(typed_owner_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
