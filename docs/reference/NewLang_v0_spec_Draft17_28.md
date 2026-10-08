@@ -7234,20 +7234,28 @@ implicit destructor/RAII, raw-to-typed reconstruction or FFI is implied.
 **Candidate selection (Issue #203; unmerged):** Extend **only** Draft 17.27
 §3.2's same-H two-static-fallible-site, one semantic compilation unit profile by
 one additional top-level known-direct ordinary NON-generic producer:
-`fn handoff_live_tail(p:ptr<H>, a:Allocation, d:LifetimeDomain) -> LiveTail`.
-It allocates zero H roots, never ends O_t/D_t/R_t, contains no ref-dependent
-result, has no nested/indirect/recursive/escaping call, and its whole body is the
-exact construction + ordinary explicit `return` shown below. The producer is
-not the §18.1a `unit` terminal receiver, and that receiver's earlier strictly
-bounded definition remains unchanged. One two-success branch may:
-1. physically link and then unlink H_h.next while H_t remains live;
-2. invoke this producer with the original matched (ptr_t, A_t, D_t);
-3. receive and wholly destructure the returned LiveTail; optionally perform
-   a D_t-scoped read reloan; and invoke the existing §18.1a terminal receiver
-   with the same original (ptr_t, A_t, D_t) now in fresh caller bindings;
-4. separately end/finalize/deallocate H_h, A_h, D_h in the donor/main.
-No other LiveTail producer/consumer source category is selected. This
-restricted bridge is NOT a mandate for future general owning API structure.
+fn detach_and_return_tail(
+  head_link: ref<write,Option<ptr<H>>>,
+  p:ptr<H>, a:Allocation, d:LifetimeDomain
+) -> LiveTail.
+It allocates zero H roots, never ends O_t/D_t/R_t and contains no
+ref-dependent result, recursive/indirect/escaping call or extra allocation.
+It first uses the **existing scoped head write-ref** to replace the current
+H_h.next Some(p) by None; then returns the complete LiveTail value. The
+separate head link ref is derived from live O_h under a D_h-scoped write
+reloan. Neither original head Allocation_h nor head Domain D_h is passed
+or consumed. The existing §18.1a terminal receiver is unchanged.
+One selected both-Some branch may:
+1. create the actual H_h.next=Some(ptr_t) while distinct O_h/O_t live;
+2. within a head D_h-scoped reloan, call this producer with a real scoped
+   head-link write ref plus original ptr_t, A_t and D_t; the producer itself
+   performs head-link Some(ptr_t)->None;
+3. receive and wholly destructure the returned LiveTail **after**
+   the head ref/loan scope ends, optionally reloan using D_t, then call the
+   existing terminal §18.1a receiver with the same original O_t/R_t/D_t;
+4. separately end and deallocate O_h/R_h via A_h/D_h in caller main.
+No other LiveTail producer/consumer source category is selected. This is
+not a general owner interface.
 
 ### 18.1b.1 closed compiler-known nominal result and source spelling
 
@@ -7382,11 +7390,14 @@ syntactic `try_allocate_one<Node>` calls, solely in `main`.
 ~~~newlang
 struct Node { next: Option<ptr<Node>>, payload: u8, }
 
-fn handoff_live_tail(
+fn detach_and_return_tail(
+    head_link: ref<write, Option<ptr<Node>>>,
     p: ptr<Node>,
     a: Allocation,
     d: LifetimeDomain
 ) -> LiveTail {
+    let old_link = replace(
+        head_link, Option<ptr<Node>>::None);
     return LiveTail {
         owned_ptr: p,
         owned_allocation: a,
@@ -7466,17 +7477,15 @@ fn main() -> unit {
                             }
                         },
                     };
-                    let old_some = loan_read(life_h) { |stable_h|
-                        let head_w2 = ref_from_ptr(write, ptr_h, stable_h);
-                        replace(head_w2@next,
-                            Option<ptr<Node>>::None)
-                    };
-
                     let LiveTail {
                         owned_ptr,
                         owned_allocation,
                         owned_domain
-                    } = handoff_live_tail(ptr_t, allocation_t, life_t);
+                    } = loan_read(life_h) { |stable_h|
+                        let head_w2 = ref_from_ptr(write, ptr_h, stable_h);
+                        detach_and_return_tail(
+                            head_w2@next, ptr_t, allocation_t, life_t)
+                    };
 
                     loan_read(owned_domain) { |stable_t|
                         let live_t = ref_from_ptr(read, owned_ptr, stable_t);
