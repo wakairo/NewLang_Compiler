@@ -24,6 +24,8 @@ typedef struct {
 typedef struct {
     char *name;
     bool incomplete, recursive_header;
+    NLTypeId allocated_target,
+        one_backing_target; /* closed Draft17.24 registry */
     NLTypeId
         option_target; /* canonical Option instantiation argument, not name */
     NLSemanticTypeView view;
@@ -218,4 +220,9 @@ NLCheckStatus nl_sem_check_function_block(NLSemanticContext *,
                                           NLCheckedFragment **,
                                           NLCheckDiagnostic *);
 
+/* Private-candidate operations; caller rolls back the entire candidate on
+ * failure. */
+NLCheckStatus nl_allocated_registry(NLSemanticContext *, NLTypeId, NLTypeId *);
+NLCheckStatus nl_allocated_grant(NLSemanticContext *, NLTypeId, bool,
+                                 NLCheckedNodeView *, NLCheckDiagnostic *);
 #endif

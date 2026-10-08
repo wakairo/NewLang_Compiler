@@ -168,11 +168,11 @@ Draft/Issueの未merge候補は `PROPOSED (unmerged)` と表記し、ADOPTEDに�
   matching `heap_deallocate`をworkload-testedした。
   allocator failure/error branchや既存bounded source grammarは未確定だった。
   `NewLang_v0_surface_Draft1_1.md`も同系の候補を保持する。
-- **現canonical:** Draft 17.23 §3.1–§3.4, §13, §14, §23.1, §26, §29に
-  backing/authority/occupancy/lifetime/failed value semanticsが存在。
-  一方general native allocator sourceとfailure type、layout witness source、
-  exclusive loan/local explicit domain sourceは未固定。
-- **候補状態:** **PROPOSED / UNMERGED** (Issue #169 candidate Draft17.24)。
+- **現canonical:** Draft 17.24 §3.2は下記closed profileを固定し、
+  §3.1–§3.4, §13, §14, §23.1, §26, §29の責任・lifetime規則を再利用する。
+  general native allocator、general layout witness、final loan syntaxは未固定。
+- **候補状態:** **ADOPTED / BOUNDED** (Issue #169 / merged PR #170、
+  independent Coordination ACCEPT)。
   exactly completed bounded recursive nominal `H`について
   compiler-authorized exact `sizeof(H)`/alignで1 backingを割り当て、
   `Option<OneBacking>`の`None`/responsibility-bearing`Some`を返す
@@ -185,10 +185,11 @@ Draft/Issueの未merge候補は `PROPOSED (unmerged)` と表記し、ADOPTEDに�
   **DEFER** general allocator interface/trait、general
   `Layout<T>` spelling、FFI/C ABI/native struct offsets、fallible init、
   multiple dynamic roots、final unified loan syntax (DI-006)。
-- **レビュー注意:** candidateはnon-normative until merged。
-  product North Star successをこのdesign aloneで主張しない。
+- **レビュー注意:** source designはcanonical採用済み。
+  product North Star successやnative heap executionをこのdesign aloneで主張しない。
   full old `NewLang_M9` chat は完全照合できていない。
 - **出典:** [Issue #169](https://github.com/wakairo/NewLang_Compiler/issues/169)、
+  [PR #170 Coordination ACCEPT](https://github.com/wakairo/NewLang_Compiler/pull/170#issuecomment-6051813657)、
   [Issue #168](https://github.com/wakairo/NewLang_Compiler/issues/168)、
   `NewLang_v0_surface_Draft1.md`, `NewLang_v0_surface_Draft1_1.md`、
   `docs/reference/CURRENT_SPEC.md`。

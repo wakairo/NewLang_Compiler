@@ -4,7 +4,7 @@
 
 bool nl_sum_authority(const NLSemanticContext *c, NLTypeId type)
 {
-    if (type == 2)
+    if (type == 2 || c->types[type - 1].one_backing_target != 0)
         return true;
     const NLSemanticTypeView t = c->types[type - 1].view;
     if (t.kind == NL_TYPE_SLOT || t.kind == NL_TYPE_STORAGE ||
