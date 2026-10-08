@@ -194,6 +194,44 @@ Draft/Issueの未merge候補は `PROPOSED (unmerged)` と表記し、ADOPTEDに�
   `NewLang_v0_surface_Draft1.md`, `NewLang_v0_surface_Draft1_1.md`、
   `docs/reference/CURRENT_SPEC.md`。
 
+### DI-010 — heap H scoped root reloan / ref-base link projection (Issue #176)
+
+- **検索語:** ref_from_ptr write, ref<read,H>@link, ref<write,H>@link, ref-based field, read authority, scope, ProjectionId, ptr dereference
+- **過去のnon-normative根拠:** `NewLang_v0_module_private_receiver_surface_breaktest.md`
+  (Draft17.2ベース)は`value@field`のCopyと
+  `ref<read/write,S>@field`のmode-preserving typed ref projection、
+  `ptr<S>@field`のlocation-only projectionを**明示的に別操作**として提案した。
+  さらに旧`NewLang_v0_surface_Draft1.md`の初期実験は
+  `r.field`/`w.field`という旧punctuationだが、
+  read/write mode保持とptr非derefは同じ意図だった。
+- **現在のcanonical:** Draft17.24 §10.1はproper provenance/liveness/stability
+  とread/write backing permissionに基づくptr→ref core semanticsを持つが、
+  §3.2 sourceではallocated Hの`ref_from_ptr(read,p,stable)`のみ。
+  §17.1 coreにはmode-preserving fixed field projectionがあるが、
+  actual `@link`は**direct lexical H local-only**。
+- **今回の判断:** **PROPOSED / UNMERGED** (Issue #176 candidate Draft17.25)。
+  `ref_from_ptr(write,p,stable)`でexplicit-domain-backed
+  write-authorized H root refを取得し、そのscoped ref bindingから
+  committed link fieldだけ`r@link`で
+  `ref<read/write,Option<ptr<H>>>`へmode-preserving projection。
+  bounded `read(r@link)` Copy / `replace(w@link,...) ` ordinary write。
+  **read→writeは不可**。
+- **§4.2 disposition:** historical ref-base typed mode-preserving sourceは**KEEP / selected limited subset**。
+  general `ptr@field` location-token/sourceやimplicit deref、general
+  ref-base field/loan、future module-private accessは**DEFER**。
+  DI-001の`@`/`::`/`.` separationは**KEEP**。
+  DI-006のfinal unified loan spellingは**DEFER**、
+  DI-009のexact allocated H authority/lifecycleは**KEEP**。
+- **No-foreclosure:** H/link-only root ref projectionはlater named-module visibility、
+  general ref projectionやptr location projection、receiver `.`/
+  final loan spelling、other nominal/generic typeを決めない。
+  scoped root refのpermissionからwriteを増幅しないことは今後も不変。
+- **出典:** [Issue #176](https://github.com/wakairo/NewLang_Compiler/issues/176)、
+  `NewLang_v0_module_private_receiver_surface_breaktest.md`、
+  `NewLang_v0_surface_Draft1.md`、[Issue #153](https://github.com/wakairo/NewLang_Compiler/issues/153)、
+  Draft17.24 §10.1/§17.1、[Issue #175](https://github.com/wakairo/NewLang_Compiler/issues/175)。
+  旧`NewLang_M9`全文への独立アクセスは未確認であり、網羅調査したと主張しない。
+
 ## 3. 欠落・更新・accessibilityの扱い
 
 初回indexはIssue #153の**限定的な監査**から作成したもので、
