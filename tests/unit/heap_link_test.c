@@ -188,8 +188,9 @@ static bool run(const char *path)
           n.context->domain_count == 0);
     char *out = NULL;
     size_t length = 999;
-    CHECK(nl_checked_c_node(n.entry, &out, &length) == NL_NODE_C_UNSUPPORTED &&
-          out == NULL && length == 999);
+    CHECK(nl_checked_c_node(n.entry, &out, &length) == NL_NODE_C_OK &&
+          out != NULL && length == strlen(out));
+    free(out);
     node_checked_destroy(&n);
     return true;
 }
