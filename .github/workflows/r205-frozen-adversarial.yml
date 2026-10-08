@@ -66,6 +66,28 @@ jobs:
             --frozen-root "$PWD" --compiler "$PWD/build-r205/newlangc" \
             --evidence "$GITHUB_WORKSPACE/docs/evidence/r205_frozen_adversarial" \
             --out "$GITHUB_WORKSPACE/r205-observations"
+      - name: Independent checked-owner identity and rollback probe (supporting)
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT="$RUNNER_TEMP/r205/frozen"
+          EVIDENCE="$GITHUB_WORKSPACE/docs/evidence/r205_frozen_adversarial"
+          mkdir -p "$GITHUB_WORKSPACE/r205-observations"
+          gcc-13 -std=c17 -O0 -g -Wall -Wextra \
+            -I"$ROOT/include" -I"$ROOT/src" -I"$ROOT/tests/support" \
+            "$EVIDENCE/owned_probe.c" -o "$RUNNER_TEMP/r205/owned_probe" \
+            -Wl,--start-group "$ROOT/build-r205"/libnewlang_{semantic,checked,parser,lexer,syntax,source,diagnostic}.a -Wl,--end-group
+          "$RUNNER_TEMP/r205/owned_probe" \
+            "$EVIDENCE/corpus/p01_seed.nl" \
+            "$EVIDENCE/corpus/p08_alias_all_caller.nl" \
+            "$EVIDENCE/corpus/p13_reorder_functions.nl" \
+            "$EVIDENCE/corpus/b_p02_rename_nominal_affine_alias.nl" \
+            "$EVIDENCE/corpus/n01_wrong_root.nl" \
+            "$EVIDENCE/corpus/n02_wrong_region.nl" \
+            "$EVIDENCE/corpus/n10_double_call.nl" \
+            "$EVIDENCE/corpus/n18_branch_good_none_bad_some.nl" \
+            "$EVIDENCE/corpus/b_bad_region_sibling.nl" \
+            | tee "$GITHUB_WORKSPACE/r205-observations/owned_probe_stdout.txt"
       - name: Capture frozen workspace integrity after evidence
         if: always()
         shell: bash
