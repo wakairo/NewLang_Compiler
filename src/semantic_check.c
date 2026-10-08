@@ -1253,6 +1253,103 @@ static NLCheckedNodeId allocated_raw(Check *, const NLSyntaxView *,
 static NLCheckedNodeId allocated_ref(Check *, const NLSyntaxView *);
 static NLCheckedNodeId link_read(Check *, const NLSyntaxView *);
 
+/* §18.1a admission is read-only. Arguments have undergone ordinary Copy/move
+ * in the private transaction, but no callee bindings/effects exist yet. */
+static bool owner_entry(Check *check, NLCheckedNodeId id,
+                        const NLFunctionEntry *function,
+                        const NLCheckedNodeId *arguments)
+{
+    NLSemanticContext *c = check->context;
+    const NLSourceSpan span = view(check, id)->span;
+    const NLTypedOwnerDefinition d = function->body->owner_definition;
+    if (!d.definition_checked || d.requirements != NL_OWNER_ALL_REQUIREMENTS ||
+        d.target != c->types[function->parameters[0] - 1].view.target ||
+        (d.step_count != 4 && d.step_count != 5) || !check->allocated_slice ||
+        check->allocation_depth != 2 || check->body_function == 0 ||
+        strcmp(c->functions[check->body_function - 1].name, "main") != 0) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+             "P193-CALL-PROFILE", "requires the closed two-H main call world");
+        return false;
+    }
+    for (size_t i = 0; i < d.step_count; ++i)
+        if (d.steps[i] != (NLTypedOwnerStep)(i + (d.step_count == 4 ? 1 : 0))) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+                 "P193-CALL-DEFINITION",
+                 "conditional definition evidence incomplete");
+            return false;
+        }
+    NLValueId values[3];
+    for (size_t i = 0; i < 3; ++i) {
+        values[i] = one_result(check, arguments[i]);
+        if (values[i] == 0)
+            return false;
+        const NLCheckedNodeView a = *view(check, arguments[i]);
+        if (a.kind != NL_CHECKED_IDENTIFIER || a.symbol == 0 ||
+            a.value_use != (i == 0 ? NL_VALUE_COPIED : NL_VALUE_CONSUMED)) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+                 "P193-CALL-TRANSFER", "requires original available bindings");
+            return false;
+        }
+        if (c->values[values[i] - 1].dependencies != NL_DEPENDENCY_FREE ||
+            c->values[values[i] - 1].value_dependency_count != 0) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+                 "P193-CALL-DEPENDENCY",
+                 "input dependency proof is incomplete");
+            return false;
+        }
+    }
+    if (!reference_live(check, values[0], span))
+        return false;
+    check->status = nl_owner_relations(c, values, &d, span, &check->diagnostic);
+    if (check->status != NL_CHECK_OK)
+        return false;
+    const NLReferenceFacts f = c->values[values[0] - 1].reference;
+    const NLSemanticPlaceView root = c->places[f.place - 1];
+    const NLSemanticValueView domain = c->values[values[2] - 1];
+    /* These existing checks prove unique occupancy/Allocation and preservation
+     * against all surviving Value/Occurrence blockers, not only selected p. */
+    if (!host(check, nl_raw_validate(c), span))
+        return false;
+    if (conflicts(check, f.place, false, true, 0, span))
+        return false;
+    NLCheckStatus blockers = nl_fixed_end_dependencies(c, f.place, SIZE_MAX);
+    if (blockers != NL_CHECK_OK) {
+        fail(check, blockers, span, "P193-CALL-BLOCKER",
+             "surviving dependency blocks receiver EndRoot");
+        return false;
+    }
+    for (size_t i = 0; i < c->place_count; ++i)
+        if (c->places[i].live && c->places[i].independent_root &&
+            c->places[i].governing_domain == domain.domain &&
+            i + 1 != f.place) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, span, "P193-CALL-DOMAIN-ROOTS",
+                 "received domain also governs an unrelated live root");
+            return false;
+        }
+    if (check->artifact->owner_entry != NULL) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+             "P193-CALL-PRECISION",
+             "one receiver call per bounded path artifact");
+        return false;
+    }
+    if (!host(check, nl_sem_clone(c, &check->artifact->owner_entry), span))
+        return false;
+    check->artifact->owner_entry_call = id;
+    check->artifact->destroy_owner_entry = nl_semantic_destroy;
+    view(check, id)->owner_call.definition = d;
+    view(check, id)->owner_call.entry_proved = true;
+    view(check, id)->owner_call.root = f.place;
+    view(check, id)->owner_call.incarnation = f.incarnation;
+    view(check, id)->owner_call.range = root.placement;
+    view(check, id)->owner_call.domain = domain.domain;
+    for (size_t i = 0; i < 3; ++i) {
+        view(check, id)->owner_call.inputs[i] = values[i];
+        view(check, id)->owner_call.donor[i] =
+            view(check, arguments[i])->symbol;
+    }
+    return true;
+}
+
 static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
 {
     NLSemanticContext *const c = check->context;
@@ -1383,6 +1480,7 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
             return 0;
         }
         if (function.kind == NL_CHECKED_REGISTERED_CALL &&
+            !function.owner_receiver &&
             (expected == 2 ||
              c->types[expected - 1].view.kind == NL_TYPE_SLOT ||
              c->types[expected - 1].view.kind == NL_TYPE_STORAGE ||
@@ -1455,6 +1553,9 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         ++view(check, id)->argument_count;
         argument_syntax = nl_syntax_next_argument(argument_syntax);
     }
+    if (function.owner_receiver &&
+        !owner_entry(check, id, &function, arguments))
+        return 0;
     if (!(function.body != NULL ? run_body(check, id, &function, arguments)
                                 : primitive(check, id, arguments))) {
         return 0;
@@ -2649,6 +2750,8 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                   .function_scope_floor = scope_floor,
                   .function_place_floor = place_floor,
                   .body_function = view(caller, call_id)->function};
+    body.allocated_slice = function->owner_receiver &&
+                           view(caller, call_id)->owner_call.entry_proved;
     body.artifact = malloc(sizeof(*body.artifact));
     if (body.artifact == NULL) {
         (void)host(caller, NL_CHECK_OUT_OF_MEMORY, call_span);
@@ -2685,10 +2788,42 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                                        value, binding_floor, &symbol),
                   (NLSourceSpan){0}))
             goto failure;
+        if (function->owner_receiver) {
+            view(caller, call_id)->owner_call.parameters[i] = symbol;
+            if (i == 2)
+                c->places[c->bindings[symbol - 1].view.place - 1]
+                    .implicit_local = true;
+        }
     }
     if (!function_block(&body, nl_syntax_node_view(nl_syntax_tree_root(
                                    function->body->syntax))))
         goto failure;
+    if (function->owner_receiver) {
+        const NLCheckedNodeView proof = *view(caller, call_id);
+        const NLSemanticPlaceView root = c->places[proof.owner_call.root - 1];
+        bool closed =
+            !root.live && root.current_value == 0 && root.current_fact == 0 &&
+            root.placement.region == 0 && root.governing_domain == 0 &&
+            root.incarnation == proof.owner_call.incarnation &&
+            !c->regions[proof.owner_call.range.region - 1].view.live &&
+            !c->domains[proof.owner_call.domain - 1].live;
+        for (size_t i = 1; i < 3; ++i)
+            closed =
+                closed &&
+                c->values[proof.owner_call.inputs[i] - 1].carrier ==
+                    NL_CARRIER_ENDED &&
+                c->bindings[proof.owner_call.donor[i] - 1].view.availability ==
+                    NL_CONSUMED &&
+                c->bindings[proof.owner_call.parameters[i] - 1]
+                        .view.availability == NL_CONSUMED;
+        if (!closed) {
+            fail(&body, NL_CHECK_SEMANTIC_ERROR, (NLSourceSpan){0},
+                 "P193-CALL-POSTSTATE",
+                 "receiver did not establish exact closed post-state");
+            goto failure;
+        }
+        view(caller, call_id)->owner_call.post_proved = true;
+    }
     /* Save owned checked body evidence; no source expansion into caller nodes.
      */
     if (caller->artifact->body_count == 64) {
@@ -6311,6 +6446,14 @@ static void clear_definition_state(NLSemanticContext *c)
 
 static bool check_definition(Check *registration, size_t function_id)
 {
+    NLFunctionEntry *entry = &registration->context->functions[function_id - 1];
+    if (entry->owner_receiver) {
+        registration->status = nl_owner_definition(
+            registration->context, entry->body,
+            registration->context->types[entry->parameters[0] - 1].view.target,
+            &entry->body->owner_definition, &registration->diagnostic);
+        return registration->status == NL_CHECK_OK;
+    }
     Check definition = {
         .source =
             registration->context->functions[function_id - 1].body->source,
@@ -6703,6 +6846,7 @@ NLCheckStatus nl_semantic_register_function_unit(
     if (total != 0)
         qsort(declarations, total, sizeof(*declarations), declaration_order);
     /* Exact signature installation is private until ALL definitions succeed. */
+    size_t owner_receivers = 0;
     for (size_t i = 0; i < total; ++i) {
         FunctionDeclaration *d = &declarations[i];
         input = d->input;
@@ -6752,16 +6896,30 @@ NLCheckStatus nl_semantic_register_function_unit(
             const NLTypeId type = check_type(&check, p->data.parameter.type);
             if (type == 0)
                 goto failure;
-            if (!body_signature_type(check.context, type, true))
-                goto signature_limit;
             types[parameter] = type;
             d->parameters[parameter].type = type;
         }
         const NLTypeId result = check_type(&check, s->data.function.result);
         if (result == 0)
             goto failure;
-        if (!body_signature_type(check.context, result, false))
-            goto signature_limit;
+        const bool owner =
+            nl_owner_signature(check.context, types, parameter, result);
+        if (owner) {
+            if (recursive == NULL || count != 1 || owner_receivers != 0 ||
+                strcmp(d->name, "main") == 0) {
+                fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
+                     "P193-SIGNATURE-PROFILE",
+                     "requires one same-unit H receiver");
+                goto failure;
+            }
+            ++owner_receivers;
+        } else {
+            if (!body_signature_type(check.context, result, false))
+                goto signature_limit;
+            for (size_t j = 0; j < parameter; ++j)
+                if (!body_signature_type(check.context, types[j], true))
+                    goto signature_limit;
+        }
         if (!host(&check,
                   nl_semantic_register_function(check.context, d->name, types,
                                                 parameter, result, false,
@@ -6769,6 +6927,7 @@ NLCheckStatus nl_semantic_register_function_unit(
                   s->span))
             goto failure;
         d->function = check.context->function_count;
+        check.context->functions[d->function - 1].owner_receiver = owner;
         continue;
     duplicate:
         fail(&check, NL_CHECK_SEMANTIC_ERROR, s->data.function.name,
@@ -6796,18 +6955,25 @@ NLCheckStatus nl_semantic_register_function_unit(
                   span))
             goto failure;
     }
-    for (size_t i = 0; i < total; ++i) {
-        const FunctionDeclaration *d = &declarations[i];
-        input = d->input;
-        if (!check_definition(&check, d->function)) {
-            const size_t start =
-                nl_syntax_node_view(d->syntax->data.function.body)
-                    ->span.start_byte;
-            check.diagnostic.span.start_byte += start;
-            check.diagnostic.span.end_byte += start;
-            goto failure;
+    /* Symbolic obligations are checked before any ordinary definition walks a
+     * known call, independent of declaration/name order or favorable callers.
+     */
+    for (size_t pass = 0; pass < 2; ++pass)
+        for (size_t i = 0; i < total; ++i) {
+            const FunctionDeclaration *d = &declarations[i];
+            if (check.context->functions[d->function - 1].owner_receiver !=
+                (pass == 0))
+                continue;
+            input = d->input;
+            if (!check_definition(&check, d->function)) {
+                const size_t start =
+                    nl_syntax_node_view(d->syntax->data.function.body)
+                        ->span.start_byte;
+                check.diagnostic.span.start_byte += start;
+                check.diagnostic.span.end_byte += start;
+                goto failure;
+            }
         }
-    }
     check.source = nl_syntax_tree_source(inputs[0]);
     input = 0;
     if (!host(&check, nl_sem_validate(check.context), (NLSourceSpan){0}) ||

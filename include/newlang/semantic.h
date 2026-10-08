@@ -188,6 +188,41 @@ typedef struct {
     NLSourceSpan span;
 } NLCheckDiagnostic;
 
+/* Draft 17.27 §18.1a only. These are symbolic entry obligations, NOT facts
+ * or authority values. Parameter origins are the three ordered signature
+ * positions; no concrete root/region/domain identity occurs in a definition.
+ * The finite post-state follows the checked primitive order below. */
+typedef enum {
+    NL_OWNER_READ_ROOT,
+    NL_OWNER_END_ROOT,
+    NL_OWNER_ERASE_SLOT,
+    NL_OWNER_FINALIZE_DOMAIN,
+    NL_OWNER_END_REGION
+} NLTypedOwnerStep;
+enum {
+    NL_OWNER_CURRENT_ROOT = 1u,
+    NL_OWNER_PROVENANCE_ACCESS = 2u,
+    NL_OWNER_MATCH_REGION = 4u,
+    NL_OWNER_MATCH_DOMAIN = 8u,
+    NL_OWNER_FULL_OCCUPANCY = 16u,
+    NL_OWNER_SCOPE_COMPATIBILITY = 32u,
+    NL_OWNER_FULL_RECOVERY = 64u,
+    NL_OWNER_AFFINE_TRANSFER = 128u,
+    NL_OWNER_ALL_REQUIREMENTS = 255u
+};
+typedef struct {
+    bool definition_checked;
+    NLTypeId target;
+    unsigned requirements;
+    size_t step_count;
+    NLTypedOwnerStep steps[5];
+} NLTypedOwnerDefinition;
+
+/* Read-only owned-definition evidence; false outside this closed profile.
+ * Definition checking never discharges the entry requirements. */
+bool nl_semantic_function_applicability(const NLSemanticContext *, size_t,
+                                        NLTypedOwnerDefinition *);
+
 /* Implementation budgets, not NewLang limits. */
 #define NL_SEMANTIC_MAX_ENTRIES 4096
 #define NL_SEMANTIC_MAX_PARAMETERS 128

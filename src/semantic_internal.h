@@ -45,6 +45,7 @@ typedef struct NLFunctionBody {
     NLSyntaxTree *syntax;
     char *parameter_names[NL_SEMANTIC_MAX_PARAMETERS];
     size_t count;
+    NLTypedOwnerDefinition owner_definition;
 } NLFunctionBody; /* immutable plan; only ownership count is mutable */
 
 typedef struct {
@@ -53,7 +54,7 @@ typedef struct {
     NLTypeId *parameters;
     size_t count;
     NLTypeId result;
-    bool caller_effects, hidden_dependencies;
+    bool caller_effects, hidden_dependencies, owner_receiver;
     NLFunctionBody *body; /* owned retained plan, NULL for signature-only */
 } NLFunctionEntry;
 struct NLSemanticContext {
@@ -83,6 +84,9 @@ typedef struct {
     struct NLCheckedFragment *artifact; /* owns hypothetical arm context */
 } NLCheckedArm;
 struct NLCheckedFragment {
+    NLSemanticContext *owner_entry; /* exact pre-callee actual world snapshot */
+    NLCheckedNodeId owner_entry_call;
+    void (*destroy_owner_entry)(NLSemanticContext *);
     /* Nested allocation proof target; owned ancestor-only closed snapshot,
      * independent of either hypothetical arm and later lexical cleanup. */
     NLSemanticContext *captured_post;
@@ -126,6 +130,16 @@ NLCheckStatus nl_body_create_span(const NLSource *, NLSourceSpan,
                                   NLFunctionBody **);
 NLCheckStatus nl_body_retain(NLFunctionBody *);
 void nl_body_release(NLFunctionBody *);
+bool nl_owner_signature(const NLSemanticContext *, const NLTypeId *, size_t,
+                        NLTypeId);
+/* Independent symbolic checking: read-only registry, no concrete value/place
+ * operations, no assumption that the three symbolic parameters correlate. */
+NLCheckStatus nl_owner_definition(const NLSemanticContext *, NLFunctionBody *,
+                                  NLTypeId, NLTypedOwnerDefinition *,
+                                  NLCheckDiagnostic *);
+NLCheckStatus nl_owner_relations(const NLSemanticContext *, const NLValueId *,
+                                 const NLTypedOwnerDefinition *, NLSourceSpan,
+                                 NLCheckDiagnostic *);
 /* Surviving packages after body/parameter cleanup may not reference newly
  * ending local scopes/places. Used by registration, real calls and fixtures. */
 NLCheckStatus nl_sem_function_exit(const NLSemanticContext *,
