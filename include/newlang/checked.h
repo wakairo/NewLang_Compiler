@@ -144,6 +144,22 @@ typedef struct {
         NLBackingRange range;
         NLDomainId domain;
     } owner_call;
+    /* §18.1b: separately owned entry/return worlds qualify every ID. */
+    struct {
+        NLTypedOwnerDefinition definition;
+        bool entry_proved, return_proved;
+        const NLSemanticContext *entry_world,
+            *return_world; /* borrowed owned snapshots */
+        NLValueId inputs[4], result;
+        NLSymbolId donor[4], parameters[4];
+        NLCheckedField head;
+        NLPlaceId root;
+        NLIncarnationId incarnation;
+        NLBackingRange range;
+        NLDomainId domain, head_domain;
+        NLValueId head_before, head_after;
+        NLValueFactId head_before_fact, head_after_fact;
+    } producer;
     bool terminates; /* no normal outgoing edge; type 0 means absent, not never
                       */
     size_t normal_arms;       /* finite branch count, excludes return edges */
@@ -185,8 +201,16 @@ const NLCheckedNodeView *nl_checked_node_view(const NLCheckedFragment *,
                                               NLCheckedNodeId);
 const NLSource *nl_checked_source(const NLCheckedFragment *);
 const NLSemanticContext *nl_checked_context(const NLCheckedFragment *);
-/* Owned actual state after argument evaluation, before callee effects. IDs
- * are copied prefix identities of THIS call world; never another branch. */
+/* Producer snapshots are separately owned exact actual entry and return
+ * worlds. Validation is read-only (link with the semantic library), requires
+ * the matching synchronous checked body and rejects foreign cloned worlds.
+ * Neither accessor nor validation mints or consumes source authority. */
+bool nl_checked_producer_valid(const NLCheckedFragment *, NLCheckedNodeId);
+const NLSemanticContext *nl_checked_producer_entry(const NLCheckedFragment *,
+                                                   NLCheckedNodeId);
+const NLSemanticContext *nl_checked_producer_return(const NLCheckedFragment *,
+                                                    NLCheckedNodeId);
+/* Terminal receiver actual entry, after argument evaluation, before effects. */
 const NLSemanticContext *nl_checked_owner_entry(const NLCheckedFragment *,
                                                 NLCheckedNodeId);
 /* Borrowed immutable ancestor-prefix proof target, owned by fragment.

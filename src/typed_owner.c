@@ -14,7 +14,10 @@ typedef enum {
     ENDING,
     REF,
     EMPTY,
-    RAW
+    RAW,
+    HEAD,
+    OPTION,
+    LIVE_TAIL
 } Role;
 typedef struct {
     const char *parameter; /* owned by immutable body plan, borrowed here */
@@ -28,7 +31,7 @@ typedef struct {
     NLTypedOwnerDefinition definition;
     Symbol symbols[128];
     size_t count, depth;
-    bool ended, finalized, released, returned;
+    bool ended, finalized, released, returned, detached;
     NLCheckStatus status;
     NLCheckDiagnostic diagnostic;
 } Infer;
@@ -42,6 +45,22 @@ bool nl_owner_signature(const NLSemanticContext *c, const NLTypeId *types,
     return p.kind == NL_TYPE_PTR && nl_recursive_local_type(c, p.target) &&
            c->types[types[1] - 1].view.kind == NL_TYPE_ALLOCATION &&
            types[2] == nl_semantic_domain_type(c);
+}
+
+bool nl_producer_signature(const NLSemanticContext *c, const NLTypeId *types,
+                           size_t count, NLTypeId result)
+{
+    if (count != 4 || c->types[result - 1].live_tail_target == 0)
+        return false;
+    const NLTypeId h = c->types[result - 1].live_tail_target;
+    const NLSemanticTypeView head = c->types[types[0] - 1].view;
+    return head.kind == NL_TYPE_REF && !head.is_exclusive &&
+           head.access == NL_ACCESS_WRITE &&
+           c->types[head.target - 1].option_target == types[1] &&
+           c->types[types[1] - 1].view.kind == NL_TYPE_PTR &&
+           c->types[types[1] - 1].view.target == h &&
+           c->types[types[2] - 1].view.kind == NL_TYPE_ALLOCATION &&
+           types[3] == nl_semantic_domain_type(c);
 }
 
 static Role error(Infer *i, NLSourceSpan span, NLCheckStatus status,
@@ -73,7 +92,7 @@ static bool same(const Infer *i, NLSourceSpan a, NLSourceSpan b)
 }
 static bool affine(Role r)
 {
-    return r == A || r == D || r == EMPTY || r == RAW;
+    return r == A || r == D || r == EMPTY || r == RAW || r == LIVE_TAIL;
 }
 static Role use(Infer *i, const NLSyntaxNode *n, bool consume)
 {
@@ -159,12 +178,15 @@ static Role block(Infer *i, const NLSyntaxView *v, size_t floor)
         } else if (item->kind == NL_SYNTAX_STATEMENT ||
                    item->kind == NL_SYNTAX_RETURN) {
             Role r = expr(i, item->data.statement.expression);
-            if (affine(r))
+            if (affine(r) && !(item->kind == NL_SYNTAX_RETURN &&
+                               i->definition.live_return && r == LIVE_TAIL))
                 (void)error(i, item->span, NL_CHECK_SEMANTIC_ERROR,
                             "P193-DEFINITION-OBLIGATION",
                             "non-Discardable conditional result is discarded");
             if (item->kind == NL_SYNTAX_RETURN) {
-                if (i->depth != 0 || r != U)
+                if (i->depth != 0 ||
+                    (i->definition.live_return ? r != LIVE_TAIL || !i->detached
+                                               : r != U))
                     (void)error(i, item->span, NL_CHECK_SEMANTIC_ERROR,
                                 "P193-DEFINITION-ESCAPE",
                                 "return cannot escape a loan or capability");
@@ -193,6 +215,70 @@ static Role expr(Infer *i, const NLSyntaxNode *node)
         return U;
     if (v->kind == NL_SYNTAX_EXPR_NAME)
         return use(i, node, true);
+    if (i->definition.live_return && v->kind == NL_SYNTAX_SUM_CONSTRUCTOR) {
+        const NLSyntaxView *type =
+            nl_syntax_node_view(v->data.constructor.type);
+        const NLSyntaxView *ptr =
+            type == NULL ? NULL
+                         : nl_syntax_node_view(type->data.ptr_type.target);
+        const char *h = i->registry->types[i->definition.target - 1].name;
+        if (type == NULL || type->kind != NL_SYNTAX_OPTION_PTR || ptr == NULL ||
+            ptr->kind != NL_SYNTAX_TYPE_NAME || !text(i, ptr->data.name, h) ||
+            !text(i, v->data.constructor.variant, "None") ||
+            v->data.constructor.parentheses ||
+            v->data.constructor.argument_count != 0)
+            return error(i, v->span, NL_CHECK_SEMANTIC_ERROR,
+                         "P208-DEFINITION-TYPE",
+                         "detach requires exact H Option None");
+        return OPTION;
+    }
+    if (i->definition.live_return && v->kind == NL_SYNTAX_AGGREGATE) {
+        if (!i->detached || !text(i, v->data.aggregate.type_name, "LiveTail") ||
+            v->data.aggregate.count != 3)
+            return error(i, v->span, NL_CHECK_SEMANTIC_ERROR,
+                         "P208-DEFINITION-RETURN",
+                         "complete LiveTail requires prior detach");
+        const char *names[] = {"owned_ptr", "owned_allocation", "owned_domain"};
+        const Role roles[] = {P, A, D};
+        bool seen[3] = {false};
+        for (const NLSyntaxNode *n = v->data.aggregate.fields; n != NULL;
+             n = nl_syntax_next_argument(n)) {
+            const NLSyntaxView *f = nl_syntax_node_view(n);
+            size_t index = 3;
+            for (size_t j = 0; j < 3; ++j)
+                if (text(i, f->data.binding.name, names[j]))
+                    index = j;
+            if (index == 3 || seen[index] ||
+                use(i, f->data.binding.initializer, true) != roles[index])
+                return error(i, f->span, NL_CHECK_SEMANTIC_ERROR,
+                             "P208-DEFINITION-RETURN",
+                             "field must transfer its original symbolic input "
+                             "role once");
+            seen[index] = true;
+        }
+        for (size_t j = 0; j < 3; ++j)
+            if (!seen[j])
+                return error(i, v->span, NL_CHECK_SEMANTIC_ERROR,
+                             "P208-DEFINITION-RETURN", "missing field");
+        return LIVE_TAIL;
+    }
+    if (i->definition.live_return && v->kind == NL_SYNTAX_EXPR_CALL &&
+        text(i, v->data.call.callee, "replace")) {
+        const NLSyntaxNode *a = v->data.call.arguments;
+        if (i->detached || v->data.call.argument_count != 2 ||
+            use(i, a, false) != HEAD ||
+            expr(i, nl_syntax_next_argument(a)) != OPTION)
+            return error(
+                i, v->span, NL_CHECK_SEMANTIC_ERROR, "P208-DEFINITION-DETACH",
+                "producer must detach the input head ref exactly once");
+        i->detached = true;
+        return OPTION;
+    }
+    if (i->definition.live_return)
+        return error(
+            i, v->span, NL_CHECK_ANALYSIS_PRECISION_LIMIT,
+            "P208-DEFINITION-PROFILE",
+            "operation needs obligations outside finite producer definition");
     if (v->kind == NL_SYNTAX_LOCAL_READ_LOAN) {
         if (use(i, v->data.loan.source, false) != D || i->finalized ||
             i->depth != 0)
@@ -283,19 +369,25 @@ NLCheckStatus nl_owner_definition(const NLSemanticContext *c,
                                   NLTypedOwnerDefinition *out,
                                   NLCheckDiagnostic *diagnostic)
 {
-    Infer i = {
-        .registry = c,
-        .body = body,
-        .definition = {.target = h, .requirements = NL_OWNER_ALL_REQUIREMENTS},
-        .count = 3};
-    const Role roles[] = {P, A, D};
-    for (size_t j = 0; j < 3; ++j)
-        i.symbols[j] = (Symbol){body->parameter_names[j], {0}, roles[j], true};
+    const bool producer = body->count == 4;
+    Infer i = {.registry = c,
+               .body = body,
+               .definition = {.target = h,
+                              .requirements = NL_OWNER_ALL_REQUIREMENTS,
+                              .live_return = producer,
+                              .head_link_required = producer},
+               .count = body->count};
+    const Role roles[] = {HEAD, P, A, D};
+    for (size_t j = 0; j < body->count; ++j)
+        i.symbols[j] = (Symbol){
+            body->parameter_names[j], {0}, roles[j + (producer ? 0 : 1)], true};
     const NLSyntaxView *root =
         nl_syntax_node_view(nl_syntax_tree_root(body->syntax));
     const Role result = block(&i, root, 0);
     if (i.status == NL_CHECK_OK &&
-        (result != U || !i.ended || !i.finalized || !i.released))
+        (producer ? (!i.returned || !i.detached || i.ended || i.finalized ||
+                     i.released)
+                  : (result != U || !i.ended || !i.finalized || !i.released)))
         (void)error(&i, root->span, NL_CHECK_SEMANTIC_ERROR,
                     "P193-DEFINITION-OBLIGATION",
                     "normal receiver exit lacks complete lifecycle closure");
@@ -411,4 +503,232 @@ NLCheckStatus nl_owner_relations(const NLSemanticContext *c,
             "full original range/authority recovery unproved");
     }
     return NL_CHECK_OK;
+}
+
+/* Read-only consumer contract: the live-return certificate belongs to exactly
+ * its owned caller entry/return worlds and synchronous checked producer body.
+ * A cloned world's coincidental numeric IDs are not this evidence. */
+bool nl_checked_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id)
+{
+    const NLCheckedNodeView *v = nl_checked_node_view(f, id);
+    const NLSemanticContext *a = nl_checked_producer_entry(f, id),
+                            *b = nl_checked_producer_return(f, id);
+    const NLCheckedFragment *body = nl_checked_call_body(f, id);
+    if (v == NULL || a == NULL || b == NULL || a == b ||
+        v->producer.entry_world != a || v->producer.return_world != b ||
+        body == NULL || nl_checked_context(body) != nl_checked_context(f) ||
+        !v->body_backed || !v->producer.entry_proved ||
+        !v->producer.return_proved ||
+        !v->producer.definition.definition_checked ||
+        !v->producer.definition.live_return ||
+        !v->producer.definition.head_link_required ||
+        v->producer.definition.step_count != 0 ||
+        v->producer.definition.requirements != NL_OWNER_ALL_REQUIREMENTS ||
+        !v->producer.head.present || v->producer.head.index != 0 ||
+        v->producer.head.access != NL_ACCESS_WRITE ||
+        v->producer.head.nominal != v->producer.definition.target ||
+        v->function == 0 || v->function > a->function_count ||
+        v->argument_count != 4 ||
+        !a->functions[v->function - 1].owner_producer ||
+        body->body_owner != a->functions[v->function - 1].body ||
+        v->result_count != 1 || v->results[0].value != v->producer.result ||
+        v->results[0].type != a->functions[v->function - 1].result)
+        return false;
+    if (nl_sem_validate(a) != NL_CHECK_OK ||
+        nl_sem_validate(b) != NL_CHECK_OK ||
+        nl_raw_validate(a) != NL_CHECK_OK || nl_raw_validate(b) != NL_CHECK_OK)
+        return false;
+    const NLTypedOwnerDefinition def =
+        a->functions[v->function - 1].body->owner_definition;
+    if (def.target != v->producer.definition.target || !def.live_return ||
+        !def.head_link_required || !def.definition_checked ||
+        def.step_count != 0 || def.requirements != NL_OWNER_ALL_REQUIREMENTS)
+        return false;
+    for (size_t i = 0; i < 4; ++i)
+        if (v->producer.inputs[i] == 0 ||
+            v->producer.inputs[i] > a->value_count ||
+            v->producer.inputs[i] > b->value_count ||
+            v->producer.parameters[i] == 0 ||
+            v->producer.parameters[i] > b->binding_count ||
+            b->bindings[v->producer.parameters[i] - 1].view.value !=
+                v->producer.inputs[i] ||
+            b->bindings[v->producer.parameters[i] - 1].view.place ==
+                v->producer.root)
+            return false;
+    if (nl_owner_relations(a, v->producer.inputs + 1, &def, v->span, NULL) !=
+            NL_CHECK_OK ||
+        v->producer.root == 0 || v->producer.root > a->place_count ||
+        v->producer.root > b->place_count || v->producer.head.parent == 0 ||
+        v->producer.head.parent > a->place_count ||
+        v->producer.head.parent > b->place_count ||
+        v->producer.head.child == 0 ||
+        v->producer.head.child > a->place_count ||
+        v->producer.head.child > b->place_count ||
+        v->producer.range.region == 0 ||
+        v->producer.range.region > b->region_count || v->producer.domain == 0 ||
+        v->producer.domain > b->domain_count || v->producer.result == 0 ||
+        v->producer.result > b->value_count)
+        return false;
+    const NLSemanticPlaceView t = a->places[v->producer.root - 1],
+                              rt = b->places[v->producer.root - 1],
+                              h = a->places[v->producer.head.parent - 1],
+                              rh = b->places[v->producer.head.parent - 1],
+                              l = a->places[v->producer.head.child - 1],
+                              rl = b->places[v->producer.head.child - 1];
+    const NLSemanticValueView p = a->values[v->producer.inputs[1] - 1],
+                              href = a->values[v->producer.inputs[0] - 1],
+                              package = b->values[v->producer.result - 1];
+    if (p.reference.place != v->producer.root ||
+        p.reference.incarnation != v->producer.incarnation || !t.live ||
+        !rt.live || t.incarnation != rt.incarnation ||
+        rt.incarnation != v->producer.incarnation ||
+        t.governing_domain != v->producer.domain ||
+        rt.governing_domain != v->producer.domain ||
+        t.current_value != rt.current_value ||
+        t.current_fact != rt.current_fact ||
+        t.placement.start != v->producer.range.start ||
+        t.placement.length != v->producer.range.length ||
+        t.placement.region != v->producer.range.region ||
+        rt.placement.region != t.placement.region ||
+        rt.placement.start != t.placement.start ||
+        rt.placement.length != t.placement.length ||
+        !b->regions[v->producer.range.region - 1].view.live ||
+        !b->domains[v->producer.domain - 1].live || !h.live || !rh.live ||
+        h.incarnation != rh.incarnation ||
+        h.incarnation != v->producer.head.parent_incarnation ||
+        h.governing_domain != v->producer.head_domain ||
+        rh.governing_domain != h.governing_domain ||
+        h.placement.region == t.placement.region ||
+        rh.placement.region != h.placement.region ||
+        h.governing_domain == t.governing_domain || !l.live || !rl.live ||
+        l.incarnation != rl.incarnation ||
+        l.incarnation != v->producer.head.child_incarnation ||
+        l.parent_aggregate != v->producer.head.parent ||
+        rl.parent_aggregate != l.parent_aggregate ||
+        l.parent_field_index != 0 || rl.parent_field_index != 0 ||
+        l.current_value != v->producer.head_before ||
+        l.current_fact != v->producer.head_before_fact ||
+        rl.current_value != v->producer.head_after ||
+        rl.current_fact != v->producer.head_after_fact ||
+        l.current_fact == rl.current_fact || rl.payload_occurrence != 0 ||
+        href.reference.place != v->producer.head.child ||
+        href.reference.incarnation != l.incarnation ||
+        href.reference_count != 0 ||
+        href.reference.provenance != NL_PROVENANCE_VALID ||
+        !href.reference.readable || !href.reference.writable ||
+        href.dependencies != NL_DEPENDENCY_FREE || href.reference.scope == 0 ||
+        href.reference.scope > a->scope_count ||
+        !a->scopes[href.reference.scope - 1].active || l.current_value == 0 ||
+        l.current_value > a->value_count || rl.current_value == 0 ||
+        rl.current_value > b->value_count ||
+        a->values[l.current_value - 1].variant != 2 ||
+        b->values[rl.current_value - 1].variant != 1 ||
+        package.carrier != NL_CARRIER_LOOSE ||
+        package.type != v->results[0].type || package.field_count != 3 ||
+        package.dependencies != NL_DEPENDENCY_FREE ||
+        package.value_dependency_count != 0)
+        return false;
+    const NLSemanticBackingView
+        ar = a->regions[v->producer.range.region - 1].view,
+        br = b->regions[v->producer.range.region - 1].view;
+    if (ar.size != br.size || ar.alignment != br.alignment ||
+        ar.ordinary_read != br.ordinary_read ||
+        ar.ordinary_write != br.ordinary_write)
+        return false;
+    const NLSemanticTypeView ht = a->types[href.type - 1].view;
+    if (ht.kind != NL_TYPE_REF || ht.is_exclusive ||
+        ht.access != NL_ACCESS_WRITE || ht.target != l.type ||
+        v->producer.head.type != l.type ||
+        v->producer.head.child_fact != l.current_fact ||
+        v->producer.head.old_value != l.current_value ||
+        v->producer.head.parent_fact != h.current_fact ||
+        h.type != def.target || !h.independent_root ||
+        h.placement.region == 0 || h.placement.region > a->region_count ||
+        h.placement.region > b->region_count || h.governing_domain == 0 ||
+        h.governing_domain > a->domain_count ||
+        h.governing_domain > b->domain_count ||
+        !a->domains[h.governing_domain - 1].live ||
+        !b->domains[h.governing_domain - 1].live ||
+        !a->regions[h.placement.region - 1].view.live ||
+        !b->regions[h.placement.region - 1].view.live ||
+        !a->regions[h.placement.region - 1].view.ordinary_read ||
+        !a->regions[h.placement.region - 1].view.ordinary_write ||
+        !b->regions[h.placement.region - 1].view.ordinary_read ||
+        !b->regions[h.placement.region - 1].view.ordinary_write)
+        return false;
+    bool stable_origin = false;
+    for (size_t i = 0; i < a->value_count; ++i) {
+        const NLSemanticValueView stable = a->values[i];
+        const NLSemanticTypeView st = a->types[stable.type - 1].view;
+        const NLReferenceFacts sf = stable.reference;
+        if (stable.carrier != NL_CARRIER_ENDED &&
+            stable.dependencies == NL_DEPENDENCY_FREE &&
+            stable.value_dependency_count == 0 && st.kind == NL_TYPE_REF &&
+            st.target == 2 && !st.is_exclusive && stable.reference_count == 0 &&
+            sf.scope == href.reference.scope &&
+            sf.provenance == NL_PROVENANCE_VALID && sf.readable &&
+            sf.place != 0 && sf.place <= a->place_count) {
+            const NLSemanticPlaceView dp = a->places[sf.place - 1];
+            if (dp.live && dp.incarnation == sf.incarnation &&
+                dp.current_value != 0 && dp.type == 2 &&
+                a->values[dp.current_value - 1].domain == h.governing_domain)
+                stable_origin = true;
+        }
+    }
+    if (!stable_origin)
+        return false;
+    const NLValueId payload = a->values[l.current_value - 1].sum_payload;
+    if (payload == 0 || payload > a->value_count ||
+        a->values[payload - 1].reference.place != v->producer.root ||
+        a->values[payload - 1].reference.incarnation != v->producer.incarnation)
+        return false;
+    const NLSemanticValueView payload_value = a->values[payload - 1];
+    if (payload_value.type != p.type || payload_value.reference_count != 0 ||
+        payload_value.reference.provenance != NL_PROVENANCE_VALID ||
+        payload_value.dependencies != NL_DEPENDENCY_FREE ||
+        payload_value.value_dependency_count != 0 ||
+        payload_value.reference.scope != p.reference.scope ||
+        payload_value.reference.readable != p.reference.readable ||
+        payload_value.reference.writable != p.reference.writable ||
+        payload_value.reference.occurrence_dependency !=
+            p.reference.occurrence_dependency)
+        return false;
+    for (size_t i = 0; i < 3; ++i) {
+        const NLValueId field = package.fields[i];
+        if (field == 0 || field > b->value_count)
+            return false;
+        const NLSemanticValueView m = b->values[field - 1];
+        if (m.carrier != NL_CARRIER_AGGREGATE ||
+            m.aggregate_owner != v->producer.result ||
+            m.dependencies != NL_DEPENDENCY_FREE ||
+            m.value_dependency_count != 0)
+            return false;
+        if (i == 0) {
+            if (m.reference.place != v->producer.root ||
+                m.reference.incarnation != v->producer.incarnation ||
+                m.reference.provenance != NL_PROVENANCE_VALID ||
+                m.reference_count != 0 ||
+                m.reference.scope != p.reference.scope ||
+                m.reference.occurrence_dependency !=
+                    p.reference.occurrence_dependency ||
+                m.reference.readable != p.reference.readable ||
+                m.reference.writable != p.reference.writable)
+                return false;
+        } else {
+            const NLSymbolId donor = v->producer.donor[i + 1],
+                             parameter = v->producer.parameters[i + 1];
+            if (field != v->producer.inputs[i + 1] || donor == 0 ||
+                donor > a->binding_count || donor > b->binding_count ||
+                donor == parameter ||
+                a->bindings[donor - 1].view.availability != NL_CONSUMED ||
+                b->bindings[donor - 1].view.availability != NL_CONSUMED ||
+                b->bindings[parameter - 1].view.availability != NL_CONSUMED)
+                return false;
+            if (i == 1 && m.allocation_region != v->producer.range.region)
+                return false;
+            if (i == 2 && m.domain != v->producer.domain)
+                return false;
+        }
+    }
+    return true;
 }

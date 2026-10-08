@@ -109,7 +109,8 @@ NLCheckStatus nl_sem_clone(const NLSemanticContext *source,
                 .recursive_header = source->types[i].recursive_header,
                 .option_target = source->types[i].option_target,
                 .allocated_target = source->types[i].allocated_target,
-                .one_backing_target = source->types[i].one_backing_target};
+                .one_backing_target = source->types[i].one_backing_target,
+                .live_tail_target = source->types[i].live_tail_target};
             memcpy(copy->types[i].field_types, source->types[i].field_types,
                    sizeof(copy->types[i].field_types));
             memcpy(copy->types[i].variant_types, source->types[i].variant_types,
@@ -1004,7 +1005,8 @@ NLCheckStatus nl_semantic_register_function(NLSemanticContext *c,
     }
     if (!nl_recursive_value_type(c, result))
         return NL_CHECK_SEMANTIC_ERROR;
-    if (c->types[result - 1].view.field_count != 0) {
+    if (c->types[result - 1].view.field_count != 0 &&
+        c->types[result - 1].live_tail_target == 0) {
         return NL_CHECK_SEMANTIC_UNSUPPORTED; /* no opaque aggregate result mint
                                                */
     }
@@ -1015,6 +1017,9 @@ NLCheckStatus nl_semantic_register_function(NLSemanticContext *c,
         if (!nl_recursive_value_type(c, parameters[i]))
             return NL_CHECK_SEMANTIC_ERROR;
     }
+    if (c->types[result - 1].live_tail_target != 0 &&
+        !nl_producer_signature(c, parameters, count, result))
+        return NL_CHECK_SEMANTIC_UNSUPPORTED;
     for (size_t i = 0; i < c->function_count; ++i) {
         if (strcmp(c->functions[i].name, name) == 0) {
             return NL_CHECK_SEMANTIC_ERROR;

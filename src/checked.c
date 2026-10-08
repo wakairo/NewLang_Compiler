@@ -27,6 +27,10 @@ NLCheckStatus nl_checked_add(NLCheckedFragment *fragment,
 void nl_checked_destroy(NLCheckedFragment *fragment)
 {
     if (fragment != NULL) {
+        if (fragment->destroy_producer_world != NULL) {
+            fragment->destroy_producer_world(fragment->producer_entry);
+            fragment->destroy_producer_world(fragment->producer_return);
+        }
         if (fragment->destroy_owner_entry != NULL)
             fragment->destroy_owner_entry(fragment->owner_entry);
         if (fragment->destroy_captured_post != NULL)
@@ -138,4 +142,15 @@ const NLCheckedFragment *nl_checked_call_body(const NLCheckedFragment *f,
 const NLControlExits *nl_checked_control_exits(const NLCheckedFragment *f)
 {
     return f == NULL ? NULL : f->exits;
+}
+
+const NLSemanticContext *nl_checked_producer_entry(const NLCheckedFragment *f,
+                                                   NLCheckedNodeId call)
+{
+    return f != NULL && f->producer_call == call ? f->producer_entry : NULL;
+}
+const NLSemanticContext *nl_checked_producer_return(const NLCheckedFragment *f,
+                                                    NLCheckedNodeId call)
+{
+    return f != NULL && f->producer_call == call ? f->producer_return : NULL;
 }
