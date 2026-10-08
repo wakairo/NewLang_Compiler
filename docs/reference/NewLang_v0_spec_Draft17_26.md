@@ -1844,7 +1844,7 @@ source profile can express the case:
 | `into_slot` with wrong size/alignment or live occupancy | reject, no forged/partial occupancy |
 | wrong BackingRegion / non-full Storage with`deallocate` | reject if provably wrong; unproved matching cannot be accepted as safe |
 | `deallocate` with live root, slot or raw fragment | full raw occupancy unavailable, reject |
-| `head@payload`, ptr/ref-base `@field`, general second heap node | source-profile outside; do not silently turn into safe general feature |
+| `head@payload`, ptr/ref-base `@field`, general/unbounded additional heap node | Draft17.24 one-root source baselineではoutside; Draft17.26は上記の静的second same-H allocation **だけ**を別途admit。payload/ptr-fieldやunbounded/third allocationは依然outside |
 | still-linked head ptr at tail EndRoot | ptr is nonblocking; unlink is product witness obligation, **not** invented lifetime-safety error |
 | arbitrary `Result` / general `Layout<T>`, external allocator, FFI | separate source decision remains Deferred |
 | allocation internal failure with partial resource | no partially published authority or raw claim; atomic `None` contract |
