@@ -294,6 +294,17 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/allocated_node_semantic.nl")
     add_executable(allocated_checked_probe tests/integration/allocated_checked_probe.c)
     target_link_libraries(allocated_checked_probe PRIVATE newlang_semantic newlang_parser)
+    add_executable(two_heap_test tests/unit/two_heap_test.c)
+    target_link_libraries(two_heap_test PRIVATE newlang_checked_c_node newlang_parser)
+    add_test(NAME two_heap_fields.unit COMMAND two_heap_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/two_heap_semantic.nl")
+    add_test(NAME two_heap_lifecycle.unit COMMAND allocated_join_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/two_heap_semantic.nl")
+    add_test(NAME two_heap_failures.unit COMMAND allocated_node_test failures
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/two_heap_semantic.nl")
+    add_test(NAME two_heap_source.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/two_heap_test.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/two_heap_semantic.nl" "$<TARGET_FILE:two_heap_test>")
     add_executable(allocated_join_test tests/unit/allocated_join_test.c)
     target_link_libraries(allocated_join_test PRIVATE newlang_checked_c_node newlang_parser)
     add_test(NAME allocated_join_evidence.unit COMMAND allocated_join_test

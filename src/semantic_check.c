@@ -36,6 +36,8 @@ typedef struct Check {
     size_t arm_floor;
     bool has_arm_floor, in_match_arm;
     size_t allocation_depth; /* bounded owned path, maximum two trials */
+    size_t allocation_sites;
+    size_t *allocation_budget; /* borrowed counter, active body walk only */
     bool allocated_slice; /* owned Some world, never a runtime success claim */
     NLCheckStatus status;
     NLCheckDiagnostic diagnostic;
@@ -1805,6 +1807,10 @@ static NLCheckedNodeId u8_literal(Check *check, const NLSyntaxView *syntax)
 
 static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
 {
+    /* Seed before any branch copies Check, so distinct syntactic trials in
+     * sibling worlds share the finite source-profile counter. */
+    if (check->allocation_budget == NULL)
+        check->allocation_budget = &check->allocation_sites;
     const NLSyntaxView *const node = nl_syntax_node_view(syntax);
     if (!enter(check, node->span)) {
         return 0;
@@ -4332,18 +4338,31 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
 {
     const NLSyntaxView *trial =
         nl_syntax_node_view(syntax->data.match.scrutinee);
-    if (check->allocation_depth >= 2 ||
+    if (check->allocation_budget == NULL)
+        check->allocation_budget = &check->allocation_sites;
+    if (check->loop != NULL || *check->allocation_budget >= 2 ||
+        (*check->allocation_budget != 0 &&
+         (check->allocation_depth != 1 || !check->allocated_slice)) ||
+        check->allocation_depth >= 2 ||
         (check->allocation_depth != 0 && !check->allocated_slice) ||
         check->artifact->captured_post != NULL) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, trial->span,
              "ALLOCATED-CARDINALITY-PROFILE",
-             "only two nested same-H allocation trials are supported");
+             "allocation requires one outer trial and at most one nested "
+             "Some-arm trial, outside loops");
         return 0;
     }
+    ++*check->allocation_budget;
     NLTypeId h = check_type(check, trial->data.call.type), option = 0;
-    if (h == 0 ||
-        !host(check, nl_allocated_registry(check->context, h, &option),
-              trial->span))
+    if (h == 0)
+        return 0;
+    NLCheckStatus registry = nl_allocated_registry(check->context, h, &option);
+    if (registry == NL_CHECK_SEMANTIC_UNSUPPORTED) {
+        fail(check, registry, trial->span, "ALLOCATED-TARGET-PROFILE",
+             "both trials require the same completed recursive nominal H");
+        return 0;
+    }
+    if (!host(check, registry, trial->span))
         return 0;
     NLSemanticContext *c = check->context;
     const NLSyntaxView *arms[2] = {0};
