@@ -185,9 +185,9 @@ Draft/Issueの未merge候補は `PROPOSED (unmerged)` と表記し、ADOPTEDに�
   **DEFER** general allocator interface/trait、general
   `Layout<T>` spelling、FFI/C ABI/native struct offsets、fallible init、
   multiple dynamic roots、final unified loan syntax (DI-006)。
-- **Issue #183 targeted source reopening: PROPOSED / UNMERGED.**
+- **Issue #183 targeted source reopening: ADOPTED / BOUNDED.**
   Draft17.25までは複数live Hのsource admissionはDeferredだった。
-  proposed Draft17.26は同じcompleted nominal Hに限り、
+  canonical Draft17.26は同じcompleted nominal Hに限り、
   outer Some-arm内部のsecond `try_allocate_one<H>()`という
   **two static allocation sites / maximum two live distinct H roots**と
   nested `Option<OneBacking>` consuming matchの三経路だけを許す。
@@ -204,7 +204,10 @@ Draft/Issueの未merge候補は `PROPOSED (unmerged)` と表記し、ADOPTEDに�
   ownership policy、FFI/external alias、modules、unified loan syntax。
   旧experimental Surface Draft1/1.1はsuccessful explicit allocation
   sketchであり、two nested fallible Option worldsの実証ではなかった。
-  旧M9チャット全文未監査。Coordination ACCEPT/merge前にADOPTEDとしない。
+  旧M9チャット全文未監査。
+  [PR #184 Coordination ACCEPT](https://github.com/wakairo/NewLang_Compiler/pull/184#issuecomment-6054622279)
+  とmerge `1c089ba933a31d73fc16013fdaee638741f13f3f`によるsource採用。
+  production checker / two-H nativeの証明とは区別する。
   [Issue #183](https://github.com/wakairo/NewLang_Compiler/issues/183)。
 - **レビュー注意:** source designはcanonical採用済み。
   product North Star successやnative heap executionをこのdesign aloneで主張しない。

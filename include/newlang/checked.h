@@ -118,6 +118,16 @@ typedef struct {
      * arm-local symbols belong to the separately owned arm context. */
     bool normal_frame_unchanged;
     size_t match_binding_prefix;
+    /* Nested allocation only: BOTH owned arms proved this pre-fork head's
+     * complete closure against a post-state derived solely from the parent.
+     * IDs are ancestor-prefix identities in this fragment's world; arm-local
+     * IDs remain qualified by nl_checked_match_arm's owned path. */
+    bool captured_frame_closed;
+    NLBackingRegionId captured_backing;
+    NLPlaceId captured_root;
+    NLIncarnationId captured_incarnation;
+    NLDomainId captured_domain;
+    NLSymbolId captured_allocation, captured_domain_binding;
     NLTypeId type;
     NLSymbolId symbol;
     size_t function; /* resolved prelude/registered signature identity */
@@ -163,6 +173,10 @@ const NLCheckedNodeView *nl_checked_node_view(const NLCheckedFragment *,
                                               NLCheckedNodeId);
 const NLSource *nl_checked_source(const NLCheckedFragment *);
 const NLSemanticContext *nl_checked_context(const NLCheckedFragment *);
+/* Borrowed immutable ancestor-prefix proof target, owned by fragment.
+ * NULL unless this exact match proved changed captured closure. */
+const NLSemanticContext *nl_checked_captured_post(const NLCheckedFragment *,
+                                                  NLCheckedNodeId match);
 
 /* Borrowed arm evidence in source order. Its semantic IDs belong exclusively
  * to nl_checked_context(arm), an artifact-owned hypothetical branch snapshot.

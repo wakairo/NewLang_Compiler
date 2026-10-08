@@ -83,6 +83,11 @@ typedef struct {
     struct NLCheckedFragment *artifact; /* owns hypothetical arm context */
 } NLCheckedArm;
 struct NLCheckedFragment {
+    /* Nested allocation proof target; owned ancestor-only closed snapshot,
+     * independent of either hypothetical arm and later lexical cleanup. */
+    NLSemanticContext *captured_post;
+    NLCheckedNodeId captured_match;
+    void (*destroy_captured_post)(NLSemanticContext *);
     NLControlExits *loop_returns; /* owned early loop Return evidence */
     NLControlExits *exits;        /* owned complete finite control evidence */
     NLControlTarget *function_target; /* owned boundary identity, if any */
@@ -226,6 +231,15 @@ NLCheckStatus nl_sem_check_function_block(NLSemanticContext *,
 /* Private-candidate operations; caller rolls back the entire candidate on
  * failure. */
 NLCheckStatus nl_allocated_registry(NLSemanticContext *, NLTypeId, NLTypeId *);
+/* Derive a CLOSED prefix from the incoming single live allocated H only.
+ * This is a comparison target, never source cleanup or an arm import.
+ * Success owns *out; failure leaves output/certificate untouched. */
+NLCheckStatus nl_allocated_closed_prefix(const NLSemanticContext *,
+                                         NLSemanticContext **,
+                                         NLCheckedNodeView *);
+bool nl_allocated_post_matches(const NLSemanticContext *,
+                               const NLSemanticContext *,
+                               const NLCheckedNodeView *);
 NLCheckStatus nl_allocated_grant(NLSemanticContext *, NLTypeId, bool,
                                  NLCheckedNodeView *, NLCheckDiagnostic *);
 #endif
