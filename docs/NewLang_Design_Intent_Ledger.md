@@ -158,6 +158,41 @@ Draft/Issueの未merge候補は `PROPOSED (unmerged)` と表記し、ADOPTEDに�
   旧 `NewLang_v0_identity_validation_SurfaceDraft1.md`、
   [#153 AUDIT-LEGACY-07](https://github.com/wakairo/NewLang_Compiler/issues/153)。
 
+### DI-009 — dynamically allocated single root / exact layout / failure branch (Issue #169)
+
+- **検索語:** heap_allocate, try_allocate_one, Allocation, Storage, slot, lifetime_domain, initialize, destroy, finalize_domain, deallocate, layout, failure
+- **旧候補:** non-normative `NewLang_v0_surface_Draft1.md` §6–§8, §33では
+  `heap_allocate(sizeof(Record),alignof(Record))`をsuccess-onlyに書き、
+  `into_slot<Record>` / explicit `lifetime_domain` / lexical ordinary and
+  exclusive domain loans / `initialize` / `destroy` / `into_storage` /
+  matching `heap_deallocate`をworkload-testedした。
+  allocator failure/error branchや既存bounded source grammarは未確定だった。
+  `NewLang_v0_surface_Draft1_1.md`も同系の候補を保持する。
+- **現canonical:** Draft 17.23 §3.1–§3.4, §13, §14, §23.1, §26, §29に
+  backing/authority/occupancy/lifetime/failed value semanticsが存在。
+  一方general native allocator sourceとfailure type、layout witness source、
+  exclusive loan/local explicit domain sourceは未固定。
+- **候補状態:** **PROPOSED / UNMERGED** (Issue #169 candidate Draft17.24)。
+  exactly completed bounded recursive nominal `H`について
+  compiler-authorized exact `sizeof(H)`/alignで1 backingを割り当て、
+  `Option<OneBacking>`の`None`/responsibility-bearing`Some`を返す
+  closed source profileを選定。生存終了とdeallocationの責任は
+  `Allocation`、`Storage`、`slot<H>`、`LifetimeDomain`で明示する。
+- **裁定・未決定:** **KEEP** distinct backing/occupancy/domain/ptr authority、
+  explicit releaseとold surfaceのseparation。
+  **INTENTIONALLY REPLACE（本profileに限る）** success-only
+  `heap_allocate(size,align)`表記をfailure-aware exact H operationに。
+  **DEFER** general allocator interface/trait、general
+  `Layout<T>` spelling、FFI/C ABI/native struct offsets、fallible init、
+  multiple dynamic roots、final unified loan syntax (DI-006)。
+- **レビュー注意:** candidateはnon-normative until merged。
+  product North Star successをこのdesign aloneで主張しない。
+  full old `NewLang_M9` chat は完全照合できていない。
+- **出典:** [Issue #169](https://github.com/wakairo/NewLang_Compiler/issues/169)、
+  [Issue #168](https://github.com/wakairo/NewLang_Compiler/issues/168)、
+  `NewLang_v0_surface_Draft1.md`, `NewLang_v0_surface_Draft1_1.md`、
+  `docs/reference/CURRENT_SPEC.md`。
+
 ## 3. 欠落・更新・accessibilityの扱い
 
 初回indexはIssue #153の**限定的な監査**から作成したもので、
