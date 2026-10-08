@@ -341,9 +341,9 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
 {
     const NLCheckedNodeView *call = nl_checked_node_view(fragment, id);
     if (call == NULL || call->kind != NL_CHECKED_REGISTERED_CALL ||
-        !call->body_backed || call->argument_count != 0 ||
-        call->type != program->unit || call->result_count != 0 ||
-        call->terminates)
+        !call->body_backed || call->owner_call.definition.definition_checked ||
+        call->argument_count != 0 || call->type != program->unit ||
+        call->result_count != 0 || call->terminates)
         return false;
 
     const NLCheckedFragment *body = nl_checked_call_body(fragment, id);

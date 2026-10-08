@@ -132,6 +132,18 @@ typedef struct {
     NLSymbolId symbol;
     size_t function; /* resolved prelude/registered signature identity */
     bool body_backed;
+    /* All IDs below belong to this artifact's world, including the separately
+     * owned synchronous callee body. Never compare across match-arm worlds. */
+    struct {
+        NLTypedOwnerDefinition definition;
+        bool entry_proved, post_proved;
+        NLValueId inputs[3];
+        NLSymbolId donor[3], parameters[3];
+        NLPlaceId root;
+        NLIncarnationId incarnation;
+        NLBackingRange range;
+        NLDomainId domain;
+    } owner_call;
     bool terminates; /* no normal outgoing edge; type 0 means absent, not never
                       */
     size_t normal_arms;       /* finite branch count, excludes return edges */
@@ -173,6 +185,10 @@ const NLCheckedNodeView *nl_checked_node_view(const NLCheckedFragment *,
                                               NLCheckedNodeId);
 const NLSource *nl_checked_source(const NLCheckedFragment *);
 const NLSemanticContext *nl_checked_context(const NLCheckedFragment *);
+/* Owned actual state after argument evaluation, before callee effects. IDs
+ * are copied prefix identities of THIS call world; never another branch. */
+const NLSemanticContext *nl_checked_owner_entry(const NLCheckedFragment *,
+                                                NLCheckedNodeId);
 /* Borrowed immutable ancestor-prefix proof target, owned by fragment.
  * NULL unless this exact match proved changed captured closure. */
 const NLSemanticContext *nl_checked_captured_post(const NLCheckedFragment *,

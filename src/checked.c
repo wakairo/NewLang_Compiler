@@ -27,6 +27,8 @@ NLCheckStatus nl_checked_add(NLCheckedFragment *fragment,
 void nl_checked_destroy(NLCheckedFragment *fragment)
 {
     if (fragment != NULL) {
+        if (fragment->destroy_owner_entry != NULL)
+            fragment->destroy_owner_entry(fragment->owner_entry);
         if (fragment->destroy_captured_post != NULL)
             fragment->destroy_captured_post(fragment->captured_post);
         nl_control_exits_destroy(fragment->loop_returns);
@@ -46,6 +48,14 @@ void nl_checked_destroy(NLCheckedFragment *fragment)
         free(fragment->nodes);
         free(fragment);
     }
+}
+
+const NLSemanticContext *nl_checked_owner_entry(const NLCheckedFragment *f,
+                                                NLCheckedNodeId call)
+{
+    return f != NULL && call != 0 && f->owner_entry_call == call
+               ? f->owner_entry
+               : NULL;
 }
 
 NLCheckedNodeId nl_checked_root(const NLCheckedFragment *fragment)

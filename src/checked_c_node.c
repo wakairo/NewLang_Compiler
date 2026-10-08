@@ -507,7 +507,8 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
         e->status = NL_NODE_C_RESOURCE_LIMIT;
         return false;
     }
-    if (v == NULL || v->terminates || v->result_count > 1)
+    if (v == NULL || v->terminates || v->result_count > 1 ||
+        v->owner_call.definition.definition_checked)
         return reject(e);
     *out = (Value){.type = v->type};
     if (ctype(e, env, v->type) != NULL &&
