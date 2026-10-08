@@ -1,0 +1,84 @@
+name: R205 frozen adversarial evidence
+on:
+  push:
+    branches: [r205-frozen-adversarial-evidence]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  frozen-adversarial:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - name: Checkout evidence branch with full history
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Prove frozen ancestry and auxiliary-only delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          FROZEN=aed9e7b7d49de338c570c8c6e89197f2251db134
+          echo "EVIDENCE_BRANCH_HEAD=$(git rev-parse HEAD)"
+          git merge-base --is-ancestor "$FROZEN" HEAD
+          git diff --name-only "$FROZEN" HEAD | tee /tmp/r205_changed_files.txt
+          if grep -Ev '^(docs/evidence/r205_frozen_adversarial/|\.github/workflows/r205-frozen-adversarial\.yml$)' /tmp/r205_changed_files.txt; then
+            echo "DISALLOWED_FROZEN_DELTA"; exit 12
+          fi
+          test "$(git rev-parse "$FROZEN")" = "$FROZEN"
+          mkdir -p "$RUNNER_TEMP/r205"
+          git worktree add --detach "$RUNNER_TEMP/r205/frozen" "$FROZEN"
+          test "$(git -C "$RUNNER_TEMP/r205/frozen" rev-parse HEAD)" = "$FROZEN"
+          test "$(git -C "$RUNNER_TEMP/r205/frozen" hash-object tests/fixtures/live_tail_handoff.nl)" = d62b74f7e4f2607de1db9f4a31093fa14e3429eb
+          grep -q NewLang_v0_spec_Draft17_27.md "$RUNNER_TEMP/r205/frozen/docs/reference/CURRENT_SPEC.md"
+          test -z "$(git -C "$RUNNER_TEMP/r205/frozen" status --porcelain)"
+          echo "R205_FROZEN_CHECKOUT_OK"
+      - name: Install frozen host prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Acquire checksum-locked LLVM 23.1.2 from frozen bootstrap
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/r205/frozen"
+          python3 scripts/bootstrap.py
+          . .deps/activate.sh
+          llvm-config-23 --version
+          test "$(llvm-config-23 --version)" = "23.1.2"
+          gcc-13 --version | head -1
+          clang-23 --version | head -1
+      - name: Build exact frozen newlangc
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/r205/frozen"
+          . .deps/activate.sh
+          CC=gcc-13 cmake --fresh -S . -B build-r205 -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=OFF
+          cmake --build build-r205 --parallel 2 --target newlangc
+          ./build-r205/newlangc --version
+          echo "FROZEN_BINARY_SHA256=$(sha256sum ./build-r205/newlangc)"
+      - name: Execute independent Red Team corpus (never run generated C)
+        id: adversarial
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/r205/frozen"
+          . .deps/activate.sh
+          python3 "$GITHUB_WORKSPACE/docs/evidence/r205_frozen_adversarial/run.py" \
+            --frozen-root "$PWD" --compiler "$PWD/build-r205/newlangc" \
+            --evidence "$GITHUB_WORKSPACE/docs/evidence/r205_frozen_adversarial" \
+            --out "$GITHUB_WORKSPACE/r205-observations"
+      - name: Capture frozen workspace integrity after evidence
+        if: always()
+        shell: bash
+        run: |
+          git -C "$RUNNER_TEMP/r205/frozen" status --porcelain || true
+          git -C "$RUNNER_TEMP/r205/frozen" rev-parse HEAD || true
+      - name: Upload all original diagnostics and source corpus
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r205-frozen-source-observations
+          path: |
+            r205-observations/
+            docs/evidence/r205_frozen_adversarial/
+          retention-days: 14
+          if-no-files-found: error
