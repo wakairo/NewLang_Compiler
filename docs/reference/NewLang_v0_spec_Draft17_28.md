@@ -13,7 +13,9 @@
 ## Draft 17.28 の主変更 — Issue #203 bounded live detached tail nonCopy owner RETURN
 
 This candidate adds exactly one closed, same-unit, known-direct source route for
-returning a STILL LIVE H tail's original Allocation(R_t) and LifetimeDomain(D_t)
+**detaching head H_h.next from Some(ptr_t) to None inside the returning
+function using a caller-supplied head D_h-scoped write-ref**, then returning
+a STILL LIVE H tail's original Allocation(R_t) and LifetimeDomain(D_t)
 alongside its Copy provenance-bearing ptr<H> via a compiler-registered nominal
 LiveTail value. The producer may not end or free that H root. This selects an
 independently definition-checked conditional LiveTail construction and a
@@ -7306,6 +7308,23 @@ does **NOT** perform EndRoot or assume it has happened. Its input must have
 sufficient future lifetime-ending/full-range recovery capability without
 using or constructing raw Storage now.
 
+A second, separately inferred, **finite head-link applicability** obligation
+requires an independently valid scoped ref<write,Option<ptr<H>>> pointing to
+the committed link field of a **different CURRENT H_h** on disjoint R_h and
+governed D_h. At entry its current exact Option semantic value must be
+Some(p) with the *same* provenance/current O_t identity as the tail ptr,
+not just an address coincidence; caller evidence must show the ref's
+read/write backing access and D_h-dependent loan scope, no conflicting
+surviving link occurrence dependency, and correct relative field projection.
+The head_link and p/a/d formals are uncorrelated in the independent
+definition check. The receiver may assume these obligations **only
+conditionally**, never from parameter static types or an imagined main.
+The body performs exactly the existing replace(head_link,None) under
+§17.4/§26.7, producing caller-visible Change/Reset without ending O_h/O_t.
+The resulting LiveTail value must **not** depend on head_link or its
+callee-local/head-D_h scoped capability. A body that cannot prove this
+nonescape/result independence fails definition checking.
+
 The definition checker may retain *unproved* finite relative O/R/D input
 requirements exactly as §18.1a allows for its terminal body, and must
 independently verify the body, complete constructor fields, left-to-right
@@ -7338,7 +7357,17 @@ It must follow §13.5c / §18.5–18.8 hidden semantic value-package flow.
 At **every actual known direct producer call** in the selected closed source,
 after ordinary left-to-right argument evaluation, the compiler must prove all
 the corresponding §18.1a RequiredAtEntry predicates from the actual
-world-qualified CURRENT O/R/D/provenance/occupancy/loan/affine state. Mismatched
+world-qualified CURRENT O/R/D/provenance/occupancy/loan/affine state. The
+caller must **also** prove the above actual H_h link-ref/source/current
+Some(p) correspondence, R_h disjoint from R_t, D_h-scoped ref liveness,
+ordinary write permission, and the absence of surviving dependencies at
+the replace. The producer, not a post-hoc C helper, changes the original
+head link to None before returning the still-live tail obligation.
+When the enclosing head loan scope expires, its result LiveTail cannot
+depend on that head scope, and after the producer returns O_h/O_t remain
+live; the caller later closes D_h only during independent head cleanup.
+Wrong head ref, wrong current link payload, read-only scope or Unknown
+value/provenance must reject even with a correctly matched tail triple. Mismatched
 ptr/Allocation/Domain identities, Unknown or may-only proof, stale ptr/root,
 live D_t-dependent ref or exclusive loan, consumed/duplicated authority,
 no future full-R recovery proof, phantom None grants or numeric coincidental
@@ -7369,6 +7398,9 @@ same full R_t, same D_t, no surviving scoped refs, no stale/unknown state.
 That receiver's existing EndRoot → empty H slot → same full-R raw recovery →
 D_t finalization → matched A_t deallocation remains unchanged; head cleanup
 remains independent. The return/producer itself performs **zero frees**.
+Its **one** head-link replace is a caller-visible post-state Change/Reset.
+The caller's head loan must end before later D_h exclusive EndRoot; its
+return result must survive that expiry without a head-scoped dependency.
 
 First allocation `None`: no R_h/R_t, no producer/receiver, zero releases.
 Second allocation `None`: only O_h/R_h/D_h exists and head's one
@@ -7527,6 +7559,8 @@ it is not an assertion that a current compiler accepts it.
 | p_h/A_t/D_t | REJECT: p targets O_h governed D_h |
 | p_t/A_h/D_t | REJECT: A_h backs R_h, not R_t |
 | p_t/A_t/D_h | REJECT: D_h does not govern O_t |
+| head-link ref is None, points to Some(ptr_h)/other root, or is read-only | REJECT: actual current Some(ptr_t) and write-capability proof missing |
+| producer's returned LiveTail depends on caller head-loan scope | REJECT: §18.8 escape, not a transferable owner result |
 | construct after destroy(O_t) | REJECT: no current live typed H root |
 | construct while overlapping full raw Storage claimed | REJECT: occupancy conflict; cannot mint a second claim |
 | live D_t-dependent ref/exclusive loan at transfer | REJECT: nonCopy domain transfer/dependency conflict |
@@ -7564,7 +7598,9 @@ Old `requires fn` / unchecked experimental hook is not silently made safe.
 
 If separately authorized later, production must first prove independently
 checked uncorrelated producer definition; every known producer call's exact
-O/R/D/affine/loan conditions; single LiveTail nonCopy result value flow and
+O/R/D/affine/loan conditions; single LiveTail nonCopy result value flow
+and exact current head-link Some(ptr_t)->None from a D_h-scoped
+mode-preserving write ref; single LiveTail nonCopy result value flow and
 after-return current O_t and A_t/D_t identity; whole destructure and
 existing §18.1a receiver positive/negative; 0/1/2 branch joins and
 transactional failure. It must publish owned checked evidence or reject
@@ -7572,6 +7608,8 @@ with no C. A later *independently authorized* native oracle must show
 original physical tail still live after actual producer return and
 before separate receiver EndRoot/free, same real R_t pointer and matching
 A_t handle, no implicit producer free, head unlink while tail live,
+with **physical Some(ptr_t)->None head unlink performed inside
+the source-lowered producer** (not donor source or C observer),
 receiver tail real free then donor head free, exactly 0/1/2 matched frees
 under first/second/both malloc outcomes, source-driven machine effects,
 negative/observer corruption controls. Neither P/F/R nor cJSON/benchmark
