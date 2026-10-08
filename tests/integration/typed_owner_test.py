@@ -1,4 +1,4 @@
-"""Draft17.27 conditional applicability: actual source, no native handoff."""
+"""Draft17.27 applicability controls; accepted source may now lower to C."""
 import pathlib
 import subprocess
 import sys
@@ -69,8 +69,9 @@ with tempfile.TemporaryDirectory() as directory:
         path.write_text(text)
         runs = [subprocess.run([compiler, str(path)], capture_output=True) for _ in range(2)]
         for run in runs:
-            assert run.returncode == 4 and b"V1-BACKEND-UNSUPPORTED" in run.stderr, (name, run.returncode, run.stderr)
-            assert not run.stdout, (name, "unexpected C")
+            assert run.returncode == 0 and not run.stderr, (name, run.returncode, run.stderr)
+            assert b"static void nl_owner_" in run.stdout, (name, "missing receiver C")
+        assert runs[0].stdout == runs[1].stdout
         assert runs[0].stderr == runs[1].stderr
         subprocess.run([evidence, "evidence", str(path)], check=True)
     for name, (text, code) in negatives.items():
@@ -87,4 +88,4 @@ with tempfile.TemporaryDirectory() as directory:
             run = subprocess.run([compiler, str(uncalled)], capture_output=True)
             assert run.returncode == 3 and code.encode() in run.stderr and not run.stdout, (name, "uncalled", run.stderr)
     assert all(path.suffix == ".nl" for path in root.iterdir()), "no generated C or executable"
-print(f"{len(positives)} actual-source positives, {len(negatives)} destructive controls; pre-backend only")
+print(f"{len(positives)} actual-source positives, {len(negatives)} destructive controls; semantic safety guards retained")

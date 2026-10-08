@@ -27,6 +27,9 @@ typedef struct {
 } HeapLifecycle;
 typedef struct {
     char *text;
+    char *receiver;
+    size_t receiver_used, owner_calls;
+    bool owner_read;
     size_t used, temp, steps, frames, roots;
     bool allocated;
     bool two_heap;
@@ -250,6 +253,8 @@ static bool field(Emit *e, const Env *env, const NLCheckedField *f,
                : reject(e);
 }
 static bool expr(Emit *, Env *, NLCheckedNodeId, Value *);
+static bool owner_call(Emit *, Env *, NLCheckedNodeId,
+                       const NLCheckedNodeView *, Value *);
 static bool allocated_match(Emit *, Env *, NLCheckedNodeId,
                             const NLCheckedNodeView *, Value *);
 static bool allocated_expr(Emit *, Env *, const NLCheckedNodeView *, Value *);
@@ -507,10 +512,11 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
         e->status = NL_NODE_C_RESOURCE_LIMIT;
         return false;
     }
-    if (v == NULL || v->terminates || v->result_count > 1 ||
-        v->owner_call.definition.definition_checked)
+    if (v == NULL || v->terminates || v->result_count > 1)
         return reject(e);
     *out = (Value){.type = v->type};
+    if (v->kind == NL_CHECKED_REGISTERED_CALL)
+        return owner_call(e, env, id, v, out);
     if (ctype(e, env, v->type) != NULL &&
         (v->result_count != 1 || v->results[0].type != v->type ||
          v->results[0].value == 0))
@@ -1283,7 +1289,7 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
             e->heap_link = write;
         const Env *target = heap(env, v);
         if ((!e->two_heap && e->destroys != 0) ||
-            e->reloans >= (e->two_heap    ? 4u
+            e->reloans >= (e->two_heap    ? 4u + (e->owner_read ? 1u : 0u)
                            : e->heap_link ? 3u
                                           : 1u) ||
             (e->heap_link &&
@@ -1517,6 +1523,249 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
     return reject(e);
 }
 
+/* This gate consumes only the existing §18.1a proof. A separate parameter
+ * placement never supplies a heap root or an allocation handle. */
+static bool owner_evidence(Emit *e, Env *env, NLCheckedNodeId id,
+                           const NLCheckedNodeView *v, const Env **target)
+{
+    const NLSemanticContext *post = nl_checked_context(env->artifact),
+                            *entry = nl_checked_owner_entry(env->artifact, id);
+    const NLCheckedFragment *body = nl_checked_call_body(env->artifact, id);
+    NLTypedOwnerDefinition definition;
+    NLSemanticSnapshot snap;
+    NLSemanticPlaceView before, after;
+    NLSemanticBackingView r, dead_r;
+    NLSemanticDomainView d, dead_d;
+    const Env *h = region(env, v->owner_call.range.region);
+    if (!e->two_heap || e->owner_calls != 0 || e->allocations != 2 ||
+        e->reloans != 4 || e->link_updates != 2 || e->projections != 3 ||
+        e->reads != 1 || h == NULL || h->region_slot != 1 ||
+        v->kind != NL_CHECKED_REGISTERED_CALL || !v->body_backed ||
+        v->argument_count != 3 || v->type != e->unit || v->result_count != 0 ||
+        !v->owner_call.entry_proved || !v->owner_call.post_proved ||
+        entry == NULL || body == NULL || nl_checked_context(body) != post ||
+        !nl_semantic_function_applicability(post, v->function, &definition) ||
+        !definition.definition_checked || definition.target != e->node ||
+        definition.requirements != NL_OWNER_ALL_REQUIREMENTS ||
+        definition.step_count < 4 || definition.step_count > 5 ||
+        definition.definition_checked !=
+            v->owner_call.definition.definition_checked ||
+        definition.target != v->owner_call.definition.target ||
+        definition.requirements != v->owner_call.definition.requirements ||
+        definition.step_count != v->owner_call.definition.step_count ||
+        h->heap_place != v->owner_call.root ||
+        h->heap_incarnation != v->owner_call.incarnation ||
+        h->heap_domain != v->owner_call.domain ||
+        v->owner_call.range.start != 0 || v->owner_call.range.length != 24 ||
+        e->lifecycle[1].stage != 4 || !nl_semantic_snapshot(entry, &snap) ||
+        !nl_semantic_place_view(entry, h->heap_place, &before) ||
+        !before.live || !before.independent_root || before.type != e->node ||
+        before.parent_aggregate != 0 || before.parent_sum != 0 ||
+        before.incarnation != h->heap_incarnation ||
+        before.governing_domain != h->heap_domain ||
+        before.current_value == 0 || before.current_fact == 0 ||
+        before.placement.region != h->backing || before.placement.start != 0 ||
+        before.placement.length != 24 ||
+        !nl_semantic_place_view(post, h->heap_place, &after) || after.live ||
+        after.incarnation != before.incarnation || after.current_value != 0 ||
+        after.current_fact != 0 || after.placement.region != 0 ||
+        after.governing_domain != 0 ||
+        !nl_semantic_backing_view(entry, h->backing, &r) || !r.live ||
+        r.size != 24 || r.alignment < 8 || !r.ordinary_read ||
+        !r.ordinary_write ||
+        !nl_semantic_backing_view(post, h->backing, &dead_r) || dead_r.live ||
+        !nl_semantic_domain_view(entry, h->heap_domain, &d) || !d.live ||
+        d.value != v->owner_call.inputs[2] ||
+        !nl_semantic_domain_view(post, h->heap_domain, &dead_d) || dead_d.live)
+        return reject(e);
+    for (size_t i = 0; i < definition.step_count; ++i)
+        if (definition.steps[i] !=
+                (NLTypedOwnerStep)(i + (definition.step_count == 4)) ||
+            definition.steps[i] != v->owner_call.definition.steps[i])
+            return reject(e);
+    /* This closed backend requires all source loans ended at transfer. An
+     * unsupported surviving unrelated loan is not a new language error. */
+    for (NLScopeId s = 1; s <= snap.scopes; ++s) {
+        NLSemanticScopeView scope;
+        if (!nl_semantic_scope_view(entry, s, &scope) || scope.active)
+            return reject(e);
+    }
+    size_t roots = 0;
+    for (NLPlaceId p = 1; p <= snap.places; ++p) {
+        NLSemanticPlaceView place;
+        if (!nl_semantic_place_view(entry, p, &place))
+            return reject(e);
+        if (place.live && place.placement.region == h->backing) {
+            if (p != h->heap_place)
+                return reject(e);
+            ++roots;
+        }
+        if (place.live && place.independent_root &&
+            place.governing_domain == h->heap_domain && p != h->heap_place)
+            return reject(e);
+    }
+    if (roots != 1)
+        return reject(e);
+    for (NLValueId i = 1; i <= snap.values; ++i) {
+        NLSemanticValueView value;
+        if (!nl_semantic_value_view(entry, i, &value))
+            return reject(e);
+        if (value.carrier == NL_CARRIER_ENDED)
+            continue;
+        if (value.dependencies != NL_DEPENDENCY_FREE ||
+            value.value_dependency_count != 0 ||
+            value.occupancy.region == h->backing ||
+            (value.allocation_region == h->backing &&
+             i != v->owner_call.inputs[1]) ||
+            (value.domain == h->heap_domain && i != v->owner_call.inputs[2]))
+            return reject(e);
+    }
+    const NLTypeId types[] = {e->ptr,
+                              nl_semantic_core_type(post, NL_TYPE_ALLOCATION),
+                              nl_semantic_domain_type(post)};
+    NLCheckedNodeId arg_id = v->first_argument;
+    for (size_t i = 0; i < 3; ++i) {
+        const NLCheckedNodeView *arg = get(env, arg_id);
+        NLSemanticBindingView donor, parameter;
+        NLSemanticValueView a, b;
+        if (arg == NULL || arg->kind != NL_CHECKED_IDENTIFIER ||
+            arg->type != types[i] || arg->symbol != v->owner_call.donor[i] ||
+            arg->result_count != 1 ||
+            arg->results[0].value != v->owner_call.inputs[i] ||
+            arg->results[0].type != types[i] ||
+            arg->value_use != (i == 0 ? NL_VALUE_COPIED : NL_VALUE_CONSUMED) ||
+            local(env, arg->symbol, arg->type) == NULL ||
+            v->owner_call.parameters[i] <= snap.bindings ||
+            !nl_semantic_binding_view(entry, arg->symbol, &donor) ||
+            donor.type != types[i] ||
+            !nl_semantic_binding_view(post, v->owner_call.parameters[i],
+                                      &parameter) ||
+            parameter.type != types[i] ||
+            parameter.value != v->owner_call.inputs[i] ||
+            parameter.place == donor.place ||
+            parameter.place == h->heap_place ||
+            !nl_semantic_value_view(entry, v->owner_call.inputs[i], &a) ||
+            a.type != types[i] ||
+            !nl_semantic_value_view(post, parameter.value, &b) ||
+            b.type != types[i] || a.dependencies != NL_DEPENDENCY_FREE ||
+            a.value_dependency_count != 0 ||
+            b.dependencies != NL_DEPENDENCY_FREE ||
+            b.value_dependency_count != 0)
+            return reject(e);
+        if (i == 0) {
+            NLSemanticValueView original;
+            if (!selected_reference(env, arg, &original) ||
+                !same_reference(a.reference, b.reference) ||
+                a.reference_count != 0 || a.reference.place != h->heap_place ||
+                a.reference.incarnation != h->heap_incarnation ||
+                a.reference.provenance != NL_PROVENANCE_VALID ||
+                !a.reference.readable || a.reference.scope != 0 ||
+                a.reference.occurrence_dependency != 0)
+                return reject(e);
+        } else if (donor.availability != NL_CONSUMED ||
+                   parameter.availability != NL_CONSUMED ||
+                   donor.value != v->owner_call.inputs[i] ||
+                   a.carrier != NL_CARRIER_LOOSE ||
+                   b.carrier != NL_CARRIER_ENDED ||
+                   (i == 1 ? (a.allocation_region != h->backing ||
+                              b.allocation_region != h->backing)
+                           : (a.domain != h->heap_domain ||
+                              b.domain != h->heap_domain)))
+            return reject(e);
+        arg_id = arg->next_argument;
+    }
+    if (arg_id != 0)
+        return reject(e);
+    *target = h;
+    return true;
+}
+static bool owner_call(Emit *e, Env *env, NLCheckedNodeId id,
+                       const NLCheckedNodeView *v, Value *out)
+{
+    const Env *target = NULL;
+    if (!owner_evidence(e, env, id, v, &target))
+        return false;
+    const Local *donors[3];
+    Value args[3] = {0};
+    NLCheckedNodeId arg = v->first_argument;
+    for (size_t i = 0; i < 3; ++i) {
+        const NLCheckedNodeView *a = get(env, arg);
+        donors[i] = local(env, a->symbol, a->type);
+        if (!expr(e, env, arg, &args[i]))
+            return false;
+        arg = a->next_argument;
+    }
+    const HeapLifecycle head = e->lifecycle[0];
+    const NLCheckedFragment *body = nl_checked_call_body(env->artifact, id);
+    Env receiver = {.artifact = body,
+                    .frame = ++e->frames,
+                    .region_slot = 1,
+                    .backing = target->backing,
+                    .heap_place = target->heap_place,
+                    .heap_incarnation = target->heap_incarnation,
+                    .heap_domain = target->heap_domain,
+                    .heap_symbol = v->owner_call.parameters[0]};
+    for (size_t i = 0; i < 3; ++i)
+        if (!add_local(e, &receiver, v->owner_call.parameters[i], args[i].type,
+                       false))
+            return false;
+    e->receiver = malloc(C_BYTES);
+    if (e->receiver == NULL) {
+        e->status = NL_NODE_C_OUT_OF_MEMORY;
+        return false;
+    }
+    char *main_text = e->text;
+    size_t main_used = e->used;
+    e->text = e->receiver;
+    e->used = 0;
+    ++e->owner_calls;
+    e->owner_read = v->owner_call.definition.step_count == 5;
+    bool ok = put(
+        e,
+        "static void nl_owner_%zu(const nl_node *nl_b_%zu_%zu,nl_allocation "
+        "nl_b_%zu_%zu,nl_domain nl_b_%zu_%zu) {\n"
+        "NL_HEAP_RECEIVER_ENTER(nl_b_%zu_%zu,nl_b_%zu_%zu.handle,nl_b_%zu_%zu."
+        "token,%zu,%zu,%zu,%zu,&nl_b_%zu_%zu,&nl_b_%zu_%zu);\n",
+        v->function, receiver.frame, v->owner_call.parameters[0],
+        receiver.frame, v->owner_call.parameters[1], receiver.frame,
+        v->owner_call.parameters[2], receiver.frame,
+        v->owner_call.parameters[0], receiver.frame,
+        v->owner_call.parameters[1], receiver.frame,
+        v->owner_call.parameters[2], receiver.frame,
+        v->owner_call.parameters[0], v->owner_call.parameters[1],
+        v->owner_call.parameters[2], receiver.frame,
+        v->owner_call.parameters[1], receiver.frame,
+        v->owner_call.parameters[2]);
+    Value result = {0};
+    if (ok)
+        ok = block(e, &receiver, nl_checked_root(body), &result) &&
+             result.type == e->unit && e->lifecycle[1].stage == 8 &&
+             e->lifecycle[1].owner_symbol == 0 &&
+             e->lifecycle[1].domain_symbol == 0 &&
+             head.stage == e->lifecycle[0].stage &&
+             head.owner_frame == e->lifecycle[0].owner_frame &&
+             head.owner_symbol == e->lifecycle[0].owner_symbol &&
+             head.domain_frame == e->lifecycle[0].domain_frame &&
+             head.domain_symbol == e->lifecycle[0].domain_symbol &&
+             put(e, "NL_HEAP_RECEIVER_EXIT();\n}\n");
+    e->receiver_used = e->used;
+    e->text = main_text;
+    e->used = main_used;
+    if (!ok)
+        return reject(e);
+    out->type = e->unit;
+    return put(e,
+               "NL_HEAP_HANDOFF(nl_v_%zu,nl_v_%zu.handle,nl_v_%zu.token,&nl_b_%"
+               "zu_%zu,&nl_b_%zu_%zu);\n"
+               "nl_owner_%zu(nl_v_%zu,nl_v_%zu,nl_v_%zu);\n"
+               "NL_HEAP_RETURNED(&nl_b_%zu_%zu,&nl_b_%zu_%zu);\n",
+               args[0].temp, args[1].temp, args[2].temp, donors[1]->frame,
+               donors[1]->symbol, donors[2]->frame, donors[2]->symbol,
+               v->function, args[0].temp, args[1].temp, args[2].temp,
+               donors[1]->frame, donors[1]->symbol, donors[2]->frame,
+               donors[2]->symbol);
+}
+
 static bool two_profile(const NLCheckedFragment *f, size_t depth)
 {
     if (depth >= C_DEPTH)
@@ -1620,8 +1869,13 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             "((void)0)\n"
             "#define NL_HEAP_FINALIZE(...) ((void)0)\n#define "
             "NL_HEAP_RELEASE(...) ((void)0)\n"
-            "#define NL_HEAP_FINISH() ((void)0)\n#endif\n");
+            "#define NL_HEAP_FINISH() ((void)0)\n"
+            "#define NL_HEAP_HANDOFF(...) ((void)0)\n"
+            "#define NL_HEAP_RECEIVER_ENTER(...) ((void)0)\n"
+            "#define NL_HEAP_RECEIVER_EXIT() ((void)0)\n"
+            "#define NL_HEAP_RETURNED(...) ((void)0)\n#endif\n");
     }
+    const size_t main_offset = e.used;
     (void)put(&e, "int main(void) {\n");
     Value result = {0};
     if (!block(&e, &env, nl_checked_root(body), &result) || e.roots != 2 ||
@@ -1634,7 +1888,7 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
           e.finalized != (e.two_heap ? 3u : 1u) ||
           e.slots != (e.two_heap ? 2u : 1u) ||
           e.erased != (e.two_heap ? 3u : 1u) ||
-          e.reloans != (e.two_heap    ? 4u
+          e.reloans != (e.two_heap    ? 4u + (e.owner_read ? 1u : 0u)
                         : e.heap_link ? 3u
                                       : 1u) ||
           (e.heap_link && (e.projections != 3 || e.reads != 1)) ||
@@ -1643,8 +1897,21 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
                              : "NL_NODE_FINISH();\nreturn 0;\n}\n")) {
         if (e.status == NL_NODE_C_OK)
             e.status = NL_NODE_C_UNSUPPORTED;
+        free(e.receiver);
         free(e.text);
         return e.status;
+    }
+    if (e.receiver != NULL) {
+        if (e.receiver_used >= C_BYTES - e.used) {
+            free(e.receiver);
+            free(e.text);
+            return NL_NODE_C_RESOURCE_LIMIT;
+        }
+        memmove(e.text + main_offset + e.receiver_used, e.text + main_offset,
+                e.used - main_offset + 1);
+        memcpy(e.text + main_offset, e.receiver, e.receiver_used);
+        e.used += e.receiver_used;
+        free(e.receiver);
     }
     *out = e.text;
     *length = e.used;

@@ -11,8 +11,10 @@ typedef enum {
  * staged C into an initialized NULL slot on success ONLY; failure leaves both
  * output slots untouched. Bounded two-lexical-root or one allocated/one lexical
  * H topology, or the closed two-allocated-H nested profile; heap-root/field
- * access requires owned checked operands and projection evidence. Not a general
- * recursive or allocator backend. */
+ * access requires owned checked operands and projection evidence. The closed
+ * §18.1a proven live-tail receiver may use one real direct C call preserving
+ * the original heap/owner/domain carriers; stack params never mint heap roots.
+ * Not a general recursive or allocator backend. */
 NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *, char **out,
                                 size_t *length);
 #endif

@@ -173,8 +173,9 @@ static bool evidence(const char *path)
           counts.ends == 3 && counts.releases == 3);
     char *c = NULL;
     size_t length = 0;
-    CHECK(nl_checked_c_node(n.entry, &c, &length) == NL_NODE_C_UNSUPPORTED &&
-          c == NULL && length == 0);
+    CHECK(nl_checked_c_node(n.entry, &c, &length) == NL_NODE_C_OK &&
+          c != NULL && length == strlen(c));
+    free(c);
     node_checked_destroy(&n);
     return true;
 }
