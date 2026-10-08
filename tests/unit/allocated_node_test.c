@@ -136,6 +136,142 @@ static bool evidence(const char *path)
     node_checked_destroy(&n);
     return true;
 }
+static const NLCheckedFragment *ref_world(const NLCheckedFragment *f,
+                                          NLCheckedNodeId *id)
+{
+    for (NLCheckedNodeId i = 1; i <= nl_checked_node_count(f); ++i) {
+        const NLCheckedNodeView *v = nl_checked_node_view(f, i);
+        if (v->kind == NL_CHECKED_REF_FROM_PTR) {
+            *id = i;
+            return f;
+        }
+        const NLCheckedFragment *body = nl_checked_call_body(f, i),
+                                *found = NULL;
+        if (body != NULL && (found = ref_world(body, id)) != NULL)
+            return found;
+        if (v->kind == NL_CHECKED_MATCH)
+            for (size_t a = 0; a < v->item_count; ++a) {
+                body = nl_checked_match_arm(f, i, a);
+                if (body != NULL && (found = ref_world(body, id)) != NULL)
+                    return found;
+            }
+    }
+    return NULL;
+}
+static bool operand_case(const char *text, const char *ptr, const char *stable,
+                         NLPlaceId *place, NLDomainId *domain,
+                         NLSymbolId *symbol)
+{
+    NLSource *source = NULL, *entry = NULL;
+    NLParser *parser = NULL;
+    NLSyntaxTree *tree = NULL;
+    NLSemanticContext *c = NULL;
+    NLCheckedFragment *f = NULL;
+    CHECK(nl_source_create(text, strlen(text), "allocated-operands", &source) ==
+          NL_SOURCE_OK);
+    CHECK(nl_parser_create(source, &parser) == NL_PARSE_OK);
+    CHECK(nl_parser_parse_function_unit(parser, &tree, NULL) == NL_PARSE_OK);
+    CHECK(nl_semantic_create(&c) == NL_CHECK_OK);
+    const NLSyntaxTree *units[] = {tree};
+    CHECK(nl_semantic_register_function_unit(c, units, 1, NULL) == NL_CHECK_OK);
+    nl_syntax_tree_destroy(tree);
+    nl_parser_destroy(parser);
+    nl_source_destroy(source);
+    parser = NULL;
+    tree = NULL;
+    CHECK(nl_source_create("main()", 6, "operand-entry", &entry) ==
+          NL_SOURCE_OK);
+    CHECK(nl_parser_create(entry, &parser) == NL_PARSE_OK);
+    CHECK(nl_parser_parse_expression_fragment(parser, &tree, NULL) ==
+          NL_PARSE_OK);
+    CHECK(nl_semantic_check_expression(c, tree, &f, NULL) == NL_CHECK_OK);
+    nl_syntax_tree_destroy(tree);
+    nl_parser_destroy(parser);
+    NLCheckedNodeId id = 0;
+    const NLCheckedFragment *world = ref_world(f, &id);
+    CHECK(world != NULL);
+    const NLCheckedNodeView *v = nl_checked_node_view(world, id);
+    CHECK(v->argument_count == 2 && v->has_reference_result);
+    const NLCheckedNodeView *p = nl_checked_node_view(world, v->first_argument);
+    CHECK(p != NULL && p->kind == NL_CHECKED_IDENTIFIER &&
+          p->value_use == NL_VALUE_COPIED);
+    const NLCheckedNodeView *st = nl_checked_node_view(world, p->next_argument);
+    CHECK(st != NULL && st->kind == NL_CHECKED_IDENTIFIER &&
+          st->value_use == NL_VALUE_COPIED && st->next_argument == 0);
+    const NLSemanticContext *wc = nl_checked_context(world);
+    CHECK(p->symbol != 0 && st->symbol != 0 &&
+          strcmp(wc->bindings[p->symbol - 1].name, ptr) == 0 &&
+          strcmp(wc->bindings[st->symbol - 1].name, stable) == 0);
+    CHECK(wc->values[p->results[0].value - 1].reference.place ==
+          v->lifetime_place);
+    CHECK(wc->values[p->results[0].value - 1].reference.incarnation ==
+          v->lifetime_incarnation);
+    const NLSemanticTypeView *pt = &wc->types[p->type - 1].view,
+                             *stt = &wc->types[st->type - 1].view,
+                             *rt = &wc->types[v->type - 1].view;
+    CHECK(pt->kind == NL_TYPE_PTR && rt->kind == NL_TYPE_REF &&
+          rt->target == pt->target && rt->access == NL_ACCESS_READ &&
+          !rt->is_exclusive && stt->kind == NL_TYPE_REF &&
+          stt->target == nl_semantic_domain_type(wc) &&
+          stt->access == NL_ACCESS_READ && !stt->is_exclusive);
+    CHECK(wc->values[st->results[0].value - 1].reference.scope ==
+          v->reference_result.scope);
+    CHECK(wc->values[p->results[0].value - 1].carrier == NL_CARRIER_ENDED &&
+          wc->values[st->results[0].value - 1].carrier == NL_CARRIER_ENDED);
+    *place = v->lifetime_place;
+    *domain = v->lifetime_domain;
+    *symbol = p->symbol;
+    nl_checked_destroy(f);
+    nl_source_destroy(entry);
+    nl_semantic_destroy(c);
+    return true;
+}
+static char *replace_text(const char *text, const char *from, const char *to)
+{
+    const char *at = strstr(text, from);
+    if (at == NULL)
+        return NULL;
+    size_t prefix = (size_t)(at - text),
+           length = strlen(text) - strlen(from) + strlen(to);
+    char *out = malloc(length + 1);
+    if (out == NULL)
+        return NULL;
+    memcpy(out, text, prefix);
+    memcpy(out + prefix, to, strlen(to));
+    strcpy(out + prefix + strlen(to), at + strlen(from));
+    return out;
+}
+static bool operands(const char *path)
+{
+    NLSource *s = NULL;
+    CHECK(nl_source_load(path, &s) == NL_SOURCE_OK);
+    NLSourceView contents;
+    CHECK(nl_source_view(s, (NLSourceSpan){0, nl_source_length(s)}, &contents));
+    char *text = malloc(contents.length + 1);
+    CHECK(text != NULL);
+    memcpy(text, contents.bytes, contents.length);
+    text[contents.length] = 0;
+    nl_source_destroy(s);
+    NLPlaceId p1, p2, p3;
+    NLDomainId d1, d2, d3;
+    NLSymbolId s1, s2, s3;
+    CHECK(operand_case(text, "q", "stable", &p1, &d1, &s1));
+    char *tail = replace_text(text, "ref_from_ptr(read, q, stable)",
+                              "ref_from_ptr(read, tail, stable)");
+    CHECK(tail != NULL);
+    CHECK(operand_case(tail, "tail", "stable", &p2, &d2, &s2));
+    CHECK(p1 == p2 && d1 == d2 && s1 != s2);
+    char *alias = replace_text(
+        text, "let access = ref_from_ptr(read, q, stable);",
+        "let borrowed=stable; let access=ref_from_ptr(read,q,borrowed);");
+    CHECK(alias != NULL);
+    CHECK(operand_case(alias, "q", "borrowed", &p3, &d3, &s3));
+    CHECK(p1 == p3 && d1 == d3 && s1 == s3);
+    free(alias);
+    free(tail);
+    free(text);
+    return true;
+}
 static bool failures(const char *path)
 {
     NLSource *source = NULL;
@@ -217,7 +353,8 @@ int main(int argc, char **argv)
 {
     if (argc != 3)
         return EXIT_FAILURE;
-    bool result = strcmp(argv[1], "evidence") == 0 ? evidence(argv[2])
-                                                   : failures(argv[2]);
+    bool result = strcmp(argv[1], "evidence") == 0   ? evidence(argv[2])
+                  : strcmp(argv[1], "operands") == 0 ? operands(argv[2])
+                                                     : failures(argv[2]);
     return result ? EXIT_SUCCESS : EXIT_FAILURE;
 }

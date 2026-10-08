@@ -5284,13 +5284,34 @@ static NLCheckedNodeId allocated_ref(Check *check, const NLSyntaxView *syntax)
                              false, syntax->span);
     if (type == 0)
         return 0;
+    /* Preserve selected operands using the existing argument/Copy contract.
+     * The ordinary domain ref is a scoped stability borrow, never its owner:
+     * copying its capability package creates no new domain/lifetime authority.
+     * These temporary packages end below; their immutable operand evidence
+     * remains owned by this same arm artifact for native lowering. */
+    NLTypeId stable_type =
+        compound(check, NL_TYPE_REF, nl_semantic_domain_type(c), NL_ACCESS_READ,
+                 false, syntax->span);
+    if (stable_type == 0)
+        return 0;
+    NLCheckedNodeId pointer_arg = argument(check, pn, c->values[pv - 1].type);
+    if (pointer_arg == 0)
+        return 0;
+    NLCheckedNodeId stability_arg = argument(check, sn, stable_type);
+    if (stability_arg == 0)
+        return 0;
+    view(check, pointer_arg)->next_argument = stability_arg;
     NLValueId ref = new_value(
         check, (NLSemanticValueView){.type = type, .reference = facts},
         syntax->span);
     if (ref == 0)
         return 0;
+    end_temporary(check, one_result(check, pointer_arg));
+    end_temporary(check, one_result(check, stability_arg));
     return add(check,
                (NLCheckedNodeView){.kind = NL_CHECKED_REF_FROM_PTR,
+                                   .first_argument = pointer_arg,
+                                   .argument_count = 2,
                                    .span = syntax->span,
                                    .type = type,
                                    .result_count = 1,

@@ -260,10 +260,21 @@ if(BUILD_TESTING)
     add_test(NAME allocated_node_source.integration
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/allocated_node_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/allocated_node_semantic.nl")
+    add_test(NAME allocated_node_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/allocated_native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:allocated_checked_probe>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/allocated_node_semantic.nl" "${NEWLANG_SANITIZER}")
+    add_executable(allocated_backend_test tests/unit/allocated_backend_test.c)
+    target_link_libraries(allocated_backend_test PRIVATE newlang_checked_c_node newlang_parser)
+    target_link_options(allocated_backend_test PRIVATE -Wl,--wrap=malloc)
+    add_test(NAME allocated_backend.unit COMMAND allocated_backend_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/allocated_node_semantic.nl")
+    add_executable(allocated_checked_probe tests/integration/allocated_checked_probe.c)
+    target_link_libraries(allocated_checked_probe PRIVATE newlang_semantic newlang_parser)
     add_executable(allocated_node_test tests/unit/allocated_node_test.c)
     target_link_libraries(allocated_node_test PRIVATE newlang_semantic newlang_parser)
     target_link_options(allocated_node_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
-    foreach(group evidence failures)
+    foreach(group evidence operands failures)
         add_test(NAME allocated_node_${group}.unit COMMAND allocated_node_test ${group}
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/allocated_node_semantic.nl")
     endforeach()
