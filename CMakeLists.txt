@@ -272,6 +272,17 @@ if(BUILD_TESTING)
     add_executable(heap_link_support_test tests/unit/heap_link_support_test.c)
     target_link_libraries(heap_link_support_test PRIVATE newlang_semantic newlang_parser)
     add_test(NAME heap_link_supporting_claims.unit COMMAND heap_link_support_test)
+    add_executable(heap_link_checked_probe tests/integration/heap_link_checked_probe.c)
+    target_link_libraries(heap_link_checked_probe PRIVATE newlang_semantic newlang_parser)
+    add_executable(heap_link_backend_test tests/unit/heap_link_backend_test.c)
+    target_link_libraries(heap_link_backend_test PRIVATE newlang_checked_c_node newlang_parser)
+    target_link_options(heap_link_backend_test PRIVATE -Wl,--wrap=malloc)
+    add_test(NAME heap_link_backend.unit COMMAND heap_link_backend_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/heap_link_semantic.nl")
+    add_test(NAME heap_link_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/heap_link_native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:heap_link_checked_probe>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/heap_link_semantic.nl" "${NEWLANG_SANITIZER}")
     add_test(NAME allocated_node_native.integration
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/allocated_native_test.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:allocated_checked_probe>" "${CMAKE_C_COMPILER}"

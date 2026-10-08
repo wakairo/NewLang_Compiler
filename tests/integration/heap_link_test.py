@@ -7,11 +7,11 @@ import tempfile
 compiler, fixture = sys.argv[1:]
 source = pathlib.Path(fixture).read_text()
 cases = [
-    ("canonical", source, 4, "V1-BACKEND-UNSUPPORTED"),
-    ("renamed", source.replace("Node", "Cell").replace("next", "link").replace("payload", "datum"), 4, "V1-BACKEND-UNSUPPORTED"),
+    ("canonical", source, 0, ""),
+    ("renamed", source.replace("Node", "Cell").replace("next", "link").replace("payload", "datum"), 0, ""),
     ("write-read-weakening", source.replace("let root_r = ref_from_ptr(read,", "let root_r = ref_from_ptr(write,"), 4, "V1-BACKEND-UNSUPPORTED"),
     ("scoped-alias", source.replace("replace(root_w@next,", "let link_ref=root_w@next; replace(link_ref,"), 4, "V1-BACKEND-UNSUPPORTED"),
-    ("ordinary-write-alias", source.replace("replace(root_w@next,", "let alias=root_w; replace(alias@next,"), 4, "V1-BACKEND-UNSUPPORTED"),
+    ("ordinary-write-alias", source.replace("replace(root_w@next,", "let alias=root_w; replace(alias@next,"), 0, ""),
     ("read-no-write", source.replace("let root_w = ref_from_ptr(write,", "let root_w = ref_from_ptr(read,"), 3, "P3-TYPE-MISMATCH"),
     ("ptr-base", source.replace("replace(root_w@next,", "replace(heap_head@next,"), 3, "HEAP-LINK-REF-PROFILE"),
     ("payload", source.replace("replace(root_w@next,", "replace(root_w@payload,"), 3, "HEAP-LINK-FIELD-PROFILE"),
@@ -46,8 +46,13 @@ with tempfile.TemporaryDirectory(prefix="heap-link-source-") as directory:
         path.write_text(text)
         result = subprocess.run([compiler, str(path)], capture_output=True, text=True)
         assert result.returncode == status, (name, result.returncode, result.stderr)
+        if status == 0:
+            # Explicit input-based native admission; no outcome-based fallback.
+            # Only the separate native oracle claims actual execution.
+            assert result.stdout.startswith("/* Bounded Checked-C") and not result.stderr
+            continue
         assert diagnostic in result.stderr, (name, result.stderr)
         assert not result.stdout, (name, "partial C output")
         assert list(root.glob("*.c")) == [] and list(root.glob("*.o")) == []
         assert list(root.glob("*.exe")) == []
-print(f"{len(cases)} actual-source heap link controls passed; no native field support")
+print(f"{len(cases)} actual-source heap link controls passed; strict static rejection retained")

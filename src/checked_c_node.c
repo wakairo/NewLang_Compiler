@@ -1,4 +1,5 @@
 #include "newlang/checked_c_node.h"
+#include "newlang/raw_storage.h"
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -23,6 +24,13 @@ typedef struct {
     char *text;
     size_t used, temp, steps, frames, roots;
     bool allocated;
+    bool heap_link;
+    size_t projections, reads;
+    NLPlaceId link_place;
+    NLIncarnationId link_incarnation;
+    NLValueId link_value;
+    NLValueFactId root_fact, link_fact;
+    NLOccurrenceId occurrence;
     size_t allocations, destroys, releases, domains, finalized, slots, erased,
         reloans, option_bindings, link_updates;
     NLTypeId bundle;
@@ -37,6 +45,8 @@ typedef struct Env {
     NLIncarnationId heap_incarnation;
     NLDomainId heap_domain;
     NLSymbolId heap_symbol;
+    NLScopeId stability_scope;
+    NLDomainId stability_domain;
     const struct Env *parent;
     const NLCheckedFragment *artifact;
 } Env;
@@ -146,11 +156,16 @@ static const char *ctype(const Emit *e, const Env *env, NLTypeId type)
             return "nl_slot";
         if (type == nl_semantic_domain_type(nl_checked_context(env->artifact)))
             return "nl_domain";
-        if (t.kind == NL_TYPE_REF && t.access == NL_ACCESS_READ) {
+        if (t.kind == NL_TYPE_REF) {
             if (t.target == e->node && !t.is_exclusive)
-                return "const nl_node *";
-            if (t.target ==
-                nl_semantic_domain_type(nl_checked_context(env->artifact)))
+                return t.access == NL_ACCESS_WRITE ? "nl_node *"
+                                                   : "const nl_node *";
+            if (t.target == e->option && !t.is_exclusive)
+                return t.access == NL_ACCESS_WRITE ? "nl_node_option *"
+                                                   : "const nl_node_option *";
+            if (t.target == nl_semantic_domain_type(
+                                nl_checked_context(env->artifact)) &&
+                t.access == NL_ACCESS_READ)
                 return "const nl_domain *";
         }
     }
@@ -160,10 +175,13 @@ static bool shape(Emit *e, const Env *env, NLTypeId type)
 {
     const NLSemanticContext *c = nl_checked_context(env->artifact);
     NLAggregateField link, payload;
-    NLSemanticTypeView option, ptr;
+    NLSemanticTypeView option, ptr, h;
     /* Registry predicate includes completed recursive-header identity and the
      * exact Option constructor metadata; names are never consulted. */
     if (!nl_semantic_recursive_local_type(c, type) ||
+        !nl_semantic_type_view(c, type, &h) ||
+        (e->allocated &&
+         (!h.layout_known || h.size != 24 || h.alignment != 8)) ||
         !nl_semantic_aggregate_field_view(c, type, 0, &link) ||
         !nl_semantic_aggregate_field_view(c, type, 1, &payload) ||
         !nl_semantic_type_view(c, link.type, &option))
@@ -201,6 +219,35 @@ static bool expr(Emit *, Env *, NLCheckedNodeId, Value *);
 static bool allocated_match(Emit *, Env *, NLCheckedNodeId,
                             const NLCheckedNodeView *, Value *);
 static bool allocated_expr(Emit *, Env *, const NLCheckedNodeView *, Value *);
+static bool heap_link_expr(Emit *, Env *, const NLCheckedNodeView *, Value *);
+static bool same_reference(NLReferenceFacts a, NLReferenceFacts b)
+{
+    return a.place == b.place && a.incarnation == b.incarnation &&
+           a.scope == b.scope && a.provenance == b.provenance &&
+           a.readable == b.readable && a.writable == b.writable &&
+           a.occurrence_dependency == b.occurrence_dependency;
+}
+static bool selected_reference(const Env *env, const NLCheckedNodeView *arg,
+                               NLSemanticValueView *value)
+{
+    NLSemanticBindingView b;
+    NLSemanticValueView original;
+    const NLSemanticContext *c = nl_checked_context(env->artifact);
+    return arg != NULL && arg->kind == NL_CHECKED_IDENTIFIER &&
+           arg->value_use == NL_VALUE_COPIED && arg->result_count == 1 &&
+           local(env, arg->symbol, arg->type) != NULL &&
+           nl_semantic_binding_view(c, arg->symbol, &b) &&
+           b.type == arg->type &&
+           nl_semantic_value_view(c, b.value, &original) &&
+           nl_semantic_value_view(c, arg->results[0].value, value) &&
+           original.type == arg->type && value->type == arg->type &&
+           original.dependencies == NL_DEPENDENCY_FREE &&
+           value->dependencies == NL_DEPENDENCY_FREE &&
+           original.value_dependency_count == 0 &&
+           value->value_dependency_count == 0 &&
+           original.reference_count == 0 && value->reference_count == 0 &&
+           same_reference(original.reference, value->reference);
+}
 static bool block(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
 {
     const NLCheckedNodeView *v = get(env, id);
@@ -392,7 +439,8 @@ static bool match(Emit *e, Env *env, NLCheckedNodeId id,
                       .parent = env,
                       .prefix = v->match_binding_prefix,
                       .frame = ++e->frames,
-                      .depth = env->depth + 1};
+                      .depth = env->depth + 1,
+                      .backing = env->backing};
         if (!put(e, "case %zu: {\n", a->variant - 1))
             return false;
         if (a->variant == 2) {
@@ -442,6 +490,10 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
          v->kind == NL_CHECKED_REF_FROM_PTR ||
          (v->kind == NL_CHECKED_LOAN_HEADER && !v->loan.implicit_local)))
         return allocated_expr(e, env, v, out);
+    if (e->allocated &&
+        (v->kind == NL_CHECKED_FIELD_REF || v->kind == NL_CHECKED_LINK_READ ||
+         v->kind == NL_CHECKED_REPLACE))
+        return heap_link_expr(e, env, v, out);
     if (v->kind == NL_CHECKED_UNIT)
         return v->type == e->unit && v->result_count == 0 ? true : reject(e);
     if (v->kind == NL_CHECKED_BLOCK)
@@ -612,6 +664,182 @@ static const Env *heap(const Env *env, const NLCheckedNodeView *v)
         return NULL;
     return heap(env->parent, v);
 }
+/* Point-in-time certificates select carriers; final liveness is not replayed.
+ * Historical child/parent identity is inspectable even after EndRoot. */
+static bool heap_projection(Emit *e, const Env *env, const NLCheckedNodeView *v)
+{
+    const NLSemanticContext *c = nl_checked_context(env->artifact);
+    const NLCheckedField f = v->field;
+    const NLCheckedNodeView *a = get(env, v->first_argument);
+    NLSemanticTypeView pt, t;
+    NLSemanticValueView p, r;
+    NLSemanticPlaceView child;
+    if (!e->heap_link || e->destroys != 0 || !f.present ||
+        !f.dependency_compatible || f.nominal != e->node ||
+        f.type != e->option || f.index != 0 || f.parent_fact == 0 ||
+        f.child_fact == 0 || f.old_value != e->link_value ||
+        f.payload_occurrence != e->occurrence ||
+        (e->root_fact != 0 && f.parent_fact != e->root_fact) ||
+        (e->link_fact != 0 && f.child_fact != e->link_fact) ||
+        heap(env, v) == NULL || f.parent != v->lifetime_place ||
+        f.parent_incarnation != v->lifetime_incarnation ||
+        v->lifetime_domain != env->stability_domain ||
+        v->lifetime_range.region != env->backing ||
+        v->lifetime_range.start != 0 || v->lifetime_range.length != 24 ||
+        !nl_semantic_place_view(c, f.child, &child) ||
+        child.parent_aggregate != f.parent ||
+        child.parent_incarnation != f.parent_incarnation ||
+        child.parent_field_index != f.index || child.type != f.type ||
+        child.incarnation != f.child_incarnation ||
+        child.governing_domain != v->lifetime_domain ||
+        (e->link_place != 0 && (f.child != e->link_place ||
+                                f.child_incarnation != e->link_incarnation)) ||
+        v->argument_count != 1 || a == NULL || a->next_argument != 0 ||
+        a->kind != NL_CHECKED_IDENTIFIER || a->symbol != f.base ||
+        a->value_use != NL_VALUE_COPIED ||
+        local(env, a->symbol, a->type) == NULL ||
+        !nl_semantic_type_view(c, a->type, &pt) || pt.kind != NL_TYPE_REF ||
+        pt.is_exclusive || pt.target != e->node || pt.access != f.access ||
+        !nl_semantic_type_view(c, v->type, &t) || t.kind != NL_TYPE_REF ||
+        t.is_exclusive || t.target != e->option || t.access != f.access ||
+        !selected_reference(env, a, &p) ||
+        !nl_semantic_value_view(c, v->results[0].value, &r) ||
+        p.dependencies != NL_DEPENDENCY_FREE ||
+        r.dependencies != p.dependencies || p.value_dependency_count != 0 ||
+        r.value_dependency_count != 0 || p.reference_count != 0 ||
+        r.reference_count != 0 || p.reference.place != f.parent ||
+        p.reference.incarnation != f.parent_incarnation ||
+        p.reference.scope != env->stability_scope ||
+        p.reference.provenance != NL_PROVENANCE_VALID ||
+        !p.reference.readable ||
+        p.reference.writable != (f.access == NL_ACCESS_WRITE) ||
+        r.reference.place != f.child ||
+        r.reference.incarnation != f.child_incarnation ||
+        r.reference.scope != p.reference.scope ||
+        r.reference.provenance != p.reference.provenance ||
+        r.reference.readable != p.reference.readable ||
+        r.reference.writable != p.reference.writable ||
+        r.reference.occurrence_dependency !=
+            p.reference.occurrence_dependency ||
+        !v->has_reference_result ||
+        !same_reference(v->reference_result, r.reference))
+        return reject(e);
+    e->link_place = f.child;
+    e->link_incarnation = f.child_incarnation;
+    e->root_fact = f.parent_fact;
+    e->link_fact = f.child_fact;
+    return true;
+}
+static bool heap_link_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
+                           Value *out)
+{
+    const NLSemanticContext *c = nl_checked_context(env->artifact);
+    if (v->kind == NL_CHECKED_FIELD_REF) {
+        Value parent = {0};
+        if (e->projections >= 3 || !heap_projection(e, env, v) ||
+            !expr(e, env, v->first_argument, &parent))
+            return reject(e);
+        ++e->projections;
+        out->temp = ++e->temp;
+        return put(e,
+                   "%s nl_v_%zu = &nl_v_%zu->f0;\n"
+                   "NL_HEAP_FIELD(nl_v_%zu,nl_v_%zu,%u,%zu,%zu,%zu,%zu,%zu);\n",
+                   ctype(e, env, v->type), out->temp, parent.temp, parent.temp,
+                   out->temp, v->field.access == NL_ACCESS_WRITE ? 1u : 0u,
+                   v->field.nominal, v->field.index, v->field.child,
+                   v->field.child_incarnation, v->reference_result.scope);
+    }
+    const NLCheckedNodeView *ref = get(env, v->first_argument);
+    if (ref == NULL || ref->kind != NL_CHECKED_FIELD_REF ||
+        v->type != e->option || v->result_count != 1 ||
+        v->field.old_value != e->link_value ||
+        ref->field.old_value != v->field.old_value || !v->field.present ||
+        !v->field.dependency_compatible ||
+        ref->field.nominal != v->field.nominal ||
+        ref->field.type != v->field.type ||
+        ref->field.index != v->field.index ||
+        ref->field.access != v->field.access ||
+        ref->field.parent_incarnation != v->field.parent_incarnation ||
+        ref->field.child_incarnation != v->field.child_incarnation ||
+        ref->field.parent_fact != v->field.parent_fact ||
+        ref->field.child_fact != v->field.child_fact ||
+        ref->field.payload_occurrence != v->field.payload_occurrence ||
+        ref->field.parent != v->field.parent ||
+        ref->field.child != v->field.child || ref->field.base != v->field.base)
+        return reject(e);
+    Value projected = {0};
+    if (!expr(e, env, v->first_argument, &projected))
+        return false;
+    if (v->kind == NL_CHECKED_LINK_READ) {
+        NLSemanticValueView original, copy, p, q;
+        if (e->reads++ != 0 || e->link_updates != 1 || v->argument_count != 1 ||
+            ref->next_argument != 0 || v->value_use != NL_VALUE_COPIED ||
+            !nl_semantic_value_view(c, v->field.old_value, &original) ||
+            !nl_semantic_value_view(c, v->results[0].value, &copy) ||
+            original.variant != 2 || copy.variant != original.variant ||
+            copy.type != e->option || copy.dependencies != NL_DEPENDENCY_FREE ||
+            original.dependencies != NL_DEPENDENCY_FREE ||
+            !nl_semantic_value_view(c, original.sum_payload, &p) ||
+            !nl_semantic_value_view(c, copy.sum_payload, &q) ||
+            original.sum_payload == copy.sum_payload || p.type != e->ptr ||
+            q.type != e->ptr || !same_reference(p.reference, q.reference) ||
+            q.reference.scope != 0 ||
+            q.reference.provenance != NL_PROVENANCE_VALID ||
+            p.reference_count != 0 || q.reference_count != 0 ||
+            p.dependencies != NL_DEPENDENCY_FREE ||
+            q.dependencies != NL_DEPENDENCY_FREE)
+            return reject(e);
+        out->temp = ++e->temp;
+        return put(e,
+                   "nl_node_option nl_v_%zu = *nl_v_%zu;\n"
+                   "NL_HEAP_COPY(nl_v_%zu,&nl_v_%zu);\n",
+                   out->temp, projected.temp, projected.temp, out->temp);
+    }
+    const NLCheckedField f = v->field;
+    const NLCheckedNodeView *next = get(env, ref->next_argument);
+    NLSemanticOccurrenceView occurrence;
+    NLSemanticValueView old;
+    if (v->kind != NL_CHECKED_REPLACE || v->argument_count != 2 ||
+        f.access != NL_ACCESS_WRITE || ref->field.access != NL_ACCESS_WRITE ||
+        !f.dependency_compatible || f.nominal != e->node || f.index != 0 ||
+        f.parent_fact != e->root_fact || f.child_fact != e->link_fact ||
+        f.parent_incarnation != ref->field.parent_incarnation ||
+        f.child_incarnation != ref->field.child_incarnation ||
+        f.payload_occurrence != e->occurrence || f.parent_post_fact == 0 ||
+        f.child_post_fact == 0 || f.parent_post_fact == f.parent_fact ||
+        f.child_post_fact == f.child_fact ||
+        f.old_value != v->results[0].value || next == NULL ||
+        next->kind != NL_CHECKED_SUM_CONSTRUCTOR || next->next_argument != 0 ||
+        next->results[0].value != f.new_value || e->link_updates >= 2 ||
+        next->variant != (e->link_updates == 0 ? 2u : 1u) ||
+        !nl_semantic_value_view(c, f.old_value, &old) ||
+        old.variant != (e->link_updates == 0 ? 1u : 2u) ||
+        (e->link_updates == 0 ? f.post_payload_occurrence == 0
+                              : f.post_payload_occurrence != 0) ||
+        (e->link_updates == 1 && e->reads != 1) ||
+        !nl_semantic_occurrence_view(c,
+                                     e->link_updates == 0
+                                         ? f.post_payload_occurrence
+                                         : f.payload_occurrence,
+                                     &occurrence) ||
+        occurrence.root != f.child || occurrence.variant != 2)
+        return reject(e);
+    Value replacement = {0};
+    if (!expr(e, env, ref->next_argument, &replacement))
+        return false;
+    e->link_value = f.new_value;
+    e->root_fact = f.parent_post_fact;
+    e->link_fact = f.child_post_fact;
+    e->occurrence = f.post_payload_occurrence;
+    ++e->link_updates;
+    out->temp = ++e->temp;
+    return put(e,
+               "nl_node_option nl_v_%zu = *nl_v_%zu;\n"
+               "*nl_v_%zu = nl_v_%zu;\n"
+               "NL_HEAP_CHANGE(nl_v_%zu,&nl_v_%zu,%zu);\n",
+               out->temp, projected.temp, projected.temp, replacement.temp,
+               projected.temp, out->temp, e->link_updates);
+}
 static bool allocated_body(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
 {
     const NLCheckedNodeView *body = get(env, id);
@@ -781,7 +1009,9 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
                     .prefix = SIZE_MAX,
                     .frame = ++e->frames,
                     .depth = env->depth + 1,
-                    .backing = env->backing};
+                    .backing = env->backing,
+                    .stability_scope = l->scope,
+                    .stability_domain = l->domain};
         if (!add_local(e, &body, l->ref_symbol, binder.type, false) ||
             !put(e,
                  "{ const nl_domain *nl_b_%zu_%zu = "
@@ -802,6 +1032,9 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
             env->heap_domain = body.heap_domain;
         }
         out->temp = result;
+        if (e->heap_link && !l->is_exclusive &&
+            !put(e, "NL_HEAP_SCOPE_END(%zu);\n", l->scope))
+            return false;
         return put(e, "}\n");
     }
     if (v->kind == NL_CHECKED_DOMAIN_CREATE) {
@@ -820,16 +1053,63 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
         const NLCheckedNodeView *st = get(env, a->next_argument);
         Value p = {0}, stable = {0};
         NLSemanticTypeView t;
-        if (e->reloans++ != 0 || v->argument_count != 2 ||
-            a->value_use != NL_VALUE_COPIED || a->type != e->ptr ||
-            st == NULL || st->value_use != NL_VALUE_COPIED ||
-            st->next_argument != 0 || !nl_semantic_type_view(c, st->type, &t) ||
-            t.kind != NL_TYPE_REF || t.target != nl_semantic_domain_type(c) ||
-            t.is_exclusive || !v->has_reference_result ||
-            heap(env, v) == NULL || !expr(e, env, v->first_argument, &p) ||
+        NLSemanticTypeView rt;
+        NLSemanticValueView pv, rv, sv;
+        NLSemanticBackingView backing;
+        const bool write = v->reference_result.writable;
+        if (e->reloans == 0)
+            e->heap_link = write;
+        if (e->destroys != 0 || e->reloans >= (e->heap_link ? 3u : 1u) ||
+            (e->heap_link && write != (e->reloans != 1)) ||
+            v->argument_count != 2 || a->value_use != NL_VALUE_COPIED ||
+            a->type != e->ptr || st == NULL ||
+            st->value_use != NL_VALUE_COPIED || st->next_argument != 0 ||
+            !nl_semantic_type_view(c, st->type, &t) || t.kind != NL_TYPE_REF ||
+            t.target != nl_semantic_domain_type(c) || t.is_exclusive ||
+            !v->has_reference_result || heap(env, v) == NULL ||
+            !nl_semantic_type_view(c, v->type, &rt) || rt.kind != NL_TYPE_REF ||
+            rt.is_exclusive || rt.target != e->node ||
+            rt.access != (write ? NL_ACCESS_WRITE : NL_ACCESS_READ) ||
+            !selected_reference(env, a, &pv) ||
+            !selected_reference(env, st, &sv) ||
+            !nl_semantic_value_view(c, v->results[0].value, &rv) ||
+            pv.dependencies != NL_DEPENDENCY_FREE || pv.reference_count != 0 ||
+            sv.dependencies != NL_DEPENDENCY_FREE ||
+            rv.dependencies != NL_DEPENDENCY_FREE ||
+            pv.reference.provenance != NL_PROVENANCE_VALID ||
+            !pv.reference.readable || (write && !pv.reference.writable) ||
+            pv.reference.place != v->lifetime_place ||
+            pv.reference.incarnation != v->lifetime_incarnation ||
+            rv.reference.place != pv.reference.place ||
+            rv.reference.incarnation != pv.reference.incarnation ||
+            rv.reference.scope != env->stability_scope ||
+            rv.reference.scope != sv.reference.scope ||
+            rv.reference.scope != v->reference_result.scope ||
+            v->lifetime_domain != env->stability_domain ||
+            !rv.reference.readable || rv.reference.writable != write ||
+            rv.reference.provenance != NL_PROVENANCE_VALID ||
+            !same_reference(v->reference_result, rv.reference) ||
+            !nl_semantic_backing_view(c, env->backing, &backing) ||
+            !backing.ordinary_read || backing.size != 24 ||
+            (write && (!backing.ordinary_write || backing.alignment < 8 ||
+                       v->lifetime_range.region != env->backing ||
+                       v->lifetime_range.start != 0 ||
+                       v->lifetime_range.length != 24)) ||
+            !expr(e, env, v->first_argument, &p) ||
             !expr(e, env, a->next_argument, &stable))
             return reject(e);
+        ++e->reloans;
         out->temp = ++e->temp;
+        if (e->heap_link)
+            return put(
+                e,
+                "%s nl_v_%zu = %snl_v_%zu;\n"
+                "NL_HEAP_ROOT(nl_v_%zu,nl_v_%zu->token,%u,%zu,%zu,%zu);\n"
+                "(void)nl_v_%zu;\n",
+                ctype(e, env, v->type), out->temp, write ? "(nl_node *)" : "",
+                p.temp, out->temp, stable.temp, write ? 1u : 0u,
+                v->lifetime_place, v->lifetime_incarnation, rv.reference.scope,
+                stable.temp);
         return put(e,
                    "const nl_node *nl_v_%zu = "
                    "nl_v_%zu;\nNL_HEAP_RELOAN(nl_v_%zu,nl_v_%zu->token);\n("
@@ -858,6 +1138,11 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
         env->heap_place = v->lifetime_place;
         env->heap_incarnation = v->lifetime_incarnation;
         env->heap_domain = v->lifetime_domain;
+        NLSemanticValueView initial;
+        if (!nl_semantic_value_view(c, n->results[0].value, &initial) ||
+            initial.field_count != 2)
+            return reject(e);
+        e->link_value = initial.fields[0];
         out->temp = ++e->temp;
         return put(e,
                    "*(nl_node *)nl_v_%zu.bytes = nl_v_%zu;\nconst nl_node "
@@ -989,6 +1274,12 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             "\"checked H target layout\");\n"
             "_Static_assert(sizeof(void*)==8 && offsetof(nl_node,f0)==0 && "
             "offsetof(nl_node,f1)==16, \"private member plan\");\n"
+            "_Static_assert(sizeof(nl_node_option)==16 && "
+            "_Alignof(nl_node_option)==8 && "
+            "_Generic(((nl_node *)0)->f0,nl_node_option:1,default:0) && "
+            "_Generic(((nl_node *)0)->f1,uint8_t:1,default:0) && "
+            "_Generic(((nl_node_option *)0)->ptr,const nl_node *:1,default:0), "
+            "\"private member types\");\n"
             "typedef struct {void *handle;} nl_allocation;\n"
             "typedef struct {unsigned char *bytes;size_t length;} nl_storage;\n"
             "typedef struct {unsigned char *bytes;size_t length;} nl_slot;\n"
@@ -1003,6 +1294,11 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             "((void)0)\n"
             "#define NL_HEAP_INITIALIZE(...) ((void)0)\n#define "
             "NL_HEAP_RELOAN(...) ((void)0)\n"
+            "#define NL_HEAP_ROOT(...) ((void)0)\n"
+            "#define NL_HEAP_FIELD(...) ((void)0)\n"
+            "#define NL_HEAP_COPY(...) ((void)0)\n"
+            "#define NL_HEAP_CHANGE(...) ((void)0)\n"
+            "#define NL_HEAP_SCOPE_END(...) ((void)0)\n"
             "#define NL_HEAP_END(...) ((void)0)\n#define NL_HEAP_RAW(...) "
             "((void)0)\n"
             "#define NL_HEAP_FINALIZE(...) ((void)0)\n#define "
@@ -1016,7 +1312,9 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         (e.allocated &&
          (e.allocations != 1 || e.destroys != 1 || e.releases != 1 ||
           e.domains != 1 || e.finalized != 1 || e.slots != 1 || e.erased != 1 ||
-          e.reloans != 1 || e.option_bindings != 3 || e.link_updates != 2)) ||
+          e.reloans != (e.heap_link ? 3u : 1u) ||
+          (e.heap_link && (e.projections != 3 || e.reads != 1)) ||
+          e.option_bindings != 3 || e.link_updates != 2)) ||
         !put(&e, e.allocated ? "NL_HEAP_FINISH();\nreturn 0;\n}\n"
                              : "NL_NODE_FINISH();\nreturn 0;\n}\n")) {
         if (e.status == NL_NODE_C_OK)
