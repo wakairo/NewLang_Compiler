@@ -171,10 +171,16 @@ static bool evidence(const char *path)
     CHECK(not_published == NULL && untouched.captured_root == 777);
     char *out = NULL;
     size_t length = 777;
-    CHECK(nl_checked_c_node(n.entry, &out, &length) == NL_NODE_C_UNSUPPORTED &&
-          out == NULL && length == 777);
-    /* Malformed certificate is not a backend capability. New two-site
-     * artifacts remain unsupported, with staged output untouched. */
+    const bool has_link = count(arms[1], NL_CHECKED_FIELD_REF) != 0;
+    CHECK(nl_checked_c_node(n.entry, &out, &length) ==
+          (has_link ? NL_NODE_C_OK : NL_NODE_C_UNSUPPORTED));
+    CHECK(has_link ? (out != NULL && length == strlen(out))
+                   : (out == NULL && length == 777));
+    free(out);
+    out = NULL;
+    length = 777;
+    /* Malformed certificate must fail closed even when the complete link
+     * profile is supported, with staged output untouched. */
     NLCheckedNodeView *malformed =
         &((NLCheckedFragment *)first_some)->nodes[inner_id - 1];
     const NLCheckedNodeView saved = *malformed;
