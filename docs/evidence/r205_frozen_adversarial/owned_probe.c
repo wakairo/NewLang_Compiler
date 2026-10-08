@@ -88,6 +88,7 @@ static bool negative(const char *path) {
  NLSemanticContext *c=NULL;
  NLCheckedFragment *out=NULL;
  NLCheckDiagnostic diagnostic={0};
+ NLFunctionUnitDiagnostic registration_diagnostic={0};
  bool ok=false;
  if(nl_source_load(path,&source)!=NL_SOURCE_OK)return invalid("load negative source");
  if(nl_parser_create(source,&parser)!=NL_PARSE_OK)return invalid("parser negative");
@@ -96,7 +97,7 @@ static bool negative(const char *path) {
  NLSemanticSnapshot before={0},after={0};
  if(!nl_semantic_snapshot(c,&before))return invalid("before reg snapshot");
  const NLSyntaxTree *inputs[]={unit};
- NLCheckStatus reg=nl_semantic_register_function_unit(c,inputs,1,&diagnostic);
+ NLCheckStatus reg=nl_semantic_register_function_unit(c,inputs,1,&registration_diagnostic);
  if(reg!=NL_CHECK_OK) {
   if(!nl_semantic_snapshot(c,&after) || memcmp(&before,&after,sizeof(before))!=0)
    return invalid("failed registration published state");

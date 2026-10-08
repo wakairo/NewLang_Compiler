@@ -73,7 +73,7 @@ jobs:
           ROOT="$RUNNER_TEMP/r205/frozen"
           EVIDENCE="$GITHUB_WORKSPACE/docs/evidence/r205_frozen_adversarial"
           mkdir -p "$GITHUB_WORKSPACE/r205-observations"
-          gcc-13 -std=c17 -O0 -g -Wall -Wextra \
+          gcc-13 -std=c17 -O0 -g -Wall -Wextra -Werror \
             -I"$ROOT/include" -I"$ROOT/src" -I"$ROOT/tests/support" \
             "$EVIDENCE/owned_probe.c" -o "$RUNNER_TEMP/r205/owned_probe" \
             -Wl,--start-group "$ROOT/build-r205"/libnewlang_{semantic,checked,parser,lexer,syntax,source,diagnostic}.a -Wl,--end-group
