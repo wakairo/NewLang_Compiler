@@ -40,6 +40,11 @@ typedef enum {
     NL_SYNTAX_LOCAL_READ_LOAN,
     NL_SYNTAX_LOCAL_WRITE_LOAN, /* Draft 17.19 bounded direct-local u8 write */
     NL_SYNTAX_RECURSIVE_STRUCT, /* avs_struct union; exact Option<ptr<H>>,u8 */
+    NL_SYNTAX_ALLOCATED_TRY,
+    NL_SYNTAX_ALLOCATED_INTO_SLOT,
+    NL_SYNTAX_ALLOCATED_ERASE_SLOT,
+    NL_SYNTAX_ALLOCATED_REF,
+    NL_SYNTAX_OPTION_BACKING,
     NL_SYNTAX_OPTION_PTR /* ptr_type union; target is a nominal name only */
 } NLSyntaxKind;
 
@@ -88,6 +93,7 @@ typedef struct {
         } ref_type;
         struct {
             NLSourceSpan callee;
+            const NLSyntaxNode *type; /* closed allocated-H builtin only */
             const NLSyntaxNode *arguments;
             size_t argument_count;
         } call;

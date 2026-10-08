@@ -50,7 +50,9 @@ typedef enum {
     NL_CHECKED_BREAK,
     NL_CHECKED_UNIT,
     NL_CHECKED_U8_LITERAL,
-    NL_CHECKED_FIELD_READ
+    NL_CHECKED_FIELD_READ,
+    NL_CHECKED_TRY_ALLOCATE_ONE,
+    NL_CHECKED_REF_FROM_PTR
 } NLCheckedKind;
 typedef enum {
     NL_VALUE_USE_NONE,
@@ -98,6 +100,17 @@ typedef struct {
     NLSourceSpan span, name, qualifier;
     size_t variant;
     bool borrowed_match;
+    /* A fallible trial has no common-context result package. Owned arm worlds
+     * record conditional grants only; success is never a runtime assertion. */
+    bool allocation_trial, allocation_success;
+    NLTypeId allocation_target;
+    size_t allocation_size, allocation_alignment;
+    NLBackingRegionId backing;
+    NLValueId allocation_authority, storage_authority;
+    NLPlaceId lifetime_place;
+    NLIncarnationId lifetime_incarnation;
+    NLDomainId lifetime_domain;
+    NLBackingRange lifetime_range;
     /* MATCH: every normal arm proved identical to the incoming public frame.
      * Only symbols in this prefix can be mapped to ancestor C carriers;
      * arm-local symbols belong to the separately owned arm context. */

@@ -178,8 +178,18 @@ static bool mode(NLParser *parser, NLAccessSyntax *out_mode)
 static NLSyntaxNode *option_ptr(NLParser *parser, NLSourceSpan start)
 {
     if (!expect_punct(parser, '<', "REC-TYPE-PROFILE",
-                      "expected Option<ptr<H>>") ||
-        !word(parser, "ptr"))
+                      "expected Option argument"))
+        goto profile;
+    if (word(parser, "OneBacking")) {
+        consume(parser);
+        size_t end = parser->token.span.end_byte;
+        if (!expect_punct(parser, '>', "ALLOCATED-TYPE-PROFILE",
+                          "expected Option close"))
+            return NULL;
+        return node(parser, NL_SYNTAX_OPTION_BACKING,
+                    (NLSourceSpan){start.start_byte, end});
+    }
+    if (!word(parser, "ptr"))
         goto profile;
     consume(parser);
     if (!expect_punct(parser, '<', "REC-TYPE-PROFILE", "expected ptr<H>") ||
@@ -984,6 +994,64 @@ static NLSyntaxNode *source_if(NLParser *parser)
     return result;
 }
 
+/* Draft17.24 closed builtin routes; no general generic-call grammar. */
+static NLSyntaxNode *allocated_call(NLParser *parser, NLSourceSpan name,
+                                    NLSyntaxKind kind)
+{
+    NLSyntaxNode *target = NULL;
+    const size_t count = kind == NL_SYNTAX_ALLOCATED_TRY   ? 0
+                         : kind == NL_SYNTAX_ALLOCATED_REF ? 2
+                                                           : 1;
+    if (kind != NL_SYNTAX_ALLOCATED_REF) {
+        if (!expect_punct(parser, '<', "ALLOCATED-CALL-TYPE",
+                          "expected exact <H>"))
+            return NULL;
+        target = source_name(parser, NL_SYNTAX_TYPE_NAME, false);
+        if (target == NULL ||
+            !expect_punct(parser, '>', "ALLOCATED-CALL-TYPE", "expected >"))
+            return NULL;
+    }
+    if (!expect_punct(parser, '(', "ALLOCATED-CALL-ARITY", "expected ("))
+        return NULL;
+    if (kind == NL_SYNTAX_ALLOCATED_REF) {
+        if (!word(parser, "read")) {
+            fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+                 "ALLOCATED-REF-ACCESS",
+                 "only explicit read reloan is admitted");
+            return NULL;
+        }
+        consume(parser);
+        if (!expect_punct(parser, ',', "ALLOCATED-CALL-ARITY",
+                          "expected comma after read"))
+            return NULL;
+    }
+    NLSyntaxNode *result = node(parser, kind, name), *last = NULL;
+    if (result == NULL)
+        return NULL;
+    result->view.data.call.callee = name;
+    result->view.data.call.type = target;
+    for (size_t i = 0; i < count; ++i) {
+        NLSyntaxNode *arg = source_name(parser, NL_SYNTAX_EXPR_NAME, false);
+        if (arg == NULL)
+            return NULL;
+        if (last == NULL)
+            result->view.data.call.arguments = arg;
+        else
+            last->argument_next = arg;
+        last = arg;
+        ++result->view.data.call.argument_count;
+        if (i + 1 < count && !expect_punct(parser, ',', "ALLOCATED-CALL-ARITY",
+                                           "expected comma"))
+            return NULL;
+    }
+    size_t end = parser->token.span.end_byte;
+    if (!expect_punct(parser, ')', "ALLOCATED-CALL-ARITY",
+                      "expected exact builtin operands"))
+        return NULL;
+    result->view.span.end_byte = end;
+    return result;
+}
+
 static NLSyntaxNode *source_expression(NLParser *parser)
 {
     if (!enter(parser))
@@ -1038,14 +1106,30 @@ static NLSyntaxNode *source_expression(NLParser *parser)
     const bool exact_option = word(parser, "Option");
     const bool u8_literal = word(parser, "u8");
     const bool read_loan = word(parser, "loan_read");
+    const bool ending_loan = word(parser, "loan_exclusive_read");
+    const bool allocate = word(parser, "try_allocate_one");
+    const bool into = word(parser, "into_slot");
+    const bool erase = word(parser, "erase_slot");
+    const bool reloan = word(parser, "ref_from_ptr");
     const bool ptr_loan = word(parser, "loan_read_ptr");
     const bool write_loan = word(parser, "loan_write");
     const NLSourceSpan name = parser->token.span;
     consume(parser);
-    if ((read_loan || ptr_loan || write_loan) && punct(parser, '(')) {
+    if (allocate || into || erase || reloan) {
+        result = allocated_call(parser, name,
+                                allocate ? NL_SYNTAX_ALLOCATED_TRY
+                                : into   ? NL_SYNTAX_ALLOCATED_INTO_SLOT
+                                : erase  ? NL_SYNTAX_ALLOCATED_ERASE_SLOT
+                                         : NL_SYNTAX_ALLOCATED_REF);
+        goto done;
+    }
+    if ((read_loan || ptr_loan || write_loan || ending_loan) &&
+        punct(parser, '(')) {
         const NLAccessSyntax access =
             write_loan ? NL_ACCESS_WRITE : NL_ACCESS_READ;
         result = source_local_loan(parser, name, ptr_loan, access);
+        if (result != NULL)
+            result->view.data.loan.is_exclusive = ending_loan;
         goto done;
     }
     NLSyntaxNode *option_type = NULL;

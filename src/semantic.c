@@ -107,7 +107,9 @@ NLCheckStatus nl_sem_clone(const NLSemanticContext *source,
                 .view = source->types[i].view,
                 .incomplete = source->types[i].incomplete,
                 .recursive_header = source->types[i].recursive_header,
-                .option_target = source->types[i].option_target};
+                .option_target = source->types[i].option_target,
+                .allocated_target = source->types[i].allocated_target,
+                .one_backing_target = source->types[i].one_backing_target};
             memcpy(copy->types[i].field_types, source->types[i].field_types,
                    sizeof(copy->types[i].field_types));
             memcpy(copy->types[i].variant_types, source->types[i].variant_types,
