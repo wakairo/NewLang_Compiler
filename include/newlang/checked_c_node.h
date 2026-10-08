@@ -14,6 +14,11 @@ typedef enum {
  * access requires owned checked operands and projection evidence. The closed
  * §18.1a proven live-tail receiver may use one real direct C call preserving
  * the original heap/owner/domain carriers; stack params never mint heap roots.
+ * The closed §18.1b two-item producer validates its owned entry/return
+ * certificate, performs the checked projected write in a separate C function,
+ * returns the original ptr/Allocation/Domain carriers by value, and permits
+ * one whole destructure before the independently proven terminal receiver.
+ * Other LiveTail body/result profiles remain explicitly unsupported.
  * Not a general recursive or allocator backend. */
 NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *, char **out,
                                 size_t *length);

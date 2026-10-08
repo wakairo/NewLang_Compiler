@@ -1,5 +1,10 @@
 # Draft17.28 LiveTail return source / semantic gate
 
+This report records the accepted PR #209 pre-backend evidence. The subsequent
+[Issue #210 native gate](LIVE_TAIL_RETURN_NATIVE_GATE.md) separately implements
+the closed producer-return execution path; the source/semantic contract here
+remains unchanged.
+
 Track: P — Issue #208。新しいnative実装を含まないpre-backend gate。
 
 ## Authority / scope

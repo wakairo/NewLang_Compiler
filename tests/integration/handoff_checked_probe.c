@@ -37,6 +37,12 @@ static bool walk(const NLCheckedFragment *f)
             printf("FIELD %zu %zu %zu %zu %zu\n", v->field.base,
                    v->field.nominal, v->field.child, v->field.child_incarnation,
                    v->reference_result.scope);
+        if (v->producer.entry_proved) {
+            CHECK(nl_checked_producer_valid(f, i));
+            printf("PRODUCER %zu %zu %zu %zu %zu\n", v->function,
+                   v->producer.root, v->producer.range.region,
+                   v->producer.domain, v->producer.result);
+        }
         if (v->owner_call.entry_proved) {
             CHECK(v->owner_call.post_proved);
             printf("CALL %zu %zu %zu %zu %zu\n", v->function,

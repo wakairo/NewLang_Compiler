@@ -372,12 +372,15 @@ static bool evidence(const char *path)
     CHECK(producers == 1 && receivers == 1 && destructures == 1);
     char *code = NULL;
     size_t length = 37;
-    CHECK(nl_checked_c_node(n.entry, &code, &length) == NL_NODE_C_UNSUPPORTED &&
-          code == NULL && length == 37);
+    const NLNodeCStatus emitted = nl_checked_c_node(n.entry, &code, &length);
+    CHECK(emitted == NL_NODE_C_OK || emitted == NL_NODE_C_UNSUPPORTED);
+    CHECK(emitted == NL_NODE_C_OK ? (code != NULL && length == strlen(code))
+                                  : (code == NULL && length == 37));
+    free(code);
     node_checked_destroy(&n);
-    puts("owned live-return entry/post/correlation after AST teardown; 34 "
+    puts("owned live-return entry/post/correlation after AST teardown; 41 "
          "corruptions rejected; whole destructure and distinct terminal "
-         "receiver; backend unsupported");
+         "receiver; native subset checked separately");
     return true;
 }
 static bool oom(const char *path)
