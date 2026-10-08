@@ -80,6 +80,13 @@ V defines target users, workloads, workflows, value hypotheses, North Star exper
 
 V does not independently decide canonical language semantics, Draft revisions, implementation architecture, formal-proof strategy, or final merge/milestone sequencing. See the primary Japanese `NewLang_Product_Value_Strategy.md`.
 
+### Q — Quality Observation & Improvement
+
+Q is an advisory track for reducing material NewLang quality risk, not maximizing quality metrics.
+It is quiet by default: it observes existing P / CI / F / R / V evidence and proposes an evidence-backed Issue to Coordination only when there is a concrete risk or a cost-effective improvement opportunity.
+Q does not itself implement the compiler, write tests, configure CI, or become an automatic PR / merge gate. Coordination alone decides whether to adopt a proposal, its priority, and the track that owns any resulting work.
+Simplifying or removing a low-value quality procedure is also a valid Q proposal. See Issue #162 for the accepted Charter record.
+
 ### Coordination
 
 Coordination owns:
@@ -142,6 +149,7 @@ Track: F
 Track: P
 Track: R
 Track: V
+Track: Q
 ```
 
 The goal is later traceability of whose judgment, finding, or question is being recorded; no strict machine-readable format is required.
@@ -289,6 +297,7 @@ M: Is this the smallest practical rule?
 F: Is the rule internally coherent and provable where expected?
 P: Can a production compiler represent and diagnose it faithfully?
 R: What breaks if we ignore the project's preferred interpretation?
+Q: Does the existing quality evidence leave a material-risk or false-confidence blind spot?
 ```
 
 Passing all tracks increases confidence, but does not prove the design is complete.
