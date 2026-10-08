@@ -84,6 +84,13 @@ Vはtarget user / workload / workflowを具体化し、value hypothesis、North 
 
 Vはcanonical language semantics、Draft revision、implementation architecture、formal proof strategy、merge / milestone sequencingを単独では決めない。詳細は `NewLang_Product_Value_Strategy.md` を参照する。
 
+### Q — Quality Observation & Improvement
+
+Qは、品質指標の最大化ではなく、NewLangの実質的な品質リスクを減らすためのadvisory trackである。
+通常は沈黙し、既存のP / CI / F / R / Vの証拠を観測して、具体的なリスクまたは費用対効果のある改善機会がある場合だけ、根拠付きIssueとしてCoordinationへ提案する。
+Q自身はcompiler実装、テスト作成、CI構築を行わず、PR / mergeの自動的な必須gateにもならない。提案の採否、優先順位、担当trackの割り当てはCoordinationだけが決定する。
+低価値になった品質手続きの簡素化・廃止も正当な提案対象とする。承認時の詳細なCharterはIssue #162を参照する。
+
 ### Coordination
 
 Coordinationは少なくとも以下を担う。
@@ -146,6 +153,7 @@ Track: F
 Track: P
 Track: R
 Track: V
+Track: Q
 ```
 
 後から読んだときに誰の判断・finding・質問か識別できればよく、厳密な機械可読formatは要求しない。
@@ -296,6 +304,7 @@ M: これは最小で実用的なruleか？
 F: ruleは内部整合し、期待される性質を形式化できるか？
 P: production compilerで忠実に表現・診断・検査できるか？
 R: projectのpreferred interpretationを知らずに読むと、何が壊れるか？
+Q: 既存の品質証拠に、実質的なリスクまたは誤ったconfidenceを残す盲点があるか？
 ```
 
 全trackを通過することはconfidenceを高めるが、設計の完全性を証明するものではない。
