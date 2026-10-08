@@ -1,4 +1,4 @@
-"""Draft17.28 source admission, falsification, owned evidence; no new native."""
+"""Draft17.28 semantic regression and explicit bounded backend profiles."""
 import pathlib
 import subprocess
 import sys
@@ -84,13 +84,17 @@ precision = source.replace(op, "match seen {Some(q)=>{" + op + "},None=>{" + op 
 # No C/executable path: accepted source is intentionally pre-backend unsupported.
 with tempfile.TemporaryDirectory() as directory:
     root = pathlib.Path(directory)
+    supported = {"primary", "renamed", "declaration-order", "tail-argument-aliases", "reversed-inner-arms", "reversed-constructor-fields"}
     for name, text in positives.items():
         path = root / (name + ".nl")
         path.write_text(text)
         runs = [subprocess.run([compiler, str(path)], capture_output=True) for _ in range(2)]
         for run in runs:
-            assert run.returncode == 4 and not run.stdout and b"V1-BACKEND-UNSUPPORTED" in run.stderr, (name, run.returncode, run.stderr)
-        assert runs[0].stderr == runs[1].stderr
+            if name in supported:
+                assert run.returncode == 0 and run.stdout and not run.stderr, (name, run.returncode, run.stderr)
+            else:
+                assert run.returncode == 4 and not run.stdout and b"V1-BACKEND-UNSUPPORTED" in run.stderr, (name, run.returncode, run.stderr)
+        assert (runs[0].stdout, runs[0].stderr) == (runs[1].stdout, runs[1].stderr)
         subprocess.run([evidence, "evidence", str(path)], check=True)
     for name, (text, code) in negatives.items():
         path = root / (name + ".nl")
@@ -106,4 +110,4 @@ with tempfile.TemporaryDirectory() as directory:
     run = subprocess.run([compiler, str(path)], capture_output=True)
     assert run.returncode == 3 and not run.stdout and b"precision" in run.stderr, ("branch-result-precision", run.stderr)
     assert all(path.suffix == ".nl" for path in root.iterdir())
-print(f"{len(positives)} source positives / {len(negatives)} destructive controls; no new native/emission")
+print(f"{len(positives)} source positives / {len(negatives)} destructive controls; explicit emission profiles; native covered separately")

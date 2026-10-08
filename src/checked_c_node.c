@@ -28,6 +28,10 @@ typedef struct {
 typedef struct {
     char *text;
     char *receiver;
+    char *producer;
+    size_t producer_used, producer_calls;
+    NLTypeId live_tail;
+    NLValueId returned_members[3];
     size_t receiver_used, owner_calls;
     bool owner_read;
     size_t used, temp, steps, frames, roots;
@@ -183,6 +187,8 @@ static const char *ctype(const Emit *e, const Env *env, NLTypeId type)
         NLSemanticTypeView t;
         if (!nl_semantic_type_view(nl_checked_context(env->artifact), type, &t))
             return NULL;
+        if (e->live_tail != 0 && type == e->live_tail)
+            return "nl_live_tail";
         if (type == e->bundle)
             return "nl_backing";
         if (t.kind == NL_TYPE_ALLOCATION)
@@ -253,6 +259,9 @@ static bool field(Emit *e, const Env *env, const NLCheckedField *f,
                : reject(e);
 }
 static bool expr(Emit *, Env *, NLCheckedNodeId, Value *);
+static bool producer_call(Emit *, Env *, NLCheckedNodeId,
+                          const NLCheckedNodeView *, Value *);
+static bool live_destructure(Emit *, Env *, const NLCheckedNodeView *, Value *);
 static bool owner_call(Emit *, Env *, NLCheckedNodeId,
                        const NLCheckedNodeView *, Value *);
 static bool allocated_match(Emit *, Env *, NLCheckedNodeId,
@@ -516,7 +525,13 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
         return reject(e);
     *out = (Value){.type = v->type};
     if (v->kind == NL_CHECKED_REGISTERED_CALL)
-        return owner_call(e, env, id, v, out);
+        return v->producer.entry_proved ? producer_call(e, env, id, v, out)
+                                        : owner_call(e, env, id, v, out);
+    if (v->kind == NL_CHECKED_AGGREGATE_BINDING) {
+        const NLCheckedNodeView *init = get(env, v->initializer);
+        if (init != NULL && e->live_tail != 0 && init->type == e->live_tail)
+            return live_destructure(e, env, v, out);
+    }
     if (ctype(e, env, v->type) != NULL &&
         (v->result_count != 1 || v->results[0].type != v->type ||
          v->results[0].value == 0))
@@ -1289,7 +1304,8 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
             e->heap_link = write;
         const Env *target = heap(env, v);
         if ((!e->two_heap && e->destroys != 0) ||
-            e->reloans >= (e->two_heap    ? 4u + (e->owner_read ? 1u : 0u)
+            e->reloans >= (e->two_heap    ? 4u + (e->live_tail != 0 ? 1u : 0u) +
+                                                (e->owner_read ? 1u : 0u)
                            : e->heap_link ? 3u
                                           : 1u) ||
             (e->heap_link &&
@@ -1523,6 +1539,265 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
     return reject(e);
 }
 
+/* Exact two-item producer body. Its scope/relational certificate is checked
+ * first; this traversal validates each actual operand and emits in checked
+ * source order. It is deliberately not a general aggregate/return backend. */
+static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
+                          const NLCheckedNodeView *v, Value *out)
+{
+    const NLCheckedFragment *f = nl_checked_call_body(env->artifact, id);
+    const NLCheckedNodeView *body = nl_checked_node_view(f, nl_checked_root(f));
+    const Env *tail = region(env, v->producer.range.region);
+    if (!e->two_heap || e->live_tail == 0 || v->type != e->live_tail ||
+        e->producer_calls != 0 || e->owner_calls != 0 ||
+        !nl_checked_producer_valid(env->artifact, id) ||
+        !v->producer.head.dependency_compatible || tail == NULL ||
+        tail->region_slot != 1 || e->lifecycle[1].stage != 4 ||
+        tail->heap_place != v->producer.root ||
+        tail->heap_incarnation != v->producer.incarnation ||
+        tail->heap_domain != v->producer.domain || e->link_updates != 1 ||
+        e->reloans != 4 || e->reads != 1 || e->projections != 2 ||
+        body == NULL || body->kind != NL_CHECKED_BLOCK || !body->terminates ||
+        body->item_count != 2 || body->tail != 0 ||
+        body->returned.type != e->live_tail ||
+        body->returned.value != v->producer.result)
+        return reject(e);
+    const NLCheckedNodeView *binding =
+        nl_checked_node_view(f, body->first_item);
+    const NLCheckedNodeView *ret =
+        binding == NULL ? NULL : nl_checked_node_view(f, binding->next_item);
+    const NLCheckedNodeView *replace =
+        binding == NULL ? NULL : nl_checked_node_view(f, binding->initializer);
+    const NLCheckedNodeView *aggregate =
+        ret == NULL ? NULL : nl_checked_node_view(f, ret->initializer);
+    if (binding == NULL || binding->kind != NL_CHECKED_BINDING ||
+        binding->argument_count != 1 || ret == NULL ||
+        ret->kind != NL_CHECKED_RETURN || !ret->terminates ||
+        ret->next_item != 0 || ret->returned.type != e->live_tail ||
+        ret->returned.value != v->producer.result || replace == NULL ||
+        replace->kind != NL_CHECKED_REPLACE || replace->argument_count != 2 ||
+        replace->type != e->option || replace->result_count != 1 ||
+        aggregate == NULL || aggregate->kind != NL_CHECKED_AGGREGATE ||
+        aggregate->type != e->live_tail || aggregate->argument_count != 3 ||
+        aggregate->result_count != 1 ||
+        aggregate->results[0].value != v->producer.result)
+        return reject(e);
+    const NLCheckedNodeView *receiver =
+        nl_checked_node_view(f, binding->first_argument);
+    if (receiver == NULL || receiver->kind != NL_CHECKED_RECEIVER ||
+        receiver->symbol != binding->symbol || receiver->type != e->option ||
+        receiver->next_argument != 0 || binding->type != e->unit)
+        return reject(e);
+    NLSemanticValueView package;
+    if (!nl_semantic_value_view(nl_checked_producer_return(env->artifact, id),
+                                v->producer.result, &package) ||
+        package.field_count != 3)
+        return reject(e);
+    const NLCheckedNodeView *ref =
+        nl_checked_node_view(f, replace->first_argument);
+    const NLCheckedNodeView *none =
+        ref == NULL ? NULL : nl_checked_node_view(f, ref->next_argument);
+    const NLCheckedField field = replace->field;
+    if (ref == NULL || ref->kind != NL_CHECKED_IDENTIFIER ||
+        ref->symbol != v->producer.parameters[0] ||
+        ref->value_use != NL_VALUE_COPIED || none == NULL ||
+        none->kind != NL_CHECKED_SUM_CONSTRUCTOR || none->variant != 1 ||
+        none->type != e->option || none->next_argument != 0 || !field.present ||
+        !field.dependency_compatible || field.nominal != e->node ||
+        field.type != e->option || field.index != 0 ||
+        field.access != NL_ACCESS_WRITE ||
+        field.parent != v->producer.head.parent ||
+        field.child != v->producer.head.child ||
+        field.parent_incarnation != v->producer.head.parent_incarnation ||
+        field.child_incarnation != v->producer.head.child_incarnation ||
+        field.parent_fact != e->root_fact || field.child_fact != e->link_fact ||
+        field.old_value != e->link_value ||
+        field.old_value != v->producer.head_before ||
+        field.child_fact != v->producer.head_before_fact ||
+        field.new_value != v->producer.head_after ||
+        field.child_post_fact != v->producer.head_after_fact ||
+        field.parent_post_fact == 0 ||
+        field.parent_post_fact == field.parent_fact ||
+        field.child_post_fact == field.child_fact ||
+        field.payload_occurrence != e->occurrence ||
+        field.post_payload_occurrence != 0 ||
+        replace->results[0].value != field.old_value ||
+        none->result_count != 1 || none->results[0].value != field.new_value)
+        return reject(e);
+    Value args[4] = {0};
+    const Local *donors[4] = {0};
+    NLCheckedNodeId arg = v->first_argument;
+    for (size_t i = 0; i < 4; ++i) {
+        const NLCheckedNodeView *a = get(env, arg);
+        if (a == NULL || a->result_count != 1 ||
+            a->results[0].value != v->producer.inputs[i] ||
+            (i == 0 ? a->kind != NL_CHECKED_FIELD_REF
+                    : (a->kind != NL_CHECKED_IDENTIFIER ||
+                       a->symbol != v->producer.donor[i])))
+            return reject(e);
+        if (i == 0 && (a->field.child != v->producer.head.child ||
+                       a->field.parent != v->producer.head.parent ||
+                       a->reference_result.scope == 0))
+            return reject(e);
+        if (i != 0)
+            donors[i] = local(env, a->symbol, a->type);
+        if (!expr(e, env, arg, &args[i]))
+            return false;
+        arg = a->next_argument;
+    }
+    if (arg != 0 || donors[2] == NULL || donors[3] == NULL ||
+        e->projections != 3)
+        return reject(e);
+    Env callee = {.artifact = f,
+                  .frame = ++e->frames,
+                  .backing = tail->backing,
+                  .region_slot = 1,
+                  .heap_place = tail->heap_place,
+                  .heap_incarnation = tail->heap_incarnation,
+                  .heap_domain = tail->heap_domain};
+    for (size_t i = 0; i < 4; ++i)
+        if (!add_local(e, &callee, v->producer.parameters[i], args[i].type,
+                       false))
+            return false;
+    e->producer = malloc(C_BYTES);
+    if (e->producer == NULL) {
+        e->status = NL_NODE_C_OUT_OF_MEMORY;
+        return false;
+    }
+    char *main_text = e->text;
+    size_t main_used = e->used;
+    e->text = e->producer;
+    e->used = 0;
+    ++e->producer_calls;
+    bool ok = put(e, "static nl_live_tail nl_producer_%zu(", v->function);
+    for (size_t i = 0; ok && i < 4; ++i)
+        ok = put(e, "%s%s nl_b_%zu_%zu", i == 0 ? "" : ",",
+                 ctype(e, &callee, args[i].type), callee.frame,
+                 v->producer.parameters[i]);
+    if (ok)
+        ok = put(e,
+                 ") "
+                 "{\nNL_LIVE_ENTER(nl_b_%zu_%zu,nl_b_%zu_%zu,nl_b_%zu_%zu."
+                 "handle,nl_b_%zu_%zu.token);\n",
+                 callee.frame, v->producer.parameters[0], callee.frame,
+                 v->producer.parameters[1], callee.frame,
+                 v->producer.parameters[2], callee.frame,
+                 v->producer.parameters[3]);
+    Value projected = {0}, replacement = {0};
+    NLSemanticValueView selected, input;
+    if (ok)
+        ok =
+            selected_reference(&callee, ref, &selected) &&
+            nl_semantic_value_view(nl_checked_producer_entry(env->artifact, id),
+                                   v->producer.inputs[0], &input) &&
+            same_reference(selected.reference, input.reference) &&
+            expr(e, &callee, replace->first_argument, &projected) &&
+            expr(e, &callee, ref->next_argument, &replacement);
+    size_t old = ++e->temp;
+    if (ok)
+        ok = put(e,
+                 "nl_node_option nl_v_%zu = *nl_v_%zu;\n*nl_v_%zu = nl_v_%zu;\n"
+                 "NL_HEAP_CHANGE(nl_v_%zu,&nl_v_%zu,2);\n(void)nl_v_%zu;\n",
+                 old, projected.temp, projected.temp, replacement.temp,
+                 projected.temp, old, old);
+    Value values[3] = {0};
+    bool seen[3] = {false, false, false};
+    NLCheckedNodeId item = aggregate->first_argument;
+    for (size_t i = 0; ok && i < 3; ++i) {
+        const NLCheckedNodeView *field_node = nl_checked_node_view(f, item);
+        const NLCheckedNodeView *a =
+            field_node == NULL
+                ? NULL
+                : nl_checked_node_view(f, field_node->initializer);
+        if (field_node == NULL ||
+            field_node->kind != NL_CHECKED_AGGREGATE_FIELD ||
+            field_node->field_index >= 3 || seen[field_node->field_index] ||
+            a == NULL || a->kind != NL_CHECKED_IDENTIFIER ||
+            a->symbol != v->producer.parameters[field_node->field_index + 1] ||
+            a->result_count != 1 ||
+            a->results[0].value != package.fields[field_node->field_index] ||
+            field_node->type != a->type ||
+            a->type != args[field_node->field_index + 1].type) {
+            ok = reject(e);
+            break;
+        }
+        seen[field_node->field_index] = true;
+        ok = expr(e, &callee, field_node->initializer,
+                  &values[field_node->field_index]);
+        item = field_node->next_argument;
+    }
+    size_t packed = ++e->temp;
+    if (ok)
+        ok = item == 0 &&
+             put(e,
+                 "nl_live_tail nl_v_%zu = {nl_v_%zu,nl_v_%zu,nl_v_%zu};\n"
+                 "NL_LIVE_RETURN(nl_v_%zu);\nreturn nl_v_%zu;\n}\n",
+                 packed, values[0].temp, values[1].temp, values[2].temp, packed,
+                 packed);
+    e->producer_used = e->used;
+    e->text = main_text;
+    e->used = main_used;
+    if (!ok)
+        return reject(e);
+    for (size_t i = 0; i < 3; ++i)
+        e->returned_members[i] = package.fields[i];
+    e->link_value = field.new_value;
+    e->root_fact = field.parent_post_fact;
+    e->link_fact = field.child_post_fact;
+    e->occurrence = 0;
+    ++e->link_updates;
+    out->type = e->live_tail;
+    out->temp = ++e->temp;
+    return put(e,
+               "NL_LIVE_SEND(nl_v_%zu,nl_v_%zu.handle,nl_v_%zu.token,&nl_b_%zu_"
+               "%zu,&nl_b_%zu_%zu);\n"
+               "nl_live_tail nl_v_%zu = "
+               "nl_producer_%zu(nl_v_%zu,nl_v_%zu,nl_v_%zu,nl_v_%zu);\n"
+               "NL_LIVE_RECEIVE(nl_v_%zu,&nl_b_%zu_%zu,&nl_b_%zu_%zu);\n",
+               args[1].temp, args[2].temp, args[3].temp, donors[2]->frame,
+               donors[2]->symbol, donors[3]->frame, donors[3]->symbol,
+               out->temp, v->function, args[0].temp, args[1].temp, args[2].temp,
+               args[3].temp, out->temp, donors[2]->frame, donors[2]->symbol,
+               donors[3]->frame, donors[3]->symbol);
+}
+static bool live_destructure(Emit *e, Env *env, const NLCheckedNodeView *v,
+                             Value *out)
+{
+    if (v->argument_count != 3 || e->producer_calls != 0)
+        return reject(e);
+    Value package = {0};
+    if (!expr(e, env, v->initializer, &package) ||
+        package.type != e->live_tail || e->producer_calls != 1)
+        return reject(e);
+    const NLSemanticContext *c = nl_checked_context(env->artifact);
+    const NLTypeId types[3] = {e->ptr,
+                               nl_semantic_core_type(c, NL_TYPE_ALLOCATION),
+                               nl_semantic_domain_type(c)};
+    const char *members[3] = {"ptr", "allocation", "domain"};
+    bool seen[3] = {false, false, false};
+    NLCheckedNodeId id = v->first_argument;
+    for (size_t i = 0; i < 3; ++i) {
+        const NLCheckedNodeView *r = get(env, id);
+        if (r == NULL || r->kind != NL_CHECKED_RECEIVER ||
+            r->field_index >= 3 || seen[r->field_index] ||
+            r->type != types[r->field_index] ||
+            !add_local(e, env, r->symbol, r->type, false))
+            return reject(e);
+        NLSemanticBindingView binding;
+        if (!nl_semantic_binding_view(c, r->symbol, &binding) ||
+            binding.value != e->returned_members[r->field_index])
+            return reject(e);
+        seen[r->field_index] = true;
+        if (!put(e, "%s nl_b_%zu_%zu = nl_v_%zu.%s;\n(void)nl_b_%zu_%zu;\n",
+                 ctype(e, env, r->type), env->frame, r->symbol, package.temp,
+                 members[r->field_index], env->frame, r->symbol))
+            return false;
+        id = r->next_argument;
+    }
+    out->type = e->unit;
+    return id == 0 && put(e, "nl_v_%zu = (nl_live_tail){0};\n", package.temp);
+}
+
 /* This gate consumes only the existing §18.1a proof. A separate parameter
  * placement never supplies a heap root or an allocation handle. */
 static bool owner_evidence(Emit *e, Env *env, NLCheckedNodeId id,
@@ -1538,8 +1813,9 @@ static bool owner_evidence(Emit *e, Env *env, NLCheckedNodeId id,
     NLSemanticDomainView d, dead_d;
     const Env *h = region(env, v->owner_call.range.region);
     if (!e->two_heap || e->owner_calls != 0 || e->allocations != 2 ||
-        e->reloans != 4 || e->link_updates != 2 || e->projections != 3 ||
-        e->reads != 1 || h == NULL || h->region_slot != 1 ||
+        e->reloans != 4u + (e->live_tail != 0 ? 1u : 0u) ||
+        e->link_updates != 2 || e->projections != 3 || e->reads != 1 ||
+        h == NULL || h->region_slot != 1 ||
         v->kind != NL_CHECKED_REGISTERED_CALL || !v->body_backed ||
         v->argument_count != 3 || v->type != e->unit || v->result_count != 0 ||
         !v->owner_call.entry_proved || !v->owner_call.post_proved ||
@@ -1787,6 +2063,29 @@ static bool two_profile(const NLCheckedFragment *f, size_t depth)
     return false;
 }
 
+static bool return_profile(Emit *e, const NLCheckedFragment *f, size_t depth)
+{
+    if (depth >= C_DEPTH)
+        return reject(e);
+    for (NLCheckedNodeId i = 1; i <= nl_checked_node_count(f); ++i) {
+        const NLCheckedNodeView *v = nl_checked_node_view(f, i);
+        if (v->producer.entry_proved) {
+            if (e->live_tail != 0 || !nl_checked_producer_valid(f, i))
+                return reject(e);
+            e->live_tail = v->type;
+        }
+        const NLCheckedFragment *b = nl_checked_call_body(f, i);
+        if (b != NULL && !return_profile(e, b, depth + 1))
+            return false;
+        if (v->kind == NL_CHECKED_MATCH)
+            for (size_t a = 0; a < v->item_count; ++a)
+                if (!return_profile(e, nl_checked_match_arm(f, i, a),
+                                    depth + 1))
+                    return false;
+    }
+    return true;
+}
+
 NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
                                 size_t *length)
 {
@@ -1809,6 +2108,10 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         return NL_NODE_C_OUT_OF_MEMORY;
     Env env = {.artifact = body};
     e.two_heap = two_profile(body, 0);
+    if (!return_profile(&e, body, 0)) {
+        free(e.text);
+        return e.status;
+    }
     for (NLCheckedNodeId i = 1; i <= nl_checked_node_count(body); ++i) {
         const NLCheckedNodeView *op = get(&env, i);
         if (op->kind == NL_CHECKED_TRY_ALLOCATE_ONE && op->result_count == 0) {
@@ -1850,6 +2153,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             "typedef struct {unsigned char *bytes;size_t length;} nl_storage;\n"
             "typedef struct {unsigned char *bytes;size_t length;} nl_slot;\n"
             "typedef struct {size_t token;} nl_domain;\n"
+            "typedef struct {const nl_node *ptr;nl_allocation "
+            "allocation;nl_domain domain;} nl_live_tail;\n"
             "typedef struct {nl_allocation allocation;nl_storage raw;} "
             "nl_backing;\n"
             "#ifdef NEWLANG_HEAP_OBSERVER\n#include "
@@ -1873,7 +2178,11 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             "#define NL_HEAP_HANDOFF(...) ((void)0)\n"
             "#define NL_HEAP_RECEIVER_ENTER(...) ((void)0)\n"
             "#define NL_HEAP_RECEIVER_EXIT() ((void)0)\n"
-            "#define NL_HEAP_RETURNED(...) ((void)0)\n#endif\n");
+            "#define NL_HEAP_RETURNED(...) ((void)0)\n"
+            "#define NL_LIVE_SEND(...) ((void)0)\n"
+            "#define NL_LIVE_ENTER(...) ((void)0)\n"
+            "#define NL_LIVE_RETURN(...) ((void)0)\n"
+            "#define NL_LIVE_RECEIVE(...) ((void)0)\n#endif\n");
     }
     const size_t main_offset = e.used;
     (void)put(&e, "int main(void) {\n");
@@ -1888,18 +2197,34 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
           e.finalized != (e.two_heap ? 3u : 1u) ||
           e.slots != (e.two_heap ? 2u : 1u) ||
           e.erased != (e.two_heap ? 3u : 1u) ||
-          e.reloans != (e.two_heap    ? 4u + (e.owner_read ? 1u : 0u)
+          e.reloans != (e.two_heap    ? 4u + (e.live_tail != 0 ? 1u : 0u) +
+                                            (e.owner_read ? 1u : 0u)
                         : e.heap_link ? 3u
                                       : 1u) ||
           (e.heap_link && (e.projections != 3 || e.reads != 1)) ||
-          e.option_bindings != 3 || e.link_updates != 2)) ||
+          e.option_bindings != (e.live_tail != 0 ? 2u : 3u) ||
+          e.link_updates != 2)) ||
         !put(&e, e.allocated ? "NL_HEAP_FINISH();\nreturn 0;\n}\n"
                              : "NL_NODE_FINISH();\nreturn 0;\n}\n")) {
         if (e.status == NL_NODE_C_OK)
             e.status = NL_NODE_C_UNSUPPORTED;
         free(e.receiver);
+        free(e.producer);
         free(e.text);
         return e.status;
+    }
+    if (e.producer != NULL) {
+        if (e.producer_used >= C_BYTES - e.used) {
+            free(e.receiver);
+            free(e.producer);
+            free(e.text);
+            return NL_NODE_C_RESOURCE_LIMIT;
+        }
+        memmove(e.text + main_offset + e.producer_used, e.text + main_offset,
+                e.used - main_offset + 1);
+        memcpy(e.text + main_offset, e.producer, e.producer_used);
+        e.used += e.producer_used;
+        free(e.producer);
     }
     if (e.receiver != NULL) {
         if (e.receiver_used >= C_BYTES - e.used) {

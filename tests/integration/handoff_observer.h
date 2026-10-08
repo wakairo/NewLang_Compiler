@@ -6,8 +6,10 @@
 #include <stdio.h>
 #define VERIFY(x)                                                              \
     do {                                                                       \
-        if (!(x))                                                              \
+        if (!(x)) {                                                            \
+            fprintf(stderr, "OBSERVER_REJECT %s:%d\n", __FILE__, __LINE__);    \
             abort();                                                           \
+        }                                                                      \
     } while (0)
 size_t test_malloc_calls(void);
 size_t test_free_calls(void);
@@ -16,8 +18,14 @@ static const size_t domains[2] = {EXPECT_HD, EXPECT_TD};
 static const size_t places[2] = {EXPECT_HP, EXPECT_TP};
 static const size_t incarnations[2] = {EXPECT_HI, EXPECT_TI};
 static const unsigned payloads[2] = {EXPECT_HV, EXPECT_TV};
-static const size_t scopes[5] = {EXPECT_S0, EXPECT_S1, EXPECT_S2, EXPECT_S3,
-                                 EXPECT_S4};
+#ifndef EXPECT_RETURN_READ
+#define EXPECT_RETURN_READ 0
+#endif
+#ifndef EXPECT_S5
+#define EXPECT_S5 0
+#endif
+static const size_t scopes[6] = {EXPECT_S0, EXPECT_S1, EXPECT_S2,
+                                 EXPECT_S3, EXPECT_S4, EXPECT_S5};
 static bool in_receiver, pending_handoff;
 static size_t handoffs, receiver_entries, receiver_exits, returns,
     receiver_frees, donor_frees;
@@ -106,11 +114,20 @@ static void root_ref(const nl_node *p, size_t d, unsigned write, size_t r,
 {
     siblings();
     unsigned i = region_of(p);
-    if (roots == 4) {
-        VERIFY(EXPECT_RECEIVER_READ && in_receiver && receiver_entries == 1 &&
-               i == 1 && d == domains[1] && r == places[1] &&
+    if (roots == 4 && EXPECT_RETURN_READ) {
+        VERIFY(!in_receiver && i == 1 && d == domains[1] && r == places[1] &&
                inc == incarnations[1] && !write && scope == scopes[4] &&
                scope != 0 && active_scope == 0 && link_phase == 5);
+        active_scope = scope;
+        ++roots;
+        return;
+    }
+    if (roots == 4 + EXPECT_RETURN_READ) {
+        VERIFY(EXPECT_RECEIVER_READ && in_receiver && receiver_entries == 1 &&
+               i == 1 && d == domains[1] && r == places[1] &&
+               inc == incarnations[1] && !write &&
+               scope == scopes[4 + EXPECT_RETURN_READ] && scope != 0 &&
+               active_scope == 0 && link_phase == 5);
         active_scope = scope;
         ++roots;
         return;
@@ -176,7 +193,7 @@ static void node_arm(size_t v, const nl_node *p)
 static void scope_end(size_t scope)
 {
     VERIFY(active_scope != 0 && scope == active_scope &&
-           scopes_ended < 4 + EXPECT_RECEIVER_READ);
+           scopes_ended < 4 + EXPECT_RETURN_READ + EXPECT_RECEIVER_READ);
     active_scope = 0;
     ++scopes_ended;
 }
@@ -186,9 +203,11 @@ static void end(const nl_node *p, size_t d)
     VERIFY(phases[i] == 4 && active_scope == 0 && d == domains[i]);
     VERIFY(p->f0.tag == 0 && p->f0.ptr == NULL && p->f1 == payloads[i]);
     if (addresses[1]) {
-        VERIFY(link_phase == 5 && scopes_ended == 4 + EXPECT_RECEIVER_READ &&
-               roots == 4 + EXPECT_RECEIVER_READ && fields == 3 &&
-               changes == 2 && copy_bindings == 3);
+        VERIFY(link_phase == 5 &&
+               scopes_ended == 4 + EXPECT_RETURN_READ + EXPECT_RECEIVER_READ &&
+               roots == 4 + EXPECT_RETURN_READ + EXPECT_RECEIVER_READ &&
+               fields == 3 && changes == 2 &&
+               copy_bindings == (EXPECT_RETURN_READ ? 2u : 3u));
         VERIFY(i == 1 ? (phases[0] == 4 && in_receiver && receiver_entries == 1)
                       : (phases[1] == 9 && !in_receiver && returns == 1));
     } else
