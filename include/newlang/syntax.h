@@ -94,6 +94,7 @@ typedef struct {
         struct {
             NLSourceSpan callee;
             const NLSyntaxNode *type; /* closed allocated-H builtin only */
+            NLAccessSyntax access;    /* ALLOCATED_REF requested mode only */
             const NLSyntaxNode *arguments;
             size_t argument_count;
         } call;

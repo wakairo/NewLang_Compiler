@@ -204,12 +204,16 @@ Draft/Issueの未merge候補は `PROPOSED (unmerged)` と表記し、ADOPTEDに�
   さらに旧`NewLang_v0_surface_Draft1.md`の初期実験は
   `r.field`/`w.field`という旧punctuationだが、
   read/write mode保持とptr非derefは同じ意図だった。
-- **現在のcanonical:** Draft17.24 §10.1はproper provenance/liveness/stability
+- **採用前のcanonical:** Draft17.24 §10.1はproper provenance/liveness/stability
   とread/write backing permissionに基づくptr→ref core semanticsを持つが、
   §3.2 sourceではallocated Hの`ref_from_ptr(read,p,stable)`のみ。
   §17.1 coreにはmode-preserving fixed field projectionがあるが、
   actual `@link`は**direct lexical H local-only**。
-- **今回の判断:** **PROPOSED / UNMERGED** (Issue #176 candidate Draft17.25)。
+- **今回の判断:** **ADOPTED / BOUNDED**。
+  [PR #177独立Coordination ACCEPT](https://github.com/wakairo/NewLang_Compiler/pull/177#issuecomment-6053120459)
+  とmain merge `060731a121cb29ba6cfe2559d135a4736c3dc429`により
+  Draft17.25 §§10.1/17.1のclosed sourceとして採用。
+  source採用はproduction/native実行実績を意味しない。
   `ref_from_ptr(write,p,stable)`でexplicit-domain-backed
   write-authorized H root refを取得し、そのscoped ref bindingから
   committed link fieldだけ`r@link`で

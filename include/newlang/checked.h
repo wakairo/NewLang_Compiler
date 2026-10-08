@@ -52,7 +52,9 @@ typedef enum {
     NL_CHECKED_U8_LITERAL,
     NL_CHECKED_FIELD_READ,
     NL_CHECKED_TRY_ALLOCATE_ONE,
-    NL_CHECKED_REF_FROM_PTR
+    NL_CHECKED_REF_FROM_PTR,
+    NL_CHECKED_FIELD_REF, /* mode-preserving scoped H link projection */
+    NL_CHECKED_LINK_READ  /* bounded Copy read through FIELD_REF */
 } NLCheckedKind;
 typedef enum {
     NL_VALUE_USE_NONE,
