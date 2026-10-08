@@ -2,6 +2,41 @@
 #include <stdlib.h>
 #include <string.h>
 
+NLCheckStatus nl_allocated_write_access(const NLSemanticContext *c,
+                                        NLValueId pointer)
+{
+    if (pointer == 0 || pointer > c->value_count)
+        return NL_CHECK_SEMANTIC_ERROR;
+    const NLSemanticValueView v = c->values[pointer - 1];
+    const NLSemanticTypeView t = c->types[v.type - 1].view;
+    const NLReferenceFacts f = v.reference;
+    if (v.reference_count != 0 || f.provenance == NL_PROVENANCE_UNKNOWN)
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    if (t.kind != NL_TYPE_PTR || !nl_recursive_local_type(c, t.target) ||
+        f.provenance != NL_PROVENANCE_VALID || !f.writable || !f.readable ||
+        !nl_fixed_live(c, f.place))
+        return NL_CHECK_SEMANTIC_ERROR;
+    const NLSemanticPlaceView root = c->places[f.place - 1];
+    const NLSemanticTypeView h = c->types[t.target - 1].view;
+    if (root.type != t.target || root.incarnation != f.incarnation ||
+        !root.independent_root || root.parent_aggregate != 0 ||
+        root.parent_sum != 0 || root.governing_domain == 0 ||
+        !c->domains[root.governing_domain - 1].live ||
+        root.placement.region == 0 || root.placement.region > c->region_count ||
+        !h.layout_known || h.alignment == 0 ||
+        root.placement.length != h.size ||
+        root.placement.start % h.alignment != 0)
+        return NL_CHECK_SEMANTIC_ERROR;
+    const NLSemanticBackingView backing =
+        c->regions[root.placement.region - 1].view;
+    return backing.live && backing.ordinary_write &&
+                   backing.alignment >= h.alignment &&
+                   root.placement.start <= backing.size &&
+                   root.placement.length <= backing.size - root.placement.start
+               ? NL_CHECK_OK
+               : NL_CHECK_SEMANTIC_ERROR;
+}
+
 /* Private candidate operations. The caller owns clone/rollback on any failure.
  * No host pointer, address, allocation event or live authority at registration.
  * The existing Linux x86_64 execution target uses one word tag + one pointer

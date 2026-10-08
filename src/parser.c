@@ -999,6 +999,7 @@ static NLSyntaxNode *allocated_call(NLParser *parser, NLSourceSpan name,
                                     NLSyntaxKind kind)
 {
     NLSyntaxNode *target = NULL;
+    NLAccessSyntax access = NL_ACCESS_READ;
     const size_t count = kind == NL_SYNTAX_ALLOCATED_TRY   ? 0
                          : kind == NL_SYNTAX_ALLOCATED_REF ? 2
                                                            : 1;
@@ -1014,15 +1015,16 @@ static NLSyntaxNode *allocated_call(NLParser *parser, NLSourceSpan name,
     if (!expect_punct(parser, '(', "ALLOCATED-CALL-ARITY", "expected ("))
         return NULL;
     if (kind == NL_SYNTAX_ALLOCATED_REF) {
-        if (!word(parser, "read")) {
+        if (!word(parser, "read") && !word(parser, "write")) {
             fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
                  "ALLOCATED-REF-ACCESS",
-                 "only explicit read reloan is admitted");
+                 "explicit reloan requires read or write mode");
             return NULL;
         }
+        access = word(parser, "write") ? NL_ACCESS_WRITE : NL_ACCESS_READ;
         consume(parser);
         if (!expect_punct(parser, ',', "ALLOCATED-CALL-ARITY",
-                          "expected comma after read"))
+                          "expected comma after access mode"))
             return NULL;
     }
     NLSyntaxNode *result = node(parser, kind, name), *last = NULL;
@@ -1030,6 +1032,7 @@ static NLSyntaxNode *allocated_call(NLParser *parser, NLSourceSpan name,
         return NULL;
     result->view.data.call.callee = name;
     result->view.data.call.type = target;
+    result->view.data.call.access = access;
     for (size_t i = 0; i < count; ++i) {
         NLSyntaxNode *arg = source_name(parser, NL_SYNTAX_EXPR_NAME, false);
         if (arg == NULL)

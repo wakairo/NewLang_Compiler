@@ -636,9 +636,19 @@ static NLCheckedNodeId argument(Check *check, const NLSyntaxNode *syntax,
     return parameter_match(check, id, expected);
 }
 
+static bool ref_field_selection(Check *, const NLSyntaxView *, NLCheckedField *,
+                                NLValueId *);
 static NLTypeId write_parameter(Check *check, const NLSyntaxNode *syntax)
 {
     const NLSyntaxView *const node = nl_syntax_node_view(syntax);
+    if (check->allocated_slice && node->kind == NL_SYNTAX_FIELD_DESIGNATOR) {
+        NLCheckedField field;
+        NLValueId parent;
+        if (!ref_field_selection(check, node, &field, &parent))
+            return 0;
+        return compound(check, NL_TYPE_REF, field.type, NL_ACCESS_WRITE, false,
+                        node->span);
+    }
     if (node->kind != NL_SYNTAX_EXPR_NAME ||
         equal_name(check, node->data.name, "unit")) {
         return 0;
@@ -1174,6 +1184,9 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                     if (!c->bindings[i].hidden &&
                         c->bindings[i].view.place == root)
                         evidence.base = i + 1;
+                if (view(check, args[0])->field.present &&
+                    view(check, args[0])->field.child == place)
+                    evidence.base = view(check, args[0])->field.base;
                 if (!host(check,
                           nl_fixed_change(c, place, second,
                                           kind == NL_CHECKED_STORE),
@@ -1235,12 +1248,16 @@ static bool run_body(Check *, NLCheckedNodeId, const NLFunctionEntry *,
 static NLCheckedNodeId allocated_raw(Check *, const NLSyntaxView *,
                                      NLRawOperationKind);
 static NLCheckedNodeId allocated_ref(Check *, const NLSyntaxView *);
+static NLCheckedNodeId link_read(Check *, const NLSyntaxView *);
 
 static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
 {
     NLSemanticContext *const c = check->context;
     if (equal_name(check, syntax->data.call.callee, "deallocate"))
         return allocated_raw(check, syntax, NL_RAW_DEALLOCATE);
+    if (check->allocated_slice &&
+        equal_name(check, syntax->data.call.callee, "read"))
+        return link_read(check, syntax);
     if (equal_name(check, syntax->data.call.callee, "lifetime_domain")) {
         if (!check->allocated_slice || syntax->data.call.argument_count != 0) {
             fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
@@ -1561,9 +1578,161 @@ static bool fixed_selection(Check *check, const NLSyntaxView *s,
     return true;
 }
 
+/* The static projection key is (completed nominal, declaration index), never
+ * a C offset. The current fixed-child place is its incarnation-specific site.
+ * A ref base is selected before its field label and remains a separate route
+ * from a lexical value read. No ptr, implicit dereference or mode promotion. */
+static bool ref_field_selection(Check *check, const NLSyntaxView *s,
+                                NLCheckedField *out, NLValueId *parent)
+{
+    NLSemanticContext *c = check->context;
+    const NLSymbolId symbol = available(check, s->data.field_designator.base);
+    if (symbol == 0)
+        return false;
+    const NLSemanticBindingView b = c->bindings[symbol - 1].view;
+    const NLSemanticTypeView t = c->types[b.type - 1].view;
+    if (!check->allocated_slice || t.kind != NL_TYPE_REF || t.is_exclusive ||
+        !nl_recursive_local_type(c, t.target)) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
+             "HEAP-LINK-REF-PROFILE",
+             "projection requires an ordinary scoped completed H root ref");
+        return false;
+    }
+    if (!concrete_ref(check, b.value, s->span) ||
+        !reference_live(check, b.value, s->span))
+        return false;
+    const NLSemanticValueView v = c->values[b.value - 1];
+    if (!host(check, nl_fixed_dependencies(c), s->span))
+        return false;
+    const NLSemanticPlaceView p = c->places[v.reference.place - 1];
+    if (!p.independent_root || p.parent_aggregate != 0 || p.parent_sum != 0 ||
+        p.placement.region == 0 || p.governing_domain == 0 ||
+        !c->regions[p.placement.region - 1].view.live ||
+        !c->domains[p.governing_domain - 1].live || p.fixed_field_count != 2) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
+             "HEAP-LINK-ROOT-PROFILE",
+             "projection requires the current allocated H root");
+        return false;
+    }
+    if (!equal_name(check, s->data.field_designator.field,
+                    c->types[t.target - 1].field_names[0])) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
+             "HEAP-LINK-FIELD-PROFILE",
+             "projection selects only H's committed recursive link");
+        return false;
+    }
+    const NLPlaceId child = p.fixed_fields[0];
+    if (!nl_fixed_live(c, child)) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "FIELD-STALE-CHILD",
+             "projected fixed child incarnation has ended");
+        return false;
+    }
+    const NLSemanticPlaceView f = c->places[child - 1];
+    *parent = b.value;
+    *out = (NLCheckedField){.present = true,
+                            .dependency_compatible = true,
+                            .base = symbol,
+                            .nominal = t.target,
+                            .type = f.type,
+                            .index = 0,
+                            .parent = v.reference.place,
+                            .child = child,
+                            .parent_incarnation = p.incarnation,
+                            .child_incarnation = f.incarnation,
+                            .parent_fact = p.current_fact,
+                            .child_fact = f.current_fact,
+                            .access = t.access,
+                            .old_value = f.current_value,
+                            .payload_occurrence = f.payload_occurrence};
+    return true;
+}
+
+static NLCheckedNodeId field_ref(Check *check, const NLSyntaxView *s)
+{
+    NLSemanticContext *c = check->context;
+    NLCheckedField field;
+    NLValueId parent;
+    if (!ref_field_selection(check, s, &field, &parent) ||
+        conflicts(check, field.child, false, false, parent, s->span))
+        return 0;
+    /* Copy exactly the parent's dependency evidence. Fixed projection changes
+     * the referent site/type, not scope, permission or authority. Ordinary refs
+     * do not implicitly depend on the mutable current ValueFact. */
+    NLSemanticValueView projected = c->values[parent - 1];
+    projected.type =
+        compound(check, NL_TYPE_REF, field.type, field.access, false, s->span);
+    if (projected.type == 0)
+        return 0;
+    projected.reference.place = field.child;
+    projected.reference.incarnation = field.child_incarnation;
+    const NLCheckedNodeId arg =
+        binding_argument(check, field.base, 0, s->data.field_designator.base,
+                         s->data.field_designator.base);
+    if (arg == 0)
+        return 0;
+    const NLValueId value = new_value(check, projected, s->span);
+    if (value == 0)
+        return 0;
+    end_temporary(check, one_result(check, arg));
+    const NLSemanticPlaceView root = c->places[field.parent - 1];
+    return add(check, (NLCheckedNodeView){
+                          .kind = NL_CHECKED_FIELD_REF,
+                          .span = s->span,
+                          .type = projected.type,
+                          .symbol = field.base,
+                          .first_argument = arg,
+                          .argument_count = 1,
+                          .field = field,
+                          .has_reference_result = true,
+                          .reference_result = projected.reference,
+                          .lifetime_place = field.parent,
+                          .lifetime_incarnation = field.parent_incarnation,
+                          .lifetime_domain = root.governing_domain,
+                          .lifetime_range = root.placement,
+                          .result_count = 1,
+                          .results = {{projected.type, value}}});
+}
+
+static NLCheckedNodeId link_read(Check *check, const NLSyntaxView *s)
+{
+    const NLSyntaxView *operand = nl_syntax_node_view(s->data.call.arguments);
+    if (s->data.call.argument_count != 1 || operand == NULL ||
+        operand->kind != NL_SYNTAX_FIELD_DESIGNATOR) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
+             "HEAP-LINK-READ-PROFILE", "read requires the bounded ref@link");
+        return 0;
+    }
+    const NLCheckedNodeId projected = field_ref(check, operand);
+    if (projected == 0)
+        return 0;
+    const NLCheckedNodeView ref = *view(check, projected);
+    const NLTypeId expected = compound(check, NL_TYPE_REF, ref.field.type,
+                                       NL_ACCESS_READ, false, s->span);
+    if (expected == 0 || parameter_match(check, projected, expected) == 0)
+        return 0;
+    NLSemanticContext *c = check->context;
+    NLValueId copy = 0;
+    if (!host(check, nl_sem_copy_value(c, ref.field.old_value, &copy), s->span))
+        return 0;
+    end_temporary(check, ref.results[0].value);
+    return add(check, (NLCheckedNodeView){.kind = NL_CHECKED_LINK_READ,
+                                          .span = s->span,
+                                          .type = ref.field.type,
+                                          .first_argument = projected,
+                                          .argument_count = 1,
+                                          .field = ref.field,
+                                          .value_use = NL_VALUE_COPIED,
+                                          .result_count = 1,
+                                          .results = {{ref.field.type, copy}}});
+}
+
 static NLCheckedNodeId field_read(Check *check, const NLSyntaxView *s)
 {
     NLSemanticContext *c = check->context;
+    const NLSymbolId base = field_binding(check, s->data.field_designator.base);
+    if (check->allocated_slice && base != 0 &&
+        c->types[c->bindings[base - 1].view.type - 1].view.kind == NL_TYPE_REF)
+        return field_ref(check, s);
     NLCheckedField evidence;
     if (!fixed_selection(check, s, NL_ACCESS_READ, &evidence))
         return 0;
@@ -5239,6 +5408,7 @@ static NLCheckedNodeId allocated_ref(Check *check, const NLSyntaxView *syntax)
         return 0;
     }
     NLSemanticContext *c = check->context;
+    const bool write = syntax->data.call.access == NL_ACCESS_WRITE;
     const NLSyntaxNode *pn = syntax->data.call.arguments,
                        *sn = nl_syntax_next_argument(pn);
     NLSymbolId p = available(check, nl_syntax_node_view(pn)->span),
@@ -5276,12 +5446,21 @@ static NLCheckedNodeId allocated_ref(Check *check, const NLSyntaxView *syntax)
              "pointer requires matching readable live domain");
         return 0;
     }
+    if (write) {
+        const NLCheckStatus access = nl_allocated_write_access(c, pv);
+        if (access != NL_CHECK_OK) {
+            fail(check, access, syntax->span, "HEAP-ROOT-WRITE-ACCESS",
+                 "write reloan requires proven allocated-root and ptr write "
+                 "access");
+            return 0;
+        }
+    }
     if (conflicts(check, facts.place, false, false, 0, syntax->span))
         return 0;
     facts.scope = c->values[sv - 1].reference.scope;
-    facts.writable = false;
-    NLTypeId type = compound(check, NL_TYPE_REF, pt.target, NL_ACCESS_READ,
-                             false, syntax->span);
+    facts.writable = write;
+    NLTypeId type = compound(check, NL_TYPE_REF, pt.target,
+                             syntax->data.call.access, false, syntax->span);
     if (type == 0)
         return 0;
     /* Preserve selected operands using the existing argument/Copy contract.
@@ -5320,7 +5499,9 @@ static NLCheckedNodeId allocated_ref(Check *check, const NLSyntaxView *syntax)
                                    .reference_result = facts,
                                    .lifetime_place = facts.place,
                                    .lifetime_incarnation = facts.incarnation,
-                                   .lifetime_domain = domain});
+                                   .lifetime_domain = domain,
+                                   .lifetime_range =
+                                       c->places[facts.place - 1].placement});
 }
 
 static NLCheckedNodeId allocated_domain_loan(Check *check,
