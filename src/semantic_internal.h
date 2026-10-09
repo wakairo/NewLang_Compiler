@@ -88,7 +88,7 @@ typedef struct {
 struct NLCheckedFragment {
     /* Parent owns entry/post; a child owns its pre-pattern entry and borrows
      * the enclosing fragment. Child evidence never outlives that owner tree. */
-    NLSemanticContext *packet_entry, *packet_post;
+    NLSemanticContext *packet_entry, *packet_post, *packet_retained_post;
     void (*destroy_packet_world)(NLSemanticContext *);
     const struct NLCheckedFragment *packet_parent;
     NLCheckedNodeId packet_match;
@@ -280,6 +280,14 @@ NLCheckStatus nl_packet_fork_prepare(NLCheckedFragment *, NLCheckedNodeId,
 bool nl_packet_inherited(const NLCheckedFragment *, NLValueId);
 /* Read-only pre-consumption relation; no sink/alias proof or transfer grant. */
 bool nl_packet_available_inherited(const NLCheckedFragment *, NLValueId);
+NLCheckStatus nl_packet_retained(const NLCheckedFragment *, NLCheckedNodeId,
+                                 const NLSemanticContext *,
+                                 NLSemanticContext **);
+bool nl_packet_arm_retained(const NLCheckedFragment *, NLCheckedNodeId,
+                            const NLCheckedFragment *,
+                            const NLCheckedNodeView *);
+bool nl_packet_receiving_after_join(const NLCheckedFragment *,
+                                    const NLSemanticContext *, NLValueId);
 NLCheckStatus nl_packet_closed(const NLCheckedFragment *, NLCheckedNodeId,
                                const NLSemanticContext *, NLSemanticContext **);
 bool nl_packet_arm_closed(const NLCheckedFragment *, NLCheckedNodeId,

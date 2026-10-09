@@ -2661,6 +2661,17 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
             goto cleanup;
         }
         if (check->context->types[type - 1].live_tail_target != 0) {
+            const NLCheckedNodeView *join = nl_checked_node_view(
+                check->artifact, check->artifact->packet_match);
+            if (join != NULL && join->packet_fork.retained &&
+                !nl_packet_receiving_after_join(check->artifact, check->context,
+                                                rhs.results[0].value)) {
+                fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                     "P222-RECEIVING-ORIGIN",
+                     "post-join receiving requires the unchanged original "
+                     "packet, root, backing and domain");
+                goto cleanup;
+            }
             const NLCheckedNodeId source = check->artifact->producer_call;
             const bool local =
                 source != 0 && view(check, source)->producer.return_proved &&
@@ -2726,6 +2737,20 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
         view(check, result)->packet_origin.entry_world =
             check->artifact->packet_entry;
         view(check, result)->packet_origin.packet = rhs.results[0].value;
+    }
+    if (destructure && check->artifact->packet_retained_post != NULL &&
+        check->context->types[type - 1].live_tail_target != 0) {
+        const NLCheckedNodeView *join = nl_checked_node_view(
+            check->artifact, check->artifact->packet_match);
+        if (join != NULL && join->packet_fork.retained) {
+            view(check, result)->packet_origin.ancestor = check->artifact;
+            view(check, result)->packet_origin.match =
+                check->artifact->packet_match;
+            view(check, result)->packet_origin.world = check->artifact->context;
+            view(check, result)->packet_origin.entry_world =
+                check->artifact->packet_retained_post;
+            view(check, result)->packet_origin.packet = rhs.results[0].value;
+        }
     }
     NLCheckedNodeId previous = 0;
     for (size_t i = 0; i < count; ++i) {
@@ -5268,6 +5293,7 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
                 c->bindings[i].view.value == packet;
     }
     const bool packet_join = node_unit_join && count == 2 && captured_packet;
+    unsigned packet_modes = 3; /* intersection of two parent-derived targets */
     if (packet_join) {
         const NLCheckStatus prepared =
             nl_packet_fork_prepare(check->artifact, id, c);
@@ -5282,6 +5308,11 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
         if (!host(check,
                   nl_packet_closed(check->artifact, id, c,
                                    &check->artifact->packet_post),
+                  syntax->span))
+            return 0;
+        if (!host(check,
+                  nl_packet_retained(check->artifact, id, c,
+                                     &check->artifact->packet_retained_post),
                   syntax->span))
             return 0;
         /* Scrutinee temporary is consumed in either pattern, no arm ID. */
@@ -5331,12 +5362,20 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
         const NLCheckedNodeView result = *view(&branch, body);
         if (packet_join)
             branch.context->values[input - 1].sum_payload = 0;
-        if (packet_join && !nl_packet_arm_closed(check->artifact, id,
-                                                 branch.artifact, &result)) {
-            fail(&branch, NL_CHECK_ANALYSIS_PRECISION_LIMIT, a->span,
-                 "P219-POSTSTATE-PRECISION",
-                 "arm lacks the exact original closed-tail postcondition");
-            goto failure;
+        bool retained = false;
+        if (packet_join) {
+            retained = nl_packet_arm_retained(check->artifact, id,
+                                              branch.artifact, &result);
+            const bool closed = nl_packet_arm_closed(check->artifact, id,
+                                                     branch.artifact, &result);
+            packet_modes &= (closed ? 1U : 0U) | (retained ? 2U : 0U);
+            if (packet_modes == 0) {
+                fail(&branch, NL_CHECK_ANALYSIS_PRECISION_LIMIT, a->span,
+                     "P219-POSTSTATE-PRECISION",
+                     "both arms must prove the same original-owner retained "
+                     "or closed parent postcondition");
+                goto failure;
+            }
         }
         node_unit_join =
             node_unit_join && !branch.terminated &&
@@ -5354,6 +5393,17 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
                                          .result_count = result.result_count,
                                          .results = {result.results[0]},
                                          .returned = branch.returned});
+        if (retained && branch.artifact->root != 0) {
+            view(&branch, branch.artifact->root)->packet_origin.ancestor =
+                check->artifact;
+            view(&branch, branch.artifact->root)->packet_origin.match = id;
+            view(&branch, branch.artifact->root)->packet_origin.world =
+                branch.artifact->context;
+            view(&branch, branch.artifact->root)->packet_origin.entry_world =
+                branch.artifact->packet_entry;
+            view(&branch, branch.artifact->root)->packet_origin.packet =
+                view(check, id)->packet_fork.packet;
+        }
         if (!host(check,
                   nl_control_exits_union(&check->artifact->exits,
                                          branch.artifact->exits),
@@ -5389,14 +5439,23 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
         if (packet_join) {
             /* Reconstruct ONLY the parent prefix, never select an arm. */
             NLSemanticContext *post = NULL;
-            if (!host(check, nl_packet_closed(check->artifact, id, c, &post),
+            const bool retained = packet_modes == 2;
+            if (!host(check,
+                      retained
+                          ? nl_sem_clone(check->artifact->packet_retained_post,
+                                         &post)
+                          : nl_packet_closed(check->artifact, id, c, &post),
                       syntax->span))
                 return 0;
             nl_sem_end_value(post, input);
             post->values[input - 1].sum_payload = 0;
             nl_sem_commit(c, post);
             view(check, id)->normal_arms = 2;
-            view(check, id)->packet_fork.closed = true;
+            view(check, id)->packet_fork.closed = !retained;
+            view(check, id)->packet_fork.retained = retained;
+            if (retained)
+                view(check, id)->packet_fork.post_world =
+                    check->artifact->packet_retained_post;
             view(check, id)->type = 1;
             return id;
         }
