@@ -1,0 +1,74 @@
+name: R254 frozen field occurrence second-pass
+
+on:
+  pull_request:
+    paths:
+      - 'r254_second_pass/**'
+      - '.github/workflows/r254-field-occurrence.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  frozen-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+      - name: Verify original frozen compiler and pure additive overlay
+        shell: bash
+        run: |
+          set -euo pipefail
+          PIN=d8765a5ae11919d3076cec0d1432973a0f18fdcd
+          echo "RUN_HEAD=$(git rev-parse HEAD)"
+          echo "PIN=$PIN"
+          git cat-file -e "$PIN^{commit}"
+          git merge-base --is-ancestor "$PIN" HEAD
+          git diff --name-only "$PIN" HEAD | tee /tmp/r254-changed-files.txt
+          if grep -Ev '^r254_second_pass/|^.github/workflows/r254-field-occurrence.yml$' /tmp/r254-changed-files.txt; then
+            echo 'FORBIDDEN changes to frozen compiler tree' >&2
+            exit 64
+          fi
+          test "$(git show "$PIN:docs/reference/CURRENT_SPEC.md" | grep -m1 'NewLang_v0_spec_Draft17_30.md')" = 'NewLang_v0_spec_Draft17_30.md'
+          echo "FROZEN_COMPILER_TREE_SHA256=$(git ls-tree -r "$PIN" -- src include scripts CMakeLists.txt | sha256sum)"
+          echo "OVERLAY_COMPILER_TREE_SHA256=$(git ls-tree -r HEAD -- src include scripts CMakeLists.txt | sha256sum)"
+          test "$(git ls-tree -r "$PIN" -- src include scripts CMakeLists.txt | sha256sum | cut -d' ' -f1)" = "$(git ls-tree -r HEAD -- src include scripts CMakeLists.txt | sha256sum | cut -d' ' -f1)"
+          test "$(git show "$PIN:docs/reference/NewLang_v0_spec_Draft17_30.md" | sha256sum | cut -d' ' -f1)" = "$(sha256sum docs/reference/NewLang_v0_spec_Draft17_30.md | cut -d' ' -f1)"
+      - name: Install signed OS requirements
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            gcc-13 g++-13 make cmake python3 dpkg \
+            libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Checksum-locked LLVM SDK
+        run: python3 scripts/bootstrap.py
+      - name: Build original fixed compiler (no source modification)
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .deps/activate.sh
+          CC=gcc-13 cmake -S . -B build-r254 -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-r254 --parallel 2
+          ./build-r254/newlangc --version
+          sha256sum build-r254/newlangc
+          sha256sum docs/reference/CURRENT_SPEC.md docs/reference/NewLang_v0_spec_Draft17_30.md
+          gcc-13 --version | head -n1
+      - name: Execute independent 26-case source adversarial corpus
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 r254_second_pass/generate_execute.py build-r254/newlangc
+          sha256sum r254_second_pass/generate_execute.py r254_second_pass/evidence/manifest.json r254_second_pass/evidence/quick.tsv
+          cat r254_second_pass/evidence/quick.tsv
+          cat r254_second_pass/evidence/manifest.json | python3 -c 'import sys,json; j=json.load(sys.stdin); print("COUNTS",j["counts"],"UNEXPECTED",j["unexpected"])'
+      - name: Preserve complete byte-exact source and diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r254-second-pass-source-evidence
+          path: r254_second_pass/evidence/
+          if-no-files-found: warn
+          retention-days: 30
