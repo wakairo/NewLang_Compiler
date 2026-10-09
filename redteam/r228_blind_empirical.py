@@ -32,7 +32,7 @@ def corpus():
     def add(name, source, expectation, attack):
         # §18.1c.4 is source-shaped prose; // commentary is not in the bounded lexer.
         # Preserve the mutation first, then strip normative editorial comment lines.
-        source = re.sub(r"(?m)^[ \\t]*//[^\\n]*(?:\\n|$)", "", source)
+        source = re.sub(r"(?m)^[ \t]*//[^\n]*(?:\n|$)", "", source)
         ans.append((name,source,expectation,attack))
     add("00_canonical",base,"admit-semantic", "exact normative §18.1c.4 witness; original two-root custody")
     renamed=re.sub(r"\bpacket\b","transit_owner",base)
