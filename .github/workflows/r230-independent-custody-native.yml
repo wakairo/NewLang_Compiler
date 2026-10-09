@@ -61,6 +61,20 @@ jobs:
           export R230_COMPILER="$GITHUB_WORKSPACE/frozen/build-r230/newlangc"
           export CC_NATIVE=gcc-13
           python3 r230/independent_probe.py 2>&1 | tee r230-run.log
+          python3 r230/mutation_probe.py 2>&1 | tee r230-mutations.log
+      - name: Compiler ASan and UBSan independent source invocation (no P tests)
+        shell: bash
+        working-directory: frozen
+        run: |
+          set -euo pipefail
+          . .deps/activate.sh
+          for sanitizer in address undefined; do
+            CC=clang-23 cmake --fresh -S . -B "build-r230-$sanitizer" -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_SANITIZER="$sanitizer"
+            cmake --build "build-r230-$sanitizer" --parallel 2
+            sha256sum "./build-r230-$sanitizer/newlangc"
+            "./build-r230-$sanitizer/newlangc" "../reviewer/r230/results/sources/A00_canonical_accept.nl" > "../reviewer/r230/results/compiler_$sanitizer.c"
+            sha256sum "../reviewer/r230/results/compiler_$sanitizer.c"
+          done
       - name: Attach durable independent hashes, emitted C, native logs and executables
         if: always()
         uses: actions/upload-artifact@v4
@@ -69,5 +83,6 @@ jobs:
           path: |
             reviewer/r230/results
             reviewer/r230-run.log
+            reviewer/r230-mutations.log
           if-no-files-found: warn
           retention-days: 30
