@@ -1,0 +1,284 @@
+{
+  "claim": "full actual-source semantic admission; no C/native/cJSON PASS",
+  "observations": [
+    {
+      "input": "canonical",
+      "sha256": "812042833072145f761ddc21cbf774d81b64da3a34f6d466ba7db01a6d704d7d",
+      "classification": "source-accepted",
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: canonical.nl\n",
+      "output_files_created": []
+    },
+    {
+      "input": "alpha",
+      "sha256": "757f86136a041a15dc05984fb3a4da6a52a845b3bc26e3eeee2d67839605e071",
+      "classification": "source-accepted",
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: alpha.nl\n",
+      "output_files_created": []
+    },
+    {
+      "input": "two-arm-permutations",
+      "sha256": "a5b0f6eea8c3d37d4c9455521552bf9c82010e41595c26f471dff75b1b79a3b8",
+      "classification": "source-accepted",
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: two-arm-permutations.nl\n",
+      "output_files_created": []
+    },
+    {
+      "input": "canonical-comments",
+      "sha256": "5145c955343a18d497c2f0568bc78cc0f31c54bdda4e0ff3a0734a6ea5b4fac4",
+      "classification": "source-accepted",
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: canonical-comments.nl\n",
+      "output_files_created": []
+    },
+    {
+      "input": "same-address-reset",
+      "sha256": "813a93626e82538cb81e8138d0a7631ad0e85ca39b5318e076a8bdcb9f25ef0f",
+      "classification": "source-accepted-reset-evidence",
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: same-address-reset.nl\n",
+      "output_files_created": []
+    },
+    {
+      "input": "library-tail-policy",
+      "sha256": "91691fa66a9f835ddb95087a8ee2cf38b913023a5b33324f97a65c3edea90709",
+      "classification": "library-policy-mismatch",
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: library-tail-policy.nl\n",
+      "output_files_created": []
+    },
+    {
+      "input": "ptr-base",
+      "sha256": "3c9f405f2ae7ed7222e6a1fcaf723e156f1bf6ca7035508b2739cfef2c8688f1",
+      "classification": "profile-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "ptr-base.nl:156:57-156:70: error(unsupported)[HEAP-LINK-REF-PROFILE]: projection requires an ordinary scoped completed H root ref\n",
+      "output_files_created": []
+    },
+    {
+      "input": "payload-field",
+      "sha256": "e46c1c783dd6133399935de8d0453264a7346c89cf3f6204a9a4b040c153ebf5",
+      "classification": "profile-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "payload-field.nl:156:57-156:76: error(unsupported)[HEAP-LINK-FIELD-PROFILE]: projection selects only H's committed recursive link\n",
+      "output_files_created": []
+    },
+    {
+      "input": "unknown-field",
+      "sha256": "3525fbe399c1776c766904fd1ca9d7793d50a26a026c2f4b7fa6f02b2673df95",
+      "classification": "profile-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "unknown-field.nl:156:57-156:76: error(unsupported)[HEAP-LINK-FIELD-PROFILE]: projection selects only H's committed recursive link\n",
+      "output_files_created": []
+    },
+    {
+      "input": "read-write-escalation",
+      "sha256": "9afeee88cdf1f0e73089788651c98a3048b3cf052b5c1c7dc20b569dd38ec7b4",
+      "classification": "semantic-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "read-write-escalation.nl:156:57-156:74: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n",
+      "output_files_created": []
+    },
+    {
+      "input": "wrong-domain",
+      "sha256": "192659d4330254fa6fa0c794a7ec596e7d8b37f332e1a96715635e90bc30c711",
+      "classification": "semantic-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "wrong-domain.nl:155:67-155:110: error(semantic)[ALLOCATED-DOMAIN-MISMATCH]: pointer requires matching readable live domain\n",
+      "output_files_created": []
+    },
+    {
+      "input": "wrong-allocation",
+      "sha256": "0f5096a5c93f86404831a23bb5e1d097c1ff9639a9d562acdf5563cc9aebbb89",
+      "classification": "semantic-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "wrong-allocation.nl:8:19-8:19: error(semantic)[P4-ALLOCATION-MISMATCH]: Allocation and Storage have different BackingRegion identities\n",
+      "output_files_created": []
+    },
+    {
+      "input": "wrong-end-domain",
+      "sha256": "bba951f3d68774dcd73748897be4bb4e4ee24900c4635ea3934ace17593cde43",
+      "classification": "semantic-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "wrong-end-domain.nl:185:64-185:74: error(semantic)[P3-DOMAIN-MISMATCH]: lifetime-ending authority refers to wrong LifetimeDomain\n",
+      "output_files_created": []
+    },
+    {
+      "input": "double-release",
+      "sha256": "c62a2b338540cc91728a08819d8397227266708274a336b00a5aaf333a544f3b",
+      "classification": "semantic-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "double-release.nl:189:93-189:107: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "output_files_created": []
+    },
+    {
+      "input": "noncopy-reuse",
+      "sha256": "362c95b6972144420248416ecdfac7d15765a29cf76c62891744fd47eb918199",
+      "classification": "semantic-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "noncopy-reuse.nl:15:57-15:67: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "output_files_created": []
+    },
+    {
+      "input": "none-fabricated-owner",
+      "sha256": "7b2902906c3cbd06483700100b9a8cc971c15185a73f744ab911b7921042b89c",
+      "classification": "profile-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "none-fabricated-owner.nl:11:13-11:48: error(unsupported)[ALLOCATED-SOURCE-PROFILE]: raw lifecycle operands require a checked allocation Some world\n",
+      "output_files_created": []
+    },
+    {
+      "input": "scope-escape",
+      "sha256": "a1011b450ded704ddfcda2a82f4ce0dd8b8bb4a89a416d969fdd2e586dd4caa5",
+      "classification": "semantic-reject-legacy-diagnostic",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "scope-escape.nl:154:65-158:46: error(semantic)[P3-INTERNAL]: invalid semantic module state\n",
+      "output_files_created": []
+    },
+    {
+      "input": "active-loan-ending",
+      "sha256": "9c06010ac7861d02c2d3ed3227f542f5e5d6a15db48ce779d6bfc0d971ff3b68",
+      "classification": "semantic-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "active-loan-ending.nl:184:110-184:118: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n",
+      "output_files_created": []
+    },
+    {
+      "input": "stale-pointer",
+      "sha256": "87a3e3c9ba6fcec0f80d186db1e84f65c6d95ea56ab9377063de91e7db8cc5a5",
+      "classification": "semantic-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "stale-pointer.nl:187:79-187:111: error(semantic)[P3-STALE-POINTER]: pointer/ref does not refer to a current live incarnation\n",
+      "output_files_created": []
+    },
+    {
+      "input": "stale-some-borrow",
+      "sha256": "7981b8caae154afb374a7c0586ded04527fe3d728942126a2a1fb1283dababa8",
+      "classification": "precision-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "stale-some-borrow.nl:166:73-166:172: error(precision)[P9-MATCH-PRECISION]: function match requires a concrete registered sum value\n",
+      "output_files_created": []
+    },
+    {
+      "input": "unknown-alias",
+      "sha256": "66fef4b62c9c8d02a4fdb56348d14e7a94874b1e033d3e501caee7b0c2555b5a",
+      "classification": "precision-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "unknown-alias.nl:113:37-216:38: error(precision)[CAPTURED-CLOSURE-PRECISION]: complete original-owner fork/cleanup proof is unavailable\n",
+      "output_files_created": []
+    },
+    {
+      "input": "sixth",
+      "sha256": "1c8298bc95134ff6e7967a15669f3ebb1a99bda6df80d07b1092aea8fab6d604",
+      "classification": "profile-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "sixth.nl:154:51-154:74: error(unsupported)[ALLOCATED-CARDINALITY-PROFILE]: allocation requires one outer trial and at most one nested Some-arm trial, outside loops\n",
+      "output_files_created": []
+    },
+    {
+      "input": "fourth-link",
+      "sha256": "3c832380c3786693285fb1ec78446dfeca755d16b9f63d476380dc927e87fbf4",
+      "classification": "profile-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "fourth-link.nl:5:11-5:17: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+      "output_files_created": []
+    },
+    {
+      "input": "second-nominal",
+      "sha256": "61c4a397ce5ab095fdeaea87c922289957c22729c78c225230c370aeec687f09",
+      "classification": "semantic-registration-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "second-nominal.nl:226:1-226:49: error(semantic)[REC-DECL-DUPLICATE]: at most one bounded recursive declaration per semantic unit\n",
+      "output_files_created": []
+    },
+    {
+      "input": "none-2-missing-cleanup",
+      "sha256": "a1650c3a2288c73c10067394c5cfc9839a0dc711f9543e8a9e0fe2c8a57c16c1",
+      "classification": "precision-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "none-2-missing-cleanup.nl:27:17-29:18: error(precision)[ALLOCATED-CAPTURED-JOIN-PRECISION]: each allocation world must close its own responsibilities and prove the exact captured-prefix post-state\n",
+      "output_files_created": []
+    },
+    {
+      "input": "none-3-missing-cleanup",
+      "sha256": "f363d2d78688ce0ba88463b4d2835097ed376169fed4b6de2815550808d7c901",
+      "classification": "precision-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "none-3-missing-cleanup.nl:50:25-58:26: error(precision)[ALLOCATED-CAPTURED-JOIN-PRECISION]: each allocation world must close its own responsibilities and prove the exact captured-prefix post-state\n",
+      "output_files_created": []
+    },
+    {
+      "input": "none-3-wrong-cleanup",
+      "sha256": "494474f303c899cba88d7f58412347ac5b3cbc57f5fcb99192743681b1f96384",
+      "classification": "semantic-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "none-3-wrong-cleanup.nl:8:19-8:19: error(semantic)[P4-ALLOCATION-MISMATCH]: Allocation and Storage have different BackingRegion identities\n",
+      "output_files_created": []
+    },
+    {
+      "input": "none-4-missing-cleanup",
+      "sha256": "cf69e0e9a60082e2d16919b33526e8793553a4381dab21169f5bb1cf68ab0d80",
+      "classification": "precision-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "none-4-missing-cleanup.nl:79:33-93:34: error(precision)[ALLOCATED-CAPTURED-JOIN-PRECISION]: each allocation world must close its own responsibilities and prove the exact captured-prefix post-state\n",
+      "output_files_created": []
+    },
+    {
+      "input": "none-4-wrong-cleanup",
+      "sha256": "e39c1d77669abbe4c2866c217d599ca47a0a61decf55b1649bdf40c247228c1f",
+      "classification": "semantic-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "none-4-wrong-cleanup.nl:8:19-8:19: error(semantic)[P4-ALLOCATION-MISMATCH]: Allocation and Storage have different BackingRegion identities\n",
+      "output_files_created": []
+    },
+    {
+      "input": "none-5-missing-cleanup",
+      "sha256": "7fd909c6ae504d8811e642e5b8f3bada4415dad1ba392977dca8e913f4d86654",
+      "classification": "precision-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "none-5-missing-cleanup.nl:114:41-134:42: error(precision)[ALLOCATED-CAPTURED-JOIN-PRECISION]: each allocation world must close its own responsibilities and prove the exact captured-prefix post-state\n",
+      "output_files_created": []
+    },
+    {
+      "input": "none-5-wrong-cleanup",
+      "sha256": "e815f34956f9dd7ee777a9c05cd004b6b54129aea26a2c4bde6c0f55d18438d9",
+      "classification": "semantic-reject",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "none-5-wrong-cleanup.nl:8:19-8:19: error(semantic)[P4-ALLOCATION-MISMATCH]: Allocation and Storage have different BackingRegion identities\n",
+      "output_files_created": []
+    }
+  ]
+}

@@ -10,18 +10,29 @@ bool nl_recursive_local_type(const NLSemanticContext *c, NLTypeId type)
         return false;
     const NLTypeEntry *t = &c->types[type - 1];
     if (!t->recursive_header || t->incomplete ||
-        t->view.kind != NL_TYPE_NOMINAL || t->view.field_count != 2 ||
+        t->view.kind != NL_TYPE_NOMINAL ||
+        (t->view.field_count != 2 && t->view.field_count != 4) ||
         !t->view.is_copy || !t->view.is_discardable)
         return false;
-    const NLTypeId link = t->field_types[0];
-    if (link == 0 || link > c->type_count)
-        return false;
-    const NLTypeId ptr = c->types[link - 1].option_target;
-    return ptr != 0 && ptr <= c->type_count &&
-           c->types[link - 1].view.kind == NL_TYPE_SUM &&
-           c->types[ptr - 1].view.kind == NL_TYPE_PTR &&
-           c->types[ptr - 1].view.target == type &&
-           t->field_types[1] == nl_semantic_core_type(c, NL_TYPE_U8);
+    const char *const labels[] = {"next", "prev", "child", "payload"};
+    if (t->view.field_count == 4)
+        for (size_t i = 0; i < 4; ++i)
+            if (t->field_names[i] == NULL ||
+                strcmp(t->field_names[i], labels[i]) != 0)
+                return false;
+    for (size_t i = 0; i < t->view.field_count - 1; ++i) {
+        const NLTypeId link = t->field_types[i];
+        if (link == 0 || link > c->type_count)
+            return false;
+        const NLTypeId ptr = c->types[link - 1].option_target;
+        if (ptr == 0 || ptr > c->type_count ||
+            c->types[link - 1].view.kind != NL_TYPE_SUM ||
+            c->types[ptr - 1].view.kind != NL_TYPE_PTR ||
+            c->types[ptr - 1].view.target != type)
+            return false;
+    }
+    return t->field_types[t->view.field_count - 1] ==
+           nl_semantic_core_type(c, NL_TYPE_U8);
 }
 
 bool nl_semantic_recursive_local_type(const NLSemanticContext *c, NLTypeId type)
@@ -63,9 +74,10 @@ NLCheckStatus nl_fixed_attach(NLSemanticContext *c, NLPlaceId root)
     if (!nl_fixed_type(c, p.type))
         return NL_CHECK_OK;
     const NLSemanticValueView v = c->values[p.current_value - 1];
-    if (v.field_count != 2 || p.fixed_field_count != 0)
+    if (v.field_count != c->types[p.type - 1].view.field_count ||
+        p.fixed_field_count != 0)
         return NL_CHECK_INTERNAL_ERROR;
-    for (size_t i = 0; i < 2; ++i) {
+    for (size_t i = 0; i < v.field_count; ++i) {
         NLPlaceId child;
         NLCheckStatus s =
             nl_sem_new_place(c, c->types[p.type - 1].field_types[i],
@@ -294,7 +306,8 @@ NLCheckStatus nl_fixed_validate(const NLSemanticContext *c)
     }
     for (size_t i = 0; i < c->place_count; ++i) {
         const NLSemanticPlaceView p = c->places[i];
-        if (p.live && nl_fixed_type(c, p.type) && p.fixed_field_count != 2)
+        if (p.live && nl_fixed_type(c, p.type) &&
+            p.fixed_field_count != c->types[p.type - 1].view.field_count)
             return NL_CHECK_INTERNAL_ERROR;
         if (p.parent_aggregate == 0)
             continue;

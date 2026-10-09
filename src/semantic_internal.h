@@ -97,7 +97,16 @@ typedef struct NLCapturedClosure {
         const NLSemanticContext *world;        /* exact owned arm identity */
     } branches[2];
 } NLCapturedClosure;
+typedef struct {
+    NLCheckedNodeId node;
+    const NLSemanticContext *world;
+    NLSemanticContext *before, *after; /* owned point-in-time worlds */
+    const NLSemanticContext *before_origin, *after_origin;
+} NLCapturedChange;
 struct NLCheckedFragment {
+    NLCapturedChange *field_changes[6];
+    size_t field_change_count;
+    void (*destroy_field_changes)(NLCheckedFragment *);
     NLCapturedClosure *captured_closure;
     void (*destroy_captured_closure)(NLCapturedClosure *);
     /* Parent owns entry/post; a child owns its pre-pattern entry and borrows
@@ -147,6 +156,10 @@ struct NLCheckedFragment {
     void (*release_body)(NLFunctionBody *);
 };
 
+NLCheckStatus nl_captured_change_begin(NLCheckedFragment *, NLCheckedNodeId,
+                                       const NLSemanticContext *);
+NLCheckStatus nl_captured_change_end(NLCheckedFragment *,
+                                     const NLSemanticContext *);
 NLCheckStatus nl_captured_closure_create(const NLSemanticContext *,
                                          NLCapturedClosure **);
 void nl_captured_closure_destroy(NLCapturedClosure *);

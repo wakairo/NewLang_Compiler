@@ -40,7 +40,9 @@ NLCheckStatus nl_allocated_write_access(const NLSemanticContext *c,
 /* Private candidate operations. The caller owns clone/rollback on any failure.
  * No host pointer, address, allocation event or live authority at registration.
  * The existing Linux x86_64 execution target uses one word tag + one pointer
- * word, followed by u8 and alignment padding: private size 24/alignment 8.
+ * word per link, followed by u8 and alignment padding: private size 24 for
+ * one link, 56 for three links, alignment 8. The three-link plan is used only
+ * by this semantic gate; no native three-link lowering is enabled here.
  * This is a target representation plan, never a source ABI/layout guarantee. */
 static NLCheckStatus string_copy(const char *text, char **out)
 {
@@ -66,12 +68,13 @@ NLCheckStatus nl_allocated_registry(NLSemanticContext *c, NLTypeId h,
             return NL_CHECK_OK;
         }
     }
+    const size_t size = c->types[h - 1].view.field_count == 4 ? 56 : 24;
     if (c->types[h - 1].view.layout_known &&
-        (c->types[h - 1].view.size != 24 ||
+        (c->types[h - 1].view.size != size ||
          c->types[h - 1].view.alignment != 8))
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
     c->types[h - 1].view.layout_known = true;
-    c->types[h - 1].view.size = 24;
+    c->types[h - 1].view.size = size;
     c->types[h - 1].view.alignment = 8;
     NLTypeId bundle, sum;
     NLCheckStatus s = nl_sem_nominal(c, "OneBacking", false, false, &bundle);

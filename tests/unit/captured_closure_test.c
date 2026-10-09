@@ -4,6 +4,71 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+static bool public_source;
+/* Actual production registration + actual known main() check, no probe flag.
+ * On either public transaction failure the caller snapshot must be unchanged.
+ */
+static NLCheckStatus public_unit(const NLSyntaxTree *unit,
+                                 NLCheckedFragment **out,
+                                 NLCheckDiagnostic *diagnostic)
+{
+    NLSemanticContext *context = NULL;
+    NLSource *entry_source = NULL;
+    NLParser *entry_parser = NULL;
+    NLSyntaxTree *entry_syntax = NULL;
+    NLCheckStatus s = nl_semantic_create(&context);
+    if (s != NL_CHECK_OK)
+        goto done;
+    NLSemanticSnapshot before, after;
+    if (!nl_semantic_snapshot(context, &before)) {
+        s = NL_CHECK_INTERNAL_ERROR;
+        goto done;
+    }
+    const NLSyntaxTree *units[] = {unit};
+    NLFunctionUnitDiagnostic d = {0};
+    s = nl_semantic_register_function_unit(context, units, 1, &d);
+    if (s != NL_CHECK_OK) {
+        if (diagnostic != NULL)
+            *diagnostic = d.diagnostic;
+        if (!nl_semantic_snapshot(context, &after) ||
+            memcmp(&before, &after, sizeof(before)) != 0)
+            s = NL_CHECK_INTERNAL_ERROR;
+        goto done;
+    }
+    if (nl_source_create("main()", 6, "actual-main", &entry_source) !=
+            NL_SOURCE_OK ||
+        nl_parser_create(entry_source, &entry_parser) != NL_PARSE_OK ||
+        nl_parser_parse_expression_fragment(entry_parser, &entry_syntax,
+                                            NULL) != NL_PARSE_OK) {
+        s = NL_CHECK_OUT_OF_MEMORY;
+        goto done;
+    }
+    if (!nl_semantic_snapshot(context, &before)) {
+        s = NL_CHECK_INTERNAL_ERROR;
+        goto done;
+    }
+    s = nl_semantic_check_expression(context, entry_syntax, out, diagnostic);
+    if (s == NL_CHECK_OK) {
+        (*out)->destroy_context = nl_semantic_destroy;
+        (*out)->source = NULL;
+        context = NULL;
+    } else if (!nl_semantic_snapshot(context, &after) ||
+               memcmp(&before, &after, sizeof(before)) != 0)
+        s = NL_CHECK_INTERNAL_ERROR;
+done:
+    nl_syntax_tree_destroy(entry_syntax);
+    nl_parser_destroy(entry_parser);
+    nl_source_destroy(entry_source);
+    nl_semantic_destroy(context);
+    return s;
+}
+static NLCheckStatus unit_check(const NLSyntaxTree *unit,
+                                NLCheckedFragment **out,
+                                NLCheckDiagnostic *diagnostic)
+{
+    return public_source ? public_unit(unit, out, diagnostic)
+                         : nl_captured_closure_probe(unit, out, diagnostic);
+}
 static NLCheckStatus load(const char *path, NLCheckedFragment **out,
                           NLCheckDiagnostic *diagnostic)
 {
@@ -20,7 +85,7 @@ static NLCheckStatus load(const char *path, NLCheckedFragment **out,
         s = NL_CHECK_SEMANTIC_UNSUPPORTED;
         goto done;
     }
-    s = nl_captured_closure_probe(unit, out, diagnostic);
+    s = unit_check(unit, out, diagnostic);
 done:
     nl_syntax_tree_destroy(unit);
     nl_parser_destroy(parser);
@@ -37,6 +102,106 @@ static NLCheckedNodeId match(const NLCheckedFragment *f)
         if (nl_checked_node_view(f, i)->kind == NL_CHECKED_MATCH)
             return i;
     return 0;
+}
+static bool full_topology(const NLCheckedFragment *entry)
+{
+    const NLCheckedFragment *parent = body(entry);
+    for (size_t i = 0; i < 4; ++i)
+        parent = nl_checked_match_arm(parent, match(parent), 1);
+    NLCapturedClosureView owners;
+    CHECK(nl_checked_captured_closure_view(parent, match(parent), &owners) &&
+          owners.count == 4);
+    const NLCheckedFragment *leaf =
+        nl_checked_match_arm(parent, match(parent), 1);
+    CHECK(nl_checked_captured_change_count(leaf) == 6);
+    NLCapturedChangeView last;
+    CHECK(nl_checked_captured_change_view(leaf, 5, &last));
+    const NLSemanticContext *checkpoint = last.after;
+    NLPlaceId roots[5];
+    for (size_t i = 0; i < 4; ++i)
+        roots[i] = owners.originals[i].root;
+    roots[4] = 0;
+    for (size_t i = 1; i <= nl_checked_node_count(leaf); ++i)
+        if (nl_checked_node_view(leaf, i)->kind == NL_CHECKED_INITIALIZE)
+            roots[4] = nl_checked_node_view(leaf, i)->lifetime_place;
+    CHECK(roots[4] != 0 && checkpoint->region_count == 5 &&
+          checkpoint->domain_count == 5);
+    for (size_t i = 0; i < 5; ++i) {
+        const NLSemanticPlaceView r = checkpoint->places[roots[i] - 1];
+        CHECK(r.live && r.independent_root && r.fixed_field_count == 4 &&
+              checkpoint->regions[r.placement.region - 1].view.live &&
+              checkpoint->domains[r.governing_domain - 1].live);
+        for (size_t j = 0; j < i; ++j) {
+            const NLSemanticPlaceView old = checkpoint->places[roots[j] - 1];
+            CHECK(r.placement.region != old.placement.region &&
+                  r.incarnation != old.incarnation &&
+                  r.governing_domain != old.governing_domain);
+        }
+        for (size_t j = 0; j < 3; ++j) {
+            const NLSemanticPlaceView child =
+                checkpoint->places[r.fixed_fields[j] - 1];
+            CHECK(child.live && !child.independent_root &&
+                  child.parent_aggregate == roots[i] &&
+                  child.parent_incarnation == r.incarnation &&
+                  child.parent_field_index == j &&
+                  child.governing_domain == r.governing_domain &&
+                  child.placement.region == 0);
+            for (size_t k = 0; k < j; ++k)
+                CHECK(r.fixed_fields[j] != r.fixed_fields[k] &&
+                      !nl_fixed_overlap(checkpoint, r.fixed_fields[j],
+                                        r.fixed_fields[k]));
+        }
+    }
+    const size_t facts[][3] = {{0, 2, 1}, {1, 1, 3}, {1, 0, 2},
+                               {2, 1, 1}, {2, 0, 3}, {3, 1, 2}};
+    for (size_t i = 0; i < 6; ++i) {
+        const NLSemanticPlaceView r =
+            checkpoint->places[roots[facts[i][0]] - 1];
+        const NLSemanticPlaceView field =
+            checkpoint->places[r.fixed_fields[facts[i][1]] - 1];
+        const NLSemanticValueView option =
+            checkpoint->values[field.current_value - 1];
+        CHECK(option.variant == 2 && field.payload_occurrence != 0);
+        const NLSemanticValueView pointer =
+            checkpoint->values[option.sum_payload - 1];
+        CHECK(pointer.reference.place == roots[facts[i][2]] &&
+              pointer.reference.incarnation ==
+                  checkpoint->places[roots[facts[i][2]] - 1].incarnation &&
+              pointer.reference.provenance == NL_PROVENANCE_VALID &&
+              pointer.reference.scope == 0);
+        NLCapturedChangeView change;
+        CHECK(nl_checked_captured_change_view(leaf, i, &change));
+        const NLCheckedField e =
+            nl_checked_node_view(leaf, change.operation)->field;
+        CHECK(e.parent == roots[facts[i][0]] && e.index == facts[i][1] &&
+              e.post_payload_occurrence != 0 &&
+              e.parent_fact != e.parent_post_fact &&
+              e.child_fact != e.child_post_fact);
+        const NLSemanticPlaceView before = change.before->places[e.parent - 1];
+        const NLSemanticPlaceView after = change.after->places[e.parent - 1];
+        CHECK(before.incarnation == after.incarnation);
+        for (size_t j = 0; j < 3; ++j) {
+            CHECK(before.fixed_fields[j] == after.fixed_fields[j]);
+            if (j == e.index)
+                continue;
+            const NLSemanticPlaceView a =
+                change.before->places[before.fixed_fields[j] - 1];
+            const NLSemanticPlaceView b =
+                change.after->places[after.fixed_fields[j] - 1];
+            CHECK(a.current_value == b.current_value &&
+                  a.current_fact == b.current_fact &&
+                  a.payload_occurrence == b.payload_occurrence &&
+                  a.incarnation == b.incarnation);
+        }
+    }
+    const NLValueId dst_child =
+        checkpoint->places[checkpoint->places[roots[4] - 1].fixed_fields[2] - 1]
+            .current_value;
+    CHECK(checkpoint->values[dst_child - 1].variant == 1 &&
+          checkpoint->values[dst_child - 1].sum_payload == 0);
+    puts("public full source: five original live R/O/D; six changes; seven "
+         "actual field facts; sibling preservation");
+    return true;
 }
 static bool evidence(const char *path, size_t sites)
 {
@@ -57,6 +222,8 @@ static bool evidence(const char *path, size_t sites)
           nl_checked_context(entry)->domain_count == 0);
     for (size_t i = 0; i <= NL_CAPTURED_MAX_RELEASES; ++i)
         CHECK(view.release_worlds[i] == (i <= sites));
+    if (public_source)
+        CHECK(full_topology(entry));
     printf("owned certificate: sites=%zu, release worlds=0..%zu\n", sites,
            sites);
     nl_checked_destroy(entry);
@@ -260,6 +427,140 @@ static bool poison(const char *path)
           NL_CHECK_ANALYSIS_PRECISION_LIMIT);
     grant->allocation_success = false;
     CHECK(nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    if (public_source) {
+        NLCheckedFragment *last_parent = at_count(entry, 4);
+        NLCheckedFragment *leaf = (NLCheckedFragment *)nl_checked_match_arm(
+            last_parent, match(last_parent), 1);
+        CHECK(leaf->field_change_count == 6);
+        NLCapturedChange *change = leaf->field_changes[1];
+        NLCheckedNodeView *write = &leaf->nodes[change->node - 1];
+        const NLCheckedNodeView saved = *write;
+        for (size_t attack = 0; attack < 8; ++attack) {
+            switch (attack) {
+            case 0:
+                write->field.index = 0;
+                break;
+            case 1:
+                ++write->field.parent_incarnation;
+                break;
+            case 2:
+                ++write->field.child_post_fact;
+                break;
+            case 3:
+                write->field.post_payload_occurrence =
+                    write->field.payload_occurrence;
+                break;
+            case 4:
+                write->field.new_value = write->field.old_value;
+                break;
+            case 5:
+                write->field.access = NL_ACCESS_READ;
+                break;
+            case 6:
+                write->field.dependency_compatible = false;
+                break;
+            case 7:
+                write->kind = NL_CHECKED_UNIT;
+                break;
+            }
+            CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+                  NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+            *write = saved;
+        }
+        NLCheckedNodeView *projection = &leaf->nodes[write->first_argument - 1];
+        const NLCheckedNodeView original_projection = *projection;
+        projection->field = leaf->nodes[leaf->field_changes[0]->node - 1].field;
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        *projection = original_projection;
+        projection->reference_result.writable = false;
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        *projection = original_projection;
+        NLSemanticContext *before_change = change->before;
+        change->before = leaf->field_changes[0]
+                             ->before; /* valid other epoch, same world IDs */
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        change->before = before_change;
+        change->before = NULL;
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        change->before = before_change;
+        NLSemanticContext *after_change = change->after;
+        change->after = NULL;
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        change->after = after_change;
+        leaf->field_change_count = 7;
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        leaf->field_change_count = 6;
+        const NLPlaceId root = write->field.parent;
+        const NLPlaceId sibling =
+            before_change->places[root - 1].fixed_fields[0];
+        before_change->places[root - 1].fixed_fields[1] = sibling;
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        before_change->places[root - 1].fixed_fields[1] = write->field.child;
+        const NLValueId ref_id =
+            before_change->bindings[write->field.base - 1].view.value;
+        before_change->values[ref_id - 1].reference.writable = false;
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        before_change->values[ref_id - 1].reference.writable = true;
+        NLCheckedNodeView *acquisition = NULL;
+        for (size_t i = 0; i < change->node - 1; ++i)
+            if (leaf->nodes[i].kind == NL_CHECKED_REF_FROM_PTR &&
+                leaf->nodes[i].results[0].value == ref_id)
+                acquisition = &leaf->nodes[i];
+        CHECK(acquisition != NULL);
+        NLCheckedNodeView *pointer_input =
+            &leaf->nodes[acquisition->first_argument - 1];
+        NLCheckedNodeView *stability_input =
+            &leaf->nodes[pointer_input->next_argument - 1];
+        NLCheckedNodeView *stability_loan = NULL;
+        for (size_t i = 0; i < change->node - 1; ++i)
+            if (leaf->nodes[i].kind == NL_CHECKED_LOAN_HEADER &&
+                leaf->nodes[i].loan.ref_symbol == stability_input->symbol)
+                stability_loan = &leaf->nodes[i];
+        CHECK(stability_loan != NULL);
+        const NLCheckedNodeView original_loan = *stability_loan;
+        for (size_t attack = 0; attack < 4; ++attack) {
+            switch (attack) {
+            case 0:
+                ++stability_loan->loan.domain;
+                break;
+            case 1:
+                stability_loan->loan.source = write->field.base;
+                break;
+            case 2:
+                stability_loan->loan.prevent_lifetime_end = false;
+                break;
+            case 3:
+                stability_loan->loan.is_exclusive = true;
+                break;
+            }
+            CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+                  NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+            *stability_loan = original_loan;
+        }
+        ++stability_input->symbol;
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        --stability_input->symbol;
+        pointer_input->value_use = NL_VALUE_USE_NONE;
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        pointer_input->value_use = NL_VALUE_COPIED;
+        ++change->after->places[write->field.child - 1].current_fact;
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        --change->after->places[write->field.child - 1].current_fact;
+        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+              NL_CHECK_OK);
+        CHECK(full_topology(entry));
+    }
     nl_checked_destroy(entry);
     puts("tuple/order/world/post/trace/dependency/scope poison rejected");
     return true;
@@ -368,7 +669,7 @@ static bool checker_oom(const char *path)
     failure_at = SIZE_MAX;
     index_at = 0;
     injecting = true;
-    NLCheckStatus s = nl_captured_closure_probe(unit, &out, NULL);
+    NLCheckStatus s = unit_check(unit, &out, NULL);
     injecting = false;
     CHECK(s == NL_CHECK_OK && out != NULL);
     const size_t allocations = index_at;
@@ -381,11 +682,11 @@ static bool checker_oom(const char *path)
         failure_at = i;
         index_at = 0;
         injecting = true;
-        s = nl_captured_closure_probe(unit, &out, NULL);
+        s = unit_check(unit, &out, NULL);
         injecting = false;
         CHECK(s == NL_CHECK_OUT_OF_MEMORY && out == NULL);
         ++attacked;
-        CHECK(nl_captured_closure_probe(unit, &out, NULL) == NL_CHECK_OK);
+        CHECK(unit_check(unit, &out, NULL) == NL_CHECK_OK);
         CHECK(nl_checked_captured_closure_validate(
                   body(out), match(body(out))) == NL_CHECK_OK);
         nl_checked_destroy(out);
@@ -396,6 +697,40 @@ static bool checker_oom(const char *path)
     printf("checker OOM: %zu distributed failures / %zu allocation "
            "opportunities; no publication and clean retry\n",
            attacked, allocations);
+    return true;
+}
+static bool same_address_reset(const char *path)
+{
+    NLCheckedFragment *entry = NULL;
+    NLCheckDiagnostic d = {0};
+    CHECK(load(path, &entry, &d) == NL_CHECK_OK);
+    const NLCheckedFragment *top = body(entry);
+    CHECK(nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    NLCheckedFragment *leaf = (NLCheckedFragment *)nl_checked_match_arm(
+        at_count(entry, 4), match(at_count(entry, 4)), 1);
+    const NLCheckedField previous =
+        leaf->nodes[leaf->field_changes[1]->node - 1].field;
+    NLCheckedNodeView *write = &leaf->nodes[leaf->field_changes[2]->node - 1];
+    CHECK(write->field.child == previous.child &&
+          write->field.payload_occurrence == previous.post_payload_occurrence &&
+          write->field.post_payload_occurrence !=
+              write->field.payload_occurrence);
+    const NLSemanticContext *before = leaf->field_changes[2]->before;
+    const NLSemanticValueView old = before->values[write->field.old_value - 1];
+    const NLSemanticValueView next = before->values[write->field.new_value - 1];
+    CHECK(old.variant == 2 && next.variant == 2 &&
+          old.sum_payload != next.sum_payload &&
+          before->values[old.sum_payload - 1].reference.place ==
+              before->values[next.sum_payload - 1].reference.place);
+    const NLOccurrenceId saved = write->field.payload_occurrence;
+    write->field.payload_occurrence = 0;
+    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    write->field.payload_occurrence = saved;
+    CHECK(nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    nl_checked_destroy(entry);
+    puts("same pointer target; distinct copied packages and fresh Some "
+         "occurrence; stale evidence rejected");
     return true;
 }
 static int inspect(const char *path)
@@ -414,7 +749,9 @@ static int inspect(const char *path)
         printf("certificate-substrate accepted; release worlds:");
         for (size_t i = 0; i <= NL_CAPTURED_MAX_RELEASES; ++i)
             printf(" %zu", v.release_worlds[i]);
-        puts("; NOT public source admission or native evidence");
+        puts(public_source
+                 ? "; public source semantic admission; no native claim"
+                 : "; NOT public source admission or native evidence");
     } else {
         printf("status=%d category=%s code=%s\n", s,
                d.diagnostic.category == NULL ? "profile"
@@ -427,6 +764,12 @@ static int inspect(const char *path)
 
 int main(int argc, char **argv)
 {
+    if (argc >= 2 && strncmp(argv[1], "full-", 5) == 0) {
+        public_source = true;
+        argv[1] += 5;
+    }
+    if (argc == 3 && strcmp(argv[1], "reset") == 0)
+        return same_address_reset(argv[2]) ? 0 : 1;
     if (argc == 3 && strcmp(argv[1], "check") == 0)
         return inspect(argv[2]);
     if (argc == 4 && strcmp(argv[1], "evidence") == 0)

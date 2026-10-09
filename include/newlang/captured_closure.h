@@ -30,6 +30,18 @@ typedef struct {
     size_t release_worlds[NL_CAPTURED_MAX_RELEASES + 1];
 } NLCapturedClosureView;
 
+/* Actual field Change snapshots, borrowed from this immutable arm artifact.
+ * after the last change is the live pre-teardown topology checkpoint.
+ * Static opaque projection identity is (nominal,index); child is its current
+ * incarnation-specific place, never an offset or another backing root. */
+typedef struct {
+    NLCheckedNodeId operation;
+    const NLSemanticContext *world, *before, *after;
+} NLCapturedChangeView;
+size_t nl_checked_captured_change_count(const NLCheckedFragment *);
+bool nl_checked_captured_change_view(const NLCheckedFragment *, size_t,
+                                     NLCapturedChangeView *);
+
 bool nl_checked_captured_closure_view(const NLCheckedFragment *,
                                       NLCheckedNodeId, NLCapturedClosureView *);
 /* Read-only rederivation and both-arm evidence validation. OOM is explicit;

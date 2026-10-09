@@ -36,8 +36,9 @@ typedef struct Check {
     NLControlTarget *function_target; /* borrowed active function identity */
     size_t arm_floor;
     bool has_arm_floor, in_match_arm;
+    bool allocation_some_path; /* nearest trial outcome, not ancestor success */
     bool closure_probe; /* isolated #244 certificate integration, never CLI */
-    size_t allocation_depth; /* source gate two; isolated probe at most five */
+    size_t allocation_depth; /* one-link gate two; certified profile five */
     size_t allocation_sites;
     size_t *allocation_budget; /* borrowed counter, active body walk only */
     bool allocated_slice; /* owned Some world, never a runtime success claim */
@@ -1243,6 +1244,21 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                 if (view(check, args[0])->field.present &&
                     view(check, args[0])->field.child == place)
                     evidence.base = view(check, args[0])->field.base;
+                const bool record =
+                    check->allocated_slice &&
+                    c->types[before.type - 1].recursive_header &&
+                    c->types[before.type - 1].view.field_count == 4;
+                if (record && kind != NL_CHECKED_REPLACE) {
+                    fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, span,
+                         "THREE-LINK-CHANGE-PROFILE",
+                         "three-link source selects replace only");
+                    return false;
+                }
+                if (record && !closure_status(check,
+                                              nl_captured_change_begin(
+                                                  check->artifact, call, c),
+                                              span))
+                    return false;
                 if (!host(check,
                           nl_fixed_change(c, place, second,
                                           kind == NL_CHECKED_STORE),
@@ -1261,6 +1277,10 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                         (NLCheckedResult){old.type, old.current_value};
                 }
                 *view(check, call) = operation;
+                if (record &&
+                    !host(check, nl_captured_change_end(check->artifact, c),
+                          span))
+                    return false;
                 return true;
             }
             NLValueFactId fact;
@@ -2098,7 +2118,8 @@ static bool fixed_selection(Check *check, const NLSyntaxView *s,
              "field is not declared by the selected nominal");
         return false;
     }
-    if (nl_recursive_local_type(c, b.type) && index != 0) {
+    if (nl_recursive_local_type(c, b.type) &&
+        index >= c->types[b.type - 1].view.field_count - 1) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
              "NODE-LINK-FIELD-PROFILE",
              "bounded recursive field surface selects only its declared link");
@@ -2159,20 +2180,25 @@ static bool ref_field_selection(Check *check, const NLSyntaxView *s,
     if (!p.independent_root || p.parent_aggregate != 0 || p.parent_sum != 0 ||
         p.placement.region == 0 || p.governing_domain == 0 ||
         !c->regions[p.placement.region - 1].view.live ||
-        !c->domains[p.governing_domain - 1].live || p.fixed_field_count != 2) {
+        !c->domains[p.governing_domain - 1].live ||
+        p.fixed_field_count != c->types[t.target - 1].view.field_count) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
              "HEAP-LINK-ROOT-PROFILE",
              "projection requires the current allocated H root");
         return false;
     }
-    if (!equal_name(check, s->data.field_designator.field,
-                    c->types[t.target - 1].field_names[0])) {
+    size_t index = p.fixed_field_count;
+    for (size_t i = 0; i + 1 < p.fixed_field_count; ++i)
+        if (equal_name(check, s->data.field_designator.field,
+                       c->types[t.target - 1].field_names[i]))
+            index = i;
+    if (index == p.fixed_field_count) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
              "HEAP-LINK-FIELD-PROFILE",
              "projection selects only H's committed recursive link");
         return false;
     }
-    const NLPlaceId child = p.fixed_fields[0];
+    const NLPlaceId child = p.fixed_fields[index];
     if (!nl_fixed_live(c, child)) {
         fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "FIELD-STALE-CHILD",
              "projected fixed child incarnation has ended");
@@ -2185,7 +2211,7 @@ static bool ref_field_selection(Check *check, const NLSyntaxView *s,
                             .base = symbol,
                             .nominal = t.target,
                             .type = f.type,
-                            .index = 0,
+                            .index = index,
                             .parent = v.reference.place,
                             .child = child,
                             .parent_incarnation = p.incarnation,
@@ -3136,6 +3162,17 @@ static bool body_result(Check *check, NLTypeId declared, NLCheckedNodeId body,
                         NLSourceSpan span)
 {
     const NLCheckedNodeView result = *view(check, body);
+    for (size_t i = 0; i < check->context->type_count; ++i)
+        if (check->context->types[i].recursive_header &&
+            check->context->types[i].view.field_count == 4 &&
+            (check->allocation_budget == NULL ||
+             *check->allocation_budget != 5)) {
+            fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, span,
+                 "FIVE-ROOT-SOURCE-PROFILE",
+                 "three-link main requires exactly five nested allocation "
+                 "sites");
+            return false;
+        }
     if (!host(check,
               nl_control_function_boundary(
                   check->artifact->exits, check->function_target, declared,
@@ -5211,11 +5248,18 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         nl_syntax_node_view(syntax->data.match.scrutinee);
     if (check->allocation_budget == NULL)
         check->allocation_budget = &check->allocation_sites;
-    const size_t limit = check->closure_probe ? 5 : 2;
+    NLTypeId h = check_type(check, trial->data.call.type), option = 0;
+    if (h == 0)
+        return 0;
+    const bool certified = check->closure_probe ||
+                           (nl_recursive_local_type(check->context, h) &&
+                            check->context->types[h - 1].view.field_count == 4);
+    const size_t limit = certified ? 5 : 2;
     if (check->loop != NULL || *check->allocation_budget >= limit ||
         (*check->allocation_budget != 0 &&
-         ((check->closure_probe ? check->allocation_depth == 0
-                                : check->allocation_depth != 1) ||
+         ((!check->allocation_some_path) ||
+          (certified ? check->allocation_depth == 0
+                     : check->allocation_depth != 1) ||
           !check->allocated_slice)) ||
         check->allocation_depth >= limit ||
         (check->allocation_depth != 0 && !check->allocated_slice) ||
@@ -5228,9 +5272,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         return 0;
     }
     ++*check->allocation_budget;
-    NLTypeId h = check_type(check, trial->data.call.type), option = 0;
-    if (h == 0)
-        return 0;
+
     NLCheckStatus registry = nl_allocated_registry(check->context, h, &option);
     if (registry == NL_CHECK_SEMANTIC_UNSUPPORTED) {
         fail(check, registry, trial->span, "ALLOCATED-TARGET-PROFILE",
@@ -5285,7 +5327,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
     NLSemanticContext *closed_prefix = NULL;
     NLCheckedNodeView certificate = {0};
     NLCapturedClosure *closure = NULL;
-    if (check->closure_probe) {
+    if (certified) {
         if (!closure_status(check, nl_captured_closure_create(c, &closure),
                             trial->span))
             return 0;
@@ -5316,6 +5358,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         branch.artifact = NULL;
         branch.allocated_slice = check->allocated_slice || i == 1;
         branch.allocation_depth = check->allocation_depth + 1;
+        branch.allocation_some_path = i == 1;
         branch.in_match_arm = true;
         branch.binding_floor = branch.arm_floor = c->binding_count;
         branch.has_arm_floor = true;
@@ -8470,7 +8513,8 @@ static bool register_recursive(Check *check, const NLSyntaxView *s)
     if (!lexical_source_name(check, s->data.avs_struct.name))
         return false;
     char *name = source_name_copy(check, s->data.avs_struct.name);
-    char *labels[2] = {NULL, NULL};
+    char *labels[4] = {0};
+    const size_t count = s->data.avs_struct.count;
     bool ok = false;
     if (name == NULL)
         return false;
@@ -8481,6 +8525,11 @@ static bool register_recursive(Check *check, const NLSyntaxView *s)
         if (!check->context->bindings[i].hidden &&
             strcmp(name, check->context->bindings[i].name) == 0)
             goto collision;
+    if (count != 2 && count != 4) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span, "REC-DECL-PROFILE",
+             "H requires one link or exact three links");
+        goto cleanup;
+    }
     NLTypeId header = 0;
     const NLCheckStatus created =
         nl_recursive_header(check->context, name, &header);
@@ -8488,9 +8537,9 @@ static bool register_recursive(Check *check, const NLSyntaxView *s)
         goto collision;
     if (!host(check, created, s->span))
         goto cleanup;
-    NLAggregateField fields[2] = {{0}};
+    NLAggregateField fields[4] = {{0}};
     const NLSyntaxNode *n = s->data.avs_struct.fields;
-    for (size_t i = 0; i < 2; ++i) {
+    for (size_t i = 0; i < count; ++i) {
         const NLSyntaxView *f = nl_syntax_node_view(n);
         fields[i].type = check_type(check, f->data.parameter.type);
         if (fields[i].type == 0)
@@ -8508,7 +8557,8 @@ static bool register_recursive(Check *check, const NLSyntaxView *s)
              "link target must be the same nominal identity");
         goto cleanup;
     }
-    ok = host(check, nl_recursive_complete(check->context, header, fields, 2),
+    ok = host(check,
+              nl_recursive_complete(check->context, header, fields, count),
               s->span);
     goto cleanup;
 collision:
@@ -8516,8 +8566,8 @@ collision:
          "recursive declaration conflicts with an established name");
 cleanup:
     free(name);
-    free(labels[0]);
-    free(labels[1]);
+    for (size_t i = 0; i < 4; ++i)
+        free(labels[i]);
     return ok;
 }
 
@@ -8598,6 +8648,17 @@ register_function_unit(NLSemanticContext *context,
         input = recursive_input;
         if (!register_recursive(&check, recursive))
             goto failure;
+        if (recursive->data.avs_struct.count == 4 &&
+            (count != 1 || total != 1 ||
+             strcmp(declarations[0].name, "main") != 0 ||
+             declarations[0].syntax->data.function.count != 0 ||
+             check_type(&check, declarations[0].syntax->data.function.result) !=
+                 1)) {
+            fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, recursive->span,
+                 "FIVE-ROOT-SOURCE-PROFILE",
+                 "three-link H selects one parameterless main only");
+            goto failure;
+        }
     }
     if (!host(&check, nl_recursive_validate(check.context), (NLSourceSpan){0}))
         goto failure;

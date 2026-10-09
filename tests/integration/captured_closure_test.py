@@ -89,9 +89,10 @@ with tempfile.TemporaryDirectory(prefix="captured-closure-") as directory:
         assert not a.stderr and set(root.iterdir()) == before, name
         observations.append({"input": name, "sha256": hashlib.sha256(text.encode()).hexdigest(),
                              "probe_exit": a.returncode, "stdout": a.stdout.decode(), "stderr": ""})
-    # Public CLI gates stay closed; their outcomes are not inferred from a
-    # generic failure and are never reclassified as certificate successes.
-    for name, status, code in [("five_root_three_field", 3, "AVS-DECL-PROFILE"),
+    # The reviewed three-link/five-site profile now admits its full source.
+    # One-link reduced three/five-site probes retain their closed public gate;
+    # outcomes are classified by explicit inputs, never generic failures.
+    for name, status, code in [("five_root_three_field", 4, "V1-BACKEND-UNSUPPORTED"),
                               ("three_allocation_no_links", 3, "ALLOCATED-CARDINALITY-PROFILE"),
                               ("five_allocation_closure_probe", 3, "ALLOCATED-CARDINALITY-PROFILE"),
                               ("two_allocation_no_links", 4, "V1-BACKEND-UNSUPPORTED")]:
