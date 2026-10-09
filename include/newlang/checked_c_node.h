@@ -18,6 +18,11 @@ typedef enum {
  * certificate, performs the checked projected write in a separate C function,
  * returns the original ptr/Allocation/Domain carriers by value, and permits
  * one whole destructure before the independently proven terminal receiver.
+ * The closed §18.1c custody profile validates both owned policy worlds and
+ * each correlated suffix, emits separate producer/recipient/terminal calls,
+ * and represents caller-local Option<LiveTail> with a private tagged carrier.
+ * The two source-proven exact-None eliminations create no cleanup or runtime
+ * ownership policy. Borrowed pointers to evidence stay world-qualified.
  * Other LiveTail body/result profiles remain explicitly unsupported.
  * Not a general recursive or allocator backend. */
 NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *, char **out,

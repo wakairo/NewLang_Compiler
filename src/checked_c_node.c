@@ -29,6 +29,11 @@ typedef struct {
     char *text;
     char *receiver;
     char *producer;
+    char *recipient;
+    size_t recipient_used, recipient_calls;
+    NLTypeId custody_type;
+    bool custody, custody_authorized;
+    const NLCheckedNodeView *custody_active_call;
     size_t producer_used, producer_calls;
     NLTypeId live_tail;
     NLValueId returned_members[3];
@@ -76,6 +81,7 @@ static bool reject(Emit *e)
         e->status = NL_NODE_C_UNSUPPORTED;
     return false;
 }
+
 static bool put(Emit *e, const char *format, ...)
 {
     if (e->status != NL_NODE_C_OK)
@@ -187,6 +193,8 @@ static const char *ctype(const Emit *e, const Env *env, NLTypeId type)
         NLSemanticTypeView t;
         if (!nl_semantic_type_view(nl_checked_context(env->artifact), type, &t))
             return NULL;
+        if (e->custody_type != 0 && type == e->custody_type)
+            return "nl_custody";
         if (e->live_tail != 0 && type == e->live_tail)
             return "nl_live_tail";
         if (type == e->bundle)
@@ -200,6 +208,9 @@ static const char *ctype(const Emit *e, const Env *env, NLTypeId type)
         if (type == nl_semantic_domain_type(nl_checked_context(env->artifact)))
             return "nl_domain";
         if (t.kind == NL_TYPE_REF) {
+            if (e->custody_type != 0 && t.target == e->custody_type &&
+                !t.is_exclusive && t.access == NL_ACCESS_WRITE)
+                return "nl_custody *";
             if (t.target == e->node && !t.is_exclusive)
                 return t.access == NL_ACCESS_WRITE ? "nl_node *"
                                                    : "const nl_node *";
@@ -268,6 +279,10 @@ static bool allocated_match(Emit *, Env *, NLCheckedNodeId,
                             const NLCheckedNodeView *, Value *);
 static bool allocated_expr(Emit *, Env *, const NLCheckedNodeView *, Value *);
 static bool heap_link_expr(Emit *, Env *, const NLCheckedNodeView *, Value *);
+static bool custody_expr(Emit *, Env *, NLCheckedNodeId,
+                         const NLCheckedNodeView *, Value *);
+static bool custody_match(Emit *, Env *, NLCheckedNodeId,
+                          const NLCheckedNodeView *, Value *);
 static bool same_reference(NLReferenceFacts a, NLReferenceFacts b)
 {
     return a.place == b.place && a.incarnation == b.incarnation &&
@@ -303,6 +318,7 @@ static bool block(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
         v->type != e->unit || v->result_count != 0 || env->depth >= C_DEPTH)
         return reject(e);
     NLCheckedNodeId item = v->first_item;
+    bool custody_suffix = false;
     ++env->depth;
     for (size_t i = 0; i < v->item_count; ++i) {
         const NLCheckedNodeView *n = get(env, item);
@@ -311,9 +327,16 @@ static bool block(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
             return reject(e);
         if (ignored.temp != 0 && !put(e, "(void)nl_v_%zu;\n", ignored.temp))
             return false;
+        custody_suffix = n->kind == NL_CHECKED_STATEMENT &&
+                         nl_checked_custody_continuation(
+                             env->artifact, n->initializer, 0) != NULL;
         item = n->next_item;
     }
     --env->depth;
+    if (e->custody && custody_suffix && v->tail == 0 && item == 0) {
+        *out = (Value){.type = e->unit};
+        return true;
+    }
     return item == 0 && expr(e, env, v->tail, out);
 }
 static bool loan(Emit *e, Env *env, const NLCheckedNodeView *v, Value *out)
@@ -459,6 +482,10 @@ static bool match(Emit *e, Env *env, NLCheckedNodeId id,
     const NLCheckedNodeView *trial = get(env, v->initializer);
     if (trial != NULL && trial->kind == NL_CHECKED_TRY_ALLOCATE_ONE)
         return allocated_match(e, env, id, v, out);
+    if (e->custody &&
+        (nl_checked_custody_continuation(env->artifact, id, 0) != NULL ||
+         v->custody_selected_variant || v->custody_none_site))
+        return custody_match(e, env, id, v, out);
     if (v->borrowed_match || v->terminates || v->type != e->unit ||
         v->result_count != 0 || v->item_count != 2 || v->normal_arms != 2 ||
         !v->normal_frame_unchanged || v->match_binding_prefix == 0)
@@ -524,6 +551,13 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
     if (v == NULL || v->terminates || v->result_count > 1)
         return reject(e);
     *out = (Value){.type = v->type};
+    if (e->custody &&
+        (v->custody_call.entry_proved || v->custody_extraction.present ||
+         (v->kind == NL_CHECKED_REPLACE && v->type == e->custody_type) ||
+         (v->kind == NL_CHECKED_SUM_CONSTRUCTOR &&
+          v->type == e->custody_type) ||
+         (v->kind == NL_CHECKED_LOAN_HEADER && v->loan.implicit_local)))
+        return custody_expr(e, env, id, v, out);
     if (v->kind == NL_CHECKED_REGISTERED_CALL)
         return v->producer.entry_proved ? producer_call(e, env, id, v, out)
                                         : owner_call(e, env, id, v, out);
@@ -1309,8 +1343,9 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
                            : e->heap_link ? 3u
                                           : 1u) ||
             (e->heap_link &&
-             write != (e->two_heap ? (e->reloans == 0 || e->reloans == 3)
-                                   : e->reloans != 1)) ||
+             write != (e->custody    ? e->reloans < 2
+                       : e->two_heap ? (e->reloans == 0 || e->reloans == 3)
+                                     : e->reloans != 1)) ||
             v->argument_count != 2 || a->value_use != NL_VALUE_COPIED ||
             a->type != e->ptr || st == NULL ||
             st->value_use != NL_VALUE_COPIED || st->next_argument != 0 ||
@@ -1556,8 +1591,10 @@ static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
         tail->heap_place != v->producer.root ||
         tail->heap_incarnation != v->producer.incarnation ||
         tail->heap_domain != v->producer.domain || e->link_updates != 1 ||
-        e->reloans != 4 || e->reads != 1 || e->projections != 2 ||
-        body == NULL || body->kind != NL_CHECKED_BLOCK || !body->terminates ||
+        e->reloans != (e->custody ? 2u : 4u) ||
+        e->reads != (e->custody ? 0u : 1u) ||
+        e->projections != (e->custody ? 1u : 2u) || body == NULL ||
+        body->kind != NL_CHECKED_BLOCK || !body->terminates ||
         body->item_count != 2 || body->tail != 0 ||
         body->returned.type != e->live_tail ||
         body->returned.value != v->producer.result)
@@ -1646,7 +1683,7 @@ static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
         arg = a->next_argument;
     }
     if (arg != 0 || donors[2] == NULL || donors[3] == NULL ||
-        e->projections != 3)
+        e->projections != (e->custody ? 2u : 3u))
         return reject(e);
     Env callee = {.artifact = f,
                   .frame = ++e->frames,
@@ -1763,7 +1800,9 @@ static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
 static bool live_destructure(Emit *e, Env *env, const NLCheckedNodeView *v,
                              Value *out)
 {
-    if (v->argument_count != 3 || e->producer_calls != 0)
+    if (v->argument_count != 3 ||
+        (e->custody ? (!e->custody_authorized || e->producer_calls != 1)
+                    : e->producer_calls != 0))
         return reject(e);
     Value package = {0};
     if (!expr(e, env, v->initializer, &package) ||
@@ -1813,13 +1852,14 @@ static bool owner_evidence(Emit *e, Env *env, NLCheckedNodeId id,
     NLSemanticDomainView d, dead_d;
     const Env *h = region(env, v->owner_call.range.region);
     if (!e->two_heap || e->owner_calls != 0 || e->allocations != 2 ||
-        e->reloans != 4u + (e->live_tail != 0 ? 1u : 0u) ||
-        e->link_updates != 2 || e->projections != 3 || e->reads != 1 ||
-        h == NULL || h->region_slot != 1 ||
-        v->kind != NL_CHECKED_REGISTERED_CALL || !v->body_backed ||
-        v->argument_count != 3 || v->type != e->unit || v->result_count != 0 ||
-        !v->owner_call.entry_proved || !v->owner_call.post_proved ||
-        entry == NULL || body == NULL || nl_checked_context(body) != post ||
+        e->reloans != (e->custody ? 2u : 4u + (e->live_tail != 0 ? 1u : 0u)) ||
+        e->link_updates != 2 || e->projections != (e->custody ? 2u : 3u) ||
+        e->reads != (e->custody ? 0u : 1u) || h == NULL ||
+        h->region_slot != 1 || v->kind != NL_CHECKED_REGISTERED_CALL ||
+        !v->body_backed || v->argument_count != 3 || v->type != e->unit ||
+        v->result_count != 0 || !v->owner_call.entry_proved ||
+        !v->owner_call.post_proved || entry == NULL || body == NULL ||
+        nl_checked_context(body) != post ||
         !nl_semantic_function_applicability(post, v->function, &definition) ||
         !definition.definition_checked || definition.target != e->node ||
         definition.requirements != NL_OWNER_ALL_REQUIREMENTS ||
@@ -1985,7 +2025,8 @@ static bool owner_call(Emit *e, Env *env, NLCheckedNodeId id,
         if (!add_local(e, &receiver, v->owner_call.parameters[i], args[i].type,
                        false))
             return false;
-    e->receiver = malloc(C_BYTES);
+    if (e->receiver == NULL)
+        e->receiver = malloc(C_BYTES);
     if (e->receiver == NULL) {
         e->status = NL_NODE_C_OUT_OF_MEMORY;
         return false;
@@ -1993,25 +2034,27 @@ static bool owner_call(Emit *e, Env *env, NLCheckedNodeId id,
     char *main_text = e->text;
     size_t main_used = e->used;
     e->text = e->receiver;
-    e->used = 0;
+    e->used = e->receiver_used;
     ++e->owner_calls;
     e->owner_read = v->owner_call.definition.step_count == 5;
-    bool ok = put(
-        e,
-        "static void nl_owner_%zu(const nl_node *nl_b_%zu_%zu,nl_allocation "
-        "nl_b_%zu_%zu,nl_domain nl_b_%zu_%zu) {\n"
-        "NL_HEAP_RECEIVER_ENTER(nl_b_%zu_%zu,nl_b_%zu_%zu.handle,nl_b_%zu_%zu."
-        "token,%zu,%zu,%zu,%zu,&nl_b_%zu_%zu,&nl_b_%zu_%zu);\n",
-        v->function, receiver.frame, v->owner_call.parameters[0],
-        receiver.frame, v->owner_call.parameters[1], receiver.frame,
-        v->owner_call.parameters[2], receiver.frame,
-        v->owner_call.parameters[0], receiver.frame,
-        v->owner_call.parameters[1], receiver.frame,
-        v->owner_call.parameters[2], receiver.frame,
-        v->owner_call.parameters[0], v->owner_call.parameters[1],
-        v->owner_call.parameters[2], receiver.frame,
-        v->owner_call.parameters[1], receiver.frame,
-        v->owner_call.parameters[2]);
+    bool ok = put(e, "static void nl_owner_%zu", v->function) &&
+              (!e->custody || put(e, "_%zu", receiver.frame)) &&
+              put(e,
+                  "(const nl_node *nl_b_%zu_%zu,nl_allocation "
+                  "nl_b_%zu_%zu,nl_domain nl_b_%zu_%zu) {\n"
+                  "NL_HEAP_RECEIVER_ENTER(nl_b_%zu_%zu,nl_b_%zu_%zu.handle,nl_"
+                  "b_%zu_%zu."
+                  "token,%zu,%zu,%zu,%zu,&nl_b_%zu_%zu,&nl_b_%zu_%zu);\n",
+                  receiver.frame, v->owner_call.parameters[0], receiver.frame,
+                  v->owner_call.parameters[1], receiver.frame,
+                  v->owner_call.parameters[2], receiver.frame,
+                  v->owner_call.parameters[0], receiver.frame,
+                  v->owner_call.parameters[1], receiver.frame,
+                  v->owner_call.parameters[2], receiver.frame,
+                  v->owner_call.parameters[0], v->owner_call.parameters[1],
+                  v->owner_call.parameters[2], receiver.frame,
+                  v->owner_call.parameters[1], receiver.frame,
+                  v->owner_call.parameters[2]);
     Value result = {0};
     if (ok)
         ok = block(e, &receiver, nl_checked_root(body), &result) &&
@@ -2033,13 +2076,335 @@ static bool owner_call(Emit *e, Env *env, NLCheckedNodeId id,
     return put(e,
                "NL_HEAP_HANDOFF(nl_v_%zu,nl_v_%zu.handle,nl_v_%zu.token,&nl_b_%"
                "zu_%zu,&nl_b_%zu_%zu);\n"
-               "nl_owner_%zu(nl_v_%zu,nl_v_%zu,nl_v_%zu);\n"
-               "NL_HEAP_RETURNED(&nl_b_%zu_%zu,&nl_b_%zu_%zu);\n",
+               "nl_owner_%zu",
                args[0].temp, args[1].temp, args[2].temp, donors[1]->frame,
                donors[1]->symbol, donors[2]->frame, donors[2]->symbol,
-               v->function, args[0].temp, args[1].temp, args[2].temp,
-               donors[1]->frame, donors[1]->symbol, donors[2]->frame,
-               donors[2]->symbol);
+               v->function) &&
+           (!e->custody || put(e, "_%zu", receiver.frame)) &&
+           put(e,
+               "(nl_v_%zu,nl_v_%zu,nl_v_%zu);\n"
+               "NL_HEAP_RETURNED(&nl_b_%zu_%zu,&nl_b_%zu_%zu);\n",
+               args[0].temp, args[1].temp, args[2].temp, donors[1]->frame,
+               donors[1]->symbol, donors[2]->frame, donors[2]->symbol);
+}
+
+/* §18.1c only. The complete owned certificate authorizes the finite world
+ * mapping; every reachable policy arm and its own continuation is emitted.
+ * These are compile-time carrier maps, never an ownership runtime. */
+static bool custody_loan(Emit *e, Env *env, const NLCheckedNodeView *v,
+                         Value *out)
+{
+    const NLCheckedLoanPlan l = v->loan;
+    const NLSemanticContext *c = nl_checked_context(env->artifact);
+    const Local *src = local(env, l.source, e->custody_type);
+    NLSemanticBindingView b;
+    NLSemanticTypeView t;
+    if (!e->custody_authorized || src == NULL || !l.implicit_local ||
+        l.is_exclusive || l.from_ptr || l.access != NL_ACCESS_WRITE ||
+        l.scope == 0 || !l.body_nonescape_proved ||
+        !l.normal_result_forwarded || !l.prevent_lifetime_end ||
+        !nl_semantic_binding_view(c, l.ref_symbol, &b) ||
+        !nl_semantic_type_view(c, b.type, &t) || t.kind != NL_TYPE_REF ||
+        t.target != e->custody_type || t.is_exclusive ||
+        t.access != NL_ACCESS_WRITE)
+        return reject(e);
+    Env body = {.artifact = env->artifact,
+                .parent = env,
+                .prefix = SIZE_MAX,
+                .frame = ++e->frames,
+                .depth = env->depth + 1};
+    if (!add_local(e, &body, l.ref_symbol, b.type, false))
+        return false;
+    size_t result = 0;
+    if (v->type != e->unit) {
+        if (v->type != e->custody_type)
+            return reject(e);
+        result = ++e->temp;
+        if (!put(e, "nl_custody nl_v_%zu;\n", result))
+            return false;
+    }
+    if (!put(e, "{ nl_custody *nl_b_%zu_%zu = &nl_b_%zu_%zu;\n", body.frame,
+             l.ref_symbol, src->frame, src->symbol))
+        return false;
+    if (!put(e, "NL_CUSTODY_LOAN(nl_b_%zu_%zu,%zu,1);\n", body.frame,
+             l.ref_symbol, l.scope))
+        return false;
+    Value value = {0};
+    if (!allocated_body(e, &body, v->initializer, &value) ||
+        value.type != v->type ||
+        (result && !put(e, "nl_v_%zu = nl_v_%zu;\n", result, value.temp)) ||
+        !put(e, "NL_CUSTODY_LOAN(nl_b_%zu_%zu,%zu,0);\n}\n", body.frame,
+             l.ref_symbol, l.scope))
+        return reject(e);
+    *out = (Value){.type = v->type, .temp = result};
+    return true;
+}
+static bool custody_recipient(Emit *e, Env *env, NLCheckedNodeId id,
+                              const NLCheckedNodeView *v, Value *out)
+{
+    const NLCheckedFragment *f = nl_checked_call_body(env->artifact, id);
+    const NLCheckedNodeView *body = nl_checked_node_view(f, nl_checked_root(f));
+    const NLCheckedNodeView *ref = get(env, v->first_argument),
+                            *packet = ref ? get(env, ref->next_argument) : NULL;
+    NLSemanticValueView pv, sv;
+    NLSemanticBindingView rb;
+    NLSemanticTypeView rt;
+    if (!e->custody_authorized || e->recipient_calls != 0 ||
+        !v->custody_call.entry_proved || !v->custody_call.post_proved ||
+        !v->body_backed || v->argument_count != 2 || v->type != e->unit ||
+        v->custody_call.world != nl_checked_context(env->artifact) ||
+        body == NULL || body->kind != NL_CHECKED_BLOCK ||
+        body->item_count != 2 || body->terminates || ref == NULL ||
+        packet == NULL || packet->next_argument != 0 ||
+        ref->kind != NL_CHECKED_IDENTIFIER ||
+        packet->kind != NL_CHECKED_IDENTIFIER || packet->type != e->live_tail ||
+        packet->symbol != v->custody_call.donor ||
+        packet->value_use != NL_VALUE_CONSUMED ||
+        packet->results[0].value != v->custody_call.packet ||
+        !nl_semantic_type_view(nl_checked_context(env->artifact), ref->type,
+                               &rt) ||
+        rt.kind != NL_TYPE_REF || rt.target != e->custody_type ||
+        rt.is_exclusive || rt.access != NL_ACCESS_WRITE ||
+        !nl_semantic_value_view(v->custody_call.entry_world,
+                                packet->results[0].value, &pv) ||
+        pv.field_count != 3 ||
+        !nl_semantic_binding_view(v->custody_call.entry_world, ref->symbol,
+                                  &rb) ||
+        !nl_semantic_value_view(v->custody_call.entry_world, rb.value, &sv) ||
+        sv.reference.place != v->custody_call.sink ||
+        sv.reference.incarnation != v->custody_call.sink_incarnation ||
+        sv.reference.scope == 0 ||
+        sv.reference.provenance != NL_PROVENANCE_VALID ||
+        !sv.reference.writable)
+        return reject(e);
+    for (size_t i = 0; i < 3; ++i)
+        if (pv.fields[i] != e->returned_members[i])
+            return reject(e);
+    const Local *donor = local(env, packet->symbol, packet->type);
+    Value args[2] = {0};
+    if (donor == NULL || !expr(e, env, v->first_argument, &args[0]) ||
+        !expr(e, env, ref->next_argument, &args[1]))
+        return reject(e);
+    Env callee = {.artifact = f, .frame = ++e->frames, .depth = env->depth + 1};
+    for (size_t i = 0; i < 2; ++i)
+        if (!add_local(e, &callee, v->custody_call.parameters[i], args[i].type,
+                       false))
+            return false;
+    e->recipient = malloc(C_BYTES);
+    if (e->recipient == NULL) {
+        e->status = NL_NODE_C_OUT_OF_MEMORY;
+        return false;
+    }
+    char *main_text = e->text;
+    size_t main_used = e->used;
+    e->text = e->recipient;
+    e->used = 0;
+    ++e->recipient_calls;
+    bool ok = put(e,
+                  "static void nl_recipient_%zu(nl_custody *nl_b_%zu_%zu,"
+                  "nl_live_tail nl_b_%zu_%zu) {\n"
+                  "NL_CUSTODY_ENTER(nl_b_%zu_%zu,nl_b_%zu_%zu);\n",
+                  v->function, callee.frame, v->custody_call.parameters[0],
+                  callee.frame, v->custody_call.parameters[1], callee.frame,
+                  v->custody_call.parameters[0], callee.frame,
+                  v->custody_call.parameters[1]);
+    e->custody_active_call = v;
+    /* Source-body traversal, not a fabricated recipient builtin. */
+    Value result = {0};
+    if (ok)
+        ok = block(e, &callee, nl_checked_root(f), &result) &&
+             result.type == e->unit &&
+             put(e, "NL_CUSTODY_STORED(nl_b_%zu_%zu,&nl_b_%zu_%zu);\n}\n",
+                 callee.frame, v->custody_call.parameters[0], callee.frame,
+                 v->custody_call.parameters[1]);
+    e->custody_active_call = NULL;
+    e->recipient_used = e->used;
+    e->text = main_text;
+    e->used = main_used;
+    if (!ok)
+        return reject(e);
+    *out = (Value){.type = e->unit};
+    return put(e,
+               "nl_recipient_%zu(nl_v_%zu,nl_v_%zu);\n"
+               "NL_CUSTODY_RETURNED(nl_v_%zu,&nl_b_%zu_%zu);\n",
+               v->function, args[0].temp, args[1].temp, args[0].temp,
+               donor->frame, donor->symbol);
+}
+static bool custody_expr(Emit *e, Env *env, NLCheckedNodeId id,
+                         const NLCheckedNodeView *v, Value *out)
+{
+    if (v->custody_call.entry_proved)
+        return custody_recipient(e, env, id, v, out);
+    if (v->kind == NL_CHECKED_LOAN_HEADER)
+        return custody_loan(e, env, v, out);
+    if (v->kind == NL_CHECKED_SUM_CONSTRUCTOR) {
+        if (v->type != e->custody_type || v->result_count != 1 ||
+            v->results[0].type != e->custody_type || v->variant < 1 ||
+            v->variant > 2)
+            return reject(e);
+        out->type = e->custody_type;
+        out->temp = ++e->temp;
+        if (v->variant == 1)
+            return v->initializer == 0 &&
+                   put(e, "nl_custody nl_v_%zu = {0};\n", out->temp);
+        Value payload = {0};
+        if (!e->custody_authorized || !expr(e, env, v->initializer, &payload) ||
+            payload.type != e->live_tail)
+            return reject(e);
+        return put(e, "nl_custody nl_v_%zu = {1,nl_v_%zu};\n", out->temp,
+                   payload.temp);
+    }
+    const NLCheckedNodeView *a = get(env, v->first_argument),
+                            *b = a ? get(env, a->next_argument) : NULL;
+    if (v->kind != NL_CHECKED_REPLACE || !e->custody_authorized ||
+        v->type != e->custody_type || v->argument_count != 2 || a == NULL ||
+        b == NULL || b->next_argument != 0 ||
+        b->kind != NL_CHECKED_SUM_CONSTRUCTOR || b->type != e->custody_type ||
+        (v->custody_extraction.present &&
+         (b->variant != 1 ||
+          b->results[0].value != v->custody_extraction.new_sum ||
+          v->results[0].value != v->custody_extraction.old_sum)))
+        return reject(e);
+    if (!v->custody_extraction.present) {
+        const NLCheckedNodeView *call = e->custody_active_call;
+        const NLCheckedNodeView *payload = get(env, b->initializer);
+        if (call == NULL || a->kind != NL_CHECKED_IDENTIFIER ||
+            a->symbol != call->custody_call.parameters[0] || b->variant != 2 ||
+            payload == NULL || payload->kind != NL_CHECKED_IDENTIFIER ||
+            payload->symbol != call->custody_call.parameters[1] ||
+            payload->results[0].value != call->custody_call.packet ||
+            v->results[0].value != call->custody_call.old_none ||
+            b->results[0].value != call->custody_call.new_some)
+            return reject(e);
+    }
+    Value ref = {0}, replacement = {0};
+    if (!expr(e, env, v->first_argument, &ref) ||
+        !expr(e, env, a->next_argument, &replacement))
+        return reject(e);
+    out->type = e->custody_type;
+    out->temp = ++e->temp;
+    return put(e,
+               "nl_custody nl_v_%zu = *nl_v_%zu;\n"
+               "*nl_v_%zu = nl_v_%zu;\n",
+               out->temp, ref.temp, ref.temp, replacement.temp) &&
+           (!v->custody_extraction.present ||
+            put(e, "NL_CUSTODY_EXTRACT(nl_v_%zu,nl_v_%zu);\n", ref.temp,
+                out->temp));
+}
+static bool custody_match(Emit *e, Env *env, NLCheckedNodeId id,
+                          const NLCheckedNodeView *v, Value *out)
+{
+    const NLCheckedFragment *suffix0 =
+        nl_checked_custody_continuation(env->artifact, id, 0);
+    if (suffix0 != NULL) {
+        if (e->custody_authorized ||
+            !nl_checked_custody_valid(env->artifact, id) ||
+            v->normal_frame_unchanged || v->normal_arms != 2 ||
+            v->item_count != 2)
+            return reject(e);
+        e->custody_authorized = true;
+        Value scrutinee = {0};
+        if (!expr(e, env, v->initializer, &scrutinee) ||
+            scrutinee.type != e->option ||
+            !put(e, "switch(nl_v_%zu.tag) {\n", scrutinee.temp))
+            return reject(e);
+        HeapLifecycle incoming[2] = {e->lifecycle[0], e->lifecycle[1]};
+        size_t starting_reloans = e->reloans;
+        bool seen[2] = {false, false};
+        for (size_t i = 0; i < 2; ++i) {
+            const NLCheckedFragment *f = nl_checked_match_arm(env->artifact, id,
+                                                              i),
+                                    *suffix = nl_checked_custody_continuation(
+                                        env->artifact, id, i);
+            const NLCheckedNodeView *a =
+                nl_checked_node_view(f, nl_checked_root(f));
+            if (suffix == NULL || a == NULL ||
+                a->kind != NL_CHECKED_MATCH_ARM || a->variant < 1 ||
+                a->variant > 2 || seen[a->variant - 1])
+                return reject(e);
+            seen[a->variant - 1] = true;
+            e->lifecycle[0] = incoming[0];
+            e->lifecycle[1] = incoming[1];
+            e->owner_calls = 0;
+            e->reloans = starting_reloans;
+            Env arm = {.artifact = f,
+                       .parent = env,
+                       .prefix = v->match_binding_prefix,
+                       .frame = ++e->frames,
+                       .depth = env->depth + 1};
+            if (!put(e, "case %zu: {\nNL_CUSTODY_POLICY(%zu);\n",
+                     a->variant - 1, a->variant))
+                return false;
+            if (a->variant == 2 &&
+                (!add_local(e, &arm, a->symbol, e->ptr, false) ||
+                 !put(e,
+                      "const nl_node *nl_b_%zu_%zu = nl_v_%zu.ptr;\n"
+                      "(void)nl_b_%zu_%zu;\n",
+                      arm.frame, a->symbol, scrutinee.temp, arm.frame,
+                      a->symbol)))
+                return reject(e);
+            Value ignored = {0};
+            if (!block(e, &arm, a->initializer, &ignored))
+                return reject(e);
+            /* Prefix refers to parent public carriers; never sibling numeric
+             * IDs. suffix is owned by this arm's certificate, independently
+             * checked. */
+            Env continuation = {.artifact = suffix,
+                                .parent = env,
+                                .prefix = v->match_binding_prefix,
+                                .frame = ++e->frames,
+                                .depth = env->depth + 1};
+            if (!block(e, &continuation, nl_checked_root(suffix), &ignored) ||
+                e->lifecycle[0].stage != 8 || e->lifecycle[1].stage != 8 ||
+                e->owner_calls != 1 || e->reloans != starting_reloans + 1 ||
+                !put(e, "break; }\n"))
+                return reject(e);
+        }
+        e->reloans =
+            starting_reloans + 2; /* count both emitted receiver bodies */
+        e->lifecycle[0] = (HeapLifecycle){.stage = 8};
+        e->lifecycle[1] = (HeapLifecycle){.stage = 8};
+        *out = (Value){.type = e->unit};
+        return put(e, "}\n");
+    }
+    if (!e->custody_authorized || v->type != e->unit || v->result_count != 0)
+        return reject(e);
+    Value scrutinee = {0};
+    if (!expr(e, env, v->initializer, &scrutinee) ||
+        scrutinee.type != e->custody_type)
+        return reject(e);
+    *out = (Value){.type = e->unit};
+    if (v->custody_none_site) {
+        if (v->item_count != 1 ||
+            (v->custody_none_site != 1 && v->custody_none_site != 2))
+            return reject(e);
+        /* Only the source-proven exact None is erased. There is no runtime
+         * cleanup or runtime test supplying the omitted-arm proof. */
+        return put(e, "NL_CUSTODY_NONE(%u,nl_v_%zu);\n(void)nl_v_%zu;\n",
+                   v->custody_none_site, scrutinee.temp, scrutinee.temp) &&
+               block(e, env,
+                     v->custody_none_site == 1 ? v->tail : v->first_item, out);
+    }
+    if (v->item_count != 2 || v->custody_selected_variant < 1 ||
+        v->custody_selected_variant > 2)
+        return reject(e);
+    if (!put(e, "if(nl_v_%zu.tag == %u) {\n", scrutinee.temp,
+             v->custody_selected_variant - 1))
+        return false;
+    if (v->custody_selected_variant == 2) {
+        const NLCheckedNodeView *b = get(env, v->first_item),
+                                *d = b ? get(env, b->first_item) : NULL,
+                                *p = d ? get(env, d->initializer) : NULL;
+        if (p == NULL || p->kind != NL_CHECKED_IDENTIFIER ||
+            p->type != e->live_tail ||
+            !add_local(e, env, p->symbol, p->type, false) ||
+            !put(e,
+                 "nl_live_tail nl_b_%zu_%zu = nl_v_%zu.packet;\n"
+                 "nl_v_%zu.packet = (nl_live_tail){0};\n",
+                 env->frame, p->symbol, scrutinee.temp, scrutinee.temp))
+            return reject(e);
+    }
+    return block(e, env, v->first_item, out) && put(e, "}\n");
 }
 
 static bool two_profile(const NLCheckedFragment *f, size_t depth)
@@ -2069,6 +2434,22 @@ static bool return_profile(Emit *e, const NLCheckedFragment *f, size_t depth)
         return reject(e);
     for (NLCheckedNodeId i = 1; i <= nl_checked_node_count(f); ++i) {
         const NLCheckedNodeView *v = nl_checked_node_view(f, i);
+        if (v->kind == NL_CHECKED_MATCH &&
+            nl_checked_custody_continuation(f, i, 0) != NULL) {
+            if (e->custody || !nl_checked_custody_valid(f, i))
+                return reject(e);
+            e->custody = true;
+            const NLCheckedFragment *suffix =
+                nl_checked_custody_continuation(f, i, 0);
+            for (NLCheckedNodeId n = 1; n <= nl_checked_node_count(suffix);
+                 ++n) {
+                const NLCheckedNodeView *op = nl_checked_node_view(suffix, n);
+                if (op->custody_extraction.present)
+                    e->custody_type = op->type;
+            }
+            if (e->custody_type == 0)
+                return reject(e);
+        }
         if (v->producer.entry_proved) {
             if (e->live_tail != 0 || !nl_checked_producer_valid(f, i))
                 return reject(e);
@@ -2155,6 +2536,7 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             "typedef struct {size_t token;} nl_domain;\n"
             "typedef struct {const nl_node *ptr;nl_allocation "
             "allocation;nl_domain domain;} nl_live_tail;\n"
+            "typedef struct {unsigned tag;nl_live_tail packet;} nl_custody;\n"
             "typedef struct {nl_allocation allocation;nl_storage raw;} "
             "nl_backing;\n"
             "#ifdef NEWLANG_HEAP_OBSERVER\n#include "
@@ -2182,32 +2564,52 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             "#define NL_LIVE_SEND(...) ((void)0)\n"
             "#define NL_LIVE_ENTER(...) ((void)0)\n"
             "#define NL_LIVE_RETURN(...) ((void)0)\n"
-            "#define NL_LIVE_RECEIVE(...) ((void)0)\n#endif\n");
+            "#define NL_LIVE_RECEIVE(...) ((void)0)\n#endif\n"
+            "#ifndef NL_CUSTODY_ENTER\n"
+            "#define NL_CUSTODY_ENTER(...) ((void)0)\n"
+            "#define NL_CUSTODY_STORED(...) ((void)0)\n"
+            "#define NL_CUSTODY_RETURNED(...) ((void)0)\n"
+            "#define NL_CUSTODY_EXTRACT(...) ((void)0)\n"
+            "#define NL_CUSTODY_NONE(...) ((void)0)\n"
+            "#define NL_CUSTODY_POLICY(...) ((void)0)\n"
+            "#define NL_CUSTODY_LOAN(...) ((void)0)\n#endif\n");
     }
     const size_t main_offset = e.used;
     (void)put(&e, "int main(void) {\n");
     Value result = {0};
     if (!block(&e, &env, nl_checked_root(body), &result) || e.roots != 2 ||
         result.type != e.unit ||
+        (e.custody && (!e.custody_authorized || e.recipient_calls != 1)) ||
         (e.allocated &&
          (e.allocations != (e.two_heap ? 2u : 1u) ||
-          e.destroys != (e.two_heap ? 3u : 1u) ||
-          e.releases != (e.two_heap ? 3u : 1u) ||
+          e.destroys != (e.custody    ? 5u
+                         : e.two_heap ? 3u
+                                      : 1u) ||
+          e.releases != (e.custody    ? 5u
+                         : e.two_heap ? 3u
+                                      : 1u) ||
           e.domains != (e.two_heap ? 2u : 1u) ||
-          e.finalized != (e.two_heap ? 3u : 1u) ||
+          e.finalized != (e.custody    ? 5u
+                          : e.two_heap ? 3u
+                                       : 1u) ||
           e.slots != (e.two_heap ? 2u : 1u) ||
-          e.erased != (e.two_heap ? 3u : 1u) ||
-          e.reloans != (e.two_heap    ? 4u + (e.live_tail != 0 ? 1u : 0u) +
+          e.erased != (e.custody    ? 5u
+                       : e.two_heap ? 3u
+                                    : 1u) ||
+          e.reloans != (e.custody     ? 4u
+                        : e.two_heap  ? 4u + (e.live_tail != 0 ? 1u : 0u) +
                                             (e.owner_read ? 1u : 0u)
                         : e.heap_link ? 3u
                                       : 1u) ||
-          (e.heap_link && (e.projections != 3 || e.reads != 1)) ||
+          (e.heap_link && (e.projections != (e.custody ? 2u : 3u) ||
+                           e.reads != (e.custody ? 0u : 1u))) ||
           e.option_bindings != (e.live_tail != 0 ? 2u : 3u) ||
           e.link_updates != 2)) ||
         !put(&e, e.allocated ? "NL_HEAP_FINISH();\nreturn 0;\n}\n"
                              : "NL_NODE_FINISH();\nreturn 0;\n}\n")) {
         if (e.status == NL_NODE_C_OK)
             e.status = NL_NODE_C_UNSUPPORTED;
+        free(e.recipient);
         free(e.receiver);
         free(e.producer);
         free(e.text);
@@ -2215,6 +2617,7 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
     }
     if (e.producer != NULL) {
         if (e.producer_used >= C_BYTES - e.used) {
+            free(e.recipient);
             free(e.receiver);
             free(e.producer);
             free(e.text);
@@ -2226,8 +2629,23 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         e.used += e.producer_used;
         free(e.producer);
     }
+    if (e.recipient != NULL) {
+        if (e.recipient_used >= C_BYTES - e.used) {
+            free(e.recipient);
+            free(e.receiver);
+            free(e.text);
+            return NL_NODE_C_RESOURCE_LIMIT;
+        }
+        memmove(e.text + main_offset + e.recipient_used, e.text + main_offset,
+                e.used - main_offset + 1);
+        memcpy(e.text + main_offset, e.recipient, e.recipient_used);
+        e.used += e.recipient_used;
+        free(e.recipient);
+        e.recipient = NULL;
+    }
     if (e.receiver != NULL) {
         if (e.receiver_used >= C_BYTES - e.used) {
+            free(e.recipient);
             free(e.receiver);
             free(e.text);
             return NL_NODE_C_RESOURCE_LIMIT;
@@ -2236,6 +2654,7 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
                 e.used - main_offset + 1);
         memcpy(e.text + main_offset, e.receiver, e.receiver_used);
         e.used += e.receiver_used;
+        free(e.recipient);
         free(e.receiver);
     }
     *out = e.text;
