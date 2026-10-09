@@ -102,5 +102,6 @@ for san in address undefined; do
   fi
 done
 find r_native_258/out/cases r_native_258/out/native r_native_258/out/mutants -type f \( -name '*.c' -o -name '*.nl' -o -perm /111 \) -print0 | sort -z | xargs -0 -r sha256sum > r_native_258/out/derived-sha256.txt
-git fetch --no-tags --depth=20 origin "$GITHUB_REF_NAME"\ngit diff --name-status b75baea96a644e68634baee383299b66981b3c62 HEAD | tee r_native_258/out/frozen-compare.txt
+git fetch --no-tags --depth=20 origin "$GITHUB_REF_NAME"
+git diff --name-status b75baea96a644e68634baee383299b66981b3c62 HEAD | tee r_native_258/out/frozen-compare.txt
 cat r_native_258/out/world-results.log r_native_258/out/mutant-results.log r_native_258/out/san-results.log
