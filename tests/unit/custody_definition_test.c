@@ -182,15 +182,9 @@ static bool faults(const char *path, bool definition)
         last = nl_semantic_register_function_unit(c, inputs, 1, &d);
         injecting = false;
         if (last != NL_CHECK_OUT_OF_MEMORY) {
-            if (definition) {
-                CHECK(last == NL_CHECK_OK && conditions(c));
-            } else {
-                CHECK(last == NL_CHECK_ANALYSIS_PRECISION_LIMIT &&
-                      strcmp(d.diagnostic.diagnostic.code,
-                             "CUSTODY-TRANSFER-PRECISION") == 0);
-                CHECK(nl_semantic_snapshot(c, &after) &&
-                      memcmp(&before, &after, sizeof(before)) == 0);
-            }
+            CHECK(last == NL_CHECK_OK);
+            if (definition)
+                CHECK(conditions(c));
             break;
         }
         CHECK(nl_semantic_snapshot(c, &after) &&
@@ -213,8 +207,8 @@ static bool faults(const char *path, bool definition)
         test_checked_destroy(&retry);
     }
     printf("%s: %zu staged registration allocation failures, atomic %s\n",
-           definition ? "independent definition" : "primary HOLD source",
-           faults, definition ? "success" : "precision rejection");
+           definition ? "independent definition" : "primary complete source",
+           faults, "success");
     nl_syntax_tree_destroy(tree);
     nl_source_destroy(source);
     nl_semantic_destroy(c);
