@@ -1,0 +1,56 @@
+name: R250 isolated frozen-source blind empirical checker
+
+on:
+  push:
+    branches:
+      - r250-blind-source-first-pass
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r250:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Verify immutable frozen ancestor and isolated overlay
+        run: |
+          set -eu
+          echo "overlay_head=$(git rev-parse HEAD)"
+          git cat-file -t d8765a5ae11919d3076cec0d1432973a0f18fdcd
+          test "$(git merge-base HEAD d8765a5ae11919d3076cec0d1432973a0f18fdcd)" = "d8765a5ae11919d3076cec0d1432973a0f18fdcd"
+          git diff --name-only d8765a5ae11919d3076cec0d1432973a0f18fdcd HEAD
+          test "$(git diff --name-only d8765a5ae11919d3076cec0d1432973a0f18fdcd HEAD | grep -Ev '^r250_blind/|^\.github/workflows/r250-blind\.yml$' | wc -l)" -eq 0
+      - name: Host prerequisites from Ubuntu
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            gcc-13 g++-13 make cmake python3 dpkg \
+            libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Locked LLVM bootstrap
+        run: python3 scripts/bootstrap.py
+      - name: Build original compiler source (unmodified)
+        env:
+          CC: gcc-13
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_SANITIZER=none
+          cmake --build build --parallel 2
+      - name: Generate independent source attacks from canonical text
+        run: python3 r250_blind/generate_sources.py
+      - name: Execute black-box CLI and collect raw bytes
+        run: |
+          . .deps/activate.sh
+          python3 r250_blind/run_source_checks.py
+      - name: Evidence artifact
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r250-blind-source-evidence
+          if-no-files-found: warn
+          path: |
+            r250_blind/manifest.json
+            r250_blind/run_results.json
+            r250_blind/sources/*.nl
