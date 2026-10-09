@@ -132,7 +132,7 @@ def main():
              "free(nl_v_21.handle);","(void)nl_v_21.handle;",
              2,"leak"),
         "M14_refusal_skip_terminal_free": (refusal,
-             "free(nl_v_113.handle);","(void)nl_v_113.handle;",
+             "free(nl_v_114.handle);","(void)nl_v_114.handle;",
              0,"leak"),
         "M15_return_stale_displaced_some": (original,
              "nl_custody nl_v_69 = *nl_v_66;",
