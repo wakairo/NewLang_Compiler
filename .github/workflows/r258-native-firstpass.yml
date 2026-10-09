@@ -55,6 +55,9 @@ jobs:
           if [ -x r_native_258/out/native-gcc ]; then r_native_258/out/native-gcc >r_native_258/out/native.stdout 2>r_native_258/out/native.stderr; echo "NATIVE_EXIT=$?" | tee -a r_native_258/out/result.txt; sha256sum r_native_258/out/native-gcc >> r_native_258/out/sha256.txt; fi
           cat r_native_258/out/result.txt r_native_258/out/sha256.txt
           cat r_native_258/out/gcc.stderr r_native_258/out/clang.stderr
+      - name: Execute independently authored corpus, physical observation and safe mutants
+        shell: bash
+        run: bash r_native_258/execute.sh
       - name: Upload independent outputs even on failure
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
