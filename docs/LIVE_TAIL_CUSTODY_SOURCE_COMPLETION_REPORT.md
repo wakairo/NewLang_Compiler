@@ -1,165 +1,135 @@
-# Draft17.29 durable LiveTail custody — complete bounded source gate
+# Draft17.29 durable LiveTail custody — 完全な bounded source gate
 
-Track: P — [Issue #217](https://github.com/wakairo/NewLang_Compiler/issues/217).
+Track: P — [Issue #217](https://github.com/wakairo/NewLang_Compiler/issues/217)。
 
-Candidate disposition: **P DRAFT17.29 DURABLE CUSTODY SOURCE GATE READY FOR COORDINATION REVIEW**.
-Independent Coordination review and merge remain pending. This is source/semantic
-acceptance and owned checked evidence; it is not native custody execution.
+候補のdisposition: **P DRAFT17.29 DURABLE CUSTODY SOURCE GATE READY FOR COORDINATION REVIEW**。
+独立Coordination reviewとmergeは未実施。本成果はsource/semantic acceptanceとowned checked evidenceであり、native custody実行の証拠ではない。
 
-## Authority / exact scope
+## Authorityと範囲
 
-Base main: `75897e9b108185c530229c774c9d6c9951756922`.
-`CURRENT_SPEC.md` points to Draft17.29; adopted §18.1c is the normative rule.
-The pointer's older explanatory PROPOSED prose does not override the adopted
-canonical section or the Coordination continuation/commit-update instructions.
-Process, Compiler Testing Strategy, Design Decision Procedure, DI-009–013 and
-merged #218/#220/#221/#223 were checked. Historical design-selection gate: N/A
-for implementation of this adopted bounded profile. Semantic delta: **0**.
-Canonical Draft, CURRENT_SPEC, Ledger, frozen oracle and source fixture are unchanged.
+base main: `75897e9b108185c530229c774c9d6c9951756922`。
+`CURRENT_SPEC.md`の参照先はDraft17.29。採用済み§18.1cをnormative authorityとする。
+参照ファイルの古い説明文に残るPROPOSED表記は、canonical sectionの採用済み状態やCoordinationの再開・commit更新裁定を上書きしない。
+開発プロセス、Compiler Testing Strategy、Design Decision Procedure、DI-009–013、merged #218/#220/#221/#223を確認した。
+採用済みbounded profileの実装なので、新規設計選択に対するhistorical gateはN/A。**Semantic delta = 0**。
+canonical Draft、CURRENT_SPEC、Ledger、frozen oracle、source fixtureは変更していない。
 
-The complete §18.1c.4 fixture is still
-`tests/fixtures/live_tail_custody.nl`, SHA-256
-`a30bbc37ff817020165d44a1436cb98ac934568f557068b378bf3118227d5644`.
-The existing canonical-comparison test removes only comment-only lines, because
-comments remain outside the current lexer. No executable statement is removed.
-Earlier partial/HOLD reports describe their cited older candidates; this report
-records the complete source gate on the new base.
+完全な§18.1c.4のfixtureは既存の`tests/fixtures/live_tail_custody.nl`。
+SHA-256は`a30bbc37ff817020165d44a1436cb98ac934568f557068b378bf3118227d5644`。
+既存integrationはcanonicalのfenced sourceからコメントだけの行を除いて比較する。
+現lexerで未対応のコメント以外、実行文・分岐・宣言・順序は変えていない。
+既存partial/HOLD文書は、それぞれに記載された過去候補の証拠として保持する。
 
-## Actual transfer and source checking
+## 実際の所有責任移転
 
-The existing independently checked `NLCustodyDefinition` remains conditional.
-Each actual recipient call first uses the read-only admission path to prove the
-inherited, world-qualified original packet and its live O/R/D/Allocation,
-separate caller-owned exact-None root, ordinary scoped write permission,
-source loan operand, and absence of unresolved dependencies or live aliases.
-This happens before argument evaluation/consumption. Body shape alone grants
-no caller authority.
+独立したdefinition-time `NLCustodyDefinition`は引き続き条件付き証拠である。
+各actual known-direct recipient callで、引数評価・消費の**前**に既存のread-only admissionを行う。
+元のworld-qualified packet、その生存中O/R/D/Allocation、別のcaller-owned exact-None root、ordinary scoped write permission、source loan operandを照合し、未解決dependencyやlive aliasのないことを要求する。
+body shapeだけではcallerのauthorityを生成しない。
 
-The same production body checker then replays the retained source plan with the
-actual arguments. It consumes the original packet into `Some(packet)`, performs
-ordinary `replace`, and explicitly consumes its old None at the first special
-site. The original tail stays live; no EndRoot/free is added. The sink's fresh
-payload occurrence and current fact, original packet, actual consumed donor and
-formals, physical root incarnation and live region/domain are retained in owned
-entry/post snapshots. Source/callee loans close through the existing scope rules.
-Both Option variants remain statically nonCopy and nonDiscardable.
+その後、同じproduction body checkerが保持されたsource planを実引数で検査する。
+元のnonCopy packetをSomeへ移し、通常のreplaceを行い、取り出したold Noneを第1の特別なmatch siteで明示的にconsumeする。
+recipientはtailを生存させたままunitを返す。EndRoot/freeを追加しない。
+Cのfresh payload occurrence/current fact、元packet、消費済みdonor/formal、physical root incarnation、live region/domainをowned entry/post snapshotへ保存する。
+source/callee loanは既存scope規則で終了する。
+OptionはNone/Someのどちらでも静的にnonCopy / nonDiscardableのままである。
 
-## Differential continuation and common final closure
+## 異なる状態の継続と共通の最終状態
 
-| Independently checked policy world | Custody / original tail | Same later source suffix |
+| 独立に検査したpolicy world | Cと元のtail | 同じ後続sourceの検査 |
 |---|---|---|
-| Adoption | Some(original packet), fresh occurrence; tail live | fresh loan/replace returns Some; whole saved packet received and terminally released |
-| Pre-consume refusal | None; original packet received/released by refusal arm | fresh loan/replace returns None; no owner is constructed in unreachable Some |
+| adoption | Some(original packet)、fresh occurrence、tail生存 | fresh loan/replaceがSomeを返し、whole saved packetを取り出してterminal release |
+| pre-consume refusal | None、元packetはrefusal armでrelease済み | fresh loan/replaceがNoneを返す。到達不能Someからownerを作らない |
 
-The policy match retains **both** arm worlds. `normal_frame_unchanged` is false;
-common retained/closed packet flags are not substituted for this differential
-state. The remaining lexical block is checked separately in each owned world,
-under the existing shared finite work/resource budgets. The actual policy
-scrutinee does not select the favorable alternative.
+policy matchは**両方**のarm worldを保持する。
+`normal_frame_unchanged`はfalseであり、共通retained/closed packet flagを異なる状態の代用にしない。
+残りの同じlexical blockを、それぞれのowned worldから既存の共有finite work/resource budgetの下で検査する。
+実際のpolicy scrutineeがNoneでも、有利なarmだけを選ばない。
 
-The later recovered match is syntactically exhaustive in both continuations.
-Its possible tag is source-proven separately in each correlated world. Only the
-reachable arm executes there, so the refusal world never gains a hypothetical
-Some owner. Across the two policy worlds both recovery paths are checked.
-Whole receiving retains the original packet field identities; the existing
-terminal receiver independently re-proves the O/R/D/Allocation relation.
-The second one-arm consuming match is limited to the original custody binding,
-after the one actual extraction, when its current value is exact None and loans
-have ended. Unrelated None values and other incomplete matches gain no exception.
+後段recovered matchは両継続で構文上exhaustiveである。
+各相関worldのsource事実から可能なtagを証明し、そのworldで到達可能なarmを検査する。
+refusal側にhypothetical Some ownerを生成しない。
+2つのpolicy world全体ではNone/Some双方の回復経路を検査する。
+whole receivingは元packetのfield identityを保持し、既存terminal receiverがO/R/D/Allocation対応を再検証する。
+第2のone-arm consuming matchは、実際の1回のextraction後、loan終了後、元のC bindingのcurrent valueがexact Noneである場合だけに限る。
+無関係なNone値や他の不完全matchへ例外を広げない。
 
-A parent-derived closed-prefix target is constructed from the existing
-parent closed-tail proof plus explicit head/custody closure obligations. **It is
-not committed until both complete source suffixes prove it**. No arm's state is
-chosen as the public result. The comparison for adoption projects only the
-proved ownership edge from the original packet local to C's new payload; all
-other inherited facts must match. For final closure, only the historical,
-consumed, payload-free None ID in C's binding is normalized in a temporary
-comparison clone. No live owner, root, region, domain or occurrence identity is
-rebased across worlds. No new source owner/effect contract is introduced.
+既存parent closed-tail証拠とhead/Cの明示的closure義務から、parentだけに由来するclosed-prefix targetを構築する。
+**両方の完全なsource suffixがそのtargetを証明するまでcommitしない**。
+armの状態を代表値として採用しない。
+adoptionの比較では、証明済みのpacket local→C payloadの所有edgeだけを射影し、それ以外の継承事実をexactに比較する。
+最終closureの比較では、消費済みでpayloadを持たないCのhistorical None IDだけを一時的な比較cloneで正規化する。
+live owner/root/region/domain/occurrenceをworld間で再同定しない。
+新しいsource owner/effect contractは追加していない。
 
-## Owned checked evidence / module contract
+## Owned checked evidenceの契約
 
-`NLCheckedFragment` owns recipient entry/post snapshots, both policy arm worlds,
-both source suffix artifacts with their exact starting worlds, and the common
-final target. Parent/world pointers are borrowed only within the owning tree.
-Destruction releases all worlds/body evidence, including partially built OOM
-paths. The caller context changes only through the enclosing successful
-transaction.
+`NLCheckedFragment`はrecipient entry/post、両policy arm、各開始worldとsource suffix、共通final targetを所有する。
+parent/world pointerのborrowはowning tree内だけに限定する。
+破棄時は、OOMによる部分構築を含め全world/body evidenceを解放する。
+caller contextへの変更は外側transaction成功時だけ反映する。
 
-`NLCheckedNodeView` records actual recipient operands and donor/formals, original
-packet/world, sink incarnation, displaced None, new Some/occurrence, later
-replace's old/new sums and occurrence, the two special match sites and selected
-recovery variant. `nl_checked_custody_continuation` returns a borrowed per-arm
-suffix; its numeric IDs belong to that suffix's owned world.
-`nl_checked_custody_valid` reads this evidence, reconstructs the parent-only
-closure target and verifies both alternative certificates. It does not replay
-source/AST or mint/consume authority; validation OOM returns false.
+`NLCheckedNodeView`は実際のoperand・donor/formal、元packet/world、sink incarnation、old None、new Some/occurrence、後段replaceのold/new sumとoccurrence、2つのspecial match site、回復variantを記録する。
+`nl_checked_custody_continuation`は各armのsuffixへのborrowed viewを返し、その数値IDは当該owned worldに属する。
+`nl_checked_custody_valid`はparent-only closure targetを再構築し、両方の証拠をread-onlyで照合する。
+source/ASTの再実行やauthorityの生成・消費は行わず、validation OOMはfalseとなる。
 
-Tests destroy original input AST/source and entry source before validation.
-**64 poison controls per positive** reject foreign/sibling cloned worlds,
-missing normal alternatives, fake unchanged/retained flags, wrong ancestor,
-unknown/may-Some sink, stale sink incarnation/occurrence, changed original
-packet fields/dependencies, missing first/second None evidence, corrupted
-extraction, whole receiving fields and terminal donor/parameter/owner tuples.
-No numerical coincidence between sibling worlds supplies an origin proof.
+元の入力AST/sourceとentry sourceを破棄してから検証する。
+**positiveごとに64個のpoison control**で次を拒否する:
 
-## Actual-source tests and accurate rejection stages
+- sibling/foreign cloned world、alternative欠落、偽unchanged/retained flag、誤ったancestor。
+- Unknown/may-Some sink、stale sink incarnation/occurrence。
+- 元packetのfield/dependency改変、生存root/domain改変、old Noneの未消費。
+- 第1/第2 None証拠の欠落、extraction改変、whole receiving field改変。
+- terminal donor/parameter/root/Allocation/domainの不正な組。
 
-`custody_source.integration` tests six complete admissions: primary, refusal,
-recipient rename, header/local rename, renamed refusal and declaration order.
-Each must reach **exit 4, V1-BACKEND-UNSUPPORTED, empty C output**, then pass the
-owned-evidence test on an actual checked `main()` call. Native success is not
-claimed. The old integration also retains five independent-definition positives,
-16 definition-shape negatives, seven pre-consume guard negatives, three producer
-identity negatives, and both old closed/retained join prerequisites.
+sibling worldの数値ID一致だけではorigin証明にならない。
 
-The new integration independently checks 25 destructive actual sources:
+## Actual-sourceと拒否段階の証拠
 
-- Post-adoption donor reuse and double terminal release: `P3-USE-AFTER-CONSUME`.
-- Wrong later ptr/domain and Allocation: `P193-CALL-DOMAIN/BACKING`.
-- Missing tail/head release or final custody consumption: `P5-SCOPE-OBLIGATION`.
-- Missing recovery arms, premature/unrelated one-arm None: `P6-EXHAUSTIVENESS`;
-  Some wildcard: `P6-PAYLOAD-DISCARD`.
-- Double extraction, recovery alias or extra scope: structured custody precision
-  rejection. Read-mode recovery and consumption during a live loan use the
-  existing type/reference-conflict rules.
-- Retained-vs-closed policy without actual adoption cannot be forced into this
-  custody continuation: `CUSTODY-CONDITIONAL-CONTINUATION`.
-- Preexisting Some construction is an **early bounded constructor guard refusal**,
-  not evidence of late occupied-sink transfer rejection. Unknown/may-Some current
-  sink and stale occurrence are separately attacked in owned evidence.
+新しい`custody_source.integration`は6本の完全ソースを検査する。
+primary、refusal、recipient rename、header/local rename、renamed refusal、宣言順変更である。
+全て**exit 4 / V1-BACKEND-UNSUPPORTED / C出力なし**に到達し、actual checked `main()`のowned evidence検査も通る。
+native成功は主張しない。
+既存integrationの独立definition positive 5本、definition-shape negative 16本、pre-consume guard negative 7本、producer identity negative 3本、closed/retained join prerequisiteも維持した。
 
-Registration fault injection covers **3447** allocation sites; actual checked
-`main()` replay covers **2968**. Every injected failure preserves the existing
-source-created u8 carrier and complete snapshot and exposes no artifact.
-A source which fails at the later wrong-Allocation terminal call covers
-**2696** registration fault sites before the genuine `P193-CALL-BACKING` failure;
-rollback preserves the pre-existing context. Completion/retry works afterward.
-A raw-invariant allocation failure must propagate as OUT_OF_MEMORY rather than
-a precision rejection; the same exhaustive injection covers that distinction.
-The old independent-definition OOM test is preserved and now expects successful
-complete source registration rather than the superseded transfer fence.
+新しいintegrationは**25本の破壊的actual source**を独立に検査する:
 
-## Validation / boundaries / handoff
+- adoption後donor再利用、double release: `P3-USE-AFTER-CONSUME`。
+- 後段の誤ったptr/domain/Allocation: `P193-CALL-DOMAIN/BACKING`。
+- tail/head releaseやC消費の欠落: `P5-SCOPE-OBLIGATION`。
+- 回復arm欠落、早すぎる/無関係なone-arm None: `P6-EXHAUSTIVENESS`。
+  Some wildcard: `P6-PAYLOAD-DISCARD`。
+- double extraction、alias、追加scope、非unit回復body: structured custody precision rejection。
+  read-mode recoveryやlive loan中の消費は既存type/ref-conflict規則で拒否する。
+- actual adoptionのないretained-vs-closed policy: `CUSTODY-CONDITIONAL-CONTINUATION`。
+- preexisting Some構築は**早期bounded constructor guardによる拒否**である。
+  late occupied-sink transfer拒否の証拠とは数えない。
+  Unknown/may-Some current sinkとstale occurrenceはowned evidenceで別途攻撃する。
 
-Checksum-locked bootstrap verified LLVM/Clang/format **23.1.2**, CMake **3.31.6**,
-Python **3.12.14**, local GCC **14.2.0**. C17/warning policy and all dependency pins
-are unchanged. Standard commands remain `cmake --build <build>` and
-`ctest --test-dir <build> --output-on-failure`; CI additionally checks formatting.
+registrationのfault injectionは**3447** allocation site、actual checked `main()` replayは**2968** siteを走査した。
+各失敗で既存source-created u8 carrierと全snapshotを保持し、artifactを公開しない。
+後段のwrong-Allocation terminal callで失敗するsourceは、実際の`P193-CALL-BACKING`に達する前の**2696** registration allocation siteを走査し、rollbackを確認した。
+正常完了・retryも通る。
+raw-invariant検証のallocation failureはprecisionへ変換せずOUT_OF_MEMORYを伝播し、同じ全点fault injectionがこの区別も検査する。
+独立definitionの既存OOMテストは維持し、complete source登録の成功を新たな期待値とした。
 
-All previous **229 CTests** remain. Three new tests bring the suite to **232**:
-owned source evidence, exhaustive OOM and complete-source integration. Full GCC,
-GCC Release/NDEBUG, Clang, ASan and UBSan validation includes old 2-root native
-RETURN tests, oracle.adapter, oracle.smoke and artifacts.integrity. Exact candidate
-head, PR URL and the five PR-triggered CI results are recorded on Issue #217 and
-the candidate PR after CI completion, avoiding a self-referential SHA in this file.
+## Validation、制限、handoff
 
-Findings: no new spec hole/ambiguity or contradiction. Conservative
-COMPILER-PRECISION fences remain for additional aliases, unknown states, other
-conditional ownership profiles, extra custody transfers and non-unit/terminating
-recovery suffixes. This is the adopted finite two-root source gate, not a general
-owner/effect or symbolic memory solver. No backend, native custody, extra root,
-new field, API spelling, RAII, LLVM, cJSON or other Track work is added.
+checksum-locked bootstrapでLLVM/Clang/format **23.1.2**、CMake **3.31.6**、Python **3.12.14**、local GCC **14.2.0**を検証した。
+C17、warning policy、dependency pinは変更していない。
+通常コマンドは`cmake --build <build>`と`ctest --test-dir <build> --output-on-failure`。
+CIではformatも検査する。
 
-The candidate is **OPEN / unmerged** for independent Coordination review.
-No merge, Issue closure or next task is authorized by this report.
+既存**229 CTests**を全て保持し、owned source evidence / exhaustive OOM / complete-source integrationの3テストで合計**232**となる。
+GCC、GCC Release/NDEBUG、Clang、ASan、UBSanの全suiteには、既存2-root native RETURN、oracle.adapter、oracle.smoke、artifacts.integrityを含む。
+exact candidate head、PR URL、5構成のPR-triggered CI結果はCI完了後にIssue #217と候補PRへ記録する。
+本ファイル内に自己参照commit SHAは置かない。
+
+finding: 新しいspec hole/ambiguityや矛盾は発見していない。
+追加alias、Unknown状態、別の条件付きownership profile、追加custody transfer、非unit/terminating recovery suffix等は保守的なCOMPILER-PRECISION fenceの対象である。
+採用済みfinite two-root source gateであり、一般owner/effect systemやsymbolic memory solverではない。
+backend、native custody、追加root/field、API spelling、RAII、LLVM、cJSON、他Trackの作業は追加していない。
+
+候補は**OPEN / unmerged**で独立Coordination reviewへ渡す。
+本reportからmerge、Issue close、後続taskを開始しない。
