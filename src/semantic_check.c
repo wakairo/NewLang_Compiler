@@ -1,3 +1,4 @@
+#include "newlang/parser.h"
 #include "semantic_internal.h"
 
 #include <stdint.h>
@@ -35,7 +36,8 @@ typedef struct Check {
     NLControlTarget *function_target; /* borrowed active function identity */
     size_t arm_floor;
     bool has_arm_floor, in_match_arm;
-    size_t allocation_depth; /* bounded owned path, maximum two trials */
+    bool closure_probe; /* isolated #244 certificate integration, never CLI */
+    size_t allocation_depth; /* source gate two; isolated probe at most five */
     size_t allocation_sites;
     size_t *allocation_budget; /* borrowed counter, active body walk only */
     bool allocated_slice; /* owned Some world, never a runtime success claim */
@@ -90,6 +92,17 @@ static bool host(Check *check, NLCheckStatus status, NLSourceSpan span)
              ? "P3 implementation resource budget exceeded"
              : "invalid semantic module state");
     return false;
+}
+
+static bool closure_status(Check *check, NLCheckStatus status,
+                           NLSourceSpan span)
+{
+    if (status == NL_CHECK_ANALYSIS_PRECISION_LIMIT) {
+        fail(check, status, span, "CAPTURED-CLOSURE-PRECISION",
+             "complete original-owner fork/cleanup proof is unavailable");
+        return false;
+    }
+    return host(check, status, span);
 }
 
 static bool equal_name(Check *check, NLSourceSpan span, const char *name)
@@ -3258,6 +3271,7 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                   .branch_budget = caller->branch_budget,
                   .depth = caller->depth,
                   .definition = caller->definition,
+                  .closure_probe = caller->closure_probe,
                   .context = c,
                   .source = function->body->source,
                   .binding_floor = binding_floor,
@@ -5197,12 +5211,16 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         nl_syntax_node_view(syntax->data.match.scrutinee);
     if (check->allocation_budget == NULL)
         check->allocation_budget = &check->allocation_sites;
-    if (check->loop != NULL || *check->allocation_budget >= 2 ||
+    const size_t limit = check->closure_probe ? 5 : 2;
+    if (check->loop != NULL || *check->allocation_budget >= limit ||
         (*check->allocation_budget != 0 &&
-         (check->allocation_depth != 1 || !check->allocated_slice)) ||
-        check->allocation_depth >= 2 ||
+         ((check->closure_probe ? check->allocation_depth == 0
+                                : check->allocation_depth != 1) ||
+          !check->allocated_slice)) ||
+        check->allocation_depth >= limit ||
         (check->allocation_depth != 0 && !check->allocated_slice) ||
-        check->artifact->captured_post != NULL) {
+        check->artifact->captured_post != NULL ||
+        check->artifact->captured_closure != NULL) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, trial->span,
              "ALLOCATED-CARDINALITY-PROFILE",
              "allocation requires one outer trial and at most one nested "
@@ -5266,7 +5284,20 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         return 0;
     NLSemanticContext *closed_prefix = NULL;
     NLCheckedNodeView certificate = {0};
-    if (check->allocated_slice) {
+    NLCapturedClosure *closure = NULL;
+    if (check->closure_probe) {
+        if (!closure_status(check, nl_captured_closure_create(c, &closure),
+                            trial->span))
+            return 0;
+        check->artifact->captured_closure = closure;
+        check->artifact->destroy_captured_closure = nl_captured_closure_destroy;
+        check->artifact->captured_match = id;
+        closure->parent_world = check->artifact->context;
+        if (closure->view.count != 0) {
+            closed_prefix = (NLSemanticContext *)closure->view.closed_post;
+            certificate.captured_frame_closed = true;
+        }
+    } else if (check->allocated_slice) {
         NLCheckStatus s =
             nl_allocated_closed_prefix(c, &closed_prefix, &certificate);
         if (s != NL_CHECK_OK) {
@@ -5299,6 +5330,13 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         branch.artifact->source = check->source;
         branch.artifact->context = branch.context;
         branch.artifact->destroy_context = nl_semantic_destroy;
+        if (closure != NULL &&
+            !host(&branch,
+                  nl_sem_clone(branch.context, &closure->branches[i].entry),
+                  arms[i]->span))
+            goto failure;
+        if (closure != NULL)
+            closure->branches[i].entry_origin = closure->branches[i].entry;
         NLCheckedNodeView grant = {.span = trial->span};
         branch.status = nl_allocated_grant(branch.context, option, i == 1,
                                            &grant, &branch.diagnostic);
@@ -5335,8 +5373,13 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
                                              .type = 1,
                                              .normal_frame_unchanged =
                                                  closed_prefix == NULL});
-        if (branch.artifact->root == 0 ||
-            !save_arm(check, id, branch.artifact, arms[i]->span))
+        if (branch.artifact->root == 0)
+            goto failure;
+        if (closure != NULL) {
+            closure->branches[i].arm = branch.artifact;
+            closure->branches[i].world = branch.context;
+        }
+        if (!save_arm(check, id, branch.artifact, arms[i]->span))
             goto failure;
         continue;
     failure:
@@ -5348,21 +5391,32 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
             nl_checked_destroy(branch.artifact);
         else
             nl_semantic_destroy(branch.context);
-        nl_semantic_destroy(closed_prefix);
+        if (closure == NULL)
+            nl_semantic_destroy(closed_prefix);
         return 0;
     }
+    view(check, id)->type = 1;
+    view(check, id)->normal_arms = 2;
+    view(check, id)->normal_frame_unchanged = closed_prefix == NULL;
+    view(check, id)->captured_frame_closed = closed_prefix != NULL;
+    if (closure != NULL &&
+        !closure_status(check, nl_captured_closure_finish(check->artifact, id),
+                        syntax->span))
+        return 0;
     if (closed_prefix != NULL) {
         /* Both arms proved this ancestor-derived target. No arm is selected. */
         NLSemanticContext *continuation = NULL;
         if (!host(check, nl_sem_clone(closed_prefix, &continuation),
                   syntax->span)) {
-            nl_semantic_destroy(closed_prefix);
+            if (closure == NULL)
+                nl_semantic_destroy(closed_prefix);
             return 0;
         }
         nl_sem_commit(c, continuation);
         check->artifact->captured_post = closed_prefix;
         check->artifact->captured_match = id;
-        check->artifact->destroy_captured_post = nl_semantic_destroy;
+        if (closure == NULL)
+            check->artifact->destroy_captured_post = nl_semantic_destroy;
         NLCheckedNodeView *v = view(check, id);
         v->captured_frame_closed = certificate.captured_frame_closed;
         v->captured_backing = certificate.captured_backing;
@@ -7656,7 +7710,8 @@ typedef enum {
     CHECK_EXPRESSION,
     CHECK_BINDING,
     CHECK_LOAN,
-    CHECK_SOURCE
+    CHECK_SOURCE,
+    CHECK_CLOSURE_EXPRESSION
 } Entry;
 
 static NLCheckStatus check_fragment(NLSemanticContext *context,
@@ -7676,7 +7731,8 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
          root->kind != NL_SYNTAX_OPTION_BACKING &&
          root->kind != NL_SYNTAX_TYPE_PTR &&
          root->kind != NL_SYNTAX_TYPE_REF) ||
-        (entry == CHECK_EXPRESSION && root->kind != NL_SYNTAX_EXPR_NAME &&
+        ((entry == CHECK_EXPRESSION || entry == CHECK_CLOSURE_EXPRESSION) &&
+         root->kind != NL_SYNTAX_EXPR_NAME &&
          root->kind != NL_SYNTAX_EXPR_CALL) ||
         (entry == CHECK_BINDING && root->kind != NL_SYNTAX_BINDING) ||
         (entry == CHECK_SOURCE && root->kind != NL_SYNTAX_EXPR_NAME &&
@@ -7699,7 +7755,8 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
         (entry == CHECK_LOAN && root->kind != NL_SYNTAX_LOAN)) {
         return NL_CHECK_INTERNAL_ERROR;
     }
-    Check check = {.source = nl_syntax_tree_source(tree)};
+    Check check = {.source = nl_syntax_tree_source(tree),
+                   .closure_probe = entry == CHECK_CLOSURE_EXPRESSION};
     if (!host(&check, nl_sem_clone(context, &check.context), root->span)) {
         goto failure;
     }
@@ -7726,7 +7783,7 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
                                                 .span = root->span,
                                                 .type = type});
         }
-    } else if (entry == CHECK_EXPRESSION) {
+    } else if (entry == CHECK_EXPRESSION || entry == CHECK_CLOSURE_EXPRESSION) {
         check.artifact->root = expression(&check, nl_syntax_tree_root(tree));
     } else if (entry == CHECK_BINDING) {
         check.artifact->root = binding(&check, root);
@@ -8157,6 +8214,7 @@ static bool check_definition(Check *registration, size_t function_id)
             registration->context->functions[function_id - 1].body->source,
         .in_function_body = true,
         .definition = true,
+        .closure_probe = registration->closure_probe,
         .body_function = function_id,
         .has_arm_floor = true};
     const NLSourceSpan span =
@@ -8463,9 +8521,10 @@ cleanup:
     return ok;
 }
 
-NLCheckStatus nl_semantic_register_function_unit(
-    NLSemanticContext *context, const NLSyntaxTree *const *inputs, size_t count,
-    NLFunctionUnitDiagnostic *diagnostic)
+static NLCheckStatus
+register_function_unit(NLSemanticContext *context,
+                       const NLSyntaxTree *const *inputs, size_t count,
+                       NLFunctionUnitDiagnostic *diagnostic, bool closure_probe)
 {
     if (context == NULL || inputs == NULL || count == 0)
         return NL_CHECK_INTERNAL_ERROR;
@@ -8475,7 +8534,8 @@ NLCheckStatus nl_semantic_register_function_unit(
                 NL_SYNTAX_FUNCTION_UNIT)
             return NL_CHECK_INTERNAL_ERROR;
     }
-    Check check = {.source = nl_syntax_tree_source(inputs[0])};
+    Check check = {.source = nl_syntax_tree_source(inputs[0]),
+                   .closure_probe = closure_probe};
     FunctionDeclaration *declarations = NULL;
     const NLSyntaxView *recursive = NULL;
     size_t recursive_input = 0;
@@ -8729,4 +8789,83 @@ failure:
     if (check.status != NL_CHECK_OK && diagnostic != NULL)
         *diagnostic = (NLFunctionUnitDiagnostic){input, check.diagnostic};
     return check.status;
+}
+
+NLCheckStatus nl_semantic_register_function_unit(
+    NLSemanticContext *context, const NLSyntaxTree *const *inputs, size_t count,
+    NLFunctionUnitDiagnostic *diagnostic)
+{
+    return register_function_unit(context, inputs, count, diagnostic, false);
+}
+
+NLCheckStatus nl_captured_closure_probe(const NLSyntaxTree *unit,
+                                        NLCheckedFragment **out,
+                                        NLCheckDiagnostic *diagnostic)
+{
+    if (unit == NULL || out == NULL || *out != NULL)
+        return NL_CHECK_INTERNAL_ERROR;
+    NLSemanticContext *context = NULL;
+    NLSource *source = NULL;
+    NLParser *parser = NULL;
+    NLSyntaxTree *entry = NULL;
+    NLCheckedFragment *artifact = NULL;
+    NLCheckStatus s = nl_semantic_create(&context);
+    const NLSyntaxTree *units[] = {unit};
+    NLFunctionUnitDiagnostic d = {0};
+    if (s != NL_CHECK_OK)
+        goto done;
+    s = register_function_unit(context, units, 1, &d, true);
+    if (s != NL_CHECK_OK) {
+        if (diagnostic != NULL)
+            *diagnostic = d.diagnostic;
+        goto done;
+    }
+    size_t bodies = 0;
+    for (size_t i = 0; i < context->function_count; ++i) {
+        const NLFunctionEntry f = context->functions[i];
+        if (f.body == NULL)
+            continue;
+        ++bodies;
+        if (strcmp(f.name, "main") != 0 || f.count != 0 || f.result != 1) {
+            s = NL_CHECK_SEMANTIC_UNSUPPORTED;
+            goto done;
+        }
+    }
+    if (bodies != 1) {
+        s = NL_CHECK_SEMANTIC_UNSUPPORTED;
+        goto done;
+    }
+    if (nl_source_create("main()", 6, "captured-closure-probe", &source) !=
+            NL_SOURCE_OK ||
+        nl_parser_create(source, &parser) != NL_PARSE_OK ||
+        nl_parser_parse_expression_fragment(parser, &entry, NULL) !=
+            NL_PARSE_OK) {
+        s = NL_CHECK_OUT_OF_MEMORY;
+        goto done;
+    }
+    s = check_fragment(context, entry, &artifact, diagnostic,
+                       CHECK_CLOSURE_EXPRESSION);
+    if (s == NL_CHECK_OK) {
+        const NLCheckedFragment *body =
+            nl_checked_call_body(artifact, nl_checked_root(artifact));
+        if (body == NULL || body->captured_closure == NULL ||
+            body->captured_closure->view.count != 0)
+            s = NL_CHECK_SEMANTIC_UNSUPPORTED;
+        else
+            s = nl_checked_captured_closure_validate(body,
+                                                     body->captured_match);
+        if (s == NL_CHECK_OK) {
+            artifact->destroy_context = nl_semantic_destroy;
+            artifact->source = NULL; /* proof never interprets entry spelling */
+            context = NULL;
+            *out = artifact;
+        } else
+            nl_checked_destroy(artifact);
+    }
+done:
+    nl_syntax_tree_destroy(entry);
+    nl_parser_destroy(parser);
+    nl_source_destroy(source);
+    nl_semantic_destroy(context);
+    return s;
 }

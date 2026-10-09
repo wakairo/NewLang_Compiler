@@ -2,6 +2,7 @@
 #define NEWLANG_SEMANTIC_INTERNAL_H
 
 #include "control.h"
+#include "newlang/captured_closure.h"
 #include "newlang/checked.h"
 #include "newlang/raw_storage.h"
 #include "ordinary_name.h"
@@ -85,7 +86,20 @@ typedef struct {
     NLCheckedNodeId match;
     struct NLCheckedFragment *artifact; /* owns hypothetical arm context */
 } NLCheckedArm;
+typedef struct NLCapturedClosure {
+    NLCapturedClosureView view;
+    NLSemanticContext *ancestor_owned, *closed_owned;
+    const NLSemanticContext *parent_world;
+    struct {
+        NLSemanticContext *entry; /* owned pre-grant fork snapshot */
+        const NLSemanticContext *entry_origin; /* nominal owned fork anchor */
+        const NLCheckedFragment *arm;          /* borrowed owning subtree */
+        const NLSemanticContext *world;        /* exact owned arm identity */
+    } branches[2];
+} NLCapturedClosure;
 struct NLCheckedFragment {
+    NLCapturedClosure *captured_closure;
+    void (*destroy_captured_closure)(NLCapturedClosure *);
     /* Parent owns entry/post; a child owns its pre-pattern entry and borrows
      * the enclosing fragment. Child evidence never outlives that owner tree. */
     NLSemanticContext *packet_entry, *packet_post, *packet_retained_post;
@@ -132,6 +146,17 @@ struct NLCheckedFragment {
     NLFunctionBody *body_owner;
     void (*release_body)(NLFunctionBody *);
 };
+
+NLCheckStatus nl_captured_closure_create(const NLSemanticContext *,
+                                         NLCapturedClosure **);
+void nl_captured_closure_destroy(NLCapturedClosure *);
+NLCheckStatus nl_captured_closure_finish(NLCheckedFragment *, NLCheckedNodeId);
+/* Explicitly isolated checker-integration entry. No CLI/source admission
+ * flag, host seed or allocation grant. Parses/checks the supplied real unit
+ * through the same body/primitive transactions; result owns its context. */
+NLCheckStatus nl_captured_closure_probe(const NLSyntaxTree *,
+                                        NLCheckedFragment **,
+                                        NLCheckDiagnostic *);
 
 /* All ref consumers either iterate this may-set or explicitly reject it.
  * A concrete fact remains the P3 representation when reference_count == 0. */

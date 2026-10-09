@@ -64,7 +64,7 @@ add_library(newlang_parser STATIC src/parser.c)
 target_link_libraries(newlang_parser PUBLIC newlang_syntax newlang_lexer newlang_diagnostic)
 add_library(newlang_checked STATIC src/checked.c)
 target_link_libraries(newlang_checked PUBLIC newlang_syntax)
-add_library(newlang_semantic STATIC src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
+add_library(newlang_semantic STATIC src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
 target_link_libraries(newlang_semantic PUBLIC newlang_checked newlang_diagnostic newlang_parser)
 add_library(newlang_checked_c_node STATIC src/checked_c_node.c)
 target_link_libraries(newlang_checked_c_node PUBLIC newlang_semantic)
@@ -386,6 +386,27 @@ if(BUILD_TESTING)
     add_test(NAME two_heap_source.integration
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/two_heap_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/two_heap_semantic.nl" "$<TARGET_FILE:two_heap_test>")
+    add_executable(captured_closure_test tests/unit/captured_closure_test.c)
+    target_link_libraries(captured_closure_test PRIVATE newlang_semantic)
+    target_link_options(captured_closure_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
+    foreach(sites IN ITEMS 2 3 5)
+        if(sites EQUAL 2)
+            set(closure_fixture two_allocation_no_links)
+        elseif(sites EQUAL 3)
+            set(closure_fixture three_allocation_no_links)
+        else()
+            set(closure_fixture five_allocation_closure_probe)
+        endif()
+        add_test(NAME captured_closure_${sites}_worlds.unit COMMAND captured_closure_test evidence
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/${closure_fixture}.nl" ${sites})
+    endforeach()
+    foreach(group IN ITEMS poison oom checker-oom)
+        add_test(NAME captured_closure_${group}.unit COMMAND captured_closure_test ${group}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/five_allocation_closure_probe.nl")
+    endforeach()
+    add_test(NAME captured_closure_source.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/captured_closure_test.py"
+        "$<TARGET_FILE:captured_closure_test>" "$<TARGET_FILE:newlangc>")
     add_executable(allocated_join_test tests/unit/allocated_join_test.c)
     target_link_libraries(allocated_join_test PRIVATE newlang_checked_c_node newlang_parser)
     add_test(NAME allocated_join_evidence.unit COMMAND allocated_join_test
