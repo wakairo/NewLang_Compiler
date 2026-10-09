@@ -1592,18 +1592,24 @@ static NLSyntaxNode *avs_struct(NLParser *parser)
         return NULL;
     decl->view.data.avs_struct.name = name->view.data.name;
     NLSyntaxNode *head = NULL, *tail = NULL;
-    for (size_t i = 0; i < 2; ++i) {
+    bool three_links = false;
+    for (size_t i = 0; i < 4; ++i) {
         NLSyntaxNode *label = source_name(parser, NL_SYNTAX_RECEIVER, false);
         if (label == NULL || !expect_punct(parser, ':', "AVS-DECL-COLON",
                                            "expected : after field label"))
             return NULL;
         NLSyntaxNode *type = NULL;
-        if (i == 0 && word(parser, "Option")) {
+        if ((i == 0 || (decl->view.kind == NL_SYNTAX_RECURSIVE_STRUCT &&
+                        (i == 1 || (i == 2 && three_links)))) &&
+            word(parser, "Option")) {
             const NLSourceSpan option = parser->token.span;
             consume(parser);
             type = option_ptr(parser, option);
             decl->view.kind = NL_SYNTAX_RECURSIVE_STRUCT;
-        } else if (word(parser, "u8")) {
+            three_links = three_links || i == 1;
+        } else if (word(parser, "u8") &&
+                   (decl->view.kind == NL_SYNTAX_AVS_STRUCT ||
+                    (i == 1 && !three_links) || (i == 3 && three_links))) {
             type = node(parser, NL_SYNTAX_TYPE_NAME, parser->token.span);
             if (type != NULL)
                 type->view.data.name = parser->token.span;
@@ -1625,15 +1631,24 @@ static NLSyntaxNode *avs_struct(NLParser *parser)
         field->view.span.end_byte = type->view.span.end_byte;
         link_node(&head, &tail, field);
         ++decl->view.data.avs_struct.count;
-        if (i == 0 && !expect_punct(parser, ',', "AVS-DECL-COMMA",
-                                    "expected , between AVS fields"))
+        if (punct(parser, ','))
+            consume(parser);
+        else if (!punct(parser, '}')) {
+            fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+                 "AVS-DECL-COMMA", "expected , between fields");
             return NULL;
+        }
+        if (punct(parser, '}') || (i == 1 && !three_links))
+            break;
     }
     if (punct(parser, ','))
         consume(parser);
-    if (!punct(parser, '}')) {
+    if (!punct(parser, '}') ||
+        decl->view.data.avs_struct.count != (three_links ? 4u : 2u)) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
-             "AVS-DECL-PROFILE", "bounded declaration has exactly two fields");
+             "AVS-DECL-PROFILE",
+             "bounded declaration requires two fields or three recursive "
+             "links and payload");
         return NULL;
     }
     decl->view.span.end_byte = parser->token.span.end_byte;
@@ -1699,7 +1714,10 @@ static NLParseStatus fragment(NLParser *parser, NLSyntaxTree **out_tree,
     if (parser == NULL || out_tree == NULL || *out_tree != NULL) {
         return NL_PARSE_INTERNAL_ERROR;
     }
-    (void)nl_lexer_init(&parser->lexer, parser->source);
+    if (parse == function_unit || parse == source_fragment)
+        (void)nl_lexer_init_source(&parser->lexer, parser->source);
+    else
+        (void)nl_lexer_init(&parser->lexer, parser->source);
     parser->have_token = false;
     parser->depth = 0;
     parser->status = NL_PARSE_OK;

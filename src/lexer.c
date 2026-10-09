@@ -48,8 +48,16 @@ bool nl_lexer_init(NLLexer *lexer, const NLSource *source)
     if (lexer == NULL) {
         return false;
     }
-    *lexer = (NLLexer){source, 0};
+    *lexer = (NLLexer){.source = source};
     return source != NULL;
+}
+
+bool nl_lexer_init_source(NLLexer *lexer, const NLSource *source)
+{
+    if (!nl_lexer_init(lexer, source))
+        return false;
+    lexer->line_comments = true;
+    return true;
 }
 
 NLLexResult nl_lexer_next(NLLexer *lexer, NLToken *out_token)
@@ -74,6 +82,11 @@ NLLexResult nl_lexer_next(NLLexer *lexer, NLToken *out_token)
         } else if (byte == '\r' && length - start >= 2 &&
                    bytes[start + 1] == '\n') {
             start += 2;
+        } else if (lexer->line_comments && byte == '/' && length - start >= 2 &&
+                   bytes[start + 1] == '/') {
+            start += 2;
+            while (start < length && bytes[start] != '\n')
+                ++start;
         } else {
             break;
         }

@@ -407,6 +407,15 @@ if(BUILD_TESTING)
     add_test(NAME captured_closure_source.integration
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/captured_closure_test.py"
         "$<TARGET_FILE:captured_closure_test>" "$<TARGET_FILE:newlangc>")
+    add_test(NAME five_root_evidence.unit COMMAND captured_closure_test full-evidence
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/five_root_three_field.nl" 5)
+    foreach(group IN ITEMS poison oom checker-oom)
+        add_test(NAME five_root_${group}.unit COMMAND captured_closure_test full-${group}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/five_root_three_field.nl")
+    endforeach()
+    add_test(NAME five_root_source.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/five_root_source_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:captured_closure_test>")
     add_executable(allocated_join_test tests/unit/allocated_join_test.c)
     target_link_libraries(allocated_join_test PRIVATE newlang_checked_c_node newlang_parser)
     add_test(NAME allocated_join_evidence.unit COMMAND allocated_join_test

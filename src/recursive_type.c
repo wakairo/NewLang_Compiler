@@ -111,14 +111,16 @@ NLCheckStatus nl_recursive_complete(NLSemanticContext *c, NLTypeId header,
         !c->types[header - 1].incomplete)
         return NL_CHECK_SEMANTIC_ERROR; /* duplicate/inconsistent never
                                            idempotent */
-    if (count != 2)
+    if (count != 2 && count != 4)
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
     for (size_t i = 0; i < count; ++i)
         if (fields[i].name == NULL || fields[i].name[0] == 0 ||
             fields[i].type == 0 || fields[i].type > c->type_count)
             return NL_CHECK_INTERNAL_ERROR;
-    if (strcmp(fields[0].name, fields[1].name) == 0)
-        return NL_CHECK_SEMANTIC_ERROR;
+    for (size_t i = 0; i < count; ++i)
+        for (size_t j = 0; j < i; ++j)
+            if (strcmp(fields[i].name, fields[j].name) == 0)
+                return NL_CHECK_SEMANTIC_ERROR;
     if (c->type_count > NL_SEMANTIC_MAX_ENTRIES)
         return NL_CHECK_RESOURCE_LIMIT;
     unsigned char *colors = malloc(c->type_count);
@@ -129,15 +131,24 @@ NLCheckStatus nl_recursive_complete(NLSemanticContext *c, NLTypeId header,
     free(colors);
     if (status != NL_CHECK_OK)
         return status;
-    const NLTypeId ptr = c->types[fields[0].type - 1].option_target;
-    if (ptr == 0 || c->types[ptr - 1].view.target != header ||
-        fields[1].type != nl_semantic_core_type(c, NL_TYPE_U8))
+    const char *const profile[] = {"next", "prev", "child", "payload"};
+    for (size_t i = 0; i < count - 1; ++i) {
+        const NLTypeId ptr = c->types[fields[i].type - 1].option_target;
+        if (ptr == 0 || c->types[ptr - 1].view.target != header ||
+            (count == 4 && strcmp(fields[i].name, profile[i]) != 0))
+            return NL_CHECK_SEMANTIC_UNSUPPORTED;
+    }
+    if (fields[count - 1].type != nl_semantic_core_type(c, NL_TYPE_U8) ||
+        (count == 4 && strcmp(fields[3].name, profile[3]) != 0))
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
-    char *names[2] = {owned(fields[0].name), owned(fields[1].name)};
-    if (names[0] == NULL || names[1] == NULL) {
-        free(names[0]);
-        free(names[1]);
-        return NL_CHECK_OUT_OF_MEMORY;
+    char *names[4] = {0};
+    for (size_t i = 0; i < count; ++i) {
+        names[i] = owned(fields[i].name);
+        if (names[i] == NULL) {
+            for (size_t j = 0; j < i; ++j)
+                free(names[j]);
+            return NL_CHECK_OUT_OF_MEMORY;
+        }
     }
     NLTypeEntry *t = &c->types[header - 1];
     t->view.field_count = count;

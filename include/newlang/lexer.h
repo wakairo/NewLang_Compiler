@@ -12,6 +12,7 @@
 typedef struct {
     const NLSource *source;
     size_t next_byte;
+    bool line_comments; /* source-profile trivia, atom scanner defaults false */
 } NLLexer;
 
 typedef enum {
@@ -26,6 +27,9 @@ typedef enum {
  * lexer inert (next reports INTERNAL_ERROR). No allocation/partial ownership.
  * Caller may abandon the lexer at any time; it owns no resources. */
 bool nl_lexer_init(NLLexer *lexer, const NLSource *source);
+/* Source unit/body mode: canonical // annotations are trivia through LF/EOF.
+ * Block comments remain unsupported; offsets still refer to original bytes. */
+bool nl_lexer_init_source(NLLexer *lexer, const NLSource *source);
 
 /* TOKEN advances and writes kind/span; EOF writes EOF [length,length) and is
  * repeatable. UNSUPPORTED writes a stable nonempty unsupported span, commits

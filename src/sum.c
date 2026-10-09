@@ -133,11 +133,13 @@ NLCheckStatus nl_sum_validate(const NLSemanticContext *c)
             r.parent_aggregate != 0 && nl_fixed_live(c, i + 1) &&
             nl_recursive_local_type(c,
                                     c->places[r.parent_aggregate - 1].type) &&
-            r.parent_field_index == 0 && v.carrier == NL_CARRIER_AGGREGATE &&
-            v.owner_place == 0 &&
+            r.parent_field_index + 1 <
+                c->places[r.parent_aggregate - 1].fixed_field_count &&
+            v.carrier == NL_CARRIER_AGGREGATE && v.owner_place == 0 &&
             v.aggregate_owner ==
                 c->places[r.parent_aggregate - 1].current_value &&
-            c->values[v.aggregate_owner - 1].fields[0] == r.current_value;
+            c->values[v.aggregate_owner - 1].fields[r.parent_field_index] ==
+                r.current_value;
         if (v.type != r.type ||
             (!field_owned &&
              (v.carrier != NL_CARRIER_PLACE || v.owner_place != i + 1)))

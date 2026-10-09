@@ -150,6 +150,34 @@ static bool unsupported_bytes(void)
     return true;
 }
 
+static bool source_annotations(void)
+{
+    const char text[] = "// heading\r\nx // inline\n7 // final";
+    NLSource *source = NULL;
+    CHECK(nl_source_create(text, strlen(text), "source-trivia", &source) ==
+          NL_SOURCE_OK);
+    NLLexer lexer;
+    CHECK(nl_lexer_init_source(&lexer, source));
+    NLToken token;
+    size_t x = (size_t)(strchr(text, 'x') - text);
+    size_t n = (size_t)(strchr(text, '7') - text);
+    CHECK(nl_lexer_next(&lexer, &token) == NL_LEX_TOKEN &&
+          token_equal(token, (NLToken){NL_TOKEN_WORD, {x, x + 1}}));
+    CHECK(nl_lexer_next(&lexer, &token) == NL_LEX_TOKEN &&
+          token_equal(token, (NLToken){NL_TOKEN_DIGITS, {n, n + 1}}));
+    CHECK(nl_lexer_next(&lexer, &token) == NL_LEX_EOF);
+    CHECK(nl_lexer_init(&lexer, source));
+    CHECK(nl_lexer_next(&lexer, &token) == NL_LEX_UNSUPPORTED);
+    nl_source_destroy(source);
+    source = NULL;
+    CHECK(nl_source_create("/* block */", 11, "deferred-block", &source) ==
+          NL_SOURCE_OK);
+    CHECK(nl_lexer_init_source(&lexer, source));
+    CHECK(nl_lexer_next(&lexer, &token) == NL_LEX_UNSUPPORTED);
+    nl_source_destroy(source);
+    return true;
+}
+
 static bool internal_failure(void)
 {
     NLLexer lexer;
@@ -171,6 +199,8 @@ static bool internal_failure(void)
 
 int main(void)
 {
+    if (!source_annotations())
+        return EXIT_FAILURE;
     if (!supported_sequences() || !unsupported_bytes() || !internal_failure()) {
         return EXIT_FAILURE;
     }
