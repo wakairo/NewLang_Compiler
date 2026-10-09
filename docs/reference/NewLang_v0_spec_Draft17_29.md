@@ -12,8 +12,7 @@
 
 ## Draft 17.29 の主変更 — Issue #214 bounded two-H durable LiveTail custody
 
-**PROPOSED / UNMERGED, not canonical until independent Coordination ACCEPT and
-merge.** This candidate selects one further exact same-unit/same-H source path
+**ADOPTED / CANONICAL:** independently ACCEPTED in Compiler [PR #215](https://github.com/wakairo/NewLang_Compiler/pull/215) and merged into `main`; `CURRENT_SPEC.md` selects Draft 17.29. This bounded source rule selects one further exact same-unit/same-H source path
 AFTER the existing Draft17.28 §18.1b physical head-link detach and original
 still-live tail LiveTail return. One separately named known-direct recipient
 takes exactly that original nonCopy LiveTail by value, inserts it into a
@@ -7637,7 +7636,7 @@ PASS is authorized by this candidate itself.
 
 ## 18.1c Draft 17.29 — bounded two-H live-tail nonCopy custody after recipient return
 
-**Candidate, not yet normative (Issue #214).** Reuse precisely §3.2/§16.3's
+**Canonical bounded source rule (Issue #214; accepted PR #215).** Reuse precisely §3.2/§16.3's
 completed one-link `H` and **two and only two** syntactic nested fallible
 `try_allocate_one<H>()` sites, with first-None / second-None / both-Some
 disposal. Reuse Draft17.28 §18.1b's exact four-argument producer,
@@ -7823,10 +7822,10 @@ After that, the C local is statically proved None and explicitly
 consumed; donor independently releases O_h. No persistent borrowed
 capability or stale owner remains.
 
-### 18.1c.4 Exact full proposed source witness, including both failure worlds
+### 18.1c.4 Exact canonical source-shaped witness, including both failure worlds
 
-**Only a candidate / source-shaped test contract, NOT currently accepted
-or native-executed.** Lines introduced by this revision, including
+**Adopted source-shaped test contract, NOT yet fully admitted by the production
+semantic checker or native-executed.** Lines introduced by this revision, including
 `loan_write(custody)`, `Option<LiveTail>::Some` and the two
 `match ... { None => ... }` forms, are **not** admitted by canonical
 Draft17.28. Existing `struct Node`, `try_allocate_one`, head producer,
@@ -8066,9 +8065,11 @@ metamorphism; optionally later independently authorized native C17
 observer confirms *same original* tail allocation/root/domain
 through producer → recipient caller-local Some → recipient return →
 later old-value move → receiver free, no frees inside producer or
-recipient, original head cleanup and 0/1/2 world counts. Do not claim
-this candidate already parses, has compiler diagnostics, native
-runtime execution, F proof, independent R review or cJSON PASS.
+recipient, original head cleanup and 0/1/2 world counts. Do not infer from this adopted source contract that the production compiler
+already admits its entire source, or that native execution, a complete
+source-to-model proof, independent R validation or cJSON PASS has occurred.
+A separate bounded finite FormalProof model does not establish production
+source-checker or native correctness.
 
 ### 18.1c.6 Gate §4.2 / compatibility and no foreclosure
 
