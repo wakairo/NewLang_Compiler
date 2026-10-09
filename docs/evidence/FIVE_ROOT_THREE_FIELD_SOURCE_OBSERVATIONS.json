@@ -1,0 +1,53 @@
+{
+  "kind": "observations-only-not-ready-proof",
+  "canonical_sha256_including_terminal_lf": "5145c955343a18d497c2f0568bc78cc0f31c54bdda4e0ff3a0734a6ea5b4fac4",
+  "canonical_characters_excluding_terminal_lf": 15055,
+  "fixture_sha256": "812042833072145f761ddc21cbf774d81b64da3a34f6d466ba7db01a6d704d7d",
+  "observations": [
+    {
+      "input": "canonical",
+      "source_sha256": "812042833072145f761ddc21cbf774d81b64da3a34f6d466ba7db01a6d704d7d",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "canonical.nl:3:11-3:17: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+      "repeat_identical": true,
+      "output_files_created": []
+    },
+    {
+      "input": "alpha",
+      "source_sha256": "757f86136a041a15dc05984fb3a4da6a52a845b3bc26e3eeee2d67839605e071",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "alpha.nl:3:11-3:17: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+      "repeat_identical": true,
+      "output_files_created": []
+    },
+    {
+      "input": "payload",
+      "source_sha256": "4e864dbff5ce2e7129d5fa8b5189142e9e2b99d10b79ea28740584e616a3fa4e",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "payload.nl:3:11-3:17: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+      "repeat_identical": true,
+      "output_files_created": []
+    },
+    {
+      "input": "three-no-links",
+      "source_sha256": "edbd3e500ffe0355fee44e9a5147fdc25c94167b0ed18aa4e0e20a2ebd7439d3",
+      "exit": 3,
+      "stdout": "",
+      "stderr": "three-no-links.nl:39:27-39:50: error(unsupported)[ALLOCATED-CARDINALITY-PROFILE]: allocation requires one outer trial and at most one nested Some-arm trial, outside loops\n",
+      "repeat_identical": true,
+      "output_files_created": []
+    },
+    {
+      "input": "two-no-links",
+      "source_sha256": "5ea7ab31ba5fd7f4a38ab35f38f35ee106781a2e6d97efffdc9043ec4e0f8a06",
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: two-no-links.nl\n",
+      "repeat_identical": true,
+      "output_files_created": []
+    }
+  ]
+}
