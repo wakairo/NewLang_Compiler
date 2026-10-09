@@ -1,0 +1,61 @@
+name: R258 independent native first pass
+on:
+  push:
+    branches: [r258-blind-native-empirical]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 95
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install neutral host prereqs
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Checksum locked llvm and isolated compiler
+        run: |
+          python3 scripts/bootstrap.py
+          . .deps/activate.sh
+          CC=gcc-13 cmake -S . -B build-r258 -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=OFF
+          cmake --build build-r258 --parallel 2
+      - name: Extract canonical witness and emit fresh C
+        shell: bash
+        run: |
+          mkdir -p r_native_258/out
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib
+          s=Path('docs/reference/NewLang_v0_spec_Draft17_30.md').read_text()
+          x=s.split('### 3.2b.3',1)[1].split('### 3.2b.4',1)[0]
+          src=x.split('~~~newlang',1)[1].split('~~~',1)[0].strip()+'\n'
+          path=Path('r_native_258/out/canonical.nl')
+          path.write_text(src)
+          print('CANONICAL_SOURCE_SHA256',hashlib.sha256(path.read_bytes()).hexdigest())
+          PY
+          . .deps/activate.sh
+          sha256sum build-r258/newlangc r_native_258/out/canonical.nl > r_native_258/out/sha256.txt
+          set +e
+          build-r258/newlangc r_native_258/out/canonical.nl >r_native_258/out/generated.c 2>r_native_258/out/emit.stderr
+          ec=$?
+          set -e
+          echo "EMIT_EXIT=$ec" | tee r_native_258/out/result.txt
+          cat r_native_258/out/emit.stderr
+          if [ "$ec" -ne 0 ]; then exit 0; fi
+          sha256sum r_native_258/out/generated.c >> r_native_258/out/sha256.txt
+          gcc-13 -std=c17 -Wall -Wextra -Wpedantic -Werror r_native_258/out/generated.c -o r_native_258/out/native-gcc >r_native_258/out/gcc.stdout 2>r_native_258/out/gcc.stderr && echo GCC_COMPILE_PASS | tee -a r_native_258/out/result.txt || echo GCC_COMPILE_FAIL | tee -a r_native_258/out/result.txt
+          clang-23 -std=c17 -Wall -Wextra -Wpedantic -Werror r_native_258/out/generated.c -o r_native_258/out/native-clang >r_native_258/out/clang.stdout 2>r_native_258/out/clang.stderr && echo CLANG_COMPILE_PASS | tee -a r_native_258/out/result.txt || echo CLANG_COMPILE_FAIL | tee -a r_native_258/out/result.txt
+          if [ -x r_native_258/out/native-gcc ]; then r_native_258/out/native-gcc >r_native_258/out/native.stdout 2>r_native_258/out/native.stderr; echo "NATIVE_EXIT=$?" | tee -a r_native_258/out/result.txt; sha256sum r_native_258/out/native-gcc >> r_native_258/out/sha256.txt; fi
+          cat r_native_258/out/result.txt r_native_258/out/sha256.txt
+          cat r_native_258/out/gcc.stderr r_native_258/out/clang.stderr
+      - name: Upload independent outputs even on failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r258-native-baseline
+          path: r_native_258/out/
+          if-no-files-found: warn
