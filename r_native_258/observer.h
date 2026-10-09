@@ -37,8 +37,9 @@ static inline void r258_topology(void) {
     r258_fail(84,"wrong destination None/tag");
   for (int i=0;i<5;i++){
     if(i!=0 && i!=1 && i!=2 && i!=3 && i!=4) r258_fail(84,"bad root");
-    if ((i==0 || i==3 || i==4) && (n[i]->f0.tag || n[i]->f1.tag))
-      r258_fail(84,"unexpected sibling edge");
+    if (i==0 && (n[i]->f0.tag || n[i]->f1.tag)) r258_fail(84,"src siblings non-None");
+    if (i==3 && (n[i]->f0.tag || n[i]->f2.tag)) r258_fail(84,"C siblings non-None");
+    if (i==4 && (n[i]->f0.tag || n[i]->f1.tag)) r258_fail(84,"dst siblings non-None");
     if (i==1 && n[i]->f2.tag) r258_fail(84,"A child non-None");
     if (i==2 && n[i]->f2.tag) r258_fail(84,"B child non-None");
     if (i==3 && n[i]->f2.tag) r258_fail(84,"C child non-None");
