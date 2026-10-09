@@ -33,6 +33,11 @@ def swap_blocks(code, start_a, start_b, start_c):
     assert a < b < c
     return code[:a] + code[b:c] + code[a:b] + code[c:]
 
+def in_fifth_success(code, old, new):
+    marker = "Some(bundle_dst) =>"
+    pos = code.index(marker)
+    return code[:pos] + once(code[pos:],old,new)
+
 def swap_last_match_arms(code):
     marker = "match try_allocate_one<Node>() {  // independent allocation site 5: dst"
     at = code.index(marker)
@@ -98,10 +103,10 @@ add("N02_wrong_domain_src_write","REJECT_SEMANTIC","D_src stability cannot autho
     "ref_from_ptr(write, ptr_src, stable_src_child)",
     "ref_from_ptr(write, ptr_C, stable_src_child)"))
 # Wrong ending authority; same nominal H, but different original root.
-add("N03_destroy_wrong_original_D","REJECT_SEMANTIC","An ending_B exclusive ref cannot end A's typed root",once(base,
+add("N03_destroy_wrong_original_D","REJECT_SEMANTIC","An ending_B exclusive ref cannot end A's typed root",in_fifth_success(base,
     "destroy(ptr_B, ending_B)\n                                            };\n                                            let full_B",
     "destroy(ptr_A, ending_B)\n                                            };\n                                            let full_B"))
-add("N04_cross_deallocate","REJECT_SEMANTIC","Allocation_A and B's full raw must not be accepted as same BackingRegion",once(base,
+add("N04_cross_deallocate","REJECT_SEMANTIC","Allocation_A and B's full raw must not be accepted as same BackingRegion",in_fifth_success(base,
     "deallocate(allocation_B, full_B);\n                                            let empty_A",
     "deallocate(allocation_A, full_B);\n                                            let empty_A"))
 add("N05_double_release","REJECT_SEMANTIC","Second use of same original nonCopy allocation/full raw must be rejected",once(base,
@@ -110,7 +115,7 @@ add("N05_double_release","REJECT_SEMANTIC","Second use of same original nonCopy 
 add("N06_moved_allocation_reused","REJECT_SEMANTIC","Moving original allocation does not leave previous binding owning it",once(base,
     "deallocate(allocation_dst, full_dst);\n                                            let empty_C",
     "let moved_allocation_dst = allocation_dst;\n                                            deallocate(allocation_dst, full_dst);\n                                            let empty_C"))
-add("N07_stale_after_endroot","REJECT_SEMANTIC","Even with D_B alive, ptr_B does not permit safe read after EndRoot",once(base,
+add("N07_stale_after_endroot","REJECT_SEMANTIC","Even with D_B alive, ptr_B does not permit safe read after EndRoot",in_fifth_success(base,
     "destroy(ptr_B, ending_B)\n                                            };\n                                            let full_B",
     "destroy(ptr_B, ending_B)\n                                            };\n                                            loan_read(life_B) { |stable_stale|\n                                                let post_end = ref_from_ptr(read, ptr_B, stable_stale);\n                                                unit\n                                            };\n                                            let full_B"))
 add("N08_escape_stability_loan","REJECT_SEMANTIC","A D-scoped ref cannot be returned outside its loan closure",insert_before(base,
