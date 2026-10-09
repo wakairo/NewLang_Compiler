@@ -227,6 +227,24 @@ typedef struct {
 bool nl_semantic_function_applicability(const NLSemanticContext *, size_t,
                                         NLTypedOwnerDefinition *);
 
+/* Draft17.29 §18.1c conditional recipient obligations. These are NOT proof
+ * that any actual packet or referent satisfies them. No ownership is minted. */
+enum {
+    NL_CUSTODY_ORIGINAL_PACKET = 1u,
+    NL_CUSTODY_CURRENT_NONE = 2u,
+    NL_CUSTODY_LOCAL_WRITE = 4u,
+    NL_CUSTODY_ALIAS_DEPENDENCIES = 8u,
+    NL_CUSTODY_SCOPE_NONESCAPE = 16u,
+    NL_CUSTODY_ALL_REQUIREMENTS = 31u
+};
+typedef struct {
+    bool definition_checked;
+    NLTypeId target, packet, option;
+    unsigned requirements;
+} NLCustodyDefinition;
+bool nl_semantic_function_custody_applicability(const NLSemanticContext *,
+                                                size_t, NLCustodyDefinition *);
+
 /* Implementation budgets, not NewLang limits. */
 #define NL_SEMANTIC_MAX_ENTRIES 4096
 #define NL_SEMANTIC_MAX_PARAMETERS 128

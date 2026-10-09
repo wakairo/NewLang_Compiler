@@ -46,6 +46,7 @@ typedef struct NLFunctionBody {
     char *parameter_names[NL_SEMANTIC_MAX_PARAMETERS];
     size_t count;
     NLTypedOwnerDefinition owner_definition;
+    NLCustodyDefinition custody_definition;
 } NLFunctionBody; /* immutable plan; only ownership count is mutable */
 
 typedef struct {
@@ -54,7 +55,8 @@ typedef struct {
     NLTypeId *parameters;
     size_t count;
     NLTypeId result;
-    bool caller_effects, hidden_dependencies, owner_receiver, owner_producer;
+    bool caller_effects, hidden_dependencies, owner_receiver, owner_producer,
+        custody_recipient;
     NLFunctionBody *body; /* owned retained plan, NULL for signature-only */
 } NLFunctionEntry;
 struct NLSemanticContext {
@@ -135,6 +137,11 @@ NLCheckStatus nl_body_create_span(const NLSource *, NLSourceSpan,
 NLCheckStatus nl_body_retain(NLFunctionBody *);
 void nl_body_release(NLFunctionBody *);
 NLCheckStatus nl_live_tail_registry(NLSemanticContext *, NLTypeId, NLTypeId *);
+NLCheckStatus nl_custody_registry(NLSemanticContext *, NLTypeId, NLTypeId *);
+bool nl_custody_signature(const NLSemanticContext *, const NLTypeId *, size_t,
+                          NLTypeId);
+NLCheckStatus nl_custody_definition(const NLSemanticContext *, NLFunctionBody *,
+                                    NLCustodyDefinition *, NLCheckDiagnostic *);
 bool nl_producer_signature(const NLSemanticContext *, const NLTypeId *, size_t,
                            NLTypeId);
 bool nl_owner_signature(const NLSemanticContext *, const NLTypeId *, size_t,

@@ -219,6 +219,18 @@ static NLTypeId check_type(Check *check, const NLSyntaxNode *syntax)
                  "requires one completed recursive H");
         else
             (void)host(check, status, node->span);
+    } else if (node->kind == NL_SYNTAX_OPTION_LIVE_TAIL) {
+        NLTypeId h = 0;
+        for (size_t i = 0; i < check->context->type_count; ++i)
+            if (nl_recursive_local_type(check->context, i + 1))
+                h = i + 1;
+        NLCheckStatus status = nl_custody_registry(check->context, h, &result);
+        if (status == NL_CHECK_SEMANTIC_UNSUPPORTED)
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, node->span,
+                 "CUSTODY-TYPE-PROFILE",
+                 "custody requires one completed H source profile");
+        else
+            (void)host(check, status, node->span);
     } else if (node->kind == NL_SYNTAX_OPTION_PTR) {
         const NLSyntaxView *target =
             nl_syntax_node_view(node->data.ptr_type.target);
@@ -1596,6 +1608,18 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
              "P3-ARITY", "argument count differs from resolved signature");
         return 0;
     }
+    if (function.custody_recipient) {
+        /* The conditional definition is NOT an actual CarriesLiveH or
+         * Current(C)==None certificate. Until a world-qualified custody
+         * transfer certificate exists, reject before argument consumption.
+         * Neither replaying a favorable branch nor static types discharge it.
+         */
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+             "CUSTODY-ENTRY-PRECISION",
+             "original packet/current sink correspondence and persistent "
+             "custody post-state evidence are not implemented");
+        return 0;
+    }
     if (function.body == NULL && function.caller_effects) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->data.call.callee,
              "P3-EFFECT-SUMMARY-UNSUPPORTED",
@@ -1777,6 +1801,11 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
 static NLCheckedNodeId source_binding(Check *, const NLSyntaxView *);
 static NLCheckedNodeId source_statement(Check *, const NLSyntaxView *);
 static NLCheckedNodeId source_block(Check *, const NLSyntaxView *);
+static bool custody_type(const NLSemanticContext *c, NLTypeId type)
+{
+    const NLTypeId packet = c->types[type - 1].option_target;
+    return packet != 0 && c->types[packet - 1].live_tail_target != 0;
+}
 static bool avs_type(const NLSemanticContext *c, NLTypeId type)
 {
     if (c->types[type - 1].recursive_header && !c->types[type - 1].incomplete)
@@ -2578,7 +2607,9 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
              nl_fixed_type(check->context,
                            check->context->values[values[i] - 1].type) ||
              (check->allocated_slice &&
-              check->context->values[values[i] - 1].type == 2)))
+              (check->context->values[values[i] - 1].type == 2 ||
+               custody_type(check->context,
+                            check->context->values[values[i] - 1].type)))))
             check->context
                 ->places[check->context->bindings[symbol - 1].view.place - 1]
                 .implicit_local = true;
@@ -3195,8 +3226,20 @@ static NLCheckedNodeId sum_constructor(Check *check, const NLSyntaxView *s)
         if (type == 0)
             return 0;
         const NLTypeId ptr = c->types[type - 1].option_target;
+        const bool custody =
+            ptr != 0 && c->types[ptr - 1].live_tail_target != 0;
+        if (custody &&
+            (!check->allocated_slice ||
+             !equal_name(check, s->data.constructor.variant, "None"))) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
+                 "CUSTODY-CONSTRUCTION-PRECISION",
+                 "custody construction requires world-qualified original "
+                 "packet transfer evidence");
+            return 0;
+        }
         if (ptr == 0 ||
-            c->types[c->types[ptr - 1].view.target - 1].incomplete) {
+            (!custody &&
+             c->types[c->types[ptr - 1].view.target - 1].incomplete)) {
             fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "REC-INCOMPLETE-TYPE",
                  "Option value construction needs header completion");
             return 0;
@@ -5746,6 +5789,7 @@ static NLCheckedNodeId source_local_loan(Check *check, const NLSyntaxView *s)
             visible = true;
     const bool supported_type =
         root.type == nl_semantic_core_type(c, NL_TYPE_U8) || field ||
+        (check->allocated_slice && custody_type(c, root.type)) ||
         (!write && nl_recursive_local_type(c, root.type));
     if (!stability_root.implicit_local || !visible || !root.live ||
         root.governing_domain != 0 || !stability_root.independent_root ||
@@ -6279,6 +6323,7 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
     if (root == NULL ||
         (entry == CHECK_TYPE && root->kind != NL_SYNTAX_TYPE_NAME &&
          root->kind != NL_SYNTAX_OPTION_PTR &&
+         root->kind != NL_SYNTAX_OPTION_LIVE_TAIL &&
          root->kind != NL_SYNTAX_OPTION_BACKING &&
          root->kind != NL_SYNTAX_TYPE_PTR &&
          root->kind != NL_SYNTAX_TYPE_REF) ||
@@ -6743,6 +6788,12 @@ static void clear_definition_state(NLSemanticContext *c)
 static bool check_definition(Check *registration, size_t function_id)
 {
     NLFunctionEntry *entry = &registration->context->functions[function_id - 1];
+    if (entry->custody_recipient) {
+        registration->status = nl_custody_definition(
+            registration->context, entry->body,
+            &entry->body->custody_definition, &registration->diagnostic);
+        return registration->status == NL_CHECK_OK;
+    }
     if (entry->owner_receiver || entry->owner_producer) {
         registration->status = nl_owner_definition(
             registration->context, entry->body,
@@ -7144,7 +7195,7 @@ NLCheckStatus nl_semantic_register_function_unit(
     if (total != 0)
         qsort(declarations, total, sizeof(*declarations), declaration_order);
     /* Exact signature installation is private until ALL definitions succeed. */
-    size_t owner_receivers = 0, owner_producers = 0;
+    size_t owner_receivers = 0, owner_producers = 0, custody_recipients = 0;
     for (size_t i = 0; i < total; ++i) {
         FunctionDeclaration *d = &declarations[i];
         input = d->input;
@@ -7204,7 +7255,18 @@ NLCheckStatus nl_semantic_register_function_unit(
             nl_owner_signature(check.context, types, parameter, result);
         const bool producer =
             nl_producer_signature(check.context, types, parameter, result);
-        if (producer) {
+        const bool custody =
+            nl_custody_signature(check.context, types, parameter, result);
+        if (custody) {
+            if (recursive == NULL || count != 1 || custody_recipients != 0 ||
+                strcmp(d->name, "main") == 0) {
+                fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
+                     "CUSTODY-SIGNATURE-PROFILE",
+                     "requires one same-unit H custody recipient");
+                goto failure;
+            }
+            ++custody_recipients;
+        } else if (producer) {
             if (recursive == NULL || count != 1 || owner_producers != 0 ||
                 strcmp(d->name, "main") == 0) {
                 fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
@@ -7238,6 +7300,7 @@ NLCheckStatus nl_semantic_register_function_unit(
         d->function = check.context->function_count;
         check.context->functions[d->function - 1].owner_receiver = owner;
         check.context->functions[d->function - 1].owner_producer = producer;
+        check.context->functions[d->function - 1].custody_recipient = custody;
         continue;
     duplicate:
         fail(&check, NL_CHECK_SEMANTIC_ERROR, s->data.function.name,
@@ -7254,6 +7317,13 @@ NLCheckStatus nl_semantic_register_function_unit(
         fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, (NLSourceSpan){0},
              "P208-UNIT-PROFILE",
              "live-tail profile requires a distinct known terminal receiver");
+        goto failure;
+    }
+    if (custody_recipients != 0 &&
+        (owner_producers != 1 || owner_receivers != 1)) {
+        fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, (NLSourceSpan){0},
+             "CUSTODY-UNIT-PROFILE",
+             "custody requires the independent producer and terminal receiver");
         goto failure;
     }
     /* Never interpret a source definition as a coarse signature-only call. */
@@ -7278,7 +7348,8 @@ NLCheckStatus nl_semantic_register_function_unit(
         for (size_t i = 0; i < total; ++i) {
             const FunctionDeclaration *d = &declarations[i];
             if ((check.context->functions[d->function - 1].owner_receiver ||
-                 check.context->functions[d->function - 1].owner_producer) !=
+                 check.context->functions[d->function - 1].owner_producer ||
+                 check.context->functions[d->function - 1].custody_recipient) !=
                 (pass == 0))
                 continue;
             input = d->input;
