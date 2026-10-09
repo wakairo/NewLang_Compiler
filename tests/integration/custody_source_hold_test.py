@@ -65,9 +65,9 @@ holds = {
                                    "let admit_flag = Option<ptr<Node>>::Some(ptr_h);"),
     "renamed-primary": source.replace("recipient_adopt", "retain_tail"),
 }
-# Minimal existing-source precision witness, without Option<LiveTail>,
-# recipient, or special None-only match. Original producer evidence is lost at
-# the new function-match fragment boundary before any richer post-state join.
+# Issue #219 existing-source prerequisite, without custody. Both arms now
+# receive the original qualified packet and prove common terminal closure.
+# This does NOT enable the distinct #217 custody path or native fork lowering.
 old = (fixture.parent / "live_tail_return.nl").read_text()
 start = old.index("                    let LiveTail {")
 end = old.index("                    } = loan_read", start)
@@ -76,8 +76,8 @@ start = fork.index("                    loan_read(owned_domain)")
 end = fork.index("                    let empty_h =", start)
 consume = "let LiveTail{owned_ptr,owned_allocation,owned_domain}=packet;receive_and_release_tail(owned_ptr,owned_allocation,owned_domain);unit"
 fork = fork[:start] + "let policy=Option<ptr<Node>>::None;match policy {None=>{" + consume + "},Some(q)=>{" + consume + "}};\n" + fork[end:]
-precision = {"fork-origin-none": (fork, "P208-DESTRUCTURE-ORIGIN"),
-             "fork-origin-some": (fork.replace("let policy=Option<ptr<Node>>::None;", "let policy=Option<ptr<Node>>::Some(ptr_h);"), "P208-DESTRUCTURE-ORIGIN")}
+precision = {"fork-origin-none": (fork, "V1-BACKEND-UNSUPPORTED"),
+             "fork-origin-some": (fork.replace("let policy=Option<ptr<Node>>::None;", "let policy=Option<ptr<Node>>::Some(ptr_h);"), "V1-BACKEND-UNSUPPORTED")}
 existing_owner_rejections = {}
 for name, args, code in [
     ("wrong-root", "head_w2@next, ptr_h, allocation_t, life_t", "P193-CALL-DOMAIN"),
@@ -97,7 +97,7 @@ with tempfile.TemporaryDirectory() as directory:
             if code is None:
                 assert run.returncode == 0 and run.stdout and not run.stderr, (name, run.returncode, run.stderr)
             else:
-                assert run.returncode == 3 and not run.stdout and code.encode() in run.stderr, (name, run.returncode, run.stderr)
+                assert run.returncode == (4 if code == "V1-BACKEND-UNSUPPORTED" else 3) and not run.stdout and code.encode() in run.stderr, (name, run.returncode, run.stderr)
         assert (runs[0].stdout, runs[0].stderr) == (runs[1].stdout, runs[1].stderr)
         assert all(p.suffix == ".nl" for p in root.iterdir()), "rejection emitted an artifact"
         return path
@@ -117,5 +117,5 @@ with tempfile.TemporaryDirectory() as directory:
 print(f"{len(positives)} independently checked definition positives; "
       f"{len(negatives)} definition-shape negatives; {len(holds)} primary "
       f"custody HOLD controls; {len(precision)} original-packet fork precision "
-      f"witnesses; {len(existing_owner_rejections)} preserved producer-entry "
+      f"backend-unsupported witnesses; {len(existing_owner_rejections)} preserved producer-entry "
       "owner-rule rejections. Actual custody acceptance/evidence NOT claimed.")
