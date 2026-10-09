@@ -77,8 +77,10 @@ else:
             "stderr":output.get("stderr_preview"),"stdout":output.get("stdout_preview")},ensure_ascii=False),flush=True)
     reports["discovery_trials"]=trial
     # Prefer checker-specific spelling if present; use a known-success actual compile.
-    accepted=[t for t in trial if t["result"].get("exit_status")==0 and
-        "usage" not in (t["result"].get("stdout_preview","")+t["result"].get("stderr_preview","")).lower()]
+    accepted=[t for t in trial if str(sample) in t["argv"] and (
+        t["result"].get("exit_status")==0 or
+        (t["result"].get("exit_status")==4 and
+         "accepted program uses a construct" in t["result"].get("stderr_preview","")))]
     if accepted:
         chosen=accepted[0]["argv"]
     else:
@@ -99,6 +101,7 @@ else:
                 "stderr_preview":result.get("stderr_preview",""),
                 "c_outputs":c_outputs}
         reports["cases"].append(report)
+        print("CASE_RAW",json.dumps({"name":c["name"],"stdout_b64":result["stdout_b64"],"stderr_b64":result["stderr_b64"]}),flush=True)
         print("CASE",json.dumps({"name":c["name"],"rc":result["exit_status"],
                                 "stderr":report["stderr_preview"][:600],
                                 "stdout":report["stdout_preview"][:300],
