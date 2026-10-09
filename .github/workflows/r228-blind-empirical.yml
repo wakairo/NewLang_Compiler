@@ -1,0 +1,71 @@
+name: R228 frozen blind empirical first-pass
+on:
+  push:
+    branches:
+      - r228-blind-empirical-firstpass
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independent-blackbox:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - name: Checkout R-owned additive harness
+        uses: actions/checkout@v4
+        with:
+          path: r-harness
+          persist-credentials: false
+      - name: Checkout exact frozen compiler SHA, not branch code
+        uses: actions/checkout@v4
+        with:
+          ref: c2838d42f5bb4894ba431d48b25e00f0403b2ea7
+          path: r-harness/compiler
+          persist-credentials: false
+      - name: Verify immutable compiler and record source fingerprints
+        working-directory: r-harness
+        run: |
+          set -euxo pipefail
+          FROZEN=c2838d42f5bb4894ba431d48b25e00f0403b2ea7
+          test "$(git -C compiler rev-parse HEAD)" = "$FROZEN"
+          git -C compiler status --porcelain
+          echo "R228_FROZEN_COMPILER_SHA=$FROZEN"
+          (cd compiler && git ls-files src include CMakeLists.txt scripts/bootstrap.py scripts/toolchain-lock.json | LC_ALL=C sort | xargs sha256sum | sha256sum) | tee frozen-source-tree.sha256
+          sha256sum compiler/docs/reference/NewLang_v0_spec_Draft17_29.md | tee frozen-draft.sha256
+          python3 redteam/r228_blind_empirical.py generate
+      - name: Install documented Ubuntu build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Build exact frozen production compiler (locked LLVM 23.1.2)
+        working-directory: r-harness/compiler
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 scripts/bootstrap.py
+          . .deps/activate.sh
+          CC=gcc cmake --fresh -S . -B build-gcc -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-gcc --parallel 2
+          ./build-gcc/newlangc --version
+          sha256sum ./build-gcc/newlangc | tee ../newlangc-binary.sha256
+          cp ./build-gcc/newlangc ../r228-evidence/newlangc
+      - name: Run independent corpus against fixed actual CLI
+        working-directory: r-harness
+        shell: bash
+        run: |
+          set -euxo pipefail
+          python3 redteam/r228_blind_empirical.py run compiler/build-gcc/newlangc | tee r228-evidence/runner-log.txt
+          cat r228-evidence/results.csv
+      - name: Preserve corpus, diagnostics, source hashes, outputs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r228-blind-empirical-corpus-and-results
+          path: |
+            r-harness/r228-evidence/
+            r-harness/frozen-source-tree.sha256
+            r-harness/frozen-draft.sha256
+            r-harness/newlangc-binary.sha256
+          retention-days: 30
