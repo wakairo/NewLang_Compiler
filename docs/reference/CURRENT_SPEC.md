@@ -3,7 +3,7 @@
 The canonical NewLang v0 specification on a branch is the Draft named here.
 
 ```text
-NewLang_v0_spec_Draft17_29.md
+NewLang_v0_spec_Draft17_30.md
 ```
 
 Repository policy:
@@ -13,6 +13,22 @@ Repository policy:
 - Design-thread reports, FormalProof results, compiler findings, and review-resolution documents are inputs to specification work; they do not override the canonical Draft by themselves.
 - A newer Draft on an unmerged branch is a candidate until that branch is reviewed and merged into `main`.
 - Prompts handed to M / F / P tracks should cite the `main` commit SHA and this file before relying on conversational memory.
+
+Draft17.30 (PROPOSED / UNMERGED; Compiler Issue #234) source-selects
+only §3.2b's five distinct statically nested fallible original
+H allocation sites plus a single H with exactly three separate fixed
+`next/prev/child:Option<ptr<H>>` fields and `payload:u8`; each field
+retains its own fixed ProjectionId and mode-preserving explicit
+D-scoped `ref@field` write/read, with existing §17.4 / §26
+Change/Reset/conditional payload occurrence behavior. All five
+original O/R/D/Allocation authorities remain distinct and are manually
+discharged on six possible allocation worlds (0–5 successes).
+The initial cJSON `src.child=A,A.prev=C,A.next=B,B.prev=A,
+B.next=C,C.prev=B,dst.child=None` substrate is established before
+explicit teardown. No B detach/adoption, later owner custody, general
+allocator, codegen, formal, concurrency, or product PASS is selected.
+Only the candidate branch points to Draft17.30 until independent
+Coordination review/merge.
 
 Draft 17.29 (PROPOSED / UNMERGED; Issue #214) adds only §18.1c: after the canonical Draft17.28 2-H producer physically unlinks the head and returns the ORIGINAL still-live tail LiveTail, one separate known-direct recipient takes that same nonCopy value and places it into a caller-owned ordinary local Option<LiveTail> through an explicitly scoped nonexclusive ref<write>. The recipient returns unit and never ends/frees the tail. After that frame and loan end, a fresh caller scope replaces custody with None, consumes its old Some payload by whole match/destructure, and the canonical terminal receiver releases exactly the original tail once; head remains independently released. Exact O/R/D/A, sink-current-None and caller-memory effects must be proved at every call. Option<LiveTail> is statically nonDiscardable even at None, so precisely two proof-checked known-None consuming one-arm matches are added *only* in this closed profile; no general exhaustiveness/Drop relaxation, effect, owner trait, third root, H field, compiler/native or cJSON change. This branch is a candidate until independent Coordination ACCEPT and merge.
 
