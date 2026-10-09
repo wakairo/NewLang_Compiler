@@ -1,4 +1,4 @@
-"""#237 actual public source gate; semantic evidence only, no native claim."""
+"""#237 public source regressions; native evidence has a separate test."""
 import hashlib
 import json
 import pathlib
@@ -38,12 +38,12 @@ def swap(text, site):
     return text[:first] + text[second:second_end] + text[first:first_end] + text[second_end:]
 
 cases = [
-    ("canonical", source, 4, "V1-BACKEND-UNSUPPORTED", "source-accepted"),
-    ("alpha", source.replace("Node", "Cell").replace("ptr_", "pointer_").replace("life_", "domain_"), 4, "V1-BACKEND-UNSUPPORTED", "source-accepted"),
-    ("two-arm-permutations", swap(swap(source, 3), 1), 4, "V1-BACKEND-UNSUPPORTED", "source-accepted"),
-    ("canonical-comments", canonical, 4, "V1-BACKEND-UNSUPPORTED", "source-accepted"),
-    ("same-address-reset", source.replace("replace(w_A_next@next,", "replace(w_A_next@prev,", 1).replace("Some(ptr_B))", "Some(ptr_C))", 1), 4, "V1-BACKEND-UNSUPPORTED", "source-accepted-reset-evidence"),
-    ("library-tail-policy", source.replace("Some(ptr_C))", "Some(ptr_B))", 1), 4, "V1-BACKEND-UNSUPPORTED", "library-policy-mismatch"),
+    ("canonical", source, 0, "", "source-accepted"),
+    ("alpha", source.replace("Node", "Cell").replace("ptr_", "pointer_").replace("life_", "domain_"), 0, "", "source-accepted"),
+    ("two-arm-permutations", swap(swap(source, 3), 1), 0, "", "source-accepted"),
+    ("canonical-comments", canonical, 0, "", "source-accepted"),
+    ("same-address-reset", source.replace("replace(w_A_next@next,", "replace(w_A_next@prev,", 1).replace("Some(ptr_B))", "Some(ptr_C))", 1), 0, "", "source-accepted-reset-evidence"),
+    ("library-tail-policy", source.replace("Some(ptr_C))", "Some(ptr_B))", 1), 0, "", "library-policy-mismatch"),
     ("ptr-base", source.replace("w_src_child@child", "ptr_src@child", 1), 3, "HEAP-LINK-REF-PROFILE", "profile-reject"),
     ("payload-field", source.replace("w_src_child@child", "w_src_child@payload", 1), 3, "HEAP-LINK-FIELD-PROFILE", "profile-reject"),
     ("unknown-field", source.replace("w_src_child@child", "w_src_child@unknown", 1), 3, "HEAP-LINK-FIELD-PROFILE", "profile-reject"),
@@ -89,8 +89,11 @@ with tempfile.TemporaryDirectory(prefix="five-root-source-") as directory:
         a = subprocess.run([compiler, filename], cwd=root, capture_output=True)
         b = subprocess.run([compiler, filename], cwd=root, capture_output=True)
         assert (a.returncode, a.stdout, a.stderr) == (b.returncode, b.stdout, b.stderr), name
-        assert a.returncode == status and code.encode() in a.stderr, (name, a.returncode, a.stderr)
-        assert not a.stdout and set(root.iterdir()) == before, (name, "unexpected C/artifact")
+        if status == 0:
+            assert a.returncode == 0 and a.stdout.startswith(b"/* Draft17.30 bounded five-root C17;") and not a.stderr, (name, a.returncode, a.stderr)
+        else:
+            assert a.returncode == status and code.encode() in a.stderr and not a.stdout, (name, a.returncode, a.stderr)
+        assert set(root.iterdir()) == before, (name, "unexpected file publication")
         if classification == "source-accepted":
             checked = subprocess.run([evidence, "full-evidence", filename, "5"], cwd=root, capture_output=True)
             assert checked.returncode == 0 and b"seven actual field facts" in checked.stdout, (name, checked.stderr)
@@ -99,6 +102,6 @@ with tempfile.TemporaryDirectory(prefix="five-root-source-") as directory:
             assert checked.returncode == 0 and b"fresh Some occurrence" in checked.stdout, (name, checked.stderr)
         observations.append({"input": name, "sha256": hashlib.sha256(text.encode()).hexdigest(),
                              "classification": classification, "exit": a.returncode,
-                             "stdout": a.stdout.decode(), "stderr": a.stderr.decode(), "output_files_created": []})
-print(json.dumps({"claim": "full actual-source semantic admission; no C/native/cJSON PASS",
+                             "stdout_sha256": hashlib.sha256(a.stdout).hexdigest(), "stderr": a.stderr.decode(), "output_files_created": []})
+print(json.dumps({"claim": "full source semantic admission and staged CLI C output; native evidence separate; no cJSON PASS",
                   "observations": observations}, indent=2))

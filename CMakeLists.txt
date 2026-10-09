@@ -66,7 +66,7 @@ add_library(newlang_checked STATIC src/checked.c)
 target_link_libraries(newlang_checked PUBLIC newlang_syntax)
 add_library(newlang_semantic STATIC src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
 target_link_libraries(newlang_semantic PUBLIC newlang_checked newlang_diagnostic newlang_parser)
-add_library(newlang_checked_c_node STATIC src/checked_c_node.c)
+add_library(newlang_checked_c_node STATIC src/checked_c_node.c src/checked_c_five.c)
 target_link_libraries(newlang_checked_c_node PUBLIC newlang_semantic)
 add_executable(newlangc src/main.c)
 target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic newlang_diagnostic)
@@ -387,7 +387,7 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/two_heap_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/two_heap_semantic.nl" "$<TARGET_FILE:two_heap_test>")
     add_executable(captured_closure_test tests/unit/captured_closure_test.c)
-    target_link_libraries(captured_closure_test PRIVATE newlang_semantic)
+    target_link_libraries(captured_closure_test PRIVATE newlang_checked_c_node)
     target_link_options(captured_closure_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
     foreach(sites IN ITEMS 2 3 5)
         if(sites EQUAL 2)
@@ -416,6 +416,17 @@ if(BUILD_TESTING)
     add_test(NAME five_root_source.integration
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/five_root_source_test.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:captured_closure_test>")
+    add_executable(five_checked_probe tests/integration/five_checked_probe.c)
+    target_link_libraries(five_checked_probe PRIVATE newlang_semantic newlang_parser)
+    add_executable(five_backend_test tests/unit/five_backend_test.c)
+    target_link_libraries(five_backend_test PRIVATE newlang_checked_c_node newlang_parser)
+    target_link_options(five_backend_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
+    add_test(NAME five_root_backend.unit COMMAND five_backend_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/five_root_three_field.nl")
+    add_test(NAME five_root_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/five_native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:five_checked_probe>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/five_root_three_field.nl" "${NEWLANG_SANITIZER}")
     add_executable(allocated_join_test tests/unit/allocated_join_test.c)
     target_link_libraries(allocated_join_test PRIVATE newlang_checked_c_node newlang_parser)
     add_test(NAME allocated_join_evidence.unit COMMAND allocated_join_test

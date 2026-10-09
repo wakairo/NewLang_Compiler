@@ -1,10 +1,28 @@
 #include "../../src/semantic_internal.h"
 #include "../support/semantic_check.h"
+#include "newlang/checked_c_node.h"
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 
 static bool public_source;
+static NLCheckedNodeId match(const NLCheckedFragment *f);
+static size_t backend_poison_count;
+static bool rejected_certificate(const NLCheckedFragment *top,
+                                 const NLCheckedFragment *entry)
+{
+    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
+          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    if (public_source) {
+        char *output = NULL;
+        size_t length = 777;
+        CHECK(nl_checked_c_node(entry, &output, &length) ==
+              NL_NODE_C_UNSUPPORTED);
+        CHECK(output == NULL && length == 777);
+        ++backend_poison_count;
+    }
+    return true;
+}
 /* Actual production registration + actual known main() check, no probe flag.
  * On either public transaction failure the caller snapshot must be unchanged.
  */
@@ -307,8 +325,7 @@ static bool poison(const char *path)
             ++c->view.release_worlds[2];
             break;
         }
-        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        CHECK(rejected_certificate(top, entry));
         c->view = good;
         CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
               NL_CHECK_OK);
@@ -318,16 +335,14 @@ static bool poison(const char *path)
     CHECK(nl_packet_same_entry(c->branches[0].entry, c->branches[1].entry));
     NLSemanticContext *saved_entry = c->branches[0].entry;
     c->branches[0].entry = c->branches[1].entry;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     c->branches[0].entry = saved_entry;
     NLSemanticContext *foreign_ancestor = NULL;
     CHECK(nl_sem_clone(c->view.ancestor, &foreign_ancestor) == NL_CHECK_OK);
     c->view.ancestor = foreign_ancestor;
     for (size_t r = 0; r < c->view.count; ++r)
         c->view.originals[r].origin = foreign_ancestor;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     c->view = good;
     nl_semantic_destroy(foreign_ancestor);
     NLCheckedFragment *none = (NLCheckedFragment *)c->branches[0].arm;
@@ -335,56 +350,46 @@ static bool poison(const char *path)
     CHECK(nl_sem_clone(none->context, &foreign) == NL_CHECK_OK);
     const NLSemanticContext *saved_world = none->context;
     none->context = foreign;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     none->context = saved_world;
     nl_semantic_destroy(foreign);
     c->view.closed_post = c->branches[1].world;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     c->view = good;
     NLSemanticContext *post = (NLSemanticContext *)c->view.closed_post;
     post->regions[0].view.live = true;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     post->regions[0].view.live = false;
     NLSemanticContext *world = (NLSemanticContext *)none->context;
     world->scopes[0].active = true;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     world->scopes[0].active = false;
     world->places[good.originals[0].root - 1].live = true;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     world->places[good.originals[0].root - 1].live = false;
     NLCheckedFragment *some = (NLCheckedFragment *)c->branches[1].arm;
     const NLSemanticContext *some_world = some->context;
     some->context = none->context;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     some->context = some_world;
     NLSemanticBindingView *owner =
         &world->bindings[good.originals[0].allocation_binding - 1].view;
     owner->availability = NL_AVAILABLE;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     owner->availability = NL_CONSUMED;
     NLValueId original = good.originals[0].allocation_value;
     world->values[original - 1].allocation_region =
         good.originals[1].extent.region;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     world->values[original - 1].allocation_region =
         good.originals[0].extent.region;
     const NLSemanticValueView old = world->values[world->value_count - 1];
     world->values[world->value_count - 1].dependencies =
         NL_DEPENDENCIES_UNKNOWN;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     world->values[world->value_count - 1] = old;
     world->values[world->value_count - 1].value_dependency_count = 1;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     world->values[world->value_count - 1] = old;
     const NLCheckedKind kinds[] = {NL_CHECKED_DESTROY, NL_CHECKED_ERASE_SLOT,
                                    NL_CHECKED_DOMAIN_FINALIZE,
@@ -395,8 +400,7 @@ static bool poison(const char *path)
         NLCheckedNodeView saved = *v;
         v->kind =
             NL_CHECKED_UNIT; /* final state still closed: trace must fail */
-        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        CHECK(rejected_certificate(top, entry));
         *v = saved;
     }
     NLCheckedNodeView *end = operation(none, NL_CHECKED_DESTROY);
@@ -404,27 +408,23 @@ static bool poison(const char *path)
     CHECK(end != NULL && unit != NULL);
     NLCheckedNodeView saved_unit = *unit;
     *unit = *end; /* duplicate EndRoot after actual EndRoot */
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     *unit = saved_unit;
     NLCheckedNodeView *free_node = operation(none, NL_CHECKED_DEALLOCATE);
     NLCheckedNodeView *argument = &none->nodes[free_node->first_argument - 1];
     const NLValueUse use = argument->value_use;
     argument->value_use = NL_VALUE_COPIED;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     argument->value_use = use;
     NLCheckedNodeView *loan = operation(none, NL_CHECKED_LOAN_HEADER);
     CHECK(loan != NULL);
     loan->loan.body_nonescape_proved = false;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     loan->loan.body_nonescape_proved = true;
     NLCheckedNodeView *grant =
         &none->nodes[nl_checked_node_view(none, none->root)->initializer - 1];
     grant->allocation_success = true; /* None must mint no original */
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     grant->allocation_success = false;
     CHECK(nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
     if (public_source) {
@@ -463,51 +463,42 @@ static bool poison(const char *path)
                 write->kind = NL_CHECKED_UNIT;
                 break;
             }
-            CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-                  NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+            CHECK(rejected_certificate(top, entry));
             *write = saved;
         }
         NLCheckedNodeView *projection = &leaf->nodes[write->first_argument - 1];
         const NLCheckedNodeView original_projection = *projection;
         projection->field = leaf->nodes[leaf->field_changes[0]->node - 1].field;
-        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        CHECK(rejected_certificate(top, entry));
         *projection = original_projection;
         projection->reference_result.writable = false;
-        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        CHECK(rejected_certificate(top, entry));
         *projection = original_projection;
         NLSemanticContext *before_change = change->before;
         change->before = leaf->field_changes[0]
                              ->before; /* valid other epoch, same world IDs */
-        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        CHECK(rejected_certificate(top, entry));
         change->before = before_change;
         change->before = NULL;
-        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        CHECK(rejected_certificate(top, entry));
         change->before = before_change;
         NLSemanticContext *after_change = change->after;
         change->after = NULL;
-        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        CHECK(rejected_certificate(top, entry));
         change->after = after_change;
         leaf->field_change_count = 7;
-        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        CHECK(rejected_certificate(top, entry));
         leaf->field_change_count = 6;
         const NLPlaceId root = write->field.parent;
         const NLPlaceId sibling =
             before_change->places[root - 1].fixed_fields[0];
         before_change->places[root - 1].fixed_fields[1] = sibling;
-        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        CHECK(rejected_certificate(top, entry));
         before_change->places[root - 1].fixed_fields[1] = write->field.child;
         const NLValueId ref_id =
             before_change->bindings[write->field.base - 1].view.value;
         before_change->values[ref_id - 1].reference.writable = false;
-        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        CHECK(rejected_certificate(top, entry));
         before_change->values[ref_id - 1].reference.writable = true;
         NLCheckedNodeView *acquisition = NULL;
         for (size_t i = 0; i < change->node - 1; ++i)
@@ -541,28 +532,26 @@ static bool poison(const char *path)
                 stability_loan->loan.is_exclusive = true;
                 break;
             }
-            CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-                  NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+            CHECK(rejected_certificate(top, entry));
             *stability_loan = original_loan;
         }
         ++stability_input->symbol;
-        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        CHECK(rejected_certificate(top, entry));
         --stability_input->symbol;
         pointer_input->value_use = NL_VALUE_USE_NONE;
-        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        CHECK(rejected_certificate(top, entry));
         pointer_input->value_use = NL_VALUE_COPIED;
         ++change->after->places[write->field.child - 1].current_fact;
-        CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        CHECK(rejected_certificate(top, entry));
         --change->after->places[write->field.child - 1].current_fact;
         CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
               NL_CHECK_OK);
         CHECK(full_topology(entry));
     }
     nl_checked_destroy(entry);
-    puts("tuple/order/world/post/trace/dependency/scope poison rejected");
+    printf("tuple/order/world/post/trace/dependency/scope poison rejected; "
+           "backend refusals=%zu\n",
+           backend_poison_count);
     return true;
 }
 
@@ -647,8 +636,7 @@ static bool oom(const char *path)
         nl_checked_captured_closure_validate(top, match(top));
     injecting = false;
     CHECK(refused == NL_CHECK_OUT_OF_MEMORY);
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     --bad->captured_closure->view.originals[0].incarnation;
     CHECK(nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
     nl_checked_destroy(entry);
@@ -724,8 +712,7 @@ static bool same_address_reset(const char *path)
               before->values[next.sum_payload - 1].reference.place);
     const NLOccurrenceId saved = write->field.payload_occurrence;
     write->field.payload_occurrence = 0;
-    CHECK(nl_checked_captured_closure_validate(top, match(top)) ==
-          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    CHECK(rejected_certificate(top, entry));
     write->field.payload_occurrence = saved;
     CHECK(nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
     nl_checked_destroy(entry);

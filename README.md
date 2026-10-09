@@ -25,7 +25,7 @@ Break/ref joins. Rich cyclic correlations remain structured precision rejections
 ## Authority
 
 The canonical language authority is the Draft selected by
-`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.18**), followed by reviewed
+`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.30**), followed by reviewed
 process/backend contracts and merged implementation/formal evidence.
 Historical reports, the task prompt and conversation do not override the Draft.
 Backend Contract v0.4 defines backend obligations. The Charter, Handoff Manifest
@@ -237,6 +237,15 @@ The actual-source witness and rule/evidence mapping are in
 [the Node link report](docs/DRAFT_17_23_NODE_LINK_SEMANTIC_REPORT.md).
 See the [contract](docs/DRAFT_17_21_PRODUCTION_CONTRACT.md) and
 [report](docs/DRAFT_17_21_PRODUCTION_REPORT.md).
+
+The bounded Draft17.30 five-root/three-field **pre-detach** Checked-C adapter
+emits the complete `tests/fixtures/five_root_three_field.nl` source through
+the existing owned certificate revalidator. Native tests exercise all six
+allocation worlds, actual heap links and explicit matched cleanup with an
+independent read-only observer. See the
+[contract](docs/FIVE_ROOT_NATIVE_C17_CONTRACT.md) and
+[measured report](docs/FIVE_ROOT_NATIVE_C17_REPORT.md). This gate does not
+implement B detach/adoption or claim cJSON product PASS.
 
 Draft 17.22 separates bounded field `local@field` and closed-sum
 `SumType::Variant` / `SumType::Variant(expr)` syntax. The two colons must be
