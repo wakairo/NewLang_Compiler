@@ -92,7 +92,7 @@ with tempfile.TemporaryDirectory(prefix="captured-closure-") as directory:
     # The reviewed three-link/five-site profile now admits its full source.
     # One-link reduced three/five-site probes retain their closed public gate;
     # outcomes are classified by explicit inputs, never generic failures.
-    for name, status, code in [("five_root_three_field", 4, "V1-BACKEND-UNSUPPORTED"),
+    for name, status, code in [("five_root_three_field", 0, ""),
                               ("three_allocation_no_links", 3, "ALLOCATED-CARDINALITY-PROFILE"),
                               ("five_allocation_closure_probe", 3, "ALLOCATED-CARDINALITY-PROFILE"),
                               ("two_allocation_no_links", 4, "V1-BACKEND-UNSUPPORTED")]:
@@ -100,9 +100,10 @@ with tempfile.TemporaryDirectory(prefix="captured-closure-") as directory:
         filename = name + ".nl"
         (root / filename).write_text(text)
         a = subprocess.run([compiler, filename], cwd=root, capture_output=True)
-        assert a.returncode == status and code.encode() in a.stderr and not a.stdout, (name, a.returncode, a.stderr)
+        assert a.returncode == status and code.encode() in a.stderr, (name, a.returncode, a.stderr)
+        assert (bool(a.stdout), bool(a.stderr)) == ((True, False) if status == 0 else (False, True)), name
         observations.append({"input": name, "sha256": hashlib.sha256(text.encode()).hexdigest(),
-                             "public_cli_exit": a.returncode, "stdout": "", "stderr": a.stderr.decode()})
+                             "public_cli_exit": a.returncode, "stdout_sha256": hashlib.sha256(a.stdout).hexdigest(), "stderr": a.stderr.decode()})
     assert not list(root.glob("*.c")) and not list(root.glob("*.o")) and not list(root.glob("*.exe"))
-print(json.dumps({"claim": "certificate substrate ONLY; full three-field source NOT ADMITTED",
+print(json.dumps({"claim": "certificate substrate plus current CLI admission; native evidence is a separate test",
                   "source_controls": observations}, indent=2))

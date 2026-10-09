@@ -1,4 +1,5 @@
 #include "newlang/checked_c_node.h"
+#include "checked_c_five.h"
 #include "newlang/raw_storage.h"
 #include <stdarg.h>
 #include <stdint.h>
@@ -2480,6 +2481,17 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         body == NULL)
         return NL_NODE_C_UNSUPPORTED;
     const NLSemanticContext *c = nl_checked_context(body);
+    for (size_t i = 1; i <= nl_checked_node_count(body); ++i) {
+        const NLCheckedNodeView *op = nl_checked_node_view(body, i);
+        NLSemanticTypeView h;
+        if (op->kind == NL_CHECKED_TRY_ALLOCATE_ONE &&
+            nl_semantic_type_view(c, op->allocation_target, &h) &&
+            h.field_count == 4) {
+            if (v->type != nl_semantic_unit_type(c))
+                return NL_NODE_C_UNSUPPORTED;
+            return nl_checked_c_five(body, out, length);
+        }
+    }
     Emit e = {.unit = nl_semantic_unit_type(c),
               .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
     if (v->type != e.unit)
