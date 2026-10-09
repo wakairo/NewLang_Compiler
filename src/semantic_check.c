@@ -39,6 +39,16 @@ typedef struct Check {
     size_t allocation_sites;
     size_t *allocation_budget; /* borrowed counter, active body walk only */
     bool allocated_slice; /* owned Some world, never a runtime success claim */
+    /* Borrowed synchronous proof from the exact independently checked call. */
+    const NLCheckedFragment *custody_origin;
+    NLCheckedNodeId custody_origin_match;
+    NLValueId custody_packet, custody_old_none;
+    NLPlaceId custody_sink;
+    bool custody_recipient_body;
+    NLCheckedNodeId custody_pending;
+    NLSymbolId custody_binding;
+    bool custody_continuation, custody_extracted, custody_final_none;
+    NLValueId custody_recovered, custody_saved;
     NLCheckStatus status;
     NLCheckDiagnostic diagnostic;
 } Check;
@@ -1244,6 +1254,36 @@ static bool primitive(Check *check, NLCheckedNodeId call,
             if (!host(check, nl_sem_fresh_fact(c, &fact), span)) {
                 return false;
             }
+            if (check->custody_continuation && place == check->custody_sink) {
+                const NLSymbolId owner = view(check, args[0])->symbol;
+                if (owner == 0 || owner > c->binding_count) {
+                    fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+                         "CUSTODY-EXTRACTION-SOURCE",
+                         "recovery requires the exact source loan operand");
+                    return false;
+                }
+                const NLValueId source_ref = c->bindings[owner - 1].view.value;
+                for (size_t i = 0; i < c->value_count; ++i) {
+                    const NLSemanticValueView v = c->values[i];
+                    if (v.carrier != NL_CARRIER_ENDED &&
+                        c->types[v.type - 1].view.kind == NL_TYPE_REF &&
+                        i + 1 != first && i + 1 != source_ref) {
+                        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+                             "CUSTODY-EXTRACTION-ALIAS",
+                             "extra live alias requires a stronger recovery "
+                             "proof");
+                        return false;
+                    }
+                }
+                operation.custody_extraction.present = true;
+                operation.custody_extraction.sink = place;
+                operation.custody_extraction.old_sum = old.current_value;
+                operation.custody_extraction.new_sum = second;
+                operation.custody_extraction.packet =
+                    c->values[old.current_value - 1].sum_payload;
+                operation.custody_extraction.old_occurrence =
+                    old.payload_occurrence;
+            }
             nl_sum_detach(c, place);
             c->places[place - 1].current_value = second;
             c->places[place - 1].current_fact = fact;
@@ -1268,6 +1308,32 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                 operation.results[0] =
                     (NLCheckedResult){old.type, old.current_value};
             }
+        }
+    }
+    if (check->custody_recipient_body && kind == NL_CHECKED_REPLACE) {
+        const NLValueId old = operation.results[0].value;
+        if (check->custody_old_none != 0 || operation.result_count != 1 ||
+            old == 0 || c->values[old - 1].variant != 1 ||
+            c->values[old - 1].sum_payload != 0) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+                 "CUSTODY-OLD-NONE-PROOF",
+                 "recipient old sum is not source-proven exact None");
+            return false;
+        }
+        check->custody_old_none = old;
+    }
+    if (check->custody_continuation && kind == NL_CHECKED_REPLACE) {
+        const NLValueId ref = one_result(check, args[0]);
+        if (c->values[ref - 1].reference.place == check->custody_sink) {
+            if (check->custody_recovered != 0 ||
+                c->values[c->places[check->custody_sink - 1].current_value - 1]
+                        .variant != 1) {
+                fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+                     "CUSTODY-EXTRACTION-PROOF",
+                     "one source extraction returning old Some/None required");
+                return false;
+            }
+            check->custody_recovered = operation.results[0].value;
         }
     }
     *view(check, call) = operation;
@@ -1545,9 +1611,9 @@ static bool producer_entry(Check *check, NLCheckedNodeId id,
     return true;
 }
 
-/* Partial #217 preflight only. No argument is evaluated, no owner moves and
- * no applicability/transfer certificate is published here. Success still
- * stops at the explicit transfer-evidence precision fence below. */
+/* #217 admission is read-only: no argument evaluation, owner transfer or
+ * transfer certificate here. Actual body/continuation checks follow only
+ * after these source/world obligations pass. */
 static bool custody_preflight(Check *check, const NLSyntaxView *syntax,
                               const NLFunctionEntry *function)
 {
@@ -1729,18 +1795,11 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         return 0;
     }
     if (function.custody_recipient) {
-        /* Conditional definition + read-only preflight are NOT an owned
-         * actual transfer/post-state certificate. Until that certificate and
-         * conditional continuation exist, reject before argument consumption.
-         * Neither a favorable branch nor static types discharge this fence. */
+        /* Conditional definition is not caller authority. Prove source entry
+         * before argument evaluation/consume; body replay and the finite
+         * continuation separately prove transfer and final responsibility. */
         if (!custody_preflight(check, syntax, &function))
             return 0;
-        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
-             "CUSTODY-TRANSFER-PRECISION",
-             "read-only entry preflight passed; original-owner Some transfer, "
-             "exact-None consumption and conditional custody continuation "
-             "certificate are not implemented");
-        return 0;
     }
     if (function.body == NULL && function.caller_effects) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->data.call.callee,
@@ -1774,6 +1833,42 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
                                        .body_backed = function.body != NULL});
     if (id == 0) {
         return 0;
+    }
+    if (function.custody_recipient) {
+        check->artifact->destroy_custody_world = nl_semantic_destroy;
+        check->artifact->custody_call_id = id;
+        if (check->artifact->custody_entry != NULL) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                 "CUSTODY-CALL-PRECISION",
+                 "one original custody transfer per policy world required");
+            return 0;
+        }
+        if (!host(check, nl_sem_clone(c, &check->artifact->custody_entry),
+                  syntax->span))
+            return 0;
+        const NLSyntaxView *a =
+                               nl_syntax_node_view(syntax->data.call.arguments),
+                           *b = nl_syntax_node_view(nl_syntax_next_argument(
+                               syntax->data.call.arguments));
+        const NLSymbolId sink = available(check, a->span),
+                         donor = available(check, b->span);
+        if (!sink || !donor)
+            return 0;
+        const NLReferenceFacts ref =
+            c->values[c->bindings[sink - 1].view.value - 1].reference;
+        view(check, id)->custody_call.entry_proved = true;
+        view(check, id)->custody_call.origin = check->artifact->packet_parent;
+        view(check, id)->custody_call.origin_match =
+            check->artifact->packet_match;
+        view(check, id)->custody_call.entry_world =
+            check->artifact->custody_entry;
+        view(check, id)->custody_call.world = check->artifact->context;
+        view(check, id)->custody_call.sink = ref.place;
+        view(check, id)->custody_call.sink_incarnation =
+            c->places[ref.place - 1].incarnation;
+        view(check, id)->custody_call.packet =
+            c->bindings[donor - 1].view.value;
+        view(check, id)->custody_call.donor = donor;
     }
     NLCheckedNodeId arguments[NL_SEMANTIC_MAX_PARAMETERS] = {0};
     const NLSyntaxNode *argument_syntax = syntax->data.call.arguments;
@@ -1811,6 +1906,7 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         }
         if (function.kind == NL_CHECKED_REGISTERED_CALL &&
             !function.owner_receiver && !function.owner_producer &&
+            !function.custody_recipient &&
             (expected == 2 ||
              c->types[expected - 1].view.kind == NL_TYPE_SLOT ||
              c->types[expected - 1].view.kind == NL_TYPE_STORAGE ||
@@ -2676,7 +2772,11 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
             const bool local =
                 source != 0 && view(check, source)->producer.return_proved &&
                 view(check, source)->producer.result == rhs.results[0].value;
-            if (!local &&
+            const bool extracted =
+                check->custody_continuation && check->custody_extracted &&
+                rhs.results[0].value == check->custody_packet &&
+                rhs.results[0].value == check->custody_saved;
+            if (!local && !extracted &&
                 !nl_packet_inherited(check->artifact, rhs.results[0].value)) {
                 fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
                      "P208-DESTRUCTURE-ORIGIN",
@@ -2937,6 +3037,9 @@ static NLCheckedNodeId source_return(Check *check, const NLSyntaxView *syntax)
                                           .returned = check->returned});
 }
 
+static bool custody_continue_block(Check *, const NLSyntaxView *,
+                                   const NLSyntaxNode *, size_t,
+                                   NLCheckedNodeId);
 static NLCheckedNodeId source_block(Check *check, const NLSyntaxView *syntax)
 {
     NLSemanticContext *c = check->context;
@@ -2977,6 +3080,12 @@ static NLCheckedNodeId source_block(Check *check, const NLSyntaxView *syntax)
             view(check, previous)->next_item = child;
         previous = child;
         ++view(check, id)->item_count;
+        if (check->custody_pending != 0) {
+            if (!custody_continue_block(
+                    check, syntax, nl_syntax_next_argument(item), floor, id))
+                goto cleanup;
+            goto cleanup;
+        }
         if (check->terminated)
             break;
     }
@@ -3161,7 +3270,16 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                   .function_scope_floor = scope_floor,
                   .function_place_floor = place_floor,
                   .body_function = view(caller, call_id)->function};
-    body.allocated_slice = (function->owner_receiver &&
+    body.custody_recipient_body = function->custody_recipient;
+    if (function->custody_recipient) {
+        body.custody_origin = view(caller, call_id)->custody_call.origin;
+        body.custody_origin_match =
+            view(caller, call_id)->custody_call.origin_match;
+        body.custody_packet = view(caller, call_id)->custody_call.packet;
+        body.custody_sink = view(caller, call_id)->custody_call.sink;
+    }
+    body.allocated_slice = function->custody_recipient ||
+                           (function->owner_receiver &&
                             view(caller, call_id)->owner_call.entry_proved) ||
                            (function->owner_producer &&
                             view(caller, call_id)->producer.entry_proved);
@@ -3207,6 +3325,8 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                 c->places[c->bindings[symbol - 1].view.place - 1]
                     .implicit_local = true;
         }
+        if (function->custody_recipient)
+            view(caller, call_id)->custody_call.parameters[i] = symbol;
         if (function->owner_receiver) {
             view(caller, call_id)->owner_call.parameters[i] = symbol;
             if (i == 2)
@@ -3312,6 +3432,50 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         }
         view(caller, call_id)->owner_call.post_proved = true;
     }
+    if (function->custody_recipient) {
+        const NLCheckedNodeView proof = *view(caller, call_id);
+        const NLSemanticPlaceView sink = c->places[proof.custody_call.sink - 1];
+        const NLSemanticValueView some = c->values[sink.current_value - 1];
+        const NLCheckedNodeView *producer = nl_checked_node_view(
+            proof.custody_call.origin,
+            nl_checked_node_view(proof.custody_call.origin,
+                                 proof.custody_call.origin_match)
+                ->packet_fork.producer);
+        bool valid =
+            sink.live &&
+            sink.incarnation == proof.custody_call.sink_incarnation &&
+            some.variant == 2 &&
+            some.sum_payload == proof.custody_call.packet &&
+            sink.payload_occurrence != 0 && body.custody_old_none != 0 &&
+            c->values[body.custody_old_none - 1].carrier == NL_CARRIER_ENDED &&
+            c->bindings[proof.custody_call.donor - 1].view.availability ==
+                NL_CONSUMED &&
+            c->bindings[proof.custody_call.parameters[1] - 1]
+                    .view.availability == NL_CONSUMED &&
+            c->places[producer->producer.root - 1].live &&
+            c->places[producer->producer.root - 1].incarnation ==
+                producer->producer.incarnation &&
+            c->places[producer->producer.root - 1].governing_domain ==
+                producer->producer.domain &&
+            c->regions[producer->producer.range.region - 1].view.live &&
+            c->domains[producer->producer.domain - 1].live;
+        if (!valid) {
+            fail(&body, NL_CHECK_ANALYSIS_PRECISION_LIMIT, (NLSourceSpan){0},
+                 "CUSTODY-CALL-POST",
+                 "original owner/None/occurrence post-state not proved");
+            goto failure;
+        }
+        if (!host(&body, nl_sem_clone(c, &caller->artifact->custody_post),
+                  call_span))
+            goto failure;
+        view(caller, call_id)->custody_call.post_proved = true;
+        view(caller, call_id)->custody_call.post_world =
+            caller->artifact->custody_post;
+        view(caller, call_id)->custody_call.old_none = body.custody_old_none;
+        view(caller, call_id)->custody_call.new_some = sink.current_value;
+        view(caller, call_id)->custody_call.occurrence =
+            sink.payload_occurrence;
+    }
     /* Save owned checked body evidence; no source expansion into caller nodes.
      */
     if (caller->artifact->body_count == 64) {
@@ -3391,7 +3555,8 @@ static NLCheckedNodeId sum_constructor(Check *check, const NLSyntaxView *s)
             ptr != 0 && c->types[ptr - 1].live_tail_target != 0;
         if (custody &&
             (!check->allocated_slice ||
-             !equal_name(check, s->data.constructor.variant, "None"))) {
+             (!equal_name(check, s->data.constructor.variant, "None") &&
+              !check->custody_recipient_body))) {
             fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
                  "CUSTODY-CONSTRUCTION-PRECISION",
                  "custody construction requires world-qualified original "
@@ -3449,6 +3614,13 @@ static NLCheckedNodeId sum_constructor(Check *check, const NLSyntaxView *s)
                  "constructor payload type differs from registered variant");
             return 0;
         }
+    }
+    if (check->custody_recipient_body && custody_type(c, type) &&
+        (payload != check->custody_packet || variant != 2)) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
+             "CUSTODY-PACKET-TRANSFER",
+             "Some must contain the original checked packet");
+        return 0;
     }
     NLValueId value =
         new_value(check,
@@ -5266,7 +5438,31 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
         arms[count] = arm;
         variants[count++] = variant;
     }
-    if (count != c->types[type - 1].view.variant_count) {
+    const bool custody_recovery = check->custody_continuation &&
+                                  custody_type(c, type) &&
+                                  input == check->custody_recovered;
+    const bool second_none =
+        check->custody_continuation && check->custody_extracted &&
+        !check->in_source_loan && custody_type(c, type) && count == 1 &&
+        variants[0] == 1 && value.variant == 1 && value.sum_payload == 0 &&
+        view(check, init)->symbol == check->custody_binding &&
+        !c->places[check->custody_sink - 1].live &&
+        value.carrier == NL_CARRIER_LOOSE;
+    const bool first_none =
+        check->custody_recipient_body && custody_type(c, type) && count == 1 &&
+        variants[0] == 1 && value.variant == 1 && value.sum_payload == 0 &&
+        input == check->custody_old_none && value.carrier == NL_CARRIER_LOOSE;
+    if (second_none) {
+        for (size_t scope = 0; scope < c->scope_count; ++scope)
+            if (c->scopes[scope].active) {
+                fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                     "CUSTODY-NONE-SCOPE",
+                     "final exact-None consumption requires expired loans");
+                return 0;
+            }
+    }
+    if (count != c->types[type - 1].view.variant_count && !first_none &&
+        !second_none) {
         fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span, "P6-EXHAUSTIVENESS",
              "every variant requires exactly one arm");
         return 0;
@@ -5279,6 +5475,58 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
                                        .item_count = count});
     if (id == 0)
         return 0;
+    if (first_none)
+        view(check, id)->custody_none_site = 1;
+    if (second_none)
+        view(check, id)->custody_none_site = 2;
+    if (custody_recovery || second_none) {
+        if (custody_recovery &&
+            (count != 2 || value.variant == 0 ||
+             (value.variant == 2 &&
+              value.sum_payload != check->custody_packet))) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                 "CUSTODY-RECOVERED-ORIGIN",
+                 "recovered Some must carry the original package in this "
+                 "qualified world");
+            return 0;
+        }
+        size_t selected = 0;
+        while (selected < count && variants[selected] != value.variant)
+            ++selected;
+        if (selected == count) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                 "CUSTODY-RECOVERY-VARIANT",
+                 "source-proven recovery variant has no arm");
+            return 0;
+        }
+        NLSymbolId binder = 0;
+        if (!function_arm(check, nl_syntax_node_view(arms[selected]), input,
+                          value.variant, false, &binder))
+            return 0;
+        if (custody_recovery) {
+            check->custody_extracted = true;
+            check->custody_saved = value.sum_payload;
+        }
+        NLCheckedNodeId child = expression(
+            check, nl_syntax_node_view(arms[selected])->data.arm.body);
+        if (child == 0)
+            return 0;
+        if (view(check, child)->type != 1 || check->terminated) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                 "CUSTODY-RECOVERY-BODY",
+                 "bounded recovery requires normal unit arm completion");
+            return 0;
+        }
+        view(check, id)->initializer = init;
+        view(check, id)->first_item = child;
+        view(check, id)->normal_arms = 1;
+        view(check, id)->custody_selected_variant = value.variant;
+        view(check, id)->type = 1;
+        if (second_none)
+            check->custody_final_none = true;
+        return id;
+    }
+
     size_t normal = 0, normal_index = 0, actual_index = 0;
     const NLTypeId ptr = c->types[type - 1].option_target;
     bool node_unit_join =
@@ -5294,6 +5542,21 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
     }
     const bool packet_join = node_unit_join && count == 2 && captured_packet;
     unsigned packet_modes = 3; /* intersection of two parent-derived targets */
+    NLSymbolId custody_symbol = 0;
+    if (packet_join)
+        for (size_t b = 0; b < c->binding_count; ++b)
+            if (!c->bindings[b].hidden &&
+                c->bindings[b].view.availability == NL_AVAILABLE &&
+                custody_type(c, c->bindings[b].view.type)) {
+                if (custody_symbol != 0) {
+                    fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                         "CUSTODY-MULTIPLE-LOCAL",
+                         "one original custody local required");
+                    return 0;
+                }
+                custody_symbol = b + 1;
+            }
+
     if (packet_join) {
         const NLCheckStatus prepared =
             nl_packet_fork_prepare(check->artifact, id, c);
@@ -5369,7 +5632,7 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
             const bool closed = nl_packet_arm_closed(check->artifact, id,
                                                      branch.artifact, &result);
             packet_modes &= (closed ? 1U : 0U) | (retained ? 2U : 0U);
-            if (packet_modes == 0) {
+            if (packet_modes == 0 && custody_symbol == 0) {
                 fail(&branch, NL_CHECK_ANALYSIS_PRECISION_LIMIT, a->span,
                      "P219-POSTSTATE-PRECISION",
                      "both arms must prove the same original-owner retained "
@@ -5436,6 +5699,14 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
         return id;
     }
     if (normal > 1) {
+        if (packet_join && custody_symbol != 0) {
+            check->custody_pending = id;
+            check->artifact->custody_join = id;
+            check->artifact->custody_binding = custody_symbol;
+            view(check, id)->normal_arms = 2;
+            view(check, id)->type = 1;
+            return id;
+        }
         if (packet_join) {
             /* Reconstruct ONLY the parent prefix, never select an arm. */
             NLSemanticContext *post = NULL;
@@ -5506,6 +5777,777 @@ chosen_failure:
     check->status = chosen.status;
     check->diagnostic = chosen.diagnostic;
     return 0;
+}
+
+/* A finite source continuation, not an Unknown Option/current-memory join.
+ * Each policy world keeps its own actual owner and runs the same lexical
+ * suffix.
+ */
+static bool custody_adopted_frame(Check *check, const NLCheckedFragment *arm,
+                                  NLSymbolId symbol)
+{
+    const NLCheckedFragment *parent = check->artifact;
+    const NLSemanticContext *c = arm->context,
+                            *before = parent->packet_retained_post;
+    const NLCheckedNodeView *call =
+        nl_checked_node_view(arm, arm->custody_call_id);
+    const NLCheckedNodeView *m =
+        nl_checked_node_view(parent, parent->packet_match);
+    if (call == NULL || !call->custody_call.entry_proved ||
+        !call->custody_call.post_proved ||
+        call->custody_call.origin != parent ||
+        call->custody_call.origin_match != parent->packet_match ||
+        call->custody_call.packet != m->packet_fork.packet ||
+        arm->custody_entry == NULL || arm->custody_post == NULL)
+        return false;
+    if (!host(check, nl_sem_validate(c), call->span) ||
+        !host(check, nl_raw_validate(c), call->span))
+        return false;
+    const NLPlaceId sink = c->bindings[symbol - 1].view.place;
+    const NLValueId packet = m->packet_fork.packet,
+                    some = c->places[sink - 1].current_value;
+    const NLOccurrenceId occurrence = c->places[sink - 1].payload_occurrence;
+    if (sink != call->custody_call.sink ||
+        c->places[sink - 1].incarnation !=
+            call->custody_call.sink_incarnation ||
+        some != call->custody_call.new_some ||
+        occurrence != call->custody_call.occurrence || occurrence == 0 ||
+        occurrence <= before->occurrence_count ||
+        c->values[some - 1].variant != 2 ||
+        c->values[some - 1].sum_payload != packet ||
+        c->bindings[symbol - 1].view.availability != NL_AVAILABLE ||
+        c->bindings[m->packet_fork.binding - 1].view.availability !=
+            NL_CONSUMED)
+        return false;
+    for (size_t i = 0; i < c->scope_count; ++i)
+        if (c->scopes[i].active)
+            return false;
+    const NLPlaceId child = c->occurrences[occurrence - 1].payload_place;
+    if (child <= before->place_count || !c->occurrences[occurrence - 1].live ||
+        c->occurrences[occurrence - 1].root != sink ||
+        !c->places[child - 1].live ||
+        c->places[child - 1].current_value != packet ||
+        c->values[packet - 1].owner_place != child ||
+        c->values[packet - 1].sum_owner != some)
+        return false;
+    NLSemanticValueView expected_packet = before->values[packet - 1];
+    expected_packet.carrier = NL_CARRIER_PLACE;
+    expected_packet.owner_place = child;
+    expected_packet.sum_owner = some;
+    if (!node_unit_value_same(expected_packet, c->values[packet - 1]) ||
+        c->values[some - 1].dependencies != NL_DEPENDENCY_FREE ||
+        c->values[some - 1].value_dependency_count != 0)
+        return false;
+    NLSemanticContext *normalized = NULL;
+    if (!host(check, nl_sem_clone(c, &normalized), call->span))
+        return false;
+    /* Compare all OTHER parent facts exactly. Only the demonstrated one
+     * ownership edge (packet place -> current C payload) is projected here;
+     * this comparison world is never published as the adopted continuation. */
+    normalized->bindings[symbol - 1].view = before->bindings[symbol - 1].view;
+    normalized->bindings[m->packet_fork.binding - 1].view =
+        before->bindings[m->packet_fork.binding - 1].view;
+    const NLPlaceId old_packet =
+        before->bindings[m->packet_fork.binding - 1].view.place;
+    normalized->places[sink - 1] = before->places[sink - 1];
+    normalized->places[old_packet - 1] = before->places[old_packet - 1];
+    const NLValueId old_none = before->bindings[symbol - 1].view.value;
+    normalized->values[old_none - 1] = before->values[old_none - 1];
+    normalized->values[packet - 1] = before->values[packet - 1];
+    normalized->occurrences[occurrence - 1].live = false;
+    normalized->places[child - 1].live = false;
+    normalized->places[child - 1].current_value = 0;
+    normalized->places[child - 1].current_fact = 0;
+    normalized->places[child - 1].governing_domain = 0;
+    normalized->values[some - 1].carrier = NL_CARRIER_ENDED;
+    normalized->values[some - 1].sum_payload = 0;
+    const NLCheckedNodeView unit = {.type = 1};
+    const bool valid = nl_allocated_post_matches(before, normalized, &unit);
+    nl_semantic_destroy(normalized);
+    return valid;
+}
+
+static bool custody_final_target(Check *check, size_t floor, NLSourceSpan span)
+{
+    NLCheckedFragment *f = check->artifact;
+    f->custody_floor = floor;
+    NLSemanticContext *post = NULL;
+    if (!host(check, nl_sem_clone(f->packet_post, &post), span))
+        return false;
+    f->custody_final_post = post;
+    const NLCheckedNodeView *m = nl_checked_node_view(f, f->custody_join),
+                            *p = nl_checked_node_view(f,
+                                                      m->packet_fork.producer);
+    const NLPlaceId head = p->producer.head.parent;
+    const NLDomainId domain = p->producer.head_domain;
+    const NLBackingRegionId region = post->places[head - 1].placement.region;
+    if (!region || !post->regions[region - 1].view.live ||
+        !post->domains[domain - 1].live)
+        return false;
+    nl_sum_detach(post, head);
+    nl_fixed_detach(post, head);
+    nl_sem_end_value(post, post->places[head - 1].current_value);
+    post->places[head - 1].live = false;
+    post->places[head - 1].current_value = 0;
+    post->places[head - 1].current_fact = 0;
+    post->places[head - 1].governing_domain = 0;
+    post->places[head - 1].placement = (NLBackingRange){0};
+    post->domains[domain - 1].live = false;
+    post->regions[region - 1].view.live = false;
+    post->raw_interval_count -= post->regions[region - 1].count;
+    free(post->regions[region - 1].intervals);
+    post->regions[region - 1].intervals = NULL;
+    post->regions[region - 1].count = 0;
+    for (size_t i = 0; i < post->binding_count; ++i) {
+        NLSemanticBindingView *b = &post->bindings[i].view;
+        const NLSemanticValueView v = post->values[b->value - 1];
+        if ((b->type == 2 && v.domain == domain) ||
+            (post->types[b->type - 1].view.kind == NL_TYPE_ALLOCATION &&
+             v.allocation_region == region) ||
+            i + 1 == f->custody_binding) {
+            b->availability = NL_CONSUMED;
+            nl_sum_detach(post, b->place);
+            nl_fixed_detach(post, b->place);
+            nl_sem_end_value(post, b->value);
+            post->places[b->place - 1].live = false;
+            post->places[b->place - 1].current_value = 0;
+            post->places[b->place - 1].current_fact = 0;
+            post->places[b->place - 1].governing_domain = 0;
+        }
+    }
+    Check target = *check;
+    target.context = post;
+    if (!end_bindings(&target, floor, span)) {
+        check->status = target.status;
+        check->diagnostic = target.diagnostic;
+        return false;
+    }
+    return host(check, nl_sem_validate(post), span) &&
+           host(check, nl_raw_validate(post), span);
+}
+
+static bool custody_continue_block(Check *check, const NLSyntaxView *block,
+                                   const NLSyntaxNode *first, size_t floor,
+                                   NLCheckedNodeId block_id)
+{
+    const NLCheckedNodeId match = check->custody_pending;
+    NLCheckedFragment *f = check->artifact;
+    const NLSymbolId binding = f->custody_binding;
+    const NLPlaceId sink = check->context->bindings[binding - 1].view.place;
+    const NLCheckedNodeView *m = nl_checked_node_view(f, match);
+    bool seen_adoption = false, seen_refusal = false;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedFragment *arm = nl_checked_match_arm(f, match, i);
+        const NLCheckedNodeView *r = nl_checked_node_view(arm, arm->root);
+        if (arm->custody_call_id) {
+            if (seen_adoption || !custody_adopted_frame(check, arm, binding))
+                goto precision;
+            seen_adoption = true;
+        } else {
+            if (seen_refusal || !nl_packet_arm_closed(f, match, arm, r))
+                goto precision;
+            seen_refusal = true;
+        }
+    }
+    if (!seen_adoption || !seen_refusal ||
+        !custody_final_target(check, floor, block->span))
+        goto precision;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedFragment *arm = nl_checked_match_arm(f, match, i);
+        Check continuation = *check;
+        continuation.custody_pending = 0;
+        continuation.custody_continuation = true;
+        continuation.custody_binding = binding;
+        continuation.custody_sink = sink;
+        continuation.custody_packet = m->packet_fork.packet;
+        continuation.custody_origin = f;
+        continuation.custody_origin_match = match;
+        continuation.context = NULL;
+        continuation.artifact = NULL;
+        continuation.has_arm_floor = false;
+        if (!host(check, nl_sem_clone(arm->context, &continuation.context),
+                  block->span))
+            return false;
+        continuation.artifact = malloc(sizeof(*continuation.artifact));
+        if (continuation.artifact == NULL) {
+            nl_semantic_destroy(continuation.context);
+            return host(check, NL_CHECK_OUT_OF_MEMORY, block->span);
+        }
+        *continuation.artifact = (NLCheckedFragment){0};
+        f->custody_continuations[i] = continuation.artifact;
+        continuation.artifact->source = check->source;
+        continuation.artifact->context = continuation.context;
+        continuation.artifact->custody_policy_world = arm->context;
+        continuation.artifact->custody_continuation_world =
+            continuation.context;
+        continuation.artifact->destroy_context = nl_semantic_destroy;
+        continuation.artifact->destroy_custody_world = nl_semantic_destroy;
+        if (!host(check,
+                  nl_sem_clone(arm->context,
+                               &continuation.artifact->custody_entry),
+                  block->span))
+            return false;
+        continuation.artifact->packet_parent = f;
+        continuation.artifact->packet_match = match;
+        continuation.artifact->destroy_packet_world = nl_semantic_destroy;
+        if (!host(check,
+                  nl_sem_clone(f->packet_entry,
+                               &continuation.artifact->packet_entry),
+                  block->span))
+            return false;
+        const NLSyntaxView suffix = {
+            .kind = NL_SYNTAX_BLOCK,
+            .span = block->span,
+            .data.block = {.items = first, .tail = block->data.block.tail}};
+        continuation.has_arm_floor = true;
+        continuation.arm_floor = floor;
+        continuation.artifact->root = source_block(&continuation, &suffix);
+        if (!continuation.artifact->root || !continuation.custody_extracted ||
+            !continuation.custody_final_none || continuation.terminated) {
+            check->status = continuation.status;
+            check->diagnostic = continuation.diagnostic;
+            goto precision;
+        }
+        const NLSemanticContext *c = continuation.context;
+        const NLSemanticBindingView b = c->bindings[binding - 1].view;
+        if (b.availability != NL_CONSUMED || !c->bindings[binding - 1].hidden ||
+            c->places[sink - 1].live || c->values[b.value - 1].variant != 1 ||
+            c->values[b.value - 1].sum_payload != 0 ||
+            c->values[b.value - 1].carrier != NL_CARRIER_ENDED)
+            goto precision;
+        NLSemanticContext *normalized = NULL;
+        if (!host(check, nl_sem_clone(c, &normalized), block->span))
+            return false;
+        /* Historical ended None IDs differ; no live authority is reidentified.
+         */
+        normalized->bindings[binding - 1].view.value =
+            f->custody_final_post->bindings[binding - 1].view.value;
+        const NLCheckedNodeView *result = nl_checked_node_view(
+            continuation.artifact, continuation.artifact->root);
+        const bool same = nl_allocated_post_matches(f->custody_final_post,
+                                                    normalized, result);
+        nl_semantic_destroy(normalized);
+        if (!same)
+            goto precision;
+    }
+    NLSemanticContext *commit = NULL;
+    if (!host(check, nl_sem_clone(f->custody_final_post, &commit), block->span))
+        return false;
+    nl_sem_commit(check->context, commit);
+    check->custody_pending = 0;
+    view(check, block_id)->type = 1;
+    return true;
+precision:
+    if (check->status == NL_CHECK_OK)
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, block->span,
+             "CUSTODY-CONDITIONAL-CONTINUATION",
+             "both correlated source continuations and original final closure "
+             "must be proved");
+    return false;
+}
+
+const NLCheckedFragment *
+nl_checked_custody_continuation(const NLCheckedFragment *f,
+                                NLCheckedNodeId match, size_t i)
+{
+    return f != NULL && f->custody_join == match && i < 2
+               ? f->custody_continuations[i]
+               : NULL;
+}
+
+static bool custody_call_certificate(const NLCheckedFragment *parent,
+                                     const NLCheckedFragment *arm,
+                                     NLSymbolId custody)
+{
+    const NLCheckedNodeView *call =
+        nl_checked_node_view(arm, arm->custody_call_id);
+    const NLSemanticContext *entry = arm->custody_entry,
+                            *post = arm->custody_post;
+    if (call == NULL || entry == NULL || post == NULL || entry == post ||
+        call->kind != NL_CHECKED_REGISTERED_CALL || call->argument_count != 2 ||
+        !call->body_backed || !call->custody_call.entry_proved ||
+        !call->custody_call.post_proved ||
+        call->custody_call.origin != parent ||
+        call->custody_call.origin_match != parent->custody_join ||
+        call->custody_call.entry_world != entry ||
+        call->custody_call.post_world != post ||
+        call->custody_call.world != arm->context || call->function == 0 ||
+        call->function > entry->function_count)
+        return false;
+    const NLFunctionEntry fn = entry->functions[call->function - 1];
+    const NLCheckedFragment *body =
+        nl_checked_call_body(arm, arm->custody_call_id);
+    if (!fn.custody_recipient || fn.body == NULL || body == NULL ||
+        body->body_owner != fn.body ||
+        !fn.body->custody_definition.definition_checked ||
+        fn.body->custody_definition.requirements != NL_CUSTODY_ALL_REQUIREMENTS)
+        return false;
+    NLCheckedFragment lookup = *arm;
+    lookup.context = entry;
+    if (!nl_packet_available_inherited(&lookup, call->custody_call.packet))
+        return false;
+    if (custody == 0 || custody > entry->binding_count ||
+        custody > post->binding_count)
+        return false;
+    const NLPlaceId sink = entry->bindings[custody - 1].view.place;
+    if (sink == 0 || sink > entry->place_count || sink > post->place_count)
+        return false;
+    const NLCheckedNodeView *arg0 =
+                                nl_checked_node_view(arm, call->first_argument),
+                            *arg1 = arg0 == NULL
+                                        ? NULL
+                                        : nl_checked_node_view(
+                                              arm, arg0->next_argument);
+    if (arg0 == NULL || arg1 == NULL || arg0->kind != NL_CHECKED_IDENTIFIER ||
+        arg1->kind != NL_CHECKED_IDENTIFIER || arg0->result_count != 1 ||
+        arg1->result_count != 1 || arg1->next_argument != 0 ||
+        arg0->value_use != NL_VALUE_COPIED ||
+        arg1->value_use != NL_VALUE_CONSUMED || arg0->symbol == 0 ||
+        arg0->symbol > entry->binding_count || arg1->symbol == 0 ||
+        arg1->symbol > entry->binding_count ||
+        arg1->symbol > post->binding_count ||
+        arg1->symbol != call->custody_call.donor ||
+        arg1->results[0].value != call->custody_call.packet ||
+        entry->bindings[arg1->symbol - 1].view.availability != NL_AVAILABLE ||
+        post->bindings[arg1->symbol - 1].view.availability != NL_CONSUMED ||
+        sink != call->custody_call.sink ||
+        entry->places[sink - 1].incarnation !=
+            call->custody_call.sink_incarnation)
+        return false;
+    const NLValueId ref = entry->bindings[arg0->symbol - 1].view.value;
+    if (ref == 0 || ref > entry->value_count ||
+        call->custody_call.old_none == 0 ||
+        call->custody_call.old_none > post->value_count)
+        return false;
+    const NLSemanticValueView cap = entry->values[ref - 1];
+    if (cap.type == 0 || cap.type > entry->type_count ||
+        cap.reference.scope > entry->scope_count)
+        return false;
+    const NLSemanticTypeView type = entry->types[cap.type - 1].view;
+    if (type.kind != NL_TYPE_REF || type.is_exclusive ||
+        type.access != NL_ACCESS_WRITE ||
+        type.target != entry->places[sink - 1].type ||
+        cap.reference.place != sink ||
+        cap.reference.provenance != NL_PROVENANCE_VALID ||
+        !cap.reference.writable || cap.reference.scope == 0 ||
+        !entry->scopes[cap.reference.scope - 1].active ||
+        cap.reference.incarnation != entry->places[sink - 1].incarnation ||
+        entry->values[entry->places[sink - 1].current_value - 1].variant != 1 ||
+        entry->places[sink - 1].payload_occurrence != 0 ||
+        call->custody_call.old_none != entry->places[sink - 1].current_value ||
+        post->values[call->custody_call.old_none - 1].carrier !=
+            NL_CARRIER_ENDED ||
+        post->values[call->custody_call.old_none - 1].variant != 1 ||
+        post->values[call->custody_call.old_none - 1].sum_payload != 0)
+        return false;
+    bool source_loan = false;
+    for (size_t n = 0; n < arm->count; ++n) {
+        const NLCheckedNodeView v = arm->nodes[n];
+        source_loan |=
+            v.kind == NL_CHECKED_LOAN_HEADER &&
+            v.loan.ref_symbol == arg0->symbol &&
+            v.loan.scope == cap.reference.scope && v.loan.source == custody &&
+            v.loan.place == sink &&
+            v.loan.incarnation == call->custody_call.sink_incarnation &&
+            v.loan.access == NL_ACCESS_WRITE && v.loan.implicit_local &&
+            !v.loan.from_ptr && v.loan.body_nonescape_proved;
+    }
+    if (!source_loan)
+        return false;
+    for (size_t i = 0; i < entry->scope_count; ++i)
+        if (entry->scopes[i].active && i + 1 != cap.reference.scope)
+            return false;
+    for (size_t i = 0; i < entry->value_count; ++i) {
+        const NLSemanticValueView v = entry->values[i];
+        if (v.carrier != NL_CARRIER_ENDED &&
+            (v.dependencies != NL_DEPENDENCY_FREE || v.value_dependency_count ||
+             (entry->types[v.type - 1].view.kind == NL_TYPE_REF &&
+              i + 1 != ref)))
+            return false;
+    }
+    const NLValueId some = call->custody_call.new_some,
+                    packet = call->custody_call.packet;
+    const NLOccurrenceId occurrence = call->custody_call.occurrence;
+    if (some == 0 || some > post->value_count ||
+        occurrence <= entry->occurrence_count ||
+        occurrence > post->occurrence_count ||
+        post->places[sink - 1].current_value != some ||
+        post->places[sink - 1].payload_occurrence != occurrence ||
+        post->places[sink - 1].incarnation !=
+            call->custody_call.sink_incarnation ||
+        post->places[sink - 1].current_fact <= entry->last_value_fact ||
+        post->values[some - 1].variant != 2 ||
+        post->values[some - 1].sum_payload != packet ||
+        !post->occurrences[occurrence - 1].live ||
+        post->occurrences[occurrence - 1].root != sink)
+        return false;
+    const NLCheckedNodeView *policy =
+        nl_checked_node_view(parent, parent->custody_join);
+    const NLCheckedNodeView *producer =
+        policy == NULL
+            ? NULL
+            : nl_checked_node_view(parent, policy->packet_fork.producer);
+    if (producer == NULL || packet == 0 || packet > entry->value_count ||
+        packet > post->value_count || producer->producer.root == 0 ||
+        producer->producer.root > post->place_count ||
+        producer->producer.range.region == 0 ||
+        producer->producer.range.region > post->region_count ||
+        producer->producer.domain == 0 ||
+        producer->producer.domain > post->domain_count)
+        return false;
+    const NLSemanticPlaceView tail = post->places[producer->producer.root - 1];
+    if (!tail.live || tail.incarnation != producer->producer.incarnation ||
+        tail.governing_domain != producer->producer.domain ||
+        tail.placement.region != producer->producer.range.region ||
+        tail.placement.start != producer->producer.range.start ||
+        tail.placement.length != producer->producer.range.length ||
+        !post->regions[tail.placement.region - 1].view.live ||
+        !post->domains[tail.governing_domain - 1].live ||
+        post->values[packet - 1].field_count != 3 ||
+        post->values[packet - 1].dependencies != NL_DEPENDENCY_FREE ||
+        post->values[packet - 1].value_dependency_count != 0)
+        return false;
+    for (size_t i = 0; i < 3; ++i) {
+        const NLValueId member = entry->values[packet - 1].fields[i];
+        if (member == 0 || member > entry->value_count ||
+            member > post->value_count ||
+            post->values[packet - 1].fields[i] != member ||
+            !node_unit_value_same(entry->values[member - 1],
+                                  post->values[member - 1]))
+            return false;
+    }
+    for (size_t i = 0; i < 2; ++i) {
+        const NLSymbolId p = call->custody_call.parameters[i];
+        if (p <= entry->binding_count || p > post->binding_count ||
+            post->bindings[p - 1].view.availability != NL_CONSUMED ||
+            (i == 1 && post->bindings[p - 1].view.value != packet))
+            return false;
+    }
+    size_t first = 0;
+    for (size_t n = 0; n < body->count; ++n) {
+        const NLCheckedNodeView v = body->nodes[n];
+        if (v.kind == NL_CHECKED_DESTROY || v.kind == NL_CHECKED_DEALLOCATE ||
+            v.kind == NL_CHECKED_DOMAIN_FINALIZE)
+            return false;
+        if (v.custody_none_site == 1) {
+            const NLCheckedNodeView *init =
+                nl_checked_node_view(body, v.initializer);
+            if (init == NULL || init->kind != NL_CHECKED_IDENTIFIER ||
+                init->value_use != NL_VALUE_CONSUMED ||
+                init->results[0].value != call->custody_call.old_none ||
+                v.item_count != 1)
+                return false;
+            ++first;
+        }
+    }
+    return first == 1 && nl_sem_validate(entry) == NL_CHECK_OK &&
+           nl_sem_validate(post) == NL_CHECK_OK &&
+           nl_raw_validate(entry) == NL_CHECK_OK &&
+           nl_raw_validate(post) == NL_CHECK_OK;
+}
+
+static bool custody_suffix_certificate(const NLCheckedFragment *parent,
+                                       const NLCheckedFragment *arm,
+                                       const NLCheckedFragment *suffix,
+                                       bool adoption)
+{
+    const NLSemanticContext *entry = suffix->custody_entry,
+                            *c = suffix->context;
+    const NLCheckedNodeView *m = nl_checked_node_view(parent,
+                                                      parent->custody_join),
+                            *producer = nl_checked_node_view(
+                                parent, m->packet_fork.producer);
+    const NLValueId packet = m->packet_fork.packet;
+    const NLSymbolId binding = parent->custody_binding;
+    if (m == NULL || producer == NULL || entry == NULL || c == NULL ||
+        binding == 0 || binding > entry->binding_count ||
+        binding > c->binding_count ||
+        suffix->custody_policy_world != arm->context ||
+        suffix->custody_continuation_world != c)
+        return false;
+    const NLPlaceId sink = entry->bindings[binding - 1].view.place;
+    if (sink == 0 || sink > entry->place_count || sink > c->place_count ||
+        entry->places[sink - 1].current_value == 0 ||
+        entry->places[sink - 1].current_value > entry->value_count)
+        return false;
+    if (entry->values[entry->places[sink - 1].current_value - 1].variant !=
+            (adoption ? 2U : 1U) ||
+        entry->values[entry->places[sink - 1].current_value - 1].sum_payload !=
+            (adoption ? packet : 0))
+        return false;
+    if (suffix->packet_parent != parent ||
+        suffix->packet_match != parent->custody_join || entry == NULL ||
+        entry == arm->context || !nl_packet_same_entry(entry, arm->context) ||
+        !nl_packet_same_entry(parent->packet_entry, suffix->packet_entry))
+        return false;
+    size_t extracts = 0, second = 0, receives = 0;
+    NLValueId recovered = 0;
+    for (size_t n = 0; n < suffix->count; ++n) {
+        const NLCheckedNodeView v = suffix->nodes[n];
+        if (v.custody_extraction.present) {
+            const NLCheckedNodeView *a = nl_checked_node_view(suffix,
+                                                              v.first_argument),
+                                    *b = a == NULL
+                                             ? NULL
+                                             : nl_checked_node_view(
+                                                   suffix, a->next_argument);
+            if (a == NULL || b == NULL || v.argument_count != 2 ||
+                a->kind != NL_CHECKED_IDENTIFIER || a->result_count != 1 ||
+                a->results[0].value == 0 ||
+                a->results[0].value > c->value_count ||
+                b->kind != NL_CHECKED_SUM_CONSTRUCTOR || b->variant != 1 ||
+                b->results[0].value != v.custody_extraction.new_sum ||
+                v.result_count != 1 ||
+                v.results[0].value != v.custody_extraction.old_sum)
+                return false;
+            const NLSemanticValueView ref = c->values[a->results[0].value - 1];
+            if (c->types[ref.type - 1].view.kind != NL_TYPE_REF ||
+                c->types[ref.type - 1].view.access != NL_ACCESS_WRITE ||
+                ref.reference.provenance != NL_PROVENANCE_VALID ||
+                !ref.reference.writable || ref.reference.place != sink ||
+                ref.reference.incarnation !=
+                    entry->places[sink - 1].incarnation)
+                return false;
+            bool source = false;
+            for (size_t k = 0; k < suffix->count; ++k) {
+                const NLCheckedNodeView loan = suffix->nodes[k];
+                source |= loan.kind == NL_CHECKED_LOAN_HEADER &&
+                          loan.loan.source == binding &&
+                          loan.loan.scope == ref.reference.scope &&
+                          loan.loan.place == sink &&
+                          loan.loan.access == NL_ACCESS_WRITE &&
+                          loan.loan.implicit_local &&
+                          loan.loan.body_nonescape_proved;
+            }
+            if (!source || v.custody_extraction.new_sum == 0 ||
+                v.custody_extraction.new_sum > c->value_count)
+                return false;
+            if (v.kind != NL_CHECKED_REPLACE ||
+                v.custody_extraction.sink != sink ||
+                v.custody_extraction.old_sum !=
+                    entry->places[sink - 1].current_value ||
+                v.custody_extraction.old_occurrence !=
+                    entry->places[sink - 1].payload_occurrence ||
+                v.custody_extraction.packet != (adoption ? packet : 0) ||
+                v.custody_extraction.new_sum == 0 ||
+                c->values[v.custody_extraction.new_sum - 1].variant != 1 ||
+                c->values[v.custody_extraction.new_sum - 1].sum_payload != 0 ||
+                (adoption &&
+                 (v.custody_extraction.old_occurrence == 0 ||
+                  v.custody_extraction.old_occurrence > c->occurrence_count ||
+                  c->occurrences[v.custody_extraction.old_occurrence - 1]
+                      .live)))
+                return false;
+            recovered = v.custody_extraction.old_sum;
+            ++extracts;
+        }
+        if (v.custody_none_site == 2) {
+            const NLCheckedNodeView *init =
+                nl_checked_node_view(suffix, v.initializer);
+            if (init == NULL || init->symbol != binding ||
+                init->value_use != NL_VALUE_CONSUMED || v.item_count != 1 ||
+                v.custody_selected_variant != 1)
+                return false;
+            ++second;
+        }
+        if (v.kind == NL_CHECKED_AGGREGATE_BINDING &&
+            v.packet_origin.ancestor != NULL) {
+            const NLCheckedNodeView *init =
+                nl_checked_node_view(suffix, v.initializer);
+            if (!adoption || init == NULL ||
+                init->value_use != NL_VALUE_CONSUMED ||
+                init->results[0].value != packet ||
+                v.packet_origin.ancestor != parent ||
+                v.packet_origin.world != c ||
+                v.packet_origin.entry_world != suffix->packet_entry ||
+                v.packet_origin.match != parent->custody_join ||
+                v.packet_origin.packet != packet || v.argument_count != 3)
+                return false;
+            bool fields[3] = {false, false, false};
+            NLCheckedNodeId receiver_id = v.first_argument;
+            for (size_t field = 0; field < 3; ++field) {
+                const NLCheckedNodeView *receiver =
+                    nl_checked_node_view(suffix, receiver_id);
+                if (receiver == NULL || receiver->kind != NL_CHECKED_RECEIVER ||
+                    receiver->field_index >= 3 ||
+                    fields[receiver->field_index] || receiver->symbol == 0 ||
+                    receiver->symbol > c->binding_count ||
+                    c->bindings[receiver->symbol - 1].view.value !=
+                        parent->packet_entry->values[packet - 1]
+                            .fields[receiver->field_index])
+                    return false;
+                fields[receiver->field_index] = true;
+                receiver_id = receiver->next_argument;
+            }
+            if (receiver_id != 0)
+                return false;
+            ++receives;
+        }
+    }
+    size_t recovery_matches = 0;
+    for (size_t n = 0; n < suffix->count; ++n) {
+        const NLCheckedNodeView v = suffix->nodes[n];
+        const NLCheckedNodeView *init =
+            nl_checked_node_view(suffix, v.initializer);
+        if (v.kind == NL_CHECKED_MATCH && !v.custody_none_site &&
+            v.custody_selected_variant) {
+            if (init == NULL || init->results[0].value != recovered ||
+                v.custody_selected_variant != (adoption ? 2U : 1U) ||
+                v.item_count != 2)
+                return false;
+            ++recovery_matches;
+        }
+    }
+    if (extracts != 1 || second != 1 || recovery_matches != 1 ||
+        receives != (adoption ? 1U : 0U))
+        return false;
+    if (adoption) {
+        const NLCheckedNodeView *call =
+            nl_checked_node_view(suffix, suffix->owner_entry_call);
+        const NLSemanticContext *actual =
+            nl_checked_owner_entry(suffix, suffix->owner_entry_call);
+        if (call == NULL || actual == NULL || !call->owner_call.entry_proved ||
+            !call->owner_call.post_proved ||
+            call->owner_call.root != producer->producer.root ||
+            call->owner_call.incarnation != producer->producer.incarnation ||
+            call->owner_call.range.region != producer->producer.range.region ||
+            call->owner_call.domain != producer->producer.domain ||
+            call->owner_call.inputs[1] != producer->producer.inputs[2] ||
+            call->owner_call.inputs[2] != producer->producer.inputs[3] ||
+            nl_owner_relations(actual, call->owner_call.inputs,
+                               &call->owner_call.definition, call->span,
+                               NULL) != NL_CHECK_OK)
+            return false;
+        const NLCheckedFragment *body =
+            nl_checked_call_body(suffix, suffix->owner_entry_call);
+        if (body == NULL ||
+            !body->body_owner->owner_definition.definition_checked)
+            return false;
+        if (body->context != c || call->function == 0 ||
+            call->function > actual->function_count ||
+            !actual->functions[call->function - 1].owner_receiver ||
+            body->body_owner != actual->functions[call->function - 1].body ||
+            call->owner_call.range.start != producer->producer.range.start ||
+            call->owner_call.range.length != producer->producer.range.length)
+            return false;
+        NLCheckedNodeId arg_id = call->first_argument;
+        for (size_t i = 0; i < 3; ++i) {
+            const NLCheckedNodeView *arg = nl_checked_node_view(suffix, arg_id);
+            const NLSymbolId parameter = call->owner_call.parameters[i],
+                             donor = call->owner_call.donor[i];
+            if (arg == NULL || arg->kind != NL_CHECKED_IDENTIFIER ||
+                arg->result_count != 1 || arg->symbol != donor ||
+                arg->results[0].value != call->owner_call.inputs[i] ||
+                arg->value_use !=
+                    (i == 0 ? NL_VALUE_COPIED : NL_VALUE_CONSUMED) ||
+                donor == 0 || donor > actual->binding_count ||
+                donor > c->binding_count || parameter == 0 ||
+                parameter > c->binding_count || parameter == donor ||
+                c->bindings[parameter - 1].view.value !=
+                    call->owner_call.inputs[i] ||
+                (i != 0 &&
+                 (actual->bindings[donor - 1].view.availability !=
+                      NL_CONSUMED ||
+                  c->bindings[donor - 1].view.availability != NL_CONSUMED ||
+                  c->bindings[parameter - 1].view.availability != NL_CONSUMED)))
+                return false;
+            arg_id = arg->next_argument;
+        }
+        if (arg_id != 0)
+            return false;
+        size_t ends = 0, frees = 0;
+        for (size_t n = 0; n < body->count; ++n) {
+            ends += body->nodes[n].kind == NL_CHECKED_DESTROY;
+            frees += body->nodes[n].kind == NL_CHECKED_DEALLOCATE;
+        }
+        if (ends != 1 || frees != 1)
+            return false;
+    } else if (suffix->owner_entry != NULL || suffix->owner_entry_call != 0)
+        return false;
+    const NLSemanticBindingView b = c->bindings[binding - 1].view;
+    if (b.availability != NL_CONSUMED || !c->bindings[binding - 1].hidden ||
+        c->places[sink - 1].live ||
+        c->values[b.value - 1].carrier != NL_CARRIER_ENDED ||
+        c->values[b.value - 1].variant != 1 ||
+        c->values[b.value - 1].sum_payload != 0)
+        return false;
+    NLSemanticContext *normalized = NULL;
+    if (nl_sem_clone(c, &normalized) != NL_CHECK_OK)
+        return false;
+    normalized->bindings[binding - 1].view.value =
+        parent->custody_final_post->bindings[binding - 1].view.value;
+    const bool same =
+        nl_allocated_post_matches(parent->custody_final_post, normalized,
+                                  nl_checked_node_view(suffix, suffix->root));
+    nl_semantic_destroy(normalized);
+    return same && nl_raw_validate(c) == NL_CHECK_OK;
+}
+
+bool nl_checked_custody_valid(const NLCheckedFragment *f, NLCheckedNodeId id)
+{
+    const NLCheckedNodeView *m = nl_checked_node_view(f, id);
+    if (m == NULL || m->kind != NL_CHECKED_MATCH || f->custody_join != id ||
+        m->normal_arms != 2 || m->item_count != 2 ||
+        m->normal_frame_unchanged || m->packet_fork.closed ||
+        m->packet_fork.retained || f->custody_binding == 0 ||
+        f->packet_match != id ||
+        m->packet_fork.entry_world != f->packet_entry ||
+        f->packet_entry == NULL || f->packet_retained_post == NULL ||
+        f->custody_final_post == NULL ||
+        !nl_checked_producer_valid(f, m->packet_fork.producer))
+        return false;
+    if (f->custody_binding > f->packet_entry->binding_count ||
+        f->custody_floor > f->packet_entry->binding_count)
+        return false;
+    /* Reconstruct, don't trust the saved target flag/world. Temporary owns only
+     * its new target; all original evidence is borrowed and stays immutable. */
+    NLCheckedFragment reconstruction = *f;
+    reconstruction.custody_final_post = NULL;
+    Check reader = {.artifact = &reconstruction};
+    if (!custody_final_target(&reader, f->custody_floor, m->span)) {
+        nl_semantic_destroy(reconstruction.custody_final_post);
+        return false;
+    }
+    const bool target = nl_packet_same_entry(reconstruction.custody_final_post,
+                                             f->custody_final_post);
+    nl_semantic_destroy(reconstruction.custody_final_post);
+    if (!target)
+        return false;
+    bool adoption = false, refusal = false, variants[2] = {false, false};
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedFragment *arm = nl_checked_match_arm(f, id, i),
+                                *suffix = f->custody_continuations[i];
+        if (arm == NULL || suffix == NULL || arm->packet_parent != f ||
+            arm->packet_match != id ||
+            !nl_packet_same_entry(f->packet_entry, arm->packet_entry))
+            return false;
+        const NLCheckedNodeView *root = nl_checked_node_view(arm, arm->root);
+        if (root == NULL || root->kind != NL_CHECKED_MATCH_ARM ||
+            root->variant < 1 || root->variant > 2 ||
+            variants[root->variant - 1] ||
+            nl_control_exits_count(arm->exits) != 0 ||
+            nl_control_exits_count(arm->loop_returns) != 0)
+            return false;
+        variants[root->variant - 1] = true;
+        const bool adopted = arm->custody_call_id != 0;
+        Check compare = {.artifact = (NLCheckedFragment *)f};
+        if (adopted) {
+            if (adoption ||
+                !custody_call_certificate(f, arm, f->custody_binding) ||
+                !custody_adopted_frame(&compare, arm, f->custody_binding))
+                return false;
+            adoption = true;
+        } else {
+            if (refusal ||
+                !nl_packet_arm_closed(f, id, arm,
+                                      nl_checked_node_view(arm, arm->root)))
+                return false;
+            refusal = true;
+        }
+        if (!custody_suffix_certificate(f, arm, suffix, adopted))
+            return false;
+    }
+    return adoption && refusal;
 }
 
 static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)

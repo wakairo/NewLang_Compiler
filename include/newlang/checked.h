@@ -139,6 +139,27 @@ typedef struct {
         NLCheckedNodeId match;
         NLValueId packet;
     } packet_origin;
+    /* Finite §18.1c custody evidence; IDs belong to these owned worlds. */
+    struct {
+        bool entry_proved, post_proved;
+        const NLCheckedFragment *origin;
+        const NLSemanticContext *entry_world, *post_world, *world;
+        NLCheckedNodeId origin_match;
+        NLPlaceId sink;
+        NLIncarnationId sink_incarnation;
+        NLValueId packet, old_none, new_some;
+        NLOccurrenceId occurrence;
+        NLSymbolId donor, parameters[2];
+    } custody_call;
+    struct {
+        bool present;
+        NLPlaceId sink;
+        NLValueId old_sum, new_sum, packet;
+        NLOccurrenceId old_occurrence;
+    } custody_extraction;
+    unsigned custody_selected_variant;
+    unsigned
+        custody_none_site; /* 1: recipient old None; 2: caller final None */
     bool captured_frame_closed;
     NLBackingRegionId captured_backing;
     NLPlaceId captured_root;
@@ -231,6 +252,16 @@ bool nl_checked_packet_retaining_join_valid(const NLCheckedFragment *,
 /* Also validates whole receiving and terminal release in the joined caller. */
 bool nl_checked_packet_retention_release_valid(
     const NLCheckedFragment *fragment, NLCheckedNodeId match);
+/* §18.1c only: revalidates original transfer, BOTH correlated policy worlds,
+ * their source-checked lexical continuations and the common final closure.
+ * Read-only; false also on validation OOM. No source/AST replay or authority
+ * minting. The continuation index follows nl_checked_match_arm source order;
+ * views are borrowed until the parent is destroyed and IDs stay
+ * world-qualified. */
+bool nl_checked_custody_valid(const NLCheckedFragment *, NLCheckedNodeId);
+const NLCheckedFragment *
+nl_checked_custody_continuation(const NLCheckedFragment *, NLCheckedNodeId,
+                                size_t);
 bool nl_checked_producer_valid(const NLCheckedFragment *, NLCheckedNodeId);
 const NLSemanticContext *nl_checked_producer_entry(const NLCheckedFragment *,
                                                    NLCheckedNodeId);

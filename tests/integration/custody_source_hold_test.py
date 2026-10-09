@@ -1,7 +1,7 @@
-"""Issue #217 partial definition + read-only entry preflight, precise HOLD.
+"""Issue #217 independent definitions, actual custody, preserved negative gates.
 
-These tests deliberately do NOT count guarded custody calls as owner-rule
-verification, semantic acceptance, native success, or backend unsupported.
+Full-source owned evidence is separately exercised by custody_source_test.
+Native success is not claimed; accepted programs remain backend unsupported.
 """
 import pathlib
 import subprocess
@@ -143,7 +143,7 @@ with tempfile.TemporaryDirectory() as directory:
     for name, (text, code) in negatives.items():
         invoke(name, text, code)
     for name, text in holds.items():
-        invoke(name, text, "CUSTODY-TRANSFER-PRECISION")
+        invoke(name, text, "V1-BACKEND-UNSUPPORTED")
     for name, (text, code) in precision.items():
         invoke(name, text, code)
     for name, (text, code) in existing_owner_rejections.items():
@@ -155,8 +155,8 @@ with tempfile.TemporaryDirectory() as directory:
 
 print(f"{len(positives)} independently checked definition positives; "
       f"{len(negatives)} definition-shape negatives; {len(holds)} primary "
-      f"custody HOLD controls; {len(precision)} original-packet fork precision "
+      f"custody semantic admissions; {len(precision)} original-packet fork precision "
       f"backend-unsupported witnesses; {len(existing_owner_rejections)} preserved producer-entry "
       f"owner-rule rejections; {len(preflight_rejections)} read-only entry refusals; "
       f"{len(continuation_holds)} retained-packet semantic continuations (backend unsupported; #222 evidence separately). "
-      "Actual custody acceptance/evidence NOT claimed.")
+      "Owned custody evidence tested separately; no native claim.")

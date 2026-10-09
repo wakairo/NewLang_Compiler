@@ -92,6 +92,15 @@ struct NLCheckedFragment {
     void (*destroy_packet_world)(NLSemanticContext *);
     const struct NLCheckedFragment *packet_parent;
     NLCheckedNodeId packet_match;
+    NLSemanticContext *custody_entry, *custody_post;
+    void (*destroy_custody_world)(NLSemanticContext *);
+    NLCheckedNodeId custody_call_id;
+    const NLSemanticContext *custody_policy_world, *custody_continuation_world;
+    NLCheckedFragment *custody_continuations[2];
+    NLSemanticContext *custody_final_post;
+    NLCheckedNodeId custody_join;
+    NLSymbolId custody_binding;
+    size_t custody_floor;
     NLSemanticContext *producer_entry,
         *producer_return; /* owned actual worlds */
     NLCheckedNodeId producer_call;
