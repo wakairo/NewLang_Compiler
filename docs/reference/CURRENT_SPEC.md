@@ -14,7 +14,7 @@ Repository policy:
 - A newer Draft on an unmerged branch is a candidate until that branch is reviewed and merged into `main`.
 - Prompts handed to M / F / P tracks should cite the `main` commit SHA and this file before relying on conversational memory.
 
-Draft17.30 (PROPOSED / UNMERGED; Compiler Issue #234) source-selects
+Draft17.30 (ADOPTED / CANONICAL; Issue #234, merged PR #235) source-selects
 only §3.2b's five distinct statically nested fallible original
 H allocation sites plus a single H with exactly three separate fixed
 `next/prev/child:Option<ptr<H>>` fields and `payload:u8`; each field
@@ -27,10 +27,10 @@ The initial cJSON `src.child=A,A.prev=C,A.next=B,B.prev=A,
 B.next=C,C.prev=B,dst.child=None` substrate is established before
 explicit teardown. No B detach/adoption, later owner custody, general
 allocator, codegen, formal, concurrency, or product PASS is selected.
-Only the candidate branch points to Draft17.30 until independent
-Coordination review/merge.
+Draft17.30 was independently reviewed and is now selected on canonical
+`main` by this `CURRENT_SPEC.md` (PR #235).
 
-Draft 17.29 (PROPOSED / UNMERGED; Issue #214) adds only §18.1c: after the canonical Draft17.28 2-H producer physically unlinks the head and returns the ORIGINAL still-live tail LiveTail, one separate known-direct recipient takes that same nonCopy value and places it into a caller-owned ordinary local Option<LiveTail> through an explicitly scoped nonexclusive ref<write>. The recipient returns unit and never ends/frees the tail. After that frame and loan end, a fresh caller scope replaces custody with None, consumes its old Some payload by whole match/destructure, and the canonical terminal receiver releases exactly the original tail once; head remains independently released. Exact O/R/D/A, sink-current-None and caller-memory effects must be proved at every call. Option<LiveTail> is statically nonDiscardable even at None, so precisely two proof-checked known-None consuming one-arm matches are added *only* in this closed profile; no general exhaustiveness/Drop relaxation, effect, owner trait, third root, H field, compiler/native or cJSON change. This branch is a candidate until independent Coordination ACCEPT and merge.
+Draft 17.29 (ADOPTED in merged PR #215; Issue #214) adds only §18.1c: after the canonical Draft17.28 2-H producer physically unlinks the head and returns the ORIGINAL still-live tail LiveTail, one separate known-direct recipient takes that same nonCopy value and places it into a caller-owned ordinary local Option<LiveTail> through an explicitly scoped nonexclusive ref<write>. The recipient returns unit and never ends/frees the tail. After that frame and loan end, a fresh caller scope replaces custody with None, consumes its old Some payload by whole match/destructure, and the canonical terminal receiver releases exactly the original tail once; head remains independently released. Exact O/R/D/A, sink-current-None and caller-memory effects must be proved at every call. Option<LiveTail> is statically nonDiscardable even at None, so precisely two proof-checked known-None consuming one-arm matches are added *only* in this closed profile; no general exhaustiveness/Drop relaxation, effect, owner trait, third root, H field, compiler/native or cJSON change. This branch is a candidate until independent Coordination ACCEPT and merge.
 
 Draft 17.28 (ADOPTED / BOUNDED; Issue #203) selects one additional closed same-H, same-unit ordinary non-generic known-direct producer that first unlinks the head using a caller-proven D_h-scoped write-ref and returns the STILL LIVE tail through a compiler-known nonCopy/nonDiscardable LiveTail {owned_ptr:ptr<H>, owned_allocation:Allocation, owned_domain:LifetimeDomain}. Definition-time conditional checking retains exact O_t/R_t/D_t obligations plus H_h head-link current Some(ptr_t)/write-ref requirements; every actual caller must prove them, and result/whole-destructure must preserve the original live heap root and A/D identities without minting Storage or owner rights; existing §18.1a receiver can later release the tail while donor independently releases head. No general owner/source API, P implementation/native/frozen North Star change is authorized. Draft 17.28 was independently accepted and merged via PR #207; Draft 17.29 in this branch remains unmerged.
 
