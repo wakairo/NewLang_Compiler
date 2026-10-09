@@ -1,6 +1,6 @@
 """Complete §18.1c source admission and post-consume destructive controls.
 
-This is a semantic gate: no native custody result is claimed. The companion
+Semantic evidence is independent from the separate native observer. The companion
 C test destroys input source/AST before inspecting owned per-world evidence.
 """
 from pathlib import Path
@@ -131,13 +131,16 @@ with tempfile.TemporaryDirectory() as directory:
         path.write_text(text)
         runs=[subprocess.run([compiler,str(path)],capture_output=True) for _ in range(2)]
         for run in runs:
+            if code == "native-supported":
+                assert run.returncode == 0 and run.stdout and not run.stderr, (name,run.stderr)
+                continue
             assert run.returncode == (4 if code == "V1-BACKEND-UNSUPPORTED" else 3), (name,run.returncode,run.stderr)
             assert not run.stdout and code.encode() in run.stderr, (name,run.stderr)
         assert runs[0].stderr == runs[1].stderr, name
         assert all(p.suffix == ".nl" for p in root.iterdir()), "emitted artifact on failure/unsupported"
         return path
     for name,text in positives.items():
-        path=invoke(name,text,"V1-BACKEND-UNSUPPORTED")
+        path=invoke(name,text,"native-supported")
         subprocess.run([evidence,"evidence",str(path)],check=True)
     for name,text in cases.items():
         path=invoke(name,text,expected[name])
@@ -148,4 +151,4 @@ with tempfile.TemporaryDirectory() as directory:
     subprocess.run([evidence,"reject-oom",str(path)],check=True)
 print(f"{len(positives)} complete source admissions, both alternatives owned; "
       f"{len(cases)} source negatives + late post-transfer/OOM rollback; "
-      "exit4/no C/native explicitly preserved")
+      "source rejection remains before C emission; native evidence tested separately")

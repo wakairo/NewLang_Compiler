@@ -1,7 +1,8 @@
 """Issue #217 independent definitions, actual custody, preserved negative gates.
 
 Full-source owned evidence is separately exercised by custody_source_test.
-Native success is not claimed; accepted programs remain backend unsupported.
+Full custody is now emitted; other legal ownership profiles stay explicitly
+backend unsupported. Native evidence is covered by custody_native.integration.
 """
 import pathlib
 import subprocess
@@ -143,7 +144,7 @@ with tempfile.TemporaryDirectory() as directory:
     for name, (text, code) in negatives.items():
         invoke(name, text, code)
     for name, text in holds.items():
-        invoke(name, text, "V1-BACKEND-UNSUPPORTED")
+        invoke(name, text)
     for name, (text, code) in precision.items():
         invoke(name, text, code)
     for name, (text, code) in existing_owner_rejections.items():

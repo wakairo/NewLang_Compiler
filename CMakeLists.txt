@@ -340,6 +340,13 @@ if(BUILD_TESTING)
         add_test(NAME custody_source_${group}.unit COMMAND custody_source_test ${group} ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/live_tail_custody.nl)
     endforeach()
     add_test(NAME custody_source.integration COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/custody_source_test.py $<TARGET_FILE:newlangc> ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/live_tail_custody.nl $<TARGET_FILE:custody_source_test>)
+    add_executable(custody_checked_probe tests/integration/custody_checked_probe.c)
+    target_link_libraries(custody_checked_probe PRIVATE newlang_semantic)
+    add_test(NAME custody_codegen_oom.unit COMMAND custody_source_test codegen-oom ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/live_tail_custody.nl)
+    add_test(NAME custody_native.integration
+        COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/custody_native_test.py
+        $<TARGET_FILE:newlangc> $<TARGET_FILE:custody_checked_probe> ${CMAKE_C_COMPILER}
+        ${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/live_tail_custody.nl ${NEWLANG_SANITIZER})
     add_executable(custody_definition_test tests/unit/custody_definition_test.c)
     target_link_libraries(custody_definition_test PRIVATE newlang_semantic)
     target_link_options(custody_definition_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
