@@ -12,7 +12,7 @@
 
 ## Draft 17.30 の主変更 — Issue #234 five-original-root three-field SOURCE substrate
 
-**PROPOSED / UNMERGED (candidate branch only).** Add a closed same-H
+**ADOPTED / CANONICAL:** independently [ACCEPTED PR #235](https://github.com/wakairo/NewLang_Compiler/pull/235) and merged on Compiler `main`. Add a closed same-H
 five-static-fallible-site nested main and one H declaration with exactly
 three separate fixed `next`, `prev`, `child` pointer links plus `payload:u8`,
 with existing mode-preserving `ref@field` and current-value/occurrence
@@ -21,11 +21,11 @@ cJSON *pre-detach* graph of five independent original allocated roots
 and seven link facts, then explicitly releases all five originals.
 No B detach/adoption, general allocator/owner API, core lifetime
 change, compiler/native/Lean work or North Star PASS follows.
-Only §3.2b is newly selected as a candidate; old narrower forms remain.
+Only §3.2b is newly adopted as a bounded source alternative; old narrower forms remain.
 
 ## Draft 17.29 の主変更 — Issue #214 bounded two-H durable LiveTail custody
 
-**ADOPTED / CANONICAL:** independently ACCEPTED in Compiler [PR #215](https://github.com/wakairo/NewLang_Compiler/pull/215) and merged into `main`; `CURRENT_SPEC.md` selects Draft 17.29. This bounded source rule selects one further exact same-unit/same-H source path
+**ADOPTED / CANONICAL:** independently ACCEPTED in Compiler [PR #215](https://github.com/wakairo/NewLang_Compiler/pull/215) and merged into `main`; `CURRENT_SPEC.md` selected Draft 17.29 at that merge; the current canonical Draft is 17.30. This bounded source rule selects one further exact same-unit/same-H source path
 AFTER the existing Draft17.28 §18.1b physical head-link detach and original
 still-live tail LiveTail return. One separately named known-direct recipient
 takes exactly that original nonCopy LiveTail by value, inserts it into a
@@ -2098,7 +2098,7 @@ No frozen cJSON/preregistration/oracle change or next-track start.
 
 ## 3.2b Draft 17.30 — exact five original heap H roots and three fixed pointer-field source substrate
 
-**PROPOSED / UNMERGED — Compiler Issue #234.** This is an additive,
+**ADOPTED / CANONICAL — Compiler Issue #234, PR #235.** This is an additive,
 source-admission-only, finite profile, not an assertion that Draft17.29
 already admits five roots or that any current compiler has parsed/executed
 the source example. It selects the *pre-detach* heap graph substrate only.
@@ -2218,8 +2218,8 @@ pre-detach positive witness. Nothing here implies cJSON's
 
 ### 3.2b.3 Exact five-site full source-shaped positive witness
 
-**PROPOSED SOURCE CONTRACT ONLY: NOT current Draft17.29 syntax, NOT
-yet accepted by production/compiler/native, NOT cJSON port.**
+**ADOPTED SOURCE CONTRACT: NOT supported by the production compiler/native
+yet and NOT a cJSON port.**
 No source macro/`SET` pseudo-intrinsic, host-injected checker fact,
 privileged semantic hook, reused physical proxy root or unchecked
 per-hop repair appears. The source uses existing individual
@@ -2561,7 +2561,7 @@ These experiments inform this bounded additive selection but are
 NOT silently adopted as general syntax/authority.
 
 **Gate C choices:**
-- (A) **INTENTIONALLY EXTEND SOURCE ONLY — selected proposed**:
+- (A) **INTENTIONALLY EXTEND SOURCE ONLY — selected and adopted**:
   exactly five same-H static nested fallible sites and one precise
   three named fixed pointer-field H alternative, mode-preserving
   projection for all three. **KEEP** distinct original A/R/O/D,
