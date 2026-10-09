@@ -12,13 +12,14 @@ def sha(data):
 
 def edit(s, old, new, *, count=1):
     n=s.count(old)
-    if n!=count:
-        raise ValueError(f"expected {count} occurrences, found {n}: {old[:100]!r}")
+    if n<count:
+        raise ValueError(f"expected at least {count} occurrences, found {n}: {old[:100]!r}")
     return s.replace(old, new, count)
 
 def cut(s, start, end, replacement):
     i=s.index(start)
     j=s.index(end,i)
+    if end.startswith("    unit\n}\n\n"): j += len("    unit\n}\n\n")
     return s[:i]+replacement+s[j:]
 
 def corpus():
