@@ -174,7 +174,7 @@ static bool mode(NLParser *parser, NLAccessSyntax *out_mode)
     return true;
 }
 
-/* Exact Draft 17.21 link only; current token is < after Option. */
+/* Closed committed Option spellings; current token is < after Option. */
 static NLSyntaxNode *option_ptr(NLParser *parser, NLSourceSpan start)
 {
     if (!expect_punct(parser, '<', "REC-TYPE-PROFILE",
@@ -187,6 +187,15 @@ static NLSyntaxNode *option_ptr(NLParser *parser, NLSourceSpan start)
                           "expected Option close"))
             return NULL;
         return node(parser, NL_SYNTAX_OPTION_BACKING,
+                    (NLSourceSpan){start.start_byte, end});
+    }
+    if (word(parser, "LiveTail")) {
+        consume(parser);
+        const size_t end = parser->token.span.end_byte;
+        if (!expect_punct(parser, '>', "CUSTODY-TYPE-PROFILE",
+                          "expected Option<LiveTail> close"))
+            return NULL;
+        return node(parser, NL_SYNTAX_OPTION_LIVE_TAIL,
                     (NLSourceSpan){start.start_byte, end});
     }
     if (!word(parser, "ptr"))

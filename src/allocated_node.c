@@ -168,6 +168,34 @@ NLCheckStatus nl_allocated_grant(NLSemanticContext *c, NLTypeId option,
 }
 
 /* Type registration only: no concrete root, region, domain, value or grant. */
+NLCheckStatus nl_custody_registry(NLSemanticContext *c, NLTypeId h,
+                                  NLTypeId *out)
+{
+    NLTypeId packet = 0;
+    NLCheckStatus status = nl_live_tail_registry(c, h, &packet);
+    if (status != NL_CHECK_OK)
+        return status;
+    for (size_t i = 0; i < c->type_count; ++i)
+        if (c->types[i].option_target == packet) {
+            *out = i + 1;
+            return NL_CHECK_OK;
+        }
+    NLTypeId sum = 0;
+    status = nl_sem_nominal(c, "<custody-option>", false, false, &sum);
+    if (status != NL_CHECK_OK)
+        return status;
+    c->types[sum - 1].option_target = packet;
+    c->types[sum - 1].view.kind = NL_TYPE_SUM;
+    c->types[sum - 1].view.variant_count = 2;
+    c->types[sum - 1].variant_types[1] = packet;
+    status = string_copy("None", &c->types[sum - 1].variant_names[0]);
+    if (status == NL_CHECK_OK)
+        status = string_copy("Some", &c->types[sum - 1].variant_names[1]);
+    if (status == NL_CHECK_OK)
+        *out = sum;
+    return status;
+}
+
 NLCheckStatus nl_live_tail_registry(NLSemanticContext *c, NLTypeId h,
                                     NLTypeId *out)
 {
