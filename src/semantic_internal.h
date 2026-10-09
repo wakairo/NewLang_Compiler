@@ -278,6 +278,8 @@ bool nl_packet_same_entry(const NLSemanticContext *, const NLSemanticContext *);
 NLCheckStatus nl_packet_fork_prepare(NLCheckedFragment *, NLCheckedNodeId,
                                      const NLSemanticContext *);
 bool nl_packet_inherited(const NLCheckedFragment *, NLValueId);
+/* Read-only pre-consumption relation; no sink/alias proof or transfer grant. */
+bool nl_packet_available_inherited(const NLCheckedFragment *, NLValueId);
 NLCheckStatus nl_packet_closed(const NLCheckedFragment *, NLCheckedNodeId,
                                const NLSemanticContext *, NLSemanticContext **);
 bool nl_packet_arm_closed(const NLCheckedFragment *, NLCheckedNodeId,

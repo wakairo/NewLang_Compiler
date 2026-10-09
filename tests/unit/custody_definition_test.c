@@ -187,7 +187,7 @@ static bool faults(const char *path, bool definition)
             } else {
                 CHECK(last == NL_CHECK_ANALYSIS_PRECISION_LIMIT &&
                       strcmp(d.diagnostic.diagnostic.code,
-                             "CUSTODY-ENTRY-PRECISION") == 0);
+                             "CUSTODY-TRANSFER-PRECISION") == 0);
                 CHECK(nl_semantic_snapshot(c, &after) &&
                       memcmp(&before, &after, sizeof(before)) == 0);
             }
@@ -206,6 +206,11 @@ static bool faults(const char *path, bool definition)
                   0);
         CHECK(nl_semantic_value_view(c, binding_before.value, &value_after) &&
               memcmp(&value_before, &value_after, sizeof(value_before)) == 0);
+        TestChecked retry = {0};
+        CHECK(test_run(c, "{let retry=u8(255);retry;unit}", TEST_SOURCE,
+                       NL_CHECK_OK, NULL, &retry));
+        CHECK(retry.artifact != NULL);
+        test_checked_destroy(&retry);
     }
     printf("%s: %zu staged registration allocation failures, atomic %s\n",
            definition ? "independent definition" : "primary HOLD source",

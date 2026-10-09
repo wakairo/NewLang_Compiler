@@ -1,4 +1,4 @@
-"""Issue #217 partial implementation: definition evidence and precise HOLD.
+"""Issue #217 partial definition + read-only entry preflight, precise HOLD.
 
 These tests deliberately do NOT count guarded custody calls as owner-rule
 verification, semantic acceptance, native success, or backend unsupported.
@@ -64,6 +64,9 @@ holds = {
     "full-refusal": source.replace("let admit_flag = Option<ptr<Node>>::None;",
                                    "let admit_flag = Option<ptr<Node>>::Some(ptr_h);"),
     "renamed-primary": source.replace("recipient_adopt", "retain_tail"),
+    "renamed-owner-and-header": source.replace("Node", "Cell")
+        .replace("packet", "owner").replace("custody", "retained")
+        .replace("sink", "slot"),
 }
 # Issue #219 existing-source prerequisite, without custody. Both arms now
 # receive the original qualified packet and prove common terminal closure.
@@ -85,6 +88,38 @@ for name, args, code in [
     ("wrong-domain", "head_w2@next, ptr_t, allocation_t, life_h", "P3-REF-CONFLICT"),
 ]:
     existing_owner_rejections[name] = (source.replace("head_w2@next, ptr_t, allocation_t, life_t", args), code)
+
+# These sources reach the read-only preflight BEFORE argument consume. They
+# prove refusal of this entry profile, NOT Some transfer or delayed custody.
+preflight_rejections = {}
+for name, old, new, code in [
+    ("sink-read-mode", "loan_write(custody)", "loan_read(custody)", "CUSTODY-SINK-MODE"),
+    ("wrong-sink-value", "recipient_adopt(sink, packet)", "recipient_adopt(packet, packet)", "CUSTODY-SINK-MODE"),
+    ("unknown-packet", "recipient_adopt(sink, packet)", "recipient_adopt(sink, missing)", "P3-UNKNOWN-BINDING"),
+    ("consumed-packet", "recipient_adopt(sink, packet)", "let previous=packet; recipient_adopt(sink, packet)", "P3-USE-AFTER-CONSUME"),
+    ("wrong-packet-value", "recipient_adopt(sink, packet)", "recipient_adopt(sink, allocation_h)", "CUSTODY-PACKET-ORIGIN-PRECISION"),
+    ("live-copy-alias", "recipient_adopt(sink, packet)", "let alias=sink; recipient_adopt(sink, packet)", "CUSTODY-ALIAS-PRECISION"),
+    ("extra-domain-scope", "recipient_adopt(sink, packet)", "loan_read(life_h){|extra|recipient_adopt(sink,packet)}", "CUSTODY-ALIAS-PRECISION"),
+]:
+    assert old in source, name
+    preflight_rejections[name] = (source.replace(old, new, 1), code)
+
+# No custody or new constructor: retain the original packet through an
+# unchanged exhaustive policy match, then explicitly receive/release it.
+# This legal ownership continuation pinpoints the terminal-only #219 seam.
+continuation = (fixture.parent / "live_tail_packet_fork.nl").read_text()
+consume = "let LiveTail{owned_ptr,owned_allocation,owned_domain}=packet;receive_and_release_tail(owned_ptr,owned_allocation,owned_domain);unit"
+assert continuation.count(consume) == 2
+continuation = continuation.replace(consume, "unit")
+cleanup = "                    let empty_h ="
+assert continuation.count(cleanup) == 2
+at = continuation.rindex(cleanup)
+continuation = (continuation[:at] + consume.removesuffix("unit") + "\n"
+                + continuation[at:])
+continuation_holds = {
+    "packet-continuation-none": continuation,
+    "packet-continuation-some": continuation.replace("let policy=Option<ptr<Node>>::None;", "let policy=Option<ptr<Node>>::Some(ptr_h);"),
+}
 
 with tempfile.TemporaryDirectory() as directory:
     root = pathlib.Path(directory)
@@ -108,14 +143,20 @@ with tempfile.TemporaryDirectory() as directory:
     for name, (text, code) in negatives.items():
         invoke(name, text, code)
     for name, text in holds.items():
-        invoke(name, text, "CUSTODY-ENTRY-PRECISION")
+        invoke(name, text, "CUSTODY-TRANSFER-PRECISION")
     for name, (text, code) in precision.items():
         invoke(name, text, code)
     for name, (text, code) in existing_owner_rejections.items():
         invoke(name, text, code)
+    for name, (text, code) in preflight_rejections.items():
+        invoke(name, text, code)
+    for name, text in continuation_holds.items():
+        invoke(name, text, "P219-POSTSTATE-PRECISION")
 
 print(f"{len(positives)} independently checked definition positives; "
       f"{len(negatives)} definition-shape negatives; {len(holds)} primary "
       f"custody HOLD controls; {len(precision)} original-packet fork precision "
       f"backend-unsupported witnesses; {len(existing_owner_rejections)} preserved producer-entry "
-      "owner-rule rejections. Actual custody acceptance/evidence NOT claimed.")
+      f"owner-rule rejections; {len(preflight_rejections)} read-only entry refusals; "
+      f"{len(continuation_holds)} retained-packet continuation HOLD probes. "
+      "Actual custody acceptance/evidence NOT claimed.")
