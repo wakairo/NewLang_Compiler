@@ -47,6 +47,9 @@ jobs:
           cat r_native_258/out/emit.stderr
           if [ "$ec" -ne 0 ]; then exit 0; fi
           sha256sum r_native_258/out/generated.c >> r_native_258/out/sha256.txt
+          echo 'FRESH_GENERATED_C_BEGIN'
+          cat r_native_258/out/generated.c
+          echo 'FRESH_GENERATED_C_END'
           gcc-13 -std=c17 -Wall -Wextra -Wpedantic -Werror r_native_258/out/generated.c -o r_native_258/out/native-gcc >r_native_258/out/gcc.stdout 2>r_native_258/out/gcc.stderr && echo GCC_COMPILE_PASS | tee -a r_native_258/out/result.txt || echo GCC_COMPILE_FAIL | tee -a r_native_258/out/result.txt
           clang-23 -std=c17 -Wall -Wextra -Wpedantic -Werror r_native_258/out/generated.c -o r_native_258/out/native-clang >r_native_258/out/clang.stdout 2>r_native_258/out/clang.stderr && echo CLANG_COMPILE_PASS | tee -a r_native_258/out/result.txt || echo CLANG_COMPILE_FAIL | tee -a r_native_258/out/result.txt
           if [ -x r_native_258/out/native-gcc ]; then r_native_258/out/native-gcc >r_native_258/out/native.stdout 2>r_native_258/out/native.stderr; echo "NATIVE_EXIT=$?" | tee -a r_native_258/out/result.txt; sha256sum r_native_258/out/native-gcc >> r_native_258/out/sha256.txt; fi
