@@ -122,6 +122,23 @@ typedef struct {
      * complete closure against a post-state derived solely from the parent.
      * IDs are ancestor-prefix identities in this fragment's world; arm-local
      * IDs remain qualified by nl_checked_match_arm's owned path. */
+    /* One original LiveTail packet fork. Worlds and IDs are a qualified
+     * ancestor-prefix mapping, never an arm-local owner/custody join. */
+    struct {
+        bool closed;
+        const NLSemanticContext *entry_world, *post_world;
+        NLCheckedNodeId producer;
+        NLValueId packet;
+        NLSymbolId binding;
+    } packet_fork;
+    /* Whole receiving in an arm: every inherited numeric ID is qualified
+     * by this exact world and the enclosing match's common parent proof. */
+    struct {
+        const NLCheckedFragment *ancestor;
+        const NLSemanticContext *world, *entry_world;
+        NLCheckedNodeId match;
+        NLValueId packet;
+    } packet_origin;
     bool captured_frame_closed;
     NLBackingRegionId captured_backing;
     NLPlaceId captured_root;
@@ -205,6 +222,9 @@ const NLSemanticContext *nl_checked_context(const NLCheckedFragment *);
  * worlds. Validation is read-only (link with the semantic library), requires
  * the matching synchronous checked body and rejects foreign cloned worlds.
  * Neither accessor nor validation mints or consumes source authority. */
+/* Validates the owned parent/child lineage, both independently checked
+ * terminal calls and the common parent-derived closed-tail postcondition. */
+bool nl_checked_packet_fork_valid(const NLCheckedFragment *, NLCheckedNodeId);
 bool nl_checked_producer_valid(const NLCheckedFragment *, NLCheckedNodeId);
 const NLSemanticContext *nl_checked_producer_entry(const NLCheckedFragment *,
                                                    NLCheckedNodeId);

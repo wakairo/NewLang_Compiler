@@ -2540,12 +2540,15 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
         }
         if (check->context->types[type - 1].live_tail_target != 0) {
             const NLCheckedNodeId source = check->artifact->producer_call;
-            if (source == 0 || !view(check, source)->producer.return_proved ||
-                view(check, source)->producer.result != rhs.results[0].value) {
+            const bool local =
+                source != 0 && view(check, source)->producer.return_proved &&
+                view(check, source)->producer.result == rhs.results[0].value;
+            if (!local &&
+                !nl_packet_inherited(check->artifact, rhs.results[0].value)) {
                 fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
                      "P208-DESTRUCTURE-ORIGIN",
                      "whole LiveTail receiving requires checked producer "
-                     "return in this world");
+                     "return or qualified parent origin");
                 goto cleanup;
             }
         }
@@ -2591,6 +2594,17 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
                             .type = 1});
     if (result == 0)
         goto cleanup;
+    if (destructure && check->artifact->packet_parent != NULL &&
+        check->context->types[type - 1].live_tail_target != 0) {
+        view(check, result)->packet_origin.ancestor =
+            check->artifact->packet_parent;
+        view(check, result)->packet_origin.match =
+            check->artifact->packet_match;
+        view(check, result)->packet_origin.world = check->artifact->context;
+        view(check, result)->packet_origin.entry_world =
+            check->artifact->packet_entry;
+        view(check, result)->packet_origin.packet = rhs.results[0].value;
+    }
     NLCheckedNodeId previous = 0;
     for (size_t i = 0; i < count; ++i) {
         NLSymbolId symbol = 0;
@@ -4768,6 +4782,56 @@ static bool node_unit_arm_frame(const NLSemanticContext *before,
     return true;
 }
 
+/* Identity prefix is qualified only by two owned snapshots captured at the
+ * actual clone boundary. Fresh post-fork facts/IDs never enter this mapping. */
+bool nl_packet_same_entry(const NLSemanticContext *a,
+                          const NLSemanticContext *b)
+{
+    const NLCheckedNodeView unit = {.type = 1};
+    if (a == NULL || b == NULL || a == b || a->type_count != b->type_count ||
+        a->function_count != b->function_count ||
+        a->value_count != b->value_count || a->place_count != b->place_count ||
+        a->binding_count != b->binding_count ||
+        a->scope_count != b->scope_count ||
+        a->occurrence_count != b->occurrence_count ||
+        a->last_value_fact != b->last_value_fact ||
+        a->last_incarnation != b->last_incarnation ||
+        nl_sem_validate(a) != NL_CHECK_OK || nl_sem_validate(b) != NL_CHECK_OK)
+        return false;
+    for (size_t i = 0; i < a->type_count; ++i) {
+        const NLTypeEntry *x = &a->types[i], *y = &b->types[i];
+        const NLSemanticTypeView u = x->view, v = y->view;
+        if (u.kind != v.kind || u.is_copy != v.is_copy ||
+            u.is_discardable != v.is_discardable || u.target != v.target ||
+            u.access != v.access || u.is_exclusive != v.is_exclusive ||
+            u.layout_known != v.layout_known ||
+            u.variant_count != v.variant_count ||
+            u.field_count != v.field_count || u.size != v.size ||
+            u.alignment != v.alignment || x->incomplete != y->incomplete ||
+            x->recursive_header != y->recursive_header ||
+            x->allocated_target != y->allocated_target ||
+            x->one_backing_target != y->one_backing_target ||
+            x->live_tail_target != y->live_tail_target ||
+            x->option_target != y->option_target ||
+            memcmp(x->field_types, y->field_types, sizeof(x->field_types)) !=
+                0 ||
+            memcmp(x->variant_types, y->variant_types,
+                   sizeof(x->variant_types)) != 0)
+            return false;
+    }
+    for (size_t i = 0; i < a->function_count; ++i)
+        if (a->functions[i].body != b->functions[i].body ||
+            a->functions[i].owner_receiver != b->functions[i].owner_receiver ||
+            a->functions[i].owner_producer != b->functions[i].owner_producer ||
+            a->functions[i].custody_recipient !=
+                b->functions[i].custody_recipient)
+            return false;
+    for (size_t i = 0; i < a->binding_count; ++i)
+        if (strcmp(a->bindings[i].name, b->bindings[i].name) != 0)
+            return false;
+    return node_unit_arm_frame(a, b, 0, &unit);
+}
+
 /* Exact ancestor-prefix equivalence; suffix claims must all be closed.
  * Post-fork numeric IDs are never compared across worlds or imported. */
 bool nl_allocated_post_matches(const NLSemanticContext *expected,
@@ -5072,6 +5136,37 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
     const NLTypeId ptr = c->types[type - 1].option_target;
     bool node_unit_join =
         ptr != 0 && nl_recursive_local_type(c, c->types[ptr - 1].view.target);
+    bool captured_packet = false;
+    if (check->artifact->producer_call != 0) {
+        const NLValueId packet =
+            view(check, check->artifact->producer_call)->producer.result;
+        for (size_t i = 0; i < c->binding_count; ++i)
+            captured_packet |=
+                c->bindings[i].view.availability == NL_AVAILABLE &&
+                c->bindings[i].view.value == packet;
+    }
+    const bool packet_join = node_unit_join && count == 2 && captured_packet;
+    if (packet_join) {
+        const NLCheckStatus prepared =
+            nl_packet_fork_prepare(check->artifact, id, c);
+        if (prepared == NL_CHECK_ANALYSIS_PRECISION_LIMIT) {
+            fail(check, prepared, syntax->span, "P219-FORK-ENTRY-PRECISION",
+                 "exact available original packet and unloaned parent-world "
+                 "prefix required");
+            return 0;
+        }
+        if (!host(check, prepared, syntax->span))
+            return 0;
+        if (!host(check,
+                  nl_packet_closed(check->artifact, id, c,
+                                   &check->artifact->packet_post),
+                  syntax->span))
+            return 0;
+        /* Scrutinee temporary is consumed in either pattern, no arm ID. */
+        nl_sem_end_value(check->artifact->packet_post, input);
+        check->artifact->packet_post->values[input - 1].sum_payload = 0;
+        view(check, id)->packet_fork.post_world = check->artifact->packet_post;
+    }
     for (size_t i = 0; i < count; ++i) {
         if (variants[i] == value.variant)
             actual_index = i;
@@ -5093,6 +5188,14 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
             (NLCheckedFragment){.source = check->source,
                                 .context = branch.context,
                                 .destroy_context = nl_semantic_destroy};
+        if (packet_join) {
+            branch.artifact->packet_parent = check->artifact;
+            branch.artifact->packet_match = id;
+            branch.artifact->destroy_packet_world = nl_semantic_destroy;
+            if (!host(&branch, nl_sem_clone(c, &branch.artifact->packet_entry),
+                      a->span))
+                goto failure;
+        }
         NLSymbolId binder = 0;
         if (!function_arm(&branch, a, input, variants[i], true, &binder))
             goto failure;
@@ -5104,6 +5207,15 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
             normal_index = i;
         }
         const NLCheckedNodeView result = *view(&branch, body);
+        if (packet_join)
+            branch.context->values[input - 1].sum_payload = 0;
+        if (packet_join && !nl_packet_arm_closed(check->artifact, id,
+                                                 branch.artifact, &result)) {
+            fail(&branch, NL_CHECK_ANALYSIS_PRECISION_LIMIT, a->span,
+                 "P219-POSTSTATE-PRECISION",
+                 "arm lacks the exact original closed-tail postcondition");
+            goto failure;
+        }
         node_unit_join =
             node_unit_join && !branch.terminated &&
             nl_control_exits_count(branch.artifact->exits) == 0 &&
@@ -5152,6 +5264,20 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
         return id;
     }
     if (normal > 1) {
+        if (packet_join) {
+            /* Reconstruct ONLY the parent prefix, never select an arm. */
+            NLSemanticContext *post = NULL;
+            if (!host(check, nl_packet_closed(check->artifact, id, c, &post),
+                      syntax->span))
+                return 0;
+            nl_sem_end_value(post, input);
+            post->values[input - 1].sum_payload = 0;
+            nl_sem_commit(c, post);
+            view(check, id)->normal_arms = 2;
+            view(check, id)->packet_fork.closed = true;
+            view(check, id)->type = 1;
+            return id;
+        }
         if (node_unit_join) {
             end_temporary(check, input);
             view(check, id)->normal_arms = normal;

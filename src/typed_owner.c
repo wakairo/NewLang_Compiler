@@ -508,7 +508,7 @@ NLCheckStatus nl_owner_relations(const NLSemanticContext *c,
 /* Read-only consumer contract: the live-return certificate belongs to exactly
  * its owned caller entry/return worlds and synchronous checked producer body.
  * A cloned world's coincidental numeric IDs are not this evidence. */
-bool nl_checked_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id)
+bool nl_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id, bool raw)
 {
     const NLCheckedNodeView *v = nl_checked_node_view(f, id);
     const NLSemanticContext *a = nl_checked_producer_entry(f, id),
@@ -536,7 +536,8 @@ bool nl_checked_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id)
         return false;
     if (nl_sem_validate(a) != NL_CHECK_OK ||
         nl_sem_validate(b) != NL_CHECK_OK ||
-        nl_raw_validate(a) != NL_CHECK_OK || nl_raw_validate(b) != NL_CHECK_OK)
+        (raw && (nl_raw_validate(a) != NL_CHECK_OK ||
+                 nl_raw_validate(b) != NL_CHECK_OK)))
         return false;
     const NLTypedOwnerDefinition def =
         a->functions[v->function - 1].body->owner_definition;
@@ -731,4 +732,9 @@ bool nl_checked_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id)
         }
     }
     return true;
+}
+
+bool nl_checked_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id)
+{
+    return nl_producer_valid(f, id, true);
 }

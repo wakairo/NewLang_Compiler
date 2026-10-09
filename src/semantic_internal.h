@@ -86,6 +86,12 @@ typedef struct {
     struct NLCheckedFragment *artifact; /* owns hypothetical arm context */
 } NLCheckedArm;
 struct NLCheckedFragment {
+    /* Parent owns entry/post; a child owns its pre-pattern entry and borrows
+     * the enclosing fragment. Child evidence never outlives that owner tree. */
+    NLSemanticContext *packet_entry, *packet_post;
+    void (*destroy_packet_world)(NLSemanticContext *);
+    const struct NLCheckedFragment *packet_parent;
+    NLCheckedNodeId packet_match;
     NLSemanticContext *producer_entry,
         *producer_return; /* owned actual worlds */
     NLCheckedNodeId producer_call;
@@ -265,6 +271,17 @@ NLCheckStatus nl_allocated_registry(NLSemanticContext *, NLTypeId, NLTypeId *);
 NLCheckStatus nl_allocated_closed_prefix(const NLSemanticContext *,
                                          NLSemanticContext **,
                                          NLCheckedNodeView *);
+/* Internal proof comparisons allocate nothing. Raw integrity is separately
+ * status-checked at construction and fail-closed in public validation. */
+bool nl_producer_valid(const NLCheckedFragment *, NLCheckedNodeId, bool raw);
+bool nl_packet_same_entry(const NLSemanticContext *, const NLSemanticContext *);
+NLCheckStatus nl_packet_fork_prepare(NLCheckedFragment *, NLCheckedNodeId,
+                                     const NLSemanticContext *);
+bool nl_packet_inherited(const NLCheckedFragment *, NLValueId);
+NLCheckStatus nl_packet_closed(const NLCheckedFragment *, NLCheckedNodeId,
+                               const NLSemanticContext *, NLSemanticContext **);
+bool nl_packet_arm_closed(const NLCheckedFragment *, NLCheckedNodeId,
+                          const NLCheckedFragment *, const NLCheckedNodeView *);
 bool nl_allocated_post_matches(const NLSemanticContext *,
                                const NLSemanticContext *,
                                const NLCheckedNodeView *);
