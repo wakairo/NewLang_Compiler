@@ -55,6 +55,27 @@ static bool fork_evidence(NLCheckedFragment *f, NLCheckedNodeId id)
         CHECK(arm->packet_parent == f && arm->packet_match == id &&
               arm->packet_entry != entry && arm->packet_entry != arm->context);
         CHECK(nl_packet_same_entry(entry, arm->packet_entry));
+        /* Read-only pre-consumption lookup uses a retained actual-source
+         * entry world, not the ended current arm or a type-created owner.
+         * This is original-packet evidence only, never a custody certificate.
+         */
+        NLCheckedFragment before_arm = *arm;
+        before_arm.context = arm->packet_entry;
+        NLSemanticSnapshot before_lookup, after_lookup;
+        const NLSemanticValueView original_packet =
+            before_arm.context->values[m->packet_fork.packet - 1];
+        CHECK(nl_semantic_snapshot(before_arm.context, &before_lookup));
+        CHECK(
+            nl_packet_available_inherited(&before_arm, m->packet_fork.packet));
+        CHECK(!nl_packet_available_inherited(arm, m->packet_fork.packet));
+        CHECK(!nl_packet_available_inherited(&before_arm,
+                                             m->packet_fork.packet + 1));
+        CHECK(nl_semantic_snapshot(before_arm.context, &after_lookup) &&
+              memcmp(&before_lookup, &after_lookup, sizeof(before_lookup)) ==
+                  0);
+        CHECK(memcmp(&original_packet,
+                     &before_arm.context->values[m->packet_fork.packet - 1],
+                     sizeof(original_packet)) == 0);
         size_t receives = 0, calls = 0;
         for (NLCheckedNodeId n = 1; n <= arm->count; ++n) {
             const NLCheckedNodeView *v = nl_checked_node_view(arm, n);
@@ -211,6 +232,9 @@ static bool fork_evidence(NLCheckedFragment *f, NLCheckedNodeId id)
             ++changed->places[p->producer.root - 1].incarnation;
         if (k == 5)
             changed->values[packet - 1].dependencies = NL_DEPENDENCIES_UNKNOWN;
+        NLCheckedFragment preflight = *arms[0];
+        preflight.context = changed;
+        CHECK(!nl_packet_available_inherited(&preflight, packet));
         NLSemanticContext *refused = NULL;
         CHECK(nl_packet_closed(f, id, changed, &refused) ==
                   NL_CHECK_ANALYSIS_PRECISION_LIMIT &&
@@ -222,6 +246,7 @@ static bool fork_evidence(NLCheckedFragment *f, NLCheckedNodeId id)
         changed->places[p->producer.root - 1] = root;
     }
     nl_semantic_destroy(changed);
+    CHECK(!nl_packet_available_inherited(NULL, packet));
     NLSemanticContext *empty = NULL;
     CHECK(nl_packet_closed(NULL, 0, NULL, &empty) ==
               NL_CHECK_ANALYSIS_PRECISION_LIMIT &&

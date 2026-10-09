@@ -3,8 +3,8 @@
 
 /* This is a single inherited packet, not an owner-carrying sum join. The
  * original producer certificate remains in its ancestor-owned world. */
-static bool current_packet(const NLCheckedFragment *f, NLCheckedNodeId match,
-                           const NLSemanticContext *c, bool moved)
+static bool packet_relation(const NLCheckedFragment *f, NLCheckedNodeId match,
+                            const NLSemanticContext *c, bool moved)
 {
     const NLCheckedNodeView *m = nl_checked_node_view(f, match);
     if (m == NULL || m->packet_fork.producer == 0 ||
@@ -77,6 +77,14 @@ static bool current_packet(const NLCheckedFragment *f, NLCheckedNodeId match,
                    c->domains[a.domain - 1].value != field)
             return false;
     }
+    return true;
+}
+
+static bool current_packet(const NLCheckedFragment *f, NLCheckedNodeId match,
+                           const NLSemanticContext *c, bool moved)
+{
+    if (!packet_relation(f, match, c, moved))
+        return false;
     /* A deliberately small entry profile. Unknown/dependent capabilities or
      * an enclosing loan require additional evidence, never erased blockers. */
     for (size_t i = 0; i < c->scope_count; ++i)
@@ -142,6 +150,22 @@ static bool lineage(const NLCheckedFragment *arm)
            arm->packet_entry != f->packet_entry &&
            current_packet(f, arm->packet_match, f->packet_entry, false) &&
            nl_packet_same_entry(f->packet_entry, arm->packet_entry);
+}
+
+/* Read-only pre-consumption relation. Unlike whole receiving, a recipient
+ * preflight has a live caller-local sink loan. Its caller must independently
+ * check that scope and all blockers; this predicate grants no transfer and
+ * does not relax the existing unloaned fork/receiving/closure predicates. */
+bool nl_packet_available_inherited(const NLCheckedFragment *arm,
+                                   NLValueId value)
+{
+    if (arm == NULL || !lineage(arm))
+        return false;
+    const NLCheckedNodeView *m =
+        nl_checked_node_view(arm->packet_parent, arm->packet_match);
+    return value == m->packet_fork.packet &&
+           packet_relation(arm->packet_parent, arm->packet_match, arm->context,
+                           false);
 }
 
 /* Called after the ordinary identifier has consumed the packet placement,

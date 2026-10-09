@@ -1545,6 +1545,126 @@ static bool producer_entry(Check *check, NLCheckedNodeId id,
     return true;
 }
 
+/* Partial #217 preflight only. No argument is evaluated, no owner moves and
+ * no applicability/transfer certificate is published here. Success still
+ * stops at the explicit transfer-evidence precision fence below. */
+static bool custody_preflight(Check *check, const NLSyntaxView *syntax,
+                              const NLFunctionEntry *function)
+{
+    NLSemanticContext *c = check->context;
+    const NLCustodyDefinition d = function->body->custody_definition;
+    const NLSyntaxNode *args = syntax->data.call.arguments;
+    const NLSyntaxView *sink_syntax = nl_syntax_node_view(args),
+                       *packet_syntax =
+                           nl_syntax_node_view(nl_syntax_next_argument(args));
+    if (!d.definition_checked ||
+        d.requirements != NL_CUSTODY_ALL_REQUIREMENTS ||
+        !check->allocated_slice || !check->in_source_loan ||
+        sink_syntax->kind != NL_SYNTAX_EXPR_NAME ||
+        packet_syntax->kind != NL_SYNTAX_EXPR_NAME) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+             "CUSTODY-ENTRY-PRECISION",
+             "recipient preflight requires qualified original packet and "
+             "direct scoped caller-local sink arguments");
+        return false;
+    }
+    const NLSymbolId sink_symbol = available(check, sink_syntax->span);
+    if (sink_symbol == 0)
+        return false;
+    const NLSymbolId packet_symbol = available(check, packet_syntax->span);
+    if (packet_symbol == 0)
+        return false;
+    const NLSemanticBindingView sink_binding =
+        c->bindings[sink_symbol - 1].view;
+    const NLSemanticTypeView t = c->types[sink_binding.type - 1].view;
+    if (t.kind != NL_TYPE_REF || t.is_exclusive ||
+        t.access != NL_ACCESS_WRITE || t.target != d.option) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, sink_syntax->span,
+             "CUSTODY-SINK-MODE",
+             "recipient requires an ordinary write ref to its custody sum");
+        return false;
+    }
+    if (!concrete_ref(check, sink_binding.value, sink_syntax->span) ||
+        !reference_live(check, sink_binding.value, sink_syntax->span))
+        return false;
+    const NLSemanticValueView ref = c->values[sink_binding.value - 1];
+    const NLReferenceFacts f = ref.reference;
+    const NLSemanticPlaceView root = c->places[f.place - 1];
+    const NLSemanticValueView current = c->values[root.current_value - 1];
+    if (!root.implicit_local || !root.independent_root ||
+        root.parent_sum != 0 || root.parent_aggregate != 0 ||
+        root.placement.region != 0 || root.governing_domain != 0 ||
+        root.type != d.option || root.payload_occurrence != 0 ||
+        current.type != d.option || current.variant != 1 ||
+        current.sum_payload != 0 || current.carrier != NL_CARRIER_PLACE ||
+        current.owner_place != f.place ||
+        current.dependencies != NL_DEPENDENCY_FREE ||
+        current.value_dependency_count != 0) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, sink_syntax->span,
+             "CUSTODY-CURRENT-NONE-PRECISION",
+             "caller-local current exact None and empty occurrence required");
+        return false;
+    }
+    bool scoped_local = false;
+    for (NLCheckedNodeId n = 1; n <= check->artifact->count; ++n) {
+        const NLCheckedNodeView *v = view(check, n);
+        if (v->kind != NL_CHECKED_LOAN_HEADER ||
+            v->loan.ref_symbol != sink_symbol || v->loan.scope != f.scope ||
+            v->loan.place != f.place ||
+            v->loan.incarnation != root.incarnation ||
+            v->loan.access != NL_ACCESS_WRITE || !v->loan.implicit_local ||
+            !v->loan.prevent_lifetime_end || v->loan.from_ptr ||
+            v->loan.source == 0 || v->loan.source > c->binding_count)
+            continue;
+        const NLSemanticBindingView owner =
+            c->bindings[v->loan.source - 1].view;
+        scoped_local = !c->bindings[v->loan.source - 1].hidden &&
+                       owner.availability == NL_AVAILABLE &&
+                       owner.place == f.place &&
+                       owner.value == root.current_value;
+    }
+    if (!scoped_local || c->scopes[f.scope - 1].parent != 0 ||
+        c->scopes[f.scope - 1].parent_authority != 0) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, sink_syntax->span,
+             "CUSTODY-SCOPE-PRECISION",
+             "sink requires its actual source-owned caller-local loan");
+        return false;
+    }
+    for (size_t i = 0; i < c->scope_count; ++i)
+        if (c->scopes[i].active && i + 1 != f.scope) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                 "CUSTODY-ALIAS-PRECISION",
+                 "additional active scope is outside custody entry proof");
+            return false;
+        }
+    for (size_t i = 0; i < c->value_count; ++i) {
+        const NLSemanticValueView v = c->values[i];
+        if (v.carrier == NL_CARRIER_ENDED)
+            continue;
+        if (v.dependencies != NL_DEPENDENCY_FREE ||
+            v.value_dependency_count != 0 ||
+            (c->types[v.type - 1].view.kind == NL_TYPE_REF &&
+             i + 1 != sink_binding.value)) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                 "CUSTODY-ALIAS-PRECISION",
+                 "surviving alias or unresolved dependency requires proof");
+            return false;
+        }
+    }
+    const NLValueId packet = c->bindings[packet_symbol - 1].view.value;
+    if (!host(check, nl_raw_validate(c), syntax->span))
+        return false;
+    if (c->values[packet - 1].type != d.packet ||
+        !nl_packet_available_inherited(check->artifact, packet)) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, packet_syntax->span,
+             "CUSTODY-PACKET-ORIGIN-PRECISION",
+             "available intact original packet requires qualified parent "
+             "producer and current child-world correspondence");
+        return false;
+    }
+    return true;
+}
+
 static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
 {
     NLSemanticContext *const c = check->context;
@@ -1609,15 +1729,17 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         return 0;
     }
     if (function.custody_recipient) {
-        /* The conditional definition is NOT an actual CarriesLiveH or
-         * Current(C)==None certificate. Until a world-qualified custody
-         * transfer certificate exists, reject before argument consumption.
-         * Neither replaying a favorable branch nor static types discharge it.
-         */
+        /* Conditional definition + read-only preflight are NOT an owned
+         * actual transfer/post-state certificate. Until that certificate and
+         * conditional continuation exist, reject before argument consumption.
+         * Neither a favorable branch nor static types discharge this fence. */
+        if (!custody_preflight(check, syntax, &function))
+            return 0;
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
-             "CUSTODY-ENTRY-PRECISION",
-             "original packet/current sink correspondence and persistent "
-             "custody post-state evidence are not implemented");
+             "CUSTODY-TRANSFER-PRECISION",
+             "read-only entry preflight passed; original-owner Some transfer, "
+             "exact-None consumption and conditional custody continuation "
+             "certificate are not implemented");
         return 0;
     }
     if (function.body == NULL && function.caller_effects) {
