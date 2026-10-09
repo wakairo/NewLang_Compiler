@@ -48,6 +48,7 @@ void nl_checked_destroy(NLCheckedFragment *fragment)
         if (fragment->destroy_packet_world != NULL) {
             fragment->destroy_packet_world(fragment->packet_entry);
             fragment->destroy_packet_world(fragment->packet_post);
+            fragment->destroy_packet_world(fragment->packet_retained_post);
         }
         if (fragment->release_body != NULL)
             fragment->release_body(fragment->body_owner);

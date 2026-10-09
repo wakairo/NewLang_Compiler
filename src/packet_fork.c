@@ -234,16 +234,76 @@ NLCheckStatus nl_packet_closed(const NLCheckedFragment *f, NLCheckedNodeId id,
     return NL_CHECK_OK;
 }
 
-bool nl_packet_arm_closed(const NLCheckedFragment *f, NLCheckedNodeId match,
-                          const NLCheckedFragment *arm,
-                          const NLCheckedNodeView *result)
+/* Parent-only common LIVE target. The sole projection is the owned Copy
+ * scrutinee temporary, not a source binding, owner or branch-local fact. */
+NLCheckStatus nl_packet_retained(const NLCheckedFragment *f, NLCheckedNodeId id,
+                                 const NLSemanticContext *before,
+                                 NLSemanticContext **out)
 {
-    if (arm == NULL || arm->packet_parent != f || arm->packet_match != match ||
-        !lineage(arm) || f->packet_post == NULL ||
-        nl_control_exits_count(arm->exits) != 0 ||
-        nl_control_exits_count(arm->loop_returns) != 0 ||
-        !nl_allocated_post_matches(f->packet_post, arm->context, result))
-        return false;
+    if (out == NULL || *out != NULL)
+        return NL_CHECK_INTERNAL_ERROR;
+    const NLCheckedNodeView *m = nl_checked_node_view(f, id);
+    const NLCheckedNodeView *init =
+        m == NULL ? NULL : nl_checked_node_view(f, m->initializer);
+    if (m == NULL || m->kind != NL_CHECKED_MATCH || before == NULL ||
+        init == NULL || init->result_count != 1 ||
+        !current_packet(f, id, before, false))
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    const NLValueId input = init->results[0].value;
+    if (input == 0 || input > before->value_count ||
+        input == m->packet_fork.packet ||
+        before->values[input - 1].carrier != NL_CARRIER_LOOSE ||
+        !before->types[before->values[input - 1].type - 1].view.is_copy ||
+        before->types[before->values[input - 1].type - 1].view.kind !=
+            NL_TYPE_SUM ||
+        nl_sum_authority(before, before->values[input - 1].type))
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    NLSemanticContext *c = NULL;
+    NLCheckStatus s = nl_sem_clone(before, &c);
+    if (s != NL_CHECK_OK)
+        return s;
+    nl_sem_end_value(c, input);
+    c->values[input - 1].sum_payload = 0;
+    s = nl_sem_validate(c);
+    if (s == NL_CHECK_OK)
+        s = nl_raw_validate(c);
+    if (s != NL_CHECK_OK) {
+        nl_semantic_destroy(c);
+        return s;
+    }
+    *out = c;
+    return NL_CHECK_OK;
+}
+
+bool nl_packet_arm_retained(const NLCheckedFragment *f, NLCheckedNodeId match,
+                            const NLCheckedFragment *arm,
+                            const NLCheckedNodeView *result)
+{
+    return arm != NULL && arm->packet_parent == f &&
+           arm->packet_match == match && lineage(arm) &&
+           f->packet_retained_post != NULL &&
+           nl_control_exits_count(arm->exits) == 0 &&
+           nl_control_exits_count(arm->loop_returns) == 0 &&
+           current_packet(f, match, arm->context, false) &&
+           nl_allocated_post_matches(f->packet_retained_post, arm->context,
+                                     result);
+}
+
+bool nl_packet_receiving_after_join(const NLCheckedFragment *f,
+                                    const NLSemanticContext *c,
+                                    NLValueId packet)
+{
+    const NLCheckedNodeView *m = nl_checked_node_view(f, f->packet_match);
+    return m != NULL && m->packet_fork.retained && !m->packet_fork.closed &&
+           packet == m->packet_fork.packet &&
+           m->packet_fork.post_world == f->packet_retained_post &&
+           current_packet(f, f->packet_match, c, true);
+}
+
+static bool packet_terminal(const NLCheckedFragment *f, NLCheckedNodeId match,
+                            const NLCheckedFragment *arm,
+                            const NLSemanticContext *receiving_world)
+{
     const NLCheckedNodeView *m = nl_checked_node_view(f, match),
                             *p = nl_checked_node_view(f,
                                                       m->packet_fork.producer),
@@ -325,7 +385,7 @@ bool nl_packet_arm_closed(const NLCheckedFragment *f, NLCheckedNodeId match,
             init->symbol == m->packet_fork.binding &&
             v->packet_origin.ancestor == f && v->packet_origin.match == match &&
             v->packet_origin.world == arm->context &&
-            v->packet_origin.entry_world == arm->packet_entry &&
+            v->packet_origin.entry_world == receiving_world &&
             v->packet_origin.packet == m->packet_fork.packet) {
             if (v->argument_count != 3)
                 return false;
@@ -353,13 +413,27 @@ bool nl_packet_arm_closed(const NLCheckedFragment *f, NLCheckedNodeId match,
     return receives == 1;
 }
 
+bool nl_packet_arm_closed(const NLCheckedFragment *f, NLCheckedNodeId match,
+                          const NLCheckedFragment *arm,
+                          const NLCheckedNodeView *result)
+{
+    if (arm == NULL || arm->packet_parent != f || arm->packet_match != match ||
+        !lineage(arm) || f->packet_post == NULL ||
+        nl_control_exits_count(arm->exits) != 0 ||
+        nl_control_exits_count(arm->loop_returns) != 0 ||
+        !nl_allocated_post_matches(f->packet_post, arm->context, result))
+        return false;
+    return packet_terminal(f, match, arm, arm->packet_entry);
+}
+
 bool nl_checked_packet_fork_valid(const NLCheckedFragment *f,
                                   NLCheckedNodeId id)
 {
     const NLCheckedNodeView *m = nl_checked_node_view(f, id);
     if (m == NULL || m->kind != NL_CHECKED_MATCH || !m->packet_fork.closed ||
-        m->normal_frame_unchanged || m->captured_frame_closed ||
-        m->normal_arms != 2 || m->item_count != 2 || f->packet_match != id ||
+        m->packet_fork.retained || m->normal_frame_unchanged ||
+        m->captured_frame_closed || m->normal_arms != 2 || m->item_count != 2 ||
+        f->packet_match != id ||
         f->packet_entry != m->packet_fork.entry_world ||
         f->packet_post != m->packet_fork.post_world ||
         f->packet_entry == NULL || f->packet_post == NULL ||
@@ -384,4 +458,65 @@ bool nl_checked_packet_fork_valid(const NLCheckedFragment *f,
         seen[r->variant - 1] = true;
     }
     return true;
+}
+
+bool nl_checked_packet_retaining_join_valid(const NLCheckedFragment *f,
+                                            NLCheckedNodeId id)
+{
+    const NLCheckedNodeView *m = nl_checked_node_view(f, id);
+    if (m == NULL || m->kind != NL_CHECKED_MATCH || !m->packet_fork.retained ||
+        m->packet_fork.closed || m->normal_frame_unchanged ||
+        m->captured_frame_closed || m->normal_arms != 2 || m->item_count != 2 ||
+        f->packet_match != id || f->packet_entry == NULL ||
+        f->packet_retained_post == NULL ||
+        m->packet_fork.entry_world != f->packet_entry ||
+        m->packet_fork.post_world != f->packet_retained_post ||
+        !nl_checked_producer_valid(f, m->packet_fork.producer))
+        return false;
+    NLSemanticContext *expected = NULL;
+    if (nl_packet_retained(f, id, f->packet_entry, &expected) != NL_CHECK_OK)
+        return false;
+    const bool same = nl_packet_same_entry(expected, f->packet_retained_post);
+    nl_semantic_destroy(expected);
+    if (!same || nl_raw_validate(f->packet_retained_post) != NL_CHECK_OK)
+        return false;
+    bool seen[2] = {false, false};
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedFragment *arm = nl_checked_match_arm(f, id, i);
+        const NLCheckedNodeView *r =
+            nl_checked_node_view(arm, nl_checked_root(arm));
+        if (r == NULL || r->kind != NL_CHECKED_MATCH_ARM || r->variant < 1 ||
+            r->variant > 2 || seen[r->variant - 1] ||
+            r->packet_origin.ancestor != f || r->packet_origin.match != id ||
+            r->packet_origin.packet != m->packet_fork.packet ||
+            r->packet_origin.world != arm->context ||
+            r->packet_origin.entry_world != arm->packet_entry ||
+            !nl_packet_arm_retained(f, id, arm, r) ||
+            nl_raw_validate(arm->context) != NL_CHECK_OK)
+            return false;
+        seen[r->variant - 1] = true;
+    }
+    return true;
+}
+
+/* The retaining join and its later whole receiving/release are separate
+ * certificates. Validate the continuation in the parent's own current world. */
+bool nl_checked_packet_retention_release_valid(const NLCheckedFragment *f,
+                                               NLCheckedNodeId id)
+{
+    if (!nl_checked_packet_retaining_join_valid(f, id) ||
+        !packet_terminal(f, id, f, f->packet_retained_post) ||
+        nl_sem_validate(f->context) != NL_CHECK_OK ||
+        nl_raw_validate(f->context) != NL_CHECK_OK)
+        return false;
+    const NLCheckedNodeView *m = nl_checked_node_view(f, id),
+                            *p = nl_checked_node_view(f,
+                                                      m->packet_fork.producer);
+    return !f->context->places[p->producer.root - 1].live &&
+           !f->context->regions[p->producer.range.region - 1].view.live &&
+           !f->context->domains[p->producer.domain - 1].live &&
+           f->context->bindings[m->packet_fork.binding - 1].view.availability ==
+               NL_CONSUMED &&
+           f->context->values[m->packet_fork.packet - 1].carrier ==
+               NL_CARRIER_ENDED;
 }

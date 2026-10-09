@@ -151,12 +151,12 @@ with tempfile.TemporaryDirectory() as directory:
     for name, (text, code) in preflight_rejections.items():
         invoke(name, text, code)
     for name, text in continuation_holds.items():
-        invoke(name, text, "P219-POSTSTATE-PRECISION")
+        invoke(name, text, "V1-BACKEND-UNSUPPORTED")
 
 print(f"{len(positives)} independently checked definition positives; "
       f"{len(negatives)} definition-shape negatives; {len(holds)} primary "
       f"custody HOLD controls; {len(precision)} original-packet fork precision "
       f"backend-unsupported witnesses; {len(existing_owner_rejections)} preserved producer-entry "
       f"owner-rule rejections; {len(preflight_rejections)} read-only entry refusals; "
-      f"{len(continuation_holds)} retained-packet continuation HOLD probes. "
+      f"{len(continuation_holds)} retained-packet semantic continuations (backend unsupported; #222 evidence separately). "
       "Actual custody acceptance/evidence NOT claimed.")

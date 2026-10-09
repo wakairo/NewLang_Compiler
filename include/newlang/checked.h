@@ -125,7 +125,7 @@ typedef struct {
     /* One original LiveTail packet fork. Worlds and IDs are a qualified
      * ancestor-prefix mapping, never an arm-local owner/custody join. */
     struct {
-        bool closed;
+        bool closed, retained; /* distinct common targets; never differential */
         const NLSemanticContext *entry_world, *post_world;
         NLCheckedNodeId producer;
         NLValueId packet;
@@ -225,6 +225,12 @@ const NLSemanticContext *nl_checked_context(const NLCheckedFragment *);
 /* Validates the owned parent/child lineage, both independently checked
  * terminal calls and the common parent-derived closed-tail postcondition. */
 bool nl_checked_packet_fork_valid(const NLCheckedFragment *, NLCheckedNodeId);
+/* Owned two-arm original-owner retention; no custody/differential state. */
+bool nl_checked_packet_retaining_join_valid(const NLCheckedFragment *,
+                                            NLCheckedNodeId);
+/* Also validates whole receiving and terminal release in the joined caller. */
+bool nl_checked_packet_retention_release_valid(
+    const NLCheckedFragment *fragment, NLCheckedNodeId match);
 bool nl_checked_producer_valid(const NLCheckedFragment *, NLCheckedNodeId);
 const NLSemanticContext *nl_checked_producer_entry(const NLCheckedFragment *,
                                                    NLCheckedNodeId);
