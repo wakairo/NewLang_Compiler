@@ -1,0 +1,73 @@
+name: "R230 independent frozen native C17 blind first-pass"
+on:
+  push:
+    branches:
+      - r230-blind-native-a374df3
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  r230-native-firstpass:
+    name: Frozen compiler + independent black-box probe
+    runs-on: ubuntu-24.04
+    timeout-minutes: 140
+    steps:
+      - name: Checkout isolated R-only harness
+        uses: actions/checkout@v4
+        with:
+          path: reviewer
+          persist-credentials: false
+      - name: Checkout exact frozen compiler (NEVER use review branch compiler)
+        uses: actions/checkout@v4
+        with:
+          ref: a374df32dab3a619d40ac02b39cc1d07605c362f
+          path: frozen
+          persist-credentials: false
+      - name: Verify immutable source and runner toolchain
+        shell: bash
+        run: |
+          set -euxo pipefail
+          test "$(git -C frozen rev-parse HEAD)" = "a374df32dab3a619d40ac02b39cc1d07605c362f"
+          git -C reviewer rev-parse HEAD
+          git -C frozen rev-parse HEAD
+          sha256sum frozen/docs/reference/NewLang_v0_spec_Draft17_29.md
+          uname -a
+          gcc-13 --version || true
+      - name: Install documented Ubuntu base prerequisites
+        shell: bash
+        run: |
+          set -euxo pipefail
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            gcc-13 g++-13 make cmake python3 dpkg libstdc++6 \
+            libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap canonical locked toolchain and build only pinned compiler
+        shell: bash
+        working-directory: frozen
+        run: |
+          set -euxo pipefail
+          python3 scripts/bootstrap.py
+          . .deps/activate.sh
+          CC=gcc cmake --fresh -S . -B build-r230 -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-r230 --parallel 2
+          ./build-r230/newlangc --version
+          sha256sum ./build-r230/newlangc
+      - name: Independent source corpus plus plain/observed/sanitized physical native
+        shell: bash
+        working-directory: reviewer
+        run: |
+          set -euo pipefail
+          export R230_FROZEN_ROOT="$GITHUB_WORKSPACE/frozen"
+          export R230_COMPILER="$GITHUB_WORKSPACE/frozen/build-r230/newlangc"
+          export CC_NATIVE=gcc-13
+          python3 r230/independent_probe.py 2>&1 | tee r230-run.log
+      - name: Attach durable independent hashes, emitted C, native logs and executables
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r230-frozen-a374df3-independent-evidence
+          path: |
+            reviewer/r230/results
+            reviewer/r230-run.log
+          if-no-files-found: warn
+          retention-days: 30
