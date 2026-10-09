@@ -1,0 +1,145 @@
+{
+  "claim": "certificate substrate ONLY; full three-field source NOT ADMITTED",
+  "source_controls": [
+    {
+      "input": "five",
+      "sha256": "e1f3eb9b9823d7c1d6c6544e2bdb193faa979d8554a727a70edefe39df610687",
+      "probe_exit": 0,
+      "stdout": "certificate-substrate accepted; release worlds: 1 1 1 1 1 1; NOT public source admission or native evidence\n",
+      "stderr": ""
+    },
+    {
+      "input": "outer-some-first",
+      "sha256": "c7a5f368138b0983da370bcfc155c95c0e17f273d3f7216b5b910b39c3e54886",
+      "probe_exit": 0,
+      "stdout": "certificate-substrate accepted; release worlds: 1 1 1 1 1 1; NOT public source admission or native evidence\n",
+      "stderr": ""
+    },
+    {
+      "input": "third-some-first",
+      "sha256": "e72b4d3b95411764c26c110b8ae355ded4cc1d467031512bda19326c257aae1f",
+      "probe_exit": 0,
+      "stdout": "certificate-substrate accepted; release worlds: 1 1 1 1 1 1; NOT public source admission or native evidence\n",
+      "stderr": ""
+    },
+    {
+      "input": "alpha",
+      "sha256": "e713efac94fc0122c8738f5e2454b8ea6c366390dfc5ac72ae98a9f6fee9d5f0",
+      "probe_exit": 0,
+      "stdout": "certificate-substrate accepted; release worlds: 1 1 1 1 1 1; NOT public source admission or native evidence\n",
+      "stderr": ""
+    },
+    {
+      "input": "cross-allocation",
+      "sha256": "efea37f6ebcfdc115202d141bc860b7232e623caa3bf762ad76cc01eb28b690c",
+      "probe_exit": 3,
+      "stdout": "status=1 category=semantic code=P4-ALLOCATION-MISMATCH\n",
+      "stderr": ""
+    },
+    {
+      "input": "cross-domain",
+      "sha256": "b7fb7ae277eb2c50d4f35b9032728cce533c2d49cfbd912c459fd0619f8a03b7",
+      "probe_exit": 3,
+      "stdout": "status=1 category=semantic code=P3-DOMAIN-MISMATCH\n",
+      "stderr": ""
+    },
+    {
+      "input": "double-release",
+      "sha256": "01d9ad7f2f34d3a2b3b577f1fe9eb6314d7831c022b1babfbe044c00981e569d",
+      "probe_exit": 3,
+      "stdout": "status=1 category=semantic code=P3-USE-AFTER-CONSUME\n",
+      "stderr": ""
+    },
+    {
+      "input": "noncopy-reuse",
+      "sha256": "375ebb42dec464e040ef26cbea14da52aed80038ff9fd1283d7a3e1374129e37",
+      "probe_exit": 3,
+      "stdout": "status=1 category=semantic code=P3-USE-AFTER-CONSUME\n",
+      "stderr": ""
+    },
+    {
+      "input": "missing-release",
+      "sha256": "c205a9c680752e58b655c20366f035ae14f094f903cf2e20ffef6bb32c9ab6a0",
+      "probe_exit": 3,
+      "stdout": "status=1 category=semantic code=P5-SCOPE-OBLIGATION\n",
+      "stderr": ""
+    },
+    {
+      "input": "none-2-missing-original",
+      "sha256": "81017b3597b8d184d8e16ea53c2f9bbc1f4f9b58d295e86cb1ebb7b1d4ee355d",
+      "probe_exit": 3,
+      "stdout": "status=3 category=precision code=ALLOCATED-CAPTURED-JOIN-PRECISION\n",
+      "stderr": ""
+    },
+    {
+      "input": "none-3-missing-original",
+      "sha256": "0867a9b225efb818ad978d56e6fbb224a80ce140298ea9112ae9e97b704fe3fa",
+      "probe_exit": 3,
+      "stdout": "status=3 category=precision code=ALLOCATED-CAPTURED-JOIN-PRECISION\n",
+      "stderr": ""
+    },
+    {
+      "input": "none-4-missing-original",
+      "sha256": "8e97f3d59ee55cedd18106ce83d3710f0cabdf0adadc9a743f0ee03a7727343e",
+      "probe_exit": 3,
+      "stdout": "status=3 category=precision code=ALLOCATED-CAPTURED-JOIN-PRECISION\n",
+      "stderr": ""
+    },
+    {
+      "input": "none-5-missing-original",
+      "sha256": "8ec6792ba9cc3d3a3864114819d3a88f0191f565c8f3a07180ba369845bd111f",
+      "probe_exit": 3,
+      "stdout": "status=3 category=precision code=ALLOCATED-CAPTURED-JOIN-PRECISION\n",
+      "stderr": ""
+    },
+    {
+      "input": "active-loan",
+      "sha256": "8cb56c369b0e4466e37132d3bee92af455708739fd0f2add20ba49e96fbccbc2",
+      "probe_exit": 3,
+      "stdout": "status=1 category=semantic code=P3-REF-CONFLICT\n",
+      "stderr": ""
+    },
+    {
+      "input": "scope-escape",
+      "sha256": "7b5316ee1ef997b2ca321a4726d6195456e0a12003b1c63167f60463b3157a2d",
+      "probe_exit": 3,
+      "stdout": "status=1 category=semantic code=P3-INTERNAL\n",
+      "stderr": ""
+    },
+    {
+      "input": "sixth",
+      "sha256": "77213545501a1be9496a9599e45330427719061e90e3abf97e527daf9e5aeefe",
+      "probe_exit": 3,
+      "stdout": "status=2 category=unsupported code=ALLOCATED-CARDINALITY-PROFILE\n",
+      "stderr": ""
+    },
+    {
+      "input": "five_root_three_field",
+      "sha256": "812042833072145f761ddc21cbf774d81b64da3a34f6d466ba7db01a6d704d7d",
+      "public_cli_exit": 3,
+      "stdout": "",
+      "stderr": "five_root_three_field.nl:3:11-3:17: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n"
+    },
+    {
+      "input": "three_allocation_no_links",
+      "sha256": "edbd3e500ffe0355fee44e9a5147fdc25c94167b0ed18aa4e0e20a2ebd7439d3",
+      "public_cli_exit": 3,
+      "stdout": "",
+      "stderr": "three_allocation_no_links.nl:39:27-39:50: error(unsupported)[ALLOCATED-CARDINALITY-PROFILE]: allocation requires one outer trial and at most one nested Some-arm trial, outside loops\n"
+    },
+    {
+      "input": "five_allocation_closure_probe",
+      "sha256": "e1f3eb9b9823d7c1d6c6544e2bdb193faa979d8554a727a70edefe39df610687",
+      "public_cli_exit": 3,
+      "stdout": "",
+      "stderr": "five_allocation_closure_probe.nl:39:27-39:50: error(unsupported)[ALLOCATED-CARDINALITY-PROFILE]: allocation requires one outer trial and at most one nested Some-arm trial, outside loops\n"
+    },
+    {
+      "input": "two_allocation_no_links",
+      "sha256": "5ea7ab31ba5fd7f4a38ab35f38f35ee106781a2e6d97efffdc9043ec4e0f8a06",
+      "public_cli_exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: two_allocation_no_links.nl\n"
+    }
+  ]
+}

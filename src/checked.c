@@ -27,6 +27,8 @@ NLCheckStatus nl_checked_add(NLCheckedFragment *fragment,
 void nl_checked_destroy(NLCheckedFragment *fragment)
 {
     if (fragment != NULL) {
+        if (fragment->destroy_captured_closure != NULL)
+            fragment->destroy_captured_closure(fragment->captured_closure);
         if (fragment->destroy_producer_world != NULL) {
             fragment->destroy_producer_world(fragment->producer_entry);
             fragment->destroy_producer_world(fragment->producer_return);
