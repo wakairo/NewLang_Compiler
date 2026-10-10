@@ -3006,9 +3006,15 @@ finish_three(donor);        // actual A,C,src original frees
 finish_two(receiver_b);    // original B,dst after A EndRoot
 ~~~
 
-At the named attach RETURN, **one current WHOLE TreeTwo** has
-root=original K_dst and child=original K_B. Donor TreeThree holds only
-src,A,C; old donor_b/receiver_empty/detached actuals/formals are Consumed
+For the **specific genuine five-original H1 positive caller above**,
+the intended product condition at the named attach RETURN is:
+**one current WHOLE TreeTwo** has root=original K_dst and
+child=original K_B. An ordinary attach call that returns a
+mixed TreeTwo is still core-legal where its body only changes
+properly permitted Copy H links and moves nonCopy components;
+it does not automatically fulfill H1. In this positive caller,
+donor TreeThree holds only src,A,C; the old donor_b/receiver_empty/
+detached actuals/formals are Consumed
 and no active D/H ref escapes. World still has original live B/dst;
 there is no new B malloc or sixth H. finish_three frees original
 A(#2),C(#4),src(#1) first; finish_two consumes TreeTwo alone to
@@ -3031,8 +3037,12 @@ Before detach rejection: TreeFour still holds B, receiver_empty holds dst;
 finish_four + finish_root(dst) or exact nonCopy whole refund.
 After detach, before attach rejection: complete returned TreeThree +
 LiveRoot(B) + LiveRoot(dst) remain to be separately finished or moved.
-After attach: TreeTwo alone owns both original K_dst and K_B and
-must be finished/whole-moved before normal exit.
+After attach in the **specific H1-accepted caller**: TreeTwo alone
+contains both genuine original K_dst and K_B and must be finished
+or whole-moved before normal exit. Other ordinary complete return
+values may have mismatched constituents and require later complete
+repartitioning before any matched terminal; they still cannot
+silently drop nonCopy components at normal exit.
 This **straight-line known direct attach** has no callbacks,
 allocation, FFI, unwind, exception, fallible step, early error/false
 edge or unknown effect after entry checks; both safe Copy-link replace
@@ -3043,9 +3053,13 @@ consistent graph rollback, or committed TreeTwo; not added here.
 §26/§27 normal joins cannot abandon a nonDiscardable owner.
 
 Required source-eligible semantic-negative oracles:
-- original p_B/D_B + A_C → reject matched root result/release by
-  independently checked AllocationBacking mismatch, **even though**
-  B.prev scoped H write can succeed;
+- original p_B/D_B + A_C → ACCEPT an otherwise legal ordinary
+  LiveRoot/TreeTwo constructor, move and pure assembly/return;
+  REJECT an actual B matched-release operation or the independently
+  checked requiring finish_root call, by original AllocationBacking
+  mismatch, even though a proper D_B-scoped B.prev H write may succeed;
+  if observed at the specific H1 result, report product H1 NO,
+  NOT ordinary source rejection;
 - p_B/A_B + D_C → reject governing domain mismatch;
 - stale original p_B O/incarnation → reject current typed root;
 - duplicate original B nonCopy A_B or D_B in two packet values →
@@ -3080,17 +3094,36 @@ B8 ownership-vs-reference policy is independently assessed.
 | Draft17.29 §18.1a–c / DI-011/012/013 | KEEP existing TWO-H conditional known-call, LiveTail and caller Option exact semantics; INTENTIONALLY extend proof method to five-source original packet constituents | No arbitrary LiveTail constructor, no reinterpretation of known-None Option, no old A-head terminal generalization |
 | DI-001/002/004/005/006/007; older nonnormative Surface Draft1/1.1 and M0 | KEEP @ vs :: vs . split and no implicit borrow; DEFER general field/ptr projection, receiver/module/visibility/generic primary and unified loan syntax | Whole-destructure + local lifetime_domain loan is sufficient within this proposal |
 | DI-008 and §16.1/16.2 | KEEP complete aggregate consume/repack | No partial-live aggregate, hidden Drop or invented generic tuple return |
-| M #270/#271 source research, F #43/#47 + formal draft PR #48 | PROPOSED / experimental formal HOLD | The current rich source refinement is NOT established by Lean ticket projection; do not count source or product PASS |
+| M #270/#271 source research, F #43/#47 and human-merged noncanonical formal PR #48 (FormalProof/main 08c8b8da4b9dbe5e125e4be0643bffb28294bfad) | PROPOSED source / formal HOLD | The current rich source refinement is NOT established by Lean ticket projection; do not count full source or product PASS |
 | Generic dynamic TreeOwner, Owner<T> runtime registry, FFI, GC/RAII, 6th H | DEFER | Avoid broad core change, ABI lock-in and spurious human/product value claims |
 
-**Genuine CORE rule change: NONE proposed.** Nontrivial new bounded
-source/AST/semantic proof obligations: acyclic user value-nominal
-declarations, original provenance propagation through complete
-aggregate calls/results, symbolic matched three-component obligations
-with an independent Allocation/Backing relation, current all-binding
-nonCopy exclusivity/loan conflict, and a fresh full-R post-A late
-finish source application. Draft status is **CANDIDATE**, not
-a formal or source checker theorem.
+**Genuine CORE rule change: NONE proposed.** Issue #279
+**INTENTIONALLY NARROWS** matched-original-root tests to actual
+release-using operations and transitive requiring named calls:
+ordinary nonCopy custody and complete return must preserve actual
+even mismatched source constituents without imposing matching.
+The third, specific H1 TreeTwo returned-member test is a
+product oracle and adds no universal type-based owner restriction.
+Nontrivial bounded source/AST obligations remain: acyclic nominal
+registration, original source provenance through whole returns,
+conditional body-specific original R/A/O/D terminal inference,
+global all-binding nonCopy availability and loan conflicts,
+and the independent after-A two-member matched terminal.
+
+**Bounded experimental evidence, NOT source selection:** P #274/#276,
+draft experimental PRs #275/#277, independently accepted by Coordination,
+show that a real mixed ordinary record can be source moved/returned,
+including a repaired legal return, but genuine p_B/D_B + original
+Allocation_C fails only at a later requiring finish_root(tail)
+actual call with P193-CALL-BACKING. The P #276 38-source corpus
+contains 11 semantic-accepted/backend-unsupported cases and 21
+genuine semantic rejects. Two independent member-path conditional
+requirements for source-defined finish_two(TreeTwo) remain
+UNPROVED at P276-TERMINAL-SUMMARY-PRECISION; P #278 is separately
+investigating this on an experimental branch. These are NOT native
+C17, complete 4-detach/2-adopt, rich F source evaluator, full H1
+product verification or a canonical Draft17.31 adoption.
+The candidate remains **DRAFT / UNMERGED**.
 
 **Hard Gate E BLOCK until independently checked**: actual five-source
 OneBacking/initialize→aggregate p/O/R/A/D correspondence (especially
