@@ -1170,6 +1170,186 @@ static bool owner_poison(const char *path)
     nl_checked_destroy(entry);
     return true;
 }
+#ifdef NEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL
+static bool three_poison(const char *path)
+{
+    NLCheckedFragment *entry = NULL;
+    NLCheckDiagnostic d = {0};
+    CHECK(load(path, &entry, &d) == NL_CHECK_OK);
+    NLCheckedFragment *top = (NLCheckedFragment *)body(entry);
+    NLCheckedFragment *parent = at_count(entry, 4);
+    NLCheckedFragment *leaf =
+        (NLCheckedFragment *)nl_checked_match_arm(parent, match(parent), 1);
+    CHECK(leaf && leaf->whole_call &&
+          nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    const NLWholeValueCallView good = leaf->whole_value;
+    CHECK(good.count == 3);
+    for (size_t i = 0; i < 3; ++i) {
+        leaf->whole_value.inputs[i] = 0;
+        CHECK(rejected_certificate(top, entry));
+        leaf->whole_value = good;
+        leaf->whole_value.donors[i] = 0;
+        CHECK(rejected_certificate(top, entry));
+        leaf->whole_value = good;
+        leaf->whole_value.parameters[i] = 0;
+        CHECK(rejected_certificate(top, entry));
+        leaf->whole_value = good;
+    }
+    leaf->whole_value.count = 2;
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    leaf->whole_value.result = 0;
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    leaf->whole_value.parameters[2] = good.parameters[0];
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    leaf->whole_value.receiver = good.donors[0];
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    NLSemanticContext *clone = NULL;
+    CHECK(nl_sem_clone(good.entry, &clone) == NL_CHECK_OK);
+    leaf->whole_value.entry = clone;
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    nl_semantic_destroy(clone);
+    NLSemanticContext *worlds[] = {(NLSemanticContext *)good.entry,
+                                   (NLSemanticContext *)good.returned,
+                                   (NLSemanticContext *)good.received};
+    for (size_t j = 0; j < 3; ++j) {
+        NLSemanticContext *c = worlds[j];
+        for (size_t i = 0; i < c->value_count; ++i) {
+            NLSemanticValueView *v = &c->values[i];
+            const NLSemanticValueView saved = *v;
+            if (v->carrier != NL_CARRIER_ENDED &&
+                c->types[v->type - 1].view.kind == NL_TYPE_ALLOCATION) {
+                v->allocation_region = 0;
+                CHECK(rejected_certificate(top, entry));
+                *v = saved;
+            }
+            if (v->carrier != NL_CARRIER_ENDED &&
+                v->type == nl_semantic_domain_type(c)) {
+                v->domain = 0;
+                CHECK(rejected_certificate(top, entry));
+                *v = saved;
+            }
+        }
+        for (size_t k = 0; k < 2; ++k) {
+            NLSemanticValueView *packet = &c->values[good.inputs[k] - 1];
+            const NLSemanticValueView saved = *packet;
+            packet->fields[1] = packet->fields[2];
+            CHECK(rejected_certificate(top, entry));
+            *packet = saved;
+            NLSemanticValueView *ptr = &c->values[packet->fields[0] - 1];
+            const NLSemanticValueView old = *ptr;
+            ++ptr->reference.incarnation;
+            CHECK(rejected_certificate(top, entry));
+            *ptr = old;
+            ptr->reference.place = 0;
+            CHECK(rejected_certificate(top, entry));
+            *ptr = old;
+            NLSemanticPlaceView *root = &c->places[ptr->reference.place - 1];
+            const NLSemanticPlaceView place = *root;
+            ++root->incarnation;
+            CHECK(rejected_certificate(top, entry));
+            *root = place;
+            root->placement.region = 1;
+            CHECK(rejected_certificate(top, entry));
+            *root = place;
+        }
+        NLSemanticBindingView *donor = &c->bindings[good.donors[2] - 1].view;
+        const NLSemanticBindingView saved = *donor;
+        donor->availability = NL_CONSUMED;
+        CHECK(rejected_certificate(top, entry));
+        *donor = saved;
+        if (j) {
+            NLSemanticValueView *token = &c->values[good.inputs[2] - 1];
+            const NLSemanticValueView old = *token;
+            ++token->reference.incarnation;
+            CHECK(rejected_certificate(top, entry));
+            *token = old;
+            token->type = c->values[good.inputs[0] - 1].type;
+            CHECK(rejected_certificate(top, entry));
+            *token = old;
+        }
+    }
+    for (size_t j = 0; j < 3; ++j) {
+        NLSemanticContext *c = worlds[j];
+        const size_t count = c->value_count;
+        const NLSemanticValueView packet = c->values[good.inputs[0] - 1];
+        for (size_t k = 1; k < 3; ++k) {
+            NLSemanticValueView duplicate = c->values[packet.fields[k] - 1];
+            duplicate.carrier = NL_CARRIER_LOOSE;
+            duplicate.owner_place = 0;
+            duplicate.aggregate_owner = 0;
+            NLValueId clone_id = 0;
+            CHECK(nl_sem_new_value(c, duplicate, &clone_id) == NL_CHECK_OK &&
+                  clone_id == count + 1);
+            const NLCheckStatus rejected =
+                nl_checked_captured_closure_validate(top, match(top));
+            CHECK(rejected == NL_CHECK_SEMANTIC_ERROR ||
+                  rejected == NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+            char *output = NULL;
+            size_t length = 777;
+            CHECK(nl_checked_c_node(entry, &output, &length) ==
+                      NL_NODE_C_UNSUPPORTED &&
+                  !output && length == 777);
+            ++backend_poison_count;
+            c->value_count = count;
+        }
+    }
+    NLCheckedNodeView *call = &leaf->nodes[leaf->whole_call - 1];
+    const NLCheckedNodeView saved = *call;
+    call->argument_count = 2;
+    CHECK(rejected_certificate(top, entry));
+    *call = saved;
+    NLCheckedNodeView *arg =
+        &leaf->nodes
+             [leaf->nodes[leaf->nodes[call->first_argument - 1].next_argument -
+                          1]
+                  .next_argument -
+              1];
+    const NLCheckedNodeView token = *arg;
+    arg->value_use = NL_VALUE_CONSUMED;
+    CHECK(rejected_certificate(top, entry));
+    *arg = token;
+    arg->next_argument = call->first_argument;
+    CHECK(rejected_certificate(top, entry));
+    *arg = token;
+    NLCheckedFragment *callee =
+        (NLCheckedFragment *)nl_checked_call_body(leaf, leaf->whole_call);
+    for (size_t i = 0; i < callee->count; ++i) {
+        NLCheckedNodeView *n = &callee->nodes[i];
+        const NLCheckedNodeView old = *n;
+        if (n->kind == NL_CHECKED_AGGREGATE) {
+            n->argument_count = 1;
+            CHECK(rejected_certificate(top, entry));
+            *n = old;
+        }
+        if (n->kind == NL_CHECKED_AGGREGATE_FIELD) {
+            n->field_index = 2;
+            CHECK(rejected_certificate(top, entry));
+            *n = old;
+        }
+        if (n->kind == NL_CHECKED_IDENTIFIER) {
+            n->value_use = NL_VALUE_COPIED;
+            CHECK(rejected_certificate(top, entry));
+            *n = old;
+        }
+        if (n->kind == NL_CHECKED_RETURN) {
+            n->returned.value = 0;
+            CHECK(rejected_certificate(top, entry));
+            *n = old;
+        }
+    }
+    CHECK(nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    printf("three-argument actual source poison rejected: %zu; restored public "
+           "validator OK\n",
+           backend_poison_count);
+    nl_checked_destroy(entry);
+    return true;
+}
+#endif
 static bool owner_parser_oom(const char *path)
 {
     NLSource *source = NULL;
@@ -1223,6 +1403,10 @@ int main(int argc, char **argv)
     if (argc != 3)
         return EXIT_FAILURE;
 #ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+#ifdef NEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL
+    if (strcmp(argv[1], "three-poison") == 0)
+        return three_poison(argv[2]) ? 0 : 1;
+#endif
     if (strcmp(argv[1], "owner-poison") == 0)
         return owner_poison(argv[2]) ? 0 : 1;
     if (strcmp(argv[1], "owner-parser-oom") == 0)

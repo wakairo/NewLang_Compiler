@@ -80,3 +80,9 @@ jobs:
           cmake -S . -B build -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON
           cmake --build build --parallel 2
           ctest --test-dir build --output-on-failure
+      - name: UNADOPTED Issue 289 finite three-argument source call (DO NOT MERGE)
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON
+          cmake --build build --parallel 2
+          ctest --test-dir build --output-on-failure

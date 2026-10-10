@@ -90,6 +90,11 @@ if os.environ.get("NEWLANG_P285") == "1":
              if name == "refusal-loses-whole-owner" else (name,text,category,code,proof)
              for name,text,category,code,proof in cases]
 
+if os.environ.get("NEWLANG_P289") == "1":
+    cases = [(name,text,"semantic-profile-unsupported","ALLOCATED-DOMAIN-LOAN",proof)
+             if code == "P8-SIGNATURE-PRECISION" else (name,text,category,code,proof)
+             for name,text,category,code,proof in cases]
+
 def run(directory):
     observations = []
     for name, text, category, code, proof in cases:
