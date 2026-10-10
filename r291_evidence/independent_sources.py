@@ -48,6 +48,18 @@ finalize_domain(d_{i});
 deallocate(a_{i}, raw_{i});
 """
     def success_body():
+        # The Draft17.30 three-link H profile requires this exact original
+        # five-allocation graph before any custody-transfer experiment.
+        wiring = ""
+        if n == 5:
+            edges = [(0,"child",1),(1,"prev",3),(1,"next",2),
+                     (2,"prev",1),(2,"next",3),(3,"prev",2)]
+            for j,(src,field,dst) in enumerate(edges):
+                wiring += f"""let previous_{j} = loan_read(d_{src}) {{ |guard_{j}|
+  let projected_{j} = ref_from_ptr(write, p_{src}, guard_{j});
+  replace(projected_{j}@{field}, Option<ptr<Node>>::Some(p_{dst}))
+}};
+"""
         expr = "Vessel { " + ", ".join(
           f"{labels[i]}: LiveRoot {{ p: p_{i}, a: a_{i}, d: d_{i} }}"
           for i in range(m)) + " }"
@@ -57,27 +69,27 @@ deallocate(a_{i}, raw_{i});
         if mode == "active_loan":
             # Move one active D through a returning aggregate while a stability
             # loan still protects it; source must NOT accept this.
-            return f"loan_read(d_1) {{ |active| transit({expr}) }};\nunit\n"
+            return wiring + f"loan_read(d_1) {{ |active| transit({expr}) }};\nunit\n"
         if mode == "duplicate_donor":
             decl += "let shipped = transit(vessel);\nlet twice = transit(vessel);\n"
             decl += "let Vessel {first: l, second: r}=shipped;\nretire(l); retire(r); unit\n"
-            return decl
+            return wiring + decl
         if mode == "mixed_alloc":
             decl += "let shipped = exchange(vessel);\n"
         else:
             decl += "let shipped = transit(vessel);\n"
         decl += "let Vessel {" + ", ".join(f"{labels[i]}: keeper_{i}" for i in range(m)) + " } = shipped;\n"
         if mode == "lost_original":
-            return decl + "retire(keeper_0);\nunit\n"
+            return wiring + decl + "retire(keeper_0);\nunit\n"
         if mode == "duplicate_receiver":
             decl += "retire(keeper_0);\nretire(keeper_0);\n"
             decl += "retire(keeper_1);\nunit\n"
-            return decl
+            return wiring + decl
         for i in range(m):
             decl += f"retire(keeper_{i});\n"
         for i in range(m,n):
             decl += f"retire(LiveRoot {{p:p_{i}, a:a_{i}, d:d_{i}}});\n"
-        return decl+"unit\n"
+        return wiring + decl+"unit\n"
     def branch(i):
         prefix = f"""match try_allocate_one<Node>() {{
 None => {{
@@ -104,12 +116,12 @@ let p_{i} = loan_read(d_{i}) {{ |stable_{i}|
 
 CASES = [
   ("original_2", "plain", 2),
-  ("duplicate_donor", "duplicate_donor", 2),
-  ("duplicate_receiver", "duplicate_receiver", 2),
-  ("mixed_allocation_release", "mixed_alloc", 2),
-  ("lost_original", "lost_original", 2),
-  ("omitted_owner", "omitted_member", 2),
-  ("active_domain_loan", "active_loan", 2),
+  ("duplicate_donor", "duplicate_donor", 5),
+  ("duplicate_receiver", "duplicate_receiver", 5),
+  ("mixed_allocation_release", "mixed_alloc", 5),
+  ("lost_original", "lost_original", 5),
+  ("omitted_owner", "omitted_member", 5),
+  ("active_domain_loan", "active_loan", 5),
   ("original_3", "plain", 3),
   ("original_5", "plain", 5),
 ]
