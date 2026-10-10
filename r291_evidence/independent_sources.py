@@ -30,16 +30,19 @@ def make(mode, n=2):
     fields = ", ".join(f"{labels[i]}: LiveRoot" for i in range(m))
     header = HEADER + "struct Vessel { " + fields + ", }\n"
     head = header + FINISH + "fn transit(v:Vessel)->Vessel { return v; }\n"
-    if mode == "mixed_alloc":
-        head += """fn exchange(v:Vessel)->Vessel {
-    let Vessel { first: left, second: right } = v;
-    let LiveRoot { p: lp, a: la, d: ld } = left;
-    let LiveRoot { p: rp, a: ra, d: rd } = right;
-    return Vessel {
-        first: LiveRoot { p: lp, a: ra, d: ld },
-        second: LiveRoot { p: rp, a: la, d: rd }
-    };
-}
+    if mode in ("mixed_alloc", "mixed_domain"):
+        first = ("ra","ld") if mode == "mixed_alloc" else ("la","rd")
+        second = ("la","rd") if mode == "mixed_alloc" else ("ra","ld")
+        head += f"""fn exchange(v:Vessel)->Vessel {{
+    let Vessel {{ first: left, second: right, third: third, fourth: fourth }} = v;
+    let LiveRoot {{ p: lp, a: la, d: ld }} = left;
+    let LiveRoot {{ p: rp, a: ra, d: rd }} = right;
+    return Vessel {{
+        first: LiveRoot {{ p: lp, a: {first[0]}, d: {first[1]} }},
+        second: LiveRoot {{ p: rp, a: {second[0]}, d: {second[1]} }},
+        third: third, fourth: fourth
+    }};
+}}
 """
     def cleanup(i):
         return f"""let void_{i} = loan_exclusive_read(d_{i}) {{ |ender_{i}| destroy(p_{i}, ender_{i}) }};
@@ -72,9 +75,9 @@ deallocate(a_{i}, raw_{i});
             return wiring + f"loan_read(d_1) {{ |active| transit({expr}) }};\nunit\n"
         if mode == "duplicate_donor":
             decl += "let shipped = transit(vessel);\nlet twice = transit(vessel);\n"
-            decl += "let Vessel {first: l, second: r}=shipped;\nretire(l); retire(r); unit\n"
+            decl += "let Vessel {first: l, second: r, third: t, fourth: f}=shipped;\nretire(l); retire(r); retire(t); retire(f); unit\n"
             return wiring + decl
-        if mode == "mixed_alloc":
+        if mode in ("mixed_alloc", "mixed_domain"):
             decl += "let shipped = exchange(vessel);\n"
         else:
             decl += "let shipped = transit(vessel);\n"
@@ -83,7 +86,7 @@ deallocate(a_{i}, raw_{i});
             return wiring + decl + "retire(keeper_0);\nunit\n"
         if mode == "duplicate_receiver":
             decl += "retire(keeper_0);\nretire(keeper_0);\n"
-            decl += "retire(keeper_1);\nunit\n"
+            decl += "retire(keeper_1); retire(keeper_2); retire(keeper_3);\nunit\n"
             return wiring + decl
         for i in range(m):
             decl += f"retire(keeper_{i});\n"
@@ -119,10 +122,12 @@ CASES = [
   ("duplicate_donor", "duplicate_donor", 5),
   ("duplicate_receiver", "duplicate_receiver", 5),
   ("mixed_allocation_release", "mixed_alloc", 5),
+  ("mixed_domain_release", "mixed_domain", 5),
   ("lost_original", "lost_original", 5),
   ("omitted_owner", "omitted_member", 5),
   ("active_domain_loan", "active_loan", 5),
   ("original_3", "plain", 3),
+  ("original_4", "plain", 4),
   ("original_5", "plain", 5),
 ]
 rows=[]
