@@ -66,7 +66,7 @@ deallocate(a_{i}, raw_{i});
         if mode == "direct_release":
             return wiring + "".join(
                 f"let direct_{i}=LiveRoot {{p:p_{i},a:a_{i},d:d_{i}}};\nretire(direct_{i});\n"
-                for i in ([1,3,0,2,4] if n == 5 else range(n))) + "unit\\n"
+                for i in ([1,3,0,2,4] if n == 5 else range(n))) + "unit\n"
         expr = "Vessel { " + ", ".join(
           f"{labels[i]}: LiveRoot {{ p: p_{i}, a: a_{i}, d: d_{i} }}"
           for i in range(m)) + " }"
