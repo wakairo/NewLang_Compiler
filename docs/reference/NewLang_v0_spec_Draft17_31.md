@@ -2992,8 +2992,13 @@ fn finish_four(t: TreeFour) -> unit {
 The intermediate old Option<ptr<Node>> values are Copy/Discardable;
 this is NOT old Option<LiveTail> which remains nonDiscardable even at None.
 All domain loans inside helpers end before the LiveRoot re-pack. At
-source entry and exit of each known call, original A/R/O/D match and
-current/no-escaping-scope proof remain mandatory. This bounded example
+entry and exit of every known call, actual p/O/R/A/D constituent
+identities (including any mismatch), nonCopy/current-carrier state
+and no-escaping-loan obligations are preserved. Exact original
+p/O/R/Allocation/Domain matching is demanded only for operations
+or transitive named-callee requirements that actually use the
+corresponding authority; the specific H1 original-B result identity
+is a separate product witness. This bounded example
 uses 3 reusable field helpers rather than a NEW generic field-loan syntax;
 it does increase function/source ceremony, to be measured before product PASS.
 The ordinary Copy first_ptr/last_ptr/b_ptr actuals must be source-proved
