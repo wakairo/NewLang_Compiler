@@ -2820,27 +2820,45 @@ known-direct inferred-requirement method is reused and extended from
 separate two-H p/a/d parameters to complete source components of these
 small acyclic nonCopy record values:
 - At definition time, start with fresh, UNCORRELATED symbolic p/a/d
-  formals and full aggregate field constituents. For every root-access,
-  owner-bearing output, full-range destroy/deallocate, field Change and
-  whole result, independently infer precise relative original p/O/R/A/D,
-  access, loan and current-owner requirements. Do not stipulate Matched
-  or a source AST proof flag from type names. Reject inconsistent/unprovable
-  local steps or nonDiscardable normal exits.
-- At **every actual known-direct call**, substitute real caller source
-  origin facts for all formal member paths. Prove separately
-  PtrOrigin(p)==O/R, AllocationBacking(a)==R, Governs(O)==D(d),
-  original full-slot recovery, relevant loan/Change/Reset/current root
-  and all source bindings' affine inventory. Existing §13.5c/§18.7–8
-  scope-dependency, alias and caller post-state rules are unchanged.
-  Unknown is REJECT, not safe assumption. A caller with a ghost duplicate
-  B grant cannot pass based only on the callee's input slots.
-- For an owner-bearing complete result, require every original grant to
-  remain live/matched in its current returned member, with consumed old
-  packet/formals and no escaping borrow. Checked semantic artifact records
-  the original source fact origins, whole consume edges, tree member
-  paths, dependent loans, Change/Reset, exact root identity, inferred
-  caller requirements and result location. Backend must not derive an
-  Allocation from the Copy dst.child or nominal spelling.
+  formals and full aggregate constituents. Check each actual source BODY
+  operation independently: ordinary whole assembly/move/return requires
+  affine completeness (I); H field access requires current p/O/D/access
+  and proper loan/Change/Reset (II); original lifetime-ending release
+  needs the additional original R/Allocation/full-slot/Domain matches
+  (II). Do NOT infer root-release equality merely from an owner-like
+  nominal, pure whole result, unrelated ptr field or caller name.
+  Source-defined consumers infer their conditional requirements ONLY
+  from the actual primitive or transitive known-callee uses in the body,
+  not from assumed favorable caller relations. Reject unprovable body
+  steps or nonDiscardable normal exits.
+- At **every actual known-direct call**, check the ordinary nonCopy
+  argument and all caller-current binding/member availability first (I).
+  Substitute actual source original-provenance and current world facts
+  for every operational condition inferred from the independently
+  checked callee BODY. Prove ONLY the needed p/O/D field-access and/or
+  full original p/O/R/A/D terminal matches (II), plus relevant loans,
+  Change/Reset, aliases, complete full range and consuming effects
+  under §13.5c/§18.7–8. There is NO unconditional
+  AllocationBacking(a)==R check on a pure assembler, pure forwarder,
+  or ordinary whole record return. Unknown rejects an UNSATISFIED
+  REQUIRED operation precondition, not a mismatched but harmless value.
+  No live ghost duplicate original A_B/D_B or conflicting active D_B
+  loan may be overlooked just because the local call slots look valid.
+- For **every ordinary complete result**, carry the exact original
+  source constituent identities and matching OR mismatching relations
+  unmodified; consume old parameter/input/formal/result binding places
+  exactly once and forbid escaping scoped refs. Do not make any
+  general matched-result guarantee for LiveRoot, TreeTwo or similar
+  nominal types. Only the specific cJSON original-five caller's H1
+  product assessment separately checks whether returned TreeTwo
+  contains genuine K_dst and K_B (III); its failure is not an extra
+  general semantic error. Each later release-using named terminal
+  must separately satisfy its body-derived requirements (II).
+  Checked semantic artifact tracks source origins, nonCopy consume
+  edges, nested member paths, inherited conditional use-requirements,
+  current result places, loan/effect state and actual original
+  carrier uniqueness. Backend cannot mint Allocation authority
+  from the Copy dst.child or record spelling.
 
 **Cheapest stable domain source:** do not add loan_read(ticket@domain),
 ticket@ptr, arbitrary field borrowing or ref-to-field owner grant.
