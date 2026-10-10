@@ -1,4 +1,5 @@
 """P281 first source gate; blocked mutations are never semantic safety passes."""
+import os
 import hashlib
 import json
 import pathlib
@@ -75,6 +76,20 @@ for name in ("wrong-original-C-Allocation-at-finish-two", "wrong-original-C-Doma
     cases.append(("P278-" + name, text, category, code, "reject:" + code))
 
 
+# The immutable inputs remain controls. Only the NEW default-OFF profile
+# deliberately changes their first gate; do not count them as safety passes.
+if os.environ.get("NEWLANG_P285") == "1":
+    cases = [(name,text,
+              "semantic-precision-unsupported" if category == "parser-unsupported" and not name.startswith("minimal-") else "semantic-profile-unsupported",
+              "P8-SIGNATURE-PRECISION" if category == "parser-unsupported" and not name.startswith("minimal-") else "FIVE-ROOT-SOURCE-PROFILE",proof)
+             if category == "parser-unsupported" or name.startswith("minimal-") else (name,text,category,code,proof)
+             for name,text,category,code,proof in cases]
+
+if os.environ.get("NEWLANG_P285") == "1":
+    cases = [(name,text,"parser-syntax-error","P13-IF-OPEN",proof)
+             if name == "refusal-loses-whole-owner" else (name,text,category,code,proof)
+             for name,text,category,code,proof in cases]
+
 def run(directory):
     observations = []
     for name, text, category, code, proof in cases:
@@ -87,16 +102,16 @@ def run(directory):
         assert first.returncode == (4 if proof == "after-death" else 3) and not first.stdout, (name, first.stderr)
         assert code.encode() in first.stderr, (name, first.stderr)
         assert set(directory.iterdir()) == before, name
-        expected_label = b"error(semantic)" if category == "semantic-reject" else b"error(cli)" if proof == "after-death" else b"error(unsupported)"
+        expected_label = b"error(semantic)" if category == "semantic-reject" else b"error(cli)" if proof == "after-death" else b"error(syntax)" if category == "parser-syntax-error" else b"error(precision)" if category == "semantic-precision-unsupported" else b"error(unsupported)"
         assert expected_label in first.stderr, (name, first.stderr)
         checked = subprocess.run([boundary, str(path)], capture_output=True)
         assert checked.returncode == 0 and not checked.stderr, (name, checked.stderr)
         view = json.loads(checked.stdout)
-        if category == "parser-unsupported":
-            assert view["parse_status"] == 2 and not view["syntax_tree"] and not view["registration_attempted"]
+        if category.startswith("parser-"):
+            assert view["parse_status"] == (3 if category == "parser-syntax-error" else 2) and not view["syntax_tree"] and not view["registration_attempted"]
         else:
             assert view["parse_status"] == 0 and view["syntax_tree"] and view["registration_attempted"]
-            assert view["registration_status"] == (0 if proof == "after-death" else 1 if category == "semantic-reject" else 2)
+            assert view["registration_status"] == (0 if proof == "after-death" else 1 if category == "semantic-reject" else 3 if category == "semantic-precision-unsupported" else 2)
         if proof != "after-death":
             assert view["code"] == code and view["snapshot_unchanged"]
             view["source_span"] = text[view["start_byte"]:view["end_byte"]]

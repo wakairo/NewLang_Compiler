@@ -1073,6 +1073,141 @@ static bool transitive_poison(const char *path)
 }
 #endif
 
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+static bool owner_poison(const char *path)
+{
+    NLCheckedFragment *entry = NULL;
+    NLCheckDiagnostic d = {0};
+    CHECK(load(path, &entry, &d) == NL_CHECK_OK);
+    NLCheckedFragment *top = (NLCheckedFragment *)body(entry);
+    NLCheckedFragment *parent = at_count(entry, 4);
+    NLCheckedFragment *leaf =
+        (NLCheckedFragment *)nl_checked_match_arm(parent, match(parent), 1);
+    CHECK(leaf && leaf->whole_call &&
+          nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    const NLWholeValueCallView good = leaf->whole_value;
+    CHECK(good.count == 1);
+    leaf->whole_value.count = 2;
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    leaf->whole_value.result = 0;
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    leaf->whole_value.inputs[0] = 0;
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    leaf->whole_value.receiver = good.donors[0];
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    NLSemanticContext *worlds[] = {(NLSemanticContext *)good.entry,
+                                   (NLSemanticContext *)good.returned,
+                                   (NLSemanticContext *)good.received};
+    for (size_t j = 0; j < 3; ++j) {
+        NLSemanticContext *c = worlds[j];
+        for (size_t i = 0; i < c->value_count; ++i) {
+            NLSemanticValueView *v = &c->values[i];
+            if (v->carrier == NL_CARRIER_ENDED)
+                continue;
+            const NLSemanticValueView saved = *v;
+            if (c->types[v->type - 1].view.kind == NL_TYPE_ALLOCATION) {
+                v->allocation_region = 0;
+                CHECK(rejected_certificate(top, entry));
+                *v = saved;
+            }
+            if (v->type == nl_semantic_domain_type(c)) {
+                v->domain = 0;
+                CHECK(rejected_certificate(top, entry));
+                *v = saved;
+            }
+            if (v->carrier == NL_CARRIER_AGGREGATE && v->field_count) {
+                v->fields[0] = 0;
+                CHECK(rejected_certificate(top, entry));
+                *v = saved;
+            }
+        }
+    }
+    size_t constructors = 0, patterns = 0;
+    for (size_t i = 0; i < leaf->count; ++i) {
+        NLCheckedNodeView *n = &leaf->nodes[i];
+        if (n->kind != NL_CHECKED_AGGREGATE &&
+            n->kind != NL_CHECKED_AGGREGATE_BINDING)
+            continue;
+        const NLCheckedNodeView *input =
+            n->kind == NL_CHECKED_AGGREGATE
+                ? n
+                : nl_checked_node_view(leaf, n->initializer);
+        if (!input ||
+            !nl_experimental_owner_aggregate_type(leaf->context, input->type))
+            continue;
+        const NLCheckedNodeView saved = *n;
+        --n->argument_count;
+        CHECK(rejected_certificate(top, entry));
+        *n = saved;
+        NLCheckedNodeView *member = &leaf->nodes[n->first_argument - 1];
+        const NLCheckedNodeView field = *member;
+        member->field_index = 4;
+        CHECK(rejected_certificate(top, entry));
+        *member = field;
+        member->next_argument = n->first_argument;
+        CHECK(rejected_certificate(top, entry));
+        *member = field;
+        constructors += n->kind == NL_CHECKED_AGGREGATE;
+        patterns += n->kind == NL_CHECKED_AGGREGATE_BINDING;
+    }
+    CHECK(constructors >= 8 && patterns >= 3);
+    NLCheckedFragment *callee =
+        (NLCheckedFragment *)nl_checked_call_body(leaf, leaf->whole_call);
+    NLCheckedNodeView *ret = operation(callee, NL_CHECKED_RETURN);
+    CHECK(ret);
+    const NLCheckedNodeView saved = *ret;
+    ret->returned.value = 0;
+    CHECK(rejected_certificate(top, entry));
+    *ret = saved;
+    CHECK(nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    printf("owner aggregate actual source poison rejected: %zu; "
+           "constructors=%zu patterns=%zu; restored validator OK\n",
+           backend_poison_count, constructors, patterns);
+    nl_checked_destroy(entry);
+    return true;
+}
+static bool owner_parser_oom(const char *path)
+{
+    NLSource *source = NULL;
+    CHECK(nl_source_load(path, &source) == NL_SOURCE_OK);
+    size_t attempts = 0;
+    for (failure_at = 0; failure_at < 30000; ++failure_at) {
+        NLParser *parser = NULL;
+        NLSyntaxTree *unit = NULL;
+        index_at = 0;
+        injecting = true;
+        NLParseStatus status = nl_parser_create(source, &parser);
+        if (status == NL_PARSE_OK)
+            status = nl_parser_parse_function_unit(parser, &unit, NULL);
+        injecting = false;
+        if (status == NL_PARSE_OK) {
+            attempts = failure_at;
+            nl_syntax_tree_destroy(unit);
+            nl_parser_destroy(parser);
+            break;
+        }
+        CHECK(status == NL_PARSE_OUT_OF_MEMORY && unit == NULL);
+        nl_parser_destroy(parser);
+        parser = NULL;
+        CHECK(nl_parser_create(source, &parser) == NL_PARSE_OK &&
+              nl_parser_parse_function_unit(parser, &unit, NULL) ==
+                  NL_PARSE_OK);
+        nl_syntax_tree_destroy(unit);
+        nl_parser_destroy(parser);
+    }
+    CHECK(attempts > 0);
+    nl_source_destroy(source);
+    printf("owner aggregate parser exhaustive OOM: %zu; no partial syntax and "
+           "clean retries\n",
+           attempts);
+    return true;
+}
+#endif
+
 int main(int argc, char **argv)
 {
     if (argc >= 2 && strncmp(argv[1], "full-", 5) == 0) {
@@ -1087,6 +1222,12 @@ int main(int argc, char **argv)
         return evidence(argv[2], (size_t)strtoul(argv[3], NULL, 10)) ? 0 : 1;
     if (argc != 3)
         return EXIT_FAILURE;
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+    if (strcmp(argv[1], "owner-poison") == 0)
+        return owner_poison(argv[2]) ? 0 : 1;
+    if (strcmp(argv[1], "owner-parser-oom") == 0)
+        return owner_parser_oom(argv[2]) ? 0 : 1;
+#endif
 #ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
     if (strcmp(argv[1], "transitive-poison") == 0)
         return transitive_poison(argv[2]) ? 0 : 1;

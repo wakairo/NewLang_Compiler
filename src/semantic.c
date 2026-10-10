@@ -1097,10 +1097,49 @@ bool nl_experimental_nested_type(const NLSemanticContext *c, NLTypeId id)
     return false;
 }
 
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+static bool owner_shape(const NLSemanticContext *c, NLTypeId id,
+                        size_t *remaining, size_t depth)
+{
+    if (id == 0 || id > c->type_count || depth > 16)
+        return false;
+    if (nl_experimental_root_record_type(c, id)) {
+        if (*remaining == 0)
+            return false;
+        --*remaining;
+        return true;
+    }
+    const NLTypeEntry *t = &c->types[id - 1];
+    if (t->view.kind != NL_TYPE_NOMINAL || t->view.field_count == 0 ||
+        t->view.field_count > 4 || t->view.is_copy || t->view.is_discardable)
+        return false;
+    for (size_t i = 0; i < t->view.field_count; ++i)
+        if (t->field_types[i] >= id ||
+            !owner_shape(c, t->field_types[i], remaining, depth + 1))
+            return false;
+    return true;
+}
+#endif
+
+bool nl_experimental_owner_aggregate_type(const NLSemanticContext *c,
+                                          NLTypeId id)
+{
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+    size_t remaining =
+        4; /* Four original donor responsibilities, not grants. */
+    return c != NULL && owner_shape(c, id, &remaining, 0);
+#else
+    (void)c;
+    (void)id;
+    return false;
+#endif
+}
+
 bool nl_experimental_value_type(const NLSemanticContext *c, NLTypeId id)
 {
 #ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
-    return nl_experimental_root_record_type(c, id) ||
+    return nl_experimental_owner_aggregate_type(c, id) ||
+           nl_experimental_root_record_type(c, id) ||
            nl_experimental_nested_type(c, id);
 #else
     (void)c;
@@ -1137,6 +1176,15 @@ NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *c,
     experimental_triad = experimental_triad ||
                          (count == 2 && fields[0].type == fields[1].type &&
                           nl_experimental_root_record_type(c, fields[0].type));
+#endif
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+    if (!experimental_triad && count <= 4) {
+        size_t remaining = 4;
+        bool owner = true;
+        for (size_t f = 0; f < count; ++f)
+            owner = owner && owner_shape(c, fields[f].type, &remaining, 0);
+        experimental_triad = owner;
+    }
 #endif
     bool copy = true, discard = true;
     for (size_t f = 0; f < count; ++f) {

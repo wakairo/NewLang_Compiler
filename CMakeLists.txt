@@ -40,6 +40,15 @@ if(NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL)
     target_compile_definitions(newlang_options INTERFACE
         NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=1)
 endif()
+option(NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+    "UNADOPTED Issue 285 acyclic owner aggregate substrate; DO NOT MERGE" OFF)
+if(NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES)
+    if(NOT NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL)
+        message(FATAL_ERROR "Issue 285 requires the separate Issue 278 opt-in")
+    endif()
+    target_compile_definitions(newlang_options INTERFACE
+        NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=1)
+endif()
 target_compile_options(newlang_options INTERFACE
     -Wall -Wextra -Wpedantic -Werror)
 if(NOT NEWLANG_SANITIZER STREQUAL "none")
@@ -109,6 +118,18 @@ if(BUILD_TESTING)
             "$<TARGET_FILE:captured_closure_test>")
         if(NEWLANG_EXPERIMENTAL_NESTED_CALLER)
             if(NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL)
+                if(NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES)
+                    add_executable(owner_aggregate_evidence tests/integration/owner_aggregate_evidence.c)
+                    target_link_libraries(owner_aggregate_evidence PRIVATE newlang_checked_c_node)
+                    add_test(NAME owner_aggregate.integration COMMAND "${Python3_EXECUTABLE}"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/owner_aggregate_test.py"
+                        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:owner_aggregate_evidence>"
+                        "$<TARGET_FILE:five_root_source_gate_evidence>")
+                    foreach(mode owner-poison owner-parser-oom oom checker-oom)
+                        add_test(NAME owner_aggregate_${mode}.unit COMMAND captured_closure_test full-${mode}
+                            "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_owner_aggregate_transport.nl")
+                    endforeach()
+                endif()
                 add_executable(five_root_source_gate_evidence
                     tests/integration/five_root_source_gate_evidence.c)
                 target_link_libraries(five_root_source_gate_evidence PRIVATE
@@ -580,6 +601,9 @@ if(BUILD_TESTING)
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+    if(NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES)
+        set_property(TEST nested_caller.integration five_root_source_gate.integration APPEND PROPERTY ENVIRONMENT "NEWLANG_P285=1")
+    endif()
     if(NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL)
         set_property(TEST nested_caller.integration APPEND PROPERTY ENVIRONMENT "NEWLANG_P278=1")
     endif()

@@ -74,3 +74,9 @@ jobs:
           cmake -S . -B build -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON
           cmake --build build --parallel 2
           ctest --test-dir build --output-on-failure
+      - name: UNADOPTED Issue 285 finite owner aggregate substrate (DO NOT MERGE)
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON
+          cmake --build build --parallel 2
+          ctest --test-dir build --output-on-failure

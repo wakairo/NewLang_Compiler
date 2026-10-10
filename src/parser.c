@@ -1395,6 +1395,20 @@ static NLSyntaxNode *source_binding(NLParser *parser)
                     source_name(parser, NL_SYNTAX_RECEIVER, false);
                 if (field == NULL)
                     return NULL;
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+                if (punct(parser, ':')) {
+                    const NLSourceSpan label = field->view.data.name;
+                    consume(parser);
+                    NLSyntaxNode *receiver =
+                        source_name(parser, NL_SYNTAX_RECEIVER, false);
+                    if (receiver == NULL)
+                        return NULL;
+                    field->view.kind = NL_SYNTAX_BINDING;
+                    field->view.data.binding.name = label;
+                    field->view.data.binding.initializer = receiver;
+                    field->view.span.end_byte = receiver->view.span.end_byte;
+                }
+#endif
                 link_node(&head, &tail, field);
                 ++count;
                 if (punct(parser, ':') || punct(parser, '{') ||
@@ -1606,7 +1620,11 @@ static NLSyntaxNode *avs_struct(NLParser *parser)
               !word(parser, "u8") && !word(parser, "bool") &&
               !word(parser, "unit") && !word(parser, "Byte") &&
               !word(parser, "Allocation") && !word(parser, "LifetimeDomain")) ||
-             (i == 1 &&
+             ((i == 1
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+               || i == 2 || i == 3
+#endif
+               ) &&
               decl->view.kind == NL_SYNTAX_EXPERIMENTAL_NESTED_STRUCT &&
               parser->token.kind == NL_TOKEN_WORD))) {
             field_type = type(parser);
@@ -1667,11 +1685,18 @@ static NLSyntaxNode *avs_struct(NLParser *parser)
     }
     if (punct(parser, ','))
         consume(parser);
+    bool bounded_owner = false;
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+    bounded_owner = decl->view.kind == NL_SYNTAX_EXPERIMENTAL_NESTED_STRUCT &&
+                    decl->view.data.avs_struct.count >= 1 &&
+                    decl->view.data.avs_struct.count <= 4;
+#endif
     if (!punct(parser, '}') ||
-        decl->view.data.avs_struct.count !=
-            (decl->view.kind == NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT ? 3u
-             : three_links                                         ? 4u
-                                                                   : 2u)) {
+        (!bounded_owner &&
+         decl->view.data.avs_struct.count !=
+             (decl->view.kind == NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT ? 3u
+              : three_links                                         ? 4u
+                                                                    : 2u))) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
              "AVS-DECL-PROFILE",
              "bounded declaration requires two fields or three recursive "
