@@ -109,6 +109,14 @@ if(BUILD_TESTING)
             "$<TARGET_FILE:captured_closure_test>")
         if(NEWLANG_EXPERIMENTAL_NESTED_CALLER)
             if(NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL)
+                add_executable(five_root_source_gate_evidence
+                    tests/integration/five_root_source_gate_evidence.c)
+                target_link_libraries(five_root_source_gate_evidence PRIVATE
+                    newlang_semantic newlang_parser)
+                add_test(NAME five_root_source_gate.integration COMMAND "${Python3_EXECUTABLE}"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/five_root_source_gate_test.py"
+                    "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:five_root_source_gate_evidence>"
+                    "$<TARGET_FILE:transitive_terminal_evidence>")
                 add_executable(transitive_terminal_evidence tests/integration/transitive_terminal_evidence.c)
                 target_link_libraries(transitive_terminal_evidence PRIVATE newlang_checked_c_node)
                 add_test(NAME transitive_terminal.integration COMMAND "${Python3_EXECUTABLE}"
