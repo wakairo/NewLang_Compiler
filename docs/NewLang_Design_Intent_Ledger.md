@@ -317,13 +317,32 @@ Draft/Issueの未merge候補は `PROPOSED (unmerged)` と表記し、ADOPTEDに�
   TreeTwo, post-A finish, wrongAllocation, local-domain loan, H0 vs H1.
 - **Specific new finding:** F #47
   [HOLD](https://github.com/wakairo/NewLang_FormalProof/issues/47#issuecomment-6092828952)
-  and its [draft PR #48](https://github.com/wakairo/NewLang_FormalProof/pull/48)
-  demonstrate real B ptr + D_B can write B.prev while separate unused Allocation
-  is original A_C, NOT A_B. The source owner grant must independently establish
-  AOrigin(a)==R_root from real
-  OneBacking(R) → full Storage(R) → slot<Node>(R) → initialize O@R governed D
-  → copied ptr(O) plus consumed original Allocation(R)/Domain(D). Never infer
-  original A/R match from link write or nominal type name alone.
+  and [PR #48](https://github.com/wakairo/NewLang_FormalProof/pull/48)
+  (human-merged as noncanonical HOLD research, FormalProof/main
+  08c8b8da4b9dbe5e125e4be0643bffb28294bfad)
+  demonstrate real B ptr + D_B can write B.prev while separate unused
+  Allocation is original A_C, NOT A_B. **Only actual source operations
+  or named body-sensitive calls requiring original root RELEASE** must
+  independently establish AOrigin(a)==R_root from real
+  OneBacking(R) → full Storage(R) → slot<Node>(R) → initialize O@R
+  governed D → copied ptr(O) plus original nonCopy A/D value flow.
+  Never infer match from link write, record construction or name alone.
+- **Issue #279 intentionally narrowed THREE predicates, not a new core
+  authority rule:** (I) ordinary nonCopy complete constructor,
+  destructure, move, pure assembler, return and repair preserve the actual
+  constituent identities and affine availability, **including false
+  ptr/Allocation/Domain same-root correlation**; such harmless mismatch
+  is core-safe if later lawful matched consumption discharges all original
+  nonCopy values. (II) actual H field access requires current p/O/D/
+  loans/occurrences, not unused matching Allocation; a destroy/full
+  raw/finalize/deallocate or independently checked named terminal body
+  additionally requires original p/O/R/A/D match at each ACTUAL
+  requiring call, with Unknown rejected there. (III) the specific
+  preregistered cJSON H1 caller requires its returned single TreeTwo
+  value to contain original K_dst AND K_B, distinct from caller-held
+  B/Copy pointer H0; **H1 failure is PRODUCT NO, not an ordinary
+  source move/return error**. No source-visible owner marker/Matched
+  or automatic grant from nominal/function spelling.
 - **Gate B historical evidence:** Draft17.30 §3.2b + DI-014 are
   **normative-current BOUNDED** PRE-detach five-H, three-link, 0..5 site
   source. Draft17.27 §18.1a/DI-011 selected definition-time and every-actual
@@ -346,13 +365,19 @@ Draft/Issueの未merge候補は `PROPOSED (unmerged)` と表記し、ADOPTEDに�
 - **INTENTIONALLY EXTEND SOURCE ONLY — PROPOSED:** bounded acyclic ordinary
   user-declared value struct forms + full construction/destructuring,
   five-original role-neutral LiveRoot(p,a,d) source provenance evidence,
-  TreeFour→DetachResult(TreeThree,B)→TreeTwo(dst,B) whole-value calls,
-  actual original R/A/D/O/p equality at each known call, after-A exact
-  finish_root/finish_two. No source-visible Matched assumption, no extra
-  root/owner grant, no new core authority or lifetime law.
-  Ordinary complete whole-destructure and existing local loan_read(domain)
-  after extracting all fields replace the earlier M #270 ticket@domain
-  field-loan proposal. Source contract is not yet parser/formal proved.
+  TreeFour→DetachResult(TreeThree,B)→TreeTwo(dst,B) whole-value calls.
+  Ordinary assembly and return transport even unmatched source values;
+  only body-inferred matched root lifetime-ending uses and transitive
+  named terminal call sites require original R/A/D/O/p equality.
+  The H1 original dst+B result identity check is a **specific
+  caller/product oracle**, not a general nominal type requirement.
+  No source-visible Matched assumption, extra grant, new core
+  authority or lifetime law. Existing local loan_read(domain) after
+  complete whole-destructure replaces M #270 ticket@domain field loan.
+  P #274/#276 empirically confirmed some ordinary mixed returns,
+  lawful repairs and named one-packet terminal rejection on unmerged
+  experimental PRs #275/#277; full source/profile/native/formal
+  verification remains unproved.
 - **DEFER / no foreclosure:** general aggregate grammar, generic
   Owner<T>, arbitrary dynamic tree owner capacity, generalized LiveTail
   constructor/alias, module visibility/privacy, generic primary nominal,
@@ -361,13 +386,18 @@ Draft/Issueの未merge候補は `PROPOSED (unmerged)` と表記し、ADOPTEDに�
   general allocator/FFI/ABI, RAII/GC/Drop, sixth heap Node and actor/thread
   requirements. DI-001/002/004/005/006/007 earlier source punctuation,
   generic, loan and visibility possibilities remain indexed.
-- **Open independent Gate E blockers:** real complete source/current-value
-  grant AOrigin/R match, unforgeable caller-owned original B with no
-  duplicate B carrier/active borrowed domain, actual five-world
-  definition-time/body-sensitive call substitution, checked
-  Change/Reset/normal exit, and after-A TreeTwo full raw terminal.
-  F #43 and F #47 are conditional formal HOLD, not actual source proofs.
-  The full cJSON original B native remains STOP.
+- **Open independent Gate E blockers:** actual source-derived p/O/R/A/D
+  matching when a terminal BODY uses it (not in an ordinary assembler);
+  global current nonCopy A/D uniqueness and outstanding loan conflicts;
+  complete five-world named-return and post-state/Change/Reset/
+  nonDiscardable obligations; specific original B/dst H1 member witness;
+  and the after-A TWO-member finish_two body-sensitive member-path
+  requirements transitively inferred and checked at each caller.
+  P #276 presently stops at P276-TERMINAL-SUMMARY-PRECISION; parallel
+  experimental P #278 addresses this separately, without modifying
+  PR #273. F #43/#47 formal source refinement remains HOLD, and
+  P #276 accepted sources remain backend-UNSUPPORTED, not native C17.
+  Full cJSON original B native remains STOP.
 - **H0 vs H1:** an unrelated caller-local genuine B packet can be
   safely MOVED or explicitly matched destroy/erase_slot/finalize_domain/
   deallocated under v0; this is NOT intrinsically a core-safety error.
