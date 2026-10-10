@@ -63,6 +63,10 @@ deallocate(a_{i}, raw_{i});
   replace(projected_{j}@{field}, Option<ptr<Node>>::Some(p_{dst}))
 }};
 """
+        if mode == "direct_release":
+            return wiring + "".join(
+                f"retire(LiveRoot {{p:p_{i},a:a_{i},d:d_{i}}});\\n"
+                for i in ([1,3,0,2,4] if n == 5 else range(n))) + "unit\\n"
         expr = "Vessel { " + ", ".join(
           f"{labels[i]}: LiveRoot {{ p: p_{i}, a: a_{i}, d: d_{i} }}"
           for i in range(m)) + " }"
@@ -77,7 +81,9 @@ deallocate(a_{i}, raw_{i});
             decl += "let shipped = transit(vessel);\nlet twice = transit(vessel);\n"
             decl += "let Vessel {first: l, second: r, third: t, fourth: f}=shipped;\nretire(l); retire(r); retire(t); retire(f); unit\n"
             return wiring + decl
-        if mode in ("mixed_alloc", "mixed_domain"):
+        if mode == "local_transport":
+            decl += "let shipped = vessel;\\n"
+        elif mode in ("mixed_alloc", "mixed_domain"):
             decl += "let shipped = exchange(vessel);\n"
         else:
             decl += "let shipped = transit(vessel);\n"
@@ -130,6 +136,8 @@ CASES = [
   ("original_3", "plain", 3),
   ("original_4", "plain", 4),
   ("original_5", "plain", 5),
+  ("direct_release_5", "direct_release", 5),
+  ("local_transport_5", "local_transport", 5),
 ]
 rows=[]
 for name, mode, n in CASES:
