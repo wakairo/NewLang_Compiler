@@ -166,5 +166,36 @@ def generate(case):
 fn main() -> unit {
 """+branch(0,case)+"\n}\n"
 
+
+# Final independent syntax/precision probes: attempt sequential nonCopy
+# destructuring in the same lexical arm, rather than nested statement blocks.
+CASES = CASES + ("flat_sequential_same","flat_sequential_reversed")
+_previous_full = full
+_previous_generate = generate
+def full(case):
+ if not case.startswith("flat_"):
+  return _previous_full(case)
+ lines=[
+ "let owner_two = OwnerCar { locator: p_2, permit: a_2, realm: d_2 };",
+ "let owner_three = OwnerCar { locator: p_3, permit: a_3, realm: d_3 };",
+ "let packet_result = route(owner_two, owner_three, p_0);",
+ "let PairOwners { first, second } = packet_result;"]
+ order=[(2,"first"),(3,"second")]
+ if case=="flat_sequential_reversed":order.reverse()
+ for idx,which in order:
+  lines.append(f"let OwnerCar {{ locator, permit, realm }} = {which};")
+  lines.append(cleanup(idx,loc="locator",grant="permit",domain="realm",tag="x"))
+ for idx in (4,1,0):lines.append(cleanup(idx))
+ lines.append("unit")
+ return "\n".join(lines)
+def generate(case):
+ if not case.startswith("flat_"):
+  return _previous_generate(case)
+ return HEADER+"""fn route(first: OwnerCar, second: OwnerCar, marker: ptr<Node>) -> PairOwners {
+ PairOwners { first: first, second: second }
+}
+fn main() -> unit {
+"""+branch(0,case)+"\n}\n"
+
 if __name__=="__main__":
  main(pathlib.Path(sys.argv[1]).resolve(),pathlib.Path(sys.argv[2]).resolve())
