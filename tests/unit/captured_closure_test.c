@@ -898,6 +898,181 @@ static int inspect(const char *path)
     return s == NL_CHECK_OK ? 0 : 3;
 }
 
+#ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
+static bool transitive_poison(const char *path)
+{
+    NLCheckedFragment *entry = NULL;
+    NLCheckDiagnostic diagnostic = {0};
+    CHECK(load(path, &entry, &diagnostic) == NL_CHECK_OK);
+    NLCheckedFragment *top = (NLCheckedFragment *)body(entry);
+    NLCheckedFragment *parent = at_count(entry, 4);
+    NLCheckedFragment *leaf =
+        (NLCheckedFragment *)nl_checked_match_arm(parent, match(parent), 1);
+    CHECK(leaf && leaf->two_call &&
+          nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    const NLTwoRootCallView good = leaf->two_root;
+    NLTwoRootCallView untouched = good;
+    CHECK(!nl_checked_two_root_call_view(leaf, 0, &untouched) &&
+          !memcmp(&good, &untouched, sizeof(good)));
+    NLSemanticContext *equal = NULL;
+    CHECK(nl_sem_clone(good.entry, &equal) == NL_CHECK_OK);
+    leaf->two_root.entry = equal;
+    CHECK(rejected_certificate(top, entry));
+    leaf->two_root = good;
+    nl_semantic_destroy(equal);
+    CHECK(nl_sem_clone(good.returned, &equal) == NL_CHECK_OK);
+    leaf->two_root.returned = equal;
+    CHECK(rejected_certificate(top, entry));
+    leaf->two_root = good;
+    nl_semantic_destroy(equal);
+    leaf->two_root.returned = good.entry;
+    CHECK(rejected_certificate(top, entry));
+    leaf->two_root = good;
+    leaf->two_root.input = 0;
+    CHECK(rejected_certificate(top, entry));
+    leaf->two_root = good;
+    leaf->two_root.donor = 0;
+    CHECK(rejected_certificate(top, entry));
+    leaf->two_root = good;
+    leaf->two_root.parameter = good.donor;
+    CHECK(rejected_certificate(top, entry));
+    leaf->two_root = good;
+    NLSemanticContext *before = (NLSemanticContext *)good.entry;
+    NLSemanticContext *after = (NLSemanticContext *)good.returned;
+    const NLSemanticValueView pair = before->values[good.input - 1];
+    const NLValueId child = pair.fields[1];
+    const NLSemanticValueView packet = before->values[child - 1];
+    before->values[good.input - 1].fields[1] = pair.fields[0];
+    CHECK(rejected_certificate(top, entry));
+    before->values[good.input - 1] = pair;
+    before->values[child - 1].fields[1] =
+        leaf->whole_value.received->values[leaf->whole_value.result - 1]
+            .fields[0];
+    CHECK(rejected_certificate(top, entry));
+    before->values[child - 1] = packet;
+    NLSemanticValueView *allocation = &before->values[packet.fields[1] - 1];
+    const NLSemanticValueView allocation_saved = *allocation;
+    allocation->allocation_region = 4;
+    CHECK(rejected_certificate(top, entry));
+    *allocation = allocation_saved;
+    NLSemanticValueView *domain = &before->values[packet.fields[2] - 1];
+    const NLSemanticValueView domain_saved = *domain;
+    domain->domain = 4;
+    CHECK(rejected_certificate(top, entry));
+    *domain = domain_saved;
+    NLSemanticValueView *pointer = &before->values[packet.fields[0] - 1];
+    const NLSemanticValueView pointer_saved = *pointer;
+    ++pointer->reference.incarnation;
+    CHECK(rejected_certificate(top, entry));
+    *pointer = pointer_saved;
+    before->values[good.input - 1].carrier = NL_CARRIER_LOOSE;
+    CHECK(rejected_certificate(top, entry));
+    before->values[good.input - 1] = pair;
+    const NLAvailability availability =
+        before->bindings[good.donor - 1].view.availability;
+    before->bindings[good.donor - 1].view.availability = NL_CONSUMED;
+    CHECK(rejected_certificate(top, entry));
+    before->bindings[good.donor - 1].view.availability = availability;
+    CHECK(before->scope_count);
+    const bool active = before->scopes[0].active;
+    before->scopes[0].active = true;
+    CHECK(rejected_certificate(top, entry));
+    before->scopes[0].active = active;
+    const NLPlaceId root = pointer->reference.place;
+    const bool live = after->places[root - 1].live;
+    after->places[root - 1].live = true;
+    CHECK(rejected_certificate(top, entry));
+    after->places[root - 1].live = live;
+    /* Unrelated original C carrier resurrected after C's legitimate release. */
+    NLValueId c_allocation = 0;
+    for (size_t i = 0; i < before->value_count; ++i)
+        if (before->types[before->values[i].type - 1].view.kind ==
+                NL_TYPE_ALLOCATION &&
+            before->values[i].allocation_region == 4)
+            c_allocation = i + 1;
+    CHECK(c_allocation);
+    const NLSemanticValueView ended_c = before->values[c_allocation - 1];
+    before->values[c_allocation - 1].carrier = NL_CARRIER_LOOSE;
+    CHECK(rejected_certificate(top, entry));
+    before->values[c_allocation - 1] = ended_c;
+    NLCheckedFragment *callee =
+        (NLCheckedFragment *)nl_checked_call_body(leaf, leaf->two_call);
+    CHECK(callee);
+    const NLSource *source_origin = callee->source;
+    callee->source = leaf->source;
+    CHECK(rejected_certificate(top, entry));
+    callee->source = source_origin;
+    NLCheckedNodeView *pattern =
+        operation(callee, NL_CHECKED_AGGREGATE_BINDING);
+    NLCheckedNodeView *operand = operation(callee, NL_CHECKED_IDENTIFIER);
+    NLCheckedNodeView *block = operation(callee, NL_CHECKED_BLOCK);
+    CHECK(pattern && operand && block);
+    const NLCheckedNodeView saved_pattern = *pattern, saved_operand = *operand,
+                            saved_block = *block;
+    pattern->argument_count = 1;
+    CHECK(rejected_certificate(top, entry));
+    *pattern = saved_pattern;
+    operand->value_use = NL_VALUE_COPIED;
+    CHECK(rejected_certificate(top, entry));
+    *operand = saved_operand;
+    block->first_item = 0;
+    CHECK(rejected_certificate(top, entry));
+    *block = saved_block;
+    block->item_count = 0;
+    CHECK(rejected_certificate(top, entry));
+    *block = saved_block;
+    const size_t body_count = callee->body_count;
+    callee->body_count = 1;
+    CHECK(rejected_certificate(top, entry));
+    callee->body_count = body_count;
+    NLFunctionBody *plan = callee->body_owner;
+    const NLTwoRootDefinition summary = plan->two_root_definition;
+    plan->two_root_definition.calls[1].member =
+        plan->two_root_definition.calls[0].member;
+    CHECK(rejected_certificate(top, entry));
+    plan->two_root_definition = summary;
+    plan->two_root_definition.calls[0].definition.requirements = 0;
+    CHECK(rejected_certificate(top, entry));
+    plan->two_root_definition = summary;
+    plan->two_root_definition.calls[0].definition.head_link_required = true;
+    CHECK(rejected_certificate(top, entry));
+    plan->two_root_definition = summary;
+    for (size_t i = 0; i < callee->body_count; ++i) {
+        NLCheckedFragment *terminal = callee->bodies[i];
+        const NLSource *terminal_source = terminal->source;
+        terminal->source = callee->source;
+        CHECK(rejected_certificate(top, entry));
+        terminal->source = terminal_source;
+        NLCheckedNodeView *free_node =
+            operation(terminal, NL_CHECKED_DEALLOCATE);
+        NLCheckedNodeView *split =
+            operation(terminal, NL_CHECKED_AGGREGATE_BINDING);
+        CHECK(free_node && split);
+        const NLCheckedNodeView saved = *free_node, saved_split = *split;
+        free_node->kind = NL_CHECKED_UNIT;
+        CHECK(rejected_certificate(top, entry));
+        *free_node = saved;
+        split->argument_count = 2;
+        CHECK(rejected_certificate(top, entry));
+        *split = saved_split;
+        NLCheckedNodeView *raw =
+            &terminal->nodes[terminal->nodes[free_node->first_argument - 1]
+                                 .next_argument -
+                             1];
+        const NLCheckedNodeView saved_raw = *raw;
+        raw->results[0].value = packet.fields[1];
+        CHECK(rejected_certificate(top, entry));
+        *raw = saved_raw;
+    }
+    CHECK(nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    printf("transitive member/world/summary/primitive poison rejected: %zu; no "
+           "backend artifact\n",
+           backend_poison_count);
+    nl_checked_destroy(entry);
+    return true;
+}
+#endif
+
 int main(int argc, char **argv)
 {
     if (argc >= 2 && strncmp(argv[1], "full-", 5) == 0) {
@@ -912,6 +1087,10 @@ int main(int argc, char **argv)
         return evidence(argv[2], (size_t)strtoul(argv[3], NULL, 10)) ? 0 : 1;
     if (argc != 3)
         return EXIT_FAILURE;
+#ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
+    if (strcmp(argv[1], "transitive-poison") == 0)
+        return transitive_poison(argv[2]) ? 0 : 1;
+#endif
 #ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
     if (strcmp(argv[1], "nested-poison") == 0)
         return nested_poison(argv[2]) ? 0 : 1;

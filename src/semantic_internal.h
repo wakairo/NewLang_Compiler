@@ -11,6 +11,13 @@
  * Draft 17.14 preserves core/structural reasons without changing lexer tokens.
  */
 bool nl_sem_lexical_name_admissible(const void *bytes, size_t length);
+NLCheckStatus nl_owner_record_relations(const NLSemanticContext *, NLValueId,
+                                        const NLTypedOwnerDefinition *);
+struct NLFunctionBody;
+NLCheckStatus nl_two_root_definition(const NLSemanticContext *,
+                                     const struct NLFunctionBody *, NLTypeId,
+                                     NLTwoRootDefinition *,
+                                     NLCheckDiagnostic *);
 
 typedef struct {
     size_t start, length;
@@ -47,6 +54,7 @@ typedef struct NLFunctionBody {
     char *parameter_names[NL_SEMANTIC_MAX_PARAMETERS];
     size_t count;
     NLTypedOwnerDefinition owner_definition;
+    NLTwoRootDefinition two_root_definition;
     NLCustodyDefinition custody_definition;
 } NLFunctionBody; /* immutable plan; only ownership count is mutable */
 
@@ -57,7 +65,8 @@ typedef struct {
     size_t count;
     NLTypeId result;
     bool caller_effects, hidden_dependencies, owner_receiver, owner_producer,
-        custody_recipient, experimental_root_receiver;
+        custody_recipient, experimental_root_receiver,
+        experimental_two_receiver;
     NLFunctionBody *body; /* owned retained plan, NULL for signature-only */
 } NLFunctionEntry;
 struct NLSemanticContext {
@@ -104,6 +113,10 @@ typedef struct {
     const NLSemanticContext *before_origin, *after_origin;
 } NLCapturedChange;
 struct NLCheckedFragment {
+    NLTwoRootCallView two_root;
+    const NLSemanticContext *two_entry_origin, *two_return_origin;
+    NLCheckedNodeId two_call;
+    void (*destroy_two_world)(NLSemanticContext *);
     NLWholeValueCallView whole_value;
     const NLSemanticContext *whole_entry_origin, *whole_return_origin,
         *whole_receive_origin;

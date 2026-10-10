@@ -1,0 +1,110 @@
+[
+  {
+    "compiler": "fixed-main",
+    "input": "after-A-C-src-only-TreeTwo",
+    "cli_exit": 3,
+    "diagnostic": "after-A-C-src-only-TreeTwo.nl:10:22-10:25: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "repeat_identical": true,
+    "compiler_sha": "b75baea96a644e68634baee383299b66981b3c62",
+    "source_sha256": "138d37bd0a3f814080b78fe9ead38bd64c57f5624cb1d463c8f5a1fdee2e23b1"
+  },
+  {
+    "compiler": "fixed-main",
+    "input": "wrong-original-C-Allocation-at-finish-two",
+    "cli_exit": 3,
+    "diagnostic": "wrong-original-C-Allocation-at-finish-two.nl:10:22-10:25: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "repeat_identical": true,
+    "compiler_sha": "b75baea96a644e68634baee383299b66981b3c62",
+    "source_sha256": "aeae3298425be041413b2768e065f5a5f36ecd12357a4080368d667cfdc946fe"
+  },
+  {
+    "compiler": "fixed-main",
+    "input": "mixed-ordinary-return-repaired",
+    "cli_exit": 3,
+    "diagnostic": "mixed-ordinary-return-repaired.nl:10:22-10:25: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "repeat_identical": true,
+    "compiler_sha": "b75baea96a644e68634baee383299b66981b3c62",
+    "source_sha256": "b87516628ab2b5084f0680edc67c7bbe76a9ff90b66b6b1910b15a03f68d6821"
+  },
+  {
+    "compiler": "fixed-main",
+    "input": "after-death-exact-returned-whole",
+    "cli_exit": 3,
+    "diagnostic": "after-death-exact-returned-whole.nl:10:22-10:25: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "repeat_identical": true,
+    "compiler_sha": "b75baea96a644e68634baee383299b66981b3c62",
+    "source_sha256": "c092287c1f4e701ed50016168a3e7980900369b4728b2b3de10b904dfe33bd7c"
+  },
+  {
+    "compiler": "P275-opt-in",
+    "input": "after-A-C-src-only-TreeTwo",
+    "cli_exit": 3,
+    "diagnostic": "after-A-C-src-only-TreeTwo.nl:12:24-12:32: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "repeat_identical": true,
+    "compiler_sha": "059b85497862d1461688ec5c6212e5ee87adf94c",
+    "source_sha256": "138d37bd0a3f814080b78fe9ead38bd64c57f5624cb1d463c8f5a1fdee2e23b1"
+  },
+  {
+    "compiler": "P275-opt-in",
+    "input": "wrong-original-C-Allocation-at-finish-two",
+    "cli_exit": 3,
+    "diagnostic": "wrong-original-C-Allocation-at-finish-two.nl:12:24-12:32: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "repeat_identical": true,
+    "compiler_sha": "059b85497862d1461688ec5c6212e5ee87adf94c",
+    "source_sha256": "aeae3298425be041413b2768e065f5a5f36ecd12357a4080368d667cfdc946fe"
+  },
+  {
+    "compiler": "P275-opt-in",
+    "input": "mixed-ordinary-return-repaired",
+    "cli_exit": 3,
+    "diagnostic": "mixed-ordinary-return-repaired.nl:12:24-12:32: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "repeat_identical": true,
+    "compiler_sha": "059b85497862d1461688ec5c6212e5ee87adf94c",
+    "source_sha256": "b87516628ab2b5084f0680edc67c7bbe76a9ff90b66b6b1910b15a03f68d6821"
+  },
+  {
+    "compiler": "P275-opt-in",
+    "input": "after-death-exact-returned-whole",
+    "cli_exit": 3,
+    "diagnostic": "after-death-exact-returned-whole.nl:12:24-12:32: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "repeat_identical": true,
+    "compiler_sha": "059b85497862d1461688ec5c6212e5ee87adf94c",
+    "source_sha256": "c092287c1f4e701ed50016168a3e7980900369b4728b2b3de10b904dfe33bd7c"
+  },
+  {
+    "compiler": "fixed-P277",
+    "input": "after-A-C-src-only-TreeTwo",
+    "cli_exit": 3,
+    "diagnostic": "after-A-C-src-only-TreeTwo.nl:25:68-25:86: error(precision)[P276-TERMINAL-SUMMARY-PRECISION]: type-only formal needs transitive original-root requirement inference\n",
+    "repeat_identical": true,
+    "compiler_sha": "8fcda9e07a05626038508427794e4599563cdf5b",
+    "source_sha256": "138d37bd0a3f814080b78fe9ead38bd64c57f5624cb1d463c8f5a1fdee2e23b1"
+  },
+  {
+    "compiler": "fixed-P277",
+    "input": "wrong-original-C-Allocation-at-finish-two",
+    "cli_exit": 3,
+    "diagnostic": "wrong-original-C-Allocation-at-finish-two.nl:25:68-25:86: error(precision)[P276-TERMINAL-SUMMARY-PRECISION]: type-only formal needs transitive original-root requirement inference\n",
+    "repeat_identical": true,
+    "compiler_sha": "8fcda9e07a05626038508427794e4599563cdf5b",
+    "source_sha256": "aeae3298425be041413b2768e065f5a5f36ecd12357a4080368d667cfdc946fe"
+  },
+  {
+    "compiler": "fixed-P277",
+    "input": "mixed-ordinary-return-repaired",
+    "cli_exit": 3,
+    "diagnostic": "mixed-ordinary-return-repaired.nl:25:68-25:86: error(precision)[P276-TERMINAL-SUMMARY-PRECISION]: type-only formal needs transitive original-root requirement inference\n",
+    "repeat_identical": true,
+    "compiler_sha": "8fcda9e07a05626038508427794e4599563cdf5b",
+    "source_sha256": "b87516628ab2b5084f0680edc67c7bbe76a9ff90b66b6b1910b15a03f68d6821"
+  },
+  {
+    "compiler": "fixed-P277",
+    "input": "after-death-exact-returned-whole",
+    "cli_exit": 3,
+    "diagnostic": "after-death-exact-returned-whole.nl:25:68-25:86: error(precision)[P276-TERMINAL-SUMMARY-PRECISION]: type-only formal needs transitive original-root requirement inference\n",
+    "repeat_identical": true,
+    "compiler_sha": "8fcda9e07a05626038508427794e4599563cdf5b",
+    "source_sha256": "c092287c1f4e701ed50016168a3e7980900369b4728b2b3de10b904dfe33bd7c"
+  }
+]

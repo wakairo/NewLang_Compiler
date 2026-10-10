@@ -1,0 +1,1059 @@
+{
+  "kind": "UNADOPTED P278 transitive terminal evidence",
+  "native_execution": false,
+  "observations": [
+    {
+      "input": "after-A-C-src-only-TreeTwo",
+      "source_sha256": "138d37bd0a3f814080b78fe9ead38bd64c57f5624cb1d463c8f5a1fdee2e23b1",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: after-A-C-src-only-TreeTwo.nl\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "transitive_source_requirements": true,
+        "member_paths": [
+          1,
+          0
+        ],
+        "member_regions": [
+          5,
+          3
+        ],
+        "member_allocations": [
+          5,
+          3
+        ],
+        "member_domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "entry_live_allocations": 2,
+        "entry_live_domains": 2,
+        "entry_active_loans": 0,
+        "A_C_src_ended_before_call": 3,
+        "requirements_each": 255,
+        "head_live_required": false,
+        "ordinary_return_ptr_regions": [
+          5,
+          3
+        ],
+        "ordinary_return_allocation_regions": [
+          5,
+          3
+        ],
+        "mixed_ordinary_return": false,
+        "terminal_is_exact_returned_whole": false,
+        "h1_result_members_dst_B": true,
+        "whole_current_at_terminal_entry": true,
+        "terminal_input": 149,
+        "terminal_donor": 85,
+        "terminal_formal": 86,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "before-C-src-two-independent",
+      "source_sha256": "f3a30ab3f823094ae88a2cb9aadd831845cbfebb9995b5b5981c34a6d655928a",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: before-C-src-two-independent.nl\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "transitive_source_requirements": true,
+        "member_paths": [
+          1,
+          0
+        ],
+        "member_regions": [
+          5,
+          3
+        ],
+        "member_allocations": [
+          5,
+          3
+        ],
+        "member_domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "entry_live_allocations": 4,
+        "entry_live_domains": 4,
+        "entry_active_loans": 0,
+        "A_C_src_ended_before_call": 1,
+        "requirements_each": 255,
+        "head_live_required": false,
+        "ordinary_return_ptr_regions": [
+          5,
+          3
+        ],
+        "ordinary_return_allocation_regions": [
+          5,
+          3
+        ],
+        "mixed_ordinary_return": false,
+        "terminal_is_exact_returned_whole": false,
+        "h1_result_members_dst_B": true,
+        "whole_current_at_terminal_entry": true,
+        "terminal_input": 139,
+        "terminal_donor": 79,
+        "terminal_formal": 80,
+        "release_order": [
+          2,
+          3,
+          5,
+          4,
+          1
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "mixed-ordinary-return-repaired",
+      "source_sha256": "b87516628ab2b5084f0680edc67c7bbe76a9ff90b66b6b1910b15a03f68d6821",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: mixed-ordinary-return-repaired.nl\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "transitive_source_requirements": true,
+        "member_paths": [
+          1,
+          0
+        ],
+        "member_regions": [
+          5,
+          3
+        ],
+        "member_allocations": [
+          5,
+          3
+        ],
+        "member_domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "entry_live_allocations": 4,
+        "entry_live_domains": 4,
+        "entry_active_loans": 0,
+        "A_C_src_ended_before_call": 1,
+        "requirements_each": 255,
+        "head_live_required": false,
+        "ordinary_return_ptr_regions": [
+          5,
+          3
+        ],
+        "ordinary_return_allocation_regions": [
+          5,
+          4
+        ],
+        "mixed_ordinary_return": true,
+        "terminal_is_exact_returned_whole": false,
+        "h1_result_members_dst_B": false,
+        "whole_current_at_terminal_entry": true,
+        "terminal_input": 141,
+        "terminal_donor": 84,
+        "terminal_formal": 85,
+        "release_order": [
+          2,
+          3,
+          5,
+          4,
+          1
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "wrong-original-C-Allocation-at-finish-two",
+      "source_sha256": "aeae3298425be041413b2768e065f5a5f36ecd12357a4080368d667cfdc946fe",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "wrong-original-C-Allocation-at-finish-two.nl:220:85-220:101: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-CALL-BACKING",
+        "start_byte": 13712,
+        "end_byte": 13728,
+        "source_span": "finish_two(pair)"
+      }
+    },
+    {
+      "input": "wrong-original-C-Domain-at-finish-two",
+      "source_sha256": "9062af89fc777c6bcbffd49d68949c7eae72ebeefe4cbba8dd1a1947b8a47c93",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "wrong-original-C-Domain-at-finish-two.nl:220:151-220:167: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-CALL-DOMAIN",
+        "start_byte": 13778,
+        "end_byte": 13794,
+        "source_span": "finish_two(pair)"
+      }
+    },
+    {
+      "input": "duplicate-original-Allocation",
+      "source_sha256": "195c6d028b7f9f9ddd995fdf554682cdbe37de19fbc73f955dbe97ded61a96b9",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "duplicate-original-Allocation.nl:188:55-188:67: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 11189,
+        "end_byte": 11201,
+        "source_span": "allocation_B"
+      }
+    },
+    {
+      "input": "duplicate-original-Domain",
+      "source_sha256": "d1e4885993f4cae2e748608c0d03f93e90cbcb9a05aa65bfc0d2bd023c822334",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "duplicate-original-Domain.nl:188:55-188:61: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 11189,
+        "end_byte": 11195,
+        "source_span": "life_B"
+      }
+    },
+    {
+      "input": "donor-after-assembler-return",
+      "source_sha256": "377b74380fc90b5dfe8d26bff940954e3f03559b7047810a6903c2edcefddeee",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "donor-after-assembler-return.nl:199:55-199:63: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 12091,
+        "end_byte": 12099,
+        "source_span": "detached"
+      }
+    },
+    {
+      "input": "result-after-consume",
+      "source_sha256": "f353f39c13fe6ef8c0fbf5b2465c67fa64a44795e7337a36a9a0a931be76c6bc",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "result-after-consume.nl:232:113-232:117: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 14660,
+        "end_byte": 14664,
+        "source_span": "pair"
+      }
+    },
+    {
+      "input": "callee-duplicate-member",
+      "source_sha256": "12a377f81d4204a17735ddfa79e84af03b974dfd7e81b0012922227b0b65b42d",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "callee-duplicate-member.nl:25:100-25:105: error(semantic)[P278-DEFINITION-CONSUMED]: member responsibility already consumed\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P278-DEFINITION-CONSUMED",
+        "start_byte": 880,
+        "end_byte": 885,
+        "source_span": "child"
+      }
+    },
+    {
+      "input": "callee-loses-second-member",
+      "source_sha256": "3d0e460527ebb4865e8dccf67911bb25c8e933d08f2abe02603b4b8b482e5f01",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "callee-loses-second-member.nl:25:36-25:93: error(semantic)[P278-DEFINITION-OBLIGATION]: normal exit loses a non-Discardable member\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P278-DEFINITION-OBLIGATION",
+        "start_byte": 816,
+        "end_byte": 873,
+        "source_span": "{let TreeTwo{root,child}=whole; finish_root(child); unit}"
+      }
+    },
+    {
+      "input": "live-local-Domain-loan-at-call",
+      "source_sha256": "f281b40e5a2557749a6c602abae1c28c6e9b5b4fc9361abb13a067e224715c8a",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "live-local-Domain-loan-at-call.nl:232:118-232:119: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-REF-CONFLICT",
+        "start_byte": 14665,
+        "end_byte": 14666,
+        "source_span": "d"
+      }
+    },
+    {
+      "input": "live-derived-H-at-call",
+      "source_sha256": "fb80aa51e3dfd344108b0a0eaa1067dc0ad5b47384f380dbf865392ca1513954",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "live-derived-H-at-call.nl:232:152-232:153: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-REF-CONFLICT",
+        "start_byte": 14699,
+        "end_byte": 14700,
+        "source_span": "d"
+      }
+    },
+    {
+      "input": "whole-value-loan-at-call",
+      "source_sha256": "c98b47b6e721b067eb7c16e5659e382065e7b77a96058674503ec23e57a48a54",
+      "classification": "semantic-profile-unsupported",
+      "cli_exit": 3,
+      "diagnostic": "whole-value-loan-at-call.nl:232:95-232:99: error(unsupported)[LOCAL-LOAN-PROFILE]: requires a supported current lexical root or fixed field\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 2,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "LOCAL-LOAN-PROFILE",
+        "start_byte": 14642,
+        "end_byte": 14646,
+        "source_span": "pair"
+      }
+    },
+    {
+      "input": "stale-original-B",
+      "source_sha256": "5f45fdb53862b0daf054268273d9c779463a5f693b1891d509c39e6d63d8285e",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "stale-original-B.nl:232:214-232:230: error(semantic)[P193-CALL-ROOT]: pointer origin is not current\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-CALL-ROOT",
+        "start_byte": 14761,
+        "end_byte": 14777,
+        "source_span": "finish_two(pair)"
+      }
+    },
+    {
+      "input": "old-A-pointer-at-terminal",
+      "source_sha256": "b320a971a15cf26ab2951dc67e3e83bbccd64fd36d0fea0a966cfaf65cf83181",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "old-A-pointer-at-terminal.nl:232:163-232:179: error(semantic)[P193-CALL-ROOT]: pointer origin is not current\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-CALL-ROOT",
+        "start_byte": 14710,
+        "end_byte": 14726,
+        "source_span": "finish_two(pair)"
+      }
+    },
+    {
+      "input": "wrong-full-raw-body",
+      "source_sha256": "74609eda36da6a8e9493f92c79c3bf15084f47fa0eb6b0d8c192ac2de9e6b477",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "wrong-full-raw-body.nl:22:19-22:24: error(semantic)[P193-DEFINITION-CONSUMED]: symbolic non-Copy responsibility was consumed\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-DEFINITION-CONSUMED",
+        "start_byte": 763,
+        "end_byte": 768,
+        "source_span": "empty"
+      }
+    },
+    {
+      "input": "old-A-head-terminal-body",
+      "source_sha256": "8aabef306dbdd5c1cc2fee42145ce5bd78a333241f0123280ae94c6a6a526932",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "old-A-head-terminal-body.nl:22:5-22:21: error(semantic)[P193-DEFINITION-ORDER]: EndRoot requires input pointer and exclusive loan\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-DEFINITION-ORDER",
+        "start_byte": 749,
+        "end_byte": 765,
+        "source_span": "destroy(ptr_A,d)"
+      }
+    },
+    {
+      "input": "unused-bad-root-definition",
+      "source_sha256": "bc18fb44c9dd7633ddb5a026fffe0ac77d557962deeecb658f3a3922f7c8e0c4",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "unused-bad-root-definition.nl:17:39-24:2: error(semantic)[P193-DEFINITION-OBLIGATION]: normal exit retains non-Discardable responsibility\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-DEFINITION-OBLIGATION",
+        "start_byte": 568,
+        "end_byte": 765,
+        "source_span": "{\n    let LiveRoot { p, a, d } = ticket;\n    let empty = loan_exclusive_read(d) { |ending| destroy(p, ending) };\n    let full = erase_slot<Node>(empty);\n    finalize_domain(d);\n    unit;\n    unit\n}"
+      }
+    },
+    {
+      "input": "nested-branch-loses-owner",
+      "source_sha256": "8497c4a415eaaefef577ff602f989d1ebdaaaf7ffaf40bff0553509228392338",
+      "classification": "semantic-precision-unsupported",
+      "cli_exit": 3,
+      "diagnostic": "nested-branch-loses-owner.nl:25:36-25:156: error(precision)[P278-MEMBER-PATH-PRECISION]: outside two direct independent member terminal calls\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 3,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P278-MEMBER-PATH-PRECISION",
+        "start_byte": 816,
+        "end_byte": 936,
+        "source_span": "{let TreeTwo{root,child}=whole; if (true) {finish_root(child); finish_root(root); unit} else {finish_root(child); unit}}"
+      }
+    },
+    {
+      "input": "explicit-return-wrapper",
+      "source_sha256": "58fdc647e4f444e14fdec38028a440fa719c32e91b83250c4b805a3ab819cd5a",
+      "classification": "semantic-precision-unsupported",
+      "cli_exit": 3,
+      "diagnostic": "explicit-return-wrapper.nl:25:36-25:120: error(precision)[P278-MEMBER-PATH-PRECISION]: outside two direct independent member terminal calls\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 3,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P278-MEMBER-PATH-PRECISION",
+        "start_byte": 816,
+        "end_byte": 900,
+        "source_span": "{let TreeTwo{root,child}=whole; finish_root(child); finish_root(root); return unit;}"
+      }
+    },
+    {
+      "input": "third-transitive-layer",
+      "source_sha256": "3816f42403273e3ab86d874fab4218a1985c5306395e2391ab9366bb75c8abfa",
+      "classification": "semantic-precision-unsupported",
+      "cli_exit": 3,
+      "diagnostic": "third-transitive-layer.nl:26:38-26:63: error(precision)[P278-MEMBER-PATH-PRECISION]: outside two direct independent member terminal calls\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 3,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P278-MEMBER-PATH-PRECISION",
+        "start_byte": 930,
+        "end_byte": 955,
+        "source_span": "{finish_two(whole); unit}"
+      }
+    },
+    {
+      "input": "temporary-terminal-argument",
+      "source_sha256": "154bf15c770df5822da24625860a294779e68a7d0e82b6872c2948ca0ff894df",
+      "classification": "semantic-precision-unsupported",
+      "cli_exit": 3,
+      "diagnostic": "temporary-terminal-argument.nl:232:45-232:86: error(precision)[P278-CALL-ARGUMENT]: requires current named whole packet\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 3,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P278-CALL-ARGUMENT",
+        "start_byte": 14592,
+        "end_byte": 14633,
+        "source_span": "finish_two(TreeTwo{root:root,child:tail})"
+      }
+    },
+    {
+      "input": "partial-root-parser",
+      "source_sha256": "323c2fb172c9e6307d6f60e5e18b5d9e1030fdacbbdf41e943d03efbfd84a7ee",
+      "classification": "parser-unsupported",
+      "cli_exit": 3,
+      "diagnostic": "partial-root-parser.nl:10:48-10:49: error(unsupported)[AVS-DECL-PROFILE]: bounded declaration requires two fields or three recursive links and payload\n",
+      "repeat_identical": true,
+      "source_owned_evidence": null
+    },
+    {
+      "input": "all-type-function-names-renamed",
+      "source_sha256": "2bf1bdc60fe90ef09593992ac6d1ae1637bc751c7194eca3c8724bc9b20562e6",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: all-type-function-names-renamed.nl\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "transitive_source_requirements": true,
+        "member_paths": [
+          1,
+          0
+        ],
+        "member_regions": [
+          5,
+          3
+        ],
+        "member_allocations": [
+          5,
+          3
+        ],
+        "member_domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "entry_live_allocations": 2,
+        "entry_live_domains": 2,
+        "entry_active_loans": 0,
+        "A_C_src_ended_before_call": 3,
+        "requirements_each": 255,
+        "head_live_required": false,
+        "ordinary_return_ptr_regions": [
+          5,
+          3
+        ],
+        "ordinary_return_allocation_regions": [
+          5,
+          3
+        ],
+        "mixed_ordinary_return": false,
+        "terminal_is_exact_returned_whole": false,
+        "h1_result_members_dst_B": true,
+        "whole_current_at_terminal_entry": true,
+        "terminal_input": 149,
+        "terminal_donor": 85,
+        "terminal_formal": 86,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "blessed-names-mixed-Allocation",
+      "source_sha256": "203dada540c936356f099e08b4d4a7b3c02b1a58fafa30ff1fbd4d0c8264828a",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "blessed-names-mixed-Allocation.nl:220:89-220:110: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-CALL-BACKING",
+        "start_byte": 13779,
+        "end_byte": 13800,
+        "source_span": "proof_of_safety(pair)"
+      }
+    },
+    {
+      "input": "whole-pattern-field-order",
+      "source_sha256": "e5f9fbc613c782041a83ce00702319cd13a15403538868a8f5c0f37e97691045",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: whole-pattern-field-order.nl\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "transitive_source_requirements": true,
+        "member_paths": [
+          1,
+          0
+        ],
+        "member_regions": [
+          5,
+          3
+        ],
+        "member_allocations": [
+          5,
+          3
+        ],
+        "member_domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "entry_live_allocations": 2,
+        "entry_live_domains": 2,
+        "entry_active_loans": 0,
+        "A_C_src_ended_before_call": 3,
+        "requirements_each": 255,
+        "head_live_required": false,
+        "ordinary_return_ptr_regions": [
+          5,
+          3
+        ],
+        "ordinary_return_allocation_regions": [
+          5,
+          3
+        ],
+        "mixed_ordinary_return": false,
+        "terminal_is_exact_returned_whole": false,
+        "h1_result_members_dst_B": true,
+        "whole_current_at_terminal_entry": true,
+        "terminal_input": 149,
+        "terminal_donor": 85,
+        "terminal_formal": 86,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "terminal-path-order-reversed",
+      "source_sha256": "eaef911340c31b267bd1cb02cd66203e9a2a674047b2d9027934d9fd984e9ee5",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: terminal-path-order-reversed.nl\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "transitive_source_requirements": true,
+        "member_paths": [
+          0,
+          1
+        ],
+        "member_regions": [
+          5,
+          3
+        ],
+        "member_allocations": [
+          5,
+          3
+        ],
+        "member_domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "entry_live_allocations": 2,
+        "entry_live_domains": 2,
+        "entry_active_loans": 0,
+        "A_C_src_ended_before_call": 3,
+        "requirements_each": 255,
+        "head_live_required": false,
+        "ordinary_return_ptr_regions": [
+          5,
+          3
+        ],
+        "ordinary_return_allocation_regions": [
+          5,
+          3
+        ],
+        "mixed_ordinary_return": false,
+        "terminal_is_exact_returned_whole": false,
+        "h1_result_members_dst_B": true,
+        "whole_current_at_terminal_entry": true,
+        "terminal_input": 149,
+        "terminal_donor": 85,
+        "terminal_formal": 86,
+        "release_order": [
+          2,
+          4,
+          1,
+          5,
+          3
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "after-death-exact-returned-whole",
+      "source_sha256": "c092287c1f4e701ed50016168a3e7980900369b4728b2b3de10b904dfe33bd7c",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: after-death-exact-returned-whole.nl\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "transitive_source_requirements": true,
+        "member_paths": [
+          1,
+          0
+        ],
+        "member_regions": [
+          5,
+          3
+        ],
+        "member_allocations": [
+          5,
+          3
+        ],
+        "member_domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "entry_live_allocations": 2,
+        "entry_live_domains": 2,
+        "entry_active_loans": 0,
+        "A_C_src_ended_before_call": 3,
+        "requirements_each": 255,
+        "head_live_required": false,
+        "ordinary_return_ptr_regions": [
+          5,
+          3
+        ],
+        "ordinary_return_allocation_regions": [
+          5,
+          3
+        ],
+        "mixed_ordinary_return": false,
+        "terminal_is_exact_returned_whole": true,
+        "h1_result_members_dst_B": true,
+        "whole_current_at_terminal_entry": true,
+        "terminal_input": 124,
+        "terminal_donor": 70,
+        "terminal_formal": 83,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "independent-dst-wrong-Allocation",
+      "source_sha256": "61549a2b7c11814836cda8d4de747873816188c88c67b23a2ebcd99147c624a0",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "independent-dst-wrong-Allocation.nl:220:85-220:101: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-CALL-BACKING",
+        "start_byte": 13710,
+        "end_byte": 13726,
+        "source_span": "finish_two(pair)"
+      }
+    },
+    {
+      "input": "independent-dst-wrong-Domain",
+      "source_sha256": "495dcb2ae49efa23950662c197942bd014f68a9c1385231a25e594def96df2ef",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "independent-dst-wrong-Domain.nl:220:157-220:173: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-CALL-DOMAIN",
+        "start_byte": 13784,
+        "end_byte": 13800,
+        "source_span": "finish_two(pair)"
+      }
+    },
+    {
+      "input": "current-child-duplicate",
+      "source_sha256": "ff3695e2378169b572fea95ccdb0341aee2238b0803ccab31a3a992bbc8cd89d",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "current-child-duplicate.nl:232:78-232:82: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 14625,
+        "end_byte": 14629,
+        "source_span": "tail"
+      }
+    },
+    {
+      "input": "old-A-Domain-use-after-death",
+      "source_sha256": "9f2148b2ef60072a2069378dd314817219e332a703b046395da7f5f934b33a23",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "old-A-Domain-use-after-death.nl:232:55-232:61: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 14602,
+        "end_byte": 14608,
+        "source_span": "life_A"
+      }
+    },
+    {
+      "input": "independent-definition-order",
+      "source_sha256": "9fb7739eed97fbf2d783f5be974ebd206e43e3591e34bbe497dbc7af3c18a34f",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: independent-definition-order.nl\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "transitive_source_requirements": true,
+        "member_paths": [
+          1,
+          0
+        ],
+        "member_regions": [
+          5,
+          3
+        ],
+        "member_allocations": [
+          5,
+          3
+        ],
+        "member_domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "entry_live_allocations": 2,
+        "entry_live_domains": 2,
+        "entry_active_loans": 0,
+        "A_C_src_ended_before_call": 3,
+        "requirements_each": 255,
+        "head_live_required": false,
+        "ordinary_return_ptr_regions": [
+          5,
+          3
+        ],
+        "ordinary_return_allocation_regions": [
+          5,
+          3
+        ],
+        "mixed_ordinary_return": false,
+        "terminal_is_exact_returned_whole": false,
+        "h1_result_members_dst_B": true,
+        "whole_current_at_terminal_entry": true,
+        "terminal_input": 149,
+        "terminal_donor": 85,
+        "terminal_formal": 86,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "unused-invalid-formal-shadow",
+      "source_sha256": "24b3e1c89f3a13487aa34721d4adc84e1eb0a2fc75955190c4145a5a8caefb1f",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "unused-invalid-formal-shadow.nl:25:48-25:52: error(semantic)[P278-DEFINITION-NAME]: duplicate or inadmissible lexical binder\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P278-DEFINITION-NAME",
+        "start_byte": 828,
+        "end_byte": 832,
+        "source_span": "root"
+      }
+    },
+    {
+      "input": "H0-independent-caller-B-core-safe",
+      "source_sha256": "947645eddf6b77ed7c62ca796fb5b12b5185e8580f784571117bf79475bc2a54",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: H0-independent-caller-B-core-safe.nl\n",
+      "repeat_identical": true,
+      "source_owned_evidence": {
+        "transitive_source_requirements": true,
+        "member_paths": [
+          1,
+          0
+        ],
+        "member_regions": [
+          5,
+          4
+        ],
+        "member_allocations": [
+          5,
+          4
+        ],
+        "member_domains": [
+          5,
+          4
+        ],
+        "original_roots": [
+          57,
+          44
+        ],
+        "original_incarnations": [
+          60,
+          47
+        ],
+        "entry_live_allocations": 3,
+        "entry_live_domains": 3,
+        "entry_active_loans": 0,
+        "A_C_src_ended_before_call": 1,
+        "requirements_each": 255,
+        "head_live_required": false,
+        "ordinary_return_ptr_regions": [
+          5,
+          4
+        ],
+        "ordinary_return_allocation_regions": [
+          5,
+          4
+        ],
+        "mixed_ordinary_return": false,
+        "terminal_is_exact_returned_whole": false,
+        "h1_result_members_dst_B": false,
+        "whole_current_at_terminal_entry": true,
+        "terminal_input": 147,
+        "terminal_donor": 87,
+        "terminal_formal": 88,
+        "release_order": [
+          2,
+          3,
+          4,
+          5,
+          1
+        ],
+        "backend": "unsupported"
+      }
+    }
+  ]
+}

@@ -222,6 +222,21 @@ typedef struct {
     NLTypedOwnerStep steps[5];
 } NLTypedOwnerDefinition;
 
+/* Experimental conditional member paths, inferred from a known source body.
+ * These are demands, not concrete heap facts or a Matched result type. */
+typedef struct {
+    bool definition_checked;
+    NLTypeId type;
+    size_t count;
+    struct {
+        size_t member, function;
+        NLSourceSpan span;
+        NLTypedOwnerDefinition definition;
+    } calls[2];
+} NLTwoRootDefinition;
+bool nl_semantic_two_root_definition(const NLSemanticContext *, size_t,
+                                     NLTwoRootDefinition *);
+
 /* Read-only owned-definition evidence; false outside this closed profile.
  * Definition checking never discharges the entry requirements. */
 bool nl_semantic_function_applicability(const NLSemanticContext *, size_t,

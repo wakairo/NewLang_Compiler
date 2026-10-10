@@ -486,11 +486,10 @@ static NLCheckStatus relation_error(NLCheckDiagnostic *out,
 
 /* Compiler-internal predicate; consumes nothing, mints nothing. Tests may
  * mutate copies of source-derived entry snapshots to attack proof precision. */
-NLCheckStatus nl_owner_relations(const NLSemanticContext *c,
-                                 const NLValueId *values,
-                                 const NLTypedOwnerDefinition *d,
-                                 NLSourceSpan span,
-                                 NLCheckDiagnostic *diagnostic)
+static NLCheckStatus
+owner_relations(const NLSemanticContext *c, const NLValueId *values,
+                const NLTypedOwnerDefinition *d, NLSourceSpan span,
+                NLCheckDiagnostic *diagnostic, bool contained)
 {
     if (c == NULL || values == NULL || d == NULL || !d->definition_checked ||
         d->target == 0 || d->target > c->type_count ||
@@ -549,14 +548,47 @@ NLCheckStatus nl_owner_relations(const NLSemanticContext *c,
     if (!r.live || !r.ordinary_read || !r.ordinary_write ||
         root.placement.start != 0 || root.placement.length != h.size ||
         root.placement.length != r.size || h.alignment == 0 ||
-        r.alignment < h.alignment || a.carrier != NL_CARRIER_LOOSE ||
-        domain.carrier != NL_CARRIER_LOOSE) {
+        r.alignment < h.alignment ||
+        (!contained && (a.carrier != NL_CARRIER_LOOSE ||
+                        domain.carrier != NL_CARRIER_LOOSE))) {
         return relation_error(
             diagnostic, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
             "P193-CALL-RECOVERY",
             "full original range/authority recovery unproved");
     }
     return NL_CHECK_OK;
+}
+
+NLCheckStatus nl_owner_relations(const NLSemanticContext *c,
+                                 const NLValueId *values,
+                                 const NLTypedOwnerDefinition *d,
+                                 NLSourceSpan span, NLCheckDiagnostic *diag)
+{
+    return owner_relations(c, values, d, span, diag, false);
+}
+
+/* Read-only entry projection. The actual body still must perform complete
+ * affine decomposition and run the original LOOSE-only primitive checker. */
+NLCheckStatus nl_owner_record_relations(const NLSemanticContext *c,
+                                        NLValueId id,
+                                        const NLTypedOwnerDefinition *d)
+{
+    if (!c || !id || id > c->value_count)
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    const NLSemanticValueView packet = c->values[id - 1];
+    if (!nl_experimental_root_record_type(c, packet.type) ||
+        packet.field_count != 3)
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    for (size_t i = 0; i < 3; ++i) {
+        if (!packet.fields[i] || packet.fields[i] > c->value_count)
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        const NLSemanticValueView field = c->values[packet.fields[i] - 1];
+        if (field.carrier != NL_CARRIER_AGGREGATE ||
+            field.aggregate_owner != id ||
+            field.type != c->types[packet.type - 1].field_types[i])
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    }
+    return owner_relations(c, packet.fields, d, (NLSourceSpan){0}, NULL, true);
 }
 
 /* Read-only consumer contract: the live-return certificate belongs to exactly
