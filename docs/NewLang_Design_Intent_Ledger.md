@@ -303,6 +303,86 @@ Draft/Issueの未merge候補は `PROPOSED (unmerged)` と表記し、ADOPTEDに�
 - **New source witness:** Draft17.30 §3.2b has one complete full `fn main()` with exactly five syntactic sites, exactly six owner-neutral scoped link writes creating `src.child=A,A.prev=C,A.next=B,B.prev=A,B.next=C,C.prev=B,dst.child=None`, followed by independent original matched explicit 5 frees, and all five NULL positions with 0,1,2,3,4 cleanup. No B detach/adopt, no observed native execution, no change to frozen product scoring or tests.
 - **Status:** **ADOPTED / BOUNDED** — Draft17.30 §3.2b independently [ACCEPTED in PR #235](https://github.com/wakairo/NewLang_Compiler/pull/235#issuecomment-6077029075) and merged as Compiler main `300508324c0428e5cae4195e493399787ed09445`. `CURRENT_SPEC.md` now selects Draft17.30; this records normative source selection only, not five-root production/native acceptance, nor any P/F/R/V/Q task launch. No generic H roots/field extension selected for other source profiles.
 
+
+### DI-015 — original-five LiveRoot source grant / complete nonCopy owner handoff (Issue #272; PROPOSED / UNMERGED)
+
+- **Status: PROPOSED (unmerged) / NOT canonical / NOT adopted.** Candidate:
+  [Compiler Issue #272](https://github.com/wakairo/NewLang_Compiler/issues/272),
+  [pre-registered H1 gate #268](https://github.com/wakairo/NewLang_Compiler/issues/268),
+  candidate Draft17.31 §3.2c at docs/reference/NewLang_v0_spec_Draft17_31.md.
+  CURRENT_SPEC.md remains canonical Draft17.30 until independent Gate E review
+  and merge. No compiler-native or North Star PASS.
+- **Keywords:** LiveRoot, LiveTail, original Allocation, OneBacking, BackingRegion,
+  typed root, ptr provenance, LifetimeDomain, complete aggregate, nonCopy,
+  TreeTwo, post-A finish, wrongAllocation, local-domain loan, H0 vs H1.
+- **Specific new finding:** F #47
+  [HOLD](https://github.com/wakairo/NewLang_FormalProof/issues/47#issuecomment-6092828952)
+  and its [draft PR #48](https://github.com/wakairo/NewLang_FormalProof/pull/48)
+  demonstrate real B ptr + D_B can write B.prev while separate unused Allocation
+  is original A_C, NOT A_B. The source owner grant must independently establish
+  AOrigin(a)==R_root from real
+  OneBacking(R) → full Storage(R) → slot<Node>(R) → initialize O@R governed D
+  → copied ptr(O) plus consumed original Allocation(R)/Domain(D). Never infer
+  original A/R match from link write or nominal type name alone.
+- **Gate B historical evidence:** Draft17.30 §3.2b + DI-014 are
+  **normative-current BOUNDED** PRE-detach five-H, three-link, 0..5 site
+  source. Draft17.27 §18.1a/DI-011 selected definition-time and every-actual
+  symbolic original p/A/D receiver requirements but only in TWO-H.
+  Draft17.28 §18.1b/DI-012 compiler-known TWO-H
+  LiveTail(owned_ptr,owned_allocation,owned_domain) and
+  Draft17.29 §18.1c/DI-013 caller Option custody are adopted only as bounded.
+  §16 whole aggregate, §14.5 original domain identity transfer,
+  §13.5c known direct call source semantics and DI-008 whole consume
+  are existing core/history, not a grant constructor. Old Surface Draft1,
+  Draft1_1, module/private/receiver M0 source experiments remain
+  **EXPERIMENTAL**; the old entire M9 transcript was not audited.
+- **Gate C KEEP:** five independent original BackingRegions/Allocations/
+  LifetimeDomains/typed O incarnations, exact matched full Storage recovery,
+  §10 safe ptr→ref, §13 scoped refs and three-field Change/Reset,
+  §16 no partial nonCopy move, §18 nonCopy argument/result and body-sensitive
+  call, §26/§27 exhaustiveness/nonDiscardable normal-exit.
+  Existing TWO-H LiveTail source, its compiler-known status, and its
+  old A-head terminal are UNCHANGED.
+- **INTENTIONALLY EXTEND SOURCE ONLY — PROPOSED:** bounded acyclic ordinary
+  user-declared value struct forms + full construction/destructuring,
+  five-original role-neutral LiveRoot(p,a,d) source provenance evidence,
+  TreeFour→DetachResult(TreeThree,B)→TreeTwo(dst,B) whole-value calls,
+  actual original R/A/D/O/p equality at each known call, after-A exact
+  finish_root/finish_two. No source-visible Matched assumption, no extra
+  root/owner grant, no new core authority or lifetime law.
+  Ordinary complete whole-destructure and existing local loan_read(domain)
+  after extracting all fields replace the earlier M #270 ticket@domain
+  field-loan proposal. Source contract is not yet parser/formal proved.
+- **DEFER / no foreclosure:** general aggregate grammar, generic
+  Owner<T>, arbitrary dynamic tree owner capacity, generalized LiveTail
+  constructor/alias, module visibility/privacy, generic primary nominal,
+  receiver method, arbitrary ptr/field projection, new field domain
+  borrowing, unified loan spelling, source-visible effects/lifetime,
+  general allocator/FFI/ABI, RAII/GC/Drop, sixth heap Node and actor/thread
+  requirements. DI-001/002/004/005/006/007 earlier source punctuation,
+  generic, loan and visibility possibilities remain indexed.
+- **Open independent Gate E blockers:** real complete source/current-value
+  grant AOrigin/R match, unforgeable caller-owned original B with no
+  duplicate B carrier/active borrowed domain, actual five-world
+  definition-time/body-sensitive call substitution, checked
+  Change/Reset/normal exit, and after-A TreeTwo full raw terminal.
+  F #43 and F #47 are conditional formal HOLD, not actual source proofs.
+  The full cJSON original B native remains STOP.
+- **H0 vs H1:** an unrelated caller-local genuine B packet can be
+  safely MOVED or explicitly matched destroy/erase_slot/finalize_domain/
+  deallocated under v0; this is NOT intrinsically a core-safety error.
+  Such a state fails the distinct product H1 if TreeB has only a Copy
+  child pointer and cannot independently release original B and dst.
+  H2 historical actor stress is separate/unrevised.
+- **Frozen cost/product:** exactly five original H and 3 Copy fields,
+  6 initial +4 detach +2 adopt writes, 0..5 failures/refusal and original
+  A,C,src then B,dst release. Topology≥5/6, 0 per-hop unchecked,
+  ≥5 future actual B1–B7 semantic classes, B8 policy and meaningful
+  C/Zig/topology-preserving Rust/source ceremony/diagnostic comparison
+  remain unmeasured/unscored. Three field helper functions are source,
+  not new builtins. No product PASS from this record.
+
+
 ## 3. 欠落・更新・accessibilityの扱い
 
 初回indexはIssue #153の**限定的な監査**から作成したもので、
