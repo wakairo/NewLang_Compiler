@@ -315,4 +315,17 @@ typedef struct {
 bool nl_checked_whole_value_call_view(const NLCheckedFragment *,
                                       NLCheckedNodeId, NLWholeValueCallView *);
 
+/* Point-in-time actual nested terminal entry/return; immutable owned worlds.
+ * One bounded two-member requiring call per fragment. */
+typedef struct {
+    const NLSemanticContext *entry, *returned;
+    NLValueId input;
+    NLSymbolId donor, parameter;
+} NLTwoRootCallView;
+bool nl_checked_two_root_call_view(const NLCheckedFragment *, NLCheckedNodeId,
+                                   NLTwoRootCallView *);
+
+NLCheckStatus nl_checked_two_root_call_validate(const NLCheckedFragment *,
+                                                NLCheckedNodeId);
+
 #endif

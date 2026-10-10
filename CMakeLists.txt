@@ -31,6 +31,15 @@ if(NEWLANG_EXPERIMENTAL_NESTED_CALLER)
     target_compile_definitions(newlang_options INTERFACE
         NEWLANG_EXPERIMENTAL_NESTED_CALLER=1)
 endif()
+option(NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
+    "UNADOPTED Issue 278 two-member terminal experiment; DO NOT MERGE" OFF)
+if(NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL)
+    if(NOT NEWLANG_EXPERIMENTAL_NESTED_CALLER)
+        message(FATAL_ERROR "Issue 278 requires the separate Issue 276 opt-in")
+    endif()
+    target_compile_definitions(newlang_options INTERFACE
+        NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=1)
+endif()
 target_compile_options(newlang_options INTERFACE
     -Wall -Wextra -Wpedantic -Werror)
 if(NOT NEWLANG_SANITIZER STREQUAL "none")
@@ -79,7 +88,7 @@ add_library(newlang_parser STATIC src/parser.c)
 target_link_libraries(newlang_parser PUBLIC newlang_syntax newlang_lexer newlang_diagnostic)
 add_library(newlang_checked STATIC src/checked.c)
 target_link_libraries(newlang_checked PUBLIC newlang_syntax)
-add_library(newlang_semantic STATIC src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
+add_library(newlang_semantic STATIC src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/transitive_terminal.c src/custody.c src/control.c)
 target_link_libraries(newlang_semantic PUBLIC newlang_checked newlang_diagnostic newlang_parser)
 add_library(newlang_checked_c_node STATIC src/checked_c_node.c src/checked_c_five.c)
 target_link_libraries(newlang_checked_c_node PUBLIC newlang_semantic)
@@ -99,6 +108,20 @@ if(BUILD_TESTING)
             "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:original_grant_evidence>"
             "$<TARGET_FILE:captured_closure_test>")
         if(NEWLANG_EXPERIMENTAL_NESTED_CALLER)
+            if(NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL)
+                add_executable(transitive_terminal_evidence tests/integration/transitive_terminal_evidence.c)
+                target_link_libraries(transitive_terminal_evidence PRIVATE newlang_checked_c_node)
+                add_test(NAME transitive_terminal.integration COMMAND "${Python3_EXECUTABLE}"
+                    "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/transitive_terminal_test.py"
+                    "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:transitive_terminal_evidence>"
+                    "$<TARGET_FILE:captured_closure_test>")
+                add_test(NAME transitive_terminal_poison.unit COMMAND captured_closure_test full-transitive-poison
+                    "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_transitive_terminal.nl")
+                add_test(NAME transitive_terminal_oom.unit COMMAND captured_closure_test full-oom
+                    "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_transitive_terminal.nl")
+                add_test(NAME transitive_terminal_checker_oom.unit COMMAND captured_closure_test full-checker-oom
+                    "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_transitive_terminal.nl")
+            endif()
             add_executable(nested_caller_evidence tests/integration/nested_caller_evidence.c)
             target_link_libraries(nested_caller_evidence PRIVATE newlang_checked_c_node)
             add_test(NAME nested_caller.integration COMMAND "${Python3_EXECUTABLE}"
@@ -549,6 +572,9 @@ if(BUILD_TESTING)
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+    if(NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL)
+        set_property(TEST nested_caller.integration APPEND PROPERTY ENVIRONMENT "NEWLANG_P278=1")
+    endif()
     if(NEWLANG_EXPERIMENTAL_NESTED_CALLER)
         set_property(TEST original_grant.integration APPEND PROPERTY ENVIRONMENT "NEWLANG_P276=1")
     endif()

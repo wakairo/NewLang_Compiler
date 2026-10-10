@@ -27,6 +27,12 @@ NLCheckStatus nl_checked_add(NLCheckedFragment *fragment,
 void nl_checked_destroy(NLCheckedFragment *fragment)
 {
     if (fragment != NULL) {
+        if (fragment->destroy_two_world != NULL) {
+            fragment->destroy_two_world(
+                (NLSemanticContext *)fragment->two_entry_origin);
+            fragment->destroy_two_world(
+                (NLSemanticContext *)fragment->two_return_origin);
+        }
         if (fragment->destroy_whole_world != NULL) {
             fragment->destroy_whole_world(
                 (NLSemanticContext *)fragment->whole_entry_origin);
@@ -166,6 +172,16 @@ const NLCheckedFragment *nl_checked_call_body(const NLCheckedFragment *f,
 const NLControlExits *nl_checked_control_exits(const NLCheckedFragment *f)
 {
     return f == NULL ? NULL : f->exits;
+}
+
+bool nl_checked_two_root_call_view(const NLCheckedFragment *f,
+                                   NLCheckedNodeId id, NLTwoRootCallView *out)
+{
+    if (!f || !out || !id || id != f->two_call || !f->two_root.entry ||
+        !f->two_root.returned)
+        return false;
+    *out = f->two_root;
+    return true;
 }
 
 bool nl_checked_whole_value_call_view(const NLCheckedFragment *f,

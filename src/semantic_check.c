@@ -1867,6 +1867,22 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
     if (id == 0) {
         return 0;
     }
+#ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
+    if (function.experimental_two_receiver) {
+        if (check->artifact->two_call != 0) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                 "P278-CALL-PRECISION", "one two-member terminal per fragment");
+            return 0;
+        }
+        NLSemanticContext *entry = NULL;
+        if (!host(check, nl_sem_clone(c, &entry), syntax->span))
+            return 0;
+        check->artifact->two_call = id;
+        check->artifact->two_root.entry = entry;
+        check->artifact->two_entry_origin = entry;
+        check->artifact->destroy_two_world = nl_semantic_destroy;
+    }
+#endif
 #ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
     const bool whole_call = function.body != NULL &&
                             nl_experimental_nested_type(c, function.result) &&
@@ -2047,6 +2063,20 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
 #endif
         argument_syntax = nl_syntax_next_argument(argument_syntax);
     }
+#ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
+    if (function.experimental_two_receiver) {
+        const NLCheckedNodeView *input = view(check, arguments[0]);
+        if (input->kind != NL_CHECKED_IDENTIFIER ||
+            input->value_use != NL_VALUE_CONSUMED || input->result_count != 1 ||
+            input->symbol == 0) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                 "P278-CALL-ARGUMENT", "requires current named whole packet");
+            return 0;
+        }
+        check->artifact->two_root.input = input->results[0].value;
+        check->artifact->two_root.donor = input->symbol;
+    }
+#endif
     if (function.owner_producer &&
         !producer_entry(check, id, &function, arguments))
         return 0;
@@ -3473,6 +3503,10 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         if (caller->artifact->whole_call == call_id)
             caller->artifact->whole_value.parameters[i] = symbol;
 #endif
+#ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
+        if (function->experimental_two_receiver)
+            caller->artifact->two_root.parameter = symbol;
+#endif
         if (function->custody_recipient)
             view(caller, call_id)->custody_call.parameters[i] = symbol;
         if (function->owner_receiver) {
@@ -3648,6 +3682,15 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         view(caller, call_id)->custody_call.occurrence =
             sink.payload_occurrence;
     }
+#ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
+    if (function->experimental_two_receiver) {
+        NLSemanticContext *returned = NULL;
+        if (!host(&body, nl_sem_clone(c, &returned), call_span))
+            goto failure;
+        caller->artifact->two_root.returned = returned;
+        caller->artifact->two_return_origin = returned;
+    }
+#endif
     /* Save owned checked body evidence; no source expansion into caller nodes.
      */
     if (caller->artifact->body_count == 64) {
@@ -8389,6 +8432,14 @@ static NLValueId experimental_formal(Check *check, NLTypeId type,
 static bool check_definition(Check *registration, size_t function_id)
 {
     NLFunctionEntry *entry = &registration->context->functions[function_id - 1];
+#ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
+    if (entry->experimental_two_receiver) {
+        registration->status = nl_two_root_definition(
+            registration->context, entry->body, entry->parameters[0],
+            &entry->body->two_root_definition, &registration->diagnostic);
+        return registration->status == NL_CHECK_OK;
+    }
+#endif
     if (entry->experimental_root_receiver) {
         registration->status = nl_root_record_definition(
             registration->context, entry->body, entry->parameters[0],
@@ -9046,6 +9097,11 @@ register_function_unit(NLSemanticContext *context,
             parameter == 1 && result == nl_semantic_unit_type(check.context) &&
             nl_experimental_root_record_type(check.context, types[0]);
 #endif
+#ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
+        check.context->functions[d->function - 1].experimental_two_receiver =
+            parameter == 1 && result == nl_semantic_unit_type(check.context) &&
+            nl_experimental_nested_type(check.context, types[0]);
+#endif
         continue;
     duplicate:
         fail(&check, NL_CHECK_SEMANTIC_ERROR, s->data.function.name,
@@ -9089,14 +9145,18 @@ register_function_unit(NLSemanticContext *context,
     /* Symbolic obligations are checked before any ordinary definition walks a
      * known call, independent of declaration/name order or favorable callers.
      */
-    for (size_t pass = 0; pass < 2; ++pass)
+    for (size_t pass = 0; pass < 3; ++pass)
         for (size_t i = 0; i < total; ++i) {
             const FunctionDeclaration *d = &declarations[i];
-            if ((check.context->functions[d->function - 1].owner_receiver ||
-                 check.context->functions[d->function - 1].owner_producer ||
-                 check.context->functions[d->function - 1].custody_recipient ||
-                 check.context->functions[d->function - 1]
-                     .experimental_root_receiver) != (pass == 0))
+            const NLFunctionEntry *entry =
+                &check.context->functions[d->function - 1];
+            const size_t stage =
+                (entry->owner_receiver || entry->owner_producer ||
+                 entry->custody_recipient || entry->experimental_root_receiver)
+                    ? 0
+                : entry->experimental_two_receiver ? 1
+                                                   : 2;
+            if (stage != pass)
                 continue;
             input = d->input;
             if (!check_definition(&check, d->function)) {

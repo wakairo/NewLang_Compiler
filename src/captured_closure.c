@@ -876,6 +876,251 @@ NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *f,
 #endif
 }
 
+NLCheckStatus nl_checked_two_root_call_validate(const NLCheckedFragment *f,
+                                                NLCheckedNodeId id)
+{
+#ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
+    NLTwoRootCallView w;
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    if (!call || call->kind != NL_CHECKED_REGISTERED_CALL ||
+        !call->body_backed || !nl_checked_two_root_call_view(f, id, &w) ||
+        w.entry != f->two_entry_origin || w.returned != f->two_return_origin ||
+        w.entry == w.returned || w.entry == f->context ||
+        w.returned == f->context || call->function == 0 ||
+        call->function > w.entry->function_count || call->argument_count != 1 ||
+        call->result_count != 0 || call->type != 1)
+        return INVALID;
+    const NLFunctionEntry *fn = &w.entry->functions[call->function - 1];
+    const NLCheckedFragment *body = nl_checked_call_body(f, id);
+    if (!fn->experimental_two_receiver || !fn->body || !body ||
+        body->body_owner != fn->body || body->source != fn->body->source ||
+        body->context != f->context || fn->count != 1 || fn->result != 1 ||
+        body->body_count != 2)
+        return INVALID;
+    NLTwoRootDefinition d;
+    if (nl_two_root_definition(w.entry, fn->body, fn->parameters[0], &d,
+                               NULL) != NL_CHECK_OK)
+        return INVALID;
+    const NLTwoRootDefinition saved = fn->body->two_root_definition;
+    if (!saved.definition_checked || saved.type != d.type || saved.count != 2 ||
+        d.count != 2)
+        return INVALID;
+    for (size_t i = 0; i < 2; ++i)
+        if (saved.calls[i].member != d.calls[i].member ||
+            saved.calls[i].function != d.calls[i].function ||
+            memcmp(&saved.calls[i].span, &d.calls[i].span,
+                   sizeof(NLSourceSpan)) ||
+            saved.calls[i].definition.target != d.calls[i].definition.target ||
+            saved.calls[i].definition.requirements !=
+                d.calls[i].definition.requirements ||
+            !saved.calls[i].definition.definition_checked ||
+            saved.calls[i].definition.live_return ||
+            saved.calls[i].definition.head_link_required ||
+            saved.calls[i].definition.step_count != 4 ||
+            memcmp(saved.calls[i].definition.steps, d.calls[i].definition.steps,
+                   4 * sizeof(NLTypedOwnerStep)))
+            return INVALID;
+    NLCheckStatus status = nl_sem_validate(w.entry);
+    if (status != NL_CHECK_OK)
+        return status == NL_CHECK_OUT_OF_MEMORY ? status : INVALID;
+    status = nl_raw_validate(w.entry);
+    if (status != NL_CHECK_OK)
+        return status == NL_CHECK_OUT_OF_MEMORY ? status : INVALID;
+    status = nl_sem_validate(w.returned);
+    if (status != NL_CHECK_OK)
+        return status == NL_CHECK_OUT_OF_MEMORY ? status : INVALID;
+    status = nl_raw_validate(w.returned);
+    if (status != NL_CHECK_OK)
+        return status == NL_CHECK_OUT_OF_MEMORY ? status : INVALID;
+    if (!w.input || w.input > w.entry->value_count ||
+        w.input > w.returned->value_count || !w.donor ||
+        w.donor > w.entry->binding_count ||
+        w.donor > w.returned->binding_count || !w.parameter ||
+        w.parameter <= w.entry->binding_count ||
+        w.parameter > w.returned->binding_count ||
+        !current_binding(w.entry, w.input))
+        return INVALID;
+    const NLSemanticValueView whole = w.entry->values[w.input - 1];
+    const NLSemanticBindingView donor = w.entry->bindings[w.donor - 1].view,
+                                consumed =
+                                    w.returned->bindings[w.donor - 1].view,
+                                formal =
+                                    w.returned->bindings[w.parameter - 1].view;
+    const NLCheckedNodeView *argument =
+        nl_checked_node_view(f, call->first_argument);
+    if (!argument || argument->kind != NL_CHECKED_IDENTIFIER ||
+        argument->symbol != w.donor ||
+        argument->value_use != NL_VALUE_CONSUMED ||
+        argument->result_count != 1 || argument->results[0].value != w.input ||
+        argument->next_argument != 0 || whole.type != d.type ||
+        whole.field_count != 2 || whole.fields[0] == whole.fields[1] ||
+        donor.availability != NL_AVAILABLE || donor.value != w.input ||
+        consumed.availability != NL_CONSUMED || consumed.value != w.input ||
+        formal.availability != NL_CONSUMED || formal.value != w.input ||
+        formal.type != d.type || formal.place == donor.place ||
+        strcmp(w.returned->bindings[w.parameter - 1].name,
+               fn->body->parameter_names[0]) ||
+        w.returned->values[w.input - 1].carrier != NL_CARRIER_ENDED)
+        return INVALID;
+    /* Inspect ALL surviving current A/D carriers and loans, including values
+     * unrelated to the input. A numeric member ID alone is no owner proof. */
+    for (size_t i = 0; i < w.entry->scope_count; ++i)
+        if (w.entry->scopes[i].active)
+            return INVALID;
+    if (w.entry->region_count > NL_CAPTURED_MAX_RELEASES ||
+        w.entry->domain_count > NL_CAPTURED_MAX_RELEASES)
+        return INVALID;
+    size_t allocations[NL_CAPTURED_MAX_RELEASES] = {0};
+    size_t domains[NL_CAPTURED_MAX_RELEASES] = {0};
+    for (size_t i = 0; i < w.entry->value_count; ++i) {
+        const NLSemanticValueView value = w.entry->values[i];
+        if (value.carrier == NL_CARRIER_ENDED)
+            continue;
+        if ((value.type == 2 ||
+             w.entry->types[value.type - 1].view.kind == NL_TYPE_ALLOCATION) &&
+            !current_binding(w.entry, i + 1))
+            return INVALID;
+        if (w.entry->types[value.type - 1].view.kind == NL_TYPE_ALLOCATION) {
+            if (!value.allocation_region ||
+                value.allocation_region > w.entry->region_count ||
+                !w.entry->regions[value.allocation_region - 1].view.live ||
+                ++allocations[value.allocation_region - 1] != 1)
+                return INVALID;
+        }
+        if (value.type == 2) {
+            if (!value.domain || value.domain > w.entry->domain_count ||
+                !w.entry->domains[value.domain - 1].live ||
+                w.entry->domains[value.domain - 1].value != i + 1 ||
+                ++domains[value.domain - 1] != 1)
+                return INVALID;
+        }
+    }
+    const NLCheckedNodeView *root = nl_checked_node_view(body, body->root);
+    if (!root || root->kind != NL_CHECKED_BLOCK || root->terminates ||
+        root->item_count != 3)
+        return INVALID;
+    const NLCheckedNodeView *split =
+        nl_checked_node_view(body, root->first_item);
+    if (!split || split->kind != NL_CHECKED_AGGREGATE_BINDING ||
+        split->argument_count != 2)
+        return INVALID;
+    const NLCheckedNodeView *input =
+        nl_checked_node_view(body, split->initializer);
+    if (!input || input->kind != NL_CHECKED_IDENTIFIER ||
+        input->symbol != w.parameter || input->value_use != NL_VALUE_CONSUMED ||
+        input->result_count != 1 || input->results[0].value != w.input)
+        return INVALID;
+    NLSymbolId members[2] = {0};
+    NLCheckedNodeId field = split->first_argument;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedNodeView *v = nl_checked_node_view(body, field);
+        if (!v || v->kind != NL_CHECKED_RECEIVER || v->field_index >= 2 ||
+            members[v->field_index] || !v->symbol ||
+            v->symbol > w.returned->binding_count ||
+            v->value_use != NL_VALUE_RECEIVED ||
+            w.returned->bindings[v->symbol - 1].view.value !=
+                whole.fields[v->field_index] ||
+            w.returned->bindings[v->symbol - 1].view.availability !=
+                NL_CONSUMED)
+            return INVALID;
+        members[v->field_index] = v->symbol;
+        field = v->next_argument;
+    }
+    if (field || !members[0] || !members[1])
+        return INVALID;
+    NLCheckedNodeId next = split->next_item;
+    NLPlaceId roots[2] = {0};
+    for (size_t i = 0; i < 2; ++i) {
+        const size_t m = d.calls[i].member;
+        const NLValueId packet_id = whole.fields[m];
+        if (!packet_id || packet_id > w.entry->value_count ||
+            packet_id > w.returned->value_count ||
+            !current_binding(w.entry, packet_id) ||
+            nl_owner_record_relations(w.entry, packet_id,
+                                      &d.calls[i].definition) != NL_CHECK_OK)
+            return INVALID;
+        const NLSemanticValueView packet = w.entry->values[packet_id - 1];
+        const NLSemanticValueView pointer =
+            w.entry->values[packet.fields[0] - 1];
+        roots[i] = pointer.reference.place;
+        if (packet.aggregate_owner != w.input ||
+            packet.carrier != NL_CARRIER_AGGREGATE ||
+            roots[i] > w.returned->place_count ||
+            w.returned->places[roots[i] - 1].live ||
+            w.returned->values[packet_id - 1].carrier != NL_CARRIER_ENDED)
+            return INVALID;
+        for (size_t j = 1; j < 3; ++j)
+            if (packet.fields[j] > w.returned->value_count ||
+                w.returned->values[packet.fields[j] - 1].carrier !=
+                    NL_CARRIER_ENDED)
+                return INVALID;
+        const NLCheckedNodeView *statement = nl_checked_node_view(body, next);
+        if (!statement || statement->kind != NL_CHECKED_STATEMENT)
+            return INVALID;
+        const NLCheckedNodeView *child =
+            nl_checked_node_view(body, statement->initializer);
+        if (!child || child->kind != NL_CHECKED_REGISTERED_CALL ||
+            child->function != d.calls[i].function ||
+            memcmp(&child->span, &d.calls[i].span, sizeof(NLSourceSpan)) ||
+            child->argument_count != 1)
+            return INVALID;
+        const NLCheckedNodeView *operand =
+            nl_checked_node_view(body, child->first_argument);
+        if (!operand || operand->kind != NL_CHECKED_IDENTIFIER ||
+            operand->symbol != members[m] ||
+            operand->value_use != NL_VALUE_CONSUMED ||
+            operand->result_count != 1 ||
+            operand->results[0].value != packet_id || operand->next_argument ||
+            !nl_checked_call_body(body, statement->initializer))
+            return INVALID;
+        next = statement->next_item;
+    }
+    if (next || roots[0] == roots[1])
+        return INVALID;
+    const NLCheckedNodeView *tail = nl_checked_node_view(body, root->tail);
+    if (!tail || tail->kind != NL_CHECKED_UNIT)
+        return INVALID;
+    size_t identifiers = 0, receivers = 0, splits = 0, calls = 0, units = 0,
+           blocks = 0, statements = 0;
+    for (size_t i = 1; i <= body->count; ++i) {
+        const NLCheckedNodeView *n = nl_checked_node_view(body, i);
+        switch (n->kind) {
+        case NL_CHECKED_IDENTIFIER:
+            ++identifiers;
+            break;
+        case NL_CHECKED_RECEIVER:
+            ++receivers;
+            break;
+        case NL_CHECKED_AGGREGATE_BINDING:
+            ++splits;
+            break;
+        case NL_CHECKED_REGISTERED_CALL:
+            ++calls;
+            break;
+        case NL_CHECKED_STATEMENT:
+            ++statements;
+            break;
+        case NL_CHECKED_UNIT:
+            ++units;
+            break;
+        case NL_CHECKED_BLOCK:
+            ++blocks;
+            break;
+        default:
+            return INVALID;
+        }
+    }
+    return identifiers == 3 && receivers == 2 && splits == 1 && calls == 2 &&
+                   units == 1 && blocks == 1 && statements == 2
+               ? NL_CHECK_OK
+               : INVALID;
+#else
+    (void)f;
+    (void)id;
+    return INVALID;
+#endif
+}
+
 static NLCheckStatus trace(const NLCheckedFragment *f,
                            const NLCapturedClosure *certificate, size_t variant,
                            size_t *histogram, size_t depth)
@@ -902,7 +1147,13 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
     struct {
         const NLCheckedFragment *fragment;
         size_t next;
-    } frames[2] = {{f, 1}};
+    } frames[
+#ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
+        3
+#else
+        2
+#endif
+    ] = {{f, 1}};
     size_t frame_count = 1;
     while (frame_count != 0) {
         if (frames[frame_count - 1].next >
@@ -917,6 +1168,47 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             v->kind == NL_CHECKED_IF || v->kind == NL_CHECKED_LOOP)
             return INVALID; /* finite lifecycle/field certificate profile */
         if (v->kind == NL_CHECKED_REGISTERED_CALL) {
+#ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
+            if (v->function && v->function <= world->function_count &&
+                world->functions[v->function - 1].experimental_two_receiver) {
+                if (frame_count != 1)
+                    return INVALID;
+                const NLCheckStatus status =
+                    nl_checked_two_root_call_validate(f, i);
+                if (status != NL_CHECK_OK)
+                    return status;
+                NLTwoRootCallView w;
+                if (!nl_checked_two_root_call_view(f, i, &w))
+                    return INVALID;
+                const NLSemanticValueView whole = w.entry->values[w.input - 1];
+                for (size_t j = 0; j < 2; ++j) {
+                    const NLSemanticValueView packet =
+                        w.entry->values[whole.fields[j] - 1];
+                    const NLReferenceFacts p =
+                        w.entry->values[packet.fields[0] - 1].reference;
+                    size_t matched = 0;
+                    for (size_t r = 0; r < count; ++r) {
+                        const NLCapturedOriginal o = releases[r].original;
+                        if (o.root != p.place || o.incarnation != p.incarnation)
+                            continue;
+                        if (!releases[r].initialized || releases[r].ended ||
+                            releases[r].freed ||
+                            packet.fields[1] != o.allocation_value ||
+                            packet.fields[2] != o.domain_value ||
+                            w.entry->places[o.root - 1].placement.region !=
+                                o.extent.region ||
+                            !current_original(w.entry, o))
+                            return INVALID;
+                        ++matched;
+                    }
+                    if (matched != 1)
+                        return INVALID;
+                }
+                frames[frame_count].fragment = nl_checked_call_body(f, i);
+                frames[frame_count++].next = 1;
+                continue;
+            }
+#endif
 #ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
             if (v->function != 0 && v->function <= world->function_count &&
                 world->functions[v->function - 1].experimental_root_receiver) {
@@ -926,10 +1218,19 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                     return INVALID;
                 const NLTypedOwnerDefinition d = fn->body->owner_definition;
                 if (body == NULL || body->context != f->context ||
-                    body->body_owner != fn->body || !d.definition_checked ||
+                    body->body_owner != fn->body ||
+#ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
+                    body->source != fn->body->source ||
+#endif
+                    !d.definition_checked ||
                     d.requirements != NL_OWNER_ALL_REQUIREMENTS ||
                     d.step_count != 4 || v->argument_count != 1 ||
-                    v->type != 1 || v->result_count != 0 || frame_count != 1 ||
+                    v->type != 1 || v->result_count != 0 ||
+#ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
+                    (frame_count != 1 && frame_count != 2) ||
+#else
+                    frame_count != 1 ||
+#endif
                     body->body_count != 0 || fn->body == NULL)
                     return INVALID;
                 for (size_t step = 0; step < 4; ++step)

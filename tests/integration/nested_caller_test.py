@@ -1,6 +1,7 @@
 """Issue 276 source-derived opt-in falsifiers; backend UNSUPPORTED != semantic error.
 The public observer never seeds a fact or supplies a grant to the checker.
 """
+import os
 import hashlib
 import json
 import pathlib
@@ -130,6 +131,11 @@ cases.append(('terminal-explicit-return-profile',explicit_terminal_return,3,'CAP
 # A second whole-result call in the same arm needs a richer owned call list.
 second_call=change(source,'let TreeTwo { root, child } = adopted;','let TreeTwo{root,child}=adopted; let adopted_again=assemble(root,child); let TreeTwo{root,child}=adopted_again;')
 cases.append(('second-whole-result-call-profile',second_call,3,'P276-CALL-PROFILE','semantic-profile-unsupported',None))
+
+if os.environ.get("NEWLANG_P278") == "1":
+    cases = [(name, text, 4, 'V1-BACKEND-UNSUPPORTED', 'semantic-accepted/backend-unsupported', 'nested-only')
+             if name == 'named-finish-two-summary' else (name,text,status,code,category,proof)
+             for name,text,status,code,category,proof in cases]
 
 def run(root):
     observations=[]
