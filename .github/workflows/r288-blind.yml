@@ -40,6 +40,7 @@ jobs:
           python3 r288_blind_runner_b.py
           python3 r288_blind_runner_c.py
           python3 r288_blind_runner_d.py
+          python3 r288_blind_runner_e.py
       - name: Preserve source and direct compiler observations
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
