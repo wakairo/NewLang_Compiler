@@ -98,7 +98,8 @@ deallocate(a_{i}, raw_{i});
         for i in order:
             decl += f"retire(keeper_{i});\n"
         for i in range(m,n):
-            decl += f"retire(LiveRoot {{p:p_{i}, a:a_{i}, d:d_{i}}});\n"
+            decl += f"let keeper_{i} = LiveRoot {{p:p_{i}, a:a_{i}, d:d_{i}}};\n"
+            decl += f"retire(keeper_{i});\n"
         return wiring + decl+"unit\n"
     def branch(i):
         prefix = f"""match try_allocate_one<Node>() {{
