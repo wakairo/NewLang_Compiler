@@ -2739,21 +2739,29 @@ access, exact ptr incarnation, compatible exclusive domain ending loan,
 no surviving semantic-dependency/borrow/occurrence conflicts and valid
 whole raw recovery must also be checked.
 
-Ordinary mismatched LiveRoot **construction** is not by itself a violation
-of the language core, since ordinary triples do not manufacture authority.
-Such a value CANNOT discharge a matched-root consuming call or establish
-the original B-owned TreeTwo postcondition. Existing legitimate nonCopy
-values could still be split and discharged by other valid current matched
-primitive sequences if source permits. No general rule is introduced
-that forbids storing mismatched nonCopy components harmlessly.
+Ordinary mismatched LiveRoot **construction, whole consume, move,
+pure assembly and return** are not by themselves violations of the
+language core. Ordinary records carry their ACTUAL nonCopy components,
+not a promise that p/Allocation/Domain designate the same heap root.
+A mixed packet may be legally passed, returned, completely destructured,
+re-partitioned with other original nonCopy constituents, then safely
+discharged. Affine uniqueness, loan/scope compatibility and nonDiscardable
+normal-exit duties still apply. Such a mismatch fails only an actual
+operational use requiring a matching original-root grant; a specific
+cJSON H1 return witness with an unmatched B member fails H1 as a
+PRODUCT condition, not as a general ordinary source/return violation.
 
 **F #47 decisive negative:** original p_B and D_B, but original A_C
 instead of A_B. B.prev write using p_B with a real D_B-scoped ref may
 succeed; the write does not read Allocation. However R_B≠R_C,
 OriginalAllocationBacking(A_C)=R_C and PtrOrigin(p_B).R=R_B.
-Therefore GrantMatched(p_B,A_C,D_B) is false; a call trying to release
-B with this grant, or certify B in TreeTwo, MUST semantically reject
-at the independently inferred original-Allocation equality predicate.
+Therefore GrantMatched(p_B,A_C,D_B) is false. At an actual original-B
+release-using operation, or a named callee whose independently checked
+body executes that release, the requiring predicate MUST reject on
+original-Allocation inequality. Ordinary TreeTwo assembly and return
+with the mixed packet are permitted if all regular affine/loan duties
+are satisfied. Its B member is only H1 PRODUCT-negative if this is
+the separately specified cJSON original-B caller witness.
 Similarly (p_B,A_B,D_C) fails GoverningDomain(O_B)==D_C, a stale p_B
 fails CurrentTypedRoot, and two simultaneous packets reusing A_B/D_B
 fail §4/§18 nonCopy consumed-use. Numeric ptr equality never fixes
@@ -2769,7 +2777,43 @@ retain exact origin and current-value facts in aggregate constituents.
 A whole consume destroys only the old **LOCAL owner-value** incarnation,
 and makes fresh local/formal/result incarnations; it does not EndRoot O_B.
 A fresh complete re-pack after an ended borrow retains the original
-p/O/R/A/D identities and does not remint any allocation/domain.
+p/O/R/A/D constituent identities and their TRUE or FALSE relationships;
+it does not remint an allocation/domain or repair a mismatch.
+
+**Three distinct judgments, with no new source-level marker:**
+
+(I) **Ordinary whole-value custody / affine completeness.** Complete
+construction, destructuring, nonCopy move, known-direct pure assembly,
+return and subsequent local placement conserve exactly the actual
+original Allocation and Domain constituents. Each current nonCopy
+value has a single available carrier, former input placements become
+Consumed, scoped ref dependencies are respected, and normal exits do
+not drop nonDiscardable values. A pure ordinary record operation DOES
+NOT require its copied ptr, Allocation and Domain to be a matched
+root triple. A mixed return retains mixed origin facts, not a new grant.
+
+(II) **Source-derived matched operational use.** At each ACTUAL
+primitive access, or at a named call that actually uses the authority
+in its checked body, infer only the needed body-sensitive conditions.
+For a scoped H field read/write, require valid current p/O, governing D,
+field access, loan and Change/Reset conditions; an unused Allocation
+need not equal R. For root destroy, full original slot/raw recovery,
+original Domain finalization and matched deallocate, require the
+separate original AllocationBacking(a)==R, PtrOrigin(p)==current
+O@R incarnation, Governs(O)==D and all full range/current-loan/
+scope conditions. Only such demanding operations/calls must reject
+Unknown matching. There is no unconditional matching requirement
+at every call or return.
+
+(III) **Specific cJSON H1 product witness.** For the one registered
+five-original successful caller, after its named attach/assemble
+RETURN, inspect whether its one CURRENT TreeTwo value actually
+contains original K_dst AND original K_B, with no other current
+B ownership carrier. Later finish_two must still independently
+prove its actual B/dst release calls. An unmatched or unrelated
+caller-held B result can fail this H1 product oracle without being
+an illegal ordinary NewLang value. H2 remains a separate historical
+actor test. The H1 observer supplies no authority to a source checker.
 
 The existing §18.1a definition-time independently symbolic ordinary
 known-direct inferred-requirement method is reused and extended from
