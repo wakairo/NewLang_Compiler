@@ -46,7 +46,7 @@ jobs:
           set -eu
           gcc-13 -std=c17 -O0 -Wall -Wextra -Werror -Iinclude r291_evidence/public_owned_observer.c -o /tmp/r291_public_owned \
             -Wl,--start-group build/libnewlang_semantic.a build/libnewlang_checked.a build/libnewlang_parser.a build/libnewlang_syntax.a build/libnewlang_lexer.a build/libnewlang_diagnostic.a build/libnewlang_source.a -Wl,--end-group
-          /tmp/r291_public_owned /tmp/r291_cases/original_2.nl || echo R291_OWNED_OBSERVER_REJECTED
+          /tmp/r291_public_owned /tmp/r291_cases/original_5.nl || echo R291_OWNED_OBSERVER_REJECTED
       - name: Display evidence and guards
         shell: bash
         run: |
