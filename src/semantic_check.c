@@ -1884,9 +1884,15 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
     }
 #endif
 #ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
-    const bool whole_call = function.body != NULL &&
-                            nl_experimental_nested_type(c, function.result) &&
-                            (function.count == 1 || function.count == 2);
+    const bool whole_call =
+        function.body != NULL &&
+        (nl_experimental_nested_type(c, function.result)
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+         || (function.count == 1 &&
+             nl_experimental_owner_aggregate_type(c, function.result))
+#endif
+             ) &&
+        (function.count == 1 || function.count == 2);
     if (whole_call) {
         if (check->artifact->whole_call != 0) {
             fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
@@ -2662,8 +2668,9 @@ static bool aggregate_fields(Check *check, NLTypeId type,
     for (const NLSyntaxNode *f = fields; f != NULL;
          f = nl_syntax_next_argument(f)) {
         const NLSyntaxView *v = nl_syntax_node_view(f);
-        const NLSourceSpan name =
-            construction ? v->data.binding.name : v->data.name;
+        const NLSourceSpan name = construction || v->kind == NL_SYNTAX_BINDING
+                                      ? v->data.binding.name
+                                      : v->data.name;
         size_t index = entry->view.field_count;
         for (size_t j = 0; j < entry->view.field_count; ++j) {
             if (equal_name(check, name, entry->field_names[j])) {
@@ -2832,8 +2839,26 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
     NLCheckedNodeId result = 0;
     const NLSyntaxNode *r = receivers;
     for (size_t i = 0; i < count; ++i) {
-        spans[i] = receivers == NULL ? syntax->data.binding.name
-                                     : nl_syntax_node_view(r)->data.name;
+        const NLSyntaxView *receiver = nl_syntax_node_view(r);
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+        if (destructure && receiver->kind == NL_SYNTAX_BINDING) {
+            if (!nl_experimental_value_type(check->context, type)) {
+                fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, receiver->span,
+                     "P5-PATTERN-UNSUPPORTED",
+                     "renaming is bounded to complete experimental owner "
+                     "patterns");
+                goto cleanup;
+            }
+            receiver = nl_syntax_node_view(receiver->data.binding.initializer);
+            if (receiver == NULL || receiver->kind != NL_SYNTAX_RECEIVER) {
+                fail(check, NL_CHECK_INTERNAL_ERROR, syntax->span,
+                     "P3-INTERNAL", "invalid whole-pattern receiver");
+                goto cleanup;
+            }
+        }
+#endif
+        spans[i] =
+            receivers == NULL ? syntax->data.binding.name : receiver->data.name;
         names[i] = source_name_copy(check, spans[i]);
         if (names[i] == NULL || !fresh_name(check, names[i], spans[i]))
             goto cleanup;
@@ -8734,14 +8759,22 @@ static bool register_experimental_root_record(Check *check,
     if (!lexical_source_name(check, s->data.avs_struct.name))
         return false;
     char *name = source_name_copy(check, s->data.avs_struct.name);
-    char *labels[3] = {0};
-    NLAggregateField fields[3] = {{0}};
+    char *labels[4] = {0};
+    NLAggregateField fields[4] = {{0}};
     bool ok = false;
     if (name == NULL)
         return false;
     const NLSyntaxNode *n = s->data.avs_struct.fields;
     const bool nested = s->kind == NL_SYNTAX_EXPERIMENTAL_NESTED_STRUCT;
-    const size_t count = nested ? 2 : 3;
+    const size_t count = nested ?
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+                                s->data.avs_struct.count
+#else
+                                2
+#endif
+                                : 3;
+    if (count == 0 || count > 4)
+        goto profile;
     if (s->data.avs_struct.count != count)
         goto profile;
     for (size_t i = 0; i < count; ++i) {
@@ -8767,22 +8800,123 @@ static bool register_experimental_root_record(Check *check,
              "ordinary record name or field declarations conflict");
         goto cleanup;
     }
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+    if (nested && status == NL_CHECK_SEMANTIC_UNSUPPORTED)
+        goto profile;
+#endif
     if (!host(check, status, s->span))
         goto cleanup;
-    if (!(nested ? nl_experimental_nested_type(check->context, result)
+    if (!(nested ?
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+                 nl_experimental_owner_aggregate_type(check->context, result)
+#else
+                 nl_experimental_nested_type(check->context, result)
+#endif
                  : nl_experimental_root_record_type(check->context, result)))
         goto profile;
     ok = true;
     goto cleanup;
 profile:
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+    if (nested) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
+             "P285-OWNER-PROFILE",
+             "finite composite requires one to four fields and at most four "
+             "root triads");
+        goto cleanup;
+    }
+#endif
     fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span, "P274-RECORD-PROFILE",
          "experiment requires a triad or exactly two same triad members");
 cleanup:
     free(name);
-    for (size_t i = 0; i < 3; ++i)
+    for (size_t i = 0; i < 4; ++i)
         free(labels[i]);
     return ok;
 }
+
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+/* Collect only completed owner-value nominals. Forward source order is not
+ * a forward by-value header: no nominal is installed before its components.
+ * All partial registration belongs to the enclosing unit transaction. */
+static bool register_owner_aggregates(Check *check,
+                                      const NLSyntaxView *const *decls,
+                                      size_t count)
+{
+    char *names[16] = {0};
+    bool completed[16] = {false};
+    bool ok = false;
+    for (size_t i = 0; i < count; ++i) {
+        if (!lexical_source_name(check, decls[i]->data.avs_struct.name))
+            goto done;
+        names[i] = source_name_copy(check, decls[i]->data.avs_struct.name);
+        if (names[i] == NULL)
+            goto done;
+        for (size_t j = 0; j < i; ++j)
+            if (strcmp(names[i], names[j]) == 0) {
+                fail(check, NL_CHECK_SEMANTIC_ERROR, decls[i]->span,
+                     "P285-OWNER-NAME", "owner nominal names must be distinct");
+                goto done;
+            }
+    }
+    size_t left = count;
+    while (left != 0) {
+        bool progress = false;
+        for (size_t i = 0; i < count; ++i) {
+            if (completed[i])
+                continue;
+            bool ready = true;
+            if (decls[i]->kind == NL_SYNTAX_EXPERIMENTAL_NESTED_STRUCT) {
+                for (const NLSyntaxNode *f = decls[i]->data.avs_struct.fields;
+                     f != NULL; f = nl_syntax_next_argument(f)) {
+                    const NLSyntaxView *field = nl_syntax_node_view(f);
+                    const NLSyntaxView *type =
+                        nl_syntax_node_view(field->data.parameter.type);
+                    if (type == NULL || type->kind != NL_SYNTAX_TYPE_NAME) {
+                        fail(
+                            check, NL_CHECK_SEMANTIC_ERROR, field->span,
+                            "P285-OWNER-COMPONENT",
+                            "composite fields require declared owner nominals");
+                        goto done;
+                    }
+                    char *member = source_name_copy(check, type->data.name);
+                    if (member == NULL)
+                        goto done;
+                    size_t dependency = count;
+                    for (size_t j = 0; j < count; ++j)
+                        if (strcmp(member, names[j]) == 0)
+                            dependency = j;
+                    free(member);
+                    if (dependency == count) {
+                        fail(check, NL_CHECK_SEMANTIC_ERROR, type->span,
+                             "P285-OWNER-COMPONENT",
+                             "unknown or non-owner by-value component");
+                        goto done;
+                    }
+                    ready &= completed[dependency];
+                }
+            }
+            if (!ready)
+                continue;
+            if (!register_experimental_root_record(check, decls[i]))
+                goto done;
+            completed[i] = true;
+            --left;
+            progress = true;
+        }
+        if (!progress) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, decls[0]->span,
+                 "P285-OWNER-CYCLE", "by-value owner cycle has no completion");
+            goto done;
+        }
+    }
+    ok = true;
+done:
+    for (size_t i = 0; i < count; ++i)
+        free(names[i]);
+    return ok;
+}
+#endif
 
 static bool register_recursive(Check *check, const NLSyntaxView *s)
 {
@@ -8866,6 +9000,10 @@ register_function_unit(NLSemanticContext *context,
     const NLSyntaxView *recursive = NULL;
     const NLSyntaxView *experimental_record = NULL;
     const NLSyntaxView *experimental_nested = NULL;
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+    const NLSyntaxView *owners[16] = {0};
+    size_t owner_count = 0;
+#endif
     size_t recursive_input = 0;
     size_t total = 0, input = 0;
     if (!host(&check, nl_sem_clone(context, &check.context), (NLSourceSpan){0}))
@@ -8877,6 +9015,23 @@ register_function_unit(NLSemanticContext *context,
         for (const NLSyntaxNode *n = root->data.function_unit.declarations;
              n != NULL; n = nl_syntax_next_argument(n)) {
             const NLSyntaxView *s = nl_syntax_node_view(n);
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+            if (s->kind == NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT ||
+                s->kind == NL_SYNTAX_EXPERIMENTAL_NESTED_STRUCT) {
+                if (count != 1 || owner_count == 16) {
+                    fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
+                         "P285-OWNER-PROFILE",
+                         "one unit, at most sixteen owner declarations");
+                    goto failure;
+                }
+                owners[owner_count++] = s;
+                if (s->kind == NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT)
+                    experimental_record = s;
+                else
+                    experimental_nested = s;
+                continue;
+            }
+#endif
             if (s->kind == NL_SYNTAX_EXPERIMENTAL_NESTED_STRUCT) {
                 if (count != 1 || experimental_nested != NULL) {
                     fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
@@ -8961,6 +9116,20 @@ register_function_unit(NLSemanticContext *context,
     }
     if (!host(&check, nl_recursive_validate(check.context), (NLSourceSpan){0}))
         goto failure;
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+    if (owner_count != 0) {
+        check.source = nl_syntax_tree_source(inputs[0]);
+        input = 0;
+        if (recursive == NULL) {
+            fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, owners[0]->span,
+                 "P274-RECORD-PROFILE",
+                 "owner values require a completed source H");
+            goto failure;
+        }
+        if (!register_owner_aggregates(&check, owners, owner_count))
+            goto failure;
+    }
+#else
     if (experimental_record != NULL) {
         check.source = nl_syntax_tree_source(inputs[0]);
         input = 0;
@@ -8983,6 +9152,7 @@ register_function_unit(NLSemanticContext *context,
         if (!register_experimental_root_record(&check, experimental_nested))
             goto failure;
     }
+#endif
     if (total != 0)
         qsort(declarations, total, sizeof(*declarations), declaration_order);
     /* Exact signature installation is private until ALL definitions succeed. */

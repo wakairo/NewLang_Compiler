@@ -577,7 +577,14 @@ static NLCheckStatus validate(const NLCheckedFragment *, NLCheckedNodeId,
  */
 static bool current_binding(const NLSemanticContext *c, NLValueId id)
 {
-    for (size_t depth = 0; depth < 3; ++depth) {
+    for (size_t depth = 0; depth <
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+                           18
+#else
+                           3
+#endif
+         ;
+         ++depth) {
         if (id == 0 || id > c->value_count)
             return false;
         const NLSemanticValueView value = c->values[id - 1];
@@ -646,6 +653,89 @@ static bool current_original(const NLSemanticContext *c, NLCapturedOriginal o)
 }
 #endif
 
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+/* Identity return conserves actual component facts recursively. Completeness
+ * is a custody fact, never an assertion that a ptr/A/D triple is matched. */
+static bool identity_components(const NLSemanticContext *entry,
+                                const NLSemanticContext *returned,
+                                const NLSemanticContext *received, NLValueId id,
+                                size_t depth)
+{
+    if (depth >= 18 || !id || id > entry->value_count ||
+        id > returned->value_count || id > received->value_count)
+        return false;
+    const NLSemanticValueView a = entry->values[id - 1],
+                              b = returned->values[id - 1],
+                              c = received->values[id - 1];
+    if (a.type != b.type || a.type != c.type ||
+        a.field_count != b.field_count || a.field_count != c.field_count ||
+        memcmp(a.fields, b.fields, sizeof(a.fields)) ||
+        memcmp(a.fields, c.fields, sizeof(a.fields)) ||
+        a.allocation_region != b.allocation_region ||
+        a.allocation_region != c.allocation_region || a.domain != b.domain ||
+        a.domain != c.domain ||
+        memcmp(&a.reference, &b.reference, sizeof(a.reference)) ||
+        memcmp(&a.reference, &c.reference, sizeof(a.reference)))
+        return false;
+    if (a.field_count > 4)
+        return false;
+    for (size_t i = 0; i < a.field_count; ++i)
+        if (!identity_components(entry, returned, received, a.fields[i],
+                                 depth + 1))
+            return false;
+    return true;
+}
+/* The source checker consumes complete values. Its owned checked graph must
+ * retain that same field bijection; ended historical values retain their IDs.
+ */
+static bool owner_node_shape(const NLCheckedFragment *f,
+                             const NLCheckedNodeView *node)
+{
+    const bool constructor = node->kind == NL_CHECKED_AGGREGATE;
+    if (!constructor && node->kind != NL_CHECKED_AGGREGATE_BINDING)
+        return true;
+    const NLCheckedNodeView *input =
+        constructor ? node : nl_checked_node_view(f, node->initializer);
+    if (!input || input->result_count != 1 ||
+        !nl_experimental_owner_aggregate_type(f->context, input->type))
+        return true;
+    const NLValueId id = input->results[0].value;
+    if (!id || id > f->context->value_count)
+        return false;
+    const NLSemanticValueView value = f->context->values[id - 1];
+    if (value.type != input->type || value.field_count == 0 ||
+        value.field_count > 4 || node->argument_count != value.field_count)
+        return false;
+    bool seen[4] = {false};
+    NLCheckedNodeId next = node->first_argument;
+    for (size_t i = 0; i < value.field_count; ++i) {
+        const NLCheckedNodeView *field = nl_checked_node_view(f, next);
+        if (!field || field->field_index >= value.field_count ||
+            seen[field->field_index])
+            return false;
+        seen[field->field_index] = true;
+        const NLValueId member = value.fields[field->field_index];
+        if (!member || member > f->context->value_count ||
+            field->type != f->context->values[member - 1].type)
+            return false;
+        if (constructor) {
+            const NLCheckedNodeView *operand =
+                nl_checked_node_view(f, field->initializer);
+            if (field->kind != NL_CHECKED_AGGREGATE_FIELD || !operand ||
+                operand->result_count != 1 ||
+                operand->results[0].value != member)
+                return false;
+        } else if (field->kind != NL_CHECKED_RECEIVER ||
+                   field->value_use != NL_VALUE_RECEIVED || !field->symbol ||
+                   field->symbol > f->context->binding_count ||
+                   f->context->bindings[field->symbol - 1].view.value != member)
+            return false;
+        next = field->next_argument;
+    }
+    return next == 0;
+}
+#endif
+
 /* A small custody-only call certificate, NOT matched-root entitlement.
  * Pure complete-value packaging or identity can preserve a mixed packet.
  * The actual original relationship is still required by later primitive use.
@@ -657,6 +747,13 @@ NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *f,
     NLWholeValueCallView w;
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLCheckedFragment *body = nl_checked_call_body(f, id);
+    bool expanded_identity = false;
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+    expanded_identity =
+        call != NULL &&
+        nl_experimental_owner_aggregate_type(f->context, call->type) &&
+        !nl_experimental_nested_type(f->context, call->type);
+#endif
     if (!nl_checked_whole_value_call_view(f, id, &w) || call == NULL ||
         body == NULL || body->context != f->context ||
         w.entry != f->whole_entry_origin ||
@@ -667,7 +764,10 @@ NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *f,
         !call->body_backed || call->terminates || call->result_count != 1 ||
         call->results[0].value != w.result || call->argument_count != w.count ||
         (w.count != 1 && w.count != 2) ||
-        !nl_experimental_nested_type(w.entry, call->type) ||
+        !(expanded_identity
+              ? (w.count == 1 &&
+                 nl_experimental_owner_aggregate_type(w.entry, call->type))
+              : nl_experimental_nested_type(w.entry, call->type)) ||
         call->function == 0 || call->function > w.entry->function_count)
         return INVALID;
     const NLFunctionEntry *fn = &w.entry->functions[call->function - 1];
@@ -690,7 +790,11 @@ NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *f,
     const NLSemanticValueView received = w.received->values[w.result - 1];
     const NLSemanticBindingView receiver =
         w.received->bindings[w.receiver - 1].view;
-    if (result.type != call->type || result.field_count != 2 ||
+    if (result.type != call->type ||
+        result.field_count !=
+            (expanded_identity
+                 ? w.returned->types[call->type - 1].view.field_count
+                 : 2u) ||
         result.carrier != NL_CARRIER_LOOSE ||
         received.carrier != NL_CARRIER_PLACE ||
         receiver.availability != NL_AVAILABLE || receiver.value != w.result ||
@@ -699,6 +803,11 @@ NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *f,
         memcmp(result.fields, received.fields, sizeof(result.fields)) != 0 ||
         !current_binding(w.received, w.result))
         return INVALID;
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+    if (w.count == 1 &&
+        !identity_components(w.entry, w.returned, w.received, w.result, 0))
+        return INVALID;
+#endif
     NLCheckedNodeId arg = call->first_argument;
     for (size_t i = 0; i < w.count; ++i) {
         const NLCheckedNodeView *node = nl_checked_node_view(f, arg);
@@ -1126,6 +1235,11 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                            size_t *histogram, size_t depth)
 {
     const NLSemanticContext *world = f->context;
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+    for (size_t i = 1; i <= f->count; ++i)
+        if (!owner_node_shape(f, nl_checked_node_view(f, i)))
+            return INVALID;
+#endif
     if (f->field_change_count > 6)
         return INVALID;
     Release releases[NL_CAPTURED_MAX_RELEASES] = {0};
@@ -1316,6 +1430,22 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             const NLCheckStatus status = nl_whole_call_validate(f, i);
             if (status != NL_CHECK_OK)
                 return status;
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+            const NLWholeValueCallView w = f->whole_value;
+            for (size_t r = 0; r < count; ++r) {
+                const NLCapturedOriginal o = releases[r].original;
+                if (!releases[r].initialized || releases[r].ended ||
+                    releases[r].freed)
+                    continue;
+                if (!current_original(w.entry, o) ||
+                    !current_original(w.received, o) ||
+                    !identity_components(w.entry, w.returned, w.received,
+                                         o.allocation_value, 0) ||
+                    !identity_components(w.entry, w.returned, w.received,
+                                         o.domain_value, 0))
+                    return INVALID;
+            }
+#endif
             continue;
         }
         if (v->kind == NL_CHECKED_REPLACE) {

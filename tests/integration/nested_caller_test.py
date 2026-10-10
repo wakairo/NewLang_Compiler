@@ -137,6 +137,11 @@ if os.environ.get("NEWLANG_P278") == "1":
              if name == 'named-finish-two-summary' else (name,text,status,code,category,proof)
              for name,text,status,code,category,proof in cases]
 
+if os.environ.get("NEWLANG_P285") == "1":
+    cases = [(name, text, 4, 'V1-BACKEND-UNSUPPORTED', 'semantic-accepted/backend-unsupported', 'matched')
+             if name == 'third-nested-layer' else (name,text,status,code,category,proof)
+             for name,text,status,code,category,proof in cases]
+
 def run(root):
     observations=[]
     for name,text,status,code,category,proof in cases:

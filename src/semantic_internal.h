@@ -262,6 +262,7 @@ bool nl_recursive_local_type(const NLSemanticContext *, NLTypeId);
 bool nl_experimental_root_record_type(const NLSemanticContext *, NLTypeId);
 /* Structural custody shapes, never a p/R/A/D matching assertion. */
 bool nl_experimental_nested_type(const NLSemanticContext *, NLTypeId);
+bool nl_experimental_owner_aggregate_type(const NLSemanticContext *, NLTypeId);
 bool nl_experimental_value_type(const NLSemanticContext *, NLTypeId);
 NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *,
                                      NLCheckedNodeId);

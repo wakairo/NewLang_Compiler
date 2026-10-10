@@ -78,7 +78,9 @@ static bool parser_tests(void)
         CHECK(parse_case(invalid[i], NL_PARSE_SYNTAX_ERROR));
     const char *unsupported[] = {"let(a,_)=f()",
                                  "let(a,(b,c))=f()",
+#ifndef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
                                  "let Pair{a:renamed,b}=p",
+#endif
                                  "x+y",
                                  "Option<u32>::None",
                                  "struct Pair{a:T}",
@@ -89,6 +91,9 @@ static bool parser_tests(void)
                                  "let Pair{a{b},c}=p"};
     for (size_t i = 0; i < sizeof(unsupported) / sizeof(unsupported[0]); ++i)
         CHECK(parse_case(unsupported[i], NL_PARSE_SYNTAX_UNSUPPORTED));
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+    CHECK(parse_case("let Pair{a:renamed,b}=p", NL_PARSE_OK));
+#endif
     /* Source order, structural roles and precise name spans. */
     const char *text = "{ let (v, s) = take(p,d); Pair { b: v, a: s } }";
     NLSource *src = NULL;
@@ -247,6 +252,11 @@ static bool aggregate_tests(void)
     TestSemantic f = {0};
     NLTypeId pair;
     CHECK(aggregate_fixture(&f, &pair));
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+    CHECK(test_rejected(f.context, "let Pair{a:renamed,b}=Pair{a:x,b:y}",
+                        TEST_SOURCE, NL_CHECK_SEMANTIC_UNSUPPORTED,
+                        "P5-PATTERN-UNSUPPORTED"));
+#endif
     CHECK(reject(&f, "Pair{a:x,a:x}", "P5-AGGREGATE-FIELD"));
     CHECK(reject(&f, "Pair{a:x}", "P5-AGGREGATE-FIELD-COUNT"));
     CHECK(reject(&f, "Pair{c:x,b:y}", "P5-AGGREGATE-FIELD"));
