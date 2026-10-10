@@ -720,6 +720,155 @@ static bool same_address_reset(const char *path)
          "occurrence; stale evidence rejected");
     return true;
 }
+
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+/* Poison owned actual-source call evidence only AFTER ordinary public
+ * registration/checking. These tests never seed a source grant. */
+static bool nested_poison(const char *path)
+{
+    NLCheckedFragment *entry = NULL;
+    NLCheckDiagnostic diagnostic = {0};
+    CHECK(load(path, &entry, &diagnostic) == NL_CHECK_OK);
+    NLCheckedFragment *top = (NLCheckedFragment *)body(entry);
+    NLCheckedFragment *parent = at_count(entry, 4);
+    NLCheckedFragment *leaf =
+        (NLCheckedFragment *)nl_checked_match_arm(parent, match(parent), 1);
+    CHECK(leaf && leaf->whole_call &&
+          nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    const NLWholeValueCallView good = leaf->whole_value;
+    NLWholeValueCallView untouched = good;
+    CHECK(!nl_checked_whole_value_call_view(leaf, 0, &untouched) &&
+          !memcmp(&good, &untouched, sizeof(good)));
+    NLSemanticContext *equal = NULL;
+    CHECK(nl_sem_clone(good.entry, &equal) == NL_CHECK_OK);
+    leaf->whole_value.entry = equal;
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    nl_semantic_destroy(equal);
+    leaf->whole_value.returned = good.received;
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    leaf->whole_value.received = good.returned;
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    leaf->whole_value.inputs[1] = good.inputs[0];
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    leaf->whole_value.donors[1] = good.donors[0];
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    leaf->whole_value.parameters[1] = good.parameters[0];
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    leaf->whole_value.result = 0;
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    leaf->whole_value.receiver = good.callee_result;
+    CHECK(rejected_certificate(top, entry));
+    leaf->whole_value = good;
+    NLSemanticContext *returned = (NLSemanticContext *)good.returned;
+    NLSemanticContext *received = (NLSemanticContext *)good.received;
+    const NLAvailability availability =
+        returned->bindings[good.donors[0] - 1].view.availability;
+    returned->bindings[good.donors[0] - 1].view.availability = NL_AVAILABLE;
+    CHECK(rejected_certificate(top, entry));
+    returned->bindings[good.donors[0] - 1].view.availability = availability;
+    const NLSemanticValueView packet = received->values[good.result - 1];
+    received->values[good.result - 1].fields[1] = packet.fields[0];
+    CHECK(rejected_certificate(top, entry));
+    received->values[good.result - 1] = packet;
+    received->values[good.result - 1].carrier = NL_CARRIER_LOOSE;
+    CHECK(rejected_certificate(top, entry));
+    received->values[good.result - 1] = packet;
+    NLSemanticBindingView *receiver =
+        &received->bindings[good.receiver - 1].view;
+    const NLPlaceId place = receiver->place;
+    receiver->place = SIZE_MAX;
+    CHECK(rejected_certificate(top, entry));
+    receiver->place = place;
+    NLSemanticBindingView *local =
+        &returned->bindings[good.callee_result - 1].view;
+    const NLPlaceId local_place = local->place;
+    local->place = 0;
+    CHECK(rejected_certificate(top, entry));
+    local->place = local_place;
+    NLCheckedFragment *callee =
+        (NLCheckedFragment *)nl_checked_call_body(leaf, leaf->whole_call);
+    CHECK(callee);
+    NLCheckedNodeView *ret = operation(callee, NL_CHECKED_RETURN);
+    NLCheckedNodeView *value = operation(callee, NL_CHECKED_IDENTIFIER);
+    NLCheckedNodeView *aggregate = operation(callee, NL_CHECKED_AGGREGATE);
+    CHECK(ret && value && aggregate);
+    const NLCheckedNodeView saved_return = *ret, saved_value = *value,
+                            saved_aggregate = *aggregate;
+    ret->returned.value = 0;
+    CHECK(rejected_certificate(top, entry));
+    *ret = saved_return;
+    ret->initializer = 0;
+    CHECK(rejected_certificate(top, entry));
+    *ret = saved_return;
+    value->value_use = NL_VALUE_COPIED;
+    CHECK(rejected_certificate(top, entry));
+    *value = saved_value;
+    value->results[0].value = good.result;
+    CHECK(rejected_certificate(top, entry));
+    *value = saved_value;
+    aggregate->first_argument = 0;
+    CHECK(rejected_certificate(top, entry));
+    *aggregate = saved_aggregate;
+    aggregate->argument_count = 1;
+    CHECK(rejected_certificate(top, entry));
+    *aggregate = saved_aggregate;
+    const NLCheckedNodeId root = callee->root;
+    callee->root = 0;
+    CHECK(rejected_certificate(top, entry));
+    callee->root = root;
+    NLCheckedNodeView *block = &callee->nodes[root - 1];
+    const NLCheckedNodeView saved_block = *block;
+    block->first_item = 0;
+    CHECK(rejected_certificate(top, entry));
+    *block = saved_block;
+    block->item_count = 0;
+    CHECK(rejected_certificate(top, entry));
+    *block = saved_block;
+    /* A closed final world cannot replace the original callee release trace. */
+    size_t terminals = 0;
+    for (size_t i = 1; i <= leaf->count; ++i) {
+        const NLCheckedNodeView *n = nl_checked_node_view(leaf, i);
+        if (n->kind != NL_CHECKED_REGISTERED_CALL || i == leaf->whole_call)
+            continue;
+        NLCheckedFragment *terminal =
+            (NLCheckedFragment *)nl_checked_call_body(leaf, i);
+        CHECK(terminal);
+        NLCheckedNodeView *deallocate =
+            operation(terminal, NL_CHECKED_DEALLOCATE);
+        NLCheckedNodeView *pattern =
+            operation(terminal, NL_CHECKED_AGGREGATE_BINDING);
+        CHECK(deallocate && pattern);
+        const NLCheckedNodeView saved = *deallocate, saved_pattern = *pattern;
+        deallocate->kind = NL_CHECKED_UNIT;
+        CHECK(rejected_certificate(top, entry));
+        *deallocate = saved;
+        pattern->argument_count = 2;
+        CHECK(rejected_certificate(top, entry));
+        *pattern = saved_pattern;
+        NLCheckedNodeView *field =
+            &terminal->nodes[pattern->first_argument - 1];
+        const NLCheckedNodeView saved_field = *field;
+        field->field_index = 3;
+        CHECK(rejected_certificate(top, entry));
+        *field = saved_field;
+        ++terminals;
+    }
+    CHECK(terminals == 2 &&
+          nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    printf("actual owned whole/result/return/primitive call poison rejected: "
+           "%zu; no backend artifact\n",
+           backend_poison_count);
+    nl_checked_destroy(entry);
+    return true;
+}
+#endif
 static int inspect(const char *path)
 {
     NLCheckedFragment *out = NULL;
@@ -763,6 +912,10 @@ int main(int argc, char **argv)
         return evidence(argv[2], (size_t)strtoul(argv[3], NULL, 10)) ? 0 : 1;
     if (argc != 3)
         return EXIT_FAILURE;
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+    if (strcmp(argv[1], "nested-poison") == 0)
+        return nested_poison(argv[2]) ? 0 : 1;
+#endif
     bool ok = strcmp(argv[1], "poison") == 0        ? poison(argv[2])
               : strcmp(argv[1], "oom") == 0         ? oom(argv[2])
               : strcmp(argv[1], "checker-oom") == 0 ? checker_oom(argv[2])

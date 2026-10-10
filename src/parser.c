@@ -1599,11 +1599,25 @@ static NLSyntaxNode *avs_struct(NLParser *parser)
                                            "expected : after field label"))
             return NULL;
         NLSyntaxNode *field_type = NULL;
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+        if (peek(parser) &&
+            ((i == 0 && parser->token.kind == NL_TOKEN_WORD &&
+              !word(parser, "ptr") && !word(parser, "Option") &&
+              !word(parser, "u8") && !word(parser, "bool") &&
+              !word(parser, "unit") && !word(parser, "Byte") &&
+              !word(parser, "Allocation") && !word(parser, "LifetimeDomain")) ||
+             (i == 1 &&
+              decl->view.kind == NL_SYNTAX_EXPERIMENTAL_NESTED_STRUCT &&
+              parser->token.kind == NL_TOKEN_WORD))) {
+            field_type = type(parser);
+            decl->view.kind = NL_SYNTAX_EXPERIMENTAL_NESTED_STRUCT;
+        } else
+#endif
 #ifdef NEWLANG_EXPERIMENTAL_ORIGINAL_GRANT
-        if ((i == 0 && word(parser, "ptr")) ||
-            (decl->view.kind == NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT &&
-             ((i == 1 && word(parser, "Allocation")) ||
-              (i == 2 && word(parser, "LifetimeDomain"))))) {
+            if ((i == 0 && word(parser, "ptr")) ||
+                (decl->view.kind == NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT &&
+                 ((i == 1 && word(parser, "Allocation")) ||
+                  (i == 2 && word(parser, "LifetimeDomain"))))) {
             field_type = type(parser);
             decl->view.kind = NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT;
         } else
@@ -1687,7 +1701,9 @@ static NLSyntaxNode *function_unit(NLParser *parser)
         if (declaration == NULL)
             return NULL;
         if (structure) {
-            if (declaration->view.kind == NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT) {
+            if (declaration->view.kind == NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT ||
+                declaration->view.kind ==
+                    NL_SYNTAX_EXPERIMENTAL_NESTED_STRUCT) {
                 if (avs)
                     goto struct_profile;
             } else if (declaration->view.kind == NL_SYNTAX_RECURSIVE_STRUCT) {

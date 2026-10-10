@@ -17,7 +17,8 @@ typedef enum {
     RAW,
     HEAD,
     OPTION,
-    LIVE_TAIL
+    LIVE_TAIL,
+    ROOT_RECORD
 } Role;
 typedef struct {
     const char *parameter; /* owned by immutable body plan, borrowed here */
@@ -29,6 +30,7 @@ typedef struct {
     const NLSemanticContext *registry;
     const NLFunctionBody *body;
     NLTypedOwnerDefinition definition;
+    NLTypeId record_type;
     Symbol symbols[128];
     size_t count, depth;
     bool ended, finalized, released, returned, detached;
@@ -92,7 +94,8 @@ static bool same(const Infer *i, NLSourceSpan a, NLSourceSpan b)
 }
 static bool affine(Role r)
 {
-    return r == A || r == D || r == EMPTY || r == RAW || r == LIVE_TAIL;
+    return r == A || r == D || r == EMPTY || r == RAW || r == LIVE_TAIL ||
+           r == ROOT_RECORD;
 }
 static Role use(Infer *i, const NLSyntaxNode *n, bool consume)
 {
@@ -172,7 +175,31 @@ static Role block(Infer *i, const NLSyntaxView *v, size_t floor)
          n != NULL && i->status == NL_CHECK_OK && !i->returned;
          n = nl_syntax_next_argument(n)) {
         const NLSyntaxView *item = nl_syntax_node_view(n);
-        if (item->kind == NL_SYNTAX_BINDING) {
+        if (item->kind == NL_SYNTAX_AGGREGATE_BINDING && i->record_type != 0) {
+            const NLTypeEntry *record = &i->registry->types[i->record_type - 1];
+            if (!text(i, item->data.aggregate.type_name, record->name) ||
+                item->data.aggregate.count != 3 ||
+                use(i, item->data.aggregate.initializer, true) != ROOT_RECORD)
+                return error(i, item->span, NL_CHECK_SEMANTIC_ERROR,
+                             "P276-DEFINITION-WHOLE",
+                             "terminal must consume the complete record");
+            const Role roles[] = {P, A, D};
+            bool seen[3] = {false};
+            for (const NLSyntaxNode *f = item->data.aggregate.fields; f != NULL;
+                 f = nl_syntax_next_argument(f)) {
+                const NLSourceSpan name = nl_syntax_node_view(f)->data.name;
+                size_t index = 3;
+                for (size_t j = 0; j < 3; ++j)
+                    if (text(i, name, record->field_names[j]))
+                        index = j;
+                if (index == 3 || seen[index])
+                    return error(i, name, NL_CHECK_SEMANTIC_ERROR,
+                                 "P276-DEFINITION-WHOLE",
+                                 "duplicate or unknown constituent");
+                seen[index] = true;
+                bind(i, name, roles[index], floor);
+            }
+        } else if (item->kind == NL_SYNTAX_BINDING) {
             Role r = expr(i, item->data.binding.initializer);
             bind(i, item->data.binding.name, r, floor);
         } else if (item->kind == NL_SYNTAX_STATEMENT ||
@@ -364,14 +391,16 @@ static Role expr(Infer *i, const NLSyntaxNode *node)
         "operation needs an unrelated or unsupported entry obligation");
 }
 
-NLCheckStatus nl_owner_definition(const NLSemanticContext *c,
-                                  NLFunctionBody *body, NLTypeId h,
-                                  NLTypedOwnerDefinition *out,
-                                  NLCheckDiagnostic *diagnostic)
+static NLCheckStatus owner_definition(const NLSemanticContext *c,
+                                      NLFunctionBody *body, NLTypeId h,
+                                      NLTypeId record,
+                                      NLTypedOwnerDefinition *out,
+                                      NLCheckDiagnostic *diagnostic)
 {
     const bool producer = body->count == 4;
     Infer i = {.registry = c,
                .body = body,
+               .record_type = record,
                .definition = {.target = h,
                               .requirements = NL_OWNER_ALL_REQUIREMENTS,
                               .live_return = producer,
@@ -379,8 +408,11 @@ NLCheckStatus nl_owner_definition(const NLSemanticContext *c,
                .count = body->count};
     const Role roles[] = {HEAD, P, A, D};
     for (size_t j = 0; j < body->count; ++j)
-        i.symbols[j] = (Symbol){
-            body->parameter_names[j], {0}, roles[j + (producer ? 0 : 1)], true};
+        i.symbols[j] =
+            (Symbol){body->parameter_names[j],
+                     {0},
+                     record != 0 ? ROOT_RECORD : roles[j + (producer ? 0 : 1)],
+                     true};
     const NLSyntaxView *root =
         nl_syntax_node_view(nl_syntax_tree_root(body->syntax));
     const Role result = block(&i, root, 0);
@@ -399,6 +431,28 @@ NLCheckStatus nl_owner_definition(const NLSemanticContext *c,
     i.definition.definition_checked = true;
     *out = i.definition;
     return NL_CHECK_OK;
+}
+
+NLCheckStatus nl_owner_definition(const NLSemanticContext *c,
+                                  NLFunctionBody *body, NLTypeId h,
+                                  NLTypedOwnerDefinition *out,
+                                  NLCheckDiagnostic *diagnostic)
+{
+    return owner_definition(c, body, h, 0, out, diagnostic);
+}
+
+NLCheckStatus nl_root_record_definition(const NLSemanticContext *c,
+                                        NLFunctionBody *body, NLTypeId record,
+                                        NLTypedOwnerDefinition *out,
+                                        NLCheckDiagnostic *diagnostic)
+{
+    if (body == NULL || body->count != 1 ||
+        !nl_experimental_value_type(c, record) ||
+        !nl_experimental_root_record_type(c, record))
+        return NL_CHECK_SEMANTIC_UNSUPPORTED;
+    const NLTypeId pointer = c->types[record - 1].field_types[0];
+    return owner_definition(c, body, c->types[pointer - 1].view.target, record,
+                            out, diagnostic);
 }
 
 bool nl_semantic_function_applicability(const NLSemanticContext *c,

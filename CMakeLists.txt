@@ -22,6 +22,15 @@ if(NEWLANG_EXPERIMENTAL_ORIGINAL_GRANT)
     target_compile_definitions(newlang_options INTERFACE
         NEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=1)
 endif()
+option(NEWLANG_EXPERIMENTAL_NESTED_CALLER
+    "UNADOPTED Issue 276 nested ordinary value/call experiment; DO NOT MERGE" OFF)
+if(NEWLANG_EXPERIMENTAL_NESTED_CALLER)
+    if(NOT NEWLANG_EXPERIMENTAL_ORIGINAL_GRANT)
+        message(FATAL_ERROR "Issue 276 requires the separate Issue 274 opt-in")
+    endif()
+    target_compile_definitions(newlang_options INTERFACE
+        NEWLANG_EXPERIMENTAL_NESTED_CALLER=1)
+endif()
 target_compile_options(newlang_options INTERFACE
     -Wall -Wextra -Wpedantic -Werror)
 if(NOT NEWLANG_SANITIZER STREQUAL "none")
@@ -89,6 +98,20 @@ if(BUILD_TESTING)
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/original_grant_test.py"
             "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:original_grant_evidence>"
             "$<TARGET_FILE:captured_closure_test>")
+        if(NEWLANG_EXPERIMENTAL_NESTED_CALLER)
+            add_executable(nested_caller_evidence tests/integration/nested_caller_evidence.c)
+            target_link_libraries(nested_caller_evidence PRIVATE newlang_checked_c_node)
+            add_test(NAME nested_caller.integration COMMAND "${Python3_EXECUTABLE}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/nested_caller_test.py"
+                "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:nested_caller_evidence>"
+                "$<TARGET_FILE:captured_closure_test>")
+            add_test(NAME nested_caller_poison.unit COMMAND captured_closure_test full-nested-poison
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_nested_caller.nl")
+            add_test(NAME nested_caller_oom.unit COMMAND captured_closure_test full-oom
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_nested_caller.nl")
+            add_test(NAME nested_caller_checker_oom.unit COMMAND captured_closure_test full-checker-oom
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_nested_caller.nl")
+        endif()
     endif()
     add_executable(diagnostic_test tests/unit/diagnostic_test.c)
     target_link_libraries(diagnostic_test PRIVATE newlang_diagnostic)
@@ -526,4 +549,7 @@ if(BUILD_TESTING)
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+    if(NEWLANG_EXPERIMENTAL_NESTED_CALLER)
+        set_property(TEST original_grant.integration APPEND PROPERTY ENVIRONMENT "NEWLANG_P276=1")
+    endif()
 endif()

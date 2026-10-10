@@ -62,3 +62,9 @@ jobs:
           cmake -S . -B build -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON
           cmake --build build --parallel 2
           ctest --test-dir build --output-on-failure
+      - name: UNADOPTED Issue 276 nested known-caller experiment (DO NOT MERGE)
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON
+          cmake --build build --parallel 2
+          ctest --test-dir build --output-on-failure

@@ -301,4 +301,18 @@ const NLCheckedFragment *nl_checked_loop_body(const NLCheckedFragment *,
 const NLCheckedFragment *nl_checked_call_body(const NLCheckedFragment *,
                                               NLCheckedNodeId call);
 
+/* UNADOPTED Issue 276: owned, read-only whole-value custody observations.
+ * These worlds carry actual component values, NOT a Matched/root grant.
+ * Entry precedes argument consume; returned precedes local placement;
+ * received follows ONE caller binding. Borrowed until artifact destruction.
+ */
+typedef struct {
+    const NLSemanticContext *entry, *returned, *received;
+    size_t count;
+    NLValueId inputs[2], result;
+    NLSymbolId donors[2], parameters[2], callee_result, receiver;
+} NLWholeValueCallView;
+bool nl_checked_whole_value_call_view(const NLCheckedFragment *,
+                                      NLCheckedNodeId, NLWholeValueCallView *);
+
 #endif

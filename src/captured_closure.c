@@ -570,6 +570,312 @@ static NLCheckStatus change_validate(const NLCheckedFragment *f,
 static NLCheckStatus validate(const NLCheckedFragment *, NLCheckedNodeId,
                               size_t *, size_t, bool);
 
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+/* Rederive a current carrier, rather than trusting a stored owner/grant bit.
+ * Only the opt-in triad/two-triad containment is admitted. Every parent edge
+ * must be present exactly once and terminate in ONE available local binding.
+ */
+static bool current_binding(const NLSemanticContext *c, NLValueId id)
+{
+    for (size_t depth = 0; depth < 3; ++depth) {
+        if (id == 0 || id > c->value_count)
+            return false;
+        const NLSemanticValueView value = c->values[id - 1];
+        if (value.carrier == NL_CARRIER_PLACE) {
+            if (value.owner_place == 0 || value.owner_place > c->place_count)
+                return false;
+            const NLSemanticPlaceView p = c->places[value.owner_place - 1];
+            if (!p.live || p.current_value != id || p.type != value.type)
+                return false;
+            size_t owners = 0;
+            for (size_t b = 0; b < c->binding_count; ++b) {
+                const NLSemanticBindingView binding = c->bindings[b].view;
+                if (binding.availability == NL_AVAILABLE &&
+                    binding.value == id) {
+                    if (binding.place != value.owner_place ||
+                        binding.type != value.type || c->bindings[b].hidden)
+                        return false;
+                    ++owners;
+                }
+            }
+            return owners == 1;
+        }
+        if (value.carrier != NL_CARRIER_AGGREGATE || value.owner_place != 0 ||
+            value.aggregate_owner == 0 ||
+            value.aggregate_owner > c->value_count)
+            return false;
+        const NLSemanticValueView parent = c->values[value.aggregate_owner - 1];
+        if (!nl_experimental_value_type(c, parent.type) ||
+            parent.field_count != c->types[parent.type - 1].view.field_count)
+            return false;
+        size_t edges = 0;
+        for (size_t f = 0; f < parent.field_count; ++f)
+            if (parent.fields[f] == id) {
+                if (c->types[parent.type - 1].field_types[f] != value.type)
+                    return false;
+                ++edges;
+            }
+        if (edges != 1)
+            return false;
+        id = value.aggregate_owner;
+    }
+    return false;
+}
+
+static bool current_original(const NLSemanticContext *c, NLCapturedOriginal o)
+{
+    size_t allocations = 0, domains = 0;
+    for (size_t v = 0; v < c->value_count; ++v) {
+        const NLSemanticValueView value = c->values[v];
+        if (value.carrier == NL_CARRIER_ENDED)
+            continue;
+        const bool a =
+            c->types[value.type - 1].view.kind == NL_TYPE_ALLOCATION &&
+            value.allocation_region == o.extent.region;
+        const bool d = value.type == nl_semantic_domain_type(c) &&
+                       value.domain == o.domain;
+        if (!a && !d)
+            continue;
+        if (v + 1 != (a ? o.allocation_value : o.domain_value) ||
+            !current_binding(c, v + 1))
+            return false;
+        allocations += a;
+        domains += d;
+    }
+    return allocations == 1 && domains == 1;
+}
+#endif
+
+/* A small custody-only call certificate, NOT matched-root entitlement.
+ * Pure complete-value packaging or identity can preserve a mixed packet.
+ * The actual original relationship is still required by later primitive use.
+ */
+NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *f,
+                                     NLCheckedNodeId id)
+{
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+    NLWholeValueCallView w;
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    const NLCheckedFragment *body = nl_checked_call_body(f, id);
+    if (!nl_checked_whole_value_call_view(f, id, &w) || call == NULL ||
+        body == NULL || body->context != f->context ||
+        w.entry != f->whole_entry_origin ||
+        w.returned != f->whole_return_origin ||
+        w.received != f->whole_receive_origin || w.received == NULL ||
+        w.entry == w.returned || w.returned == w.received ||
+        w.entry == w.received || call->kind != NL_CHECKED_REGISTERED_CALL ||
+        !call->body_backed || call->terminates || call->result_count != 1 ||
+        call->results[0].value != w.result || call->argument_count != w.count ||
+        (w.count != 1 && w.count != 2) ||
+        !nl_experimental_nested_type(w.entry, call->type) ||
+        call->function == 0 || call->function > w.entry->function_count)
+        return INVALID;
+    const NLFunctionEntry *fn = &w.entry->functions[call->function - 1];
+    if (fn->body == NULL || body->body_owner != fn->body ||
+        body->source != fn->body->source || fn->count != w.count ||
+        fn->result != call->type || w.result == 0 ||
+        w.result > w.returned->value_count ||
+        w.result > w.received->value_count || w.receiver == 0 ||
+        w.receiver > w.received->binding_count)
+        return INVALID;
+    const NLSemanticContext *worlds[] = {w.entry, w.returned, w.received};
+    for (size_t i = 0; i < 3; ++i) {
+        NLCheckStatus status = nl_sem_validate(worlds[i]);
+        if (status == NL_CHECK_OK)
+            status = nl_raw_validate(worlds[i]);
+        if (status != NL_CHECK_OK)
+            return status == NL_CHECK_OUT_OF_MEMORY ? status : INVALID;
+    }
+    const NLSemanticValueView result = w.returned->values[w.result - 1];
+    const NLSemanticValueView received = w.received->values[w.result - 1];
+    const NLSemanticBindingView receiver =
+        w.received->bindings[w.receiver - 1].view;
+    if (result.type != call->type || result.field_count != 2 ||
+        result.carrier != NL_CARRIER_LOOSE ||
+        received.carrier != NL_CARRIER_PLACE ||
+        receiver.availability != NL_AVAILABLE || receiver.value != w.result ||
+        receiver.place == 0 || receiver.place > w.received->place_count ||
+        receiver.place != received.owner_place ||
+        memcmp(result.fields, received.fields, sizeof(result.fields)) != 0 ||
+        !current_binding(w.received, w.result))
+        return INVALID;
+    NLCheckedNodeId arg = call->first_argument;
+    for (size_t i = 0; i < w.count; ++i) {
+        const NLCheckedNodeView *node = nl_checked_node_view(f, arg);
+        if (node == NULL || node->kind != NL_CHECKED_IDENTIFIER ||
+            node->value_use != NL_VALUE_CONSUMED || node->result_count != 1 ||
+            node->symbol != w.donors[i] ||
+            node->results[0].value != w.inputs[i] || w.inputs[i] == 0 ||
+            w.inputs[i] > w.entry->value_count ||
+            w.inputs[i] > w.returned->value_count || w.donors[i] == 0 ||
+            w.donors[i] > w.entry->binding_count ||
+            w.donors[i] > w.returned->binding_count ||
+            w.parameters[i] <= w.entry->binding_count ||
+            w.parameters[i] > w.returned->binding_count)
+            return INVALID;
+        const NLSemanticBindingView donor =
+            w.entry->bindings[w.donors[i] - 1].view;
+        const NLSemanticBindingView moved =
+            w.returned->bindings[w.donors[i] - 1].view;
+        const NLSemanticBindingView parameter =
+            w.returned->bindings[w.parameters[i] - 1].view;
+        if (donor.availability != NL_AVAILABLE || donor.value != w.inputs[i] ||
+            moved.availability != NL_CONSUMED ||
+            parameter.availability != NL_CONSUMED ||
+            parameter.value != w.inputs[i] || donor.type != node->type ||
+            donor.type != fn->parameters[i] || parameter.type != donor.type ||
+            donor.place == 0 || donor.place > w.entry->place_count ||
+            parameter.place == 0 || parameter.place > w.returned->place_count ||
+            donor.place == parameter.place ||
+            strcmp(w.returned->bindings[w.parameters[i] - 1].name,
+                   fn->body->parameter_names[i]) != 0 ||
+            !current_binding(w.entry, w.inputs[i]) ||
+            memcmp(w.entry->values[w.inputs[i] - 1].fields,
+                   w.returned->values[w.inputs[i] - 1].fields,
+                   sizeof(result.fields)) != 0)
+            return INVALID;
+        if (w.count == 2) {
+            if (!nl_experimental_root_record_type(w.entry, donor.type) ||
+                (w.inputs[i] != result.fields[0] &&
+                 w.inputs[i] != result.fields[1]))
+                return INVALID;
+        } else if (donor.type != call->type || w.inputs[i] != w.result)
+            return INVALID;
+        arg = node->next_argument;
+    }
+    if (arg != 0 || (w.count == 2 && (w.inputs[0] == w.inputs[1] ||
+                                      result.fields[0] == result.fields[1])))
+        return INVALID;
+    const NLCheckedNodeView *block = nl_checked_node_view(body, body->root);
+    if (block == NULL || block->kind != NL_CHECKED_BLOCK ||
+        !block->terminates || block->returned.value != w.result ||
+        block->returned.type != call->type || block->tail != 0 ||
+        block->item_count == 0 || block->item_count > 2)
+        return INVALID;
+    NLCheckedNodeId item = block->first_item;
+    for (size_t n = 0; n < block->item_count; ++n) {
+        const NLCheckedNodeView *statement = nl_checked_node_view(body, item);
+        if (statement == NULL || statement->kind != (n + 1 == block->item_count
+                                                         ? NL_CHECKED_RETURN
+                                                         : NL_CHECKED_BINDING))
+            return INVALID;
+        item = statement->next_item;
+    }
+    if (item != 0)
+        return INVALID;
+    size_t returns = 0, constructors = 0;
+    for (size_t n = 1; n <= body->count; ++n) {
+        const NLCheckedNodeView *node = nl_checked_node_view(body, n);
+        switch (node->kind) {
+        case NL_CHECKED_BLOCK:
+            break; /* a block containing Return has no normal completion */
+        case NL_CHECKED_BINDING: {
+            const NLCheckedNodeView *input =
+                nl_checked_node_view(body, node->initializer);
+            const NLCheckedNodeView *binding =
+                nl_checked_node_view(body, node->first_argument);
+            if (node->terminates || node->argument_count != 1 ||
+                input == NULL || input->result_count != 1 ||
+                input->results[0].value != w.result || binding == NULL ||
+                binding->kind != NL_CHECKED_RECEIVER ||
+                binding->symbol != w.callee_result)
+                return INVALID;
+            break;
+        }
+        case NL_CHECKED_RECEIVER:
+            if (node->terminates || node->value_use != NL_VALUE_RECEIVED ||
+                node->symbol != w.callee_result || node->type != call->type)
+                return INVALID;
+            break;
+        case NL_CHECKED_IDENTIFIER:
+            if (node->terminates || node->value_use != NL_VALUE_CONSUMED ||
+                node->result_count != 1 || node->symbol == 0 ||
+                node->symbol > w.returned->binding_count ||
+                node->results[0].value !=
+                    w.returned->bindings[node->symbol - 1].view.value ||
+                node->type !=
+                    w.returned->bindings[node->symbol - 1].view.type ||
+                node->results[0].type != node->type ||
+                !nl_experimental_value_type(w.returned, node->type))
+                return INVALID;
+            break;
+        case NL_CHECKED_AGGREGATE: {
+            if (node->terminates || node->type != call->type ||
+                node->result_count != 1 || node->results[0].value != w.result ||
+                node->argument_count != 2 || w.count != 2)
+                return INVALID;
+            bool seen[2] = {false};
+            NLCheckedNodeId field = node->first_argument;
+            for (size_t j = 0; j < 2; ++j) {
+                const NLCheckedNodeView *member =
+                    nl_checked_node_view(body, field);
+                if (member == NULL ||
+                    member->kind != NL_CHECKED_AGGREGATE_FIELD ||
+                    member->field_index >= 2 || seen[member->field_index])
+                    return INVALID;
+                const NLCheckedNodeView *input =
+                    nl_checked_node_view(body, member->initializer);
+                if (input == NULL || input->kind != NL_CHECKED_IDENTIFIER ||
+                    input->result_count != 1 ||
+                    input->value_use != NL_VALUE_CONSUMED ||
+                    input->results[0].value !=
+                        result.fields[member->field_index] ||
+                    member->type != input->type)
+                    return INVALID;
+                seen[member->field_index] = true;
+                field = member->next_argument;
+            }
+            if (field != 0)
+                return INVALID;
+            ++constructors;
+            break;
+        }
+        case NL_CHECKED_AGGREGATE_FIELD:
+            if (node->terminates || node->field_index >= 2)
+                return INVALID;
+            break;
+        case NL_CHECKED_RETURN: {
+            const NLCheckedNodeView *input =
+                nl_checked_node_view(body, node->initializer);
+            if (!node->terminates || node->returned.value != w.result ||
+                node->returned.type != call->type || input == NULL ||
+                input->result_count != 1 ||
+                input->results[0].value != w.result ||
+                input->type != call->type ||
+                (input->kind != NL_CHECKED_IDENTIFIER &&
+                 input->kind != NL_CHECKED_AGGREGATE))
+                return INVALID;
+            ++returns;
+            break;
+        }
+        default:
+            return INVALID; /* no effect, loan, primitive, branch or nested call
+                             */
+        }
+    }
+    if (returns != 1 || constructors != (w.count == 2 ? 1u : 0u))
+        return INVALID;
+    if (w.callee_result != 0) {
+        if (w.callee_result <= w.entry->binding_count ||
+            w.callee_result > w.returned->binding_count)
+            return INVALID;
+        const NLSemanticBindingView local =
+            w.returned->bindings[w.callee_result - 1].view;
+        if (local.availability != NL_CONSUMED || local.value != w.result ||
+            local.place == 0 || local.place > w.returned->place_count ||
+            local.place == receiver.place ||
+            w.returned->places[local.place - 1].incarnation ==
+                w.received->places[receiver.place - 1].incarnation)
+            return INVALID;
+    }
+    return NL_CHECK_OK;
+#else
+    (void)f;
+    (void)id;
+    return INVALID;
+#endif
+}
+
 static NLCheckStatus trace(const NLCheckedFragment *f,
                            const NLCapturedClosure *certificate, size_t variant,
                            size_t *histogram, size_t depth)
@@ -592,12 +898,125 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
     }
     bool nested = false;
     size_t changes = 0;
-    for (size_t i = 1; i <= f->count; ++i) {
+    const NLCheckedFragment *source = f;
+    struct {
+        const NLCheckedFragment *fragment;
+        size_t next;
+    } frames[2] = {{f, 1}};
+    size_t frame_count = 1;
+    while (frame_count != 0) {
+        if (frames[frame_count - 1].next >
+            frames[frame_count - 1].fragment->count) {
+            --frame_count;
+            continue;
+        }
+        f = frames[frame_count - 1].fragment;
+        const size_t i = frames[frame_count - 1].next++;
         const NLCheckedNodeView *v = nl_checked_node_view(f, i);
         if (v->terminates || v->kind == NL_CHECKED_TAKE ||
-            v->kind == NL_CHECKED_IF || v->kind == NL_CHECKED_LOOP ||
-            v->kind == NL_CHECKED_REGISTERED_CALL)
+            v->kind == NL_CHECKED_IF || v->kind == NL_CHECKED_LOOP)
             return INVALID; /* finite lifecycle/field certificate profile */
+        if (v->kind == NL_CHECKED_REGISTERED_CALL) {
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+            if (v->function != 0 && v->function <= world->function_count &&
+                world->functions[v->function - 1].experimental_root_receiver) {
+                const NLFunctionEntry *fn = &world->functions[v->function - 1];
+                const NLCheckedFragment *body = nl_checked_call_body(f, i);
+                if (fn->body == NULL)
+                    return INVALID;
+                const NLTypedOwnerDefinition d = fn->body->owner_definition;
+                if (body == NULL || body->context != f->context ||
+                    body->body_owner != fn->body || !d.definition_checked ||
+                    d.requirements != NL_OWNER_ALL_REQUIREMENTS ||
+                    d.step_count != 4 || v->argument_count != 1 ||
+                    v->type != 1 || v->result_count != 0 || frame_count != 1 ||
+                    body->body_count != 0 || fn->body == NULL)
+                    return INVALID;
+                for (size_t step = 0; step < 4; ++step)
+                    if (d.steps[step] != (NLTypedOwnerStep)(step + 1))
+                        return INVALID;
+                const NLCheckedNodeView *argument =
+                    nl_checked_node_view(f, v->first_argument);
+                if (argument == NULL ||
+                    argument->kind != NL_CHECKED_IDENTIFIER ||
+                    argument->value_use != NL_VALUE_CONSUMED ||
+                    argument->result_count != 1 || argument->symbol == 0 ||
+                    argument->symbol > world->binding_count ||
+                    world->bindings[argument->symbol - 1].view.availability !=
+                        NL_CONSUMED ||
+                    argument->results[0].value == 0 ||
+                    argument->results[0].value > world->value_count ||
+                    argument->results[0].value !=
+                        world->bindings[argument->symbol - 1].view.value ||
+                    argument->type != fn->parameters[0] ||
+                    !nl_experimental_root_record_type(world, argument->type))
+                    return INVALID;
+                size_t destructures = 0;
+                for (size_t n = 1; n <= body->count; ++n) {
+                    const NLCheckedNodeView *node =
+                        nl_checked_node_view(body, n);
+                    if (node->kind != NL_CHECKED_AGGREGATE_BINDING)
+                        continue;
+                    const NLCheckedNodeView *input =
+                        nl_checked_node_view(body, node->initializer);
+                    if (input == NULL || input->kind != NL_CHECKED_IDENTIFIER ||
+                        input->value_use != NL_VALUE_CONSUMED ||
+                        input->result_count != 1 ||
+                        input->results[0].value != argument->results[0].value ||
+                        node->argument_count != 3 || input->symbol == 0 ||
+                        input->symbol > world->binding_count ||
+                        strcmp(world->bindings[input->symbol - 1].name,
+                               fn->body->parameter_names[0]) != 0 ||
+                        world->bindings[input->symbol - 1].view.availability !=
+                            NL_CONSUMED)
+                        return INVALID;
+                    const NLSemanticBindingView formal =
+                        world->bindings[input->symbol - 1].view;
+                    const NLSemanticBindingView donor =
+                        world->bindings[argument->symbol - 1].view;
+                    const NLSemanticValueView packet =
+                        world->values[input->results[0].value - 1];
+                    if (formal.value != input->results[0].value ||
+                        formal.type != argument->type ||
+                        formal.place == donor.place || packet.field_count != 3)
+                        return INVALID;
+                    bool seen[3] = {false};
+                    NLCheckedNodeId field = node->first_argument;
+                    for (size_t j = 0; j < 3; ++j) {
+                        const NLCheckedNodeView *member =
+                            nl_checked_node_view(body, field);
+                        if (member == NULL ||
+                            member->kind != NL_CHECKED_RECEIVER ||
+                            member->field_index >= 3 ||
+                            seen[member->field_index] ||
+                            member->value_use != NL_VALUE_RECEIVED ||
+                            member->symbol == 0 ||
+                            member->symbol > world->binding_count ||
+                            world->bindings[member->symbol - 1].view.value !=
+                                packet.fields[member->field_index])
+                            return INVALID;
+                        seen[member->field_index] = true;
+                        field = member->next_argument;
+                    }
+                    if (field != 0)
+                        return INVALID;
+                    ++destructures;
+                }
+                if (destructures != 1)
+                    return INVALID;
+                /* Replay the exact owned callee primitives in this ORIGINAL
+                 * release machine. No summary flag substitutes for the trace.
+                 */
+                frames[frame_count].fragment = body;
+                frames[frame_count++].next = 1;
+                continue;
+            }
+#endif
+            const NLCheckStatus status = nl_whole_call_validate(f, i);
+            if (status != NL_CHECK_OK)
+                return status;
+            continue;
+        }
         if (v->kind == NL_CHECKED_REPLACE) {
             if (nested || count != 5 || changes >= f->field_change_count ||
                 changes >= 6 || f->field_changes[changes] == NULL ||
@@ -621,6 +1040,10 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                     b->values[o.allocation_value - 1].allocation_region !=
                         o.extent.region)
                     return INVALID;
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+                if (!current_original(b, o))
+                    return INVALID;
+#else
                 size_t allocations = 0, domains = 0;
                 for (size_t j = 0; j < b->binding_count; ++j) {
                     const NLSemanticBindingView owner = b->bindings[j].view;
@@ -639,6 +1062,7 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                 }
                 if (allocations != 1 || domains != 1)
                     return INVALID;
+#endif
                 const NLSemanticPlaceView p = b->places[o.root - 1];
                 for (size_t j = 0; j < 3; ++j)
                     if (p.fixed_fields[j] == 0 ||
@@ -904,6 +1328,7 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             r->freed = true;
         }
     }
+    f = source;
     if (grants != 1 || count != certificate->view.count + (variant == 2) ||
         changes != f->field_change_count)
         return INVALID;

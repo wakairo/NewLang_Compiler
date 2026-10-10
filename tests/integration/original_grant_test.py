@@ -5,6 +5,7 @@ no source annotations, host seeds, Matched bits or private probe entry are used.
 The compiled CLI and observer are exercised independently. Run with an optional
 fourth argument to retain exact source inputs and JSON observations for review.
 """
+import os
 import hashlib
 import json
 import pathlib
@@ -80,6 +81,14 @@ cases.append(("alpha-renamed", alpha, 4, "V1-BACKEND-UNSUPPORTED", "semantic-acc
 reorder = change(source, "LiveRoot { p: ptr_B, a: allocation_B, d: life_B }", "LiveRoot { d: life_B, a: allocation_B, p: ptr_B }")
 cases.append(("constructor-field-order", reorder, 4, "V1-BACKEND-UNSUPPORTED", "semantic-accepted/backend-unsupported", "matched"))
 
+
+# Only the new nested declaration is admitted by the separate #276 opt-in.
+# The #275 source-only terminal control still lacks a nested declaration.
+if os.environ.get("NEWLANG_P276") == "1":
+    cases = [(n, t, 4, "V1-BACKEND-UNSUPPORTED",
+              "semantic-accepted/backend-unsupported", "matched")
+             if n == "priority-two-nested-record" else (n,t,s,c,k,p)
+             for n,t,s,c,k,p in cases]
 
 def run(root):
     observations = []

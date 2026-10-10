@@ -1867,6 +1867,26 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
     if (id == 0) {
         return 0;
     }
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+    const bool whole_call = function.body != NULL &&
+                            nl_experimental_nested_type(c, function.result) &&
+                            (function.count == 1 || function.count == 2);
+    if (whole_call) {
+        if (check->artifact->whole_call != 0) {
+            fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
+                 "P276-CALL-PROFILE", "one whole result call per bounded arm");
+            return 0;
+        }
+        NLSemanticContext *entry = NULL;
+        if (!host(check, nl_sem_clone(c, &entry), syntax->span))
+            return 0;
+        check->artifact->whole_value.entry = entry;
+        check->artifact->whole_entry_origin = entry;
+        check->artifact->destroy_whole_world = nl_semantic_destroy;
+        check->artifact->whole_call = id;
+        check->artifact->whole_value.count = function.count;
+    }
+#endif
     if (function.custody_recipient) {
         check->artifact->destroy_custody_world = nl_semantic_destroy;
         check->artifact->custody_call_id = id;
@@ -2010,6 +2030,21 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         }
         tail = arguments[i];
         ++view(check, id)->argument_count;
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+        if (whole_call) {
+            const NLCheckedNodeView input = *view(check, arguments[i]);
+            if (input.kind != NL_CHECKED_IDENTIFIER || input.symbol == 0 ||
+                input.value_use != NL_VALUE_CONSUMED ||
+                input.result_count != 1) {
+                fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, input.span,
+                     "P276-CALL-ARGUMENT",
+                     "requires whole current local arguments");
+                return 0;
+            }
+            check->artifact->whole_value.donors[i] = input.symbol;
+            check->artifact->whole_value.inputs[i] = input.results[0].value;
+        }
+#endif
         argument_syntax = nl_syntax_next_argument(argument_syntax);
     }
     if (function.owner_producer &&
@@ -2643,7 +2678,7 @@ static NLCheckedNodeId aggregate(Check *check, const NLSyntaxView *syntax)
         return 0;
     }
     if (check->in_function_body && !avs_type(check->context, type) &&
-        !live_tail &&
+        !live_tail && !nl_experimental_value_type(check->context, type) &&
         !(check->allocated_slice &&
           nl_experimental_root_record_type(check->context, type))) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
@@ -2751,6 +2786,7 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
             !aggregate_fields(check, type, receivers, count, false, indices))
             return 0;
         if (check->in_function_body && !avs_type(check->context, type) &&
+            !nl_experimental_value_type(check->context, type) &&
             !(check->allocated_slice &&
               (check->context->types[type - 1].one_backing_target != 0 ||
                check->context->types[type - 1].live_tail_target != 0 ||
@@ -2843,6 +2879,30 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
             values[i] = original.fields[indices[i]];
             check->context->values[values[i] - 1].carrier = NL_CARRIER_LOOSE;
             check->context->values[values[i] - 1].aggregate_owner = 0;
+        }
+        if (check->body_function != 0 &&
+            check->context->functions[check->body_function - 1]
+                .experimental_root_receiver) {
+            const NLTypedOwnerDefinition *definition =
+                &check->context->functions[check->body_function - 1]
+                     .body->owner_definition;
+            if (check->definition &&
+                check->context->values[original.fields[0] - 1]
+                        .reference.provenance == NL_PROVENANCE_UNKNOWN) {
+                fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                     "P276-TERMINAL-SUMMARY-PRECISION",
+                     "type-only formal needs transitive original-root "
+                     "requirement inference");
+                goto cleanup;
+            }
+            /* Check canonical order, not pattern/source spelling order. */
+            check->status =
+                nl_owner_relations(check->context, original.fields, definition,
+                                   syntax->span, &check->diagnostic);
+            if (check->status != NL_CHECK_OK)
+                goto cleanup;
+            if (!host(check, nl_raw_validate(check->context), syntax->span))
+                goto cleanup;
         }
     } else if (!multi && rhs.result_count == 0 && rhs.type == 1) {
         values[0] =
@@ -2938,6 +2998,27 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
         if (!multi && !destructure) {
             view(check, result)->symbol = symbol;
             view(check, result)->name = spans[i];
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+            if (init == check->artifact->whole_call &&
+                values[i] == check->artifact->whole_value.result) {
+                if (check->artifact->whole_receive_origin != NULL) {
+                    fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
+                         "P276-RECEIVE-PROFILE",
+                         "one current caller result placement");
+                    result = 0;
+                    goto cleanup;
+                }
+                NLSemanticContext *received = NULL;
+                if (!host(check, nl_sem_clone(check->context, &received),
+                          syntax->span)) {
+                    result = 0;
+                    goto cleanup;
+                }
+                check->artifact->whole_value.receiver = symbol;
+                check->artifact->whole_value.received = received;
+                check->artifact->whole_receive_origin = received;
+            }
+#endif
         }
     }
 cleanup:
@@ -3165,9 +3246,17 @@ static bool body_result(Check *check, NLTypeId declared, NLCheckedNodeId body,
                         NLSourceSpan span)
 {
     const NLCheckedNodeView result = *view(check, body);
+    bool experimental_helper = false;
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+    experimental_helper =
+        check->body_function != 0 &&
+        strcmp(check->context->functions[check->body_function - 1].name,
+               "main") != 0;
+#endif
     for (size_t i = 0; i < check->context->type_count; ++i)
         if (check->context->types[i].recursive_header &&
             check->context->types[i].view.field_count == 4 &&
+            !experimental_helper &&
             (check->allocation_budget == NULL ||
              *check->allocation_budget != 5)) {
             fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, span,
@@ -3332,7 +3421,8 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         body.custody_packet = view(caller, call_id)->custody_call.packet;
         body.custody_sink = view(caller, call_id)->custody_call.sink;
     }
-    body.allocated_slice = function->custody_recipient ||
+    body.allocated_slice = function->experimental_root_receiver ||
+                           function->custody_recipient ||
                            (function->owner_receiver &&
                             view(caller, call_id)->owner_call.entry_proved) ||
                            (function->owner_producer &&
@@ -3379,6 +3469,10 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                 c->places[c->bindings[symbol - 1].view.place - 1]
                     .implicit_local = true;
         }
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+        if (caller->artifact->whole_call == call_id)
+            caller->artifact->whole_value.parameters[i] = symbol;
+#endif
         if (function->custody_recipient)
             view(caller, call_id)->custody_call.parameters[i] = symbol;
         if (function->owner_receiver) {
@@ -3391,6 +3485,30 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     if (!function_block(&body, nl_syntax_node_view(nl_syntax_tree_root(
                                    function->body->syntax))))
         goto failure;
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+    if (caller->artifact->whole_call == call_id) {
+        NLWholeValueCallView *whole = &caller->artifact->whole_value;
+        const NLCheckedResult result =
+            body.terminated ? body.returned
+                            : view(&body, body.artifact->root)->results[0];
+        whole->result = result.value;
+        for (size_t n = 1; n <= nl_checked_node_count(body.artifact); ++n) {
+            const NLCheckedNodeView *ret =
+                nl_checked_node_view(body.artifact, n);
+            if (ret->kind == NL_CHECKED_RETURN) {
+                const NLCheckedNodeView *value =
+                    nl_checked_node_view(body.artifact, ret->initializer);
+                if (value != NULL && value->kind == NL_CHECKED_IDENTIFIER)
+                    whole->callee_result = value->symbol;
+            }
+        }
+        NLSemanticContext *returned = NULL;
+        if (!host(&body, nl_sem_clone(c, &returned), call_span))
+            goto failure;
+        whole->returned = returned;
+        caller->artifact->whole_return_origin = returned;
+    }
+#endif
     if (function->owner_producer) {
         const NLCheckedNodeView proof = *view(caller, call_id);
         const NLCheckedResult result =
@@ -8201,7 +8319,7 @@ static bool body_plain_type(const NLSemanticContext *c, NLTypeId type)
 static bool body_signature_type(const NLSemanticContext *c, NLTypeId type,
                                 bool parameter)
 {
-    if (body_plain_type(c, type))
+    if (body_plain_type(c, type) || nl_experimental_value_type(c, type))
         return true;
     const NLSemanticTypeView t = c->types[type - 1].view;
     if (t.kind == NL_TYPE_SUM) {
@@ -8238,9 +8356,45 @@ static void clear_definition_state(NLSemanticContext *c)
                              .function_count = function_count};
 }
 
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+/* Abstract fields for ordinary whole-value type/consume checking ONLY.
+ * No R, O, D, pointer entitlement or actual Allocation is synthesized.
+ * run_body receives real caller values; these symbols never reach a caller.
+ * A grant-using body cannot use this as an allocated world. */
+static NLValueId experimental_formal(Check *check, NLTypeId type,
+                                     NLSourceSpan span)
+{
+    NLSemanticValueView value = {.type = type};
+    if (nl_experimental_value_type(check->context, type)) {
+        value.field_count = check->context->types[type - 1].view.field_count;
+        for (size_t f = 0; f < value.field_count; ++f) {
+            value.fields[f] = experimental_formal(
+                check, check->context->types[type - 1].field_types[f], span);
+            if (value.fields[f] == 0)
+                return 0;
+        }
+    }
+    const NLValueId result = new_value(check, value, span);
+    if (result != 0)
+        for (size_t f = 0; f < value.field_count; ++f) {
+            check->context->values[value.fields[f] - 1].carrier =
+                NL_CARRIER_AGGREGATE;
+            check->context->values[value.fields[f] - 1].aggregate_owner =
+                result;
+        }
+    return result;
+}
+#endif
+
 static bool check_definition(Check *registration, size_t function_id)
 {
     NLFunctionEntry *entry = &registration->context->functions[function_id - 1];
+    if (entry->experimental_root_receiver) {
+        registration->status = nl_root_record_definition(
+            registration->context, entry->body, entry->parameters[0],
+            &entry->body->owner_definition, &registration->diagnostic);
+        return registration->status == NL_CHECK_OK;
+    }
     if (entry->custody_recipient) {
         registration->status = nl_custody_definition(
             registration->context, entry->body,
@@ -8281,6 +8435,14 @@ static bool check_definition(Check *registration, size_t function_id)
      * formal disjointness is retained; EVERY call rechecks actual relations. */
     for (size_t i = 0; i < function.count; ++i) {
         const NLTypeId type = function.parameters[i];
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+        if (nl_experimental_value_type(c, type)) {
+            values[i] = experimental_formal(&definition, type, span);
+            if (values[i] == 0)
+                goto failure;
+            continue;
+        }
+#endif
         const NLSemanticTypeView t = c->types[type - 1].view;
         NLSemanticValueView value = {.type = type};
         if (t.kind == NL_TYPE_REF || t.kind == NL_TYPE_PTR) {
@@ -8527,9 +8689,11 @@ static bool register_experimental_root_record(Check *check,
     if (name == NULL)
         return false;
     const NLSyntaxNode *n = s->data.avs_struct.fields;
-    if (s->data.avs_struct.count != 3)
+    const bool nested = s->kind == NL_SYNTAX_EXPERIMENTAL_NESTED_STRUCT;
+    const size_t count = nested ? 2 : 3;
+    if (s->data.avs_struct.count != count)
         goto profile;
-    for (size_t i = 0; i < 3; ++i) {
+    for (size_t i = 0; i < count; ++i) {
         if (n == NULL)
             goto profile;
         const NLSyntaxView *f = nl_syntax_node_view(n);
@@ -8546,7 +8710,7 @@ static bool register_experimental_root_record(Check *check,
         goto profile;
     NLTypeId result = 0;
     const NLCheckStatus status = nl_semantic_register_aggregate(
-        check->context, name, fields, 3, &result);
+        check->context, name, fields, count, &result);
     if (status == NL_CHECK_SEMANTIC_ERROR) {
         fail(check, status, s->span, "P274-RECORD-DECLARATION",
              "ordinary record name or field declarations conflict");
@@ -8554,13 +8718,14 @@ static bool register_experimental_root_record(Check *check,
     }
     if (!host(check, status, s->span))
         goto cleanup;
-    if (!nl_experimental_root_record_type(check->context, result))
+    if (!(nested ? nl_experimental_nested_type(check->context, result)
+                 : nl_experimental_root_record_type(check->context, result)))
         goto profile;
     ok = true;
     goto cleanup;
 profile:
     fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span, "P274-RECORD-PROFILE",
-         "experimental record requires ptr<H>,Allocation,LifetimeDomain");
+         "experiment requires a triad or exactly two same triad members");
 cleanup:
     free(name);
     for (size_t i = 0; i < 3; ++i)
@@ -8649,6 +8814,7 @@ register_function_unit(NLSemanticContext *context,
     FunctionDeclaration *declarations = NULL;
     const NLSyntaxView *recursive = NULL;
     const NLSyntaxView *experimental_record = NULL;
+    const NLSyntaxView *experimental_nested = NULL;
     size_t recursive_input = 0;
     size_t total = 0, input = 0;
     if (!host(&check, nl_sem_clone(context, &check.context), (NLSourceSpan){0}))
@@ -8660,6 +8826,16 @@ register_function_unit(NLSemanticContext *context,
         for (const NLSyntaxNode *n = root->data.function_unit.declarations;
              n != NULL; n = nl_syntax_next_argument(n)) {
             const NLSyntaxView *s = nl_syntax_node_view(n);
+            if (s->kind == NL_SYNTAX_EXPERIMENTAL_NESTED_STRUCT) {
+                if (count != 1 || experimental_nested != NULL) {
+                    fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
+                         "P276-NESTED-PROFILE",
+                         "experiment admits one two-triad record in one unit");
+                    goto failure;
+                }
+                experimental_nested = s;
+                continue;
+            }
             if (s->kind == NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT) {
                 if (count != 1 || experimental_record != NULL) {
                     fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
@@ -8720,6 +8896,7 @@ register_function_unit(NLSemanticContext *context,
         if (!register_recursive(&check, recursive))
             goto failure;
         if (recursive->data.avs_struct.count == 4 &&
+            experimental_nested == NULL &&
             (count != 1 || total != 1 ||
              strcmp(declarations[0].name, "main") != 0 ||
              declarations[0].syntax->data.function.count != 0 ||
@@ -8743,6 +8920,16 @@ register_function_unit(NLSemanticContext *context,
             goto failure;
         }
         if (!register_experimental_root_record(&check, experimental_record))
+            goto failure;
+    }
+    if (experimental_nested != NULL) {
+        if (experimental_record == NULL) {
+            fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED,
+                 experimental_nested->span, "P276-NESTED-PROFILE",
+                 "two-triad record requires a completed source triad");
+            goto failure;
+        }
+        if (!register_experimental_root_record(&check, experimental_nested))
             goto failure;
     }
     if (total != 0)
@@ -8854,6 +9041,11 @@ register_function_unit(NLSemanticContext *context,
         check.context->functions[d->function - 1].owner_receiver = owner;
         check.context->functions[d->function - 1].owner_producer = producer;
         check.context->functions[d->function - 1].custody_recipient = custody;
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+        check.context->functions[d->function - 1].experimental_root_receiver =
+            parameter == 1 && result == nl_semantic_unit_type(check.context) &&
+            nl_experimental_root_record_type(check.context, types[0]);
+#endif
         continue;
     duplicate:
         fail(&check, NL_CHECK_SEMANTIC_ERROR, s->data.function.name,
@@ -8902,8 +9094,9 @@ register_function_unit(NLSemanticContext *context,
             const FunctionDeclaration *d = &declarations[i];
             if ((check.context->functions[d->function - 1].owner_receiver ||
                  check.context->functions[d->function - 1].owner_producer ||
-                 check.context->functions[d->function - 1].custody_recipient) !=
-                (pass == 0))
+                 check.context->functions[d->function - 1].custody_recipient ||
+                 check.context->functions[d->function - 1]
+                     .experimental_root_receiver) != (pass == 0))
                 continue;
             input = d->input;
             if (!check_definition(&check, d->function)) {
