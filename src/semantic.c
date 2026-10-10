@@ -1057,6 +1057,28 @@ NLCheckStatus nl_semantic_register_function(NLSemanticContext *c,
     return finish_candidate(c, candidate, status);
 }
 
+bool nl_experimental_root_record_type(const NLSemanticContext *c, NLTypeId id)
+{
+#ifdef NEWLANG_EXPERIMENTAL_ORIGINAL_GRANT
+    if (c != NULL && id != 0 && id <= c->type_count) {
+        const NLTypeEntry *t = &c->types[id - 1];
+        if (t->view.kind == NL_TYPE_NOMINAL && t->view.field_count == 3 &&
+            !t->view.is_copy && !t->view.is_discardable) {
+            const NLSemanticTypeView p = c->types[t->field_types[0] - 1].view;
+            return p.kind == NL_TYPE_PTR &&
+                   nl_recursive_local_type(c, p.target) &&
+                   c->types[t->field_types[1] - 1].view.kind ==
+                       NL_TYPE_ALLOCATION &&
+                   t->field_types[2] == nl_semantic_domain_type(c);
+        }
+    }
+#else
+    (void)c;
+    (void)id;
+#endif
+    return false;
+}
+
 NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *c,
                                              const char *name,
                                              const NLAggregateField *fields,
@@ -1071,6 +1093,16 @@ NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *c,
         return NL_CHECK_SEMANTIC_ERROR;
     if (count > NL_SEMANTIC_MAX_FIELDS)
         return NL_CHECK_RESOURCE_LIMIT;
+    bool experimental_triad = false;
+#ifdef NEWLANG_EXPERIMENTAL_ORIGINAL_GRANT
+    if (count == 3 && fields[0].type != 0 && fields[0].type <= c->type_count &&
+        fields[1].type == nl_semantic_core_type(c, NL_TYPE_ALLOCATION) &&
+        fields[2].type == nl_semantic_domain_type(c)) {
+        const NLSemanticTypeView p = c->types[fields[0].type - 1].view;
+        experimental_triad =
+            p.kind == NL_TYPE_PTR && nl_recursive_local_type(c, p.target);
+    }
+#endif
     bool copy = true, discard = true;
     for (size_t f = 0; f < count; ++f) {
         if (fields[f].name == NULL || fields[f].name[0] == 0 ||
@@ -1079,10 +1111,11 @@ NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *c,
         if (c->types[fields[f].type - 1].incomplete)
             return NL_CHECK_SEMANTIC_ERROR;
         const NLSemanticTypeView t = c->types[fields[f].type - 1].view;
-        if (t.field_count != 0 || fields[f].type == 2 ||
-            (t.kind != NL_TYPE_NOMINAL && t.kind != NL_TYPE_BOOL &&
-             t.kind != NL_TYPE_BYTE && t.kind != NL_TYPE_U8 &&
-             t.kind != NL_TYPE_USIZE && t.kind != NL_TYPE_ADDR))
+        if (!experimental_triad &&
+            (t.field_count != 0 || fields[f].type == 2 ||
+             (t.kind != NL_TYPE_NOMINAL && t.kind != NL_TYPE_BOOL &&
+              t.kind != NL_TYPE_BYTE && t.kind != NL_TYPE_U8 &&
+              t.kind != NL_TYPE_USIZE && t.kind != NL_TYPE_ADDR)))
             return NL_CHECK_SEMANTIC_UNSUPPORTED;
         for (size_t j = 0; j < f; ++j)
             if (strcmp(fields[f].name, fields[j].name) == 0)

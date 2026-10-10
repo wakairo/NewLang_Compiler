@@ -305,7 +305,9 @@ typedef struct {
 /* Fixed flat nominal aggregate registry; no physical layout.
  * Properties derive from all fields. This slice supports dependency-free flat
  * nominal/scalar members, not nested aggregates or authority/capability fields.
- * Unsupported kinds are reported, never treated as invalid language. */
+ * Unsupported kinds are reported, never treated as invalid language.
+ * Unadopted NEWLANG_EXPERIMENTAL_ORIGINAL_GRANT additionally admits only a
+ * ptr<H>,Allocation,LifetimeDomain triad. Shape is never Matched evidence. */
 NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *, const char *,
                                              const NLAggregateField *, size_t,
                                              NLTypeId *out);

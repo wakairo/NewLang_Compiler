@@ -2643,7 +2643,9 @@ static NLCheckedNodeId aggregate(Check *check, const NLSyntaxView *syntax)
         return 0;
     }
     if (check->in_function_body && !avs_type(check->context, type) &&
-        !live_tail) {
+        !live_tail &&
+        !(check->allocated_slice &&
+          nl_experimental_root_record_type(check->context, type))) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
              "P8-BODY-PROFILE",
              "function-body aggregate admission is bounded to two u8 fields");
@@ -2751,7 +2753,8 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
         if (check->in_function_body && !avs_type(check->context, type) &&
             !(check->allocated_slice &&
               (check->context->types[type - 1].one_backing_target != 0 ||
-               check->context->types[type - 1].live_tail_target != 0))) {
+               check->context->types[type - 1].live_tail_target != 0 ||
+               nl_experimental_root_record_type(check->context, type)))) {
             fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
                  "P8-BODY-PROFILE",
                  "function-body destructuring is bounded to two u8 fields");
@@ -7384,6 +7387,7 @@ static NLCheckedNodeId allocated_raw(Check *check, const NLSyntaxView *syntax,
     NLCheckedNodeId args[2] = {0};
     const NLSyntaxNode *operand = syntax->data.call.arguments;
     for (size_t i = 0; i < count; ++i) {
+        operation.operands[i].span = nl_syntax_node_view(operand)->span;
         NLTypeId expected =
             kind == NL_RAW_DEALLOCATE
                 ? nl_semantic_core_type(c, i == 0 ? NL_TYPE_ALLOCATION
@@ -8508,6 +8512,62 @@ cleanup:
     return ok;
 }
 
+/* Opt-in staging of ONE ordinary nonCopy triad. Its nominal/field spelling
+ * carries no Matched bit; primitive consumers check the actual constituents.
+ * The enclosing unit transaction owns rollback of the registry on failure. */
+static bool register_experimental_root_record(Check *check,
+                                              const NLSyntaxView *s)
+{
+    if (!lexical_source_name(check, s->data.avs_struct.name))
+        return false;
+    char *name = source_name_copy(check, s->data.avs_struct.name);
+    char *labels[3] = {0};
+    NLAggregateField fields[3] = {{0}};
+    bool ok = false;
+    if (name == NULL)
+        return false;
+    const NLSyntaxNode *n = s->data.avs_struct.fields;
+    if (s->data.avs_struct.count != 3)
+        goto profile;
+    for (size_t i = 0; i < 3; ++i) {
+        if (n == NULL)
+            goto profile;
+        const NLSyntaxView *f = nl_syntax_node_view(n);
+        const NLTypeId type = check_type(check, f->data.parameter.type);
+        if (type == 0)
+            goto cleanup;
+        labels[i] = source_name_copy(check, f->data.parameter.name);
+        if (labels[i] == NULL)
+            goto cleanup;
+        fields[i] = (NLAggregateField){labels[i], type};
+        n = nl_syntax_next_argument(n);
+    }
+    if (n != NULL)
+        goto profile;
+    NLTypeId result = 0;
+    const NLCheckStatus status = nl_semantic_register_aggregate(
+        check->context, name, fields, 3, &result);
+    if (status == NL_CHECK_SEMANTIC_ERROR) {
+        fail(check, status, s->span, "P274-RECORD-DECLARATION",
+             "ordinary record name or field declarations conflict");
+        goto cleanup;
+    }
+    if (!host(check, status, s->span))
+        goto cleanup;
+    if (!nl_experimental_root_record_type(check->context, result))
+        goto profile;
+    ok = true;
+    goto cleanup;
+profile:
+    fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span, "P274-RECORD-PROFILE",
+         "experimental record requires ptr<H>,Allocation,LifetimeDomain");
+cleanup:
+    free(name);
+    for (size_t i = 0; i < 3; ++i)
+        free(labels[i]);
+    return ok;
+}
+
 static bool register_recursive(Check *check, const NLSyntaxView *s)
 {
     if (!lexical_source_name(check, s->data.avs_struct.name))
@@ -8588,6 +8648,7 @@ register_function_unit(NLSemanticContext *context,
                    .closure_probe = closure_probe};
     FunctionDeclaration *declarations = NULL;
     const NLSyntaxView *recursive = NULL;
+    const NLSyntaxView *experimental_record = NULL;
     size_t recursive_input = 0;
     size_t total = 0, input = 0;
     if (!host(&check, nl_sem_clone(context, &check.context), (NLSourceSpan){0}))
@@ -8599,6 +8660,16 @@ register_function_unit(NLSemanticContext *context,
         for (const NLSyntaxNode *n = root->data.function_unit.declarations;
              n != NULL; n = nl_syntax_next_argument(n)) {
             const NLSyntaxView *s = nl_syntax_node_view(n);
+            if (s->kind == NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT) {
+                if (count != 1 || experimental_record != NULL) {
+                    fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
+                         "P274-RECORD-PROFILE",
+                         "experiment admits one ordinary triad in one unit");
+                    goto failure;
+                }
+                experimental_record = s;
+                continue;
+            }
             if (s->kind == NL_SYNTAX_RECURSIVE_STRUCT) {
                 if (recursive != NULL) {
                     fail(&check, NL_CHECK_SEMANTIC_ERROR, s->span,
@@ -8662,6 +8733,18 @@ register_function_unit(NLSemanticContext *context,
     }
     if (!host(&check, nl_recursive_validate(check.context), (NLSourceSpan){0}))
         goto failure;
+    if (experimental_record != NULL) {
+        check.source = nl_syntax_tree_source(inputs[0]);
+        input = 0;
+        if (recursive == NULL) {
+            fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED,
+                 experimental_record->span, "P274-RECORD-PROFILE",
+                 "experimental record requires a completed source H");
+            goto failure;
+        }
+        if (!register_experimental_root_record(&check, experimental_record))
+            goto failure;
+    }
     if (total != 0)
         qsort(declarations, total, sizeof(*declarations), declaration_order);
     /* Exact signature installation is private until ALL definitions succeed. */

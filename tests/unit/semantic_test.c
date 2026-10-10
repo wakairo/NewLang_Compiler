@@ -81,6 +81,88 @@ static bool type_tests(void)
     return true;
 }
 
+/* Type registry contract only; no runtime root/Allocation/domain is seeded.
+ * Source H completion establishes the ptr target used by the opt-in triad. */
+static bool original_grant_registry_tests(void)
+{
+    NLSemanticContext *c = NULL;
+    NLSource *source = NULL;
+    NLParser *parser = NULL;
+    NLSyntaxTree *syntax = NULL;
+    const char text[] = "struct Node{next:Option<ptr<Node>>,payload:u8}";
+    CHECK(nl_semantic_create(&c) == NL_CHECK_OK);
+    CHECK(nl_source_create(text, sizeof(text) - 1, "registry-H", &source) ==
+          NL_SOURCE_OK);
+    CHECK(nl_parser_create(source, &parser) == NL_PARSE_OK);
+    CHECK(nl_parser_parse_function_unit(parser, &syntax, NULL) == NL_PARSE_OK);
+    const NLSyntaxTree *inputs[] = {syntax};
+    CHECK(nl_semantic_register_function_unit(c, inputs, 1, NULL) ==
+          NL_CHECK_OK);
+    TestChecked checked = {0};
+    CHECK(test_run(c, "ptr<Node>", TEST_TYPE, NL_CHECK_OK, NULL, &checked));
+    const NLTypeId pointer = test_root(&checked)->type;
+    test_checked_destroy(&checked);
+    NLAggregateField fields[] = {
+        {"p", pointer},
+        {"a", nl_semantic_core_type(c, NL_TYPE_ALLOCATION)},
+        {"d", nl_semantic_domain_type(c)}};
+    TestState before;
+    CHECK(test_state(c, &before));
+    NLTypeId result = SIZE_MAX;
+#ifndef NEWLANG_EXPERIMENTAL_ORIGINAL_GRANT
+    CHECK(nl_semantic_register_aggregate(c, "Parcel", fields, 3, &result) ==
+              NL_CHECK_SEMANTIC_UNSUPPORTED &&
+          result == SIZE_MAX);
+    CHECK(test_unchanged(c, &before));
+#else
+    CHECK(nl_semantic_register_aggregate(c, "Parcel", fields, 3, &result) ==
+          NL_CHECK_OK);
+    NLSemanticTypeView t;
+    CHECK(nl_semantic_type_view(c, result, &t) && t.field_count == 3 &&
+          !t.is_copy && !t.is_discardable && !t.layout_known);
+    NLSemanticSnapshot state;
+    CHECK(nl_semantic_snapshot(c, &state) && state.values == 0 &&
+          state.backing_regions == 0 && state.domains == 0);
+    CHECK(test_state(c, &before));
+    result = SIZE_MAX;
+    CHECK(nl_semantic_register_aggregate(c, "Parcel", fields, 3, &result) ==
+              NL_CHECK_SEMANTIC_ERROR &&
+          result == SIZE_MAX);
+    CHECK(test_unchanged(c, &before));
+    fields[1].name = "p";
+    CHECK(nl_semantic_register_aggregate(c, "Duplicate", fields, 3, &result) ==
+              NL_CHECK_SEMANTIC_ERROR &&
+          result == SIZE_MAX);
+    CHECK(test_unchanged(c, &before));
+    fields[1].name = "a";
+    CHECK(nl_semantic_register_aggregate(c, "Partial", fields, 2, &result) ==
+              NL_CHECK_SEMANTIC_UNSUPPORTED &&
+          result == SIZE_MAX);
+    CHECK(test_unchanged(c, &before));
+    bool success = false;
+    for (size_t nth = 0; nth < 256; ++nth) {
+        fail_at = nth;
+        allocation_index = 0;
+        injecting = true;
+        NLCheckStatus status = nl_semantic_register_aggregate(
+            c, "FailureTrial", fields, 3, &result);
+        injecting = false;
+        if (status == NL_CHECK_OK) {
+            success = true;
+            break;
+        }
+        CHECK(status == NL_CHECK_OUT_OF_MEMORY && result == SIZE_MAX);
+        CHECK(test_unchanged(c, &before));
+    }
+    CHECK(success);
+#endif
+    nl_syntax_tree_destroy(syntax);
+    nl_parser_destroy(parser);
+    nl_source_destroy(source);
+    nl_semantic_destroy(c);
+    return true;
+}
+
 static bool value_tests(void)
 {
     TestSemantic f = {0};
@@ -1155,7 +1237,7 @@ int main(int argc, char **argv)
     }
     bool ok = false;
     if (strcmp(argv[1], "type") == 0) {
-        ok = type_tests();
+        ok = type_tests() && original_grant_registry_tests();
     } else if (strcmp(argv[1], "value_use") == 0) {
         ok = value_tests() && compatibility_tests();
     } else if (strcmp(argv[1], "domain") == 0) {

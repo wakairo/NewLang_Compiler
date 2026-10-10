@@ -636,6 +636,62 @@ static bool diagnostic_tests(void)
     return true;
 }
 
+static bool original_grant_tests(void)
+{
+    const char *text = "struct Packet { p:ptr<Node>, a:Allocation, "
+                       "d:LifetimeDomain, } fn main()->unit{unit}";
+#ifndef NEWLANG_EXPERIMENTAL_ORIGINAL_GRANT
+    CHECK(failure(nl_parser_parse_function_unit, text,
+                  NL_PARSE_SYNTAX_UNSUPPORTED, "AVS-DECL-PROFILE"));
+#else
+    NLSource *source = NULL;
+    NLParser *parser = NULL;
+    CHECK(create(text, &source, &parser));
+    for (size_t repeat = 0; repeat < 2; ++repeat) {
+        NLSyntaxTree *tree = NULL;
+        CHECK(nl_parser_parse_function_unit(parser, &tree, NULL) ==
+              NL_PARSE_OK);
+        const NLSyntaxView *root =
+            nl_syntax_node_view(nl_syntax_tree_root(tree));
+        CHECK(root->kind == NL_SYNTAX_FUNCTION_UNIT);
+        const NLSyntaxView *record =
+            nl_syntax_node_view(root->data.function_unit.declarations);
+        CHECK(record->kind == NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT &&
+              record->data.avs_struct.count == 3);
+        CHECK(test_name(source, record->data.avs_struct.name, "Packet"));
+        const NLSyntaxView *field =
+            nl_syntax_node_view(record->data.avs_struct.fields);
+        CHECK(test_name(source, field->data.parameter.name, "p") &&
+              nl_syntax_node_view(field->data.parameter.type)->kind ==
+                  NL_SYNTAX_TYPE_PTR);
+        nl_syntax_tree_destroy(tree);
+    }
+    nl_parser_destroy(parser);
+    nl_source_destroy(source);
+    CHECK(
+        failure(nl_parser_parse_function_unit,
+                "struct Packet{p:ptr<Node>,a:Allocation} fn main()->unit{unit}",
+                NL_PARSE_SYNTAX_UNSUPPORTED, "AVS-DECL-PROFILE"));
+    CHECK(failure(
+        nl_parser_parse_function_unit,
+        "struct Packet{p:ptr<Node>,a:Allocation,d:LifetimeDomain,extra:u8} fn "
+        "main()->unit{unit}",
+        NL_PARSE_SYNTAX_UNSUPPORTED, "AVS-DECL-PROFILE"));
+    CHECK(failure(nl_parser_parse_function_unit,
+                  "struct Packet{p:ptr<Node>,a:LifetimeDomain,d:Allocation} fn "
+                  "main()->unit{unit}",
+                  NL_PARSE_SYNTAX_UNSUPPORTED, "AVS-DECL-PROFILE"));
+    CHECK(failure(
+        nl_parser_parse_function_unit,
+        "struct TreeTwo{root:Packet,child:Packet} fn main()->unit{unit}",
+        NL_PARSE_SYNTAX_UNSUPPORTED, "AVS-DECL-PROFILE"));
+    CHECK(failure(nl_parser_parse_function_unit,
+                  "struct Packet{p:ptr<Node>,a:Allocation,d:",
+                  NL_PARSE_SYNTAX_UNSUPPORTED, "AVS-DECL-PROFILE"));
+#endif
+    return true;
+}
+
 int main(int argc, char **argv)
 {
     if (argc != 2) {
@@ -644,9 +700,13 @@ int main(int argc, char **argv)
     const struct {
         const char *name;
         bool (*run)(void);
-    } groups[] = {{"type", type_tests},     {"expression", expression_tests},
-                  {"loan", loan_tests},     {"ownership", ownership_tests},
-                  {"limits", limits_tests}, {"diagnostics", diagnostic_tests}};
+    } groups[] = {{"type", type_tests},
+                  {"expression", expression_tests},
+                  {"loan", loan_tests},
+                  {"ownership", ownership_tests},
+                  {"limits", limits_tests},
+                  {"diagnostics", diagnostic_tests},
+                  {"original_grant", original_grant_tests}};
     for (size_t i = 0; i < sizeof(groups) / sizeof(groups[0]); ++i) {
         if (strcmp(argv[1], groups[i].name) == 0) {
             if (!groups[i].run()) {

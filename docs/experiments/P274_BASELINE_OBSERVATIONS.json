@@ -1,0 +1,58 @@
+[
+  {
+    "input": "canonical",
+    "source_sha256": "812042833072145f761ddc21cbf774d81b64da3a34f6d466ba7db01a6d704d7d",
+    "exit": 0,
+    "stdout_bytes": 28239,
+    "diagnostic": ""
+  },
+  {
+    "input": "direct-wrong-original-allocation",
+    "source_sha256": "ad0bd4b5931e1eb6193d41fa5c9f6bae72d32c9516a5de0aa5076645c2541c56",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "direct-wrong-original-allocation.nl:8:19-8:19: error(semantic)[P4-ALLOCATION-MISMATCH]: Allocation and Storage have different BackingRegion identities\n"
+  },
+  {
+    "input": "two-H-LiveTail",
+    "source_sha256": "fe6671d59794d3c96b935c97cf30753dc49a83ed7c3b560b2715afc0e8ba5e4f",
+    "exit": 0,
+    "stdout_bytes": 13498,
+    "diagnostic": ""
+  },
+  {
+    "input": "two-H-custody",
+    "source_sha256": "a30bbc37ff817020165d44a1436cb98ac934568f557068b378bf3118227d5644",
+    "exit": 0,
+    "stdout_bytes": 17725,
+    "diagnostic": ""
+  },
+  {
+    "input": "correct-original",
+    "source_sha256": "32e64598f0b322928733de61640b69bb6ae663255e8b0f6e4c2ffb8ebc147d30",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "correct-original.nl:10:22-10:25: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n"
+  },
+  {
+    "input": "wrong-original-allocation",
+    "source_sha256": "807d0b7083dd285e92c83e478e50b56662178863f9508fb1527eb6ab438bf37b",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "wrong-original-allocation.nl:10:22-10:25: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n"
+  },
+  {
+    "input": "mixed-harmless-repaired",
+    "source_sha256": "18ca1c74db9e7a4882886a73c5fcf4158b9380dfedee8a730edd1a7b293501c0",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "mixed-harmless-repaired.nl:10:22-10:25: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n"
+  },
+  {
+    "input": "two-H-LiveTail-direct-construction",
+    "source_sha256": "f76aa3be64da2e5a1e053353666133c46c4e816e355b7250c353fe42441754bd",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "two-H-LiveTail-direct-construction.nl:90:35-90:115: error(unsupported)[P208-CONSTRUCTOR-CONTEXT]: LiveTail construction requires a proved producer call\n"
+  }
+]

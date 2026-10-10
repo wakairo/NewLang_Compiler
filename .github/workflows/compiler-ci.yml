@@ -56,3 +56,9 @@ jobs:
             -DNEWLANG_SANITIZER=${{ matrix.sanitizer }}
           cmake --build build --parallel 2
           ctest --test-dir build --output-on-failure
+      - name: UNADOPTED Issue 274 opt-in checker experiment (DO NOT MERGE)
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON
+          cmake --build build --parallel 2
+          ctest --test-dir build --output-on-failure
