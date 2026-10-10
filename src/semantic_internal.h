@@ -11,6 +11,10 @@
  * Draft 17.14 preserves core/structural reasons without changing lexer tokens.
  */
 bool nl_sem_lexical_name_admissible(const void *bytes, size_t length);
+bool nl_three_owner_signature(const NLSemanticContext *, const NLTypeId *,
+                              size_t, NLTypeId);
+bool nl_three_owner_body(const NLCheckedFragment *,
+                         const NLSymbolId parameters[3], NLValueId result);
 NLCheckStatus nl_owner_record_relations(const NLSemanticContext *, NLValueId,
                                         const NLTypedOwnerDefinition *);
 struct NLFunctionBody;

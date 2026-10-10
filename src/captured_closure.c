@@ -763,7 +763,7 @@ NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *f,
         w.entry == w.received || call->kind != NL_CHECKED_REGISTERED_CALL ||
         !call->body_backed || call->terminates || call->result_count != 1 ||
         call->results[0].value != w.result || call->argument_count != w.count ||
-        (w.count != 1 && w.count != 2) ||
+        (w.count != 1 && w.count != 2 && w.count != 3) ||
         !(expanded_identity
               ? (w.count == 1 &&
                  nl_experimental_owner_aggregate_type(w.entry, call->type))
@@ -777,6 +777,10 @@ NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *f,
         w.result > w.returned->value_count ||
         w.result > w.received->value_count || w.receiver == 0 ||
         w.receiver > w.received->binding_count)
+        return INVALID;
+    const bool three = w.count == 3;
+    if (three && !nl_three_owner_signature(w.entry, fn->parameters, fn->count,
+                                           fn->result))
         return INVALID;
     const NLSemanticContext *worlds[] = {w.entry, w.returned, w.received};
     for (size_t i = 0; i < 3; ++i) {
@@ -809,7 +813,7 @@ NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *f,
         return INVALID;
 #endif
     NLCheckedNodeId arg = call->first_argument;
-    for (size_t i = 0; i < w.count; ++i) {
+    for (size_t i = 0; i < (three ? 2u : w.count); ++i) {
         const NLCheckedNodeView *node = nl_checked_node_view(f, arg);
         if (node == NULL || node->kind != NL_CHECKED_IDENTIFIER ||
             node->value_use != NL_VALUE_CONSUMED || node->result_count != 1 ||
@@ -843,7 +847,7 @@ NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *f,
                    w.returned->values[w.inputs[i] - 1].fields,
                    sizeof(result.fields)) != 0)
             return INVALID;
-        if (w.count == 2) {
+        if (w.count >= 2) {
             if (!nl_experimental_root_record_type(w.entry, donor.type) ||
                 (w.inputs[i] != result.fields[0] &&
                  w.inputs[i] != result.fields[1]))
@@ -852,7 +856,114 @@ NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *f,
             return INVALID;
         arg = node->next_argument;
     }
-    if (arg != 0 || (w.count == 2 && (w.inputs[0] == w.inputs[1] ||
+#ifdef NEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL
+    if (three) {
+        if (!nl_three_owner_body(body, w.parameters, w.result))
+            return INVALID;
+        /* Return has a legitimate loose whole-result carrier. Check uniqueness
+         * independently of lexical placement so a cloned A/D in this owned
+         * intermediate world cannot hide behind the later received world. */
+        for (size_t v = 0; v < w.entry->value_count; ++v) {
+            const NLSemanticValueView original = w.entry->values[v];
+            if (original.carrier == NL_CARRIER_ENDED)
+                continue;
+            const bool allocation =
+                w.entry->types[original.type - 1].view.kind ==
+                NL_TYPE_ALLOCATION;
+            const bool domain =
+                original.type == nl_semantic_domain_type(w.entry);
+            if (!allocation && !domain)
+                continue;
+            size_t owners = 0;
+            for (size_t n = 0; n < w.returned->value_count; ++n) {
+                const NLSemanticValueView candidate = w.returned->values[n];
+                if (candidate.carrier == NL_CARRIER_ENDED)
+                    continue;
+                if (candidate.type == original.type &&
+                    (allocation ? candidate.allocation_region ==
+                                      original.allocation_region
+                                : candidate.domain == original.domain)) {
+                    if (n != v)
+                        return INVALID;
+                    ++owners;
+                }
+            }
+            if (owners != 1)
+                return INVALID;
+        }
+        const NLCheckedNodeView *token = nl_checked_node_view(f, arg);
+        if (!token || token->kind != NL_CHECKED_IDENTIFIER ||
+            token->value_use != NL_VALUE_COPIED || token->result_count != 1 ||
+            token->symbol != w.donors[2] ||
+            token->results[0].value != w.inputs[2] || !w.donors[2] ||
+            w.donors[2] > w.entry->binding_count ||
+            w.parameters[2] <= w.entry->binding_count ||
+            w.parameters[2] > w.returned->binding_count || !w.inputs[2] ||
+            w.inputs[2] > w.returned->value_count ||
+            w.inputs[2] > w.received->value_count ||
+            w.donors[2] > w.returned->binding_count ||
+            w.donors[2] > w.received->binding_count ||
+            token->type != fn->parameters[2])
+            return INVALID;
+        const NLSemanticBindingView donor =
+            w.entry->bindings[w.donors[2] - 1].view;
+        const NLSemanticBindingView param =
+            w.returned->bindings[w.parameters[2] - 1].view;
+        if (!donor.value || donor.value > w.entry->value_count ||
+            donor.type != token->type || donor.availability != NL_AVAILABLE ||
+            w.returned->bindings[w.donors[2] - 1].view.availability !=
+                NL_AVAILABLE ||
+            w.received->bindings[w.donors[2] - 1].view.availability !=
+                NL_AVAILABLE ||
+            param.value != w.inputs[2] || param.type != token->type ||
+            param.availability != NL_CONSUMED ||
+            strcmp(w.returned->bindings[w.parameters[2] - 1].name,
+                   fn->body->parameter_names[2]) ||
+            memcmp(&w.entry->values[donor.value - 1].reference,
+                   &w.returned->values[w.inputs[2] - 1].reference,
+                   sizeof(NLReferenceFacts)) ||
+            memcmp(&w.returned->values[w.inputs[2] - 1].reference,
+                   &w.received->values[w.inputs[2] - 1].reference,
+                   sizeof(NLReferenceFacts)))
+            return INVALID;
+        if (w.returned->bindings[w.donors[2] - 1].view.value != donor.value ||
+            w.received->bindings[w.donors[2] - 1].view.value != donor.value ||
+            w.returned->values[w.inputs[2] - 1].type != token->type ||
+            w.received->values[w.inputs[2] - 1].type != token->type ||
+            w.returned->values[w.inputs[2] - 1].allocation_region ||
+            w.returned->values[w.inputs[2] - 1].domain ||
+            w.returned->values[w.inputs[2] - 1].reference.scope ||
+            w.returned->values[w.inputs[2] - 1].reference_count ||
+            w.received->values[w.inputs[2] - 1].reference_count)
+            return INVALID;
+        for (size_t k = 0; k < 2; ++k) {
+            if (!identity_components(w.entry, w.returned, w.received,
+                                     w.inputs[k], 0))
+                return INVALID;
+            const NLValueId p = w.entry->values[w.inputs[k] - 1].fields[0];
+            if (!p || p > w.entry->value_count)
+                return INVALID;
+            const NLPlaceId root = w.entry->values[p - 1].reference.place;
+            if (root) {
+                if (root > w.entry->place_count ||
+                    root > w.returned->place_count ||
+                    root > w.received->place_count ||
+                    memcmp(&w.entry->places[root - 1],
+                           &w.returned->places[root - 1],
+                           sizeof(NLSemanticPlaceView)) ||
+                    memcmp(&w.entry->places[root - 1],
+                           &w.received->places[root - 1],
+                           sizeof(NLSemanticPlaceView)))
+                    return INVALID;
+            }
+        }
+        arg = token->next_argument;
+    }
+#else
+    if (three)
+        return INVALID;
+#endif
+    if (arg != 0 || (w.count >= 2 && (w.inputs[0] == w.inputs[1] ||
                                       result.fields[0] == result.fields[1])))
         return INVALID;
     const NLCheckedNodeView *block = nl_checked_node_view(body, body->root);
@@ -911,7 +1022,7 @@ NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *f,
         case NL_CHECKED_AGGREGATE: {
             if (node->terminates || node->type != call->type ||
                 node->result_count != 1 || node->results[0].value != w.result ||
-                node->argument_count != 2 || w.count != 2)
+                node->argument_count != 2 || w.count < 2)
                 return INVALID;
             bool seen[2] = {false};
             NLCheckedNodeId field = node->first_argument;
@@ -962,7 +1073,7 @@ NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *f,
                              */
         }
     }
-    if (returns != 1 || constructors != (w.count == 2 ? 1u : 0u))
+    if (returns != 1 || constructors != (w.count >= 2 ? 1u : 0u))
         return INVALID;
     if (w.callee_result != 0) {
         if (w.callee_result <= w.entry->binding_count ||

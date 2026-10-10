@@ -1,0 +1,1438 @@
+{
+  "kind": "P289 pure finite 3-arg source candidate; UNSELECTED",
+  "native_execution": false,
+  "observations": [
+    {
+      "input": "independent-caller-bindings",
+      "source_sha256": "40f91fb62cbffd318963fc3e139c2205612f6dee400458745a67bbbc14027b1d",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: independent-caller-bindings.nl\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 0,
+        "code": "",
+        "start_byte": 0,
+        "end_byte": 0,
+        "snapshot_unchanged": false,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "owned_source_evidence": {
+        "owned_source_artifact": true,
+        "public_validator": true,
+        "four_construct_consume": true,
+        "whole_value": 137,
+        "caller": 60,
+        "callee": 65,
+        "receiver": 69,
+        "mixed_return_preserved": false,
+        "three_arguments": true,
+        "Copy_token_caller_retained": true,
+        "original_leaves": [
+          {
+            "value": 135,
+            "ptr_value": 134,
+            "Allocation_value": 57,
+            "Domain_value": 62,
+            "root": 57,
+            "incarnation": 60,
+            "region": 5,
+            "Allocation_region": 5,
+            "Domain": 5
+          },
+          {
+            "value": 130,
+            "ptr_value": 129,
+            "Allocation_value": 29,
+            "Domain_value": 34,
+            "root": 31,
+            "incarnation": 34,
+            "region": 3,
+            "Allocation_region": 3,
+            "Domain": 3
+          }
+        ],
+        "donors": [
+          60,
+          63,
+          24
+        ],
+        "parameters": [
+          65,
+          66,
+          67
+        ],
+        "Copy_input_value": 136,
+        "all_three_worlds_unique_A_D": true,
+        "active_loans": 0,
+        "one_current_A_D_per_original": true,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "C_output": false
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "fifth-owner-field-parser-profile",
+      "source_sha256": "a638e251c51092ebc54c01fe251cd12c127da196c6f12208e0fbfc22d082d904",
+      "classification": "parser-unsupported",
+      "cli_exit": 3,
+      "diagnostic": "fifth-owner-field-parser-profile.nl:10:85-10:89: error(unsupported)[AVS-DECL-PROFILE]: bounded declaration requires two fields or three recursive links and payload\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 2,
+        "syntax_tree": false,
+        "registration_attempted": false,
+        "registration_status": null,
+        "code": "AVS-DECL-PROFILE",
+        "start_byte": 353,
+        "end_byte": 357,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "last"
+      },
+      "owned_source_evidence": null,
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "three-formal-source",
+      "source_sha256": "ff95d9ae2c6d4ecd24b94ca9704872b6754d5e3001705f9b84f19f681c8c9a86",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: three-formal-source.nl\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 0,
+        "code": "",
+        "start_byte": 0,
+        "end_byte": 0,
+        "snapshot_unchanged": false,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "owned_source_evidence": {
+        "owned_source_artifact": true,
+        "public_validator": true,
+        "four_construct_consume": true,
+        "whole_value": 137,
+        "caller": 60,
+        "callee": 65,
+        "receiver": 69,
+        "mixed_return_preserved": false,
+        "three_arguments": true,
+        "Copy_token_caller_retained": true,
+        "original_leaves": [
+          {
+            "value": 135,
+            "ptr_value": 134,
+            "Allocation_value": 57,
+            "Domain_value": 62,
+            "root": 57,
+            "incarnation": 60,
+            "region": 5,
+            "Allocation_region": 5,
+            "Domain": 5
+          },
+          {
+            "value": 130,
+            "ptr_value": 129,
+            "Allocation_value": 29,
+            "Domain_value": 34,
+            "root": 31,
+            "incarnation": 34,
+            "region": 3,
+            "Allocation_region": 3,
+            "Domain": 3
+          }
+        ],
+        "donors": [
+          60,
+          63,
+          24
+        ],
+        "parameters": [
+          65,
+          66,
+          67
+        ],
+        "Copy_input_value": 136,
+        "all_three_worlds_unique_A_D": true,
+        "active_loans": 0,
+        "one_current_A_D_per_original": true,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "C_output": false
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "pure-direct-return",
+      "source_sha256": "486ab924078aaa2eea11c2a5236cdce4b2b045c7dcaa4d8d9bee4b6e4678806d",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: pure-direct-return.nl\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 0,
+        "code": "",
+        "start_byte": 0,
+        "end_byte": 0,
+        "snapshot_unchanged": false,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "owned_source_evidence": {
+        "owned_source_artifact": true,
+        "public_validator": true,
+        "four_construct_consume": true,
+        "whole_value": 137,
+        "caller": 60,
+        "callee": 65,
+        "receiver": 68,
+        "mixed_return_preserved": false,
+        "three_arguments": true,
+        "Copy_token_caller_retained": true,
+        "original_leaves": [
+          {
+            "value": 135,
+            "ptr_value": 134,
+            "Allocation_value": 57,
+            "Domain_value": 62,
+            "root": 57,
+            "incarnation": 60,
+            "region": 5,
+            "Allocation_region": 5,
+            "Domain": 5
+          },
+          {
+            "value": 130,
+            "ptr_value": 129,
+            "Allocation_value": 29,
+            "Domain_value": 34,
+            "root": 31,
+            "incarnation": 34,
+            "region": 3,
+            "Allocation_region": 3,
+            "Domain": 3
+          }
+        ],
+        "donors": [
+          60,
+          63,
+          24
+        ],
+        "parameters": [
+          65,
+          66,
+          67
+        ],
+        "Copy_input_value": 136,
+        "all_three_worlds_unique_A_D": true,
+        "active_loans": 0,
+        "one_current_A_D_per_original": true,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "C_output": false
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "role-neutral-alpha",
+      "source_sha256": "535cc2acb10e6a39723ddecb53508cb391429c7b235b660d8edfa6d11d303001",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: role-neutral-alpha.nl\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 0,
+        "code": "",
+        "start_byte": 0,
+        "end_byte": 0,
+        "snapshot_unchanged": false,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "owned_source_evidence": {
+        "owned_source_artifact": true,
+        "public_validator": true,
+        "four_construct_consume": true,
+        "whole_value": 137,
+        "caller": 60,
+        "callee": 65,
+        "receiver": 69,
+        "mixed_return_preserved": false,
+        "three_arguments": true,
+        "Copy_token_caller_retained": true,
+        "original_leaves": [
+          {
+            "value": 135,
+            "ptr_value": 134,
+            "Allocation_value": 57,
+            "Domain_value": 62,
+            "root": 57,
+            "incarnation": 60,
+            "region": 5,
+            "Allocation_region": 5,
+            "Domain": 5
+          },
+          {
+            "value": 130,
+            "ptr_value": 129,
+            "Allocation_value": 29,
+            "Domain_value": 34,
+            "root": 31,
+            "incarnation": 34,
+            "region": 3,
+            "Allocation_region": 3,
+            "Domain": 3
+          }
+        ],
+        "donors": [
+          60,
+          63,
+          24
+        ],
+        "parameters": [
+          65,
+          66,
+          67
+        ],
+        "Copy_input_value": 136,
+        "all_three_worlds_unique_A_D": true,
+        "active_loans": 0,
+        "one_current_A_D_per_original": true,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "C_output": false
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "reversed-whole-fields",
+      "source_sha256": "9a60e4720128176b06d1bd9b71b6748e28608e1c32d01d32cf6e6b192d14aa7e",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: reversed-whole-fields.nl\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 0,
+        "code": "",
+        "start_byte": 0,
+        "end_byte": 0,
+        "snapshot_unchanged": false,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "owned_source_evidence": {
+        "owned_source_artifact": true,
+        "public_validator": true,
+        "four_construct_consume": true,
+        "whole_value": 137,
+        "caller": 60,
+        "callee": 65,
+        "receiver": 69,
+        "mixed_return_preserved": false,
+        "three_arguments": true,
+        "Copy_token_caller_retained": true,
+        "original_leaves": [
+          {
+            "value": 135,
+            "ptr_value": 134,
+            "Allocation_value": 57,
+            "Domain_value": 62,
+            "root": 57,
+            "incarnation": 60,
+            "region": 5,
+            "Allocation_region": 5,
+            "Domain": 5
+          },
+          {
+            "value": 130,
+            "ptr_value": 129,
+            "Allocation_value": 29,
+            "Domain_value": 34,
+            "root": 31,
+            "incarnation": 34,
+            "region": 3,
+            "Allocation_region": 3,
+            "Domain": 3
+          }
+        ],
+        "donors": [
+          60,
+          63,
+          24
+        ],
+        "parameters": [
+          65,
+          66,
+          67
+        ],
+        "Copy_input_value": 136,
+        "all_three_worlds_unique_A_D": true,
+        "active_loans": 0,
+        "one_current_A_D_per_original": true,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "C_output": false
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "mixed-allocation-return-repaired",
+      "source_sha256": "5bd0d757eb6a318f900327080c2c109e6d6a6e618d31addb4e5f6f14f355e5d7",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: mixed-allocation-return-repaired.nl\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 0,
+        "code": "",
+        "start_byte": 0,
+        "end_byte": 0,
+        "snapshot_unchanged": false,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "owned_source_evidence": {
+        "owned_source_artifact": true,
+        "public_validator": true,
+        "four_construct_consume": true,
+        "whole_value": 137,
+        "caller": 60,
+        "callee": 65,
+        "receiver": 69,
+        "mixed_return_preserved": true,
+        "three_arguments": true,
+        "Copy_token_caller_retained": true,
+        "original_leaves": [
+          {
+            "value": 135,
+            "ptr_value": 134,
+            "Allocation_value": 57,
+            "Domain_value": 62,
+            "root": 57,
+            "incarnation": 60,
+            "region": 5,
+            "Allocation_region": 5,
+            "Domain": 5
+          },
+          {
+            "value": 130,
+            "ptr_value": 129,
+            "Allocation_value": 43,
+            "Domain_value": 34,
+            "root": 31,
+            "incarnation": 34,
+            "region": 3,
+            "Allocation_region": 4,
+            "Domain": 3
+          }
+        ],
+        "donors": [
+          60,
+          63,
+          24
+        ],
+        "parameters": [
+          65,
+          66,
+          67
+        ],
+        "Copy_input_value": 136,
+        "all_three_worlds_unique_A_D": true,
+        "active_loans": 0,
+        "one_current_A_D_per_original": true,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "C_output": false
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "Copy-link-C-confers-no-authority",
+      "source_sha256": "5afd03d714809b9900868b678f1739b01ffc9657c2edc5008ad48f7a69abe8fc",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: Copy-link-C-confers-no-authority.nl\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 0,
+        "code": "",
+        "start_byte": 0,
+        "end_byte": 0,
+        "snapshot_unchanged": false,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "owned_source_evidence": {
+        "owned_source_artifact": true,
+        "public_validator": true,
+        "four_construct_consume": true,
+        "whole_value": 137,
+        "caller": 60,
+        "callee": 65,
+        "receiver": 69,
+        "mixed_return_preserved": false,
+        "three_arguments": true,
+        "Copy_token_caller_retained": true,
+        "original_leaves": [
+          {
+            "value": 135,
+            "ptr_value": 134,
+            "Allocation_value": 57,
+            "Domain_value": 62,
+            "root": 57,
+            "incarnation": 60,
+            "region": 5,
+            "Allocation_region": 5,
+            "Domain": 5
+          },
+          {
+            "value": 130,
+            "ptr_value": 129,
+            "Allocation_value": 29,
+            "Domain_value": 34,
+            "root": 31,
+            "incarnation": 34,
+            "region": 3,
+            "Allocation_region": 3,
+            "Domain": 3
+          }
+        ],
+        "donors": [
+          60,
+          63,
+          32
+        ],
+        "parameters": [
+          65,
+          66,
+          67
+        ],
+        "Copy_input_value": 136,
+        "all_three_worlds_unique_A_D": true,
+        "active_loans": 0,
+        "one_current_A_D_per_original": true,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "C_output": false
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "stale-Copy-link-after-A-C-src-release",
+      "source_sha256": "0aed8b196097c60d7a21bfeba427e8f5a8a080c6cec10a74b3afcab4ae85654e",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: stale-Copy-link-after-A-C-src-release.nl\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 0,
+        "code": "",
+        "start_byte": 0,
+        "end_byte": 0,
+        "snapshot_unchanged": false,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "owned_source_evidence": {
+        "owned_source_artifact": true,
+        "public_validator": true,
+        "four_construct_consume": true,
+        "whole_value": 152,
+        "caller": 60,
+        "callee": 86,
+        "receiver": 90,
+        "mixed_return_preserved": false,
+        "three_arguments": true,
+        "Copy_token_caller_retained": true,
+        "original_leaves": [
+          {
+            "value": 135,
+            "ptr_value": 134,
+            "Allocation_value": 57,
+            "Domain_value": 62,
+            "root": 57,
+            "incarnation": 60,
+            "region": 5,
+            "Allocation_region": 5,
+            "Domain": 5
+          },
+          {
+            "value": 130,
+            "ptr_value": 129,
+            "Allocation_value": 29,
+            "Domain_value": 34,
+            "root": 31,
+            "incarnation": 34,
+            "region": 3,
+            "Allocation_region": 3,
+            "Domain": 3
+          }
+        ],
+        "donors": [
+          60,
+          63,
+          16
+        ],
+        "parameters": [
+          86,
+          87,
+          88
+        ],
+        "Copy_input_value": 151,
+        "all_three_worlds_unique_A_D": true,
+        "active_loans": 0,
+        "one_current_A_D_per_original": true,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "C_output": false
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "real-finish-two-after-A-C-src-release",
+      "source_sha256": "2f86845f81082288c657392f55e7758123509a24b40c85b634335686d1050f90",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: real-finish-two-after-A-C-src-release.nl\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 0,
+        "code": "",
+        "start_byte": 0,
+        "end_byte": 0,
+        "snapshot_unchanged": false,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "owned_source_evidence": {
+        "owned_source_artifact": true,
+        "public_validator": true,
+        "four_construct_consume": true,
+        "whole_value": 137,
+        "caller": 60,
+        "callee": 65,
+        "receiver": 69,
+        "mixed_return_preserved": false,
+        "three_arguments": true,
+        "Copy_token_caller_retained": true,
+        "original_leaves": [
+          {
+            "value": 135,
+            "ptr_value": 134,
+            "Allocation_value": 57,
+            "Domain_value": 62,
+            "root": 57,
+            "incarnation": 60,
+            "region": 5,
+            "Allocation_region": 5,
+            "Domain": 5
+          },
+          {
+            "value": 130,
+            "ptr_value": 129,
+            "Allocation_value": 29,
+            "Domain_value": 34,
+            "root": 31,
+            "incarnation": 34,
+            "region": 3,
+            "Allocation_region": 3,
+            "Domain": 3
+          }
+        ],
+        "donors": [
+          60,
+          63,
+          24
+        ],
+        "parameters": [
+          65,
+          66,
+          67
+        ],
+        "Copy_input_value": 136,
+        "all_three_worlds_unique_A_D": true,
+        "active_loans": 0,
+        "one_current_A_D_per_original": true,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "C_output": false
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "wrong-C-allocation-B-release",
+      "source_sha256": "d5d6ba29277ae3c62e019dea37e8dcc27919be3e67adb9ba1a0b6fb1102c8fce",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "wrong-C-allocation-B-release.nl:210:45-210:62: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P193-CALL-BACKING",
+        "start_byte": 13206,
+        "end_byte": 13223,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "finish_root(leaf)"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-CALL-BACKING",
+        "start_byte": 13206,
+        "end_byte": 13223
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "wrong-C-domain-B-release",
+      "source_sha256": "f1a6184c4e0fe27a1f8427a0ee5cdbea211425bffc0f4914d8e53f3f8973a7ca",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "wrong-C-domain-B-release.nl:210:45-210:62: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P193-CALL-DOMAIN",
+        "start_byte": 13206,
+        "end_byte": 13223,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "finish_root(leaf)"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-CALL-DOMAIN",
+        "start_byte": 13206,
+        "end_byte": 13223
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "caller-reuses-dst",
+      "source_sha256": "30f5a86a541f0d481743498b9687afd4a88471b0c0c30e08636db5590c4f4dcb",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "caller-reuses-dst.nl:208:101-208:109: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 13081,
+        "end_byte": 13089,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "receiver"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 13081,
+        "end_byte": 13089
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "caller-reuses-B",
+      "source_sha256": "7a6fb6382fd1ecf09d7ff24cfdc8169ac9a3ea3d0d0ca1b3a9f001370708f949",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "caller-reuses-B.nl:208:101-208:111: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 13081,
+        "end_byte": 13091,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "original_B"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 13081,
+        "end_byte": 13091
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "returned-owner-duplicate",
+      "source_sha256": "3b2f4e64c6dc613517718a05796119bad19737ae1653b926c91123613d526aa5",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "returned-owner-duplicate.nl:209:84-209:89: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 13171,
+        "end_byte": 13176,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "moved"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 13171,
+        "end_byte": 13176
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "same-packet-two-arguments",
+      "source_sha256": "d00a8a17d0ed90717250a3703023aaa45c391aee9a681cd6263546681da68271",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "same-packet-two-arguments.nl:208:73-208:81: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 13053,
+        "end_byte": 13061,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "receiver"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 13053,
+        "end_byte": 13061
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "callee-formal-double-use",
+      "source_sha256": "a45802459a64afc07a272365848abd532fa0738cd89f0687148d6850e58417c5",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "callee-formal-double-use.nl:24:63-24:71: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 929,
+        "end_byte": 937,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "detached"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 929,
+        "end_byte": 937
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "callee-omits-owner",
+      "source_sha256": "4a89efb22e3128c95d9ced77996c1307fa0f002e0011d79aa519219d6f497361",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "callee-omits-owner.nl:24:20-24:33: error(semantic)[P5-AGGREGATE-FIELD-COUNT]: all aggregate fields must occur exactly once\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P5-AGGREGATE-FIELD-COUNT",
+        "start_byte": 886,
+        "end_byte": 899,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "root:receiver"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P5-AGGREGATE-FIELD-COUNT",
+        "start_byte": 886,
+        "end_byte": 899
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "callee-normal-exit-loss",
+      "source_sha256": "550aef7ef59cb1d57faa6c135b4a2c523da25ea51bd5e0c9362a46daed4c3601",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "callee-normal-exit-loss.nl:23:76-25:2: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P5-SCOPE-OBLIGATION",
+        "start_byte": 865,
+        "end_byte": 877,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "{\n    unit\n}"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P5-SCOPE-OBLIGATION",
+        "start_byte": 865,
+        "end_byte": 877
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "caller-normal-exit-loss",
+      "source_sha256": "4a29f260e93a120090f76036ed3a1988eac722d858afa22872f9640b73fb5c6d",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "caller-normal-exit-loss.nl:159:61-216:42: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P5-SCOPE-OBLIGATION",
+        "start_byte": 8906,
+        "end_byte": 13574,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "{\n                                            let OneBacking { allocation, raw } = bundle_dst;\n                                            let allocation_dst = allocation;\n                                            let vacant_dst = into_slot<Node>(raw);\n                                            let life_dst = lifetime_domain();\n                                            let ptr_dst = loan_read(life_dst) { |stable_dst|\n                                                initialize(vacant_dst, Node {\n                                                    next: Option<ptr<Node>>::None,\n                                                    prev: Option<ptr<Node>>::None,\n                                                    child: Option<ptr<Node>>::None,\n                                                    payload: u8(5)\n                                                }, stable_dst)\n                                            };\n                                            let old_src_child = loan_read(life_src) { |stable_src_child|\n                                                let w_src_child = ref_from_ptr(write, ptr_src, stable_src_child);\n                                                replace(w_src_child@child,\n                                                    Option<ptr<Node>>::Some(ptr_A))\n                                            };\n                                            let old_A_prev = loan_read(life_A) { |stable_A_prev|\n                                                let w_A_prev = ref_from_ptr(write, ptr_A, stable_A_prev);\n                                                replace(w_A_prev@prev,\n                                                    Option<ptr<Node>>::Some(ptr_C))\n                                            };\n                                            let old_A_next = loan_read(life_A) { |stable_A_next|\n                                                let w_A_next = ref_from_ptr(write, ptr_A, stable_A_next);\n                                                replace(w_A_next@next,\n                                                    Option<ptr<Node>>::Some(ptr_B))\n                                            };\n                                            let old_B_prev = loan_read(life_B) { |s_B_prev|\n                                                let w_B_prev = ref_from_ptr(write, ptr_B, s_B_prev);\n                                                replace(w_B_prev@prev, Option<ptr<Node>>::Some(ptr_A))\n                                            };\n                                            let old_B_next = loan_read(life_B) { |s_B_next|\n                                                let w_B_next = ref_from_ptr(write, ptr_B, s_B_next);\n                                                replace(w_B_next@next, Option<ptr<Node>>::Some(ptr_C))\n                                            };\n                                            let old_C_prev = loan_read(life_C) { |s_C_prev|\n                                                let w_C_prev = ref_from_ptr(write, ptr_C, s_C_prev);\n                                                replace(w_C_prev@prev, Option<ptr<Node>>::Some(ptr_B))\n                                            };\n                                            // All five originals exist; exactly six initial Changes above.\n                                            let donor = TreeFour {\n                                                src:LiveRoot { p:ptr_src, a:allocation_src, d:life_src },\n                                                first:LiveRoot { p:ptr_A, a:allocation_A, d:life_A },\n                                                middle:LiveRoot { p:ptr_B, a:allocation_B, d:life_B },\n                                                last:LiveRoot { p:ptr_C, a:allocation_C, d:life_C }\n                                            };\n                                            let receiver = LiveRoot { p:ptr_dst, a:allocation_dst, d:life_dst };\n                                            let TreeFour {src:original_src,first:original_A,middle:original_B,last:original_C}=donor;\n                                            let moved=assemble(receiver,original_B,ptr_B);\n                                            let TreeTwo{root:owner_dst,child:leaf}=moved;\n                                            finish_root(original_A);\n                                            finish_root(original_C);\n                                            finish_root(original_src);\n                                            \n                                            finish_root(owner_dst);\n                                            unit\n                                        }"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P5-SCOPE-OBLIGATION",
+        "start_byte": 8906,
+        "end_byte": 13574
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "duplicate-original-Allocation",
+      "source_sha256": "aaecbab2b324310124402b6d60dbed1b15ccf4005a1904b4359fa60562d3d236",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "duplicate-original-Allocation.nl:203:78-203:90: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 12561,
+        "end_byte": 12573,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "allocation_A"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 12561,
+        "end_byte": 12573
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "duplicate-original-Domain",
+      "source_sha256": "9c839b7f08b94c6709d27dffe3189cd79486f43208a212c54e71829ecdc2a81e",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "duplicate-original-Domain.nl:203:94-203:100: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 12577,
+        "end_byte": 12583,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "life_A"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 12577,
+        "end_byte": 12583
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "Copy-ptr-as-owner-Allocation",
+      "source_sha256": "71b7c8c6b1b259a29f1ac6b3876b6cd2bc5f719bd9c5d860f846b4c4dd2d65fb",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "Copy-ptr-as-owner-Allocation.nl:203:78-203:83: error(semantic)[P5-FIELD-TYPE]: aggregate initializer type differs from registered field\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P5-FIELD-TYPE",
+        "start_byte": 12561,
+        "end_byte": 12566,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "ptr_B"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P5-FIELD-TYPE",
+        "start_byte": 12561,
+        "end_byte": 12566
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "Copy-ptr-as-third-nonCopy-packet",
+      "source_sha256": "3dbe9ca2ac7e4b399b26f3149859a516f0eb277a81e89d0cc31c6b1a25198c7f",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "Copy-ptr-as-third-nonCopy-packet.nl:208:73-208:78: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P3-TYPE-MISMATCH",
+        "start_byte": 13053,
+        "end_byte": 13058,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "ptr_B"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-TYPE-MISMATCH",
+        "start_byte": 13053,
+        "end_byte": 13058
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "wrong-third-parameter-type",
+      "source_sha256": "66e96f5797cedb187e74ac9ec0d73a561f0717391c4f4fe11d4bca81ccb6ab19",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "wrong-third-parameter-type.nl:208:84-208:89: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P3-TYPE-MISMATCH",
+        "start_byte": 13064,
+        "end_byte": 13069,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "u8(1)"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-TYPE-MISMATCH",
+        "start_byte": 13064,
+        "end_byte": 13069
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "live-domain-loan-crosses-call",
+      "source_sha256": "b3e1c161eea75b0e43d69f1a44bb74e226527d2aa6b356771db0941ff7783042",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "diagnostic": "live-domain-loan-crosses-call.nl:208:148-208:150: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P3-REF-CONFLICT",
+        "start_byte": 13128,
+        "end_byte": 13130,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "db"
+      },
+      "owned_source_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-REF-CONFLICT",
+        "start_byte": 13128,
+        "end_byte": 13130
+      },
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "independent-definition-unsafe-third-ref",
+      "source_sha256": "b4b34b03f0c976ecfe0a11c851b0a940f9038df237feb997606319e01cfae725",
+      "classification": "semantic-profile-unsupported",
+      "cli_exit": 3,
+      "diagnostic": "independent-definition-unsafe-third-ref.nl:24:20-24:48: error(unsupported)[ALLOCATED-REF-PROFILE]: explicit allocated ref requires pointer and domain stability\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 2,
+        "code": "ALLOCATED-REF-PROFILE",
+        "start_byte": 886,
+        "end_byte": 914,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "ref_from_ptr(write,link,link"
+      },
+      "owned_source_evidence": null,
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "independent-definition-releases-mixed-packet",
+      "source_sha256": "61aeed2b75728d45440c115612140b7883df1264a54d0b54b0f1277fef651716",
+      "classification": "semantic-precision-unsupported",
+      "cli_exit": 3,
+      "diagnostic": "independent-definition-releases-mixed-packet.nl:24:5-24:26: error(precision)[P276-TERMINAL-SUMMARY-PRECISION]: type-only formal needs transitive original-root requirement inference\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 3,
+        "code": "P276-TERMINAL-SUMMARY-PRECISION",
+        "start_byte": 871,
+        "end_byte": 892,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "finish_root(detached)"
+      },
+      "owned_source_evidence": null,
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "independent-definition-extra-inert-read",
+      "source_sha256": "6235f914f20cb7127c32f78e892ffaf6ef03299451623b36ba3a2b4782818c12",
+      "classification": "semantic-precision-unsupported",
+      "cli_exit": 3,
+      "diagnostic": "independent-definition-extra-inert-read.nl:23:76-25:2: error(precision)[P289-BODY-PRECISION]: requires pure complete two-packet assembly and explicit whole return\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 3,
+        "code": "P289-BODY-PRECISION",
+        "start_byte": 865,
+        "end_byte": 953,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "{\n    let unused=link;let result=TreeTwo{root:receiver,child:detached}; return result;\n}"
+      },
+      "owned_source_evidence": null,
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "implicit-normal-result-outside-body-slice",
+      "source_sha256": "156495967050b365dda7f401199935de5c782b110c0ce6db37adff0ac8aef9f2",
+      "classification": "semantic-precision-unsupported",
+      "cli_exit": 3,
+      "diagnostic": "implicit-normal-result-outside-body-slice.nl:23:76-25:2: error(precision)[P289-BODY-PRECISION]: requires pure complete two-packet assembly and explicit whole return\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 3,
+        "code": "P289-BODY-PRECISION",
+        "start_byte": 865,
+        "end_byte": 910,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "{\n    TreeTwo{root:receiver,child:detached}\n}"
+      },
+      "owned_source_evidence": null,
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "fourth-argument-profile",
+      "source_sha256": "bd7260c05a933bb1c1ae77dbf06eb380cf972ddba49361b782eab86b175fef74",
+      "classification": "semantic-precision-unsupported",
+      "cli_exit": 3,
+      "diagnostic": "fourth-argument-profile.nl:23:1-25:2: error(precision)[P8-SIGNATURE-PRECISION]: signature needs unsupported body analysis\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 3,
+        "code": "P8-SIGNATURE-PRECISION",
+        "start_byte": 790,
+        "end_byte": 955,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "fn assemble(receiver:LiveRoot, detached:LiveRoot, link:ptr<Node>, fourth:ptr<Node>)->TreeTwo {\n    let result=TreeTwo{root:receiver,child:detached}; return result;\n}"
+      },
+      "owned_source_evidence": null,
+      "C_output": false,
+      "detach_adopt_claim": false
+    },
+    {
+      "input": "original-full-first-next-blocker",
+      "source_sha256": "8763eb98f68d502b8a26b49d8a023ba38dcce45090253bf2c6695fc5391d3512",
+      "classification": "semantic-profile-unsupported",
+      "cli_exit": 3,
+      "diagnostic": "original-full-first-next-blocker.nl:53:25-56:6: error(unsupported)[ALLOCATED-DOMAIN-LOAN]: bounded domain loan requires read authority in Some world\n",
+      "repeat_identical": true,
+      "public_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 2,
+        "code": "ALLOCATED-DOMAIN-LOAN",
+        "start_byte": 2140,
+        "end_byte": 2282,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false,
+        "source_span": "loan_read(dd) { |s_dst|\n        let w_dst = ref_from_ptr(write, pd, s_dst);\n        replace(w_dst@child, Option<ptr<Node>>::Some(ptr_B))\n    }"
+      },
+      "owned_source_evidence": null,
+      "C_output": false,
+      "detach_adopt_claim": false
+    }
+  ]
+}

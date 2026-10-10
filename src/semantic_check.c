@@ -1892,7 +1892,9 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
              nl_experimental_owner_aggregate_type(c, function.result))
 #endif
              ) &&
-        (function.count == 1 || function.count == 2);
+        (function.count == 1 || function.count == 2 ||
+         nl_three_owner_signature(c, function.parameters, function.count,
+                                  function.result));
     if (whole_call) {
         if (check->artifact->whole_call != 0) {
             fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, syntax->span,
@@ -2056,7 +2058,8 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         if (whole_call) {
             const NLCheckedNodeView input = *view(check, arguments[i]);
             if (input.kind != NL_CHECKED_IDENTIFIER || input.symbol == 0 ||
-                input.value_use != NL_VALUE_CONSUMED ||
+                input.value_use !=
+                    (i == 2 ? NL_VALUE_COPIED : NL_VALUE_CONSUMED) ||
                 input.result_count != 1) {
                 fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, input.span,
                      "P276-CALL-ARGUMENT",
@@ -8507,6 +8510,7 @@ static bool check_definition(Check *registration, size_t function_id)
     const NLFunctionEntry function = c->functions[function_id - 1];
     definition.function_result = function.result;
     NLValueId values[NL_SEMANTIC_MAX_PARAMETERS] = {0};
+    NLSymbolId formal_symbols[NL_SEMANTIC_MAX_PARAMETERS] = {0};
     /* These formal sites supply type/ownership checking only. No proof of
      * formal disjointness is retained; EVERY call rechecks actual relations. */
     for (size_t i = 0; i < function.count; ++i) {
@@ -8521,6 +8525,16 @@ static bool check_definition(Check *registration, size_t function_id)
 #endif
         const NLSemanticTypeView t = c->types[type - 1].view;
         NLSemanticValueView value = {.type = type};
+        if (t.kind == NL_TYPE_PTR &&
+            nl_three_owner_signature(c, function.parameters, function.count,
+                                     function.result)) {
+            /* Independent Copy token: no synthetic place, R, A, D or
+             * provenance. */
+            values[i] = new_value(&definition, value, span);
+            if (!values[i])
+                goto failure;
+            continue;
+        }
         if (t.kind == NL_TYPE_REF || t.kind == NL_TYPE_PTR) {
             NLValueId referent = new_value(
                 &definition, (NLSemanticValueView){.type = t.target}, span);
@@ -8569,6 +8583,7 @@ static bool check_definition(Check *registration, size_t function_id)
                                        values[i], 0, &symbol),
                   span))
             goto failure;
+        formal_symbols[i] = symbol;
     }
     definition.artifact = malloc(sizeof(*definition.artifact));
     if (definition.artifact == NULL) {
@@ -8580,6 +8595,16 @@ static bool check_definition(Check *registration, size_t function_id)
     if (!function_block(&definition, nl_syntax_node_view(nl_syntax_tree_root(
                                          function.body->syntax))))
         goto failure;
+    if (nl_three_owner_signature(c, function.parameters, function.count,
+                                 function.result) &&
+        !nl_three_owner_body(definition.artifact, formal_symbols,
+                             definition.returned.value)) {
+        fail(&definition, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+             "P289-BODY-PRECISION",
+             "requires pure complete two-packet assembly and explicit whole "
+             "return");
+        goto failure;
+    }
     if (!host(&definition, nl_sem_validate(c), span) ||
         !host(&definition, nl_raw_validate(c), span))
         goto failure;
@@ -9249,7 +9274,9 @@ register_function_unit(NLSemanticContext *context,
             if (!body_signature_type(check.context, result, false))
                 goto signature_limit;
             for (size_t j = 0; j < parameter; ++j)
-                if (!body_signature_type(check.context, types[j], true))
+                if (!nl_three_owner_signature(check.context, types, parameter,
+                                              result) &&
+                    !body_signature_type(check.context, types[j], true))
                     goto signature_limit;
         }
         if (!host(&check,
