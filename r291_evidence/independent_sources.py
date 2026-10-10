@@ -88,7 +88,8 @@ deallocate(a_{i}, raw_{i});
             decl += "retire(keeper_0);\nretire(keeper_0);\n"
             decl += "retire(keeper_1); retire(keeper_2); retire(keeper_3);\nunit\n"
             return wiring + decl
-        for i in range(m):
+        order = [1,3,0,2] if n == 5 else list(range(m))
+        for i in order:
             decl += f"retire(keeper_{i});\n"
         for i in range(m,n):
             decl += f"retire(LiveRoot {{p:p_{i}, a:a_{i}, d:d_{i}}});\n"
