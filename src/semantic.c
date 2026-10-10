@@ -1006,7 +1006,8 @@ NLCheckStatus nl_semantic_register_function(NLSemanticContext *c,
     if (!nl_recursive_value_type(c, result))
         return NL_CHECK_SEMANTIC_ERROR;
     if (c->types[result - 1].view.field_count != 0 &&
-        c->types[result - 1].live_tail_target == 0) {
+        c->types[result - 1].live_tail_target == 0 &&
+        !nl_experimental_value_type(c, result)) {
         return NL_CHECK_SEMANTIC_UNSUPPORTED; /* no opaque aggregate result mint
                                                */
     }
@@ -1079,6 +1080,35 @@ bool nl_experimental_root_record_type(const NLSemanticContext *c, NLTypeId id)
     return false;
 }
 
+bool nl_experimental_nested_type(const NLSemanticContext *c, NLTypeId id)
+{
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+    if (c != NULL && id != 0 && id <= c->type_count) {
+        const NLTypeEntry *t = &c->types[id - 1];
+        return t->view.kind == NL_TYPE_NOMINAL && t->view.field_count == 2 &&
+               !t->view.is_copy && !t->view.is_discardable &&
+               t->field_types[0] == t->field_types[1] &&
+               nl_experimental_root_record_type(c, t->field_types[0]);
+    }
+#else
+    (void)c;
+    (void)id;
+#endif
+    return false;
+}
+
+bool nl_experimental_value_type(const NLSemanticContext *c, NLTypeId id)
+{
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+    return nl_experimental_root_record_type(c, id) ||
+           nl_experimental_nested_type(c, id);
+#else
+    (void)c;
+    (void)id;
+    return false;
+#endif
+}
+
 NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *c,
                                              const char *name,
                                              const NLAggregateField *fields,
@@ -1102,6 +1132,11 @@ NLCheckStatus nl_semantic_register_aggregate(NLSemanticContext *c,
         experimental_triad =
             p.kind == NL_TYPE_PTR && nl_recursive_local_type(c, p.target);
     }
+#endif
+#ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
+    experimental_triad = experimental_triad ||
+                         (count == 2 && fields[0].type == fields[1].type &&
+                          nl_experimental_root_record_type(c, fields[0].type));
 #endif
     bool copy = true, discard = true;
     for (size_t f = 0; f < count; ++f) {

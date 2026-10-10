@@ -1,0 +1,1321 @@
+{
+  "kind": "UNADOPTED P276 empirical production-checker evidence",
+  "native_execution": false,
+  "observations": [
+    {
+      "input": "correct-two-originals",
+      "source_sha256": "24bdc646192812f71f026aab7b7360f23bf55d972211500eb6a555e2ef4d5703",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "stdout_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: correct-two-originals.nl\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "whole_result_value": 113,
+        "member_packet_ids": [
+          112,
+          110
+        ],
+        "pointer_values": [
+          111,
+          109
+        ],
+        "allocation_values": [
+          57,
+          29
+        ],
+        "domain_values": [
+          62,
+          34
+        ],
+        "caller_donors": [
+          58,
+          59
+        ],
+        "callee_formals": [
+          60,
+          61
+        ],
+        "callee_result_binding": 62,
+        "caller_result_binding": 63,
+        "original_A_D_carriers_each": 1,
+        "owned_validator": true,
+        "field_write_B_prev": true,
+        "actual_input_count": 2,
+        "ordinary_whole_return": true,
+        "h1_dst_B_result": true,
+        "mixed_return_accepted": false,
+        "ptr_regions": [
+          5,
+          3
+        ],
+        "allocation_regions": [
+          5,
+          3
+        ],
+        "domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "donors_and_parameters_consumed": true,
+        "fresh_caller_incarnation": 92,
+        "callee_incarnation": 91,
+        "unchanged_member_ids": true,
+        "named_grant_consumers": 2,
+        "full_original_release_order": [
+          2,
+          3,
+          4,
+          1,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "after-A-C-src-terminal",
+      "source_sha256": "251835e040cd0e54c555a22d8d573c0c9ce21694c60508868d393da8f9baca35",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "stdout_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: after-A-C-src-terminal.nl\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "whole_result_value": 113,
+        "member_packet_ids": [
+          112,
+          110
+        ],
+        "pointer_values": [
+          111,
+          109
+        ],
+        "allocation_values": [
+          57,
+          29
+        ],
+        "domain_values": [
+          62,
+          34
+        ],
+        "caller_donors": [
+          58,
+          59
+        ],
+        "callee_formals": [
+          60,
+          61
+        ],
+        "callee_result_binding": 62,
+        "caller_result_binding": 63,
+        "original_A_D_carriers_each": 1,
+        "owned_validator": true,
+        "field_write_B_prev": true,
+        "actual_input_count": 2,
+        "ordinary_whole_return": true,
+        "h1_dst_B_result": true,
+        "mixed_return_accepted": false,
+        "ptr_regions": [
+          5,
+          3
+        ],
+        "allocation_regions": [
+          5,
+          3
+        ],
+        "domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "donors_and_parameters_consumed": true,
+        "fresh_caller_incarnation": 92,
+        "callee_incarnation": 91,
+        "unchanged_member_ids": true,
+        "named_grant_consumers": 2,
+        "full_original_release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "mixed-return-repaired",
+      "source_sha256": "02cacf48ecc8001e41d4ef139afa47232d40cfd70941ec8c739bc77621d6b03c",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "stdout_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: mixed-return-repaired.nl\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "whole_result_value": 113,
+        "member_packet_ids": [
+          112,
+          110
+        ],
+        "pointer_values": [
+          111,
+          109
+        ],
+        "allocation_values": [
+          57,
+          43
+        ],
+        "domain_values": [
+          62,
+          34
+        ],
+        "caller_donors": [
+          58,
+          59
+        ],
+        "callee_formals": [
+          60,
+          61
+        ],
+        "callee_result_binding": 62,
+        "caller_result_binding": 63,
+        "original_A_D_carriers_each": 1,
+        "owned_validator": true,
+        "field_write_B_prev": true,
+        "actual_input_count": 2,
+        "ordinary_whole_return": true,
+        "h1_dst_B_result": false,
+        "mixed_return_accepted": true,
+        "ptr_regions": [
+          5,
+          3
+        ],
+        "allocation_regions": [
+          5,
+          4
+        ],
+        "domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "donors_and_parameters_consumed": true,
+        "fresh_caller_incarnation": 92,
+        "callee_incarnation": 91,
+        "unchanged_member_ids": true,
+        "named_grant_consumers": 2,
+        "full_original_release_order": [
+          2,
+          3,
+          4,
+          1,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "swapped-result-core-safe",
+      "source_sha256": "f2d8d829deaa222cb241f787cd58c36cd78bb27196e2372415ade9b61555432e",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "stdout_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: swapped-result-core-safe.nl\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "whole_result_value": 113,
+        "member_packet_ids": [
+          110,
+          112
+        ],
+        "pointer_values": [
+          109,
+          111
+        ],
+        "allocation_values": [
+          29,
+          57
+        ],
+        "domain_values": [
+          34,
+          62
+        ],
+        "caller_donors": [
+          58,
+          59
+        ],
+        "callee_formals": [
+          60,
+          61
+        ],
+        "callee_result_binding": 62,
+        "caller_result_binding": 63,
+        "original_A_D_carriers_each": 1,
+        "owned_validator": true,
+        "field_write_B_prev": true,
+        "actual_input_count": 2,
+        "ordinary_whole_return": true,
+        "h1_dst_B_result": false,
+        "mixed_return_accepted": false,
+        "ptr_regions": [
+          3,
+          5
+        ],
+        "allocation_regions": [
+          3,
+          5
+        ],
+        "domains": [
+          3,
+          5
+        ],
+        "original_roots": [
+          31,
+          57
+        ],
+        "original_incarnations": [
+          34,
+          60
+        ],
+        "donors_and_parameters_consumed": true,
+        "fresh_caller_incarnation": 92,
+        "callee_incarnation": 91,
+        "unchanged_member_ids": true,
+        "named_grant_consumers": 2,
+        "full_original_release_order": [
+          2,
+          3,
+          4,
+          1,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "whole-input-identity",
+      "source_sha256": "53f03cbcd1d9ed517a633ecb07d48522b6fbc93e01c1730a4490aeddec072399",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "stdout_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: whole-input-identity.nl\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "whole_result_value": 113,
+        "member_packet_ids": [
+          112,
+          110
+        ],
+        "pointer_values": [
+          111,
+          109
+        ],
+        "allocation_values": [
+          57,
+          29
+        ],
+        "domain_values": [
+          62,
+          34
+        ],
+        "caller_donors": [
+          60,
+          0
+        ],
+        "callee_formals": [
+          61,
+          0
+        ],
+        "callee_result_binding": 61,
+        "caller_result_binding": 62,
+        "original_A_D_carriers_each": 1,
+        "owned_validator": true,
+        "field_write_B_prev": true,
+        "actual_input_count": 1,
+        "ordinary_whole_return": true,
+        "h1_dst_B_result": true,
+        "mixed_return_accepted": false,
+        "ptr_regions": [
+          5,
+          3
+        ],
+        "allocation_regions": [
+          5,
+          3
+        ],
+        "domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "donors_and_parameters_consumed": true,
+        "fresh_caller_incarnation": 91,
+        "callee_incarnation": 90,
+        "unchanged_member_ids": true,
+        "named_grant_consumers": 2,
+        "full_original_release_order": [
+          2,
+          3,
+          4,
+          1,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "H0-result-without-B",
+      "source_sha256": "d964cba04e562909522b43c4d653f8a110de0d0d3f11605ca1f7d312236ee972",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "stdout_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: H0-result-without-B.nl\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "whole_result_value": 136,
+        "member_packet_ids": [
+          113,
+          135
+        ],
+        "pointer_values": [
+          112,
+          134
+        ],
+        "allocation_values": [
+          57,
+          43
+        ],
+        "domain_values": [
+          62,
+          48
+        ],
+        "caller_donors": [
+          58,
+          70
+        ],
+        "callee_formals": [
+          71,
+          72
+        ],
+        "callee_result_binding": 73,
+        "caller_result_binding": 74,
+        "original_A_D_carriers_each": 1,
+        "owned_validator": true,
+        "field_write_B_prev": true,
+        "actual_input_count": 2,
+        "ordinary_whole_return": true,
+        "h1_dst_B_result": false,
+        "mixed_return_accepted": false,
+        "ptr_regions": [
+          5,
+          4
+        ],
+        "allocation_regions": [
+          5,
+          4
+        ],
+        "domains": [
+          5,
+          4
+        ],
+        "original_roots": [
+          57,
+          44
+        ],
+        "original_incarnations": [
+          60,
+          47
+        ],
+        "donors_and_parameters_consumed": true,
+        "fresh_caller_incarnation": 106,
+        "callee_incarnation": 105,
+        "unchanged_member_ids": true,
+        "named_grant_consumers": 3,
+        "full_original_release_order": [
+          2,
+          3,
+          4,
+          1,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "wrong-original-C-allocation",
+      "source_sha256": "2060c12a93f131dede8b30905f34c00ce267877e34e25ce863e36483a5b77c0a",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "wrong-original-C-allocation.nl:219:45-219:62: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-CALL-BACKING",
+        "start_byte": 13560,
+        "end_byte": 13577,
+        "source_span": "finish_root(tail)"
+      }
+    },
+    {
+      "input": "wrong-original-C-domain-at-terminal",
+      "source_sha256": "fb71f639263ad03479d92d3b3da9c7e94065f939f43d4cc6f8ed5ddd0ee285b5",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "wrong-original-C-domain-at-terminal.nl:219:110-219:128: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-CALL-DOMAIN",
+        "start_byte": 13625,
+        "end_byte": 13643,
+        "source_span": "finish_root(wrong)"
+      }
+    },
+    {
+      "input": "wrong-domain-before-B-write",
+      "source_sha256": "a687e9f2c49c31f4a4ae119b8847f6a6ba5096d04db3a65e355f1080b107d2d9",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "wrong-domain-before-B-write.nl:190:68-190:104: error(semantic)[ALLOCATED-DOMAIN-MISMATCH]: pointer requires matching readable live domain\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "ALLOCATED-DOMAIN-MISMATCH",
+        "start_byte": 11330,
+        "end_byte": 11366
+      }
+    },
+    {
+      "input": "duplicate-allocation",
+      "source_sha256": "e050c863227c1bc9aa9459fa3b96540fee2f26b4ce475aea132bce8f99ab4685",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "duplicate-allocation.nl:187:74-187:86: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 11096,
+        "end_byte": 11108
+      }
+    },
+    {
+      "input": "duplicate-domain",
+      "source_sha256": "b691f02c181f469203f3f717ec5d347cc57309c52d52ff19be609daaaff2c7a5",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "duplicate-domain.nl:187:89-187:95: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 11111,
+        "end_byte": 11117
+      }
+    },
+    {
+      "input": "duplicate-current-packet-arguments",
+      "source_sha256": "f3a3e132644756da9fd86dfae7ae3fad7fba6178a331b6ef2e3756418a9432df",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "duplicate-current-packet-arguments.nl:197:78-197:86: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 11914,
+        "end_byte": 11922
+      }
+    },
+    {
+      "input": "old-caller-packet-after-return",
+      "source_sha256": "f50b8f0dae729e7e1f61d0dde0ee37a7e94892e859d82f616f1d094bcbeb9c56",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "old-caller-packet-after-return.nl:198:55-198:63: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 11979,
+        "end_byte": 11987
+      }
+    },
+    {
+      "input": "phantom-original-allocation-after-call",
+      "source_sha256": "d9f0618c4c0db7d45704d538b637344f59b0bc857a3081632b871ad764028a62",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "phantom-original-allocation-after-call.nl:198:74-198:86: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 11998,
+        "end_byte": 12010
+      }
+    },
+    {
+      "input": "second-current-result-reused",
+      "source_sha256": "57a650de5462260d3e1c7bd429505b1996e8efabf6cdf533aae05be00f5ca36a",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "second-current-result-reused.nl:198:94-198:101: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 12018,
+        "end_byte": 12025
+      }
+    },
+    {
+      "input": "callee-duplicates-formal",
+      "source_sha256": "57a7c2e4f62d50bcfa0256bd85cd4493fb7c39b14985091e6cf0d8054429bfc3",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "callee-duplicates-formal.nl:14:48-14:53: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 497,
+        "end_byte": 502
+      }
+    },
+    {
+      "input": "callee-reuses-returned-local",
+      "source_sha256": "e7514ae668cb00da2c1306208f5dff4049ca12da792df9f81052d7bceb6de571",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "callee-reuses-returned-local.nl:15:32-15:40: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 538,
+        "end_byte": 546
+      }
+    },
+    {
+      "input": "partial-nested-pattern",
+      "source_sha256": "d9ab8fa5e818a19251d5e76368e5584e4f893231841d627d35d91a3069e2a692",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "partial-nested-pattern.nl:198:59-198:63: error(semantic)[P5-AGGREGATE-FIELD-COUNT]: all aggregate fields must occur exactly once\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P5-AGGREGATE-FIELD-COUNT",
+        "start_byte": 11983,
+        "end_byte": 11987
+      }
+    },
+    {
+      "input": "forgotten-second-owner",
+      "source_sha256": "d6e82acc95476609986a322337104d3f3c44e754c617da04523d6b02c12ce6ad",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "forgotten-second-owner.nl:158:61-234:42: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P5-SCOPE-OBLIGATION",
+        "start_byte": 8749,
+        "end_byte": 14639
+      }
+    },
+    {
+      "input": "duplicate-terminal",
+      "source_sha256": "36b4e8e4617adeb13c81651a2132d7f9ba65cf9d03a4c4f56b6f0fd2e68d4e51",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "duplicate-terminal.nl:219:76-219:80: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-USE-AFTER-CONSUME",
+        "start_byte": 13591,
+        "end_byte": 13595
+      }
+    },
+    {
+      "input": "live-domain-loan-over-repack",
+      "source_sha256": "84de64265483b52cf16c40c821bb32c47a913832a172bed75e48ee73cc58331b",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "live-domain-loan-over-repack.nl:193:93-193:94: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-REF-CONFLICT",
+        "start_byte": 11619,
+        "end_byte": 11620
+      }
+    },
+    {
+      "input": "live-H-loan-over-repack",
+      "source_sha256": "ff99980cccbbd233e672d690893d3376c096463d4b54610ba90228db30fa8747",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "live-H-loan-over-repack.nl:193:133-193:134: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-REF-CONFLICT",
+        "start_byte": 11659,
+        "end_byte": 11660
+      }
+    },
+    {
+      "input": "whole-loan-during-call",
+      "source_sha256": "70db62b349b2afcb08b3b386c2cd82455a57a578ac9b2a3a71b32519e1dfb7f4",
+      "classification": "semantic-profile-unsupported",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "whole-loan-during-call.nl:197:67-197:75: error(unsupported)[LOCAL-LOAN-PROFILE]: requires a supported current lexical root or fixed field\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 2,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "LOCAL-LOAN-PROFILE",
+        "start_byte": 11903,
+        "end_byte": 11911
+      }
+    },
+    {
+      "input": "wrong-terminal-body-order",
+      "source_sha256": "1e4eac4ac99e983248b3f43a03afaaf0a5c400898cd31c9badab2d53d6e2afae",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "wrong-terminal-body-order.nl:21:5-21:24: error(semantic)[P193-DEFINITION-RELATION]: release requires original Allocation and raw chain\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-DEFINITION-RELATION",
+        "start_byte": 725,
+        "end_byte": 744
+      }
+    },
+    {
+      "input": "unused-bad-terminal-definition",
+      "source_sha256": "91d36b4b9fd8714adff55fe18eb30f53225758b06b63370c42a014bb44fdae19",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "unused-bad-terminal-definition.nl:17:39-24:2: error(semantic)[P193-DEFINITION-OBLIGATION]: normal exit retains non-Discardable responsibility\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-DEFINITION-OBLIGATION",
+        "start_byte": 568,
+        "end_byte": 765
+      }
+    },
+    {
+      "input": "named-finish-two-summary",
+      "source_sha256": "f3a30ab3f823094ae88a2cb9aadd831845cbfebb9995b5b5981c34a6d655928a",
+      "classification": "semantic-precision-unsupported",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "named-finish-two-summary.nl:25:68-25:86: error(precision)[P276-TERMINAL-SUMMARY-PRECISION]: type-only formal needs transitive original-root requirement inference\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 3,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P276-TERMINAL-SUMMARY-PRECISION",
+        "start_byte": 848,
+        "end_byte": 866
+      }
+    },
+    {
+      "input": "third-nested-layer",
+      "source_sha256": "0e1aabd17380edd715d6dc1a07c981b7a2ff355f7bdbad08e80630a51427028b",
+      "classification": "semantic-profile-unsupported",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "third-nested-layer.nl:13:1-13:41: error(unsupported)[P276-NESTED-PROFILE]: experiment admits one two-triad record in one unit\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 2,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P276-NESTED-PROFILE",
+        "start_byte": 394,
+        "end_byte": 434
+      }
+    },
+    {
+      "input": "partial-root-declaration",
+      "source_sha256": "5f17e7ec1d12c51fe4afd0167323b8e38e3d40fc06d6dd169c62516ac77a173a",
+      "classification": "parser-unsupported",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "partial-root-declaration.nl:10:48-10:49: error(unsupported)[AVS-DECL-PROFILE]: bounded declaration requires two fields or three recursive links and payload\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": null
+    },
+    {
+      "input": "alpha-all-names",
+      "source_sha256": "f896f298f6dcf1f48048e9df82ffe97d1707800948c2f1ae53312d2cac008d10",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "stdout_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: alpha-all-names.nl\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "whole_result_value": 113,
+        "member_packet_ids": [
+          112,
+          110
+        ],
+        "pointer_values": [
+          111,
+          109
+        ],
+        "allocation_values": [
+          57,
+          29
+        ],
+        "domain_values": [
+          62,
+          34
+        ],
+        "caller_donors": [
+          58,
+          59
+        ],
+        "callee_formals": [
+          60,
+          61
+        ],
+        "callee_result_binding": 62,
+        "caller_result_binding": 63,
+        "original_A_D_carriers_each": 1,
+        "owned_validator": true,
+        "field_write_B_prev": true,
+        "actual_input_count": 2,
+        "ordinary_whole_return": true,
+        "h1_dst_B_result": true,
+        "mixed_return_accepted": false,
+        "ptr_regions": [
+          5,
+          3
+        ],
+        "allocation_regions": [
+          5,
+          3
+        ],
+        "domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "donors_and_parameters_consumed": true,
+        "fresh_caller_incarnation": 92,
+        "callee_incarnation": 91,
+        "unchanged_member_ids": true,
+        "named_grant_consumers": 2,
+        "full_original_release_order": [
+          2,
+          3,
+          4,
+          1,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "blessed-names-wrong-allocation",
+      "source_sha256": "9cd659349da0e2f5e30043d760a2733b85d390bffd4ed1e349a14304b62674a6",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "blessed-names-wrong-allocation.nl:219:45-219:63: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-CALL-BACKING",
+        "start_byte": 13546,
+        "end_byte": 13564,
+        "source_span": "close_ticket(tail)"
+      }
+    },
+    {
+      "input": "field-label-order",
+      "source_sha256": "bf3a0017cdc04de5ecf8029ffee54697812d9209c869f7e067794a71105df215",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "stdout_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: field-label-order.nl\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "whole_result_value": 113,
+        "member_packet_ids": [
+          112,
+          110
+        ],
+        "pointer_values": [
+          111,
+          109
+        ],
+        "allocation_values": [
+          57,
+          29
+        ],
+        "domain_values": [
+          62,
+          34
+        ],
+        "caller_donors": [
+          58,
+          59
+        ],
+        "callee_formals": [
+          60,
+          61
+        ],
+        "callee_result_binding": 62,
+        "caller_result_binding": 63,
+        "original_A_D_carriers_each": 1,
+        "owned_validator": true,
+        "field_write_B_prev": true,
+        "actual_input_count": 2,
+        "ordinary_whole_return": true,
+        "h1_dst_B_result": true,
+        "mixed_return_accepted": false,
+        "ptr_regions": [
+          5,
+          3
+        ],
+        "allocation_regions": [
+          5,
+          3
+        ],
+        "domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "donors_and_parameters_consumed": true,
+        "fresh_caller_incarnation": 92,
+        "callee_incarnation": 91,
+        "unchanged_member_ids": true,
+        "named_grant_consumers": 2,
+        "full_original_release_order": [
+          2,
+          3,
+          4,
+          1,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "wrong-original-pointer-at-terminal",
+      "source_sha256": "b2aa5b3f053447da8bb63fd29825729f8be725459f91ca10718cd398b81a101e",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "wrong-original-pointer-at-terminal.nl:219:109-219:127: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P193-CALL-DOMAIN",
+        "start_byte": 13624,
+        "end_byte": 13642,
+        "source_span": "finish_root(wrong)"
+      }
+    },
+    {
+      "input": "direct-constructor-return",
+      "source_sha256": "2c4057dfb120c37b26b992601193d25b7547fd27e43d9ae31ba80ea16a6138a0",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "stdout_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: direct-constructor-return.nl\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "whole_result_value": 113,
+        "member_packet_ids": [
+          112,
+          110
+        ],
+        "pointer_values": [
+          111,
+          109
+        ],
+        "allocation_values": [
+          57,
+          29
+        ],
+        "domain_values": [
+          62,
+          34
+        ],
+        "caller_donors": [
+          58,
+          59
+        ],
+        "callee_formals": [
+          60,
+          61
+        ],
+        "callee_result_binding": 0,
+        "caller_result_binding": 62,
+        "original_A_D_carriers_each": 1,
+        "owned_validator": true,
+        "field_write_B_prev": true,
+        "actual_input_count": 2,
+        "ordinary_whole_return": true,
+        "h1_dst_B_result": true,
+        "mixed_return_accepted": false,
+        "ptr_regions": [
+          5,
+          3
+        ],
+        "allocation_regions": [
+          5,
+          3
+        ],
+        "domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "donors_and_parameters_consumed": true,
+        "fresh_caller_incarnation": 91,
+        "callee_incarnation": 0,
+        "unchanged_member_ids": true,
+        "named_grant_consumers": 2,
+        "full_original_release_order": [
+          2,
+          3,
+          4,
+          1,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "unknown-external-callee",
+      "source_sha256": "2de61fe1ee5b261a204bdaf881fcca2dadd5ad601cc4cbfa733789d121575fa6",
+      "classification": "semantic-reject",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "unknown-external-callee.nl:197:59-197:72: error(semantic)[P3-UNKNOWN-CALLEE]: unknown semantic callee\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 1,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P3-UNKNOWN-CALLEE",
+        "start_byte": 11895,
+        "end_byte": 11908
+      }
+    },
+    {
+      "input": "arbitrary-field-labels",
+      "source_sha256": "266562ac5b1d8e3f200004a3d975e2cc96e5f23c4df3981921005db610302531",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "stdout_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: arbitrary-field-labels.nl\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "whole_result_value": 113,
+        "member_packet_ids": [
+          112,
+          110
+        ],
+        "pointer_values": [
+          111,
+          109
+        ],
+        "allocation_values": [
+          57,
+          29
+        ],
+        "domain_values": [
+          62,
+          34
+        ],
+        "caller_donors": [
+          58,
+          59
+        ],
+        "callee_formals": [
+          60,
+          61
+        ],
+        "callee_result_binding": 62,
+        "caller_result_binding": 63,
+        "original_A_D_carriers_each": 1,
+        "owned_validator": true,
+        "field_write_B_prev": true,
+        "actual_input_count": 2,
+        "ordinary_whole_return": true,
+        "h1_dst_B_result": true,
+        "mixed_return_accepted": false,
+        "ptr_regions": [
+          5,
+          3
+        ],
+        "allocation_regions": [
+          5,
+          3
+        ],
+        "domains": [
+          5,
+          3
+        ],
+        "original_roots": [
+          57,
+          31
+        ],
+        "original_incarnations": [
+          60,
+          34
+        ],
+        "donors_and_parameters_consumed": true,
+        "fresh_caller_incarnation": 92,
+        "callee_incarnation": 91,
+        "unchanged_member_ids": true,
+        "named_grant_consumers": 2,
+        "full_original_release_order": [
+          2,
+          3,
+          4,
+          1,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    },
+    {
+      "input": "nested-without-whole-result-call",
+      "source_sha256": "cda426fa2b62ad0f7f9008426eb79aa2c6fb6d2e3caaffc59f392698025f8ecd",
+      "classification": "semantic-accepted/backend-unsupported",
+      "cli_exit": 4,
+      "stdout_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: nested-without-whole-result-call.nl\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "owned_validator": true,
+        "nested_source_only": true,
+        "whole_call_certificate": false,
+        "release_worlds": "0..5"
+      }
+    },
+    {
+      "input": "terminal-explicit-return-profile",
+      "source_sha256": "51c8ead4be7e9819635fdbcd4619532c04a64263e95f85607923bc9599064328",
+      "classification": "semantic-precision-unsupported",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "terminal-explicit-return-profile.nl:130:37-235:38: error(precision)[CAPTURED-CLOSURE-PRECISION]: complete original-owner fork/cleanup proof is unavailable\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 3,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "CAPTURED-CLOSURE-PRECISION",
+        "start_byte": 6663,
+        "end_byte": 14699
+      }
+    },
+    {
+      "input": "second-whole-result-call-profile",
+      "source_sha256": "c310555c99f4def000e98843f85204ac0a99e511c353ae523a7d23bcfbd48373",
+      "classification": "semantic-profile-unsupported",
+      "cli_exit": 3,
+      "stdout_bytes": 0,
+      "diagnostic": "second-whole-result-call-profile.nl:198:96-198:116: error(unsupported)[P276-CALL-PROFILE]: one whole result call per bounded arm\n",
+      "repeat_identical": true,
+      "output_files_created": [],
+      "source_owned_evidence": {
+        "registration_rejected": true,
+        "status": 2,
+        "snapshot_unchanged": true,
+        "owned_artifact": false,
+        "code": "P276-CALL-PROFILE",
+        "start_byte": 12020,
+        "end_byte": 12040
+      }
+    }
+  ]
+}

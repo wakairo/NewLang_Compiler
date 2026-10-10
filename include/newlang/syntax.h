@@ -46,8 +46,9 @@ typedef enum {
     NL_SYNTAX_ALLOCATED_REF,
     NL_SYNTAX_OPTION_BACKING,
     NL_SYNTAX_OPTION_PTR, /* ptr_type union; target is a nominal name only */
-    NL_SYNTAX_OPTION_LIVE_TAIL,        /* exact Draft 17.29 custody type only */
-    NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT /* opt-in unadopted Issue 274 triad */
+    NL_SYNTAX_OPTION_LIVE_TAIL, /* exact Draft 17.29 custody type only */
+    NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT,  /* opt-in unadopted Issue 274 triad */
+    NL_SYNTAX_EXPERIMENTAL_NESTED_STRUCT /* opt-in Issue 276 two triads */
 } NLSyntaxKind;
 
 /* Requested source spelling only: not checked access permission/authority. */

@@ -57,7 +57,7 @@ typedef struct {
     size_t count;
     NLTypeId result;
     bool caller_effects, hidden_dependencies, owner_receiver, owner_producer,
-        custody_recipient;
+        custody_recipient, experimental_root_receiver;
     NLFunctionBody *body; /* owned retained plan, NULL for signature-only */
 } NLFunctionEntry;
 struct NLSemanticContext {
@@ -104,6 +104,11 @@ typedef struct {
     const NLSemanticContext *before_origin, *after_origin;
 } NLCapturedChange;
 struct NLCheckedFragment {
+    NLWholeValueCallView whole_value;
+    const NLSemanticContext *whole_entry_origin, *whole_return_origin,
+        *whole_receive_origin;
+    NLCheckedNodeId whole_call;
+    void (*destroy_whole_world)(NLSemanticContext *);
     NLCapturedChange *field_changes[6];
     size_t field_change_count;
     void (*destroy_field_changes)(NLCheckedFragment *);
@@ -204,6 +209,10 @@ bool nl_owner_signature(const NLSemanticContext *, const NLTypeId *, size_t,
 NLCheckStatus nl_owner_definition(const NLSemanticContext *, NLFunctionBody *,
                                   NLTypeId, NLTypedOwnerDefinition *,
                                   NLCheckDiagnostic *);
+NLCheckStatus nl_root_record_definition(const NLSemanticContext *,
+                                        NLFunctionBody *, NLTypeId,
+                                        NLTypedOwnerDefinition *,
+                                        NLCheckDiagnostic *);
 NLCheckStatus nl_owner_relations(const NLSemanticContext *, const NLValueId *,
                                  const NLTypedOwnerDefinition *, NLSourceSpan,
                                  NLCheckDiagnostic *);
@@ -238,6 +247,11 @@ bool nl_recursive_local_type(const NLSemanticContext *, NLTypeId);
 /* Syntax/shape admission only; NEVER an original-root correlation grant.
  * False in every canonical/default build. */
 bool nl_experimental_root_record_type(const NLSemanticContext *, NLTypeId);
+/* Structural custody shapes, never a p/R/A/D matching assertion. */
+bool nl_experimental_nested_type(const NLSemanticContext *, NLTypeId);
+bool nl_experimental_value_type(const NLSemanticContext *, NLTypeId);
+NLCheckStatus nl_whole_call_validate(const NLCheckedFragment *,
+                                     NLCheckedNodeId);
 /* Read-only write-admission predicate, not a mint/seed operation. Caller still
  * checks explicit domain stability, dependencies and scope/conflicts. */
 NLCheckStatus nl_allocated_write_access(const NLSemanticContext *, NLValueId);

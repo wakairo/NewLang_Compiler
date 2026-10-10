@@ -1,0 +1,83 @@
+[
+  {
+    "control": "fixed-main",
+    "sha": "b75baea96a644e68634baee383299b66981b3c62",
+    "flags": "OFF",
+    "case": "correct-two-originals",
+    "exit": 3,
+    "diagnostic": "/tmp/p276-observations/correct-two-originals.nl:10:22-10:25: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "classification": "parser-unsupported; no semantic verdict"
+  },
+  {
+    "control": "fixed-main",
+    "sha": "b75baea96a644e68634baee383299b66981b3c62",
+    "flags": "OFF",
+    "case": "wrong-original-C-allocation",
+    "exit": 3,
+    "diagnostic": "/tmp/p276-observations/wrong-original-C-allocation.nl:10:22-10:25: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "classification": "parser-unsupported; no semantic verdict"
+  },
+  {
+    "control": "fixed-main",
+    "sha": "b75baea96a644e68634baee383299b66981b3c62",
+    "flags": "OFF",
+    "case": "mixed-return-repaired",
+    "exit": 3,
+    "diagnostic": "/tmp/p276-observations/mixed-return-repaired.nl:10:22-10:25: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "classification": "parser-unsupported; no semantic verdict"
+  },
+  {
+    "control": "P275-opt-in",
+    "sha": "059b85497862d1461688ec5c6212e5ee87adf94c",
+    "flags": "ORIGINAL=ON",
+    "case": "correct-two-originals",
+    "exit": 3,
+    "diagnostic": "/tmp/p276-observations/correct-two-originals.nl:12:24-12:32: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "classification": "parser-unsupported; no semantic verdict"
+  },
+  {
+    "control": "P275-opt-in",
+    "sha": "059b85497862d1461688ec5c6212e5ee87adf94c",
+    "flags": "ORIGINAL=ON",
+    "case": "wrong-original-C-allocation",
+    "exit": 3,
+    "diagnostic": "/tmp/p276-observations/wrong-original-C-allocation.nl:12:24-12:32: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "classification": "parser-unsupported; no semantic verdict"
+  },
+  {
+    "control": "P275-opt-in",
+    "sha": "059b85497862d1461688ec5c6212e5ee87adf94c",
+    "flags": "ORIGINAL=ON",
+    "case": "mixed-return-repaired",
+    "exit": 3,
+    "diagnostic": "/tmp/p276-observations/mixed-return-repaired.nl:12:24-12:32: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "classification": "parser-unsupported; no semantic verdict"
+  },
+  {
+    "control": "P275-default",
+    "sha": "059b85497862d1461688ec5c6212e5ee87adf94c",
+    "flags": "OFF",
+    "case": "correct-two-originals",
+    "exit": 3,
+    "diagnostic": "/tmp/p276-observations/correct-two-originals.nl:10:22-10:25: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "classification": "parser-unsupported; no semantic verdict"
+  },
+  {
+    "control": "P275-default",
+    "sha": "059b85497862d1461688ec5c6212e5ee87adf94c",
+    "flags": "OFF",
+    "case": "wrong-original-C-allocation",
+    "exit": 3,
+    "diagnostic": "/tmp/p276-observations/wrong-original-C-allocation.nl:10:22-10:25: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "classification": "parser-unsupported; no semantic verdict"
+  },
+  {
+    "control": "P275-default",
+    "sha": "059b85497862d1461688ec5c6212e5ee87adf94c",
+    "flags": "OFF",
+    "case": "mixed-return-repaired",
+    "exit": 3,
+    "diagnostic": "/tmp/p276-observations/mixed-return-repaired.nl:10:22-10:25: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "classification": "parser-unsupported; no semantic verdict"
+  }
+]

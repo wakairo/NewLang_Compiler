@@ -681,10 +681,12 @@ static bool original_grant_tests(void)
                   "struct Packet{p:ptr<Node>,a:LifetimeDomain,d:Allocation} fn "
                   "main()->unit{unit}",
                   NL_PARSE_SYNTAX_UNSUPPORTED, "AVS-DECL-PROFILE"));
+#ifndef NEWLANG_EXPERIMENTAL_NESTED_CALLER
     CHECK(failure(
         nl_parser_parse_function_unit,
         "struct TreeTwo{root:Packet,child:Packet} fn main()->unit{unit}",
         NL_PARSE_SYNTAX_UNSUPPORTED, "AVS-DECL-PROFILE"));
+#endif
     CHECK(failure(nl_parser_parse_function_unit,
                   "struct Packet{p:ptr<Node>,a:Allocation,d:",
                   NL_PARSE_SYNTAX_UNSUPPORTED, "AVS-DECL-PROFILE"));
