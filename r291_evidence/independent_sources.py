@@ -30,9 +30,9 @@ def make(mode, n=2):
     fields = ", ".join(f"{labels[i]}: LiveRoot" for i in range(m))
     header = HEADER + "struct Vessel { " + fields + ", }\n"
     head = header + FINISH + "fn transit(v:Vessel)->Vessel { return v; }\n"
-    if mode in ("mixed_alloc", "mixed_domain"):
-        first = ("ra","ld") if mode == "mixed_alloc" else ("la","rd")
-        second = ("la","rd") if mode == "mixed_alloc" else ("ra","ld")
+    if mode.startswith("mixed_alloc") or mode.startswith("mixed_domain"):
+        first = ("ra","ld") if mode.startswith("mixed_alloc") else ("la","rd")
+        second = ("la","rd") if mode.startswith("mixed_alloc") else ("ra","ld")
         head += f"""fn exchange(v:Vessel)->Vessel {{
     let Vessel {{ first: left, second: right, third: third, fourth: fourth }} = v;
     let LiveRoot {{ p: lp, a: la, d: ld }} = left;
@@ -83,10 +83,24 @@ deallocate(a_{i}, raw_{i});
             return wiring + decl
         if mode == "local_transport":
             decl += "let shipped = vessel;\n"
-        elif mode in ("mixed_alloc", "mixed_domain"):
+        elif mode.startswith("mixed_alloc") or mode.startswith("mixed_domain"):
             decl += "let shipped = exchange(vessel);\n"
         else:
             decl += "let shipped = transit(vessel);\n"
+        if mode.endswith("_repaired"):
+            decl += "let Vessel {first:x0, second:x1, third:x2, fourth:x3} = shipped;\n"
+            decl += "let LiveRoot {p:pr0, a:al0, d:dm0} = x0;\n"
+            decl += "let LiveRoot {p:pr1, a:al1, d:dm1} = x1;\n"
+            if mode.startswith("mixed_alloc"):
+                decl += "let corrected_0=LiveRoot{p:pr0,a:al1,d:dm0};\n"
+                decl += "let corrected_1=LiveRoot{p:pr1,a:al0,d:dm1};\n"
+            else:
+                decl += "let corrected_0=LiveRoot{p:pr0,a:al0,d:dm1};\n"
+                decl += "let corrected_1=LiveRoot{p:pr1,a:al1,d:dm0};\n"
+            decl += "retire(corrected_0);\nretire(corrected_1);\nretire(x2);\nretire(x3);\n"
+            for i in range(m,n):
+                decl += f"let keeper_{i}=LiveRoot{{p:p_{i},a:a_{i},d:d_{i}}};\nretire(keeper_{i});\n"
+            return wiring + decl + "unit\n"
         decl += "let Vessel {" + ", ".join(f"{labels[i]}: keeper_{i}" for i in range(m)) + " } = shipped;\n"
         if mode == "lost_original":
             return wiring + decl + "retire(keeper_0);\nunit\n"
@@ -131,19 +145,26 @@ CASES = [
   ("duplicate_receiver", "duplicate_receiver", 5),
   ("mixed_allocation_release", "mixed_alloc", 5),
   ("mixed_domain_release", "mixed_domain", 5),
+  ("mixed_alloc_repaired_5", "mixed_alloc_repaired", 5),
+  ("mixed_domain_repaired_5", "mixed_domain_repaired", 5),
   ("lost_original", "lost_original", 5),
   ("omitted_owner", "omitted_member", 5),
   ("active_domain_loan", "active_loan", 5),
   ("original_3", "plain", 3),
   ("original_4", "plain", 4),
   ("original_5", "plain", 5),
+  ("alpha_renamed_5", "plain", 5),
   ("direct_release_5", "direct_release", 5),
   ("local_transport_5", "local_transport", 5),
 ]
 rows=[]
 for name, mode, n in CASES:
     p=OUT/(name+".nl")
-    p.write_text(make(mode,n))
+    program=make(mode,n)
+    if name=="alpha_renamed_5":
+        for old,new in [("Node","Cell"),("LiveRoot","OwnedParcel"),("Vessel","Cargo"),("transit","forward"),("retire","release")]:
+            program=program.replace(old,new)
+    p.write_text(program)
     proc=subprocess.run([sys.argv[1],str(p)],text=True,capture_output=True,timeout=90)
     diagnostic=proc.stderr[-1300:].replace("\n"," / ")
     print("R291_CASE",json.dumps({"case":name,"count":n,"exit":proc.returncode,
