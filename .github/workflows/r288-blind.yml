@@ -38,6 +38,7 @@ jobs:
           . .deps/activate.sh
           NEWLANG_BIN=build-r288/newlangc python3 r288_blind_runner.py
           python3 r288_blind_runner_b.py
+          python3 r288_blind_runner_c.py
       - name: Preserve source and direct compiler observations
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
