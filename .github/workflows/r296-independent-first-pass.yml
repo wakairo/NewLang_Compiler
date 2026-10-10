@@ -1,0 +1,67 @@
+name: R296 frozen independent blind evidence
+on:
+  push:
+    branches:
+      - r296-blind-evidence-only
+permissions:
+  contents: read
+jobs:
+  independent-source-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout isolated evidence only
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          path: evidence
+          persist-credentials: false
+      - name: Checkout exactly frozen experimental compiler
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: f6f79161f6d6f1b83d4c80275379982bceb9fa9e
+          path: candidate
+          persist-credentials: false
+      - name: Verify immutable target and evidence
+        run: |
+          test "$(git -C candidate rev-parse HEAD)" = "f6f79161f6d6f1b83d4c80275379982bceb9fa9e"
+          git -C candidate rev-parse HEAD
+          sha256sum evidence/r296_blind_runner.py
+      - name: Install checked Ubuntu host build requirements
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap checksum-pinned LLVM
+        working-directory: candidate
+        run: |
+          python3 scripts/bootstrap.py
+          . .deps/activate.sh
+          llvm-config-23 --version
+      - name: Configure and build opt-in bounded experimental compiler
+        working-directory: candidate
+        run: |
+          . .deps/activate.sh
+          CC=gcc-13 cmake -S . -B build-r296 -DCMAKE_BUILD_TYPE=Debug \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON
+          cmake --build build-r296 --parallel 2 --target newlangc
+          ./build-r296/newlangc --version
+      - name: Execute independently generated NewLang attacks
+        working-directory: candidate
+        env:
+          NEWLANG_P276: "1"
+          NEWLANG_P278: "1"
+          NEWLANG_P285: "1"
+          NEWLANG_P289: "1"
+        run: |
+          . .deps/activate.sh
+          python3 ../evidence/r296_blind_runner.py ./build-r296/newlangc ../evidence/r296-results
+      - name: Preserve all actual sources, hashes and compiler outputs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r296-independent-first-pass
+          path: evidence/r296-results/
+          if-no-files-found: warn
