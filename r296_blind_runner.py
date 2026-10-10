@@ -110,5 +110,61 @@ def main(binary,directory):
   results.append(record)
   print("R296_RESULT "+json.dumps(record,ensure_ascii=False),flush=True)
  (directory/"summary.json").write_text(json.dumps(results,indent=2,ensure_ascii=False))
+
+# Independent alternate ordinary-record design.  Keep direct call and terminal
+# cleanup in a flat lexical block, without source-level nested cleanup blocks.
+CASES = CASES + ("hetero_good_p0","hetero_good_p2","hetero_cross_pure_repaired","hetero_cross_bad_release")
+_old_full = full
+_old_generate = generate
+HETERONOMINAL = """struct Node {
+ next: Option<ptr<Node>>,
+ prev: Option<ptr<Node>>,
+ child: Option<ptr<Node>>,
+ payload: u8,
+}
+struct OwnerLeft {
+ leftptr: ptr<Node>,
+ leftgrant: Allocation,
+ leftdomain: LifetimeDomain,
+}
+struct OwnerRight {
+ rightptr: ptr<Node>,
+ rightgrant: Allocation,
+ rightdomain: LifetimeDomain,
+}
+struct OwnerPair {
+ first: OwnerLeft,
+ second: OwnerRight,
+}
+"""
+def full(case):
+ if not case.startswith("hetero_"):
+  return _old_full(case)
+ crossing=case in ("hetero_cross_pure_repaired","hetero_cross_bad_release")
+ a_left,a_right=("a_3","a_2") if crossing else ("a_2","a_3")
+ terminal_left="rightgrant" if case=="hetero_cross_pure_repaired" else "leftgrant"
+ terminal_right="leftgrant" if case=="hetero_cross_pure_repaired" else "rightgrant"
+ link="p_2" if case=="hetero_good_p2" else "p_0"
+ lines=[
+ f"let left = OwnerLeft {{ leftptr: p_2, leftgrant: {a_left}, leftdomain: d_2 }};",
+ f"let right = OwnerRight {{ rightptr: p_3, rightgrant: {a_right}, rightdomain: d_3 }};",
+ f"let both = ferry(left, right, {link});",
+ "let OwnerPair { first, second } = both;",
+ "let OwnerLeft { leftptr, leftgrant, leftdomain } = first;",
+ "let OwnerRight { rightptr, rightgrant, rightdomain } = second;",
+ cleanup(2,loc="leftptr",grant=terminal_left,domain="leftdomain",tag="left"),
+ cleanup(3,loc="rightptr",grant=terminal_right,domain="rightdomain",tag="right")]
+ for i in (4,1,0):lines.append(cleanup(i))
+ lines.append("unit")
+ return "\n".join(lines)
+def generate(case):
+ if not case.startswith("hetero_"):
+  return _old_generate(case)
+ return HETERONOMINAL+"""fn ferry(left: OwnerLeft, right: OwnerRight, marker: ptr<Node>) -> OwnerPair {
+ OwnerPair { first: left, second: right }
+}
+fn main() -> unit {
+"""+branch(0,case)+"\n}\n"
+
 if __name__=="__main__":
  main(pathlib.Path(sys.argv[1]).resolve(),pathlib.Path(sys.argv[2]).resolve())
