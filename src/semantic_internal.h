@@ -235,6 +235,9 @@ NLCheckStatus nl_sem_new_scope(NLSemanticContext *, NLScopeId, bool,
 NLCheckStatus nl_sem_fresh_fact(NLSemanticContext *, NLValueFactId *);
 bool nl_fixed_type(const NLSemanticContext *, NLTypeId);
 bool nl_recursive_local_type(const NLSemanticContext *, NLTypeId);
+/* Syntax/shape admission only; NEVER an original-root correlation grant.
+ * False in every canonical/default build. */
+bool nl_experimental_root_record_type(const NLSemanticContext *, NLTypeId);
 /* Read-only write-admission predicate, not a mint/seed operation. Caller still
  * checks explicit domain stability, dependencies and scope/conflicts. */
 NLCheckStatus nl_allocated_write_access(const NLSemanticContext *, NLValueId);

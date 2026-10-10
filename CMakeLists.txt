@@ -16,6 +16,12 @@ endif()
 set(NEWLANG_SANITIZER "none" CACHE STRING "none, address, or undefined")
 set_property(CACHE NEWLANG_SANITIZER PROPERTY STRINGS none address undefined)
 add_library(newlang_options INTERFACE)
+option(NEWLANG_EXPERIMENTAL_ORIGINAL_GRANT
+    "UNADOPTED Issue 274 ordinary root-record checker experiment; DO NOT MERGE" OFF)
+if(NEWLANG_EXPERIMENTAL_ORIGINAL_GRANT)
+    target_compile_definitions(newlang_options INTERFACE
+        NEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=1)
+endif()
 target_compile_options(newlang_options INTERFACE
     -Wall -Wextra -Wpedantic -Werror)
 if(NOT NEWLANG_SANITIZER STREQUAL "none")
@@ -74,6 +80,16 @@ target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic n
 include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
+    add_test(NAME parser_original_grant.unit COMMAND parser_test original_grant)
+    if(NEWLANG_EXPERIMENTAL_ORIGINAL_GRANT)
+        add_executable(original_grant_evidence
+            tests/integration/original_grant_evidence.c)
+        target_link_libraries(original_grant_evidence PRIVATE newlang_checked_c_node)
+        add_test(NAME original_grant.integration COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/original_grant_test.py"
+            "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:original_grant_evidence>"
+            "$<TARGET_FILE:captured_closure_test>")
+    endif()
     add_executable(diagnostic_test tests/unit/diagnostic_test.c)
     target_link_libraries(diagnostic_test PRIVATE newlang_diagnostic)
     add_test(NAME diagnostics.unit COMMAND diagnostic_test)

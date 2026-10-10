@@ -1598,21 +1598,30 @@ static NLSyntaxNode *avs_struct(NLParser *parser)
         if (label == NULL || !expect_punct(parser, ':', "AVS-DECL-COLON",
                                            "expected : after field label"))
             return NULL;
-        NLSyntaxNode *type = NULL;
-        if ((i == 0 || (decl->view.kind == NL_SYNTAX_RECURSIVE_STRUCT &&
-                        (i == 1 || (i == 2 && three_links)))) &&
-            word(parser, "Option")) {
+        NLSyntaxNode *field_type = NULL;
+#ifdef NEWLANG_EXPERIMENTAL_ORIGINAL_GRANT
+        if ((i == 0 && word(parser, "ptr")) ||
+            (decl->view.kind == NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT &&
+             ((i == 1 && word(parser, "Allocation")) ||
+              (i == 2 && word(parser, "LifetimeDomain"))))) {
+            field_type = type(parser);
+            decl->view.kind = NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT;
+        } else
+#endif
+            if ((i == 0 || (decl->view.kind == NL_SYNTAX_RECURSIVE_STRUCT &&
+                            (i == 1 || (i == 2 && three_links)))) &&
+                word(parser, "Option")) {
             const NLSourceSpan option = parser->token.span;
             consume(parser);
-            type = option_ptr(parser, option);
+            field_type = option_ptr(parser, option);
             decl->view.kind = NL_SYNTAX_RECURSIVE_STRUCT;
             three_links = three_links || i == 1;
         } else if (word(parser, "u8") &&
                    (decl->view.kind == NL_SYNTAX_AVS_STRUCT ||
                     (i == 1 && !three_links) || (i == 3 && three_links))) {
-            type = node(parser, NL_SYNTAX_TYPE_NAME, parser->token.span);
-            if (type != NULL)
-                type->view.data.name = parser->token.span;
+            field_type = node(parser, NL_SYNTAX_TYPE_NAME, parser->token.span);
+            if (field_type != NULL)
+                field_type->view.data.name = parser->token.span;
             consume(parser);
         } else {
             fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
@@ -1620,15 +1629,15 @@ static NLSyntaxNode *avs_struct(NLParser *parser)
                  "only two-u8 or exact Option<ptr<H>>,u8 profile");
             return NULL;
         }
-        if (type == NULL)
+        if (field_type == NULL)
             return NULL;
         NLSyntaxNode *field =
             node(parser, NL_SYNTAX_PARAMETER, label->view.span);
         if (field == NULL)
             return NULL;
         field->view.data.parameter.name = label->view.data.name;
-        field->view.data.parameter.type = type;
-        field->view.span.end_byte = type->view.span.end_byte;
+        field->view.data.parameter.type = field_type;
+        field->view.span.end_byte = field_type->view.span.end_byte;
         link_node(&head, &tail, field);
         ++decl->view.data.avs_struct.count;
         if (punct(parser, ','))
@@ -1638,13 +1647,17 @@ static NLSyntaxNode *avs_struct(NLParser *parser)
                  "AVS-DECL-COMMA", "expected , between fields");
             return NULL;
         }
-        if (punct(parser, '}') || (i == 1 && !three_links))
+        if (punct(parser, '}') ||
+            (i == 1 && decl->view.kind == NL_SYNTAX_AVS_STRUCT))
             break;
     }
     if (punct(parser, ','))
         consume(parser);
     if (!punct(parser, '}') ||
-        decl->view.data.avs_struct.count != (three_links ? 4u : 2u)) {
+        decl->view.data.avs_struct.count !=
+            (decl->view.kind == NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT ? 3u
+             : three_links                                         ? 4u
+                                                                   : 2u)) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
              "AVS-DECL-PROFILE",
              "bounded declaration requires two fields or three recursive "
@@ -1674,7 +1687,10 @@ static NLSyntaxNode *function_unit(NLParser *parser)
         if (declaration == NULL)
             return NULL;
         if (structure) {
-            if (declaration->view.kind == NL_SYNTAX_RECURSIVE_STRUCT) {
+            if (declaration->view.kind == NL_SYNTAX_EXPERIMENTAL_ROOT_STRUCT) {
+                if (avs)
+                    goto struct_profile;
+            } else if (declaration->view.kind == NL_SYNTAX_RECURSIVE_STRUCT) {
                 if (avs)
                     goto struct_profile;
                 ++recursive;
