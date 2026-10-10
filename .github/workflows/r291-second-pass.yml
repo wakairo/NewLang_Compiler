@@ -1,0 +1,52 @@
+name: R291 frozen second-pass evidence only
+on:
+  push:
+    branches:
+      - r291-independent-owned-evidence
+permissions:
+  contents: read
+jobs:
+  empirical:
+    name: R291 Independent Owned Artifacts
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Verify frozen target parent
+        shell: bash
+        run: |
+          set -eux
+          git rev-list --max-parents=0 HEAD | head -1
+          git merge-base --is-ancestor 5303fcb481f7f15e9007920c106534b17ccacd69 HEAD
+          git log -4 --oneline
+      - name: Bootstrap exact compiler prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+          python3 scripts/bootstrap.py
+      - name: Build with four experimental flags on
+        env:
+          CC: gcc-13
+        shell: bash
+        run: |
+          set -eux
+          . .deps/activate.sh
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=OFF -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON
+          cmake --build build --parallel 2
+      - name: R original source acceptance and rejects
+        shell: bash
+        run: |
+          set -eu
+          python3 r291_evidence/independent_sources.py build/newlangc
+      - name: R public parse registration owned witness (not a stub)
+        shell: bash
+        run: |
+          set -eu
+          gcc-13 -std=c17 -O0 -Wall -Wextra -Werror -Iinclude r291_evidence/public_owned_observer.c -o /tmp/r291_public_owned \
+            -Wl,--start-group build/libnewlang_semantic.a build/libnewlang_checked.a build/libnewlang_parser.a build/libnewlang_syntax.a build/libnewlang_lexer.a build/libnewlang_diagnostic.a build/libnewlang_source.a -Wl,--end-group
+          /tmp/r291_public_owned /tmp/r291_cases/original_2.nl || echo R291_OWNED_OBSERVER_REJECTED
+      - name: Display evidence and guards
+        shell: bash
+        run: |
+          cat /tmp/r291_cases/results.json
+          git status --short
