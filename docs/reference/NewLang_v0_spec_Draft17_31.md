@@ -2815,6 +2815,25 @@ caller-held B result can fail this H1 product oracle without being
 an illegal ordinary NewLang value. H2 remains a separate historical
 actor test. The H1 observer supplies no authority to a source checker.
 
+**P #276 ordinary pure return witness (source-level illustration):**
+~~~newlang
+fn assemble(first: LiveRoot, second: LiveRoot) -> TreeTwo {
+    let combined = TreeTwo { root: first, child: second };
+    return combined;
+}
+~~~
+This definition creates NO matched-grant requirement on either packet:
+the body only consumes and assembles actual nonCopy member values.
+For an actual second packet with original (p_B,A_C,D_B) and genuine
+first packet K_dst, the named assembly and complete return may be
+core-safe under (I), EVEN THOUGH the returned B-like member is mixed.
+A later consumer may whole-destructure and re-pair original A_C/A_B
+with the real corresponding C/B ptrs/domains before legitimate matched
+terminal operations. Dropping or duplicating any nonCopy original A/D
+is never permitted. If this returned value is examined as the particular
+cJSON H1 TreeB witness, its B member FAILS (III); if uncorrected B
+is later passed to finish_root, THAT demanding call FAILS (II).
+
 The existing §18.1a definition-time independently symbolic ordinary
 known-direct inferred-requirement method is reused and extended from
 separate two-H p/a/d parameters to complete source components of these
@@ -3060,8 +3079,12 @@ Required source-eligible semantic-negative oracles:
   mismatch, even though a proper D_B-scoped B.prev H write may succeed;
   if observed at the specific H1 result, report product H1 NO,
   NOT ordinary source rejection;
-- p_B/A_B + D_C → reject governing domain mismatch;
-- stale original p_B O/incarnation → reject current typed root;
+- p_B/A_B + D_C → ordinary mixed value custody still possible;
+  reject the actual ref access or matched terminal needing
+  Governs(O_B)==D_C, not a pure record move/return;
+- stale original p_B O/incarnation → stale Copy locator may exist;
+  reject actual reloan/root-ending requiring current typed root,
+  not ordinary copying of the ptr token;
 - duplicate original B nonCopy A_B or D_B in two packet values →
   reject consumed-use; a local call-entry subset is insufficient,
   check all actual current bindings and current loan scopes;
@@ -3125,14 +3148,21 @@ C17, complete 4-detach/2-adopt, rich F source evaluator, full H1
 product verification or a canonical Draft17.31 adoption.
 The candidate remains **DRAFT / UNMERGED**.
 
-**Hard Gate E BLOCK until independently checked**: actual five-source
-OneBacking/initialize→aggregate p/O/R/A/D correspondence (especially
-unused Allocation); current LiveRoot source-place through whole
-consume and local domain loans, including external duplicate holders/
-borrowers; after-A full typed slot/raw/dst+B named receiver; exact
-normal branches and checked artifact/backend handoff. If these
-cannot be derived from actual source without assuming matched inputs
-or post-WF, fail the candidate, do not silently widen core.
+**Hard Gate E BLOCK until independently checked**: preservation
+of actual source OneBacking/initialize-derived p/O/R/A/D **identities
+including a potentially nonmatching Allocation** through ordinary
+aggregate/call/return (no fabricated equality); proving the
+original same-R Allocation equality only at a **demanding
+release-using** primitive/named call; current LiveRoot source-place
+and old/current consume obligations across local domain loans,
+external ghost duplicate holders/borrowers; TWO separately inferred
+member-path terminal requirements carried transitively by
+finish_two after original A died; exact 0..5 normal/refusal/Change/
+Reset exits and checked artifact/backend handoff. No owner result
+or product H1 witness may be used to presuppose its own proof.
+If required operational facts cannot be derived from actual
+source without matched/post-WF assumptions, fail the candidate,
+not silently widen core.
 
 Full frozen North Star remains: original pinned upstream cJSON,
 node-per-physical allocation, ≥5/6 critical topology, 0 per-hop
