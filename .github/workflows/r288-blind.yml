@@ -1,0 +1,46 @@
+name: R288 frozen blind empirical (noncanonical)
+on:
+  push:
+    branches:
+      - r288-frozen-blind-empirical-20261010
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  blind-first-pass:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Verify immutable candidate ancestry
+        run: |
+          echo "evidence HEAD=$(git rev-parse HEAD)"
+          echo "frozen HEAD=5303fcb481f7f15e9007920c106534b17ccacd69"
+          test "$(git merge-base HEAD 5303fcb481f7f15e9007920c106534b17ccacd69)" = 5303fcb481f7f15e9007920c106534b17ccacd69
+          git diff --name-only 5303fcb481f7f15e9007920c106534b17ccacd69 HEAD
+      - name: Prerequisites (operational only)
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Locked SDK bootstrap
+        run: python3 scripts/bootstrap.py
+      - name: Build frozen compiler with four experimental opt-ins
+        run: |
+          . .deps/activate.sh
+          CC=gcc-13 cmake -S . -B build-r288 -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=OFF -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON
+          cmake --build build-r288 --parallel 2
+          ./build-r288/newlangc --version
+          ./build-r288/newlangc --help
+      - name: Run independent first-pass cases
+        run: |
+          . .deps/activate.sh
+          NEWLANG_BIN=build-r288/newlangc python3 r288_blind_runner.py
+      - name: Preserve source and direct compiler observations
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r288-blind-frozen-evidence
+          path: r288-frozen-evidence/
+          if-no-files-found: warn
