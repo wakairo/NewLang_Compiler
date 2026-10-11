@@ -2,6 +2,7 @@
  * No fixtures, private header, injected semantic world or artificial certificate. */
 #include "newlang/parser.h"
 #include "newlang/captured_closure.h"
+#include "newlang/raw_storage.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
