@@ -28,6 +28,10 @@ NLCheckStatus nl_captured_change_begin(NLCheckedFragment *f,
         || (f->field_change_count == 6 && (!f->second_scoped_field_call ||
                                            node <= f->second_scoped_field_call))
 #endif
+#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT
+        || (f->field_change_count == 7 &&
+            (!f->field_changes[6] || node <= f->field_changes[6]->node))
+#endif
     )
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     NLCapturedChange *c = calloc(1, sizeof(*c));
@@ -359,8 +363,13 @@ static bool cross_root_third(const NLCheckedFragment *f,
 {
     NLScopedFieldCallView second;
     const NLCheckedNodeView *write = nl_checked_node_view(f, change->node);
-    if (f->field_change_count != 7 || change != f->field_changes[6] ||
-        !f->scoped_field_call || !f->second_scoped_field_call ||
+    if ((f->field_change_count != 7
+#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT
+         && f->field_change_count != 8
+#endif
+         ) ||
+        change != f->field_changes[6] || !f->scoped_field_call ||
+        !f->second_scoped_field_call ||
         f->scoped_field_call >= f->second_scoped_field_call ||
         f->second_scoped_field_call >= change->node ||
         !nl_checked_scoped_field_call_view(f, f->second_scoped_field_call,
@@ -421,6 +430,80 @@ static bool cross_root_third(const NLCheckedFragment *f,
             return false;
     }
     /* Ref/scoped local additions may occur; current roots/fields may not. */
+    size_t roots = 0;
+    for (size_t i = 0; i < prior->place_count; ++i) {
+        const NLSemanticPlaceView p = prior->places[i];
+        if (!p.live || p.fixed_field_count != 4 || !p.placement.region)
+            continue;
+        if (i >= before->place_count ||
+            memcmp(&p, &before->places[i], sizeof(p)))
+            return false;
+        ++roots;
+        for (size_t j = 0; j < 4; ++j) {
+            const NLPlaceId child = p.fixed_fields[j];
+            if (!child || child > prior->place_count ||
+                child > before->place_count ||
+                memcmp(&prior->places[child - 1], &before->places[child - 1],
+                       sizeof(NLSemanticPlaceView)))
+                return false;
+        }
+    }
+    return roots == 5;
+}
+#endif
+
+#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT
+/* One eighth direct Change, after the independently checked A.next Change.
+ * All authority and Change/Reset effects still come from primitive replay. */
+static bool cross_root_fourth(const NLCheckedFragment *f,
+                              const NLCapturedChange *change)
+{
+    if (f->field_change_count != 8 || change != f->field_changes[7] ||
+        !f->field_changes[6] || !cross_root_third(f, f->field_changes[6]))
+        return false;
+    const NLCapturedChange *third = f->field_changes[6];
+    const NLCheckedNodeView *write = nl_checked_node_view(f, change->node);
+    const NLCheckedNodeView *a_write = nl_checked_node_view(f, third->node);
+    const NLSemanticContext *before = change->before, *prior = third->after;
+    if (!before || !prior || !write || !a_write ||
+        third->node >= change->node || write->field.index != 1 ||
+        !write->field.parent || write->field.parent > before->place_count ||
+        !a_write->field.parent || a_write->field.parent > before->place_count ||
+        !write->field.old_value ||
+        write->field.old_value > before->value_count ||
+        !write->field.new_value || write->field.new_value > before->value_count)
+        return false;
+    const NLCheckedNodeView *projection = argument_node(f, write, 0),
+                            *a_projection = argument_node(f, a_write, 0);
+    if (!projection || !projection->has_reference_result ||
+        !projection->reference_result.scope ||
+        projection->reference_result.scope > f->context->scope_count ||
+        f->context->scopes[projection->reference_result.scope - 1].active ||
+        !a_projection || !a_projection->reference_result.scope ||
+        a_projection->reference_result.scope > before->scope_count ||
+        before->scopes[a_projection->reference_result.scope - 1].active)
+        return false;
+    const NLSemanticPlaceView c = before->places[write->field.parent - 1],
+                              a = before->places[a_write->field.parent - 1];
+    if (!c.live || c.placement.region != 4 || c.governing_domain != 4 ||
+        !a.live || a.placement.region != 2 || a.governing_domain != 2)
+        return false;
+    const NLSemanticValueView old = before->values[write->field.old_value - 1],
+                              incoming =
+                                  before->values[write->field.new_value - 1];
+    if (old.variant != 2 || incoming.variant != 2 || !old.sum_payload ||
+        old.sum_payload > before->value_count || !incoming.sum_payload ||
+        incoming.sum_payload > before->value_count)
+        return false;
+    const NLSemanticValueView bp = before->values[old.sum_payload - 1];
+    if (!bp.reference.place || bp.reference.place > before->place_count)
+        return false;
+    const NLSemanticPlaceView b = before->places[bp.reference.place - 1];
+    if (!b.live || b.placement.region != 3 || b.governing_domain != 3 ||
+        !pointer_to(before, bp, bp.reference.place, b.incarnation) ||
+        !pointer_to(before, before->values[incoming.sum_payload - 1],
+                    a_write->field.parent, a.incarnation))
+        return false;
     size_t roots = 0;
     for (size_t i = 0; i < prior->place_count; ++i) {
         const NLSemanticPlaceView p = prior->places[i];
@@ -1918,6 +2001,10 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             const NLCapturedChange *change = f->field_changes[changes++];
 #ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS
             if (changes == 7 && !cross_root_third(f, change))
+                return INVALID;
+#endif
+#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT
+            if (changes == 8 && !cross_root_fourth(f, change))
                 return INVALID;
 #endif
             NLCheckStatus s = change_validate(f, change);

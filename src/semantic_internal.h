@@ -128,7 +128,9 @@ struct NLCheckedFragment {
         *whole_receive_origin;
     NLCheckedNodeId whole_call;
     void (*destroy_whole_world)(NLSemanticContext *);
-#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS
+#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT
+    NLCapturedChange *field_changes[8];
+#elif defined(NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS)
     NLCapturedChange *field_changes[7];
 #else
     NLCapturedChange *field_changes[6];
