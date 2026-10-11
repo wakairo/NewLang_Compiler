@@ -25,7 +25,7 @@ static int same_snapshot(NLSemanticSnapshot a, NLSemanticSnapshot b) {
         a.domains==b.domains && a.scopes==b.scopes &&
         a.functions==b.functions && a.occurrences==b.occurrences &&
         a.backing_regions==b.backing_regions &&
-        a.last_incarnation==b.last_incarnation &&
+        a.raw_intervals==b.raw_intervals && a.last_incarnation==b.last_incarnation &&
         a.last_value_fact==b.last_value_fact;
 }
 static void check_change(const NLCheckedFragment *f, Metrics *m) {
@@ -104,10 +104,11 @@ static void inspect(const NLCheckedFragment *f, Metrics *m, unsigned depth) {
     }
 }
 int main(int argc,char **argv){
-    if(argc!=2){fprintf(stderr,"usage: %s witness.nl\n",argv[0]);return 2;}
-    NLSource *src=NULL,*call_source=NULL;
-    NLParser *parser=NULL,*call_parser=NULL;
-    NLSyntaxTree *tree=NULL,*calltree=NULL;
+    if(argc!=2 && argc!=3){fprintf(stderr,"usage: %s witness.nl [clean-retry.nl]\n",argv[0]);return 2;}
+    int verified=0,rejected=0;
+    NLSource *src=NULL,*call_source=NULL,*clean_source=NULL;
+    NLParser *parser=NULL,*call_parser=NULL,*clean_parser=NULL;
+    NLSyntaxTree *tree=NULL,*calltree=NULL,*clean_tree=NULL;
     NLSemanticContext *ctx=NULL;
     NLCheckedFragment *owned=NULL;
     NLParseDiagnostic pd={0};NLCheckDiagnostic cd={0};
@@ -129,7 +130,19 @@ int main(int argc,char **argv){
     if(st!=NL_CHECK_OK){
         printf("REGISTER_DIAG=%s bytes=%zu..%zu\n",fd.diagnostic.diagnostic.code?fd.diagnostic.diagnostic.code:"(none)",fd.diagnostic.span.start_byte,fd.diagnostic.span.end_byte);
         nl_semantic_snapshot(ctx,&after);
-        printf("REGISTER_ROLLBACK=%d\n",same_snapshot(base,after));
+        bool rolled_back=same_snapshot(base,after);
+        printf("REGISTER_ROLLBACK=%d\n",rolled_back);
+        if(argc!=3 || !rolled_back)goto end;
+        rejected=1;
+        if(nl_source_load(argv[2],&clean_source)!=NL_SOURCE_OK)goto end;
+        if(nl_parser_create(clean_source,&clean_parser)!=NL_PARSE_OK)goto end;
+        if(nl_parser_parse_function_unit(clean_parser,&clean_tree,&pd)!=NL_PARSE_OK)goto end;
+        const NLSyntaxTree *clean_input[1]={clean_tree};
+        st=nl_semantic_register_function_unit(ctx,clean_input,1,&fd);
+        printf("SAME_CONTEXT_RETRY_REGISTER=%d\n",(int)st);
+        if(st!=NL_CHECK_OK)goto end;
+    } else if(argc==3) {
+        puts("R318_INVALID_SOURCE_UNEXPECTEDLY_ACCEPTED");
         goto end;
     }
     static const char call[]="main()";
@@ -151,10 +164,13 @@ int main(int argc,char **argv){
         m.matches,m.captured_success,m.captured_failure,m.scoped_calls,m.scoped_success,m.scoped_failure,m.named_call_nodes,m.direct_changes,m.change_snapshots);
     if(m.captured_success!=5 || m.scoped_success!=2 || m.scoped_failure!=0 || m.captured_failure!=0 || m.scoped_calls!=2 || m.named_call_nodes<2 || m.change_snapshots<7 || m.audit_attempted!=1 || m.audit_ok!=1) { puts("R318_POSITIVE_NOT_PROVEN"); goto end; }
     puts("R318_BASIC_PUBLIC_VALIDATORS_OK");
+    if(rejected)puts("R318_REJECT_ROLLBACK_SAME_CONTEXT_RETRY_OK");
+    verified=1;
 end:
     nl_checked_destroy(owned);
     nl_semantic_destroy(ctx);
     nl_syntax_tree_destroy(calltree);nl_parser_destroy(call_parser);nl_source_destroy(call_source);
     nl_syntax_tree_destroy(tree);nl_parser_destroy(parser);nl_source_destroy(src);
-    return 0; /* Always preserve evidence for CI, including precision barriers. */
+    nl_syntax_tree_destroy(clean_tree);nl_parser_destroy(clean_parser);nl_source_destroy(clean_source);
+    return verified?0:1; /* Positives, refusals and same-context retry must pass. */
 }
