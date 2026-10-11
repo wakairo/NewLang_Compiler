@@ -262,7 +262,7 @@ static bool returned_two_owner(const NLCheckedFragment *f) {
     NLSemanticSnapshot snap_received;
     REQUIRE(nl_semantic_snapshot(call.received,&snap_received));
     size_t current_receivers=0;
-    for(NLBindingId binding=1;binding<=snap_received.bindings;++binding) {
+    for(size_t binding=1;binding<=snap_received.bindings;++binding) {
         NLSemanticBindingView candidate;
         REQUIRE(nl_semantic_binding_view(call.received,binding,&candidate));
         current_receivers+=candidate.availability==NL_AVAILABLE &&
