@@ -1,0 +1,45 @@
+name: P334 fixed compiler ninth adoption HOLD evidence (DO NOT MERGE)
+on:
+  push:
+    branches: [p334-first-dst-child-source-only]
+permissions:
+  contents: read
+jobs:
+  first-barrier-evidence:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Pin unchanged fixed compiler and source-only evidence
+        run: |
+          test "$(git rev-parse HEAD^)" = de9c4b175784f484675b670a109f62edeaf35de1
+          python3 - <<'PY'
+          import subprocess
+          for line in subprocess.check_output(['git','diff','--name-status','de9c4b175784f484675b670a109f62edeaf35de1','HEAD'],text=True).splitlines():
+              status,path=line.split('\t')
+              assert status=='A' and (path.startswith('evidence/p334/') or path=='.github/workflows/p334-first-adoption-diagnostic.yml' or path=='docs/experiments/P334_FIRST_DST_CHILD_HOLD.md'),line
+          PY
+          git fetch --no-tags origin 46a02e60cabce1b63cc3db4bc9035fe06f5f8009
+          echo 'bd7692f8118c8e4de2b7662b0f90fcf503a548d9948bfded27bd430ad127716d  evidence/p334/calibration_returned_owner.nl' | sha256sum --check
+          echo 'bef64179aca653b04a3fe20bc3d03c81906cc7a2fd7639ffb8bb1757b3c82ffc  evidence/p334/dst_child_return_old.nl' | sha256sum --check
+          echo 'b7968600287220138486878c63c1bf5044126052fdaeaf15ae559cabbde0773d  evidence/p334/dst_child_scope_unit.nl' | sha256sum --check
+      - name: Install runtime prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap checksum-locked LLVM
+        run: python3 scripts/bootstrap.py
+      - name: Assert calibrated owned and two exact precision refusals with same-context retries
+        env:
+          CC: gcc-13
+        run: |
+          . .deps/activate.sh
+          bash evidence/p334/run.sh build-p334
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p334-ninth-adoption-HOLD
+          path: |
+            build-p334/p334-observations.json
+            build-p334/p334-compiler-sha256.txt
