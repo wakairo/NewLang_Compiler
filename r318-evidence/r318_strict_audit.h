@@ -106,7 +106,7 @@ static bool r318_call_event(const NLCheckedFragment *f, NLCheckedNodeId id, NLSc
     MUST(scope && nl_semantic_scope_view(before,scope,&active) && active.active &&
          nl_semantic_scope_view(nl_checked_context(f),scope,&ended_scope) && !ended_scope.active);
     printf("R318_B_HELPER_%zu_OK call=%zu field_index=%zu old_target_region=%zu old_occ=%zu old_ended=1 new_None=1 original_B_root=%zu domain=3\n",
-           seq+1,id,field_index,seq==0?2u:4u,field[0].payload_occurrence,op->field.parent);
+           seq+1,id,field_index,(size_t)(seq==0?2:4),field[0].payload_occurrence,op->field.parent);
     return true;
 }
 static bool r318_direct(const NLCheckedFragment *f,const NLScopedFieldCallView *second,
