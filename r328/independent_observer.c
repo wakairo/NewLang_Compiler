@@ -184,7 +184,9 @@ static bool inspect(const NLCheckedFragment *entry){
         NLCapturedClosureView view;
         REQUIRE(nl_checked_captured_closure_view(f,m,&view));
         printf("R328_CAPTURE_PROBE i=%zu status=%d count=%zu releases=%zu,%zu,%zu,%zu,%zu,%zu\\n",i,(int)st,view.count,view.release_worlds[0],view.release_worlds[1],view.release_worlds[2],view.release_worlds[3],view.release_worlds[4],view.release_worlds[5]);
-        REQUIRE(st==NL_CHECK_OK && view.count<=5);
+        REQUIRE(st==NL_CHECK_OK && view.count==i);
+        for(size_t failure_world=i;failure_world<=5;++failure_world)
+            REQUIRE(view.release_worlds[failure_world]==1);
         printf("R328_CAPTURED index=%zu match=%zu status=%d original_count=%zu releases=%zu\n",
                 i,m,(int)st,view.count,view.release_worlds[i+1]);
         f=nl_checked_match_arm(f,m,1);
@@ -216,6 +218,20 @@ static bool inspect(const NLCheckedFragment *entry){
             nl_checked_captured_change_view(f,7,&fourth));
     REQUIRE(check_transition(&third,2,0,3,4));
     REQUIRE(check_transition(&fourth,4,1,3,2));
+    NLCapturedChangeView direct[2]={third,fourth};
+    for(size_t i=0;i<2;++i){
+        const NLCheckedNodeView *write=nl_checked_node_view(f,direct[i].operation);
+        const NLCheckedNodeView *projection=write?nl_checked_node_view(f,write->first_argument):NULL;
+        NLSemanticScopeView scope;
+        REQUIRE(write && write->kind==NL_CHECKED_REPLACE &&
+                projection && projection->kind==NL_CHECKED_FIELD_REF &&
+                projection->reference_result.scope &&
+                nl_semantic_scope_view(nl_checked_context(f),
+                                       projection->reference_result.scope,&scope) &&
+                !scope.active);
+        printf("R328_DIRECT_SCOPE_CLOSED index=%zu scope=%zu\\n",
+               i,projection->reference_result.scope);
+    }
     NLValueId a0[5],d0[5],a1[5],d1[5];
     REQUIRE(inventory(third.before,a0,d0) && inventory(fourth.after,a1,d1));
     for(size_t i=0;i<5;++i) REQUIRE(a0[i]==a1[i] && d0[i]==d1[i]);
