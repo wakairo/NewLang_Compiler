@@ -1,0 +1,62 @@
+name: R327 independent first-pass (not PR326)
+on:
+  push:
+    branches:
+      - r327-independent-first-pass-20261011
+permissions:
+  contents: read
+jobs:
+  independent:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Toolchain prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap pinned SDK
+        run: python3 scripts/bootstrap.py
+      - name: Verify exact target parent and authored-source identity
+        run: |
+          git rev-parse HEAD^
+          git log --format='%H %s' -5
+          sha256sum r327/independent_four_detach.nl
+      - name: Build exact experimental profile
+        env:
+          CC: gcc-13
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build-r327 -DCMAKE_BUILD_TYPE=Debug \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS=ON \
+            -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS=ON \
+            -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT=ON 
+          cmake --build build-r327 --parallel 2 --target newlangc newlang_semantic
+      - name: Check R-authored NewLang source (capture exact first diagnostic)
+        run: |
+          set +e
+          ./build-r327/newlangc r327/independent_four_detach.nl >r327-stdout.txt 2>r327-stderr.txt
+          rc=$?
+          set -e
+          printf 'R327_FIRST_PASS_EXIT=%s\n' "$rc"
+          printf 'R327_STDOUT_BYTES='; wc -c <r327-stdout.txt
+          printf 'R327_FIRST_DIAGNOSTIC_BEGIN\n'; cat r327-stderr.txt
+          printf 'R327_FIRST_DIAGNOSTIC_END\n'
+          sha256sum r327-stdout.txt r327-stderr.txt
+      - name: Upload isolated R evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r327-first-pass-independent
+          path: |
+            r327/independent_four_detach.nl
+            r327-stdout.txt
+            r327-stderr.txt
+          if-no-files-found: warn
