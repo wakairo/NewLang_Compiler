@@ -94,6 +94,15 @@ if(NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS)
     target_compile_definitions(newlang_options INTERFACE
         NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS=1)
 endif()
+option(NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT
+    "UNADOPTED Issue 319 single direct C.prev after two B calls and A.next; DO NOT MERGE" OFF)
+if(NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT)
+    if(NOT NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS)
+        message(FATAL_ERROR "Issue 319 requires the separate Issue 315 opt-in")
+    endif()
+    target_compile_definitions(newlang_options INTERFACE
+        NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT=1)
+endif()
 target_compile_options(newlang_options INTERFACE
     -Wall -Wextra -Wpedantic -Werror)
 if(NOT NEWLANG_SANITIZER STREQUAL "none")
@@ -219,6 +228,18 @@ if(BUILD_TESTING)
                                             "$<TARGET_FILE:five_root_source_gate_evidence>" "$<TARGET_FILE:two_scoped_field_evidence>")
                                         add_test(NAME cross_root_a_next_poison.unit COMMAND captured_closure_test full-cross-root-poison
                                             "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_cross_root_a_next.nl")
+                                        if(NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT)
+                                            add_executable(cross_root_c_prev_evidence tests/integration/cross_root_c_prev_evidence.c)
+                                            target_link_libraries(cross_root_c_prev_evidence PRIVATE newlang_semantic)
+                                            target_link_options(cross_root_c_prev_evidence PRIVATE
+                                                -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+                                            add_test(NAME cross_root_c_prev.integration COMMAND "${Python3_EXECUTABLE}"
+                                                "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/cross_root_c_prev_test.py"
+                                                "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:cross_root_c_prev_evidence>"
+                                                "$<TARGET_FILE:five_root_source_gate_evidence>" "$<TARGET_FILE:cross_root_a_next_evidence>")
+                                            add_test(NAME cross_root_c_prev_poison.unit COMMAND captured_closure_test full-fourth-cross-root-poison
+                                                "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_cross_root_c_prev.nl")
+                                        endif()
                                     endif()
                                 endif()
                                 add_test(NAME moved_b_prev_poison.unit COMMAND captured_closure_test full-scoped-poison
