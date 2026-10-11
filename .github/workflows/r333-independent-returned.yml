@@ -92,7 +92,7 @@ jobs:
           import hashlib,json,subprocess,re
           from pathlib import Path
           variants=sorted(Path("r333/variants").glob("*.nl"))
-          assert len(variants)==16,len(variants)
+          assert len(variants)==17,len(variants)
           product_control={"early_B_release_product_counterexample"}
           failed=[]
           counts={"semantic":0,"precision":0,"unsupported":0,"accepted_product_counterexample":0}
