@@ -76,7 +76,7 @@ static void inspect(const NLCheckedFragment *f, Metrics *m, unsigned depth) {
             m->matches++;
             NLCapturedClosureView c={0};
             if(nl_checked_captured_closure_view(f,i,&c)){
-                bool worlds_valid=(c.count==depth && c.count<=4);
+                bool worlds_valid=(c.count==m->matches-1 && c.count<=4);
                 for(size_t world=0;world<6;world++)
                     if(c.release_worlds[world]!=(world>=c.count?1u:0u))worlds_valid=false;
                 for(size_t j=0;j<c.count;j++){
@@ -86,7 +86,7 @@ static void inspect(const NLCheckedFragment *f, Metrics *m, unsigned depth) {
                        o->domain_availability!=NL_AVAILABLE)worlds_valid=false;
                 }
                 if(worlds_valid)m->worlds_ok++;
-                else {m->captured_failure++;puts("R318_CAPTURED_RELEASE_WORLD_MISMATCH");}
+                else {m->captured_failure++;printf("R318_CAPTURED_RELEASE_WORLD_MISMATCH count=%zu depth=%u ordinal=%u\n",c.count,depth,m->matches);}
                 NLCheckStatus st=nl_checked_captured_closure_validate(f,i);
                 if(st==NL_CHECK_OK)m->captured_success++;else m->captured_failure++;
                 printf("PUBLIC_CAPTURED_VALIDATOR node=%zu status=%d count=%zu worlds=[%zu,%zu,%zu,%zu,%zu,%zu]\n",
