@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""P308 reproducible source/public-API evidence; compiler code remains frozen."""
+"""P308 reproducible source/public-API evidence; each invocation uses a fixed compiler binary."""
 from pathlib import Path
 import hashlib,json,subprocess,sys,tempfile
 compiler,observer,boundary,calibration=sys.argv[1:5]
@@ -57,7 +57,12 @@ with tempfile.TemporaryDirectory(prefix='p308-source-') as temp:
         state=json.loads(b.stdout)
         assert (state['parse_status'],state['registration_status'],state['code'])==(0,status,code),(name,state)
         assert not r.stdout and not state['owned_entry_artifact']
-        if status: assert r.returncode==3 and state['snapshot_unchanged']
+        retry=False
+        if status:
+            assert r.returncode==3 and state['snapshot_unchanged']
+            clean=subprocess.run([observer,str(root/'tests/fixtures/experimental_moved_b_prev_call.nl'),'after-refusal',str(path)],capture_output=True,text=True,check=True)
+            retry=json.loads(clean.stdout.splitlines()[-1])['registration_refusal_rollback_retry']
+            assert retry
         else: assert r.returncode==4 and 'V1-BACKEND-UNSUPPORTED' in r.stderr
         observed=[];oom=[]
         if status==0:
@@ -75,7 +80,7 @@ with tempfile.TemporaryDirectory(prefix='p308-source-') as temp:
         span=state['start_byte'];end=state['end_byte']
         def position(byte):
             prefix=text.encode()[:byte].decode();return [prefix.count('\n')+1,len(prefix.rsplit('\n',1)[-1])+1]
-        rows.append(dict(name=name,sha256=hashlib.sha256(text.encode()).hexdigest(),cli_exit=r.returncode,diagnostic=r.stderr.replace(str(path),'<source>'),span_start=position(span),span_end=position(end),boundary=state,owned=observed,oom=oom,c_generated=False))
+        rows.append(dict(name=name,sha256=hashlib.sha256(text.encode()).hexdigest(),cli_exit=r.returncode,diagnostic=r.stderr.replace(str(path),'<source>'),span_start=position(span),span_end=position(end),boundary=state,registration_refusal_rollback_retry=retry,owned=observed,oom=oom,c_generated=False))
         print(name,state['registration_status'],state['code'],r.returncode)
 output=Path(sys.argv[5]) if len(sys.argv)>5 else Path('p308-observations.json')
 output.write_text(json.dumps(rows,indent=2,ensure_ascii=False)+'\n')

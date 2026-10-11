@@ -456,7 +456,32 @@ static bool sample_oom(const NLSyntaxTree *syntax,
     }
     return true;
 }
-static bool run(const char *path, bool oom)
+/* Refused source must not poison a context reused for a valid source. */
+static bool rejected_registration(NLSemanticContext *c, const char *path)
+{
+    NLSource *source = NULL;
+    NLParser *parser = NULL;
+    NLSyntaxTree *syntax = NULL;
+    NLSemanticSnapshot before, after;
+    NLFunctionUnitDiagnostic diagnostic = {0};
+    bool ok = false;
+    if (nl_source_load(path, &source) != NL_SOURCE_OK ||
+        nl_parser_create(source, &parser) != NL_PARSE_OK ||
+        nl_parser_parse_function_unit(parser, &syntax, NULL) != NL_PARSE_OK ||
+        !nl_semantic_snapshot(c, &before))
+        goto done;
+    const NLSyntaxTree *units[] = {syntax};
+    ok = nl_semantic_register_function_unit(c, units, 1, &diagnostic) !=
+             NL_CHECK_OK &&
+         nl_semantic_snapshot(c, &after) &&
+         !memcmp(&before, &after, sizeof(before));
+done:
+    nl_syntax_tree_destroy(syntax);
+    nl_parser_destroy(parser);
+    nl_source_destroy(source);
+    return ok;
+}
+static bool run(const char *path, bool oom, const char *refused)
 {
     NLSource *source = NULL, *entry_source = NULL;
     NLParser *parser = NULL, *entry_parser = NULL;
@@ -472,6 +497,8 @@ static bool run(const char *path, bool oom)
     const NLSyntaxTree *units[] = {syntax};
     NLFunctionUnitDiagnostic d = {0};
     NLCheckDiagnostic e = {0};
+    if (refused && !rejected_registration(c, refused))
+        goto done;
     if (nl_semantic_register_function_unit(c, units, 1, &d) != NL_CHECK_OK) {
         (void)nl_check_diagnostic_render(stderr, source, &d.diagnostic);
         goto done;
@@ -488,6 +515,8 @@ static bool run(const char *path, bool oom)
     evidence_source = source;
     ok = inspect(entry) && (!oom || (sample_oom(syntax, entry_syntax) &&
                                      sample_validator_oom(entry)));
+    if (ok && refused)
+        printf("{\"registration_refusal_rollback_retry\":true}\n");
 done:
     nl_checked_destroy(entry);
     nl_semantic_destroy(c);
@@ -501,8 +530,10 @@ done:
 }
 int main(int argc, char **argv)
 {
+    if (argc == 4 && !strcmp(argv[2], "after-refusal"))
+        return run(argv[1], false, argv[3]) ? EXIT_SUCCESS : EXIT_FAILURE;
     return (argc == 2 || (argc == 3 && !strcmp(argv[2], "oom"))) &&
-                   run(argv[1], argc == 3)
+                   run(argv[1], argc == 3, NULL)
                ? EXIT_SUCCESS
                : EXIT_FAILURE;
 }
