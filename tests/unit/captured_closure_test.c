@@ -1391,7 +1391,7 @@ static bool owner_parser_oom(const char *path)
 #ifdef NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
 /* Mutate owned production evidence only; never seed a successful source check.
  */
-static bool scoped_poison(const char *path)
+static bool scoped_poison(const char *path, bool second)
 {
     NLCheckedFragment *entry = NULL;
     NLCheckDiagnostic diagnostic = {0};
@@ -1401,7 +1401,8 @@ static bool scoped_poison(const char *path)
     NLCheckedFragment *leaf =
         (NLCheckedFragment *)nl_checked_match_arm(parent, match(parent), 1);
     NLScopedFieldCallView view;
-    const NLCheckedNodeId call = leaf->scoped_field_call;
+    const NLCheckedNodeId call =
+        second ? leaf->second_scoped_field_call : leaf->scoped_field_call;
     CHECK(nl_checked_scoped_field_call_view(leaf, call, &view) &&
           nl_checked_scoped_field_call_validate(leaf, call) == NL_CHECK_OK);
     NLCheckedFragment *callee = (NLCheckedFragment *)view.body;
@@ -1509,6 +1510,81 @@ static bool scoped_poison(const char *path)
 }
 #endif
 
+#ifdef NEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS
+static bool two_registry_poison(const char *path)
+{
+    CHECK(scoped_poison(path, false) && scoped_poison(path, true));
+    NLCheckedFragment *entry = NULL;
+    NLCheckDiagnostic diagnostic = {0};
+    CHECK(load(path, &entry, &diagnostic) == NL_CHECK_OK);
+    NLCheckedFragment *top = (NLCheckedFragment *)body(entry);
+    NLCheckedFragment *parent = at_count(entry, 4);
+    NLCheckedFragment *leaf =
+        (NLCheckedFragment *)nl_checked_match_arm(parent, match(parent), 1);
+    const NLCheckedNodeId first = leaf->scoped_field_call,
+                          second = leaf->second_scoped_field_call;
+    CHECK(first && second);
+    size_t rejected = 0;
+#define REJECT_PAIR()                                                          \
+    do {                                                                       \
+        CHECK(rejected_certificate(top, entry));                               \
+        ++rejected;                                                            \
+    } while (0)
+    leaf->scoped_field_call = 0;
+    CHECK(nl_checked_scoped_field_call_validate(leaf, first) != NL_CHECK_OK);
+    REJECT_PAIR();
+    leaf->scoped_field_call = first;
+    leaf->second_scoped_field_call = 0;
+    CHECK(nl_checked_scoped_field_call_validate(leaf, second) != NL_CHECK_OK);
+    REJECT_PAIR();
+    leaf->second_scoped_field_call = second;
+    leaf->scoped_field_call = second;
+    leaf->second_scoped_field_call = first;
+    CHECK(nl_checked_scoped_field_call_validate(leaf, first) != NL_CHECK_OK &&
+          nl_checked_scoped_field_call_validate(leaf, second) != NL_CHECK_OK);
+    REJECT_PAIR();
+    leaf->scoped_field_call = first;
+    leaf->second_scoped_field_call = first;
+    REJECT_PAIR();
+    leaf->second_scoped_field_call = second;
+    const NLCheckedNodeView first_node = leaf->nodes[first - 1],
+                            second_node = leaf->nodes[second - 1];
+    leaf->nodes[first - 1].kind = NL_CHECKED_UNIT;
+    REJECT_PAIR();
+    leaf->nodes[first - 1] = first_node;
+    leaf->nodes[second - 1].kind = NL_CHECKED_UNIT;
+    REJECT_PAIR();
+    leaf->nodes[second - 1] = second_node;
+    leaf->nodes[first - 1] = second_node;
+    leaf->nodes[second - 1] = first_node;
+    REJECT_PAIR();
+    leaf->nodes[first - 1] = first_node;
+    leaf->nodes[second - 1] = second_node;
+    NLScopedFieldCallView a, b;
+    CHECK(nl_checked_scoped_field_call_view(leaf, first, &a) &&
+          nl_checked_scoped_field_call_view(leaf, second, &b));
+    NLCheckedFragment *callee = (NLCheckedFragment *)b.body;
+    NLSemanticContext *before = callee->field_changes[0]->before;
+    const NLCheckedNodeView *projection =
+        nl_checked_node_view(leaf, a.projection);
+    const NLScopeId old_scope = projection->reference_result.scope;
+    CHECK(old_scope && !before->scopes[old_scope - 1].active);
+    before->scopes[old_scope - 1].active = true;
+    CHECK(nl_checked_scoped_field_call_validate(leaf, second) != NL_CHECK_OK);
+    REJECT_PAIR();
+    before->scopes[old_scope - 1].active = false;
+    CHECK(nl_checked_scoped_field_call_validate(leaf, first) == NL_CHECK_OK &&
+          nl_checked_scoped_field_call_validate(leaf, second) == NL_CHECK_OK &&
+          nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    printf("two-call registration/order/scope poison rejected: %zu; restored "
+           "public validators pass\n",
+           rejected);
+#undef REJECT_PAIR
+    nl_checked_destroy(entry);
+    return true;
+}
+#endif
+
 int main(int argc, char **argv)
 {
     if (argc >= 2 && strncmp(argv[1], "full-", 5) == 0) {
@@ -1526,8 +1602,12 @@ int main(int argc, char **argv)
 #ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
 #ifdef NEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL
 #ifdef NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
+#ifdef NEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS
+    if (strcmp(argv[1], "two-scoped-poison") == 0)
+        return two_registry_poison(argv[2]) ? 0 : 1;
+#endif
     if (strcmp(argv[1], "scoped-poison") == 0)
-        return scoped_poison(argv[2]) ? 0 : 1;
+        return scoped_poison(argv[2], false) ? 0 : 1;
 #endif
     if (strcmp(argv[1], "three-poison") == 0)
         return three_poison(argv[2]) ? 0 : 1;

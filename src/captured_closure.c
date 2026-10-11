@@ -737,6 +737,21 @@ NLCheckStatus nl_checked_scoped_field_call_validate(const NLCheckedFragment *f,
         projection->reference_result.scope > f->context->scope_count ||
         f->context->scopes[projection->reference_result.scope - 1].active)
         return INVALID;
+#ifdef NEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS
+    NLScopedFieldCallView pair[2];
+    if (f->second_scoped_field_call &&
+        (f->scoped_field_call >= f->second_scoped_field_call ||
+         !nl_checked_scoped_field_call_view(f, f->scoped_field_call,
+                                            &pair[0]) ||
+         !nl_checked_scoped_field_call_view(f, f->second_scoped_field_call,
+                                            &pair[1])))
+        return INVALID;
+    if (id == f->second_scoped_field_call &&
+        !nl_scoped_field_continuation(
+            f, projection, w.change.before,
+            argument_node(f, call, 1)->results[0].value))
+        return INVALID;
+#endif
     return change_validate_from(w.body, w.body->field_changes[0], f, id);
 #else
     (void)f;
@@ -1572,7 +1587,7 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
             return INVALID; /* finite lifecycle/field certificate profile */
         if (v->kind == NL_CHECKED_REGISTERED_CALL) {
 #ifdef NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
-            if (f->scoped_field_call == i) {
+            if (nl_scoped_field_call_member(f, i)) {
                 if (nested || count != 5 || frame_count != 1)
                     return INVALID;
                 NLCheckStatus status =
@@ -1892,9 +1907,13 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                                   .view.value == v->results[0].value;
             }
 #ifdef NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
-            if (f->scoped_field_call) {
+            const NLCheckedNodeId scoped_calls[] = {
+                f->scoped_field_call, f->second_scoped_field_call};
+            for (size_t scoped = 0; scoped < 2; ++scoped) {
+                if (!scoped_calls[scoped])
+                    continue;
                 NLScopedFieldCallView w;
-                if (!nl_checked_scoped_field_call_view(f, f->scoped_field_call,
+                if (!nl_checked_scoped_field_call_view(f, scoped_calls[scoped],
                                                        &w))
                     return INVALID;
                 const NLCheckedNodeView *write =
