@@ -365,6 +365,8 @@ int main(int argc,char **argv){
         REQUIRE(all_clean(&walk_result));
         Saved backup={0},secondary={0};
         if(!corrupt(case_id,&site,&backup,&secondary)){
+            unstash(&secondary);
+            unstash(&backup);
             fprintf(stderr,"R322_MUTATION_BARRIER case=%u\n",case_id);
             goto done;
         }
