@@ -10,12 +10,14 @@
 #include "newlang/semantic.h"
 #include "newlang/checked.h"
 #include "newlang/captured_closure.h"
+#include "newlang/raw_storage.h"
+#include "r318_strict_audit.h"
 
 typedef struct {
     unsigned matches, captured_success, captured_failure;
     unsigned scoped_calls, scoped_success, scoped_failure;
     unsigned direct_changes, change_snapshots, named_call_nodes;
-    unsigned trace_index;
+    unsigned trace_index, audit_attempted, audit_ok;
 } Metrics;
 static int same_snapshot(NLSemanticSnapshot a, NLSemanticSnapshot b) {
     return a.types==b.types && a.bindings==b.bindings &&
@@ -51,6 +53,7 @@ static void check_change(const NLCheckedFragment *f, Metrics *m) {
 static void inspect(const NLCheckedFragment *f, Metrics *m, unsigned depth) {
     if(!f || depth>32) {printf("INVALID fragment/depth\n");return;}
     check_change(f,m);
+    if(nl_checked_captured_change_count(f)==7){m->audit_attempted++;if(r318_strict_audit(f))m->audit_ok++;}
     size_t count=nl_checked_node_count(f);
     for(size_t i=1;i<=count;i++){
         const NLCheckedNodeView *v=nl_checked_node_view(f,i);
@@ -146,7 +149,7 @@ int main(int argc,char **argv){
     inspect(owned,&m,0);
     printf("R318_SUMMARY matches=%u public_captured_ok=%u captured_fail=%u public_scoped_calls=%u scoped_ok=%u scoped_fail=%u named_call_nodes=%u replace_nodes=%u captured_change_snapshots=%u\n",
         m.matches,m.captured_success,m.captured_failure,m.scoped_calls,m.scoped_success,m.scoped_failure,m.named_call_nodes,m.direct_changes,m.change_snapshots);
-    if(m.captured_success!=5 || m.scoped_success!=2 || m.scoped_failure!=0 || m.captured_failure!=0 || m.scoped_calls!=2 || m.named_call_nodes<2 || m.change_snapshots<7) { puts("R318_POSITIVE_NOT_PROVEN"); goto end; }
+    if(m.captured_success!=5 || m.scoped_success!=2 || m.scoped_failure!=0 || m.captured_failure!=0 || m.scoped_calls!=2 || m.named_call_nodes<2 || m.change_snapshots<7 || m.audit_attempted!=1 || m.audit_ok!=1) { puts("R318_POSITIVE_NOT_PROVEN"); goto end; }
     puts("R318_BASIC_PUBLIC_VALIDATORS_OK");
 end:
     nl_checked_destroy(owned);
