@@ -1,0 +1,95 @@
+name: R317 fresh blind independent source-owned test
+on:
+  push:
+    branches: [r317-blind-original-a-next-evidence]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-blind:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Confirm exact frozen ancestry and evidence-only changes
+        shell: bash
+        run: |
+          set -euxo pipefail
+          test "$(git merge-base HEAD 3d8621bab9c3c3b6bf509bebc3b17fd331502c28)" = "3d8621bab9c3c3b6bf509bebc3b17fd331502c28"
+          git log -1 --format='%H %P %s'
+          git diff --name-only 3d8621bab9c3c3b6bf509bebc3b17fd331502c28 HEAD | tee /tmp/r317-changed-files.txt
+          if grep -Ev '^(r317-evidence/|\.github/workflows/r317-fresh-blind\.yml$)' /tmp/r317-changed-files.txt; then
+            echo 'R317 forbidden change'; exit 1
+          fi
+          test "$(grep -c '^r317-evidence/' /tmp/r317-changed-files.txt)" -ge 2
+      - name: Install documented build prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap pinned compiler toolchain
+        run: python3 scripts/bootstrap.py
+      - name: Build exact frozen experimental compiler with nine opt-ins
+        shell: bash
+        run: |
+          set -euxo pipefail
+          source .deps/activate.sh
+          CC=gcc cmake -S . -B build-r317 -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=OFF \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS=ON \
+            -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS=ON
+          cmake --build build-r317 --parallel 2
+          ./build-r317/newlangc --version
+          cc -std=c17 -Wall -Wextra -Werror -Iinclude r317-evidence/r317_public_observer.c \
+            build-r317/libnewlang_semantic.a build-r317/libnewlang_checked.a \
+            build-r317/libnewlang_parser.a build-r317/libnewlang_syntax.a \
+            build-r317/libnewlang_lexer.a build-r317/libnewlang_source.a \
+            build-r317/libnewlang_diagnostic.a -o build-r317/r317_observer
+      - name: Source fingerprint CLI and owned observer positive
+        shell: bash
+        run: |
+          set -uo pipefail
+          source .deps/activate.sh
+          sha256sum r317-evidence/independent-five-root-three-change.nl r317-evidence/r317_public_observer.c
+          echo "=== POSITIVE CLI ==="
+          ./build-r317/newlangc r317-evidence/independent-five-root-three-change.nl >/tmp/r317-compiler-emission.txt 2>/tmp/r317-compiler-diag.txt
+          echo "CLI_EXIT=$?"
+          cat /tmp/r317-compiler-diag.txt
+          printf 'EMITTED_C_BYTES='; wc -c </tmp/r317-compiler-emission.txt
+          echo "=== POSITIVE PUBLIC OBSERVER ==="
+          ./build-r317/r317_observer r317-evidence/independent-five-root-three-change.nl
+      - name: Independent source mutation negatives and public rollback
+        shell: bash
+        run: |
+          set -uo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          s=Path("r317-evidence/independent-five-root-three-change.nl").read_text()
+          cases={
+           "a_wrong_b_domain": ("loan_read(life_A) { |proof_a_next|","loan_read(life_B_current) { |proof_a_next|"),
+           "b_wrong_a_domain": ("loan_read(life_B_current) { |proof_prev|","loan_read(life_A) { |proof_prev|"),
+           "a_read_ref_write": ("ref_from_ptr(write, ptr_A, proof_a_next)","ref_from_ptr(read, ptr_A, proof_a_next)"),
+           "b_read_ref_write": ("ref_from_ptr(write, ptr_B_current, proof_prev)","ref_from_ptr(read, ptr_B_current, proof_prev)"),
+           "third_helper_not_direct": ("replace(a_next@next, Option<ptr<Node>>::Some(ptr_C))","erase_link(a_next@next, Option<ptr<Node>>::Some(ptr_C))"),
+           "incorrect_a_initial": ("replace(target_1@next, Option<ptr<Node>>::Some(ptr_B))","replace(target_1@next, Option<ptr<Node>>::Some(ptr_C))"),
+           "repeat_old_b_owner": ("let ptr_B_current = held_ptr;","let ptr_B_current = held_ptr;\n                          let duplicated_B = held_allocation;"),
+           "incorrect_last_value": ("replace(a_next@next, Option<ptr<Node>>::Some(ptr_C))","replace(a_next@next, Option<ptr<Node>>::None)"),
+          }
+          p=Path("r317-evidence/negatives"); p.mkdir(exist_ok=True)
+          for name,(needle,replacement) in cases.items():
+              assert s.count(needle)==1,(name,s.count(needle))
+              (p/(name+".nl")).write_text(s.replace(needle,replacement))
+          PY
+          sha256sum r317-evidence/negatives/*.nl
+          for file in r317-evidence/negatives/*.nl; do
+            echo "=== NEGATIVE: $file ==="
+            ./build-r317/r317_observer "$file"
+            echo "OBSERVER_EXIT=$?"
+          done
