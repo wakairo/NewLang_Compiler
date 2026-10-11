@@ -1,0 +1,47 @@
+# P308 — single original-B prev named field call (UNSELECTED / DO NOT MERGE)
+
+This is a bounded NewLang compiler implementation and ownership-validation experiment, not a specification change. Fixed compiler parent PR302 `b28a49755f1bc254b6a8f7c337e5e1866d9483b8`, canonical Compiler/main `a5343bf70004b30a8b026e52aa2fde93b5920be0` / CURRENT_SPEC Draft17.30, FormalProof/main `a8de4ebb4099f4742fc161d26867740dcac48414`. PR298 is unrelated/not incorporated; PR302 and Draft17.31/DI015 remain unmerged/HOLD.
+
+## Concrete problem and bounded change
+
+After complete original B transfer through ordinary DetachedHolder and fresh same-original-D loan, the pinned checker stops at P297-CALL-PRECISION for `set_link(write_B@prev,None)` because caller admission and the public scoped-call validator independently require field index0. Canonical §3.2b already has distinct next/prev/child projections and direct correct-D field writes. The existing Change rederivation handles all three fixed places with exact child/parent incarnation/facts, scope, governing Domain, access, body substitution, occurrence conflicts and replay equality.
+
+New **NEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL** is default OFF and requires all six prior opt-ins. It adds only index1 as an alternate to index0 in a shared private checker/validator predicate. The one-call-per-fragment gate, exact two-formal source-defined one-replace helper, independent formal checks, all source-origin A/D/root proofs and existing Change semantics remain. It admits one correct prev projection from an actual proven original root; it does not encode special rights for the names B, Holder, Node or set_link. Index2, a second helper, general effects, caller/callee-local ownership acquisition, native generation and whole H1 remain excluded.
+
+The new source `tests/fixtures/experimental_moved_b_prev_call.nl` preserves all five original heap grants, six initial links, all allocation-failure cleanup, complete Holder moves, scoped reloan and original matched terminal releases. It only clears original B.prev Some(A)→None with one helper. Original immutable P297/full H1 calibrators and copied P306 next calibration retain their bytes. No extra direct field preparation or heap allocation.
+
+## Historical §4.2 Gates A–C (required, not N/A)
+
+Reviewed canonical §§3.2b/10–14/14.5/17.4/18/26–27, fixed-main Process §§4.1.1/4.2/6/7/9/10, Design Decision Procedure/Ledger, M266/M290/M305, P297/P306, R304 and new R307 disposition plus independent Coordination adjudication. Prior work is limited evidence, not proof that prev was already admitted. F59 remains proof-only adjunct and grants no selected core/source registry.
+
+| History / evidence class | Decision / reason and no-foreclosure |
+|---|---|
+| DI007/010, old mode-preserving ref/ptr field sketches; canonical bounded and experimental/Deferred | KEEP explicit same-D safe ref, separate opaque fixed ProjectionId and nonexclusive write semantics. Extend only one known-call index1 admission; DEFER ptr@field, implicit dereference and general field/loan API. |
+| DI009/014, historically normative two-site→canonical five-site/three-field direct source | KEEP original physical R/O/A/D, explicit 0..5 cleanup, distinct per-field places, six initial links. No sixth root or implicit Drop. |
+| DI011, canonical bounded known calls; P297 experimental helper | KEEP independent definition checking, actual caller applicability and body-sensitive Change/Reset substitution. Type-only formal is never matched original authority. |
+| DI012/013 canonical 2-H whole carrier/custody; P285 experimental ordinary complete aggregate transport | KEEP original D identity through whole transfer (§14.5), explicit whole consumption and nonDiscardable exit obligations. DEFER arbitrary partial move, generic owner/container and nonCopy Option exceptions. |
+| M266 Holder / M305 logical TreeD, design-only UNSELECTED | KEEP ordinary temporary one-field value with no privileged ownership law. Holder-first is the authorized witness, not a general permanent Owner API. DEFER two-owner TreeBOwner return and full adoption. |
+| P306/R307 next source→owned CLEAN(LIMITED), experimental/nonbinding | KEEP measured next baseline and the recorded prev precision refusal. Add actual prev owned/negative tests; do not promote previous next evidence to prev proof. |
+| DI015/Draft17.31 proposed HOLD; F59 proof-only adjunct | DEFER normative adoption/core registry bridge, full 4+2 and native/product selection. |
+
+No normative semantic rule is intentionally replaced. This is an explicitly unselected source-profile extension, so historical audit is COMPLETED rather than N/A. Ledger/Process/CURRENT_SPEC are unchanged: no normative selection or new design intent is being adopted, and the existing Deferred boundaries remain visible pending Coordination Gate D/E. Accessible canonical/source/ledger/prior reports were compared. Raw older Surface/M0/module files and complete M9 chats were not recovered in this worktree; absence is not evidence no old alternative existed.
+
+## Validation layers and reproducibility
+
+`evidence/p308/fixed-baseline.json` records pinned PR302 parse/register/CLI/owned calibration and the precise prev refusal. `r307-calibration.json` separately records both unchanged R307 novel next sources and their original public observer against the pinned compiler. Issue308 originally contained a P306 next SHA transcription mismatch; Coordination corrected it before this resumed final validation. Actual immutable bytes and R307 agree on `beffe69de3a858e6cc0a8a4d7acb86a569310a34cf5710716887a6a3b7c82e46`; no source was edited to match the incorrect literal.
+
+`moved_b_prev_evidence.c` uses public headers only, actual parser/register/main() check, non-NULL source-generated artifact, five public captured closure validators and the scoped-call validator. It observes original B root31/incarnation34/R3, A29/DId3/DValue34; old Domain place33 consumed versus new96 current; previous B scopes ended/new loan on new place; correct index1/field36; exact old Some(A) occurrence end, payload currentness cleared, new None; both next and child sibling PlaceViews unchanged; original whole repack and five unique exact matched frees. Original identities are checked against captured original evidence, never seeded from names. Public semantic IDs are world-qualified evidence, not machine addresses.
+
+`moved_b_prev_test.py` runs each CLI twice and separately parses/registers through the public rollback observer. It checks semantic negatives for wrong Domain, stale/duplicate owner, active-loan move/repack, Copy ptr stability/formal, read→write, escape, wrong terminal A/D, orphan responsibility. Borrowed old occurrence, unresolved alias, second helper and child helper remain classified as precision; Copy ptr field is unsupported. Some→Some positive gives a fresh Some occurrence. Type/helper/wrapper alpha variants verify that names grant no authority. Original next calibrations and the old regression corpus remain checked with the prev flag OFF and ON.
+
+Sampled registration/entry/public-validator OOM: 7 indices per stage (21), snapshots unchanged, failed entry NULL and same-context retry succeeds. Not exhaustive. Controlled post-generation invalid-artifact tests add accepted-index/child mismatch and second sibling corruption to the previous 10 cases: 12 refusals with restored public validation. Private corruption harness is a separate negative test; it never supplies successful source authority. The positive observer uses no private headers/seed APIs.
+
+Local GCC Debug regression: default OFF 249/249, prior six opt-ins ON / prev OFF 271/271, all seven ON 273/273 PASS. The new immutable witness SHA256 is `9c6a6b4e6a8c453d7839b86a52c5195de221ae6456f030477e1af20c9a183d46`. The source evidence corpus has 27 cases (6 accepted calibrations/positives, 15 semantic refusals, 4 precision refusals, 2 unsupported refusals), with each CLI checked twice. Sampled OOM allocation counts are 10152 / 9006 / 120 for registration / entry / validator; these are host checker allocations, not source heap grants.
+
+CLI4 / V1-BACKEND-UNSUPPORTED is expected after source admission: no native C or runtime/ABI cost claim. The independent branch push CI checks GCC Debug/Release, Clang, ASan/LSan, UBSan under default OFF, prior six ON/new flag OFF, and all seven ON. The original PR workflow also runs unchanged prior profiles.
+
+## Ceremony and stop
+
+Relative to the P306 Holder source, the accepted prev source changes the one projection and comment only: **0 new ownership operations, bindings, loan scopes, physical heap allocations**; same 248 lines, same 8 whole-value statements/12 receiving names. One extra build opt-in is required. Compared to original P297 calibration the Holder source still adds 11 lines/2 ordinary nominals. No erasure/stack/ABI/runtime zero-cost conclusion is possible because the backend is unsupported.
+
+Scope stops at this one field: no second helper, 4 detach+2 adopt, two-owner receiver join, post-A H1 release, general owner/borrow/effect framework, native backend, Draft17.31 adoption, main/PR302/PR298 changes, self-merge/close or other Track launch. Final CI and terminal disposition are recorded in Issue308; candidate remains UNSELECTED and cJSON H1 PASS/FAIL UNDECIDED.

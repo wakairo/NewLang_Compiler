@@ -1,0 +1,60 @@
+[
+  {
+    "name": "r307_double_holder_none.nl",
+    "sha256": "bb608808ede29c19689d97f0e9dd0e430ea63cb5e145e707e92266a0953cf159",
+    "cli_exit": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p308-evidence/r307/r307_double_holder_none.nl\n",
+    "observer_exit": 0,
+    "owned": {
+      "R": "307",
+      "original_B_root": 31,
+      "incarnation": 34,
+      "domain_id": 3,
+      "allocation_value": 29,
+      "domain_value": 34,
+      "old_D_place": 33,
+      "reloan_D_place": 98,
+      "projection_nominal": 10,
+      "projection_index": 0,
+      "field_fact_before": 92,
+      "field_fact_after": 115,
+      "old_occurrence": 5,
+      "new_occurrence": 0,
+      "old_payload_ended": true,
+      "prev_unchanged": true,
+      "source_owned_validators": true,
+      "five_matched_frees": true,
+      "new_some": false,
+      "native_execution": false
+    }
+  },
+  {
+    "name": "r307_some_to_some_B.nl",
+    "sha256": "0510dde007e8c0ede32c3b3e1ea580a74e42bc43d781bc3c7b28cab1bc87a49a",
+    "cli_exit": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p308-evidence/r307/r307_some_to_some_B.nl\n",
+    "observer_exit": 0,
+    "owned": {
+      "R": "307",
+      "original_B_root": 31,
+      "incarnation": 34,
+      "domain_id": 3,
+      "allocation_value": 29,
+      "domain_value": 34,
+      "old_D_place": 33,
+      "reloan_D_place": 96,
+      "projection_nominal": 10,
+      "projection_index": 0,
+      "field_fact_before": 92,
+      "field_fact_after": 114,
+      "old_occurrence": 5,
+      "new_occurrence": 8,
+      "old_payload_ended": true,
+      "prev_unchanged": true,
+      "source_owned_validators": true,
+      "five_matched_frees": true,
+      "new_some": true,
+      "native_execution": false
+    }
+  }
+]

@@ -100,8 +100,10 @@ static bool inspect(const NLCheckedFragment *entry)
     const NLCheckedNodeView *write =
         nl_checked_node_view(w.body, w.change.operation);
     const NLCheckedNodeView *projection = nl_checked_node_view(f, w.projection);
+    const size_t index = projection ? projection->field.index : 0;
     CHECK(write && projection && write->kind == NL_CHECKED_REPLACE &&
-          projection->kind == NL_CHECKED_FIELD_REF && write->field.index == 0 &&
+          projection->kind == NL_CHECKED_FIELD_REF && index <= 1 &&
+          write->field.index == index &&
           write->field.nominal == projection->field.nominal &&
           write->field.index == projection->field.index &&
           write->field.child == projection->field.child);
@@ -117,9 +119,9 @@ static bool inspect(const NLCheckedFragment *entry)
             root[i].live &&
             nl_semantic_place_view(worlds[i], write->field.child, &field[i]) &&
             field[i].live && root[i].fixed_field_count == 4 &&
-            root[i].fixed_fields[0] == write->field.child &&
+            root[i].fixed_fields[index] == write->field.child &&
             root[i].fixed_fields[0] != root[i].fixed_fields[1] &&
-            nl_semantic_place_view(worlds[i], root[i].fixed_fields[1],
+            nl_semantic_place_view(worlds[i], root[i].fixed_fields[1 - index],
                                    &prev[i]) &&
             prev[i].live &&
             nl_semantic_value_view(worlds[i], field[i].current_value,
@@ -169,7 +171,7 @@ static bool inspect(const NLCheckedFragment *entry)
     NLSemanticPlaceView old_target, new_target = {0};
     CHECK(nl_semantic_place_view(worlds[0], payload[0].reference.place,
                                  &old_target) &&
-          old_target.placement.region == 3);
+          old_target.placement.region == (index ? 4 : 3));
     if (value[1].variant == 2)
         CHECK(nl_semantic_place_view(worlds[1], payload[1].reference.place,
                                      &new_target) &&
@@ -205,31 +207,32 @@ static bool inspect(const NLCheckedFragment *entry)
         ++frees;
     }
     CHECK(frees == 5);
-    printf("{\"owned_source_artifact\":true,\"closure_validators\":5,\"scoped_"
-           "call_validator\":true,"
-           "\"caller_changes\":6,\"callee_changes\":1,\"ProjectionId_nominal\":"
-           "%zu,\"ProjectionId_index\":%zu,"
-           "\"root\":%zu,\"root_incarnation\":%zu,\"field\":%zu,\"field_"
-           "incarnation\":%zu,"
-           "\"fact_before\":%zu,\"fact_after\":%zu,\"old_occurrence\":%zu,"
-           "\"new_occurrence\":%zu,"
-           "\"old_ptr_region\":%zu,\"new_ptr_region\":%zu,"
-           "\"root_fact_before\":%zu,\"root_fact_after\":%zu,"
-           "\"Allocation_values\":[%zu,%zu,%zu,%zu,%zu],\"Domain_values\":[%zu,"
-           "%zu,%zu,%zu,%zu],"
-           "\"old_payload_place\":%zu,\"old_payload_current_cleared\":true,"
-           "\"prev_current_preserved\":true,\"original_A_D_preserved_unique\":"
-           "true,"
-           "\"scoped_ref_ended\":true,\"matched_frees\":5,\"native_execution\":"
-           "false}\n",
-           write->field.nominal, write->field.index, write->field.parent,
-           root[0].incarnation, write->field.child, field[0].incarnation,
-           field[0].current_fact, field[1].current_fact,
-           field[0].payload_occurrence, field[1].payload_occurrence,
-           old_target.placement.region, new_target.placement.region,
-           root[0].current_fact, root[1].current_fact, as[0][0], as[0][1],
-           as[0][2], as[0][3], as[0][4], ds[0][0], ds[0][1], ds[0][2], ds[0][3],
-           ds[0][4], old_occ.payload_place);
+    printf(
+        "{\"owned_source_artifact\":true,\"closure_validators\":5,\"scoped_"
+        "call_validator\":true,"
+        "\"caller_changes\":6,\"callee_changes\":1,\"ProjectionId_nominal\":"
+        "%zu,\"ProjectionId_index\":%zu,"
+        "\"root\":%zu,\"root_incarnation\":%zu,\"field\":%zu,\"field_"
+        "incarnation\":%zu,"
+        "\"fact_before\":%zu,\"fact_after\":%zu,\"old_occurrence\":%zu,"
+        "\"new_occurrence\":%zu,"
+        "\"old_ptr_region\":%zu,\"new_ptr_region\":%zu,"
+        "\"root_fact_before\":%zu,\"root_fact_after\":%zu,"
+        "\"Allocation_values\":[%zu,%zu,%zu,%zu,%zu],\"Domain_values\":[%zu,"
+        "%zu,%zu,%zu,%zu],"
+        "\"old_payload_place\":%zu,\"old_payload_current_cleared\":true,"
+        "\"sibling_current_preserved\":true,\"original_A_D_preserved_unique\":"
+        "true,"
+        "\"scoped_ref_ended\":true,\"matched_frees\":5,\"native_execution\":"
+        "false}\n",
+        write->field.nominal, write->field.index, write->field.parent,
+        root[0].incarnation, write->field.child, field[0].incarnation,
+        field[0].current_fact, field[1].current_fact,
+        field[0].payload_occurrence, field[1].payload_occurrence,
+        old_target.placement.region, new_target.placement.region,
+        root[0].current_fact, root[1].current_fact, as[0][0], as[0][1],
+        as[0][2], as[0][3], as[0][4], ds[0][0], ds[0][1], ds[0][2], ds[0][3],
+        ds[0][4], old_occ.payload_place);
     return true;
 }
 static bool sample_validator_oom(const NLCheckedFragment *entry)

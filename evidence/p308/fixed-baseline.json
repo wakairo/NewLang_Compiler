@@ -1,0 +1,159 @@
+[
+  {
+    "name": "held_B_next_None.nl",
+    "sha256": "beffe69de3a858e6cc0a8a4d7acb86a569310a34cf5710716887a6a3b7c82e46",
+    "cli_exit": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p306/evidence/p306/held_B_next_None.nl\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 0,
+      "code": "",
+      "start_byte": 0,
+      "end_byte": 0,
+      "snapshot_unchanged": false,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "owned": [
+      {
+        "original_B_domain": 3,
+        "original_B_allocation_value": 29,
+        "original_B_domain_value": 34,
+        "old_domain_place": 33,
+        "new_domain_place": 96,
+        "old_binding_consumed": true,
+        "new_binding_sole_current": true,
+        "fresh_loan_on_new_place": true,
+        "prior_B_loans_ended": 2,
+        "repacked_and_exactly_released": true
+      },
+      {
+        "owned_source_artifact": true,
+        "closure_validators": 5,
+        "scoped_call_validator": true,
+        "caller_changes": 6,
+        "callee_changes": 1,
+        "ProjectionId_nominal": 10,
+        "ProjectionId_index": 0,
+        "root": 31,
+        "root_incarnation": 34,
+        "field": 35,
+        "field_incarnation": 35,
+        "fact_before": 92,
+        "fact_after": 113,
+        "old_occurrence": 5,
+        "new_occurrence": 0,
+        "old_ptr_region": 4,
+        "new_ptr_region": 0,
+        "root_fact_before": 93,
+        "root_fact_after": 114,
+        "Allocation_values": [
+          1,
+          15,
+          29,
+          43,
+          57
+        ],
+        "Domain_values": [
+          6,
+          20,
+          34,
+          48,
+          62
+        ],
+        "old_payload_place": 84,
+        "old_payload_current_cleared": true,
+        "prev_current_preserved": true,
+        "original_A_D_preserved_unique": true,
+        "scoped_ref_ended": true,
+        "matched_frees": 5,
+        "native_execution": false
+      }
+    ]
+  },
+  {
+    "name": "held_B_prev_None_blocker.nl",
+    "sha256": "b2a4e1c11a85b4c7c4eeb40fdfac4552f834374526a1974386ce1a752998a3d9",
+    "cli_exit": 3,
+    "diagnostic": "/workspace/p306/evidence/p306/held_B_prev_None_blocker.nl:201:49-201:95: error(precision)[P297-CALL-PRECISION]: requires one explicit original scoped next-field projection\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 3,
+      "code": "P297-CALL-PRECISION",
+      "start_byte": 12554,
+      "end_byte": 12600,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    }
+  },
+  {
+    "name": "experimental_scoped_field_call.nl",
+    "sha256": "e83854ba2b37f8c522fa119c282ce48d5b4914e8868ebe7f51f96ad2e96f5096",
+    "cli_exit": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p297/tests/fixtures/experimental_scoped_field_call.nl\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 0,
+      "code": "",
+      "start_byte": 0,
+      "end_byte": 0,
+      "snapshot_unchanged": false,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "owned": [
+      {
+        "owned_source_artifact": true,
+        "closure_validators": 5,
+        "scoped_call_validator": true,
+        "caller_changes": 6,
+        "callee_changes": 1,
+        "ProjectionId_nominal": 10,
+        "ProjectionId_index": 0,
+        "root": 18,
+        "root_incarnation": 21,
+        "field": 22,
+        "field_incarnation": 22,
+        "fact_before": 80,
+        "fact_after": 107,
+        "old_occurrence": 3,
+        "new_occurrence": 8,
+        "old_ptr_region": 3,
+        "new_ptr_region": 4,
+        "root_fact_before": 81,
+        "root_fact_after": 108,
+        "Allocation_values": [
+          1,
+          15,
+          29,
+          43,
+          57
+        ],
+        "Domain_values": [
+          6,
+          20,
+          34,
+          48,
+          62
+        ],
+        "old_payload_place": 76,
+        "old_payload_current_cleared": true,
+        "prev_current_preserved": true,
+        "original_A_D_preserved_unique": true,
+        "scoped_ref_ended": true,
+        "matched_frees": 5,
+        "native_execution": false
+      }
+    ]
+  }
+]
