@@ -95,6 +95,15 @@ jobs:
           bad['minimal_alias_inline']=inline_helper(strip_observers(no_holder(s)))
           bad['original_holder_no_observers']=strip_observers(s)
           bad['original_holder_inline']=inline_helper(strip_observers(s))
+          bad['minimal_holder_some_to_some']=bad['minimal_holder_call'].replace(
+            'set_link(write_B_change@prev, Option<ptr<Node>>::None);',
+            'set_link(write_B_change@prev, Option<ptr<Node>>::Some(ptr_C));')
+          bad['minimal_holder_wrong_domain']=bad['minimal_holder_call'].replace(
+            'let changed_prev = loan_read(original_domain_B)',
+            'let changed_prev = loan_read(life_A)')
+          bad['minimal_holder_active_loan_move']=bad['minimal_holder_call'].replace(
+            'let original_holder = DetachedHolder { owned_ptr: ptr_B, owned_allocation: allocation_B, owned_domain: life_B };',
+            'let original_holder = loan_read(life_B) { |still_stable| DetachedHolder { owned_ptr: ptr_B, owned_allocation: allocation_B, owned_domain: life_B } };')
           for name,src in bad.items():
             (d/(name+'.nl')).write_text(src)
           PY
@@ -117,7 +126,7 @@ jobs:
             build-r310/libnewlang_parser.a build-r310/libnewlang_source.a \
             build-r310/libnewlang_syntax.a build-r310/libnewlang_lexer.a \
             build-r310/libnewlang_diagnostic.a -Wl,--end-group -o /tmp/r310/public-observer
-          for sample in minimal_holder_call minimal_alias_call minimal_holder_inline wrong_domain duplicate_owner wrong_terminal_domain positive; do
+          for sample in minimal_holder_call minimal_holder_some_to_some minimal_alias_call minimal_holder_inline minimal_holder_wrong_domain minimal_holder_active_loan_move wrong_domain duplicate_owner wrong_terminal_domain positive; do
             echo "R310_PUBLIC_SAMPLE=$sample"
             /tmp/r310/public-observer "/tmp/r310/$sample.nl"
           done
