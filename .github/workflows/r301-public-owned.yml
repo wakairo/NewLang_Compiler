@@ -36,7 +36,7 @@ jobs:
           Path('r-evidence/301/results/variant-copy-pointer.nl').write_text(alt)
           assert source.count("let result=TreeTwo{root:receiver,child:detached}; return result;")==1
           alt=source.replace("let result=TreeTwo{root:receiver,child:detached}; return result;",
-                             "let saved=detached; let result=TreeTwo{child:saved,root:receiver}; return result;")
+                             "let result=TreeTwo{child:detached,root:receiver}; return result;")
           Path('r-evidence/301/results/variant-return-placement.nl').write_text(alt)
           PY
       - name: Build immutable PR295 compiler with all five experimental opt-ins
