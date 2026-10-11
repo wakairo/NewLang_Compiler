@@ -62,6 +62,14 @@ jobs:
           build/p315-public-observer evidence/p315/generated/third-A-next-own-domain.nl \
             > build/p315-seven-public-owned.txt
           cat build/p315-seven-public-owned.txt
+      - name: Run fourteen independent semantic and finite-profile refusal controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .deps/activate.sh
+          python3 evidence/p315/probe_negatives.py build/newlangc \
+            build/five_root_source_gate_evidence build/p315-public-observer \
+            | tee build/p315-negative-observations.txt
       - uses: actions/upload-artifact@v4
         if: always()
         with:
