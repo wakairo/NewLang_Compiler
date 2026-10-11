@@ -25,7 +25,7 @@ for name,(source,expect) in checks.items():
  datum=json.loads(obs.stdout)
  print(json.dumps(dict(negative=name,sha256=hashlib.sha256(source.encode()).hexdigest(),exit=cli.returncode,
     status=datum.get("registration_status"),code=datum.get("code"),rollback=datum.get("snapshot_unchanged"),
-    start=datum.get("start_byte"),end=datum.get("end_byte")),flush=True)
+    start=datum.get("start_byte"),end=datum.get("end_byte"))),flush=True)
  if cli.returncode!=3 or datum.get("code")!=expect or not datum.get("snapshot_unchanged"):
   raise AssertionError((name,expect,cli.stderr,datum))
  (Path(folder)/(name+".stderr")).write_text(cli.stderr)

@@ -77,6 +77,10 @@ int main(int argc,char **argv){
   }
  }
  REQUIRE(callid&&nl_checked_scoped_field_call_validate(f,callid)==NL_CHECK_OK);
+ // Public invalid-ID refusal then read-only revalidation; not forged-artifact corruption.
+ REQUIRE(nl_checked_scoped_field_call_validate(f,0)!=NL_CHECK_OK);
+ REQUIRE(nl_checked_scoped_field_call_validate(f,callid)==NL_CHECK_OK);
+ REQUIRE(nl_checked_captured_closure_validate(f,callid)!=NL_CHECK_OK);
  REQUIRE(nl_checked_captured_change_count(callview.body)==1);
  const NLCheckedNodeView *change=nl_checked_node_view(callview.body,callview.change.operation);
  const NLCheckedNodeView *projection=nl_checked_node_view(f,callview.projection);
@@ -101,11 +105,20 @@ int main(int argc,char **argv){
  REQUIRE(nl_semantic_place_view(post,r0.fixed_fields[2],&child1));
  REQUIRE(p0.live&&p1.live&&p0.incarnation==p1.incarnation&&p0.current_fact!=p1.current_fact);
  REQUIRE(unchanged_sibling(&next0,&next1)&&unchanged_sibling(&child0,&child1));
+ NLSemanticValueView nextsum,childsum,nextptr,oldptr,newptr;
+ REQUIRE(nl_semantic_value_view(pre,next0.current_value,&nextsum)&&nextsum.variant==2);
+ REQUIRE(nl_semantic_value_view(pre,nextsum.sum_payload,&nextptr));
+ NLSemanticPlaceView nexttarget;
+ REQUIRE(nl_semantic_place_view(pre,nextptr.reference.place,&nexttarget)&&nexttarget.placement.region==4);
+ REQUIRE(nl_semantic_value_view(pre,child0.current_value,&childsum)&&childsum.variant==1);
  REQUIRE(p0.current_value==change->field.old_value&&p1.current_value==change->field.new_value);
  NLSemanticValueView oldval,newval;
  REQUIRE(nl_semantic_value_view(pre,p0.current_value,&oldval));
  REQUIRE(nl_semantic_value_view(post,p1.current_value,&newval));
  REQUIRE(oldval.variant==2&&p0.payload_occurrence);
+ REQUIRE(nl_semantic_value_view(pre,oldval.sum_payload,&oldptr));
+ NLSemanticPlaceView oldtarget;
+ REQUIRE(nl_semantic_place_view(pre,oldptr.reference.place,&oldtarget)&&oldtarget.placement.region==2);
  NLSemanticOccurrenceView oldocc0,oldocc1,newocc;
  REQUIRE(nl_semantic_occurrence_view(pre,p0.payload_occurrence,&oldocc0)&&oldocc0.live);
  REQUIRE(nl_semantic_occurrence_view(post,p0.payload_occurrence,&oldocc1)&&!oldocc1.live);
@@ -115,6 +128,9 @@ int main(int argc,char **argv){
  else{
   REQUIRE(!strcmp(argv[2],"some")&&newval.variant==2&&p1.payload_occurrence!=p0.payload_occurrence);
   REQUIRE(nl_semantic_occurrence_view(post,p1.payload_occurrence,&newocc)&&newocc.live);
+  REQUIRE(nl_semantic_value_view(post,newval.sum_payload,&newptr));
+  NLSemanticPlaceView newtarget;
+  REQUIRE(nl_semantic_place_view(post,newptr.reference.place,&newtarget)&&newtarget.placement.region==4);
  }
  NLSemanticBindingView first_d,first_a,moved_d,moved_a;
  REQUIRE(nl_semantic_binding_view(original.origin,original.domain_binding,&first_d));
