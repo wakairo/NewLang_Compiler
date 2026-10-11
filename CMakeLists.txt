@@ -125,6 +125,14 @@ if(BUILD_TESTING)
                         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/owner_aggregate_test.py"
                         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:owner_aggregate_evidence>"
                         "$<TARGET_FILE:five_root_source_gate_evidence>")
+                    add_executable(mixed_repair_evidence tests/integration/mixed_repair_evidence.c)
+                    target_link_libraries(mixed_repair_evidence PRIVATE newlang_semantic)
+                    target_link_options(mixed_repair_evidence PRIVATE
+                        -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+                    add_test(NAME mixed_repair.integration COMMAND "${Python3_EXECUTABLE}"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/mixed_repair_test.py"
+                        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:five_root_source_gate_evidence>"
+                        "$<TARGET_FILE:mixed_repair_evidence>")
                     foreach(mode owner-poison owner-parser-oom oom checker-oom)
                         add_test(NAME owner_aggregate_${mode}.unit COMMAND captured_closure_test full-${mode}
                             "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_owner_aggregate_transport.nl")
