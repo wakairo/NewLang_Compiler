@@ -217,6 +217,29 @@ static bool original_is_inside_return(const NLSemanticContext *ctx,
     }
     return false;
 }
+/* Original physical roots and all four fixed sibling field facts must be
+ * invariant under the source-defined PURE owner-value call/return. */
+static bool same_five_roots_20_fields(const NLSemanticContext *a,
+                                      const NLSemanticContext *b) {
+    for(size_t region=1;region<=5;++region) {
+        NLPlaceId left=0,right=0;
+        NLSemanticPlaceView l,r;
+        REQUIRE(root_for(a,region,&left,&l) && root_for(b,region,&right,&r));
+        REQUIRE(left==right && l.live && r.live &&
+                l.incarnation==r.incarnation && l.current_fact==r.current_fact);
+        for(size_t field=0;field<4;++field) {
+            NLSemanticPlaceView fl,fr;
+            REQUIRE(l.fixed_fields[field] && l.fixed_fields[field]==r.fixed_fields[field] &&
+                    nl_semantic_place_view(a,l.fixed_fields[field],&fl) &&
+                    nl_semantic_place_view(b,r.fixed_fields[field],&fr) &&
+                    fl.live && fr.live && fl.incarnation==fr.incarnation &&
+                    fl.current_value==fr.current_value &&
+                    fl.current_fact==fr.current_fact &&
+                    fl.payload_occurrence==fr.payload_occurrence);
+        }
+    }
+    return true;
+}
 static bool returned_two_owner(const NLCheckedFragment *f) {
     NLWholeValueCallView call={0};
     NLTwoRootCallView late={0};
@@ -235,6 +258,22 @@ static bool returned_two_owner(const NLCheckedFragment *f) {
     }
     REQUIRE(call_id && late_id>call_id && call.count==3 &&
             late.input==call.result && late.donor==call.receiver);
+    const NLCheckedFragment *body=nl_checked_call_body(f,call_id);
+    REQUIRE(body);
+    size_t returns=0,aggregates=0;
+    for(NLCheckedNodeId n=1;n<=nl_checked_node_count(body);++n) {
+        const NLCheckedNodeView *v=nl_checked_node_view(body,n);
+        REQUIRE(v);
+        REQUIRE(v->kind==NL_CHECKED_BLOCK || v->kind==NL_CHECKED_BINDING ||
+                v->kind==NL_CHECKED_AGGREGATE || v->kind==NL_CHECKED_IDENTIFIER ||
+                v->kind==NL_CHECKED_RETURN || v->kind==NL_CHECKED_AGGREGATE_FIELD ||
+                v->kind==NL_CHECKED_STATEMENT || v->kind==NL_CHECKED_RECEIVER);
+        returns+=v->kind==NL_CHECKED_RETURN;
+        aggregates+=v->kind==NL_CHECKED_AGGREGATE;
+    }
+    REQUIRE(returns==1 && aggregates==1);
+    REQUIRE(same_five_roots_20_fields(call.entry,call.returned) &&
+            same_five_roots_20_fields(call.entry,call.received));
     NLCheckStatus validation=nl_checked_two_root_call_validate(f,late_id);
     REQUIRE(validation==NL_CHECK_OK);
     NLValueId baseline_a[5],baseline_d[5],other_a[5],other_d[5];
