@@ -1,0 +1,92 @@
+name: R333 limited independent calibration probe
+on:
+  push:
+    branches: [r333-independent-returned-composition-20261012]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 20
+      - name: Exact-head ancestry and evidence-only file gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor de9c4b175784f484675b670a109f62edeaf35de1 HEAD
+          test "$(git merge-base de9c4b175784f484675b670a109f62edeaf35de1 HEAD)" = de9c4b175784f484675b670a109f62edeaf35de1
+          git diff --name-only de9c4b175784f484675b670a109f62edeaf35de1 HEAD > r333-changed-paths.txt
+          cat r333-changed-paths.txt
+          if grep -Ev '^(r333/|\.github/workflows/r333-calibrated\.yml$)' r333-changed-paths.txt; then exit 21; fi
+          sha256sum r333/independent_returned.nl
+          git log --format='%H %s' -3
+      - name: Install compiler dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap pinned SDK
+        run: python3 scripts/bootstrap.py
+      - name: Build exact experimental profile with all ten explicit flags
+        env:
+          CC: gcc-13
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build-r333 -DCMAKE_BUILD_TYPE=Debug \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS=ON \
+            -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS=ON \
+            -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT=ON
+          cmake --build build-r333 --parallel 2 --target newlangc newlang_semantic
+      - name: Independently probe source parse/register/main in exact compiler
+        shell: bash
+        run: |
+          set +e
+          ./build-r333/newlangc r333/independent_returned.nl > r333-stdout.txt 2> r333-stderr.txt
+          rc=$?
+          set -e
+          echo "R333_PROBE_EXIT=$rc"
+          printf 'R333_PROBE_STDOUT_BYTES='
+          wc -c <r333-stdout.txt
+          echo 'R333_DIAGNOSTICS_BEGIN'
+          cat r333-stderr.txt
+          echo 'R333_DIAGNOSTICS_END'
+          sha256sum r333/independent_returned.nl r333-stdout.txt r333-stderr.txt
+          printf '%s\n' "$rc" > r333-exit.txt
+          # Source-accepted experiment must yield backend unsupported (exit 4) and no C bytes.
+          test "$rc" -eq 4
+          test ! -s r333-stdout.txt
+          grep -q 'V1-BACKEND-UNSUPPORTED' r333-stderr.txt
+      - name: Compile R-owned public observer and require eight actual validator results
+        shell: bash
+        run: |
+          set -euo pipefail
+          gcc-13 -std=c17 -O0 -g -I include r333/public_observer.c \
+            -Wl,--start-group build-r333/libnewlang_semantic.a \
+            build-r333/libnewlang_checked.a build-r333/libnewlang_parser.a \
+            build-r333/libnewlang_diagnostic.a build-r333/libnewlang_syntax.a \
+            build-r333/libnewlang_lexer.a build-r333/libnewlang_source.a \
+            -Wl,--end-group -o r333-observer
+          ./r333-observer r333/independent_returned.nl | tee r333-observer.log
+          sha256sum r333/public_observer.c r333/independent_returned.nl r333-observer.log
+      - name: Upload R333 diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r333-first-composite-probe
+          path: |
+            r333/independent_returned.nl
+            r333-stdout.txt
+            r333-stderr.txt
+            r333-exit.txt
+            r333-observer.log
+            r333-changed-paths.txt
+          if-no-files-found: warn
