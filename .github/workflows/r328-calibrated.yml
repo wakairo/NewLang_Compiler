@@ -1,0 +1,76 @@
+name: R328 limited independent calibration probe
+on:
+  push:
+    branches: [r328-calibrated-second-pass-20261011]
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 20
+      - name: Exact-head ancestry and evidence-only file gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor de9c4b175784f484675b670a109f62edeaf35de1 HEAD
+          test "$(git merge-base de9c4b175784f484675b670a109f62edeaf35de1 HEAD)" = de9c4b175784f484675b670a109f62edeaf35de1
+          git diff --name-only de9c4b175784f484675b670a109f62edeaf35de1 HEAD > r328-changed-paths.txt
+          cat r328-changed-paths.txt
+          if grep -Ev '^(r328/|\.github/workflows/r328-calibrated\.yml$)' r328-changed-paths.txt; then exit 21; fi
+          sha256sum r328/independent_calibrated.nl
+          git log --format='%H %s' -3
+      - name: Install compiler dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap pinned SDK
+        run: python3 scripts/bootstrap.py
+      - name: Build exact experimental profile with all ten explicit flags
+        env:
+          CC: gcc-13
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build-r328 -DCMAKE_BUILD_TYPE=Debug \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS=ON \
+            -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS=ON \
+            -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT=ON
+          cmake --build build-r328 --parallel 2 --target newlangc newlang_semantic
+      - name: Independently probe source parse/register/main in exact compiler
+        shell: bash
+        run: |
+          set +e
+          ./build-r328/newlangc r328/independent_calibrated.nl > r328-stdout.txt 2> r328-stderr.txt
+          rc=$?
+          set -e
+          echo "R328_PROBE_EXIT=$rc"
+          printf 'R328_PROBE_STDOUT_BYTES='
+          wc -c <r328-stdout.txt
+          echo 'R328_DIAGNOSTICS_BEGIN'
+          cat r328-stderr.txt
+          echo 'R328_DIAGNOSTICS_END'
+          sha256sum r328/independent_calibrated.nl r328-stdout.txt r328-stderr.txt
+          printf '%s\n' "$rc" > r328-exit.txt
+          # Probe records the first real barrier; diagnostic-capture SUCCESS != source acceptance.
+      - name: Upload R328 diagnostic evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r328-calibrated-probe
+          path: |
+            r328/independent_calibrated.nl
+            r328-stdout.txt
+            r328-stderr.txt
+            r328-exit.txt
+            r328-changed-paths.txt
+          if-no-files-found: warn
