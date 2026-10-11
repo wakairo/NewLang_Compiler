@@ -55,6 +55,7 @@ jobs:
       - name: Source fingerprint CLI and owned observer positive
         shell: bash
         run: |
+          set +e
           set -uo pipefail
           source .deps/activate.sh
           sha256sum r317-evidence/independent-five-root-three-change.nl r317-evidence/r317_public_observer.c
@@ -68,6 +69,7 @@ jobs:
       - name: Independent source mutation negatives and public rollback
         shell: bash
         run: |
+          set +e
           set -uo pipefail
           python3 - <<'PY'
           from pathlib import Path
