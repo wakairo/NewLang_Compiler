@@ -1,0 +1,14 @@
+{
+  "compiler": "de9c4b175784f484675b670a109f62edeaf35de1",
+  "compiler_main": "a5343bf70004b30a8b026e52aa2fde93b5920be0",
+  "canonical": "Draft17.30",
+  "formalproof_main": "a8de4ebb4099f4742fc161d26867740dcac48414",
+  "calibration_commit": "46a02e60cabce1b63cc3db4bc9035fe06f5f8009",
+  "calibration_source_sha256": "bd7692f8118c8e4de2b7662b0f90fcf503a548d9948bfded27bd430ad127716d",
+  "calibration_observer_sha256": "6cb44a88f43c7f844f243aabca8e11ced74536d7876a8fbed0604dd2656f3619",
+  "gate_release": "https://github.com/wakairo/NewLang_Compiler/issues/334#issuecomment-6113375396",
+  "started_utc": "2026-10-11 20:28:31 UTC",
+  "compiler_changes": false,
+  "new_flags": false,
+  "fresh_local_compiler_sha256": "a14014b8d04bd4343adaf460d8be85c9615f859596268eaf82f855385002d5e8"
+}
