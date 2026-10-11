@@ -74,6 +74,47 @@ jobs:
             -Wl,--end-group -o r328-observer
           ./r328-observer r328/independent_calibrated.nl | tee r328-observer.log
           sha256sum r328/independent_observer.c r328/independent_calibrated.nl r328-observer.log
+      - name: Generate fourteen independent source controls and exercise transactional public boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 r328/make_negatives.py | tee r328-mutations.log
+          gcc-13 -std=c17 -O0 -g -I include r328/rollback_probe.c \
+            -Wl,--start-group build-r328/libnewlang_semantic.a \
+            build-r328/libnewlang_checked.a build-r328/libnewlang_parser.a \
+            build-r328/libnewlang_diagnostic.a build-r328/libnewlang_syntax.a \
+            build-r328/libnewlang_lexer.a build-r328/libnewlang_source.a \
+            -Wl,--end-group -o r328-rollback
+          python3 - <<'PY' | tee r328-negative-results.jsonl
+          import hashlib,json,re,subprocess
+          from pathlib import Path
+          variants=sorted(Path("r328/variants").glob("*.nl"))
+          assert len(variants)==14,len(variants)
+          bad_authority = {"B_prev_wrong_A_domain","B_next_wrong_C_domain",
+           "A_next_wrong_B_domain","C_prev_wrong_A_domain","B_prev_read_not_write",
+           "B_next_ptr_not_ref","B_original_owner_after_move",
+           "B_allocation_double_consume","C_terminal_wrong_D","active_B_loan_during_move"}
+          violations=[]
+          for file in variants:
+              source=file.read_bytes()
+              test=subprocess.run(["./build-r328/newlangc",str(file)],capture_output=True,text=True)
+              assert test.returncode in (3,4),(file,test.returncode,test.stderr)
+              assert not test.stdout,(file,len(test.stdout))
+              lines=test.stderr.splitlines()
+              outcome=lines[0] if lines else ""
+              boundary=subprocess.run(["./r328-rollback","r328/independent_calibrated.nl",str(file)],capture_output=True,text=True)
+              row={"name":file.stem,"sha256":hashlib.sha256(source).hexdigest(),
+                   "cli_exit":test.returncode,"first_diagnostic":outcome,
+                   "boundary_exit":boundary.returncode,
+                   "boundary_stdout":boundary.stdout.strip(),"boundary_stderr":boundary.stderr.strip()}
+              print(json.dumps(row,ensure_ascii=False),flush=True)
+              if file.stem in bad_authority and test.returncode==4: violations.append(file.stem)
+              if boundary.returncode!=0: violations.append(file.stem+":rollback_probe_failed")
+          print(json.dumps({"summary":"R328_NEGATIVES","total":len(variants),
+                            "unexpected_semantic_admission_or_rollback_failure":violations}))
+          assert not violations,violations
+          PY
+          sha256sum r328/rollback_probe.c r328/make_negatives.py r328-negative-results.jsonl
       - name: Upload R328 diagnostic evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -85,5 +126,8 @@ jobs:
             r328-stderr.txt
             r328-exit.txt
             r328-observer.log
+            r328-mutations.log
+            r328-negative-results.jsonl
+            r328/variants/
             r328-changed-paths.txt
           if-no-files-found: warn
