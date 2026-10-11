@@ -91,10 +91,12 @@ jobs:
           cmake --build build --parallel 2
           ctest --test-dir build --output-on-failure | tee build/p315-nine-tests.txt
           python3 evidence/p315/probe_candidate.py build/newlangc build/five_root_source_gate_evidence | tee build/p315-nine-source.txt
-          gcc-13 -std=c17 -O0 -g -Iinclude evidence/p315/public_seventh_observer.c \
+          SAN_ARGS=()
+          if [ "${{ matrix.sanitizer }}" != "none" ]; then SAN_ARGS+=("-fsanitize=${{ matrix.sanitizer }}" "-fno-sanitize-recover=all"); fi
+          ${{ matrix.compiler }} -std=c17 -O0 -g -Iinclude evidence/p315/public_seventh_observer.c \
             -Wl,--start-group $(find build -name '*.a') -Wl,--end-group \
             -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc -lm \
-            -o build/p315-public-observer
+            "${SAN_ARGS[@]}" -o build/p315-public-observer
           build/p315-public-observer evidence/p315/generated/third-A-next-own-domain.nl | tee build/p315-nine-public-owned.txt
           python3 evidence/p315/probe_negatives.py build/newlangc \
             build/five_root_source_gate_evidence build/p315-public-observer \
