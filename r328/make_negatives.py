@@ -30,9 +30,11 @@ cases = [
  ("C_terminal_wrong_D",final("let empty_C = loan_exclusive_read(life_C)","let empty_C = loan_exclusive_read(life_A)")),
  ("C_prev_wrong_new_target",unique("replace(direct_C@prev, Option<ptr<Node>>::Some(ptr_A))","replace(direct_C@prev, Option<ptr<Node>>::Some(ptr_B_m))")),
  ("A_next_lost_direct_rewire",unique("replace(direct_A@next, Option<ptr<Node>>::Some(ptr_C))","replace(direct_A@next, Option<ptr<Node>>::Some(ptr_B_m))")),
- ("C_prev_wrong_initial_edge",unique("replace(accessor_5@prev, Option<ptr<Node>>::Some(ptr_B))","replace(accessor_5@prev, Option<ptr<Node>>::Some(ptr_A))"))
+ ("C_prev_wrong_initial_edge",unique("replace(accessor_5@prev, Option<ptr<Node>>::Some(ptr_B))","replace(accessor_5@prev, Option<ptr<Node>>::Some(ptr_A))")),
+ ("active_B_loan_during_move",unique("let carried_B = DetachedHolder { node: ptr_B, grant: allocation_B, dom: life_B };","let carried_B = loan_read(life_B) { |active_B| DetachedHolder { node: ptr_B, grant: allocation_B, dom: life_B } };")),
+ ("old_C_prev_copy_after_replace",unique("replace(direct_C@prev, Option<ptr<Node>>::Some(ptr_A))","let old_copy = read(direct_C@prev); let result_c = replace(direct_C@prev, Option<ptr<Node>>::Some(ptr_A)); let later_copy = old_copy; result_c"))
 ]
-assert len({label for label,_ in cases})==12
+assert len({label for label,_ in cases})==14
 report=[]
 for name,program in cases:
     assert program!=source
