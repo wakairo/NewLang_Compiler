@@ -92,7 +92,10 @@ cases=[
 ]
 # Positive R328 old H0 separate B custody is known source-valid but product-negative:
 # this is deliberately NOT counted as a semantic negative.
-assert len({n for n,_ in cases})==17
+# Explicit non-novel lawful H0 comparator is the original independent R328 source.
+cases.append(("H0_original_R328_caller_custody",
+              Path("r333/h0_r328_caller_custody.nl").read_text()))
+assert len({n for n,_ in cases})==18
 manifest=[]
 for name,src in cases:
     assert src!=source
