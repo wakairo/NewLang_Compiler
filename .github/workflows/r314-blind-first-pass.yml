@@ -1,0 +1,85 @@
+name: R314 independent blind empirical source/owned probe
+on:
+  push:
+    branches:
+      - r314-blind-independent-evidence-20261011
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  independent-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Confirm frozen tested commit ancestry and read-only source zone
+        shell: bash
+        run: |
+          set -eu
+          git merge-base --is-ancestor f6034297edababdf37b90ddfd1dd083e31804b80 HEAD
+          test "$(git rev-parse f6034297edababdf37b90ddfd1dd083e31804b80^0)" = f6034297edababdf37b90ddfd1dd083e31804b80
+          git diff --name-only f6034297edababdf37b90ddfd1dd083e31804b80 HEAD
+          if git diff --name-only f6034297edababdf37b90ddfd1dd083e31804b80 HEAD | grep -E '^(src/|include/|tests/|CMakeLists.txt|docs/reference/)' ; then exit 1; fi
+      - name: Install build prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap pinned toolchain
+        run: python3 scripts/bootstrap.py
+      - name: Build frozen candidate with eight opt-ins
+        shell: bash
+        run: |
+          set -eu
+          . .deps/activate.sh
+          FLAGS="-DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=1 -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=1 -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=1 -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=1 -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=1 -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=1 -DNEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=1 -DNEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS=1"
+          cmake -S . -B r-evidence/314/build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=gcc-13 -DCMAKE_C_FLAGS="$FLAGS" \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS=ON
+          cmake --build r-evidence/314/build --parallel 2
+          find r-evidence/314/build -name '*.a' -print
+      - name: Generate independent source corpus and log SHA-256
+        shell: bash
+        run: |
+          python3 r-evidence/314/make_witness.py | tee r-evidence/314/witness-shas.txt
+          sha256sum r-evidence/314/generated/*.nl
+      - name: Run source CLI and record precise statuses
+        shell: bash
+        run: |
+          set +e
+          exe=r-evidence/314/build/newlangc
+          test -x "$exe" || { echo "MISSING newlangc"; exit 1; }
+          for f in r-evidence/314/generated/*.nl ; do
+            echo "::group::$(basename "$f")"
+            "$exe" "$f" > /tmp/r314-stdout 2>/tmp/r314-stderr
+            ret=$?
+            echo "R314_CASE $(basename "$f") exit=$ret c_bytes=$(wc -c < /tmp/r314-stdout)"
+            sed -n '1,14p' /tmp/r314-stderr
+            echo "::endgroup::"
+          done
+          exit 0
+      - name: Run independently authored public-owned observer if available
+        shell: bash
+        run: |
+          set +e
+          if test ! -f r-evidence/314/observer.c ; then
+            echo 'R314_OBSERVER_NOT_YET_AVAILABLE: public owned validator barrier remains'
+            exit 0
+          fi
+          gcc-13 -std=c17 -O0 -g -Iinclude r-evidence/314/observer.c \
+            -Wl,--start-group $(find r-evidence/314/build -name '*.a') -Wl,--end-group -lm -o /tmp/r314-observer
+          ret=$?
+          echo "R314_OBSERVER_COMPILE_STATUS=$ret"
+          if test "$ret" -ne 0; then exit 0; fi
+          for f in r-evidence/314/generated/*.nl; do
+            echo "::group::observer $(basename "$f")"
+            /tmp/r314-observer "$f"
+            echo "R314_OBSERVER_EXIT=$?"
+            echo "::endgroup::"
+          done
+          exit 0
