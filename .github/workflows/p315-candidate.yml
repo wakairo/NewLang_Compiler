@@ -59,7 +59,7 @@ jobs:
             -Wl,--start-group $(find build -name '*.a') -Wl,--end-group \
             -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc -lm \
             -o build/p315-public-observer
-          build/p315-public-observer evidence/p315/generated/third-A-next-own-domain \
+          build/p315-public-observer evidence/p315/generated/third-A-next-own-domain.nl \
             > build/p315-seven-public-owned.txt
           cat build/p315-seven-public-owned.txt
       - uses: actions/upload-artifact@v4
