@@ -1,0 +1,90 @@
+name: R310 fresh blind source audit
+on:
+  push:
+    branches: [r310-fresh-blind-20261011]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  r310:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          persist-credentials: false
+      - name: Enforce pinned compiler checkout; extract only R-authored source
+        shell: bash
+        run: |
+          set -euo pipefail
+          EXPECTED=c85275bc6f2a4c786b0ba25d4321695e5429ee69
+          echo "Evidence head: $(git rev-parse HEAD)"
+          git show "$GITHUB_SHA:evidence/r310/fresh_original_b_prev.nl" > /tmp/r310_fresh_positive.nl
+          git checkout --detach "$EXPECTED"
+          test "$(git rev-parse HEAD)" = "$EXPECTED"
+          git diff --exit-code
+          echo "PINNED_COMPILER=$(git rev-parse HEAD)"
+          sha256sum /tmp/r310_fresh_positive.nl
+      - name: Install documented base dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Build exact experimental compiler from public README
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/bootstrap.py
+          source .deps/activate.sh
+          CC=gcc cmake --fresh -S . -B build-r310 -DCMAKE_BUILD_TYPE=Debug \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=ON
+          cmake --build build-r310 --parallel 2
+          ./build-r310/newlangc --version
+          echo PUBLIC_LIBRARIES
+          find build-r310 -name '*.a' -o -name '*.so' | sort
+      - name: Execute independent source plus controlled negative variants
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p /tmp/r310
+          cp /tmp/r310_fresh_positive.nl /tmp/r310/positive.nl
+          python3 - <<'PY'
+          from pathlib import Path
+          d=Path('/tmp/r310')
+          s=(d/'positive.nl').read_text()
+          bad={
+            'wrong_domain':s.replace('let changed_prev = loan_read(original_domain_B)', 'let changed_prev = loan_read(life_A)'),
+            'duplicate_owner':s.replace('let transferred_holder = original_holder;', 'let transferred_holder = original_holder;\nlet stolen_holder = original_holder;'),
+            'wrong_terminal_domain':s.replace('loan_exclusive_read(original_domain_B) { |ending_B|','loan_exclusive_read(life_A) { |ending_B|'),
+            'ptr_as_ref':s.replace('set_link(write_B_change@prev, Option<ptr<Node>>::None);','set_link(original_ptr_B@prev, Option<ptr<Node>>::None);'),
+            'field_swap':s.replace('set_link(write_B_change@prev, Option<ptr<Node>>::None);','set_link(write_B_change@next, Option<ptr<Node>>::None);'),
+            'double_change':s.replace('set_link(write_B_change@prev, Option<ptr<Node>>::None);','set_link(write_B_change@prev, Option<ptr<Node>>::None);\nset_link(write_B_change@prev, Option<ptr<Node>>::None);'),
+            'wrong_pointer':s.replace('ref_from_ptr(write, original_ptr_B, stable_change)', 'ref_from_ptr(write, ptr_A, stable_change)'),
+            'illegal_payload':s.replace('set_link(write_B_change@prev, Option<ptr<Node>>::None);','set_link(write_B_change@payload, Option<ptr<Node>>::None);'),
+            'some_to_some':s.replace('set_link(write_B_change@prev, Option<ptr<Node>>::None);','set_link(write_B_change@prev, Option<ptr<Node>>::Some(ptr_C));')
+          }
+          for name,src in bad.items():
+            (d/(name+'.nl')).write_text(src)
+          PY
+          echo ==== SHA256 manifest ====
+          sha256sum /tmp/r310/*.nl
+          echo ==== measured CLI exits, diagnostics and C byte count ====
+          for src in /tmp/r310/*.nl; do
+            name=$(basename "$src" .nl)
+            set +e
+            ./build-r310/newlangc "$src" >"/tmp/r310/$name.c" 2>"/tmp/r310/$name.diag"
+            exitcode=$?
+            set -e
+            echo "R310_CASE=$name EXIT=$exitcode C_BYTES=$(wc -c < /tmp/r310/$name.c)"
+            head -c 1500 "/tmp/r310/$name.diag"
+            echo
+          done
+          echo ==== fixed checkout integrity ====
+          test "$(git rev-parse HEAD)" = "c85275bc6f2a4c786b0ba25d4321695e5429ee69"
+          git diff --exit-code
