@@ -232,12 +232,45 @@ static bool r318_strict_audit(const NLCheckedFragment *f){
             ids[count]=i;calls[count]=candidate;count++;
         }
     }
+    /* Six independent source-ordered setup links; don't accept a synthetic
+     * precondition or terminal-only topology as a complete witness. */
+    static const size_t expected_region[6]={4,2,1,3,2,3};
+    static const size_t expected_field[6]={1,0,2,0,1,1};
+    static const size_t expected_target[6]={3,3,2,4,4,2};
+    NLCheckedNodeId previous=0;
+    for(size_t i=0;i<6;i++){
+        NLCapturedChangeView evt={0};
+        MUST(nl_checked_captured_change_view(f,i,&evt));
+        const NLCheckedNodeView *n=nl_checked_node_view(f,evt.operation);
+        R318Inventory before_inventory,after_inventory;
+        MUST(n && n->kind==NL_CHECKED_REPLACE && evt.operation>previous);
+        MUST(r318_inventory(evt.before,&before_inventory) &&
+             r318_inventory(evt.after,&after_inventory) &&
+             r318_equal_inventory(before_inventory,after_inventory));
+        MUST(n->field.parent==before_inventory.roots[expected_region[i]-1] &&
+             n->field.index==expected_field[i]);
+        MUST(r318_sum_target(evt.before,n->field.child,0));
+        MUST(r318_sum_target(evt.after,n->field.child,expected_target[i]));
+        previous=evt.operation;
+    }
+    MUST(previous<ids[0]);
+    puts("R318_SIX_INITIAL_LINKS_OK");
     MUST(count==2 && ids[0]<ids[1]);
     const NLCheckedNodeView *one=nl_checked_node_view(f,ids[0]);
     const NLCheckedNodeView *two=nl_checked_node_view(f,ids[1]);
     MUST(one && two && one->function==two->function && calls[0].body!=calls[1].body);
     MUST(r318_call_event(f,ids[0],&calls[0],0));
     MUST(r318_call_event(f,ids[1],&calls[1],1));
+    const NLCheckedNodeView *first_projection=nl_checked_node_view(f,calls[0].projection);
+    const NLCheckedNodeView *second_projection=nl_checked_node_view(f,calls[1].projection);
+    NLSemanticScopeView exited={0};
+    MUST(first_projection && second_projection &&
+         first_projection->reference_result.scope!=second_projection->reference_result.scope &&
+         nl_semantic_scope_view(calls[1].change.before,
+             first_projection->reference_result.scope,&exited) && !exited.active);
+    MUST(nl_semantic_scope_view(
+             nl_checked_context(f),second_projection->reference_result.scope,&exited) &&
+         !exited.active);
     MUST(r318_direct(f,&calls[1],ids[1]));
     puts("R318_STRICT_SOURCE_OWNED_OK");
     return true;
