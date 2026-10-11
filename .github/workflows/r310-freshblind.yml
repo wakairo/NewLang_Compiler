@@ -21,6 +21,7 @@ jobs:
           EXPECTED=c85275bc6f2a4c786b0ba25d4321695e5429ee69
           echo "Evidence head: $(git rev-parse HEAD)"
           git show "$GITHUB_SHA:evidence/r310/fresh_original_b_prev.nl" > /tmp/r310_fresh_positive.nl
+          git show "$GITHUB_SHA:evidence/r310/fresh_public_observer.c" > /tmp/r310_public_observer.c
           git checkout --detach "$EXPECTED"
           test "$(git rev-parse HEAD)" = "$EXPECTED"
           git diff --exit-code
@@ -109,6 +110,16 @@ jobs:
             echo "R310_CASE=$name EXIT=$exitcode C_BYTES=$(wc -c < /tmp/r310/$name.c)"
             head -c 1500 "/tmp/r310/$name.diag"
             echo
+          done
+          echo ==== independently authored public API observer ====
+          gcc -std=c17 -Wall -Wextra -Iinclude /tmp/r310_public_observer.c \
+            -Wl,--start-group build-r310/libnewlang_semantic.a build-r310/libnewlang_checked.a \
+            build-r310/libnewlang_parser.a build-r310/libnewlang_source.a \
+            build-r310/libnewlang_syntax.a build-r310/libnewlang_lexer.a \
+            build-r310/libnewlang_diagnostic.a -Wl,--end-group -o /tmp/r310/public-observer
+          for sample in minimal_holder_call minimal_alias_call minimal_holder_inline wrong_domain duplicate_owner wrong_terminal_domain positive; do
+            echo "R310_PUBLIC_SAMPLE=$sample"
+            /tmp/r310/public-observer "/tmp/r310/$sample.nl"
           done
           echo ==== fixed checkout integrity ====
           test "$(git rev-parse HEAD)" = "c85275bc6f2a4c786b0ba25d4321695e5429ee69"
