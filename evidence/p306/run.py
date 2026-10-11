@@ -4,21 +4,22 @@ from pathlib import Path
 import hashlib,json,subprocess,sys,tempfile
 compiler,observer,boundary,calibration=sys.argv[1:5]
 root=Path(__file__).resolve().parents[2]
-s=(root/'evidence/p306/moved_B_next.nl').read_text()
-call='set_link(write_B@next,Option<ptr<Node>>::Some(moved_ptr_B));'
+s=(root/'evidence/p306/held_B_next_None.nl').read_text()
+call='set_link(write_B@next,Option<ptr<Node>>::None);'
 loan='loan_read(moved_d_B) { |stable_B_field|'
 def one(text,old,new):
     assert text.count(old)==1,(old,text.count(old))
     return text.replace(old,new)
 cases=[
- ('moved-original-B',s,0,''),
- ('moved-Some-to-None',one(s,call,'set_link(write_B@next,Option<ptr<Node>>::None);'),0,''),
+ ('holder-original-B-next-clear',s,0,''),
+ ('holder-Some-to-Some',one(s,call,'set_link(write_B@next,Option<ptr<Node>>::Some(moved_ptr_B));'),0,''),
+ ('one-field-TreeD-comparator',s.replace('DetachedHolder','TreeDWithB'),0,''),
  ('alpha-types-and-helper',s.replace('Node','Element').replace('LiveRoot','Ticket').replace('TreeDWithB','StagedValue').replace('set_link','update_edge'),0,''),
  ('wrong-Domain',one(s,loan,loan.replace('moved_d_B','life_C')),1,'ALLOCATED-DOMAIN-MISMATCH'),
  ('old-Domain-binding',one(s,loan,loan.replace('moved_d_B','life_B')),1,'P3-USE-AFTER-CONSUME'),
  ('old-whole-carrier',one(s,'let transferred=staged;','let transferred=staged; let duplicate=staged;'),1,'P3-USE-AFTER-CONSUME'),
- ('duplicate-Domain-after-loan',one(s,'let rebuilt=TreeDWithB','let first=moved_d_B;let second=moved_d_B;let rebuilt=TreeDWithB'),1,'P3-USE-AFTER-CONSUME'),
- ('duplicate-Allocation',one(s,'let rebuilt=TreeDWithB','let first=moved_a_B;let second=moved_a_B;let rebuilt=TreeDWithB'),1,'P3-USE-AFTER-CONSUME'),
+ ('duplicate-Domain-after-loan',one(s,'let rebuilt=DetachedHolder','let first=moved_d_B;let second=moved_d_B;let rebuilt=DetachedHolder'),1,'P3-USE-AFTER-CONSUME'),
+ ('duplicate-Allocation',one(s,'let rebuilt=DetachedHolder','let first=moved_a_B;let second=moved_a_B;let rebuilt=DetachedHolder'),1,'P3-USE-AFTER-CONSUME'),
  ('duplicate-Domain',one(s,call,'let first=moved_d_B;let second=moved_d_B;'+call),1,'P3-REF-CONFLICT'),
  ('active-loan-Domain-move',one(s,call,'let moved_again=moved_d_B;'+call),1,'P3-REF-CONFLICT'),
  ('active-loan-whole-pack',one(s,call,'let illegal=LiveRoot{p:moved_ptr_B,a:moved_a_B,d:moved_d_B};'+call),1,'P3-REF-CONFLICT'),
@@ -35,6 +36,7 @@ cases=[
                                             let empty_dst'''),1,'P4-ALLOCATION-MISMATCH'),
  ('old-occurrence-ref',one(s,call,'''match write_B@next {None=>{unit},Some(previous)=>{
 set_link(write_B@next,Option<ptr<Node>>::Some(moved_ptr_B));let stale=previous;unit}};'''),3,'P9-MATCH-PRECISION'),
+ ('holder-preferred-B-prev-clear',(root/'evidence/p306/held_B_prev_None_blocker.nl').read_text(),3,'P297-CALL-PRECISION'),
  ('B-prev-setup', (root/'evidence/p306/B_prev_preparation_blocker.nl').read_text(),3,'CAPTURED-CLOSURE-PRECISION'),
  ('B-prev-helper-without-setup',one(s,call,call.replace('@next','@prev')),3,'P297-CALL-PRECISION'),
  ('second-helper',one(s,call,call+call),3,'P297-CALL-PRECISION'),
@@ -61,7 +63,7 @@ with tempfile.TemporaryDirectory(prefix='p306-source-') as temp:
             tool=calibration if name=='fixed-calibration' else observer
             o=subprocess.run([tool,str(path)],capture_output=True,text=True,check=True)
             observed=[json.loads(line) for line in o.stdout.splitlines()]
-            if name=='moved-original-B':
+            if name=='holder-original-B-next-clear':
                 o=subprocess.run([observer,str(path),'oom'],capture_output=True,text=True,check=True)
                 oom=[json.loads(line) for line in o.stdout.splitlines() if 'oom_stage' in line]
                 assert len(oom)==3

@@ -64,7 +64,7 @@ jobs:
           . .deps/activate.sh
           bash evidence/p306/build_observer.sh build ${{ matrix.sanitizer }}
           python3 evidence/p306/run.py build/newlangc build/p306_owned_observer build/five_root_source_gate_evidence build/scoped_field_evidence build/p306-observations.json
-          build/captured_closure_test full-scoped-poison evidence/p306/moved_B_next.nl
+          build/captured_closure_test full-scoped-poison evidence/p306/held_B_next_None.nl
           sha256sum build/newlangc > build/p306-compiler-sha256.txt
       - uses: actions/upload-artifact@v4
         if: always()

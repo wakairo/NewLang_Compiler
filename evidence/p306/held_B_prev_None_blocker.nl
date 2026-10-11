@@ -1,4 +1,4 @@
-// P306 UNSELECTED: original B whole transfer, fresh same-D loan, one next-field helper.
+// P306 HOLDER-FIRST: original B whole transfer, same-D reloan, one next-field clear.
 // No complete detach/adopt, native execution or H1 product claim.
 struct Node {
     next: Option<ptr<Node>>,
@@ -8,7 +8,7 @@ struct Node {
 }
 
 struct LiveRoot { p:ptr<Node>, a:Allocation, d:LifetimeDomain, }
-struct TreeDWithB { only:LiveRoot, }
+struct DetachedHolder { held:LiveRoot, }
 
 fn set_link(field_ref:ref<write,Option<ptr<Node>>>, new_value:Option<ptr<Node>>) -> unit {
     let old = replace(field_ref,new_value);
@@ -192,17 +192,17 @@ fn main() -> unit {
                                                     Option<ptr<Node>>::Some(ptr_B))
                                             };
                                             let owner_B=LiveRoot{p:ptr_B,a:allocation_B,d:life_B};
-                                            let staged=TreeDWithB{only:owner_B};
+                                            let staged=DetachedHolder{held:owner_B};
                                             let transferred=staged;
-                                            let TreeDWithB{only}=transferred;
-                                            let LiveRoot{p:moved_ptr_B,a:moved_a_B,d:moved_d_B}=only;
+                                            let DetachedHolder{held}=transferred;
+                                            let LiveRoot{p:moved_ptr_B,a:moved_a_B,d:moved_d_B}=held;
                                             loan_read(moved_d_B) { |stable_B_field|
                                                 let write_B=ref_from_ptr(write,moved_ptr_B,stable_B_field);
-                                                set_link(write_B@next,Option<ptr<Node>>::Some(moved_ptr_B));
+                                                set_link(write_B@prev,Option<ptr<Node>>::None);
                                                 unit
                                             };
-                                            let rebuilt=TreeDWithB{only:LiveRoot{p:moved_ptr_B,a:moved_a_B,d:moved_d_B}};
-                                            let TreeDWithB{only:terminal_owner}=rebuilt;
+                                            let rebuilt=DetachedHolder{held:LiveRoot{p:moved_ptr_B,a:moved_a_B,d:moved_d_B}};
+                                            let DetachedHolder{held:terminal_owner}=rebuilt;
                                             let LiveRoot{p:final_ptr_B,a:final_a_B,d:final_d_B}=terminal_owner;
                                             let empty_dst = loan_exclusive_read(life_dst) { |ending_dst|
                                                 destroy(ptr_dst, ending_dst)

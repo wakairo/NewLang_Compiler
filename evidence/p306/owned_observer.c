@@ -241,7 +241,7 @@ static bool inspect(const NLCheckedFragment *entry)
           nl_semantic_place_view(worlds[0], new_d.place, &new_local) &&
           !old_local.live && !old_local.current_value && new_local.live &&
           new_local.current_value == ds[0][2]);
-    const char *consumed[] = {"owner_B", "staged", "transferred", "only"};
+    const char *consumed[] = {"owner_B", "staged", "transferred", "held"};
     for (size_t i = 0; i < 4; ++i)
         CHECK(carrier(worlds[0], consumed[i], NL_CONSUMED, 0, &donor));
     CHECK(carrier(worlds[1], "moved_d_B", NL_AVAILABLE, ds[0][2], &donor) &&
