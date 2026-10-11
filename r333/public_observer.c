@@ -198,6 +198,25 @@ static bool release_sequence(const NLCheckedFragment *f,size_t regions[5],size_t
     }
     return true;
 }
+/* Count a single original nonCopy authority path to the returned aggregate.
+ * This uses public carrier/field views; no manually authored positive world. */
+static bool original_is_inside_return(const NLSemanticContext *ctx,
+                                      NLValueId source,NLValueId result) {
+    NLValueId traversed=source;
+    for(size_t depth=0;depth<9;++depth) {
+        if(traversed==result) return true;
+        NLSemanticValueView current,parent;
+        REQUIRE(nl_semantic_value_view(ctx,traversed,&current) &&
+                current.carrier==NL_CARRIER_AGGREGATE && current.aggregate_owner &&
+                nl_semantic_value_view(ctx,current.aggregate_owner,&parent));
+        size_t appearances=0;
+        for(size_t i=0;i<parent.field_count;++i)
+            appearances+=parent.fields[i]==traversed;
+        REQUIRE(appearances==1);
+        traversed=current.aggregate_owner;
+    }
+    return false;
+}
 static bool returned_two_owner(const NLCheckedFragment *f) {
     NLWholeValueCallView call={0};
     NLTwoRootCallView late={0};
@@ -240,6 +259,16 @@ static bool returned_two_owner(const NLCheckedFragment *f) {
     NLSemanticBindingView recv,donor,formal,done;
     REQUIRE(nl_semantic_binding_view(call.received,call.receiver,&recv) &&
             recv.availability==NL_AVAILABLE && recv.value==call.result);
+    NLSemanticSnapshot snap_received;
+    REQUIRE(nl_semantic_snapshot(call.received,&snap_received));
+    size_t current_receivers=0;
+    for(NLBindingId binding=1;binding<=snap_received.bindings;++binding) {
+        NLSemanticBindingView candidate;
+        REQUIRE(nl_semantic_binding_view(call.received,binding,&candidate));
+        current_receivers+=candidate.availability==NL_AVAILABLE &&
+                           candidate.value==call.result && candidate.place==recv.place;
+    }
+    REQUIRE(current_receivers==1);
     const size_t originals[2]={5,3};
     for(size_t i=0;i<2;++i) {
         NLSemanticValueView owner,allocation,domain,pointer;
@@ -263,7 +292,11 @@ static bool returned_two_owner(const NLCheckedFragment *f) {
                 allocation.allocation_region==originals[i] &&
                 domain.domain==originals[i] &&
                 owner.fields[1]==baseline_a[originals[i]-1] &&
-                owner.fields[2]==baseline_d[originals[i]-1]);
+                owner.fields[2]==baseline_d[originals[i]-1] &&
+                original_is_inside_return(call.returned,owner.fields[1],call.result) &&
+                original_is_inside_return(call.returned,owner.fields[2],call.result) &&
+                original_is_inside_return(call.received,owner.fields[1],call.result) &&
+                original_is_inside_return(call.received,owner.fields[2],call.result));
         printf("R333_ORIGINAL_RETURN_MEMBER index=%zu region=%zu root=%zu A=%zu D=%zu\n",
                i,originals[i],pointer.reference.place,owner.fields[1],owner.fields[2]);
     }
