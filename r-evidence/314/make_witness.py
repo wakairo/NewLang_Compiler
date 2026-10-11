@@ -111,7 +111,8 @@ PREFIX=lines(
 "    held_domain: LifetimeDomain,",
 "}",
 "fn clear_link(field: ref<write, Option<ptr<Node>>>, target: Option<ptr<Node>>) -> unit {",
-"    replace(field, target);",
+"    let old = replace(field, target);",
+"    old;",
 "    unit",
 "}",
 "fn main() -> unit {")
@@ -135,8 +136,8 @@ mutate(cases,"duplicate_consumed_holder",
        "let DetachedHolder { held_ptr, held_allocation, held_domain } = holder;",
        "let DetachedHolder { held_ptr, held_allocation, held_domain } = holder;\nlet stolen = holder;")
 mutate(cases,"wrong_original_terminal_domain",
-       "destroy(held_ptr, end_B)",
-       "destroy(held_ptr, end_A)")
+       "loan_exclusive_read(held_domain) { |end_B|",
+       "loan_exclusive_read(life_A) { |end_B|")
 mutate(cases,"repeat_first_scope_ref",
        "let second_result = loan_read(held_domain) { |fresh_b_2|",
        "let escaped = original_b_1@prev;\nlet second_result = loan_read(held_domain) { |fresh_b_2|")
