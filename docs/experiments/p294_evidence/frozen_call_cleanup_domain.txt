@@ -1,0 +1,22 @@
+TRACE before-call-cleanup semantic=0 raw=0
+TRACE value=1 A.R=1 D=0 carrier=3 aggregate=135 place=0
+TRACE value=6 A.R=0 D=1 carrier=3 aggregate=137 place=0
+TRACE value=15 A.R=2 D=0 carrier=3 aggregate=137 place=0
+TRACE value=20 A.R=0 D=2 carrier=3 aggregate=135 place=0
+TRACE value=29 A.R=3 D=0 carrier=3 aggregate=130 place=0
+TRACE value=34 A.R=0 D=3 carrier=3 aggregate=130 place=0
+TRACE value=43 A.R=4 D=0 carrier=3 aggregate=132 place=0
+TRACE value=48 A.R=0 D=4 carrier=3 aggregate=132 place=0
+TRACE value=57 A.R=5 D=0 carrier=1 aggregate=0 place=56
+TRACE value=62 A.R=0 D=5 carrier=1 aggregate=0 place=59
+TRACE after-call-cleanup semantic=6 raw=6
+TRACE value=1 A.R=1 D=0 carrier=2 aggregate=0 place=0
+TRACE value=6 A.R=0 D=1 carrier=2 aggregate=0 place=0
+TRACE value=15 A.R=2 D=0 carrier=2 aggregate=0 place=0
+TRACE value=20 A.R=0 D=2 carrier=2 aggregate=0 place=0
+TRACE value=29 A.R=3 D=0 carrier=2 aggregate=0 place=0
+TRACE value=34 A.R=0 D=3 carrier=2 aggregate=0 place=0
+TRACE value=43 A.R=4 D=0 carrier=2 aggregate=0 place=0
+TRACE value=48 A.R=0 D=4 carrier=2 aggregate=0 place=0
+TRACE value=57 A.R=5 D=0 carrier=1 aggregate=0 place=56
+TRACE value=62 A.R=0 D=5 carrier=1 aggregate=0 place=59

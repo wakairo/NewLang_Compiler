@@ -2105,6 +2105,16 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
         for (size_t r = 0; r < argument_view.result_count; ++r) {
             const NLValueId value = argument_view.results[r].value;
             const NLValueCarrier carrier = c->values[value - 1].carrier;
+#ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
+            /* Whole destruction already ended this shell. Its historical
+             * fields can now belong to a different returned packet; ending
+             * the shell recursively again would destroy transferred members.
+             * Reassembly still needs the existing whole-call certificate. */
+            if (whole_call && carrier == NL_CARRIER_ENDED &&
+                nl_experimental_owner_aggregate_type(c,
+                                                     c->values[value - 1].type))
+                continue;
+#endif
             bool forwarded = carrier == NL_CARRIER_PLACE ||
                              carrier == NL_CARRIER_SUM ||
                              carrier == NL_CARRIER_AGGREGATE;

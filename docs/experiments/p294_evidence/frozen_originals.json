@@ -1,0 +1,44 @@
+[
+  {
+    "source": "tests/fixtures/p294/mixed_alloc_repaired_5.nl",
+    "sha256": "48f19bbd6ddd3b8ae1057a4f35a0fff95963c4af2930a9f44d9d5087ed5f12db",
+    "exit": 3,
+    "diagnostic": "tests/fixtures/p294/mixed_alloc_repaired_5.nl:190:1-190:20: error(internal)[P3-INTERNAL]: invalid semantic module state\n",
+    "C": false,
+    "repeat_identical": true,
+    "public_boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 6,
+      "code": "P3-INTERNAL",
+      "start_byte": 6084,
+      "end_byte": 6103,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    }
+  },
+  {
+    "source": "tests/fixtures/p294/mixed_domain_repaired_5.nl",
+    "sha256": "870516e459cfe85eb59d9ecf05af2f8481cdd7e2fe254e4e92d8935c34f6c4e5",
+    "exit": 3,
+    "diagnostic": "tests/fixtures/p294/mixed_domain_repaired_5.nl:190:1-190:20: error(internal)[P3-INTERNAL]: invalid semantic module state\n",
+    "C": false,
+    "repeat_identical": true,
+    "public_boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 6,
+      "code": "P3-INTERNAL",
+      "start_byte": 6084,
+      "end_byte": 6103,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    }
+  }
+]
