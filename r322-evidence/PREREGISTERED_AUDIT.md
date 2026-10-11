@@ -43,3 +43,19 @@ Distinct R322 mutation harness, no P private poison implementation copied. **Con
 - Unable to obtain actual source-generated positive, or unsafe layout/mutator boundary: **INCONCLUSIVE — FIRST OBSERVER/VALIDATOR LIMIT**; report the first barrier without fabricating positives.
 - An individual accepted mutation with uncertain semantic observability is **REVIEW**, not automatically UNSAFE; CI remains fail-closed for expected rejection.
 - Retain CLI backend unsupported/C bytes0 and no native, TreeBOwner, C.prev, specification selection or earlier R #317/#318 disposition claims.
+
+
+## Second-stage coordinated negative controls (declared after the successful first 21-case run, before final outcome)
+
+First 21-case CI: workflow run 38142931149, SUCCESS. The 21 original independent classes were pre-registered before that run. The next six test-only classes are a distinct **second-stage extension** motivated by the original issue's concern about partially internally consistent forgeries. These are **not** represented as pre-registered before the first run.
+
+| ID | Coordinated source-generated artifact mutation | Intended challenge |
+|---|---|---|
+| 21 | Reanchor seventh before and before_origin to a valid earlier owned sixth setup after-world | internal provenance pointers agree, but false source chronology |
+| 22 | Reanchor seventh after and after_origin to the same valid earlier setup world | internally paired owned origin, wrong endpoint |
+| 23 | Change A governing D in both seventh before and after worlds to B's D | coherent local two-world D but wrong original allocation/domain |
+| 24 | Change B current fact identically in second named-after and seventh before | preserve the immediate cross-root equality while forging the historical B currentness |
+| 25 | Swap original B and C pointer targets together in both old and incoming A-before payload values | two typed, live root targets but inverted old/new semantics |
+| 26 | Swap the actual seventh before/after world pointers with their corresponding paired origin anchors | individually valid real-world snapshots with inverted source chronology |
+
+The final workflow oracle is deliberately revised from 21 to 27 classes. Paired corruption changes are restored in reverse order and all seven public validator statuses must again become NL_CHECK_OK. A false-negative remains a failed CI; no private semantic checker result substitutes for a public validator.
