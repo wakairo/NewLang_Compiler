@@ -125,6 +125,13 @@ def mutate(case,label,old,new):
         raise RuntimeError("source mutation input missing: "+label)
     cases[label]=base.replace(old,new,1)
 
+mutate(cases,"active_loan_owner_move",
+       "    clear_link(original_b_1@prev, "+TYPE+"::None)",
+       "    let illicit_while_loaned = DetachedHolder { held_ptr: held_ptr, held_allocation: held_allocation, held_domain: held_domain };\\n"
+       "    clear_link(original_b_1@prev, "+TYPE+"::None)")
+mutate(cases,"cross_root_with_b_domain",
+       "ref_from_ptr(write, held_ptr, fresh_b_2)",
+       "ref_from_ptr(write, ptr_src, fresh_b_2)")
 mutate(cases,"wrong_governing_domain",
        "loan_read(held_domain) { |fresh_b_1|",
        "loan_read(life_A) { |fresh_b_1|")
