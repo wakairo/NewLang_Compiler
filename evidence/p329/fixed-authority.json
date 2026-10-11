@@ -1,0 +1,42 @@
+{
+  "authority": {
+    "compiler_main": "a5343bf70004b30a8b026e52aa2fde93b5920be0",
+    "canonical": "Draft17.30",
+    "compiler_experimental": "de9c4b175784f484675b670a109f62edeaf35de1",
+    "formalproof_main": "a8de4ebb4099f4742fc161d26867740dcac48414"
+  },
+  "compiler_patch": false,
+  "new_flag": false,
+  "first_fixed_binary_sha256": "5fb7caf6519b6008ee501a2e15e94a4dba295a4e078be459ccd8685f111b7b15",
+  "fresh_local_binary_sha256": "c26b5c04275972f9877c85dce169e5bc8b5a37c53136551a2d9a5ecf724cb11d",
+  "unchanged_main_prefix_through_B_extraction": true,
+  "sources": {
+    "tests/fixtures/experimental_cross_root_c_prev.nl": {
+      "sha256": "f7bdb6a3b6b2e446767f0340451fec1c63ade5d7d147b6fda4abbad3b9d2a1b5",
+      "physical_lines": 261,
+      "nonblank_lines": 258,
+      "let_binding_occurrences": 82,
+      "fallible_heap_sites": 5,
+      "lexical_loan_occurrences": 30,
+      "deallocate_occurrences": 15
+    },
+    "evidence/p329/first_falsifier.nl": {
+      "sha256": "1cf957992a9f1c8afd16fc84c01e3876a2179ec79251950a809667ef31103b0a",
+      "physical_lines": 251,
+      "nonblank_lines": 248,
+      "let_binding_occurrences": 80,
+      "fallible_heap_sites": 5,
+      "lexical_loan_occurrences": 26,
+      "deallocate_occurrences": 11
+    },
+    "evidence/p329/returned_owner.nl": {
+      "sha256": "bd7692f8118c8e4de2b7662b0f90fcf503a548d9948bfded27bd430ad127716d",
+      "physical_lines": 254,
+      "nonblank_lines": 251,
+      "let_binding_occurrences": 86,
+      "fallible_heap_sites": 5,
+      "lexical_loan_occurrences": 29,
+      "deallocate_occurrences": 14
+    }
+  }
+}

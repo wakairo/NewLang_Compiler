@@ -1,0 +1,1156 @@
+[
+  {
+    "name": "composed-returned-only",
+    "category": "component-positive",
+    "sha256": "bd7692f8118c8e4de2b7662b0f90fcf503a548d9948bfded27bd430ad127716d",
+    "cli_exit": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: <source>\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 0,
+      "code": "",
+      "start_byte": 0,
+      "end_byte": 0,
+      "snapshot_unchanged": false,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      1,
+      1
+    ],
+    "span_end": [
+      1,
+      1
+    ],
+    "owned": [
+      {
+        "parse_status": 0,
+        "registration_status": 0,
+        "main_check_status": 0,
+        "owned_entry_artifact": true
+      },
+      {
+        "static_release_worlds_0_to_5": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "native_failure_injection": false
+      },
+      {
+        "call_ordinal": 0,
+        "call_id": 149,
+        "scope": 12,
+        "prior_B_loans_ended": 2,
+        "chronological_connection": true
+      },
+      {
+        "original_B_domain": 3,
+        "original_B_allocation_value": 29,
+        "original_B_domain_value": 34,
+        "old_domain_place": 33,
+        "new_domain_place": 96,
+        "old_binding_consumed": true,
+        "new_binding_sole_current": true,
+        "fresh_loan_on_new_place": true,
+        "repacked_and_exactly_released": true
+      },
+      {
+        "owned_source_artifact": true,
+        "closure_validators": 5,
+        "scoped_call_validator": true,
+        "caller_changes": 8,
+        "callee_changes": 1,
+        "ProjectionId_nominal": 10,
+        "ProjectionId_index": 1,
+        "root": 31,
+        "root_incarnation": 34,
+        "field": 36,
+        "field_incarnation": 36,
+        "fact_before": 86,
+        "fact_after": 113,
+        "old_occurrence": 4,
+        "new_occurrence": 0,
+        "old_ptr_region": 2,
+        "new_ptr_region": 0,
+        "root_fact_before": 93,
+        "root_fact_after": 114,
+        "Allocation_values": [
+          1,
+          15,
+          29,
+          43,
+          57
+        ],
+        "Domain_values": [
+          6,
+          20,
+          34,
+          48,
+          62
+        ],
+        "old_payload_place": 80,
+        "old_payload_current_cleared": true,
+        "sibling_and_child_current_preserved": true,
+        "original_A_D_preserved_unique": true,
+        "scoped_ref_ended": true,
+        "matched_frees": 5,
+        "native_execution": false
+      },
+      {
+        "call_ordinal": 1,
+        "call_id": 163,
+        "scope": 13,
+        "prior_B_loans_ended": 3,
+        "chronological_connection": true
+      },
+      {
+        "original_B_domain": 3,
+        "original_B_allocation_value": 29,
+        "original_B_domain_value": 34,
+        "old_domain_place": 33,
+        "new_domain_place": 96,
+        "old_binding_consumed": true,
+        "new_binding_sole_current": true,
+        "fresh_loan_on_new_place": true,
+        "repacked_and_exactly_released": true
+      },
+      {
+        "owned_source_artifact": true,
+        "closure_validators": 5,
+        "scoped_call_validator": true,
+        "caller_changes": 8,
+        "callee_changes": 1,
+        "ProjectionId_nominal": 10,
+        "ProjectionId_index": 0,
+        "root": 31,
+        "root_incarnation": 34,
+        "field": 35,
+        "field_incarnation": 35,
+        "fact_before": 92,
+        "fact_after": 121,
+        "old_occurrence": 5,
+        "new_occurrence": 0,
+        "old_ptr_region": 4,
+        "new_ptr_region": 0,
+        "root_fact_before": 114,
+        "root_fact_after": 122,
+        "Allocation_values": [
+          1,
+          15,
+          29,
+          43,
+          57
+        ],
+        "Domain_values": [
+          6,
+          20,
+          34,
+          48,
+          62
+        ],
+        "old_payload_place": 84,
+        "old_payload_current_cleared": true,
+        "sibling_and_child_current_preserved": true,
+        "original_A_D_preserved_unique": true,
+        "scoped_ref_ended": true,
+        "matched_frees": 5,
+        "native_execution": false
+      },
+      {
+        "direct_cross_root_change": true,
+        "ordinal": 3,
+        "operation": 177,
+        "scope": 14,
+        "root": 18,
+        "incarnation": 21,
+        "region": 2,
+        "DomainId": 2,
+        "Allocation_value": 15,
+        "Domain_value": 20,
+        "field": 22,
+        "ProjectionId_index": 0,
+        "fact_before": 80,
+        "fact_after": 127,
+        "root_fact_before": 81,
+        "root_fact_after": 128,
+        "old_occurrence": 3,
+        "new_occurrence": 9,
+        "old_payload_place": 76,
+        "old_ptr_region": 3,
+        "new_ptr_region": 4,
+        "original_B_still_live_and_owned": true,
+        "second_after_equals_third_before": true,
+        "all_siblings_preserved": true,
+        "old_occurrence_ended": true,
+        "new_occurrence_live": true,
+        "direct_change_validated_in_five_captured_closures": true
+      },
+      {
+        "direct_cross_root_change": true,
+        "ordinal": 4,
+        "operation": 191,
+        "scope": 15,
+        "root": 44,
+        "incarnation": 47,
+        "region": 4,
+        "DomainId": 4,
+        "Allocation_value": 43,
+        "Domain_value": 48,
+        "field": 49,
+        "ProjectionId_index": 1,
+        "fact_before": 98,
+        "fact_after": 134,
+        "root_fact_before": 99,
+        "root_fact_after": 135,
+        "old_occurrence": 6,
+        "new_occurrence": 11,
+        "old_payload_place": 88,
+        "old_ptr_region": 3,
+        "new_ptr_region": 2,
+        "original_B_still_live_and_owned": true,
+        "third_after_equals_fourth_before": true,
+        "all_siblings_preserved": true,
+        "old_occurrence_ended": true,
+        "new_occurrence_live": true,
+        "direct_change_validated_in_five_captured_closures": true
+      },
+      {
+        "pure_call": 235,
+        "terminal_call": 295,
+        "owner_inputs": [
+          170,
+          172
+        ],
+        "result": 174,
+        "donors": [
+          87,
+          88
+        ],
+        "formals": [
+          89,
+          90
+        ],
+        "receiver": 93,
+        "roots": [
+          57,
+          31
+        ],
+        "incarnations": [
+          60,
+          34
+        ],
+        "regions": [
+          5,
+          3
+        ],
+        "Allocation_values": [
+          57,
+          29
+        ],
+        "Domain_values": [
+          62,
+          34
+        ],
+        "inert_Copy_token_no_authority": true,
+        "three_donors_dead_before_terminal": true,
+        "sole_returned_owner_live_A_D": [
+          2,
+          2
+        ],
+        "exact_result_is_only_terminal_argument": true,
+        "all_5_roots_and_20_siblings_preserved_through_pure_call": true,
+        "B_dst_current_unchanged_during_donor_frees": true,
+        "two_root_validator_status": 0,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    ],
+    "registration_refusal_rollback_retry": false,
+    "c_generated": false
+  },
+  {
+    "name": "alpha-types-and-functions",
+    "category": "component-positive",
+    "sha256": "e9652156cb3b0bfd914ecbf209c8d42e84169337e84c1956b061cecf87a1a879",
+    "cli_exit": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: <source>\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 0,
+      "code": "",
+      "start_byte": 0,
+      "end_byte": 0,
+      "snapshot_unchanged": false,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      1,
+      1
+    ],
+    "span_end": [
+      1,
+      1
+    ],
+    "owned": [
+      {
+        "parse_status": 0,
+        "registration_status": 0,
+        "main_check_status": 0,
+        "owned_entry_artifact": true
+      },
+      {
+        "static_release_worlds_0_to_5": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        "native_failure_injection": false
+      },
+      {
+        "call_ordinal": 0,
+        "call_id": 149,
+        "scope": 12,
+        "prior_B_loans_ended": 2,
+        "chronological_connection": true
+      },
+      {
+        "original_B_domain": 3,
+        "original_B_allocation_value": 29,
+        "original_B_domain_value": 34,
+        "old_domain_place": 33,
+        "new_domain_place": 96,
+        "old_binding_consumed": true,
+        "new_binding_sole_current": true,
+        "fresh_loan_on_new_place": true,
+        "repacked_and_exactly_released": true
+      },
+      {
+        "owned_source_artifact": true,
+        "closure_validators": 5,
+        "scoped_call_validator": true,
+        "caller_changes": 8,
+        "callee_changes": 1,
+        "ProjectionId_nominal": 10,
+        "ProjectionId_index": 1,
+        "root": 31,
+        "root_incarnation": 34,
+        "field": 36,
+        "field_incarnation": 36,
+        "fact_before": 86,
+        "fact_after": 113,
+        "old_occurrence": 4,
+        "new_occurrence": 0,
+        "old_ptr_region": 2,
+        "new_ptr_region": 0,
+        "root_fact_before": 93,
+        "root_fact_after": 114,
+        "Allocation_values": [
+          1,
+          15,
+          29,
+          43,
+          57
+        ],
+        "Domain_values": [
+          6,
+          20,
+          34,
+          48,
+          62
+        ],
+        "old_payload_place": 80,
+        "old_payload_current_cleared": true,
+        "sibling_and_child_current_preserved": true,
+        "original_A_D_preserved_unique": true,
+        "scoped_ref_ended": true,
+        "matched_frees": 5,
+        "native_execution": false
+      },
+      {
+        "call_ordinal": 1,
+        "call_id": 163,
+        "scope": 13,
+        "prior_B_loans_ended": 3,
+        "chronological_connection": true
+      },
+      {
+        "original_B_domain": 3,
+        "original_B_allocation_value": 29,
+        "original_B_domain_value": 34,
+        "old_domain_place": 33,
+        "new_domain_place": 96,
+        "old_binding_consumed": true,
+        "new_binding_sole_current": true,
+        "fresh_loan_on_new_place": true,
+        "repacked_and_exactly_released": true
+      },
+      {
+        "owned_source_artifact": true,
+        "closure_validators": 5,
+        "scoped_call_validator": true,
+        "caller_changes": 8,
+        "callee_changes": 1,
+        "ProjectionId_nominal": 10,
+        "ProjectionId_index": 0,
+        "root": 31,
+        "root_incarnation": 34,
+        "field": 35,
+        "field_incarnation": 35,
+        "fact_before": 92,
+        "fact_after": 121,
+        "old_occurrence": 5,
+        "new_occurrence": 0,
+        "old_ptr_region": 4,
+        "new_ptr_region": 0,
+        "root_fact_before": 114,
+        "root_fact_after": 122,
+        "Allocation_values": [
+          1,
+          15,
+          29,
+          43,
+          57
+        ],
+        "Domain_values": [
+          6,
+          20,
+          34,
+          48,
+          62
+        ],
+        "old_payload_place": 84,
+        "old_payload_current_cleared": true,
+        "sibling_and_child_current_preserved": true,
+        "original_A_D_preserved_unique": true,
+        "scoped_ref_ended": true,
+        "matched_frees": 5,
+        "native_execution": false
+      },
+      {
+        "direct_cross_root_change": true,
+        "ordinal": 3,
+        "operation": 177,
+        "scope": 14,
+        "root": 18,
+        "incarnation": 21,
+        "region": 2,
+        "DomainId": 2,
+        "Allocation_value": 15,
+        "Domain_value": 20,
+        "field": 22,
+        "ProjectionId_index": 0,
+        "fact_before": 80,
+        "fact_after": 127,
+        "root_fact_before": 81,
+        "root_fact_after": 128,
+        "old_occurrence": 3,
+        "new_occurrence": 9,
+        "old_payload_place": 76,
+        "old_ptr_region": 3,
+        "new_ptr_region": 4,
+        "original_B_still_live_and_owned": true,
+        "second_after_equals_third_before": true,
+        "all_siblings_preserved": true,
+        "old_occurrence_ended": true,
+        "new_occurrence_live": true,
+        "direct_change_validated_in_five_captured_closures": true
+      },
+      {
+        "direct_cross_root_change": true,
+        "ordinal": 4,
+        "operation": 191,
+        "scope": 15,
+        "root": 44,
+        "incarnation": 47,
+        "region": 4,
+        "DomainId": 4,
+        "Allocation_value": 43,
+        "Domain_value": 48,
+        "field": 49,
+        "ProjectionId_index": 1,
+        "fact_before": 98,
+        "fact_after": 134,
+        "root_fact_before": 99,
+        "root_fact_after": 135,
+        "old_occurrence": 6,
+        "new_occurrence": 11,
+        "old_payload_place": 88,
+        "old_ptr_region": 3,
+        "new_ptr_region": 2,
+        "original_B_still_live_and_owned": true,
+        "third_after_equals_fourth_before": true,
+        "all_siblings_preserved": true,
+        "old_occurrence_ended": true,
+        "new_occurrence_live": true,
+        "direct_change_validated_in_five_captured_closures": true
+      },
+      {
+        "pure_call": 235,
+        "terminal_call": 295,
+        "owner_inputs": [
+          170,
+          172
+        ],
+        "result": 174,
+        "donors": [
+          87,
+          88
+        ],
+        "formals": [
+          89,
+          90
+        ],
+        "receiver": 93,
+        "roots": [
+          57,
+          31
+        ],
+        "incarnations": [
+          60,
+          34
+        ],
+        "regions": [
+          5,
+          3
+        ],
+        "Allocation_values": [
+          57,
+          29
+        ],
+        "Domain_values": [
+          62,
+          34
+        ],
+        "inert_Copy_token_no_authority": true,
+        "three_donors_dead_before_terminal": true,
+        "sole_returned_owner_live_A_D": [
+          2,
+          2
+        ],
+        "exact_result_is_only_terminal_argument": true,
+        "all_5_roots_and_20_siblings_preserved_through_pure_call": true,
+        "B_dst_current_unchanged_during_donor_frees": true,
+        "two_root_validator_status": 0,
+        "release_order": [
+          2,
+          4,
+          1,
+          3,
+          5
+        ],
+        "backend": "unsupported"
+      }
+    ],
+    "registration_refusal_rollback_retry": false,
+    "c_generated": false
+  },
+  {
+    "name": "H0-no-join-independent-caller-custody",
+    "category": "legal-component-negative",
+    "sha256": "f7bdb6a3b6b2e446767f0340451fec1c63ade5d7d147b6fda4abbad3b9d2a1b5",
+    "cli_exit": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: <source>\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 0,
+      "code": "",
+      "start_byte": 0,
+      "end_byte": 0,
+      "snapshot_unchanged": false,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      1,
+      1
+    ],
+    "span_end": [
+      1,
+      1
+    ],
+    "owned": [
+      {
+        "parse_status": 0,
+        "registration_status": 0,
+        "main_check_status": 0,
+        "owned_entry_artifact": true
+      },
+      {
+        "call_ordinal": 0,
+        "call_id": 149,
+        "scope": 12,
+        "prior_B_loans_ended": 2,
+        "chronological_connection": true
+      },
+      {
+        "original_B_domain": 3,
+        "original_B_allocation_value": 29,
+        "original_B_domain_value": 34,
+        "old_domain_place": 33,
+        "new_domain_place": 96,
+        "old_binding_consumed": true,
+        "new_binding_sole_current": true,
+        "fresh_loan_on_new_place": true,
+        "repacked_and_exactly_released": true
+      },
+      {
+        "owned_source_artifact": true,
+        "closure_validators": 5,
+        "scoped_call_validator": true,
+        "caller_changes": 8,
+        "callee_changes": 1,
+        "ProjectionId_nominal": 10,
+        "ProjectionId_index": 1,
+        "root": 31,
+        "root_incarnation": 34,
+        "field": 36,
+        "field_incarnation": 36,
+        "fact_before": 86,
+        "fact_after": 113,
+        "old_occurrence": 4,
+        "new_occurrence": 0,
+        "old_ptr_region": 2,
+        "new_ptr_region": 0,
+        "root_fact_before": 93,
+        "root_fact_after": 114,
+        "Allocation_values": [
+          1,
+          15,
+          29,
+          43,
+          57
+        ],
+        "Domain_values": [
+          6,
+          20,
+          34,
+          48,
+          62
+        ],
+        "old_payload_place": 80,
+        "old_payload_current_cleared": true,
+        "sibling_and_child_current_preserved": true,
+        "original_A_D_preserved_unique": true,
+        "scoped_ref_ended": true,
+        "matched_frees": 5,
+        "native_execution": false
+      },
+      {
+        "call_ordinal": 1,
+        "call_id": 163,
+        "scope": 13,
+        "prior_B_loans_ended": 3,
+        "chronological_connection": true
+      },
+      {
+        "original_B_domain": 3,
+        "original_B_allocation_value": 29,
+        "original_B_domain_value": 34,
+        "old_domain_place": 33,
+        "new_domain_place": 96,
+        "old_binding_consumed": true,
+        "new_binding_sole_current": true,
+        "fresh_loan_on_new_place": true,
+        "repacked_and_exactly_released": true
+      },
+      {
+        "owned_source_artifact": true,
+        "closure_validators": 5,
+        "scoped_call_validator": true,
+        "caller_changes": 8,
+        "callee_changes": 1,
+        "ProjectionId_nominal": 10,
+        "ProjectionId_index": 0,
+        "root": 31,
+        "root_incarnation": 34,
+        "field": 35,
+        "field_incarnation": 35,
+        "fact_before": 92,
+        "fact_after": 121,
+        "old_occurrence": 5,
+        "new_occurrence": 0,
+        "old_ptr_region": 4,
+        "new_ptr_region": 0,
+        "root_fact_before": 114,
+        "root_fact_after": 122,
+        "Allocation_values": [
+          1,
+          15,
+          29,
+          43,
+          57
+        ],
+        "Domain_values": [
+          6,
+          20,
+          34,
+          48,
+          62
+        ],
+        "old_payload_place": 84,
+        "old_payload_current_cleared": true,
+        "sibling_and_child_current_preserved": true,
+        "original_A_D_preserved_unique": true,
+        "scoped_ref_ended": true,
+        "matched_frees": 5,
+        "native_execution": false
+      },
+      {
+        "direct_cross_root_change": true,
+        "ordinal": 3,
+        "operation": 177,
+        "scope": 14,
+        "root": 18,
+        "incarnation": 21,
+        "region": 2,
+        "DomainId": 2,
+        "Allocation_value": 15,
+        "Domain_value": 20,
+        "field": 22,
+        "ProjectionId_index": 0,
+        "fact_before": 80,
+        "fact_after": 127,
+        "root_fact_before": 81,
+        "root_fact_after": 128,
+        "old_occurrence": 3,
+        "new_occurrence": 9,
+        "old_payload_place": 76,
+        "old_ptr_region": 3,
+        "new_ptr_region": 4,
+        "original_B_still_live_and_owned": true,
+        "second_after_equals_third_before": true,
+        "all_siblings_preserved": true,
+        "old_occurrence_ended": true,
+        "new_occurrence_live": true,
+        "direct_change_validated_in_five_captured_closures": true
+      },
+      {
+        "direct_cross_root_change": true,
+        "ordinal": 4,
+        "operation": 191,
+        "scope": 15,
+        "root": 44,
+        "incarnation": 47,
+        "region": 4,
+        "DomainId": 4,
+        "Allocation_value": 43,
+        "Domain_value": 48,
+        "field": 49,
+        "ProjectionId_index": 1,
+        "fact_before": 98,
+        "fact_after": 134,
+        "root_fact_before": 99,
+        "root_fact_after": 135,
+        "old_occurrence": 6,
+        "new_occurrence": 11,
+        "old_payload_place": 88,
+        "old_ptr_region": 3,
+        "new_ptr_region": 2,
+        "original_B_still_live_and_owned": true,
+        "third_after_equals_fourth_before": true,
+        "all_siblings_preserved": true,
+        "old_occurrence_ended": true,
+        "new_occurrence_live": true,
+        "direct_change_validated_in_five_captured_closures": true
+      }
+    ],
+    "registration_refusal_rollback_retry": false,
+    "c_generated": false
+  },
+  {
+    "name": "first-falsifier-inline-donor-packet",
+    "category": "precision",
+    "sha256": "1cf957992a9f1c8afd16fc84c01e3876a2179ec79251950a809667ef31103b0a",
+    "cli_exit": 3,
+    "diagnostic": "<source>:136:37-242:38: error(precision)[CAPTURED-CLOSURE-PRECISION]: complete original-owner fork/cleanup proof is unavailable\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 3,
+      "code": "CAPTURED-CLOSURE-PRECISION",
+      "start_byte": 6961,
+      "end_byte": 15530,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      136,
+      37
+    ],
+    "span_end": [
+      242,
+      38
+    ],
+    "owned": [],
+    "registration_refusal_rollback_retry": true,
+    "c_generated": false
+  },
+  {
+    "name": "consumed-Holder-reused",
+    "category": "semantic",
+    "sha256": "30faf80a2ba1cd30947dbb76a3ad653d318e6627b388aae86b64abed3ec9bab1",
+    "cli_exit": 3,
+    "diagnostic": "<source>:235:59-235:70: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 1,
+      "code": "P3-USE-AFTER-CONSUME",
+      "start_byte": 14995,
+      "end_byte": 15006,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      235,
+      59
+    ],
+    "span_end": [
+      235,
+      70
+    ],
+    "owned": [],
+    "registration_refusal_rollback_retry": true,
+    "c_generated": false
+  },
+  {
+    "name": "B-owner-reused-after-call",
+    "category": "semantic",
+    "sha256": "2c74808482d300527afea12f18854dda0d215dad443cf1ba0597e419a10870d1",
+    "cli_exit": 3,
+    "diagnostic": "<source>:235:107-235:115: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 1,
+      "code": "P3-USE-AFTER-CONSUME",
+      "start_byte": 15043,
+      "end_byte": 15051,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      235,
+      107
+    ],
+    "span_end": [
+      235,
+      115
+    ],
+    "owned": [],
+    "registration_refusal_rollback_retry": true,
+    "c_generated": false
+  },
+  {
+    "name": "dst-owner-reused-after-call",
+    "category": "semantic",
+    "sha256": "09bc2e57bae7e98703275902c497d736ec9cddd74272942e801942f53df693a9",
+    "cli_exit": 3,
+    "diagnostic": "<source>:235:107-235:115: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 1,
+      "code": "P3-USE-AFTER-CONSUME",
+      "start_byte": 15043,
+      "end_byte": 15051,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      235,
+      107
+    ],
+    "span_end": [
+      235,
+      115
+    ],
+    "owned": [],
+    "registration_refusal_rollback_retry": true,
+    "c_generated": false
+  },
+  {
+    "name": "returned-owner-reused-after-terminal",
+    "category": "semantic",
+    "sha256": "88c649aa386e5d4aeb8ca93fcc4a020e12a8608abe828dcdde25a9586201b370",
+    "cli_exit": 3,
+    "diagnostic": "<source>:242:81-242:89: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 1,
+      "code": "P3-USE-AFTER-CONSUME",
+      "start_byte": 15909,
+      "end_byte": 15917,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      242,
+      81
+    ],
+    "span_end": [
+      242,
+      89
+    ],
+    "owned": [],
+    "registration_refusal_rollback_retry": true,
+    "c_generated": false
+  },
+  {
+    "name": "active-B-loan-before-packet-move",
+    "category": "semantic",
+    "sha256": "43f04cc6d19fb7836e7627569df4ff341ed5f9430d03d9ed1d35e478fa10d83d",
+    "cli_exit": 3,
+    "diagnostic": "<source>:234:122-234:131: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 1,
+      "code": "P3-REF-CONFLICT",
+      "start_byte": 14952,
+      "end_byte": 14961,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      234,
+      122
+    ],
+    "span_end": [
+      234,
+      131
+    ],
+    "owned": [],
+    "registration_refusal_rollback_retry": true,
+    "c_generated": false
+  },
+  {
+    "name": "wrong-B-Allocation-at-requiring-terminal",
+    "category": "semantic",
+    "sha256": "bcf28c872bb75d6fe984ce71b4816dae3379d83db709fb4a214ac049a6edff8e",
+    "cli_exit": 3,
+    "diagnostic": "<source>:240:45-240:65: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 1,
+      "code": "P193-CALL-BACKING",
+      "start_byte": 15616,
+      "end_byte": 15636,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      240,
+      45
+    ],
+    "span_end": [
+      240,
+      65
+    ],
+    "owned": [],
+    "registration_refusal_rollback_retry": true,
+    "c_generated": false
+  },
+  {
+    "name": "wrong-B-Domain-at-requiring-terminal",
+    "category": "semantic",
+    "sha256": "18002a544f6b0c6b72188ff937eb420d9d9045583fc223dad590dc3cc35bdb98",
+    "cli_exit": 3,
+    "diagnostic": "<source>:240:45-240:65: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 1,
+      "code": "P193-CALL-DOMAIN",
+      "start_byte": 15610,
+      "end_byte": 15630,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      240,
+      45
+    ],
+    "span_end": [
+      240,
+      65
+    ],
+    "owned": [],
+    "registration_refusal_rollback_retry": true,
+    "c_generated": false
+  },
+  {
+    "name": "callee-duplicate-return-member",
+    "category": "semantic",
+    "sha256": "4f42fd832d2ec46c0c8f502256aafcd304a5c49723cf1f6bddbe41650dc723d4",
+    "cli_exit": 3,
+    "diagnostic": "<source>:26:47-26:55: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 1,
+      "code": "P3-USE-AFTER-CONSUME",
+      "start_byte": 935,
+      "end_byte": 943,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      26,
+      47
+    ],
+    "span_end": [
+      26,
+      55
+    ],
+    "owned": [],
+    "registration_refusal_rollback_retry": true,
+    "c_generated": false
+  },
+  {
+    "name": "missing-returned-owner-cleanup",
+    "category": "semantic",
+    "sha256": "468e83761b3fa2571504cc3d933659d057d5f883753b1bc02c849224d4960463",
+    "cli_exit": 3,
+    "diagnostic": "<source>:164:61-244:42: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 1,
+      "code": "P5-SCOPE-OBLIGATION",
+      "start_byte": 9055,
+      "end_byte": 15964,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      164,
+      61
+    ],
+    "span_end": [
+      244,
+      42
+    ],
+    "owned": [],
+    "registration_refusal_rollback_retry": true,
+    "c_generated": false
+  },
+  {
+    "name": "sixth-independent-H",
+    "category": "unsupported",
+    "sha256": "e2cf5a28741f39c9210910db904eebe42d1107e388f6660452f562ccf3406f04",
+    "cli_exit": 3,
+    "diagnostic": "<source>:235:51-235:74: error(unsupported)[ALLOCATED-CARDINALITY-PROFILE]: allocation requires one outer trial and at most one nested Some-arm trial, outside loops\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 2,
+      "code": "ALLOCATED-CARDINALITY-PROFILE",
+      "start_byte": 14987,
+      "end_byte": 15010,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      235,
+      51
+    ],
+    "span_end": [
+      235,
+      74
+    ],
+    "owned": [],
+    "registration_refusal_rollback_retry": true,
+    "c_generated": false
+  },
+  {
+    "name": "early-B-EndRoot-with-active-ref",
+    "category": "semantic",
+    "sha256": "176381edf3e3ed3e8e936ba5bb5f67ca3d9e212b0a5aa2f92305aa13719222b8",
+    "cli_exit": 3,
+    "diagnostic": "<source>:219:79-219:88: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 1,
+      "code": "P3-REF-CONFLICT",
+      "start_byte": 13533,
+      "end_byte": 13542,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "span_start": [
+      219,
+      79
+    ],
+    "span_end": [
+      219,
+      88
+    ],
+    "owned": [],
+    "registration_refusal_rollback_retry": true,
+    "c_generated": false
+  }
+]
