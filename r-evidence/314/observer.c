@@ -19,6 +19,8 @@ typedef struct {
 } CallEvidence;
 static CallEvidence calls[16];
 static size_t call_count, captured_count, captured_ok, depth_max;
+static NLCapturedClosureView deepest_originals;
+static bool deepest_present;
 
 static const char *sc(NLCheckStatus c) {
     static const char *n[]={"OK","SEMANTIC_ERROR","SEMANTIC_UNSUPPORTED",
@@ -48,6 +50,7 @@ static void inspect(const NLCheckedFragment *f, unsigned depth) {
             NLCapturedClosureView cv={0};
             if(nl_checked_captured_closure_view(f,i,&cv)) {
                 captured_count++;
+                if(cv.count==4) { deepest_originals=cv; deepest_present=true; }
                 NLCheckStatus st=nl_checked_captured_closure_validate(f,i);
                 if(st==NL_CHECK_OK) captured_ok++;
                 printf("CAPTURED depth=%u match=%zu originals=%zu validator=%s releases=%zu,%zu,%zu,%zu,%zu,%zu\n",
@@ -106,6 +109,27 @@ static bool prove_two(void) {
        !nl_semantic_place_view(b->scoped.change.after,root,&second_post)) {
         puts("R314_WORLD_BARRIER: four root views not available");return false;
     }
+    if(deepest_present) {
+        bool distinct=true;
+        for(size_t i=0;i<deepest_originals.count;i++) {
+            const NLCapturedOriginal *o=&deepest_originals.originals[i];
+            printf("R314_ORIGINAL_ANCESTOR %zu root=%zu inc=%zu D=%zu R=%zu alloc_value=%zu domain_value=%zu\\n",
+              i,o->root,o->incarnation,o->domain,o->extent.region,
+              o->allocation_value,o->domain_value);
+            for(size_t j=0;j<i;j++) {
+                const NLCapturedOriginal *other=&deepest_originals.originals[j];
+                if(o->root==other->root || o->domain==other->domain ||
+                   o->extent.region==other->extent.region ||
+                   o->allocation_value==other->allocation_value ||
+                   o->domain_value==other->domain_value) distinct=false;
+            }
+        }
+        bool matched=deepest_originals.originals[2].root==root &&
+            deepest_originals.originals[2].domain==first_pre.governing_domain &&
+            deepest_originals.originals[2].extent.region==first_pre.placement.region;
+        printf("R314_ORIGINAL_DISTINCT_FOUR_ANCESTORS=%d B_MAPPED=%d\\n",distinct,matched);
+        ok &= distinct && matched;
+    } else { puts("R314_FIVE_ORIGINAL_CAPTURE_BARRIER");ok=false; }
     printf("R314_ROOT pre inc=%zu D=%zu R=%zu, mid inc=%zu D=%zu R=%zu, second pre inc=%zu D=%zu R=%zu, post inc=%zu D=%zu R=%zu\n",
        first_pre.incarnation,first_pre.governing_domain,first_pre.placement.region,
        first_post.incarnation,first_post.governing_domain,first_post.placement.region,
@@ -140,6 +164,18 @@ static bool prove_two(void) {
         sx0,vx0,sx1,vx1,sx2,vx2,ax0.current_fact,ax1.current_fact,ax2.current_fact);
     printf("R314_CURRENT: next: first-post some=%d var=%zu second-pre some=%d var=%zu second-post some=%d var=%zu facts %zu -> %zu -> %zu\n",
         sy1,vy1,sy2,vy2,sy3,vy3,ay1.current_fact,ay2.current_fact,ay3.current_fact);
+    if(first_pre.fixed_field_count>=3) {
+        NLPlaceId child=first_pre.fixed_fields[2];
+        NLSemanticPlaceView child_before={0},child_post={0};
+        bool seen=child!=0 &&
+            nl_semantic_place_view(a->scoped.change.before,child,&child_before) &&
+            nl_semantic_place_view(b->scoped.change.after,child,&child_post);
+        bool kept=seen && child_before.current_fact==child_post.current_fact &&
+            child_before.incarnation==child_post.incarnation;
+        printf("R314_B_CHILD_SIBLING_SAVED=%d place=%zu fact_before=%zu fact_after=%zu\\n",
+            kept,child,child_before.current_fact,child_post.current_fact);
+        ok &= kept;
+    } else {puts("R314_CHILD_FIELD_BARRIER");ok=false;}
     ok &= sx0 && !sx1 && !sx2 && sy1 && sy2 && !sy3 &&
       ax1.current_fact==ax2.current_fact && ay1.current_fact==ay2.current_fact &&
       ax1.current_fact!=ax0.current_fact && ay2.current_fact!=ay3.current_fact;
