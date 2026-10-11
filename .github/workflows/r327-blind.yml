@@ -11,6 +11,8 @@ jobs:
     timeout-minutes: 65
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 4
       - name: Toolchain prerequisites
         run: |
           sudo apt-get update
@@ -19,7 +21,7 @@ jobs:
         run: python3 scripts/bootstrap.py
       - name: Verify exact target parent and authored-source identity
         run: |
-          git rev-parse HEAD^
+          test "$(git rev-parse HEAD~2)" = de9c4b175784f484675b670a109f62edeaf35de1
           git log --format='%H %s' -5
           sha256sum r327/independent_four_detach.nl
       - name: Build exact experimental profile
