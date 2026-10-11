@@ -1,5 +1,80 @@
 #include "semantic_internal.h"
 
+bool nl_scoped_field_call_member(const NLCheckedFragment *f, NLCheckedNodeId id)
+{
+    return f && id &&
+           (f->scoped_field_call == id
+#ifdef NEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS
+            || f->second_scoped_field_call == id
+#endif
+           );
+}
+
+/* One finite prev->next continuation. No additional grant or summary.
+ * The public validator applies the same check to the second actual before
+ * world, after each body has separately retained its own Change evidence. */
+bool nl_scoped_field_continuation(const NLCheckedFragment *f,
+                                  const NLCheckedNodeView *projection,
+                                  const NLSemanticContext *next,
+                                  NLValueId input)
+{
+#ifdef NEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS
+    NLScopedFieldCallView first;
+    if (!f || !projection || !next ||
+        !nl_checked_scoped_field_call_view(f, f->scoped_field_call, &first) ||
+        projection->kind != NL_CHECKED_FIELD_REF ||
+        projection->field.index != 0 || !projection->has_reference_result ||
+        !input || input > next->value_count ||
+        next->values[input - 1].variant != 1 ||
+        next->values[input - 1].sum_payload)
+        return false;
+    const NLCheckedNodeView *prior = nl_checked_node_view(f, first.projection);
+    const NLCheckedNodeView *write =
+        nl_checked_node_view(first.body, first.change.operation);
+    const NLSemanticContext *after = first.change.after;
+    if (!prior || !write || !after || !prior->has_reference_result ||
+        prior->field.index != 1 ||
+        prior->field.nominal != projection->field.nominal ||
+        prior->field.parent != projection->field.parent ||
+        prior->field.parent_incarnation !=
+            projection->field.parent_incarnation ||
+        !prior->field.parent || prior->field.parent > after->place_count ||
+        prior->field.parent > next->place_count ||
+        !prior->reference_result.scope ||
+        prior->reference_result.scope > next->scope_count ||
+        next->scopes[prior->reference_result.scope - 1].active ||
+        !projection->reference_result.scope ||
+        projection->reference_result.scope == prior->reference_result.scope ||
+        projection->reference_result.scope > next->scope_count ||
+        !next->scopes[projection->reference_result.scope - 1].active)
+        return false;
+    const NLSemanticPlaceView root = after->places[prior->field.parent - 1];
+    if (memcmp(&root, &next->places[prior->field.parent - 1], sizeof(root)) ||
+        root.fixed_field_count != 4)
+        return false;
+    for (size_t i = 0; i < 4; ++i) {
+        const NLPlaceId child = root.fixed_fields[i];
+        if (!child || child > after->place_count || child > next->place_count ||
+            memcmp(&after->places[child - 1], &next->places[child - 1],
+                   sizeof(NLSemanticPlaceView)))
+            return false;
+    }
+    const NLPlaceId prev = root.fixed_fields[1];
+    const NLValueId value = next->places[prev - 1].current_value;
+    return value && value <= next->value_count &&
+           value == write->field.new_value &&
+           next->values[value - 1].variant == 1 &&
+           !next->values[value - 1].sum_payload &&
+           !next->places[prev - 1].payload_occurrence;
+#else
+    (void)f;
+    (void)projection;
+    (void)next;
+    (void)input;
+    return false;
+#endif
+}
+
 /* Finite caller/validator admission only; never a field capability grant. */
 bool nl_scoped_field_index(size_t index)
 {
@@ -120,7 +195,7 @@ bool nl_checked_scoped_field_call_view(const NLCheckedFragment *f,
                                        NLScopedFieldCallView *out)
 {
 #ifdef NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
-    if (!f || !out || !id || f->scoped_field_call != id)
+    if (!out || !nl_scoped_field_call_member(f, id))
         return false;
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLCheckedFragment *body = nl_checked_call_body(f, id);

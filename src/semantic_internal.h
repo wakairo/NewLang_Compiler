@@ -118,6 +118,7 @@ typedef struct {
 } NLCapturedChange;
 struct NLCheckedFragment {
     NLCheckedNodeId scoped_field_call; /* one finite nonescaping helper */
+    NLCheckedNodeId second_scoped_field_call; /* opt-in exact continuation */
     NLTwoRootCallView two_root;
     const NLSemanticContext *two_entry_origin, *two_return_origin;
     NLCheckedNodeId two_call;
@@ -209,6 +210,10 @@ bool nl_scoped_field_signature(const NLSemanticContext *, const NLTypeId *,
                                size_t, NLTypeId);
 bool nl_scoped_field_body(const NLCheckedFragment *, const NLSymbolId[2]);
 bool nl_scoped_field_index(size_t);
+bool nl_scoped_field_call_member(const NLCheckedFragment *, NLCheckedNodeId);
+bool nl_scoped_field_continuation(const NLCheckedFragment *,
+                                  const NLCheckedNodeView *,
+                                  const NLSemanticContext *, NLValueId);
 NLCheckStatus nl_body_create(const NLSyntaxTree *, const NLFunctionParameter *,
                              size_t, NLFunctionBody **);
 NLCheckStatus nl_body_create_span(const NLSource *, NLSourceSpan,

@@ -1,0 +1,171 @@
+[
+  {
+    "source": "/workspace/p308/tests/fixtures/experimental_moved_b_prev_call.nl",
+    "sha256": "9c6a6b4e6a8c453d7839b86a52c5195de221ae6456f030477e1af20c9a183d46",
+    "cli_exit": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p308/tests/fixtures/experimental_moved_b_prev_call.nl\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 0,
+      "code": "",
+      "start_byte": 0,
+      "end_byte": 0,
+      "snapshot_unchanged": false,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "owned": [
+      {
+        "original_B_domain": 3,
+        "original_B_allocation_value": 29,
+        "original_B_domain_value": 34,
+        "old_domain_place": 33,
+        "new_domain_place": 96,
+        "old_binding_consumed": true,
+        "new_binding_sole_current": true,
+        "fresh_loan_on_new_place": true,
+        "prior_B_loans_ended": 2,
+        "repacked_and_exactly_released": true
+      },
+      {
+        "owned_source_artifact": true,
+        "closure_validators": 5,
+        "scoped_call_validator": true,
+        "caller_changes": 6,
+        "callee_changes": 1,
+        "ProjectionId_nominal": 10,
+        "ProjectionId_index": 1,
+        "root": 31,
+        "root_incarnation": 34,
+        "field": 36,
+        "field_incarnation": 36,
+        "fact_before": 86,
+        "fact_after": 113,
+        "old_occurrence": 4,
+        "new_occurrence": 0,
+        "old_ptr_region": 2,
+        "new_ptr_region": 0,
+        "root_fact_before": 93,
+        "root_fact_after": 114,
+        "Allocation_values": [
+          1,
+          15,
+          29,
+          43,
+          57
+        ],
+        "Domain_values": [
+          6,
+          20,
+          34,
+          48,
+          62
+        ],
+        "old_payload_place": 80,
+        "old_payload_current_cleared": true,
+        "sibling_and_child_current_preserved": true,
+        "original_A_D_preserved_unique": true,
+        "scoped_ref_ended": true,
+        "matched_frees": 5,
+        "native_execution": false
+      }
+    ]
+  },
+  {
+    "source": "/workspace/p308/evidence/p308/P306_fixed_holder_calibration.nl",
+    "sha256": "beffe69de3a858e6cc0a8a4d7acb86a569310a34cf5710716887a6a3b7c82e46",
+    "cli_exit": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p308/evidence/p308/P306_fixed_holder_calibration.nl\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 0,
+      "code": "",
+      "start_byte": 0,
+      "end_byte": 0,
+      "snapshot_unchanged": false,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "owned": [
+      {
+        "original_B_domain": 3,
+        "original_B_allocation_value": 29,
+        "original_B_domain_value": 34,
+        "old_domain_place": 33,
+        "new_domain_place": 96,
+        "old_binding_consumed": true,
+        "new_binding_sole_current": true,
+        "fresh_loan_on_new_place": true,
+        "prior_B_loans_ended": 2,
+        "repacked_and_exactly_released": true
+      },
+      {
+        "owned_source_artifact": true,
+        "closure_validators": 5,
+        "scoped_call_validator": true,
+        "caller_changes": 6,
+        "callee_changes": 1,
+        "ProjectionId_nominal": 10,
+        "ProjectionId_index": 0,
+        "root": 31,
+        "root_incarnation": 34,
+        "field": 35,
+        "field_incarnation": 35,
+        "fact_before": 92,
+        "fact_after": 113,
+        "old_occurrence": 5,
+        "new_occurrence": 0,
+        "old_ptr_region": 4,
+        "new_ptr_region": 0,
+        "root_fact_before": 93,
+        "root_fact_after": 114,
+        "Allocation_values": [
+          1,
+          15,
+          29,
+          43,
+          57
+        ],
+        "Domain_values": [
+          6,
+          20,
+          34,
+          48,
+          62
+        ],
+        "old_payload_place": 84,
+        "old_payload_current_cleared": true,
+        "sibling_and_child_current_preserved": true,
+        "original_A_D_preserved_unique": true,
+        "scoped_ref_ended": true,
+        "matched_frees": 5,
+        "native_execution": false
+      }
+    ]
+  },
+  {
+    "source": "/tmp/p312-evidence/two-calls-fixed.nl",
+    "sha256": "40b5dad768a0c265e85bd111e9aca7a9160c325e04bf96f249767896b616f73e",
+    "cli_exit": 3,
+    "diagnostic": "/tmp/p312-evidence/two-calls-fixed.nl:206:49-206:100: error(precision)[P297-CALL-PRECISION]: requires one explicit original scoped next/prev projection\n",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 3,
+      "code": "P297-CALL-PRECISION",
+      "start_byte": 12944,
+      "end_byte": 12995,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    }
+  }
+]

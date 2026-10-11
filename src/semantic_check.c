@@ -2098,19 +2098,29 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
     if (nl_scoped_field_signature(c, function.parameters, function.count,
                                   function.result)) {
         if (!check->allocated_slice || !check->in_source_loan ||
-            check->artifact->scoped_field_call ||
+            (check->artifact->scoped_field_call &&
+             (check->artifact->second_scoped_field_call ||
+              !nl_scoped_field_continuation(
+                  check->artifact, view(check, arguments[0]), c,
+                  view(check, arguments[1])->results[0].value))) ||
             view(check, arguments[0])->kind != NL_CHECKED_FIELD_REF ||
             !nl_scoped_field_index(view(check, arguments[0])->field.index)) {
             fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
                  "P297-CALL-PRECISION",
-#ifdef NEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL
+#ifdef NEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS
+                 "requires one call or a closed two-scope prev-to-next None "
+                 "continuation");
+#elif defined(NEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL)
                  "requires one explicit original scoped next/prev projection");
 #else
                  "requires one explicit original scoped next-field projection");
 #endif
             return 0;
         }
-        check->artifact->scoped_field_call = id;
+        if (!check->artifact->scoped_field_call)
+            check->artifact->scoped_field_call = id;
+        else
+            check->artifact->second_scoped_field_call = id;
     }
     if (!(function.body != NULL ? run_body(check, id, &function, arguments)
                                 : primitive(check, id, arguments))) {

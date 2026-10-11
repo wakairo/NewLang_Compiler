@@ -76,6 +76,15 @@ if(NEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL)
     target_compile_definitions(newlang_options INTERFACE
         NEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=1)
 endif()
+option(NEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS
+    "UNADOPTED Issue 312 exactly two scoped helper changes; DO NOT MERGE" OFF)
+if(NEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS)
+    if(NOT NEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL)
+        message(FATAL_ERROR "Issue 312 requires the separate Issue 308 opt-in")
+    endif()
+    target_compile_definitions(newlang_options INTERFACE
+        NEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS=1)
+endif()
 target_compile_options(newlang_options INTERFACE
     -Wall -Wextra -Wpedantic -Werror)
 if(NOT NEWLANG_SANITIZER STREQUAL "none")
@@ -179,6 +188,18 @@ if(BUILD_TESTING)
                                     "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/moved_b_prev_test.py"
                                     "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:moved_b_prev_evidence>"
                                     "$<TARGET_FILE:five_root_source_gate_evidence>" "$<TARGET_FILE:scoped_field_evidence>")
+                                if(NEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS)
+                                    add_executable(two_scoped_field_evidence tests/integration/two_scoped_field_evidence.c)
+                                    target_link_libraries(two_scoped_field_evidence PRIVATE newlang_semantic)
+                                    target_link_options(two_scoped_field_evidence PRIVATE
+                                        -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+                                    add_test(NAME two_scoped_field.integration COMMAND "${Python3_EXECUTABLE}"
+                                        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/two_scoped_field_test.py"
+                                        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:two_scoped_field_evidence>"
+                                        "$<TARGET_FILE:five_root_source_gate_evidence>" "$<TARGET_FILE:moved_b_prev_evidence>")
+                                    add_test(NAME two_scoped_field_poison.unit COMMAND captured_closure_test full-two-scoped-poison
+                                        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_two_scoped_field_calls.nl")
+                                endif()
                                 add_test(NAME moved_b_prev_poison.unit COMMAND captured_closure_test full-scoped-poison
                                     "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_moved_b_prev_call.nl")
                             endif()
