@@ -17,7 +17,7 @@ typedef struct {
     unsigned matches, captured_success, captured_failure;
     unsigned scoped_calls, scoped_success, scoped_failure;
     unsigned direct_changes, change_snapshots, named_call_nodes;
-    unsigned trace_index, audit_attempted, audit_ok;
+    unsigned trace_index, audit_attempted, audit_ok, worlds_ok;
 } Metrics;
 static int same_snapshot(NLSemanticSnapshot a, NLSemanticSnapshot b) {
     return a.types==b.types && a.bindings==b.bindings &&
@@ -76,6 +76,17 @@ static void inspect(const NLCheckedFragment *f, Metrics *m, unsigned depth) {
             m->matches++;
             NLCapturedClosureView c={0};
             if(nl_checked_captured_closure_view(f,i,&c)){
+                bool worlds_valid=(c.count==depth && c.count<=4);
+                for(size_t world=0;world<6;world++)
+                    if(c.release_worlds[world]!=(world>=c.count?1u:0u))worlds_valid=false;
+                for(size_t j=0;j<c.count;j++){
+                    const NLCapturedOriginal *o=&c.originals[j];
+                    if(o->extent.region!=j+1 || o->domain!=j+1 ||
+                       o->allocation_availability!=NL_AVAILABLE ||
+                       o->domain_availability!=NL_AVAILABLE)worlds_valid=false;
+                }
+                if(worlds_valid)m->worlds_ok++;
+                else {m->captured_failure++;puts("R318_CAPTURED_RELEASE_WORLD_MISMATCH");}
                 NLCheckStatus st=nl_checked_captured_closure_validate(f,i);
                 if(st==NL_CHECK_OK)m->captured_success++;else m->captured_failure++;
                 printf("PUBLIC_CAPTURED_VALIDATOR node=%zu status=%d count=%zu worlds=[%zu,%zu,%zu,%zu,%zu,%zu]\n",
@@ -162,8 +173,9 @@ int main(int argc,char **argv){
     inspect(owned,&m,0);
     printf("R318_SUMMARY matches=%u public_captured_ok=%u captured_fail=%u public_scoped_calls=%u scoped_ok=%u scoped_fail=%u named_call_nodes=%u replace_nodes=%u captured_change_snapshots=%u\n",
         m.matches,m.captured_success,m.captured_failure,m.scoped_calls,m.scoped_success,m.scoped_failure,m.named_call_nodes,m.direct_changes,m.change_snapshots);
-    if(m.captured_success!=5 || m.scoped_success!=2 || m.scoped_failure!=0 || m.captured_failure!=0 || m.scoped_calls!=2 || m.named_call_nodes<2 || m.change_snapshots<7 || m.audit_attempted!=1 || m.audit_ok!=1) { puts("R318_POSITIVE_NOT_PROVEN"); goto end; }
+    if(m.captured_success!=5 || m.scoped_success!=2 || m.scoped_failure!=0 || m.captured_failure!=0 || m.scoped_calls!=2 || m.named_call_nodes<2 || m.change_snapshots<7 || m.audit_attempted!=1 || m.audit_ok!=1 || m.worlds_ok!=5) { puts("R318_POSITIVE_NOT_PROVEN"); goto end; }
     puts("R318_BASIC_PUBLIC_VALIDATORS_OK");
+    puts("R318_FIVE_STATIC_RELEASE_WORLDS_OK");
     if(rejected)puts("R318_REJECT_ROLLBACK_SAME_CONTEXT_RETRY_OK");
     verified=1;
 end:
