@@ -1,0 +1,94 @@
+name: R330 fourth C.prev independent owned consistency
+on:
+  push:
+    branches: [r330-fourth-owned-consistency-20261011]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 65
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 20
+      - name: Enforce frozen PR326 exact ancestor and R-only additions
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=de9c4b175784f484675b670a109f62edeaf35de1
+          test "$(git merge-base "$BASE" HEAD)" = "$BASE"
+          git diff --name-status "$BASE" HEAD | tee r330-paths.txt
+          test "$(wc -l <r330-paths.txt)" -eq 4
+          if grep -Ev '^A[[:space:]]+(r330/|\.github/workflows/r330-fourth-consistency\.yml$)' r330-paths.txt; then exit 18; fi
+          test "$(sha256sum r330/independent_calibrated.nl | cut -d' ' -f1)" = b6033c21e2b86d72f5a352326a9874e0c786a0774bc4a8262f44bc6feaef51c4
+          git log -4 --format='%H %s'
+          sha256sum r330/independent_calibrated.nl r330/PREREGISTERED_CASES.md r330/fourth_consistency_observer.c
+      - name: Install exact CI compiler dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap compiler SDK
+        run: python3 scripts/bootstrap.py
+      - name: Compile frozen experimental target ten switches ON only here
+        env:
+          CC: gcc-13
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build-r330 -DCMAKE_BUILD_TYPE=Debug \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS=ON \
+            -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS=ON \
+            -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT=ON
+          cmake --build build-r330 --parallel 2 --target newlangc newlang_semantic
+      - name: Check independently calibrated source (backend output not claimed)
+        shell: bash
+        run: |
+          set +e
+          ./build-r330/newlangc r330/independent_calibrated.nl >r330-source-stdout.txt 2>r330-source-stderr.txt
+          rc=$?
+          set -e
+          echo "R330_CLI_EXIT=$rc"
+          echo "R330_GENERATED_C_BYTES=$(wc -c <r330-source-stdout.txt)"
+          cat r330-source-stderr.txt
+          test "$rc" -eq 4
+          test ! -s r330-source-stdout.txt
+          grep -q V1-BACKEND-UNSUPPORTED r330-source-stderr.txt
+      - name: R-authored bounded in-memory modifications; seven public validators only
+        shell: bash
+        run: |
+          set -euo pipefail
+          gcc-13 -std=c17 -O0 -g \
+            -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT \
+            -I include -I src r330/fourth_consistency_observer.c \
+            -Wl,--start-group build-r330/libnewlang_semantic.a \
+            build-r330/libnewlang_checked.a build-r330/libnewlang_parser.a \
+            build-r330/libnewlang_diagnostic.a build-r330/libnewlang_syntax.a \
+            build-r330/libnewlang_lexer.a build-r330/libnewlang_source.a \
+            -Wl,--end-group -o r330-observer
+          ./r330-observer r330/independent_calibrated.nl | tee r330-observer.log
+          grep -q 'R330_REAL_ARTIFACT_PUBLIC_VALIDATOR_ORACLE_PASS' r330-observer.log
+          grep -q 'R330_MATRIX proposed=23 rejected=23 publicly_accepted=0 restore_failed=0' r330-observer.log
+          test "$(grep -c 'R330_CASE id=' r330-observer.log)" -eq 23
+          test "$(grep -c 'R330_RESTORED id=' r330-observer.log)" -eq 23
+          sha256sum r330/independent_calibrated.nl r330/PREREGISTERED_CASES.md r330/fourth_consistency_observer.c r330-observer.log
+      - name: Upload actual R330 source + statuses + immutable path guard
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r330-fourth-owned-consistency
+          path: |
+            r330/PREREGISTERED_CASES.md
+            r330/independent_calibrated.nl
+            r330/fourth_consistency_observer.c
+            r330-observer.log
+            r330-source-stderr.txt
+            r330-source-stdout.txt
+            r330-paths.txt
+          if-no-files-found: warn
