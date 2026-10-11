@@ -168,7 +168,6 @@ Red Teamについては§7の独立性を優先する。
 first-pass attack用Issueには、その時点で許可された狭い入力だけを置き、M/F/Pのrationaleや過去の結論を先回りして混ぜない。
 first-pass finding後に追加情報を解禁する場合は、同じIssueへ追記するか、明示的にlinkしたfollow-up Issueで扱う。
 
-
 ### 4.1.1 作業指示・報告の明確性と誤認防止
 
 GitHub Issue、PR、Track起動prompt、作業報告などの文章は、**実際の作業目的・対象・範囲が第三者やAI実行環境にも正確に伝わるように記述する**。
@@ -186,7 +185,6 @@ GitHub Issue、PR、Track起動prompt、作業報告などの文章は、**実�
 また、表現の調整によってRed Teamの独立性、検証の厳密性、findingの報告義務、canonical authority、停止条件を弱めてはならない。
 
 AI実行環境による作業中断が発生した場合は、実際の作業範囲を再確認し、目的と対象をより明確に記述する。それでも制限が継続する場合は、実行環境の正規の手続きに従い、作業を停止または適切な環境へ移管する。
-
 
 ### 4.2 Historical design-intent gate（設計判断の必須照合）
 
