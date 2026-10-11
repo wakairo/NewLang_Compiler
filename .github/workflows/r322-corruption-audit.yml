@@ -1,0 +1,92 @@
+name: R322 seventh A.next owned-artifact public-validator corruption audit
+on:
+  push:
+    branches:
+      - r322-seventh-change-corruption-evidence
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-owned-corruption:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Guard exact pinned ancestry and evidence-only diff
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git merge-base HEAD 3d8621bab9c3c3b6bf509bebc3b17fd331502c28)" = "3d8621bab9c3c3b6bf509bebc3b17fd331502c28"
+          git show -s --format='R322_HEAD %H PARENT %P'
+          git diff --name-only 3d8621bab9c3c3b6bf509bebc3b17fd331502c28 HEAD | tee /tmp/r322_diff.txt
+          if grep -Ev '^(r322-evidence/|\.github/workflows/r322-corruption-audit\.yml$)' /tmp/r322_diff.txt; then
+            echo "R322_FORBIDDEN_DIFF"; exit 1
+          fi
+          test "$(grep -c '^r322-evidence/' /tmp/r322_diff.txt)" -ge 3
+          echo "R322_FIXED_ANCESTRY_AND_EVIDENCE_ONLY=OK"
+      - name: Install documented compiler prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap pinned compiler toolchain
+        run: python3 scripts/bootstrap.py
+      - name: Build pinned compiler (nine isolated experimental opt-ins)
+        shell: bash
+        run: |
+          set -euo pipefail
+          source .deps/activate.sh
+          CC=gcc cmake -S . -B build-r322 -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=OFF \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS=ON \
+            -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS=ON
+          cmake --build build-r322 --parallel 2
+          ./build-r322/newlangc --version
+          cc -std=c17 -O0 -g -Wall -Wextra -Werror \
+            -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS \
+            -Iinclude -Isrc r322-evidence/r322_corruption_observer.c \
+            build-r322/libnewlang_semantic.a build-r322/libnewlang_checked.a \
+            build-r322/libnewlang_parser.a build-r322/libnewlang_syntax.a \
+            build-r322/libnewlang_lexer.a build-r322/libnewlang_source.a \
+            build-r322/libnewlang_diagnostic.a -o build-r322/r322_observer
+      - name: Actual source admission, backend limit and independent public corruption oracle
+        shell: bash
+        run: |
+          set -euo pipefail
+          source .deps/activate.sh
+          sha256sum r322-evidence/calibration-r318-five-H.nl r322-evidence/r322_corruption_observer.c r322-evidence/PREREGISTERED_AUDIT.md
+          echo 'd3798e0dfbe9874d1261eaac92330d7f8edbad5c7ed92ef3cef7a0153c235ef0  r322-evidence/calibration-r318-five-H.nl' | sha256sum -c -
+          set +e
+          ./build-r322/newlangc r322-evidence/calibration-r318-five-H.nl >/tmp/r322-generated-c.txt 2>/tmp/r322-cli-diagnostic.txt
+          cli=$?
+          set -e
+          echo "R322_CLI_EXIT=$cli"
+          cat /tmp/r322-cli-diagnostic.txt
+          bytes=$(wc -c </tmp/r322-generated-c.txt)
+          echo "R322_EMITTED_C_BYTES=$bytes"
+          test "$cli" -eq 4
+          test "$bytes" -eq 0
+          grep -q 'V1-BACKEND-UNSUPPORTED' /tmp/r322-cli-diagnostic.txt
+          ./build-r322/r322_observer r322-evidence/calibration-r318-five-H.nl | tee /tmp/r322-observer.log
+          grep -q 'R322_REAL_SOURCE_GENERATED_POSITIVE_OK' /tmp/r322-observer.log
+          grep -q 'R322_CORRUPTION_MATRIX proposed=21 rejected=21 not_rejected=0 restore_failed=0' /tmp/r322-observer.log
+          grep -q 'R322_ALL_EXPECTED_CORRUPTIONS_REJECTED_AND_RESTORED' /tmp/r322-observer.log
+          test "$(grep -c '^R322_RESTORED case=' /tmp/r322-observer.log)" -eq 21
+          echo "R322_ORACLE_PASS"
+      - name: Preserve raw observable evidence logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r322-source-owned-public-validator-audit
+          path: |
+            /tmp/r322-observer.log
+            /tmp/r322-cli-diagnostic.txt
+            /tmp/r322_diff.txt
+          if-no-files-found: warn
