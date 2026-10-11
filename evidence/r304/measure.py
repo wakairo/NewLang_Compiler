@@ -9,6 +9,7 @@ import sys
 
 compiler = Path(sys.argv[1]).resolve()
 observer = Path(sys.argv[2]).resolve()
+boundary = Path(sys.argv[3]).resolve()
 repo = Path(__file__).resolve().parents[2]
 base = repo / "evidence/r304"
 results = []
@@ -43,6 +44,18 @@ def check_case(name, path, owned_expected=None):
         if owned.returncode!=0 or '"source_owned":true' not in owned.stdout:
             raise RuntimeError("first owned witness failed: "+name)
     else:
+        bnd=subprocess.run([str(boundary),str(path.resolve())], capture_output=True,text=True)
+        item["public_boundary"]={"exit":bnd.returncode,"stdout":bnd.stdout,"stderr":bnd.stderr}
+        if bnd.returncode!=0:
+            checkpoint()
+            raise RuntimeError("negative public registration/rollback failure "+name)
+        public=json.loads(bnd.stdout)
+        item["public_boundary"].update(public)
+        if (public["parse_status"]!=0 or public["registration_status"]!=1 or
+            not public["snapshot_unchanged"] or public["code"] not in run.stderr or
+            run.returncode!=3):
+            checkpoint()
+            raise RuntimeError("negative CLI and public registration disagree "+name)
         diag=run.stderr
         if run.returncode==3:
             if any(code in diag for code in
@@ -60,6 +73,7 @@ def check_case(name, path, owned_expected=None):
         else:
             item["parse_registration_cli"]="unexpected CLI state"
         checkpoint()
+        print(json.dumps({"public_negative":name,"boundary":item["public_boundary"]},ensure_ascii=False),flush=True)
     return item
 
 fixture=repo/"tests/fixtures/experimental_scoped_field_call.nl"
@@ -75,6 +89,7 @@ for key in ("wrong_domain","read_ref_as_write","domain_consume_reuse",
             "copy_ptr_authority"):
     check_case(key,base/(key+".nl"))
 semantic=sum(r["parse_registration_cli"]=="semantic-gated (diagnostic must be audited)"
+             and r["public_boundary"]["registration_status"]==1
              for r in results[3:])
 print(json.dumps({"cases":len(results),"new_positive_owned":2,
                   "negative_semantic_gates":semantic,"CI_url":

@@ -1,0 +1,8 @@
+Track: R — Issue #304; NON-BLIND calibrated second pass on experimental candidate b28a49755f1bc254b6a8f7c337e5e1866d9483b8.
+
+Calibration uses the existing fixture byte-for-byte (SHA256 checked in runner); it is explicitly NOT independent evidence. Two independent source variants retain the five allocation sites/domains, six original topology writes, and six 0..5 cleanup worlds:
+* same_pointer_fresh.nl: A.next is initially Some(B); named helper writes the identical Copy ptr B. The former Some occurrence must die, a distinct Some occurrence must start.
+* none_clears_occurrence.nl: A.next is initially Some(B); named helper writes None and is declared after main. There must be no new conditional occurrence.
+The independently authored public-header-only C owned observer checks real source-produced artifacts, scoped validator, five captured closure validators, original owner uniqueness, fixed root/projection identity, next Change/Reset, old payload end, prev sibling currentness, and five matched release nodes. It does NOT execute generated C, run a native heap or prove the unselected full detach/adopt.
+Seven negative cases are independently checked by the second new public-header-only C observer for registration status, first diagnostic span/code, transactional rollback and no entry; CLI error classification is checked separately. A nonexclusive ordinary write alias by itself is not a negative.
+GitHub Action run URLs and JSON observation artifacts are the authority for measured outcomes. These results are limited SOURCE→owned evidence only, not H1/cJSON/native or new Draft acceptance.

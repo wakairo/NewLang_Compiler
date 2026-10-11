@@ -45,11 +45,16 @@ jobs:
             build-r304/libnewlang_parser.a build-r304/libnewlang_syntax.a \
             build-r304/libnewlang_lexer.a build-r304/libnewlang_source.a \
             build-r304/libnewlang_diagnostic.a -Wl,--end-group -o build-r304/r304-observer
+          gcc-13 -std=c17 -Wall -Wextra -Werror -Iinclude evidence/r304/boundary_observer.c \
+            -Wl,--start-group build-r304/libnewlang_semantic.a build-r304/libnewlang_checked.a \
+            build-r304/libnewlang_parser.a build-r304/libnewlang_syntax.a \
+            build-r304/libnewlang_lexer.a build-r304/libnewlang_source.a \
+            build-r304/libnewlang_diagnostic.a -Wl,--end-group -o build-r304/r304-boundary
       - name: First calibrate, then check independently written source and owned snapshots
         run: |
           set -euo pipefail
           . .deps/activate.sh
-          python3 evidence/r304/measure.py build-r304/newlangc build-r304/r304-observer
+          python3 evidence/r304/measure.py build-r304/newlangc build-r304/r304-observer build-r304/r304-boundary
       - name: Upload measurement log, including first failure if any
         if: always()
         uses: actions/upload-artifact@v4
