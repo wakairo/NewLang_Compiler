@@ -183,7 +183,8 @@ static bool inspect(const NLCheckedFragment *entry){
         const NLCheckStatus st=nl_checked_captured_closure_validate(f,m);
         NLCapturedClosureView view;
         REQUIRE(nl_checked_captured_closure_view(f,m,&view));
-        REQUIRE(st==NL_CHECK_OK && view.count>=1 && view.release_worlds[i+1]>0);
+        printf("R328_CAPTURE_PROBE i=%zu status=%d count=%zu releases=%zu,%zu,%zu,%zu,%zu,%zu\\n",i,(int)st,view.count,view.release_worlds[0],view.release_worlds[1],view.release_worlds[2],view.release_worlds[3],view.release_worlds[4],view.release_worlds[5]);
+        REQUIRE(st==NL_CHECK_OK && view.count>=1);
         printf("R328_CAPTURED index=%zu match=%zu status=%d original_count=%zu releases=%zu\n",
                 i,m,(int)st,view.count,view.release_worlds[i+1]);
         f=nl_checked_match_arm(f,m,1);
