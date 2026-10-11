@@ -128,7 +128,12 @@ struct NLCheckedFragment {
         *whole_receive_origin;
     NLCheckedNodeId whole_call;
     void (*destroy_whole_world)(NLSemanticContext *);
-    NLCapturedChange *field_changes[6];
+#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS
+#define NL_CAPTURED_FIELD_CAPACITY 7
+#else
+#define NL_CAPTURED_FIELD_CAPACITY 6
+#endif
+    NLCapturedChange *field_changes[NL_CAPTURED_FIELD_CAPACITY];
     size_t field_change_count;
     void (*destroy_field_changes)(NLCheckedFragment *);
     NLCapturedClosure *captured_closure;
