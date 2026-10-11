@@ -36,7 +36,7 @@ cases = [
     ("active_domain_transfer",once(a,call_a,"let shadow_domain=moved_d_B; "+call_a),1,"P3-REF-CONFLICT",None),
     ("active_whole_owner_repack",once(b,call_b,"let illegal=LiveRoot{p:moved_ptr_B,a:moved_a_B,d:moved_d_B}; "+call_b),1,"P3-REF-CONFLICT",None),
     ("copy_pointer_as_domain",once(b,"ref_from_ptr(write,moved_ptr_B,stable_B_field)","ref_from_ptr(write,moved_ptr_B,moved_ptr_B)"),1,"ALLOCATED-REF-TYPE",None),
-    ("write_ref_escape",once(a,call_a+"\n                                                 unit",call_a+"\n                                                 write_B@next"),1,"P297-LOAN-ESCAPE",None),
+    ("write_ref_escape",once(a,call_a+"\n                                                unit",call_a+"\n                                                write_B@next"),1,"P297-LOAN-ESCAPE",None),
     ("wrong_B_terminal_domain",once(b,"loan_exclusive_read(final_d_B) { |ending_B|","loan_exclusive_read(life_A) { |ending_B|"),1,"P3-DOMAIN-MISMATCH",None),
     ("incorrect_B_terminal_allocation",once(a,"deallocate(final_a_B, full_B);","deallocate(allocation_A, full_B);"),1,"P4-ALLOCATION-MISMATCH",None),
     ("prev_precision_only",once(b,call_b,call_b.replace("@next","@prev")),3,"P297-CALL-PRECISION",None),
