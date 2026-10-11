@@ -1,0 +1,46 @@
+name: P329 fixed PR326 returned-only owner evidence (DO NOT MERGE)
+on:
+  push:
+    branches: [p329-returned-owner-after-detach]
+permissions:
+  contents: read
+jobs:
+  public-source-evidence:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Pin unchanged compiler, authority, and input hashes
+        run: |
+          test "$(git rev-parse HEAD^)" = de9c4b175784f484675b670a109f62edeaf35de1
+          python3 - <<'PY'
+          import subprocess
+          for line in subprocess.check_output(['git','diff','--name-status','de9c4b175784f484675b670a109f62edeaf35de1','HEAD'],text=True).splitlines():
+              status,path=line.split('\t')
+              assert status=='A' and (path.startswith('evidence/p329/') or path=='.github/workflows/p329-returned-owner-evidence.yml' or path=='docs/experiments/P329_RETURNED_OWNER.md'),line
+          PY
+          echo 'f7bdb6a3b6b2e446767f0340451fec1c63ade5d7d147b6fda4abbad3b9d2a1b5  tests/fixtures/experimental_cross_root_c_prev.nl' | sha256sum --check
+          echo '1cf957992a9f1c8afd16fc84c01e3876a2179ec79251950a809667ef31103b0a  evidence/p329/first_falsifier.nl' | sha256sum --check
+          echo 'bd7692f8118c8e4de2b7662b0f90fcf503a548d9948bfded27bd430ad127716d  evidence/p329/returned_owner.nl' | sha256sum --check
+      - name: Install runtime prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap checksum-locked LLVM
+        run: python3 scripts/bootstrap.py
+      - name: Assert calibration and composed real owned source, 15 controls, rollback and sampled OOM
+        env:
+          CC: gcc-13
+        run: |
+          . .deps/activate.sh
+          bash evidence/p329/run.sh build-p329
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p329-source-owned-evidence
+          path: |
+            build-p329/p329-calibration.jsonl
+            build-p329/p329-observations.json
+            build-p329/p329-owned-oom.jsonl
+            build-p329/p329-compiler-sha256.txt
