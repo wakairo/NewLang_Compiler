@@ -20,7 +20,7 @@ jobs:
           test "$(git merge-base de9c4b175784f484675b670a109f62edeaf35de1 HEAD)" = de9c4b175784f484675b670a109f62edeaf35de1
           git diff --name-only de9c4b175784f484675b670a109f62edeaf35de1 HEAD > r333-changed-paths.txt
           cat r333-changed-paths.txt
-          if grep -Ev '^(r333/|\.github/workflows/r333-calibrated\.yml$)' r333-changed-paths.txt; then exit 21; fi
+          if grep -Ev '^(r333/|\.github/workflows/r333-independent-returned\.yml$)' r333-changed-paths.txt; then exit 21; fi
           sha256sum r333/independent_returned.nl
           git log --format='%H %s' -3
       - name: Install compiler dependencies
