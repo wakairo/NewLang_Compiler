@@ -1,0 +1,117 @@
+name: P315 exact original A.next cross-root finite compiler candidate (DRAFT)
+on:
+  push:
+    branches: [p315-cross-root-a-next-after-two-b]
+permissions:
+  contents: read
+jobs:
+  evidence:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: GCC Debug
+            compiler: gcc-13
+            build_type: Debug
+            sanitizer: none
+          - name: GCC Release
+            compiler: gcc-13
+            build_type: Release
+            sanitizer: none
+          - name: Clang
+            compiler: clang-23
+            build_type: Debug
+            sanitizer: none
+          - name: ASan-LSan
+            compiler: clang-23
+            build_type: Debug
+            sanitizer: address
+          - name: UBSan
+            compiler: clang-23
+            build_type: Debug
+            sanitizer: undefined
+    name: ${{ matrix.name }}
+    env:
+      CC: ${{ matrix.compiler }}
+      ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+      UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prove immutable PR313 ancestry and unchanged reference authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor f6034297edababdf37b90ddfd1dd083e31804b80 HEAD
+          git diff --exit-code f6034297edababdf37b90ddfd1dd083e31804b80 -- include tests docs/reference scripts
+          git diff --name-only f6034297edababdf37b90ddfd1dd083e31804b80 HEAD
+      - name: Install compiler prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap pinned LLVM
+        run: python3 scripts/bootstrap.py
+      - name: Previous default OFF regressions
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .deps/activate.sh
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DNEWLANG_SANITIZER=${{ matrix.sanitizer }} -DCMAKE_C_COMPILER=${{ matrix.compiler }}
+          cmake --build build --parallel 2
+          ctest --test-dir build --output-on-failure | tee build/p315-off-tests.txt
+      - name: Previous eight ON and ninth OFF, reject third cross-root Change
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .deps/activate.sh
+          cmake -S . -B build \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS=ON
+          cmake --build build --parallel 2
+          ctest --test-dir build --output-on-failure | tee build/p315-eight-tests.txt
+          python3 evidence/p315/probe_candidate.py build/newlangc build/five_root_source_gate_evidence | tee build/p315-eight-source.txt
+          build/five_root_source_gate_evidence evidence/p315/generated/third-A-next-own-domain.nl > build/p315-eight-refusal.json
+          python3 -c 'import json;d=json.load(open("build/p315-eight-refusal.json"));assert d["registration_status"]==3 and d["code"]=="CAPTURED-CLOSURE-PRECISION" and d["snapshot_unchanged"]'
+      - name: All nine ON, public checked-owned and fourteen negative rollback controls
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .deps/activate.sh
+          cmake -S . -B build \
+            -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS=ON
+          cmake --build build --parallel 2
+          ctest --test-dir build --output-on-failure | tee build/p315-nine-tests.txt
+          python3 evidence/p315/probe_candidate.py build/newlangc build/five_root_source_gate_evidence | tee build/p315-nine-source.txt
+          gcc-13 -std=c17 -O0 -g -Iinclude evidence/p315/public_seventh_observer.c \
+            -Wl,--start-group $(find build -name '*.a') -Wl,--end-group \
+            -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc -lm \
+            -o build/p315-public-observer
+          build/p315-public-observer evidence/p315/generated/third-A-next-own-domain.nl | tee build/p315-nine-public-owned.txt
+          python3 evidence/p315/probe_negatives.py build/newlangc \
+            build/five_root_source_gate_evidence build/p315-public-observer \
+            | tee build/p315-nine-negatives.txt
+          sha256sum build/newlangc > build/p315-compiler-sha256.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p315-${{ matrix.name }}
+          path: |
+            build/p315-off-tests.txt
+            build/p315-eight-tests.txt
+            build/p315-nine-tests.txt
+            build/p315-eight-refusal.json
+            build/p315-eight-source.txt
+            build/p315-nine-source.txt
+            build/p315-nine-public-owned.txt
+            build/p315-nine-negatives.txt
+            build/p315-compiler-sha256.txt
+            build/Testing/Temporary/LastTest.log
