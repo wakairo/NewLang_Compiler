@@ -112,7 +112,6 @@ PREFIX=lines(
 "}",
 "fn clear_link(field: ref<write, Option<ptr<Node>>>, target: Option<ptr<Node>>) -> unit {",
 "    let old = replace(field, target);",
-"    old;",
 "    unit",
 "}",
 "fn main() -> unit {")
