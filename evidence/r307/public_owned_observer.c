@@ -2,6 +2,7 @@
  * This host C program is NOT NewLang generated code. */
 #include "newlang/captured_closure.h"
 #include "newlang/parser.h"
+#include "newlang/raw_storage.h"
 #include "newlang/source.h"
 #include "newlang/semantic.h"
 #include <stdio.h>
