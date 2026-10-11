@@ -1,0 +1,87 @@
+name: P315 bounded direct A.next after two B calls (DO NOT MERGE)
+on:
+  push:
+    branches: [p315-cross-root-a-next]
+permissions:
+  contents: read
+jobs:
+  evidence:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: GCC Debug
+            compiler: gcc-13
+            build_type: Debug
+            sanitizer: none
+          - name: GCC Release
+            compiler: gcc-13
+            build_type: Release
+            sanitizer: none
+          - name: Clang
+            compiler: clang-23
+            build_type: Debug
+            sanitizer: none
+          - name: ASan-LSan
+            compiler: clang-23
+            build_type: Debug
+            sanitizer: address
+          - name: UBSan
+            compiler: clang-23
+            build_type: Debug
+            sanitizer: undefined
+    name: ${{ matrix.name }}
+    env:
+      CC: ${{ matrix.compiler }}
+      ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+      UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Assert fixed PR313 parent and immutable authority/calibrators
+        run: |
+          test "$(git rev-parse HEAD^)" = f6034297edababdf37b90ddfd1dd083e31804b80
+          git diff --exit-code f6034297edababdf37b90ddfd1dd083e31804b80 -- include docs/reference/CURRENT_SPEC.md docs/reference/NewLang_v0_spec_Draft17_30.md docs/NewLang_Project_Development_Process.md docs/NewLang_Design_Decision_Procedure.md docs/NewLang_Design_Intent_Ledger.md tests/fixtures/experimental_scoped_field_call.nl tests/fixtures/experimental_five_root_detach_attach.nl tests/fixtures/experimental_moved_b_prev_call.nl tests/fixtures/experimental_two_scoped_field_calls.nl evidence/p308/P306_fixed_holder_calibration.nl
+      - name: Install compiler and runtime prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap checksum-locked LLVM
+        run: python3 scripts/bootstrap.py
+      - name: Default OFF regression
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DNEWLANG_SANITIZER=${{ matrix.sanitizer }}
+          cmake --build build --parallel 2
+          ctest --test-dir build --output-on-failure
+      - name: Eight prior opt-ins ON, cross-root flag OFF
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON -DNEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=ON -DNEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS=ON -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS=OFF
+          cmake --build build --parallel 2
+          ctest --test-dir build --output-on-failure
+          build/five_root_source_gate_evidence tests/fixtures/experimental_cross_root_a_next.nl > build/off-third.json
+          python3 -c 'import json; d=json.load(open("build/off-third.json")); assert d["parse_status"]==0 and d["registration_status"]==3 and d["code"]=="CAPTURED-CLOSURE-PRECISION" and d["snapshot_unchanged"]'
+      - name: New single cross-root opt-in ON, source-owned and validator regressions
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS=ON
+          cmake --build build --parallel 2
+          ctest --test-dir build --output-on-failure
+          python3 tests/integration/cross_root_a_next_test.py build/newlangc build/cross_root_a_next_evidence build/five_root_source_gate_evidence build/two_scoped_field_evidence build/p315-observations.json
+          build/captured_closure_test full-cross-root-poison tests/fixtures/experimental_cross_root_a_next.nl
+          sha256sum build/newlangc > build/p315-compiler-sha256.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p315-${{ matrix.name }}
+          path: |
+            build/p315-observations.json
+            build/p315-compiler-sha256.txt
+            build/Testing/Temporary/LastTest.log
+            build/off-third.json

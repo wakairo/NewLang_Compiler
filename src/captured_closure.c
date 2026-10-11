@@ -4,6 +4,9 @@
 #include <string.h>
 
 #define INVALID NL_CHECK_ANALYSIS_PRECISION_LIMIT
+#define CHANGE_CAPACITY                                                        \
+    (sizeof(((NLCheckedFragment *)0)->field_changes) /                         \
+     sizeof(NLCapturedChange *))
 
 static void changes_destroy(NLCheckedFragment *f)
 {
@@ -20,7 +23,12 @@ NLCheckStatus nl_captured_change_begin(NLCheckedFragment *f,
                                        NLCheckedNodeId node,
                                        const NLSemanticContext *world)
 {
-    if (f->field_change_count >= 6)
+    if (f->field_change_count >= CHANGE_CAPACITY
+#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS
+        || (f->field_change_count == 6 && (!f->second_scoped_field_call ||
+                                           node <= f->second_scoped_field_call))
+#endif
+    )
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     NLCapturedChange *c = calloc(1, sizeof(*c));
     if (c == NULL)
@@ -49,7 +57,7 @@ bool nl_checked_captured_change_view(const NLCheckedFragment *f, size_t index,
                                      NLCapturedChangeView *out)
 {
     if (f == NULL || out == NULL || index >= f->field_change_count ||
-        index >= 6 || f->field_changes[index] == NULL)
+        index >= CHANGE_CAPACITY || f->field_changes[index] == NULL)
         return false;
     const NLCapturedChange *c = f->field_changes[index];
     *out = (NLCapturedChangeView){c->node, c->world, c->before, c->after};
@@ -343,6 +351,98 @@ static bool pointer_to(const NLSemanticContext *world,
            pointer.reference.place == root &&
            pointer.reference.incarnation == incarnation;
 }
+#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS
+/* Exactly one seventh direct Change after both B scopes. Existing primitive
+ * replay and the original-release ledger still prove every authority. */
+static bool cross_root_third(const NLCheckedFragment *f,
+                             const NLCapturedChange *change)
+{
+    NLScopedFieldCallView second;
+    const NLCheckedNodeView *write = nl_checked_node_view(f, change->node);
+    if (f->field_change_count != 7 || change != f->field_changes[6] ||
+        !f->scoped_field_call || !f->second_scoped_field_call ||
+        f->scoped_field_call >= f->second_scoped_field_call ||
+        f->second_scoped_field_call >= change->node ||
+        !nl_checked_scoped_field_call_view(f, f->second_scoped_field_call,
+                                           &second) ||
+        !write || write->field.index != 0 || !change->before)
+        return false;
+    const NLSemanticContext *before = change->before,
+                            *prior = second.change.after;
+    const NLCheckedNodeView *second_write =
+        nl_checked_node_view(second.body, second.change.operation);
+    if (!prior || !second_write || !write->field.parent ||
+        write->field.parent > before->place_count ||
+        !second_write->field.parent ||
+        second_write->field.parent > before->place_count ||
+        !write->field.old_value ||
+        write->field.old_value > before->value_count ||
+        !write->field.new_value || write->field.new_value > before->value_count)
+        return false;
+    const NLCheckedNodeView *projection = argument_node(f, write, 0);
+    if (!projection || !projection->has_reference_result ||
+        !projection->reference_result.scope ||
+        projection->reference_result.scope > f->context->scope_count ||
+        f->context->scopes[projection->reference_result.scope - 1].active)
+        return false;
+    const NLSemanticPlaceView a = before->places[write->field.parent - 1];
+    const NLSemanticPlaceView b =
+        before->places[second_write->field.parent - 1];
+    if (!a.live || a.placement.region != 2 || a.governing_domain != 2 ||
+        !b.live || b.placement.region != 3 || b.governing_domain != 3)
+        return false;
+    const NLSemanticValueView old = before->values[write->field.old_value - 1];
+    const NLSemanticValueView incoming =
+        before->values[write->field.new_value - 1];
+    if (old.variant != 2 || incoming.variant != 2 || !old.sum_payload ||
+        old.sum_payload > before->value_count || !incoming.sum_payload ||
+        incoming.sum_payload > before->value_count ||
+        !pointer_to(before, before->values[old.sum_payload - 1],
+                    second_write->field.parent, b.incarnation))
+        return false;
+    const NLSemanticValueView cp = before->values[incoming.sum_payload - 1];
+    if (!cp.reference.place || cp.reference.place > before->place_count)
+        return false;
+    const NLSemanticPlaceView c = before->places[cp.reference.place - 1];
+    if (!c.live || c.placement.region != 4 || c.governing_domain != 4 ||
+        !pointer_to(before, cp, cp.reference.place, c.incarnation))
+        return false;
+    for (size_t i = 0; i < 2; ++i) {
+        NLScopedFieldCallView call;
+        if (!nl_checked_scoped_field_call_view(
+                f, i ? f->second_scoped_field_call : f->scoped_field_call,
+                &call))
+            return false;
+        const NLCheckedNodeView *projection =
+            nl_checked_node_view(f, call.projection);
+        if (!projection || !projection->reference_result.scope ||
+            projection->reference_result.scope > before->scope_count ||
+            before->scopes[projection->reference_result.scope - 1].active)
+            return false;
+    }
+    /* Ref/scoped local additions may occur; current roots/fields may not. */
+    size_t roots = 0;
+    for (size_t i = 0; i < prior->place_count; ++i) {
+        const NLSemanticPlaceView p = prior->places[i];
+        if (!p.live || p.fixed_field_count != 4 || !p.placement.region)
+            continue;
+        if (i >= before->place_count ||
+            memcmp(&p, &before->places[i], sizeof(p)))
+            return false;
+        ++roots;
+        for (size_t j = 0; j < 4; ++j) {
+            const NLPlaceId child = p.fixed_fields[j];
+            if (!child || child > prior->place_count ||
+                child > before->place_count ||
+                memcmp(&prior->places[child - 1], &before->places[child - 1],
+                       sizeof(NLSemanticPlaceView)))
+                return false;
+        }
+    }
+    return roots == 5;
+}
+#endif
+
 static bool domain_ref(const NLSemanticContext *world,
                        NLSemanticValueView reference, NLDomainId domain,
                        bool exclusive)
@@ -1544,7 +1644,7 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
         if (!owner_node_shape(f, nl_checked_node_view(f, i)))
             return INVALID;
 #endif
-    if (f->field_change_count > 6)
+    if (f->field_change_count > CHANGE_CAPACITY)
         return INVALID;
     Release releases[NL_CAPTURED_MAX_RELEASES] = {0};
     size_t count = certificate->view.count, grants = 0;
@@ -1811,10 +1911,15 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
         }
         if (v->kind == NL_CHECKED_REPLACE) {
             if (nested || count != 5 || changes >= f->field_change_count ||
-                changes >= 6 || f->field_changes[changes] == NULL ||
+                changes >= CHANGE_CAPACITY ||
+                f->field_changes[changes] == NULL ||
                 f->field_changes[changes]->node != i)
                 return INVALID;
             const NLCapturedChange *change = f->field_changes[changes++];
+#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS
+            if (changes == 7 && !cross_root_third(f, change))
+                return INVALID;
+#endif
             NLCheckStatus s = change_validate(f, change);
             if (s != NL_CHECK_OK)
                 return s;
@@ -1891,7 +1996,8 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
         if (v->kind == NL_CHECKED_REF_FROM_PTR ||
             v->kind == NL_CHECKED_FIELD_REF) {
             bool proved = false;
-            for (size_t j = 0; j < f->field_change_count && j < 6; ++j) {
+            for (size_t j = 0; j < f->field_change_count && j < CHANGE_CAPACITY;
+                 ++j) {
                 const NLCapturedChange *change = f->field_changes[j];
                 const NLCheckedNodeView *write =
                     change == NULL ? NULL

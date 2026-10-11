@@ -1585,6 +1585,125 @@ static bool two_registry_poison(const char *path)
 }
 #endif
 
+#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS
+static bool cross_root_poison(const char *path)
+{
+    CHECK(two_registry_poison(path));
+    NLCheckedFragment *entry = NULL;
+    NLCheckDiagnostic diagnostic = {0};
+    CHECK(load(path, &entry, &diagnostic) == NL_CHECK_OK);
+    NLCheckedFragment *top = (NLCheckedFragment *)body(entry);
+    NLCheckedFragment *parent = at_count(entry, 4);
+    NLCheckedFragment *leaf =
+        (NLCheckedFragment *)nl_checked_match_arm(parent, match(parent), 1);
+    CHECK(leaf->field_change_count == 7);
+    NLCapturedChange *change = leaf->field_changes[6];
+    NLCheckedNodeView *write = &leaf->nodes[change->node - 1];
+    const NLCheckedNodeView saved = *write;
+    NLSemanticContext *before = change->before, *after = change->after;
+    const NLPlaceId field = write->field.child, root = write->field.parent;
+    size_t rejected = 0;
+#define REJECT_DIRECT()                                                        \
+    do {                                                                       \
+        CHECK(rejected_certificate(top, entry));                               \
+        ++rejected;                                                            \
+    } while (0)
+    leaf->field_change_count = 6;
+    REJECT_DIRECT();
+    leaf->field_change_count = 7;
+    write->kind = NL_CHECKED_UNIT;
+    REJECT_DIRECT();
+    *write = saved;
+    ++write->field.index;
+    REJECT_DIRECT();
+    *write = saved;
+    ++write->field.nominal;
+    REJECT_DIRECT();
+    *write = saved;
+    ++write->field.child_fact;
+    REJECT_DIRECT();
+    *write = saved;
+    ++write->field.child_post_fact;
+    REJECT_DIRECT();
+    *write = saved;
+    ++write->field.parent_post_fact;
+    REJECT_DIRECT();
+    *write = saved;
+    const NLCheckedNodeId operation = change->node;
+    change->node = leaf->second_scoped_field_call - 1;
+    REJECT_DIRECT();
+    change->node = operation;
+    const NLSemanticPlaceView good_field = after->places[field - 1];
+    after->places[field - 1].payload_occurrence =
+        before->places[field - 1].payload_occurrence;
+    REJECT_DIRECT();
+    after->places[field - 1] = good_field;
+    const NLOccurrenceId occurrence =
+        before->places[field - 1].payload_occurrence;
+    after->occurrences[occurrence - 1].live = true;
+    REJECT_DIRECT();
+    after->occurrences[occurrence - 1].live = false;
+    const NLPlaceId payload = before->occurrences[occurrence - 1].payload_place;
+    const NLSemanticPlaceView good_payload = after->places[payload - 1];
+    after->places[payload - 1] = before->places[payload - 1];
+    REJECT_DIRECT();
+    after->places[payload - 1] = good_payload;
+    const NLPlaceId sibling = before->places[root - 1].fixed_fields[1];
+    ++after->places[sibling - 1].current_fact;
+    REJECT_DIRECT();
+    --after->places[sibling - 1].current_fact;
+    NLScopedFieldCallView second;
+    CHECK(nl_checked_scoped_field_call_view(
+        leaf, leaf->second_scoped_field_call, &second));
+    const NLCheckedNodeView *bp = nl_checked_node_view(leaf, second.projection);
+    const NLPlaceId bprev =
+        before->places[bp->field.parent - 1].fixed_fields[1];
+    ++after->places[bprev - 1].current_fact;
+    REJECT_DIRECT();
+    --after->places[bprev - 1].current_fact;
+    const NLScopeId bscope = bp->reference_result.scope;
+    before->scopes[bscope - 1].active = true;
+    REJECT_DIRECT();
+    before->scopes[bscope - 1].active = false;
+    const NLCheckedNodeView *ap =
+        nl_checked_node_view(leaf, write->first_argument);
+    const NLScopeId ascope = ap->reference_result.scope;
+    leaf->context->scopes[ascope - 1].active = true;
+    REJECT_DIRECT();
+    leaf->context->scopes[ascope - 1].active = false;
+    const NLDomainId domain = before->places[root - 1].governing_domain;
+    before->places[root - 1].governing_domain = 3;
+    REJECT_DIRECT();
+    before->places[root - 1].governing_domain = domain;
+    const NLValueId av = before->values[write->field.new_value - 1].sum_payload;
+    const NLReferenceFacts original = before->values[av - 1].reference;
+    before->values[av - 1].reference.place = bp->field.parent;
+    before->values[av - 1].reference.incarnation =
+        before->places[bp->field.parent - 1].incarnation;
+    REJECT_DIRECT();
+    before->values[av - 1].reference = original;
+    const NLCheckedNodeView good_second =
+        leaf->nodes[leaf->second_scoped_field_call - 1];
+    leaf->nodes[leaf->second_scoped_field_call - 1] = saved;
+    *write = good_second;
+    REJECT_DIRECT();
+    *write = saved;
+    leaf->nodes[leaf->second_scoped_field_call - 1] = good_second;
+    CHECK(
+        nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK &&
+        nl_checked_scoped_field_call_validate(leaf, leaf->scoped_field_call) ==
+            NL_CHECK_OK &&
+        nl_checked_scoped_field_call_validate(
+            leaf, leaf->second_scoped_field_call) == NL_CHECK_OK);
+    printf("direct cross-root actual source artifact poison rejected: %zu; "
+           "restored public validators pass\n",
+           rejected);
+#undef REJECT_DIRECT
+    nl_checked_destroy(entry);
+    return true;
+}
+#endif
+
 int main(int argc, char **argv)
 {
     if (argc >= 2 && strncmp(argv[1], "full-", 5) == 0) {
@@ -1603,6 +1722,10 @@ int main(int argc, char **argv)
 #ifdef NEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL
 #ifdef NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
 #ifdef NEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS
+#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS
+    if (strcmp(argv[1], "cross-root-poison") == 0)
+        return cross_root_poison(argv[2]) ? 0 : 1;
+#endif
     if (strcmp(argv[1], "two-scoped-poison") == 0)
         return two_registry_poison(argv[2]) ? 0 : 1;
 #endif
