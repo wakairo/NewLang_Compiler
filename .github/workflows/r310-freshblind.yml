@@ -69,6 +69,31 @@ jobs:
             'illegal_payload':s.replace('set_link(write_B_change@prev, Option<ptr<Node>>::None);','set_link(write_B_change@payload, Option<ptr<Node>>::None);'),
             'some_to_some':s.replace('set_link(write_B_change@prev, Option<ptr<Node>>::None);','set_link(write_B_change@prev, Option<ptr<Node>>::Some(ptr_C));')
           }
+          def strip_observers(src):
+            a=src.index('let original_B_next_before =')
+            b=src.index('let changed_prev =',a)
+            src=src[:a]+src[b:]
+            a=src.index('let original_B_next_after =')
+            b=src.index('let empty_dst =',a)
+            return src[:a]+src[b:]
+          def one_holder(src):
+            return src.replace('let transferred_holder = original_holder;','').replace('= transferred_holder;', '= original_holder;')
+          def no_holder(src):
+            a=src.index('let original_holder =')
+            b=src.index('let original_B_next_before =',a)
+            src=src[:a]+'''let original_ptr_B = ptr_B;
+                                            let original_allocation_B = allocation_B;
+                                            let original_domain_B = life_B;
+                                            '''+src[b:]
+            return src
+          def inline_helper(src):
+            return src.replace('set_link(write_B_change@prev, Option<ptr<Node>>::None);', 'let inline_old_prev = replace(write_B_change@prev, Option<ptr<Node>>::None);')
+          bad['minimal_holder_call']=one_holder(strip_observers(s))
+          bad['minimal_holder_inline']=inline_helper(one_holder(strip_observers(s)))
+          bad['minimal_alias_call']=no_holder(strip_observers(s))
+          bad['minimal_alias_inline']=inline_helper(no_holder(strip_observers(s)))
+          bad['original_holder_no_observers']=strip_observers(s)
+          bad['original_holder_inline']=inline_helper(strip_observers(s))
           for name,src in bad.items():
             (d/(name+'.nl')).write_text(src)
           PY
