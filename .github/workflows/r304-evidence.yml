@@ -1,0 +1,59 @@
+name: R304 calibrated second-pass independent evidence
+on:
+  push:
+    branches:
+      - r304-calibrated-evidence
+permissions:
+  contents: read
+jobs:
+  measure:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Assert frozen compiler and no production edits
+        shell: bash
+        run: |
+          set -euo pipefail
+          FROZEN=b28a49755f1bc254b6a8f7c337e5e1866d9483b8
+          test "$(git rev-parse "$FROZEN")" = "$FROZEN"
+          git merge-base --is-ancestor "$FROZEN" HEAD
+          git diff --exit-code "$FROZEN" HEAD -- CMakeLists.txt src/ include/ tests/ docs/reference/ .github/workflows/compiler-ci.yml
+          echo "frozen_candidate=$FROZEN evidence_head=$(git rev-parse HEAD)"
+      - name: Linux build prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Locked LLVM 23.1.2 environment
+        run: python3 scripts/bootstrap.py
+      - name: Compile exact six-opt-in frozen experimental compiler and independent C observer
+        run: |
+          set -euo pipefail
+          . .deps/activate.sh
+          cmake -S . -B build-r304 -DCMAKE_C_COMPILER=gcc-13 -DCMAKE_BUILD_TYPE=Debug \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON
+          cmake --build build-r304 --parallel 2 --target newlangc newlang_semantic
+          gcc-13 -std=c17 -Wall -Wextra -Werror -Iinclude evidence/r304/owned_observer.c \
+            -Wl,--start-group build-r304/libnewlang_semantic.a build-r304/libnewlang_checked.a \
+            build-r304/libnewlang_parser.a build-r304/libnewlang_syntax.a \
+            build-r304/libnewlang_lexer.a build-r304/libnewlang_source.a \
+            build-r304/libnewlang_diagnostic.a -Wl,--end-group -o build-r304/r304-observer
+      - name: First calibrate, then check independently written source and owned snapshots
+        run: |
+          set -euo pipefail
+          . .deps/activate.sh
+          python3 evidence/r304/measure.py build-r304/newlangc build-r304/r304-observer
+      - name: Upload measurement log, including first failure if any
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r304-observations
+          path: evidence/r304/observations.json
+          if-no-files-found: warn
