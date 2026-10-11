@@ -74,7 +74,7 @@ jobs:
             -Wl,--end-group -o r328-observer
           ./r328-observer r328/independent_calibrated.nl | tee r328-observer.log
           sha256sum r328/independent_observer.c r328/independent_calibrated.nl r328-observer.log
-      - name: Generate fourteen independent source controls and exercise transactional public boundary
+      - name: Generate fifteen independent source controls and exercise transactional public boundary
         shell: bash
         run: |
           set -euo pipefail
@@ -89,10 +89,10 @@ jobs:
           import hashlib,json,re,subprocess
           from pathlib import Path
           variants=sorted(Path("r328/variants").glob("*.nl"))
-          assert len(variants)==14,len(variants)
+          assert len(variants)==15,len(variants)
           bad_authority = {"B_prev_wrong_A_domain","B_next_wrong_C_domain",
            "A_next_wrong_B_domain","C_prev_wrong_A_domain","B_prev_read_not_write",
-           "B_next_ptr_not_ref","B_original_owner_after_move",
+           "B_next_ptr_not_ref","B_original_D_after_move",
            "B_allocation_double_consume","C_terminal_wrong_D","active_B_loan_during_move"}
           violations=[]
           for file in variants:
