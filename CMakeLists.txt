@@ -85,6 +85,15 @@ if(NEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS)
     target_compile_definitions(newlang_options INTERFACE
         NEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS=1)
 endif()
+option(NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS
+    "UNADOPTED Issue 315 original A.next direct replacement after two B helper calls; DO NOT MERGE" OFF)
+if(NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS)
+    if(NOT NEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS)
+        message(FATAL_ERROR "Issue 315 requires the separate Issue 312 opt-in")
+    endif()
+    target_compile_definitions(newlang_options INTERFACE
+        NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS=1)
+endif()
 target_compile_options(newlang_options INTERFACE
     -Wall -Wextra -Wpedantic -Werror)
 if(NOT NEWLANG_SANITIZER STREQUAL "none")
