@@ -42,6 +42,19 @@ size_t nl_checked_captured_change_count(const NLCheckedFragment *);
 bool nl_checked_captured_change_view(const NLCheckedFragment *, size_t,
                                      NLCapturedChangeView *);
 
+/* Issue297 experimental evidence only; no source authority is granted.
+ * The callee owns one actual Change snapshot; projection belongs to caller. */
+typedef struct {
+    const NLCheckedFragment *body;
+    NLCheckedNodeId projection;
+    NLCapturedChangeView change;
+} NLScopedFieldCallView;
+bool nl_checked_scoped_field_call_view(const NLCheckedFragment *,
+                                       NLCheckedNodeId,
+                                       NLScopedFieldCallView *);
+NLCheckStatus nl_checked_scoped_field_call_validate(const NLCheckedFragment *,
+                                                    NLCheckedNodeId);
+
 bool nl_checked_captured_closure_view(const NLCheckedFragment *,
                                       NLCheckedNodeId, NLCapturedClosureView *);
 /* Read-only rederivation and both-arm evidence validation. OOM is explicit;

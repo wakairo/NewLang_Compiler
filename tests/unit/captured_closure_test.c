@@ -1388,6 +1388,109 @@ static bool owner_parser_oom(const char *path)
 }
 #endif
 
+#ifdef NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
+/* Mutate owned production evidence only; never seed a successful source check.
+ */
+static bool scoped_poison(const char *path)
+{
+    NLCheckedFragment *entry = NULL;
+    NLCheckDiagnostic diagnostic = {0};
+    CHECK(load(path, &entry, &diagnostic) == NL_CHECK_OK);
+    NLCheckedFragment *top = (NLCheckedFragment *)body(entry);
+    NLCheckedFragment *parent = at_count(entry, 4);
+    NLCheckedFragment *leaf =
+        (NLCheckedFragment *)nl_checked_match_arm(parent, match(parent), 1);
+    NLScopedFieldCallView view;
+    const NLCheckedNodeId call = leaf->scoped_field_call;
+    CHECK(nl_checked_scoped_field_call_view(leaf, call, &view) &&
+          nl_checked_scoped_field_call_validate(leaf, call) == NL_CHECK_OK);
+    NLCheckedFragment *callee = (NLCheckedFragment *)view.body;
+    NLCheckedNodeView *write = &callee->nodes[view.change.operation - 1];
+    NLCheckedNodeView *projection = &leaf->nodes[view.projection - 1];
+    const NLCheckedNodeView good_write = *write, good_projection = *projection;
+    NLCapturedChange *change = callee->field_changes[0];
+    NLSemanticContext *before = change->before, *after = change->after;
+    size_t count = 0;
+#define REJECT_SCOPED()                                                        \
+    do {                                                                       \
+        CHECK(nl_checked_scoped_field_call_validate(leaf, call) ==             \
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);                              \
+        CHECK(rejected_certificate(top, entry));                               \
+        ++count;                                                               \
+    } while (0)
+    ++projection->field.index;
+    REJECT_SCOPED();
+    *projection = good_projection;
+    ++write->field.child_fact;
+    REJECT_SCOPED();
+    *write = good_write;
+    ++write->field.post_payload_occurrence;
+    REJECT_SCOPED();
+    *write = good_write;
+    ++write->field.parent_incarnation;
+    REJECT_SCOPED();
+    *write = good_write;
+    leaf->nodes[call - 1].result_count = 1;
+    REJECT_SCOPED();
+    leaf->nodes[call - 1].result_count = 0;
+    const NLOccurrenceId old = write->field.payload_occurrence;
+    after->occurrences[old - 1].live = true;
+    REJECT_SCOPED();
+    after->occurrences[old - 1].live = false;
+    NLSemanticPlaceView *prev =
+        &after->places[after->places[write->field.parent - 1].fixed_fields[1] -
+                       1];
+    const NLValueFactId prev_fact = prev->current_fact;
+    ++prev->current_fact;
+    REJECT_SCOPED();
+    prev->current_fact = prev_fact;
+    for (size_t i = 0; i < before->value_count; ++i) {
+        NLSemanticValueView *v = &before->values[i];
+        if (v->carrier != NL_CARRIER_ENDED &&
+            before->types[v->type - 1].view.kind == NL_TYPE_ALLOCATION) {
+            const NLBackingRegionId region = v->allocation_region;
+            v->allocation_region = region == 1 ? 2 : 1;
+            REJECT_SCOPED();
+            v->allocation_region = region;
+            break;
+        }
+    }
+    const NLDomainId domain =
+        before->places[write->field.parent - 1].governing_domain;
+    before->places[write->field.parent - 1].governing_domain = 1;
+    REJECT_SCOPED();
+    before->places[write->field.parent - 1].governing_domain = domain;
+    /* A retained old-occurrence ref is an operation conflict even when an
+     * exact state replay alone would leave that dangling fact unchanged. */
+    size_t spare = SIZE_MAX;
+    for (size_t i = 0; i < before->value_count; ++i)
+        if (before->values[i].carrier == NL_CARRIER_ENDED &&
+            before->types[before->values[i].type - 1].view.is_copy) {
+            spare = i;
+            break;
+        }
+    CHECK(spare != SIZE_MAX && spare < after->value_count);
+    const NLSemanticValueView saved_before = before->values[spare],
+                              saved_after = after->values[spare];
+    const NLValueId ref =
+        callee->nodes[write->first_argument - 1].results[0].value;
+    before->values[spare] = before->values[ref - 1];
+    before->values[spare].reference.occurrence_dependency = old;
+    after->values[spare] = before->values[spare];
+    REJECT_SCOPED();
+    before->values[spare] = saved_before;
+    after->values[spare] = saved_after;
+    CHECK(nl_checked_scoped_field_call_validate(leaf, call) == NL_CHECK_OK &&
+          nl_checked_captured_closure_validate(top, match(top)) == NL_CHECK_OK);
+    printf("scoped actual owned artifact poison rejected: %zu; restored public "
+           "validators pass\n",
+           count);
+#undef REJECT_SCOPED
+    nl_checked_destroy(entry);
+    return true;
+}
+#endif
+
 int main(int argc, char **argv)
 {
     if (argc >= 2 && strncmp(argv[1], "full-", 5) == 0) {
@@ -1404,6 +1507,10 @@ int main(int argc, char **argv)
         return EXIT_FAILURE;
 #ifdef NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES
 #ifdef NEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL
+#ifdef NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
+    if (strcmp(argv[1], "scoped-poison") == 0)
+        return scoped_poison(argv[2]) ? 0 : 1;
+#endif
     if (strcmp(argv[1], "three-poison") == 0)
         return three_poison(argv[2]) ? 0 : 1;
 #endif

@@ -1,0 +1,19 @@
+{
+  "compiler_head": "f6f79161f6d6f1b83d4c80275379982bceb9fa9e",
+  "source_sha256": "8763eb98f68d502b8a26b49d8a023ba38dcce45090253bf2c6695fc5391d3512",
+  "runs": [
+    {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/workspace/p289/tests/fixtures/experimental_five_root_detach_attach.nl:53:25-56:6: error(unsupported)[ALLOCATED-DOMAIN-LOAN]: bounded domain loan requires read authority in Some world\n"
+    },
+    {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/workspace/p289/tests/fixtures/experimental_five_root_detach_attach.nl:53:25-56:6: error(unsupported)[ALLOCATED-DOMAIN-LOAN]: bounded domain loan requires read authority in Some world\n"
+    }
+  ],
+  "boundary_exit": 0,
+  "boundary_stdout": "{\"parse_status\":0,\"syntax_tree\":true,\"registration_attempted\":true,\"registration_status\":2,\"code\":\"ALLOCATED-DOMAIN-LOAN\",\"start_byte\":2140,\"end_byte\":2282,\"snapshot_unchanged\":true,\"owned_entry_artifact\":false,\"entry_check_attempted\":false,\"backend_attempted\":false}\n",
+  "boundary_stderr": ""
+}

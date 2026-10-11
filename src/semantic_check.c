@@ -42,6 +42,7 @@ typedef struct Check {
     size_t allocation_sites;
     size_t *allocation_budget; /* borrowed counter, active body walk only */
     bool allocated_slice; /* owned Some world, never a runtime success claim */
+    NLSymbolId scoped_field_base; /* actual caller projection, never a grant */
     /* Borrowed synchronous proof from the exact independently checked call. */
     const NLCheckedFragment *custody_origin;
     NLCheckedNodeId custody_origin_match;
@@ -1241,6 +1242,8 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                     if (!c->bindings[i].hidden &&
                         c->bindings[i].view.place == root)
                         evidence.base = i + 1;
+                if (check->scoped_field_base)
+                    evidence.base = check->scoped_field_base;
                 if (view(check, args[0])->field.present &&
                     view(check, args[0])->field.child == place)
                     evidence.base = view(check, args[0])->field.base;
@@ -2092,6 +2095,19 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
     if (function.owner_receiver &&
         !owner_entry(check, id, &function, arguments))
         return 0;
+    if (nl_scoped_field_signature(c, function.parameters, function.count,
+                                  function.result)) {
+        if (!check->allocated_slice || !check->in_source_loan ||
+            check->artifact->scoped_field_call ||
+            view(check, arguments[0])->kind != NL_CHECKED_FIELD_REF ||
+            view(check, arguments[0])->field.index != 0) {
+            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+                 "P297-CALL-PRECISION",
+                 "requires one explicit original scoped next-field projection");
+            return 0;
+        }
+        check->artifact->scoped_field_call = id;
+    }
     if (!(function.body != NULL ? run_body(check, id, &function, arguments)
                                 : primitive(check, id, arguments))) {
         return 0;
@@ -3479,12 +3495,18 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         body.custody_packet = view(caller, call_id)->custody_call.packet;
         body.custody_sink = view(caller, call_id)->custody_call.sink;
     }
-    body.allocated_slice = function->experimental_root_receiver ||
-                           function->custody_recipient ||
-                           (function->owner_receiver &&
-                            view(caller, call_id)->owner_call.entry_proved) ||
-                           (function->owner_producer &&
-                            view(caller, call_id)->producer.entry_proved);
+    body.allocated_slice =
+        (nl_scoped_field_signature(c, function->parameters, function->count,
+                                   function->result) &&
+         caller->allocated_slice && caller->in_source_loan) ||
+        function->experimental_root_receiver || function->custody_recipient ||
+        (function->owner_receiver &&
+         view(caller, call_id)->owner_call.entry_proved) ||
+        (function->owner_producer &&
+         view(caller, call_id)->producer.entry_proved);
+    if (nl_scoped_field_signature(c, function->parameters, function->count,
+                                  function->result))
+        body.scoped_field_base = view(caller, arguments[0])->field.base;
     body.artifact = malloc(sizeof(*body.artifact));
     if (body.artifact == NULL) {
         (void)host(caller, NL_CHECK_OUT_OF_MEMORY, call_span);
@@ -3496,6 +3518,7 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         goto failure;
     body.artifact->body_owner = function->body;
     body.artifact->release_body = nl_body_release;
+    NLSymbolId scoped_parameters[2] = {0};
     for (size_t i = 0; i < function->count; ++i) {
         const NLCheckedNodeView argument = *view(caller, arguments[i]);
         NLValueId value =
@@ -3521,6 +3544,8 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                                        value, binding_floor, &symbol),
                   (NLSourceSpan){0}))
             goto failure;
+        if (body.scoped_field_base && i < 2)
+            scoped_parameters[i] = symbol;
         if (function->owner_producer) {
             view(caller, call_id)->producer.parameters[i] = symbol;
             if (i == 3)
@@ -3547,6 +3572,12 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     if (!function_block(&body, nl_syntax_node_view(nl_syntax_tree_root(
                                    function->body->syntax))))
         goto failure;
+    if (body.scoped_field_base &&
+        !nl_scoped_field_body(body.artifact, scoped_parameters)) {
+        fail(&body, NL_CHECK_ANALYSIS_PRECISION_LIMIT, call_span,
+             "P297-BODY-PRECISION", "actual body must preserve finite helper");
+        goto failure;
+    }
 #ifdef NEWLANG_EXPERIMENTAL_NESTED_CALLER
     if (caller->artifact->whole_call == call_id) {
         NLWholeValueCallView *whole = &caller->artifact->whole_value;
@@ -7784,7 +7815,21 @@ static NLCheckedNodeId allocated_domain_loan(Check *check,
     check->loop = saved_loop;
     if (body == 0)
         return 0;
-    if (!host(check, nl_sem_function_exit(c, scopes, c->place_count), s->span))
+    const NLCheckStatus nonescape =
+        nl_sem_function_exit(c, scopes, c->place_count);
+#ifdef NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
+    if (check->artifact->scoped_field_call &&
+        (nonescape == NL_CHECK_SEMANTIC_ERROR ||
+         nonescape == NL_CHECK_ANALYSIS_PRECISION_LIMIT)) {
+        fail(check, nonescape, s->span,
+             nonescape == NL_CHECK_SEMANTIC_ERROR ? "P297-LOAN-ESCAPE"
+                                                  : "P297-LOAN-PRECISION",
+             "scoped field call must leave no result dependent on the ended "
+             "loan");
+        return 0;
+    }
+#endif
+    if (!host(check, nonescape, s->span))
         return 0;
     for (size_t i = scopes; i < c->scope_count; ++i)
         c->scopes[i].active = false;
@@ -8457,7 +8502,33 @@ static NLValueId experimental_formal(Check *check, NLTypeId type,
 }
 #endif
 
-static bool check_definition(Check *registration, size_t function_id)
+static NLValueId scoped_formal_option(Check *check, NLTypeId type,
+                                      size_t variant, NLSourceSpan span)
+{
+    NLValueId payload = 0;
+    if (variant == 2) {
+        payload = new_value(
+            check,
+            (NLSemanticValueView){
+                .type = check->context->types[type - 1].variant_types[1]},
+            span);
+        if (!payload)
+            return 0;
+    }
+    NLValueId value =
+        new_value(check,
+                  (NLSemanticValueView){
+                      .type = type, .variant = variant, .sum_payload = payload},
+                  span);
+    if (value && payload) {
+        check->context->values[payload - 1].carrier = NL_CARRIER_SUM;
+        check->context->values[payload - 1].sum_owner = value;
+    }
+    return value;
+}
+
+static bool check_definition_case(Check *registration, size_t function_id,
+                                  size_t old_variant, size_t new_variant)
 {
     NLFunctionEntry *entry = &registration->context->functions[function_id - 1];
 #ifdef NEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL
@@ -8508,6 +8579,8 @@ static bool check_definition(Check *registration, size_t function_id)
     NLSemanticContext *c = definition.context;
     clear_definition_state(c);
     const NLFunctionEntry function = c->functions[function_id - 1];
+    const bool scoped = nl_scoped_field_signature(
+        c, function.parameters, function.count, function.result);
     definition.function_result = function.result;
     NLValueId values[NL_SEMANTIC_MAX_PARAMETERS] = {0};
     NLSymbolId formal_symbols[NL_SEMANTIC_MAX_PARAMETERS] = {0};
@@ -8536,8 +8609,12 @@ static bool check_definition(Check *registration, size_t function_id)
             continue;
         }
         if (t.kind == NL_TYPE_REF || t.kind == NL_TYPE_PTR) {
-            NLValueId referent = new_value(
-                &definition, (NLSemanticValueView){.type = t.target}, span);
+            NLValueId referent =
+                scoped
+                    ? scoped_formal_option(&definition, t.target, old_variant,
+                                           span)
+                    : new_value(&definition,
+                                (NLSemanticValueView){.type = t.target}, span);
             NLPlaceId place;
             if (referent == 0 ||
                 !host(&definition,
@@ -8553,6 +8630,13 @@ static bool check_definition(Check *registration, size_t function_id)
                 scope, NL_PROVENANCE_VALID,
                 true,  t.kind == NL_TYPE_PTR || t.access == NL_ACCESS_WRITE,
                 0};
+        }
+        if (scoped && t.kind == NL_TYPE_SUM) {
+            values[i] =
+                scoped_formal_option(&definition, type, new_variant, span);
+            if (!values[i])
+                goto failure;
+            continue;
         }
         if (t.kind == NL_TYPE_SUM) {
             value.variant = 1;
@@ -8595,6 +8679,12 @@ static bool check_definition(Check *registration, size_t function_id)
     if (!function_block(&definition, nl_syntax_node_view(nl_syntax_tree_root(
                                          function.body->syntax))))
         goto failure;
+    if (scoped && !nl_scoped_field_body(definition.artifact, formal_symbols)) {
+        fail(&definition, NL_CHECK_ANALYSIS_PRECISION_LIMIT, span,
+             "P297-BODY-PRECISION",
+             "requires one formal replace, old Copy disposal and unit tail");
+        goto failure;
+    }
     if (nl_three_owner_signature(c, function.parameters, function.count,
                                  function.result) &&
         !nl_three_owner_body(definition.artifact, formal_symbols,
@@ -8617,6 +8707,24 @@ failure:
     nl_checked_destroy(definition.artifact);
     nl_semantic_destroy(definition.context);
     return false;
+}
+
+static bool check_definition(Check *registration, size_t function_id)
+{
+    const NLFunctionEntry fn =
+        registration->context->functions[function_id - 1];
+    if (nl_scoped_field_signature(registration->context, fn.parameters,
+                                  fn.count, fn.result)) {
+        /* Exhaust all old/new Option variants on unmatched symbolic formals.
+         * These four private worlds have no original R/A/D or caller facts. */
+        for (size_t old = 1; old <= 2; ++old)
+            for (size_t incoming = 1; incoming <= 2; ++incoming)
+                if (!check_definition_case(registration, function_id, old,
+                                           incoming))
+                    return false;
+        return true;
+    }
+    return check_definition_case(registration, function_id, 0, 0);
 }
 
 NLCheckStatus nl_semantic_register_function_body(
@@ -9128,6 +9236,9 @@ register_function_unit(NLSemanticContext *context,
             goto failure;
         if (recursive->data.avs_struct.count == 4 &&
             experimental_nested == NULL &&
+#ifdef NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
+            !(count == 1 && total == 2) &&
+#endif
             (count != 1 || total != 1 ||
              strcmp(declarations[0].name, "main") != 0 ||
              declarations[0].syntax->data.function.count != 0 ||
@@ -9274,7 +9385,9 @@ register_function_unit(NLSemanticContext *context,
             if (!body_signature_type(check.context, result, false))
                 goto signature_limit;
             for (size_t j = 0; j < parameter; ++j)
-                if (!nl_three_owner_signature(check.context, types, parameter,
+                if (!nl_scoped_field_signature(check.context, types, parameter,
+                                               result) &&
+                    !nl_three_owner_signature(check.context, types, parameter,
                                               result) &&
                     !body_signature_type(check.context, types[j], true))
                     goto signature_limit;
@@ -9324,6 +9437,38 @@ register_function_unit(NLSemanticContext *context,
              "custody requires the independent producer and terminal receiver");
         goto failure;
     }
+#ifdef NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
+    size_t scoped_helpers = 0;
+    for (size_t i = 0; i < total; ++i) {
+        const NLFunctionEntry fn =
+            check.context->functions[declarations[i].function - 1];
+        scoped_helpers += nl_scoped_field_signature(
+            check.context, fn.parameters, fn.count, fn.result);
+    }
+    if (scoped_helpers > 1) {
+        fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, (NLSourceSpan){0},
+             "P297-UNIT-PROFILE", "one finite field helper definition only");
+        goto failure;
+    }
+    if (recursive && recursive->data.avs_struct.count == 4 &&
+        experimental_nested == NULL && total != 1) {
+        size_t helpers = 0, mains = 0;
+        for (size_t i = 0; i < total; ++i) {
+            const NLFunctionEntry fn =
+                check.context->functions[declarations[i].function - 1];
+            helpers += nl_scoped_field_signature(check.context, fn.parameters,
+                                                 fn.count, fn.result);
+            mains += strcmp(declarations[i].name, "main") == 0 &&
+                     fn.count == 0 && fn.result == 1;
+        }
+        if (total != 2 || helpers != 1 || mains != 1) {
+            fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, recursive->span,
+                 helpers ? "P297-UNIT-PROFILE" : "FIVE-ROOT-SOURCE-PROFILE",
+                 "one main and one finite field helper only");
+            goto failure;
+        }
+    }
+#endif
     /* Never interpret a source definition as a coarse signature-only call. */
     for (size_t i = 0; i < total; ++i) {
         const FunctionDeclaration *d = &declarations[i];
@@ -9342,17 +9487,28 @@ register_function_unit(NLSemanticContext *context,
     /* Symbolic obligations are checked before any ordinary definition walks a
      * known call, independent of declaration/name order or favorable callers.
      */
-    for (size_t pass = 0; pass < 3; ++pass)
+    size_t definition_passes = 3;
+#ifdef NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
+    definition_passes = 4;
+#endif
+    for (size_t pass = 0; pass < definition_passes; ++pass)
         for (size_t i = 0; i < total; ++i) {
             const FunctionDeclaration *d = &declarations[i];
             const NLFunctionEntry *entry =
                 &check.context->functions[d->function - 1];
-            const size_t stage =
+            const size_t old_stage =
                 (entry->owner_receiver || entry->owner_producer ||
                  entry->custody_recipient || entry->experimental_root_receiver)
                     ? 0
                 : entry->experimental_two_receiver ? 1
                                                    : 2;
+            size_t stage = old_stage;
+#ifdef NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
+            stage = nl_scoped_field_signature(check.context, entry->parameters,
+                                              entry->count, entry->result)
+                        ? 0
+                        : old_stage + 1;
+#endif
             if (stage != pass)
                 continue;
             input = d->input;
