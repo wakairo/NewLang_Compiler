@@ -46,6 +46,9 @@ cases=[
  "let DetachedHolder { node, grant, dom } = carried_B; let second_holder = carried_B;")),
 ("reuse_original_B_domain_after_whole_move",unique(
  "let life_B_m = dom;", "let life_B_m = life_B;")),
+("live_B_scoped_ref_during_whole_owner_receipt",unique(
+ "let b_receipt = RootReceipt { node: ptr_B_m, allocation: allocation_B_m, domain: life_B_m };",
+ "let b_receipt = loan_read(life_B_m) { |borrowed_B| RootReceipt { node: ptr_B_m, allocation: allocation_B_m, domain: life_B_m } };")),
 ("overlapping_B_loan_during_pair_consume",unique(
  "let returned_pair = convey_pair(dst_receipt, b_receipt, ptr_B);",
  "let returned_pair = loan_read(life_B_m) { |active_B| convey_pair(dst_receipt, b_receipt, ptr_B) };")),
@@ -89,7 +92,7 @@ cases=[
 ]
 # Positive R328 old H0 separate B custody is known source-valid but product-negative:
 # this is deliberately NOT counted as a semantic negative.
-assert len({n for n,_ in cases})==16
+assert len({n for n,_ in cases})==17
 manifest=[]
 for name,src in cases:
     assert src!=source
