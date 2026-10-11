@@ -1,0 +1,60 @@
+name: P315 ninth-flag bounded cross-root A.next candidate
+on:
+  push:
+    branches: [p315-cross-root-a-next-after-two-b]
+permissions:
+  contents: read
+jobs:
+  pinned-source-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify fixed base and unchanged compiler, specification and fixtures
+        shell: bash
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor f6034297edababdf37b90ddfd1dd083e31804b80 HEAD
+          git diff --name-only f6034297edababdf37b90ddfd1dd083e31804b80 HEAD
+          if git diff --name-only f6034297edababdf37b90ddfd1dd083e31804b80 HEAD | grep -E '^(include/|tests/|docs/reference/|scripts/)' ; then
+            echo "Unauthorized alteration of compiler baseline"; exit 1
+          fi
+      - name: Install frozen compiler prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap pinned LLVM
+        run: python3 scripts/bootstrap.py
+      - name: Build PR313 plus exact ninth experimental flag
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .deps/activate.sh
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=gcc-13 \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_TWO_SCOPED_FIELD_CALLS=ON \
+            -DNEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS=ON
+          cmake --build build --parallel 2
+          ctest --test-dir build --output-on-failure -R "two_scoped_field"
+      - name: Source and public-registration empirical probe
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .deps/activate.sh
+          python3 evidence/p315/probe_candidate.py build/newlangc build/five_root_source_gate_evidence | tee build/p315-candidate-observations.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: p315-nine-flag-candidate
+          path: |
+            build/p315-fixed-observations.txt
+            evidence/p315/generated/*.nl
+            build/Testing/Temporary/LastTest.log
