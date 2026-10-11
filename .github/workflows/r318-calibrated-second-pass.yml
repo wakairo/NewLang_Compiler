@@ -55,6 +55,7 @@ jobs:
       - name: Source fingerprint CLI and owned observer positive
         shell: bash
         run: |
+          set +e
           set -uo pipefail
           source .deps/activate.sh
           sha256sum r318-evidence/independent-five-root-three-change.nl r318-evidence/r318_public_observer.c
@@ -65,7 +66,7 @@ jobs:
           printf 'EMITTED_C_BYTES='; wc -c </tmp/r318-compiler-emission.txt
           echo "=== POSITIVE PUBLIC OBSERVER ==="
           ./build-r318/r318_observer r318-evidence/independent-five-root-three-change.nl | tee /tmp/r318-positive.txt
-          grep -q 'R318_BASIC_PUBLIC_VALIDATORS_OK' /tmp/r318-positive.txt
+          grep -q 'R318_BASIC_PUBLIC_VALIDATORS_OK' /tmp/r318-positive.txt || exit 1
       - name: Independent source mutation negatives and public rollback
         shell: bash
         run: |
