@@ -1,0 +1,61 @@
+name: R307 independent nonCopy Holder reloan evidence
+on:
+  push:
+    branches: [r307-independent-holder-reloan-evidence]
+permissions:
+  contents: read
+jobs:
+  r307:
+    name: R307 GCC Debug
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+      - name: Assert fixed ancestor and evidence-only delta
+        run: |
+          git merge-base --is-ancestor b28a49755f1bc254b6a8f7c337e5e1866d9483b8 HEAD
+          git diff --exit-code b28a49755f1bc254b6a8f7c337e5e1866d9483b8 HEAD -- src include CMakeLists.txt tests docs .github/workflows/compiler-ci.yml
+          git diff --name-only b28a49755f1bc254b6a8f7c337e5e1866d9483b8 HEAD
+      - name: System prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Fixed checksum-verified LLVM toolchain
+        run: python3 scripts/bootstrap.py
+      - name: Build frozen PR302 with exactly six flags
+        run: |
+          . .deps/activate.sh
+          CC=gcc-13 cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON
+          cmake --build build --parallel 2
+          ctest --test-dir build --output-on-failure
+      - name: Compile independent public-header-only host observer
+        run: |
+          . .deps/activate.sh
+          gcc-13 -std=c17 -g -Wall -Wextra -Werror -Iinclude \
+            evidence/r307/public_owned_observer.c \
+            -Lbuild -lnewlang_semantic -lnewlang_checked -lnewlang_parser \
+            -lnewlang_diagnostic -lnewlang_syntax -lnewlang_lexer -lnewlang_source \
+            -o build/r307_public_observer
+      - name: Independently run R-owned cases and P-only calibration
+        run: |
+          . .deps/activate.sh
+          python3 evidence/r307/run.py build/newlangc build/r307_public_observer \
+            build/five_root_source_gate_evidence build/scoped_field_evidence \
+            build/r307-results.json
+          sha256sum build/newlangc > build/r307-compiler-sha256.txt
+      - name: Upload audit artifacts even if failed
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r307-evidence
+          path: |
+            build/r307-results.json
+            build/r307-compiler-sha256.txt
+            build/Testing/Temporary/LastTest.log
