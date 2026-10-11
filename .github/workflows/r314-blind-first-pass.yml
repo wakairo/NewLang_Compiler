@@ -49,6 +49,7 @@ jobs:
         shell: bash
         run: |
           python3 r-evidence/314/make_witness.py | tee r-evidence/314/witness-shas.txt
+          python3 r-evidence/314/helper_variants.py
           sha256sum r-evidence/314/generated/*.nl
       - name: Run source CLI and record precise statuses
         shell: bash
