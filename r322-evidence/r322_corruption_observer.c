@@ -35,7 +35,7 @@ typedef struct {
     NLCheckedFragment *f;
     NLCapturedChange *seventh;
     NLCheckedNodeView *write;
-    NLSemanticContext *before,*after;
+    NLSemanticContext *before,*after,*prior;
     NLCheckedNodeId first_call,second_call;
     NLPlaceId root_a,root_b,root_c,old_payload;
     NLPlaceId field_a,field_b,field_other;
@@ -194,6 +194,7 @@ static int prepare(const Walk *w, Site *s) {
     if(!s->field_b || !s->field_other)return 0;
     const NLSemanticContext *prior=named[1].change.after;
     if(!prior)return 0;
+    s->prior=(NLSemanticContext *)prior;
     for(size_t r=1;r<=5;r++) {
         NLPlaceId root=0;
         if(!lookup_root(prior,r,&root))return 0;
@@ -251,10 +252,16 @@ static const char *const classes[]={
  "other_original_sibling_fact_changed_between_calls",
  "first_B_scope_active_during_seventh",
  "A_scope_active_in_final_owned_context",
- "new_C_payload_forged_after_change"
+ "new_C_payload_forged_after_change",
+ "seventh_before_reanchored_to_earlier_valid_world",
+ "seventh_after_reanchored_to_earlier_valid_world",
+ "A_governing_D_coherently_changed_before_after",
+ "B_current_fact_coherently_changed_prior_and_before",
+ "B_and_C_payload_targets_swapped_before",
+ "seventh_before_after_worlds_exchanged_with_anchors"
 };
 #define NUM_CASES (sizeof(classes)/sizeof(classes[0]))
-static int corrupt(unsigned which,Site *s,Saved *backup){
+static int corrupt(unsigned which,Site *s,Saved *backup,Saved *secondary){
 #define MUTATE(type,ptr,statement) do{type *cell=(ptr);if(!stash(backup,cell,sizeof(*cell)))return 0;statement;}while(0)
     switch(which){
     case 0: MUTATE(NLCapturedChange,s->seventh,cell->node=s->f->field_changes[1]->node);break;
@@ -278,6 +285,37 @@ static int corrupt(unsigned which,Site *s,Saved *backup){
     case 18: MUTATE(NLSemanticScopeView,&s->before->scopes[s->b_scope-1],cell->active=true);break;
     case 19: MUTATE(NLSemanticScopeView,&((NLSemanticContext*)s->f->context)->scopes[s->a_scope-1],cell->active=true);break;
     case 20: MUTATE(NLSemanticValueView,&s->after->values[s->new_payload_value-1],cell->reference.place=s->root_b);break;
+    case 21: MUTATE(NLCapturedChange,s->seventh,
+        cell->before=s->f->field_changes[5]->after;
+        cell->before_origin=cell->before);break;
+    case 22: MUTATE(NLCapturedChange,s->seventh,
+        cell->after=s->f->field_changes[5]->after;
+        cell->after_origin=cell->after);break;
+    case 23:
+        MUTATE(NLSemanticPlaceView,&s->before->places[s->root_a-1],cell->governing_domain=3);
+        if(!stash(secondary,&s->after->places[s->root_a-1],
+                  sizeof(s->after->places[s->root_a-1])))return 0;
+        s->after->places[s->root_a-1].governing_domain=3;
+        break;
+    case 24:
+        MUTATE(NLSemanticPlaceView,&s->prior->places[s->root_b-1],cell->current_fact++);
+        if(!stash(secondary,&s->before->places[s->root_b-1],
+                  sizeof(s->before->places[s->root_b-1])))return 0;
+        s->before->places[s->root_b-1].current_fact=s->prior->places[s->root_b-1].current_fact;
+        break;
+    case 25:
+        MUTATE(NLSemanticValueView,&s->before->values[s->old_payload_value-1],
+               cell->reference.place=s->root_c);
+        if(!stash(secondary,&s->before->values[s->new_payload_value-1],
+                  sizeof(s->before->values[s->new_payload_value-1])))return 0;
+        s->before->values[s->new_payload_value-1].reference.place=s->root_b;
+        break;
+    case 26:
+        MUTATE(NLCapturedChange,s->seventh,
+            NLSemanticContext *x=cell->before; cell->before=cell->after; cell->after=x;
+            const NLSemanticContext *y=cell->before_origin;
+            cell->before_origin=cell->after_origin; cell->after_origin=y);
+        break;
     default:return 0;
     }
 #undef MUTATE
@@ -325,8 +363,8 @@ int main(int argc,char **argv){
     unsigned accepted=0,invalid=0,unrestored=0;
     for(unsigned case_id=0;case_id<NUM_CASES;case_id++){
         REQUIRE(all_clean(&walk_result));
-        Saved backup={0};
-        if(!corrupt(case_id,&site,&backup)){
+        Saved backup={0},secondary={0};
+        if(!corrupt(case_id,&site,&backup,&secondary)){
             fprintf(stderr,"R322_MUTATION_BARRIER case=%u\n",case_id);
             goto done;
         }
@@ -343,6 +381,7 @@ int main(int argc,char **argv){
                (int)statuses[5],(int)statuses[6],observed && fail_count>0);
         if(observed && fail_count)accepted++;
         else invalid++;
+        unstash(&secondary);
         unstash(&backup);
         if(!all_clean(&walk_result)){
             printf("R322_RESTORE_FAILED case=%u\n",case_id);unrestored++;break;
