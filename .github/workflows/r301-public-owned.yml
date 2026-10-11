@@ -38,6 +38,8 @@ jobs:
           alt=source.replace("let result=TreeTwo{root:receiver,child:detached}; return result;",
                              "let result=TreeTwo{child:detached,root:receiver}; return result;")
           Path('r-evidence/301/results/variant-return-placement.nl').write_text(alt)
+          negative=source.replace('let moved=assemble(receiver,original_B,ptr_B);', 'let moved=assemble(receiver,original_B,ptr_B); finish_root(original_B);')
+          Path('r-evidence/301/results/negative-reuse-consumed.nl').write_text(negative)
           PY
       - name: Build immutable PR295 compiler with all five experimental opt-ins
         run: |
@@ -75,6 +77,13 @@ jobs:
             echo "PUBLIC_EXIT=$public"
             echo "C_OUTPUT_FILES=$(find r-evidence/301/results -name '*.c' | wc -l)"
           done
+          echo 'NEGATIVE_CASE=consume_then_reuse'
+          sha256sum r-evidence/301/results/negative-reuse-consumed.nl
+          build/newlangc r-evidence/301/results/negative-reuse-consumed.nl >/tmp/r301-negative.log 2>&1
+          echo "NEGATIVE_CLI_EXIT=$?"
+          cat /tmp/r301-negative.log
+          r-evidence/301/results/observer r-evidence/301/results/negative-reuse-consumed.nl
+          echo "NEGATIVE_PUBLIC_EXIT=$?"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
