@@ -6,6 +6,7 @@ import json
 import subprocess
 import sys
 import tempfile
+import os
 
 compiler, observer, boundary = sys.argv[1:4]
 fixtures = Path(__file__).resolve().parents[1] / 'fixtures'
@@ -80,6 +81,8 @@ expected = {
     'Allocation-as-Copy-payload': (1, 'P6-PAYLOAD-TYPE', 'semantic'),
     'original-full': (2, 'ALLOCATED-DOMAIN-LOAN', 'unsupported'),
 }
+if os.environ.get('NEWLANG_P308') == '1':
+    expected['other-link-field'] = (0, '', 'accepted-source/backend-unsupported')
 results = []
 with tempfile.TemporaryDirectory(prefix='p297-source-') as directory:
     root = Path(directory)
@@ -105,10 +108,11 @@ with tempfile.TemporaryDirectory(prefix='p297-source-') as directory:
             owned, oom = rows[0], rows[1:]
             assert owned['owned_source_artifact'] and owned['scoped_call_validator'], name
             assert owned['caller_changes'] == 6 and owned['callee_changes'] == 1, name
-            assert owned['ProjectionId_index'] == 0 and owned['old_ptr_region'] == 3, name
+            index = 1 if name == 'other-link-field' else 0
+            assert owned['ProjectionId_index'] == index and owned['old_ptr_region'] == (4 if index else 3), name
             target = 0 if name == 'Some-to-None' else 3 if name == 'same-value-fresh-occurrence' else 4
             assert owned['new_ptr_region'] == target and owned['old_occurrence'] != owned['new_occurrence'], name
-            assert owned['prev_current_preserved'] and owned['original_A_D_preserved_unique'], name
+            assert owned['sibling_current_preserved'] and owned['original_A_D_preserved_unique'], name
             assert owned['old_payload_current_cleared'] and len(set(owned['Allocation_values'])) == 5 and len(set(owned['Domain_values'])) == 5, name
             assert owned['root_fact_before'] != owned['root_fact_after'], name
             assert owned['scoped_ref_ended'] and owned['matched_frees'] == 5 and not owned['native_execution'], name
@@ -131,4 +135,4 @@ with tempfile.TemporaryDirectory(prefix='p297-source-') as directory:
     assert not list(root.glob('*.c')), 'no native output'
 if len(sys.argv) == 5:
     Path(sys.argv[4]).write_text(json.dumps(results, ensure_ascii=False, indent=2) + '\n')
-print('P297: 5 owned-source positives; 11 semantic refusals; 6 precision, 3 unsupported, 2 parser gates; 21 sampled OOM failures')
+print('P297: source/owned regression corpus passed; prev alternate enabled:', os.environ.get('NEWLANG_P308') == '1')

@@ -1421,6 +1421,14 @@ static bool scoped_poison(const char *path)
     ++projection->field.index;
     REJECT_SCOPED();
     *projection = good_projection;
+    /* With both indices admitted, an index-only profile check is insufficient.
+     * Even a coordinated alternate index must match the actual fixed child. */
+#ifdef NEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL
+    projection->field.index = write->field.index = 1 - good_write.field.index;
+    REJECT_SCOPED();
+    *projection = good_projection;
+    *write = good_write;
+#endif
     ++write->field.child_fact;
     REJECT_SCOPED();
     *write = good_write;
@@ -1438,12 +1446,22 @@ static bool scoped_poison(const char *path)
     REJECT_SCOPED();
     after->occurrences[old - 1].live = false;
     NLSemanticPlaceView *prev =
-        &after->places[after->places[write->field.parent - 1].fixed_fields[1] -
+        &after->places[after->places[write->field.parent - 1]
+                           .fixed_fields[1 - write->field.index] -
                        1];
     const NLValueFactId prev_fact = prev->current_fact;
     ++prev->current_fact;
     REJECT_SCOPED();
     prev->current_fact = prev_fact;
+#ifdef NEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL
+    NLSemanticPlaceView *other_sibling =
+        &after->places[after->places[write->field.parent - 1].fixed_fields[2] -
+                       1];
+    const NLValueFactId other_fact = other_sibling->current_fact;
+    ++other_sibling->current_fact;
+    REJECT_SCOPED();
+    other_sibling->current_fact = other_fact;
+#endif
     for (size_t i = 0; i < before->value_count; ++i) {
         NLSemanticValueView *v = &before->values[i];
         if (v->carrier != NL_CARRIER_ENDED &&

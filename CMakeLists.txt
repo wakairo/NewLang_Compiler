@@ -67,6 +67,15 @@ if(NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL)
     target_compile_definitions(newlang_options INTERFACE
         NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=1)
 endif()
+option(NEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL
+    "UNADOPTED Issue 308 single prev-field helper alternate; DO NOT MERGE" OFF)
+if(NEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL)
+    if(NOT NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL)
+        message(FATAL_ERROR "Issue 308 requires the separate Issue 297 opt-in")
+    endif()
+    target_compile_definitions(newlang_options INTERFACE
+        NEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=1)
+endif()
 target_compile_options(newlang_options INTERFACE
     -Wall -Wextra -Wpedantic -Werror)
 if(NOT NEWLANG_SANITIZER STREQUAL "none")
@@ -161,6 +170,18 @@ if(BUILD_TESTING)
                                 "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/scoped_field_test.py"
                                 "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:scoped_field_evidence>"
                                 "$<TARGET_FILE:five_root_source_gate_evidence>")
+                            if(NEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL)
+                                add_executable(moved_b_prev_evidence tests/integration/moved_b_prev_evidence.c)
+                                target_link_libraries(moved_b_prev_evidence PRIVATE newlang_semantic)
+                                target_link_options(moved_b_prev_evidence PRIVATE
+                                    -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+                                add_test(NAME moved_b_prev.integration COMMAND "${Python3_EXECUTABLE}"
+                                    "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/moved_b_prev_test.py"
+                                    "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:moved_b_prev_evidence>"
+                                    "$<TARGET_FILE:five_root_source_gate_evidence>" "$<TARGET_FILE:scoped_field_evidence>")
+                                add_test(NAME moved_b_prev_poison.unit COMMAND captured_closure_test full-scoped-poison
+                                    "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_moved_b_prev_call.nl")
+                            endif()
                         endif()
                         foreach(mode three-poison owner-parser-oom oom checker-oom)
                             add_test(NAME three_arg_owner_${mode}.unit COMMAND captured_closure_test full-${mode}
@@ -645,6 +666,9 @@ if(BUILD_TESTING)
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
     if(NEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL)
         set_property(TEST five_root_source_gate.integration APPEND PROPERTY ENVIRONMENT "NEWLANG_P289=1")
+    endif()
+    if(NEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL)
+        set_property(TEST scoped_field.integration APPEND PROPERTY ENVIRONMENT "NEWLANG_P308=1")
     endif()
     if(NEWLANG_EXPERIMENTAL_OWNER_AGGREGATES)
         set_property(TEST nested_caller.integration five_root_source_gate.integration APPEND PROPERTY ENVIRONMENT "NEWLANG_P285=1")

@@ -208,6 +208,7 @@ static inline NLReferenceFacts nl_sem_ref_fact(NLSemanticValueView v, size_t i)
 bool nl_scoped_field_signature(const NLSemanticContext *, const NLTypeId *,
                                size_t, NLTypeId);
 bool nl_scoped_field_body(const NLCheckedFragment *, const NLSymbolId[2]);
+bool nl_scoped_field_index(size_t);
 NLCheckStatus nl_body_create(const NLSyntaxTree *, const NLFunctionParameter *,
                              size_t, NLFunctionBody **);
 NLCheckStatus nl_body_create_span(const NLSource *, NLSourceSpan,

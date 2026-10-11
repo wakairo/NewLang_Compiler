@@ -1,5 +1,15 @@
 #include "semantic_internal.h"
 
+/* Finite caller/validator admission only; never a field capability grant. */
+bool nl_scoped_field_index(size_t index)
+{
+#ifdef NEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL
+    return index == 0 || index == 1;
+#else
+    return index == 0;
+#endif
+}
+
 /* This signature supplies type-only formal checking, never caller authority. */
 bool nl_scoped_field_signature(const NLSemanticContext *c, const NLTypeId *p,
                                size_t count, NLTypeId result)

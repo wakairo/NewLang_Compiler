@@ -731,7 +731,8 @@ NLCheckStatus nl_checked_scoped_field_call_validate(const NLCheckedFragment *f,
         return INVALID;
     const NLCheckedNodeView *projection = argument_node(f, call, 0);
     if (projection->kind != NL_CHECKED_FIELD_REF ||
-        projection->field.index != 0 || !projection->has_reference_result ||
+        !nl_scoped_field_index(projection->field.index) ||
+        !projection->has_reference_result ||
         !projection->reference_result.scope ||
         projection->reference_result.scope > f->context->scope_count ||
         f->context->scopes[projection->reference_result.scope - 1].active)
