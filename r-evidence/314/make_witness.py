@@ -127,7 +127,7 @@ def mutate(case,label,old,new):
 
 mutate(cases,"active_loan_owner_move",
        "    clear_link(original_b_1@prev, "+TYPE+"::None)",
-       "    let illicit_while_loaned = DetachedHolder { held_ptr: held_ptr, held_allocation: held_allocation, held_domain: held_domain };\\n"
+       "    let illicit_while_loaned = DetachedHolder { held_ptr: held_ptr, held_allocation: held_allocation, held_domain: held_domain };\n"
        "    clear_link(original_b_1@prev, "+TYPE+"::None)")
 mutate(cases,"cross_root_with_b_domain",
        "ref_from_ptr(write, held_ptr, fresh_b_2)",
