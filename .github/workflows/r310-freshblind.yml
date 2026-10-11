@@ -90,7 +90,7 @@ jobs:
             return src.replace('set_link(write_B_change@prev, Option<ptr<Node>>::None);', 'let inline_old_prev = replace(write_B_change@prev, Option<ptr<Node>>::None);')
           bad['minimal_holder_call']=one_holder(strip_observers(s))
           bad['minimal_holder_inline']=inline_helper(one_holder(strip_observers(s)))
-          bad['minimal_alias_call']=no_holder(strip_observers(s))
+          bad['minimal_alias_call']=strip_observers(no_holder(s))
           bad['minimal_alias_inline']=inline_helper(no_holder(strip_observers(s)))
           bad['original_holder_no_observers']=strip_observers(s)
           bad['original_holder_inline']=inline_helper(strip_observers(s))
