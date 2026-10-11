@@ -25,7 +25,8 @@ cases = [
  ("C_prev_wrong_A_domain",unique("let swapped_prev = loan_read(life_C)", "let swapped_prev = loan_read(life_A)")),
  ("B_prev_read_not_write",unique("ref_from_ptr(write, ptr_B_m, first_stable)","ref_from_ptr(read, ptr_B_m, first_stable)")),
  ("B_next_ptr_not_ref",unique("unlink_field(second_root@next, Option<ptr<Node>>::None)","unlink_field(ptr_B_m, Option<ptr<Node>>::None)")),
- ("B_original_owner_after_move",unique("let ptr_B_m = node;","let ptr_B_m = ptr_B;")),
+ ("B_Copy_ptr_after_move_is_allowed",unique("let ptr_B_m = node;","let ptr_B_m = ptr_B;")),
+ ("B_original_D_after_move",unique("let life_B_m = dom;","let life_B_m = life_B;")),
  ("B_allocation_double_consume",unique("let cleared_previous = loan_read(life_B_m)", "let owned_once = allocation_B_m; let owned_twice = allocation_B_m; let cleared_previous = loan_read(life_B_m)")),
  ("C_terminal_wrong_D",final("let empty_C = loan_exclusive_read(life_C)","let empty_C = loan_exclusive_read(life_A)")),
  ("C_prev_wrong_new_target",unique("replace(direct_C@prev, Option<ptr<Node>>::Some(ptr_A))","replace(direct_C@prev, Option<ptr<Node>>::Some(ptr_B_m))")),
@@ -34,7 +35,7 @@ cases = [
  ("active_B_loan_during_move",unique("let carried_B = DetachedHolder { node: ptr_B, grant: allocation_B, dom: life_B };","let carried_B = loan_read(life_B) { |active_B| DetachedHolder { node: ptr_B, grant: allocation_B, dom: life_B } };")),
  ("old_C_prev_copy_after_replace",unique("replace(direct_C@prev, Option<ptr<Node>>::Some(ptr_A))","let old_copy = read(direct_C@prev); let result_c = replace(direct_C@prev, Option<ptr<Node>>::Some(ptr_A)); let later_copy = old_copy; result_c"))
 ]
-assert len({label for label,_ in cases})==14
+assert len({label for label,_ in cases})==15
 report=[]
 for name,program in cases:
     assert program!=source
