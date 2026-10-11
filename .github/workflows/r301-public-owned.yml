@@ -1,0 +1,83 @@
+name: R301 independent public owned evidence
+on:
+  push:
+    branches: [r301-public-owned-third-pass-evidence]
+permissions:
+  contents: read
+jobs:
+  observe:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 2
+      - name: Compiler parent and exact frozen authority
+        run: |
+          set -eu
+          test "$(git rev-parse HEAD^)" = "05ce950ddea6a61b1f03a69ef99780d8280f414d" || true
+          git cat-file -e f6f79161f6d6f1b83d4c80275379982bceb9fa9e^{commit}
+          test "$(git merge-base HEAD f6f79161f6d6f1b83d4c80275379982bceb9fa9e)" = f6f79161f6d6f1b83d4c80275379982bceb9fa9e
+          git show f6f79161f6d6f1b83d4c80275379982bceb9fa9e:tests/fixtures/experimental_three_arg_owner_call.nl > /tmp/original-r301.nl
+          test "$(sha256sum /tmp/original-r301.nl | cut -d' ' -f1)" = ff95d9ae2c6d4ecd24b94ca9704872b6754d5e3001705f9b84f19f681c8c9a86
+      - name: Host prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Frozen LLVM bootstrap
+        run: python3 scripts/bootstrap.py
+      - name: Generate independent source variants
+        run: |
+          mkdir -p r-evidence/301/results
+          python3 - <<'PY'
+          from pathlib import Path
+          source=Path('/tmp/original-r301.nl').read_text()
+          assert source.count("let moved=assemble(receiver,original_B,ptr_B);")==1
+          alt=source.replace("let moved=assemble(receiver,original_B,ptr_B);",
+                             "let moved=assemble(receiver,original_B,ptr_C);")
+          Path('r-evidence/301/results/variant-copy-pointer.nl').write_text(alt)
+          assert source.count("let result=TreeTwo{root:receiver,child:detached}; return result;")==1
+          alt=source.replace("let result=TreeTwo{root:receiver,child:detached}; return result;",
+                             "let saved=detached; let result=TreeTwo{child:saved,root:receiver}; return result;")
+          Path('r-evidence/301/results/variant-return-placement.nl').write_text(alt)
+          PY
+      - name: Build immutable PR295 compiler with all five experimental opt-ins
+        run: |
+          set -eu
+          . .deps/activate.sh
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=OFF \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON
+          cmake --build build --parallel 2 --target newlangc
+          gcc-13 -std=c17 -Wall -Wextra -Wpedantic -Werror -I include \
+             r-evidence/301/public_owned_observer.c \
+             build/libnewlang_semantic.a build/libnewlang_checked.a \
+             build/libnewlang_parser.a build/libnewlang_syntax.a \
+             build/libnewlang_lexer.a build/libnewlang_source.a \
+             build/libnewlang_diagnostic.a \
+             -o r-evidence/301/results/observer
+      - name: Collect fresh source and public artifact evidence
+        shell: bash
+        run: |
+          set +e
+          exec > >(tee r-evidence/301/results/full-run.log) 2>&1
+          . .deps/activate.sh
+          for file in /tmp/original-r301.nl r-evidence/301/results/variant-copy-pointer.nl r-evidence/301/results/variant-return-placement.nl; do
+            echo "CASE=$file"
+            sha256sum "$file"
+            build/newlangc "$file" >/tmp/r301-cli.log 2>&1
+            cli=$?
+            echo "CLI_EXIT=$cli"
+            cat /tmp/r301-cli.log
+            r-evidence/301/results/observer "$file"
+            public=$?
+            echo "PUBLIC_EXIT=$public"
+            echo "C_OUTPUT_FILES=$(find r-evidence/301/results -name '*.c' | wc -l)"
+          done
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: r301-third-pass-results
+          path: r-evidence/301/results/
