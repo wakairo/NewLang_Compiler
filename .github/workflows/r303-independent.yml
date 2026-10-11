@@ -1,0 +1,50 @@
+name: R303 independent evidence only
+on:
+  push:
+    branches:
+      - r303-blind-scoped-field-evidence-20261011
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify frozen compiler commit ancestry
+        run: |
+          git rev-parse HEAD
+          git rev-parse HEAD^
+          test "$(git rev-parse HEAD~2)" = b28a49755f1bc254b6a8f7c337e5e1866d9483b8
+      - name: Bootstrap prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+          python3 scripts/bootstrap.py
+      - name: Build frozen compiler with exact opt-ins
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build-r303 -DCMAKE_BUILD_TYPE=Debug -DBUILD_TESTING=OFF \
+            -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON \
+            -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON \
+            -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON \
+            -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON \
+            -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON \
+            -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON
+          cmake --build build-r303 -j 2
+          cmake -LA -N build-r303 | grep NEWLANG_EXPERIMENTAL
+      - name: Run independently authored matrix
+        run: |
+          mkdir -p r-evidence/issue303/results
+          git rev-parse HEAD~2 > r-evidence/issue303/results/frozen_candidate_sha.txt
+          python3 r-evidence/issue303/independent_matrix.py build-r303/newlangc
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r303-independent-evidence
+          path: r-evidence/issue303/results/
+          if-no-files-found: warn
