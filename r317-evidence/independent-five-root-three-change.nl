@@ -131,6 +131,7 @@ fn main() -> unit {
                           let raw_src = erase_slot<Node>(empty_src);
                           finalize_domain(life_src);
                           deallocate(allocation_src, raw_src);
+                          unit
                       },
                     }
                   },
