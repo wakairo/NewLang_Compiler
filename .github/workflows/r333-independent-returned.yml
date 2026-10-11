@@ -77,6 +77,51 @@ jobs:
             -Wl,--end-group -o r333-observer
           ./r333-observer r333/independent_returned.nl | tee r333-observer.log
           sha256sum r333/public_observer.c r333/independent_returned.nl r333-observer.log
+      - name: Generate R333 original-owner variants and require rollback and independent retry
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 r333/make_variants.py | tee r333-variant-generation.log
+          gcc-13 -std=c17 -O0 -g -I include r333/rollback_probe.c \
+            -Wl,--start-group build-r333/libnewlang_semantic.a \
+            build-r333/libnewlang_checked.a build-r333/libnewlang_parser.a \
+            build-r333/libnewlang_diagnostic.a build-r333/libnewlang_syntax.a \
+            build-r333/libnewlang_lexer.a build-r333/libnewlang_source.a \
+            -Wl,--end-group -o r333-rollback
+          python3 - <<'PY' | tee r333-variants-result.jsonl
+          import hashlib,json,subprocess,re
+          from pathlib import Path
+          variants=sorted(Path("r333/variants").glob("*.nl"))
+          assert len(variants)==16,len(variants)
+          product_control={"early_B_release_product_counterexample"}
+          failed=[]
+          counts={"semantic":0,"precision":0,"unsupported":0,"accepted_product_counterexample":0}
+          for path in variants:
+              cmd=subprocess.run(["./build-r333/newlangc",str(path)],capture_output=True,text=True)
+              lines=cmd.stderr.splitlines()
+              first=next((line for line in lines if "error(" in line),"")
+              rb=subprocess.run(["./r333-rollback","r333/independent_returned.nl",str(path)],
+                               capture_output=True,text=True)
+              kind=("semantic" if "error(semantic)" in first else
+                    "precision" if "error(precision)" in first else
+                    "unsupported" if "error(unsupported)" in first else
+                    "accepted_product_counterexample" if cmd.returncode==4 else "other")
+              row={"case":path.stem,"sha256":hashlib.sha256(path.read_bytes()).hexdigest(),
+                   "cli_exit":cmd.returncode,"kind":kind,"diagnostic":first,
+                   "rollback_exit":rb.returncode,"rollback_stdout":rb.stdout.strip(),
+                   "rollback_stderr":rb.stderr.strip()}
+              print(json.dumps(row,ensure_ascii=False),flush=True)
+              if path.stem in product_control:
+                  if cmd.returncode not in (3,4) or rb.returncode!=0: failed.append(path.stem)
+              else:
+                  if cmd.returncode!=3 or rb.returncode!=0 or "rollback=1 same_context_clean_retry=1 real_owned=1" not in rb.stdout:
+                      failed.append(path.stem)
+              counts[kind]=counts.get(kind,0)+1
+          print(json.dumps({"summary":"R333_VARIANT_SUMMARY","count":len(variants),
+                            "categories":counts,"unexpected_unsafe_admission_or_missing_rollback":failed}))
+          assert not failed,failed
+          PY
+          sha256sum r333/make_variants.py r333/rollback_probe.c r333-variants-result.jsonl
       - name: Upload R333 diagnostic evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -88,5 +133,8 @@ jobs:
             r333-stderr.txt
             r333-exit.txt
             r333-observer.log
+            r333-variant-generation.log
+            r333-variants-result.jsonl
+            r333/variants/
             r333-changed-paths.txt
           if-no-files-found: warn
