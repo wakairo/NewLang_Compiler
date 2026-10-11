@@ -28,8 +28,9 @@ def paired_wrong(old,new):
                                             finalize_domain(life_C);
                                             deallocate(allocation_C, reclaimed_C);
 """
-    assert s.count(cleanup)==1
-    s=s.replace(cleanup,"")
+    assert cleanup in s
+    prefix,marker,suffix=s.rpartition(cleanup)
+    s=prefix+suffix
     assert s.count("                                            release_pair(returned_pair);")==1
     return s.replace("                                            release_pair(returned_pair);",
                      "                                            release_pair(returned_pair);\n"+cleanup)
@@ -57,7 +58,7 @@ cases=[
 ("drop_returned_pair_without_terminal",unique(
  "release_pair(returned_pair);",
  "unit;")),
-("omit_donor_A_cleanup",unique(
+("omit_donor_A_cleanup",late(
  """                                            let empty_A = loan_exclusive_read(life_A) { |e_A| destroy(ptr_A, e_A) };
                                             let reclaimed_A = erase_slot<Node>(empty_A);
                                             finalize_domain(life_A);
