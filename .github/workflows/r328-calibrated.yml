@@ -62,6 +62,18 @@ jobs:
           sha256sum r328/independent_calibrated.nl r328-stdout.txt r328-stderr.txt
           printf '%s\n' "$rc" > r328-exit.txt
           # Probe records the first real barrier; diagnostic-capture SUCCESS != source acceptance.
+      - name: Compile independently authored public-only observer and require seven actual validators
+        shell: bash
+        run: |
+          set -euo pipefail
+          gcc-13 -std=c17 -O0 -g -I include r328/independent_observer.c \\
+            -Wl,--start-group build-r328/libnewlang_semantic.a \\
+            build-r328/libnewlang_checked.a build-r328/libnewlang_parser.a \\
+            build-r328/libnewlang_diagnostic.a build-r328/libnewlang_syntax.a \\
+            build-r328/libnewlang_lexer.a build-r328/libnewlang_source.a \\
+            -Wl,--end-group -o r328-observer
+          ./r328-observer r328/independent_calibrated.nl | tee r328-observer.log
+          sha256sum r328/independent_observer.c r328/independent_calibrated.nl r328-observer.log
       - name: Upload R328 diagnostic evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
@@ -72,5 +84,6 @@ jobs:
             r328-stdout.txt
             r328-stderr.txt
             r328-exit.txt
+            r328-observer.log
             r328-changed-paths.txt
           if-no-files-found: warn
