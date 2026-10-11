@@ -10,11 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
-          fetch-depth: 2
+          fetch-depth: 0
       - name: Compiler parent and exact frozen authority
         run: |
           set -eu
-          test "$(git rev-parse HEAD^)" = "05ce950ddea6a61b1f03a69ef99780d8280f414d" || true
           git cat-file -e f6f79161f6d6f1b83d4c80275379982bceb9fa9e^{commit}
           test "$(git merge-base HEAD f6f79161f6d6f1b83d4c80275379982bceb9fa9e)" = f6f79161f6d6f1b83d4c80275379982bceb9fa9e
           git show f6f79161f6d6f1b83d4c80275379982bceb9fa9e:tests/fixtures/experimental_three_arg_owner_call.nl > /tmp/original-r301.nl
