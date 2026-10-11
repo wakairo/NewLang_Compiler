@@ -164,6 +164,24 @@ For Red Team work, the independence rules in §7 take precedence.
 A first-pass attack Issue should contain only the deliberately narrow input allowed at that stage and should not pre-seed M/F/P rationale or conclusions.
 After first-pass findings are recorded, additional evidence may be appended to the same Issue or supplied through an explicitly linked follow-up Issue.
 
+#### 4.1.1 Clarity and context in work instructions and reports
+
+Write GitHub Issues, PRs, track launch prompts, and work reports so that **the actual purpose, target, and scope of the work are clear to other readers and AI execution environments**.
+
+Compiler negative tests, independent reviews, malformed-input checks, and internal-state consistency tests can be misunderstood as attempts at unauthorized cybersecurity activity. To avoid ambiguity:
+
+- State the legitimate purpose, such as NewLang compiler development, specification verification, or quality improvement, near the beginning.
+- Prefer concrete descriptions of the actual work, such as "reproduction test," "negative test," "boundary-condition check," "independent verification," or "internal-invariant check."
+- Avoid unexplained terms such as "attack," "adversarial," "intrusion," or "exploit" where they could imply a different kind of activity, unless their precise technical meaning is necessary and made clear.
+- When relevant, identify the repository, pinned commit, test environment, permitted changes, and out-of-scope activities.
+- Describe the legitimacy, safety, and results of the work accurately, without exaggeration.
+
+**This is not a policy for bypassing safety measures or usage restrictions.** Do not conceal the actual work, misrepresent its scope, or alter technical facts to obtain access.
+
+Wording changes must not weaken Red Team independence, verification rigor, the obligation to report findings, canonical authority, or stop conditions.
+
+If an AI execution environment interrupts work, recheck the actual scope and clarify its purpose and target. If restrictions persist, follow the environment's legitimate procedures and stop the task or move it to an appropriate authorized environment.
+
 ### 4.2 Required historical design-intent gate
 
 **Procedure:** [NewLang_Design_Decision_Procedure.md](NewLang_Design_Decision_Procedure.md)
