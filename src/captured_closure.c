@@ -1902,14 +1902,53 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                             prior->places[c_field - 1].current_fact)
                         return INVALID;
                 }
-                /* The two previous B fields are None, C.prev still B;
-                 * this step rewrites the A-root edge alone. */
+                /* Preserve original five-root topology outside A.next:
+                 * B.prev/next are None, A.prev→C, C.prev→B, dst.child=None.
+                 * All lookups are checked before dereference so public
+                 * validators also fail closed on malformed owned artifacts. */
+                const NLPlaceId bp_id = br.fixed_fields[1];
+                const NLPlaceId bn_id = br.fixed_fields[0];
+                const NLPlaceId ap_id = ar.fixed_fields[1];
+                const NLPlaceId cp_id = cr.fixed_fields[1];
+                const NLCapturedOriginal od = releases[4].original;
+                if (!bp_id || !bn_id || !ap_id || !cp_id ||
+                    bp_id > b->place_count || bn_id > b->place_count ||
+                    ap_id > b->place_count || cp_id > b->place_count ||
+                    !od.root || od.root > b->place_count ||
+                    b->places[od.root - 1].fixed_field_count != 4)
+                    return INVALID;
+                const NLPlaceId dc_id =
+                    b->places[od.root - 1].fixed_fields[2];
+                if (!dc_id || dc_id > b->place_count)
+                    return INVALID;
+                const NLPlaceId targets[] = {bp_id, bn_id, ap_id, cp_id, dc_id};
+                for (size_t t = 0; t < 5; ++t) {
+                    const NLValueId value =
+                        b->places[targets[t] - 1].current_value;
+                    if (!value || value > b->value_count)
+                        return INVALID;
+                }
                 const NLSemanticValueView bp =
-                    b->values[b->places[br.fixed_fields[1] - 1].current_value - 1];
+                    b->values[b->places[bp_id - 1].current_value - 1];
                 const NLSemanticValueView bn =
-                    b->values[b->places[br.fixed_fields[0] - 1].current_value - 1];
+                    b->values[b->places[bn_id - 1].current_value - 1];
+                const NLSemanticValueView ap =
+                    b->values[b->places[ap_id - 1].current_value - 1];
+                const NLSemanticValueView cp =
+                    b->values[b->places[cp_id - 1].current_value - 1];
+                const NLSemanticValueView dc =
+                    b->values[b->places[dc_id - 1].current_value - 1];
                 if (bp.variant != 1 || bp.sum_payload ||
-                    bn.variant != 1 || bn.sum_payload)
+                    bn.variant != 1 || bn.sum_payload ||
+                    dc.variant != 1 || dc.sum_payload ||
+                    ap.variant != 2 || !ap.sum_payload ||
+                    cp.variant != 2 || !cp.sum_payload ||
+                    ap.sum_payload > b->value_count ||
+                    cp.sum_payload > b->value_count ||
+                    !pointer_to(b, b->values[ap.sum_payload - 1],
+                                oc.root, oc.incarnation) ||
+                    !pointer_to(b, b->values[cp.sum_payload - 1],
+                                ob.root, ob.incarnation))
                     return INVALID;
             }
 #endif
