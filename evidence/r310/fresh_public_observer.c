@@ -40,6 +40,18 @@ static void inspect(const NLCheckedFragment *f, unsigned depth) {
             v->field.dependency_compatible,v->field.payload_occurrence,
             v->field.post_payload_occurrence);
       }
+      if(v->kind == NL_CHECKED_FIELD_REF && v->field.present &&
+         v->field.index == 1 && v->field.payload_occurrence != 0) {
+        NLSemanticPlaceView root={0}, projected={0};
+        const NLSemanticContext *world=nl_checked_context(f);
+        bool rv=nl_semantic_place_view(world,v->field.parent,&root);
+        bool pv=nl_semantic_place_view(world,v->field.child,&projected);
+        printf("R310_ORIGINAL_B_PREV world_depth=%u place_parent=%zu root_view=%d root_D=%zu root_O=%zu root_live=%d fixed0=%zu fixed1=%zu fixed2=%zu prev_view=%d prev_current_fact=%zu old_occ=%zu new_occ=%zu\n",
+          depth,v->field.parent,rv,root.governing_domain,root.incarnation,
+          root.live,root.fixed_fields[0],root.fixed_fields[1],root.fixed_fields[2],
+          pv,projected.current_fact,v->field.payload_occurrence,
+          v->field.post_payload_occurrence);
+      }
       if(v->kind == NL_CHECKED_REPLACE) ++found_replacements;
       if(v->kind == NL_CHECKED_LOAN_HEADER || v->kind == NL_CHECKED_REF_FROM_PTR) ++found_loan;
       if(v->kind == NL_CHECKED_TRY_ALLOCATE_ONE) ++found_allocs;
