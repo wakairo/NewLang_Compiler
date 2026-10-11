@@ -164,7 +164,6 @@ For Red Team work, the independence rules in §7 take precedence.
 A first-pass attack Issue should contain only the deliberately narrow input allowed at that stage and should not pre-seed M/F/P rationale or conclusions.
 After first-pass findings are recorded, additional evidence may be appended to the same Issue or supplied through an explicitly linked follow-up Issue.
 
-
 ### 4.1.1 Clarity and context in work instructions and reports
 
 Write GitHub Issues, PRs, track launch prompts, and work reports so that **the actual purpose, target, and scope of the work are clear to other readers and AI execution environments**.
@@ -182,7 +181,6 @@ Compiler negative tests, independent reviews, malformed-input checks, and intern
 Wording changes must not weaken Red Team independence, verification rigor, the obligation to report findings, canonical authority, or stop conditions.
 
 If an AI execution environment interrupts work, recheck the actual scope and clarify its purpose and target. If restrictions persist, follow the environment's legitimate procedures and stop the task or move it to an appropriate authorized environment.
-
 
 ### 4.2 Required historical design-intent gate
 
