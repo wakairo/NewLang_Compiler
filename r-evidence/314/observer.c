@@ -130,6 +130,29 @@ static bool prove_two(void) {
         printf("R314_ORIGINAL_DISTINCT_FOUR_ANCESTORS=%d B_MAPPED=%d\\n",distinct,matched);
         ok &= distinct && matched;
     } else { puts("R314_FIVE_ORIGINAL_CAPTURE_BARRIER");ok=false; }
+    {
+        NLSemanticSnapshot ns={0};
+        size_t physical_count=0;
+        NLBackingRegionId regions[8]={0};
+        NLDomainId domains[8]={0};
+        bool distinct=true;
+        if(!nl_semantic_snapshot(a->scoped.change.before,&ns)) { puts("R314_ROOT_SNAPSHOT_BARRIER");ok=false; }
+        else for(NLPlaceId p=1;p<=ns.places;p++) {
+            NLSemanticPlaceView pl={0};
+            if(!nl_semantic_place_view(a->scoped.change.before,p,&pl) ||
+               !pl.live || !pl.independent_root || !pl.governing_domain || !pl.placement.region) continue;
+            if(physical_count<8) {
+               regions[physical_count]=pl.placement.region;domains[physical_count]=pl.governing_domain;
+               for(size_t j=0;j<physical_count;j++)
+                   if(regions[j]==pl.placement.region || domains[j]==pl.governing_domain) distinct=false;
+            }
+            physical_count++;
+            printf("R314_PHYSICAL_ROOT place=%zu inc=%zu D=%zu R=%zu\\n",
+              p,pl.incarnation,pl.governing_domain,pl.placement.region);
+        }
+        printf("R314_FIVE_PHYSICAL_ROOTS count=%zu unique=%d\\n",physical_count,distinct);
+        ok &= physical_count==5 && distinct;
+    }
     printf("R314_ROOT pre inc=%zu D=%zu R=%zu, mid inc=%zu D=%zu R=%zu, second pre inc=%zu D=%zu R=%zu, post inc=%zu D=%zu R=%zu\n",
        first_pre.incarnation,first_pre.governing_domain,first_pre.placement.region,
        first_post.incarnation,first_post.governing_domain,first_post.placement.region,
@@ -149,6 +172,24 @@ static bool prove_two(void) {
        !nl_semantic_place_view(b->scoped.change.before,y->child,&ay2) ||
        !nl_semantic_place_view(b->scoped.change.after,y->child,&ay3)) {
         puts("R314_FIELD_STATE_BARRIER");return false;
+    }
+    if(deepest_present) {
+        NLSemanticValueView prevsum={0},prevptr={0},nextsum={0},nextptr={0};
+        bool prevok=nl_semantic_value_view(a->scoped.change.before,ax0.current_value,&prevsum) &&
+            prevsum.variant!=0 &&
+            nl_semantic_value_view(a->scoped.change.before,prevsum.sum_payload,&prevptr);
+        bool nextok=nl_semantic_value_view(b->scoped.change.before,ay2.current_value,&nextsum) &&
+            nextsum.variant!=0 &&
+            nl_semantic_value_view(b->scoped.change.before,nextsum.sum_payload,&nextptr);
+        bool match=prevok && nextok &&
+            prevptr.reference.place==deepest_originals.originals[1].root &&
+            nextptr.reference.place==deepest_originals.originals[3].root &&
+            prevptr.reference.provenance==NL_PROVENANCE_VALID &&
+            nextptr.reference.provenance==NL_PROVENANCE_VALID;
+        printf("R314_ORIGINAL_PTR_LINK_TARGETS prev_to_A=%d next_to_C=%d both_valid=%d\\n",
+          prevok && prevptr.reference.place==deepest_originals.originals[1].root,
+          nextok && nextptr.reference.place==deepest_originals.originals[3].root,match);
+        ok &= match;
     }
     bool sx0=false,sx1=false,sx2=false,sy1=false,sy2=false,sy3=false;
     size_t vx0=0,vx1=0,vx2=0,vy1=0,vy2=0,vy3=0;
