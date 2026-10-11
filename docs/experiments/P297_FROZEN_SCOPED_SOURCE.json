@@ -1,0 +1,29 @@
+{
+  "compiler_head": "f6f79161f6d6f1b83d4c80275379982bceb9fa9e",
+  "source_sha256": "e83854ba2b37f8c522fa119c282ce48d5b4914e8868ebe7f51f96ad2e96f5096",
+  "runs": [
+    {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "experimental_scoped_field_call.nl:3:1-8:2: error(unsupported)[FIVE-ROOT-SOURCE-PROFILE]: three-link H selects one parameterless main only\n"
+    },
+    {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "experimental_scoped_field_call.nl:3:1-8:2: error(unsupported)[FIVE-ROOT-SOURCE-PROFILE]: three-link H selects one parameterless main only\n"
+    }
+  ],
+  "boundary": {
+    "parse_status": 0,
+    "syntax_tree": true,
+    "registration_attempted": true,
+    "registration_status": 2,
+    "code": "FIVE-ROOT-SOURCE-PROFILE",
+    "start_byte": 148,
+    "end_byte": 268,
+    "snapshot_unchanged": true,
+    "owned_entry_artifact": false,
+    "entry_check_attempted": false,
+    "backend_attempted": false
+  }
+}

@@ -58,6 +58,15 @@ if(NEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL)
     target_compile_definitions(newlang_options INTERFACE
         NEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=1)
 endif()
+option(NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
+    "UNADOPTED Issue 297 single scoped field helper; DO NOT MERGE" OFF)
+if(NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL)
+    if(NOT NEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL)
+        message(FATAL_ERROR "Issue 297 requires the separate Issue 289 opt-in")
+    endif()
+    target_compile_definitions(newlang_options INTERFACE
+        NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=1)
+endif()
 target_compile_options(newlang_options INTERFACE
     -Wall -Wextra -Wpedantic -Werror)
 if(NOT NEWLANG_SANITIZER STREQUAL "none")
@@ -106,7 +115,7 @@ add_library(newlang_parser STATIC src/parser.c)
 target_link_libraries(newlang_parser PUBLIC newlang_syntax newlang_lexer newlang_diagnostic)
 add_library(newlang_checked STATIC src/checked.c)
 target_link_libraries(newlang_checked PUBLIC newlang_syntax)
-add_library(newlang_semantic STATIC src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/transitive_terminal.c src/three_arg_owner.c src/custody.c src/control.c)
+add_library(newlang_semantic STATIC src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/transitive_terminal.c src/three_arg_owner.c src/scoped_field_call.c src/custody.c src/control.c)
 target_link_libraries(newlang_semantic PUBLIC newlang_checked newlang_diagnostic newlang_parser)
 add_library(newlang_checked_c_node STATIC src/checked_c_node.c src/checked_c_five.c)
 target_link_libraries(newlang_checked_c_node PUBLIC newlang_semantic)
@@ -141,6 +150,18 @@ if(BUILD_TESTING)
                             "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/three_arg_owner_test.py"
                             "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:three_arg_owner_evidence>"
                             "$<TARGET_FILE:five_root_source_gate_evidence>")
+                        if(NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL)
+                            add_test(NAME scoped_field_poison.unit COMMAND captured_closure_test full-scoped-poison
+                                "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_scoped_field_call.nl")
+                            add_executable(scoped_field_evidence tests/integration/scoped_field_evidence.c)
+                            target_link_libraries(scoped_field_evidence PRIVATE newlang_semantic)
+                            target_link_options(scoped_field_evidence PRIVATE
+                                -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+                            add_test(NAME scoped_field.integration COMMAND "${Python3_EXECUTABLE}"
+                                "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/scoped_field_test.py"
+                                "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:scoped_field_evidence>"
+                                "$<TARGET_FILE:five_root_source_gate_evidence>")
+                        endif()
                         foreach(mode three-poison owner-parser-oom oom checker-oom)
                             add_test(NAME three_arg_owner_${mode}.unit COMMAND captured_closure_test full-${mode}
                                 "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/experimental_three_arg_owner_call.nl")

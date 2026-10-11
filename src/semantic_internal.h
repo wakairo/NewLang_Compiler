@@ -117,6 +117,7 @@ typedef struct {
     const NLSemanticContext *before_origin, *after_origin;
 } NLCapturedChange;
 struct NLCheckedFragment {
+    NLCheckedNodeId scoped_field_call; /* one finite nonescaping helper */
     NLTwoRootCallView two_root;
     const NLSemanticContext *two_entry_origin, *two_return_origin;
     NLCheckedNodeId two_call;
@@ -204,6 +205,9 @@ static inline NLReferenceFacts nl_sem_ref_fact(NLSemanticValueView v, size_t i)
     return v.reference_count == 0 ? v.reference : v.references[i];
 }
 
+bool nl_scoped_field_signature(const NLSemanticContext *, const NLTypeId *,
+                               size_t, NLTypeId);
+bool nl_scoped_field_body(const NLCheckedFragment *, const NLSymbolId[2]);
 NLCheckStatus nl_body_create(const NLSyntaxTree *, const NLFunctionParameter *,
                              size_t, NLFunctionBody **);
 NLCheckStatus nl_body_create_span(const NLSource *, NLSourceSpan,
