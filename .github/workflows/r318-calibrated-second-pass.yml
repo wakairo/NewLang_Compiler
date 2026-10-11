@@ -58,7 +58,7 @@ jobs:
           set +e
           set -uo pipefail
           source .deps/activate.sh
-          sha256sum r318-evidence/independent-five-root-three-change.nl r318-evidence/r318_public_observer.c
+          sha256sum r318-evidence/independent-five-root-three-change.nl r318-evidence/r318_public_observer.c r318-evidence/r318_strict_audit.h
           echo "=== POSITIVE CLI ==="
           ./build-r318/newlangc r318-evidence/independent-five-root-three-change.nl >/tmp/r318-compiler-emission.txt 2>/tmp/r318-compiler-diag.txt
           echo "CLI_EXIT=$?"
@@ -67,6 +67,7 @@ jobs:
           echo "=== POSITIVE PUBLIC OBSERVER ==="
           ./build-r318/r318_observer r318-evidence/independent-five-root-three-change.nl | tee /tmp/r318-positive.txt
           grep -q 'R318_BASIC_PUBLIC_VALIDATORS_OK' /tmp/r318-positive.txt || exit 1
+          grep -q 'R318_STRICT_SOURCE_OWNED_OK' /tmp/r318-positive.txt || exit 1
       - name: Independent source mutation negatives and public rollback
         shell: bash
         run: |
@@ -84,6 +85,11 @@ jobs:
            "incorrect_a_initial": ("replace(target_1@next, Option<ptr<Node>>::Some(ptr_B))","replace(target_1@next, Option<ptr<Node>>::Some(ptr_C))"),
            "repeat_old_b_owner": ("let ptr_B_current = held_ptr;","let ptr_B_current = held_ptr;\n                          let duplicated_B = held_allocation;"),
            "incorrect_last_value": ("replace(a_next@next, Option<ptr<Node>>::Some(ptr_C))","replace(a_next@next, Option<ptr<Node>>::None)"),
+           "b_copy_ptr_not_write_ref": ("erase_link(b_prev@prev, Option<ptr<Node>>::None)","erase_link(ptr_B_current, Option<ptr<Node>>::None)"),
+           "wrong_B_terminal_ptr": ("destroy(ptr_B_current, end_B_current)","destroy(ptr_A, end_B_current)"),
+           "wrong_B_terminal_allocation": ("deallocate(allocation_B_current, raw_B_current)","deallocate(allocation_A, raw_B_current)"),
+           "b_move_domain_under_loan": ("erase_link(b_prev@prev, Option<ptr<Node>>::None)","let stolen_B = life_B_current; erase_link(b_prev@prev, Option<ptr<Node>>::None)"),
+           "missing_original_a_next": ("replace(target_1@next, Option<ptr<Node>>::Some(ptr_B))","replace(target_1@next, Option<ptr<Node>>::None)"),
           }
           p=Path("r318-evidence/negatives"); p.mkdir(exist_ok=True)
           for name,(needle,replacement) in cases.items():
@@ -93,6 +99,16 @@ jobs:
           sha256sum r318-evidence/negatives/*.nl
           for file in r318-evidence/negatives/*.nl; do
             echo "=== NEGATIVE: $file ==="
-            ./build-r318/r318_observer "$file"
-            echo "OBSERVER_EXIT=$?"
+            ./build-r318/r318_observer "$file" r318-evidence/independent-five-root-three-change.nl | tee /tmp/r318-negative-result.txt
+            rc=${PIPESTATUS[0]}
+            test "$rc" -eq 0 || { echo "R318_NEGATIVE_OR_RETRY_FAILED $file rc=$rc"; exit 1; }
+            grep -q 'REGISTER_ROLLBACK=1' /tmp/r318-negative-result.txt || exit 1
+            grep -q 'R318_REJECT_ROLLBACK_SAME_CONTEXT_RETRY_OK' /tmp/r318-negative-result.txt || exit 1
+            grep -q 'R318_STRICT_SOURCE_OWNED_OK' /tmp/r318-negative-result.txt || exit 1
+            case "$file" in
+              *incorrect_a_initial*|*incorrect_last_value*|*third_helper_not_direct*|*missing_original_a_next*) expected=3 ;;
+              *) expected=1 ;;
+            esac
+            grep -q "REGISTER_STATUS=$expected" /tmp/r318-negative-result.txt || { echo "R318_UNEXPECTED_CLASS $file"; exit 1; }
           done
+          echo "R318_NEGATIVE_MATRIX_RETRY_PASS=13"
