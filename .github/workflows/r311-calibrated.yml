@@ -1,0 +1,46 @@
+name: R311 independent calibrated source-owned validation
+on:
+  push:
+    branches: [r311-calibrated-20261011]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  r311:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Assert immutable candidate and forbidden paths
+        shell: bash
+        run: |
+          set -euxo pipefail
+          git merge-base --is-ancestor c85275bc6f2a4c786b0ba25d4321695e5429ee69 HEAD
+          git diff --name-only c85275bc6f2a4c786b0ba25d4321695e5429ee69 HEAD | tee /tmp/r311-changed.txt
+          if grep -E '^(src/|include/|CMakeLists.txt|tests/|docs/reference/)' /tmp/r311-changed.txt; then exit 1; fi
+          git diff --exit-code c85275bc6f2a4c786b0ba25d4321695e5429ee69 -- src include CMakeLists.txt tests docs/reference
+      - name: Bootstrap exact candidate prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 cmake python3 make libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+          python3 scripts/bootstrap.py
+      - name: Compile exact candidate with seven default-OFF experimental opt-ins ON
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON -DNEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL=ON -DNEWLANG_EXPERIMENTAL_SCOPED_PREV_FIELD_CALL=ON
+          cmake --build build --parallel 2
+          sha256sum build/newlangc
+      - name: Calibrate frozen P fixture and public observer FIRST - never count as R positive
+        run: |
+          build/moved_b_prev_evidence tests/fixtures/experimental_moved_b_prev_call.nl | tee build/p308-calibration-only.txt
+      - name: Generate and check independently built R programs and negatives
+        run: |
+          bash evidence/r311/run.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r311-independent-evidence
+          path: |
+            build/r311/
+            build/p308-calibration-only.txt
