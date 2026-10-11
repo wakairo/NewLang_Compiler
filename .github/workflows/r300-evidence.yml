@@ -1,0 +1,65 @@
+name: R300 isolated calibrated source observation
+on:
+  push:
+    branches: [r300-calibrated-evidence-20261011]
+permissions:
+  contents: read
+jobs:
+  independent-check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: f6f79161f6d6f1b83d4c80275379982bceb9fa9e
+      - name: Build frozen experimental compiler
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = f6f79161f6d6f1b83d4c80275379982bceb9fa9e
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+          python3 scripts/bootstrap.py
+          . .deps/activate.sh
+          CC=gcc-13 cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_EXPERIMENTAL_ORIGINAL_GRANT=ON -DNEWLANG_EXPERIMENTAL_NESTED_CALLER=ON -DNEWLANG_EXPERIMENTAL_TRANSITIVE_TERMINAL=ON -DNEWLANG_EXPERIMENTAL_OWNER_AGGREGATES=ON -DNEWLANG_EXPERIMENTAL_THREE_ARG_OWNER_CALL=ON
+          cmake --build build --parallel 2
+      - name: Actual source CLI with independent changed sources
+        run: |
+          set -euo pipefail
+          mkdir -p r300
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path("tests/fixtures/experimental_three_arg_owner_call.nl")
+          s=p.read_text()
+          variants={
+            "calibration":s,
+            "alpha_rename":s.replace("assemble","combine_packets").replace("TreeTwo","PairOwners").replace("receiver:LiveRoot","arrival:LiveRoot").replace("root:receiver","root:arrival"),
+            "independent_copy_token":s.replace("assemble(receiver,original_B,ptr_B)","assemble(receiver,original_B,ptr_C)"),
+            "third_copy_src":s.replace("assemble(receiver,original_B,ptr_B)","assemble(receiver,original_B,ptr_src)"),
+            "reverse_pure_assembly":s.replace("TreeTwo{root:receiver,child:detached}","TreeTwo{root:detached,child:receiver}"),
+            "postconsume_reuse":s.replace("finish_root(leaf);","finish_root(leaf);\n                                            finish_root(leaf);"),
+            "owner_duplication":s.replace("TreeTwo{root:receiver,child:detached}","TreeTwo{root:receiver,child:receiver}"),
+            "ignored_noncopy":s.replace("finish_root(leaf);",""),
+            "wrong_root_release":s.replace("finish_root(leaf);","finish_root(owner_dst);").replace("finish_root(owner_dst);\n                                            unit","finish_root(leaf);\n                                            unit"),
+            "binding_rename":s.replace("let moved=assemble(","let transported=assemble(").replace("}=moved;","}=transported;")
+          }
+          for name,src in variants.items():
+            Path("r300",name+".nl").write_text(src)
+          PY
+          python3 - <<'PY'
+          from pathlib import Path
+          import subprocess,hashlib,json
+          cases=[]
+          for path in sorted(Path("r300").glob("*.nl")):
+            content=path.read_bytes()
+            proc=subprocess.run(["./build/newlangc",str(path)],capture_output=True)
+            (path.with_suffix(".stdout")).write_bytes(proc.stdout)
+            (path.with_suffix(".stderr")).write_bytes(proc.stderr)
+            item={"case":path.stem,"sha256":hashlib.sha256(content).hexdigest(),"exit":proc.returncode,"stderr":proc.stderr.decode(errors="replace")[:2500],"c_bytes":len(proc.stdout)}
+            cases.append(item)
+            print(json.dumps(item),flush=True)
+          Path("r300/results.json").write_text(json.dumps(cases,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r300-source-results
+          path: r300/
