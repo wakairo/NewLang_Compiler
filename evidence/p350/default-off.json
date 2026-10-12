@@ -1,0 +1,10 @@
+{
+  "mode": "unmodified_default_OFF_GCC14_Debug",
+  "existing_opt_ins_ON": 0,
+  "tests": 249,
+  "failed": 0,
+  "ctest_exit": 0,
+  "elapsed_seconds": 47.98,
+  "shadow_hook_compiled": false,
+  "production_files_changed": []
+}
