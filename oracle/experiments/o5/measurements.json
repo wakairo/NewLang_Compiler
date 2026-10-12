@@ -1,0 +1,135 @@
+{
+  "scope": "SYNTHETIC_ONLY_NOT_SOURCE_AUTHORITY",
+  "python": "3.13.5",
+  "interpreter_platform": "Linux",
+  "seed": 20261012,
+  "median_repetitions": 31,
+  "timing_includes_tracemalloc": true,
+  "unittest_methods_pass": 10,
+  "random_positive_negative_pairs": 128,
+  "positive_motif_length_pairs": 8,
+  "semantic_mutations_rejected": 32,
+  "scalar_gap": {
+    "hidden_semantic_reject": 2,
+    "explicit_recorded_accept": 2,
+    "inert_copy_accept": 2,
+    "unknown_effect_precision": 2,
+    "first_sid": "scalar:gap:0205cd15",
+    "directory_hidden_sha256": "2409bef1df81eff3843281689198433045150c58779da02f9257d0a1a8ca49c5"
+  },
+  "critical_full_reject_delta_accept": 0,
+  "independent_source_sha256": {
+    "model_py": "9c2080c98177212cbfdb7016999287058569a949d775b2da9fb1882ab3fdf215",
+    "full_snapshot_py": "3cf080585cfa1ca5ec045b2eec678ca9bf2d39ec570eb796b9d271116cff4863",
+    "persistent_delta_py": "08bb045673499ed5e3ea3fb22399345f9d0a5c9c2b40916d5f57cd541ab73e07",
+    "generate_py": "704115375f0cb313e08e474b64c1e70a511cb6d4c5b1144f4bd82beaa0170f7e",
+    "test_o5_py": "faf1c0b6981c79ad59f12f3f1f4d8f02afb2bda8daa69ec9fb1716fc9b0d5138",
+    "run_study_py": "50d0774bd904fbaab34cc15bf27a2d2039b4c2bcd0dc886bd338dbfb1ff417d5"
+  },
+  "local_full_results_json_sha256": "ba19805f4227f7fd3d24bfa99a99707a5c25c02fc97344f346dccd906bb1cdc4",
+  "measurements": [
+    {
+      "motif": "directory",
+      "changes": 2,
+      "snapshot_new_slots": 50,
+      "delta_new_slots": 4,
+      "snapshot_peak_semantic_slots": 75,
+      "delta_peak_semantic_slots": 29,
+      "snapshot_median_ns": 191171,
+      "delta_median_ns": 168749,
+      "snapshot_tracemalloc_peak_bytes": 3715,
+      "delta_tracemalloc_peak_bytes": 3133
+    },
+    {
+      "motif": "directory",
+      "changes": 4,
+      "snapshot_new_slots": 100,
+      "delta_new_slots": 8,
+      "snapshot_peak_semantic_slots": 125,
+      "delta_peak_semantic_slots": 33,
+      "snapshot_median_ns": 336175,
+      "delta_median_ns": 289997,
+      "snapshot_tracemalloc_peak_bytes": 5822,
+      "delta_tracemalloc_peak_bytes": 4122
+    },
+    {
+      "motif": "directory",
+      "changes": 9,
+      "snapshot_new_slots": 225,
+      "delta_new_slots": 18,
+      "snapshot_peak_semantic_slots": 250,
+      "delta_peak_semantic_slots": 43,
+      "snapshot_median_ns": 705449,
+      "delta_median_ns": 1332393,
+      "snapshot_tracemalloc_peak_bytes": 11699,
+      "delta_tracemalloc_peak_bytes": 7236
+    },
+    {
+      "motif": "directory",
+      "changes": 12,
+      "snapshot_new_slots": 300,
+      "delta_new_slots": 24,
+      "snapshot_peak_semantic_slots": 325,
+      "delta_peak_semantic_slots": 49,
+      "snapshot_median_ns": 1035355,
+      "delta_median_ns": 1825970,
+      "snapshot_tracemalloc_peak_bytes": 14922,
+      "delta_tracemalloc_peak_bytes": 8686
+    },
+    {
+      "motif": "scheduler",
+      "changes": 2,
+      "snapshot_new_slots": 50,
+      "delta_new_slots": 4,
+      "snapshot_peak_semantic_slots": 75,
+      "delta_peak_semantic_slots": 29,
+      "snapshot_median_ns": 190170,
+      "delta_median_ns": 171113,
+      "snapshot_tracemalloc_peak_bytes": 3782,
+      "delta_tracemalloc_peak_bytes": 3204
+    },
+    {
+      "motif": "scheduler",
+      "changes": 4,
+      "snapshot_new_slots": 100,
+      "delta_new_slots": 8,
+      "snapshot_peak_semantic_slots": 125,
+      "delta_peak_semantic_slots": 33,
+      "snapshot_median_ns": 326211,
+      "delta_median_ns": 288755,
+      "snapshot_tracemalloc_peak_bytes": 5889,
+      "delta_tracemalloc_peak_bytes": 4197
+    },
+    {
+      "motif": "scheduler",
+      "changes": 9,
+      "snapshot_new_slots": 225,
+      "delta_new_slots": 18,
+      "snapshot_peak_semantic_slots": 250,
+      "delta_peak_semantic_slots": 43,
+      "snapshot_median_ns": 694423,
+      "delta_median_ns": 1271704,
+      "snapshot_tracemalloc_peak_bytes": 11900,
+      "delta_tracemalloc_peak_bytes": 7455
+    },
+    {
+      "motif": "scheduler",
+      "changes": 12,
+      "snapshot_new_slots": 300,
+      "delta_new_slots": 24,
+      "snapshot_peak_semantic_slots": 325,
+      "delta_peak_semantic_slots": 49,
+      "snapshot_median_ns": 1112859,
+      "delta_median_ns": 2328871,
+      "snapshot_tracemalloc_peak_bytes": 15190,
+      "delta_tracemalloc_peak_bytes": 8978
+    }
+  ],
+  "limitations": [
+    "No real C or NewLang source admission run in O5",
+    "Full witness comparison checks 25 entries even in incremental model",
+    "No CFG joins, alias paths, callee effects, owner transfer, OOM transaction",
+    "Wall-time and tracemalloc peaks are platform-specific",
+    "Python Original / Domain are fixture assumptions"
+  ]
+}
