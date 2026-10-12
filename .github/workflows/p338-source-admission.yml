@@ -1,0 +1,42 @@
+name: P338 unchanged compiler real non-cJSON source admission (DO NOT MERGE)
+on:
+  push:
+    branches: [p338-noncjson-source-admission]
+permissions:
+  contents: read
+jobs:
+  source-owned-evidence:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Pin unchanged compiler and additions-only evidence
+        run: |
+          test "$(git rev-parse HEAD^)" = de9c4b175784f484675b670a109f62edeaf35de1
+          python3 - <<'PY'
+          import subprocess
+          for line in subprocess.check_output(['git','diff','--name-status','de9c4b175784f484675b670a109f62edeaf35de1','HEAD'],text=True).splitlines():
+              status,path=line.split('\t')
+              assert status=='A' and (path.startswith('evidence/p338/') or path=='.github/workflows/p338-source-admission.yml' or path=='docs/experiments/P338_NONCJSON_SOURCE_ADMISSION.md'),line
+          PY
+          git fetch --no-tags origin 46a02e60cabce1b63cc3db4bc9035fe06f5f8009
+      - name: Install prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap checksum-locked LLVM
+        run: python3 scripts/bootstrap.py
+      - name: Assert actual source-owned public proof and wrong-D rollback/retry
+        env:
+          CC: gcc-13
+        run: |
+          . .deps/activate.sh
+          bash evidence/p338/build.sh build-p338
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: p338-noncjson-source-owned-limited
+          path: |
+            build-p338/p338-observations.json
+            build-p338/p338-compiler-sha256.txt
