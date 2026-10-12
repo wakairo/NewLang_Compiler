@@ -84,6 +84,8 @@ implementation difficultyは重要なfeedbackだが、backend convenienceだけ�
 Vはtarget user / workload / workflowを具体化し、value hypothesis、North Star、PASS / FAIL criteria、anti-gaming rule、human obligation、topology preservation等をproduct evidenceとして管理する。
 また、current beachheadを不必要に広げずにpractical C-replacement envelopeを長期監査し、Deferred capabilityが将来のC-class workloadを不必要にforecloseしないかを確認する。
 
+重要なproduct goalとの不整合、過剰な機構拡張、未検討の低負担な代替手段を発見した場合、Vは必要なときだけ `VALUE-ALIGNMENT-RISK` を短く報告し、技術研究としてのGOと製品投資としてのGOを区別する（§4.3）。
+
 Vはcanonical language semantics、Draft revision、implementation architecture、formal proof strategy、merge / milestone sequencingを単独では決めない。詳細は `NewLang_Product_Value_Strategy.md` を参照する。
 
 ### Q — Quality Observation & Improvement
@@ -110,6 +112,7 @@ Coordinationは少なくとも以下を担う。
 - Draft revisionの要否判定
 - 設計変更前・independent PR review時のhistorical design-intent gate (§4.2)
 - Mを止めてP/Fのcatch-upを待つかの判断
+- 大きな機構投資・製品目標変更前のGoal Alignment（§4.3）とV警告への応答
 
 ## 4. 標準feedback loop
 
@@ -137,6 +140,14 @@ reportはこのprocessの代替にはならない。
 
 track間の継続的・参照可能なコミュニケーションは、原則として **GitHub Issueを主経路** とする。
 promptやchatは作業開始・制御のために使ってよいが、handoffの全内容を会話だけへ閉じ込めず、可能な限り対応するIssueを指す薄い起動指示にする。
+
+通常のTrack起動指示には、次の**一文**を含める（同趣旨の簡潔な表現でよい）。
+
+> 作業開始時に \`docs/NewLang_Project_Compass.md\` から関連する目標・非目標・代替手段の正本を探し、曖昧ならリンク先を確認してください。目標逸脱の懸念は、技術的な作業結果と区別してIssueに記録し、Coordinationに伝えてください。
+
+Compassは新しいauthorityではない。**独立Rのfresh blind first-pass**では§7の入力隔離が優先され、旧案・設計者のpreferred rationale等を判定前に読ませない。
+
+
 
 一つのboundedなtask / finding / revalidationには、原則として一つのIssueを用いる。
 そのIssueには必要に応じて次を集約する。
@@ -194,6 +205,8 @@ GitHub Issue、PR、Track起動prompt、作業報告などの文章は、**実�
 
 AI実行環境による作業中断が発生した場合は、実際の作業範囲を再確認し、目的と対象をより明確に記述する。それでも制限が継続する場合は、実行環境の正規の手続きに従い、作業を停止または適切な環境へ移管する。
 
+**並行Trackの停止・差替え：** Issueへの作業コメントが0件でも、別チャットで着手済みの可能性がある。Coordinationは変更時に \`STOP REQUESTED\` と既知/不明の稼働状況を記録し、作業者は次の大きな書込みやPR公開前に現行Issueの停止指示を確認し、停止・保全した範囲を \`STOP ACK\` として報告する（可能な場合）。**ACK未確認は停止確認済みではない**。GitHubのIssue closeだけで別チャットが自動停止するとは扱わず、必要なら利用者から直接伝える。
+
 ### 4.2 Historical design-intent gate（設計判断の必須照合）
 
 **必須手順:** [NewLang_Design_Decision_Procedure.md](NewLang_Design_Decision_Procedure.md)
@@ -218,6 +231,23 @@ PR作成時には`.github/PULL_REQUEST_TEMPLATE.md`が照合記入を促す。
 **Red Team first-pass独立性との両立:** §7を優先する。
 blind R reviewerにはfirst-pass disposition前に本ledgerや旧M/P rationaleを読ませない。
 M/Coordinationがpreflightを行い、R first-passの独立性を損なわない順序で照合する。
+
+### 4.3 Goal Alignment Gate（重要な投資判断に限定）
+
+**目的：** §4.2は過去の設計・意味論との整合性を問う。このgateは別に、**その技術的手段を採ることが製品目標にとって必要・適切か**を問う。技術的にGOでも、製品投資のGOとは限らない。
+
+**適用時：** Coordinationが新しい大きな checker/proof/source mechanism やsource意味論への投資を認可する前、または同じ製品目標で2種類目のprecision workaround、専用条件の増殖、製品上の改善がない技術Issueの連続などの兆候があるとき。初回の大きな機構提案も対象。回数は兆候であり機械的な拒否閾値ではない。通常のbug fix、既存scopeの実装・テスト、純粋な小規模研究では省略できる。**研究結果を製品に必要な次工程へ昇格する時点**では再確認する。
+
+新しい審査文書やformを作らず、**対象のIssueまたは親Issueに4行程度**をCoordinationが記録する。
+
+1. **Goal**：どのuser-facing価値・元の制約を改善するか。
+2. **Evidence**：CAPABILITY（機構の成功）、SAFETY（静的拒否）、PRODUCT（実workload）、BURDEN（人間の責任）で何が実測・未測定か。
+3. **Alternatives**：checked・既存API・局所 \`unchecked\` / library境界・source-surface gap・native検証・pivot等の**関係する選択肢**と最小の反証。無関係なら理由付きN/Aでよい。どの案も事前に正しいと仮定しない。
+4. **Stop / owner**：何が出たら投資判断を戻し、誰が次の裁定をするか。
+
+**Vの警告とCoordinationの応答：** Vはmaterialな懸念があるときだけ、報告冒頭で \`VALUE-ALIGNMENT-RISK\` と明示し、「元の価値／今回の実証範囲／未検討の代替案／残るhuman burden／求める判断」を**一段落**で伝える。必要に応じ \`HOLD PRODUCT PRIORITY\`、\`GO TECHNICAL RESEARCH ONLY\`、または懸念なしを区別する。Vには実装停止・設計裁定の単独権限はない。Coordinationは**次の該当する機構投資の認可前**にIssueで \`ACCEPT\` / \`REJECT（理由）\` / \`DEFER（停止条件）\` を一度記録し、警告を無応答で黙殺しない。
+
+**軽量さと検証：** 全Issue/PRへのV sign-off、毎週の定例、Compass読了チェックを設けない。最初の数件の重要判断（H1以外も含む）で、比較が**実際のscope・順序・停止**を変えたかと手続き負担を短く振り返り、効果がなければ簡素化・廃止する。§7のblind R独立性と既存§4.2の履歴照合は維持する。
 
 ## 5. Finding分類
 
