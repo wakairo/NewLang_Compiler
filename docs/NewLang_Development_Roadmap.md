@@ -59,22 +59,56 @@ M371/M372のsafe operation contractとM374/F45のallocator/typed-claim橋を
 [STB六条件HOLD裁定](https://github.com/wakairo/NewLang_Compiler/issues/374#issuecomment-6125505436)
 はtechnical evidenceとproduct investmentを分離するための拘束条件である。
 
-## 4. 新しい優先順位（暦日ではなく通過条件で進む）
+## 4. 暫定航路 — 経由する星を検証してから北極星へ
 
-| 順序 | 段階 | 成果物・合格条件 | ここでやらないこと / STOP |
-| --- | --- | --- | --- |
-| **A0 — 今回** | 根拠付き棚卸しとscope固定 | 本文の能力表、実行到達範囲、保留理由と再開条件をuser/Coordinationがレビューする | Draft・P/F実装・H1 score・製品目標を変更しない |
-| **A1 — 最優先** | **既存の言語構成による普通のプログラムのsource→CHECK→NATIVE** | **新しい意味論なし**で、単一unit内の通常の名前付きhelper/direct call + Copy引数/返値を1件、CLIから実行。異常系は同じCLIで真のsemantic rejectとbackend unsupportedを区別。既存のV0/V1/AVS・five-H nativeを回帰として保護 | **最初にsource admissionとemitter対応を観測して境界を固定**。backend修正が複数の新しいsource/ABI/ownership機構を要求するならSTOP・小さいスライスへ切る。名前付きhelperはP8–P11に意味論の基礎があるが**この組合せのnative実行は未確認** |
-| **A2 — A1後** | 低水準state updateを伴う**小さなlibrary内部操作** | 既に規範化された`Pair`/fixed field or bounded persistent-link + scoped write/replaceのうち**実sourceで現に受理できる一つ**を、同じ実行経路へ追加。before/afterと旧occurrence終了、wrong-D/stale-access/consume misuseの実source負例を検査。正確な診断と反復loan/cleanupを記録 | cJSON graphやSTB relocationへ形だけ寄せない。compiler専用特別名前/host-owned証明が必要ならSTOP。機能数ではなくユーザーが使える操作を増やす |
-| **B — 条件付き** | library API / 人間の負担の実測 | A1/A2の成果で、1つの通常の**呼出可能なsafe operation**の作者側・利用者側L/R/P/V/Cを同等のC/Zig/Rust実装と比較。静的に除去できた責任と残るtrue library policyを分類する | safetyを隠れた`requires fn`で呼出者に移転しない。receipt + encapsulation等**複数の新規大機構が必要**ならHOLDし別候補を検討 |
-| **C — 再開条件付き** | 独立した実C workloadの縦断製品検証 | cJSONまたはSTBの保留条件が独立した新証拠で狭まったときだけ、元pre-registrationを**そのまま**使い、source→semantic→native + negative + product benefitを測る | H1 PASS/FAILを改変しない。STB C結果をNewLang productの成功に転記しない。技術GOを即製品GOにしない |
-| **D — 長期別枠** | practical C-replacement coverage | FFI/C ABI、function pointer/context callback、external backing、in-place init、freestanding、modules/separate compilation、platform/atomicity等を[Coverage Map](NewLang_C_Replacement_Coverage_Map.md)のno-foreclosureに従い個別評価 | roadmapの次項目として全機構を今実装しない。C構文互換・一般Rust型制度の複製を目標にしない |
+> **航路は候補。順序・選定・到達状態は未裁定。**
+> 元の「A1 named helper単独最優先」を取り消して決め打ちせず、
+> 独立[Track V #377](https://github.com/wakairo/NewLang_Compiler/issues/377)（製品価値）、
+> [Track M #378](https://github.com/wakairo/NewLang_Compiler/issues/378)（歴史的破壊検査・意味論）、
+> [Track P #379](https://github.com/wakairo/NewLang_Compiler/issues/379)（実コンパイラ到達可能性）
+> の評価を[Coordination #375](https://github.com/wakairo/NewLang_Compiler/issues/375)に集めて後で航路を裁定する。
+> この図はまだP実装Issueや言語機構の着手承認ではない。
 
-**優先する最初の実験はA1の一つだけ**。これは「NewLangはすでにnamed helperのnativeが動く」という主張ではない。
-まず現在のsource → CHECKの受理状況、emitterが拒否するexact stageと診断を記録し、
-すでに選択された規則の**faithful backend workに収まる**場合だけ最小実装へ進む。
-もし通常関数自体が未サポートなら、初回の作業で見つけた**最も近いsource-positive**を採用候補として再裁定する。
-テスト用host JSONやsynthetic Pythonが通常のcallerから使えるNewLang sourceを置換してはいけない。
+### 4.1 星図（一本道・必須通過順ではない）
+
+```text
+             ┌─ S1: 関数・値・小さな数値処理 ─ S2: 文字/バイト処理 ─┐
+S0: 既存基盤 ┤                                                ├─ S5: 安全なlibrary操作 ─ ★ 北極星
+             ├─ S3: 固定境界の探索/ソート ─ S4: ring/queue ─────┘
+             └─ scoped ptr/ref・fixed-field mutation ──────────┘
+                         └──────── 実装済みの足場を再利用
+```
+
+- **S0** = Draft17.30と現在mainで確認済みの*範囲限定*source/check/nativeを利用する出発点。
+- **S1〜S5** = 新しい到達目標**候補**。構文・arithmetic・array/slice・文字列・安全な公開APIなどの実装有無を先取りしない。
+- **★** = 凍結済みcJSON H1 #268（別途PASS/FAIL UNDECIDED）。STB-ARRAY-1は**独立した隣接能力のHOLD**であり、★の代用品ではない。
+- 探索順は途中で変更可能。例えばarray-index sourceがないならS3/S4を後回しにし、scoped ref/fixed-fieldの別経路を先行してよい。
+- 成功した中間星の結果を★の得点として加算しない。既存機構のreuseとコストを次の星へ移すことが成果である。
+
+### 4.2 候補星と継承する能力
+
+| 星 | 最小のプログラム/操作候補 | 正例＋**その題材に固有の誤り** | 最初に確認すべき依存 / 身に付く能力 | 現在の証拠分類 |
+| --- | --- | --- | --- | --- |
+| **S1 基本計算・関数** | 名前付きhelper、合計、反復Fibonacci（再帰版は**別候補**） | 値の受渡し・境界値／型・overflow・未定義名などの拒否 | nonCopy以外の普通のAPI、戻り値・分岐・反復・整数演算；**一般intや再帰が選択済みとは仮定しない** | P8–P14にはbounded source/semanticの基盤、CLI/nativeの組合せは**要P確認**；新題材自体は**候補** |
+| **S2 文字・バイト** | length-bounded `memchr`/ `strnlen`相当、10進整数parse、escape decoder | 長さ0、境界直前、無効文字・桁あふれ・終端の扱いを明示 | byte representation、nonescaping bounded span、checked traversal、`Result`/失敗返却；glibcとの**意味の互換性を決め打ちしない** | Testing Strategyにnumeric parsing/escape decoding等の検査候補あり；**NewLang source/nativeは未確認** |
+| **S3 基本アルゴリズム** | bounded binary search、挿入ソート | 範囲外・重複・empty input・order preservation/更新時の不正参照 | index/span、比較、loop、array elementへの安全なアクセス；**一般array/index構文は要確認** | **候補／既存のDraft意味論との対応未検証** |
+| **S4 固定容量状態構造** | fixed ring buffer、stack、FIFO | empty/full、wraparound、部分初期化、stale ref、ownership refund | Ringのhead/len SSOT、raw-vacant claimとtyped live occupancy、要素移動／初期化；可変容量`realloc`を必須にしない | Draft §15 Ring/Vec設計・過去の破壊検査に**研究基盤**、main実source/native成立は**未確認** |
+| **S5 小ライブラリAPI** | lexer/token stream、小さなstateful container、公開safe操作 | 不正入力・誤owner/Domain・失敗時返却・clientによる不変条件破壊を拒否 | library作者のtrue precondition局所化、call側poststate、representational protection、次のoperationでの合成 | cJSON M371/M372から欠落契約は判明、実用safe APIは**未成立**。限定的候補を再評価 |
+| **★ 元の北極星** | 凍結cJSON B middle detach/adoptと元owner返却、native／負例 | [H1 #268](https://github.com/wakairo/NewLang_Compiler/issues/268)の事前登録条件を**一切変更しない** | 複数root・original B nonCopy receipt・membership・reference/delete・安全な操作合成 | 原B adoption 0/2、full native 0、**HOLD実装 / UNDECIDED製品** |
+
+### 4.3 過去の実験から候補を引き出す（成功範囲を誤認しない）
+
+- [Compiler Testing Strategy](NewLang_Compiler_Testing_Strategy.md)には**numeric parsing、escape decoding、source-span arithmetic、hash/equality、checked arithmetic**等をcomponent-levelテスト候補とする記述がある。これは実装済みのNewLang標準ライブラリを意味しない。
+- Draft17.30 §15はRingの`head/len`、Vecの`len`をmetadata **SSOT**とする議論・局所claim責任を含む。**原理/機構の検討と一般のsource実装は異なる**。
+- 過去のPython source-like/破壊検査にはVec growth、coalescing allocator、arena/free-list、intrusive relocation、parser/hash insert等を扱った報告がある可能性がある。ただしここで**原本を未再検証**の報告を実証済みcurrent Draft sourceとして列挙しない。[M #378](https://github.com/wakairo/NewLang_Compiler/issues/378)で正本・古いreport・最初の反例を照合して、星ごとの`HISTORICAL TESTED`、`CURRENT CHECK`、`CURRENT NATIVE`を分けて補強する。
+- lexer/parser等NewLangコンパイラ自身の**C実装**を観察することと、それらの機能が**NewLangソースとして実装可能**なことは別。
+- 「C標準ライブラリ関数の星」は、glibcの最適化assembly・C ABI・C仕様のUBまで複製する意味ではなく、NewLang利用者にも有用な**安全な同等操作**を提供すること。裸のNUL終端ポインタの長さ不明な読取りをordinary safe APIだと称さない。
+
+### 4.4 到達判定・航路変更の基準
+
+星ごとに、**(1)** 実sourceがparse/CHECK/NATIVEのどこまで到達、**(2)** 具体的な本物の負例と正しい診断、**(3)** 何が手作業からcompilerへ移りlibrary作者／callerのL/R/P/V/Cがどう減るか、**(4)** 次の星が再利用できる機構と未達を記録する。SPEC・FORMAL・Python synthetic・C元実装とproduct PASSを混ぜない。
+
+同じ星で独立した大きなsource/semantic/encapsulation機構が複数必要なら**その星をHOLDして迂回または順序を変更**する。テストだけ増えて普通の利用者が書けるNewLangが増えなければ目的との整合を再評価する。Rは安全性境界のhigh-value地点で独立blind検証、F/Oは実際の疑問がある地点だけ参加する。すべての星で全Trackの儀式を設けない。
 
 ## 5. 各Trackの作業方針と審査
 
@@ -106,22 +140,26 @@ metadataからauthorityを創造するwrapper、CLI以外でだけ動くhost fix
 変更されたtoy topology、並行する複数の未選択広域機構、成功数だけのKPI。
 H1/STBのHOLDは「NewLang開発中止」や既存規則の不健全性確定を意味しない。
 
-## 7. 次に承認を求める一件
+## 7. 直近の実行順序（暫定航路の独立査定を先に行う）
 
-**Proposed next bounded Track P task（この文書で自動起動しない）：**
-A1 preflight＋忠実な最小backend slice。まずmainの現実の
-`fn named helper / ordinary direct call / Copy arg+return` sourceを
-**1本のfixture**で実測し、parse / registration / semantic / emitter / nativeの
-最初のfailure stageを報告する。既存選択済み規則とback-end coverageの範囲で
-修正可能なら、正負例、emit前reject、host native result、GCC/Clang/ASan/UBSan、
-CI回帰と実行手順を**同じ小scope**で実証する。
+**本PRはDRAFT。航路の候補と棚卸しは公開するが、現時点の実装GOではない。**
+[Coordination #375](https://github.com/wakairo/NewLang_Compiler/issues/375)の下で、以下の**一回限りの独立read-only査定**を実施する：
 
-**Hard STOP:** fixed selected semanticsを変える必要がある、sourceがまったく表現できない、
-正しいbackendを作るのに他の未選択ABI/closure/owner系が必須、または
-診断・通常ユーザーの負担が改善しない。そこでは新機能追加に切り替えず、
-Coordinationが別のsource-positive候補と価値を選び直す。
-一般LLVM backendへの投資可否は、このv0実行経路で学んだ差分を使って別途裁定する。
+- [V #377](https://github.com/wakairo/NewLang_Compiler/issues/377)：本当に利用者の価値が積み上がる星の優先順位、C/Zig/Rustと比較した作者・caller側の負担、枝分かれ／迂回。
+- [M #378](https://github.com/wakairo/NewLang_Compiler/issues/378)：過去の破壊検査と現行Draft17.30の対応、現sourceの要否、星の意味論的依存と過剰一般化リスク。
+- [P #379](https://github.com/wakairo/NewLang_Compiler/issues/379)：**mainの実ソースとchecker/backend**を読んで各星のsource→CHECK→NATIVE可否、最初の詰まり、最も安い実行経路。
 
-**この提案をreviewしてから**最初のP Issueを起票する。
-その他のTrackを連鎖起動せず、独立研究の既存判断を上書きしない。
+各Trackは自身のIssueへ一度だけ評価を記録してSTOP。他Trackの答えに合わせる義務はない。
+Coordinationは報告がそろったら相違点・USER価値と最初の実行可能な星を[Issue #375](https://github.com/wakairo/NewLang_Compiler/issues/375)に裁定して、**このPRを追加改稿しユーザーのレビューを受ける**。
+そこで初めて、必要な**一つだけの**bounded P実測/実装Issueを別途認可する。
+
+**当面の候補A1 named helper + Copy return**もS1という一つの星に後退し、既存の意味論／backend実装可能性の有無によりS2やfixed-field等と入れ替えうる。
+実装first stepで「一般int、再帰、array indexing、文字列、`unchecked`、allocator/ABIがすでにある」という前提を使わない。
+SOURCE gapが単一既存機構の欠落ならその星の安価な候補を示し、
+複数の広い新機構ならSTOPし他経路を選ぶ。Normativeなsource/semantic変更には
+[Process §4.2](NewLang_Project_Development_Process.md)、
+大きな投資には§4.3を適用するが、独立研究や小修正へ追加の定例承認は課さない。
+
+北極星#268の元データ・PASS/FAILは固定のまま。STB #374の投資HOLDを解除しない。
+一般LLVM backendの採否とFFI等長期envelopeは、この航路上で得た実行可能性に基づいて別途決める。
 
