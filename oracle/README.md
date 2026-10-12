@@ -18,6 +18,9 @@ bootstrap/build. Extraction is temporary, hash-checked and isolated. Future
 differential cases belong in `tests/oracle/`; unsupported C results must never
 be classified as oracle agreement. See `docs/P0_ARCHITECTURE.md` for the seam.
 
-The archive also contains historical specs/contracts. Those have Class O/H
-contextual status here; they do not replace the versioned Class N Draft 17.4
-and Backend Contract v0.4 under `docs/reference/`.
+The archive also contains historical specifications and contracts. These are
+Class O/H contextual evidence, not current normative language authority.
+The canonical NewLang specification is the Draft selected by
+`docs/reference/CURRENT_SPEC.md` (currently Draft 17.30). References to
+Draft 17.4 and Backend Contract v0.4 in frozen M7.5/P0 material describe
+that historical context; they do not supersede the selected specification.
