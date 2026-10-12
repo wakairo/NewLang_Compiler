@@ -34,6 +34,14 @@ for name in ['w1_device_refresh_9','w2_scheduler_rotation_9']:
     r=subprocess.run([str(both/'public_probe'),str(s),'9',str(n)],capture_output=True,text=True,check=True);assert not r.stderr
     data=[json.loads(x) for x in r.stdout.splitlines()];assert next(x for x in data if 'source_owned_publicly_validated' in x)['events']==9
     direct.append({'source':s.name,'records':data})
-result={'base':'82578ff6eb23970e3ae934c98a38383ca01468f7','evidence_head':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'compiler_edits':False,'composition_owned':False,'classification':'P G3 COMPOSITION: HOLD — FIRST SOURCE/OWNED/PUBLIC PROOF BARRIER','boundaries':rows,'legacy_owned':owned,'legacy_edges':edge_records,'legacy_oom':[json.loads(x) for x in oom.stdout.splitlines()],'source_negatives':negatives,'direct9_controls':direct,'composed_public_poison':'UNTESTED: no successful composed owned artifact','composed_OOM':'UNTESTED: no accepted composed route'}
+finite_retry=[]
+for name in ['w1_device_refresh_9','w2_scheduler_rotation_9']:
+    r=subprocess.run([str(both/'precision_retry'),str(root/'evidence/p352'/(name+'.nl')),'9',str(adopt)],capture_output=True,text=True,check=True)
+    assert not r.stderr
+    records=[json.loads(x) for x in r.stdout.splitlines()]
+    assert records[0]['refused_registration_status']==3 and records[0]['snapshot_unchanged']
+    assert records[-1]['same_context_actual_source_owned_clean_retry']
+    finite_retry.append({'source':name,'records':records})
+result={'base':'82578ff6eb23970e3ae934c98a38383ca01468f7','evidence_head':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'compiler_edits':False,'composition_owned':False,'classification':'P G3 COMPOSITION: HOLD — FIRST SOURCE/OWNED/PUBLIC PROOF BARRIER','boundaries':rows,'legacy_owned':owned,'legacy_edges':edge_records,'legacy_oom':[json.loads(x) for x in oom.stdout.splitlines()],'source_negatives':negatives,'direct9_controls':direct,'finite_refusal_clean_retry':finite_retry,'composed_public_poison':'UNTESTED: no successful composed owned artifact','composed_OOM':'UNTESTED: no accepted composed route'}
 (base.parent/(base.name+'-observations.json')).write_text(json.dumps(result,indent=2)+'\n')
 print('P362_ASSERT HOLD unchanged353 composition registration3 rollback; legacy actual_owned8 5+2+1 validators; source_negative3 semantic1; direct9_controls2 PASS; COMPOSED_OWNED_NONE')

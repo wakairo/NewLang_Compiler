@@ -94,7 +94,11 @@ unchanged snapshot/no owned artifact: wrong original dst Domain and wrong moved
 B Domain (`ALLOCATED-DOMAIN-MISMATCH`), read ref to write formal (`P3-TYPE-MISMATCH`).
 Source hashes, exact spans and CLI diagnostics are retained. Failed ninth legacy
 registration followed by the complete owned8 calibration in the same context
-succeeds. Legacy sampled registration/owned acquisition and four public validator
+succeeds. With replay ON, the genuine failed composition registration is also
+followed in the SAME context by actual W1 and W2 owned9 main/public validation
+(two separate clean-retry tests). The copied immutable P338 public observer
+changes only its expected refusal status/code to the measured precision3; no
+compiler/validator acceptance expectation changes. Legacy sampled registration/owned acquisition and four public validator
 OOM routes also preserve rollback/retry. These samples do **not** exercise the
 unimplemented joined composition.
 
