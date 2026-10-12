@@ -1,0 +1,73 @@
+name: P362 G3 unchanged compiler composition barrier (DO NOT MERGE)
+on:
+  push:
+    branches: [p362-known-call-owner-composition]
+permissions:
+  contents: read
+jobs:
+  evidence:
+    name: G3 evidence ${{ matrix.name }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: GCC Debug
+            cc: gcc-13
+            build_type: Debug
+            sanitizer: none
+          - name: GCC Release
+            cc: gcc-13
+            build_type: Release
+            sanitizer: none
+          - name: Clang
+            cc: clang-23
+            build_type: Debug
+            sanitizer: none
+          - name: ASan-LSan
+            cc: clang-23
+            build_type: Debug
+            sanitizer: address
+          - name: UBSan
+            cc: clang-23
+            build_type: Debug
+            sanitizer: undefined
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Exact unchanged compiler and evidence-only scope
+        run: |
+          git merge-base --is-ancestor 82578ff6eb23970e3ae934c98a38383ca01468f7 HEAD
+          python3 - <<'PY'
+          import subprocess
+          for line in subprocess.check_output(['git','diff','--name-status','82578ff6eb23970e3ae934c98a38383ca01468f7','HEAD'],text=True).splitlines():
+              status,path=line.split('\t')
+              assert status=='A' and (path.startswith('evidence/p362/') or path=='docs/experiments/P362_G3_COMPOSITION_HOLD.md' or path=='.github/workflows/p362-composition-barrier.yml'),line
+          PY
+          git fetch --no-tags origin 46a02e60cabce1b63cc3db4bc9035fe06f5f8009 276ca88d34ef1d54ee0ccda4c9a4f47956ddb26f
+      - name: Locked toolchain and prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+          python3 scripts/bootstrap.py
+          . .deps/activate.sh
+          bash scripts/check-format.sh
+      - name: Unchanged compiler, three flag profiles, real owned controls and sampled OOM
+        env:
+          CC: ${{ matrix.cc }}
+          P362_BUILD_TYPE: ${{ matrix.build_type }}
+          P362_SANITIZER: ${{ matrix.sanitizer }}
+          ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+          UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+        run: |
+          . .deps/activate.sh
+          bash evidence/p362/run.sh build-g3
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: p362-G3-${{ matrix.name }}
+          path: |
+            build-g3-observations.json
+            build-g3-both/p362-trace.json
+            build-g3-new-only/p362-r359.json

@@ -1,0 +1,3 @@
+{"parse_status":0,"syntax_tree":true,"registration_attempted":true,"registration_status":3,"code":"CAPTURED-CLOSURE-PRECISION","start_byte":6961,"end_byte":16406,"snapshot_unchanged":true,"owned_entry_artifact":false,"entry_check_attempted":false,"backend_attempted":false}
+P362_TRACE unsealed_attempt_direct_count=9 registered_call=149 span=12007:12053
+P362_TRACE reason=UNMODELLED_CALLEE node=149

@@ -1,0 +1,20 @@
+{
+  "guard": "NEWLANG_TEST_P362_TRACE",
+  "normal_archive_sha256": "0ff85825f66dab2829d1ce385985a4b1d44607d347cef2f87370d304991e8a91",
+  "normal_archive_unchanged": true,
+  "trace": "P362_TRACE unsealed_attempt_direct_count=9 registered_call=149 span=12007:12053\nP362_TRACE reason=UNMODELLED_CALLEE node=149\n",
+  "boundary": {
+    "parse_status": 0,
+    "syntax_tree": true,
+    "registration_attempted": true,
+    "registration_status": 3,
+    "code": "CAPTURED-CLOSURE-PRECISION",
+    "start_byte": 6961,
+    "end_byte": 16406,
+    "snapshot_unchanged": true,
+    "owned_entry_artifact": false,
+    "entry_check_attempted": false,
+    "backend_attempted": false
+  },
+  "trace_tu_sha256": "12ab6c090027327ff3d044049ea7c81c83c68a45ed1fb86fa253606c6869aea3"
+}
