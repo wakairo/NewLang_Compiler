@@ -1,0 +1,71 @@
+name: P350 G1 test-only chronology shadow (DO NOT MERGE)
+on:
+  push:
+    branches: [p350-g1-shadow-chronology]
+permissions:
+  contents: read
+jobs:
+  shadow:
+    name: G1 ${{ matrix.name }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: GCC
+            cc: gcc-13
+            sanitizer: none
+          - name: ASan-LSan
+            cc: clang-23
+            sanitizer: address
+          - name: UBSan
+            cc: clang-23
+            sanitizer: undefined
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Pin fixed parent and additions ONLY
+        run: |
+          test "$(git rev-parse HEAD^)" = dc0fc7e7d2f9f92286973a4f5062089acf0d85f2
+          python3 - <<'PY'
+          import subprocess
+          for line in subprocess.check_output(['git','diff','--name-status','dc0fc7e7d2f9f92286973a4f5062089acf0d85f2','HEAD'],text=True).splitlines():
+              status,path=line.split('\t')
+              assert status=='A' and (path.startswith('evidence/p350/') or path=='.github/workflows/p350-g1-shadow.yml' or path=='docs/experiments/P350_G1_SHADOW.md'),line
+          PY
+          git fetch --no-tags origin 46a02e60cabce1b63cc3db4bc9035fe06f5f8009
+      - name: Existing prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap unchanged locked LLVM and standard formatting
+        run: |
+          python3 scripts/bootstrap.py
+          . .deps/activate.sh
+          bash scripts/check-format.sh
+      - name: Default OFF regression
+        if: matrix.name == 'GCC'
+        env:
+          CC: gcc-13
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build-off -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-off --parallel 2
+          ctest --test-dir build-off --output-on-failure
+      - name: Control + genuine shadow + restored corruptions + OOM
+        env:
+          CC: ${{ matrix.cc }}
+          P350_SANITIZER: ${{ matrix.sanitizer }}
+          ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+          UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+        run: |
+          . .deps/activate.sh
+          bash evidence/p350/run.sh build-g1
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: p350-G1-${{ matrix.name }}
+          path: |
+            build-g1/p350-observations.json
+            build-g1/p338-observations.json
