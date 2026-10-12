@@ -1,0 +1,5 @@
+P365_ANCHOR D6=110 block=104 loan=103 binding=115 values=124 bindings=57 scopes=11
+P365_REPLAY M bindings=65 values=127 next_statement=155 loan=142
+P365_ENDPOINT place=96
+P365_HOLD node=149 reason=ENDPOINT_PLACE
+/tmp/p365-build/parent.c:429: m && nl_checked_captured_closure_validate(f, m) == NL_CHECK_OK

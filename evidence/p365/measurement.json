@@ -1,0 +1,37 @@
+{
+  "disposition": "HOLD; Coordination STOP supersedes next-step work",
+  "compiler_base": "82578ff6eb23970e3ae934c98a38383ca01468f7",
+  "source_sha256": "bd7692f8118c8e4de2b7662b0f90fcf503a548d9948bfded27bd430ad127716d",
+  "profile": "old ten opt-ins ON; FINITE_CHANGE_REPLAY OFF",
+  "unchanged": {
+    "observer_exit": 0,
+    "parse_status": 0,
+    "registration_status": 0,
+    "main_check_status": 0,
+    "owned": true,
+    "public_captured_count": 5,
+    "public_scoped_count": 2,
+    "public_terminal_status": 0
+  },
+  "cli_status": "NOT MEASURED separately; parser/registration/main measured by public observer",
+  "partial_guarded": {
+    "observer_exit": 1,
+    "status_returned_by_stop": "NL_CHECK_ANALYSIS_PRECISION_LIMIT (3)",
+    "first_failure": "ENDPOINT_PLACE",
+    "place": 96,
+    "node": 149,
+    "source_span_bytes": [
+      12007,
+      12053
+    ],
+    "source_line": 201,
+    "source_column": 24,
+    "diagnostic_kind": "test-only stderr, not a production compiler source diagnostic"
+  },
+  "corruption_131_134": "UNTESTED: genuine guarded positive absent",
+  "prototype_oom": "UNTESTED",
+  "prototype_rollback": "UNTESTED",
+  "prototype_ci": "NOT RUN: STOP superseded",
+  "native_execution": "NOT ATTEMPTED",
+  "ninth_adoption": "NOT ATTEMPTED"
+}
