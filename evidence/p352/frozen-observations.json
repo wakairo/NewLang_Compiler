@@ -1,0 +1,46 @@
+[
+  {
+    "source": "w1_device_refresh_9.nl",
+    "sha256": "1f22d9af5e2120939a15b89150963ddc9d9d823d06f7e1dddd728eee65670503",
+    "compiler": "de9c4b175784f484675b670a109f62edeaf35de1",
+    "boundary_exit": 0,
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 3,
+      "code": "CAPTURED-CLOSURE-PRECISION",
+      "start_byte": 12162,
+      "end_byte": 12219,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "cli_exit": 3,
+    "diagnostic": "evidence/p352/w1_device_refresh_9.nl:181:49-181:106: error(precision)[CAPTURED-CLOSURE-PRECISION]: complete original-owner fork/cleanup proof is unavailable\n",
+    "source_span_text": "replace(write_7@child,Option<ptr<Node>>::Some(ptr_slot5))"
+  },
+  {
+    "source": "w2_scheduler_rotation_9.nl",
+    "sha256": "078f20bbc47079c33705387240d09a38b96d598a8c907f7ee4e8676c5326f967",
+    "compiler": "de9c4b175784f484675b670a109f62edeaf35de1",
+    "boundary_exit": 0,
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 3,
+      "code": "CAPTURED-CLOSURE-PRECISION",
+      "start_byte": 12308,
+      "end_byte": 12353,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "cli_exit": 3,
+    "diagnostic": "evidence/p352/w2_scheduler_rotation_9.nl:181:49-181:94: error(precision)[CAPTURED-CLOSURE-PRECISION]: complete original-owner fork/cleanup proof is unavailable\n",
+    "source_span_text": "replace(write_7@next,Option<ptr<Node>>::None)"
+  }
+]

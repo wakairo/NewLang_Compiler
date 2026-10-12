@@ -24,11 +24,13 @@ NLCheckStatus nl_captured_change_begin(NLCheckedFragment *f,
                                        const NLSemanticContext *world)
 {
     if (f->field_change_count >= CHANGE_CAPACITY
-#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS
+#if defined(NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS) &&         \
+    !defined(NEWLANG_EXPERIMENTAL_FINITE_CHANGE_REPLAY)
         || (f->field_change_count == 6 && (!f->second_scoped_field_call ||
                                            node <= f->second_scoped_field_call))
 #endif
-#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT
+#if defined(NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT) &&            \
+    !defined(NEWLANG_EXPERIMENTAL_FINITE_CHANGE_REPLAY)
         || (f->field_change_count == 7 &&
             (!f->field_changes[6] || node <= f->field_changes[6]->node))
 #endif
@@ -355,7 +357,8 @@ static bool pointer_to(const NLSemanticContext *world,
            pointer.reference.place == root &&
            pointer.reference.incarnation == incarnation;
 }
-#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS
+#if defined(NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS) &&         \
+    !defined(NEWLANG_EXPERIMENTAL_FINITE_CHANGE_REPLAY)
 /* Exactly one seventh direct Change after both B scopes. Existing primitive
  * replay and the original-release ledger still prove every authority. */
 static bool cross_root_third(const NLCheckedFragment *f,
@@ -452,7 +455,8 @@ static bool cross_root_third(const NLCheckedFragment *f,
 }
 #endif
 
-#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT
+#if defined(NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT) &&            \
+    !defined(NEWLANG_EXPERIMENTAL_FINITE_CHANGE_REPLAY)
 /* One eighth direct Change, after the independently checked A.next Change.
  * All authority and Change/Reset effects still come from primitive replay. */
 static bool cross_root_fourth(const NLCheckedFragment *f,
@@ -767,6 +771,265 @@ static NLCheckStatus change_validate(const NLCheckedFragment *f,
 {
     return change_validate_from(f, c, NULL, 0);
 }
+
+#ifdef NEWLANG_EXPERIMENTAL_FINITE_CHANGE_REPLAY
+/* G1 chronology, now part of the existing PUBLIC owned closure validator.
+ * Bounded direct caller only. No workload/ordinal-specific field or region.
+ * Original issuance and 0..5 teardown remain independently proved by trace.
+ */
+typedef struct {
+    const char *reason;
+    size_t eligible, replayed, originals, scalar_checks, gaps_checked;
+    NLCheckedNodeId node;
+} ReplayReport;
+typedef struct {
+    NLPlaceId root;
+    NLIncarnationId incarnation;
+    NLDomainId domain;
+    NLBackingRange extent;
+    NLValueId allocation, domain_value;
+} ReplayOriginal;
+static NLCheckStatus replay_stop(ReplayReport *r, const char *reason,
+                                 NLCheckedNodeId node)
+{
+    r->reason = reason;
+    r->node = node;
+    return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+}
+static bool replay_inventory(const NLSemanticContext *c,
+                             const ReplayOriginal *orig, size_t count)
+{
+    for (size_t i = 0; i < count; ++i) {
+        const ReplayOriginal o = orig[i];
+        NLSemanticPlaceView p;
+        NLSemanticValueView a, d;
+        if (!nl_semantic_place_view(c, o.root, &p) || !p.live ||
+            p.incarnation != o.incarnation || p.governing_domain != o.domain ||
+            p.fixed_field_count != 4 ||
+            memcmp(&p.placement, &o.extent, sizeof(o.extent)) ||
+            !nl_semantic_value_view(c, o.allocation, &a) ||
+            !nl_semantic_value_view(c, o.domain_value, &d) ||
+            a.allocation_region != o.extent.region || d.domain != o.domain ||
+            a.carrier != NL_CARRIER_PLACE || d.carrier != NL_CARRIER_PLACE)
+            return false;
+        NLSemanticPlaceView ah, dh;
+        if (!nl_semantic_place_view(c, a.owner_place, &ah) ||
+            !nl_semantic_place_view(c, d.owner_place, &dh) || !ah.live ||
+            !dh.live || ah.current_value != o.allocation ||
+            dh.current_value != o.domain_value)
+            return false;
+        size_t owners_a = 0, owners_d = 0;
+        NLSemanticSnapshot snap;
+        if (!nl_semantic_snapshot(c, &snap))
+            return false;
+        for (size_t j = 1; j <= snap.bindings; ++j) {
+            NLSemanticBindingView b;
+            if (!nl_semantic_binding_view(c, j, &b))
+                return false;
+            if (b.availability == NL_AVAILABLE) {
+                owners_a += b.value == o.allocation;
+                owners_d += b.value == o.domain_value;
+            }
+        }
+        if (owners_a != 1 || owners_d != 1)
+            return false;
+    }
+    return true;
+}
+static bool replay_heap_same(const NLSemanticContext *a,
+                             const NLSemanticContext *b,
+                             const ReplayOriginal *orig, size_t count,
+                             ReplayReport *r)
+{
+    for (size_t i = 0; i < count; ++i) {
+        NLSemanticPlaceView x, y;
+        if (!nl_semantic_place_view(a, orig[i].root, &x) ||
+            !nl_semantic_place_view(b, orig[i].root, &y) ||
+            memcmp(&x, &y, sizeof(x)))
+            return false;
+        for (size_t k = 0; k < x.fixed_field_count; ++k) {
+            NLSemanticPlaceView u, v;
+            NLSemanticValueView uv, vv;
+            if (!nl_semantic_place_view(a, x.fixed_fields[k], &u) ||
+                !nl_semantic_place_view(b, y.fixed_fields[k], &v) ||
+                memcmp(&u, &v, sizeof(u)) ||
+                !nl_semantic_value_view(a, u.current_value, &uv) ||
+                !nl_semantic_value_view(b, v.current_value, &vv) ||
+                memcmp(&uv, &vv, sizeof(uv)))
+                return false;
+            NLAggregateField field;
+            NLSemanticTypeView type;
+            if (!nl_semantic_aggregate_field_view(a, x.type, k, &field) ||
+                !nl_semantic_type_view(a, field.type, &type))
+                return false;
+            if (type.kind == NL_TYPE_U8)
+                ++r->scalar_checks;
+        }
+        NLSemanticValueView av, bv, dv, ev;
+        if (!nl_semantic_value_view(a, orig[i].allocation, &av) ||
+            !nl_semantic_value_view(b, orig[i].allocation, &bv) ||
+            memcmp(&av, &bv, sizeof(av)) ||
+            !nl_semantic_value_view(a, orig[i].domain_value, &dv) ||
+            !nl_semantic_value_view(b, orig[i].domain_value, &ev) ||
+            memcmp(&dv, &ev, sizeof(dv)))
+            return false;
+    }
+    return true;
+}
+static bool replay_copy_node(const NLCheckedFragment *f,
+                             const NLCheckedNodeView *n)
+{
+    NLSemanticTypeView t;
+    switch (n->kind) {
+    case NL_CHECKED_BLOCK:
+    case NL_CHECKED_STATEMENT:
+    case NL_CHECKED_UNIT:
+    case NL_CHECKED_TYPE:
+        return true;
+    case NL_CHECKED_IDENTIFIER:
+    case NL_CHECKED_BINDING:
+    case NL_CHECKED_RECEIVER:
+    case NL_CHECKED_U8_LITERAL:
+    case NL_CHECKED_SUM_CONSTRUCTOR:
+    case NL_CHECKED_AGGREGATE_FIELD:
+        return n->type && nl_semantic_type_view(f->context, n->type, &t) &&
+               t.is_copy;
+    case NL_CHECKED_REF_FROM_PTR:
+    case NL_CHECKED_FIELD_REF:
+        return n->has_reference_result;
+    case NL_CHECKED_LOAN_HEADER:
+        return n->loan.access == NL_ACCESS_READ && !n->loan.is_exclusive &&
+               n->loan.body_nonescape_proved && n->loan.prevent_lifetime_end;
+    default:
+        return false;
+    }
+}
+static NLCheckStatus replay_gap(const NLCheckedFragment *f,
+                                const NLCapturedChange *previous,
+                                const NLCapturedChange *next,
+                                const ReplayOriginal *orig, size_t count,
+                                ReplayReport *r)
+{
+    const NLCheckedNodeView *p = nl_checked_node_view(f, previous->node),
+                            *n = nl_checked_node_view(f, next->node);
+    for (size_t j = 1; j <= nl_checked_node_count(f); ++j) {
+        const NLCheckedNodeView *q = nl_checked_node_view(f, j);
+        if (q->span.start_byte >= p->span.end_byte &&
+            q->span.start_byte < n->span.start_byte && !replay_copy_node(f, q))
+            return replay_stop(r, "UNMODELLED_INTERMEDIATE_SOURCE_EFFECT", j);
+    }
+    const NLCheckedNodeView *project =
+        nl_checked_node_view(f, p->first_argument);
+    NLSemanticScopeView ended;
+    if (!project ||
+        !nl_semantic_scope_view(next->before, project->reference_result.scope,
+                                &ended) ||
+        ended.active)
+        return replay_stop(r, "PREVIOUS_LOAN_NOT_CLOSED", previous->node);
+    if (!replay_heap_same(previous->after, next->before, orig, count, r))
+        return replay_stop(r, "ORIGINAL_HEAP_ADJACENCY", next->node);
+    ++r->gaps_checked;
+    return NL_CHECK_OK;
+}
+static NLCheckStatus chronological_changes(const NLCheckedFragment *f,
+                                           const NLCapturedOriginal *issued,
+                                           size_t count)
+{
+    if (count != NL_CAPTURED_MAX_RELEASES)
+        return INVALID;
+    ReplayOriginal originals[NL_CAPTURED_MAX_RELEASES] = {0};
+    for (size_t i = 0; i < count; ++i) {
+        const NLCapturedOriginal o = issued[i];
+        originals[i] =
+            (ReplayOriginal){o.root,   o.incarnation,      o.domain,
+                             o.extent, o.allocation_value, o.domain_value};
+    }
+    ReplayReport report = {0}, *r = &report;
+    const NLCapturedChange *const *tape =
+        (const NLCapturedChange *const *)f->field_changes;
+    size_t length = f->field_change_count;
+    size_t capacity = sizeof(f->field_changes) / sizeof(f->field_changes[0]);
+    NLCheckedNodeId
+        nodes[sizeof(f->field_changes) / sizeof(f->field_changes[0])];
+    size_t eligible = 0;
+    for (size_t j = 1; j <= nl_checked_node_count(f); ++j) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, j);
+        if (n->kind == NL_CHECKED_REGISTERED_CALL)
+            return replay_stop(r, "UNMODELLED_CALLEE", j);
+        if (n->kind == NL_CHECKED_REPLACE) {
+            if (eligible == capacity || !n->field.present)
+                return replay_stop(r, "SOURCE_EVENT_PROFILE_BOUND", j);
+            nodes[eligible++] = j;
+        }
+    }
+    r->eligible = eligible;
+    if (!eligible || length != eligible || length != f->field_change_count)
+        return replay_stop(r, "TAPE_SOURCE_CARDINALITY", 0);
+    for (size_t i = 0; i < length; ++i) {
+        const NLCapturedChange *c = tape[i];
+        if (!c || c != f->field_changes[i] || c->world != f->context ||
+            c->node != nodes[i])
+            return replay_stop(r, "TAPE_SOURCE_BIJECTION", nodes[i]);
+        const NLCheckedNodeView *n = nl_checked_node_view(f, c->node);
+        NLSourceView operation_source;
+        if (!nl_source_view(nl_checked_source(f), n->span, &operation_source) ||
+            operation_source.length < 8 ||
+            memcmp(operation_source.bytes, "replace(", 8))
+            return replay_stop(r, "SOURCE_OPERATION_SPAN", c->node);
+        if (i && nl_checked_node_view(f, tape[i - 1]->node)->span.end_byte >=
+                     n->span.start_byte)
+            return replay_stop(r, "SOURCE_SPAN_ORDER", c->node);
+        if (!replay_inventory(c->before, originals, count) ||
+            !replay_inventory(c->after, originals, count))
+            return replay_stop(r, "CURRENT_ORIGINAL_AUTHORITY", c->node);
+        if (i) {
+            NLCheckStatus status =
+                replay_gap(f, tape[i - 1], c, originals, count, r);
+            if (status != NL_CHECK_OK)
+                return status;
+        }
+        NLCheckStatus status = change_validate(f, c);
+        if (status != NL_CHECK_OK) {
+            r->reason = "PRIMITIVE_REPLAY";
+            r->node = c->node;
+            return status;
+        }
+        ++r->replayed;
+        /* Every non-target fourth or link field must remain current. The
+         * primitive already replays all state; this explicitly audits scalar.
+         */
+        for (size_t j = 0; j < count; ++j) {
+            NLSemanticPlaceView b, a;
+            if (!nl_semantic_place_view(c->before, originals[j].root, &b) ||
+                !nl_semantic_place_view(c->after, originals[j].root, &a))
+                return replay_stop(r, "ROOT_VIEW", c->node);
+            for (size_t k = 0; k < b.fixed_field_count; ++k)
+                if (b.fixed_fields[k] != n->field.child) {
+                    NLSemanticPlaceView x, y;
+                    NLSemanticValueView vx, vy;
+                    if (!nl_semantic_place_view(c->before, b.fixed_fields[k],
+                                                &x) ||
+                        !nl_semantic_place_view(c->after, a.fixed_fields[k],
+                                                &y) ||
+                        memcmp(&x, &y, sizeof(x)) ||
+                        !nl_semantic_value_view(c->before, x.current_value,
+                                                &vx) ||
+                        !nl_semantic_value_view(c->after, y.current_value, &vy))
+                        return replay_stop(r, "UNRELATED_FIXED_FIELD", c->node);
+                    /* Whole replace reanchors unchanged members in the new
+                     * parent aggregate. The primitive replay proves custody. */
+                    vx.aggregate_owner = 0;
+                    vy.aggregate_owner = 0;
+                    if (memcmp(&vx, &vy, sizeof(vx)))
+                        return replay_stop(r, "UNRELATED_FIXED_VALUE", c->node);
+                    if (vx.scalar_known)
+                        ++r->scalar_checks;
+                }
+        }
+    }
+    return NL_CHECK_OK;
+}
+#endif
 
 #ifdef NEWLANG_EXPERIMENTAL_SCOPED_FIELD_CALL
 /* Rederive the primitive's non-ending write conflicts, not just its world
@@ -1998,12 +2261,29 @@ static NLCheckStatus trace(const NLCheckedFragment *f,
                 f->field_changes[changes] == NULL ||
                 f->field_changes[changes]->node != i)
                 return INVALID;
+#ifdef NEWLANG_EXPERIMENTAL_FINITE_CHANGE_REPLAY
+            if (changes == 0) {
+                NLCapturedOriginal issued[NL_CAPTURED_MAX_RELEASES];
+                for (size_t r = 0; r < count; ++r) {
+                    if (!releases[r].initialized || releases[r].ended ||
+                        releases[r].freed)
+                        return INVALID;
+                    issued[r] = releases[r].original;
+                }
+                NLCheckStatus chronology =
+                    chronological_changes(f, issued, count);
+                if (chronology != NL_CHECK_OK)
+                    return chronology;
+            }
+#endif
             const NLCapturedChange *change = f->field_changes[changes++];
-#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS
+#if defined(NEWLANG_EXPERIMENTAL_CROSS_ROOT_A_NEXT_AFTER_TWO_CALLS) &&         \
+    !defined(NEWLANG_EXPERIMENTAL_FINITE_CHANGE_REPLAY)
             if (changes == 7 && !cross_root_third(f, change))
                 return INVALID;
 #endif
-#ifdef NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT
+#if defined(NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT) &&            \
+    !defined(NEWLANG_EXPERIMENTAL_FINITE_CHANGE_REPLAY)
             if (changes == 8 && !cross_root_fourth(f, change))
                 return INVALID;
 #endif

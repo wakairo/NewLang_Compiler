@@ -103,6 +103,12 @@ if(NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT)
     target_compile_definitions(newlang_options INTERFACE
         NEWLANG_EXPERIMENTAL_CROSS_ROOT_C_PREV_AFTER_A_NEXT=1)
 endif()
+option(NEWLANG_EXPERIMENTAL_FINITE_CHANGE_REPLAY
+    "UNSELECTED Issue 352 finite original-five-H chronological replay; DO NOT MERGE" OFF)
+if(NEWLANG_EXPERIMENTAL_FINITE_CHANGE_REPLAY)
+    target_compile_definitions(newlang_options INTERFACE
+        NEWLANG_EXPERIMENTAL_FINITE_CHANGE_REPLAY=1)
+endif()
 target_compile_options(newlang_options INTERFACE
     -Wall -Wextra -Wpedantic -Werror)
 if(NOT NEWLANG_SANITIZER STREQUAL "none")
