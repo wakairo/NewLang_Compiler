@@ -4,7 +4,9 @@
 #include "../../src/semantic_internal.h"
 #include "probe.h"
 #include <stdlib.h>
-unsigned nl_test_p352_phase;
+/* GCC may eliminate a nonvolatile tag around builtin calloc. The malloc
+ * wrappers must actually observe the fault site even under -O3. */
+volatile unsigned nl_test_p352_phase;
 static size_t captures;
 static unsigned next_clone;
 void nl_test_p352_reset_faults(void)

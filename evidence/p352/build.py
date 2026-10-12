@@ -22,4 +22,4 @@ assert all(hashlib.sha256(p.read_bytes()).hexdigest()==before[p] for p in protec
 # Separate real production/public-only tools: no test archive or fault symbols.
 normal_libs=[original]+[build/('libnewlang_'+x+'.a') for x in ['checked','parser','diagnostic','syntax','lexer','source']]
 for source,target in [(root/'tests/integration/five_root_source_gate_evidence.c',build/'five_root_source_gate_evidence'),(root/'evidence/p338/public_probe.c',build/'public_probe')]:
-    subprocess.run([compiler]+flags+link_flags+[str(source)]+[str(x) for x in normal_libs]+['-o',str(target)],check=True)
+    subprocess.run([compiler]+[x for x in flags if x!='-DNEWLANG_TEST_CHRONOLOGY_SHADOW=1']+link_flags+[str(source)]+[str(x) for x in normal_libs]+['-o',str(target)],check=True)

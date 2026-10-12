@@ -118,7 +118,10 @@ OOM: per motif 11 registration attempts and 11 entry-check attempts, including
 EXACT ninth capture calloc, before clone and after clone fault tags (only in
 test TU), early/middle/last sampled allocations; all4, rollback snapshots equal,
 failed entry output NULL, same-context source retry produces real owned9 and
-public0. First-entry allocation calibration warms existing body cache to avoid
+public0. The test-only capture tag is volatile: initial GCC Release CI exposed that a
+nonvolatile tag around builtin calloc can be optimized away, preventing actual
+fault injection (not a compiler OOM acceptance). Local Release rerun passed
+after fixing only the test tag. First-entry allocation calibration warms existing body cache to avoid
 injecting beyond the subsequent attempt's end. Public-validator 8 sampled
 OOMs all4 and same-live-artifact retry0. This is sampled, not exhaustive. No
 partial exposed owned output, double free or sanitizer failure in completed

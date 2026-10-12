@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Actual source admission, PUBLIC proof, owned corruption, rollback and OOM."""
 from pathlib import Path
-import hashlib,json,subprocess,sys,os,shlex
+import hashlib,json,subprocess,sys,os,shlex,re
 root=Path(__file__).resolve().parents[2];build=Path(sys.argv[1]).resolve();frozen=Path(sys.argv[2]).resolve()
 pins=json.loads((root/'evidence/p352/source_hashes.json').read_text())
 oldpins=json.loads((root/'evidence/p338/source_hashes.json').read_text())
@@ -14,6 +14,8 @@ for name,count in [('w1_device_refresh',2),('w2_scheduler_rotation',4)]:
     records=[json.loads(x) for x in result.stdout.splitlines()];assert not result.stderr
     assert next(x for x in records if 'source_owned_publicly_validated' in x)['events']==count
     prefixes.append({'source':source.name,'records':records})
+enabled=re.findall(r'^(NEWLANG_EXPERIMENTAL_\w+):BOOL=ON$',(build/'CMakeCache.txt').read_text(),re.M)
+assert enabled==['NEWLANG_EXPERIMENTAL_FINITE_CHANGE_REPLAY'],enabled
 rows=[]
 required={'missing_ninth_owned_record','duplicate_ninth_owned_record','reordered_ninth_owned_record','missing_checked_replace','spliced_source_span','duplicated_owned_event_node','wrong_original_domain_proof','unknown_write_ref_provenance','old_some_occurrence_revived','nonfresh_post_occurrence_claim','unrelated_fourth_scalar_fact','disconnected_valid_primitive_pair','unmodelled_intermediate_effect'}
 for motif,name in [('W1','w1_device_refresh_9'),('W2','w2_scheduler_rotation_9')]:
@@ -33,7 +35,10 @@ for motif,name in [('W1','w1_device_refresh_9'),('W2','w2_scheduler_rotation_9')
     assert len([x for x in real_public if x.get('public_validator_status')==0 and 'captured_depth' in x])==5
     assert next(x for x in real_public if 'source_owned_publicly_validated' in x)['events']==9
     args=[str(build/'p352-tests/harness'),str(source),str(negative)]
-    a=subprocess.run(args,capture_output=True,text=True,check=True);b=subprocess.run(args,capture_output=True,text=True,check=True)
+    a=subprocess.run(args,capture_output=True,text=True);b=subprocess.run(args,capture_output=True,text=True)
+    if a.returncode or b.returncode:
+        print(a.stdout+a.stderr+b.stdout+b.stderr,file=sys.stderr)
+        raise RuntimeError(f'{motif} real harness exit {a.returncode}/{b.returncode}')
     assert a.stdout==b.stdout and not a.stderr and not b.stderr
     records=[json.loads(x) for x in a.stdout.splitlines()]
     assert records[0]['refused_registration_status']==1 and records[0]['snapshot_unchanged']

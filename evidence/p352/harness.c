@@ -277,6 +277,14 @@ static bool registration_oom(const NLSyntaxTree *t)
             CHECK(status == NL_CHECK_OK);
             total = allocation_count;
         } else {
+            if (status != NL_CHECK_OUT_OF_MEMORY ||
+                memcmp(&before, &after, sizeof(before)))
+                fprintf(stderr,
+                        "P352_REG_OOM attempt=%zu status=%d unchanged=%d "
+                        "phase=%u triggered=%d allocations=%zu\n",
+                        attempt, status,
+                        !memcmp(&before, &after, sizeof(before)), failure_phase,
+                        phase_triggered, allocation_count);
             CHECK(status == NL_CHECK_OUT_OF_MEMORY &&
                   !memcmp(&before, &after, sizeof(before)));
             if (failure_phase)
