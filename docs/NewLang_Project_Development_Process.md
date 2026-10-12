@@ -17,6 +17,7 @@ NewLangは、部分的に独立した複数trackで開発する。
 - **P — production compiler実装**
 - **R — 独立Red Team review**
 - **V — Value / Product Validation**
+- **O — Python意味論・解析アルゴリズム研究（暫定）**
 - **Coordination — track間の裁定・同期・順序決定**
 
 目的は、各trackを最初から同じ結論へ揃えることではない。
@@ -48,6 +49,7 @@ docs/NewLang_C_Replacement_Coverage_Map.md
 **Ledgerはnon-normative evidence indexであり、現在のDraftを上書きしない。**
 設計判断を選択・変更する前の必須照合手順は
 [NewLang 設計判断手順](NewLang_Design_Decision_Procedure.md) に定める。
+暫定Track Oの運用上のCharterは[Track O研究Charter](NewLang_Track_O_Research_Charter.md)とする。これはproject processの文書であり、言語仕様のnormative Draftを上書きしない。
 
 UTF-8で問題なく管理できる文書は日本語を基本とし、必要に応じて英語版を併記する。
 一方、shell操作やtoolchain上で前面に現れるcommit message等は、互換性・可搬性を優先して英語ASCIIを基本とする。
@@ -90,6 +92,12 @@ Qは、品質指標の最大化ではなく、NewLangの実質的な品質リス
 通常は沈黙し、既存のP / CI / F / R / Vの証拠を観測して、具体的なリスクまたは費用対効果のある改善機会がある場合だけ、根拠付きIssueとしてCoordinationへ提案する。
 Q自身はcompiler実装、テスト作成、CI構築を行わず、PR / mergeの自動的な必須gateにもならない。提案の採否、優先順位、担当trackの割り当てはCoordinationだけが決定する。
 低価値になった品質手続きの簡素化・廃止も正当な提案対象とする。承認時の詳細なCharterはIssue #162を参照する。
+
+### O — Python意味論・解析アルゴリズム研究（暫定）
+
+Oは非normativeなPython実験で、コンパイラのsemantic-state表現、Changeの時系列検証、抽象解析の精度とコストを独立に比較し、反例と再現可能な知見をM/P/Coordinationへ返す。
+実NewLangソースの受理・Allocation/Domainの発行・checked-owned検証はPの責務であり、Oの合成モデルや診断用JSONで代替しない。Oは独立R、Fの形式証明、Mの意味論選択にも代わらない。
+Oの実施はCoordinationが承認した限定Issueに限る。常設化・独立リポジトリ化は未承認。詳細は[Track O研究Charter](NewLang_Track_O_Research_Charter.md)を参照する。
 
 ### Coordination
 
@@ -323,6 +331,7 @@ F: ruleは内部整合し、期待される性質を形式化できるか？
 P: production compilerで忠実に表現・診断・検査できるか？
 R: projectのpreferred interpretationを知らずに読むと、何が壊れるか？
 Q: 既存の品質証拠に、実質的なリスクまたは誤ったconfidenceを残す盲点があるか？
+O: Pythonの独立モデルで、解析に必要な状態と時系列不変条件を最小反例・精度・コストの面から明らかにできるか？
 ```
 
 全trackを通過することはconfidenceを高めるが、設計の完全性を証明するものではない。

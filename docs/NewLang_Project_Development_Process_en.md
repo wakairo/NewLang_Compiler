@@ -17,6 +17,7 @@ NewLang is developed through several partially independent tracks:
 - **P — Production compiler implementation**
 - **R — Independent red-team review**
 - **V — Value / Product Validation**
+- **O — Python semantic and analysis algorithm research (provisional)**
 - **Coordination — cross-track adjudication and sequencing**
 
 The goal is not to make the tracks agree by construction.
@@ -46,6 +47,7 @@ They govern product strategy, not normative language semantics.
 If an important semantic decision exists only in a report or conversation, it should be promoted through a reviewed Draft revision before being treated as normative.
 
 The [Design-Intent Ledger](NewLang_Design_Intent_Ledger.md) is a **non-normative index of historical proposals and unresolved intent**, not a replacement for the canonical Draft. The mandatory pre-decision check and review procedure is [NewLang Design Decision Procedure](NewLang_Design_Decision_Procedure.md).
+The provisional [Track O Research Charter](NewLang_Track_O_Research_Charter.md) governs O's research workflow as a project process document; it does not override the normative language Draft.
 
 UTF-8-managed project documents should normally use Japanese as the primary language, with an English companion when useful.
 For commit messages and other text that appears prominently in shell/toolchain workflows, prefer English ASCII for portability and operational simplicity.
@@ -86,6 +88,12 @@ Q is an advisory track for reducing material NewLang quality risk, not maximizin
 It is quiet by default: it observes existing P / CI / F / R / V evidence and proposes an evidence-backed Issue to Coordination only when there is a concrete risk or a cost-effective improvement opportunity.
 Q does not itself implement the compiler, write tests, configure CI, or become an automatic PR / merge gate. Coordination alone decides whether to adopt a proposal, its priority, and the track that owns any resulting work.
 Simplifying or removing a low-value quality procedure is also a valid Q proposal. See Issue #162 for the accepted Charter record.
+
+### O — Python semantic and analysis algorithm research (provisional)
+
+O runs non-normative Python experiments on semantic-state representations, Change chronology validation, abstract-analysis precision, and costs, returning independent counterexamples and reproducible findings to M/P/Coordination.
+Only P can establish real NewLang source admission and issued Allocation/Domain/checked-owned validation; synthetic Python premises and diagnostic JSON cannot replace that proof. O does not replace blind R review, F proofs, or M semantic decisions.
+Each O task requires a bounded Coordination-authorized Issue. Permanence and an independent Oracle repository are not approved. See the [Track O Research Charter](NewLang_Track_O_Research_Charter.md) (Japanese primary text).
 
 ### Coordination
 
@@ -316,6 +324,7 @@ F: Is the rule internally coherent and provable where expected?
 P: Can a production compiler represent and diagnose it faithfully?
 R: What breaks if we ignore the project's preferred interpretation?
 Q: Does the existing quality evidence leave a material-risk or false-confidence blind spot?
+O: Which semantic-state and chronology invariants are necessary, and what do independent Python counterexamples, precision and costs reveal?
 ```
 
 Passing all tracks increases confidence, but does not prove the design is complete.

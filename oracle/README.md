@@ -1,5 +1,7 @@
 # Frozen M7.5 oracle (Class O)
 
+This directory's frozen M7.5 attachment is historical evidence, distinct from the currently **provisional Track O** Python algorithm research. Track O's process-level charter is [`docs/NewLang_Track_O_Research_Charter.md`](../docs/NewLang_Track_O_Research_Charter.md); independent experiments may live under `oracle/experiments/` in unmerged evidence branches. Neither the archive nor those experiments supersede `docs/reference/CURRENT_SPEC.md` or provide C-issued source authority.
+
 `NewLang_FrontEnd_Prototype_M7_5.zip` is the untouched attachment, identified by
 `identity.json` and independently by `docs/reference/INPUT_ARTIFACTS.json`.
 M7.5's metadata version is 0.7.0; historical baseline 466/466 pytest PASS is
