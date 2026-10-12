@@ -1,0 +1,56 @@
+[
+  {
+    "source": "wrong_B_domain.nl",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 1,
+      "code": "ALLOCATED-DOMAIN-MISMATCH",
+      "start_byte": 13013,
+      "end_byte": 13058,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "cli_exit": 3,
+    "diagnostic": "evidence/p362/wrong_B_domain.nl:213:61-213:106: error(semantic)[ALLOCATED-DOMAIN-MISMATCH]: pointer requires matching readable live domain\n"
+  },
+  {
+    "source": "wrong_dst_domain.nl",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 1,
+      "code": "ALLOCATED-DOMAIN-MISMATCH",
+      "start_byte": 14567,
+      "end_byte": 14610,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "cli_exit": 3,
+    "diagnostic": "evidence/p362/wrong_dst_domain.nl:231:69-231:112: error(semantic)[ALLOCATED-DOMAIN-MISMATCH]: pointer requires matching readable live domain\n"
+  },
+  {
+    "source": "read_ref_to_write_formal.nl",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 1,
+      "code": "P3-TYPE-MISMATCH",
+      "start_byte": 13120,
+      "end_byte": 13132,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "cli_exit": 3,
+    "diagnostic": "evidence/p362/read_ref_to_write_formal.nl:214:58-214:70: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  }
+]

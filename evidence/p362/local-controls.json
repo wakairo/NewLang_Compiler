@@ -1,0 +1,2564 @@
+{
+  "base": "82578ff6eb23970e3ae934c98a38383ca01468f7",
+  "evidence_head": "bc04d7a5c47e80a92c9f9184b49f952fec996b8f",
+  "compiler_edits": false,
+  "composition_owned": false,
+  "classification": "P G3 COMPOSITION: HOLD \u2014 FIRST SOURCE/OWNED/PUBLIC PROOF BARRIER",
+  "boundaries": [
+    {
+      "config": "old-only",
+      "source": "first_adoption.nl",
+      "boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 3,
+        "code": "CAPTURED-CLOSURE-PRECISION",
+        "start_byte": 14661,
+        "end_byte": 14728,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "cli_exit": 3,
+      "diagnostic": "/workspace/p362/evidence/p362/first_adoption.nl:232:49-232:116: error(precision)[CAPTURED-CLOSURE-PRECISION]: complete original-owner fork/cleanup proof is unavailable\n",
+      "compiler_sha256": "85a65077b56f8ce5b9f4e2c0145c8c580d4def4fb5af425e6f3d0e0eedf6f2fd"
+    },
+    {
+      "config": "old-only",
+      "source": "returned_owner_calibration.nl",
+      "boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 0,
+        "code": "",
+        "start_byte": 0,
+        "end_byte": 0,
+        "snapshot_unchanged": false,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p362/evidence/p362/returned_owner_calibration.nl\n",
+      "compiler_sha256": "85a65077b56f8ce5b9f4e2c0145c8c580d4def4fb5af425e6f3d0e0eedf6f2fd"
+    },
+    {
+      "config": "both",
+      "source": "first_adoption.nl",
+      "boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 3,
+        "code": "CAPTURED-CLOSURE-PRECISION",
+        "start_byte": 6961,
+        "end_byte": 16406,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "cli_exit": 3,
+      "diagnostic": "/workspace/p362/evidence/p362/first_adoption.nl:136:37-249:38: error(precision)[CAPTURED-CLOSURE-PRECISION]: complete original-owner fork/cleanup proof is unavailable\n",
+      "compiler_sha256": "bcff20e0a971a518d2c4094144e7a1f66d2f8d5175981b8cfa29fa7168177056"
+    },
+    {
+      "config": "both",
+      "source": "returned_owner_calibration.nl",
+      "boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 3,
+        "code": "CAPTURED-CLOSURE-PRECISION",
+        "start_byte": 6961,
+        "end_byte": 16024,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "cli_exit": 3,
+      "diagnostic": "/workspace/p362/evidence/p362/returned_owner_calibration.nl:136:37-245:38: error(precision)[CAPTURED-CLOSURE-PRECISION]: complete original-owner fork/cleanup proof is unavailable\n",
+      "compiler_sha256": "bcff20e0a971a518d2c4094144e7a1f66d2f8d5175981b8cfa29fa7168177056"
+    },
+    {
+      "config": "new-only",
+      "source": "first_adoption.nl",
+      "boundary": {
+        "parse_status": 2,
+        "syntax_tree": false,
+        "registration_attempted": false,
+        "registration_status": null,
+        "code": "AVS-DECL-PROFILE",
+        "start_byte": 294,
+        "end_byte": 297,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "cli_exit": 3,
+      "diagnostic": "/workspace/p362/evidence/p362/first_adoption.nl:10:21-10:24: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+      "compiler_sha256": "7729cdb6f91ecdfc162a0db708c656b653ca65351dd357cbe8533d75ea0ccda0"
+    },
+    {
+      "config": "new-only",
+      "source": "returned_owner_calibration.nl",
+      "boundary": {
+        "parse_status": 2,
+        "syntax_tree": false,
+        "registration_attempted": false,
+        "registration_status": null,
+        "code": "AVS-DECL-PROFILE",
+        "start_byte": 294,
+        "end_byte": 297,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "cli_exit": 3,
+      "diagnostic": "/workspace/p362/evidence/p362/returned_owner_calibration.nl:10:21-10:24: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+      "compiler_sha256": "7729cdb6f91ecdfc162a0db708c656b653ca65351dd357cbe8533d75ea0ccda0"
+    }
+  ],
+  "legacy_owned": [
+    {
+      "parse_status": 0,
+      "registration_status": 0,
+      "main_check_status": 0,
+      "owned_entry_artifact": true
+    },
+    {
+      "static_release_worlds_0_to_5": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "native_failure_injection": false
+    },
+    {
+      "call_ordinal": 0,
+      "call_id": 149,
+      "scope": 12,
+      "prior_B_loans_ended": 2,
+      "chronological_connection": true
+    },
+    {
+      "original_B_domain": 3,
+      "original_B_allocation_value": 29,
+      "original_B_domain_value": 34,
+      "old_domain_place": 33,
+      "new_domain_place": 96,
+      "old_binding_consumed": true,
+      "new_binding_sole_current": true,
+      "fresh_loan_on_new_place": true,
+      "repacked_and_exactly_released": true
+    },
+    {
+      "owned_source_artifact": true,
+      "closure_validators": 5,
+      "scoped_call_validator": true,
+      "caller_changes": 8,
+      "callee_changes": 1,
+      "ProjectionId_nominal": 10,
+      "ProjectionId_index": 1,
+      "root": 31,
+      "root_incarnation": 34,
+      "field": 36,
+      "field_incarnation": 36,
+      "fact_before": 86,
+      "fact_after": 113,
+      "old_occurrence": 4,
+      "new_occurrence": 0,
+      "old_ptr_region": 2,
+      "new_ptr_region": 0,
+      "root_fact_before": 93,
+      "root_fact_after": 114,
+      "Allocation_values": [
+        1,
+        15,
+        29,
+        43,
+        57
+      ],
+      "Domain_values": [
+        6,
+        20,
+        34,
+        48,
+        62
+      ],
+      "old_payload_place": 80,
+      "old_payload_current_cleared": true,
+      "sibling_and_child_current_preserved": true,
+      "original_A_D_preserved_unique": true,
+      "scoped_ref_ended": true,
+      "matched_frees": 5,
+      "native_execution": false
+    },
+    {
+      "call_ordinal": 1,
+      "call_id": 163,
+      "scope": 13,
+      "prior_B_loans_ended": 3,
+      "chronological_connection": true
+    },
+    {
+      "original_B_domain": 3,
+      "original_B_allocation_value": 29,
+      "original_B_domain_value": 34,
+      "old_domain_place": 33,
+      "new_domain_place": 96,
+      "old_binding_consumed": true,
+      "new_binding_sole_current": true,
+      "fresh_loan_on_new_place": true,
+      "repacked_and_exactly_released": true
+    },
+    {
+      "owned_source_artifact": true,
+      "closure_validators": 5,
+      "scoped_call_validator": true,
+      "caller_changes": 8,
+      "callee_changes": 1,
+      "ProjectionId_nominal": 10,
+      "ProjectionId_index": 0,
+      "root": 31,
+      "root_incarnation": 34,
+      "field": 35,
+      "field_incarnation": 35,
+      "fact_before": 92,
+      "fact_after": 121,
+      "old_occurrence": 5,
+      "new_occurrence": 0,
+      "old_ptr_region": 4,
+      "new_ptr_region": 0,
+      "root_fact_before": 114,
+      "root_fact_after": 122,
+      "Allocation_values": [
+        1,
+        15,
+        29,
+        43,
+        57
+      ],
+      "Domain_values": [
+        6,
+        20,
+        34,
+        48,
+        62
+      ],
+      "old_payload_place": 84,
+      "old_payload_current_cleared": true,
+      "sibling_and_child_current_preserved": true,
+      "original_A_D_preserved_unique": true,
+      "scoped_ref_ended": true,
+      "matched_frees": 5,
+      "native_execution": false
+    },
+    {
+      "direct_cross_root_change": true,
+      "ordinal": 3,
+      "operation": 177,
+      "scope": 14,
+      "root": 18,
+      "incarnation": 21,
+      "region": 2,
+      "DomainId": 2,
+      "Allocation_value": 15,
+      "Domain_value": 20,
+      "field": 22,
+      "ProjectionId_index": 0,
+      "fact_before": 80,
+      "fact_after": 127,
+      "root_fact_before": 81,
+      "root_fact_after": 128,
+      "old_occurrence": 3,
+      "new_occurrence": 9,
+      "old_payload_place": 76,
+      "old_ptr_region": 3,
+      "new_ptr_region": 4,
+      "original_B_still_live_and_owned": true,
+      "second_after_equals_third_before": true,
+      "all_siblings_preserved": true,
+      "old_occurrence_ended": true,
+      "new_occurrence_live": true,
+      "direct_change_validated_in_five_captured_closures": true
+    },
+    {
+      "direct_cross_root_change": true,
+      "ordinal": 4,
+      "operation": 191,
+      "scope": 15,
+      "root": 44,
+      "incarnation": 47,
+      "region": 4,
+      "DomainId": 4,
+      "Allocation_value": 43,
+      "Domain_value": 48,
+      "field": 49,
+      "ProjectionId_index": 1,
+      "fact_before": 98,
+      "fact_after": 134,
+      "root_fact_before": 99,
+      "root_fact_after": 135,
+      "old_occurrence": 6,
+      "new_occurrence": 11,
+      "old_payload_place": 88,
+      "old_ptr_region": 3,
+      "new_ptr_region": 2,
+      "original_B_still_live_and_owned": true,
+      "third_after_equals_fourth_before": true,
+      "all_siblings_preserved": true,
+      "old_occurrence_ended": true,
+      "new_occurrence_live": true,
+      "direct_change_validated_in_five_captured_closures": true
+    },
+    {
+      "pure_call": 235,
+      "terminal_call": 295,
+      "owner_inputs": [
+        170,
+        172
+      ],
+      "result": 174,
+      "donors": [
+        87,
+        88
+      ],
+      "formals": [
+        89,
+        90
+      ],
+      "receiver": 93,
+      "roots": [
+        57,
+        31
+      ],
+      "incarnations": [
+        60,
+        34
+      ],
+      "regions": [
+        5,
+        3
+      ],
+      "Allocation_values": [
+        57,
+        29
+      ],
+      "Domain_values": [
+        62,
+        34
+      ],
+      "inert_Copy_token_no_authority": true,
+      "three_donors_dead_before_terminal": true,
+      "sole_returned_owner_live_A_D": [
+        2,
+        2
+      ],
+      "exact_result_is_only_terminal_argument": true,
+      "all_5_roots_and_20_siblings_preserved_through_pure_call": true,
+      "B_dst_current_unchanged_during_donor_frees": true,
+      "two_root_validator_status": 0,
+      "release_order": [
+        2,
+        4,
+        1,
+        3,
+        5
+      ],
+      "backend": "unsupported"
+    },
+    {
+      "registration_refusal_rollback_retry": true
+    }
+  ],
+  "legacy_edges": [
+    {
+      "edge": "D6.after -> M -> C1.before",
+      "heap_root_and_all_20_fields_equal": true,
+      "AD_carriers": [
+        {
+          "value": 1,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 4,
+          "after_place": 4,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 6,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 7,
+          "after_place": 7,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 15,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 17,
+          "after_place": 17,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 20,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 20,
+          "after_place": 20,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 29,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 30,
+          "after_place": 95,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 34,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 33,
+          "after_place": 96,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 43,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 43,
+          "after_place": 43,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 48,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 46,
+          "after_place": 46,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 57,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 56,
+          "after_place": 56,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 62,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 59,
+          "after_place": 59,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        }
+      ]
+    },
+    {
+      "edge": "C1.after -> C2.before",
+      "heap_root_and_all_20_fields_equal": true,
+      "AD_carriers": [
+        {
+          "value": 1,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 4,
+          "after_place": 4,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 6,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 7,
+          "after_place": 7,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 15,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 17,
+          "after_place": 17,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 20,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 20,
+          "after_place": 20,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 29,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 95,
+          "after_place": 95,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 34,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 96,
+          "after_place": 96,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 43,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 43,
+          "after_place": 43,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 48,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 46,
+          "after_place": 46,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 57,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 56,
+          "after_place": 56,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 62,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 59,
+          "after_place": 59,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        }
+      ]
+    },
+    {
+      "edge": "C2.after -> D7.before",
+      "heap_root_and_all_20_fields_equal": true,
+      "AD_carriers": [
+        {
+          "value": 1,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 4,
+          "after_place": 4,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 6,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 7,
+          "after_place": 7,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 15,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 17,
+          "after_place": 17,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 20,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 20,
+          "after_place": 20,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 29,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 95,
+          "after_place": 95,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 34,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 96,
+          "after_place": 96,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 43,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 43,
+          "after_place": 43,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 48,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 46,
+          "after_place": 46,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 57,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 56,
+          "after_place": 56,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 62,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 59,
+          "after_place": 59,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        }
+      ]
+    },
+    {
+      "edge": "D8.after -> owner packaging -> J.entry",
+      "heap_root_and_all_20_fields_equal": true,
+      "AD_carriers": [
+        {
+          "value": 1,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 4,
+          "after_place": 4,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 6,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 7,
+          "after_place": 7,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 15,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 17,
+          "after_place": 17,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 20,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 20,
+          "after_place": 20,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 29,
+          "before_carrier": 1,
+          "after_carrier": 3,
+          "before_place": 95,
+          "after_place": 0,
+          "before_aggregate": 0,
+          "after_aggregate": 172
+        },
+        {
+          "value": 34,
+          "before_carrier": 1,
+          "after_carrier": 3,
+          "before_place": 96,
+          "after_place": 0,
+          "before_aggregate": 0,
+          "after_aggregate": 172
+        },
+        {
+          "value": 43,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 43,
+          "after_place": 43,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 48,
+          "before_carrier": 1,
+          "after_carrier": 1,
+          "before_place": 46,
+          "after_place": 46,
+          "before_aggregate": 0,
+          "after_aggregate": 0
+        },
+        {
+          "value": 57,
+          "before_carrier": 1,
+          "after_carrier": 3,
+          "before_place": 56,
+          "after_place": 0,
+          "before_aggregate": 0,
+          "after_aggregate": 170
+        },
+        {
+          "value": 62,
+          "before_carrier": 1,
+          "after_carrier": 3,
+          "before_place": 59,
+          "after_place": 0,
+          "before_aggregate": 0,
+          "after_aggregate": 170
+        }
+      ]
+    },
+    {
+      "nonCopy_source_gap_node": 117,
+      "kind": 31,
+      "type": 13,
+      "value_use": 0,
+      "symbol": 0,
+      "initializer": 0,
+      "start": 11387,
+      "end": 11428
+    },
+    {
+      "nonCopy_source_gap_node": 120,
+      "kind": 1,
+      "type": 3,
+      "value_use": 2,
+      "symbol": 20,
+      "initializer": 0,
+      "start": 11406,
+      "end": 11418
+    },
+    {
+      "nonCopy_source_gap_node": 121,
+      "kind": 32,
+      "type": 3,
+      "value_use": 0,
+      "symbol": 0,
+      "initializer": 120,
+      "start": 11404,
+      "end": 11418
+    },
+    {
+      "nonCopy_source_gap_node": 122,
+      "kind": 1,
+      "type": 2,
+      "value_use": 2,
+      "symbol": 22,
+      "initializer": 0,
+      "start": 11421,
+      "end": 11427
+    },
+    {
+      "nonCopy_source_gap_node": 123,
+      "kind": 32,
+      "type": 2,
+      "value_use": 0,
+      "symbol": 0,
+      "initializer": 122,
+      "start": 11419,
+      "end": 11427
+    },
+    {
+      "nonCopy_source_gap_node": 125,
+      "kind": 30,
+      "type": 13,
+      "value_use": 4,
+      "symbol": 59,
+      "initializer": 0,
+      "start": 11379,
+      "end": 11386
+    },
+    {
+      "nonCopy_source_gap_node": 126,
+      "kind": 31,
+      "type": 14,
+      "value_use": 0,
+      "symbol": 0,
+      "initializer": 0,
+      "start": 11485,
+      "end": 11513
+    },
+    {
+      "nonCopy_source_gap_node": 127,
+      "kind": 1,
+      "type": 13,
+      "value_use": 2,
+      "symbol": 59,
+      "initializer": 0,
+      "start": 11505,
+      "end": 11512
+    },
+    {
+      "nonCopy_source_gap_node": 128,
+      "kind": 32,
+      "type": 13,
+      "value_use": 0,
+      "symbol": 0,
+      "initializer": 127,
+      "start": 11500,
+      "end": 11512
+    },
+    {
+      "nonCopy_source_gap_node": 130,
+      "kind": 30,
+      "type": 14,
+      "value_use": 4,
+      "symbol": 60,
+      "initializer": 0,
+      "start": 11478,
+      "end": 11484
+    },
+    {
+      "nonCopy_source_gap_node": 131,
+      "kind": 1,
+      "type": 14,
+      "value_use": 2,
+      "symbol": 60,
+      "initializer": 0,
+      "start": 11575,
+      "end": 11581
+    },
+    {
+      "nonCopy_source_gap_node": 133,
+      "kind": 30,
+      "type": 14,
+      "value_use": 4,
+      "symbol": 61,
+      "initializer": 0,
+      "start": 11563,
+      "end": 11574
+    },
+    {
+      "nonCopy_source_gap_node": 134,
+      "kind": 1,
+      "type": 14,
+      "value_use": 2,
+      "symbol": 61,
+      "initializer": 0,
+      "start": 11652,
+      "end": 11663
+    },
+    {
+      "nonCopy_source_gap_node": 136,
+      "kind": 30,
+      "type": 13,
+      "value_use": 4,
+      "symbol": 62,
+      "initializer": 0,
+      "start": 11646,
+      "end": 11650
+    },
+    {
+      "nonCopy_source_gap_node": 137,
+      "kind": 1,
+      "type": 13,
+      "value_use": 2,
+      "symbol": 62,
+      "initializer": 0,
+      "start": 11761,
+      "end": 11765
+    },
+    {
+      "nonCopy_source_gap_node": 140,
+      "kind": 30,
+      "type": 3,
+      "value_use": 4,
+      "symbol": 64,
+      "initializer": 0,
+      "start": 11738,
+      "end": 11747
+    },
+    {
+      "nonCopy_source_gap_node": 141,
+      "kind": 30,
+      "type": 2,
+      "value_use": 4,
+      "symbol": 65,
+      "initializer": 0,
+      "start": 11750,
+      "end": 11759
+    },
+    {
+      "calibration_actual_owned": true,
+      "caller_changes": 8,
+      "helper_calls": [
+        149,
+        163
+      ],
+      "whole_call": 235,
+      "composition_ninth_owned": false
+    }
+  ],
+  "legacy_oom": [
+    {
+      "parse_status": 0,
+      "registration_status": 0,
+      "main_check_status": 0,
+      "owned_entry_artifact": true
+    },
+    {
+      "static_release_worlds_0_to_5": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "native_failure_injection": false
+    },
+    {
+      "call_ordinal": 0,
+      "call_id": 149,
+      "scope": 12,
+      "prior_B_loans_ended": 2,
+      "chronological_connection": true
+    },
+    {
+      "original_B_domain": 3,
+      "original_B_allocation_value": 29,
+      "original_B_domain_value": 34,
+      "old_domain_place": 33,
+      "new_domain_place": 96,
+      "old_binding_consumed": true,
+      "new_binding_sole_current": true,
+      "fresh_loan_on_new_place": true,
+      "repacked_and_exactly_released": true
+    },
+    {
+      "owned_source_artifact": true,
+      "closure_validators": 5,
+      "scoped_call_validator": true,
+      "caller_changes": 8,
+      "callee_changes": 1,
+      "ProjectionId_nominal": 10,
+      "ProjectionId_index": 1,
+      "root": 31,
+      "root_incarnation": 34,
+      "field": 36,
+      "field_incarnation": 36,
+      "fact_before": 86,
+      "fact_after": 113,
+      "old_occurrence": 4,
+      "new_occurrence": 0,
+      "old_ptr_region": 2,
+      "new_ptr_region": 0,
+      "root_fact_before": 93,
+      "root_fact_after": 114,
+      "Allocation_values": [
+        1,
+        15,
+        29,
+        43,
+        57
+      ],
+      "Domain_values": [
+        6,
+        20,
+        34,
+        48,
+        62
+      ],
+      "old_payload_place": 80,
+      "old_payload_current_cleared": true,
+      "sibling_and_child_current_preserved": true,
+      "original_A_D_preserved_unique": true,
+      "scoped_ref_ended": true,
+      "matched_frees": 5,
+      "native_execution": false
+    },
+    {
+      "call_ordinal": 1,
+      "call_id": 163,
+      "scope": 13,
+      "prior_B_loans_ended": 3,
+      "chronological_connection": true
+    },
+    {
+      "original_B_domain": 3,
+      "original_B_allocation_value": 29,
+      "original_B_domain_value": 34,
+      "old_domain_place": 33,
+      "new_domain_place": 96,
+      "old_binding_consumed": true,
+      "new_binding_sole_current": true,
+      "fresh_loan_on_new_place": true,
+      "repacked_and_exactly_released": true
+    },
+    {
+      "owned_source_artifact": true,
+      "closure_validators": 5,
+      "scoped_call_validator": true,
+      "caller_changes": 8,
+      "callee_changes": 1,
+      "ProjectionId_nominal": 10,
+      "ProjectionId_index": 0,
+      "root": 31,
+      "root_incarnation": 34,
+      "field": 35,
+      "field_incarnation": 35,
+      "fact_before": 92,
+      "fact_after": 121,
+      "old_occurrence": 5,
+      "new_occurrence": 0,
+      "old_ptr_region": 4,
+      "new_ptr_region": 0,
+      "root_fact_before": 114,
+      "root_fact_after": 122,
+      "Allocation_values": [
+        1,
+        15,
+        29,
+        43,
+        57
+      ],
+      "Domain_values": [
+        6,
+        20,
+        34,
+        48,
+        62
+      ],
+      "old_payload_place": 84,
+      "old_payload_current_cleared": true,
+      "sibling_and_child_current_preserved": true,
+      "original_A_D_preserved_unique": true,
+      "scoped_ref_ended": true,
+      "matched_frees": 5,
+      "native_execution": false
+    },
+    {
+      "direct_cross_root_change": true,
+      "ordinal": 3,
+      "operation": 177,
+      "scope": 14,
+      "root": 18,
+      "incarnation": 21,
+      "region": 2,
+      "DomainId": 2,
+      "Allocation_value": 15,
+      "Domain_value": 20,
+      "field": 22,
+      "ProjectionId_index": 0,
+      "fact_before": 80,
+      "fact_after": 127,
+      "root_fact_before": 81,
+      "root_fact_after": 128,
+      "old_occurrence": 3,
+      "new_occurrence": 9,
+      "old_payload_place": 76,
+      "old_ptr_region": 3,
+      "new_ptr_region": 4,
+      "original_B_still_live_and_owned": true,
+      "second_after_equals_third_before": true,
+      "all_siblings_preserved": true,
+      "old_occurrence_ended": true,
+      "new_occurrence_live": true,
+      "direct_change_validated_in_five_captured_closures": true
+    },
+    {
+      "direct_cross_root_change": true,
+      "ordinal": 4,
+      "operation": 191,
+      "scope": 15,
+      "root": 44,
+      "incarnation": 47,
+      "region": 4,
+      "DomainId": 4,
+      "Allocation_value": 43,
+      "Domain_value": 48,
+      "field": 49,
+      "ProjectionId_index": 1,
+      "fact_before": 98,
+      "fact_after": 134,
+      "root_fact_before": 99,
+      "root_fact_after": 135,
+      "old_occurrence": 6,
+      "new_occurrence": 11,
+      "old_payload_place": 88,
+      "old_ptr_region": 3,
+      "new_ptr_region": 2,
+      "original_B_still_live_and_owned": true,
+      "third_after_equals_fourth_before": true,
+      "all_siblings_preserved": true,
+      "old_occurrence_ended": true,
+      "new_occurrence_live": true,
+      "direct_change_validated_in_five_captured_closures": true
+    },
+    {
+      "pure_call": 235,
+      "terminal_call": 295,
+      "owner_inputs": [
+        170,
+        172
+      ],
+      "result": 174,
+      "donors": [
+        87,
+        88
+      ],
+      "formals": [
+        89,
+        90
+      ],
+      "receiver": 93,
+      "roots": [
+        57,
+        31
+      ],
+      "incarnations": [
+        60,
+        34
+      ],
+      "regions": [
+        5,
+        3
+      ],
+      "Allocation_values": [
+        57,
+        29
+      ],
+      "Domain_values": [
+        62,
+        34
+      ],
+      "inert_Copy_token_no_authority": true,
+      "three_donors_dead_before_terminal": true,
+      "sole_returned_owner_live_A_D": [
+        2,
+        2
+      ],
+      "exact_result_is_only_terminal_argument": true,
+      "all_5_roots_and_20_siblings_preserved_through_pure_call": true,
+      "B_dst_current_unchanged_during_donor_frees": true,
+      "two_root_validator_status": 0,
+      "release_order": [
+        2,
+        4,
+        1,
+        3,
+        5
+      ],
+      "backend": "unsupported"
+    },
+    {
+      "oom_stage": 0,
+      "baseline_allocations": 15681,
+      "injected_failures": 7,
+      "rollback_retry": true
+    },
+    {
+      "oom_stage": 1,
+      "baseline_allocations": 14063,
+      "injected_failures": 7,
+      "rollback_retry": true
+    },
+    {
+      "oom_stage": 2,
+      "call_ordinal": 0,
+      "baseline_allocations": 129,
+      "injected_failures": 7,
+      "rollback_retry": true
+    },
+    {
+      "oom_stage": 2,
+      "call_ordinal": 1,
+      "baseline_allocations": 134,
+      "injected_failures": 7,
+      "rollback_retry": true
+    },
+    {
+      "oom_stage": 2,
+      "call_ordinal": 2,
+      "baseline_allocations": 1315,
+      "injected_failures": 7,
+      "rollback_retry": true
+    },
+    {
+      "oom_stage": 2,
+      "call_ordinal": 3,
+      "baseline_allocations": 4,
+      "injected_failures": 7,
+      "rollback_retry": true
+    }
+  ],
+  "source_negatives": [
+    {
+      "source": "wrong_dst_domain.nl",
+      "boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "ALLOCATED-DOMAIN-MISMATCH",
+        "start_byte": 14567,
+        "end_byte": 14610,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      }
+    },
+    {
+      "source": "wrong_B_domain.nl",
+      "boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "ALLOCATED-DOMAIN-MISMATCH",
+        "start_byte": 13013,
+        "end_byte": 13058,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      }
+    },
+    {
+      "source": "read_ref_to_write_formal.nl",
+      "boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "P3-TYPE-MISMATCH",
+        "start_byte": 13120,
+        "end_byte": 13132,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      }
+    }
+  ],
+  "direct9_controls": [
+    {
+      "source": "w1_device_refresh_9.nl",
+      "records": [
+        {
+          "refused_registration_status": 1,
+          "snapshot_unchanged": true,
+          "refused_owned_artifact_published": false
+        },
+        {
+          "parse_status": 0,
+          "registration_status": 0,
+          "main_check_status": 0,
+          "owned_entry_artifact": true
+        },
+        {
+          "captured_depth": 0,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 1,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 2,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 3,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 4,
+          "public_validator_status": 0
+        },
+        {
+          "event": 0,
+          "operation": 40,
+          "start_byte": 10071,
+          "end_byte": 10128,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 2,
+          "old_occurrence": 0,
+          "new_occurrence": 1,
+          "old_fact": 11,
+          "new_fact": 68,
+          "scope": 6,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 1,
+          "operation": 54,
+          "start_byte": 10425,
+          "end_byte": 10471,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 2,
+          "target_region": 0,
+          "old_occurrence": 1,
+          "new_occurrence": 0,
+          "old_fact": 68,
+          "new_fact": 74,
+          "scope": 7,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 2,
+          "operation": 67,
+          "start_byte": 10768,
+          "end_byte": 10825,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 3,
+          "old_fact": 74,
+          "new_fact": 80,
+          "scope": 8,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 3,
+          "operation": 81,
+          "start_byte": 11122,
+          "end_byte": 11168,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 3,
+          "target_region": 0,
+          "old_occurrence": 3,
+          "new_occurrence": 0,
+          "old_fact": 80,
+          "new_fact": 86,
+          "scope": 9,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 4,
+          "operation": 94,
+          "start_byte": 11465,
+          "end_byte": 11522,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 4,
+          "old_occurrence": 0,
+          "new_occurrence": 5,
+          "old_fact": 86,
+          "new_fact": 92,
+          "scope": 10,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 5,
+          "operation": 108,
+          "start_byte": 11819,
+          "end_byte": 11865,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 4,
+          "target_region": 0,
+          "old_occurrence": 5,
+          "new_occurrence": 0,
+          "old_fact": 92,
+          "new_fact": 98,
+          "scope": 11,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 6,
+          "operation": 121,
+          "start_byte": 12162,
+          "end_byte": 12219,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 5,
+          "old_occurrence": 0,
+          "new_occurrence": 7,
+          "old_fact": 98,
+          "new_fact": 104,
+          "scope": 12,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 7,
+          "operation": 135,
+          "start_byte": 12516,
+          "end_byte": 12562,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 5,
+          "target_region": 0,
+          "old_occurrence": 7,
+          "new_occurrence": 0,
+          "old_fact": 104,
+          "new_fact": 110,
+          "scope": 13,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 8,
+          "operation": 148,
+          "start_byte": 12859,
+          "end_byte": 12916,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 2,
+          "old_occurrence": 0,
+          "new_occurrence": 9,
+          "old_fact": 110,
+          "new_fact": 116,
+          "scope": 14,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "source_owned_publicly_validated": true,
+          "events": 9,
+          "original_Allocation_values": [
+            1,
+            15,
+            29,
+            43,
+            57
+          ],
+          "original_Domain_values": [
+            6,
+            20,
+            34,
+            48,
+            62
+          ],
+          "static_release_worlds_0_to_5": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "success_release_order": [
+            5,
+            4,
+            3,
+            2,
+            1
+          ],
+          "native": false
+        },
+        {
+          "same_context_actual_source_owned_clean_retry": true
+        }
+      ]
+    },
+    {
+      "source": "w2_scheduler_rotation_9.nl",
+      "records": [
+        {
+          "refused_registration_status": 1,
+          "snapshot_unchanged": true,
+          "refused_owned_artifact_published": false
+        },
+        {
+          "parse_status": 0,
+          "registration_status": 0,
+          "main_check_status": 0,
+          "owned_entry_artifact": true
+        },
+        {
+          "captured_depth": 0,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 1,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 2,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 3,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 4,
+          "public_validator_status": 0
+        },
+        {
+          "event": 0,
+          "operation": 40,
+          "start_byte": 10208,
+          "end_byte": 10265,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 1,
+          "old_fact": 9,
+          "new_fact": 68,
+          "scope": 6,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 1,
+          "operation": 54,
+          "start_byte": 10560,
+          "end_byte": 10617,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 5,
+          "old_occurrence": 0,
+          "new_occurrence": 2,
+          "old_fact": 23,
+          "new_fact": 74,
+          "scope": 7,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 2,
+          "operation": 68,
+          "start_byte": 10912,
+          "end_byte": 10969,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 2,
+          "new_variant": 2,
+          "old_target_region": 3,
+          "target_region": 4,
+          "old_occurrence": 1,
+          "new_occurrence": 3,
+          "old_fact": 68,
+          "new_fact": 80,
+          "scope": 8,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 3,
+          "operation": 82,
+          "start_byte": 11264,
+          "end_byte": 11309,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 5,
+          "target_region": 0,
+          "old_occurrence": 2,
+          "new_occurrence": 0,
+          "old_fact": 74,
+          "new_fact": 87,
+          "scope": 9,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 4,
+          "operation": 95,
+          "start_byte": 11604,
+          "end_byte": 11661,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 2,
+          "new_variant": 2,
+          "old_target_region": 4,
+          "target_region": 5,
+          "old_occurrence": 3,
+          "new_occurrence": 6,
+          "old_fact": 80,
+          "new_fact": 93,
+          "scope": 10,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 5,
+          "operation": 109,
+          "start_byte": 11956,
+          "end_byte": 12013,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 8,
+          "old_fact": 87,
+          "new_fact": 100,
+          "scope": 11,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 6,
+          "operation": 123,
+          "start_byte": 12308,
+          "end_byte": 12353,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 5,
+          "target_region": 0,
+          "old_occurrence": 6,
+          "new_occurrence": 0,
+          "old_fact": 93,
+          "new_fact": 106,
+          "scope": 12,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 7,
+          "operation": 136,
+          "start_byte": 12648,
+          "end_byte": 12705,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 2,
+          "new_variant": 2,
+          "old_target_region": 3,
+          "target_region": 4,
+          "old_occurrence": 8,
+          "new_occurrence": 10,
+          "old_fact": 100,
+          "new_fact": 112,
+          "scope": 13,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 8,
+          "operation": 150,
+          "start_byte": 13000,
+          "end_byte": 13057,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 12,
+          "old_fact": 106,
+          "new_fact": 119,
+          "scope": 14,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "source_owned_publicly_validated": true,
+          "events": 9,
+          "original_Allocation_values": [
+            1,
+            15,
+            29,
+            43,
+            57
+          ],
+          "original_Domain_values": [
+            6,
+            20,
+            34,
+            48,
+            62
+          ],
+          "static_release_worlds_0_to_5": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "success_release_order": [
+            5,
+            4,
+            3,
+            2,
+            1
+          ],
+          "native": false
+        },
+        {
+          "same_context_actual_source_owned_clean_retry": true
+        }
+      ]
+    }
+  ],
+  "finite_refusal_clean_retry": [
+    {
+      "source": "w1_device_refresh_9",
+      "records": [
+        {
+          "refused_registration_status": 3,
+          "snapshot_unchanged": true,
+          "refused_owned_artifact_published": false
+        },
+        {
+          "parse_status": 0,
+          "registration_status": 0,
+          "main_check_status": 0,
+          "owned_entry_artifact": true
+        },
+        {
+          "captured_depth": 0,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 1,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 2,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 3,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 4,
+          "public_validator_status": 0
+        },
+        {
+          "event": 0,
+          "operation": 40,
+          "start_byte": 10071,
+          "end_byte": 10128,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 2,
+          "old_occurrence": 0,
+          "new_occurrence": 1,
+          "old_fact": 11,
+          "new_fact": 68,
+          "scope": 6,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 1,
+          "operation": 54,
+          "start_byte": 10425,
+          "end_byte": 10471,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 2,
+          "target_region": 0,
+          "old_occurrence": 1,
+          "new_occurrence": 0,
+          "old_fact": 68,
+          "new_fact": 74,
+          "scope": 7,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 2,
+          "operation": 67,
+          "start_byte": 10768,
+          "end_byte": 10825,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 3,
+          "old_fact": 74,
+          "new_fact": 80,
+          "scope": 8,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 3,
+          "operation": 81,
+          "start_byte": 11122,
+          "end_byte": 11168,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 3,
+          "target_region": 0,
+          "old_occurrence": 3,
+          "new_occurrence": 0,
+          "old_fact": 80,
+          "new_fact": 86,
+          "scope": 9,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 4,
+          "operation": 94,
+          "start_byte": 11465,
+          "end_byte": 11522,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 4,
+          "old_occurrence": 0,
+          "new_occurrence": 5,
+          "old_fact": 86,
+          "new_fact": 92,
+          "scope": 10,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 5,
+          "operation": 108,
+          "start_byte": 11819,
+          "end_byte": 11865,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 4,
+          "target_region": 0,
+          "old_occurrence": 5,
+          "new_occurrence": 0,
+          "old_fact": 92,
+          "new_fact": 98,
+          "scope": 11,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 6,
+          "operation": 121,
+          "start_byte": 12162,
+          "end_byte": 12219,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 5,
+          "old_occurrence": 0,
+          "new_occurrence": 7,
+          "old_fact": 98,
+          "new_fact": 104,
+          "scope": 12,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 7,
+          "operation": 135,
+          "start_byte": 12516,
+          "end_byte": 12562,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 5,
+          "target_region": 0,
+          "old_occurrence": 7,
+          "new_occurrence": 0,
+          "old_fact": 104,
+          "new_fact": 110,
+          "scope": 13,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 8,
+          "operation": 148,
+          "start_byte": 12859,
+          "end_byte": 12916,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 2,
+          "old_occurrence": 0,
+          "new_occurrence": 9,
+          "old_fact": 110,
+          "new_fact": 116,
+          "scope": 14,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "source_owned_publicly_validated": true,
+          "events": 9,
+          "original_Allocation_values": [
+            1,
+            15,
+            29,
+            43,
+            57
+          ],
+          "original_Domain_values": [
+            6,
+            20,
+            34,
+            48,
+            62
+          ],
+          "static_release_worlds_0_to_5": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "success_release_order": [
+            5,
+            4,
+            3,
+            2,
+            1
+          ],
+          "native": false
+        },
+        {
+          "same_context_actual_source_owned_clean_retry": true
+        }
+      ]
+    },
+    {
+      "source": "w2_scheduler_rotation_9",
+      "records": [
+        {
+          "refused_registration_status": 3,
+          "snapshot_unchanged": true,
+          "refused_owned_artifact_published": false
+        },
+        {
+          "parse_status": 0,
+          "registration_status": 0,
+          "main_check_status": 0,
+          "owned_entry_artifact": true
+        },
+        {
+          "captured_depth": 0,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 1,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 2,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 3,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 4,
+          "public_validator_status": 0
+        },
+        {
+          "event": 0,
+          "operation": 40,
+          "start_byte": 10208,
+          "end_byte": 10265,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 1,
+          "old_fact": 9,
+          "new_fact": 68,
+          "scope": 6,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 1,
+          "operation": 54,
+          "start_byte": 10560,
+          "end_byte": 10617,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 5,
+          "old_occurrence": 0,
+          "new_occurrence": 2,
+          "old_fact": 23,
+          "new_fact": 74,
+          "scope": 7,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 2,
+          "operation": 68,
+          "start_byte": 10912,
+          "end_byte": 10969,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 2,
+          "new_variant": 2,
+          "old_target_region": 3,
+          "target_region": 4,
+          "old_occurrence": 1,
+          "new_occurrence": 3,
+          "old_fact": 68,
+          "new_fact": 80,
+          "scope": 8,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 3,
+          "operation": 82,
+          "start_byte": 11264,
+          "end_byte": 11309,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 5,
+          "target_region": 0,
+          "old_occurrence": 2,
+          "new_occurrence": 0,
+          "old_fact": 74,
+          "new_fact": 87,
+          "scope": 9,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 4,
+          "operation": 95,
+          "start_byte": 11604,
+          "end_byte": 11661,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 2,
+          "new_variant": 2,
+          "old_target_region": 4,
+          "target_region": 5,
+          "old_occurrence": 3,
+          "new_occurrence": 6,
+          "old_fact": 80,
+          "new_fact": 93,
+          "scope": 10,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 5,
+          "operation": 109,
+          "start_byte": 11956,
+          "end_byte": 12013,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 8,
+          "old_fact": 87,
+          "new_fact": 100,
+          "scope": 11,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 6,
+          "operation": 123,
+          "start_byte": 12308,
+          "end_byte": 12353,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 5,
+          "target_region": 0,
+          "old_occurrence": 6,
+          "new_occurrence": 0,
+          "old_fact": 93,
+          "new_fact": 106,
+          "scope": 12,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 7,
+          "operation": 136,
+          "start_byte": 12648,
+          "end_byte": 12705,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 2,
+          "new_variant": 2,
+          "old_target_region": 3,
+          "target_region": 4,
+          "old_occurrence": 8,
+          "new_occurrence": 10,
+          "old_fact": 100,
+          "new_fact": 112,
+          "scope": 13,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 8,
+          "operation": 150,
+          "start_byte": 13000,
+          "end_byte": 13057,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 12,
+          "old_fact": 106,
+          "new_fact": 119,
+          "scope": 14,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "source_owned_publicly_validated": true,
+          "events": 9,
+          "original_Allocation_values": [
+            1,
+            15,
+            29,
+            43,
+            57
+          ],
+          "original_Domain_values": [
+            6,
+            20,
+            34,
+            48,
+            62
+          ],
+          "static_release_worlds_0_to_5": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "success_release_order": [
+            5,
+            4,
+            3,
+            2,
+            1
+          ],
+          "native": false
+        },
+        {
+          "same_context_actual_source_owned_clean_retry": true
+        }
+      ]
+    }
+  ],
+  "composed_public_poison": "UNTESTED: no successful composed owned artifact",
+  "composed_OOM": "UNTESTED: no accepted composed route"
+}

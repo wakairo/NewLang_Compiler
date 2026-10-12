@@ -1,0 +1,134 @@
+[
+  {
+    "config": "both",
+    "head": "82578ff6eb23970e3ae934c98a38383ca01468f7",
+    "compiler_sha256": "bcff20e0a971a518d2c4094144e7a1f66d2f8d5175981b8cfa29fa7168177056",
+    "source": "first_adoption.nl",
+    "source_sha256": "bef64179aca653b04a3fe20bc3d03c81906cc7a2fd7639ffb8bb1757b3c82ffc",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 3,
+      "code": "CAPTURED-CLOSURE-PRECISION",
+      "start_byte": 6961,
+      "end_byte": 16406,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "cli_exit": 3,
+    "diagnostic": "evidence/p362/first_adoption.nl:136:37-249:38: error(precision)[CAPTURED-CLOSURE-PRECISION]: complete original-owner fork/cleanup proof is unavailable\n"
+  },
+  {
+    "config": "both",
+    "head": "82578ff6eb23970e3ae934c98a38383ca01468f7",
+    "compiler_sha256": "bcff20e0a971a518d2c4094144e7a1f66d2f8d5175981b8cfa29fa7168177056",
+    "source": "returned_owner_calibration.nl",
+    "source_sha256": "bd7692f8118c8e4de2b7662b0f90fcf503a548d9948bfded27bd430ad127716d",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 3,
+      "code": "CAPTURED-CLOSURE-PRECISION",
+      "start_byte": 6961,
+      "end_byte": 16024,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "cli_exit": 3,
+    "diagnostic": "evidence/p362/returned_owner_calibration.nl:136:37-245:38: error(precision)[CAPTURED-CLOSURE-PRECISION]: complete original-owner fork/cleanup proof is unavailable\n"
+  },
+  {
+    "config": "old-only",
+    "head": "82578ff6eb23970e3ae934c98a38383ca01468f7",
+    "compiler_sha256": "85a65077b56f8ce5b9f4e2c0145c8c580d4def4fb5af425e6f3d0e0eedf6f2fd",
+    "source": "first_adoption.nl",
+    "source_sha256": "bef64179aca653b04a3fe20bc3d03c81906cc7a2fd7639ffb8bb1757b3c82ffc",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 3,
+      "code": "CAPTURED-CLOSURE-PRECISION",
+      "start_byte": 14661,
+      "end_byte": 14728,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "cli_exit": 3,
+    "diagnostic": "evidence/p362/first_adoption.nl:232:49-232:116: error(precision)[CAPTURED-CLOSURE-PRECISION]: complete original-owner fork/cleanup proof is unavailable\n"
+  },
+  {
+    "config": "old-only",
+    "head": "82578ff6eb23970e3ae934c98a38383ca01468f7",
+    "compiler_sha256": "85a65077b56f8ce5b9f4e2c0145c8c580d4def4fb5af425e6f3d0e0eedf6f2fd",
+    "source": "returned_owner_calibration.nl",
+    "source_sha256": "bd7692f8118c8e4de2b7662b0f90fcf503a548d9948bfded27bd430ad127716d",
+    "boundary": {
+      "parse_status": 0,
+      "syntax_tree": true,
+      "registration_attempted": true,
+      "registration_status": 0,
+      "code": "",
+      "start_byte": 0,
+      "end_byte": 0,
+      "snapshot_unchanged": false,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "cli_exit": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: evidence/p362/returned_owner_calibration.nl\n"
+  },
+  {
+    "config": "new-only",
+    "head": "82578ff6eb23970e3ae934c98a38383ca01468f7",
+    "compiler_sha256": "7729cdb6f91ecdfc162a0db708c656b653ca65351dd357cbe8533d75ea0ccda0",
+    "source": "first_adoption.nl",
+    "source_sha256": "bef64179aca653b04a3fe20bc3d03c81906cc7a2fd7639ffb8bb1757b3c82ffc",
+    "boundary": {
+      "parse_status": 2,
+      "syntax_tree": false,
+      "registration_attempted": false,
+      "registration_status": null,
+      "code": "AVS-DECL-PROFILE",
+      "start_byte": 294,
+      "end_byte": 297,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "cli_exit": 3,
+    "diagnostic": "evidence/p362/first_adoption.nl:10:21-10:24: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n"
+  },
+  {
+    "config": "new-only",
+    "head": "82578ff6eb23970e3ae934c98a38383ca01468f7",
+    "compiler_sha256": "7729cdb6f91ecdfc162a0db708c656b653ca65351dd357cbe8533d75ea0ccda0",
+    "source": "returned_owner_calibration.nl",
+    "source_sha256": "bd7692f8118c8e4de2b7662b0f90fcf503a548d9948bfded27bd430ad127716d",
+    "boundary": {
+      "parse_status": 2,
+      "syntax_tree": false,
+      "registration_attempted": false,
+      "registration_status": null,
+      "code": "AVS-DECL-PROFILE",
+      "start_byte": 294,
+      "end_byte": 297,
+      "snapshot_unchanged": true,
+      "owned_entry_artifact": false,
+      "entry_check_attempted": false,
+      "backend_attempted": false
+    },
+    "cli_exit": 3,
+    "diagnostic": "evidence/p362/returned_owner_calibration.nl:10:21-10:24: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n"
+  }
+]
