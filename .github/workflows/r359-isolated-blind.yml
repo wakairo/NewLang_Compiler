@@ -1,0 +1,33 @@
+name: R359 isolated blind public-API first pass
+on:
+  push:
+    branches:
+      - r359-blind-nine-first-pass
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  blind:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install documented toolchain prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Independent source to owned artifact and public API observations
+        shell: bash
+        run: |
+          bash evidence/r-finite-nine-blind/run.sh 2>&1 | tee r359-first-pass.log
+      - name: Keep own raw evidence regardless of disposition
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r359-first-pass
+          path: |
+            r359-first-pass.log
+            evidence/r-finite-nine-blind/hashes.txt
+          if-no-files-found: warn
