@@ -1,0 +1,2040 @@
+{
+  "base": "cc1707186e1338d71fdfba26bf90134d54f5de3e",
+  "revision_at_observation": "cc1707186e1338d71fdfba26bf90134d54f5de3e",
+  "uncommitted_changes_at_observation": true,
+  "new_default_off_option": "NEWLANG_EXPERIMENTAL_FINITE_CHANGE_REPLAY",
+  "frozen_compiler_sha256": "2a99ba4a1730f3c0dbe4a87e3ff2b0aedb6331ff80d113f7a6f9b3256ae0880b",
+  "candidate_compiler_sha256": "8d252085121b9f58c89d5b85ae1fc912296de56473c677e85bf987b7f1114737",
+  "sanitizer": "none",
+  "build_type": "Debug",
+  "cases": [
+    {
+      "motif": "W1",
+      "source": "w1_device_refresh_9.nl",
+      "sha256": "1f22d9af5e2120939a15b89150963ddc9d9d823d06f7e1dddd728eee65670503",
+      "negative_sha256": "d585eaeb3e99eb7ee6a8b27d10d837bcf5b3bed934e6ac61e0f7c145726975ed",
+      "frozen_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 3,
+        "code": "CAPTURED-CLOSURE-PRECISION",
+        "start_byte": 12162,
+        "end_byte": 12219,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "frozen_cli_exit": 3,
+      "frozen_diagnostic": "/workspace/p352/evidence/p352/w1_device_refresh_9.nl:181:49-181:106: error(precision)[CAPTURED-CLOSURE-PRECISION]: complete original-owner fork/cleanup proof is unavailable\n",
+      "first_operation": "replace(write_7@child,Option<ptr<Node>>::Some(ptr_slot5))",
+      "candidate_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 0,
+        "code": "",
+        "start_byte": 0,
+        "end_byte": 0,
+        "snapshot_unchanged": false,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "wrong_domain_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "ALLOCATED-DOMAIN-MISMATCH",
+        "start_byte": 12763,
+        "end_byte": 12804,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "candidate_cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p352/evidence/p352/w1_device_refresh_9.nl\n",
+      "wrong_diagnostic": "/workspace/p352/evidence/p352/w1_device_refresh_9_wrong_domain.nl:188:63-188:104: error(semantic)[ALLOCATED-DOMAIN-MISMATCH]: pointer requires matching readable live domain\n",
+      "normal_public_records": [
+        {
+          "refused_registration_status": 1,
+          "snapshot_unchanged": true,
+          "refused_owned_artifact_published": false
+        },
+        {
+          "parse_status": 0,
+          "registration_status": 0,
+          "main_check_status": 0,
+          "owned_entry_artifact": true
+        },
+        {
+          "captured_depth": 0,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 1,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 2,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 3,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 4,
+          "public_validator_status": 0
+        },
+        {
+          "event": 0,
+          "operation": 40,
+          "start_byte": 10071,
+          "end_byte": 10128,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 2,
+          "old_occurrence": 0,
+          "new_occurrence": 1,
+          "old_fact": 11,
+          "new_fact": 68,
+          "scope": 6,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 1,
+          "operation": 54,
+          "start_byte": 10425,
+          "end_byte": 10471,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 2,
+          "target_region": 0,
+          "old_occurrence": 1,
+          "new_occurrence": 0,
+          "old_fact": 68,
+          "new_fact": 74,
+          "scope": 7,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 2,
+          "operation": 67,
+          "start_byte": 10768,
+          "end_byte": 10825,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 3,
+          "old_fact": 74,
+          "new_fact": 80,
+          "scope": 8,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 3,
+          "operation": 81,
+          "start_byte": 11122,
+          "end_byte": 11168,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 3,
+          "target_region": 0,
+          "old_occurrence": 3,
+          "new_occurrence": 0,
+          "old_fact": 80,
+          "new_fact": 86,
+          "scope": 9,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 4,
+          "operation": 94,
+          "start_byte": 11465,
+          "end_byte": 11522,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 4,
+          "old_occurrence": 0,
+          "new_occurrence": 5,
+          "old_fact": 86,
+          "new_fact": 92,
+          "scope": 10,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 5,
+          "operation": 108,
+          "start_byte": 11819,
+          "end_byte": 11865,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 4,
+          "target_region": 0,
+          "old_occurrence": 5,
+          "new_occurrence": 0,
+          "old_fact": 92,
+          "new_fact": 98,
+          "scope": 11,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 6,
+          "operation": 121,
+          "start_byte": 12162,
+          "end_byte": 12219,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 5,
+          "old_occurrence": 0,
+          "new_occurrence": 7,
+          "old_fact": 98,
+          "new_fact": 104,
+          "scope": 12,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 7,
+          "operation": 135,
+          "start_byte": 12516,
+          "end_byte": 12562,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 5,
+          "target_region": 0,
+          "old_occurrence": 7,
+          "new_occurrence": 0,
+          "old_fact": 104,
+          "new_fact": 110,
+          "scope": 13,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 8,
+          "operation": 148,
+          "start_byte": 12859,
+          "end_byte": 12916,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 2,
+          "old_occurrence": 0,
+          "new_occurrence": 9,
+          "old_fact": 110,
+          "new_fact": 116,
+          "scope": 14,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "source_owned_publicly_validated": true,
+          "events": 9,
+          "original_Allocation_values": [
+            1,
+            15,
+            29,
+            43,
+            57
+          ],
+          "original_Domain_values": [
+            6,
+            20,
+            34,
+            48,
+            62
+          ],
+          "static_release_worlds_0_to_5": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "success_release_order": [
+            5,
+            4,
+            3,
+            2,
+            1
+          ],
+          "native": false
+        },
+        {
+          "same_context_actual_source_owned_clean_retry": true
+        }
+      ],
+      "records": [
+        {
+          "refused_registration_status": 1,
+          "snapshot_unchanged": true,
+          "refused_owned_artifact_published": false
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 1,
+          "status": 4,
+          "ninth_phase": 1,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14813
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 2,
+          "status": 4,
+          "ninth_phase": 2,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14813
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 3,
+          "status": 4,
+          "ninth_phase": 3,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14813
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 4,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14813
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 5,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14813
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 6,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14813
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 7,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14813
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 8,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14813
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 9,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14813
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 10,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14813
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 11,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14813
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 1,
+          "status": 4,
+          "ninth_phase": 1,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14014
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 2,
+          "status": 4,
+          "ninth_phase": 2,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14014
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 3,
+          "status": 4,
+          "ninth_phase": 3,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14014
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 4,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14014
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 5,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14014
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 6,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14014
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 7,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14014
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 8,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14014
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 9,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14014
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 10,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14014
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 11,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14014
+        },
+        {
+          "captured_depth": 0,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 1,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 2,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 3,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 4,
+          "public_validator_status": 0
+        },
+        {
+          "event": 0,
+          "operation": 40,
+          "start_byte": 10071,
+          "end_byte": 10128,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 2,
+          "old_occurrence": 0,
+          "new_occurrence": 1,
+          "old_fact": 11,
+          "new_fact": 68,
+          "scope": 6,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 1,
+          "operation": 54,
+          "start_byte": 10425,
+          "end_byte": 10471,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 2,
+          "target_region": 0,
+          "old_occurrence": 1,
+          "new_occurrence": 0,
+          "old_fact": 68,
+          "new_fact": 74,
+          "scope": 7,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 2,
+          "operation": 67,
+          "start_byte": 10768,
+          "end_byte": 10825,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 3,
+          "old_fact": 74,
+          "new_fact": 80,
+          "scope": 8,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 3,
+          "operation": 81,
+          "start_byte": 11122,
+          "end_byte": 11168,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 3,
+          "target_region": 0,
+          "old_occurrence": 3,
+          "new_occurrence": 0,
+          "old_fact": 80,
+          "new_fact": 86,
+          "scope": 9,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 4,
+          "operation": 94,
+          "start_byte": 11465,
+          "end_byte": 11522,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 4,
+          "old_occurrence": 0,
+          "new_occurrence": 5,
+          "old_fact": 86,
+          "new_fact": 92,
+          "scope": 10,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 5,
+          "operation": 108,
+          "start_byte": 11819,
+          "end_byte": 11865,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 4,
+          "target_region": 0,
+          "old_occurrence": 5,
+          "new_occurrence": 0,
+          "old_fact": 92,
+          "new_fact": 98,
+          "scope": 11,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 6,
+          "operation": 121,
+          "start_byte": 12162,
+          "end_byte": 12219,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 5,
+          "old_occurrence": 0,
+          "new_occurrence": 7,
+          "old_fact": 98,
+          "new_fact": 104,
+          "scope": 12,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 7,
+          "operation": 135,
+          "start_byte": 12516,
+          "end_byte": 12562,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 5,
+          "target_region": 0,
+          "old_occurrence": 7,
+          "new_occurrence": 0,
+          "old_fact": 104,
+          "new_fact": 110,
+          "scope": 13,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 8,
+          "operation": 148,
+          "start_byte": 12859,
+          "end_byte": 12916,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            2
+          ],
+          "child": 11,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 2,
+          "old_occurrence": 0,
+          "new_occurrence": 9,
+          "old_fact": 110,
+          "new_fact": 116,
+          "scope": 14,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "source_owned_publicly_validated": true,
+          "events": 9,
+          "original_Allocation_values": [
+            1,
+            15,
+            29,
+            43,
+            57
+          ],
+          "original_Domain_values": [
+            6,
+            20,
+            34,
+            48,
+            62
+          ],
+          "static_release_worlds_0_to_5": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "success_release_order": [
+            5,
+            4,
+            3,
+            2,
+            1
+          ],
+          "native": false
+        },
+        {
+          "case": "missing_ninth_owned_record",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "duplicate_ninth_owned_record",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "reordered_ninth_owned_record",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "missing_checked_replace",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "spliced_source_span",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "duplicated_owned_event_node",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "wrong_original_domain_proof",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "unknown_write_ref_provenance",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "old_some_occurrence_revived",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "nonfresh_post_occurrence_claim",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "unrelated_fourth_scalar_fact",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "disconnected_valid_primitive_pair",
+          "individual_primitive_status": 0,
+          "scalar_value_same_but_fact_fresh": true
+        },
+        {
+          "case": "disconnected_valid_primitive_pair",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "unmodelled_intermediate_effect",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 0,
+          "total": 2042,
+          "status": 4,
+          "retry": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 1,
+          "total": 2042,
+          "status": 4,
+          "retry": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 2,
+          "total": 2042,
+          "status": 4,
+          "retry": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 3,
+          "total": 2042,
+          "status": 4,
+          "retry": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 7,
+          "total": 2042,
+          "status": 4,
+          "retry": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 15,
+          "total": 2042,
+          "status": 4,
+          "retry": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 1021,
+          "total": 2042,
+          "status": 4,
+          "retry": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 2041,
+          "total": 2042,
+          "status": 4,
+          "retry": true
+        }
+      ]
+    },
+    {
+      "motif": "W2",
+      "source": "w2_scheduler_rotation_9.nl",
+      "sha256": "078f20bbc47079c33705387240d09a38b96d598a8c907f7ee4e8676c5326f967",
+      "negative_sha256": "316a6e8168716fc832f425fd8d4941c56cedc0a35257a98e1c91bd23f3537188",
+      "frozen_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 3,
+        "code": "CAPTURED-CLOSURE-PRECISION",
+        "start_byte": 12308,
+        "end_byte": 12353,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "frozen_cli_exit": 3,
+      "frozen_diagnostic": "/workspace/p352/evidence/p352/w2_scheduler_rotation_9.nl:181:49-181:94: error(precision)[CAPTURED-CLOSURE-PRECISION]: complete original-owner fork/cleanup proof is unavailable\n",
+      "first_operation": "replace(write_7@next,Option<ptr<Node>>::None)",
+      "candidate_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 0,
+        "code": "",
+        "start_byte": 0,
+        "end_byte": 0,
+        "snapshot_unchanged": false,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "wrong_domain_boundary": {
+        "parse_status": 0,
+        "syntax_tree": true,
+        "registration_attempted": true,
+        "registration_status": 1,
+        "code": "ALLOCATED-DOMAIN-MISMATCH",
+        "start_byte": 12909,
+        "end_byte": 12949,
+        "snapshot_unchanged": true,
+        "owned_entry_artifact": false,
+        "entry_check_attempted": false,
+        "backend_attempted": false
+      },
+      "candidate_cli_exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p352/evidence/p352/w2_scheduler_rotation_9.nl\n",
+      "wrong_diagnostic": "/workspace/p352/evidence/p352/w2_scheduler_rotation_9_wrong_domain.nl:188:63-188:103: error(semantic)[ALLOCATED-DOMAIN-MISMATCH]: pointer requires matching readable live domain\n",
+      "normal_public_records": [
+        {
+          "refused_registration_status": 1,
+          "snapshot_unchanged": true,
+          "refused_owned_artifact_published": false
+        },
+        {
+          "parse_status": 0,
+          "registration_status": 0,
+          "main_check_status": 0,
+          "owned_entry_artifact": true
+        },
+        {
+          "captured_depth": 0,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 1,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 2,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 3,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 4,
+          "public_validator_status": 0
+        },
+        {
+          "event": 0,
+          "operation": 40,
+          "start_byte": 10208,
+          "end_byte": 10265,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 1,
+          "old_fact": 9,
+          "new_fact": 68,
+          "scope": 6,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 1,
+          "operation": 54,
+          "start_byte": 10560,
+          "end_byte": 10617,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 5,
+          "old_occurrence": 0,
+          "new_occurrence": 2,
+          "old_fact": 23,
+          "new_fact": 74,
+          "scope": 7,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 2,
+          "operation": 68,
+          "start_byte": 10912,
+          "end_byte": 10969,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 2,
+          "new_variant": 2,
+          "old_target_region": 3,
+          "target_region": 4,
+          "old_occurrence": 1,
+          "new_occurrence": 3,
+          "old_fact": 68,
+          "new_fact": 80,
+          "scope": 8,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 3,
+          "operation": 82,
+          "start_byte": 11264,
+          "end_byte": 11309,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 5,
+          "target_region": 0,
+          "old_occurrence": 2,
+          "new_occurrence": 0,
+          "old_fact": 74,
+          "new_fact": 87,
+          "scope": 9,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 4,
+          "operation": 95,
+          "start_byte": 11604,
+          "end_byte": 11661,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 2,
+          "new_variant": 2,
+          "old_target_region": 4,
+          "target_region": 5,
+          "old_occurrence": 3,
+          "new_occurrence": 6,
+          "old_fact": 80,
+          "new_fact": 93,
+          "scope": 10,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 5,
+          "operation": 109,
+          "start_byte": 11956,
+          "end_byte": 12013,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 8,
+          "old_fact": 87,
+          "new_fact": 100,
+          "scope": 11,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 6,
+          "operation": 123,
+          "start_byte": 12308,
+          "end_byte": 12353,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 5,
+          "target_region": 0,
+          "old_occurrence": 6,
+          "new_occurrence": 0,
+          "old_fact": 93,
+          "new_fact": 106,
+          "scope": 12,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 7,
+          "operation": 136,
+          "start_byte": 12648,
+          "end_byte": 12705,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 2,
+          "new_variant": 2,
+          "old_target_region": 3,
+          "target_region": 4,
+          "old_occurrence": 8,
+          "new_occurrence": 10,
+          "old_fact": 100,
+          "new_fact": 112,
+          "scope": 13,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 8,
+          "operation": 150,
+          "start_byte": 13000,
+          "end_byte": 13057,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 12,
+          "old_fact": 106,
+          "new_fact": 119,
+          "scope": 14,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "source_owned_publicly_validated": true,
+          "events": 9,
+          "original_Allocation_values": [
+            1,
+            15,
+            29,
+            43,
+            57
+          ],
+          "original_Domain_values": [
+            6,
+            20,
+            34,
+            48,
+            62
+          ],
+          "static_release_worlds_0_to_5": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "success_release_order": [
+            5,
+            4,
+            3,
+            2,
+            1
+          ],
+          "native": false
+        },
+        {
+          "same_context_actual_source_owned_clean_retry": true
+        }
+      ],
+      "records": [
+        {
+          "refused_registration_status": 1,
+          "snapshot_unchanged": true,
+          "refused_owned_artifact_published": false
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 1,
+          "status": 4,
+          "ninth_phase": 1,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14863
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 2,
+          "status": 4,
+          "ninth_phase": 2,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14863
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 3,
+          "status": 4,
+          "ninth_phase": 3,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14863
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 4,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14863
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 5,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14863
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 6,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14863
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 7,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14863
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 8,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14863
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 9,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14863
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 10,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14863
+        },
+        {
+          "case": "registration_OOM",
+          "attempt": 11,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "no_owned_exposed": true,
+          "same_context_retry": true,
+          "total_allocations": 14863
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 1,
+          "status": 4,
+          "ninth_phase": 1,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14062
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 2,
+          "status": 4,
+          "ninth_phase": 2,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14062
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 3,
+          "status": 4,
+          "ninth_phase": 3,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14062
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 4,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14062
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 5,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14062
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 6,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14062
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 7,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14062
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 8,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14062
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 9,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14062
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 10,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14062
+        },
+        {
+          "case": "entry_OOM",
+          "attempt": 11,
+          "status": 4,
+          "ninth_phase": 0,
+          "snapshot_unchanged": true,
+          "failed_owned_null": true,
+          "same_context_owned_nine_retry": true,
+          "total_allocations": 14062
+        },
+        {
+          "captured_depth": 0,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 1,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 2,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 3,
+          "public_validator_status": 0
+        },
+        {
+          "captured_depth": 4,
+          "public_validator_status": 0
+        },
+        {
+          "event": 0,
+          "operation": 40,
+          "start_byte": 10208,
+          "end_byte": 10265,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 1,
+          "old_fact": 9,
+          "new_fact": 68,
+          "scope": 6,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 1,
+          "operation": 54,
+          "start_byte": 10560,
+          "end_byte": 10617,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 5,
+          "old_occurrence": 0,
+          "new_occurrence": 2,
+          "old_fact": 23,
+          "new_fact": 74,
+          "scope": 7,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 2,
+          "operation": 68,
+          "start_byte": 10912,
+          "end_byte": 10969,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 2,
+          "new_variant": 2,
+          "old_target_region": 3,
+          "target_region": 4,
+          "old_occurrence": 1,
+          "new_occurrence": 3,
+          "old_fact": 68,
+          "new_fact": 80,
+          "scope": 8,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 3,
+          "operation": 82,
+          "start_byte": 11264,
+          "end_byte": 11309,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 5,
+          "target_region": 0,
+          "old_occurrence": 2,
+          "new_occurrence": 0,
+          "old_fact": 74,
+          "new_fact": 87,
+          "scope": 9,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 4,
+          "operation": 95,
+          "start_byte": 11604,
+          "end_byte": 11661,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 2,
+          "new_variant": 2,
+          "old_target_region": 4,
+          "target_region": 5,
+          "old_occurrence": 3,
+          "new_occurrence": 6,
+          "old_fact": 80,
+          "new_fact": 93,
+          "scope": 10,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 5,
+          "operation": 109,
+          "start_byte": 11956,
+          "end_byte": 12013,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 8,
+          "old_fact": 87,
+          "new_fact": 100,
+          "scope": 11,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 6,
+          "operation": 123,
+          "start_byte": 12308,
+          "end_byte": 12353,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 2,
+          "new_variant": 1,
+          "old_target_region": 5,
+          "target_region": 0,
+          "old_occurrence": 6,
+          "new_occurrence": 0,
+          "old_fact": 93,
+          "new_fact": 106,
+          "scope": 12,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 7,
+          "operation": 136,
+          "start_byte": 12648,
+          "end_byte": 12705,
+          "region": 2,
+          "domain": 2,
+          "root": 18,
+          "incarnation": 21,
+          "projection": [
+            10,
+            1
+          ],
+          "child": 23,
+          "old_variant": 2,
+          "new_variant": 2,
+          "old_target_region": 3,
+          "target_region": 4,
+          "old_occurrence": 8,
+          "new_occurrence": 10,
+          "old_fact": 100,
+          "new_fact": 112,
+          "scope": 13,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "event": 8,
+          "operation": 150,
+          "start_byte": 13000,
+          "end_byte": 13057,
+          "region": 1,
+          "domain": 1,
+          "root": 5,
+          "incarnation": 8,
+          "projection": [
+            10,
+            0
+          ],
+          "child": 9,
+          "old_variant": 1,
+          "new_variant": 2,
+          "old_target_region": 0,
+          "target_region": 3,
+          "old_occurrence": 0,
+          "new_occurrence": 12,
+          "old_fact": 106,
+          "new_fact": 119,
+          "scope": 14,
+          "scope_ended": true,
+          "unchanged_siblings": 19,
+          "original_A_D_unique_and_preserved": true
+        },
+        {
+          "source_owned_publicly_validated": true,
+          "events": 9,
+          "original_Allocation_values": [
+            1,
+            15,
+            29,
+            43,
+            57
+          ],
+          "original_Domain_values": [
+            6,
+            20,
+            34,
+            48,
+            62
+          ],
+          "static_release_worlds_0_to_5": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          "success_release_order": [
+            5,
+            4,
+            3,
+            2,
+            1
+          ],
+          "native": false
+        },
+        {
+          "case": "missing_ninth_owned_record",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "duplicate_ninth_owned_record",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "reordered_ninth_owned_record",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "missing_checked_replace",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "spliced_source_span",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "duplicated_owned_event_node",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "wrong_original_domain_proof",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "unknown_write_ref_provenance",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "old_some_occurrence_revived",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "nonfresh_post_occurrence_claim",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "unrelated_fourth_scalar_fact",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "disconnected_valid_primitive_pair",
+          "individual_primitive_status": 0,
+          "scalar_value_same_but_fact_fresh": true
+        },
+        {
+          "case": "disconnected_valid_primitive_pair",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "unmodelled_intermediate_effect",
+          "public_validator_status": 3,
+          "owned_ninth": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 0,
+          "total": 2050,
+          "status": 4,
+          "retry": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 1,
+          "total": 2050,
+          "status": 4,
+          "retry": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 2,
+          "total": 2050,
+          "status": 4,
+          "retry": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 3,
+          "total": 2050,
+          "status": 4,
+          "retry": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 7,
+          "total": 2050,
+          "status": 4,
+          "retry": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 15,
+          "total": 2050,
+          "status": 4,
+          "retry": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 1025,
+          "total": 2050,
+          "status": 4,
+          "retry": true
+        },
+        {
+          "case": "public_validator_OOM",
+          "fail_at": 2049,
+          "total": 2050,
+          "status": 4,
+          "retry": true
+        }
+      ]
+    }
+  ]
+}

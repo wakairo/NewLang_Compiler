@@ -1,0 +1,84 @@
+name: P352 G2a finite source-owned replay (DO NOT MERGE)
+on:
+  push:
+    branches: [p352-neutral-nine-replay]
+permissions:
+  contents: read
+jobs:
+  replay:
+    name: G2a ${{ matrix.name }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: GCC Debug
+            cc: gcc-13
+            build_type: Debug
+            sanitizer: none
+          - name: GCC Release
+            cc: gcc-13
+            build_type: Release
+            sanitizer: none
+          - name: Clang
+            cc: clang-23
+            build_type: Debug
+            sanitizer: none
+          - name: ASan-LSan
+            cc: clang-23
+            build_type: Debug
+            sanitizer: address
+          - name: UBSan
+            cc: clang-23
+            build_type: Debug
+            sanitizer: undefined
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Pin ancestry and allowed file scope
+        run: |
+          git merge-base --is-ancestor cc1707186e1338d71fdfba26bf90134d54f5de3e HEAD
+          python3 - <<'PY'
+          import subprocess
+          allowed={'CMakeLists.txt','src/semantic_internal.h','src/captured_closure.c','src/semantic_check.c'}
+          for line in subprocess.check_output(['git','diff','--name-status','cc1707186e1338d71fdfba26bf90134d54f5de3e','HEAD'],text=True).splitlines():
+              status,path=line.split('\t')
+              assert (status=='M' and path in allowed) or (status=='A' and (path.startswith('evidence/p352/') or path=='docs/experiments/P352_G2A_FINITE_REPLAY.md' or path=='.github/workflows/p352-finite-change-replay.yml')),line
+          PY
+          git fetch --no-tags origin 46a02e60cabce1b63cc3db4bc9035fe06f5f8009
+      - name: Locked LLVM and existing host prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+          python3 scripts/bootstrap.py
+          . .deps/activate.sh
+          bash scripts/check-format.sh
+      - name: Ordinary default-OFF regression
+        if: matrix.name == 'GCC Debug'
+        env:
+          CC: gcc-13
+        run: |
+          . .deps/activate.sh
+          cmake -S . -B build-off -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-off --parallel 2
+          ctest --test-dir build-off --output-on-failure
+      - name: Frozen source/G1, actual ninth source-owned, public poison and OOM
+        env:
+          CC: ${{ matrix.cc }}
+          P352_BUILD_TYPE: ${{ matrix.build_type }}
+          P352_SANITIZER: ${{ matrix.sanitizer }}
+          ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+          UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+        run: |
+          . .deps/activate.sh
+          bash evidence/p352/run.sh build-g2a
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: p352-G2a-${{ matrix.name }}
+          path: |
+            build-g2a/p352-observations.json
+            build-g2a/legacy-equivalence.json
+            build-g2a-frozen/p350-observations.json
+            build-g2a-frozen/p338-observations.json
