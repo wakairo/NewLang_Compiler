@@ -37,7 +37,10 @@ old ten OFF/new ON. Exact inherited keys come from immutable P338 build.sh.
 With replay ON, public `CAPTURED-CLOSURE-PRECISION` covers the deep success arm:
 first adoption **136:37–249:38**, bytes **6961–16406**. A test-only copied TU/archive
 (`trace.py`, explicit `NEWLANG_TEST_P362_TRACE` guard) logs the first actual
-private stop: **UNMODELLED_CALLEE, node149, bytes12007–12053** (first B helper).
+private stop: **UNMODELLED_CALLEE, node149**, span **12007–12053 in the
+retained main-body NLSource**. Its body-slice origin is1105, so the original
+input span is **13112–13158, line214:49–95** (first B helper). Checked node
+spans must not be interpreted as whole-file offsets.
 Nine direct records exist in the **unsealed failed registration**, never as a
 successful owned artifact. Tracing leaves the original static archive unchanged
 and reproduces the same public refusal and unchanged semantic snapshot.
@@ -65,7 +68,7 @@ Those heap views are equal at D6→C1, C1→C2, C2→D7 and D8→J.entry. Noneth
 B Allocation29/Domain34 current owner places change **30/33→95/96** through the
 source whole moves. At owner assembly entry they become AGGREGATE-carried by172;
 dst Allocation57/Domain62 become AGGREGATE-carried by170. Seventeen nonCopy
-checked source nodes occur in the D6→C1 gap. Raw heap equality plus isolated
+checked source nodes (retained-body coordinates) occur in the D6→C1 gap. Raw heap equality plus isolated
 validator success does not rederive their chronological responsibility transfer.
 
 The existing finite replay rejects registered calls and requires original A/D

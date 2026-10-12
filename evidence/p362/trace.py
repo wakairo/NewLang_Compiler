@@ -35,6 +35,9 @@ r=subprocess.run([str(d/'boundary'),str(root/'evidence/p362/first_adoption.nl')]
 boundary=json.loads(r.stdout);assert boundary['registration_status']==3 and not boundary['owned_entry_artifact'] and boundary['snapshot_unchanged']
 assert 'UNMODELLED_CALLEE node=149' in r.stderr and 'unsealed_attempt_direct_count=9 registered_call=149 span=12007:12053' in r.stderr
 assert hashlib.sha256(normal.read_bytes()).hexdigest()==digest
-result={'guard':'NEWLANG_TEST_P362_TRACE','normal_archive_sha256':digest,'normal_archive_unchanged':True,'trace':r.stderr,'boundary':boundary,'trace_tu_sha256':hashlib.sha256(source.read_bytes()).hexdigest()}
+original=(root/'evidence/p362/first_adoption.nl').read_bytes()
+body_start=original.index(b'{',original.index(b'fn main()'))
+assert body_start==1105 and original[body_start+12007:body_start+12053]==b'set_link(write_B@prev,Option<ptr<Node>>::None)'
+result={'checked_span_coordinate':'retained main body NLSource, not whole input','checked_span':[12007,12053],'original_input_span':[13112,13158],'original_input_line_column':[214,49,214,95],'body_slice_origin':body_start,'guard':'NEWLANG_TEST_P362_TRACE','normal_archive_sha256':digest,'normal_archive_unchanged':True,'trace':r.stderr,'boundary':boundary,'trace_tu_sha256':hashlib.sha256(source.read_bytes()).hexdigest()}
 (b/'p362-trace.json').write_text(json.dumps(result,indent=2)+'\n')
 print(r.stderr,end='')

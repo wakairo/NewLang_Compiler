@@ -1,4 +1,20 @@
 {
+  "checked_span_coordinate": "retained main body NLSource, not whole input",
+  "checked_span": [
+    12007,
+    12053
+  ],
+  "original_input_span": [
+    13112,
+    13158
+  ],
+  "original_input_line_column": [
+    214,
+    49,
+    214,
+    95
+  ],
+  "body_slice_origin": 1105,
   "guard": "NEWLANG_TEST_P362_TRACE",
   "normal_archive_sha256": "0ff85825f66dab2829d1ce385985a4b1d44607d347cef2f87370d304991e8a91",
   "normal_archive_unchanged": true,
