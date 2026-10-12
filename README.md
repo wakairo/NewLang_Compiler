@@ -163,6 +163,9 @@ the current North Star contract in
 and long-horizon C-replacement coverage in
 [`docs/NewLang_C_Replacement_Coverage_Map.md`](docs/NewLang_C_Replacement_Coverage_Map.md).
 
+A proposed, non-normative [evidence inventory and development roadmap](docs/NewLang_Development_Roadmap.md)
+separates the current source/checker/native capabilities from product and research gates.
+
 The normal integration test compiles emitted C17
 with the configured host C compiler and executes the resulting native program.
 
