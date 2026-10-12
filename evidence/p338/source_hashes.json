@@ -1,0 +1,7 @@
+{
+  "calibration_returned_owner.nl": "bd7692f8118c8e4de2b7662b0f90fcf503a548d9948bfded27bd430ad127716d",
+  "w1_device_refresh.nl": "e39eb75d1161e90caf8392626462d086e8d31b7552e646ba7862e34900b1893f",
+  "w1_device_refresh_wrong_domain.nl": "922dda7f670a1d56746e5e7d6b9815b4b74b3edb12b5db376f048d47eadee4b6",
+  "w2_scheduler_rotation.nl": "e64160665a22e185cb8191afecbad9a14d1c5a5411afb3da17832ab6d5b5427c",
+  "w2_scheduler_rotation_wrong_domain.nl": "3fb5f39cde2bfcbbdc744878662fb9ec72de73183ca4a293c2f46308cbb31112"
+}

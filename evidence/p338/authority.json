@@ -1,0 +1,19 @@
+{
+  "track": "P",
+  "issue": 338,
+  "compiler_main": "a5343bf70004b30a8b026e52aa2fde93b5920be0",
+  "canonical": "Draft17.30",
+  "compiler": "de9c4b175784f484675b670a109f62edeaf35de1",
+  "prior_evidence": "46a02e60cabce1b63cc3db4bc9035fe06f5f8009",
+  "prior_hold": "89244619f5f9e152aede362726368e3b09398ca1",
+  "formal_main": "a8de4ebb4099f4742fc161d26867740dcac48414",
+  "coordination_acceptance": "https://github.com/wakairo/NewLang_Compiler/issues/337#issuecomment-6115446783",
+  "host_compiler": "GCC 14.2.0 Debug",
+  "new_flags": 0,
+  "existing_opt_ins_enabled": 10,
+  "source_positive_variants_per_motif": 1,
+  "syntax_calibrations_per_motif": 0,
+  "mandated_semantic_negative_per_motif": 1,
+  "first_public_positive_utc": "2026-10-12T00:18:00Z",
+  "first_public_positive_time_note": "approximate; no runtime timing benchmark"
+}
