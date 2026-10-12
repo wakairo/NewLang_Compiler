@@ -3,7 +3,7 @@
 set -u
 set -o pipefail
 HERE="$(cd "$(dirname "$0")" && pwd)"
-cd "$(dirname "$HERE")/../.."
+cd "$HERE/../.."
 echo "R359 HEAD $(git rev-parse HEAD)"
 echo "R359 frozen candidate: 82578ff6eb23970e3ae934c98a38383ca01468f7"
 if ! git merge-base --is-ancestor 82578ff6eb23970e3ae934c98a38383ca01468f7 HEAD; then
