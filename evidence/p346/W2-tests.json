@@ -1,0 +1,16 @@
+{
+  "poison_checks": {
+    "missing_event": "REJECTED_INTERNAL_INCONSISTENCY_AFTER_REHASH",
+    "duplicated_event": "REJECTED_INTERNAL_INCONSISTENCY_AFTER_REHASH",
+    "renumbered_event": "REJECTED_INTERNAL_INCONSISTENCY_AFTER_REHASH",
+    "wrong_source_digest": "REJECTED_INTERNAL_INCONSISTENCY_AFTER_REHASH",
+    "wrong_fragment_path": "REJECTED_INTERNAL_INCONSISTENCY_AFTER_REHASH",
+    "missing_fourth_sibling": "REJECTED_INTERNAL_INCONSISTENCY_AFTER_REHASH",
+    "false_validator_status": "REJECTED_INTERNAL_INCONSISTENCY_AFTER_REHASH",
+    "changed_typed_domain": "REJECTED_INTERNAL_INCONSISTENCY_AFTER_REHASH"
+  },
+  "consistent_domain_rewrite_with_recomputed_digest": "CONSISTENT_UNTRUSTED_NOT_P_VALIDATED",
+  "requires_actual_C_rerun": true,
+  "synthetic_Original_constructed": false,
+  "portable_authority_claimed": false
+}
