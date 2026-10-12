@@ -44,6 +44,106 @@ static const char *parse_name(NLParseStatus s) {
     }
     return "INVALID";
 }
+
+/* Re-check unaffected siblings using independently owned public pre/post worlds. */
+static void verify_transition(const NLCapturedChangeView *cv,
+                              const NLCheckedNodeView *op,
+                              size_t depth, size_t ordinal) {
+    if (!cv->before || !cv->after || !op || op->kind != NL_CHECKED_REPLACE) {
+        puts("TRANSITION_ERROR absent independent public before/after");
+        failed_invariant = 1; return;
+    }
+    NLSemanticPlaceView bp = {0}, ap = {0};
+    if (!nl_semantic_place_view(cv->before, op->field.parent, &bp) ||
+        !nl_semantic_place_view(cv->after, op->field.parent, &ap) ||
+        !bp.live || !ap.live || bp.independent_root != ap.independent_root ||
+        !bp.independent_root || bp.incarnation != ap.incarnation ||
+        bp.governing_domain == 0 || bp.governing_domain != ap.governing_domain ||
+        bp.placement.region == 0 || bp.placement.region != ap.placement.region ||
+        bp.fixed_field_count != 4 || ap.fixed_field_count != 4 ||
+        op->field.index >= 3) {
+        printf("TRANSITION_ERROR depth=%zu ordinal=%zu root_identity\n",
+               depth, ordinal);
+        failed_invariant = 1; return;
+    }
+    size_t stable_siblings = 0;
+    for (size_t j = 0; j < 4; ++j) {
+        NLPlaceId before_id = bp.fixed_fields[j], after_id = ap.fixed_fields[j];
+        NLSemanticPlaceView bc = {0}, ac = {0};
+        if (!before_id || before_id != after_id ||
+            !nl_semantic_place_view(cv->before, before_id, &bc) ||
+            !nl_semantic_place_view(cv->after, after_id, &ac) ||
+            !bc.live || !ac.live || bc.incarnation != ac.incarnation ||
+            bc.parent_aggregate != op->field.parent ||
+            ac.parent_aggregate != op->field.parent) {
+            printf("TRANSITION_ERROR depth=%zu ordinal=%zu field=%zu identity\n",
+                   depth, ordinal, j);
+            failed_invariant = 1; continue;
+        }
+        printf("FIELD_FACT depth=%zu ordinal=%zu field=%zu before=%zu after=%zu"
+               " oldocc=%zu newocc=%zu\n",
+               depth, ordinal, j, (size_t)bc.current_fact,
+               (size_t)ac.current_fact, (size_t)bc.payload_occurrence,
+               (size_t)ac.payload_occurrence);
+        if (j == op->field.index) {
+            if (!bc.current_fact || !ac.current_fact ||
+                bc.current_fact == ac.current_fact ||
+                ac.payload_occurrence == 0 ||
+                ac.payload_occurrence == bc.payload_occurrence) {
+                printf("TRANSITION_ERROR depth=%zu ordinal=%zu target_change\n",
+                       depth, ordinal);
+                failed_invariant = 1;
+            }
+            NLSemanticOccurrenceView fresh = {0};
+            if (!nl_semantic_occurrence_view(cv->after,
+                                             ac.payload_occurrence, &fresh) ||
+                !fresh.live || fresh.root != after_id) {
+                printf("TRANSITION_ERROR depth=%zu ordinal=%zu fresh_occurrence\n",
+                       depth, ordinal);
+                failed_invariant = 1;
+            }
+            if (bc.payload_occurrence) {
+                NLSemanticOccurrenceView old_pre = {0}, old_post = {0};
+                if (!nl_semantic_occurrence_view(cv->before,
+                                                 bc.payload_occurrence, &old_pre) ||
+                    !nl_semantic_occurrence_view(cv->after,
+                                                 bc.payload_occurrence, &old_post) ||
+                    !old_pre.live || old_post.live || old_pre.root != before_id) {
+                    printf("TRANSITION_ERROR depth=%zu ordinal=%zu old_end\n",
+                           depth, ordinal);
+                    failed_invariant = 1;
+                }
+            }
+        } else {
+            if (!bc.current_fact || bc.current_fact != ac.current_fact ||
+                bc.payload_occurrence != ac.payload_occurrence) {
+                printf("TRANSITION_ERROR depth=%zu ordinal=%zu field=%zu sibling_stale\n",
+                       depth, ordinal, j);
+                failed_invariant = 1;
+            } else {
+                ++stable_siblings;
+            }
+            if (j == 3) {
+                NLSemanticValueView bv = {0}, av = {0};
+                if (!nl_semantic_value_view(cv->before, bc.current_value, &bv) ||
+                    !nl_semantic_value_view(cv->after, ac.current_value, &av) ||
+                    !bv.scalar_known || !av.scalar_known ||
+                    bv.scalar_value != av.scalar_value) {
+                    printf("TRANSITION_ERROR depth=%zu ordinal=%zu scalar_payload\n",
+                           depth, ordinal);
+                    failed_invariant = 1;
+                }
+            }
+        }
+    }
+    printf("TRANSITION depth=%zu ordinal=%zu originalR=%zu originalD=%zu"
+           " originalO=%zu rootinc=%zu siblings_current=%zu/3\n",
+           depth, ordinal, (size_t)bp.placement.region,
+           (size_t)bp.governing_domain, (size_t)op->field.parent,
+           (size_t)bp.incarnation, stable_siblings);
+    if (stable_siblings != 3) failed_invariant = 1;
+}
+
 static void examine(const NLCheckedFragment *f, size_t depth) {
     if (!f) return;
     if (depth > max_depth) max_depth = depth;
@@ -81,6 +181,7 @@ static void examine(const NLCheckedFragment *f, size_t depth) {
                v ? (size_t)v->field.child_fact : 0,
                v ? (size_t)v->field.child_post_fact : 0);
         if (v && v->kind != NL_CHECKED_REPLACE) failed_invariant = 1;
+        verify_transition(&cv, v, depth, i);
         if (v && v->field.payload_occurrence && v->field.post_payload_occurrence) {
             if (v->field.payload_occurrence != v->field.post_payload_occurrence) {
                 ++old_new_distinct;
