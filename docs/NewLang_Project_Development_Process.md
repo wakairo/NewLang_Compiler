@@ -6,7 +6,6 @@
 > 意図的に軽量な初版であり、projectの経験に応じて今後改訂してよい。
 > 変更履歴はGitのcommit historyを正とし、この文書内に別のchange log / Version historyを持たない。
 >
-> English companion: `NewLang_Project_Development_Process_en.md`
 
 ## 1. 目的
 
