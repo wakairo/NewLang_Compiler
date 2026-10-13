@@ -508,6 +508,8 @@ if(BUILD_TESTING)
     foreach(group parser values body failures)
         add_test(NAME u8_${group}.unit COMMAND u8_literal_test ${group})
     endforeach()
+    add_executable(nested_u8_checked_probe tests/integration/nested_u8_checked_probe.c)
+    target_link_libraries(nested_u8_checked_probe PRIVATE newlang_checked_c_node newlang_semantic)
     add_executable(u8_call_checked_probe tests/integration/u8_call_checked_probe.c)
     target_link_libraries(u8_call_checked_probe PRIVATE newlang_checked_c_node newlang_semantic)
     add_test(NAME u8_call_checked_c.integration
