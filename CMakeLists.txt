@@ -453,6 +453,22 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_link_semantic.nl")
     target_link_libraries(node_link_test PRIVATE newlang_semantic newlang_parser)
     target_link_options(node_link_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    add_executable(node_join_test tests/unit/node_join_test.c)
+    target_link_libraries(node_join_test PRIVATE newlang_checked_c_node newlang_parser)
+    target_link_options(node_join_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    foreach(case two_normal_join join_actual_none join_other_original join_both_arms join_clear_occurrence join_saved_copy join_same_locator join_post_write)
+        add_test(NAME node_${case}.unit COMMAND node_join_test evidence
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_${case}.nl")
+    endforeach()
+    foreach(group negatives owner private-ids dependencies oom)
+        add_test(NAME node_join_${group}.unit COMMAND node_join_test ${group}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_two_normal_join.nl")
+    endforeach()
+    add_test(NAME node_join_source.integration
+        COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/node_join_source_test.py"
+            $<TARGET_FILE:newlangc> $<TARGET_FILE:node_join_test>
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures")
     foreach(group evidence transitions dependencies negatives liveness resource failures)
         add_test(NAME node_link_${group}.unit COMMAND node_link_test ${group}
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_link_semantic.nl")
