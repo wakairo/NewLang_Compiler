@@ -1,0 +1,31 @@
+{
+  "source_sha256": "38202e8d8df56e01a1aba78356b9ba6038dc2617eaef6a2d04bc8fda081ce86c",
+  "CLI": 0,
+  "C_bytes": 920,
+  "C_sha256": "7213285045495110cc72cb74d02a3eedaf261b38afaae3db71509836f8f0f901",
+  "host_cc": "clang-23",
+  "native_O0_O2": {
+    "plain": [
+      0,
+      0
+    ],
+    "observed": [
+      0,
+      0
+    ]
+  },
+  "actual_return_observations": [
+    0,
+    255,
+    0,
+    255
+  ],
+  "owned": [
+    "CALL 11 2 1 1 1 2 0",
+    "CALL 11 6 3 3 3 4 255",
+    "CALL 11 10 5 5 5 6 0",
+    "CALL 11 14 7 7 7 8 255",
+    "CONTROLS 8 REJECT restored PASS snapshot UNCHANGED",
+    "OWNED 4"
+  ]
+}

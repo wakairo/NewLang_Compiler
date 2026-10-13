@@ -1,0 +1,70 @@
+{
+  "baseline_exit": 0,
+  "baseline_C_bytes": 2209,
+  "cases": [
+    {
+      "source": "node_two_normal_join",
+      "sha256": "02270fa7f21f9ee46225d9708ad1bfadf72b458efd7ef7085db08c8acf7b7439",
+      "exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "source_owned_public_views": "tests/fixtures/node_two_normal_join.nl source-owned=true normal_arms=2 original_roots=1,6 incarnations=1,6 incoming_variants=1,2 joined_variant=unknown joined_fact=16 sibling_fact=3 scoped_writes=1 native=unsupported"
+    },
+    {
+      "source": "node_join_actual_none",
+      "sha256": "eda42d720ae3d36b2b244f7137f6fafe81c1a88b202736bc37303de35b6287e0",
+      "exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "source_owned_public_views": "tests/fixtures/node_join_actual_none.nl source-owned=true normal_arms=2 original_roots=1,6 incarnations=1,6 incoming_variants=1,2 joined_variant=unknown joined_fact=14 sibling_fact=3 scoped_writes=1 native=unsupported"
+    },
+    {
+      "source": "node_join_other_original",
+      "sha256": "24d4b33d3736b75713f5a09ec92d7322f33b3d5c60e2ac036701bf1769393426",
+      "exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "source_owned_public_views": "tests/fixtures/node_join_other_original.nl source-owned=true normal_arms=2 original_roots=1,6 incarnations=1,6 incoming_variants=1,2 joined_variant=unknown joined_fact=18 sibling_fact=3 scoped_writes=1 native=unsupported"
+    },
+    {
+      "source": "node_join_both_arms",
+      "sha256": "d3ec49b684ecb598c6f6637601df5350a8a870daadbccc87bc3888bc6720d031",
+      "exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "source_owned_public_views": "tests/fixtures/node_join_both_arms.nl source-owned=true normal_arms=2 original_roots=1,6 incarnations=1,6 incoming_variants=1,2 joined_variant=unknown joined_fact=16 sibling_fact=3 scoped_writes=2 native=unsupported"
+    },
+    {
+      "source": "node_join_clear_occurrence",
+      "sha256": "765f5435abb5e8728cd12483f4eaf25c9fac8f1ec2e250d6bd59286e4638239c",
+      "exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "source_owned_public_views": "tests/fixtures/node_join_clear_occurrence.nl source-owned=true normal_arms=2 original_roots=1,6 incarnations=1,6 incoming_variants=2,1 joined_variant=unknown joined_fact=23 sibling_fact=3 scoped_writes=1 native=unsupported"
+    },
+    {
+      "source": "node_join_saved_copy",
+      "sha256": "7ce18e07eca3c954c7bcb515f19ffa6bbff894347143eda14a2e36a6006b4cab",
+      "exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "source_owned_public_views": "tests/fixtures/node_join_saved_copy.nl source-owned=true normal_arms=2 original_roots=1,6 incarnations=1,6 incoming_variants=2,1 joined_variant=unknown joined_fact=25 sibling_fact=3 scoped_writes=1 native=unsupported"
+    },
+    {
+      "source": "node_join_same_locator",
+      "sha256": "59076eec8d23173be8f8984223cdadbc7cad71b092e7314f427fc410314e3db1",
+      "exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "source_owned_public_views": "O6 same Copy locator: field F17->F25, occurrence P2->P4, parent RF18->RF26; common RF24\ntests/fixtures/node_join_same_locator.nl source-owned=true normal_arms=2 original_roots=1,6 incarnations=1,6 incoming_variants=2,2 joined_variant=unknown joined_fact=23 sibling_fact=3 scoped_writes=1 native=unsupported"
+    },
+    {
+      "source": "node_join_post_write",
+      "sha256": "fdd488106f98da89d3a453d2d6b86b4b612dc7647bce07a888049c4ed19a1198",
+      "exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "source_owned_public_views": "tests/fixtures/node_join_post_write.nl source-owned=true normal_arms=2 original_roots=1,6 incarnations=1,6 incoming_variants=1,2 joined_variant=unknown joined_fact=16 sibling_fact=3 scoped_writes=1 native=unsupported"
+    }
+  ]
+}
