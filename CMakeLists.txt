@@ -492,6 +492,12 @@ if(BUILD_TESTING)
     foreach(group parser values body failures)
         add_test(NAME u8_${group}.unit COMMAND u8_literal_test ${group})
     endforeach()
+    add_executable(u8_call_checked_probe tests/integration/u8_call_checked_probe.c)
+    target_link_libraries(u8_call_checked_probe PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME u8_call_checked_c.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_u8_call_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:u8_call_checked_probe>" "${CMAKE_C_COMPILER}")
     add_test(NAME north_star_v1_checked_c.integration
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_v1_test.py"

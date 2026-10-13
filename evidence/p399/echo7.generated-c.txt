@@ -1,0 +1,24 @@
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+
+static void nl_fn_11(void);
+static uint8_t nl_fn_10(uint8_t nl_local_1);
+
+static void nl_fn_11(void)
+{
+    const uint8_t nl_call_2 = nl_fn_10(7);
+    (void)nl_call_2;
+    (void)0;
+}
+
+static uint8_t nl_fn_10(uint8_t nl_local_1)
+{
+    (void)nl_local_1;
+    return nl_local_1;
+}
+
+int main(void)
+{
+    nl_fn_11();
+    return 0;
+}
