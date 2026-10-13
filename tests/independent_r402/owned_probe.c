@@ -6,6 +6,7 @@
 #include "newlang/source.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 typedef struct {
@@ -56,12 +57,15 @@ static int parse_input(const char *text, bool function_unit, Input *out)
     return 1;
 }
 
-static int fail(const char *condition, int line)
+static void required(int result, const char *condition, int line)
 {
-    printf("R405 FAIL line=%d condition=%s\n", line, condition);
-    return 0;
+    if (!result) {
+        printf("R405 FAIL line=%d condition=%s\n", line, condition);
+        fflush(stdout);
+        exit(1);
+    }
 }
-#define REQUIRE(expr) if (!(expr)) return fail(#expr, __LINE__)
+#define REQUIRE(expr) required(!!(expr), #expr, __LINE__)
 
 static int equal_locator(NLReferenceFacts x, NLReferenceFacts y)
 {
@@ -179,8 +183,8 @@ static int observe_owned(const NLCheckedFragment *call, int same)
                 link.parent_incarnation == incarnation[0]);
         REQUIRE(sibling.parent_aggregate == original[0]);
         NLValueId sibling_value = sibling.current_value;
-        REQUIRE(nl_semantic_value_view(worlds[arm_index], sibling_value,
-                                       &payload));
+        const NLSemanticContext *world = worlds[arm_index];
+        REQUIRE(nl_semantic_value_view(world, sibling_value, &payload));
         REQUIRE(payload.scalar_known && payload.scalar_value == 1);
         if (sibling_fact == 0)
             sibling_fact = sibling.current_fact;
@@ -343,8 +347,8 @@ static int run_case(const char *unit_text, int same)
     status = nl_semantic_check_source_fragment(ctx, invocation.tree, &checked,
                                                &diagnostic);
     const char *check_code = diagnostic.diagnostic.code;
-    printf("R405 actual main() fragment=%d code=%s owned=%d\n",
-           (int)status, check_code ? check_code : "-", checked != NULL);
+    printf("R405 actual main() fragment=%d code=%s owned=%d\n", (int)status,
+           check_code ? check_code : "-", checked != NULL);
     if (status != NL_CHECK_OK || checked == NULL)
         goto cleanup;
     if (!observe_owned(checked, same))
@@ -360,8 +364,7 @@ static int run_case(const char *unit_text, int same)
     const char *invalid_code = unit_diag.diagnostic.diagnostic.code;
     printf("R405 rejected unselected arm=%d code=%s\n", (int)status,
            invalid_code ? invalid_code : "-");
-    if (status != NL_CHECK_SEMANTIC_ERROR ||
-        invalid_code == NULL ||
+    if (status != NL_CHECK_SEMANTIC_ERROR || invalid_code == NULL ||
         strcmp(invalid_code, "P3-UNKNOWN-BINDING") != 0 ||
         !nl_semantic_snapshot(ctx, &after))
         goto cleanup;
@@ -375,9 +378,9 @@ static int run_case(const char *unit_text, int same)
         before.backing_regions != after.backing_regions)
         goto cleanup;
     diagnostic = (NLCheckDiagnostic){0};
-    status = nl_semantic_check_source_fragment(ctx, invocation.tree,
-                                                &checked, &diagnostic);
-    printf("R405 rollback recheck=%d owned=%d\n", (int)status,
+    status = nl_semantic_check_source_fragment(ctx, invocation.tree, &checked,
+                                               &diagnostic);
+    printf("R405 rollback status=%d owned=%d\n", (int)status,
            checked != NULL);
     if (status != NL_CHECK_OK || checked == NULL ||
         !observe_owned(checked, same))
