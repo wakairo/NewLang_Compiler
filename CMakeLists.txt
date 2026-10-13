@@ -526,6 +526,9 @@ if(BUILD_TESTING)
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+    add_executable(r402_owned_probe tests/independent_r402/owned_probe.c)
+    target_link_libraries(r402_owned_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME r402_public_owned_survey.unit COMMAND r402_owned_probe)
     # R402 fresh BLIND source-only validator; no production source changes.
     add_test(NAME r402_blind_two_normal_source.integration
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/independent_r402/check_r402.py"
