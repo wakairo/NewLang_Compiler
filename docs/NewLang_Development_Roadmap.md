@@ -93,6 +93,22 @@ GCC/Release/Clang/ASan/UBSan **5/5 PASS（初回）**。
 普通の独立safe caller・heap/nonCopy/Option/loopへの一般化やC/Zig/Rust比較上の製品優位は**未実証**。
 PR395はDRAFT/DO NOT MERGE、元G0/G1も未マージ。
 
+**新しい実測地図の更新：** [DRAFT PR396](https://github.com/wakairo/NewLang_Compiler/pull/396)
+（Compiler/main固定`348ca7d48f6dd5d658706f4547ab7ef9a63af33d`、テストのみ）では、
+元の2つのlexical Nodeと`head.next=Some(tail_ptr)`を保ち、
+`Some(q)`の枝で元の別Node `tail@next`をscoped writeしようとした。
+[Clang測定ログ](https://github.com/wakairo/NewLang_Compiler/actions/runs/38366237758)では
+baseline CLI0/C2209/native成功、追加sourceは**CLI3/C0、
+`P9-CONTINUATION-PRECISION`**で停止。分岐後readは未到達。
+これはsyntax-invalidやptr権限の拒否ではなく、`match`の複数normal armsで異なる
+current/value stateを合流する現productionの**解析精度不足**とコード上整合する
+（`src/semantic_check.c`の`node_unit_arm_frame`／P9 fallback）。
+**地図の更新：** 真の条件付きintrusive操作の次の費用は、単純なNode field emitterだけでなく
+**branch state join/proof fidelity**にある可能性が高い。一般join機構が必要か、
+単一normal continuationなど狭い既存経路で十分かは**まだ未測定**。
+この実験のCIがGreenでも新操作のPASSではなく、外部LLVM HTTP404は別の環境障害。
+規範・compiler本体・元H1の契約は不変。新joinの実装認可は別判断。
+
 
 ### 4.1 証拠がある分岐と、次の実用操作への障害
 
