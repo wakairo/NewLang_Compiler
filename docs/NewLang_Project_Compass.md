@@ -28,6 +28,7 @@
 | Ring `head/len`、Vec `len` の metadata SSOT と局所的な claim transfer | 現行 Draft §15（[CURRENT_SPEC](reference/CURRENT_SPEC.md) から移動） |
 | 過去案の位置付けと source/semantic 変更前の確認 | [Design Decision Procedure](NewLang_Design_Decision_Procedure.md)、[Design-Intent Ledger](NewLang_Design_Intent_Ledger.md) |
 | Track、Issue、レビュー、独立 R、Goal Alignment、停止確認 | [Development Process](NewLang_Project_Development_Process.md) §§3–4,7 |
+| 探索投資と製品化投資、Exploration GO / Product GO、予測→実測→地図の更新 | [Development Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go) |
 | H1 固有の凍結条件（一般的な言語要件とは別） | [H1 Issue #268](https://github.com/wakairo/NewLang_Compiler/issues/268) |
 | 今回の目標逸脱と反省点（正本ではなく evidence） | [Coordination #368](https://github.com/wakairo/NewLang_Compiler/issues/368)、[V #369](https://github.com/wakairo/NewLang_Compiler/issues/369) |
 
@@ -35,7 +36,7 @@
 
 1. **関連する行だけ選ぶ**。分からない目標・非目標・代替手段があればリンク先の正本を読む。Compass を引用しただけで理解・審査済みとはしない。
 2. **手段の目的化に注意**：新しい checker/proof mechanism が作れることと、製品に必要であることは別。checked、既存 API、局所 unchecked、別 workload 等を必要に応じて比較する。ただし unchecked が source 上表現可能・sound と推定してはならない。
-3. **投資判断は [Process §4.3](NewLang_Project_Development_Process.md) に従う**。小修正・既存範囲の実装・独立した研究ごとに重い審査を繰り返さない。
+3. **投資判断は [Process §4.3](NewLang_Project_Development_Process.md) に従う**。特に[§4.3.1の探索GO／製品化GO](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go)を区別する。製品価値がまだ未実証でも、次の探索経路の判断を改善する小さな実測や選択済みv0の忠実な実装を否定しない。ただし、探索成功をProduct PASSや仕様・安全性の承認と取り違えない。
 4. **blind Red Team の初回判定は Process §7 を優先**。設計者の rationale や過去の優先結論を先に読ませない。
 
 この入口が古い・壊れている場合はリンク先の正本を確認して修正を提案する。Compass 自体を第2の authority にしない。
