@@ -380,8 +380,7 @@ static int run_case(const char *unit_text, int same)
     diagnostic = (NLCheckDiagnostic){0};
     status = nl_semantic_check_source_fragment(ctx, invocation.tree, &checked,
                                                &diagnostic);
-    printf("R405 rollback status=%d owned=%d\n", (int)status,
-           checked != NULL);
+    printf("R405 rollback status=%d owned=%d\n", (int)status, checked != NULL);
     if (status != NL_CHECK_OK || checked == NULL ||
         !observe_owned(checked, same))
         goto cleanup;
