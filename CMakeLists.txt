@@ -503,6 +503,14 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_u8_return_test.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:u8_return_checked_probe>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
+    add_executable(pair_call_checked_probe tests/integration/pair_call_checked_probe.c)
+    target_link_libraries(pair_call_checked_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME g1_pair_call_native.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_pair_call_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:pair_call_checked_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/evidence/p383/pair-g1.nl")
     add_test(NAME north_star_v0_checked_c.integration
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_v0_test.py"

@@ -1,0 +1,10 @@
+{"kind":"snapshot","step":0,"values":[7,1,9,2]}
+{"kind":"binding","name":"old_a","value":7}
+{"kind":"snapshot","step":1,"values":[11,1,9,2]}
+{"kind":"binding","name":"old_b","value":9}
+{"kind":"snapshot","step":2,"values":[11,1,13,2]}
+{"kind":"binding","name":"after_a","value":11}
+{"kind":"binding","name":"marker_a","value":1}
+{"kind":"binding","name":"after_b","value":13}
+{"kind":"calls","value":2}
+{"kind":"binding","name":"marker_b","value":2}

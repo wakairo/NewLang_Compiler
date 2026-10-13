@@ -1,0 +1,1300 @@
+{
+  "sanitizer": "none",
+  "positive": [
+    {
+      "name": "original",
+      "source": "struct Pair { left:u8, right:u8 }\nfn update_state(field:ref<write,u8>,next:u8)->u8{replace(field,next)}\nfn main()->unit {\n let a=Pair{left:u8(7),right:u8(1)};\n let b=Pair{left:u8(9),right:u8(2)};\n let old_a=loan_write(a@left){|w|update_state(w,u8(11))};\n let old_b=loan_write(b@left){|w|update_state(w,u8(13))};\n let after_a=a@left;let marker_a=a@right;\n let after_b=b@left;let marker_b=b@right;\n old_a;old_b;after_a;marker_a;after_b;marker_b;unit\n}\n",
+      "source_sha256": "4033da51c6b2434b07b5f118ce07c3950ff66cd7b6cbb807573447810323c22f",
+      "c_sha256": "037ead7a3d6af93929bbdfaa6ff322d7d75905e2a307e4c62ea7499afc1bb921",
+      "checked": [
+        {
+          "kind": "status",
+          "parse": 0,
+          "register": 0,
+          "check": 0,
+          "owned": true
+        },
+        {
+          "kind": "record",
+          "symbol": 1,
+          "parent": 1,
+          "incarnation": 1,
+          "initial": [
+            7,
+            1
+          ],
+          "initial_values": [
+            1,
+            2
+          ]
+        },
+        {
+          "kind": "record",
+          "symbol": 2,
+          "parent": 4,
+          "incarnation": 4,
+          "initial": [
+            9,
+            2
+          ],
+          "initial_values": [
+            4,
+            5
+          ]
+        },
+        {
+          "kind": "call",
+          "node": 18,
+          "function": 11,
+          "record": 1,
+          "index": 0,
+          "ref_symbol": 3,
+          "scope": 1,
+          "formal_symbols": [
+            4,
+            5
+          ],
+          "actual_values": [
+            8,
+            9
+          ],
+          "old": 7,
+          "new": 11,
+          "parent": 1,
+          "child": 2,
+          "incarnation": 2,
+          "facts": [
+            1,
+            2
+          ],
+          "post_facts": [
+            11,
+            10
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_a",
+          "symbol": 6,
+          "value": 7
+        },
+        {
+          "kind": "call",
+          "node": 25,
+          "function": 11,
+          "record": 2,
+          "index": 0,
+          "ref_symbol": 7,
+          "scope": 2,
+          "formal_symbols": [
+            8,
+            9
+          ],
+          "actual_values": [
+            14,
+            15
+          ],
+          "old": 9,
+          "new": 13,
+          "parent": 4,
+          "child": 5,
+          "incarnation": 5,
+          "facts": [
+            4,
+            5
+          ],
+          "post_facts": [
+            17,
+            16
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_b",
+          "symbol": 10,
+          "value": 9
+        },
+        {
+          "kind": "binding",
+          "name": "after_a",
+          "symbol": 11,
+          "value": 11
+        },
+        {
+          "kind": "binding",
+          "name": "marker_a",
+          "symbol": 12,
+          "value": 1
+        },
+        {
+          "kind": "binding",
+          "name": "after_b",
+          "symbol": 13,
+          "value": 13
+        },
+        {
+          "kind": "binding",
+          "name": "marker_b",
+          "symbol": 14,
+          "value": 2
+        },
+        {
+          "kind": "read",
+          "record": 1,
+          "index": 0,
+          "child": 2,
+          "incarnation": 2,
+          "parent_fact": 11,
+          "child_fact": 10,
+          "current_value": 11
+        },
+        {
+          "kind": "read",
+          "record": 1,
+          "index": 1,
+          "child": 3,
+          "incarnation": 3,
+          "parent_fact": 11,
+          "child_fact": 3,
+          "current_value": 2
+        },
+        {
+          "kind": "read",
+          "record": 2,
+          "index": 0,
+          "child": 5,
+          "incarnation": 5,
+          "parent_fact": 17,
+          "child_fact": 16,
+          "current_value": 17
+        },
+        {
+          "kind": "read",
+          "record": 2,
+          "index": 1,
+          "child": 6,
+          "incarnation": 6,
+          "parent_fact": 17,
+          "child_fact": 6,
+          "current_value": 5
+        }
+      ],
+      "native": [
+        {
+          "kind": "snapshot",
+          "step": 0,
+          "values": [
+            7,
+            1,
+            9,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_a",
+          "value": 7
+        },
+        {
+          "kind": "snapshot",
+          "step": 1,
+          "values": [
+            11,
+            1,
+            9,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_b",
+          "value": 9
+        },
+        {
+          "kind": "snapshot",
+          "step": 2,
+          "values": [
+            11,
+            1,
+            13,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "after_a",
+          "value": 11
+        },
+        {
+          "kind": "binding",
+          "name": "marker_a",
+          "value": 1
+        },
+        {
+          "kind": "binding",
+          "name": "after_b",
+          "value": 13
+        },
+        {
+          "kind": "calls",
+          "value": 2
+        },
+        {
+          "kind": "binding",
+          "name": "marker_b",
+          "value": 2
+        }
+      ],
+      "compiler_exit": 0,
+      "pristine_exit": 0,
+      "observer_exit": 0
+    },
+    {
+      "name": "different",
+      "source": "struct Pair { left:u8, right:u8 }\nfn update_state(field:ref<write,u8>,next:u8)->u8{replace(field,next)}\nfn main()->unit {\n let a=Pair{left:u8(80),right:u8(3)};\n let b=Pair{left:u8(90),right:u8(4)};\n let old_a=loan_write(a@left){|w|update_state(w,u8(123))};\n let old_b=loan_write(b@left){|w|update_state(w,u8(124))};\n let after_a=a@left;let marker_a=a@right;\n let after_b=b@left;let marker_b=b@right;\n old_a;old_b;after_a;marker_a;after_b;marker_b;unit\n}\n",
+      "source_sha256": "8ee9c433f28643ad396681cd9e49f2f43368d944b5b9dd5aeb61c4353eab62e2",
+      "c_sha256": "7a29ecb3028d048d6d5f5bc3ede28fb48a45865c677a0fee47250d574b08edb6",
+      "checked": [
+        {
+          "kind": "status",
+          "parse": 0,
+          "register": 0,
+          "check": 0,
+          "owned": true
+        },
+        {
+          "kind": "record",
+          "symbol": 1,
+          "parent": 1,
+          "incarnation": 1,
+          "initial": [
+            80,
+            3
+          ],
+          "initial_values": [
+            1,
+            2
+          ]
+        },
+        {
+          "kind": "record",
+          "symbol": 2,
+          "parent": 4,
+          "incarnation": 4,
+          "initial": [
+            90,
+            4
+          ],
+          "initial_values": [
+            4,
+            5
+          ]
+        },
+        {
+          "kind": "call",
+          "node": 18,
+          "function": 11,
+          "record": 1,
+          "index": 0,
+          "ref_symbol": 3,
+          "scope": 1,
+          "formal_symbols": [
+            4,
+            5
+          ],
+          "actual_values": [
+            8,
+            9
+          ],
+          "old": 80,
+          "new": 123,
+          "parent": 1,
+          "child": 2,
+          "incarnation": 2,
+          "facts": [
+            1,
+            2
+          ],
+          "post_facts": [
+            11,
+            10
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_a",
+          "symbol": 6,
+          "value": 80
+        },
+        {
+          "kind": "call",
+          "node": 25,
+          "function": 11,
+          "record": 2,
+          "index": 0,
+          "ref_symbol": 7,
+          "scope": 2,
+          "formal_symbols": [
+            8,
+            9
+          ],
+          "actual_values": [
+            14,
+            15
+          ],
+          "old": 90,
+          "new": 124,
+          "parent": 4,
+          "child": 5,
+          "incarnation": 5,
+          "facts": [
+            4,
+            5
+          ],
+          "post_facts": [
+            17,
+            16
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_b",
+          "symbol": 10,
+          "value": 90
+        },
+        {
+          "kind": "binding",
+          "name": "after_a",
+          "symbol": 11,
+          "value": 123
+        },
+        {
+          "kind": "binding",
+          "name": "marker_a",
+          "symbol": 12,
+          "value": 3
+        },
+        {
+          "kind": "binding",
+          "name": "after_b",
+          "symbol": 13,
+          "value": 124
+        },
+        {
+          "kind": "binding",
+          "name": "marker_b",
+          "symbol": 14,
+          "value": 4
+        },
+        {
+          "kind": "read",
+          "record": 1,
+          "index": 0,
+          "child": 2,
+          "incarnation": 2,
+          "parent_fact": 11,
+          "child_fact": 10,
+          "current_value": 11
+        },
+        {
+          "kind": "read",
+          "record": 1,
+          "index": 1,
+          "child": 3,
+          "incarnation": 3,
+          "parent_fact": 11,
+          "child_fact": 3,
+          "current_value": 2
+        },
+        {
+          "kind": "read",
+          "record": 2,
+          "index": 0,
+          "child": 5,
+          "incarnation": 5,
+          "parent_fact": 17,
+          "child_fact": 16,
+          "current_value": 17
+        },
+        {
+          "kind": "read",
+          "record": 2,
+          "index": 1,
+          "child": 6,
+          "incarnation": 6,
+          "parent_fact": 17,
+          "child_fact": 6,
+          "current_value": 5
+        }
+      ],
+      "native": [
+        {
+          "kind": "snapshot",
+          "step": 0,
+          "values": [
+            80,
+            3,
+            90,
+            4
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_a",
+          "value": 80
+        },
+        {
+          "kind": "snapshot",
+          "step": 1,
+          "values": [
+            123,
+            3,
+            90,
+            4
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_b",
+          "value": 90
+        },
+        {
+          "kind": "snapshot",
+          "step": 2,
+          "values": [
+            123,
+            3,
+            124,
+            4
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "after_a",
+          "value": 123
+        },
+        {
+          "kind": "binding",
+          "name": "marker_a",
+          "value": 3
+        },
+        {
+          "kind": "binding",
+          "name": "after_b",
+          "value": 124
+        },
+        {
+          "kind": "calls",
+          "value": 2
+        },
+        {
+          "kind": "binding",
+          "name": "marker_b",
+          "value": 4
+        }
+      ],
+      "compiler_exit": 0,
+      "pristine_exit": 0,
+      "observer_exit": 0
+    },
+    {
+      "name": "actual_locals",
+      "source": "struct Pair { left:u8, right:u8 }\nfn update_state(field:ref<write,u8>,next:u8)->u8{replace(field,next)}\nfn main()->unit {\n let a=Pair{left:u8(7),right:u8(1)};\n let b=Pair{left:u8(9),right:u8(2)};\n let next_a=u8(22);let next_b=u8(33);\n let old_a=loan_write(a@left){|w|update_state(w,next_a)};\n let old_b=loan_write(b@left){|w|update_state(w,next_b)};\n let after_a=a@left;let marker_a=a@right;\n let after_b=b@left;let marker_b=b@right;\n old_a;old_b;after_a;marker_a;after_b;marker_b;unit\n}\n",
+      "source_sha256": "bdda4153ae75bad61821ce10baf5d358bac1453b16f92bcbba5125adfe6eaf58",
+      "c_sha256": "dd7fa4ab987016b66f894ec90e041ffc5f595303031d23ff488c9e900d193c8d",
+      "checked": [
+        {
+          "kind": "status",
+          "parse": 0,
+          "register": 0,
+          "check": 0,
+          "owned": true
+        },
+        {
+          "kind": "record",
+          "symbol": 1,
+          "parent": 1,
+          "incarnation": 1,
+          "initial": [
+            7,
+            1
+          ],
+          "initial_values": [
+            1,
+            2
+          ]
+        },
+        {
+          "kind": "record",
+          "symbol": 2,
+          "parent": 4,
+          "incarnation": 4,
+          "initial": [
+            9,
+            2
+          ],
+          "initial_values": [
+            4,
+            5
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "next_a",
+          "symbol": 3,
+          "value": 22
+        },
+        {
+          "kind": "binding",
+          "name": "next_b",
+          "symbol": 4,
+          "value": 33
+        },
+        {
+          "kind": "call",
+          "node": 24,
+          "function": 11,
+          "record": 1,
+          "index": 0,
+          "ref_symbol": 5,
+          "scope": 1,
+          "formal_symbols": [
+            6,
+            7
+          ],
+          "actual_values": [
+            10,
+            11
+          ],
+          "old": 7,
+          "new": 22,
+          "parent": 1,
+          "child": 2,
+          "incarnation": 2,
+          "facts": [
+            1,
+            2
+          ],
+          "post_facts": [
+            13,
+            12
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_a",
+          "symbol": 8,
+          "value": 7
+        },
+        {
+          "kind": "call",
+          "node": 31,
+          "function": 11,
+          "record": 2,
+          "index": 0,
+          "ref_symbol": 9,
+          "scope": 2,
+          "formal_symbols": [
+            10,
+            11
+          ],
+          "actual_values": [
+            16,
+            17
+          ],
+          "old": 9,
+          "new": 33,
+          "parent": 4,
+          "child": 5,
+          "incarnation": 5,
+          "facts": [
+            4,
+            5
+          ],
+          "post_facts": [
+            19,
+            18
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_b",
+          "symbol": 12,
+          "value": 9
+        },
+        {
+          "kind": "binding",
+          "name": "after_a",
+          "symbol": 13,
+          "value": 22
+        },
+        {
+          "kind": "binding",
+          "name": "marker_a",
+          "symbol": 14,
+          "value": 1
+        },
+        {
+          "kind": "binding",
+          "name": "after_b",
+          "symbol": 15,
+          "value": 33
+        },
+        {
+          "kind": "binding",
+          "name": "marker_b",
+          "symbol": 16,
+          "value": 2
+        },
+        {
+          "kind": "read",
+          "record": 1,
+          "index": 0,
+          "child": 2,
+          "incarnation": 2,
+          "parent_fact": 13,
+          "child_fact": 12,
+          "current_value": 13
+        },
+        {
+          "kind": "read",
+          "record": 1,
+          "index": 1,
+          "child": 3,
+          "incarnation": 3,
+          "parent_fact": 13,
+          "child_fact": 3,
+          "current_value": 2
+        },
+        {
+          "kind": "read",
+          "record": 2,
+          "index": 0,
+          "child": 5,
+          "incarnation": 5,
+          "parent_fact": 19,
+          "child_fact": 18,
+          "current_value": 19
+        },
+        {
+          "kind": "read",
+          "record": 2,
+          "index": 1,
+          "child": 6,
+          "incarnation": 6,
+          "parent_fact": 19,
+          "child_fact": 6,
+          "current_value": 5
+        }
+      ],
+      "native": [
+        {
+          "kind": "snapshot",
+          "step": 0,
+          "values": [
+            7,
+            1,
+            9,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "next_a",
+          "value": 22
+        },
+        {
+          "kind": "binding",
+          "name": "next_b",
+          "value": 33
+        },
+        {
+          "kind": "binding",
+          "name": "old_a",
+          "value": 7
+        },
+        {
+          "kind": "snapshot",
+          "step": 1,
+          "values": [
+            22,
+            1,
+            9,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_b",
+          "value": 9
+        },
+        {
+          "kind": "snapshot",
+          "step": 2,
+          "values": [
+            22,
+            1,
+            33,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "after_a",
+          "value": 22
+        },
+        {
+          "kind": "binding",
+          "name": "marker_a",
+          "value": 1
+        },
+        {
+          "kind": "binding",
+          "name": "after_b",
+          "value": 33
+        },
+        {
+          "kind": "calls",
+          "value": 2
+        },
+        {
+          "kind": "binding",
+          "name": "marker_b",
+          "value": 2
+        }
+      ],
+      "compiler_exit": 0,
+      "pristine_exit": 0,
+      "observer_exit": 0
+    },
+    {
+      "name": "renamed",
+      "source": "struct Pair { left:u8, right:u8 }\nfn refresh(field:ref<write,u8>,next:u8)->u8{replace(field,next)}\nfn main()->unit {\n let a=Pair{left:u8(7),right:u8(1)};\n let b=Pair{left:u8(9),right:u8(2)};\n let old_a=loan_write(a@left){|w|refresh(w,u8(11))};\n let old_b=loan_write(b@left){|w|refresh(w,u8(13))};\n let after_a=a@left;let marker_a=a@right;\n let after_b=b@left;let marker_b=b@right;\n old_a;old_b;after_a;marker_a;after_b;marker_b;unit\n}\n",
+      "source_sha256": "38427b77bfa3b24234eede98a99d2e7b65356dc99472bb681034c7e130ebcc6c",
+      "c_sha256": "037ead7a3d6af93929bbdfaa6ff322d7d75905e2a307e4c62ea7499afc1bb921",
+      "checked": [
+        {
+          "kind": "status",
+          "parse": 0,
+          "register": 0,
+          "check": 0,
+          "owned": true
+        },
+        {
+          "kind": "record",
+          "symbol": 1,
+          "parent": 1,
+          "incarnation": 1,
+          "initial": [
+            7,
+            1
+          ],
+          "initial_values": [
+            1,
+            2
+          ]
+        },
+        {
+          "kind": "record",
+          "symbol": 2,
+          "parent": 4,
+          "incarnation": 4,
+          "initial": [
+            9,
+            2
+          ],
+          "initial_values": [
+            4,
+            5
+          ]
+        },
+        {
+          "kind": "call",
+          "node": 18,
+          "function": 11,
+          "record": 1,
+          "index": 0,
+          "ref_symbol": 3,
+          "scope": 1,
+          "formal_symbols": [
+            4,
+            5
+          ],
+          "actual_values": [
+            8,
+            9
+          ],
+          "old": 7,
+          "new": 11,
+          "parent": 1,
+          "child": 2,
+          "incarnation": 2,
+          "facts": [
+            1,
+            2
+          ],
+          "post_facts": [
+            11,
+            10
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_a",
+          "symbol": 6,
+          "value": 7
+        },
+        {
+          "kind": "call",
+          "node": 25,
+          "function": 11,
+          "record": 2,
+          "index": 0,
+          "ref_symbol": 7,
+          "scope": 2,
+          "formal_symbols": [
+            8,
+            9
+          ],
+          "actual_values": [
+            14,
+            15
+          ],
+          "old": 9,
+          "new": 13,
+          "parent": 4,
+          "child": 5,
+          "incarnation": 5,
+          "facts": [
+            4,
+            5
+          ],
+          "post_facts": [
+            17,
+            16
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_b",
+          "symbol": 10,
+          "value": 9
+        },
+        {
+          "kind": "binding",
+          "name": "after_a",
+          "symbol": 11,
+          "value": 11
+        },
+        {
+          "kind": "binding",
+          "name": "marker_a",
+          "symbol": 12,
+          "value": 1
+        },
+        {
+          "kind": "binding",
+          "name": "after_b",
+          "symbol": 13,
+          "value": 13
+        },
+        {
+          "kind": "binding",
+          "name": "marker_b",
+          "symbol": 14,
+          "value": 2
+        },
+        {
+          "kind": "read",
+          "record": 1,
+          "index": 0,
+          "child": 2,
+          "incarnation": 2,
+          "parent_fact": 11,
+          "child_fact": 10,
+          "current_value": 11
+        },
+        {
+          "kind": "read",
+          "record": 1,
+          "index": 1,
+          "child": 3,
+          "incarnation": 3,
+          "parent_fact": 11,
+          "child_fact": 3,
+          "current_value": 2
+        },
+        {
+          "kind": "read",
+          "record": 2,
+          "index": 0,
+          "child": 5,
+          "incarnation": 5,
+          "parent_fact": 17,
+          "child_fact": 16,
+          "current_value": 17
+        },
+        {
+          "kind": "read",
+          "record": 2,
+          "index": 1,
+          "child": 6,
+          "incarnation": 6,
+          "parent_fact": 17,
+          "child_fact": 6,
+          "current_value": 5
+        }
+      ],
+      "native": [
+        {
+          "kind": "snapshot",
+          "step": 0,
+          "values": [
+            7,
+            1,
+            9,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_a",
+          "value": 7
+        },
+        {
+          "kind": "snapshot",
+          "step": 1,
+          "values": [
+            11,
+            1,
+            9,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_b",
+          "value": 9
+        },
+        {
+          "kind": "snapshot",
+          "step": 2,
+          "values": [
+            11,
+            1,
+            13,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "after_a",
+          "value": 11
+        },
+        {
+          "kind": "binding",
+          "name": "marker_a",
+          "value": 1
+        },
+        {
+          "kind": "binding",
+          "name": "after_b",
+          "value": 13
+        },
+        {
+          "kind": "calls",
+          "value": 2
+        },
+        {
+          "kind": "binding",
+          "name": "marker_b",
+          "value": 2
+        }
+      ],
+      "compiler_exit": 0,
+      "pristine_exit": 0,
+      "observer_exit": 0
+    }
+  ],
+  "negative": [
+    {
+      "name": "escape",
+      "source": "struct Pair{left:u8,right:u8}\nfn main()->unit{let p=Pair{left:u8(7),right:u8(9)};let bad=loan_write(p@left){|w|w};unit}",
+      "exit": 3,
+      "diagnostic": "P8-EXIT-DEPENDENCY",
+      "stderr": "<fixture-dir>/escape.nl:2:60-2:84: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n",
+      "c_bytes": 0
+    },
+    {
+      "name": "range",
+      "source": "struct Pair { left:u8, right:u8 }\nfn update_state(field:ref<write,u8>,next:u8)->u8{replace(field,next)}\nfn main()->unit {\n let a=Pair{left:u8(7),right:u8(1)};\n let b=Pair{left:u8(9),right:u8(2)};\n let old_a=loan_write(a@left){|w|update_state(w,u8(256))};\n let old_b=loan_write(b@left){|w|update_state(w,u8(13))};\n let after_a=a@left;let marker_a=a@right;\n let after_b=b@left;let marker_b=b@right;\n old_a;old_b;after_a;marker_a;after_b;marker_b;unit\n}\n",
+      "exit": 3,
+      "diagnostic": "V1-U8-LITERAL-RANGE",
+      "stderr": "<fixture-dir>/range.nl:6:49-6:56: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255\n",
+      "c_bytes": 0
+    },
+    {
+      "name": "return_type",
+      "source": "struct Pair { left:u8, right:u8 }\nfn update_state(field:ref<write,u8>,next:u8)->u8{unit}\nfn main()->unit {\n let a=Pair{left:u8(7),right:u8(1)};\n let b=Pair{left:u8(9),right:u8(2)};\n let old_a=loan_write(a@left){|w|update_state(w,u8(11))};\n let old_b=loan_write(b@left){|w|update_state(w,u8(13))};\n let after_a=a@left;let marker_a=a@right;\n let after_b=b@left;let marker_b=b@right;\n old_a;old_b;after_a;marker_a;after_b;marker_b;unit\n}\n",
+      "exit": 3,
+      "diagnostic": "P8-BODY-RESULT",
+      "stderr": "<fixture-dir>/return_type.nl:6:34-6:56: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n",
+      "c_bytes": 0
+    },
+    {
+      "name": "read_actual",
+      "source": "struct Pair{left:u8,right:u8}\nfn update_state(field:ref<write,u8>,next:u8)->u8{replace(field,next)}\nfn main()->unit{let x=u8(7);loan_read(x){|r|update_state(r,u8(11))};unit}",
+      "exit": 3,
+      "diagnostic": "P3-TYPE-MISMATCH",
+      "stderr": "<fixture-dir>/read_actual.nl:3:58-3:59: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n",
+      "c_bytes": 0
+    },
+    {
+      "name": "no_authority",
+      "source": "struct Pair{left:u8,right:u8}\nfn update_state(field:ref<write,u8>,next:u8)->u8{replace(field,next)}\nfn main()->unit{let p=Pair{left:u8(7),right:u8(9)};update_state(p@left,u8(11));unit}",
+      "exit": 3,
+      "diagnostic": "P3-TYPE-MISMATCH",
+      "stderr": "<fixture-dir>/no_authority.nl:3:65-3:71: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n",
+      "c_bytes": 0
+    },
+    {
+      "name": "arbitrary_record",
+      "source": "struct State { left:u8, right:u8 }\nfn update_state(field:ref<write,u8>,next:u8)->u8{replace(field,next)}\nfn main()->unit {\n let a=State{left:u8(7),right:u8(1)};\n let b=State{left:u8(9),right:u8(2)};\n let old_a=loan_write(a@left){|w|update_state(w,u8(11))};\n let old_b=loan_write(b@left){|w|update_state(w,u8(13))};\n let after_a=a@left;let marker_a=a@right;\n let after_b=b@left;let marker_b=b@right;\n old_a;old_b;after_a;marker_a;after_b;marker_b;unit\n}\n",
+      "exit": 3,
+      "diagnostic": "FIELD-PROFILE",
+      "stderr": "<fixture-dir>/arbitrary_record.nl:6:23-6:29: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n",
+      "c_bytes": 0
+    },
+    {
+      "name": "richer_body",
+      "source": "struct Pair { left:u8, right:u8 }\nfn update_state(field:ref<write,u8>,next:u8)->u8{let old=replace(field,next);old}\nfn main()->unit {\n let a=Pair{left:u8(7),right:u8(1)};\n let b=Pair{left:u8(9),right:u8(2)};\n let old_a=loan_write(a@left){|w|update_state(w,u8(11))};\n let old_b=loan_write(b@left){|w|update_state(w,u8(13))};\n let after_a=a@left;let marker_a=a@right;\n let after_b=b@left;let marker_b=b@right;\n old_a;old_b;after_a;marker_a;after_b;marker_b;unit\n}\n",
+      "exit": 4,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: <fixture-dir>/richer_body.nl\n",
+      "c_bytes": 0
+    },
+    {
+      "name": "scalar_parameter",
+      "source": "fn identity(x:u8)->u8{x}fn main()->unit{identity(u8(7));unit}",
+      "exit": 4,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: <fixture-dir>/scalar_parameter.nl\n",
+      "c_bytes": 0
+    }
+  ],
+  "mutants": [
+    {
+      "name": "wrong_field",
+      "native_exit": 0,
+      "observer_comparison": "REJECT",
+      "native": [
+        {
+          "kind": "snapshot",
+          "step": 0,
+          "values": [
+            7,
+            1,
+            9,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_a",
+          "value": 1
+        },
+        {
+          "kind": "snapshot",
+          "step": 1,
+          "values": [
+            7,
+            11,
+            9,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_b",
+          "value": 9
+        },
+        {
+          "kind": "snapshot",
+          "step": 2,
+          "values": [
+            7,
+            11,
+            13,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "after_a",
+          "value": 7
+        },
+        {
+          "kind": "binding",
+          "name": "marker_a",
+          "value": 11
+        },
+        {
+          "kind": "binding",
+          "name": "after_b",
+          "value": 13
+        },
+        {
+          "kind": "calls",
+          "value": 2
+        },
+        {
+          "kind": "binding",
+          "name": "marker_b",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "missed_call",
+      "native_exit": 0,
+      "observer_comparison": "REJECT",
+      "native": [
+        {
+          "kind": "snapshot",
+          "step": 0,
+          "values": [
+            7,
+            1,
+            9,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_a",
+          "value": 0
+        },
+        {
+          "kind": "snapshot",
+          "step": 1,
+          "values": [
+            7,
+            1,
+            9,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_b",
+          "value": 9
+        },
+        {
+          "kind": "snapshot",
+          "step": 2,
+          "values": [
+            7,
+            1,
+            13,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "after_a",
+          "value": 7
+        },
+        {
+          "kind": "binding",
+          "name": "marker_a",
+          "value": 1
+        },
+        {
+          "kind": "binding",
+          "name": "after_b",
+          "value": 13
+        },
+        {
+          "kind": "calls",
+          "value": 1
+        },
+        {
+          "kind": "binding",
+          "name": "marker_b",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "name": "wrong_return",
+      "native_exit": 0,
+      "observer_comparison": "REJECT",
+      "native": [
+        {
+          "kind": "snapshot",
+          "step": 0,
+          "values": [
+            7,
+            1,
+            9,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_a",
+          "value": 11
+        },
+        {
+          "kind": "snapshot",
+          "step": 1,
+          "values": [
+            11,
+            1,
+            9,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "old_b",
+          "value": 13
+        },
+        {
+          "kind": "snapshot",
+          "step": 2,
+          "values": [
+            11,
+            1,
+            13,
+            2
+          ]
+        },
+        {
+          "kind": "binding",
+          "name": "after_a",
+          "value": 11
+        },
+        {
+          "kind": "binding",
+          "name": "marker_a",
+          "value": 1
+        },
+        {
+          "kind": "binding",
+          "name": "after_b",
+          "value": 13
+        },
+        {
+          "kind": "calls",
+          "value": 2
+        },
+        {
+          "kind": "binding",
+          "name": "marker_b",
+          "value": 2
+        }
+      ]
+    }
+  ]
+}

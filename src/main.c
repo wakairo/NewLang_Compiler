@@ -32,6 +32,9 @@ typedef struct {
     size_t function;
     const NLCheckedFragment *body;
     NLTypeId result;
+    /* Pair-only two-parameter replace body; zero means the G0/V0 profile. */
+    NLSymbolId parameters[2];
+    NLCheckedNodeId replacement;
 } V0Function;
 
 typedef struct {
@@ -283,6 +286,131 @@ static bool gate_replace(const NLCheckedFragment *f, NLCheckedNodeId id,
            gate_ref_type(f, ref->type, NL_ACCESS_WRITE, p) &&
            gate_identifier(f, ref, p) && v1_scalar(f, ref->next_argument, p);
 }
+
+/* One exact body-visible ref<write,u8>,u8 -> u8 call under a Pair field
+ * loan. Check EVERY retained actual body, including subsequent calls to the
+ * same function. Ended formal bindings retain historical package IDs; their
+ * final availability is not a point-in-time loan/liveness proof. No source
+ * names, literal values, host seeds or synthetic formal authority are used. */
+static bool gate_pair_call(const NLCheckedFragment *f,
+                           const NLCheckedNodeView *loan, V0Program *p)
+{
+    const NLCheckedNodeView *block = nl_checked_node_view(f, loan->initializer);
+    const NLCheckedNodeView *call =
+        block == NULL ? NULL : nl_checked_node_view(f, block->tail);
+    if (!loan->field.present || block == NULL || block->item_count != 0 ||
+        block->first_item != 0 || call == NULL ||
+        call->kind != NL_CHECKED_REGISTERED_CALL || !call->body_backed ||
+        call->owner_call.definition.definition_checked || call->terminates ||
+        call->argument_count != 2 || call->type != p->u8 ||
+        call->result_count != 1 || call->results[0].type != p->u8)
+        return false;
+    const NLCheckedNodeView *actual_ref =
+        nl_checked_node_view(f, call->first_argument);
+    const NLCheckedNodeView *actual_u8 =
+        actual_ref == NULL ? NULL
+                           : nl_checked_node_view(f, actual_ref->next_argument);
+    if (actual_ref == NULL || actual_u8 == NULL ||
+        actual_ref->symbol != loan->loan.ref_symbol ||
+        !gate_identifier(f, actual_ref, p) ||
+        !gate_ref_type(f, actual_ref->type, NL_ACCESS_WRITE, p) ||
+        actual_ref->parameter_type != actual_ref->type ||
+        actual_u8->parameter_type != p->u8 || actual_u8->next_argument != 0 ||
+        !v1_scalar(f, actual_ref->next_argument, p))
+        return false;
+    const NLCheckedFragment *body = nl_checked_call_body(f, block->tail);
+    if (body == NULL || nl_checked_context(body) != nl_checked_context(f) ||
+        nl_checked_node_count(body) != 4)
+        return false;
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(body, nl_checked_root(body));
+    const NLCheckedNodeView *replace =
+        root == NULL ? NULL : nl_checked_node_view(body, root->tail);
+    if (root == NULL || root->kind != NL_CHECKED_BLOCK || root->terminates ||
+        root->item_count != 0 || root->first_item != 0 || root->type != p->u8 ||
+        root->result_count != 1 || replace == NULL ||
+        replace->kind != NL_CHECKED_REPLACE || replace->argument_count != 2 ||
+        replace->type != p->u8 || replace->result_count != 1 ||
+        replace->results[0].type != p->u8 || replace->terminates ||
+        root->results[0].value != replace->results[0].value ||
+        call->results[0].value != replace->results[0].value ||
+        loan->results[0].value != replace->results[0].value)
+        return false;
+    const NLCheckedNodeView *formal_ref =
+        nl_checked_node_view(body, replace->first_argument);
+    const NLCheckedNodeView *formal_u8 =
+        formal_ref == NULL
+            ? NULL
+            : nl_checked_node_view(body, formal_ref->next_argument);
+    if (formal_ref == NULL || formal_u8 == NULL ||
+        formal_ref->kind != NL_CHECKED_IDENTIFIER ||
+        formal_u8->kind != NL_CHECKED_IDENTIFIER || formal_ref->symbol == 0 ||
+        formal_u8->symbol == 0 || formal_ref->symbol == formal_u8->symbol ||
+        formal_ref->value_use != NL_VALUE_COPIED ||
+        formal_u8->value_use != NL_VALUE_COPIED ||
+        formal_ref->type != actual_ref->type || formal_u8->type != p->u8 ||
+        formal_ref->result_count != 1 || formal_u8->result_count != 1 ||
+        formal_u8->next_argument != 0)
+        return false;
+    const NLSemanticContext *c = nl_checked_context(f);
+    NLSemanticBindingView ref_binding, u8_binding;
+    NLSemanticValueView ref_package, used_ref;
+    if (!nl_semantic_binding_view(c, formal_ref->symbol, &ref_binding) ||
+        !nl_semantic_binding_view(c, formal_u8->symbol, &u8_binding) ||
+        ref_binding.type != actual_ref->type || u8_binding.type != p->u8 ||
+        ref_binding.value != actual_ref->results[0].value ||
+        u8_binding.value != actual_u8->results[0].value ||
+        !nl_semantic_value_view(c, ref_binding.value, &ref_package) ||
+        !nl_semantic_value_view(c, formal_ref->results[0].value, &used_ref) ||
+        ref_package.reference_count != 0 || used_ref.reference_count != 0)
+        return false;
+    const NLReferenceFacts a = ref_package.reference, b = used_ref.reference;
+    if (a.provenance != NL_PROVENANCE_VALID || !a.readable || !a.writable ||
+        a.occurrence_dependency != 0 || a.place != loan->loan.place ||
+        a.incarnation != loan->loan.incarnation ||
+        a.scope != loan->loan.scope || b.place != a.place ||
+        b.incarnation != a.incarnation || b.scope != a.scope ||
+        b.provenance != a.provenance || b.readable != a.readable ||
+        b.writable != a.writable ||
+        b.occurrence_dependency != a.occurrence_dependency)
+        return false;
+    const NLCheckedField *before = &loan->field, *change = &replace->field;
+    if (!bounded_field(f, change, p) || change->access != NL_ACCESS_WRITE ||
+        change->base != before->base || change->index != before->index ||
+        change->parent != before->parent || change->child != before->child ||
+        change->parent_incarnation != before->parent_incarnation ||
+        change->child_incarnation != before->child_incarnation ||
+        change->parent_fact != before->parent_fact ||
+        change->child_fact != before->child_fact ||
+        change->parent_post_fact == 0 || change->child_post_fact == 0 ||
+        change->parent_post_fact == change->parent_fact ||
+        change->child_post_fact == change->child_fact ||
+        change->old_value != before->old_value ||
+        change->old_value != replace->results[0].value ||
+        change->new_value != formal_u8->results[0].value)
+        return false;
+    V0Function *prior = v0_find_function(p, call->function);
+    if (prior != NULL) {
+        /* Same durable checked definition, but independently proved actual
+         * effects above. Never reuse the first actual's package/place IDs. */
+        const NLCheckedNodeView *original =
+            nl_checked_node_view(prior->body, prior->replacement);
+        return prior->result == p->u8 && prior->replacement != 0 &&
+               original != NULL &&
+               nl_checked_source(prior->body) == nl_checked_source(body) &&
+               original->span.start_byte == replace->span.start_byte &&
+               original->span.end_byte == replace->span.end_byte;
+    }
+    if (p->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
+        return false;
+    p->functions[p->count++] =
+        (V0Function){.function = call->function,
+                     .body = body,
+                     .result = p->u8,
+                     .parameters = {formal_ref->symbol, formal_u8->symbol},
+                     .replacement = root->tail};
+    return true;
+}
 static bool gate_loan(const NLCheckedFragment *f, const NLCheckedNodeView *v,
                       V0Program *p)
 {
@@ -319,6 +447,8 @@ static bool gate_loan(const NLCheckedFragment *f, const NLCheckedNodeView *v,
         if (v->results[0].value != body->results[0].value)
             return false;
         if (write) {
+            if (tail != NULL && tail->kind == NL_CHECKED_REGISTERED_CALL)
+                return gate_pair_call(f, v, p);
             if (tail == NULL ||
                 !gate_replace(f, body->tail, p, v->loan.ref_symbol))
                 return false;
@@ -392,8 +522,8 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
     if (program->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
         return false;
 
-    program->functions[program->count++] =
-        (V0Function){call->function, body, call->type};
+    program->functions[program->count++] = (V0Function){
+        .function = call->function, .body = body, .result = call->type};
     return v0_validate_node(body, nl_checked_root(body), program);
 }
 
@@ -607,11 +737,27 @@ static bool gate_emit_loan(FILE *stream, const NLCheckedFragment *f,
     }
     if (v->result_count == 1) {
         if (write) {
-            if (!gate_emit_replace(stream, f, body->tail, depth + 1, false) ||
-                !v0_indent(stream, depth + 1) ||
-                fprintf(stream, "nl_loan_result_%zu = nl_replace_old_%zu;\n",
-                        v->loan.scope, body->tail) < 0)
-                return false;
+            const NLCheckedNodeView *tail = nl_checked_node_view(f, body->tail);
+            if (tail->kind == NL_CHECKED_REGISTERED_CALL) {
+                const NLCheckedNodeView *ref =
+                    nl_checked_node_view(f, tail->first_argument);
+                if (!v0_indent(stream, depth + 1) ||
+                    fprintf(stream, "nl_loan_result_%zu = nl_fn_%zu(",
+                            v->loan.scope, tail->function) < 0 ||
+                    !gate_emit_ptr(stream, f, ref) || fputs(", ", stream) < 0 ||
+                    !v1_emit_scalar(
+                        stream, nl_checked_node_view(f, ref->next_argument)) ||
+                    fputs(");\n", stream) < 0)
+                    return false;
+            } else {
+                if (!gate_emit_replace(stream, f, body->tail, depth + 1,
+                                       false) ||
+                    !v0_indent(stream, depth + 1) ||
+                    fprintf(stream,
+                            "nl_loan_result_%zu = nl_replace_old_%zu;\n",
+                            v->loan.scope, body->tail) < 0)
+                    return false;
+            }
         } else {
             if (!v0_indent(stream, depth + 1))
                 return false;
@@ -773,12 +919,19 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
                 program->aggregate) < 0)
         return false;
 
-    for (size_t i = 0; i < program->count; ++i)
-        if (fprintf(stream, "static %s nl_fn_%zu(void);\n",
-                    program->functions[i].result == program->u8 ? "uint8_t"
-                                                                : "void",
-                    program->functions[i].function) < 0)
+    for (size_t i = 0; i < program->count; ++i) {
+        if (program->functions[i].replacement != 0) {
+            if (fprintf(stream,
+                        "static uint8_t nl_fn_%zu(uint8_t *, uint8_t);\n",
+                        program->functions[i].function) < 0)
+                return false;
+        } else if (fprintf(stream, "static %s nl_fn_%zu(void);\n",
+                           program->functions[i].result == program->u8
+                               ? "uint8_t"
+                               : "void",
+                           program->functions[i].function) < 0)
             return false;
+    }
     if (fputc('\n', stream) == EOF)
         return false;
 
@@ -786,6 +939,19 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
         const V0Function function = program->functions[i];
         const NLCheckedNodeView *root =
             nl_checked_node_view(function.body, nl_checked_root(function.body));
+        if (function.replacement != 0) {
+            if (fprintf(stream,
+                        "static uint8_t nl_fn_%zu(uint8_t *nl_local_%zu, "
+                        "uint8_t nl_local_%zu)\n{\n",
+                        function.function, function.parameters[0],
+                        function.parameters[1]) < 0 ||
+                !gate_emit_replace(stream, function.body, function.replacement,
+                                   1, false) ||
+                fprintf(stream, "    return nl_replace_old_%zu;\n}\n\n",
+                        function.replacement) < 0)
+                return false;
+            continue;
+        }
         if (root == NULL ||
             fprintf(stream, "static %s nl_fn_%zu(void)\n",
                     function.result == program->u8 ? "uint8_t" : "void",

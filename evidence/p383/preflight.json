@@ -1,0 +1,14 @@
+[
+  {
+    "compiler": "main",
+    "status": 4,
+    "C_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p382/pair-g1.nl\n"
+  },
+  {
+    "compiler": "pr381",
+    "status": 4,
+    "C_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p382/pair-g1.nl\n"
+  }
+]
