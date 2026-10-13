@@ -38,11 +38,11 @@ static int parse_input(const char *text, bool function_unit, Input *out)
         release_input(out);
         return 0;
     }
+    NLSyntaxTree **destination = &out->tree;
     if (function_unit) {
-        status = nl_parser_parse_function_unit(parser, &out->tree, &diagnostic);
+        status = nl_parser_parse_function_unit(parser, destination, &diagnostic);
     } else {
-        status = nl_parser_parse_source_fragment(parser, &out->tree,
-                                                 &diagnostic);
+        status = nl_parser_parse_source_fragment(parser, destination, &diagnostic);
     }
     nl_parser_destroy(parser);
     if (status != NL_PARSE_OK) {
@@ -72,8 +72,7 @@ static int observe_owned(const NLCheckedFragment *checked)
             const NLSemanticContext *world = nl_checked_context(checked);
             const NLSemanticContext *left = nl_checked_context(arm0);
             const NLSemanticContext *right = nl_checked_context(arm1);
-            separate_worlds =
-                left != right && left != world && right != world;
+            separate_worlds = left != right && left != world && right != world;
         }
         printf("R402 owned arms=%zu counts=%zu,%zu worlds=%d\n",
                view->normal_arms, n0, n1, separate_worlds);
@@ -81,8 +80,9 @@ static int observe_owned(const NLCheckedFragment *checked)
             ++verified;
         /* IDs in different arm contexts are intentionally never compared. */
     }
-    printf("R402 owned nodes=%zu matches=%zu verified=%zu\n", count,
-           matches, verified);
+    printf("R402 owned nodes=%zu\n", count);
+    printf("R402 owned matches=%zu\n", matches);
+    printf("R402 owned verified=%zu\n", verified);
     return verified == 1;
 }
 
