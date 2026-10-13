@@ -20,6 +20,32 @@ bool nl_sum_authority(const NLSemanticContext *c, NLTypeId type)
     return false;
 }
 
+bool nl_sum_unknown_node_option(const NLSemanticContext *c,
+                                NLSemanticValueView v)
+{
+    if (v.type == 0 || v.type > c->type_count || v.variant != 0 ||
+        v.sum_payload != 0 || v.dependencies != NL_DEPENDENCY_FREE ||
+        v.value_dependency_count != 0 || v.reference_count != 0 ||
+        v.reference.place != 0 || v.reference.incarnation != 0 ||
+        v.reference.scope != 0 ||
+        v.reference.provenance != NL_PROVENANCE_UNKNOWN ||
+        v.reference.readable || v.reference.writable ||
+        v.reference.occurrence_dependency != 0 || v.field_count != 0 ||
+        v.scalar_known || v.scalar_value != 0 || v.domain != 0 ||
+        v.slot_place != 0 || v.allocation_region != 0 ||
+        v.occupancy.region != 0 || v.occupancy.start != 0 ||
+        v.occupancy.length != 0)
+        return false;
+    const NLTypeEntry *t = &c->types[v.type - 1];
+    const NLTypeId pointer = t->option_target;
+    return t->view.kind == NL_TYPE_SUM && t->view.is_copy &&
+           t->view.is_discardable && pointer != 0 &&
+           c->types[pointer - 1].view.kind == NL_TYPE_PTR &&
+           nl_recursive_local_type(c, c->types[pointer - 1].view.target) &&
+           c->types[c->types[pointer - 1].view.target - 1].view.field_count ==
+               2;
+}
+
 NLCheckStatus nl_sum_attach(NLSemanticContext *c, NLPlaceId root)
 {
     const NLSemanticPlaceView r = c->places[root - 1];
@@ -27,7 +53,9 @@ NLCheckStatus nl_sum_attach(NLSemanticContext *c, NLPlaceId root)
         return NL_CHECK_OK;
     const NLSemanticValueView v = c->values[r.current_value - 1];
     if (v.variant == 0)
-        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        return nl_sum_unknown_node_option(c, v)
+                   ? NL_CHECK_OK /* no unconditionally present occurrence */
+                   : NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     if (v.sum_payload == 0)
         return NL_CHECK_OK;
     if (c->occurrence_count >= NL_SEMANTIC_MAX_ENTRIES)
@@ -105,6 +133,8 @@ NLCheckStatus nl_sum_validate(const NLSemanticContext *c)
         const NLSemanticValueView v = c->values[i];
         const NLTypeEntry *t = &c->types[v.type - 1];
         if (v.carrier == NL_CARRIER_ENDED || t->view.kind != NL_TYPE_SUM)
+            continue;
+        if (nl_sum_unknown_node_option(c, v))
             continue;
         if (v.variant == 0 || v.variant > t->view.variant_count)
             return NL_CHECK_INTERNAL_ERROR;
