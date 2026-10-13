@@ -1,0 +1,49 @@
+name: R386 independent Pair native
+on:
+  push:
+    branches: [r386-g1-blind-ci]
+permissions:
+  contents: read
+jobs:
+  r386:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Verify exact ancestor and R-only changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor 8e80af60e8c9c8b29acb0ea6a7aad4ab5d1c8bd8 HEAD
+          git diff --name-only 8e80af60e8c9c8b29acb0ea6a7aad4ab5d1c8bd8 HEAD | tee /tmp/r386-diff
+          if grep -Ev '^(tests/red_team/r386/|\.github/workflows/r386-native\.yml$)' /tmp/r386-diff; then
+            echo 'ERROR: non R-owned production changes'; exit 1
+          fi
+          git rev-parse HEAD
+          git rev-parse 8e80af60e8c9c8b29acb0ea6a7aad4ab5d1c8bd8
+      - name: Ubuntu prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 clang make cmake python3 dpkg libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Locked bootstrap LLVM 23.1.2
+        run: python3 scripts/bootstrap.py
+      - name: Build candidate without modification
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .deps/activate.sh
+          CC=gcc-13 cmake -S . -B build-r386 -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-r386 --parallel 2
+          ./build-r386/newlangc --version
+      - name: R-owned independent source probe / capture
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tests/red_team/r386/collect.py build-r386/newlangc
+      - name: Upload R independently generated evidence even on error
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r386-evidence
+          path: tests/red_team/r386/evidence/
+          if-no-files-found: warn
