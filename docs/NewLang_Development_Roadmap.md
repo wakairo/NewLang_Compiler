@@ -2,7 +2,7 @@
 
 > **Status: PROPOSED / NON-NORMATIVE — Coordination Issue #375 / review待ち**
 >
-> 対象スナップショット：2026-10-12、Compiler/main `348ca7d48f6dd5d658706f4547ab7ef9a63af33d`、
+> 最新裁定スナップショット：2026-10-13、Compiler/main `adc63b64b656b3d6e0501f29eaeee5181927dc14`、
 > FormalProof/main `a8de4ebb4099f4742fc161d26867740dcac48414`。
 > 本書は順序と判定基準の**提案**であり、Issue/PRの起票だけで実装やTrackを開始しない。
 > 言語の正本は [CURRENT_SPEC](reference/CURRENT_SPEC.md) → Draft 17.30、
@@ -11,6 +11,21 @@
 > [C-Replacement Coverage Map](NewLang_C_Replacement_Coverage_Map.md)。
 > 運用は [Development Process](NewLang_Project_Development_Process.md) に従う。
 > この文書は正本を置換せず、将来の更新時は「観測した事実」と「新しい投資案」を分ける。
+
+## 0. 2026-10-13 現行スナップショット — 旧実験とmerged能力を分離
+
+この節と§7が**現行の事実・投資裁定**である。2026-10-12を起点とした本文の実験履歴は、事後に一般能力へ昇格させず歴史的観測として残す。現在のCompiler/mainは `adc63b64b656b3d6e0501f29eaeee5181927dc14`、[マージ後CI](https://github.com/wakairo/NewLang_Compiler/actions/runs/38393450406) 5構成成功、`CURRENT_SPEC` は引き続き **Draft17.30**、FormalProof/mainは `a8de4ebb4099f4742fc161d26867740dcac48414`。
+
+| 能力／問い | 現時点の証拠と境界 |
+| --- | --- |
+| **通常のCopy `u8→u8`関数呼び出し** | [PR404 MERGED](https://github.com/wakairo/NewLang_Compiler/pull/404)。SOURCE→CHECKED-OWNED→C17/nativeの有限経路。P399 owned／[R406 fresh BLIND](https://github.com/wakairo/NewLang_Compiler/issues/406) native **PASS BOUNDED**。任意のsignature、nonCopy/heap ownerや一般ABIは未対応 |
+| **2 lexical original Node の2 normal-arm Option-link currentness join** | [PR410 MERGED](https://github.com/wakairo/NewLang_Compiler/pull/410)（元PR401の有限実装を忠実統合）。SOURCE/CHECK/公開checked-owned **PASS BOUNDED**。[R405 calibrated](https://github.com/wakairo/NewLang_Compiler/issues/405) はowned確認。field・親rootのValueFactとSome occurrenceを正しく再発行。新しいchanged-matchの**C17/nativeは未対応** |
+| **Node nativeの最初の証拠不足** | [P412](https://github.com/wakairo/NewLang_Compiler/issues/412) **NO-CODE FEASIBILITY HOLD**。公開`normal_frame_unchanged`は変更を伴う2分岐に対して偽で、C carrierと共通entry・各arm・親postを結び付ける公開証明がない。証拠専用[PR413](https://github.com/wakairo/NewLang_Compiler/pull/413)は**DRAFT/未マージ**、CI成功はunsupportedの再現のみ |
+| **Node join証明の設計案** | [M414](https://github.com/wakairo/NewLang_Compiler/issues/414) は **MINIMAL CERTIFICATE FEASIBLE (CONDITIONAL)**。既存public traceのみでは十分と示せず、source-issued entry/arm/post certificate＋再検証validatorは条件付き候補。**中～高の監査・保守費用、未実装、native未測定、追加P投資HOLD** |
+| **利用者価値** | [V394](https://github.com/wakairo/NewLang_Compiler/issues/394)／[V411](https://github.com/wakairo/NewLang_Compiler/issues/411)は**NO INVESTMENT-READY / Product-P HOLD**。実`uthash/utlist`のunlinkと元owner解放は別責務だが、同一トポロジーC/Zig/Rustに対する通常callerを含む純便益と、狭いsource→native経路を未実証 |
+| **実験証拠の扱い** | G0/G1 [PR381](https://github.com/wakairo/NewLang_Compiler/pull/381)／[PR384](https://github.com/wakairo/NewLang_Compiler/pull/384)、Python/O6、R-only [PR403](https://github.com/wakairo/NewLang_Compiler/pull/403)／[PR407](https://github.com/wakairo/NewLang_Compiler/pull/407)／[PR408](https://github.com/wakairo/NewLang_Compiler/pull/408)は固有の実験・独立検証の証拠であり、**mainで一般対応しているという主張ではない** |
+
+**今回の実施／非実施判断：** [Coordination M414最終裁定](https://github.com/wakairo/NewLang_Compiler/issues/414#issuecomment-6146540308)は条件付き設計研究をACCEPT、ただしNode専用certificate実装・emitter拡張を**現時点では認可しない**。追加の中～高コスト証明機構は利用者操作の実証と最小の再利用可能経路が提示された時点で再評価する。C後継の計画自体は継続し、製品HOLDをNewLang全体のFAILと混同しない。
 
 ## 1. まず何を継続するのか
 
@@ -48,11 +63,11 @@ M371/M372のsafe operation contractとM374/F45のallocator/typed-claim橋を
 | --- | --- | --- |
 | **M / 規範** | Draft17.30のroot/BackingRegion、nonCopy、Domain、persistent ptr、scoped ref、Change/Reset、known-call body-sensitive、fallible分岐。実際に選択されたsourceは**bounded**。[CURRENT_SPEC](reference/CURRENT_SPEC.md) | `unchecked`の概念的意味はあるが、汎用source構文・protected representation・dynamic owner claim/epoch transferを一般に実装したわけではない |
 | **P / parser・checker** | C17製のproduction compiler、P0–P14の段階的source/semantic基盤（登録関数、条件分岐、loop、ref、sum、aggregate等）。[Compiler README](../README.md) | 多くの受理済み構文は現行native emitterの範囲外。source admissibility、semantic precision、codegen failureを別診断にすべき |
-| **P / 実行** | mainではscalar/Pair/fixed Option-link等の限定source→CHECK→C17/nativeとoriginal五H **pre-detach** 六初期link・0–5 failure native。未マージ[DRAFT G0 PR381](https://github.com/wakairo/NewLang_Compiler/pull/381)のu8返却と、stacked [DRAFT G1 PR384](https://github.com/wakairo/NewLang_Compiler/pull/384)の二Pair named scoped write-ref/Copy-oldは別のbounded native技術実証。[R #386](https://github.com/wakairo/NewLang_Compiler/issues/386#issuecomment-6136526649)独立PASS（限定）。 | G0/G1は**main未マージ**。一般Option/Node named-call/backend、任意record、opaque library、cJSON B detach+adopt/native、STB NewLang growは未実証。LLVM主backend方針≠Checked-C完成 |
+| **P / 実行** | mainに有限scalar/Pair/Option-linkおよび元の5-root pre-detach・0〜5 failure worldのnative。**PR404 MERGED**により普通の1件`u8→u8` Copy関数引数／結果のSOURCE→owned→C17/nativeが追加。**PR410 MERGED**で2 lexical original Node・2 normal arms・最大1 field ChangeのSOURCE/CHECK/owned合流を追加（new join nativeは**CLI4/C0 unsupported**）。G0/G1 DRAFT PR381/384は別証拠 | Node joinの公開entry/arm/post validatorとchanged-match native、一般関数ABI、opaque nonCopy/heap owner library user、cJSON detach/adoption、STB NewLang growは未実証 |
 | **F / 形式的安全性** | F0–F2および多数のbounded adjunctによるoccurrence・責任・scoped access・loopの証明。[FormalProof README](https://github.com/wakairo/NewLang_FormalProof/blob/main/README.md) | compiler-to-formal全体のsoundness theoremや実source/runtime等価性は未完成。F45はfinite epoch/physicalモデルを構築したが**allocator rich refinement 6条件HOLD**。[F45](https://github.com/wakairo/NewLang_FormalProof/issues/45#issuecomment-6091895139) |
-| **O / 検証アルゴリズム** | M7.5歴史的Pythonプロトタイプの再評価、O1–O5の独立synthetic Change chronology/abstract-state比較。[O0](https://github.com/wakairo/NewLang_Compiler/issues/339) / [O5](https://github.com/wakairo/NewLang_Compiler/issues/354) | source-owned authorityへ変換する証明付き橋ではない。PR #344/#357等は**DRAFT・非normative**。独立Oracle repository化は保留 |
+| **O / 検証アルゴリズム** | O0–O5のsynthetic研究と[O6 #398](https://github.com/wakairo/NewLang_Compiler/issues/398)の2分岐Change/Reset相関研究は有限joinの設計上の反例を提供。同じCopy locatorでもfield F／Some occurrence P／親root RFは更新される | Python Class O/Hはcompiler-issued certificate、公開validator、native成功や形式証明ではない。O6知見はP397/PR410のsource-owned検査へ限定的に反映された |
 | **R/Q / 信頼境界** | 独立Rの実source/validator/negative実測、Qの局所的なartifact-integrityレビュー。[R #359](https://github.com/wakairo/NewLang_Compiler/issues/359) / [Q #323](https://github.com/wakairo/NewLang_Compiler/issues/323) | finite/較正済み正例を全言語に一般化できない。新たなcritical compiler境界は適切なscopeのR評価を要する |
-| **V / 製品と差別化** | 実cJSON/STB workloadに加え、実G1のsource/nativeを対象にC・Zig・Rustの同じnamed scalar field helperと**作者・caller別**L/R/P/V/Cを比較。[V #387](https://github.com/wakairo/NewLang_Compiler/issues/387#issuecomment-6136712325)は**TECHNICAL ONLY / VALUE NOT DEMONSTRATED**。 | G1は静的安全性負例の限定実証であり、減った総人間負担・通常safe library APIの優位は未実証。opaque/nonCopy/heap/domain、cJSON original B adoptionとSTB NewLang source/nativeは未達 |
+| **V / 製品と差別化** | V387（G1）、V391（5-root）、[V394](https://github.com/wakairo/NewLang_Compiler/issues/394)（候補比較）、[V411](https://github.com/wakairo/NewLang_Compiler/issues/411)（実uthash/utlist）でC・Zig・同じnode配置Rustの作者／caller負担を比較。utlistのunlinkと元owner解放の別責務は実ソースで確認した | **NO INVESTMENT-READY / Product-P HOLD**。独立の実利用者・因果的な呼び出し結果、低コストのsource-owned/native経路、総L/R/P/V/C負担の減少はいまだ立証されていない |
 
 **注意：** Compiler/mainにない実験機構のPRは見つけても自動的に「現在の実装」とは数えない。
 [H1追加機構投資の裁定](https://github.com/wakairo/NewLang_Compiler/issues/373#issuecomment-6125144038)、
@@ -93,22 +108,7 @@ GCC/Release/Clang/ASan/UBSan **5/5 PASS（初回）**。
 普通の独立safe caller・heap/nonCopy/Option/loopへの一般化やC/Zig/Rust比較上の製品優位は**未実証**。
 PR395はDRAFT/DO NOT MERGE、元G0/G1も未マージ。
 
-**新しい実測地図の更新：** [DRAFT PR396](https://github.com/wakairo/NewLang_Compiler/pull/396)
-（Compiler/main固定`348ca7d48f6dd5d658706f4547ab7ef9a63af33d`、テストのみ）では、
-元の2つのlexical Nodeと`head.next=Some(tail_ptr)`を保ち、
-`Some(q)`の枝で元の別Node `tail@next`をscoped writeしようとした。
-[Clang測定ログ](https://github.com/wakairo/NewLang_Compiler/actions/runs/38366237758)では
-baseline CLI0/C2209/native成功、追加sourceは**CLI3/C0、
-`P9-CONTINUATION-PRECISION`**で停止。分岐後readは未到達。
-これはsyntax-invalidやptr権限の拒否ではなく、`match`の複数normal armsで異なる
-current/value stateを合流する現productionの**解析精度不足**とコード上整合する
-（`src/semantic_check.c`の`node_unit_arm_frame`／P9 fallback）。
-**地図の更新：** 真の条件付きintrusive操作の次の費用は、単純なNode field emitterだけでなく
-**branch state join/proof fidelity**にある可能性が高い。一般join機構が必要か、
-単一normal continuationなど狭い既存経路で十分かは**まだ未測定**。
-この実験のCIがGreenでも新操作のPASSではなく、外部LLVM HTTP404は別の環境障害。
-規範・compiler本体・元H1の契約は不変。新joinの実装認可は別判断。
-
+**履歴（2026-10-13に再裁定）：** 旧[PR396](https://github.com/wakairo/NewLang_Compiler/pull/396)で初めて観測した`P9-CONTINUATION-PRECISION`は、その後のP397/PR410で**限定SOURCE/CHECK/ownedについて解消**した。新しい2-normal changing matchはnative対応済みとはならず、P412で公開common-entry→arm→parent-post proof欠落（`normal_frame_unchanged=false`）が次の障害と確定。M414の設計案は条件付き実現可能だが追加実装はHOLD。**古いprecision失敗を現在mainの失敗として再掲しない。**
 
 ### 4.1 証拠がある分岐と、次の実用操作への障害
 
@@ -116,7 +116,7 @@ current/value stateを合流する現productionの**解析精度不足**とコ�
 | --- | --- | --- |
 | **S0：既存の局所状態／fixed field** | mainにbounded scalar/Pairと`loan_write`＋`replace`の実source→C17/native。新規一般callやheap traversalは別 | **既存能力**。新しい成功数に加算しない。具体的な利用者の実作業に使って初めて再評価 |
 | **G0/G1：named fixed-field operation** | DRAFT [PR381](https://github.com/wakairo/NewLang_Compiler/pull/381) `()->u8`、stacked DRAFT [PR384](https://github.com/wakairo/NewLang_Compiler/pull/384) Pair `ref<write,u8>`＋Copy-old結果は実C17/native。[R386](https://github.com/wakairo/NewLang_Compiler/issues/386#issuecomment-6136526649)は限定独立PASS | [V387](https://github.com/wakairo/NewLang_Compiler/issues/387#issuecomment-6136712325) **TECHNICAL ONLY**：普通callerの総負担削減は未証明。両PRは未マージ／**DO NOT MERGE**。同じhelperを増やすだけでは製品評価を再開しない |
-| **F：persistent Option link＋元Domain再loan** | mainで2 lexical Nodeの直接link変更とpost-clear旧Copy locator→まだliveな元rootへのread-reloanは有限native。[P390](https://github.com/wakairo/NewLang_Compiler/issues/390#issuecomment-6137712444)。named `Option<ptr<Node>>` helperは[P388](https://github.com/wakairo/NewLang_Compiler/issues/388#issuecomment-6136990174) `P8-SIGNATURE-PRECISION` | [V389](https://github.com/wakairo/NewLang_Compiler/issues/389#issuecomment-6137182596) **TECHNICAL BASIS ONLY**。sourceでのpayload取得と独立caller未達。**G2 named／toy二個体の追加実装HOLD** |
+| **F：persistent Option link＋元Domain再loan** | 既存の有限2 lexical original Node native link操作に加え、[PR410 MERGED](https://github.com/wakairo/NewLang_Compiler/pull/410)で2 normal-arm changed Option-linkのchecked-owned合流を獲得。旧named Option helperは別profileで未達 | [P412](https://github.com/wakairo/NewLang_Compiler/issues/412)は新しい合流のemitter入口で公開証拠HOLD。[M414](https://github.com/wakairo/NewLang_Compiler/issues/414)の最小certificate案は**条件付き・中～高費用・現時点でP投資HOLD**。R405 checked-owned PASS≠native PASS／Product GO |
 | **real five-root heap graph** | mainで5独立fallible original heap nodes・6本のcross links・0〜5失敗/解放世界のSOURCE/CHECK→C17/native。[V391](https://github.com/wakairo/NewLang_Compiler/issues/391#issuecomment-6137908136)は差別化の**土台**と判断 | [P392](https://github.com/wakairo/NewLang_Compiler/issues/392#issuecomment-6138094156)実2-hop consumerの`B.payload`読み取りは`HEAP-LINK-FIELD-PROFILE`（SOURCE未対応、semantic不正ではない）。[M393](https://github.com/wakairo/NewLang_Compiler/issues/393#issuecomment-6138319527)限定候補は可能でも**VALUE GATE NOT MET／source選択・checker/validator/emitter投資HOLD** |
 | **N：bounded数値処理** | u8 literalはあるが、普通の算術式・比較・overflow等の完全source/check/native未実証。再帰は別precision制約 | Fibonacciやsumは機能デモだけではC後継の責務削減を示さない。現実の数値処理のconsumerが先 |
 | **B：byte処理／decoder** | byte/span/index/guard/loop/結果の通常source/backendに複合gap。[P379](https://github.com/wakairo/NewLang_Compiler/issues/379) | 実際の長さ付きdecode、エラー返却をconsumerが使い、C/Zig/Rustの安全性／費用差が示せる場合のみ。複数の大きな機構が同時に必要ならHOLD |
@@ -182,11 +182,13 @@ cap4,len4→8,len4、header-adjacent original backing、same-numeric epochとfor
 
 H1/STBの停止は**NewLang全体の開発中止でも既存core semanticsの不健全性でもない**。
 
-## 7. Coordinationの現在の裁定とレビュー対象（2026-10-13）
+## 7. Coordinationの現在の裁定とレビュー対象（2026-10-13 最新）
 
-- **Authority:** Compiler/main `348ca7d48f6dd5d658706f4547ab7ef9a63af33d`、canonical Draft17.30、FormalProof/main `a8de4ebb4099f4742fc161d26867740dcac48414`。
-- **技術KEEP:** mainの五実heap roots/六初期link/0–5 native。DRAFT G0/G1の限定C17、[R386](https://github.com/wakairo/NewLang_Compiler/issues/386#issuecomment-6136526649)独立限定PASS。
-- **製品HOLD:** [V387](https://github.com/wakairo/NewLang_Compiler/issues/387#issuecomment-6136712325)のG1 `TECHNICAL ONLY`、[V391](https://github.com/wakairo/NewLang_Compiler/issues/391#issuecomment-6137908136)の5-root `BOUNDED BASIS`、[P392](https://github.com/wakairo/NewLang_Compiler/issues/392#issuecomment-6138094156)のSOURCE-PROFILE障害、[M393](https://github.com/wakairo/NewLang_Compiler/issues/393#issuecomment-6138319527)の`NARROW CANDIDATE / CONDITIONAL`を統合。[Coordination裁定](https://github.com/wakairo/NewLang_Compiler/issues/393#issuecomment-6138373666)：**`VALUE GATE NOT MET — HOLD SOURCE SELECTION AND PRODUCTION INVESTMENT`**。2-hop sourceの`peek_B_payload;`は`u8`を単に捨て、利用結果を変えない。225行の手動cleanup＋25行のpeekは製品上の負担減を未証明。read-only proof certificateや限定nativeの追加は別途必要。
-- **再開条件:** 元5heap/6link/0–5責任を変えずに、値が普通の利用者の**実際の戻り値／状態変化／判断**に因果的に作用するsource operationを定め、C/Zig/同トポロジーRust比較で**どの人間の義務が減るか**とbounded public owned artifact→backend可能性を示す。そうでなければ別の本物のC-class workloadへ迂回。追加のgraph専用実験や自動Track連鎖は行わない。
-- **現在のPR:** [PR376](https://github.com/wakairo/NewLang_Compiler/pull/376)は**DRAFT docs-only、ユーザーレビュー待ち**。[PR381](https://github.com/wakairo/NewLang_Compiler/pull/381)・[PR384](https://github.com/wakairo/NewLang_Compiler/pull/384)はDRAFT・未マージ。**DO NOT MERGE**。新しい機構/試験の自動GOはない。
-- **CI evidence:** docs PR前HEAD `16efbd592ef4e2a5c9fc94a90f56f22653bf9f15`の[Actions #38347698561](https://github.com/wakairo/NewLang_Compiler/actions/runs/38347698561)は5/5 SUCCESS。文書を再編集した新HEADは別のCIを確認するまでgreenとは書かない。
+- **Authority:** Compiler/main `adc63b64b656b3d6e0501f29eaeee5181927dc14`（[postmerge 5/5](https://github.com/wakairo/NewLang_Compiler/actions/runs/38393450406)）、canonical Draft17.30、FormalProof/main `a8de4ebb4099f4742fc161d26867740dcac48414`。
+- **技術KEEP／mainの到達点:** [PR404](https://github.com/wakairo/NewLang_Compiler/pull/404)普通のone-u8 Copy関数のC17/nativeと、[PR410](https://github.com/wakairo/NewLang_Compiler/pull/410)二正常分岐のlexical Node Option field currentness SOURCE/CHECKED-OWNEDを採用。独立R406 native PASSは前者、R405 calibrated owned PASSは後者の各**限定**証拠。R402のBLIND判定はINCONCLUSIVEのまま。
+- **次のnative境界HOLD:** [P412](https://github.com/wakairo/NewLang_Compiler/issues/412)でpublic entry/arm/post証拠不足を再現。test-only [PR413](https://github.com/wakairo/NewLang_Compiler/pull/413)はDRAFT/DO NOT MERGE。[M414](https://github.com/wakairo/NewLang_Compiler/issues/414)の`MINIMAL CERTIFICATE FEASIBLE (CONDITIONAL)`は中～高費用で新issuer/validatorもsoundness実測もないため、**専用certificate実装／Node C17投資は現時点でHOLD**。private arm IDの数値一致やCopy ptrから権限を発行しない。
+- **製品HOLD／優先付け:** [V394](https://github.com/wakairo/NewLang_Compiler/issues/394)と[V411](https://github.com/wakairo/NewLang_Compiler/issues/411)の**NO INVESTMENT-READY C-class product operation**を維持。utlistのunlinkとfree分離は実際の研究対象だが、実利用者・正しい普通callerの判断・fair C/Zig/Rust比較上の総責任減・単一小さなsource→owned→native経路は不在。根拠なき類似サンプルの量産ではなく、**実ユーザーのmaterialな新証拠が生じるまで大きなproof/emitter機構投資を増やさない**。
+- **開発継続と再開条件:** 開発を中止するわけではない。既存mainのバグ修正・品質維持と、具体的で新しい低コスト実測は別途Goal/Evidence/Alternatives/Stopを明記して限定判断できる。特定の普通C-class利用者操作、実source-levelの因果的結果、作者＋callerのL/R/P/V/C純差分と最初の小さな実装経路が揃えば、必要な機構を選び直す。Bのcertificate実装を自動的な次工程にはしない。
+- **凍結の維持:** H1 [#268](https://github.com/wakairo/NewLang_Compiler/issues/268)の元の5 independently fallible roots／6+4+2／B.prev=B self-link／B+dst nonCopy custody／0〜5 failure worlds／B1–B7はPASS/FAIL UNDECIDED・専用追加投資DEFER。STB F45/M374の6条件HOLD。
+- **現在のPRとレビュー:** 本[PR376](https://github.com/wakairo/NewLang_Compiler/pull/376)は**DRAFT docs-only / user review待ち / 非normative**。旧DRAFT PR381/384、R-only PR403/407/408、test-only PR413は個別の実験・検証証拠であり、**DO NOT MERGE**。旧PR401は統合PR410で取り込んだため未マージclosed。本文の古い2026-10-12実験報告はこの最新版の能力表・停止判断より優先しない。
+- **CI evidence:** この文書更新前のmain [run #38393450406](https://github.com/wakairo/NewLang_Compiler/actions/runs/38393450406)は5/5 PASS。**本DRAFT文書更新のCIは新しいコミットHEADで別途確認するまでgreenとは主張しない。** 合意のない自動merge・source/semantic/API選択・新Track連鎖は行わない。
