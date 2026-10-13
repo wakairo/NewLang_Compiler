@@ -69,23 +69,20 @@ static int observe_owned(const NLCheckedFragment *checked)
         size_t n1 = arm1 ? nl_checked_node_count(arm1) : 0;
         bool separate_worlds = arm0 != NULL && arm1 != NULL;
         if (separate_worlds) {
-            separate_worlds = nl_checked_context(arm0) != nl_checked_context(arm1);
+            const NLSemanticContext *world = nl_checked_context(checked);
+            const NLSemanticContext *left = nl_checked_context(arm0);
+            const NLSemanticContext *right = nl_checked_context(arm1);
             separate_worlds =
-                separate_worlds && nl_checked_context(arm0) != nl_checked_context(checked);
-            separate_worlds =
-                separate_worlds && nl_checked_context(arm1) != nl_checked_context(checked);
+                left != right && left != world && right != world;
         }
-        printf("R402 owned match normal_arms=%zu arms_present=%d,%d "
-               "arm_node_counts=%zu,%zu world_isolation=%d "
-               "parent_frame_unchanged=%d\n",
-               view->normal_arms, arm0 != NULL, arm1 != NULL, n0, n1,
-               separate_worlds, view->normal_frame_unchanged);
+        printf("R402 owned arms=%zu counts=%zu,%zu worlds=%d\n",
+               view->normal_arms, n0, n1, separate_worlds);
         if (view->normal_arms == 2 && n0 > 0 && n1 > 0 && separate_worlds)
             ++verified;
         /* IDs in different arm contexts are intentionally never compared. */
     }
-    printf("R402 owned node_count=%zu match_count=%zu verified=%zu\n",
-           count, matches, verified);
+    printf("R402 owned nodes=%zu matches=%zu verified=%zu\n", count,
+           matches, verified);
     return verified == 1;
 }
 
@@ -143,9 +140,9 @@ int main(void)
     }
     const NLSyntaxTree *unit[] = {d.tree};
     s = nl_semantic_register_function_unit(ctx, unit, 1, &unit_diag);
+    const char *reg_code = unit_diag.diagnostic.diagnostic.code;
     printf("R402 owned register_unit=%d code=%s\n", (int)s,
-           unit_diag.diagnostic.diagnostic.code
-               ? unit_diag.diagnostic.diagnostic.code : "-");
+           reg_code ? reg_code : "-");
     if (s != NL_CHECK_OK)
         goto cleanup;
     s = nl_semantic_check_source_fragment(ctx, p.tree, &owned, &diagnostic);
@@ -158,8 +155,7 @@ int main(void)
     } else if (s == NL_CHECK_ANALYSIS_PRECISION_LIMIT && owned == NULL) {
         /* Public fragment precision barrier, not owned-artifact validation. */
         passed = 1;
-        printf("R402 owned BOUNDARY: fragment precision prevents owned read
-");
+        printf("R402 owned BOUNDARY: no public owned fragment\n");
     }
     nl_checked_destroy(owned);
     owned = NULL;
