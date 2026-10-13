@@ -28,9 +28,11 @@ def main() -> None:
         positive(root, compiler, cc, "unused", "fn main()->unit{let x=u8(255);unit}\n")
         negative(root, compiler, "n1", "fn main()->unit{let x=u8(256);unit}\n", "V1-U8-LITERAL-RANGE")
         negative(root, compiler, "n2", "fn main()->unit{let x=7;unit}\n", "P5-EXPECTED-EXPRESSION")
-        # Checker-accepted u8 function result is beyond the V1 backend subset.
+        # G0 adds normal discards of zero-argument u8 calls, not receiving.
+        positive(root, compiler, cc, "u8_return",
+                 "fn scalar()->u8{u8(7)}\nfn main()->unit{scalar();unit}\n")
         unsupported = root / "unsupported.nl"
-        unsupported.write_text("fn scalar()->u8{u8(7)}\nfn main()->unit{scalar();unit}\n", encoding="utf-8")
+        unsupported.write_text("fn scalar()->u8{u8(7)}\nfn main()->unit{let value=scalar();value;unit}\n", encoding="utf-8")
         result = run([compiler, str(unsupported)])
         if result.returncode != 4 or result.stdout or "V1-BACKEND-UNSUPPORTED" not in result.stderr:
             raise SystemExit(f"backend-unsupported boundary lost: {result}")

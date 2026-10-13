@@ -1,0 +1,511 @@
+{
+  "base": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+  "baseline": {
+    "cli_exit": 4,
+    "c_bytes": 0,
+    "binary_sha256": "1770c740cd725fec9beca45b3b47b55197394521777e61081ed0a7ad66e90abc",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: <fixture-dir>/scalar7.nl\n",
+    "owned": [
+      {
+        "parse": 0,
+        "register": 0,
+        "check": 0,
+        "owned": true
+      },
+      {
+        "call": 2,
+        "function": 11,
+        "type": 6,
+        "value": 7
+      }
+    ]
+  },
+  "environment_note": "Initial sandbox ASan/LSan run failed at LeakSanitizer ptrace restriction. Diagnostics/G0 then full249 passed outside sandbox. No sanitizer or leak detection disabled.",
+  "ci": "Final PR head status belongs to Issue380 report; not inferred from local tests.",
+  "positive_sources": {
+    "seven": {
+      "source": "fn scalar()->u8{u8(7)}\nfn main()->unit{scalar();unit}\n",
+      "source_sha256": "4d86fe28552a973b758874e08235549e33c78346c65d044d62f11baa7b9c77c3",
+      "c_sha256": "882b545a892805a0ee2ff3e661bb8bb05f01354847becb6d504a505c705a366a",
+      "checked": [
+        {
+          "parse": 0,
+          "register": 0,
+          "check": 0,
+          "owned": true
+        },
+        {
+          "call": 2,
+          "function": 11,
+          "type": 6,
+          "value": 7
+        }
+      ]
+    },
+    "nine": {
+      "source": "fn scalar()->u8{u8(9)}\nfn main()->unit{scalar();unit}\n",
+      "source_sha256": "903351d566685204482a97985bdee26e9b6ce034d69e5058847f9a3398e30d4d",
+      "c_sha256": "4f426a4e7730872d19291e4db5d47c4f75d366f26c85144ed8e0c61856d6eadd",
+      "checked": [
+        {
+          "parse": 0,
+          "register": 0,
+          "check": 0,
+          "owned": true
+        },
+        {
+          "call": 2,
+          "function": 11,
+          "type": 6,
+          "value": 9
+        }
+      ]
+    },
+    "twins": {
+      "source": "fn amber()->u8{u8(0)}fn teal()->u8{u8(255)}fn main()->unit{teal();amber();teal();unit}\n",
+      "source_sha256": "00866786ece67aacf7f5d8dfb763a1bfb1a749be703d6ddd158a5c4cd612a30a",
+      "c_sha256": "d28695ec83b99c7c6c5b2c0af3f06136cd185f6a4358e7c3ec70fea07011be1a",
+      "checked": [
+        {
+          "parse": 0,
+          "register": 0,
+          "check": 0,
+          "owned": true
+        },
+        {
+          "call": 2,
+          "function": 12,
+          "type": 6,
+          "value": 255
+        },
+        {
+          "call": 4,
+          "function": 10,
+          "type": 6,
+          "value": 0
+        },
+        {
+          "call": 6,
+          "function": 12,
+          "type": 6,
+          "value": 255
+        }
+      ]
+    },
+    "local": {
+      "source": "fn result()->u8{let x=u8(9);x}fn main()->unit{result();unit}\n",
+      "source_sha256": "4bdea871271142c597aeb57f854556d680268a10ff41c259585dea1d83f30b36",
+      "c_sha256": "302bf8920e0591f71dd4fab2b1389348429bf84d1afc754a15a626a50374c0dc",
+      "checked": [
+        {
+          "parse": 0,
+          "register": 0,
+          "check": 0,
+          "owned": true
+        },
+        {
+          "call": 2,
+          "function": 11,
+          "type": 6,
+          "value": 9
+        }
+      ]
+    },
+    "return": {
+      "source": "fn result()->u8{return u8(7);}fn main()->unit{result();unit}\n",
+      "source_sha256": "f2d7f34e10a30b2c10b883c903b8e7682bbbe49556a0779f1c44cd32abb4ffb4",
+      "c_sha256": "882b545a892805a0ee2ff3e661bb8bb05f01354847becb6d504a505c705a366a",
+      "checked": [
+        {
+          "parse": 0,
+          "register": 0,
+          "check": 0,
+          "owned": true
+        },
+        {
+          "call": 2,
+          "function": 11,
+          "type": 6,
+          "value": 7
+        }
+      ]
+    }
+  },
+  "semantic_and_profile_negatives": [
+    {
+      "name": "range",
+      "exit": 3,
+      "diagnostic": "V1-U8-LITERAL-RANGE",
+      "c_bytes": 0,
+      "source": "fn scalar()->u8{u8(256)}fn main()->unit{scalar();unit}",
+      "stderr": "<fixture-dir>/range.nl:1:41-1:49: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255\n"
+    },
+    {
+      "name": "type",
+      "exit": 3,
+      "diagnostic": "P9-RETURN-TYPE",
+      "c_bytes": 0,
+      "source": "fn scalar()->u8{return unit;}fn main()->unit{scalar();unit}",
+      "stderr": "<fixture-dir>/type.nl:1:46-1:54: error(semantic)[P9-RETURN-TYPE]: return expression must exactly match the function result\n"
+    },
+    {
+      "name": "unknown",
+      "exit": 3,
+      "diagnostic": "P3-UNKNOWN-CALLEE",
+      "c_bytes": 0,
+      "source": "fn main()->unit{missing();unit}",
+      "stderr": "<fixture-dir>/unknown.nl:1:17-1:24: error(semantic)[P3-UNKNOWN-CALLEE]: unknown semantic callee\n"
+    },
+    {
+      "name": "parameter",
+      "exit": 4,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "c_bytes": 0,
+      "source": "fn identity(x:u8)->u8{x}fn main()->unit{identity(u8(7));unit}",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: <fixture-dir>/parameter.nl\n"
+    },
+    {
+      "name": "receiving",
+      "exit": 4,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "c_bytes": 0,
+      "source": "fn scalar()->u8{u8(7)}fn main()->unit{let x=scalar();x;unit}",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: <fixture-dir>/receiving.nl\n"
+    },
+    {
+      "name": "entry",
+      "exit": 4,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "c_bytes": 0,
+      "source": "fn main()->u8{u8(7)}",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: <fixture-dir>/entry.nl\n"
+    }
+  ],
+  "matrix": {
+    "gcc_debug": {
+      "full_suite": "249/249 PASS",
+      "sanitizer": "none",
+      "native": {
+        "seven": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 7
+          }
+        ],
+        "nine": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 9
+          }
+        ],
+        "twins": [
+          {
+            "function": 10,
+            "guest_calls": 1,
+            "value": 0
+          },
+          {
+            "function": 12,
+            "guest_calls": 2,
+            "value": 255
+          }
+        ],
+        "local": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 9
+          }
+        ],
+        "return": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 7
+          }
+        ]
+      },
+      "all_positive_compiler_pristine_observer_exits": 0,
+      "negatives": {
+        "range": 3,
+        "type": 3,
+        "unknown": 3,
+        "parameter": 4,
+        "receiving": 4,
+        "entry": 4
+      },
+      "mutants": [
+        {
+          "name": "wrong-result",
+          "exit": 77
+        },
+        {
+          "name": "missed-call",
+          "exit": 78
+        }
+      ]
+    },
+    "gcc_release": {
+      "full_suite": "249/249 PASS",
+      "sanitizer": "none",
+      "native": {
+        "seven": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 7
+          }
+        ],
+        "nine": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 9
+          }
+        ],
+        "twins": [
+          {
+            "function": 10,
+            "guest_calls": 1,
+            "value": 0
+          },
+          {
+            "function": 12,
+            "guest_calls": 2,
+            "value": 255
+          }
+        ],
+        "local": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 9
+          }
+        ],
+        "return": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 7
+          }
+        ]
+      },
+      "all_positive_compiler_pristine_observer_exits": 0,
+      "negatives": {
+        "range": 3,
+        "type": 3,
+        "unknown": 3,
+        "parameter": 4,
+        "receiving": 4,
+        "entry": 4
+      },
+      "mutants": [
+        {
+          "name": "wrong-result",
+          "exit": 77
+        },
+        {
+          "name": "missed-call",
+          "exit": 78
+        }
+      ]
+    },
+    "clang": {
+      "full_suite": "249/249 PASS",
+      "sanitizer": "none",
+      "native": {
+        "seven": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 7
+          }
+        ],
+        "nine": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 9
+          }
+        ],
+        "twins": [
+          {
+            "function": 10,
+            "guest_calls": 1,
+            "value": 0
+          },
+          {
+            "function": 12,
+            "guest_calls": 2,
+            "value": 255
+          }
+        ],
+        "local": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 9
+          }
+        ],
+        "return": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 7
+          }
+        ]
+      },
+      "all_positive_compiler_pristine_observer_exits": 0,
+      "negatives": {
+        "range": 3,
+        "type": 3,
+        "unknown": 3,
+        "parameter": 4,
+        "receiving": 4,
+        "entry": 4
+      },
+      "mutants": [
+        {
+          "name": "wrong-result",
+          "exit": 77
+        },
+        {
+          "name": "missed-call",
+          "exit": 78
+        }
+      ]
+    },
+    "ubsan": {
+      "full_suite": "249/249 PASS",
+      "sanitizer": "undefined",
+      "native": {
+        "seven": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 7
+          }
+        ],
+        "nine": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 9
+          }
+        ],
+        "twins": [
+          {
+            "function": 10,
+            "guest_calls": 1,
+            "value": 0
+          },
+          {
+            "function": 12,
+            "guest_calls": 2,
+            "value": 255
+          }
+        ],
+        "local": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 9
+          }
+        ],
+        "return": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 7
+          }
+        ]
+      },
+      "all_positive_compiler_pristine_observer_exits": 0,
+      "negatives": {
+        "range": 3,
+        "type": 3,
+        "unknown": 3,
+        "parameter": 4,
+        "receiving": 4,
+        "entry": 4
+      },
+      "mutants": [
+        {
+          "name": "wrong-result",
+          "exit": 77
+        },
+        {
+          "name": "missed-call",
+          "exit": 78
+        }
+      ]
+    },
+    "asan_lsan": {
+      "full_suite": "249/249 PASS outside sandbox, leak detection retained",
+      "sanitizer": "address",
+      "native": {
+        "seven": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 7
+          }
+        ],
+        "nine": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 9
+          }
+        ],
+        "twins": [
+          {
+            "function": 10,
+            "guest_calls": 1,
+            "value": 0
+          },
+          {
+            "function": 12,
+            "guest_calls": 2,
+            "value": 255
+          }
+        ],
+        "local": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 9
+          }
+        ],
+        "return": [
+          {
+            "function": 11,
+            "guest_calls": 1,
+            "value": 7
+          }
+        ]
+      },
+      "all_positive_compiler_pristine_observer_exits": 0,
+      "negatives": {
+        "range": 3,
+        "type": 3,
+        "unknown": 3,
+        "parameter": 4,
+        "receiving": 4,
+        "entry": 4
+      },
+      "mutants": [
+        {
+          "name": "wrong-result",
+          "exit": 77
+        },
+        {
+          "name": "missed-call",
+          "exit": 78
+        }
+      ]
+    }
+  }
+}

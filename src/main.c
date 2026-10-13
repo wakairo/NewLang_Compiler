@@ -31,6 +31,7 @@ static int report_error(const char *code, const char *message,
 typedef struct {
     size_t function;
     const NLCheckedFragment *body;
+    NLTypeId result;
 } V0Function;
 
 typedef struct {
@@ -342,19 +343,57 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
     const NLCheckedNodeView *call = nl_checked_node_view(fragment, id);
     if (call == NULL || call->kind != NL_CHECKED_REGISTERED_CALL ||
         !call->body_backed || call->owner_call.definition.definition_checked ||
-        call->argument_count != 0 || call->type != program->unit ||
-        call->result_count != 0 || call->terminates)
+        call->argument_count != 0 || call->terminates)
+        return false;
+
+    const bool scalar = call->type == program->u8;
+    if (scalar
+            ? (call->result_count != 1 || call->results[0].type != program->u8)
+            : (call->type != program->unit || call->result_count != 0))
         return false;
 
     const NLCheckedFragment *body = nl_checked_call_body(fragment, id);
     if (body == NULL)
         return false;
-    if (v0_find_function(program, call->function) != NULL)
-        return true;
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(body, nl_checked_root(body));
+    if (scalar) {
+        /* G0: a normal scalar tail or a direct explicit scalar return.
+         * Call-valued tails/receiving, parameters and control-flow lowering
+         * remain outside this reference emitter. Never use caller constants
+         * as a substitute for emitting the independently owned callee body. */
+        if (root == NULL || root->kind != NL_CHECKED_BLOCK)
+            return false;
+        if (root->terminates) {
+            const NLCheckedNodeView *last = NULL;
+            for (NLCheckedNodeId i = root->first_item; i != 0;) {
+                last = nl_checked_node_view(body, i);
+                if (last == NULL)
+                    return false;
+                i = last->next_item;
+            }
+            if (root->tail != 0 || root->result_count != 0 || last == NULL ||
+                last->kind != NL_CHECKED_RETURN ||
+                last->returned.type != program->u8)
+                return false;
+        } else {
+            const NLCheckedNodeView *tail =
+                nl_checked_node_view(body, root->tail);
+            if (root->type != program->u8 || root->result_count != 1 ||
+                !v1_scalar(body, root->tail, program) || tail == NULL ||
+                root->results[0].type != program->u8 ||
+                root->results[0].value != tail->results[0].value)
+                return false;
+        }
+    }
+    V0Function *prior = v0_find_function(program, call->function);
+    if (prior != NULL)
+        return prior->result == call->type;
     if (program->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
         return false;
 
-    program->functions[program->count++] = (V0Function){call->function, body};
+    program->functions[program->count++] =
+        (V0Function){call->function, body, call->type};
     return v0_validate_node(body, nl_checked_root(body), program);
 }
 
@@ -425,8 +464,10 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
         return v0_validate_call(fragment, id, program);
     case NL_CHECKED_RETURN:
         return view->terminates && view->initializer != 0 &&
-               view->returned.type == program->unit &&
-               v0_validate_node(fragment, view->initializer, program);
+               ((view->returned.type == program->unit &&
+                 v0_validate_node(fragment, view->initializer, program)) ||
+                (view->returned.type == program->u8 &&
+                 v1_scalar(fragment, view->initializer, program)));
     case NL_CHECKED_UNIT:
         return view->type == program->unit && view->result_count == 0;
     default:
@@ -446,7 +487,8 @@ static bool v0_emit_node(FILE *, const NLCheckedFragment *, NLCheckedNodeId,
                          size_t);
 
 static bool v0_emit_block(FILE *stream, const NLCheckedFragment *fragment,
-                          const NLCheckedNodeView *block, size_t depth)
+                          const NLCheckedNodeView *block, size_t depth,
+                          bool return_u8)
 {
     if (!v0_indent(stream, depth) || fputs("{\n", stream) < 0)
         return false;
@@ -458,9 +500,17 @@ static bool v0_emit_block(FILE *stream, const NLCheckedFragment *fragment,
             return false;
         item = view->next_item;
     }
-    if (block->tail != 0 &&
-        !v0_emit_node(stream, fragment, block->tail, depth + 1))
-        return false;
+    if (block->tail != 0) {
+        if (return_u8) {
+            if (!v0_indent(stream, depth + 1) || fputs("return ", stream) < 0 ||
+                !v1_emit_scalar(stream,
+                                nl_checked_node_view(fragment, block->tail)) ||
+                fputs(";\n", stream) < 0)
+                return false;
+        } else if (!v0_emit_node(stream, fragment, block->tail, depth + 1)) {
+            return false;
+        }
+    }
     return v0_indent(stream, depth) && fputs("}\n", stream) >= 0;
 }
 
@@ -686,13 +736,19 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                fprintf(stream, "(void)nl_local_%zu;\n", view->symbol) >= 0;
     }
     case NL_CHECKED_BLOCK:
-        return v0_emit_block(stream, fragment, view, depth);
+        return v0_emit_block(stream, fragment, view, depth, false);
     case NL_CHECKED_STATEMENT:
         return v0_emit_node(stream, fragment, view->initializer, depth);
     case NL_CHECKED_REGISTERED_CALL:
         return v0_indent(stream, depth) &&
                fprintf(stream, "nl_fn_%zu();\n", view->function) >= 0;
     case NL_CHECKED_RETURN:
+        if (view->returned.type ==
+            nl_semantic_core_type(nl_checked_context(fragment), NL_TYPE_U8))
+            return v0_indent(stream, depth) && fputs("return ", stream) >= 0 &&
+                   v1_emit_scalar(stream, nl_checked_node_view(
+                                              fragment, view->initializer)) &&
+                   fputs(";\n", stream) >= 0;
         if (!v0_emit_node(stream, fragment, view->initializer, depth))
             return false;
         return v0_indent(stream, depth) && fputs("return;\n", stream) >= 0;
@@ -718,7 +774,9 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
         return false;
 
     for (size_t i = 0; i < program->count; ++i)
-        if (fprintf(stream, "static void nl_fn_%zu(void);\n",
+        if (fprintf(stream, "static %s nl_fn_%zu(void);\n",
+                    program->functions[i].result == program->u8 ? "uint8_t"
+                                                                : "void",
                     program->functions[i].function) < 0)
             return false;
     if (fputc('\n', stream) == EOF)
@@ -729,9 +787,11 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
         const NLCheckedNodeView *root =
             nl_checked_node_view(function.body, nl_checked_root(function.body));
         if (root == NULL ||
-            fprintf(stream, "static void nl_fn_%zu(void)\n",
+            fprintf(stream, "static %s nl_fn_%zu(void)\n",
+                    function.result == program->u8 ? "uint8_t" : "void",
                     function.function) < 0 ||
-            !v0_emit_block(stream, function.body, root, 0) ||
+            !v0_emit_block(stream, function.body, root, 0,
+                           function.result == program->u8) ||
             fputc('\n', stream) == EOF)
             return false;
     }
@@ -832,7 +892,8 @@ static int compile_v0(const char *path)
     const NLCheckedNodeView *root_view = nl_checked_node_view(entry, root);
     V0Program program = {.unit = nl_semantic_unit_type(context),
                          .u8 = nl_semantic_core_type(context, NL_TYPE_U8)};
-    if (root_view == NULL || !v0_validate_call(entry, root, &program)) {
+    if (root_view == NULL || root_view->type != program.unit ||
+        !v0_validate_call(entry, root, &program)) {
         char *node_c = NULL;
         size_t node_length = 0;
         const NLNodeCStatus status =

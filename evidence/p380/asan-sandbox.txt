@@ -1,0 +1,11 @@
+Internal ctest changing into directory: /tmp/p380-asan
+Test project /tmp/p380-asan
+        Start   1: diagnostics.unit
+        Start   2: source.unit
+  1/249 Test   #1: diagnostics.unit .......................***Failed    0.03 sec
+==11220==LeakSanitizer has encountered a fatal error.
+==11220==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==11220==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+==11220==HINT: LeakSanitizer requires ptrace_scope to be disabled (e.g. echo 0 > /proc/sys/kernel/yama/ptrace_scope)
+
+  2/249 Test   #2: source.unit ............................***Failed    0.02 sec

@@ -496,6 +496,13 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_v1_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(u8_return_checked_probe tests/integration/u8_return_checked_probe.c)
+    target_link_libraries(u8_return_checked_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME g0_u8_return_native.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_u8_return_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:u8_return_checked_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
     add_test(NAME north_star_v0_checked_c.integration
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_v0_test.py"

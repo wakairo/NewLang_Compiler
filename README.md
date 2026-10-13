@@ -184,6 +184,20 @@ other integer families or C representation guarantees are added.
 See [V1 contract](docs/NORTH_STAR_V1_TYPED_SCALAR_CONTRACT.md) and
 [V1 report](docs/NORTH_STAR_V1_TYPED_SCALAR_REPORT.md).
 
+G0 also emits checked zero-argument `u8` callees with a scalar tail or direct
+explicit return, when the caller discards the result:
+
+```newlang
+fn scalar()->u8{u8(7)}
+fn main()->unit{scalar();unit}
+```
+
+The emitted typed function and runtime call use the owned checked body, not a
+caller-specific constant. Arguments, call-result receiving, arithmetic and
+general control-flow lowering remain unsupported; the entry stays unit-valued.
+See the [G0 report](docs/experiments/P380_G0_U8_RETURN.md). This is a technical
+execution rung, not G1 state-update or North Star product validation.
+
 AVS adds one optional leading source declaration with exactly two core-u8 fields:
 
 ```newlang
