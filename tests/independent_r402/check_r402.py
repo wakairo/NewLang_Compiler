@@ -113,11 +113,24 @@ def main():
                         "07_option_as_ptr_postjoin", "08_scoped_ref_escape",
                         "09_stale_lexical_ptr", "10_wrong_stability") and p.returncode == 0:
                 problematic.append(name + ": unsafe or unknown acceptance needs inspection")
+            expected = {
+                "01_diff_current_some": "V1-BACKEND-UNSUPPORTED",
+                "02_diff_current_none": "V1-BACKEND-UNSUPPORTED",
+                "03_same_locator": "V1-BACKEND-UNSUPPORTED",
+                "04_distinct_originals": "P9-CONTINUATION-PRECISION",
+                "05_unselected_bad_none": "P3-UNKNOWN-BINDING",
+                "06_unselected_bad_some": "P3-UNKNOWN-BINDING",
+                "07_option_as_ptr_postjoin": "P3-PTR-REQUIRED",
+                "08_scoped_ref_escape": "P8-EXIT-DEPENDENCY",
+                "09_stale_lexical_ptr": "P3-STALE-POINTER",
+                "10_wrong_stability": "ALLOCATED-REF-PROFILE",
+            }[name]
+            if expected not in p.stderr:
+                problematic.append(name + ": measured first-pass category changed")
         if problematic:
-            print("R402 SUSPECT: " + " | ".join(problematic), flush=True)
-    # During first survey make CTest expose all observations in GitHub Actions logs.
-    print("R402 SURVEY COMPLETE — first-pass classification pending; intentional failure", flush=True)
-    raise SystemExit(1)
+            print("R402 FAILED: " + " | ".join(problematic), flush=True)
+            raise SystemExit(1)
+    print("R402 PASS: ten first-pass observations stable; owned evidence separate", flush=True)
 
 if __name__ == "__main__":
     main()
