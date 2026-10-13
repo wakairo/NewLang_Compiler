@@ -471,6 +471,16 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_link_semantic.nl")
     # TEST-ONLY exploration. Green CTest means measured first-barrier classification;
     # it does not assert the experimental cross-root operation is supported.
+    # Emit measured JSON directly during the build: ctest --output-on-failure
+    # suppresses successful test stdout, making a green run uninterpretable.
+    add_custom_command(TARGET newlangc POST_BUILD
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/exploration_node_conditional_relink.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_link_semantic.nl"
+        "${NEWLANG_SANITIZER}"
+        COMMENT "EXPLORATION: print measured Option-link first-barrier JSON"
+        VERBATIM)
     add_test(NAME exploration_node_option_relink.integration
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/exploration_node_conditional_relink.py"
