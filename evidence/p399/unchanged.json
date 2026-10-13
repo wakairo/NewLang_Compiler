@@ -1,0 +1,114 @@
+[
+  {
+    "case": "echo7",
+    "compiler": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+    "source_sha256": "8d928120a5a4f5aeafad048c209ada36dacc4a5b8ef607d9d68b67d7ade24440",
+    "cli": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: evidence/p399/echo7.nl\n"
+  },
+  {
+    "case": "echo9",
+    "compiler": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+    "source_sha256": "b262812d7076332096eecd02b2a348f890b818f72350a03470a211c43321a81d",
+    "cli": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: evidence/p399/echo9.nl\n"
+  },
+  {
+    "case": "two",
+    "compiler": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+    "source_sha256": "300eec91566bbe805b6d3219f5a72cda2daa65636e496caca87052a03915a05b",
+    "cli": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: evidence/p399/two.nl\n"
+  },
+  {
+    "case": "forward",
+    "compiler": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+    "source_sha256": "629fd4faa3849c994f07d50c0a39032cd9bed10e316e351dd02adfa7251643c3",
+    "cli": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: evidence/p399/forward.nl\n"
+  },
+  {
+    "case": "renamed_local",
+    "compiler": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+    "source_sha256": "575178200bb3d1c3e843385c1f992ea34b310b642cd652b0e9c6c20b7ada0696",
+    "cli": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: evidence/p399/renamed_local.nl\n"
+  },
+  {
+    "case": "explicit_return",
+    "compiler": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+    "source_sha256": "e383ca89c7b9fbf3795d475c05ac5917300adcfbcf01db6df0df98461d4fb15d",
+    "cli": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: evidence/p399/explicit_return.nl\n"
+  },
+  {
+    "case": "range",
+    "compiler": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+    "source_sha256": "c0131a3501dd506697c658a6995015fa538464e691fa9e6f81d2ed425bff7dc6",
+    "cli": 3,
+    "c_bytes": 0,
+    "diagnostic": "evidence/p399/range.nl:1:43-1:50: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255\n"
+  },
+  {
+    "case": "wrong_argument",
+    "compiler": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+    "source_sha256": "98af156a5616e00f090a73b3ed97c31c3a967ffae6d8b287cba16e7ce2864558",
+    "cli": 3,
+    "c_bytes": 0,
+    "diagnostic": "evidence/p399/wrong_argument.nl:1:43-1:47: error(unsupported)[P3-ARGUMENT-RESULTS]: argument needs one result; multi-result receiving is outside P3\n"
+  },
+  {
+    "case": "wrong_pointer_type",
+    "compiler": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+    "source_sha256": "fb78f40c8f9f8b1f9f26d8ef26c67d0b5210e56d25d4e1923107bb15e3a9bfb3",
+    "cli": 3,
+    "c_bytes": 0,
+    "diagnostic": "evidence/p399/wrong_pointer_type.nl:1:94-1:95: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  },
+  {
+    "case": "wrong_arity",
+    "compiler": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+    "source_sha256": "d77afec8192e5adfec014f9b6433ea99f372c830ab83a1fa07bc0d4279720b07",
+    "cli": 3,
+    "c_bytes": 0,
+    "diagnostic": "evidence/p399/wrong_arity.nl:1:38-1:42: error(semantic)[P3-ARITY]: argument count differs from resolved signature\n"
+  },
+  {
+    "case": "wrong_return",
+    "compiler": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+    "source_sha256": "5e1ff7eb6534fbde569b5d9fdf99b30b2d79e206b2db7a75464dff63fdcc76ae",
+    "cli": 3,
+    "c_bytes": 0,
+    "diagnostic": "evidence/p399/wrong_return.nl:1:18-1:24: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+  },
+  {
+    "case": "two_arguments",
+    "compiler": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+    "source_sha256": "8daa037911cbb484affc0a55df3d11ad6d6e4ba349cdb99fd9e331635ebbd49e",
+    "cli": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: evidence/p399/two_arguments.nl\n"
+  },
+  {
+    "case": "richer_body",
+    "compiler": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+    "source_sha256": "d1463dec6430b544bd48486abbb17c339b7d5b783339d79ddd22893d00b5d08b",
+    "cli": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: evidence/p399/richer_body.nl\n"
+  },
+  {
+    "case": "ref_argument",
+    "compiler": "348ca7d48f6dd5d658706f4547ab7ef9a63af33d",
+    "source_sha256": "d53dc024c9fc1108872394d83427d6cd57ad28614d46d45f6731a7c06e40d138",
+    "cli": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: evidence/p399/ref_argument.nl\n"
+  }
+]

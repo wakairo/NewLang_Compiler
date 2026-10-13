@@ -184,6 +184,15 @@ other integer families or C representation guarantees are added.
 See [V1 contract](docs/NORTH_STAR_V1_TYPED_SCALAR_CONTRACT.md) and
 [V1 report](docs/NORTH_STAR_V1_TYPED_SCALAR_REPORT.md).
 
+The P399 candidate also lowers ordinary body-backed `fn echo(x:u8)->u8{x}`
+with one runtime Copy u8 formal and one Copy u8 result. Repeated direct calls
+and receiving/forwarding a result through a local use typed C17 carriers.
+The finite callee body supports scalar Copy locals and a scalar tail/direct
+return; richer bodies, two arguments and ref arguments fail closed.
+This main-based candidate does not incorporate the unmerged G0/G1 branches;
+zero-argument u8 returns retain the original unsupported backend boundary.
+See [P399 evidence and limits](docs/P399_U8_COPY_CALL.md).
+
 AVS adds one optional leading source declaration with exactly two core-u8 fields:
 
 ```newlang

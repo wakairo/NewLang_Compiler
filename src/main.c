@@ -4,6 +4,7 @@
 #include "newlang/parser.h"
 #include "newlang/semantic.h"
 #include "newlang/source.h"
+#include "semantic_internal.h"
 
 #include <stdbool.h>
 #include <stdio.h>
@@ -31,6 +32,9 @@ static int report_error(const char *code, const char *message,
 typedef struct {
     size_t function;
     const NLCheckedFragment *body;
+    NLTypeId result;
+    NLSymbolId
+        parameter; /* representative body-local C formal, not caller ID */
 } V0Function;
 
 typedef struct {
@@ -38,6 +42,8 @@ typedef struct {
     size_t count;
     size_t entry_function;
     NLTypeId unit, u8, aggregate;
+    const NLCheckedFragment *formal_body; /* current validation only */
+    NLSymbolId formal;
 } V0Program;
 
 static V0Function *v0_find_function(V0Program *program, size_t function)
@@ -93,6 +99,14 @@ static bool v1_scalar(const NLCheckedFragment *fragment, NLCheckedNodeId id,
     if (v->kind != NL_CHECKED_IDENTIFIER || v->symbol == 0 ||
         v->value_use != NL_VALUE_COPIED)
         return false;
+    if (fragment == program->formal_body && v->symbol == program->formal) {
+        NLSemanticValueView value;
+        return nl_semantic_value_view(nl_checked_context(fragment),
+                                      v->results[0].value, &value) &&
+               value.type == program->u8 &&
+               value.dependencies == NL_DEPENDENCY_FREE &&
+               value.value_dependency_count == 0;
+    }
     /* Exclude host-known parameters/seeds: the C local must have a source
      * binding in this owned body. Lexical visibility is checker-established. */
     for (size_t i = 1; i <= nl_checked_node_count(fragment); ++i) {
@@ -199,6 +213,8 @@ static bool v1_emit_scalar(FILE *stream, const NLCheckedNodeView *value)
 }
 
 static bool v0_validate_node(const NLCheckedFragment *, NLCheckedNodeId,
+                             V0Program *);
+static bool v0_validate_call(const NLCheckedFragment *, NLCheckedNodeId,
                              V0Program *);
 
 /* Bounded capability lowering is authorized by completed checked loans.
@@ -336,26 +352,145 @@ static bool gate_loan(const NLCheckedFragment *f, const NLCheckedNodeView *v,
     return v0_validate_node(f, v->initializer, p);
 }
 
+/* Driver-private proof: the actual owned synchronous body must belong to
+ * this exact registration. Copy arguments retain package identity when bound
+ * to the fresh formal. Names locate that binding in the immutable registry;
+ * neither source tokens nor scalar_known can supply runtime arguments. */
+static bool v1_call_parameter(const NLCheckedFragment *f, NLCheckedNodeId id,
+                              const V0Program *p, NLSymbolId *parameter)
+{
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    const NLSemanticContext *c = nl_checked_context(f);
+    const NLCheckedFragment *body = nl_checked_call_body(f, id);
+    if (call == NULL || c == NULL || body == NULL || call->function == 0 ||
+        call->function > c->function_count || nl_checked_context(body) != c)
+        return false;
+    const NLFunctionEntry *fn = &c->functions[call->function - 1];
+    if (fn->kind != NL_CHECKED_REGISTERED_CALL || fn->body == NULL ||
+        body->body_owner != fn->body || body->source != fn->body->source ||
+        fn->result != call->type || fn->count != call->argument_count ||
+        fn->body->count != fn->count || fn->count > 1 || fn->caller_effects ||
+        fn->hidden_dependencies || fn->owner_receiver || fn->owner_producer ||
+        fn->custody_recipient)
+        return false;
+    *parameter = 0;
+    if (fn->count == 0)
+        return call->type == p->unit && call->first_argument == 0;
+    const NLCheckedNodeView *arg =
+        nl_checked_node_view(f, call->first_argument);
+    if (fn->parameters[0] != p->u8 || call->type != p->u8 || arg == NULL ||
+        arg->next_argument != 0 || arg->parameter_type != p->u8 ||
+        !v1_scalar(f, call->first_argument, p))
+        return false;
+    for (size_t i = 0; i < c->binding_count; ++i) {
+        const NLBindingEntry *binding = &c->bindings[i];
+        if (binding->view.value == arg->results[0].value &&
+            binding->view.type == p->u8 && binding->hidden &&
+            strcmp(binding->name, fn->body->parameter_names[0]) == 0) {
+            if (*parameter != 0)
+                return false;
+            *parameter = i + 1;
+        }
+    }
+    return *parameter != 0;
+}
+
+/* Finite scalar callee: Copy local receiving/use and one direct scalar tail
+ * or return. No nested call, ref, write, branch or general ABI in this body. */
+static bool v1_copy_body(const NLCheckedFragment *f, const V0Program *p,
+                         NLCheckedNodeId *result)
+{
+    const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
+    if (root == NULL || root->kind != NL_CHECKED_BLOCK)
+        return false;
+    NLCheckedNodeId last = 0;
+    size_t count = 0;
+    for (NLCheckedNodeId i = root->first_item; i != 0;) {
+        const NLCheckedNodeView *v = nl_checked_node_view(f, i);
+        if (v == NULL || ++count > nl_checked_node_count(f))
+            return false;
+        if (v->kind == NL_CHECKED_BINDING) {
+            const NLCheckedNodeView *r =
+                nl_checked_node_view(f, v->first_argument);
+            if (v->argument_count != 1 || r == NULL ||
+                r->kind != NL_CHECKED_RECEIVER || r->next_argument != 0 ||
+                r->type != p->u8 || r->symbol != v->symbol ||
+                !v1_scalar(f, v->initializer, p))
+                return false;
+        } else if (v->kind == NL_CHECKED_STATEMENT) {
+            if (!v1_scalar(f, v->initializer, p))
+                return false;
+        } else if (v->kind == NL_CHECKED_RETURN) {
+            if (v->next_item != 0 || !v->terminates ||
+                v->returned.type != p->u8 || !v1_scalar(f, v->initializer, p))
+                return false;
+        } else {
+            return false;
+        }
+        last = i;
+        i = v->next_item;
+    }
+    if (count != root->item_count)
+        return false;
+    const NLControlExits *exits = nl_checked_control_exits(f);
+    if (root->terminates) {
+        const NLCheckedNodeView *v = nl_checked_node_view(f, last);
+        if (v == NULL || v->kind != NL_CHECKED_RETURN || root->tail != 0 ||
+            root->result_count != 0 || nl_control_exits_count(exits) != 1 ||
+            !nl_control_exits_only_return(exits, f->function_target))
+            return false;
+        *result = v->initializer;
+        const NLCheckedNodeView *r = nl_checked_node_view(f, *result);
+        return v->returned.value == r->results[0].value;
+    }
+    *result = root->tail;
+    const NLCheckedNodeView *tail = nl_checked_node_view(f, *result);
+    return nl_control_exits_count(exits) == 0 && root->type == p->u8 &&
+           root->result_count == 1 && root->results[0].type == p->u8 &&
+           tail != NULL && v1_scalar(f, *result, p) &&
+           root->results[0].value == tail->results[0].value;
+}
+
 static bool v0_validate_call(const NLCheckedFragment *fragment,
                              NLCheckedNodeId id, V0Program *program)
 {
     const NLCheckedNodeView *call = nl_checked_node_view(fragment, id);
     if (call == NULL || call->kind != NL_CHECKED_REGISTERED_CALL ||
         !call->body_backed || call->owner_call.definition.definition_checked ||
-        call->argument_count != 0 || call->type != program->unit ||
-        call->result_count != 0 || call->terminates)
+        call->terminates)
         return false;
-
+    NLSymbolId parameter = 0;
+    if (!v1_call_parameter(fragment, id, program, &parameter))
+        return false;
+    const bool scalar = parameter != 0;
+    if (scalar
+            ? (call->result_count != 1 || call->results[0].type != program->u8)
+            : (call->result_count != 0))
+        return false;
     const NLCheckedFragment *body = nl_checked_call_body(fragment, id);
-    if (body == NULL)
-        return false;
-    if (v0_find_function(program, call->function) != NULL)
-        return true;
+    if (scalar) {
+        const NLCheckedFragment *saved_body = program->formal_body;
+        const NLSymbolId saved_formal = program->formal;
+        program->formal_body = body;
+        program->formal = parameter;
+        NLCheckedNodeId returned = 0;
+        const bool valid =
+            v1_copy_body(body, program, &returned) &&
+            call->results[0].value ==
+                nl_checked_node_view(body, returned)->results[0].value;
+        program->formal_body = saved_body;
+        program->formal = saved_formal;
+        if (!valid)
+            return false;
+    }
+    V0Function *prior = v0_find_function(program, call->function);
+    if (prior != NULL)
+        return prior->result == call->type && (prior->parameter != 0) == scalar;
     if (program->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
         return false;
-
-    program->functions[program->count++] = (V0Function){call->function, body};
-    return v0_validate_node(body, nl_checked_root(body), program);
+    program->functions[program->count++] =
+        (V0Function){call->function, body, call->type, parameter};
+    return scalar || v0_validate_node(body, nl_checked_root(body), program);
 }
 
 static bool v0_validate_block(const NLCheckedFragment *fragment,
@@ -408,6 +543,9 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                receiver->symbol == view->symbol &&
                ((receiver->type == program->u8 &&
                  (v1_scalar(fragment, view->initializer, program) ||
+                  (initializer->kind == NL_CHECKED_REGISTERED_CALL &&
+                   initializer->type == program->u8 &&
+                   v0_validate_call(fragment, view->initializer, program)) ||
                   (initializer->kind == NL_CHECKED_LOAN_HEADER &&
                    initializer->loan.access == NL_ACCESS_WRITE &&
                    v0_validate_node(fragment, view->initializer, program)))) ||
@@ -594,6 +732,19 @@ static bool gate_symbol_written(const NLCheckedFragment *f, NLSymbolId symbol)
     return false;
 }
 
+static bool v1_emit_call(FILE *stream, const NLCheckedFragment *f,
+                         NLCheckedNodeId id, size_t depth)
+{
+    const NLCheckedNodeView *v = nl_checked_node_view(f, id);
+    if (!v0_indent(stream, depth) ||
+        fprintf(stream, "const uint8_t nl_call_%zu = nl_fn_%zu(", id,
+                v->function) < 0 ||
+        !v1_emit_scalar(stream, nl_checked_node_view(f, v->first_argument)) ||
+        fputs(");\n", stream) < 0 || !v0_indent(stream, depth))
+        return false;
+    return fprintf(stream, "(void)nl_call_%zu;\n", id) >= 0;
+}
+
 static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                          NLCheckedNodeId id, size_t depth)
 {
@@ -645,6 +796,9 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
             gate_symbol_written(fragment, view->symbol) ? "" : "const ";
         if (initializer == NULL)
             return false;
+        if (initializer->kind == NL_CHECKED_REGISTERED_CALL &&
+            !v1_emit_call(stream, fragment, view->initializer, depth))
+            return false;
         if (initializer->kind == NL_CHECKED_LOAN_HEADER &&
             !gate_emit_loan(stream, fragment, initializer, depth))
             return false;
@@ -674,6 +828,10 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                         scalar_qualifier, view->symbol,
                         initializer->loan.scope) < 0)
                 return false;
+        } else if (initializer->kind == NL_CHECKED_REGISTERED_CALL) {
+            if (fprintf(stream, "const uint8_t nl_local_%zu = nl_call_%zu",
+                        view->symbol, view->initializer) < 0)
+                return false;
         } else if (fprintf(stream, "%suint8_t nl_local_%zu = ",
                            scalar_qualifier, view->symbol) < 0 ||
                    !v1_emit_scalar(stream, initializer))
@@ -690,6 +848,8 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     case NL_CHECKED_STATEMENT:
         return v0_emit_node(stream, fragment, view->initializer, depth);
     case NL_CHECKED_REGISTERED_CALL:
+        if (view->result_count == 1)
+            return v1_emit_call(stream, fragment, id, depth);
         return v0_indent(stream, depth) &&
                fprintf(stream, "nl_fn_%zu();\n", view->function) >= 0;
     case NL_CHECKED_RETURN:
@@ -701,6 +861,42 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     default:
         return false;
     }
+}
+
+static bool v1_emit_body(FILE *stream, const V0Function *fn)
+{
+    const NLCheckedFragment *f = fn->body;
+    const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
+    if (fputs("{\n", stream) < 0 ||
+        fprintf(stream, "    (void)nl_local_%zu;\n", fn->parameter) < 0)
+        return false;
+    for (NLCheckedNodeId i = root->first_item; i != 0;) {
+        const NLCheckedNodeView *v = nl_checked_node_view(f, i);
+        if (v->kind == NL_CHECKED_RETURN) {
+            if (fputs("    return ", stream) < 0 ||
+                !v1_emit_scalar(stream,
+                                nl_checked_node_view(f, v->initializer)) ||
+                fputs(";\n", stream) < 0)
+                return false;
+        } else if (!v0_emit_node(stream, f, i, 1)) {
+            return false;
+        }
+        i = v->next_item;
+    }
+    if (root->tail != 0 &&
+        (fputs("    return ", stream) < 0 ||
+         !v1_emit_scalar(stream, nl_checked_node_view(f, root->tail)) ||
+         fputs(";\n", stream) < 0))
+        return false;
+    return fputs("}\n", stream) >= 0;
+}
+
+static bool v0_emit_signature(FILE *stream, const V0Function *fn)
+{
+    if (fn->parameter != 0)
+        return fprintf(stream, "static uint8_t nl_fn_%zu(uint8_t nl_local_%zu)",
+                       fn->function, fn->parameter) >= 0;
+    return fprintf(stream, "static void nl_fn_%zu(void)", fn->function) >= 0;
 }
 
 static bool v0_emit_c(FILE *stream, const V0Program *program)
@@ -718,8 +914,8 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
         return false;
 
     for (size_t i = 0; i < program->count; ++i)
-        if (fprintf(stream, "static void nl_fn_%zu(void);\n",
-                    program->functions[i].function) < 0)
+        if (!v0_emit_signature(stream, &program->functions[i]) ||
+            fputs(";\n", stream) < 0)
             return false;
     if (fputc('\n', stream) == EOF)
         return false;
@@ -728,10 +924,11 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
         const V0Function function = program->functions[i];
         const NLCheckedNodeView *root =
             nl_checked_node_view(function.body, nl_checked_root(function.body));
-        if (root == NULL ||
-            fprintf(stream, "static void nl_fn_%zu(void)\n",
-                    function.function) < 0 ||
-            !v0_emit_block(stream, function.body, root, 0) ||
+        if (root == NULL || !v0_emit_signature(stream, &function) ||
+            fputc('\n', stream) == EOF ||
+            !(function.parameter != 0
+                  ? v1_emit_body(stream, &function)
+                  : v0_emit_block(stream, function.body, root, 0)) ||
             fputc('\n', stream) == EOF)
             return false;
     }
