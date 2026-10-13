@@ -469,6 +469,14 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/node_link_source_test.py"
         "$<TARGET_FILE:newlangc>"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_link_semantic.nl")
+    # TEST-ONLY exploration. Green CTest means measured first-barrier classification;
+    # it does not assert the experimental cross-root operation is supported.
+    add_test(NAME exploration_node_option_relink.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/exploration_node_conditional_relink.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_link_semantic.nl"
+        "${NEWLANG_SANITIZER}")
     target_link_libraries(recursive_type_test PRIVATE newlang_semantic newlang_parser)
     target_link_options(recursive_type_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
     foreach(group parser identity source cycle negatives failures)
