@@ -13,6 +13,8 @@ import platform
 import shlex
 import shutil
 import subprocess
+import time
+import urllib.error
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +32,29 @@ def sha256(path: Path) -> str:
 def run(args: list[str], environment: dict[str, str] | None = None) -> str:
     return subprocess.check_output(args, env=environment, text=True,
                                    stderr=subprocess.STDOUT).strip()
+
+
+def download(package: dict[str, str], path: Path) -> None:
+    """Three attempts at the locked URL; only observed HTTP404 is retried."""
+    temporary = path.with_suffix(".partial")
+    for attempt in range(1, 4):
+        try:
+            with urllib.request.urlopen(package["url"], timeout=60) as response:
+                with temporary.open("wb") as output:
+                    shutil.copyfileobj(response, output)
+            if sha256(temporary) != package["sha256"]:
+                raise SystemExit(f"checksum mismatch: {package['name']}")
+            temporary.replace(path)
+            return
+        except urllib.error.HTTPError as error:
+            if error.code != 404 or attempt == 3:
+                raise
+            error.close()
+            print(f"retry {package['name']}: HTTP404 attempt {attempt}/3; "
+                  f"wait {attempt}s", flush=True)
+            time.sleep(attempt)
+        finally:
+            temporary.unlink(missing_ok=True)
 
 
 def main() -> None:
@@ -61,15 +86,8 @@ def main() -> None:
     for package in lock["platforms"][target]["packages"]:
         path = cache / f"{package['name']}-{package['sha256']}.deb"
         if not path.is_file() or sha256(path) != package["sha256"]:
-            temporary = path.with_suffix(".partial")
             print(f"download {package['name']} {package['version']}", flush=True)
-            with urllib.request.urlopen(package["url"], timeout=60) as response:
-                with temporary.open("wb") as output:
-                    shutil.copyfileobj(response, output)
-            if sha256(temporary) != package["sha256"]:
-                temporary.unlink()
-                raise SystemExit(f"checksum mismatch: {package['name']}")
-            temporary.replace(path)
+            download(package, path)
         if not completed.is_file():
             subprocess.run(["dpkg-deb", "-x", str(path), str(prefix)], check=True)
 

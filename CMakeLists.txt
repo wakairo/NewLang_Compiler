@@ -522,6 +522,9 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_v0_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_test(NAME bootstrap_retry.offline
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/bootstrap_retry_test.py")
     add_test(NAME artifacts.integrity COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/artifact_test.py")
     add_test(NAME oracle.adapter COMMAND "${Python3_EXECUTABLE}"
