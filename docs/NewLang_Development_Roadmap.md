@@ -81,8 +81,8 @@ G1: body-visible named ref<write,u8> + u8 → old Copy u8
   |  V387: TECHNICAL ONLY / PRODUCT VALUE NOT DEMONSTRATED
   |
   +── G2? F枝: Node.next Option<ptr<Node>> の非所有 named TAKE/CLEAR
-  |   └─ [P388] 同じ固定G1 compilerでSOURCE/CHECK/backendの最初の壁だけ確認
-  |      └─ 不成立・2以上の広域機構が必要ならHOLD/別枝
+  |   └─ P388: named Option signatureはP8-SIGNATURE-PRECISION (CLI3/C0)
+  |      └─ G2 named実装HOLD。既存direct Node操作の製品価値をV389で確認
   +── N枝: checked数値計算→sum/Fibonacci（一般演算source未実証）
   +── B枝: 有界byte処理→parse/decoder（span/index等未実証）
   +── I枝: fixed array/index→search/sort→Ring/queue（別の複合gap）
@@ -100,7 +100,7 @@ STB: allocator epoch/typed claim six refinements（別のHOLD）
 - **S0**はmainの実証済み限定機能で、新機能数には加算しない。既存[Node direct-link SOURCE/native report](DRAFT_17_23_NODE_EXECUTABLE_REPORT.md)はG2 named-callの成功根拠**ではない**。
 - **G0**は[PR381](https://github.com/wakairo/NewLang_Compiler/pull/381)の実calleeのu8結果（7→9等）がC17/nativeに忠実に出た技術的橋。パラメータ、算術、再帰や一般backendを含まない。
 - **G1**は[PR384](https://github.com/wakairo/NewLang_Compiler/pull/384)の選択済み`Pair{left:u8,right:u8}`と`update_state(ref<write,u8>,u8)->u8`に限る。独立Rの二つのLexical Pair sourceと4 semantic negatives、GCC13/Clang native+observer [Actions #38334944637](https://github.com/wakairo/NewLang_Compiler/actions/runs/38334944637)でbounded信頼境界を確認した。main/PR381のみでは同じhelperのbackendはexit4。呼出者の`loan_write`×2、field選択、old受取は残り、Rust safe `&mut`比較で優位未実証（V387）。**「G1最初の製品価値の星」は候補名だけであり、PRODUCT達成ではない**。
-- **G2? / F分岐**は[V387](https://github.com/wakairo/NewLang_Compiler/issues/387#issuecomment-6136712325)推奨の*非所有* `Node.next:Option<ptr<Node>>` へのnamed helper `clear_link(ref<write,Option<ptr<Node>>>) -> Option<ptr<Node>>` の**条件付き**経由地。old `Some(ptr)`はCopy locatorで、元rootのlive authorityを自動的に保持するnonCopy ownerではない。source grammar/semantic admission、ref formalとOption結果、C17 tagged sum loweringは**未実証**。次は[read-only P #388](https://github.com/wakairo/NewLang_Compiler/issues/388)で固定候補上の最初の拒否点を確認するだけ。実装や正式G2の選定ではない。
+- **G2? / F分岐（named実装HOLD）**：[P #388](https://github.com/wakairo/NewLang_Compiler/issues/388#issuecomment-6136990174)は固定G1 candidateで、名前付き非所有`clear_link(ref<write,Option<ptr<Node>>>) -> Option<ptr<Node>>`の構文解析に成功したが、関数登録で**`P8-SIGNATURE-PRECISION`（CLI3/C0）**と実測。戻り値`Option<ptr<Node>>`・引数ref-to-Optionが個別にsignature precision limitであり、callee/actualのchecked artifactもC17も未到達。安全性違反のsemantic rejectではない。checker定義解析と名前付きNode helper/codegenの**少なくとも二つの実装領域**が未完成だが、二つの広汎な新言語機構が必須とまでは判定されていない。old Some(ptr)はCopy locatorでowner/Domain権限ではない。**追加機構投資はHOLD**し、既にmainでSOURCE/CHECK/native済みの*直接*Node/Optionリンクの安全性がユーザー負担を下げるかを[V #389](https://github.com/wakairo/NewLang_Compiler/issues/389)でread-only比較する。
 - **S5a**はsource-visible bodyに基づく小さな安全操作だが、製品APIやrepresentation privacyの証拠を要する。**S5b**のopaque/nonCopy安全所有API、cJSON M371/M372およびSTBの複雑なepoch/claimは依然HOLD。
 - **N/B/I/Ring**は迂回可能な別枝。mainで一般加算/比較、文字列/byte span、`data[i]`、Array/Ring一般source/backendが完成したとは扱わない。
 
@@ -110,7 +110,7 @@ STB: allocator epoch/typed claim six refinements（別のHOLD）
 | --- | --- | --- | --- |
 | **G0：u8 return call** | 固定body `scalar()->u8`の実calleeが7を返し、ソース9に追従 | mainはbackend4。**DRAFT PR381ではSOURCE/CHECK→C17/native限定PASS、5 CI success（未マージ）** | source-generated body/型付き返値の正しいemitter。範囲外u8や型不一致はC生成前に拒否。**Product価値判定は保留** |
 | **G1：safe state transition (technical)** | 同じscoped replace helperを2独立Pairから実呼出し、旧Copy値・兄弟field・別rootを観測 | P382 SOURCE/CHECK、G0ではbackend4 → stacked **DRAFT PR384**でC17/GCC/Clang native。独立R386限定PASS、V387 **TECHNICAL ONLY / VALUE NOT DEMONSTRATED**。任意`State`は未サポート | 表現・currentness/Copy-oldを実nativeまで接続。L/P/Vの限定チェックを確認。ただし普通callerの`loan_write`やfield選択が残り、C/Zig/Rust比の製品優位は未証明 |
-| **G2?：非所有Option-link named TAKE/CLEAR（条件付きF枝）** | 2つの独立lexical Nodeの`next:Option<ptr<Node>>`を同じnamed helperでNoneへ置換し、旧Copy locatorとlive-root reloanを区別 | 既存Nodeの**直接**link更新はmain nativeだが、named `ref<write,Option<ptr<Node>>>` formal／`Option`結果／C17 tagged returnは未実証。[P388](https://github.com/wakairo/NewLang_Compiler/issues/388)が**固定PR384 compilerでread-only SOURCE/CHECK/backend preflight**するまで投資判定HOLD | Option occurrence/currentness/pointer identityと依存関係を露出し、C-classの実用差分を評価する候補。copy ptrはowner権限でない。最初の拒否と実装範囲を分け、広域機構2つ以上なら別枝へ迂回 |
+| **G2?：非所有Option-link named helper（HOLD）** | 2独立lexical Nodeの`next:Option<ptr<Node>>`を一つのhelperでNoneへ置換、旧Copy locatorを使用 | [P388](https://github.com/wakairo/NewLang_Compiler/issues/388#issuecomment-6136990174)：parse0、registration precision limit `P8-SIGNATURE-PRECISION`、CLI3/C0。Option resultとref-to-Option formalの両方が独立障害。mainの直接Node fixtureと固定candidate上のdirect-prepared正例はnative可、**namedはsource/check/backend未到達**。checkerとemitterの2領域、実装規模未確定 | G2 named実装HOLD。currentness/pointer原original authorityの価値差がまず既存direct sourceで証明できるか[V389](https://github.com/wakairo/NewLang_Compiler/issues/389)が作者・利用者を比較。旧Copy locatorをnonCopy ownerと扱わない |
 | **N：有限数値処理** | 合計・反復Fibonacci、別候補の再帰 | 一般算術式とoverflowガードのsource/parser/checker/codegen不足。再帰は別precision limit | 単なるu8 literalと区別して真正の計算、正しいover/underflow runtime/semantic分類 |
 | **B：byte/char処理** | length-bounded scan、整数parse、escape decoder | byte sequence/index/span/bounds/loop source未実証。C lexer実装はNewLang libraryでない | 検査可能な入力長・失敗/Result・parserへ再利用。範囲外アクセスと不正文字のruntime errorを区別。無限NUL探索をsafeと称さない |
 | **I：検索/ソート** | 固定array内のbinary search、挿入sort | `Array<T,N>`の一般実sourceと`data[i]`、比較/算術が未対応 | bounds・loop・更新/aliasを共有。空範囲/重複/overflowを検証し、ソート結果はlibrary policy oracle |
@@ -162,18 +162,16 @@ metadataからauthorityを創造するwrapper、CLI以外でだけ動くhost fix
 変更されたtoy topology、並行する複数の未選択広域機構、成功数だけのKPI。
 H1/STBのHOLDは「NewLang開発中止」や既存規則の不健全性確定を意味しない。
 
-## 7. 現在の一件・投入条件（2026-10-13 Coordination更新、V387後）
+## 7. 現在の一件・投入条件（2026-10-13 Coordination更新、P388後）
 
-**固定authority：** Compiler/main `348ca7d48f6dd5d658706f4547ab7ef9a63af33d`、`CURRENT_SPEC.md`→Draft17.30、FormalProof/main `a8de4ebb4099f4742fc161d26867740dcac48414`。正本・H1契約は変更しない。
+**固定authorityとマージ境界：** Compiler/main `348ca7d48f6dd5d658706f4547ab7ef9a63af33d`、`CURRENT_SPEC.md`→Draft17.30、FormalProof/main `a8de4ebb4099f4742fc161d26867740dcac48414`。G0 DRAFT PR381とstacked G1 DRAFT PR384、当ロードマップDRAFT PR376は全て**未マージ / DO NOT MERGE**。この文書は非規範の暫定航路である。
 
-**完了した事実と限界：**
-- [P380/G0](https://github.com/wakairo/NewLang_Compiler/issues/380) の引数なしu8 returnは**DRAFT PR381 / 限定C17 native technical PASS**。main未マージ。
-- [P382→P383/G1](https://github.com/wakairo/NewLang_Compiler/issues/383) は、選択済み固定Pairのordinary `update_state(field:ref<write,u8>,next:u8)->u8`を二つの独立Pairへ適用するSOURCE/CHECK→C17/nativeを**stacked DRAFT PR384**で限定実装。G0のみ/mainは同じG1 sourceをbackend4/C0で拒否。PR384の通常CIは5/5成功。
-- [R #385](https://github.com/wakairo/NewLang_Compiler/issues/385) はDNS blockerで独立INCONCLUSIVE（判定維持）。専用GitHub Actions runnerで[独立R #386](https://github.com/wakairo/NewLang_Compiler/issues/386#issuecomment-6136526649)が固定PR384候補`8e80af60e8c9c8b29acb0ea6a7aad4ab5d1c8bd8`をビルドし、実NewLang source・独立C観測器・GCC/Clang strict native・4 semantic negativesから**`PASS IN TESTED BOUNDARY`**。R test-only branchは本体変更なしで未マージ。一般ref、heap/domain、owner、opaque APIや形式的soundnessの証拠ではない。
-- [V #387](https://github.com/wakairo/NewLang_Compiler/issues/387#issuecomment-6136712325) は実Source/CとC・Zig・Rustの同形named helperとL/R/P/V/Cを比較し**`TECHNICAL ONLY / VALUE NOT DEMONSTRATED`**。安全性の部分改善はKEEP、作者/callerの総負担やRust safe API比の競争力は未実証。C後継の製品PASSに昇格しない。
+**KEEPする技術成果・製品未達：** G0の引数なしu8-C17返値、G1の選択済みPairに限るordinary scoped write helper/旧Copy値の二個体native、[独立R386](https://github.com/wakairo/NewLang_Compiler/issues/386#issuecomment-6136526649)のGitHub Actions実測 `PASS IN TESTED BOUNDARY`。しかし[V387](https://github.com/wakairo/NewLang_Compiler/issues/387#issuecomment-6136712325)はC・Zig・Rustでfactored同一操作を比較し、実際のlibrary作者・callerの総L/R/P/V/C削減は未実証のため**`TECHNICAL ONLY / VALUE NOT DEMONSTRATED`**。G0/G1のDRAFT実装をmainに含めず、独立安全性PASSを製品PASSへ変換しない。
 
-**次の一件（user launch待ち・実装不可）：** [P #388](https://github.com/wakairo/NewLang_Compiler/issues/388)で**実装せず**既存選択済みlocal Node/Option-link操作を同一のnamed scoped helperへ移した場合の最初のSOURCE/CHECK/backend拒否点を、**固定PR384 SHA**のunchanged compilerで実測する。成功するSource/profile、意味論違反、backend exit4、環境阻害を区別し、元Copy `ptr<Node>`はあくまでlocatorでoriginal root authorityではないと確認する。read-onlyの判定後、CoordinationがGO小さなemitter研究/HOLD/迂回のいずれかを再裁定する。P388は仕様変更、新C17 lowering、形式証明、R再試験、製品PASSを**許可しない**。一つの候補に広域mechanism 2以上が必要ならHOLDし、byte/有限状態等の別枝の実現可能性を検討する。
+**P388結果とG2? named HOLD：** [P #388](https://github.com/wakairo/NewLang_Compiler/issues/388#issuecomment-6136990174)は固定未修正PR384 candidateの実sourceで、2 Node・3 intended callsのnamed `clear_link(ref<write,Option<ptr<Node>>>) -> Option<ptr<Node>>`についてparser PASSだが**function-unit registration precision limit `P8-SIGNATURE-PRECISION`、CLI3/C0**を観測。元Node directly-inlined source/調整済direct-prepared sourceはcheckerとstrict C17/native到達（後者の新address observerは未実施）したが、**named G2のactual checker/backend/nativeは未到達**。Option result/Option-ref parameterの両signature制限と、新たなNode named Option loweringが未完成であり、単一cheap emitter変更では済まない。二つの大規模feature familyが必須とは断定しない。**Coordination [裁定](https://github.com/wakairo/NewLang_Compiler/issues/388#issuecomment-6137055271)：G2のproduction追加投資HOLD。**
 
-**CI留意：** [roadmap DRAFT PR376](https://github.com/wakairo/NewLang_Compiler/pull/376)旧head `de5d833c28e2e0eb954c554485e5b922eec91df5` のCIは4/5成功、ASanのみchecksum-locked LLVM23.1.2 bootstrap HTTP404で**テスト前停止**。他PRのCIやR386 runner成功をPR376のASan成功に算入しない。pin/checksum無断変更・無制限再実行・CI停止はしない。本文の更新で新しいheadが作られた場合は、そのheadのCIを改めて照合する。
+**次の一件（user launch待ち / READ-ONLY VALUE FIRST）：** [V #389](https://github.com/wakairo/NewLang_Compiler/issues/389)に、*すでにmainでnative実行可能な*二個のlexical Node/Optionリンク（None→Some→None、old Copy pointer locator、original live referent再loan）を使い、元のpointer topologyを保ったC・Zig・safe Rustとの**実際の責務差分**を、作者/caller別L/R/P/V/Cで評価してもらう。普通の公開library APIでない事実とRust safe-reference解法の可能性を明記。新compiler/codegen、M/F/O/R/P作業や一般module/ABI/ownershipを**先に認可しない**。V389の一回の報告後、Coordinationが既存Node経路のユーザー価値を活かすか、別の少数機構枝へ迂回するかを判断する。
 
-**merge/投資停止：** 本ロードマップPR376、G0 PR381、G1 PR384は全て**DRAFT / DO NOT MERGE**。current-main実装と数えず、ユーザーレビュー・merge順序裁定を別途要する。凍結cJSON H1 #268の5H/6+4+2・B.prev=B・original nonCopy custodyとSTB #374 allocator六条件はHOLD/UNDECIDEDのまま。新しい広いsource/ABI/owner/unchecked/representation機構を自動開始しない。
+**停止条件と既存HOLD：** V389で新しいmanual proof削減の証拠がなければ、G1やG2への機構投資を自動再開せず、value-alignmentを再評価。G2を再開するには価値差の**具体的な**根拠とchecker/summary+backendの安全で有限な計画が両方必要。cJSON H1 #268のoriginal 5H・6+4+2・B.prev=B・原B/dst nonCopy返却/失敗世界等はPASS/FAIL UNDECIDED・H1専用追加投資DEFERRED。STBのF45/M374 allocator六条件もHOLD。設計変更時のみProcess §4.2の歴史照合、大きな投資時のみ§4.3を適用する。
+
+**CI：** [PR376 previous head e60d6e54… CI #38336253202](https://github.com/wakairo/NewLang_Compiler/actions/runs/38336253202)は**5/5 SUCCESS**（ASanを含む）。さらに文書コミットして新HEADができた場合は、その新HEADのCIを別に確認し、結果未確定なら未確定と記す。LLVM pins/checksumsを変更せず、以前の一時的なbootstrap 404と今回のgreenを区別する。
