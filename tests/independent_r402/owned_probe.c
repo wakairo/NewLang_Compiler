@@ -39,10 +39,11 @@ static int parse_input(const char *text, bool function_unit, Input *out)
         return 0;
     }
     NLSyntaxTree **destination = &out->tree;
+    NLParseDiagnostic *error = &diagnostic;
     if (function_unit) {
-        status = nl_parser_parse_function_unit(parser, destination, &diagnostic);
+        status = nl_parser_parse_function_unit(parser, destination, error);
     } else {
-        status = nl_parser_parse_source_fragment(parser, destination, &diagnostic);
+        status = nl_parser_parse_source_fragment(parser, destination, error);
     }
     nl_parser_destroy(parser);
     if (status != NL_PARSE_OK) {
