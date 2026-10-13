@@ -510,6 +510,11 @@ if(BUILD_TESTING)
     endforeach()
     add_executable(nested_u8_checked_probe tests/integration/nested_u8_checked_probe.c)
     target_link_libraries(nested_u8_checked_probe PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME nested_u8_checked_c.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_nested_u8_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:nested_u8_checked_probe>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/evidence/p419")
     add_executable(u8_call_checked_probe tests/integration/u8_call_checked_probe.c)
     target_link_libraries(u8_call_checked_probe PRIVATE newlang_checked_c_node newlang_semantic)
     add_test(NAME u8_call_checked_c.integration

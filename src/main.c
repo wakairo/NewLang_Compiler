@@ -44,6 +44,7 @@ typedef struct {
     NLTypeId unit, u8, aggregate;
     const NLCheckedFragment *formal_body; /* current validation only */
     NLSymbolId formal;
+    size_t scalar_depth; /* at most relay + leaf; not a general call graph */
 } V0Program;
 
 static V0Function *v0_find_function(V0Program *program, size_t function)
@@ -395,9 +396,10 @@ static bool v1_call_parameter(const NLCheckedFragment *f, NLCheckedNodeId id,
     return *parameter != 0;
 }
 
-/* Finite scalar callee: Copy local receiving/use and one direct scalar tail
- * or return. No nested call, ref, write, branch or general ABI in this body. */
-static bool v1_copy_body(const NLCheckedFragment *f, const V0Program *p,
+/* Finite scalar callee: Copy locals and a scalar tail/return. Only the tail
+ * may additionally be one authenticated u8 call, within two scalar frames.
+ * No call arguments containing calls, refs, writes, branches or general ABI. */
+static bool v1_copy_body(const NLCheckedFragment *f, V0Program *p,
                          NLCheckedNodeId *result)
 {
     const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
@@ -447,7 +449,10 @@ static bool v1_copy_body(const NLCheckedFragment *f, const V0Program *p,
     const NLCheckedNodeView *tail = nl_checked_node_view(f, *result);
     return nl_control_exits_count(exits) == 0 && root->type == p->u8 &&
            root->result_count == 1 && root->results[0].type == p->u8 &&
-           tail != NULL && v1_scalar(f, *result, p) &&
+           tail != NULL &&
+           (v1_scalar(f, *result, p) ||
+            (p->scalar_depth == 1 && tail->kind == NL_CHECKED_REGISTERED_CALL &&
+             v0_validate_call(f, *result, p))) &&
            root->results[0].value == tail->results[0].value;
 }
 
@@ -469,6 +474,9 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
         return false;
     const NLCheckedFragment *body = nl_checked_call_body(fragment, id);
     if (scalar) {
+        if (program->scalar_depth >= 2)
+            return false;
+        ++program->scalar_depth;
         const NLCheckedFragment *saved_body = program->formal_body;
         const NLSymbolId saved_formal = program->formal;
         program->formal_body = body;
@@ -480,6 +488,7 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
                 nl_checked_node_view(body, returned)->results[0].value;
         program->formal_body = saved_body;
         program->formal = saved_formal;
+        --program->scalar_depth;
         if (!valid)
             return false;
     }
@@ -883,11 +892,17 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
         }
         i = v->next_item;
     }
-    if (root->tail != 0 &&
-        (fputs("    return ", stream) < 0 ||
-         !v1_emit_scalar(stream, nl_checked_node_view(f, root->tail)) ||
-         fputs(";\n", stream) < 0))
-        return false;
+    if (root->tail != 0) {
+        const NLCheckedNodeView *tail = nl_checked_node_view(f, root->tail);
+        if (tail->kind == NL_CHECKED_REGISTERED_CALL) {
+            if (!v1_emit_call(stream, f, root->tail, 1) ||
+                fprintf(stream, "    return nl_call_%zu;\n", root->tail) < 0)
+                return false;
+        } else if (fputs("    return ", stream) < 0 ||
+                   !v1_emit_scalar(stream, tail) || fputs(";\n", stream) < 0) {
+            return false;
+        }
+    }
     return fputs("}\n", stream) >= 0;
 }
 
