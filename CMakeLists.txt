@@ -522,6 +522,14 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_v0_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    # P412 test-only unchanged-main public boundary reproduction.
+    add_executable(p412_public_boundary tests/p412/public_boundary.c)
+    target_link_libraries(p412_public_boundary PRIVATE newlang_checked_c_node newlang_parser)
+    add_test(NAME p412_public_boundary.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p412/reproduce.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p412_public_boundary>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures")
     add_test(NAME artifacts.integrity COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/artifact_test.py")
     add_test(NAME oracle.adapter COMMAND "${Python3_EXECUTABLE}"
