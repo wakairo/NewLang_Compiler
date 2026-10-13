@@ -1,4 +1,5 @@
-/* R405 NON-BLIND calibrated second pass; original R402 probe is preserved in PR403. */
+/* R405 NON-BLIND calibrated owned second pass.
+ * Original R402 independent evidence is preserved in PR403. */
 #include "newlang/checked.h"
 #include "newlang/parser.h"
 #include "newlang/semantic.h"
@@ -55,14 +56,12 @@ static int parse_input(const char *text, bool function_unit, Input *out)
     return 1;
 }
 
-
-#define REQUIRE(expr)                                                          \
-    do {                                                                       \
-        if (!(expr)) {                                                         \
-            printf("R405 FAIL line=%d condition=%s\n", __LINE__, #expr);         \
-            return 0;                                                          \
-        }                                                                      \
-    } while (0)
+static int fail(const char *condition, int line)
+{
+    printf("R405 FAIL line=%d condition=%s\n", line, condition);
+    return 0;
+}
+#define REQUIRE(expr) if (!(expr)) return fail(#expr, __LINE__)
 
 static int equal_locator(NLReferenceFacts x, NLReferenceFacts y)
 {
@@ -108,7 +107,8 @@ static int observe_owned(const NLCheckedFragment *call, int same)
                 NLSemanticBindingView binding;
                 NLSemanticPlaceView root;
                 REQUIRE(roots < 2);
-                REQUIRE(nl_semantic_binding_view(parent, received->symbol, &binding));
+                NLSymbolId symbol = received->symbol;
+                REQUIRE(nl_semantic_binding_view(parent, symbol, &binding));
                 REQUIRE(nl_semantic_place_view(parent, binding.place, &root));
                 REQUIRE(root.independent_root && root.implicit_local &&
                         root.placement.region == 0 && root.incarnation != 0);
@@ -123,10 +123,12 @@ static int observe_owned(const NLCheckedFragment *call, int same)
         if (match != 0 && i > match && n->kind == NL_CHECKED_FIELD_READ) {
             if (n->field.parent == original[0]) {
                 NLSemanticValueView v;
-                REQUIRE(n->field.present && n->field.parent_incarnation ==
-                        incarnation[0] && n->field.parent_fact != 0 &&
-                        n->field.child_fact != 0);
-                REQUIRE(nl_semantic_value_view(parent, n->results[0].value, &v));
+                REQUIRE(n->field.present);
+                REQUIRE(n->field.parent_incarnation == incarnation[0]);
+                REQUIRE(n->field.parent_fact != 0);
+                REQUIRE(n->field.child_fact != 0);
+                NLValueId value = n->results[0].value;
+                REQUIRE(nl_semantic_value_view(parent, value, &v));
                 if (post_read == NULL) {
                     post_read = n;
                     REQUIRE(v.variant == 0 && v.sum_payload == 0);
@@ -143,8 +145,8 @@ static int observe_owned(const NLCheckedFragment *call, int same)
             ++second_writes;
         }
     }
-    REQUIRE(roots == 2 && original[0] != original[1] &&
-            incarnation[0] != 0 && incarnation[1] != 0 && match != 0);
+    REQUIRE(roots == 2 && original[0] != original[1]);
+    REQUIRE(incarnation[0] != 0 && incarnation[1] != 0 && match != 0);
     REQUIRE(post_read != NULL && post_reads >= 2 && second_writes >= 1);
     size_t replacements[2] = {0};
     size_t variants[2] = {0};
@@ -176,14 +178,16 @@ static int observe_owned(const NLCheckedFragment *call, int same)
         REQUIRE(link.parent_aggregate == original[0] &&
                 link.parent_incarnation == incarnation[0]);
         REQUIRE(sibling.parent_aggregate == original[0]);
-        REQUIRE(nl_semantic_value_view(worlds[arm_index],
-                                       sibling.current_value, &payload));
+        NLValueId sibling_value = sibling.current_value;
+        REQUIRE(nl_semantic_value_view(worlds[arm_index], sibling_value,
+                                       &payload));
         REQUIRE(payload.scalar_known && payload.scalar_value == 1);
         if (sibling_fact == 0)
             sibling_fact = sibling.current_fact;
         REQUIRE(sibling.current_fact == sibling_fact);
         NLSemanticValueView sum;
-        REQUIRE(nl_semantic_value_view(worlds[arm_index], link.current_value, &sum));
+        NLValueId current_value = link.current_value;
+        REQUIRE(nl_semantic_value_view(worlds[arm_index], current_value, &sum));
         variants[arm_index] = sum.variant;
         REQUIRE((arm_index == 0 ? 2u : (same ? 2u : 1u)) == sum.variant);
         for (NLCheckedNodeId k = 1; k <= nl_checked_node_count(arm); ++k) {
@@ -191,8 +195,8 @@ static int observe_owned(const NLCheckedFragment *call, int same)
             REQUIRE(n != NULL);
             if (n->kind != NL_CHECKED_REPLACE)
                 continue;
-            REQUIRE(n->field.present &&
-                    n->field.parent == original[0] &&
+            REQUIRE(n->field.present);
+            REQUIRE(n->field.parent == original[0] &&
                     n->field.child == root.fixed_fields[0] &&
                     n->field.parent_incarnation == incarnation[0] &&
                     n->field.child_incarnation == link.incarnation &&
@@ -225,8 +229,9 @@ static int observe_owned(const NLCheckedFragment *call, int same)
                 REQUIRE(nl_semantic_occurrence_view(
                     worlds[arm_index], n->field.payload_occurrence, &ended));
                 REQUIRE(!ended.live);
-                REQUIRE(nl_semantic_occurrence_view(
-                    worlds[arm_index], n->field.post_payload_occurrence, &fresh));
+                NLOccurrenceId new_occ = n->field.post_payload_occurrence;
+                REQUIRE(nl_semantic_occurrence_view(worlds[arm_index], new_occ,
+                                                    &fresh));
                 REQUIRE(fresh.live && fresh.variant == 2 &&
                         fresh.root == root.fixed_fields[0]);
                 printf("R405 same-locator arm=%zu old-occur=%zu ended=%d "
@@ -247,17 +252,19 @@ static int observe_owned(const NLCheckedFragment *call, int same)
         REQUIRE(replacements[arm_index] == 1);
     }
     REQUIRE(worlds[0] != worlds[1] && sibling_fact != 0);
-    REQUIRE(post_read->field.parent == original[0] &&
-            post_read->field.child != 0 &&
-            post_read->field.parent_incarnation == incarnation[0] &&
-            post_read->field.child_fact != 0 && post_read->field.parent_fact != 0);
+    REQUIRE(post_read->field.parent == original[0]);
+    REQUIRE(post_read->field.child != 0);
+    REQUIRE(post_read->field.parent_incarnation == incarnation[0]);
+    REQUIRE(post_read->field.child_fact != 0);
+    REQUIRE(post_read->field.parent_fact != 0);
     printf("R405 OWNED PASS same=%d original_roots=%zu,%zu "
            "incarnations=%zu,%zu normal_arms=2 worlds=separate "
            "arm_variants=%zu,%zu child_join_fact=%zu parent_join_fact=%zu "
            "sibling_fact=%zu parent_second_writes=%zu post_reads=%zu\n",
            same, original[0], original[1], incarnation[0], incarnation[1],
            variants[0], variants[1], post_read->field.child_fact,
-           post_read->field.parent_fact, sibling_fact, second_writes, post_reads);
+           post_read->field.parent_fact, sibling_fact, second_writes,
+           post_reads);
     return 1;
 }
 
@@ -270,8 +277,10 @@ static const char good[] =
     " let pb=loan_read(b){|rb|ptr_from_ref(rb)};\n"
     " let option=Option<ptr<Node>>::Some(pa);\n"
     " match option {\n"
-    "   Some(q)=>{loan_write(a@next){|w|replace(w,Option<ptr<Node>>::Some(pb))};unit},\n"
-    "   None=>{loan_write(a@next){|w|replace(w,Option<ptr<Node>>::None)};unit}\n"
+    "   Some(q)=>{loan_write(a@next){|w|replace(w,"
+    "Option<ptr<Node>>::Some(pb))};unit},\n"
+    "   None=>{loan_write(a@next){|w|replace(w,"
+    "Option<ptr<Node>>::None)};unit}\n"
     " };\n"
     " let after=a@next;\n"
     " loan_write(a@next){|w|replace(w,Option<ptr<Node>>::None)};\n"
@@ -285,11 +294,14 @@ static const char same_locator[] =
     " let b=Node{next:Option<ptr<Node>>::None,payload:u8(2)};\n"
     " let pa=loan_read(a){|ra|ptr_from_ref(ra)};\n"
     " let pb=loan_read(b){|rb|ptr_from_ref(rb)};\n"
-    " let seeded=loan_write(a@next){|w|replace(w,Option<ptr<Node>>::Some(pa))};\n"
+    " let seeded=loan_write(a@next){|w|replace(w,"
+    "Option<ptr<Node>>::Some(pa))};\n"
     " let option=Option<ptr<Node>>::Some(pa);\n"
     " match option {\n"
-    "   Some(q)=>{loan_write(a@next){|w|replace(w,Option<ptr<Node>>::Some(pa))};unit},\n"
-    "   None=>{loan_write(a@next){|w|replace(w,Option<ptr<Node>>::Some(pa))};unit}\n"
+    "   Some(q)=>{loan_write(a@next){|w|replace(w,"
+    "Option<ptr<Node>>::Some(pa))};unit},\n"
+    "   None=>{loan_write(a@next){|w|replace(w,"
+    "Option<ptr<Node>>::Some(pa))};unit}\n"
     " };\n"
     " let after=a@next;\n"
     " loan_write(a@next){|w|replace(w,Option<ptr<Node>>::None)};\n"
@@ -323,16 +335,16 @@ static int run_case(const char *unit_text, int same)
     const NLSyntaxTree *units[] = {unit.tree};
     NLCheckStatus status =
         nl_semantic_register_function_unit(ctx, units, 1, &unit_diag);
+    const char *reg_code = unit_diag.diagnostic.diagnostic.code;
     printf("R405 register=%d code=%s\n", (int)status,
-           unit_diag.diagnostic.diagnostic.code ?
-           unit_diag.diagnostic.diagnostic.code : "-");
+           reg_code ? reg_code : "-");
     if (status != NL_CHECK_OK)
         goto cleanup;
-    status = nl_semantic_check_source_fragment(ctx, invocation.tree,
-                                                &checked, &diagnostic);
-    printf("R405 actual main() source fragment=%d code=%s owned=%d\n",
-           (int)status, diagnostic.diagnostic.code ?
-           diagnostic.diagnostic.code : "-", checked != NULL);
+    status = nl_semantic_check_source_fragment(ctx, invocation.tree, &checked,
+                                               &diagnostic);
+    const char *check_code = diagnostic.diagnostic.code;
+    printf("R405 actual main() fragment=%d code=%s owned=%d\n",
+           (int)status, check_code ? check_code : "-", checked != NULL);
     if (status != NL_CHECK_OK || checked == NULL)
         goto cleanup;
     if (!observe_owned(checked, same))
@@ -345,12 +357,12 @@ static int run_case(const char *unit_text, int same)
     const NLSyntaxTree *invalid[] = {bad.tree};
     unit_diag = (NLFunctionUnitDiagnostic){0};
     status = nl_semantic_register_function_unit(ctx, invalid, 1, &unit_diag);
-    printf("R405 invalid unselected arm registration=%d code=%s\n",
-           (int)status, unit_diag.diagnostic.diagnostic.code ?
-           unit_diag.diagnostic.diagnostic.code : "-");
+    const char *invalid_code = unit_diag.diagnostic.diagnostic.code;
+    printf("R405 rejected unselected arm=%d code=%s\n", (int)status,
+           invalid_code ? invalid_code : "-");
     if (status != NL_CHECK_SEMANTIC_ERROR ||
-        unit_diag.diagnostic.diagnostic.code == NULL ||
-        strcmp(unit_diag.diagnostic.diagnostic.code, "P3-UNKNOWN-BINDING") != 0 ||
+        invalid_code == NULL ||
+        strcmp(invalid_code, "P3-UNKNOWN-BINDING") != 0 ||
         !nl_semantic_snapshot(ctx, &after))
         goto cleanup;
     if (before.types != after.types || before.bindings != after.bindings ||
@@ -365,8 +377,8 @@ static int run_case(const char *unit_text, int same)
     diagnostic = (NLCheckDiagnostic){0};
     status = nl_semantic_check_source_fragment(ctx, invocation.tree,
                                                 &checked, &diagnostic);
-    printf("R405 after rejected function: main()=%d owned=%d\n",
-           (int)status, checked != NULL);
+    printf("R405 rollback recheck=%d owned=%d\n", (int)status,
+           checked != NULL);
     if (status != NL_CHECK_OK || checked == NULL ||
         !observe_owned(checked, same))
         goto cleanup;
