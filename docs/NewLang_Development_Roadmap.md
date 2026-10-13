@@ -68,9 +68,31 @@ L（lifetime）/R（responsibility）/P（pointer access）/V（value）/C（con
 （`Box`＋`NonNull`＋局所`unsafe`の安全なwrapperやRAII）と比較する。
 Rustのsafe reference / indices等へ構造を変更する比較は、それを明示して別枠で行う。
 
-**2026-10-13時点の結論：どの新しいProduct／Implementation gateも自動GOではない。**
-ユーザーの次の候補選択と投資判断を経るまでは、追加のTrack実装を起動しない。
-現在の技術的成功を残しながら、製品価値の未実証を言い換えて隠さない。
+**Product / large mechanism investment remains HOLD unless a concrete author+caller benefit is shown.**
+一方で、実装コスト・source/validator/nativeの最初の壁を実測し、別経路にも再利用できる知識を増やす
+**探索投資（Exploration）を、製品化投資（Exploitation）と区別する**。
+製品価値が未実証なことだけで、小さく可逆的な実測をNO-GOにしない。
+この区別は安全性・canonical semantics・public evidenceを緩めるものではなく、
+あくまで投資許可の判断基準の区別である。
+
+### 4.0 不完全な地図での探索ルール（Coordination運用案）
+
+- **探索仮説を事前登録**：何が未確定か、予測する最初の停止層（parser / semantic / source-owned / C17 / native）、結果が変える次経路、再利用できる能力を一件につき明記。推定工数は**予測値**であり実測値と取り違えない。
+- **情報利得を評価**：期待したProduct成果に届かなくても、分岐のコスト・正確な停止原因・別workloadでの再利用条件が分かれば探索として進歩。既知の2-Pair smokeを成功回数だけ積み増すことは情報利得が低い。
+- **費用を制限し可逆化**：原則一度に一つの未確定境界。最初は未マージDRAFT枝／小さなテスト／固定SHA／単独CIから始め、失敗時はガード解除や特権的host証拠を加えて救済せず、測定結果を地図へ返す。次の修正投資は別判断とする。
+- **安全性・価値を混同しない**：`SOURCE unsupported` ≠ language-invalid、`CI green` ≠ untested feature PASS、有限technical PASS ≠ 製品上の人間負担削減。意味論を変えるならProcess §4.2、重要機構投資なら§4.3を適用する。
+- **停止後の再経路探索**：成功・失敗とも、残りの推定コストと新しく獲得した能力を比較して次の星を選び直す。実測した能力に独立根拠なしで「一般対応」を与えない。
+
+**直近の具体例：** [V394](https://github.com/wakairo/NewLang_Compiler/issues/394#issuecomment-6140235445)の
+`NO INVESTMENT-READY CANDIDATE`は**製品化投資の判定**として受理。
+一方、既存DRAFT G1を変更せず、テスト1ファイルでAのsource-issued Copy-oldを別Bの次の状態へ渡す
+[DRAFT PR395](https://github.com/wakairo/NewLang_Compiler/pull/395)は
+[Actions #38361710223](https://github.com/wakairo/NewLang_Compiler/actions/runs/38361710223)で
+GCC/Release/Clang/ASan/UBSan **5/5 PASS（初回）**。
+**獲得した地図上の知識＝この固定ref/u8/Pair経路ではsource→checked-owned probe→C17/nativeの実データフローが合成可能**。
+普通の独立safe caller・heap/nonCopy/Option/loopへの一般化やC/Zig/Rust比較上の製品優位は**未実証**。
+PR395はDRAFT/DO NOT MERGE、元G0/G1も未マージ。
+
 
 ### 4.1 証拠がある分岐と、次の実用操作への障害
 
@@ -100,8 +122,9 @@ Rustのsafe reference / indices等へ構造を変更する比較は、それを�
 4. **停止条件：** 一つのユーザー操作を通すために二つ以上の無関係な広いsource/semantic/ABI/owner機構、権限を無から作るhostや`unchecked`、あるいは反復するper-hop proofが必要ならHOLDして他workloadへ。static negative、runtime error、policy mismatch、unsupported profileを混同しない。
 5. 実装判断はCoordinationの§4.3 Goal Alignment後のみ。新しい選択source ruleが必要なら[Development Process §4.2](NewLang_Project_Development_Process.md)／Design Decision Procedure／Ledgerを経て、実装のGOと別に選択する。広い安全性主張が新たに加わる時だけ適切な独立R/Fを起動する。
 
-この条件に合う候補がまだ無いこと自体を**未選定**として扱う。
-「とにかく進める」ために、FibonacciやG2 helper、payload fieldなどを自動的なfirst taskへ格上げしない。
+**製品化投資については**条件に合う候補がまだ無いこと自体を**未選定**として扱う。
+ただし上記4.0の小さな探索は、情報獲得の見込み・費用上限・停止条件が独立に成立するなら実施可能。
+FibonacciやG2 helper、payload fieldなどを自動的なfirst product taskへ格上げしない。
 
 ### 4.3 過去のPython／Oracle研究の扱い
 
