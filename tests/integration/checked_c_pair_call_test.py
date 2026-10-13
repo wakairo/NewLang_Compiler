@@ -92,7 +92,15 @@ def main():
              'actual_locals': source.replace(' let old_a=', ' let next_a=u8(22);let next_b=u8(33);\n let old_a=')
                                     .replace('update_state(w,u8(11))', 'update_state(w,next_a)')
                                     .replace('update_state(w,u8(13))', 'update_state(w,next_b)'),
-             'renamed': source.replace('update_state', 'refresh')}
+             'renamed': source.replace('update_state', 'refresh'),
+             # Same source-issued old Copy result from A becomes the real value
+             # written to independent B. This is a causal state transfer,
+             # not the original two literal-new updates with discarded old.
+             'causal_old_to_b': source.replace(
+                 'update_state(w,u8(13))', 'update_state(w,old_a)'),
+             'causal_old_to_b_changed': source.replace(
+                 'u8(7)', 'u8(80)').replace('u8(11)', 'u8(123)').replace(
+                 'update_state(w,u8(13))', 'update_state(w,old_a)')}
     report = {'sanitizer': sanitizer, 'positive': [], 'negative': [], 'mutants': []}
     with tempfile.TemporaryDirectory(prefix='newlang-g1-') as directory:
         root = Path(directory)
@@ -114,6 +122,29 @@ def main():
             rows = [json.loads(r) for r in checked.stdout.splitlines()]
             if rows[0] != {'kind': 'status', 'parse': 0, 'register': 0, 'check': 0, 'owned': True}:
                 raise SystemExit('not a genuine source-owned artifact')
+            if name in ('causal_old_to_b', 'causal_old_to_b_changed'):
+                # Independently pre-registered application-level oracle:
+                # the value loaded/returned by first source call controls the
+                # second source call's actual B state, not just an observer.
+                initial_a, new_a = ((7, 11) if name == 'causal_old_to_b'
+                                    else (80, 123))
+                expected_values = {'old_a': initial_a, 'old_b': 9,
+                                   'after_a': new_a, 'marker_a': 1,
+                                   'after_b': initial_a, 'marker_b': 2}
+                records = [r for r in rows if r['kind'] == 'record']
+                calls = [r for r in rows if r['kind'] == 'call']
+                bindings = {r['name']: r['value'] for r in rows
+                            if r['kind'] == 'binding'}
+                if (len(records) != 2 or len(calls) != 2 or
+                        records[0]['initial'] != [initial_a, 1] or
+                        records[1]['initial'] != [9, 2] or
+                        calls[0]['old'] != initial_a or
+                        calls[0]['new'] != new_a or
+                        calls[1]['old'] != 9 or
+                        calls[1]['new'] != calls[0]['old'] or
+                        bindings != expected_values):
+                    raise SystemExit(
+                        f'causal Copy-old source-owned dataflow mismatch: {rows}')
             emitted = run([compiler, str(path)])
             ok(emitted, name + ' emission')
             repeated = run([compiler, str(path)])
