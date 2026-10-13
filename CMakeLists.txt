@@ -517,3 +517,6 @@ if(BUILD_TESTING)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
 endif()
+
+# R406 independent first-pass only (no Production fixture dependence).
+include(tests/independent_r406/CMakeLists.txt)
