@@ -250,6 +250,9 @@ NLCheckStatus nl_recursive_complete(NLSemanticContext *, NLTypeId,
 NLCheckStatus nl_recursive_validate(const NLSemanticContext *);
 bool nl_recursive_value_type(const NLSemanticContext *, NLTypeId);
 NLCheckStatus nl_fixed_attach(NLSemanticContext *, NLPlaceId);
+/* Coarse content top for the Copy local-Node Option only. No payload or
+ * dereference facts; dependency freedom is proved separately by the join. */
+bool nl_sum_unknown_node_option(const NLSemanticContext *, NLSemanticValueView);
 void nl_fixed_detach(NLSemanticContext *, NLPlaceId);
 NLCheckStatus nl_fixed_validate(const NLSemanticContext *);
 NLCheckStatus nl_sem_validate(const NLSemanticContext *);

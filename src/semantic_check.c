@@ -5152,6 +5152,222 @@ static bool node_unit_arm_frame(const NLSemanticContext *before,
     return true;
 }
 
+/* One original lexical Node link may differ across two normal unit arms.
+ * Authenticate the actual replace, then compare the rest of the complete
+ * incoming frame. The comparison clone is never a semantic continuation.
+ * No arm-private value, fact, place or occurrence is imported. */
+static bool node_join_pointer(const NLSemanticContext *before,
+                              const NLSemanticContext *world, NLValueId value,
+                              NLTypeId node)
+{
+    const NLSemanticValueView pointer = world->values[value - 1];
+    if (pointer.dependencies != NL_DEPENDENCY_FREE ||
+        pointer.value_dependency_count != 0 || pointer.reference_count != 0 ||
+        pointer.reference.provenance != NL_PROVENANCE_VALID ||
+        !pointer.reference.readable || pointer.reference.scope != 0 ||
+        pointer.reference.occurrence_dependency != 0)
+        return false;
+    for (size_t i = 0; i < before->place_count; ++i) {
+        const NLSemanticPlaceView root = before->places[i];
+        if (root.live && root.independent_root && root.type == node &&
+            root.placement.region == 0 && pointer.reference.place == i + 1 &&
+            pointer.reference.incarnation == root.incarnation)
+            return true;
+    }
+    return false;
+}
+
+static bool node_changed_arm(Check *check, const NLCheckedFragment *arm,
+                             NLValueId input, NLPlaceId *changed)
+{
+    const NLSemanticContext *before = check->context;
+    const NLSemanticContext *after = nl_checked_context(arm);
+    const NLCheckedNodeView *result =
+        nl_checked_node_view(arm, nl_checked_root(arm));
+    if (result == NULL || result->terminates || result->type != 1 ||
+        nl_control_exits_count(arm->exits) != 0 ||
+        nl_control_exits_count(arm->loop_returns) != 0 ||
+        nl_sem_validate(after) != NL_CHECK_OK)
+        return false;
+    const NLCheckedNodeView *write = NULL;
+    for (size_t i = 1; i <= nl_checked_node_count(arm); ++i) {
+        const NLCheckedNodeView *op = nl_checked_node_view(arm, i);
+        if (op->kind == NL_CHECKED_MATCH || op->kind == NL_CHECKED_IF ||
+            op->kind == NL_CHECKED_LOOP ||
+            op->kind == NL_CHECKED_REGISTERED_CALL)
+            return false;
+        if (op->kind == NL_CHECKED_REPLACE) {
+            if (write != NULL || !op->field.present || op->field.index != 0)
+                return false;
+            write = op;
+        }
+    }
+    if (write == NULL)
+        return node_unit_arm_frame(before, after, input, result);
+    const NLCheckedField f = write->field;
+    if (f.parent == 0 || f.parent > before->place_count || f.child == 0 ||
+        f.child > before->place_count || (*changed != 0 && *changed != f.child))
+        return false;
+    const NLSemanticPlaceView parent = before->places[f.parent - 1],
+                              child = before->places[f.child - 1],
+                              post = after->places[f.child - 1];
+    if (!parent.live || !parent.independent_root || !parent.implicit_local ||
+        parent.placement.region != 0 ||
+        !nl_recursive_local_type(before, parent.type) ||
+        parent.fixed_field_count != 2 || parent.fixed_fields[0] != f.child ||
+        !same_place_frame(parent, after->places[f.parent - 1]) ||
+        !same_place_frame(child, post) || f.old_value != child.current_value ||
+        f.parent_fact != parent.current_fact ||
+        f.child_fact != child.current_fact ||
+        f.payload_occurrence != child.payload_occurrence ||
+        f.new_value != post.current_value ||
+        f.child_post_fact != post.current_fact ||
+        f.parent_post_fact != after->places[f.parent - 1].current_fact ||
+        f.post_payload_occurrence != post.payload_occurrence ||
+        f.parent_incarnation != parent.incarnation ||
+        f.child_incarnation != child.incarnation ||
+        after->values[parent.current_value - 1].carrier != NL_CARRIER_ENDED ||
+        after->values[child.current_value - 1].carrier != NL_CARRIER_ENDED ||
+        nl_fixed_change_dependencies(before, f.child, child.current_value) !=
+            NL_CHECK_OK)
+        return false;
+    const NLSemanticValueView prior = before->values[child.current_value - 1];
+    if (prior.variant == 0 || prior.dependencies != NL_DEPENDENCY_FREE ||
+        prior.value_dependency_count != 0 ||
+        (prior.sum_payload != 0 &&
+         !node_join_pointer(before, before, prior.sum_payload, parent.type)))
+        return false;
+    const NLSemanticValueView incoming = after->values[post.current_value - 1];
+    if (incoming.dependencies != NL_DEPENDENCY_FREE ||
+        incoming.value_dependency_count != 0 || incoming.variant == 0)
+        return false;
+    if (incoming.sum_payload != 0 &&
+        !node_join_pointer(before, after, incoming.sum_payload, parent.type))
+        return false;
+    /* Surviving occurrence refs cannot follow a conditional Reset. */
+    for (size_t i = 0; i < before->value_count; ++i) {
+        const NLSemanticValueView v = before->values[i];
+        if (v.carrier == NL_CARRIER_ENDED ||
+            before->types[v.type - 1].view.kind != NL_TYPE_REF)
+            continue;
+        for (size_t j = 0; j < nl_sem_ref_count(v); ++j) {
+            const NLReferenceFacts r = nl_sem_ref_fact(v, j);
+            if (child.payload_occurrence != 0 &&
+                r.occurrence_dependency == child.payload_occurrence &&
+                scope_active(before, r.scope))
+                return false;
+        }
+    }
+    const NLPlaceId payload =
+        post.payload_occurrence == 0
+            ? 0
+            : after->occurrences[post.payload_occurrence - 1].payload_place;
+    for (size_t i = before->scope_count; i < after->scope_count; ++i)
+        if (after->scopes[i].active)
+            return false;
+    for (size_t i = before->place_count; i < after->place_count; ++i)
+        if ((after->places[i].live && i + 1 != payload) ||
+            nl_recursive_local_type(after, after->places[i].type))
+            return false;
+    NLSemanticContext *comparison = NULL;
+    if (!host(check, nl_sem_clone(after, &comparison), write->span))
+        return false;
+    /* Restore ONLY the ownership bookkeeping changed by the authenticated
+     * replace. All semantic contents, pointer facts and dependencies still
+     * compare exactly; restoration is not validation or state commitment. */
+    const NLValueId old[] = {
+        parent.current_value, child.current_value,
+        before->values[child.current_value - 1].sum_payload};
+    for (size_t i = 0; i < 3; ++i)
+        if (old[i] != 0) {
+            NLSemanticValueView *v = &comparison->values[old[i] - 1];
+            const NLSemanticValueView original = before->values[old[i] - 1];
+            v->carrier = original.carrier;
+            v->owner_place = original.owner_place;
+            v->aggregate_owner = original.aggregate_owner;
+            v->sum_owner = original.sum_owner;
+        }
+    comparison->places[f.parent - 1].current_value = parent.current_value;
+    comparison->places[f.parent - 1].current_fact = parent.current_fact;
+    comparison->places[f.child - 1].current_value = child.current_value;
+    comparison->places[f.child - 1].current_fact = child.current_fact;
+    comparison->places[f.child - 1].payload_occurrence =
+        child.payload_occurrence;
+    const NLPlaceId sibling = parent.fixed_fields[1];
+    comparison->values[before->places[sibling - 1].current_value - 1]
+        .aggregate_owner = parent.current_value;
+    for (size_t i = 0; i < before->binding_count; ++i)
+        if (before->bindings[i].view.place == f.parent)
+            comparison->bindings[i].view.value = before->bindings[i].view.value;
+    if (child.payload_occurrence != 0) {
+        const NLSemanticOccurrenceView occurrence =
+            before->occurrences[child.payload_occurrence - 1];
+        comparison->occurrences[child.payload_occurrence - 1].live =
+            occurrence.live;
+        NLSemanticPlaceView *p =
+            &comparison->places[occurrence.payload_place - 1];
+        const NLSemanticPlaceView original =
+            before->places[occurrence.payload_place - 1];
+        p->live = original.live;
+        p->current_value = original.current_value;
+        p->current_fact = original.current_fact;
+    }
+    const bool same = node_unit_arm_frame(before, comparison, input, result);
+    nl_semantic_destroy(comparison);
+    if (same)
+        *changed = f.child;
+    return same;
+}
+
+static bool node_memory_join(Check *check, NLCheckedNodeId match,
+                             NLValueId input, NLSourceSpan span)
+{
+    NLSemanticContext *c = check->context;
+    size_t roots = 0;
+    if (check->allocated_slice || check->loop != NULL || check->in_source_loan)
+        return false;
+    const NLTypeId pointer =
+        c->types[c->values[input - 1].type - 1].option_target;
+    if (pointer == 0 || c->types[pointer - 1].view.kind != NL_TYPE_PTR ||
+        !nl_recursive_local_type(c, c->types[pointer - 1].view.target))
+        return false;
+    for (size_t i = 0; i < c->place_count; ++i)
+        if (c->places[i].live && c->places[i].independent_root &&
+            nl_recursive_local_type(c, c->places[i].type)) {
+            if (!c->places[i].implicit_local ||
+                c->places[i].placement.region != 0 ||
+                c->places[i].fixed_field_count != 2)
+                return false;
+            ++roots;
+        }
+    if (roots != 2)
+        return false;
+    NLPlaceId changed = 0;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedFragment *arm =
+            nl_checked_match_arm(check->artifact, match, i);
+        if (arm == NULL || !node_changed_arm(check, arm, input, &changed))
+            return false;
+    }
+    if (changed == 0)
+        return false;
+    /* Dependencies are empty because BOTH incoming concrete packages and
+     * their Copy pointers were proved free. Content/provenance is top, not
+     * a None value and not an invented pointer. Subsequent match/extraction
+     * remains a precision boundary. Reuse ordinary Change/Reset bookkeeping. */
+    const NLValueId unknown = new_value(
+        check, (NLSemanticValueView){.type = c->places[changed - 1].type},
+        span);
+    if (unknown == 0 ||
+        !host(check, nl_fixed_change(c, changed, unknown, true), span))
+        return false;
+    refresh_bindings(check, c->places[changed - 1].parent_aggregate);
+    end_temporary(check, input);
+    view(check, match)->normal_arms = 2;
+    view(check, match)->type = 1;
+    return true;
+}
+
 /* Identity prefix is qualified only by two owned snapshots captured at the
  * actual clone boundary. Fresh post-fork facts/IDs never enter this mapping. */
 bool nl_packet_same_entry(const NLSemanticContext *a,
@@ -5496,6 +5712,12 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
     NLSemanticContext *c = check->context;
     const NLSemanticValueView value = c->values[input - 1];
     const NLTypeId type = value.type;
+    if (nl_sum_unknown_node_option(c, value)) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
+             "NODE-JOIN-POST-PRECISION",
+             "joined Node link has unknown variant and pointer provenance");
+        return 0;
+    }
     if (c->types[type - 1].view.kind != NL_TYPE_SUM || value.variant == 0) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
              "P9-MATCH-PRECISION",
@@ -5834,6 +6056,10 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
             view(check, id)->type = 1;
             return id;
         }
+        if (count == 2 && node_memory_join(check, id, input, syntax->span))
+            return id;
+        if (check->status != NL_CHECK_OK)
+            return 0;
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, syntax->span,
              "P9-CONTINUATION-PRECISION",
              "multiple normal function-match states require a richer join");
@@ -6677,6 +6903,15 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
         return 0;
     if (borrowed && !concrete_ref(check, scrutinee, s->span))
         return 0;
+    const NLValueId matched_value =
+        borrowed ? c->places[input.reference.place - 1].current_value
+                 : scrutinee;
+    if (nl_sum_unknown_node_option(c, c->values[matched_value - 1])) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
+             "NODE-JOIN-POST-PRECISION",
+             "joined Node link has unknown variant and pointer provenance");
+        return 0;
+    }
     NLPlaceId root = borrowed ? input.reference.place : 0;
     if (borrowed && c->places[root - 1].parent_aggregate != 0) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
