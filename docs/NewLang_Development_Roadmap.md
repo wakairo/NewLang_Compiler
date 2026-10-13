@@ -1,10 +1,10 @@
 # NewLang 開発ロードマップ — 既存成果の実用化を優先する
 
-> **Status: PROPOSED / NON-NORMATIVE — Coordination Issue #375 / review待ち**
+> **Status: ADOPTED / NON-NORMATIVE — Coordination Issue #375 / 2026-10-13承認**
 >
 > 最新裁定スナップショット：2026-10-13、Compiler/main `adc63b64b656b3d6e0501f29eaeee5181927dc14`、
 > FormalProof/main `a8de4ebb4099f4742fc161d26867740dcac48414`。
-> 本書は順序と判定基準の**提案**であり、Issue/PRの起票だけで実装やTrackを開始しない。
+> 本書は順序と判定基準についての**採用済み・非規範的な開発ガイド**であり、Issue/PRの起票だけで実装やTrackを開始しない。
 > 言語の正本は [CURRENT_SPEC](reference/CURRENT_SPEC.md) → Draft 17.30、
 > 製品の正本は [Product / Value Strategy](NewLang_Product_Value_Strategy.md)、
 > [North Star](NewLang_North_Star_Product_Validation.md)、
@@ -90,7 +90,7 @@ Rustのsafe reference / indices等へ構造を変更する比較は、それを�
 この区別は安全性・canonical semantics・public evidenceを緩めるものではなく、
 あくまで投資許可の判断基準の区別である。
 
-### 4.0 不完全な地図での探索ルール（Coordination運用案）
+### 4.0 不完全な地図での探索ルール（Coordination運用方針）
 
 - **探索仮説を事前登録**：何が未確定か、予測する最初の停止層（parser / semantic / source-owned / C17 / native）、結果が変える次経路、再利用できる能力を一件につき明記。推定工数は**予測値**であり実測値と取り違えない。
 - **情報利得を評価**：期待したProduct成果に届かなくても、分岐のコスト・正確な停止原因・別workloadでの再利用条件が分かれば探索として進歩。既知の2-Pair smokeを成功回数だけ積み増すことは情報利得が低い。
@@ -190,5 +190,5 @@ H1/STBの停止は**NewLang全体の開発中止でも既存core semanticsの不
 - **製品HOLD／優先付け:** [V394](https://github.com/wakairo/NewLang_Compiler/issues/394)と[V411](https://github.com/wakairo/NewLang_Compiler/issues/411)の**NO INVESTMENT-READY C-class product operation**を維持。utlistのunlinkとfree分離は実際の研究対象だが、実利用者・正しい普通callerの判断・fair C/Zig/Rust比較上の総責任減・単一小さなsource→owned→native経路は不在。根拠なき類似サンプルの量産ではなく、**実ユーザーのmaterialな新証拠が生じるまで大きなproof/emitter機構投資を増やさない**。
 - **開発継続と再開条件:** 開発を中止するわけではない。既存mainのバグ修正・品質維持と、具体的で新しい低コスト実測は別途Goal/Evidence/Alternatives/Stopを明記して限定判断できる。特定の普通C-class利用者操作、実source-levelの因果的結果、作者＋callerのL/R/P/V/C純差分と最初の小さな実装経路が揃えば、必要な機構を選び直す。Bのcertificate実装を自動的な次工程にはしない。
 - **凍結の維持:** H1 [#268](https://github.com/wakairo/NewLang_Compiler/issues/268)の元の5 independently fallible roots／6+4+2／B.prev=B self-link／B+dst nonCopy custody／0〜5 failure worlds／B1–B7はPASS/FAIL UNDECIDED・専用追加投資DEFER。STB F45/M374の6条件HOLD。
-- **現在のPRとレビュー:** 本[PR376](https://github.com/wakairo/NewLang_Compiler/pull/376)は**DRAFT docs-only / user review待ち / 非normative**。旧DRAFT PR381/384、R-only PR403/407/408、test-only PR413は個別の実験・検証証拠であり、**DO NOT MERGE**。旧PR401は統合PR410で取り込んだため未マージclosed。本文の古い2026-10-12実験報告はこの最新版の能力表・停止判断より優先しない。
-- **CI evidence:** この文書更新前のmain [run #38393450406](https://github.com/wakairo/NewLang_Compiler/actions/runs/38393450406)は5/5 PASS。**本DRAFT文書更新のCIは新しいコミットHEADで別途確認するまでgreenとは主張しない。** 合意のない自動merge・source/semantic/API選択・新Track連鎖は行わない。
+- **ロードマップの採用:** 本文は[PR376](https://github.com/wakairo/NewLang_Compiler/pull/376)で採用した**非規範的な開発ガイド**。旧DRAFT PR381/384、R-only PR403/407/408、test-only PR413は個別の実験・検証証拠であり、**DO NOT MERGE**。旧PR401は統合PR410で取り込んだため未マージclosed。本文の古い2026-10-12実験報告はこの最新版の能力表・停止判断より優先しない。
+- **CI evidence:** この文書採用前のmain [run #38393450406](https://github.com/wakairo/NewLang_Compiler/actions/runs/38393450406)は5/5 PASS。採用PRの正確なHEADでの検証結果は[PR376のChecks](https://github.com/wakairo/NewLang_Compiler/pull/376/checks)とCoordination裁定を参照する。**この文書の採用からsource/semantic/API選択、新規機構の実装やTrack連鎖は自動で承認されない。**
