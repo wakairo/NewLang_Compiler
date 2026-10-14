@@ -974,7 +974,7 @@ static int render_check_failure(const NLSource *source,
                         nl_source_name(source), 3);
 }
 
-static int compile_v0(const char *path)
+static int compile_v0(const char *path, bool check_only)
 {
     static const char entry_text[] = "main()";
     NLSource *source = NULL, *entry_source = NULL;
@@ -1040,6 +1040,13 @@ static int compile_v0(const char *path)
         goto cleanup;
     }
 
+    /* A real owned entry has been checked. No backend admission or output is
+     * needed in this mode; keep the same destruction order on every exit. */
+    if (check_only) {
+        result = 0;
+        goto cleanup;
+    }
+
     const NLCheckedNodeId root = nl_checked_root(entry);
     const NLCheckedNodeView *root_view = nl_checked_node_view(entry, root);
     V0Program program = {.unit = nl_semantic_unit_type(context),
@@ -1097,6 +1104,9 @@ int main(int argc, char **argv)
     if (argc == 1 || (argc == 2 && strcmp(argv[1], "--help") == 0)) {
         return fputs(help, stdout) >= 0 && fflush(stdout) == 0 ? 0 : 1;
     }
+    if (argc == 3 && strcmp(argv[1], "--check") == 0 && argv[2][0] != '-') {
+        return compile_v0(argv[2], true);
+    }
     if (argc != 2) {
         return report_error("P0-CLI-ARGUMENT", "expected exactly one argument",
                             "use --help for usage", 2);
@@ -1110,5 +1120,5 @@ int main(int argc, char **argv)
     if (argv[1][0] == '-') {
         return report_error("P0-CLI-OPTION", "unknown option", argv[1], 2);
     }
-    return compile_v0(argv[1]);
+    return compile_v0(argv[1], false);
 }

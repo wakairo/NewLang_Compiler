@@ -147,6 +147,14 @@ P0 does not claim to reproduce them in C.
 `--version` prints `newlangc 0.1.0 (P0 bootstrap)`. `--help` (also no arguments)
 prints usage; both exit 0. Invalid options / argument counts exit 2.
 
+`newlangc --check SOURCE` runs the same production parser, function-unit
+registration and semantic checking of the ordinary `main()` entry, then
+destroys the source-generated checked-owned fragment without invoking codegen.
+Success exits 0 with zero stdout/stderr bytes. Source I/O failures exit 1;
+parser and semantic failures retain their diagnostics and exit 3. A missing
+entry is a semantic failure. Backend-unsupported but semantically valid source
+can pass `--check`; this does **not** establish C17, LLVM or native support.
+
 For a source path, the North Star V0/V1/AVS path reads the actual source, parses the
 bounded source function unit, registers/checks it with the production semantic
 checker, then checks an ordinary zero-argument `main()` call selected only by
@@ -158,6 +166,31 @@ Accepted checked constructs outside the V0/V1/AVS emitter report
 The Checked-C path is a bounded bootstrap/reference execution vehicle for the
 North Star V0/V1/AVS subset; it is not a general C backend and does not replace LLVM as
 the planned primary backend.
+
+### LLVM-independent frontend build
+
+On a Linux host with GCC or Clang, make, CMake >=3.28,<4.0 and Python >=3.12:
+
+```sh
+CC=gcc cmake -S . -B build-frontend -DCMAKE_BUILD_TYPE=Debug \
+  -DNEWLANG_FRONTEND_ONLY=ON
+cmake --build build-frontend --parallel 2
+ctest --test-dir build-frontend --output-on-failure
+./build-frontend/newlangc --check tests/fixtures/node_join_same_locator.nl
+```
+
+These commands do not invoke bootstrap or fetch LLVM. The explicit option
+skips LLVM discovery/import and only the `llvm.c_api` smoke test. All other
+tests, including source/checker, negative semantics, OOM/rollback, public
+validators and existing C17/native reference tests, remain enabled: that C17
+emitter has no LLVM dependency and its ordinary CLI behavior is preserved.
+`--check` is available in both builds; existing help/version output is unchanged.
+
+The option defaults **OFF**. The normal build still requires exact LLVM 23.1.2,
+and the normal five-configuration CI uses that default. Frontend-only results
+are separately scoped partial validation and cannot replace the full gate or
+justify merging new backend safety features. No native or Product PASS follows
+from checking source alone.
 
 Product/value strategy is recorded in
 [`docs/NewLang_Product_Value_Strategy.md`](docs/NewLang_Product_Value_Strategy.md),

@@ -29,26 +29,31 @@ if(NOT NEWLANG_SANITIZER STREQUAL "none")
         -fsanitize=${NEWLANG_SANITIZER} -fno-sanitize-recover=all)
 endif()
 
-find_program(LLVM_CONFIG NAMES llvm-config-23 REQUIRED)
-execute_process(COMMAND "${LLVM_CONFIG}" --version
-    OUTPUT_VARIABLE llvm_version OUTPUT_STRIP_TRAILING_WHITESPACE
-    COMMAND_ERROR_IS_FATAL ANY)
-if(NOT llvm_version STREQUAL "23.1.2")
-    message(FATAL_ERROR "LLVM must be exactly 23.1.2; found ${llvm_version}")
+option(NEWLANG_FRONTEND_ONLY "Build/check without LLVM (not the full validation gate)" OFF)
+if(NEWLANG_FRONTEND_ONLY)
+    message(STATUS "Frontend-only: LLVM discovery and llvm.c_api smoke omitted")
+else()
+    find_program(LLVM_CONFIG NAMES llvm-config-23 REQUIRED)
+    execute_process(COMMAND "${LLVM_CONFIG}" --version
+        OUTPUT_VARIABLE llvm_version OUTPUT_STRIP_TRAILING_WHITESPACE
+        COMMAND_ERROR_IS_FATAL ANY)
+    if(NOT llvm_version STREQUAL "23.1.2")
+        message(FATAL_ERROR "LLVM must be exactly 23.1.2; found ${llvm_version}")
+    endif()
+    execute_process(COMMAND "${LLVM_CONFIG}" --includedir
+        OUTPUT_VARIABLE llvm_include OUTPUT_STRIP_TRAILING_WHITESPACE
+        COMMAND_ERROR_IS_FATAL ANY)
+    execute_process(COMMAND "${LLVM_CONFIG}" --libdir
+        OUTPUT_VARIABLE llvm_libdir OUTPUT_STRIP_TRAILING_WHITESPACE
+        COMMAND_ERROR_IS_FATAL ANY)
+    find_library(llvm_shared NAMES LLVM-23 LLVM
+        PATHS "${llvm_libdir}" NO_DEFAULT_PATH REQUIRED)
+    add_library(newlang_llvm SHARED IMPORTED)
+    set_target_properties(newlang_llvm PROPERTIES
+        IMPORTED_LOCATION "${llvm_shared}"
+        INTERFACE_INCLUDE_DIRECTORIES "${llvm_include}")
+    message(STATUS "LLVM C API ${llvm_version}: ${llvm_shared}")
 endif()
-execute_process(COMMAND "${LLVM_CONFIG}" --includedir
-    OUTPUT_VARIABLE llvm_include OUTPUT_STRIP_TRAILING_WHITESPACE
-    COMMAND_ERROR_IS_FATAL ANY)
-execute_process(COMMAND "${LLVM_CONFIG}" --libdir
-    OUTPUT_VARIABLE llvm_libdir OUTPUT_STRIP_TRAILING_WHITESPACE
-    COMMAND_ERROR_IS_FATAL ANY)
-find_library(llvm_shared NAMES LLVM-23 LLVM
-    PATHS "${llvm_libdir}" NO_DEFAULT_PATH REQUIRED)
-add_library(newlang_llvm SHARED IMPORTED)
-set_target_properties(newlang_llvm PROPERTIES
-    IMPORTED_LOCATION "${llvm_shared}"
-    INTERFACE_INCLUDE_DIRECTORIES "${llvm_include}")
-message(STATUS "LLVM C API ${llvm_version}: ${llvm_shared}")
 
 add_library(newlang_diagnostic STATIC src/diagnostic.c)
 target_include_directories(newlang_diagnostic PUBLIC include)
@@ -225,9 +230,17 @@ if(BUILD_TESTING)
     target_link_libraries(argument_compatibility_test PRIVATE newlang_semantic newlang_parser)
     add_test(NAME r4_01_argument_compatibility.unit COMMAND argument_compatibility_test)
 
-    add_executable(llvm_smoke tests/integration/llvm_smoke.c)
-    target_link_libraries(llvm_smoke PRIVATE newlang_options newlang_llvm)
-    add_test(NAME llvm.c_api COMMAND llvm_smoke)
+    if(NOT NEWLANG_FRONTEND_ONLY)
+        add_executable(llvm_smoke tests/integration/llvm_smoke.c)
+        target_link_libraries(llvm_smoke PRIVATE newlang_options newlang_llvm)
+        add_test(NAME llvm.c_api COMMAND llvm_smoke)
+    endif()
+    add_test(NAME cli.check_source COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/check_cli_test.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}")
+    add_test(NAME frontend_build_policy.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/frontend_build_policy_test.py"
+        "${CMAKE_COMMAND}" "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_C_COMPILER}")
 
     foreach(case version help no_arguments invalid_option extra_argument)
         add_test(NAME cli.${case} COMMAND "${Python3_EXECUTABLE}"
