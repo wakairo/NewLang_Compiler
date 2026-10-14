@@ -1,0 +1,76 @@
+name: R435 independent public Node join proof
+
+on:
+  push:
+    branches:
+      - r435-p432-public-proof-blind-ci
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  independent-first-pass:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout R-owned exact candidate descendant
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+      - name: Freeze and isolate candidate/branch
+        run: |
+          set -eux
+          echo "R435 RUNNER_HEAD=$(git rev-parse HEAD)"
+          echo "R435 REF=$GITHUB_REF RUN=$GITHUB_RUN_ID ATTEMPT=$GITHUB_RUN_ATTEMPT"
+          test "$GITHUB_REF_NAME" = "r435-p432-public-proof-blind-ci"
+          test "$(git merge-base 9d1a96aadf9507cc3549dadb3ecc464d3d4332c0 HEAD)" = "9d1a96aadf9507cc3549dadb3ecc464d3d4332c0"
+          git diff --name-only 9d1a96aadf9507cc3549dadb3ecc464d3d4332c0 HEAD | tee /tmp/r435_changed_paths
+          if grep -Ev '^(tests/red_team/r435/|\.github/workflows/r435-join-proof\.yml$)' /tmp/r435_changed_paths; then
+            echo "R435 FAIL unauthorized changed path"
+            exit 1
+          fi
+          sha256sum tests/red_team/r435/*.nl tests/red_team/r435/probe.c
+      - name: Install Ubuntu build prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y \
+            gcc-13 g++-13 make cmake python3 dpkg \
+            libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
+      - name: Bootstrap immutable LLVM dependency
+        run: python3 scripts/bootstrap.py
+      - name: Build candidate and bounded baseline CTest
+        env:
+          CC: gcc-13
+        run: |
+          set -eu
+          . .deps/activate.sh
+          cmake -S . -B build-r435 -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_SANITIZER=none
+          cmake --build build-r435 --parallel 2
+          ctest --test-dir build-r435 --output-on-failure \
+            -R '^(p6_|p13_|local_root_|recursive_)'
+      - name: Compile fresh R-only public API probe
+        run: |
+          set -eux
+          cc -std=c17 -Wall -Wextra -Wpedantic -Werror -Iinclude \
+            tests/red_team/r435/probe.c \
+            build-r435/libnewlang_semantic.a \
+            build-r435/libnewlang_checked.a \
+            build-r435/libnewlang_parser.a \
+            build-r435/libnewlang_syntax.a \
+            build-r435/libnewlang_lexer.a \
+            build-r435/libnewlang_source.a \
+            build-r435/libnewlang_diagnostic.a \
+            -o build-r435/r435-public-probe
+      - name: Execute independent source-issued and public validator first pass
+        run: |
+          set -o pipefail
+          ./build-r435/r435-public-probe 2>&1 | tee build-r435/r435-first-pass.log
+      - name: Upload independent result log
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r435-independent-first-pass
+          path: |
+            build-r435/r435-first-pass.log
+          if-no-files-found: ignore
