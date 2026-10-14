@@ -231,13 +231,13 @@ static bool evidence(const char *text, const char *label)
         CHECK(post_write);
     char *output = NULL;
     size_t length = 0;
-    CHECK(nl_checked_c_node(call.artifact, &output, &length) ==
-          NL_NODE_C_UNSUPPORTED);
-    CHECK(output == NULL && length == 0);
+    CHECK(nl_checked_c_node(call.artifact, &output, &length) == NL_NODE_C_OK);
+    CHECK(output != NULL && length == strlen(output));
+    free(output);
     printf("%s source-owned=true normal_arms=2 original_roots=%zu,%zu "
            "incarnations=%zu,%zu incoming_variants=%zu,%zu "
            "joined_variant=unknown joined_fact=%zu sibling_fact=%zu "
-           "scoped_writes=%zu native=unsupported\n",
+           "scoped_writes=%zu C17=generated native=not-executed\n",
            label, originals[0], originals[1], incarnations[0], incarnations[1],
            incoming[0], incoming[1], read->field.child_fact, sibling_fact,
            writes);

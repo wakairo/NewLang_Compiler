@@ -1,0 +1,687 @@
+{
+  "gcc": {
+    "host": "gcc",
+    "sanitizer": "none",
+    "cases": [
+      {
+        "source": "node_join_same_locator.nl",
+        "source_sha256": "59076eec8d23173be8f8984223cdadbc7cad71b092e7314f427fc410314e3db1",
+        "CLI_exit": 0,
+        "C_bytes": 3376,
+        "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884",
+        "public_probe_exit": 0,
+        "checked_expectations": "B 0 1 1 2 0 0\nB 0 3 2 1 0 0\nB 0 4 1 1 0 0\nW 4 0 0 1 1\nB 0 6 3 0 0 0\nB 0 8 2 4 0 0\nW 1 0 0 1 4\nB 0 10 3 0 0 0\nB 0 11 3 0 1 1\nM 1 1\nW 1 1 4 1 4\nB 1 14 3 0 1 4\nB 0 12 3 0 1 4\nR 1\nW 4 1 1 0 0\nB 0 15 3 0 1 1\n",
+        "runs": [
+          {
+            "name": "node_join_same_locator-O0False",
+            "optimization": "-O0",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          },
+          {
+            "name": "node_join_same_locator-O0True",
+            "optimization": "-O0",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7fff5bc90440 old=0/(nil) new=1/0x7fff5bc904a0 sibling=1\nreplace root=0x7fff5bc904a0 old=0/(nil) new=1/0x7fff5bc90440 sibling=2\nbranch=2 pointer=0x7fff5bc904a0\nreplace root=0x7fff5bc904a0 old=1/0x7fff5bc90440 new=1/0x7fff5bc90440 sibling=2\nreplace root=0x7fff5bc90440 old=1/0x7fff5bc904a0 new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          },
+          {
+            "name": "node_join_same_locator-O2False",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          },
+          {
+            "name": "node_join_same_locator-O2True",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7ffd1691d1c0 old=0/(nil) new=1/0x7ffd1691d1a0 sibling=1\nreplace root=0x7ffd1691d1a0 old=0/(nil) new=1/0x7ffd1691d1c0 sibling=2\nbranch=2 pointer=0x7ffd1691d1a0\nreplace root=0x7ffd1691d1a0 old=1/0x7ffd1691d1c0 new=1/0x7ffd1691d1c0 sibling=2\nreplace root=0x7ffd1691d1c0 old=1/0x7ffd1691d1a0 new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          }
+        ],
+        "C_mutants": []
+      },
+      {
+        "source": "node_join_native_none.nl",
+        "source_sha256": "c1f3478b1e80933074bc662ef1ca6661212490657a98f2be69e9d7b3df52de10",
+        "CLI_exit": 0,
+        "C_bytes": 3719,
+        "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065",
+        "public_probe_exit": 0,
+        "checked_expectations": "B 0 1 1 2 0 0\nB 0 3 2 1 0 0\nB 0 4 1 1 0 0\nW 4 0 0 0 0\nB 0 6 3 0 0 0\nB 0 8 2 4 0 0\nW 1 0 0 1 4\nB 0 10 3 0 0 0\nB 0 11 3 0 0 0\nM 0 0\nW 1 1 4 0 0\nB 1 13 3 0 1 4\nB 0 12 3 0 0 0\nR 1\nW 4 0 0 0 0\nB 0 15 3 0 0 0\n",
+        "runs": [
+          {
+            "name": "node_join_native_none-O0False",
+            "optimization": "-O0",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          },
+          {
+            "name": "node_join_native_none-O0True",
+            "optimization": "-O0",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7fffb06a4d40 old=0/(nil) new=0/(nil) sibling=1\nreplace root=0x7fffb06a4da0 old=0/(nil) new=1/0x7fffb06a4d40 sibling=2\nbranch=1 pointer=(nil)\nreplace root=0x7fffb06a4da0 old=1/0x7fffb06a4d40 new=0/(nil) sibling=2\nreplace root=0x7fffb06a4d40 old=0/(nil) new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          },
+          {
+            "name": "node_join_native_none-O2False",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          },
+          {
+            "name": "node_join_native_none-O2True",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7ffee6292920 old=0/(nil) new=0/(nil) sibling=1\nreplace root=0x7ffee6292900 old=0/(nil) new=1/0x7ffee6292920 sibling=2\nbranch=1 pointer=(nil)\nreplace root=0x7ffee6292900 old=1/0x7ffee6292920 new=0/(nil) sibling=2\nreplace root=0x7ffee6292920 old=0/(nil) new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          }
+        ],
+        "C_mutants": [
+          {
+            "name": "wrong_root",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "691486f4e318371d533fb0f0ec64a2004f44a6ae77e8c951399f77094b299f24"
+          },
+          {
+            "name": "wrong_arm",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "56e581b49382f06db2f172beb00bbb17bc3fa93298ca0ae60201a0fd08fc38df"
+          },
+          {
+            "name": "wrong_tag",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "85f6a0f6ca5c359f49013245ffb56abbd48df22d41c764331a7fb6b87ee683fd"
+          },
+          {
+            "name": "omitted_write",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "c613f6855e164f7e98713f23d80e6ab40692b7df66e930937e31336dba4e24ee"
+          },
+          {
+            "name": "old_copy",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "38d6146df28a37fe165072b0822d1a24ed086e2a63c0d421edcc5b92a014aa9f"
+          },
+          {
+            "name": "sibling",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "90ceb448318c576b797915fe281b09e6a30e7dd87780651c8796d0952ca08af4"
+          }
+        ]
+      }
+    ]
+  },
+  "clang": {
+    "host": "clang-23",
+    "sanitizer": "none",
+    "cases": [
+      {
+        "source": "node_join_same_locator.nl",
+        "source_sha256": "59076eec8d23173be8f8984223cdadbc7cad71b092e7314f427fc410314e3db1",
+        "CLI_exit": 0,
+        "C_bytes": 3376,
+        "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884",
+        "public_probe_exit": 0,
+        "checked_expectations": "B 0 1 1 2 0 0\nB 0 3 2 1 0 0\nB 0 4 1 1 0 0\nW 4 0 0 1 1\nB 0 6 3 0 0 0\nB 0 8 2 4 0 0\nW 1 0 0 1 4\nB 0 10 3 0 0 0\nB 0 11 3 0 1 1\nM 1 1\nW 1 1 4 1 4\nB 1 14 3 0 1 4\nB 0 12 3 0 1 4\nR 1\nW 4 1 1 0 0\nB 0 15 3 0 1 1\n",
+        "runs": [
+          {
+            "name": "node_join_same_locator-O0False",
+            "optimization": "-O0",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          },
+          {
+            "name": "node_join_same_locator-O0True",
+            "optimization": "-O0",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7fffe1ff7930 old=0/(nil) new=1/0x7fffe1ff79a0 sibling=1\nreplace root=0x7fffe1ff79a0 old=0/(nil) new=1/0x7fffe1ff7930 sibling=2\nbranch=2 pointer=0x7fffe1ff79a0\nreplace root=0x7fffe1ff79a0 old=1/0x7fffe1ff7930 new=1/0x7fffe1ff7930 sibling=2\nreplace root=0x7fffe1ff7930 old=1/0x7fffe1ff79a0 new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          },
+          {
+            "name": "node_join_same_locator-O2False",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          },
+          {
+            "name": "node_join_same_locator-O2True",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7ffc2ecb0750 old=0/(nil) new=1/0x7ffc2ecb0730 sibling=1\nreplace root=0x7ffc2ecb0730 old=0/(nil) new=1/0x7ffc2ecb0750 sibling=2\nbranch=2 pointer=0x7ffc2ecb0730\nreplace root=0x7ffc2ecb0730 old=1/0x7ffc2ecb0750 new=1/0x7ffc2ecb0750 sibling=2\nreplace root=0x7ffc2ecb0750 old=1/0x7ffc2ecb0730 new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          }
+        ],
+        "C_mutants": []
+      },
+      {
+        "source": "node_join_native_none.nl",
+        "source_sha256": "c1f3478b1e80933074bc662ef1ca6661212490657a98f2be69e9d7b3df52de10",
+        "CLI_exit": 0,
+        "C_bytes": 3719,
+        "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065",
+        "public_probe_exit": 0,
+        "checked_expectations": "B 0 1 1 2 0 0\nB 0 3 2 1 0 0\nB 0 4 1 1 0 0\nW 4 0 0 0 0\nB 0 6 3 0 0 0\nB 0 8 2 4 0 0\nW 1 0 0 1 4\nB 0 10 3 0 0 0\nB 0 11 3 0 0 0\nM 0 0\nW 1 1 4 0 0\nB 1 13 3 0 1 4\nB 0 12 3 0 0 0\nR 1\nW 4 0 0 0 0\nB 0 15 3 0 0 0\n",
+        "runs": [
+          {
+            "name": "node_join_native_none-O0False",
+            "optimization": "-O0",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          },
+          {
+            "name": "node_join_native_none-O0True",
+            "optimization": "-O0",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7ffecbc30b90 old=0/(nil) new=0/(nil) sibling=1\nreplace root=0x7ffecbc30c00 old=0/(nil) new=1/0x7ffecbc30b90 sibling=2\nbranch=1 pointer=(nil)\nreplace root=0x7ffecbc30c00 old=1/0x7ffecbc30b90 new=0/(nil) sibling=2\nreplace root=0x7ffecbc30b90 old=0/(nil) new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          },
+          {
+            "name": "node_join_native_none-O2False",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          },
+          {
+            "name": "node_join_native_none-O2True",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7ffd86dfb0e0 old=0/(nil) new=0/(nil) sibling=1\nreplace root=0x7ffd86dfb0a0 old=0/(nil) new=1/0x7ffd86dfb0e0 sibling=2\nbranch=1 pointer=(nil)\nreplace root=0x7ffd86dfb0a0 old=1/0x7ffd86dfb0e0 new=0/(nil) sibling=2\nreplace root=0x7ffd86dfb0e0 old=0/(nil) new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          }
+        ],
+        "C_mutants": [
+          {
+            "name": "wrong_root",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "691486f4e318371d533fb0f0ec64a2004f44a6ae77e8c951399f77094b299f24"
+          },
+          {
+            "name": "wrong_arm",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "56e581b49382f06db2f172beb00bbb17bc3fa93298ca0ae60201a0fd08fc38df"
+          },
+          {
+            "name": "wrong_tag",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "85f6a0f6ca5c359f49013245ffb56abbd48df22d41c764331a7fb6b87ee683fd"
+          },
+          {
+            "name": "omitted_write",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "c613f6855e164f7e98713f23d80e6ab40692b7df66e930937e31336dba4e24ee"
+          },
+          {
+            "name": "old_copy",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "38d6146df28a37fe165072b0822d1a24ed086e2a63c0d421edcc5b92a014aa9f"
+          },
+          {
+            "name": "sibling",
+            "optimization": "-O2",
+            "sanitizer": "none",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "90ceb448318c576b797915fe281b09e6a30e7dd87780651c8796d0952ca08af4"
+          }
+        ]
+      }
+    ]
+  },
+  "asan-local": {
+    "host": "clang-23",
+    "sanitizer": "address",
+    "cases": [
+      {
+        "source": "node_join_same_locator.nl",
+        "source_sha256": "59076eec8d23173be8f8984223cdadbc7cad71b092e7314f427fc410314e3db1",
+        "CLI_exit": 0,
+        "C_bytes": 3376,
+        "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884",
+        "public_probe_exit": 0,
+        "checked_expectations": "B 0 1 1 2 0 0\nB 0 3 2 1 0 0\nB 0 4 1 1 0 0\nW 4 0 0 1 1\nB 0 6 3 0 0 0\nB 0 8 2 4 0 0\nW 1 0 0 1 4\nB 0 10 3 0 0 0\nB 0 11 3 0 1 1\nM 1 1\nW 1 1 4 1 4\nB 1 14 3 0 1 4\nB 0 12 3 0 1 4\nR 1\nW 4 1 1 0 0\nB 0 15 3 0 1 1\n",
+        "runs": [
+          {
+            "name": "node_join_same_locator-O0False",
+            "optimization": "-O0",
+            "sanitizer": "address",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          },
+          {
+            "name": "node_join_same_locator-O0True",
+            "optimization": "-O0",
+            "sanitizer": "address",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7b54036f0080 old=0/(nil) new=1/0x7b54036f0020 sibling=1\nreplace root=0x7b54036f0020 old=0/(nil) new=1/0x7b54036f0080 sibling=2\nbranch=2 pointer=0x7b54036f0020\nreplace root=0x7b54036f0020 old=1/0x7b54036f0080 new=1/0x7b54036f0080 sibling=2\nreplace root=0x7b54036f0080 old=1/0x7b54036f0020 new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          },
+          {
+            "name": "node_join_same_locator-O2False",
+            "optimization": "-O2",
+            "sanitizer": "address",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          },
+          {
+            "name": "node_join_same_locator-O2True",
+            "optimization": "-O2",
+            "sanitizer": "address",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7ba7399f0080 old=0/(nil) new=1/0x7ba7399f0020 sibling=1\nreplace root=0x7ba7399f0020 old=0/(nil) new=1/0x7ba7399f0080 sibling=2\nbranch=2 pointer=0x7ba7399f0020\nreplace root=0x7ba7399f0020 old=1/0x7ba7399f0080 new=1/0x7ba7399f0080 sibling=2\nreplace root=0x7ba7399f0080 old=1/0x7ba7399f0020 new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          }
+        ],
+        "C_mutants": []
+      },
+      {
+        "source": "node_join_native_none.nl",
+        "source_sha256": "c1f3478b1e80933074bc662ef1ca6661212490657a98f2be69e9d7b3df52de10",
+        "CLI_exit": 0,
+        "C_bytes": 3719,
+        "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065",
+        "public_probe_exit": 0,
+        "checked_expectations": "B 0 1 1 2 0 0\nB 0 3 2 1 0 0\nB 0 4 1 1 0 0\nW 4 0 0 0 0\nB 0 6 3 0 0 0\nB 0 8 2 4 0 0\nW 1 0 0 1 4\nB 0 10 3 0 0 0\nB 0 11 3 0 0 0\nM 0 0\nW 1 1 4 0 0\nB 1 13 3 0 1 4\nB 0 12 3 0 0 0\nR 1\nW 4 0 0 0 0\nB 0 15 3 0 0 0\n",
+        "runs": [
+          {
+            "name": "node_join_native_none-O0False",
+            "optimization": "-O0",
+            "sanitizer": "address",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          },
+          {
+            "name": "node_join_native_none-O0True",
+            "optimization": "-O0",
+            "sanitizer": "address",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7bfac3af0080 old=0/(nil) new=0/(nil) sibling=1\nreplace root=0x7bfac3af0020 old=0/(nil) new=1/0x7bfac3af0080 sibling=2\nbranch=1 pointer=(nil)\nreplace root=0x7bfac3af0020 old=1/0x7bfac3af0080 new=0/(nil) sibling=2\nreplace root=0x7bfac3af0080 old=0/(nil) new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          },
+          {
+            "name": "node_join_native_none-O2False",
+            "optimization": "-O2",
+            "sanitizer": "address",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          },
+          {
+            "name": "node_join_native_none-O2True",
+            "optimization": "-O2",
+            "sanitizer": "address",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7b54e13f0080 old=0/(nil) new=0/(nil) sibling=1\nreplace root=0x7b54e13f0020 old=0/(nil) new=1/0x7b54e13f0080 sibling=2\nbranch=1 pointer=(nil)\nreplace root=0x7b54e13f0020 old=1/0x7b54e13f0080 new=0/(nil) sibling=2\nreplace root=0x7b54e13f0080 old=0/(nil) new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          }
+        ],
+        "C_mutants": [
+          {
+            "name": "wrong_root",
+            "optimization": "-O2",
+            "sanitizer": "address",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "691486f4e318371d533fb0f0ec64a2004f44a6ae77e8c951399f77094b299f24"
+          },
+          {
+            "name": "wrong_arm",
+            "optimization": "-O2",
+            "sanitizer": "address",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "56e581b49382f06db2f172beb00bbb17bc3fa93298ca0ae60201a0fd08fc38df"
+          },
+          {
+            "name": "wrong_tag",
+            "optimization": "-O2",
+            "sanitizer": "address",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "85f6a0f6ca5c359f49013245ffb56abbd48df22d41c764331a7fb6b87ee683fd"
+          },
+          {
+            "name": "omitted_write",
+            "optimization": "-O2",
+            "sanitizer": "address",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "c613f6855e164f7e98713f23d80e6ab40692b7df66e930937e31336dba4e24ee"
+          },
+          {
+            "name": "old_copy",
+            "optimization": "-O2",
+            "sanitizer": "address",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "38d6146df28a37fe165072b0822d1a24ed086e2a63c0d421edcc5b92a014aa9f"
+          },
+          {
+            "name": "sibling",
+            "optimization": "-O2",
+            "sanitizer": "address",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "90ceb448318c576b797915fe281b09e6a30e7dd87780651c8796d0952ca08af4"
+          }
+        ]
+      }
+    ],
+    "environment_limit": "LSan fatal ptrace restriction; local ASAN_OPTIONS=detect_leaks=0; default LSan verification reserved to CI"
+  },
+  "ubsan": {
+    "host": "clang-23",
+    "sanitizer": "undefined",
+    "cases": [
+      {
+        "source": "node_join_same_locator.nl",
+        "source_sha256": "59076eec8d23173be8f8984223cdadbc7cad71b092e7314f427fc410314e3db1",
+        "CLI_exit": 0,
+        "C_bytes": 3376,
+        "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884",
+        "public_probe_exit": 0,
+        "checked_expectations": "B 0 1 1 2 0 0\nB 0 3 2 1 0 0\nB 0 4 1 1 0 0\nW 4 0 0 1 1\nB 0 6 3 0 0 0\nB 0 8 2 4 0 0\nW 1 0 0 1 4\nB 0 10 3 0 0 0\nB 0 11 3 0 1 1\nM 1 1\nW 1 1 4 1 4\nB 1 14 3 0 1 4\nB 0 12 3 0 1 4\nR 1\nW 4 1 1 0 0\nB 0 15 3 0 1 1\n",
+        "runs": [
+          {
+            "name": "node_join_same_locator-O0False",
+            "optimization": "-O0",
+            "sanitizer": "undefined",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          },
+          {
+            "name": "node_join_same_locator-O0True",
+            "optimization": "-O0",
+            "sanitizer": "undefined",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7ffd25a0c9f0 old=0/(nil) new=1/0x7ffd25a0ca50 sibling=1\nreplace root=0x7ffd25a0ca50 old=0/(nil) new=1/0x7ffd25a0c9f0 sibling=2\nbranch=2 pointer=0x7ffd25a0ca50\nreplace root=0x7ffd25a0ca50 old=1/0x7ffd25a0c9f0 new=1/0x7ffd25a0c9f0 sibling=2\nreplace root=0x7ffd25a0c9f0 old=1/0x7ffd25a0ca50 new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          },
+          {
+            "name": "node_join_same_locator-O2False",
+            "optimization": "-O2",
+            "sanitizer": "undefined",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          },
+          {
+            "name": "node_join_same_locator-O2True",
+            "optimization": "-O2",
+            "sanitizer": "undefined",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7ffc29df33a0 old=0/(nil) new=1/0x7ffc29df33c0 sibling=1\nreplace root=0x7ffc29df33c0 old=0/(nil) new=1/0x7ffc29df33a0 sibling=2\nbranch=2 pointer=0x7ffc29df33c0\nreplace root=0x7ffc29df33c0 old=1/0x7ffc29df33a0 new=1/0x7ffc29df33a0 sibling=2\nreplace root=0x7ffc29df33a0 old=1/0x7ffc29df33c0 new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
+          }
+        ],
+        "C_mutants": []
+      },
+      {
+        "source": "node_join_native_none.nl",
+        "source_sha256": "c1f3478b1e80933074bc662ef1ca6661212490657a98f2be69e9d7b3df52de10",
+        "CLI_exit": 0,
+        "C_bytes": 3719,
+        "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065",
+        "public_probe_exit": 0,
+        "checked_expectations": "B 0 1 1 2 0 0\nB 0 3 2 1 0 0\nB 0 4 1 1 0 0\nW 4 0 0 0 0\nB 0 6 3 0 0 0\nB 0 8 2 4 0 0\nW 1 0 0 1 4\nB 0 10 3 0 0 0\nB 0 11 3 0 0 0\nM 0 0\nW 1 1 4 0 0\nB 1 13 3 0 1 4\nB 0 12 3 0 0 0\nR 1\nW 4 0 0 0 0\nB 0 15 3 0 0 0\n",
+        "runs": [
+          {
+            "name": "node_join_native_none-O0False",
+            "optimization": "-O0",
+            "sanitizer": "undefined",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          },
+          {
+            "name": "node_join_native_none-O0True",
+            "optimization": "-O0",
+            "sanitizer": "undefined",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7ffc73a8db10 old=0/(nil) new=0/(nil) sibling=1\nreplace root=0x7ffc73a8db70 old=0/(nil) new=1/0x7ffc73a8db10 sibling=2\nbranch=1 pointer=(nil)\nreplace root=0x7ffc73a8db70 old=1/0x7ffc73a8db10 new=0/(nil) sibling=2\nreplace root=0x7ffc73a8db10 old=0/(nil) new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          },
+          {
+            "name": "node_join_native_none-O2False",
+            "optimization": "-O2",
+            "sanitizer": "undefined",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          },
+          {
+            "name": "node_join_native_none-O2True",
+            "optimization": "-O2",
+            "sanitizer": "undefined",
+            "compile_exit": 0,
+            "exit": 0,
+            "stdout": "replace root=0x7fffce74c510 old=0/(nil) new=0/(nil) sibling=1\nreplace root=0x7fffce74c550 old=0/(nil) new=1/0x7fffce74c510 sibling=2\nbranch=1 pointer=(nil)\nreplace root=0x7fffce74c550 old=1/0x7fffce74c510 new=0/(nil) sibling=2\nreplace root=0x7fffce74c510 old=0/(nil) new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stderr": "",
+            "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
+          }
+        ],
+        "C_mutants": [
+          {
+            "name": "wrong_root",
+            "optimization": "-O2",
+            "sanitizer": "undefined",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "691486f4e318371d533fb0f0ec64a2004f44a6ae77e8c951399f77094b299f24"
+          },
+          {
+            "name": "wrong_arm",
+            "optimization": "-O2",
+            "sanitizer": "undefined",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "56e581b49382f06db2f172beb00bbb17bc3fa93298ca0ae60201a0fd08fc38df"
+          },
+          {
+            "name": "wrong_tag",
+            "optimization": "-O2",
+            "sanitizer": "undefined",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "85f6a0f6ca5c359f49013245ffb56abbd48df22d41c764331a7fb6b87ee683fd"
+          },
+          {
+            "name": "omitted_write",
+            "optimization": "-O2",
+            "sanitizer": "undefined",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "c613f6855e164f7e98713f23d80e6ab40692b7df66e930937e31336dba4e24ee"
+          },
+          {
+            "name": "old_copy",
+            "optimization": "-O2",
+            "sanitizer": "undefined",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "38d6146df28a37fe165072b0822d1a24ed086e2a63c0d421edcc5b92a014aa9f"
+          },
+          {
+            "name": "sibling",
+            "optimization": "-O2",
+            "sanitizer": "undefined",
+            "compile_exit": 0,
+            "exit": -6,
+            "stdout": "",
+            "stderr": "native topology assertion failed\n",
+            "C_sha256": "90ceb448318c576b797915fe281b09e6a30e7dd87780651c8796d0952ca08af4"
+          }
+        ]
+      }
+    ]
+  }
+}
