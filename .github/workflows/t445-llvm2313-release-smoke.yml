@@ -27,7 +27,7 @@ jobs:
           mkdir -p "$base"
           arch="$base/LLVM-23.1.3-Linux-X64.tar.zst"
           url="https://github.com/llvm/llvm-project/releases/download/llvmorg-23.1.3/LLVM-23.1.3-Linux-X64.tar.zst"
-          for c in curl gpg sha256sum tar zstd gcc ldd python3;do command -v "$c" >/dev/null || { log "STOP missing tool $c";exit 70; };done
+          for c in curl gpg sha256sum tar zstd unzstd gcc ldd python3;do command -v "$c" >/dev/null || { log "STOP missing tool $c";exit 70; };done
           df -h "$RUNNER_TEMP"
           free=$(df -B1 --output=avail "$RUNNER_TEMP" | tail -1 | xargs)
           if [ "$free" -lt 8589934592 ];then log "STOP free disk too small $free";exit 71;fi
@@ -57,31 +57,77 @@ jobs:
           log "GPG_VERIFIED release manager fingerprint"
           log "SAFE_TAR_STREAM_CHECK before extraction"
           python3 - "$arch" <<'PY'
-          import subprocess,sys,tarfile,posixpath
-          p=subprocess.Popen(["zstd","-dc","--",sys.argv[1]],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-          count=0;size=0;roots=set()
-          try:
-           with tarfile.open(fileobj=p.stdout,mode="r|") as t:
-            for m in t:
-             n=posixpath.normpath(m.name.removeprefix("./"))
-             if m.name.startswith("/") or n in ("",".","..") or n.startswith("../"):
-              raise ValueError("unsafe tar path")
-             count+=1;size+=m.size if m.isfile() else 0;roots.add(n.split("/")[0])
-             if count>250000 or size>8*1024**3:raise ValueError("unpack exceeds budget")
-             if m.issym() or m.islnk():
-              if m.linkname.startswith("/"):raise ValueError("absolute archive link")
-              dst=posixpath.normpath(posixpath.join(posixpath.dirname(n),m.linkname) if m.issym() else m.linkname)
-              if dst==".." or dst.startswith("../") or dst.split("/")[0]!=n.split("/")[0]:raise ValueError("link escapes top root")
-             elif not (m.isfile() or m.isdir()):raise ValueError("special archive entry")
-           p.stdout.close()
-           status=p.wait(timeout=30)
-           if status:raise ValueError("zstd error")
-          finally:
-           if p.poll() is None:p.kill();p.wait()
-           if p.stdout:p.stdout.close()
-           if p.stderr:p.stderr.close()
-          if len(roots)!=1:raise ValueError("wrong number of top-level roots")
-          print(f"T445 SAFE_TAR members={count} uncompressed_bytes={size} top={next(iter(roots))}",flush=True)
+          import os
+          import posixpath
+          import shutil
+          import subprocess
+          import sys
+          import tarfile
+          import tempfile
+          
+          if not shutil.which("zstd"):
+              raise SystemExit("T447 STOP: zstd unavailable")
+          archive = sys.argv[1]
+          if not os.path.isfile(archive) or os.path.getsize(archive) < 1:
+              raise SystemExit("T447 STOP: empty or nonregular compressed archive")
+          count = 0
+          size = 0
+          roots = set()
+          problem = None
+          with tempfile.TemporaryFile() as stderr:
+              proc = subprocess.Popen(
+                  ["zstd", "-dc", "--", archive], stdout=subprocess.PIPE, stderr=stderr)
+              try:
+                  with tarfile.open(fileobj=proc.stdout, mode="r|") as stream:
+                      for entry in stream:
+                          name = entry.name
+                          parts = name.removeprefix("./").split("/")
+                          norm = posixpath.normpath(name.removeprefix("./"))
+                          if (name.startswith("/") or norm in ("", ".", "..")
+                              or norm.startswith("../") or "\x00" in name
+                              or ".." in parts):
+                              raise ValueError("unsafe tar path: " + repr(name[:120]))
+                          roots.add(norm.split("/")[0])
+                          count += 1
+                          if entry.isfile():
+                              size += entry.size
+                          if count > 250000 or size > 8 * 1024 ** 3:
+                              raise ValueError("archive exceeds member/uncompressed byte budget")
+                          if entry.issym() or entry.islnk():
+                              link = entry.linkname
+                              if not link or link.startswith("/") or "\x00" in link:
+                                  raise ValueError("invalid absolute/empty link: " + repr(name[:120]))
+                              dest = posixpath.normpath(
+                                  posixpath.join(posixpath.dirname(norm), link)
+                                  if entry.issym() else link)
+                              if (dest in (".", "..") or dest.startswith("../")
+                                  or dest.split("/")[0] != norm.split("/")[0]):
+                                  raise ValueError("link escapes top-level root: " + repr(name[:120]))
+                          elif not (entry.isfile() or entry.isdir()):
+                              raise ValueError("unsupported special tar member: " + repr(name[:120]))
+              except (tarfile.TarError, EOFError, ValueError, OSError) as exc:
+                  problem = str(exc)
+              finally:
+                  if proc.stdout:
+                      proc.stdout.close()
+                  try:
+                      code = proc.wait(timeout=30)
+                  except subprocess.TimeoutExpired:
+                      proc.kill()
+                      code = proc.wait(timeout=10)
+                      problem = problem or "zstd timeout"
+                  stderr.flush()
+                  stderr.seek(0)
+                  diagnostic = stderr.read(2048).decode("utf-8", "replace").replace("\n", " | ")
+              if problem is not None or code != 0:
+                  raise SystemExit(
+                      "T447 STOP: tar/zstd failure: tar_issue=" + repr(problem)
+                      + " zstd_exit=" + str(code) + " stderr=" + repr(diagnostic[:700]))
+          if len(roots) != 1:
+              raise SystemExit("T447 STOP: invalid top-level root count: " + repr(roots))
+          print("T447 SAFE_TAR members=" + str(count)
+                + " uncompressed_bytes=" + str(size)
+                + " root=" + next(iter(roots)), flush=True)
           PY
           mkdir "$base/sdk"
           extractstart=$(date +%s)
