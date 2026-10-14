@@ -1,7 +1,8 @@
-# T441 one-shot isolated trusted-branch restore audit. DO NOT MERGE.
+# T444 one-shot original archive license/control inventory. DO NOT MERGE.
+# Original T441 fail-closed SHA/provenance audit is retained unchanged.
 # Historical T430 producer: 61cc2c7918aada289b9098dc91153c5f5ab77dea.
 # Do not add pull_request: or a matrix; do not invoke compiler bootstrap.
-name: T441 trusted cache restore-only audit
+name: T444 original .deb redistribution-readiness audit
 
 on:
   push:
@@ -12,7 +13,7 @@ permissions:
 
 jobs:
   restore:
-    name: T441 exact 12-package byte audit
+    name: T444 original 12-package legal inventory
     if: github.event_name == 'push' && github.repository == 'wakairo/NewLang_Compiler' && github.ref == 'refs/heads/t430-verified-deb-cache-trial'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
@@ -124,4 +125,175 @@ jobs:
               print(f"T441 VERIFIED name={p['name']} size={size} sha256={digest}" +
                     (" size_source=frozen_signed_trixie_Packages" if p["name"] != "libz3-4" else " size_source=actual_only_lock_has_no_size"))
           print("T441 12/12 ACTUAL RESTORED BYTES SHA256 VERIFIED; no package GET, no cache save, no bootstrap")
+          PY
+      - name: Read-only inspect original .deb binary control, copyright, license, notice
+        env:
+          CACHE_HIT: ${{ steps.restore.outputs.cache-hit }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          import posixpath
+          import re
+          import stat
+          import subprocess
+          import tarfile
+          from pathlib import Path
+          
+          print("T444 audit only; no install, script execution, package network, upload or cache save", flush=True)
+          lock = json.loads(Path("scripts/toolchain-lock.json").read_text())
+          pkgs = lock["platforms"]["ubuntu-24.04-x86_64"]["packages"]
+          directory = Path(".deps/downloads")
+          if len(pkgs) != 12 or os.environ.get("CACHE_HIT") != "true":
+              raise SystemExit("T444 STOP: not exact T430 restored cache")
+          if not directory.is_dir() or directory.is_symlink():
+              raise SystemExit("T444 STOP: invalid restored directory")
+          expected_files = {f"{p['name']}-{p['sha256']}.deb" for p in pkgs}
+          actual_files = {p.name for p in directory.iterdir()}
+          if actual_files != expected_files or len(actual_files) != 12:
+              raise SystemExit("T444 STOP: unexpected cached member count/path")
+          for package in pkgs:
+              f = directory / f"{package['name']}-{package['sha256']}.deb"
+              if not stat.S_ISREG(f.lstat().st_mode):
+                  raise SystemExit("T444 STOP: nonregular cache file")
+              h = hashlib.sha256()
+              with f.open("rb") as stream:
+                  for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+                      h.update(chunk)
+              if h.hexdigest() != package["sha256"] or f.stat().st_size == 0:
+                  raise SystemExit("T444 STOP: package SHA mismatch " + package["name"])
+          print("T444 REAL_BYTES 12/12 verified against frozen lock before any archive parsing", flush=True)
+          
+          publisher_data = Path("scripts/toolchain-provenance/trixie-23/Packages").read_bytes()
+          release_lines = Path("scripts/toolchain-provenance/trixie-23/Release").read_text().splitlines()
+          digest = hashlib.sha256(publisher_data).hexdigest()
+          refs = [x.split() for x in release_lines if len(x.split()) == 3 and
+                  x.split()[2] == "main/binary-amd64/Packages" and
+                  re.fullmatch("[0-9a-f]{64}", x.split()[0])]
+          if len(refs) != 1 or refs[0][0] != digest or int(refs[0][1]) != len(publisher_data):
+              raise SystemExit("T444 STOP: frozen publisher index provenance mismatch")
+          records = {}
+          for para in publisher_data.decode().split("\n\n"):
+              data = dict(re.findall(r"(?m)^([A-Za-z][A-Za-z0-9-]+): ([^\n]+)", para))
+              if "Package" in data:
+                  records[data["Package"]] = data
+          
+          def inspect_tarchive(package_path, kind):
+              command = ["dpkg-deb", "--ctrl-tarfile" if kind == "control" else "--fsys-tarfile", str(package_path)]
+              proc = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+              summary = {"members": 0, "regular": 0, "symlink": 0, "hardlink": 0, "other": 0,
+                         "scripts": [], "control": None, "docdirs": [], "doc_copyright": [],
+                         "license_files": [], "notice_files": [], "license_ids": [], "copyright_sha": [],
+                         "debian_packaging_license": [], "source_urls": [], "copyright_excerpt": []}
+              try:
+                  with tarfile.open(fileobj=proc.stdout, mode="r|") as tf:
+                      for member in tf:
+                          raw = member.name
+                          normalized = posixpath.normpath(raw.removeprefix("./"))
+                          if (raw.startswith("/") or normalized == ".." or normalized.startswith("../") or
+                              normalized.startswith("/") or "\x00" in raw):
+                              raise ValueError("unsafe archive path " + repr(raw[:80]))
+                          summary["members"] += 1
+                          if summary["members"] > 300000:
+                              raise ValueError("unbounded archive member count")
+                          if member.isfile():
+                              summary["regular"] += 1
+                          elif member.issym():
+                              summary["symlink"] += 1
+                          elif member.islnk():
+                              summary["hardlink"] += 1
+                          elif not member.isdir():
+                              summary["other"] += 1
+                          lower = normalized.lower()
+                          if kind == "control":
+                              if normalized in ("control", "./control"):
+                                  if not member.isfile() or member.size > 1024 * 1024:
+                                      raise ValueError("invalid control record")
+                                  summary["control"] = tf.extractfile(member).read().decode("utf-8", "replace")
+                              elif posixpath.basename(normalized) in ("preinst", "postinst", "prerm", "postrm", "config", "triggers"):
+                                  summary["scripts"].append(posixpath.basename(normalized))
+                              continue
+                          if re.match(r"^usr/share/doc/[^/]+$", normalized):
+                              summary["docdirs"].append({"path": normalized, "type": "symlink" if member.issym() else ("dir" if member.isdir() else "other"),
+                                                          "link": member.linkname[:180] if member.issym() else ""})
+                          leaf = posixpath.basename(lower)
+                          in_doc = lower.startswith("usr/share/doc/")
+                          copyright_file = in_doc and leaf == "copyright"
+                          license_name = bool(re.match(r"^(licen[sc]e|copying|copyright)([._-].*)?$", leaf))
+                          notice_name = bool(re.match(r"^(notice|authors|patents)([._-].*)?$", leaf))
+                          # Read only small license/notice texts directly from the archive, never extract onto disk.
+                          if copyright_file or license_name or notice_name:
+                              category = "doc_copyright" if copyright_file else ("notice_files" if notice_name else "license_files")
+                              entry = {"path": normalized, "type": "file" if member.isfile() else ("symlink" if member.issym() else ("hardlink" if member.islnk() else "other")),
+                                       "link": member.linkname[:200] if member.issym() or member.islnk() else "",
+                                       "size": member.size}
+                              summary[category].append(entry)
+                              if member.isfile() and member.size <= 512 * 1024 and (copyright_file or (in_doc and (license_name or notice_name))):
+                                  content = tf.extractfile(member).read()
+                                  if copyright_file:
+                                      summary["copyright_sha"].append({"path": normalized, "sha256": hashlib.sha256(content).hexdigest(), "bytes": len(content)})
+                                      txt = content.decode("utf-8", "replace")
+                                      summary["license_ids"] += re.findall(r"(?im)^License:\s*([^\n\r]+)", txt)[:120]
+                                      summary["source_urls"] += re.findall(r"(?im)^(?:Source|Upstream-Contact|Upstream-Name):\s*([^\n\r]+)", txt)[:10]
+                                      for stanza in re.split(r"\n\s*\n", txt):
+                                          if re.search(r"(?im)^Files:\s*debian/", stanza):
+                                              label = re.findall(r"(?im)^License:\s*([^\n\r]+)", stanza)
+                                              summary["debian_packaging_license"].append({"files": re.findall(r"(?im)^Files:\s*([^\n\r]+)", stanza)[:2], "license": label[:2]})
+                                      summary["copyright_excerpt"] = txt.splitlines()[:8]
+                          if len(summary["doc_copyright"]) + len(summary["license_files"]) + len(summary["notice_files"]) > 3000:
+                              raise ValueError("unbounded legal-file entries")
+                  proc.stdout.close()
+                  err = proc.stderr.read(8192)
+                  status = proc.wait(timeout=20)
+                  if status != 0:
+                      raise ValueError("dpkg-deb inspect error " + err.decode("utf-8", "replace")[:600])
+              finally:
+                  if proc.poll() is None:
+                      proc.kill()
+                      proc.wait()
+                  if proc.stdout:
+                      proc.stdout.close()
+                  if proc.stderr:
+                      proc.stderr.close()
+              if kind == "control" and not summary["control"]:
+                  raise ValueError("control record missing")
+              return summary
+          
+          allrows = []
+          for p in pkgs:
+              path = directory / f"{p['name']}-{p['sha256']}.deb"
+              size = path.stat().st_size
+              if p["name"] != "libz3-4":
+                  rec = records.get(p["name"])
+                  if not rec or (rec.get("Version") != p["version"] or
+                                 rec.get("SHA256") != p["sha256"] or
+                                 int(rec.get("Size", "0")) != size or
+                                 not p["url"].endswith(rec.get("Filename", "!"))):
+                      raise SystemExit("T444 STOP: publisher entry mismatch " + p["name"])
+              try:
+                  ctrl = inspect_tarchive(path, "control")
+                  data = inspect_tarchive(path, "data")
+              except Exception as ex:
+                  raise SystemExit("T444 STOP: unsafe/unreadable .deb " + p["name"] + ": " + str(ex))
+              binary = dict(re.findall(r"(?m)^([A-Za-z][A-Za-z0-9-]+): ([^\n]+)", ctrl["control"]))
+              if binary.get("Package") != p["name"] or binary.get("Version") != p["version"]:
+                  raise SystemExit("T444 STOP: binary control identity mismatch " + p["name"])
+              if data["other"] > 0:
+                  raise SystemExit("T444 STOP: unsupported archive special entry " + p["name"])
+              result = {"name": p["name"], "version": p["version"], "sha256": p["sha256"], "bytes": size,
+                        "control": {k: binary.get(k, "") for k in ("Package", "Version", "Source", "Maintainer", "Architecture", "Section", "Homepage", "Depends")},
+                        "control_scripts": ctrl["scripts"], "data_regular": data["regular"],
+                        "data_symlinks": data["symlink"], "data_hardlinks": data["hardlink"],
+                        "doc_copyright": data["doc_copyright"][:15], "docdirs": data["docdirs"][:20],
+                        "copyright_sha": data["copyright_sha"][:15], "license_ids": sorted(set(data["license_ids"]))[:65],
+                        "debian_packaging_license": data["debian_packaging_license"][:12],
+                        "source_urls": data["source_urls"][:10],
+                        "extra_license_paths": data["license_files"][:25], "notice_paths": data["notice_files"][:25],
+                        "copyright_excerpt": data["copyright_excerpt"][:8],
+                        "provenance": "signed-trixie-index" if p["name"] != "libz3-4" else "original-locked-Debian-z3"}
+              allrows.append(result)
+              print("T444 PACKAGE " + json.dumps(result, ensure_ascii=True, separators=(",", ":")), flush=True)
+          print("T444 AUDIT COMPLETE: 12 exact original read-only .deb control/data inventories; no package download, install or publish", flush=True)
           PY
