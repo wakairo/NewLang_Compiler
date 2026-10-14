@@ -51,7 +51,7 @@ jobs:
           gpg --homedir "$base/gnupg" --batch --quiet --import "$base/release-keys.asc"
           gpg --homedir "$base/gnupg" --batch --status-fd=1 --verify "$arch.sig" "$arch" > "$base/verify.log" 2>&1 || { log "STOP invalid GPG";exit 74; }
           grep '^\[GNUPG:\] VALIDSIG ' "$base/verify.log"
-          if ! grep -q '^\[GNUPG:\] VALIDSIG D574BD5D1D0E98895E3BF90444F2485E45D59042 ' "$base/verify.log";then
+          if ! grep -q '^\[GNUPG:\] VALIDSIG D574BD5D1D0E98895E3BF90044F2485E45D59042 ' "$base/verify.log";then
            log "STOP signature signer differs from independently confirmed LLVM release manager";exit 75
           fi
           log "GPG_VERIFIED release manager fingerprint"
