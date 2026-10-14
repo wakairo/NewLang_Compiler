@@ -515,8 +515,16 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_nested_u8_test.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:nested_u8_checked_probe>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/evidence/p419")
+    add_executable(field_call_composition_probe tests/integration/field_call_composition_probe.c)
+    target_link_libraries(field_call_composition_probe PRIVATE newlang_semantic)
     add_executable(u8_call_checked_probe tests/integration/u8_call_checked_probe.c)
     target_link_libraries(u8_call_checked_probe PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME field_call_composition.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_field_call_composition_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:field_call_composition_probe>"
+        "$<TARGET_FILE:u8_call_checked_probe>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/evidence/p421")
     add_test(NAME u8_call_checked_c.integration
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_u8_call_test.py"
