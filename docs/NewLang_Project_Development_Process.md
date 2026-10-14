@@ -17,6 +17,7 @@ NewLangは、部分的に独立した複数trackで開発する。
 - **R — 独立Red Team review**
 - **V — Value / Product Validation**
 - **O — Python意味論・解析アルゴリズム研究（暫定）**
+- **T — Tooling / Infrastructure（開発基盤、暫定）**
 - **Coordination — track間の裁定・同期・順序決定**
 
 目的は、各trackを最初から同じ結論へ揃えることではない。
@@ -48,7 +49,7 @@ docs/NewLang_C_Replacement_Coverage_Map.md
 **Ledgerはnon-normative evidence indexであり、現在のDraftを上書きしない。**
 設計判断を選択・変更する前の必須照合手順は
 [NewLang 設計判断手順](NewLang_Design_Decision_Procedure.md) に定める。
-暫定Track Oの運用上のCharterは[Track O研究Charter](NewLang_Track_O_Research_Charter.md)とする。これはproject processの文書であり、言語仕様のnormative Draftを上書きしない。
+暫定Track Oの運用上のCharterは[Track O研究Charter](NewLang_Track_O_Research_Charter.md)、暫定Track TのCharterは[Track T開発基盤Charter](NewLang_Track_T_Tooling_Charter.md)とする。いずれもproject processの文書であり、言語仕様のnormative Draftを上書きしない。
 
 UTF-8で問題なく管理できる文書は日本語を基本とし、必要に応じて英語版を併記する。
 一方、shell操作やtoolchain上で前面に現れるcommit message等は、互換性・可搬性を優先して英語ASCIIを基本とする。
@@ -99,6 +100,11 @@ Q自身はcompiler実装、テスト作成、CI構築を行わず、PR / merge�
 Oは非normativeなPython実験で、コンパイラのsemantic-state表現、Changeの時系列検証、抽象解析の精度とコストを独立に比較し、反例と再現可能な知見をM/P/Coordinationへ返す。
 実NewLangソースの受理・Allocation/Domainの発行・checked-owned検証はPの責務であり、Oの合成モデルや診断用JSONで代替しない。Oは独立R、Fの形式証明、Mの意味論選択にも代わらない。
 Oの実施はCoordinationが承認した限定Issueに限る。常設化・独立リポジトリ化は未承認。詳細は[Track O研究Charter](NewLang_Track_O_Research_Charter.md)を参照する。
+
+### T — Tooling / Infrastructure（暫定）
+
+Tは、CoordinationがIssue単位で認可した開発基盤庶務（toolchain bootstrap、固定依存取得・検証、CI/workflow、再現可能なbuild/test環境、開発者向け起動手順）の調査・小規模実装を担当する。**常駐・自動監視はせず、仕事のないときは沈黙する。** 詳細は[Track T開発基盤Charter](NewLang_Track_T_Tooling_Charter.md)。
+Pは引き続きcompiler source/semantic/backendとそのテスト契約を担当し、Tは仕様・権限issuer・compiler安全性や製品判断を変更しない。Pへ着手済みのIssueはT新設だけでは移管しない。toolchain lock、署名来歴、TLS・SHA、cache/Actionsの信頼境界はTの便宜で緩めず、変更案はCoordinationがreview・merge裁定する。Qは引き続き提案のみの独立品質Trackである。
 
 ### Coordination
 
@@ -170,6 +176,7 @@ Track: P
 Track: R
 Track: V
 Track: Q
+Track: T
 ```
 
 後から読んだときに誰の判断・finding・質問か識別できればよく、厳密な機械可読formatは要求しない。
