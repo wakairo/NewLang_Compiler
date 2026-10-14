@@ -97,6 +97,7 @@ bash scripts/check-format.sh  # verify without modifying
 ```
 
 CI runs the non-modifying check.
+For failed GitHub Actions jobs, see the [CI incident triage runbook](docs/NewLang_CI_Incident_Runbook.md) before any selective rerun.
 
 ## Other validated configurations
 
