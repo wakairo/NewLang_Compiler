@@ -115,8 +115,7 @@ cmake --build build-ubsan --parallel 2
 ctest --test-dir build-ubsan --output-on-failure
 ```
 
-The historical P0–P14 inventory of **95 CTests** has expanded; at the adopted-roadmap main snapshot,
-the full five-job CI runs **263 CTests per job**. Use `ctest --test-dir build-gcc -N`
+The historical P0–P14 inventory of **95 CTests** has expanded. The adopted-roadmap snapshot ran **263 CTests per job**; at exact merged PR420 main `6fc8ba26d34a2e2aff0aed92512859ecf40bd0a5`, all five jobs ran **265 tests per job**. Use `ctest --test-dir build-gcc -N`
 to inspect the exact inventory of your checkout. The following is a historical
 summary of the included source and lexer module unit
 tests, six parser unit groups, file-source -> lexer/parser integration,
@@ -176,15 +175,19 @@ with the configured host C compiler and executes the resulting native program.
 ### First runnable source-to-C17 program on current main
 
 After completing the `build-gcc` setup above, the following **real NewLang source**
-uses the merged, bounded ordinary one-`u8`-argument / one-`u8`-result call
-path. The compiler writes generated C17 to stdout:
+uses the merged ordinary `u8` argument/result path, including **one
+helper-to-helper call**. This source is the exact `nested9.nl` witness from
+merged [PR420](https://github.com/wakairo/NewLang_Compiler/pull/420).
+The compiler writes generated C17 to stdout:
 
 ```sh
 cat > first-call.nl <<'NEWLANG'
 fn echo(x:u8)->u8{x}
+fn relay(y:u8)->u8{echo(y)}
 fn main()->unit{
-    let returned=echo(u8(9));
-    returned;
+    let a=relay(u8(9));
+    let b=relay(a);
+    b;
     unit
 }
 NEWLANG
@@ -192,14 +195,17 @@ NEWLANG
 gcc -std=c17 -Wall -Wextra -Wpedantic -Werror first-call.c -o first-call
 ./first-call
 echo $?
+ctest --test-dir build-gcc -R '^nested_u8_checked_c\.integration$' --output-on-failure
 ```
 
 `echo $?` should print `0` on successful native execution. This is a **toolchain
 smoke test**, not an observable guest `u8` output: `main` returns `unit`, and
 this bounded emitter does not introduce guest I/O or an exit-value ABI.
-The [P399 native integration test](tests/integration/checked_c_u8_call_test.py)
-separately observes the **actual emitted argument and returned C carriers**
-for different values and catches a deliberately corrupted return.
+The [merged nested-call integration test](tests/integration/checked_c_nested_u8_test.py)
+independently observes the **actual emitted inner and outer argument/return C carriers**
+for 9/255/renamed sources and detects corrupt return values. The
+[P399 direct-call integration test](tests/integration/checked_c_u8_call_test.py)
+remains part of the suite.
 
 Accepted source constructs beyond this finite emitter profile still
 fail closed with `V1-BACKEND-UNSUPPORTED` rather than silently producing C.
@@ -232,7 +238,10 @@ The merged [PR404](https://github.com/wakairo/NewLang_Compiler/pull/404) impleme
 with one runtime Copy u8 formal and one Copy u8 result. Repeated direct calls
 and receiving/forwarding a result through a local use typed C17 carriers.
 The finite callee body supports scalar Copy locals and a scalar tail/direct
-return; richer bodies, two arguments and ref arguments fail closed.
+return. Merged [PR420](https://github.com/wakairo/NewLang_Compiler/pull/420)
+also supports **one authenticated nested `u8 -> u8` tail call** (relay + leaf).
+A second nested level, two arguments, ref/nonCopy signatures, nested call
+arguments, and general call graphs remain unsupported in this emitter.
 This merged main implementation does not incorporate the unmerged G0/G1 branches;
 zero-argument u8 returns retain the original unsupported backend boundary.
 See [P399 evidence and limits](docs/P399_U8_COPY_CALL.md).
