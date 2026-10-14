@@ -63,8 +63,10 @@ python3 tests/integration/checked_c_nested_u8_test.py \
 ```
 
 Repeat with Clang. CI's locked bootstrap supplies the project toolchain.
-The unchanged-compiler workflow remains a fixed-reference measurement on branch
-pushes; ordinary PR validation covers the exact candidate in all five matrices.
+The unchanged-compiler workflow was test-only on the P419 exploration branch;
+its historical run remains linked above. The branch-only workflow was removed
+from the merge candidate to avoid leaving an inert experimental workflow in main.
+Ordinary PR validation covers the exact candidate in all five matrices.
 
 ## Verification and limits
 
