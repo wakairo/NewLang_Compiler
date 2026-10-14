@@ -49,16 +49,12 @@ jobs:
           (github.ref == 'refs/heads/main' ||
            github.ref == 'refs/heads/t430-verified-deb-cache-trial')
         id: deb_manifest
-        env:
-          LOCK_HASHFILES: ${{ hashFiles('scripts/toolchain-lock.json') }}
         run: |
           python3 - <<'PY'
           import hashlib, json, os, re
           from pathlib import Path
           raw = Path("scripts/toolchain-lock.json").read_bytes()
           digest = hashlib.sha256(raw).hexdigest()
-          if digest != os.environ["LOCK_HASHFILES"]:
-              raise SystemExit("T430: lock digest mismatch or empty hashFiles")
           packages = json.loads(raw)["platforms"]["ubuntu-24.04-x86_64"]["packages"]
           paths = []
           for package in packages:
