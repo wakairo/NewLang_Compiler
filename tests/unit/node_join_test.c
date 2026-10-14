@@ -5,6 +5,7 @@
 
 void *__real_malloc(size_t);
 void *__real_realloc(void *, size_t);
+void *__real_calloc(size_t, size_t);
 static bool injecting;
 static size_t allocation_index, fail_at;
 void *__wrap_malloc(size_t n)
@@ -18,6 +19,12 @@ void *__wrap_realloc(void *p, size_t n)
     if (injecting && allocation_index++ == fail_at)
         return NULL;
     return __real_realloc(p, n);
+}
+void *__wrap_calloc(size_t n, size_t size)
+{
+    if (injecting && allocation_index++ == fail_at)
+        return NULL;
+    return __real_calloc(n, size);
 }
 static bool parse(const char *text, NLSource **s, NLSyntaxTree **t)
 {
@@ -563,6 +570,143 @@ static bool oom(const char *text)
     nl_source_destroy(s);
     return true;
 }
+/* Supplemental trusted corruption of the ACTUAL issued artifact, not a test
+ * issuer or seeded world. Production has no mutation hook. Public candidate
+ * mutation is independently tested in node_join_proof_test with public APIs
+ * only. Restore each damaged member before destruction; never validate freed
+ * C pointers (that would violate the ordinary API borrowing contract). */
+static bool proof_poison(const char *text)
+{
+    NLSemanticContext *c = NULL;
+    CHECK(nl_semantic_create(&c) == NL_CHECK_OK);
+    CHECK(registration(c, text, NL_CHECK_OK, NULL));
+    TestChecked call = {0};
+    CHECK(test_run(c, "main()", TEST_EXPRESSION, NL_CHECK_OK, NULL, &call));
+    NLCheckedFragment *body = (NLCheckedFragment *)nl_checked_call_body(
+        call.artifact, nl_checked_root(call.artifact));
+    NLNodeJoinProof *p = body->node_joins;
+    CHECK(p != NULL && p->complete);
+    const NLCheckedNodeId match = p->view.match;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) == NL_CHECK_OK);
+    const NLPlaceId parent =
+        p->entry_owned->places[p->view.changed - 1].parent_aggregate;
+    NLValueFactId saved = p->post_owned->places[parent - 1].current_fact;
+    p->post_owned->places[parent - 1].current_fact =
+        p->entry_owned->places[parent - 1].current_fact;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) ==
+          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    p->post_owned->places[parent - 1].current_fact = saved;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) == NL_CHECK_OK);
+    printf("actual owned corruption REJECT: stale parent RF / same locator\n");
+
+    saved = p->entry_owned->places[p->view.sibling - 1].current_fact;
+    ++p->entry_owned->places[p->view.sibling - 1].current_fact;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) ==
+          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    p->entry_owned->places[p->view.sibling - 1].current_fact = saved;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) == NL_CHECK_OK);
+    printf("actual owned corruption REJECT: poisoned common entry\n");
+
+    p->post_owned->places[parent - 1].live = false;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) ==
+          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    p->post_owned->places[parent - 1].live = true;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) == NL_CHECK_OK);
+    printf("actual owned corruption REJECT: forged post EndRoot\n");
+    saved = p->post_owned->places[p->view.sibling - 1].current_fact;
+    ++p->post_owned->places[p->view.sibling - 1].current_fact;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) ==
+          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    p->post_owned->places[p->view.sibling - 1].current_fact = saved;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) == NL_CHECK_OK);
+    printf("actual owned corruption REJECT: changed sibling post\n");
+
+    NLValueId top = p->post_owned->places[p->view.changed - 1].current_value;
+    p->post_owned->values[top - 1].variant = 1;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) ==
+          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    p->post_owned->values[top - 1].variant = 0;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) == NL_CHECK_OK);
+    printf("actual owned corruption REJECT: arbitrary concrete None post\n");
+
+    const size_t which = p->view.arms[0].operation != 0 ? 0 : 1;
+    NLCheckedFragment *arm = (NLCheckedFragment *)p->view.arms[which].artifact;
+    NLCheckedNodeView *write = &arm->nodes[p->view.arms[which].operation - 1];
+    const NLCheckedField field = write->field;
+    const NLCheckedField issued = p->view.arms[which].change;
+    ++write->field.payload_occurrence;
+    p->view.arms[which].change = write->field;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) ==
+          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    write->field = field;
+    p->view.arms[which].change = issued;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) == NL_CHECK_OK);
+    printf(
+        "actual owned corruption REJECT: correlated forged old occurrence\n");
+
+    NLCapturedChange *change = arm->field_changes[0];
+    saved = change->after->places[parent - 1].current_fact;
+    ++change->after->places[parent - 1].current_fact;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) ==
+          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    change->after->places[parent - 1].current_fact = saved;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) == NL_CHECK_OK);
+    printf("actual owned corruption REJECT: precise Change post root RF\n");
+
+    const NLSemanticContext *world = arm->context;
+    arm->context = p->view.arms[1 - which].world;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) ==
+          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    arm->context = world;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) == NL_CHECK_OK);
+    printf("actual owned corruption REJECT: same-number foreign arm world\n");
+
+    NLCheckedNodeView *a = &arm->nodes[arm->root - 1];
+    const NLCheckedNodeId initial = a->initializer;
+    for (size_t k = 0; k < arm->count; ++k)
+        if (arm->nodes[k].kind == NL_CHECKED_UNIT) {
+            a->initializer = k + 1;
+            break;
+        }
+    CHECK(a->initializer != initial);
+    CHECK(nl_checked_node_join_validate(body, match, NULL) ==
+          NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    a->initializer = initial;
+    CHECK(nl_checked_node_join_validate(body, match, NULL) == NL_CHECK_OK);
+    printf(
+        "actual owned corruption REJECT: disconnected source Change graph\n");
+
+    for (size_t k = 0; k < arm->count; ++k) {
+        NLCheckedNodeView *n = &arm->nodes[k];
+        if (n->kind != NL_CHECKED_LOAN_HEADER)
+            continue;
+        const NLDomainId domain = n->loan.domain;
+        n->loan.domain = 1;
+        CHECK(nl_checked_node_join_validate(body, match, NULL) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        n->loan.domain = domain;
+        CHECK(nl_checked_node_join_validate(body, match, NULL) == NL_CHECK_OK);
+    }
+    printf("actual owned corruption REJECT: wrong scoped original Domain\n");
+    bool disconnected = false;
+    for (size_t k = 0; k < body->count; ++k) {
+        NLCheckedNodeView *n = &body->nodes[k];
+        if (n->kind != NL_CHECKED_STATEMENT || n->initializer != match)
+            continue;
+        n->initializer = 0;
+        CHECK(nl_checked_node_join_validate(body, match, NULL) ==
+              NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+        n->initializer = match;
+        CHECK(nl_checked_node_join_validate(body, match, NULL) == NL_CHECK_OK);
+        disconnected = true;
+        break;
+    }
+    CHECK(disconnected);
+    printf("actual owned corruption REJECT: disconnected parent match graph\n");
+    test_checked_destroy(&call);
+    nl_semantic_destroy(c);
+    return true;
+}
 int main(int argc, char **argv)
 {
     if (argc != 3)
@@ -589,5 +733,7 @@ int main(int argc, char **argv)
         return value_dependencies() ? 0 : 1;
     if (strcmp(argv[1], "oom") == 0)
         return oom(text) ? 0 : 1;
+    if (strcmp(argv[1], "proof-poison") == 0)
+        return proof_poison(text) ? 0 : 1;
     return 2;
 }

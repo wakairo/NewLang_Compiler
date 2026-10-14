@@ -1,0 +1,82 @@
+{
+  "authority": "b4db6aa73c3dc730b860c8b3b6103be86ac31b58",
+  "canonical": "Draft17.30",
+  "stage": "source/check/owned/public-validator only",
+  "native_claim": false,
+  "cases": [
+    {
+      "source": "tests/fixtures/node_two_normal_join.nl",
+      "sha256": "02270fa7f21f9ee46225d9708ad1bfadf72b458efd7ef7085db08c8acf7b7439",
+      "public_probe_exit": 0,
+      "public_probe": "PUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\n",
+      "cli_exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/fixtures/node_two_normal_join.nl\n"
+    },
+    {
+      "source": "tests/fixtures/node_join_both_arms.nl",
+      "sha256": "d3ec49b684ecb598c6f6637601df5350a8a870daadbccc87bc3888bc6720d031",
+      "public_probe_exit": 0,
+      "public_probe": "PUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\n",
+      "cli_exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/fixtures/node_join_both_arms.nl\n"
+    },
+    {
+      "source": "tests/fixtures/node_join_same_locator.nl",
+      "sha256": "59076eec8d23173be8f8984223cdadbc7cad71b092e7314f427fc410314e3db1",
+      "public_probe_exit": 0,
+      "public_probe": "PUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\n",
+      "cli_exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/fixtures/node_join_same_locator.nl\n"
+    },
+    {
+      "source": "tests/fixtures/node_join_post_write.nl",
+      "sha256": "fdd488106f98da89d3a453d2d6b86b4b612dc7647bce07a888049c4ed19a1198",
+      "public_probe_exit": 0,
+      "public_probe": "PUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\n",
+      "cli_exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/fixtures/node_join_post_write.nl\n"
+    }
+  ],
+  "node_join_proof_test_negative": {
+    "exit": 0,
+    "output": "PUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: post-function context forged as entry\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: foreign common entry\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: stale joined root/field facts\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: wrong fixed projection\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: duplicated original root\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: duplicate arm\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: truncated arm\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: reordered arms\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: foreign world with SAME NUMERIC original IDs\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: missing source Change\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: changed field but stale enclosing root RF\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: same locator, forged old Some occurrence\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: wrong original root\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: expired original incarnation\nPUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\nREJECT copied actual witness: foreign match\n"
+  },
+  "node_join_proof_test_oom": {
+    "exit": 0,
+    "output": "PUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\npublic validator OOM positions=112 all 9 worlds unchanged\n"
+  },
+  "node_join_test_proof-poison": {
+    "exit": 0,
+    "output": "actual owned corruption REJECT: stale parent RF / same locator\nactual owned corruption REJECT: poisoned common entry\nactual owned corruption REJECT: forged post EndRoot\nactual owned corruption REJECT: changed sibling post\nactual owned corruption REJECT: arbitrary concrete None post\nactual owned corruption REJECT: correlated forged old occurrence\nactual owned corruption REJECT: precise Change post root RF\nactual owned corruption REJECT: same-number foreign arm world\nactual owned corruption REJECT: disconnected source Change graph\nactual owned corruption REJECT: wrong scoped original Domain\nactual owned corruption REJECT: disconnected parent match graph\n"
+  },
+  "node_join_test_oom": {
+    "exit": 0,
+    "output": "OOM registration=661 call=489 all_failures_rollback=true\n"
+  },
+  "node_join_proof_test_oom_node_join_same_locator": {
+    "exit": 0,
+    "output": "PUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\npublic validator OOM positions=112 all 9 worlds unchanged\n"
+  },
+  "node_join_test_oom_node_join_same_locator": {
+    "exit": 0,
+    "output": "OOM registration=661 call=489 all_failures_rollback=true\n"
+  },
+  "node_join_proof_test_oom_node_join_both_arms": {
+    "exit": 0,
+    "output": "PUBLIC VALID: two original lexical roots, entry/fork/post; F/P/RF reset, sibling stable, unknown Option; native not tested\npublic validator OOM positions=164 all 11 worlds unchanged\n"
+  },
+  "node_join_test_oom_node_join_both_arms": {
+    "exit": 0,
+    "output": "OOM registration=695 call=530 all_failures_rollback=true\n"
+  },
+  "local_suite": {
+    "count": 274,
+    "passed": 274,
+    "seconds": 51.87,
+    "note": "final test-only checkpoint coverage also rerun separately"
+  }
+}

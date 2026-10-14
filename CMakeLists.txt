@@ -64,7 +64,7 @@ add_library(newlang_parser STATIC src/parser.c)
 target_link_libraries(newlang_parser PUBLIC newlang_syntax newlang_lexer newlang_diagnostic)
 add_library(newlang_checked STATIC src/checked.c)
 target_link_libraries(newlang_checked PUBLIC newlang_syntax)
-add_library(newlang_semantic STATIC src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
+add_library(newlang_semantic STATIC src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/node_join.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
 target_link_libraries(newlang_semantic PUBLIC newlang_checked newlang_diagnostic newlang_parser)
 add_library(newlang_checked_c_node STATIC src/checked_c_node.c src/checked_c_five.c)
 target_link_libraries(newlang_checked_c_node PUBLIC newlang_semantic)
@@ -453,9 +453,20 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_link_semantic.nl")
     target_link_libraries(node_link_test PRIVATE newlang_semantic newlang_parser)
     target_link_options(node_link_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    add_executable(node_join_proof_test tests/unit/node_join_proof_test.c)
+    target_link_libraries(node_join_proof_test PRIVATE newlang_semantic)
+    target_link_options(node_join_proof_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
+    foreach(case two_normal_join join_both_arms join_same_locator join_post_write)
+        add_test(NAME node_${case}_public_proof.unit COMMAND node_join_proof_test evidence
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_${case}.nl")
+    endforeach()
+    foreach(group negative oom)
+        add_test(NAME node_join_public_${group}.unit COMMAND node_join_proof_test ${group}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_join_same_locator.nl")
+    endforeach()
     add_executable(node_join_test tests/unit/node_join_test.c)
     target_link_libraries(node_join_test PRIVATE newlang_checked_c_node newlang_parser)
-    target_link_options(node_join_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    target_link_options(node_join_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
     foreach(case two_normal_join join_actual_none join_other_original join_both_arms join_clear_occurrence join_saved_copy join_same_locator join_post_write)
         add_test(NAME node_${case}.unit COMMAND node_join_test evidence
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_${case}.nl")
@@ -464,6 +475,12 @@ if(BUILD_TESTING)
         add_test(NAME node_join_${group}.unit COMMAND node_join_test ${group}
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_two_normal_join.nl")
     endforeach()
+    add_test(NAME node_join_both_public_oom.unit COMMAND node_join_proof_test oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_join_both_arms.nl")
+    add_test(NAME node_join_both_issuer_oom.unit COMMAND node_join_test oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_join_both_arms.nl")
+    add_test(NAME node_join_owned_poison.unit COMMAND node_join_test proof-poison
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_join_same_locator.nl")
     add_test(NAME node_join_source.integration
         COMMAND "${Python3_EXECUTABLE}"
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/node_join_source_test.py"

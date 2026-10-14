@@ -1254,6 +1254,16 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                          "three-link source selects replace only");
                     return false;
                 }
+                const NLNodeJoinProof *join = check->artifact->node_join_parent;
+                const bool record_join =
+                    join != NULL && root <= join->view.entry->place_count &&
+                    old.parent_field_index == 0 &&
+                    check->artifact->field_change_count == 0;
+                if (record_join &&
+                    !host(check,
+                          nl_captured_change_begin(check->artifact, call, c),
+                          span))
+                    return false;
                 if (record && !closure_status(check,
                                               nl_captured_change_begin(
                                                   check->artifact, call, c),
@@ -1277,7 +1287,7 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                         (NLCheckedResult){old.type, old.current_value};
                 }
                 *view(check, call) = operation;
-                if (record &&
+                if ((record || record_join) &&
                     !host(check, nl_captured_change_end(check->artifact, c),
                           span))
                     return false;
@@ -5177,10 +5187,10 @@ static bool node_join_pointer(const NLSemanticContext *before,
     return false;
 }
 
-static bool node_changed_arm(Check *check, const NLCheckedFragment *arm,
-                             NLValueId input, NLPlaceId *changed)
+NLCheckStatus nl_node_join_arm_check(const NLSemanticContext *before,
+                                     const NLCheckedFragment *arm,
+                                     NLValueId input, NLPlaceId *changed)
 {
-    const NLSemanticContext *before = check->context;
     const NLSemanticContext *after = nl_checked_context(arm);
     const NLCheckedNodeView *result =
         nl_checked_node_view(arm, nl_checked_root(arm));
@@ -5188,26 +5198,28 @@ static bool node_changed_arm(Check *check, const NLCheckedFragment *arm,
         nl_control_exits_count(arm->exits) != 0 ||
         nl_control_exits_count(arm->loop_returns) != 0 ||
         nl_sem_validate(after) != NL_CHECK_OK)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLCheckedNodeView *write = NULL;
     for (size_t i = 1; i <= nl_checked_node_count(arm); ++i) {
         const NLCheckedNodeView *op = nl_checked_node_view(arm, i);
         if (op->kind == NL_CHECKED_MATCH || op->kind == NL_CHECKED_IF ||
             op->kind == NL_CHECKED_LOOP ||
             op->kind == NL_CHECKED_REGISTERED_CALL)
-            return false;
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         if (op->kind == NL_CHECKED_REPLACE) {
             if (write != NULL || !op->field.present || op->field.index != 0)
-                return false;
+                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
             write = op;
         }
     }
     if (write == NULL)
-        return node_unit_arm_frame(before, after, input, result);
+        return node_unit_arm_frame(before, after, input, result)
+                   ? NL_CHECK_OK
+                   : NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLCheckedField f = write->field;
     if (f.parent == 0 || f.parent > before->place_count || f.child == 0 ||
         f.child > before->place_count || (*changed != 0 && *changed != f.child))
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLSemanticPlaceView parent = before->places[f.parent - 1],
                               child = before->places[f.child - 1],
                               post = after->places[f.child - 1];
@@ -5230,20 +5242,20 @@ static bool node_changed_arm(Check *check, const NLCheckedFragment *arm,
         after->values[child.current_value - 1].carrier != NL_CARRIER_ENDED ||
         nl_fixed_change_dependencies(before, f.child, child.current_value) !=
             NL_CHECK_OK)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLSemanticValueView prior = before->values[child.current_value - 1];
     if (prior.variant == 0 || prior.dependencies != NL_DEPENDENCY_FREE ||
         prior.value_dependency_count != 0 ||
         (prior.sum_payload != 0 &&
          !node_join_pointer(before, before, prior.sum_payload, parent.type)))
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLSemanticValueView incoming = after->values[post.current_value - 1];
     if (incoming.dependencies != NL_DEPENDENCY_FREE ||
         incoming.value_dependency_count != 0 || incoming.variant == 0)
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     if (incoming.sum_payload != 0 &&
         !node_join_pointer(before, after, incoming.sum_payload, parent.type))
-        return false;
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     /* Surviving occurrence refs cannot follow a conditional Reset. */
     for (size_t i = 0; i < before->value_count; ++i) {
         const NLSemanticValueView v = before->values[i];
@@ -5255,7 +5267,7 @@ static bool node_changed_arm(Check *check, const NLCheckedFragment *arm,
             if (child.payload_occurrence != 0 &&
                 r.occurrence_dependency == child.payload_occurrence &&
                 scope_active(before, r.scope))
-                return false;
+                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         }
     }
     const NLPlaceId payload =
@@ -5264,14 +5276,15 @@ static bool node_changed_arm(Check *check, const NLCheckedFragment *arm,
             : after->occurrences[post.payload_occurrence - 1].payload_place;
     for (size_t i = before->scope_count; i < after->scope_count; ++i)
         if (after->scopes[i].active)
-            return false;
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     for (size_t i = before->place_count; i < after->place_count; ++i)
         if ((after->places[i].live && i + 1 != payload) ||
             nl_recursive_local_type(after, after->places[i].type))
-            return false;
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     NLSemanticContext *comparison = NULL;
-    if (!host(check, nl_sem_clone(after, &comparison), write->span))
-        return false;
+    const NLCheckStatus cloned = nl_sem_clone(after, &comparison);
+    if (cloned != NL_CHECK_OK)
+        return cloned;
     /* Restore ONLY the ownership bookkeeping changed by the authenticated
      * replace. All semantic contents, pointer facts and dependencies still
      * compare exactly; restoration is not validation or state commitment. */
@@ -5316,7 +5329,7 @@ static bool node_changed_arm(Check *check, const NLCheckedFragment *arm,
     nl_semantic_destroy(comparison);
     if (same)
         *changed = f.child;
-    return same;
+    return same ? NL_CHECK_OK : NL_CHECK_ANALYSIS_PRECISION_LIMIT;
 }
 
 static bool node_memory_join(Check *check, NLCheckedNodeId match,
@@ -5346,8 +5359,15 @@ static bool node_memory_join(Check *check, NLCheckedNodeId match,
     for (size_t i = 0; i < 2; ++i) {
         const NLCheckedFragment *arm =
             nl_checked_match_arm(check->artifact, match, i);
-        if (arm == NULL || !node_changed_arm(check, arm, input, &changed))
+        if (arm == NULL)
             return false;
+        const NLCheckStatus status =
+            nl_node_join_arm_check(c, arm, input, &changed);
+        if (status != NL_CHECK_OK) {
+            if (status != NL_CHECK_ANALYSIS_PRECISION_LIMIT)
+                (void)host(check, status, span);
+            return false;
+        }
     }
     if (changed == 0)
         return false;
@@ -5365,7 +5385,8 @@ static bool node_memory_join(Check *check, NLCheckedNodeId match,
     end_temporary(check, input);
     view(check, match)->normal_arms = 2;
     view(check, match)->type = 1;
-    return true;
+    return host(check, nl_node_join_finish(check->artifact, match, changed, c),
+                span);
 }
 
 /* Identity prefix is qualified only by two owned snapshots captured at the
@@ -5860,6 +5881,12 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
                 c->bindings[i].view.value == packet;
     }
     const bool packet_join = node_unit_join && count == 2 && captured_packet;
+    if (node_unit_join && count == 2 && !packet_join &&
+        !check->allocated_slice && check->loop == NULL &&
+        !check->in_source_loan &&
+        !host(check, nl_node_join_prepare(check->artifact, id, c, input),
+              syntax->span))
+        return 0;
     unsigned packet_modes = 3; /* intersection of two parent-derived targets */
     NLSymbolId custody_symbol = 0;
     if (packet_join)
@@ -5931,6 +5958,10 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
                       a->span))
                 goto failure;
         }
+        if (!host(&branch,
+                  nl_node_join_fork(check->artifact, id, i, branch.artifact),
+                  a->span))
+            goto failure;
         NLSymbolId binder = 0;
         if (!function_arm(&branch, a, input, variants[i], true, &binder))
             goto failure;

@@ -4,6 +4,7 @@
 #include "control.h"
 #include "newlang/captured_closure.h"
 #include "newlang/checked.h"
+#include "newlang/node_join.h"
 #include "newlang/raw_storage.h"
 #include "ordinary_name.h"
 
@@ -103,7 +104,18 @@ typedef struct {
     NLSemanticContext *before, *after; /* owned point-in-time worlds */
     const NLSemanticContext *before_origin, *after_origin;
 } NLCapturedChange;
+typedef struct NLNodeJoinProof {
+    NLNodeJoinView view;
+    NLSemanticContext *entry_owned, *post_owned, *arm_entry[2];
+    const NLSemanticContext *arm_origin[2];
+    const NLCheckedFragment *parent;
+    bool complete;
+    struct NLNodeJoinProof *next;
+} NLNodeJoinProof;
 struct NLCheckedFragment {
+    const NLNodeJoinProof *node_join_parent; /* finite fork lineage only */
+    NLNodeJoinProof *node_joins; /* owned finite source-issued checkpoints */
+    void (*destroy_node_joins)(NLCheckedFragment *);
     NLCapturedChange *field_changes[6];
     size_t field_change_count;
     void (*destroy_field_changes)(NLCheckedFragment *);
@@ -155,6 +167,18 @@ struct NLCheckedFragment {
     NLFunctionBody *body_owner;
     void (*release_body)(NLFunctionBody *);
 };
+
+NLCheckStatus nl_node_join_prepare(NLCheckedFragment *, NLCheckedNodeId,
+                                   const NLSemanticContext *, NLValueId);
+NLCheckStatus nl_node_join_fork(NLCheckedFragment *, NLCheckedNodeId, size_t,
+                                NLCheckedFragment *);
+NLCheckStatus nl_node_join_finish(NLCheckedFragment *, NLCheckedNodeId,
+                                  NLPlaceId, const NLSemanticContext *);
+void nl_node_join_destroy(NLCheckedFragment *);
+/* Shared exact arm-frame kernel; no issuer state or post commitment. */
+NLCheckStatus nl_node_join_arm_check(const NLSemanticContext *,
+                                     const NLCheckedFragment *, NLValueId,
+                                     NLPlaceId *);
 
 NLCheckStatus nl_captured_change_begin(NLCheckedFragment *, NLCheckedNodeId,
                                        const NLSemanticContext *);
