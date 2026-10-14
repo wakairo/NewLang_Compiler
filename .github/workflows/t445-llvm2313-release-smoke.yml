@@ -1,0 +1,147 @@
+# One-shot isolated T445 probe. DO NOT MERGE or promote to normal CI.
+name: T445 LLVM 23.1.3 official archive smoke
+
+on:
+  push:
+    branches: [t445-llvm2313-release-smoke]
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    name: T445 trusted one archive SDK test
+    if: github.event_name == 'push' && github.repository == 'wakairo/NewLang_Compiler' && github.ref == 'refs/heads/t445-llvm2313-release-smoke'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify one official artifact and run bounded SDK smoke
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          log(){ echo "T445 $(date -u +%FT%TZ) $*"; }
+          base="$RUNNER_TEMP/t445"
+          mkdir -p "$base"
+          arch="$base/LLVM-23.1.3-Linux-X64.tar.zst"
+          url="https://github.com/llvm/llvm-project/releases/download/llvmorg-23.1.3/LLVM-23.1.3-Linux-X64.tar.zst"
+          for c in curl gpg sha256sum tar zstd gcc ldd python3;do command -v "$c" >/dev/null || { log "STOP missing tool $c";exit 70; };done
+          df -h "$RUNNER_TEMP"
+          free=$(df -B1 --output=avail "$RUNNER_TEMP" | tail -1 | xargs)
+          if [ "$free" -lt 8589934592 ];then log "STOP free disk too small $free";exit 71;fi
+          log "HOST os=$(grep PRETTY_NAME /etc/os-release) $(getconf GNU_LIBC_VERSION)"
+          begin=$(date +%s)
+          log "DOWNLOAD exactly one full official asset; no retry/no mirror"
+          curl -fLsS --retry 0 --connect-timeout 20 --max-time 600 \
+           --write-out 'T445 CURL received=%{size_download}B seconds=%{time_total} http=%{http_code}\n' \
+           -o "$arch" "$url"
+          received=$(stat -c %s "$arch")
+          downloaded=$(date +%s)
+          log "DOWNLOAD_BYTES=$received ELAPSED_S=$((downloaded-begin))"
+          if [ "$received" -ne 1188398549 ];then log "STOP archive size mismatch";exit 72;fi
+          hash=$(sha256sum "$arch" | awk '{print $1}')
+          log "ACTUAL_SHA256=$hash"
+          if [ "$hash" != 14d2f701eb68fb799001bdea6231048f3990690fa2f406d563555ff8f744daba ];then log "STOP archive sha mismatch";exit 73;fi
+          log "VERIFY detached signature from GitHub, keys from official LLVM website"
+          curl -fLsS --retry 0 --max-time 60 -o "$arch.sig" "$url.sig"
+          curl -fLsS --retry 0 --max-time 60 -o "$base/release-keys.asc" https://releases.llvm.org/release-keys.asc
+          mkdir -m 700 "$base/gnupg"
+          gpg --homedir "$base/gnupg" --batch --quiet --import "$base/release-keys.asc"
+          gpg --homedir "$base/gnupg" --batch --status-fd=1 --verify "$arch.sig" "$arch" > "$base/verify.log" 2>&1 || { log "STOP invalid GPG";exit 74; }
+          grep '^\[GNUPG:\] VALIDSIG ' "$base/verify.log"
+          if ! grep -q '^\[GNUPG:\] VALIDSIG D574BD5D1D0E98895E3BF90444F2485E45D59042 ' "$base/verify.log";then
+           log "STOP signature signer differs from independently confirmed LLVM release manager";exit 75
+          fi
+          log "GPG_VERIFIED release manager fingerprint"
+          log "SAFE_TAR_STREAM_CHECK before extraction"
+          python3 - "$arch" <<'PY'
+          import subprocess,sys,tarfile,posixpath
+          p=subprocess.Popen(["zstd","-dc","--",sys.argv[1]],stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+          count=0;size=0;roots=set()
+          try:
+           with tarfile.open(fileobj=p.stdout,mode="r|") as t:
+            for m in t:
+             n=posixpath.normpath(m.name.removeprefix("./"))
+             if m.name.startswith("/") or n in ("",".","..") or n.startswith("../"):
+              raise ValueError("unsafe tar path")
+             count+=1;size+=m.size if m.isfile() else 0;roots.add(n.split("/")[0])
+             if count>250000 or size>8*1024**3:raise ValueError("unpack exceeds budget")
+             if m.issym() or m.islnk():
+              if m.linkname.startswith("/"):raise ValueError("absolute archive link")
+              dst=posixpath.normpath(posixpath.join(posixpath.dirname(n),m.linkname) if m.issym() else m.linkname)
+              if dst==".." or dst.startswith("../") or dst.split("/")[0]!=n.split("/")[0]:raise ValueError("link escapes top root")
+             elif not (m.isfile() or m.isdir()):raise ValueError("special archive entry")
+           p.stdout.close()
+           status=p.wait(timeout=30)
+           if status:raise ValueError("zstd error")
+          finally:
+           if p.poll() is None:p.kill();p.wait()
+           if p.stdout:p.stdout.close()
+           if p.stderr:p.stderr.close()
+          if len(roots)!=1:raise ValueError("wrong number of top-level roots")
+          print(f"T445 SAFE_TAR members={count} uncompressed_bytes={size} top={next(iter(roots))}",flush=True)
+          PY
+          mkdir "$base/sdk"
+          extractstart=$(date +%s)
+          tar --use-compress-program=unzstd --no-same-owner --no-same-permissions -xf "$arch" -C "$base/sdk"
+          log "EXTRACT_SECONDS=$(($(date +%s)-extractstart))"
+          root=$(find "$base/sdk" -mindepth 1 -maxdepth 1 -type d -print -quit)
+          if [ -z "$root" ] || [ "$(find "$base/sdk" -mindepth 1 -maxdepth 1 | wc -l)" -ne 1 ];then log "STOP sdk root";exit 76;fi
+          log "ROOT=$root"
+          if [ -x "$root/bin/llvm-config" ];then cfg="$root/bin/llvm-config"
+          elif [ -x "$root/bin/llvm-config-23" ];then cfg="$root/bin/llvm-config-23"
+          else log "STOP llvm-config missing";exit 77;fi
+          export PATH="$root/bin:$PATH"
+          export LD_LIBRARY_PATH="$root/lib:$root/lib64:$(printenv LD_LIBRARY_PATH || true)"
+          v=$("$cfg" --version)
+          log "LLVM_CONFIG_VERSION=$v"
+          if [ "$v" != "23.1.3" ];then log "STOP LLVM version";exit 78;fi
+          inc=$("$cfg" --includedir)
+          lib=$("$cfg" --libdir)
+          log "LLVM_INC=$inc LIBDIR=$lib"
+          if [ ! -f "$inc/llvm-c/Core.h" ] || [ ! -f "$inc/llvm-c/Analysis.h" ];then log "STOP C API headers missing";exit 79;fi
+          find "$lib" -maxdepth 1 -name 'libLLVM*.so*' -printf 'T445 LLVM_SHARED %f\n' | head -10
+          if ! find "$lib" -maxdepth 1 -name 'libLLVM*.so*' | grep -q .;then log "STOP LLVM shared lib missing";exit 80;fi
+          cat > "$base/capi.c" <<'C'
+          #include <llvm-c/Core.h>
+          #include <llvm-c/Analysis.h>
+          int main(void) {
+           LLVMContextRef c=LLVMContextCreate();
+           LLVMModuleRef m=LLVMModuleCreateWithNameInContext("t445",c);
+           LLVMTypeRef ty=LLVMFunctionType(LLVMInt32TypeInContext(c),0,0,0);
+           LLVMValueRef f=LLVMAddFunction(m,"answer",ty);
+           LLVMBasicBlockRef b=LLVMAppendBasicBlockInContext(c,f,"entry");
+           LLVMBuilderRef builder=LLVMCreateBuilderInContext(c);
+           LLVMPositionBuilderAtEnd(builder,b);
+           LLVMBuildRet(builder,LLVMConstInt(LLVMInt32TypeInContext(c),42,0));
+           char *err=0;int bad=LLVMVerifyModule(m,LLVMReturnStatusAction,&err);
+           if(err)LLVMDisposeMessage(err);
+           LLVMDisposeBuilder(builder);LLVMDisposeModule(m);LLVMContextDispose(c);
+           return bad;
+          }
+          C
+          log "CAPI compile and link GCC/system"
+          gcc -std=c17 -Wall -Wextra -Werror -I"$inc" "$base/capi.c" -L"$lib" \
+           -Wl,-rpath,"$lib" $("$cfg" --link-shared --libs core) $("$cfg" --system-libs) \
+           -o "$base/capi"
+          ldd "$base/capi" | grep -E 'libLLVM|not found|libstdc|libz3|libc\.so' || true
+          if ldd "$base/capi" | grep -q 'not found';then log "STOP CAPI shared deps missing";exit 81;fi
+          "$base/capi"
+          log "CAPI_PASS"
+          test -x "$root/bin/clang" || { log "STOP clang missing";exit 82; }
+          test -x "$root/bin/clang-format" || { log "STOP clang-format missing";exit 83; }
+          log "CLANG=$("$root/bin/clang" --version | head -1)"
+          log "FORMAT=$("$root/bin/clang-format" --version | head -1)"
+          if ldd "$root/bin/clang" | grep -q 'not found';then log "STOP Clang host ABI deps";exit 84;fi
+          printf '#include <stdio.h>\nint main(void){volatile int a=42;printf("%%d\\n",a);return a!=42;}\n' > "$base/san.c"
+          for san in address undefined;do
+           log "SANITIZER_CHECK $san"
+           "$root/bin/clang" -std=c17 -Wall -Wextra -Werror "-fsanitize=$san" \
+            -fno-omit-frame-pointer -fno-sanitize-recover=all "$base/san.c" -o "$base/test-$san"
+           "$base/test-$san"
+           log "SANITIZER_PASS $san"
+          done
+          log "FULL_LIMITED_SMOKE_PASS 23.1.3"
+          log "TIMES_TOTAL_S=$(($(date +%s)-begin)) DOWNLOAD_S=$((downloaded-begin)) ARCHIVE_BYTES=$received"
