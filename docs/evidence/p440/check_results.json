@@ -1,0 +1,193 @@
+{
+  "base_commit": "c6771a029062292c915ac2b8f5e66045661eec3f",
+  "branch": "p440-frontend-only-check",
+  "baseline_binary": "/tmp/p436-baseline/newlangc",
+  "candidate_binary": "/tmp/p440-no-llvm/newlangc",
+  "scope": "diagnostic run record; not ownership or native authority",
+  "cases": [
+    {
+      "name": "node",
+      "source": "tests/fixtures/node_join_same_locator.nl",
+      "source_sha256": "59076eec8d23173be8f8984223cdadbc7cad71b092e7314f427fc410314e3db1",
+      "unchanged": {
+        "exit": 4,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/fixtures/node_join_same_locator.nl\n"
+      },
+      "ordinary": {
+        "exit": 4,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/fixtures/node_join_same_locator.nl\n"
+      },
+      "check": {
+        "exit": 0,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      }
+    },
+    {
+      "name": "escape",
+      "source": "/tmp/p440-inputs/escape.nl",
+      "source_sha256": "467b02bb6e31ccd532f420862f530c71def7475d75dc7d909695462dbcbd9bf1",
+      "unchanged": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/escape.nl:1:37-1:56: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+      },
+      "ordinary": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/escape.nl:1:37-1:56: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+      },
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/escape.nl:1:37-1:56: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+      }
+    },
+    {
+      "name": "missing_main",
+      "source": "/tmp/p440-inputs/missing_main.nl",
+      "source_sha256": "93111bd94a3a3e498d46b44139c0681766af3a94d8b13eab59e9d756dae4d099",
+      "unchanged": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "<v0-entry>:1:1-1:5: error(semantic)[P3-UNKNOWN-CALLEE]: unknown semantic callee\n"
+      },
+      "ordinary": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "<v0-entry>:1:1-1:5: error(semantic)[P3-UNKNOWN-CALLEE]: unknown semantic callee\n"
+      },
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "<v0-entry>:1:1-1:5: error(semantic)[P3-UNKNOWN-CALLEE]: unknown semantic callee\n"
+      }
+    },
+    {
+      "name": "parse",
+      "source": "/tmp/p440-inputs/parse.nl",
+      "source_sha256": "0c4dfa5ca719c6cc3277852fd6ea526d1b2731f9beb0daf5a82ca275963ba205",
+      "unchanged": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/parse.nl:1:23-1:24: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+      },
+      "ordinary": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/parse.nl:1:23-1:24: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+      },
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/parse.nl:1:23-1:24: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+      }
+    },
+    {
+      "name": "plus",
+      "source": "/tmp/p440-inputs/plus.nl",
+      "source_sha256": "3b6f444342701dbe6bab7615395d2957070db00f82b1dbfe1870f73f0576459c",
+      "unchanged": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/plus.nl:1:28-1:29: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+      },
+      "ordinary": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/plus.nl:1:28-1:29: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+      },
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/plus.nl:1:28-1:29: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+      }
+    },
+    {
+      "name": "range",
+      "source": "/tmp/p440-inputs/range.nl",
+      "source_sha256": "8293c86d9583b413834defb7cefc9ec8b194533d0bb01b6293f096db5d90872f",
+      "unchanged": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/range.nl:1:23-1:30: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255\n"
+      },
+      "ordinary": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/range.nl:1:23-1:30: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255\n"
+      },
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/range.nl:1:23-1:30: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255\n"
+      }
+    },
+    {
+      "name": "type",
+      "source": "/tmp/p440-inputs/type.nl",
+      "source_sha256": "9b3bcee91c9bdc0f884df0e00ee87a94cec7885d9ce0ba2a64e20bf8ad062fdc",
+      "unchanged": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/type.nl:1:13-1:19: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+      },
+      "ordinary": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/type.nl:1:13-1:19: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+      },
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "/tmp/p440-inputs/type.nl:1:13-1:19: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+      }
+    },
+    {
+      "name": "u8",
+      "source": "/tmp/p440-inputs/u8.nl",
+      "source_sha256": "bf874f3e2f38c6c72c592b2b378676673ad4b3256df644155fc32461c6c6f469",
+      "unchanged": {
+        "exit": 0,
+        "stdout_bytes": 277,
+        "stdout_sha256": "1acbfbe11a2688bccd4a4df56a7d8854b69ba5bfb4f0e677a09896825a119e2c",
+        "stderr": ""
+      },
+      "ordinary": {
+        "exit": 0,
+        "stdout_bytes": 277,
+        "stdout_sha256": "1acbfbe11a2688bccd4a4df56a7d8854b69ba5bfb4f0e677a09896825a119e2c",
+        "stderr": ""
+      },
+      "check": {
+        "exit": 0,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      }
+    }
+  ]
+}
