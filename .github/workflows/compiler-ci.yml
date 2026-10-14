@@ -1,138 +1,127 @@
-name: Compiler validation
+# T441 one-shot isolated trusted-branch restore audit. DO NOT MERGE.
+# Historical T430 producer: 61cc2c7918aada289b9098dc91153c5f5ab77dea.
+# Do not add pull_request: or a matrix; do not invoke compiler bootstrap.
+name: T441 trusted cache restore-only audit
 
 on:
-  pull_request:
   push:
-    branches: [main, t430-verified-deb-cache-trial]
+    branches: [t430-verified-deb-cache-trial]
 
 permissions:
   contents: read
 
 jobs:
-  validate:
-    name: ${{ matrix.name }}
+  restore:
+    name: T441 exact 12-package byte audit
+    if: github.event_name == 'push' && github.repository == 'wakairo/NewLang_Compiler' && github.ref == 'refs/heads/t430-verified-deb-cache-trial'
     runs-on: ubuntu-24.04
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: GCC
-            compiler: gcc-13
-            sanitizer: none
-          - name: GCC Release
-            compiler: gcc-13
-            sanitizer: none
-            build_type: Release
-          - name: Clang
-            compiler: clang-23
-            sanitizer: none
-          - name: ASan
-            compiler: clang-23
-            sanitizer: address
-          - name: UBSan
-            compiler: clang-23
-            sanitizer: undefined
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-      - name: Host prerequisites from signed Ubuntu repositories
-        run: |
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends -y \
-            gcc-13 g++-13 make cmake python3 dpkg \
-            libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
-      # T430: only trusted repository pushes can read/write this experimental cache.
-      # PR/fork runs retain the unchanged cold-download behavior.
-      - name: Enumerate exact locked Debian packages
-        if: >-
-          github.event_name == 'push' &&
-          github.repository == 'wakairo/NewLang_Compiler' &&
-          (github.ref == 'refs/heads/main' ||
-           github.ref == 'refs/heads/t430-verified-deb-cache-trial')
-        id: deb_manifest
+      - name: Checkout T430 source and frozen lock
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Enumerate exact T430 cache paths without downloading packages
+        id: manifest
+        shell: bash
         run: |
           python3 - <<'PY'
           import hashlib, json, os, re
           from pathlib import Path
           raw = Path("scripts/toolchain-lock.json").read_bytes()
           digest = hashlib.sha256(raw).hexdigest()
-          packages = json.loads(raw)["platforms"]["ubuntu-24.04-x86_64"]["packages"]
-          paths = []
+          if digest != "dd0a726af2b91f32ffbbbd9412dfc5a4a82f48bb40ac08d6fcc4e4ab1ae06b4d":
+              raise SystemExit("T441 STOP: historical lock SHA mismatch")
+          lock = json.loads(raw)
+          if lock["llvm_version"] != "23.1.2" or lock["llvm_source_commit"] != "85ac560262434c9ccfc0c183ec22d4138ed647fb":
+              raise SystemExit("T441 STOP: wrong LLVM tag/commit")
+          packages = lock["platforms"]["ubuntu-24.04-x86_64"]["packages"]
+          if len(packages) != 12:
+              raise SystemExit("T441 STOP: locked package count changed")
+          files = []
           for package in packages:
               name, sha = package["name"], package["sha256"]
               if not re.fullmatch(r"[A-Za-z0-9+_.-]+", name) or not re.fullmatch(r"[0-9a-f]{64}", sha):
-                  raise SystemExit("T430: invalid locked package path")
-              paths.append(f".deps/downloads/{name}-{sha}.deb")
-          if not paths or len(paths) != len(set(paths)):
-              raise SystemExit("T430: empty or duplicate locked paths")
+                  raise SystemExit("T441 STOP: unsafe manifest")
+              files.append(f".deps/downloads/{name}-{sha}.deb")
+          if len(set(files)) != 12:
+              raise SystemExit("T441 STOP: duplicate cache member")
           with open(os.environ["GITHUB_OUTPUT"], "a") as out:
-              out.write(f"digest={digest}\npaths<<T430_PATHS\n")
-              out.write("\n".join(paths) + "\nT430_PATHS\n")
-          print(f"T430 locked manifest: {len(paths)} packages; lock SHA256 {digest}")
+              out.write("paths<<T441_PATHS\n" + "\n".join(files) + "\nT441_PATHS\n")
+          print(f"T441 manifest: 12 exact paths; full lock sha256={digest}")
           PY
-      - name: Restore and cache only locked verified .deb files
-        if: steps.deb_manifest.outcome == 'success'
-        id: deb_cache
-        uses: actions/cache@3edfce9056124e459a23f683a21433670d47daca # pinned GitHub action, Node 24
+      - name: Restore original trusted-branch T430 cache, never save
+        id: restore
+        uses: actions/cache/restore@3edfce9056124e459a23f683a21433670d47daca
         with:
-          path: ${{ steps.deb_manifest.outputs.paths }}
-          key: t430-locked-deb-v1-${{ runner.os }}-${{ runner.arch }}-${{ steps.deb_manifest.outputs.digest }}
+          path: ${{ steps.manifest.outputs.paths }}
+          key: t430-locked-deb-v1-Linux-X64-dd0a726af2b91f32ffbbbd9412dfc5a4a82f48bb40ac08d6fcc4e4ab1ae06b4d
           enableCrossOsArchive: false
-          # No restore-keys: no stale lock/OS/arch fallback.
-      - name: Reject unexpected restored paths before bootstrap
-        if: steps.deb_manifest.outcome == 'success'
-        run: |
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-          lock = json.loads(Path("scripts/toolchain-lock.json").read_text())
-          expected = {f"{p['name']}-{p['sha256']}.deb" for p in
-                      lock["platforms"]["ubuntu-24.04-x86_64"]["packages"]}
-          for folder in (Path(".deps"), Path(".deps/downloads")):
-              if folder.is_symlink() or (folder.exists() and not folder.is_dir()):
-                  raise SystemExit(f"T430: unexpected cache directory: {folder}")
-          directory = Path(".deps/downloads")
-          restored = list(directory.iterdir()) if directory.exists() else []
-          for path in restored:
-              if path.name not in expected or path.is_symlink() or not path.is_file():
-                  raise SystemExit(f"T430: unexpected cache member: {path}")
-          print(f"T430 restored regular files: {len(restored)}/{len(expected)}")
-          PY
-      - name: Bootstrap checksum-locked LLVM 23.1.2
-        run: python3 scripts/bootstrap.py
-      - name: Check C formatting
-        if: matrix.name == 'Clang'
-        run: |
-          . .deps/activate.sh
-          bash scripts/check-format.sh
-      - name: Configure, build, and test
+          fail-on-cache-miss: true
+      - name: Fail-closed audit of restored original bytes
         env:
-          CC: ${{ matrix.compiler }}
-        run: |
-          . .deps/activate.sh
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type || 'Debug' }} \
-            -DNEWLANG_SANITIZER=${{ matrix.sanitizer }}
-          cmake --build build --parallel 2
-          ctest --test-dir build --output-on-failure
-      - name: Validate publisher inventory and SHA before cache post-save
-        if: steps.deb_manifest.outcome == 'success'
+          CACHE_HIT: ${{ steps.restore.outputs.cache-hit }}
+        shell: bash
         run: |
           python3 - <<'PY'
-          import hashlib, json
+          import hashlib, json, os, re, stat
           from pathlib import Path
-          lock = json.loads(Path("scripts/toolchain-lock.json").read_text())
-          packages = lock["platforms"]["ubuntu-24.04-x86_64"]["packages"]
-          expected = {f"{p['name']}-{p['sha256']}.deb": p["sha256"] for p in packages}
-          directory = Path(".deps/downloads")
-          if directory.is_symlink() or not directory.is_dir():
-              raise SystemExit("T430: unsafe downloads directory")
-          actual = {p.name for p in directory.iterdir()}
-          if actual != set(expected):
-              raise SystemExit(f"T430: unexpected/missing cache files: {actual ^ set(expected)}")
-          for name, digest in expected.items():
-              path = directory / name
-              if path.is_symlink() or not path.is_file():
-                  raise SystemExit(f"T430: non-regular package: {name}")
-              if hashlib.sha256(path.read_bytes()).hexdigest() != digest:
-                  raise SystemExit(f"T430: package checksum mismatch: {name}")
-          print(f"T430 publisher verified SHA256 for {len(packages)} regular .deb files")
+          if os.environ.get("CACHE_HIT") != "true":
+              raise SystemExit("T441 STOP: no exact restored cache hit")
+          packages = json.loads(Path("scripts/toolchain-lock.json").read_text())["platforms"]["ubuntu-24.04-x86_64"]["packages"]
+          expected = {f"{p['name']}-{p['sha256']}.deb": p for p in packages}
+          base = Path(".deps")
+          target = base / "downloads"
+          for path in (base, target):
+              if path.is_symlink() or not path.is_dir():
+                  raise SystemExit(f"T441 STOP: bad cache directory {path}")
+          folders = []
+          observed = []
+          for root, dirs, files in os.walk(base, followlinks=False):
+              directory = Path(root)
+              folders.append(directory.as_posix())
+              for d in dirs:
+                  path = directory / d
+                  if path.is_symlink() or not path.is_dir():
+                      raise SystemExit(f"T441 STOP: non-directory/symlink {path}")
+              for f in files:
+                  path = directory / f
+                  if not stat.S_ISREG(path.lstat().st_mode):
+                      raise SystemExit(f"T441 STOP: non-regular cached member {path}")
+                  observed.append(path)
+          if set(folders) != {".deps", ".deps/downloads"}:
+              raise SystemExit(f"T441 STOP: extra cached directories {folders}")
+          actual = {p.name for p in observed if p.parent == target}
+          if len(observed) != 12 or actual != set(expected):
+              raise SystemExit(f"T441 STOP: cached inventory differs, missing/extra={set(expected) ^ actual}")
+          raw_index = Path("scripts/toolchain-provenance/trixie-23/Packages").read_bytes()
+          release = Path("scripts/toolchain-provenance/trixie-23/Release").read_text()
+          index_sha = hashlib.sha256(raw_index).hexdigest()
+          matching = [line.split() for line in release.splitlines()
+                      if len(line.split()) == 3 and line.split()[2] == "main/binary-amd64/Packages"
+                      and re.fullmatch(r"[0-9a-f]{64}", line.split()[0])]
+          if len(matching) != 1 or matching[0][0] != index_sha or int(matching[0][1]) != len(raw_index):
+              raise SystemExit("T441 STOP: original publisher Packages/Release SHA mismatch")
+          records = {}
+          for chunk in raw_index.decode().split("\n\n"):
+              fields = {}
+              for line in chunk.splitlines():
+                  if ":" in line and not line.startswith(" "):
+                      k, v = line.split(":", 1)
+                      fields[k] = v.strip()
+              if "Package" in fields:
+                  records[fields["Package"]] = fields
+          for p in packages:
+              path = target / f"{p['name']}-{p['sha256']}.deb"
+              size = path.stat().st_size
+              digest = hashlib.sha256(path.read_bytes()).hexdigest()
+              if not size or digest != p["sha256"]:
+                  raise SystemExit(f"T441 STOP: size/digest mismatch {p['name']}")
+              if p["name"] != "libz3-4":
+                  rec = records.get(p["name"])
+                  if rec is None or rec.get("SHA256") != digest or rec.get("Version") != p["version"] or int(rec["Size"]) != size or not p["url"].endswith(rec["Filename"]):
+                      raise SystemExit(f"T441 STOP: signed publisher inventory mismatch {p['name']}")
+              print(f"T441 VERIFIED name={p['name']} size={size} sha256={digest}" +
+                    (" size_source=frozen_signed_trixie_Packages" if p["name"] != "libz3-4" else " size_source=actual_only_lock_has_no_size"))
+          print("T441 12/12 ACTUAL RESTORED BYTES SHA256 VERIFIED; no package GET, no cache save, no bootstrap")
           PY
