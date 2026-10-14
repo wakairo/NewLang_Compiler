@@ -69,6 +69,7 @@ def main():
     compiler, probe, cc, fixtures, sanitizer = sys.argv[1:]
     fixtures = Path(fixtures)
     records = []
+    unsupported = []
     with tempfile.TemporaryDirectory(prefix="newlang-p436-") as d:
         root = Path(d)
         for case, variant in [("node_join_same_locator", 2), ("node_join_native_none", 1)]:
@@ -112,12 +113,22 @@ def main():
                     mutants.append(native(root, cc, label, broken, header, "-O2", sanitizer, False))
                 broken = c.replace("NL_NODE_FINISH();", f"nl_b_0_{roots[0]}.f1 = (uint8_t)(nl_b_0_{roots[0]}.f1 + 1);\nNL_NODE_FINISH();")
                 mutants.append(native(root, cc, "sibling", broken, header, "-O2", sanitizer, False))
+            if case == "node_join_same_locator":
+                post_extract = source.read_text().replace(
+                    "let joined=tail@next;",
+                    "let joined=tail@next;match joined{None=>{unit},Some(extracted)=>{extracted;unit}};")
+                negative = root / "unknown_extract.nl"
+                negative.write_text(post_extract)
+                refused = execute([compiler, str(negative)])
+                assert refused.returncode == 3 and not refused.stdout and "NODE-JOIN-POST-PRECISION" in refused.stderr
+                unsupported.append({"case": "unknown_to_Some", "class": "source semantic precision refusal, not backend", "source_sha256": hashlib.sha256(post_extract.encode()).hexdigest(),
+                                    "exit": refused.returncode, "C_bytes": len(refused.stdout), "diagnostic": refused.stderr})
             records.append({"source": source.name, "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
                             "CLI_exit": emitted.returncode, "C_bytes": len(emitted.stdout.encode()),
                             "C_sha256": hashlib.sha256(emitted.stdout.encode()).hexdigest(),
                             "public_probe_exit": proof.returncode, "checked_expectations": proof.stdout,
                             "runs": runs, "C_mutants": mutants})
-    print(json.dumps({"host": cc, "sanitizer": sanitizer, "cases": records}, indent=2))
+    print(json.dumps({"host": cc, "sanitizer": sanitizer, "cases": records, "unsupported": unsupported}, indent=2))
 
 
 if __name__ == "__main__":

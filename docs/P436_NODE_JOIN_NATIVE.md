@@ -93,3 +93,12 @@ alone was concretely insufficient for physical-carrier mapping, as predicted.
 Both runtime branches now execute in distinct source programs; a discarded unit
 sample is still not an ordinary useful library or a Product/value comparison.
 New backend trust boundary requires Coordination's independent R decision.
+
+Post-join Some extraction calibration: parser accepts the added match, but
+existing checker rejects it at NODE-JOIN-POST-PRECISION (CLI3/C0, span16:26–86).
+The initial negative test incorrectly expected backend CLI4; it was corrected
+without changing checker/emitter semantics. No unsafe acceptance occurred.
+This is a source precision boundary, distinct from invalid-proof/backend refusal.
+Initial PR CI38509471917: four configurations passed277/277; ASan failed during
+locked bootstrap before build/test. Final test-only head gets its own fresh CI;
+these earlier results are not counted as final-head five-job green.

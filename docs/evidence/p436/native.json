@@ -28,7 +28,7 @@
             "sanitizer": "none",
             "compile_exit": 0,
             "exit": 0,
-            "stdout": "replace root=0x7fff5bc90440 old=0/(nil) new=1/0x7fff5bc904a0 sibling=1\nreplace root=0x7fff5bc904a0 old=0/(nil) new=1/0x7fff5bc90440 sibling=2\nbranch=2 pointer=0x7fff5bc904a0\nreplace root=0x7fff5bc904a0 old=1/0x7fff5bc90440 new=1/0x7fff5bc90440 sibling=2\nreplace root=0x7fff5bc90440 old=1/0x7fff5bc904a0 new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stdout": "replace root=0x7ffd3bb67eb0 old=0/(nil) new=1/0x7ffd3bb67f10 sibling=1\nreplace root=0x7ffd3bb67f10 old=0/(nil) new=1/0x7ffd3bb67eb0 sibling=2\nbranch=2 pointer=0x7ffd3bb67f10\nreplace root=0x7ffd3bb67f10 old=1/0x7ffd3bb67eb0 new=1/0x7ffd3bb67eb0 sibling=2\nreplace root=0x7ffd3bb67eb0 old=1/0x7ffd3bb67f10 new=0/(nil) sibling=1\nnative topology observations complete\n",
             "stderr": "",
             "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
           },
@@ -48,7 +48,7 @@
             "sanitizer": "none",
             "compile_exit": 0,
             "exit": 0,
-            "stdout": "replace root=0x7ffd1691d1c0 old=0/(nil) new=1/0x7ffd1691d1a0 sibling=1\nreplace root=0x7ffd1691d1a0 old=0/(nil) new=1/0x7ffd1691d1c0 sibling=2\nbranch=2 pointer=0x7ffd1691d1a0\nreplace root=0x7ffd1691d1a0 old=1/0x7ffd1691d1c0 new=1/0x7ffd1691d1c0 sibling=2\nreplace root=0x7ffd1691d1c0 old=1/0x7ffd1691d1a0 new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stdout": "replace root=0x7ffd74e9a5c0 old=0/(nil) new=1/0x7ffd74e9a5a0 sibling=1\nreplace root=0x7ffd74e9a5a0 old=0/(nil) new=1/0x7ffd74e9a5c0 sibling=2\nbranch=2 pointer=0x7ffd74e9a5a0\nreplace root=0x7ffd74e9a5a0 old=1/0x7ffd74e9a5c0 new=1/0x7ffd74e9a5c0 sibling=2\nreplace root=0x7ffd74e9a5c0 old=1/0x7ffd74e9a5a0 new=0/(nil) sibling=1\nnative topology observations complete\n",
             "stderr": "",
             "C_sha256": "c318f7e69379b60709490db5225cfd1a273a33df4a89b077fd303cf7e707a884"
           }
@@ -80,7 +80,7 @@
             "sanitizer": "none",
             "compile_exit": 0,
             "exit": 0,
-            "stdout": "replace root=0x7fffb06a4d40 old=0/(nil) new=0/(nil) sibling=1\nreplace root=0x7fffb06a4da0 old=0/(nil) new=1/0x7fffb06a4d40 sibling=2\nbranch=1 pointer=(nil)\nreplace root=0x7fffb06a4da0 old=1/0x7fffb06a4d40 new=0/(nil) sibling=2\nreplace root=0x7fffb06a4d40 old=0/(nil) new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stdout": "replace root=0x7ffc8cb19360 old=0/(nil) new=0/(nil) sibling=1\nreplace root=0x7ffc8cb193c0 old=0/(nil) new=1/0x7ffc8cb19360 sibling=2\nbranch=1 pointer=(nil)\nreplace root=0x7ffc8cb193c0 old=1/0x7ffc8cb19360 new=0/(nil) sibling=2\nreplace root=0x7ffc8cb19360 old=0/(nil) new=0/(nil) sibling=1\nnative topology observations complete\n",
             "stderr": "",
             "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
           },
@@ -100,7 +100,7 @@
             "sanitizer": "none",
             "compile_exit": 0,
             "exit": 0,
-            "stdout": "replace root=0x7ffee6292920 old=0/(nil) new=0/(nil) sibling=1\nreplace root=0x7ffee6292900 old=0/(nil) new=1/0x7ffee6292920 sibling=2\nbranch=1 pointer=(nil)\nreplace root=0x7ffee6292900 old=1/0x7ffee6292920 new=0/(nil) sibling=2\nreplace root=0x7ffee6292920 old=0/(nil) new=0/(nil) sibling=1\nnative topology observations complete\n",
+            "stdout": "replace root=0x7ffec6a0b0c0 old=0/(nil) new=0/(nil) sibling=1\nreplace root=0x7ffec6a0b0a0 old=0/(nil) new=1/0x7ffec6a0b0c0 sibling=2\nbranch=1 pointer=(nil)\nreplace root=0x7ffec6a0b0a0 old=1/0x7ffec6a0b0c0 new=0/(nil) sibling=2\nreplace root=0x7ffec6a0b0c0 old=0/(nil) new=0/(nil) sibling=1\nnative topology observations complete\n",
             "stderr": "",
             "C_sha256": "5cc6a09acd301deb27e7a5c9b6f369eed3ebdd1548d0ca7fea9b60ab013d3065"
           }
@@ -167,6 +167,16 @@
             "C_sha256": "90ceb448318c576b797915fe281b09e6a30e7dd87780651c8796d0952ca08af4"
           }
         ]
+      }
+    ],
+    "unsupported": [
+      {
+        "case": "unknown_to_Some",
+        "class": "source semantic precision refusal, not backend",
+        "source_sha256": "b48148a3d148a05463977c0d6e3a3ff985fd82fc47d8363c2295ebca738103b2",
+        "exit": 3,
+        "C_bytes": 0,
+        "diagnostic": "/tmp/newlang-p436-3185z1r5/unknown_extract.nl:16:26-16:86: error(precision)[NODE-JOIN-POST-PRECISION]: joined Node link has unknown variant and pointer provenance\n"
       }
     ]
   },
