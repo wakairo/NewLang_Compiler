@@ -1,0 +1,53 @@
+name: R437 independent Node C17 native first pass
+on:
+  push:
+    branches: [r437-node-native-blind-ci]
+permissions:
+  contents: read
+jobs:
+  r437:
+    name: Fresh R437 (one attempt)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout frozen R branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Confirm host/compiler inventory
+        run: |
+          set -eux
+          git rev-parse HEAD
+          git merge-base --is-ancestor d26d30568018f9d4866a9841d9eba6966a703557 HEAD
+          cmake --version
+          gcc --version
+          clang --version
+          python3 --version
+      - name: Build unchanged candidate compiler from source (LLVM-free native C17 path)
+        run: |
+          set -eux
+          CC=gcc cmake -S . -B build-r437 -DNEWLANG_FRONTEND_ONLY=ON -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-r437 --parallel 2 --target newlangc
+      - name: Link independent public API certificate auditor
+        run: |
+          set -eux
+          mkdir -p tests/red_team/r437/output
+          gcc -std=c17 -Wall -Wextra -Wpedantic -Werror -O0 -Iinclude \
+            tests/red_team/r437/public_proof.c -Wl,--start-group \
+            build-r437/libnewlang_checked_c_node.a \
+            build-r437/libnewlang_semantic.a build-r437/libnewlang_checked.a \
+            build-r437/libnewlang_parser.a build-r437/libnewlang_syntax.a \
+            build-r437/libnewlang_lexer.a build-r437/libnewlang_source.a \
+            build-r437/libnewlang_diagnostic.a -Wl,--end-group \
+            -o tests/red_team/r437/output/public_proof
+      - name: Execute pre-registered independent sources / proof mutations / C17 native
+        run: |
+          python3 -u tests/red_team/r437/audit.py 2>&1 | tee tests/red_team/r437/output/r437.log
+          test "${PIPESTATUS[0]}" -eq 0
+      - name: Archive R-only evidence including generated C
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r437-independent-evidence
+          path: tests/red_team/r437/output/
+          retention-days: 14
