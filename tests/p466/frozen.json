@@ -1,0 +1,33 @@
+{
+  "compiler": "55f4f0feaf5976648a97fbd7190bbf954ed6647e",
+  "cases": {
+    "some": {
+      "sha256": "e887c7036f849abd340225f850157db385d573a9d9c717a4d92b92de9dc0abbd",
+      "semantic_valid": true,
+      "runtime_variant": 2,
+      "initial_peer_tag": 1,
+      "initial_target": "anchor",
+      "old_tag": 1,
+      "old_target": "anchor",
+      "post_tag": 0,
+      "post_target": null,
+      "anchor_payload": 29,
+      "peer_payload": 61,
+      "reloan": "original anchor"
+    },
+    "none": {
+      "sha256": "9732e15a18d5f5b4b3f510f742d6a43ab5256b28d77cb64d0a1dd13fdc9ab945",
+      "semantic_valid": true,
+      "runtime_variant": 1,
+      "initial_peer_tag": 0,
+      "initial_target": null,
+      "old_tag": 0,
+      "old_target": null,
+      "post_tag": 1,
+      "post_target": "anchor",
+      "anchor_payload": 29,
+      "peer_payload": 61,
+      "reloan": "original anchor"
+    }
+  }
+}
