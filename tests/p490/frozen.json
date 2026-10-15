@@ -1,0 +1,50 @@
+{
+  "compiler_main": "d6e603e12591c2ff39e3e1b77c784681fec66033",
+  "canonical": "Draft17.30",
+  "frozen_at_utc": "2026-10-15T13:30:58.674018+00:00",
+  "control": "tests/p471/asymmetric.nl",
+  "control_sha256": "c578ebdce71ffd46e30758903c28f69227876c7904264b3eec1914c7f6bdd050",
+  "cases": [
+    {
+      "source": "tests/p490/postjoin_read.nl",
+      "sha256": "9221eb7bb0a09b35e38db87c3e70658cc00819d9ebfbfd3e9587577f79e75b69",
+      "oracle": {
+        "input_arm": "Some(q), q=&original tail",
+        "originals": "distinct lexical head/tail, implicit local identity only",
+        "old_tail": "None Copy",
+        "tail_after": "Some(original tail), self-link",
+        "joined_read": "Some(original tail) physically if reached; semantic join is conservatively Unknown",
+        "reloan": "C2 Some(p) attempts ordinary loan_read_ptr(p) to original tail; no escape",
+        "head_final": "None",
+        "payloads": {
+          "tail": 2,
+          "head": 1
+        },
+        "no_minted_authority": true
+      }
+    },
+    {
+      "source": "tests/p490/postjoin_reloan.nl",
+      "sha256": "c5c94d2ed32a5d60b01d009673ba182bb8be6c0a0aaba05193b34f56cd2e60b0",
+      "oracle": {
+        "input_arm": "Some(q), q=&original tail",
+        "originals": "distinct lexical head/tail, implicit local identity only",
+        "old_tail": "None Copy",
+        "tail_after": "Some(original tail), self-link",
+        "joined_read": "Some(original tail) physically if reached; semantic join is conservatively Unknown",
+        "reloan": "C2 Some(p) attempts ordinary loan_read_ptr(p) to original tail; no escape",
+        "head_final": "None",
+        "payloads": {
+          "tail": 2,
+          "head": 1
+        },
+        "no_minted_authority": true
+      }
+    }
+  ],
+  "prediction": {
+    "C1": "CHECK0 likely; valid original join certificate followed by a Copy read of conservative Unknown, possibly existing backend can read physical carrier",
+    "C2": "CHECK precision likely when matching joined Unknown Option, before pointer reloan can prove original-root facts"
+  },
+  "negatives": "Independent post-EndRoot/old-Copy/known-None source negatives UNTESTED unless expressible without adding a third variant; no host seeds or unsafe acceptance inferred from precision stop"
+}
