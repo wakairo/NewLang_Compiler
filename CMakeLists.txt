@@ -501,6 +501,17 @@ if(BUILD_TESTING)
         "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}" "${NEWLANG_SANITIZER}")
     set_tests_properties(p471_crossroot_frontier.integration PROPERTIES
         PASS_REGULAR_EXPRESSION "P471 PASS FINITE CROSSROOT: control and both frozen cases observed")
+    add_executable(p478_registration_test tests/p478/registration_test.c)
+    target_link_libraries(p478_registration_test PRIVATE newlang_semantic)
+    target_link_options(p478_registration_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
+    foreach(group definition oom gap)
+        add_test(NAME p478_${group}.unit COMMAND p478_registration_test ${group}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p478/named_link.nl")
+    endforeach()
+    add_test(NAME p478_ptr_as_ref.unit COMMAND p478_registration_test type
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p478/ptr_as_ref.nl")
+    add_test(NAME p478_live_read_precision.unit COMMAND p478_registration_test gap
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p478/live_read.nl")
     add_executable(node_link_test tests/unit/node_link_test.c)
     add_executable(node_initial_test tests/unit/node_initial_test.c)
     target_link_libraries(node_initial_test PRIVATE newlang_checked_c_node)
