@@ -12,8 +12,13 @@ Ledger, FormalProof or process changes.
 
 One completed §16.3 recursive nominal, its declaration-order link at index 0
 (`Option<ptr<H>>`) and u8 sibling at index 1. No spelling is special. Exactly two
-lexical roots in one no-argument, unit-result ordinary entry body; each root is
-constructed with None and a checked u8 initializer. Option/ptr/u8 local Copy,
+lexical roots in one no-argument, unit-result ordinary entry body. The original
+profile constructs both with None and a checked u8 initializer. The P457
+candidate additionally permits the second root's direct Some initializer from
+the first root's already-emitted, checked read-loan/ptr_from_ref binding; its
+operand/Option payload packages and exact physical original must agree.
+Alias-chain producers, heap roots and hypothetical arms remain outside this
+constructor extension. The original None lane is retained. Option/ptr/u8 local Copy,
 link reads, empty-item scoped loan bodies with ptr_from_ref / replace / unit
 as tail, and the existing unchanged-public-frame, two-normal-arm unit match
 are supported. A Some payload binder remains local to its owned arm context.
@@ -119,3 +124,35 @@ publish C; both source siblings must survive and ptr must equal actual peer.
 STOP for new issuer/semantic authority or another backend family.
 Benefit is only avoiding one None-then-loan/replace initial-link ceremony in
 this finite profile; no ordinary caller/heap/product burden win is claimed.
+
+### P457 measured candidate boundary
+
+The emitter-only helper uses public checked node/value/reference views, plus
+the existing backend Local mapping. It verifies the pointer's actual prior
+loan producer, copied operand and Option payload agree on original place,
+incarnation, scope-independent provenance and dependency-free package. The
+prior loan already passed the existing C consumer before its pointer Local
+was registered. Runtime data still comes from that exact emitted pointer;
+no address, liveness, Domain or Allocation is minted from Some/Copy bits.
+There is no new issuer, public validator or final-context liveness replay.
+
+Some now emits1309 bytes, SHA256
+7b1c59e9329398ed2e9c00550bfc99e15dd06a9fb241d0ca73af9e9c9314fc04;
+None1270 bytes, SHA256
+85af019496800ba725d6f71a41eb9f535f972cfc6383fc6ca3dc5b2039a19b9a.
+The test probe derives symbols, initial tags/targets and payloads from actual
+public source-issued checked views; the separate passive observer checks real
+distinct C root addresses, ptr equality, independent Option read and preserved
+siblings. Plain/observed guest C bytes are identical. Tag/ptr/each-root payload
+mutants are separate observer failures, never source checker rejections.
+Source payload-type, escaping-ref and expired-root reloan negatives preserve
+their existing semantic diagnostics. A legal Copy alias remains CHECK-valid
+but backend-unsupported. Explicit wrong-Domain is not a local implicit-Domain
+operation in this slice; existing heap Domain tests remain in the full suite.
+
+Nine owned packet/carrier/constructor poisons fail closed with output/state
+unchanged. Fault injection covers the single staging allocation (successful
+generation transfers that same buffer), with no output publication or owned
+mutation on failure. Exact-head normal/partial CI is reported separately on
+Issue457/PR; local or source check alone is not full CI, independent R or
+Product PASS. R437's frozen coverage finding is not rewritten or relabelled.

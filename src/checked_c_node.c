@@ -334,6 +334,68 @@ static bool selected_reference(const Env *env, const NLCheckedNodeView *arg,
            original.reference_count == 0 && value->reference_count == 0 &&
            same_reference(original.reference, value->reference);
 }
+/* One direct initial link to the already constructed lexical original.
+ * The checked loan establishes the pointer; the existing Local establishes
+ * its physical C carrier. Copy bits or final-context liveness grant nothing.
+ * No alias-chain search, heap path or hypothetical arm is admitted here. */
+static bool initial_some(Emit *e, const Env *env, const NLCheckedNodeView *some)
+{
+    if (e->allocated || e->two_heap || e->custody || env->parent != NULL ||
+        e->roots != 1 || some->result_count != 1)
+        return reject(e);
+    const NLCheckedNodeView *arg = get(env, some->initializer);
+    const NLSemanticContext *c = nl_checked_context(env->artifact);
+    NLSemanticValueView value, sum, payload;
+    if (arg == NULL || arg->type != e->ptr ||
+        !selected_reference(env, arg, &value) || !arg->has_reference_result ||
+        !same_reference(arg->reference_result, value.reference) ||
+        value.reference.scope != 0 ||
+        value.reference.provenance != NL_PROVENANCE_VALID ||
+        !value.reference.readable ||
+        value.reference.occurrence_dependency != 0 ||
+        !nl_semantic_value_view(c, some->results[0].value, &sum) ||
+        sum.type != e->option || sum.variant != 2 ||
+        !nl_semantic_value_view(c, sum.sum_payload, &payload) ||
+        payload.type != e->ptr || payload.reference_count != 0 ||
+        payload.dependencies != NL_DEPENDENCY_FREE ||
+        payload.value_dependency_count != 0 ||
+        !same_reference(payload.reference, value.reference))
+        return reject(e);
+    const Local *peer =
+        root(env, e->node, value.reference.place, value.reference.incarnation);
+    const Local *pointer = local(env, arg->symbol, e->ptr);
+    if (peer == NULL || pointer == NULL || peer->frame != env->frame ||
+        pointer->frame != env->frame)
+        return reject(e);
+    const NLCheckedNodeView *producer = NULL;
+    for (size_t i = 1; i <= nl_checked_node_count(env->artifact); ++i) {
+        const NLCheckedNodeView *v = get(env, i);
+        if (v->kind != NL_CHECKED_BINDING || v->symbol != arg->symbol)
+            continue;
+        if (producer != NULL)
+            return reject(e);
+        producer = get(env, v->initializer);
+        if (producer == NULL)
+            return reject(e);
+    }
+    const NLCheckedNodeView *body =
+        producer == NULL ? NULL : get(env, producer->initializer);
+    const NLCheckedNodeView *tail = body == NULL ? NULL : get(env, body->tail);
+    if (producer == NULL || producer->kind != NL_CHECKED_LOAN_HEADER ||
+        producer->type != e->ptr || !producer->loan.implicit_local ||
+        producer->loan.from_ptr || producer->loan.access != NL_ACCESS_READ ||
+        !producer->loan.body_nonescape_proved ||
+        !producer->loan.normal_result_forwarded ||
+        producer->loan.source != peer->symbol ||
+        producer->loan.place != peer->place ||
+        producer->loan.incarnation != peer->incarnation || tail == NULL ||
+        tail->kind != NL_CHECKED_PTR_FROM_REF || !tail->has_reference_result ||
+        !same_reference(tail->reference_result, value.reference))
+        return reject(e);
+    /* This exact producer already passed loan() before its pointer Local was
+     * registered. Reuse its emitted runtime pointer, never synthesize one. */
+    return true;
+}
 static bool block(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
 {
     const NLCheckedNodeView *v = get(env, id);
@@ -800,7 +862,9 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
             const NLCheckedNodeView *init = get(env, f->initializer);
             if (f->field_index == 0 &&
                 (init == NULL || init->kind != NL_CHECKED_SUM_CONSTRUCTOR ||
-                 init->variant != 1 || init->type != e->option))
+                 init->type != e->option ||
+                 (init->variant != 1 &&
+                  (init->variant != 2 || !initial_some(e, env, init)))))
                 return reject(e);
             if (!expr(e, env, f->initializer, &fields[f->field_index]))
                 return false;
