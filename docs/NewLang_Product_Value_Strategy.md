@@ -31,7 +31,7 @@ responsibility等の条件はchecked側で拒否・保証し、証明不能で�
 **Audit locus（監査の実際の対象）**は `unchecked` の行数ではない。
 各privileged operationと**実際のauthority issuer**、元の
 Storage / BackingRegion / Allocation / LifetimeDomain、
-前提となる封じ込め済み不変条件、全legal mutationと
+前提となる封じ込め済み不変条件、それに影響するlegal mutationと
 normal / error / teardown / reentrant callback / FFI経路、
 および変更時にそれらの成立性を再検討すべき**影響依存関係**を含む。
 raw addressやmetadata（例：Ringの `head/len`）は責任・権限を無から
@@ -52,7 +52,7 @@ safe helperやwriterを変更するときには、その変更が影響する
 **すべてのsafe-reachable state**とその状態遷移に対し、内部uncheckedの
 前提が維持されることである。通常処理だけでなく、失敗時の責任の返却／
 rollback／commit、途中状態での公開、破棄、借用中の変更、callbackによる
-再入、FFI境界を含む。これはstaticに強制するか、音のあるruntime guardと
+再入、FFI境界を含む。これはstaticに強制するか、健全なruntime guardと
 アクセス制御を伴う内部不変条件として成立させる必要がある。
 FULL / EMPTY等の予期される操作結果は `Option` / `Result` 等へtotalize／
 明示的に返し、UBの「前提」に押し込まない。representation hidingや
