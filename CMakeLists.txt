@@ -53,7 +53,8 @@ else()
     execute_process(COMMAND "${LLVM_CONFIG}" --libdir
         OUTPUT_VARIABLE llvm_libdir OUTPUT_STRIP_TRAILING_WHITESPACE
         COMMAND_ERROR_IS_FATAL ANY)
-    execute_process(COMMAND "${LLVM_CONFIG}" --shared-mode
+    execute_process(COMMAND "${LLVM_CONFIG}" --link-static
+        --shared-mode core analysis
         OUTPUT_VARIABLE llvm_shared_mode OUTPUT_STRIP_TRAILING_WHITESPACE
         COMMAND_ERROR_IS_FATAL ANY)
     if(NOT llvm_shared_mode STREQUAL "static")

@@ -30,8 +30,15 @@ def sha256(path: Path) -> str:
 
 
 def run(args: list[str], environment: dict[str, str] | None = None) -> str:
-    return subprocess.check_output(args, env=environment, text=True,
-                                   stderr=subprocess.STDOUT).strip()
+    try:
+        return subprocess.check_output(args, env=environment, text=True,
+                                       stderr=subprocess.STDOUT).strip()
+    except subprocess.CalledProcessError as error:
+        # Show the already-captured tool diagnostic; never dump environment.
+        output = (error.output or "").strip()[:1200]
+        raise SystemExit(
+            f"Tool failed (exit={error.returncode}): "
+            f"{shlex.join(args)}; output={output!r}") from error
 
 
 def download(package: dict[str, str], path: Path) -> None:
@@ -273,7 +280,8 @@ def _sdk_verify_tools(sdk: Path, version: str) -> None:
     config = bin_dir / "llvm-config-23"
     if run([str(config), "--version"], environment) != version:
         raise SystemExit("SDK llvm-config wrong version")
-    if run([str(config), "--shared-mode"], environment) != "static":
+    if run([str(config), "--link-static", "--shared-mode",
+             "core", "analysis"], environment) != "static":
         raise SystemExit("SDK must be reviewed static-only LLVM configuration")
     for switch in ("--includedir", "--libdir"):
         value = Path(run([str(config), switch], environment)).resolve()
