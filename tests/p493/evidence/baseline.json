@@ -1,0 +1,23 @@
+[
+  {
+    "name": "positive",
+    "source_sha256": "06c96f6df6688167f2f9d8e2768bfc5bc2ea9f93e09838502400039d2de5f8aa",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "diagnostic": ""
+  },
+  {
+    "name": "matched",
+    "source_sha256": "444cb2c22ec51d7c4cb991fe53398beac59553e9357c91d3b7a016103796c73f",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p478/named_link.nl:13:5-16:6: error(precision)[P9-CONTINUATION-PRECISION]: multiple normal function-match states require a richer join\n"
+  },
+  {
+    "name": "ptr_as_ref",
+    "source_sha256": "b793b9dd90d0d9bc61bf71a06604a0640ce4bf69204ad2e2885023350b1b06a4",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p478/ptr_as_ref.nl:15:66-15:67: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  }
+]

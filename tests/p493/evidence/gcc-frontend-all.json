@@ -1,0 +1,13 @@
+{
+  "full_stdout_sha256": "06274bb0a561bd6d0d72f474fc02b8ceb02cf38781ba6904c2a333c6980ca2d6",
+  "summary_tail": [
+    "        Start 289: oracle.adapter",
+    "289/290 Test #289: oracle.adapter .............................   Passed    0.09 sec",
+    "        Start 290: oracle.smoke",
+    "290/290 Test #290: oracle.smoke ...............................   Passed    0.85 sec",
+    "",
+    "100% tests passed, 0 tests failed out of 290",
+    "",
+    "Total Test time (real) =  52.43 sec"
+  ]
+}

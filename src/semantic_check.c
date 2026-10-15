@@ -1259,7 +1259,10 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                     join != NULL && root <= join->view.entry->place_count &&
                     old.parent_field_index == 0 &&
                     check->artifact->field_change_count == 0;
-                if (record_join &&
+                const bool record_call =
+                    check->artifact->ordinary_call != NULL &&
+                    check->artifact->field_change_count == 0;
+                if ((record_join || record_call) &&
                     !host(check,
                           nl_captured_change_begin(check->artifact, call, c),
                           span))
@@ -1287,7 +1290,7 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                         (NLCheckedResult){old.type, old.current_value};
                 }
                 *view(check, call) = operation;
-                if ((record || record_join) &&
+                if ((record || record_join || record_call) &&
                     !host(check, nl_captured_change_end(check->artifact, c),
                           span))
                     return false;
@@ -2056,6 +2059,10 @@ static NLCheckedNodeId call(Check *check, const NLSyntaxView *syntax)
             }
         }
     }
+    if (function.body != NULL &&
+        !host(check, nl_ordinary_call_post(check->artifact, id, c),
+              syntax->span))
+        return 0;
     return id;
 }
 
@@ -3355,6 +3362,12 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         goto failure;
     body.artifact->body_owner = function->body;
     body.artifact->release_body = nl_body_release;
+    if (!caller->definition && !caller->in_match_arm && caller->loop == NULL &&
+        !host(&body,
+              nl_ordinary_call_begin(body.artifact, caller->artifact, call_id,
+                                     c, arguments),
+              call_span))
+        goto failure;
     for (size_t i = 0; i < function->count; ++i) {
         const NLCheckedNodeView argument = *view(caller, arguments[i]);
         NLValueId value =
@@ -7601,6 +7614,8 @@ static NLCheckedNodeId source_local_loan(Check *check, const NLSyntaxView *s)
     memcpy(view(check, id)->results, result.results, sizeof(result.results));
     view(check, id)->loan.body_nonescape_proved = true;
     view(check, id)->loan.normal_result_forwarded = true;
+    if (!host(check, nl_ordinary_call_close(check->artifact, id, c), s->span))
+        id = 0;
 cleanup:
     free(name);
     return id;
