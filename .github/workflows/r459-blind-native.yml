@@ -1,0 +1,68 @@
+name: R459 FRESH BLIND source to C17/native
+on:
+  push:
+    branches: [r459-initial-some-blind-ci]
+permissions:
+  contents: read
+jobs:
+  r459-one-shot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact R-owned commit and full history without persistent token
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Freeze ancestry, input file Git blobs, and runner tools before candidate execution
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "b69b6f63c6eb8681ebd468e7988f961b0378f23f"
+          test "$(git rev-parse HEAD^^)" = "42cebcc661d24fa1a4bb99d80e54b256490eb2a3"
+          git cat-file -e "4506112b1dea4a5a63b4ac41ff9e8f8f8388146d^{commit}"
+          test -z "$(git status --porcelain)"
+          echo "R459 HEAD=$(git rev-parse HEAD)"
+          echo "R459 CANDIDATE=$(git rev-parse HEAD^)"
+          echo "R459 PARENT=$(git rev-parse HEAD^^)"
+          git ls-tree -r HEAD r-tests/r459/source r-tests/r459/observe.gdb r-tests/r459/runner.py r-tests/r459/public_probe.c
+          for tool in gcc clang cmake make python3 sha256sum; do command -v "$tool"; done
+          python3 -m py_compile r-tests/r459/runner.py
+          if ! command -v gdb >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install --no-install-recommends -y gdb
+          fi
+          gdb --version | head -n 1
+      - name: Build frozen compiler as black box (frontend-only, no LLVM substitution)
+        shell: bash
+        run: |
+          set -euo pipefail
+          CC=gcc cmake -S . -B build-r459 -DNEWLANG_FRONTEND_ONLY=ON -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-r459 --target newlangc --parallel 2
+          ./build-r459/newlangc --version
+      - name: Compile independent public checked observer from installed public headers
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p r459-output
+          gcc -std=c17 -Wall -Wextra -Wpedantic -Werror -I include \
+            r-tests/r459/public_probe.c -L build-r459 \
+            -Wl,--start-group -lnewlang_semantic -lnewlang_checked \
+            -lnewlang_parser -lnewlang_syntax -lnewlang_lexer \
+            -lnewlang_source -lnewlang_diagnostic -Wl,--end-group \
+            -o r459-output/r459-public-probe
+      - name: Exactly one frozen R first-pass execution
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -u r-tests/r459/runner.py 2>&1 | tee r459-first-pass.log
+      - name: Preserve independent logs and emitted C on failure or success
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r459-one-shot-evidence
+          path: |
+            r459-first-pass.log
+            r459-output/*.c
+            r459-output/*.err
+          if-no-files-found: ignore
