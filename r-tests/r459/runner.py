@@ -28,7 +28,7 @@ def classify_negative(name):
     print("R459 NEGATIVE_REJECTED "+name+" class=source/checker-or-syntax (exact diagnostic above)",flush=True)
 def read_oracle(name):
     r=run([OUT/"r459-public-probe",SOURCE/name],tag="public-owned-"+name,expect=0)
-    found=re.findall(r"R459_ORACLE source=(initial_some|none_control) anchor_symbol=(\\d+) peer_symbol=(\\d+) snapshot_symbol=(\\d+) copy_nodes=(\\d+) ptr_from_ref=(\\d+)",r.stdout)
+    found=re.findall(r"R459_ORACLE source=(initial_some|none_control) anchor_symbol=(\d+) peer_symbol=(\d+) snapshot_symbol=(\d+) copy_nodes=(\d+) ptr_from_ref=(\d+)",r.stdout)
     if len(found)!=1 or found[0][0] != name.removesuffix(".nl"):
         raise RuntimeError("R459 INCONCLUSIVE: missing authentic source-issued checked-owned original mapping "+name)
     d=dict(zip(("name","anchor","peer","snapshot","copy_nodes","ptr_from_ref"),found[0]))
