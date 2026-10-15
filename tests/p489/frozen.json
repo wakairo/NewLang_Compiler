@@ -1,0 +1,42 @@
+{
+  "compiler_main": "d6e603e12591c2ff39e3e1b77c784681fec66033",
+  "canonical": "Draft17.30",
+  "frozen_at_utc": "2026-10-15T13:27:42.006309+00:00",
+  "cases": [
+    {
+      "source": "tests/p489/asymmetric_none.nl",
+      "sha256": "7b95794a3eb145de1a786ccfb68e929003fd12c851fc4721de58a4ad26fd81db",
+      "origin": "tests/p471/asymmetric.nl",
+      "origin_sha256": "c578ebdce71ffd46e30758903c28f69227876c7904264b3eec1914c7f6bdd050",
+      "expected": {
+        "selected_arm": "None",
+        "tail": "original next None, payload2",
+        "head": "distinct original next None, payload1",
+        "old_head_initial": "None",
+        "old_head_final": "None",
+        "old_tail": "no write on A; None from single None->None replace on S",
+        "dormant_some": "unchanged Some(q) body; never native-selected",
+        "no_heap": "two implicit lexical originals only"
+      }
+    },
+    {
+      "source": "tests/p489/symmetric_none.nl",
+      "sha256": "f049777361399fbc28ed8ad333a433260751a18f25b510791c116ae0d1bbe7fd",
+      "origin": "tests/p471/symmetric.nl",
+      "origin_sha256": "dfc07c373f4b72be95114149cf0c503f4601d58b99ebb494a49400cc76bd0531",
+      "expected": {
+        "selected_arm": "None",
+        "tail": "original next None, payload2",
+        "head": "distinct original next None, payload1",
+        "old_head_initial": "None",
+        "old_head_final": "None",
+        "old_tail": "no write on A; None from single None->None replace on S",
+        "dormant_some": "unchanged Some(q) body; never native-selected",
+        "no_heap": "two implicit lexical originals only"
+      }
+    }
+  ],
+  "control": "tests/p471/asymmetric.nl",
+  "control_sha256": "c578ebdce71ffd46e30758903c28f69227876c7904264b3eec1914c7f6bdd050",
+  "prediction": "Known None may prevent dormant Some arm pointer precision or public join issuance; first SOURCE/CHECK/public/backend barrier stops each case; no silent source rewrite"
+}
