@@ -18,15 +18,17 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test "$(git rev-parse HEAD^)" = "b32a0d99579689208b637a04901d987c9d05e2f0"
-          test "$(git rev-parse HEAD^^)" = "b69b6f63c6eb8681ebd468e7988f961b0378f23f"
-          test "$(git rev-parse HEAD^^^)" = "42cebcc661d24fa1a4bb99d80e54b256490eb2a3"
+          test "$(git rev-parse HEAD^)" = "63d7001c5ed13e91b6f0d1fa76130a58f784b774"
+          test "$(git rev-parse HEAD^^)" = "b32a0d99579689208b637a04901d987c9d05e2f0"
+          test "$(git rev-parse HEAD^^^)" = "b69b6f63c6eb8681ebd468e7988f961b0378f23f"
+          test "$(git rev-parse HEAD^^^^)" = "42cebcc661d24fa1a4bb99d80e54b256490eb2a3"
           git cat-file -e "4506112b1dea4a5a63b4ac41ff9e8f8f8388146d^{commit}"
           test -z "$(git status --porcelain)"
           echo "R459 HEAD=$(git rev-parse HEAD)"
-          echo "R459 PREVIOUS_R=$(git rev-parse HEAD^)"
-          echo "R459 CANDIDATE=$(git rev-parse HEAD^^)"
-          echo "R459 PARENT=$(git rev-parse HEAD^^^)"
+          echo "R461 PREVIOUS_R=$(git rev-parse HEAD^)"
+          echo "R461 ORIGINAL_R=$(git rev-parse HEAD^^)"
+          echo "R461 CANDIDATE=$(git rev-parse HEAD^^^)"
+          echo "R461 CANDIDATE_PARENT=$(git rev-parse HEAD^^^^)"
           git ls-tree -r HEAD r-tests/r459/source r-tests/r459/observe.gdb r-tests/r459/runner.py r-tests/r459/public_probe.c
           for tool in gcc clang cmake make python3 sha256sum; do command -v "$tool"; done
           python3 -m py_compile r-tests/r459/runner.py

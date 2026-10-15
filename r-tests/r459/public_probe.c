@@ -11,6 +11,30 @@ static void fail(const char *at, int status) {
     fprintf(stderr, "R459 PUBLIC EVIDENCE BARRIER at %s status=%d\n", at, status);
     exit(31);
 }
+/* Source-checked lexical symbol IDs, never emitted C local names or P tests. */
+static int source_label(const NLSource *src, NLSourceSpan span,
+                        const char *label, int full_binding) {
+    NLSourceView view;
+    if (!nl_source_span_valid(src, span) ||
+        !nl_source_view(src, span, &view) || !view.bytes) return 0;
+    if (!full_binding)
+        return view.length == strlen(label) &&
+               memcmp(view.bytes, label, view.length) == 0;
+    const unsigned char *s = view.bytes;
+    size_t n = view.length, i = 0, len = strlen(label);
+    while (i < n && (s[i] == ' ' || s[i] == '\t')) ++i;
+    if (n - i < 4 + len || memcmp(s + i, "let ", 4)) return 0;
+    i += 4;
+    if (memcmp(s + i, label, len)) return 0;
+    i += len;
+    return i == n || s[i] == ' ' || s[i] == '=' || s[i] == ':';
+}
+static int checked_label(const NLSource *src, const NLCheckedNodeView *v,
+                         const char *name) {
+    return source_label(src, v->name, name, 0) ||
+           source_label(src, v->span, name, 1);
+}
+
 int main(int argc, char **argv) {
     if (argc != 2) fail("argc", argc);
     NLSource *src = NULL, *call_src = NULL;
@@ -42,6 +66,10 @@ int main(int argc, char **argv) {
     if (cs != NL_CHECK_OK || !owned) fail("check_source_issued_call", cs);
     const NLCheckedFragment *body = NULL;
     size_t direct_calls = 0, ptr_from_refs = 0, sum_ctors = 0, aggregates = 0;
+    size_t copy_reads = 0;
+    NLSymbolId anchor = 0, peer = 0, snapshot = 0;
+    int some = strstr(argv[1], "initial_some.nl") != NULL;
+    if (!some && !strstr(argv[1], "none_control.nl")) fail("unfrozen-source", -1);
     for (NLCheckedNodeId i = 1; i <= nl_checked_node_count(owned); ++i) {
         const NLCheckedNodeView *v = nl_checked_node_view(owned, i);
         if (!v) continue;
@@ -52,6 +80,8 @@ int main(int argc, char **argv) {
         }
     }
     if (!body) fail("no_source_issued_owned_body", -1);
+    const NLSource *body_src = nl_checked_source(body);
+    if (!body_src) fail("no-authentic-body-source", -1);
     for (NLCheckedNodeId i = 1; i <= nl_checked_node_count(body); ++i) {
         const NLCheckedNodeView *v = nl_checked_node_view(body, i);
         if (!v) continue;
@@ -61,11 +91,30 @@ int main(int argc, char **argv) {
         }
         if (v->kind == NL_CHECKED_SUM_CONSTRUCTOR) ++sum_ctors;
         if (v->kind == NL_CHECKED_AGGREGATE) ++aggregates;
+        if (v->kind == NL_CHECKED_FIELD_READ || v->kind == NL_CHECKED_LINK_READ)
+            ++copy_reads;
+        if (v->kind == NL_CHECKED_BINDING) {
+            NLSymbolId *dst = NULL;
+            if (checked_label(body_src, v, "anchor")) dst = &anchor;
+            if (checked_label(body_src, v, "peer")) dst = &peer;
+            if (checked_label(body_src, v, "snapshot")) dst = &snapshot;
+            if (dst) {
+                if (*dst || !v->symbol) fail("ambiguous-original-binding", -1);
+                *dst = v->symbol;
+            }
+        }
     }
     printf("R459 AUTHENTIC source-issued owned checked view: direct_calls=%zu body_nodes=%zu ptr_from_ref=%zu aggregate=%zu sum_constructors=%zu\n",
            direct_calls, nl_checked_node_count(body), ptr_from_refs, aggregates, sum_ctors);
-    if (direct_calls == 0 || ptr_from_refs == 0 || aggregates < 2 || sum_ctors < 2)
+    if (direct_calls == 0 || (some && ptr_from_refs == 0) || aggregates < 2 ||
+        sum_ctors < (some ? 2u : 1u) || copy_reads == 0)
         fail("owned_node_evidence_missing", -1);
+    if (!anchor || !peer || !snapshot || anchor == peer ||
+        anchor == snapshot || peer == snapshot)
+        fail("owned-original-symbol-mapping-missing", -1);
+    printf("R459_ORACLE source=%s anchor_symbol=%zu peer_symbol=%zu snapshot_symbol=%zu copy_nodes=%zu ptr_from_ref=%zu\n",
+           some ? "initial_some" : "none_control",
+           (size_t)anchor, (size_t)peer, (size_t)snapshot, copy_reads, ptr_from_refs);
     nl_checked_destroy(owned);
     nl_syntax_tree_destroy(call_tree);
     nl_parser_destroy(call_parser);
