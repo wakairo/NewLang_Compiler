@@ -1,0 +1,76 @@
+FRAGMENT depth=0 source=node-native-entry root=1 nodes=1
+NODE depth=0 id=1 kind=3 span=0:6 symbol=0 arg=0 nextarg=0 result=0 value=0 copied=0
+CALL depth=0 id=1 function=10 body_backed=1 owner_entry=0 producer_entry=0 custody_entry=0
+FRAGMENT depth=1 source=tests/p488/nonmatch_link.nl root=1 nodes=50
+NODE depth=1 id=1 kind=27 span=0:520 symbol=0 arg=0 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=2 kind=31 span=15:63 symbol=0 arg=4 nextarg=0 result=1 value=3 copied=0
+NODE depth=1 id=3 kind=34 span=25:48 symbol=0 arg=0 nextarg=0 result=1 value=1 copied=0
+NODE depth=1 id=4 kind=32 span=20:48 symbol=0 arg=0 nextarg=6 result=0 value=0 copied=0
+NODE depth=1 id=5 kind=44 span=57:62 symbol=0 arg=0 nextarg=0 result=1 value=2 copied=0
+NODE depth=1 id=6 kind=32 span=49:62 symbol=0 arg=0 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=7 kind=2 span=6:63 symbol=1 arg=8 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=8 kind=30 span=10:14 symbol=1 arg=0 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=9 kind=13 span=82:117 symbol=0 arg=0 nextarg=0 result=1 value=6 copied=0
+LOAN depth=1 id=9 place=1 incarnation=1 domain=0 implicit=1 access=0 scope=1 ref=2 nonescape=1 forwarded=1
+NODE depth=1 id=10 kind=27 span=96:117 symbol=0 arg=0 nextarg=0 result=1 value=6 copied=0
+NODE depth=1 id=11 kind=5 span=101:116 symbol=0 arg=12 nextarg=0 result=1 value=6 copied=0
+REFERENCE depth=1 id=11 place=1 incarnation=1 scope=0 provenance=1
+NODE depth=1 id=12 kind=1 span=114:115 symbol=2 arg=0 nextarg=0 result=1 value=5 copied=1
+NODE depth=1 id=13 kind=2 span=69:117 symbol=3 arg=14 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=14 kind=30 span=73:81 symbol=3 arg=0 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=15 kind=31 span=132:180 symbol=0 arg=17 nextarg=0 result=1 value=9 copied=0
+NODE depth=1 id=16 kind=34 span=142:165 symbol=0 arg=0 nextarg=0 result=1 value=7 copied=0
+NODE depth=1 id=17 kind=32 span=137:165 symbol=0 arg=0 nextarg=19 result=0 value=0 copied=0
+NODE depth=1 id=18 kind=44 span=174:179 symbol=0 arg=0 nextarg=0 result=1 value=8 copied=0
+NODE depth=1 id=19 kind=32 span=166:179 symbol=0 arg=0 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=20 kind=2 span=123:180 symbol=4 arg=21 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=21 kind=30 span=127:131 symbol=4 arg=0 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=22 kind=13 span=199:283 symbol=0 arg=0 nextarg=0 result=1 value=7 copied=0
+FIELD depth=1 id=22 parent=6/6 child=7/7 index=0 F=7->0 RF=6->0 occurrence=0->0 old=7/1 new=0/0 target=0/0 compatible=1
+LOAN depth=1 id=22 place=7 incarnation=7 domain=0 implicit=1 access=1 scope=2 ref=5 nonescape=1 forwarded=1
+NODE depth=1 id=23 kind=27 span=219:283 symbol=0 arg=0 nextarg=0 result=1 value=7 copied=0
+NODE depth=1 id=24 kind=10 span=233:277 symbol=0 arg=25 nextarg=0 result=1 value=7 copied=0
+FIELD depth=1 id=24 parent=6/6 child=7/7 index=0 F=7->10 RF=6->11 occurrence=0->1 old=7/1 new=13/2 target=1/1 compatible=1
+NODE depth=1 id=25 kind=1 span=241:242 symbol=5 arg=0 nextarg=27 result=1 value=11 copied=1
+NODE depth=1 id=26 kind=1 span=267:275 symbol=3 arg=0 nextarg=0 result=1 value=12 copied=1
+REFERENCE depth=1 id=26 place=1 incarnation=1 scope=0 provenance=1
+NODE depth=1 id=27 kind=34 span=243:276 symbol=0 arg=0 nextarg=0 result=1 value=13 copied=0
+NODE depth=1 id=28 kind=2 span=186:283 symbol=6 arg=29 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=29 kind=30 span=190:198 symbol=6 arg=0 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=30 kind=45 span=302:311 symbol=4 arg=0 nextarg=0 result=1 value=15 copied=1
+FIELD depth=1 id=30 parent=6/6 child=7/7 index=0 F=10->0 RF=11->0 occurrence=1->0 old=13/2 new=0/0 target=0/0 compatible=1
+NODE depth=1 id=31 kind=2 span=289:311 symbol=7 arg=32 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=32 kind=30 span=293:301 symbol=7 arg=0 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=33 kind=13 span=330:401 symbol=0 arg=0 nextarg=0 result=1 value=1 copied=0
+FIELD depth=1 id=33 parent=1/1 child=2/2 index=0 F=2->0 RF=1->0 occurrence=0->0 old=1/1 new=0/0 target=0/0 compatible=1
+LOAN depth=1 id=33 place=2 incarnation=2 domain=0 implicit=1 access=1 scope=3 ref=8 nonescape=1 forwarded=1
+NODE depth=1 id=34 kind=27 span=350:401 symbol=0 arg=0 nextarg=0 result=1 value=1 copied=0
+NODE depth=1 id=35 kind=3 span=355:400 symbol=0 arg=36 nextarg=0 result=1 value=1 copied=0
+CALL depth=1 id=35 function=11 body_backed=1 owner_entry=0 producer_entry=0 custody_entry=0
+FRAGMENT depth=2 source=tests/p488/nonmatch_link.nl root=1 nodes=4
+NODE depth=2 id=1 kind=27 span=0:27 symbol=0 arg=0 nextarg=0 result=1 value=1 copied=0
+NODE depth=2 id=2 kind=10 span=6:25 symbol=0 arg=3 nextarg=0 result=1 value=1 copied=0
+FIELD depth=2 id=2 parent=1/1 child=2/2 index=0 F=2->20 RF=1->21 occurrence=0->4 old=1/1 new=22/2 target=1/1 compatible=1
+NODE depth=2 id=3 kind=1 span=14:19 symbol=9 arg=0 nextarg=4 result=1 value=21 copied=1
+NODE depth=2 id=4 kind=1 span=20:24 symbol=10 arg=0 nextarg=0 result=1 value=22 copied=1
+NODE depth=1 id=36 kind=1 span=364:365 symbol=8 arg=0 nextarg=38 result=1 value=18 copied=1
+NODE depth=1 id=37 kind=1 span=390:398 symbol=3 arg=0 nextarg=0 result=1 value=19 copied=1
+REFERENCE depth=1 id=37 place=1 incarnation=1 scope=0 provenance=1
+NODE depth=1 id=38 kind=34 span=366:399 symbol=0 arg=0 nextarg=0 result=1 value=20 copied=0
+NODE depth=1 id=39 kind=2 span=317:401 symbol=11 arg=40 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=40 kind=30 span=321:329 symbol=11 arg=0 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=41 kind=1 span=407:415 symbol=11 arg=0 nextarg=0 result=1 value=25 copied=1
+NODE depth=1 id=42 kind=28 span=407:416 symbol=0 arg=0 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=43 kind=13 span=434:508 symbol=0 arg=0 nextarg=0 result=1 value=13 copied=0
+FIELD depth=1 id=43 parent=6/6 child=7/7 index=0 F=10->0 RF=11->0 occurrence=1->0 old=13/2 new=0/0 target=0/0 compatible=1
+LOAN depth=1 id=43 place=7 incarnation=7 domain=0 implicit=1 access=1 scope=4 ref=12 nonescape=1 forwarded=1
+NODE depth=1 id=44 kind=27 span=454:508 symbol=0 arg=0 nextarg=0 result=1 value=13 copied=0
+NODE depth=1 id=45 kind=10 span=468:502 symbol=0 arg=46 nextarg=0 result=1 value=13 copied=0
+FIELD depth=1 id=45 parent=6/6 child=7/7 index=0 F=10->25 RF=11->26 occurrence=1->0 old=13/2 new=28/1 target=0/0 compatible=1
+NODE depth=1 id=46 kind=1 span=476:477 symbol=12 arg=0 nextarg=47 result=1 value=27 copied=1
+NODE depth=1 id=47 kind=34 span=478:501 symbol=0 arg=0 nextarg=0 result=1 value=28 copied=0
+NODE depth=1 id=48 kind=2 span=421:508 symbol=13 arg=49 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=49 kind=30 span=425:433 symbol=13 arg=0 nextarg=0 result=0 value=0 copied=0
+NODE depth=1 id=50 kind=43 span=514:518 symbol=0 arg=0 nextarg=0 result=0 value=0 copied=0
+OBSERVED actual write-ref -> original tail field, one child replace, old None returned, Some(original tail) and F/RF/occurrence change
+OBSERVATION ONLY: call-body accessor is not an independent ordinary call-effect certificate; PUBLIC PROOF NOT ESTABLISHED

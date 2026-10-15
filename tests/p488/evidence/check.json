@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "/workspace/p488-build/newlangc",
+    "--check",
+    "tests/p488/nonmatch_link.nl"
+  ],
+  "exit": 0,
+  "stdout_bytes": 0,
+  "stderr": "",
+  "compiler_source_commit": "03b1751b513e7aef2d7ba193eda671a556f54b47",
+  "build_commit": "5978805cb8134e4b1a7dc0a7e8161199248a5671",
+  "binary_sha256": "cf539b524177de3d325c74b8dc074faac9d549609bb6f91782f9c633ee74419f"
+}
