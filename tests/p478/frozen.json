@@ -1,0 +1,27 @@
+{
+  "compiler": "d6e603e12591c2ff39e3e1b77c784681fec66033",
+  "canonical": "Draft 17.30",
+  "positive": "named_link.nl",
+  "positive_expected": "canonical-valid scoped known safe call; support not assumed",
+  "control": "tests/p471/asymmetric.nl",
+  "control_sha256": "c578ebdce71ffd46e30758903c28f69227876c7904264b3eec1914c7f6bdd050",
+  "sha256": {
+    "named_link.nl": "444cb2c22ec51d7c4cb991fe53398beac59553e9357c91d3b7a016103796c73f",
+    "ptr_as_ref.nl": "b793b9dd90d0d9bc61bf71a06604a0640ce4bf69204ad2e2885023350b1b06a4",
+    "live_read.nl": "fb25ea44ece0950bb47c425ee08968624de5ebb9d57b97332aa055f405351396"
+  },
+  "native_oracle": {
+    "distinct_head_tail": true,
+    "head_payload": 1,
+    "tail_payload": 2,
+    "actual_q": "original tail",
+    "old_return": "None",
+    "tail_after": "Some(original tail), self-link",
+    "head_final": "None",
+    "ref_escape": false
+  },
+  "negatives": {
+    "ptr_as_ref.nl": "semantic type/ref authority rejection: Copy ptr is not ref<write,Option<ptr<Node>>>",
+    "live_read.nl": "semantic conflicting surviving read reference rejection; unsupported grammar/precision must be classified separately"
+  }
+}

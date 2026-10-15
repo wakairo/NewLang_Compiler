@@ -1,0 +1,20 @@
+[
+  {
+    "case": "named_link",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p478/named_link.nl:13:5-16:6: error(precision)[P9-CONTINUATION-PRECISION]: multiple normal function-match states require a richer join\n"
+  },
+  {
+    "case": "ptr_as_ref",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p478/ptr_as_ref.nl:15:66-15:67: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  },
+  {
+    "case": "live_read",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p478/live_read.nl:13:5-16:6: error(precision)[P9-CONTINUATION-PRECISION]: multiple normal function-match states require a richer join\n"
+  }
+]

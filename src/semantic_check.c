@@ -8479,6 +8479,22 @@ static bool body_signature_type(const NLSemanticContext *c, NLTypeId type,
            body_plain_type(c, t.target);
 }
 
+/* One structural known-call profile, not general sum/ref admission. Unknown
+ * is an opaque Copy package, never a Some locator or original root authority.
+ * Both independent formals and actual body replay use the existing core
+ * state/dependency rules; no postcondition follows from this predicate. */
+static bool node_link_signature(const NLSemanticContext *c,
+                                const NLTypeId *parameters, size_t count,
+                                NLTypeId result)
+{
+    if (count != 2 || parameters[1] != result ||
+        !nl_sum_unknown_node_option(c, (NLSemanticValueView){.type = result}))
+        return false;
+    const NLSemanticTypeView ref = c->types[parameters[0] - 1].view;
+    return ref.kind == NL_TYPE_REF && !ref.is_exclusive &&
+           ref.access == NL_ACCESS_WRITE && ref.target == result;
+}
+
 /* Definition checking must not depend on any caller's runtime/fixture state. */
 static void clear_definition_state(NLSemanticContext *c)
 {
@@ -8564,7 +8580,7 @@ static bool check_definition(Check *registration, size_t function_id)
                 true,  t.kind == NL_TYPE_PTR || t.access == NL_ACCESS_WRITE,
                 0};
         }
-        if (t.kind == NL_TYPE_SUM) {
+        if (t.kind == NL_TYPE_SUM && !nl_sum_unknown_node_option(c, value)) {
             value.variant = 1;
             NLTypeId payload_type = c->types[type - 1].variant_types[0];
             if (payload_type != 0) {
@@ -8639,8 +8655,6 @@ NLCheckStatus nl_semantic_register_function_body(
     }
     if (!lexical_name(&check, name, strlen(name), root->span))
         goto failure;
-    if (!body_signature_type(context, result, false))
-        goto signature_limit;
     for (size_t i = 0; i < count; ++i) {
         if (parameters[i].name == NULL || parameters[i].name[0] == 0 ||
             parameters[i].type == 0 || parameters[i].type > context->type_count)
@@ -8648,8 +8662,6 @@ NLCheckStatus nl_semantic_register_function_body(
         if (!lexical_name(&check, parameters[i].name,
                           strlen(parameters[i].name), root->span))
             goto failure;
-        if (!body_signature_type(context, parameters[i].type, true))
-            goto signature_limit;
         for (size_t j = 0; j < i; ++j)
             if (strcmp(parameters[i].name, parameters[j].name) == 0) {
                 fail(&check, NL_CHECK_SEMANTIC_ERROR, root->span,
@@ -8658,6 +8670,13 @@ NLCheckStatus nl_semantic_register_function_body(
                 goto failure;
             }
         types[i] = parameters[i].type;
+    }
+    if (!node_link_signature(context, types, count, result)) {
+        if (!body_signature_type(context, result, false))
+            goto signature_limit;
+        for (size_t i = 0; i < count; ++i)
+            if (!body_signature_type(context, types[i], true))
+                goto signature_limit;
     }
     for (size_t i = 0; i < context->function_count; ++i)
         if (strcmp(name, context->functions[i].name) == 0) {
@@ -9020,7 +9039,8 @@ register_function_unit(NLSemanticContext *context,
                 goto failure;
             }
             ++owner_receivers;
-        } else {
+        } else if (!node_link_signature(check.context, types, parameter,
+                                        result)) {
             if (!body_signature_type(check.context, result, false))
                 goto signature_limit;
             for (size_t j = 0; j < parameter; ++j)
@@ -9085,7 +9105,12 @@ register_function_unit(NLSemanticContext *context,
             const FunctionDeclaration *d = &declarations[i];
             if ((check.context->functions[d->function - 1].owner_receiver ||
                  check.context->functions[d->function - 1].owner_producer ||
-                 check.context->functions[d->function - 1].custody_recipient) !=
+                 check.context->functions[d->function - 1].custody_recipient ||
+                 node_link_signature(
+                     check.context,
+                     check.context->functions[d->function - 1].parameters,
+                     check.context->functions[d->function - 1].count,
+                     check.context->functions[d->function - 1].result)) !=
                 (pass == 0))
                 continue;
             input = d->input;
