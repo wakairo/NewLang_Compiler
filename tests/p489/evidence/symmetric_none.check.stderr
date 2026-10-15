@@ -1,0 +1,1 @@
+tests/p489/symmetric_none.nl:10:5-13:6: error(precision)[P9-CONTINUATION-PRECISION]: multiple normal function-match states require a richer join

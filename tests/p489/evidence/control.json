@@ -1,0 +1,23 @@
+[
+  {
+    "stage": "control.check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  {
+    "stage": "control.public",
+    "exit": 0,
+    "stdout_bytes": 383,
+    "sha256": "1932bb8582153bac68d7026b13e2926800f3bc439b34dec434ca7924ba1bdae3",
+    "stderr": ""
+  },
+  {
+    "stage": "control.C17",
+    "exit": 0,
+    "stdout_bytes": 2545,
+    "sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc",
+    "stderr": ""
+  }
+]

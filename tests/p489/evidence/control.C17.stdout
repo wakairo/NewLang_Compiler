@@ -1,0 +1,87 @@
+/* Bounded Checked-C representation, not a NewLang ABI. */
+#include <stdint.h>
+#include <stddef.h>
+#include <stdlib.h>
+typedef struct nl_node nl_node;
+typedef struct { unsigned tag; const nl_node *ptr; } nl_node_option;
+struct nl_node { nl_node_option f0; uint8_t f1; };
+#ifdef NEWLANG_NODE_OBSERVER
+#include NEWLANG_NODE_OBSERVER
+#else
+#define NL_NODE_BIND(...) ((void)0)
+#define NL_NODE_REPLACE(...) ((void)0)
+#define NL_NODE_ARM(...) ((void)0)
+#define NL_NODE_RELOAN(...) ((void)0)
+#define NL_NODE_FINISH() ((void)0)
+#endif
+int main(void) {
+nl_node_option nl_v_1 = { 0, NULL };
+uint8_t nl_v_2 = 2;
+nl_node nl_v_3 = { nl_v_1, nl_v_2 };
+nl_node nl_b_0_1 = nl_v_3;
+(void)nl_b_0_1;
+NL_NODE_BIND(0, 1, 1, &nl_b_0_1);
+const nl_node * nl_v_4;
+{ const nl_node *nl_ref_5 = &nl_b_0_1;
+nl_v_4 = nl_ref_5; }
+const nl_node * const nl_b_0_3 = nl_v_4;
+(void)nl_b_0_3;
+NL_NODE_BIND(0, 3, 2, &nl_b_0_3);
+nl_node_option nl_v_6 = { 0, NULL };
+uint8_t nl_v_7 = 1;
+nl_node nl_v_8 = { nl_v_6, nl_v_7 };
+nl_node nl_b_0_4 = nl_v_8;
+(void)nl_b_0_4;
+NL_NODE_BIND(0, 4, 1, &nl_b_0_4);
+nl_node_option nl_v_9;
+const nl_node * nl_v_11 = nl_b_0_3;
+nl_node_option nl_v_12 = { 1, nl_v_11 };
+{ nl_node_option *nl_ref_10 = &nl_b_0_4.f0;
+const nl_node_option nl_old_10 = *nl_ref_10;
+*nl_ref_10 = nl_v_12;
+NL_NODE_REPLACE(&nl_b_0_4, &nl_old_10);
+nl_v_9 = nl_old_10; }
+const nl_node_option nl_b_0_6 = nl_v_9;
+(void)nl_b_0_6;
+NL_NODE_BIND(0, 6, 3, &nl_b_0_6);
+nl_node_option nl_v_13 = nl_b_0_4.f0;
+const nl_node_option nl_b_0_7 = nl_v_13;
+(void)nl_b_0_7;
+NL_NODE_BIND(0, 7, 3, &nl_b_0_7);
+nl_node_option nl_v_14 = nl_b_0_7;
+switch (nl_v_14.tag) {
+case 0: {
+NL_NODE_ARM(1, nl_v_14.ptr);
+break; }
+case 1: {
+const nl_node *const nl_b_2_8 = nl_v_14.ptr;
+NL_NODE_ARM(2, nl_b_2_8);
+(void)nl_b_2_8;
+nl_node_option nl_v_15;
+const nl_node * nl_v_17 = nl_b_2_8;
+nl_node_option nl_v_18 = { 1, nl_v_17 };
+{ nl_node_option *nl_ref_16 = &nl_b_0_1.f0;
+const nl_node_option nl_old_16 = *nl_ref_16;
+*nl_ref_16 = nl_v_18;
+NL_NODE_REPLACE(&nl_b_0_1, &nl_old_16);
+nl_v_15 = nl_old_16; }
+const nl_node_option nl_b_2_10 = nl_v_15;
+(void)nl_b_2_10;
+NL_NODE_BIND(2, 10, 3, &nl_b_2_10);
+nl_node_option nl_v_19 = nl_b_2_10;
+(void)nl_v_19;
+break; }
+}
+nl_node_option nl_v_20;
+nl_node_option nl_v_22 = { 0, NULL };
+{ nl_node_option *nl_ref_21 = &nl_b_0_4.f0;
+const nl_node_option nl_old_21 = *nl_ref_21;
+*nl_ref_21 = nl_v_22;
+NL_NODE_REPLACE(&nl_b_0_4, &nl_old_21);
+nl_v_20 = nl_old_21; }
+const nl_node_option nl_b_0_9 = nl_v_20;
+(void)nl_b_0_9;
+NL_NODE_BIND(0, 9, 3, &nl_b_0_9);
+NL_NODE_FINISH();
+return 0;
+}

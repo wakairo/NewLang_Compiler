@@ -1,0 +1,21 @@
+{
+  "compiler_source": "d6e603e12591c2ff39e3e1b77c784681fec66033",
+  "build_commit": "2fd441c5cafa68f8a462ae1e5265572eac7dd91c",
+  "binary_sha256": "c4d003e6ee187b9abf7c10cb62fe059dfbb6b6cd978924de3e9edd81435b294d",
+  "cases": [
+    {
+      "source": "tests/p489/asymmetric_none.nl",
+      "sha256": "7b95794a3eb145de1a786ccfb68e929003fd12c851fc4721de58a4ad26fd81db",
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p489/asymmetric_none.nl:10:5-13:6: error(precision)[P9-CONTINUATION-PRECISION]: multiple normal function-match states require a richer join\n"
+    },
+    {
+      "source": "tests/p489/symmetric_none.nl",
+      "sha256": "f049777361399fbc28ed8ad333a433260751a18f25b510791c116ae0d1bbe7fd",
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p489/symmetric_none.nl:10:5-13:6: error(precision)[P9-CONTINUATION-PRECISION]: multiple normal function-match states require a richer join\n"
+    }
+  ]
+}

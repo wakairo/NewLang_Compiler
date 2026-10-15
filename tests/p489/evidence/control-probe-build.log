@@ -1,0 +1,10 @@
+[ 10%] Built target newlang_diagnostic
+[ 10%] Built target newlang_source
+[ 26%] Built target newlang_syntax
+[ 26%] Built target newlang_lexer
+[ 36%] Built target newlang_checked
+[ 42%] Built target newlang_parser
+[ 89%] Built target newlang_semantic
+[ 94%] Building C object CMakeFiles/p471_public_probe.dir/tests/p471/public_probe.c.o
+[100%] Linking C executable p471_public_probe
+[100%] Built target p471_public_probe
