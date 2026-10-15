@@ -487,6 +487,17 @@ if(BUILD_TESTING)
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/allocated_node_semantic.nl")
     endforeach()
     add_executable(node_link_test tests/unit/node_link_test.c)
+    add_executable(node_initial_test tests/unit/node_initial_test.c)
+    target_link_libraries(node_initial_test PRIVATE newlang_checked_c_node)
+    target_link_options(node_initial_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
+    foreach(group controls oom)
+        add_test(NAME node_initial_some_${group}.unit COMMAND node_initial_test ${group}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_initial_some.nl")
+    endforeach()
+    add_test(NAME node_initial_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/node_initial_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:node_initial_test>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures" "${NEWLANG_SANITIZER}")
     add_executable(node_join_native_test tests/unit/node_join_native_test.c)
     target_link_libraries(node_join_native_test PRIVATE newlang_checked_c_node)
     target_link_options(node_join_native_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
