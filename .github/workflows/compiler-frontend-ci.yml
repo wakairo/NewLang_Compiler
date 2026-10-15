@@ -1,0 +1,108 @@
+# LLVM-independent Production source/checker and existing C17/native reference
+# regression only. PARTIAL evidence; never replaces the LLVM 23.1.2 full matrix.
+name: Compiler frontend/C17 reference (NO LLVM; PARTIAL)
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  frontend-c17-partial:
+    name: Production CHECK + C17/native reference (NO LLVM; PARTIAL)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out source without persisted credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Verify available Ubuntu runner tools (no LLVM install)
+        shell: bash
+        run: |
+          set -euo pipefail
+          for tool in gcc make cmake python3 ctest; do
+            command -v "$tool"
+          done
+          gcc --version | head -n 1
+          cmake --version | head -n 1
+          python3 --version
+          ctest --version | head -n 1
+
+      - name: Configure and build the actual Production frontend with GCC (no LLVM)
+        shell: bash
+        run: |
+          set -euo pipefail
+          CC=gcc cmake -S . -B build-frontend \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DNEWLANG_FRONTEND_ONLY=ON \
+            | tee "$RUNNER_TEMP/newlang-frontend-configure.log"
+          grep -F "Frontend-only: LLVM discovery and llvm.c_api smoke omitted" \
+            "$RUNNER_TEMP/newlang-frontend-configure.log"
+          grep -Fx "NEWLANG_FRONTEND_ONLY:BOOL=ON" build-frontend/CMakeCache.txt
+          grep -Fx "BUILD_TESTING:BOOL=ON" build-frontend/CMakeCache.txt
+          cmake --build build-frontend --parallel 2
+
+      - name: Inventory all CTests and assert Production CHECK, C17/native and public validators
+        shell: bash
+        run: |
+          set -euo pipefail
+          ctest --test-dir build-frontend -N \
+            | tee "$RUNNER_TEMP/newlang-frontend-ctest-inventory.txt"
+          python3 - "$RUNNER_TEMP/newlang-frontend-ctest-inventory.txt" <<'PY'
+          import pathlib
+          import re
+          import sys
+
+          text = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8")
+          names = re.findall(r"(?m)^\s*Test\s+#\d+:\s*(\S+)\s*$", text)
+          total = re.search(r"(?m)^Total Tests:\s*(\d+)\s*$", text)
+          required = (
+              "cli.check_source",
+              "frontend_build_policy.integration",
+              "nested_u8_checked_c.integration",
+              "u8_call_checked_c.integration",
+              "north_star_v0_checked_c.integration",
+              "node_join_same_locator_public_proof.unit",
+              "node_two_normal_join_public_proof.unit",
+              "node_join_public_negative.unit",
+              "node_join_public_oom.unit",
+              "node_join_both_public_oom.unit",
+              "node_join_owned_poison.unit",
+              "bootstrap_retry.offline",
+          )
+          missing = [name for name in required if name not in names]
+          print(f"NO LLVM / PARTIAL: registered CTests={len(names)}, "
+                f"reported={total.group(1) if total else 'MISSING'}", flush=True)
+          print("NO LLVM / PARTIAL: required CHECK+C17/native+public-validator "
+                f"names registered={len(required) - len(missing)}/{len(required)}",
+                flush=True)
+          if (not total or int(total.group(1)) != len(names)
+                  or len(set(names)) != len(names)
+                  or len(names) < 275
+                  or "llvm.c_api" in names or missing):
+              raise SystemExit("STOP: partial CTest inventory inconsistent, "
+                               f"missing={missing}")
+          PY
+
+      - name: Execute every registered frontend/C17 CTest (NO LLVM; PARTIAL)
+        shell: bash
+        run: |
+          set -euo pipefail
+          ctest --test-dir build-frontend --output-on-failure
+
+      - name: Verify real Production source/checker CLI path (NO LLVM; PARTIAL)
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./build-frontend/newlangc --check \
+            tests/fixtures/node_join_same_locator.nl \
+            > "$RUNNER_TEMP/newlang-check-stdout" \
+            2> "$RUNNER_TEMP/newlang-check-stderr"
+          test ! -s "$RUNNER_TEMP/newlang-check-stdout"
+          test ! -s "$RUNNER_TEMP/newlang-check-stderr"
+          echo "NO LLVM / PARTIAL: Production source/checker exit 0, zero stdout/stderr"

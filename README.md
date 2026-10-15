@@ -40,64 +40,71 @@ See the [P2 grammar audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md),
 [P5 source contract](docs/P5_SOURCE_FRONTEND_SLICE_CONTRACT.md) and
 [P6 sum contract](docs/P6_CLOSED_SUM_SOURCE_SLICE_CONTRACT.md).
 
-## Fresh setup
+## Fresh setup — proposed fixed LLVM 23.1.3 full CI (Issue #449)
 
-Supported hosts: Linux x86_64, Codex Cloud Debian 13 and Ubuntu 24.04 (including
-WSL2 userspace). WSL2 itself has not been tested. Python >=3.12 is required.
-Use the existing task checkout; tasks are already isolated. Do not create an
-additional Git worktree unless explicitly requested.
+This section describes a **DRAFT, Coordination-gated toolchain migration**.
+The Canonical remains Draft 17.30; the compiler/source/checked-owned/C17
+semantics and Production tests are unchanged. Until its actual first five-job
+CI and independent review pass, this is *not* proof of an adopted main toolchain.
 
-On Ubuntu 24.04, install base prerequisites from its signed package repositories:
+Full curated LLVM SDK bootstrap is supported on **Ubuntu 24.04 x86_64**
+(including WSL2 Ubuntu 24.04 userspace when prerequisites match). It does
+**not** fetch the original 1.19 GB official archive, or the old 23.1.2
+apt.llvm.org .deb packages. Requires Python >=3.12, CMake >=3.28,<4.0,
+GCC13/G++13, make, zstd, and standard signed Ubuntu static-link developer
+libraries (zlib/zstd/tinfo/XML as required by LLVM).
 
 ```sh
 sudo apt-get update
 sudo apt-get install --no-install-recommends -y \
-  gcc-13 g++-13 make cmake python3 dpkg \
-  libstdc++6 libz3-4 libxml2 libpfm4 libedit2 libzstd1 libffi8
-```
-
-The Codex Debian 13 base already supplies GCC 14, make, Python, dpkg, and LLVM
-runtime dependencies. Bootstrap supplies the missing Clang/LLVM development
-tools, sanitizer runtimes, and CMake there without root privileges. Both hosts
-use the tag-matching Trixie LLVM SDK in the private prefix; Ubuntu additionally
-receives checksum-locked Z3 4.13.3. Its system `libstdc++6` must be >=14 (from
-normal Ubuntu updates), independently of using GCC 13 as the C compiler.
-Bootstrap checks that prerequisite; it never replaces system libc/libstdc++.
-
-From the repository root:
-
-```sh
+  gcc-13 g++-13 make cmake python3 zstd \
+  libstdc++6 zlib1g-dev libzstd-dev libtinfo-dev libxml2-dev
 python3 scripts/bootstrap.py
 . .deps/activate.sh
-CC=gcc cmake --fresh -S . -B build-gcc -DCMAKE_BUILD_TYPE=Debug
+CC=gcc cmake -S . -B build-gcc -DCMAKE_BUILD_TYPE=Debug
 cmake --build build-gcc --parallel 2
 ctest --test-dir build-gcc --output-on-failure
 ./build-gcc/newlangc --version
 ```
 
-Bootstrap downloads reviewed binary packages into ignored `.deps/`, verifies
-each SHA-256, and extracts a content-addressed toolchain. Exact LLVM **23.1.2**
-and OS-specific package versions/hashes live in `scripts/toolchain-lock.json`.
-It does not build LLVM from source, run package maintainer scripts, or update
-pins. Activation is needed in each new shell/task; processes are not retained.
-The SDK source commit matches the official `llvmorg-23.1.2` tag. Upgrades require
-a dedicated reviewed PR; ordinary bootstrap/build never change the release.
-`cmake --fresh` refreshes compiler/LLVM discovery when upgrading an existing
-build directory from LLVM 19; build/test commands themselves reuse valid outputs.
-Network destinations: `deb.debian.org` (auxiliary OS packages), `apt.llvm.org` (LLVM SDK),
-Ubuntu package mirrors (Ubuntu prerequisites), and GitHub / `api.github.com`
-for repository/PR operations. No application credentials or services are needed.
+The committed `scripts/toolchain-lock.json` selects exact `llvmorg-23.1.3`
+source commit `0d261d1ca552c95a8f007e061c787ac7132fbcbc` and a separate
+**unofficial NewLang-curated GitHub prerelease** asset, exact SHA-256
+`5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133`
+(126,520,077 bytes). Both cached bytes and freshly downloaded GitHub Release
+bytes are SHA-checked before bounded `zstd --long=30` tar validation and
+rootless extraction. `.deps/activate.sh` activates exact SDK-local
+`llvm-config-23`, `clang-23`, `clang-format-23`. It is static-only LLVM;
+CMake links the unchanged `llvm.c_api` via static LLVM libraries and uses the
+C++ linker **only for the infrastructure C API smoke**. The Production
+compiler still uses strict C17. No `latest`, unreviewed mirror, binary
+maintainer script, SDK-dependent frontend fallback or trust in cache hits.
 
-The same locked LLVM toolchain provides `clang-format-23` 23.1.2. Mechanical
-C/H formatting is repository policy:
+The original LLVM GitHub tarball had a verified upstream GPG signature, but
+**the curated archive is not separately GPG signed**. Its authenticity is
+the *committed exact GitHub-hosted archive SHA*, plus its internal
+`PROVENANCE.md` and `licenses/`. Its selection was compared locally against
+496 original LLVM SDK entries. License/NOTICE inclusion is a bounded audit,
+**not a legal certification or complete SBOM**. See
+[toolchain P0 decisions](docs/P0_TOOLCHAIN_DECISIONS.md) and the
+[unofficial prerelease](https://github.com/wakairo/NewLang_Compiler/releases/tag/llvm-23.1.3-newlang-sdk-linux-x64-v1)
+for authorship, credits, limitations, and the disclosed Unicode-notice date
+discrepancy.
 
-```sh
-bash scripts/format.sh        # rewrite tracked C/H files
-bash scripts/check-format.sh  # verify without modifying
-```
+`bash scripts/check-format.sh` uses the active `clang-format-23`; the
+ordinary five-way workflow still executes GCC, GCC Release, Clang, ASan,
+UBSan, every registered CTest, and the unchanged `llvm.c_api`. An
+independent `NEWLANG_FRONTEND_ONLY=ON` **NO LLVM / PARTIAL** lane remains
+available for Production source/checker/C17 reference work during SDK
+infrastructure incidents; it never replaces full backend/native proof.
 
-CI runs the non-modifying check.
-For failed GitHub Actions jobs, see the [CI incident triage runbook](docs/NewLang_CI_Incident_Runbook.md) before any selective rerun.
+The older **Debian 13** snapshot .deb lock remains recorded as a legacy
+fallback but is **not** the curated Ubuntu 24.04 full CI. The original
+23.1.2 Debian/Noble cross-distribution guidance in historical P0 decisions
+does not describe this curated install path. Once a toolchain migration is
+approved, rerun bootstrap and use a **fresh** CMake build directory to avoid
+persisted LLVM C API link targets. This is a candidate until Coordination
+independently merges the PR.
 
 ## Other validated configurations
 
@@ -147,6 +154,14 @@ P0 does not claim to reproduce them in C.
 `--version` prints `newlangc 0.1.0 (P0 bootstrap)`. `--help` (also no arguments)
 prints usage; both exit 0. Invalid options / argument counts exit 2.
 
+`newlangc --check SOURCE` runs the same production parser, function-unit
+registration and semantic checking of the ordinary `main()` entry, then
+destroys the source-generated checked-owned fragment without invoking codegen.
+Success exits 0 with zero stdout/stderr bytes. Source I/O failures exit 1;
+parser and semantic failures retain their diagnostics and exit 3. A missing
+entry is a semantic failure. Backend-unsupported but semantically valid source
+can pass `--check`; this does **not** establish C17, LLVM or native support.
+
 For a source path, the North Star V0/V1/AVS path reads the actual source, parses the
 bounded source function unit, registers/checks it with the production semantic
 checker, then checks an ordinary zero-argument `main()` call selected only by
@@ -158,6 +173,31 @@ Accepted checked constructs outside the V0/V1/AVS emitter report
 The Checked-C path is a bounded bootstrap/reference execution vehicle for the
 North Star V0/V1/AVS subset; it is not a general C backend and does not replace LLVM as
 the planned primary backend.
+
+### LLVM-independent frontend build
+
+On a Linux host with GCC or Clang, make, CMake >=3.28,<4.0 and Python >=3.12:
+
+```sh
+CC=gcc cmake -S . -B build-frontend -DCMAKE_BUILD_TYPE=Debug \
+  -DNEWLANG_FRONTEND_ONLY=ON
+cmake --build build-frontend --parallel 2
+ctest --test-dir build-frontend --output-on-failure
+./build-frontend/newlangc --check tests/fixtures/node_join_same_locator.nl
+```
+
+These commands do not invoke bootstrap or fetch LLVM. The explicit option
+skips LLVM discovery/import and only the `llvm.c_api` smoke test. All other
+tests, including source/checker, negative semantics, OOM/rollback, public
+validators and existing C17/native reference tests, remain enabled: that C17
+emitter has no LLVM dependency and its ordinary CLI behavior is preserved.
+`--check` is available in both builds; existing help/version output is unchanged.
+
+The option defaults **OFF**. The normal build still requires exact LLVM 23.1.2,
+and the normal five-configuration CI uses that default. Frontend-only results
+are separately scoped partial validation and cannot replace the full gate or
+justify merging new backend safety features. No native or Product PASS follows
+from checking source alone.
 
 Product/value strategy is recorded in
 [`docs/NewLang_Product_Value_Strategy.md`](docs/NewLang_Product_Value_Strategy.md),
