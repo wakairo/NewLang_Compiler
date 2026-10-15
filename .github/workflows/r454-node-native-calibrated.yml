@@ -22,7 +22,7 @@ jobs:
           test "$GITHUB_RUN_ATTEMPT" = 1
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           git merge-base --is-ancestor d26d30568018f9d4866a9841d9eba6966a703557 HEAD
-          test "$(git rev-list --count d26d30568018f9d4866a9841d9eba6966a703557..HEAD)" = 1
+          test "$(git rev-list --count d26d30568018f9d4866a9841d9eba6966a703557..HEAD)" = 2
           git diff --name-only d26d30568018f9d4866a9841d9eba6966a703557 HEAD
           git diff --name-only d26d30568018f9d4866a9841d9eba6966a703557 HEAD | while read -r path; do
             case "$path" in tests/red_team/r454/*|.github/workflows/r454-node-native-calibrated.yml) ;; *) exit 1 ;; esac

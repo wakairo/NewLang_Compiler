@@ -109,7 +109,7 @@ static void r454_finish(void) {
             r454_anchor->f0.tag,(const void*)r454_anchor->f0.ptr,
             r454_replacements,r454_arms,r454_old_none,r454_old_some);
 }
-#define NL_NODE_BIND(K,F,S,P) r454_bind((K),(const void *)(P))
+#define NL_NODE_BIND(F,S,K,P) r454_bind((K),(const void *)(P))
 #define NL_NODE_REPLACE(P,O) r454_replace((P),(O))
 #define NL_NODE_ARM(V,P) r454_arm((V),(P))
 #define NL_NODE_RELOAN(P) ((void)(P))
