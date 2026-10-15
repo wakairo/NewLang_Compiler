@@ -1,0 +1,12 @@
+# R454: finite-profile calibrated independent physical Node witness
+
+Authority: compiler/main 6e3cb6051b286e020d852c04bd37161cc08a367f; candidate d26d30568018f9d4866a9841d9eba6966a703557; Draft17.30. NON-BLIND calibrated second pass, NOT R437 first pass. The R437 sources and finding stay frozen. This is an independently authored R454 source pair, not a Production source/golden-C copy.
+
+Pre-registered physical expectations, derived solely from these two R sources and the public selected Node contract:
+
+* none: two distinct lexical C Node roots start with None, peer.f1=79, anchor.f1=31, and peer.f0 stays None. A Copy of anchor.next selects normal None arm (tag 0, binder pointer NULL). One scoped source-checked replace occurs inside that arm on anchor.f0, old Copy tag 0/pointer NULL and new tag 1/pointer equal to original peer's physical address. No Some arm executes.
+* some: two distinct lexical C Node roots start with None, peer.f1=83, anchor.f1=47, and peer.f0 stays None. An earlier scoped checked replace changes anchor.f0 to Some(original peer), old Copy tag0/NULL; a Copy of the resulting anchor.next selects actual Some arm (tag 1, found pointer equals peer). One arm-local checked replace resets anchor.f0 to None, old Copy tag1/original peer pointer. No None arm executes.
+* Distinct actual addresses, stable roots, sibling fields, live old Copy packages, both source-generated switch arms, and the physical predecessor/successor tags must be checked, not assumed from process exit. Observer is read-only in positives and uses only the original emitted runtime callback arguments; it cannot manufacture NewLang source authority.
+* Public checked-owned Node view MUST be issued and validated in each case, with original roots, field, sibling, two arm worlds and performed operation; nine or more independently corrupted views must be refused. Source-invalid wrong field/escaping write ref must be refused before C emission.
+* Verify SHA of untouched emitted C17 and of each separately compiled observer variant, strict GCC/Clang O0/O2, ASan/UBSan if available. One *separate modified C negative* flips anchor sibling before finish and MUST fail in observer. It is NOT valid source-generated C.
+* STOP at first error/unsupported profile/ambiguous observer; no second CI run, expected-value tuning or modification of candidate. A failed or unsupported source is SOURCE/PROFILE BLOCKED, not a native FAIL. Only the prescribed output may be reported as a finite PASS.

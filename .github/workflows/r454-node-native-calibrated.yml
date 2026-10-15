@@ -1,0 +1,62 @@
+name: R454 calibrated independent Node physical C17/native second pass
+on:
+  push:
+    branches: [r454-node-native-calibrated-ci]
+permissions:
+  contents: read
+jobs:
+  r454:
+    name: R454 one immutable attempt
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Full checkout and exact candidate ancestry gate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Verify exact committed R-only delta and ancestry
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git merge-base --is-ancestor d26d30568018f9d4866a9841d9eba6966a703557 HEAD
+          test "$(git rev-list --count d26d30568018f9d4866a9841d9eba6966a703557..HEAD)" = 1
+          git diff --name-only d26d30568018f9d4866a9841d9eba6966a703557 HEAD
+          git diff --name-only d26d30568018f9d4866a9841d9eba6966a703557 HEAD | while read -r path; do
+            case "$path" in tests/red_team/r454/*|.github/workflows/r454-node-native-calibrated.yml) ;; *) exit 1 ;; esac
+          done
+          gcc --version
+          clang --version
+          cmake --version
+          python3 --version
+      - name: Build immutable candidate frontend/native emitter (NO LLVM / PARTIAL)
+        run: |
+          set -eux
+          CC=gcc cmake -S . -B build-r454 -DNEWLANG_FRONTEND_ONLY=ON -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-r454 --parallel 2 --target newlangc
+      - name: Link R-owned public checked-owned proof auditor
+        run: |
+          set -eux
+          mkdir -p tests/red_team/r454/output
+          gcc -std=c17 -Wall -Wextra -Wpedantic -Werror -O0 -Iinclude \
+            tests/red_team/r454/public_proof.c -Wl,--start-group \
+            build-r454/libnewlang_checked_c_node.a \
+            build-r454/libnewlang_semantic.a build-r454/libnewlang_checked.a \
+            build-r454/libnewlang_parser.a build-r454/libnewlang_syntax.a \
+            build-r454/libnewlang_lexer.a build-r454/libnewlang_source.a \
+            build-r454/libnewlang_diagnostic.a -Wl,--end-group \
+            -o tests/red_team/r454/output/public_proof
+      - name: Single R454 independent source/certificate/C17/native run
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 -u tests/red_team/r454/audit.py 2>&1 | tee tests/red_team/r454/output/r454.log
+      - name: Preserve untouched issued C17 and observation evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r454-calibrated-independent-evidence
+          path: tests/red_team/r454/output/
+          retention-days: 14
