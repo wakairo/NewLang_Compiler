@@ -1,0 +1,9 @@
+{
+  "case": "C1",
+  "public_exit": 0,
+  "manifest_exit": 0,
+  "C17_exit": 0,
+  "C17_bytes": 2728,
+  "C17_sha256": "daac2db7d1d0db0475819f6b8448f9fed0cd0a97255bab4c3f257999d9c79705",
+  "diagnostic": ""
+}

@@ -1,0 +1,119 @@
+{
+  "host": "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/lib/llvm-23/bin/clang",
+  "sanitizer": "none",
+  "cases": [
+    {
+      "case": "control",
+      "check_exit": 0,
+      "public_exit": 0,
+      "public": "ORIGINAL index=0 place=1 incarnation=1 RF=1->17\nORIGINAL index=1 place=6 incarnation=6 RF=11->11\nJOIN match=34 changed=2 sibling=3 input_variant=2 input_target=1\nARM variant=1 unchanged=1\nQ binder=8 operand_symbol=8 use=COPY target=1 incarnation=1\nARM variant=2 operation=4 F=2->18 RF=1->19 occurrence=0->3\nPUBLIC VALID q/R/O/Change/Reset; wrong projection rejected; native untested\n",
+      "manifest": "B 0 1 1 2 0 0\nB 0 3 2 1 0 0\nB 0 4 1 1 0 0\nW 4 0 0 1 1\nB 0 6 3 0 0 0\nB 0 7 3 0 1 1\nM 1 1\nW 1 0 0 1 1\nB 1 10 3 0 0 0\nW 4 1 1 0 0\nB 0 9 3 0 1 1\n",
+      "C17_exit": 0,
+      "C17_bytes": 2545,
+      "C17_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc",
+      "runs": [
+        {
+          "name": "control-O0False",
+          "optimization": "-O0",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "C_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc"
+        },
+        {
+          "name": "control-O0True",
+          "optimization": "-O0",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "tail=0x7fff31f56560 payload=2\nhead=0x7fff31f564f0 payload=1 distinct=1\nSome(q)=0x7fff31f56560 same_original_tail=1\nold_tail=None new_tail=Some(0x7fff31f56560) self_link=1\nnative topology observations complete\n",
+          "stderr": "",
+          "C_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc"
+        },
+        {
+          "name": "control-O2False",
+          "optimization": "-O2",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "C_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc"
+        },
+        {
+          "name": "control-O2True",
+          "optimization": "-O2",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "tail=0x7fff20ca8630 payload=2\nhead=0x7fff20ca8610 payload=1 distinct=1\nSome(q)=0x7fff20ca8630 same_original_tail=1\nold_tail=None new_tail=Some(0x7fff20ca8630) self_link=1\nnative topology observations complete\n",
+          "stderr": "",
+          "C_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc"
+        }
+      ]
+    },
+    {
+      "case": "C1",
+      "check_exit": 0,
+      "public_exit": 0,
+      "public": "ORIGINAL index=0 place=1 incarnation=1 RF=1->17\nORIGINAL index=1 place=6 incarnation=6 RF=11->11\nJOIN match=34 changed=2 sibling=3 input_variant=2 input_target=1\nARM variant=1 unchanged=1\nQ binder=8 operand_symbol=8 use=COPY target=1 incarnation=1\nARM variant=2 operation=4 F=2->18 RF=1->19 occurrence=0->3\nPOST_READ node=36 original=1/1 field=2/2 RF=17 F=16 value=19 copy=21 variant=UNKNOWN payload=0 provenance=NOT_INVENTED\nPUBLIC VALID q/R/O/Change/Reset + post-read Copy Unknown; wrong projection rejected; concrete post pointer NOT PROVED\n",
+      "manifest": "B 0 1 1 2 0 0\nB 0 3 2 1 0 0\nB 0 4 1 1 0 0\nW 4 0 0 1 1\nB 0 6 3 0 0 0\nB 0 7 3 0 1 1\nM 1 1\nW 1 0 0 1 1\nB 1 10 3 0 0 0\nB 0 8 3 0 1 1\nW 4 1 1 0 0\nB 0 10 3 0 1 1\n",
+      "C17_exit": 0,
+      "C17_bytes": 2728,
+      "C17_sha256": "daac2db7d1d0db0475819f6b8448f9fed0cd0a97255bab4c3f257999d9c79705",
+      "runs": [
+        {
+          "name": "C1-O0False",
+          "optimization": "-O0",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "C_sha256": "daac2db7d1d0db0475819f6b8448f9fed0cd0a97255bab4c3f257999d9c79705"
+        },
+        {
+          "name": "C1-O0True",
+          "optimization": "-O0",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "tail=0x7ffe84a93c30 payload=2\nhead=0x7ffe84a93bc0 payload=1 distinct=1\nSome(q)=0x7ffe84a93c30 same_original_tail=1\nold_tail=None new_tail=Some(0x7ffe84a93c30) self_link=1\npost_join_read=Some(0x7ffe84a93c30) original_tail=0x7ffe84a93c30 current=1\nnative topology observations complete\n",
+          "stderr": "",
+          "C_sha256": "daac2db7d1d0db0475819f6b8448f9fed0cd0a97255bab4c3f257999d9c79705"
+        },
+        {
+          "name": "C1-O2False",
+          "optimization": "-O2",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "C_sha256": "daac2db7d1d0db0475819f6b8448f9fed0cd0a97255bab4c3f257999d9c79705"
+        },
+        {
+          "name": "C1-O2True",
+          "optimization": "-O2",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "tail=0x7ffda2ee9090 payload=2\nhead=0x7ffda2ee9070 payload=1 distinct=1\nSome(q)=0x7ffda2ee9090 same_original_tail=1\nold_tail=None new_tail=Some(0x7ffda2ee9090) self_link=1\npost_join_read=Some(0x7ffda2ee9090) original_tail=0x7ffda2ee9090 current=1\nnative topology observations complete\n",
+          "stderr": "",
+          "C_sha256": "daac2db7d1d0db0475819f6b8448f9fed0cd0a97255bab4c3f257999d9c79705"
+        }
+      ]
+    }
+  ],
+  "C2": {
+    "check_exit": 3,
+    "diagnostic": "/workspace/p490/tests/p490/postjoin_reloan.nl:16:5-19:6: error(precision)[NODE-JOIN-POST-PRECISION]: joined Node link has unknown variant and pointer provenance\n",
+    "first_barrier": "NODE-JOIN-POST-PRECISION",
+    "owned": "NOT REACHED",
+    "C17": "NOT REACHED",
+    "native": "NOT REACHED"
+  }
+}
+P490 C1 PHYSICAL READ PASS; C2 EXPECTED PRECISION STOP (RELOAN NOT REACHED)

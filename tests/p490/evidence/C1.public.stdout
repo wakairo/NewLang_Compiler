@@ -1,0 +1,8 @@
+ORIGINAL index=0 place=1 incarnation=1 RF=1->17
+ORIGINAL index=1 place=6 incarnation=6 RF=11->11
+JOIN match=34 changed=2 sibling=3 input_variant=2 input_target=1
+ARM variant=1 unchanged=1
+Q binder=8 operand_symbol=8 use=COPY target=1 incarnation=1
+ARM variant=2 operation=4 F=2->18 RF=1->19 occurrence=0->3
+POST_READ node=36 original=1/1 field=2/2 RF=17 F=16 value=19 copy=21 variant=UNKNOWN payload=0 provenance=NOT_INVENTED
+PUBLIC VALID q/R/O/Change/Reset + post-read Copy Unknown; wrong projection rejected; concrete post pointer NOT PROVED

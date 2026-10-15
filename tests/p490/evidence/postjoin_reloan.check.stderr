@@ -1,0 +1,1 @@
+tests/p490/postjoin_reloan.nl:16:5-19:6: error(precision)[NODE-JOIN-POST-PRECISION]: joined Node link has unknown variant and pointer provenance
