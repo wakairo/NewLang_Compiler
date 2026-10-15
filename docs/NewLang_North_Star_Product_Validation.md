@@ -108,6 +108,8 @@ B8はstatic safetyではなくpolicy/modeling問題として残る可能性を�
 
 ## 8. Human Obligation Ledger
 
+一般の製品価値仮説「UB-prevention audit locality」とauthor／ordinary callerの責務は[Product / Value Strategy §1.1](NewLang_Product_Value_Strategy.md#11-ub-prevention-audit-locality-value-hypothesis)を正本とする。ここでのL/R/P/V/C、cJSONの固定topology・per-hop `unchecked` budget・B1–B8・PASS/FAILは**凍結された個別North Star実験の評価条件**であり、普遍的な価値定義への読み替えや変更を行わない。
+
 比較時には単なるline countではなく、人間が正しく維持する必要のあるobligationを分類する。
 
 - **L — Lifetime**: object/rootの開始・終了・stale access
