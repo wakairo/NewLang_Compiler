@@ -1,0 +1,137 @@
+# Issue #486: one-off clean first-user README reproduction only.
+# Runner-only branch; not a Production CI change. DO NOT MERGE.
+name: T486 clean README initial Some first-user smoke (NO LLVM)
+
+on:
+  push:
+    branches: [t486-initial-some-first-user-smoke]
+
+permissions:
+  contents: read
+
+jobs:
+  ubuntu24-clean-first-user:
+    name: Fresh Ubuntu 24.04 GCC13 README copy/paste (NO LLVM)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout EXACT adopted main into separate clean directory
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: d6e603e12591c2ff39e3e1b77c784681fec66033
+          path: user-checkout
+          persist-credentials: false
+
+      - name: Record clean-runner preflight and README host prerequisites
+        shell: bash
+        working-directory: user-checkout
+        run: |
+          set -euo pipefail
+          printf 'T486 START: clean Ubuntu 24.04 x86_64 README reproduction, 2026-10-15 JST\n'
+          . /etc/os-release
+          echo "HOST: $PRETTY_NAME; arch=$(uname -m); working_dir=$(pwd)"
+          test "$ID" = "ubuntu"
+          test "$VERSION_ID" = "24.04"
+          test "$(uname -m)" = "x86_64"
+          git rev-parse HEAD
+          test "$(git rev-parse HEAD)" = "d6e603e12591c2ff39e3e1b77c784681fec66033"
+          test -z "$(git status --porcelain --untracked-files=all)"
+          test ! -e .deps
+          test ! -e build-frontend
+          printf '%s\n' 'CLEAN CHECKOUT: exact main SHA, no prebuilt .deps or build-frontend'
+          printf '%s\n' 'EXPECTED: --check exit 0 silent; emitted C17 nonempty; GCC13 strict C17 exit0; native exit0/silent; existing physical observer CTest PASS'
+          # Exactly README's install step; no extra CMake/Python/LLVM source.
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 make cmake python3
+          gcc-13 --version | head -n 1
+          cmake --version | head -n 1
+          python3 --version
+          python3 -c "import re,subprocess,sys; a=tuple(map(int,re.search(r'version (\\d+)\\.(\\d+)',subprocess.check_output(['cmake','--version'],text=True)).groups())); assert (3,28)<=a<(4,0), a; assert sys.version_info>=(3,12); print('README CMake/Python version requirements: PASS')"
+          test "$(gcc-13 -dumpversion | cut -d. -f1)" = "13"
+          test ! -e .deps
+
+      - name: Copy README NO LLVM GCC13 configure and complete frontend build
+        shell: bash
+        working-directory: user-checkout
+        run: |
+          set -euo pipefail
+          CC=gcc-13 cmake -S . -B build-frontend -DCMAKE_BUILD_TYPE=Debug \
+            -DNEWLANG_FRONTEND_ONLY=ON \
+            | tee "$RUNNER_TEMP/t486-configure.log"
+          grep -F "Frontend-only: LLVM discovery and llvm.c_api smoke omitted" "$RUNNER_TEMP/t486-configure.log"
+          grep -Fx "NEWLANG_FRONTEND_ONLY:BOOL=ON" build-frontend/CMakeCache.txt
+          cmake --build build-frontend --parallel 2
+          test ! -e .deps
+          if ldd build-frontend/newlangc | grep -Ei 'libLLVM|libclang'; then
+            echo 'STOP: unexpected LLVM/Clang native linkage' >&2
+            exit 1
+          fi
+          echo 'NO LLVM: no .deps, no bootstrap/download, no libLLVM/Clang dynamic linkage'
+
+      - name: Reproduce literal README source CHECK, C17 emission, strict GCC13, native
+        shell: bash
+        working-directory: user-checkout
+        run: |
+          set -euo pipefail
+          echo 'SOURCE AND IMMUTABLE PROVENANCE:'
+          sha256sum tests/fixtures/node_initial_some.nl
+          set +e
+          ./build-frontend/newlangc --check tests/fixtures/node_initial_some.nl \
+            > "$RUNNER_TEMP/t486-check.stdout" 2> "$RUNNER_TEMP/t486-check.stderr"
+          check_status=$?
+          set -e
+          echo "SOURCE --check exit=$check_status stdout_bytes=$(wc -c < "$RUNNER_TEMP/t486-check.stdout") stderr_bytes=$(wc -c < "$RUNNER_TEMP/t486-check.stderr")"
+          if [ "$check_status" -ne 0 ]; then cat "$RUNNER_TEMP/t486-check.stderr"; exit 1; fi
+          test ! -s "$RUNNER_TEMP/t486-check.stdout"
+          test ! -s "$RUNNER_TEMP/t486-check.stderr"
+          set +e
+          ./build-frontend/newlangc tests/fixtures/node_initial_some.nl \
+            > build-frontend/node_initial_some.c \
+            2> "$RUNNER_TEMP/t486-emission.stderr"
+          emit_status=$?
+          set -e
+          echo "C17 EMISSION exit=$emit_status stderr_bytes=$(wc -c < "$RUNNER_TEMP/t486-emission.stderr")"
+          if [ "$emit_status" -ne 0 ]; then cat "$RUNNER_TEMP/t486-emission.stderr"; exit 1; fi
+          test ! -s "$RUNNER_TEMP/t486-emission.stderr"
+          test -s build-frontend/node_initial_some.c
+          echo "C17 EMITTED bytes=$(wc -c < build-frontend/node_initial_some.c)"
+          sha256sum build-frontend/node_initial_some.c
+          gcc-13 -std=c17 -Wall -Wextra -Wpedantic -Werror \
+            build-frontend/node_initial_some.c -o build-frontend/node_initial_some
+          echo 'GCC13 -std=c17 -Wall -Wextra -Wpedantic -Werror: EXIT 0'
+          set +e
+          ./build-frontend/node_initial_some \
+            > "$RUNNER_TEMP/t486-guest.stdout" 2> "$RUNNER_TEMP/t486-guest.stderr"
+          guest_status=$?
+          set -e
+          echo "$guest_status"
+          echo "NATIVE exit=$guest_status stdout_bytes=$(wc -c < "$RUNNER_TEMP/t486-guest.stdout") stderr_bytes=$(wc -c < "$RUNNER_TEMP/t486-guest.stderr")"
+          if [ "$guest_status" -ne 0 ]; then cat "$RUNNER_TEMP/t486-guest.stderr"; exit 1; fi
+          test ! -s "$RUNNER_TEMP/t486-guest.stdout"
+          test ! -s "$RUNNER_TEMP/t486-guest.stderr"
+          test ! -e .deps
+          git diff --exit-code
+          git diff --cached --exit-code
+          echo 'COPY/PASTE SOURCE→CHECK→EMIT C17→GCC13→NATIVE: PASS (independent of physical observer)'
+
+      - name: Run README physical Node integration CTest on SAME clean GCC13 build
+        shell: bash
+        working-directory: user-checkout
+        run: |
+          set -euo pipefail
+          ctest --test-dir build-frontend -N -R '^node_initial_native\.integration$' \
+            | tee "$RUNNER_TEMP/t486-ctest-inventory.log"
+          grep -Fx 'Total Tests: 1' "$RUNNER_TEMP/t486-ctest-inventory.log"
+          ctest --test-dir build-frontend -R '^node_initial_native\.integration$' --output-on-failure \
+            | tee "$RUNNER_TEMP/t486-ctest-doc-command.log"
+          grep -F '100% tests passed, 0 tests failed out of 1' "$RUNNER_TEMP/t486-ctest-doc-command.log"
+          # Separate diagnostic pass only: the original passive observer checks
+          # actual C pointer identity, independent of uninstrumented guest exit0.
+          ctest --test-dir build-frontend -R '^node_initial_native\.integration$' \
+            --output-on-failure --verbose > "$RUNNER_TEMP/t486-observer.log"
+          grep -F 'native topology observations complete' "$RUNNER_TEMP/t486-observer.log" | head -n 3
+          grep -F '"observer_mutants"' "$RUNNER_TEMP/t486-observer.log" | head -n 2
+          echo 'EXISTING PHYSICAL NODE OBSERVER: PASS (pointer identities checked by pre-existing integration, not by simple guest)'
+          test ! -e .deps
+          git diff --exit-code
+          echo 'T486 CLEAN USER REPRODUCTION FINAL: PASS / NO LLVM / no repository file edits'
