@@ -5,6 +5,7 @@
 #include "newlang/captured_closure.h"
 #include "newlang/checked.h"
 #include "newlang/node_join.h"
+#include "newlang/ordinary_call.h"
 #include "newlang/raw_storage.h"
 #include "ordinary_name.h"
 
@@ -113,6 +114,8 @@ typedef struct NLNodeJoinProof {
     struct NLNodeJoinProof *next;
 } NLNodeJoinProof;
 struct NLCheckedFragment {
+    struct NLOrdinaryCallProof *ordinary_call;
+    void (*destroy_ordinary_call)(NLCheckedFragment *);
     const NLNodeJoinProof *node_join_parent; /* finite fork lineage only */
     NLNodeJoinProof *node_joins; /* owned finite source-issued checkpoints */
     void (*destroy_node_joins)(NLCheckedFragment *);
@@ -238,6 +241,14 @@ NLCheckStatus nl_sem_function_exit(const NLSemanticContext *,
 
 /* Concrete candidate state helpers; no general allocator/transaction DSL. */
 NLCheckStatus nl_sem_clone(const NLSemanticContext *, NLSemanticContext **);
+NLCheckStatus nl_ordinary_call_begin(NLCheckedFragment *,
+                                     const NLCheckedFragment *, NLCheckedNodeId,
+                                     const NLSemanticContext *,
+                                     const NLCheckedNodeId *);
+NLCheckStatus nl_ordinary_call_post(const NLCheckedFragment *, NLCheckedNodeId,
+                                    const NLSemanticContext *);
+NLCheckStatus nl_ordinary_call_close(const NLCheckedFragment *, NLCheckedNodeId,
+                                     const NLSemanticContext *);
 void nl_sem_commit(NLSemanticContext *, NLSemanticContext *);
 NLCheckStatus nl_sem_compound(NLSemanticContext *, NLSemanticTypeKind, NLTypeId,
                               NLAccessSyntax, bool, NLTypeId *);

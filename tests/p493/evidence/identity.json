@@ -1,0 +1,16 @@
+{
+  "baseline_source": "03b1751b513e7aef2d7ba193eda671a556f54b47",
+  "pre_code_pre_run_freeze": "3f3eef2d6431d841a372ec42243b7d6e638cc7f1",
+  "main_authority": "ad0604d2c766eac045273eba15170027f199d650",
+  "baseline_binary_sha256": "d59b2f8439f9674b9657d7940d9ff76f4b4f3fb6d51ba106eb8fd466fd462706",
+  "gcc": "GCC14.2.0 Debian13",
+  "clang": "pre-existing Debian Clang23.1.2 SDK; hosted CI retains its own pinned23.1.3",
+  "named_C17_native": "NOT ATTEMPTED / OUT OF SCOPE",
+  "production_default": "NEWLANG_EXPERIMENTAL_ORDINARY_CALL_PROOF=OFF",
+  "test_opt_in": "dedicated p493_semantic target defines experimental flag1; same actual source/checker path",
+  "validation_oom_positions": 47,
+  "issuance_oom_positions": {
+    "off": 132,
+    "on": 307
+  }
+}

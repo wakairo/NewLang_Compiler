@@ -1,0 +1,1 @@
+tests/p478/named_link.nl:13:5-16:6: error(precision)[P9-CONTINUATION-PRECISION]: multiple normal function-match states require a richer join
