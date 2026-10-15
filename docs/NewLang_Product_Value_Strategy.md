@@ -35,10 +35,18 @@ Storage / BackingRegion / Allocation / LifetimeDomain、
 normal / error / teardown / reentrant callback / FFI経路、
 および変更時にそれらの成立性を再検討すべき**影響依存関係**を含む。
 raw addressやmetadata（例：Ringの `head/len`）は責任・権限を無から
-生成できない。表面的な `unchecked` が1か所でも、通常のsafe operationが
-その前提を壊せるならaudit locusは非局所的で、監査負担は減っていない。
-「unchecked箇所だけ見ればよい」は、これらの支援義務まで
-機械的に保護されるか、検証可能な境界内に閉じられている場合に限る。
+生成できない。例えば `unchecked buf[i]` では、元の `buf` の領域・
+寿命・アクセス権限と `i` の範囲だけでなく、それらを生成・更新する
+writer、呼出し、状態遷移まで監査対象が広がり得る。これは
+`unchecked` の行以外を確認する必要があるというだけで、局所化の失敗ではない。
+**実際の前提からの依存関係を特定し、その閉包だけを監査・再監査すれば
+よく、無関係なsafeコードの再監査を避けられる**なら、Cより監査範囲を
+絞れた価値がある。逆に公開ordinary-safe APIの合法な操作が
+前提を破壊できるなら、安全な抽象化は成立していない。実装内部の
+safe helperやwriterを変更するときには、その変更が影響する
+不変条件の依存閉包を再監査し、compilerが保護できる部分は委ねる。
+「uncheckedの行だけ見ればよい」は、この依存閉包の確認を
+省略してよいという意味ではない。
 
 **ordinary-safe library/APIの成立条件**は、APIから合法的に到達できる
 **すべてのsafe-reachable state**とその状態遷移に対し、内部uncheckedの
@@ -80,8 +88,11 @@ zero unchecked lines / zero bugsは目標指標ではない。
 
 **保証と現状の線引き**：健全なcompiler・backend・runtime・FFI・platform
 契約と、実際に正しい局所unchecked前提が成立した*将来の条件付き到達点*
-として、合法なordinary-safe source edit / callが、隠れた不変条件の破壊で
-NewLangのmemory / lifetime / owner UBを新たに起こさないことを目指す。
+として、公開ordinary-safe APIを合法的に使うcallerや監査済み依存閉包の
+外側のsafeな変更が、内部uncheckedの前提を破壊しないことを目指す。
+依存閉包の内側を変更する際には、真の前提の維持について
+人間の再監査が残り得るが、compilerが機械的に保証する部分は
+再監査対象から外せることを目指す。
 logic / application policyの欠陥、C互換UB、未カバーのplatform effect、
 v0範囲外のconcurrency、誤証明されたunchecked前提をなくす約束ではない。
 現行Productionにgeneral source `unchecked` / `requires fn`、
