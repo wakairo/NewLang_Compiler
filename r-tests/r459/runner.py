@@ -86,7 +86,7 @@ def native(c,control,oracle):
             measured.stdout.count("R459_OBSERVE copy=snapshot ")!=1):
             raise RuntimeError("R459 INCONCLUSIVE: missing or duplicated real physical event "+label)
         anchor=re.search(r"original=anchor .*?physical=(0x[0-9a-fA-F]+)",measured.stdout)
-        peer=re.search(r"original=peer .*?physical=(0x[0-9a-fA-F]+).*? ptr=((?:0x[0-9a-fA-F]+)|\\(nil\\))",measured.stdout)
+        peer=re.search(r"original=peer .*?physical=(0x[0-9a-fA-F]+).*? ptr=((?:0x[0-9a-fA-F]+)|\(nil\))",measured.stdout)
         if not anchor or not peer or anchor.group(1).lower()==peer.group(1).lower():
             raise RuntimeError("R459 INCONCLUSIVE: cannot independently read two distinct original addresses "+label)
         if not control and anchor.group(1).lower()!=peer.group(2).lower():
