@@ -486,6 +486,12 @@ if(BUILD_TESTING)
         add_test(NAME allocated_node_${group}.unit COMMAND allocated_node_test ${group}
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/allocated_node_semantic.nl")
     endforeach()
+    add_executable(p466_public_probe tests/p466/public_probe.c)
+    target_link_libraries(p466_public_probe PRIVATE newlang_semantic)
+    add_test(NAME p466_composition.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p466/composition_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p466_public_probe>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p466" "${NEWLANG_SANITIZER}")
     add_executable(node_link_test tests/unit/node_link_test.c)
     add_executable(node_initial_test tests/unit/node_initial_test.c)
     target_link_libraries(node_initial_test PRIVATE newlang_checked_c_node)
