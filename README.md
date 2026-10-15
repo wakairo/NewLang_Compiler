@@ -1,6 +1,7 @@
 # NewLang Compiler
 
-NewLang production compiler, written in C17 with LLVM as the primary backend.
+NewLang compiler implementation, written in C17. LLVM is the planned primary
+backend; the current runnable CLI emits C17 for bounded reference profiles.
 
 **P0 through P7 are complete and merged.** P6 adds the Draft 17.10 bounded
 registered closed-sum source slice, and P7 adds bounded dependency-aware
@@ -40,12 +41,66 @@ See the [P2 grammar audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md),
 [P5 source contract](docs/P5_SOURCE_FRONTEND_SLICE_CONTRACT.md) and
 [P6 sum contract](docs/P6_CLOSED_SUM_SOURCE_SLICE_CONTRACT.md).
 
-## Fresh setup — proposed fixed LLVM 23.1.3 full CI (Issue #449)
+## Initial Some: first-user quickstart (no LLVM)
 
-This section describes a **DRAFT, Coordination-gated toolchain migration**.
-The Canonical remains Draft 17.30; the compiler/source/checked-owned/C17
-semantics and Production tests are unchanged. Until its actual first five-job
-CI and independent review pass, this is *not* proof of an adopted main toolchain.
+On **Ubuntu 24.04 x86_64** (including WSL2 Ubuntu 24.04), the existing
+[`tests/fixtures/node_initial_some.nl`](tests/fixtures/node_initial_some.nl)
+demonstrates a bounded **source → semantic check / checked-owned → C17 →
+native execution** path. It constructs two lexical `Node` locals; the second
+initializes `Option<ptr<Node>>::Some(peer_ptr)` pointing to the first.
+This is **not** a heap-allocation example.
+
+From a fresh checkout (skip `git clone` and `cd` if already in the repository
+root), install GCC 13, make, CMake **>=3.28, <4.0**, and Python **>=3.12**:
+
+```sh
+git clone https://github.com/wakairo/NewLang_Compiler.git
+cd NewLang_Compiler
+sudo apt-get update
+sudo apt-get install --no-install-recommends -y gcc-13 make cmake python3
+
+CC=gcc-13 cmake -S . -B build-frontend -DCMAKE_BUILD_TYPE=Debug \
+  -DNEWLANG_FRONTEND_ONLY=ON
+cmake --build build-frontend --parallel 2
+
+./build-frontend/newlangc --check tests/fixtures/node_initial_some.nl
+./build-frontend/newlangc tests/fixtures/node_initial_some.nl \
+  > build-frontend/node_initial_some.c
+gcc-13 -std=c17 -Wall -Wextra -Wpedantic -Werror \
+  build-frontend/node_initial_some.c -o build-frontend/node_initial_some
+./build-frontend/node_initial_some
+echo $?
+```
+
+Expected: `--check` succeeds **silently**, emission writes C17 to the
+redirected file (not a binary), and `echo $?` prints **0**. This finite
+`main()->unit` program prints no guest output. `--check` parses and
+semantically checks the actual source and constructs checked-owned state; it
+does **not** prove the backend supports every checked program. Normal
+`newlangc SOURCE` emits C17 only after checking succeeds.
+
+For the existing stronger native integration test with passive physical
+C-pointer/Option observations (the simple exit-code smoke above does not
+perform these observations):
+
+```sh
+ctest --test-dir build-frontend -R '^node_initial_native\.integration$' --output-on-failure
+```
+
+No LLVM bootstrap, SDK download or LLVM linkage is required in this lane.
+This demonstrates **only** bounded reference C17, not general/full-program
+code generation, a working LLVM language backend or public library API, heap
+allocation, nonCopy ownership, general graphs, full soundness or Product GO.
+See [CLI contract](#cli-contract) and
+[frontend-only build details](#llvm-independent-frontend-build).
+
+## Full setup — adopted curated LLVM 23.1.3 (Ubuntu 24.04)
+
+The curated LLVM 23.1.3 toolchain is **adopted on main** (merged PR #451);
+this is the full infrastructure/validation route, not required for the
+LLVM-independent quickstart. Canonical Draft 17.30 remains unchanged.
+The full route exercises the LLVM C API smoke; it does not establish
+general LLVM lowering or a general language backend.
 
 Full curated LLVM SDK bootstrap is supported on **Ubuntu 24.04 x86_64**
 (including WSL2 Ubuntu 24.04 userspace when prerequisites match). It does
@@ -101,10 +156,9 @@ infrastructure incidents; it never replaces full backend/native proof.
 The older **Debian 13** snapshot .deb lock remains recorded as a legacy
 fallback but is **not** the curated Ubuntu 24.04 full CI. The original
 23.1.2 Debian/Noble cross-distribution guidance in historical P0 decisions
-does not describe this curated install path. Once a toolchain migration is
-approved, rerun bootstrap and use a **fresh** CMake build directory to avoid
-persisted LLVM C API link targets. This is a candidate until Coordination
-independently merges the PR.
+does not describe this curated install path. When updating a checkout from a previous toolchain, rerun bootstrap and
+use a **fresh** CMake build directory to avoid persisted LLVM C API link
+targets. The Ubuntu 24.04 curated 23.1.3 route is already merged on main.
 
 ## Other validated configurations
 
@@ -162,17 +216,18 @@ parser and semantic failures retain their diagnostics and exit 3. A missing
 entry is a semantic failure. Backend-unsupported but semantically valid source
 can pass `--check`; this does **not** establish C17, LLVM or native support.
 
-For a source path, the North Star V0/V1/AVS path reads the actual source, parses the
-bounded source function unit, registers/checks it with the production semantic
-checker, then checks an ordinary zero-argument `main()` call selected only by
-the driver. Only after those checks succeed does `newlangc` emit the bounded
-Checked-C representation to stdout. Semantic rejection emits no C bytes.
-Accepted checked constructs outside the V0/V1/AVS emitter report
-`V1-BACKEND-UNSUPPORTED`.
+For a source path, the bounded CLI path reads the actual source, parses the
+source function unit, registers/checks it with the production semantic
+checker, then checks an ordinary zero-argument `main()` call selected only
+by the driver. Only after these checks does `newlangc SOURCE` emit bounded
+C17 reference code to stdout, including the
+[initial Some fixture](#initial-some-first-user-quickstart-no-llvm).
+Semantic rejection emits no C bytes. Checked programs beyond the finite
+emitter profiles report `V1-BACKEND-UNSUPPORTED`.
 
-The Checked-C path is a bounded bootstrap/reference execution vehicle for the
-North Star V0/V1/AVS subset; it is not a general C backend and does not replace LLVM as
-the planned primary backend.
+The Checked-C path is a bounded bootstrap/reference execution vehicle
+for selected V0/V1/AVS, local-root and Node profiles; it is not a general
+C backend and does not replace LLVM as the planned primary backend.
 
 ### LLVM-independent frontend build
 
@@ -193,8 +248,9 @@ validators and existing C17/native reference tests, remain enabled: that C17
 emitter has no LLVM dependency and its ordinary CLI behavior is preserved.
 `--check` is available in both builds; existing help/version output is unchanged.
 
-The option defaults **OFF**. The normal build still requires exact LLVM 23.1.2,
-and the normal five-configuration CI uses that default. Frontend-only results
+The option defaults **OFF**. The normal Ubuntu 24.04 full build requires
+exact curated LLVM **23.1.3**, and the normal five-configuration CI uses
+that default. Frontend-only results
 are separately scoped partial validation and cannot replace the full gate or
 justify merging new backend safety features. No native or Product PASS follows
 from checking source alone.
@@ -430,7 +486,7 @@ Existing field/sum semantics and Checked-C evidence are preserved. See the
 
 There is still no full-program parser or semantic checker, typed MIR, LLVM lowering,
 optimization framework, broad FFI, concurrency, separate compilation,
-self-hosting, public token/AST-dump mode, or a full-program frontend. The module slice supports canonical receiving/block/aggregate forms, registered closed-sum constructor/match, bounded dependency-aware ref results and registered body calls with P9 explicit-return lexical blocks. Only the fn-only declaration-unit profile is supported; broader frontend forms remain unsupported. The CLI compile path remains unsupported.
+self-hosting, public token/AST-dump mode, or a full-program frontend. The module slice supports canonical receiving/block/aggregate forms, registered closed-sum constructor/match, bounded dependency-aware ref results and registered body calls with P9 explicit-return lexical blocks. Only the fn-only declaration-unit profile is supported; broader frontend forms remain unsupported. The CLI **does** emit bounded C17 for selected checked programs via `newlangc SOURCE` (see [CLI contract](#cli-contract) and [initial Some quickstart](#initial-some-first-user-quickstart-no-llvm)); general/full-program CLI code generation remains unsupported.
 
 ## Local-root ptr/ref product gate
 
