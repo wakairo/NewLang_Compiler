@@ -2,7 +2,7 @@
 
 > **Status: ADOPTED / NON-NORMATIVE — Coordination Issue #375 / 2026-10-13承認**
 >
-> 最新裁定スナップショット：2026-10-13、Compiler/main `adc63b64b656b3d6e0501f29eaeee5181927dc14`、
+> 採用時点の履歴スナップショット：2026-10-13、Compiler/main `adc63b64b656b3d6e0501f29eaeee5181927dc14`、
 > FormalProof/main `a8de4ebb4099f4742fc161d26867740dcac48414`。
 > 本書は順序と判定基準についての**採用済み・非規範的な開発ガイド**であり、Issue/PRの起票だけで実装やTrackを開始しない。
 > 言語の正本は [CURRENT_SPEC](reference/CURRENT_SPEC.md) → Draft 17.30、
@@ -12,9 +12,27 @@
 > 運用は [Development Process](NewLang_Project_Development_Process.md) に従う。
 > この文書は正本を置換せず、将来の更新時は「観測した事実」と「新しい投資案」を分ける。
 
-## 0. 2026-10-13 現行スナップショット — 旧実験とmerged能力を分離
+## 現行checkpoint — 2026-10-15（旧§0/§7の能力表・優先順位に優先）
 
-この節と§7が**現行の事実・投資裁定**である。2026-10-12を起点とした本文の実験履歴は、事後に一般能力へ昇格させず歴史的観測として残す。現在のCompiler/mainは `adc63b64b656b3d6e0501f29eaeee5181927dc14`、[マージ後CI](https://github.com/wakairo/NewLang_Compiler/actions/runs/38393450406) 5構成成功、`CURRENT_SPEC` は引き続き **Draft17.30**、FormalProof/mainは `a8de4ebb4099f4742fc161d26867740dcac48414`。
+**実装の現在地:** Compiler/main [`e459d66994ea0f6dc1b6c88bf349f81da36b6b76`](https://github.com/wakairo/NewLang_Compiler/commit/e459d66994ea0f6dc1b6c88bf349f81da36b6b76)、[CURRENT_SPEC](reference/CURRENT_SPEC.md) → **canonical Draft 17.30（不変）**。FormalProof/main [`a8de4ebb4099f4742fc161d26867740dcac48414`](https://github.com/wakairo/NewLang_FormalProof/commit/a8de4ebb4099f4742fc161d26867740dcac48414) は別の有限形式化証拠であり、今回のcompiler→native全体のsoundness証明ではない。本checkpointは[Coordination #454最終裁定](https://github.com/wakairo/NewLang_Compiler/issues/454#issuecomment-6185178883)を記録する**non-normative事実更新**である。
+
+| 領域 | 2026-10-15時点に実際にmainへ統合済みの限定能力／未到達 |
+| --- | --- |
+| **source/checker** | [PR #442](https://github.com/wakairo/NewLang_Compiler/pull/442)で実NewLangの`newlangc --check`とopt-in `NEWLANG_FRONTEND_ONLY=ON`を採用。check通過≠backend/native通過。 |
+| **source-issued Node合流証明** | [PR #410](https://github.com/wakairo/NewLang_Compiler/pull/410)の二正常分岐SOURCE/OWNEDに続き、[PR #434](https://github.com/wakairo/NewLang_Compiler/pull/434)で二つの元lexical Nodeのcommon-entry/arm/post **公開certificateと独立validator**をmainへ統合。旧§0/§7の「未実装」は履歴情報。 |
+| **Node changed-join C17/native** | [PR #438](https://github.com/wakairo/NewLang_Compiler/pull/438)で**元の2 lexical Nodeをそれぞれ`next:None`で初期化**し、scoped checked `replace`と2 normal unit match armsを持つ有限public-proof consumerを統合。実物理C root carrier、Option tag/ptr、old Copy、変化しないsiblingは[R454-B独立NON-BLIND calibrated](https://github.com/wakairo/NewLang_Compiler/issues/454#issuecomment-6185028392)で限定確認済み。一般CFG/heap owner、元nonCopy custody、安全な普通caller APIには一般化しない。 |
+| **独立Rの履歴** | [R437 fresh BLIND finding](https://github.com/wakairo/NewLang_Compiler/issues/437#issuecomment-6184559150)の**最初から`Node{next:Some(peer_ptr)}`**を作るsource-valid形式はbackend限定profile外のためCLI4/C0 fail-closed。これをR454-Bのcalibrated PASSで上書きしない。 |
+| **toolchain / integration CI** | SHA固定LLVM **23.1.3** [PR #451](https://github.com/wakairo/NewLang_Compiler/pull/451)統合。[PR #438 postmerge main FULL](https://github.com/wakairo/NewLang_Compiler/actions/runs/38686540419) GCC/GCC Release/Clang/ASan/UBSan **初回5構成各279/279 PASS（合計1395）**。[NO LLVM/PARTIAL](https://github.com/wakairo/NewLang_Compiler/actions/runs/38686540431) **278/278 PASS**。FULLとPARTIALは別のgate。 |
+
+**製品・大きな機構のHOLDは維持:** [H1 #268](https://github.com/wakairo/NewLang_Compiler/issues/268)は元の5 independent fallible heap roots、6 setup + 4 detach + 2 adoption、`B.prev=B`、元B＋dstの完全nonCopy owner custody/receipt/refund、0–5 worldsを満たす製品PASS/FAILが未決定。[STB F45](https://github.com/wakairo/NewLang_FormalProof/issues/45)/[M374](https://github.com/wakairo/NewLang_Compiler/issues/374)のallocator/epoch/typed-claim六条件はHOLD。[V411](https://github.com/wakairo/NewLang_Compiler/issues/411)/[V415](https://github.com/wakairo/NewLang_Compiler/issues/415)の通常callerを含むC/Zig/同一topology Rustとの作者＋caller L/R/P/V/C純負担差はまだProduct GOに届かない。Core compiler Explorationの限定的成功は**Product GOではない**。
+
+**次の投資条件:** 既存機構を増やすことを目的化せず、実際のC-class利用者操作で、入力・source上の因果的結果・元pointer topologyとownerの維持・正常/失敗・普通callerへ移る責任を一つ指定する。その上で実mainのSOURCE/CHECK→公開owned→backend→nativeの最初の不足、同等のC/Zig/Rustや既存checked＋局所uncheckedなどの安価な代替、予測・実測・停止条件をProcess [§4.3/§4.3.1](NewLang_Project_Development_Process.md)に従いIssueに記録してから、別途限定的に認可する。新しいsource/semantic/API選択時には[§4.2](NewLang_Project_Development_Process.md)が必須。**このdocs更新自体は新Track、PR merge、機構実装を認可しない。**
+
+以下の2026-10-13節・§7・古い技術的「未実装」記述は**当時の裁定と判断経緯を保存する履歴**であり、現在のmainの能力・作業許可について矛盾した場合は本checkpointと最新のIssue/PR/main証拠を優先する。
+
+## 0. 2026-10-13 履歴スナップショット — 旧実験と当時のmerged能力を分離
+
+この節と§7は**2026-10-13当時の事実・投資裁定の履歴**である。上の2026-10-15 checkpointを現行として参照する。2026-10-12を起点とした本文の実験履歴は、事後に一般能力へ昇格させず歴史的観測として残す。現在のCompiler/mainは `adc63b64b656b3d6e0501f29eaeee5181927dc14`、[マージ後CI](https://github.com/wakairo/NewLang_Compiler/actions/runs/38393450406) 5構成成功、`CURRENT_SPEC` は引き続き **Draft17.30**、FormalProof/mainは `a8de4ebb4099f4742fc161d26867740dcac48414`。
 
 | 能力／問い | 現時点の証拠と境界 |
 | --- | --- |
@@ -182,7 +200,7 @@ cap4,len4→8,len4、header-adjacent original backing、same-numeric epochとfor
 
 H1/STBの停止は**NewLang全体の開発中止でも既存core semanticsの不健全性でもない**。
 
-## 7. Coordinationの現在の裁定とレビュー対象（2026-10-13 最新）
+## 7. Coordinationの当時の裁定とレビュー対象（2026-10-13 履歴）
 
 - **Authority:** Compiler/main `adc63b64b656b3d6e0501f29eaeee5181927dc14`（[postmerge 5/5](https://github.com/wakairo/NewLang_Compiler/actions/runs/38393450406)）、canonical Draft17.30、FormalProof/main `a8de4ebb4099f4742fc161d26867740dcac48414`。
 - **技術KEEP／mainの到達点:** [PR404](https://github.com/wakairo/NewLang_Compiler/pull/404)普通のone-u8 Copy関数のC17/nativeと、[PR410](https://github.com/wakairo/NewLang_Compiler/pull/410)二正常分岐のlexical Node Option field currentness SOURCE/CHECKED-OWNEDを採用。独立R406 native PASSは前者、R405 calibrated owned PASSは後者の各**限定**証拠。R402のBLIND判定はINCONCLUSIVEのまま。
