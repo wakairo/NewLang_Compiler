@@ -1,0 +1,23 @@
+{
+  "compiler": "7139b8c64bf001001e4319c9a54bf9114e130f51",
+  "canonical": "Draft 17.30",
+  "control_path": "tests/p471/asymmetric.nl",
+  "control_sha256": "c578ebdce71ffd46e30758903c28f69227876c7904264b3eec1914c7f6bdd050",
+  "candidate_sha256": "444cb2c22ec51d7c4cb991fe53398beac59553e9357c91d3b7a016103796c73f",
+  "candidate_count": 1,
+  "expected_semantics": "valid ordinary known-safe call under canonical13.5c/18.7, if implementation can prove actual state; profile support not assumed",
+  "prediction": "Parser likely accepts existing nested ref/Option/ptr fn spelling; registration P8-SIGNATURE-PRECISION likely first, body_signature_type excludes ref target sum and sum payload ptr",
+  "expected_runtime": {
+    "tail_payload": 2,
+    "head_payload": 1,
+    "distinct_originals": true,
+    "q": "original tail from actual observed=head.next Some arm",
+    "helper_replaces": 1,
+    "helper_old": "tail.next None",
+    "tail_final": "Some(original tail address), self-link",
+    "head_final": "None",
+    "old_head_some": "Some(original tail address)",
+    "loan_escape": false,
+    "heap_authority": "none, lexical original roots only"
+  }
+}
