@@ -37,7 +37,7 @@ def main() -> None:
         assert "Frontend-only:" in frontend.stdout
         wrong = configure("wrong", [f"-DLLVM_CONFIG={config}"])
         assert wrong.returncode != 0 and marker.exists()
-        assert "LLVM must be exactly 23.1.2; found 22.1.8" in wrong.stderr
+        assert "LLVM must be exactly 23.1.3; found 22.1.8" in wrong.stderr
         cache = (root / "wrong/CMakeCache.txt").read_text(encoding="utf-8")
         assert "NEWLANG_FRONTEND_ONLY:BOOL=OFF" in cache
         # Suppress all find_program search categories for this dependency

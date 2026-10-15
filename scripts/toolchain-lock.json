@@ -1,6 +1,6 @@
 {
-  "llvm_version": "23.1.2",
-  "llvm_source_commit": "85ac560262434c9ccfc0c183ec22d4138ed647fb",
+  "llvm_version": "23.1.3",
+  "llvm_source_commit": "0d261d1ca552c95a8f007e061c787ac7132fbcbc",
   "platforms": {
     "debian-13-x86_64": {
       "provenance": "LLVM SDK: apt.llvm.org trixie-23 signed Release (key 6084F3CF814B57C1CF12EFD515CF4D18AF4F7421) and Packages SHA-256 verified; source commit matches llvmorg-23.1.2. Auxiliary Debian artifacts retain signature-verified trixie APT metadata provenance.",
@@ -102,85 +102,27 @@
           "url": "https://deb.debian.org/debian/pool/main/libu/libuv1/libuv1t64_1.50.0-2_amd64.deb",
           "sha256": "5fec8035002e0c745b64d1c5b3e1dc42790d1a77574315b976cf3e4aab9ddc0a"
         }
-      ]
+      ],
+      "llvm_version": "23.1.2"
     },
     "ubuntu-24.04-x86_64": {
-      "provenance": "LLVM SDK: apt.llvm.org trixie-23 signed Release (key 6084F3CF814B57C1CF12EFD515CF4D18AF4F7421) and Packages SHA-256 verified; source commit matches llvmorg-23.1.2. Auxiliary Debian artifacts retain signature-verified trixie APT metadata provenance.",
-      "release_sha256": "80e3d0862511d1fb04687191679128c00542d5f6e7c7e2e3b5ecdcdf1c931f5c",
-      "packages": [
-        {
-          "name": "clang-23",
-          "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
-          "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/clang-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
-          "sha256": "956ce817b505f5bbdefdac394e6057731ddc10fa830a961591b9e91716fc264b"
-        },
-        {
-          "name": "clang-format-23",
-          "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
-          "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/clang-format-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
-          "sha256": "c9d22323f0cd62f05566c515e1106065b693c5f1aa1f5919d25f95b31c13fb80"
-        },
-        {
-          "name": "libclang-common-23-dev",
-          "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
-          "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/libclang-common-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
-          "sha256": "66fe3bd4b5c4a9a3debb7f845c9cdfdcded5e3e85b0a7a7b9380bee2f1d1f51b"
-        },
-        {
-          "name": "libclang-cpp23",
-          "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
-          "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/libclang-cpp23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
-          "sha256": "5e1a40ca4fbbcb4e6d483b51174ed8370d3cf7ff823ff41e56b13f950efd5d51"
-        },
-        {
-          "name": "libclang-rt-23-dev",
-          "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
-          "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/libclang-rt-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
-          "sha256": "1d7e53f9913bbe77c5876f3c66e4876f6d3cac4fc420627a83d98bbc9da1168b"
-        },
-        {
-          "name": "libclang1-23",
-          "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
-          "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/libclang1-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
-          "sha256": "26fe35b870d983e1511309a9e352107aa7a861c947d999f0113ccf2c8a8daf75"
-        },
-        {
-          "name": "libllvm23",
-          "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
-          "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/libllvm23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
-          "sha256": "d363638cd9594ae8be342866a6acf83beca080d07b8be27befd2759a78571e29"
-        },
-        {
-          "name": "llvm-23",
-          "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
-          "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/llvm-23_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
-          "sha256": "357db4823058de7e87afb400db159709615eafb07a2ef218aabaa7a14804ad72"
-        },
-        {
-          "name": "llvm-23-dev",
-          "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
-          "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/llvm-23-dev_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
-          "sha256": "8bf4c23e982bf4cb6c53964b29ad3f09c8922b1157d0cd7c1ae96f463549002b"
-        },
-        {
-          "name": "llvm-23-runtime",
-          "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
-          "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/llvm-23-runtime_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
-          "sha256": "c94aec95ab4183732c9061819aa7015972d29e5e9966309aa0ad4273139fbd24"
-        },
-        {
-          "name": "llvm-23-linker-tools",
-          "version": "1:23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76",
-          "url": "https://apt.llvm.org/trixie/pool/main/l/llvm-toolchain-23/llvm-23-linker-tools_23.1.2~++20260920034005+85ac56026243-1~exp1~20260920034024.76_amd64.deb",
-          "sha256": "8a3af089f1a9bd64a1d915428800a49f6f9767a2697b43a6eee29f862ed3c67e"
-        },
-        {
-          "name": "libz3-4",
-          "version": "4.13.3-1",
-          "url": "https://deb.debian.org/debian/pool/main/z/z3/libz3-4_4.13.3-1_amd64.deb",
-          "sha256": "71383373523ef62d47eccf660cf6535c3febcbb3f88e54cb7a43124014b57359"
-        }
-      ]
+      "provenance": "NewLang unofficial curated LLVM 23.1.3 GitHub public prerelease; immutable asset server SHA-256 verified 2026-10-15. Exact curated bytes are SHA-locked here; upstream original LLVM GPG signature authenticates only the original (not curated) SDK. Locally matched 496 source binary/header/library entries, retained PROVENANCE.md/licenses notices with a stated non-exhaustive FOSS audit. See docs/P0_TOOLCHAIN_DECISIONS.md.",
+      "sdk_archive": {
+        "name": "newlang-llvm-23.1.3-linux-x64-final",
+        "filename": "newlang-llvm-23.1.3-linux-x64-final.tar.zst",
+        "version": "23.1.3",
+        "url": "https://github.com/wakairo/NewLang_Compiler/releases/download/llvm-23.1.3-newlang-sdk-linux-x64-v1/newlang-llvm-23.1.3-linux-x64-final.tar.zst",
+        "size": 126520077,
+        "tar_size": 448040960,
+        "sha256": "5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133",
+        "github_release_id": 413357190,
+        "github_asset_id": 642393404,
+        "upstream_tag": "llvmorg-23.1.3",
+        "upstream_source_commit": "0d261d1ca552c95a8f007e061c787ac7132fbcbc",
+        "upstream_original_archive_sha256": "14d2f701eb68fb799001bdea6231048f3990690fa2f406d563555ff8f744daba",
+        "upstream_original_signer_fingerprint": "D574BD5D1D0E98895E3BF90044F2485E45D59042",
+        "signature_scope": "Original upstream archive GPG signed; curated archive NOT signed. Require SHA-256 against committed exact GitHub Release asset bytes every time."
+      }
     }
   }
 }
