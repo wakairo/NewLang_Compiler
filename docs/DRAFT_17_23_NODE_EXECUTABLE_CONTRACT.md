@@ -86,3 +86,36 @@ outside the bounded actual source surface. Codegen does not grant new authority.
 
 No allocation/lifecycle, detach/free, general recursive backend, cJSON, ptr/ref
 field projection, general Option/record emitter, LLVM, FFI or next slice.
+
+## P457 initial-Some exploration preflight (2026-10-15, before implementation)
+
+Authority: main4506112b1dea4a5a63b4ac41ff9e8f8f8388146d, canonical Draft17.30.
+Issue457 separately authorizes one initial-Some backend consumer; R437's original
+CLI4 finding and P453's correct profile HOLD remain historical, not retroactive PASS.
+Compass -> Product Strategy / adopted roadmap checkpoint and Process4.2/4.3/4.3.1
+reviewed. N/A historical audit for faithful existing Option/ptr/aggregate lowering;
+KEEP DI001/006/007, no source/semantic/public proof/ownership change.
+
+Frozen inputs: node_initial_some.nl SHA256
+b8199651020a2ae4135811684187b42eb04d4816b714bba687fbfc90784c1409,
+node_initial_none.nl SHA256
+bc671d4a49ce9cc22dbab554b887b53e813b485ebdb7557b0e73f53672fa2136.
+Both CHECK0; baseline Some CLI4/C0 at aggregate variant!=1, None CLI0/C1270.
+Real owned pointer package: place1/incarnation1, scope0, valid provenance,
+readable, no occurrence/ref alternatives/value dependencies. The registered
+pointer's actual producer is a prior checked implicit-local read-loan returning
+ptr_from_ref to the already-emitted original C root. Final context live=false
+is NOT a point-in-time liveness proof and must not be replayed as permission.
+
+Conditional GO: one emitter helper restricts Some initialization to the second
+flat lexical Node, exactly one previously constructed original and the direct
+pointer binding from that checked loan. Cross-check operand/binding packages,
+ptr_from_ref result, loan place/incarnation/source and actual prior C Local;
+reject aliases requiring general graph traversal, missing/foreign facts or carriers.
+Reuse existing Option expression lowering for runtime data, retain None lane.
+Prediction: 50-90 emitter lines plus focused public-view/poison/OOM/native tests.
+First falsifiers: wrong incarnation/packet or absent physical original must not
+publish C; both source siblings must survive and ptr must equal actual peer.
+STOP for new issuer/semantic authority or another backend family.
+Benefit is only avoiding one None-then-loan/replace initial-link ceremony in
+this finite profile; no ordinary caller/heap/product burden win is claimed.
