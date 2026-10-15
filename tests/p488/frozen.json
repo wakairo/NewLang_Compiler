@@ -1,0 +1,22 @@
+{
+  "compiler": "03b1751b513e7aef2d7ba193eda671a556f54b47",
+  "main": "d6e603e12591c2ff39e3e1b77c784681fec66033",
+  "canonical": "Draft17.30",
+  "source": "tests/p488/nonmatch_link.nl",
+  "sha256": "06c96f6df6688167f2f9d8e2768bfc5bc2ea9f93e09838502400039d2de5f8aa",
+  "original": "tests/p478/named_link.nl",
+  "original_sha256": "444cb2c22ec51d7c4cb991fe53398beac59553e9357c91d3b7a016103796c73f",
+  "oracle": {
+    "head_payload": 1,
+    "tail_payload": 2,
+    "originals": "two distinct lexical Node roots; implicit local domains, no heap Allocation",
+    "initial_head_next": "Some(original tail)",
+    "old_tail": "None",
+    "new_tail_next": "Some(original tail), self-link",
+    "head_final": "None",
+    "ref": "ordinary scoped nonescaping write loan on original tail.next",
+    "returned": "old Option Copy; no minted ownership"
+  },
+  "prediction": "CHECK0 likely outside Node join; ordinary call independent public effect certificate absent; C17 direct-replace loan consumer may reject, not yet measured",
+  "frozen_at_utc": "2026-10-15T13:23:41.676488+00:00"
+}
