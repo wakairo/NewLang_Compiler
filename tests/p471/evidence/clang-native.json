@@ -1,0 +1,185 @@
+{
+  "compiler_authority": "9ff3759df34aa711108e344baa6d7cfa0ce597fd",
+  "host": "clang-23",
+  "sanitizer": "none",
+  "contract": "FIRST-BARRIER MAP; runner exit0 is not candidate PASS",
+  "cases": [
+    {
+      "case": "control",
+      "source_sha256": "afe989f4839f1fabf1112bf1f27a7498531db30a7e407784079d401690e15ada",
+      "check_exit": 0,
+      "check_stdout": "",
+      "diagnostic": "",
+      "public_probe_exit": 0,
+      "public_evidence": "B tail 1 1 2 0 0\nB tail_ptr 3 2 1 0 1\nB head 4 1 1 0 0\nW 4 0 0 1 1\nB old_none 6 3 0 0 0\nB observed 7 3 0 1 1\nM 1 1\nA 1 0\nA 2 8\nR 1\nW 4 1 1 0 0\nB old_some 9 3 0 1 1\n",
+      "public_diagnostic": "",
+      "backend_exit": 0,
+      "C_bytes": 2209,
+      "C_sha256": "d040b5abee56df765707e83d6f0db1952bab9094e7ee9931ae3fe6833c500e61",
+      "backend_diagnostic": "",
+      "public_join": "N/A normal_frame_unchanged control",
+      "runs": [
+        {
+          "name": "control-O0False",
+          "optimization": "-O0",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "C_sha256": "d040b5abee56df765707e83d6f0db1952bab9094e7ee9931ae3fe6833c500e61"
+        },
+        {
+          "name": "control-O0True",
+          "optimization": "-O0",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "native topology observations complete\n",
+          "stderr": "",
+          "C_sha256": "d040b5abee56df765707e83d6f0db1952bab9094e7ee9931ae3fe6833c500e61"
+        },
+        {
+          "name": "control-O2False",
+          "optimization": "-O2",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "C_sha256": "d040b5abee56df765707e83d6f0db1952bab9094e7ee9931ae3fe6833c500e61"
+        },
+        {
+          "name": "control-O2True",
+          "optimization": "-O2",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "native topology observations complete\n",
+          "stderr": "",
+          "C_sha256": "d040b5abee56df765707e83d6f0db1952bab9094e7ee9931ae3fe6833c500e61"
+        }
+      ],
+      "first_barrier": null,
+      "observation": "PASS original physical topology (not heap authority/product)"
+    },
+    {
+      "case": "symmetric",
+      "source_sha256": "dfc07c373f4b72be95114149cf0c503f4601d58b99ebb494a49400cc76bd0531",
+      "check_exit": 0,
+      "check_stdout": "",
+      "diagnostic": "",
+      "public_probe_exit": 0,
+      "public_evidence": "ORIGINAL index=0 place=1 incarnation=1 RF=1->17\nORIGINAL index=1 place=6 incarnation=6 RF=11->11\nJOIN match=34 changed=2 sibling=3 input_variant=2 input_target=1\nARM variant=1 operation=4 F=2->17 RF=1->18 occurrence=0->0\nQ binder=8 operand_symbol=8 use=COPY target=1 incarnation=1\nARM variant=2 operation=4 F=2->18 RF=1->19 occurrence=0->3\nPUBLIC VALID q/R/O/Change/Reset; wrong projection rejected; native untested\n",
+      "public_diagnostic": "",
+      "backend_exit": 0,
+      "C_bytes": 2922,
+      "C_sha256": "0c6a710d3e29c7d3be2e9564614a5e79303e81893066ea9c0ace824aecdb7b95",
+      "backend_diagnostic": "",
+      "public_runtime_manifest": "B 0 1 1 2 0 0\nB 0 3 2 1 0 0\nB 0 4 1 1 0 0\nW 4 0 0 1 1\nB 0 6 3 0 0 0\nB 0 7 3 0 1 1\nM 1 1\nW 1 0 0 1 1\nB 1 10 3 0 0 0\nW 4 1 1 0 0\nB 0 9 3 0 1 1\n",
+      "runs": [
+        {
+          "name": "symmetric-O0False",
+          "optimization": "-O0",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "C_sha256": "0c6a710d3e29c7d3be2e9564614a5e79303e81893066ea9c0ace824aecdb7b95"
+        },
+        {
+          "name": "symmetric-O0True",
+          "optimization": "-O0",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "tail=0x7ffedd8cbe20 payload=2\nhead=0x7ffedd8cbdb0 payload=1 distinct=1\nSome(q)=0x7ffedd8cbe20 same_original_tail=1\nold_tail=None new_tail=Some(0x7ffedd8cbe20) self_link=1\nnative topology observations complete\n",
+          "stderr": "",
+          "C_sha256": "0c6a710d3e29c7d3be2e9564614a5e79303e81893066ea9c0ace824aecdb7b95"
+        },
+        {
+          "name": "symmetric-O2False",
+          "optimization": "-O2",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "C_sha256": "0c6a710d3e29c7d3be2e9564614a5e79303e81893066ea9c0ace824aecdb7b95"
+        },
+        {
+          "name": "symmetric-O2True",
+          "optimization": "-O2",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "tail=0x7ffefed38b30 payload=2\nhead=0x7ffefed38b10 payload=1 distinct=1\nSome(q)=0x7ffefed38b30 same_original_tail=1\nold_tail=None new_tail=Some(0x7ffefed38b30) self_link=1\nnative topology observations complete\n",
+          "stderr": "",
+          "C_sha256": "0c6a710d3e29c7d3be2e9564614a5e79303e81893066ea9c0ace824aecdb7b95"
+        }
+      ],
+      "first_barrier": null,
+      "observation": "PASS original physical topology (not heap authority/product)"
+    },
+    {
+      "case": "asymmetric",
+      "source_sha256": "c578ebdce71ffd46e30758903c28f69227876c7904264b3eec1914c7f6bdd050",
+      "check_exit": 0,
+      "check_stdout": "",
+      "diagnostic": "",
+      "public_probe_exit": 0,
+      "public_evidence": "ORIGINAL index=0 place=1 incarnation=1 RF=1->17\nORIGINAL index=1 place=6 incarnation=6 RF=11->11\nJOIN match=34 changed=2 sibling=3 input_variant=2 input_target=1\nARM variant=1 unchanged=1\nQ binder=8 operand_symbol=8 use=COPY target=1 incarnation=1\nARM variant=2 operation=4 F=2->18 RF=1->19 occurrence=0->3\nPUBLIC VALID q/R/O/Change/Reset; wrong projection rejected; native untested\n",
+      "public_diagnostic": "",
+      "backend_exit": 0,
+      "C_bytes": 2545,
+      "C_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc",
+      "backend_diagnostic": "",
+      "public_runtime_manifest": "B 0 1 1 2 0 0\nB 0 3 2 1 0 0\nB 0 4 1 1 0 0\nW 4 0 0 1 1\nB 0 6 3 0 0 0\nB 0 7 3 0 1 1\nM 1 1\nW 1 0 0 1 1\nB 1 10 3 0 0 0\nW 4 1 1 0 0\nB 0 9 3 0 1 1\n",
+      "runs": [
+        {
+          "name": "asymmetric-O0False",
+          "optimization": "-O0",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "C_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc"
+        },
+        {
+          "name": "asymmetric-O0True",
+          "optimization": "-O0",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "tail=0x7ffd6fd7cc30 payload=2\nhead=0x7ffd6fd7cbc0 payload=1 distinct=1\nSome(q)=0x7ffd6fd7cc30 same_original_tail=1\nold_tail=None new_tail=Some(0x7ffd6fd7cc30) self_link=1\nnative topology observations complete\n",
+          "stderr": "",
+          "C_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc"
+        },
+        {
+          "name": "asymmetric-O2False",
+          "optimization": "-O2",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "",
+          "stderr": "",
+          "C_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc"
+        },
+        {
+          "name": "asymmetric-O2True",
+          "optimization": "-O2",
+          "sanitizer": "none",
+          "compile_exit": 0,
+          "exit": 0,
+          "stdout": "tail=0x7ffd75e0b6a0 payload=2\nhead=0x7ffd75e0b680 payload=1 distinct=1\nSome(q)=0x7ffd75e0b6a0 same_original_tail=1\nold_tail=None new_tail=Some(0x7ffd75e0b6a0) self_link=1\nnative topology observations complete\n",
+          "stderr": "",
+          "C_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc"
+        }
+      ],
+      "first_barrier": null,
+      "observation": "PASS original physical topology (not heap authority/product)"
+    }
+  ]
+}
