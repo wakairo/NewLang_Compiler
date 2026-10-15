@@ -369,6 +369,44 @@ minor editごとにfull Red Team reviewを行う必要はない。
 
 「現在案が良いことを確認してください」という依頼は避ける。
 
+
+### 7.6 独立実測中の検証ハーネス修復
+
+Red Team の独立性を保つことと、テストハーネスの単純な誤りのたびに
+Coordination 裁定を待つことは同義ではない。**事前に Issue で認可した
+実測checkpoint の範囲内**なら、R は自分で書いた検証環境の明白な不備を
+修正し、その区切りまで続行してよい。
+
+- **事前凍結**：対象 compiler/canonical/commit、独立 NewLang source、
+  source SHA、予測した正常・異常結果、物理 topology / 安全性 oracle、
+  使用可能な公開 checked-owned 情報、専用 branch / CI、最大修正 commit 数と
+  CI 実行回数、区切り・停止条件を Issue に記載する。無期限の自動リトライは認可しない。
+- **自律修復できる範囲**：R 専用の API 呼出名、正規表現・ログ parser、
+  assertion 到達前の検証環境、読み取り専用観測プログラムの明確な実装ミス、
+  CI 祖先 SHA / checkout 設定等。**最初の失敗ログを保存し、変更前に
+  既存ログ・模擬入力で offline preflight** を行う。各最小修正・commit・CI を
+  順に記録し、実測を隠す上書きや都合のよい再実行はしない。
+- **自律修復できない範囲**：対象 compiler / Production、独立 source、
+  期待する安全性・root identity・pointer 比較・失敗診断、issuer / validator、
+  canonical、observer による guest state の書換え、sanitizer / `-Werror` の
+  緩和、初回判定前の P/M の結果や oracle の取り込み。これらの変更が必要なら
+  修復を止めて Coordination に返す。
+- **実質的な停止**：予測に反する source/check、checked-owned、C17/native
+  挙動、実際の安全性違反・unsoundness の疑い、独立性の破れ、原因を R の
+  ハーネスだけに帰せない不一致、予算超過、権限・依存範囲の変更は、まず
+  **FINDING / INCONCLUSIVE として事実を凍結して停止**する。観測条件を
+  書き換えて PASS に寄せてはならない。
+- **報告 checkpoint**：通常は CI 1 回ごとの停止ではなく、事前に定めた
+  source→check→owned→generated artifact→実 native 観測（必要なら
+  negative/sanitizer を含む）までの区切り、または上記 STOP で終了する。
+  各ハーネス修正と試行回数を audit 可能に残し、**最終 verdict は一度**記録する。
+  PASS の範囲は到達した有限条件に限定し、merge / Product GO は
+  Coordination が別途裁定する。
+
+Issue が修復権限・予算を与えていない場合、R は勝手に scope を拡張しない。
+この節は§7.1–7.3の BLIND 情報隔離や finding の凍結を緩めるものではなく、
+**検証対象の失敗と検証機材の失敗を分離する**ための運用である。
+
 ## 8. 相関したvalidationを避ける
 
 各trackは異なる問いを持つ。
