@@ -501,6 +501,15 @@ if(BUILD_TESTING)
         "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}" "${NEWLANG_SANITIZER}")
     set_tests_properties(p471_crossroot_frontier.integration PROPERTIES
         PASS_REGULAR_EXPRESSION "P471 PASS FINITE CROSSROOT: control and both frozen cases observed")
+    add_executable(p490_public_probe tests/p490/public_probe.c)
+    target_link_libraries(p490_public_probe PRIVATE newlang_semantic)
+    add_test(NAME p490_postjoin_frontier.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p490/frontier_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p490_public_probe>"
+        "$<TARGET_FILE:p471_public_probe>" "$<TARGET_FILE:node_join_native_probe>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}" "${NEWLANG_SANITIZER}")
+    set_tests_properties(p490_postjoin_frontier.integration PROPERTIES
+        PASS_REGULAR_EXPRESSION "P490 C1 PHYSICAL READ PASS; C2 EXPECTED PRECISION STOP")
     add_executable(node_link_test tests/unit/node_link_test.c)
     add_executable(node_initial_test tests/unit/node_initial_test.c)
     target_link_libraries(node_initial_test PRIVATE newlang_checked_c_node)

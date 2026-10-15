@@ -1,0 +1,21 @@
+{
+  "compiler_source": "d6e603e12591c2ff39e3e1b77c784681fec66033",
+  "build_commit": "f673cdd3b1717d249a99fe8fbf716178a847e33f",
+  "binary_sha256": "4bc2826a3e9b245800af170a2d636066627debff5e1129d226380ce0194b0945",
+  "cases": [
+    {
+      "source": "tests/p490/postjoin_read.nl",
+      "sha256": "9221eb7bb0a09b35e38db87c3e70658cc00819d9ebfbfd3e9587577f79e75b69",
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    {
+      "source": "tests/p490/postjoin_reloan.nl",
+      "sha256": "c5c94d2ed32a5d60b01d009673ba182bb8be6c0a0aaba05193b34f56cd2e60b0",
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p490/postjoin_reloan.nl:16:5-19:6: error(precision)[NODE-JOIN-POST-PRECISION]: joined Node link has unknown variant and pointer provenance\n"
+    }
+  ]
+}
