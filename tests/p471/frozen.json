@@ -1,0 +1,53 @@
+{
+  "compiler": "9ff3759df34aa711108e344baa6d7cfa0ce597fd",
+  "canonical": "Draft 17.30",
+  "control": {
+    "path": "tests/fixtures/node_link_semantic.nl",
+    "sha256": "afe989f4839f1fabf1112bf1f27a7498531db30a7e407784079d401690e15ada",
+    "git_blob": "3b44edc997fe556baf48ed9a313bb8881eb5cf49",
+    "expected_check": 0,
+    "expected_C17": 0,
+    "expected_native": 0,
+    "tail_final_next": "None",
+    "head_final_next": "None",
+    "runtime_variant": 2
+  },
+  "candidates": {
+    "symmetric": {
+      "sha256": "dfc07c373f4b72be95114149cf0c503f4601d58b99ebb494a49400cc76bd0531",
+      "semantically_valid": true,
+      "normal_arms": 2,
+      "none_arm_writes": true,
+      "some_arm_writes": 1,
+      "write_target": "original tail.next",
+      "written_pointer": "Some arm binder q copied from observed=head.next",
+      "runtime_variant": 2,
+      "head_payload": 1,
+      "tail_payload": 2,
+      "tail_old_next": "None",
+      "tail_after_some_arm": "Some(original tail address), self-link",
+      "head_final_next": "None",
+      "tail_final_next": "Some(original tail address), self-link",
+      "old_head_none": "None",
+      "old_head_some": "Some(original tail address)"
+    },
+    "asymmetric": {
+      "sha256": "c578ebdce71ffd46e30758903c28f69227876c7904264b3eec1914c7f6bdd050",
+      "semantically_valid": true,
+      "normal_arms": 2,
+      "none_arm_writes": false,
+      "some_arm_writes": 1,
+      "write_target": "original tail.next",
+      "written_pointer": "Some arm binder q copied from observed=head.next",
+      "runtime_variant": 2,
+      "head_payload": 1,
+      "tail_payload": 2,
+      "tail_old_next": "None",
+      "tail_after_some_arm": "Some(original tail address), self-link",
+      "head_final_next": "None",
+      "tail_final_next": "Some(original tail address), self-link",
+      "old_head_none": "None",
+      "old_head_some": "Some(original tail address)"
+    }
+  }
+}
