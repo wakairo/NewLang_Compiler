@@ -37,8 +37,15 @@ else()
     execute_process(COMMAND "${LLVM_CONFIG}" --version
         OUTPUT_VARIABLE llvm_version OUTPUT_STRIP_TRAILING_WHITESPACE
         COMMAND_ERROR_IS_FATAL ANY)
-    if(NOT llvm_version STREQUAL "23.1.2")
-        message(FATAL_ERROR "LLVM must be exactly 23.1.2; found ${llvm_version}")
+    if(NOT llvm_version STREQUAL "23.1.3")
+        message(FATAL_ERROR "LLVM must be exactly 23.1.3; found ${llvm_version}")
+    endif()
+    # A release-locked executable from bootstrap, not a system LLVM fallback.
+    if(NOT DEFINED ENV{NEWLANG_SDK_ROOT} OR "$ENV{NEWLANG_SDK_ROOT}" STREQUAL "")
+        message(FATAL_ERROR "Full LLVM CI needs curated NEWLANG_SDK_ROOT from .deps/activate.sh")
+    endif()
+    if(NOT LLVM_CONFIG STREQUAL "$ENV{NEWLANG_SDK_ROOT}/bin/llvm-config-23")
+        message(FATAL_ERROR "LLVM config must come from exact curated SDK prefix")
     endif()
     execute_process(COMMAND "${LLVM_CONFIG}" --includedir
         OUTPUT_VARIABLE llvm_include OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -46,13 +53,34 @@ else()
     execute_process(COMMAND "${LLVM_CONFIG}" --libdir
         OUTPUT_VARIABLE llvm_libdir OUTPUT_STRIP_TRAILING_WHITESPACE
         COMMAND_ERROR_IS_FATAL ANY)
-    find_library(llvm_shared NAMES LLVM-23 LLVM
-        PATHS "${llvm_libdir}" NO_DEFAULT_PATH REQUIRED)
-    add_library(newlang_llvm SHARED IMPORTED)
-    set_target_properties(newlang_llvm PROPERTIES
-        IMPORTED_LOCATION "${llvm_shared}"
-        INTERFACE_INCLUDE_DIRECTORIES "${llvm_include}")
-    message(STATUS "LLVM C API ${llvm_version}: ${llvm_shared}")
+    execute_process(COMMAND "${LLVM_CONFIG}" --shared-mode
+        OUTPUT_VARIABLE llvm_shared_mode OUTPUT_STRIP_TRAILING_WHITESPACE
+        COMMAND_ERROR_IS_FATAL ANY)
+    if(NOT llvm_shared_mode STREQUAL "static")
+        message(FATAL_ERROR "Curated LLVM 23.1.3 must be static-only")
+    endif()
+    if(NOT EXISTS "${llvm_include}/llvm-c/Core.h"
+            OR NOT EXISTS "${llvm_include}/llvm-c/Analysis.h"
+            OR NOT EXISTS "${llvm_libdir}/libLLVMCore.a")
+        message(FATAL_ERROR "Curated LLVM C API static headers/archives missing")
+    endif()
+    execute_process(COMMAND "${LLVM_CONFIG}" --link-static
+        --libs core analysis --system-libs
+        OUTPUT_VARIABLE llvm_static_flags OUTPUT_STRIP_TRAILING_WHITESPACE
+        COMMAND_ERROR_IS_FATAL ANY)
+    separate_arguments(llvm_static_libraries NATIVE_COMMAND
+        "${llvm_static_flags}")
+    if(NOT llvm_static_libraries)
+        message(FATAL_ERROR "Curated LLVM static link closure is empty")
+    endif()
+    # Only the LLVM C API infrastructure smoke needs the host C++ linker.
+    # Production source/checker/backend still compile as strict C17.
+    enable_language(CXX)
+    add_library(newlang_llvm INTERFACE)
+    target_include_directories(newlang_llvm INTERFACE "${llvm_include}")
+    target_link_directories(newlang_llvm INTERFACE "${llvm_libdir}")
+    target_link_libraries(newlang_llvm INTERFACE ${llvm_static_libraries})
+    message(STATUS "LLVM C API ${llvm_version}: curated static LLVM via ${LLVM_CONFIG}")
 endif()
 
 add_library(newlang_diagnostic STATIC src/diagnostic.c)
@@ -233,6 +261,7 @@ if(BUILD_TESTING)
     if(NOT NEWLANG_FRONTEND_ONLY)
         add_executable(llvm_smoke tests/integration/llvm_smoke.c)
         target_link_libraries(llvm_smoke PRIVATE newlang_options newlang_llvm)
+        set_target_properties(llvm_smoke PROPERTIES LINKER_LANGUAGE CXX)
         add_test(NAME llvm.c_api COMMAND llvm_smoke)
     endif()
     add_test(NAME cli.check_source COMMAND "${Python3_EXECUTABLE}"

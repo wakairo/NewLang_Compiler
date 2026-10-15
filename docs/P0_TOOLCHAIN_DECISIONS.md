@@ -25,9 +25,78 @@ is checksum-locked by bootstrap. Ubuntu uses its signed distro CMake package
 (3.28.x policy), not an unpinned latest CMake release. Build parallelism 2 is
 sufficient for four small C targets and keeps CI/resource use modest.
 
-## LLVM baseline re-review (2026-10-04)
+## LLVM 23.1.3 curated static SDK candidate (2026-10-15, Issue #449)
 
-**Selected: exact stable LLVM 23.1.2**, Clang/compiler-rt 23.1.2, C API only.
+**Proposed for the full Ubuntu 24.04 five-job CI, subject to one actual first-attempt
+Actions run and independent Coordination review; do not treat this DRAFT PR as an
+already adopted main baseline.** Draft17.30, language C17 and Production C
+semantics remain unchanged. This supersedes the **Ubuntu** acquisition path
+described in the historical LLVM 23.1.2 review below; the Debian 13 legacy
+package entry remains separate and is not used in Ubuntu Actions.
+
+- **Exact original LLVM**: official `llvmorg-23.1.3` tag
+  `0d261d1ca552c95a8f007e061c787ac7132fbcbc`, upstream signed
+  `LLVM-23.1.3-Linux-X64.tar.zst` digest
+  `14d2f701eb68fb799001bdea6231048f3990690fa2f406d563555ff8f744daba`,
+  original release-manager GPG fingerprint
+  `D574BD5D1D0E98895E3BF90044F2485E45D59042`.
+- **Actual CI origin**: *unofficial NewLang curated* public GitHub **prerelease**
+  `llvm-23.1.3-newlang-sdk-linux-x64-v1`, asset ID `642393404`,
+  `newlang-llvm-23.1.3-linux-x64-final.tar.zst`, **126,520,077 bytes**,
+  committed SHA-256
+  `5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133`.
+  Compressed asset expands to a pinned 448,040,960-byte tar. Lock contains the
+  *exact* HTTPS tagged asset URL and the upstream identity. Its checksum is
+  verified for **both Actions cache restores and direct GitHub downloads**,
+  before any tar header is trusted. Cache is disposable; the published fixed
+  Release is the enduring source. No mutable latest tags or fetch mirrors.
+- **Provenance scope**: the upstream asset was GPG verified and user-local
+  selected 496 SDK binaries/headers/libs/symlinks were identical after curation,
+  but **the curated archive has no independent GPG signature**. The signed
+  upstream file signature does not authenticate the curated bytes; the curated
+  archive is authenticated against the exact committed **Release asset SHA**.
+  `PROVENANCE.md` and `licenses/` are mandatory unpacked contents. Included
+  LLVM/Clang/compiler-rt licenses, Unicode/OpenBSD regex/BLAKE3/xxHash/MD5 notices
+  are part of a **bounded, non-exhaustive FOSS review, not legal certification**.
+  The Unicode notice date discrepancy (README says Oct 14; retrieval Oct 15 JST)
+  is disclosed in the original prerelease notes. No Source-to-SBOM claim.
+- **Static-only LLVM C API**: the curated SDK has `libLLVMCore.a`, not
+  `libLLVM-23.so`; `llvm-config-23 --shared-mode` must report `static`.
+  The existing unchanged `llvm_smoke.c` and `llvm.c_api` CTest use
+  `llvm-config --link-static --libs core analysis --system-libs`, with **host
+  C++ linker only for that LLVM smoke**. Production remains C17, strict warnings
+  and unchanged checked-owned/C17 emitter. Requires normal Ubuntu GCC13/G++13
+  libstdc++ and the SDK's selected Clang/clang-format/compiler-rt resources.
+  The correct SDK `llvm-config-23` must be under activated `NEWLANG_SDK_ROOT`;
+  a random host/system LLVM executable is not an accepted fallback.
+- **Fail closed**: Ubuntu 24.04 x86_64 only for curated mode, rootless temporary
+  atomic extraction, verified cache/download bytes, explicit `zstd --long=30`
+  decode with strict **448,040,960 B** decompressed tar size and a minimum
+  3 GiB free disk preflight, safe tar member types/path/symlink/hardlink
+  validation plus Python `tarfile.data_filter`. No privilege preservation,
+  scripts, unsigned mirror or silent external-lib substitution. LLVM tools
+  are version-checked and written into `.deps/activate.sh`.
+- **Cache trust**: Actions restore a single exact archive via a pinned cache
+  action, key `ubuntu-24.04-x86_64` plus the full archive SHA; no restore key,
+  PR/fork saves or extracted-prefix caching. Cache publication is restricted
+  to successful trusted `main` pushes. Cache hit **always** rehashes its
+  restored archive and then uses the same safety gate as a cache miss.
+- **Workload & alternatives**: 126.5 MB per cold job, 632.6 MB across five
+  independent cold runners; ~427 MiB unpacked per job, vs original upstream
+  1.19 GB / ~12 GB and ~5.94 GB across cold five jobs. The old 23.1.2
+  twelve-package set was ~140 MB but original apt.llvm.org URLs recurrently
+  failed HTTP404. An unmerged NO LLVM/PARTIAL source/C17 job cannot replace
+  five-way LLVM C API/sanitizer/native evidence. Actual runner/cache timings
+  and acceptance remain to be measured, not predicted success.
+- **Stop / ownership**: first SHA, tar, SDK version/layout, C++ closure,
+  Clang warning, sanitizer, native/CTest or ABI failure stops the one candidate
+  attempt. PR stays DRAFT pending Coordination independent review; no automatic
+  PR438 merge/R437 start, Production soundness or Product GO.
+
+## Historical LLVM baseline re-review (2026-10-04; LLVM 23.1.2)
+
+
+**Historical selection: exact stable LLVM 23.1.2**, Clang/compiler-rt 23.1.2, C API only.
 The original 19.1.7 rationale compared only older releases and was insufficient
 for a new compiler in 2026. This dedicated review supersedes that selection.
 P0 code has no semantic lowering or large LLVM surface to migrate, so avoiding
