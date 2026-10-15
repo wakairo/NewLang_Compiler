@@ -1,0 +1,5 @@
+proof VALID but physical original carrier wrong: emission refused
+poisoned owned joined parent RF: validator and emitter refused
+foreign owned arm world: validator and emitter refused
+forged unchanged flag with/without witness: emission refused
+emitter OOM positions=113 output sentinel and all owned worlds unchanged

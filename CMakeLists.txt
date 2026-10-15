@@ -487,6 +487,19 @@ if(BUILD_TESTING)
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/allocated_node_semantic.nl")
     endforeach()
     add_executable(node_link_test tests/unit/node_link_test.c)
+    add_executable(node_join_native_test tests/unit/node_join_native_test.c)
+    target_link_libraries(node_join_native_test PRIVATE newlang_checked_c_node)
+    target_link_options(node_join_native_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
+    add_test(NAME node_join_native_carrier.unit COMMAND node_join_native_test controls
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_join_carrier_gate.nl")
+    add_test(NAME node_join_native_oom.unit COMMAND node_join_native_test oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/node_join_same_locator.nl")
+    add_test(NAME node_join_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/node_join_native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:node_join_native_probe>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures" "${NEWLANG_SANITIZER}")
+    add_executable(node_join_native_probe tests/integration/node_join_native_probe.c)
+    target_link_libraries(node_join_native_probe PRIVATE newlang_semantic)
     add_executable(node_checked_probe tests/integration/node_checked_probe.c)
     target_link_libraries(node_checked_probe PRIVATE newlang_semantic)
     add_executable(checked_c_node_test tests/unit/checked_c_node_test.c)

@@ -1,5 +1,6 @@
 #include "newlang/checked_c_node.h"
 #include "checked_c_five.h"
+#include "newlang/node_join.h"
 #include "newlang/raw_storage.h"
 #include <stdarg.h>
 #include <stdint.h>
@@ -69,6 +70,9 @@ typedef struct Env {
     NLScopeId stability_scope;
     NLDomainId stability_domain;
     NLPlaceId stability_place;
+    const NLNodeJoinView
+        *node_join; /* borrowed only during synchronous arm emit */
+    size_t node_join_arm;
     const struct Env *parent;
     const NLCheckedFragment *artifact;
 } Env;
@@ -102,6 +106,25 @@ static const NLCheckedNodeView *get(const Env *env, NLCheckedNodeId id)
 {
     return nl_checked_node_view(env->artifact, id);
 }
+/* Changed-frame inheritance is world-qualified by a validated source fork.
+ * Ordinary unchanged-frame inheritance retains its existing prefix contract. */
+static bool inherited(const Env *env, NLSymbolId symbol, NLTypeId type)
+{
+    if (env->parent == NULL || symbol == 0 || symbol > env->prefix)
+        return false;
+    if (env->node_join == NULL)
+        return true;
+    NLSemanticBindingView a, b;
+    return env->node_join_arm < 2 &&
+           nl_checked_context(env->artifact) ==
+               env->node_join->arms[env->node_join_arm].world &&
+           nl_semantic_binding_view(env->node_join->entry, symbol, &a) &&
+           nl_semantic_binding_view(
+               env->node_join->arms[env->node_join_arm].entry, symbol, &b) &&
+           a.availability == NL_AVAILABLE && b.availability == NL_AVAILABLE &&
+           a.type == type && b.type == type && a.place == b.place &&
+           a.value == b.value;
+}
 static const Local *local(const Env *env, NLSymbolId symbol, NLTypeId type)
 {
     for (size_t i = 0; i < env->count; ++i)
@@ -109,9 +132,8 @@ static const Local *local(const Env *env, NLSymbolId symbol, NLTypeId type)
             return &env->locals[i];
     /* Public prefix mapping is authorized by the parent's checked MATCH
      * certificate, not numeric coincidence of hypothetical local IDs. */
-    return env->parent != NULL && symbol <= env->prefix
-               ? local(env->parent, symbol, type)
-               : NULL;
+    return inherited(env, symbol, type) ? local(env->parent, symbol, type)
+                                        : NULL;
 }
 static const Local *root(const Env *env, NLTypeId type, NLPlaceId place,
                          NLIncarnationId incarnation)
@@ -122,7 +144,7 @@ static const Local *root(const Env *env, NLTypeId type, NLPlaceId place,
             return &env->locals[i];
     if (env->parent != NULL) {
         const Local *p = root(env->parent, type, place, incarnation);
-        return p != NULL && p->symbol <= env->prefix ? p : NULL;
+        return p != NULL && inherited(env, p->symbol, p->type) ? p : NULL;
     }
     return NULL;
 }
@@ -477,20 +499,95 @@ static bool loan(Emit *e, Env *env, const NLCheckedNodeView *v, Value *out)
                "nl_v_%zu = nl_ref_%zu; }\n",
                reference, src->frame, src->symbol, out->temp, reference);
 }
-static bool match(Emit *e, Env *env, NLCheckedNodeId id,
-                  const NLCheckedNodeView *v, Value *out)
+/* One proof-consumer lane, not a new issuer or a normal-frame boolean bypass.
+ * The semantic snapshots authorize identity; actual constructed Local records
+ * authorize physical C carriers. Either missing edge fails before C publish. */
+static bool join_carriers(Emit *e, const Env *env, const NLNodeJoinView *proof)
 {
-    const NLCheckedNodeView *trial = get(env, v->initializer);
-    if (trial != NULL && trial->kind == NL_CHECKED_TRY_ALLOCATE_ONE)
-        return allocated_match(e, env, id, v, out);
-    if (e->custody &&
-        (nl_checked_custody_continuation(env->artifact, id, 0) != NULL ||
-         v->custody_selected_variant || v->custody_none_site))
-        return custody_match(e, env, id, v, out);
-    if (v->borrowed_match || v->terminates || v->type != e->unit ||
-        v->result_count != 0 || v->item_count != 2 || v->normal_arms != 2 ||
-        !v->normal_frame_unchanged || v->match_binding_prefix == 0)
+    if (e->allocated || e->two_heap || e->custody || env->parent != NULL ||
+        e->roots != 2)
         return reject(e);
+    const Local *originals[2] = {NULL, NULL};
+    for (size_t i = 0; i < 2; ++i) {
+        NLSemanticPlaceView r, post;
+        if (!nl_semantic_place_view(proof->entry, proof->originals[i], &r) ||
+            !nl_semantic_place_view(proof->post, proof->originals[i], &post) ||
+            !r.live || !post.live || r.type != e->node || post.type != r.type ||
+            r.incarnation != post.incarnation || !r.implicit_local ||
+            !r.independent_root || r.governing_domain != 0 ||
+            post.governing_domain != 0 || r.placement.region != 0 ||
+            post.placement.region != 0 || r.fixed_field_count != 2 ||
+            post.fixed_field_count != 2 ||
+            r.fixed_fields[0] != post.fixed_fields[0] ||
+            r.fixed_fields[1] != post.fixed_fields[1])
+            return reject(e);
+        const Local *l = root(env, e->node, proof->originals[i], r.incarnation);
+        NLSemanticBindingView b;
+        if (l == NULL || l->frame != env->frame ||
+            !nl_semantic_binding_view(proof->entry, l->symbol, &b) ||
+            b.availability != NL_AVAILABLE || b.type != e->node ||
+            b.place != proof->originals[i] ||
+            local(env, l->symbol, e->node) != l)
+            return reject(e);
+        originals[i] = l;
+        for (size_t k = 0; k < 2; ++k) {
+            NLSemanticPlaceView arm_root;
+            NLSemanticBindingView arm_binding;
+            if (!nl_semantic_place_view(proof->arms[k].entry,
+                                        proof->originals[i], &arm_root) ||
+                !nl_semantic_binding_view(proof->arms[k].entry, l->symbol,
+                                          &arm_binding) ||
+                arm_root.incarnation != l->incarnation ||
+                arm_root.type != l->type ||
+                arm_root.fixed_fields[0] != r.fixed_fields[0] ||
+                arm_root.fixed_fields[1] != r.fixed_fields[1] ||
+                arm_binding.place != l->place || arm_binding.type != l->type ||
+                arm_binding.value != b.value)
+                return reject(e);
+        }
+    }
+    if (originals[0] == originals[1])
+        return reject(e);
+    NLSemanticPlaceView changed, parent, sibling;
+    if (!nl_semantic_place_view(proof->entry, proof->changed, &changed) ||
+        !nl_semantic_place_view(proof->entry, changed.parent_aggregate,
+                                &parent) ||
+        !nl_semantic_place_view(proof->entry, proof->sibling, &sibling) ||
+        changed.type != e->option || changed.parent_field_index != 0 ||
+        parent.fixed_fields[0] != proof->changed ||
+        parent.fixed_fields[1] != proof->sibling || sibling.type != e->u8 ||
+        sibling.parent_field_index != 1 ||
+        sibling.parent_aggregate != changed.parent_aggregate)
+        return reject(e);
+    for (size_t k = 0; k < 2; ++k) {
+        if (proof->arms[k].operation == 0)
+            continue;
+        const NLCheckedField f = proof->arms[k].change;
+        const Local *l = root(env, e->node, f.parent, f.parent_incarnation);
+        if (f.child != proof->changed || f.index != 0 ||
+            f.child_incarnation != changed.incarnation ||
+            f.parent_incarnation != parent.incarnation || l == NULL ||
+            l != local(env, f.base, e->node) ||
+            (l != originals[0] && l != originals[1]))
+            return reject(e);
+    }
+    /* Every already emitted inherited carrier is tied to the exact entry
+     * binding, not a guessed arm-private symbol with the same integer. */
+    for (size_t i = 0; i < env->count; ++i) {
+        const Local l = env->locals[i];
+        NLSemanticBindingView b;
+        if (!nl_semantic_binding_view(proof->entry, l.symbol, &b) ||
+            b.availability != NL_AVAILABLE || b.type != l.type ||
+            (l.type == e->node && b.place != l.place))
+            return reject(e);
+    }
+    return true;
+}
+
+static bool match_runtime(Emit *e, Env *env, NLCheckedNodeId id,
+                          const NLCheckedNodeView *v, Value *out,
+                          const NLNodeJoinView *proof)
+{
     NLSemanticSnapshot snapshot;
     if (!nl_semantic_snapshot(nl_checked_context(env->artifact), &snapshot) ||
         v->match_binding_prefix > snapshot.bindings)
@@ -516,7 +613,9 @@ static bool match(Emit *e, Env *env, NLCheckedNodeId id,
                       .prefix = v->match_binding_prefix,
                       .frame = ++e->frames,
                       .depth = env->depth + 1,
-                      .backing = env->backing};
+                      .backing = env->backing,
+                      .node_join = proof,
+                      .node_join_arm = i};
         if (!put(e, "case %zu: {\n", a->variant - 1))
             return false;
         if (a->variant == 2) {
@@ -542,6 +641,63 @@ static bool match(Emit *e, Env *env, NLCheckedNodeId id,
     out->type = e->unit;
     return put(e, "}\n");
 }
+static bool changed_match(Emit *e, Env *env, NLCheckedNodeId id,
+                          const NLCheckedNodeView *v, Value *out)
+{
+    NLNodeJoinView proof;
+    if (v->borrowed_match || v->terminates || v->type != e->unit ||
+        v->result_count != 0 || v->item_count != 2 || v->normal_arms != 2 ||
+        v->normal_frame_unchanged || v->match_binding_prefix == 0 ||
+        !nl_checked_node_join_view(env->artifact, id, &proof))
+        return reject(e);
+    const NLCheckStatus status =
+        nl_checked_node_join_validate(env->artifact, id, &proof);
+    if (status != NL_CHECK_OK) {
+        e->status = status == NL_CHECK_OUT_OF_MEMORY ? NL_NODE_C_OUT_OF_MEMORY
+                    : status == NL_CHECK_RESOURCE_LIMIT
+                        ? NL_NODE_C_RESOURCE_LIMIT
+                        : NL_NODE_C_UNSUPPORTED;
+        return false;
+    }
+    return join_carriers(e, env, &proof) &&
+           match_runtime(e, env, id, v, out, &proof);
+}
+
+static bool match(Emit *e, Env *env, NLCheckedNodeId id,
+                  const NLCheckedNodeView *v, Value *out)
+{
+    const NLCheckedNodeView *trial = get(env, v->initializer);
+    if (trial != NULL && trial->kind == NL_CHECKED_TRY_ALLOCATE_ONE)
+        return allocated_match(e, env, id, v, out);
+    if (e->custody &&
+        (nl_checked_custody_continuation(env->artifact, id, 0) != NULL ||
+         v->custody_selected_variant || v->custody_none_site))
+        return custody_match(e, env, id, v, out);
+    NLNodeJoinView issued;
+    bool original_change = false;
+    for (size_t k = 0; k < 2; ++k) {
+        const NLCheckedFragment *arm =
+            nl_checked_match_arm(env->artifact, id, k);
+        for (size_t n = 1; n <= nl_checked_node_count(arm); ++n) {
+            const NLCheckedNodeView *op = nl_checked_node_view(arm, n);
+            if (op->kind == NL_CHECKED_REPLACE && op->field.present &&
+                root(env, e->node, op->field.parent,
+                     op->field.parent_incarnation) != NULL)
+                original_change = true;
+        }
+    }
+    /* A forged unchanged boolean, even with a dropped witness, cannot route
+     * a real inherited-root Change through the old unchanged-frame lane. */
+    if (!v->normal_frame_unchanged || original_change ||
+        nl_checked_node_join_view(env->artifact, id, &issued))
+        return changed_match(e, env, id, v, out);
+    if (v->borrowed_match || v->terminates || v->type != e->unit ||
+        v->result_count != 0 || v->item_count != 2 || v->normal_arms != 2 ||
+        !v->normal_frame_unchanged || v->match_binding_prefix == 0)
+        return reject(e);
+    return match_runtime(e, env, id, v, out, NULL);
+}
+
 static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
 {
     const NLCheckedNodeView *v = get(env, id);
@@ -749,7 +905,7 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
             (ctype(e, env, v->type) == NULL ||
              !put(e, "%s nl_v_%zu;\n", ctype(e, env, v->type), slot)))
             return reject(e);
-        Value result = {.temp = slot};
+        Value result = {.temp = v->type == e->unit ? 0 : slot};
         if (!loan(e, env, v, &result))
             return false;
         *out = result;

@@ -15,6 +15,10 @@ def main() -> None:
     node = Path(repo) / "tests/fixtures/node_join_same_locator.nl"
     samples = {
         "u8": ("fn main()->unit{let x=u8(7);x;unit}\n", 0, ""),
+        # Existing checked_c_local_root_test.py boundary: semantically valid
+        # scalar-returning read loan is still outside the C17 emitter profile.
+        "backend": ("fn main()->unit{let x=u8(7);"
+                    "let y=loan_read(x){|r|u8(9)};y;unit}\n", 0, ""),
         "parse": ("fn main()->unit{let x=;unit}\n", 3,
                   "P5-EXPECTED-EXPRESSION"),
         "range": ("fn main()->unit{let x=u8(256);unit}\n", 3,
@@ -48,10 +52,10 @@ def main() -> None:
             else:
                 assert not first.stderr, (name, actual)
             ordinary = run(compiler, [str(path)])
-            if name == "node":
+            if name == "backend":
                 assert ordinary.returncode == 4 and not ordinary.stdout
                 assert b"[V1-BACKEND-UNSUPPORTED]" in ordinary.stderr
-            elif name == "u8":
+            elif name in ("u8", "node"):
                 assert ordinary.returncode == 0 and not ordinary.stderr
                 assert b"int main(void)" in ordinary.stdout
             else:
