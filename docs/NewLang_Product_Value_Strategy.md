@@ -18,6 +18,88 @@ Cで合理的に採用されている低水準architecture / topology / explicit
 
 application / data-structure policyを過度にlanguage coreへ取り込まず、低水準mechanismの意味を厳密にする。
 
+## 1.1 UB-prevention audit locality (value hypothesis)
+
+**製品価値仮説**は、C-classのoriginal pointer topology / allocation・lifetime policy /
+physical architectureを維持しながら、**未定義動作（UB）を防ぐために人間が
+監査・再監査しなければならない意味論的範囲を小さくすること**である。
+compilerが現実的に検査できるlifetime、currentness、provenance、access、
+responsibility等の条件はchecked側で拒否・保証し、証明不能でも実際に真で
+ある必要がある事前条件だけを明示的・局所的な `unchecked` に残す。
+`unchecked` の前提違反はUBであり、明示した人間／library authorが証明責任を持つ。
+
+**Audit locus（監査の実際の対象）**は `unchecked` の行数ではない。
+各privileged operationと**実際のauthority issuer**、元の
+Storage / BackingRegion / Allocation / LifetimeDomain、
+前提となる封じ込め済み不変条件、それに影響するlegal mutationと
+normal / error / teardown / reentrant callback / FFI経路、
+および変更時にそれらの成立性を再検討すべき**影響依存関係**を含む。
+raw addressやmetadata（例：Ringの `head/len`）は責任・権限を無から
+生成できない。例えば `unchecked buf[i]` では、元の `buf` の領域・
+寿命・アクセス権限と `i` の範囲だけでなく、それらを生成・更新する
+writer、呼出し、状態遷移まで監査対象が広がり得る。これは
+`unchecked` の行以外を確認する必要があるというだけで、局所化の失敗ではない。
+**実際の前提からの依存関係を特定し、その閉包だけを監査・再監査すれば
+よく、無関係なsafeコードの再監査を避けられる**なら、Cより監査範囲を
+絞れた価値がある。逆に公開ordinary-safe APIの合法な操作が
+前提を破壊できるなら、安全な抽象化は成立していない。実装内部の
+safe helperやwriterを変更するときには、その変更が影響する
+不変条件の依存閉包を再監査し、compilerが保護できる部分は委ねる。
+「uncheckedの行だけ見ればよい」は、この依存閉包の確認を
+省略してよいという意味ではない。
+
+**ordinary-safe library/APIの成立条件**は、APIから合法的に到達できる
+**すべてのsafe-reachable state**とその状態遷移に対し、内部uncheckedの
+前提が維持されることである。通常処理だけでなく、失敗時の責任の返却／
+rollback／commit、途中状態での公開、破棄、借用中の変更、callbackによる
+再入、FFI境界を含む。これはstaticに強制するか、健全なruntime guardと
+アクセス制御を伴う内部不変条件として成立させる必要がある。
+FULL / EMPTY等の予期される操作結果は `Option` / `Result` 等へtotalize／
+明示的に返し、UBの「前提」に押し込まない。representation hidingや
+safe mutationの制限を実際に強制できないなら、監査の局所化はまだ成立しない。
+
+**責務の分離**：library authorは、原権限を保ったclaim transfer、
+その不変条件とすべての合法な変更・失敗経路、内部uncheckedの正当性を負う。
+ordinary callerは公開された型付きsafe APIの使用とapplication policyを
+負うが、隠れたpointer hopごとのlifetime／owner証明を要求されない。
+明示的な `unchecked`／外部契約をcaller自身が選ぶ場合は、その境界の
+人間による証明責任が残る。
+
+**公平な比較基準**は、同等の元のtopologyと実際のAPIを揃えた
+*library author + ordinary caller* の合計である。
+
+- **十分にAPI化したC**：callerからraw rewiringと局所証明を隠せる。
+  static analysisやruntime checksも使えるが、通常は内部のlifetime /
+  provenance / mutationに関するUB監査・再監査をlibrary authorが持つ。
+- **Zig**：明示的なlow-level control、unsafe境界とbuild modeに応じた
+  runtime safety checksが使える。比較は「unsafe行数」ではなく、
+  覆われないalias/lifetime/owner前提を誰が保守するかで行う。
+- **同等topologyのRust**：localized `unsafe` + safe wrapper、
+  privacy、型／借用制約によってordinary callerを守れる。
+  既にaudit localityを実現する有力な比較対象であり、NewLangの優位は
+  前提としない。同じ構造を維持するためのauthor側証明、safe API設計、
+  保守変更の再監査半径、ceremonyを実測して初めて差を判定する。
+
+**成功の観測対象**は、人間が維持するL/R/P/V/C等のsemantic obligation、
+author/callerの分担、unchecked前提をsafe mutationで破壊できるかという
+negative evidence、変更時の相対的な再監査範囲・費用、および
+topology維持である（分類は[North Star §8](NewLang_North_Star_Product_Validation.md#8-human-obligation-ledger)を再利用する）。
+zero unchecked lines / zero bugsは目標指標ではない。
+
+**保証と現状の線引き**：健全なcompiler・backend・runtime・FFI・platform
+契約と、実際に正しい局所unchecked前提が成立した*将来の条件付き到達点*
+として、公開ordinary-safe APIを合法的に使うcallerや監査済み依存閉包の
+外側のsafeな変更が、内部uncheckedの前提を破壊しないことを目指す。
+依存閉包の内側を変更する際には、真の前提の維持について
+人間の再監査が残り得るが、compilerが機械的に保証する部分は
+再監査対象から外せることを目指す。
+logic / application policyの欠陥、C互換UB、未カバーのplatform effect、
+v0範囲外のconcurrency、誤証明されたunchecked前提をなくす約束ではない。
+現行Productionにgeneral source `unchecked` / `requires fn`、
+module-level representation hidingの強制、general Ring safe APIが
+実装済みだとは主張しない。現在の有限source → checked-owned →
+C17/nativeのPASSやCHECK0／CI greenは、soundness theoremでもProduct GOでもない。
+
 ## 2. 多段階ターゲティング
 
 NewLangはcurrent North Starと最終市場を同一視しない。
@@ -114,7 +196,7 @@ Track Vは **誰のどの問題を、どのevidenceで解けたと言うか** �
 - value hypothesisの明文化
 - North Star / representative workloadの選択
 - PASS / FAIL criteriaとanti-gaming ruleのpre-registration
-- human obligation、ceremony、topology preservationの比較
+- human obligation、ceremony、topology preservationの比較（§1.1のauthor/caller別監査・再監査範囲とsafe mutationによる前提破壊リスクを含む）
 - intermediate product gateの設計とfalse progressの検出
 - implementation後のevidenceがproduct claimを本当に支持するかの評価
 - practical C-replacement envelopeのcoverage risk管理
@@ -140,7 +222,7 @@ Coordination: どのfindingを、いつ、どのtrackへ渡すか？
 - **User value**: 誰のどのreal workloadが改善するか。
 - **Beachhead necessity**: current gateに本当に必要か。
 - **Failure attribution**: 複数の未確定mechanismを一つのgateへ混ぜていないか。
-- **Anti-false-progress**: host fixture、toy rewrite、unchecked、backend trickでuser-visible gapを隠していないか。
+- **Anti-false-progress**: host fixture、toy rewrite、unchecked、backend trickでuser-visible gapを隠していないか。safe mutationによるunchecked前提破壊の反例・未検証範囲を隠していないか。
 - **Topology preservation**: NewLangを通すために元のC architectureを本質的に別物へ変えていないか。
 - **No foreclosure**: 小さな現在判断が将来のC replacementを不必要に閉ざしていないか。
 - **Lifecycle cost**: implementation costだけでなくsemantic/test/diagnostic/compatibility/documentation/future-interaction costを数える。
@@ -168,7 +250,7 @@ one sharp value claim
   -> residual-C reduction
 ```
 
-最終的には、Cを選ばざるを得ない重要workloadがどれだけ残るか、NewLangがsemantic bookkeepingを実務上どれだけ減らすか、language/toolchain追加コストに見合うかで評価する。
+最終的には、Cを選ばざるを得ない重要workloadがどれだけ残るか、NewLangがsemantic bookkeepingとauthor/caller双方のUB予防監査・再監査範囲を実務上どれだけ減らすか（safe mutationの負の証拠と相対的な再監査半径を含む）、language/toolchain追加コストに見合うかで評価する。
 
 ## 12. 関連文書
 
