@@ -67,11 +67,11 @@ int main(int argc, char **argv) {
     if (direct_calls == 0 || ptr_from_refs == 0 || aggregates < 2 || sum_ctors < 2)
         fail("owned_node_evidence_missing", -1);
     nl_checked_destroy(owned);
-    nl_syntax_destroy(call_tree);
+    nl_syntax_tree_destroy(call_tree);
     nl_parser_destroy(call_parser);
     nl_source_destroy(call_src);
     nl_semantic_destroy(sem);
-    nl_syntax_destroy(unit_tree);
+    nl_syntax_tree_destroy(unit_tree);
     nl_parser_destroy(parser);
     nl_source_destroy(src);
     return 0;
