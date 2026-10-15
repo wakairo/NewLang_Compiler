@@ -1,0 +1,37 @@
+{
+  "source": "tests/p493/nonmatch_link.nl",
+  "sha256": "06c96f6df6688167f2f9d8e2768bfc5bc2ea9f93e09838502400039d2de5f8aa",
+  "compiler_base": "03b1751b513e7aef2d7ba193eda671a556f54b47",
+  "main_authority": "ad0604d2c766eac045273eba15170027f199d650",
+  "canonical": "Draft17.30",
+  "frozen_at_utc": "2026-10-15T23:12:23.897900+00:00",
+  "positive_expected": {
+    "baseline_check": 0,
+    "baseline_owned": "actual main/callee body observed, no independent public call proof",
+    "experimental": "only if actual entry/formals/primitive/returned-old/post can be independently replayed against source-issued immutable snapshots",
+    "old_result": "None Copy from executed replace",
+    "destination": "original tail.next",
+    "originals": "two distinct lexical Node roots, implicit governing identity; no heap Allocation minted",
+    "scoped_reference": "actual write-ref from real lexical tail loan, no escape",
+    "post": "original tail Some(original tail), original head and payload siblings unchanged at call exit"
+  },
+  "certificate_negatives": [
+    {
+      "mutation": "only exported destination mapping tail.next -> head.next, same type",
+      "expected": "independent validator ANALYSIS_PRECISION_LIMIT, genuine proof/public snapshots unchanged"
+    },
+    {
+      "mutation": "only exported loan scope=0, or original incarnation+1",
+      "expected": "independent validator ANALYSIS_PRECISION_LIMIT, no scope/identity invention"
+    }
+  ],
+  "controls": {
+    "named_match_source": "tests/p478/named_link.nl",
+    "named_match_sha256": "444cb2c22ec51d7c4cb991fe53398beac59553e9357c91d3b7a016103796c73f",
+    "named_match_expected": "CLI3/P9-CONTINUATION-PRECISION unchanged",
+    "ptr_as_ref_expected": "semantic P3-TYPE-MISMATCH unchanged",
+    "inline_control": "tests/p471/asymmetric.nl",
+    "inline_sha256": "c578ebdce71ffd46e30758903c28f69227876c7904264b3eec1914c7f6bdd050"
+  },
+  "stop": "first essential missing correlation, hidden dependency closure or bounded independent replay that cannot fit90\u2013150min; no syntax/P9/CFG/general effect/ABI/emitter change"
+}
