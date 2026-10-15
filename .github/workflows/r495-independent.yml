@@ -1,0 +1,29 @@
+name: R495 independent bounded public proof (NO LLVM)
+on:
+  push:
+    branches: [r495-qualified-call-blind-ci]
+permissions:
+  contents: read
+jobs:
+  independent:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - cc: gcc-13
+          - cc: clang
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+          fetch-depth: 2
+      - name: Host prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 clang cmake make python3
+      - name: Run independent frozen observer
+        env:
+          R495_CC: ${{ matrix.cc }}
+        run: bash tests/r495/run.sh
