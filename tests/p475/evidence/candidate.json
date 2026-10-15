@@ -1,0 +1,16 @@
+{
+  "compiler": "7139b8c64bf001001e4319c9a54bf9114e130f51",
+  "source_sha256": "444cb2c22ec51d7c4cb991fe53398beac59553e9357c91d3b7a016103796c73f",
+  "command": [
+    "newlangc",
+    "--check",
+    "tests/p475/named_link.nl"
+  ],
+  "exit": 3,
+  "stdout_bytes": 0,
+  "stdout": "",
+  "diagnostic": "tests/p475/named_link.nl:2:1-4:2: error(precision)[P8-SIGNATURE-PRECISION]: signature needs unsupported body analysis\n",
+  "public_owned": "NOT REACHED",
+  "C17": "NOT RUN",
+  "native": "NOT RUN"
+}

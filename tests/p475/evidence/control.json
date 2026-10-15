@@ -1,0 +1,52 @@
+{
+  "compiler": "7139b8c64bf001001e4319c9a54bf9114e130f51",
+  "source_sha256": "c578ebdce71ffd46e30758903c28f69227876c7904264b3eec1914c7f6bdd050",
+  "CHECK_exit": 0,
+  "public_probe_exit": 0,
+  "public_evidence": "ORIGINAL index=0 place=1 incarnation=1 RF=1->17\nORIGINAL index=1 place=6 incarnation=6 RF=11->11\nJOIN match=34 changed=2 sibling=3 input_variant=2 input_target=1\nARM variant=1 unchanged=1\nQ binder=8 operand_symbol=8 use=COPY target=1 incarnation=1\nARM variant=2 operation=4 F=2->18 RF=1->19 occurrence=0->3\nPUBLIC VALID q/R/O/Change/Reset; wrong projection rejected; native untested\n",
+  "C17_exit": 0,
+  "C_bytes": 2545,
+  "C_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc",
+  "native": [
+    {
+      "name": "control-O0False",
+      "optimization": "-O0",
+      "sanitizer": "none",
+      "compile_exit": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "C_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc"
+    },
+    {
+      "name": "control-O0True",
+      "optimization": "-O0",
+      "sanitizer": "none",
+      "compile_exit": 0,
+      "exit": 0,
+      "stdout": "tail=0x7ffee8df2890 payload=2\nhead=0x7ffee8df2830 payload=1 distinct=1\nSome(q)=0x7ffee8df2890 same_original_tail=1\nold_tail=None new_tail=Some(0x7ffee8df2890) self_link=1\nnative topology observations complete\n",
+      "stderr": "",
+      "C_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc"
+    },
+    {
+      "name": "control-O2False",
+      "optimization": "-O2",
+      "sanitizer": "none",
+      "compile_exit": 0,
+      "exit": 0,
+      "stdout": "",
+      "stderr": "",
+      "C_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc"
+    },
+    {
+      "name": "control-O2True",
+      "optimization": "-O2",
+      "sanitizer": "none",
+      "compile_exit": 0,
+      "exit": 0,
+      "stdout": "tail=0x7ffe35b87fd0 payload=2\nhead=0x7ffe35b87ff0 payload=1 distinct=1\nSome(q)=0x7ffe35b87fd0 same_original_tail=1\nold_tail=None new_tail=Some(0x7ffe35b87fd0) self_link=1\nnative topology observations complete\n",
+      "stderr": "",
+      "C_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc"
+    }
+  ]
+}
