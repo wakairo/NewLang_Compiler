@@ -1,0 +1,15 @@
+NODE id=2 kind=50 value=1 origin=0
+NODE id=5 kind=50 value=2 origin=0
+NODE id=8 kind=1 value=3 origin=2
+NODE id=9 kind=1 value=4 origin=5
+NODE id=10 kind=51 value=5 origin=0
+IF node=11 span=57-87 joined=6 unknown=1 arms=2 backend_selection=1
+NODE id=11 kind=36 value=6 origin=0
+CALL node=14 span=107-122 function=11 actual=7 formal=4 formal_value=7 returned=8 known=0 old_chain=1 body_nodes=2
+BODY node=1 kind=27 symbol=0 value=8
+BODY node=2 kind=1 symbol=4 value=8
+NODE id=14 kind=3 value=8 origin=0
+NODE id=15 kind=1 value=7 origin=11
+NODE id=18 kind=1 value=9 origin=11
+NODE id=20 kind=1 value=10 origin=14
+PUBLIC source-issued PASS; existing call-body predicate PASS; observer snapshot UNCHANGED; program_functions=2

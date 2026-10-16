@@ -1,0 +1,71 @@
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+#include <stdlib.h>
+static unsigned p521_calls;
+
+#include <stddef.h>
+_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
+
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+
+static void nl_fn_10(void);
+static uint8_t nl_fn_11(uint8_t nl_local_5);
+
+static void nl_fn_10(void)
+{
+    const size_t nl_local_1 = ((size_t)UINTMAX_C(29));
+    (void)nl_local_1;
+    const size_t nl_local_2 = ((size_t)UINTMAX_C(29));
+    (void)nl_local_2;
+    nl_type_10 nl_local_3 = { .f0 = 37, .f1 = 211, };
+    const void *const p521_root = &nl_local_3;
+    uint8_t *const p521_left = &nl_local_3.f0;
+    uint8_t *const p521_right = &nl_local_3.f1;
+    (void)nl_local_3;
+    const uint8_t nl_local_4 = ((nl_local_1 == nl_local_2) ? 108 : 173);
+    if (nl_local_4 != 108) abort();
+    (void)nl_local_4;
+    const uint8_t nl_call_21 = nl_fn_11(nl_local_4);
+    if (nl_call_21 != 108 || p521_calls != 1) abort();
+    (void)nl_call_21;
+    const uint8_t nl_local_6 = nl_call_21;
+    if (nl_local_6 != 108) abort();
+    (void)nl_local_6;
+    uint8_t nl_loan_result_1;
+    {
+        uint8_t *const nl_local_7 = &nl_local_3.f0;
+        if (nl_local_7 != p521_left || p521_root != &nl_local_3 || *nl_local_7 != 37) abort();
+        (void)nl_local_7;
+        const uint8_t nl_replace_old_27 = *nl_local_7;
+        *nl_local_7 = nl_local_6;
+        if (nl_local_3.f0 != 108 || nl_local_3.f1 != 211 || p521_right != &nl_local_3.f1) abort();
+        nl_loan_result_1 = nl_replace_old_27;
+    }
+    (void)nl_loan_result_1;
+    const uint8_t nl_local_8 = nl_loan_result_1;
+    if (nl_local_8 != 37) abort();
+    (void)nl_local_8;
+    const uint8_t nl_local_9 = nl_local_3.f0;
+    if (nl_local_9 != 108) abort();
+    (void)nl_local_9;
+    const uint8_t nl_local_10 = nl_local_3.f1;
+    if (nl_local_10 != 211) abort();
+    (void)nl_local_10;
+    (void)nl_local_8;
+    (void)nl_local_9;
+    (void)nl_local_10;
+    (void)0;
+}
+
+static uint8_t nl_fn_11(uint8_t nl_local_5)
+{
+    ++p521_calls;
+    (void)nl_local_5;
+    return nl_local_5;
+}
+
+int main(void)
+{
+    nl_fn_10();
+    return 0;
+}

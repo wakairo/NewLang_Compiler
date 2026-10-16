@@ -166,6 +166,22 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p517_public_probe>"
         "$<TARGET_FILE:p517_gate_test>" "$<TARGET_FILE:p514_gate_test>"
         "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p517" "${NEWLANG_SANITIZER}")
+    add_executable(p521_owned_probe tests/p521/owned_probe.c)
+    target_link_libraries(p521_owned_probe PRIVATE newlang_checked_c_node newlang_semantic)
+    add_executable(p521_call_gate tests/p521/call_gate.c)
+    target_link_libraries(p521_call_gate PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME p521_call_evidence.unit COMMAND p521_call_gate
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p521/combined_true.nl")
+    add_test(NAME p521_identity_poison.unit COMMAND p517_gate_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p521/combined_true.nl")
+    add_test(NAME p521_oom.unit COMMAND p514_gate_test oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p521/combined_true.nl")
+    add_test(NAME p521_copy_call_composition_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p521/native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p521_owned_probe>"
+        "$<TARGET_FILE:p517_public_probe>" "$<TARGET_FILE:p521_call_gate>"
+        "$<TARGET_FILE:p514_gate_test>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p521" "${NEWLANG_SANITIZER}")
     add_executable(diagnostic_test tests/unit/diagnostic_test.c)
     target_link_libraries(diagnostic_test PRIVATE newlang_diagnostic)
     add_test(NAME diagnostics.unit COMMAND diagnostic_test)

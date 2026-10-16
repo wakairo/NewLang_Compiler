@@ -1,0 +1,90 @@
+Internal ctest changing into directory: /workspace/p521-baseline
+UpdateCTestConfiguration  from :/workspace/p521-baseline/DartConfiguration.tcl
+Parse Config file:/workspace/p521-baseline/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p521-baseline/DartConfiguration.tcl
+Parse Config file:/workspace/p521-baseline/DartConfiguration.tcl
+Test project /workspace/p521-baseline
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 15
+    Start 15: p521_call_evidence.unit
+
+15: Test command: /workspace/p521-baseline/p521_call_gate "/workspace/p521/tests/p521/combined_true.nl"
+15: Working Directory: /workspace/p521-baseline
+15: Environment variables:
+15:  PYTHONDONTWRITEBYTECODE=1
+15:  PYTHONHASHSEED=0
+15:  LC_ALL=C
+15:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+15:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+15: Test timeout computed to be: 90
+15: P521_CALL_GATE rejects=19 restored=PASS evidence/worlds=UNCHANGED
+1/4 Test #15: p521_call_evidence.unit .........................   Passed    0.02 sec
+test 16
+    Start 16: p521_identity_poison.unit
+
+16: Test command: /workspace/p521-baseline/p517_gate_test "/workspace/p521/tests/p521/combined_true.nl"
+16: Working Directory: /workspace/p521-baseline
+16: Environment variables:
+16:  PYTHONDONTWRITEBYTECODE=1
+16:  PYTHONHASHSEED=0
+16:  LC_ALL=C
+16:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+16:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+16: Test timeout computed to be: 90
+16: P517_GATE rejects=78 original=PASS worlds=UNCHANGED driver_allocations=0
+2/4 Test #16: p521_identity_poison.unit .......................   Passed    0.07 sec
+test 17
+    Start 17: p521_oom.unit
+
+17: Test command: /workspace/p521-baseline/p514_gate_test "oom" "/workspace/p521/tests/p521/combined_true.nl"
+17: Working Directory: /workspace/p521-baseline
+17: Environment variables:
+17:  PYTHONDONTWRITEBYTECODE=1
+17:  PYTHONHASHSEED=0
+17:  LC_ALL=C
+17:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+17:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+17: Test timeout computed to be: 90
+17: P514_OOM registration=314 rollback=PASS
+17: P514_OOM main=151 rollback=PASS output=NULL
+3/4 Test #17: p521_oom.unit ...................................   Passed    0.02 sec
+test 18
+    Start 18: p521_copy_call_composition_native.integration
+
+18: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p521/tests/p521/native_test.py" "/workspace/p521-baseline/newlangc" "/workspace/p521-baseline/p521_owned_probe" "/workspace/p521-baseline/p517_public_probe" "/workspace/p521-baseline/p521_call_gate" "/workspace/p521-baseline/p514_gate_test" "/usr/bin/cc" "/workspace/p521/tests/p521" "none"
+18: Working Directory: /workspace/p521-baseline
+18: Environment variables:
+18:  PYTHONDONTWRITEBYTECODE=1
+18:  PYTHONHASHSEED=0
+18:  LC_ALL=C
+18:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+18:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+18: Test timeout computed to be: 90
+18: {"case": "scalar_constant", "sha256": "35bf720c5ce4ce96b15947511e8cdc83dc4557ce2da71c67528fd7157c4f10d6", "check": 0, "c17": 0, "plain_native": [0, 0], "observed_native": [0, 0], "physical_oracle": {"forwarded": 108, "real_callee_call_required": true}, "public_field_facts": null, "bad_C_refused": {"wrong_callee": [-6, -6]}}
+18: {"case": "adopted_p515", "sha256": "c921596f72e64116630676b98d6ce43c529420a4bec26c437d01981cc39cc864", "check": 0, "c17": 0, "plain_native": [0, 0], "observed_native": null, "physical_oracle": "existing P517 native test", "public_field_facts": {"if": 18, "bool": 1, "condition_symbol": 0, "equal_symbol": 0, "operand_symbols": [1, 2], "arms": [108, 173], "arm_symbols": [0, 0], "selected_symbol": 4, "input_symbol": 4, "original_symbol": 3, "old_symbol": 6, "after_symbol": 7, "sibling_symbol": 8, "ref_symbol": 5, "replace_node": 23, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 9], "left_facts": [4, 8], "right_fact": 5, "old": 37, "sibling": 211, "joined_unknown": true, "scope_ended": true}, "bad_C_refused": {}}
+18: {"case": "call_choice_true", "sha256": "317e3e036d2e089a2c55d3e25ff57555de27bb29bed22c12253607a54592fac2", "check": 0, "c17": 0, "plain_native": [0, 0], "observed_native": [0, 0], "physical_oracle": {"old": 37, "selected": 108, "forwarded": 108, "after": 108, "sibling": 211, "same_original_physical_pair": true, "real_callee_call_required": true}, "public_field_facts": null, "bad_C_refused": {"wrong_callee": [-6, -6]}}
+18: {"case": "direct_pair_true", "sha256": "2b8c46554d7aaba137b2910ec08f5a30a2df3be3155a0c313710737f3dcfef37", "check": 0, "c17": 0, "plain_native": [0, 0], "observed_native": null, "physical_oracle": "existing P517 native test", "public_field_facts": {"if": 18, "bool": 1, "condition_symbol": 0, "equal_symbol": 0, "operand_symbols": [1, 2], "arms": [108, 173], "arm_symbols": [0, 0], "selected_symbol": 4, "input_symbol": 4, "original_symbol": 3, "old_symbol": 6, "after_symbol": 7, "sibling_symbol": 8, "ref_symbol": 5, "replace_node": 23, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 9], "left_facts": [4, 8], "right_fact": 5, "old": 37, "sibling": 211, "joined_unknown": true, "scope_ended": true}, "bad_C_refused": {}}
+18: {"case": "combined_true", "sha256": "0776824b0fa5ed5f97d48ffd062402aeb6b38316a885648d56037fb156d59cf4", "check": 0, "c17": 0, "plain_native": [0, 0], "observed_native": [0, 0], "physical_oracle": {"old": 37, "selected": 108, "forwarded": 108, "after": 108, "sibling": 211, "same_original_physical_pair": true, "real_callee_call_required": true}, "public_field_facts": {"if": 18, "bool": 1, "condition_symbol": 0, "equal_symbol": 0, "operand_symbols": [1, 2], "arms": [108, 173], "arm_symbols": [0, 0], "selected_symbol": 4, "input_symbol": 6, "original_symbol": 3, "old_symbol": 8, "after_symbol": 9, "sibling_symbol": 10, "ref_symbol": 7, "replace_node": 27, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 11], "left_facts": [4, 10], "right_fact": 5, "old": 37, "sibling": 211, "joined_unknown": true, "scope_ended": true}, "bad_C_refused": {"wrong_callee": [-6, -6], "wrong_condition": [-6, -6], "wrong_arm": [-6, -6], "wrong_field": [-6, -6], "wrong_root": [-6, -6], "wrong_sibling": [-6, -6]}}
+18: {"case": "call_choice_false", "sha256": "caf3744772fe18a6abfa9fa6e14fd71f7ef8e60c456abb29d83da4d111e440ee", "check": 0, "c17": 0, "plain_native": [0, 0], "observed_native": [0, 0], "physical_oracle": {"old": 37, "selected": 173, "forwarded": 173, "after": 173, "sibling": 211, "same_original_physical_pair": true, "real_callee_call_required": true}, "public_field_facts": null, "bad_C_refused": {"wrong_callee": [-6, -6]}}
+18: {"case": "direct_pair_false", "sha256": "efa00084af5fc5f90feffb77b362a3bed92ba9e63e2c6b3d3f49a394d6e4b84b", "check": 0, "c17": 0, "plain_native": [0, 0], "observed_native": null, "physical_oracle": "existing P517 native test", "public_field_facts": {"if": 18, "bool": 0, "condition_symbol": 0, "equal_symbol": 0, "operand_symbols": [1, 2], "arms": [108, 173], "arm_symbols": [0, 0], "selected_symbol": 4, "input_symbol": 4, "original_symbol": 3, "old_symbol": 6, "after_symbol": 7, "sibling_symbol": 8, "ref_symbol": 5, "replace_node": 23, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 9], "left_facts": [4, 8], "right_fact": 5, "old": 37, "sibling": 211, "joined_unknown": true, "scope_ended": true}, "bad_C_refused": {}}
+18: {"case": "combined_false", "sha256": "c016e643f8b1ec0da014225bbca045dc600712d913658b3d33a3637f6194b994", "check": 0, "c17": 0, "plain_native": [0, 0], "observed_native": [0, 0], "physical_oracle": {"old": 37, "selected": 173, "forwarded": 173, "after": 173, "sibling": 211, "same_original_physical_pair": true, "real_callee_call_required": true}, "public_field_facts": {"if": 18, "bool": 0, "condition_symbol": 0, "equal_symbol": 0, "operand_symbols": [1, 2], "arms": [108, 173], "arm_symbols": [0, 0], "selected_symbol": 4, "input_symbol": 6, "original_symbol": 3, "old_symbol": 8, "after_symbol": 9, "sibling_symbol": 10, "ref_symbol": 7, "replace_node": 27, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 11], "left_facts": [4, 10], "right_fact": 5, "old": 37, "sibling": 211, "joined_unknown": true, "scope_ended": true}, "bad_C_refused": {"wrong_callee": [-6, -6], "wrong_condition": [-6, -6], "wrong_arm": [-6, -6], "wrong_field": [-6, -6], "wrong_root": [-6, -6], "wrong_sibling": [-6, -6]}}
+18: {"case": "negative_else_range", "cli": 3, "diagnostic": "/workspace/p521/tests/p521/negative_else_range.nl:6:40-6:47: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255", "rollback": "P514_REJECT phase=registration code=V1-U8-LITERAL-RANGE rollback=PASS artifact=NULL"}
+18: {"case": "negative_argument", "cli": 3, "diagnostic": "/workspace/p521/tests/p521/negative_argument.nl:7:25-7:26: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter", "rollback": "P514_REJECT phase=registration code=P3-TYPE-MISMATCH rollback=PASS artifact=NULL"}
+18: {"case": "negative_return", "cli": 3, "diagnostic": "/workspace/p521/tests/p521/negative_return.nl:7:19-7:34: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result", "rollback": "P514_REJECT phase=registration code=P8-BODY-RESULT rollback=PASS artifact=NULL"}
+18: P521 frozen source -> owned -> actual C17/native call composition PASS; negative controls reject
+4/4 Test #18: p521_copy_call_composition_native.integration ...   Passed    2.03 sec
+
+The following tests passed:
+	p521_call_evidence.unit
+	p521_identity_poison.unit
+	p521_oom.unit
+	p521_copy_call_composition_native.integration
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   2.15 sec

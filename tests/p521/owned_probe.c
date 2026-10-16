@@ -48,9 +48,17 @@ static bool observe(const char *path)
             CHECK(binding.value == arg->results[0].value);
             CHECK(nl_semantic_value_view(c, binding.value, &actual));
             CHECK(nl_semantic_value_view(c, v->results[0].value, &result));
+            const NLCheckedNodeView *root =
+                nl_checked_node_view(body, nl_checked_root(body));
+            CHECK(root && root->result_count == 1 &&
+                  root->results[0].value == v->results[0].value);
+            CHECK(binding.type == p.u8 && actual.type == p.u8 &&
+                  result.type == p.u8);
             CHECK(actual.scalar_known == result.scalar_known &&
                   actual.dependencies == NL_DEPENDENCY_FREE &&
-                  result.dependencies == NL_DEPENDENCY_FREE);
+                  result.dependencies == NL_DEPENDENCY_FREE &&
+                  result.value_dependency_count == 0 && result.domain == 0 &&
+                  result.allocation_region == 0 && result.reference.place == 0);
             CHECK(v0_validate_call(f, i, &p));
             printf("CALL node=%zu span=%zu-%zu function=%zu actual=%zu "
                    "formal=%zu formal_value=%zu returned=%zu known=%d "
@@ -58,7 +66,7 @@ static bool observe(const char *path)
                    i, v->span.start_byte, v->span.end_byte, v->function,
                    arg->results[0].value, formal, binding.value,
                    v->results[0].value, result.scalar_known,
-                   selected ? copy_if_u8(f, i, selected, p.u8) : -1,
+                   selected ? copy_if_u8(f, i, selected, &p) : -1,
                    nl_checked_node_count(body));
             for (size_t j = 1; j <= nl_checked_node_count(body); ++j) {
                 const NLCheckedNodeView *b = nl_checked_node_view(body, j);
