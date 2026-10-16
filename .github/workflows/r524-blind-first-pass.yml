@@ -1,0 +1,109 @@
+name: R524 independent BLIND fixed-C17/native initial
+on:
+  push:
+    branches: [r524-copy-if-call-original-pair-blind]
+permissions:
+  contents: read
+jobs:
+  frozen-blackbox:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: R-only immutable fixtures
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Verify sealed pre-registration and baseline
+        shell: bash
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor d8931968f2d0859d2d03ad299f18254b882a2f98 HEAD
+          sha256sum -c tests/r524/sha256.manifest
+          mkdir -p r524-result
+          cp tests/r524/sha256.manifest r524-result/sha256.manifest
+          git rev-parse HEAD | tee r524-result/harness_commit.txt
+          printf '%s\n' a513b48484b890c0d8cee6dcc7766414075b33ee > r524-result/main_baseline.txt
+      - name: Checkout exact candidate without inspecting its producer fixtures
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          repository: wakairo/NewLang_Compiler
+          ref: 1e192a5682778b83b13347838ff4ed26e5128a1d
+          path: candidate
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Build exact candidate C17 frontend
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C candidate rev-parse HEAD)" = 1e192a5682778b83b13347838ff4ed26e5128a1d
+          CC=gcc cmake -S candidate -B candidate/build-r524 -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_FRONTEND_ONLY=ON
+          cmake --build candidate/build-r524 --parallel 2
+          cp candidate/build-r524/newlangc r524-result/newlangc
+          sha256sum r524-result/newlangc | tee r524-result/compiler_sha256.txt
+          ./r524-result/newlangc --version
+      - name: First-pass independent actual source CHECK and semantic-negative oracle
+        shell: bash
+        run: |
+          set -euo pipefail
+          for case in true false; do
+            for repeat in 1 2; do
+              ./r524-result/newlangc --check "tests/r524/$case.nl" >"r524-result/$case.check$repeat.stdout" 2>"r524-result/$case.check$repeat.stderr" || { echo "STOP: $case CHECK semantic failure (attempt $repeat)"; cat "r524-result/$case.check$repeat.stderr"; exit 1; }
+              test ! -s "r524-result/$case.check$repeat.stdout"
+              test ! -s "r524-result/$case.check$repeat.stderr"
+              echo "CHECK0 $case repeat=$repeat empty outputs"
+            done
+          done
+          set +e
+          ./r524-result/newlangc --check tests/r524/negative.nl >r524-result/negative.check.stdout 2>r524-result/negative.check.stderr
+          status=$?
+          set -e
+          echo "NEGATIVE CHECK exit=$status"
+          cat r524-result/negative.check.stderr
+          test "$status" -eq 3 && test ! -s r524-result/negative.check.stdout
+          set +e
+          ./r524-result/newlangc tests/r524/negative.nl >r524-result/negative.emitted.c 2>r524-result/negative.emit.stderr
+          status=$?
+          set -e
+          echo "NEGATIVE EMIT exit=$status Cbytes=$(wc -c <r524-result/negative.emitted.c)"
+          test "$status" -eq 3 && test ! -s r524-result/negative.emitted.c
+      - name: Actual checked-owned-authorized C17 and native four-build matrix
+        shell: bash
+        run: |
+          set -euo pipefail
+          for case in true false; do
+            ./r524-result/newlangc "tests/r524/$case.nl" >"r524-result/$case.c" 2>"r524-result/$case.emit.stderr" || { echo "STOP: $case BACKEND emission"; cat "r524-result/$case.emit.stderr"; exit 1; }
+            test ! -s "r524-result/$case.emit.stderr"
+            sha256sum "r524-result/$case.c" | tee "r524-result/$case.c.sha256"
+            echo "=== $case emitted C17, unmodified ==="
+            nl -ba "r524-result/$case.c" | head -n 280
+            for cc in gcc clang; do
+              for opt in 0 2; do
+                "$cc" -std=c17 -Wall -Wextra -Wpedantic -Werror -g "-O$opt" -fno-inline "r524-result/$case.c" -o "r524-result/$case.$cc.O$opt"
+                "./r524-result/$case.$cc.O$opt" >"r524-result/$case.$cc.O$opt.stdout" 2>"r524-result/$case.$cc.O$opt.stderr"
+                echo "NATIVE $case $cc O$opt EXIT0"
+              done
+            done
+          done
+      - name: R-owned GDB passive snapshots in original live C function
+        shell: bash
+        run: |
+          set -euo pipefail
+          if ! command -v gdb >/dev/null; then
+            echo 'R524 OBSERVER_UNMEASURED: gdb missing on runner'
+            exit 0
+          fi
+          for case in true false; do
+            echo "=== PASSIVE O0 $case ==="
+            R524_CFILE="$GITHUB_WORKSPACE/r524-result/$case.c" gdb --batch -q -x tests/r524/observer.py --args "./r524-result/$case.gcc.O0" >"r524-result/$case.gdb.trace" 2>&1 || { cat "r524-result/$case.gdb.trace"; echo "OBSERVER_UNMEASURED / GDB failure"; exit 1; }
+            grep -E 'R524_PASSIVE_|R524_SNAPSHOT' "r524-result/$case.gdb.trace" | tail -n 25 || true
+            echo "GDB PASSIVE TRACE $case snapshots $(grep -c '^R524_SNAPSHOT' "r524-result/$case.gdb.trace" || true)"
+          done
+      - name: Keep frozen black-box observations even on failure
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r524-blind-first-pass
+          path: r524-result/
+          if-no-files-found: warn
+          retention-days: 14
