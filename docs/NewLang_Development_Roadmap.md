@@ -12,6 +12,15 @@
 > 運用は [Development Process](NewLang_Project_Development_Process.md) に従う。
 > この文書は正本を置換せず、将来の更新時は「観測した事実」と「新しい投資案」を分ける。
 
+## 現行checkpoint — 2026-10-16（P521/PR #523統合後。以前のcheckpointは履歴）
+
+**Compiler/main `2d4317dbd8b3f1b6ddf095ebeb7ec747eb49d809`、CURRENT_SPEC→Draft17.30、FormalProof/main `5437f92d099e228773d31e2323e8ee6228ca21bf`（本機能のformal proofでない）。** [P521の凍結8正例／3負例](https://github.com/wakairo/NewLang_Compiler/issues/521#issuecomment-6212931235)は、従来のmainでCHECK0→C17 `CLI4` の境界にあった「純粋IF後のUnknown Copy `u8`→普通の一引数Copy関数→元の同じ物理Pair.leftへの単一scoped replace」を、[PR523](https://github.com/wakairo/NewLang_Compiler/pull/523)で既存のauthentic call/IF/field証拠を再利用して通常C17/nativeまで接続した。実装は`src/main.c` +75/-14（純増61C行）で、source/parser/checker/public issuer/canonical/ABI/規範変更なし。提出固定HEAD FULL5＋NO LLVM/PARTIAL初回CI成功を統合後main実行と混同しない。[R524 fresh BLIND独立](https://github.com/wakairo/NewLang_Compiler/issues/524#issuecomment-6213334576)は別のR凍結TRUE/FALSEで、元Pair旧61→左137/23・右182、元field/旧戻り値/関数実引数・返値を生存関数内の物理アドレスで観測してSAFE LIMITED。Rの内部公開checked-owned詳細ID／毒入れは**未実測**でありPの証拠と混同しない。
+
+**Goal Alignment — §1.1 UB-prevention audit locality:** この`u8` relayでprivileged原権限は移らず、caller用opaque safe API／合法な状態変更の不変条件保護／通常caller側の監査負担削減は**一切実証していない**。factor済みC/Zig／同トポロジーRustにも安価な同等構成がある。外部実行時未知inputは[M522](https://github.com/wakairo/NewLang_Compiler/issues/522)の複数独立source/ABI＋未知数値比較issuer不足でHOLD。分岐**内部**の元Pair書換えの構造的join（PR510）、named ref helper効果（PR479/494）、H1 owner/Array/FFI/concurrency/ordinary-safe APIもHOLDのまま。**これは有限Exploration採用でありProduct GOではない。**
+
+**次の費用判断：** さらに類似したIF/Pair/backend専用profileを連鎖させるのではなく、既存成果で作者の真のunchecked前提（権限issuer・root/Allocation/D・関連safe writer・refusal/teardown/callback）とordinary-safe callerの合法変更による再監査依存閉包が**どこで縮小するか**、無関係safe変更ではなぜ再監査不要か、実利用[#470](https://github.com/wakairo/NewLang_Compiler/issues/470)を基に同じtopologyのfactor済みC/Zig/Rustと比較する。新機構は別Issueで価値・反証・予算・停止を規定した場合のみ探索認可。既存H1の価値PASS/FAILは未決定。
+
+
 ## 現行checkpoint — 2026-10-16（P514/P517/PR #515統合後、以下のcheckpointは履歴）
 
 **Compiler/main `87675e7b18976d15c80d79fe9e01ccfb4440cf81`、CURRENT_SPEC→Draft17.30、FormalProof/main `5437f92d099e228773d31e2323e8ee6228ca21bf`。** [P #514](https://github.com/wakairo/NewLang_Compiler/issues/514)→[P #517](https://github.com/wakairo/NewLang_Compiler/issues/517)→[merged PR #515](https://github.com/wakairo/NewLang_Compiler/pull/515)は、元Pairを実sourceで条件より前に作り、`usize==usize`が選んだ純粋Copy `u8`を**分岐後に一度だけ元Pair.leftへscoped replace**する物理C17/nativeの有限実装を統合。P側public-owned／mutation/OOM証拠と固定候補FULL5／NO LLVM CI、[R #518 NON-BLIND calibrated独立native](https://github.com/wakairo/NewLang_Compiler/issues/518#issuecomment-6210781475)により元R凍結TRUE/FALSEで旧37→新108/173、right211、元物理Pairのアドレス同一性を生存関数内で確認。R #516のBLIND C17 failureは旧候補の発見として記録を維持。R #518で専用公開owned数値状態dump／issuer毒入れ／破損C感度を**独立測定したとは主張しない**。成功CIは統合前候補HEADであり新mainに対する追加実行ではない。
