@@ -1,0 +1,4 @@
+P501_OOM parser=16
+P501_OOM semantic=32 rollback=PASS
+P501_OOM registration=101 rollback=PASS
+P501_OOM actual_main=44 rollback=PASS
