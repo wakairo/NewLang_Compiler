@@ -120,7 +120,7 @@ S0 既にmerged: scalar Copy fn / Pair field / scoped ref /
 
 ## 3.3 次の投資分岐と停止規則（Coordination向け候補、非認可）
 
-**探索投資候補G（優先して判断）**：選択済み`usize`比較の最小source形をhistory/canonicalに照合し、**実際に異なる値でcaller分岐が変わる**二つの凍結入力を先に定める。mainで`SOURCE→CHECK→OWNED→C17→NATIVE`の最初の停止点を独立に測り、比較operandのtype mismatchと、比較結果に依存する不正な権限使用を安全性負例と混同せず分類する。source/API選択が欠けるなら**最初に§4.2へ停止して戻す**。この一操作が小さな独立branchとして済むならbyte/Array/guardにも波及する。一般`+`/overflow、loop、memory allocation、C ABIを同じPRで導入しない。前提は製品合格ではなく**§4.3.1の情報獲得**。選択・予算・実装範囲は**別IssueでCoordinationが決める**。
+**探索投資候補G（[Track P #497](https://github.com/wakairo/NewLang_Compiler/issues/497)、USER LAUNCH REQUIRED）**：選択済み`usize`比較の最小source形をhistory/canonicalに照合し、**実際に異なる値でcaller分岐が変わる**二つの凍結入力を先に定める。mainで`SOURCE→CHECK→OWNED→C17→NATIVE`の最初の停止点を独立に測り、比較operandのtype mismatchと、比較結果に依存する不正な権限使用を安全性負例と混同せず分類する。source/API選択が欠けるなら**最初に§4.2へ停止して戻す**。この一操作が小さな独立branchとして済むならbyte/Array/guardにも波及する。一般`+`/overflow、loop、memory allocation、C ABIを同じPRで導入しない。前提は製品合格ではなく**§4.3.1の情報獲得**。選択・予算・実装範囲は**別IssueでCoordinationが決める**。
 
 **候補I（Gと独立）**：fixed Arrayの一element Copy accessと拒否オラクルを、単一source/actual backed original storage上で検証する。新source syntaxや一般claim policyが必要なら設計Gateへ戻る。最初からRingやfree-listへ拡張しない。
 
