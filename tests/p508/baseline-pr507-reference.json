@@ -1,0 +1,164 @@
+[
+  {
+    "source": "field_roots.nl",
+    "mode": "CHECK",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 0,
+    "stdout": "",
+    "diagnostic": ""
+  },
+  {
+    "source": "field_roots.nl",
+    "mode": "C17",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 4,
+    "stdout": "",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p508/field_roots.nl\n"
+  },
+  {
+    "source": "invalid_else.nl",
+    "mode": "CHECK",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p508/invalid_else.nl:5:54-5:59: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ordinary ref<write,T> or its checked reborrow\n"
+  },
+  {
+    "source": "invalid_else.nl",
+    "mode": "C17",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p508/invalid_else.nl:5:54-5:59: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ordinary ref<write,T> or its checked reborrow\n"
+  },
+  {
+    "source": "noncopy_arms.nl",
+    "mode": "CHECK",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p508/noncopy_arms.nl:5:31-5:48: error(unsupported)[ALLOCATED-SOURCE-PROFILE]: domain creation requires the allocated H source world\n"
+  },
+  {
+    "source": "noncopy_arms.nl",
+    "mode": "C17",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p508/noncopy_arms.nl:5:31-5:48: error(unsupported)[ALLOCATED-SOURCE-PROFILE]: domain creation requires the allocated H source world\n"
+  },
+  {
+    "source": "ref_escape.nl",
+    "mode": "CHECK",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p508/ref_escape.nl:6:31-6:49: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+  },
+  {
+    "source": "ref_escape.nl",
+    "mode": "C17",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p508/ref_escape.nl:6:31-6:49: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+  },
+  {
+    "source": "renamed_false.nl",
+    "mode": "CHECK",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 0,
+    "stdout": "",
+    "diagnostic": ""
+  },
+  {
+    "source": "renamed_false.nl",
+    "mode": "C17",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 4,
+    "stdout": "",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p508/renamed_false.nl\n"
+  },
+  {
+    "source": "renamed_true.nl",
+    "mode": "CHECK",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 0,
+    "stdout": "",
+    "diagnostic": ""
+  },
+  {
+    "source": "renamed_true.nl",
+    "mode": "C17",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 4,
+    "stdout": "",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p508/renamed_true.nl\n"
+  },
+  {
+    "source": "select_false.nl",
+    "mode": "CHECK",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 0,
+    "stdout": "",
+    "diagnostic": ""
+  },
+  {
+    "source": "select_false.nl",
+    "mode": "C17",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 4,
+    "stdout": "",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p508/select_false.nl\n"
+  },
+  {
+    "source": "select_true.nl",
+    "mode": "CHECK",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 0,
+    "stdout": "",
+    "diagnostic": ""
+  },
+  {
+    "source": "select_true.nl",
+    "mode": "C17",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 4,
+    "stdout": "",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p508/select_true.nl\n"
+  },
+  {
+    "source": "wrong_condition.nl",
+    "mode": "CHECK",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p508/wrong_condition.nl:5:22-5:23: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n"
+  },
+  {
+    "source": "wrong_condition.nl",
+    "mode": "C17",
+    "compiler_base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80 (same Production tree as PR507 head)",
+    "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p508/wrong_condition.nl:5:22-5:23: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n"
+  }
+]

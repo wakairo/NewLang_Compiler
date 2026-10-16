@@ -1,0 +1,8 @@
+fn main()->unit {
+    let a=usize(2);
+    let b=usize(2);
+    let equal=a==b;
+    let selected=if (a) { u8(7) } else { u8(8) };
+    let copied=selected;
+    copied; unit
+}

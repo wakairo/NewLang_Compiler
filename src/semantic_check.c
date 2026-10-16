@@ -4135,6 +4135,9 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
             (NLCheckedFragment){.source = check->source,
                                 .context = branch.context,
                                 .destroy_context = nl_semantic_destroy,
+                                .if_parent = check->artifact,
+                                .if_parent_node = id,
+                                .if_arm_index = i,
                                 .branch_value_prefix = c->value_count,
                                 .branch_fact_prefix = c->last_value_fact};
         NLCheckedNodeId body = expression(&branch, arms[i]);

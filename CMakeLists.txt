@@ -124,6 +124,20 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:p504_gate_probe>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p504" "${NEWLANG_SANITIZER}")
 
+    add_executable(p508_public_probe tests/p508/public_probe.c)
+    target_link_libraries(p508_public_probe PRIVATE newlang_semantic)
+    add_executable(p508_gate_test tests/p508/gate_test.c)
+    target_link_libraries(p508_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
+    target_link_options(p508_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
+    foreach(group poison oom)
+        add_test(NAME p508_${group}.unit COMMAND p508_gate_test ${group}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p508/select_true.nl")
+    endforeach()
+    add_test(NAME p508_copy_selection_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p508/native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p508_public_probe>"
+        "$<TARGET_FILE:p508_gate_test>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p508" "${NEWLANG_SANITIZER}")
     add_executable(diagnostic_test tests/unit/diagnostic_test.c)
     target_link_libraries(diagnostic_test PRIVATE newlang_diagnostic)
     add_test(NAME diagnostics.unit COMMAND diagnostic_test)

@@ -1,0 +1,150 @@
+[
+  {
+    "source": "field_roots.nl",
+    "mode": "CHECK",
+    "exit": 0,
+    "diagnostic": "",
+    "stdout_bytes": 0,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151"
+  },
+  {
+    "source": "field_roots.nl",
+    "mode": "C17",
+    "exit": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p508/field_roots.nl\n",
+    "stdout_bytes": 0,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151"
+  },
+  {
+    "source": "invalid_else.nl",
+    "mode": "CHECK",
+    "exit": 3,
+    "diagnostic": "tests/p508/invalid_else.nl:5:54-5:59: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ordinary ref<write,T> or its checked reborrow\n",
+    "stdout_bytes": 0,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151"
+  },
+  {
+    "source": "invalid_else.nl",
+    "mode": "C17",
+    "exit": 3,
+    "diagnostic": "tests/p508/invalid_else.nl:5:54-5:59: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ordinary ref<write,T> or its checked reborrow\n",
+    "stdout_bytes": 0,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151"
+  },
+  {
+    "source": "noncopy_arms.nl",
+    "mode": "CHECK",
+    "exit": 3,
+    "diagnostic": "tests/p508/noncopy_arms.nl:5:31-5:48: error(unsupported)[ALLOCATED-SOURCE-PROFILE]: domain creation requires the allocated H source world\n",
+    "stdout_bytes": 0,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151"
+  },
+  {
+    "source": "noncopy_arms.nl",
+    "mode": "C17",
+    "exit": 3,
+    "diagnostic": "tests/p508/noncopy_arms.nl:5:31-5:48: error(unsupported)[ALLOCATED-SOURCE-PROFILE]: domain creation requires the allocated H source world\n",
+    "stdout_bytes": 0,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151"
+  },
+  {
+    "source": "ref_escape.nl",
+    "mode": "CHECK",
+    "exit": 3,
+    "diagnostic": "tests/p508/ref_escape.nl:6:31-6:49: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n",
+    "stdout_bytes": 0,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151"
+  },
+  {
+    "source": "ref_escape.nl",
+    "mode": "C17",
+    "exit": 3,
+    "diagnostic": "tests/p508/ref_escape.nl:6:31-6:49: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n",
+    "stdout_bytes": 0,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151"
+  },
+  {
+    "source": "renamed_false.nl",
+    "mode": "CHECK",
+    "exit": 0,
+    "diagnostic": "",
+    "stdout_bytes": 0,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151"
+  },
+  {
+    "source": "renamed_false.nl",
+    "mode": "C17",
+    "exit": 0,
+    "diagnostic": "",
+    "stdout_bytes": 900,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151",
+    "c_sha256": "4499cc0727920f8c5945ff9d50c36330f70d5d3c5dff3219370cfe8b61f870c9"
+  },
+  {
+    "source": "renamed_true.nl",
+    "mode": "CHECK",
+    "exit": 0,
+    "diagnostic": "",
+    "stdout_bytes": 0,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151"
+  },
+  {
+    "source": "renamed_true.nl",
+    "mode": "C17",
+    "exit": 0,
+    "diagnostic": "",
+    "stdout_bytes": 900,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151",
+    "c_sha256": "3503a0c50f29b3d229197d6d5b0a1704b6d55fb894d5b4bfbe435a81ce12b224"
+  },
+  {
+    "source": "select_false.nl",
+    "mode": "CHECK",
+    "exit": 0,
+    "diagnostic": "",
+    "stdout_bytes": 0,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151"
+  },
+  {
+    "source": "select_false.nl",
+    "mode": "C17",
+    "exit": 0,
+    "diagnostic": "",
+    "stdout_bytes": 707,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151",
+    "c_sha256": "9d8dfe1b9db50f98fcc0057af75a6b408296f9785cd08d19e54d579ef3094351"
+  },
+  {
+    "source": "select_true.nl",
+    "mode": "CHECK",
+    "exit": 0,
+    "diagnostic": "",
+    "stdout_bytes": 0,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151"
+  },
+  {
+    "source": "select_true.nl",
+    "mode": "C17",
+    "exit": 0,
+    "diagnostic": "",
+    "stdout_bytes": 707,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151",
+    "c_sha256": "95da84d1fb3d39ab65ecde8905f40e7e92768ae13f9385ee249f69c5a4942cbe"
+  },
+  {
+    "source": "wrong_condition.nl",
+    "mode": "CHECK",
+    "exit": 3,
+    "diagnostic": "tests/p508/wrong_condition.nl:5:22-5:23: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+    "stdout_bytes": 0,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151"
+  },
+  {
+    "source": "wrong_condition.nl",
+    "mode": "C17",
+    "exit": 3,
+    "diagnostic": "tests/p508/wrong_condition.nl:5:22-5:23: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+    "stdout_bytes": 0,
+    "binary_sha256": "ba9cdbcdb9ce463fa752862426246885a33f526c3143f99a1484e48cf6f2e151"
+  }
+]
