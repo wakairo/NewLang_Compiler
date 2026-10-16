@@ -1,0 +1,68 @@
+name: R516 frozen original Pair blind C17/native
+
+on:
+  push:
+    branches: [r516-original-pair-native-blind]
+
+permissions:
+  contents: read
+
+jobs:
+  independent-native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - name: Checkout frozen R-only branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Checkout exactly fixed opaque compiler candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          ref: 53b6883664f5f585ddd095ab357bc80e1e4018af
+          path: candidate-r516
+
+      - name: Verify fixed candidate and independent hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C candidate-r516 rev-parse HEAD)" = 53b6883664f5f585ddd095ab357bc80e1e4018af
+          printf 'Candidate exactly: %s\n' "$(git -C candidate-r516 rev-parse HEAD)"
+          (cd tests/r516 && sha256sum -c <<'SHA'
+          c921596f72e64116630676b98d6ce43c529420a4bec26c437d01981cc39cc864  true.nl
+          0dfc413cfc63fa379b6b4c1d20a6beea1421188add4e05b9d1bc660fc0ca1664  false.nl
+          d9f6c09fdb63ba50e5beaeb26b6ada585cfe67c28883a53c53c7504ce6c0c272  reject_arm.nl
+          SHA
+          )
+          command -v gcc && command -v clang && command -v gdb
+          cmake --version | head -n 1
+          python3 --version
+
+      - name: Build candidate as opaque compiler (NO LLVM)
+        shell: bash
+        run: |
+          set -euo pipefail
+          CC=gcc cmake -S candidate-r516 -B build-r516 -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_FRONTEND_ONLY=ON
+          cmake --build build-r516 --parallel 2 --target newlangc
+          sha256sum build-r516/newlangc
+
+      - name: Run pre-frozen source/CHECK/C17/native/passive-observation plan
+        env:
+          R516_COMPILER: ${{ github.workspace }}/build-r516/newlangc
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tests/r516/run.py
+
+      - name: Preserve unmodified generated C and all diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r516-first-pass-evidence
+          path: r516-evidence/
+          if-no-files-found: warn
+          retention-days: 30
