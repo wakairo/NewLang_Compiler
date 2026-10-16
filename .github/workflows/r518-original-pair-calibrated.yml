@@ -1,0 +1,77 @@
+name: R518 calibrated original Pair live-frame second-pass
+on:
+  push:
+    branches: [r518-original-pair-calibrated]
+
+permissions:
+  contents: read
+
+jobs:
+  r518-finite-independent-native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 32
+    steps:
+      - name: R-only branch checkout, preserving R516 evidence
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Checkout exactly pinned repaired compiler candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+          ref: 431ff6413f6e24e4de307c25f140ca8161d95bbc
+          path: candidate-r518
+
+      - name: Verify authority, immutable original sources, and tooling
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C candidate-r518 rev-parse HEAD)" = "431ff6413f6e24e4de307c25f140ca8161d95bbc"
+          printf 'R518 candidate exact HEAD: %s\n' "$(git -C candidate-r518 rev-parse HEAD)"
+          git rev-parse HEAD
+          (cd tests/r516 && sha256sum -c <<'SOURCES'
+          c921596f72e64116630676b98d6ce43c529420a4bec26c437d01981cc39cc864  true.nl
+          0dfc413cfc63fa379b6b4c1d20a6beea1421188add4e05b9d1bc660fc0ca1664  false.nl
+          d9f6c09fdb63ba50e5beaeb26b6ada585cfe67c28883a53c53c7504ce6c0c272  reject_arm.nl
+          SOURCES
+          )
+          python3 -m py_compile tests/r518/run.py
+          command -v gcc
+          command -v clang
+          if ! command -v gdb >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install --no-install-recommends -y gdb
+          fi
+          command -v gdb
+          gcc --version | head -n1
+          clang --version | head -n1
+          cmake --version | head -n1
+
+      - name: Build exact candidate without LLVM
+        shell: bash
+        run: |
+          set -euo pipefail
+          CC=gcc cmake -S candidate-r518 -B build-r518 -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_FRONTEND_ONLY=ON
+          cmake --build build-r518 --parallel 2 --target newlangc
+          sha256sum build-r518/newlangc
+
+      - name: R-owned original source, C17/native and live root oracle
+        shell: bash
+        env:
+          R518_SHA: 431ff6413f6e24e4de307c25f140ca8161d95bbc
+          R518_COMPILER: build-r518/newlangc
+        run: |
+          set -euo pipefail
+          python3 tests/r518/run.py
+
+      - name: Archive second-pass evidence only
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r518-calibrated-finite-evidence
+          path: r518-evidence/
+          if-no-files-found: warn
+          retention-days: 30
