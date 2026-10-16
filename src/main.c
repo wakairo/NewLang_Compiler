@@ -169,6 +169,148 @@ static bool quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
     return false;
 }
 
+/* New bool lowering is restricted to the function's straight-line root block.
+ * Match checked identifiers to root declarations, including retained source
+ * spelling. Source bytes validate resolution only; emitted names use IDs. */
+static NLCheckedNodeId bool_source_origin(const NLCheckedFragment *f,
+                                          NLCheckedNodeId id)
+{
+    const NLCheckedNodeView *v = nl_checked_node_view(f, id);
+    const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
+    if (v == NULL || root == NULL || root->kind != NL_CHECKED_BLOCK ||
+        v->kind != NL_CHECKED_IDENTIFIER || v->symbol == 0 ||
+        v->value_use != NL_VALUE_COPIED)
+        return 0;
+    NLSourceView use;
+    if (!nl_source_view(nl_checked_source(f), v->name, &use) || use.length == 0)
+        return 0;
+    for (NLCheckedNodeId i = root->first_item; i != 0;) {
+        const NLCheckedNodeView *binding = nl_checked_node_view(f, i);
+        if (binding == NULL)
+            return 0;
+        if (i < id && binding->kind == NL_CHECKED_BINDING &&
+            binding->symbol == v->symbol && binding->initializer != 0 &&
+            binding->initializer < i) {
+            const NLCheckedNodeView *receiver =
+                nl_checked_node_view(f, binding->first_argument);
+            NLSourceView declaration;
+            if (receiver != NULL && receiver->kind == NL_CHECKED_RECEIVER &&
+                receiver->symbol == v->symbol && receiver->type == v->type &&
+                nl_source_view(nl_checked_source(f), receiver->name,
+                               &declaration) &&
+                declaration.length == use.length &&
+                memcmp(declaration.bytes, use.bytes, use.length) == 0)
+                return binding->initializer;
+            return 0;
+        }
+        if (binding->next_item != 0 && binding->next_item <= i)
+            return 0;
+        i = binding->next_item;
+    }
+    return 0;
+}
+
+static bool bool_root_value(const NLCheckedFragment *f, NLCheckedNodeId id)
+{
+    const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
+    if (root == NULL || root->kind != NL_CHECKED_BLOCK)
+        return false;
+    if (root->tail == id)
+        return true;
+    for (NLCheckedNodeId i = root->first_item; i != 0;) {
+        const NLCheckedNodeView *v = nl_checked_node_view(f, i);
+        if (v == NULL)
+            return false;
+        if ((v->kind == NL_CHECKED_BINDING ||
+             v->kind == NL_CHECKED_STATEMENT) &&
+            v->initializer == id)
+            return true;
+        if (v->next_item != 0 && v->next_item <= i)
+            return false;
+        i = v->next_item;
+    }
+    return false;
+}
+
+static bool bool_quantity_origin(const NLCheckedFragment *f, NLCheckedNodeId id,
+                                 V0Program *p)
+{
+    if (!quantity_scalar(f, id, p))
+        return false;
+    while (id != 0) {
+        const NLCheckedNodeView *v = nl_checked_node_view(f, id);
+        if (v->kind == NL_CHECKED_USIZE_LITERAL)
+            return true;
+        id = bool_source_origin(f, id);
+    }
+    return false;
+}
+
+/* Boolean scalar staging: authenticate the real quantity children, not merely
+ * the cached static truth. Copy locals must lead back to that same operation.
+ * No IF/effect/ABI or root-identity evidence is admitted here. */
+static bool boolean_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
+                           V0Program *p)
+{
+    const NLSemanticContext *c = nl_checked_context(f);
+    const NLTypeId boolean = nl_semantic_core_type(c, NL_TYPE_BOOL);
+    bool first = true;
+    size_t expected = 0;
+    while (id != 0) {
+        const NLCheckedNodeView *v = nl_checked_node_view(f, id);
+        NLSemanticValueView value;
+        if (v == NULL || !bool_root_value(f, id) || v->type != boolean ||
+            v->terminates || v->result_count != 1 ||
+            v->results[0].type != boolean ||
+            !nl_semantic_value_view(c, v->results[0].value, &value) ||
+            value.type != boolean || !value.scalar_known ||
+            value.scalar_value > 1 ||
+            value.dependencies != NL_DEPENDENCY_FREE ||
+            value.value_dependency_count != 0 || value.domain != 0 ||
+            value.allocation_region != 0 || value.reference.place != 0 ||
+            value.reference_count != 0 || value.slot_place != 0 ||
+            value.field_count != 0 || value.sum_owner != 0 ||
+            (!first && value.scalar_value != expected))
+            return false;
+        expected = value.scalar_value;
+        first = false;
+        if (v->kind == NL_CHECKED_USIZE_EQUALITY) {
+            const NLCheckedNodeView *left =
+                nl_checked_node_view(f, v->first_argument);
+            const NLCheckedNodeView *right =
+                left == NULL ? NULL
+                             : nl_checked_node_view(f, left->next_argument);
+            NLSemanticValueView a, b;
+            if (v->argument_count != 2 || left == NULL || right == NULL ||
+                v->first_argument >= left->next_argument ||
+                left->next_argument >= id || right->next_argument != 0 ||
+                v->span.start_byte != left->span.start_byte ||
+                v->span.end_byte != right->span.end_byte ||
+                v->name.end_byte < v->name.start_byte ||
+                v->name.end_byte - v->name.start_byte != 2 ||
+                left->span.end_byte > v->name.start_byte ||
+                v->name.end_byte > right->span.start_byte ||
+                !bool_quantity_origin(f, v->first_argument, p) ||
+                !bool_quantity_origin(f, left->next_argument, p) ||
+                !nl_semantic_value_view(c, left->results[0].value, &a) ||
+                !nl_semantic_value_view(c, right->results[0].value, &b) ||
+                v->results[0].value <= left->results[0].value ||
+                v->results[0].value <= right->results[0].value ||
+                !v->has_scalar_result || !v->scalar_result.known ||
+                v->scalar_result.type != boolean ||
+                v->scalar_result.value != expected)
+                return false;
+            /* Consistency validation only. Emission below uses lhs == rhs. */
+            return expected == (a.scalar_value == b.scalar_value ? 1U : 0U);
+        }
+        if (v->kind != NL_CHECKED_IDENTIFIER || v->symbol == 0 ||
+            v->value_use != NL_VALUE_COPIED)
+            return false;
+        id = bool_source_origin(f, id);
+    }
+    return false;
+}
+
 /* Only one flat two-u8 nominal representation. The associated checked
  * context supplies semantic shape facts; no names or layout are consulted. */
 static bool avs_shape(const NLCheckedFragment *fragment, NLTypeId type,
@@ -264,6 +406,20 @@ static bool v1_emit_scalar(FILE *stream, const NLCheckedNodeView *value)
         return fprintf(stream, "nl_local_%zu.f%zu", value->field.base,
                        value->field.index) >= 0;
     return false;
+}
+
+static bool emit_quantity_bool(FILE *stream, const NLCheckedFragment *f,
+                               const NLCheckedNodeView *value)
+{
+    if (value->kind != NL_CHECKED_USIZE_EQUALITY)
+        return v1_emit_scalar(stream, value);
+    const NLCheckedNodeView *left =
+        nl_checked_node_view(f, value->first_argument);
+    const NLCheckedNodeView *right =
+        nl_checked_node_view(f, left->next_argument);
+    return fputc('(', stream) != EOF && v1_emit_scalar(stream, left) &&
+           fputs(" == ", stream) >= 0 && v1_emit_scalar(stream, right) &&
+           fputc(')', stream) != EOF;
 }
 
 static bool v0_validate_node(const NLCheckedFragment *, NLCheckedNodeId,
@@ -584,9 +740,11 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
     case NL_CHECKED_FIELD_READ:
     case NL_CHECKED_U8_LITERAL:
     case NL_CHECKED_USIZE_LITERAL:
+    case NL_CHECKED_USIZE_EQUALITY:
     case NL_CHECKED_IDENTIFIER:
         return v1_scalar(fragment, id, program) ||
                quantity_scalar(fragment, id, program) ||
+               boolean_scalar(fragment, id, program) ||
                gate_ptr(fragment, id, program);
     case NL_CHECKED_PTR_FROM_REF:
         return gate_ptr(fragment, id, program);
@@ -607,6 +765,7 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                receiver->symbol == view->symbol &&
                receiver->type == initializer->type &&
                (quantity_scalar(fragment, view->initializer, program) ||
+                boolean_scalar(fragment, view->initializer, program) ||
                 (receiver->type == program->u8 &&
                  (v1_scalar(fragment, view->initializer, program) ||
                   (initializer->kind == NL_CHECKED_REGISTERED_CALL &&
@@ -822,12 +981,13 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     case NL_CHECKED_FIELD_READ:
     case NL_CHECKED_U8_LITERAL:
     case NL_CHECKED_USIZE_LITERAL:
+    case NL_CHECKED_USIZE_EQUALITY:
     case NL_CHECKED_IDENTIFIER:
     case NL_CHECKED_PTR_FROM_REF:
         return v0_indent(stream, depth) && fputs("(void)", stream) >= 0 &&
                (view->kind == NL_CHECKED_PTR_FROM_REF
                     ? gate_emit_ptr(stream, fragment, view)
-                    : v1_emit_scalar(stream, view)) &&
+                    : emit_quantity_bool(stream, fragment, view)) &&
                fputs(";\n", stream) >= 0;
     case NL_CHECKED_REPLACE:
         return gate_emit_replace(stream, fragment, id, depth, true);
@@ -883,6 +1043,13 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
             if (fprintf(stream, "const size_t nl_local_%zu = ", view->symbol) <
                     0 ||
                 !v1_emit_scalar(stream, initializer))
+                return false;
+        } else if (initializer->type ==
+                   nl_semantic_core_type(nl_checked_context(fragment),
+                                         NL_TYPE_BOOL)) {
+            if (fprintf(stream, "const _Bool nl_local_%zu = ", view->symbol) <
+                    0 ||
+                !emit_quantity_bool(stream, fragment, initializer))
                 return false;
         } else if ((initializer->kind == NL_CHECKED_LOAN_HEADER &&
                     initializer->loan.access == NL_ACCESS_READ) ||

@@ -1064,7 +1064,7 @@ static NLSyntaxNode *allocated_call(NLParser *parser, NLSourceSpan name,
     return result;
 }
 
-static NLSyntaxNode *source_expression(NLParser *parser)
+static NLSyntaxNode *source_primary(NLParser *parser)
 {
     if (!enter(parser))
         return NULL;
@@ -1346,6 +1346,7 @@ static NLSyntaxNode *source_expression(NLParser *parser)
             result->view.data.name = name;
     }
     if (peek(parser) && expression_extension(parser) && !punct(parser, ';') &&
+        !punct(parser, '=') &&
         !(parser->match_scrutinee && punct(parser, '{'))) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
              "P5-EXPRESSION-UNSUPPORTED", "expression extension outside P5");
@@ -1353,6 +1354,53 @@ static NLSyntaxNode *source_expression(NLParser *parser)
 done:
     --parser->depth;
     return parser->status == NL_PARSE_OK ? result : NULL;
+}
+
+static bool equality_operand(const NLSyntaxNode *operand)
+{
+    const NLSyntaxKind kind = operand->view.kind;
+    return kind == NL_SYNTAX_EXPR_NAME || kind == NL_SYNTAX_U8_LITERAL ||
+           kind == NL_SYNTAX_USIZE_LITERAL;
+}
+
+/* One already-selected spelling, not a precedence/associativity grammar.
+ * Compound operands and chaining remain unsupported source profiles. */
+static NLSyntaxNode *source_expression(NLParser *parser)
+{
+    NLSyntaxNode *left = source_primary(parser);
+    if (left == NULL || !punct(parser, '='))
+        return left;
+    const NLSourceSpan first = parser->token.span;
+    consume(parser);
+    if (!punct(parser, '=') ||
+        parser->token.span.start_byte != first.end_byte) {
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, first,
+             "P5-EXPRESSION-UNSUPPORTED",
+             "expected one contiguous == operator");
+        return NULL;
+    }
+    const NLSourceSpan operator_span = {first.start_byte,
+                                        parser->token.span.end_byte};
+    consume(parser);
+    NLSyntaxNode *right = source_primary(parser);
+    if (right == NULL)
+        return NULL;
+    if (!equality_operand(left) || !equality_operand(right) ||
+        punct(parser, '=')) {
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, operator_span,
+             "USIZE-EQUALITY-SOURCE-PRECISION",
+             "only one flat equality of names or typed literals is supported");
+        return NULL;
+    }
+    NLSyntaxNode *result = node(
+        parser, NL_SYNTAX_USIZE_EQUALITY,
+        (NLSourceSpan){left->view.span.start_byte, right->view.span.end_byte});
+    if (result != NULL) {
+        result->view.data.equality.left = left;
+        result->view.data.equality.right = right;
+        result->view.data.equality.operator_span = operator_span;
+    }
+    return result;
 }
 
 static NLSyntaxNode *source_binding(NLParser *parser)

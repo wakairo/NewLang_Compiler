@@ -83,15 +83,22 @@ def main():
             print(json.dumps(dict(source=name, checked=0, public=public.stdout.strip(),
                                   c_sha256=hashlib.sha256(text.encode()).hexdigest(),
                                   native=statuses, target_guard="REJECT")))
-        # These remain SOURCE-PROFILE refusals, not semantic safety evidence.
-        for name in ("guard_true.nl", "guard_false.nl", "wrong_type.nl", "false_authority.nl"):
+        # P504 deliberately advances these immutable historical source frontiers.
+        # Prior parser results remain in baseline.json; no source/hash is changed.
+        frontiers = {
+            "guard_true.nl": ("precision", "P6-JOIN-PRECISION"),
+            "guard_false.nl": ("precision", "P6-JOIN-PRECISION"),
+            "wrong_type.nl": ("semantic", "USIZE-EQUALITY-TYPE"),
+            "false_authority.nl": ("semantic", "P3-WRITE-REF-REQUIRED"),
+        }
+        for name, (category, code) in frontiers.items():
             for flags in (["--check"], []):
                 result = run([compiler, *flags, str(source_dir / name)])
                 require(result.returncode == 3 and not result.stdout and
-                        "P5-EXPRESSION-UNSUPPORTED" in result.stderr,
+                        f"error({category})[{code}]" in result.stderr,
                         f"comparison frontier changed: {result}")
                 print(json.dumps(dict(source=name, flags=flags, exit=3,
-                                      diagnostic=result.stderr.strip(), stage="PARSER")))
+                                      diagnostic=result.stderr.strip(), stage=category)))
         for flags in (["--check"], []):
             result = run([compiler, *flags, str(source_dir / "literal_overflow.nl")])
             require(result.returncode == 3 and not result.stdout and
@@ -113,7 +120,7 @@ def main():
             require(result.returncode == 3 and not result.stdout and code in result.stderr,
                     f"typed quantity safety negative failed: {result}")
             print(json.dumps(dict(negative=name, exit=3, diagnostic=result.stderr.strip())))
-    print("P497 PHASE1 ONLY: comparison/if/Pair and equality-authority safety UNTESTED")
+    print("P497 literals preserved; P504 equality type/ref negatives semantic; Pair join precision; IF native UNTESTED")
 
 
 if __name__ == "__main__":

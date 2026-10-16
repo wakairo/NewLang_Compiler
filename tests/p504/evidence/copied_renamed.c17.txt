@@ -1,0 +1,27 @@
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+
+#include <stddef.h>
+_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
+
+static void nl_fn_10(void);
+
+static void nl_fn_10(void)
+{
+    const size_t nl_local_1 = ((size_t)UINTMAX_C(17));
+    (void)nl_local_1;
+    const size_t nl_local_2 = nl_local_1;
+    (void)nl_local_2;
+    const size_t nl_local_3 = ((size_t)UINTMAX_C(17));
+    (void)nl_local_3;
+    const _Bool nl_local_4 = (nl_local_2 == nl_local_3);
+    (void)nl_local_4;
+    (void)nl_local_4;
+    (void)0;
+}
+
+int main(void)
+{
+    nl_fn_10();
+    return 0;
+}

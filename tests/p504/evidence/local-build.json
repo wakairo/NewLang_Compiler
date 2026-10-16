@@ -1,0 +1,21 @@
+{
+  "base": "2161115b5cc25c3ef0c8c2a729f0f0ffe1b7a287",
+  "freeze": "80d02e0505343600dfdd0744e9be5773a9a4bc2a",
+  "binary_sha256": "2ec2e47e61cb434e4243337c8b7c2a5b57a886b0f6af219c495fc43c2b56929f",
+  "ctest_tail": [
+    "293/294 Test #266: node_topology.integration ..................   Passed    2.29 sec",
+    "294/294 Test #294: oracle.smoke ...............................   Passed    1.05 sec",
+    "",
+    "100% tests passed, 0 tests failed out of 294",
+    "",
+    "Total Test time (real) =  35.31 sec"
+  ],
+  "gcc": "gcc (Debian 14.2.0-19) 14.2.0",
+  "native_case_count": 6,
+  "native_per_compiler": {
+    "successes": 24,
+    "controlled_refusals": 18
+  },
+  "backend_private_controls_per_compiler_suite": 70,
+  "p497_historical_baseline_sha256": "0b75b5964c8ed8ff825d68796fec64965505cda0a9a32029ec0f0a7933d36c3a"
+}

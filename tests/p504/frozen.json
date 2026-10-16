@@ -1,0 +1,97 @@
+{
+  "base": "2161115b5cc25c3ef0c8c2a729f0f0ffe1b7a287",
+  "reference_pr503": "e561e8f189fd67961f5ac90560e20ecc45752abd",
+  "sources": {
+    "bool_as_ref.nl": "7748c1ffe3ef72659bef20b3b4147e45f0548c76cd3c04187b9032155324032f",
+    "chain.nl": "46c790bb2731b3464c922d5fcb2c66fc4fd7c20a3ef7136f3f22b033950fe81c",
+    "copied_renamed.nl": "8b63429c8d979f19ded4e7eef6c21f4c5c8a186d036c412d71e21598fae3ebab",
+    "copy_false.nl": "e6b07be7784b64f8a99f87ff8341fef6f3cae2fe4e3685c33d4f4f4c03c26598",
+    "copy_true.nl": "0ec4a7a1ae30bdd192ad5680e95002c7af9db323148d881c5d82880a843a0315",
+    "direct_false.nl": "fe1b704115f206a14e7f5a1e58e15025998359e36071eecd160b961ac7c7c21f",
+    "equal_false.nl": "45bf0f4e861374e7a3e78218ff3147f0f23d9efb17c730cde2f7e83e0a1e6954",
+    "equal_true.nl": "6a473c7e5c2cec1d96739b6de6f2b1bdc8d48b1024c495992857cb78f81b7506",
+    "full_guard_false.nl": "02823c36bc013e7b6cb727a068d23a59da5b9ca2fb37b0b33997fcdad9b67a2d",
+    "full_guard_true.nl": "7b0fbc9d346a247699275f030c2c64d70fb6aee57f0128eb0c5cb98e5a399d3b",
+    "if_false.nl": "d237584f2f3a2374a922f88f7786731dc02313d7ffcff529de8366b746541d2a",
+    "if_true.nl": "c05655de8b78d6c2655f57936b171df81e150bbcb1db3c7ba8c0470841f568ee",
+    "split_operator.nl": "acd3e6e2bebfca03f040d196af648f09439c77a4bad48290980155d44a24d564",
+    "unknown.nl": "8aa9d69fccce82a5063bb514b81d6be8bce77ff029297d2b3f53b9a3ce3dc278",
+    "wrong_type.nl": "a35b023ab02fa272a08bb4d67e55cc74101e371cd45d967c2260ed880b875327"
+  },
+  "oracles": {
+    "native": {
+      "equal_true.nl": [
+        2,
+        2,
+        1
+      ],
+      "equal_false.nl": [
+        2,
+        3,
+        0
+      ],
+      "copied_renamed.nl": [
+        17,
+        17,
+        1
+      ],
+      "copy_true.nl": [
+        2,
+        2,
+        1
+      ],
+      "copy_false.nl": [
+        2,
+        3,
+        0
+      ],
+      "direct_false.nl": [
+        17,
+        19,
+        0
+      ]
+    },
+    "if_true.nl": "CHECK bool1, C17 CLI4 no output; hypothetical unit arms only",
+    "if_false.nl": "CHECK bool0, C17 CLI4 no output; no physical IF",
+    "full_guard_true.nl": "CHECK P6-JOIN-PRECISION7:5-8:70; original Pair true7 old0 sibling9 NOT native reached",
+    "full_guard_false.nl": "CHECK P6-JOIN-PRECISION7:5-8:70; original Pair false8 old0 sibling9 NOT native reached",
+    "wrong_type.nl": "semantic USIZE-EQUALITY-TYPE at ==",
+    "bool_as_ref.nl": "semantic P3-WRITE-REF-REQUIRED",
+    "unknown.nl": "USIZE-EQUALITY-PRECISION",
+    "chain.nl": "unsupported flat source",
+    "split_operator.nl": "unsupported contiguous spelling",
+    "baseline": "all SOURCE parser unsupported at first =; run --check/normal separately",
+    "native_observer": "read source operand and bool local; explicit saved Copy if present; real C lhs == rhs, never static bool literal",
+    "faulty_c": "same observer must reject flipped == operator and corrupted bool Copy, no guest repair"
+  },
+  "p497_migration": {
+    "immutable_sources": {
+      "guard_true.nl": "7b0fbc9d346a247699275f030c2c64d70fb6aee57f0128eb0c5cb98e5a399d3b",
+      "guard_false.nl": "02823c36bc013e7b6cb727a068d23a59da5b9ca2fb37b0b33997fcdad9b67a2d",
+      "literal.nl": "3cbc872229eed56c08a246d824f2e90f3bb91b42c7791f83cd343541aca2c710",
+      "literal9.nl": "afb620ce4eb2a0c1ff268c49bc6bfc60e328d7dae9735937e6e5c32b32116926",
+      "literal_overflow.nl": "e9831e0350d1a0bf0d8d21fc0fef748503fcb7b54a728344edfe533462ee98b8",
+      "wrong_type.nl": "c3940b616ca8168b19347d09651d2ad54c2b99ae1f59c97d8085b09e36a09827",
+      "false_authority.nl": "c46d401e5e4b02a0d2511cff79edfe8f2038115610947221ab887882826a57e4"
+    },
+    "expected": {
+      "guard_true.nl": [
+        "precision",
+        "P6-JOIN-PRECISION"
+      ],
+      "guard_false.nl": [
+        "precision",
+        "P6-JOIN-PRECISION"
+      ],
+      "wrong_type.nl": [
+        "semantic",
+        "USIZE-EQUALITY-TYPE"
+      ],
+      "false_authority.nl": [
+        "semantic",
+        "P3-WRITE-REF-REQUIRED"
+      ]
+    },
+    "historical_baseline": "tests/p497/baseline.json unchanged"
+  }
+}
