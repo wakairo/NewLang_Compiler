@@ -73,6 +73,61 @@ statusはlanguage validityを意味しない。以下の行の `SPEC`／`SOURCE/
 | C undefined-behavior compatibility | OUTSIDE-ENVELOPE | 継承しないことがNewLangの目的に含まれる。 |
 | every compiler extension / preprocessor trick | OUTSIDE-ENVELOPE | practical capabilityが別の安全なmechanismで満たせれば互換は不要。 |
 
+## 3.1 能力依存地図 — 最初の不足と再利用先（2026-10-16）
+
+上の横断的statusは**長期的な採用可能性**の分類であり、以下は**現Productionで一つのsource/programをどこまで実測したか**という別軸である。段階は `SOURCE/CHECK → 公開OWNED → 通常C17 → 実物理NATIVE → 通常callerの価値`。左で停止した実験の右側は**NOT REACHED**であり「右側機構が一般的に不正／不存在」の証拠ではない。`CHECK3 precision`は静的安全性違反の発見と同義ではなく、`CHECK0`も公開証明／nativeを保証しない。下記の「次の最小問い」は**候補であって実装の起動許可ではない**。
+
+| C-classの能力経路 | 固定できる現実の実測足場 | 最初に未到達／不足する境界 | 次に買う情報（成功／停止の反証） |
+| --- | --- | --- | --- |
+| **Copy値を返す同一unitの通常関数** | [merged PR #404](https://github.com/wakairo/NewLang_Compiler/pull/404)：元sourceの`fn echo(x:u8)->u8{x}`、異なる実引数／旧戻り値のsource-issued検査・限定strict C17/native。旧[P379](https://github.com/wakairo/NewLang_Compiler/issues/379#issuecomment-6134477587)が`Copy引数付きA1 UNKNOWN`としたのは**当時の履歴**。 | 関数を使えることからstateful ref/owner functionのcaller poststateや一般ABIは従わない。 | 数値・選択結果を本物のcallerが次の操作に使うsourceを固定する。単なる`echo(7)`繰返しは新能力に数えない。 |
+| **元lexical intrusive Nodeの条件付きlink更新／継続** | [merged PR #472](https://github.com/wakairo/NewLang_Compiler/pull/472)の実`Some(q)`跨りroot書込、および[merged PR #492](https://github.com/wakairo/NewLang_Compiler/pull/492)の合流後`tail@next` Copy再読は、両方SOURCE/CHECK・公開owned・物理C17/nativeで有限実測。 | P490 C2は後続`match joined_tail`が`NODE-JOIN-POST-PRECISION`：**variant/provenanceがUnknown**のままなので`Some(p)`由来reloanは未達。 | 必要な利用者操作が**reloanそのもの**を要する場合だけ、実sourceでroot/provenanceを守る有限相関を費用・負例と比較。物理Some観測から静的Someを捏造しない。 |
+| **refを受け取って元fieldを書き換えるnamed helper** | [PR #479](https://github.com/wakairo/NewLang_Compiler/pull/479)は未統合P8→P9、[PR #494](https://github.com/wakairo/NewLang_Compiler/pull/494)はその上の単一**非match** source-issued公開caller/callee証明default-OFF候補、[R #495](https://github.com/wakairo/NewLang_Compiler/issues/495)は限定SAFE（独立OOM未測定）。 | **mainはnamed Option/ref signature CHECK P8**。候補PR479でも二正常分岐中の呼出しは`P9-CONTINUATION-PRECISION`。候補PR494のnamed C17/native、ordinary safe API、author/caller純負担は未達。 | 1 bodyのための530行replay・5 world複製を、実測済みP471 inlineと比較。**監査依存閉包の減少が無い限り次の証明機構を買わない**（[V #484](https://github.com/wakairo/NewLang_Compiler/issues/484)）。 |
+| **guard付きquantity／比較・分岐** | canonical [Draft17.30 §5.2](reference/NewLang_v0_spec_Draft17_30.md) は`usize`の加減乗除のpreconditionと比較を選択。u8 typed literal、bool branch、Copy callの**別々のsource/check/native**足場あり。 | [P379](https://github.com/wakairo/NewLang_Compiler/issues/379#issuecomment-6134477587)：一般の算術／比較式のexpression parser・check・loweringを**一つの元sourceで通した証拠なし**。lexerが記号を認識することはsource admissionでない。 | **第一候補：`usize`の比較一操作→bool→既存if**を凍結して最初のSOURCE／owned／C17停止点を測る。比較結果が元callerの分岐を変えることをoracleに入れる。算術/overflow、Array、loopを同時に要求するなら分離／STOP。実装するには文法の歴史照合（§4.2）が先。 |
+| **固定容量・添字付きArray／slot／Ring** | core §15の`head/len` SSOTと§25のArray/index/span/bounds／occupancyは意味論の資産。既存Pair固定fieldはsource/nativeまで到達。 | Arrayの`data[i]`等の**一般要素source producer／bounds proof**は[P379](https://github.com/wakairo/NewLang_Compiler/issues/379#issuecomment-6134477587)時点では未到達。これに比較・loop/backedge・Option occurrence・wraparoundが**別々に**必要。 | まず**一つの固定ArrayのCopy element read＋範囲外拒否**をsource/certificate/nativeで閉じられるか。成功してもRingのfull/empty・refundable owner claimは別。metadata`len/head`から権限を作らない。 |
+| **有限byte列decoder／bounded scan** | `byte`/typed scalar、§24 raw observation、§25 scoped spanはcanonicalの設計基盤。現mainのC lexerは**NewLangで実装されたbyte decoderではない**。 | 実NewLang sourceのbounded byte-sequence/access/index、終端／エラー結果、合法な反復を合わせたソースが未達。[P379](https://github.com/wakairo/NewLang_Compiler/issues/379#issuecomment-6134477587)。 | 一つの入力byteから分岐結果を得る以前に、**長さ・寿命を保持した一要素アクセス**の真のsource権限とbounds否定を測る。NUL未検証raw ptrを安全なbyte spanと呼ばない。 |
+| **元heap Nodeのdetach→別ownerへの返却／解放** | H1の**5元root pre-detach / 0–5 allocation failure**は実C17/native足場、元B/dst非Copy custodyは別。[H1 #268](https://github.com/wakairo/NewLang_Compiler/issues/268)。 | [M371/M372](https://github.com/wakairo/NewLang_Compiler/issues/372)：original owner receipt/refund/poststateとmembership・representation保護の**二つの独立source/encapsulation gap**。full H1 adoption 0/2、native full 0。 | 低水準`Some(ptr)` hopを増やしても原Allocation/Dは移らない。安全な普通callerの`detach` contractが成立する具体的原権限と保護境界が無い限りH1専用実装を再開しない。 |
+| **allocator epoch grow／STB、FFI callback／外部backing** | stb_ds original Cの挙動とF45/M374研究、C ABI／external backing／MMIO等の長期coverage項目は存在。 | STBは**六つのrich source-to-epoch obligation**が同時に未接続。callback/FFI ABI／外部region importと動的typed lifetimeは別の未確認層。元core権限と物理addressを混同しない。 | まず独立した**一つのimport/call境界のoriginal backing・失敗・scope証明**が具体的なconsumerで必要か確かめる。STB/H1を一つの`usize ==`などの小さなsource PASSで代替しない。 |
+| **freestanding・DMA/MMIO・concurrency・modules** | 長期C replacementの重要な`STRATEGIC-GAP/OPEN`。現v0は単一semantic unit・concurrency外。 | native portable substrate・外部alias／device effects／memory model／別unit summaryとoriginal owner identityの輸送は**個別の境界**で、lexical Node C17成功では埋まらない。 | userの実platform/ABI契約が与えられたときに**no-foreclosure／一つの境界**から調査。v0にgeneral effects/threadsを先行搭載しない。 |
+
+## 3.2 非直列の依存関係 — 小さな枝で全体の再利用率を増やす
+
+以下は**着手順の強制ではなく、未証明の橋を区別する論理地図**である。`A+B`と書いてもそれらが同一sourceで合成可能と主張しない（各合流は別証拠を要する）。
+
+```text
+S0 既にmerged: scalar Copy fn / Pair field / scoped ref /
+              Option match / original lexical Node join + post-read
+  |
+  +-- G: quantity comparison -> bool -> conditionally used result
+  |      +-- numeric checked operations -> bounded count/offset/loop
+  |      +-- (with indexed access) -> safe bounded byte decoder
+  |
+  +-- I: fixed Array source -> indexed Copy read + bounds negative
+  |      +-- (with G / loop) -> search/scan
+  |      +-- (with Option slot & transition contract) -> fixed Ring
+  |
+  +-- L: original Node ptr/ref/currentness -> safe following / reloan
+  |      +-- direct checked operations [partial merged]
+  |      +-- named call entry/body/post [PR494 experimental, not merged]
+  |      +-- (with true A/D custody + membership encapsulation)
+  |             -> owner-returning detach/adopt ordinary-safe library
+  |
+  +-- B: original BackingRegion import / runtime ABI / FFI
+         +-- allocator epoch exchange [STB HOLD]
+         +-- device memory / callback / freestanding [separate gates]
+```
+
+**S1→S2→S3→S4→S5の単線レベル上げではない。** 元のユーザー操作に不要な数値・Ring・一般ABIを前提条件にしない。S5も内部不変条件の公開を必要としない小さなbody-visible helperと、別ordinary callerに対してmembershipを守るopaque safe APIでは必要証拠が違う（[M378](https://github.com/wakairo/NewLang_Compiler/issues/378#issuecomment-6134428899)）。成功した小枝をcJSON H1やsafe Ringの得点に足さない。
+
+## 3.3 次の投資分岐と停止規則（Coordination向け候補、非認可）
+
+**探索投資候補G（[Track P #497](https://github.com/wakairo/NewLang_Compiler/issues/497)、USER LAUNCH REQUIRED）**：選択済み`usize`比較の最小source形をhistory/canonicalに照合し、**実際に異なる値でcaller分岐が変わる**二つの凍結入力を先に定める。mainで`SOURCE→CHECK→OWNED→C17→NATIVE`の最初の停止点を独立に測り、比較operandのtype mismatchと、比較結果に依存する不正な権限使用を安全性負例と混同せず分類する。source/API選択が欠けるなら**最初に§4.2へ停止して戻す**。この一操作が小さな独立branchとして済むならbyte/Array/guardにも波及する。一般`+`/overflow、loop、memory allocation、C ABIを同じPRで導入しない。前提は製品合格ではなく**§4.3.1の情報獲得**。選択・予算・実装範囲は**別IssueでCoordinationが決める**。
+
+**候補I（Gと独立）**：fixed Arrayの一element Copy accessと拒否オラクルを、単一source/actual backed original storage上で検証する。新source syntaxや一般claim policyが必要なら設計Gateへ戻る。最初からRingやfree-listへ拡張しない。
+
+**優先度を上げない案**：PR494の追加snapshot/replayを一般call-in-matchへ展開すること、P490 C2のprecisionを実行時`Some`で埋めること、元heap B ownerをCopy ptrから推定すること、長いsource未対応領域をCのhost helperだけで処理してNewLang成功と呼ぶこと。いずれも作者＋普通callerの監査依存閉包の改善を示さないか、権限／障害の真の位置を隠す。
+
+**選定に必要な一つの価値条件**：本物のC-class操作において、入力→元物理オブジェクトの変化→普通callerの決定が追えるか、内部の安全条件を破る合法な変更を型／compilerが拒否できるか。同等にfactor済みC、Zig、同一topology Rustのsafe wrapperと比較する。**実装前にその情報がまだ無い探索は、再利用される最小のsource能力に限り費用・停止条件を先に固定する**。Product GOは別判定とする。
+
 ## 4. Coverage reviewで見ること
 
 各capabilityについて、単にfeatureの有無ではなく次を確認する。
