@@ -90,9 +90,12 @@ jobs:
         run: |
           set -euo pipefail
           if ! command -v gdb >/dev/null; then
-            echo 'R524 OBSERVER_UNMEASURED: gdb missing on runner'
-            exit 0
+            echo 'R524 R-ONLY HARNESS REPAIR: installing missing passive GDB observer; initial run 38885927240 preserved'
+            sudo apt-get update -qq
+            sudo apt-get install -y --no-install-recommends gdb
           fi
+          command -v gdb
+          gdb --version | head -n 1
           for case in true false; do
             echo "=== PASSIVE O0 $case ==="
             R524_CFILE="$GITHUB_WORKSPACE/r524-result/$case.c" gdb --batch -q -x tests/r524/observer.py --args "./r524-result/$case.gcc.O0" >"r524-result/$case.gdb.trace" 2>&1 || { cat "r524-result/$case.gdb.trace"; echo "OBSERVER_UNMEASURED / GDB failure"; exit 1; }
