@@ -6,6 +6,10 @@
 > language semanticsのnormative authorityは `docs/reference/CURRENT_SPEC.md` が指すDraftであり、本書はそれを上書きしない。
 > current implementation stateは変化するため、個別milestoneのexact evidenceはIssue / PR / report / Git historyを参照する。
 
+## 現行追記 — 2026-10-16（P504/PR507統合後）
+
+**現行Compiler/main `eacbd0fd84f3f9ef90813435ac71633a770f3f80`、canonical Draft17.30。** 下の`ad0604d2…`の補遺は**当時の履歴**。§3.1の能力依存地図を最新到達点の根拠とする：一つの平坦な`usize == usize`は[PR507](https://github.com/wakairo/NewLang_Compiler/pull/507)でsource/CHECK/issued bool/通常strict C17/native TRUE/FALSEまでmainへ採用済み。元Pair guarded two-normal-armは`P6-JOIN-PRECISION`、`if`のC17/native分岐はCLI4で未達。[M505](https://github.com/wakairo/NewLang_Compiler/issues/505#issuecomment-6206080130)は元Pair親current value/factの非flat合流で停止する原因と最小構造再構成案を**read-onlyで特定しただけ**。P506公開証明・P508物理Copy分岐はいずれも独立した**USER起動待ち**の探索であり成功未宣言。Product Strategy §1.1の普通caller/author監査・再監査依存閉包、cJSON H1／STB／RingのHOLDは変わらない。PR507の成功は**提出固定HEAD CI**に基づき、統合後mainの新規CIではない。
+
 ## 2026-10-16 実装証拠の補遺（strategic statusは変更しない）
 
 現行Compiler/main `ad0604d2c766eac045273eba15170027f199d650`、canonical Draft17.30。これは下記の長期coverage分類に対する**追加の有限技術証拠と未到達境界**であり、`BEACHHEAD-VERIFIED` 等のstatus変更、製品PASS、新規機構の認可ではない。
@@ -82,7 +86,7 @@ statusはlanguage validityを意味しない。以下の行の `SPEC`／`SOURCE/
 | **Copy値を返す同一unitの通常関数** | [merged PR #404](https://github.com/wakairo/NewLang_Compiler/pull/404)：元sourceの`fn echo(x:u8)->u8{x}`、異なる実引数／旧戻り値のsource-issued検査・限定strict C17/native。旧[P379](https://github.com/wakairo/NewLang_Compiler/issues/379#issuecomment-6134477587)が`Copy引数付きA1 UNKNOWN`としたのは**当時の履歴**。 | 関数を使えることからstateful ref/owner functionのcaller poststateや一般ABIは従わない。 | 数値・選択結果を本物のcallerが次の操作に使うsourceを固定する。単なる`echo(7)`繰返しは新能力に数えない。 |
 | **元lexical intrusive Nodeの条件付きlink更新／継続** | [merged PR #472](https://github.com/wakairo/NewLang_Compiler/pull/472)の実`Some(q)`跨りroot書込、および[merged PR #492](https://github.com/wakairo/NewLang_Compiler/pull/492)の合流後`tail@next` Copy再読は、両方SOURCE/CHECK・公開owned・物理C17/nativeで有限実測。 | P490 C2は後続`match joined_tail`が`NODE-JOIN-POST-PRECISION`：**variant/provenanceがUnknown**のままなので`Some(p)`由来reloanは未達。 | 必要な利用者操作が**reloanそのもの**を要する場合だけ、実sourceでroot/provenanceを守る有限相関を費用・負例と比較。物理Some観測から静的Someを捏造しない。 |
 | **refを受け取って元fieldを書き換えるnamed helper** | [PR #479](https://github.com/wakairo/NewLang_Compiler/pull/479)は未統合P8→P9、[PR #494](https://github.com/wakairo/NewLang_Compiler/pull/494)はその上の単一**非match** source-issued公開caller/callee証明default-OFF候補、[R #495](https://github.com/wakairo/NewLang_Compiler/issues/495)は限定SAFE（独立OOM未測定）。 | **mainはnamed Option/ref signature CHECK P8**。候補PR479でも二正常分岐中の呼出しは`P9-CONTINUATION-PRECISION`。候補PR494のnamed C17/native、ordinary safe API、author/caller純負担は未達。 | 1 bodyのための530行replay・5 world複製を、実測済みP471 inlineと比較。**監査依存閉包の減少が無い限り次の証明機構を買わない**（[V #484](https://github.com/wakairo/NewLang_Compiler/issues/484)）。 |
-| **guard付きquantity／比較・分岐** | **[merged P497/PR #500](https://github.com/wakairo/NewLang_Compiler/pull/500)**（Compiler/main `0d29d61c...`）：canonical §6 `usize(DIGITS)`→実source/CHECK／Copy値→通常C17の`size_t`→GCC/Clang O0/O2で元localの**3/9**を有限native観測。SIZE_MAXを越えるliteralはsemantic拒否、生成Cは異幅targetをstatic assertで拒否。これは単なるu8やhost seedではない。 | P497の凍結TRUE/FALSE二入力は**実測CLI3 parser `P5-EXPRESSION-UNSUPPORTED` at `==`**。`usize == usize`比較のtyped bool／public-owned、普通caller IF／元Pair 7/8 Change/Reset、C17/nativeは**未到達**。IF/Pair emitterの独立不足はコード調査の予測であって実証済みの後段diagnosticではない。 | **[Track P #501](https://github.com/wakairo/NewLang_Compiler/issues/501)（別途USER起動必要）**で数値比較のSOURCE→真正bool/CHECKを最小の前提とし、IF checkerまでは可能な場合のみ。比較operandの誤型とbool権限偽装は**parser障害を越えて初めてsemantic拒否と数えられる**。一般算術・Array・条件付きnative effectsは同時に導入しない。 |
+| **guard付きquantity／比較・分岐** | **[merged P497/PR500](https://github.com/wakairo/NewLang_Compiler/pull/500)＋[merged P504/PR507](https://github.com/wakairo/NewLang_Compiler/pull/507)**：Draft§6の`usize(DIGITS)`と§5.2一つの平坦な`usize == usize`は**通常default-ONの実source→CHECK→実Copy/`bool`公開owned→strict C17→元の`size_t` operandを用いた実`_Bool = (lhs == rhs)`→GCC/Clang O0/O2 native TRUE/FALSE**まで有限到達。型違い、boolをwrite-refに偽装、依存/未知引数は意味拒否／precisionで区別。P497の旧parser拒否は**sourceを不変**のまま新診断へ移行。 | **`if` CHECK0のunit両arm ≠ C17 physical branching**。二分岐で元Pairを`replace(p@left,7/8)`した凍結sourceは**CHECK CLI3 `P6-JOIN-PRECISION`**、それ以外のsource-known bool IFもC17 **CLI4 `V1-BACKEND-UNSUPPORTED`**。M505は元Pairの非flat親current package/factが`arm_frame`で拒否されることをcode確定、正規checkerのsource合流・公開検証・nativeは**未達**。一般runtime入力／bounds／Array／safe ordinary caller負担改善は未実証。 | **二つの別frontier**：[Track P #508](https://github.com/wakairo/NewLang_Compiler/issues/508)（USER起動必要）は真のsource条件から**二Copy値7/8の一方を選択するC17/native**；[Track P #506](https://github.com/wakairo/NewLang_Compiler/issues/506)（独立user起動、固定PR503実験HEAD）は**元Pairの構造的合流＋独立公開validatorを先に測る**。後者でも元Pairのnative IFは対象外。一般effects/CFG/SSA/新権限は認可しない。 |
 | **固定容量・添字付きArray／slot／Ring** | core §15の`head/len` SSOTと§25のArray/index/span/bounds／occupancyは意味論の資産。既存Pair固定fieldはsource/nativeまで到達。 | Arrayの`data[i]`等の**一般要素source producer／bounds proof**は[P379](https://github.com/wakairo/NewLang_Compiler/issues/379#issuecomment-6134477587)時点では未到達。これに比較・loop/backedge・Option occurrence・wraparoundが**別々に**必要。 | まず**一つの固定ArrayのCopy element read＋範囲外拒否**をsource/certificate/nativeで閉じられるか。成功してもRingのfull/empty・refundable owner claimは別。metadata`len/head`から権限を作らない。 |
 | **有限byte列decoder／bounded scan** | `byte`/typed scalar、§24 raw observation、§25 scoped spanはcanonicalの設計基盤。現mainのC lexerは**NewLangで実装されたbyte decoderではない**。 | 実NewLang sourceのbounded byte-sequence/access/index、終端／エラー結果、合法な反復を合わせたソースが未達。[P379](https://github.com/wakairo/NewLang_Compiler/issues/379#issuecomment-6134477587)。 | 一つの入力byteから分岐結果を得る以前に、**長さ・寿命を保持した一要素アクセス**の真のsource権限とbounds否定を測る。NUL未検証raw ptrを安全なbyte spanと呼ばない。 |
 | **元heap Nodeのdetach→別ownerへの返却／解放** | H1の**5元root pre-detach / 0–5 allocation failure**は実C17/native足場、元B/dst非Copy custodyは別。[H1 #268](https://github.com/wakairo/NewLang_Compiler/issues/268)。 | [M371/M372](https://github.com/wakairo/NewLang_Compiler/issues/372)：original owner receipt/refund/poststateとmembership・representation保護の**二つの独立source/encapsulation gap**。full H1 adoption 0/2、native full 0。 | 低水準`Some(ptr)` hopを増やしても原Allocation/Dは移らない。安全な普通callerの`detach` contractが成立する具体的原権限と保護境界が無い限りH1専用実装を再開しない。 |
@@ -95,10 +99,14 @@ statusはlanguage validityを意味しない。以下の行の `SPEC`／`SOURCE/
 
 ```text
 S0 既にmerged: scalar Copy fn / native-target usize(DIGITS) /
+              real source usize == usize -> bool -> strict C17/native /
               Pair field / scoped ref / Option match /
               original lexical Node join + post-read
   |
-  +-- G: usize equality expression [SOURCE frontier] -> checked bool -> caller if [IF native separate]
+  +-- G: source bool [merged] -> two-arm Copy selection C17/native [P508 planned]
+  |      +-- (independent J: original Pair changed-root structural join
+  |           + public validator [P506 experimental, not merged])
+  |             -> faithful original Pair physical IF [NOT REACHED]
   |      +-- numeric checked operations -> bounded count/offset/loop
   |      +-- (with indexed access) -> safe bounded byte decoder
   |
@@ -121,7 +129,7 @@ S0 既にmerged: scalar Copy fn / native-target usize(DIGITS) /
 
 ## 3.3 次の投資分岐と停止規則（Coordination向け候補、非認可）
 
-**探索投資候補G（[P497/merged PR #500](https://github.com/wakairo/NewLang_Compiler/issues/497)の予測→実測を反映、次は[Track P #501](https://github.com/wakairo/NewLang_Compiler/issues/501)・USER LAUNCH REQUIRED）**：前回の`usize` source literal不足は**元source→checked値／Copy→C17/nativeとして解消済み**。現在の最初の障害は**`==`のsource expression parsing**、次に本物の`bool`値をoriginal operandと照合するchecker／公開ownedが必要。さらに`if`を元Pairの物理carrierにfaithfulにlowerするのは**別の未着手mechanism**。まず二つの凍結true/false量入力から正しいboolがsource→CHECKで発行されるかを、type mismatch・fake ref権限の負例とともに予測・独立に実測する。一般比較構文/precedence、新効果/CFG/SSA、backend全IF、配列/index、owner/ABIには広げず、先に実装障害／§4.2履歴gateが分かればSTOPする。これは再利用可能なquantity比較への**Exploration GO**であり、普通callerの実運用負担削減・Product GOには数えない。
+**探索投資候補G（[merged P504/PR507](https://github.com/wakairo/NewLang_Compiler/pull/507)反映、次は[Track P #508](https://github.com/wakairo/NewLang_Compiler/issues/508)・USER LAUNCH REQUIRED）**：`usize` literalと`usize == usize`の真正source-issued比較は**source→CHECK/owned→C17/nativeへ到達済み**。次の独立した**実行上の停止点**は`NL_CHECKED_IF`のsource arm結果を実際のC17分岐・Copy結果へ橋渡しすることで、単に`bool`をnative出力することではない。まず副作用なし二正常armからCopyの7/8を**元source由来のconditionによって物理的に選択**する有限source／public proof／C17の最初の障害を測り、一般branch/effectsやPair構造的合流には広げない。対して[Track M #505](https://github.com/wakairo/NewLang_Compiler/issues/505#issuecomment-6206080130)の**親Pair current ValueFact/aggregate joinの構造保全**は別の証明問題であり、[Track P #506](https://github.com/wakairo/NewLang_Compiler/issues/506)が先に公開検証可能性・費用を限定計測する（これだけで元Pair nativeを達成とは呼ばない）。§4.2歴史Gate/§4.3費用・STOPを維持し、Array/heap/H1へbool PASSを流用しない。
 
 **候補I（Gと独立）**：fixed Arrayの一element Copy accessと拒否オラクルを、単一source/actual backed original storage上で検証する。新source syntaxや一般claim policyが必要なら設計Gateへ戻る。最初からRingやfree-listへ拡張しない。
 
