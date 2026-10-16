@@ -1,0 +1,64 @@
+{
+  "base": "eacbd0fd84f3f9ef90813435ac71633a770f3f80",
+  "base_tree": "8c6501ddff9dfb2b784a77b8259af8d5cbb16b64",
+  "frozen_at": "2026-10-16T04:36:25.773459+00:00",
+  "source_sha256": {
+    "select_true.nl": "284e05e86d01d38cec0fc013462214fdeb47cf2867a943f96580e1986bc761af",
+    "select_false.nl": "4148ceedde9e06f89171ac38bf310e4383ba49c163d1d3a206ec20abdf25239c",
+    "renamed_true.nl": "f5b4ba67101ca730a08f7c886bfbcf0076263f6500dca30ae4f92f2aa897d8e4",
+    "renamed_false.nl": "8c440cc8b22d729190329cfb5009bc1bba5b6d87f4f8404390dfb6dc01cc5603",
+    "wrong_condition.nl": "32cf2ce2c097032f948ed3ccad52dfee248b412065cf0bb715e097eeb3ef896f",
+    "invalid_else.nl": "b67c76004f5d49376d977a65d17e926070de1895109e797f85bc2620d5060788",
+    "ref_escape.nl": "b067d076fa63369c6c9b4fc55665748bed1e69b0ac294d3d4f153064f1b2de08",
+    "noncopy_arms.nl": "502be0815a9f42de05453fdb3ef6383c5788bdbb96b4740f3fb7f8dc830e3b84",
+    "field_roots.nl": "6154a2dcdf8743bc05d66a803ac119159183a6576985c216e564447b54761f7a"
+  },
+  "oracles": {
+    "select_true.nl": [
+      2,
+      2,
+      1,
+      7,
+      7
+    ],
+    "select_false.nl": [
+      2,
+      3,
+      0,
+      8,
+      8
+    ],
+    "renamed_true.nl": [
+      2,
+      2,
+      1,
+      7,
+      7
+    ],
+    "renamed_false.nl": [
+      2,
+      3,
+      0,
+      8,
+      8
+    ]
+  },
+  "baseline_prediction": "CHECK likely accepts unknown flat u8 IF result; C17 V1-BACKEND-UNSUPPORTED. This is prediction only, not a measured result.",
+  "negative_oracles": {
+    "wrong_condition.nl": "semantic wrong bool condition",
+    "invalid_else.nl": "semantic invalid arm even known true",
+    "ref_escape.nl": "semantic scope escape",
+    "noncopy_arms.nl": "semantic/precision, never source-owned pure Copy permission",
+    "field_roots.nl": "may CHECK legal Copy reads, emitter narrow-profile rejection; not semantic wrong-root claim"
+  },
+  "poison_oracles": [
+    "swapped/duplicate/foreign arm pointers",
+    "wrong arm result id/package/type/scalar",
+    "wrong parent IF/source span/condition origin",
+    "wrong Copy or condition value",
+    "caller prefix/scopes/facts corruption",
+    "invented source-less bool",
+    "broken carrier/branch literal/direction/Copied result MUST observer fail"
+  ],
+  "native": "GCC+Clang C17 O0/O2 passive observer, original guest bytes unchanged, compare rendered C digest. NOT Pair/ownership/audit-value proof."
+}

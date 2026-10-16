@@ -1,0 +1,9 @@
+# P508 pre-execution freeze and cost gate
+
+Start 2026-10-16T04:35Z; exact eacbd0fd84f3f9ef90813435ac71633a770f3f80 (merged P504). P506 fully stopped/reported before this task. No P503/P506 code imported. See frozen.json for original source bytes, base tree, positive/negative/poison oracles.
+
+Compass→Strategy§1.1 and Coverage Map§§3.1–3.3; Process§§4.2/4.3.1; Design Procedure A–E and Ledger DI001/006/007/011; canonical Draft17.30§§4/5.2/6/7/13/20/27. KEEP selected IF expression grammar, both arms independently checked, flat Copy join and scoped provenance rules. No new semantic/source choice; normative update gates D/E N/A, Coordination owns adoption. DEFER Pair mutation/join, general CFG/SSA/effect/owner/Array and arbitrary call/ABI. Existing C/Zig/Rust scalar choices already express this; success would be a reusable technical rung, not measured audit-locality advantage.
+
+Prediction before execution: original let-initializer IF is grammar-admitted and CHECK joins two flat u8 results as unknown, but driver lacks IF emission. If grammar/proof needs broad change, stop. Existing public qualified IF arms, source identity/spans, real primitive/package/Copy source origins and unchanged scalar-only frame may allow one bounded pure-u8 IF lowering. No assumed public Pair proof. Reject both unknown-world lineage and malformed arms; NEVER use cached bool to choose emitted constant.
+
+Budget 120–210 minutes including one natural FULL5+PARTIAL pair, no re-run shopping; estimate 200–400 production C lines plus 400–800 targeted evidence/test lines if mapping fits. If no trustworthy thin source-owned branch mapping, or new root/authority/effect/general control mechanism needed, HOLD before emitter. Source/checker guards and existing P497/P504 source/oracles unchanged. OOM rollback/read-only driver gate and malicious issued-artifact controls required where feasible.
