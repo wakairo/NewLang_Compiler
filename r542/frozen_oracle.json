@@ -1,0 +1,21 @@
+{
+  "authority": {
+    "main": "ebb8c4d034a6df2ec6fbfae7e47ebb37650accae",
+    "canonical": "Draft17.32",
+    "under_test": "7f639a3a89d55f44848e361e1458529fe5395345"
+  },
+  "mode": "NON-BLIND calibrated; historical R540-01 unchanged",
+  "source": "r542/source/one_original_array.nl",
+  "source_sha256": "c46f22dd074c3453facf014c47e11913632e3a2f683556fcbbf8c204156e990e",
+  "frozen_expectations": {
+    "source_check": "exit 0, genuine original typed Array<Option<u8>,4>, four separately written None leaves, default-OFF refusal",
+    "registered_body": "one source-created Array root, five live placements, exactly four dependent indexed child places, one lexical receiver, no other independent authority",
+    "qualified_identity": "root incarnation and fact preserved; children have distinct incarnation/current facts/value/packages, identical parent and parent-incarnation, child index 0-3, sum variant None and no payload or occurrences",
+    "public_validation": "actual source-owned view valid after original AST teardown; corruption of copies rejected; borrowed views do not mint authority; alien-origin and orphaned/absent proof reject",
+    "C17": "source-generated original emitted C intact: one nl_array_T[4] of nl_option_U envelopes; None tags originate in source emitter; no memset",
+    "physical": "read-only observer injected only inside actual emitted nl_fn_* while its declared nl_local_* Array is live; four element addresses spaced sizeof(full Option envelope); tag for each equals generated None enum; same original function; observation may prevent optimized-away materialization",
+    "native": "GCC+Clang C17 -O0/-O2 plain and passively instrumented normal exit0",
+    "limits": "historical R540-01 two-root precision mismatch retained; this cannot imply Ring4/OwnedFrame, owner transfer, new checked indexing, abstract C ABI or Product GO"
+  },
+  "provenance": "new R-owned source and oracle frozen in Git prior to this calibrated execution; prior R540/P534 reports consulted, results kept separate"
+}
