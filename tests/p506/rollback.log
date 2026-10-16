@@ -1,0 +1,6 @@
+negative=tests/p506/wrong_root.nl diagnostic=P6-JOIN-PRECISION public_rollback=PASS
+negative=tests/p506/wrong_field.nl diagnostic=P6-JOIN-PRECISION public_rollback=PASS
+negative=tests/p506/extra_change.nl diagnostic=P6-JOIN-PRECISION public_rollback=PASS
+negative=tests/p506/invalid_else.nl diagnostic=P3-WRITE-REF-REQUIRED public_rollback=PASS
+negative=tests/p506/escaping_ref.nl diagnostic=P8-EXIT-DEPENDENCY public_rollback=PASS
+negative=tests/p506/live_root_ref.nl diagnostic=LOCAL-LOAN-PROFILE public_rollback=PASS

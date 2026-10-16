@@ -1,0 +1,2 @@
+P506_OOM registration=317 rollback=PASS
+P506_OOM actual_main=200 output_NULL_and_rollback=PASS
