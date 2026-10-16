@@ -1,0 +1,26 @@
+[
+  {
+    "source": "first_named_true.nl",
+    "exit": 0,
+    "trace": "",
+    "public_and_private_observations": "IF=21 span=185-227 condition=20 kind=1 origin=17 bool_root=0 boolean_scalar=0\nexisting_scalar_renderer=1 existing_equality_renderer=1\nARM0 original_binding=1 place=1 inc=1 fact=1 value=3 children=2,3 known_old=37 right=211\nARM1 original_binding=1 place=1 inc=1 fact=1 value=3 children=2,3 known_old=37 right=211\nOP=26 kind=10 base=1 parent=1 child=2 inc=1,2 facts=1,2 post=10,9 old=1 new=13\nOP=31 kind=45 base=1 parent=1 child=2 inc=1,2 facts=10,9 post=0,0 old=13 new=0\nOP=34 kind=45 base=1 parent=1 child=3 inc=1,3 facts=10,3 post=0,0 old=2 new=0\n"
+  },
+  {
+    "source": "first_inline_true.nl",
+    "exit": 4,
+    "trace": "TRACE copy_if_selection line511\nerror(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p517/first_inline_true.nl\n",
+    "public_and_private_observations": "IF=18 span=142-198 condition=17 kind=51 origin=0 bool_root=0 boolean_scalar=0\nexisting_scalar_renderer=0 existing_equality_renderer=1\nARM0 original_binding=1 place=1 inc=1 fact=1 value=3 children=2,3 known_old=37 right=211\nARM1 original_binding=1 place=1 inc=1 fact=1 value=3 children=2,3 known_old=37 right=211\nOP=23 kind=10 base=1 parent=1 child=2 inc=1,2 facts=1,2 post=9,8 old=1 new=12\nOP=28 kind=45 base=1 parent=1 child=2 inc=1,2 facts=9,8 post=0,0 old=12 new=0\nOP=31 kind=45 base=1 parent=1 child=3 inc=1,3 facts=9,3 post=0,0 old=2 new=0\n"
+  },
+  {
+    "source": "late_named_true.nl",
+    "exit": 4,
+    "trace": "TRACE copy_if_pair_frame line997\nTRACE copy_if_selection line519\nerror(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p517/late_named_true.nl\n",
+    "public_and_private_observations": "IF=21 span=185-227 condition=20 kind=1 origin=17 bool_root=0 boolean_scalar=0\nexisting_scalar_renderer=1 existing_equality_renderer=1\nARM0 original_binding=3 place=3 inc=3 fact=3 value=5 children=4,5 known_old=37 right=211\nARM1 original_binding=3 place=3 inc=3 fact=3 value=5 children=4,5 known_old=37 right=211\nOP=26 kind=10 base=3 parent=3 child=4 inc=3,4 facts=3,4 post=10,9 old=3 new=13\nOP=31 kind=45 base=3 parent=3 child=4 inc=3,4 facts=10,9 post=0,0 old=13 new=0\nOP=34 kind=45 base=3 parent=3 child=5 inc=3,5 facts=10,5 post=0,0 old=4 new=0\n"
+  },
+  {
+    "source": "late_inline_true.nl",
+    "exit": 4,
+    "trace": "TRACE copy_if_selection line511\nerror(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p517/late_inline_true.nl\n",
+    "public_and_private_observations": "IF=18 span=142-198 condition=17 kind=51 origin=0 bool_root=0 boolean_scalar=0\nexisting_scalar_renderer=0 existing_equality_renderer=1\nARM0 original_binding=3 place=3 inc=3 fact=3 value=5 children=4,5 known_old=37 right=211\nARM1 original_binding=3 place=3 inc=3 fact=3 value=5 children=4,5 known_old=37 right=211\nOP=23 kind=10 base=3 parent=3 child=4 inc=3,4 facts=3,4 post=9,8 old=3 new=12\nOP=28 kind=45 base=3 parent=3 child=4 inc=3,4 facts=9,8 post=0,0 old=12 new=0\nOP=31 kind=45 base=3 parent=3 child=5 inc=3,5 facts=9,5 post=0,0 old=4 new=0\n"
+  }
+]
