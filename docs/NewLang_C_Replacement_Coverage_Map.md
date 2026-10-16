@@ -6,6 +6,15 @@
 > language semanticsのnormative authorityは `docs/reference/CURRENT_SPEC.md` が指すDraftであり、本書はそれを上書きしない。
 > current implementation stateは変化するため、個別milestoneのexact evidenceはIssue / PR / report / Git historyを参照する。
 
+## 2026-10-16 実装証拠の補遺（strategic statusは変更しない）
+
+現行Compiler/main `ad0604d2c766eac045273eba15170027f199d650`、canonical Draft17.30。これは下記の長期coverage分類に対する**追加の有限技術証拠と未到達境界**であり、`BEACHHEAD-VERIFIED` 等のstatus変更、製品PASS、新規機構の認可ではない。
+
+- **既統合／原物理Node Copy read：** [P490/merged PR #492](https://github.com/wakairo/NewLang_Compiler/pull/492) の事前固定C1では、元lexical`tail.next`を非対称二正常分岐の`Some(q)`跨りroot更新後に**後続sourceから再読**し、SOURCE/CHECK・真正公開owned・strict C17/nativeで実`Some(original tail)`を限定観測。公開postの`Option`とCopyは依然として**Unknown**、検査結果がSome provenanceを発行したわけではない。同じ凍結C2の後続再match/再loanは`NODE-JOIN-POST-PRECISION`でCHECK停止（再loan未実施）。したがって既存persistent ptr／scoped ref／field mutationの限定証拠が増えただけで、一般的なsafe pointer再取得／heap owner／recursive graph製品coverageではない。
+- **未統合／通常関数の公開証明候補：** [P493 DRAFT PR #494](https://github.com/wakairo/NewLang_Compiler/pull/494)は未統合の[PR #479](https://github.com/wakairo/NewLang_Compiler/pull/479)上の**分岐なし**`set_link`一body-visible呼出しでsource-issued caller⇄callee公開certificate/replayをdefault-OFF実験として確認。[R495独立有限評価](https://github.com/wakairo/NewLang_Compiler/issues/495#issuecomment-6204729857)は正しい公開viewと誤ったroot/scope/occurrence/old Copy拒否を検証したが独立OOM sweepは未実施。**mainへ採用されていない**。二正常分岐内named callは引き続き`CHECK CLI3 P9-CONTINUATION-PRECISION`、named helperのC17/nativeも到達なし。530行のreplay＋状態複製に見合うordinary caller/authorの監査依存閉包削減も未測定。[C裁定](https://github.com/wakairo/NewLang_Compiler/issues/495#issuecomment-6204806851)はPR479/494 **DRAFT / DO NOT MERGE**、Product HOLDを維持。
+
+元のC topology・実利用操作・safe wrapperを揃えたC/Zig/Rustとの比較は[Product Strategy §1.1](NewLang_Product_Value_Strategy.md#11-ub-prevention-audit-locality-value-hypothesis)に従う。今回のPASSをallocation／nonCopy custody／一般library API／C置換の実証へ昇格しない。
+
 ## 1. 目的
 
 North Starを狭く保ちながら、NewLangが将来Cの実用領域を置換できなくなる設計上の穴を見落とさないために使う。
