@@ -1,0 +1,2 @@
+error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: tests/p521/call_choice_false.nl
