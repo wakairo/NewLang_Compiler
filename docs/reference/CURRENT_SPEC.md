@@ -3,7 +3,7 @@
 The canonical NewLang v0 specification on a branch is the Draft named here.
 
 ```text
-NewLang_v0_spec_Draft17_30.md
+NewLang_v0_spec_Draft17_32.md
 ```
 
 Repository policy:
@@ -14,7 +14,9 @@ Repository policy:
 - A newer Draft on an unmerged branch is a candidate until that branch is reviewed and merged into `main`.
 - Prompts handed to M / F / P tracks should cite the `main` commit SHA and this file before relying on conversational memory.
 
-Draft17.30 (ADOPTED / CANONICAL; Issue #234, merged PR #235) source-selects
+Draft17.32 (**SELECTED ON THIS BRANCH ONLY; NOT CANONICAL ON MAIN UNTIL THIS PR IS REVIEWED AND MERGED**) — [Coordination Issue #532](https://github.com/wakairo/NewLang_Compiler/issues/532) proposes a source-only closed concrete `Array<Option<u8>,4>{ Option<u8>::None × 4 }` construction profile. It is based directly on adopted Draft17.30 and **does not include** the separately unmerged Draft17.31/DI-015 from [PR #273](https://github.com/wakairo/NewLang_Compiler/pull/273). Exactly one actual original lexical Array root/four current fixed live Option child places, contiguous `sizeof(Option<u8>)` stride and genuine source-owned proof required. No generic N/T, index projection, `Option<OwnedFrame>`/Ring, heap owner, opaque caller API or new core lifetime rule is selected. Source/CHECK/owned/C17/native implementation and Product GO are still NOT REACHED. Branch selection does not mean production support; independent review of this candidate and fixed-HEAD CI must precede any canonical main update. See the selected section at top of `NewLang_v0_spec_Draft17_32.md` and Ledger DI-016.
+
+Draft17.30 (PREVIOUSLY ADOPTED / CANONICAL ON MAIN THROUGH ISSUE #234, PR #235; BASE OF Draft17.32) source-selects
 only §3.2b's five distinct statically nested fallible original
 H allocation sites plus a single H with exactly three separate fixed
 `next/prev/child:Option<ptr<H>>` fields and `payload:u8`; each field
@@ -30,7 +32,7 @@ allocator, codegen, formal, concurrency, or product PASS is selected.
 Draft17.30 was independently reviewed and is now selected on canonical
 `main` by this `CURRENT_SPEC.md` (PR #235).
 
-Draft 17.29 (ADOPTED in merged PR #215; Issue #214) adds only §18.1c: after the canonical Draft17.28 2-H producer physically unlinks the head and returns the ORIGINAL still-live tail LiveTail, one separate known-direct recipient takes that same nonCopy value and places it into a caller-owned ordinary local Option<LiveTail> through an explicitly scoped nonexclusive ref<write>. The recipient returns unit and never ends/frees the tail. After that frame and loan end, a fresh caller scope replaces custody with None, consumes its old Some payload by whole match/destructure, and the canonical terminal receiver releases exactly the original tail once; head remains independently released. Exact O/R/D/A, sink-current-None and caller-memory effects must be proved at every call. Option<LiveTail> is statically nonDiscardable even at None, so precisely two proof-checked known-None consuming one-arm matches are added *only* in this closed profile; no general exhaustiveness/Drop relaxation, effect, owner trait, third root, H field, compiler/native or cJSON change. This Draft17.29 source rule was independently accepted and merged as PR #215; the currently selected canonical Draft is 17.30.
+Draft 17.29 (ADOPTED in merged PR #215; Issue #214) adds only §18.1c: after the canonical Draft17.28 2-H producer physically unlinks the head and returns the ORIGINAL still-live tail LiveTail, one separate known-direct recipient takes that same nonCopy value and places it into a caller-owned ordinary local Option<LiveTail> through an explicitly scoped nonexclusive ref<write>. The recipient returns unit and never ends/frees the tail. After that frame and loan end, a fresh caller scope replaces custody with None, consumes its old Some payload by whole match/destructure, and the canonical terminal receiver releases exactly the original tail once; head remains independently released. Exact O/R/D/A, sink-current-None and caller-memory effects must be proved at every call. Option<LiveTail> is statically nonDiscardable even at None, so precisely two proof-checked known-None consuming one-arm matches are added *only* in this closed profile; no general exhaustiveness/Drop relaxation, effect, owner trait, third root, H field, compiler/native or cJSON change. This Draft17.29 source rule was independently accepted and merged as PR #215; the subsequently selected main authority must be checked in the code block above.
 
 Draft 17.28 (ADOPTED / BOUNDED; Issue #203) selects one additional closed same-H, same-unit ordinary non-generic known-direct producer that first unlinks the head using a caller-proven D_h-scoped write-ref and returns the STILL LIVE tail through a compiler-known nonCopy/nonDiscardable LiveTail {owned_ptr:ptr<H>, owned_allocation:Allocation, owned_domain:LifetimeDomain}. Definition-time conditional checking retains exact O_t/R_t/D_t obligations plus H_h head-link current Some(ptr_t)/write-ref requirements; every actual caller must prove them, and result/whole-destructure must preserve the original live heap root and A/D identities without minting Storage or owner rights; existing §18.1a receiver can later release the tail while donor independently releases head. No general owner/source API, P implementation/native/frozen North Star change is authorized. Draft 17.28 was independently accepted and merged via PR #207; Draft 17.29 was subsequently adopted in merged PR #215, and the current canonical Draft is 17.30.
 
