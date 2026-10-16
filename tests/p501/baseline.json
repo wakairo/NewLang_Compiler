@@ -1,0 +1,198 @@
+{
+  "compiler": "0d29d61c114f179af8e7300096fd85ec485ad2e7",
+  "binary_sha256": "47ca70a6197a0ac0ec9f518e224a4f0997dbb24d6f274dcb608f6547a3cedb6f",
+  "runs": [
+    {
+      "source": "bool_as_ref.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/bool_as_ref.nl:4:14-4:15: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "bool_as_ref.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/bool_as_ref.nl:4:14-4:15: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "chain.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/chain.nl:1:73-1:74: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "chain.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/chain.nl:1:73-1:74: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "copied_renamed.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/copied_renamed.nl:1:89-1:90: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "copied_renamed.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/copied_renamed.nl:1:89-1:90: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "equal_false.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/equal_false.nl:4:14-4:15: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "equal_false.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/equal_false.nl:4:14-4:15: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "equal_true.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/equal_true.nl:4:14-4:15: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "equal_true.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/equal_true.nl:4:14-4:15: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "full_guard_false.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/full_guard_false.nl:5:16-5:17: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "full_guard_false.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/full_guard_false.nl:5:16-5:17: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "full_guard_true.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/full_guard_true.nl:5:16-5:17: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "full_guard_true.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/full_guard_true.nl:5:16-5:17: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "if_false.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/if_false.nl:4:14-4:15: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "if_false.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/if_false.nl:4:14-4:15: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "if_true.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/if_true.nl:4:14-4:15: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "if_true.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/if_true.nl:4:14-4:15: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "split_operator.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/split_operator.nl:1:58-1:59: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "split_operator.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/split_operator.nl:1:58-1:59: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "unknown.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/unknown.nl:1:33-1:34: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "unknown.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/unknown.nl:1:33-1:34: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "wrong_type.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/wrong_type.nl:4:14-4:15: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    },
+    {
+      "source": "wrong_type.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/wrong_type.nl:4:14-4:15: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+    }
+  ]
+}

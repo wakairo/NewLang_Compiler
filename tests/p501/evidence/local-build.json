@@ -1,0 +1,16 @@
+{
+  "base": "0d29d61c114f179af8e7300096fd85ec485ad2e7",
+  "freeze": "ac3589b2048f023f8c2ae9b36c15e2004a87316a",
+  "default_newlangc_sha256": "e7bde7176f5c5ed23fb52ae66f372ff9e4167ab01889edf1c75534fa9f3cc985",
+  "experimental_newlangc_sha256": "ee1c486f8889c227531c7db546da147258ae7e041b97c0ef2eed56029633fceb",
+  "public_probe_sha256": "2dc73c0823c18647a418730d86c74fdd345ba05a46c29a4991d2ed3f5ec91ba5",
+  "ctest_tail": [
+    "293/294 Test #288: u8_call_checked_c.integration ..............   Passed    1.69 sec",
+    "294/294 Test #294: oracle.smoke ...............................   Passed    1.04 sec",
+    "",
+    "100% tests passed, 0 tests failed out of 294",
+    "",
+    "Total Test time (real) =  31.84 sec"
+  ],
+  "gcc": "gcc (Debian 14.2.0-19) 14.2.0"
+}

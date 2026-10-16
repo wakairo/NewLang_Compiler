@@ -1,0 +1,102 @@
+{
+  "configuration": "FRONTEND_ONLY=ON BUILD_TESTING=OFF NEWLANG_EXPERIMENTAL_USIZE_EQUALITY=ON",
+  "binary_sha256": "7fb18a95ccbbdfa25491b49a2027ca0c76785aee11e3994aef82d38390ff61ff",
+  "runs": [
+    {
+      "source": "equal_true.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "source": "equal_true.nl",
+      "flags": [],
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p501/equal_true.nl\n"
+    },
+    {
+      "source": "equal_false.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "source": "equal_false.nl",
+      "flags": [],
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p501/equal_false.nl\n"
+    },
+    {
+      "source": "wrong_type.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/wrong_type.nl:4:14-4:16: error(semantic)[USIZE-EQUALITY-TYPE]: == requires two exact core usize operands\n"
+    },
+    {
+      "source": "wrong_type.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/wrong_type.nl:4:14-4:16: error(semantic)[USIZE-EQUALITY-TYPE]: == requires two exact core usize operands\n"
+    },
+    {
+      "source": "bool_as_ref.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/bool_as_ref.nl:5:11-5:16: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ref<write,T>\n"
+    },
+    {
+      "source": "bool_as_ref.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/bool_as_ref.nl:5:11-5:16: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ref<write,T>\n"
+    },
+    {
+      "source": "if_true.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "source": "if_true.nl",
+      "flags": [],
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p501/if_true.nl\n"
+    },
+    {
+      "source": "full_guard_true.nl",
+      "flags": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/full_guard_true.nl:7:5-8:70: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+    },
+    {
+      "source": "full_guard_true.nl",
+      "flags": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p501/full_guard_true.nl:7:5-8:70: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+    }
+  ]
+}
