@@ -1,0 +1,1166 @@
+{
+  "authority": "Class O/H synthetic only; no source-issued C authority or real P acceptance",
+  "benchmark_method": "51 Python repeats with tracemalloc active; tiny synthetic models; not a C implementation comparison",
+  "benchmarks": {
+    "conditional_none_after_join": {
+      "delta": {
+        "first_status": "PRECISION",
+        "max_wall_ns_traced": 125228,
+        "median_peak_tracemalloc_bytes": 4112,
+        "median_wall_ns_traced": 61392,
+        "min_wall_ns_traced": 59890,
+        "repeats": 51
+      },
+      "snapshot": {
+        "first_status": "PRECISION",
+        "max_wall_ns_traced": 246551,
+        "median_peak_tracemalloc_bytes": 8565,
+        "median_wall_ns_traced": 217918,
+        "min_wall_ns_traced": 215334,
+        "repeats": 51
+      }
+    },
+    "direct_inline": {
+      "delta": {
+        "first_status": "ACCEPT",
+        "max_wall_ns_traced": 287192,
+        "median_peak_tracemalloc_bytes": 8589,
+        "median_wall_ns_traced": 215334,
+        "min_wall_ns_traced": 211118,
+        "repeats": 51
+      },
+      "snapshot": {
+        "first_status": "ACCEPT",
+        "max_wall_ns_traced": 253412,
+        "median_peak_tracemalloc_bytes": 8565,
+        "median_wall_ns_traced": 221844,
+        "min_wall_ns_traced": 218579,
+        "repeats": 51
+      }
+    },
+    "field_dependent_ref_survives": {
+      "delta": {
+        "first_status": "SEMANTIC_REJECT",
+        "max_wall_ns_traced": 239721,
+        "median_peak_tracemalloc_bytes": 8152,
+        "median_wall_ns_traced": 155474,
+        "min_wall_ns_traced": 152860,
+        "repeats": 51
+      },
+      "snapshot": {
+        "first_status": "SEMANTIC_REJECT",
+        "max_wall_ns_traced": 225429,
+        "median_peak_tracemalloc_bytes": 8064,
+        "median_wall_ns_traced": 151127,
+        "min_wall_ns_traced": 149035,
+        "repeats": 51
+      }
+    },
+    "named_call": {
+      "delta": {
+        "first_status": "ACCEPT",
+        "max_wall_ns_traced": 405570,
+        "median_peak_tracemalloc_bytes": 8805,
+        "median_wall_ns_traced": 223627,
+        "min_wall_ns_traced": 217447,
+        "repeats": 51
+      },
+      "snapshot": {
+        "first_status": "ACCEPT",
+        "max_wall_ns_traced": 299501,
+        "median_peak_tracemalloc_bytes": 8629,
+        "median_wall_ns_traced": 229896,
+        "min_wall_ns_traced": 225219,
+        "repeats": 51
+      }
+    },
+    "old_option_some_return": {
+      "delta": {
+        "first_status": "ACCEPT",
+        "max_wall_ns_traced": 349175,
+        "median_peak_tracemalloc_bytes": 8805,
+        "median_wall_ns_traced": 222455,
+        "min_wall_ns_traced": 218128,
+        "repeats": 51
+      },
+      "snapshot": {
+        "first_status": "ACCEPT",
+        "max_wall_ns_traced": 304859,
+        "median_peak_tracemalloc_bytes": 8629,
+        "median_wall_ns_traced": 228134,
+        "min_wall_ns_traced": 224067,
+        "repeats": 51
+      }
+    },
+    "post_join_whole_change": {
+      "delta": {
+        "first_status": "ACCEPT",
+        "max_wall_ns_traced": 322214,
+        "median_peak_tracemalloc_bytes": 8805,
+        "median_wall_ns_traced": 240902,
+        "min_wall_ns_traced": 233931,
+        "repeats": 51
+      },
+      "snapshot": {
+        "first_status": "ACCEPT",
+        "max_wall_ns_traced": 270847,
+        "median_peak_tracemalloc_bytes": 8773,
+        "median_wall_ns_traced": 246360,
+        "min_wall_ns_traced": 242034,
+        "repeats": 51
+      }
+    },
+    "sibling_mutation_not_in_summary": {
+      "delta": {
+        "first_status": "SEMANTIC_REJECT",
+        "max_wall_ns_traced": 217657,
+        "median_peak_tracemalloc_bytes": 8128,
+        "median_wall_ns_traced": 150326,
+        "min_wall_ns_traced": 148113,
+        "repeats": 51
+      },
+      "snapshot": {
+        "first_status": "SEMANTIC_REJECT",
+        "max_wall_ns_traced": 171979,
+        "median_peak_tracemalloc_bytes": 8040,
+        "median_wall_ns_traced": 145278,
+        "min_wall_ns_traced": 143206,
+        "repeats": 51
+      }
+    }
+  },
+  "canonical": "Draft17.30",
+  "canonical_blob": "db8fe08f811acc8286f2d37e9d3229b5d7a67067",
+  "cases": [
+    {
+      "concrete": {
+        "reason": "all concrete normal states",
+        "status": "ACCEPT",
+        "successor_worlds": 2
+      },
+      "delta": {
+        "new_updates": 2,
+        "reason": "delta effects and dependencies cover both normals",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots_with_diagnostic_materialization": 22
+      },
+      "expected": "ACCEPT",
+      "input_sha256": "3cb6836c6466f25e729f5cb74c42e8b9c6dc1184790352f808fc0c1bc11a3965",
+      "name": "direct_inline",
+      "snapshot": {
+        "estimated_retained_slots": 20,
+        "new_cloned_slots": 10,
+        "reason": "all snapshot alternatives safe",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots": 40
+      }
+    },
+    {
+      "concrete": {
+        "reason": "all concrete normal states",
+        "status": "ACCEPT",
+        "successor_worlds": 2
+      },
+      "delta": {
+        "new_updates": 2,
+        "reason": "delta effects and dependencies cover both normals",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots_with_diagnostic_materialization": 22
+      },
+      "expected": "ACCEPT",
+      "input_sha256": "cb23307f73aa8313657a23b02da95cc7c8ab3ace635df8f14d260966c029a5dc",
+      "name": "named_call",
+      "snapshot": {
+        "estimated_retained_slots": 20,
+        "new_cloned_slots": 10,
+        "reason": "all snapshot alternatives safe",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots": 40
+      }
+    },
+    {
+      "concrete": {
+        "reason": "all concrete normal states",
+        "status": "ACCEPT",
+        "successor_worlds": 2
+      },
+      "delta": {
+        "new_updates": 2,
+        "reason": "delta effects and dependencies cover both normals",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots_with_diagnostic_materialization": 22
+      },
+      "expected": "ACCEPT",
+      "input_sha256": "d74b1b0529aa22b4246948a92f7cb9901455290724666ac85c77c3ae24778aad",
+      "name": "same_root_locator_alias_without_extra_effect",
+      "snapshot": {
+        "estimated_retained_slots": 20,
+        "new_cloned_slots": 10,
+        "reason": "all snapshot alternatives safe",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots": 40
+      }
+    },
+    {
+      "concrete": {
+        "reason": "all concrete normal states",
+        "status": "ACCEPT",
+        "successor_worlds": 2
+      },
+      "delta": {
+        "new_updates": 2,
+        "reason": "delta effects and dependencies cover both normals",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots_with_diagnostic_materialization": 22
+      },
+      "expected": "ACCEPT",
+      "input_sha256": "15068fa77e1196b2e7d82f727a3de78c2a45bfb0fbc8de483631ddb02324e032",
+      "name": "old_option_some_return",
+      "snapshot": {
+        "estimated_retained_slots": 20,
+        "new_cloned_slots": 10,
+        "reason": "all snapshot alternatives safe",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots": 40
+      }
+    },
+    {
+      "concrete": {
+        "reason": "all concrete normal states",
+        "status": "ACCEPT",
+        "successor_worlds": 2
+      },
+      "delta": {
+        "new_updates": 2,
+        "reason": "delta effects and dependencies cover both normals",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots_with_diagnostic_materialization": 22
+      },
+      "expected": "ACCEPT",
+      "input_sha256": "c83e96f087d34143b2acdc139c03f5e1fc7b310437252bb129043964014a2777",
+      "name": "same_locator_old_some_fresh_occurrence",
+      "snapshot": {
+        "estimated_retained_slots": 20,
+        "new_cloned_slots": 10,
+        "reason": "all snapshot alternatives safe",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots": 40
+      }
+    },
+    {
+      "concrete": {
+        "reason": "all concrete normal states",
+        "status": "ACCEPT",
+        "successor_worlds": 2
+      },
+      "delta": {
+        "new_updates": 2,
+        "reason": "delta effects and dependencies cover both normals",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots_with_diagnostic_materialization": 22
+      },
+      "expected": "ACCEPT",
+      "input_sha256": "1770ee91174dc6382118a0b44d0ac31ead30eafd41c351526912301878101d40",
+      "name": "disjoint_tail_sibling_ref",
+      "snapshot": {
+        "estimated_retained_slots": 20,
+        "new_cloned_slots": 10,
+        "reason": "all snapshot alternatives safe",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots": 40
+      }
+    },
+    {
+      "concrete": {
+        "reason": "all concrete normal states",
+        "status": "ACCEPT",
+        "successor_worlds": 2
+      },
+      "delta": {
+        "new_updates": 2,
+        "reason": "delta effects and dependencies cover both normals",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots_with_diagnostic_materialization": 22
+      },
+      "expected": "ACCEPT",
+      "input_sha256": "5efffc42472035c93dde16f16d3d45466de4f24f221e8f22388e178b7d8bebe3",
+      "name": "post_join_whole_change",
+      "snapshot": {
+        "estimated_retained_slots": 20,
+        "new_cloned_slots": 10,
+        "reason": "all snapshot alternatives safe",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots": 40
+      }
+    },
+    {
+      "concrete": {
+        "reason": "all concrete normal states",
+        "status": "ACCEPT",
+        "successor_worlds": 2
+      },
+      "delta": {
+        "new_updates": 2,
+        "reason": "delta effects and dependencies cover both normals",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots_with_diagnostic_materialization": 22
+      },
+      "expected": "ACCEPT",
+      "input_sha256": "cb23307f73aa8313657a23b02da95cc7c8ab3ace635df8f14d260966c029a5dc",
+      "name": "post_join_copy_read",
+      "snapshot": {
+        "estimated_retained_slots": 20,
+        "new_cloned_slots": 10,
+        "reason": "all snapshot alternatives safe",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots": 40
+      }
+    },
+    {
+      "concrete": {
+        "reason": "all concrete normal states",
+        "status": "ACCEPT",
+        "successor_worlds": 2
+      },
+      "delta": {
+        "new_updates": 2,
+        "reason": "delta effects and dependencies cover both normals",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots_with_diagnostic_materialization": 22
+      },
+      "expected": "ACCEPT",
+      "input_sha256": "ed133661b6bb39a784ec9196048debdce973de3acef5774f95627d46cec8ced4",
+      "name": "unaffected_head_ref",
+      "snapshot": {
+        "estimated_retained_slots": 20,
+        "new_cloned_slots": 10,
+        "reason": "all snapshot alternatives safe",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots": 40
+      }
+    },
+    {
+      "concrete": {
+        "reason": "all concrete normal states",
+        "status": "ACCEPT",
+        "successor_worlds": 2
+      },
+      "delta": {
+        "new_updates": 2,
+        "reason": "delta effects and dependencies cover both normals",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots_with_diagnostic_materialization": 22
+      },
+      "expected": "ACCEPT",
+      "input_sha256": "480604396df5c60592465a918a376d43b2bd0c61b0df94eb908d82a535f6c52d",
+      "name": "known_both_some_after_join",
+      "snapshot": {
+        "estimated_retained_slots": 20,
+        "new_cloned_slots": 10,
+        "reason": "all snapshot alternatives safe",
+        "records": 1,
+        "status": "ACCEPT",
+        "visited_slots": 40
+      }
+    },
+    {
+      "concrete": {
+        "reason": "not Some in all incoming states",
+        "status": "PRECISION",
+        "successor_worlds": 2
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "conditional None after join",
+        "records": 0,
+        "status": "PRECISION",
+        "visited_slots_with_diagnostic_materialization": 0
+      },
+      "expected": "PRECISION",
+      "input_sha256": "38c23c247c1b6cb820a723efead334027a47c82ec64a8e126c8ce18d0232a930",
+      "name": "conditional_none_after_join",
+      "snapshot": {
+        "estimated_retained_slots": 20,
+        "new_cloned_slots": 10,
+        "reason": "not Some on all alternatives",
+        "records": 1,
+        "status": "PRECISION",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "unknown callee effect",
+        "status": "PRECISION",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "unknown called effect",
+        "records": 0,
+        "status": "PRECISION",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "PRECISION",
+      "input_sha256": "4d08481e6bbf12d8d4753d4e0313fd5e00612e12249a1e567548315b1c32a579",
+      "name": "unknown_effect",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "unknown body effect",
+        "records": 0,
+        "status": "PRECISION",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "all concrete normal states",
+        "status": "ACCEPT",
+        "successor_worlds": 2
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "summary atom omission",
+        "records": 0,
+        "status": "PRECISION",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "PRECISION",
+      "input_sha256": "b2965db42cf5937b1b1fb3406390df9beb1013a02bd562a4f1a065da8a040e06",
+      "name": "missing_reset_summary",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "known-body summary lost Change/Reset",
+        "records": 0,
+        "status": "PRECISION",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "all concrete normal states",
+        "status": "ACCEPT",
+        "successor_worlds": 2
+      },
+      "delta": {
+        "new_updates": 2,
+        "reason": "bounded alternative budget",
+        "records": 1,
+        "status": "PRECISION",
+        "visited_slots_with_diagnostic_materialization": 22
+      },
+      "expected": "PRECISION",
+      "input_sha256": "7cb6bb94e94129d4cbef833f5386fb5352164f020e12b8534d9f46fe690df62d",
+      "name": "cap_one",
+      "snapshot": {
+        "estimated_retained_slots": 20,
+        "new_cloned_slots": 10,
+        "reason": "snapshot state budget",
+        "records": 1,
+        "status": "PRECISION",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "unknown post-join consumer",
+        "status": "UNSUPPORTED",
+        "successor_worlds": 2
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "unknown continuation",
+        "records": 0,
+        "status": "UNSUPPORTED",
+        "visited_slots_with_diagnostic_materialization": 0
+      },
+      "expected": "UNSUPPORTED",
+      "input_sha256": "efd046125e523b0d6ca10a58b9ecce97275d2643f998d53cbdaf32e3f53894ad",
+      "name": "unsupported_runtime",
+      "snapshot": {
+        "estimated_retained_slots": 20,
+        "new_cloned_slots": 10,
+        "reason": "post-join use",
+        "records": 1,
+        "status": "UNSUPPORTED",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "two distinct lexical Node roots required",
+        "status": "UNSUPPORTED",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "not bounded two roots",
+        "records": 0,
+        "status": "UNSUPPORTED",
+        "visited_slots_with_diagnostic_materialization": 0
+      },
+      "expected": "UNSUPPORTED",
+      "input_sha256": "30325eee4a47797bd2d590faf95e96ef63edaf1bfc802d7d5f030c04a06335e3",
+      "name": "extra_heap_root",
+      "snapshot": {
+        "estimated_retained_slots": 0,
+        "new_cloned_slots": 0,
+        "reason": "two original roots",
+        "records": 0,
+        "status": "UNSUPPORTED",
+        "visited_slots": 0
+      }
+    },
+    {
+      "concrete": {
+        "reason": "wrong root/place/incarnation",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "wrong actual referent",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "9f30569e43ead23e19cac2a3fd82d3ffe795680a349686ed964998a78942d74e",
+      "name": "bad_actual_root",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "formal ref wrong original target",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "formal-to-actual substitution",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "mismatched argument map",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "7305735e0af288795b3f5196364445128bb657fabe1995e8ce8f588da34b06f5",
+      "name": "wrong_formal_actual_relation",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "unproved actual/formal substitution",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "original Domain mismatch",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "no proper original D/ref grant",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "fb5302b07bff6c0cb6f6fc4b9bd6c4dc3235c48a1846cfad8f716d0f77a7b75a",
+      "name": "wrong_original_domain",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "original stability Domain",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "duplicate formal mapping",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "duplicate formal binding",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "7c77268b842cd0aacf4bff17ddbbc2c88fc345d084a5ad20fccfc3c91c8b38d7",
+      "name": "duplicate_formal_keys",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "one formal mapped twice",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "stale/nonclosing write-ref",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "no proper original D/ref grant",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "3850dbc412aa8127d3f15edbffd58e9fb0a6c036c98860e42a800a6ed589fe2d",
+      "name": "stale_write_ref",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "scoped write-ref/exit",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "wrong root/place/incarnation",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "wrong actual referent",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "b5afd8b968c4ab6644aaf93011bcdb1e0a1f4dfd897d718e974dc6369b3ee2c3",
+      "name": "mismatched_ref_root",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "formal ref wrong original target",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "wrong root/place/incarnation",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "wrong actual referent",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "52acfc1a952824c8d9e0ea83321823f0298b42bb4e8aff0d501ea29954e8a607",
+      "name": "mismatched_ref_incarnation",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "formal ref wrong original target",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "stale/nonclosing write-ref",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "loan escapes call",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "a0d3180ef02d9b3795d08a330abbae3e358ef95a11e934b1bd5b4dd64b1783c8",
+      "name": "scope_exits_before_call",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "scoped write-ref/exit",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "stale/nonclosing write-ref",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "no proper original D/ref grant",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "cd48dc6e863c072d82ede85487ad554c577813c275952ef884e78b0ee07ab68e",
+      "name": "missing_write_ref",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "scoped write-ref/exit",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "matched Copy q not valid",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "q source mismatch",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "251e8552ec58d1975d3eede7929c50be3b68c094792cb0c2099281c61025f46a",
+      "name": "bad_q_source",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "q must be Some branch Copy",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "matched Copy q not valid",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "q source mismatch",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "130849a5150965eb40f3ba2dd274865cb1f609be961e7f27f1274a881301833f",
+      "name": "stale_q_copy",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "q must be Some branch Copy",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "callee exit failure",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "call body incomplete exit",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "311cebdbb996ff4fc75a1f5d977b6234cae82f6d0af69312f82834f4512cd372",
+      "name": "call_exit_missing",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "named body exit",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "old Option return not actual",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "returned-old mismatch",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "64e5596ee7b13337b1e9432b6eb2507fc2e275de8b2c1dccaeaa5b53487e2958",
+      "name": "wrong_expected_return_old",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "old value not identical",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "old result dropped by required call contract",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "old Option not transferred",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "48495b2d19df3f8735270bae4837d5ce7e8b2c36085c7cadf6f2d8dca927dd46",
+      "name": "old_copy_result_dropped",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "old value lost",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "surviving stale field ref",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "Change/Reset conflicts surviving package",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "9aa16fc352e8df3862c32037837a71b599637bc7af1c97cb46b34851ed584f60",
+      "name": "old_some_occurrence_survives",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "stale field/occurrence survives",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "surviving stale field ref",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "Change/Reset conflicts surviving package",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "298a3b8dfc20ccef59ee2027e9571b6907dd1dddf297143e0bd7d04ef095e2d1",
+      "name": "field_dependent_ref_survives",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "stale field/occurrence survives",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "surviving stale parent root ref",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "root Change conflicts surviving package",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "0b704fee3bed1b5c959425f861de647debb316f5c68d3cd17340bde156d85c96",
+      "name": "enclosing_root_dependent_ref_survives",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "stale containing root fact survives",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "unrecorded sibling modification",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "extra unaccounted sibling effect",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "e0c9ba1d57831b7f4566ee1b457a63739858ec4dda87ba4a81ab459d21e78363",
+      "name": "sibling_mutation_not_in_summary",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "unrecorded sibling effect",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "original root ownership/identity",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "dead original root",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 0
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "18cda16a634e1abfa99319dfc97ccd0f641a8ba98b38053c9cc46f0097186527",
+      "name": "dead_original",
+      "snapshot": {
+        "estimated_retained_slots": 0,
+        "new_cloned_slots": 0,
+        "reason": "stale original",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 0
+      }
+    },
+    {
+      "concrete": {
+        "reason": "distinct allocation",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "duplicate allocation",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 0
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "bf229be78c5b461dca002d9d997eab44247e69c4afc50a9b2d57c8d27af29e62",
+      "name": "original_allocation_alias",
+      "snapshot": {
+        "estimated_retained_slots": 0,
+        "new_cloned_slots": 0,
+        "reason": "original not distinct: allocation",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 0
+      }
+    },
+    {
+      "concrete": {
+        "reason": "distinct domain",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "duplicate domain",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 0
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "fe3eddf0530c60150d964277f5c94404e3f981e7e21f746dc7d9fc32c9f6c86c",
+      "name": "original_domain_alias",
+      "snapshot": {
+        "estimated_retained_slots": 0,
+        "new_cloned_slots": 0,
+        "reason": "original not distinct: domain",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 0
+      }
+    },
+    {
+      "concrete": {
+        "reason": "distinct root",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "duplicate root",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 0
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "7ea7bddd5ed07dc30ee78b009afc903b641ac73ee2c50f90ceb4ddd34d6ca33a",
+      "name": "original_root_alias",
+      "snapshot": {
+        "estimated_retained_slots": 0,
+        "new_cloned_slots": 0,
+        "reason": "original not distinct: root",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 0
+      }
+    },
+    {
+      "concrete": {
+        "reason": "stale/nonclosing write-ref",
+        "status": "SEMANTIC_REJECT",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "no proper original D/ref grant",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "SEMANTIC_REJECT",
+      "input_sha256": "2bc9a7a9876da1f7e8fa34fe1b5f77aa417b45a40d45bd92b9cebb1d613b9f01",
+      "name": "source_loan_not_stable",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "scoped write-ref/exit",
+        "records": 0,
+        "status": "SEMANTIC_REJECT",
+        "visited_slots": 20
+      }
+    },
+    {
+      "concrete": {
+        "reason": "unmodelled call body",
+        "status": "UNSUPPORTED",
+        "successor_worlds": 0
+      },
+      "delta": {
+        "new_updates": 0,
+        "reason": "unknown operation",
+        "records": 0,
+        "status": "UNSUPPORTED",
+        "visited_slots_with_diagnostic_materialization": 10
+      },
+      "expected": "UNSUPPORTED",
+      "input_sha256": "936d02da1c1d65d93d1daa6afc489eee74b8d8f24c0671a98995a499b2354ab2",
+      "name": "unsupported_body_kind",
+      "snapshot": {
+        "estimated_retained_slots": 10,
+        "new_cloned_slots": 0,
+        "reason": "body kind",
+        "records": 0,
+        "status": "UNSUPPORTED",
+        "visited_slots": 20
+      }
+    }
+  ],
+  "compiler_main": "d6e603e12591c2ff39e3e1b77c784681fec66033",
+  "example_minimal_stale_ref": {
+    "counterexample": "tail.next current ValueFact F0 (or original parent RF0) supports surviving ref; in Some branch replace creates F1/RF1; old F0/RF0 remains only on None branch; using joined old ref is invalid",
+    "example_digest": "298a3b8dfc20ccef59ee2027e9571b6907dd1dddf297143e0bd7d04ef095e2d1",
+    "positive_source_pattern": "None=>unit, Some(q)=>set_link(tail@next,Some(q))"
+  },
+  "formal_mapping_permutations": 96,
+  "generated_sample_count": 320,
+  "matrix_size": 40,
+  "matrix_statuses": {
+    "ACCEPT": 10,
+    "PRECISION": 4,
+    "SEMANTIC_REJECT": 23,
+    "UNSUPPORTED": 3
+  },
+  "model_limits": [
+    "two lexical originals only",
+    "one known body Change/Reset in Some arm",
+    "No actual NewLang parser/checker",
+    "no dynamic heap issuance",
+    "no runtime/FFI",
+    "no generic CFG/callgraph effects",
+    "diagnostic B full world reconstruction contributes to memory",
+    "not proof of same-actual multi-formal general alias safety"
+  ],
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "python": "3.13.5",
+  "seed": 48220261015,
+  "unit_test_methods": 7,
+  "unsafe_concrete_reject_abstract_accept": []
+}

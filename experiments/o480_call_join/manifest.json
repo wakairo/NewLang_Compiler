@@ -1,0 +1,16 @@
+{
+  "authority": "Draft17.30",
+  "compiler_main": "d6e603e12591c2ff39e3e1b77c784681fec66033",
+  "files_sha256": {
+    "PREFLIGHT.md": "29dbcf8b0b3cc3cb80b4a3bdd5180795e7b9819572cbb9d7683c0e897d9e812d",
+    "README.md": "8c8de20ca3550c6f838e2f620d1a0025b3c23d4e60ddc1b25fdc62d23fada733",
+    "concrete.py": "ae56339cbb63fcb9fe219ec675f8c08a8c610ef67851099947d240f6b37ddcd3",
+    "delta.py": "b0530e7d96e4b42c9d9cca4d25d12e5277d382e60886433db9123b2f0d7e5621",
+    "ir.py": "a39da79faa47ea9a90e1d5db024b528cb6b847641df198823cb617099256134a",
+    "results.json": "40568f106f51f606a082fd7ad1e1141ccfd67f4a2c985c194dad557086448730",
+    "run_study.py": "ad0e45f157759dc9f61cb0850d1b4c4591111ae352a8498637666233e182e417",
+    "snapshot.py": "fcec694417da083d75379f75c0455c79db5c43c9bb68915359aca0e01e64b0c0",
+    "test_o482.py": "566fc5d6fbfd8238ab4b8c1f040308766fcf2f5148fac27f3eb6b09ce3789a13"
+  },
+  "task": "NewLang Track O Issue #482"
+}
