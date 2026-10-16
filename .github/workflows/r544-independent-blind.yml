@@ -1,0 +1,130 @@
+name: R544 isolated independent BLIND single run
+on:
+  push:
+    branches: [r544-independent-twin-blind-13f0072]
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - name: Checkout pinned-source descendant without credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Verify source and oracle frozen before executing candidate
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          FIXED=13f00721213463b6f6284d4af258081a6396cd25
+          test "$(git rev-parse "$FIXED^{commit}")" = "$FIXED"
+          git merge-base --is-ancestor "$FIXED" HEAD
+          echo "R544 Fixed compiler SHA=$FIXED; audit branch HEAD=$(git rev-parse HEAD)"
+          echo "R544 Changed paths relative to FIXED (ONLY R-owned files + workflow):"
+          git diff --name-only "$FIXED" HEAD | tee /tmp/r544_changed_paths.txt
+          if grep -Ev '^r544_blind/|^\.github/workflows/r544-independent-blind.yml$' /tmp/r544_changed_paths.txt; then
+            echo "R544 STOP production changed"; exit 1
+          fi
+          (cd r544_blind/source && sha256sum -c manifest.sha256)
+          echo "R544 independent oracle SHA256: 61f38f7bd5853bbe49591ae210c3139fc38c1b19c7848c522b7b4c50c3c2034b"
+          date -u -Iseconds
+          gcc --version | head -n 1
+          clang --version | head -n 1
+          cmake --version | head -n 1
+          python3 --version
+      - name: Build normal and experimental compilers at fixed SHA
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          CC=gcc cmake -S . -B build-r544 -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_FRONTEND_ONLY=ON
+          cmake --build build-r544 --parallel 2 --target newlangc newlangc_p534
+          test -x build-r544/newlangc_p534
+          test -x build-r544/newlangc
+          ./build-r544/newlangc_p534 --version
+          ./build-r544/newlangc --version
+      - name: Test independent SOURCE CHECK positives before inspecting any P result
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          src=r544_blind/source
+          echo "R544 POSITIVE twin source→CHECK"
+          ./build-r544/newlangc_p534 --check "$src/twin.newlang" > /tmp/twin.check.out 2> /tmp/twin.check.err || {
+             cat /tmp/twin.check.out /tmp/twin.check.err; echo "R544 BLIND FINDING positive twin CHECK refusal"; exit 2;
+          }
+          test ! -s /tmp/twin.check.out && test ! -s /tmp/twin.check.err
+          echo "R544 POSITIVE singleton source→CHECK"
+          ./build-r544/newlangc_p534 --check "$src/singleton.newlang" > /tmp/single.check.out 2> /tmp/single.check.err || {
+             cat /tmp/single.check.out /tmp/single.check.err; echo "R544 BLIND FINDING singleton CHECK refusal"; exit 2;
+          }
+          test ! -s /tmp/single.check.out && test ! -s /tmp/single.check.err
+          echo "R544 SOURCE CHECK positives PASS"
+      - name: Semantic negative cases and normal default-OFF rejection
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          src=r544_blind/source
+          for case in neg_second_arity3 neg_second_arity5 neg_second_wrong_type neg_second_alias neg_second_missing_payload neg_second_bad_delimiter; do
+             echo "R544 NEGATIVE $case"
+             if ./build-r544/newlangc_p534 --check "$src/$case.newlang" > "/tmp/$case.out" 2> "/tmp/$case.err"; then
+               echo "R544 BLIND FINDING unexpected ACCEPT $case"; exit 3;
+             fi
+             cat "/tmp/$case.out" "/tmp/$case.err"
+          done
+          echo "R544 DEFAULT OFF CHECK"
+          if ./build-r544/newlangc --check "$src/twin.newlang" > /tmp/off.out 2> /tmp/off.err; then
+             echo "R544 BLIND FINDING default compiler accepted opt-in"; exit 3
+          fi
+          cat /tmp/off.out /tmp/off.err
+          echo "R544 expected rejection statuses PASS (layer must be independently adjudicated)"
+      - name: Emit and freeze plain ordinary source-derived compiler C17
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          src=r544_blind/source
+          ./build-r544/newlangc_p534 "$src/twin.newlang" > /tmp/r544_twin_plain.c 2> /tmp/twin.emit.err || {
+             cat /tmp/twin.emit.err; echo "R544 BLIND FINDING twin emission"; exit 4;
+          }
+          test ! -s /tmp/twin.emit.err && test -s /tmp/r544_twin_plain.c
+          ./build-r544/newlangc_p534 "$src/singleton.newlang" > /tmp/r544_single_plain.c 2> /tmp/single.emit.err || {
+             cat /tmp/single.emit.err; echo "R544 BLIND FINDING singleton emission"; exit 4;
+          }
+          sha256sum /tmp/r544_twin_plain.c /tmp/r544_single_plain.c
+          echo "R544_PLAIN_C17_BEGIN"
+          cat /tmp/r544_twin_plain.c
+          echo "R544_PLAIN_C17_END"
+      - name: Compile and run compiler-produced unmodified C17 via GCC and Clang at O0/O2
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          for CC in gcc clang; do
+            for OPT in 0 2; do
+              echo "R544 PLAIN NATIVE $CC -O$OPT"
+              "$CC" -std=c17 -pedantic -Wall -Wextra -Werror "-O$OPT" /tmp/r544_twin_plain.c -o /tmp/r544_twin_$CC$OPT
+              /tmp/r544_twin_$CC$OPT
+              "$CC" -std=c17 -pedantic -Wall -Wextra -Werror "-O$OPT" /tmp/r544_single_plain.c -o /tmp/r544_single_$CC$OPT
+              /tmp/r544_single_$CC$OPT
+            done
+          done
+          echo "R544 PLAIN native all four toolchain levels PASS, not yet a live-physical proof"
+      - name: Independent genuine public-owned source fragment and validator attack
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          sed '1s/^fn main() -> unit //' r544_blind/source/twin.newlang > /tmp/r544_body_derived.nl
+          sha256sum /tmp/r544_body_derived.nl r544_blind/independent_probe.c
+          gcc -std=c17 -pedantic -Wall -Wextra -Werror -Iinclude \
+              r544_blind/independent_probe.c \
+              -Wl,--start-group \
+                build-r544/libnewlang_semantic.a \
+                build-r544/libnewlang_checked.a \
+                build-r544/libnewlang_parser_p534.a \
+                build-r544/libnewlang_parser.a \
+                build-r544/libnewlang_diagnostic.a \
+                build-r544/libnewlang_lexer.a \
+                build-r544/libnewlang_syntax.a \
+                build-r544/libnewlang_source.a \
+              -Wl,--end-group -o /tmp/r544_independent_probe
+          /tmp/r544_independent_probe /tmp/r544_body_derived.nl
+          echo "R544 PUBLIC PROBE PASS; body extracted from original function, not a separate fabricated owner"
