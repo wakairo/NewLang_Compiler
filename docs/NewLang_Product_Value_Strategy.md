@@ -100,6 +100,20 @@ module-level representation hidingの強制、general Ring safe APIが
 実装済みだとは主張しない。現在の有限source → checked-owned →
 C17/nativeのPASSやCHECK0／CI greenは、soundness theoremでもProduct GOでもない。
 
+## 1.2 NewLang-native library design as the primary value-validation path
+
+§1.1は、**任意の既存CソースをそのままNewLangへ移せば、すべての`unchecked`の監査依存範囲が小さくなる**という万能の移植保証ではない。元Cコードの偶然の式順序、helper分割、公開された内部表現まで忠実に再現することを、NewLangの製品価値の必要条件にしない。
+
+**製品価値の主たる検証対象**は、Cを使う合理的な理由がある典型的なデータ構造・アルゴリズム（例：固定容量Ring、intrusive list、arena/allocator等）を、**NewLangで最初から自然に設計・実装した低水準library**である。library authorがそのworkloadのために合理的に選ぶpointer topology、物理配置、storage/backing、明示的なallocation・lifetime policy、実際の性能・外部契約を満たす。一方、偶然の元C実装詳細（式順序、helper分割、非契約上の内部表現）は維持する必要がなく、安全なAPI境界や失敗時の返却構成もNewLangに適した形を選んでよい。例えばintrusiveな元ポインタ同一性が要る操作を無関係なindex-only/GC表現へ置き換えるなど、**実用上不可欠な物理制約を外して別workloadにした結果**は同等の置換成功と数えない。
+
+**責務分担の評価**では、compilerが現実的に判定できるlifetime / responsibility / provenance / currentness / access等をcheckedで保証し、なお真でなければならないが機械的に証明できない前提だけを、正当な原権限と実際の依存関係に基づく局所的な`unchecked`へ残す。`unchecked`の個数・字句的な近さ・全操作のchecked化を合格条件にしない。library authorは内部の論理的不変条件、影響する合法writer、失敗・rollback・破棄・再入・FFIの依存閉包を引き続き監査する。**ordinary-safe callerが許される全状態遷移**で内部の前提を破壊できないことも必要である。compilerの検査対象外となる本当の前提を`unchecked`と記しただけでは監査は局所化されない。
+
+代表workloadは、少なくとも一つの具体的な利用APIと実際の物理対象、正常経路、該当するFULL/EMPTY・allocation failure等の通常の失敗結果、破棄／責任の移転を持たせる。内部不変条件に影響する**合法な変更**と、影響しない**無関係なsafe変更**の両方を考え、それぞれでauthorとordinary callerが再監査するL/R/P/V/C依存範囲を特定する。比較相手は**同じ本質的な物理構造と実用API**を持つ、十分にfactorしたC、Zig、局所unsafe＋safe wrapperのRustとする。NewLang固有の利得が無ければ正直に未実証とする。局所化できない代表workloadや予想外に広い依存閉包も、重要な負の製品証拠として残す。
+
+**既存Cの忠実な移植・実際の修正履歴は引き続き有効**である。original topology、移植可能性、checker精度、権限の偽造、失敗・teardown等の厳しい反例を調べる*補助的なpressure test*として使う。ただし一つの既存C実装をそのままsource/CHECK→nativeで再現できないことと、自然なNewLang-native実装の製品価値が成立しないことを同一視しない。逆に、簡単なNewLang-native toy例のCHECK/native成功もProduct GOではない。
+
+**現行能力との区別：** Draft上の`unchecked`意味論、Array/Ring/ownerの概念的機構、またはlexical Node/Pairの有限C17/native成功は、general source `unchecked`、representation hiding、original heap ownerの安全な返却・refund、safe library APIを現Productionが実装済みである証拠ではない。代表ライブラリの設計評価と、現在のSOURCE／CHECK／公開owned／C17／nativeの到達範囲は別々に記録する。複数の独立機構不足があれば最初の不足で探索を停止し、Product GOまで無制限に実装を連鎖させない。
+
 ## 2. 多段階ターゲティング
 
 NewLangはcurrent North Starと最終市場を同一視しない。
@@ -224,6 +238,7 @@ Coordination: どのfindingを、いつ、どのtrackへ渡すか？
 - **Failure attribution**: 複数の未確定mechanismを一つのgateへ混ぜていないか。
 - **Anti-false-progress**: host fixture、toy rewrite、unchecked、backend trickでuser-visible gapを隠していないか。safe mutationによるunchecked前提破壊の反例・未検証範囲を隠していないか。
 - **Topology preservation**: NewLangを通すために元のC architectureを本質的に別物へ変えていないか。
+- **NewLang-native validation**: 既存Cソースの逐語的な再現を必須にせず、典型的な低水準libraryを自然に設計したときのauthor＋ordinary callerの監査依存閉包、影響する／無関係なsafe変更、同等topologyのC/Zig/Rust比較を検証できるか。
 - **No foreclosure**: 小さな現在判断が将来のC replacementを不必要に閉ざしていないか。
 - **Lifecycle cost**: implementation costだけでなくsemantic/test/diagnostic/compatibility/documentation/future-interaction costを数える。
 
