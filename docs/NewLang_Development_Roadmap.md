@@ -23,6 +23,8 @@
 
 **投資上の結論：** 技術探索の有限正例は保持するが、PR #494のProduction採用・一般effect/CFG／P9合流拡張・Rの単なる反復には進まない。[実利用者の作業事例受付 #470](https://github.com/wakairo/NewLang_Compiler/issues/470)等から、元C topologyを保持した具体操作と作者＋普通callerの監査負担の真の差を確認した場合にのみ、別Issueで§4.3/4.3.1の投資可否を判断する。本補遺は非規範的な事実・停止線の整合であり、新Trackや意味論選択を認可しない。
 
+**能力依存地図への移行（2026-10-16）：** [C Replacement Coverage Map §3.1–3.3](NewLang_C_Replacement_Coverage_Map.md#31-能力依存地図--最初の不足と再利用先2026-10-16)に、source→CHECK→公開owned→C17/nativeの**最初の未到達点**、`u8→u8` Copy関数（PR404）の既統合実績、原Node（PR472/492）、未統合named call（PR479/494）、guard付きquantity・Array・byte・heap owner・ABIの**非直列**の枝を整理した。次の探索候補は比較一操作＋caller分岐の最初の停止点を固定する低費用gate（§5.2既存規則／§4.2 syntax履歴照合が前提）。これはRing、cJSON H1、安全なordinary APIのProduct GOや一般演算実装の認可ではない。実装する場合は別Issueでsource・negative・CI・撤退条件を凍結する。
+
 ## 現行checkpoint — 2026-10-15（P471/PR #472統合済み、P478/PR #479は未統合HOLD。旧§0/§7より優先）
 
 **実装の現在地:** Compiler/main [`d6e603e12591c2ff39e3e1b77c784681fec66033`](https://github.com/wakairo/NewLang_Compiler/commit/d6e603e12591c2ff39e3e1b77c784681fec66033)、[CURRENT_SPEC](reference/CURRENT_SPEC.md) → **canonical Draft 17.30（不変）**。従前のFormalProof有限証拠はcompiler→C17/native全体のsoundness証明ではない。本checkpointは[PR #458](https://github.com/wakairo/NewLang_Compiler/pull/458)・[独立R462](https://github.com/wakairo/NewLang_Compiler/issues/462#issuecomment-6186802683)、[P466 / merged PR #467](https://github.com/wakairo/NewLang_Compiler/pull/467)、[P471 / merged PR #472](https://github.com/wakairo/NewLang_Compiler/pull/472)までの**採用済み有限source/公開owned/C17/native**と、[P475](https://github.com/wakairo/NewLang_Compiler/issues/475#issuecomment-6190667128)・[P478](https://github.com/wakairo/NewLang_Compiler/issues/478#issuecomment-6191917231)の**別個の名前付きcall停止**を区別するnon-normative事実更新である。
