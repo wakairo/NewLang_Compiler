@@ -12,7 +12,15 @@
 > 運用は [Development Process](NewLang_Project_Development_Process.md) に従う。
 > この文書は正本を置換せず、将来の更新時は「観測した事実」と「新しい投資案」を分ける。
 
-## 現行checkpoint — 2026-10-16（P504／PR #507統合後。下記は履歴）
+## 現行checkpoint — 2026-10-16（P508／PR #511統合後、下記checkpointは履歴）
+
+**Compiler/main `e4af76784a6fe4174730af0671eb58bf606aac91`、CURRENT_SPEC→Draft17.30不変、FormalProof/main `5437f92d099e228773d31e2323e8ee6228ca21bf`。** 非規範の能力・投資checkpoint。§4.1 Issue中心のTrack引継ぎを守り、Track起動はユーザーが別スレッドから行う。
+
+- **採用済み／純粋Copyの条件付きnative選択：** [P508完了報告](https://github.com/wakairo/NewLang_Compiler/issues/508#issuecomment-6208605972)と[Coordination裁定](https://github.com/wakairo/NewLang_Compiler/issues/508#issuecomment-6208693083)、[merged PR #511](https://github.com/wakairo/NewLang_Compiler/pull/511)。凍結したTRUE/FALSE原sourceは一つの`usize == usize` boolを作り、二正常armの`u8(7)`/`u8(8)`を実C17の物理条件演算で選び、結果を次のCopy localへ運ぶ。SOURCE/CHECK→public-owned両arm→通常strict C17→GCC/Clang O0/O2 native7/8、壊したarm/condition/copy拒否、private source artifactのfork-membership等の変異拒否とOOM回復。FULL5＋NO LLVM CIは固定HEAD `a573764e5c720ffc0f513afa6df53076d1fab05c`ですべて成功（統合後mainの別CIではない）。一般IF/effects/元Pair物理Change、通常caller価値の実証ではない。
+- **同時進行の元Pair探索は安全性昇格せず停止：** [P506/PR510](https://github.com/wakairo/NewLang_Compiler/pull/510) は固定未統合PR503上の実原Pair左右arm同一root構造的CHECK0とpostjoin unknown-left/right9の**Stage1候補**。共通entry／immediate post／Change lineageを独立に確認する公開validatorが**未実装のためStage2 HOLD**、C17/nativeなし。PR503/510、named helper PR479/494は依然DRAFT／DO NOT MERGE。CHECK0もCI greenも公開証明PASSではない。
+- **今後の投資とGoal Alignment：** スカラーifはC/Zig/Rustでも容易でありNewLang固有のUB防止監査・再監査依存閉包の改善は未計測。次にPair専用の400–800行の公開validatorと別の物理IFを即認可するのではなく、(A)本当に必要な元C-class operation・ordinary callerの依存閉包へつなぐ最小根拠、(B)既存scoped/direct APIや局所unchecked境界、(C)fixed Array一要素Copy/bounds拒否等の独立かつ再利用可能なC replacementの技術frontier、を比較する。追加新機構はProcess §4.3の4行GateをIssueへ記録し、§4.2の新source/意味論選択がある場合は履歴照合する。元heap H1・STB・Ring・Array source/ABIの未到達、Product GO HOLDを維持。
+
+## 履歴checkpoint — 2026-10-16（P504／PR #507統合後）
 
 **Compiler/main `eacbd0fd84f3f9ef90813435ac71633a770f3f80`、CURRENT_SPEC→Draft17.30不変、FormalProof/main `5437f92d099e228773d31e2323e8ee6228ca21bf`。** これは非規範の最新投資checkpoint。以下の以前のmain SHA／当時の未対応判定は、各時点の正確な履歴として保持する。
 
