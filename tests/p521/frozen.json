@@ -1,0 +1,230 @@
+{
+  "fixed_compiler": "a513b48484b890c0d8cee6dcc7766414075b33ee",
+  "canonical": "Draft 17.30",
+  "frozen_utc": "2026-10-16T08:31:49.295914+00:00",
+  "cases": {
+    "scalar_constant": {
+      "source": "scalar_constant.nl",
+      "sha256": "35bf720c5ce4ce96b15947511e8cdc83dc4557ce2da71c67528fd7157c4f10d6",
+      "bytes": 91,
+      "expectation": {
+        "parser": 0,
+        "check": "0 predicted; record genuine precision separately",
+        "owned": "source-issued only if CHECK succeeds",
+        "c17": "possible finite backend mismatch; do not presume supported",
+        "native": "only after C17 succeeds"
+      },
+      "oracle": {
+        "forwarded": 108,
+        "real_callee_call_required": true
+      }
+    },
+    "adopted_p515": {
+      "source": "adopted_p515.nl",
+      "sha256": "c921596f72e64116630676b98d6ce43c529420a4bec26c437d01981cc39cc864",
+      "bytes": 466,
+      "expectation": {
+        "parser": 0,
+        "check": "0 predicted; record genuine precision separately",
+        "owned": "source-issued only if CHECK succeeds",
+        "c17": "possible finite backend mismatch; do not presume supported",
+        "native": "only after C17 succeeds"
+      },
+      "oracle": {
+        "old": 37,
+        "selected": 108,
+        "forwarded": 108,
+        "after": 108,
+        "sibling": 211,
+        "same_original_physical_pair": true,
+        "real_callee_call_required": false
+      }
+    },
+    "call_choice_true": {
+      "source": "call_choice_true.nl",
+      "sha256": "317e3e036d2e089a2c55d3e25ff57555de27bb29bed22c12253607a54592fac2",
+      "bytes": 197,
+      "expectation": {
+        "parser": 0,
+        "check": "0 predicted; record genuine precision separately",
+        "owned": "source-issued only if CHECK succeeds",
+        "c17": "possible finite backend mismatch; do not presume supported",
+        "native": "only after C17 succeeds"
+      },
+      "oracle": {
+        "old": 37,
+        "selected": 108,
+        "forwarded": 108,
+        "after": 108,
+        "sibling": 211,
+        "same_original_physical_pair": true,
+        "real_callee_call_required": true
+      }
+    },
+    "direct_pair_true": {
+      "source": "direct_pair_true.nl",
+      "sha256": "2b8c46554d7aaba137b2910ec08f5a30a2df3be3155a0c313710737f3dcfef37",
+      "bytes": 348,
+      "expectation": {
+        "parser": 0,
+        "check": "0 predicted; record genuine precision separately",
+        "owned": "source-issued only if CHECK succeeds",
+        "c17": "possible finite backend mismatch; do not presume supported",
+        "native": "only after C17 succeeds"
+      },
+      "oracle": {
+        "old": 37,
+        "selected": 108,
+        "forwarded": 108,
+        "after": 108,
+        "sibling": 211,
+        "same_original_physical_pair": true,
+        "real_callee_call_required": false
+      }
+    },
+    "combined_true": {
+      "source": "combined_true.nl",
+      "sha256": "0776824b0fa5ed5f97d48ffd062402aeb6b38316a885648d56037fb156d59cf4",
+      "bytes": 409,
+      "expectation": {
+        "parser": 0,
+        "check": "0 predicted; record genuine precision separately",
+        "owned": "source-issued only if CHECK succeeds",
+        "c17": "possible finite backend mismatch; do not presume supported",
+        "native": "only after C17 succeeds"
+      },
+      "oracle": {
+        "old": 37,
+        "selected": 108,
+        "forwarded": 108,
+        "after": 108,
+        "sibling": 211,
+        "same_original_physical_pair": true,
+        "real_callee_call_required": true
+      }
+    },
+    "call_choice_false": {
+      "source": "call_choice_false.nl",
+      "sha256": "caf3744772fe18a6abfa9fa6e14fd71f7ef8e60c456abb29d83da4d111e440ee",
+      "bytes": 197,
+      "expectation": {
+        "parser": 0,
+        "check": "0 predicted; record genuine precision separately",
+        "owned": "source-issued only if CHECK succeeds",
+        "c17": "possible finite backend mismatch; do not presume supported",
+        "native": "only after C17 succeeds"
+      },
+      "oracle": {
+        "old": 37,
+        "selected": 173,
+        "forwarded": 173,
+        "after": 173,
+        "sibling": 211,
+        "same_original_physical_pair": true,
+        "real_callee_call_required": true
+      }
+    },
+    "direct_pair_false": {
+      "source": "direct_pair_false.nl",
+      "sha256": "efa00084af5fc5f90feffb77b362a3bed92ba9e63e2c6b3d3f49a394d6e4b84b",
+      "bytes": 348,
+      "expectation": {
+        "parser": 0,
+        "check": "0 predicted; record genuine precision separately",
+        "owned": "source-issued only if CHECK succeeds",
+        "c17": "possible finite backend mismatch; do not presume supported",
+        "native": "only after C17 succeeds"
+      },
+      "oracle": {
+        "old": 37,
+        "selected": 173,
+        "forwarded": 173,
+        "after": 173,
+        "sibling": 211,
+        "same_original_physical_pair": true,
+        "real_callee_call_required": false
+      }
+    },
+    "combined_false": {
+      "source": "combined_false.nl",
+      "sha256": "c016e643f8b1ec0da014225bbca045dc600712d913658b3d33a3637f6194b994",
+      "bytes": 409,
+      "expectation": {
+        "parser": 0,
+        "check": "0 predicted; record genuine precision separately",
+        "owned": "source-issued only if CHECK succeeds",
+        "c17": "possible finite backend mismatch; do not presume supported",
+        "native": "only after C17 succeeds"
+      },
+      "oracle": {
+        "old": 37,
+        "selected": 173,
+        "forwarded": 173,
+        "after": 173,
+        "sibling": 211,
+        "same_original_physical_pair": true,
+        "real_callee_call_required": true
+      }
+    },
+    "negative_else_range": {
+      "source": "negative_else_range.nl",
+      "sha256": "b884f592736cd3bdfe87d8e7ebeb5d5cac6aedc6c9cef13825a2965c08e94c4b",
+      "bytes": 409,
+      "expectation": {
+        "parser": 0,
+        "check": 3,
+        "diagnostic": "V1-U8-LITERAL-RANGE",
+        "classification": "semantic error in unchosen arm must reject"
+      },
+      "oracle": {
+        "old": 37,
+        "selected": 108,
+        "forwarded": 108,
+        "after": 108,
+        "sibling": 211,
+        "same_original_physical_pair": true,
+        "real_callee_call_required": false
+      }
+    },
+    "negative_argument": {
+      "source": "negative_argument.nl",
+      "sha256": "7c7c7404247d8ec4e33bbe1b9ca2f3c239e08b60f947107925e347bbced7e30c",
+      "bytes": 402,
+      "expectation": {
+        "parser": 0,
+        "check": 3,
+        "diagnostic": "P3-TYPE-MISMATCH",
+        "classification": "usize actual for u8 formal"
+      },
+      "oracle": {
+        "old": 37,
+        "selected": 108,
+        "forwarded": 108,
+        "after": 108,
+        "sibling": 211,
+        "same_original_physical_pair": true,
+        "real_callee_call_required": false
+      }
+    },
+    "negative_return": {
+      "source": "negative_return.nl",
+      "sha256": "e911ffde4af17464b9efe4f162ef728c1f98d1a668fc79147a56d62c503ec5de",
+      "bytes": 412,
+      "expectation": {
+        "parser": 0,
+        "check": 3,
+        "diagnostic": "P8-BODY-RESULT",
+        "classification": "unit body for u8 result"
+      },
+      "oracle": {
+        "old": 37,
+        "selected": 108,
+        "forwarded": 108,
+        "after": 108,
+        "sibling": 211,
+        "same_original_physical_pair": true,
+        "real_callee_call_required": false
+      }
+    }
+  }
+}

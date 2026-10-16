@@ -1,0 +1,11 @@
+# P521 pre-execution freeze
+
+Start 2026-10-16 08:27 UTC; absolute150min stop10:57 UTC. Fixed compiler a513b48484b890c0d8cee6dcc7766414075b33ee; CURRENT_SPEC Draft17.30. No source executed at freeze. frozen.json fixes UTF8 bytes, SHA256, stage forecasts, physical oracles and negatives. TRUE/FALSE differ only b29→30. adopted_p515 is byte-exact tests/p517/late_inline_true.nl; direct_pair keeps final source spelling/order. Eight positive isolation inputs plus three negatives; no catalogue expansion.
+
+Forecast: independent scalar and direct IF/Pair baselines CHECK0/C170. Unknown joined Copy argument may CHECK3 precision (hard STOP), or CHECK0 with a finite driver consumer limitation. The latter is not assumed repairable: only existing authenticated actual/formal/result/body provenance may justify <=100–150 net new production C LOC. Missing semantic/postcall/body proof, multiple mechanisms or a new public certificate: NO-CODE HOLD. All unsuccessful artifacts must remain NULL and rollback measured; no host-owned surrogate.
+
+Compass followed to Strategy1.1, Process4.2–4.3.1, CoverageMap3.1–3.3, Draft18.1/18.2/18.5/18.7,19.1,20.4,27.3/27.4. Historical KEEP current ordinary Copy transfer/result/dependency and pure IF semantics, DI001/006/007/011 (owner-specific extension not reused as Copy authority). No normative/source change; implementation-only N/A only if consuming already-issued facts. Earlier experiments PR479/494/510 remain separate; no broad ordinary-ref/call summary implied.
+
+Goal: distinguish a genuinely reusable composition bridge from separate already-adopted successes. Alternatives: existing direct IF→write; literal→ordinary Copy call; same factored C/Zig/Rust helper; conservative precision HOLD. VALUE-ALIGNMENT-RISK: no author+caller audit-locality/burden advantage measured; more Pair/IF case whitelists or public replay machinery would require Coordination investment, not automatic implementation. Preserve topology and no invented authority.
+
+Baseline clean frontend-only Debug build (production source/checker/owned/C17 driver); local LLVM23.1.2 does not satisfy required23.1.3 full gate; never weaken lock. No code => no PR/CI/full suite. If implementation genuinely fits: one final natural FULL5+partial pair only. One terminal Issue comment, then STOP.
