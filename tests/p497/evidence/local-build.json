@@ -1,0 +1,7 @@
+{
+  "base": "e666b4d36ce6c678101bc8353af76ad13b06ef54",
+  "freeze": "be32f2e7dd115d38e0dd65dc201624627ea262da",
+  "binary_sha256": "c8229272b6cc36c4eb7d7725da917f1ba89f7ea190f35d309f87d9f53598a11b",
+  "target": "native x86_64 Linux SIZE_MAX=18446744073709551615 (no cross-target model claimed)",
+  "gcc": "gcc (Debian 14.2.0-19) 14.2.0"
+}

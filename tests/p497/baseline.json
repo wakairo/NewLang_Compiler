@@ -1,0 +1,133 @@
+{
+  "compiler_code": "e666b4d36ce6c678101bc8353af76ad13b06ef54",
+  "freeze": "be32f2e",
+  "binary_sha256": "e66ac90d3ad49b0d4d7799f32aa3e6a1257359ca8cce7804360b614dfe600ced",
+  "runs": [
+    {
+      "source": "false_authority.nl",
+      "sha256": "c46d401e5e4b02a0d2511cff79edfe8f2038115610947221ab887882826a57e4",
+      "mode": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p497/false_authority.nl:1:29-1:30: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    {
+      "source": "false_authority.nl",
+      "sha256": "c46d401e5e4b02a0d2511cff79edfe8f2038115610947221ab887882826a57e4",
+      "mode": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p497/false_authority.nl:1:29-1:30: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    {
+      "source": "guard_false.nl",
+      "sha256": "02823c36bc013e7b6cb727a068d23a59da5b9ca2fb37b0b33997fcdad9b67a2d",
+      "mode": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p497/guard_false.nl:3:17-3:18: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    {
+      "source": "guard_false.nl",
+      "sha256": "02823c36bc013e7b6cb727a068d23a59da5b9ca2fb37b0b33997fcdad9b67a2d",
+      "mode": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p497/guard_false.nl:3:17-3:18: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    {
+      "source": "guard_true.nl",
+      "sha256": "7b0fbc9d346a247699275f030c2c64d70fb6aee57f0128eb0c5cb98e5a399d3b",
+      "mode": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p497/guard_true.nl:3:17-3:18: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    {
+      "source": "guard_true.nl",
+      "sha256": "7b0fbc9d346a247699275f030c2c64d70fb6aee57f0128eb0c5cb98e5a399d3b",
+      "mode": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p497/guard_true.nl:3:17-3:18: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    {
+      "source": "literal.nl",
+      "sha256": "3cbc872229eed56c08a246d824f2e90f3bb91b42c7791f83cd343541aca2c710",
+      "mode": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p497/literal.nl:1:36-1:37: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    {
+      "source": "literal.nl",
+      "sha256": "3cbc872229eed56c08a246d824f2e90f3bb91b42c7791f83cd343541aca2c710",
+      "mode": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p497/literal.nl:1:36-1:37: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    {
+      "source": "literal9.nl",
+      "sha256": "afb620ce4eb2a0c1ff268c49bc6bfc60e328d7dae9735937e6e5c32b32116926",
+      "mode": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p497/literal9.nl:1:36-1:37: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    {
+      "source": "literal9.nl",
+      "sha256": "afb620ce4eb2a0c1ff268c49bc6bfc60e328d7dae9735937e6e5c32b32116926",
+      "mode": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p497/literal9.nl:1:36-1:37: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    {
+      "source": "literal_overflow.nl",
+      "sha256": "e9831e0350d1a0bf0d8d21fc0fef748503fcb7b54a728344edfe533462ee98b8",
+      "mode": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p497/literal_overflow.nl:1:36-1:56: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    {
+      "source": "literal_overflow.nl",
+      "sha256": "e9831e0350d1a0bf0d8d21fc0fef748503fcb7b54a728344edfe533462ee98b8",
+      "mode": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p497/literal_overflow.nl:1:36-1:56: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    {
+      "source": "wrong_type.nl",
+      "sha256": "c3940b616ca8168b19347d09651d2ad54c2b99ae1f59c97d8085b09e36a09827",
+      "mode": [
+        "--check"
+      ],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p497/wrong_type.nl:4:17-4:18: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    {
+      "source": "wrong_type.nl",
+      "sha256": "c3940b616ca8168b19347d09651d2ad54c2b99ae1f59c97d8085b09e36a09827",
+      "mode": [],
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p497/wrong_type.nl:4:17-4:18: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    }
+  ]
+}

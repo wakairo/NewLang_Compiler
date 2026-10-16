@@ -46,7 +46,8 @@ typedef enum {
     NL_SYNTAX_ALLOCATED_REF,
     NL_SYNTAX_OPTION_BACKING,
     NL_SYNTAX_OPTION_PTR, /* ptr_type union; target is a nominal name only */
-    NL_SYNTAX_OPTION_LIVE_TAIL /* exact Draft 17.29 custody type only */
+    NL_SYNTAX_OPTION_LIVE_TAIL, /* exact Draft 17.29 custody type only */
+    NL_SYNTAX_USIZE_LITERAL     /* native target positive decimal §6 subset */
 } NLSyntaxKind;
 
 /* Requested source spelling only: not checked access permission/authority. */
@@ -83,7 +84,9 @@ typedef struct {
             const NLSyntaxNode *type;
         } parameter;
         NLSourceSpan u8_digits; /* U8_LITERAL: unchecked decimal payload. */
-        NLSourceSpan name;      /* TYPE_NAME / EXPR_NAME / RECEIVER. */
+        NLSourceSpan
+            usize_digits;  /* USIZE_LITERAL: decimal mathematical integer. */
+        NLSourceSpan name; /* TYPE_NAME / EXPR_NAME / RECEIVER. */
         struct {
             const NLSyntaxNode *target;
         } ptr_type;

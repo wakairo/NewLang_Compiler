@@ -1,0 +1,3 @@
+USIZE_OOM allocations=20 rollback=PASS
+USIZE_OOM allocations=63 rollback=PASS
+USIZE_OOM allocations=26 rollback=PASS

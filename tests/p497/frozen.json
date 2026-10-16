@@ -1,0 +1,21 @@
+{
+  "base": "e666b4d36ce6c678101bc8353af76ad13b06ef54",
+  "sources": {
+    "guard_true.nl": "7b0fbc9d346a247699275f030c2c64d70fb6aee57f0128eb0c5cb98e5a399d3b",
+    "guard_false.nl": "02823c36bc013e7b6cb727a068d23a59da5b9ca2fb37b0b33997fcdad9b67a2d",
+    "literal.nl": "3cbc872229eed56c08a246d824f2e90f3bb91b42c7791f83cd343541aca2c710",
+    "literal9.nl": "afb620ce4eb2a0c1ff268c49bc6bfc60e328d7dae9735937e6e5c32b32116926",
+    "literal_overflow.nl": "e9831e0350d1a0bf0d8d21fc0fef748503fcb7b54a728344edfe533462ee98b8",
+    "wrong_type.nl": "c3940b616ca8168b19347d09651d2ad54c2b99ae1f59c97d8085b09e36a09827",
+    "false_authority.nl": "c46d401e5e4b02a0d2511cff79edfe8f2038115610947221ab887882826a57e4"
+  },
+  "oracles": {
+    "guard_true": "equality true; selected old Copy=0, original Pair.left=7, right=9",
+    "guard_false": "equality false; selected old Copy=0, original Pair.left=8, right=9",
+    "literal": "source usize scalar3, Copy local same3; passive C size_t read3; no comparison or if claim",
+    "literal9": "independent source usize scalar9, passive C size_t read9",
+    "literal_overflow": "semantic range reject on native 64-bit target, no emitted C",
+    "wrong_type": "if equality implemented: semantic type reject u8 vs usize, no emitted C; initial source blocker recorded separately",
+    "false_authority": "if equality implemented: bool is not ref, replace semantic reject; otherwise UNTESTED at semantic layer"
+  }
+}

@@ -53,8 +53,9 @@ typedef enum {
     NL_CHECKED_FIELD_READ,
     NL_CHECKED_TRY_ALLOCATE_ONE,
     NL_CHECKED_REF_FROM_PTR,
-    NL_CHECKED_FIELD_REF, /* mode-preserving scoped H link projection */
-    NL_CHECKED_LINK_READ  /* bounded Copy read through FIELD_REF */
+    NL_CHECKED_FIELD_REF,    /* mode-preserving scoped H link projection */
+    NL_CHECKED_LINK_READ,    /* bounded Copy read through FIELD_REF */
+    NL_CHECKED_USIZE_LITERAL /* native target checked §6 quantity */
 } NLCheckedKind;
 typedef enum {
     NL_VALUE_USE_NONE,
@@ -217,7 +218,7 @@ typedef struct {
     size_t
         result_count; /* 0 = unit/no responsibility; 1 or 2 separate values */
     NLCheckedResult results[2];
-    bool has_scalar_result; /* U8_LITERAL owns checked value evidence; raw
+    bool has_scalar_result; /* U8/USIZE_LITERAL own checked value evidence; raw
                               observations do not mint ValuePackages. */
     NLScalarValue scalar_result;
     size_t raw_offsets[2], raw_count; /* resolved constant selections */

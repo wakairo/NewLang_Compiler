@@ -1,0 +1,11 @@
+{
+  "command": "ctest --test-dir /workspace/p497-build --output-on-failure -j4",
+  "tail": [
+    "288/289 Test  #37: p6_parser.unit .............................   Passed    0.00 sec",
+    "289/289 Test   #6: parser_expression.unit .....................   Passed    0.00 sec",
+    "",
+    "100% tests passed, 0 tests failed out of 289",
+    "",
+    "Total Test time (real) =  31.01 sec"
+  ]
+}
