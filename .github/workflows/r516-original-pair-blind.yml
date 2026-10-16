@@ -38,7 +38,12 @@ jobs:
           d9f6c09fdb63ba50e5beaeb26b6ada585cfe67c28883a53c53c7504ce6c0c272  reject_arm.nl
           SHA
           )
-          command -v gcc && command -v clang && command -v gdb
+          command -v gcc && command -v clang
+          if ! command -v gdb >/dev/null 2>&1; then
+            sudo apt-get update -qq
+            sudo apt-get install --no-install-recommends -y gdb
+          fi
+          command -v gdb
           cmake --version | head -n 1
           python3 --version
 

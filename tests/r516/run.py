@@ -101,7 +101,7 @@ for name in ("true","false"):
     # Read-only observation of the ORIGINAL unaltered C bytes; not an instrumented guest.
     # Use one final return stop before the C main exits so the original stack root remains live.
     lines=cpath.read_text().splitlines()
-    positions=[i+1 for i,line in enumerate(lines) if re.search(r"\\breturn\\s+0\\s*;",line)]
+    positions=[i+1 for i,line in enumerate(lines) if re.search(r"\breturn\s+0\s*;",line)]
     if not positions: stop("OBSERVER INCONCLUSIVE: no final return 0 line in emitted C")
     if not shutil.which("gdb"): stop("OBSERVER INCONCLUSIVE: gdb missing")
     script=OUT/(name+".gdb")
