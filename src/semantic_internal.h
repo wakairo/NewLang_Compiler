@@ -112,7 +112,16 @@ typedef struct NLNodeJoinProof {
     bool complete;
     struct NLNodeJoinProof *next;
 } NLNodeJoinProof;
+NLCheckStatus nl_array4_registry(NLSemanticContext *, bool, NLTypeId *);
+bool nl_array4_type(const NLSemanticContext *, NLTypeId);
+
+NLCheckStatus nl_array4_capture(NLCheckedFragment *, NLCheckedNodeId,
+                                const NLSemanticContext *);
 struct NLCheckedFragment {
+    NLSemanticContext *array4_world; /* owned live placement checkpoint */
+    NLCheckedNodeId array4_binding;
+    struct NLArray4Construction
+        *array4_issued; /* immutable source event record */
     /* Borrowed finite IF fork lineage. Never authority, ownership, or a
      * general CFG edge; parent owns this arm and outlives its borrowed view. */
     const struct NLCheckedFragment *if_parent;

@@ -1,0 +1,31 @@
+/* SPECULATIVE PR533 original Array4, checked source only. */
+#include <stdint.h>
+#include <stddef.h>
+#include <inttypes.h>
+#include <stdio.h>
+#include <stdlib.h>
+enum { NL_ARRAY4_NONE = 37 };
+typedef struct { uint8_t tag; uint8_t payload; } nl_option_10;
+typedef nl_option_10 nl_array_11[4];
+static void nl_fn_10(void)
+{
+    nl_array_11 nl_local_1 = {
+        { .tag = NL_ARRAY4_NONE },
+        { .tag = NL_ARRAY4_NONE },
+        { .tag = NL_ARRAY4_NONE },
+        { .tag = NL_ARRAY4_NONE }
+    };
+
+    const void *const p534_original = &nl_local_1;
+    const uintptr_t p534_base = (uintptr_t)(const void *)&nl_local_1[0];
+    if (sizeof(nl_local_1) != 4 * sizeof(nl_option_10)) abort();
+    for (size_t i=0; i<4; ++i) {
+        const uintptr_t here = (uintptr_t)(const void *)&nl_local_1[i];
+        if (&nl_local_1 != p534_original || here-p534_base != i*sizeof(nl_option_10) ||
+            nl_local_1[i].tag != NL_ARRAY4_NONE) abort();
+        printf("element=%zu address=%" PRIuPTR " stride=%zu tag=%u\n", i, here,
+               sizeof(nl_option_10), (unsigned)nl_local_1[i].tag);
+    }
+    (void)nl_local_1;
+}
+int main(void) { nl_fn_10(); return 0; }

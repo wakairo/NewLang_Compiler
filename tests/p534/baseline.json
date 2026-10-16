@@ -1,0 +1,74 @@
+{
+  "original": {
+    "check": {
+      "status": 3,
+      "diagnostic": "tests/p534/original.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "c_bytes": 0
+    },
+    "c17": {
+      "status": 3,
+      "diagnostic": "tests/p534/original.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "c_bytes": 0
+    }
+  },
+  "arity3": {
+    "check": {
+      "status": 3,
+      "diagnostic": "tests/p534/arity3.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "c_bytes": 0
+    },
+    "c17": {
+      "status": 3,
+      "diagnostic": "tests/p534/arity3.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "c_bytes": 0
+    }
+  },
+  "arity5": {
+    "check": {
+      "status": 3,
+      "diagnostic": "tests/p534/arity5.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "c_bytes": 0
+    },
+    "c17": {
+      "status": 3,
+      "diagnostic": "tests/p534/arity5.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "c_bytes": 0
+    }
+  },
+  "wrong_type": {
+    "check": {
+      "status": 3,
+      "diagnostic": "tests/p534/wrong_type.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "c_bytes": 0
+    },
+    "c17": {
+      "status": 3,
+      "diagnostic": "tests/p534/wrong_type.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "c_bytes": 0
+    }
+  },
+  "payloadless_some": {
+    "check": {
+      "status": 3,
+      "diagnostic": "tests/p534/payloadless_some.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "c_bytes": 0
+    },
+    "c17": {
+      "status": 3,
+      "diagnostic": "tests/p534/payloadless_some.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "c_bytes": 0
+    }
+  },
+  "wrong_variant": {
+    "check": {
+      "status": 3,
+      "diagnostic": "tests/p534/wrong_variant.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "c_bytes": 0
+    },
+    "c17": {
+      "status": 3,
+      "diagnostic": "tests/p534/wrong_variant.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "c_bytes": 0
+    }
+  }
+}

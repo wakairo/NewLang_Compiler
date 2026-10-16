@@ -62,6 +62,8 @@ void nl_checked_destroy(NLCheckedFragment *fragment)
         }
         for (size_t i = 0; i < 2; ++i)
             nl_checked_destroy(fragment->custody_continuations[i]);
+        free(fragment->array4_issued);
+        nl_semantic_destroy(fragment->array4_world);
         nl_semantic_destroy(fragment->custody_final_post);
         if (fragment->release_body != NULL)
             fragment->release_body(fragment->body_owner);

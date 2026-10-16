@@ -161,10 +161,11 @@ NLCheckStatus nl_sum_validate(const NLSemanticContext *c)
          * not a second package owner. Validate the exact ownership path. */
         const bool field_owned =
             r.parent_aggregate != 0 && nl_fixed_live(c, i + 1) &&
-            nl_recursive_local_type(c,
-                                    c->places[r.parent_aggregate - 1].type) &&
-            r.parent_field_index + 1 <
-                c->places[r.parent_aggregate - 1].fixed_field_count &&
+            ((nl_recursive_local_type(c,
+                                      c->places[r.parent_aggregate - 1].type) &&
+              r.parent_field_index + 1 <
+                  c->places[r.parent_aggregate - 1].fixed_field_count) ||
+             nl_array4_type(c, c->places[r.parent_aggregate - 1].type)) &&
             v.carrier == NL_CARRIER_AGGREGATE && v.owner_place == 0 &&
             v.aggregate_owner ==
                 c->places[r.parent_aggregate - 1].current_value &&

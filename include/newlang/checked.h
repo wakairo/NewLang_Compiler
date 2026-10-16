@@ -58,7 +58,8 @@ typedef enum {
     NL_CHECKED_USIZE_LITERAL, /* native target checked §6 quantity */
     /* §5.2 bool result, first_argument/next_argument are actual LTR operands;
      * name is the exact operator span. This grants no memory authority. */
-    NL_CHECKED_USIZE_EQUALITY
+    NL_CHECKED_USIZE_EQUALITY,
+    NL_CHECKED_ARRAY4_CONSTRUCTOR /* SPECULATIVE typed positional vector */
 } NLCheckedKind;
 typedef enum {
     NL_VALUE_USE_NONE,

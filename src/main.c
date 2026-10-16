@@ -1,3 +1,4 @@
+#include "newlang/array4.h"
 #include "newlang/checked.h"
 #include "newlang/checked_c_node.h"
 #include "newlang/diagnostic.h"
@@ -2069,6 +2070,25 @@ static int compile_v0(const char *path, bool check_only)
     if (root_view == NULL || !v0_validate_call(entry, root, &program)) {
         char *node_c = NULL;
         size_t node_length = 0;
+        const NLCheckStatus array_status =
+            nl_checked_array4_c17(entry, &node_c, &node_length);
+        if (array_status == NL_CHECK_OK) {
+            result = fwrite(node_c, 1, node_length, stdout) == node_length &&
+                             fflush(stdout) == 0
+                         ? 0
+                         : report_error("V0-C-OUTPUT",
+                                        "failed to emit Checked-C", path, 1);
+            free(node_c);
+            goto cleanup;
+        }
+        if (array_status == NL_CHECK_OUT_OF_MEMORY ||
+            array_status == NL_CHECK_RESOURCE_LIMIT ||
+            array_status == NL_CHECK_INTERNAL_ERROR) {
+            result =
+                report_error("ARRAY4-C-RESOURCE",
+                             "speculative Array C17 emission failed", path, 1);
+            goto cleanup;
+        }
         const NLNodeCStatus status =
             nl_checked_c_node(entry, &node_c, &node_length);
         if (status == NL_NODE_C_OK) {

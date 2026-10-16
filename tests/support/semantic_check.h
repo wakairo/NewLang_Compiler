@@ -151,7 +151,8 @@ static inline bool test_type_equal(NLSemanticTypeView a, NLSemanticTypeView b)
            a.is_discardable == b.is_discardable && a.target == b.target &&
            a.access == b.access && a.is_exclusive == b.is_exclusive &&
            a.layout_known == b.layout_known && a.field_count == b.field_count &&
-           a.variant_count == b.variant_count && a.size == b.size &&
+           a.variant_count == b.variant_count &&
+           a.element_count == b.element_count && a.size == b.size &&
            a.alignment == b.alignment;
 }
 static inline bool test_reference_equal(NLReferenceFacts a, NLReferenceFacts b)

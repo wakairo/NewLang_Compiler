@@ -51,7 +51,7 @@ bool nl_semantic_recursive_link_types(const NLSemanticContext *c, NLTypeId type,
 
 bool nl_fixed_type(const NLSemanticContext *c, NLTypeId type)
 {
-    if (nl_recursive_local_type(c, type))
+    if (nl_recursive_local_type(c, type) || nl_array4_type(c, type))
         return true;
     if (type == 0 || type > c->type_count)
         return false;

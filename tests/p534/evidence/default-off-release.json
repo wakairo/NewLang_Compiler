@@ -1,0 +1,7 @@
+{
+  "BUILD_TESTING": false,
+  "build": "frontend-only Release",
+  "default_source_optin": false,
+  "exit": 3,
+  "diagnostic": "tests/p534/original.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+}
