@@ -1,0 +1,242 @@
+[
+  {
+    "source": "bool_as_ref.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p504/bool_as_ref.nl:5:11-5:16: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ref<write,T>\n"
+  },
+  {
+    "source": "bool_as_ref.nl",
+    "flags": [],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p504/bool_as_ref.nl:5:11-5:16: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ref<write,T>\n"
+  },
+  {
+    "source": "chain.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p504/chain.nl:1:73-1:75: error(unsupported)[USIZE-EQUALITY-SOURCE-PRECISION]: only one flat equality of names or typed literals is supported\n"
+  },
+  {
+    "source": "chain.nl",
+    "flags": [],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p504/chain.nl:1:73-1:75: error(unsupported)[USIZE-EQUALITY-SOURCE-PRECISION]: only one flat equality of names or typed literals is supported\n"
+  },
+  {
+    "source": "copied_renamed.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "copied_renamed.nl",
+    "flags": [],
+    "exit": 0,
+    "stdout": "/* North Star V0/V1/AVS Checked-C reference output. */\n#include <stdint.h>\n\n#include <stddef.h>\n_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), \"NewLang usize target mismatch\");\n\nstatic void nl_fn_10(void);\n\nstatic void nl_fn_10(void)\n{\n    const size_t nl_local_1 = ((size_t)UINTMAX_C(17));\n    (void)nl_local_1;\n    const size_t nl_local_2 = nl_local_1;\n    (void)nl_local_2;\n    const size_t nl_local_3 = ((size_t)UINTMAX_C(17));\n    (void)nl_local_3;\n    const _Bool nl_local_4 = (nl_local_2 == nl_local_3);\n    (void)nl_local_4;\n    (void)nl_local_4;\n    (void)0;\n}\n\nint main(void)\n{\n    nl_fn_10();\n    return 0;\n}\n",
+    "stderr": ""
+  },
+  {
+    "source": "copy_false.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "copy_false.nl",
+    "flags": [],
+    "exit": 0,
+    "stdout": "/* North Star V0/V1/AVS Checked-C reference output. */\n#include <stdint.h>\n\n#include <stddef.h>\n_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), \"NewLang usize target mismatch\");\n\nstatic void nl_fn_10(void);\n\nstatic void nl_fn_10(void)\n{\n    const size_t nl_local_1 = ((size_t)UINTMAX_C(2));\n    (void)nl_local_1;\n    const size_t nl_local_2 = ((size_t)UINTMAX_C(3));\n    (void)nl_local_2;\n    const _Bool nl_local_3 = (nl_local_1 == nl_local_2);\n    (void)nl_local_3;\n    const _Bool nl_local_4 = nl_local_3;\n    (void)nl_local_4;\n    (void)nl_local_4;\n    (void)0;\n}\n\nint main(void)\n{\n    nl_fn_10();\n    return 0;\n}\n",
+    "stderr": ""
+  },
+  {
+    "source": "copy_true.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "copy_true.nl",
+    "flags": [],
+    "exit": 0,
+    "stdout": "/* North Star V0/V1/AVS Checked-C reference output. */\n#include <stdint.h>\n\n#include <stddef.h>\n_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), \"NewLang usize target mismatch\");\n\nstatic void nl_fn_10(void);\n\nstatic void nl_fn_10(void)\n{\n    const size_t nl_local_1 = ((size_t)UINTMAX_C(2));\n    (void)nl_local_1;\n    const size_t nl_local_2 = ((size_t)UINTMAX_C(2));\n    (void)nl_local_2;\n    const _Bool nl_local_3 = (nl_local_1 == nl_local_2);\n    (void)nl_local_3;\n    const _Bool nl_local_4 = nl_local_3;\n    (void)nl_local_4;\n    (void)nl_local_4;\n    (void)0;\n}\n\nint main(void)\n{\n    nl_fn_10();\n    return 0;\n}\n",
+    "stderr": ""
+  },
+  {
+    "source": "direct_false.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "direct_false.nl",
+    "flags": [],
+    "exit": 0,
+    "stdout": "/* North Star V0/V1/AVS Checked-C reference output. */\n#include <stdint.h>\n\n#include <stddef.h>\n_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), \"NewLang usize target mismatch\");\n\nstatic void nl_fn_10(void);\n\nstatic void nl_fn_10(void)\n{\n    const _Bool nl_local_1 = (((size_t)UINTMAX_C(17)) == ((size_t)UINTMAX_C(19)));\n    (void)nl_local_1;\n    const _Bool nl_local_2 = nl_local_1;\n    (void)nl_local_2;\n    (void)nl_local_2;\n    (void)0;\n}\n\nint main(void)\n{\n    nl_fn_10();\n    return 0;\n}\n",
+    "stderr": ""
+  },
+  {
+    "source": "equal_false.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "equal_false.nl",
+    "flags": [],
+    "exit": 0,
+    "stdout": "/* North Star V0/V1/AVS Checked-C reference output. */\n#include <stdint.h>\n\n#include <stddef.h>\n_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), \"NewLang usize target mismatch\");\n\nstatic void nl_fn_10(void);\n\nstatic void nl_fn_10(void)\n{\n    const size_t nl_local_1 = ((size_t)UINTMAX_C(2));\n    (void)nl_local_1;\n    const size_t nl_local_2 = ((size_t)UINTMAX_C(3));\n    (void)nl_local_2;\n    const _Bool nl_local_3 = (nl_local_1 == nl_local_2);\n    (void)nl_local_3;\n    (void)nl_local_3;\n    (void)0;\n}\n\nint main(void)\n{\n    nl_fn_10();\n    return 0;\n}\n",
+    "stderr": ""
+  },
+  {
+    "source": "equal_true.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "equal_true.nl",
+    "flags": [],
+    "exit": 0,
+    "stdout": "/* North Star V0/V1/AVS Checked-C reference output. */\n#include <stdint.h>\n\n#include <stddef.h>\n_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), \"NewLang usize target mismatch\");\n\nstatic void nl_fn_10(void);\n\nstatic void nl_fn_10(void)\n{\n    const size_t nl_local_1 = ((size_t)UINTMAX_C(2));\n    (void)nl_local_1;\n    const size_t nl_local_2 = ((size_t)UINTMAX_C(2));\n    (void)nl_local_2;\n    const _Bool nl_local_3 = (nl_local_1 == nl_local_2);\n    (void)nl_local_3;\n    (void)nl_local_3;\n    (void)0;\n}\n\nint main(void)\n{\n    nl_fn_10();\n    return 0;\n}\n",
+    "stderr": ""
+  },
+  {
+    "source": "full_guard_false.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p504/full_guard_false.nl:7:5-8:70: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "full_guard_false.nl",
+    "flags": [],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p504/full_guard_false.nl:7:5-8:70: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "full_guard_true.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p504/full_guard_true.nl:7:5-8:70: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "full_guard_true.nl",
+    "flags": [],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p504/full_guard_true.nl:7:5-8:70: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "if_false.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "if_false.nl",
+    "flags": [],
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p504/if_false.nl\n"
+  },
+  {
+    "source": "if_true.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "if_true.nl",
+    "flags": [],
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p504/if_true.nl\n"
+  },
+  {
+    "source": "split_operator.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p504/split_operator.nl:1:58-1:59: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expected one contiguous == operator\n"
+  },
+  {
+    "source": "split_operator.nl",
+    "flags": [],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p504/split_operator.nl:1:58-1:59: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expected one contiguous == operator\n"
+  },
+  {
+    "source": "unknown.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p504/unknown.nl:1:33-1:35: error(precision)[USIZE-EQUALITY-PRECISION]: equality needs known dependency-free quantity operands in this profile\n"
+  },
+  {
+    "source": "unknown.nl",
+    "flags": [],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p504/unknown.nl:1:33-1:35: error(precision)[USIZE-EQUALITY-PRECISION]: equality needs known dependency-free quantity operands in this profile\n"
+  },
+  {
+    "source": "wrong_type.nl",
+    "flags": [
+      "--check"
+    ],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p504/wrong_type.nl:4:14-4:16: error(semantic)[USIZE-EQUALITY-TYPE]: == requires two exact core usize operands\n"
+  },
+  {
+    "source": "wrong_type.nl",
+    "flags": [],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p504/wrong_type.nl:4:14-4:16: error(semantic)[USIZE-EQUALITY-TYPE]: == requires two exact core usize operands\n"
+  }
+]

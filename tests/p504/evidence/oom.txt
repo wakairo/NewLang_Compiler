@@ -1,0 +1,4 @@
+P504_OOM parser=16
+P504_OOM semantic=32 rollback=PASS
+P504_OOM registration=101 rollback=PASS
+P504_OOM actual_main=44 rollback=PASS

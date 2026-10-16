@@ -108,6 +108,22 @@ target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic n
 include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
+    add_executable(p504_public_probe tests/p504/public_probe.c)
+    target_link_libraries(p504_public_probe PRIVATE newlang_semantic)
+    add_executable(p504_gate_probe tests/p504/gate_probe.c)
+    target_link_libraries(p504_gate_probe PRIVATE newlang_checked_c_node newlang_semantic)
+    add_executable(p504_equality_test tests/p504/equality_test.c)
+    target_link_libraries(p504_equality_test PRIVATE newlang_semantic)
+    target_link_options(p504_equality_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    foreach(group parser values rollback oom)
+        add_test(NAME p504_equality_${group}.unit COMMAND p504_equality_test ${group})
+    endforeach()
+    add_test(NAME p504_equality_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p504/frontier_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p504_public_probe>"
+        "$<TARGET_FILE:p504_gate_probe>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p504" "${NEWLANG_SANITIZER}")
+
     add_executable(diagnostic_test tests/unit/diagnostic_test.c)
     target_link_libraries(diagnostic_test PRIVATE newlang_diagnostic)
     add_test(NAME diagnostics.unit COMMAND diagnostic_test)
