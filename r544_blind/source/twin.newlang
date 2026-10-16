@@ -1,0 +1,15 @@
+fn main() -> unit {
+    let east_slots = Array<Option<u8>,4>{
+        Option<u8>::None,
+        Option<u8>::None,
+        Option<u8>::None,
+        Option<u8>::None
+    };
+    let west_slots = Array<Option<u8>,4>{
+        Option<u8>::None,
+        Option<u8>::None,
+        Option<u8>::None,
+        Option<u8>::None
+    };
+    unit
+}
