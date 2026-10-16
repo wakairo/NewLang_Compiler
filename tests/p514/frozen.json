@@ -1,0 +1,71 @@
+{
+  "authority": "9e6389388a44950d17e19bb134cbfde37ac75f97",
+  "frozen_at": "2026-10-16T05:58:54.414432+00:00",
+  "source_sha256": {
+    "branch_effect.nl": "757f895f06c84bcbcfc1efa60bcb3cb1b4b39fa7245ebb2bb090d861f64feceb",
+    "compose_false.nl": "166dbbfae51bfb5328907b26dfef747590b69887351ae4fc902cd7a7e1f5529c",
+    "compose_true.nl": "e4c417cf40d31d6844a6eab28fea302a66182d5d39ab2b6e0914cee049d1fea9",
+    "disjoint_root.nl": "58d11e1544e20700ca09eec58c3c823606ed41f757b05d60a2b8bc3596ac500b",
+    "hold_control.nl": "7b0fbc9d346a247699275f030c2c64d70fb6aee57f0128eb0c5cb98e5a399d3b",
+    "invalid_else.nl": "bb6ee62bbd763f5d797aa11d94f1ad21c5f1bfb8bb7eeb0ca82e9808e5c9b773",
+    "ref_escape.nl": "1f992624333c35aa9c3c873d0ec5fed96fe958a2605b0719c339357235e28c0e",
+    "renamed_false.nl": "e794c739fa0ecaf3d85522e1f2a12455e3e263a8b5e72911ad80fee107b6b6d0",
+    "renamed_true.nl": "bb09401362a0649edf6624129e84e2a5437e157f558b5c5fe4252fafe04e338e",
+    "second_write.nl": "d0612bbf9761bf64e7e5b25fee22463fe2cd2506876186fbb45e08f9688701e6",
+    "wrong_condition.nl": "3e81d01b42ffa8276067ca7498c8e27a84429aa77ddbf380b578848abfd9e4af",
+    "wrong_field.nl": "cb4bc9e6f07f0a920d101fa2c262957cf28fa6ab3d70b61d893559f6fca86e5f"
+  },
+  "positive_oracles": {
+    "compose_true.nl": {
+      "bool": 1,
+      "selected": 7,
+      "old": 0,
+      "after": 7,
+      "sibling": 9,
+      "physical": "same original pre-IF Pair; one post-IF write, no host assignments"
+    },
+    "compose_false.nl": {
+      "bool": 0,
+      "selected": 8,
+      "old": 0,
+      "after": 8,
+      "sibling": 9,
+      "physical": "same original pre-IF Pair; one post-IF write, no host assignments"
+    },
+    "renamed_true.nl": {
+      "bool": 1,
+      "selected": 7,
+      "old": 0,
+      "after": 7,
+      "sibling": 9,
+      "physical": "same original pre-IF Pair; one post-IF write, no host assignments"
+    },
+    "renamed_false.nl": {
+      "bool": 0,
+      "selected": 8,
+      "old": 0,
+      "after": 8,
+      "sibling": 9,
+      "physical": "same original pre-IF Pair; one post-IF write, no host assignments"
+    }
+  },
+  "negative_oracles": {
+    "wrong_condition.nl": "semantic bool condition",
+    "invalid_else.nl": "semantic reject invalid arm despite known true",
+    "ref_escape.nl": "semantic scope escape",
+    "wrong_field.nl": "legal broader source; finite profile refusal, NOT safety violation",
+    "disjoint_root.nl": "legal broader source; finite profile refusal",
+    "second_write.nl": "legal broader source; finite one-write boundary",
+    "branch_effect.nl": "precision or backend boundary; no effect join added",
+    "hold_control.nl": "independent unchanged P506 per-arm original Pair HOLD control"
+  },
+  "c_corruptions": [
+    "chosen result/copied carrier",
+    "arm swap",
+    "direction",
+    "wrong old",
+    "wrong sibling",
+    "wrong original C carrier"
+  ],
+  "prediction": "SOURCE/CHECK likely pass; P508 scalar-only copy_if_selection rejects original Pair before C17. Source-owned lineage must be inspected before any emitter edit."
+}
