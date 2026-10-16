@@ -1,0 +1,50 @@
+name: R542 calibrated independent owned and original live C17
+on:
+  push:
+    branches:
+      - r542-calibrated-owned-live-array4
+permissions:
+  contents: read
+jobs:
+  independent-calibrated-audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: r
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 7f639a3a89d55f44848e361e1458529fe5395345
+          path: compiler
+          persist-credentials: false
+      - name: Pinned toolchain and provenance
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p r542-results
+          git -C r rev-parse HEAD | tee r542-results/r_branch_head.txt
+          git -C compiler rev-parse HEAD | tee r542-results/fixed_compiler_head.txt
+          test "$(git -C compiler rev-parse HEAD)" = "7f639a3a89d55f44848e361e1458529fe5395345"
+          sha256sum r/r542/source/one_original_array.nl r/r542/frozen_oracle.json | tee r542-results/frozen_hashes.txt
+          gcc --version | head -n1 | tee r542-results/gcc_version.txt
+          clang --version | head -n1 | tee r542-results/clang_version.txt
+          cmake --version | head -n1 | tee r542-results/cmake_version.txt
+      - name: Build frozen experimental compiler and public libraries only
+        shell: bash
+        run: |
+          set -euo pipefail
+          CC=gcc cmake -S compiler -B compiler/r542-build -DNEWLANG_FRONTEND_ONLY=ON -DCMAKE_BUILD_TYPE=Debug 2>&1 | tee r542-results/configure.log
+          cmake --build compiler/r542-build --parallel 2 --target newlangc_p534 newlangc p534_public_probe 2>&1 | tee r542-results/build.log
+      - name: Run R-owned independent source/public/physical/native audit
+        shell: bash
+        run: |
+          python3 r/r542/run_calibrated.py
+      - name: Preserve original C, separate observer C, diff and logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: r542-calibrated-independent-evidence
+          path: r542-results/
+          if-no-files-found: warn
