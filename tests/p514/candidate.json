@@ -1,0 +1,178 @@
+{
+  "baseline_commit": "9e6389388a44950d17e19bb134cbfde37ac75f97",
+  "compiler_sha256": "5b357370293c4fbcbe2512cd3d1f46b7c8328583770cb5c88d14532888353bf5",
+  "runs": [
+    {
+      "source": "branch_effect.nl",
+      "sha256": "757f895f06c84bcbcfc1efa60bcb3cb1b4b39fa7245ebb2bb090d861f64feceb",
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p514/branch_effect.nl:7:18-7:113: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+        "stdout_bytes": 0
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p514/branch_effect.nl:7:18-7:113: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+        "stdout_bytes": 0
+      }
+    },
+    {
+      "source": "compose_false.nl",
+      "sha256": "166dbbfae51bfb5328907b26dfef747590b69887351ae4fc902cd7a7e1f5529c",
+      "check": {
+        "exit": 0,
+        "diagnostic": "",
+        "stdout_bytes": 0
+      },
+      "c17": {
+        "exit": 0,
+        "diagnostic": "",
+        "stdout_bytes": 1305,
+        "sha256": "954155c2793793595a6529b071f229985bd311b6096c702ae13505e7189d319d"
+      }
+    },
+    {
+      "source": "compose_true.nl",
+      "sha256": "e4c417cf40d31d6844a6eab28fea302a66182d5d39ab2b6e0914cee049d1fea9",
+      "check": {
+        "exit": 0,
+        "diagnostic": "",
+        "stdout_bytes": 0
+      },
+      "c17": {
+        "exit": 0,
+        "diagnostic": "",
+        "stdout_bytes": 1305,
+        "sha256": "0130aacadf6a2f9659ca75006e1455643980c7d728559bf3acb80843d93c88d4"
+      }
+    },
+    {
+      "source": "disjoint_root.nl",
+      "sha256": "58d11e1544e20700ca09eec58c3c823606ed41f757b05d60a2b8bc3596ac500b",
+      "check": {
+        "exit": 0,
+        "diagnostic": "",
+        "stdout_bytes": 0
+      },
+      "c17": {
+        "exit": 4,
+        "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p514/disjoint_root.nl\n",
+        "stdout_bytes": 0
+      }
+    },
+    {
+      "source": "hold_control.nl",
+      "sha256": "7b0fbc9d346a247699275f030c2c64d70fb6aee57f0128eb0c5cb98e5a399d3b",
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p514/hold_control.nl:7:5-8:70: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+        "stdout_bytes": 0
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p514/hold_control.nl:7:5-8:70: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+        "stdout_bytes": 0
+      }
+    },
+    {
+      "source": "invalid_else.nl",
+      "sha256": "bb6ee62bbd763f5d797aa11d94f1ad21c5f1bfb8bb7eeb0ca82e9808e5c9b773",
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p514/invalid_else.nl:7:54-7:59: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ordinary ref<write,T> or its checked reborrow\n",
+        "stdout_bytes": 0
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p514/invalid_else.nl:7:54-7:59: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ordinary ref<write,T> or its checked reborrow\n",
+        "stdout_bytes": 0
+      }
+    },
+    {
+      "source": "ref_escape.nl",
+      "sha256": "1f992624333c35aa9c3c873d0ec5fed96fe958a2605b0719c339357235e28c0e",
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p514/ref_escape.nl:7:42-7:43: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n",
+        "stdout_bytes": 0
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p514/ref_escape.nl:7:42-7:43: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n",
+        "stdout_bytes": 0
+      }
+    },
+    {
+      "source": "renamed_false.nl",
+      "sha256": "e794c739fa0ecaf3d85522e1f2a12455e3e263a8b5e72911ad80fee107b6b6d0",
+      "check": {
+        "exit": 0,
+        "diagnostic": "",
+        "stdout_bytes": 0
+      },
+      "c17": {
+        "exit": 0,
+        "diagnostic": "",
+        "stdout_bytes": 1576,
+        "sha256": "570ec34e0de02a675ab6ad44dacf99ee92445734a74abca88ddd0db1bdf0ca51"
+      }
+    },
+    {
+      "source": "renamed_true.nl",
+      "sha256": "bb09401362a0649edf6624129e84e2a5437e157f558b5c5fe4252fafe04e338e",
+      "check": {
+        "exit": 0,
+        "diagnostic": "",
+        "stdout_bytes": 0
+      },
+      "c17": {
+        "exit": 0,
+        "diagnostic": "",
+        "stdout_bytes": 1576,
+        "sha256": "7d66eefd8c7bddb17900d5eab14a1cca368224dcbb16b4c26ed93423c27239d2"
+      }
+    },
+    {
+      "source": "second_write.nl",
+      "sha256": "d0612bbf9761bf64e7e5b25fee22463fe2cd2506876186fbb45e08f9688701e6",
+      "check": {
+        "exit": 0,
+        "diagnostic": "",
+        "stdout_bytes": 0
+      },
+      "c17": {
+        "exit": 4,
+        "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p514/second_write.nl\n",
+        "stdout_bytes": 0
+      }
+    },
+    {
+      "source": "wrong_condition.nl",
+      "sha256": "3e81d01b42ffa8276067ca7498c8e27a84429aa77ddbf380b578848abfd9e4af",
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p514/wrong_condition.nl:7:22-7:23: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+        "stdout_bytes": 0
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p514/wrong_condition.nl:7:22-7:23: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+        "stdout_bytes": 0
+      }
+    },
+    {
+      "source": "wrong_field.nl",
+      "sha256": "cb4bc9e6f07f0a920d101fa2c262957cf28fa6ab3d70b61d893559f6fca86e5f",
+      "check": {
+        "exit": 0,
+        "diagnostic": "",
+        "stdout_bytes": 0
+      },
+      "c17": {
+        "exit": 4,
+        "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p514/wrong_field.nl\n",
+        "stdout_bytes": 0
+      }
+    }
+  ]
+}
