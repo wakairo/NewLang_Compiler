@@ -12,6 +12,15 @@
 > 運用は [Development Process](NewLang_Project_Development_Process.md) に従う。
 > この文書は正本を置換せず、将来の更新時は「観測した事実」と「新しい投資案」を分ける。
 
+## 現行checkpoint — 2026-10-16（P514/P517/PR #515統合後、以下のcheckpointは履歴）
+
+**Compiler/main `87675e7b18976d15c80d79fe9e01ccfb4440cf81`、CURRENT_SPEC→Draft17.30、FormalProof/main `5437f92d099e228773d31e2323e8ee6228ca21bf`。** [P #514](https://github.com/wakairo/NewLang_Compiler/issues/514)→[P #517](https://github.com/wakairo/NewLang_Compiler/issues/517)→[merged PR #515](https://github.com/wakairo/NewLang_Compiler/pull/515)は、元Pairを実sourceで条件より前に作り、`usize==usize`が選んだ純粋Copy `u8`を**分岐後に一度だけ元Pair.leftへscoped replace**する物理C17/nativeの有限実装を統合。P側public-owned／mutation/OOM証拠と固定候補FULL5／NO LLVM CI、[R #518 NON-BLIND calibrated独立native](https://github.com/wakairo/NewLang_Compiler/issues/518#issuecomment-6210781475)により元R凍結TRUE/FALSEで旧37→新108/173、right211、元物理Pairのアドレス同一性を生存関数内で確認。R #516のBLIND C17 failureは旧候補の発見として記録を維持。R #518で専用公開owned数値状態dump／issuer毒入れ／破損C感度を**独立測定したとは主張しない**。成功CIは統合前候補HEADであり新mainに対する追加実行ではない。
+
+**区別すべき不達：** [P506/PR510](https://github.com/wakairo/NewLang_Compiler/pull/510)の「IF各arm**内**で元Pairを変更した後に構造的合流」は公開join証明／native未達の別HOLD。一般effects/CFG、非Copy owner、H1/STB、named helper、[M513](https://github.com/wakairo/NewLang_Compiler/issues/513)で二機構不足と確認した本物のArray source/element boundsも未到達。作者・通常callerのaudit/re-audit dependency closure縮小は未実測で**Product GOなし**。C/Zig/同トポロジーRustでも純粋値を先に選んで後から一度書けるので、これをNewLang優位と数えない。
+
+**次の投資裁定：** 追加のPair/IF専用backend規則、Pair構造合流証明、Array二機構を自動連鎖しない。既存技術経路を必要とする**本当のC-class元オブジェクト＋普通callerの操作**が見つかり、そのUB防止監査依存閉包・同等にfactorされたC/Zig/Rustとの比較が可能なときだけ、Process §§4.2–4.3.1の設計履歴／Goal Alignment Gateで新しい有限課題を認可する。実利用case募集[Issue #470](https://github.com/wakairo/NewLang_Compiler/issues/470)はOPEN INTAKEのみ、Trackの自動起動ではない。
+
+
 ## 現行checkpoint — 2026-10-16（P508／PR #511統合後、下記checkpointは履歴）
 
 **Compiler/main `e4af76784a6fe4174730af0671eb58bf606aac91`、CURRENT_SPEC→Draft17.30不変、FormalProof/main `5437f92d099e228773d31e2323e8ee6228ca21bf`。** 非規範の能力・投資checkpoint。§4.1 Issue中心のTrack引継ぎを守り、Track起動はユーザーが別スレッドから行う。
