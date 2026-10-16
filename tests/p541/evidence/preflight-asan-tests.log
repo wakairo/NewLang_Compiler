@@ -1,0 +1,101 @@
+Internal ctest changing into directory: /tmp/p541-baseline-asan
+UpdateCTestConfiguration  from :/tmp/p541-baseline-asan/DartConfiguration.tcl
+Parse Config file:/tmp/p541-baseline-asan/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p541-baseline-asan/DartConfiguration.tcl
+Parse Config file:/tmp/p541-baseline-asan/DartConfiguration.tcl
+Test project /tmp/p541-baseline-asan
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: p534_source_owned.unit
+
+1: Test command: /tmp/p541-baseline-asan/p534_public_probe "/workspace/p534/tests/p534/original.nl"
+1: Working Directory: /tmp/p541-baseline-asan
+1: Environment variables:
+1:  PYTHONDONTWRITEBYTECODE=1
+1:  PYTHONHASHSEED=0
+1:  LC_ALL=C
+1:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+1:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+1: Test timeout computed to be: 90
+1: {"array_type":11,"element_type":10,"symbol":1,"root":1,"incarnation":1,"fact":1,"value":5,"live_checkpoint_places":5,"independent_roots":1,"elements":[{"index":0,"place":2,"incarnation":2,"fact":2,"value":1,"source_node":3,"variant":1},{"index":1,"place":3,"incarnation":3,"fact":3,"value":2,"source_node":4,"variant":1},{"index":2,"place":4,"incarnation":4,"fact":4,"value":3,"source_node":5,"variant":1},{"index":3,"place":5,"incarnation":5,"fact":5,"value":4,"source_node":6,"variant":1}],"separate_view_mutants_rejected":40,"final_root_ended":true,"public_validator":true}
+1/4 Test #1: p534_source_owned.unit ...........   Passed    0.01 sec
+test 2
+    Start 2: p534_oom.unit
+
+2: Test command: /tmp/p541-baseline-asan/p534_semantic_gate "oom" "/workspace/p534/tests/p534/original.nl"
+2: Working Directory: /tmp/p541-baseline-asan
+2: Environment variables:
+2:  PYTHONDONTWRITEBYTECODE=1
+2:  PYTHONHASHSEED=0
+2:  LC_ALL=C
+2:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+2:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+2: Test timeout computed to be: 90
+2: P514_OOM registration=114 rollback=PASS
+2: P514_OOM main=65 rollback=PASS output=NULL
+2/4 Test #2: p534_oom.unit ....................   Passed    0.02 sec
+test 3
+    Start 3: p534_issuer_fault.unit
+
+3: Test command: /tmp/p541-baseline-asan/p534_fault_test "/workspace/p534/tests/p534/original.nl"
+3: Working Directory: /tmp/p541-baseline-asan
+3: Environment variables:
+3:  PYTHONDONTWRITEBYTECODE=1
+3:  PYTHONHASHSEED=0
+3:  LC_ALL=C
+3:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+3:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+3: Test timeout computed to be: 90
+3: P534_FAULT corrupted_worlds=12 source_issued_record_missing=REJECT foreign_source_plan=REJECT public_validator_allocations=0 emit_OOM=1 output_UNCHANGED semantic_world=UNCHANGED restored=PASS
+3/4 Test #3: p534_issuer_fault.unit ...........   Passed    0.01 sec
+test 4
+    Start 4: p534_array_native.integration
+
+4: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p534/tests/p534/native_test.py" "/tmp/p541-baseline-asan/newlangc_p534" "/tmp/p541-baseline-asan/newlangc" "/tmp/p541-baseline-asan/p534_public_probe" "/tmp/p541-baseline-asan/p534_semantic_gate" "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23" "/workspace/p534/tests/p534" "address"
+4: Working Directory: /tmp/p541-baseline-asan
+4: Environment variables:
+4:  PYTHONDONTWRITEBYTECODE=1
+4:  PYTHONHASHSEED=0
+4:  LC_ALL=C
+4:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+4:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+4: Test timeout computed to be: 90
+4: {"case": "original", "check": 0, "c17": 0, "public_owned": {"array_type": 11, "element_type": 10, "symbol": 1, "root": 1, "incarnation": 1, "fact": 1, "value": 5, "live_checkpoint_places": 5, "independent_roots": 1, "elements": [{"index": 0, "place": 2, "incarnation": 2, "fact": 2, "value": 1, "source_node": 3, "variant": 1}, {"index": 1, "place": 3, "incarnation": 3, "fact": 3, "value": 2, "source_node": 4, "variant": 1}, {"index": 2, "place": 4, "incarnation": 4, "fact": 4, "value": 3, "source_node": 5, "variant": 1}, {"index": 3, "place": 5, "incarnation": 5, "fact": 5, "value": 4, "source_node": 6, "variant": 1}], "separate_view_mutants_rejected": 40, "final_root_ended": true, "public_validator": true}, "plain_native": [{"opt": "-O0", "exit": 0, "stdout": "", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "", "stderr": ""}], "physical_observed_native": [{"opt": "-O0", "exit": 0, "stdout": "element=0 address=135890155274272 stride=2 tag=37\nelement=1 address=135890155274274 stride=2 tag=37\nelement=2 address=135890155274276 stride=2 tag=37\nelement=3 address=135890155274278 stride=2 tag=37\n", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "element=0 address=135623542243360 stride=2 tag=37\nelement=1 address=135623542243362 stride=2 tag=37\nelement=2 address=135623542243364 stride=2 tag=37\nelement=3 address=135623542243366 stride=2 tag=37\n", "stderr": ""}], "bad_C_refused": {"wrong_None_tag": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}], "missing_typed_initializer": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}], "wrong_extent": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}]}}
+4: Traceback (most recent call last):
+4:   File "/workspace/p534/tests/p534/native_test.py", line 106, in <module>
+4:     main()
+4:   File "/workspace/p534/tests/p534/native_test.py", line 93, in main
+4:     default=run([regular,'--check',str(file)])
+4:             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4:   File "/workspace/p534/tests/p534/native_test.py", line 13, in run
+4:     return subprocess.run(args, capture_output=True, text=True, check=False)
+4:            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4:   File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 548, in run
+4:     with Popen(*popenargs, **kwargs) as process:
+4:          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+4:   File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1026, in __init__
+4:     self._execute_child(args, executable, preexec_fn, close_fds,
+4:   File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1955, in _execute_child
+4:     raise child_exception_type(errno_num, err_msg, err_filename)
+4: FileNotFoundError: [Errno 2] No such file or directory: '/tmp/p541-baseline-asan/newlangc'
+4/4 Test #4: p534_array_native.integration ....***Failed    1.45 sec
+
+The following tests passed:
+	p534_source_owned.unit
+	p534_oom.unit
+	p534_issuer_fault.unit
+
+75% tests passed, 1 tests failed out of 4
+
+Total Test time (real) =   1.51 sec
+
+The following tests FAILED:
+	  4 - p534_array_native.integration (Failed)
+Errors while running CTest
+Output from these tests are in: /tmp/p541-baseline-asan/Testing/Temporary/LastTest.log
+Use "--rerun-failed --output-on-failure" to re-run the failed cases verbosely.

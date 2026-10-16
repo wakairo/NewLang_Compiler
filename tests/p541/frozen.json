@@ -1,0 +1,102 @@
+{
+  "frozen_utc": "2026-10-16T15:48:13.480544+00:00",
+  "main": "ebb8c4d034a6df2ec6fbfae7e47ebb37650accae",
+  "canonical": "Draft17.32 on CURRENT main; historical candidate pointer remains unchanged",
+  "compiler_pre_fix": "7f639a3a89d55f44848e361e1458529fe5395345",
+  "isolation": "P NON-BLIND CALIBRATED, R540 source copy remains R immutable blind evidence; P-authored cases are separate",
+  "cases": {
+    "two_roots": {
+      "sha256": "829f8d7b9a0aea422f4349d3fd0dc2b389d995b0ab13119b3f490cefc4cb30d1",
+      "bytes": 331,
+      "expected": {
+        "parser": 0,
+        "check": 0,
+        "diagnostic": null,
+        "rollback": true,
+        "records": 2
+      }
+    },
+    "r540_two_roots": {
+      "sha256": "3d01ff12734a194ccc8357625e16de5d1740019a59873ba467467f2152760f9f",
+      "bytes": 326,
+      "expected": {
+        "parser": 0,
+        "check": 0,
+        "diagnostic": null,
+        "rollback": true,
+        "records": 2
+      }
+    },
+    "second_arity3": {
+      "sha256": "3158d3a6ae982a7430d3c1fe05d33fc2eec8fa04876eb6548519f8537e8afa69",
+      "bytes": 305,
+      "expected": {
+        "parser": 0,
+        "check": 3,
+        "diagnostic": "ARRAY4-INITIALIZER-ARITY",
+        "rollback": true,
+        "records": null
+      }
+    },
+    "second_arity5": {
+      "sha256": "656c5f69d087483c8bfb37053bffc61c6ff7b96a0fe70c425befea3d73b47d73",
+      "bytes": 357,
+      "expected": {
+        "parser": 0,
+        "check": 3,
+        "diagnostic": "ARRAY4-INITIALIZER-ARITY",
+        "rollback": true,
+        "records": null
+      }
+    },
+    "second_wrong_type": {
+      "sha256": "730d3b591622c6153ae4496d87a6063702c5bfd8aa88074001c6081e27ed68ae",
+      "bytes": 320,
+      "expected": {
+        "parser": 0,
+        "check": 3,
+        "diagnostic": "ARRAY4-ELEMENT-TYPE",
+        "rollback": true,
+        "records": null
+      }
+    },
+    "second_nonleaf": {
+      "sha256": "1baaceb14c35c12b74698b53b93b8216f04436e39d8bad648624ff2084695dc9",
+      "bytes": 335,
+      "expected": {
+        "parser": 0,
+        "check": 3,
+        "diagnostic": "ARRAY4-ELEMENT-CONSTRUCTOR",
+        "rollback": true,
+        "records": null
+      }
+    }
+  },
+  "positive_oracle": {
+    "captured_places": [
+      5,
+      10
+    ],
+    "captured_independent_roots": [
+      1,
+      2
+    ],
+    "distinct_original_roots": 2,
+    "dependent_elements_per_root": 4,
+    "all_variants": "None",
+    "occurrences": 0,
+    "explicit_A_D_Storage_grants": 0,
+    "source_authenticated_per_event": true,
+    "all_root_child_package_fact_incarnations_distinct": true,
+    "earlier_originals_remain_current_in_later_checkpoint": true,
+    "final_lexical_roots_ended": true
+  },
+  "physical_oracle": {
+    "C_carriers": "2 distinct actual source-symbol typed C arrays[4] in original source function",
+    "element_type": "full opaque Option<u8> envelope",
+    "stride": "sizeof(Option envelope), not presumed u8 stride",
+    "semantic_values": "all actual symbolic None, never zero-fill assumption",
+    "observation": "passive while both original objects live; no guest values/authority written",
+    "native": "strictC17 GCC/Clang O0/O2, plain vs observed labelled separately"
+  }
+}

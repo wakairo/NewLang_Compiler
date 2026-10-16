@@ -1,0 +1,20 @@
+[
+  {
+    "compiler": "7f639a3a89d55f44848e361e1458529fe5395345",
+    "source_sha256": "3d01ff12734a194ccc8357625e16de5d1740019a59873ba467467f2152760f9f",
+    "args": [
+      "--check"
+    ],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p541-preflight/r540-positive-two-roots.nl:8:18-13:6: error(precision)[ARRAY4-ONE-ROOT-PROFILE]: one original Array constructor per checked body\n"
+  },
+  {
+    "compiler": "7f639a3a89d55f44848e361e1458529fe5395345",
+    "source_sha256": "3d01ff12734a194ccc8357625e16de5d1740019a59873ba467467f2152760f9f",
+    "args": [],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p541-preflight/r540-positive-two-roots.nl:8:18-13:6: error(precision)[ARRAY4-ONE-ROOT-PROFILE]: one original Array constructor per checked body\n"
+  }
+]
