@@ -1,0 +1,56 @@
+/* SPECULATIVE PR533 original Array4, checked source only. */
+#include <stdint.h>
+#include <stddef.h>
+#include <inttypes.h>
+#include <stdio.h>
+#include <stdlib.h>
+enum { NL_ARRAY4_NONE = 37 };
+typedef struct { uint8_t tag; uint8_t payload; } nl_option_10;
+typedef nl_option_10 nl_array_11[4];
+static void nl_fn_10(void)
+{
+    nl_array_11 nl_local_1 = {
+        { .tag = NL_ARRAY4_NONE },
+        { .tag = NL_ARRAY4_NONE },
+        { .tag = NL_ARRAY4_NONE },
+        { .tag = NL_ARRAY4_NONE }
+    };
+    (void)nl_local_1;
+    nl_array_11 nl_local_2 = {
+        { .tag = NL_ARRAY4_NONE },
+        { .tag = NL_ARRAY4_NONE },
+        { .tag = NL_ARRAY4_NONE },
+        { .tag = NL_ARRAY4_NONE }
+    };
+
+    const uintptr_t p541_first = (uintptr_t)(const void *)&nl_local_1[0];
+    const uintptr_t p541_second = (uintptr_t)(const void *)&nl_local_2[0];
+    if ((const void *)&nl_local_1 == (const void *)&nl_local_2 ||
+        p541_first == p541_second ||
+        sizeof(nl_local_1) != 4 * sizeof(nl_option_10) ||
+        sizeof(nl_local_2) != 4 * sizeof(nl_option_10) ||
+        !((p541_first + sizeof(nl_local_1) <= p541_second) ||
+          (p541_second + sizeof(nl_local_2) <= p541_first))) abort();
+
+    for (size_t i = 0; i < 4; ++i) {
+        const uintptr_t here = (uintptr_t)(const void *)&nl_local_1[i];
+        if (here - p541_first != i * sizeof(nl_option_10) ||
+            nl_local_1[i].tag != NL_ARRAY4_NONE) abort();
+        printf("array=0 element=%zu base=%" PRIuPTR
+               " address=%" PRIuPTR " stride=%zu tag=%u\n",
+               i, p541_first, here, sizeof(nl_option_10),
+               (unsigned)nl_local_1[i].tag);
+    }
+
+    for (size_t i = 0; i < 4; ++i) {
+        const uintptr_t here = (uintptr_t)(const void *)&nl_local_2[i];
+        if (here - p541_second != i * sizeof(nl_option_10) ||
+            nl_local_2[i].tag != NL_ARRAY4_NONE) abort();
+        printf("array=1 element=%zu base=%" PRIuPTR
+               " address=%" PRIuPTR " stride=%zu tag=%u\n",
+               i, p541_second, here, sizeof(nl_option_10),
+               (unsigned)nl_local_2[i].tag);
+    }
+    (void)nl_local_2;
+}
+int main(void) { nl_fn_10(); return 0; }

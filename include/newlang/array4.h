@@ -25,7 +25,18 @@ typedef struct NLArray4Construction {
     NLValueId value;
     NLArray4Element elements[4];
 } NLArray4Construction;
-/* Observation never creates a checkpoint. Success only for an owned captured
+/* Source-order construction collection, bounded by existing checked-node
+ * resources. This index selects an EVIDENCE RECORD, not an Array element or
+ * a new source projection. Every world/record borrows fragment ownership. */
+size_t nl_checked_array4_count(const NLCheckedFragment *);
+bool nl_checked_array4_view_at(const NLCheckedFragment *, size_t,
+                               NLArray4Construction *out);
+const NLSemanticContext *nl_checked_array4_world_at(const NLCheckedFragment *,
+                                                    size_t);
+bool nl_checked_array4_valid_at(const NLCheckedFragment *, size_t,
+                                const NLArray4Construction *);
+/* Legacy SINGLETON observations fail closed on a multi-construction fragment.
+ * Observation never creates a checkpoint. Success only for an owned captured
  * source constructor; failure leaves out unchanged. Source/AST input may have
  * been destroyed. All pointers borrow fragment ownership. */
 bool nl_checked_array4_view(const NLCheckedFragment *,
@@ -39,8 +50,10 @@ const NLSemanticContext *nl_checked_array4_world(const NLCheckedFragment *);
  * Validity describes the captured event, NOT current lifetime/owner rights. */
 bool nl_checked_array4_valid(const NLCheckedFragment *,
                              const NLArray4Construction *);
-/* Emit only the authenticated single-array unit entry. Success writes an
- * allocated C17 buffer; failure leaves both output slots untouched. No guest
+/* Emit only an authenticated direct-constructor/normal-unit body, validating
+ * EVERY original before staging distinct source-symbol Array carriers.
+ * Success writes an allocated C17 buffer; failure leaves both output slots
+ * untouched. No guest
  * observation/injection and no general Array ABI or element source operation.
  */
 NLCheckStatus nl_checked_array4_c17(const NLCheckedFragment *, char **out,

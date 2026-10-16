@@ -100,25 +100,86 @@ bool nl_array4_type(const NLSemanticContext *c, NLTypeId id)
 
 #include "newlang/array4.h"
 #include "newlang/lexer.h"
+#include <stdint.h>
+#include <stdio.h>
 
-static bool describe(const NLCheckedFragment *, NLArray4Construction *);
+static bool describe(const NLCheckedFragment *, NLCheckedNodeId,
+                     const NLSemanticContext *, NLArray4Construction *);
+
+size_t nl_checked_array4_count(const NLCheckedFragment *f)
+{
+    if (!f || !f->array4_world || !f->array4_binding || !f->array4_issued ||
+        f->array4_binding != f->array4_issued->binding)
+        return 0;
+    size_t count = 1;
+    for (const NLArray4Capture *p = f->array4_more; p; p = p->next) {
+        if (count >= NL_SEMANTIC_MAX_ENTRIES || !p->world || !p->binding ||
+            !p->issued || p->issued->binding != p->binding)
+            return 0;
+        ++count;
+    }
+    return count;
+}
+
+/* Selection is always qualified by the owning actual source fragment and
+ * construction ordinal. It never looks up a guessed root in a host world. */
+static const NLArray4Construction *record_at(const NLCheckedFragment *f,
+                                             size_t index,
+                                             const NLSemanticContext **world)
+{
+    if (!index) {
+        *world = f->array4_world;
+        return f->array4_issued;
+    }
+    const NLArray4Capture *p = f->array4_more;
+    for (size_t i = 1; p && i < index; ++i)
+        p = p->next;
+    if (!p)
+        return NULL;
+    *world = p->world;
+    return p->issued;
+}
 
 NLCheckStatus nl_array4_capture(NLCheckedFragment *f, NLCheckedNodeId binding,
                                 const NLSemanticContext *c)
 {
-    if (f->array4_world != NULL)
-        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    const size_t count = nl_checked_array4_count(f);
+    if ((!count && (f->array4_world || f->array4_binding || f->array4_issued ||
+                    f->array4_more)) ||
+        count >= NL_SEMANTIC_MAX_ENTRIES)
+        return count ? NL_CHECK_RESOURCE_LIMIT : NL_CHECK_INTERNAL_ERROR;
     NLSemanticContext *snapshot = NULL;
-    NLCheckStatus s = nl_sem_clone(c, &snapshot);
-    if (s != NL_CHECK_OK)
-        return s;
-    f->array4_world = snapshot;
-    f->array4_binding = binding;
-    f->array4_issued = malloc(sizeof(*f->array4_issued));
-    if (f->array4_issued == NULL)
-        return NL_CHECK_OUT_OF_MEMORY;
-    if (!describe(f, f->array4_issued))
+    NLCheckStatus status = nl_sem_clone(c, &snapshot);
+    if (status != NL_CHECK_OK)
+        return status;
+    NLArray4Construction description;
+    if (!describe(f, binding, snapshot, &description)) {
+        nl_semantic_destroy(snapshot);
         return NL_CHECK_INTERNAL_ERROR;
+    }
+    NLArray4Construction *issued = malloc(sizeof(*issued));
+    if (!issued) {
+        nl_semantic_destroy(snapshot);
+        return NL_CHECK_OUT_OF_MEMORY;
+    }
+    *issued = description;
+    if (!count) {
+        f->array4_world = snapshot;
+        f->array4_binding = binding;
+        f->array4_issued = issued;
+    } else {
+        NLArray4Capture *event = malloc(sizeof(*event));
+        if (!event) {
+            free(issued);
+            nl_semantic_destroy(snapshot);
+            return NL_CHECK_OUT_OF_MEMORY;
+        }
+        *event = (NLArray4Capture){snapshot, binding, issued, NULL};
+        NLArray4Capture **last = &f->array4_more;
+        while (*last)
+            last = &(*last)->next;
+        *last = event;
+    }
     return NL_CHECK_OK;
 }
 static bool token_is(const NLSource *s, NLToken t, const char *word)
@@ -173,22 +234,17 @@ static bool source_vector(const NLCheckedFragment *f,
     return token_is(f->source, t, "}") && t.span.end_byte == a->span.end_byte;
 }
 
-const NLSemanticContext *nl_checked_array4_world(const NLCheckedFragment *f)
+static bool describe(const NLCheckedFragment *f, NLCheckedNodeId binding,
+                     const NLSemanticContext *c, NLArray4Construction *out)
 {
-    return f ? f->array4_world : NULL;
-}
-
-static bool describe(const NLCheckedFragment *f, NLArray4Construction *out)
-{
-    if (!f || !out || !f->array4_world || !f->array4_binding)
+    if (!f || !out || !c || !binding)
         return false;
-    const NLCheckedNodeView *b = nl_checked_node_view(f, f->array4_binding);
+    const NLCheckedNodeView *b = nl_checked_node_view(f, binding);
     if (!b || b->kind != NL_CHECKED_BINDING)
         return false;
     const NLCheckedNodeView *a = nl_checked_node_view(f, b->initializer);
     const NLCheckedNodeView *receiver =
         nl_checked_node_view(f, b->first_argument);
-    const NLSemanticContext *c = f->array4_world;
     if (!a || !receiver || b->symbol == 0 || b->symbol > c->binding_count)
         return false;
     const NLPlaceId root = c->bindings[b->symbol - 1].view.place;
@@ -198,7 +254,7 @@ static bool describe(const NLCheckedFragment *f, NLArray4Construction *out)
     if (!p.type || p.type > c->type_count || p.fixed_field_count != 4)
         return false;
     NLArray4Construction v = {.origin = f,
-                              .binding = f->array4_binding,
+                              .binding = binding,
                               .constructor = b->initializer,
                               .receiver = b->first_argument,
                               .symbol = b->symbol,
@@ -223,24 +279,115 @@ static bool describe(const NLCheckedFragment *f, NLArray4Construction *out)
     return true;
 }
 
-bool nl_checked_array4_view(const NLCheckedFragment *f,
-                            NLArray4Construction *out)
+bool nl_checked_array4_view_at(const NLCheckedFragment *f, size_t index,
+                               NLArray4Construction *out)
 {
-    if (!f || !out || !f->array4_issued)
+    if (!out || index >= nl_checked_array4_count(f))
         return false;
-    *out = *f->array4_issued;
+    const NLSemanticContext *world;
+    const NLArray4Construction *v = record_at(f, index, &world);
+    if (!v || !world)
+        return false;
+    *out = *v;
     return true;
 }
 
-bool nl_checked_array4_valid(const NLCheckedFragment *f,
-                             const NLArray4Construction *v)
+const NLSemanticContext *nl_checked_array4_world_at(const NLCheckedFragment *f,
+                                                    size_t index)
 {
-    if (!f || !v || !f->array4_issued || v->origin != f || !f->array4_world ||
-        v->binding != f->array4_binding || !f->body_owner ||
-        f->source != f->body_owner->source)
+    if (index >= nl_checked_array4_count(f))
+        return NULL;
+    const NLSemanticContext *world = NULL;
+    (void)record_at(f, index, &world);
+    return world;
+}
+
+bool nl_checked_array4_view(const NLCheckedFragment *f,
+                            NLArray4Construction *out)
+{
+    return nl_checked_array4_count(f) == 1 &&
+           nl_checked_array4_view_at(f, 0, out);
+}
+const NLSemanticContext *nl_checked_array4_world(const NLCheckedFragment *f)
+{
+    return nl_checked_array4_count(f) == 1 ? nl_checked_array4_world_at(f, 0)
+                                           : NULL;
+}
+static bool same_span(NLSourceSpan a, NLSourceSpan b)
+{
+    return a.start_byte == b.start_byte && a.end_byte == b.end_byte;
+}
+
+/* Authenticate the COMPLETE closed source/checked body, not a selected subset
+ * or coincident numeric IDs. Retained immutable AST belongs to the registered
+ * body, independently of the destroyed input unit AST/source. */
+static bool body_graph(const NLCheckedFragment *f, size_t count)
+{
+    const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
+    const NLSyntaxView *syntax =
+        f->body_owner && f->body_owner->syntax
+            ? nl_syntax_node_view(nl_syntax_tree_root(f->body_owner->syntax))
+            : NULL;
+    if (!count || count > (NL_SEMANTIC_MAX_ENTRIES - 2) / 7 || !root ||
+        !syntax || syntax->kind != NL_SYNTAX_BLOCK ||
+        root->kind != NL_CHECKED_BLOCK || root->terminates || root->type != 1 ||
+        root->result_count || root->item_count != count ||
+        syntax->data.block.item_count != count ||
+        !same_span(root->span, syntax->span) ||
+        nl_checked_node_count(f) != 7 * count + 2 ||
+        nl_control_exits_count(nl_checked_control_exits(f)))
         return false;
-    const NLArray4Construction *issued = f->array4_issued;
-    if (v->binding != issued->binding ||
+    const NLCheckedNodeView *tail = nl_checked_node_view(f, root->tail);
+    const NLSyntaxView *stail = nl_syntax_node_view(syntax->data.block.tail);
+    if (!tail || !stail || tail->kind != NL_CHECKED_UNIT || tail->type != 1 ||
+        tail->result_count || tail->terminates ||
+        stail->kind != NL_SYNTAX_EXPR_NAME ||
+        !same_span(tail->span, stail->span) ||
+        !token_is(f->source, (NLToken){.span = stail->data.name}, "unit"))
+        return false;
+    NLCheckedNodeId next = root->first_item;
+    const NLSyntaxNode *item = syntax->data.block.items;
+    for (size_t i = 0; i < count; ++i) {
+        const NLSemanticContext *world;
+        const NLArray4Construction *p = record_at(f, i, &world);
+        const NLSyntaxView *s = nl_syntax_node_view(item);
+        if (!p || !s || s->kind != NL_SYNTAX_BINDING || p->binding != next)
+            return false;
+        const NLSyntaxView *a =
+            nl_syntax_node_view(s->data.binding.initializer);
+        const NLCheckedNodeView *b = nl_checked_node_view(f, next),
+                                *r = nl_checked_node_view(f, p->receiver),
+                                *constructor =
+                                    nl_checked_node_view(f, p->constructor);
+        if (!a || a->kind != NL_SYNTAX_ARRAY4_CONSTRUCTOR ||
+            a->data.array4.count != 4 || !b || !r || !constructor ||
+            b->terminates || b->result_count || !same_span(b->span, s->span) ||
+            !same_span(b->name, s->data.binding.name) ||
+            !same_span(r->span, s->data.binding.name) ||
+            !same_span(constructor->span, a->span))
+            return false;
+        const NLSyntaxNode *element = a->data.array4.elements;
+        for (size_t e = 0; e < 4; ++e) {
+            const NLSyntaxView *se = nl_syntax_node_view(element);
+            const NLCheckedNodeView *ce =
+                nl_checked_node_view(f, p->elements[e].initializer);
+            if (!se || !ce || se->kind != NL_SYNTAX_SUM_CONSTRUCTOR ||
+                !same_span(ce->span, se->span))
+                return false;
+            element = nl_syntax_next_argument(element);
+        }
+        if (element)
+            return false;
+        next = b->next_item;
+        item = nl_syntax_next_argument(item);
+    }
+    return next == 0 && item == NULL;
+}
+
+static bool same_record(const NLArray4Construction *v,
+                        const NLArray4Construction *issued)
+{
+    if (v->origin != issued->origin || v->binding != issued->binding ||
         v->constructor != issued->constructor ||
         v->receiver != issued->receiver || v->symbol != issued->symbol ||
         v->array_type != issued->array_type ||
@@ -255,8 +402,30 @@ bool nl_checked_array4_valid(const NLCheckedFragment *f,
             a.fact != b.fact || a.value != b.value)
             return false;
     }
-    const NLSemanticContext *c = f->array4_world,
-                            *final = nl_checked_context(f);
+    return true;
+}
+static bool plain_package(NLSemanticValueView v)
+{
+    return v.dependencies == NL_DEPENDENCY_FREE && !v.value_dependency_count &&
+           !v.domain && !v.slot_place && !v.allocation_region &&
+           !v.occupancy.region && !v.occupancy.start && !v.occupancy.length &&
+           !v.reference_count && !v.reference.place &&
+           !v.reference.incarnation && !v.reference.scope &&
+           v.reference.provenance == NL_PROVENANCE_UNKNOWN &&
+           !v.reference.readable && !v.reference.writable &&
+           !v.reference.occurrence_dependency && !v.scalar_known &&
+           !v.scalar_value && !v.sum_owner;
+}
+static bool event_valid(const NLCheckedFragment *f,
+                        const NLArray4Construction *v,
+                        const NLSemanticContext *c)
+{
+    const NLSemanticContext *final = nl_checked_context(f);
+    if (v->origin != f || !v->incarnation || !v->fact || !final ||
+        final->place_count < c->place_count ||
+        final->value_count < c->value_count ||
+        final->binding_count < c->binding_count)
+        return false;
     bool registered = false;
     for (size_t i = 0; i < final->function_count && i < c->function_count;
          ++i) {
@@ -300,15 +469,20 @@ bool nl_checked_array4_valid(const NLCheckedFragment *f,
         root.type != v->array_type || root.incarnation != v->incarnation ||
         root.current_fact != v->fact || root.current_value != v->value ||
         root.fixed_field_count != 4 || root.governing_domain ||
-        root.placement.region || value.type != v->array_type ||
+        root.placement.region || root.placement.start ||
+        root.placement.length || value.type != v->array_type ||
         value.field_count != 4 || value.carrier != NL_CARRIER_PLACE ||
-        value.owner_place != v->root || value.domain ||
+        value.owner_place != v->root || value.aggregate_owner || value.domain ||
         value.allocation_region || value.dependencies != NL_DEPENDENCY_FREE ||
-        value.value_dependency_count || c->place_count != 5 ||
-        c->value_count != 5 || c->binding_count != 1 || c->region_count ||
-        c->domain_count || c->scope_count || c->occurrence_count ||
-        final->place_count < c->place_count ||
-        final->places[v->root - 1].incarnation != root.incarnation)
+        value.value_dependency_count || !plain_package(value) ||
+        value.variant || value.sum_payload || root.payload_occurrence ||
+        c->region_count || c->domain_count || c->scope_count ||
+        c->occurrence_count || final->place_count < c->place_count ||
+        final->places[v->root - 1].incarnation != root.incarnation ||
+        final->places[v->root - 1].live ||
+        final->places[v->root - 1].type != v->array_type ||
+        final->bindings[v->symbol - 1].view.place != v->root ||
+        final->bindings[v->symbol - 1].view.availability != NL_CONSUMED)
         return false;
     const NLCheckedNodeView *elements[4];
     NLCheckedNodeId next = a->first_argument;
@@ -337,6 +511,13 @@ bool nl_checked_array4_valid(const NLCheckedFragment *f,
             x.aggregate_owner != v->value || x.owner_place ||
             value.fields[i] != e.value || x.domain || x.allocation_region ||
             x.dependencies != NL_DEPENDENCY_FREE || x.value_dependency_count ||
+            !plain_package(x) || x.field_count || p.fixed_field_count ||
+            !e.fact || !e.incarnation || p.implicit_local ||
+            p.placement.region || p.placement.start || p.placement.length ||
+            final->places[e.place - 1].live ||
+            final->places[e.place - 1].type != v->element_type ||
+            final->places[e.place - 1].parent_aggregate != v->root ||
+            final->places[e.place - 1].parent_incarnation != v->incarnation ||
             final->places[e.place - 1].incarnation != e.incarnation)
             return false;
         for (size_t j = 0; j < i; ++j)
@@ -347,13 +528,97 @@ bool nl_checked_array4_valid(const NLCheckedFragment *f,
         elements[i] = n;
         next = n->next_argument;
     }
-    /* All five places/packages and type/parent/value bounds are checked
-     * before invoking the committed-world kernel on this captured event. */
-    return next == 0 && source_vector(f, a, elements) &&
-           nl_sem_validate(c) == NL_CHECK_OK;
+    return next == 0 && source_vector(f, a, elements);
 }
 
-#include <stdio.h>
+bool nl_checked_array4_valid_at(const NLCheckedFragment *f, size_t index,
+                                const NLArray4Construction *v)
+{
+    const size_t count = nl_checked_array4_count(f);
+    if (!f || !v || index >= count || v->origin != f || !f->body_owner ||
+        f->source != f->body_owner->source)
+        return false;
+    const NLSemanticContext *c;
+    const NLArray4Construction *issued = record_at(f, index, &c);
+    if (!issued || !c || !same_record(v, issued) || !body_graph(f, count) ||
+        c->place_count != 5 * (index + 1) ||
+        c->value_count != 5 * (index + 1) || c->binding_count != index + 1 ||
+        c->place_count > NL_SEMANTIC_MAX_ENTRIES || c->region_count ||
+        c->domain_count || c->scope_count || c->occurrence_count ||
+        c->raw_interval_count)
+        return false;
+    bool places[NL_SEMANTIC_MAX_ENTRIES + 1] = {false};
+    bool values[NL_SEMANTIC_MAX_ENTRIES + 1] = {false};
+    bool bindings[NL_SEMANTIC_MAX_ENTRIES + 1] = {false};
+    /* Revalidate EVERY earlier source-issued original in the selected actual
+     * checkpoint. Unique coverage + exact counts closes its whole frame
+     * before the invariant kernel can index any other place/package. */
+    for (size_t i = 0; i <= index; ++i) {
+        const NLSemanticContext *origin;
+        const NLArray4Construction *p = record_at(f, i, &origin);
+        if (!p || !event_valid(f, p, c) || bindings[p->symbol] ||
+            places[p->root] || values[p->value])
+            return false;
+        bindings[p->symbol] = places[p->root] = values[p->value] = true;
+        for (size_t e = 0; e < 4; ++e) {
+            const NLArray4Element child = p->elements[e];
+            if (places[child.place] || values[child.value])
+                return false;
+            places[child.place] = values[child.value] = true;
+        }
+    }
+    return nl_sem_validate(c) == NL_CHECK_OK;
+}
+bool nl_checked_array4_valid(const NLCheckedFragment *f,
+                             const NLArray4Construction *v)
+{
+    return nl_checked_array4_count(f) == 1 &&
+           nl_checked_array4_valid_at(f, 0, v);
+}
+
+/* Two passes over an authenticated source body: first size, then one staged
+ * allocation. No guest array or authority is constructed by this host helper.
+ */
+static bool c_text(const NLCheckedFragment *f, size_t count, size_t function,
+                   char *text, size_t capacity, size_t *written)
+{
+    const NLSemanticContext *world;
+    const NLArray4Construction *first = record_at(f, 0, &world);
+    size_t used = 0;
+#define WRITE(...)                                                             \
+    do {                                                                       \
+        const int n = snprintf(text ? text + used : NULL,                      \
+                               text ? capacity - used : 0, __VA_ARGS__);       \
+        if (n < 0 || (size_t)n > SIZE_MAX - used ||                            \
+            (text && (size_t)n >= capacity - used))                            \
+            return false;                                                      \
+        used += (size_t)n;                                                     \
+    } while (0)
+    WRITE("/* SPECULATIVE PR533 original Array4, checked source only. */\n"
+          "#include <stdint.h>\n"
+          "enum { NL_ARRAY4_NONE = 37 };\n"
+          "typedef struct { uint8_t tag; uint8_t payload; } nl_option_%zu;\n"
+          "typedef nl_option_%zu nl_array_%zu[4];\n"
+          "static void nl_fn_%zu(void)\n{\n",
+          first->element_type, first->element_type, first->array_type,
+          function);
+    for (size_t i = 0; i < count; ++i) {
+        const NLArray4Construction *p = record_at(f, i, &world);
+        WRITE("    nl_array_%zu nl_local_%zu = {\n"
+              "        { .tag = NL_ARRAY4_NONE },\n"
+              "        { .tag = NL_ARRAY4_NONE },\n"
+              "        { .tag = NL_ARRAY4_NONE },\n"
+              "        { .tag = NL_ARRAY4_NONE }\n"
+              "    };\n"
+              "    (void)nl_local_%zu;\n",
+              p->array_type, p->symbol, p->symbol);
+    }
+    WRITE("}\nint main(void) { nl_fn_%zu(); return 0; }\n", function);
+#undef WRITE
+    *written = used;
+    return true;
+}
+
 NLCheckStatus nl_checked_array4_c17(const NLCheckedFragment *entry, char **out,
                                     size_t *length)
 {
@@ -377,54 +642,30 @@ NLCheckStatus nl_checked_array4_c17(const NLCheckedFragment *entry, char **out,
         fn.hidden_dependencies || fn.owner_receiver || fn.owner_producer ||
         fn.custody_recipient)
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
-    NLArray4Construction p;
-    if (!nl_checked_array4_view(f, &p) || !nl_checked_array4_valid(f, &p))
+    const size_t count = nl_checked_array4_count(f);
+    if (!count)
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
-    const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f)),
-                            *binding = nl_checked_node_view(f, p.binding);
-    const NLCheckedNodeView *tail =
-        root ? nl_checked_node_view(f, root->tail) : NULL;
-    if (!root || root->kind != NL_CHECKED_BLOCK || root->terminates ||
-        root->type != 1 || root->result_count || root->item_count != 1 ||
-        root->first_item != p.binding || !binding || binding->next_item ||
-        !tail || tail->kind != NL_CHECKED_UNIT || tail->type != 1 ||
-        tail->result_count || tail->terminates ||
-        nl_checked_node_count(f) != 9 ||
-        nl_control_exits_count(nl_checked_control_exits(f)))
+    NLArray4Construction first, p;
+    if (!nl_checked_array4_view_at(f, 0, &first))
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
-    /* Each source-issued initializer was independently checked as typed None.
-     * The opaque envelope/tag is this compiler's private C17 choice; Array is
-     * a C array of complete envelopes, not a record of four fields. */
-    static const char format[] =
-        "/* SPECULATIVE PR533 original Array4, checked source only. */\n"
-        "#include <stdint.h>\n"
-        "enum { NL_ARRAY4_NONE = 37 };\n"
-        "typedef struct { uint8_t tag; uint8_t payload; } nl_option_%zu;\n"
-        "typedef nl_option_%zu nl_array_%zu[4];\n"
-        "static void nl_fn_%zu(void)\n{\n"
-        "    nl_array_%zu nl_local_%zu = {\n"
-        "        { .tag = NL_ARRAY4_NONE },\n"
-        "        { .tag = NL_ARRAY4_NONE },\n"
-        "        { .tag = NL_ARRAY4_NONE },\n"
-        "        { .tag = NL_ARRAY4_NONE }\n"
-        "    };\n"
-        "    (void)nl_local_%zu;\n}\n"
-        "int main(void) { nl_fn_%zu(); return 0; }\n";
-    const int n = snprintf(NULL, 0, format, p.element_type, p.element_type,
-                           p.array_type, call->function, p.array_type, p.symbol,
-                           p.symbol, call->function);
-    if (n < 0)
+    for (size_t i = 0; i < count; ++i)
+        if (!nl_checked_array4_view_at(f, i, &p) ||
+            p.array_type != first.array_type ||
+            p.element_type != first.element_type ||
+            !nl_checked_array4_valid_at(f, i, &p))
+            return NL_CHECK_SEMANTIC_UNSUPPORTED;
+    size_t n = 0, actual = 0;
+    if (!c_text(f, count, call->function, NULL, 0, &n) || n == SIZE_MAX)
         return NL_CHECK_RESOURCE_LIMIT;
-    char *text = malloc((size_t)n + 1);
+    char *text = malloc(n + 1);
     if (!text)
         return NL_CHECK_OUT_OF_MEMORY;
-    if (snprintf(text, (size_t)n + 1, format, p.element_type, p.element_type,
-                 p.array_type, call->function, p.array_type, p.symbol, p.symbol,
-                 call->function) != n) {
+    if (!c_text(f, count, call->function, text, n + 1, &actual) ||
+        actual != n) {
         free(text);
         return NL_CHECK_INTERNAL_ERROR;
     }
     *out = text;
-    *length = (size_t)n;
+    *length = n;
     return NL_CHECK_OK;
 }

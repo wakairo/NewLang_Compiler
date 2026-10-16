@@ -132,6 +132,20 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:p534_semantic_gate>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p534" "${NEWLANG_SANITIZER}")
 
+    add_executable(p541_public_probe tests/p541/public_probe.c)
+    target_link_libraries(p541_public_probe PRIVATE newlang_parser_p534 newlang_semantic)
+    add_test(NAME p541_source_owned.unit COMMAND p541_public_probe "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541/two_roots.nl")
+    add_test(NAME p541_oom.unit COMMAND p534_semantic_gate oom "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541/two_roots.nl")
+    add_executable(p541_fault_test tests/p541/fault_test.c)
+    target_link_libraries(p541_fault_test PRIVATE newlang_parser_p534 newlang_semantic)
+    target_link_options(p541_fault_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
+    add_test(NAME p541_issuer_fault.unit COMMAND p541_fault_test "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541/two_roots.nl")
+    add_test(NAME p541_array_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541/native_test.py"
+        "$<TARGET_FILE:newlangc_p534>" "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p541_public_probe>"
+        "$<TARGET_FILE:p534_semantic_gate>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541" "${NEWLANG_SANITIZER}")
+
     add_executable(p504_public_probe tests/p504/public_probe.c)
     target_link_libraries(p504_public_probe PRIVATE newlang_semantic)
     add_executable(p504_gate_probe tests/p504/gate_probe.c)

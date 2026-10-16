@@ -1,0 +1,152 @@
+Internal ctest changing into directory: /workspace/p541-asan
+UpdateCTestConfiguration  from :/workspace/p541-asan/DartConfiguration.tcl
+Parse Config file:/workspace/p541-asan/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p541-asan/DartConfiguration.tcl
+Parse Config file:/workspace/p541-asan/DartConfiguration.tcl
+Test project /workspace/p541-asan
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: p534_source_owned.unit
+
+1: Test command: /workspace/p541-asan/p534_public_probe "/workspace/p541/tests/p534/original.nl"
+1: Working Directory: /workspace/p541-asan
+1: Environment variables:
+1:  PYTHONDONTWRITEBYTECODE=1
+1:  PYTHONHASHSEED=0
+1:  LC_ALL=C
+1:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+1:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+1: Test timeout computed to be: 90
+1: {"array_type":11,"element_type":10,"symbol":1,"root":1,"incarnation":1,"fact":1,"value":5,"live_checkpoint_places":5,"independent_roots":1,"elements":[{"index":0,"place":2,"incarnation":2,"fact":2,"value":1,"source_node":3,"variant":1},{"index":1,"place":3,"incarnation":3,"fact":3,"value":2,"source_node":4,"variant":1},{"index":2,"place":4,"incarnation":4,"fact":4,"value":3,"source_node":5,"variant":1},{"index":3,"place":5,"incarnation":5,"fact":5,"value":4,"source_node":6,"variant":1}],"separate_view_mutants_rejected":40,"final_root_ended":true,"public_validator":true}
+1/8 Test #1: p534_source_owned.unit ...........   Passed    0.02 sec
+test 2
+    Start 2: p534_oom.unit
+
+2: Test command: /workspace/p541-asan/p534_semantic_gate "oom" "/workspace/p541/tests/p534/original.nl"
+2: Working Directory: /workspace/p541-asan
+2: Environment variables:
+2:  PYTHONDONTWRITEBYTECODE=1
+2:  PYTHONHASHSEED=0
+2:  LC_ALL=C
+2:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+2:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+2: Test timeout computed to be: 90
+2: P514_OOM registration=114 rollback=PASS
+2: P514_OOM main=65 rollback=PASS output=NULL
+2/8 Test #2: p534_oom.unit ....................   Passed    0.03 sec
+test 3
+    Start 3: p534_issuer_fault.unit
+
+3: Test command: /workspace/p541-asan/p534_fault_test "/workspace/p541/tests/p534/original.nl"
+3: Working Directory: /workspace/p541-asan
+3: Environment variables:
+3:  PYTHONDONTWRITEBYTECODE=1
+3:  PYTHONHASHSEED=0
+3:  LC_ALL=C
+3:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+3:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+3: Test timeout computed to be: 90
+3: P534_FAULT corrupted_worlds=12 source_issued_record_missing=REJECT foreign_source_plan=REJECT public_validator_allocations=0 emit_OOM=1 output_UNCHANGED semantic_world=UNCHANGED restored=PASS
+3/8 Test #3: p534_issuer_fault.unit ...........   Passed    0.01 sec
+test 4
+    Start 4: p534_array_native.integration
+
+4: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p541/tests/p534/native_test.py" "/workspace/p541-asan/newlangc_p534" "/workspace/p541-asan/newlangc" "/workspace/p541-asan/p534_public_probe" "/workspace/p541-asan/p534_semantic_gate" "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23" "/workspace/p541/tests/p534" "address"
+4: Working Directory: /workspace/p541-asan
+4: Environment variables:
+4:  PYTHONDONTWRITEBYTECODE=1
+4:  PYTHONHASHSEED=0
+4:  LC_ALL=C
+4:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+4:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+4: Test timeout computed to be: 90
+4: {"case": "original", "check": 0, "c17": 0, "public_owned": {"array_type": 11, "element_type": 10, "symbol": 1, "root": 1, "incarnation": 1, "fact": 1, "value": 5, "live_checkpoint_places": 5, "independent_roots": 1, "elements": [{"index": 0, "place": 2, "incarnation": 2, "fact": 2, "value": 1, "source_node": 3, "variant": 1}, {"index": 1, "place": 3, "incarnation": 3, "fact": 3, "value": 2, "source_node": 4, "variant": 1}, {"index": 2, "place": 4, "incarnation": 4, "fact": 4, "value": 3, "source_node": 5, "variant": 1}, {"index": 3, "place": 5, "incarnation": 5, "fact": 5, "value": 4, "source_node": 6, "variant": 1}], "separate_view_mutants_rejected": 40, "final_root_ended": true, "public_validator": true}, "plain_native": [{"opt": "-O0", "exit": 0, "stdout": "", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "", "stderr": ""}], "physical_observed_native": [{"opt": "-O0", "exit": 0, "stdout": "element=0 address=135301417599008 stride=2 tag=37\nelement=1 address=135301417599010 stride=2 tag=37\nelement=2 address=135301417599012 stride=2 tag=37\nelement=3 address=135301417599014 stride=2 tag=37\n", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "element=0 address=136111260106784 stride=2 tag=37\nelement=1 address=136111260106786 stride=2 tag=37\nelement=2 address=136111260106788 stride=2 tag=37\nelement=3 address=136111260106790 stride=2 tag=37\n", "stderr": ""}], "bad_C_refused": {"wrong_None_tag": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}], "missing_typed_initializer": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}], "wrong_extent": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}]}}
+4: {"case": "arity3", "sha256": "7344e531c81bf1b88adfa49f4f7042db8fb1443d73534ee4f8f9cdb78c77f4a0", "parser": 0, "check": 3, "diagnostic": "/workspace/p541/tests/p534/arity3.nl:2:17-6:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-INITIALIZER-ARITY rollback=PASS artifact=NULL"}
+4: {"case": "arity5", "sha256": "219ce408e53d930e68954ecb2443c205d73a73ff73dab4f36a8b8f1bee4469e4", "parser": 0, "check": 3, "diagnostic": "/workspace/p541/tests/p534/arity5.nl:2:17-8:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-INITIALIZER-ARITY rollback=PASS artifact=NULL"}
+4: {"case": "wrong_type", "sha256": "f8536e75f847c69aa5cf1cc7ee9e8ad2f1ca1f19dad308bf5ff3967dd9531766", "parser": 0, "check": 3, "diagnostic": "/workspace/p541/tests/p534/wrong_type.nl:3:9-3:14: error(semantic)[ARRAY4-ELEMENT-TYPE]: initializer must have exact Option<u8> type\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-ELEMENT-TYPE rollback=PASS artifact=NULL"}
+4: {"case": "payloadless_some", "sha256": "2d9b57b89d80a5a61fcedc07d223b8205f2b53830645d5181cdad69d11ec7a27", "parser": 0, "check": 3, "diagnostic": "/workspace/p541/tests/p534/payloadless_some.nl:3:21-3:25: error(semantic)[P6-CONSTRUCTOR-SHAPE]: constructor payload shape/arity does not match variant\n", "rollback": "P514_REJECT phase=registration code=P6-CONSTRUCTOR-SHAPE rollback=PASS artifact=NULL"}
+4: {"case": "wrong_variant", "sha256": "a2380941134cee467b1f97dba66b3f17ee84d0f046a96deef7f81dd4bc45366f", "parser": 0, "check": 3, "diagnostic": "/workspace/p541/tests/p534/wrong_variant.nl:3:9-3:32: error(unsupported)[ARRAY4-OPTION-VARIANT]: speculative Option<u8> construction permits only None\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-OPTION-VARIANT rollback=PASS artifact=NULL"}
+4: P534 SPECULATIVE SOURCE/OWNED/C17/NATIVE original Option Array4 PASS; no indexing/Ring/product claim
+4/8 Test #4: p534_array_native.integration ....   Passed    1.64 sec
+test 5
+    Start 5: p541_source_owned.unit
+
+5: Test command: /workspace/p541-asan/p541_public_probe "/workspace/p541/tests/p541/two_roots.nl"
+5: Working Directory: /workspace/p541-asan
+5: Environment variables:
+5:  PYTHONDONTWRITEBYTECODE=1
+5:  PYTHONHASHSEED=0
+5:  LC_ALL=C
+5:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+5:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+5: Test timeout computed to be: 90
+5: {"record_count":2,"source_function":10,"public_validator":true,"legacy_singleton_refused":true,"worlds_distinct":true,"final_roots_ended":true,"view_mutants_rejected":100,"records":[{"index":0,"array_type":11,"element_type":10,"symbol":1,"binding":7,"constructor":2,"root":1,"incarnation":1,"fact":1,"value":5,"checkpoint_places":5,"checkpoint_roots":1,"elements":[{"index":0,"place":2,"incarnation":2,"fact":2,"value":1,"source_node":3},{"index":1,"place":3,"incarnation":3,"fact":3,"value":2,"source_node":4},{"index":2,"place":4,"incarnation":4,"fact":4,"value":3,"source_node":5},{"index":3,"place":5,"incarnation":5,"fact":5,"value":4,"source_node":6}]},{"index":1,"array_type":11,"element_type":10,"symbol":2,"binding":14,"constructor":9,"root":6,"incarnation":6,"fact":6,"value":10,"checkpoint_places":10,"checkpoint_roots":2,"elements":[{"index":0,"place":7,"incarnation":7,"fact":7,"value":6,"source_node":10},{"index":1,"place":8,"incarnation":8,"fact":8,"value":7,"source_node":11},{"index":2,"place":9,"incarnation":9,"fact":9,"value":8,"source_node":12},{"index":3,"place":10,"incarnation":10,"fact":10,"value":9,"source_node":13}]}]}
+5/8 Test #5: p541_source_owned.unit ...........   Passed    0.02 sec
+test 6
+    Start 6: p541_oom.unit
+
+6: Test command: /workspace/p541-asan/p534_semantic_gate "oom" "/workspace/p541/tests/p541/two_roots.nl"
+6: Working Directory: /workspace/p541-asan
+6: Environment variables:
+6:  PYTHONDONTWRITEBYTECODE=1
+6:  PYTHONHASHSEED=0
+6:  LC_ALL=C
+6:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+6:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+6: Test timeout computed to be: 90
+6: P514_OOM registration=170 rollback=PASS
+6: P514_OOM main=104 rollback=PASS output=NULL
+6/8 Test #6: p541_oom.unit ....................   Passed    0.05 sec
+test 7
+    Start 7: p541_issuer_fault.unit
+
+7: Test command: /workspace/p541-asan/p541_fault_test "/workspace/p541/tests/p541/two_roots.nl"
+7: Working Directory: /workspace/p541-asan
+7: Environment variables:
+7:  PYTHONDONTWRITEBYTECODE=1
+7:  PYTHONHASHSEED=0
+7:  LC_ALL=C
+7:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+7:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+7: Test timeout computed to be: 90
+7: P541_FAULT checkpoint_mutants=38 graph_mutants=11 coupled_raw_kernel_valid_but_not_issued=2 validator_allocations=0 emit_OOM=1 rollback=PASS restored=PASS
+7/8 Test #7: p541_issuer_fault.unit ...........   Passed    0.03 sec
+test 8
+    Start 8: p541_array_native.integration
+
+8: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p541/tests/p541/native_test.py" "/workspace/p541-asan/newlangc_p534" "/workspace/p541-asan/newlangc" "/workspace/p541-asan/p541_public_probe" "/workspace/p541-asan/p534_semantic_gate" "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23" "/workspace/p541/tests/p541" "address"
+8: Working Directory: /workspace/p541-asan
+8: Environment variables:
+8:  PYTHONDONTWRITEBYTECODE=1
+8:  PYTHONHASHSEED=0
+8:  LC_ALL=C
+8:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+8:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+8: Test timeout computed to be: 90
+8: {"case": "two_roots", "source_sha256": "829f8d7b9a0aea422f4349d3fd0dc2b389d995b0ab13119b3f490cefc4cb30d1", "check": 0, "c17": 0, "public_owned": {"record_count": 2, "source_function": 10, "public_validator": true, "legacy_singleton_refused": true, "worlds_distinct": true, "final_roots_ended": true, "view_mutants_rejected": 100, "records": [{"index": 0, "array_type": 11, "element_type": 10, "symbol": 1, "binding": 7, "constructor": 2, "root": 1, "incarnation": 1, "fact": 1, "value": 5, "checkpoint_places": 5, "checkpoint_roots": 1, "elements": [{"index": 0, "place": 2, "incarnation": 2, "fact": 2, "value": 1, "source_node": 3}, {"index": 1, "place": 3, "incarnation": 3, "fact": 3, "value": 2, "source_node": 4}, {"index": 2, "place": 4, "incarnation": 4, "fact": 4, "value": 3, "source_node": 5}, {"index": 3, "place": 5, "incarnation": 5, "fact": 5, "value": 4, "source_node": 6}]}, {"index": 1, "array_type": 11, "element_type": 10, "symbol": 2, "binding": 14, "constructor": 9, "root": 6, "incarnation": 6, "fact": 6, "value": 10, "checkpoint_places": 10, "checkpoint_roots": 2, "elements": [{"index": 0, "place": 7, "incarnation": 7, "fact": 7, "value": 6, "source_node": 10}, {"index": 1, "place": 8, "incarnation": 8, "fact": 8, "value": 7, "source_node": 11}, {"index": 2, "place": 9, "incarnation": 9, "fact": 9, "value": 8, "source_node": 12}, {"index": 3, "place": 10, "incarnation": 10, "fact": 10, "value": 9, "source_node": 13}]}]}, "c17_sha256": "516de3980e1b667dcc0e22a85de3780df2e3df9daf751e1b9dc5402ca85a750c", "observed_C_sha256": "6ea6a7c6a0bbd368246753d099ca28e5a0422e6f51de271468005a87b9992feb", "plain_native": [{"opt": "-O0", "exit": 0, "stdout": "", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "", "stderr": ""}], "physical_observed_native": [{"opt": "-O0", "exit": 0, "stdout": "array=0 element=0 base=136263059308576 address=136263059308576 stride=2 tag=37\narray=0 element=1 base=136263059308576 address=136263059308578 stride=2 tag=37\narray=0 element=2 base=136263059308576 address=136263059308580 stride=2 tag=37\narray=0 element=3 base=136263059308576 address=136263059308582 stride=2 tag=37\narray=1 element=0 base=136263059308608 address=136263059308608 stride=2 tag=37\narray=1 element=1 base=136263059308608 address=136263059308610 stride=2 tag=37\narray=1 element=2 base=136263059308608 address=136263059308612 stride=2 tag=37\narray=1 element=3 base=136263059308608 address=136263059308614 stride=2 tag=37\n", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "array=0 element=0 base=136144685563936 address=136144685563936 stride=2 tag=37\narray=0 element=1 base=136144685563936 address=136144685563938 stride=2 tag=37\narray=0 element=2 base=136144685563936 address=136144685563940 stride=2 tag=37\narray=0 element=3 base=136144685563936 address=136144685563942 stride=2 tag=37\narray=1 element=0 base=136144685563968 address=136144685563968 stride=2 tag=37\narray=1 element=1 base=136144685563968 address=136144685563970 stride=2 tag=37\narray=1 element=2 base=136144685563968 address=136144685563972 stride=2 tag=37\narray=1 element=3 base=136144685563968 address=136144685563974 stride=2 tag=37\n", "stderr": ""}], "bad_C_refused": {"aliased_second_carrier": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}], "wrong_second_None": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}], "wrong_extent": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}]}}
+8: {"case": "r540_two_roots", "source_sha256": "3d01ff12734a194ccc8357625e16de5d1740019a59873ba467467f2152760f9f", "check": 0, "c17": 0, "public_owned": {"record_count": 2, "source_function": 10, "public_validator": true, "legacy_singleton_refused": true, "worlds_distinct": true, "final_roots_ended": true, "view_mutants_rejected": 100, "records": [{"index": 0, "array_type": 11, "element_type": 10, "symbol": 1, "binding": 7, "constructor": 2, "root": 1, "incarnation": 1, "fact": 1, "value": 5, "checkpoint_places": 5, "checkpoint_roots": 1, "elements": [{"index": 0, "place": 2, "incarnation": 2, "fact": 2, "value": 1, "source_node": 3}, {"index": 1, "place": 3, "incarnation": 3, "fact": 3, "value": 2, "source_node": 4}, {"index": 2, "place": 4, "incarnation": 4, "fact": 4, "value": 3, "source_node": 5}, {"index": 3, "place": 5, "incarnation": 5, "fact": 5, "value": 4, "source_node": 6}]}, {"index": 1, "array_type": 11, "element_type": 10, "symbol": 2, "binding": 14, "constructor": 9, "root": 6, "incarnation": 6, "fact": 6, "value": 10, "checkpoint_places": 10, "checkpoint_roots": 2, "elements": [{"index": 0, "place": 7, "incarnation": 7, "fact": 7, "value": 6, "source_node": 10}, {"index": 1, "place": 8, "incarnation": 8, "fact": 8, "value": 7, "source_node": 11}, {"index": 2, "place": 9, "incarnation": 9, "fact": 9, "value": 8, "source_node": 12}, {"index": 3, "place": 10, "incarnation": 10, "fact": 10, "value": 9, "source_node": 13}]}]}, "c17_sha256": "516de3980e1b667dcc0e22a85de3780df2e3df9daf751e1b9dc5402ca85a750c", "observed_C_sha256": "6ea6a7c6a0bbd368246753d099ca28e5a0422e6f51de271468005a87b9992feb", "plain_native": [{"opt": "-O0", "exit": 0, "stdout": "", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "", "stderr": ""}], "physical_observed_native": [{"opt": "-O0", "exit": 0, "stdout": "array=0 element=0 base=136085732524064 address=136085732524064 stride=2 tag=37\narray=0 element=1 base=136085732524064 address=136085732524066 stride=2 tag=37\narray=0 element=2 base=136085732524064 address=136085732524068 stride=2 tag=37\narray=0 element=3 base=136085732524064 address=136085732524070 stride=2 tag=37\narray=1 element=0 base=136085732524096 address=136085732524096 stride=2 tag=37\narray=1 element=1 base=136085732524096 address=136085732524098 stride=2 tag=37\narray=1 element=2 base=136085732524096 address=136085732524100 stride=2 tag=37\narray=1 element=3 base=136085732524096 address=136085732524102 stride=2 tag=37\n", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "array=0 element=0 base=135616243105824 address=135616243105824 stride=2 tag=37\narray=0 element=1 base=135616243105824 address=135616243105826 stride=2 tag=37\narray=0 element=2 base=135616243105824 address=135616243105828 stride=2 tag=37\narray=0 element=3 base=135616243105824 address=135616243105830 stride=2 tag=37\narray=1 element=0 base=135616243105856 address=135616243105856 stride=2 tag=37\narray=1 element=1 base=135616243105856 address=135616243105858 stride=2 tag=37\narray=1 element=2 base=135616243105856 address=135616243105860 stride=2 tag=37\narray=1 element=3 base=135616243105856 address=135616243105862 stride=2 tag=37\n", "stderr": ""}], "bad_C_refused": {"aliased_second_carrier": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}], "wrong_second_None": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}], "wrong_extent": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}]}}
+8: {"case": "second_arity3", "parser": 0, "check": 3, "diagnostic": "/workspace/p541/tests/p541/second_arity3.nl:8:20-12:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-INITIALIZER-ARITY rollback=PASS artifact=NULL"}
+8: {"case": "second_arity5", "parser": 0, "check": 3, "diagnostic": "/workspace/p541/tests/p541/second_arity5.nl:8:20-14:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-INITIALIZER-ARITY rollback=PASS artifact=NULL"}
+8: {"case": "second_wrong_type", "parser": 0, "check": 3, "diagnostic": "/workspace/p541/tests/p541/second_wrong_type.nl:9:9-9:14: error(semantic)[ARRAY4-ELEMENT-TYPE]: initializer must have exact Option<u8> type\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-ELEMENT-TYPE rollback=PASS artifact=NULL"}
+8: {"case": "second_nonleaf", "parser": 0, "check": 3, "diagnostic": "/workspace/p541/tests/p541/second_nonleaf.nl:9:9-9:29: error(semantic)[ARRAY4-ELEMENT-CONSTRUCTOR]: each initializer must construct typed None\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-ELEMENT-CONSTRUCTOR rollback=PASS artifact=NULL"}
+8: P541 CALIBRATED TWO ORIGINAL ARRAY SOURCE/OWNED/C17/NATIVE PASS; no Ring/product claim
+8/8 Test #8: p541_array_native.integration ....   Passed    3.13 sec
+
+The following tests passed:
+	p534_source_owned.unit
+	p534_oom.unit
+	p534_issuer_fault.unit
+	p534_array_native.integration
+	p541_source_owned.unit
+	p541_oom.unit
+	p541_issuer_fault.unit
+	p541_array_native.integration
+
+100% tests passed, 0 tests failed out of 8
+
+Total Test time (real) =   4.92 sec

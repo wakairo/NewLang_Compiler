@@ -3815,13 +3815,9 @@ static NLCheckedNodeId array4_constructor(Check *check, const NLSyntaxView *s)
     const NLTypeId type = check_type(check, s->data.array4.type);
     if (!type)
         return 0;
-    for (size_t i = 0; i < c->value_count; ++i)
-        if (c->values[i].type == type) {
-            fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, s->span,
-                 "ARRAY4-ONE-ROOT-PROFILE",
-                 "one original Array constructor per checked body");
-            return 0;
-        }
+    /* Each direct lexical receiver gets a fresh original placement from the
+     * existing bind/fixed-child kernel. Its own source event is captured only
+     * after receiving; the collection validator closes every original. */
     const NLTypeId option = c->types[type - 1].view.target;
     NLSemanticValueView package = {.type = type, .field_count = 4};
     NLCheckedNodeId id =

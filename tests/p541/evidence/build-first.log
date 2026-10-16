@@ -1,0 +1,52 @@
+[  5%] Building C object CMakeFiles/newlang_source.dir/src/source.c.o
+[  5%] Building C object CMakeFiles/newlang_diagnostic.dir/src/diagnostic.c.o
+[ 11%] Linking C static library libnewlang_diagnostic.a
+[ 11%] Linking C static library libnewlang_source.a
+[ 11%] Built target newlang_source
+[ 11%] Built target newlang_diagnostic
+[ 17%] Building C object CMakeFiles/newlang_syntax.dir/src/syntax.c.o
+[ 17%] Building C object CMakeFiles/newlang_lexer.dir/src/lexer.c.o
+[ 17%] Linking C static library libnewlang_syntax.a
+[ 23%] Linking C static library libnewlang_lexer.a
+[ 23%] Built target newlang_syntax
+[ 23%] Built target newlang_lexer
+[ 23%] Building C object CMakeFiles/newlang_checked.dir/src/checked.c.o
+[ 23%] Building C object CMakeFiles/newlang_parser.dir/src/parser.c.o
+[ 23%] Building C object CMakeFiles/newlang_parser_p534.dir/src/parser.c.o
+[ 29%] Linking C static library libnewlang_checked.a
+[ 29%] Built target newlang_checked
+[ 35%] Linking C static library libnewlang_parser.a
+[ 41%] Linking C static library libnewlang_parser_p534.a
+[ 41%] Built target newlang_parser_p534
+[ 41%] Built target newlang_parser
+[ 47%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic.c.o
+[ 47%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o
+[ 47%] Building C object CMakeFiles/newlang_semantic.dir/src/array4.c.o
+[ 52%] Building C object CMakeFiles/newlang_semantic.dir/src/recursive_type.c.o
+/workspace/p541/src/array4.c: In function ‘c_text’:
+/workspace/p541/src/array4.c:586:34: error: ‘SIZE_MAX’ undeclared (first use in this function)
+  586 |         if (n < 0 || (size_t)n > SIZE_MAX - used ||                              \
+      |                                  ^~~~~~~~
+/workspace/p541/src/array4.c:591:5: note: in expansion of macro ‘WRITE’
+  591 |     WRITE("/* SPECULATIVE PR533 original Array4, checked source only. */\n"
+      |     ^~~~~
+/workspace/p541/src/array4.c:104:1: note: ‘SIZE_MAX’ is defined in header ‘<stdint.h>’; this is probably fixable by adding ‘#include <stdint.h>’
+  103 | #include "newlang/lexer.h"
+  +++ |+#include <stdint.h>
+  104 | #include <stdio.h>
+/workspace/p541/src/array4.c:586:34: note: each undeclared identifier is reported only once for each function it appears in
+  586 |         if (n < 0 || (size_t)n > SIZE_MAX - used ||                              \
+      |                                  ^~~~~~~~
+/workspace/p541/src/array4.c:591:5: note: in expansion of macro ‘WRITE’
+  591 |     WRITE("/* SPECULATIVE PR533 original Array4, checked source only. */\n"
+      |     ^~~~~
+/workspace/p541/src/array4.c: In function ‘nl_checked_array4_c17’:
+/workspace/p541/src/array4.c:651:64: error: ‘SIZE_MAX’ undeclared (first use in this function)
+  651 |     if (!c_text(f, count, call->function, NULL, 0, &n) || n == SIZE_MAX)
+      |                                                                ^~~~~~~~
+/workspace/p541/src/array4.c:651:64: note: ‘SIZE_MAX’ is defined in header ‘<stdint.h>’; this is probably fixable by adding ‘#include <stdint.h>’
+gmake[3]: *** [CMakeFiles/newlang_semantic.dir/build.make:79: CMakeFiles/newlang_semantic.dir/src/array4.c.o] Error 1
+gmake[3]: *** Waiting for unfinished jobs....
+gmake[2]: *** [CMakeFiles/Makefile2:598: CMakeFiles/newlang_semantic.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:1653: CMakeFiles/newlangc_p534.dir/rule] Error 2
+gmake: *** [Makefile:628: newlangc_p534] Error 2

@@ -1,0 +1,320 @@
+{
+  "utc": "2026-10-16T16:07:58.752392+00:00",
+  "compiler_base": "7f639a3a89d55f44848e361e1458529fe5395345",
+  "source_freeze_commit": "4cffbff7e8682153cac9e2b97e472953d120233f",
+  "current_normative_main": "ebb8c4d034a6df2ec6fbfae7e47ebb37650accae",
+  "canonical": "Draft17.32 (historical branch pointer preserved)",
+  "local_compiler_input_sha256": {
+    "src/array4.c": "a989028c381e72268497a6024ac30fb375750735fd14a275d3e9e44eeb084185",
+    "src/checked.c": "30024764897faa5d4294301daa116222041ec5465cdfca3d3c85e4b7af1dff7f",
+    "src/semantic_check.c": "7bdca9c11435760de85c94e077e7c554803da445cc93e4effb100b9d19db8921",
+    "src/semantic_internal.h": "614f7fe4b7a6cf50a6987b3e9a0490e055f30e5cc58b840ad8ee013c4ec27698",
+    "include/newlang/array4.h": "a07db923b0313a3f7d2ed8e4fd3a67969de79a780ec4f99ed384a5407783112e",
+    "CMakeLists.txt": "29ea2b4094d76dd6f60525db3e8cfc519335b0a1eb011b9a9e5fc9f2e809c2a3"
+  },
+  "binaries": {
+    "/workspace/p541-build/newlangc_p534": "8546685818a36b831826b819572bae3781105d600e3a0eb75a47677928d99e21",
+    "/workspace/p541-build/newlangc": "9818529864be8883277d469092d86a27e2fafdf7ad878ce3d795859eed8fa6c6",
+    "/workspace/p541-build/p541_public_probe": "85ab933892f5f304f11eb88654b4c5cdbebacb08cd54e023a2cb79f323c058ef"
+  },
+  "cases": {
+    "two_roots": {
+      "check": {
+        "exit": 0,
+        "stderr": "",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 0,
+        "stderr": "",
+        "stdout_bytes": 682,
+        "stdout_sha256": "516de3980e1b667dcc0e22a85de3780df2e3df9daf751e1b9dc5402ca85a750c"
+      },
+      "public_owned": {
+        "record_count": 2,
+        "source_function": 10,
+        "public_validator": true,
+        "legacy_singleton_refused": true,
+        "worlds_distinct": true,
+        "final_roots_ended": true,
+        "view_mutants_rejected": 100,
+        "records": [
+          {
+            "index": 0,
+            "array_type": 11,
+            "element_type": 10,
+            "symbol": 1,
+            "binding": 7,
+            "constructor": 2,
+            "root": 1,
+            "incarnation": 1,
+            "fact": 1,
+            "value": 5,
+            "checkpoint_places": 5,
+            "checkpoint_roots": 1,
+            "elements": [
+              {
+                "index": 0,
+                "place": 2,
+                "incarnation": 2,
+                "fact": 2,
+                "value": 1,
+                "source_node": 3
+              },
+              {
+                "index": 1,
+                "place": 3,
+                "incarnation": 3,
+                "fact": 3,
+                "value": 2,
+                "source_node": 4
+              },
+              {
+                "index": 2,
+                "place": 4,
+                "incarnation": 4,
+                "fact": 4,
+                "value": 3,
+                "source_node": 5
+              },
+              {
+                "index": 3,
+                "place": 5,
+                "incarnation": 5,
+                "fact": 5,
+                "value": 4,
+                "source_node": 6
+              }
+            ]
+          },
+          {
+            "index": 1,
+            "array_type": 11,
+            "element_type": 10,
+            "symbol": 2,
+            "binding": 14,
+            "constructor": 9,
+            "root": 6,
+            "incarnation": 6,
+            "fact": 6,
+            "value": 10,
+            "checkpoint_places": 10,
+            "checkpoint_roots": 2,
+            "elements": [
+              {
+                "index": 0,
+                "place": 7,
+                "incarnation": 7,
+                "fact": 7,
+                "value": 6,
+                "source_node": 10
+              },
+              {
+                "index": 1,
+                "place": 8,
+                "incarnation": 8,
+                "fact": 8,
+                "value": 7,
+                "source_node": 11
+              },
+              {
+                "index": 2,
+                "place": 9,
+                "incarnation": 9,
+                "fact": 9,
+                "value": 8,
+                "source_node": 12
+              },
+              {
+                "index": 3,
+                "place": 10,
+                "incarnation": 10,
+                "fact": 10,
+                "value": 9,
+                "source_node": 13
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "r540_two_roots": {
+      "check": {
+        "exit": 0,
+        "stderr": "",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 0,
+        "stderr": "",
+        "stdout_bytes": 682,
+        "stdout_sha256": "516de3980e1b667dcc0e22a85de3780df2e3df9daf751e1b9dc5402ca85a750c"
+      },
+      "public_owned": {
+        "record_count": 2,
+        "source_function": 10,
+        "public_validator": true,
+        "legacy_singleton_refused": true,
+        "worlds_distinct": true,
+        "final_roots_ended": true,
+        "view_mutants_rejected": 100,
+        "records": [
+          {
+            "index": 0,
+            "array_type": 11,
+            "element_type": 10,
+            "symbol": 1,
+            "binding": 7,
+            "constructor": 2,
+            "root": 1,
+            "incarnation": 1,
+            "fact": 1,
+            "value": 5,
+            "checkpoint_places": 5,
+            "checkpoint_roots": 1,
+            "elements": [
+              {
+                "index": 0,
+                "place": 2,
+                "incarnation": 2,
+                "fact": 2,
+                "value": 1,
+                "source_node": 3
+              },
+              {
+                "index": 1,
+                "place": 3,
+                "incarnation": 3,
+                "fact": 3,
+                "value": 2,
+                "source_node": 4
+              },
+              {
+                "index": 2,
+                "place": 4,
+                "incarnation": 4,
+                "fact": 4,
+                "value": 3,
+                "source_node": 5
+              },
+              {
+                "index": 3,
+                "place": 5,
+                "incarnation": 5,
+                "fact": 5,
+                "value": 4,
+                "source_node": 6
+              }
+            ]
+          },
+          {
+            "index": 1,
+            "array_type": 11,
+            "element_type": 10,
+            "symbol": 2,
+            "binding": 14,
+            "constructor": 9,
+            "root": 6,
+            "incarnation": 6,
+            "fact": 6,
+            "value": 10,
+            "checkpoint_places": 10,
+            "checkpoint_roots": 2,
+            "elements": [
+              {
+                "index": 0,
+                "place": 7,
+                "incarnation": 7,
+                "fact": 7,
+                "value": 6,
+                "source_node": 10
+              },
+              {
+                "index": 1,
+                "place": 8,
+                "incarnation": 8,
+                "fact": 8,
+                "value": 7,
+                "source_node": 11
+              },
+              {
+                "index": 2,
+                "place": 9,
+                "incarnation": 9,
+                "fact": 9,
+                "value": 8,
+                "source_node": 12
+              },
+              {
+                "index": 3,
+                "place": 10,
+                "incarnation": 10,
+                "fact": 10,
+                "value": 9,
+                "source_node": 13
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "second_arity3": {
+      "check": {
+        "exit": 3,
+        "stderr": "tests/p541/second_arity3.nl:8:20-12:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "stderr": "tests/p541/second_arity3.nl:8:20-12:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "second_arity5": {
+      "check": {
+        "exit": 3,
+        "stderr": "tests/p541/second_arity5.nl:8:20-14:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "stderr": "tests/p541/second_arity5.nl:8:20-14:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "second_wrong_type": {
+      "check": {
+        "exit": 3,
+        "stderr": "tests/p541/second_wrong_type.nl:9:9-9:14: error(semantic)[ARRAY4-ELEMENT-TYPE]: initializer must have exact Option<u8> type\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "stderr": "tests/p541/second_wrong_type.nl:9:9-9:14: error(semantic)[ARRAY4-ELEMENT-TYPE]: initializer must have exact Option<u8> type\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "second_nonleaf": {
+      "check": {
+        "exit": 3,
+        "stderr": "tests/p541/second_nonleaf.nl:9:9-9:29: error(semantic)[ARRAY4-ELEMENT-CONSTRUCTOR]: each initializer must construct typed None\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "stderr": "tests/p541/second_nonleaf.nl:9:9-9:29: error(semantic)[ARRAY4-ELEMENT-CONSTRUCTOR]: each initializer must construct typed None\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  }
+}

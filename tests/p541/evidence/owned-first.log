@@ -1,0 +1,64 @@
+Internal ctest changing into directory: /workspace/p541-build
+UpdateCTestConfiguration  from :/workspace/p541-build/DartConfiguration.tcl
+Parse Config file:/workspace/p541-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p541-build/DartConfiguration.tcl
+Parse Config file:/workspace/p541-build/DartConfiguration.tcl
+Test project /workspace/p541-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 5
+    Start 5: p541_source_owned.unit
+
+5: Test command: /workspace/p541-build/p541_public_probe "/workspace/p541/tests/p541/two_roots.nl"
+5: Working Directory: /workspace/p541-build
+5: Environment variables:
+5:  PYTHONDONTWRITEBYTECODE=1
+5:  PYTHONHASHSEED=0
+5:  LC_ALL=C
+5:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+5:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+5: Test timeout computed to be: 90
+5: {"record_count":2,"source_function":10,"public_validator":true,"legacy_singleton_refused":true,"worlds_distinct":true,"final_roots_ended":true,"view_mutants_rejected":100,"records":[{"index":0,"array_type":11,"element_type":10,"symbol":1,"binding":7,"constructor":2,"root":1,"incarnation":1,"fact":1,"value":5,"checkpoint_places":5,"checkpoint_roots":1,"elements":[{"index":0,"place":2,"incarnation":2,"fact":2,"value":1,"source_node":3},{"index":1,"place":3,"incarnation":3,"fact":3,"value":2,"source_node":4},{"index":2,"place":4,"incarnation":4,"fact":4,"value":3,"source_node":5},{"index":3,"place":5,"incarnation":5,"fact":5,"value":4,"source_node":6}]},{"index":1,"array_type":11,"element_type":10,"symbol":2,"binding":14,"constructor":9,"root":6,"incarnation":6,"fact":6,"value":10,"checkpoint_places":10,"checkpoint_roots":2,"elements":[{"index":0,"place":7,"incarnation":7,"fact":7,"value":6,"source_node":10},{"index":1,"place":8,"incarnation":8,"fact":8,"value":7,"source_node":11},{"index":2,"place":9,"incarnation":9,"fact":9,"value":8,"source_node":12},{"index":3,"place":10,"incarnation":10,"fact":10,"value":9,"source_node":13}]}]}
+1/3 Test #5: p541_source_owned.unit ...........   Passed    0.00 sec
+test 6
+    Start 6: p541_oom.unit
+
+6: Test command: /workspace/p541-build/p534_semantic_gate "oom" "/workspace/p541/tests/p541/two_roots.nl"
+6: Working Directory: /workspace/p541-build
+6: Environment variables:
+6:  PYTHONDONTWRITEBYTECODE=1
+6:  PYTHONHASHSEED=0
+6:  LC_ALL=C
+6:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+6:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+6: Test timeout computed to be: 90
+6: P514_OOM registration=170 rollback=PASS
+6: P514_OOM main=104 rollback=PASS output=NULL
+2/3 Test #6: p541_oom.unit ....................   Passed    0.00 sec
+test 7
+    Start 7: p541_issuer_fault.unit
+
+7: Test command: /workspace/p541-build/p541_fault_test "/workspace/p541/tests/p541/two_roots.nl"
+7: Working Directory: /workspace/p541-build
+7: Environment variables:
+7:  PYTHONDONTWRITEBYTECODE=1
+7:  PYTHONHASHSEED=0
+7:  LC_ALL=C
+7:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+7:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+7: Test timeout computed to be: 90
+7: P541_FAULT checkpoint_mutants=38 graph_mutants=11 coupled_raw_kernel_valid_but_not_issued=2 validator_allocations=0 emit_OOM=1 rollback=PASS restored=PASS
+3/3 Test #7: p541_issuer_fault.unit ...........   Passed    0.01 sec
+
+The following tests passed:
+	p541_source_owned.unit
+	p541_oom.unit
+	p541_issuer_fault.unit
+
+100% tests passed, 0 tests failed out of 3
+
+Total Test time (real) =   0.03 sec
