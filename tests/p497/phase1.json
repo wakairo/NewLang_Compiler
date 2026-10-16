@@ -1,0 +1,114 @@
+[
+  {
+    "source": "false_authority.nl",
+    "mode": [
+      "--check"
+    ],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p497/false_authority.nl:1:58-1:59: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "false_authority.nl",
+    "mode": [],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p497/false_authority.nl:1:58-1:59: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "guard_false.nl",
+    "mode": [
+      "--check"
+    ],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p497/guard_false.nl:5:16-5:17: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "guard_false.nl",
+    "mode": [],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p497/guard_false.nl:5:16-5:17: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "guard_true.nl",
+    "mode": [
+      "--check"
+    ],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p497/guard_true.nl:5:16-5:17: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "guard_true.nl",
+    "mode": [],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p497/guard_true.nl:5:16-5:17: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "literal.nl",
+    "mode": [
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "literal.nl",
+    "mode": [],
+    "exit": 0,
+    "stdout": "/* North Star V0/V1/AVS Checked-C reference output. */\n#include <stdint.h>\n\n#include <stddef.h>\n_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), \"NewLang usize target mismatch\");\n\nstatic void nl_fn_10(void);\n\nstatic void nl_fn_10(void)\n{\n    const size_t nl_local_1 = ((size_t)UINTMAX_C(3));\n    (void)nl_local_1;\n    (void)nl_local_1;\n    (void)0;\n}\n\nint main(void)\n{\n    nl_fn_10();\n    return 0;\n}\n",
+    "stderr": ""
+  },
+  {
+    "source": "literal9.nl",
+    "mode": [
+      "--check"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "source": "literal9.nl",
+    "mode": [],
+    "exit": 0,
+    "stdout": "/* North Star V0/V1/AVS Checked-C reference output. */\n#include <stdint.h>\n\n#include <stddef.h>\n_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), \"NewLang usize target mismatch\");\n\nstatic void nl_fn_10(void);\n\nstatic void nl_fn_10(void)\n{\n    const size_t nl_local_1 = ((size_t)UINTMAX_C(9));\n    (void)nl_local_1;\n    (void)nl_local_1;\n    (void)0;\n}\n\nint main(void)\n{\n    nl_fn_10();\n    return 0;\n}\n",
+    "stderr": ""
+  },
+  {
+    "source": "literal_overflow.nl",
+    "mode": [
+      "--check"
+    ],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p497/literal_overflow.nl:1:30-1:57: error(semantic)[USIZE-LITERAL-RANGE]: usize literal is outside native target range\n"
+  },
+  {
+    "source": "literal_overflow.nl",
+    "mode": [],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p497/literal_overflow.nl:1:30-1:57: error(semantic)[USIZE-LITERAL-RANGE]: usize literal is outside native target range\n"
+  },
+  {
+    "source": "wrong_type.nl",
+    "mode": [
+      "--check"
+    ],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p497/wrong_type.nl:5:16-5:17: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "wrong_type.nl",
+    "mode": [],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "tests/p497/wrong_type.nl:5:16-5:17: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  }
+]

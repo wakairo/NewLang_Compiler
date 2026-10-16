@@ -7,6 +7,7 @@
 #include "semantic_internal.h"
 
 #include <stdbool.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -42,6 +43,7 @@ typedef struct {
     size_t count;
     size_t entry_function;
     NLTypeId unit, u8, aggregate;
+    bool uses_usize;
     const NLCheckedFragment *formal_body; /* current validation only */
     NLSymbolId formal;
     size_t scalar_depth; /* at most relay + leaf; not a general call graph */
@@ -115,6 +117,54 @@ static bool v1_scalar(const NLCheckedFragment *fragment, NLCheckedNodeId id,
         if (binding != NULL && binding->kind == NL_CHECKED_RECEIVER &&
             binding->type == program->u8 && binding->symbol == v->symbol)
             return true;
+    }
+    return false;
+}
+
+/* Native target §6 quantity staging only. A source-connected Copy binding is
+ * required; no usize call ABI, ref, arithmetic or inferred owner authority. */
+static bool quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
+                            V0Program *p)
+{
+    const NLTypeId type =
+        nl_semantic_core_type(nl_checked_context(f), NL_TYPE_USIZE);
+    bool first = true;
+    size_t expected = 0;
+    /* Follow decreasing source IDs iteratively: long Copy chains cannot
+     * consume the C stack or introduce a source-less scalar seed. */
+    while (id != 0) {
+        const NLCheckedNodeView *v = nl_checked_node_view(f, id);
+        NLSemanticValueView value;
+        if (v == NULL || v->type != type || v->terminates ||
+            v->result_count != 1 || v->results[0].type != type ||
+            !nl_semantic_value_view(nl_checked_context(f), v->results[0].value,
+                                    &value) ||
+            value.type != type || !value.scalar_known ||
+            value.dependencies != NL_DEPENDENCY_FREE ||
+            value.value_dependency_count != 0 ||
+            (!first && value.scalar_value != expected))
+            return false;
+        expected = value.scalar_value;
+        first = false;
+        if (v->kind == NL_CHECKED_USIZE_LITERAL) {
+            p->uses_usize = true;
+            return v->has_scalar_result && v->scalar_result.known &&
+                   v->scalar_result.type == type &&
+                   v->scalar_result.value == expected;
+        }
+        if (v->kind != NL_CHECKED_IDENTIFIER || v->symbol == 0 ||
+            v->value_use != NL_VALUE_COPIED)
+            return false;
+        NLCheckedNodeId origin = 0;
+        for (size_t i = 1; i < id; ++i) {
+            const NLCheckedNodeView *b = nl_checked_node_view(f, i);
+            if (b->kind == NL_CHECKED_BINDING && b->symbol == v->symbol &&
+                b->initializer < i && b->initializer != 0) {
+                origin = b->initializer;
+                break;
+            }
+        }
+        id = origin;
     }
     return false;
 }
@@ -205,6 +255,9 @@ static bool v1_emit_scalar(FILE *stream, const NLCheckedNodeView *value)
 {
     if (value->kind == NL_CHECKED_U8_LITERAL)
         return fprintf(stream, "%zu", value->scalar_result.value) >= 0;
+    if (value->kind == NL_CHECKED_USIZE_LITERAL)
+        return fprintf(stream, "((size_t)UINTMAX_C(%zu))",
+                       value->scalar_result.value) >= 0;
     if (value->kind == NL_CHECKED_IDENTIFIER)
         return fprintf(stream, "nl_local_%zu", value->symbol) >= 0;
     if (value->kind == NL_CHECKED_FIELD_READ)
@@ -530,8 +583,10 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
     switch (view->kind) {
     case NL_CHECKED_FIELD_READ:
     case NL_CHECKED_U8_LITERAL:
+    case NL_CHECKED_USIZE_LITERAL:
     case NL_CHECKED_IDENTIFIER:
         return v1_scalar(fragment, id, program) ||
+               quantity_scalar(fragment, id, program) ||
                gate_ptr(fragment, id, program);
     case NL_CHECKED_PTR_FROM_REF:
         return gate_ptr(fragment, id, program);
@@ -550,7 +605,9 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                view->symbol != 0 && receiver != NULL && initializer != NULL &&
                receiver->kind == NL_CHECKED_RECEIVER &&
                receiver->symbol == view->symbol &&
-               ((receiver->type == program->u8 &&
+               receiver->type == initializer->type &&
+               (quantity_scalar(fragment, view->initializer, program) ||
+                (receiver->type == program->u8 &&
                  (v1_scalar(fragment, view->initializer, program) ||
                   (initializer->kind == NL_CHECKED_REGISTERED_CALL &&
                    initializer->type == program->u8 &&
@@ -764,6 +821,7 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     switch (view->kind) {
     case NL_CHECKED_FIELD_READ:
     case NL_CHECKED_U8_LITERAL:
+    case NL_CHECKED_USIZE_LITERAL:
     case NL_CHECKED_IDENTIFIER:
     case NL_CHECKED_PTR_FROM_REF:
         return v0_indent(stream, depth) && fputs("(void)", stream) >= 0 &&
@@ -818,6 +876,13 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                         "%snl_type_%zu nl_local_%zu = ", scalar_qualifier,
                         initializer->type, view->symbol) < 0 ||
                 !avs_emit_initializer(stream, fragment, initializer))
+                return false;
+        } else if (initializer->type ==
+                   nl_semantic_core_type(nl_checked_context(fragment),
+                                         NL_TYPE_USIZE)) {
+            if (fprintf(stream, "const size_t nl_local_%zu = ", view->symbol) <
+                    0 ||
+                !v1_emit_scalar(stream, initializer))
                 return false;
         } else if ((initializer->kind == NL_CHECKED_LOAN_HEADER &&
                     initializer->loan.access == NL_ACCESS_READ) ||
@@ -920,6 +985,16 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
             "/* North Star V0/V1/AVS Checked-C reference output. */\n#include "
             "<stdint.h>\n\n",
             stream) < 0)
+        return false;
+
+    /* The frontend currently has a native-size_t quantity target, not a
+     * cross-target integer model. Refuse mismatched C targets explicitly. */
+    if (program->uses_usize &&
+        fprintf(stream,
+                "#include <stddef.h>\n"
+                "_Static_assert(SIZE_MAX == UINTMAX_C(%zu), "
+                "\"NewLang usize target mismatch\");\n\n",
+                SIZE_MAX) < 0)
         return false;
 
     if (program->aggregate != 0 &&

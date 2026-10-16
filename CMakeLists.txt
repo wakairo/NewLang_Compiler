@@ -298,6 +298,19 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_avs_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
     add_executable(u8_literal_test tests/unit/u8_literal_test.c)
+    add_executable(p497_literal_test tests/p497/literal_test.c)
+    target_link_libraries(p497_literal_test PRIVATE newlang_semantic newlang_parser)
+    target_link_options(p497_literal_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    foreach(group parser values body failures)
+        add_test(NAME p497_usize_${group}.unit COMMAND p497_literal_test ${group})
+    endforeach()
+    add_executable(p497_public_probe tests/p497/public_probe.c)
+    target_link_libraries(p497_public_probe PRIVATE newlang_semantic)
+    add_test(NAME p497_usize_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p497/frontier_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p497_public_probe>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p497")
+
     add_executable(fixed_field_test tests/unit/fixed_field_test.c)
     add_executable(recursive_type_test tests/unit/recursive_type_test.c)
     add_test(NAME allocated_node_source.integration

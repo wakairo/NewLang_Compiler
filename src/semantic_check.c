@@ -2344,15 +2344,19 @@ static NLCheckedNodeId field_read(Check *check, const NLSyntaxView *s)
 }
 
 /* The source payload is decimal mathematical-integer evidence, not a C
- * conversion. Keep the accumulator bounded by 255: arbitrarily long payloads
+ * conversion. Bound by 255 or the native target SIZE_MAX: long payloads
  * cannot overflow the host, truncate, or wrap. No signed/general numeric IR. */
-static NLCheckedNodeId u8_literal(Check *check, const NLSyntaxView *syntax)
+static NLCheckedNodeId typed_literal(Check *check, const NLSyntaxView *syntax)
 {
+    const bool quantity = syntax->kind == NL_SYNTAX_USIZE_LITERAL;
+    const size_t maximum = quantity ? SIZE_MAX : 255;
+    const NLSourceSpan payload =
+        quantity ? syntax->data.usize_digits : syntax->data.u8_digits;
     NLSourceView digits;
-    if (!nl_source_view(check->source, syntax->data.u8_digits, &digits) ||
+    if (!nl_source_view(check->source, payload, &digits) ||
         digits.length == 0) {
         fail(check, NL_CHECK_INTERNAL_ERROR, syntax->span, "P3-INTERNAL",
-             "invalid u8 literal payload span");
+             "invalid typed literal payload span");
         return 0;
     }
     size_t value = 0;
@@ -2360,18 +2364,21 @@ static NLCheckedNodeId u8_literal(Check *check, const NLSyntaxView *syntax)
         const unsigned char digit = digits.bytes[i];
         if (digit < '0' || digit > '9') {
             fail(check, NL_CHECK_INTERNAL_ERROR, syntax->span, "P3-INTERNAL",
-                 "expected decimal u8 payload");
+                 "expected decimal typed payload");
             return 0;
         }
         const size_t n = digit - '0';
-        if (value > (255 - n) / 10) {
+        if (value > (maximum - n) / 10) {
             fail(check, NL_CHECK_SEMANTIC_ERROR, syntax->span,
-                 "V1-U8-LITERAL-RANGE", "u8 literal is outside 0..255");
+                 quantity ? "USIZE-LITERAL-RANGE" : "V1-U8-LITERAL-RANGE",
+                 quantity ? "usize literal is outside native target range"
+                          : "u8 literal is outside 0..255");
             return 0;
         }
         value = value * 10 + n;
     }
-    const NLTypeId type = nl_semantic_core_type(check->context, NL_TYPE_U8);
+    const NLTypeId type = nl_semantic_core_type(
+        check->context, quantity ? NL_TYPE_USIZE : NL_TYPE_U8);
     const NLValueId package = new_value(
         check,
         (NLSemanticValueView){
@@ -2380,7 +2387,8 @@ static NLCheckedNodeId u8_literal(Check *check, const NLSyntaxView *syntax)
     if (package == 0)
         return 0;
     return add(check,
-               (NLCheckedNodeView){.kind = NL_CHECKED_U8_LITERAL,
+               (NLCheckedNodeView){.kind = quantity ? NL_CHECKED_USIZE_LITERAL
+                                                    : NL_CHECKED_U8_LITERAL,
                                    .span = syntax->span,
                                    .type = type,
                                    .result_count = 1,
@@ -2406,6 +2414,7 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         node->kind != NL_SYNTAX_FIELD_DESIGNATOR &&
         node->kind != NL_SYNTAX_MATCH && node->kind != NL_SYNTAX_IF &&
         node->kind != NL_SYNTAX_LOOP && node->kind != NL_SYNTAX_U8_LITERAL &&
+        node->kind != NL_SYNTAX_USIZE_LITERAL &&
         node->kind != NL_SYNTAX_AGGREGATE &&
         node->kind != NL_SYNTAX_LOCAL_READ_LOAN &&
         node->kind != NL_SYNTAX_LOCAL_WRITE_LOAN &&
@@ -2439,8 +2448,9 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
                                                       .span = node->span,
                                                       .type = 1})
                      : identifier(check, node);
-    } else if (node->kind == NL_SYNTAX_U8_LITERAL) {
-        result = u8_literal(check, node);
+    } else if (node->kind == NL_SYNTAX_U8_LITERAL ||
+               node->kind == NL_SYNTAX_USIZE_LITERAL) {
+        result = typed_literal(check, node);
     } else if (node->kind == NL_SYNTAX_ALLOCATED_INTO_SLOT ||
                node->kind == NL_SYNTAX_ALLOCATED_ERASE_SLOT) {
         result = allocated_raw(check, node,
@@ -8055,6 +8065,7 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
          root->kind != NL_SYNTAX_LOOP && root->kind != NL_SYNTAX_BLOCK &&
          root->kind != NL_SYNTAX_STATEMENT &&
          root->kind != NL_SYNTAX_U8_LITERAL &&
+         root->kind != NL_SYNTAX_USIZE_LITERAL &&
          root->kind != NL_SYNTAX_LOCAL_READ_LOAN &&
          root->kind != NL_SYNTAX_LOCAL_WRITE_LOAN &&
          root->kind != NL_SYNTAX_ALLOCATED_TRY &&

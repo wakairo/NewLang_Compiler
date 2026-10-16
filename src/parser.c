@@ -1117,6 +1117,7 @@ static NLSyntaxNode *source_expression(NLParser *parser)
     }
     const bool exact_option = word(parser, "Option");
     const bool u8_literal = word(parser, "u8");
+    const bool usize_literal = word(parser, "usize");
     const bool read_loan = word(parser, "loan_read");
     const bool ending_loan = word(parser, "loan_exclusive_read");
     const bool allocate = word(parser, "try_allocate_one");
@@ -1277,18 +1278,26 @@ static NLSyntaxNode *source_expression(NLParser *parser)
         /* Recognize only the authorized positive-DIGITS profile. Other
          * operands keep the existing call path; negative spelling is Deferred.
          */
-        if (u8_literal && peek(parser) &&
+        if ((u8_literal || usize_literal) && peek(parser) &&
             parser->token.kind == NL_TOKEN_DIGITS) {
-            result = node(parser, NL_SYNTAX_U8_LITERAL, name);
+            result = node(parser,
+                          u8_literal ? NL_SYNTAX_U8_LITERAL
+                                     : NL_SYNTAX_USIZE_LITERAL,
+                          name);
             if (result == NULL)
                 goto done;
-            result->view.data.u8_digits = parser->token.span;
+            if (u8_literal)
+                result->view.data.u8_digits = parser->token.span;
+            else
+                result->view.data.usize_digits = parser->token.span;
             consume(parser);
             if (!peek(parser))
                 goto done;
             const size_t end = parser->token.span.end_byte;
-            if (!expect_punct(parser, ')', "V1-U8-LITERAL-END",
-                              "expected ) after u8 decimal payload"))
+            if (!expect_punct(parser, ')',
+                              u8_literal ? "V1-U8-LITERAL-END"
+                                         : "USIZE-LITERAL-END",
+                              "expected ) after typed decimal payload"))
                 goto done;
             result->view.span.end_byte = end;
             goto done;
