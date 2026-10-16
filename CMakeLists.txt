@@ -105,6 +105,11 @@ add_library(newlang_checked STATIC src/checked.c)
 target_link_libraries(newlang_checked PUBLIC newlang_syntax)
 add_library(newlang_semantic STATIC src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/node_join.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
 target_link_libraries(newlang_semantic PUBLIC newlang_checked newlang_diagnostic newlang_parser)
+option(NEWLANG_EXPERIMENTAL_PAIR_IF_JOIN
+    "Unselected same-original Pair two-normal-arm structural join (P506)" OFF)
+if(NEWLANG_EXPERIMENTAL_PAIR_IF_JOIN)
+    target_compile_definitions(newlang_semantic PRIVATE NEWLANG_EXPERIMENTAL_PAIR_IF_JOIN=1)
+endif()
 add_library(newlang_checked_c_node STATIC src/checked_c_node.c src/checked_c_five.c)
 target_link_libraries(newlang_checked_c_node PUBLIC newlang_semantic)
 add_executable(newlangc src/main.c)
@@ -139,6 +144,21 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p501/frontier_test.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p501_newlangc>"
         "$<TARGET_FILE:p501_public_probe>" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p501")
+    # Keep all P501 source/oracle bytes and its default precision frontier.
+    # Only this test semantic variant enables the independent Pair candidate.
+    add_library(p506_semantic STATIC ${p501_semantic_sources})
+    target_compile_definitions(p506_semantic PRIVATE NEWLANG_EXPERIMENTAL_PAIR_IF_JOIN=1)
+    target_link_libraries(p506_semantic PUBLIC newlang_checked newlang_diagnostic p501_parser)
+    add_executable(p506_pair_test tests/p506/pair_test.c)
+    target_link_libraries(p506_pair_test PRIVATE p506_semantic)
+    target_link_options(p506_pair_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
+    foreach(group owned rollback oom)
+        add_test(NAME p506_pair_${group}.unit COMMAND p506_pair_test ${group}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p506")
+    endforeach()
+    add_test(NAME p506_frozen.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p506/freeze_test.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p506")
     add_executable(diagnostic_test tests/unit/diagnostic_test.c)
     target_link_libraries(diagnostic_test PRIVATE newlang_diagnostic)
     add_test(NAME diagnostics.unit COMMAND diagnostic_test)

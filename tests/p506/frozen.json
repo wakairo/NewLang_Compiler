@@ -1,0 +1,54 @@
+{
+  "base": "e561e8f189fd67961f5ac90560e20ecc45752abd",
+  "base_tree": "a0f4f4f477414b37d31decb3f6380a990e82ca24",
+  "frozen_at": "2026-10-16T02:05:52.751852+00:00",
+  "sources": {
+    "escaping_ref.nl": "f8792693984cd7b98902b15280e6d27cb73534966ad43b937f4d5d9db0cf54cc",
+    "extra_change.nl": "932a70766dbd54ece770c564ef722a5ee92fc42dbe614baea3e1114a977de7d8",
+    "full_guard_false.nl": "02823c36bc013e7b6cb727a068d23a59da5b9ca2fb37b0b33997fcdad9b67a2d",
+    "full_guard_true.nl": "7b0fbc9d346a247699275f030c2c64d70fb6aee57f0128eb0c5cb98e5a399d3b",
+    "invalid_else.nl": "d2e9bf42f7346a281c94378a57ff111db8154e42c998d8602d666b0c4d0bcc84",
+    "live_root_ref.nl": "e6b5e55630a3e0b1a25f9f2ae35aded378238eb8be51047661a688bf59c540a6",
+    "wrong_field.nl": "1b7c37c0fd7f69ff96390d517ee6db04a860520c480fdb6eaadfcdbb01b83c2e",
+    "wrong_root.nl": "e2fa382448bfdd09e2fcb84268af58c2a1c174250458f92953cc2dd100e470c5"
+  },
+  "oracle": {
+    "full_guard_true.nl": {
+      "check": "candidate 0, baseline P6-JOIN-PRECISION",
+      "left_static": "unknown u8",
+      "physical_expected": 7,
+      "old": 0,
+      "right": 9
+    },
+    "full_guard_false.nl": {
+      "check": "candidate 0, baseline P6-JOIN-PRECISION",
+      "left_static": "unknown u8",
+      "physical_expected": 8,
+      "old": 0,
+      "right": 9
+    }
+  },
+  "negative_oracles": {
+    "wrong_field.nl": "finite precision, not canonical error",
+    "wrong_root.nl": "finite precision, not canonical error",
+    "invalid_else.nl": "semantic rejection regardless known true",
+    "escaping_ref.nl": "scope escape semantic rejection",
+    "live_root_ref.nl": "classify real scoped escape; no fabricated Value(root) dependency",
+    "extra_change.nl": "finite precision"
+  },
+  "view_mutants": [
+    "wrong original root",
+    "wrong field index/child",
+    "stale parent/child ValueFact",
+    "private arm scope/value transplanted",
+    "old Copy0 replaced by new7",
+    "sibling current fact/value",
+    "wrong incarnation",
+    "different arm witness pointer",
+    "missing/duplicate/change node",
+    "new left marked scalar-known",
+    "post empty aggregate",
+    "post member aggregate_owner",
+    "condition or IF node mismatch"
+  ]
+}

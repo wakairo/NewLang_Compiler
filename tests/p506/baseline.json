@@ -1,0 +1,74 @@
+[
+  {
+    "source": "escaping_ref.nl",
+    "compiler": "e561e8f189fd67961f5ac90560e20ecc45752abd",
+    "binary_sha256": "ee1c486f8889c227531c7db546da147258ae7e041b97c0ef2eed56029633fceb",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p506/escaping_ref.nl:7:26-7:50: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n",
+    "owned": "not issued on error"
+  },
+  {
+    "source": "extra_change.nl",
+    "compiler": "e561e8f189fd67961f5ac90560e20ecc45752abd",
+    "binary_sha256": "ee1c486f8889c227531c7db546da147258ae7e041b97c0ef2eed56029633fceb",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p506/extra_change.nl:7:5-8:105: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+    "owned": "not issued on error"
+  },
+  {
+    "source": "full_guard_false.nl",
+    "compiler": "e561e8f189fd67961f5ac90560e20ecc45752abd",
+    "binary_sha256": "ee1c486f8889c227531c7db546da147258ae7e041b97c0ef2eed56029633fceb",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p506/full_guard_false.nl:7:5-8:70: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+    "owned": "not issued on error"
+  },
+  {
+    "source": "full_guard_true.nl",
+    "compiler": "e561e8f189fd67961f5ac90560e20ecc45752abd",
+    "binary_sha256": "ee1c486f8889c227531c7db546da147258ae7e041b97c0ef2eed56029633fceb",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p506/full_guard_true.nl:7:5-8:70: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+    "owned": "not issued on error"
+  },
+  {
+    "source": "invalid_else.nl",
+    "compiler": "e561e8f189fd67961f5ac90560e20ecc45752abd",
+    "binary_sha256": "ee1c486f8889c227531c7db546da147258ae7e041b97c0ef2eed56029633fceb",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p506/invalid_else.nl:8:50-8:55: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ordinary ref<write,T> or its checked reborrow\n",
+    "owned": "not issued on error"
+  },
+  {
+    "source": "live_root_ref.nl",
+    "compiler": "e561e8f189fd67961f5ac90560e20ecc45752abd",
+    "binary_sha256": "ee1c486f8889c227531c7db546da147258ae7e041b97c0ef2eed56029633fceb",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p506/live_root_ref.nl:7:24-7:25: error(unsupported)[LOCAL-LOAN-PROFILE]: requires a supported current lexical root or fixed field\n",
+    "owned": "not issued on error"
+  },
+  {
+    "source": "wrong_field.nl",
+    "compiler": "e561e8f189fd67961f5ac90560e20ecc45752abd",
+    "binary_sha256": "ee1c486f8889c227531c7db546da147258ae7e041b97c0ef2eed56029633fceb",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p506/wrong_field.nl:7:5-8:71: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+    "owned": "not issued on error"
+  },
+  {
+    "source": "wrong_root.nl",
+    "compiler": "e561e8f189fd67961f5ac90560e20ecc45752abd",
+    "binary_sha256": "ee1c486f8889c227531c7db546da147258ae7e041b97c0ef2eed56029633fceb",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p506/wrong_root.nl:8:5-9:70: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+    "owned": "not issued on error"
+  }
+]

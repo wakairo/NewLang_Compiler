@@ -1,0 +1,6 @@
+arm=0 root=4 child=5 root_fact=4->9 child_fact=5->8 old=0 new=7 scope=1 closed=1
+arm=1 root=4 child=5 root_fact=4->9 child_fact=5->8 old=0 new=8 scope=1 closed=1
+CHECK=0 owned=1 bool=1 original_root=4 root_inc=4 left_inc=5 post_root_fact=8 post_left_fact=7 left_unknown=1 right=9 public_join_validator=NOT_IMPLEMENTED C17=NOT_RUN NATIVE=NOT_RUN
+arm=0 root=4 child=5 root_fact=4->9 child_fact=5->8 old=0 new=7 scope=1 closed=1
+arm=1 root=4 child=5 root_fact=4->9 child_fact=5->8 old=0 new=8 scope=1 closed=1
+CHECK=0 owned=1 bool=0 original_root=4 root_inc=4 left_inc=5 post_root_fact=8 post_left_fact=7 left_unknown=1 right=9 public_join_validator=NOT_IMPLEMENTED C17=NOT_RUN NATIVE=NOT_RUN

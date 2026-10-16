@@ -4082,6 +4082,11 @@ static bool widen_place(Check *check, size_t index, NLSourceSpan span)
     return true;
 }
 
+#if defined(NEWLANG_EXPERIMENTAL_PAIR_IF_JOIN)
+static bool pair_memory_join(Check *, const NLCheckedFragment *[2],
+                             NLSourceSpan);
+#endif
+
 static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
 {
     if (check->branch_budget == NULL)
@@ -4258,6 +4263,19 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
                  "outer non-Copy availability differs between normal arms");
             return 0;
         }
+#if defined(NEWLANG_EXPERIMENTAL_PAIR_IF_JOIN)
+    /* A separate finite structural path. Never widen a nonflat package or
+     * weaken arm_frame: both independently checked arms must authenticate. */
+    if (!returning && counts[0] == 0 && counts[1] == 0 && types[0] == 1 &&
+        pair_memory_join(
+            check, (const NLCheckedFragment *[]){evidence[0], evidence[1]},
+            syntax->span)) {
+        view(check, id)->type = 1;
+        return id;
+    }
+    if (check->status != NL_CHECK_OK)
+        return 0;
+#endif
     bool changed[NL_SEMANTIC_MAX_ENTRIES] = {false};
     NLSemanticValueView joined_ref = {.type = types[0]};
     const bool reference = c->types[types[0] - 1].view.kind == NL_TYPE_REF;
@@ -5234,6 +5252,139 @@ static bool node_unit_arm_frame(const NLSemanticContext *before,
     }
     return true;
 }
+
+#if defined(NEWLANG_EXPERIMENTAL_PAIR_IF_JOIN)
+/* Stage 1 candidate only. No public Pair-join certificate is issued here.
+ * Compare both complete persistent frames before constructing one parent
+ * state. Arm-private values/facts/scopes are never copied into the parent. */
+static bool pair_memory_join(Check *check, const NLCheckedFragment *arms[2],
+                             NLSourceSpan span)
+{
+    NLSemanticContext *c = check->context;
+    NLPlaceId root = 0;
+    for (size_t j = 0; j < c->place_count; ++j) {
+        const NLSemanticPlaceView r = c->places[j];
+        if (!r.live || !r.independent_root || !nl_fixed_type(c, r.type) ||
+            nl_recursive_local_type(c, r.type))
+            continue;
+        if (root != 0 || !r.implicit_local || r.placement.region != 0 ||
+            r.fixed_field_count != 2)
+            return false;
+        root = j + 1;
+    }
+    if (root == 0 || check->allocated_slice || check->loop != NULL ||
+        check->in_source_loan)
+        return false;
+    const NLSemanticPlaceView r = c->places[root - 1];
+    const NLPlaceId left = r.fixed_fields[0], right = r.fixed_fields[1];
+    const NLSemanticPlaceView l = c->places[left - 1],
+                              sibling = c->places[right - 1];
+    if (strcmp(c->types[r.type - 1].field_names[0], "left") != 0 ||
+        strcmp(c->types[r.type - 1].field_names[1], "right") != 0 ||
+        l.type != nl_semantic_core_type(c, NL_TYPE_U8) ||
+        sibling.type != l.type || nl_sem_validate(c) != NL_CHECK_OK ||
+        nl_fixed_change_dependencies(c, left, l.current_value) != NL_CHECK_OK)
+        return false;
+    for (size_t a = 0; a < 2; ++a) {
+        const NLCheckedFragment *arm = arms[a];
+        const NLSemanticContext *post = arm->context;
+        const NLCheckedNodeView *result = nl_checked_node_view(arm, arm->root);
+        const NLCheckedNodeView *write = NULL, *loan = NULL;
+        if (result == NULL || result->terminates || result->type != 1 ||
+            nl_control_exits_count(arm->exits) != 0 ||
+            nl_control_exits_count(arm->loop_returns) != 0 ||
+            nl_sem_validate(post) != NL_CHECK_OK)
+            return false;
+        for (size_t n = 0; n < arm->count; ++n) {
+            const NLCheckedNodeView *op = &arm->nodes[n];
+            if (op->kind == NL_CHECKED_IF || op->kind == NL_CHECKED_MATCH ||
+                op->kind == NL_CHECKED_LOOP ||
+                op->kind == NL_CHECKED_REGISTERED_CALL ||
+                op->kind == NL_CHECKED_STORE || op->kind == NL_CHECKED_SWAP)
+                return false;
+            if (op->kind == NL_CHECKED_REPLACE) {
+                if (write != NULL)
+                    return false;
+                write = op;
+            }
+            if (op->kind == NL_CHECKED_LOAN_HEADER) {
+                if (loan != NULL)
+                    return false;
+                loan = op;
+            }
+        }
+        if (write == NULL || loan == NULL || loan->loan.place != left ||
+            loan->loan.incarnation != l.incarnation ||
+            loan->loan.access != NL_ACCESS_WRITE ||
+            !loan->loan.implicit_local || !loan->loan.body_nonescape_proved ||
+            !loan->loan.normal_result_forwarded || loan->loan.scope == 0 ||
+            loan->loan.scope > post->scope_count ||
+            post->scopes[loan->loan.scope - 1].active ||
+            !write->field.present || !write->field.dependency_compatible ||
+            write->field.access != NL_ACCESS_WRITE || write->field.index != 0 ||
+            write->field.parent != root || write->field.child != left ||
+            write->field.nominal != r.type || write->field.type != l.type ||
+            write->field.parent_incarnation != r.incarnation ||
+            write->field.child_incarnation != l.incarnation ||
+            write->field.parent_fact != r.current_fact ||
+            write->field.child_fact != l.current_fact ||
+            write->field.old_value != l.current_value ||
+            write->result_count != 1 ||
+            write->results[0].value != l.current_value ||
+            !same_place_frame(r, post->places[root - 1]) ||
+            !same_place_frame(l, post->places[left - 1]) ||
+            write->field.parent_post_fact !=
+                post->places[root - 1].current_fact ||
+            write->field.child_post_fact !=
+                post->places[left - 1].current_fact ||
+            write->field.new_value != post->places[left - 1].current_value)
+            return false;
+        const NLSemanticValueView incoming =
+            post->values[write->field.new_value - 1];
+        if (incoming.type != l.type ||
+            incoming.dependencies != NL_DEPENDENCY_FREE ||
+            incoming.value_dependency_count != 0)
+            return false;
+        for (size_t j = c->scope_count; j < post->scope_count; ++j)
+            if (post->scopes[j].active)
+                return false;
+        for (size_t j = c->place_count; j < post->place_count; ++j)
+            if (post->places[j].live)
+                return false;
+        /* A temporary comparison only: restore exactly the authenticated
+         * parent/left transition's carrier bookkeeping, then use the full
+         * persistent frame comparator. Never publish this normalized clone. */
+        NLSemanticContext *comparison = NULL;
+        if (!host(check, nl_sem_clone(post, &comparison), span))
+            return false;
+        comparison->places[root - 1] = r;
+        comparison->places[left - 1] = l;
+        const NLValueId old[] = {r.current_value, l.current_value,
+                                 sibling.current_value};
+        for (size_t j = 0; j < 3; ++j) {
+            const NLSemanticValueView original = c->values[old[j] - 1];
+            NLSemanticValueView *v = &comparison->values[old[j] - 1];
+            v->carrier = original.carrier;
+            v->owner_place = original.owner_place;
+            v->aggregate_owner = original.aggregate_owner;
+        }
+        for (size_t j = 0; j < c->binding_count; ++j)
+            if (c->bindings[j].view.place == root)
+                comparison->bindings[j].view.value = c->bindings[j].view.value;
+        const bool same = node_unit_arm_frame(c, comparison, 0, result);
+        nl_semantic_destroy(comparison);
+        if (!same)
+            return false;
+    }
+    const NLValueId unknown =
+        new_value(check, (NLSemanticValueView){.type = l.type}, span);
+    if (unknown == 0 ||
+        !host(check, nl_fixed_change(c, left, unknown, true), span))
+        return false;
+    refresh_bindings(check, root);
+    return host(check, nl_sem_validate(c), span);
+}
+#endif
 
 /* One original lexical Node link may differ across two normal unit arms.
  * Authenticate the actual replace, then compare the rest of the complete

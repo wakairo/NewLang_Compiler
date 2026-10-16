@@ -1,0 +1,122 @@
+[
+  {
+    "source": "escaping_ref.nl",
+    "configuration": {
+      "USIZE_EQUALITY": true,
+      "PAIR_IF_JOIN": true,
+      "FRONTEND_ONLY": true,
+      "BUILD_TESTING": false
+    },
+    "binary_sha256": "dae73a7c994b7b72077bca47e376b31b15b23ea8d902eef5da099f8040826aba",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p506/escaping_ref.nl:7:26-7:50: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n",
+    "C17": "NOT RUN",
+    "native": "NOT RUN"
+  },
+  {
+    "source": "extra_change.nl",
+    "configuration": {
+      "USIZE_EQUALITY": true,
+      "PAIR_IF_JOIN": true,
+      "FRONTEND_ONLY": true,
+      "BUILD_TESTING": false
+    },
+    "binary_sha256": "dae73a7c994b7b72077bca47e376b31b15b23ea8d902eef5da099f8040826aba",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p506/extra_change.nl:7:5-8:105: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+    "C17": "NOT RUN",
+    "native": "NOT RUN"
+  },
+  {
+    "source": "full_guard_false.nl",
+    "configuration": {
+      "USIZE_EQUALITY": true,
+      "PAIR_IF_JOIN": true,
+      "FRONTEND_ONLY": true,
+      "BUILD_TESTING": false
+    },
+    "binary_sha256": "dae73a7c994b7b72077bca47e376b31b15b23ea8d902eef5da099f8040826aba",
+    "exit": 0,
+    "stdout": "",
+    "diagnostic": "",
+    "C17": "NOT RUN",
+    "native": "NOT RUN"
+  },
+  {
+    "source": "full_guard_true.nl",
+    "configuration": {
+      "USIZE_EQUALITY": true,
+      "PAIR_IF_JOIN": true,
+      "FRONTEND_ONLY": true,
+      "BUILD_TESTING": false
+    },
+    "binary_sha256": "dae73a7c994b7b72077bca47e376b31b15b23ea8d902eef5da099f8040826aba",
+    "exit": 0,
+    "stdout": "",
+    "diagnostic": "",
+    "C17": "NOT RUN",
+    "native": "NOT RUN"
+  },
+  {
+    "source": "invalid_else.nl",
+    "configuration": {
+      "USIZE_EQUALITY": true,
+      "PAIR_IF_JOIN": true,
+      "FRONTEND_ONLY": true,
+      "BUILD_TESTING": false
+    },
+    "binary_sha256": "dae73a7c994b7b72077bca47e376b31b15b23ea8d902eef5da099f8040826aba",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p506/invalid_else.nl:8:50-8:55: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ordinary ref<write,T> or its checked reborrow\n",
+    "C17": "NOT RUN",
+    "native": "NOT RUN"
+  },
+  {
+    "source": "live_root_ref.nl",
+    "configuration": {
+      "USIZE_EQUALITY": true,
+      "PAIR_IF_JOIN": true,
+      "FRONTEND_ONLY": true,
+      "BUILD_TESTING": false
+    },
+    "binary_sha256": "dae73a7c994b7b72077bca47e376b31b15b23ea8d902eef5da099f8040826aba",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p506/live_root_ref.nl:7:24-7:25: error(unsupported)[LOCAL-LOAN-PROFILE]: requires a supported current lexical root or fixed field\n",
+    "C17": "NOT RUN",
+    "native": "NOT RUN"
+  },
+  {
+    "source": "wrong_field.nl",
+    "configuration": {
+      "USIZE_EQUALITY": true,
+      "PAIR_IF_JOIN": true,
+      "FRONTEND_ONLY": true,
+      "BUILD_TESTING": false
+    },
+    "binary_sha256": "dae73a7c994b7b72077bca47e376b31b15b23ea8d902eef5da099f8040826aba",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p506/wrong_field.nl:7:5-8:71: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+    "C17": "NOT RUN",
+    "native": "NOT RUN"
+  },
+  {
+    "source": "wrong_root.nl",
+    "configuration": {
+      "USIZE_EQUALITY": true,
+      "PAIR_IF_JOIN": true,
+      "FRONTEND_ONLY": true,
+      "BUILD_TESTING": false
+    },
+    "binary_sha256": "dae73a7c994b7b72077bca47e376b31b15b23ea8d902eef5da099f8040826aba",
+    "exit": 3,
+    "stdout": "",
+    "diagnostic": "tests/p506/wrong_root.nl:8:5-9:70: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+    "C17": "NOT RUN",
+    "native": "NOT RUN"
+  }
+]
