@@ -12,6 +12,14 @@
 > 運用は [Development Process](NewLang_Project_Development_Process.md) に従う。
 > この文書は正本を置換せず、将来の更新時は「観測した事実」と「新しい投資案」を分ける。
 
+## 現行checkpoint — 2026-10-16（PR #500統合後。下記補遺より優先）
+
+**現行authority（再確認）:** Compiler/main `0d29d61c114f179af8e7300096fd85ec485ad2e7`、CURRENT_SPEC→canonical **Draft17.30変更なし**、FormalProof/main `5437f92d099e228773d31e2323e8ee6228ca21bf`。以下は既存仕様のfaithful有限実装を区別する**非規範のcheckpoint**であり、過去のauthority SHAを指す下の記録はそれぞれの時点の履歴とする。
+
+- **採用済み [P497／merged PR #500](https://github.com/wakairo/NewLang_Compiler/pull/500)：** §6 `usize(DIGITS)` を実source→真正checked `usize` Copy値／public view→現native-target `size_t` C17→GCC/Clang O0/O2で元local 3/9 を有限実測。大きすぎるliteralはsemantic拒否、OOM失敗後の状態rollback、異なるC target幅はemitted static assertionで拒否。**実cross-targetビルド／ABI／一般数量演算ではない**。提出固定HEAD FULL初回5構成×290／NO LLVM289 CI成功と、**別途未確認の統合後main CI**を混同しない。
+- **次の未到達：** 元の凍結TRUE/FALSE `usize == usize` は**CLI3 parser `P5-EXPRESSION-UNSUPPORTED`**、comparandに対応する真正`bool`のsource/CHECK、二分岐の元Pairの物理Change/Reset・C17/nativeをまだ実証していない。独立IF emitter不足はコード調査に基づく**予測**。比較負例2件がparserで止まったことを意味論的安全拒否と誤記しない。[Track P #501](https://github.com/wakairo/NewLang_Compiler/issues/501)はUSER起動が必要な**一比較SOURCE/CHECK探索**であって、一般算術／IF nativeを一度に実装する許可ではない。
+- **Product/H1/STB不変：** これがlibrary作者＋ordinary callerのUB予防監査・再監査依存閉包を実証的に縮めたとは言えない。Arrayは[M499](https://github.com/wakairo/NewLang_Compiler/issues/499#issuecomment-6205260677)で§25.2機構FITだが真の構築・要素投影のsource-first未選択を確認し、**P投資は歴史的構文選択までHOLD**。PR479/494・cJSON H1・STB・Ringの既存HOLD／DRAFT条件は不変。最新の多枝依存関係は[Coverage Map §§3.1–3.3](NewLang_C_Replacement_Coverage_Map.md)。
+
 ## 最新補遺 — 2026-10-16（下記2026-10-15 checkpointより優先）
 
 **現行authority（確認済み）:** Compiler/main [`ad0604d2c766eac045273eba15170027f199d650`](https://github.com/wakairo/NewLang_Compiler/commit/ad0604d2c766eac045273eba15170027f199d650)、[CURRENT_SPEC](reference/CURRENT_SPEC.md) → **Draft 17.30 不変**。FormalProof/main `5437f92d099e228773d31e2323e8ee6228ca21bf`（F62/PR63の有限・条件付きLean補遺を統合済み。実compilerからの一般的な証明bridgeではない）。前回のmainからの新規採用はロードマップ／Coverage Mapの2文書を整合した[Docs PR #487](https://github.com/wakairo/NewLang_Compiler/pull/487)と、**テスト・観測専用**の[P490/PR #492](https://github.com/wakairo/NewLang_Compiler/pull/492)であり、一般のnamed-call checker／backend意味論をmainへ追加したものではない。
