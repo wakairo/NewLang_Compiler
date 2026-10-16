@@ -12,6 +12,15 @@
 > 運用は [Development Process](NewLang_Project_Development_Process.md) に従う。
 > この文書は正本を置換せず、将来の更新時は「観測した事実」と「新しい投資案」を分ける。
 
+## 現行checkpoint — 2026-10-16（P504／PR #507統合後。下記は履歴）
+
+**Compiler/main `eacbd0fd84f3f9ef90813435ac71633a770f3f80`、CURRENT_SPEC→Draft17.30不変、FormalProof/main `5437f92d099e228773d31e2323e8ee6228ca21bf`。** これは非規範の最新投資checkpoint。以下の以前のmain SHA／当時の未対応判定は、各時点の正確な履歴として保持する。
+
+- **実装済み／通常native数量比較：** [Track P #504](https://github.com/wakairo/NewLang_Compiler/issues/504#issuecomment-6206332324)／[merged PR #507](https://github.com/wakairo/NewLang_Compiler/pull/507) は既存の§5.2一つの平坦な`usize == usize`を、実source→型付きchecked/public-owned bool→通常C17の**元の実operand `size_t`による`_Bool=(lhs == rhs)`**→GCC/Clang O0/O2のTRUE/FALSE nativeへ接続。sourceのCopy/renamed localも観測し、同じobserverが壊れたC比較・Copyを拒否。P497固定元sourceは無変更、旧parser診断に依存するテスト**期待診断だけを新precision／semanticへ移行**。元のP497 literal native、OOM/型/ref等の採用済み回帰は保持。固定候補HEADのFULL5×295、NO LLVM294 CIは成功（**統合後mainを別実行した証拠ではない**）。
+- **実行分岐は別段階：** 普通の`if`はCHECK時に2 armを検査できるがC17/nativeは**CLI4 `V1-BACKEND-UNSUPPORTED`**。元Pairにおいて左右の分岐が同じ元`p@left`を`replace(7/8)`する原sourceは**CHECK3 `P6-JOIN-PRECISION`**で停止。独立[M505](https://github.com/wakairo/NewLang_Compiler/issues/505#issuecomment-6206080130)が、子`left`変更と同時に親Pair current value/factも更新され、親が非flatで`arm_frame`を通らない**正確なcode-path**を確認。これは不正ソース発見でも安全なPair合流の成功でもなく、**構造を保ったUnknown左＋保全右の保守的合流・独立公開検証・一元C17物理IF**という未実装の別義務がある。
+- **並列可能な新しい有限投資：** [Track P #508](https://github.com/wakairo/NewLang_Compiler/issues/508) は**元bool条件で選ぶu8 Copy値7/8の実物理IF**（元Pair書込なし）、[Track P #506](https://github.com/wakairo/NewLang_Compiler/issues/506) は**固定未統合PR503実験HEAD上で元Pairの構造的CHECK合流と独立公開検証器**（元Pair nativeなし）。両方とも**別スレッドからUSER起動が必要**で、Issue作成は着手を意味しない。別authorityの枝を無断でrebase／mergeしない。成功まで本格的な元Pair conditional nativeは未達で、一般effects/CFG/SSA/ownerを導入する許可でもない。
+- **価値の境界：** 実演したのはCopyスカラ計算であり、作者＋普通callerのUB防止監査・再監査依存範囲減少を測ったわけではない。元heap H1、STB、Ring、Array source、named helper PR479/494のProduct／技術HOLDは維持。次の判断用の非直列な依存関係は[Coverage Map §§3.1–3.3](NewLang_C_Replacement_Coverage_Map.md)へ反映。
+
 ## 現行checkpoint — 2026-10-16（PR #500統合後。下記補遺より優先）
 
 **現行authority（再確認）:** Compiler/main `0d29d61c114f179af8e7300096fd85ec485ad2e7`、CURRENT_SPEC→canonical **Draft17.30変更なし**、FormalProof/main `5437f92d099e228773d31e2323e8ee6228ca21bf`。以下は既存仕様のfaithful有限実装を区別する**非規範のcheckpoint**であり、過去のauthority SHAを指す下の記録はそれぞれの時点の履歴とする。
