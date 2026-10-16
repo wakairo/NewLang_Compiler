@@ -399,14 +399,19 @@ static bool copy_if_literal(const NLCheckedFragment *f,
            copy_if_gap(nl_checked_source(f), v->span.start_byte + i,
                        v->span.end_byte, ")");
 }
-/* Root-local u8 Copy origins only. An unknown result must lead back to THIS
- * source IF; a cached value cannot substitute for the selected C carrier. */
+static bool v0_validate_call(const NLCheckedFragment *, NLCheckedNodeId,
+                             V0Program *);
+
+/* Root-local u8 Copy origins, optionally through an authenticated Copy call.
+ * Unknown results must lead back to THIS source IF, not a cached constant. */
 static bool copy_if_u8(const NLCheckedFragment *f, NLCheckedNodeId id,
-                       NLCheckedNodeId selection, NLTypeId u8)
+                       NLCheckedNodeId selection, const V0Program *program)
 {
+    const NLTypeId u8 = program->u8;
+    size_t remaining = nl_checked_node_count(f);
     NLSemanticValueView first = {0};
     bool initial = true;
-    while (id != 0) {
+    while (id != 0 && remaining-- != 0) {
         const NLCheckedNodeView *v = nl_checked_node_view(f, id);
         NLSemanticValueView value;
         if (v == NULL || v->type != u8 || v->terminates ||
@@ -428,7 +433,14 @@ static bool copy_if_u8(const NLCheckedFragment *f, NLCheckedNodeId id,
                    value.scalar_value == 0;
         if (v->kind == NL_CHECKED_U8_LITERAL)
             return copy_if_literal(f, v);
-        id = bool_source_origin(f, id);
+        if (v->kind == NL_CHECKED_REGISTERED_CALL) {
+            V0Program call = *program;
+            if (!bool_root_value(f, id) || !v0_validate_call(f, id, &call))
+                return false;
+            id = v->first_argument;
+        } else {
+            id = bool_source_origin(f, id);
+        }
     }
     return false;
 }
@@ -502,7 +514,7 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
         v->type != p->u8 || v->result_count != 1 ||
         v->results[0].type != p->u8 || !bool_root_value(f, id) ||
         c->domain_count != 0 || c->region_count != 0 ||
-        c->occurrence_count != 0 || p->count != 1 || p->scalar_depth != 0)
+        c->occurrence_count != 0 || p->scalar_depth != 0)
         return false;
     const NLCheckedNodeView *cond = nl_checked_node_view(f, v->initializer);
     NLSemanticValueView cv, origin_value, result;
@@ -528,6 +540,10 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
         return false;
     const bool paired = p->aggregate != 0;
     size_t scalars = 0, bindings = 0;
+    bool body_values[NL_SEMANTIC_MAX_ENTRIES] = {false};
+    size_t calls = 0;
+    if (c->value_count >= NL_SEMANTIC_MAX_ENTRIES)
+        return false;
     for (size_t i = 0; i < f->count; ++i)
         if (f->nodes[i].kind == NL_CHECKED_BINDING &&
             f->nodes[i].span.end_byte <= v->span.start_byte)
@@ -546,6 +562,29 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
         case NL_CHECKED_RECEIVER:
         case NL_CHECKED_UNIT:
             break;
+        case NL_CHECKED_REGISTERED_CALL: {
+            if (++calls > 1 || !copy_if_u8(f, i + 1, id, p))
+                return false;
+            const NLCheckedFragment *body = nl_checked_call_body(f, i + 1);
+            /* Existing call validation authenticates this retained body.
+             * Account its fresh Copy results, not the caller actual twice. */
+            for (size_t j = 1; j <= nl_checked_node_count(body); ++j) {
+                const NLCheckedNodeView *b = nl_checked_node_view(body, j);
+                NLSemanticValueView value;
+                if (b->kind == NL_CHECKED_REGISTERED_CALL)
+                    return false;
+                if (b->result_count == 0)
+                    continue;
+                const NLValueId v = b->results[0].value;
+                if (b->result_count != 1 || v == 0 || v > c->value_count ||
+                    !nl_semantic_value_view(c, v, &value) ||
+                    !copy_if_plain(value, p->u8) ||
+                    value.carrier != NL_CARRIER_ENDED || value.owner_place)
+                    return false;
+                body_values[v] = true;
+            }
+            break;
+        }
         case NL_CHECKED_IF:
             if (i + 1 != id)
                 return false;
@@ -555,7 +594,10 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
         case NL_CHECKED_USIZE_EQUALITY:
         case NL_CHECKED_IDENTIFIER: {
             NLSemanticValueView value;
-            if (n->result_count != 1 || n->results[0].value != ++scalars ||
+            ++scalars;
+            while (scalars <= c->value_count && body_values[scalars])
+                ++scalars;
+            if (n->result_count != 1 || n->results[0].value != scalars ||
                 !nl_semantic_value_view(c, scalars, &value) ||
                 !copy_if_plain(value, n->type) ||
                 value.carrier != NL_CARRIER_ENDED || value.owner_place != 0 ||
@@ -563,7 +605,7 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
                 (n->type != p->u8 &&
                  n->type != nl_semantic_core_type(c, NL_TYPE_BOOL) &&
                  n->type != nl_semantic_core_type(c, NL_TYPE_USIZE)) ||
-                (n->type == p->u8 && !copy_if_u8(f, i + 1, id, p->u8)))
+                (n->type == p->u8 && !copy_if_u8(f, i + 1, id, p)))
                 return false;
             break;
         }
@@ -571,6 +613,8 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
             return false;
         }
     }
+    while (!paired && scalars < c->value_count && body_values[scalars + 1])
+        ++scalars;
     if (!paired && scalars != c->value_count)
         return false;
     const NLCheckedFragment *arms[2] = {nl_checked_if_arm(f, id, 0),
@@ -650,7 +694,7 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
             if (receiver == NULL || init == NULL ||
                 receiver->kind != NL_CHECKED_RECEIVER ||
                 receiver->symbol != tail->symbol || receiver->type != p->u8 ||
-                !copy_if_u8(f, declaration->initializer, id, p->u8) ||
+                !copy_if_u8(f, declaration->initializer, id, p) ||
                 !nl_semantic_value_view(c, init->results[0].value, &original) ||
                 !original.scalar_known ||
                 original.scalar_value != value.scalar_value ||
@@ -934,6 +978,7 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
         nl_checked_node_view(f, choice->initializer);
     const NLCheckedNodeView *aggregate = NULL, *declaration = NULL;
     const NLCheckedNodeView *loan = NULL, *write = NULL, *reads[2] = {0};
+    size_t call_bindings = 0;
     const NLCheckedFragment *arms[2] = {nl_checked_if_arm(f, id, 0),
                                         nl_checked_if_arm(f, id, 1)};
     const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
@@ -945,6 +990,22 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
     for (size_t i = 0; i < f->count; ++i) {
         const NLCheckedNodeView *n = &f->nodes[i];
         switch (n->kind) {
+        case NL_CHECKED_REGISTERED_CALL: {
+            if (call_bindings != 0 ||
+                n->span.start_byte <= choice->span.end_byte ||
+                !copy_if_u8(f, i + 1, id, p))
+                return false;
+            const NLCheckedFragment *body = nl_checked_call_body(f, i + 1);
+            call_bindings = 1; /* authenticated fresh formal */
+            for (size_t j = 1; j <= nl_checked_node_count(body); ++j) {
+                const NLCheckedNodeView *b = nl_checked_node_view(body, j);
+                if (b->kind == NL_CHECKED_REGISTERED_CALL)
+                    return false;
+                if (b->kind == NL_CHECKED_BINDING)
+                    ++call_bindings;
+            }
+            break;
+        }
         case NL_CHECKED_AGGREGATE:
             if (aggregate != NULL ||
                 n->span.end_byte >= choice->span.start_byte ||
@@ -1019,7 +1080,7 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
     const NLCheckedNodeView *input =
         ref == NULL ? NULL : nl_checked_node_view(f, ref->next_argument);
     if (body == NULL || nl_checked_node_view(f, body->tail) != write ||
-        input == NULL || !copy_if_u8(f, ref->next_argument, id, p->u8) ||
+        input == NULL || !copy_if_u8(f, ref->next_argument, id, p) ||
         e->base != declaration->symbol || loan->loan.source != e->base ||
         loan->loan.place != e->child ||
         e->new_value != input->results[0].value ||
@@ -1179,7 +1240,7 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
         if (n->kind == NL_CHECKED_BINDING &&
             n->span.end_byte >= choice->span.end_byte &&
             n->span.end_byte < loan->span.start_byte) {
-            if (!copy_if_u8(f, n->initializer, id, p->u8))
+            if (!copy_if_u8(f, n->initializer, id, p))
                 return false;
             ++intermediate_bindings;
         }
@@ -1187,8 +1248,8 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
     /* Fresh sequential facts: joined Copy bindings, one ref binder, then
      * child and parent Change facts. Arm-private facts never enter parent. */
     if (intermediate_bindings == 0 ||
-        e->child_post_fact !=
-            entry->last_value_fact + intermediate_bindings + 2 ||
+        e->child_post_fact != entry->last_value_fact + intermediate_bindings +
+                                  call_bindings + 2 ||
         e->parent_post_fact != e->child_post_fact + 1 ||
         e->parent_post_fact > c->last_value_fact)
         return false;
@@ -1203,7 +1264,7 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
                     init->results[0].value ||
                 (init != aggregate && !quantity_scalar(f, n->initializer, p) &&
                  !boolean_scalar(f, n->initializer, p) &&
-                 !copy_if_u8(f, n->initializer, id, p->u8)))
+                 !copy_if_u8(f, n->initializer, id, p)))
                 return false;
         }
     }

@@ -1,0 +1,161 @@
+{
+  "compiler_commit": "a513b48484b890c0d8cee6dcc7766414075b33ee",
+  "compiler_sha256": "4105ae0a8d740d85e7e95f8651f648977871fee583f9e1f3525baa8b84d31ac9",
+  "utc": "2026-10-16T08:32:16.576618+00:00",
+  "cases": {
+    "scalar_constant": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 0,
+        "stdout_bytes": 490,
+        "stdout_sha256": "309f1baa7d1c9c9f4c4b13da0ef299b432a42fab873e283ebf02d3733a4c9e03",
+        "stderr": ""
+      }
+    },
+    "adopted_p515": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 0,
+        "stdout_bytes": 1251,
+        "stdout_sha256": "d3a09ba3e8a190f3f82691f3e5737d0884ea7c0ca00a88f309441e484447e7f3",
+        "stderr": ""
+      }
+    },
+    "call_choice_true": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 4,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p521/call_choice_true.nl\n"
+      }
+    },
+    "direct_pair_true": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 0,
+        "stdout_bytes": 1251,
+        "stdout_sha256": "d3a09ba3e8a190f3f82691f3e5737d0884ea7c0ca00a88f309441e484447e7f3",
+        "stderr": ""
+      }
+    },
+    "combined_true": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 4,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p521/combined_true.nl\n"
+      }
+    },
+    "call_choice_false": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 4,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p521/call_choice_false.nl\n"
+      }
+    },
+    "direct_pair_false": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 0,
+        "stdout_bytes": 1251,
+        "stdout_sha256": "28570213e970306b32808c877c814a4d0197a99fe663547ff886f45abc65d81e",
+        "stderr": ""
+      }
+    },
+    "combined_false": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 4,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p521/combined_false.nl\n"
+      }
+    },
+    "negative_else_range": {
+      "check": {
+        "status": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "tests/p521/negative_else_range.nl:6:40-6:47: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255\n"
+      },
+      "c17": {
+        "status": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "tests/p521/negative_else_range.nl:6:40-6:47: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255\n"
+      }
+    },
+    "negative_argument": {
+      "check": {
+        "status": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "tests/p521/negative_argument.nl:7:25-7:26: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+      },
+      "c17": {
+        "status": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "tests/p521/negative_argument.nl:7:25-7:26: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+      }
+    },
+    "negative_return": {
+      "check": {
+        "status": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "tests/p521/negative_return.nl:7:19-7:34: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+      },
+      "c17": {
+        "status": 3,
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "tests/p521/negative_return.nl:7:19-7:34: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+      }
+    }
+  }
+}

@@ -1,0 +1,32 @@
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+#include <stdlib.h>
+static unsigned p521_calls;
+
+static void nl_fn_10(void);
+static uint8_t nl_fn_11(uint8_t nl_local_1);
+
+static void nl_fn_10(void)
+{
+    const uint8_t nl_call_2 = nl_fn_11(108);
+    if (nl_call_2 != 108 || p521_calls != 1) abort();
+    (void)nl_call_2;
+    const uint8_t nl_local_2 = nl_call_2;
+    if (nl_local_2 != 108) abort();
+    (void)nl_local_2;
+    (void)nl_local_2;
+    (void)0;
+}
+
+static uint8_t nl_fn_11(uint8_t nl_local_1)
+{
+    ++p521_calls;
+    (void)nl_local_1;
+    return nl_local_1;
+}
+
+int main(void)
+{
+    nl_fn_10();
+    return 0;
+}

@@ -1,0 +1,267 @@
+{
+  "utc": "2026-10-16T09:45:35.947060+00:00",
+  "compiler_base": "a513b48484b890c0d8cee6dcc7766414075b33ee",
+  "candidate_compiler_sha256": "7a5306e8f373200cd07c43c67cd5928d6bd82723af4220bcb26a82a4ad54b7c0",
+  "source_files_unchanged": true,
+  "cases": {
+    "scalar_constant": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 0,
+        "stdout_bytes": 490,
+        "sha256": "309f1baa7d1c9c9f4c4b13da0ef299b432a42fab873e283ebf02d3733a4c9e03",
+        "stderr": ""
+      },
+      "source_sha256": "35bf720c5ce4ce96b15947511e8cdc83dc4557ce2da71c67528fd7157c4f10d6"
+    },
+    "adopted_p515": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 0,
+        "stdout_bytes": 1251,
+        "sha256": "d3a09ba3e8a190f3f82691f3e5737d0884ea7c0ca00a88f309441e484447e7f3",
+        "stderr": ""
+      },
+      "source_sha256": "c921596f72e64116630676b98d6ce43c529420a4bec26c437d01981cc39cc864"
+    },
+    "call_choice_true": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 0,
+        "stdout_bytes": 886,
+        "sha256": "54c5cc20354a306dbb99ecc69c751a5e46791425291d319889dc4f60c033e134",
+        "stderr": ""
+      },
+      "source_sha256": "317e3e036d2e089a2c55d3e25ff57555de27bb29bed22c12253607a54592fac2"
+    },
+    "direct_pair_true": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 0,
+        "stdout_bytes": 1251,
+        "sha256": "d3a09ba3e8a190f3f82691f3e5737d0884ea7c0ca00a88f309441e484447e7f3",
+        "stderr": ""
+      },
+      "source_sha256": "2b8c46554d7aaba137b2910ec08f5a30a2df3be3155a0c313710737f3dcfef37"
+    },
+    "combined_true": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 0,
+        "stdout_bytes": 1533,
+        "sha256": "cd580a416b324a56aa44f277fbc29358390d9f09589d7e25df3ce876869d0cdc",
+        "stderr": ""
+      },
+      "public_fields": {
+        "if": 18,
+        "bool": 1,
+        "condition_symbol": 0,
+        "equal_symbol": 0,
+        "operand_symbols": [
+          1,
+          2
+        ],
+        "arms": [
+          108,
+          173
+        ],
+        "arm_symbols": [
+          0,
+          0
+        ],
+        "selected_symbol": 4,
+        "input_symbol": 6,
+        "original_symbol": 3,
+        "old_symbol": 8,
+        "after_symbol": 9,
+        "sibling_symbol": 10,
+        "ref_symbol": 7,
+        "replace_node": 27,
+        "scope": 1,
+        "root": 3,
+        "child": 4,
+        "incarnations": [
+          3,
+          4,
+          5
+        ],
+        "root_facts": [
+          3,
+          11
+        ],
+        "left_facts": [
+          4,
+          10
+        ],
+        "right_fact": 5,
+        "old": 37,
+        "sibling": 211,
+        "joined_unknown": true,
+        "scope_ended": true
+      },
+      "source_sha256": "0776824b0fa5ed5f97d48ffd062402aeb6b38316a885648d56037fb156d59cf4"
+    },
+    "call_choice_false": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 0,
+        "stdout_bytes": 886,
+        "sha256": "136e32c37115e236daba5bbfac4957c584d50e286076cfcc57d8924f71db03a2",
+        "stderr": ""
+      },
+      "source_sha256": "caf3744772fe18a6abfa9fa6e14fd71f7ef8e60c456abb29d83da4d111e440ee"
+    },
+    "direct_pair_false": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 0,
+        "stdout_bytes": 1251,
+        "sha256": "28570213e970306b32808c877c814a4d0197a99fe663547ff886f45abc65d81e",
+        "stderr": ""
+      },
+      "source_sha256": "efa00084af5fc5f90feffb77b362a3bed92ba9e63e2c6b3d3f49a394d6e4b84b"
+    },
+    "combined_false": {
+      "check": {
+        "status": 0,
+        "stdout_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": ""
+      },
+      "c17": {
+        "status": 0,
+        "stdout_bytes": 1533,
+        "sha256": "2155e51157825d3dc2c23f091b8f76d66d8a1093bc010381092c07a95d847545",
+        "stderr": ""
+      },
+      "public_fields": {
+        "if": 18,
+        "bool": 0,
+        "condition_symbol": 0,
+        "equal_symbol": 0,
+        "operand_symbols": [
+          1,
+          2
+        ],
+        "arms": [
+          108,
+          173
+        ],
+        "arm_symbols": [
+          0,
+          0
+        ],
+        "selected_symbol": 4,
+        "input_symbol": 6,
+        "original_symbol": 3,
+        "old_symbol": 8,
+        "after_symbol": 9,
+        "sibling_symbol": 10,
+        "ref_symbol": 7,
+        "replace_node": 27,
+        "scope": 1,
+        "root": 3,
+        "child": 4,
+        "incarnations": [
+          3,
+          4,
+          5
+        ],
+        "root_facts": [
+          3,
+          11
+        ],
+        "left_facts": [
+          4,
+          10
+        ],
+        "right_fact": 5,
+        "old": 37,
+        "sibling": 211,
+        "joined_unknown": true,
+        "scope_ended": true
+      },
+      "source_sha256": "c016e643f8b1ec0da014225bbca045dc600712d913658b3d33a3637f6194b994"
+    },
+    "negative_else_range": {
+      "check": {
+        "status": 3,
+        "stdout_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "tests/p521/negative_else_range.nl:6:40-6:47: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255\n"
+      },
+      "c17": {
+        "status": 3,
+        "stdout_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "tests/p521/negative_else_range.nl:6:40-6:47: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255\n"
+      },
+      "source_sha256": "b884f592736cd3bdfe87d8e7ebeb5d5cac6aedc6c9cef13825a2965c08e94c4b"
+    },
+    "negative_argument": {
+      "check": {
+        "status": 3,
+        "stdout_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "tests/p521/negative_argument.nl:7:25-7:26: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+      },
+      "c17": {
+        "status": 3,
+        "stdout_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "tests/p521/negative_argument.nl:7:25-7:26: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+      },
+      "source_sha256": "7c7c7404247d8ec4e33bbe1b9ca2f3c239e08b60f947107925e347bbced7e30c"
+    },
+    "negative_return": {
+      "check": {
+        "status": 3,
+        "stdout_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "tests/p521/negative_return.nl:7:19-7:34: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+      },
+      "c17": {
+        "status": 3,
+        "stdout_bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr": "tests/p521/negative_return.nl:7:19-7:34: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+      },
+      "source_sha256": "e911ffde4af17464b9efe4f162ef728c1f98d1a668fc79147a56d62c503ec5de"
+    }
+  }
+}

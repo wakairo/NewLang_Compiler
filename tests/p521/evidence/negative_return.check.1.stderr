@@ -1,0 +1,1 @@
+tests/p521/negative_return.nl:7:19-7:34: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result

@@ -1,0 +1,22 @@
+{
+  "call_choice_true": {
+    "status": 4,
+    "stderr": "TRACE copy_if_selection line571\nerror(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p521/call_choice_true.nl\n",
+    "stdout_bytes": 0
+  },
+  "call_choice_false": {
+    "status": 4,
+    "stderr": "TRACE copy_if_selection line571\nerror(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p521/call_choice_false.nl\n",
+    "stdout_bytes": 0
+  },
+  "combined_true": {
+    "status": 4,
+    "stderr": "TRACE copy_if_pair_frame line997\nTRACE copy_if_selection line536\nerror(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p521/combined_true.nl\n",
+    "stdout_bytes": 0
+  },
+  "combined_false": {
+    "status": 4,
+    "stderr": "TRACE copy_if_pair_frame line997\nTRACE copy_if_selection line536\nerror(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p521/combined_false.nl\n",
+    "stdout_bytes": 0
+  }
+}
