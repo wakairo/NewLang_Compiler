@@ -1,0 +1,49 @@
+name: R540 fresh BLIND independently frozen Array4
+on:
+  push:
+    branches:
+      - r540-fresh-blind-array4-firstpass
+permissions:
+  contents: read
+jobs:
+  independent-firstpass:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: r
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 7f639a3a89d55f44848e361e1458529fe5395345
+          path: compiler
+          persist-credentials: false
+      - name: Record tool versions and fixed SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p r540-results
+          git -C compiler rev-parse HEAD | tee r540-results/compiler_sha.txt
+          test "$(git -C compiler rev-parse HEAD)" = "7f639a3a89d55f44848e361e1458529fe5395345"
+          gcc --version | head -n 1 | tee r540-results/gcc_version.txt
+          clang --version | head -n 1 | tee r540-results/clang_version.txt
+          cmake --version | head -n 1 | tee r540-results/cmake_version.txt
+          python3 --version | tee r540-results/python_version.txt
+      - name: Build ONLY pinned candidate execution interfaces, no P tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          CC=gcc cmake -S compiler -B compiler/r540-build -DNEWLANG_FRONTEND_ONLY=ON -DCMAKE_BUILD_TYPE=Debug 2>&1 | tee r540-results/configure.txt
+          cmake --build compiler/r540-build --parallel 2 --target newlangc_p534 newlangc 2>&1 | tee r540-results/build.txt
+      - name: Frozen source CHECK, C17, GCC/Clang native and passive GDB
+        shell: bash
+        run: |
+          python3 r/r540/run_probe.py
+      - name: Publish raw independent first-pass evidence
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: r540-fresh-blind-firstpass
+          path: r540-results/
+          if-no-files-found: warn

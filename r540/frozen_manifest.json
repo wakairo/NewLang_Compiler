@@ -1,0 +1,13 @@
+{
+  "frozen_at_utc": "2026-10-16T15:03:15.036669+00:00",
+  "entries": {
+    "oracles_frozen.json": "ceecb561b70e5eac8fb155f73c3c41384ae5167d7fa0b2a89a5202152db95509",
+    "source/negative_arity3.nl": "a2165f36bb97c41c86d26d80c151bddbc2b2fd292443dd63fa9bed9d08f95a65",
+    "source/negative_arity5.nl": "3f3b7dc24c3ad70a2c8b8b84a1a4b82141998f8673f0013515b20a0fb96922de",
+    "source/negative_nonleaf_binding.nl": "352a8f073995eae35b66b422dc05a5e5291979e9b594c228ae7ade0a57fbfdbf",
+    "source/negative_payloadless_some.nl": "3a7bc24200ad96a256916fe3e8c0334152dd5b8e689aa48b8701d02dd7c40f21",
+    "source/negative_u8_element.nl": "4d722ac4e718adf0b1d08d7dcaf748624a299e92efee7b4a09ad4420a0e9f55a",
+    "source/positive_original.nl": "dcbd20822a82faa5f6b2e2f1e391e31d251ec261e3708aa8a20bcd2f760b884b",
+    "source/positive_two_roots.nl": "3d01ff12734a194ccc8357625e16de5d1740019a59873ba467467f2152760f9f"
+  }
+}

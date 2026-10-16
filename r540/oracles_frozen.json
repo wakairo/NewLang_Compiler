@@ -1,0 +1,27 @@
+{
+  "track": "R540 fresh BLIND first-pass",
+  "authority": {
+    "main": "ebb8c4d034a6df2ec6fbfae7e47ebb37650accae",
+    "canonical": "NewLang_v0_spec_Draft17_32.md",
+    "compiler_under_test": "7f639a3a89d55f44848e361e1458529fe5395345",
+    "opt_in_target": "newlangc_p534",
+    "cmake_switch": "-DNEWLANG_FRONTEND_ONLY=ON"
+  },
+  "source_expectations": {
+    "positive_original.nl": "ACCEPT source/parser and semantic CHECK; four direct qualified None leaves; ONE surviving original lexical Array root with four distinct typed live dependent None child places; true concrete Array<Option<u8>,4> public source-issued owned projection with origin and parentage, not synthetic host fixture; native C17 in original source main has one Array carrier with four contiguous full Option envelopes, element stride sizeof(Option_u8), observed passively while original live root exists",
+    "negative_arity3.nl": "well-formed Array AST; semantic arity rejection (NOT parser-only refusal)",
+    "negative_arity5.nl": "well-formed Array AST; semantic arity rejection (NOT parser-only refusal)",
+    "negative_u8_element.nl": "well-formed Array AST; semantic element-type rejection (NOT parser-only refusal)",
+    "negative_payloadless_some.nl": "well-formed Array AST; semantic constructor/payload or variant rejection (NOT parser-only refusal)",
+    "negative_nonleaf_binding.nl": "source-eligibility semantic refusal for non-direct leaf",
+    "positive_two_roots.nl": "EXPLORATORY if time: two separate original lexical Array placements and non-coalesced child parentage; no copy binding"
+  },
+  "binary_evidence": {
+    "strict_C17": "gcc and clang -std=c17 -Wall -Wextra -Werror -pedantic at O0 and O2 if generated C is available, with no relaxation",
+    "passive_observation": "inspect original live Array symbol and four element starts in the original generated source function; address stride must equal sizeof full Option; None interpretation must follow generated representation, not zero-filled assumption",
+    "default_off": "unadorned newlangc must refuse positive original source; opt-in compiler considered separately",
+    "public_owned": "accept only authentic source-issued owned/public validator evidence, with one array parent root, four distinct typed projections and None facts; numerical IDs alone not sufficient; no host seed_root artifact",
+    "integrity_probes": "Only if documented public owned consumer interface can be discovered from allowed non-P documentation. Otherwise UNMEASURED."
+  },
+  "stop": "Stop on first substantial fixed-compiler discrepancy, integrity failure, or budget exhaustion; do not tune substantive source expectations. At most one harness-only repair. Never inspect P534 or PR539 before frozen initial BLIND verdict."
+}
