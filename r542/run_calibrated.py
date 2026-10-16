@@ -149,7 +149,7 @@ try:
     proof_text = proof.stdout.decode("utf-8")
     proof_line = [line for line in proof_text.splitlines() if line.startswith("PUBLIC_OK ")]
     required(len(proof_line) == 1, "one public report line")
-    fields = dict(re.findall(r"([a-z_]+)=([0-9]+)", proof_line[0]))
+    fields = dict(re.findall(r"([A-Za-z_]+)=([0-9]+)", proof_line[0]))
     for key, value in [("independent_roots",1),("live_places",5),
                        ("children",4),("source_AST_torn_down",1),("final_root_ended",1)]:
         required(int(fields.get(key,-1)) == value, "public field mismatch "+key)
