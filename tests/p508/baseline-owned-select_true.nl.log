@@ -1,0 +1,6 @@
+{"if":14,"condition":13,"bool":1,"arms":[7,8],"joined_unknown":true,"authority":0}
+BIND 1 usize 1 2
+BIND 2 usize 1 2
+BIND 3 bool 1 1
+BIND 4 u8 0 0
+BIND 5 u8 0 0

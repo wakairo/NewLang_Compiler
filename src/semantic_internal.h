@@ -113,6 +113,11 @@ typedef struct NLNodeJoinProof {
     struct NLNodeJoinProof *next;
 } NLNodeJoinProof;
 struct NLCheckedFragment {
+    /* Borrowed finite IF fork lineage. Never authority, ownership, or a
+     * general CFG edge; parent owns this arm and outlives its borrowed view. */
+    const struct NLCheckedFragment *if_parent;
+    NLCheckedNodeId if_parent_node;
+    size_t if_arm_index;
     const NLNodeJoinProof *node_join_parent; /* finite fork lineage only */
     NLNodeJoinProof *node_joins; /* owned finite source-issued checkpoints */
     void (*destroy_node_joins)(NLCheckedFragment *);
