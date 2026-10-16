@@ -1,0 +1,56 @@
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+
+#include <stddef.h>
+_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
+
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+
+static void nl_fn_10(void);
+
+static void nl_fn_10(void)
+{
+    nl_type_10 nl_local_1 = { .f0 = 0, .f1 = 9, };
+    (void)nl_local_1;
+    const size_t nl_local_2 = ((size_t)UINTMAX_C(2));
+    (void)nl_local_2;
+    const size_t nl_local_3 = ((size_t)UINTMAX_C(3));
+    (void)nl_local_3;
+    const _Bool nl_local_4 = (nl_local_2 == nl_local_3);
+    (void)nl_local_4;
+    const uint8_t nl_local_5 = 7;
+    (void)nl_local_5;
+    const uint8_t nl_local_6 = 8;
+    (void)nl_local_6;
+    const _Bool nl_local_7 = nl_local_4;
+    (void)nl_local_7;
+    const uint8_t nl_local_8 = (nl_local_7 ? nl_local_5 : nl_local_6);
+    (void)nl_local_8;
+    const uint8_t nl_local_9 = nl_local_8;
+    (void)nl_local_9;
+    uint8_t nl_loan_result_1;
+    {
+        uint8_t *const nl_local_10 = &nl_local_1.f0;
+        (void)nl_local_10;
+        const uint8_t nl_replace_old_38 = *nl_local_10;
+        *nl_local_10 = nl_local_9;
+        nl_loan_result_1 = nl_replace_old_38;
+    }
+    (void)nl_loan_result_1;
+    const uint8_t nl_local_11 = nl_loan_result_1;
+    (void)nl_local_11;
+    const uint8_t nl_local_12 = nl_local_1.f0;
+    (void)nl_local_12;
+    const uint8_t nl_local_13 = nl_local_1.f1;
+    (void)nl_local_13;
+    (void)nl_local_11;
+    (void)nl_local_12;
+    (void)nl_local_13;
+    (void)0;
+}
+
+int main(void)
+{
+    nl_fn_10();
+    return 0;
+}

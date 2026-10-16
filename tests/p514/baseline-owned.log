@@ -1,0 +1,77 @@
+NODE 1 kind27 ty1 val0 sym0 init0 args0 first0 next0 tail43 span0-282
+NODE 2 kind31 ty10 val3 sym0 init0 args2 first4 next0 tail0 span12-40
+NODE 3 kind44 ty6 val1 sym0 init0 args0 first0 next0 tail0 span22-27
+NODE 4 kind32 ty6 val0 sym0 init3 args0 first0 next6 tail0 span17-27
+NODE 5 kind44 ty6 val2 sym0 init0 args0 first0 next0 tail0 span34-39
+NODE 6 kind32 ty6 val0 sym0 init5 args0 first0 next0 tail0 span28-39
+NODE 7 kind2 ty1 val0 sym1 init2 args1 first8 next0 tail0 span6-40
+NODE 8 kind30 ty10 val0 sym1 init0 args0 first0 next0 tail0 span10-11
+NODE 9 kind50 ty7 val4 sym0 init0 args0 first0 next0 tail0 span52-60
+NODE 10 kind2 ty1 val0 sym2 init9 args1 first11 next0 tail0 span46-60
+NODE 11 kind30 ty7 val0 sym2 init0 args0 first0 next0 tail0 span50-51
+NODE 12 kind50 ty7 val5 sym0 init0 args0 first0 next0 tail0 span72-80
+NODE 13 kind2 ty1 val0 sym3 init12 args1 first14 next0 tail0 span66-80
+NODE 14 kind30 ty7 val0 sym3 init0 args0 first0 next0 tail0 span70-71
+NODE 15 kind1 ty7 val6 sym2 init0 args0 first0 next16 tail0 span96-97
+NODE 16 kind1 ty7 val7 sym3 init0 args0 first0 next0 tail0 span99-100
+NODE 17 kind51 ty9 val8 sym0 init0 args2 first15 next0 tail0 span96-100
+NODE 18 kind2 ty1 val0 sym4 init17 args1 first19 next0 tail0 span86-100
+NODE 19 kind30 ty9 val0 sym4 init0 args0 first0 next0 tail0 span90-95
+NODE 20 kind1 ty9 val9 sym4 init0 args0 first0 next0 tail0 span123-128
+NODE 21 kind36 ty6 val10 sym0 init20 args0 first0 next0 tail0 span119-154
+ARM 0 places6 vals10 bindings4 scopes0
+ PLACE1 type10 live1 local1 ind1 inc1 fact1 val3 parent0 fields2[2,3]
+ PLACE2 type6 live1 local0 ind0 inc2 fact2 val1 parent1 fields0[0,0]
+ PLACE3 type6 live1 local0 ind0 inc3 fact3 val2 parent1 fields0[0,0]
+ PLACE4 type7 live1 local0 ind1 inc4 fact4 val4 parent0 fields0[0,0]
+ PLACE5 type7 live1 local0 ind1 inc5 fact5 val5 parent0 fields0[0,0]
+ PLACE6 type9 live1 local0 ind1 inc6 fact6 val8 parent0 fields0[0,0]
+ VALUE1 type6 carrier3 owner0 agg3 fields0[0,0] known1 scalar0
+ VALUE2 type6 carrier3 owner0 agg3 fields0[0,0] known1 scalar9
+ VALUE3 type10 carrier1 owner1 agg0 fields2[1,2] known0 scalar0
+ VALUE4 type7 carrier1 owner4 agg0 fields0[0,0] known1 scalar2
+ VALUE5 type7 carrier1 owner5 agg0 fields0[0,0] known1 scalar2
+ VALUE6 type7 carrier2 owner0 agg0 fields0[0,0] known1 scalar2
+ VALUE7 type7 carrier2 owner0 agg0 fields0[0,0] known1 scalar2
+ VALUE8 type9 carrier1 owner6 agg0 fields0[0,0] known1 scalar1
+ VALUE9 type9 carrier2 owner0 agg0 fields0[0,0] known1 scalar1
+ VALUE10 type6 carrier0 owner0 agg0 fields0[0,0] known1 scalar7
+ARM 1 places6 vals10 bindings4 scopes0
+ PLACE1 type10 live1 local1 ind1 inc1 fact1 val3 parent0 fields2[2,3]
+ PLACE2 type6 live1 local0 ind0 inc2 fact2 val1 parent1 fields0[0,0]
+ PLACE3 type6 live1 local0 ind0 inc3 fact3 val2 parent1 fields0[0,0]
+ PLACE4 type7 live1 local0 ind1 inc4 fact4 val4 parent0 fields0[0,0]
+ PLACE5 type7 live1 local0 ind1 inc5 fact5 val5 parent0 fields0[0,0]
+ PLACE6 type9 live1 local0 ind1 inc6 fact6 val8 parent0 fields0[0,0]
+ VALUE1 type6 carrier3 owner0 agg3 fields0[0,0] known1 scalar0
+ VALUE2 type6 carrier3 owner0 agg3 fields0[0,0] known1 scalar9
+ VALUE3 type10 carrier1 owner1 agg0 fields2[1,2] known0 scalar0
+ VALUE4 type7 carrier1 owner4 agg0 fields0[0,0] known1 scalar2
+ VALUE5 type7 carrier1 owner5 agg0 fields0[0,0] known1 scalar2
+ VALUE6 type7 carrier2 owner0 agg0 fields0[0,0] known1 scalar2
+ VALUE7 type7 carrier2 owner0 agg0 fields0[0,0] known1 scalar2
+ VALUE8 type9 carrier1 owner6 agg0 fields0[0,0] known1 scalar1
+ VALUE9 type9 carrier2 owner0 agg0 fields0[0,0] known1 scalar1
+ VALUE10 type6 carrier0 owner0 agg0 fields0[0,0] known1 scalar8
+NODE 22 kind2 ty1 val0 sym5 init21 args1 first23 next0 tail0 span106-154
+NODE 23 kind30 ty6 val0 sym5 init0 args0 first0 next0 tail0 span110-118
+NODE 24 kind13 ty6 val1 sym0 init25 args0 first0 next0 tail0 span168-210 FIELD base1 root1 child2 idx0 inc1/2 fact1/2 post0/0 old1 new0 LOAN place2 scope1 D0 src1 ref6 endedproof1
+NODE 25 kind27 ty6 val1 sym0 init0 args0 first0 next0 tail26 span185-210
+NODE 26 kind10 ty6 val1 sym0 init0 args2 first27 next0 tail0 span190-209 FIELD base1 root1 child2 idx0 inc1/2 fact1/2 post10/9 old1 new13
+NODE 27 kind1 ty11 val12 sym6 init0 args0 first0 next28 tail0 span198-199
+NODE 28 kind1 ty6 val13 sym5 init0 args0 first0 next0 tail0 span200-208
+NODE 29 kind2 ty1 val0 sym7 init24 args1 first30 next0 tail0 span160-210
+NODE 30 kind30 ty6 val0 sym7 init0 args0 first0 next0 tail0 span164-167
+NODE 31 kind45 ty6 val15 sym1 init0 args0 first0 next0 tail0 span226-232 FIELD base1 root1 child2 idx0 inc1/2 fact10/9 post0/0 old13 new0
+NODE 32 kind2 ty1 val0 sym8 init31 args1 first33 next0 tail0 span216-232
+NODE 33 kind30 ty6 val0 sym8 init0 args0 first0 next0 tail0 span220-225
+NODE 34 kind45 ty6 val16 sym1 init0 args0 first0 next0 tail0 span245-252 FIELD base1 root1 child3 idx1 inc1/3 fact10/3 post0/0 old2 new0
+NODE 35 kind2 ty1 val0 sym9 init34 args1 first36 next0 tail0 span233-252
+NODE 36 kind30 ty6 val0 sym9 init0 args0 first0 next0 tail0 span237-244
+NODE 37 kind1 ty6 val17 sym7 init0 args0 first0 next0 tail0 span258-261
+NODE 38 kind28 ty1 val0 sym0 init37 args0 first0 next0 tail0 span258-262
+NODE 39 kind1 ty6 val18 sym8 init0 args0 first0 next0 tail0 span262-267
+NODE 40 kind28 ty1 val0 sym0 init39 args0 first0 next0 tail0 span262-268
+NODE 41 kind1 ty6 val19 sym9 init0 args0 first0 next0 tail0 span268-275
+NODE 42 kind28 ty1 val0 sym0 init41 args0 first0 next0 tail0 span268-276
+NODE 43 kind43 ty1 val0 sym0 init0 args0 first0 next0 tail0 span276-280

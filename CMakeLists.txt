@@ -138,6 +138,34 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p508_public_probe>"
         "$<TARGET_FILE:p508_gate_test>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p508" "${NEWLANG_SANITIZER}")
+    add_executable(p514_public_probe tests/p514/public_probe.c)
+    target_link_libraries(p514_public_probe PRIVATE newlang_semantic)
+    add_executable(p514_gate_test tests/p514/gate_test.c)
+    target_link_libraries(p514_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
+    target_link_options(p514_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
+    foreach(group poison oom)
+        add_test(NAME p514_${group}.unit COMMAND p514_gate_test ${group}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p514/compose_true.nl")
+    endforeach()
+    add_test(NAME p514_composition_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p514/native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p514_public_probe>"
+        "$<TARGET_FILE:p514_gate_test>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p514" "${NEWLANG_SANITIZER}")
+    add_executable(p517_public_probe tests/p517/public_probe.c)
+    target_link_libraries(p517_public_probe PRIVATE newlang_semantic)
+    add_executable(p517_gate_test tests/p517/gate_test.c)
+    target_link_libraries(p517_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
+    target_link_options(p517_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
+    add_test(NAME p517_identity_poison.unit COMMAND p517_gate_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p517/r516_true.nl")
+    add_test(NAME p517_oom.unit COMMAND p514_gate_test oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p517/r516_true.nl")
+    add_test(NAME p517_r516_composition_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p517/native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p517_public_probe>"
+        "$<TARGET_FILE:p517_gate_test>" "$<TARGET_FILE:p514_gate_test>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p517" "${NEWLANG_SANITIZER}")
     add_executable(diagnostic_test tests/unit/diagnostic_test.c)
     target_link_libraries(diagnostic_test PRIVATE newlang_diagnostic)
     add_test(NAME diagnostics.unit COMMAND diagnostic_test)

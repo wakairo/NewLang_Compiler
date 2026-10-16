@@ -1,0 +1,179 @@
+{
+  "fixed_main": "9e6389388a44950d17e19bb134cbfde37ac75f97",
+  "fixed_candidate": "53b6883664f5f585ddd095ab357bc80e1e4018af",
+  "frozen_at": "2026-10-16T06:58:33.160321+00:00",
+  "r_origin": "19e9ed06a57ee822a569b777c1e2d9a8d51c21a8",
+  "r_original_sha256": {
+    "true": "c921596f72e64116630676b98d6ce43c529420a4bec26c437d01981cc39cc864",
+    "false": "0dfc413cfc63fa379b6b4c1d20a6beea1421188add4e05b9d1bc660fc0ca1664",
+    "reject_arm": "d9f6c09fdb63ba50e5beaeb26b6ada585cfe67c28883a53c53c7504ce6c0c272"
+  },
+  "replicas": "r516_*.nl are byte-identical derived replicas; original R branch/oracle never edited",
+  "matrix": {
+    "first_named_true.nl": [
+      "first",
+      "named",
+      "true"
+    ],
+    "first_inline_true.nl": [
+      "first",
+      "inline",
+      "true"
+    ],
+    "late_named_true.nl": [
+      "late",
+      "named",
+      "true"
+    ],
+    "late_inline_true.nl": [
+      "late",
+      "inline",
+      "true"
+    ],
+    "first_named_false.nl": [
+      "first",
+      "named",
+      "false"
+    ],
+    "first_inline_false.nl": [
+      "first",
+      "inline",
+      "false"
+    ],
+    "late_named_false.nl": [
+      "late",
+      "named",
+      "false"
+    ],
+    "late_inline_false.nl": [
+      "late",
+      "inline",
+      "false"
+    ]
+  },
+  "positive_oracles": {
+    "first_named_true.nl": {
+      "bool": 1,
+      "selected": 108,
+      "old": 37,
+      "after": 108,
+      "sibling": 211
+    },
+    "first_inline_true.nl": {
+      "bool": 1,
+      "selected": 108,
+      "old": 37,
+      "after": 108,
+      "sibling": 211
+    },
+    "late_named_true.nl": {
+      "bool": 1,
+      "selected": 108,
+      "old": 37,
+      "after": 108,
+      "sibling": 211
+    },
+    "late_inline_true.nl": {
+      "bool": 1,
+      "selected": 108,
+      "old": 37,
+      "after": 108,
+      "sibling": 211
+    },
+    "r516_true.nl": {
+      "bool": 1,
+      "selected": 108,
+      "old": 37,
+      "after": 108,
+      "sibling": 211
+    },
+    "first_named_false.nl": {
+      "bool": 0,
+      "selected": 173,
+      "old": 37,
+      "after": 173,
+      "sibling": 211
+    },
+    "first_inline_false.nl": {
+      "bool": 0,
+      "selected": 173,
+      "old": 37,
+      "after": 173,
+      "sibling": 211
+    },
+    "late_named_false.nl": {
+      "bool": 0,
+      "selected": 173,
+      "old": 37,
+      "after": 173,
+      "sibling": 211
+    },
+    "late_inline_false.nl": {
+      "bool": 0,
+      "selected": 173,
+      "old": 37,
+      "after": 173,
+      "sibling": 211
+    },
+    "r516_false.nl": {
+      "bool": 0,
+      "selected": 173,
+      "old": 37,
+      "after": 173,
+      "sibling": 211
+    },
+    "middle_inline_true.nl": {
+      "bool": 1,
+      "selected": 108,
+      "old": 37,
+      "after": 108,
+      "sibling": 211
+    },
+    "late_inline_copy_false.nl": {
+      "bool": 0,
+      "selected": 173,
+      "old": 37,
+      "after": 173,
+      "sibling": 211
+    }
+  },
+  "source_sha256": {
+    "disjoint_root.nl": "170bea304073b961ea7203cc778a6f47fdb880a8dbd5a95079a1ec4c37a245c0",
+    "first_inline_false.nl": "895abcee12cfd35d97508987199bb96647b2f8e3c9272607d7c5bcbcc81c1d4a",
+    "first_inline_true.nl": "0c290685c453c75cde3ee42698ad1f881fdd76767a29cdccc4543ed49b7d84fa",
+    "first_named_false.nl": "92ed297087b6f39f283019013e197557021dc15bbb834f948e7a9bd938dcf75f",
+    "first_named_true.nl": "1b25edb58b3613a7a8491de73046d064eca562c044d42fb6c743c60a2db067cc",
+    "late_inline_copy_false.nl": "d63d841545b36267ffaff5dc0d1fc513b4f2e41f54c9c21b37e4e47802231858",
+    "late_inline_false.nl": "0dfc413cfc63fa379b6b4c1d20a6beea1421188add4e05b9d1bc660fc0ca1664",
+    "late_inline_true.nl": "c921596f72e64116630676b98d6ce43c529420a4bec26c437d01981cc39cc864",
+    "late_named_false.nl": "57ab8a22e3a82c5ecea08f6c9607ac370896ad5838b137e9c31501fc60befb7a",
+    "late_named_true.nl": "b41b84e0a37f20316bc1b84c9c360a3046a8705f6de84035155c195f4b63ac54",
+    "middle_inline_true.nl": "e2bb50f1612499744bcaff2df795a25ab93fdd3db2eb4729a3efc8c73f71b17d",
+    "r516_false.nl": "0dfc413cfc63fa379b6b4c1d20a6beea1421188add4e05b9d1bc660fc0ca1664",
+    "r516_reject_arm.nl": "d9f6c09fdb63ba50e5beaeb26b6ada585cfe67c28883a53c53c7504ce6c0c272",
+    "r516_true.nl": "c921596f72e64116630676b98d6ce43c529420a4bec26c437d01981cc39cc864",
+    "second_write.nl": "ed8c851e5067a32e169446ceabec86afbfee4549b20fe88c44727a289024b7a3",
+    "wrong_field.nl": "b4a8f5ff902aa2e8609f8d5f6984336b3f79c69bbf47cac71e96e5ab222a92df"
+  },
+  "negative_oracles": {
+    "r516_reject_arm.nl": "semantic V1-U8-LITERAL-RANGE in ELSE, both-arm checking",
+    "wrong_field.nl": "otherwise legal broader field profile, backend refusal",
+    "disjoint_root.nl": "otherwise legal broader root profile, backend refusal",
+    "second_write.nl": "otherwise legal multiple write profile, backend refusal"
+  },
+  "p514_originals": {
+    "branch_effect.nl": "757f895f06c84bcbcfc1efa60bcb3cb1b4b39fa7245ebb2bb090d861f64feceb",
+    "compose_false.nl": "166dbbfae51bfb5328907b26dfef747590b69887351ae4fc902cd7a7e1f5529c",
+    "compose_true.nl": "e4c417cf40d31d6844a6eab28fea302a66182d5d39ab2b6e0914cee049d1fea9",
+    "disjoint_root.nl": "58d11e1544e20700ca09eec58c3c823606ed41f757b05d60a2b8bc3596ac500b",
+    "hold_control.nl": "7b0fbc9d346a247699275f030c2c64d70fb6aee57f0128eb0c5cb98e5a399d3b",
+    "invalid_else.nl": "bb6ee62bbd763f5d797aa11d94f1ad21c5f1bfb8bb7eeb0ca82e9808e5c9b773",
+    "ref_escape.nl": "1f992624333c35aa9c3c873d0ec5fed96fe958a2605b0719c339357235e28c0e",
+    "renamed_false.nl": "e794c739fa0ecaf3d85522e1f2a12455e3e263a8b5e72911ad80fee107b6b6d0",
+    "renamed_true.nl": "bb09401362a0649edf6624129e84e2a5437e157f558b5c5fe4252fafe04e338e",
+    "second_write.nl": "d0612bbf9761bf64e7e5b25fee22463fe2cd2506876186fbb45e08f9688701e6",
+    "wrong_condition.nl": "3e81d01b42ffa8276067ca7498c8e27a84429aa77ddbf380b578848abfd9e4af",
+    "wrong_field.nl": "cb4bc9e6f07f0a920d101fa2c262957cf28fa6ab3d70b61d893559f6fca86e5f"
+  },
+  "prediction": "Existing driver likely refuses inline condition before Pair frame; named+late may reveal first-binding assumptions. Predictions not measured findings."
+}

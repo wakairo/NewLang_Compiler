@@ -1,0 +1,18 @@
+Internal ctest changing into directory: /workspace/p514-build
+Test project /workspace/p514-build
+    Start  6: p508_poison.unit
+1/6 Test  #6: p508_poison.unit .........................   Passed    0.04 sec
+    Start  7: p508_oom.unit
+2/6 Test  #7: p508_oom.unit ............................   Passed    0.01 sec
+    Start  8: p508_copy_selection_native.integration
+3/6 Test  #8: p508_copy_selection_native.integration ...   Passed    1.73 sec
+    Start  9: p514_poison.unit
+4/6 Test  #9: p514_poison.unit .........................   Passed    0.13 sec
+    Start 10: p514_oom.unit
+5/6 Test #10: p514_oom.unit ............................   Passed    0.01 sec
+    Start 11: p514_composition_native.integration
+6/6 Test #11: p514_composition_native.integration ......   Passed    3.20 sec
+
+100% tests passed, 0 tests failed out of 6
+
+Total Test time (real) =   5.13 sec

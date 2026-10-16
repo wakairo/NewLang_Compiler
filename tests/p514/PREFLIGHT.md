@@ -1,0 +1,17 @@
+# P514 pre-edit/pre-run freeze
+
+Authority: main 9e6389388a44950d17e19bb134cbfde37ac75f97, CURRENT_SPEC -> Draft17.30. Start 2026-10-16 05:54 UTC. Hard stop 08:54 UTC. Branch p514-copy-choice-original-pair.
+
+Goal: keep the existing physical pre-IF Pair, pure Copy conditional then exactly one later scoped left replace, old0 and right9. Alternatives: existing direct fixed-field write; hoist pure choice (also possible in C/Zig/Rust); costly P506 branch-mutated Pair certificate remains HOLD. No public Pair phi/effect/ownership/ABI or new source rules.
+
+Historical: KEEP §§4/5.2/6/7/13/17/20/27; DI-001 @ projection, DI-006 existing lexical loan (final unified spelling DEFER), DI-007 write mode/no ptr authority, DI-011 no signature-based authority. PR511 adopted pure IF consumer and existing fixed-field direct write are separate evidence, not composition proof. PR510 only Stage1 CHECK and no public Pair join/native. N/A normative delta only for faithful composition; any new source/semantic choice STOP for Coordination. Ledger/Process/Compass/Strategy/Coverage read, authority remains Draft.
+
+Prediction: exact sources CHECK0, ordinary C17 first rejects pure-IF scalar-only global frame. Inspect actual checked source/arm prefix, original Pair root and one post-IF scoped write. If existing evidence insufficient or >200–400 new production LOC, stop before implementation. If finite consumer feasible, target <=300 production LOC, no issuer/public API/semantic changes, no generic IF frame loosening. Tests/OOM/private gate poisoning/GCC+Clang O0/O2 plus one natural full5+partial pair at final HEAD only. 90–180min maximum, no reruns/merge/other Tracks.
+
+Goal alignment: technical composition capability does not establish author+ordinary caller audit dependency reduction over fair C/Zig/Rust wrappers. Root/currentness/scoped-ref obligations remain compiler contracts; no Product GO/H1/Array/ordinary-safe library claim. Coordination decides independent R for any new original-root consumer trust.
+
+Manifest freezes sources, runtime oracle and negative classifications before compiler edits/runs. Corrupted generated C is a separate observer control, never a NewLang success.
+
+Stage0 measured 05:59 UTC (baseline file timestamps): positives CHECK0/C174, ordinary CLI gives path-only V1-BACKEND-UNSUPPORTED (no invented source span); source IF21 spans119–154 in retained body. Public arm worlds both retain Pair place1/inc1/fact1/value3 with children2/inc2/fact2/value1 and3/inc3/fact3/value2. Actual post-IF loan24/replace26/read31+34 connect same IDs; rootfact1->10, left2->9, right3 unchanged. Final scope is ended; final root is ended, so final current_fact0 is NOT claimed live. Old/new/root retained packages allow point-time metadata correlation. Minimum path appears a <=300–400 LOC read-only private consumer of existing qualified IF arms and original fixed-field evidence; no issuer/public API additions or semantic frame edits. Independent R is appropriate before adoption because this extends backend trust for actual original-root composition. Cost estimate 45–100min implementation/tests plus CI within180min. If this estimate fails, HOLD instead of new public Pair certificate.
+
+First ref_escape candidate reaches LOCAL-LOAN-PROFILE before semantic escape; retain as fixed profile control, not scope-rejection evidence. Add a separately frozen supported local-loan escape control if needed; never rewrite original input.
