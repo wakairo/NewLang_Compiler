@@ -133,6 +133,13 @@ try:
     # the *documented* candidate public headers/library, not P probe executable.
     all_libs = sorted((CANDIDATE/"r542-build").glob("libnewlang_*.a"))
     required(len(all_libs) >= 7, "missing standalone public library linkage")
+    # R542 harness-only repair: the default parser and opt-in parser export
+    # identical symbols. Static link order MUST select the fixed p534 opt-in
+    # parser, matching the documented p534_public_probe target. First-run
+    # parser-only failure remains in Actions #38924527577, unchanged.
+    experimental_parser = CANDIDATE/"r542-build/libnewlang_parser_p534.a"
+    required(experimental_parser in all_libs, "missing pinned opt-in parser archive")
+    all_libs = [experimental_parser] + [lib for lib in all_libs if lib != experimental_parser]
     audit_exe = OUT/"public_audit"
     cc_args = ["gcc","-std=c17","-Wall","-Wextra","-Wpedantic","-Werror",
                "-I"+str(CANDIDATE/"include"),
