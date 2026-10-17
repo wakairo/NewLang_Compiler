@@ -53,7 +53,8 @@ typedef enum {
     NL_TYPE_USIZE,
     NL_TYPE_ADDR,
     NL_TYPE_SUM,
-    NL_TYPE_BOOL
+    NL_TYPE_BOOL,
+    NL_TYPE_ARRAY /* structural builtin, never a user nominal */
 } NLSemanticTypeKind;
 typedef struct {
     NLSemanticTypeKind kind;
@@ -64,7 +65,8 @@ typedef struct {
     bool is_exclusive;
     bool layout_known;
     size_t variant_count; /* registered closed sum, zero otherwise */
-    size_t field_count;   /* registered aggregate shape; zero for flat types */
+    size_t field_count;   /* aggregate member count; fixed Array elements too */
+    size_t element_count; /* structural Array count; zero for other kinds */
     size_t size, alignment; /* compiler/target facts, not aggregate ABI */
 } NLSemanticTypeView;
 

@@ -1127,7 +1127,8 @@ NLTypeId nl_semantic_core_type(const NLSemanticContext *c,
                                NLSemanticTypeKind kind)
 {
     if (c != NULL && kind != NL_TYPE_NOMINAL && kind != NL_TYPE_PTR &&
-        kind != NL_TYPE_REF && kind != NL_TYPE_SLOT && kind != NL_TYPE_SUM) {
+        kind != NL_TYPE_REF && kind != NL_TYPE_SLOT && kind != NL_TYPE_SUM &&
+        kind != NL_TYPE_ARRAY) {
         for (size_t i = 0; i < c->type_count; ++i) {
             if (c->types[i].view.kind == kind) {
                 return i + 1;

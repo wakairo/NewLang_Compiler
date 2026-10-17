@@ -1,0 +1,26 @@
+{
+  "arity3": {
+    "check": 3,
+    "diagnostic": "tests/p534/arity3.nl:2:17-6:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n"
+  },
+  "arity5": {
+    "check": 3,
+    "diagnostic": "tests/p534/arity5.nl:2:17-8:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n"
+  },
+  "original": {
+    "check": 0,
+    "diagnostic": ""
+  },
+  "payloadless_some": {
+    "check": 3,
+    "diagnostic": "tests/p534/payloadless_some.nl:3:21-3:25: error(semantic)[P6-CONSTRUCTOR-SHAPE]: constructor payload shape/arity does not match variant\n"
+  },
+  "wrong_type": {
+    "check": 3,
+    "diagnostic": "tests/p534/wrong_type.nl:3:9-3:14: error(semantic)[ARRAY4-ELEMENT-TYPE]: initializer must have exact Option<u8> type\n"
+  },
+  "wrong_variant": {
+    "check": 3,
+    "diagnostic": "tests/p534/wrong_variant.nl:3:9-3:32: error(semantic)[ARRAY4-OPTION-VARIANT]: speculative Option<u8> construction permits only None\n"
+  }
+}

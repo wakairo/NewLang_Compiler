@@ -6,6 +6,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef NEWLANG_EXPERIMENTAL_OPTION_ARRAY4_SOURCE
+#define NEWLANG_EXPERIMENTAL_OPTION_ARRAY4_SOURCE 0
+#endif
+
 struct NLParser {
     const NLSource *source;
     NLLexer lexer;
@@ -180,6 +184,17 @@ static NLSyntaxNode *option_ptr(NLParser *parser, NLSourceSpan start)
     if (!expect_punct(parser, '<', "REC-TYPE-PROFILE",
                       "expected Option argument"))
         goto profile;
+    if (NEWLANG_EXPERIMENTAL_OPTION_ARRAY4_SOURCE && word(parser, "u8")) {
+        consume(parser);
+        if (!peek(parser))
+            return NULL;
+        const size_t end = parser->token.span.end_byte;
+        if (!expect_punct(parser, '>', "ARRAY4-OPTION-TYPE",
+                          "expected Option<u8> close"))
+            return NULL;
+        return node(parser, NL_SYNTAX_OPTION_U8,
+                    (NLSourceSpan){start.start_byte, end});
+    }
     if (word(parser, "OneBacking")) {
         consume(parser);
         size_t end = parser->token.span.end_byte;
@@ -228,6 +243,43 @@ profile:
     return NULL;
 }
 
+/* Concrete nested builtins only; no generic type expression engine. */
+static NLSyntaxNode *array4_type(NLParser *parser, NLSourceSpan start)
+{
+    if (!expect_punct(parser, '<', "ARRAY4-TYPE", "expected Array argument") ||
+        !word(parser, "Option"))
+        goto unsupported;
+    const NLSourceSpan option = parser->token.span;
+    consume(parser);
+    NLSyntaxNode *element = option_ptr(parser, option);
+    if (element == NULL)
+        return NULL;
+    if (element->view.kind != NL_SYNTAX_OPTION_U8 ||
+        !expect_punct(parser, ',', "ARRAY4-TYPE", "expected static count") ||
+        !peek(parser) || parser->token.kind != NL_TOKEN_DIGITS)
+        goto unsupported;
+    NLSourceView count;
+    if (!nl_source_view(parser->source, parser->token.span, &count) ||
+        count.length != 1 || count.bytes[0] != '4')
+        goto unsupported;
+    consume(parser);
+    if (!peek(parser))
+        return NULL;
+    const size_t end = parser->token.span.end_byte;
+    if (!expect_punct(parser, '>', "ARRAY4-TYPE", "expected Array close"))
+        return NULL;
+    NLSyntaxNode *r = node(parser, NL_SYNTAX_ARRAY4_TYPE,
+                           (NLSourceSpan){start.start_byte, end});
+    if (r != NULL)
+        r->view.data.array4.type = element;
+    return r;
+unsupported:
+    fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
+         "ARRAY4-TYPE-PROFILE",
+         "only speculative Array<Option<u8>,4> is enabled");
+    return NULL;
+}
+
 static NLSyntaxNode *type(NLParser *parser)
 {
     if (!enter(parser)) {
@@ -253,11 +305,17 @@ static NLSyntaxNode *type(NLParser *parser)
         }
     }
     const NLSourceSpan name_span = parser->token.span;
+    const bool is_array =
+        NEWLANG_EXPERIMENTAL_OPTION_ARRAY4_SOURCE && word(parser, "Array");
     const bool is_option = word(parser, "Option");
     const bool is_ptr = word(parser, "ptr");
     const bool is_ref = word(parser, "ref");
     consume(parser);
     if (!peek(parser)) {
+        goto done;
+    }
+    if (!is_exclusive && is_array && punct(parser, '<')) {
+        result = array4_type(parser, name_span);
         goto done;
     }
     if (!is_exclusive && is_option && punct(parser, '<')) {
@@ -1115,6 +1173,8 @@ static NLSyntaxNode *source_primary(NLParser *parser)
              "expected name, call, registered aggregate or lexical block");
         goto done;
     }
+    const bool exact_array =
+        NEWLANG_EXPERIMENTAL_OPTION_ARRAY4_SOURCE && word(parser, "Array");
     const bool exact_option = word(parser, "Option");
     const bool u8_literal = word(parser, "u8");
     const bool usize_literal = word(parser, "usize");
@@ -1128,6 +1188,40 @@ static NLSyntaxNode *source_primary(NLParser *parser)
     const bool write_loan = word(parser, "loan_write");
     const NLSourceSpan name = parser->token.span;
     consume(parser);
+    if (exact_array && punct(parser, '<')) {
+        NLSyntaxNode *t = array4_type(parser, name);
+        if (t == NULL || !expect_punct(parser, '{', "ARRAY4-OPEN",
+                                       "expected Array initializer"))
+            goto done;
+        NLSyntaxNode *head = NULL, *tail = NULL;
+        size_t count = 0;
+        while (!punct(parser, '}')) {
+            NLSyntaxNode *element = source_expression(parser);
+            if (element == NULL)
+                goto done;
+            if (tail != NULL)
+                tail->argument_next = element;
+            else
+                head = element;
+            tail = element;
+            ++count;
+            if (!punct(parser, ','))
+                break;
+            consume(parser);
+        }
+        const size_t end = parser->token.span.end_byte;
+        if (!expect_punct(parser, '}', "ARRAY4-CLOSE",
+                          "expected Array initializer close"))
+            goto done;
+        result = node(parser, NL_SYNTAX_ARRAY4_CONSTRUCTOR,
+                      (NLSourceSpan){name.start_byte, end});
+        if (result != NULL) {
+            result->view.data.array4.type = t;
+            result->view.data.array4.elements = head;
+            result->view.data.array4.count = count;
+        }
+        goto done;
+    }
     if (allocate || into || erase || reloan) {
         result = allocated_call(parser, name,
                                 allocate ? NL_SYNTAX_ALLOCATED_TRY

@@ -1,0 +1,121 @@
+{
+  "utc": "2026-10-16T15:48:24.720303+00:00",
+  "fixed_compiler": "7f639a3a89d55f44848e361e1458529fe5395345",
+  "source_freeze_commit": "4cffbff",
+  "cases": {
+    "two_roots": {
+      "runs": [
+        {
+          "args": [
+            "--check"
+          ],
+          "exit": 3,
+          "stdout": "",
+          "stderr": "tests/p541/two_roots.nl:8:20-13:6: error(precision)[ARRAY4-ONE-ROOT-PROFILE]: one original Array constructor per checked body\n"
+        },
+        {
+          "args": [],
+          "exit": 3,
+          "stdout": "",
+          "stderr": "tests/p541/two_roots.nl:8:20-13:6: error(precision)[ARRAY4-ONE-ROOT-PROFILE]: one original Array constructor per checked body\n"
+        }
+      ],
+      "public_rollback": "P514_REJECT phase=registration code=ARRAY4-ONE-ROOT-PROFILE rollback=PASS artifact=NULL"
+    },
+    "r540_two_roots": {
+      "runs": [
+        {
+          "args": [
+            "--check"
+          ],
+          "exit": 3,
+          "stdout": "",
+          "stderr": "tests/p541/r540_two_roots.nl:8:18-13:6: error(precision)[ARRAY4-ONE-ROOT-PROFILE]: one original Array constructor per checked body\n"
+        },
+        {
+          "args": [],
+          "exit": 3,
+          "stdout": "",
+          "stderr": "tests/p541/r540_two_roots.nl:8:18-13:6: error(precision)[ARRAY4-ONE-ROOT-PROFILE]: one original Array constructor per checked body\n"
+        }
+      ],
+      "public_rollback": "P514_REJECT phase=registration code=ARRAY4-ONE-ROOT-PROFILE rollback=PASS artifact=NULL"
+    },
+    "second_arity3": {
+      "runs": [
+        {
+          "args": [
+            "--check"
+          ],
+          "exit": 3,
+          "stdout": "",
+          "stderr": "tests/p541/second_arity3.nl:8:20-12:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n"
+        },
+        {
+          "args": [],
+          "exit": 3,
+          "stdout": "",
+          "stderr": "tests/p541/second_arity3.nl:8:20-12:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n"
+        }
+      ],
+      "public_rollback": "P514_REJECT phase=registration code=ARRAY4-INITIALIZER-ARITY rollback=PASS artifact=NULL"
+    },
+    "second_arity5": {
+      "runs": [
+        {
+          "args": [
+            "--check"
+          ],
+          "exit": 3,
+          "stdout": "",
+          "stderr": "tests/p541/second_arity5.nl:8:20-14:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n"
+        },
+        {
+          "args": [],
+          "exit": 3,
+          "stdout": "",
+          "stderr": "tests/p541/second_arity5.nl:8:20-14:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n"
+        }
+      ],
+      "public_rollback": "P514_REJECT phase=registration code=ARRAY4-INITIALIZER-ARITY rollback=PASS artifact=NULL"
+    },
+    "second_wrong_type": {
+      "runs": [
+        {
+          "args": [
+            "--check"
+          ],
+          "exit": 3,
+          "stdout": "",
+          "stderr": "tests/p541/second_wrong_type.nl:8:20-13:6: error(precision)[ARRAY4-ONE-ROOT-PROFILE]: one original Array constructor per checked body\n"
+        },
+        {
+          "args": [],
+          "exit": 3,
+          "stdout": "",
+          "stderr": "tests/p541/second_wrong_type.nl:8:20-13:6: error(precision)[ARRAY4-ONE-ROOT-PROFILE]: one original Array constructor per checked body\n"
+        }
+      ],
+      "public_rollback": "P514_REJECT phase=registration code=ARRAY4-ONE-ROOT-PROFILE rollback=PASS artifact=NULL"
+    },
+    "second_nonleaf": {
+      "runs": [
+        {
+          "args": [
+            "--check"
+          ],
+          "exit": 3,
+          "stdout": "",
+          "stderr": "tests/p541/second_nonleaf.nl:8:20-13:6: error(precision)[ARRAY4-ONE-ROOT-PROFILE]: one original Array constructor per checked body\n"
+        },
+        {
+          "args": [],
+          "exit": 3,
+          "stdout": "",
+          "stderr": "tests/p541/second_nonleaf.nl:8:20-13:6: error(precision)[ARRAY4-ONE-ROOT-PROFILE]: one original Array constructor per checked body\n"
+        }
+      ],
+      "public_rollback": "P514_REJECT phase=registration code=ARRAY4-ONE-ROOT-PROFILE rollback=PASS artifact=NULL"
+    }
+  }
+}

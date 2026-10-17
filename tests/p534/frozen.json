@@ -1,0 +1,68 @@
+{
+  "frozen_utc": "2026-10-16T13:44:43.730845+00:00",
+  "fixed_main": "c6ae58512683090b2d98b09f51765143b1517345",
+  "candidate_authority": "817a5534b131b9b70b5d37f78a4bad1e39ee4ad4",
+  "canonical": "Draft17.30; candidate17.32 NOT ADOPTED",
+  "cases": {
+    "original": {
+      "sha256": "0e032e49f78028fb69549b1120a060dd4fe84ae1073d25925ba679d3d8513801",
+      "bytes": 178,
+      "oracle": {
+        "positive": true,
+        "arity": 4,
+        "eventual_layer": "SOURCE/CHECK/OWNED/C17/NATIVE"
+      },
+      "baseline_prediction": "parser unsupported; exact first diagnostic to measure"
+    },
+    "arity3": {
+      "sha256": "7344e531c81bf1b88adfa49f4f7042db8fb1443d73534ee4f8f9cdb78c77f4a0",
+      "bytes": 152,
+      "oracle": {
+        "positive": false,
+        "arity": 3,
+        "eventual_layer": "semantic arity/type/constructor refusal, not parser-only"
+      },
+      "baseline_prediction": "parser unsupported; exact first diagnostic to measure"
+    },
+    "arity5": {
+      "sha256": "219ce408e53d930e68954ecb2443c205d73a73ff73dab4f36a8b8f1bee4469e4",
+      "bytes": 204,
+      "oracle": {
+        "positive": false,
+        "arity": 5,
+        "eventual_layer": "semantic arity/type/constructor refusal, not parser-only"
+      },
+      "baseline_prediction": "parser unsupported; exact first diagnostic to measure"
+    },
+    "wrong_type": {
+      "sha256": "f8536e75f847c69aa5cf1cc7ee9e8ad2f1ca1f19dad308bf5ff3967dd9531766",
+      "bytes": 167,
+      "oracle": {
+        "positive": false,
+        "arity": 4,
+        "eventual_layer": "semantic arity/type/constructor refusal, not parser-only"
+      },
+      "baseline_prediction": "parser unsupported; exact first diagnostic to measure"
+    },
+    "payloadless_some": {
+      "sha256": "2d9b57b89d80a5a61fcedc07d223b8205f2b53830645d5181cdad69d11ec7a27",
+      "bytes": 178,
+      "oracle": {
+        "positive": false,
+        "arity": 4,
+        "eventual_layer": "semantic arity/type/constructor refusal, not parser-only"
+      },
+      "baseline_prediction": "parser unsupported; exact first diagnostic to measure"
+    },
+    "wrong_variant": {
+      "sha256": "a2380941134cee467b1f97dba66b3f17ee84d0f046a96deef7f81dd4bc45366f",
+      "bytes": 185,
+      "oracle": {
+        "positive": false,
+        "arity": 4,
+        "eventual_layer": "semantic arity/type/constructor refusal, not parser-only"
+      },
+      "baseline_prediction": "parser unsupported; exact first diagnostic to measure"
+    }
+  }
+}

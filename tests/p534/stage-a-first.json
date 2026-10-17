@@ -1,0 +1,26 @@
+{
+  "arity3": {
+    "check": 3,
+    "diagnostic": "tests/p534/arity3.nl:2:33-2:34: error(unsupported)[ARRAY4-TYPE-PROFILE]: only speculative Array<Option<u8>,4> is enabled\n"
+  },
+  "arity5": {
+    "check": 3,
+    "diagnostic": "tests/p534/arity5.nl:2:33-2:34: error(unsupported)[ARRAY4-TYPE-PROFILE]: only speculative Array<Option<u8>,4> is enabled\n"
+  },
+  "original": {
+    "check": 3,
+    "diagnostic": "tests/p534/original.nl:2:33-2:34: error(unsupported)[ARRAY4-TYPE-PROFILE]: only speculative Array<Option<u8>,4> is enabled\n"
+  },
+  "payloadless_some": {
+    "check": 3,
+    "diagnostic": "tests/p534/payloadless_some.nl:2:33-2:34: error(unsupported)[ARRAY4-TYPE-PROFILE]: only speculative Array<Option<u8>,4> is enabled\n"
+  },
+  "wrong_type": {
+    "check": 3,
+    "diagnostic": "tests/p534/wrong_type.nl:2:33-2:34: error(unsupported)[ARRAY4-TYPE-PROFILE]: only speculative Array<Option<u8>,4> is enabled\n"
+  },
+  "wrong_variant": {
+    "check": 3,
+    "diagnostic": "tests/p534/wrong_variant.nl:2:33-2:34: error(unsupported)[ARRAY4-TYPE-PROFILE]: only speculative Array<Option<u8>,4> is enabled\n"
+  }
+}

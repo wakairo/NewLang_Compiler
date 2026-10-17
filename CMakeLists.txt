@@ -98,7 +98,7 @@ add_library(newlang_parser STATIC src/parser.c)
 target_link_libraries(newlang_parser PUBLIC newlang_syntax newlang_lexer newlang_diagnostic)
 add_library(newlang_checked STATIC src/checked.c)
 target_link_libraries(newlang_checked PUBLIC newlang_syntax)
-add_library(newlang_semantic STATIC src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/node_join.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
+add_library(newlang_semantic STATIC src/array4.c src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/node_join.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
 target_link_libraries(newlang_semantic PUBLIC newlang_checked newlang_diagnostic newlang_parser)
 add_library(newlang_checked_c_node STATIC src/checked_c_node.c src/checked_c_five.c)
 target_link_libraries(newlang_checked_c_node PUBLIC newlang_semantic)
@@ -108,6 +108,44 @@ target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic n
 include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
+    # SPECULATIVE PR533 opt-in: default compiler/parser stay OFF. Test-only
+    # rebuild of the SAME parser exercises Production semantics/owned/C17.
+    add_library(newlang_parser_p534 STATIC src/parser.c)
+    target_compile_definitions(newlang_parser_p534 PRIVATE NEWLANG_EXPERIMENTAL_OPTION_ARRAY4_SOURCE=1)
+    target_link_libraries(newlang_parser_p534 PUBLIC newlang_syntax newlang_lexer newlang_diagnostic)
+    add_executable(newlangc_p534 src/main.c)
+    target_link_libraries(newlangc_p534 PRIVATE newlang_parser_p534 newlang_checked_c_node newlang_semantic newlang_diagnostic)
+    add_executable(p534_public_probe tests/p534/public_probe.c)
+    target_link_libraries(p534_public_probe PRIVATE newlang_parser_p534 newlang_semantic)
+    add_test(NAME p534_source_owned.unit COMMAND p534_public_probe "${CMAKE_CURRENT_SOURCE_DIR}/tests/p534/original.nl")
+    add_executable(p534_semantic_gate tests/p514/gate_test.c)
+    target_link_libraries(p534_semantic_gate PRIVATE newlang_parser_p534 newlang_checked_c_node newlang_semantic)
+    target_link_options(p534_semantic_gate PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
+    add_test(NAME p534_oom.unit COMMAND p534_semantic_gate oom "${CMAKE_CURRENT_SOURCE_DIR}/tests/p534/original.nl")
+    add_executable(p534_fault_test tests/p534/fault_test.c)
+    target_link_libraries(p534_fault_test PRIVATE newlang_parser_p534 newlang_semantic)
+    target_link_options(p534_fault_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
+    add_test(NAME p534_issuer_fault.unit COMMAND p534_fault_test "${CMAKE_CURRENT_SOURCE_DIR}/tests/p534/original.nl")
+    add_test(NAME p534_array_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p534/native_test.py"
+        "$<TARGET_FILE:newlangc_p534>" "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p534_public_probe>"
+        "$<TARGET_FILE:p534_semantic_gate>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p534" "${NEWLANG_SANITIZER}")
+
+    add_executable(p541_public_probe tests/p541/public_probe.c)
+    target_link_libraries(p541_public_probe PRIVATE newlang_parser_p534 newlang_semantic)
+    add_test(NAME p541_source_owned.unit COMMAND p541_public_probe "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541/two_roots.nl")
+    add_test(NAME p541_oom.unit COMMAND p534_semantic_gate oom "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541/two_roots.nl")
+    add_executable(p541_fault_test tests/p541/fault_test.c)
+    target_link_libraries(p541_fault_test PRIVATE newlang_parser_p534 newlang_semantic)
+    target_link_options(p541_fault_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
+    add_test(NAME p541_issuer_fault.unit COMMAND p541_fault_test "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541/two_roots.nl")
+    add_test(NAME p541_array_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541/native_test.py"
+        "$<TARGET_FILE:newlangc_p534>" "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p541_public_probe>"
+        "$<TARGET_FILE:p534_semantic_gate>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541" "${NEWLANG_SANITIZER}")
+
     add_executable(p504_public_probe tests/p504/public_probe.c)
     target_link_libraries(p504_public_probe PRIVATE newlang_semantic)
     add_executable(p504_gate_probe tests/p504/gate_probe.c)

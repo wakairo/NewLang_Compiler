@@ -196,7 +196,14 @@ static NLTypeId check_type(Check *check, const NLSyntaxNode *syntax)
         return 0;
     }
     NLTypeId result = 0;
-    if (node->kind == NL_SYNTAX_TYPE_NAME) {
+    if (node->kind == NL_SYNTAX_OPTION_U8 ||
+        node->kind == NL_SYNTAX_ARRAY4_TYPE) {
+        (void)host(check,
+                   nl_array4_registry(check->context,
+                                      node->kind == NL_SYNTAX_ARRAY4_TYPE,
+                                      &result),
+                   node->span);
+    } else if (node->kind == NL_SYNTAX_TYPE_NAME) {
         for (size_t i = 0; i < check->context->type_count; ++i) {
             const char *const name = check->context->types[i].name;
             if (name != NULL && equal_name(check, node->data.name, name)) {
@@ -2081,6 +2088,7 @@ static bool avs_type(const NLSemanticContext *c, NLTypeId type)
 
 static NLCheckedNodeId aggregate(Check *, const NLSyntaxView *);
 static NLCheckedNodeId sum_constructor(Check *, const NLSyntaxView *);
+static NLCheckedNodeId array4_constructor(Check *, const NLSyntaxView *);
 static NLCheckedNodeId sum_match(Check *, const NLSyntaxView *);
 static NLCheckedNodeId source_if(Check *, const NLSyntaxView *);
 static NLCheckedNodeId source_loop(Check *, const NLSyntaxView *);
@@ -2105,7 +2113,8 @@ static bool fixed_selection(Check *check, const NLSyntaxView *s,
     NLSemanticContext *c = check->context;
     const NLSymbolId symbol =
         field_binding(check, s->data.field_designator.base);
-    if (symbol == 0 || !nl_fixed_type(c, c->bindings[symbol - 1].view.type)) {
+    if (symbol == 0 || !nl_fixed_type(c, c->bindings[symbol - 1].view.type) ||
+        nl_array4_type(c, c->bindings[symbol - 1].view.type)) {
         fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span, "FIELD-PROFILE",
              "field base requires a direct Pair or completed recursive local");
         return false;
@@ -2476,6 +2485,7 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         node->kind != NL_SYNTAX_LOOP && node->kind != NL_SYNTAX_U8_LITERAL &&
         node->kind != NL_SYNTAX_USIZE_LITERAL &&
         node->kind != NL_SYNTAX_USIZE_EQUALITY &&
+        node->kind != NL_SYNTAX_ARRAY4_CONSTRUCTOR &&
         node->kind != NL_SYNTAX_AGGREGATE &&
         node->kind != NL_SYNTAX_LOCAL_READ_LOAN &&
         node->kind != NL_SYNTAX_LOCAL_WRITE_LOAN &&
@@ -2533,6 +2543,8 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         result = source_block(check, node);
     } else if (node->kind == NL_SYNTAX_SUM_CONSTRUCTOR) {
         result = sum_constructor(check, node);
+    } else if (node->kind == NL_SYNTAX_ARRAY4_CONSTRUCTOR) {
+        result = array4_constructor(check, node);
     } else if (node->kind == NL_SYNTAX_FIELD_DESIGNATOR) {
         result = field_read(check, node);
     } else if (node->kind == NL_SYNTAX_MATCH) {
@@ -3020,6 +3032,10 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
             view(check, result)->name = spans[i];
         }
     }
+    if (result != 0 && rhs.kind == NL_CHECKED_ARRAY4_CONSTRUCTOR &&
+        !host(check, nl_array4_capture(check->artifact, result, check->context),
+              syntax->span))
+        result = 0;
 cleanup:
     for (size_t i = 0; i < count; ++i)
         free(names[i]);
@@ -3698,7 +3714,7 @@ static NLCheckedNodeId sum_constructor(Check *check, const NLSyntaxView *s)
             return 0;
         }
         if (ptr == 0 ||
-            (!custody &&
+            (ptr != nl_semantic_core_type(c, NL_TYPE_U8) && !custody &&
              c->types[c->types[ptr - 1].view.target - 1].incomplete)) {
             fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "REC-INCOMPLETE-TYPE",
                  "Option value construction needs header completion");
@@ -3728,6 +3744,14 @@ static NLCheckedNodeId sum_constructor(Check *check, const NLSyntaxView *s)
         fail(check, NL_CHECK_SEMANTIC_ERROR, s->data.constructor.variant,
              "P6-CONSTRUCTOR-SHAPE",
              "constructor payload shape/arity does not match variant");
+        return 0;
+    }
+    if (c->types[type - 1].option_target ==
+            nl_semantic_core_type(c, NL_TYPE_U8) &&
+        variant != 1) {
+        fail(check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
+             "ARRAY4-OPTION-VARIANT",
+             "speculative Option<u8> construction permits only None");
         return 0;
     }
     NLCheckedNodeId init = 0;
@@ -3777,6 +3801,70 @@ static NLCheckedNodeId sum_constructor(Check *check, const NLSyntaxView *s)
                                    .initializer = init,
                                    .result_count = 1,
                                    .results = {{type, value}}});
+}
+
+static NLCheckedNodeId array4_constructor(Check *check, const NLSyntaxView *s)
+{
+    NLSemanticContext *c = check->context;
+    if (s->data.array4.count != 4) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR, s->span,
+             "ARRAY4-INITIALIZER-ARITY",
+             "Array4 requires exactly four initializers");
+        return 0;
+    }
+    const NLTypeId type = check_type(check, s->data.array4.type);
+    if (!type)
+        return 0;
+    /* Each direct lexical receiver gets a fresh original placement from the
+     * existing bind/fixed-child kernel. Its own source event is captured only
+     * after receiving; the collection validator closes every original. */
+    const NLTypeId option = c->types[type - 1].view.target;
+    NLSemanticValueView package = {.type = type, .field_count = 4};
+    NLCheckedNodeId id =
+        add(check, (NLCheckedNodeView){.kind = NL_CHECKED_ARRAY4_CONSTRUCTOR,
+                                       .span = s->span,
+                                       .type = type});
+    if (!id)
+        return 0;
+    const NLSyntaxNode *element = s->data.array4.elements;
+    NLCheckedNodeId previous = 0;
+    for (size_t i = 0; i < 4; ++i) {
+        NLCheckedNodeId child = expression(check, element);
+        if (!child)
+            return 0;
+        const NLValueId value = one_result(check, child);
+        if (!value || c->values[value - 1].type != option) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, view(check, child)->span,
+                 "ARRAY4-ELEMENT-TYPE",
+                 "initializer must have exact Option<u8> type");
+            return 0;
+        }
+        if (view(check, child)->kind != NL_CHECKED_SUM_CONSTRUCTOR ||
+            c->values[value - 1].variant != 1) {
+            fail(check, NL_CHECK_SEMANTIC_ERROR, view(check, child)->span,
+                 "ARRAY4-ELEMENT-CONSTRUCTOR",
+                 "each initializer must construct typed None");
+            return 0;
+        }
+        package.fields[i] = value;
+        if (previous)
+            view(check, previous)->next_argument = child;
+        else
+            view(check, id)->first_argument = child;
+        previous = child;
+        ++view(check, id)->argument_count;
+        element = nl_syntax_next_argument(element);
+    }
+    const NLValueId value = new_value(check, package, s->span);
+    if (!value)
+        return 0;
+    for (size_t i = 0; i < 4; ++i) {
+        c->values[package.fields[i] - 1].carrier = NL_CARRIER_AGGREGATE;
+        c->values[package.fields[i] - 1].aggregate_owner = value;
+    }
+    view(check, id)->result_count = 1;
+    view(check, id)->results[0] = (NLCheckedResult){type, value};
+    return id;
 }
 
 static bool flat_copy(const NLSemanticContext *c, NLTypeId type)

@@ -1,0 +1,96 @@
+{
+  "utc": "2026-10-16T14:23:32.674757+00:00",
+  "base_main": "c6ae58512683090b2d98b09f51765143b1517345",
+  "candidate_source_authority": "817a5534b131b9b70b5d37f78a4bad1e39ee4ad4",
+  "binary_sha256": {
+    "/workspace/p534-baseline/newlangc": "79e38c713b4d5555a6d930bbeb971ee7d3f73a4adff47a8ac144116eb63a0716",
+    "/workspace/p534-candidate/newlangc": "af7c3cb2bd7487d564672ed6dade8c5273566f9b21bfd5a73e9309afc580ebd2",
+    "/workspace/p534-candidate/newlangc_p534": "d0d3d5508f01a2f30f093d968a8ac7671d7f4c780799252d81963a105f251aa6"
+  },
+  "cases": {
+    "original": {
+      "check": {
+        "status": 0,
+        "diagnostic": "",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "status": 0,
+        "diagnostic": "",
+        "stdout_bytes": 483,
+        "stdout_sha256": "068581b7c75a356be56fbb13f5d621dc2c01327fdbff9147fcda75a143e43217"
+      }
+    },
+    "arity3": {
+      "check": {
+        "status": 3,
+        "diagnostic": "tests/p534/arity3.nl:2:17-6:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "status": 3,
+        "diagnostic": "tests/p534/arity3.nl:2:17-6:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "arity5": {
+      "check": {
+        "status": 3,
+        "diagnostic": "tests/p534/arity5.nl:2:17-8:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "status": 3,
+        "diagnostic": "tests/p534/arity5.nl:2:17-8:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wrong_type": {
+      "check": {
+        "status": 3,
+        "diagnostic": "tests/p534/wrong_type.nl:3:9-3:14: error(semantic)[ARRAY4-ELEMENT-TYPE]: initializer must have exact Option<u8> type\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "status": 3,
+        "diagnostic": "tests/p534/wrong_type.nl:3:9-3:14: error(semantic)[ARRAY4-ELEMENT-TYPE]: initializer must have exact Option<u8> type\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "payloadless_some": {
+      "check": {
+        "status": 3,
+        "diagnostic": "tests/p534/payloadless_some.nl:3:21-3:25: error(semantic)[P6-CONSTRUCTOR-SHAPE]: constructor payload shape/arity does not match variant\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "status": 3,
+        "diagnostic": "tests/p534/payloadless_some.nl:3:21-3:25: error(semantic)[P6-CONSTRUCTOR-SHAPE]: constructor payload shape/arity does not match variant\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wrong_variant": {
+      "check": {
+        "status": 3,
+        "diagnostic": "tests/p534/wrong_variant.nl:3:9-3:32: error(unsupported)[ARRAY4-OPTION-VARIANT]: speculative Option<u8> construction permits only None\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "status": 3,
+        "diagnostic": "tests/p534/wrong_variant.nl:3:9-3:32: error(unsupported)[ARRAY4-OPTION-VARIANT]: speculative Option<u8> construction permits only None\n",
+        "stdout_bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  }
+}

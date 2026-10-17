@@ -1,0 +1,74 @@
+[ 11%] Built target newlang_source
+[ 11%] Built target newlang_diagnostic
+[ 17%] Built target newlang_syntax
+[ 23%] Built target newlang_lexer
+[ 41%] Built target newlang_parser
+[ 41%] Built target newlang_parser_p534
+[ 41%] Built target newlang_checked
+[ 41%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_node.c.o
+[ 47%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_join.c.o
+[ 47%] Building C object CMakeFiles/newlang_semantic.dir/src/array4.c.o
+[ 47%] Building C object CMakeFiles/newlang_semantic.dir/src/captured_closure.c.o
+[ 52%] Building C object CMakeFiles/newlang_semantic.dir/src/node_join.c.o
+[ 52%] Building C object CMakeFiles/newlang_semantic.dir/src/packet_fork.c.o
+[ 58%] Building C object CMakeFiles/newlang_semantic.dir/src/fixed_field.c.o
+[ 58%] Building C object CMakeFiles/newlang_semantic.dir/src/sum.c.o
+[ 64%] Building C object CMakeFiles/newlang_semantic.dir/src/raw_storage.c.o
+[ 64%] Building C object CMakeFiles/newlang_semantic.dir/src/function_body.c.o
+[ 70%] Building C object CMakeFiles/newlang_semantic.dir/src/typed_owner.c.o
+[ 70%] Building C object CMakeFiles/newlang_semantic.dir/src/custody.c.o
+[ 76%] Building C object CMakeFiles/newlang_semantic.dir/src/control.c.o
+[ 76%] Linking C static library libnewlang_semantic.a
+[ 88%] Built target newlang_semantic
+[ 88%] Building C object CMakeFiles/newlang_checked_c_node.dir/src/checked_c_node.c.o
+[ 88%] Building C object CMakeFiles/newlang_checked_c_node.dir/src/checked_c_five.c.o
+[ 94%] Linking C static library libnewlang_checked_c_node.a
+[ 94%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/newlangc_p534.dir/src/main.c.o
+[100%] Linking C executable newlangc_p534
+[100%] Built target newlangc_p534
+[  6%] Built target newlang_diagnostic
+[ 12%] Built target newlang_source
+[ 18%] Built target newlang_lexer
+[ 25%] Built target newlang_syntax
+[ 37%] Built target newlang_checked
+[ 37%] Built target newlang_parser
+[ 87%] Built target newlang_semantic
+[ 93%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/newlangc.dir/src/main.c.o
+[100%] Linking C executable newlangc
+[100%] Built target newlangc
+[  6%] Built target newlang_diagnostic
+[ 12%] Built target newlang_source
+[ 25%] Built target newlang_syntax
+[ 25%] Built target newlang_lexer
+[ 31%] Built target newlang_checked
+[ 43%] Built target newlang_parser_p534
+[ 43%] Built target newlang_parser
+[ 93%] Built target newlang_semantic
+[100%] Building C object CMakeFiles/p534_public_probe.dir/tests/p534/public_probe.c.o
+[100%] Linking C executable p534_public_probe
+[100%] Built target p534_public_probe
+[  6%] Built target newlang_diagnostic
+[ 12%] Built target newlang_source
+[ 18%] Built target newlang_lexer
+[ 25%] Built target newlang_syntax
+[ 31%] Built target newlang_parser_p534
+[ 43%] Built target newlang_parser
+[ 43%] Built target newlang_checked
+[ 93%] Built target newlang_semantic
+[100%] Building C object CMakeFiles/p534_fault_test.dir/tests/p534/fault_test.c.o
+[100%] Linking C executable p534_fault_test
+[100%] Built target p534_fault_test
+[ 11%] Built target newlang_diagnostic
+[ 11%] Built target newlang_source
+[ 17%] Built target newlang_lexer
+[ 23%] Built target newlang_syntax
+[ 29%] Built target newlang_parser_p534
+[ 35%] Built target newlang_checked
+[ 41%] Built target newlang_parser
+[ 88%] Built target newlang_semantic
+[ 94%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p534_semantic_gate.dir/tests/p514/gate_test.c.o
+[100%] Linking C executable p534_semantic_gate
+[100%] Built target p534_semantic_gate
