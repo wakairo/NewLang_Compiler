@@ -366,7 +366,7 @@ fn scenario() {
     let a = pool.detach_active(&active_a).expect("detach same original A");
     let before_invalid = pool.audit();
     assert!(!pool.is_active(&copied_a));
-    assert_eq!(pool.detach_active(&copied_a), Err(intrusive::Invalid));
+    assert!(matches!(pool.detach_active(&copied_a), Err(intrusive::Invalid)));
     assert_eq!(pool.audit(), before_invalid); // stale clone: Invalid, ZERO mutation
     pool.recycle_free(a).expect("recycle A");
     let b = pool.detach_active(&active_b).expect("detach same original B");
