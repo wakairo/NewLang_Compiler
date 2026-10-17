@@ -1,0 +1,18 @@
+{
+  "frozen_utc": "2026-10-17T13:40:09.549316+00:00",
+  "purpose": "negative finite-profile boundaries; original positive/negative freeze unchanged",
+  "cases": {
+    "four_roots": {
+      "sha256": "79e125da3c441562637e2f8a133563724886827c1e61b44d57c6d0be7def5b9a",
+      "expected_check": 0,
+      "expected_C17": 4,
+      "expected_diagnostic": "V1-BACKEND-UNSUPPORTED"
+    },
+    "third_write": {
+      "sha256": "a6c81d112f7a2428297a104a8a4a7883109b6c0dd7387ed326872c8b15fb2da3",
+      "expected_check": 0,
+      "expected_C17": 4,
+      "expected_diagnostic": "V1-BACKEND-UNSUPPORTED"
+    }
+  }
+}

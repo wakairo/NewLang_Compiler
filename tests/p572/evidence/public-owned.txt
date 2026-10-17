@@ -1,0 +1,17 @@
+CHANGE step=0 parent=6 child=7 RF=6->19 F=7->18 occurrence=1->2 target=12
+CHANGE step=1 parent=12 child=13 RF=12->25 F=13->24 occurrence=0->4 target=6
+B middle 1
+B p_middle 3
+B left 4
+B p_left 6
+B right 7
+B p_right 9
+B old_left 11
+B old_right 13
+B final_left 14
+B final_right 15
+B untouched_middle 16
+ROOT index=0 place=1 incarnation=1 final_ended=1
+ROOT index=1 place=6 incarnation=6 final_ended=1
+ROOT index=2 place=12 incarnation=12 final_ended=1
+PUBLIC NODE_LINKS VALID roots=3 changes=2 copied_view_refusals=17 input_AST_destroyed=1

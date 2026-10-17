@@ -1266,7 +1266,22 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                     join != NULL && root <= join->view.entry->place_count &&
                     old.parent_field_index == 0 &&
                     check->artifact->field_change_count == 0;
-                if (record_join &&
+                size_t lexical_roots = 0;
+                if (!check->allocated_slice && join == NULL)
+                    for (size_t i = 0; i < c->place_count; ++i)
+                        if (c->places[i].live &&
+                            c->places[i].independent_root &&
+                            nl_recursive_local_type(c, c->places[i].type) &&
+                            c->places[i].fixed_field_count == 2)
+                            ++lexical_roots;
+                /* Existing owned Change storage, no capacity/source rule
+                 * change. Extra operations remain checked but cannot certify
+                 * the two-operation profile (validator checks full coverage).
+                 */
+                const bool record_links =
+                    kind == NL_CHECKED_REPLACE && lexical_roots == 3 &&
+                    check->artifact->field_change_count < 2;
+                if ((record_join || record_links) &&
                     !host(check,
                           nl_captured_change_begin(check->artifact, call, c),
                           span))
@@ -1294,7 +1309,7 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                         (NLCheckedResult){old.type, old.current_value};
                 }
                 *view(check, call) = operation;
-                if ((record || record_join) &&
+                if ((record || record_join || record_links) &&
                     !host(check, nl_captured_change_end(check->artifact, c),
                           span))
                     return false;
@@ -5253,6 +5268,11 @@ static bool node_unit_value_same(NLSemanticValueView a, NLSemanticValueView b)
         if (ref_order(a.references[i], b.references[i]) != 0)
             return false;
     return true;
+}
+
+bool nl_node_value_same(NLSemanticValueView a, NLSemanticValueView b)
+{
+    return node_unit_value_same(a, b);
 }
 
 static bool node_unit_arm_frame(const NLSemanticContext *before,

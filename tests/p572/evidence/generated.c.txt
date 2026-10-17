@@ -1,0 +1,91 @@
+/* Bounded Checked-C representation, not a NewLang ABI. */
+#include <stdint.h>
+#include <stddef.h>
+#include <stdlib.h>
+typedef struct nl_node nl_node;
+typedef struct { unsigned tag; const nl_node *ptr; } nl_node_option;
+struct nl_node { nl_node_option f0; uint8_t f1; };
+#ifdef NEWLANG_NODE_OBSERVER
+#include NEWLANG_NODE_OBSERVER
+#else
+#define NL_NODE_BIND(...) ((void)0)
+#define NL_NODE_REPLACE(...) ((void)0)
+#define NL_NODE_ARM(...) ((void)0)
+#define NL_NODE_RELOAN(...) ((void)0)
+#define NL_NODE_FINISH() ((void)0)
+#endif
+int main(void) {
+nl_node_option nl_v_1 = { 0, NULL };
+uint8_t nl_v_2 = 22;
+nl_node nl_v_3 = { nl_v_1, nl_v_2 };
+nl_node nl_b_0_1 = nl_v_3;
+(void)nl_b_0_1;
+NL_NODE_BIND(0, 1, 1, &nl_b_0_1);
+const nl_node * nl_v_4;
+{ const nl_node *nl_ref_5 = &nl_b_0_1;
+nl_v_4 = nl_ref_5; }
+const nl_node * const nl_b_0_3 = nl_v_4;
+(void)nl_b_0_3;
+NL_NODE_BIND(0, 3, 2, &nl_b_0_3);
+const nl_node * nl_v_6 = nl_b_0_3;
+nl_node_option nl_v_7 = { 1, nl_v_6 };
+uint8_t nl_v_8 = 11;
+nl_node nl_v_9 = { nl_v_7, nl_v_8 };
+nl_node nl_b_0_4 = nl_v_9;
+(void)nl_b_0_4;
+NL_NODE_BIND(0, 4, 1, &nl_b_0_4);
+const nl_node * nl_v_10;
+{ const nl_node *nl_ref_11 = &nl_b_0_4;
+nl_v_10 = nl_ref_11; }
+const nl_node * const nl_b_0_6 = nl_v_10;
+(void)nl_b_0_6;
+NL_NODE_BIND(0, 6, 2, &nl_b_0_6);
+nl_node_option nl_v_12 = { 0, NULL };
+uint8_t nl_v_13 = 33;
+nl_node nl_v_14 = { nl_v_12, nl_v_13 };
+nl_node nl_b_0_7 = nl_v_14;
+(void)nl_b_0_7;
+NL_NODE_BIND(0, 7, 1, &nl_b_0_7);
+const nl_node * nl_v_15;
+{ const nl_node *nl_ref_16 = &nl_b_0_7;
+nl_v_15 = nl_ref_16; }
+const nl_node * const nl_b_0_9 = nl_v_15;
+(void)nl_b_0_9;
+NL_NODE_BIND(0, 9, 2, &nl_b_0_9);
+nl_node_option nl_v_17;
+const nl_node * nl_v_19 = nl_b_0_9;
+nl_node_option nl_v_20 = { 1, nl_v_19 };
+{ nl_node_option *nl_ref_18 = &nl_b_0_4.f0;
+const nl_node_option nl_old_18 = *nl_ref_18;
+*nl_ref_18 = nl_v_20;
+NL_NODE_REPLACE(&nl_b_0_4, &nl_old_18);
+nl_v_17 = nl_old_18; }
+const nl_node_option nl_b_0_11 = nl_v_17;
+(void)nl_b_0_11;
+NL_NODE_BIND(0, 11, 3, &nl_b_0_11);
+nl_node_option nl_v_21;
+const nl_node * nl_v_23 = nl_b_0_6;
+nl_node_option nl_v_24 = { 1, nl_v_23 };
+{ nl_node_option *nl_ref_22 = &nl_b_0_7.f0;
+const nl_node_option nl_old_22 = *nl_ref_22;
+*nl_ref_22 = nl_v_24;
+NL_NODE_REPLACE(&nl_b_0_7, &nl_old_22);
+nl_v_21 = nl_old_22; }
+const nl_node_option nl_b_0_13 = nl_v_21;
+(void)nl_b_0_13;
+NL_NODE_BIND(0, 13, 3, &nl_b_0_13);
+nl_node_option nl_v_25 = nl_b_0_4.f0;
+const nl_node_option nl_b_0_14 = nl_v_25;
+(void)nl_b_0_14;
+NL_NODE_BIND(0, 14, 3, &nl_b_0_14);
+nl_node_option nl_v_26 = nl_b_0_7.f0;
+const nl_node_option nl_b_0_15 = nl_v_26;
+(void)nl_b_0_15;
+NL_NODE_BIND(0, 15, 3, &nl_b_0_15);
+nl_node_option nl_v_27 = nl_b_0_1.f0;
+const nl_node_option nl_b_0_16 = nl_v_27;
+(void)nl_b_0_16;
+NL_NODE_BIND(0, 16, 3, &nl_b_0_16);
+NL_NODE_FINISH();
+return 0;
+}

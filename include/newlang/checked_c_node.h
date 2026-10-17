@@ -9,7 +9,9 @@ typedef enum {
 } NLNodeCStatus;
 /* Borrow the completed entry artifact/context. Return caller-owned (free)
  * staged C into an initialized NULL slot on success ONLY; failure leaves both
- * output slots untouched. Bounded two-lexical-root or one allocated/one lexical
+ * output slots untouched. Bounded two-lexical-root, or three lexical originals
+ * ONLY after public node_links validation of two scoped next replacements,
+ * or one allocated/one lexical
  * H topology, or the closed two-allocated-H nested profile; heap-root/field
  * access requires owned checked operands and projection evidence. The closed
  * §18.1a proven live-tail receiver may use one real direct C call preserving

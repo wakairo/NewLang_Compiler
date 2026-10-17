@@ -43,3 +43,5 @@ three fixed lexical roots cannot prove scalable full O(1) detach. Real heap
 nonCopy extraction/refund and protected membership are independent M371/372 gaps.
 Budget≤150min, initial barrier gate≤30min, at most2 CI attempts, one DRAFT PR
 only if meaningful implementation/regression succeeds; terminal Issue once.
+
+Initial cost gate GO LIMITED EXISTING-CAPTURE REPLAY CONSUMER at 2026-10-17T13:42:09.675066+00:00, elapsed 25.18min. Before first PR/CI: frozen unchanged-main first barrier retained; bounded existing capture/core replay and guarded three-carrier candidate actual public proof, copied-view/issuer-fault/typed coupled-bridge refusals, rollback/OOM and plain/passive native passed. No new source rule or general ownership/CFG needed. Initial full local regression319/319 and ASan4/4 passed; final-HEAD natural CI pending. No M571 result consulted.
