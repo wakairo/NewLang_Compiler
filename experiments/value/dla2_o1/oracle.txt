@@ -1,0 +1,59 @@
+DLA-2 FROZEN BEFORE any new Rust execution
+Authority Compiler/main 547df12e4c6e724db41afc0bf672221380118d59; Draft17.32.
+Original C parent 3999b12848214a201bf56ef416b9dac1ec63f811;
+2020 child fix a65abf2f4f1842765761a616e93c14ae25a284fd.
+C direct known valid live cJSON* detach: link/unlink, last tail cache fix,
+clear detached links, return SAME original cJSON* in O(1), subject to
+C caller proving current parent membership/lifetime/ownership.
+DeleteItemFromArray(index) has O(n) index lookup + possible subtree free.
+V526 C bug path was source verified, NOT newly native run here.
+V563 Rust Vec<Box<Node>>::position + Vec::remove is O(n) by handle.
+V552 Rust fixed COUNT3 from_link does scan; not scalable O(1) evidence.
+
+Chosen Rust: preexisting mature intrusive-collections EXACT =0.10.3
+LinkedList<NodeAdapter=Box<Node>>, embedded private physical LinkedListLink,
+actual crate-owned Box original, safe List facade using private Vec<Slot>
+NONOWNING pointers, token pool unique ID + slot + generation + original
+numeric address. Token from append, not obtained through list search.
+Entire safe detach_known operation does: pool equality, indexed ONE
+slots.get_mut, live generation/ptr/address validation, internally unsafe
+cursor_mut_from_ptr, remove Box owner, slot invalidation and generation bump.
+No scan/HashMap on REMOVE. Raw pointer from authentic retained original
+allocation under private list membership issuer. No callbacks/reentrancy,
+concurrency or external link field writers. Invalid/foreign token rejected
+before privileged pointer dereference. Drop/list destroy O(n) in population.
+append Vec slot growth amortized O(1) with possible O(n) resize; it changes
+C allocation policy. Slot space grows with cumulative appends even after
+removal (no slot reuse); memory/long-lived churn is a real design cost.
+Original Box never rebuilt or cloned. No cJSON pointer ABI/FFI promised.
+Exact raw C pointer/cursor_mut_from_ptr also possible at UNSAFE Rust API;
+safe caller could not use it without wrapper or proof. Safe token here is
+DIFFERENT ordinary caller API from cJSON*; account migration cost.
+
+Expected native before tests:
+- C historical last delete B then append C: list 1,3 and three exact Drops
+  with stale copied h rejected.
+- remove middle B return SAME original Box address; reparent to another
+  owner List; invalid foreign or stale handles; head/singleton detach; free3.
+- sizes n=3,16,256: handle returned at append, detach center returns original
+  Box, exactly one registry slot probe regardless of n; stale second attempt
+  one registry slot probe; no list-search on remove. Test values() is O(n)
+  postoperation oracle (DO NOT count as part of remove).
+- wrong pool, wrong generation, forged address, out-of-range slot reject
+  and leave graph unmutated; forged handle only test-internal, public handle
+  fields private.
+- four Rust native unit tests and standalone process exit0, final stdout:
+DLA2_INTRUSIVE_O1_OK original_box; true_links; safe_slot_guard; stale_foreign; owner_reparent; n3_16_256
+- Cargo source versions exact Rust 1.99.0, intrusive-collections 0.10.3,
+  memoffset 0.9.1. Cargo.lock and registry checksum MUST be recorded by CI
+  before executing actual tests; no nightly. Cargo.lock may be generated in
+  hosted runner, so checksums are runner-confirmed, not pre-frozen here.
+
+Complexity proof is source/code-path reasoning; probe counter ONLY
+tracks OUR indexed slot accesses, not underlying CPU instructions.
+No performance timings, controlled author hours, sanitizer/Miri/formal proof,
+full cJSON JSON API/parity, C ABI, OOM/alloc-failure, FFI or concurrency
+tests. Rust author invariant: Slot(ptr,current,generation) iff actual linked
+original boxed node owned by list; cJSON historical tail invariant replaced
+by crate link maintenance. Need re-review slot invalidation and link writer,
+Drop, handle reuse/ABA (pool IDs monotonic, slots never reused).
