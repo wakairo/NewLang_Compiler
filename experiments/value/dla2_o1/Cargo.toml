@@ -1,0 +1,9 @@
+[package]
+name = "newlang-v567-dla2-compare"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+intrusive-collections = "=0.10.3"
+memoffset = "=0.9.1"
