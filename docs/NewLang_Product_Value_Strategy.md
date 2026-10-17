@@ -73,13 +73,14 @@ ordinary callerは公開された型付きsafe APIの使用とapplication policy
 
 1. **ターゲット適格性（Cがなお合理的か）**：実際の利用者が要求する物理構造、failure／rollback／teardown、ownership／alias、ABI、配布・対応target、工数等を先に固定する。stable Rust＋既存library、局所`unsafe`＋soundなsafe facade、`no_std`、FFI等の最善の現実的代替を評価し、nightlyや未対応targetは別に記録する。**Rustで十分ならRustでよく、NewLangの主要targetにはしない。** `unsafe`が必要なだけで不適格とはしない一方、`unsafe`で実装可能というだけで実用的な制約・保守負担が解消したとも扱わない。既存C資産の移植費用、新規開発でも残る制約、言語として原理的に不可能な事柄を区別する。
 
+2. **C後継としての製品価値（Cに対し何を改善するか）**：上記のC合理性が認められ、NewLangにも同じ実用要求を維持する見込みがあるworkloadで、**十分にAPI化・必要に応じstatic/runtime guardを備えた現実的なC**とNewLangを比較する。両者の本質的なpointer topology、allocation／lifetime／失敗処理／配備条件と公開APIを揃え、*library author + ordinary-safe caller*が人間の規律で維持するUB防止監査・再監査の依存閉包、合法writer、error／teardown／再入／FFI、無関係なsafe変更の影響を比較する。NewLangがCの自由を損なう、または人間の責務を実用上改善しないなら**Cから移行する製品理由は未実証**。
+
 **第1関門の「Rustで十分」は、機能的に書けることと同義ではない。** 同じ操作がcompile/native PASSした事実は**実現可能性**を示すが、実際の利用者の要求に対する**設計の自然さ・API・開発・変更・保守まで含む実用上の十分性**は別に判断する。特にCのデータ構造／アルゴリズムについて、必要な物理identity・外部owner・membership・失敗／teardown契約を維持したときに、Rust固有のadapterやhandle、公開APIの制約、内部の証明契約、設計変更時の修正・再監査範囲がどこまで増えるかを調べる。初期の移植可否だけでなく、**実際の保守変更の前後**で、authorとordinary callerへの影響を観察する。AIがコード記述を高速化しても残る表現上の制約は観察対象だが、AI／人間の開発工数差は測定なしに断定しない。
 
 **公平性と実証の境界：** Rustには成熟したcrate・`Pin`・内部`unsafe`＋soundなsafe API・RAII等を使った**最善の自然な設計**を許す。Cの偶然のfield配置、式の順序、字句的APIをRustに強制しない。ただし利用者に不可欠なidentity／placement／external contractを別物に置き換えて「同等」とも数えない。Rustのborrow checkが防いだ欠陥、callerを守るwrapper、変更時に自動で検出される破綻は**実用上の利点**として数え、C側のmanual UB防止監査・レビュー・既存API化の費用も負担に含める。`unsafe`の行数、compiler errorの回数、コード量、単なる好みだけで総負担を判定しない。
 
 **判定に必要な証拠：** 実際のconsumer／保守要求、双方の成立する操作契約、Rustの最善の構成と必要な追加設計、API・変更影響の具体的な差を記録する。実行PASS、source上の依存関係、測定した変更作業、利用者が費用を許容できないという証拠は**異なる強さの証拠**である。比較できる工数を実測していなければ「未測定」とする。継続的な負担が重要だと裏付けられない限り、**「Rustでも書けるが面倒そう」だけではC合理性やNewLangのProduct GOを認定しない**。反対に、動作一致だけでRustの実用上の十分性を確定しない。
-2. **C後継としての製品価値（Cに対し何を改善するか）**：上記のC合理性が認められ、NewLangにも同じ実用要求を維持する見込みがあるworkloadで、**十分にAPI化・必要に応じstatic/runtime guardを備えた現実的なC**とNewLangを比較する。両者の本質的なpointer topology、allocation／lifetime／失敗処理／配備条件と公開APIを揃え、*library author + ordinary-safe caller*が人間の規律で維持するUB防止監査・再監査の依存閉包、合法writer、error／teardown／再入／FFI、無関係なsafe変更の影響を比較する。NewLangがCの自由を損なう、または人間の責務を実用上改善しないなら**Cから移行する製品理由は未実証**。
-   
+
 **RustとのUB監査責務競争は第2段階のProduct GO条件ではない。** Rustがそのworkloadで実用上十分かは第1段階で判断する。Rustの有力な代替が後から成立した場合は第1段階に戻す。Zig等の他の実用言語も、追加言語を導入する必要性を問う代替として考慮できるが、すべてに対する監査優位を形式的な合格条件にはしない。Rustの内部safe facadeや技術的証拠を研究・安全性検証の参照対象とすることまで禁止しない。
 
 **成功の観測対象**は、人間が維持するL/R/P/V/C等のsemantic obligation、
