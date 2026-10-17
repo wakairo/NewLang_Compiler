@@ -1,0 +1,70 @@
+name: V567 DLA2 true-intrusive whole-operation O1 Rust (isolated)
+on:
+  pull_request:
+    paths:
+      - 'experiments/value/dla2_o1/**'
+      - '.github/workflows/v_dla2_o1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  o1-intrusive-full-operation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      RUSTUP_AUTO_INSTALL: "0"
+      CARGO_TERM_COLOR: never
+      RUSTFLAGS: "-D warnings"
+    steps:
+      - name: SHA-pinned readonly checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Preflight actual fixed runner rustc and pre-registered SHA before compilation
+        shell: bash
+        run: |
+          set -euo pipefail
+          env | grep -E '^(ImageOS|ImageVersion|RUSTUP_TOOLCHAIN|RUSTUP_AUTO_INSTALL)=' || true
+          rustc --version --verbose
+          cargo --version
+          if [[ "$(rustc --version)" != "rustc 1.99.0 "* ]]; then
+            echo "DLA2_ENV_INCONCLUSIVE_RUSTC_VERSION"; exit 78
+          fi
+          if command -v rustup >/dev/null 2>&1; then
+            sha256sum "$(rustup which rustc)"
+          fi
+          cd experiments/value/dla2_o1
+          sha256sum -c manifest.sha256
+          cat manifest.sha256
+          echo DLA2_FROZEN_SOURCE_VERIFIED
+      - name: Lock exactly selected crate and its registry source checksums before any binary run
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd experiments/value/dla2_o1
+          cargo generate-lockfile
+          cargo fetch --locked
+          cat Cargo.lock
+          sha256sum Cargo.lock
+          cargo tree --locked
+          echo DLA2_VERSION_CHECKSUM_LOCK_RECORDED
+      - name: Strict stable Rust test compile and native n 3/16/256 cases
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd experiments/value/dla2_o1
+          cargo test --locked --offline -- --nocapture 2>&1 | tee "$RUNNER_TEMP/v567_test.log"
+          grep -F "test result: ok. 4 passed; 0 failed" "$RUNNER_TEMP/v567_test.log"
+          echo DLA2_FOUR_NATIVE_TESTS_PASS
+      - name: Strict stable Rust executable with exposed full-operation probe observations
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd experiments/value/dla2_o1
+          cargo run --locked --offline 2>&1 | tee "$RUNNER_TEMP/v567_native.log"
+          for n in 3 16 256; do
+            grep -Fx "DLA2_SCALE n=$n live_probes=1 stale_probes=1 original_box=true frees=$n" "$RUNNER_TEMP/v567_native.log"
+          done
+          grep -Fx "DLA2_INTRUSIVE_O1_OK original_box; true_links; safe_slot_guard; stale_foreign; owner_reparent; n3_16_256" "$RUNNER_TEMP/v567_native.log"
+          echo DLA2_SAFE_WRAPPER_COMPLETE_REMOVE_NATIVE_PASS
