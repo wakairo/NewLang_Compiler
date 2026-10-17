@@ -132,7 +132,7 @@ All registration failures rollback; parser failure leaves state unchanged.
 Four roots and a third write stay CHECK0 but C17 CLI4; no new success categories.
 
 Copied public-view corruptions17 refused. Genuine source-owned internal fault
-controls17 refused by PUBLIC validator AND PUBLIC C consumer, output slots
+controls18 refused by PUBLIC validator AND PUBLIC C consumer, output slots
 unchanged: wrong root/incarnation/field, stale RF/F, wrong old Copy, old
 occurrence, missing/duplicate/reordered evidence, stale post fact, sibling scalar
 mutation, occurrence resurrection, and scoped-ref scope/write/provenance changes.
@@ -193,5 +193,27 @@ Product Strategy, existing source/expectation, LLVM/bootstrap, existing PR, Arra
 profile, merge, Issue close or other Track change. New proof API/candidate backend
 trust boundary still needs Coordination's independent R decision. DO NOT MERGE.
 
-CI: pending the candidate's one natural FULL5 + NO LLVM/PARTIAL pair; the final
-Issue report and PR description will record exact HEAD, runs and outcomes.
+## One documented self-fix before final CI
+
+First DRAFT HEAD191b090701413ece94dda4b56468255073a7005d had a genuine new
+proof-validation omission found by P during the first CI run: change a captured
+ref<write,Option<ptr<Node>>> type's target to u8 in BOTH before/after registries.
+Both corrupted snapshots pass the underlying fixed/sum validator; first draft
+sequence validator returned0 and C consumer0. This is a corrupted-C-artifact
+acceptance in the draft proof, NOT a demonstrated source program forging a ref.
+Original logs are preserved in evidence/repair/type-probe-before.txt.
+
+Use exactly ONE allowed self-fix: authenticate complete snapshot type meaning
+against the actual registered fragment's type registry, and explicitly require
+ref target=actual field type, nonexclusive write type and checked operand type
+agreement. This finite profile requires its type registry established before
+first capture. No canonical or source rule/validator relaxation. New regression
+mutates both real source checkpoints; final public validator3 and C consumer1
+reject it, with the full positive remaining valid. Final fault controls18;
+source/validator/consumer OOM counts unchanged. Actual emitted C byte-identical.
+
+First natural FULL5/PARTIAL results and the corrected HEAD's SECOND natural
+pair are separately recorded in the final Issue and PR body. No run cancellation,
+manual rerun or third attempt. No additional code repair is authorized by this
+task; a remaining substantial defect must stop/HOLD. The new source-proof/C17
+trust boundary still needs Coordination's independent review, irrespective of CI.

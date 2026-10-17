@@ -1,0 +1,7 @@
+#include "../../../../src/semantic_internal.h"
+#include "../../../support/node_checked.h"
+#include "newlang/node_links.h"
+#include "newlang/checked_c_node.h"
+#include <stdlib.h>
+static bool run(const char *path){TestNode n={0};CHECK(node_checked_load(path,&n));NLCheckedFragment*f=(NLCheckedFragment*)nl_checked_call_body(n.entry,nl_checked_root(n.entry));NLCapturedChange*x=f->field_changes[0];const NLCheckedNodeView*op=nl_checked_node_view(f,x->node),*arg=nl_checked_node_view(f,op->first_argument);NLTypeId type=x->before->values[arg->results[0].value-1].type;NLTypeId old=x->before->types[type-1].view.target;x->before->types[type-1].view.target=nl_semantic_core_type(n.context,NL_TYPE_U8);x->after->types[type-1].view.target=x->before->types[type-1].view.target;printf("before=%d after=%d validator=%d old_target=%zu forged_target=%zu\n",nl_sem_validate(x->before),nl_sem_validate(x->after),nl_checked_node_links_validate(f,NULL),old,x->before->types[type-1].view.target);char*out=NULL;size_t len=77;printf("emitter=%d\n",(int)nl_checked_c_node(n.entry,&out,&len));free(out);x->before->types[type-1].view.target=old;x->after->types[type-1].view.target=old;node_checked_destroy(&n);return true;}
+int main(int argc,char**argv){return argc==2&&run(argv[1])?0:1;}

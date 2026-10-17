@@ -1,1 +1,1 @@
-FAULT refusals=17 coupled_isolated_replay=PASS bridge=REJECT validator_OOM=74 rollback=PASS emit_OOM=75 worlds=UNCHANGED
+FAULT refusals=18 coupled_isolated_replay=PASS bridge=REJECT validator_OOM=74 rollback=PASS emit_OOM=75 worlds=UNCHANGED

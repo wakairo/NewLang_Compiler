@@ -16,7 +16,7 @@
       "opt": "-O0",
       "observed": true,
       "exit": 0,
-      "stdout": "ROOT role=0 address=0x7ffc3f1418e0 next_address=0x7ffc3f1418e0 payload=22\nROOT role=1 address=0x7ffc3f141880 next_address=0x7ffc3f141880 payload=11\nROOT role=2 address=0x7ffc3f141820 next_address=0x7ffc3f141820 payload=33\nCHANGE step=0 original=0x7ffc3f141880 old=1/0x7ffc3f1418e0 new=1/0x7ffc3f141820\nCOPY role=6 address=0x7ffc3f1417e0 target=0x7ffc3f1418e0 tag=1\nCHANGE step=1 original=0x7ffc3f141820 old=0/(nil) new=1/0x7ffc3f141880\nCOPY role=7 address=0x7ffc3f1417b0 target=(nil) tag=0\nCOPY role=8 address=0x7ffc3f141790 target=0x7ffc3f141820 tag=1\nCOPY role=9 address=0x7ffc3f141770 target=0x7ffc3f141880 tag=1\nCOPY role=10 address=0x7ffc3f141750 target=(nil) tag=0\np572 physical originals/oldCopy/reciprocal links PASS\n"
+      "stdout": "ROOT role=0 address=0x7ffe47091d30 next_address=0x7ffe47091d30 payload=22\nROOT role=1 address=0x7ffe47091cd0 next_address=0x7ffe47091cd0 payload=11\nROOT role=2 address=0x7ffe47091c70 next_address=0x7ffe47091c70 payload=33\nCHANGE step=0 original=0x7ffe47091cd0 old=1/0x7ffe47091d30 new=1/0x7ffe47091c70\nCOPY role=6 address=0x7ffe47091c30 target=0x7ffe47091d30 tag=1\nCHANGE step=1 original=0x7ffe47091c70 old=0/(nil) new=1/0x7ffe47091cd0\nCOPY role=7 address=0x7ffe47091c00 target=(nil) tag=0\nCOPY role=8 address=0x7ffe47091be0 target=0x7ffe47091c70 tag=1\nCOPY role=9 address=0x7ffe47091bc0 target=0x7ffe47091cd0 tag=1\nCOPY role=10 address=0x7ffe47091ba0 target=(nil) tag=0\np572 physical originals/oldCopy/reciprocal links PASS\n"
     },
     {
       "opt": "-O2",
@@ -28,7 +28,7 @@
       "opt": "-O2",
       "observed": true,
       "exit": 0,
-      "stdout": "ROOT role=0 address=0x7ffef6cbbe40 next_address=0x7ffef6cbbe40 payload=22\nROOT role=1 address=0x7ffef6cbbe60 next_address=0x7ffef6cbbe60 payload=11\nROOT role=2 address=0x7ffef6cbbe80 next_address=0x7ffef6cbbe80 payload=33\nCHANGE step=0 original=0x7ffef6cbbe60 old=1/0x7ffef6cbbe40 new=1/0x7ffef6cbbe80\nCOPY role=6 address=0x7ffef6cbbdf0 target=0x7ffef6cbbe40 tag=1\nCHANGE step=1 original=0x7ffef6cbbe80 old=0/(nil) new=1/0x7ffef6cbbe60\nCOPY role=7 address=0x7ffef6cbbe00 target=(nil) tag=0\nCOPY role=8 address=0x7ffef6cbbe10 target=0x7ffef6cbbe80 tag=1\nCOPY role=9 address=0x7ffef6cbbe20 target=0x7ffef6cbbe60 tag=1\nCOPY role=10 address=0x7ffef6cbbe30 target=(nil) tag=0\np572 physical originals/oldCopy/reciprocal links PASS\n"
+      "stdout": "ROOT role=0 address=0x7ffd3df6fc90 next_address=0x7ffd3df6fc90 payload=22\nROOT role=1 address=0x7ffd3df6fcb0 next_address=0x7ffd3df6fcb0 payload=11\nROOT role=2 address=0x7ffd3df6fcd0 next_address=0x7ffd3df6fcd0 payload=33\nCHANGE step=0 original=0x7ffd3df6fcb0 old=1/0x7ffd3df6fc90 new=1/0x7ffd3df6fcd0\nCOPY role=6 address=0x7ffd3df6fc40 target=0x7ffd3df6fc90 tag=1\nCHANGE step=1 original=0x7ffd3df6fcd0 old=0/(nil) new=1/0x7ffd3df6fcb0\nCOPY role=7 address=0x7ffd3df6fc50 target=(nil) tag=0\nCOPY role=8 address=0x7ffd3df6fc60 target=0x7ffd3df6fcd0 tag=1\nCOPY role=9 address=0x7ffd3df6fc70 target=0x7ffd3df6fcb0 tag=1\nCOPY role=10 address=0x7ffd3df6fc80 target=(nil) tag=0\np572 physical originals/oldCopy/reciprocal links PASS\n"
     }
   ],
   "negatives": {

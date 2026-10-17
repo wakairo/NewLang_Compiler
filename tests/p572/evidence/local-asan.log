@@ -5,10 +5,10 @@ Test project /workspace/p572-asan
     Start 2: p572_three_node_fault.unit
 2/4 Test #2: p572_three_node_fault.unit ...........   Passed    0.28 sec
     Start 3: p572_source_oom.unit
-3/4 Test #3: p572_source_oom.unit .................   Passed    0.28 sec
+3/4 Test #3: p572_source_oom.unit .................   Passed    0.32 sec
     Start 4: p572_three_node_native.integration
-4/4 Test #4: p572_three_node_native.integration ...   Passed    0.80 sec
+4/4 Test #4: p572_three_node_native.integration ...   Passed    0.81 sec
 
 100% tests passed, 0 tests failed out of 4
 
-Total Test time (real) =   1.37 sec
+Total Test time (real) =   1.43 sec

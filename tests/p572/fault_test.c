@@ -203,6 +203,20 @@ static bool exercise(const char *path)
         write_ref->reference = original_ref;
         ++rejected;
     }
+    /* First draft accepted a coupled corrupted ref<T> registry. Preserve a
+     * regression for actual source type identity, not just access-mode bits. */
+    const NLTypeId ref_type = write_ref->type;
+    const NLTypeId target = one->before->types[ref_type - 1].view.target;
+    one->before->types[ref_type - 1].view.target =
+        nl_semantic_core_type(n.context, NL_TYPE_U8);
+    one->after->types[ref_type - 1].view.target =
+        one->before->types[ref_type - 1].view.target;
+    CHECK(nl_sem_validate(one->before) == NL_CHECK_OK &&
+          nl_sem_validate(one->after) == NL_CHECK_OK);
+    CHECK(refused(&n, f));
+    one->before->types[ref_type - 1].view.target = target;
+    one->after->types[ref_type - 1].view.target = target;
+    ++rejected;
     CHECK(nl_checked_node_links_validate(f, NULL) == NL_CHECK_OK);
     uint64_t before = fingerprint(f);
     fail_at = SIZE_MAX;

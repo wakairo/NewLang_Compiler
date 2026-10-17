@@ -1,7 +1,56 @@
 #include "newlang/node_links.h"
 #include "semantic_internal.h"
+#include <string.h>
 
 #define INVALID NL_CHECK_ANALYSIS_PRECISION_LIMIT
+
+static bool same_name(const char *a, const char *b)
+{
+    return a && b ? strcmp(a, b) == 0 : a == b;
+}
+
+/* A captured type ID must retain its actual registered meaning. Core memory
+ * replay alone cannot authenticate a type registry altered in BOTH snapshots.
+ * This finite body creates no types after its first captured write. */
+static bool same_types(const NLSemanticContext *issued,
+                       const NLSemanticContext *snapshot)
+{
+    if (!snapshot || issued->type_count != snapshot->type_count ||
+        issued->type_count > NL_SEMANTIC_MAX_ENTRIES)
+        return false;
+    for (size_t i = 0; i < issued->type_count; ++i) {
+        const NLTypeEntry *a = &issued->types[i], *b = &snapshot->types[i];
+        const NLSemanticTypeView x = a->view, y = b->view;
+        if (x.kind != y.kind || x.target != y.target || x.access != y.access ||
+            x.is_copy != y.is_copy || x.is_discardable != y.is_discardable ||
+            x.is_exclusive != y.is_exclusive ||
+            x.layout_known != y.layout_known ||
+            x.variant_count != y.variant_count ||
+            x.field_count != y.field_count ||
+            x.element_count != y.element_count || x.size != y.size ||
+            x.alignment != y.alignment ||
+            x.field_count > NL_SEMANTIC_MAX_FIELDS ||
+            x.variant_count > NL_SEMANTIC_MAX_VARIANTS ||
+            a->incomplete != b->incomplete ||
+            a->recursive_header != b->recursive_header ||
+            a->option_target != b->option_target ||
+            a->allocated_target != b->allocated_target ||
+            a->one_backing_target != b->one_backing_target ||
+            a->live_tail_target != b->live_tail_target ||
+            !same_name(a->name, b->name) ||
+            memcmp(a->field_types, b->field_types, sizeof(a->field_types)) ||
+            memcmp(a->variant_types, b->variant_types,
+                   sizeof(a->variant_types)))
+            return false;
+        for (size_t j = 0; j < x.field_count; ++j)
+            if (!same_name(a->field_names[j], b->field_names[j]))
+                return false;
+        for (size_t j = 0; j < x.variant_count; ++j)
+            if (!same_name(a->variant_names[j], b->variant_names[j]))
+                return false;
+    }
+    return true;
+}
 
 static bool originals(const NLSemanticContext *c, NLPlaceId roots[3])
 {
@@ -140,6 +189,8 @@ static NLCheckStatus replay(const NLCheckedFragment *f, size_t index,
         change->before == change->after)
         return INVALID;
     const NLSemanticContext *b = change->before, *a = change->after;
+    if (!same_types(f->context, b) || !same_types(f->context, a))
+        return INVALID;
     NLPlaceId br[3], ar[3];
     if (!originals(b, br) || !originals(a, ar))
         return INVALID;
@@ -187,7 +238,9 @@ static NLCheckStatus replay(const NLCheckedFragment *f, size_t index,
     if (!ref.type || ref.type > b->type_count ||
         b->types[ref.type - 1].view.kind != NL_TYPE_REF ||
         b->types[ref.type - 1].view.access != NL_ACCESS_WRITE ||
-        ref.reference.place != p.child ||
+        b->types[ref.type - 1].view.is_exclusive ||
+        b->types[ref.type - 1].view.target != p.type || arg->type != ref.type ||
+        arg->results[0].type != ref.type || ref.reference.place != p.child ||
         ref.reference.incarnation != p.child_incarnation ||
         ref.reference.provenance != NL_PROVENANCE_VALID ||
         !ref.reference.readable || !ref.reference.writable ||
