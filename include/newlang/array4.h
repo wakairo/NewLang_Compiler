@@ -27,7 +27,15 @@ typedef struct NLArray4Construction {
 } NLArray4Construction;
 /* Source-order construction collection, bounded by existing checked-node
  * resources. This index selects an EVIDENCE RECORD, not an Array element or
- * a new source projection. Every world/record borrows fragment ownership. */
+ * a new source projection. Every world/record borrows fragment ownership.
+ * count/view_at/world_at may expose provisional construction observations in
+ * an unregistered source fragment. Such views are NOT certified evidence:
+ * valid_at, legacy valid and C17 emission intentionally require the checked
+ * body of a registered source function, obtained through a real checked call
+ * (parse_function_unit -> register_function_unit -> checked_call_body).
+ * Standalone parse/check_source_fragment does not satisfy that precondition;
+ * validation must fail closed even for an unmodified provisional view.
+ * Historical issued evidence never grants currently live access authority. */
 size_t nl_checked_array4_count(const NLCheckedFragment *);
 bool nl_checked_array4_view_at(const NLCheckedFragment *, size_t,
                                NLArray4Construction *out);
