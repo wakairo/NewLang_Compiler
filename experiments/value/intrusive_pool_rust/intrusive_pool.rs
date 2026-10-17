@@ -333,7 +333,7 @@ fn scenario() {
     assert_eq!(tracker.freed(), 0);
     let physical = pool.originals();
     for i in 0..3 {
-        assert_ne!(physical[i].0, physical[i].1);
+        assert_eq!(physical[i].0, physical[i].1); // repr(C) first embedded Link starts at Node address
         for j in (i + 1)..3 { assert_ne!(physical[i].0, physical[j].0); }
     }
     let heads = pool.sentinels();
