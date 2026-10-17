@@ -71,7 +71,7 @@ ordinary callerは公開された型付きsafe APIの使用とapplication policy
 
 **比較の順序は二段階である。** 安全性評価の厳密さは変えず、対象を選ぶ比較とC後継の製品価値比較を混同しない。
 
-1. **ターゲット適格性（Cを選ぶ積極的合理性）**：実際の利用者にとって、Cでのarchitecture／physical identity／allocation・lifetime・failure policy、操作の計算量／storage、ABI・配備、既存システム統合、開発・変更・保守の総負担などに、**具体的で重要なC選択の理由**があるかを確認する。stable Rust＋既存library、局所`unsafe`＋soundなsafe facade、`no_std`、FFI、GC言語やその他の現実的代替を公平に評価するが、**Rustも十分に実用的という理由だけで、証拠のあるCの合理性を棄却しない**。同じ用途でCとRustの両方が合理的に選ばれることも許容する。Cに固有の利点かどうか、重要性、継続性、単なる慣性・移植費用かどうかを区別する。`unsafe`の有無だけで判定せず、機能的実装可能性を唯一の競争条件にしない。
+1. **ターゲット適格性（Cを選ぶ積極的合理性）**：実際の利用者にとって、Cでのarchitecture／physical identity／allocation・lifetime・failure policy、操作の計算量／storage、ABI・配備、既存システム統合、開発・変更・保守の総負担などに、**具体的で重要なC選択の理由**があるかを確認する。stable Rust＋既存library、局所`unsafe`＋soundなsafe facade、`no_std`、FFI、GC言語やその他の現実的代替を公平に評価するが、**Rustも十分に実用的という理由だけで、証拠のあるCの合理性を棄却しない**。同じ用途でCとRustの両方が合理的に選ばれることも許容する。その用途でCを選ぶ利点が実際に重要・継続的か、単なる慣性・一時的な移植費用かを区別する。`unsafe`の有無だけで判定せず、機能的実装可能性を唯一の競争条件にしない。
 
 2. **C後継としての製品価値（Cに対し何を改善するか）**：上記のC合理性が認められ、NewLangにも同じ実用要求を維持する見込みがあるworkloadで、**十分にAPI化・必要に応じstatic/runtime guardを備えた現実的なC**とNewLangを比較する。両者の本質的なpointer topology、allocation／lifetime／失敗処理／配備条件と公開APIを揃え、*library author + ordinary-safe caller*が人間の規律で維持するUB防止監査・再監査の依存閉包、合法writer、error／teardown／再入／FFI、無関係なsafe変更の影響を比較する。NewLangがCの自由を損なう、または人間の責務を実用上改善しないなら**Cから移行する製品理由は未実証**。
 
@@ -206,7 +206,7 @@ Track Vは **誰のどの問題を、どのevidenceで解けたと言うか** �
 主な責務:
 
 - target user / workload / workflowの定義
-- **C-rational target eligibility**：実利用者にとってのCの**積極的・重要な採用理由**を確認し、Rust／GCその他の十分実用的な代替も公平に記録する。**RustとCの両方が合理的なケースを候補から棄却しない**。Cに固有の重要な利点、慣性や一度限りの移行費用、実際の利用者の受容・拒否、撤退条件を証拠とともに区別する
+- **C-rational target eligibility**：実利用者にとってのCの**積極的・重要な採用理由**を確認し、Rust／GCその他の十分実用的な代替も公平に記録する。**RustとCの両方が合理的なケースを候補から棄却しない**。Cを選ぶ実質的に重要な利点、慣性や一度限りの移行費用、実際の利用者の受容・拒否、撤退条件を証拠とともに区別する
 - value hypothesisの明文化
 - North Star / representative workloadの選択
 - PASS / FAIL criteriaとanti-gaming ruleのpre-registration
