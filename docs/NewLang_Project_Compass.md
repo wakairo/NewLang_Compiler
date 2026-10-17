@@ -7,7 +7,8 @@
 
 ## 1. 何を目指すか / 何を目指さないか
 
-- **C 後継**：C が合理的に選ばれる実用的な systems workload を対象にする。
+- **多言語主義／C 後継**：GC言語で十分ならGC言語、Rustが自然に十分ならRustを使う。NewLangは、Rustへ無理に合わせたくないほどCの合法な設計・失敗処理・配備自由が合理的に必要な用途の、安全性を改善するC後継候補（[Product Strategy §§1–3](NewLang_Product_Value_Strategy.md)）。これは実在性を検証する仮説であってRustの一般的不可能性ではない。
+- **二段階の製品判断**：最初に「RustでなくCが合理的か」を現実の要求・代替手段で検証し、次に**NewLangとC**をUB防止の作者＋通常safe caller監査・再監査責務で比較する。Rustと監査責務の優劣を競うこと自体を製品目標としない。
 - **Preserve the architecture, replace the bookkeeping**：低水準の構造や pointer topology を保ち、機械的に扱える lifetime / ownership 等の責務を compiler に移す。
 - **Policy-neutral, mechanism-strict**：データ構造・アルゴリズムの方針は利用者が決め、言語の低水準 mechanism は厳密にする。
 - **全操作の自動証明は必須目標ではない**：証明できる条件は checked、証明できない**真の**事前条件は明示的・局所的な `unchecked` と人間の責任で扱える。ordinary safe API は呼出者へ隠れた証明責任を転嫁しない。
@@ -20,7 +21,8 @@
 
 | タスクで問うこと | 参照先 |
 | --- | --- |
-| C 後継の狙い、product/user value、policy-neutral、no-foreclosure | [Product / Value Strategy](NewLang_Product_Value_Strategy.md) §§1–6,9 |
+| C 後継の狙い、GC→Rust→NewLangの多言語主義、二段階のtarget選定・製品価値、no-foreclosure | [Product / Value Strategy](NewLang_Product_Value_Strategy.md) §§1–6,9,11 |
+| CがRustでなく選ばれる可能性の文献証拠・13事例・限界（非規範、未独立検証） | [C/Rust target discovery 2026-10-17](research/C_Rust_Target_Discovery_2026-10-17.md) |
 | 今の North Star、topology、per-hop unchecked の例外、L/R/P/V/C、PASS/FAIL | [North Star Product Validation](NewLang_North_Star_Product_Validation.md) §§1,6–11 |
 | 長期の C-class workload と現段階の coverage | [C Replacement Coverage Map](NewLang_C_Replacement_Coverage_Map.md) |
 | 現在の normative semantics（Draft を決め打ちしない） | [CURRENT_SPEC](reference/CURRENT_SPEC.md) → 現行 Draft |
