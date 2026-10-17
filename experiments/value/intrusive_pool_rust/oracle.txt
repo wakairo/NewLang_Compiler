@@ -1,0 +1,34 @@
+V552 FROZEN POSITIVE/NATIVE ORACLE — before any rustc candidate execution
+Authority: Compiler/main 7fa4b240cbfe25ac0563fe42069700a99ee51d6d, canonical Draft17.32
+Host gate: GitHub Actions ubuntu-24.04, preinstalled rustc version prefix "rustc 1.99.0 "
+No toolchain install, no update, no version fallback, no external crate dependencies.
+Physical: 3 distinct original heap Node allocations A/B/C; each repr(C) Node has
+first embedded Link{prev,next} (Node start and Link start address equal);
+two separate pinned, independently heap-allocated circular sentinel Link places.
+True linked prev/next traverse; owner-only registry cannot replace topology.
+No original Node reallocation during any take/attach/detach/recycle.
+Expected:
+  initial FREE=ABC, ACTIVE empty, DETACHED empty
+  take A -> DetachedLease A -> ACTIVE A (nonClone/nonCopy lease consumed)
+  clone a copied ACTIVE locator (locator only, NOT custody)
+  take/activate B; take C detached; fourth take Empty
+  ACTIVE=AB, DETACHED=C, FREE empty
+  finish must be Busy; same Pool identity, Node/Link addresses, sentinel addresses
+  zero frees; recycle C
+  detach A; cloned old A locator now invalid; repeat detach returns Invalid
+  invalid operation must not mutate snapshot
+  recycle A; detach/recycle B; FREE=CAB, ACTIVE empty
+  successful finish releases the exact 3 original Node allocations once
+  created count remains exactly 3; no Node constructor after initialization
+Expected standalone binary stdout EXACT (one line):
+V552_RUST_INTRUSIVE_OK original3; two_heads; stale_invalid; busy_refund; empty; free3
+Expected rustc --test: 2 tests pass, no warnings/errors with -D warnings:
+  same_original_pool_full_oracle
+  safe_early_drop_does_not_follow_dangling_links
+Expected compile-negative source: rustc must EXIT NONZERO due E0382
+(use of moved value lease on recycle_free after attach_active consumed lease).
+Missing module or unsupported syntax/warnings are NOT acceptable negatives.
+OOM limitation: Box::pin/std::array::from_fn do not expose fallible construction
+Result; no forced OOM nor explicit partial-allocation rollback validated.
+Soundness caveat: compiler pass and one test do not prove generalized unsafe
+invariants; author must inspect original lifetime, aliasing, membership and Drop.
