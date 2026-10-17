@@ -1,0 +1,104 @@
+{
+  "issue": 580,
+  "phase": "FROZEN PRE-CANDIDATE BLIND ORACLE",
+  "fixed_candidate": "87fc878b52763858f69678a8350d8c1b66a061bb",
+  "base": "a310c9b9dae5b507b2388fcc6cb39597267d1448",
+  "canonical": "Draft 17.32",
+  "assumptions": "Actual registered fn main(); all original lexical nodes; no heap, owner-return or membership",
+  "positive_source": "struct Node { next: Option<ptr<Node>>, payload: u8, }\nfn main()->unit {\n    let c=Node{next:Option<ptr<Node>>::None,payload:u8(33)};\n    let cptr=loan_read(c){|r|ptr_from_ref(r)};\n    let b=Node{next:Option<ptr<Node>>::None,payload:u8(22)};\n    let bptr=loan_read(b){|r|ptr_from_ref(r)};\n    let a=Node{next:Option<ptr<Node>>::None,payload:u8(11)};\n    let old_a=loan_write(a@next){|w|\n        replace(w,Option<ptr<Node>>::Some(bptr))\n    };\n    let old_b=loan_write(b@next){|w|\n        replace(w,Option<ptr<Node>>::Some(cptr))\n    };\n    unit\n}\n",
+  "expected_positive": {
+    "check": 0,
+    "registered_public": "3 distinct original roots, 2 ordered source-backed scoped write replacements; no synthetic roots",
+    "roots": [
+      {
+        "name": "c",
+        "payload": 33,
+        "initial": "None",
+        "final": "None"
+      },
+      {
+        "name": "b",
+        "payload": 22,
+        "initial": "None",
+        "final": "Some(c physical original)"
+      },
+      {
+        "name": "a",
+        "payload": 11,
+        "initial": "None",
+        "final": "Some(b physical original)"
+      }
+    ],
+    "ptrs": {
+      "cptr": "c",
+      "bptr": "b"
+    },
+    "writes": [
+      {
+        "root": "a",
+        "field": "next",
+        "before": "None",
+        "after": "Some(b)",
+        "old": "None"
+      },
+      {
+        "root": "b",
+        "field": "next",
+        "before": "None",
+        "after": "Some(c)",
+        "old": "None"
+      }
+    ],
+    "native": [
+      "gcc",
+      "clang"
+    ],
+    "opts": [
+      "-O0",
+      "-O2"
+    ],
+    "physical": "3 pairwise distinct original stable root addresses, original f0 updated, old carrier copies preserved, side payload unchanged"
+  },
+  "negative_cases": [
+    {
+      "name": "fourth_root",
+      "transformation": "insert lexical d Node after declaration of a",
+      "expect": "out-of-profile issuer/public proof MUST NOT claim three-root bounded authority; source CHECK may admit generic Node elsewhere"
+    },
+    {
+      "name": "third_change",
+      "transformation": "insert c.next=Some(bptr) after old_b",
+      "expect": "third Change outside bounded issuer must fail closed"
+    },
+    {
+      "name": "type_mismatch",
+      "transformation": "replace second Some(cptr) by Option<u8>::None",
+      "expect": "semantic CHECK reject, no C emission"
+    },
+    {
+      "name": "ptr_escalation",
+      "transformation": "replace second scoped loan_write(b@next) with loan_write_ptr(bptr)",
+      "expect": "SOURCE or CHECK reject, Copy ptr no writable reference authority"
+    },
+    {
+      "name": "unregistered_fragment",
+      "transformation": "expression main() without function registration",
+      "expect": "public function body not certifiable; registered path must be distinguished"
+    }
+  ],
+  "tamper_cases": [
+    "root swap",
+    "field swap",
+    "stale incarnation/ValueFact",
+    "duplicate/foreign root",
+    "step-2-before mismatch",
+    "reordered Changes",
+    "wrong type/ref access",
+    "host-created root/value",
+    "pointer address equality privilege amplification"
+  ],
+  "expected_tamper": "all public validator rejects; no modified C17 output",
+  "oom": "fail closed, no authority or output commit",
+  "stop": "at first real failure or unavailable published proof; never reinterpret original finding",
+  "actions_max": 2
+}
