@@ -1,0 +1,91 @@
+name: V561 P2 Clay consumer source rebuild vs Rust vendor staticlib smoke (experimental)
+on:
+  pull_request:
+    paths:
+      - 'experiments/value/p561_clay_consumer/**'
+      - '.github/workflows/v561_clay_consumer.yml'
+permissions:
+  contents: read
+jobs:
+  real-crave-consumer-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - name: Checkout frozen actual independent consumer
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          repository: bichanna/crave
+          ref: 36f9f7064a041875283db843d1d0a801b5757408
+          path: actual-consumer
+          persist-credentials: false
+      - name: Document consumer revision and build tool
+        run: |
+          set -euo pipefail
+          cd actual-consumer
+          echo "CRAVE_HEAD=$(git rev-parse HEAD)"
+          test "$(git rev-parse HEAD)" = 36f9f7064a041875283db843d1d0a801b5757408
+          grep -F "c_std=c17" meson.build
+          grep -F "#define CLAY_IMPLEMENTATION" src/clay_raylib.c
+          sha256sum meson.build src/clay_raylib.c thirdparty/clay/clay.h
+          cc --version | head -n 1
+          uname -a
+      - name: Install Crave documented Linux Meson/X11/OpenGL dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends             meson ninja-build python3 pkg-config             libgl1-mesa-dev libx11-dev libxrandr-dev libxinerama-dev             libxcursor-dev libxi-dev
+          meson --version
+          ninja --version
+          cc --version | head -n 1
+      - name: Actually build unchanged Crave with vendored Clay implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd actual-consumer
+          meson setup build
+          meson compile -v -C build 2>&1 | tee "$RUNNER_TEMP/v561_crave_build.log"
+          test -f build/crave
+          file build/crave
+          if grep -F 'clay_raylib.c' "$RUNNER_TEMP/v561_crave_build.log"; then
+            echo "V561_ACTUAL_CRAVE_CLAY_C17_SOURCE_BUILD_PASS"
+          else
+            echo "NO_CLAY_COMPILE_LOG_VERIFY"
+            exit 1
+          fi
+
+  vendor-rust-c-abi-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout frozen V-only comparator
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Freeze source hashes and vendor toolchain
+        run: |
+          set -euo pipefail
+          cd experiments/value/p561_clay_consumer
+          sha256sum vendor_staticlib.rs consumer_link_smoke.c oracle.md
+          rustc --version --verbose
+          cc --version | head -n 1
+          uname -a
+      - name: Vendor-build stable Rust staticlib on matching target
+        run: |
+          set -euo pipefail
+          cd experiments/value/p561_clay_consumer
+          rustc --edition=2021 -D warnings --crate-type=staticlib -C panic=abort -O vendor_staticlib.rs -o "$RUNNER_TEMP/libp561.a"
+          ls -l "$RUNNER_TEMP/libp561.a"
+          sha256sum "$RUNNER_TEMP/libp561.a"
+          nm -g "$RUNNER_TEMP/libp561.a" | grep -m 2 'p561_rectangle_area' || true
+      - name: With ONLY C build tools on consumer PATH, link vendor artifact and execute
+        run: |
+          set -euo pipefail
+          cd experiments/value/p561_clay_consumer
+          if PATH=/usr/bin:/bin command -v rustc; then
+            echo 'consumer PATH unexpectedly finds rustc'; exit 1
+          fi
+          env PATH=/usr/bin:/bin cc -std=c17 -O2 -Wall -Wextra -Werror -pedantic             consumer_link_smoke.c "$RUNNER_TEMP/libp561.a" -ldl -lpthread -lm -lrt             -o "$RUNNER_TEMP/v561_abi_consumer"
+          "$RUNNER_TEMP/v561_abi_consumer" | tee "$RUNNER_TEMP/v561_abi.log"
+          grep -Fx 'P561_RUST_STATICLIB_C_ABI_OK area=2048' "$RUNNER_TEMP/v561_abi.log"
+          echo 'V561_VENDOR_RUST_STATICLIB_ACCEPTED_BY_C_ONLY_LINK_PHASE'
