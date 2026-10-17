@@ -1,0 +1,33 @@
+[
+  {
+    "source": "read_authority",
+    "status": 0,
+    "stdout": "P514_REJECT phase=parser code=LOCAL-LOAN-PROFILE state=UNCHANGED semantic=NOT_ENTERED artifact=NULL\n",
+    "stderr": ""
+  },
+  {
+    "source": "wrong_field_type",
+    "status": 0,
+    "stdout": "P514_REJECT phase=registration code=NODE-LINK-FIELD-PROFILE rollback=PASS artifact=NULL\n",
+    "stderr": ""
+  },
+  {
+    "source": "scope_escape",
+    "status": 0,
+    "stdout": "P514_REJECT phase=registration code=P8-EXIT-DEPENDENCY rollback=PASS artifact=NULL\n",
+    "stderr": ""
+  },
+  {
+    "source": "ptr_is_not_ref",
+    "status": 0,
+    "stdout": "P514_REJECT phase=registration code=P3-WRITE-REF-REQUIRED rollback=PASS artifact=NULL\n",
+    "stderr": ""
+  },
+  {
+    "source": "three_originals",
+    "test": "oom",
+    "status": 0,
+    "stdout": "P514_OOM registration=297 rollback=PASS\nP514_OOM main=151 rollback=PASS output=NULL\n",
+    "stderr": ""
+  }
+]

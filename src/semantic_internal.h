@@ -372,6 +372,8 @@ NLCheckStatus nl_allocated_closed_prefix(const NLSemanticContext *,
  * status-checked at construction and fail-closed in public validation. */
 bool nl_producer_valid(const NLCheckedFragment *, NLCheckedNodeId, bool raw);
 bool nl_packet_same_entry(const NLSemanticContext *, const NLSemanticContext *);
+/* Reuse the existing exact package comparison without changing its callers. */
+bool nl_node_value_same(NLSemanticValueView, NLSemanticValueView);
 NLCheckStatus nl_packet_fork_prepare(NLCheckedFragment *, NLCheckedNodeId,
                                      const NLSemanticContext *);
 bool nl_packet_inherited(const NLCheckedFragment *, NLValueId);

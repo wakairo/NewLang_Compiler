@@ -1,0 +1,7 @@
+{
+  "frozen_utc": "2026-10-17T13:25:47.477768+00:00",
+  "reason": "original read-only and wrong-field negatives hit profile limits; retain both and add one direct Copy ptr-as-write-ref rejection without changing the positive or previous oracle",
+  "source": "ptr_is_not_ref.nl",
+  "sha256": "4f5e99baa86b44259489ab265b7f0b4b0543de04c24978ddbc14aab67017bd7c",
+  "expected": "semantic type/capability rejection, not authority from Copy ptr"
+}

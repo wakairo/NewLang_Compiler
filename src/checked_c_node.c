@@ -2,6 +2,7 @@
 #include "checked_c_five.h"
 #include "checked_c_target.h"
 #include "newlang/node_join.h"
+#include "newlang/node_links.h"
 #include "newlang/raw_storage.h"
 #include <stdarg.h>
 #include <stdint.h>
@@ -44,6 +45,7 @@ typedef struct {
     bool owner_read;
     size_t used, temp, steps, frames, roots;
     bool allocated;
+    bool three_lexical_links;
     bool two_heap;
     HeapLifecycle lifecycle[2]; /* backend-only carrier validation */
     bool heap_link;
@@ -827,7 +829,8 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
         if (e->allocated && r->type == e->ptr && env->heap_place != 0 &&
             env->heap_symbol == 0)
             env->heap_symbol = r->symbol;
-        if (r->type == e->node && ++e->roots > 2)
+        if (r->type == e->node &&
+            ++e->roots > (e->three_lexical_links ? 3u : 2u))
             return reject(e);
         if (e->allocated && r->type == e->option && ++e->option_bindings > 3)
             return reject(e);
@@ -2736,6 +2739,22 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             }
         }
     }
+    if (!e.allocated) {
+        NLNodeLinksView links;
+        if (nl_checked_node_links_view(body, &links)) {
+            const NLCheckStatus status =
+                nl_checked_node_links_validate(body, &links);
+            if (status != NL_CHECK_OK) {
+                free(e.text);
+                return status == NL_CHECK_OUT_OF_MEMORY
+                           ? NL_NODE_C_OUT_OF_MEMORY
+                       : status == NL_CHECK_RESOURCE_LIMIT
+                           ? NL_NODE_C_RESOURCE_LIMIT
+                           : NL_NODE_C_UNSUPPORTED;
+            }
+            e.three_lexical_links = true;
+        }
+    }
     (void)put(
         &e,
         "/* Bounded Checked-C representation, not a NewLang ABI. */\n"
@@ -2811,8 +2830,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
     const size_t main_offset = e.used;
     (void)put(&e, "int main(void) {\n");
     Value result = {0};
-    if (!block(&e, &env, nl_checked_root(body), &result) || e.roots != 2 ||
-        result.type != e.unit ||
+    if (!block(&e, &env, nl_checked_root(body), &result) ||
+        e.roots != (e.three_lexical_links ? 3u : 2u) || result.type != e.unit ||
         (e.custody && (!e.custody_authorized || e.recipient_calls != 1)) ||
         (e.allocated &&
          (e.allocations != (e.two_heap ? 2u : 1u) ||

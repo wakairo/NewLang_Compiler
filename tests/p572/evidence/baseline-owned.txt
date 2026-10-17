@@ -1,0 +1,22 @@
+SNAPSHOT places=28 values=34 bindings=16 domains=0 regions=0
+ORIGINAL name=middle symbol=1 root=1 incarnation=1 finalRF=0 final_fixed_count=0 final_ended=1
+LOAN id=9 source=1 place=1 inc=1 scope=1 write=0 implicit=1 nonescape=1
+ORIGINAL name=left symbol=4 root=6 incarnation=6 finalRF=0 final_fixed_count=0 final_ended=1
+LOAN id=23 source=4 place=6 inc=6 scope=2 write=0 implicit=1 nonescape=1
+ORIGINAL name=right symbol=7 root=12 incarnation=12 finalRF=0 final_fixed_count=0 final_ended=1
+LOAN id=36 source=7 place=12 inc=12 scope=3 write=0 implicit=1 nonescape=1
+LOAN id=42 source=4 place=7 inc=7 scope=4 write=1 implicit=1 nonescape=1
+FIELD id=42 kind=13 parent=6 child=7 RF=6->0 F=7->0 old=8 new=0 occ=1->0
+FIELD id=44 kind=10 parent=6 child=7 RF=6->19 F=7->18 old=8 new=23 occ=1->2
+FINAL_CHILD parent=6 parent_inc=6 index=0 live=0 fixed_parent=0
+CHANGE id=44 base=4 parent=6 inc=6 child=7 child_inc=7 RF=6->19 F=7->18 occurrence=1->2 old=2 target=1 new=2 target=12 public_join_validate=3
+LOAN id=50 source=7 place=13 inc=13 scope=5 write=1 implicit=1 nonescape=1
+FIELD id=50 kind=13 parent=12 child=13 RF=12->0 F=13->0 old=14 new=0 occ=0->0
+FIELD id=52 kind=10 parent=12 child=13 RF=12->25 F=13->24 old=14 new=28 occ=0->4
+FINAL_CHILD parent=12 parent_inc=12 index=0 live=0 fixed_parent=0
+CHANGE id=52 base=7 parent=12 inc=12 child=13 child_inc=13 RF=12->25 F=13->24 occurrence=0->4 old=1 target=0 new=2 target=6 public_join_validate=3
+FIELD id=58 kind=45 parent=6 child=7 RF=19->0 F=18->0 old=23 new=0 occ=2->0
+FIELD id=61 kind=45 parent=12 child=13 RF=25->0 F=24->0 old=28 new=0 occ=4->0
+FIELD id=64 kind=45 parent=1 child=2 RF=1->0 F=2->0 old=1 new=0 occ=0->0
+CAPTURED change_checkpoints=0
+PUBLIC roots=3 replacements=2 join_certificates=0 C17_status=1 output_null=1 length=77

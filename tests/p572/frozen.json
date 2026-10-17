@@ -1,0 +1,84 @@
+{
+  "frozen_utc": "2026-10-17T13:19:43.199475+00:00",
+  "compiler": "a310c9b9dae5b507b2388fcc6cb39597267d1448",
+  "canonical": "Draft17.32",
+  "isolation": "P self-authored, M571 not read; no implementation edit or source execution before this file",
+  "baseline": {
+    "sha256": "c578ebdce71ffd46e30758903c28f69227876c7904264b3eec1914c7f6bdd050",
+    "path": "tests/p471/asymmetric.nl"
+  },
+  "sources": {
+    "three_originals": {
+      "sha256": "b3154e8ad1766dfa36fc948a3945f69058d1c4e023178cb6b49e4dfbcf6f2eae",
+      "bytes": 759,
+      "oracle": "source/check valid; public original roots, fields, oldCopy, scoped updates; native if supported"
+    },
+    "read_authority": {
+      "sha256": "a63336b5d356f68c0a39bf6b603ae410d7270665c4759901c38fc8c4aaed4d52",
+      "bytes": 758,
+      "oracle": "static semantic refusal; no output artifact/ownership grant"
+    },
+    "wrong_field_type": {
+      "sha256": "4b9a76f3c56165ffc921d17b1cbd5f8bef37bd75b5cf72355d1c152fb862d62b",
+      "bytes": 762,
+      "oracle": "static semantic refusal; no output artifact/ownership grant"
+    },
+    "scope_escape": {
+      "sha256": "ab5ba2d06bce56f69f7e40a99706cfeb165c0150b62b5c6cf40eea521b8eec2a",
+      "bytes": 702,
+      "oracle": "static semantic refusal; no output artifact/ownership grant"
+    }
+  },
+  "oracle": {
+    "roots": [
+      "middle",
+      "left",
+      "right"
+    ],
+    "payloads": [
+      22,
+      11,
+      33
+    ],
+    "field_projection": {
+      "next": 0,
+      "payload": 1
+    },
+    "initial_next": {
+      "middle": null,
+      "left": "middle",
+      "right": null
+    },
+    "updates": [
+      {
+        "root": "left",
+        "field": "next",
+        "old": "Some(original middle)",
+        "new": "Some(original right)"
+      },
+      {
+        "root": "right",
+        "field": "next",
+        "old": "None",
+        "new": "Some(original left)"
+      }
+    ],
+    "final_next": {
+      "middle": null,
+      "left": "right",
+      "right": "left"
+    },
+    "identity": "three distinct original live lexical C Node addresses, stable throughout updates; no heap allocation, explicit A/D or nonCopy owner",
+    "invariants": "correct original parent+child incarnation, separate next ProjectionId qualified by each root; field AND root ValueFact change, payload sibling unchanged; old Some occurrence ends, new ones fresh; returned Copy preserves locator only; all final bindings ended",
+    "physical": "old_left refers to actual middle address, old_right None; final left/right target actual originals; all three payloads unchanged. No host value or authority injection.",
+    "complexity": "two fixed field replacements only; no complete O(1) detach/membership/owner transfer claim"
+  },
+  "corruption_oracle": [
+    "wrong original root/base",
+    "wrong child/sibling field",
+    "stale pre-change child/root ValueFact",
+    "cross-root occurrence/old Copy target",
+    "wrong scoped write provenance"
+  ],
+  "predicted_first_barrier": "C17 two-original-root envelope likely rejects third root; independent public certificate precision must be measured, not inferred from CHECK0"
+}
