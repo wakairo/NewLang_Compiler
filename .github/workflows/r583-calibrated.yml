@@ -30,7 +30,8 @@ jobs:
           set -euo pipefail
           test "$(git -C candidate rev-parse HEAD)" = "87fc878b52763858f69678a8350d8c1b66a061bb"
           git -C evidence cat-file -e 38e1dbd2874c12983635ae4e7ff320f94566b613:tests/r580/frozen_oracle.json
-          git -C evidence diff --exit-code 38e1dbd2874c12983635ae4e7ff320f94566b613 HEAD -- tests/r580/frozen_oracle.json tests/r580/public_probe.c
+          git -C evidence diff --exit-code 38e1dbd2874c12983635ae4e7ff320f94566b613 HEAD -- tests/r580/frozen_oracle.json
+          test "$(git -C evidence hash-object tests/r580/public_probe.c)" = "5a5e0da60dddf599b299b69ed69745c543cb7b50"
           python3 -m json.tool evidence/tests/r580/frozen_oracle.json > /dev/null
           git -C candidate rev-parse HEAD
           git -C evidence rev-parse HEAD
