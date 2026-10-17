@@ -1,0 +1,56 @@
+name: V559 F1 SQLite 3.46.1 recoverable builder Rust counterbaseline
+on:
+  pull_request:
+    paths:
+      - 'experiments/value/f559_sqlite_recoverable/**'
+      - '.github/workflows/v559_sqlite_rust.yml'
+permissions:
+  contents: read
+jobs:
+  stable-rust-fault-injection:
+    name: V559 pinned stable rustc 1.99.0 real GlobalAlloc rejection
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      RUSTUP_AUTO_INSTALL: '0'
+    steps:
+      - name: SHA-pinned checkout; no stored credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - name: Pin actual preinstalled stable toolchain and image
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "ImageVersion=${ImageVersion:-missing} ImageOS=${ImageOS:-missing}"
+          echo "RUSTUP_TOOLCHAIN=${RUSTUP_TOOLCHAIN:-UNSET} RUSTUP_AUTO_INSTALL=${RUSTUP_AUTO_INSTALL:-UNSET}"
+          rustc --version --verbose
+          cargo --version
+          test "$(rustc --version | awk '{print $2}')" = '1.99.0' || { echo 'TOOLCHAIN-GATE-INCONCLUSIVE'; exit 78; }
+          command -v rustc
+          if command -v rustup >/dev/null; then
+            echo "actual_rustc=$(rustup which rustc)"
+            sha256sum "$(rustup which rustc)"
+          fi
+          echo "V559_STABLE_RUSTC_1_99_0_GATE_PASS"
+      - name: Verify pre-registered C, Rust and oracle SHA256 BEFORE Rust build
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd experiments/value/f559_sqlite_recoverable
+          sha256sum -c manifest.sha256
+          cat oracle.txt
+          echo "V559_FROZEN_SOURCE_ORACLE_PASS"
+      - name: Compile stable Rust and execute real System allocator rejected nth once and persistent
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd experiments/value/f559_sqlite_recoverable
+          rustc --edition=2021 -D warnings -O rust_stable.rs -o "$RUNNER_TEMP/v559_stable_rust"
+          "$RUNNER_TEMP/v559_stable_rust" | tee "$RUNNER_TEMP/v559_stable_rust.log"
+          test "$(grep -c '^RUST_CASE ' "$RUNNER_TEMP/v559_stable_rust.log")" -eq 9
+          grep -Fx 'RUST_FALLIBLE_STR_DONE cases=9' "$RUNNER_TEMP/v559_stable_rust.log"
+          for t in success empty limit oom_new_once oom_grow_once oom_realloc_once oom_new_persistent oom_grow_persistent oom_realloc_persistent; do
+            grep -F "RUST_CASE $t " "$RUNNER_TEMP/v559_stable_rust.log"
+          done
+          echo "V559_RUST_FALLIBLE_ALLOCATOR_NATIVE_PASS"
