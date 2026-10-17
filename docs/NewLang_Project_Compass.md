@@ -13,6 +13,7 @@
 - **Policy-neutral, mechanism-strict**：データ構造・アルゴリズムの方針は利用者が決め、言語の低水準 mechanism は厳密にする。
 - **全操作の自動証明は必須目標ではない**：証明できる条件は checked、証明できない**真の**事前条件は明示的・局所的な `unchecked` と人間の責任で扱える。ordinary safe API は呼出者へ隠れた証明責任を転嫁しない。
 - **製品価値はunchecked件数ではなく監査の局所性**：library authorとordinary-safe callerのUB防止監査・再監査範囲、安全な変更が内部前提を破壊できないことを検証する（詳細は[Product Strategy §1.1](NewLang_Product_Value_Strategy.md#11-ub-prevention-audit-locality-value-hypothesis)）。per-hop uncheckedの多発や権限を無から作る操作は解決ではない。
+- **再利用可能なcompilerへの並行投資**：Product GOを待たず、選択済み意味論のsource→CHECK→公開owned→C17/nativeを、再利用可能・費用限定・安全な形で育てる。P/M/F/Rの能力構築とVの実利用／NewLang対C監査局所性検証を並行する。大きな新機構や製品化は別裁定とし、固定比率・一律gateは増やさない（[Product Strategy §1.3](NewLang_Product_Value_Strategy.md)、[Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go)）。
 - **North Star は長期の全用途を定義しない**。個別技術の進歩、仕様上の許容、製品価値の実証を混同しない。
 
 上記は**案内用の要約**。正確な規則・例外・適用範囲は必ず下記の正本で確認する。
@@ -30,7 +31,7 @@
 | Ring `head/len`、Vec `len` の metadata SSOT と局所的な claim transfer | 現行 Draft §15（[CURRENT_SPEC](reference/CURRENT_SPEC.md) から移動） |
 | 過去案の位置付けと source/semantic 変更前の確認 | [Design Decision Procedure](NewLang_Design_Decision_Procedure.md)、[Design-Intent Ledger](NewLang_Design_Intent_Ledger.md) |
 | Track、Issue、レビュー、独立 R、Goal Alignment、停止確認 | [Development Process](NewLang_Project_Development_Process.md) §§3–4,7 |
-| 探索投資と製品化投資、Exploration GO / Product GO、予測→実測→地図の更新 | [Development Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go) |
+| 再利用可能なcompiler能力の投資、探索投資と製品化投資、Exploration GO / Product GO、予測→実測→地図の更新 | [Development Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go) |
 | H1 固有の凍結条件（一般的な言語要件とは別） | [H1 Issue #268](https://github.com/wakairo/NewLang_Compiler/issues/268) |
 | 今回の目標逸脱と反省点（正本ではなく evidence） | [Coordination #368](https://github.com/wakairo/NewLang_Compiler/issues/368)、[V #369](https://github.com/wakairo/NewLang_Compiler/issues/369) |
 
@@ -38,7 +39,7 @@
 
 1. **関連する行だけ選ぶ**。分からない目標・非目標・代替手段があればリンク先の正本を読む。Compass を引用しただけで理解・審査済みとはしない。
 2. **手段の目的化に注意**：新しい checker/proof mechanism が作れることと、製品に必要であることは別。checked、既存 API、局所 unchecked、別 workload 等を必要に応じて比較する。ただし unchecked が source 上表現可能・sound と推定してはならない。
-3. **投資判断は [Process §4.3](NewLang_Project_Development_Process.md) に従う**。特に[§4.3.1の探索GO／製品化GO](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go)を区別する。製品価値がまだ未実証でも、次の探索経路の判断を改善する小さな実測や選択済みv0の忠実な実装を否定しない。ただし、探索成功をProduct PASSや仕様・安全性の承認と取り違えない。
+3. **投資判断は [Process §4.3](NewLang_Project_Development_Process.md) に従う**。特に[§4.3.1の探索GO／製品化GO](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go)を区別する。製品価値が未実証でも、**再利用可能で安全・低費用な選択済みv0のcompiler能力実装を積極的に評価する**。実物の能力が増えることで、次の価値仮説を直接実測できることも情報利得である。ただし、探索成功をProduct PASSや仕様・安全性の承認と取り違えない。
 4. **blind Red Team の初回判定は Process §7 を優先**。設計者の rationale や過去の優先結論を先に読ませない。
 
 この入口が古い・壊れている場合はリンク先の正本を確認して修正を提案する。Compass 自体を第2の authority にしない。

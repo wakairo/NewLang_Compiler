@@ -125,6 +125,18 @@ C17/nativeのPASSやCHECK0／CI greenは、soundness theoremでもProduct GOで�
 
 **現行能力との区別：** Draft上の`unchecked`意味論、Array/Ring/ownerの概念的機構、またはlexical Node/Pairの有限C17/native成功は、general source `unchecked`、representation hiding、original heap ownerの安全な返却・refund、safe library APIを現Productionが実装済みである証拠ではない。代表ライブラリの設計評価と、現在のSOURCE／CHECK／公開owned／C17／nativeの到達範囲は別々に記録する。複数の独立機構不足があれば最初の不足で探索を停止し、Product GOまで無制限に実装を連鎖させない。
 
+## 1.3 再利用可能なcompiler能力と製品価値検証への並行投資
+
+**基本方針：** 初期ターゲットは引き続き§1.1の**Cを積極的・合理的に選ぶ領域**である。ただし個別North StarやピンポイントなworkloadのProduct GOは、**再利用可能なcompiler能力への投資の一律の前提条件ではない**。NewLangの実物のsource受理・semantic CHECK・真正な公開checked-owned証拠・C17/nativeが拡大すると、従来は推論に依存した製品仮説を実プログラムと反例で検証できる。コンパイラ開発は研究対象であると同時に**価値検証を可能にする研究基盤**でもあるため、価値実証と開発を過度に直列化しない。
+
+**並行する三つの投資：** (A) 既選択のcanonical semanticsを実際のsourceから公開証明・C17/nativeまで接続し、異なるworkloadへ再利用できるcompiler、診断・検証基盤を**積極的に育てる**。(B) 新たな一般的ownership／effects／representation hiding／proof mechanism等の広く高コストな追加は、具体的な利用先、既存の代替、最初の障害、保守費用を比較して限定的に進める。(C) Track Vの実利用者にとって重要なC採用理由の発見と、**NewLang対十分にfactorしたC**のlibrary author＋ordinary-safe callerのUB-prevention audit/re-audit依存閉包の検証を並行して継続する。三者は独立して進め得るが、実測に応じて互いの優先順位を更新する。
+
+**手堅い能力投資の条件：** 既選択の意味論に忠実であり、複数の具体的なsource／workloadへ再利用可能な見込みがあり、初めて不成立になるparser／CHECK／public issuer／C17／nativeの境界を反証可能な形で特定でき、実装・テスト・診断・将来互換性を含む費用が限定されていること。失敗時にも次の投資判断が改善することを含める。逆に、単一fixtureのためだけの専用profile・複雑なpublic validator・world複製の増殖を能力蓄積と数えない。新しい大きなproof/source/semantic機構を必要としたら、既存checked、正当な局所unchecked、別source構成、小さなlibrary境界を比較して停止・再裁定する。**安全性の独立検証を実装速度と引き換えに省略しない。**
+
+**証拠と費用の境界：** SOURCE/CHECK／公開owned／C17/nativeの成功はCAPABILITY evidenceであり、一般soundnessでも§1.1のProduct GOでもない。製品化には実際のC採用理由、well-factored Cとの監査局所性改善、導入・運用・toolchain費用の検証が必要である。研究資源は**再利用可能なcompiler実装・基盤研究を重要な投資先として優先**しつつ、R/Fの独立安全性検証とVの価値探索を維持する。60/20/20等の比率は実測に基づく最適値ではなく、**固定quotaや追加の一律承認gateにしない**。具体的な許可・停止は[Development Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go)に従う。
+
+**長期の選択肢：** 初期のC後継価値を優先しながら、将来必要な型・APIだけに厳格なownership・exclusive access・不変条件保護を選べるよう発展し、Rustを合理的に選ぶ領域へも届く可能性を不必要に閉ざさない。これは現在のv0で包括的なRust型の規律や未選択機構を導入する許可ではなく、§6 no-foreclosureの長期的視野である。
+
 ## 2. 多段階ターゲティング
 
 NewLangはcurrent North Starと最終市場を同一視しない。
@@ -238,9 +250,10 @@ Coordination: どのfindingを、いつ、どのtrackへ渡すか？
 - **Failure attribution**: 複数の未確定mechanismを一つのgateへ混ぜていないか。
 - **Anti-false-progress**: host fixture、toy rewrite、unchecked、backend trickでuser-visible gapを隠していないか。safe mutationによるunchecked前提破壊の反例・未検証範囲を隠していないか。
 - **Topology preservation**: NewLangを通すために元のC architectureを本質的に別物へ変えていないか。
-- **NewLang-native validation**: 既存Cソースの逐語的な再現を必須にしない。まずGC/Rustが実用上不十分でC選択が合理的な要求を特定し、その要求をNewLang-native低水準libraryで保持した上で、同等topology・実用契約の**Cとの**author＋ordinary-safe callerの監査依存閉包を検証できるか。Rust/Zigはターゲット適格性・他の代替可能性を再評価する参照先であり、NewLangとの一般的なUB監査優劣レースを作らない。
+- **NewLang-native validation**: 既存Cソースの逐語的な再現を必須にしない。まず**Cを選ぶ重要な積極的理由**がある要求を特定する（Rustも実用的であることだけで棄却しない）。その要求をNewLang-native低水準libraryで保持した上で、同等topology・実用契約の**Cとの**author＋ordinary-safe callerの監査依存閉包を検証できるか。Rust/Zigはターゲット適格性・他の代替可能性を再評価する参照先であり、NewLangとの一般的なUB監査優劣レースを作らない。
 - **No foreclosure**: 小さな現在判断が将来のC replacementを不必要に閉ざしていないか。
 - **Lifecycle cost**: implementation costだけでなくsemantic/test/diagnostic/compatibility/documentation/future-interaction costを数える。
+- **Reusable compiler capability**: Product GOや特定North Starの完遂前でも、既選択のsemanticsを真正なsource→公開証拠→C17/nativeに再利用可能な形でつなぐ研究・実装の価値（§1.3）を評価する。
 
 AIによりimplementation costが下がっても、semantic complexityやcompatibility costは自動的には下がらない。
 

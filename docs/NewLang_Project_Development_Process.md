@@ -259,6 +259,12 @@ M/Coordinationがpreflightを行い、R first-passの独立性を損なわない
 
 NewLangの不完全な実装地図を改善する**探索投資（Exploration）**と、利用者に届く機能へ育てる**製品化投資（Exploitation）**は、目的とGO条件が異なる。両方とも最終的なC後継という目標に従うが、**製品価値が未実証という理由だけで探索を止めない**。Track Pのproduction実装も、選択済みv0意味論を実際に使える形へ広げるなら探索投資になり得る。
 
+**再利用可能なcompiler能力への積極投資：** 個別North Star／狭いworkloadの製品価値が未実証でも、選択済みcanonical semanticsに忠実で、他のsource・workloadにも使える見込みが具体的で、予算・最初の拒否境界・期待負例を示せるcompiler/source/checker/公開owned/C17/native拡張は、**Exploration GOとして優先的に認可し得る**。この実装によって次に実測できる製品仮説が増えることも情報利得である。小さな基盤機能ごとに競合言語の不十分さやCに対する監査負担改善のProduct PASSを事前に証明させない。ただし選択済み仕様の名目だけで専用fixture profileや高価なpublic validatorを無制限に積まず、再利用性・保守費用を確認する。
+
+**投資対象の区別：** (A) 既選択の意味論を忠実に実装する小さな再利用可能な縦の拡張は、soundなauthority、実source/native証拠、具体的な再利用先、限定費用と最初の障害で判断する。(B) 新たな一般source規則／ownership／effects／proof／encapsulation等の高費用な追加は§4.2の歴史照合と§4.3のGoal/Evidence/Alternatives/Stopを適用して慎重に段階投資する。(C) 実用製品への昇格は下表のProduct GOを別途満たす。**BのHOLDは無関係なAの停止でもなく、AのPASSはB/Cの自動認可でもない。** P/M/F/Rの安全な実装研究とVのC合理性・NewLang対Cの監査局所性検証を並行して進め、結果を互いに反映する。
+
+**資源と安全性：** 再利用可能なcompiler開発を資源配分の重要な中心に据えつつ、独立R/FとVを維持する。固定の60/20/20比率、新しい承認書式、全Track必須sign-offは設けない。新しい公開証明・権限issuer／provenance／Allocation／LifetimeDomain・OOM/rollback／state bridgeは引き続き厳格に検証し、独立R §7等を適用する。**有限技術PASS、soundness、Product GOは別の証拠階層**であり、安全性を犠牲にして投資を前倒ししない。
+
 | 判定 | GOの根拠 | 獲得・確認する成果 |
 | --- | --- | --- |
 | **Exploration GO** | 実装可能性・必要な解析精度・最初の不足・工数等について、結果が**次の探索経路の選択を変え得る**未解決の問いがある。費用を限定し、失敗しても有用な情報を回収できる。 | 事前の予測と実測の差、source/checker/owned evidence/backend/nativeの最初の到達・停止点、別workloadにも使える知識・能力・反例 |
@@ -450,3 +456,4 @@ closure後に新しい問題が出た場合は、より深い矛盾が示され�
 3. substantiveなM9作業の前にSemantic Sync Reviewを行う。
 4. そのsync point付近、または同等のhigh-value boundaryでindependent Red Team passを行う。
 5. 実際の運用経験からより良いmodelが得られたら、この文書自体を改訂する。
+6. **Product GO待ちだけを理由に、選択済みv0の再利用可能なcompiler能力を停滞させない。** 安全な縦の能力拡張と独立R/F・Vを並行させるが、大きな新機構と製品昇格は別裁定する（§4.3.1）。
