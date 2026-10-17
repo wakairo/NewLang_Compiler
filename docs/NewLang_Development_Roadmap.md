@@ -22,15 +22,15 @@
 
 **第2関門の目的地（未到達）：** Cを使う合理的理由が実ユーザー契約で残る場合、**同一original heap Node／Allocation・LifetimeDomainとO(1) detach/attach、元のownerを正しく返却・refund／失敗時責任・teardownまで守るNewLang-native低水準library**を目指す。必要なのは(1)実際のfallible **heap-original nonCopy owner／root/Allocation/Domainのsource発行・安全な返却／refund**、(2)**membership・alias・原リンク不変条件を保護するrepresentation hiding／ordinary-safe API**、(3)general source `unchecked`の真の前提の局所化とwriter・callback・破棄までの依存閉包、(4)利用者が要求するなら実ABI／FFIであり、現在のlexical元Node技術／test-only Array4からは導けない。`ptr`数値、Copy handle、host seed、metadata、per-hop uncheckedだけから生存・所有・所属権限を生成しない。製品上は**well-factored C**を主要baselineとして、同じO(1)操作・失敗・API条件下で**library author＋ordinary-safe callerのL/R/P/V/C UB防止監査・再監査依存閉包**の純減を測る（Rustへの監査優位を第2関門の必須条件にはしない）。[H1 #268](https://github.com/wakairo/NewLang_Compiler/issues/268)の凍結5-root detach/adoptionは**HOLD／UNDECIDED**、自動再開しない。Product GOは**未実証**。
 
-**並行する低手戻りExploration（[Coordination #570](https://github.com/wakairo/NewLang_Compiler/issues/570)で準備済み・それぞれ別途ユーザー起動が必要。起票≠着手／PASS）：**
+**低手戻りExplorationの進捗（[Coordination #570](https://github.com/wakairo/NewLang_Compiler/issues/570)）：** V #573は実ソース確認・Coordination裁定まで完了。M #571とP #572は別途ユーザー起動が必要で、起票≠実装／PASS。
 
 | 独立Track・段階 | 最初に検証する問い／成果の上限 | 停止・次の投資判断 |
 | --- | --- | --- |
-| **[V #573](https://github.com/wakairo/NewLang_Compiler/issues/573)：Gate 1／real consumer** | 実際のdownstreamが既知元NodeのO(1)、raw pointer ABI、metadata／長期churn／返却を**要求**する一次source。要求を推定せず、O(n) Vec／O(1) safe Handle／unsafe raw Rustを公平に比較 | 真の利用者条件が見つからなければINCONCLUSIVE／HOLD。[#470](https://github.com/wakairo/NewLang_Compiler/issues/470)の受付を代替しない |
+| **[V #573](https://github.com/wakairo/NewLang_Compiler/issues/573#issuecomment-6234396445)：Gate 1／real source・完了** | 実libuvの元request内queue linkの既知request O(1)解除と、Redisの元listNodeポインタを保持しての直接削除をsource確認。[C裁定](https://github.com/wakairo/NewLang_Compiler/issues/573#issuecomment-6234516564)でも受理。libuvのmutex・callback／同時実行をv0が実装済みとはしない | **実C利用の存在はPASS、Rustを排除する顧客要件・ABI／metadata拒否は未実証 → Gate 1 INCONCLUSIVE／Product HOLD**。実利用受付[#470](https://github.com/wakairo/NewLang_Compiler/issues/470)は継続 |
 | **[M #571](https://github.com/wakairo/NewLang_Compiler/issues/571)：source/issuer DAG／read-only** | P471のlexical field currentnessから実heap-original owner・receipt／return・protected membership・ordinary-safe APIまで、**最初の未選択／未実装段階**と必要な証明責務を分離 | 新規source／semantic判断が必要なら§4.2とCoordinationに戻す。read-only研究はsource採用ではない |
 | **[P #572](https://github.com/wakairo/NewLang_Compiler/issues/572)：有限技術rung** | まず既存mainで**3 distinct lexical Nodeの相互`next/prev`を2回順に更新**できるか。SOURCE→CHECK→公開owned→C17/native／元fieldの負例、または正確な最初の停止点を確認 | 既存能力ならNO-CODE。未選択の広い機構が複数要るなら停止。**heap owner／O(1) full detach／safe API成功とは数えない** |
 
-**順序と投資ゲート：** (A) Vの実利用要件発見と、Mの必要条件地図・Pの小さな既選択source忠実実装は**並行可能**（互いを事前承認・依存完了と見なさない）。(B) 真のheap原権限発行と可逆なnonCopy返却・refundを**その段階のsource/CHECK→公開owned→C17/native**で独立に検証。(C) protected membershipと通常safe callerの**全合法state／writer／失敗／teardown**での安全閉包、O(1) full-operation／メタデータ／ABI費用とfair Rust/C比較へ進む。**次の大きなP/M/F機構はこれらの成果とコスト／停止条件に応じCoordinationが別途判断**し、Exploration GOをProduct GOや一般安全性証明に読み替えない。
+**順序と投資ゲート：** (A) V #573は実際のC利用例を確認したがRustに対する独占的なC合理性は未確定。Mの必要条件地図・Pの小さな既選択source忠実実装は、追加の顧客証拠の受付と**並行可能**（互いを事前承認・依存完了と見なさない）。(B) 真のheap原権限発行と可逆なnonCopy返却・refundを**その段階のsource/CHECK→公開owned→C17/native**で独立に検証。(C) protected membershipと通常safe callerの**全合法state／writer／失敗／teardown**での安全閉包、O(1) full-operation／メタデータ／ABI費用とfair Rust/C比較へ進む。**次の大きなP/M/F機構はこれらの成果とコスト／停止条件に応じCoordinationが別途判断**し、Exploration GOをProduct GOや一般安全性証明に読み替えない。
 
 以下の2026-10-17前半以前のcheckpointは**当時の固定authority・独立R判定・価値HOLDを残した履歴**であり、上記の現在地を上書きしない。
 
