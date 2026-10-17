@@ -7,8 +7,8 @@
 
 ## 1. 何を目指すか / 何を目指さないか
 
-- **多言語主義／C 後継**：GC言語で十分ならGC言語、Rustが自然に十分ならRustを使う。NewLangは、Rustへ無理に合わせたくないほどCの合法な設計・失敗処理・配備自由が合理的に必要な用途の、安全性を改善するC後継候補（[Product Strategy §§1–3](NewLang_Product_Value_Strategy.md)）。これは実在性を検証する仮説であってRustの一般的不可能性ではない。
-- **二段階の製品判断**：最初に「RustでなくCが合理的か」を、単にRustで**書ける／動作する**だけでなく、実際の要求に対する**構造・API・開発・変更・保守の自然さと安全性を含む総負担**で検証する。次に**NewLangと十分にfactorしたC**をUB防止の作者＋通常safe caller監査・再監査責務で比較する。Rustの最善の安全な抽象化と、C側に残る人間の安全性責務の両方を公正に扱う。詳細の正本はProduct Strategy §1.1。
+- **多言語主義／C 後継**：GC言語・Rust・Cは、同じ用途でも複数が合理的な選択肢になり得る。NewLangは**Cを選ぶ具体的かつ重要な積極的理由**がある用途で、その合法な構造・失敗処理・配備の自由を保ち、UB防止責務を減らすC後継候補（[Product Strategy §§1–3](NewLang_Product_Value_Strategy.md)）。Rustも実用的な場合を自動除外せず、Cの採用が惰性だけなら優先度を下げる。Rustの一般的不可能性を示す必要はない。
+- **二段階の製品判断**：最初に**Cを選ぶ積極的合理性**を、実際の要求・構造・API・開発／保守・配備費用から判断し、実用的なRustなどの代替も公平に扱う。**RustとCの両方が合理的でも第1関門の候補となる**。次に**NewLangと十分にfactorしたC**を、同じ実用契約の下でUB防止の作者＋通常safe caller監査・再監査責務によって比較する。ターゲット適格性だけでProduct GOにしない。詳細の正本はProduct Strategy §1.1。
 - **Preserve the architecture, replace the bookkeeping**：低水準の構造や pointer topology を保ち、機械的に扱える lifetime / ownership 等の責務を compiler に移す。
 - **Policy-neutral, mechanism-strict**：データ構造・アルゴリズムの方針は利用者が決め、言語の低水準 mechanism は厳密にする。
 - **全操作の自動証明は必須目標ではない**：証明できる条件は checked、証明できない**真の**事前条件は明示的・局所的な `unchecked` と人間の責任で扱える。ordinary safe API は呼出者へ隠れた証明責任を転嫁しない。
