@@ -5,14 +5,26 @@
 > 採用時点の履歴スナップショット：2026-10-13、Compiler/main `adc63b64b656b3d6e0501f29eaeee5181927dc14`、
 > FormalProof/main `a8de4ebb4099f4742fc161d26867740dcac48414`。
 > 本書は順序と判定基準についての**採用済み・非規範的な開発ガイド**であり、Issue/PRの起票だけで実装やTrackを開始しない。
-> 言語の正本は [CURRENT_SPEC](reference/CURRENT_SPEC.md) → Draft 17.30、
+> 言語の正本は [CURRENT_SPEC](reference/CURRENT_SPEC.md) → **Draft 17.32**（本checkpointの固定main）、
 > 製品の正本は [Product / Value Strategy](NewLang_Product_Value_Strategy.md)、
 > [North Star](NewLang_North_Star_Product_Validation.md)、
 > [C-Replacement Coverage Map](NewLang_C_Replacement_Coverage_Map.md)。
 > 運用は [Development Process](NewLang_Project_Development_Process.md) に従う。
 > この文書は正本を置換せず、将来の更新時は「観測した事実」と「新しい投資案」を分ける。
 
-## 現行checkpoint — 2026-10-16（P521/PR #523統合後。以前のcheckpointは履歴）
+## 現行checkpoint — 2026-10-17（Draft17.32／PR #543採用、Array4はtest-only opt-in）
+
+**固定authority:** Compiler/main [`1c6d9cab7349a7e501b04c9157f25f60df242e02`](https://github.com/wakairo/NewLang_Compiler/commit/1c6d9cab7349a7e501b04c9157f25f60df242e02)、[CURRENT_SPEC](reference/CURRENT_SPEC.md) → **canonical Draft 17.32**（[merged PR #533](https://github.com/wakairo/NewLang_Compiler/pull/533)）。**SPEC:** `Array<Option<u8>,4>`を4つの**直接qualified** `Option<u8>::None` leafでwhole-value構築する閉じたsource profile。**一つの直接constructorごとに元lexical Array root 1つ＋従属Option要素4つ**であり、**同一関数内の独立した直接constructor 2件も規範上選択済み**。一般`Array<T,N>`、間接leaf、indexed element/ref、nonCopy `Option<OwnedFrame>`、Ring／owner custody／ordinary-safe APIではない。
+
+**採用済み実装と有限証拠（SPEC ≠ 通常CLI）：** [merged PR #543](https://github.com/wakairo/NewLang_Compiler/pull/543)は**テスト専用 `newlangc_p534` opt-in** の登録済み関数source→CHECK→**発行時点の公開checked-owned/validator**→通常strict C17→元Array carrierのnative観測を提供。独立[R #545 calibrated limited PASS](https://github.com/wakairo/NewLang_Compiler/issues/545#issuecomment-6227096033)は**実登録済み関数経路の2元root／8従属None要素**とGCC/Clang O0/O2実配置を検証（発行履歴は現在のlive owner権限でない）。**[R #544 fresh BLIND finding](https://github.com/wakairo/NewLang_Compiler/issues/544#issuecomment-6226699593)は保存**：未登録source-fragmentのprovisional viewは`valid_at`でfail closed、後の較正PASSで初回結果を書き換えない。**通常の `newlangc` はArray4 SOURCE default-OFF**、従って一般ユーザー向けSOURCE/C17/nativeを採用済みとは記さない。固定mainの[FULL5 #38985471659](https://github.com/wakairo/NewLang_Compiler/actions/runs/38985471659)／[NO LLVM/PARTIAL #38985471624](https://github.com/wakairo/NewLang_Compiler/actions/runs/38985471624)は同一SHA・初回SUCCESSだが、Product PASSや一般source有効化ではない。
+
+**最初の未到達と停止：** [P #546](https://github.com/wakairo/NewLang_Compiler/issues/546#issuecomment-6227459153)のopt-in `let b=a` Array Copyや単独Option binding／returnはCHECK受理例がある一方、真正な追加Array発行record／公開証明は不完全で**C17 fail closed**。Copyなら**別destination root＋4つの新規child**が必要で、元root/Allocation/Domainは複製不可。[M #547](https://github.com/wakairo/NewLang_Compiler/issues/547#issuecomment-6229831374)によれば直接constructor以外のC/E/F source適格性は**規範未裁定**であり、Copy自体を違法と決めない。直接leafでない初期化は選択済みpositive profile外。default-ONは**HOLD**。費用の独立観測はk=240直接constructorのC17で**約289MiB peak RSS／約3.2秒（一実行）**、k=241はparser node budget拒否。一般的な性能保証・soundness findingには換算しない。
+
+**価値・代替・投資停止：** [Product Strategy §§1.1–1.2](NewLang_Product_Value_Strategy.md)のNewLang-native低水準libraryと**library author＋ordinary-safe callerのUB予防監査・再監査依存閉包**が評価対象。[V #548](https://github.com/wakairo/NewLang_Compiler/issues/548#issuecomment-6229835479)は元アドレスを保つ二list intrusive descriptor poolを**比較workloadとして選定**し、独立standalone C17 fixtureのnative **4/4**を確認したが、libuv／NewLang／Rust／Zig poolの実行ではない。safe wrapperを持つ同一topology Rust、factor済みC/Zigは強い代替で、NewLang優位の人間負担差は**未実証**。safe Ring／intrusive library **Product HOLD**、一般Array・nonCopy/refund／H1 [#268](https://github.com/wakairo/NewLang_Compiler/issues/268) **HOLD/UNDECIDED**、真の利用事例[#470](https://github.com/wakairo/NewLang_Compiler/issues/470)は受付継続。[Coverage Map §§3.1–3.3](NewLang_C_Replacement_Coverage_Map.md)へ最初の不足を接続するが、これ自体は新機構やProduct GOの認可ではない。
+
+以下の2026-10-16以前のcheckpointは**各時点の正しい履歴**であり、現在のDraft選択・CLI公開範囲を上書きしない。
+
+## 履歴checkpoint — 2026-10-16（P521/PR #523統合後。当時の固定authority）
 
 **Compiler/main `2d4317dbd8b3f1b6ddf095ebeb7ec747eb49d809`、CURRENT_SPEC→Draft17.30、FormalProof/main `5437f92d099e228773d31e2323e8ee6228ca21bf`（本機能のformal proofでない）。** [P521の凍結8正例／3負例](https://github.com/wakairo/NewLang_Compiler/issues/521#issuecomment-6212931235)は、従来のmainでCHECK0→C17 `CLI4` の境界にあった「純粋IF後のUnknown Copy `u8`→普通の一引数Copy関数→元の同じ物理Pair.leftへの単一scoped replace」を、[PR523](https://github.com/wakairo/NewLang_Compiler/pull/523)で既存のauthentic call/IF/field証拠を再利用して通常C17/nativeまで接続した。実装は`src/main.c` +75/-14（純増61C行）で、source/parser/checker/public issuer/canonical/ABI/規範変更なし。提出固定HEAD FULL5＋NO LLVM/PARTIAL初回CI成功を統合後main実行と混同しない。[R524 fresh BLIND独立](https://github.com/wakairo/NewLang_Compiler/issues/524#issuecomment-6213334576)は別のR凍結TRUE/FALSEで、元Pair旧61→左137/23・右182、元field/旧戻り値/関数実引数・返値を生存関数内の物理アドレスで観測してSAFE LIMITED。Rの内部公開checked-owned詳細ID／毒入れは**未実測**でありPの証拠と混同しない。
 
@@ -21,7 +33,7 @@
 **次の費用判断：** さらに類似したIF/Pair/backend専用profileを連鎖させるのではなく、既存成果で作者の真のunchecked前提（権限issuer・root/Allocation/D・関連safe writer・refusal/teardown/callback）とordinary-safe callerの合法変更による再監査依存閉包が**どこで縮小するか**、無関係safe変更ではなぜ再監査不要か、実利用[#470](https://github.com/wakairo/NewLang_Compiler/issues/470)を基に同じtopologyのfactor済みC/Zig/Rustと比較する。新機構は別Issueで価値・反証・予算・停止を規定した場合のみ探索認可。既存H1の価値PASS/FAILは未決定。
 
 
-## 現行checkpoint — 2026-10-16（P514/P517/PR #515統合後、以下のcheckpointは履歴）
+## 履歴checkpoint — 2026-10-16（P514/P517/PR #515統合後）
 
 **Compiler/main `87675e7b18976d15c80d79fe9e01ccfb4440cf81`、CURRENT_SPEC→Draft17.30、FormalProof/main `5437f92d099e228773d31e2323e8ee6228ca21bf`。** [P #514](https://github.com/wakairo/NewLang_Compiler/issues/514)→[P #517](https://github.com/wakairo/NewLang_Compiler/issues/517)→[merged PR #515](https://github.com/wakairo/NewLang_Compiler/pull/515)は、元Pairを実sourceで条件より前に作り、`usize==usize`が選んだ純粋Copy `u8`を**分岐後に一度だけ元Pair.leftへscoped replace**する物理C17/nativeの有限実装を統合。P側public-owned／mutation/OOM証拠と固定候補FULL5／NO LLVM CI、[R #518 NON-BLIND calibrated独立native](https://github.com/wakairo/NewLang_Compiler/issues/518#issuecomment-6210781475)により元R凍結TRUE/FALSEで旧37→新108/173、right211、元物理Pairのアドレス同一性を生存関数内で確認。R #516のBLIND C17 failureは旧候補の発見として記録を維持。R #518で専用公開owned数値状態dump／issuer毒入れ／破損C感度を**独立測定したとは主張しない**。成功CIは統合前候補HEADであり新mainに対する追加実行ではない。
 
@@ -30,7 +42,7 @@
 **次の投資裁定：** 追加のPair/IF専用backend規則、Pair構造合流証明、Array二機構を自動連鎖しない。既存技術経路を必要とする**本当のC-class元オブジェクト＋普通callerの操作**が見つかり、そのUB防止監査依存閉包・同等にfactorされたC/Zig/Rustとの比較が可能なときだけ、Process §§4.2–4.3.1の設計履歴／Goal Alignment Gateで新しい有限課題を認可する。実利用case募集[Issue #470](https://github.com/wakairo/NewLang_Compiler/issues/470)はOPEN INTAKEのみ、Trackの自動起動ではない。
 
 
-## 現行checkpoint — 2026-10-16（P508／PR #511統合後、下記checkpointは履歴）
+## 履歴checkpoint — 2026-10-16（P508／PR #511統合後）
 
 **Compiler/main `e4af76784a6fe4174730af0671eb58bf606aac91`、CURRENT_SPEC→Draft17.30不変、FormalProof/main `5437f92d099e228773d31e2323e8ee6228ca21bf`。** 非規範の能力・投資checkpoint。§4.1 Issue中心のTrack引継ぎを守り、Track起動はユーザーが別スレッドから行う。
 
@@ -47,7 +59,7 @@
 - **並列可能な新しい有限投資：** [Track P #508](https://github.com/wakairo/NewLang_Compiler/issues/508) は**元bool条件で選ぶu8 Copy値7/8の実物理IF**（元Pair書込なし）、[Track P #506](https://github.com/wakairo/NewLang_Compiler/issues/506) は**固定未統合PR503実験HEAD上で元Pairの構造的CHECK合流と独立公開検証器**（元Pair nativeなし）。両方とも**別スレッドからUSER起動が必要**で、Issue作成は着手を意味しない。別authorityの枝を無断でrebase／mergeしない。成功まで本格的な元Pair conditional nativeは未達で、一般effects/CFG/SSA/ownerを導入する許可でもない。
 - **価値の境界：** 実演したのはCopyスカラ計算であり、作者＋普通callerのUB防止監査・再監査依存範囲減少を測ったわけではない。元heap H1、STB、Ring、Array source、named helper PR479/494のProduct／技術HOLDは維持。次の判断用の非直列な依存関係は[Coverage Map §§3.1–3.3](NewLang_C_Replacement_Coverage_Map.md)へ反映。
 
-## 現行checkpoint — 2026-10-16（PR #500統合後。下記補遺より優先）
+## 履歴checkpoint — 2026-10-16（PR #500統合後）
 
 **現行authority（再確認）:** Compiler/main `0d29d61c114f179af8e7300096fd85ec485ad2e7`、CURRENT_SPEC→canonical **Draft17.30変更なし**、FormalProof/main `5437f92d099e228773d31e2323e8ee6228ca21bf`。以下は既存仕様のfaithful有限実装を区別する**非規範のcheckpoint**であり、過去のauthority SHAを指す下の記録はそれぞれの時点の履歴とする。
 
@@ -68,7 +80,7 @@
 
 **能力依存地図への移行（2026-10-16）：** [C Replacement Coverage Map §3.1–3.3](NewLang_C_Replacement_Coverage_Map.md)に、source→CHECK→公開owned→C17/nativeの**最初の未到達点**、`u8→u8` Copy関数（PR404）の既統合実績、原Node（PR472/492）、未統合named call（PR479/494）、guard付きquantity・Array・byte・heap owner・ABIの**非直列**の枝を整理した。次の探索候補は[Track P #497](https://github.com/wakairo/NewLang_Compiler/issues/497)（USER LAUNCH REQUIRED）の比較一操作＋caller分岐の最初の停止点を固定する低費用gate（§5.2既存規則／§4.2 syntax履歴照合が前提）。これはRing、cJSON H1、安全なordinary APIのProduct GOや一般演算実装の認可ではない。実装する場合は別Issueでsource・negative・CI・撤退条件を凍結する。
 
-## 現行checkpoint — 2026-10-15（P471/PR #472統合済み、P478/PR #479は未統合HOLD。旧§0/§7より優先）
+## 履歴checkpoint — 2026-10-15（P471/PR #472統合済み、P478/PR #479当時HOLD）
 
 **実装の現在地:** Compiler/main [`d6e603e12591c2ff39e3e1b77c784681fec66033`](https://github.com/wakairo/NewLang_Compiler/commit/d6e603e12591c2ff39e3e1b77c784681fec66033)、[CURRENT_SPEC](reference/CURRENT_SPEC.md) → **canonical Draft 17.30（不変）**。従前のFormalProof有限証拠はcompiler→C17/native全体のsoundness証明ではない。本checkpointは[PR #458](https://github.com/wakairo/NewLang_Compiler/pull/458)・[独立R462](https://github.com/wakairo/NewLang_Compiler/issues/462#issuecomment-6186802683)、[P466 / merged PR #467](https://github.com/wakairo/NewLang_Compiler/pull/467)、[P471 / merged PR #472](https://github.com/wakairo/NewLang_Compiler/pull/472)までの**採用済み有限source/公開owned/C17/native**と、[P475](https://github.com/wakairo/NewLang_Compiler/issues/475#issuecomment-6190667128)・[P478](https://github.com/wakairo/NewLang_Compiler/issues/478#issuecomment-6191917231)の**別個の名前付きcall停止**を区別するnon-normative事実更新である。
 
