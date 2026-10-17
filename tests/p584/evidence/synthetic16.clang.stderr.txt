@@ -1,0 +1,13 @@
+tests/p584/evidence/bounds.after.c.txt:5:16: error: static assertion failed due to requirement '16 == 8': NewLang C17 requires 8-bit bytes
+    5 | _Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+      |                ^~~~~~~~~~~~~
+./tests/p584/evidence/synthetic16.h.txt:5:18: note: expanded from macro 'CHAR_BIT'
+    5 | #define CHAR_BIT 16
+      |                  ^
+tests/p584/evidence/bounds.after.c.txt:6:16: error: static assertion failed due to requirement '65535 == 255': NewLang C17 requires exact 8-bit uint8_t
+    6 | _Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+      |                ^~~~~~~~~~~~~~~~
+./tests/p584/evidence/synthetic16.h.txt:7:19: note: expanded from macro 'UINT8_MAX'
+    7 | #define UINT8_MAX 65535
+      |                   ^
+2 errors generated.

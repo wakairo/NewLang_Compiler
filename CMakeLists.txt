@@ -762,6 +762,13 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_v0_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_test(NAME c17_target_model.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p584/target_model_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:newlangc_p534>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}" "${NEWLANG_SANITIZER}"
+        "$<TARGET_FILE:u8_call_checked_probe>" "$<TARGET_FILE:p521_owned_probe>"
+        "$<TARGET_FILE:p534_public_probe>" "$<TARGET_FILE:p541_public_probe>"
+        "$<TARGET_FILE:node_join_proof_test>" "$<TARGET_FILE:five_checked_probe>")
     add_test(NAME bootstrap_retry.offline
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/bootstrap_retry_test.py")

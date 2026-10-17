@@ -1,0 +1,32 @@
+P584 local test-development record (not compiler/source failures)
+
+Early collector tool transcript: PermissionError: [Errno 13] Permission denied: build/newlangc
+Cause: collector overlapped linker replacement; rerun after completed build.
+
+Original full-run raw excerpt while evidence file layout was being edited:
+ 26/316 Test #312: c17_target_model.integration ....................***Failed    0.75 sec
+{"case": "bounds", "check": 0, "public_owned": "PASS", "c17_sha256": "cd05de679369c9bd7ec960870be36846d3ee00380b3e9f8257b824272478661c", "unchanged_guest_C": true, "strict_C17": ["O0", "O2"], "native": ["O0", "O2"], "synthetic_refused": ["char16_only", "wide_alias_only", "signed_alias_only", "wrong_max_only", "missing_max", "combined16"]}
+{"case": "pair", "check": 0, "public_owned": "PASS", "c17_sha256": "155f1fde947efd9e8775a42988402c0fc85687e583bab5608ffddb6341dfba42", "unchanged_guest_C": true, "strict_C17": ["O0", "O2"], "native": ["O0", "O2"], "synthetic_refused": ["char16_only", "wide_alias_only", "signed_alias_only", "wrong_max_only", "missing_max", "combined16"]}
+{"case": "array1", "check": 0, "public_owned": "PASS", "c17_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f", "unchanged_guest_C": true, "strict_C17": ["O0", "O2"], "native": ["O0", "O2"], "synthetic_refused": ["char16_only", "wide_alias_only", "signed_alias_only", "wrong_max_only", "missing_max", "combined16"]}
+{"case": "array2", "check": 0, "public_owned": "PASS", "c17_sha256": "57a3c3711159f682cd1913120cfaa3a9a1893b98ddda7a54efd89238783b9574", "unchanged_guest_C": true, "strict_C17": ["O0", "O2"], "native": ["O0", "O2"], "synthetic_refused": ["char16_only", "wide_alias_only", "signed_alias_only", "wrong_max_only", "missing_max", "combined16"]}
+{"case": "node", "check": 0, "public_owned": "PASS", "c17_sha256": "ca9eb19f920984fd179da9854c458b0d3d1355bc76231690ac2e235a2b123063", "unchanged_guest_C": true, "strict_C17": ["O0", "O2"], "native": ["O0", "O2"], "synthetic_refused": ["char16_only", "wide_alias_only", "signed_alias_only", "wrong_max_only", "missing_max", "combined16"]}
+Traceback (most recent call last):
+  File "/workspace/p584/tests/p584/target_model_test.py", line 159, in <module>
+
+  File "/workspace/p584/tests/p584/target_model_test.py", line 82, in main
+    f'{name}: source/check/C17 failed: {check} {emitted}')
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1027, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/p584/tests/p584/evidence/five.before.c.txt'
+
+
+Final stable full run:
+316/316 Test  #32: parser_expression.unit ..........................   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 316
+
+Total Test time (real) =  39.23 sec

@@ -1,5 +1,6 @@
 #include "newlang/checked_c_node.h"
 #include "checked_c_five.h"
+#include "checked_c_target.h"
 #include "newlang/node_join.h"
 #include "newlang/raw_storage.h"
 #include <stdarg.h>
@@ -2738,7 +2739,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
     (void)put(
         &e,
         "/* Bounded Checked-C representation, not a NewLang ABI. */\n"
-        "#include <stdint.h>\n#include <stddef.h>\n#include <stdlib.h>\n"
+        "#include <stdint.h>\n#include <stddef.h>\n#include "
+        "<stdlib.h>\n" NL_C17_U8_TARGET_GUARD
         "typedef struct nl_node nl_node;\n"
         "typedef struct { unsigned tag; const nl_node *ptr; } nl_node_option;\n"
         "struct nl_node { nl_node_option f0; uint8_t f1; };\n"

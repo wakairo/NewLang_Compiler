@@ -1,3 +1,4 @@
+#include "checked_c_target.h"
 #include "newlang/array4.h"
 #include "newlang/checked.h"
 #include "newlang/checked_c_node.h"
@@ -1924,7 +1925,7 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
 {
     if (fputs(
             "/* North Star V0/V1/AVS Checked-C reference output. */\n#include "
-            "<stdint.h>\n\n",
+            "<stdint.h>\n\n" NL_C17_U8_TARGET_GUARD,
             stream) < 0)
         return false;
 

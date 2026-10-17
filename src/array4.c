@@ -1,5 +1,6 @@
 /* SPECULATIVE PR533: concrete structural builtins, no user nominal/generic
  * machinery and no value/place/owner issuance in the type registry. */
+#include "checked_c_target.h"
 #include "semantic_internal.h"
 #include <stdlib.h>
 #include <string.h>
@@ -595,7 +596,7 @@ static bool c_text(const NLCheckedFragment *f, size_t count, size_t function,
         used += (size_t)n;                                                     \
     } while (0)
     WRITE("/* SPECULATIVE PR533 original Array4, checked source only. */\n"
-          "#include <stdint.h>\n"
+          "#include <stdint.h>\n" NL_C17_U8_TARGET_GUARD
           "enum { NL_ARRAY4_NONE = 37 };\n"
           "typedef struct { uint8_t tag; uint8_t payload; } nl_option_%zu;\n"
           "typedef nl_option_%zu nl_array_%zu[4];\n"
