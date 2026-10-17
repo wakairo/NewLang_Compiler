@@ -72,6 +72,12 @@ ordinary callerは公開された型付きsafe APIの使用とapplication policy
 **比較の順序は二段階である。** 安全性評価の厳密さは変えず、対象を選ぶ比較とC後継の製品価値比較を混同しない。
 
 1. **ターゲット適格性（Cがなお合理的か）**：実際の利用者が要求する物理構造、failure／rollback／teardown、ownership／alias、ABI、配布・対応target、工数等を先に固定する。stable Rust＋既存library、局所`unsafe`＋soundなsafe facade、`no_std`、FFI等の最善の現実的代替を評価し、nightlyや未対応targetは別に記録する。**Rustで十分ならRustでよく、NewLangの主要targetにはしない。** `unsafe`が必要なだけで不適格とはしない一方、`unsafe`で実装可能というだけで実用的な制約・保守負担が解消したとも扱わない。既存C資産の移植費用、新規開発でも残る制約、言語として原理的に不可能な事柄を区別する。
+
+**第1関門の「Rustで十分」は、機能的に書けることと同義ではない。** 同じ操作がcompile/native PASSした事実は**実現可能性**を示すが、実際の利用者の要求に対する**設計の自然さ・API・開発・変更・保守まで含む実用上の十分性**は別に判断する。特にCのデータ構造／アルゴリズムについて、必要な物理identity・外部owner・membership・失敗／teardown契約を維持したときに、Rust固有のadapterやhandle、公開APIの制約、内部の証明契約、設計変更時の修正・再監査範囲がどこまで増えるかを調べる。初期の移植可否だけでなく、**実際の保守変更の前後**で、authorとordinary callerへの影響を観察する。AIがコード記述を高速化しても残る表現上の制約は観察対象だが、AI／人間の開発工数差は測定なしに断定しない。
+
+**公平性と実証の境界：** Rustには成熟したcrate・`Pin`・内部`unsafe`＋soundなsafe API・RAII等を使った**最善の自然な設計**を許す。Cの偶然のfield配置、式の順序、字句的APIをRustに強制しない。ただし利用者に不可欠なidentity／placement／external contractを別物に置き換えて「同等」とも数えない。Rustのborrow checkが防いだ欠陥、callerを守るwrapper、変更時に自動で検出される破綻は**実用上の利点**として数え、C側のmanual UB防止監査・レビュー・既存API化の費用も負担に含める。`unsafe`の行数、compiler errorの回数、コード量、単なる好みだけで総負担を判定しない。
+
+**判定に必要な証拠：** 実際のconsumer／保守要求、双方の成立する操作契約、Rustの最善の構成と必要な追加設計、API・変更影響の具体的な差を記録する。実行PASS、source上の依存関係、測定した変更作業、利用者が費用を許容できないという証拠は**異なる強さの証拠**である。比較できる工数を実測していなければ「未測定」とする。継続的な負担が重要だと裏付けられない限り、**「Rustでも書けるが面倒そう」だけではC合理性やNewLangのProduct GOを認定しない**。反対に、動作一致だけでRustの実用上の十分性を確定しない。
 2. **C後継としての製品価値（Cに対し何を改善するか）**：上記のC合理性が認められ、NewLangにも同じ実用要求を維持する見込みがあるworkloadで、**十分にAPI化・必要に応じstatic/runtime guardを備えた現実的なC**とNewLangを比較する。両者の本質的なpointer topology、allocation／lifetime／失敗処理／配備条件と公開APIを揃え、*library author + ordinary-safe caller*が人間の規律で維持するUB防止監査・再監査の依存閉包、合法writer、error／teardown／再入／FFI、無関係なsafe変更の影響を比較する。NewLangがCの自由を損なう、または人間の責務を実用上改善しないなら**Cから移行する製品理由は未実証**。
    
 **RustとのUB監査責務競争は第2段階のProduct GO条件ではない。** Rustがそのworkloadで実用上十分かは第1段階で判断する。Rustの有力な代替が後から成立した場合は第1段階に戻す。Zig等の他の実用言語も、追加言語を導入する必要性を問う代替として考慮できるが、すべてに対する監査優位を形式的な合格条件にはしない。Rustの内部safe facadeや技術的証拠を研究・安全性検証の参照対象とすることまで禁止しない。
@@ -104,7 +110,7 @@ C17/nativeのPASSやCHECK0／CI greenは、soundness theoremでもProduct GOで�
 
 **責務分担の評価**では、compilerが現実的に判定できるlifetime / responsibility / provenance / currentness / access等をcheckedで保証し、なお真でなければならないが機械的に証明できない前提だけを、正当な原権限と実際の依存関係に基づく局所的な`unchecked`へ残す。`unchecked`の個数・字句的な近さ・全操作のchecked化を合格条件にしない。library authorは内部の論理的不変条件、影響する合法writer、失敗・rollback・破棄・再入・FFIの依存閉包を引き続き監査する。**ordinary-safe callerが許される全状態遷移**で内部の前提を破壊できないことも必要である。compilerの検査対象外となる本当の前提を`unchecked`と記しただけでは監査は局所化されない。
 
-代表workloadは、ターゲット適格性を先に確認し、少なくとも一つの具体的な利用APIと実際の物理対象、正常経路、該当するFULL/EMPTY・allocation failure等の通常の失敗結果、破棄／責任の移転を持たせる。内部不変条件に影響する**合法な変更**と、影響しない**無関係なsafe変更**の両方を考え、それぞれでauthorとordinary callerが再監査するL/R/P/V/C依存範囲を特定する。ターゲット発見では**同じ本質的な物理構造・失敗処理・実用API**を保持できる現実的なRust構成と比較する。ターゲットが妥当と判定されてからの製品価値は、十分にfactorしたC実装を主要baselineとして測定する。Zig等も代替案として扱い、NewLang固有の利得が無ければ正直に未実証とする。局所化できない代表workloadや予想外に広い依存閉包も、重要な負の製品証拠として残す。
+代表workloadは、ターゲット適格性を先に確認し、少なくとも一つの具体的な利用APIと実際の物理対象、正常経路、該当するFULL/EMPTY・allocation failure等の通常の失敗結果、破棄／責任の移転を持たせる。内部不変条件に影響する**合法な変更**と、影響しない**無関係なsafe変更**の両方を考え、それぞれでauthorとordinary callerが再監査するL/R/P/V/C依存範囲を特定する。ターゲット発見では、**利用者に不可欠な物理identity・失敗処理・実用API契約**を保った現実的なRust構成を比較する。Cの偶然の内部表現の再現は要求しないが、Rustによる動作一致だけで設計・変更・保守の自然さまでPASSとはしない。ターゲットが妥当と判定されてからの製品価値は、十分にfactorしたC実装を主要baselineとして測定する。Zig等も代替案として扱い、NewLang固有の利得が無ければ正直に未実証とする。局所化できない代表workloadや予想外に広い依存閉包も、重要な負の製品証拠として残す。
 
 **既存Cの忠実な移植・実際の修正履歴は引き続き有効**である。original topology、移植可能性、checker精度、権限の偽造、失敗・teardown等の厳しい反例を調べる*補助的なpressure test*として使う。ただし一つの既存C実装をそのままsource/CHECK→nativeで再現できないことと、自然なNewLang-native実装の製品価値が成立しないことを同一視しない。逆に、簡単なNewLang-native toy例のCHECK/native成功もProduct GOではない。
 
