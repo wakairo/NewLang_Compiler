@@ -1,0 +1,24 @@
+/* Read-only genuine registered-route inventory, not a semantic seed. */
+#include "../../tests/support/node_checked.h"
+#include "newlang/array4.h"
+#include <stdlib.h>
+static bool observe(const char *path)
+{
+    TestNode n = {0};
+    CHECK(node_checked_load(path, &n));
+    const NLCheckedFragment *f = nl_checked_call_body(n.entry, nl_checked_root(n.entry));
+    const size_t count = nl_checked_array4_count(f);
+    NLSemanticSnapshot final;
+    CHECK(nl_semantic_snapshot(n.context, &final));
+    size_t valid = 0;
+    for(size_t i=0;i<count;++i) {
+        NLArray4Construction p;
+        CHECK(nl_checked_array4_view_at(f,i,&p));
+        valid += nl_checked_array4_valid_at(f,i,&p);
+    }
+    char *text=NULL;size_t length=77;
+    NLCheckStatus status=nl_checked_array4_c17(n.entry,&text,&length);
+    printf("records=%zu validated=%zu final_places=%zu final_values=%zu final_bindings=%zu public_c17_status=%d output_null=%d length=%zu\n",count,valid,final.places,final.values,final.bindings,(int)status,text==NULL,length);
+    free(text);node_checked_destroy(&n);return true;
+}
+int main(int argc,char **argv){return argc==2 && observe(argv[1])?0:1;}

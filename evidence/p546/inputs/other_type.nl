@@ -1,0 +1,1 @@
+fn main()->unit {let a=Array<u8,4>{u8(1),u8(2),u8(3),u8(4)};unit}

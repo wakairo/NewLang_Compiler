@@ -1,0 +1,67 @@
+{
+  "fixed_compiler": "1c6d9cab7349a7e501b04c9157f25f60df242e02",
+  "canonical": "Draft17.32",
+  "compiler_edits": false,
+  "cases": {
+    "roots1": {
+      "sha256": "e3f9e55337d5d46aec43104a89d5c3c760988d0abe6312fffbf7a3fc09c93d71",
+      "bytes": 145,
+      "expect": "closed direct constructor profile"
+    },
+    "roots2": {
+      "sha256": "f4f486a9f558aba37f0f35190bf767f4e4868ca204ff1b9922ed0f4b9bb18099",
+      "bytes": 261,
+      "expect": "closed direct constructor profile"
+    },
+    "roots16": {
+      "sha256": "38217b2b756826c267e9336ec22e19f5e17608c788c6fa4154518e2cacdcf07b",
+      "bytes": 1891,
+      "expect": "closed direct constructor profile"
+    },
+    "roots64": {
+      "sha256": "268d34bb7ed6b99457926ebef72ec979d3db3226e00685885a8a302fcff47616",
+      "bytes": 7507,
+      "expect": "closed direct constructor profile"
+    },
+    "roots128": {
+      "sha256": "1d5abcdd68564594c6923ef7338c1745a1767c612f81cca1f2de4e6d3ee6767a",
+      "bytes": 15023,
+      "expect": "closed direct constructor profile"
+    },
+    "roots240": {
+      "sha256": "13d2caafc28e4bd279413bacdc45aee5c6a3fcf548123a5b583018e1b155e4c8",
+      "bytes": 28239,
+      "expect": "closed direct constructor profile"
+    },
+    "roots241": {
+      "sha256": "55c7928b95fe2835538b7dae16f5ff7c91428c9031cfd0794d1e60a5f607464e",
+      "bytes": 28357,
+      "expect": "existing parser budget refusal"
+    },
+    "bare_none": {
+      "sha256": "692a5d85edbbd26739644886d5b0df12fcdf2e21aa9630fda93c4b3a7fd5ba4a",
+      "bytes": 46,
+      "expect": "surface calibration; no certification claim"
+    },
+    "option_return": {
+      "sha256": "8fe516dfe94121571881c9b092c5351998c5e0ea740f2d4ef9dbe413d3111fa1",
+      "bytes": 73,
+      "expect": "surface calibration; outside direct Array body"
+    },
+    "array_copy": {
+      "sha256": "662884254d522d5f645faab9a80c5becff2e0567540aa5bf6e18bfab7bac5606",
+      "bytes": 126,
+      "expect": "outside requested constructor-only source; measure before judging"
+    },
+    "other_count": {
+      "sha256": "b08ede2c63435fd10562346a755664c6327f716c7705d2f565e46b6632c2124d",
+      "bytes": 101,
+      "expect": "unsupported count parser refusal"
+    },
+    "other_type": {
+      "sha256": "acc94940304f7746701c9e3dac211ad1f8dbe0e3764453a2bbd568e22c3810cd",
+      "bytes": 66,
+      "expect": "unsupported type parser refusal"
+    }
+  }
+}

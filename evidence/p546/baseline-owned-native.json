@@ -1,0 +1,162 @@
+[
+  {
+    "k": 1,
+    "variant": "plain",
+    "cc": "gcc",
+    "opt": "-O0",
+    "source_sha256": "e3f9e55337d5d46aec43104a89d5c3c760988d0abe6312fffbf7a3fc09c93d71",
+    "c_sha256": "068581b7c75a356be56fbb13f5d621dc2c01327fdbff9147fcda75a143e43217",
+    "status": 0,
+    "stdout": ""
+  },
+  {
+    "k": 1,
+    "variant": "plain",
+    "cc": "gcc",
+    "opt": "-O2",
+    "source_sha256": "e3f9e55337d5d46aec43104a89d5c3c760988d0abe6312fffbf7a3fc09c93d71",
+    "c_sha256": "068581b7c75a356be56fbb13f5d621dc2c01327fdbff9147fcda75a143e43217",
+    "status": 0,
+    "stdout": ""
+  },
+  {
+    "k": 1,
+    "variant": "plain",
+    "cc": "clang-23",
+    "opt": "-O0",
+    "source_sha256": "e3f9e55337d5d46aec43104a89d5c3c760988d0abe6312fffbf7a3fc09c93d71",
+    "c_sha256": "068581b7c75a356be56fbb13f5d621dc2c01327fdbff9147fcda75a143e43217",
+    "status": 0,
+    "stdout": ""
+  },
+  {
+    "k": 1,
+    "variant": "plain",
+    "cc": "clang-23",
+    "opt": "-O2",
+    "source_sha256": "e3f9e55337d5d46aec43104a89d5c3c760988d0abe6312fffbf7a3fc09c93d71",
+    "c_sha256": "068581b7c75a356be56fbb13f5d621dc2c01327fdbff9147fcda75a143e43217",
+    "status": 0,
+    "stdout": ""
+  },
+  {
+    "k": 1,
+    "variant": "observed",
+    "cc": "gcc",
+    "opt": "-O0",
+    "source_sha256": "e3f9e55337d5d46aec43104a89d5c3c760988d0abe6312fffbf7a3fc09c93d71",
+    "c_sha256": "537a047a12e891880d3b211e987b7a6a39824ccc900386aa9767e18d49381330",
+    "status": 0,
+    "stdout": "element=0 address=140736637935928 stride=2 tag=37\nelement=1 address=140736637935930 stride=2 tag=37\nelement=2 address=140736637935932 stride=2 tag=37\nelement=3 address=140736637935934 stride=2 tag=37\n"
+  },
+  {
+    "k": 1,
+    "variant": "observed",
+    "cc": "gcc",
+    "opt": "-O2",
+    "source_sha256": "e3f9e55337d5d46aec43104a89d5c3c760988d0abe6312fffbf7a3fc09c93d71",
+    "c_sha256": "537a047a12e891880d3b211e987b7a6a39824ccc900386aa9767e18d49381330",
+    "status": 0,
+    "stdout": "element=0 address=140735264939752 stride=2 tag=37\nelement=1 address=140735264939754 stride=2 tag=37\nelement=2 address=140735264939756 stride=2 tag=37\nelement=3 address=140735264939758 stride=2 tag=37\n"
+  },
+  {
+    "k": 1,
+    "variant": "observed",
+    "cc": "clang-23",
+    "opt": "-O0",
+    "source_sha256": "e3f9e55337d5d46aec43104a89d5c3c760988d0abe6312fffbf7a3fc09c93d71",
+    "c_sha256": "537a047a12e891880d3b211e987b7a6a39824ccc900386aa9767e18d49381330",
+    "status": 0,
+    "stdout": "element=0 address=140725064533528 stride=2 tag=37\nelement=1 address=140725064533530 stride=2 tag=37\nelement=2 address=140725064533532 stride=2 tag=37\nelement=3 address=140725064533534 stride=2 tag=37\n"
+  },
+  {
+    "k": 1,
+    "variant": "observed",
+    "cc": "clang-23",
+    "opt": "-O2",
+    "source_sha256": "e3f9e55337d5d46aec43104a89d5c3c760988d0abe6312fffbf7a3fc09c93d71",
+    "c_sha256": "537a047a12e891880d3b211e987b7a6a39824ccc900386aa9767e18d49381330",
+    "status": 0,
+    "stdout": "element=0 address=140729126258608 stride=2 tag=37\nelement=1 address=140729126258610 stride=2 tag=37\nelement=2 address=140729126258612 stride=2 tag=37\nelement=3 address=140729126258614 stride=2 tag=37\n"
+  },
+  {
+    "k": 2,
+    "variant": "plain",
+    "cc": "gcc",
+    "opt": "-O0",
+    "source_sha256": "f4f486a9f558aba37f0f35190bf767f4e4868ca204ff1b9922ed0f4b9bb18099",
+    "c_sha256": "516de3980e1b667dcc0e22a85de3780df2e3df9daf751e1b9dc5402ca85a750c",
+    "status": 0,
+    "stdout": ""
+  },
+  {
+    "k": 2,
+    "variant": "plain",
+    "cc": "gcc",
+    "opt": "-O2",
+    "source_sha256": "f4f486a9f558aba37f0f35190bf767f4e4868ca204ff1b9922ed0f4b9bb18099",
+    "c_sha256": "516de3980e1b667dcc0e22a85de3780df2e3df9daf751e1b9dc5402ca85a750c",
+    "status": 0,
+    "stdout": ""
+  },
+  {
+    "k": 2,
+    "variant": "plain",
+    "cc": "clang-23",
+    "opt": "-O0",
+    "source_sha256": "f4f486a9f558aba37f0f35190bf767f4e4868ca204ff1b9922ed0f4b9bb18099",
+    "c_sha256": "516de3980e1b667dcc0e22a85de3780df2e3df9daf751e1b9dc5402ca85a750c",
+    "status": 0,
+    "stdout": ""
+  },
+  {
+    "k": 2,
+    "variant": "plain",
+    "cc": "clang-23",
+    "opt": "-O2",
+    "source_sha256": "f4f486a9f558aba37f0f35190bf767f4e4868ca204ff1b9922ed0f4b9bb18099",
+    "c_sha256": "516de3980e1b667dcc0e22a85de3780df2e3df9daf751e1b9dc5402ca85a750c",
+    "status": 0,
+    "stdout": ""
+  },
+  {
+    "k": 2,
+    "variant": "observed",
+    "cc": "gcc",
+    "opt": "-O0",
+    "source_sha256": "f4f486a9f558aba37f0f35190bf767f4e4868ca204ff1b9922ed0f4b9bb18099",
+    "c_sha256": "6ea6a7c6a0bbd368246753d099ca28e5a0422e6f51de271468005a87b9992feb",
+    "status": 0,
+    "stdout": "array=0 element=0 base=140733194215080 address=140733194215080 stride=2 tag=37\narray=0 element=1 base=140733194215080 address=140733194215082 stride=2 tag=37\narray=0 element=2 base=140733194215080 address=140733194215084 stride=2 tag=37\narray=0 element=3 base=140733194215080 address=140733194215086 stride=2 tag=37\narray=1 element=0 base=140733194215072 address=140733194215072 stride=2 tag=37\narray=1 element=1 base=140733194215072 address=140733194215074 stride=2 tag=37\narray=1 element=2 base=140733194215072 address=140733194215076 stride=2 tag=37\narray=1 element=3 base=140733194215072 address=140733194215078 stride=2 tag=37\n"
+  },
+  {
+    "k": 2,
+    "variant": "observed",
+    "cc": "gcc",
+    "opt": "-O2",
+    "source_sha256": "f4f486a9f558aba37f0f35190bf767f4e4868ca204ff1b9922ed0f4b9bb18099",
+    "c_sha256": "6ea6a7c6a0bbd368246753d099ca28e5a0422e6f51de271468005a87b9992feb",
+    "status": 0,
+    "stdout": "array=0 element=0 base=140727946143120 address=140727946143120 stride=2 tag=37\narray=0 element=1 base=140727946143120 address=140727946143122 stride=2 tag=37\narray=0 element=2 base=140727946143120 address=140727946143124 stride=2 tag=37\narray=0 element=3 base=140727946143120 address=140727946143126 stride=2 tag=37\narray=1 element=0 base=140727946143128 address=140727946143128 stride=2 tag=37\narray=1 element=1 base=140727946143128 address=140727946143130 stride=2 tag=37\narray=1 element=2 base=140727946143128 address=140727946143132 stride=2 tag=37\narray=1 element=3 base=140727946143128 address=140727946143134 stride=2 tag=37\n"
+  },
+  {
+    "k": 2,
+    "variant": "observed",
+    "cc": "clang-23",
+    "opt": "-O0",
+    "source_sha256": "f4f486a9f558aba37f0f35190bf767f4e4868ca204ff1b9922ed0f4b9bb18099",
+    "c_sha256": "6ea6a7c6a0bbd368246753d099ca28e5a0422e6f51de271468005a87b9992feb",
+    "status": 0,
+    "stdout": "array=0 element=0 base=140724962380936 address=140724962380936 stride=2 tag=37\narray=0 element=1 base=140724962380936 address=140724962380938 stride=2 tag=37\narray=0 element=2 base=140724962380936 address=140724962380940 stride=2 tag=37\narray=0 element=3 base=140724962380936 address=140724962380942 stride=2 tag=37\narray=1 element=0 base=140724962380928 address=140724962380928 stride=2 tag=37\narray=1 element=1 base=140724962380928 address=140724962380930 stride=2 tag=37\narray=1 element=2 base=140724962380928 address=140724962380932 stride=2 tag=37\narray=1 element=3 base=140724962380928 address=140724962380934 stride=2 tag=37\n"
+  },
+  {
+    "k": 2,
+    "variant": "observed",
+    "cc": "clang-23",
+    "opt": "-O2",
+    "source_sha256": "f4f486a9f558aba37f0f35190bf767f4e4868ca204ff1b9922ed0f4b9bb18099",
+    "c_sha256": "6ea6a7c6a0bbd368246753d099ca28e5a0422e6f51de271468005a87b9992feb",
+    "status": 0,
+    "stdout": "array=0 element=0 base=140728580588096 address=140728580588096 stride=2 tag=37\narray=0 element=1 base=140728580588096 address=140728580588098 stride=2 tag=37\narray=0 element=2 base=140728580588096 address=140728580588100 stride=2 tag=37\narray=0 element=3 base=140728580588096 address=140728580588102 stride=2 tag=37\narray=1 element=0 base=140728580588088 address=140728580588088 stride=2 tag=37\narray=1 element=1 base=140728580588088 address=140728580588090 stride=2 tag=37\narray=1 element=2 base=140728580588088 address=140728580588092 stride=2 tag=37\narray=1 element=3 base=140728580588088 address=140728580588094 stride=2 tag=37\n"
+  }
+]

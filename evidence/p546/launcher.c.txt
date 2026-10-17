@@ -1,0 +1,29 @@
+/* Independent child resource observer; a separate exec avoids Python's RSS floor. */
+#define _POSIX_C_SOURCE 200809L
+#include <sys/resource.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <unistd.h>
+#include <time.h>
+#include <stdio.h>
+#include <stdlib.h>
+int main(int argc, char **argv)
+{
+    if (argc < 3) return 99;
+    struct timespec a,b;
+    clock_gettime(CLOCK_MONOTONIC,&a);
+    pid_t child = fork();
+    if (child < 0) return 99;
+    if (!child) {
+        size_t megabytes = strtoull(argv[1],NULL,10);
+        if (megabytes) { struct rlimit r={megabytes*1024*1024,megabytes*1024*1024}; if(setrlimit(RLIMIT_AS,&r)) _exit(98); }
+        execv(argv[2],argv+2); _exit(97);
+    }
+    int status;
+    if(waitpid(child,&status,0)!=child) return 99;
+    clock_gettime(CLOCK_MONOTONIC,&b);
+    struct rusage r;
+    if(getrusage(RUSAGE_CHILDREN,&r)) return 99;
+    fprintf(stderr,"RESOURCE elapsed=%.9f rss_kib=%ld user=%.6f system=%.6f\n",(b.tv_sec-a.tv_sec)+(b.tv_nsec-a.tv_nsec)*1e-9,r.ru_maxrss,r.ru_utime.tv_sec+r.ru_utime.tv_usec*1e-6,r.ru_stime.tv_sec+r.ru_stime.tv_usec*1e-6);
+    return WIFEXITED(status)? WEXITSTATUS(status):128+WTERMSIG(status);
+}

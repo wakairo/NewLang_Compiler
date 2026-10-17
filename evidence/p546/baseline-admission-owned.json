@@ -1,0 +1,38 @@
+[
+  {
+    "source": "roots1",
+    "status": 0,
+    "stdout": "records=1 validated=1 final_places=5 final_values=5 final_bindings=1 public_c17_status=0 output_null=0 length=483\n",
+    "stderr": ""
+  },
+  {
+    "source": "roots2",
+    "status": 0,
+    "stdout": "records=2 validated=2 final_places=10 final_values=10 final_bindings=2 public_c17_status=0 output_null=0 length=682\n",
+    "stderr": ""
+  },
+  {
+    "source": "roots16",
+    "status": 0,
+    "stdout": "records=16 validated=16 final_places=80 final_values=80 final_bindings=16 public_c17_status=0 output_null=0 length=3482\n",
+    "stderr": ""
+  },
+  {
+    "source": "array_copy",
+    "status": 0,
+    "stdout": "records=1 validated=0 final_places=10 final_values=10 final_bindings=2 public_c17_status=2 output_null=1 length=77\n",
+    "stderr": ""
+  },
+  {
+    "source": "bare_none",
+    "status": 0,
+    "stdout": "records=0 validated=0 final_places=1 final_values=1 final_bindings=1 public_c17_status=2 output_null=1 length=77\n",
+    "stderr": ""
+  },
+  {
+    "source": "option_return",
+    "status": 0,
+    "stdout": "records=0 validated=0 final_places=0 final_values=1 final_bindings=0 public_c17_status=2 output_null=1 length=77\n",
+    "stderr": ""
+  }
+]
