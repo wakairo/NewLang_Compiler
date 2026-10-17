@@ -1,0 +1,22 @@
+# V561 P2 / Gate 1 — FROZEN PRIOR to any hosted comparison execution
+
+## Authority and actual consumer
+- Fixed NewLang Compiler/main: `9fec31cb60ad7191861e402b3c9bd64e2b5a22e3`; canonical Draft17.32.
+- Frozen actual consumer: `bichanna/crave` at commit `36f9f7064a041875283db843d1d0a801b5757408`; public README, `meson.build`, `src/clay_raylib.c`, `src/ui.c`, `.github/workflows/ci.yaml`, vendored `thirdparty/clay/clay.h`, `thirdparty/raylib/**`. Crave is a REAL app and consumer, not this test's invention. Its Meson C dialect is `c_std=c17`, warnings level 3 and `werror=true`. Build requires Meson, Ninja, Python3, C GCC/Clang/MinGW and OS OpenGL/X11 deps. It already links a prebuilt vendored raylib static library. No documented prohibition of vendor-built Rust .a or an exact C99-only requirement.
+- Frozen producer distribution: `nicbarker/clay` upstream commit `e6cc36941ab2af5d81107617039d6f527a1c660b`. README describes the `CLAY_IMPLEMENTATION` one-C-translation-unit include, C99/C++20. This proves producer *offers* source rebuild, not any consumer *rejects* staticlibs. Consumer carries its own vendored Clay revision (NOT proved to be identical to pinned upstream producer hash).
+- Consumer concrete source `src/clay_raylib.c` defines `CLAY_IMPLEMENTATION` once; Meson compiles it as part of static `thirdparty` (also SQLite etc). `src/ui.c` calls Clay layout macros. No changes to consumer source permitted.
+
+## Frozen real source-build oracle
+- Hosted Ubuntu runner: checkout `bichanna/crave` at exact SHA, inspect actual C compiler, Meson, Ninja and installed dependencies, execute **unaltered** `meson setup build && meson compile -C build`. Expected exit 0 and actual `build/crave` ELF binary; no GUI invocation/headless assertions, no claims macOS/Windows compile in this runner. If dependency installation fails, classify ENV/INCONCLUSIVE, not Clay technical failure. Log actual compiler/version/dependencies and especially actual `src/clay_raylib.c` compile command; `c_std=c17`, NOT claimed C99-only consumer. This is the consumer source build, not a fully runtime UI test.
+
+## Frozen realistic Rust delivery comparator (strictly limited)
+- Vendor side: Ubuntu Linux x86_64 preinstalled stable rustc; `rustc --edition=2021 -D warnings --crate-type=staticlib -C panic=abort -O vendor_staticlib.rs -o libp561.a`. Export `extern "C"` name `p561_rectangle_area` with C ABI 32-bit width/height, uint64 area. It is a **small C ABI link feasibility smoke** ONLY, **not** implementation of Clay, not a replacement for `src/clay_raylib.c` or UI layout. Do not claim functionality parity with real Clay. Record rustc version, binary SHA if possible, size of archive, `nm -g` exported symbol, dependency/link flags.
+- Consumer side after vendor .a exists: remove rustc/cargo from PATH for **link phase**, compile unchanged `consumer_link_smoke.c` using `cc -std=c17` and the supplied .a plus needed target system libs. Expected stdout `P561_RUST_STATICLIB_C_ABI_OK area=2048`. No source/rebuild of Rust in this phase. This demonstrates a real C-only *link* acceptance route on this platform; it does not meet **a distinct requirement to recompile the library itself from C source**.
+- At no point invent a consumer's policy that binary distributions are forbidden. Alternative vendored Rust sources/offline Cargo requires allowed Rust toolchain; not an unchanged C-only environment. A mature stable Rust-to-C source transpilation for Clay-equivalent UI algorithm is NOT assumed.
+
+## Decision levels
+- LEVEL1: Clay producer C99 single-header source distribution (source-verified).
+- LEVEL2: Crave actual C17 consumer compiles vendored Clay source (need native build to call PASS; source inspection alone is not build PASS).
+- LEVEL3: Crave explicitly rejects external Rust staticlib/C ABI despite already shipping prebuilt raylib: NOT demonstrated. Without this evidence, **NO EXCLUSIVE C-SOURCE-ONLY CONTRACT** and no C-rational P2 Product GO. Small ABI smoke is a technical alternative counterexample, NOT Clay equivalence.
+- NewLang C17 backend: separate current reality. Limited source→strict C17 on finite supported profiles only; no proof C99-compatible, full Clay algorithm, single-header output, stable Clay ABI, editable original C source, same consumer targets, or no NewLang toolchain at consumer. Even if LEVEL3 later proved, **NewLang presently UNPROVEN / possible C99-source-distribution gap**.
+- Stop: one natural V-run, one self-repair max, DRAFT PR only. F-1 #559 remains RUST-SUFFICIENT/NO TARGET, unrelated.
