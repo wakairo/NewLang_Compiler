@@ -18,6 +18,10 @@ Cで合理的に採用されている低水準architecture / topology / explicit
 
 application / data-structure policyを過度にlanguage coreへ取り込まず、低水準mechanismの意味を厳密にする。
 
+**多言語主義と存在理由（mission）：** NewLangはRustの後継でも、すべてをNewLangに統一する構想でもない。GC言語が自然に要求を満たすならGC言語、Rustが自然かつ実用的に要求を満たすならRustを選べばよい。一方、Cで合理的に選ばれる設計・実装・配備上の自由（データ構造／アルゴリズム、failure/recovery policy、allocation／lifetime、外部host契約、toolchain／C-source distribution等）を、memory safetyのために無理にRustの抽象化へ合わせる以外の選択肢が失われる未来を避けたい。**本当にそのようなC-class要求が残る場合の、安全性を改善したC後継の受け皿**になることがNewLangの目的である。CのUB・任意の不正アクセスを保存する自由は対象外。
+
+**反証可能性：** Rustが要求を現実的に十分満たせるなら、そのworkloadをNewLangの主要targetへ昇格させない。RustがCの全実用領域を十分担えるなら、NewLangの必要性自体を見直す。「Rustには合わないC用途がある」という直感は調査仮説であり、既成事実ではない。対象発見の現時点の非規範的文献証拠は[2026-10-17 C/Rust target discovery](research/C_Rust_Target_Discovery_2026-10-17.md)に保存し、実測済みの製品価値へ昇格させない。
+
 ## 1.1 UB-prevention audit locality (value hypothesis)
 
 **製品価値仮説**は、C-classのoriginal pointer topology / allocation・lifetime policy /
@@ -65,20 +69,12 @@ ordinary callerは公開された型付きsafe APIの使用とapplication policy
 明示的な `unchecked`／外部契約をcaller自身が選ぶ場合は、その境界の
 人間による証明責任が残る。
 
-**公平な比較基準**は、同等の元のtopologyと実際のAPIを揃えた
-*library author + ordinary caller* の合計である。
+**比較の順序は二段階である。** 安全性評価の厳密さは変えず、対象を選ぶ比較とC後継の製品価値比較を混同しない。
 
-- **十分にAPI化したC**：callerからraw rewiringと局所証明を隠せる。
-  static analysisやruntime checksも使えるが、通常は内部のlifetime /
-  provenance / mutationに関するUB監査・再監査をlibrary authorが持つ。
-- **Zig**：明示的なlow-level control、unsafe境界とbuild modeに応じた
-  runtime safety checksが使える。比較は「unsafe行数」ではなく、
-  覆われないalias/lifetime/owner前提を誰が保守するかで行う。
-- **同等topologyのRust**：localized `unsafe` + safe wrapper、
-  privacy、型／借用制約によってordinary callerを守れる。
-  既にaudit localityを実現する有力な比較対象であり、NewLangの優位は
-  前提としない。同じ構造を維持するためのauthor側証明、safe API設計、
-  保守変更の再監査半径、ceremonyを実測して初めて差を判定する。
+1. **ターゲット適格性（Cがなお合理的か）**：実際の利用者が要求する物理構造、failure／rollback／teardown、ownership／alias、ABI、配布・対応target、工数等を先に固定する。stable Rust＋既存library、局所`unsafe`＋soundなsafe facade、`no_std`、FFI等の最善の現実的代替を評価し、nightlyや未対応targetは別に記録する。**Rustで十分ならRustでよく、NewLangの主要targetにはしない。** `unsafe`が必要なだけで不適格とはしない一方、`unsafe`で実装可能というだけで実用的な制約・保守負担が解消したとも扱わない。既存C資産の移植費用、新規開発でも残る制約、言語として原理的に不可能な事柄を区別する。
+2. **C後継としての製品価値（Cに対し何を改善するか）**：上記のC合理性が認められ、NewLangにも同じ実用要求を維持する見込みがあるworkloadで、**十分にAPI化・必要に応じstatic/runtime guardを備えた現実的なC**とNewLangを比較する。両者の本質的なpointer topology、allocation／lifetime／失敗処理／配備条件と公開APIを揃え、*library author + ordinary-safe caller*が人間の規律で維持するUB防止監査・再監査の依存閉包、合法writer、error／teardown／再入／FFI、無関係なsafe変更の影響を比較する。NewLangがCの自由を損なう、または人間の責務を実用上改善しないなら**Cから移行する製品理由は未実証**。
+   
+**RustとのUB監査責務競争は第2段階のProduct GO条件ではない。** Rustがそのworkloadで実用上十分かは第1段階で判断する。Rustの有力な代替が後から成立した場合は第1段階に戻す。Zig等の他の実用言語も、追加言語を導入する必要性を問う代替として考慮できるが、すべてに対する監査優位を形式的な合格条件にはしない。Rustの内部safe facadeや技術的証拠を研究・安全性検証の参照対象とすることまで禁止しない。
 
 **成功の観測対象**は、人間が維持するL/R/P/V/C等のsemantic obligation、
 author/callerの分担、unchecked前提をsafe mutationで破壊できるかという
@@ -108,7 +104,7 @@ C17/nativeのPASSやCHECK0／CI greenは、soundness theoremでもProduct GOで�
 
 **責務分担の評価**では、compilerが現実的に判定できるlifetime / responsibility / provenance / currentness / access等をcheckedで保証し、なお真でなければならないが機械的に証明できない前提だけを、正当な原権限と実際の依存関係に基づく局所的な`unchecked`へ残す。`unchecked`の個数・字句的な近さ・全操作のchecked化を合格条件にしない。library authorは内部の論理的不変条件、影響する合法writer、失敗・rollback・破棄・再入・FFIの依存閉包を引き続き監査する。**ordinary-safe callerが許される全状態遷移**で内部の前提を破壊できないことも必要である。compilerの検査対象外となる本当の前提を`unchecked`と記しただけでは監査は局所化されない。
 
-代表workloadは、少なくとも一つの具体的な利用APIと実際の物理対象、正常経路、該当するFULL/EMPTY・allocation failure等の通常の失敗結果、破棄／責任の移転を持たせる。内部不変条件に影響する**合法な変更**と、影響しない**無関係なsafe変更**の両方を考え、それぞれでauthorとordinary callerが再監査するL/R/P/V/C依存範囲を特定する。比較相手は**同じ本質的な物理構造と実用API**を持つ、十分にfactorしたC、Zig、局所unsafe＋safe wrapperのRustとする。NewLang固有の利得が無ければ正直に未実証とする。局所化できない代表workloadや予想外に広い依存閉包も、重要な負の製品証拠として残す。
+代表workloadは、ターゲット適格性を先に確認し、少なくとも一つの具体的な利用APIと実際の物理対象、正常経路、該当するFULL/EMPTY・allocation failure等の通常の失敗結果、破棄／責任の移転を持たせる。内部不変条件に影響する**合法な変更**と、影響しない**無関係なsafe変更**の両方を考え、それぞれでauthorとordinary callerが再監査するL/R/P/V/C依存範囲を特定する。ターゲット発見では**同じ本質的な物理構造・失敗処理・実用API**を保持できる現実的なRust構成と比較する。ターゲットが妥当と判定されてからの製品価値は、十分にfactorしたC実装を主要baselineとして測定する。Zig等も代替案として扱い、NewLang固有の利得が無ければ正直に未実証とする。局所化できない代表workloadや予想外に広い依存閉包も、重要な負の製品証拠として残す。
 
 **既存Cの忠実な移植・実際の修正履歴は引き続き有効**である。original topology、移植可能性、checker精度、権限の偽造、失敗・teardown等の厳しい反例を調べる*補助的なpressure test*として使う。ただし一つの既存C実装をそのままsource/CHECK→nativeで再現できないことと、自然なNewLang-native実装の製品価値が成立しないことを同一視しない。逆に、簡単なNewLang-native toy例のCHECK/native成功もProduct GOではない。
 
@@ -119,6 +115,10 @@ C17/nativeのPASSやCHECK0／CI greenは、soundness theoremでもProduct GOで�
 NewLangはcurrent North Starと最終市場を同一視しない。
 
 > **North Star scope is an experimental beachhead, not a definition of NewLang's ultimate addressable workload.**
+
+### Stage 0 — Evidence-led C-after-Rust target discovery
+
+実際の要求に対しGC言語／Rustが十分ならそれを使うという多言語主義から始める。Rustの現行stable API、外部crate、適切な内部`unsafe`／safe wrapper、C FFI、対象platformを公平に確認したうえで、なおCが合理的に選ばれる理由を固定する。原因をfailure／recovery（F）、data structure／algorithm（D）、lifetime／resources（L）、alias／interaction（A）、execution／runtime（E）、portability／source deployment（P）等に整理するが、分類は仮説であって製品機能の採用リストではない。最初の現実的な調査候補はfallible host library、Cソース配布、小さな複数hook外部所有構造等。調査資料は[非規範研究レポート](research/C_Rust_Target_Discovery_2026-10-17.md)を参照。初期beachheadはこの調査だけで採用・変更しない。
 
 ### Stage 1 — Beachhead / North Star
 
@@ -162,7 +162,7 @@ NewLangの長期的な狙いは単に一層追加することではなく:
 GC language -> Rust -> NewLang
 ```
 
-とし、Rustが自然に解けないため現在Cへ落ちている実用領域をNewLangで担えるようにすることである。Rustを置き換えることは目的ではない。
+とし、Rustが自然に解けないため現在Cへ落ちている実用領域をNewLangで担えるようにすることである。Rustを置き換えることは目的ではない。**Rustが自然に適するものをRustから奪わず、Cの合理的な設計自由を必要とする人に別の安全な選択肢を用意する**ことが存在理由である。RustとCの境界は継続的に変化するため、この階層を固定的な市場区分とはみなさず実利用の要求から更新する。
 
 ## 4. C replacementの意味
 
@@ -207,6 +207,7 @@ Track Vは **誰のどの問題を、どのevidenceで解けたと言うか** �
 主な責務:
 
 - target user / workload / workflowの定義
+- **C-after-Rust target eligibility**：GC/Rustで十分か、Rustが現実に満たせないC合理性は何か、単なる移植費用／target非対応／実用的な追加制約を分離し、反証と撤退条件を記録
 - value hypothesisの明文化
 - North Star / representative workloadの選択
 - PASS / FAIL criteriaとanti-gaming ruleのpre-registration
@@ -238,7 +239,7 @@ Coordination: どのfindingを、いつ、どのtrackへ渡すか？
 - **Failure attribution**: 複数の未確定mechanismを一つのgateへ混ぜていないか。
 - **Anti-false-progress**: host fixture、toy rewrite、unchecked、backend trickでuser-visible gapを隠していないか。safe mutationによるunchecked前提破壊の反例・未検証範囲を隠していないか。
 - **Topology preservation**: NewLangを通すために元のC architectureを本質的に別物へ変えていないか。
-- **NewLang-native validation**: 既存Cソースの逐語的な再現を必須にせず、典型的な低水準libraryを自然に設計したときのauthor＋ordinary callerの監査依存閉包、影響する／無関係なsafe変更、同等topologyのC/Zig/Rust比較を検証できるか。
+- **NewLang-native validation**: 既存Cソースの逐語的な再現を必須にしない。まずGC/Rustが実用上不十分でC選択が合理的な要求を特定し、その要求をNewLang-native低水準libraryで保持した上で、同等topology・実用契約の**Cとの**author＋ordinary-safe callerの監査依存閉包を検証できるか。Rust/Zigはターゲット適格性・他の代替可能性を再評価する参照先であり、NewLangとの一般的なUB監査優劣レースを作らない。
 - **No foreclosure**: 小さな現在判断が将来のC replacementを不必要に閉ざしていないか。
 - **Lifecycle cost**: implementation costだけでなくsemantic/test/diagnostic/compatibility/documentation/future-interaction costを数える。
 
@@ -265,7 +266,7 @@ one sharp value claim
   -> residual-C reduction
 ```
 
-最終的には、Cを選ばざるを得ない重要workloadがどれだけ残るか、NewLangがsemantic bookkeepingとauthor/caller双方のUB予防監査・再監査範囲を実務上どれだけ減らすか（safe mutationの負の証拠と相対的な再監査半径を含む）、language/toolchain追加コストに見合うかで評価する。
+最終的には、RustではなくCを合理的に選ぶ重要workloadが実在し続けるか、そこでNewLangがCの物理・失敗・配備条件を維持してCに比べsemantic bookkeepingとauthor／ordinary-safe caller双方のUB予防監査・再監査範囲を実務上どれだけ減らすか（safe mutationの負の証拠と相対的な再監査半径を含む）、追加language/toolchainコストに見合うかで評価する。
 
 ## 12. 関連文書
 
