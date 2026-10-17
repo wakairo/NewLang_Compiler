@@ -18,9 +18,9 @@ Cで合理的に採用されている低水準architecture / topology / explicit
 
 application / data-structure policyを過度にlanguage coreへ取り込まず、低水準mechanismの意味を厳密にする。
 
-**多言語主義と存在理由（mission）：** NewLangはRustの後継でも、すべてをNewLangに統一する構想でもない。GC言語が自然に要求を満たすならGC言語、Rustが自然かつ実用的に要求を満たすならRustを選べばよい。一方、Cで合理的に選ばれる設計・実装・配備上の自由（データ構造／アルゴリズム、failure/recovery policy、allocation／lifetime、外部host契約、toolchain／C-source distribution等）を、memory safetyのために無理にRustの抽象化へ合わせる以外の選択肢が失われる未来を避けたい。**本当にそのようなC-class要求が残る場合の、安全性を改善したC後継の受け皿**になることがNewLangの目的である。CのUB・任意の不正アクセスを保存する自由は対象外。
+**多言語主義と存在理由（mission）：** NewLangはRustの後継でも、すべてをNewLangに統一する構想でもない。GC言語・Rust・Cは、同じ計算を実現できても設計・API・性能・失敗処理・配備・開発運用上の合理的な選択理由が異なり、**複数が同じworkloadに対して十分合理的であることもある**。NewLangは、Cで合理的に選ばれる低水準architecture／pointer topology／allocation・lifetime／外部host契約／toolchain・C-source distribution等の自由を維持しつつ、人間のUB防止のsemantic bookkeepingをcompilerへ移すC後継候補である。**Rustも実用的であること自体はCの合理性を否定せず、Rustを排除してCの排他的優位を証明することは目的ではない。** CのUB・任意の不正アクセスを保存する自由は対象外。
 
-**反証可能性：** Rustが要求を現実的に十分満たせるなら、そのworkloadをNewLangの主要targetへ昇格させない。RustがCの全実用領域を十分担えるなら、NewLangの必要性自体を見直す。「Rustには合わないC用途がある」という直感は調査仮説であり、既成事実ではない。対象発見の現時点の非規範的文献証拠は[2026-10-17 C/Rust target discovery](research/C_Rust_Target_Discovery_2026-10-17.md)に保存し、実測済みの製品価値へ昇格させない。
+**反証可能性：** 重要なworkloadについて、Cを選ぶ**具体的で継続的に重要な積極的理由**が検証できなければ、その領域の優先度を下げる。Rustが実用上十分であるという事実だけではC合理性の反証にならず、Rustを含む代替がCの実際の利点を解消した場合はターゲット評価を更新する。Cの現行採用、移植惰性、実装可能性、個人的な好みだけでは積極的合理性を認定しない。NewLangがその領域でwell-factored Cに対するUB防止監査・再監査の依存閉包を実用上縮小できない場合も、製品価値仮説を支持しない。対象発見の現時点の非規範的文献証拠は[2026-10-17 C/Rust target discovery](research/C_Rust_Target_Discovery_2026-10-17.md)に保存し、歴史的調査結果を遡及的にProduct GOへ昇格させない。
 
 ## 1.1 UB-prevention audit locality (value hypothesis)
 
@@ -71,17 +71,25 @@ ordinary callerは公開された型付きsafe APIの使用とapplication policy
 
 **比較の順序は二段階である。** 安全性評価の厳密さは変えず、対象を選ぶ比較とC後継の製品価値比較を混同しない。
 
-1. **ターゲット適格性（Cがなお合理的か）**：実際の利用者が要求する物理構造、failure／rollback／teardown、ownership／alias、ABI、配布・対応target、工数等を先に固定する。stable Rust＋既存library、局所`unsafe`＋soundなsafe facade、`no_std`、FFI等の最善の現実的代替を評価し、nightlyや未対応targetは別に記録する。**Rustで十分ならRustでよく、NewLangの主要targetにはしない。** `unsafe`が必要なだけで不適格とはしない一方、`unsafe`で実装可能というだけで実用的な制約・保守負担が解消したとも扱わない。既存C資産の移植費用、新規開発でも残る制約、言語として原理的に不可能な事柄を区別する。
+1. **ターゲット適格性（Cを選ぶ積極的合理性）**：実際の利用者にとって、Cでのarchitecture／physical identity／allocation・lifetime・failure policy、操作の計算量／storage、ABI・配備、既存システム統合、開発・変更・保守の総負担などに、**具体的で重要なC選択の理由**があるかを確認する。stable Rust＋既存library、局所`unsafe`＋soundなsafe facade、`no_std`、FFI、GC言語やその他の現実的代替を公平に評価するが、**Rustも十分に実用的という理由だけで、証拠のあるCの合理性を棄却しない**。同じ用途でCとRustの両方が合理的に選ばれることも許容する。Cに固有の利点かどうか、重要性、継続性、単なる慣性・移植費用かどうかを区別する。`unsafe`の有無だけで判定せず、機能的実装可能性を唯一の競争条件にしない。
 
 2. **C後継としての製品価値（Cに対し何を改善するか）**：上記のC合理性が認められ、NewLangにも同じ実用要求を維持する見込みがあるworkloadで、**十分にAPI化・必要に応じstatic/runtime guardを備えた現実的なC**とNewLangを比較する。両者の本質的なpointer topology、allocation／lifetime／失敗処理／配備条件と公開APIを揃え、*library author + ordinary-safe caller*が人間の規律で維持するUB防止監査・再監査の依存閉包、合法writer、error／teardown／再入／FFI、無関係なsafe変更の影響を比較する。NewLangがCの自由を損なう、または人間の責務を実用上改善しないなら**Cから移行する製品理由は未実証**。
 
-**第1関門の「Rustで十分」は、機能的に書けることと同義ではない。** 同じ操作がcompile/native PASSした事実は**実現可能性**を示すが、実際の利用者の要求に対する**設計の自然さ・API・開発・変更・保守まで含む実用上の十分性**は別に判断する。特にCのデータ構造／アルゴリズムについて、必要な物理identity・外部owner・membership・失敗／teardown契約を維持したときに、Rust固有のadapterやhandle、公開APIの制約、内部の証明契約、設計変更時の修正・再監査範囲がどこまで増えるかを調べる。初期の移植可否だけでなく、**実際の保守変更の前後**で、authorとordinary callerへの影響を観察する。AIがコード記述を高速化しても残る表現上の制約は観察対象だが、AI／人間の開発工数差は測定なしに断定しない。
+**第1関門はRustの実用的不十分さを立証する試験ではない。** 同じ操作がRustでcompile/native PASSした事実は**実現可能性**を示すが、その結果も、自然な設計・API・開発・変更・保守まで含めてRustが実用的という結果も、**Cを積極的に選ぶ実際の理由が残るか**という別の問いを自動的に決着させない。特にCのデータ構造／アルゴリズムについて、必要な物理identity・外部owner・membership・失敗／teardown契約を維持したときのRustのadapterやhandle、公開APIの制約、内部の証明契約、設計変更時の修正・再監査範囲は、Cの合理性を評価する**一資料**であって、Rustに対する排他的優越の必須証明ではない。初期移植可否に限らず実際の保守変更前後のauthor／ordinary callerへの影響を観察し、AIがコード記述を高速化しても残る設計制約は観察対象とするが、AI／人間の工数差を未測定で断定しない。
 
 **公平性と実証の境界：** Rustには成熟したcrate・`Pin`・内部`unsafe`＋soundなsafe API・RAII等を使った**最善の自然な設計**を許す。Cの偶然のfield配置、式の順序、字句的APIをRustに強制しない。ただし利用者に不可欠なidentity／placement／external contractを別物に置き換えて「同等」とも数えない。Rustのborrow checkが防いだ欠陥、callerを守るwrapper、変更時に自動で検出される破綻は**実用上の利点**として数え、C側のmanual UB防止監査・レビュー・既存API化の費用も負担に含める。`unsafe`の行数、compiler errorの回数、コード量、単なる好みだけで総負担を判定しない。
 
-**判定に必要な証拠：** 実際のconsumer／保守要求、双方の成立する操作契約、Rustの最善の構成と必要な追加設計、API・変更影響の具体的な差を記録する。**実装やAIへの生成指示より前に**、利用者に必要な各操作の計算量（最悪／期待／償却を区別）、追加storageと長期churn、original identity・owner移転・ABI、valid／invalid入力の安全性責任を、該当するものだけ固定する。たとえばCの既知ノードO(1) detachをRustの探索＋配列削除O(n)に変更したなら、値・アドレスが一致しても**元の計算量要件の同等性PASSではない**。その計算量要件が実利用者に必須かどうかは**別の製品判断**として明示し、要件を緩めたRust案も代替として公平に示す。RustにCの偶然の内部実装を強制せず、Rustの安全性向上とC側の未検査ポインタ前提・監査負担の差も記録する。実行PASS、source上の依存関係、測定した変更作業、利用者が費用を許容できないという証拠は**異なる強さの証拠**である。比較できる工数を実測していなければ「未測定」とする。継続的な負担が重要だと裏付けられない限り、**「Rustでも書けるが面倒そう」だけではC合理性やNewLangのProduct GOを認定しない**。反対に、動作一致だけでRustの実用上の十分性を確定しない。
+**判定に必要な証拠：** 実際のconsumer／保守要求、双方の成立する操作契約、Rustの最善の構成と必要な追加設計、API・変更影響の具体的な差を記録する。**実装やAIへの生成指示より前に**、利用者に必要な各操作の計算量（最悪／期待／償却を区別）、追加storageと長期churn、original identity・owner移転・ABI、valid／invalid入力の安全性責任を、該当するものだけ固定する。たとえばCの既知ノードO(1) detachをRustの探索＋配列削除O(n)に変更したなら、値・アドレスが一致しても**元の計算量要件の同等性PASSではない**。その計算量要件が実利用者に必須かどうかは**別の製品判断**として明示し、要件を緩めたRust案も代替として公平に示す。RustにCの偶然の内部実装を強制せず、Rustの安全性向上とC側の未検査ポインタ前提・監査負担の差も記録する。実行PASS、source上の依存関係、測定した変更作業、利用者が費用を許容できないという証拠は**異なる強さの証拠**である。比較できる工数を実測していなければ「未測定」とする。実際のC利点の重要性が裏付けられない限り、**「Rustでも書けるが面倒そう」、C採用の惰性、未確認の移植障害だけでC合理性を認定しない**。反対に、Rustの動作一致や実用上の十分性だけでC合理性を棄却しない。**ターゲット適格性はNewLangのProduct GOを意味しない**。
 
-**RustとのUB監査責務競争は第2段階のProduct GO条件ではない。** Rustがそのworkloadで実用上十分かは第1段階で判断する。Rustの有力な代替が後から成立した場合は第1段階に戻す。Zig等の他の実用言語も、追加言語を導入する必要性を問う代替として考慮できるが、すべてに対する監査優位を形式的な合格条件にはしない。Rustの内部safe facadeや技術的証拠を研究・安全性検証の参照対象とすることまで禁止しない。
+**第1関門の対象分類（同じ要求・証拠の範囲内）：**
+
+| 実際の選択状況 | ターゲット評価 |
+| --- | --- |
+| Rustでは実用上の制約が大きく、Cが明確に有利 | **有力候補** |
+| **Rustも十分実用的だが、Cにも重要な合理的利点がある** | **十分に候補となる**（Rustとの排他的優位は不要） |
+| Cの採用がほぼ過去の惰性で、実質的な利点が見つからない | **優先度は低い**（重要な追加証拠があれば再評価） |
+
+分類は具体的な利用者・使用source・要求から行い、既存Cコードの存在だけで中段に自動昇格させない。**RustとのUB監査責務競争は第2段階のProduct GO条件ではない。** Rustの有力な代替が後から成立し、確認したC選択の理由を失わせた場合は第1関門を再評価する。Zig等の他の実用言語も、追加言語を導入する必要性を問う代替として考慮できるが、すべてに対する監査優位を形式的な合格条件にはしない。Rustの内部safe facadeや技術的証拠を研究・安全性検証の参照対象とすることまで禁止しない。
 
 **成功の観測対象**は、人間が維持するL/R/P/V/C等のsemantic obligation、
 author/callerの分担、unchecked前提をsafe mutationで破壊できるかという
@@ -123,9 +131,9 @@ NewLangはcurrent North Starと最終市場を同一視しない。
 
 > **North Star scope is an experimental beachhead, not a definition of NewLang's ultimate addressable workload.**
 
-### Stage 0 — Evidence-led C-after-Rust target discovery
+### Stage 0 — Evidence-led C-rational target discovery
 
-実際の要求に対しGC言語／Rustが十分ならそれを使うという多言語主義から始める。Rustの現行stable API、外部crate、適切な内部`unsafe`／safe wrapper、C FFI、対象platformを公平に確認したうえで、なおCが合理的に選ばれる理由を固定する。原因をfailure／recovery（F）、data structure／algorithm（D）、lifetime／resources（L）、alias／interaction（A）、execution／runtime（E）、portability／source deployment（P）等に整理するが、分類は仮説であって製品機能の採用リストではない。最初の現実的な調査候補はfallible host library、Cソース配布、小さな複数hook外部所有構造等。調査資料は[非規範研究レポート](research/C_Rust_Target_Discovery_2026-10-17.md)を参照。初期beachheadはこの調査だけで採用・変更しない。
+実際の利用者が**なぜCを合理的に選び得るか**という積極的な理由から調べる。RustやGC言語でも同じ機能を実現できること、Rustも自然で実用的であることをCの自動棄却条件としない。現行stable Rust API、外部crate、適切な内部`unsafe`／safe wrapper、C FFI、対象platformやGCの代替は公平に評価し、Cの性能・構造・ABI／配備・変更費用などの具体的な便益がどこにあり、現実に重要かを記録する。実務上の状況は§1.1の**明確なC優位／両言語とも合理的／慣性のみ**の3分類で扱う。原因をfailure／recovery（F）、data structure／algorithm（D）、lifetime／resources（L）、alias／interaction（A）、execution／runtime（E）、portability／source deployment（P）等に整理するが、分類は仮説であって製品機能の採用リストではない。最初の現実的な調査候補はfallible host library、Cソース配布、小さな複数hook外部所有構造等。調査資料は[非規範研究レポート](research/C_Rust_Target_Discovery_2026-10-17.md)を参照。初期beachheadはこの調査だけで採用・変更しない。
 
 ### Stage 1 — Beachhead / North Star
 
@@ -149,27 +157,11 @@ Beachheadと同じsemantic foundationがOS component、embedded / firmware、sto
 
 ## 3. なぜC replacementまで目指すのか
 
-実務上の大まかな選択を:
+実務上、GC言語・Rust・Cは、同じ要求を満たせる場合にも**それぞれ合理的な選択肢として共存**している。これは計算可能性による排他的な序列ではなく、物理構造、API／ABI、実行条件、開発者の設計自由、導入・保守費用などの実務上の選択である。
 
-```text
-GC language -> Rust -> C
-```
+NewLangが一部の用途に新しい選択肢を一つ加えるだけなら、language／toolchainの導入・教育・保守という**追加の組織費用**を生む。したがって、Rustが扱えない用途だけを探して狭い隙間を占めることも、既にRustが実用的な用途をすべて除外することも、C後継としての長期目的を適切に表さない。
 
-と捉えたとき、NewLangがCとRustの間のごく狭い用途だけを担うなら:
-
-```text
-GC language -> Rust -> NewLang -> C
-```
-
-となり、language/toolchainが一段増える組織コストを生み得る。
-
-NewLangの長期的な狙いは単に一層追加することではなく:
-
-```text
-GC language -> Rust -> NewLang
-```
-
-とし、Rustが自然に解けないため現在Cへ落ちている実用領域をNewLangで担えるようにすることである。Rustを置き換えることは目的ではない。**Rustが自然に適するものをRustから奪わず、Cの合理的な設計自由を必要とする人に別の安全な選択肢を用意する**ことが存在理由である。RustとCの境界は継続的に変化するため、この階層を固定的な市場区分とはみなさず実利用の要求から更新する。
+**長期的な狙いは、Cを選ぶ積極的な合理性がある実用領域で、NewLangがその設計・失敗・配備の自由を維持し、人間のUB防止責務を減らすことで、CからNewLangへの置換を徐々に実用的にすること**である。Rustの置換やRustへの排他的優越は目標ではない。RustもCも十分合理的なworkloadは、NewLangにとっても候補になり得るが、第2関門の**well-factored Cに対する監査局所性の改善**と導入・維持費用を別途示す必要がある。Cの合理的利点が存在しない場合、またはNewLangが追加言語費用に見合う便益を出せない場合は優先しない。
 
 ## 4. C replacementの意味
 
@@ -214,7 +206,7 @@ Track Vは **誰のどの問題を、どのevidenceで解けたと言うか** �
 主な責務:
 
 - target user / workload / workflowの定義
-- **C-after-Rust target eligibility**：GC/Rustで十分か、Rustが現実に満たせないC合理性は何か、単なる移植費用／target非対応／実用的な追加制約を分離し、反証と撤退条件を記録
+- **C-rational target eligibility**：実利用者にとってのCの**積極的・重要な採用理由**を確認し、Rust／GCその他の十分実用的な代替も公平に記録する。**RustとCの両方が合理的なケースを候補から棄却しない**。Cに固有の重要な利点、慣性や一度限りの移行費用、実際の利用者の受容・拒否、撤退条件を証拠とともに区別する
 - value hypothesisの明文化
 - North Star / representative workloadの選択
 - PASS / FAIL criteriaとanti-gaming ruleのpre-registration
@@ -273,7 +265,7 @@ one sharp value claim
   -> residual-C reduction
 ```
 
-最終的には、RustではなくCを合理的に選ぶ重要workloadが実在し続けるか、そこでNewLangがCの物理・失敗・配備条件を維持してCに比べsemantic bookkeepingとauthor／ordinary-safe caller双方のUB予防監査・再監査範囲を実務上どれだけ減らすか（safe mutationの負の証拠と相対的な再監査半径を含む）、追加language/toolchainコストに見合うかで評価する。
+最終的には、**Rustを含む他の選択肢も存在するなかで、Cを選ぶ重要かつ積極的な合理性があるworkload**が実在し続けるか（Rustも十分実用的であり得る）、そこでNewLangがCの物理・失敗・配備条件を維持して**十分にfactorしたC**に比べsemantic bookkeepingとauthor／ordinary-safe caller双方のUB予防監査・再監査範囲を実務上どれだけ減らすか（safe mutationの負の証拠と相対的な再監査半径を含む）、追加language/toolchainコストに見合うかで評価する。
 
 ## 12. 関連文書
 
