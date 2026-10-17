@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+          fetch-depth: 6 # include original frozen oracle commit 38e1dbd
           path: evidence
       - name: Checkout EXACT fixed compiler without studying candidate changes
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
