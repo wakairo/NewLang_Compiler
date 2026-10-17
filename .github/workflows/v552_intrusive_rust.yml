@@ -1,0 +1,91 @@
+name: V552 fixed-original intrusive Rust comparator (experimental)
+on:
+  pull_request:
+    paths:
+      - 'experiments/value/intrusive_pool_rust/**'
+      - '.github/workflows/v552_intrusive_rust.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  pinned-rust-counterbaseline:
+    name: V552 rustc 1.99.0 same-original positive and E0382 negative
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      RUSTUP_AUTO_INSTALL: "0"
+    steps:
+      - name: Fixed SHA checkout; no persisted credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Preflight actual hosted toolchain; STOP without bootstrap if not rustc 1.99.0
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "RUNNER_OS=$RUNNER_OS RUNNER_ARCH=$RUNNER_ARCH"
+          env | grep -E '^(ImageOS|ImageVersion|RUSTUP_TOOLCHAIN|RUSTUP_AUTO_INSTALL)=' || true
+          uname -a
+          command -v rustc || { echo "TOOLCHAIN-GATE-INCONCLUSIVE rustc missing"; exit 78; }
+          command -v cargo || { echo "TOOLCHAIN-GATE-INCONCLUSIVE cargo missing"; exit 78; }
+          rustc --version --verbose
+          cargo --version
+          rustver="$(rustc --version)"
+          if [[ "$rustver" != 'rustc 1.99.0 '* ]]; then
+            echo "TOOLCHAIN-GATE-INCONCLUSIVE expected rustc 1.99.0, actual=$rustver"
+            exit 78
+          fi
+          sha256sum "$(command -v rustc)"
+          if command -v rustup >/dev/null 2>&1; then
+            actual_rustc="$(rustup which rustc)"
+            echo "actual_rustc=$actual_rustc"
+            sha256sum "$actual_rustc"
+          fi
+          echo "TOOLCHAIN-GATE-PASS exact version prefix rustc 1.99.0"
+
+      - name: Verify frozen source, negative and expected oracle SHA256 BEFORE compilation
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd experiments/value/intrusive_pool_rust
+          sha256sum -c manifest.sha256
+          cat manifest.sha256
+          cat oracle.txt
+          echo "V552_FROZEN_MANIFEST_VERIFIED"
+
+      - name: Compile and run true same-original positive Rust unit and native program
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd experiments/value/intrusive_pool_rust
+          mkdir -p "$RUNNER_TEMP/v552"
+          rustc --edition=2021 -D warnings --test intrusive_pool.rs -o "$RUNNER_TEMP/v552/tests"
+          "$RUNNER_TEMP/v552/tests" --nocapture | tee "$RUNNER_TEMP/v552/positive-tests.log"
+          grep -F "test result: ok. 2 passed; 0 failed" "$RUNNER_TEMP/v552/positive-tests.log"
+          rustc --edition=2021 -D warnings intrusive_pool.rs -o "$RUNNER_TEMP/v552/demo"
+          "$RUNNER_TEMP/v552/demo" | tee "$RUNNER_TEMP/v552/native.log"
+          grep -Fx "V552_RUST_INTRUSIVE_OK original3; two_heads; stale_invalid; busy_refund; empty; free3" "$RUNNER_TEMP/v552/native.log"
+          test "$(wc -l < "$RUNNER_TEMP/v552/native.log")" -eq 1
+          echo "V552_RUST_POSITIVE_NATIVE_PASS original3 HEAD2 links/identity/RAII and no transfer-node allocations"
+
+      - name: Compile genuine moved DetachedLease negative (must fail E0382)
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd experiments/value/intrusive_pool_rust
+          set +e
+          rustc --edition=2021 -D warnings lease_double_use_fail.rs -o "$RUNNER_TEMP/v552/should-not-exist" >"$RUNNER_TEMP/v552/negative.stdout" 2>"$RUNNER_TEMP/v552/negative.stderr"
+          status=$?
+          set -e
+          echo "NEGATIVE_EXIT=$status"
+          cat "$RUNNER_TEMP/v552/negative.stdout"
+          cat "$RUNNER_TEMP/v552/negative.stderr"
+          if [[ "$status" -eq 0 ]]; then
+            echo "NEGATIVE_UNEXPECTED_ACCEPT; STOP"
+            exit 1
+          fi
+          grep -F "E0382" "$RUNNER_TEMP/v552/negative.stderr"
+          grep -F "lease" "$RUNNER_TEMP/v552/negative.stderr"
+          echo "V552_RUST_NONCOPY_LEASE_E0382_REJECTED"
