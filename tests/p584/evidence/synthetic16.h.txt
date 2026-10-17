@@ -1,0 +1,8 @@
+/* SYNTHETIC guard probe only: NOT a TI data model or compiler. */
+#include <limits.h>
+#include <stdint.h>
+#undef CHAR_BIT
+#define CHAR_BIT 16
+#undef UINT8_MAX
+#define UINT8_MAX 65535
+#define uint8_t uint16_t

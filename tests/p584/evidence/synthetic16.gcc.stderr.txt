@@ -1,0 +1,6 @@
+tests/p584/evidence/bounds.after.c.txt:5:1: error: static assertion failed: "NewLang C17 requires 8-bit bytes"
+    5 | _Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+      | ^~~~~~~~~~~~~~
+tests/p584/evidence/bounds.after.c.txt:6:1: error: static assertion failed: "NewLang C17 requires exact 8-bit uint8_t"
+    6 | _Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+      | ^~~~~~~~~~~~~~

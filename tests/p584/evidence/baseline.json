@@ -1,0 +1,68 @@
+[
+  {
+    "case": "array1.before.c.txt",
+    "synthetic_16_char_alias": 0,
+    "diagnostic": "",
+    "has_CHAR_BIT_guard": false,
+    "c17_bytes": 483,
+    "c17_sha256": "068581b7c75a356be56fbb13f5d621dc2c01327fdbff9147fcda75a143e43217"
+  },
+  {
+    "case": "array2.before.c.txt",
+    "synthetic_16_char_alias": 0,
+    "diagnostic": "",
+    "has_CHAR_BIT_guard": false,
+    "c17_bytes": 682,
+    "c17_sha256": "516de3980e1b667dcc0e22a85de3780df2e3df9daf751e1b9dc5402ca85a750c"
+  },
+  {
+    "case": "bounds.before.c.txt",
+    "synthetic_16_char_alias": 0,
+    "diagnostic": "",
+    "has_CHAR_BIT_guard": false,
+    "c17_bytes": 640,
+    "c17_sha256": "4eac74eb53d5a7656f56a212673ed390b283b40d8955c815de58a6110267c758"
+  },
+  {
+    "case": "five.before.c.txt",
+    "synthetic_16_char_alias": 0,
+    "diagnostic": "",
+    "has_CHAR_BIT_guard": false,
+    "c17_bytes": 28239,
+    "c17_sha256": "c84edadb43bac75d9f161be138e3150e6fe60c21dbbcb0c1d47eebfd46702c23"
+  },
+  {
+    "case": "node.before.c.txt",
+    "synthetic_16_char_alias": 0,
+    "diagnostic": "",
+    "has_CHAR_BIT_guard": false,
+    "c17_bytes": 2545,
+    "c17_sha256": "92359ec3c59d72c7286cd45fd28dd8f68302410d935d9417934609feeb123acc"
+  },
+  {
+    "case": "pair.before.c.txt",
+    "synthetic_16_char_alias": 0,
+    "diagnostic": "",
+    "has_CHAR_BIT_guard": false,
+    "c17_bytes": 1533,
+    "c17_sha256": "cd580a416b324a56aa44f277fbc29358390d9f09589d7e25df3ce876869d0cdc"
+  },
+  {
+    "case": "range",
+    "cli": 3,
+    "C_bytes": 0,
+    "diagnostic": "tests/p584/range.nl:1:25-1:32: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255\n"
+  },
+  {
+    "case": "type_error",
+    "cli": 3,
+    "C_bytes": 0,
+    "diagnostic": "tests/p584/type_error.nl:1:70-1:74: error(unsupported)[P3-SINGLE-RESULT-REQUIRED]: this operand requires one semantic value\n"
+  },
+  {
+    "case": "backend_unsupported",
+    "cli": 4,
+    "C_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p584/backend_unsupported.nl\n"
+  }
+]

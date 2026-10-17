@@ -1,4 +1,5 @@
 #include "checked_c_five.h"
+#include "checked_c_target.h"
 #include "newlang/captured_closure.h"
 #include <stdarg.h>
 #include <stdio.h>
@@ -637,7 +638,8 @@ NLNodeCStatus nl_checked_c_five(const NLCheckedFragment *body, char **out,
         &e,
         "/* Draft17.30 bounded five-root C17; private representation, not ABI. "
         "*/\n"
-        "#include <stdint.h>\n#include <stddef.h>\n#include <stdlib.h>\n"
+        "#include <stdint.h>\n#include <stddef.h>\n#include "
+        "<stdlib.h>\n" NL_C17_U8_TARGET_GUARD
         "typedef struct nl_node nl_node;\n"
         "typedef struct{unsigned tag;const nl_node *ptr;}nl_option;\n"
         "struct nl_node{nl_option f0,f1,f2;uint8_t f3;};\n"
