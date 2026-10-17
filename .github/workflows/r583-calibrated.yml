@@ -1,0 +1,56 @@
+name: R583 fixed candidate calibrated NON-BLIND independent
+on:
+  push:
+    branches: [r583-calibrated-evidence-20261018]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r583-calibrated:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    steps:
+      - name: Checkout separate R583 pre-registered evidence
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 20
+          path: evidence
+      - name: Checkout EXACT immutable P candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          ref: 87fc878b52763858f69678a8350d8c1b66a061bb
+          path: candidate
+      - name: Freeze integrity and authority (no R580 modifications)
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C candidate rev-parse HEAD)" = "87fc878b52763858f69678a8350d8c1b66a061bb"
+          git -C evidence cat-file -e 38e1dbd2874c12983635ae4e7ff320f94566b613:tests/r580/frozen_oracle.json
+          git -C evidence diff --exit-code 38e1dbd2874c12983635ae4e7ff320f94566b613 HEAD -- tests/r580/frozen_oracle.json tests/r580/public_probe.c
+          python3 -m json.tool evidence/tests/r580/frozen_oracle.json > /dev/null
+          git -C candidate rev-parse HEAD
+          git -C evidence rev-parse HEAD
+          sha256sum evidence/tests/r583/calibrated.nl evidence/tests/r583/calibrated_probe.c evidence/tests/r583/calibrated_run.py
+      - name: Build immutable candidate with only R test-owned inspector
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat >> candidate/CMakeLists.txt <<'CMAKE'
+          add_executable(r583_public_probe "${CMAKE_CURRENT_SOURCE_DIR}/../evidence/tests/r583/calibrated_probe.c")
+          target_include_directories(r583_public_probe PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/tests/support" "${CMAKE_CURRENT_SOURCE_DIR}/src")
+          target_link_libraries(r583_public_probe PRIVATE newlang_checked_c_node newlang_semantic)
+          CMAKE
+          cmake -S candidate -B candidate/build -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_FRONTEND_ONLY=ON
+          cmake --build candidate/build --parallel 2 --target newlangc node_checked_probe r583_public_probe
+      - name: Calibrated SOURCE to actual registered public validator then bounded native
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -u evidence/tests/r583/calibrated_run.py \
+            candidate/build/newlangc \
+            candidate/build/node_checked_probe \
+            candidate/build/r583_public_probe
