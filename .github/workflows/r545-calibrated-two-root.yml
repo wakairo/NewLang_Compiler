@@ -1,0 +1,125 @@
+name: R545 independently frozen calibrated dual-original second pass
+on:
+  push:
+    branches: [r545-calibrated-two-root-13f0072]
+permissions:
+  contents: read
+jobs:
+  second-pass:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - name: Checkout independent audit descendant
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Verify exact compiler ancestry, only audit-owned changes and all SHA256 hashes BEFORE candidate use
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          fixed=13f00721213463b6f6284d4af258081a6396cd25
+          test "$(git rev-parse "$fixed^{commit}")" = "$fixed"
+          git merge-base --is-ancestor "$fixed" HEAD
+          git diff --name-only "$fixed" HEAD | tee /tmp/r545-changed-paths.txt
+          if grep -Ev '^r545_calibrated/|^\.github/workflows/r545-calibrated-two-root.yml$' /tmp/r545-changed-paths.txt; then
+            echo 'R545 STOP audit branch changed compiler or production'; exit 1
+          fi
+          python3 - <<'PY'
+          import pathlib,re
+          m=pathlib.Path("r545_calibrated/manifest.sha256").read_text()
+          rows=m.splitlines()
+          assert len(rows)==4
+          assert all(re.fullmatch(r"[a-f0-9]{64}  [a-z0-9_.]+",r) for r in rows)
+          assert rows[0].startswith("4c1cad9ff433fb64a393a5260584fd26a44d97a58cdde52acbe6e44dcc116b93  twin.newlang")
+          print("R545 PREEXECUTION frozen full SHA256 lines=",len(rows),flush=True)
+          PY
+          (cd r545_calibrated && sha256sum --strict -c manifest.sha256)
+          sed '1s/^fn main() -> unit //' r545_calibrated/twin.newlang > /tmp/r545-original-fragment.nl
+          test "$(sha256sum /tmp/r545-original-fragment.nl | cut -d' ' -f1)" = cc4e4e196bc163817b99df2f817b1c1831191db2e28378bdf1e85634af2c9632
+          echo "R545 fixed compiler=$fixed branch=$(git rev-parse HEAD) old-R544-BLIND remains finding"
+          echo "R545 independent new source/oracle/harness verified BEFORE candidate execution"
+          gcc --version | head -1
+          clang --version | head -1
+          cmake --version | head -1
+          python3 --version
+      - name: Build unchanged pinned opt-in compiler frontend
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          CC=gcc cmake -S . -B build-r545 -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_FRONTEND_ONLY=ON
+          cmake --build build-r545 --parallel 2 --target newlangc newlangc_p534
+          ./build-r545/newlangc_p534 --version
+      - name: Independently check source-authored two-original full fn and emit exact ordinary C17
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          ./build-r545/newlangc_p534 --check r545_calibrated/twin.newlang > /tmp/r545-check.out 2> /tmp/r545-check.err
+          test ! -s /tmp/r545-check.out && test ! -s /tmp/r545-check.err
+          if ./build-r545/newlangc --check r545_calibrated/twin.newlang > /tmp/r545-default.out 2> /tmp/r545-default.err; then
+            echo 'R545 STOP default OFF unexpectedly accepted experimental source'; exit 10
+          fi
+          ./build-r545/newlangc_p534 r545_calibrated/twin.newlang > /tmp/r545-plain.c 2> /tmp/r545-emit.err
+          test ! -s /tmp/r545-emit.err
+          test -s /tmp/r545-plain.c
+          sha256sum /tmp/r545-plain.c
+          test "$(sha256sum /tmp/r545-plain.c | cut -d' ' -f1)" = 516de3980e1b667dcc0e22a85de3780df2e3df9daf751e1b9dc5402ca85a750c
+          echo R545-C17-PLAIN-BEGIN
+          cat /tmp/r545-plain.c
+          echo R545-C17-PLAIN-END
+      - name: Two independent public pathways and malicious copied-record checks
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          gcc -std=c17 -pedantic -Wall -Wextra -Werror -Iinclude \
+            r545_calibrated/public_audit.c \
+            -Wl,--start-group \
+              build-r545/libnewlang_semantic.a \
+              build-r545/libnewlang_checked.a \
+              build-r545/libnewlang_parser_p534.a \
+              build-r545/libnewlang_parser.a \
+              build-r545/libnewlang_diagnostic.a \
+              build-r545/libnewlang_lexer.a \
+              build-r545/libnewlang_syntax.a \
+              build-r545/libnewlang_source.a \
+            -Wl,--end-group -o /tmp/r545-public-audit
+          /tmp/r545-public-audit r545_calibrated/twin.newlang /tmp/r545-original-fragment.nl \
+            2>&1 | tee /tmp/r545-public-observations.log
+      - name: Preserve exact generated C17 and read-only diff, test GCC and Clang -O0/-O2
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          python3 r545_calibrated/observer.py /tmp/r545-plain.c /tmp/r545-observed.c /tmp/r545-c17-observer.diff
+          sha256sum /tmp/r545-plain.c /tmp/r545-observed.c /tmp/r545-c17-observer.diff
+          cat /tmp/r545-c17-observer.diff
+          for CC in gcc clang; do
+            for opt in 0 2; do
+              echo "R545 PLAIN $CC -O$opt"
+              "$CC" -std=c17 -pedantic -Wall -Wextra -Werror "-O$opt" /tmp/r545-plain.c -o "/tmp/r545-plain-$CC$opt"
+              "/tmp/r545-plain-$CC$opt"
+              echo "R545 OBSERVED $CC -O$opt original source-owned locals (instrumented)"
+              "$CC" -std=c17 -pedantic -Wall -Wextra -Werror "-O$opt" /tmp/r545-observed.c -o "/tmp/r545-observed-$CC$opt"
+              "/tmp/r545-observed-$CC$opt" | tee "/tmp/r545-native-$CC$opt.log"
+              test "$(grep -c '^R545 physical i=' "/tmp/r545-native-$CC$opt.log")" -eq 4
+              grep -q 'disjoint=1' "/tmp/r545-native-$CC$opt.log"
+            done
+          done
+      - name: Retain generated unmodified C17, observed variant, exact diff and audit logs
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: r545-calibrated-audit-evidence
+          if-no-files-found: warn
+          retention-days: 30
+          path: |
+            /tmp/r545-plain.c
+            /tmp/r545-observed.c
+            /tmp/r545-c17-observer.diff
+            /tmp/r545-public-observations.log
+            /tmp/r545-native-gcc0.log
+            /tmp/r545-native-gcc2.log
+            /tmp/r545-native-clang0.log
+            /tmp/r545-native-clang2.log
+            /tmp/r545-check.out
+            /tmp/r545-check.err
+            /tmp/r545-emit.err
