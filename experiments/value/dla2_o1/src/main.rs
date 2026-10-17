@@ -144,7 +144,9 @@ fn invalid_handles() {
     assert_eq!(drops.get(),0);
     drop(a);drop(b);assert_eq!(drops.get(),1);
 }
+#[cfg(not(test))]
 fn run(){last_delete_append();preserve_and_reparent();scale();invalid_handles();}
+#[cfg(not(test))]
 fn main(){
     run();
     println!("DLA2_INTRUSIVE_O1_OK original_box; true_links; safe_slot_guard; stale_foreign; owner_reparent; n3_16_256");
