@@ -1,0 +1,53 @@
+{
+  "compiler_host": "clang-23",
+  "sanitizer": "none",
+  "check": 0,
+  "public_owned": "CHANGE step=0 parent=6 child=7 RF=6->19 F=7->18 occurrence=1->2 target=12\nCHANGE step=1 parent=12 child=13 RF=12->25 F=13->24 occurrence=0->4 target=6\nB middle 1\nB p_middle 3\nB left 4\nB p_left 6\nB right 7\nB p_right 9\nB old_left 11\nB old_right 13\nB final_left 14\nB final_right 15\nB untouched_middle 16\nROOT index=0 place=1 incarnation=1 final_ended=1\nROOT index=1 place=6 incarnation=6 final_ended=1\nROOT index=2 place=12 incarnation=12 final_ended=1\nPUBLIC NODE_LINKS VALID roots=3 changes=2 copied_view_refusals=17 input_AST_destroyed=1\n",
+  "C17": 0,
+  "C_sha256": "d98b72d7c6d5d3578ab5c14ee4adb2261bb41c345f77a03259461831b2ef36bf",
+  "runs": [
+    {
+      "opt": "-O0",
+      "observed": false,
+      "exit": 0,
+      "stdout": ""
+    },
+    {
+      "opt": "-O0",
+      "observed": true,
+      "exit": 0,
+      "stdout": "ROOT role=0 address=0x7ffcc4811290 next_address=0x7ffcc4811290 payload=22\nROOT role=1 address=0x7ffcc4811228 next_address=0x7ffcc4811228 payload=11\nROOT role=2 address=0x7ffcc48111c8 next_address=0x7ffcc48111c8 payload=33\nCHANGE step=0 original=0x7ffcc4811228 old=1/0x7ffcc4811290 new=1/0x7ffcc48111c8\nCOPY role=6 address=0x7ffcc4811160 target=0x7ffcc4811290 tag=1\nCHANGE step=1 original=0x7ffcc48111c8 old=0/(nil) new=1/0x7ffcc4811228\nCOPY role=7 address=0x7ffcc4811110 target=(nil) tag=0\nCOPY role=8 address=0x7ffcc48110f0 target=0x7ffcc48111c8 tag=1\nCOPY role=9 address=0x7ffcc48110d0 target=0x7ffcc4811228 tag=1\nCOPY role=10 address=0x7ffcc48110b0 target=(nil) tag=0\np572 physical originals/oldCopy/reciprocal links PASS\n"
+    },
+    {
+      "opt": "-O2",
+      "observed": false,
+      "exit": 0,
+      "stdout": ""
+    },
+    {
+      "opt": "-O2",
+      "observed": true,
+      "exit": 0,
+      "stdout": "ROOT role=0 address=0x7ffc1e08ed30 next_address=0x7ffc1e08ed30 payload=22\nROOT role=1 address=0x7ffc1e08ecf8 next_address=0x7ffc1e08ecf8 payload=11\nROOT role=2 address=0x7ffc1e08ed10 next_address=0x7ffc1e08ed10 payload=33\nCHANGE step=0 original=0x7ffc1e08ecf8 old=1/0x7ffc1e08ed30 new=1/0x7ffc1e08ed10\nCOPY role=6 address=0x7ffc1e08edb0 target=0x7ffc1e08ed30 tag=1\nCHANGE step=1 original=0x7ffc1e08ed10 old=0/(nil) new=1/0x7ffc1e08ecf8\nCOPY role=7 address=0x7ffc1e08eda0 target=(nil) tag=0\nCOPY role=8 address=0x7ffc1e08ed90 target=0x7ffc1e08ed10 tag=1\nCOPY role=9 address=0x7ffc1e08ed80 target=0x7ffc1e08ecf8 tag=1\nCOPY role=10 address=0x7ffc1e08ed70 target=(nil) tag=0\np572 physical originals/oldCopy/reciprocal links PASS\n"
+    }
+  ],
+  "negatives": {
+    "read_authority": [
+      "LOCAL-LOAN-PROFILE",
+      "parser"
+    ],
+    "wrong_field_type": [
+      "NODE-LINK-FIELD-PROFILE",
+      "registration"
+    ],
+    "scope_escape": [
+      "P8-EXIT-DEPENDENCY",
+      "registration"
+    ],
+    "ptr_is_not_ref": [
+      "P3-WRITE-REF-REQUIRED",
+      "registration"
+    ]
+  }
+}
+P572 FINITE THREE ORIGINAL LEXICAL NODE LINK RUNG PASS; no heap owner/library/product claim

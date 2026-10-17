@@ -1,0 +1,5 @@
+{
+  "status": 3,
+  "stdout": "",
+  "diagnostic": "/workspace/p572-evidence/ptr_is_not_ref.nl:10:17-10:23: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ref<write,T>\n"
+}

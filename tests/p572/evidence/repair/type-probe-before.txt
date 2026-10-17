@@ -1,0 +1,2 @@
+before=0 after=0 validator=0 old_target=12 forged_target=6
+emitter=0

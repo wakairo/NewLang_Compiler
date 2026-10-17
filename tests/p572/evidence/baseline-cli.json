@@ -1,0 +1,72 @@
+[
+  {
+    "case": "p471_asymmetric",
+    "mode": "check",
+    "status": 0,
+    "diagnostic": "",
+    "output_bytes": 0
+  },
+  {
+    "case": "p471_asymmetric",
+    "mode": "c17",
+    "status": 0,
+    "diagnostic": "",
+    "output_bytes": 2545
+  },
+  {
+    "case": "three_originals",
+    "mode": "check",
+    "status": 0,
+    "diagnostic": "",
+    "output_bytes": 0
+  },
+  {
+    "case": "three_originals",
+    "mode": "c17",
+    "status": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p572-evidence/three_originals.nl\n",
+    "output_bytes": 0
+  },
+  {
+    "case": "read_authority",
+    "mode": "check",
+    "status": 3,
+    "diagnostic": "/workspace/p572-evidence/read_authority.nl:9:32-9:33: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n",
+    "output_bytes": 0
+  },
+  {
+    "case": "read_authority",
+    "mode": "c17",
+    "status": 3,
+    "diagnostic": "/workspace/p572-evidence/read_authority.nl:9:32-9:33: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n",
+    "output_bytes": 0
+  },
+  {
+    "case": "wrong_field_type",
+    "mode": "check",
+    "status": 3,
+    "diagnostic": "/workspace/p572-evidence/wrong_field_type.nl:9:29-9:41: error(unsupported)[NODE-LINK-FIELD-PROFILE]: bounded recursive field surface selects only its declared link\n",
+    "output_bytes": 0
+  },
+  {
+    "case": "wrong_field_type",
+    "mode": "c17",
+    "status": 3,
+    "diagnostic": "/workspace/p572-evidence/wrong_field_type.nl:9:29-9:41: error(unsupported)[NODE-LINK-FIELD-PROFILE]: bounded recursive field surface selects only its declared link\n",
+    "output_bytes": 0
+  },
+  {
+    "case": "scope_escape",
+    "mode": "check",
+    "status": 3,
+    "diagnostic": "/workspace/p572-evidence/scope_escape.nl:9:17-9:46: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n",
+    "output_bytes": 0
+  },
+  {
+    "case": "scope_escape",
+    "mode": "c17",
+    "status": 3,
+    "diagnostic": "/workspace/p572-evidence/scope_escape.nl:9:17-9:46: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n",
+    "output_bytes": 0
+  }
+]
