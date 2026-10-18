@@ -1,0 +1,268 @@
+[
+  {
+    "case": "literals",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/literals.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "literals",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/literals.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "names",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/names.nl:1:58-1:59: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "case": "names",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/names.nl:1:58-1:59: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "case": "zero",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/zero.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "zero",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/zero.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "max",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/max.nl:1:54-1:55: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "max",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/max.nl:1:54-1:55: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "copy",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/copy.nl:1:68-1:69: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "case": "copy",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/copy.nl:1:68-1:69: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "case": "consumer",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/consumer.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "consumer",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/consumer.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "overflow",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/overflow.nl:1:54-1:55: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "overflow",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/overflow.nl:1:54-1:55: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "range",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/range.nl:1:27-1:54: error(semantic)[USIZE-LITERAL-RANGE]: usize literal is outside native target range\n"
+  },
+  {
+    "case": "range",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/range.nl:1:27-1:54: error(semantic)[USIZE-LITERAL-RANGE]: usize literal is outside native target range\n"
+  },
+  {
+    "case": "mixed_type",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/mixed_type.nl:1:32-1:33: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "mixed_type",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/mixed_type.nl:1:32-1:33: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "unknown",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/unknown.nl:1:23-1:24: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "case": "unknown",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/unknown.nl:1:23-1:24: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "case": "authority",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/authority.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "authority",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/authority.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "escape",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/escape.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "escape",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/escape.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "chain",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/chain.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "chain",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/chain.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "mixed_left",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/mixed_left.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "mixed_left",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/mixed_left.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "mixed_right",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/mixed_right.nl:1:45-1:46: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "mixed_right",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/mixed_right.nl:1:45-1:46: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "parenthesized",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/parenthesized.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "parenthesized",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/parenthesized.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "case": "call_operand",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/call_operand.nl:1:54-1:55: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "case": "call_operand",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/call_operand.nl:1:54-1:55: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "case": "bare",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/bare.nl:1:27-1:28: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+  },
+  {
+    "case": "bare",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p589/bare.nl:1:27-1:28: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+  },
+  {
+    "case": "equality",
+    "mode": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stderr": ""
+  },
+  {
+    "case": "equality",
+    "mode": "emit",
+    "exit": 0,
+    "stdout_bytes": 780,
+    "stderr": ""
+  }
+]

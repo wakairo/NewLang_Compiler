@@ -6,6 +6,7 @@
 #include "newlang/parser.h"
 #include "newlang/semantic.h"
 #include "newlang/source.h"
+#include "newlang/usize_addition.h"
 #include "semantic_internal.h"
 
 #include <stdbool.h>
@@ -148,6 +149,12 @@ static bool quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
             return false;
         expected = value.scalar_value;
         first = false;
+        if (v->kind == NL_CHECKED_USIZE_ADDITION) {
+            if (!nl_checked_usize_addition_valid(f, id, NULL))
+                return false;
+            p->uses_usize = true;
+            return true;
+        }
         if (v->kind == NL_CHECKED_USIZE_LITERAL) {
             p->uses_usize = true;
             return v->has_scalar_result && v->scalar_result.known &&
@@ -241,7 +248,8 @@ static bool bool_quantity_origin(const NLCheckedFragment *f, NLCheckedNodeId id,
         return false;
     while (id != 0) {
         const NLCheckedNodeView *v = nl_checked_node_view(f, id);
-        if (v->kind == NL_CHECKED_USIZE_LITERAL)
+        if (v->kind == NL_CHECKED_USIZE_LITERAL ||
+            v->kind == NL_CHECKED_USIZE_ADDITION)
             return true;
         id = bool_source_origin(f, id);
     }
@@ -816,15 +824,17 @@ static bool v1_emit_scalar(FILE *stream, const NLCheckedNodeView *value)
 static bool emit_quantity_bool(FILE *stream, const NLCheckedFragment *f,
                                const NLCheckedNodeView *value)
 {
-    if (value->kind != NL_CHECKED_USIZE_EQUALITY)
+    if (value->kind != NL_CHECKED_USIZE_EQUALITY &&
+        value->kind != NL_CHECKED_USIZE_ADDITION)
         return v1_emit_scalar(stream, value);
     const NLCheckedNodeView *left =
         nl_checked_node_view(f, value->first_argument);
     const NLCheckedNodeView *right =
         nl_checked_node_view(f, left->next_argument);
     return fputc('(', stream) != EOF && v1_emit_scalar(stream, left) &&
-           fputs(" == ", stream) >= 0 && v1_emit_scalar(stream, right) &&
-           fputc(')', stream) != EOF;
+           fputs(value->kind == NL_CHECKED_USIZE_ADDITION ? " + " : " == ",
+                 stream) >= 0 &&
+           v1_emit_scalar(stream, right) && fputc(')', stream) != EOF;
 }
 
 static bool v0_validate_node(const NLCheckedFragment *, NLCheckedNodeId,
@@ -1491,6 +1501,7 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
     case NL_CHECKED_FIELD_READ:
     case NL_CHECKED_U8_LITERAL:
     case NL_CHECKED_USIZE_LITERAL:
+    case NL_CHECKED_USIZE_ADDITION:
     case NL_CHECKED_USIZE_EQUALITY:
     case NL_CHECKED_IDENTIFIER:
         return v1_scalar(fragment, id, program) ||
@@ -1734,6 +1745,7 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     case NL_CHECKED_FIELD_READ:
     case NL_CHECKED_U8_LITERAL:
     case NL_CHECKED_USIZE_LITERAL:
+    case NL_CHECKED_USIZE_ADDITION:
     case NL_CHECKED_USIZE_EQUALITY:
     case NL_CHECKED_IDENTIFIER:
     case NL_CHECKED_PTR_FROM_REF:
@@ -1817,7 +1829,7 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                                          NL_TYPE_USIZE)) {
             if (fprintf(stream, "const size_t nl_local_%zu = ", view->symbol) <
                     0 ||
-                !v1_emit_scalar(stream, initializer))
+                !emit_quantity_bool(stream, fragment, initializer))
                 return false;
         } else if (initializer->type ==
                    nl_semantic_core_type(nl_checked_context(fragment),

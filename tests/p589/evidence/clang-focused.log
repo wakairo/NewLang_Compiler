@@ -1,0 +1,30 @@
+Internal ctest changing into directory: /workspace/p589/build-clang
+Test project /workspace/p589/build-clang
+      Start   1: p572_three_node_owned.unit
+ 1/12 Test   #1: p572_three_node_owned.unit ...........   Passed    0.00 sec
+      Start   2: p572_three_node_fault.unit
+ 2/12 Test   #2: p572_three_node_fault.unit ...........   Passed    0.68 sec
+      Start   3: p572_source_oom.unit
+ 3/12 Test   #3: p572_source_oom.unit .................   Passed    0.14 sec
+      Start   4: p572_three_node_native.integration
+ 4/12 Test   #4: p572_three_node_native.integration ...   Passed    1.07 sec
+      Start  13: p504_equality_parser.unit
+ 5/12 Test  #13: p504_equality_parser.unit ............   Passed    0.00 sec
+      Start  14: p504_equality_values.unit
+ 6/12 Test  #14: p504_equality_values.unit ............   Passed    0.01 sec
+      Start  15: p504_equality_rollback.unit
+ 7/12 Test  #15: p504_equality_rollback.unit ..........   Passed    0.00 sec
+      Start  16: p504_equality_oom.unit
+ 8/12 Test  #16: p504_equality_oom.unit ...............   Passed    0.00 sec
+      Start  17: p504_equality_native.integration
+ 9/12 Test  #17: p504_equality_native.integration .....   Passed    8.97 sec
+      Start 316: p589_parser_oom.unit
+10/12 Test #316: p589_parser_oom.unit .................   Passed    0.00 sec
+      Start 317: p589_usize_addition.integration
+11/12 Test #317: p589_usize_addition.integration ......   Passed   10.14 sec
+      Start 318: c17_target_model.integration
+12/12 Test #318: c17_target_model.integration .........   Passed    6.42 sec
+
+100% tests passed, 0 tests failed out of 12
+
+Total Test time (real) =  27.46 sec

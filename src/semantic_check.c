@@ -2481,6 +2481,75 @@ static NLCheckedNodeId usize_equality(Check *check, const NLSyntaxView *syntax)
                                    .scalar_result = {type, true, equal}});
 }
 
+static NLCheckedNodeId usize_addition(Check *check, const NLSyntaxNode *source)
+{
+    const NLSyntaxView *syntax = nl_syntax_node_view(source);
+    const NLCheckedNodeId left = expression(check, syntax->data.equality.left);
+    if (left == 0)
+        return 0;
+    const NLCheckedNodeId right =
+        expression(check, syntax->data.equality.right);
+    if (right == 0)
+        return 0;
+    const NLCheckedNodeView lhs = *view(check, left), rhs = *view(check, right);
+    NLSemanticContext *const c = check->context;
+    const NLTypeId quantity = nl_semantic_core_type(c, NL_TYPE_USIZE);
+    if (check->terminated || lhs.result_count != 1 || rhs.result_count != 1 ||
+        lhs.type != quantity || rhs.type != quantity ||
+        lhs.results[0].type != quantity || rhs.results[0].type != quantity) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR,
+             syntax->data.equality.operator_span, "USIZE-ADDITION-TYPE",
+             "+ requires two exact core usize operands");
+        return 0;
+    }
+    const NLSemanticValueView a = c->values[lhs.results[0].value - 1];
+    const NLSemanticValueView b = c->values[rhs.results[0].value - 1];
+    if (!a.scalar_known || !b.scalar_known ||
+        a.dependencies != NL_DEPENDENCY_FREE ||
+        b.dependencies != NL_DEPENDENCY_FREE || a.value_dependency_count != 0 ||
+        b.value_dependency_count != 0) {
+        fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT,
+             syntax->data.equality.operator_span, "USIZE-ADDITION-PRECISION",
+             "addition needs known dependency-free quantity operands in this "
+             "profile");
+        return 0;
+    }
+    if (b.scalar_value > SIZE_MAX - a.scalar_value) {
+        fail(check, NL_CHECK_SEMANTIC_ERROR,
+             syntax->data.equality.operator_span, "USIZE-ADDITION-OVERFLOW",
+             "mathematical usize sum is outside target range");
+        return 0;
+    }
+    const NLTypeId type = quantity;
+    const size_t sum = a.scalar_value + b.scalar_value;
+    const NLValueId value =
+        new_value(check,
+                  (NLSemanticValueView){
+                      .type = type, .scalar_known = true, .scalar_value = sum},
+                  syntax->span);
+    if (value == 0)
+        return 0;
+    end_temporary(check, lhs.results[0].value);
+    end_temporary(check, rhs.results[0].value);
+    view(check, left)->next_argument = right;
+    const NLCheckedNodeId id = add(
+        check, (NLCheckedNodeView){.kind = NL_CHECKED_USIZE_ADDITION,
+                                   .span = syntax->span,
+                                   .name = syntax->data.equality.operator_span,
+                                   .type = type,
+                                   .first_argument = left,
+                                   .argument_count = 2,
+                                   .result_count = 1,
+                                   .results = {{type, value}},
+                                   .has_scalar_result = true,
+                                   .scalar_result = {type, true, sum}});
+    if (id &&
+        !host(check, nl_usize_addition_capture(check->artifact, id, source, c),
+              syntax->span))
+        return 0;
+    return id;
+}
+
 static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
 {
     /* Seed before any branch copies Check, so distinct syntactic trials in
@@ -2500,6 +2569,7 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
         node->kind != NL_SYNTAX_LOOP && node->kind != NL_SYNTAX_U8_LITERAL &&
         node->kind != NL_SYNTAX_USIZE_LITERAL &&
         node->kind != NL_SYNTAX_USIZE_EQUALITY &&
+        node->kind != NL_SYNTAX_USIZE_ADDITION &&
         node->kind != NL_SYNTAX_ARRAY4_CONSTRUCTOR &&
         node->kind != NL_SYNTAX_AGGREGATE &&
         node->kind != NL_SYNTAX_LOCAL_READ_LOAN &&
@@ -2536,6 +2606,8 @@ static NLCheckedNodeId expression(Check *check, const NLSyntaxNode *syntax)
                      : identifier(check, node);
     } else if (node->kind == NL_SYNTAX_USIZE_EQUALITY) {
         result = usize_equality(check, node);
+    } else if (node->kind == NL_SYNTAX_USIZE_ADDITION) {
+        result = usize_addition(check, syntax);
     } else if (node->kind == NL_SYNTAX_U8_LITERAL ||
                node->kind == NL_SYNTAX_USIZE_LITERAL) {
         result = typed_literal(check, node);
@@ -8241,6 +8313,7 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
          root->kind != NL_SYNTAX_U8_LITERAL &&
          root->kind != NL_SYNTAX_USIZE_LITERAL &&
          root->kind != NL_SYNTAX_USIZE_EQUALITY &&
+         root->kind != NL_SYNTAX_USIZE_ADDITION &&
          root->kind != NL_SYNTAX_LOCAL_READ_LOAN &&
          root->kind != NL_SYNTAX_LOCAL_WRITE_LOAN &&
          root->kind != NL_SYNTAX_ALLOCATED_TRY &&
