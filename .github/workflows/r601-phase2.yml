@@ -44,3 +44,10 @@ jobs:
           set -euo pipefail
           bash -n evidence/tests/r601-phase2/run.sh
           bash evidence/tests/r601-phase2/run.sh
+      - name: Archive exact original guest C17 bytes (R-only evidence retention)
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r601-phase2-original-c17
+          path: ${{ runner.temp }}/r601-output/native/*.original.c17.txt
+          if-no-files-found: error
+          retention-days: 30
