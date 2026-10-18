@@ -1,0 +1,56 @@
+name: R592 fixed candidate independent BLIND evidence (PARTIAL)
+on:
+  pull_request:
+    branches: [p589-usize-addition]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  r592-blind:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - name: Checkout exact frozen candidate descendant without persisted credentials
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Enforce fixed compiler ancestor, oracle and no production modifications
+        shell: bash
+        run: |
+          set -euo pipefail
+          git merge-base --is-ancestor 54986f2b227fc4999204027ee54fc50c94b546e9 HEAD
+          git cat-file -e a0c21a2e2ae47bad699206a38a94b8639023bc64^{commit}
+          test "$(git rev-parse a0c21a2e2ae47bad699206a38a94b8639023bc64:include/newlang/usize_addition.h)" = "$(git rev-parse HEAD:include/newlang/usize_addition.h)"
+          echo "R592 FROZEN_ORACLE_COMMIT=a0c21a2e2ae47bad699206a38a94b8639023bc64"
+          echo "R592 FIXED_CANDIDATE=54986f2b227fc4999204027ee54fc50c94b546e9"
+          sha256sum redteam/evidence/r592/frozen_oracle.md redteam/evidence/r592/run_blind.py redteam/evidence/r592/public_probe.c
+          cmake --version; gcc --version | head -1; clang --version | head -1
+      - name: Build actual fixed candidate frontend with GCC without LLVM
+        shell: bash
+        run: |
+          set -euo pipefail
+          CC=gcc cmake -S . -B build-r592 -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_FRONTEND_ONLY=ON -DBUILD_TESTING=OFF
+          cmake --build build-r592 --target newlangc --parallel 2
+      - name: Independently execute frozen CLI CHECK / C17 / GCC+Clang O0+O2 native ladder
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 redteam/evidence/r592/run_blind.py
+      - name: Genuine source-issued owned receipt and hostile public copied view
+        shell: bash
+        run: |
+          set -euo pipefail
+          gcc -std=c17 -Wall -Wextra -Wpedantic -Werror -Iinclude \
+            redteam/evidence/r592/public_probe.c \
+            build-r592/libnewlang_semantic.a build-r592/libnewlang_checked.a \
+            build-r592/libnewlang_parser.a build-r592/libnewlang_syntax.a \
+            build-r592/libnewlang_lexer.a build-r592/libnewlang_source.a \
+            build-r592/libnewlang_diagnostic.a \
+            -o build-r592/r592-public-proof
+          build-r592/r592-public-proof
+      - name: NON-BLIND calibrated passive observation of original emitted guest operand carriers
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 redteam/evidence/r592/calibrated_native.py
