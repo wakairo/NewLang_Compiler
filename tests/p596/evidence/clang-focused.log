@@ -1,0 +1,36 @@
+Internal ctest changing into directory: /workspace/p596/build-clang
+Test project /workspace/p596/build-clang
+      Start   1: p572_three_node_owned.unit
+ 1/15 Test   #1: p572_three_node_owned.unit ...........   Passed    0.00 sec
+      Start   2: p572_three_node_fault.unit
+ 2/15 Test   #2: p572_three_node_fault.unit ...........   Passed    0.23 sec
+      Start   3: p572_source_oom.unit
+ 3/15 Test   #3: p572_source_oom.unit .................   Passed    0.06 sec
+      Start   4: p572_three_node_native.integration
+ 4/15 Test   #4: p572_three_node_native.integration ...   Passed    0.36 sec
+      Start  13: p504_equality_parser.unit
+ 5/15 Test  #13: p504_equality_parser.unit ............   Passed    0.00 sec
+      Start  14: p504_equality_values.unit
+ 6/15 Test  #14: p504_equality_values.unit ............   Passed    0.00 sec
+      Start  15: p504_equality_rollback.unit
+ 7/15 Test  #15: p504_equality_rollback.unit ..........   Passed    0.00 sec
+      Start  16: p504_equality_oom.unit
+ 8/15 Test  #16: p504_equality_oom.unit ...............   Passed    0.00 sec
+      Start  17: p504_equality_native.integration
+ 9/15 Test  #17: p504_equality_native.integration .....   Passed    2.73 sec
+      Start 316: p589_parser_oom.unit
+10/15 Test #316: p589_parser_oom.unit .................   Passed    0.00 sec
+      Start 317: p589_usize_addition.integration
+11/15 Test #317: p589_usize_addition.integration ......   Passed    3.03 sec
+      Start 318: p596_shared_proof.unit
+12/15 Test #318: p596_shared_proof.unit ...............   Passed    0.00 sec
+      Start 319: p596_parser_oom.unit
+13/15 Test #319: p596_parser_oom.unit .................   Passed    0.00 sec
+      Start 320: p596_usize_subtraction.integration
+14/15 Test #320: p596_usize_subtraction.integration ...   Passed    4.54 sec
+      Start 321: c17_target_model.integration
+15/15 Test #321: c17_target_model.integration .........   Passed    1.92 sec
+
+100% tests passed, 0 tests failed out of 15
+
+Total Test time (real) =  12.91 sec

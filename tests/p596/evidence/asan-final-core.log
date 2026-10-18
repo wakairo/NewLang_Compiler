@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /workspace/p596/build-asan
+Test project /workspace/p596/build-asan
+    Start 318: p596_shared_proof.unit
+1/1 Test #318: p596_shared_proof.unit ...........   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.02 sec

@@ -1,0 +1,5 @@
+receipt=264 fragment=552 plus-view=216 minus-view=216; guarded-math=PASS
+op=- actual-private-receipt-refusals=11; foreign-same-number-registered=REFUSED; cross-api=REFUSED
+op=+ actual-private-receipt-refusals=11; foreign-same-number-registered=REFUSED; cross-api=REFUSED
+op=- actual-private-receipt-refusals=11; foreign-same-number-registered=REFUSED; cross-api=REFUSED
+one-shared-list +,-,+ authentic-source-events=3; results=15,11,19; cross-api=REFUSED

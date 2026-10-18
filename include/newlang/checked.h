@@ -60,7 +60,8 @@ typedef enum {
      * name is the exact operator span. This grants no memory authority. */
     NL_CHECKED_USIZE_EQUALITY,
     NL_CHECKED_ARRAY4_CONSTRUCTOR, /* SPECULATIVE typed positional vector */
-    NL_CHECKED_USIZE_ADDITION /* genuine LTR usize operands, fresh result */
+    NL_CHECKED_USIZE_ADDITION,     /* genuine LTR usize operands */
+    NL_CHECKED_USIZE_SUBTRACTION   /* guarded lhs >= rhs, fresh result */
 } NLCheckedKind;
 typedef enum {
     NL_VALUE_USE_NONE,

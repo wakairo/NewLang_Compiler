@@ -52,7 +52,8 @@ typedef enum {
     NL_SYNTAX_OPTION_U8,        /* SPECULATIVE PR533 builtin only */
     NL_SYNTAX_ARRAY4_TYPE,
     NL_SYNTAX_ARRAY4_CONSTRUCTOR,
-    NL_SYNTAX_USIZE_ADDITION /* C587: one flat +, data.equality ordered atoms */
+    NL_SYNTAX_USIZE_ADDITION,   /* C587: one flat + */
+    NL_SYNTAX_USIZE_SUBTRACTION /* C593: one flat -, data.equality atoms */
 } NLSyntaxKind;
 
 /* Requested source spelling only: not checked access permission/authority. */
