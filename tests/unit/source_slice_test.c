@@ -58,6 +58,7 @@ static bool parser_tests(void)
 {
     const char *valid[] = {
         "{}",
+        "x+y", /* C587 flat addition; operand typing belongs to CHECK. */
         "match x {None=>{x}}", /* canonical P6 syntax, formerly unsupported */
         "{ x; x }",
         "{ let x = y; x }",
@@ -76,17 +77,11 @@ static bool parser_tests(void)
                              "Pair{a:x b:y}"};
     for (size_t i = 0; i < sizeof(invalid) / sizeof(invalid[0]); ++i)
         CHECK(parse_case(invalid[i], NL_PARSE_SYNTAX_ERROR));
-    const char *unsupported[] = {"let(a,_)=f()",
-                                 "let(a,(b,c))=f()",
-                                 "let Pair{a:renamed,b}=p",
-                                 "x+y",
-                                 "Option<u32>::None",
-                                 "struct Pair{a:T}",
-                                 "{ |x:T| x }",
-                                 "let [a,b]=x",
-                                 "Pair{a,b}",
-                                 "let Pair{a,..}=p",
-                                 "let Pair{a{b},c}=p"};
+    const char *unsupported[] = {
+        "let(a,_)=f()",      "let(a,(b,c))=f()", "let Pair{a:renamed,b}=p",
+        "Option<u32>::None", "struct Pair{a:T}", "{ |x:T| x }",
+        "let [a,b]=x",       "Pair{a,b}",        "let Pair{a,..}=p",
+        "let Pair{a{b},c}=p"};
     for (size_t i = 0; i < sizeof(unsupported) / sizeof(unsupported[0]); ++i)
         CHECK(parse_case(unsupported[i], NL_PARSE_SYNTAX_UNSUPPORTED));
     /* Source order, structural roles and precise name spans. */

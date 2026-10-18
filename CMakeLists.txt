@@ -98,7 +98,7 @@ add_library(newlang_parser STATIC src/parser.c)
 target_link_libraries(newlang_parser PUBLIC newlang_syntax newlang_lexer newlang_diagnostic)
 add_library(newlang_checked STATIC src/checked.c)
 target_link_libraries(newlang_checked PUBLIC newlang_syntax)
-add_library(newlang_semantic STATIC src/array4.c src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/node_join.c src/node_links.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
+add_library(newlang_semantic STATIC src/array4.c src/usize_addition.c src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/node_join.c src/node_links.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
 target_link_libraries(newlang_semantic PUBLIC newlang_checked newlang_diagnostic newlang_parser)
 add_library(newlang_checked_c_node STATIC src/checked_c_node.c src/checked_c_five.c)
 target_link_libraries(newlang_checked_c_node PUBLIC newlang_semantic)
@@ -775,6 +775,19 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_v0_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(p589_public_probe tests/p589/public_probe.c)
+    target_link_libraries(p589_public_probe PRIVATE newlang_semantic)
+    add_executable(p589_gate_test tests/p589/gate_test.c)
+    target_link_libraries(p589_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
+    add_executable(p589_parser_oom_test tests/p589/parser_oom_test.c)
+    target_link_libraries(p589_parser_oom_test PRIVATE newlang_semantic)
+    target_link_options(p589_parser_oom_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p589_parser_oom.unit
+        COMMAND p589_parser_oom_test "${CMAKE_CURRENT_SOURCE_DIR}/tests/p589/names.nl")
+    add_test(NAME p589_usize_addition.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p589/integration_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p589_public_probe>" "$<TARGET_FILE:p589_gate_test>"
+        "$<TARGET_FILE:p534_semantic_gate>" "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p589" "${NEWLANG_SANITIZER}")
     add_test(NAME c17_target_model.integration
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p584/target_model_test.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:newlangc_p534>" "${CMAKE_C_COMPILER}"

@@ -29,7 +29,7 @@ def main() -> None:
                    "let bad=loan_write(x){|w|w};unit}\n", 3,
                    "P8-EXIT-DEPENDENCY"),
         "plus": ("fn main()->unit{let x=u8(7)+u8(2);unit}\n", 3,
-                 "P5-EXPECTED-ITEM-END"),
+                 "USIZE-ADDITION-TYPE"),
         "missing_main": ("fn other()->unit{unit}\n", 3, "P3-UNKNOWN-CALLEE"),
     }
     with tempfile.TemporaryDirectory(prefix="newlang-check-") as temp:

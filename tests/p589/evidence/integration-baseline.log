@@ -1,0 +1,16 @@
+Internal ctest changing into directory: /workspace/p589/build
+Test project /workspace/p589/build
+    Start   1: p572_three_node_owned.unit
+1/5 Test   #1: p572_three_node_owned.unit ...........   Passed    0.00 sec
+    Start   2: p572_three_node_fault.unit
+2/5 Test   #2: p572_three_node_fault.unit ...........   Passed    0.06 sec
+    Start   3: p572_source_oom.unit
+3/5 Test   #3: p572_source_oom.unit .................   Passed    0.04 sec
+    Start   4: p572_three_node_native.integration
+4/5 Test   #4: p572_three_node_native.integration ...   Passed    0.23 sec
+    Start 316: c17_target_model.integration
+5/5 Test #316: c17_target_model.integration .........   Passed    0.83 sec
+
+100% tests passed, 0 tests failed out of 5
+
+Total Test time (real) =   1.17 sec

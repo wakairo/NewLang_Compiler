@@ -1,0 +1,23 @@
+{
+  "base": "12c2c8e3338201ec3bda00a63ddac841ed80e574",
+  "post_merge_push_runs": [
+    {
+      "id": 39080512560,
+      "kind": "FULL5",
+      "attempt": 1,
+      "conclusion": "success"
+    },
+    {
+      "id": 39080512572,
+      "kind": "NO LLVM PARTIAL",
+      "attempt": 1,
+      "conclusion": "success"
+    }
+  ],
+  "gcc": "gcc (Debian 14.2.0-19) 14.2.0",
+  "clang": "Debian clang version 23.1.2 (++20260920034005+85ac56026243-1~exp1~20260920034024.76)",
+  "receipt_bytes": 256,
+  "fragment_bytes": 552,
+  "fragment_growth_bytes": 16,
+  "public_view_bytes": 216
+}
