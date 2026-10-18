@@ -1,0 +1,322 @@
+{
+  "authority": {
+    "issue": 600,
+    "pr": 599,
+    "candidate": "80f2ae3786a63235138408b35a2129a3b12afa33",
+    "main": "262f4bddb9055a6cf9067a639cbe44fa72b703a4",
+    "canonical": "Draft17.32"
+  },
+  "frozen_at": "2026-10-18; before any PR599 patch, P596 result, M593 reuse report, R598 outcome, or candidate internals",
+  "target": {
+    "C17": "8-bit CHAR_BIT; sizeof(size_t)==8 asserted for max cases",
+    "optimization": [
+      "O0",
+      "O2"
+    ],
+    "compilers": [
+      "gcc",
+      "clang"
+    ],
+    "flags": "-std=c17 -Wall -Wextra -Wpedantic -Werror"
+  },
+  "cases": [
+    {
+      "id": "sub_71_9",
+      "source": "fn main() -> unit {\n    let difference = usize(71) - usize(9);\n    unit\n}\n",
+      "source_sha256": "346f72be4d1ae6929e2fc4c843b7f25232da598d437c813e16085e7bbd403c74",
+      "expected": {
+        "source": "accept",
+        "check": "accept",
+        "public_owned": "authentic",
+        "c17": "issued",
+        "expected_value": 62
+      }
+    },
+    {
+      "id": "sub_53_27",
+      "source": "fn main() -> unit {\n    let difference = usize(53) - usize(27);\n    unit\n}\n",
+      "source_sha256": "55ee03b8ab1e27c808c83bc12d6401e778b7ac3c0d5bb38afd2f431d2ab0e761",
+      "expected": {
+        "source": "accept",
+        "check": "accept",
+        "public_owned": "authentic",
+        "c17": "issued",
+        "expected_value": 26
+      }
+    },
+    {
+      "id": "sub_named_copy",
+      "source": "fn main() -> unit {\n    let first = usize(74);\n    let duplicate = first;\n    let second = usize(21);\n    let difference = duplicate - second;\n    unit\n}\n",
+      "source_sha256": "06c9a51e8725b266dc3596a6b655052b043954076bdafa6175731c1fa0c435e0",
+      "expected": {
+        "source": "accept",
+        "check": "accept",
+        "public_owned": "authentic",
+        "c17": "issued",
+        "expected_value": 53
+      }
+    },
+    {
+      "id": "sub_equal_zero",
+      "source": "fn main() -> unit {\n    let difference = usize(17) - usize(17);\n    unit\n}\n",
+      "source_sha256": "04f1c36110361856250e3ec8cc867da0ee9787ce55c9cb0a440a6e15c2a9ab2a",
+      "expected": {
+        "source": "accept",
+        "check": "accept",
+        "public_owned": "authentic",
+        "c17": "issued",
+        "expected_value": 0
+      }
+    },
+    {
+      "id": "sub_max_boundary",
+      "source": "fn main() -> unit {\n    let difference = usize(18446744073709551615) - usize(1);\n    unit\n}\n",
+      "source_sha256": "56f9e1005b0c15d767b8d9b05586db6e1a126d80e867295be0fbd5c5aed6bcc4",
+      "expected": {
+        "source": "accept",
+        "check": "accept",
+        "public_owned": "authentic",
+        "c17": "issued",
+        "expected_value": "18446744073709551614"
+      }
+    },
+    {
+      "id": "sub_separate_fns",
+      "source": "fn left_unit() -> unit {\n    let difference = usize(29) - usize(6);\n    unit\n}\n\nfn right_unit() -> unit {\n    let difference = usize(61) - usize(19);\n    unit\n}\n\nfn main() -> unit {\n    let marker = usize(4);\n    unit\n}\n",
+      "source_sha256": "83c86a59104a0d5a15e71fa8a173cbf4fddcb59d12b27b9a5a52b8d5b1ed527f",
+      "expected": {
+        "source": "accept",
+        "check": "accept",
+        "public_owned": "authentic",
+        "c17": "issued",
+        "expected_value": {
+          "left_unit": 23,
+          "right_unit": 42
+        }
+      }
+    },
+    {
+      "id": "sub_sequence",
+      "source": "fn main() -> unit {\n    let earlier = usize(3) + usize(5);\n    let middle = earlier - usize(2);\n    let later = middle + usize(9);\n    unit\n}\n",
+      "source_sha256": "f3d3d5b3d068e4521635a916defca11453762a6bb6a4c85ddd98875c7a0ddb35",
+      "expected": {
+        "source": "accept",
+        "check": "accept",
+        "public_owned": "authentic",
+        "c17": "issued",
+        "expected_value": {
+          "earlier": 8,
+          "middle": 6,
+          "later": 15
+        }
+      }
+    },
+    {
+      "id": "plus_existing",
+      "source": "fn main() -> unit {\n    let sum = usize(37) + usize(5);\n    unit\n}\n",
+      "source_sha256": "07b4e091573a7dc0ac94a4f2e3c31c4c77d7f885fb506281c1fe8b5632d9fe08",
+      "expected": {
+        "source": "accept",
+        "check": "accept",
+        "public_owned": "authentic",
+        "c17": "issued",
+        "expected_value": 42
+      }
+    },
+    {
+      "id": "plus_near_max",
+      "source": "fn main() -> unit {\n    let sum = usize(18446744073709551614) + usize(1);\n    unit\n}\n",
+      "source_sha256": "4acd44705d75efcb4855accb138af6beba7aa6b936d4f694083b9c6d8e565306",
+      "expected": {
+        "source": "accept",
+        "check": "accept",
+        "public_owned": "authentic",
+        "c17": "issued",
+        "expected_value": "18446744073709551615"
+      }
+    },
+    {
+      "id": "equality_existing",
+      "source": "fn main() -> unit {\n    let same = usize(9) == usize(9);\n    unit\n}\n",
+      "source_sha256": "40ff4bdffec5241058cc3279e95b1ed279aee02c6c027b26e459260eb9253a4c",
+      "expected": {
+        "source": "accept",
+        "check": "accept",
+        "public_owned": "authentic",
+        "c17": "issued",
+        "expected_value": true
+      }
+    },
+    {
+      "id": "underflow",
+      "source": "fn main() -> unit {\n    let difference = usize(5) - usize(17);\n    unit\n}\n",
+      "source_sha256": "12793976c7287e1e5806ff46cf196df13603179c724fdea35b537f0cfd71408e",
+      "expected": {
+        "source": "accept",
+        "check": "reject",
+        "public_owned": "none",
+        "c17": "none",
+        "expected_value": null
+      }
+    },
+    {
+      "id": "plus_overflow",
+      "source": "fn main() -> unit {\n    let sum = usize(18446744073709551615) + usize(1);\n    unit\n}\n",
+      "source_sha256": "7357f33aaf23adcf125963bb7efcbd8fa0869fa44d86d094e6e23999bf2e1153",
+      "expected": {
+        "source": "accept",
+        "check": "reject",
+        "public_owned": "none",
+        "c17": "none",
+        "expected_value": null
+      }
+    },
+    {
+      "id": "wrong_u8_type",
+      "source": "fn main() -> unit {\n    let difference = u8(8) - usize(2);\n    unit\n}\n",
+      "source_sha256": "66a58719df6397aaaaa24908ca1f2201c9638b0d73e41f08c381025e8c2e9e4c",
+      "expected": {
+        "source": "accept",
+        "check": "reject",
+        "public_owned": "none",
+        "c17": "none",
+        "expected_value": null
+      }
+    },
+    {
+      "id": "unknown_operand",
+      "source": "fn compute(n: usize) -> unit {\n    let difference = n - usize(1);\n    unit\n}\n\nfn main() -> unit {\n    let marker = usize(1);\n    unit\n}\n",
+      "source_sha256": "aa7dda7ff411dde32c6f516c4392ae5fcd4354bb2e8b381111f95c8af7fdfae6",
+      "expected": {
+        "source": "accept",
+        "check": "reject",
+        "public_owned": "none",
+        "c17": "none",
+        "expected_value": null
+      }
+    },
+    {
+      "id": "sub_chaining",
+      "source": "fn main() -> unit {\n    let difference = usize(8) - usize(2) - usize(1);\n    unit\n}\n",
+      "source_sha256": "cc286bcf5c642302c94aa3cc6c0b22425c0f5852f113d99af2868fc3599fa602",
+      "expected": {
+        "source": "reject",
+        "check": "not_reached",
+        "public_owned": "none",
+        "c17": "none",
+        "expected_value": null
+      }
+    },
+    {
+      "id": "mixed_op_chain",
+      "source": "fn main() -> unit {\n    let difference = usize(8) + usize(2) - usize(1);\n    unit\n}\n",
+      "source_sha256": "8877fd4e7f5afb4853a355568f61fb111d5b2074826d93dc14bb08cdbcc2bb29",
+      "expected": {
+        "source": "reject",
+        "check": "not_reached",
+        "public_owned": "none",
+        "c17": "none",
+        "expected_value": null
+      }
+    },
+    {
+      "id": "parenthesized",
+      "source": "fn main() -> unit {\n    let difference = (usize(8) - usize(2));\n    unit\n}\n",
+      "source_sha256": "52a45a405d891587a3d9b94e5c3c2ef6007051c908e491f37a34c2ea596e6580",
+      "expected": {
+        "source": "reject",
+        "check": "not_reached",
+        "public_owned": "none",
+        "c17": "none",
+        "expected_value": null
+      }
+    },
+    {
+      "id": "double_minus",
+      "source": "fn main() -> unit {\n    let difference = usize(9)--usize(2);\n    unit\n}\n",
+      "source_sha256": "f7b9821258cc70e0abd51e8c624878449c3d597b346bab63d8360a81194034a6",
+      "expected": {
+        "source": "reject",
+        "check": "not_reached",
+        "public_owned": "none",
+        "c17": "none",
+        "expected_value": null
+      }
+    },
+    {
+      "id": "minus_equals",
+      "source": "fn main() -> unit {\n    let difference = usize(9);\n    difference -= usize(2);\n    unit\n}\n",
+      "source_sha256": "5133b35de5261e43a139261a69f5c0d5aba3b39d240ebe79a8a96ee4f3702cad",
+      "expected": {
+        "source": "reject",
+        "check": "not_reached",
+        "public_owned": "none",
+        "c17": "none",
+        "expected_value": null
+      }
+    },
+    {
+      "id": "bare_operand",
+      "source": "fn main() -> unit {\n    let difference = 9 - usize(2);\n    unit\n}\n",
+      "source_sha256": "334f8051a13d48d5731dbb1218a71435afa9de0830affb43b9a5a9d9ccfaf985",
+      "expected": {
+        "source": "reject",
+        "check": "not_reached",
+        "public_owned": "none",
+        "c17": "none",
+        "expected_value": null
+      }
+    },
+    {
+      "id": "nested_call",
+      "source": "fn main() -> unit {\n    let difference = usize(9) - usize(usize(2));\n    unit\n}\n",
+      "source_sha256": "ace63a47b322eaacd4ceea061d2847cadced1724bcdb5426721e2d30be4a315f",
+      "expected": {
+        "source": "reject",
+        "check": "not_reached",
+        "public_owned": "none",
+        "c17": "none",
+        "expected_value": null
+      }
+    },
+    {
+      "id": "unselected_uintptr",
+      "source": "fn main() -> unit {\n    let difference = uintptr(9) - usize(2);\n    unit\n}\n",
+      "source_sha256": "36c23f0bd70e107d5a2cdb78a865fc00d501196c4cd338d0e5725711c07c4a61",
+      "expected": {
+        "source": "reject",
+        "check": "not_reached",
+        "public_owned": "none",
+        "c17": "none",
+        "expected_value": null
+      }
+    },
+    {
+      "id": "return_arrow",
+      "source": "fn main() -> unit {\n    let difference = usize(8) - usize(2);\n    unit\n}\n",
+      "source_sha256": "1caef0b018f1c50afcf0428c4360d8f83c1bb5425c0c719b291952884ae4be77",
+      "expected": {
+        "source": "accept",
+        "check": "accept",
+        "public_owned": "authentic",
+        "c17": "issued",
+        "expected_value": 6
+      }
+    }
+  ],
+  "hostile_families": [
+    "PLUS owned proof supplied to MINUS validator and vice versa, including zero/equal-number output, must reject",
+    "modified copied public expression view op or span/token/source children, swapped operands (including underflow), reject",
+    "foreign registered function/source context even same values, reject",
+    "false result, old ValueFacts/currentness/binding, value-id or occurrence, type/dependency/authority alteration, reject",
+    "issuer-owned corruption only when test-only receipt tamper feasible; NEVER infer issuer tamper from copied view",
+    "post-destruction proof retains genuine owned source under valid lifetime; no authority minting",
+    "original C17 guest L/R carriers compute subtraction in correct direction; independent live passive observer",
+    "wrong-op and reversed operand C17 mutants yield oracle failure",
+    "bounded fail-at-N in shared receipt/publication chain should leave sentinel and no partially issued artifact",
+    "missing/foreign receipt cannot emit C17 when public API exposes such negative"
+  ],
+  "stops": "STOP on actual soundness/foreign receipt acceptance/underflow acceptance/wrong math/partial emission or inability to obtain real registered owned receipt within budget. Inconclusive if harness blocked. Maximum 2 R-specific Actions attempts. First-pass verdict immutable. No P/PR599 implementation/results before verdict.",
+  "limits": "No universal soundness or ABI claims; sub_max requires actual 64-bit size_t. Product GO not implied.",
+  "note": "This is an independent first-pass pre-registration. Grammar-specific harness repair may not silently change source or expectation."
+}
