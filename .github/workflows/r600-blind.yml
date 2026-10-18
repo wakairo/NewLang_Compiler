@@ -31,7 +31,7 @@ jobs:
           test "$(git -C candidate rev-parse HEAD)" = "80f2ae3786a63235138408b35a2129a3b12afa33"
           test "$(git -C independent rev-parse HEAD)" = "bdd3799cc0c62a0a518dbc8899eee800d37fe04a"
           cd independent
-          git show 33e55283b7ff49a8ee77c832313004c29f2b081e:redteam/issue600/independent-frozen-oracles.json | sha256sum
+          test "$(sha256sum redteam/issue600/independent-frozen-oracles.json | cut -d ' ' -f1)" = "00b1a43574245edf48459c8f71e9369fa501d1b4bf9fc6838e0418057651b035"
           command -v gcc; command -v clang; command -v python3; command -v cmake
           gcc --version | head -n 1
           clang --version | head -n 1
