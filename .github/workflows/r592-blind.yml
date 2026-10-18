@@ -49,3 +49,8 @@ jobs:
             build-r592/libnewlang_diagnostic.a \
             -o build-r592/r592-public-proof
           build-r592/r592-public-proof
+      - name: NON-BLIND calibrated passive observation of original emitted guest operand carriers
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 redteam/evidence/r592/calibrated_native.py
