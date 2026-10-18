@@ -1,0 +1,59 @@
+name: R598 single targeted NON-BLIND trust probe
+on:
+  push:
+    branches:
+      - r598-targeted-evidence
+permissions:
+  contents: read
+jobs:
+  r598:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify exact frozen main parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "262f4bddb9055a6cf9067a639cbe44fa72b703a4"
+          sha256sum tests/r598/a.nl tests/r598/b.nl tests/r598/probe.c
+      - name: Build only frontend and independent probe, not FULL5
+        shell: bash
+        run: |
+          set -euo pipefail
+          CC=gcc cmake -S . -B build-r598 -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_FRONTEND_ONLY=ON -DBUILD_TESTING=OFF
+          cmake --build build-r598 --parallel 2
+          gcc -std=c17 -Wall -Wextra -Wpedantic -Werror -Iinclude -Isrc \
+            tests/r598/probe.c -o build-r598/r598_probe \
+            -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc \
+            -Wl,--start-group \
+            build-r598/libnewlang_checked_c_node.a \
+            build-r598/libnewlang_semantic.a build-r598/libnewlang_checked.a \
+            build-r598/libnewlang_parser.a build-r598/libnewlang_syntax.a \
+            build-r598/libnewlang_lexer.a build-r598/libnewlang_diagnostic.a \
+            build-r598/libnewlang_source.a -Wl,--end-group
+      - name: Independent same-numbers foreign context and bounded OOM oracle
+        shell: bash
+        run: |
+          set -euo pipefail
+          ./build-r598/r598_probe tests/r598/a.nl tests/r598/b.nl
+      - name: Tiny controls source/check and C17
+        shell: bash
+        run: |
+          set -euo pipefail
+          for source in tests/r598/a.nl tests/r598/b.nl; do
+            ./build-r598/newlangc --check "$source"
+            ./build-r598/newlangc "$source" > /tmp/r598.generated.c
+            test -s /tmp/r598.generated.c
+            grep -F ' + ' /tmp/r598.generated.c
+            gcc -std=c17 -Wall -Wextra -Werror -O0 /tmp/r598.generated.c -o /tmp/r598.guest
+            /tmp/r598.guest
+          done
+          if ./build-r598/newlangc --check tests/p589/overflow.nl > /tmp/r598.bad.out 2>/tmp/r598.bad.err; then exit 31; fi
+          grep -F USIZE-ADDITION-OVERFLOW /tmp/r598.bad.err
+          test ! -s /tmp/r598.bad.out
+          if ./build-r598/newlangc --check tests/p589/mixed_left.nl > /tmp/r598.bad.out 2>/tmp/r598.bad.err; then exit 32; fi
+          grep -F USIZE-ADDITION-TYPE /tmp/r598.bad.err
+          test ! -s /tmp/r598.bad.out
