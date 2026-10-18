@@ -1,0 +1,46 @@
+name: R601 Phase2 fixed-auth independent proof (opt-in branch)
+on:
+  push:
+    branches:
+      - r601-phase2-20261019
+    paths:
+      - '.github/workflows/r601-phase2.yml'
+      - 'tests/r601-phase2/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  r601-phase2-evidence:
+    name: R601 hosted preflight then strict independent public/native
+    runs-on: ubuntu-24.04
+    timeout-minutes: 38
+    steps:
+      - name: Checkout immutable R-owned evidence
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          path: evidence
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Checkout immutable adopted plus baseline
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          path: baseline
+          ref: 262f4bddb9055a6cf9067a639cbe44fa72b703a4
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Checkout immutable shared plus-minus candidate
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          path: candidate
+          ref: 80f2ae3786a63235138408b35a2129a3b12afa33
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Fixed SHA and digest fail-fast, strict C17/link/public/native checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          bash -n evidence/tests/r601-phase2/run.sh
+          bash evidence/tests/r601-phase2/run.sh

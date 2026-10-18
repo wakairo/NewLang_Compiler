@@ -1,0 +1,112 @@
+{
+  "phase": "R601-PHASE2",
+  "classification": "NON-BLIND calibrated independent predictions; source/expected frozen before Actions",
+  "baseline": "262f4bddb9055a6cf9067a639cbe44fa72b703a4",
+  "candidate": "80f2ae3786a63235138408b35a2129a3b12afa33",
+  "cases": {
+    "add_a": {
+      "numbers": [
+        37,
+        59
+      ],
+      "answer": 96,
+      "op": "+"
+    },
+    "add_b": {
+      "numbers": [
+        37,
+        59
+      ],
+      "answer": 96,
+      "op": "+"
+    },
+    "add_zero": {
+      "numbers": [
+        0,
+        0
+      ],
+      "answer": 0,
+      "op": "+"
+    },
+    "sub_a": {
+      "numbers": [
+        71,
+        9
+      ],
+      "answer": 62,
+      "op": "-"
+    },
+    "sub_b": {
+      "numbers": [
+        71,
+        9
+      ],
+      "answer": 62,
+      "op": "-"
+    },
+    "sub_zero": {
+      "numbers": [
+        21,
+        21
+      ],
+      "answer": 0,
+      "op": "-"
+    },
+    "sequence": {
+      "numbers": [
+        13,
+        5,
+        18,
+        7,
+        11,
+        3,
+        14
+      ],
+      "answers": [
+        18,
+        11,
+        14
+      ],
+      "ops": [
+        "+",
+        "-",
+        "+"
+      ]
+    },
+    "underflow": {
+      "numbers": [
+        2,
+        5
+      ],
+      "phase": "CHECK",
+      "diagnostic": "USIZE-SUBTRACTION-UNDERFLOW"
+    }
+  },
+  "public_oracle": {
+    "registered_after_input_AST_teardown": true,
+    "same_number_foreign_views": "REJECT_BOTH_DIRECTIONS",
+    "wrong_source_origin": "REJECT",
+    "wrong_numeric_fact_and_binding": "REJECT",
+    "wrong_operation_even_zero": "REJECT",
+    "real_owned_receipt_corruption": "REJECT_AND_RESTORE",
+    "normal_backend_invalid_checked": "REJECT_AND_RESTORE",
+    "value_root_authority": 0
+  },
+  "native_oracle": {
+    "toolchains": [
+      "gcc",
+      "clang"
+    ],
+    "opt": [
+      "-O0",
+      "-O2"
+    ],
+    "original_guest_carriers": "OBSERVE",
+    "mutants": [
+      "wrong_result",
+      "wrong_operator"
+    ]
+  },
+  "oom": "NOT_RUN unless independent legal allocator gate built; do not borrow P selftests",
+  "emitter_stream_oom": "NOT_RUN"
+}
