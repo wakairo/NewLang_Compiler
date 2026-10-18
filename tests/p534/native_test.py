@@ -91,7 +91,7 @@ def main():
         file=directory/(name+'.nl')
         require(hashlib.sha256(file.read_bytes()).hexdigest()==case['sha256'],'frozen source changed')
         default=run([regular,'--check',str(file)])
-        require(default.returncode==3 and 'P5-EXPRESSION-UNSUPPORTED' in default.stderr and not default.stdout,'default-OFF source isolation failed')
+        require(default.returncode==3 and 'REC-TYPE-PROFILE' in default.stderr and not default.stdout,'default-OFF source isolation failed')
         if name=='original': continue
         for args in [['--check'],[]]:
             neg=run([compiler,*args,str(file)])

@@ -159,6 +159,21 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:p534_semantic_gate>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541" "${NEWLANG_SANITIZER}")
 
+    add_executable(p603_public_probe tests/p603/public_probe.c)
+    target_link_libraries(p603_public_probe PRIVATE newlang_semantic)
+    add_executable(p603_gate_probe tests/p603/gate_probe.c)
+    target_link_libraries(p603_gate_probe PRIVATE newlang_checked_c_node newlang_semantic)
+    add_executable(p603_comparison_test tests/p603/comparison_test.c)
+    target_link_libraries(p603_comparison_test PRIVATE newlang_semantic)
+    target_link_options(p603_comparison_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+    foreach(group parser values rollback oom)
+        add_test(NAME p603_comparison_${group}.unit COMMAND p603_comparison_test ${group})
+    endforeach()
+    add_test(NAME p603_comparison_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p603/integration_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p603_public_probe>"
+        "$<TARGET_FILE:p603_gate_probe>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p603" "${NEWLANG_SANITIZER}")
     add_executable(p504_public_probe tests/p504/public_probe.c)
     target_link_libraries(p504_public_probe PRIVATE newlang_semantic)
     add_executable(p504_gate_probe tests/p504/gate_probe.c)

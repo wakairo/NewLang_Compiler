@@ -292,7 +292,10 @@ static bool boolean_scalar_at(const NLCheckedFragment *f, NLCheckedNodeId id,
             return false;
         expected = value.scalar_value;
         first = false;
-        if (v->kind == NL_CHECKED_USIZE_EQUALITY) {
+        if (v->kind == NL_CHECKED_USIZE_EQUALITY ||
+            v->kind == NL_CHECKED_USIZE_LESS_THAN) {
+            const bool less = v->kind == NL_CHECKED_USIZE_LESS_THAN;
+            NLSourceView op;
             const NLCheckedNodeView *left =
                 nl_checked_node_view(f, v->first_argument);
             const NLCheckedNodeView *right =
@@ -305,7 +308,10 @@ static bool boolean_scalar_at(const NLCheckedFragment *f, NLCheckedNodeId id,
                 v->span.start_byte != left->span.start_byte ||
                 v->span.end_byte != right->span.end_byte ||
                 v->name.end_byte < v->name.start_byte ||
-                v->name.end_byte - v->name.start_byte != 2 ||
+                v->name.end_byte - v->name.start_byte != (less ? 1U : 2U) ||
+                !nl_source_view(nl_checked_source(f), v->name, &op) ||
+                op.length != (less ? 1U : 2U) ||
+                memcmp(op.bytes, less ? "<" : "==", op.length) != 0 ||
                 left->span.end_byte > v->name.start_byte ||
                 v->name.end_byte > right->span.start_byte ||
                 !bool_quantity_origin(f, v->first_argument, p) ||
@@ -318,8 +324,10 @@ static bool boolean_scalar_at(const NLCheckedFragment *f, NLCheckedNodeId id,
                 v->scalar_result.type != boolean ||
                 v->scalar_result.value != expected)
                 return false;
-            /* Consistency validation only. Emission below uses lhs == rhs. */
-            return expected == (a.scalar_value == b.scalar_value ? 1U : 0U);
+            /* Consistency only; emit the original guest operands below. */
+            const bool truth = less ? a.scalar_value < b.scalar_value
+                                    : a.scalar_value == b.scalar_value;
+            return expected == (size_t)truth;
         }
         if (v->kind != NL_CHECKED_IDENTIFIER || v->symbol == 0 ||
             v->value_use != NL_VALUE_COPIED)
@@ -825,6 +833,7 @@ static bool emit_quantity_bool(FILE *stream, const NLCheckedFragment *f,
                                const NLCheckedNodeView *value)
 {
     if (value->kind != NL_CHECKED_USIZE_EQUALITY &&
+        value->kind != NL_CHECKED_USIZE_LESS_THAN &&
         value->kind != NL_CHECKED_USIZE_ADDITION)
         return v1_emit_scalar(stream, value);
     const NLCheckedNodeView *left =
@@ -832,7 +841,9 @@ static bool emit_quantity_bool(FILE *stream, const NLCheckedFragment *f,
     const NLCheckedNodeView *right =
         nl_checked_node_view(f, left->next_argument);
     return fputc('(', stream) != EOF && v1_emit_scalar(stream, left) &&
-           fputs(value->kind == NL_CHECKED_USIZE_ADDITION ? " + " : " == ",
+           fputs(value->kind == NL_CHECKED_USIZE_ADDITION    ? " + "
+                 : value->kind == NL_CHECKED_USIZE_LESS_THAN ? " < "
+                                                             : " == ",
                  stream) >= 0 &&
            v1_emit_scalar(stream, right) && fputc(')', stream) != EOF;
 }
@@ -1503,6 +1514,7 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
     case NL_CHECKED_USIZE_LITERAL:
     case NL_CHECKED_USIZE_ADDITION:
     case NL_CHECKED_USIZE_EQUALITY:
+    case NL_CHECKED_USIZE_LESS_THAN:
     case NL_CHECKED_IDENTIFIER:
         return v1_scalar(fragment, id, program) ||
                quantity_scalar(fragment, id, program) ||
@@ -1747,6 +1759,7 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     case NL_CHECKED_USIZE_LITERAL:
     case NL_CHECKED_USIZE_ADDITION:
     case NL_CHECKED_USIZE_EQUALITY:
+    case NL_CHECKED_USIZE_LESS_THAN:
     case NL_CHECKED_IDENTIFIER:
     case NL_CHECKED_PTR_FROM_REF:
         return v0_indent(stream, depth) && fputs("(void)", stream) >= 0 &&

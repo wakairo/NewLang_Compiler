@@ -1,0 +1,482 @@
+{
+  "compiler_commit": "262f4bddb9055a6cf9067a639cbe44fa72b703a4",
+  "binary_sha256": "61da383935e85e5f6f39a74c5094c2830496daa5f865131595a49b03adcd50a4",
+  "cases": {
+    "literal_true.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/literal_true.nl:1:39-1:40: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/literal_true.nl:1:39-1:40: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "literal_false.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/literal_false.nl:1:39-1:40: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/literal_false.nl:1:39-1:40: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "equal_false.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/equal_false.nl:1:39-1:40: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/equal_false.nl:1:39-1:40: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "zero.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/zero.nl:1:39-1:40: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/zero.nl:1:39-1:40: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "max_true.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/max_true.nl:1:39-1:40: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/max_true.nl:1:39-1:40: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "max_false.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/max_false.nl:1:58-1:59: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/max_false.nl:1:58-1:59: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "max_equal.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/max_equal.nl:1:58-1:59: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/max_equal.nl:1:58-1:59: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "named_true.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/named_true.nl:1:111-1:112: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/named_true.nl:1:111-1:112: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "named_equal.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/named_equal.nl:1:93-1:94: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/named_equal.nl:1:93-1:94: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "wrong_type.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/wrong_type.nl:1:34-1:35: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/wrong_type.nl:1:34-1:35: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "uintptr.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/uintptr.nl:1:39-1:40: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/uintptr.nl:1:39-1:40: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "unknown.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/unknown.nl:1:37-1:38: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/unknown.nl:1:37-1:38: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "false_authority.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/false_authority.nl:1:34-1:35: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/false_authority.nl:1:34-1:35: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "pointer.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/pointer.nl:1:81-1:82: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/pointer.nl:1:81-1:82: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "chain.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/chain.nl:1:29-1:30: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/chain.nl:1:29-1:30: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "le.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/le.nl:1:36-1:37: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/le.nl:1:36-1:37: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "gt.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/gt.nl:1:36-1:37: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/gt.nl:1:36-1:37: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "nested.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/nested.nl:1:36-1:37: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/nested.nl:1:36-1:37: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "parenthesized.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/parenthesized.nl:1:28-1:29: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/parenthesized.nl:1:28-1:29: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "mixed_plus_left.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/mixed_plus_left.nl:1:45-1:46: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/mixed_plus_left.nl:1:45-1:46: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "mixed_plus_right.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/mixed_plus_right.nl:1:36-1:37: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/mixed_plus_right.nl:1:36-1:37: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "mixed_equal.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/mixed_equal.nl:1:36-1:37: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/mixed_equal.nl:1:36-1:37: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "call.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/call.nl:1:35-1:36: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/call.nl:1:35-1:36: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "loan.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/loan.nl:1:52-1:53: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/loan.nl:1:52-1:53: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "field.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/field.nl:1:34-1:35: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/field.nl:1:34-1:35: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "unary.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/unary.nl:1:28-1:29: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/unary.nl:1:28-1:29: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "bare.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p603/bare.nl:1:28-1:29: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p603/bare.nl:1:28-1:29: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "tests/p504/equal_true.nl": {
+      "check": {
+        "exit": 0,
+        "diagnostic": "",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 0,
+        "diagnostic": "",
+        "bytes": 780,
+        "sha256": "aeaa84b706c9e72eb0f8134664f5c2bb66d5c494c95f976a412738c28909b7fd"
+      }
+    },
+    "tests/p504/equal_false.nl": {
+      "check": {
+        "exit": 0,
+        "diagnostic": "",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 0,
+        "diagnostic": "",
+        "bytes": 780,
+        "sha256": "bd559dca09a8114e7e05bfa421aac621133e715863e71f3dcaddcd1ab57ab966"
+      }
+    },
+    "tests/p504/wrong_type.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p504/wrong_type.nl:4:14-4:16: error(semantic)[USIZE-EQUALITY-TYPE]: == requires two exact core usize operands\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p504/wrong_type.nl:4:14-4:16: error(semantic)[USIZE-EQUALITY-TYPE]: == requires two exact core usize operands\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "tests/p504/unknown.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p504/unknown.nl:1:33-1:35: error(precision)[USIZE-EQUALITY-PRECISION]: equality needs known dependency-free quantity operands in this profile\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p504/unknown.nl:1:33-1:35: error(precision)[USIZE-EQUALITY-PRECISION]: equality needs known dependency-free quantity operands in this profile\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "tests/p589/names.nl": {
+      "check": {
+        "exit": 0,
+        "diagnostic": "",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 0,
+        "diagnostic": "",
+        "bytes": 780,
+        "sha256": "809bc7fee9bd315ff02852009be5eb6e12b27a0e4638468156bd2b4f9d879fb6"
+      }
+    },
+    "tests/p589/literals.nl": {
+      "check": {
+        "exit": 0,
+        "diagnostic": "",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 0,
+        "diagnostic": "",
+        "bytes": 652,
+        "sha256": "63b162dbfa40796b8d7f2ed31c099b9944097efd756d3bb97c57d17f92305798"
+      }
+    },
+    "tests/p589/overflow.nl": {
+      "check": {
+        "exit": 3,
+        "diagnostic": "tests/p589/overflow.nl:1:54-1:55: error(semantic)[USIZE-ADDITION-OVERFLOW]: mathematical usize sum is outside target range\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "diagnostic": "tests/p589/overflow.nl:1:54-1:55: error(semantic)[USIZE-ADDITION-OVERFLOW]: mathematical usize sum is outside target range\n",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  }
+}
