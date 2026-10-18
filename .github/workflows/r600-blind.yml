@@ -1,0 +1,49 @@
+name: R600 isolated blind first pass (NO LLVM)
+on:
+  push:
+    branches:
+      - r/issue-600-independent-blind-20261018
+    paths:
+      - .github/workflows/r600-blind.yml
+permissions:
+  contents: read
+jobs:
+  r600-blind-first-pass:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out exact frozen candidate, not PR branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: 80f2ae3786a63235138408b35a2129a3b12afa33
+          persist-credentials: false
+          path: candidate
+      - name: Check out committed independent source/oracle and runner
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: bdd3799cc0c62a0a518dbc8899eee800d37fe04a
+          persist-credentials: false
+          path: independent
+      - name: Verify authority and R-owned evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C candidate rev-parse HEAD)" = "80f2ae3786a63235138408b35a2129a3b12afa33"
+          test "$(git -C independent rev-parse HEAD)" = "bdd3799cc0c62a0a518dbc8899eee800d37fe04a"
+          cd independent
+          git show 33e55283b7ff49a8ee77c832313004c29f2b081e:redteam/issue600/independent-frozen-oracles.json | sha256sum
+          command -v gcc; command -v clang; command -v python3; command -v cmake
+          gcc --version | head -n 1
+          clang --version | head -n 1
+      - name: Build Production candidate frontend exactly at frozen SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          cmake -S candidate -B candidate/build-r600 -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_FRONTEND_ONLY=ON
+          cmake --build candidate/build-r600 --parallel 2
+      - name: Execute frozen independent source-CHECK-C17/native tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 independent/redteam/issue600/first_pass.py \
+            independent/redteam/issue600 candidate/build-r600/newlangc
