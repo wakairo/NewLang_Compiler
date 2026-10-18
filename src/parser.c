@@ -1441,7 +1441,7 @@ static NLSyntaxNode *source_primary(NLParser *parser, bool flat_atom)
     }
     if (peek(parser) && expression_extension(parser) && !punct(parser, ';') &&
         !punct(parser, '=') &&
-        !(flat_atom && punct(parser, '+') &&
+        !(flat_atom && (punct(parser, '+') || punct(parser, '-')) &&
           result->view.kind == NL_SYNTAX_EXPR_NAME) &&
         !(parser->match_scrutinee && punct(parser, '{'))) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,
@@ -1459,42 +1459,49 @@ static bool equality_operand(const NLSyntaxNode *operand)
            kind == NL_SYNTAX_USIZE_LITERAL;
 }
 
-/* C587: one flat + OR the existing ==, not a precedence grammar.
+/* C587/C593: one flat + OR - OR the existing ==, no precedence grammar.
  * Compound operands and chaining remain unsupported source profiles. */
 static NLSyntaxNode *source_expression(NLParser *parser)
 {
     NLSyntaxNode *left = source_primary(parser, true);
-    if (left == NULL || (!punct(parser, '=') && !punct(parser, '+')))
+    if (left == NULL ||
+        (!punct(parser, '=') && !punct(parser, '+') && !punct(parser, '-')))
         return left;
     const bool addition = punct(parser, '+');
+    const bool subtraction = punct(parser, '-');
+    const bool arithmetic = addition || subtraction;
     const NLSourceSpan first = parser->token.span;
     consume(parser);
-    if (!addition && (!punct(parser, '=') ||
-                      parser->token.span.start_byte != first.end_byte)) {
+    if (!arithmetic && (!punct(parser, '=') ||
+                        parser->token.span.start_byte != first.end_byte)) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, first,
              "P5-EXPRESSION-UNSUPPORTED",
              "expected one contiguous == operator");
         return NULL;
     }
-    const NLSourceSpan operator_span = {first.start_byte,
-                                        addition ? first.end_byte
-                                                 : parser->token.span.end_byte};
-    if (!addition)
+    const NLSourceSpan operator_span = {
+        first.start_byte,
+        arithmetic ? first.end_byte : parser->token.span.end_byte};
+    if (!arithmetic)
         consume(parser);
     NLSyntaxNode *right = source_primary(parser, true);
     if (right == NULL)
         return NULL;
     if (!equality_operand(left) || !equality_operand(right) ||
-        (punct(parser, '=') || punct(parser, '+'))) {
+        (punct(parser, '=') || punct(parser, '+') || punct(parser, '-'))) {
         fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, operator_span,
-             addition ? "USIZE-ADDITION-SOURCE-PRECISION"
-                      : "USIZE-EQUALITY-SOURCE-PRECISION",
+             subtraction ? "USIZE-SUBTRACTION-SOURCE-PRECISION"
+             : addition  ? "USIZE-ADDITION-SOURCE-PRECISION"
+                         : "USIZE-EQUALITY-SOURCE-PRECISION",
              "only one flat binary operation of names or typed literals is "
              "supported");
         return NULL;
     }
     NLSyntaxNode *result = node(
-        parser, addition ? NL_SYNTAX_USIZE_ADDITION : NL_SYNTAX_USIZE_EQUALITY,
+        parser,
+        subtraction ? NL_SYNTAX_USIZE_SUBTRACTION
+        : addition  ? NL_SYNTAX_USIZE_ADDITION
+                    : NL_SYNTAX_USIZE_EQUALITY,
         (NLSourceSpan){left->view.span.start_byte, right->view.span.end_byte});
     if (result != NULL) {
         result->view.data.equality.left = left;

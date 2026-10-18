@@ -125,9 +125,9 @@ typedef struct NLArray4Capture {
     struct NLArray4Construction *issued;
     struct NLArray4Capture *next;
 } NLArray4Capture;
-NLCheckStatus nl_usize_addition_capture(NLCheckedFragment *, NLCheckedNodeId,
-                                        const NLSyntaxNode *,
-                                        const NLSemanticContext *);
+NLCheckStatus nl_usize_arithmetic_capture(NLCheckedFragment *, NLCheckedNodeId,
+                                          const NLSyntaxNode *,
+                                          const NLSemanticContext *);
 struct NLCheckedFragment {
     struct NLUsizeAdditionProof *usize_additions;
     void (*destroy_usize_additions)(NLCheckedFragment *);

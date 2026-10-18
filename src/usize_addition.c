@@ -1,4 +1,5 @@
 #include "newlang/usize_addition.h"
+#include "newlang/usize_subtraction.h"
 #include "semantic_internal.h"
 #include "syntax_internal.h"
 
@@ -6,10 +7,30 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Exactly two selected operators; private metadata never reinterprets the
+ * public addition .sum as a difference. Both wrappers use this single core. */
+typedef enum {
+    NL_USIZE_ADD,
+    NL_USIZE_SUBTRACT
+} NLUsizeOperation;
+typedef struct {
+    const NLCheckedFragment *origin;
+    NLCheckedNodeId node, operands[2];
+    NLTypeId type;
+    NLValueId values[2], result;
+    NLSymbolId symbols[2];
+    NLPlaceId places[2];
+    NLIncarnationId incarnations[2];
+    NLValueFactId facts[2];
+    NLSourceSpan span, operator_span, operand_spans[2];
+    size_t numbers[2], answer;
+} NLUsizeArithmeticView;
+
 /* One small immutable receipt per source operation; no world clone, hidden
  * authority registry, or alternate arithmetic interpreter. */
 typedef struct NLUsizeAdditionProof {
-    NLUsizeAdditionView issued;
+    NLUsizeArithmeticView issued;
+    NLUsizeOperation operation;
     const NLSyntaxNode *syntax;
     const NLSemanticContext *context;
     NLValueId binding_values[2];
@@ -47,30 +68,34 @@ static void destroy(NLCheckedFragment *f)
     }
 }
 
-NLCheckStatus nl_usize_addition_capture(NLCheckedFragment *f,
-                                        NLCheckedNodeId id,
-                                        const NLSyntaxNode *syntax,
-                                        const NLSemanticContext *working)
+NLCheckStatus nl_usize_arithmetic_capture(NLCheckedFragment *f,
+                                          NLCheckedNodeId id,
+                                          const NLSyntaxNode *syntax,
+                                          const NLSemanticContext *working)
 {
     const NLCheckedNodeView *n = nl_checked_node_view(f, id);
-    if (!f || !n || !syntax || n->kind != NL_CHECKED_USIZE_ADDITION)
+    if (!f || !n || !syntax ||
+        (n->kind != NL_CHECKED_USIZE_ADDITION &&
+         n->kind != NL_CHECKED_USIZE_SUBTRACTION))
         return NL_CHECK_INTERNAL_ERROR;
     NLUsizeAdditionProof *p = calloc(1, sizeof(*p));
     if (!p)
         return NL_CHECK_OUT_OF_MEMORY;
+    p->operation =
+        n->kind == NL_CHECKED_USIZE_ADDITION ? NL_USIZE_ADD : NL_USIZE_SUBTRACT;
     p->syntax = syntax;
     /* f->context is the publication destination; CHECK still operates on its
      * transaction clone. Read current facts from working, qualify saved IDs by
      * the destination that receives those exact tables only on commit. */
     p->context = f->context;
-    NLUsizeAdditionView *v = &p->issued;
-    *v = (NLUsizeAdditionView){.origin = f,
-                               .node = id,
-                               .type = n->type,
-                               .result = n->results[0].value,
-                               .span = n->span,
-                               .operator_span = n->name,
-                               .sum = n->scalar_result.value};
+    NLUsizeArithmeticView *v = &p->issued;
+    *v = (NLUsizeArithmeticView){.origin = f,
+                                 .node = id,
+                                 .type = n->type,
+                                 .result = n->results[0].value,
+                                 .span = n->span,
+                                 .operator_span = n->name,
+                                 .answer = n->scalar_result.value};
     v->operands[0] = n->first_argument;
     for (size_t i = 0; i < 2; ++i) {
         const NLCheckedNodeView *a = nl_checked_node_view(f, v->operands[i]);
@@ -122,21 +147,10 @@ static const NLUsizeAdditionProof *find(const NLCheckedFragment *f,
     return NULL;
 }
 
-bool nl_checked_usize_addition_view(const NLCheckedFragment *f,
-                                    NLCheckedNodeId id,
-                                    NLUsizeAdditionView *out)
-{
-    const NLUsizeAdditionProof *p = find(f, id);
-    if (!p || !out)
-        return false;
-    *out = p->issued;
-    return true;
-}
-
-static bool same(const NLUsizeAdditionView *a, const NLUsizeAdditionView *b)
+static bool same(const NLUsizeArithmeticView *a, const NLUsizeArithmeticView *b)
 {
     if (a->origin != b->origin || a->node != b->node || a->type != b->type ||
-        a->result != b->result || a->sum != b->sum ||
+        a->result != b->result || a->answer != b->answer ||
         !span_equal(a->span, b->span) ||
         !span_equal(a->operator_span, b->operator_span))
         return false;
@@ -158,14 +172,24 @@ static bool token(const NLSource *s, NLSourceSpan span, const char *text)
            memcmp(bytes.bytes, text, bytes.length) == 0;
 }
 
-bool nl_checked_usize_addition_valid(const NLCheckedFragment *f,
-                                     NLCheckedNodeId id,
-                                     const NLUsizeAdditionView *candidate)
+static bool arithmetic_result(NLUsizeOperation operation, size_t lhs,
+                              size_t rhs, size_t answer)
+{
+    if (operation == NL_USIZE_ADD)
+        return rhs <= SIZE_MAX - lhs && answer == lhs + rhs;
+    if (operation == NL_USIZE_SUBTRACT)
+        return lhs >= rhs && answer == lhs - rhs;
+    return false;
+}
+
+static bool arithmetic_valid(const NLCheckedFragment *f, NLCheckedNodeId id,
+                             NLUsizeOperation operation,
+                             const NLUsizeArithmeticView *candidate)
 {
     const NLUsizeAdditionProof *p = find(f, id);
-    if (!p || !f->body_owner || f->source != f->body_owner->source ||
-        p->context != f->context || p->issued.origin != f ||
-        (candidate && !same(candidate, &p->issued)))
+    if (!p || p->operation != operation || !f->body_owner ||
+        f->source != f->body_owner->source || p->context != f->context ||
+        p->issued.origin != f || (candidate && !same(candidate, &p->issued)))
         return false;
     bool registered = false, retained = false;
     for (size_t i = 0; i < f->context->function_count; ++i)
@@ -178,14 +202,19 @@ bool nl_checked_usize_addition_valid(const NLCheckedFragment *f,
             retained = true;
     if (!registered || !retained || nl_sem_validate(f->context) != NL_CHECK_OK)
         return false;
-    const NLUsizeAdditionView *v = &p->issued;
+    const NLUsizeArithmeticView *v = &p->issued;
     const NLSyntaxView *s = nl_syntax_node_view(p->syntax);
     const NLCheckedNodeView *n = nl_checked_node_view(f, id);
     NLSemanticTypeView t;
     if (v->type != nl_semantic_core_type(f->context, NL_TYPE_USIZE) ||
         !nl_semantic_type_view(f->context, v->type, &t) || !t.is_copy ||
-        t.kind != NL_TYPE_USIZE || s->kind != NL_SYNTAX_USIZE_ADDITION || !n ||
-        n->kind != NL_CHECKED_USIZE_ADDITION || n->terminates ||
+        t.kind != NL_TYPE_USIZE ||
+        s->kind != (operation == NL_USIZE_ADD ? NL_SYNTAX_USIZE_ADDITION
+                                              : NL_SYNTAX_USIZE_SUBTRACTION) ||
+        !n ||
+        n->kind != (operation == NL_USIZE_ADD ? NL_CHECKED_USIZE_ADDITION
+                                              : NL_CHECKED_USIZE_SUBTRACTION) ||
+        n->terminates ||
         !span_equal(v->span, (NLSourceSpan){v->operand_spans[0].start_byte,
                                             v->operand_spans[1].end_byte}) ||
         v->operand_spans[0].end_byte > v->operator_span.start_byte ||
@@ -196,13 +225,14 @@ bool nl_checked_usize_addition_valid(const NLCheckedFragment *f,
         !span_equal(s->span, v->span) ||
         !span_equal(n->name, v->operator_span) ||
         !span_equal(s->data.equality.operator_span, v->operator_span) ||
-        !token(f->source, v->operator_span, "+") ||
+        !token(f->source, v->operator_span,
+               operation == NL_USIZE_ADD ? "+" : "-") ||
         n->value_use != NL_VALUE_USE_NONE || !n->has_scalar_result ||
         !n->scalar_result.known || n->scalar_result.type != v->type ||
-        n->scalar_result.value != v->sum ||
-        v->numbers[1] > SIZE_MAX - v->numbers[0] ||
-        v->sum != v->numbers[0] + v->numbers[1] ||
-        !plain(f->context, v->result, v->type, v->sum))
+        n->scalar_result.value != v->answer ||
+        !arithmetic_result(operation, v->numbers[0], v->numbers[1],
+                           v->answer) ||
+        !plain(f->context, v->result, v->type, v->answer))
         return false;
     const NLSyntaxNode *atoms[] = {s->data.equality.left,
                                    s->data.equality.right};
@@ -268,3 +298,76 @@ bool nl_checked_usize_addition_valid(const NLCheckedFragment *f,
     }
     return true;
 }
+
+/* Conversion only: no public layout casts, union punning or API migration.
+ * Arguments are plain local lvalues. Numeric result fields are deliberately
+ * excluded; each wrapper maps .sum OR .difference explicitly. */
+#define COPY_METADATA(out, in)                                                 \
+    do {                                                                       \
+        (out).origin = (in).origin;                                            \
+        (out).node = (in).node;                                                \
+        (out).type = (in).type;                                                \
+        (out).result = (in).result;                                            \
+        (out).span = (in).span;                                                \
+        (out).operator_span = (in).operator_span;                              \
+        for (size_t i = 0; i < 2; ++i) {                                       \
+            (out).operands[i] = (in).operands[i];                              \
+            (out).values[i] = (in).values[i];                                  \
+            (out).symbols[i] = (in).symbols[i];                                \
+            (out).places[i] = (in).places[i];                                  \
+            (out).incarnations[i] = (in).incarnations[i];                      \
+            (out).facts[i] = (in).facts[i];                                    \
+            (out).operand_spans[i] = (in).operand_spans[i];                    \
+            (out).numbers[i] = (in).numbers[i];                                \
+        }                                                                      \
+    } while (0)
+
+bool nl_checked_usize_addition_view(const NLCheckedFragment *f,
+                                    NLCheckedNodeId id,
+                                    NLUsizeAdditionView *out)
+{
+    const NLUsizeAdditionProof *p = find(f, id);
+    if (!p || p->operation != NL_USIZE_ADD || !out)
+        return false;
+    NLUsizeAdditionView v = {0};
+    COPY_METADATA(v, p->issued);
+    v.sum = p->issued.answer;
+    *out = v;
+    return true;
+}
+bool nl_checked_usize_addition_valid(const NLCheckedFragment *f,
+                                     NLCheckedNodeId id,
+                                     const NLUsizeAdditionView *candidate)
+{
+    if (!candidate)
+        return arithmetic_valid(f, id, NL_USIZE_ADD, NULL);
+    NLUsizeArithmeticView v = {0};
+    COPY_METADATA(v, *candidate);
+    v.answer = candidate->sum;
+    return arithmetic_valid(f, id, NL_USIZE_ADD, &v);
+}
+bool nl_checked_usize_subtraction_view(const NLCheckedFragment *f,
+                                       NLCheckedNodeId id,
+                                       NLUsizeSubtractionView *out)
+{
+    const NLUsizeAdditionProof *p = find(f, id);
+    if (!p || p->operation != NL_USIZE_SUBTRACT || !out)
+        return false;
+    NLUsizeSubtractionView v = {0};
+    COPY_METADATA(v, p->issued);
+    v.difference = p->issued.answer;
+    *out = v;
+    return true;
+}
+bool nl_checked_usize_subtraction_valid(const NLCheckedFragment *f,
+                                        NLCheckedNodeId id,
+                                        const NLUsizeSubtractionView *candidate)
+{
+    if (!candidate)
+        return arithmetic_valid(f, id, NL_USIZE_SUBTRACT, NULL);
+    NLUsizeArithmeticView v = {0};
+    COPY_METADATA(v, *candidate);
+    v.answer = candidate->difference;
+    return arithmetic_valid(f, id, NL_USIZE_SUBTRACT, &v);
+}
+#undef COPY_METADATA

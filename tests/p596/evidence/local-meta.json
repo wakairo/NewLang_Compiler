@@ -1,0 +1,24 @@
+{
+  "base": "fdae44e62e39bc521fc4bcab70909d4d7e1d6155",
+  "post_merge_push": [
+    {
+      "id": 39116344227,
+      "workflow": "FULL5",
+      "conclusion": "success",
+      "attempt": 1
+    },
+    {
+      "id": 39116344177,
+      "workflow": "PARTIAL",
+      "conclusion": "success",
+      "attempt": 1
+    }
+  ],
+  "gcc": "gcc (Debian 14.2.0-19) 14.2.0",
+  "receipt_bytes": 264,
+  "previous_receipt_bytes": 256,
+  "fragment_bytes": 552,
+  "fragment_growth": 0,
+  "plus_view_bytes": 216,
+  "minus_view_bytes": 216
+}

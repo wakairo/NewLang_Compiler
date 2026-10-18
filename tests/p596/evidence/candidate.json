@@ -1,0 +1,422 @@
+[
+  {
+    "source": "literals",
+    "source_sha256": "699313cfb34e439edc3ddca2e4dbf5984b55b93d2972dfe9ca186d06b0d0ea6a",
+    "check": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 652
+    }
+  },
+  {
+    "source": "names",
+    "source_sha256": "41aee60f45a1f1760a606c467ca22ecbcba4f103d9dcfc82c6907460a11385ad",
+    "check": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 782
+    }
+  },
+  {
+    "source": "zero",
+    "source_sha256": "4d52d87b2b61041a82e942cd1cdc266997541704ad3175758114bcd8da3bc764",
+    "check": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 652
+    }
+  },
+  {
+    "source": "max",
+    "source_sha256": "aa874fd0e586d2b3538d96aeb5142b2cca31ec91b96b882e54eae663a3c5d0d8",
+    "check": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 671
+    }
+  },
+  {
+    "source": "max_self",
+    "source_sha256": "11b4f224fe6d896162e14c5681b289402d3f66737195529aec8836555398e0b0",
+    "check": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 690
+    }
+  },
+  {
+    "source": "copy",
+    "source_sha256": "c88e81cf173c3e03186c1cc6e44fc98417139f12006054ee7e160594be1171c1",
+    "check": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 846
+    }
+  },
+  {
+    "source": "consumer",
+    "source_sha256": "b12b28825bfbe3341ef89d8f06191aa56ba1081cd2bce7495947f9de86ee5c1e",
+    "check": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 743
+    }
+  },
+  {
+    "source": "underflow",
+    "source_sha256": "82f5a59050bf4607fc09914113421c26b3a3f1d2ba3b31861c5c7f461489797a",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/underflow.nl:1:35-1:36: error(semantic)[USIZE-SUBTRACTION-UNDERFLOW]: mathematical usize difference is outside target range\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/underflow.nl:1:35-1:36: error(semantic)[USIZE-SUBTRACTION-UNDERFLOW]: mathematical usize difference is outside target range\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "reversed",
+    "source_sha256": "94f81fb099bffd51748c10d3028309ccec4892b9bfb3fdd583b56e80b9b1bb2a",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/reversed.nl:1:35-1:36: error(semantic)[USIZE-SUBTRACTION-UNDERFLOW]: mathematical usize difference is outside target range\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/reversed.nl:1:35-1:36: error(semantic)[USIZE-SUBTRACTION-UNDERFLOW]: mathematical usize difference is outside target range\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "range",
+    "source_sha256": "5726c594bc6ac821f95a45070869c14e8b5b340d6648b3ccd4747c11aa73546e",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/range.nl:1:27-1:54: error(semantic)[USIZE-LITERAL-RANGE]: usize literal is outside native target range\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/range.nl:1:27-1:54: error(semantic)[USIZE-LITERAL-RANGE]: usize literal is outside native target range\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "mixed_type",
+    "source_sha256": "1025ff743eb7c5349759b35d6df6d9d232a7c22855cfeb754e51dd95b63518c8",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/mixed_type.nl:1:32-1:33: error(semantic)[USIZE-SUBTRACTION-TYPE]: - requires two exact core usize operands\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/mixed_type.nl:1:32-1:33: error(semantic)[USIZE-SUBTRACTION-TYPE]: - requires two exact core usize operands\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "unknown",
+    "source_sha256": "8c63fd8a49bdf3a5ee68313245cc6779de6ddc269eb2a8a45f65781b4fdd9cac",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/unknown.nl:1:29-1:30: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/unknown.nl:1:29-1:30: error(precision)[USIZE-SUBTRACTION-PRECISION]: subtraction needs known dependency-free quantity operands in this profile\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "authority",
+    "source_sha256": "e207003ac1e289cf5ad9c2b5b9b97e08987b976cc57a74da8d42ac5858748ee8",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/authority.nl:1:53-1:58: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ref<write,T>\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/authority.nl:1:53-1:58: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ref<write,T>\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "chain",
+    "source_sha256": "1a9ccaaeea7e8109de70b1246af02fe477781f5ba48ef8b475dc38896144f6a8",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/chain.nl:1:35-1:36: error(unsupported)[USIZE-SUBTRACTION-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/chain.nl:1:35-1:36: error(unsupported)[USIZE-SUBTRACTION-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "plus_minus",
+    "source_sha256": "e4d3a05b7c6244af71aaf5371247227b5302d0f935c3cdaf96ae9fc2cf776fa4",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/plus_minus.nl:1:35-1:36: error(unsupported)[USIZE-ADDITION-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/plus_minus.nl:1:35-1:36: error(unsupported)[USIZE-ADDITION-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "minus_plus",
+    "source_sha256": "f5a6f02f43c45525d4e3121384237971e03982f058bdcf3ccb11b8351127eb0d",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/minus_plus.nl:1:35-1:36: error(unsupported)[USIZE-SUBTRACTION-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/minus_plus.nl:1:35-1:36: error(unsupported)[USIZE-SUBTRACTION-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "minus_eq",
+    "source_sha256": "dd9b16cd0a60da845b4b7bf725f187f6fa0acf3e6eaa90c74dc7e91fc41fb9cb",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/minus_eq.nl:1:35-1:36: error(unsupported)[USIZE-SUBTRACTION-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/minus_eq.nl:1:35-1:36: error(unsupported)[USIZE-SUBTRACTION-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "eq_minus",
+    "source_sha256": "60f0985fbe61b59e2f4de42a6da7955364e0549362214e9e95caa00f3e37d4bb",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/eq_minus.nl:1:35-1:37: error(unsupported)[USIZE-EQUALITY-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/eq_minus.nl:1:35-1:37: error(unsupported)[USIZE-EQUALITY-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "paren_rhs",
+    "source_sha256": "7a58ae9e8d0bf7bcc1655723ceda306093c9036549ec61428e1a4cac251359fc",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/paren_rhs.nl:1:36-1:37: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/paren_rhs.nl:1:36-1:37: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "paren_all",
+    "source_sha256": "b75ebeb05a6dc8a8cc6be9872947704432ed5f55774917aadc3d1b9d38fb69d5",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/paren_all.nl:1:27-1:28: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/paren_all.nl:1:27-1:28: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "double_minus",
+    "source_sha256": "19d7bc644ce72e0580e8af50b091713d5f3a7363762cc71b313fb20cee5a8053",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/double_minus.nl:1:59-1:60: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/double_minus.nl:1:59-1:60: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "assign_minus",
+    "source_sha256": "6b5f8d0eed2d20befbc1ee07928358503db355a1cc9cf90d9eee2266c59440a5",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/assign_minus.nl:1:49-1:50: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/assign_minus.nl:1:49-1:50: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "unary",
+    "source_sha256": "93aec1c034c4031afaf283f883fb34b0f2d92de85d598d8718a2260d17031e83",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/unary.nl:1:42-1:43: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/unary.nl:1:42-1:43: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "negative_literal",
+    "source_sha256": "2582dc897a674644bd1631229d01b9387f2258d3018692bd515ace1fb2ee8550",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/negative_literal.nl:1:33-1:34: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/negative_literal.nl:1:33-1:34: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "bare",
+    "source_sha256": "b5bac2e478e34f72b4e62c42a17e2b1c43d5a810f9c19f04014f8701594d0cf6",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/bare.nl:1:27-1:28: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/bare.nl:1:27-1:28: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "call_operand",
+    "source_sha256": "409ee8111ff1d30282eef6c2d452b6b45d72b83ef77d08c4232e7cf6dbf0f06a",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/call_operand.nl:1:63-1:64: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/call_operand.nl:1:63-1:64: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "arrow_expr",
+    "source_sha256": "dfb13b78c51298caa8e00a53807dba59ccc9a48595ab6cdf40a24f47e2a7055b",
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p596/arrow_expr.nl:1:49-1:50: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 3,
+      "diagnostic": "tests/p596/arrow_expr.nl:1:49-1:50: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+      "stdout_bytes": 0
+    }
+  },
+  {
+    "source": "plus",
+    "source_sha256": "72f34418b26c6a6f5927b9c90b836442c7ef9677f59281c0742ee7212b36a175",
+    "check": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 652
+    }
+  },
+  {
+    "source": "equality",
+    "source_sha256": "cedc0f1658b876cced80a5ddae03d92cd162e6c4d060f6d7f1dd079437253239",
+    "check": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 652
+    }
+  },
+  {
+    "source": "function_arrow",
+    "source_sha256": "98af313dbe9877d943681c16edf62ad818680a0167dd6f3ba2b5ffff1948dfd8",
+    "check": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 0
+    },
+    "emit": {
+      "exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p596/function_arrow.nl\n",
+      "stdout_bytes": 0
+    }
+  }
+]

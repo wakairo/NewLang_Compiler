@@ -1,0 +1,422 @@
+[
+  {
+    "source": "literals",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/literals.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "literals",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/literals.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "names",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/names.nl:1:60-1:61: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "names",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/names.nl:1:60-1:61: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "zero",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/zero.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "zero",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/zero.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "max",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/max.nl:1:54-1:55: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "max",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/max.nl:1:54-1:55: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "max_self",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/max_self.nl:1:54-1:55: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "max_self",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/max_self.nl:1:54-1:55: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "copy",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/copy.nl:1:64-1:65: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "copy",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/copy.nl:1:64-1:65: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "consumer",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/consumer.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "consumer",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/consumer.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "underflow",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/underflow.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "underflow",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/underflow.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "reversed",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/reversed.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "reversed",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/reversed.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "range",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/range.nl:1:27-1:54: error(semantic)[USIZE-LITERAL-RANGE]: usize literal is outside native target range\n"
+  },
+  {
+    "source": "range",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/range.nl:1:27-1:54: error(semantic)[USIZE-LITERAL-RANGE]: usize literal is outside native target range\n"
+  },
+  {
+    "source": "mixed_type",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/mixed_type.nl:1:32-1:33: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "mixed_type",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/mixed_type.nl:1:32-1:33: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "unknown",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/unknown.nl:1:29-1:30: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "unknown",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/unknown.nl:1:29-1:30: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "authority",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/authority.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "authority",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/authority.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "chain",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/chain.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "chain",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/chain.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "plus_minus",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/plus_minus.nl:1:44-1:45: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "plus_minus",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/plus_minus.nl:1:44-1:45: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "minus_plus",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/minus_plus.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "minus_plus",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/minus_plus.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "minus_eq",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/minus_eq.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "minus_eq",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/minus_eq.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "eq_minus",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/eq_minus.nl:1:45-1:46: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "eq_minus",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/eq_minus.nl:1:45-1:46: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "paren_rhs",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/paren_rhs.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "paren_rhs",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/paren_rhs.nl:1:35-1:36: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n"
+  },
+  {
+    "source": "paren_all",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/paren_all.nl:1:27-1:28: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+  },
+  {
+    "source": "paren_all",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/paren_all.nl:1:27-1:28: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+  },
+  {
+    "source": "double_minus",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/double_minus.nl:1:58-1:59: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "double_minus",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/double_minus.nl:1:58-1:59: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "assign_minus",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/assign_minus.nl:1:48-1:49: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "assign_minus",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/assign_minus.nl:1:48-1:49: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "unary",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/unary.nl:1:42-1:43: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+  },
+  {
+    "source": "unary",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/unary.nl:1:42-1:43: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+  },
+  {
+    "source": "negative_literal",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/negative_literal.nl:1:33-1:34: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+  },
+  {
+    "source": "negative_literal",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/negative_literal.nl:1:33-1:34: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+  },
+  {
+    "source": "bare",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/bare.nl:1:27-1:28: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+  },
+  {
+    "source": "bare",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/bare.nl:1:27-1:28: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+  },
+  {
+    "source": "call_operand",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/call_operand.nl:1:63-1:64: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "call_operand",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/call_operand.nl:1:63-1:64: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "arrow_expr",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/arrow_expr.nl:1:48-1:49: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "arrow_expr",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p596/arrow_expr.nl:1:48-1:49: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  {
+    "source": "plus",
+    "mode": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "diagnostic": ""
+  },
+  {
+    "source": "plus",
+    "mode": "emit",
+    "exit": 0,
+    "stdout_bytes": 652,
+    "diagnostic": ""
+  },
+  {
+    "source": "equality",
+    "mode": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "diagnostic": ""
+  },
+  {
+    "source": "equality",
+    "mode": "emit",
+    "exit": 0,
+    "stdout_bytes": 652,
+    "diagnostic": ""
+  },
+  {
+    "source": "function_arrow",
+    "mode": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "diagnostic": ""
+  },
+  {
+    "source": "function_arrow",
+    "mode": "emit",
+    "exit": 4,
+    "stdout_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p596/function_arrow.nl\n"
+  }
+]
