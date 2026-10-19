@@ -1,0 +1,113 @@
+{
+  "main": "032cf60aabf4997e672bc3607cf53775d91ececb",
+  "canonical": "Draft17.32",
+  "freeze_jst": "2026-10-19T17:57:42.844805+09:00",
+  "prediction": "All normal independent sources CHECK0/owned; backend4 arm prefix/count/block-item restriction before native. No source/oracle revisions on refusal.",
+  "cases": {
+    "then_true.nl": {
+      "intent": "native",
+      "bool": 1,
+      "operands": [
+        21,
+        45
+      ],
+      "old": 18,
+      "selected": 83,
+      "after": 83,
+      "sibling": 209,
+      "arm_locals": [
+        1,
+        0
+      ],
+      "sha256": "1816dc3c68fdeaddf0141c5a1c75dd935722b06f91e7d934c9ca17bd51bf9031"
+    },
+    "then_false.nl": {
+      "intent": "native",
+      "bool": 0,
+      "operands": [
+        57,
+        45
+      ],
+      "old": 18,
+      "selected": 24,
+      "after": 24,
+      "sibling": 209,
+      "arm_locals": [
+        1,
+        0
+      ],
+      "sha256": "5186078d29654f1550fa759f049b0ade6ca2c3c6299339c08985e5fc7743f17a"
+    },
+    "else_false.nl": {
+      "intent": "native",
+      "bool": 0,
+      "operands": [
+        57,
+        45
+      ],
+      "old": 18,
+      "selected": 24,
+      "after": 24,
+      "sibling": 209,
+      "arm_locals": [
+        0,
+        1
+      ],
+      "sha256": "ac1249ed02d68a718f8635ff563696406ca608344a03000805dfe2a52d60de6c"
+    },
+    "wrong_type.nl": {
+      "intent": "semantic_reject",
+      "code": "USIZE-LESS-THAN-TYPE",
+      "sha256": "33ade92e058101fba5286e93ef9043a07c54e520f090daf96af9adb95bddcf38"
+    },
+    "range_arm.nl": {
+      "intent": "semantic_reject",
+      "code": "V1-U8-LITERAL-RANGE",
+      "sha256": "80b28561b6223c51a5fec24d90184e7a440a683f7858cc942ca5752807a80e7c"
+    },
+    "two_locals.nl": {
+      "intent": "unsupported",
+      "prediction": "CHECK0,backend4/no C; >1 arm local not authorized",
+      "sha256": "5ef4ebc68a6d6ee7e09a42b85894b65ff70603c134ca3fc57f76feb90c3fa917"
+    },
+    "nested_arm.nl": {
+      "intent": "unsupported",
+      "prediction": "CHECK0,backend4/no C; nested IF not authorized",
+      "sha256": "7ee114d4a56a2ab4473f6c0c5c58df50e95912522af0905b7427a8a6f56ec3bc"
+    },
+    "pure_true.nl": {
+      "intent": "native_pure",
+      "bool": 1,
+      "operands": [
+        21,
+        45
+      ],
+      "selected": 83,
+      "arm_locals": [
+        1,
+        0
+      ],
+      "sha256": "380926380dff1682ac638ec08035b0b498632ec2af32189e2685271b9476053a"
+    },
+    "pure_false.nl": {
+      "intent": "native_pure",
+      "bool": 0,
+      "operands": [
+        57,
+        45
+      ],
+      "selected": 24,
+      "arm_locals": [
+        1,
+        0
+      ],
+      "sha256": "c452b259b7679fd7f269387af2995e06a7b28c71426645b87712ec11b761699b"
+    }
+  },
+  "controls": {
+    "tests/p628/pair_true.nl": "781824f7d4f7fa8f8aefb2fe49eae11d36d916fdcf0ac46d03f21a123c152d85",
+    "tests/p626/fits_true.nl": "e6404c50f47f432b89ac0aafa4f68f2d1d9509c44e3f3504e89d501be7a5a84f",
+    "tests/p521/direct_pair_true.nl": "2b8c46554d7aaba137b2910ec08f5a30a2df3be3155a0c313710737f3dcfef37",
+    "tests/fixtures/node_initial_some.nl": "b8199651020a2ae4135811684187b42eb04d4816b714bba687fbfc90784c1409"
+  }
+}

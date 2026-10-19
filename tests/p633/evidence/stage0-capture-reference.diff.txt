@@ -1,0 +1,43 @@
+--- a/src/main.c
++++ b/src/main.c
+@@ -469,0 +470,22 @@
++/* The CLI consumes its own live checker-owned parent, never an externally
++ * supplied/deserialized parent proof. Its issuance record is independent of
++ * the child view under inspection; matching mutable child metadata alone is
++ * insufficient. This private check grants no source/memory authority and is
++ * not protection against writes to that trusted parent record itself. */
++static bool copy_if_arm_origin(const NLCheckedFragment *parent,
++                               NLCheckedNodeId id, size_t index,
++                               const NLCheckedFragment *arm)
++{
++    if (parent == NULL || arm == NULL || arm->context == NULL ||
++        arm->if_parent != parent || arm->if_parent_node != id ||
++        arm->if_arm_index != index || arm->source != parent->source)
++        return false;
++    size_t found = 0;
++    for (size_t i = 0; i < parent->arm_count; ++i) {
++        const NLCheckedArm *issued = &parent->arms[i];
++        if (issued->match == id && found++ == index)
++            return issued->artifact == arm &&
++                   issued->context_origin == arm->context;
++    }
++    return false;
++}
+@@ -661,2 +683,2 @@
+-        if (arm->if_parent != f || arm->if_parent_node != id ||
+-            arm->if_arm_index != a ||
++        if (!copy_if_arm_origin(f, id, a, arm) || arm->if_parent != f ||
++            arm->if_parent_node != id || arm->if_arm_index != a ||
+--- a/src/semantic_check.c
++++ b/src/semantic_check.c
+@@ -4093 +4093,2 @@
+-    arms[check->artifact->arm_count++] = (NLCheckedArm){match, arm};
++    arms[check->artifact->arm_count++] =
++        (NLCheckedArm){match, arm, arm->context};
+--- a/src/semantic_internal.h
++++ b/src/semantic_internal.h
+@@ -88,0 +89,4 @@
++    /* Borrowed issuance-time identity, independent of the current child
++     * view. Only the authentic parent-owned record is a trusted anchor;
++     * this is not a seal for arbitrary writable/caller-supplied parents. */
++    const NLSemanticContext *context_origin;

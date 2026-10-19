@@ -1,0 +1,805 @@
+{
+  "provenance": "actual JSON stdout before new harness stopped on wrong effectful classification; all 9 new positive native records completed. Old p626/p628 complex positives separately passed restored-authorized-migration CTests; see old-case-migration.log.",
+  "records": [
+    {
+      "source": "/workspace/p633/tests/p630/then_true.nl",
+      "source_sha256": "1816dc3c68fdeaddf0141c5a1c75dd935722b06f91e7d934c9ca17bd51bf9031",
+      "check": 0,
+      "c17": 0,
+      "c17_sha256": "687a27bb13e255895117851136f29cca2d75cbc451f8d3c4a5e46776b669b42d",
+      "public": {
+        "if": 21,
+        "condition_symbol": 4,
+        "bool": 1,
+        "selected_symbol": 5,
+        "arms": [
+          83,
+          24
+        ],
+        "arm_locals": [
+          1,
+          0
+        ],
+        "authority": 0,
+        "joined_unknown": true,
+        "arm_locals_ended": true,
+        "worlds_distinct": true
+      },
+      "pair_owned": {
+        "if": 21,
+        "bool": 1,
+        "condition_symbol": 4,
+        "equal_symbol": 4,
+        "operand_symbols": [
+          1,
+          2
+        ],
+        "arms": [
+          83,
+          24
+        ],
+        "arm_symbols": [
+          5,
+          0
+        ],
+        "selected_symbol": 5,
+        "input_symbol": 5,
+        "original_symbol": 3,
+        "old_symbol": 7,
+        "after_symbol": 8,
+        "sibling_symbol": 9,
+        "ref_symbol": 6,
+        "replace_node": 26,
+        "scope": 1,
+        "root": 3,
+        "child": 4,
+        "incarnations": [
+          3,
+          4,
+          5
+        ],
+        "root_facts": [
+          3,
+          10
+        ],
+        "left_facts": [
+          4,
+          9
+        ],
+        "right_fact": 5,
+        "old": 18,
+        "sibling": 209,
+        "joined_unknown": true,
+        "scope_ended": true
+      },
+      "native": {
+        "plain": [
+          0,
+          0
+        ],
+        "passive": [
+          0,
+          0
+        ]
+      },
+      "synthetic_native": {
+        "wrong_compare": [
+          91,
+          91
+        ],
+        "wrong_field": [
+          91,
+          91
+        ],
+        "wrong_old": [
+          91,
+          91
+        ]
+      },
+      "sanitizer": "none",
+      "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"
+    },
+    {
+      "source": "/workspace/p633/tests/p630/then_false.nl",
+      "source_sha256": "5186078d29654f1550fa759f049b0ade6ca2c3c6299339c08985e5fc7743f17a",
+      "check": 0,
+      "c17": 0,
+      "c17_sha256": "ed69cf9a473270b5ec50d60be483f00a330edc234addf9787492c00500af8ea3",
+      "public": {
+        "if": 21,
+        "condition_symbol": 4,
+        "bool": 0,
+        "selected_symbol": 5,
+        "arms": [
+          83,
+          24
+        ],
+        "arm_locals": [
+          1,
+          0
+        ],
+        "authority": 0,
+        "joined_unknown": true,
+        "arm_locals_ended": true,
+        "worlds_distinct": true
+      },
+      "pair_owned": {
+        "if": 21,
+        "bool": 0,
+        "condition_symbol": 4,
+        "equal_symbol": 4,
+        "operand_symbols": [
+          1,
+          2
+        ],
+        "arms": [
+          83,
+          24
+        ],
+        "arm_symbols": [
+          5,
+          0
+        ],
+        "selected_symbol": 5,
+        "input_symbol": 5,
+        "original_symbol": 3,
+        "old_symbol": 7,
+        "after_symbol": 8,
+        "sibling_symbol": 9,
+        "ref_symbol": 6,
+        "replace_node": 26,
+        "scope": 1,
+        "root": 3,
+        "child": 4,
+        "incarnations": [
+          3,
+          4,
+          5
+        ],
+        "root_facts": [
+          3,
+          10
+        ],
+        "left_facts": [
+          4,
+          9
+        ],
+        "right_fact": 5,
+        "old": 18,
+        "sibling": 209,
+        "joined_unknown": true,
+        "scope_ended": true
+      },
+      "native": {
+        "plain": [
+          0,
+          0
+        ],
+        "passive": [
+          0,
+          0
+        ]
+      },
+      "synthetic_native": {
+        "wrong_compare": [
+          91,
+          91
+        ],
+        "wrong_field": [
+          91,
+          91
+        ],
+        "wrong_old": [
+          91,
+          91
+        ]
+      },
+      "sanitizer": "none",
+      "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"
+    },
+    {
+      "source": "/workspace/p633/tests/p630/else_false.nl",
+      "source_sha256": "ac1249ed02d68a718f8635ff563696406ca608344a03000805dfe2a52d60de6c",
+      "check": 0,
+      "c17": 0,
+      "c17_sha256": "cefdb7e215af0f2045853d5ca1876d0be1d85b39845f873d088a7cfcba52e771",
+      "public": {
+        "if": 21,
+        "condition_symbol": 4,
+        "bool": 0,
+        "selected_symbol": 5,
+        "arms": [
+          83,
+          24
+        ],
+        "arm_locals": [
+          0,
+          1
+        ],
+        "authority": 0,
+        "joined_unknown": true,
+        "arm_locals_ended": true,
+        "worlds_distinct": true
+      },
+      "pair_owned": {
+        "if": 21,
+        "bool": 0,
+        "condition_symbol": 4,
+        "equal_symbol": 4,
+        "operand_symbols": [
+          1,
+          2
+        ],
+        "arms": [
+          83,
+          24
+        ],
+        "arm_symbols": [
+          0,
+          5
+        ],
+        "selected_symbol": 5,
+        "input_symbol": 5,
+        "original_symbol": 3,
+        "old_symbol": 7,
+        "after_symbol": 8,
+        "sibling_symbol": 9,
+        "ref_symbol": 6,
+        "replace_node": 26,
+        "scope": 1,
+        "root": 3,
+        "child": 4,
+        "incarnations": [
+          3,
+          4,
+          5
+        ],
+        "root_facts": [
+          3,
+          10
+        ],
+        "left_facts": [
+          4,
+          9
+        ],
+        "right_fact": 5,
+        "old": 18,
+        "sibling": 209,
+        "joined_unknown": true,
+        "scope_ended": true
+      },
+      "native": {
+        "plain": [
+          0,
+          0
+        ],
+        "passive": [
+          0,
+          0
+        ]
+      },
+      "synthetic_native": {
+        "wrong_compare": [
+          91,
+          91
+        ],
+        "wrong_field": [
+          91,
+          91
+        ],
+        "wrong_old": [
+          91,
+          91
+        ]
+      },
+      "sanitizer": "none",
+      "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"
+    },
+    {
+      "source": "/workspace/p633/tests/p630/wrong_type.nl",
+      "check": 3,
+      "c17": 3,
+      "c_bytes": 0,
+      "diagnostic": "/workspace/p633/tests/p630/wrong_type.nl:5:26-5:27: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands",
+      "rollback": "P514_REJECT phase=registration code=USIZE-LESS-THAN-TYPE rollback=PASS artifact=NULL"
+    },
+    {
+      "source": "/workspace/p633/tests/p630/range_arm.nl",
+      "check": 3,
+      "c17": 3,
+      "c_bytes": 0,
+      "diagnostic": "/workspace/p633/tests/p630/range_arm.nl:6:41-6:48: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255",
+      "rollback": "P514_REJECT phase=registration code=V1-U8-LITERAL-RANGE rollback=PASS artifact=NULL"
+    },
+    {
+      "source": "/workspace/p633/tests/p630/two_locals.nl",
+      "check": 0,
+      "c17": 4,
+      "c_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p633/tests/p630/two_locals.nl"
+    },
+    {
+      "source": "/workspace/p633/tests/p630/nested_arm.nl",
+      "check": 0,
+      "c17": 4,
+      "c_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p633/tests/p630/nested_arm.nl"
+    },
+    {
+      "source": "/workspace/p633/tests/p630/pure_true.nl",
+      "source_sha256": "380926380dff1682ac638ec08035b0b498632ec2af32189e2685271b9476053a",
+      "check": 0,
+      "c17": 0,
+      "c17_sha256": "3c829da467aab49de6b97d4f98a10dd1a3ec45ffcee617a8a25c9e326e09ecd9",
+      "public": {
+        "if": 14,
+        "condition_symbol": 3,
+        "bool": 1,
+        "selected_symbol": 4,
+        "arms": [
+          83,
+          24
+        ],
+        "arm_locals": [
+          1,
+          0
+        ],
+        "authority": 0,
+        "joined_unknown": true,
+        "arm_locals_ended": true,
+        "worlds_distinct": true
+      },
+      "pair_owned": null,
+      "native": {
+        "plain": [
+          0,
+          0
+        ],
+        "passive": [
+          0,
+          0
+        ]
+      },
+      "synthetic_native": {
+        "wrong_compare": [
+          91,
+          91
+        ]
+      },
+      "sanitizer": "none"
+    },
+    {
+      "source": "/workspace/p633/tests/p630/pure_false.nl",
+      "source_sha256": "c452b259b7679fd7f269387af2995e06a7b28c71426645b87712ec11b761699b",
+      "check": 0,
+      "c17": 0,
+      "c17_sha256": "f9d5570f2fae03f3209d2bdeeb910765fb8eb2d2e1580cd1ce52fd3ea6d6264b",
+      "public": {
+        "if": 14,
+        "condition_symbol": 3,
+        "bool": 0,
+        "selected_symbol": 4,
+        "arms": [
+          83,
+          24
+        ],
+        "arm_locals": [
+          1,
+          0
+        ],
+        "authority": 0,
+        "joined_unknown": true,
+        "arm_locals_ended": true,
+        "worlds_distinct": true
+      },
+      "pair_owned": null,
+      "native": {
+        "plain": [
+          0,
+          0
+        ],
+        "passive": [
+          0,
+          0
+        ]
+      },
+      "synthetic_native": {
+        "wrong_compare": [
+          91,
+          91
+        ]
+      },
+      "sanitizer": "none"
+    },
+    {
+      "source": "/workspace/p633/tests/p630/both_false.nl",
+      "source_sha256": "9eb66c3f15469ac534f4806ecff8c309f6e20248120d65463590594ec9926281",
+      "check": 0,
+      "c17": 0,
+      "c17_sha256": "865cb931dcc6b2d837d3653d59d83bb707b8f209327b5d195d19a92322f815a0",
+      "public": {
+        "if": 21,
+        "condition_symbol": 4,
+        "bool": 0,
+        "selected_symbol": 5,
+        "arms": [
+          83,
+          24
+        ],
+        "arm_locals": [
+          1,
+          1
+        ],
+        "authority": 0,
+        "joined_unknown": true,
+        "arm_locals_ended": true,
+        "worlds_distinct": true
+      },
+      "pair_owned": {
+        "if": 21,
+        "bool": 0,
+        "condition_symbol": 4,
+        "equal_symbol": 4,
+        "operand_symbols": [
+          1,
+          2
+        ],
+        "arms": [
+          83,
+          24
+        ],
+        "arm_symbols": [
+          5,
+          5
+        ],
+        "selected_symbol": 5,
+        "input_symbol": 5,
+        "original_symbol": 3,
+        "old_symbol": 7,
+        "after_symbol": 8,
+        "sibling_symbol": 9,
+        "ref_symbol": 6,
+        "replace_node": 26,
+        "scope": 1,
+        "root": 3,
+        "child": 4,
+        "incarnations": [
+          3,
+          4,
+          5
+        ],
+        "root_facts": [
+          3,
+          10
+        ],
+        "left_facts": [
+          4,
+          9
+        ],
+        "right_fact": 5,
+        "old": 18,
+        "sibling": 209,
+        "joined_unknown": true,
+        "scope_ended": true
+      },
+      "native": {
+        "plain": [
+          0,
+          0
+        ],
+        "passive": [
+          0,
+          0
+        ]
+      },
+      "synthetic_native": {
+        "wrong_compare": [
+          91,
+          91
+        ],
+        "wrong_field": [
+          91,
+          91
+        ],
+        "wrong_old": [
+          91,
+          91
+        ]
+      },
+      "sanitizer": "none",
+      "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"
+    },
+    {
+      "source": "/workspace/p633/tests/p630/outer_true.nl",
+      "source_sha256": "c04722d1fecc035660307f15422cf46df255ac5e422575e08a1c5b7fe61fdc58",
+      "check": 0,
+      "c17": 0,
+      "c17_sha256": "c641ea5e8c4da7be6e917d9ad12fb10e9e5f3e207292154076f98f55caa3ba23",
+      "public": {
+        "if": 24,
+        "condition_symbol": 5,
+        "bool": 1,
+        "selected_symbol": 6,
+        "arms": [
+          83,
+          24
+        ],
+        "arm_locals": [
+          1,
+          0
+        ],
+        "authority": 0,
+        "joined_unknown": true,
+        "arm_locals_ended": true,
+        "worlds_distinct": true
+      },
+      "pair_owned": {
+        "if": 24,
+        "bool": 1,
+        "condition_symbol": 5,
+        "equal_symbol": 5,
+        "operand_symbols": [
+          1,
+          2
+        ],
+        "arms": [
+          83,
+          24
+        ],
+        "arm_symbols": [
+          6,
+          0
+        ],
+        "selected_symbol": 6,
+        "input_symbol": 6,
+        "original_symbol": 3,
+        "old_symbol": 8,
+        "after_symbol": 9,
+        "sibling_symbol": 10,
+        "ref_symbol": 7,
+        "replace_node": 29,
+        "scope": 1,
+        "root": 3,
+        "child": 4,
+        "incarnations": [
+          3,
+          4,
+          5
+        ],
+        "root_facts": [
+          3,
+          11
+        ],
+        "left_facts": [
+          4,
+          10
+        ],
+        "right_fact": 5,
+        "old": 18,
+        "sibling": 209,
+        "joined_unknown": true,
+        "scope_ended": true
+      },
+      "native": {
+        "plain": [
+          0,
+          0
+        ],
+        "passive": [
+          0,
+          0
+        ]
+      },
+      "synthetic_native": {
+        "wrong_compare": [
+          91,
+          91
+        ],
+        "wrong_field": [
+          91,
+          91
+        ],
+        "wrong_old": [
+          91,
+          91
+        ]
+      },
+      "sanitizer": "none",
+      "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"
+    },
+    {
+      "source": "/workspace/p633/tests/p631/same_value_local.nl",
+      "source_sha256": "bbea3f108929785345d95502f09f68db9186107b0da65f08a7a229d4b83b2abe",
+      "check": 0,
+      "c17": 0,
+      "c17_sha256": "f872b7be9875a0c26e44efeb795419c2274301e68711b689ae5083149bf2dc2b",
+      "public": {
+        "if": 21,
+        "condition_symbol": 4,
+        "bool": 0,
+        "selected_symbol": 5,
+        "arms": [
+          83,
+          83
+        ],
+        "arm_locals": [
+          1,
+          1
+        ],
+        "authority": 0,
+        "joined_unknown": true,
+        "arm_locals_ended": true,
+        "worlds_distinct": true
+      },
+      "pair_owned": {
+        "if": 21,
+        "bool": 0,
+        "condition_symbol": 4,
+        "equal_symbol": 4,
+        "operand_symbols": [
+          1,
+          2
+        ],
+        "arms": [
+          83,
+          83
+        ],
+        "arm_symbols": [
+          5,
+          5
+        ],
+        "selected_symbol": 5,
+        "input_symbol": 5,
+        "original_symbol": 3,
+        "old_symbol": 7,
+        "after_symbol": 8,
+        "sibling_symbol": 9,
+        "ref_symbol": 6,
+        "replace_node": 26,
+        "scope": 1,
+        "root": 3,
+        "child": 4,
+        "incarnations": [
+          3,
+          4,
+          5
+        ],
+        "root_facts": [
+          3,
+          10
+        ],
+        "left_facts": [
+          4,
+          9
+        ],
+        "right_fact": 5,
+        "old": 18,
+        "sibling": 209,
+        "joined_unknown": true,
+        "scope_ended": true
+      },
+      "native": {
+        "plain": [
+          0,
+          0
+        ],
+        "passive": [
+          0,
+          0
+        ]
+      },
+      "synthetic_native": {
+        "wrong_compare": [
+          91,
+          91
+        ],
+        "wrong_field": [
+          91,
+          91
+        ],
+        "wrong_old": [
+          91,
+          91
+        ]
+      },
+      "sanitizer": "none"
+    },
+    {
+      "source": "/workspace/p633/tests/p631/duplicate_outer.nl",
+      "source_sha256": "9d45e58c10609644169c09136346c0498afd53bef81d76e23e725398fb5a316e",
+      "check": 0,
+      "c17": 0,
+      "c17_sha256": "c6e44f899f17e5e654a2ca35d9e6ad880a9375600b8046bf6795f483d03471d0",
+      "public": {
+        "if": 27,
+        "condition_symbol": 6,
+        "bool": 1,
+        "selected_symbol": 7,
+        "arms": [
+          83,
+          24
+        ],
+        "arm_locals": [
+          1,
+          0
+        ],
+        "authority": 0,
+        "joined_unknown": true,
+        "arm_locals_ended": true,
+        "worlds_distinct": true
+      },
+      "pair_owned": {
+        "if": 27,
+        "bool": 1,
+        "condition_symbol": 6,
+        "equal_symbol": 6,
+        "operand_symbols": [
+          1,
+          2
+        ],
+        "arms": [
+          83,
+          24
+        ],
+        "arm_symbols": [
+          7,
+          0
+        ],
+        "selected_symbol": 7,
+        "input_symbol": 7,
+        "original_symbol": 3,
+        "old_symbol": 9,
+        "after_symbol": 10,
+        "sibling_symbol": 11,
+        "ref_symbol": 8,
+        "replace_node": 32,
+        "scope": 1,
+        "root": 3,
+        "child": 4,
+        "incarnations": [
+          3,
+          4,
+          5
+        ],
+        "root_facts": [
+          3,
+          12
+        ],
+        "left_facts": [
+          4,
+          11
+        ],
+        "right_fact": 5,
+        "old": 18,
+        "sibling": 209,
+        "joined_unknown": true,
+        "scope_ended": true
+      },
+      "native": {
+        "plain": [
+          0,
+          0
+        ],
+        "passive": [
+          0,
+          0
+        ]
+      },
+      "synthetic_native": {
+        "wrong_compare": [
+          91,
+          91
+        ],
+        "wrong_field": [
+          91,
+          91
+        ],
+        "wrong_old": [
+          91,
+          91
+        ]
+      },
+      "sanitizer": "none"
+    }
+  ]
+}

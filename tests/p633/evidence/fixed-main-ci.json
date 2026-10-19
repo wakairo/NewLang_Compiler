@@ -1,0 +1,20 @@
+[
+  {
+    "id": 39224748355,
+    "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/39224748355",
+    "name": "Compiler validation",
+    "head_sha": "032cf60aabf4997e672bc3607cf53775d91ececb",
+    "status": "completed",
+    "conclusion": "success",
+    "run_attempt": 1
+  },
+  {
+    "id": 39224748336,
+    "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/39224748336",
+    "name": "Compiler frontend/C17 reference (NO LLVM; PARTIAL)",
+    "head_sha": "032cf60aabf4997e672bc3607cf53775d91ececb",
+    "status": "completed",
+    "conclusion": "success",
+    "run_attempt": 1
+  }
+]
