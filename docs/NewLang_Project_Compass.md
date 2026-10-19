@@ -14,6 +14,7 @@
 - **全操作の自動証明は必須目標ではない**：証明できる条件は checked、証明できない**真の**事前条件は明示的・局所的な `unchecked` と人間の責任で扱える。ordinary safe API は呼出者へ隠れた証明責任を転嫁しない。
 - **製品価値はunchecked件数ではなく監査の局所性**：library authorとordinary-safe callerのUB防止監査・再監査範囲、安全な変更が内部前提を破壊できないことを検証する（詳細は[Product Strategy §1.1](NewLang_Product_Value_Strategy.md#11-ub-prevention-audit-locality-value-hypothesis)）。per-hop uncheckedの多発や権限を無から作る操作は解決ではない。
 - **再利用可能なcompilerへの並行投資**：Product GOを待たず、選択済み意味論のsource→CHECK→公開owned→C17/nativeを、再利用可能・費用限定・安全な形で育てる。P/M/F/Rの能力構築とVの実利用／NewLang対C監査局所性検証を並行する。大きな新機構や製品化は別裁定とし、固定比率・一律gateは増やさない（[Product Strategy §1.3](NewLang_Product_Value_Strategy.md)、[Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go)）。
+- **現在の投資段階（v0 compiler-first、2026-10-19）：** [Coordination #624](https://github.com/wakairo/NewLang_Compiler/issues/624)に基づき、当面は通常の`newlangc` CLIから実際に書ける・検査できる・C17/native実行できるv0へ優先投資し、Product GOの**能動判定だけを初回通常利用checkpointまで一時保留**する。評価条件とH1 HOLDは維持。停止・再評価、安全性条件は[Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go)、実行順は[Roadmap現行checkpoint](NewLang_Development_Roadmap.md)を参照。本Compassはnavigationのみ。
 - **長期的な製品価値と相互協力**：技術成果を外部プログラマーに役立つ形で先に届け、実用library・技術・自発的な対話を並行して育てる。五つの証拠の側面と公開・協力の詳細は[Product Strategy §1.4](NewLang_Product_Value_Strategy.md#14-製品価値の長期実証と外部協力)が唯一の正本。本Compassはnavigationのみ。
 - **North Star は長期の全用途を定義しない**。個別技術の進歩、仕様上の許容、製品価値の実証を混同しない。
 
