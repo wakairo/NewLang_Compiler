@@ -1,0 +1,47 @@
+{
+  "then_true.nl": {
+    "exit": 0,
+    "stdout": "P514_OOM registration=251 rollback=PASS\nP514_OOM main=143 rollback=PASS output=NULL\n",
+    "stderr": ""
+  },
+  "then_false.nl": {
+    "exit": 0,
+    "stdout": "P514_OOM registration=251 rollback=PASS\nP514_OOM main=143 rollback=PASS output=NULL\n",
+    "stderr": ""
+  },
+  "else_false.nl": {
+    "exit": 0,
+    "stdout": "P514_OOM registration=251 rollback=PASS\nP514_OOM main=143 rollback=PASS output=NULL\n",
+    "stderr": ""
+  },
+  "wrong_type.nl": {
+    "exit": 0,
+    "stdout": "P514_REJECT phase=registration code=USIZE-LESS-THAN-TYPE rollback=PASS artifact=NULL\n",
+    "stderr": ""
+  },
+  "range_arm.nl": {
+    "exit": 0,
+    "stdout": "P514_REJECT phase=registration code=V1-U8-LITERAL-RANGE rollback=PASS artifact=NULL\n",
+    "stderr": ""
+  },
+  "pure_true.nl": {
+    "exit": 0,
+    "stdout": "P514_OOM registration=152 rollback=PASS\nP514_OOM main=96 rollback=PASS output=NULL\n",
+    "stderr": ""
+  },
+  "pure_false.nl": {
+    "exit": 0,
+    "stdout": "P514_OOM registration=152 rollback=PASS\nP514_OOM main=96 rollback=PASS output=NULL\n",
+    "stderr": ""
+  },
+  "both_false.nl": {
+    "exit": 0,
+    "stdout": "P514_OOM registration=259 rollback=PASS\nP514_OOM main=148 rollback=PASS output=NULL\n",
+    "stderr": ""
+  },
+  "outer_true.nl": {
+    "exit": 0,
+    "stdout": "P514_OOM registration=261 rollback=PASS\nP514_OOM main=150 rollback=PASS output=NULL\n",
+    "stderr": ""
+  }
+}

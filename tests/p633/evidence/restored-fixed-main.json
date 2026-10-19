@@ -1,0 +1,54 @@
+[
+  {
+    "source": "tests/p631/same_value_local.nl",
+    "check": {
+      "exit": 0,
+      "c_bytes": 0,
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "c_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p631/same_value_local.nl\n"
+    }
+  },
+  {
+    "source": "tests/p630/both_false.nl",
+    "check": {
+      "exit": 0,
+      "c_bytes": 0,
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "c_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p630/both_false.nl\n"
+    }
+  },
+  {
+    "source": "tests/p626/complex_arm.nl",
+    "check": {
+      "exit": 0,
+      "c_bytes": 0,
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "c_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p626/complex_arm.nl\n"
+    }
+  },
+  {
+    "source": "tests/p628/complex_arm.nl",
+    "check": {
+      "exit": 0,
+      "c_bytes": 0,
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "c_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p628/complex_arm.nl\n"
+    }
+  }
+]

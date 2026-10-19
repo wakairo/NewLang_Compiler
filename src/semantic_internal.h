@@ -86,6 +86,10 @@ struct NLSemanticContext {
 typedef struct {
     NLCheckedNodeId match;
     struct NLCheckedFragment *artifact; /* owns hypothetical arm context */
+    /* Borrowed issuance-time identity, independent of the current child
+     * view. Only the authentic parent-owned record is a trusted anchor;
+     * this is not a seal for arbitrary writable/caller-supplied parents. */
+    const NLSemanticContext *context_origin;
 } NLCheckedArm;
 typedef struct NLCapturedClosure {
     NLCapturedClosureView view;

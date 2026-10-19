@@ -1,0 +1,42 @@
+Internal ctest changing into directory: /workspace/p636/build-asan
+Test project /workspace/p636/build-asan
+      Start 13: p636_plain_source_indices.unit
+ 1/18 Test #13: p636_plain_source_indices.unit ...........   Passed    0.04 sec
+      Start 14: p636_local_arm_indices.unit
+ 2/18 Test #14: p636_local_arm_indices.unit ..............   Passed    0.07 sec
+      Start 15: p636_equal_arm_indices.unit
+ 3/18 Test #15: p636_equal_arm_indices.unit ..............   Passed    0.10 sec
+      Start 16: p634_historical_hash.unit
+ 4/18 Test #16: p634_historical_hash.unit ................   Passed    0.10 sec
+      Start 17: p634_same_value_ended_root.unit
+ 5/18 Test #17: p634_same_value_ended_root.unit ..........   Passed    0.01 sec
+      Start 18: p634_unequal_ended_root.unit
+ 6/18 Test #18: p634_unequal_ended_root.unit .............   Passed    0.06 sec
+      Start 19: p633_equal_outer_derivation.unit
+ 7/18 Test #19: p633_equal_outer_derivation.unit .........   Passed    0.04 sec
+      Start 20: p633_local_cli.integration
+ 8/18 Test #20: p633_local_cli.integration ...............   Passed   46.17 sec
+      Start 21: p633_both_false_oom.unit
+ 9/18 Test #21: p633_both_false_oom.unit .................   Passed    0.29 sec
+      Start 22: p633_outer_true_oom.unit
+10/18 Test #22: p633_outer_true_oom.unit .................   Passed    0.30 sec
+      Start 23: p633_pure_true_oom.unit
+11/18 Test #23: p633_pure_true_oom.unit ..................   Passed    0.12 sec
+      Start 24: p633_local_same_value.unit
+12/18 Test #24: p633_local_same_value.unit ...............   Passed    0.04 sec
+      Start 25: p633_local_different_values.unit
+13/18 Test #25: p633_local_different_values.unit .........   Passed    0.08 sec
+      Start 26: p633_equal_world_origin.unit
+14/18 Test #26: p633_equal_world_origin.unit .............   Passed    0.08 sec
+      Start 27: p633_unequal_world_origin.unit
+15/18 Test #27: p633_unequal_world_origin.unit ...........   Passed    0.08 sec
+      Start 28: p628_cli_pair_if.integration
+16/18 Test #28: p628_cli_pair_if.integration .............   Passed   32.30 sec
+      Start 32: p626_cli_copy_if.integration
+17/18 Test #32: p626_cli_copy_if.integration .............   Passed   22.23 sec
+      Start 34: p605_arithmetic_comparison.integration
+18/18 Test #34: p605_arithmetic_comparison.integration ...   Passed    4.27 sec
+
+100% tests passed, 0 tests failed out of 18
+
+Total Test time (real) = 106.40 sec

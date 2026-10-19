@@ -467,10 +467,157 @@ static bool copy_if_u8(const NLCheckedFragment *f, NLCheckedNodeId id,
     }
     return false;
 }
+/* The CLI consumes its own live checker-owned parent, never an externally
+ * supplied/deserialized parent proof. Its issuance record is independent of
+ * the child view under inspection; matching mutable child metadata alone is
+ * insufficient. This private check grants no source/memory authority and is
+ * not protection against writes to that trusted parent record itself. */
+static bool copy_if_arm_origin(const NLCheckedFragment *parent,
+                               NLCheckedNodeId id, size_t index,
+                               const NLCheckedFragment *arm)
+{
+    if (parent == NULL || arm == NULL || arm->context == NULL ||
+        arm->if_parent != parent || arm->if_parent_node != id ||
+        arm->if_arm_index != index || arm->source != parent->source)
+        return false;
+    size_t found = 0;
+    for (size_t i = 0; i < parent->arm_count; ++i) {
+        const NLCheckedArm *issued = &parent->arms[i];
+        if (issued->match == id && found++ == index)
+            return issued->artifact == arm &&
+                   issued->context_origin == arm->context;
+    }
+    return false;
+}
+/* Consume one already-issued, ended arm-local Copy binding. No arm ID or
+ * fresh fact is imported into the caller and no semantic state is built. */
+static bool copy_if_arm_local(const NLCheckedFragment *f, NLCheckedNodeId id,
+                              const NLCheckedFragment *arm, size_t bindings,
+                              const V0Program *p, size_t *locals)
+{
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(arm, nl_checked_root(arm));
+    const NLCheckedNodeView *block =
+        root == NULL ? NULL : nl_checked_node_view(arm, root->initializer);
+    if (block == NULL || block->kind != NL_CHECKED_BLOCK ||
+        block->item_count > 1)
+        return false;
+    *locals = block->item_count;
+    if (*locals == 0)
+        return true; /* Existing three-node arm checks still apply. */
+    const NLSemanticContext *w = nl_checked_context(arm);
+    const size_t places = bindings + (p->aggregate != 0 ? 2 : 0);
+    const NLCheckedNodeView *decl =
+        nl_checked_node_view(arm, block->first_item);
+    const NLCheckedNodeView *init =
+        decl == NULL ? NULL : nl_checked_node_view(arm, decl->initializer);
+    const NLCheckedNodeView *receiver =
+        decl == NULL ? NULL : nl_checked_node_view(arm, decl->first_argument);
+    const NLCheckedNodeView *tail = nl_checked_node_view(arm, block->tail);
+    NLSemanticValueView input, result;
+    if (!copy_if_arm_origin(f, id, arm->if_arm_index, arm) ||
+        arm->if_parent != f || arm->if_parent_node != id ||
+        arm->if_arm_index > 1 ||
+        nl_checked_if_arm(f, id, arm->if_arm_index) != arm ||
+        nl_checked_source(arm) != nl_checked_source(f) || arm->count != 6 ||
+        decl == NULL || init == NULL || receiver == NULL || tail == NULL ||
+        decl->kind != NL_CHECKED_BINDING || decl->type != p->unit ||
+        decl->result_count != 0 || decl->terminates ||
+        decl->has_scalar_result || decl->next_item != 0 ||
+        decl->symbol != bindings + 1 || receiver->kind != NL_CHECKED_RECEIVER ||
+        receiver->symbol != decl->symbol || receiver->type != p->u8 ||
+        receiver->next_argument != 0 || tail->kind != NL_CHECKED_IDENTIFIER ||
+        tail->symbol != decl->symbol || tail->value_use != NL_VALUE_COPIED ||
+        init->type != p->u8 || init->result_count != 1 ||
+        init->results[0].value != arm->branch_value_prefix + 1 ||
+        tail->results[0].value != arm->branch_value_prefix + 2 ||
+        w->binding_count != bindings + 1 || w->place_count != places + 1 ||
+        w->last_incarnation != places + 1 ||
+        !nl_semantic_value_view(w, init->results[0].value, &input) ||
+        !nl_semantic_value_view(w, tail->results[0].value, &result) ||
+        !copy_if_plain(input, p->u8) || !copy_if_plain(result, p->u8) ||
+        !input.scalar_known || input.scalar_value > 255 ||
+        !result.scalar_known || result.scalar_value != input.scalar_value ||
+        input.carrier != NL_CARRIER_ENDED || input.owner_place != 0 ||
+        result.carrier != NL_CARRIER_LOOSE || result.owner_place != 0)
+        return false;
+    const NLBindingEntry binding = w->bindings[bindings];
+    const NLSemanticPlaceView local = w->places[places];
+    if (!binding.hidden || binding.view.availability != NL_CONSUMED ||
+        binding.view.type != p->u8 ||
+        binding.view.value != init->results[0].value ||
+        binding.view.place != places + 1 || local.type != p->u8 || local.live ||
+        !local.independent_root || !local.implicit_local ||
+        local.incarnation != places + 1 || local.current_fact != 0 ||
+        local.current_value != 0 || local.governing_domain != 0 ||
+        local.placement.region != 0 || local.parent_aggregate != 0 ||
+        local.parent_sum != 0 || local.fixed_field_count != 0 ||
+        local.payload_occurrence != 0)
+        return false;
+    NLSourceView name, use;
+    const NLSource *source = nl_checked_source(arm);
+    if (!nl_source_view(source, receiver->name, &name) || name.length == 0 ||
+        !nl_source_view(source, tail->name, &use) ||
+        name.length != use.length ||
+        memcmp(name.bytes, use.bytes, name.length) != 0 ||
+        strlen(binding.name) != name.length ||
+        memcmp(name.bytes, binding.name, name.length) != 0 ||
+        decl->name.start_byte != receiver->name.start_byte ||
+        decl->name.end_byte != receiver->name.end_byte ||
+        receiver->span.start_byte != receiver->name.start_byte ||
+        receiver->span.end_byte != receiver->name.end_byte ||
+        tail->span.start_byte != tail->name.start_byte ||
+        tail->span.end_byte != tail->name.end_byte ||
+        decl->span.end_byte != init->span.end_byte ||
+        !copy_if_gap(source, block->span.start_byte, decl->span.start_byte,
+                     "{") ||
+        !copy_if_gap(source, decl->span.start_byte, receiver->name.start_byte,
+                     "let") ||
+        !copy_if_gap(source, receiver->name.end_byte, init->span.start_byte,
+                     "=") ||
+        !copy_if_gap(source, init->span.end_byte, tail->span.start_byte, ";") ||
+        !copy_if_gap(source, tail->span.end_byte, block->span.end_byte, "}"))
+        return false;
+    if (init->kind == NL_CHECKED_U8_LITERAL)
+        return copy_if_literal(arm, init) && nl_sem_validate(w) == NL_CHECK_OK;
+    /* A Copy from an earlier caller binding must authenticate that source,
+     * not an equal constant or a same-numbered local in the other world. */
+    if (init->kind != NL_CHECKED_IDENTIFIER ||
+        init->value_use != NL_VALUE_COPIED || init->symbol == 0 ||
+        init->symbol > bindings ||
+        init->span.start_byte != init->name.start_byte ||
+        init->span.end_byte != init->name.end_byte ||
+        !nl_source_view(source, init->name, &use))
+        return false;
+    for (size_t i = 0; i < f->count; ++i) {
+        const NLCheckedNodeView *d = &f->nodes[i];
+        if (d->kind != NL_CHECKED_BINDING || d->symbol != init->symbol ||
+            d->span.end_byte >= block->span.start_byte)
+            continue;
+        const NLCheckedNodeView *value =
+            nl_checked_node_view(f, d->initializer);
+        const NLCheckedNodeView *r = nl_checked_node_view(f, d->first_argument);
+        NLSemanticValueView original;
+        NLSourceView original_name;
+        return value != NULL && r != NULL &&
+               nl_source_view(source, r->name, &original_name) &&
+               original_name.length == use.length &&
+               memcmp(original_name.bytes, use.bytes, use.length) == 0 &&
+               copy_if_u8(f, d->initializer, id, p) &&
+               nl_semantic_value_view(nl_checked_context(f),
+                                      value->results[0].value, &original) &&
+               original.scalar_known &&
+               original.scalar_value == input.scalar_value &&
+               nl_sem_validate(w) == NL_CHECK_OK;
+    }
+    return false;
+}
+
 static bool copy_if_prefix(const NLCheckedFragment *f,
                            const NLCheckedFragment *arms[2],
                            const NLCheckedNodeView *conditional,
-                           NLValueId prefix, size_t bindings)
+                           NLValueId prefix, size_t bindings,
+                           const V0Program *p)
 {
     const NLSemanticContext *parent = nl_checked_context(f);
     const NLSemanticContext *world[2] = {nl_checked_context(arms[0]),
@@ -479,12 +626,17 @@ static bool copy_if_prefix(const NLCheckedFragment *f,
         return false;
     for (size_t a = 0; a < 2; ++a) {
         const NLSemanticContext *c = world[a];
+        size_t locals = 0;
+        if (!copy_if_arm_local(f, arms[a]->if_parent_node, arms[a], bindings, p,
+                               &locals))
+            return false;
         if (arms[a]->branch_value_prefix != prefix ||
-            c->value_count != prefix + 1 || c->binding_count != bindings ||
-            c->place_count != bindings || c->scope_count != 0 ||
+            c->value_count != prefix + 1 + locals ||
+            c->binding_count != bindings + locals ||
+            c->place_count != bindings + locals || c->scope_count != 0 ||
             c->domain_count != 0 || c->region_count != 0 ||
             c->occurrence_count != 0 ||
-            c->last_value_fact != arms[a]->branch_fact_prefix ||
+            c->last_value_fact != arms[a]->branch_fact_prefix + locals ||
             arms[a]->branch_fact_prefix != bindings)
             return false;
         for (size_t j = 0; j < bindings; ++j) {
@@ -646,7 +798,7 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
                                         nl_checked_if_arm(f, id, 1)};
     if (arms[0] == NULL || arms[1] == NULL || arms[0] == arms[1] ||
         (!paired &&
-         !copy_if_prefix(f, arms, v, cond->results[0].value, bindings)))
+         !copy_if_prefix(f, arms, v, cond->results[0].value, bindings, p)))
         return false;
     NLSourceSpan spans[2];
     for (size_t a = 0; a < 2; ++a) {
@@ -658,15 +810,19 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
         const NLCheckedNodeView *tail =
             block == NULL ? NULL : nl_checked_node_view(arm, block->tail);
         NLSemanticValueView value;
-        if (arm->if_parent != f || arm->if_parent_node != id ||
-            arm->if_arm_index != a ||
-            nl_checked_source(arm) != nl_checked_source(f) || arm->count != 3 ||
-            ar == NULL || block == NULL || tail == NULL ||
-            ar->kind != NL_CHECKED_IF_ARM || ar->terminates ||
+        size_t locals = 0;
+        if (!copy_if_arm_local(f, id, arm, bindings, p, &locals))
+            return false;
+        if (!copy_if_arm_origin(f, id, a, arm) || arm->if_parent != f ||
+            arm->if_parent_node != id || arm->if_arm_index != a ||
+            nl_checked_source(arm) != nl_checked_source(f) ||
+            arm->count != 3 + 3 * locals || ar == NULL || block == NULL ||
+            tail == NULL || ar->kind != NL_CHECKED_IF_ARM || ar->terminates ||
             ar->type != p->u8 || ar->result_count != 1 ||
             ar->results[0].type != p->u8 || ar->has_scalar_result ||
-            block->kind != NL_CHECKED_BLOCK || block->first_item != 0 ||
-            block->item_count != 0 || block->terminates ||
+            block->kind != NL_CHECKED_BLOCK ||
+            (locals == 0 && block->first_item != 0) ||
+            block->item_count != locals || block->terminates ||
             block->type != p->u8 || block->result_count != 1 ||
             block->results[0].type != p->u8 || block->has_scalar_result ||
             block == tail || ar == block || ar == tail ||
@@ -676,7 +832,7 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
             tail->terminates || tail->results[0].type != p->u8 ||
             tail->initializer != 0 || tail->argument_count != 0 ||
             tail->first_argument != 0 || tail->next_argument != 0 ||
-            tail->results[0].value != cond->results[0].value + 1 ||
+            tail->results[0].value != cond->results[0].value + 1 + locals ||
             ar->span.start_byte != block->span.start_byte ||
             ar->span.end_byte != block->span.end_byte ||
             !nl_semantic_value_view(nl_checked_context(arm),
@@ -684,12 +840,15 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
             !copy_if_plain(value, p->u8) || !value.scalar_known ||
             value.scalar_value > 255 || value.carrier != NL_CARRIER_LOOSE ||
             value.owner_place != 0 ||
-            !copy_if_gap(nl_checked_source(f), block->span.start_byte,
-                         tail->span.start_byte, "{") ||
+            (locals == 0 &&
+             !copy_if_gap(nl_checked_source(f), block->span.start_byte,
+                          tail->span.start_byte, "{")) ||
             !copy_if_gap(nl_checked_source(f), tail->span.end_byte,
                          block->span.end_byte, "}"))
             return false;
         spans[a] = ar->span;
+        if (locals != 0)
+            continue; /* Complete local graph/value/scope was checked above. */
         if (tail->kind == NL_CHECKED_U8_LITERAL) {
             if (!copy_if_literal(arm, tail))
                 return false;
@@ -1139,11 +1298,15 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
         reference.reference.occurrence_dependency != 0 ||
         reference.carrier != NL_CARRIER_ENDED || reference.owner_place != 0)
         return false;
+    size_t locals[2] = {0};
+    for (size_t a = 0; a < 2; ++a)
+        if (!copy_if_arm_local(f, id, arms[a], bindings, p, &locals[a]))
+            return false;
+    const size_t places = bindings + 2;
     const NLSemanticContext *entry = nl_checked_context(arms[0]);
     if (entry == c || entry == nl_checked_context(arms[1]) || bindings == 0 ||
-        entry->binding_count != bindings ||
-        entry->place_count != bindings + 2 ||
-        entry->place_count > c->place_count)
+        entry->binding_count != bindings + locals[0] ||
+        entry->place_count != places + locals[0] || places > c->place_count)
         return false;
     if (declaration->symbol > bindings)
         return false;
@@ -1161,6 +1324,12 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
         original.fixed_field_count != 2 ||
         original.current_value != binding.value ||
         original.parent_aggregate != 0)
+        return false;
+    /* This finite whole-function profile has ended the original lexical
+     * Pair. Authenticate that issued poststate, not just the live arm entry
+     * and Change trace. No general rule about all ended places is imposed. */
+    const NLSemanticPlaceView closed = c->places[original_place - 1];
+    if (closed.live || closed.current_fact != 0 || closed.current_value != 0)
         return false;
     for (size_t i = 0; i < 2; ++i) {
         NLPlaceId child = original.fixed_fields[i];
@@ -1180,17 +1349,18 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
     for (size_t a = 0; a < 2; ++a) {
         const NLSemanticContext *w = nl_checked_context(arms[a]);
         if (arms[a]->branch_value_prefix != cond->results[0].value ||
-            w->value_count != cond->results[0].value + 1 ||
-            w->binding_count != bindings || w->place_count != bindings + 2 ||
-            w->scope_count != 0 || w->domain_count != 0 ||
-            w->region_count != 0 || w->occurrence_count != 0 ||
-            w->last_value_fact != arms[a]->branch_fact_prefix ||
+            w->value_count != cond->results[0].value + 1 + locals[a] ||
+            w->binding_count != bindings + locals[a] ||
+            w->place_count != places + locals[a] || w->scope_count != 0 ||
+            w->domain_count != 0 || w->region_count != 0 ||
+            w->occurrence_count != 0 ||
+            w->last_value_fact != arms[a]->branch_fact_prefix + locals[a] ||
             w->last_value_fact != w->place_count)
             return false;
         /* Bit equality is intentionally conservative: these are unmodified
          * copies of the same entry, not semantic equality of distinct IDs. */
-        if (memcmp(w->places, entry->places,
-                   entry->place_count * sizeof(*entry->places)) != 0 ||
+        if (memcmp(w->places, entry->places, places * sizeof(*entry->places)) !=
+                0 ||
             memcmp(w->values, entry->values,
                    arms[a]->branch_value_prefix * sizeof(*entry->values)) != 0)
             return false;
@@ -1207,7 +1377,7 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
                 w->places[place - 1].current_value != b.value)
                 return false;
         }
-        for (size_t j = 0; j < w->place_count; ++j) {
+        for (size_t j = 0; j < places; ++j) {
             const NLSemanticPlaceView place = w->places[j];
             if (!place.live || place.incarnation == 0 ||
                 place.current_fact == 0 ||
@@ -1283,8 +1453,8 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
     /* Fresh sequential facts: joined Copy bindings, one ref binder, then
      * child and parent Change facts. Arm-private facts never enter parent. */
     if (intermediate_bindings == 0 ||
-        e->child_post_fact != entry->last_value_fact + intermediate_bindings +
-                                  call_bindings + 2 ||
+        e->child_post_fact != arms[0]->branch_fact_prefix +
+                                  intermediate_bindings + call_bindings + 2 ||
         e->parent_post_fact != e->child_post_fact + 1 ||
         e->parent_post_fact > c->last_value_fact)
         return false;
@@ -1858,6 +2028,50 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
         } else if (initializer->kind == NL_CHECKED_IF) {
             const NLCheckedNodeView *condition =
                 nl_checked_node_view(fragment, initializer->initializer);
+            bool local = false;
+            for (size_t a = 0; a < 2; ++a) {
+                const NLCheckedFragment *arm =
+                    nl_checked_if_arm(fragment, view->initializer, a);
+                const NLCheckedNodeView *r =
+                    nl_checked_node_view(arm, nl_checked_root(arm));
+                local |=
+                    nl_checked_node_view(arm, r->initializer)->item_count != 0;
+            }
+            if (local) {
+                if (fprintf(stream, "uint8_t nl_if_result_%zu;\n",
+                            view->initializer) < 0 ||
+                    !v0_indent(stream, depth) || fputs("if (", stream) < 0 ||
+                    !emit_quantity_bool(stream, fragment, condition) ||
+                    fputs(") {\n", stream) < 0)
+                    return false;
+                for (size_t a = 0; a < 2; ++a) {
+                    const NLCheckedFragment *arm =
+                        nl_checked_if_arm(fragment, view->initializer, a);
+                    const NLCheckedNodeView *r =
+                        nl_checked_node_view(arm, nl_checked_root(arm));
+                    const NLCheckedNodeView *b =
+                        nl_checked_node_view(arm, r->initializer);
+                    if ((b->first_item != 0 &&
+                         !v0_emit_node(stream, arm, b->first_item,
+                                       depth + 1)) ||
+                        !v0_indent(stream, depth + 1) ||
+                        fprintf(stream,
+                                "nl_if_result_%zu = ", view->initializer) < 0 ||
+                        !v1_emit_scalar(stream,
+                                        nl_checked_node_view(arm, b->tail)) ||
+                        fputs(";\n", stream) < 0 || !v0_indent(stream, depth) ||
+                        fputs(a == 0 ? "} else {\n" : "}\n", stream) < 0)
+                        return false;
+                }
+                return v0_indent(stream, depth) &&
+                       fprintf(
+                           stream,
+                           "const uint8_t nl_local_%zu = nl_if_result_%zu;\n",
+                           view->symbol, view->initializer) >= 0 &&
+                       v0_indent(stream, depth) &&
+                       fprintf(stream, "(void)nl_local_%zu;\n", view->symbol) >=
+                           0;
+            }
             if (fprintf(stream, "const uint8_t nl_local_%zu = (",
                         view->symbol) < 0 ||
                 !emit_quantity_bool(stream, fragment, condition) ||

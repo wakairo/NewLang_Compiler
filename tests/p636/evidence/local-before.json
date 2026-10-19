@@ -1,0 +1,18 @@
+[
+  {
+    "build": "build-asan",
+    "sanitizer": "address",
+    "command": "p517_gate_test tests/p630/then_true.nl",
+    "exit": 1,
+    "finding": "heap-buffer-overflow",
+    "log_sha256": "70224b5f72180a370c1091da1d337541b77672c34126fc18e5a0838f44b73e0a"
+  },
+  {
+    "build": "build-ubsan",
+    "sanitizer": "undefined",
+    "command": "p517_gate_test tests/p630/then_true.nl",
+    "exit": 1,
+    "finding": "runtime error:",
+    "log_sha256": "6f14621b76d592bebef13ea43e5da9dc1b620f8d5457222ba92f49253828dd3a"
+  }
+]
