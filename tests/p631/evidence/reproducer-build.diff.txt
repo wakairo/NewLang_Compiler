@@ -1,0 +1,11 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0e09bf4..c1cd712 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -161,0 +162,6 @@ if(BUILD_TESTING)
++    add_executable(p631_world_origin_probe tests/p631/world_origin_probe.c)
++    target_link_libraries(p631_world_origin_probe PRIVATE newlang_checked_c_node newlang_semantic)
++
++    add_executable(p630_public_probe tests/p630/public_probe.c)
++    target_link_libraries(p630_public_probe PRIVATE newlang_semantic)
++
