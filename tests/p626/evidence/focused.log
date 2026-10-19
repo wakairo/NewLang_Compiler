@@ -1,0 +1,10 @@
+Internal ctest changing into directory: /workspace/p626/build
+Test project /workspace/p626/build
+    Start 13: p626_cli_copy_if.integration
+1/2 Test #13: p626_cli_copy_if.integration .....   Passed    1.54 sec
+    Start 14: p626_if_oom.unit
+2/2 Test #14: p626_if_oom.unit .................   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   1.55 sec

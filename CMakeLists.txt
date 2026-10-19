@@ -159,6 +159,18 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:p534_semantic_gate>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541" "${NEWLANG_SANITIZER}")
 
+    add_executable(p626_public_probe tests/p626/public_probe.c)
+    target_link_libraries(p626_public_probe PRIVATE newlang_semantic)
+    add_executable(p626_comparison_gate tests/p626/comparison_gate.c)
+    target_link_libraries(p626_comparison_gate PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME p626_cli_copy_if.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p626/native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p626_public_probe>"
+        "$<TARGET_FILE:p508_gate_test>" "$<TARGET_FILE:p626_comparison_gate>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p626" "${NEWLANG_SANITIZER}")
+    add_test(NAME p626_if_oom.unit COMMAND p508_gate_test oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p626/fits_true.nl")
+
     add_executable(p605_public_probe tests/p605/public_probe.c)
     target_link_libraries(p605_public_probe PRIVATE newlang_semantic)
     add_test(NAME p605_arithmetic_comparison.integration

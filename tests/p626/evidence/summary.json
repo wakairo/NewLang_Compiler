@@ -1,0 +1,795 @@
+{
+  "main": "9ea45c88f71506875c2e1638043894129a947665",
+  "sources": {
+    "fits_true.nl": {
+      "sha256": "e6404c50f47f432b89ac0aafa4f68f2d1d9509c44e3f3504e89d501be7a5a84f",
+      "operands": [
+        11,
+        17
+      ],
+      "condition": 1,
+      "branches": [
+        42,
+        9
+      ],
+      "result": 42,
+      "intent": "normal_cli_native",
+      "baseline_prediction": "CHECK0 / backend4, likely existing IF scalar-kind membership gate"
+    },
+    "fits_false.nl": {
+      "sha256": "83e7d8fc12cd41dc1cdd8aeea64a2b4758819213ddb40d4ca044c57ff4b70d6c",
+      "operands": [
+        23,
+        17
+      ],
+      "condition": 0,
+      "branches": [
+        42,
+        9
+      ],
+      "result": 9,
+      "intent": "normal_cli_native",
+      "baseline_prediction": "CHECK0 / backend4; FALSE arm required"
+    },
+    "fits_alias.nl": {
+      "sha256": "a126d47d238edb3b6ed9e8ac162705ef4d5a9350c8f091c41f329ec3219768d7",
+      "operands": [
+        13,
+        19
+      ],
+      "condition": 1,
+      "branches": [
+        42,
+        9
+      ],
+      "result": 42,
+      "intent": "normal_cli_native",
+      "baseline_prediction": "CHECK0 / backend4; one additional Copy alias only"
+    },
+    "wrong_quantity.nl": {
+      "sha256": "f310ae13afe0515bcaee22f88dfeb6cb614b534b5749d958fcff7ca8a09de0ef",
+      "intent": "semantic_reject",
+      "prediction": "CLI3, less-than exact usize operand type mismatch, zero C"
+    },
+    "complex_arm.nl": {
+      "sha256": "3b797b6ee739f7e9e1170da2844a6e5c669ce78d8ecfbbf1bbb6523358bc2723",
+      "intent": "unsupported_legal_complex_if",
+      "prediction": "CHECK0 / backend4 if checker supports arm-local Copy binding; otherwise record precise semantic/precision barrier, do not broaden"
+    }
+  },
+  "stage0_records": {
+    "main": "9ea45c88f71506875c2e1638043894129a947665",
+    "records": {
+      "evidence/baseline.json": "dce671f4321d4e1bb4833ee558161ebb7e239871bb027dde52bc6362a28be1a2",
+      "evidence/baseline-owned.json": "ee2a2ac9d65d2abd07eeae352edac63289ca558a216ed0c42e87f15d41967844",
+      "frozen.json": "ba9df65eb97c320e09c073596c02829f1163184abdcd50ec11147f79d7b7aa3c"
+    },
+    "src_main_before_sha256": "f1d92d488935a39abf84984a5ee1256993f2c0ba823b09c90b3bc74c1325cc2d",
+    "baseline_binary_sha256": "04b20b149d300b3cc02ffd601a48ec9f2a1d094faef889a8edc9e724779de806",
+    "first_gap": "copy_if_selection scalar enumeration excludes already authenticated NL_CHECKED_USIZE_LESS_THAN; CHECK/public operands+condition/both retained arm worlds already valid",
+    "authorization": "Stage1 one existing scalar-kind connection; keep direct < IF predicate unsupported, old arm/prefix/Copy/body checks and C17 LTR staging unchanged"
+  },
+  "native": {
+    "gcc13": {
+      "positives": [
+        {
+          "source": "fits_true.nl",
+          "source_sha256": "e6404c50f47f432b89ac0aafa4f68f2d1d9509c44e3f3504e89d501be7a5a84f",
+          "check": 0,
+          "c17": 0,
+          "c17_sha256": "2b2f3500d5386af0dd75efe421dace6fa2ca82d537ae94b95ea2a7f379bf1edf",
+          "public": {
+            "operands": [
+              11,
+              17
+            ],
+            "comparison_value": 5,
+            "condition_copy_depth": 1
+          },
+          "if_public": {
+            "if": 20,
+            "condition": 19,
+            "condition_symbol": 3,
+            "bool": 1,
+            "arms": [
+              42,
+              9
+            ],
+            "arm_symbols": [
+              4,
+              5
+            ],
+            "selected_symbol": 6,
+            "copied_symbol": 7,
+            "less_symbol": 3,
+            "operand_symbols": [
+              1,
+              2
+            ],
+            "joined_unknown": true,
+            "authority": 0
+          },
+          "bindings": {
+            "1": [
+              "usize",
+              11
+            ],
+            "2": [
+              "usize",
+              17
+            ],
+            "3": [
+              "bool",
+              1
+            ],
+            "4": [
+              "u8",
+              42
+            ],
+            "5": [
+              "u8",
+              9
+            ],
+            "6": [
+              "u8",
+              42
+            ],
+            "7": [
+              "u8",
+              42
+            ]
+          },
+          "native": {
+            "plain": [
+              0,
+              0
+            ],
+            "passive": [
+              0,
+              0
+            ]
+          },
+          "synthetic_native": {
+            "wrong_comparison": [
+              91,
+              91
+            ],
+            "wrong_direction": [
+              91,
+              91
+            ],
+            "wrong_selected": [
+              91,
+              91
+            ],
+            "wrong_copy": [
+              91,
+              91
+            ]
+          },
+          "gates": {
+            "if": "P508_GATE rejects=77 original=PASS worlds=UNCHANGED driver_allocations=0",
+            "less": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"
+          },
+          "sanitizer": "none"
+        },
+        {
+          "source": "fits_false.nl",
+          "source_sha256": "83e7d8fc12cd41dc1cdd8aeea64a2b4758819213ddb40d4ca044c57ff4b70d6c",
+          "check": 0,
+          "c17": 0,
+          "c17_sha256": "32f0c422a4c7490d17e55b4c674dc95354f078ebf125c786471c93554779e117",
+          "public": {
+            "operands": [
+              23,
+              17
+            ],
+            "comparison_value": 5,
+            "condition_copy_depth": 1
+          },
+          "if_public": {
+            "if": 20,
+            "condition": 19,
+            "condition_symbol": 3,
+            "bool": 0,
+            "arms": [
+              42,
+              9
+            ],
+            "arm_symbols": [
+              4,
+              5
+            ],
+            "selected_symbol": 6,
+            "copied_symbol": 7,
+            "less_symbol": 3,
+            "operand_symbols": [
+              1,
+              2
+            ],
+            "joined_unknown": true,
+            "authority": 0
+          },
+          "bindings": {
+            "1": [
+              "usize",
+              23
+            ],
+            "2": [
+              "usize",
+              17
+            ],
+            "3": [
+              "bool",
+              0
+            ],
+            "4": [
+              "u8",
+              42
+            ],
+            "5": [
+              "u8",
+              9
+            ],
+            "6": [
+              "u8",
+              9
+            ],
+            "7": [
+              "u8",
+              9
+            ]
+          },
+          "native": {
+            "plain": [
+              0,
+              0
+            ],
+            "passive": [
+              0,
+              0
+            ]
+          },
+          "synthetic_native": {
+            "wrong_comparison": [
+              91,
+              91
+            ],
+            "wrong_direction": [
+              91,
+              91
+            ],
+            "wrong_selected": [
+              91,
+              91
+            ],
+            "wrong_copy": [
+              91,
+              91
+            ]
+          },
+          "gates": {
+            "if": "P508_GATE rejects=77 original=PASS worlds=UNCHANGED driver_allocations=0",
+            "less": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"
+          },
+          "sanitizer": "none"
+        },
+        {
+          "source": "fits_alias.nl",
+          "source_sha256": "a126d47d238edb3b6ed9e8ac162705ef4d5a9350c8f091c41f329ec3219768d7",
+          "check": 0,
+          "c17": 0,
+          "c17_sha256": "719c7c1a11d1026c9486c1c9d37a9216567973835854d0b87299ef8e3ace1f70",
+          "public": {
+            "operands": [
+              13,
+              19
+            ],
+            "comparison_value": 5,
+            "condition_copy_depth": 2
+          },
+          "if_public": {
+            "if": 23,
+            "condition": 22,
+            "condition_symbol": 6,
+            "bool": 1,
+            "arms": [
+              42,
+              9
+            ],
+            "arm_symbols": [
+              4,
+              5
+            ],
+            "selected_symbol": 7,
+            "copied_symbol": 8,
+            "less_symbol": 3,
+            "operand_symbols": [
+              1,
+              2
+            ],
+            "joined_unknown": true,
+            "authority": 0
+          },
+          "bindings": {
+            "1": [
+              "usize",
+              13
+            ],
+            "2": [
+              "usize",
+              19
+            ],
+            "3": [
+              "bool",
+              1
+            ],
+            "4": [
+              "u8",
+              42
+            ],
+            "5": [
+              "u8",
+              9
+            ],
+            "6": [
+              "bool",
+              1
+            ],
+            "7": [
+              "u8",
+              42
+            ],
+            "8": [
+              "u8",
+              42
+            ]
+          },
+          "native": {
+            "plain": [
+              0,
+              0
+            ],
+            "passive": [
+              0,
+              0
+            ]
+          },
+          "synthetic_native": {
+            "wrong_comparison": [
+              91,
+              91
+            ],
+            "wrong_direction": [
+              91,
+              91
+            ],
+            "wrong_selected": [
+              91,
+              91
+            ],
+            "wrong_copy": [
+              91,
+              91
+            ]
+          },
+          "gates": {
+            "if": "P508_GATE rejects=77 original=PASS worlds=UNCHANGED driver_allocations=0",
+            "less": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"
+          },
+          "sanitizer": "none"
+        }
+      ],
+      "negatives": [
+        {
+          "source": "wrong_quantity.nl",
+          "check": 3,
+          "c17": 3,
+          "c_bytes": 0,
+          "diagnostic": "tests/p626/wrong_quantity.nl:4:19-4:20: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands"
+        },
+        {
+          "source": "complex_arm.nl",
+          "check": 0,
+          "c17": 4,
+          "c_bytes": 0,
+          "native": null,
+          "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p626/complex_arm.nl"
+        }
+      ],
+      "controls": [
+        {
+          "control": "tests/p508/renamed_true.nl",
+          "check": 0,
+          "c17": 0,
+          "native": [
+            0,
+            0
+          ]
+        },
+        {
+          "control": "tests/fixtures/node_initial_some.nl",
+          "check": 0,
+          "c17": 0,
+          "native": [
+            0,
+            0
+          ]
+        }
+      ]
+    },
+    "clang": {
+      "positives": [
+        {
+          "source": "fits_true.nl",
+          "source_sha256": "e6404c50f47f432b89ac0aafa4f68f2d1d9509c44e3f3504e89d501be7a5a84f",
+          "check": 0,
+          "c17": 0,
+          "c17_sha256": "2b2f3500d5386af0dd75efe421dace6fa2ca82d537ae94b95ea2a7f379bf1edf",
+          "public": {
+            "operands": [
+              11,
+              17
+            ],
+            "comparison_value": 5,
+            "condition_copy_depth": 1
+          },
+          "if_public": {
+            "if": 20,
+            "condition": 19,
+            "condition_symbol": 3,
+            "bool": 1,
+            "arms": [
+              42,
+              9
+            ],
+            "arm_symbols": [
+              4,
+              5
+            ],
+            "selected_symbol": 6,
+            "copied_symbol": 7,
+            "less_symbol": 3,
+            "operand_symbols": [
+              1,
+              2
+            ],
+            "joined_unknown": true,
+            "authority": 0
+          },
+          "bindings": {
+            "1": [
+              "usize",
+              11
+            ],
+            "2": [
+              "usize",
+              17
+            ],
+            "3": [
+              "bool",
+              1
+            ],
+            "4": [
+              "u8",
+              42
+            ],
+            "5": [
+              "u8",
+              9
+            ],
+            "6": [
+              "u8",
+              42
+            ],
+            "7": [
+              "u8",
+              42
+            ]
+          },
+          "native": {
+            "plain": [
+              0,
+              0
+            ],
+            "passive": [
+              0,
+              0
+            ]
+          },
+          "synthetic_native": {
+            "wrong_comparison": [
+              91,
+              91
+            ],
+            "wrong_direction": [
+              91,
+              91
+            ],
+            "wrong_selected": [
+              91,
+              91
+            ],
+            "wrong_copy": [
+              91,
+              91
+            ]
+          },
+          "gates": {
+            "if": "P508_GATE rejects=77 original=PASS worlds=UNCHANGED driver_allocations=0",
+            "less": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"
+          },
+          "sanitizer": "none"
+        },
+        {
+          "source": "fits_false.nl",
+          "source_sha256": "83e7d8fc12cd41dc1cdd8aeea64a2b4758819213ddb40d4ca044c57ff4b70d6c",
+          "check": 0,
+          "c17": 0,
+          "c17_sha256": "32f0c422a4c7490d17e55b4c674dc95354f078ebf125c786471c93554779e117",
+          "public": {
+            "operands": [
+              23,
+              17
+            ],
+            "comparison_value": 5,
+            "condition_copy_depth": 1
+          },
+          "if_public": {
+            "if": 20,
+            "condition": 19,
+            "condition_symbol": 3,
+            "bool": 0,
+            "arms": [
+              42,
+              9
+            ],
+            "arm_symbols": [
+              4,
+              5
+            ],
+            "selected_symbol": 6,
+            "copied_symbol": 7,
+            "less_symbol": 3,
+            "operand_symbols": [
+              1,
+              2
+            ],
+            "joined_unknown": true,
+            "authority": 0
+          },
+          "bindings": {
+            "1": [
+              "usize",
+              23
+            ],
+            "2": [
+              "usize",
+              17
+            ],
+            "3": [
+              "bool",
+              0
+            ],
+            "4": [
+              "u8",
+              42
+            ],
+            "5": [
+              "u8",
+              9
+            ],
+            "6": [
+              "u8",
+              9
+            ],
+            "7": [
+              "u8",
+              9
+            ]
+          },
+          "native": {
+            "plain": [
+              0,
+              0
+            ],
+            "passive": [
+              0,
+              0
+            ]
+          },
+          "synthetic_native": {
+            "wrong_comparison": [
+              91,
+              91
+            ],
+            "wrong_direction": [
+              91,
+              91
+            ],
+            "wrong_selected": [
+              91,
+              91
+            ],
+            "wrong_copy": [
+              91,
+              91
+            ]
+          },
+          "gates": {
+            "if": "P508_GATE rejects=77 original=PASS worlds=UNCHANGED driver_allocations=0",
+            "less": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"
+          },
+          "sanitizer": "none"
+        },
+        {
+          "source": "fits_alias.nl",
+          "source_sha256": "a126d47d238edb3b6ed9e8ac162705ef4d5a9350c8f091c41f329ec3219768d7",
+          "check": 0,
+          "c17": 0,
+          "c17_sha256": "719c7c1a11d1026c9486c1c9d37a9216567973835854d0b87299ef8e3ace1f70",
+          "public": {
+            "operands": [
+              13,
+              19
+            ],
+            "comparison_value": 5,
+            "condition_copy_depth": 2
+          },
+          "if_public": {
+            "if": 23,
+            "condition": 22,
+            "condition_symbol": 6,
+            "bool": 1,
+            "arms": [
+              42,
+              9
+            ],
+            "arm_symbols": [
+              4,
+              5
+            ],
+            "selected_symbol": 7,
+            "copied_symbol": 8,
+            "less_symbol": 3,
+            "operand_symbols": [
+              1,
+              2
+            ],
+            "joined_unknown": true,
+            "authority": 0
+          },
+          "bindings": {
+            "1": [
+              "usize",
+              13
+            ],
+            "2": [
+              "usize",
+              19
+            ],
+            "3": [
+              "bool",
+              1
+            ],
+            "4": [
+              "u8",
+              42
+            ],
+            "5": [
+              "u8",
+              9
+            ],
+            "6": [
+              "bool",
+              1
+            ],
+            "7": [
+              "u8",
+              42
+            ],
+            "8": [
+              "u8",
+              42
+            ]
+          },
+          "native": {
+            "plain": [
+              0,
+              0
+            ],
+            "passive": [
+              0,
+              0
+            ]
+          },
+          "synthetic_native": {
+            "wrong_comparison": [
+              91,
+              91
+            ],
+            "wrong_direction": [
+              91,
+              91
+            ],
+            "wrong_selected": [
+              91,
+              91
+            ],
+            "wrong_copy": [
+              91,
+              91
+            ]
+          },
+          "gates": {
+            "if": "P508_GATE rejects=77 original=PASS worlds=UNCHANGED driver_allocations=0",
+            "less": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"
+          },
+          "sanitizer": "none"
+        }
+      ],
+      "negatives": [
+        {
+          "source": "wrong_quantity.nl",
+          "check": 3,
+          "c17": 3,
+          "c_bytes": 0,
+          "diagnostic": "tests/p626/wrong_quantity.nl:4:19-4:20: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands"
+        },
+        {
+          "source": "complex_arm.nl",
+          "check": 0,
+          "c17": 4,
+          "c_bytes": 0,
+          "native": null,
+          "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p626/complex_arm.nl"
+        }
+      ],
+      "controls": [
+        {
+          "control": "tests/p508/renamed_true.nl",
+          "check": 0,
+          "c17": 0,
+          "native": [
+            0,
+            0
+          ]
+        },
+        {
+          "control": "tests/fixtures/node_initial_some.nl",
+          "check": 0,
+          "c17": 0,
+          "native": [
+            0,
+            0
+          ]
+        }
+      ]
+    }
+  },
+  "new_oom": {
+    "registration_failure_prefixes": 172,
+    "main_failure_prefixes": 110,
+    "rollback": "PASS",
+    "oom_output": null
+  },
+  "local_regression": {
+    "GCC14_Debug_FRONTEND_ONLY": "334/334 PASS",
+    "Clang23.1.2_Debug_FRONTEND_ONLY": "334/334 PASS"
+  },
+  "CI": "PENDING; pre-push committed snapshot, terminal Issue626 report supplies actual result",
+  "candidate_C17": {
+    "fits_true.nl": {
+      "sha256": "2b2f3500d5386af0dd75efe421dace6fa2ca82d537ae94b95ea2a7f379bf1edf",
+      "bytes": 1154
+    },
+    "fits_false.nl": {
+      "sha256": "32f0c422a4c7490d17e55b4c674dc95354f078ebf125c786471c93554779e117",
+      "bytes": 1154
+    },
+    "fits_alias.nl": {
+      "sha256": "719c7c1a11d1026c9486c1c9d37a9216567973835854d0b87299ef8e3ace1f70",
+      "bytes": 1217
+    }
+  }
+}

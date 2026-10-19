@@ -1,0 +1,1 @@
+less source-issued fault/rollback checks failed: CompletedProcess(args=['build/p603_gate_probe', 'tests/p626/fits_true.nl'], returncode=1, stdout='', stderr='/workspace/p626/tests/p603/gate_probe.c:103: attacked\n')

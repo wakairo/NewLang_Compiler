@@ -1,0 +1,114 @@
+{
+  "tests/p626/fits_true.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p626/fits_true.nl\n"
+    }
+  },
+  "tests/p626/fits_false.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p626/fits_false.nl\n"
+    }
+  },
+  "tests/p626/fits_alias.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p626/fits_alias.nl\n"
+    }
+  },
+  "tests/p626/wrong_quantity.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "tests/p626/wrong_quantity.nl:4:19-4:20: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "tests/p626/wrong_quantity.nl:4:19-4:20: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands\n"
+    }
+  },
+  "tests/p626/complex_arm.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p626/complex_arm.nl\n"
+    }
+  },
+  "tests/p508/renamed_true.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 0,
+      "stdout_bytes": 1113,
+      "stdout_sha256": "100e88abcc374136e97de1eed6ad433be2b56026fdc2d514cedf036896058f9d",
+      "stdout": "/* North Star V0/V1/AVS Checked-C reference output. */\n#include <stdint.h>\n\n#include <limits.h>\n_Static_assert(CHAR_BIT == 8, \"NewLang C17 requires 8-bit bytes\");\n_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, \"NewLang C17 requires exact 8-bit uint8_t\");\n#include <stddef.h>\n_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), \"NewLang usize target mismatch\");\n\nstatic void nl_fn_10(void);\n\nstatic void nl_fn_10(void)\n{\n    const size_t nl_local_1 = ((size_t)UINTMAX_C(2));\n    (void)nl_local_1;\n    const size_t nl_local_2 = ((size_t)UINTMAX_C(2));\n    (void)nl_local_2;\n    const _Bool nl_local_3 = (nl_local_1 == nl_local_2);\n    (void)nl_local_3;\n    const uint8_t nl_local_4 = 7;\n    (void)nl_local_4;\n    const uint8_t nl_local_5 = 8;\n    (void)nl_local_5;\n    const _Bool nl_local_6 = nl_local_3;\n    (void)nl_local_6;\n    const uint8_t nl_local_7 = (nl_local_6 ? nl_local_4 : nl_local_5);\n    (void)nl_local_7;\n    const uint8_t nl_local_8 = nl_local_7;\n    (void)nl_local_8;\n    (void)nl_local_8;\n    (void)0;\n}\n\nint main(void)\n{\n    nl_fn_10();\n    return 0;\n}\n",
+      "stderr": ""
+    }
+  },
+  "tests/fixtures/node_initial_some.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 0,
+      "stdout_bytes": 1522,
+      "stdout_sha256": "6040f24fd9aedffe07ca6178822bb6c8b94b2aaf33f1a39b8df9207b545af4b6",
+      "stdout": "/* Bounded Checked-C representation, not a NewLang ABI. */\n#include <stdint.h>\n#include <stddef.h>\n#include <stdlib.h>\n#include <limits.h>\n_Static_assert(CHAR_BIT == 8, \"NewLang C17 requires 8-bit bytes\");\n_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, \"NewLang C17 requires exact 8-bit uint8_t\");\ntypedef struct nl_node nl_node;\ntypedef struct { unsigned tag; const nl_node *ptr; } nl_node_option;\nstruct nl_node { nl_node_option f0; uint8_t f1; };\n#ifdef NEWLANG_NODE_OBSERVER\n#include NEWLANG_NODE_OBSERVER\n#else\n#define NL_NODE_BIND(...) ((void)0)\n#define NL_NODE_REPLACE(...) ((void)0)\n#define NL_NODE_ARM(...) ((void)0)\n#define NL_NODE_RELOAN(...) ((void)0)\n#define NL_NODE_FINISH() ((void)0)\n#endif\nint main(void) {\nnl_node_option nl_v_1 = { 0, NULL };\nuint8_t nl_v_2 = 29;\nnl_node nl_v_3 = { nl_v_1, nl_v_2 };\nnl_node nl_b_0_1 = nl_v_3;\n(void)nl_b_0_1;\nNL_NODE_BIND(0, 1, 1, &nl_b_0_1);\nconst nl_node * nl_v_4;\n{ const nl_node *nl_ref_5 = &nl_b_0_1;\nnl_v_4 = nl_ref_5; }\nconst nl_node * const nl_b_0_3 = nl_v_4;\n(void)nl_b_0_3;\nNL_NODE_BIND(0, 3, 2, &nl_b_0_3);\nconst nl_node * nl_v_6 = nl_b_0_3;\nnl_node_option nl_v_7 = { 1, nl_v_6 };\nuint8_t nl_v_8 = 61;\nnl_node nl_v_9 = { nl_v_7, nl_v_8 };\nnl_node nl_b_0_4 = nl_v_9;\n(void)nl_b_0_4;\nNL_NODE_BIND(0, 4, 1, &nl_b_0_4);\nnl_node_option nl_v_10 = nl_b_0_4.f0;\nconst nl_node_option nl_b_0_5 = nl_v_10;\n(void)nl_b_0_5;\nNL_NODE_BIND(0, 5, 3, &nl_b_0_5);\nnl_node_option nl_v_11 = nl_b_0_5;\n(void)nl_v_11;\nNL_NODE_FINISH();\nreturn 0;\n}\n",
+      "stderr": ""
+    }
+  }
+}

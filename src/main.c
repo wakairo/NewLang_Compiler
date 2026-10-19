@@ -615,6 +615,8 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
         case NL_CHECKED_U8_LITERAL:
         case NL_CHECKED_USIZE_LITERAL:
         case NL_CHECKED_USIZE_EQUALITY:
+        /* The existing bool-origin and operand checks also authenticate <. */
+        case NL_CHECKED_USIZE_LESS_THAN:
         case NL_CHECKED_IDENTIFIER: {
             NLSemanticValueView value;
             ++scalars;
