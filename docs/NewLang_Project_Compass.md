@@ -14,6 +14,7 @@
 - **全操作の自動証明は必須目標ではない**：証明できる条件は checked、証明できない**真の**事前条件は明示的・局所的な `unchecked` と人間の責任で扱える。ordinary safe API は呼出者へ隠れた証明責任を転嫁しない。
 - **製品価値はunchecked件数ではなく監査の局所性**：library authorとordinary-safe callerのUB防止監査・再監査範囲、安全な変更が内部前提を破壊できないことを検証する（詳細は[Product Strategy §1.1](NewLang_Product_Value_Strategy.md#11-ub-prevention-audit-locality-value-hypothesis)）。per-hop uncheckedの多発や権限を無から作る操作は解決ではない。
 - **再利用可能なcompilerへの並行投資**：Product GOを待たず、選択済み意味論のsource→CHECK→公開owned→C17/nativeを、再利用可能・費用限定・安全な形で育てる。P/M/F/Rの能力構築とVの実利用／NewLang対C監査局所性検証を並行する。大きな新機構や製品化は別裁定とし、固定比率・一律gateは増やさない（[Product Strategy §1.3](NewLang_Product_Value_Strategy.md)、[Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go)）。
+- **長期的な製品価値と相互協力**：技術成果を外部プログラマーに役立つ形で先に届け、実用library・技術・自発的な対話を並行して育てる。五つの証拠の側面と公開・協力の詳細は[Product Strategy §1.4](NewLang_Product_Value_Strategy.md#14-製品価値の長期実証と外部協力)が唯一の正本。本Compassはnavigationのみ。
 - **North Star は長期の全用途を定義しない**。個別技術の進歩、仕様上の許容、製品価値の実証を混同しない。
 
 上記は**案内用の要約**。正確な規則・例外・適用範囲は必ず下記の正本で確認する。
@@ -23,6 +24,7 @@
 | タスクで問うこと | 参照先 |
 | --- | --- |
 | C 後継の狙い、GC→Rust→NewLangの多言語主義、二段階のtarget選定・製品価値、no-foreclosure | [Product / Value Strategy](NewLang_Product_Value_Strategy.md) §§1–6,9,11 |
+| 外部プログラマーに先に価値を返す長期指針、五つの製品価値証拠、相互協力／PoC公開の境界 | [Product Strategy §1.4](NewLang_Product_Value_Strategy.md#14-製品価値の長期実証と外部協力)（唯一の製品正本） |
 | CがRustでなく選ばれる可能性の文献証拠・13事例・限界（非規範、未独立検証） | [C/Rust target discovery 2026-10-17](research/C_Rust_Target_Discovery_2026-10-17.md) |
 | 今の North Star、topology、per-hop unchecked の例外、L/R/P/V/C、PASS/FAIL | [North Star Product Validation](NewLang_North_Star_Product_Validation.md) §§1,6–11 |
 | 長期の C-class workload と現段階の coverage | [C Replacement Coverage Map](NewLang_C_Replacement_Coverage_Map.md) |
