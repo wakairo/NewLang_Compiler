@@ -1,0 +1,31 @@
+{
+  "reason": "New harness incorrectly assumed CHECK0/backend4; original frozen P514 permits precision or backend boundary. No source/old oracle/compiler correction. Compare unchanged baseline to new first refusal, do not count as new native or semantic success.",
+  "observed": [
+    {
+      "compiler": "/workspace/p631/build/newlangc",
+      "check": {
+        "exit": 3,
+        "stdout": "",
+        "stderr": "tests/p514/branch_effect.nl:7:18-7:113: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout": "",
+        "stderr": "tests/p514/branch_effect.nl:7:18-7:113: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+      }
+    },
+    {
+      "compiler": "build/newlangc",
+      "check": {
+        "exit": 3,
+        "stdout": "",
+        "stderr": "tests/p514/branch_effect.nl:7:18-7:113: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout": "",
+        "stderr": "tests/p514/branch_effect.nl:7:18-7:113: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+      }
+    }
+  ]
+}
