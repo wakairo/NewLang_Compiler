@@ -278,6 +278,10 @@ NewLangの不完全な実装地図を改善する**探索投資（Exploration）
 
 新しい審査会、独立した申請書、全Track必須sign-offは設けない。Coordinationが探索と製品化のGOを区別し、費用上限と次の裁定を決める。仕様と安全性要求はどちらのGOでも不変とする。
 
+**当面の運用裁定 — v0 compiler-first / Product GO能動判定の一時保留（[Issue #624](https://github.com/wakairo/NewLang_Compiler/issues/624)、2026-10-19）：** 通常の開発優先順位はPによるproduction v0 compilerの**普通のCLI経路**（source→CHECK→必要なsource-issued公開owned→strict C17/native）と、診断・負例・失敗時のclean-up・再現可能性に置く。test-only opt-in、fixture専用の緑、未マージ機構は通常利用可能とは数えない。Mは実装中に発見した最小のsource/semantic gapを裁定し、F/Rは安全上重要な真正性・権限・負例を必要な独立性で検証する。Vを廃止せず、実際の利用・保守・代替から得られ、投資判断を変える事実を扱う。ただし**v0通常利用の次工程ごとにProduct GOの机上の再採点・新たな市場／競合調査を必須gateとすることは一時停止**する。既存の§1.1二段階判定とこの節のProduct GO表は凍結して保存し、判定保留をProduct PASS／全面的な実装GOに読み替えない。新しい高額なowner／proof／encapsulationやsource ruleは従来通り§4.2・§4.3で個別に許可し、§7 blind R／fail-closed／OOM・rollback等の証拠基準を緩めない。
+
+**再評価の実物checkpointと早期STOP：** 最初の通常`newlangc`から、既に採用された機構を組み合わせた**新しい小規模な利用者風のsingle-semantic-unit program**についてSOURCE／semantic CHECK／必要な元source-issued owned／実C17→GCC/Clang nativeを追跡でき、意味のある負例・診断・エラー／cleanupと使い方を示せた時点で、Coordinationはその**成功・不自然さ・未実装境界**を用い、能動的Product GO評価をいつ何に対して再開すべきか裁定する。到達前でも権限偽造／根本的soundness問題、通常経路に不可欠な設計矛盾、費用・scopeの急増、強い具体的利用者反証でSTOPして再裁定する。初回CLI技術CHECKPOINTは製品価値・一般soundnessの合格ではなく、H1 #268 HOLD／UNDECIDEDはそのまま。新しい時限KPI、固定資源比率、全Track追加承認は設けない。実際の初回作業は[Roadmap](NewLang_Development_Roadmap.md)の最新checkpointに従い、個別Issueで費用と停止条件を定める。
+
 ## 5. Finding分類
 
 必要に応じて次のような分類を用いる。
