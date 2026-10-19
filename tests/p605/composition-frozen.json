@@ -1,0 +1,38 @@
+{
+  "frozen_at": "2026-10-19T00:13:43.986979+00:00",
+  "cases": {
+    "composed_true.nl": {
+      "sha256": "6175854c693db32a6d28c8e5f6ee7ef98fa5d016045f0e3f4fc3b57b5a7d6900",
+      "add": [
+        0,
+        0,
+        0
+      ],
+      "subtract": [
+        9,
+        2,
+        7
+      ],
+      "bool": 1,
+      "check": 0,
+      "native": 0
+    },
+    "composed_equal.nl": {
+      "sha256": "80e375a89d385b024ac469499a3610a88845b36283bfba182dc780aabcff5985",
+      "add": [
+        0,
+        0,
+        0
+      ],
+      "subtract": [
+        7,
+        7,
+        0
+      ],
+      "bool": 0,
+      "check": 0,
+      "native": 0
+    }
+  },
+  "scope": "supplemental P605 same-artifact adopted +/- with < diagnostic public views; original P603 corpus unchanged"
+}

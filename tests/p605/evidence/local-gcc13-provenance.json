@@ -1,0 +1,29 @@
+{
+  "trust": "official Debian HTTPS Packages index; payload SHA256 checked against index; no claim of independent OpenPGP verification. Local diagnostic compiler only; repository and CI locks unchanged.",
+  "packages": [
+    {
+      "package": "gcc-13-x86-64-linux-gnu",
+      "version": "13.3.0-16",
+      "url": "https://deb.debian.org/debian/pool/main/g/gcc-13/gcc-13-x86-64-linux-gnu_13.3.0-16_amd64.deb",
+      "sha256": "11a6636a24780eaec7194e45760c612a3bbb42de7b310005b5033760b2154455"
+    },
+    {
+      "package": "cpp-13-x86-64-linux-gnu",
+      "version": "13.3.0-16",
+      "url": "https://deb.debian.org/debian/pool/main/g/gcc-13/cpp-13-x86-64-linux-gnu_13.3.0-16_amd64.deb",
+      "sha256": "8c6efaa4557b6311c22530f5b64dcb739d0338d317161c73f0bce791a3e45c2f"
+    },
+    {
+      "package": "libgcc-13-dev",
+      "version": "13.3.0-16",
+      "url": "https://deb.debian.org/debian/pool/main/g/gcc-13/libgcc-13-dev_13.3.0-16_amd64.deb",
+      "sha256": "0cd4b5bbead6f7908db91846caa7d73533e8ffe26e628e60cd572b8bd363fbdf"
+    },
+    {
+      "package": "gcc-13-base",
+      "version": "13.3.0-16",
+      "url": "https://deb.debian.org/debian/pool/main/g/gcc-13/gcc-13-base_13.3.0-16_amd64.deb",
+      "sha256": "e503620c4d78bc3bd14cc3ba44f604f0156154dca76fe7817c2bea03d6ff4c93"
+    }
+  ]
+}

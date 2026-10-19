@@ -1,0 +1,26 @@
+2026-10-18T12:06:07.5385746Z  17/328 Test  #17: p603_comparison_native.integration ..............***Failed    2.98 sec
+2026-10-18T12:06:07.5393657Z {"source": "literal_true.nl", "sha256": "913c58c6211f1ff5d185daf2cc43e136d4a75b182e5f6c0cbdb0b1663dd13d3b", "check": 0, "public": {"left": 2, "right": 3, "bool": 1, "comparison": 4, "children": [2, 3], "symbols": [0, 0], "values": [1, 2, 3], "operator": [23, 24], "bool_symbol": 1, "if_checks": 0, "authority": 0}, "gate": "CONTROLS rejected=22 original=PASS snapshot=UNCHANGED", "bindings": {"1": ["bool", 1], "2": ["bool", 1]}, "c17": 0, "c_sha256": "61c78232028cd909e1e6129258a2d61b5fc3ddd707fca14d44e149720d400106", "native": {"plain": [0, 0], "observed": [0, 0], "<=": [0, 0], ">": [91, 91], "copy": [91, 91]}, "sanitizer": "none"}
+2026-10-18T12:06:07.5399364Z {"source": "literal_false.nl", "sha256": "b8a2024d2380b3537ff31cbd0dd7cfa89c78ddc8729fe90fcaab942e38cf891c", "check": 0, "public": {"left": 3, "right": 2, "bool": 0, "comparison": 4, "children": [2, 3], "symbols": [0, 0], "values": [1, 2, 3], "operator": [23, 24], "bool_symbol": 1, "if_checks": 0, "authority": 0}, "gate": "CONTROLS rejected=22 original=PASS snapshot=UNCHANGED", "bindings": {"1": ["bool", 0], "2": ["bool", 0]}, "c17": 0, "c_sha256": "968c09f3d5328c8c7b1c984f5f1c31da5f3c71bbccee6cba86e41c86fa000315", "native": {"plain": [0, 0], "observed": [0, 0], "<=": [0, 0], ">": [91, 91], "copy": [91, 91]}, "sanitizer": "none"}
+2026-10-18T12:06:07.5407278Z {"source": "equal_false.nl", "sha256": "a96145cefa06362cc152d413bf8cb6cab6c36c766e9793000da042b3a2066004", "check": 0, "public": {"left": 7, "right": 7, "bool": 0, "comparison": 4, "children": [2, 3], "symbols": [0, 0], "values": [1, 2, 3], "operator": [23, 24], "bool_symbol": 1, "if_checks": 0, "authority": 0}, "gate": "CONTROLS rejected=22 original=PASS snapshot=UNCHANGED", "bindings": {"1": ["bool", 0], "2": ["bool", 0]}, "c17": 0, "c_sha256": "845eb1c2ed415a93b4a05dad958127589b0f9f6e41a023ad76108cffa91b95ff", "native": {"plain": [0, 0], "observed": [0, 0], "<=": [91, 91], ">": [0, 0], "copy": [91, 91]}, "sanitizer": "none"}
+2026-10-18T12:06:07.5412194Z {"source": "zero.nl", "sha256": "5a4f6ed1c4762ccde0ed3d8e8bc867720ccbcee272fefc1949bcb271a04b6214", "check": 0, "public": {"left": 0, "right": 0, "bool": 0, "comparison": 4, "children": [2, 3], "symbols": [0, 0], "values": [1, 2, 3], "operator": [23, 24], "bool_symbol": 1, "if_checks": 0, "authority": 0}, "gate": "CONTROLS rejected=22 original=PASS snapshot=UNCHANGED", "bindings": {"1": ["bool", 0], "2": ["bool", 0]}, "c17": 0, "c_sha256": "17398d526df396e1896603b5a112a3facec3605e3d139f815d7f0497f1062912", "native": {"plain": [0, 0], "observed": [0, 0], "<=": [91, 91], ">": [0, 0], "copy": [91, 91]}, "sanitizer": "none"}
+2026-10-18T12:06:07.5418162Z strict C17: /tmp/p603-ym7x973h/max_true.nlle.c: In function 'nl_fn_10':
+2026-10-18T12:06:07.5419274Z /tmp/p603-ym7x973h/max_true.nlle.c:15:54: error: comparison of unsigned expression in '>= 0' is always true [-Werror=type-limits]
+2026-10-18T12:06:07.5420784Z    15 |     const _Bool nl_local_1 = (((size_t)UINTMAX_C(0)) <= ((size_t)UINTMAX_C(18446744073709551615)));
+2026-10-18T12:06:07.5421598Z       |                                                      ^~
+2026-10-18T12:06:07.5422158Z cc1: all warnings being treated as errors
+2026-10-18T12:06:07.5422494Z
+2026-10-18T12:06:07.5422501Z
+2026-10-18T12:06:07.5422687Z         Start  18: p504_equality_parser.unit
+2026-10-18T12:06:07.5423626Z  18/328 Test  #18: p504_equality_parser.unit .......................   Passed    0.00 sec
+2026-10-18T12:06:07.5424377Z         Start  19: p504_equality_values.unit
+2026-10-18T12:06:07.5431869Z  19/328 Test  #19: p504_equality_values.unit .......................   Passed    0.00 sec
+2026-10-18T12:06:07.5432614Z         Start  20: p504_equality_rollback.unit
+
+2026-10-18T12:06:04.5466383Z  13/328 Test  #13: p603_comparison_parser.unit .....................   Passed    0.00 sec
+2026-10-18T12:06:04.5482579Z  14/328 Test  #14: p603_comparison_values.unit .....................   Passed    0.00 sec
+2026-10-18T12:06:04.5517591Z  15/328 Test  #15: p603_comparison_rollback.unit ...................   Passed    0.00 sec
+2026-10-18T12:06:04.5564806Z  16/328 Test  #16: p603_comparison_oom.unit ........................   Passed    0.00 sec
+2026-10-18T12:06:07.5385746Z  17/328 Test  #17: p603_comparison_native.integration ..............***Failed    2.98 sec
+2026-10-18T12:06:32.9831729Z 167/328 Test #167: llvm.c_api ......................................   Passed    0.01 sec
+2026-10-18T12:08:17.5229880Z 99% tests passed, 1 tests failed out of 328
+2026-10-18T12:08:17.5239714Z 	 17 - p603_comparison_native.integration (Failed)

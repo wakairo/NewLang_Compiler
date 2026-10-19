@@ -1,0 +1,30 @@
+{
+  "frozen_at": "2026-10-19T00:10:58.263847+00:00",
+  "cases": {
+    "minus_then_less.nl": {
+      "sha256": "af93287a4f845e3302f144fdfcf43e1e0a84ba8418d4f1e371d63de0abbac3e6",
+      "stage": "SOURCE",
+      "cli": 3,
+      "c_bytes": 0
+    },
+    "less_then_minus.nl": {
+      "sha256": "6d885bf844a231ae53d76af9c70b2b1578d33d2bbb260d7c25b37ac4d492900a",
+      "stage": "SOURCE",
+      "cli": 3,
+      "c_bytes": 0
+    },
+    "equal_then_less.nl": {
+      "sha256": "ab5c5f7da943716a71890413ef22f39a4e69bbca3e681ca2cd2ec87d8470788e",
+      "stage": "SOURCE",
+      "cli": 3,
+      "c_bytes": 0
+    },
+    "less_then_equal.nl": {
+      "sha256": "7fae07257d4cf7f039a430319243d7f323f400024934ba2f8e2a3cf78fc38d9a",
+      "stage": "SOURCE",
+      "cli": 3,
+      "c_bytes": 0
+    }
+  },
+  "purpose": "supplemental P605 minus/less/equality exclusion regression; not old P603 pre-edit sources"
+}

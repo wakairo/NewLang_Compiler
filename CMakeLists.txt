@@ -159,6 +159,15 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:p534_semantic_gate>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541" "${NEWLANG_SANITIZER}")
 
+    add_executable(p605_public_probe tests/p605/public_probe.c)
+    target_link_libraries(p605_public_probe PRIVATE newlang_semantic)
+    add_test(NAME p605_arithmetic_comparison.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p605/integration_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p605_public_probe>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p605" "${NEWLANG_SANITIZER}")
+    add_test(NAME p605_mutant_phase.unit
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p605/phase_test.py"
+        "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p603/integration_test.py")
     add_executable(p603_public_probe tests/p603/public_probe.c)
     target_link_libraries(p603_public_probe PRIVATE newlang_semantic)
     add_executable(p603_gate_probe tests/p603/gate_probe.c)

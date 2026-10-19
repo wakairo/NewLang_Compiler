@@ -1,0 +1,24 @@
+{
+  "source_sha256": "3b58fc1f60e4a7373b87d3faea50c436ab956e80793c70273ed799022a07a47d",
+  "original_c_sha256": "96f38390f39394688a84250b6bc7d8da42a023a465bcb8e63c9b71de7630f02a",
+  "mutant_c_sha256": "1ae2ec7411d1e36dd2bca5d1b686af9cb869c1f1afb7737fab81d3e943f93d43",
+  "compiler": "x86_64-linux-gnu-gcc-13 (Debian 13.3.0-16) 13.3.0",
+  "outcomes": [
+    {
+      "category": "SAME_TRUTH",
+      "optimization": "-O0",
+      "outcome": "MUTANT_COMPILE_REFUSED",
+      "compile_exit": 1,
+      "diagnostic": "/tmp/p605-record-1vklorx1/same_truth_reproduction.c: In function \u2018nl_fn_10\u2019:\n/tmp/p605-record-1vklorx1/same_truth_reproduction.c:15:54: error: comparison of unsigned expression in \u2018>= 0\u2019 is always true [-Werror=type-limits]\n   15 |     const _Bool nl_local_1 = (((size_t)UINTMAX_C(0)) <= ((size_t)UINTMAX_C(18446744073709551615)));\n      |                                                      ^~\ncc1: all warnings being treated as errors\n",
+      "native_exit": null
+    },
+    {
+      "category": "SAME_TRUTH",
+      "optimization": "-O2",
+      "outcome": "MUTANT_COMPILE_REFUSED",
+      "compile_exit": 1,
+      "diagnostic": "/tmp/p605-record-1vklorx1/same_truth_reproduction.c: In function \u2018nl_fn_10\u2019:\n/tmp/p605-record-1vklorx1/same_truth_reproduction.c:15:54: error: comparison of unsigned expression in \u2018>= 0\u2019 is always true [-Werror=type-limits]\n   15 |     const _Bool nl_local_1 = (((size_t)UINTMAX_C(0)) <= ((size_t)UINTMAX_C(18446744073709551615)));\n      |                                                      ^~\ncc1: all warnings being treated as errors\n",
+      "native_exit": null
+    }
+  ]
+}

@@ -21,7 +21,12 @@ def require(ok, message):
         raise SystemExit(message)
 
 
-def execute(root, cc, name, text, expected, sanitizer):
+def execute(root, cc, name, text, expected, sanitizer, *, mutant_kind=None):
+    require(mutant_kind in (None, "TRUTH_CHANGING", "SAME_TRUTH"),
+            "unknown synthetic mutation category")
+    if mutant_kind is not None:
+        require(expected == (91 if mutant_kind == "TRUTH_CHANGING" else 0),
+                "synthetic category/result mismatch")
     source = root / (name + '.c')
     source.write_text(text)
     statuses = []
@@ -30,11 +35,24 @@ def execute(root, cc, name, text, expected, sanitizer):
         exe = root / (name + opt)
         build = run([cc, '-std=c17', '-Wall', '-Wextra', '-Wpedantic', '-Werror', opt,
                      *extra, str(source), '-o', str(exe)])
+        if build.returncode != 0 and mutant_kind == 'SAME_TRUTH':
+            statuses.append(dict(category=mutant_kind, optimization=opt,
+                                 outcome='MUTANT_COMPILE_REFUSED',
+                                 compile_exit=build.returncode,
+                                 diagnostic=build.stderr, native_exit=None))
+            continue
+        # Original positives and truth-changing falsifiers must strictly compile.
+        # Refusing mutated C is neither a CHECK result nor a native observation.
         require(build.returncode == 0, f'strict C17: {build.stderr}')
         result = run([str(exe)])
         require(result.returncode == expected and not result.stdout and not result.stderr,
                 f'native {name}/{opt}: {result}')
-        statuses.append(result.returncode)
+        if mutant_kind is None:
+            statuses.append(result.returncode)
+        else:
+            statuses.append(dict(category=mutant_kind, optimization=opt,
+                                 outcome='NATIVE_REJECTED' if expected == 91 else 'NATIVE_SAME_TRUTH',
+                                 compile_exit=0, native_exit=result.returncode))
     return statuses
 
 
@@ -121,12 +139,14 @@ def main():
                 observed, mutants = observe(emitted.stdout, evidence, bindings)
                 statuses = {'plain': execute(Path(temp), cc, name+'plain', emitted.stdout, 0, sanitizer),
                             'observed': execute(Path(temp), cc, name+'observed', observed, 0, sanitizer)}
+                mutation_statuses = {}
                 for mutant, (text, expected) in mutants.items():
-                    statuses[mutant] = execute(Path(temp), cc, name+('le' if mutant=='<=' else 'gt' if mutant=='>' else mutant), text, expected, sanitizer)
+                    category = 'TRUTH_CHANGING' if expected == 91 else 'SAME_TRUTH'
+                    mutation_statuses[mutant] = execute(Path(temp), cc, name+('le' if mutant=='<=' else 'gt' if mutant=='>' else mutant), text, expected, sanitizer, mutant_kind=category)
                 print(json.dumps(dict(source=name, sha256=digest, check=0, public=evidence,
                                       gate=fault.stdout.strip(), bindings=bindings, c17=0,
                                       c_sha256=hashlib.sha256(emitted.stdout.encode()).hexdigest(),
-                                      native=statuses, sanitizer=sanitizer)))
+                                      native=statuses, mutations=mutation_statuses, sanitizer=sanitizer)))
             else:
                 for result in (check, emitted):
                     require(result.returncode == 3 and not result.stdout, f'negative accepted {name}')
