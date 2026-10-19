@@ -255,6 +255,8 @@ M/Coordinationがpreflightを行い、R first-passの独立性を損なわない
 
 **軽量さと検証：** 全Issue/PRへのV sign-off、毎週の定例、Compass読了チェックを設けない。最初の数件の重要判断（H1以外も含む）で、比較が**実際のscope・順序・停止**を変えたかと手続き負担を短く振り返り、効果がなければ簡素化・廃止する。§7のblind R独立性と既存§4.2の履歴照合は維持する。
 
+**外部協力・公開の判断境界：** 外部プログラマーにまず技術的な価値を返すこと、自発的な相互協力、library品質と内部PoC／外部評価／製品価値の証拠区分は[Product Strategy §1.4](NewLang_Product_Value_Strategy.md#14-製品価値の長期実証と外部協力)を単一の正本として参照する。技術的採用・独立R/F検証・Product GOは既存の権限と本Processの条件で判断する。**Coordinationは個別の対外文面・時機を編集判断し、実際の公開・連絡はユーザーの明示的選択なしに行わない。** 相手の同意・公開可否・批判・無反応を尊重し、新しい全Track承認、必須KPI、公開gateを設けない。
+
 ### 4.3.1 Exploration GO and Product GO
 
 NewLangの不完全な実装地図を改善する**探索投資（Exploration）**と、利用者に届く機能へ育てる**製品化投資（Exploitation）**は、目的とGO条件が異なる。両方とも最終的なC後継という目標に従うが、**製品価値が未実証という理由だけで探索を止めない**。Track Pのproduction実装も、選択済みv0意味論を実際に使える形へ広げるなら探索投資になり得る。

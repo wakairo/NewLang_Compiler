@@ -137,6 +137,60 @@ C17/nativeのPASSやCHECK0／CI greenは、soundness theoremでもProduct GOで�
 
 **長期の選択肢：** 初期のC後継価値を優先しながら、将来必要な型・APIだけに厳格なownership・exclusive access・不変条件保護を選べるよう発展し、Rustを合理的に選ぶ領域へも届く可能性を不必要に閉ざさない。これは現在のv0で包括的なRust型の規律や未選択機構を導入する許可ではなく、§6 no-foreclosureの長期的視野である。
 
+## 1.4 製品価値の長期実証と外部協力
+
+### 1.4.1 外部プログラマーへの価値提供を先にする
+
+**外部のプログラマーを、NewLangの価値を証明するための無償の調査対象・開発資源として扱わない。** NewLangを使わない人にも意味のある成果を丁寧に届け、そこから自発的な議論、批判、相互学習、共同改善が育つことを通じて長期的な製品価値を確かめる。これは[Issue #612のユーザー承認を受けたCoordination裁定](https://github.com/wakairo/NewLang_Compiler/issues/612#issuecomment-6258856246)に基づく実質的な製品方針であり、宣伝の標語や相手への協力依頼ではない。
+
+役立つ成果とは、たとえば正確なC/Rust比較、再現可能な実コード・テスト・失敗と反例、低水準APIの設計上のtradeoff、公開された技術判断、保守変更と監査の具体的知見、実用性のあるライブラリである。**読むだけで役に立ち、NewLangを採用したり返事したりしなくても利益が残るか**を問う。アンケートの回答率や早期の市場反応を得るためだけに未成熟なPoCを急造・公開しない。相手の時間、既存言語を選ぶ理由、批判、無反応も尊重し、NewLang側の短期ROIの都合を一方的に押し付けない。
+
+**品質・信頼・関係への時間は正当な投資対象**である。丁寧なテスト、保守可能なAPI、正確な比較と訂正、相手への十分な説明には時間がかかり得る。急ぐあまり誤解を誘う成果を公開して信頼を失うことを避ける。ただしこれは無制限のcompiler開発・CI・人員投入を許可するものではなく、既存の費用・安全性・停止条件は維持する。
+
+### 1.4.2 実証の五つの側面 — 説明軸であり新しいgateではない
+
+以下は論理・技術・製品・対外評価・継続利用の証拠を取り違えないための**互いに関係する説明軸**である。**A→Eの必須順序、固定milestone、数値KPI、リリースgate、新しいProduct GO条件ではない。** それぞれの成熟は並行・前後してよい。[§1.1](#11-ub-prevention-audit-locality-value-hypothesis)の二段階判断（Gate 1: Cを積極的に選ぶ理由、Gate 2: NewLang対well-factored Cの実用価値）と[Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go)のExploration/Product GOが引き続き正式な判断基準である。
+
+| 側面 | 確認したいこと | 具体的な証拠と限界 |
+| --- | --- | --- |
+| **A 論理的・設計上の価値** | Cの合理的な選択理由と、NewLangを検討する意味のある設計可能性 | 実用条件、規則・API・反例、現実的な**強いRust／well-factored C**等の代替。論理的可能性は需要・市場規模・製品価値の確証ではない |
+| **B 技術的成立性** | 実compilerが選択した能力をどこまで真に実装・検査できるか | genuine SOURCE→CHECK→source-issued公開checked-owned→strict C17/native、独立R/F、固定SHA、失敗と未実装範囲。CI成功は一般soundnessでも普通callerの安全性でもない |
+| **C 実用的優位** | 意味あるNewLang-native library/APIで、同等のCより人間のUB防止責務を減らすか | 元のphysical identity、allocation／lifetime、失敗・teardown、計算量・ABI、ordinary-safe APIを固定し、**library authorとordinary-safe callerのL/R/P/V/C監査・再監査の影響依存閉包**をwell-factored Cと実変更で比較する |
+| **D 外部プログラマーによる評価** | 相手自身の実務にとって有用・不要・不足・危険と判断されるか | 自発的な技術対話、試用、批判、反例、必要な品質・保守・導入条件。数件の返信・いいね・stars・survey回答数を市場規模やProduct GOに換算しない |
+| **E 継続的な実用価値** | 使い続ける理由、保守変更に耐える理由があるか | 当事者が選ぶ継続利用、実際の修正・配備、開発・維持費、共同改善。より強い後続証拠だが**最初の技術的Product GOに継続月数や利用者数を必須追加しない** |
+
+[#606のL0論理差／L1 PoC／L2外部反応／L3製品価値](https://github.com/wakairo/NewLang_Compiler/issues/606)は関連する表現だが、A〜Eとは**一対一に対応しない**。条件付きで説得力のあるC-positive設計差は、実需要が未確定でも小さく費用限定のExploration仮説となり得る。逆に、実ソースの成功・好意的反応・技術記事があるだけで製品採用を証明したとは言えない。反例や「Rust／Cで十分」という結果も、次の方向を変える貴重な知識である。
+
+### 1.4.3 技術、実用ライブラリ、対外協力を並行して育てる
+
+**技術：** [§1.3](#13-再利用可能なcompiler能力と製品価値検証への並行投資)のもと、すでに選択された安全な意味論を本物のsource／semantic CHECK／真正な公開checked-owned／C17 nativeまで再利用可能に育てる。正負の境界・失敗時挙動を明記し、独立R/Fによる検証、固定authority、CI費用・停止条件を保持する。早い対外反応のためにcanonical、proofの真正性、セキュリティ、soundness要求を緩めない。
+
+**製品：** [§1.2](#12-newlang-native-library-design-as-the-primary-value-validation-path)に沿って、Cが合理的に選ばれる実用操作について**実際に使えるNewLang-native libraryとAPI**の品質を育てる。単発のcheckerが通る最小例から、公開操作・caller責任、元Nodeの物理identity、nonCopy ownerとallocation/lifetime、必要なO(1)等の操作全体の計算量・storage／churn、normal／FULL・EMPTY／OOM／rollback／teardown／FFI・callback等の該当する失敗・保守契約まで扱う。全safe-reachable stateで内部前提を保てるrepresentation hiding／ordinary-safe API、適切な診断・テスト・再現可能な例・使用説明への投資を軽視しない。これは未実装の言語機能を使えると称することでも、すべてのworkloadに全条件を課すことでもない。**既存の十分にfactorしたCを主要baseline**にし、最善の実用的Rustを公平な代替として扱う。
+
+**対外：** NewLang非利用者にも価値ある記事・実コード、C/Rustの強い比較、実験が失敗した理由、訂正を含む再現可能なcase studyで技術的な貢献を準備する。実務家からの自発的な指摘・反証で設計と説明を改善し、本人にも知見を返す。相手の成果・活動の独立性を尊重する。**この方針は個別の外部公開・連絡の認可ではない。**
+
+三つは直列の流水工程ではない。compiler基盤が先行しても、libraryの品質向上が主となっても、読者に有用な設計比較から対話が始まってもよい。Product GOを待たずに安全で小さな再利用可能compiler投資を続けられる一方、大規模な新ownership／proof／encapsulationと製品化は[Process §§4.2–4.3.1](NewLang_Project_Development_Process.md)の別裁定に従う。**並行することは、安全性や製品価値の判定を相互に代用することではない。**
+
+### 1.4.4 自発的な対話から相互協力・実使用へ
+
+**有用なものを先に届ける → 自発的な質問・批判・反例へ誠実に応える → 双方に成果を返す共同改善 → 希望する人の試用と継続的な使用**は望ましい関係の例であって、誰かに次の段階を要求するmarketing funnelではない。読むだけ、単発の指摘、「Rustで十分」、既存Cを使い続けるという判断も健全である。必要なら誤りや限界を公開して訂正し、NewLangの不利な結果やより良い既存の安全APIを隠さない。
+
+技術的な議論・ソース・レビュー・計測への協力は**自発的かつ相互に有益**でなければならない。本人の時間、負担、許諾、クレジット、著作権、非公開コード・顧客情報の守秘、引用・転載可否を尊重し、提供された成果を勝手に外部公開しない。未承認のDM、広範なアンケート送信、返答期限やフォローアップの強要は行わない。成果物への謝意や正確な帰属、再現材料・解説・改善を通じて協力者にも利益を返す。[既存の任意フィードバック窓口 #470](https://github.com/wakairo/NewLang_Compiler/issues/470)は利用できるが、回答獲得そのものを目的化しない。沈黙を市場への肯定・否定として集計しない。
+
+### 1.4.5 PoC公開の意味と、現在の正直な到達点
+
+**内部でSOURCE/CHECK/nativeを通した技術PoC**、**読者が実務のoperation/APIを評価する価値のあるPoC**、**実用ライブラリと製品価値の実証**を別に記述する。外部に説明するなら、再現可能なsourceと実際に動いた検査、元の物理条件、API、失敗条件、強いC/Rust代替、負例と未実装境界を示す。小さいことが問題ではなく、相手にとっての独立の価値や品質が不十分なのに大きな実用上の成功として提示することが問題である。簡単なコードと質問を早期公開することを「PoC-first」の義務にしない。
+
+具体例の[**V #607のL1 packet**](https://github.com/wakairo/NewLang_Compiler/issues/607#issuecomment-6257583407)は、採用済みP572の**3つの元LEXICAL Node／2つの順序付きscoped `next`変更**に関する歴史的SOURCE→公開owned→strict C17/nativeと、**異なる元source**を用いた[R588 calibrated独立結果](https://github.com/wakairo/NewLang_Compiler/issues/588#issuecomment-6242719977)を整理した内部の有限技術資料である。Vが現mainで新たなnative実行をしたわけではなく、factored C helper／Rust `Cell`の簡単な比較は説明用でありV自身の新しいnative検証ではない。現実の成熟したRust intrusive libraryにはoriginal heap nodeのsafe O(1)操作という強い比較対象もある。
+
+**NewLangにはまだ、fallible heap-original nonCopy ownerの返却・refund、完全なmembership保護／representation hiding、再利用可能なordinary-safe library caller API、一般O(1) detach/adoptやC比のauthor＋caller再監査縮小実績がない。** 返却borrow／lending decoderはDeferredな構想でありEXECUTED PoCではない。H1とL3 Product GOはHOLD。[#607のCの短い外向き草稿](https://github.com/wakairo/NewLang_Compiler/issues/607#issuecomment-6257721074)も**ユーザーレビュー用の未公開案**であり、今回の価値先行の判断を受けて、早い質問収集を目的とする安易な公開はしない。読者への独立した有用性・品質を再検討し、必要なら改善または内部保存する。**ユーザーの明示的な公開選択なしに外部掲載・アンケート・連絡は行わない。** #607由来の外部投稿・自発的L2反応は現時点でともにゼロであり、市場規模を意味しない。
+
+### 1.4.6 長期的な実用価値の像と責務
+
+到達したいのは、実Cプログラマーが重要な低水準ライブラリを自身のoriginal identity／allocation／failure／配備条件でNewLangにより設計・試用し、**ordinary-safe callerへ隠れた生存・所属・ownerの証明責任を移さず**、実際の保守変更でwell-factored Cと比べて**library author＋ordinary-safe callerのUB防止監査・再監査の影響依存閉包が減る**ことを当事者の結果から説明できる状態である。運用の継続性と自発的な協力はより強い後続証拠となるが、最初の技術的Product GOに利用人数・継続月数を新たに課さない。安全性の保証は実際のissuer、内部不変条件、合法なwriterとerror／teardown／reentrancyに依存し、宣伝・unchecked行数・未実測工数で置き換えられない。
+
+この§1.4は**価値の届け方と異なる証拠の長期運用に関する単一の製品正本**である。[§1.1](#11-ub-prevention-audit-locality-value-hypothesis)の二段階Product GO、[§1.2](#12-newlang-native-library-design-as-the-primary-value-validation-path)の実用ライブラリ、[§1.3](#13-再利用可能なcompiler能力と製品価値検証への並行投資)の探索投資、Process §4.2/§4.3.1、独立Red Team §7の基準は変更しない。**公開の文面・時機はCoordinationがレビューし、実際の対外投稿・連絡はユーザーの選択による。** 製品価値やH1の未実証状態は本書の改訂だけでは変わらない。
+
 ## 2. 多段階ターゲティング
 
 NewLangはcurrent North Starと最終市場を同一視しない。
