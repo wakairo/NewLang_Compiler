@@ -921,6 +921,13 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # R638 independent frozen source/owned and strict native first-pass.
+    add_executable(r638_public_probe tests/r638/public_probe.c)
+    target_link_libraries(r638_public_probe PRIVATE newlang_semantic)
+    add_test(NAME r638_blind_cli_owned_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r638/native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r638_public_probe>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r638" "${NEWLANG_SANITIZER}")
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
