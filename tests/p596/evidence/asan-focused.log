@@ -1,0 +1,26 @@
+Internal ctest changing into directory: /workspace/p596/build-asan
+Test project /workspace/p596/build-asan
+      Start   1: p572_three_node_owned.unit
+ 1/10 Test   #1: p572_three_node_owned.unit ...........   Passed    0.02 sec
+      Start   2: p572_three_node_fault.unit
+ 2/10 Test   #2: p572_three_node_fault.unit ...........   Passed    0.30 sec
+      Start   3: p572_source_oom.unit
+ 3/10 Test   #3: p572_source_oom.unit .................   Passed    0.35 sec
+      Start   4: p572_three_node_native.integration
+ 4/10 Test   #4: p572_three_node_native.integration ...   Passed    0.84 sec
+      Start 316: p589_parser_oom.unit
+ 5/10 Test #316: p589_parser_oom.unit .................   Passed    0.01 sec
+      Start 317: p589_usize_addition.integration
+ 6/10 Test #317: p589_usize_addition.integration ......   Passed    6.42 sec
+      Start 318: p596_shared_proof.unit
+ 7/10 Test #318: p596_shared_proof.unit ...............   Passed    0.01 sec
+      Start 319: p596_parser_oom.unit
+ 8/10 Test #319: p596_parser_oom.unit .................   Passed    0.01 sec
+      Start 320: p596_usize_subtraction.integration
+ 9/10 Test #320: p596_usize_subtraction.integration ...   Passed    9.42 sec
+      Start 321: c17_target_model.integration
+10/10 Test #321: c17_target_model.integration .........   Passed    2.98 sec
+
+100% tests passed, 0 tests failed out of 10
+
+Total Test time (real) =  20.37 sec

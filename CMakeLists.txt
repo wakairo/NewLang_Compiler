@@ -803,6 +803,26 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p589/integration_test.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p589_public_probe>" "$<TARGET_FILE:p589_gate_test>"
         "$<TARGET_FILE:p534_semantic_gate>" "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p589" "${NEWLANG_SANITIZER}")
+    add_executable(p596_public_probe tests/p596/public_probe.c)
+    target_link_libraries(p596_public_probe PRIVATE newlang_semantic)
+    add_executable(p596_gate_test tests/p596/gate_test.c)
+    target_link_libraries(p596_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
+    add_executable(p596_parser_oom_test tests/p596/parser_oom_test.c)
+    target_link_libraries(p596_parser_oom_test PRIVATE newlang_semantic)
+    target_link_options(p596_parser_oom_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_executable(p596_proof_core_test tests/p596/proof_core_test.c)
+    target_link_libraries(p596_proof_core_test PRIVATE newlang_semantic)
+    add_test(NAME p596_shared_proof.unit
+        COMMAND p596_proof_core_test "${CMAKE_CURRENT_SOURCE_DIR}/tests/p596/literals.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p596/plus.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p596/zero.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p596/shared_sequence.nl")
+    add_test(NAME p596_parser_oom.unit
+        COMMAND p596_parser_oom_test "${CMAKE_CURRENT_SOURCE_DIR}/tests/p596/names.nl")
+    add_test(NAME p596_usize_subtraction.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p596/integration_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p596_public_probe>" "$<TARGET_FILE:p596_gate_test>"
+        "$<TARGET_FILE:p534_semantic_gate>" "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p596" "${NEWLANG_SANITIZER}")
     add_test(NAME c17_target_model.integration
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p584/target_model_test.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:newlangc_p534>" "${CMAKE_C_COMPILER}"

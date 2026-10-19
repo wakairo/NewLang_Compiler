@@ -1,0 +1,19 @@
+{
+  "utc": "2026-10-18T10:08:28.363790+00:00",
+  "classification": "P calibrated regression added after initial implementation; frozen before execution",
+  "source": "shared_sequence.nl",
+  "sha256": "638e82e6885dd16535884f4045e18e1dc3bb7fb4e4fd9896a7601d02ad5e251a",
+  "operations": [
+    "+",
+    "-",
+    "+"
+  ],
+  "values": [
+    15,
+    11,
+    19
+  ],
+  "expected_check": 0,
+  "expected_c17": 0,
+  "expected_native": 0
+}

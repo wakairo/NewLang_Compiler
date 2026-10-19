@@ -7,6 +7,7 @@
 #include "newlang/semantic.h"
 #include "newlang/source.h"
 #include "newlang/usize_addition.h"
+#include "newlang/usize_subtraction.h"
 #include "semantic_internal.h"
 
 #include <stdbool.h>
@@ -149,8 +150,11 @@ static bool quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
             return false;
         expected = value.scalar_value;
         first = false;
-        if (v->kind == NL_CHECKED_USIZE_ADDITION) {
-            if (!nl_checked_usize_addition_valid(f, id, NULL))
+        if (v->kind == NL_CHECKED_USIZE_ADDITION ||
+            v->kind == NL_CHECKED_USIZE_SUBTRACTION) {
+            if (!(v->kind == NL_CHECKED_USIZE_ADDITION
+                      ? nl_checked_usize_addition_valid(f, id, NULL)
+                      : nl_checked_usize_subtraction_valid(f, id, NULL)))
                 return false;
             p->uses_usize = true;
             return true;
@@ -249,7 +253,8 @@ static bool bool_quantity_origin(const NLCheckedFragment *f, NLCheckedNodeId id,
     while (id != 0) {
         const NLCheckedNodeView *v = nl_checked_node_view(f, id);
         if (v->kind == NL_CHECKED_USIZE_LITERAL ||
-            v->kind == NL_CHECKED_USIZE_ADDITION)
+            v->kind == NL_CHECKED_USIZE_ADDITION ||
+            v->kind == NL_CHECKED_USIZE_SUBTRACTION)
             return true;
         id = bool_source_origin(f, id);
     }
@@ -834,16 +839,18 @@ static bool emit_quantity_bool(FILE *stream, const NLCheckedFragment *f,
 {
     if (value->kind != NL_CHECKED_USIZE_EQUALITY &&
         value->kind != NL_CHECKED_USIZE_LESS_THAN &&
-        value->kind != NL_CHECKED_USIZE_ADDITION)
+        value->kind != NL_CHECKED_USIZE_ADDITION &&
+        value->kind != NL_CHECKED_USIZE_SUBTRACTION)
         return v1_emit_scalar(stream, value);
     const NLCheckedNodeView *left =
         nl_checked_node_view(f, value->first_argument);
     const NLCheckedNodeView *right =
         nl_checked_node_view(f, left->next_argument);
     return fputc('(', stream) != EOF && v1_emit_scalar(stream, left) &&
-           fputs(value->kind == NL_CHECKED_USIZE_ADDITION    ? " + "
-                 : value->kind == NL_CHECKED_USIZE_LESS_THAN ? " < "
-                                                             : " == ",
+           fputs(value->kind == NL_CHECKED_USIZE_ADDITION      ? " + "
+                 : value->kind == NL_CHECKED_USIZE_SUBTRACTION ? " - "
+                 : value->kind == NL_CHECKED_USIZE_LESS_THAN   ? " < "
+                                                               : " == ",
                  stream) >= 0 &&
            v1_emit_scalar(stream, right) && fputc(')', stream) != EOF;
 }
@@ -1513,6 +1520,7 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
     case NL_CHECKED_U8_LITERAL:
     case NL_CHECKED_USIZE_LITERAL:
     case NL_CHECKED_USIZE_ADDITION:
+    case NL_CHECKED_USIZE_SUBTRACTION:
     case NL_CHECKED_USIZE_EQUALITY:
     case NL_CHECKED_USIZE_LESS_THAN:
     case NL_CHECKED_IDENTIFIER:
@@ -1758,6 +1766,7 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     case NL_CHECKED_U8_LITERAL:
     case NL_CHECKED_USIZE_LITERAL:
     case NL_CHECKED_USIZE_ADDITION:
+    case NL_CHECKED_USIZE_SUBTRACTION:
     case NL_CHECKED_USIZE_EQUALITY:
     case NL_CHECKED_USIZE_LESS_THAN:
     case NL_CHECKED_IDENTIFIER:
