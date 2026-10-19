@@ -879,3 +879,14 @@ if(BUILD_TESTING)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
 endif()
+
+# Independent R642 pre-freeze checks; excluded from Production targets.
+if(BUILD_TESTING)
+    add_executable(r642_public_probe tests/r642/public_probe.c)
+    target_link_libraries(r642_public_probe PRIVATE newlang_semantic)
+    add_test(NAME r642_fixed_main_preflight.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r642/preflight.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r642_public_probe>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r642")
+    set_tests_properties(r642_fixed_main_preflight.integration PROPERTIES TIMEOUT 90)
+endif()
