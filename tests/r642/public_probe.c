@@ -87,8 +87,7 @@ static int examine(const char *path, bool negative)
         }
     }
     if (conditionals != 1) {
-        fprintf(stderr, "R642: expected one owned IF, got %zu\n",
-                conditionals);
+        fprintf(stderr, "R642: expected one owned IF, got %zu\n", conditionals);
         goto cleanup;
     }
     printf("R642: registered public-owned body nodes=%zu IF=%zu arms=2\n",
