@@ -341,6 +341,10 @@ selected representative workloads / attack questions
 初回attackの前には、原則としてM/F/Pの結論、設計意図、closure report、過去の議論を先に読ませない。
 既存trackのframingをそのまま継承する前に、独自に仕様を読んで壊すためである。
 
+**独立性は、最初に書いたテストコードを一字も修正しないことではない。**
+独自に立てた検証の問い・期待する意味論・観測の来歴を守ることが本質であり、
+検証機材の不備の自律修復は§7.6に従って行う。
+
 ### 7.2 Attack phase中のcommunication
 
 初回attack中は次を原則とする。
@@ -384,42 +388,88 @@ minor editごとにfull Red Team reviewを行う必要はない。
 「現在案が良いことを確認してください」という依頼は避ける。
 
 
-### 7.6 独立実測中の検証ハーネス修復
+### 7.6 独立実測の自律修復と証拠の保持
 
-Red Team の独立性を保つことと、テストハーネスの単純な誤りのたびに
-Coordination 裁定を待つことは同義ではない。**事前に Issue で認可した
-実測checkpoint の範囲内**なら、R は自分で書いた検証環境の明白な不備を
-修正し、その区切りまで続行してよい。
+**重要なのは、テストの独立性を守ることであって、テストコードを一度も
+修正しないことではない。** Red Teamの独立性は、検証の問い、根拠となる
+canonical、予測した安全性・意味論上の結果、観測の来歴、結論の形成過程にある。
+最初のテスト入力・ハーネスに誤りがなかったことを意味しない。
+format違反や接続ミスだけで毎回停止・新Issue起票とすると、独立検証のための
+手続きが実測を妨げる。Rは事前に認可されたscope内で、**自分の検証機材の
+本質的でない不備を自ら修正し、再検証まで進めることを原則**とする。
 
-- **事前凍結**：対象 compiler/canonical/commit、独立 NewLang source、
-  source SHA、予測した正常・異常結果、物理 topology / 安全性 oracle、
-  使用可能な公開 checked-owned 情報、専用 branch / CI、最大修正 commit 数と
-  CI 実行回数、区切り・停止条件を Issue に記載する。無期限の自動リトライは認可しない。
-- **自律修復できる範囲**：R 専用の API 呼出名、正規表現・ログ parser、
-  assertion 到達前の検証環境、読み取り専用観測プログラムの明確な実装ミス、
-  CI 祖先 SHA / checkout 設定等。**最初の失敗ログを保存し、変更前に
-  既存ログ・模擬入力で offline preflight** を行う。各最小修正・commit・CI を
-  順に記録し、実測を隠す上書きや都合のよい再実行はしない。
-- **自律修復できない範囲**：対象 compiler / Production、独立 source、
-  期待する安全性・root identity・pointer 比較・失敗診断、issuer / validator、
-  canonical、observer による guest state の書換え、sanitizer / `-Werror` の
-  緩和、初回判定前の P/M の結果や oracle の取り込み。これらの変更が必要なら
-  修復を止めて Coordination に返す。
-- **実質的な停止**：予測に反する source/check、checked-owned、C17/native
-  挙動、実際の安全性違反・unsoundness の疑い、独立性の破れ、原因を R の
-  ハーネスだけに帰せない不一致、予算超過、権限・依存範囲の変更は、まず
-  **FINDING / INCONCLUSIVE として事実を凍結して停止**する。観測条件を
-  書き換えて PASS に寄せてはならない。
-- **報告 checkpoint**：通常は CI 1 回ごとの停止ではなく、事前に定めた
-  source→check→owned→generated artifact→実 native 観測（必要なら
-  negative/sanitizer を含む）までの区切り、または上記 STOP で終了する。
-  各ハーネス修正と試行回数を audit 可能に残し、**最終 verdict は一度**記録する。
-  PASS の範囲は到達した有限条件に限定し、merge / Product GO は
-  Coordination が別途裁定する。
+#### 守るものと、修正してよいもの
 
-Issue が修復権限・予算を与えていない場合、R は勝手に scope を拡張しない。
-この節は§7.1–7.3の BLIND 情報隔離や finding の凍結を緩めるものではなく、
-**検証対象の失敗と検証機材の失敗を分離する**ための運用である。
+- **変えないもの**：対象compilerとcanonicalの固定authority、検証する
+  safety / semantic invariant、元の入力について独立に立てた予測、発行元・
+  root / field / pointer等のidentityとauthorityに関する要求、異常系の
+  reject条件、初回の実測ログおよびfinding。期待した結果に合わせて
+  compiler・issuer・validatorやoracleを書き換えたり、guest stateを
+  observerから作ったり、sanitizer・警告・検査を緩和したりしない。
+- **Rが自律修復してよいもの**：Rが所有するformatter・CMake・test登録、
+  build / link、公開APIの呼出名、CLI引数、テストドライバ、ログの解析、
+  読み取り専用observer、checkout / CI設定等の機械的な誤り。
+  **構文・綴りだけのsource修正**も、検証したい操作・安全性条件と期待する
+  guest値・物理identityを変えない場合には可能とする。
+  これらは修復の例であって、列挙されない類似の不備を一律停止にしない。
+- **sourceの訂正と独立性**：sourceのバイト列を修正したら新しいSHAと
+  修正理由を記録し、修正前のsource・parser / CHECK結果・ログを保存する。
+  元の入力が構文違反なら、それは「元の入力の拒否」であり、
+  修正後に通った結果で元の入力の判定を上書きしない。
+  修正後のsourceについて、実行結果を見る**前**に独立した期待値を明記する。
+  sourceが合法になったことはbackend/native安全性のPASSとは別である。
+  構造・操作・期待値が実質的に変わる場合は、単なる修復と呼ばず、
+  新しい検証ケース・oracleとして区別し、scopeと情報隔離を再確認する。
+- **BLINDとcalibratedを区別する**：BLIND first-passでは、修復中も§7.1–7.3の
+  M/F/P情報隔離を維持する。固定mainの公開文法・headers、R自身の既存ログ、
+  実行前に自ら用意したmock入力などで検証機材を直すことは、producerの
+  正解や設計意図を取り込むことと同義ではない。
+  しかしproducerのsource・oracle・期待結果を参照してcaseを直したなら、
+  その後の試行をfresh BLINDと呼ばず、明示的にNON-BLIND calibratedとする。
+  初回判定や以前のBLIND証拠を遡及的に書き換えない。
+
+#### 修復から再実測までの手順
+
+1. **まず故障層を特定する**：source syntax / semantic eligibility、
+   R-owned harness / formatter / CI、公開checked-owned、compiler proof /
+   backend、C17/native、sanitizer、実行環境を分け、実際に到達した段階と
+   NOT TESTEDを記録する。R自身のテスト準備不備をcompilerのfindingとせず、
+   逆にcompilerの予想外の振る舞いを「ハーネス不備」と決めつけない。
+2. **初回証拠を保存して修復する**：失敗したsource/commit/SHA、コマンド、
+   診断、CI job、観測値を残し、同じ問題を再現する小さな既知入力や
+   静的確認で修正内容を点検する。R所有の変更と元の予測を区別して記録し、
+   目的の観測点まで同じscopeで実際に再実行する。修復コードが存在するだけ、
+   buildが通っただけでは目的の検証をPASSとしない。
+3. **GitHub Actionsでは無駄な起動を避ける**：専用branchで修復が複数fileに
+   及ぶ場合は、まず差分を揃えてから**一まとまりのcommit**としてpushする。
+   開いたPRへのfile別逐次更新は各pushでActionsを起動し得るため、
+   意図しないCI消費を防ぐ。失敗・修復・再実行を同一Issue / PRから追跡できる
+   ようにし、途中のrunや失敗を隠さない。使用する実行方式
+   （GitHub branch + Actionsか、認可されたlocal環境か）もIssueに明示する。
+4. **予算は手段であり目的ではない**：各Issueで修復可能な範囲、実行資源、
+   観測checkpointと停止条件を事前に決める。ただし**特定の修正回数を
+   この正本の普遍的な上限・独立性の定義とはしない**。format等の軽微な
+   不備で直ちに停止することを既定にせず、自律修復できる余地を実行計画へ
+   含める。明示されたCI / scopeの予算を超えて勝手に続行はせず、
+   必要ならCoordinationへ予算変更・環境変更を求める。
+5. **最終判定を分離する**：最終報告は修復前の結果、修復差分、
+   修復後の実測、到達しなかった層、独立に得た結果とproducerによる
+   校正材料を区別する。正常系や一部jobだけの成功を全体PASSとせず、
+   first-passとcalibratedの証拠階層を混同しない。通常の報告checkpointは
+   CIの各回ではなく、source→CHECK→真正なowned→C17/native
+   （適用時はnegative/sanitizer）までの有限の実測区切りとする。
+
+**直ちに停止・裁定へ戻すもの**は、予測に反するsemantic CHECK、
+checked-owned / proof / authority、C17/native、実際の安全性違反・
+unsoundness疑い、発行元や元のroot identityの不整合、Rの検証機材だけで
+説明できない差異、BLIND情報隔離の破れ、修復によるoracle・scope変更、
+対象compiler / canonicalの変更が必要な場合、および明示予算の超過である。
+これらを期待値変更やテスト除外でPASSに寄せてはならない。
+
+この方針は**検証対象の失敗と検証機材の失敗を分離しながら、
+Rが実測まで自律的に到達するための運用原則**である。
+§7.1–7.3の独立性を緩めず、Rによる有限のPASSを一般soundnessや
+Product GOへ昇格させない。最終的な受理・merge・次scopeはCoordinationが裁定する。
 
 ## 8. 相関したvalidationを避ける
 
