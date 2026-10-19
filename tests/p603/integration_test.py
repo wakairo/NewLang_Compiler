@@ -78,7 +78,19 @@ def observe(text, evidence, bindings):
     a, b = evidence['left'], evidence['right']
     operands = [f'nl_local_{s}' if s else f'((size_t)UINTMAX_C({v}))'
                 for s, v in zip(evidence['symbols'], (a, b))]
-    expression = f'({operands[0]} < {operands[1]})'
+    temporaries = list(re.finditer(
+        r'const size_t (nl_less_(left|right)_(\d+)) = ([^\n]+);', text))
+    if temporaries:
+        require(len(temporaries) == 2 and
+                [m[2] for m in temporaries] == ['left', 'right'] and
+                temporaries[0][3] == temporaries[1][3] and
+                [m[4] for m in temporaries] == operands and
+                temporaries[0].end() < temporaries[1].start() and
+                temporaries[1].end() < comparisons[0].start(),
+                'sequenced original guest operand carriers')
+        expression = f'({temporaries[0][1]} < {temporaries[1][1]})'
+    else:
+        expression = f'({operands[0]} < {operands[1]})'
     require(comparisons[0][4] == expression and
             int(comparisons[0][3]) == evidence['bool_symbol'], 'original typed operands')
     require('_Static_assert(SIZE_MAX == UINTMAX_C(' in text and 'CHAR_BIT == 8' in text,
@@ -86,6 +98,9 @@ def observe(text, evidence, bindings):
     observed = text.replace('#include <stddef.h>', '#include <stddef.h>\n#include <stdlib.h>')
     observed = re.sub(pattern, lambda m: m[0] +
                       f'\n    if ({m[2]} != {bindings[int(m[3])][1]}) exit(91);', observed)
+    for temporary, value in zip(temporaries, (a, b)):
+        observed = observed.replace(temporary[0], temporary[0] +
+                                    f'\n    if ({temporary[1]} != ((size_t)UINTMAX_C({value}))) exit(91);', 1)
     mutants = {}
     for operator, truth in (('<=', a <= b), ('>', a > b)):
         mutants[operator] = (observed.replace(expression, expression.replace(' < ', f' {operator} '), 1),
@@ -102,6 +117,7 @@ def main():
     root = Path(directory)
     frozen = json.loads((root / 'frozen.json').read_text())
     candidate = json.loads((root / 'evidence/candidate-initial.json').read_text())
+    portable = json.loads((root.parent / 'p609/evidence/generated-index.json').read_text())
     for path, digest in frozen['unchanged_controls'].items():
         require(hashlib.sha256((root.parent.parent / path).read_bytes()).hexdigest() == digest,
                 f'historical source changed {path}')
@@ -130,6 +146,11 @@ def main():
             if oracle['stage'] == 'native':
                 require(check.returncode == emitted.returncode == 0 and not check.stdout and
                         not check.stderr and not emitted.stderr, f'admission {name}: {check} {emitted}')
+                snapshot = portable[name]
+                require(snapshot['source_sha256'] == digest and
+                        hashlib.sha256(emitted.stdout.encode()).hexdigest() == snapshot['new_c17_sha256'] and
+                        hashlib.sha256((root / 'evidence' / name.replace('.nl', '.c17.txt')).read_bytes()).hexdigest() == snapshot['old_c17_sha256'],
+                        f'versioned original/portable C17 snapshot changed {name}')
                 public = run([probe, str(source)])
                 require(public.returncode == 0 and not public.stderr, f'public observation {public}')
                 lines = public.stdout.splitlines()

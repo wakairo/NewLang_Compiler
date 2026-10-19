@@ -1,0 +1,7 @@
+{
+  "source": "max_false.nl",
+  "artifact": "unchanged historical P603 generated C17",
+  "compile_exit": 1,
+  "native_exit": null,
+  "diagnostic": "tests/p603/evidence/max_false.c17.txt: In function \u2018nl_fn_10\u2019:\ntests/p603/evidence/max_false.c17.txt:14:73: error: comparison of unsigned expression in \u2018< 0\u2019 is always false [-Werror=type-limits]\n   14 |     const _Bool nl_local_1 = (((size_t)UINTMAX_C(18446744073709551615)) < ((size_t)UINTMAX_C(0)));\n      |                                                                         ^\ncc1: all warnings being treated as errors\n"
+}

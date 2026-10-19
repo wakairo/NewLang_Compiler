@@ -846,10 +846,12 @@ static bool emit_quantity_bool(FILE *stream, const NLCheckedFragment *f,
         nl_checked_node_view(f, value->first_argument);
     const NLCheckedNodeView *right =
         nl_checked_node_view(f, left->next_argument);
+    if (value->kind == NL_CHECKED_USIZE_LESS_THAN)
+        return fprintf(stream, "(nl_less_left_%zu < nl_less_right_%zu)",
+                       value->first_argument, value->first_argument) >= 0;
     return fputc('(', stream) != EOF && v1_emit_scalar(stream, left) &&
            fputs(value->kind == NL_CHECKED_USIZE_ADDITION      ? " + "
                  : value->kind == NL_CHECKED_USIZE_SUBTRACTION ? " - "
-                 : value->kind == NL_CHECKED_USIZE_LESS_THAN   ? " < "
                                                                : " == ",
                  stream) >= 0 &&
            v1_emit_scalar(stream, right) && fputc(')', stream) != EOF;
@@ -1754,6 +1756,30 @@ static bool v1_emit_call(FILE *stream, const NLCheckedFragment *f,
     return fprintf(stream, "(void)nl_call_%zu;\n", id) >= 0;
 }
 
+/* The validated flat comparison has two pure literal/identifier operands.
+ * Sequence their actual guest size_t values before comparing, rather than
+ * spelling an unsigned constant < 0 that GCC13 rejects under -Wtype-limits.
+ * Do not substitute the checker's known truth or change the target guard. */
+static bool emit_less_operands(FILE *stream, const NLCheckedFragment *f,
+                               const NLCheckedNodeView *value, size_t depth)
+{
+    if (value->kind != NL_CHECKED_USIZE_LESS_THAN)
+        return true;
+    const NLCheckedNodeView *left =
+        nl_checked_node_view(f, value->first_argument);
+    const NLCheckedNodeView *right =
+        nl_checked_node_view(f, left->next_argument);
+    return v0_indent(stream, depth) &&
+           fprintf(stream,
+                   "const size_t nl_less_left_%zu = ", value->first_argument) >=
+               0 &&
+           v1_emit_scalar(stream, left) && fputs(";\n", stream) >= 0 &&
+           v0_indent(stream, depth) &&
+           fprintf(stream, "const size_t nl_less_right_%zu = ",
+                   value->first_argument) >= 0 &&
+           v1_emit_scalar(stream, right) && fputs(";\n", stream) >= 0;
+}
+
 static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                          NLCheckedNodeId id, size_t depth)
 {
@@ -1771,7 +1797,8 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     case NL_CHECKED_USIZE_LESS_THAN:
     case NL_CHECKED_IDENTIFIER:
     case NL_CHECKED_PTR_FROM_REF:
-        return v0_indent(stream, depth) && fputs("(void)", stream) >= 0 &&
+        return emit_less_operands(stream, fragment, view, depth) &&
+               v0_indent(stream, depth) && fputs("(void)", stream) >= 0 &&
                (view->kind == NL_CHECKED_PTR_FROM_REF
                     ? gate_emit_ptr(stream, fragment, view)
                     : emit_quantity_bool(stream, fragment, view)) &&
@@ -1816,7 +1843,8 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
         if (initializer->kind == NL_CHECKED_LOAN_HEADER &&
             !gate_emit_loan(stream, fragment, initializer, depth))
             return false;
-        if (!v0_indent(stream, depth))
+        if (!emit_less_operands(stream, fragment, initializer, depth) ||
+            !v0_indent(stream, depth))
             return false;
         if (initializer->kind == NL_CHECKED_AGGREGATE) {
             if (fprintf(stream,

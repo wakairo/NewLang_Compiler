@@ -1,0 +1,650 @@
+[
+  {
+    "source": "literal_true.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_true.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_true.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_true.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_true.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_true.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_true.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_true.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_false.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_false.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_false.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_false.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_false.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_false.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_false.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "literal_false.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "equal_false.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "equal_false.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "equal_false.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "equal_false.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "equal_false.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "equal_false.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "equal_false.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "equal_false.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "zero.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "zero.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "zero.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "zero.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "zero.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "zero.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "zero.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "zero.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_true.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_true.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_true.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_true.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_true.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_true.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_true.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_true.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_false.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_false.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_false.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_false.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_false.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_false.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_false.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_false.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_equal.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_equal.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_equal.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_equal.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_equal.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_equal.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_equal.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "max_equal.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_true.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_true.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_true.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_true.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_true.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_true.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_true.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_true.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_equal.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_equal.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_equal.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_equal.nl",
+    "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_equal.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_equal.nl",
+    "compiler": "clang-23",
+    "optimization": "-O0",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_equal.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "plain",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  },
+  {
+    "source": "named_equal.nl",
+    "compiler": "clang-23",
+    "optimization": "-O2",
+    "form": "observed",
+    "compile_exit": 0,
+    "native_exit": 0,
+    "claim": "SHAPE FEASIBILITY FROM OLD SNAPSHOT; not rebuilt compiler evidence"
+  }
+]
