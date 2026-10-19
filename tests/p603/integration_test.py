@@ -35,13 +35,14 @@ def execute(root, cc, name, text, expected, sanitizer, *, mutant_kind=None):
         exe = root / (name + opt)
         build = run([cc, '-std=c17', '-Wall', '-Wextra', '-Wpedantic', '-Werror', opt,
                      *extra, str(source), '-o', str(exe)])
-        if build.returncode != 0 and mutant_kind == 'SAME_TRUTH':
+        if build.returncode != 0 and mutant_kind is not None:
             statuses.append(dict(category=mutant_kind, optimization=opt,
                                  outcome='MUTANT_COMPILE_REFUSED',
                                  compile_exit=build.returncode,
                                  diagnostic=build.stderr, native_exit=None))
             continue
-        # Original positives and truth-changing falsifiers must strictly compile.
+        # Original positives must strictly compile. Either synthetic math class
+        # may be compile-refused, but this supplies no runtime falsifier.
         # Refusing mutated C is neither a CHECK result nor a native observation.
         require(build.returncode == 0, f'strict C17: {build.stderr}')
         result = run([str(exe)])
@@ -54,6 +55,11 @@ def execute(root, cc, name, text, expected, sanitizer, *, mutant_kind=None):
                                  outcome='NATIVE_REJECTED' if expected == 91 else 'NATIVE_SAME_TRUTH',
                                  compile_exit=0, native_exit=result.returncode))
     return statuses
+
+
+def require_runtime_falsifiers(witnesses):
+    require(all(witnesses.get(family) for family in ('<=', '>', 'copy')),
+            'missing non-boundary compiled/runtime91 synthetic family')
 
 
 def observe(text, evidence, bindings):
@@ -111,6 +117,9 @@ def main():
             if result.returncode:
                 old_code = re.search(r'error\([^)]*\)\[[^]]*\]', old['diagnostic'])[0]
                 require(old_code in result.stderr, f'legacy diagnostic regression {path}')
+    boundary = max(value for case in frozen['oracles'].values()
+                   if case['stage'] == 'native' for value in case['operands'])
+    witnesses = {family: [] for family in ('<=', '>', 'copy')}
     with tempfile.TemporaryDirectory(prefix='p603-') as temp:
         for name, digest in frozen['sources'].items():
             source = root / name
@@ -143,6 +152,13 @@ def main():
                 for mutant, (text, expected) in mutants.items():
                     category = 'TRUTH_CHANGING' if expected == 91 else 'SAME_TRUTH'
                     mutation_statuses[mutant] = execute(Path(temp), cc, name+('le' if mutant=='<=' else 'gt' if mutant=='>' else mutant), text, expected, sanitizer, mutant_kind=category)
+                    # Both operands are positive and away from the target-width
+                    # boundary; these runtime witnesses cannot be replaced by a
+                    # compile refusal on the zero/MAX instrumentation variants.
+                    if all(0 < value < boundary for value in oracle['operands']):
+                        for row in mutation_statuses[mutant]:
+                            if row['outcome'] == 'NATIVE_REJECTED' and row['native_exit'] == 91:
+                                witnesses[mutant].append(dict(source=name, optimization=row['optimization']))
                 print(json.dumps(dict(source=name, sha256=digest, check=0, public=evidence,
                                       gate=fault.stdout.strip(), bindings=bindings, c17=0,
                                       c_sha256=hashlib.sha256(emitted.stdout.encode()).hexdigest(),
@@ -162,6 +178,8 @@ def main():
                                 f'wrong phase {name}: {result.stderr}')
                 require(check.returncode == candidate[name]['check'], 'unrecorded candidate change')
                 print(json.dumps(dict(source=name, exit=3, diagnostic=check.stderr.strip(), c_bytes=0)))
+    require_runtime_falsifiers(witnesses)
+    print(json.dumps(dict(runtime_falsifiers=witnesses)))
     print('P603 finite source-owned Copy comparator; no privileged public validator or Product GO')
 
 

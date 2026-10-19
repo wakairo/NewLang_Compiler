@@ -17,21 +17,20 @@ def main():
     bad = '#error P605_SYNTHETIC_COMPILER_REFUSAL\n'
     with tempfile.TemporaryDirectory(prefix='p605-phase-') as tmp:
         root = Path(tmp)
-        cases = ((None, 0), ('TRUTH_CHANGING', 91))
-        for category, expected in cases:
-            try:
-                module.execute(root, cc, 'must_compile', bad, expected, 'none', mutant_kind=category)
-            except SystemExit as error:
-                assert 'strict C17:' in str(error)
-            else:
-                raise SystemExit('compile refusal incorrectly passed original/truth-changing policy')
-        rows = module.execute(root, cc, 'same_truth', bad, 0, 'none', mutant_kind='SAME_TRUTH')
-        assert len(rows) == 2
-        for row in rows:
-            assert row['category'] == 'SAME_TRUTH'
-            assert row['outcome'] == 'MUTANT_COMPILE_REFUSED'
-            assert row['compile_exit'] != 0 and row['native_exit'] is None
-            assert 'P605_SYNTHETIC_COMPILER_REFUSAL' in row['diagnostic']
+        try:
+            module.execute(root, cc, 'must_compile', bad, 0, 'none')
+        except SystemExit as error:
+            assert 'strict C17:' in str(error)
+        else:
+            raise SystemExit('compile refusal incorrectly passed original policy')
+        for category, expected in (('SAME_TRUTH', 0), ('TRUTH_CHANGING', 91)):
+            rows = module.execute(root, cc, category, bad, expected, 'none', mutant_kind=category)
+            assert len(rows) == 2
+            for row in rows:
+                assert row['category'] == category
+                assert row['outcome'] == 'MUTANT_COMPILE_REFUSED'
+                assert row['compile_exit'] != 0 and row['native_exit'] is None
+                assert 'P605_SYNTHETIC_COMPILER_REFUSAL' in row['diagnostic']
         try:
             module.execute(root, cc, 'wrong_runtime', 'int main(void){return 0;}\n',
                            91, 'none', mutant_kind='TRUTH_CHANGING')
@@ -39,7 +38,17 @@ def main():
             assert 'native wrong_runtime/' in str(error)
         else:
             raise SystemExit('observer runtime success mislabeled a truth-changing refusal')
-    print('P605 phase policy: original/changed compile required; same-truth compile refusal has native=NULL; wrong runtime rejected')
+        for missing in ('<=', '>', 'copy'):
+            witnesses = {family: ['runtime91'] for family in ('<=', '>', 'copy')}
+            witnesses[missing] = []
+            try:
+                module.require_runtime_falsifiers(witnesses)
+            except SystemExit as error:
+                assert 'missing non-boundary' in str(error)
+            else:
+                raise SystemExit('missing runtime family incorrectly passed')
+        module.require_runtime_falsifiers({family: ['runtime91'] for family in ('<=', '>', 'copy')})
+    print('P608 phase policy: original compile required; either synthetic refusal has native=NULL; wrong runtime and missing family rejected')
 
 
 if __name__ == '__main__':

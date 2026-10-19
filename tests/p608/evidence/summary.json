@@ -1,0 +1,155 @@
+{
+  "decision": "HOLD / FIRST ORIGINAL GCC13 STRICT-C17 COMPILE FAILURE; NO NEW CI",
+  "actual_gcc": "Debian13.3.0-16; extracted verified local P605 toolchain; not Ubuntu CI",
+  "harness_exit": 1,
+  "complete_rows": [
+    "literal_true.nl",
+    "literal_false.nl",
+    "equal_false.nl",
+    "zero.nl",
+    "max_true.nl"
+  ],
+  "synthetic_observations": {
+    "SAME_TRUTH/NATIVE_SAME_TRUTH": 8,
+    "TRUTH_CHANGING/NATIVE_REJECTED": 18,
+    "SAME_TRUTH/MUTANT_COMPILE_REFUSED": 2,
+    "TRUTH_CHANGING/MUTANT_COMPILE_REFUSED": 2
+  },
+  "actual_non_boundary_runtime91_witnesses": {
+    "<=": [
+      {
+        "source": "equal_false.nl",
+        "optimization": "-O0"
+      },
+      {
+        "source": "equal_false.nl",
+        "optimization": "-O2"
+      }
+    ],
+    ">": [
+      {
+        "source": "literal_true.nl",
+        "optimization": "-O0"
+      },
+      {
+        "source": "literal_true.nl",
+        "optimization": "-O2"
+      },
+      {
+        "source": "literal_false.nl",
+        "optimization": "-O0"
+      },
+      {
+        "source": "literal_false.nl",
+        "optimization": "-O2"
+      }
+    ],
+    "copy": [
+      {
+        "source": "literal_true.nl",
+        "optimization": "-O0"
+      },
+      {
+        "source": "literal_true.nl",
+        "optimization": "-O2"
+      },
+      {
+        "source": "literal_false.nl",
+        "optimization": "-O0"
+      },
+      {
+        "source": "literal_false.nl",
+        "optimization": "-O2"
+      },
+      {
+        "source": "equal_false.nl",
+        "optimization": "-O0"
+      },
+      {
+        "source": "equal_false.nl",
+        "optimization": "-O2"
+      }
+    ]
+  },
+  "first_incomplete_original": {
+    "source": "max_false.nl",
+    "source_sha256": "5cc13083827c606449a13a48d1ffd33b52ad3b541f97f5ebebbebc446e97f1b1",
+    "c_sha256": "9d0d8c1cb67d4f5ecbfeb4094192978a1ff4b49b7683f79cb58ff501ef9825e5",
+    "check_exit": 0,
+    "emitter_exit": 0,
+    "strict_compile_exit": 1,
+    "optimization": "-O0",
+    "native_exit": null,
+    "position": "max_false.nlplain.c:14:73",
+    "diagnostic": "-Werror=type-limits: unsigned expression < 0 is always false",
+    "stage": "ORIGINAL GENERATED C STRICT COMPILATION; NOT SYNTHETIC, NOT SEMANTIC REJECT"
+  },
+  "not_run_after_stop": [
+    "max_false remaining O2/observed/mutants",
+    "max_equal",
+    "named_true",
+    "named_equal",
+    "18 frozen negative rows",
+    "GCC13 P605 composition",
+    "new Clang/native",
+    "merged full test suite/format",
+    "new ASan/UBSan",
+    "FULL5",
+    "PARTIAL"
+  ],
+  "old_evidence_integrity": true,
+  "original_generated_C_hashes": {
+    "literal_true.nl": {
+      "source_sha256": "913c58c6211f1ff5d185daf2cc43e136d4a75b182e5f6c0cbdb0b1663dd13d3b",
+      "c17_bytes": 714,
+      "c17_sha256": "61c78232028cd909e1e6129258a2d61b5fc3ddd707fca14d44e149720d400106"
+    },
+    "literal_false.nl": {
+      "source_sha256": "b8a2024d2380b3537ff31cbd0dd7cfa89c78ddc8729fe90fcaab942e38cf891c",
+      "c17_bytes": 714,
+      "c17_sha256": "968c09f3d5328c8c7b1c984f5f1c31da5f3c71bbccee6cba86e41c86fa000315"
+    },
+    "equal_false.nl": {
+      "source_sha256": "a96145cefa06362cc152d413bf8cb6cab6c36c766e9793000da042b3a2066004",
+      "c17_bytes": 714,
+      "c17_sha256": "845eb1c2ed415a93b4a05dad958127589b0f9f6e41a023ad76108cffa91b95ff"
+    },
+    "zero.nl": {
+      "source_sha256": "5a4f6ed1c4762ccde0ed3d8e8bc867720ccbcee272fefc1949bcb271a04b6214",
+      "c17_bytes": 714,
+      "c17_sha256": "17398d526df396e1896603b5a112a3facec3605e3d139f815d7f0497f1062912"
+    },
+    "max_true.nl": {
+      "source_sha256": "3b58fc1f60e4a7373b87d3faea50c436ab956e80793c70273ed799022a07a47d",
+      "c17_bytes": 733,
+      "c17_sha256": "96f38390f39394688a84250b6bc7d8da42a023a465bcb8e63c9b71de7630f02a"
+    },
+    "max_false.nl": {
+      "source_sha256": "5cc13083827c606449a13a48d1ffd33b52ad3b541f97f5ebebbebc446e97f1b1",
+      "c17_bytes": 733,
+      "c17_sha256": "9d0d8c1cb67d4f5ecbfeb4094192978a1ff4b49b7683f79cb58ff501ef9825e5"
+    },
+    "max_equal.nl": {
+      "source_sha256": "8f1ba5baa31d6622b109c95a5fc8e72010be51f4c249d06d8a0b33207af593ee",
+      "c17_bytes": 752,
+      "c17_sha256": "32cb6cb6e2c6d5ca0412640695026ef38300cae0950b0440d494e9d823ed183f"
+    },
+    "named_true.nl": {
+      "source_sha256": "cc2c9df9baf9496b1cd60929e7cdd1b7dd7fcbbc6d0c8e60f52dac249c94e728",
+      "c17_bytes": 985,
+      "c17_sha256": "b246165ed734800a8c1133295fc234b0972bef1fb06a820160a39f4dc64b5f6a"
+    },
+    "named_equal.nl": {
+      "source_sha256": "e190b77579ea1d3b1586136ccb4c84faf9142b425b8d1b728a0ce55b1b9f33bc",
+      "c17_bytes": 908,
+      "c17_sha256": "bffcda10e65a24f1813e77af327bd0c30e62188797dd63ae40e1632bede908ae"
+    }
+  },
+  "new_actions_attempts": {
+    "FULL5": 0,
+    "PARTIAL": 0
+  },
+  "arithmetic_body_extract_sha256": "54229a755dc2378fe2ff4620c09058eb6fc593a09345a507901cc1ba01045d03",
+  "native_runtime_falsifier_coverage_in_observed_prefix": true,
+  "whole_suite_runtime_gate_reached": false
+}
