@@ -12,7 +12,23 @@
 > 運用は [Development Process](NewLang_Project_Development_Process.md) に従う。
 > この文書は正本を置換せず、将来の更新時は「観測した事実」と「新しい投資案」を分ける。
 
-## 現行checkpoint — 2026-10-19（採用済みflat usize + / - / <・独立R／PoC-firstの到達範囲）
+## 現行checkpoint — 2026-10-19（#624採用：v0 compiler-first、Product GO能動判定を一時保留）
+
+**Coordinationによる投資段階の変更：** [Issue #624の裁定](https://github.com/wakairo/NewLang_Compiler/issues/624)は、固定Compiler/main [`35fa23efaa641b96c610324735b714891be2bbac`](https://github.com/wakairo/NewLang_Compiler/commit/35fa23efaa641b96c610324735b714891be2bbac)、[CURRENT_SPEC](reference/CURRENT_SPEC.md)→**Draft17.32**を出発点とし、**v0 compilerを普通に使えるところまで実装する作業を最優先**にする。Product GO二段階条件は変えず、通常compilerの次工程を決めるための仮想的なProduct GO採点・追加市場調査を**初回実利用checkpointまで能動的に一時保留**する。H1 #268はHOLD／UNDECIDED、L3 Product GOは未達。これは製品化のGOでも一般的なsoundness PASSでもなく、v0の実装と実使用から正負の情報を得る限定Explorationである。Product Strategy §§1.1–1.4と[Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go)が正本であり、本checkpointは実装の優先順だけを示す。
+
+**既にある通常CLIの足場を基準にする：** [READMEの`newlangc --check SOURCE`／`newlangc SOURCE`からのC17生成手順](../README.md)と、既に採用済みの限定的な`usize +/-/<`、lexical Node link操作等をまず整理する。前者は実行手順の既存例であり、後者は別々の有限source profileで実測された機構であって、**互いに任意に合成できると推定しない**。Array4はtest-only opt-in（通常CLIではdefault OFF）。旧未マージ実験とtest-only profile、証拠だけのvalidatorを通常ユーザー向けの能力と数えない。新たな一律source rule、一般heap owner返却、safe library facade、separate compilation、full H1は今回の実装認可外。
+
+**初回実利用checkpoint（USER-CLI-1、到達前の目標でありPASS宣言ではない）：**
+1. 既存READMEの通常`newlangc`機能を出発点に、**新しい独立した小規模なsingle-semantic-unitの実利用者風source**を固定する。選択済みv0の範囲だけを用い、実際に入力・値・状態変化を確認できる最小経路を選ぶ。既存fixtureに条件分岐で特例を足すことを成果としない。
+2. 通常CLIの登録済み**SOURCE→semantic CHECK→必要な真正なsource-issued公開checked-owned→strict C17→GCC／Clang native**を同じoriginal programで接続し、元の値／physical carrierを該当範囲で観測する。公開ownedが必要ないCopy操作に無理にprivileged issuerを足さない。入力／出口コードと再現手順を保存する。
+3. 少なくとも対応する**正当な意味論上の負例**と、まだ受理されないが仕様上合法なsource／emitter不足を区別し、診断・非ゼロ終了・部分的なC17出力や資源cleanupを実際の失敗経路で確認する。未対応は**fail closed**し、source ruleの黙示的拡大・元authorityの偽造・warning suppressionで突破しない。
+4. 最初にぶつかる**parser／semantic／source-issued proof／C17／nativeの実障害**と作業・CI費用を記録し、別の小さな利用者sourceでも再利用できるか判断して次のbounded P taskを選ぶ。いきなり全Draft機能・一般owner・compiler→formal全面対応を要求しない。
+
+**順序・資源・STOP：** Coordinationは既存通常CLI、テストと未解決のsource/backend境界の短いread-only調査後、最初の一つの小さなP作業を別Issueで認可する。Pが主担当、Mは生じた最小意味論問題、F/Rは新しい権限や高リスク機構の独立安全性確認、Tは再現性障害を必要な場合のみ扱う。新Trackの形式的な常時稼働を義務づけず、v0実用性へ接続しない専用profileや既知の成功数の増殖を避ける。初回checkpoint到達、根本的unsoundness、通常使用を阻む設計の不自然さ、予算・scopeの急拡大、具体的で強い製品反例があれば**Coordinationで優先度とProduct GO評価再開の要否を再裁定**する。独立R/F、§4.2意味論歴史照合、§4.3重要投資gateは不変。内部の[技術記事 #619](https://github.com/wakairo/NewLang_Compiler/pull/619)はユーザーの編集レビューを待ち、変更・外部公開しない。
+
+以下の2026-10-19の**#610能力checkpointは採用済みの有限能力を記録した履歴**としてそのまま保存し、この方針転換によって当時のテスト結果・独立R判定を遡及的に変更しない。
+
+## 履歴checkpoint — 2026-10-19（#610当時：採用済みflat usize + / - / <・独立R／PoC-firstの到達範囲）
 
 **authority／postmerge確認：** [Issue #610](https://github.com/wakairo/NewLang_Compiler/issues/610)の固定Compiler/mainは[`10f9efad73de7a28e39a80a3a95ae24cdefbda90`](https://github.com/wakairo/NewLang_Compiler/commit/10f9efad73de7a28e39a80a3a95ae24cdefbda90)（親`2cca0c6118cdf725ee68b48e07fc566b29622230`）、[CURRENT_SPEC](reference/CURRENT_SPEC.md)→**canonical Draft17.32**。この**統合後mainそのもののpush**で[FULL5 #39187181421](https://github.com/wakairo/NewLang_Compiler/actions/runs/39187181421)がGCC Debug／GCC Release／Clang／ASan／UBSan **全5 job COMPLETED SUCCESS attempt1**、[PARTIAL #39187181424](https://github.com/wakairo/NewLang_Compiler/actions/runs/39187181424)も**COMPLETED SUCCESS attempt1**。各候補HEADの先行CIとは分離して記録し、単なるCI greenをgeneral soundness／Product GOへ昇格しない。
 
