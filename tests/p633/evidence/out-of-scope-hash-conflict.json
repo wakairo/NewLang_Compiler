@@ -1,0 +1,13 @@
+{
+  "test": "p605_arithmetic_comparison.integration",
+  "line": 21,
+  "status": "FAIL before source/native subtests; identical GCC14 and Clang23 local PARTIAL runs",
+  "manifest": "tests/p605/frozen.json",
+  "permitted_paths_include_manifest": false,
+  "mismatches": {
+    "src/semantic_internal.h": {
+      "expected": "15e89aefc0f1574afdc77e6826e79f51902897b8b7ed57650f7a2b82ead1bed2",
+      "actual": "647ae68ffbe578d10124bc4ecdf10266b8d1d399599ef92aae34feea84e12358"
+    }
+  }
+}

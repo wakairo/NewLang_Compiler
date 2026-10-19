@@ -34,12 +34,13 @@ def main():
                             'type-invalid input misclassified or emitted C')
                 print(json.dumps(dict(source=name, check=3, c17=3, c_bytes=0, diagnostic=check.stderr.strip())))
                 continue
-            if oracle['intent'] == 'unsupported_legal_complex_if':
-                require(check.returncode == 0 and not check.stdout and not check.stderr and
-                        emitted.returncode == 4 and not emitted.stdout and
-                        'error(cli)[V1-BACKEND-UNSUPPORTED]' in emitted.stderr,
-                        'complex source must stay CHECK-valid/backend-unsupported with no C')
-                print(json.dumps(dict(source=name, check=0, c17=4, c_bytes=0, native=None, diagnostic=emitted.stderr.strip())))
+            if name == 'complex_arm.nl':
+                # Issue633 migrates only this unchanged source's old CLI4 oracle.
+                spec = importlib.util.spec_from_file_location('p633_arm_local', root.parent / 'p633/arm_local.py')
+                local = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(local)
+                print(json.dumps(local.observe_case(compiler, source, cc, sanitizer,
+                                  {'bool': 1, 'selected': 42}, probe=None)))
                 continue
             require(check.returncode == emitted.returncode == 0 and not check.stdout and
                     not check.stderr and not emitted.stderr, 'ordinary source admission failed')

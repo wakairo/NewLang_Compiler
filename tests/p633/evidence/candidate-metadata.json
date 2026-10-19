@@ -1,0 +1,21 @@
+{
+  "fixed_main": "032cf60aabf4997e672bc3607cf53775d91ececb",
+  "canonical": "Draft17.32",
+  "saved_jst": "2026-10-19T20:34:15.038603+09:00",
+  "candidate_patch_sha256": "71de5c8d90f8b20a3152d5323a6e9345e63a20054ce2358928f3177ff0f1983b",
+  "candidate_files": {
+    "src/semantic_internal.h": "647ae68ffbe578d10124bc4ecdf10266b8d1d399599ef92aae34feea84e12358",
+    "src/semantic_check.c": "00ff60031065330da6b284c74f07cce1be031c6aed03a5589a005bef33b6624c",
+    "src/main.c": "541d160647488eec43107c29c114f2d3b6d773beaa55b38026bf00c978571780",
+    "CMakeLists.txt": "97320f8d8c2efea718f213457376f3b2684870efa835621a04fb8a19c43dd281",
+    "tests/p626/native_test.py": "c1aaf364e24e00b8b4b85f7165ea75e6d168730d5746bc78bb90f348392eba31",
+    "tests/p628/native_test.py": "c6c66a8dce961d2c798767c2bdd9bffbc5d7edd65e4f7e14ccd058e4fe583f9c",
+    "tests/p633/local_gate.c": "b4629bda43da36d38d25596ed09e50270229026881b29ee0de9d8a9cd0ecc8ac",
+    "tests/p633/origin_gate.c": "5ae1803f757863da27e37ed5fd555f0d4238e5d13b5aace5513ae880a30bfcbe",
+    "tests/p633/public_probe.c": "48888bac496a6e23b2d8e7dc081e24cda2db28fc51196d89613778c423602f88",
+    "tests/p633/derivation_gate.c": "72a08603bc5a760385a06c6573f8e2ca9b8aed640b792743f85062763d2973a0",
+    "tests/p633/native_test.py": "c21ce61d7b760c6ab414f7ef62a915207b7bdf9aa8f341b881cab1981a53c039",
+    "tests/p633/arm_local.py": "ba4bdae5dca97e84e81ac593396b1628fad831fc8afe18c796f08e5f0b58b673"
+  },
+  "status": "HOLD; unapplied research candidate only; compiler/CMake/old scripts will be restored; no candidate PR or Actions; not mergeable"
+}

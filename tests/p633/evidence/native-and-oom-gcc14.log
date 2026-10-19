@@ -1,0 +1,95 @@
+Start testing: Oct 19 11:31 UTC
+
+----------------------------------------------------------
+
+18/347 Testing: p633_local_same_value.unit
+18/347 Test: p633_local_same_value.unit
+Command: "/workspace/p633/build/p633_local_gate" "/workspace/p633/tests/p631/same_value_local.nl"
+Directory: /workspace/p633/build
+"p633_local_same_value.unit" start time: Oct 19 11:31 UTC
+Output:
+
+----------------------------------------------------------
+
+/workspace/p633/tests/p633/local_gate.c:229: !validates(replay.artifact)
+<end of output>
+Test time =   0.01 sec
+
+----------------------------------------------------------
+
+Test Failed.
+"p633_local_same_value.unit" end time: Oct 19 11:31 UTC
+"p633_local_same_value.unit" time elapsed: 00:00:00
+
+----------------------------------------------------------
+
+/workspace/p633/tests/p633/local_gate.c:229: !validates(replay.artifact)
+<end of output>
+Test time =   0.01 sec
+
+----------------------------------------------------------
+
+Test Failed.
+"p633_local_same_value.unit" end time: Oct 19 11:31 UTC
+"p633_local_same_value.unit" time elapsed: 00:00:00
+
+----------------------------------------------------------
+
+
+19/347 Testing: p633_local_different_values.unit
+19/347 Test: p633_local_different_values.unit
+Command: "/workspace/p633/build/p633_local_gate" "/workspace/p633/tests/p630/both_false.nl"
+Directory: /workspace/p633/build
+"p633_local_different_values.unit" start time: Oct 19 11:31 UTC
+Output:
+
+----------------------------------------------------------
+
+/workspace/p633/tests/p633/local_gate.c:229: !validates(replay.artifact)
+<end of output>
+Test time =   0.04 sec
+
+----------------------------------------------------------
+
+Test Failed.
+"p633_local_same_value.unit" end time: Oct 19 11:31 UTC
+"p633_local_same_value.unit" time elapsed: 00:00:00
+
+----------------------------------------------------------
+
+
+19/347 Testing: p633_local_different_values.unit
+19/347 Test: p633_local_different_values.unit
+Command: "/workspace/p633/build/p633_local_gate" "/workspace/p633/tests/p630/both_false.nl"
+Directory: /workspace/p633/build
+"p633_local_different_values.unit" start time: Oct 19 11:31 UTC
+Output:
+
+----------------------------------------------------------
+
+/workspace/p633/tests/p633/local_gate.c:229: !validates(replay.artifact)
+<end of output>
+Test time =   0.04 sec
+
+----------------------------------------------------------
+
+Test Failed.
+"p633_local_different_values.unit" end time: Oct 19 11:31 UTC
+"p633_local_different_values.unit" time elapsed: 00:00:00
+
+----------------------------------------------------------
+
+/workspace/p633/tests/p633/local_gate.c:229: !validates(replay.artifact)
+<end of output>
+Test time =   0.04 sec
+
+----------------------------------------------------------
+
+Test Failed.
+"p633_local_different_values.unit" end time: Oct 19 11:31 UTC
+"p633_local_different_values.unit" time elapsed: 00:00:00
+
+----------------------------------------------------------
+
+
+End testing: Oct 19 11:31 UTC

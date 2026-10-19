@@ -1,0 +1,30 @@
+[
+  {
+    "build": "build",
+    "source": "tests/p631/same_value_local.nl",
+    "exit": 1,
+    "stdout": "P633_PARENT_FACT original_live=0 original_fact=0 arm_fact=7 consumer_accepted=1 semantic_world_status=0\n",
+    "stderr": "/workspace/p633/tests/p633/local_gate.c:238: !accepted_parent_fact\n"
+  },
+  {
+    "build": "build",
+    "source": "tests/p630/both_false.nl",
+    "exit": 1,
+    "stdout": "P633_PARENT_FACT original_live=0 original_fact=0 arm_fact=7 consumer_accepted=1 semantic_world_status=0\n",
+    "stderr": "/workspace/p633/tests/p633/local_gate.c:238: !accepted_parent_fact\n"
+  },
+  {
+    "build": "build-clang",
+    "source": "tests/p631/same_value_local.nl",
+    "exit": 1,
+    "stdout": "P633_PARENT_FACT original_live=0 original_fact=0 arm_fact=7 consumer_accepted=1 semantic_world_status=0\n",
+    "stderr": "/workspace/p633/tests/p633/local_gate.c:238: !accepted_parent_fact\n"
+  },
+  {
+    "build": "build-clang",
+    "source": "tests/p630/both_false.nl",
+    "exit": 1,
+    "stdout": "P633_PARENT_FACT original_live=0 original_fact=0 arm_fact=7 consumer_accepted=1 semantic_world_status=0\n",
+    "stderr": "/workspace/p633/tests/p633/local_gate.c:238: !accepted_parent_fact\n"
+  }
+]

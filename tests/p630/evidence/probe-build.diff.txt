@@ -1,0 +1,6 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -160,0 +161,3 @@
++
++    add_executable(p630_public_probe tests/p630/public_probe.c)
++    target_link_libraries(p630_public_probe PRIVATE newlang_semantic)

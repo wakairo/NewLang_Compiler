@@ -1,0 +1,33 @@
+{
+  "time_jst": "2026-10-19T20:26:37.452674+09:00",
+  "gate": "Stage0 passed, exact private parent-issued arm context correlation",
+  "cases": {
+    "p630_seven": "unchanged source/sha/oracles in original manifests",
+    "p626_complex": "same source -> native choice42",
+    "p628_complex": "same source -> original Pair left27->91; old27 sibling201; same live addresses",
+    "p631_equal": "original left18->83; old18 sibling209",
+    "p631_duplicate_outer": "original left18->83; keep distinct equal83 derivation, wrong source/binding reject"
+  },
+  "unsupported": [
+    "two_locals:CHECK0 CLI4 no C",
+    "nested_arm:CHECK0 CLI4 no C"
+  ],
+  "semantic_invalid": [
+    "wrong_type:CLI3 no C",
+    "range_arm:CLI3 no C"
+  ],
+  "mutation_controls": [
+    "same source paired equal83 contexts",
+    "wrong local receiver",
+    "wrong source/name/span",
+    "forged local ValueID",
+    "revived ended local place",
+    "hidden/consumed local changed",
+    "cross-arm field facts / parent currentness leakage",
+    "equal-valued outer symbol different source derivation"
+  ],
+  "not_representable": [
+    "actual Change inside admitted pure arm: profile has only one u8 local init+tail, no replace/effect; check denial separately",
+    "Domain/Allocation authority in admitted pure arm: no domains/regions/nonCopy values admitted"
+  ]
+}
