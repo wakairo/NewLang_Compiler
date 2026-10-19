@@ -1,0 +1,6 @@
+333/334 Test #329: p596_usize_subtraction.integration ..............   Passed    5.25 sec
+334/334 Test #334: oracle.smoke ....................................   Passed    1.06 sec
+
+100% tests passed, 0 tests failed out of 334
+
+Total Test time (real) = 118.45 sec

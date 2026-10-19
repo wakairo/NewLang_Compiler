@@ -1,0 +1,10 @@
+[  6%] Built target newlang_source
+[ 13%] Built target newlang_diagnostic
+[ 26%] Built target newlang_syntax
+[ 26%] Built target newlang_lexer
+[ 40%] Built target newlang_parser
+[ 40%] Built target newlang_checked
+[ 93%] Built target newlang_semantic
+[ 93%] Building C object CMakeFiles/p626_public_probe.dir/tests/p626/public_probe.c.o
+[100%] Linking C executable p626_public_probe
+[100%] Built target p626_public_probe

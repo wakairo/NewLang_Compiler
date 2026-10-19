@@ -1,0 +1,65 @@
+{
+  "main": "9ea45c88f71506875c2e1638043894129a947665",
+  "frozen_at": "2026-10-19T07:41:57.032292+00:00",
+  "cases": {
+    "fits_true.nl": {
+      "sha256": "e6404c50f47f432b89ac0aafa4f68f2d1d9509c44e3f3504e89d501be7a5a84f",
+      "operands": [
+        11,
+        17
+      ],
+      "condition": 1,
+      "branches": [
+        42,
+        9
+      ],
+      "result": 42,
+      "intent": "normal_cli_native",
+      "baseline_prediction": "CHECK0 / backend4, likely existing IF scalar-kind membership gate"
+    },
+    "fits_false.nl": {
+      "sha256": "83e7d8fc12cd41dc1cdd8aeea64a2b4758819213ddb40d4ca044c57ff4b70d6c",
+      "operands": [
+        23,
+        17
+      ],
+      "condition": 0,
+      "branches": [
+        42,
+        9
+      ],
+      "result": 9,
+      "intent": "normal_cli_native",
+      "baseline_prediction": "CHECK0 / backend4; FALSE arm required"
+    },
+    "fits_alias.nl": {
+      "sha256": "a126d47d238edb3b6ed9e8ac162705ef4d5a9350c8f091c41f329ec3219768d7",
+      "operands": [
+        13,
+        19
+      ],
+      "condition": 1,
+      "branches": [
+        42,
+        9
+      ],
+      "result": 42,
+      "intent": "normal_cli_native",
+      "baseline_prediction": "CHECK0 / backend4; one additional Copy alias only"
+    },
+    "wrong_quantity.nl": {
+      "sha256": "f310ae13afe0515bcaee22f88dfeb6cb614b534b5749d958fcff7ca8a09de0ef",
+      "intent": "semantic_reject",
+      "prediction": "CLI3, less-than exact usize operand type mismatch, zero C"
+    },
+    "complex_arm.nl": {
+      "sha256": "3b797b6ee739f7e9e1170da2844a6e5c669ce78d8ecfbbf1bbb6523358bc2723",
+      "intent": "unsupported_legal_complex_if",
+      "prediction": "CHECK0 / backend4 if checker supports arm-local Copy binding; otherwise record precise semantic/precision barrier, do not broaden"
+    }
+  },
+  "controls": {
+    "tests/p508/renamed_true.nl": "f5b4ba67101ca730a08f7c886bfbcf0076263f6500dca30ae4f92f2aa897d8e4",
+    "tests/fixtures/node_initial_some.nl": "b8199651020a2ae4135811684187b42eb04d4816b714bba687fbfc90784c1409"
+  }
+}

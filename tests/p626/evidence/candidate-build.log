@@ -1,0 +1,41 @@
+[ 12%] Built target newlang_diagnostic
+[ 12%] Built target newlang_source
+[ 18%] Built target newlang_syntax
+[ 25%] Built target newlang_lexer
+[ 31%] Built target newlang_parser
+[ 37%] Built target newlang_checked
+[ 87%] Built target newlang_semantic
+[ 93%] Built target newlang_checked_c_node
+[ 93%] Building C object CMakeFiles/newlangc.dir/src/main.c.o
+[100%] Linking C executable newlangc
+[100%] Built target newlangc
+[ 13%] Built target newlang_source
+[ 13%] Built target newlang_diagnostic
+[ 20%] Built target newlang_lexer
+[ 26%] Built target newlang_syntax
+[ 40%] Built target newlang_parser
+[ 40%] Built target newlang_checked
+[ 93%] Built target newlang_semantic
+[100%] Built target p626_public_probe
+[  6%] Built target newlang_source
+[ 12%] Built target newlang_diagnostic
+[ 18%] Built target newlang_syntax
+[ 25%] Built target newlang_lexer
+[ 31%] Built target newlang_checked
+[ 37%] Built target newlang_parser
+[ 87%] Built target newlang_semantic
+[ 93%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p508_gate_test.dir/tests/p508/gate_test.c.o
+[100%] Linking C executable p508_gate_test
+[100%] Built target p508_gate_test
+[  6%] Built target newlang_source
+[ 12%] Built target newlang_diagnostic
+[ 18%] Built target newlang_lexer
+[ 25%] Built target newlang_syntax
+[ 31%] Built target newlang_checked
+[ 37%] Built target newlang_parser
+[ 87%] Built target newlang_semantic
+[ 93%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p603_gate_probe.dir/tests/p603/gate_probe.c.o
+[100%] Linking C executable p603_gate_probe
+[100%] Built target p603_gate_probe

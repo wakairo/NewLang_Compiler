@@ -1,0 +1,17 @@
+{
+  "fits_true.nl": {
+    "exit": 0,
+    "stdout": "{\"operands\":[11,17],\"comparison_value\":5,\"condition_copy_depth\":1}\n{\"if\":20,\"condition\":19,\"condition_symbol\":3,\"bool\":1,\"arms\":[42,9],\"arm_symbols\":[4,5],\"selected_symbol\":6,\"copied_symbol\":7,\"less_symbol\":3,\"operand_symbols\":[1,2],\"joined_unknown\":true,\"authority\":0}\nBIND 1 usize 1 11\nBIND 2 usize 1 17\nBIND 3 bool 1 1\nBIND 4 u8 1 42\nBIND 5 u8 1 9\nBIND 6 u8 0 0\nBIND 7 u8 0 0\n",
+    "stderr": ""
+  },
+  "fits_false.nl": {
+    "exit": 0,
+    "stdout": "{\"operands\":[23,17],\"comparison_value\":5,\"condition_copy_depth\":1}\n{\"if\":20,\"condition\":19,\"condition_symbol\":3,\"bool\":0,\"arms\":[42,9],\"arm_symbols\":[4,5],\"selected_symbol\":6,\"copied_symbol\":7,\"less_symbol\":3,\"operand_symbols\":[1,2],\"joined_unknown\":true,\"authority\":0}\nBIND 1 usize 1 23\nBIND 2 usize 1 17\nBIND 3 bool 1 0\nBIND 4 u8 1 42\nBIND 5 u8 1 9\nBIND 6 u8 0 0\nBIND 7 u8 0 0\n",
+    "stderr": ""
+  },
+  "fits_alias.nl": {
+    "exit": 0,
+    "stdout": "{\"operands\":[13,19],\"comparison_value\":5,\"condition_copy_depth\":2}\n{\"if\":23,\"condition\":22,\"condition_symbol\":6,\"bool\":1,\"arms\":[42,9],\"arm_symbols\":[4,5],\"selected_symbol\":7,\"copied_symbol\":8,\"less_symbol\":3,\"operand_symbols\":[1,2],\"joined_unknown\":true,\"authority\":0}\nBIND 1 usize 1 13\nBIND 2 usize 1 19\nBIND 3 bool 1 1\nBIND 4 u8 1 42\nBIND 5 u8 1 9\nBIND 6 bool 1 1\nBIND 7 u8 0 0\nBIND 8 u8 0 0\n",
+    "stderr": ""
+  }
+}

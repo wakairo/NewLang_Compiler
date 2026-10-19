@@ -1,0 +1,11 @@
+[ 13%] Built target newlang_source
+[ 13%] Built target newlang_diagnostic
+[ 13%] Built target newlang_lexer
+[ 20%] Built target newlang_syntax
+[ 33%] Built target newlang_parser
+[ 33%] Built target newlang_checked
+[ 86%] Built target newlang_semantic
+[ 93%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p626_comparison_gate.dir/tests/p626/comparison_gate.c.o
+[100%] Linking C executable p626_comparison_gate
+[100%] Built target p626_comparison_gate

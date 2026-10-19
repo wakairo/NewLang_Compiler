@@ -1,0 +1,12 @@
+{
+  "main": "9ea45c88f71506875c2e1638043894129a947665",
+  "records": {
+    "evidence/baseline.json": "dce671f4321d4e1bb4833ee558161ebb7e239871bb027dde52bc6362a28be1a2",
+    "evidence/baseline-owned.json": "ee2a2ac9d65d2abd07eeae352edac63289ca558a216ed0c42e87f15d41967844",
+    "frozen.json": "ba9df65eb97c320e09c073596c02829f1163184abdcd50ec11147f79d7b7aa3c"
+  },
+  "src_main_before_sha256": "f1d92d488935a39abf84984a5ee1256993f2c0ba823b09c90b3bc74c1325cc2d",
+  "baseline_binary_sha256": "04b20b149d300b3cc02ffd601a48ec9f2a1d094faef889a8edc9e724779de806",
+  "first_gap": "copy_if_selection scalar enumeration excludes already authenticated NL_CHECKED_USIZE_LESS_THAN; CHECK/public operands+condition/both retained arm worlds already valid",
+  "authorization": "Stage1 one existing scalar-kind connection; keep direct < IF predicate unsupported, old arm/prefix/Copy/body checks and C17 LTR staging unchanged"
+}
