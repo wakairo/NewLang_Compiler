@@ -1,0 +1,90 @@
+Internal ctest changing into directory: /workspace/p628/build
+UpdateCTestConfiguration  from :/workspace/p628/build/DartConfiguration.tcl
+Parse Config file:/workspace/p628/build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p628/build/DartConfiguration.tcl
+Parse Config file:/workspace/p628/build/DartConfiguration.tcl
+Test project /workspace/p628/build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 13
+    Start 13: p628_cli_pair_if.integration
+
+13: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p628/tests/p628/native_test.py" "/workspace/p628/build/newlangc" "/workspace/p628/build/p628_public_probe" "/workspace/p628/build/p517_gate_test" "/workspace/p628/build/p626_comparison_gate" "/workspace/p628/build/p514_gate_test" "/usr/bin/gcc" "/workspace/p628/tests/p628" "none"
+13: Working Directory: /workspace/p628/build
+13: Environment variables:
+13:  PYTHONDONTWRITEBYTECODE=1
+13:  PYTHONHASHSEED=0
+13:  LC_ALL=C
+13:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+13:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+13: Test timeout computed to be: 90
+13: {"source": "pair_true.nl", "check": 0, "c17": 0, "source_sha256": "781824f7d4f7fa8f8aefb2fe49eae11d36d916fdcf0ac46d03f21a123c152d85", "c17_sha256": "d8c3232c39e88d39c31ee6a9f08b600bfde6d3c3321ab22741508103d4294cb9", "comparison": {"operands": [17, 23], "comparison_value": 8, "condition_copy_depth": 1}, "owned": {"if": 21, "bool": 1, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [91, 13], "arm_symbols": [0, 0], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 27, "sibling": 201, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_comparison": [91, 91], "wrong_direction": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91], "wrong_sibling": [91, 91]}, "gates": {"identity": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0", "comparison": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"}, "sanitizer": "none"}
+13: {"source": "pair_false.nl", "check": 0, "c17": 0, "source_sha256": "41d7c88b7d7d16af3017a0c59dd3f96d722abcfca5baf7858bd5a0151ad69d8a", "c17_sha256": "61e09cbcc4c0a6970fc2145ab420ebab85296b26503e528461026024af012e27", "comparison": {"operands": [29, 23], "comparison_value": 8, "condition_copy_depth": 1}, "owned": {"if": 21, "bool": 0, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [91, 13], "arm_symbols": [0, 0], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 27, "sibling": 201, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_comparison": [91, 91], "wrong_direction": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91], "wrong_sibling": [91, 91]}, "gates": {"identity": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0", "comparison": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"}, "sanitizer": "none"}
+13: {"source": "pair_alias.nl", "check": 0, "c17": 0, "source_sha256": "f65712a20f3aa149cb7f6fe9dcf4b1b647897424da27d1e1711454b8ccc2767c", "c17_sha256": "411c465940fdedb7055daed397b15f3d208d492ffae61a55c2775307491eacc2", "comparison": {"operands": [19, 31], "comparison_value": 8, "condition_copy_depth": 2}, "owned": {"if": 24, "bool": 1, "condition_symbol": 5, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [91, 13], "arm_symbols": [0, 0], "selected_symbol": 6, "input_symbol": 6, "original_symbol": 3, "old_symbol": 8, "after_symbol": 9, "sibling_symbol": 10, "ref_symbol": 7, "replace_node": 29, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 11], "left_facts": [4, 10], "right_fact": 5, "old": 27, "sibling": 201, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_comparison": [91, 91], "wrong_direction": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91], "wrong_sibling": [91, 91]}, "gates": {"identity": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0", "comparison": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"}, "sanitizer": "none"}
+13: {"source": "wrong_quantity.nl", "check": 3, "c17": 3, "c_bytes": 0, "diagnostic": "/workspace/p628/tests/p628/wrong_quantity.nl:5:22-5:23: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands", "rollback": "P514_REJECT phase=registration code=USIZE-LESS-THAN-TYPE rollback=PASS artifact=NULL"}
+13: {"source": "readonly_write.nl", "check": 3, "c17": 3, "c_bytes": 0, "diagnostic": "/workspace/p628/tests/p628/readonly_write.nl:7:34-7:35: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field", "rollback": "P514_REJECT phase=parser code=LOCAL-LOAN-PROFILE state=UNCHANGED semantic=NOT_ENTERED artifact=NULL"}
+13: {"source": "complex_arm.nl", "check": 0, "c17": 4, "c_bytes": 0, "native": null}
+13: {"control": "tests/p521/direct_pair_true.nl", "check": 0, "c17": 0, "native": [0, 0]}
+13: {"control": "tests/p626/fits_true.nl", "check": 0, "c17": 0, "native": [0, 0]}
+13: {"control": "tests/fixtures/node_initial_some.nl", "check": 0, "c17": 0, "native": [0, 0]}
+13: P628 actual original Pair write after source-issued less-than Copy IF; no new authority/public validator
+1/4 Test #13: p628_cli_pair_if.integration .....   Passed    1.91 sec
+test 14
+    Start 14: p628_true_oom.unit
+
+14: Test command: /workspace/p628/build/p514_gate_test "oom" "/workspace/p628/tests/p628/pair_true.nl"
+14: Working Directory: /workspace/p628/build
+14: Environment variables:
+14:  PYTHONDONTWRITEBYTECODE=1
+14:  PYTHONHASHSEED=0
+14:  LC_ALL=C
+14:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+14:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+14: Test timeout computed to be: 90
+14: P514_OOM registration=243 rollback=PASS
+14: P514_OOM main=138 rollback=PASS output=NULL
+2/4 Test #14: p628_true_oom.unit ...............   Passed    0.01 sec
+test 15
+    Start 15: p628_false_oom.unit
+
+15: Test command: /workspace/p628/build/p514_gate_test "oom" "/workspace/p628/tests/p628/pair_false.nl"
+15: Working Directory: /workspace/p628/build
+15: Environment variables:
+15:  PYTHONDONTWRITEBYTECODE=1
+15:  PYTHONHASHSEED=0
+15:  LC_ALL=C
+15:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+15:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+15: Test timeout computed to be: 90
+15: P514_OOM registration=243 rollback=PASS
+15: P514_OOM main=138 rollback=PASS output=NULL
+3/4 Test #15: p628_false_oom.unit ..............   Passed    0.01 sec
+test 16
+    Start 16: p628_alias_oom.unit
+
+16: Test command: /workspace/p628/build/p514_gate_test "oom" "/workspace/p628/tests/p628/pair_alias.nl"
+16: Working Directory: /workspace/p628/build
+16: Environment variables:
+16:  PYTHONDONTWRITEBYTECODE=1
+16:  PYTHONHASHSEED=0
+16:  LC_ALL=C
+16:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+16:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+16: Test timeout computed to be: 90
+16: P514_OOM registration=253 rollback=PASS
+16: P514_OOM main=145 rollback=PASS output=NULL
+4/4 Test #16: p628_alias_oom.unit ..............   Passed    0.01 sec
+
+The following tests passed:
+	p628_cli_pair_if.integration
+	p628_true_oom.unit
+	p628_false_oom.unit
+	p628_alias_oom.unit
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   1.95 sec

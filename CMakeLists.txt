@@ -159,6 +159,20 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:p534_semantic_gate>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541" "${NEWLANG_SANITIZER}")
 
+    add_executable(p628_public_probe tests/p628/public_probe.c)
+    target_link_libraries(p628_public_probe PRIVATE newlang_semantic)
+
+    add_test(NAME p628_cli_pair_if.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p628/native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p628_public_probe>"
+        "$<TARGET_FILE:p517_gate_test>" "$<TARGET_FILE:p626_comparison_gate>"
+        "$<TARGET_FILE:p514_gate_test>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p628" "${NEWLANG_SANITIZER}")
+    foreach(case true false alias)
+        add_test(NAME p628_${case}_oom.unit COMMAND p514_gate_test oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p628/pair_${case}.nl")
+    endforeach()
+
     add_executable(p626_public_probe tests/p626/public_probe.c)
     target_link_libraries(p626_public_probe PRIVATE newlang_semantic)
     add_executable(p626_comparison_gate tests/p626/comparison_gate.c)

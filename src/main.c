@@ -1051,6 +1051,7 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
         case NL_CHECKED_U8_LITERAL:
         case NL_CHECKED_USIZE_LITERAL:
         case NL_CHECKED_USIZE_EQUALITY:
+        case NL_CHECKED_USIZE_LESS_THAN: /* authenticated by boolean_scalar */
         case NL_CHECKED_IDENTIFIER:
         case NL_CHECKED_BINDING:
         case NL_CHECKED_RECEIVER:
