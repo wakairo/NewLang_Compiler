@@ -1,0 +1,58 @@
+{
+  "then_true.nl": {
+    "exit": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p630/then_true.nl"
+  },
+  "then_false.nl": {
+    "exit": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p630/then_false.nl"
+  },
+  "else_false.nl": {
+    "exit": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p630/else_false.nl"
+  },
+  "wrong_type.nl": {
+    "exit": 3,
+    "c_bytes": 0,
+    "diagnostic": "tests/p630/wrong_type.nl:5:26-5:27: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands"
+  },
+  "range_arm.nl": {
+    "exit": 3,
+    "c_bytes": 0,
+    "diagnostic": "tests/p630/range_arm.nl:6:41-6:48: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255"
+  },
+  "two_locals.nl": {
+    "exit": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p630/two_locals.nl"
+  },
+  "nested_arm.nl": {
+    "exit": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p630/nested_arm.nl"
+  },
+  "pure_true.nl": {
+    "exit": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p630/pure_true.nl"
+  },
+  "pure_false.nl": {
+    "exit": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p630/pure_false.nl"
+  },
+  "both_false.nl": {
+    "exit": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p630/both_false.nl"
+  },
+  "outer_true.nl": {
+    "exit": 4,
+    "c_bytes": 0,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p630/outer_true.nl"
+  },
+  "old_controls": "original source and C17 hashes unchanged"
+}

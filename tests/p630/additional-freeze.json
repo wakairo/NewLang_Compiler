@@ -1,0 +1,39 @@
+{
+  "before_production_edit": true,
+  "cases": {
+    "both_false.nl": {
+      "intent": "native",
+      "bool": 0,
+      "operands": [
+        57,
+        45
+      ],
+      "old": 18,
+      "selected": 24,
+      "after": 24,
+      "sibling": 209,
+      "arm_locals": [
+        1,
+        1
+      ],
+      "sha256": "9eb66c3f15469ac534f4806ecff8c309f6e20248120d65463590594ec9926281"
+    },
+    "outer_true.nl": {
+      "intent": "native_optional_outer",
+      "bool": 1,
+      "operands": [
+        21,
+        45
+      ],
+      "old": 18,
+      "selected": 83,
+      "after": 83,
+      "sibling": 209,
+      "arm_locals": [
+        1,
+        0
+      ],
+      "sha256": "c04722d1fecc035660307f15422cf46df255ac5e422575e08a1c5b7fe61fdc58"
+    }
+  }
+}
