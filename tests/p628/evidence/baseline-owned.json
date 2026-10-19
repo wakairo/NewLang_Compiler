@@ -1,0 +1,17 @@
+{
+  "pair_true": {
+    "exit": 0,
+    "stdout": "{\"operands\":[17,23],\"comparison_value\":8,\"condition_copy_depth\":1}\n{\"if\":21,\"bool\":1,\"condition_symbol\":4,\"equal_symbol\":4,\"operand_symbols\":[1,2],\"arms\":[91,13],\"arm_symbols\":[0,0],\"selected_symbol\":5,\"input_symbol\":5,\"original_symbol\":3,\"old_symbol\":7,\"after_symbol\":8,\"sibling_symbol\":9,\"ref_symbol\":6,\"replace_node\":26,\"scope\":1,\"root\":3,\"child\":4,\"incarnations\":[3,4,5],\"root_facts\":[3,10],\"left_facts\":[4,9],\"right_fact\":5,\"old\":27,\"sibling\":201,\"joined_unknown\":true,\"scope_ended\":true}\n",
+    "stderr": ""
+  },
+  "pair_false": {
+    "exit": 0,
+    "stdout": "{\"operands\":[29,23],\"comparison_value\":8,\"condition_copy_depth\":1}\n{\"if\":21,\"bool\":0,\"condition_symbol\":4,\"equal_symbol\":4,\"operand_symbols\":[1,2],\"arms\":[91,13],\"arm_symbols\":[0,0],\"selected_symbol\":5,\"input_symbol\":5,\"original_symbol\":3,\"old_symbol\":7,\"after_symbol\":8,\"sibling_symbol\":9,\"ref_symbol\":6,\"replace_node\":26,\"scope\":1,\"root\":3,\"child\":4,\"incarnations\":[3,4,5],\"root_facts\":[3,10],\"left_facts\":[4,9],\"right_fact\":5,\"old\":27,\"sibling\":201,\"joined_unknown\":true,\"scope_ended\":true}\n",
+    "stderr": ""
+  },
+  "pair_alias": {
+    "exit": 0,
+    "stdout": "{\"operands\":[19,31],\"comparison_value\":8,\"condition_copy_depth\":2}\n{\"if\":24,\"bool\":1,\"condition_symbol\":5,\"equal_symbol\":4,\"operand_symbols\":[1,2],\"arms\":[91,13],\"arm_symbols\":[0,0],\"selected_symbol\":6,\"input_symbol\":6,\"original_symbol\":3,\"old_symbol\":8,\"after_symbol\":9,\"sibling_symbol\":10,\"ref_symbol\":7,\"replace_node\":29,\"scope\":1,\"root\":3,\"child\":4,\"incarnations\":[3,4,5],\"root_facts\":[3,11],\"left_facts\":[4,10],\"right_fact\":5,\"old\":27,\"sibling\":201,\"joined_unknown\":true,\"scope_ended\":true}\n",
+    "stderr": ""
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "main": "9c2f2bd928fee00ac34266619c6eba65899f475a",
+  "canonical": "Draft17.32",
+  "freeze_utc": "2026-10-19T08:20:32.825739+00:00",
+  "baseline_prediction": "CHECK0; backend either already succeeds or rejects paired IF scalar frame census for less-than. Measure, never infer.",
+  "cases": {
+    "pair_true.nl": {
+      "sha256": "781824f7d4f7fa8f8aefb2fe49eae11d36d916fdcf0ac46d03f21a123c152d85",
+      "intent": "native",
+      "operands": [
+        17,
+        23
+      ],
+      "condition": 1,
+      "old": 27,
+      "selected": 91,
+      "after": 91,
+      "sibling": 201,
+      "field": 0
+    },
+    "pair_false.nl": {
+      "sha256": "41d7c88b7d7d16af3017a0c59dd3f96d722abcfca5baf7858bd5a0151ad69d8a",
+      "intent": "native",
+      "operands": [
+        29,
+        23
+      ],
+      "condition": 0,
+      "old": 27,
+      "selected": 13,
+      "after": 13,
+      "sibling": 201,
+      "field": 0
+    },
+    "pair_alias.nl": {
+      "sha256": "f65712a20f3aa149cb7f6fe9dcf4b1b647897424da27d1e1711454b8ccc2767c",
+      "intent": "native_optional_alias",
+      "operands": [
+        19,
+        31
+      ],
+      "condition": 1,
+      "old": 27,
+      "selected": 91,
+      "after": 91,
+      "sibling": 201,
+      "field": 0
+    },
+    "wrong_quantity.nl": {
+      "sha256": "ce055538447c4d052df3314b0a84c8cb29f235abdd589ccf24ecf94fac8fce9d",
+      "intent": "semantic_reject",
+      "prediction": "USIZE-LESS-THAN-TYPE / CLI3, no C"
+    },
+    "readonly_write.nl": {
+      "sha256": "b54b1cdbaa85678e49df60865e7744d9afb919c6c63963e29366d6977097abcc",
+      "intent": "semantic_reject",
+      "prediction": "write ref required / CLI3, no C"
+    },
+    "complex_arm.nl": {
+      "sha256": "d1f536bc14709494db0010f1e3eb10c5c3503ec6eada287904676f7a138ffdad",
+      "intent": "legal_unsupported",
+      "prediction": "CHECK0, backend CLI4/no C; do not expand arm effect profile"
+    }
+  },
+  "controls": {
+    "tests/p521/direct_pair_true.nl": "2b8c46554d7aaba137b2910ec08f5a30a2df3be3155a0c313710737f3dcfef37",
+    "tests/p626/fits_true.nl": "e6404c50f47f432b89ac0aafa4f68f2d1d9509c44e3f3504e89d501be7a5a84f",
+    "tests/fixtures/node_initial_some.nl": "b8199651020a2ae4135811684187b42eb04d4816b714bba687fbfc90784c1409"
+  }
+}

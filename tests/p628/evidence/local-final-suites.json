@@ -1,0 +1,20 @@
+[
+  {
+    "file": "local-clang23-full-ctest.log",
+    "original_sha256": "96a2a2b8b588488703a2e6df3ed91a7d9bd9f98a8ed493d753ab6691afd6118e",
+    "complete_original_local_log": "/workspace/p628-clang-ctest.log",
+    "total": 338,
+    "passed": 338,
+    "result": "100% tests passed, 0 tests failed out of 338\n\nTotal Test time (real) = 140.46 sec",
+    "note": "Complete local originals preserved; compact summary here. Remote fixed-HEAD CI separately supplies full durable logs."
+  },
+  {
+    "file": "local-gcc14-final-ctest.log",
+    "original_sha256": "7f6256cfc121da18d6b03f0e4fc32c5efde3ecb68d88e220880e6e0a197aa3d4",
+    "complete_original_local_log": "/workspace/p628-gcc14-final-ctest.log",
+    "total": 338,
+    "passed": 338,
+    "result": "100% tests passed, 0 tests failed out of 338\n\nTotal Test time (real) =  90.57 sec",
+    "note": "Complete local originals preserved; compact summary here. Remote fixed-HEAD CI separately supplies full durable logs."
+  }
+]
