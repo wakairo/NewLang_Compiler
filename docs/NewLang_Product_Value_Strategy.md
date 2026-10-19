@@ -139,6 +139,8 @@ C17/nativeのPASSやCHECK0／CI greenは、soundness theoremでもProduct GOで�
 
 **長期の選択肢：** 初期のC後継価値を優先しながら、将来必要な型・APIだけに厳格なownership・exclusive access・不変条件保護を選べるよう発展し、Rustを合理的に選ぶ領域へも届く可能性を不必要に閉ざさない。これは現在のv0で包括的なRust型の規律や未選択機構を導入する許可ではなく、§6 no-foreclosureの長期的視野である。
 
+**当面の開発段階（2026-10-19、[Coordination #624](https://github.com/wakairo/NewLang_Compiler/issues/624)）：v0 compiler-first。** §1.1の二段階Product GO条件を**変更・撤廃せず、その能動的な成立判定と追加の仮想的な市場／競合調査を一時保留**する。限られた資源は、選択済みv0 semanticsに忠実なproduction compilerを通常の`newlangc` CLIから使える形へ育て、実際のプログラムのsource受理・CHECK・必要な真正な公開owned・strict C17/native、診断、失敗・cleanup、反証と保守費用を実測することへ優先配分する。これはv0の実装を通じて良い点と悪い点を発見するための**限定されたExploration投資**であり、既存のProduct GO／H1 HOLDをPASSとするものでも、全Draft機能・大規模heap ownerや新機構を一括認可するものでもない。実物での最初の通常CLI利用checkpointに到達したとき、または重大なunsoundness、通常利用を妨げる設計／費用、投資判断を覆す具体的な反証が出たとき、Coordinationが**Product GO判定を再開するか／何を評価するか**を改めて裁定する。§1.4の価値先行・自発的協力の方針、Vによる重大な実証上の反例の受付、§4.2/§4.3・独立R/Fの安全性と費用の条件は引き続き有効。詳細な運用は[Development Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go)および[Roadmap現行checkpoint](NewLang_Development_Roadmap.md)を参照する。
+
 ## 1.4 製品価値の長期実証と外部協力
 
 ### 1.4.1 外部プログラマーへの価値提供を先にする
