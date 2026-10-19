@@ -1,7 +1,7 @@
 fn main() -> unit {
-    let bad = if (true) {
+    let bad = if (usize(1) < usize(2)) {
         u8(7)
     } else {
-        false
+        usize(5)
     };
 }
