@@ -1,0 +1,4 @@
+P603_OOM parser=16
+P603_OOM semantic=32 rollback=PASS
+P603_OOM registration=101 rollback=PASS
+P603_OOM actual_main=44 rollback=PASS

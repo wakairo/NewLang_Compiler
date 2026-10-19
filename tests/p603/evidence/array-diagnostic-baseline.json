@@ -1,0 +1,91 @@
+{
+  "fixed_compiler": "262f4bddb9055a6cf9067a639cbe44fa72b703a4",
+  "timing": "supplemental unchanged baseline after initial implementation, before final migration acceptance; original Array sources retained",
+  "binary_sha256": "02e9a87dc8f67ef8ea40d61225c655506a3267fff5f30ff022fc31e59eed9260",
+  "results": [
+    {
+      "source": "tests/p534/arity3.nl",
+      "sha256": "7344e531c81bf1b88adfa49f4f7042db8fb1443d73534ee4f8f9cdb78c77f4a0",
+      "exit": 3,
+      "diagnostic": "tests/p534/arity3.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "bytes": 0
+    },
+    {
+      "source": "tests/p534/arity5.nl",
+      "sha256": "219ce408e53d930e68954ecb2443c205d73a73ff73dab4f36a8b8f1bee4469e4",
+      "exit": 3,
+      "diagnostic": "tests/p534/arity5.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "bytes": 0
+    },
+    {
+      "source": "tests/p534/original.nl",
+      "sha256": "0e032e49f78028fb69549b1120a060dd4fe84ae1073d25925ba679d3d8513801",
+      "exit": 3,
+      "diagnostic": "tests/p534/original.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "bytes": 0
+    },
+    {
+      "source": "tests/p534/payloadless_some.nl",
+      "sha256": "2d9b57b89d80a5a61fcedc07d223b8205f2b53830645d5181cdad69d11ec7a27",
+      "exit": 3,
+      "diagnostic": "tests/p534/payloadless_some.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "bytes": 0
+    },
+    {
+      "source": "tests/p534/wrong_type.nl",
+      "sha256": "f8536e75f847c69aa5cf1cc7ee9e8ad2f1ca1f19dad308bf5ff3967dd9531766",
+      "exit": 3,
+      "diagnostic": "tests/p534/wrong_type.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "bytes": 0
+    },
+    {
+      "source": "tests/p534/wrong_variant.nl",
+      "sha256": "a2380941134cee467b1f97dba66b3f17ee84d0f046a96deef7f81dd4bc45366f",
+      "exit": 3,
+      "diagnostic": "tests/p534/wrong_variant.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "bytes": 0
+    },
+    {
+      "source": "tests/p541/r540_two_roots.nl",
+      "sha256": "3d01ff12734a194ccc8357625e16de5d1740019a59873ba467467f2152760f9f",
+      "exit": 3,
+      "diagnostic": "tests/p541/r540_two_roots.nl:2:22-2:23: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "bytes": 0
+    },
+    {
+      "source": "tests/p541/second_arity3.nl",
+      "sha256": "3158d3a6ae982a7430d3c1fe05d33fc2eec8fa04876eb6548519f8537e8afa69",
+      "exit": 3,
+      "diagnostic": "tests/p541/second_arity3.nl:2:25-2:26: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "bytes": 0
+    },
+    {
+      "source": "tests/p541/second_arity5.nl",
+      "sha256": "656c5f69d087483c8bfb37053bffc61c6ff7b96a0fe70c425befea3d73b47d73",
+      "exit": 3,
+      "diagnostic": "tests/p541/second_arity5.nl:2:25-2:26: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "bytes": 0
+    },
+    {
+      "source": "tests/p541/second_nonleaf.nl",
+      "sha256": "1baaceb14c35c12b74698b53b93b8216f04436e39d8bad648624ff2084695dc9",
+      "exit": 3,
+      "diagnostic": "tests/p541/second_nonleaf.nl:2:25-2:26: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "bytes": 0
+    },
+    {
+      "source": "tests/p541/second_wrong_type.nl",
+      "sha256": "730d3b591622c6153ae4496d87a6063702c5bfd8aa88074001c6081e27ed68ae",
+      "exit": 3,
+      "diagnostic": "tests/p541/second_wrong_type.nl:2:25-2:26: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "bytes": 0
+    },
+    {
+      "source": "tests/p541/two_roots.nl",
+      "sha256": "829f8d7b9a0aea422f4349d3fd0dc2b389d995b0ab13119b3f490cefc4cb30d1",
+      "exit": 3,
+      "diagnostic": "tests/p541/two_roots.nl:2:25-2:26: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+      "bytes": 0
+    }
+  ]
+}

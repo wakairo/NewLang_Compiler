@@ -1,0 +1,384 @@
+{
+  "gcc13": {
+    "positive_sources": 9,
+    "negative_sources": 18,
+    "plain_and_passive_native": {
+      "literal_true.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "literal_false.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "equal_false.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "zero.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "max_true.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "max_false.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "max_equal.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "named_true.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "named_equal.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      }
+    },
+    "synthetic_outcomes": {
+      "SAME_TRUTH/NATIVE_SAME_TRUTH": 18,
+      "TRUTH_CHANGING/NATIVE_REJECTED": 36
+    },
+    "nonboundary_runtime91": {
+      "<=": [
+        {
+          "source": "equal_false.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "equal_false.nl",
+          "optimization": "-O2"
+        },
+        {
+          "source": "named_equal.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "named_equal.nl",
+          "optimization": "-O2"
+        }
+      ],
+      ">": [
+        {
+          "source": "literal_true.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "literal_true.nl",
+          "optimization": "-O2"
+        },
+        {
+          "source": "literal_false.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "literal_false.nl",
+          "optimization": "-O2"
+        },
+        {
+          "source": "named_true.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "named_true.nl",
+          "optimization": "-O2"
+        }
+      ],
+      "copy": [
+        {
+          "source": "literal_true.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "literal_true.nl",
+          "optimization": "-O2"
+        },
+        {
+          "source": "literal_false.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "literal_false.nl",
+          "optimization": "-O2"
+        },
+        {
+          "source": "equal_false.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "equal_false.nl",
+          "optimization": "-O2"
+        },
+        {
+          "source": "named_true.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "named_true.nl",
+          "optimization": "-O2"
+        },
+        {
+          "source": "named_equal.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "named_equal.nl",
+          "optimization": "-O2"
+        }
+      ]
+    }
+  },
+  "clang": {
+    "positive_sources": 9,
+    "negative_sources": 18,
+    "plain_and_passive_native": {
+      "literal_true.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "literal_false.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "equal_false.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "zero.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "max_true.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "max_false.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "max_equal.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "named_true.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      },
+      "named_equal.nl": {
+        "plain": [
+          0,
+          0
+        ],
+        "observed": [
+          0,
+          0
+        ]
+      }
+    },
+    "synthetic_outcomes": {
+      "SAME_TRUTH/NATIVE_SAME_TRUTH": 18,
+      "TRUTH_CHANGING/NATIVE_REJECTED": 36
+    },
+    "nonboundary_runtime91": {
+      "<=": [
+        {
+          "source": "equal_false.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "equal_false.nl",
+          "optimization": "-O2"
+        },
+        {
+          "source": "named_equal.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "named_equal.nl",
+          "optimization": "-O2"
+        }
+      ],
+      ">": [
+        {
+          "source": "literal_true.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "literal_true.nl",
+          "optimization": "-O2"
+        },
+        {
+          "source": "literal_false.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "literal_false.nl",
+          "optimization": "-O2"
+        },
+        {
+          "source": "named_true.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "named_true.nl",
+          "optimization": "-O2"
+        }
+      ],
+      "copy": [
+        {
+          "source": "literal_true.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "literal_true.nl",
+          "optimization": "-O2"
+        },
+        {
+          "source": "literal_false.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "literal_false.nl",
+          "optimization": "-O2"
+        },
+        {
+          "source": "equal_false.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "equal_false.nl",
+          "optimization": "-O2"
+        },
+        {
+          "source": "named_true.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "named_true.nl",
+          "optimization": "-O2"
+        },
+        {
+          "source": "named_equal.nl",
+          "optimization": "-O0"
+        },
+        {
+          "source": "named_equal.nl",
+          "optimization": "-O2"
+        }
+      ]
+    }
+  },
+  "toolchains": {
+    "gcc13": "x86_64-linux-gnu-gcc-13 (Debian 13.3.0-16) 13.3.0",
+    "clang": "Debian clang version 23.1.2 (++20260920034005+85ac56026243-1~exp1~20260920034024.76)"
+  },
+  "boundary_mutants": "New real staged-operand versions all compiled; historical pre-staging refusal remains in P605/P608 and old-c17-gcc13-refusal.json. Do not relabel old failures.",
+  "source_and_owned": "Original registered source, public copied bool and operand views after AST teardown; root0/no authority. Existing private validation rejects22 corruptions per positive with unchanged snapshot. No new privileged public proof."
+}

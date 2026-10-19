@@ -1,0 +1,63 @@
+--- P603/literal_true.c17.txt
++++ P609/literal_true.c17.txt
+@@ -14 +14,3 @@
+-    const _Bool nl_local_1 = (((size_t)UINTMAX_C(2)) < ((size_t)UINTMAX_C(3)));
++    const size_t nl_less_left_2 = ((size_t)UINTMAX_C(2));
++    const size_t nl_less_right_2 = ((size_t)UINTMAX_C(3));
++    const _Bool nl_local_1 = (nl_less_left_2 < nl_less_right_2);
+--- P603/literal_false.c17.txt
++++ P609/literal_false.c17.txt
+@@ -14 +14,3 @@
+-    const _Bool nl_local_1 = (((size_t)UINTMAX_C(3)) < ((size_t)UINTMAX_C(2)));
++    const size_t nl_less_left_2 = ((size_t)UINTMAX_C(3));
++    const size_t nl_less_right_2 = ((size_t)UINTMAX_C(2));
++    const _Bool nl_local_1 = (nl_less_left_2 < nl_less_right_2);
+--- P603/equal_false.c17.txt
++++ P609/equal_false.c17.txt
+@@ -14 +14,3 @@
+-    const _Bool nl_local_1 = (((size_t)UINTMAX_C(7)) < ((size_t)UINTMAX_C(7)));
++    const size_t nl_less_left_2 = ((size_t)UINTMAX_C(7));
++    const size_t nl_less_right_2 = ((size_t)UINTMAX_C(7));
++    const _Bool nl_local_1 = (nl_less_left_2 < nl_less_right_2);
+--- P603/zero.c17.txt
++++ P609/zero.c17.txt
+@@ -14 +14,3 @@
+-    const _Bool nl_local_1 = (((size_t)UINTMAX_C(0)) < ((size_t)UINTMAX_C(0)));
++    const size_t nl_less_left_2 = ((size_t)UINTMAX_C(0));
++    const size_t nl_less_right_2 = ((size_t)UINTMAX_C(0));
++    const _Bool nl_local_1 = (nl_less_left_2 < nl_less_right_2);
+--- P603/max_true.c17.txt
++++ P609/max_true.c17.txt
+@@ -14 +14,3 @@
+-    const _Bool nl_local_1 = (((size_t)UINTMAX_C(0)) < ((size_t)UINTMAX_C(18446744073709551615)));
++    const size_t nl_less_left_2 = ((size_t)UINTMAX_C(0));
++    const size_t nl_less_right_2 = ((size_t)UINTMAX_C(18446744073709551615));
++    const _Bool nl_local_1 = (nl_less_left_2 < nl_less_right_2);
+--- P603/max_false.c17.txt
++++ P609/max_false.c17.txt
+@@ -14 +14,3 @@
+-    const _Bool nl_local_1 = (((size_t)UINTMAX_C(18446744073709551615)) < ((size_t)UINTMAX_C(0)));
++    const size_t nl_less_left_2 = ((size_t)UINTMAX_C(18446744073709551615));
++    const size_t nl_less_right_2 = ((size_t)UINTMAX_C(0));
++    const _Bool nl_local_1 = (nl_less_left_2 < nl_less_right_2);
+--- P603/max_equal.c17.txt
++++ P609/max_equal.c17.txt
+@@ -14 +14,3 @@
+-    const _Bool nl_local_1 = (((size_t)UINTMAX_C(18446744073709551615)) < ((size_t)UINTMAX_C(18446744073709551615)));
++    const size_t nl_less_left_2 = ((size_t)UINTMAX_C(18446744073709551615));
++    const size_t nl_less_right_2 = ((size_t)UINTMAX_C(18446744073709551615));
++    const _Bool nl_local_1 = (nl_less_left_2 < nl_less_right_2);
+--- P603/named_true.c17.txt
++++ P609/named_true.c17.txt
+@@ -22 +22,3 @@
+-    const _Bool nl_local_5 = (nl_local_4 < nl_local_3);
++    const size_t nl_less_left_14 = nl_local_4;
++    const size_t nl_less_right_14 = nl_local_3;
++    const _Bool nl_local_5 = (nl_less_left_14 < nl_less_right_14);
+--- P603/named_equal.c17.txt
++++ P609/named_equal.c17.txt
+@@ -20 +20,3 @@
+-    const _Bool nl_local_4 = (nl_local_3 < nl_local_2);
++    const size_t nl_less_left_11 = nl_local_3;
++    const size_t nl_less_right_11 = nl_local_2;
++    const _Bool nl_local_4 = (nl_less_left_11 < nl_less_right_11);

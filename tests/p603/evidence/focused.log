@@ -1,0 +1,188 @@
+Internal ctest changing into directory: /workspace/p603/build
+UpdateCTestConfiguration  from :/workspace/p603/build/DartConfiguration.tcl
+Parse Config file:/workspace/p603/build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p603/build/DartConfiguration.tcl
+Parse Config file:/workspace/p603/build/DartConfiguration.tcl
+Test project /workspace/p603/build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 13
+      Start 13: p603_comparison_parser.unit
+
+13: Test command: /workspace/p603/build/p603_comparison_test "parser"
+13: Working Directory: /workspace/p603/build
+13: Environment variables:
+13:  PYTHONDONTWRITEBYTECODE=1
+13:  PYTHONHASHSEED=0
+13:  LC_ALL=C
+13:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+13:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+13: Test timeout computed to be: 90
+ 1/10 Test #13: p603_comparison_parser.unit ..........   Passed    0.00 sec
+test 14
+      Start 14: p603_comparison_values.unit
+
+14: Test command: /workspace/p603/build/p603_comparison_test "values"
+14: Working Directory: /workspace/p603/build
+14: Environment variables:
+14:  PYTHONDONTWRITEBYTECODE=1
+14:  PYTHONHASHSEED=0
+14:  LC_ALL=C
+14:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+14:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+14: Test timeout computed to be: 90
+ 2/10 Test #14: p603_comparison_values.unit ..........   Passed    0.00 sec
+test 15
+      Start 15: p603_comparison_rollback.unit
+
+15: Test command: /workspace/p603/build/p603_comparison_test "rollback"
+15: Working Directory: /workspace/p603/build
+15: Environment variables:
+15:  PYTHONDONTWRITEBYTECODE=1
+15:  PYTHONHASHSEED=0
+15:  LC_ALL=C
+15:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+15:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+15: Test timeout computed to be: 90
+ 3/10 Test #15: p603_comparison_rollback.unit ........   Passed    0.00 sec
+test 16
+      Start 16: p603_comparison_oom.unit
+
+16: Test command: /workspace/p603/build/p603_comparison_test "oom"
+16: Working Directory: /workspace/p603/build
+16: Environment variables:
+16:  PYTHONDONTWRITEBYTECODE=1
+16:  PYTHONHASHSEED=0
+16:  LC_ALL=C
+16:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+16:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+16: Test timeout computed to be: 90
+16: P603_OOM parser=16
+16: P603_OOM semantic=32 rollback=PASS
+16: P603_OOM registration=101 rollback=PASS
+16: P603_OOM actual_main=44 rollback=PASS
+ 4/10 Test #16: p603_comparison_oom.unit .............   Passed    0.00 sec
+test 17
+      Start 17: p603_comparison_native.integration
+
+17: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p603/tests/p603/integration_test.py" "/workspace/p603/build/newlangc" "/workspace/p603/build/p603_public_probe" "/workspace/p603/build/p603_gate_probe" "/usr/bin/cc" "/workspace/p603/tests/p603" "none"
+17: Working Directory: /workspace/p603/build
+17: Environment variables:
+17:  PYTHONDONTWRITEBYTECODE=1
+17:  PYTHONHASHSEED=0
+17:  LC_ALL=C
+17:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+17:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+17: Test timeout computed to be: 90
+17: private gate CompletedProcess(args=['/workspace/p603/build/p603_gate_probe', '/workspace/p603/tests/p603/literal_true.nl'], returncode=1, stdout='', stderr='/workspace/p603/tests/p603/gate_probe.c:62: !accepted && validates(n.entry)\n')
+ 5/10 Test #17: p603_comparison_native.integration ...***Failed    0.04 sec
+test 18
+      Start 18: p504_equality_parser.unit
+
+18: Test command: /workspace/p603/build/p504_equality_test "parser"
+18: Working Directory: /workspace/p603/build
+18: Environment variables:
+18:  PYTHONDONTWRITEBYTECODE=1
+18:  PYTHONHASHSEED=0
+18:  LC_ALL=C
+18:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+18:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+18: Test timeout computed to be: 90
+ 6/10 Test #18: p504_equality_parser.unit ............   Passed    0.00 sec
+test 19
+      Start 19: p504_equality_values.unit
+
+19: Test command: /workspace/p603/build/p504_equality_test "values"
+19: Working Directory: /workspace/p603/build
+19: Environment variables:
+19:  PYTHONDONTWRITEBYTECODE=1
+19:  PYTHONHASHSEED=0
+19:  LC_ALL=C
+19:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+19:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+19: Test timeout computed to be: 90
+ 7/10 Test #19: p504_equality_values.unit ............   Passed    0.00 sec
+test 20
+      Start 20: p504_equality_rollback.unit
+
+20: Test command: /workspace/p603/build/p504_equality_test "rollback"
+20: Working Directory: /workspace/p603/build
+20: Environment variables:
+20:  PYTHONDONTWRITEBYTECODE=1
+20:  PYTHONHASHSEED=0
+20:  LC_ALL=C
+20:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+20:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+20: Test timeout computed to be: 90
+ 8/10 Test #20: p504_equality_rollback.unit ..........   Passed    0.00 sec
+test 21
+      Start 21: p504_equality_oom.unit
+
+21: Test command: /workspace/p603/build/p504_equality_test "oom"
+21: Working Directory: /workspace/p603/build
+21: Environment variables:
+21:  PYTHONDONTWRITEBYTECODE=1
+21:  PYTHONHASHSEED=0
+21:  LC_ALL=C
+21:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+21:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+21: Test timeout computed to be: 90
+21: P504_OOM parser=16
+21: P504_OOM semantic=32 rollback=PASS
+21: P504_OOM registration=101 rollback=PASS
+21: P504_OOM actual_main=44 rollback=PASS
+ 9/10 Test #21: p504_equality_oom.unit ...............   Passed    0.00 sec
+test 22
+      Start 22: p504_equality_native.integration
+
+22: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p603/tests/p504/frontier_test.py" "/workspace/p603/build/newlangc" "/workspace/p603/build/p504_public_probe" "/workspace/p603/build/p504_gate_probe" "/usr/bin/cc" "/workspace/p603/tests/p504" "none"
+22: Working Directory: /workspace/p603/build
+22: Environment variables:
+22:  PYTHONDONTWRITEBYTECODE=1
+22:  PYTHONHASHSEED=0
+22:  LC_ALL=C
+22:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+22:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+22: Test timeout computed to be: 90
+22: {"source": "bool_as_ref.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p504/bool_as_ref.nl:5:11-5:16: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ref<write,T>", "c_bytes": 0}
+22: {"source": "chain.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p504/chain.nl:1:73-1:75: error(unsupported)[USIZE-EQUALITY-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported", "c_bytes": 0}
+22: {"source": "copied_renamed.nl", "sha256": "8b63429c8d979f19ded4e7eef6c21f4c5c8a186d036c412d71e21598fae3ebab", "check": 0, "public": {"left": 17, "right": 17, "bool": 1, "equality": 13, "children": [11, 12], "symbols": [2, 3], "values": [4, 5, 6], "operator": [73, 75], "bool_symbol": 4, "if_checks": 0, "authority": 0}, "bindings": {"1": ["usize", 17], "2": ["usize", 17], "3": ["usize", 17], "4": ["bool", 1]}, "private_gate": "CONTROLS rejected=12 original=PASS snapshot=UNCHANGED", "c17": 0, "c_sha256": "2de7a2ee022c3ca28da9925115eeca9c1efbffab8d693b26da21de0b8fe19881", "native": {"plain": [0, 0], "observed": [0, 0], "wrong_comparison": [91, 91]}, "sanitizer": "none"}
+22: {"source": "copy_false.nl", "sha256": "e6b07be7784b64f8a99f87ff8341fef6f3cae2fe4e3685c33d4f4f4c03c26598", "check": 0, "public": {"left": 2, "right": 3, "bool": 0, "equality": 10, "children": [8, 9], "symbols": [1, 2], "values": [3, 4, 5], "operator": [42, 44], "bool_symbol": 3, "if_checks": 0, "authority": 0}, "bindings": {"1": ["usize", 2], "2": ["usize", 3], "3": ["bool", 0], "4": ["bool", 0]}, "private_gate": "CONTROLS rejected=12 original=PASS snapshot=UNCHANGED", "c17": 0, "c_sha256": "1397cff0dcde8b150157ac0e39410ebfcb94365c57dafe6efa54a2e14c2f53f2", "native": {"plain": [0, 0], "observed": [0, 0], "wrong_comparison": [91, 91], "wrong_copy": [91, 91]}, "sanitizer": "none"}
+22: {"source": "copy_true.nl", "sha256": "0ec4a7a1ae30bdd192ad5680e95002c7af9db323148d881c5d82880a843a0315", "check": 0, "public": {"left": 2, "right": 2, "bool": 1, "equality": 10, "children": [8, 9], "symbols": [1, 2], "values": [3, 4, 5], "operator": [42, 44], "bool_symbol": 3, "if_checks": 0, "authority": 0}, "bindings": {"1": ["usize", 2], "2": ["usize", 2], "3": ["bool", 1], "4": ["bool", 1]}, "private_gate": "CONTROLS rejected=12 original=PASS snapshot=UNCHANGED", "c17": 0, "c_sha256": "ac80f6e29dea007db0b710e90b582bd1b8f934a06fcc3320c4809873317aadc6", "native": {"plain": [0, 0], "observed": [0, 0], "wrong_comparison": [91, 91], "wrong_copy": [91, 91]}, "sanitizer": "none"}
+22: {"source": "direct_false.nl", "sha256": "fe1b704115f206a14e7f5a1e58e15025998359e36071eecd160b961ac7c7c21f", "check": 0, "public": {"left": 17, "right": 19, "bool": 0, "equality": 4, "children": [2, 3], "symbols": [0, 0], "values": [1, 2, 3], "operator": [20, 22], "bool_symbol": 1, "if_checks": 0, "authority": 0}, "bindings": {"1": ["bool", 0], "2": ["bool", 0]}, "private_gate": "CONTROLS rejected=10 original=PASS snapshot=UNCHANGED", "c17": 0, "c_sha256": "76cdff31c05b8b2b41bb3e1c9b532c798805c7b4a240ceba1b3307a1243b57e8", "native": {"plain": [0, 0], "observed": [0, 0], "wrong_comparison": [91, 91], "wrong_copy": [91, 91]}, "sanitizer": "none"}
+22: {"source": "equal_false.nl", "sha256": "45bf0f4e861374e7a3e78218ff3147f0f23d9efb17c730cde2f7e83e0a1e6954", "check": 0, "public": {"left": 2, "right": 3, "bool": 0, "equality": 10, "children": [8, 9], "symbols": [1, 2], "values": [3, 4, 5], "operator": [51, 53], "bool_symbol": 3, "if_checks": 0, "authority": 0}, "bindings": {"1": ["usize", 2], "2": ["usize", 3], "3": ["bool", 0]}, "private_gate": "CONTROLS rejected=12 original=PASS snapshot=UNCHANGED", "c17": 0, "c_sha256": "bd559dca09a8114e7e05bfa421aac621133e715863e71f3dcaddcd1ab57ab966", "native": {"plain": [0, 0], "observed": [0, 0], "wrong_comparison": [91, 91]}, "sanitizer": "none"}
+22: {"source": "equal_true.nl", "sha256": "6a473c7e5c2cec1d96739b6de6f2b1bdc8d48b1024c495992857cb78f81b7506", "check": 0, "public": {"left": 2, "right": 2, "bool": 1, "equality": 10, "children": [8, 9], "symbols": [1, 2], "values": [3, 4, 5], "operator": [51, 53], "bool_symbol": 3, "if_checks": 0, "authority": 0}, "bindings": {"1": ["usize", 2], "2": ["usize", 2], "3": ["bool", 1]}, "private_gate": "CONTROLS rejected=12 original=PASS snapshot=UNCHANGED", "c17": 0, "c_sha256": "aeaa84b706c9e72eb0f8134664f5c2bb66d5c494c95f976a412738c28909b7fd", "native": {"plain": [0, 0], "observed": [0, 0], "wrong_comparison": [91, 91]}, "sanitizer": "none"}
+22: {"source": "full_guard_false.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p504/full_guard_false.nl:7:5-8:70: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports", "c_bytes": 0}
+22: {"source": "full_guard_true.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p504/full_guard_true.nl:7:5-8:70: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports", "c_bytes": 0}
+22: {"source": "if_false.nl", "check": 0, "c17": 4, "c_bytes": 0, "native": "NOT REACHED"}
+22: {"source": "if_true.nl", "check": 0, "c17": 4, "c_bytes": 0, "native": "NOT REACHED"}
+22: {"source": "split_operator.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p504/split_operator.nl:1:58-1:59: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expected one contiguous == operator", "c_bytes": 0}
+22: {"source": "unknown.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p504/unknown.nl:1:33-1:35: error(precision)[USIZE-EQUALITY-PRECISION]: comparison needs known dependency-free quantity operands in this profile", "c_bytes": 0}
+22: {"source": "wrong_type.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p504/wrong_type.nl:4:14-4:16: error(semantic)[USIZE-EQUALITY-TYPE]: comparison requires two exact core usize operands", "c_bytes": 0}
+22: P504 normal usize equality native FINITE; IF effects/Pair join HOLD
+10/10 Test #22: p504_equality_native.integration .....   Passed    1.32 sec
+
+The following tests passed:
+	p603_comparison_parser.unit
+	p603_comparison_values.unit
+	p603_comparison_rollback.unit
+	p603_comparison_oom.unit
+	p504_equality_parser.unit
+	p504_equality_values.unit
+	p504_equality_rollback.unit
+	p504_equality_oom.unit
+	p504_equality_native.integration
+
+90% tests passed, 1 tests failed out of 10
+
+Total Test time (real) =   1.38 sec
+
+The following tests FAILED:
+	 17 - p603_comparison_native.integration (Failed)
+Errors while running CTest
+Output from these tests are in: /workspace/p603/build/Testing/Temporary/LastTest.log
+Use "--rerun-failed --output-on-failure" to re-run the failed cases verbosely.

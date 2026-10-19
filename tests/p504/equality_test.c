@@ -52,13 +52,17 @@ static bool parser(void)
           op.length == 2 && memcmp(op.bytes, "==", 2) == 0);
     nl_syntax_tree_destroy(syntax);
     nl_source_destroy(source);
-    const char *rejected[] = {"a==b==c",
-                              "a= =b",
-                              "a===b",
-                              "a!=b",
-                              "a<b",
-                              "a+ b==c",
-                              "{usize(2)}==usize(2)"};
+    /* P603 migration: this unchanged historical a<b input is now selected.
+     * Parser-only success; unknown names have no semantic authority. */
+    source = NULL;
+    syntax = NULL;
+    CHECK(tree("a<b", false, &source, &syntax));
+    CHECK(nl_syntax_node_view(nl_syntax_tree_root(syntax))->kind ==
+          NL_SYNTAX_USIZE_LESS_THAN);
+    nl_syntax_tree_destroy(syntax);
+    nl_source_destroy(source);
+    const char *rejected[] = {"a==b==c", "a= =b",   "a===b",
+                              "a!=b",    "a+ b==c", "{usize(2)}==usize(2)"};
     for (size_t i = 0; i < sizeof rejected / sizeof rejected[0]; ++i) {
         source = NULL;
         syntax = NULL;

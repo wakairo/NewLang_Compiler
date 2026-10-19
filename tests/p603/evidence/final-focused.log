@@ -1,0 +1,120 @@
+Internal ctest changing into directory: /workspace/p603/build
+UpdateCTestConfiguration  from :/workspace/p603/build/DartConfiguration.tcl
+Parse Config file:/workspace/p603/build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p603/build/DartConfiguration.tcl
+Parse Config file:/workspace/p603/build/DartConfiguration.tcl
+Test project /workspace/p603/build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 13
+    Start 13: p603_comparison_parser.unit
+
+13: Test command: /workspace/p603/build/p603_comparison_test "parser"
+13: Working Directory: /workspace/p603/build
+13: Environment variables:
+13:  PYTHONDONTWRITEBYTECODE=1
+13:  PYTHONHASHSEED=0
+13:  LC_ALL=C
+13:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+13:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+13: Test timeout computed to be: 90
+1/5 Test #13: p603_comparison_parser.unit ..........   Passed    0.00 sec
+test 14
+    Start 14: p603_comparison_values.unit
+
+14: Test command: /workspace/p603/build/p603_comparison_test "values"
+14: Working Directory: /workspace/p603/build
+14: Environment variables:
+14:  PYTHONDONTWRITEBYTECODE=1
+14:  PYTHONHASHSEED=0
+14:  LC_ALL=C
+14:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+14:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+14: Test timeout computed to be: 90
+2/5 Test #14: p603_comparison_values.unit ..........   Passed    0.00 sec
+test 15
+    Start 15: p603_comparison_rollback.unit
+
+15: Test command: /workspace/p603/build/p603_comparison_test "rollback"
+15: Working Directory: /workspace/p603/build
+15: Environment variables:
+15:  PYTHONDONTWRITEBYTECODE=1
+15:  PYTHONHASHSEED=0
+15:  LC_ALL=C
+15:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+15:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+15: Test timeout computed to be: 90
+3/5 Test #15: p603_comparison_rollback.unit ........   Passed    0.00 sec
+test 16
+    Start 16: p603_comparison_oom.unit
+
+16: Test command: /workspace/p603/build/p603_comparison_test "oom"
+16: Working Directory: /workspace/p603/build
+16: Environment variables:
+16:  PYTHONDONTWRITEBYTECODE=1
+16:  PYTHONHASHSEED=0
+16:  LC_ALL=C
+16:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+16:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+16: Test timeout computed to be: 90
+16: P603_OOM parser=16
+16: P603_OOM semantic=32 rollback=PASS
+16: P603_OOM registration=101 rollback=PASS
+16: P603_OOM actual_main=44 rollback=PASS
+4/5 Test #16: p603_comparison_oom.unit .............   Passed    0.00 sec
+test 17
+    Start 17: p603_comparison_native.integration
+
+17: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p603/tests/p603/integration_test.py" "/workspace/p603/build/newlangc" "/workspace/p603/build/p603_public_probe" "/workspace/p603/build/p603_gate_probe" "/usr/bin/cc" "/workspace/p603/tests/p603" "none"
+17: Working Directory: /workspace/p603/build
+17: Environment variables:
+17:  PYTHONDONTWRITEBYTECODE=1
+17:  PYTHONHASHSEED=0
+17:  LC_ALL=C
+17:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+17:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+17: Test timeout computed to be: 90
+17: {"source": "literal_true.nl", "sha256": "913c58c6211f1ff5d185daf2cc43e136d4a75b182e5f6c0cbdb0b1663dd13d3b", "check": 0, "public": {"left": 2, "right": 3, "bool": 1, "comparison": 4, "children": [2, 3], "symbols": [0, 0], "values": [1, 2, 3], "operator": [23, 24], "bool_symbol": 1, "if_checks": 0, "authority": 0}, "gate": "CONTROLS rejected=22 original=PASS snapshot=UNCHANGED", "bindings": {"1": ["bool", 1], "2": ["bool", 1]}, "c17": 0, "c_sha256": "61c78232028cd909e1e6129258a2d61b5fc3ddd707fca14d44e149720d400106", "native": {"plain": [0, 0], "observed": [0, 0], "<=": [0, 0], ">": [91, 91], "copy": [91, 91]}, "sanitizer": "none"}
+17: {"source": "literal_false.nl", "sha256": "b8a2024d2380b3537ff31cbd0dd7cfa89c78ddc8729fe90fcaab942e38cf891c", "check": 0, "public": {"left": 3, "right": 2, "bool": 0, "comparison": 4, "children": [2, 3], "symbols": [0, 0], "values": [1, 2, 3], "operator": [23, 24], "bool_symbol": 1, "if_checks": 0, "authority": 0}, "gate": "CONTROLS rejected=22 original=PASS snapshot=UNCHANGED", "bindings": {"1": ["bool", 0], "2": ["bool", 0]}, "c17": 0, "c_sha256": "968c09f3d5328c8c7b1c984f5f1c31da5f3c71bbccee6cba86e41c86fa000315", "native": {"plain": [0, 0], "observed": [0, 0], "<=": [0, 0], ">": [91, 91], "copy": [91, 91]}, "sanitizer": "none"}
+17: {"source": "equal_false.nl", "sha256": "a96145cefa06362cc152d413bf8cb6cab6c36c766e9793000da042b3a2066004", "check": 0, "public": {"left": 7, "right": 7, "bool": 0, "comparison": 4, "children": [2, 3], "symbols": [0, 0], "values": [1, 2, 3], "operator": [23, 24], "bool_symbol": 1, "if_checks": 0, "authority": 0}, "gate": "CONTROLS rejected=22 original=PASS snapshot=UNCHANGED", "bindings": {"1": ["bool", 0], "2": ["bool", 0]}, "c17": 0, "c_sha256": "845eb1c2ed415a93b4a05dad958127589b0f9f6e41a023ad76108cffa91b95ff", "native": {"plain": [0, 0], "observed": [0, 0], "<=": [91, 91], ">": [0, 0], "copy": [91, 91]}, "sanitizer": "none"}
+17: {"source": "zero.nl", "sha256": "5a4f6ed1c4762ccde0ed3d8e8bc867720ccbcee272fefc1949bcb271a04b6214", "check": 0, "public": {"left": 0, "right": 0, "bool": 0, "comparison": 4, "children": [2, 3], "symbols": [0, 0], "values": [1, 2, 3], "operator": [23, 24], "bool_symbol": 1, "if_checks": 0, "authority": 0}, "gate": "CONTROLS rejected=22 original=PASS snapshot=UNCHANGED", "bindings": {"1": ["bool", 0], "2": ["bool", 0]}, "c17": 0, "c_sha256": "17398d526df396e1896603b5a112a3facec3605e3d139f815d7f0497f1062912", "native": {"plain": [0, 0], "observed": [0, 0], "<=": [91, 91], ">": [0, 0], "copy": [91, 91]}, "sanitizer": "none"}
+17: {"source": "max_true.nl", "sha256": "3b58fc1f60e4a7373b87d3faea50c436ab956e80793c70273ed799022a07a47d", "check": 0, "public": {"left": 0, "right": 18446744073709551615, "bool": 1, "comparison": 4, "children": [2, 3], "symbols": [0, 0], "values": [1, 2, 3], "operator": [23, 24], "bool_symbol": 1, "if_checks": 0, "authority": 0}, "gate": "CONTROLS rejected=22 original=PASS snapshot=UNCHANGED", "bindings": {"1": ["bool", 1], "2": ["bool", 1]}, "c17": 0, "c_sha256": "96f38390f39394688a84250b6bc7d8da42a023a465bcb8e63c9b71de7630f02a", "native": {"plain": [0, 0], "observed": [0, 0], "<=": [0, 0], ">": [91, 91], "copy": [91, 91]}, "sanitizer": "none"}
+17: {"source": "max_false.nl", "sha256": "5cc13083827c606449a13a48d1ffd33b52ad3b541f97f5ebebbebc446e97f1b1", "check": 0, "public": {"left": 18446744073709551615, "right": 0, "bool": 0, "comparison": 4, "children": [2, 3], "symbols": [0, 0], "values": [1, 2, 3], "operator": [42, 43], "bool_symbol": 1, "if_checks": 0, "authority": 0}, "gate": "CONTROLS rejected=22 original=PASS snapshot=UNCHANGED", "bindings": {"1": ["bool", 0], "2": ["bool", 0]}, "c17": 0, "c_sha256": "9d0d8c1cb67d4f5ecbfeb4094192978a1ff4b49b7683f79cb58ff501ef9825e5", "native": {"plain": [0, 0], "observed": [0, 0], "<=": [0, 0], ">": [91, 91], "copy": [91, 91]}, "sanitizer": "none"}
+17: {"source": "max_equal.nl", "sha256": "8f1ba5baa31d6622b109c95a5fc8e72010be51f4c249d06d8a0b33207af593ee", "check": 0, "public": {"left": 18446744073709551615, "right": 18446744073709551615, "bool": 0, "comparison": 4, "children": [2, 3], "symbols": [0, 0], "values": [1, 2, 3], "operator": [42, 43], "bool_symbol": 1, "if_checks": 0, "authority": 0}, "gate": "CONTROLS rejected=22 original=PASS snapshot=UNCHANGED", "bindings": {"1": ["bool", 0], "2": ["bool", 0]}, "c17": 0, "c_sha256": "32cb6cb6e2c6d5ca0412640695026ef38300cae0950b0440d494e9d823ed183f", "native": {"plain": [0, 0], "observed": [0, 0], "<=": [91, 91], ">": [0, 0], "copy": [91, 91]}, "sanitizer": "none"}
+17: {"source": "named_true.nl", "sha256": "cc2c9df9baf9496b1cd60929e7cdd1b7dd7fcbbc6d0c8e60f52dac249c94e728", "check": 0, "public": {"left": 19, "right": 23, "bool": 1, "comparison": 16, "children": [14, 15], "symbols": [4, 3], "values": [5, 6, 7], "operator": [95, 96], "bool_symbol": 5, "if_checks": 0, "authority": 0}, "gate": "CONTROLS rejected=25 original=PASS snapshot=UNCHANGED", "bindings": {"1": ["usize", 19], "2": ["usize", 19], "3": ["usize", 23], "4": ["usize", 19], "5": ["bool", 1], "6": ["bool", 1]}, "c17": 0, "c_sha256": "b246165ed734800a8c1133295fc234b0972bef1fb06a820160a39f4dc64b5f6a", "native": {"plain": [0, 0], "observed": [0, 0], "<=": [0, 0], ">": [91, 91], "copy": [91, 91]}, "sanitizer": "none"}
+17: {"source": "named_equal.nl", "sha256": "e190b77579ea1d3b1586136ccb4c84faf9142b425b8d1b728a0ce55b1b9f33bc", "check": 0, "public": {"left": 19, "right": 19, "bool": 0, "comparison": 13, "children": [11, 12], "symbols": [3, 2], "values": [4, 5, 6], "operator": [77, 78], "bool_symbol": 4, "if_checks": 0, "authority": 0}, "gate": "CONTROLS rejected=25 original=PASS snapshot=UNCHANGED", "bindings": {"1": ["usize", 19], "2": ["usize", 19], "3": ["usize", 19], "4": ["bool", 0], "5": ["bool", 0]}, "c17": 0, "c_sha256": "bffcda10e65a24f1813e77af327bd0c30e62188797dd63ae40e1632bede908ae", "native": {"plain": [0, 0], "observed": [0, 0], "<=": [91, 91], ">": [0, 0], "copy": [91, 91]}, "sanitizer": "none"}
+17: {"source": "wrong_type.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/wrong_type.nl:1:34-1:35: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands", "c_bytes": 0}
+17: {"source": "uintptr.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/uintptr.nl:1:14-1:21: error(semantic)[P3-UNKNOWN-TYPE]: unknown semantic type name", "c_bytes": 0}
+17: {"source": "unknown.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/unknown.nl:1:37-1:38: error(precision)[USIZE-LESS-THAN-PRECISION]: less-than needs known dependency-free quantity operands in this profile", "c_bytes": 0}
+17: {"source": "false_authority.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/false_authority.nl:1:52-1:56: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ref<write,T>", "c_bytes": 0}
+17: {"source": "pointer.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/pointer.nl:1:81-1:82: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands", "c_bytes": 0}
+17: {"source": "chain.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/chain.nl:1:29-1:30: error(unsupported)[USIZE-LESS-THAN-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported", "c_bytes": 0}
+17: {"source": "le.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/le.nl:1:37-1:38: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block", "c_bytes": 0}
+17: {"source": "gt.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/gt.nl:1:36-1:37: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;", "c_bytes": 0}
+17: {"source": "nested.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/nested.nl:1:37-1:38: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block", "c_bytes": 0}
+17: {"source": "parenthesized.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/parenthesized.nl:1:28-1:29: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block", "c_bytes": 0}
+17: {"source": "mixed_plus_left.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/mixed_plus_left.nl:1:36-1:37: error(unsupported)[USIZE-ADDITION-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported", "c_bytes": 0}
+17: {"source": "mixed_plus_right.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/mixed_plus_right.nl:1:36-1:37: error(unsupported)[USIZE-LESS-THAN-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported", "c_bytes": 0}
+17: {"source": "mixed_equal.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/mixed_equal.nl:1:36-1:37: error(unsupported)[USIZE-LESS-THAN-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported", "c_bytes": 0}
+17: {"source": "call.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/call.nl:1:35-1:36: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5", "c_bytes": 0}
+17: {"source": "loan.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/loan.nl:1:52-1:53: error(unsupported)[USIZE-LESS-THAN-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported", "c_bytes": 0}
+17: {"source": "field.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/field.nl:1:34-1:35: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5", "c_bytes": 0}
+17: {"source": "unary.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/unary.nl:1:28-1:29: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block", "c_bytes": 0}
+17: {"source": "bare.nl", "exit": 3, "diagnostic": "/workspace/p603/tests/p603/bare.nl:1:28-1:29: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block", "c_bytes": 0}
+17: P603 finite source-owned Copy comparator; no privileged public validator or Product GO
+5/5 Test #17: p603_comparison_native.integration ...   Passed    3.18 sec
+
+The following tests passed:
+	p603_comparison_parser.unit
+	p603_comparison_values.unit
+	p603_comparison_rollback.unit
+	p603_comparison_oom.unit
+	p603_comparison_native.integration
+
+100% tests passed, 0 tests failed out of 5
+
+Total Test time (real) =   3.19 sec

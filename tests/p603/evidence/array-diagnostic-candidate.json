@@ -1,0 +1,74 @@
+[
+  {
+    "source": "tests/p534/arity3.nl",
+    "exit": 3,
+    "diagnostic": "tests/p534/arity3.nl:2:30-2:32: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n",
+    "bytes": 0
+  },
+  {
+    "source": "tests/p534/arity5.nl",
+    "exit": 3,
+    "diagnostic": "tests/p534/arity5.nl:2:30-2:32: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n",
+    "bytes": 0
+  },
+  {
+    "source": "tests/p534/original.nl",
+    "exit": 3,
+    "diagnostic": "tests/p534/original.nl:2:30-2:32: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n",
+    "bytes": 0
+  },
+  {
+    "source": "tests/p534/payloadless_some.nl",
+    "exit": 3,
+    "diagnostic": "tests/p534/payloadless_some.nl:2:30-2:32: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n",
+    "bytes": 0
+  },
+  {
+    "source": "tests/p534/wrong_type.nl",
+    "exit": 3,
+    "diagnostic": "tests/p534/wrong_type.nl:2:30-2:32: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n",
+    "bytes": 0
+  },
+  {
+    "source": "tests/p534/wrong_variant.nl",
+    "exit": 3,
+    "diagnostic": "tests/p534/wrong_variant.nl:2:30-2:32: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n",
+    "bytes": 0
+  },
+  {
+    "source": "tests/p541/r540_two_roots.nl",
+    "exit": 3,
+    "diagnostic": "tests/p541/r540_two_roots.nl:2:30-2:32: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n",
+    "bytes": 0
+  },
+  {
+    "source": "tests/p541/second_arity3.nl",
+    "exit": 3,
+    "diagnostic": "tests/p541/second_arity3.nl:2:33-2:35: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n",
+    "bytes": 0
+  },
+  {
+    "source": "tests/p541/second_arity5.nl",
+    "exit": 3,
+    "diagnostic": "tests/p541/second_arity5.nl:2:33-2:35: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n",
+    "bytes": 0
+  },
+  {
+    "source": "tests/p541/second_nonleaf.nl",
+    "exit": 3,
+    "diagnostic": "tests/p541/second_nonleaf.nl:2:33-2:35: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n",
+    "bytes": 0
+  },
+  {
+    "source": "tests/p541/second_wrong_type.nl",
+    "exit": 3,
+    "diagnostic": "tests/p541/second_wrong_type.nl:2:33-2:35: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n",
+    "bytes": 0
+  },
+  {
+    "source": "tests/p541/two_roots.nl",
+    "exit": 3,
+    "diagnostic": "tests/p541/two_roots.nl:2:33-2:35: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n",
+    "bytes": 0
+  }
+]

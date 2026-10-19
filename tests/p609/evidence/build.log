@@ -1,0 +1,138 @@
+[  2%] Built target newlang_diagnostic
+[  2%] Built target newlang_source
+[  3%] Built target source_test
+[  2%] Built target diagnostic_test
+[  3%] Built target newlang_syntax
+[  4%] Built target newlang_lexer
+[  6%] Built target newlang_parser
+[  6%] Built target newlang_checked
+[  8%] Built target newlang_parser_p534
+[  8%] Built target lexer_test
+[ 10%] Built target lexical_frontend_test
+[ 10%] Built target parser_test
+[ 11%] Built target syntax_frontend_test
+[ 19%] Built target newlang_semantic
+[ 21%] Built target newlang_checked_c_node
+[ 21%] Built target p572_public_probe
+[ 22%] Built target p534_fault_test
+[ 23%] Built target p534_public_probe
+[ 25%] Built target p541_public_probe
+[ 25%] Built target p541_fault_test
+[ 25%] Built target p605_public_probe
+[ 26%] Built target p603_public_probe
+[ 27%] Built target p603_comparison_test
+[ 27%] Building C object CMakeFiles/p603_gate_probe.dir/tests/p603/gate_probe.c.o
+[ 28%] Built target p504_public_probe
+[ 28%] Building C object CMakeFiles/p504_gate_probe.dir/tests/p504/gate_probe.c.o
+[ 29%] Linking C executable p603_gate_probe
+[ 30%] Linking C executable p504_gate_probe
+[ 30%] Built target p603_gate_probe
+[ 30%] Built target p504_gate_probe
+[ 31%] Built target p504_equality_test
+[ 32%] Built target p508_public_probe
+[ 32%] Building C object CMakeFiles/p508_gate_test.dir/tests/p508/gate_test.c.o
+[ 33%] Built target p514_public_probe
+[ 34%] Building C object CMakeFiles/p514_gate_test.dir/tests/p514/gate_test.c.o
+[ 34%] Linking C executable p508_gate_test
+[ 34%] Built target p508_gate_test
+[ 35%] Built target p517_public_probe
+[ 35%] Building C object CMakeFiles/p517_gate_test.dir/tests/p517/gate_test.c.o
+[ 35%] Linking C executable p514_gate_test
+[ 35%] Built target p514_gate_test
+[ 35%] Building C object CMakeFiles/p521_owned_probe.dir/tests/p521/owned_probe.c.o
+[ 36%] Linking C executable p517_gate_test
+[ 36%] Linking C executable p521_owned_probe
+[ 36%] Built target p517_gate_test
+[ 36%] Building C object CMakeFiles/p521_call_gate.dir/tests/p521/call_gate.c.o
+[ 36%] Built target p521_owned_probe
+[ 37%] Built target semantic_test
+[ 38%] Built target semantic_frontend_test
+[ 39%] Built target raw_storage_test
+[ 40%] Built target raw_storage_cycle_test
+[ 40%] Built target source_slice_test
+[ 41%] Built target source_slice_frontend_test
+[ 42%] Built target sum_slice_test
+[ 43%] Linking C executable p521_call_gate
+[ 44%] Built target sum_frontend_test
+[ 45%] Built target ref_join_test
+[ 45%] Built target p521_call_gate
+[ 45%] Built target ref_join_frontend_test
+[ 46%] Built target function_body_frontend_test
+[ 47%] Built target function_body_test
+[ 48%] Built target return_test
+[ 48%] Built target function_source_test
+[ 49%] Built target structural_name_test
+[ 50%] Built target control_test
+[ 50%] Built target if_test
+[ 50%] Built target loop_test
+[ 51%] Built target unit_name_test
+[ 52%] Built target argument_compatibility_test
+[ 54%] Built target local_root_test
+[ 54%] Built target avs_test
+[ 56%] Built target p497_literal_test
+[ 56%] Built target u8_literal_test
+[ 57%] Built target p497_public_probe
+[ 58%] Built target fixed_field_test
+[ 59%] Built target recursive_type_test
+[ 60%] Built target heap_link_test
+[ 61%] Built target heap_link_support_test
+[ 62%] Built target heap_link_checked_probe
+[ 63%] Built target heap_link_backend_test
+[ 63%] Built target allocated_backend_test
+[ 64%] Built target allocated_checked_probe
+[ 65%] Built target handoff_backend_test
+[ 66%] Built target handoff_checked_probe
+[ 67%] Built target live_return_backend_test
+[ 68%] Built target live_tail_return_test
+[ 69%] Built target packet_fork_test
+[ 70%] Built target packet_retention_test
+[ 71%] Built target custody_source_test
+[ 72%] Built target custody_checked_probe
+[ 73%] Built target custody_definition_test
+[ 74%] Built target typed_owner_test
+[ 75%] Built target two_heap_checked_probe
+[ 75%] Built target two_heap_backend_test
+[ 76%] Built target two_heap_test
+[ 76%] Built target captured_closure_test
+[ 77%] Built target five_checked_probe
+[ 78%] Built target five_backend_test
+[ 79%] Built target allocated_join_test
+[ 80%] Built target allocated_node_test
+[ 81%] Built target p466_public_probe
+[ 82%] Built target p471_public_probe
+[ 82%] Built target p490_public_probe
+[ 83%] Built target node_link_test
+[ 84%] Built target node_initial_test
+[ 84%] Built target node_join_native_test
+[ 85%] Built target node_join_native_probe
+[ 86%] Built target node_checked_probe
+[ 87%] Built target checked_c_node_test
+[ 88%] Built target node_join_proof_test
+[ 89%] Built target node_join_test
+[ 90%] Building C object CMakeFiles/nested_u8_checked_probe.dir/tests/integration/nested_u8_checked_probe.c.o
+[ 90%] Building C object CMakeFiles/u8_call_checked_probe.dir/tests/integration/u8_call_checked_probe.c.o
+[ 90%] Linking C executable nested_u8_checked_probe
+[ 91%] Linking C executable u8_call_checked_probe
+[ 91%] Built target nested_u8_checked_probe
+[ 91%] Built target u8_call_checked_probe
+[ 93%] Building C object CMakeFiles/p589_gate_test.dir/tests/p589/gate_test.c.o
+[ 93%] Built target p589_public_probe
+[ 94%] Built target p589_parser_oom_test
+[ 95%] Built target p596_public_probe
+[ 95%] Building C object CMakeFiles/p596_gate_test.dir/tests/p596/gate_test.c.o
+[ 95%] Linking C executable p589_gate_test
+[ 95%] Built target p589_gate_test
+[ 96%] Linking C executable p596_gate_test
+[ 96%] Built target p596_parser_oom_test
+[ 97%] Built target p596_proof_core_test
+[ 97%] Built target p596_gate_test
+[ 98%] Building C object CMakeFiles/newlangc.dir/src/main.c.o
+[ 99%] Building C object CMakeFiles/newlangc_p534.dir/src/main.c.o
+[ 99%] Linking C executable newlangc
+[ 99%] Linking C executable newlangc_p534
+[ 99%] Built target newlangc
+[ 99%] Built target p572_fault_test
+[ 99%] Built target newlangc_p534
+[ 99%] Building C object CMakeFiles/p534_semantic_gate.dir/tests/p514/gate_test.c.o
+[100%] Linking C executable p534_semantic_gate
+[100%] Built target p534_semantic_gate

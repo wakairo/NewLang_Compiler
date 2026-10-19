@@ -111,7 +111,7 @@ def main():
         source = directory / (name + '.nl')
         default = run([regular, '--check', str(source)])
         require(default.returncode == 3 and not default.stdout and
-                'P5-EXPRESSION-UNSUPPORTED' in default.stderr,
+                'REC-TYPE-PROFILE' in default.stderr,
                 'default-OFF isolation lost')
         expected = case['expected']
         if expected['check']:

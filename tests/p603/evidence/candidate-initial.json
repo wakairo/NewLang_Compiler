@@ -1,0 +1,164 @@
+{
+  "literal_true.nl": {
+    "check": 0,
+    "diagnostic": "",
+    "c17": 0,
+    "c_bytes": 714
+  },
+  "literal_false.nl": {
+    "check": 0,
+    "diagnostic": "",
+    "c17": 0,
+    "c_bytes": 714
+  },
+  "equal_false.nl": {
+    "check": 0,
+    "diagnostic": "",
+    "c17": 0,
+    "c_bytes": 714
+  },
+  "zero.nl": {
+    "check": 0,
+    "diagnostic": "",
+    "c17": 0,
+    "c_bytes": 714
+  },
+  "max_true.nl": {
+    "check": 0,
+    "diagnostic": "",
+    "c17": 0,
+    "c_bytes": 733
+  },
+  "max_false.nl": {
+    "check": 0,
+    "diagnostic": "",
+    "c17": 0,
+    "c_bytes": 733
+  },
+  "max_equal.nl": {
+    "check": 0,
+    "diagnostic": "",
+    "c17": 0,
+    "c_bytes": 752
+  },
+  "named_true.nl": {
+    "check": 0,
+    "diagnostic": "",
+    "c17": 0,
+    "c_bytes": 985
+  },
+  "named_equal.nl": {
+    "check": 0,
+    "diagnostic": "",
+    "c17": 0,
+    "c_bytes": 908
+  },
+  "wrong_type.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/wrong_type.nl:1:34-1:35: error(semantic)[USIZE-LESS-THAN-TYPE]: comparison requires two exact core usize operands\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "uintptr.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/uintptr.nl:1:14-1:21: error(semantic)[P3-UNKNOWN-TYPE]: unknown semantic type name\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "unknown.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/unknown.nl:1:37-1:38: error(precision)[USIZE-LESS-THAN-PRECISION]: comparison needs known dependency-free quantity operands in this profile\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "false_authority.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/false_authority.nl:1:52-1:56: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ref<write,T>\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "pointer.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/pointer.nl:1:81-1:82: error(semantic)[USIZE-LESS-THAN-TYPE]: comparison requires two exact core usize operands\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "chain.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/chain.nl:1:29-1:30: error(unsupported)[USIZE-LESS-THAN-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "le.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/le.nl:1:37-1:38: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "gt.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/gt.nl:1:36-1:37: error(syntax)[P5-EXPECTED-ITEM-END]: non-tail block item requires ;\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "nested.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/nested.nl:1:37-1:38: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "parenthesized.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/parenthesized.nl:1:28-1:29: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "mixed_plus_left.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/mixed_plus_left.nl:1:36-1:37: error(unsupported)[USIZE-ADDITION-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "mixed_plus_right.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/mixed_plus_right.nl:1:36-1:37: error(unsupported)[USIZE-LESS-THAN-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "mixed_equal.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/mixed_equal.nl:1:36-1:37: error(unsupported)[USIZE-LESS-THAN-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "call.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/call.nl:1:35-1:36: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "loan.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/loan.nl:1:52-1:53: error(unsupported)[USIZE-LESS-THAN-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "field.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/field.nl:1:34-1:35: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "unary.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/unary.nl:1:28-1:29: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+    "c17": 3,
+    "c_bytes": 0
+  },
+  "bare.nl": {
+    "check": 3,
+    "diagnostic": "tests/p603/bare.nl:1:28-1:29: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n",
+    "c17": 3,
+    "c_bytes": 0
+  }
+}

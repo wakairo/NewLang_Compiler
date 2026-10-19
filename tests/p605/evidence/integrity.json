@@ -1,0 +1,11 @@
+{
+  "old_unchanged_files": 61,
+  "adopted_proof_files": {
+    "src/usize_addition.c": "31e1b76beaae03471fc2243e0a1c8402b95a8ccbd42e2c10a68235f496cfbbc7",
+    "include/newlang/usize_addition.h": "9ca7a75b339c0a09c8504ad6f988a2010cdb4451c989d007e24a06c36cf969d3",
+    "include/newlang/usize_subtraction.h": "a29c420fd4e198adb40211350b75348c4705cccd0f57e595212a1d6ca810232a",
+    "src/semantic_internal.h": "15e89aefc0f1574afdc77e6826e79f51902897b8b7ed57650f7a2b82ead1bed2"
+  },
+  "adopted_arithmetic_body_sha256": "e102af7fed13a831bd3fb4d1a6fe7297794e60bad4c357702ce99d76538652e4",
+  "all_equal": true
+}
