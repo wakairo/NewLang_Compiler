@@ -47,8 +47,7 @@ static bool r644_public(const char *path)
         NLSemanticValueView value = {0};
         CHECK(root && block && block->item_count <= 1);
         CHECK(root->result_count == 1);
-        CHECK(nl_semantic_value_view(worlds[a], root->results[0].value,
-                                     &value));
+        CHECK(nl_semantic_value_view(worlds[a], root->results[0].value, &value));
         CHECK(value.scalar_known && value.scalar_value <= 255);
         values[a] = value.scalar_value;
         locals[a] = block->item_count;
