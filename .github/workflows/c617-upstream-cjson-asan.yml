@@ -1,0 +1,105 @@
+name: C617 pinned original cJSON ASan witness (DO NOT MERGE)
+
+on:
+  push:
+    branches:
+      - c617-cjson-upstream-asan
+
+permissions:
+  contents: read
+
+jobs:
+  upstream-cjson:
+    name: Parent UAF and fixed native (GCC/Clang)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - name: Obtain and verify exact authentic upstream C and header blobs
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "C617_C_COORDINATION_RUN=1"
+          echo "NEWLANG_FROZEN_MAIN=6654ce474d236cdd17cfdbbc1eee72fd5248f2da"
+          gcc --version | head -n 1
+          clang --version | head -n 1
+          git --version
+          parent=3999b12848214a201bf56ef416b9dac1ec63f811
+          fixed=a65abf2f4f1842765761a616e93c14ae25a284fd
+          for pair in "parent:$parent:500fcf574fdc4a2aa79b662505d42276df11f7f6" "fixed:$fixed:cc1c0166773a0adc316c77f6754be897c414d24b"; do
+            IFS=: read -r phase revision expected_c <<< "$pair"
+            mkdir -p "$phase"
+            for file in cJSON.c cJSON.h LICENSE; do
+              curl --fail --silent --show-error --location --retry 2 --max-time 40 \
+                "https://raw.githubusercontent.com/DaveGamble/cJSON/$revision/$file" \
+                --output "$phase/$file"
+              echo "SOURCE $phase $revision $file $(git hash-object "$phase/$file") $(sha256sum "$phase/$file")"
+            done
+            test "$(git hash-object "$phase/cJSON.c")" = "$expected_c"
+            test "$(git hash-object "$phase/cJSON.h")" = "0c6c8e070efd754803e8d8b6549e2bb34315e9a4"
+            test "$(git hash-object "$phase/LICENSE")" = "78deb0406d713ab9730e3c2447be1abdbd70b9a2"
+            echo "PINNED_BLOBS_VERIFIED $phase $revision"
+          done
+
+      - name: Compile and execute fixed original public API harness under ASan
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > repro.c <<'C'
+          #include "cJSON.h"
+          #include <assert.h>
+          int main(void) {
+              cJSON *p=cJSON_CreateArray(), *a=cJSON_CreateNumber(1);
+              cJSON *b=cJSON_CreateNumber(2), *c=cJSON_CreateNumber(3);
+              assert(p && a && b && c);
+              assert(cJSON_AddItemToArray(p,a));
+              assert(cJSON_AddItemToArray(p,b));
+              cJSON_DeleteItemFromArray(p,1);
+              assert(cJSON_AddItemToArray(p,c));
+              assert(cJSON_GetArraySize(p)==2);
+              assert(cJSON_GetArrayItem(p,0)==a);
+              assert(cJSON_GetArrayItem(p,1)==c);
+              cJSON_Delete(p);
+              return 0;
+          }
+          C
+          echo "HARNESS_SHA256=$(sha256sum repro.c)"
+          for cc in gcc clang; do
+            "$cc" --version | head -n 1
+            for phase in parent fixed; do
+              echo "BUILD $cc $phase"
+              "$cc" -std=c17 -Wall -Wextra -Wpedantic -Werror -g -O0 \
+                -fsanitize=address -fno-omit-frame-pointer \
+                -I"$phase" repro.c "$phase/cJSON.c" -lm -o "$cc"_"$phase"
+              echo "STRICT_ORIGINAL_COMPILE_PASS $cc $phase"
+            done
+
+            echo "EXEC_ORIGINAL_PARENT $cc"
+            set +e
+            ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 "./$cc"_parent \
+              >"$cc"_parent.stdout 2>"$cc"_parent.stderr
+            old_rc=$?
+            set -e
+            echo "ORIGINAL_PARENT_EXIT $cc $old_rc"
+            cat "$cc"_parent.stdout
+            cat "$cc"_parent.stderr
+            test "$old_rc" -ne 0
+            grep -q "heap-use-after-free" "$cc"_parent.stderr
+            grep -q "WRITE of size" "$cc"_parent.stderr
+            grep -q "freed by thread" "$cc"_parent.stderr
+            grep -q "suffix_object" "$cc"_parent.stderr
+            echo "UPSTREAM_PARENT_UAF_WRITE_CONFIRMED $cc"
+
+            echo "EXEC_ORIGINAL_FIXED $cc"
+            set +e
+            ASAN_OPTIONS=detect_leaks=1:halt_on_error=1 "./$cc"_fixed \
+              >"$cc"_fixed.stdout 2>"$cc"_fixed.stderr
+            fixed_rc=$?
+            set -e
+            echo "ORIGINAL_FIXED_EXIT $cc $fixed_rc"
+            cat "$cc"_fixed.stdout
+            cat "$cc"_fixed.stderr
+            test "$fixed_rc" -eq 0
+            test ! -s "$cc"_fixed.stderr
+            echo "UPSTREAM_FIXED_ASAN_CLEAN_AND_ASSERT_PASS $cc"
+          done
+          echo "C617_ALL_FOUR_ORIGINAL_NATIVE_RUNS_VERIFIED"
