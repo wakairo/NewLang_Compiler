@@ -7,9 +7,8 @@
 
 static bool r644_valid(const TestNode *n)
 {
-    V0Program p = {
-        .unit = nl_semantic_unit_type(n->context),
-        .u8 = nl_semantic_core_type(n->context, NL_TYPE_U8)};
+    V0Program p = {.unit = nl_semantic_unit_type(n->context),
+                   .u8 = nl_semantic_core_type(n->context, NL_TYPE_U8)};
     return v0_validate_call(n->entry, nl_checked_root(n->entry), &p);
 }
 
@@ -28,14 +27,13 @@ static bool r644_public(const char *path)
         }
     CHECK(id != 0);
     const NLCheckedNodeView *join = nl_checked_node_view(f, id);
-    const NLCheckedNodeView *cond =
-        nl_checked_node_view(f, join->initializer);
+    const NLCheckedNodeView *cond = nl_checked_node_view(f, join->initializer);
     NLSemanticValueView truth = {0};
-    CHECK(join->normal_arms == 2 && join->result_count == 1 &&
-          cond != NULL && cond->result_count == 1 &&
-          nl_semantic_value_view(nl_checked_context(f),
-                                 cond->results[0].value, &truth) &&
-          truth.scalar_known && truth.scalar_value <= 1);
+    CHECK(join->normal_arms == 2 && join->result_count == 1);
+    CHECK(cond != NULL && cond->result_count == 1);
+    const NLSemanticContext *parent = nl_checked_context(f);
+    CHECK(nl_semantic_value_view(parent, cond->results[0].value, &truth));
+    CHECK(truth.scalar_known && truth.scalar_value <= 1);
     size_t values[2] = {0, 0}, locals[2] = {0, 0};
     const NLSemanticContext *worlds[2] = {NULL, NULL};
     for (size_t a = 0; a < 2; ++a) {
@@ -47,11 +45,11 @@ static bool r644_public(const char *path)
         const NLCheckedNodeView *block =
             root ? nl_checked_node_view(arm, root->initializer) : NULL;
         NLSemanticValueView value = {0};
-        CHECK(root && block && block->item_count <= 1 &&
-              root->result_count == 1 &&
-              nl_semantic_value_view(worlds[a], root->results[0].value,
-                                     &value) &&
-              value.scalar_known && value.scalar_value <= 255);
+        CHECK(root && block && block->item_count <= 1);
+        CHECK(root->result_count == 1);
+        CHECK(nl_semantic_value_view(worlds[a], root->results[0].value,
+                                     &value));
+        CHECK(value.scalar_known && value.scalar_value <= 255);
         values[a] = value.scalar_value;
         locals[a] = block->item_count;
         if (locals[a]) {
@@ -59,20 +57,18 @@ static bool r644_public(const char *path)
                 nl_checked_node_view(arm, block->first_item);
             NLSemanticBindingView binding;
             NLSemanticPlaceView place;
-            CHECK(decl && nl_semantic_binding_view(worlds[a], decl->symbol,
-                                                   &binding) &&
-                  binding.availability == NL_CONSUMED &&
-                  nl_semantic_place_view(worlds[a], binding.place,
-                                         &place) &&
-                  !place.live && place.current_value == 0);
+            CHECK(decl != NULL);
+            CHECK(nl_semantic_binding_view(worlds[a], decl->symbol, &binding));
+            CHECK(binding.availability == NL_CONSUMED);
+            CHECK(nl_semantic_place_view(worlds[a], binding.place, &place));
+            CHECK(!place.live && place.current_value == 0);
         }
     }
     CHECK(worlds[0] != worlds[1] && worlds[0] != nl_checked_context(f) &&
           worlds[1] != nl_checked_context(f));
     printf("{\"bool\":%zu,\"arms\":[%zu,%zu],"
            "\"locals\":[%zu,%zu],\"distinct\":true,\"ended\":true}\n",
-           truth.scalar_value, values[0], values[1], locals[0],
-           locals[1]);
+           truth.scalar_value, values[0], values[1], locals[0], locals[1]);
     node_checked_destroy(&n);
     return true;
 }
@@ -128,8 +124,7 @@ static bool r644_attacks(const char *path)
         CHECK(nl_fixed_validate(world) == NL_CHECK_OK);
         NLPlaceId root_id = 0;
         for (size_t i = 0; i < world->place_count; ++i)
-            if (world->places[i].live &&
-                world->places[i].independent_root &&
+            if (world->places[i].live && world->places[i].independent_root &&
                 world->places[i].fixed_field_count == 2) {
                 root_id = i + 1;
                 break;
@@ -138,32 +133,34 @@ static bool r644_attacks(const char *path)
         NLSemanticPlaceView *root = &world->places[root_id - 1];
         CHECK(root->fixed_fields[0] != 0 &&
               root->fixed_fields[0] <= world->place_count);
-        NLSemanticPlaceView *child =
-            &world->places[root->fixed_fields[0] - 1];
+        NLSemanticPlaceView *child = &world->places[root->fixed_fields[0] - 1];
         const NLSemanticPlaceView saved_root = *root;
         const NLSemanticPlaceView saved_child = *child;
-#define R644_REFUSE(change)                                                    \
-    do {                                                                       \
-        change;                                                                \
-        const NLCheckStatus result = nl_fixed_validate(world);                 \
-        *root = saved_root;                                                     \
-        *child = saved_child;                                                   \
-        CHECK(result == NL_CHECK_INTERNAL_ERROR &&                             \
-              nl_fixed_validate(world) == NL_CHECK_OK &&                       \
-              nl_sem_validate(world) == NL_CHECK_OK && r644_valid(&n) &&        \
-              r644_valid(&protected));                                          \
-        ++invalid;                                                             \
-    } while (0)
-        R644_REFUSE(root->current_value = 0);
-        R644_REFUSE(root->current_value = world->value_count + 1);
-        R644_REFUSE(child->current_value = 0);
-        R644_REFUSE(child->current_value = world->value_count + 1);
-        R644_REFUSE(child->parent_aggregate = world->place_count + 1);
-        R644_REFUSE(child->parent_field_index = NL_SEMANTIC_MAX_FIELDS);
-#undef R644_REFUSE
+        for (size_t mutant = 0; mutant < 6; ++mutant) {
+            if (mutant == 0)
+                root->current_value = 0;
+            else if (mutant == 1)
+                root->current_value = world->value_count + 1;
+            else if (mutant == 2)
+                child->current_value = 0;
+            else if (mutant == 3)
+                child->current_value = world->value_count + 1;
+            else if (mutant == 4)
+                child->parent_aggregate = world->place_count + 1;
+            else
+                child->parent_field_index = NL_SEMANTIC_MAX_FIELDS;
+            const NLCheckStatus result = nl_fixed_validate(world);
+            *root = saved_root;
+            *child = saved_child;
+            CHECK(result == NL_CHECK_INTERNAL_ERROR);
+            CHECK(nl_fixed_validate(world) == NL_CHECK_OK);
+            CHECK(nl_sem_validate(world) == NL_CHECK_OK);
+            CHECK(r644_valid(&n) && r644_valid(&protected));
+            ++invalid;
+        }
     }
-    CHECK(memcmp(f, &saved_parent, sizeof(*f)) == 0 &&
-          r644_valid(&n) && r644_valid(&protected));
+    CHECK(memcmp(f, &saved_parent, sizeof(*f)) == 0);
+    CHECK(r644_valid(&n) && r644_valid(&protected));
     printf("R644 ATTACKS rejected=%zu malformed=%zu original=UNCHANGED "
            "ASAN_UBSAN=RUNNER\n",
            rejected, invalid);
