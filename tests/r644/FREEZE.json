@@ -1,0 +1,46 @@
+{
+  "authority": {
+    "main": "032cf60aabf4997e672bc3607cf53775d91ececb",
+    "candidate": "5e37869d1c4847b6fddbd205a369462be495b697",
+    "canonical": "Draft17.32"
+  },
+  "classification": "NON-BLIND calibrated; not fresh BLIND",
+  "borrowed": [
+    "calibration.nl exactly P630 then_true.nl",
+    "P633/P636 public and private API shapes as calibration, independent r644 test implementation"
+  ],
+  "r_oracles": {
+    "r_false.nl": {
+      "truth": 0,
+      "arms": [
+        142,
+        37
+      ],
+      "selected": 37,
+      "root_left_old": 11,
+      "root_right_unchanged": 243
+    },
+    "r_equal.nl": {
+      "truth": 1,
+      "arms": [
+        67,
+        67
+      ],
+      "selected": 67,
+      "root_left_old": 55,
+      "root_right_unchanged": 202
+    }
+  },
+  "negatives": [
+    "r_wrong_type.nl semantic rc3",
+    "r_range.nl semantic rc3",
+    "r_nested.nl CHECK0/backend4 no C"
+  ],
+  "hostile": [
+    "same-value and different-value independent arm-context swap",
+    "wrong arm receipt",
+    "wrong parent node",
+    "root and child value zero/out-of-range, parent past end, field sentinel"
+  ],
+  "note": "Source SHA256 and C17 SHA256 printed from immutable committed bytes by CI before each outcome; no post-observation oracle modification."
+}

@@ -921,6 +921,14 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # Track R #644: immutable NON-BLIND calibrated evidence only.
+    add_executable(r644_probe tests/r644/probe.c)
+    target_link_libraries(r644_probe PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME r644_calibrated_cli.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r644/verify.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r644_probe>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r644"
+        "${NEWLANG_SANITIZER}")
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
