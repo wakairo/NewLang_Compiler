@@ -1,5 +1,5 @@
 fn main() -> unit {
-    let selector = false;
+    let selector = usize(7) < usize(2);
     let seed = u8(41);
     let picked = if (selector) {
         let left = seed;
