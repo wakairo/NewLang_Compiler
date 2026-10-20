@@ -1,0 +1,74 @@
+{
+  "compiler": "9da4b4ce6163592f576c5a2ecb937ff6e230e6f8",
+  "canonical": "Draft17.32",
+  "preregistered_at_utc": "2026-10-20T08:34:09.240488+00:00",
+  "preregistered_at_jst": "2026-10-20T17:34:09.240488+09:00",
+  "purpose": "Dispatch admission snapshot: add protocol header, subtract reserved budget, require at least one byte of spare headroom, update original ready byte while retaining route channel. Ready 2=pending,1=admit,0=defer. Source constants are configuration input, not general dynamic I/O.",
+  "independence": "New local P source. Adopted main only; no PR652/R655/R656 fixture or private corruption harness.",
+  "cases": {
+    "admit.nl": {
+      "sha256": "6ebc5dbb12c3691226b288e66f2fa0011e7a3be33de11c797062dfe4032bf351",
+      "predicted_check": 0,
+      "predicted_baseline_c17": 4,
+      "expected_c_bytes_on_failure": 0,
+      "candidate_c17_if_small_faithful_connection": 0,
+      "payload": 27,
+      "header": 5,
+      "budget": 96,
+      "reserved": 16,
+      "framed": 32,
+      "headroom": 80,
+      "truth": true,
+      "selected": 1,
+      "initial_ready": 2,
+      "old_ready": 2,
+      "channel": 9,
+      "final_ready": 1,
+      "physical_oracle": "same original Dispatch root and ready/channel child addresses; one actual write to ready, channel unchanged"
+    },
+    "reserve_boundary.nl": {
+      "sha256": "3bd90e5304aa9db1061a071d3ac68d08ba89fbffa1b9c1b74aeb16dfbac6f024",
+      "predicted_check": 0,
+      "predicted_baseline_c17": 4,
+      "expected_c_bytes_on_failure": 0,
+      "candidate_c17_if_small_faithful_connection": 0,
+      "payload": 75,
+      "header": 5,
+      "budget": 96,
+      "reserved": 16,
+      "framed": 80,
+      "headroom": 80,
+      "truth": false,
+      "selected": 0,
+      "initial_ready": 2,
+      "old_ready": 2,
+      "channel": 9,
+      "final_ready": 0,
+      "physical_oracle": "same original Dispatch root and ready/channel child addresses; one actual write to ready, channel unchanged"
+    },
+    "wrong_quantity.nl": {
+      "sha256": "c1b1162c5d99a062a041b27ff751d03dc7fe8ab9113800a687ef194e793ff7ea",
+      "predicted_check": 3,
+      "predicted_baseline_c17": 3,
+      "expected_c_bytes_on_failure": 0,
+      "expected_diagnostic": "USIZE-ADDITION-TYPE"
+    },
+    "over_reserved.nl": {
+      "sha256": "a0df966e1285aabe22c9e2a09f31f0eb776b35eb501d4a54b841bd82de238afa",
+      "predicted_check": 3,
+      "predicted_baseline_c17": 3,
+      "expected_c_bytes_on_failure": 0,
+      "expected_diagnostic": "USIZE-SUBTRACTION-UNDERFLOW"
+    },
+    "route_change_unsupported.nl": {
+      "sha256": "8805ce8f7d06a87f8fc8532b05afde2fef1c1a8fe3d07a90c272b626314b7ada",
+      "predicted_check": 0,
+      "predicted_baseline_c17": 4,
+      "expected_c_bytes_on_failure": 0,
+      "classification": "Draft17.32-legal; two ended scopes, one original record, two field writes; expected backend precision boundary. No authenticated frame expansion authorized.",
+      "expected_diagnostic": "V1-BACKEND-UNSUPPORTED"
+    }
+  },
+  "stage0_prediction": "Existing individual +/-/< and pure IF/write are adopted. Existing single-Pair frame switch omits arithmetic node kinds; expect first backend precision refusal on the original composite. Audit public arithmetic validation and all existing frame checks before any narrow connection. Stop if a new frame/provenance mechanism is needed.",
+  "budget": "Self-bound Stage0 <=25 min; Stage1 <=90 min including local/one natural FULL5+PARTIAL CI; compiler net target <=100 lines; no internal evidence mutation."
+}

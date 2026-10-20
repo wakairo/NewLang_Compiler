@@ -1,0 +1,1 @@
+tests/p658/wrong_quantity.nl:7:36-7:37: error(semantic)[USIZE-ADDITION-TYPE]: + requires two exact core usize operands

@@ -1,0 +1,293 @@
+{
+  "timestamp_jst": "2026-10-20T17:38:19.490092+09:00",
+  "compiler": "9da4b4ce6163592f576c5a2ecb937ff6e230e6f8",
+  "source_unchanged": true,
+  "primary_owned": "NOT_ISSUED",
+  "primary_c17_native": "NOT_REACHED",
+  "cases": {
+    "gcc13": {
+      "admit.nl": {
+        "public_frontend": {
+          "parse": 0,
+          "registration": 2,
+          "category": "unsupported",
+          "diagnostic": "FIELD-PROFILE",
+          "span": [
+            500,
+            514
+          ],
+          "public_snapshot_unchanged": true,
+          "entry": "NOT_ENTERED",
+          "owned": "NOT_ISSUED",
+          "c17": "NOT_ENTERED"
+        },
+        "host_probe_exit": 0,
+        "host_probe_stderr": "",
+        "check": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/admit.nl:12:35-12:49: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+        },
+        "c17": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/admit.nl:12:35-12:49: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+        }
+      },
+      "reserve_boundary.nl": {
+        "public_frontend": {
+          "parse": 0,
+          "registration": 2,
+          "category": "unsupported",
+          "diagnostic": "FIELD-PROFILE",
+          "span": [
+            500,
+            514
+          ],
+          "public_snapshot_unchanged": true,
+          "entry": "NOT_ENTERED",
+          "owned": "NOT_ISSUED",
+          "c17": "NOT_ENTERED"
+        },
+        "host_probe_exit": 0,
+        "host_probe_stderr": "",
+        "check": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/reserve_boundary.nl:12:35-12:49: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+        },
+        "c17": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/reserve_boundary.nl:12:35-12:49: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+        }
+      },
+      "wrong_quantity.nl": {
+        "public_frontend": {
+          "parse": 0,
+          "registration": 1,
+          "category": "semantic",
+          "diagnostic": "USIZE-ADDITION-TYPE",
+          "span": [
+            222,
+            223
+          ],
+          "public_snapshot_unchanged": true,
+          "entry": "NOT_ENTERED",
+          "owned": "NOT_ISSUED",
+          "c17": "NOT_ENTERED"
+        },
+        "host_probe_exit": 0,
+        "host_probe_stderr": "",
+        "check": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/wrong_quantity.nl:7:36-7:37: error(semantic)[USIZE-ADDITION-TYPE]: + requires two exact core usize operands\n"
+        },
+        "c17": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/wrong_quantity.nl:7:36-7:37: error(semantic)[USIZE-ADDITION-TYPE]: + requires two exact core usize operands\n"
+        }
+      },
+      "over_reserved.nl": {
+        "public_frontend": {
+          "parse": 0,
+          "registration": 1,
+          "category": "semantic",
+          "diagnostic": "USIZE-SUBTRACTION-UNDERFLOW",
+          "span": [
+            277,
+            278
+          ],
+          "public_snapshot_unchanged": true,
+          "entry": "NOT_ENTERED",
+          "owned": "NOT_ISSUED",
+          "c17": "NOT_ENTERED"
+        },
+        "host_probe_exit": 0,
+        "host_probe_stderr": "",
+        "check": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/over_reserved.nl:8:37-8:38: error(semantic)[USIZE-SUBTRACTION-UNDERFLOW]: mathematical usize difference is outside target range\n"
+        },
+        "c17": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/over_reserved.nl:8:37-8:38: error(semantic)[USIZE-SUBTRACTION-UNDERFLOW]: mathematical usize difference is outside target range\n"
+        }
+      },
+      "route_change_unsupported.nl": {
+        "public_frontend": {
+          "parse": 0,
+          "registration": 2,
+          "category": "unsupported",
+          "diagnostic": "FIELD-PROFILE",
+          "span": [
+            500,
+            514
+          ],
+          "public_snapshot_unchanged": true,
+          "entry": "NOT_ENTERED",
+          "owned": "NOT_ISSUED",
+          "c17": "NOT_ENTERED"
+        },
+        "host_probe_exit": 0,
+        "host_probe_stderr": "",
+        "check": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/route_change_unsupported.nl:12:35-12:49: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+        },
+        "c17": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/route_change_unsupported.nl:12:35-12:49: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+        }
+      }
+    },
+    "clang23_asan_lsan": {
+      "admit.nl": {
+        "public_frontend": {
+          "parse": 0,
+          "registration": 2,
+          "category": "unsupported",
+          "diagnostic": "FIELD-PROFILE",
+          "span": [
+            500,
+            514
+          ],
+          "public_snapshot_unchanged": true,
+          "entry": "NOT_ENTERED",
+          "owned": "NOT_ISSUED",
+          "c17": "NOT_ENTERED"
+        },
+        "host_probe_exit": 0,
+        "host_probe_stderr": "",
+        "check": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/admit.nl:12:35-12:49: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+        },
+        "c17": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/admit.nl:12:35-12:49: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+        }
+      },
+      "reserve_boundary.nl": {
+        "public_frontend": {
+          "parse": 0,
+          "registration": 2,
+          "category": "unsupported",
+          "diagnostic": "FIELD-PROFILE",
+          "span": [
+            500,
+            514
+          ],
+          "public_snapshot_unchanged": true,
+          "entry": "NOT_ENTERED",
+          "owned": "NOT_ISSUED",
+          "c17": "NOT_ENTERED"
+        },
+        "host_probe_exit": 0,
+        "host_probe_stderr": "",
+        "check": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/reserve_boundary.nl:12:35-12:49: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+        },
+        "c17": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/reserve_boundary.nl:12:35-12:49: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+        }
+      },
+      "wrong_quantity.nl": {
+        "public_frontend": {
+          "parse": 0,
+          "registration": 1,
+          "category": "semantic",
+          "diagnostic": "USIZE-ADDITION-TYPE",
+          "span": [
+            222,
+            223
+          ],
+          "public_snapshot_unchanged": true,
+          "entry": "NOT_ENTERED",
+          "owned": "NOT_ISSUED",
+          "c17": "NOT_ENTERED"
+        },
+        "host_probe_exit": 0,
+        "host_probe_stderr": "",
+        "check": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/wrong_quantity.nl:7:36-7:37: error(semantic)[USIZE-ADDITION-TYPE]: + requires two exact core usize operands\n"
+        },
+        "c17": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/wrong_quantity.nl:7:36-7:37: error(semantic)[USIZE-ADDITION-TYPE]: + requires two exact core usize operands\n"
+        }
+      },
+      "over_reserved.nl": {
+        "public_frontend": {
+          "parse": 0,
+          "registration": 1,
+          "category": "semantic",
+          "diagnostic": "USIZE-SUBTRACTION-UNDERFLOW",
+          "span": [
+            277,
+            278
+          ],
+          "public_snapshot_unchanged": true,
+          "entry": "NOT_ENTERED",
+          "owned": "NOT_ISSUED",
+          "c17": "NOT_ENTERED"
+        },
+        "host_probe_exit": 0,
+        "host_probe_stderr": "",
+        "check": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/over_reserved.nl:8:37-8:38: error(semantic)[USIZE-SUBTRACTION-UNDERFLOW]: mathematical usize difference is outside target range\n"
+        },
+        "c17": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/over_reserved.nl:8:37-8:38: error(semantic)[USIZE-SUBTRACTION-UNDERFLOW]: mathematical usize difference is outside target range\n"
+        }
+      },
+      "route_change_unsupported.nl": {
+        "public_frontend": {
+          "parse": 0,
+          "registration": 2,
+          "category": "unsupported",
+          "diagnostic": "FIELD-PROFILE",
+          "span": [
+            500,
+            514
+          ],
+          "public_snapshot_unchanged": true,
+          "entry": "NOT_ENTERED",
+          "owned": "NOT_ISSUED",
+          "c17": "NOT_ENTERED"
+        },
+        "host_probe_exit": 0,
+        "host_probe_stderr": "",
+        "check": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/route_change_unsupported.nl:12:35-12:49: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+        },
+        "c17": {
+          "exit": 3,
+          "stdout_bytes": 0,
+          "stderr": "tests/p658/route_change_unsupported.nl:12:35-12:49: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+        }
+      }
+    }
+  }
+}

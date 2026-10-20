@@ -1,0 +1,1 @@
+tests/p658/reserve_boundary.nl:12:35-12:49: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local
