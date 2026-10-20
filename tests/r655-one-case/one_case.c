@@ -6,7 +6,7 @@
 #undef main
 #include "../support/node_checked.h"
 
-#define REQUIRE(condition)                                                       \
+#define REQUIRE(condition)                                                     \
     do {                                                                       \
         if (!(condition)) {                                                    \
             fprintf(stderr, "%s:%d: %s\n", __FILE__, __LINE__, #condition);    \
@@ -75,7 +75,8 @@ static bool one_case(const char *path)
     for (size_t k = 0; k < 2; ++k) {
         NLSemanticBindingView binding;
         NLSemanticPlaceView root;
-        REQUIRE(nl_semantic_binding_view(world, declarations[k]->symbol, &binding));
+        REQUIRE(
+            nl_semantic_binding_view(world, declarations[k]->symbol, &binding));
         REQUIRE(nl_semantic_place_view(world, binding.place, &root));
         REQUIRE(declarations[k]->span.start_byte < writes[k]->span.start_byte);
         REQUIRE(writes[k]->field.base == declarations[k]->symbol &&
