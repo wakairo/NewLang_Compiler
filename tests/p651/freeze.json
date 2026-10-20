@@ -1,0 +1,106 @@
+{
+  "timestamp_utc": "2026-10-20T01:14:24.655869+00:00",
+  "compiler": "f58f1b166780569704ace110d74110ede07b86d2",
+  "canonical": "Draft17.32",
+  "source_sha256": {
+    "one_if_control.nl": "688082469411c07ab54eced14733b80a3887c450e1f4bc1ca32e7a1386ddfebb",
+    "two_if_unsupported.nl": "afac29f093c48cfa164a908d6c37cedb84213af580d13c1c5dc5b2d05cc71f5d",
+    "extra_arm_local.nl": "5353f2a7a07f26d460d80aae498073091f41032db918880ab11bd9d74c7fb4ae",
+    "wrong_quantity.nl": "b66e52b3b66787f8472b90ed6126f43c1140a508bf02129a790aa502e8200888",
+    "false_variant.nl": "2a06a4caa8d685328c7ac701f50327750248ebe3fa2a979036c87f22a3e29321"
+  },
+  "P647_evidence_head": "13fe75a07be5ead4e9fb239e15280ac0cec2d637",
+  "one_if_control": {
+    "provenance": "byte-identical frozen P647 control",
+    "check": 0,
+    "before_c17": 4,
+    "after_c17_if_safe": 0,
+    "initial_pairs": [
+      [
+        14,
+        181
+      ],
+      [
+        33,
+        207
+      ]
+    ],
+    "arm_values": [
+      72,
+      8
+    ],
+    "truth": true,
+    "selected": 72,
+    "old_copy_values": [
+      14,
+      33
+    ],
+    "final_pairs": [
+      [
+        72,
+        181
+      ],
+      [
+        14,
+        207
+      ]
+    ]
+  },
+  "false_variant": {
+    "provenance": "new P651 source variation before execution",
+    "check": 0,
+    "predicted_baseline_backend": 4,
+    "after_if_safe": 0,
+    "initial_pairs": [
+      [
+        46,
+        165
+      ],
+      [
+        108,
+        222
+      ]
+    ],
+    "arms": [
+      93,
+      17
+    ],
+    "truth": false,
+    "selected": 17,
+    "old_copy_values": [
+      46,
+      108
+    ],
+    "final_pairs": [
+      [
+        17,
+        165
+      ],
+      [
+        46,
+        222
+      ]
+    ]
+  },
+  "negative": {
+    "two_if_unsupported.nl": [
+      0,
+      4,
+      0
+    ],
+    "extra_arm_local.nl": [
+      0,
+      4,
+      0
+    ],
+    "wrong_quantity.nl": [
+      3,
+      3,
+      0
+    ],
+    "corrupt_field_or_child_world": "private admission REJECT before native; original restores and revalidates"
+  },
+  "native": "actual generated guest carriers GCC13/Clang23 -std=c17 -pedantic-errors -Wall -Wextra -Werror O0/O2 plain and read-only observer; no values or permissions injected",
+  "scope": "exactly two original lexical Pairs, one pure IF, two sequential closed left writes; no calls, no heap/nonCopy, no new source/issuer; old single-Pair path unchanged",
+  "budget": "Stage0 20-30min, conditional Stage1 90-150min; one natural FULL5+PARTIAL pair; DRAFT only"
+}
