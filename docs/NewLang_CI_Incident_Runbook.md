@@ -30,3 +30,18 @@
 - [main run 38496970332](https://github.com/wakairo/NewLang_Compiler/actions/runs/38496970332)、HEAD `241ae6e872ce4e099e6fddda3f57611ce03f3f84`：**attempt 1**はGCCの `llvm-23`、ASanの `libclang-common-23-dev` がそれぞれ3回目のHTTP404でbootstrap失敗（初回**3/5**）。**attempt 2**は失敗した2ジョブが成功し、最終**5/5**。他3ジョブは初回成功の持越し。コンパイラ・CTest・SHA不一致の証拠ではない。
 
 GitHubの[再実行公式手順](https://docs.github.com/en/actions/how-tos/manage-workflow-runs/re-run-workflows-and-jobs?tool=webui)は、失敗ジョブのみ・単一ジョブのUI操作、write権限、元のSHA/ref維持、および過去attemptの確認方法を説明している。**この文書は再実行を事前承認するものではない**。無用な再実行を避け、lock更新・cache評価・workflow改変は各承認済みIssueへ戻す。
+
+### clang-format-23 の修正候補を読む（Issue #648 / Track T 提案）
+
+Clang 構成の `Check C formatting and provide exact pinned-formatter correction` が失敗した場合、
+同じ SHA 固定 SDK の `clang-format-23` が生成した **unified patch** をログ末尾と
+Actions の `clang-format-suggestions-<checked SHA>-attempt<N>` artifact で確認する。
+artifact の `format-suggestions.patch` は提案であり、CI は元の source を**変更しない**。
+チェックは従来どおり `clang-format-23 --dry-run --Werror` で失敗扱いとなる。
+
+checkout を該当する固定 commit に合わせてから、内容と対象 C/H ファイルを確認し、
+`git apply --check format-suggestions.patch`、次に `git apply format-suggestions.patch`
+を実行する。適用後に `bash scripts/check-format.sh` で再確認する。
+別の修正手段 `bash scripts/format.sh` は**実ファイルを変更する**ため、差分と凍結済み R の
+元 source/oracle の SHA・初回 finding を保存してから、独立検証 Issue §7.6 の予算内で行う。
+フォーマット以外の予測・guest 値・安全性・authority を変えてはならない。
