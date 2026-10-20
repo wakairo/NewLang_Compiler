@@ -34,7 +34,7 @@ count=0
 
 for file in "${files[@]}"; do
   # A git-applicable unified patch must not ambiguously encode line breaks.
-  if [[ "$file" == *\n'* || "$file" == *\r'* || "$file" == *\t'* ]]; then
+  if [[ "$file" == *[[:cntrl:]]* ]]; then
     echo "Unsupported C/H filename for patch: refusing ambiguous diff" >&2
     exit 1
   fi
