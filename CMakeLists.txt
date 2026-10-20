@@ -206,6 +206,18 @@ if(BUILD_TESTING)
     add_test(NAME p651_true_proof.unit COMMAND p651_gate "${CMAKE_CURRENT_SOURCE_DIR}/tests/p651/one_if_control.nl")
     add_test(NAME p651_false_proof.unit COMMAND p651_gate "${CMAKE_CURRENT_SOURCE_DIR}/tests/p651/false_variant.nl")
     add_test(NAME p651_oom.unit COMMAND p514_gate_test oom "${CMAKE_CURRENT_SOURCE_DIR}/tests/p651/one_if_control.nl")
+    add_executable(r662_one_case tests/r655-one-case/one_case.c)
+    target_link_libraries(r662_one_case PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME r662_private_v0_metadata.unit
+        COMMAND r662_one_case "${CMAKE_CURRENT_SOURCE_DIR}/tests/r655-one-case/phase2_true.nl")
+    add_executable(r664_arm_origin tests/r655-arm-origin/one_case.c)
+    target_link_libraries(r664_arm_origin PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME r664_private_arm_origin.unit
+        COMMAND r664_arm_origin "${CMAKE_CURRENT_SOURCE_DIR}/tests/r655-one-case/phase2_true.nl")
+    add_executable(r666_temporal_fact tests/r655-temporal-fact/one_case.c)
+    target_link_libraries(r666_temporal_fact PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME r666_private_temporal_fact.unit
+        COMMAND r666_temporal_fact "${CMAKE_CURRENT_SOURCE_DIR}/tests/r655-one-case/phase2_true.nl")
     add_executable(p633_public_probe tests/p633/public_probe.c)
     target_link_libraries(p633_public_probe PRIVATE newlang_semantic)
     add_executable(p633_origin_gate tests/p633/origin_gate.c)
