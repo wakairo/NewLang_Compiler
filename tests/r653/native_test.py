@@ -98,8 +98,21 @@ def main():
             need(not p.stdout and "error(semantic)" in p.stderr,
                  f"invalid typed comparison not rejected: {p.stderr}")
         print("R653 negative bad_type: semantic 3; no generated C", flush=True)
-        for name in ["true_world.nl", "false_world.nl"]:
-            obj = frozen["cases"][name]
+        for name in ("true_world.nl", "false_world.nl"):
+            src = root / name
+            ck = checked_run([compiler, "--check", src])
+            need(not ck.stdout and not ck.stderr, f"BLIND control CHECK0 expected: {name}")
+            emit = checked_run([compiler, src], 4)
+            need(not emit.stdout and "V1-BACKEND-UNSUPPORTED" in emit.stderr,
+                 f"original BLIND backend4 control mismatch: {name}")
+            print(f"R653 original BLIND preserved {name}: CHECK0/backend4/no C",
+                  flush=True)
+        calibrated = json.loads((root / "PHASE2_ORACLE.json").read_text())
+        for filename, obj in calibrated["cases"].items():
+            data = (root / filename).read_bytes()
+            need(git_blob(data) == obj["blob"],
+                 f"phase2 pre-execution source was modified: {filename}")
+        for name, obj in calibrated["cases"].items():
             oracle = obj["oracle"]
             src = root / name
             ck = checked_run([compiler, "--check", src])
@@ -108,7 +121,8 @@ def main():
                                oracle["fields"][0], oracle["fields"][1],
                                oracle["arm_values"][0], oracle["arm_values"][1]])
             need("R653_OWNED_OK" in pub.stdout, "public owned proof/negative gate absent")
-            print(f"R653 public checked-owned {name}: {pub.stdout.strip()}", flush=True)
+            print(f"R653 phase2 public checked-owned {name}: {pub.stdout.strip()}",
+                  flush=True)
             emit = checked_run([compiler, src])
             need(bool(emit.stdout) and not emit.stderr, "source-issued actual C17 missing")
             repeat = checked_run([compiler, src])
@@ -116,16 +130,20 @@ def main():
             watched, refs = observe_c(emit.stdout, oracle)
             native(work, cc, name + "-plain", emit.stdout, sanitizer)
             native(work, cc, name + "-passive", watched, sanitizer)
-            # Independent mutation of C guest must be detected by the readonly observer.
+            # Deliberate observer-failure control, not a forged NewLang receipt.
             target = refs[0][0]
-            broken = watched.replace(target, target.replace(".f" + str(oracle["fields"][0]),
-                                                         ".f" + str(1-oracle["fields"][0])), 1)
+            broken = watched.replace(target, target.replace(
+                ".f" + str(oracle["fields"][0]),
+                ".f" + str(1-oracle["fields"][0])), 1)
             need(broken != watched, "mutant not constructed")
             native(work, cc, name + "-wrong-field", broken, sanitizer, 91)
-            print(json.dumps({"case": name, "source_sha256": hashlib.sha256(src.read_bytes()).hexdigest(),
+            print(json.dumps({"phase": "NON-BLIND calibrated", "case": name,
+                              "source_sha256": hashlib.sha256(src.read_bytes()).hexdigest(),
                               "c17_sha256": hashlib.sha256(emit.stdout.encode()).hexdigest(),
-                              "native": "GCC/Clang strict C17 O0+O2 plain/passive PASS",
-                              "negative_observer": "wrong-field 91", "owned": pub.stdout.strip()}))
+                              "native": "strict C17 O0+O2 plain/passive PASS",
+                              "negative_observer": "wrong-field 91",
+                              "sanitizer": sanitizer, "owned": pub.stdout.strip()}),
+                  flush=True)
 
 
 if __name__ == "__main__":
