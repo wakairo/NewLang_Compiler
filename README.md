@@ -153,12 +153,37 @@ independent `NEWLANG_FRONTEND_ONLY=ON` **NO LLVM / PARTIAL** lane remains
 available for Production source/checker/C17 reference work during SDK
 infrastructure incidents; it never replaces full backend/native proof.
 
-The older **Debian 13** snapshot .deb lock remains recorded as a legacy
-fallback but is **not** the curated Ubuntu 24.04 full CI. The original
-23.1.2 Debian/Noble cross-distribution guidance in historical P0 decisions
-does not describe this curated install path. When updating a checkout from a previous toolchain, rerun bootstrap and
-use a **fresh** CMake build directory to avoid persisted LLVM C API link
-targets. The Ubuntu 24.04 curated 23.1.3 route is already merged on main.
+### Debian 13 developer hosts (not a supported full-LLVM setup)
+
+The older **Debian 13** snapshot .deb lock is retained for historical
+reproducibility, **not** as a maintained alternative to the supported Ubuntu
+24.04 full-LLVM route. In independent [R #656's frozen Debian 13 logs](https://github.com/wakairo/NewLang_Compiler/tree/e419168cb42b8045daeb25ca161cb200317f5353/tests/r-normal-native/evidence/local),
+`python3 scripts/bootstrap.py` selected the legacy Debian packages and
+failed fetching the exact locked `libclang-cpp23` URL with HTTP 404.
+This is a dependency-availability failure, not permission to select a moving
+package, mirror or version, or to bypass HTTPS/TLS or SHA-256 validation.
+
+For a **full** LLVM C API build/test, use the supported **Ubuntu 24.04
+x86_64** setup above (including `libxml2-dev` from the signed distribution
+packages). On an experimental Debian 13 managed host, the documented
+[LLVM-independent frontend-only build](#llvm-independent-frontend-build)
+does not run bootstrap or link LLVM. With its stated GCC/Clang, make, CMake
+and Python prerequisites, it can run the ordinary CLI `--check`, generate
+bounded C17, and run native reference tests; it remains **NO LLVM / PARTIAL**
+and cannot replace the full smoke/validation gate.
+
+R #656 also experimentally used the **unchanged SHA-256-verified Ubuntu
+23.1.3 SDK** on Debian 13: its initial `llvm_smoke` link failed at
+`/usr/bin/ld: cannot find -lxml2` because the host had
+`libxml2.so.2` but not the link-time `libxml2.so` name. R made an
+isolated linker-name symlink for that run. Debian's `libxml2-dev` package
+normally provides `/usr/lib/x86_64-linux-gnu/libxml2.so`; installing
+the proper host development package resolves that *class* of missing linker
+name but **does not certify cross-distribution SDK compatibility**. The
+R-specific workaround is not a supported NewLang setup procedure.
+The old 23.1.2 Debian/Noble guidance in historical P0 decisions is not the
+curated installation path. When changing toolchains, use a **fresh** CMake
+build directory to avoid retained LLVM smoke link targets.
 
 ## Other validated configurations
 
