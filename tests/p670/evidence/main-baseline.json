@@ -1,0 +1,79 @@
+{
+  "main": "a0de7a86d04d00d75a2484dfed4184ccb177e06c",
+  "compiler_changed": false,
+  "executed_at_jst": "2026-10-20T21:46:47.058956+09:00",
+  "cases": {
+    "packet_stamp.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/packet_stamp.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/packet_stamp.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "route_stamp.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/route_stamp.nl:4:32-4:45: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/route_stamp.nl:4:32-4:45: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "pair_control.nl": {
+      "check": {
+        "exit": 0,
+        "stdout_bytes": 0,
+        "stderr": ""
+      },
+      "c17": {
+        "exit": 0,
+        "stdout_bytes": 1091,
+        "stderr": ""
+      }
+    },
+    "unknown_field.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/unknown_field.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/unknown_field.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "wrong_replacement.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_replacement.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_replacement.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "wrong_initializer.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_initializer.nl:3:35-3:44: error(semantic)[P5-FIELD-TYPE]: aggregate initializer type differs from registered field\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_initializer.nl:3:35-3:44: error(semantic)[P5-FIELD-TYPE]: aggregate initializer type differs from registered field\n"
+      }
+    }
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "main": "a0de7a86d04d00d75a2484dfed4184ccb177e06c",
+  "canonical": "Draft17.32",
+  "status": "EXPERIMENTAL NON-NORMATIVE candidate only; no source selection or merge",
+  "frozen_at_utc": "2026-10-20T12:46:46.750138+00:00",
+  "frozen_at_jst": "2026-10-20T21:46:46.750138+09:00",
+  "stage0_before_production_edits": true,
+  "coordination_order_clarification": 6291025505,
+  "cases": {
+    "packet_stamp.nl": {
+      "sha256": "40d3ada8c8eb0fdd9f9d55a913226d4b60d64744f7d9d35f799f70f406ca64b9",
+      "nominal": "PacketStamp",
+      "declared_field_order": [
+        "marker",
+        "channel"
+      ],
+      "constructor_label_order": [
+        "channel",
+        "marker"
+      ],
+      "original_root_count": 1,
+      "write_index": 0,
+      "initial": [
+        115,
+        43
+      ],
+      "new_value": 126,
+      "old_result": 115,
+      "final": [
+        126,
+        43
+      ],
+      "physical_oracle": "actual original guest root/f0/f1 addresses retained, old real f0 returned, one write to actual declared field0, field1 unchanged",
+      "main_check": 3,
+      "main_c17": 3,
+      "main_diagnostic": "FIELD-PROFILE",
+      "trial_if_authorized_check": 0,
+      "trial_if_authorized_c17": 0,
+      "guest_if_actually_emitted": 0
+    },
+    "route_stamp.nl": {
+      "sha256": "e45d1f8f6c4cf83264fa1ded60b462ec6aedfec3e3898e46a5576f4e304b6596",
+      "nominal": "RouteStamp",
+      "declared_field_order": [
+        "channel",
+        "marker"
+      ],
+      "constructor_label_order": [
+        "marker",
+        "channel"
+      ],
+      "original_root_count": 1,
+      "write_index": 0,
+      "initial": [
+        54,
+        133
+      ],
+      "new_value": 97,
+      "old_result": 54,
+      "final": [
+        97,
+        133
+      ],
+      "physical_oracle": "actual original guest root/f0/f1 addresses retained, old real f0 returned, one write to actual declared field0, field1 unchanged",
+      "main_check": 3,
+      "main_c17": 3,
+      "main_diagnostic": "FIELD-PROFILE",
+      "trial_if_authorized_check": 0,
+      "trial_if_authorized_c17": 0,
+      "guest_if_actually_emitted": 0
+    },
+    "pair_control.nl": {
+      "sha256": "d98729480f243a09853ef5a2061bd6e84ad681518d8e01b97870c39f24a16fad",
+      "nominal": "Pair",
+      "declared_field_order": [
+        "left",
+        "right"
+      ],
+      "constructor_label_order": [
+        "right",
+        "left"
+      ],
+      "original_root_count": 1,
+      "write_index": 0,
+      "initial": [
+        212,
+        89
+      ],
+      "new_value": 6,
+      "old_result": 212,
+      "final": [
+        6,
+        89
+      ],
+      "physical_oracle": "actual original guest root/f0/f1 addresses retained, old real f0 returned, one write to actual declared field0, field1 unchanged",
+      "main_check": 0,
+      "main_c17": 0,
+      "main_diagnostic": null,
+      "trial_if_authorized_check": 0,
+      "trial_if_authorized_c17": 0,
+      "guest_if_actually_emitted": 0
+    },
+    "unknown_field.nl": {
+      "sha256": "2833c438815357396a03a336274df0c58affb0f1fdc73a557309447dea42124b",
+      "main_check": 3,
+      "main_c17": 3,
+      "main_diagnostic": "FIELD-PROFILE",
+      "main_c_bytes": 0,
+      "trial_if_authorized_check": 3,
+      "trial_diagnostic": "FIELD-UNKNOWN-FIELD"
+    },
+    "wrong_replacement.nl": {
+      "sha256": "76a14dabbc287d442305684029233a1d0221b72059aab69f89f2a6efbad5b62a",
+      "main_check": 3,
+      "main_c17": 3,
+      "main_diagnostic": "FIELD-PROFILE",
+      "main_c_bytes": 0,
+      "trial_if_authorized_check": 3,
+      "trial_diagnostic": "P3-TYPE-MISMATCH"
+    },
+    "wrong_initializer.nl": {
+      "sha256": "7c8d102980b0d4e97f896adc17abc0c85c34e05930e54d7a2200c55066536917",
+      "main_check": 3,
+      "main_c17": 3,
+      "main_diagnostic": "P5-FIELD-TYPE",
+      "main_c_bytes": 0,
+      "trial_if_authorized_check": 3,
+      "trial_diagnostic": "P5-FIELD-TYPE"
+    }
+  },
+  "foreign_nominal_negative": "Not expressible in the current one-leading-two-u8-nominal source-function-unit profile without adding another source declaration mechanism; do not introduce it. No cross-type source claim.",
+  "historical_gate": "KEEP core dependent-child/current-value/scope semantics and @/:: (DI001/006/007). Candidate-only replace Pair name/labels eligibility; canonical unchanged. Stop before old oracle changes.",
+  "first_audit_risk": "Existing fixed_field_test.c negatives and node_link_test.c negatives explicitly require Other{left:u8,right:u8} direct-source-fragment field rejection. Audit exact category; global nl_fixed_type broadening changes these historical oracles. No weakening or rerouting of old tests authorized."
+}
