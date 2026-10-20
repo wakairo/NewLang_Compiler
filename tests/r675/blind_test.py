@@ -27,14 +27,19 @@ def invoke(command):
 def native_observe(text, target_index, initial, sibling, new):
     # Locate the *actual emitted original lexical record*, not a test proxy.
     records = list(re.finditer(
-        r"(?m)^\s*nl_type_\d+\s+(nl_local_\d+)\s*=\s*[^;\n]*\.f0\s*=\s*(\d+)"
-        r"[^;\n]*\.f1\s*=\s*(\d+)[^;\n]*;", text))
+        r"(?m)^\s*(?:const\s+)?nl_type_\d+\s+(nl_local_\d+)\s*=\s*(\{[^;\n]*\})\s*;", text))
     print(f"R675 source-issued C records={len(records)}", flush=True)
     if len(records) != 1:
         raise AssertionError(f"original C carrier count {len(records)} != 1")
     root = records[0]
     variable = root.group(1)
-    values = (int(root.group(2)), int(root.group(3)))
+    # C designated initializers follow source expression order, not declaration order.
+    # Validate both fixed indices and every value instead of assuming f0 precedes f1.
+    entries = re.findall(r"\.f([01])\s*=\s*(\d+)", root.group(2))
+    if len(entries) != 2 or sorted(int(field) for field, _ in entries) != [0, 1]:
+        raise AssertionError(f"missing/duplicate declared physical members {entries}")
+    physical = {int(field): int(number) for field, number in entries}
+    values = (physical[0], physical[1])
     expected = (initial, sibling) if target_index == 0 else (sibling, initial)
     if values != expected:
         raise AssertionError(f"original initializer index values {values} != {expected}")

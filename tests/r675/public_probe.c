@@ -5,7 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-/* Read-only registered-source observer: no fake IDs or private checked records. */
+/* Read-only registered-source observer: no fake IDs or private checked records.
+ */
 static bool inspect(const char *path, const char *expected_field, size_t index)
 {
     TestNode n = {0};
@@ -32,7 +33,7 @@ static bool inspect(const char *path, const char *expected_field, size_t index)
               field->parent_fact != 0 && field->child_fact != 0);
         NLAggregateField declared;
         CHECK(nl_semantic_aggregate_field_view(context, field->nominal,
-                                                field->index, &declared));
+                                               field->index, &declared));
         CHECK(declared.type == core_u8 && declared.name);
         if (nominal != 0)
             CHECK(nominal == field->nominal);
@@ -50,16 +51,17 @@ static bool inspect(const char *path, const char *expected_field, size_t index)
             if (v->kind == NL_CHECKED_FIELD_READ)
                 ++read_count;
         }
-        printf("R675 OWNED node=%zu kind=%d source_field=%s nominal=%zu index=%zu "
-               "base=%zu parent=%zu child=%zu inc=(%zu,%zu) "
-               "facts=(%zu,%zu) post=(%zu,%zu) old=%zu new=%zu\n",
-               i, (int)v->kind, declared.name, (size_t)field->nominal,
-               field->index, (size_t)field->base, (size_t)field->parent,
-               (size_t)field->child, (size_t)field->parent_incarnation,
-               (size_t)field->child_incarnation, (size_t)field->parent_fact,
-               (size_t)field->child_fact, (size_t)field->parent_post_fact,
-               (size_t)field->child_post_fact, (size_t)field->old_value,
-               (size_t)field->new_value);
+        printf(
+            "R675 OWNED node=%zu kind=%d source_field=%s nominal=%zu index=%zu "
+            "base=%zu parent=%zu child=%zu inc=(%zu,%zu) "
+            "facts=(%zu,%zu) post=(%zu,%zu) old=%zu new=%zu\n",
+            i, (int)v->kind, declared.name, (size_t)field->nominal,
+            field->index, (size_t)field->base, (size_t)field->parent,
+            (size_t)field->child, (size_t)field->parent_incarnation,
+            (size_t)field->child_incarnation, (size_t)field->parent_fact,
+            (size_t)field->child_fact, (size_t)field->parent_post_fact,
+            (size_t)field->child_post_fact, (size_t)field->old_value,
+            (size_t)field->new_value);
     }
     CHECK(nominal != 0 && root != 0 && child != 0 && found >= 1 &&
           read_count >= 1);
