@@ -1,0 +1,96 @@
+{
+  "frozen_at_utc": "2026-10-20T00:33:25.267234+00:00",
+  "compiler": "f58f1b166780569704ace110d74110ede07b86d2",
+  "canonical": "Draft17.32",
+  "route": "P Work/Codex local exact-main checkout with retained SDK; NO LLVM frontend-only ordinary newlangc; remote main-push CI checked separately",
+  "source_sha256": {
+    "handoff.nl": "afac29f093c48cfa164a908d6c37cedb84213af580d13c1c5dc5b2d05cc71f5d",
+    "wrong_quantity.nl": "b66e52b3b66787f8472b90ed6126f43c1140a508bf02129a790aa502e8200888",
+    "extra_arm_local.nl": "5353f2a7a07f26d460d80aae498073091f41032db918880ab11bd9d74c7fb4ae",
+    "one_if_control.nl": "688082469411c07ab54eced14733b80a3887c450e1f4bc1ca32e7a1386ddfebb"
+  },
+  "oracle": {
+    "handoff.nl": {
+      "intended_legal_CHECK": 0,
+      "implementation_acceptance": "UNMEASURED; stop at first actual boundary, no compiler changes",
+      "conditions": [
+        true,
+        false
+      ],
+      "if_arm_values": [
+        [
+          72,
+          8
+        ],
+        [
+          91,
+          14
+        ]
+      ],
+      "selected_values": [
+        72,
+        14
+      ],
+      "retained_old": [
+        14,
+        33
+      ],
+      "original_roots": {
+        "ingress": {
+          "initial": [
+            14,
+            181
+          ],
+          "final": [
+            72,
+            181
+          ],
+          "changed_field": "left",
+          "unchanged_sibling": "right"
+        },
+        "egress": {
+          "initial": [
+            33,
+            207
+          ],
+          "final": [
+            14,
+            207
+          ],
+          "changed_field": "left",
+          "unchanged_sibling": "right"
+        }
+      },
+      "native_if_emitted": "strict GCC/Clang O0/O2 plain/passive exit0 with exact original carrier observations; no host initialization"
+    },
+    "wrong_quantity.nl": {
+      "expected_check": 3,
+      "expected_c17": 3,
+      "expected_code": "USIZE-LESS-THAN-TYPE",
+      "c_bytes": 0
+    },
+    "extra_arm_local.nl": {
+      "intended_check": 0,
+      "predicted_backend": 4,
+      "c_bytes": 0,
+      "reason": "existing one-arm-local finite backend does not support two locals; preserves selected arithmetic and record semantics"
+    },
+    "one_if_control.nl": {
+      "optional": "one simpler predeclared control, used only to locate first two-record/two-step boundary",
+      "intended_check": 0,
+      "predicted_selected_value": 72,
+      "final_ingress": [
+        72,
+        181
+      ],
+      "final_egress": [
+        14,
+        207
+      ],
+      "no_positive_substitution": true
+    }
+  },
+  "classification": "P newly authored source, NON-BLIND producer capability probe, not independent R",
+  "budget": "30-65min; at most one natural evidence CI pair; no production/canonical changes",
+  "stop": "first substantive source/check/owned/backend/native boundary; negative/cleanup and optional one simpler control only; no bypass or new issuer"
+}

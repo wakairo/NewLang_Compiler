@@ -1,0 +1,161 @@
+{
+  "compiler_source_base": "f58f1b166780569704ace110d74110ede07b86d2",
+  "freeze_commit": "aa47ef0cadbecf074efc1fe9057a270b54b4fb72",
+  "timestamp_utc": "2026-10-20T00:38:16.887374+00:00",
+  "host": "Linux-6.18.55-x86_64-with-glibc2.41",
+  "route": "P Work/Codex local, not R host; retained local GCC13 and Clang23.1.2; NEWLANG_FRONTEND_ONLY=ON",
+  "main_push_verified": "push FULL39347001923 all 5 jobs success 354/354; PARTIAL39347001925 success 353/353; attempt1",
+  "source_sha256": {
+    "handoff.nl": "afac29f093c48cfa164a908d6c37cedb84213af580d13c1c5dc5b2d05cc71f5d",
+    "wrong_quantity.nl": "b66e52b3b66787f8472b90ed6126f43c1140a508bf02129a790aa502e8200888",
+    "extra_arm_local.nl": "5353f2a7a07f26d460d80aae498073091f41032db918880ab11bd9d74c7fb4ae",
+    "one_if_control.nl": "688082469411c07ab54eced14733b80a3887c450e1f4bc1ca32e7a1386ddfebb"
+  },
+  "ordinary_cli": {
+    "main_check": 0,
+    "main_backend": 4,
+    "emitted_c17_bytes": 0,
+    "guest_native": "NOT_REACHED; no C17 for GCC/Clang native"
+  },
+  "owned": "authentic registered-source after syntax teardown; public readback; no new public Pair/IF validator exists or is claimed",
+  "original_roots": [
+    3,
+    6
+  ],
+  "original_incarnations": [
+    3,
+    6
+  ],
+  "dependent_fields": [
+    [
+      4,
+      5
+    ],
+    [
+      7,
+      8
+    ]
+  ],
+  "original_old_values": [
+    14,
+    33
+  ],
+  "sibling_values": [
+    181,
+    207
+  ],
+  "if_conditions": [
+    true,
+    false
+  ],
+  "arm_values": [
+    [
+      72,
+      8
+    ],
+    [
+      91,
+      14
+    ]
+  ],
+  "joined_values": "conservatively Unknown; intended guest choices 72/14 are NOT native observations",
+  "changes": [
+    {
+      "root": 3,
+      "field": 4,
+      "root_facts": [
+        3,
+        13
+      ],
+      "child_facts": [
+        4,
+        12
+      ],
+      "closed_scope": 1
+    },
+    {
+      "root": 6,
+      "field": 7,
+      "root_facts": [
+        6,
+        21
+      ],
+      "child_facts": [
+        7,
+        20
+      ],
+      "closed_scope": 2
+    }
+  ],
+  "first_backend_boundary": {
+    "function": "copy_if_pair_frame",
+    "file": "src/main.c",
+    "line": 1179,
+    "actual_scope_count": 2,
+    "required_scope_count": 1,
+    "first_if_node": 28,
+    "source_span_line_column": [
+      [
+        7,
+        18
+      ],
+      [
+        7,
+        66
+      ]
+    ],
+    "binding_symbol": 6,
+    "owned_source_span_bytes": [
+      218,
+      266
+    ],
+    "original_source_span_bytes": [
+      269,
+      317
+    ],
+    "owned_source": {
+      "kind": "owned_source",
+      "sha256": "cabd816935d1842de35c1d40f1f3749716b82943f6bcb8feafc280ade1131497",
+      "bytes": 824,
+      "original_source_offset": 51,
+      "source_hex": "7b0a202020206c6574207175657565643d7573697a652836293b206c657420696e67726573735f63617061636974793d7573697a65283136293b0a202020206c657420696e67726573733d506169727b6c6566743a7538283134292c72696768743a753828313831297d3b0a202020206c6574206567726573733d506169727b6c6566743a7538283333292c72696768743a753828323037297d3b0a202020206c6574206d61795f61646d69743d717565756564203c20696e67726573735f63617061636974793b0a202020206c657420696e636f6d696e673d6966286d61795f61646d6974297b6c65742072656164793d7538283732293b72656164797d656c73657b75382838297d3b0a202020206c65742070726576696f75735f696e67726573733d6c6f616e5f777269746528696e6772657373406c656674297b7c736c6f747c7265706c61636528736c6f742c696e636f6d696e67297d3b0a202020206c65742072657365727665643d7573697a65283136293b206c6574206567726573735f63617061636974793d7573697a65283136293b0a202020206c6574206d61795f666f72776172643d7265736572766564203c206567726573735f63617061636974793b0a202020206c6574206f7574676f696e673d6966286d61795f666f7277617264297b7538283931297d656c73657b70726576696f75735f696e67726573737d3b0a202020206c65742070726576696f75735f6567726573733d6c6f616e5f777269746528656772657373406c656674297b7c736c6f747c7265706c61636528736c6f742c6f7574676f696e67297d3b0a202020206c657420696e67726573735f6e6f773d696e6772657373406c6566743b206c657420696e67726573735f7461673d696e67726573734072696768743b0a202020206c6574206567726573735f6e6f773d656772657373406c6566743b206c6574206567726573735f7461673d6567726573734072696768743b0a2020202070726576696f75735f696e67726573733b2070726576696f75735f6567726573733b0a20202020696e67726573735f6e6f773b20696e67726573735f7461673b206567726573735f6e6f773b206567726573735f7461673b20756e69740a7d"
+    },
+    "selection_prefix_passed": true
+  },
+  "additional_static_limits_NOT_repaired": [
+    "second aggregate rejected at src/main.c:1203",
+    "second IF rejected by frame traversal",
+    "second loan/replace rejected by singleton loan/write state"
+  ],
+  "negative": {
+    "check": 3,
+    "backend": 3,
+    "code": "USIZE-LESS-THAN-TYPE",
+    "source_span": "6:26-6:27",
+    "c_bytes": 0
+  },
+  "one_if_control": {
+    "check": 0,
+    "backend": 4,
+    "same_first_guard": true
+  },
+  "extra_arm_local": {
+    "check": 0,
+    "backend": 4,
+    "not_isolated_past_earlier_frame_guard": true
+  },
+  "local_host_tests": {
+    "gcc13": "p647_user_source_boundary.integration PASS",
+    "clang23": "p647_user_source_boundary.integration PASS",
+    "format": "PASS",
+    "asan": "targeted P647 host CLI + public readback + private locator PASS, no sanitizer findings"
+  },
+  "classifications": {
+    "I": "initial clang-format unqualified command absent; used retained clang-format-23 before CI, no source or semantic change; initial body-relative span mapping corrected using exact public owned-source bytes and original-source substring offset, old incorrect mapping preserved separately; source/oracle unchanged",
+    "S": "none observed in executed scope; not universal safety proof",
+    "D": "finite backend frame precision/composition gap; no demonstrated canonical contradiction",
+    "V": "new user-style synthetic program; real library author/caller audit locality unmeasured"
+  },
+  "next_candidate": "one pure IF over two original lexical Pair roots and two closed scoped writes using existing owned field/fact evidence; authenticate a finite frame, not remove singleton guards; sequential second IF remains later follow-up",
+  "no_production_changes": true
+}

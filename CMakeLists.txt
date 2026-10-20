@@ -196,6 +196,14 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p631/same_value_local.nl")
     add_test(NAME p633_local_different_values.unit COMMAND p633_local_gate
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p630/both_false.nl")
+    add_executable(p647_public_probe tests/p647/public_probe.c)
+    target_link_libraries(p647_public_probe PRIVATE newlang_semantic)
+    add_executable(p647_backend_locator tests/p647/backend_locator.c)
+    target_link_libraries(p647_backend_locator PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME p647_user_source_boundary.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p647/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p647_public_probe>"
+        "$<TARGET_FILE:p647_backend_locator>" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p647")
     add_executable(p633_public_probe tests/p633/public_probe.c)
     target_link_libraries(p633_public_probe PRIVATE newlang_semantic)
     add_executable(p633_origin_gate tests/p633/origin_gate.c)

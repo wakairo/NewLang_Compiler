@@ -1,0 +1,23 @@
+{
+  "check": {
+    "command": [
+      "/workspace/p647/build/newlangc",
+      "--check",
+      "/workspace/p647/tests/p647/handoff.nl"
+    ],
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  "c17": {
+    "command": [
+      "/workspace/p647/build/newlangc",
+      "/workspace/p647/tests/p647/handoff.nl"
+    ],
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p647/tests/p647/handoff.nl\n"
+  }
+}
