@@ -297,6 +297,13 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p508" "${NEWLANG_SANITIZER}")
     add_executable(p514_public_probe tests/p514/public_probe.c)
     target_link_libraries(p514_public_probe PRIVATE newlang_semantic)
+    # R675 independently frozen blind source, public owned, C17/native.
+    add_executable(r675_public_probe tests/r675/public_probe.c)
+    target_link_libraries(r675_public_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME r675_blind_source_owned_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r675/blind_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r675_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
     # P671 discardable NON-NORMATIVE nominal eligibility trial; DO NOT MERGE.
     add_executable(p671_public_probe tests/p671/public_probe.c)
     target_link_libraries(p671_public_probe PRIVATE newlang_semantic newlang_parser)
