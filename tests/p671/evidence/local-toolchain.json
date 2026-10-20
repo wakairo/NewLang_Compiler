@@ -1,0 +1,14 @@
+{
+  "utc": "2026-10-20T13:33:36.810468+00:00",
+  "base": "a0de7a86d04d00d75a2484dfed4184ccb177e06c",
+  "production_patch_sha256": "81e8be40b20a9829ee63257f6d8b257f664d9d149ab5e5c9a1d02bc78d33245c",
+  "frontend_only": true,
+  "llvm_smoke": "not run locally",
+  "binaries": {
+    "baseline_gcc13": "fe594b2f0242f599a9dfa71675d975b3d9bf5396c1b3684d472275c0cb408668",
+    "candidate_gcc13": "cd86bd4d27fb11a166e6b9fcb1d6c2039a53fab4eeb1510b46d53bb9a4158d39",
+    "candidate_clang23_1_2": "c09bfc31f5ca476980ca927054bf1e79fdbbd46769c1830736eaf8e6b15a38ce",
+    "candidate_asan": "26294630ff1beb54dd2fcebd39a047569ba6e70a76d210ef37d5129446dbe4cc",
+    "candidate_ubsan": "5c834fe17c48009046847e67569a495d2734d73b7ded9d972379d09195803078"
+  }
+}

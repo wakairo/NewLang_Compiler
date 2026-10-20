@@ -1,0 +1,1 @@
+tests/p670/wrong_replacement.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local

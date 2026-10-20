@@ -1,0 +1,128 @@
+{
+  "clang": {
+    "final_test_build": {
+      "argv": [
+        "cmake",
+        "--build",
+        "/workspace/p671-clang",
+        "--target",
+        "p671_public_probe",
+        "p671_fragment_probe",
+        "fixed_field_test",
+        "node_link_test",
+        "-j",
+        "2"
+      ],
+      "exit": 0,
+      "seconds": 1.45
+    },
+    "final_task": {
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "/workspace/p671-clang",
+        "-R",
+        "^(p671_|fixed_field_negatives|node_link_negatives)",
+        "-V"
+      ],
+      "exit": 0,
+      "seconds": 1.16
+    },
+    "isolated_timeout_replay": {
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "/workspace/p671-clang",
+        "-R",
+        "^p517_r516_composition_native.integration$",
+        "-V"
+      ],
+      "exit": 0,
+      "seconds": 16.98
+    }
+  },
+  "asan": {
+    "final_test_build": {
+      "argv": [
+        "cmake",
+        "--build",
+        "/workspace/p671-asan",
+        "--target",
+        "p671_public_probe",
+        "p671_fragment_probe",
+        "fixed_field_test",
+        "node_link_test",
+        "-j",
+        "2"
+      ],
+      "exit": 0,
+      "seconds": 2.0
+    },
+    "final_task": {
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "/workspace/p671-asan",
+        "-R",
+        "^(p671_|fixed_field_negatives|node_link_negatives)",
+        "-V"
+      ],
+      "exit": 0,
+      "seconds": 2.8
+    },
+    "isolated_timeout_replay": {
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "/workspace/p671-asan",
+        "-R",
+        "^(p517_r516_composition_native|p633_local_cli).integration$",
+        "-V"
+      ],
+      "exit": 0,
+      "seconds": 49.83
+    }
+  },
+  "ubsan": {
+    "final_test_build": {
+      "argv": [
+        "cmake",
+        "--build",
+        "/workspace/p671-ubsan",
+        "--target",
+        "p671_public_probe",
+        "p671_fragment_probe",
+        "fixed_field_test",
+        "node_link_test",
+        "-j",
+        "2"
+      ],
+      "exit": 0,
+      "seconds": 1.73
+    },
+    "final_task": {
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "/workspace/p671-ubsan",
+        "-R",
+        "^(p671_|fixed_field_negatives|node_link_negatives)",
+        "-V"
+      ],
+      "exit": 0,
+      "seconds": 1.51
+    },
+    "isolated_timeout_replay": {
+      "argv": [
+        "ctest",
+        "--test-dir",
+        "/workspace/p671-ubsan",
+        "-R",
+        "^p517_r516_composition_native.integration$",
+        "-V"
+      ],
+      "exit": 0,
+      "seconds": 25.42
+    }
+  }
+}

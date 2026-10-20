@@ -1,0 +1,32 @@
+{
+  "labels": [
+    "left",
+    "right"
+  ],
+  "nominal": 10,
+  "root_symbol": 1,
+  "root": 1,
+  "incarnation": 1,
+  "child": 2,
+  "sibling": 3,
+  "field_index": 0,
+  "parent_facts": [
+    1,
+    6
+  ],
+  "child_facts": [
+    2,
+    5
+  ],
+  "sibling_fact": 3,
+  "sibling_incarnation": 3,
+  "scope": 1,
+  "scope_closed": true,
+  "ref_symbol": 2,
+  "old_symbol": 3,
+  "values": [
+    212,
+    6,
+    89
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "stage1": "NOT STARTED",
+  "authority_stop": "Issue670 D: preserve historical failure and STOP before changing an existing rejection oracle",
+  "records": [
+    {
+      "file": "tests/unit/fixed_field_test.c",
+      "unchanged_sha256": "8b371dc40fce4d0cb189cc2ea94b4bfcbf36905d16c534973edc16981495a177",
+      "lines": [
+        388,
+        392
+      ],
+      "exact_excerpt": "    CHECK(register_source(\n        c, \"struct Other{left:u8,right:u8}fn other()->unit{unit}\"));\n    CHECK(run_ok(c, \"let other_pair=Other{left:u8(7),right:u8(9)};\"));\n    CHECK(test_rejected(c, \"other_pair@left\", TEST_SOURCE,\n                        NL_CHECK_SEMANTIC_UNSUPPORTED, \"FIELD-PROFILE\"));",
+      "actual_route": "source-registered Other, then source-fragment construction and field read; differs from the new whole-function-unit cases",
+      "legacy_oracle": "NL_CHECK_SEMANTIC_UNSUPPORTED / FIELD-PROFILE",
+      "prospective_global_predicate_effect": "Static, NOT APPLIED: a structural two-u8 nl_fixed_type enables existing attach and implicit-local on Other, so its direct field read would no longer follow this historical refusal."
+    },
+    {
+      "file": "tests/unit/node_link_test.c",
+      "unchanged_sha256": "e4a3dab9b1a3a9f9c1978207a15cf0b8b9dc8b14037dcc910be7875a84b7c4e4",
+      "lines": [
+        398,
+        402
+      ],
+      "exact_excerpt": "    CHECK(register_source(\n        c, \"struct Other{left:u8,right:u8}fn unused()->unit{unit}\"));\n    CHECK(run_ok(c, \"let wrong=Other{left:u8(1),right:u8(2)};\"));\n    CHECK(test_rejected(c, \"wrong@left\", TEST_SOURCE,\n                        NL_CHECK_SEMANTIC_UNSUPPORTED, \"FIELD-PROFILE\"));",
+      "actual_route": "source-registered Other, then source-fragment construction and field read; differs from the new whole-function-unit cases",
+      "legacy_oracle": "NL_CHECK_SEMANTIC_UNSUPPORTED / FIELD-PROFILE",
+      "prospective_global_predicate_effect": "Static, NOT APPLIED: a structural two-u8 nl_fixed_type enables existing attach and implicit-local on Other, so its direct field read would no longer follow this historical refusal."
+    }
+  ],
+  "next_scope_question": "C must decide old fragment source eligibility versus registered whole-unit eligibility, or authorize an explicit experimental oracle transition; no per-name exception or new trusted issuer was introduced."
+}

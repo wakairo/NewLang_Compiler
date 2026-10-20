@@ -297,6 +297,26 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p508" "${NEWLANG_SANITIZER}")
     add_executable(p514_public_probe tests/p514/public_probe.c)
     target_link_libraries(p514_public_probe PRIVATE newlang_semantic)
+    # P671 discardable NON-NORMATIVE nominal eligibility trial; DO NOT MERGE.
+    add_executable(p671_public_probe tests/p671/public_probe.c)
+    target_link_libraries(p671_public_probe PRIVATE newlang_semantic newlang_parser)
+    add_executable(p671_fragment_probe tests/p671/fragment_probe.c)
+    target_link_libraries(p671_fragment_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME p671_other_fragment.unit COMMAND p671_fragment_probe)
+    foreach(case packet_stamp route_stamp pair_control)
+        add_test(NAME p671_${case}.integration COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p671/native.py"
+            "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p671_public_probe>"
+            "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${case}.nl")
+    endforeach()
+    foreach(case packet_stamp route_stamp)
+        add_test(NAME p671_${case}_oom.unit COMMAND p514_gate_test oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p670/${case}.nl")
+    endforeach()
+    add_test(NAME p671_negative.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p671/negative.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p514_gate_test>")
+
     add_executable(p514_gate_test tests/p514/gate_test.c)
     target_link_libraries(p514_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
     target_link_options(p514_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)

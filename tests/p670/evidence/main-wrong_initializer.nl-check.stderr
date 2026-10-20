@@ -1,0 +1,1 @@
+tests/p670/wrong_initializer.nl:3:35-3:44: error(semantic)[P5-FIELD-TYPE]: aggregate initializer type differs from registered field
