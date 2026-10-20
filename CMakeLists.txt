@@ -196,6 +196,16 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p631/same_value_local.nl")
     add_test(NAME p633_local_different_values.unit COMMAND p633_local_gate
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p630/both_false.nl")
+    add_test(NAME p651_cli_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p651/native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p651_gate>" "$<TARGET_FILE:p514_gate_test>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p651" "${NEWLANG_SANITIZER}")
+    add_executable(p651_gate tests/p651/gate.c)
+    target_link_libraries(p651_gate PRIVATE newlang_checked_c_node newlang_semantic)
+    target_link_options(p651_gate PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p651_true_proof.unit COMMAND p651_gate "${CMAKE_CURRENT_SOURCE_DIR}/tests/p651/one_if_control.nl")
+    add_test(NAME p651_false_proof.unit COMMAND p651_gate "${CMAKE_CURRENT_SOURCE_DIR}/tests/p651/false_variant.nl")
+    add_test(NAME p651_oom.unit COMMAND p514_gate_test oom "${CMAKE_CURRENT_SOURCE_DIR}/tests/p651/one_if_control.nl")
     add_executable(p633_public_probe tests/p633/public_probe.c)
     target_link_libraries(p633_public_probe PRIVATE newlang_semantic)
     add_executable(p633_origin_gate tests/p633/origin_gate.c)
@@ -925,3 +935,6 @@ if(BUILD_TESTING)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
 endif()
+
+# Issue653 R-owned isolated CTest registration (no compiler changes)
+include(tests/r653/register.cmake)

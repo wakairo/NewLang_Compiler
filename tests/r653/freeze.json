@@ -1,0 +1,117 @@
+{
+  "issue": 653,
+  "phase": "FRESH BLIND independent source/oracle pre-candidate CI",
+  "authority": {
+    "main": "9da4b4ce6163592f576c5a2ecb937ff6e230e6f8",
+    "candidate": "bebff1213223e86edfd702129ad8b3f2deb27289",
+    "canonical": "Draft17.32"
+  },
+  "provenance": "R-only source and oracle; not derived from P651/P647/PR652 tests, patch, expectations, reports or logs",
+  "cases": {
+    "true_world.nl": {
+      "blob": "f41398c9c74c90db306e6c44113a3e902085464d",
+      "oracle": {
+        "originals": [
+          [
+            37,
+            193
+          ],
+          [
+            71,
+            241
+          ]
+        ],
+        "condition": 1,
+        "arm_values": [
+          104,
+          206
+        ],
+        "fields": [
+          1,
+          0
+        ],
+        "old": [
+          193,
+          71
+        ],
+        "updates": [
+          104,
+          163
+        ],
+        "final": [
+          [
+            37,
+            104
+          ],
+          [
+            163,
+            241
+          ]
+        ]
+      },
+      "expected": "CHECK0, authentic issued owned, 1 IF, 2 sequential closed writes, 2 original roots, strict native O0/O2"
+    },
+    "false_world.nl": {
+      "blob": "4c4fdb24965481afb10992d50e822a02f23b761a",
+      "oracle": {
+        "originals": [
+          [
+            12,
+            222
+          ],
+          [
+            94,
+            175
+          ]
+        ],
+        "condition": 0,
+        "arm_values": [
+          119,
+          33
+        ],
+        "fields": [
+          0,
+          1
+        ],
+        "old": [
+          12,
+          175
+        ],
+        "updates": [
+          33,
+          148
+        ],
+        "final": [
+          [
+            33,
+            222
+          ],
+          [
+            94,
+            148
+          ]
+        ]
+      },
+      "expected": "CHECK0, authentic issued owned, 1 IF, 2 sequential closed writes, 2 original roots, strict native O0/O2"
+    },
+    "bad_type.nl": {
+      "blob": "25ef78e9873730487539f7ab6c124c8f9e53aba9",
+      "expected": "semantic exit3 for u8<usize; no emitted C"
+    }
+  },
+  "mutations": [
+    "owned root parent=0",
+    "owned child from different genuine root",
+    "old value zero",
+    "parent pre-fact substituted from different original",
+    "parent post-fact zero",
+    "IF normal_arms zero",
+    "C guest pointer wrong actual field => read-only observer exit91"
+  ],
+  "not_claimed": [
+    "generic IF/CFG/heap/nonCopy",
+    "host-generated valid proof",
+    "public C17 emitted source persisted before running native",
+    "all invalid IDs/world swaps tested"
+  ]
+}

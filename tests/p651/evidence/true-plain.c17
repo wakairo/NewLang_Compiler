@@ -1,0 +1,91 @@
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+
+#include <limits.h>
+_Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+#include <stddef.h>
+_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
+
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+
+static void nl_fn_10(void);
+
+static void nl_fn_10(void)
+{
+    const size_t nl_local_1 = ((size_t)UINTMAX_C(6));
+    (void)nl_local_1;
+    const size_t nl_local_2 = ((size_t)UINTMAX_C(16));
+    (void)nl_local_2;
+    nl_type_10 nl_local_3 = { .f0 = 14, .f1 = 181, };
+    (void)nl_local_3;
+    nl_type_10 nl_local_4 = { .f0 = 33, .f1 = 207, };
+    (void)nl_local_4;
+    const size_t nl_less_left_22 = nl_local_1;
+    const size_t nl_less_right_22 = nl_local_2;
+    const _Bool nl_local_5 = (nl_less_left_22 < nl_less_right_22);
+    (void)nl_local_5;
+    uint8_t nl_if_result_28;
+    if (nl_local_5) {
+        const uint8_t nl_local_6 = 72;
+        (void)nl_local_6;
+        nl_if_result_28 = nl_local_6;
+    } else {
+        nl_if_result_28 = 8;
+    }
+    const uint8_t nl_local_6 = nl_if_result_28;
+    (void)nl_local_6;
+    uint8_t nl_loan_result_1;
+    {
+        uint8_t *const nl_local_7 = &nl_local_3.f0;
+        (void)nl_local_7;
+        const uint8_t nl_replace_old_33 = *nl_local_7;
+        *nl_local_7 = nl_local_6;
+        nl_loan_result_1 = nl_replace_old_33;
+    }
+    (void)nl_loan_result_1;
+    const uint8_t nl_local_8 = nl_loan_result_1;
+    (void)nl_local_8;
+    const size_t nl_local_9 = ((size_t)UINTMAX_C(16));
+    (void)nl_local_9;
+    const size_t nl_local_10 = ((size_t)UINTMAX_C(16));
+    (void)nl_local_10;
+    const size_t nl_less_left_44 = nl_local_9;
+    const size_t nl_less_right_44 = nl_local_10;
+    const _Bool nl_local_11 = (nl_less_left_44 < nl_less_right_44);
+    (void)nl_local_11;
+    const uint8_t nl_local_12 = nl_local_8;
+    (void)nl_local_12;
+    uint8_t nl_loan_result_2;
+    {
+        uint8_t *const nl_local_13 = &nl_local_4.f0;
+        (void)nl_local_13;
+        const uint8_t nl_replace_old_54 = *nl_local_13;
+        *nl_local_13 = nl_local_12;
+        nl_loan_result_2 = nl_replace_old_54;
+    }
+    (void)nl_loan_result_2;
+    const uint8_t nl_local_14 = nl_loan_result_2;
+    (void)nl_local_14;
+    const uint8_t nl_local_15 = nl_local_3.f0;
+    (void)nl_local_15;
+    const uint8_t nl_local_16 = nl_local_3.f1;
+    (void)nl_local_16;
+    const uint8_t nl_local_17 = nl_local_4.f0;
+    (void)nl_local_17;
+    const uint8_t nl_local_18 = nl_local_4.f1;
+    (void)nl_local_18;
+    (void)nl_local_8;
+    (void)nl_local_14;
+    (void)nl_local_15;
+    (void)nl_local_16;
+    (void)nl_local_17;
+    (void)nl_local_18;
+    (void)0;
+}
+
+int main(void)
+{
+    nl_fn_10();
+    return 0;
+}
