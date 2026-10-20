@@ -46,7 +46,7 @@ def observe_c(c, o):
     need(len(pairs) == 2, f"two authentic original carriers required; got {len(pairs)}")
     refs = list(re.finditer(r"uint8_t \*const (nl_local_\d+) = &(nl_local_\d+)\.f([01]);", c))
     need(len(refs) == 2, f"two original field writes required; got {len(refs)}")
-    need(len(re.findall(r"(?m)^[ \\t]*if \\(nl_local_\\d+\\) \\{$", c)) == 1,
+    need(len(re.findall(r"(?m)^[ \t]*if \(nl_local_\d+\) \{$", c)) == 1,
          "one real Copy IF if/else required")
     output = c.replace("#include <stdint.h>", "#include <stdint.h>\n#include <stdlib.h>", 1)
     pairs_names = [p[1] for p in pairs]
@@ -118,12 +118,6 @@ def main():
             src = root / name
             ck = checked_run([compiler, "--check", src])
             need(not ck.stdout and not ck.stderr, "successful --check must be silent")
-            pub = checked_run([probe, src, oracle["old"][0], oracle["old"][1],
-                               oracle["fields"][0], oracle["fields"][1],
-                               oracle["arm_values"][0], oracle["arm_values"][1]])
-            need("R653_OWNED_OK" in pub.stdout, "public owned proof/negative gate absent")
-            print(f"R653 phase2 public checked-owned {name}: {pub.stdout.strip()}",
-                  flush=True)
             emit = checked_run([compiler, src])
             need(bool(emit.stdout) and not emit.stderr, "source-issued actual C17 missing")
             repeat = checked_run([compiler, src])
@@ -131,7 +125,7 @@ def main():
             watched, refs = observe_c(emit.stdout, oracle)
             native(work, cc, name + "-plain", emit.stdout, sanitizer)
             native(work, cc, name + "-passive", watched, sanitizer)
-            # Deliberate observer-failure control, not a forged NewLang receipt.
+            # Wrong-field observer control, not a forged checked receipt.
             target = refs[0][0]
             broken = watched.replace(target, target.replace(
                 ".f" + str(oracle["fields"][0]),
@@ -139,12 +133,22 @@ def main():
             need(broken != watched, "mutant not constructed")
             native(work, cc, name + "-wrong-field", broken, sanitizer, 91)
             print(json.dumps({"phase": "NON-BLIND calibrated", "case": name,
+                              "checkpoint": "native complete; owned pending",
                               "source_sha256": hashlib.sha256(src.read_bytes()).hexdigest(),
                               "c17_sha256": hashlib.sha256(emit.stdout.encode()).hexdigest(),
                               "native": "strict C17 O0+O2 plain/passive PASS",
                               "negative_observer": "wrong-field 91",
-                              "sanitizer": sanitizer, "owned": pub.stdout.strip()}),
-                  flush=True)
+                              "sanitizer": sanitizer}), flush=True)
+            root_names = {"phase2_true.nl": ("larch", "willow"),
+                          "phase2_false.nl": ("sable", "birch")}[name]
+            pub = checked_run([probe, src, oracle["old"][0], oracle["old"][1],
+                               oracle["fields"][0], oracle["fields"][1],
+                               oracle["arm_values"][0], oracle["arm_values"][1],
+                               *root_names])
+            need("R653_OWNED_OK" in pub.stdout, "public owned proof/negative gate absent")
+            print(json.dumps({"phase": "NON-BLIND calibrated", "case": name,
+                              "checkpoint": "public owned",
+                              "owned": pub.stdout.strip()}), flush=True)
 
 
 if __name__ == "__main__":

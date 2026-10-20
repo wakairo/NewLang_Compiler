@@ -29,7 +29,8 @@ static bool reject_mutation(const NLCheckedFragment *entry)
 
 static bool run_probe(const char *source, const size_t expected_old[2],
                       const size_t expected_field[2],
-                      const size_t expected_arm[2])
+                      const size_t expected_arm[2],
+                      const char *const root_names[2])
 {
     TestNode n = {0};
     bool success = false;
@@ -96,31 +97,52 @@ static bool run_probe(const char *source, const size_t expected_old[2],
         NLSemanticPlaceView p, child;
         CHECK(nl_semantic_place_view(main_world, field.parent, &p));
         CHECK(nl_semantic_place_view(main_world, field.child, &child));
-        CHECK(p.independent_root);
-        CHECK(p.implicit_local);
-        CHECK(p.fixed_field_count == 2);
-        CHECK(p.fixed_fields[field.index] == field.child);
-        CHECK(child.parent_aggregate == field.parent);
-        CHECK(child.parent_field_index == field.index);
+        /* Issued base and parent are in the same main-world namespace.
+         * Closed places are historical, not live prewrite views. */
+        NLSemanticBindingView issued_base;
+        CHECK(field.base != 0 &&
+              nl_semantic_binding_view(main_world, field.base, &issued_base) &&
+              issued_base.place == field.parent);
+        CHECK(field.parent_incarnation != 0 && field.child_incarnation != 0);
         /* Final closed contexts may reset/nonlive a place. Issued post-facts
          * belong to the transition, not necessarily final current_fact. */
         printf("R653_CLOSED_STATE write=%zu parent_live=%d child_live=%d "
                "parent_final=%zu parent_issued_post=%zu "
-               "child_final=%zu child_issued_post=%zu\\n",
+               "child_final=%zu child_issued_post=%zu\n",
                i, (int)p.live, (int)child.live, (size_t)p.current_fact,
                (size_t)field.parent_post_fact, (size_t)child.current_fact,
                (size_t)field.child_post_fact);
         for (size_t a = 0; a < 2; ++a) {
             NLSemanticPlaceView before, before_child;
             const NLSemanticContext *w = nl_checked_context(arms[a]);
-            CHECK(nl_semantic_place_view(w, field.parent, &before));
-            CHECK(nl_semantic_place_view(w, field.child, &before_child));
-            CHECK(before.live);
-            CHECK(before_child.live);
-            CHECK(before.incarnation == field.parent_incarnation);
-            CHECK(before_child.incarnation == field.child_incarnation);
-            CHECK(before.current_fact == field.parent_fact);
-            CHECK(before_child.current_fact == field.child_fact);
+            /* Arm IDs are distinct from main IDs; resolve each source-named
+             * original root independently in each owned arm context. */
+            const NLSymbolId symbol =
+                nl_semantic_find_binding(w, root_names[i]);
+            NLSemanticBindingView binding;
+            CHECK(symbol != 0 &&
+                  nl_semantic_binding_view(w, symbol, &binding) &&
+                  binding.place != 0 &&
+                  nl_semantic_place_view(w, binding.place, &before));
+            CHECK(before.live && before.independent_root &&
+                  before.implicit_local);
+            CHECK(before.fixed_field_count == 2);
+            CHECK(field.index < before.fixed_field_count);
+            const NLPlaceId arm_child = before.fixed_fields[field.index];
+            CHECK(arm_child != 0 &&
+                  nl_semantic_place_view(w, arm_child, &before_child));
+            CHECK(before_child.live &&
+                  before_child.parent_aggregate == binding.place &&
+                  before_child.parent_field_index == field.index &&
+                  before_child.parent_incarnation == before.incarnation);
+            CHECK(before.incarnation != 0 && before_child.incarnation != 0 &&
+                  before.current_fact != 0 && before_child.current_fact != 0);
+            NLSemanticValueView arm_old;
+            CHECK(before_child.current_value != 0 &&
+                  nl_semantic_value_view(w, before_child.current_value,
+                                         &arm_old) &&
+                  arm_old.scalar_known &&
+                  arm_old.scalar_value == expected_old[i]);
         }
         NLSemanticScopeView loan_scope;
         CHECK(loans[i]->loan.scope != 0);
@@ -136,6 +158,8 @@ static bool run_probe(const char *source, const size_t expected_old[2],
           generated != NULL && length > 0);
     free(generated);
     generated = NULL;
+    /* Test-only corruption of realloc-backed nodes; public checked evidence
+     * remains immutable. Restore every mutation before returning. */
     NLCheckedNodeView *mut = (NLCheckedNodeView *)(uintptr_t)writes[0];
     const NLCheckedNodeView clean = *mut;
     size_t rejected = 0;
@@ -182,7 +206,7 @@ cleanup:
 
 int main(int argc, char **argv)
 {
-    if (argc != 8)
+    if (argc != 10)
         return 2;
     size_t old[2] = {(size_t)strtoul(argv[2], NULL, 10),
                      (size_t)strtoul(argv[3], NULL, 10)};
@@ -190,5 +214,6 @@ int main(int argc, char **argv)
                        (size_t)strtoul(argv[5], NULL, 10)};
     size_t arms[2] = {(size_t)strtoul(argv[6], NULL, 10),
                       (size_t)strtoul(argv[7], NULL, 10)};
-    return run_probe(argv[1], old, field, arms) ? 0 : 1;
+    const char *root_names[2] = {argv[8], argv[9]};
+    return run_probe(argv[1], old, field, arms, root_names) ? 0 : 1;
 }
