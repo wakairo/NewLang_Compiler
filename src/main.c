@@ -491,9 +491,11 @@ static bool copy_if_arm_origin(const NLCheckedFragment *parent,
 }
 /* Consume one already-issued, ended arm-local Copy binding. No arm ID or
  * fresh fact is imported into the caller and no semantic state is built. */
-static bool copy_if_arm_local(const NLCheckedFragment *f, NLCheckedNodeId id,
-                              const NLCheckedFragment *arm, size_t bindings,
-                              const V0Program *p, size_t *locals)
+static bool copy_if_arm_local_places(const NLCheckedFragment *f,
+                                     NLCheckedNodeId id,
+                                     const NLCheckedFragment *arm,
+                                     size_t bindings, size_t places,
+                                     const V0Program *p, size_t *locals)
 {
     const NLCheckedNodeView *root =
         nl_checked_node_view(arm, nl_checked_root(arm));
@@ -506,7 +508,6 @@ static bool copy_if_arm_local(const NLCheckedFragment *f, NLCheckedNodeId id,
     if (*locals == 0)
         return true; /* Existing three-node arm checks still apply. */
     const NLSemanticContext *w = nl_checked_context(arm);
-    const size_t places = bindings + (p->aggregate != 0 ? 2 : 0);
     const NLCheckedNodeView *decl =
         nl_checked_node_view(arm, block->first_item);
     const NLCheckedNodeView *init =
@@ -613,6 +614,14 @@ static bool copy_if_arm_local(const NLCheckedFragment *f, NLCheckedNodeId id,
     return false;
 }
 
+static bool copy_if_arm_local(const NLCheckedFragment *f, NLCheckedNodeId id,
+                              const NLCheckedFragment *arm, size_t bindings,
+                              const V0Program *p, size_t *locals)
+{
+    return copy_if_arm_local_places(f, id, arm, bindings,
+                                    bindings + (p->aggregate != 0 ? 2 : 0), p,
+                                    locals);
+}
 static bool copy_if_prefix(const NLCheckedFragment *f,
                            const NLCheckedFragment *arms[2],
                            const NLCheckedNodeView *conditional,
@@ -679,6 +688,8 @@ static bool copy_if_prefix(const NLCheckedFragment *f,
 }
 static bool copy_if_pair_frame(const NLCheckedFragment *, NLCheckedNodeId,
                                V0Program *, size_t);
+static bool copy_if_two_pair_frame(const NLCheckedFragment *, NLCheckedNodeId,
+                                   V0Program *, size_t);
 static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
                               V0Program *p)
 {
@@ -723,8 +734,12 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
         if (f->nodes[i].kind == NL_CHECKED_BINDING &&
             f->nodes[i].span.end_byte <= v->span.start_byte)
             ++bindings;
-    if (paired && !copy_if_pair_frame(f, id, p, bindings))
-        return false;
+    size_t pair_fields = 2;
+    if (paired && !copy_if_pair_frame(f, id, p, bindings)) {
+        if (!copy_if_two_pair_frame(f, id, p, bindings))
+            return false;
+        pair_fields = 4;
+    }
     if (!paired && c->scope_count != 0)
         return false;
     for (size_t i = 0; !paired && i < f->count; ++i) {
@@ -811,7 +826,9 @@ static bool copy_if_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
             block == NULL ? NULL : nl_checked_node_view(arm, block->tail);
         NLSemanticValueView value;
         size_t locals = 0;
-        if (!copy_if_arm_local(f, id, arm, bindings, p, &locals))
+        if (!copy_if_arm_local_places(f, id, arm, bindings,
+                                      bindings + (paired ? pair_fields : 0), p,
+                                      &locals))
             return false;
         if (!copy_if_arm_origin(f, id, a, arm) || arm->if_parent != f ||
             arm->if_parent_node != id || arm->if_arm_index != a ||
@@ -1514,6 +1531,411 @@ static bool copy_if_pair_frame(const NLCheckedFragment *f, NLCheckedNodeId id,
            recomposed.fields[1] ==
                entry->places[original.fixed_fields[1] - 1].current_value &&
            recomposed.carrier == NL_CARRIER_ENDED;
+}
+
+/* Two original records, one pure IF, two closed writes. This cursor contains
+ * existing issued IDs only: no semantic-world replay, allocation or authority.
+ */
+typedef struct {
+    const NLCheckedNodeView *decl, *aggregate, *loan;
+    NLSemanticPlaceView root, child[2];
+    NLValueId value[2];
+    NLValueFactId fact, child_fact[2];
+    NLCheckedNodeId reads[2];
+    bool changed;
+} CopyPairStep;
+
+static bool copy_pair_equal(const NLSemanticContext *c, NLValueId a,
+                            NLValueId b, NLTypeId type)
+{
+    NLSemanticValueView x, y;
+    return nl_semantic_value_view(c, a, &x) &&
+           nl_semantic_value_view(c, b, &y) && copy_if_plain(x, type) &&
+           copy_if_plain(y, type) && x.scalar_known == y.scalar_known &&
+           x.scalar_value == y.scalar_value;
+}
+static bool copy_pair_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
+                             NLCheckedNodeId selection, const V0Program *p,
+                             const CopyPairStep rows[2],
+                             NLCheckedNodeId required)
+{
+    const NLSemanticContext *c = nl_checked_context(f);
+    NLValueId first = 0;
+    size_t remaining = nl_checked_node_count(f);
+    while (id && remaining--) {
+        const NLCheckedNodeView *v = nl_checked_node_view(f, id);
+        NLSemanticValueView value;
+        if (!v || v->terminates || v->type != p->u8 || v->result_count != 1 ||
+            v->results[0].type != p->u8 ||
+            !nl_semantic_value_view(c, v->results[0].value, &value) ||
+            !copy_if_plain(value, p->u8) || value.carrier != NL_CARRIER_ENDED ||
+            value.owner_place != 0)
+            return false;
+        if (!first)
+            first = v->results[0].value;
+        if (!copy_pair_equal(c, first, v->results[0].value, p->u8))
+            return false;
+        if (id == selection)
+            return (!required || required == id) && v->kind == NL_CHECKED_IF &&
+                   !value.scalar_known;
+        if (v->kind == NL_CHECKED_U8_LITERAL)
+            return (!required || required == id) && copy_if_literal(f, v);
+        for (size_t k = 0; k < 2; ++k) {
+            if (v == rows[k].loan)
+                return (!required || required == id) && rows[k].changed;
+            for (size_t j = 0; j < 2; ++j)
+                if (id == rows[k].reads[j])
+                    return !required || required == id;
+        }
+        const NLCheckedNodeId from = bool_source_origin(f, id);
+        if (!from || from >= id)
+            return false;
+        id = from;
+    }
+    return false;
+}
+static bool copy_pair_field(const NLCheckedField *e, const CopyPairStep *r,
+                            NLAccessSyntax access)
+{
+    const size_t j = e->index;
+    return e->present && e->dependency_compatible && j < 2 &&
+           e->base == r->decl->symbol && e->nominal == r->aggregate->type &&
+           e->type == r->child[j].type && e->access == access &&
+           e->parent == r->child[j].parent_aggregate &&
+           e->parent_incarnation == r->root.incarnation &&
+           e->child == r->root.fixed_fields[j] &&
+           e->child_incarnation == r->child[j].incarnation &&
+           e->parent_fact == r->fact && e->child_fact == r->child_fact[j] &&
+           e->old_value == r->value[j] && !e->payload_occurrence &&
+           !e->post_payload_occurrence;
+}
+static bool copy_if_two_pair_frame(const NLCheckedFragment *f,
+                                   NLCheckedNodeId id, V0Program *p,
+                                   size_t bindings)
+{
+    const NLSemanticContext *c = nl_checked_context(f);
+    const NLCheckedNodeView *choice = nl_checked_node_view(f, id);
+    const NLCheckedNodeView *cond =
+        nl_checked_node_view(f, choice->initializer);
+    const NLCheckedFragment *arms[2] = {nl_checked_if_arm(f, id, 0),
+                                        nl_checked_if_arm(f, id, 1)};
+    const NLCheckedNodeView *block =
+        nl_checked_node_view(f, nl_checked_root(f));
+    CopyPairStep rows[2] = {0};
+    size_t roots = 0, locals[2] = {0};
+    const size_t places = bindings + 4;
+    if (!arms[0] || !arms[1] || !block || block->kind != NL_CHECKED_BLOCK ||
+        c->scope_count != 2 || bindings > c->binding_count ||
+        places > c->place_count || nl_sem_validate(c) != NL_CHECK_OK)
+        return false;
+    /* Authenticate both nominal arm origins before reading either world. */
+    for (size_t a = 0; a < 2; ++a)
+        if (!copy_if_arm_origin(f, id, a, arms[a]) ||
+            !copy_if_arm_local_places(f, id, arms[a], bindings, places, p,
+                                      &locals[a]))
+            return false;
+    const NLSemanticContext *entry = nl_checked_context(arms[0]);
+    for (size_t a = 0; a < 2; ++a) {
+        const NLSemanticContext *w = nl_checked_context(arms[a]);
+        if (w == c || (a && w == entry) ||
+            arms[a]->branch_value_prefix != cond->results[0].value ||
+            w->value_count != cond->results[0].value + 1 + locals[a] ||
+            w->binding_count != bindings + locals[a] ||
+            w->place_count != places + locals[a] || w->scope_count ||
+            w->domain_count || w->region_count || w->occurrence_count ||
+            arms[a]->branch_fact_prefix != places ||
+            w->last_value_fact != places + locals[a] ||
+            nl_sem_validate(w) != NL_CHECK_OK ||
+            memcmp(w->places, entry->places, places * sizeof(*w->places)) ||
+            memcmp(w->values, entry->values,
+                   arms[a]->branch_value_prefix * sizeof(*w->values)))
+            return false;
+        for (size_t j = 0; j < bindings; ++j) {
+            const NLSemanticBindingView b = w->bindings[j].view;
+            if (memcmp(&b, &entry->bindings[j].view, sizeof(b)) ||
+                w->bindings[j].hidden || b.availability != NL_AVAILABLE ||
+                !b.place || b.place > places ||
+                b.type != c->bindings[j].view.type ||
+                b.place != c->bindings[j].view.place ||
+                !w->places[b.place - 1].independent_root ||
+                w->places[b.place - 1].current_value != b.value)
+                return false;
+        }
+        for (size_t j = 0; j < places; ++j) {
+            const NLSemanticPlaceView v = w->places[j], final = c->places[j];
+            if (!v.live || v.incarnation != j + 1 || v.current_fact != j + 1 ||
+                v.type != final.type || v.incarnation != final.incarnation ||
+                v.governing_domain || v.placement.region || v.parent_sum ||
+                v.payload_occurrence || final.live || final.current_fact ||
+                final.current_value || final.governing_domain ||
+                final.placement.region ||
+                final.parent_aggregate != v.parent_aggregate ||
+                final.parent_incarnation != v.parent_incarnation ||
+                final.parent_field_index != v.parent_field_index ||
+                final.independent_root != v.independent_root ||
+                final.implicit_local != v.implicit_local)
+                return false;
+        }
+    }
+    /* Bind original roots to actual source declarations, not matching values.
+     */
+    for (NLCheckedNodeId item = block->first_item; item;) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, item);
+        const NLCheckedNodeView *v =
+            n ? nl_checked_node_view(f, n->initializer) : NULL;
+        if (!n || (n->next_item && n->next_item <= item))
+            return false;
+        if (n->span.end_byte <= choice->span.start_byte) {
+            if (n->kind != NL_CHECKED_BINDING || !v || !n->symbol ||
+                n->symbol > bindings || v->result_count != 1 ||
+                entry->bindings[n->symbol - 1].view.value !=
+                    v->results[0].value)
+                return false;
+            if (v->kind == NL_CHECKED_AGGREGATE) {
+                if (roots == 2 || !avs_construction(f, n->initializer, p))
+                    return false;
+                CopyPairStep *r = &rows[roots++];
+                r->decl = n;
+                r->aggregate = v;
+                const NLPlaceId place =
+                    entry->bindings[n->symbol - 1].view.place;
+                r->root = entry->places[place - 1];
+                r->fact = r->root.current_fact;
+                if (r->root.type != p->aggregate || !r->root.independent_root ||
+                    !r->root.implicit_local || r->root.parent_aggregate ||
+                    r->root.fixed_field_count != 2 ||
+                    r->root.current_value != v->results[0].value ||
+                    (roots == 2 && place == rows[0].child[0].parent_aggregate))
+                    return false;
+                for (size_t j = 0; j < 2; ++j) {
+                    const NLPlaceId child = r->root.fixed_fields[j];
+                    if (!child || child > places || child == place ||
+                        (j && child == r->root.fixed_fields[0]))
+                        return false;
+                    r->child[j] = entry->places[child - 1];
+                    r->child_fact[j] = r->child[j].current_fact;
+                    r->value[j] = r->child[j].current_value;
+                    if (r->child[j].independent_root ||
+                        r->child[j].parent_aggregate != place ||
+                        r->child[j].parent_incarnation != r->root.incarnation ||
+                        r->child[j].parent_field_index != j)
+                        return false;
+                }
+                for (NLCheckedNodeId field = v->first_argument; field;) {
+                    const NLCheckedNodeView *member =
+                        nl_checked_node_view(f, field);
+                    const NLCheckedNodeView *lit =
+                        member ? nl_checked_node_view(f, member->initializer)
+                               : NULL;
+                    if (!member || member->field_index >= 2 ||
+                        !copy_if_literal(f, lit) ||
+                        lit->results[0].value != r->value[member->field_index])
+                        return false;
+                    field = member->next_argument;
+                }
+            } else if (!quantity_scalar(f, n->initializer, p) &&
+                       !boolean_scalar(f, n->initializer, p) &&
+                       !copy_pair_scalar(f, n->initializer, id, p, rows, 0))
+                return false;
+        }
+        item = n->next_item;
+    }
+    if (roots != 2)
+        return false;
+    for (size_t j = 0; j < arms[0]->branch_value_prefix; ++j) {
+        NLSemanticValueView v = entry->values[j];
+        const NLSemanticValueView final = c->values[j];
+        if (v.type != final.type || v.scalar_known != final.scalar_known ||
+            v.scalar_value != final.scalar_value)
+            return false;
+        if (v.type == p->aggregate) {
+            bool matched = false;
+            for (size_t k = 0; k < 2; ++k)
+                if (j + 1 == rows[k].root.current_value) {
+                    matched =
+                        v.field_count == 2 && v.carrier == NL_CARRIER_PLACE &&
+                        v.owner_place == rows[k].child[0].parent_aggregate &&
+                        v.fields[0] == rows[k].value[0] &&
+                        v.fields[1] == rows[k].value[1];
+                }
+            if (!matched)
+                return false;
+            v.field_count = 0;
+        }
+        if (v.carrier == NL_CARRIER_AGGREGATE) {
+            bool matched = false;
+            for (size_t k = 0; k < 2; ++k)
+                for (size_t m = 0; m < 2; ++m)
+                    if (j + 1 == rows[k].value[m])
+                        matched =
+                            v.aggregate_owner == rows[k].root.current_value;
+            if (!matched)
+                return false;
+            v.aggregate_owner = 0;
+        }
+        if (!copy_if_plain(v, final.type))
+            return false;
+    }
+    size_t facts = places, next_place = places, symbols = bindings, writes = 0;
+    bool selected = false;
+    for (NLCheckedNodeId item = block->first_item; item;) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, item);
+        const NLCheckedNodeView *v = nl_checked_node_view(f, n->initializer);
+        if (n->span.end_byte <= choice->span.start_byte) {
+            item = n->next_item;
+            continue;
+        }
+        if (n->kind == NL_CHECKED_BINDING) {
+            if (!v)
+                return false;
+            if (v->kind == NL_CHECKED_IF) {
+                if (selected || n->initializer != id)
+                    return false;
+                selected = true;
+            } else if (v->kind == NL_CHECKED_LOAN_HEADER) {
+                if (!selected || writes == 2 || !gate_loan(f, v, p) ||
+                    v->loan.scope != writes + 1 || v->loan.domain ||
+                    v->loan.ref_symbol != symbols + 1)
+                    return false;
+                size_t k = 0;
+                while (k < 2 && v->field.base != rows[k].decl->symbol)
+                    ++k;
+                if (k == 2 || rows[k].changed || v->field.index != 0 ||
+                    !copy_pair_field(&v->field, &rows[k], NL_ACCESS_WRITE) ||
+                    v->field.parent_post_fact || v->field.child_post_fact)
+                    return false;
+                CopyPairStep *r = &rows[k];
+                const NLCheckedNodeView *body =
+                    nl_checked_node_view(f, v->initializer);
+                const NLCheckedNodeView *write =
+                    body ? nl_checked_node_view(f, body->tail) : NULL;
+                const NLCheckedNodeView *ref =
+                    write ? nl_checked_node_view(f, write->first_argument)
+                          : NULL;
+                const NLCheckedNodeView *input =
+                    ref ? nl_checked_node_view(f, ref->next_argument) : NULL;
+                NLSemanticScopeView scope;
+                NLCheckedNodeId required = id;
+                if (writes != 0)
+                    for (size_t prior = 0; prior < 2; ++prior)
+                        if (rows[prior].loan)
+                            required =
+                                (NLCheckedNodeId)(rows[prior].loan - f->nodes) +
+                                1;
+                if (!body || body->first_item || body->item_count || !write ||
+                    !ref || !input ||
+                    !gate_replace(f, body->tail, p, v->loan.ref_symbol) ||
+                    !copy_pair_field(&write->field, r, NL_ACCESS_WRITE) ||
+                    !copy_pair_scalar(f, ref->next_argument, id, p, rows,
+                                      required) ||
+                    write->field.index != 0 ||
+                    write->field.new_value != input->results[0].value ||
+                    v->result_count != 1 ||
+                    write->field.old_value != v->results[0].value ||
+                    !nl_semantic_scope_view(c, v->loan.scope, &scope) ||
+                    scope.active || scope.parent || scope.parent_authority)
+                    return false;
+                NLSemanticValueView reference;
+                ++facts;
+                ++symbols;
+                ++next_place;
+                if (symbols > c->binding_count || next_place > c->place_count ||
+                    c->bindings[symbols - 1].view.place != next_place ||
+                    c->places[next_place - 1].live ||
+                    c->places[next_place - 1].current_fact ||
+                    c->places[next_place - 1].current_value ||
+                    c->places[next_place - 1].incarnation != next_place ||
+                    !nl_semantic_value_view(c, ref->results[0].value,
+                                            &reference) ||
+                    reference.dependencies != NL_DEPENDENCY_FREE ||
+                    reference.value_dependency_count ||
+                    reference.reference_count || reference.domain ||
+                    reference.allocation_region || reference.slot_place ||
+                    reference.occupancy.region || reference.field_count ||
+                    reference.aggregate_owner || reference.sum_owner ||
+                    reference.sum_payload ||
+                    reference.reference.place != write->field.child ||
+                    reference.reference.incarnation !=
+                        write->field.child_incarnation ||
+                    reference.reference.scope != v->loan.scope ||
+                    reference.reference.provenance != NL_PROVENANCE_VALID ||
+                    !reference.reference.readable ||
+                    !reference.reference.writable ||
+                    reference.reference.occurrence_dependency ||
+                    reference.carrier != NL_CARRIER_ENDED ||
+                    reference.owner_place ||
+                    write->field.child_post_fact != ++facts ||
+                    write->field.parent_post_fact != ++facts)
+                    return false;
+                r->child_fact[0] = write->field.child_post_fact;
+                r->fact = write->field.parent_post_fact;
+                r->value[0] = write->field.new_value;
+                r->changed = true;
+                r->loan = v;
+                ++writes;
+            } else if (v->kind == NL_CHECKED_FIELD_READ) {
+                size_t k = 0;
+                while (k < 2 && v->field.base != rows[k].decl->symbol)
+                    ++k;
+                if (writes != 2 || k == 2 ||
+                    !copy_pair_field(&v->field, &rows[k], NL_ACCESS_READ) ||
+                    v->field.parent_post_fact || v->field.child_post_fact ||
+                    rows[k].reads[v->field.index] || v->result_count != 1 ||
+                    !copy_pair_equal(c, v->results[0].value, v->field.old_value,
+                                     p->u8))
+                    return false;
+                rows[k].reads[v->field.index] = n->initializer;
+            } else if (!selected ||
+                       (!quantity_scalar(f, n->initializer, p) &&
+                        !boolean_scalar(f, n->initializer, p) &&
+                        !copy_pair_scalar(f, n->initializer, id, p, rows, 0)))
+                return false;
+            ++facts;
+            ++symbols;
+            ++next_place;
+            NLSemanticBindingView bound;
+            NLSemanticPlaceView place;
+            if (n->symbol != symbols ||
+                !nl_semantic_binding_view(c, symbols, &bound) ||
+                bound.place != next_place || bound.type != v->type ||
+                v->result_count != 1 || bound.value != v->results[0].value ||
+                bound.availability != NL_CONSUMED ||
+                !c->bindings[symbols - 1].hidden ||
+                !nl_semantic_place_view(c, next_place, &place) ||
+                place.type != bound.type || !place.independent_root ||
+                place.implicit_local != (bound.type == p->u8) ||
+                place.incarnation != next_place || place.live ||
+                place.current_fact || place.current_value)
+                return false;
+        } else if (n->kind != NL_CHECKED_STATEMENT ||
+                   !copy_pair_scalar(f, n->initializer, id, p, rows, 0))
+            return false;
+        item = n->next_item;
+    }
+    const NLCheckedNodeView *tail = nl_checked_node_view(f, block->tail);
+    if (!selected || writes != 2 || facts != c->last_value_fact ||
+        next_place != c->place_count || next_place != c->last_incarnation ||
+        symbols != c->binding_count || !tail || tail->kind != NL_CHECKED_UNIT)
+        return false;
+    for (size_t k = 0; k < 2; ++k) {
+        CopyPairStep *r = &rows[k];
+        NLSemanticBindingView bound;
+        NLSemanticValueView recomposed;
+        const NLPlaceId place = r->child[0].parent_aggregate;
+        if (!r->changed || !r->reads[0] || !r->reads[1] ||
+            c->places[place - 1].live || c->places[place - 1].current_fact ||
+            c->places[place - 1].current_value ||
+            !nl_semantic_binding_view(c, r->decl->symbol, &bound) ||
+            !nl_semantic_value_view(c, bound.value, &recomposed) ||
+            bound.place != place || bound.availability != NL_CONSUMED ||
+            recomposed.type != p->aggregate ||
+            recomposed.carrier != NL_CARRIER_ENDED ||
+            recomposed.field_count != 2 ||
+            recomposed.fields[0] != r->value[0] ||
+            recomposed.fields[1] != r->value[1])
+            return false;
+    }
+    return true;
 }
 
 /* Driver-private proof: the actual owned synchronous body must belong to

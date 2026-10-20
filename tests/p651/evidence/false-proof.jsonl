@@ -1,0 +1,2 @@
+{"if":28,"condition_symbol":5,"truth":0,"arms":[93,17],"roots":[{"symbol":3,"place":3,"incarnation":3,"fields":[4,5],"initial":[46,165],"old_symbol":8,"read_symbols":[15,16],"ref_symbol":7,"scope":1,"facts":[3,13,4,12]},{"symbol":4,"place":6,"incarnation":6,"fields":[7,8],"initial":[108,222],"old_symbol":14,"read_symbols":[17,18],"ref_symbol":13,"scope":2,"facts":[6,21,7,20]}]}
+{"mutants_rejected":15,"original":true,"worlds_unchanged":true,"driver_allocations":0}

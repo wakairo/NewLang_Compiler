@@ -1,0 +1,5 @@
+{
+  "status": "Prototype rejected genuine source; no unsafe admission observed. Final code removes temporary trace, corrects scalar-local metadata expectation. Source/oracle unchanged.",
+  "finding": "usize/bool local places are not implicit-local u8 scoped places; requiring implicit_local for all ordinary Copy bindings was over-restrictive.",
+  "stderr": "P651_BIND symbol=6/6 place=10/10 value=13/13 availability=1 hidden=1 ended=0 fact=0 val=0 implicit=1 independent=1 inc=10\nP651_BIND symbol=8/8 place=12/12 value=3/3 availability=1 hidden=1 ended=0 fact=0 val=0 implicit=1 independent=1 inc=12\nP651_BIND symbol=9/9 place=13/13 value=18/18 availability=1 hidden=1 ended=0 fact=0 val=0 implicit=0 independent=1 inc=13\nerror(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p651/one_if_control.nl\n"
+}
