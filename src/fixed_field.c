@@ -288,7 +288,8 @@ NLCheckStatus nl_fixed_validate(const NLSemanticContext *c)
         const NLSemanticValueView a = c->values[i];
         if (a.carrier == NL_CARRIER_ENDED || a.field_count == 0)
             continue;
-        if (a.field_count > NL_SEMANTIC_MAX_FIELDS ||
+        if (a.type == 0 || a.type > c->type_count ||
+            a.field_count > NL_SEMANTIC_MAX_FIELDS ||
             a.field_count != c->types[a.type - 1].view.field_count)
             return NL_CHECK_INTERNAL_ERROR;
         for (size_t f = 0; f < a.field_count; ++f) {
@@ -306,6 +307,9 @@ NLCheckStatus nl_fixed_validate(const NLSemanticContext *c)
     }
     for (size_t i = 0; i < c->place_count; ++i) {
         const NLSemanticPlaceView p = c->places[i];
+        if (p.live && (p.type == 0 || p.type > c->type_count ||
+                       p.fixed_field_count > NL_SEMANTIC_MAX_FIELDS))
+            return NL_CHECK_INTERNAL_ERROR;
         if (p.live && nl_fixed_type(c, p.type) &&
             p.fixed_field_count != c->types[p.type - 1].view.field_count)
             return NL_CHECK_INTERNAL_ERROR;
@@ -313,9 +317,21 @@ NLCheckStatus nl_fixed_validate(const NLSemanticContext *c)
             continue;
         if (!p.live)
             continue;
-        if (!nl_fixed_live(c, i + 1) || p.independent_root || p.parent_sum != 0)
+        if (p.parent_aggregate > c->place_count || p.independent_root ||
+            p.parent_sum != 0)
             return NL_CHECK_INTERNAL_ERROR;
         const NLSemanticPlaceView r = c->places[p.parent_aggregate - 1];
+        /* Hostile proof worlds must fail before either values[] lookup or
+         * nl_fixed_live's fixed_fields[] lookup. Counts/owning arrays belong
+         * to the genuine context; these record IDs are not trusted. */
+        if (r.type == 0 || r.type > c->type_count || r.current_value == 0 ||
+            r.current_value > c->value_count || p.current_value == 0 ||
+            p.current_value > c->value_count ||
+            r.fixed_field_count > NL_SEMANTIC_MAX_FIELDS ||
+            p.parent_field_index >= r.fixed_field_count ||
+            p.parent_field_index >= c->types[r.type - 1].view.field_count ||
+            !nl_fixed_live(c, i + 1))
+            return NL_CHECK_INTERNAL_ERROR;
         const NLSemanticValueView a = c->values[r.current_value - 1];
         if (a.carrier != NL_CARRIER_PLACE ||
             a.owner_place != p.parent_aggregate ||

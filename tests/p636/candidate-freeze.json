@@ -1,0 +1,31 @@
+{
+  "frozen_at_utc": "2026-10-19T13:24:27.083772+00:00",
+  "base": "032cf60aabf4997e672bc3607cf53775d91ececb",
+  "pr635": "b5ecc584c9fcda2fcca74dd468443661bd8107ea",
+  "relative_pr635_allowed": [
+    "src/fixed_field.c",
+    "CMakeLists.txt",
+    "tests/p636/**"
+  ],
+  "guard_sha256": "6a50e918aa0f6764449e305db2c948ea59d0c873ff2c3a9e5457daa4bf28425c",
+  "test_sha256": "e5e304540dc4949ea40195eb9877ca660d377744b1432955b91c483031af6523",
+  "old_pr635_all_other_files_byte_identical": true,
+  "local_gcc13": {
+    "passed": 353,
+    "failed": 0
+  },
+  "local_clang23": {
+    "passed": 353,
+    "failed": 0
+  },
+  "targeted_asan": {
+    "passed": 18,
+    "failed": 0
+  },
+  "targeted_ubsan": {
+    "passed": 18,
+    "failed": 0
+  },
+  "ci_budget": "one natural FULL5 + PARTIAL pair; attempt1 only; frozen HEAD no repairs/retries",
+  "no_canonical_public_api_workflow_or_source_changes": true
+}

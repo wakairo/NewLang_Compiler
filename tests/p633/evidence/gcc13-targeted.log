@@ -1,0 +1,24 @@
+Internal ctest changing into directory: /workspace/p633/build-gcc13
+Test project /workspace/p633/build-gcc13
+    Start 13: p633_equal_outer_derivation.unit
+1/9 Test #13: p633_equal_outer_derivation.unit ...   Passed    0.00 sec
+    Start 14: p633_local_cli.integration
+2/9 Test #14: p633_local_cli.integration .........   Passed    5.29 sec
+    Start 15: p633_both_false_oom.unit
+3/9 Test #15: p633_both_false_oom.unit ...........   Passed    0.01 sec
+    Start 16: p633_outer_true_oom.unit
+4/9 Test #16: p633_outer_true_oom.unit ...........   Passed    0.01 sec
+    Start 17: p633_pure_true_oom.unit
+5/9 Test #17: p633_pure_true_oom.unit ............   Passed    0.00 sec
+    Start 18: p633_local_same_value.unit
+6/9 Test #18: p633_local_same_value.unit .........   Passed    0.01 sec
+    Start 19: p633_local_different_values.unit
+7/9 Test #19: p633_local_different_values.unit ...   Passed    0.04 sec
+    Start 20: p633_equal_world_origin.unit
+8/9 Test #20: p633_equal_world_origin.unit .......   Passed    0.00 sec
+    Start 21: p633_unequal_world_origin.unit
+9/9 Test #21: p633_unequal_world_origin.unit .....   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 9
+
+Total Test time (real) =   5.38 sec

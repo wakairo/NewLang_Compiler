@@ -1,0 +1,13 @@
+{
+  "base": "032cf60aabf4997e672bc3607cf53775d91ececb",
+  "historical_evidence": "d5c3788db30b7b03ec00bdc238e58d8ce61c9818",
+  "prototype_main_c_sha256": "35d7f190a59c23207b20ca4fe4b2003c1b84160e60df64d6da9e4786910c32e6",
+  "prototype_driver_sha256": "83b103d3628a7e27488fd47d6658a83290c0072518c6b1ff166896680f2648bc",
+  "probe_binary_sha256": "54a23e4f97917363f8e3638632326e331cc8fdf93f4b071114e20eca3f64b3bf",
+  "probe_source_sha256": "7f48f5bcd3b226082108c9c6bc013edb9240eef8aea9f0a7aa010b3cfaf5a7b1",
+  "historical_patch_sha256": "0130411f7e3515549daa0461da0ae6434e0aca2628cd6e9bc1b85dfac69ec371",
+  "result": "HOLD: required equal-value wrong-arm context rejection not established",
+  "new_native": "NOT RUN after trust STOP",
+  "candidate_CI": "NOT RUN",
+  "old_test_migration": "NOT PERFORMED; now authorized but stopped before migration on new trust finding"
+}

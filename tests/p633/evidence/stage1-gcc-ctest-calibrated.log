@@ -1,0 +1,28 @@
+Internal ctest changing into directory: /workspace/p633/build
+Test project /workspace/p633/build
+      Start 13: p633_equal_outer_derivation.unit
+ 1/11 Test #13: p633_equal_outer_derivation.unit ...   Passed    0.00 sec
+      Start 14: p633_local_cli.integration
+ 2/11 Test #14: p633_local_cli.integration .........   Passed    3.10 sec
+      Start 15: p633_both_false_oom.unit
+ 3/11 Test #15: p633_both_false_oom.unit ...........   Passed    0.01 sec
+      Start 16: p633_outer_true_oom.unit
+ 4/11 Test #16: p633_outer_true_oom.unit ...........   Passed    0.01 sec
+      Start 17: p633_pure_true_oom.unit
+ 5/11 Test #17: p633_pure_true_oom.unit ............   Passed    0.00 sec
+      Start 18: p633_local_same_value.unit
+ 6/11 Test #18: p633_local_same_value.unit .........   Passed    0.01 sec
+      Start 19: p633_local_different_values.unit
+ 7/11 Test #19: p633_local_different_values.unit ...   Passed    0.00 sec
+      Start 20: p633_equal_world_origin.unit
+ 8/11 Test #20: p633_equal_world_origin.unit .......   Passed    0.00 sec
+      Start 21: p633_unequal_world_origin.unit
+ 9/11 Test #21: p633_unequal_world_origin.unit .....   Passed    0.00 sec
+      Start 22: p628_cli_pair_if.integration
+10/11 Test #22: p628_cli_pair_if.integration .......   Passed    2.22 sec
+      Start 26: p626_cli_copy_if.integration
+11/11 Test #26: p626_cli_copy_if.integration .......   Passed    1.66 sec
+
+100% tests passed, 0 tests failed out of 11
+
+Total Test time (real) =   7.04 sec

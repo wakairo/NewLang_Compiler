@@ -159,6 +159,52 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:p534_semantic_gate>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p541" "${NEWLANG_SANITIZER}")
 
+    add_executable(p636_index_gate tests/p636/index_gate.c)
+    target_link_libraries(p636_index_gate PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME p636_plain_source_indices.unit COMMAND p636_index_gate)
+    add_test(NAME p636_local_arm_indices.unit COMMAND p636_index_gate
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p630/then_true.nl")
+    add_test(NAME p636_equal_arm_indices.unit COMMAND p636_index_gate
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p631/same_value_local.nl")
+
+    add_test(NAME p634_historical_hash.unit
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p634/hash_gate_test.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}")
+    add_executable(p634_ended_root_gate tests/p634/ended_root_gate.c)
+    target_link_libraries(p634_ended_root_gate PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME p634_same_value_ended_root.unit COMMAND p634_ended_root_gate
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p631/same_value_local.nl")
+    add_test(NAME p634_unequal_ended_root.unit COMMAND p634_ended_root_gate
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p630/both_false.nl")
+    add_executable(p633_derivation_gate tests/p633/derivation_gate.c)
+    target_link_libraries(p633_derivation_gate PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME p633_equal_outer_derivation.unit COMMAND p633_derivation_gate
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p631/duplicate_outer.nl")
+    add_test(NAME p633_local_cli.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p633/native_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p628_public_probe>"
+        "$<TARGET_FILE:p633_public_probe>" "$<TARGET_FILE:p517_gate_test>"
+        "$<TARGET_FILE:p514_gate_test>" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p633" "${NEWLANG_SANITIZER}")
+    foreach(case both_false outer_true pure_true)
+        add_test(NAME p633_${case}_oom.unit COMMAND p514_gate_test oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p630/${case}.nl")
+    endforeach()
+    add_executable(p633_local_gate tests/p633/local_gate.c)
+    target_link_libraries(p633_local_gate PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME p633_local_same_value.unit COMMAND p633_local_gate
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p631/same_value_local.nl")
+    add_test(NAME p633_local_different_values.unit COMMAND p633_local_gate
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p630/both_false.nl")
+    add_executable(p633_public_probe tests/p633/public_probe.c)
+    target_link_libraries(p633_public_probe PRIVATE newlang_semantic)
+    add_executable(p633_origin_gate tests/p633/origin_gate.c)
+    target_link_libraries(p633_origin_gate PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME p633_equal_world_origin.unit COMMAND p633_origin_gate
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p631/same_value_local.nl")
+    add_test(NAME p633_unequal_world_origin.unit COMMAND p633_origin_gate
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p630/both_false.nl")
+
     add_executable(p628_public_probe tests/p628/public_probe.c)
     target_link_libraries(p628_public_probe PRIVATE newlang_semantic)
 

@@ -1,0 +1,50 @@
+[
+  {
+    "build": "gcc13",
+    "source": "tests/p631/same_value_local.nl",
+    "former_P633_failure": {
+      "exit": 0,
+      "stdout": "P633_PARENT_FACT original_live=0 original_fact=0 arm_fact=7 consumer_accepted=0 semantic_world_status=0\nP633 local_controls=35 paired_equal_required=REJECT\n{\"branch_value_prefix\":[9,9],\"branch_fact_prefix\":[6,6],\"local_symbols\":[5,5],\"tail_ids\":[11,11],\"arm_values\":[83,83],\"cross_arm_context_accepted\":false,\"paired_context_swap_accepted\":false,\"original_valid\":true,\"replay_valid\":true,\"source_plan_shared\":true,\"worlds_distinct\":true,\"protected_worlds_unchanged\":true}\n"
+    },
+    "fact_value_live_controls": {
+      "exit": 0,
+      "stdout": "P634 ended_original_root=3 fact=0 value=0 live=0 rejects=3 genuine=PASS restored=UNCHANGED\n"
+    }
+  },
+  {
+    "build": "gcc13",
+    "source": "tests/p630/both_false.nl",
+    "former_P633_failure": {
+      "exit": 0,
+      "stdout": "P633_PARENT_FACT original_live=0 original_fact=0 arm_fact=7 consumer_accepted=0 semantic_world_status=0\nP633 local_controls=35 paired_equal_required=REJECT\n{\"branch_value_prefix\":[9,9],\"branch_fact_prefix\":[6,6],\"local_symbols\":[5,5],\"tail_ids\":[11,11],\"arm_values\":[83,24],\"cross_arm_context_accepted\":false,\"paired_context_swap_accepted\":false,\"original_valid\":true,\"replay_valid\":true,\"source_plan_shared\":true,\"worlds_distinct\":true,\"protected_worlds_unchanged\":true}\n"
+    },
+    "fact_value_live_controls": {
+      "exit": 0,
+      "stdout": "P634 ended_original_root=3 fact=0 value=0 live=0 rejects=3 genuine=PASS restored=UNCHANGED\n"
+    }
+  },
+  {
+    "build": "clang23",
+    "source": "tests/p631/same_value_local.nl",
+    "former_P633_failure": {
+      "exit": 0,
+      "stdout": "P633_PARENT_FACT original_live=0 original_fact=0 arm_fact=7 consumer_accepted=0 semantic_world_status=0\nP633 local_controls=35 paired_equal_required=REJECT\n{\"branch_value_prefix\":[9,9],\"branch_fact_prefix\":[6,6],\"local_symbols\":[5,5],\"tail_ids\":[11,11],\"arm_values\":[83,83],\"cross_arm_context_accepted\":false,\"paired_context_swap_accepted\":false,\"original_valid\":true,\"replay_valid\":true,\"source_plan_shared\":true,\"worlds_distinct\":true,\"protected_worlds_unchanged\":true}\n"
+    },
+    "fact_value_live_controls": {
+      "exit": 0,
+      "stdout": "P634 ended_original_root=3 fact=0 value=0 live=0 rejects=3 genuine=PASS restored=UNCHANGED\n"
+    }
+  },
+  {
+    "build": "clang23",
+    "source": "tests/p630/both_false.nl",
+    "former_P633_failure": {
+      "exit": 0,
+      "stdout": "P633_PARENT_FACT original_live=0 original_fact=0 arm_fact=7 consumer_accepted=0 semantic_world_status=0\nP633 local_controls=35 paired_equal_required=REJECT\n{\"branch_value_prefix\":[9,9],\"branch_fact_prefix\":[6,6],\"local_symbols\":[5,5],\"tail_ids\":[11,11],\"arm_values\":[83,24],\"cross_arm_context_accepted\":false,\"paired_context_swap_accepted\":false,\"original_valid\":true,\"replay_valid\":true,\"source_plan_shared\":true,\"worlds_distinct\":true,\"protected_worlds_unchanged\":true}\n"
+    },
+    "fact_value_live_controls": {
+      "exit": 0,
+      "stdout": "P634 ended_original_root=3 fact=0 value=0 live=0 rejects=3 genuine=PASS restored=UNCHANGED\n"
+    }
+  }
+]

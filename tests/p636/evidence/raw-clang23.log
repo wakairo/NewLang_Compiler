@@ -1,0 +1,355 @@
+13/353 Testing: p636_plain_source_indices.unit
+13/353 Test: p636_plain_source_indices.unit
+Command: "/workspace/p636/build-clang/p636_index_gate"
+Directory: /workspace/p636/build-clang
+"p636_plain_source_indices.unit" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+P636 source_world root=1 direct_rejects=17 status=NL_CHECK_INTERNAL_ERROR original=PASS restored=UNCHANGED readonly=PASS
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p636_plain_source_indices.unit" end time: Oct 19 13:17 UTC
+"p636_plain_source_indices.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+
+14/353 Testing: p636_local_arm_indices.unit
+14/353 Test: p636_local_arm_indices.unit
+Command: "/workspace/p636/build-clang/p636_index_gate" "/workspace/p636/tests/p630/then_true.nl"
+Directory: /workspace/p636/build-clang
+"p636_local_arm_indices.unit" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+zero_parent_sentinel=private_relation_REJECT
+P636 source_world root=3 direct_rejects=17 status=NL_CHECK_INTERNAL_ERROR original=PASS restored=UNCHANGED readonly=PASS
+zero_parent_sentinel=private_relation_REJECT
+P636 source_world root=3 direct_rejects=17 status=NL_CHECK_INTERNAL_ERROR original=PASS restored=UNCHANGED readonly=PASS
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"p636_local_arm_indices.unit" end time: Oct 19 13:17 UTC
+"p636_local_arm_indices.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+
+15/353 Testing: p636_equal_arm_indices.unit
+15/353 Test: p636_equal_arm_indices.unit
+Command: "/workspace/p636/build-clang/p636_index_gate" "/workspace/p636/tests/p631/same_value_local.nl"
+Directory: /workspace/p636/build-clang
+"p636_equal_arm_indices.unit" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+zero_parent_sentinel=private_relation_REJECT
+P636 source_world root=3 direct_rejects=17 status=NL_CHECK_INTERNAL_ERROR original=PASS restored=UNCHANGED readonly=PASS
+zero_parent_sentinel=private_relation_REJECT
+P636 source_world root=3 direct_rejects=17 status=NL_CHECK_INTERNAL_ERROR original=PASS restored=UNCHANGED readonly=PASS
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p636_equal_arm_indices.unit" end time: Oct 19 13:17 UTC
+"p636_equal_arm_indices.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+
+16/353 Testing: p634_historical_hash.unit
+16/353 Test: p634_historical_hash.unit
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3" "/workspace/p636/tests/p634/hash_gate_test.py" "/workspace/p636"
+Directory: /workspace/p636/build-clang
+"p634_historical_hash.unit" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+{"genuine": "PASS", "provenance": {"header": "src/semantic_internal.h", "candidate_sha256": "647ae68ffbe578d10124bc4ecdf10266b8d1d399599ef92aae34feea84e12358", "historical_sha256": "15e89aefc0f1574afdc77e6826e79f51902897b8b7ed57650f7a2b82ead1bed2", "exact_private_block_removed": 1}, "rejected": ["missing_block", "duplicate_block", "misplaced_block", "changed_pointer", "unrelated_header_change", "src/usize_addition.c", "include/newlang/usize_addition.h", "include/newlang/usize_subtraction.h"], "historical_manifest": "UNCHANGED"}
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"p634_historical_hash.unit" end time: Oct 19 13:17 UTC
+"p634_historical_hash.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+
+17/353 Testing: p634_same_value_ended_root.unit
+17/353 Test: p634_same_value_ended_root.unit
+Command: "/workspace/p636/build-clang/p634_ended_root_gate" "/workspace/p636/tests/p631/same_value_local.nl"
+Directory: /workspace/p636/build-clang
+"p634_same_value_ended_root.unit" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+P634 ended_original_root=3 fact=0 value=0 live=0 rejects=3 genuine=PASS restored=UNCHANGED
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p634_same_value_ended_root.unit" end time: Oct 19 13:17 UTC
+"p634_same_value_ended_root.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+
+18/353 Testing: p634_unequal_ended_root.unit
+18/353 Test: p634_unequal_ended_root.unit
+Command: "/workspace/p636/build-clang/p634_ended_root_gate" "/workspace/p636/tests/p630/both_false.nl"
+Directory: /workspace/p636/build-clang
+"p634_unequal_ended_root.unit" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+P634 ended_original_root=3 fact=0 value=0 live=0 rejects=3 genuine=PASS restored=UNCHANGED
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p634_unequal_ended_root.unit" end time: Oct 19 13:17 UTC
+"p634_unequal_ended_root.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+
+19/353 Testing: p633_equal_outer_derivation.unit
+19/353 Test: p633_equal_outer_derivation.unit
+Command: "/workspace/p636/build-clang/p633_derivation_gate" "/workspace/p636/tests/p631/duplicate_outer.nl"
+Directory: /workspace/p636/build-clang
+"p633_equal_outer_derivation.unit" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+P633 equal_scalar_different_outer_derivation=REJECT symbol_and_span_controls=2 original=PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p633_equal_outer_derivation.unit" end time: Oct 19 13:17 UTC
+"p633_equal_outer_derivation.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+
+21/353 Testing: p633_both_false_oom.unit
+21/353 Test: p633_both_false_oom.unit
+Command: "/workspace/p636/build-clang/p514_gate_test" "oom" "/workspace/p636/tests/p630/both_false.nl"
+Directory: /workspace/p636/build-clang
+"p633_both_false_oom.unit" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+P514_OOM registration=259 rollback=PASS
+P514_OOM main=148 rollback=PASS output=NULL
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"p633_both_false_oom.unit" end time: Oct 19 13:17 UTC
+"p633_both_false_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+
+22/353 Testing: p633_outer_true_oom.unit
+22/353 Test: p633_outer_true_oom.unit
+Command: "/workspace/p636/build-clang/p514_gate_test" "oom" "/workspace/p636/tests/p630/outer_true.nl"
+Directory: /workspace/p636/build-clang
+"p633_outer_true_oom.unit" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+P514_OOM registration=261 rollback=PASS
+P514_OOM main=150 rollback=PASS output=NULL
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"p633_outer_true_oom.unit" end time: Oct 19 13:17 UTC
+"p633_outer_true_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+
+23/353 Testing: p633_pure_true_oom.unit
+23/353 Test: p633_pure_true_oom.unit
+Command: "/workspace/p636/build-clang/p514_gate_test" "oom" "/workspace/p636/tests/p630/pure_true.nl"
+Directory: /workspace/p636/build-clang
+"p633_pure_true_oom.unit" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+P514_OOM registration=152 rollback=PASS
+P514_OOM main=96 rollback=PASS output=NULL
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p633_pure_true_oom.unit" end time: Oct 19 13:17 UTC
+"p633_pure_true_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+
+24/353 Testing: p633_local_same_value.unit
+24/353 Test: p633_local_same_value.unit
+Command: "/workspace/p636/build-clang/p633_local_gate" "/workspace/p636/tests/p631/same_value_local.nl"
+Directory: /workspace/p636/build-clang
+"p633_local_same_value.unit" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+P633_PARENT_FACT original_live=0 original_fact=0 arm_fact=7 consumer_accepted=0 semantic_world_status=0
+P633 local_controls=35 paired_equal_required=REJECT
+{"branch_value_prefix":[9,9],"branch_fact_prefix":[6,6],"local_symbols":[5,5],"tail_ids":[11,11],"arm_values":[83,83],"cross_arm_context_accepted":false,"paired_context_swap_accepted":false,"original_valid":true,"replay_valid":true,"source_plan_shared":true,"worlds_distinct":true,"protected_worlds_unchanged":true}
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p633_local_same_value.unit" end time: Oct 19 13:17 UTC
+"p633_local_same_value.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+
+25/353 Testing: p633_local_different_values.unit
+25/353 Test: p633_local_different_values.unit
+Command: "/workspace/p636/build-clang/p633_local_gate" "/workspace/p636/tests/p630/both_false.nl"
+Directory: /workspace/p636/build-clang
+"p633_local_different_values.unit" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+P633_PARENT_FACT original_live=0 original_fact=0 arm_fact=7 consumer_accepted=0 semantic_world_status=0
+P633 local_controls=35 paired_equal_required=REJECT
+{"branch_value_prefix":[9,9],"branch_fact_prefix":[6,6],"local_symbols":[5,5],"tail_ids":[11,11],"arm_values":[83,24],"cross_arm_context_accepted":false,"paired_context_swap_accepted":false,"original_valid":true,"replay_valid":true,"source_plan_shared":true,"worlds_distinct":true,"protected_worlds_unchanged":true}
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p633_local_different_values.unit" end time: Oct 19 13:17 UTC
+"p633_local_different_values.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+
+26/353 Testing: p633_equal_world_origin.unit
+26/353 Test: p633_equal_world_origin.unit
+Command: "/workspace/p636/build-clang/p633_origin_gate" "/workspace/p636/tests/p631/same_value_local.nl"
+Directory: /workspace/p636/build-clang
+"p633_equal_world_origin.unit" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+Stage0 rejected=15 protected_parent=checker-owned-live actual_cli_external_artifact_input=NONE
+{"branch_value_prefix":[9,9],"branch_fact_prefix":[6,6],"local_symbols":[5,5],"tail_ids":[11,11],"arm_values":[83,83],"cross_arm_context_accepted":false,"paired_context_swap_accepted":false,"original_valid":true,"replay_valid":true,"source_plan_shared":true,"worlds_distinct":true,"protected_worlds_unchanged":true}
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p633_equal_world_origin.unit" end time: Oct 19 13:17 UTC
+"p633_equal_world_origin.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+
+27/353 Testing: p633_unequal_world_origin.unit
+27/353 Test: p633_unequal_world_origin.unit
+Command: "/workspace/p636/build-clang/p633_origin_gate" "/workspace/p636/tests/p630/both_false.nl"
+Directory: /workspace/p636/build-clang
+"p633_unequal_world_origin.unit" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+Stage0 rejected=15 protected_parent=checker-owned-live actual_cli_external_artifact_input=NONE
+{"branch_value_prefix":[9,9],"branch_fact_prefix":[6,6],"local_symbols":[5,5],"tail_ids":[11,11],"arm_values":[83,24],"cross_arm_context_accepted":false,"paired_context_swap_accepted":false,"original_valid":true,"replay_valid":true,"source_plan_shared":true,"worlds_distinct":true,"protected_worlds_unchanged":true}
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p633_unequal_world_origin.unit" end time: Oct 19 13:17 UTC
+"p633_unequal_world_origin.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+
+28/353 Testing: p628_cli_pair_if.integration
+28/353 Test: p628_cli_pair_if.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3" "/workspace/p636/tests/p628/native_test.py" "/workspace/p636/build-clang/newlangc" "/workspace/p636/build-clang/p628_public_probe" "/workspace/p636/build-clang/p517_gate_test" "/workspace/p636/build-clang/p626_comparison_gate" "/workspace/p636/build-clang/p514_gate_test" "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23" "/workspace/p636/tests/p628" "none"
+Directory: /workspace/p636/build-clang
+"p628_cli_pair_if.integration" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+{"source": "pair_true.nl", "check": 0, "c17": 0, "source_sha256": "781824f7d4f7fa8f8aefb2fe49eae11d36d916fdcf0ac46d03f21a123c152d85", "c17_sha256": "d8c3232c39e88d39c31ee6a9f08b600bfde6d3c3321ab22741508103d4294cb9", "comparison": {"operands": [17, 23], "comparison_value": 8, "condition_copy_depth": 1}, "owned": {"if": 21, "bool": 1, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [91, 13], "arm_symbols": [0, 0], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 27, "sibling": 201, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_comparison": [91, 91], "wrong_direction": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91], "wrong_sibling": [91, 91]}, "gates": {"identity": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0", "comparison": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"}, "sanitizer": "none"}
+{"source": "pair_false.nl", "check": 0, "c17": 0, "source_sha256": "41d7c88b7d7d16af3017a0c59dd3f96d722abcfca5baf7858bd5a0151ad69d8a", "c17_sha256": "61e09cbcc4c0a6970fc2145ab420ebab85296b26503e528461026024af012e27", "comparison": {"operands": [29, 23], "comparison_value": 8, "condition_copy_depth": 1}, "owned": {"if": 21, "bool": 0, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [91, 13], "arm_symbols": [0, 0], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 27, "sibling": 201, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_comparison": [91, 91], "wrong_direction": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91], "wrong_sibling": [91, 91]}, "gates": {"identity": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0", "comparison": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"}, "sanitizer": "none"}
+{"source": "pair_alias.nl", "check": 0, "c17": 0, "source_sha256": "f65712a20f3aa149cb7f6fe9dcf4b1b647897424da27d1e1711454b8ccc2767c", "c17_sha256": "411c465940fdedb7055daed397b15f3d208d492ffae61a55c2775307491eacc2", "comparison": {"operands": [19, 31], "comparison_value": 8, "condition_copy_depth": 2}, "owned": {"if": 24, "bool": 1, "condition_symbol": 5, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [91, 13], "arm_symbols": [0, 0], "selected_symbol": 6, "input_symbol": 6, "original_symbol": 3, "old_symbol": 8, "after_symbol": 9, "sibling_symbol": 10, "ref_symbol": 7, "replace_node": 29, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 11], "left_facts": [4, 10], "right_fact": 5, "old": 27, "sibling": 201, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_comparison": [91, 91], "wrong_direction": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91], "wrong_sibling": [91, 91]}, "gates": {"identity": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0", "comparison": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"}, "sanitizer": "none"}
+{"source": "wrong_quantity.nl", "check": 3, "c17": 3, "c_bytes": 0, "diagnostic": "/workspace/p636/tests/p628/wrong_quantity.nl:5:22-5:23: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands", "rollback": "P514_REJECT phase=registration code=USIZE-LESS-THAN-TYPE rollback=PASS artifact=NULL"}
+{"source": "readonly_write.nl", "check": 3, "c17": 3, "c_bytes": 0, "diagnostic": "/workspace/p636/tests/p628/readonly_write.nl:7:34-7:35: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field", "rollback": "P514_REJECT phase=parser code=LOCAL-LOAN-PROFILE state=UNCHANGED semantic=NOT_ENTERED artifact=NULL"}
+{"source": "/workspace/p636/tests/p628/complex_arm.nl", "source_sha256": "d1f536bc14709494db0010f1e3eb10c5c3503ec6eada287904676f7a138ffdad", "check": 0, "c17": 0, "c17_sha256": "bea6f5306948ba42cd7695beaebc96921d03514f643205768d68e3413f044a11", "public": null, "pair_owned": {"if": 21, "bool": 1, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [91, 13], "arm_symbols": [5, 0], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 27, "sibling": 201, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none"}
+{"control": "tests/p521/direct_pair_true.nl", "check": 0, "c17": 0, "native": [0, 0]}
+{"control": "tests/p626/fits_true.nl", "check": 0, "c17": 0, "native": [0, 0]}
+{"control": "tests/fixtures/node_initial_some.nl", "check": 0, "c17": 0, "native": [0, 0]}
+P628 actual original Pair write after source-issued less-than Copy IF; no new authority/public validator
+<end of output>
+Test time =  15.69 sec
+----------------------------------------------------------
+Test Passed.
+"p628_cli_pair_if.integration" end time: Oct 19 13:17 UTC
+"p628_cli_pair_if.integration" time elapsed: 00:00:15
+----------------------------------------------------------
+
+
+20/353 Testing: p633_local_cli.integration
+20/353 Test: p633_local_cli.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3" "/workspace/p636/tests/p633/native_test.py" "/workspace/p636/build-clang/newlangc" "/workspace/p636/build-clang/p628_public_probe" "/workspace/p636/build-clang/p633_public_probe" "/workspace/p636/build-clang/p517_gate_test" "/workspace/p636/build-clang/p514_gate_test" "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23" "/workspace/p636/tests/p633" "none"
+Directory: /workspace/p636/build-clang
+"p633_local_cli.integration" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+{"source": "/workspace/p636/tests/p630/then_true.nl", "source_sha256": "1816dc3c68fdeaddf0141c5a1c75dd935722b06f91e7d934c9ca17bd51bf9031", "check": 0, "c17": 0, "c17_sha256": "687a27bb13e255895117851136f29cca2d75cbc451f8d3c4a5e46776b669b42d", "public": {"if": 21, "condition_symbol": 4, "bool": 1, "selected_symbol": 5, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 1, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [5, 0], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p636/tests/p630/then_false.nl", "source_sha256": "5186078d29654f1550fa759f049b0ade6ca2c3c6299339c08985e5fc7743f17a", "check": 0, "c17": 0, "c17_sha256": "ed69cf9a473270b5ec50d60be483f00a330edc234addf9787492c00500af8ea3", "public": {"if": 21, "condition_symbol": 4, "bool": 0, "selected_symbol": 5, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 0, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [5, 0], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p636/tests/p630/else_false.nl", "source_sha256": "ac1249ed02d68a718f8635ff563696406ca608344a03000805dfe2a52d60de6c", "check": 0, "c17": 0, "c17_sha256": "cefdb7e215af0f2045853d5ca1876d0be1d85b39845f873d088a7cfcba52e771", "public": {"if": 21, "condition_symbol": 4, "bool": 0, "selected_symbol": 5, "arms": [83, 24], "arm_locals": [0, 1], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 0, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [0, 5], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p636/tests/p630/wrong_type.nl", "check": 3, "c17": 3, "c_bytes": 0, "diagnostic": "/workspace/p636/tests/p630/wrong_type.nl:5:26-5:27: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands", "rollback": "P514_REJECT phase=registration code=USIZE-LESS-THAN-TYPE rollback=PASS artifact=NULL"}
+{"source": "/workspace/p636/tests/p630/range_arm.nl", "check": 3, "c17": 3, "c_bytes": 0, "diagnostic": "/workspace/p636/tests/p630/range_arm.nl:6:41-6:48: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255", "rollback": "P514_REJECT phase=registration code=V1-U8-LITERAL-RANGE rollback=PASS artifact=NULL"}
+{"source": "/workspace/p636/tests/p630/two_locals.nl", "check": 0, "c17": 4, "c_bytes": 0, "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p636/tests/p630/two_locals.nl"}
+{"source": "/workspace/p636/tests/p630/nested_arm.nl", "check": 0, "c17": 4, "c_bytes": 0, "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p636/tests/p630/nested_arm.nl"}
+{"source": "/workspace/p636/tests/p630/pure_true.nl", "source_sha256": "380926380dff1682ac638ec08035b0b498632ec2af32189e2685271b9476053a", "check": 0, "c17": 0, "c17_sha256": "3c829da467aab49de6b97d4f98a10dd1a3ec45ffcee617a8a25c9e326e09ecd9", "public": {"if": 14, "condition_symbol": 3, "bool": 1, "selected_symbol": 4, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": null, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91]}, "sanitizer": "none"}
+{"source": "/workspace/p636/tests/p630/pure_false.nl", "source_sha256": "c452b259b7679fd7f269387af2995e06a7b28c71426645b87712ec11b761699b", "check": 0, "c17": 0, "c17_sha256": "f9d5570f2fae03f3209d2bdeeb910765fb8eb2d2e1580cd1ce52fd3ea6d6264b", "public": {"if": 14, "condition_symbol": 3, "bool": 0, "selected_symbol": 4, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": null, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91]}, "sanitizer": "none"}
+{"source": "/workspace/p636/tests/p630/both_false.nl", "source_sha256": "9eb66c3f15469ac534f4806ecff8c309f6e20248120d65463590594ec9926281", "check": 0, "c17": 0, "c17_sha256": "865cb931dcc6b2d837d3653d59d83bb707b8f209327b5d195d19a92322f815a0", "public": {"if": 21, "condition_symbol": 4, "bool": 0, "selected_symbol": 5, "arms": [83, 24], "arm_locals": [1, 1], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 0, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [5, 5], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p636/tests/p630/outer_true.nl", "source_sha256": "c04722d1fecc035660307f15422cf46df255ac5e422575e08a1c5b7fe61fdc58", "check": 0, "c17": 0, "c17_sha256": "c641ea5e8c4da7be6e917d9ad12fb10e9e5f3e207292154076f98f55caa3ba23", "public": {"if": 24, "condition_symbol": 5, "bool": 1, "selected_symbol": 6, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 24, "bool": 1, "condition_symbol": 5, "equal_symbol": 5, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [6, 0], "selected_symbol": 6, "input_symbol": 6, "original_symbol": 3, "old_symbol": 8, "after_symbol": 9, "sibling_symbol": 10, "ref_symbol": 7, "replace_node": 29, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 11], "left_facts": [4, 10], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p636/tests/p631/same_value_local.nl", "source_sha256": "bbea3f108929785345d95502f09f68db9186107b0da65f08a7a229d4b83b2abe", "check": 0, "c17": 0, "c17_sha256": "f872b7be9875a0c26e44efeb795419c2274301e68711b689ae5083149bf2dc2b", "public": {"if": 21, "condition_symbol": 4, "bool": 0, "selected_symbol": 5, "arms": [83, 83], "arm_locals": [1, 1], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 0, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 83], "arm_symbols": [5, 5], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none"}
+{"source": "/workspace/p636/tests/p631/duplicate_outer.nl", "source_sha256": "9d45e58c10609644169c09136346c0498afd53bef81d76e23e725398fb5a316e", "check": 0, "c17": 0, "c17_sha256": "c6e44f899f17e5e654a2ca35d9e6ad880a9375600b8046bf6795f483d03471d0", "public": {"if": 27, "condition_symbol": 6, "bool": 1, "selected_symbol": 7, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 27, "bool": 1, "condition_symbol": 6, "equal_symbol": 6, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [7, 0], "selected_symbol": 7, "input_symbol": 7, "original_symbol": 3, "old_symbol": 9, "after_symbol": 10, "sibling_symbol": 11, "ref_symbol": 8, "replace_node": 32, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 12], "left_facts": [4, 11], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none"}
+{"source": "/workspace/p636/tests/p514/branch_effect.nl", "check": 3, "c17": 3, "c_bytes": 0, "diagnostic": "/workspace/p636/tests/p514/branch_effect.nl:7:18-7:113: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports"}
+<end of output>
+Test time =  21.72 sec
+----------------------------------------------------------
+Test Passed.
+"p633_local_cli.integration" end time: Oct 19 13:17 UTC
+"p633_local_cli.integration" time elapsed: 00:00:21
+----------------------------------------------------------
+
+
+34/353 Testing: p605_arithmetic_comparison.integration
+34/353 Test: p605_arithmetic_comparison.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3" "/workspace/p636/tests/p605/integration_test.py" "/workspace/p636/build-clang/newlangc" "/workspace/p636/build-clang/p605_public_probe" "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23" "/workspace/p636/tests/p605" "none"
+Directory: /workspace/p636/build-clang
+"p605_arithmetic_comparison.integration" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+{"header": "src/semantic_internal.h", "candidate_sha256": "647ae68ffbe578d10124bc4ecdf10266b8d1d399599ef92aae34feea84e12358", "historical_sha256": "15e89aefc0f1574afdc77e6826e79f51902897b8b7ed57650f7a2b82ead1bed2", "exact_private_block_removed": 1}
+{"source": "composed_true.nl", "public": {"left": 0, "right": 7, "bool": 1, "symbols": [1, 2], "bool_symbol": 3, "add": [0, 0, 0], "sub": [9, 2, 7], "authority": 0}, "c_sha256": "c98e43763a8df0c3ed1baf7842bd2b85858b58169855c4ede5a9a57d5e1fb232", "native": {"plain": [0, 0], "observed": [0, 0]}, "sanitizer": "none"}
+{"source": "composed_equal.nl", "public": {"left": 0, "right": 0, "bool": 0, "symbols": [1, 2], "bool_symbol": 3, "add": [0, 0, 0], "sub": [7, 7, 0], "authority": 0}, "c_sha256": "dfa7a0d30d9cea304a50fb74eec1b409c85bfa390560d95cf31e8b66dcc009d9", "native": {"plain": [0, 0], "observed": [0, 0]}, "sanitizer": "none"}
+{"source": "minus_then_less.nl", "exit": 3, "diagnostic": "/workspace/p636/tests/p605/minus_then_less.nl:1:35-1:36: error(unsupported)[USIZE-SUBTRACTION-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported", "c_bytes": 0}
+{"source": "less_then_minus.nl", "exit": 3, "diagnostic": "/workspace/p636/tests/p605/less_then_minus.nl:1:35-1:36: error(unsupported)[USIZE-LESS-THAN-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported", "c_bytes": 0}
+{"source": "equal_then_less.nl", "exit": 3, "diagnostic": "/workspace/p636/tests/p605/equal_then_less.nl:1:35-1:37: error(unsupported)[USIZE-EQUALITY-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported", "c_bytes": 0}
+{"source": "less_then_equal.nl", "exit": 3, "diagnostic": "/workspace/p636/tests/p605/less_then_equal.nl:1:35-1:36: error(unsupported)[USIZE-LESS-THAN-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported", "c_bytes": 0}
+P605 adopted +/- public revalidation and < Copy composition FINITE; no new public proof or Product GO
+<end of output>
+Test time =   2.00 sec
+----------------------------------------------------------
+Test Passed.
+"p605_arithmetic_comparison.integration" end time: Oct 19 13:17 UTC
+"p605_arithmetic_comparison.integration" time elapsed: 00:00:01
+----------------------------------------------------------
+
+
+32/353 Testing: p626_cli_copy_if.integration
+32/353 Test: p626_cli_copy_if.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3" "/workspace/p636/tests/p626/native_test.py" "/workspace/p636/build-clang/newlangc" "/workspace/p636/build-clang/p626_public_probe" "/workspace/p636/build-clang/p508_gate_test" "/workspace/p636/build-clang/p626_comparison_gate" "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23" "/workspace/p636/tests/p626" "none"
+Directory: /workspace/p636/build-clang
+"p626_cli_copy_if.integration" start time: Oct 19 13:17 UTC
+Output:
+----------------------------------------------------------
+{"source": "fits_true.nl", "source_sha256": "e6404c50f47f432b89ac0aafa4f68f2d1d9509c44e3f3504e89d501be7a5a84f", "check": 0, "c17": 0, "c17_sha256": "2b2f3500d5386af0dd75efe421dace6fa2ca82d537ae94b95ea2a7f379bf1edf", "public": {"operands": [11, 17], "comparison_value": 5, "condition_copy_depth": 1}, "if_public": {"if": 20, "condition": 19, "condition_symbol": 3, "bool": 1, "arms": [42, 9], "arm_symbols": [4, 5], "selected_symbol": 6, "copied_symbol": 7, "less_symbol": 3, "operand_symbols": [1, 2], "joined_unknown": true, "authority": 0}, "bindings": {"1": ["usize", 11], "2": ["usize", 17], "3": ["bool", 1], "4": ["u8", 42], "5": ["u8", 9], "6": ["u8", 42], "7": ["u8", 42]}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_comparison": [91, 91], "wrong_direction": [91, 91], "wrong_selected": [91, 91], "wrong_copy": [91, 91]}, "gates": {"if": "P508_GATE rejects=77 original=PASS worlds=UNCHANGED driver_allocations=0", "less": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"}, "sanitizer": "none"}
+{"source": "fits_false.nl", "source_sha256": "83e7d8fc12cd41dc1cdd8aeea64a2b4758819213ddb40d4ca044c57ff4b70d6c", "check": 0, "c17": 0, "c17_sha256": "32f0c422a4c7490d17e55b4c674dc95354f078ebf125c786471c93554779e117", "public": {"operands": [23, 17], "comparison_value": 5, "condition_copy_depth": 1}, "if_public": {"if": 20, "condition": 19, "condition_symbol": 3, "bool": 0, "arms": [42, 9], "arm_symbols": [4, 5], "selected_symbol": 6, "copied_symbol": 7, "less_symbol": 3, "operand_symbols": [1, 2], "joined_unknown": true, "authority": 0}, "bindings": {"1": ["usize", 23], "2": ["usize", 17], "3": ["bool", 0], "4": ["u8", 42], "5": ["u8", 9], "6": ["u8", 9], "7": ["u8", 9]}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_comparison": [91, 91], "wrong_direction": [91, 91], "wrong_selected": [91, 91], "wrong_copy": [91, 91]}, "gates": {"if": "P508_GATE rejects=77 original=PASS worlds=UNCHANGED driver_allocations=0", "less": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"}, "sanitizer": "none"}
+{"source": "fits_alias.nl", "source_sha256": "a126d47d238edb3b6ed9e8ac162705ef4d5a9350c8f091c41f329ec3219768d7", "check": 0, "c17": 0, "c17_sha256": "719c7c1a11d1026c9486c1c9d37a9216567973835854d0b87299ef8e3ace1f70", "public": {"operands": [13, 19], "comparison_value": 5, "condition_copy_depth": 2}, "if_public": {"if": 23, "condition": 22, "condition_symbol": 6, "bool": 1, "arms": [42, 9], "arm_symbols": [4, 5], "selected_symbol": 7, "copied_symbol": 8, "less_symbol": 3, "operand_symbols": [1, 2], "joined_unknown": true, "authority": 0}, "bindings": {"1": ["usize", 13], "2": ["usize", 19], "3": ["bool", 1], "4": ["u8", 42], "5": ["u8", 9], "6": ["bool", 1], "7": ["u8", 42], "8": ["u8", 42]}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_comparison": [91, 91], "wrong_direction": [91, 91], "wrong_selected": [91, 91], "wrong_copy": [91, 91]}, "gates": {"if": "P508_GATE rejects=77 original=PASS worlds=UNCHANGED driver_allocations=0", "less": "same_value_alternate_binding=NOT_PRESENT\nP626_COMPARISON_CONTROLS rejected=24 original=PASS snapshot=UNCHANGED"}, "sanitizer": "none"}
+{"source": "wrong_quantity.nl", "check": 3, "c17": 3, "c_bytes": 0, "diagnostic": "/workspace/p636/tests/p626/wrong_quantity.nl:4:19-4:20: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands"}
+{"source": "/workspace/p636/tests/p626/complex_arm.nl", "source_sha256": "3b797b6ee739f7e9e1170da2844a6e5c669ce78d8ecfbbf1bbb6523358bc2723", "check": 0, "c17": 0, "c17_sha256": "1bc4fc531db8f2d4efacfc415708d7ca318425b3904ae145080f2699d1249975", "public": null, "pair_owned": null, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91]}, "sanitizer": "none"}
+{"control": "tests/p508/renamed_true.nl", "check": 0, "c17": 0, "native": [0, 0]}
+{"control": "tests/fixtures/node_initial_some.nl", "check": 0, "c17": 0, "native": [0, 0]}
+P626 finite ordinary CLI less-than Copy condition -> pure u8 IF; no new public authority or general IF effect
+<end of output>
+Test time =  11.69 sec
+----------------------------------------------------------
+Test Passed.
+"p626_cli_copy_if.integration" end time: Oct 19 13:17 UTC
+"p626_cli_copy_if.integration" time elapsed: 00:00:11
+----------------------------------------------------------

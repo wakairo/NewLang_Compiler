@@ -1,0 +1,9 @@
+{
+  "base": "032cf60aabf4997e672bc3607cf53775d91ececb",
+  "main_c_sha256": "35d7f190a59c23207b20ca4fe4b2003c1b84160e60df64d6da9e4786910c32e6",
+  "binary_sha256": "93730b8261eeb17329d69a10aba7dfbe071d0cc3aa65bbba64faf7782f724706",
+  "status": "HOLD; prototype not integrated, no FULL5/PARTIAL run; local-specific fault suite incomplete; two historical oracle expectations need out-of-scope migration authorization",
+  "original_context_patch_sha256": "d4ad73521de928b9371389faa642d43bf1f5ff8270018b51feecd9c2db3d86c1",
+  "zero_context_patch_sha256": "0130411f7e3515549daa0461da0ae6434e0aca2628cd6e9bc1b85dfac69ec371",
+  "patch_replay": "git apply --unidiff-zero tests/p630/evidence/prototype.diff.txt"
+}
