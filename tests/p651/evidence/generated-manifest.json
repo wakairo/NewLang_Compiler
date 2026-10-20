@@ -1,0 +1,38 @@
+[
+  {
+    "path": "true-plain.c17",
+    "bytes": 2886,
+    "sha256": "ddd6b96e07e92ca3ae79ca13ed85352af07477eff9322da1da7a8993ff484f50",
+    "synthetic": false
+  },
+  {
+    "path": "true-passive.c17",
+    "bytes": 5284,
+    "sha256": "4303e1c4eaec64ef2240efae0bd2379c181915a734b169974763d57ccedda925",
+    "synthetic": false
+  },
+  {
+    "path": "true-synthetic-wrong-observer.c17",
+    "bytes": 5288,
+    "sha256": "c5cb893dab59d0a46ab54388ccddccaf5d6501044dc78df9c5bdbe1fd50985fd",
+    "synthetic": true
+  },
+  {
+    "path": "false-plain.c17",
+    "bytes": 2889,
+    "sha256": "bb5f204fb04c1de6ca7795e6db295939c64695cc03587e523c338dded71648da",
+    "synthetic": false
+  },
+  {
+    "path": "false-passive.c17",
+    "bytes": 5295,
+    "sha256": "aa2e9d724ee59d113f88bfdee0630e2f9dbbe02e3fc4ba7aadfd0fe09989bf38",
+    "synthetic": false
+  },
+  {
+    "path": "false-synthetic-wrong-observer.c17",
+    "bytes": 5299,
+    "sha256": "e9804a5595462de8108167d4d11b5b0dbb67cb65d3b052319424fca605d870ab",
+    "synthetic": true
+  }
+]

@@ -1,0 +1,72 @@
+{
+  "fixed_compiler_base": "f58f1b166780569704ace110d74110ede07b86d2",
+  "production_files": [
+    "src/main.c"
+  ],
+  "cmake_new_tests": 4,
+  "local_results": [
+    {
+      "label": "gcc13-full",
+      "route": "Work/Codex local; frontend/C17 reference, NO LLVM (PARTIAL)",
+      "expected_tests": 357,
+      "passed": true,
+      "raw_utf8_sha256": "5685f1cfc2f598b63dccbdde043a146c61c160a1b254c0df02421c9527438490"
+    },
+    {
+      "label": "clang23-full",
+      "route": "Work/Codex local; frontend/C17 reference, NO LLVM (PARTIAL)",
+      "expected_tests": 357,
+      "passed": true,
+      "raw_utf8_sha256": "64f8be7143846375b3313663d7f65fd336c9b07c184bea96ab25170a0bf0ea14"
+    },
+    {
+      "label": "asan-related",
+      "route": "Work/Codex local; frontend/C17 reference, NO LLVM (PARTIAL)",
+      "expected_tests": 22,
+      "passed": true,
+      "raw_utf8_sha256": "87404544d23adc05d47d40e1dfd10eaf6131ccf27411fdd54f1faff488b1a5aa"
+    },
+    {
+      "label": "ubsan-related",
+      "route": "Work/Codex local; frontend/C17 reference, NO LLVM (PARTIAL)",
+      "expected_tests": 22,
+      "passed": true,
+      "raw_utf8_sha256": "285be6c0c101b40613891ae9f347355f5ffb8eb20bb43040450070289491f3a1"
+    },
+    {
+      "label": "gcc13-new4",
+      "route": "Work/Codex local; frontend/C17 reference, NO LLVM (PARTIAL)",
+      "expected_tests": 4,
+      "passed": true,
+      "raw_utf8_sha256": "44fac07cffe433360e8d73d0420ba97a5dc8946e733ad9feeaeb4ec107686d1b"
+    },
+    {
+      "label": "clang23-new4",
+      "route": "Work/Codex local; frontend/C17 reference, NO LLVM (PARTIAL)",
+      "expected_tests": 4,
+      "passed": true,
+      "raw_utf8_sha256": "6a2777a838a366eed303963f90b6a4b457c98bb836c6593d5dc234b43a01f8f3"
+    }
+  ],
+  "llvm_smoke": "not run locally; reserved for natural FULL5",
+  "remote_ci": "not run yet at local evidence freeze",
+  "oom": {
+    "registration_fail_prefixes": 357,
+    "main_fail_prefixes": 203,
+    "rollback": "PASS",
+    "main_failure_output": "NULL"
+  },
+  "admission_allocations": 0,
+  "private_corruptions_per_positive_source": 15,
+  "plain_and_passive_native_per_configuration": 8,
+  "synthetic_wrong_observer_exits": [
+    91,
+    91,
+    91,
+    91
+  ],
+  "tool_versions": {
+    "gcc13": "x86_64-linux-gnu-gcc-13 (Debian 13.3.0-16) 13.3.0",
+    "clang23": "Debian clang version 23.1.2 (++20260920034005+85ac56026243-1~exp1~20260920034024.76)"
+  }
+}
