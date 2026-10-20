@@ -46,7 +46,8 @@ def observe_c(c, o):
     need(len(pairs) == 2, f"two authentic original carriers required; got {len(pairs)}")
     refs = list(re.finditer(r"uint8_t \*const (nl_local_\d+) = &(nl_local_\d+)\.f([01]);", c))
     need(len(refs) == 2, f"two original field writes required; got {len(refs)}")
-    need(c.count(" ? ") == 1, "one real Copy IF ternary required")
+    need(len(re.findall(r"(?m)^[ \\t]*if \\(nl_local_\\d+\\) \\{$", c)) == 1,
+         "one real Copy IF if/else required")
     output = c.replace("#include <stdint.h>", "#include <stdint.h>\n#include <stdlib.h>", 1)
     pairs_names = [p[1] for p in pairs]
     need(len(set(pairs_names)) == 2, "root aliases")
