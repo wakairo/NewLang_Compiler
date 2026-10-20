@@ -1,0 +1,19 @@
+Internal ctest changing into directory: /workspace/p633/build
+Test project /workspace/p633/build
+    Start 18: p633_local_same_value.unit
+1/2 Test #18: p633_local_same_value.unit .........***Failed    0.01 sec
+/workspace/p633/tests/p633/local_gate.c:229: !validates(replay.artifact)
+
+    Start 19: p633_local_different_values.unit
+2/2 Test #19: p633_local_different_values.unit ...***Failed    0.04 sec
+/workspace/p633/tests/p633/local_gate.c:229: !validates(replay.artifact)
+
+
+0% tests passed, 2 tests failed out of 2
+
+Total Test time (real) =   0.07 sec
+
+The following tests FAILED:
+	 18 - p633_local_same_value.unit (Failed)
+	 19 - p633_local_different_values.unit (Failed)
+Errors while running CTest

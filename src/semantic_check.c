@@ -4090,7 +4090,8 @@ static bool save_arm(Check *check, NLCheckedNodeId match,
         return false;
     }
     check->artifact->arms = arms;
-    arms[check->artifact->arm_count++] = (NLCheckedArm){match, arm};
+    arms[check->artifact->arm_count++] =
+        (NLCheckedArm){match, arm, arm->context};
     return true;
 }
 

@@ -1,0 +1,10 @@
+Internal ctest changing into directory: /workspace/p633/build
+Test project /workspace/p633/build
+    Start 13: p633_equal_world_origin.unit
+1/2 Test #13: p633_equal_world_origin.unit .....   Passed    0.00 sec
+    Start 14: p633_unequal_world_origin.unit
+2/2 Test #14: p633_unequal_world_origin.unit ...   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   0.02 sec

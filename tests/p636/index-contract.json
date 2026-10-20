@@ -1,0 +1,8 @@
+{
+  "time_jst": "2026-10-19T22:15:53.937678+09:00",
+  "cases": 17,
+  "zero_parent": "valid no-parent sentinel in general; direct index test excludes it; preserve private source-consumer relation REJECT in actual registered-source worlds",
+  "positive_plain_fragment": "actual registered Pair then actual checked let p=Pair{left:u8(31),right:u8(117)} source, no IF/backend dependence and no semantic seed",
+  "negative_status": "NL_CHECK_INTERNAL_ERROR before dereference; normal source worlds revalidate after restore, no mutation by validator",
+  "trusted": "source-issued owning buffers/counts/type declarations; hostile IDs/record fields, not arbitrary bogus memory addresses"
+}

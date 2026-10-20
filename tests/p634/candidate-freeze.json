@@ -1,0 +1,24 @@
+{
+  "base": "032cf60aabf4997e672bc3607cf53775d91ececb",
+  "canonical": "Draft17.32",
+  "pre_pr_freeze_jst": "2026-10-19T21:49:34.906035+09:00",
+  "historical_header_sha256": "15e89aefc0f1574afdc77e6826e79f51902897b8b7ed57650f7a2b82ead1bed2",
+  "candidate_header_sha256": "647ae68ffbe578d10124bc4ecdf10266b8d1d399599ef92aae34feea84e12358",
+  "files": {
+    "src/main.c": "3758bc26b6ff4256235b7df0b722d27ac2ada342f1b48aef1a7d02689900eac0",
+    "src/semantic_check.c": "00ff60031065330da6b284c74f07cce1be031c6aed03a5589a005bef33b6624c",
+    "src/semantic_internal.h": "647ae68ffbe578d10124bc4ecdf10266b8d1d399599ef92aae34feea84e12358",
+    "CMakeLists.txt": "708e4eea78bd9401dd631786490e946172c97c853b188d8e91bfca1203927df4",
+    "tests/p605/integration_test.py": "dc2ee330a80883a8104bf3daa403b8ccd52bceff942d56d28afae5dac9d695cd",
+    "tests/p626/native_test.py": "c1aaf364e24e00b8b4b85f7165ea75e6d168730d5746bc78bb90f348392eba31",
+    "tests/p628/native_test.py": "c6c66a8dce961d2c798767c2bdd9bffbc5d7edd65e4f7e14ccd058e4fe583f9c",
+    "tests/p634/ended_root_gate.c": "dea7d5d19a0c914119d6528090df8823963a33d32ba707984319e5bd2c7bece6",
+    "tests/p634/hash_gate_test.py": "8f03e83c3e217496f07ff3a42ac284d5803e8ec5ee9a2994d62548962cf4aca2"
+  },
+  "final_local_tests": {
+    "GCC13": 350,
+    "Clang23.1.2": 350
+  },
+  "ci_budget": "one natural FULL5 + PARTIAL pair, zero reruns; no head update after PR",
+  "authority_limit": "DRAFT DO NOT MERGE; new source semantics/public issuer/CFG/owner prohibited"
+}
