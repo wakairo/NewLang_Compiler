@@ -1,0 +1,381 @@
+[  0%] Building C object CMakeFiles/newlang_diagnostic.dir/src/diagnostic.c.o
+[  0%] Building C object CMakeFiles/newlang_source.dir/src/source.c.o
+[  0%] Linking C static library libnewlang_diagnostic.a
+[  0%] Built target newlang_diagnostic
+[  1%] Linking C static library libnewlang_source.a
+[  1%] Building C object CMakeFiles/llvm_smoke.dir/tests/integration/llvm_smoke.c.o
+[  1%] Built target newlang_source
+[  1%] Building C object CMakeFiles/diagnostic_test.dir/tests/unit/diagnostic_test.c.o
+[  1%] Linking CXX executable llvm_smoke
+[  2%] Linking C executable diagnostic_test
+[  2%] Built target diagnostic_test
+[  3%] Building C object CMakeFiles/source_test.dir/tests/unit/source_test.c.o
+[  3%] Linking C executable source_test
+[  3%] Built target source_test
+[  4%] Building C object CMakeFiles/newlang_lexer.dir/src/lexer.c.o
+[  4%] Linking C static library libnewlang_lexer.a
+[  4%] Built target newlang_lexer
+[  4%] Building C object CMakeFiles/newlang_syntax.dir/src/syntax.c.o
+[  5%] Linking C static library libnewlang_syntax.a
+[  5%] Built target newlang_syntax
+[  5%] Building C object CMakeFiles/lexer_test.dir/tests/unit/lexer_test.c.o
+[  5%] Linking C executable lexer_test
+[  5%] Built target lexer_test
+[  6%] Building C object CMakeFiles/lexical_frontend_test.dir/tests/integration/lexical_frontend_test.c.o
+[  6%] Linking C executable lexical_frontend_test
+[  6%] Built target lexical_frontend_test
+[  7%] Building C object CMakeFiles/newlang_parser.dir/src/parser.c.o
+[  7%] Linking C static library libnewlang_parser.a
+[  7%] Built target newlang_parser
+[  7%] Building C object CMakeFiles/newlang_checked.dir/src/checked.c.o
+[  7%] Built target llvm_smoke
+[  7%] Linking C static library libnewlang_checked.a
+[  7%] Building C object CMakeFiles/newlang_parser_p534.dir/src/parser.c.o
+[  7%] Built target newlang_checked
+[  7%] Building C object CMakeFiles/parser_test.dir/tests/unit/parser_test.c.o
+[  8%] Linking C executable parser_test
+[  9%] Linking C static library libnewlang_parser_p534.a
+[  9%] Built target newlang_parser_p534
+[ 10%] Building C object CMakeFiles/syntax_frontend_test.dir/tests/integration/syntax_frontend_test.c.o
+[ 10%] Linking C executable syntax_frontend_test
+[ 10%] Built target parser_test
+[ 10%] Building C object CMakeFiles/newlang_semantic.dir/src/array4.c.o
+[ 10%] Building C object CMakeFiles/newlang_semantic.dir/src/usize_addition.c.o
+[ 10%] Built target syntax_frontend_test
+[ 11%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic.c.o
+[ 11%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o
+[ 12%] Building C object CMakeFiles/newlang_semantic.dir/src/recursive_type.c.o
+[ 12%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_node.c.o
+[ 12%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_join.c.o
+[ 13%] Building C object CMakeFiles/newlang_semantic.dir/src/captured_closure.c.o
+[ 13%] Building C object CMakeFiles/newlang_semantic.dir/src/node_join.c.o
+[ 14%] Building C object CMakeFiles/newlang_semantic.dir/src/node_links.c.o
+[ 14%] Building C object CMakeFiles/newlang_semantic.dir/src/packet_fork.c.o
+[ 14%] Building C object CMakeFiles/newlang_semantic.dir/src/fixed_field.c.o
+[ 15%] Building C object CMakeFiles/newlang_semantic.dir/src/sum.c.o
+[ 15%] Building C object CMakeFiles/newlang_semantic.dir/src/raw_storage.c.o
+[ 15%] Building C object CMakeFiles/newlang_semantic.dir/src/function_body.c.o
+[ 16%] Building C object CMakeFiles/newlang_semantic.dir/src/typed_owner.c.o
+[ 16%] Building C object CMakeFiles/newlang_semantic.dir/src/custody.c.o
+[ 17%] Building C object CMakeFiles/newlang_semantic.dir/src/control.c.o
+[ 17%] Linking C static library libnewlang_semantic.a
+[ 17%] Built target newlang_semantic
+[ 18%] Building C object CMakeFiles/newlang_checked_c_node.dir/src/checked_c_node.c.o
+[ 19%] Building C object CMakeFiles/p572_public_probe.dir/tests/p572/public_probe.c.o
+[ 19%] Linking C executable p572_public_probe
+[ 19%] Built target p572_public_probe
+[ 19%] Building C object CMakeFiles/p534_public_probe.dir/tests/p534/public_probe.c.o
+[ 19%] Building C object CMakeFiles/newlang_checked_c_node.dir/src/checked_c_five.c.o
+[ 19%] Linking C executable p534_public_probe
+[ 20%] Linking C static library libnewlang_checked_c_node.a
+[ 20%] Built target newlang_checked_c_node
+[ 20%] Building C object CMakeFiles/p534_fault_test.dir/tests/p534/fault_test.c.o
+[ 20%] Built target p534_public_probe
+[ 21%] Linking C executable p534_fault_test
+[ 21%] Building C object CMakeFiles/p541_public_probe.dir/tests/p541/public_probe.c.o
+[ 22%] Linking C executable p541_public_probe
+[ 22%] Built target p534_fault_test
+[ 22%] Building C object CMakeFiles/p541_fault_test.dir/tests/p541/fault_test.c.o
+[ 22%] Built target p541_public_probe
+[ 23%] Linking C executable p541_fault_test
+[ 23%] Building C object CMakeFiles/p636_index_gate.dir/tests/p636/index_gate.c.o
+[ 23%] Built target p541_fault_test
+[ 23%] Building C object CMakeFiles/p634_ended_root_gate.dir/tests/p634/ended_root_gate.c.o
+[ 24%] Linking C executable p636_index_gate
+[ 25%] Linking C executable p634_ended_root_gate
+[ 25%] Built target p636_index_gate
+[ 25%] Building C object CMakeFiles/p633_derivation_gate.dir/tests/p633/derivation_gate.c.o
+[ 25%] Built target p634_ended_root_gate
+[ 25%] Building C object CMakeFiles/p633_local_gate.dir/tests/p633/local_gate.c.o
+[ 26%] Linking C executable p633_derivation_gate
+[ 26%] Built target p633_derivation_gate
+[ 26%] Building C object CMakeFiles/p651_gate.dir/tests/p651/gate.c.o
+[ 26%] Linking C executable p633_local_gate
+[ 26%] Built target p633_local_gate
+[ 27%] Building C object CMakeFiles/p633_public_probe.dir/tests/p633/public_probe.c.o
+[ 27%] Linking C executable p633_public_probe
+[ 27%] Linking C executable p651_gate
+[ 27%] Built target p651_gate
+[ 27%] Built target p633_public_probe
+[ 28%] Building C object CMakeFiles/p633_origin_gate.dir/tests/p633/origin_gate.c.o
+[ 29%] Building C object CMakeFiles/p628_public_probe.dir/tests/p628/public_probe.c.o
+[ 29%] Linking C executable p628_public_probe
+[ 29%] Linking C executable p633_origin_gate
+[ 29%] Built target p628_public_probe
+[ 30%] Building C object CMakeFiles/p626_public_probe.dir/tests/p626/public_probe.c.o
+[ 30%] Linking C executable p626_public_probe
+[ 30%] Built target p633_origin_gate
+[ 30%] Building C object CMakeFiles/p626_comparison_gate.dir/tests/p626/comparison_gate.c.o
+[ 30%] Built target p626_public_probe
+[ 30%] Building C object CMakeFiles/p605_public_probe.dir/tests/p605/public_probe.c.o
+[ 31%] Linking C executable p605_public_probe
+[ 31%] Linking C executable p626_comparison_gate
+[ 31%] Built target p605_public_probe
+[ 31%] Building C object CMakeFiles/p603_public_probe.dir/tests/p603/public_probe.c.o
+[ 32%] Linking C executable p603_public_probe
+[ 32%] Built target p626_comparison_gate
+[ 33%] Building C object CMakeFiles/p603_gate_probe.dir/tests/p603/gate_probe.c.o
+[ 33%] Linking C executable p603_gate_probe
+[ 33%] Built target p603_public_probe
+[ 33%] Building C object CMakeFiles/p603_comparison_test.dir/tests/p603/comparison_test.c.o
+[ 33%] Linking C executable p603_comparison_test
+[ 33%] Built target p603_gate_probe
+[ 33%] Building C object CMakeFiles/p504_public_probe.dir/tests/p504/public_probe.c.o
+[ 34%] Linking C executable p504_public_probe
+[ 34%] Built target p603_comparison_test
+[ 34%] Building C object CMakeFiles/p504_gate_probe.dir/tests/p504/gate_probe.c.o
+[ 34%] Built target p504_public_probe
+[ 35%] Building C object CMakeFiles/p504_equality_test.dir/tests/p504/equality_test.c.o
+[ 35%] Linking C executable p504_equality_test
+[ 36%] Linking C executable p504_gate_probe
+[ 36%] Built target p504_equality_test
+[ 37%] Building C object CMakeFiles/p508_public_probe.dir/tests/p508/public_probe.c.o
+[ 37%] Linking C executable p508_public_probe
+[ 37%] Built target p504_gate_probe
+[ 37%] Building C object CMakeFiles/p508_gate_test.dir/tests/p508/gate_test.c.o
+[ 37%] Built target p508_public_probe
+[ 37%] Building C object CMakeFiles/p514_public_probe.dir/tests/p514/public_probe.c.o
+[ 38%] Linking C executable p514_public_probe
+[ 38%] Linking C executable p508_gate_test
+[ 38%] Built target p514_public_probe
+[ 39%] Building C object CMakeFiles/p514_gate_test.dir/tests/p514/gate_test.c.o
+[ 39%] Built target p508_gate_test
+[ 40%] Building C object CMakeFiles/p517_public_probe.dir/tests/p517/public_probe.c.o
+[ 40%] Linking C executable p517_public_probe
+[ 40%] Linking C executable p514_gate_test
+[ 40%] Built target p517_public_probe
+[ 40%] Building C object CMakeFiles/p517_gate_test.dir/tests/p517/gate_test.c.o
+[ 40%] Built target p514_gate_test
+[ 40%] Building C object CMakeFiles/p521_owned_probe.dir/tests/p521/owned_probe.c.o
+[ 40%] Linking C executable p517_gate_test
+[ 40%] Built target p517_gate_test
+[ 41%] Building C object CMakeFiles/p521_call_gate.dir/tests/p521/call_gate.c.o
+[ 42%] Linking C executable p521_owned_probe
+[ 42%] Built target p521_owned_probe
+[ 42%] Building C object CMakeFiles/semantic_test.dir/tests/unit/semantic_test.c.o
+[ 42%] Linking C executable p521_call_gate
+[ 43%] Linking C executable semantic_test
+[ 43%] Built target p521_call_gate
+[ 44%] Building C object CMakeFiles/semantic_frontend_test.dir/tests/integration/semantic_frontend_test.c.o
+[ 44%] Built target semantic_test
+[ 45%] Building C object CMakeFiles/raw_storage_test.dir/tests/unit/raw_storage_test.c.o
+[ 45%] Linking C executable semantic_frontend_test
+[ 45%] Linking C executable raw_storage_test
+[ 45%] Built target semantic_frontend_test
+[ 45%] Building C object CMakeFiles/raw_storage_cycle_test.dir/tests/integration/raw_storage_cycle_test.c.o
+[ 45%] Linking C executable raw_storage_cycle_test
+[ 45%] Built target raw_storage_test
+[ 45%] Building C object CMakeFiles/source_slice_test.dir/tests/unit/source_slice_test.c.o
+[ 45%] Built target raw_storage_cycle_test
+[ 45%] Building C object CMakeFiles/source_slice_frontend_test.dir/tests/integration/source_slice_frontend_test.c.o
+[ 45%] Linking C executable source_slice_test
+[ 46%] Linking C executable source_slice_frontend_test
+[ 46%] Built target source_slice_test
+[ 46%] Building C object CMakeFiles/sum_slice_test.dir/tests/unit/sum_slice_test.c.o
+[ 46%] Built target source_slice_frontend_test
+[ 46%] Building C object CMakeFiles/sum_frontend_test.dir/tests/integration/sum_frontend_test.c.o
+[ 47%] Linking C executable sum_frontend_test
+[ 47%] Linking C executable sum_slice_test
+[ 47%] Built target sum_frontend_test
+[ 47%] Building C object CMakeFiles/ref_join_test.dir/tests/unit/ref_join_test.c.o
+[ 47%] Built target sum_slice_test
+[ 47%] Building C object CMakeFiles/ref_join_frontend_test.dir/tests/integration/ref_join_frontend_test.c.o
+[ 47%] Linking C executable ref_join_test
+[ 48%] Linking C executable ref_join_frontend_test
+[ 48%] Built target ref_join_test
+[ 48%] Building C object CMakeFiles/function_body_test.dir/tests/unit/function_body_test.c.o
+[ 48%] Built target ref_join_frontend_test
+[ 48%] Building C object CMakeFiles/function_body_frontend_test.dir/tests/integration/function_body_frontend_test.c.o
+[ 48%] Linking C executable function_body_test
+[ 49%] Linking C executable function_body_frontend_test
+[ 49%] Built target function_body_test
+[ 50%] Building C object CMakeFiles/return_test.dir/tests/unit/return_test.c.o
+[ 50%] Built target function_body_frontend_test
+[ 51%] Building C object CMakeFiles/function_source_test.dir/tests/unit/function_source_test.c.o
+[ 51%] Linking C executable return_test
+[ 51%] Linking C executable function_source_test
+[ 51%] Built target return_test
+[ 51%] Building C object CMakeFiles/structural_name_test.dir/tests/unit/structural_name_test.c.o
+[ 51%] Built target function_source_test
+[ 51%] Building C object CMakeFiles/control_test.dir/tests/unit/control_test.c.o
+[ 52%] Linking C executable structural_name_test
+[ 52%] Linking C executable control_test
+[ 52%] Built target structural_name_test
+[ 53%] Building C object CMakeFiles/loop_test.dir/tests/unit/loop_test.c.o
+[ 53%] Built target control_test
+[ 53%] Building C object CMakeFiles/if_test.dir/tests/unit/if_test.c.o
+[ 53%] Linking C executable loop_test
+[ 54%] Linking C executable if_test
+[ 54%] Built target loop_test
+[ 54%] Building C object CMakeFiles/unit_name_test.dir/tests/unit/unit_name_test.c.o
+[ 55%] Linking C executable unit_name_test
+[ 55%] Built target if_test
+[ 55%] Building C object CMakeFiles/argument_compatibility_test.dir/tests/unit/argument_compatibility_test.c.o
+[ 55%] Linking C executable argument_compatibility_test
+[ 55%] Built target unit_name_test
+[ 56%] Building C object CMakeFiles/local_root_test.dir/tests/unit/local_root_test.c.o
+[ 56%] Built target argument_compatibility_test
+[ 57%] Building C object CMakeFiles/avs_test.dir/tests/unit/avs_test.c.o
+[ 57%] Linking C executable local_root_test
+[ 57%] Linking C executable avs_test
+[ 57%] Built target local_root_test
+[ 57%] Building C object CMakeFiles/u8_literal_test.dir/tests/unit/u8_literal_test.c.o
+[ 57%] Built target avs_test
+[ 57%] Building C object CMakeFiles/p497_literal_test.dir/tests/p497/literal_test.c.o
+[ 58%] Linking C executable u8_literal_test
+[ 59%] Linking C executable p497_literal_test
+[ 59%] Built target u8_literal_test
+[ 59%] Building C object CMakeFiles/p497_public_probe.dir/tests/p497/public_probe.c.o
+[ 59%] Linking C executable p497_public_probe
+[ 59%] Built target p497_literal_test
+[ 59%] Building C object CMakeFiles/fixed_field_test.dir/tests/unit/fixed_field_test.c.o
+[ 60%] Linking C executable fixed_field_test
+[ 60%] Built target p497_public_probe
+[ 61%] Building C object CMakeFiles/recursive_type_test.dir/tests/unit/recursive_type_test.c.o
+[ 61%] Linking C executable recursive_type_test
+[ 61%] Built target fixed_field_test
+[ 61%] Building C object CMakeFiles/heap_link_test.dir/tests/unit/heap_link_test.c.o
+[ 62%] Linking C executable heap_link_test
+[ 62%] Built target recursive_type_test
+[ 63%] Building C object CMakeFiles/heap_link_support_test.dir/tests/unit/heap_link_support_test.c.o
+[ 63%] Linking C executable heap_link_support_test
+[ 63%] Built target heap_link_test
+[ 64%] Building C object CMakeFiles/heap_link_checked_probe.dir/tests/integration/heap_link_checked_probe.c.o
+[ 64%] Linking C executable heap_link_checked_probe
+[ 64%] Built target heap_link_support_test
+[ 64%] Building C object CMakeFiles/heap_link_backend_test.dir/tests/unit/heap_link_backend_test.c.o
+[ 64%] Built target heap_link_checked_probe
+[ 64%] Linking C executable heap_link_backend_test
+[ 64%] Building C object CMakeFiles/allocated_backend_test.dir/tests/unit/allocated_backend_test.c.o
+[ 64%] Linking C executable allocated_backend_test
+[ 64%] Built target heap_link_backend_test
+[ 65%] Building C object CMakeFiles/allocated_checked_probe.dir/tests/integration/allocated_checked_probe.c.o
+[ 65%] Built target allocated_backend_test
+[ 65%] Linking C executable allocated_checked_probe
+[ 66%] Building C object CMakeFiles/handoff_backend_test.dir/tests/unit/handoff_backend_test.c.o
+[ 66%] Linking C executable handoff_backend_test
+[ 66%] Built target allocated_checked_probe
+[ 66%] Building C object CMakeFiles/handoff_checked_probe.dir/tests/integration/handoff_checked_probe.c.o
+[ 67%] Linking C executable handoff_checked_probe
+[ 67%] Built target handoff_backend_test
+[ 67%] Building C object CMakeFiles/live_return_backend_test.dir/tests/unit/live_return_backend_test.c.o
+[ 68%] Linking C executable live_return_backend_test
+[ 68%] Built target handoff_checked_probe
+[ 68%] Building C object CMakeFiles/live_tail_return_test.dir/tests/unit/live_tail_return_test.c.o
+[ 69%] Linking C executable live_tail_return_test
+[ 69%] Built target live_return_backend_test
+[ 70%] Building C object CMakeFiles/packet_fork_test.dir/tests/unit/packet_fork_test.c.o
+[ 70%] Built target live_tail_return_test
+[ 70%] Building C object CMakeFiles/packet_retention_test.dir/tests/unit/packet_retention_test.c.o
+[ 70%] Linking C executable packet_fork_test
+[ 71%] Linking C executable packet_retention_test
+[ 71%] Built target packet_fork_test
+[ 71%] Built target packet_retention_test
+[ 71%] Building C object CMakeFiles/custody_source_test.dir/tests/unit/custody_source_test.c.o
+[ 72%] Building C object CMakeFiles/custody_checked_probe.dir/tests/integration/custody_checked_probe.c.o
+[ 72%] Linking C executable custody_checked_probe
+[ 73%] Linking C executable custody_source_test
+[ 73%] Built target custody_source_test
+[ 73%] Built target custody_checked_probe
+[ 74%] Building C object CMakeFiles/typed_owner_test.dir/tests/unit/typed_owner_test.c.o
+[ 75%] Building C object CMakeFiles/custody_definition_test.dir/tests/unit/custody_definition_test.c.o
+[ 75%] Linking C executable typed_owner_test
+[ 75%] Linking C executable custody_definition_test
+[ 75%] Built target typed_owner_test
+[ 75%] Building C object CMakeFiles/two_heap_checked_probe.dir/tests/integration/two_heap_checked_probe.c.o
+[ 76%] Linking C executable two_heap_checked_probe
+[ 76%] Built target custody_definition_test
+[ 77%] Building C object CMakeFiles/two_heap_backend_test.dir/tests/unit/two_heap_backend_test.c.o
+[ 77%] Linking C executable two_heap_backend_test
+[ 77%] Built target two_heap_checked_probe
+[ 77%] Building C object CMakeFiles/two_heap_test.dir/tests/unit/two_heap_test.c.o
+[ 77%] Linking C executable two_heap_test
+[ 77%] Built target two_heap_backend_test
+[ 78%] Building C object CMakeFiles/captured_closure_test.dir/tests/unit/captured_closure_test.c.o
+[ 78%] Linking C executable captured_closure_test
+[ 78%] Built target two_heap_test
+[ 79%] Building C object CMakeFiles/five_checked_probe.dir/tests/integration/five_checked_probe.c.o
+[ 79%] Linking C executable five_checked_probe
+[ 79%] Built target captured_closure_test
+[ 79%] Building C object CMakeFiles/five_backend_test.dir/tests/unit/five_backend_test.c.o
+[ 79%] Linking C executable five_backend_test
+[ 79%] Built target five_checked_probe
+[ 79%] Building C object CMakeFiles/allocated_join_test.dir/tests/unit/allocated_join_test.c.o
+[ 80%] Linking C executable allocated_join_test
+[ 80%] Built target five_backend_test
+[ 80%] Building C object CMakeFiles/allocated_node_test.dir/tests/unit/allocated_node_test.c.o
+[ 81%] Linking C executable allocated_node_test
+[ 81%] Built target allocated_join_test
+[ 82%] Building C object CMakeFiles/p466_public_probe.dir/tests/p466/public_probe.c.o
+[ 82%] Linking C executable p466_public_probe
+[ 82%] Built target allocated_node_test
+[ 83%] Building C object CMakeFiles/p471_public_probe.dir/tests/p471/public_probe.c.o
+[ 83%] Linking C executable p471_public_probe
+[ 83%] Built target p466_public_probe
+[ 83%] Building C object CMakeFiles/p490_public_probe.dir/tests/p490/public_probe.c.o
+[ 84%] Linking C executable p490_public_probe
+[ 84%] Built target p471_public_probe
+[ 84%] Building C object CMakeFiles/node_link_test.dir/tests/unit/node_link_test.c.o
+[ 84%] Linking C executable node_link_test
+[ 84%] Built target p490_public_probe
+[ 84%] Building C object CMakeFiles/node_initial_test.dir/tests/unit/node_initial_test.c.o
+[ 85%] Linking C executable node_initial_test
+[ 85%] Built target node_link_test
+[ 86%] Building C object CMakeFiles/node_join_native_test.dir/tests/unit/node_join_native_test.c.o
+[ 86%] Built target node_initial_test
+[ 86%] Linking C executable node_join_native_test
+[ 86%] Building C object CMakeFiles/node_join_native_probe.dir/tests/integration/node_join_native_probe.c.o
+[ 86%] Linking C executable node_join_native_probe
+[ 86%] Built target node_join_native_test
+[ 86%] Built target node_join_native_probe
+[ 86%] Building C object CMakeFiles/checked_c_node_test.dir/tests/unit/checked_c_node_test.c.o
+[ 86%] Building C object CMakeFiles/node_checked_probe.dir/tests/integration/node_checked_probe.c.o
+[ 87%] Linking C executable node_checked_probe
+[ 88%] Linking C executable checked_c_node_test
+[ 88%] Built target node_checked_probe
+[ 89%] Building C object CMakeFiles/node_join_proof_test.dir/tests/unit/node_join_proof_test.c.o
+[ 89%] Built target checked_c_node_test
+[ 89%] Building C object CMakeFiles/node_join_test.dir/tests/unit/node_join_test.c.o
+[ 89%] Linking C executable node_join_proof_test
+[ 90%] Linking C executable node_join_test
+[ 90%] Built target node_join_proof_test
+[ 90%] Building C object CMakeFiles/nested_u8_checked_probe.dir/tests/integration/nested_u8_checked_probe.c.o
+[ 90%] Built target node_join_test
+[ 91%] Building C object CMakeFiles/u8_call_checked_probe.dir/tests/integration/u8_call_checked_probe.c.o
+[ 92%] Linking C executable nested_u8_checked_probe
+[ 92%] Built target nested_u8_checked_probe
+[ 92%] Linking C executable u8_call_checked_probe
+[ 92%] Building C object CMakeFiles/p589_public_probe.dir/tests/p589/public_probe.c.o
+[ 92%] Linking C executable p589_public_probe
+[ 92%] Built target p589_public_probe
+[ 92%] Built target u8_call_checked_probe
+[ 93%] Building C object CMakeFiles/p589_gate_test.dir/tests/p589/gate_test.c.o
+[ 93%] Building C object CMakeFiles/p589_parser_oom_test.dir/tests/p589/parser_oom_test.c.o
+[ 94%] Linking C executable p589_parser_oom_test
+[ 94%] Built target p589_parser_oom_test
+[ 94%] Building C object CMakeFiles/p596_public_probe.dir/tests/p596/public_probe.c.o
+[ 95%] Linking C executable p596_public_probe
+[ 95%] Built target p596_public_probe
+[ 96%] Building C object CMakeFiles/p596_gate_test.dir/tests/p596/gate_test.c.o
+[ 96%] Linking C executable p589_gate_test
+[ 96%] Built target p589_gate_test
+[ 97%] Building C object CMakeFiles/p596_parser_oom_test.dir/tests/p596/parser_oom_test.c.o
+[ 97%] Linking C executable p596_gate_test
+[ 97%] Linking C executable p596_parser_oom_test
+[ 97%] Built target p596_parser_oom_test
+[ 97%] Building C object CMakeFiles/p596_proof_core_test.dir/tests/p596/proof_core_test.c.o
+[ 97%] Built target p596_gate_test
+[ 97%] Building C object CMakeFiles/newlangc.dir/src/main.c.o
+[ 98%] Linking C executable p596_proof_core_test
+[ 98%] Built target p596_proof_core_test
+[ 99%] Building C object CMakeFiles/newlangc_p534.dir/src/main.c.o
+[ 99%] Linking C executable newlangc
+[ 99%] Built target newlangc
+[ 99%] Building C object CMakeFiles/p572_fault_test.dir/tests/p572/fault_test.c.o
+[ 99%] Linking C executable newlangc_p534
+[ 99%] Linking C executable p572_fault_test
+[ 99%] Built target newlangc_p534
+[ 99%] Built target p572_fault_test
+[100%] Building C object CMakeFiles/p534_semantic_gate.dir/tests/p514/gate_test.c.o
+[100%] Linking C executable p534_semantic_gate
+[100%] Built target p534_semantic_gate

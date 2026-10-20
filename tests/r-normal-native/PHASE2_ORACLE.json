@@ -1,0 +1,118 @@
+{
+  "issue": 653,
+  "phase": "R653-PHASE2 NON-BLIND calibrated PRE-EXECUTION oracle",
+  "fixed_main": "9da4b4ce6163592f576c5a2ecb937ff6e230e6f8",
+  "fixed_candidate": "bebff1213223e86edfd702129ad8b3f2deb27289",
+  "canonical": "Draft17.32",
+  "origin": "R-chosen names and numbers; shape calibrated to frozen P651 finite left/left old-Copy-carry profile after immutable BLIND verdict; not fresh BLIND",
+  "old_first_pass": {
+    "freeze": "tests/r653/freeze.json",
+    "result": "tests/r653/FIRST_PASS.md",
+    "preserve_original": true
+  },
+  "cases": {
+    "phase2_true.nl": {
+      "blob": "415a7d4be78e72c6825af130abb62ae58ef6d505",
+      "oracle": {
+        "originals": [
+          [
+            57,
+            209
+          ],
+          [
+            131,
+            244
+          ]
+        ],
+        "condition": 1,
+        "arm_values": [
+          186,
+          42
+        ],
+        "fields": [
+          0,
+          0
+        ],
+        "old": [
+          57,
+          131
+        ],
+        "updates": [
+          186,
+          57
+        ],
+        "final": [
+          [
+            186,
+            209
+          ],
+          [
+            57,
+            244
+          ]
+        ]
+      },
+      "expected": "CHECK0; source-issued owned; emitted C17; original 2 roots & 2 sibling fields; old Copy 57 carried to second left; O0/O2 plain/passive native"
+    },
+    "phase2_false.nl": {
+      "blob": "0a6b7f2904e277152d0b1e635c5e662425d291f1",
+      "oracle": {
+        "originals": [
+          [
+            28,
+            183
+          ],
+          [
+            87,
+            164
+          ]
+        ],
+        "condition": 0,
+        "arm_values": [
+          152,
+          19
+        ],
+        "fields": [
+          0,
+          0
+        ],
+        "old": [
+          28,
+          87
+        ],
+        "updates": [
+          19,
+          28
+        ],
+        "final": [
+          [
+            19,
+            183
+          ],
+          [
+            28,
+            164
+          ]
+        ]
+      },
+      "expected": "CHECK0; source-issued owned; emitted C17; original 2 roots & 2 sibling fields; old Copy 28 carried to second left; O0/O2 plain/passive native"
+    }
+  },
+  "controls": {
+    "bad_type.nl": "semantic3 and no C",
+    "true_world.nl": "canonical CHECK0, backend4 and no C (original BLIND unchanged)",
+    "false_world.nl": "canonical CHECK0, backend4 and no C (original BLIND unchanged)"
+  },
+  "mutation_predictions": [
+    "zero and out-of-range root/child/field/value/fact IDs rejected",
+    "original root or child substitution rejected",
+    "wrong arm origin/world/ordinal rejected",
+    "wrong post/pre-fact, old/new result and order corruption rejected",
+    "genuine unchanged source-issued owned accepted"
+  ],
+  "stop": [
+    "credible forged authority acceptance",
+    "wrong guest values or corrupted original/siblings",
+    "host or guest sanitizer safety findings"
+  ]
+}
