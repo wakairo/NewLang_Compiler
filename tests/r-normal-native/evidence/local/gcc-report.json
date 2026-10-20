@@ -1,0 +1,340 @@
+{
+  "scope": "R656 NON-BLIND calibrated normal-native only",
+  "cc": "/usr/bin/gcc",
+  "sanitizer": "none",
+  "commands": [
+    {
+      "label": "cc-version",
+      "argv": [
+        "/usr/bin/gcc",
+        "--version"
+      ],
+      "rc": 0,
+      "stdout_sha256": "4dc9a4e32fd9e06d42fb307688c59d6d889f0ff90ce034cbefed21b0d451fd81",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_true-check",
+      "argv": [
+        "/workspace/r656-normal-native/build-gcc/newlangc",
+        "--check",
+        "/workspace/r656-normal-native/tests/r-normal-native/phase2_true.nl"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_true-emit",
+      "argv": [
+        "/workspace/r656-normal-native/build-gcc/newlangc",
+        "/workspace/r656-normal-native/tests/r-normal-native/phase2_true.nl"
+      ],
+      "rc": 0,
+      "stdout_sha256": "da4b34aa62538b9aa5d84bbd44f98483de57e2b5f36dfc11fe1df025cd0c0e5b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_true-determinism",
+      "argv": [
+        "/workspace/r656-normal-native/build-gcc/newlangc",
+        "/workspace/r656-normal-native/tests/r-normal-native/phase2_true.nl"
+      ],
+      "rc": 0,
+      "stdout_sha256": "da4b34aa62538b9aa5d84bbd44f98483de57e2b5f36dfc11fe1df025cd0c0e5b",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_true-O0-plain-build",
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=c17",
+        "-pedantic-errors",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O0",
+        "-I",
+        "/workspace/r656-normal-native/tests/r-normal-native",
+        "-x",
+        "c",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_true.c17",
+        "-o",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_true-O0-plain"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_true-O0-plain-run",
+      "argv": [
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_true-O0-plain"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_true-O0-passive-build",
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=c17",
+        "-pedantic-errors",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O0",
+        "-I",
+        "/workspace/r656-normal-native/tests/r-normal-native",
+        "-x",
+        "c",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_true.passive.c17",
+        "-o",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_true-O0-passive"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_true-O0-passive-run",
+      "argv": [
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_true-O0-passive"
+      ],
+      "rc": 0,
+      "stdout_sha256": "0661bc440d6da6884bc7db0591e8f768013f0cfc949ceb19f8d02213fcb2439f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_true-O2-plain-build",
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=c17",
+        "-pedantic-errors",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-I",
+        "/workspace/r656-normal-native/tests/r-normal-native",
+        "-x",
+        "c",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_true.c17",
+        "-o",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_true-O2-plain"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_true-O2-plain-run",
+      "argv": [
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_true-O2-plain"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_true-O2-passive-build",
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=c17",
+        "-pedantic-errors",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-I",
+        "/workspace/r656-normal-native/tests/r-normal-native",
+        "-x",
+        "c",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_true.passive.c17",
+        "-o",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_true-O2-passive"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_true-O2-passive-run",
+      "argv": [
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_true-O2-passive"
+      ],
+      "rc": 0,
+      "stdout_sha256": "34103655e92885202695dafc1a487ea7719bf9f0c2e4fc73b0201929517ccdb4",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_false-check",
+      "argv": [
+        "/workspace/r656-normal-native/build-gcc/newlangc",
+        "--check",
+        "/workspace/r656-normal-native/tests/r-normal-native/phase2_false.nl"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_false-emit",
+      "argv": [
+        "/workspace/r656-normal-native/build-gcc/newlangc",
+        "/workspace/r656-normal-native/tests/r-normal-native/phase2_false.nl"
+      ],
+      "rc": 0,
+      "stdout_sha256": "5b4ce031a53167cef5600733114c41a34a350c851d1ea72a3dda58bb2920bf3c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_false-determinism",
+      "argv": [
+        "/workspace/r656-normal-native/build-gcc/newlangc",
+        "/workspace/r656-normal-native/tests/r-normal-native/phase2_false.nl"
+      ],
+      "rc": 0,
+      "stdout_sha256": "5b4ce031a53167cef5600733114c41a34a350c851d1ea72a3dda58bb2920bf3c",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_false-O0-plain-build",
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=c17",
+        "-pedantic-errors",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O0",
+        "-I",
+        "/workspace/r656-normal-native/tests/r-normal-native",
+        "-x",
+        "c",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_false.c17",
+        "-o",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_false-O0-plain"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_false-O0-plain-run",
+      "argv": [
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_false-O0-plain"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_false-O0-passive-build",
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=c17",
+        "-pedantic-errors",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O0",
+        "-I",
+        "/workspace/r656-normal-native/tests/r-normal-native",
+        "-x",
+        "c",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_false.passive.c17",
+        "-o",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_false-O0-passive"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_false-O0-passive-run",
+      "argv": [
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_false-O0-passive"
+      ],
+      "rc": 0,
+      "stdout_sha256": "2547f0e4f377072615f57a98cfb7f5b299f1b0be5faccb306d28cc8fbfc8fa54",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_false-O2-plain-build",
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=c17",
+        "-pedantic-errors",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-I",
+        "/workspace/r656-normal-native/tests/r-normal-native",
+        "-x",
+        "c",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_false.c17",
+        "-o",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_false-O2-plain"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_false-O2-plain-run",
+      "argv": [
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_false-O2-plain"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_false-O2-passive-build",
+      "argv": [
+        "/usr/bin/gcc",
+        "-std=c17",
+        "-pedantic-errors",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-O2",
+        "-I",
+        "/workspace/r656-normal-native/tests/r-normal-native",
+        "-x",
+        "c",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_false.passive.c17",
+        "-o",
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_false-O2-passive"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "phase2_false-O2-passive-run",
+      "argv": [
+        "/workspace/r656-normal-native/build-gcc/r656-normal-native/phase2_false-O2-passive"
+      ],
+      "rc": 0,
+      "stdout_sha256": "e66905b6eba9369ad5a122bb86558aaf4fb249325479d81601b49f55253b193f",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "cases": {
+    "phase2_true.nl": {
+      "source_sha256": "22c95ca06448d5292ddf50ae3d723e7c08923e0a972ef9ec2507ffa31064cb10",
+      "generated_sha256": "da4b34aa62538b9aa5d84bbd44f98483de57e2b5f36dfc11fe1df025cd0c0e5b",
+      "passive_sha256": "1358b1579238566de19e0cec5cf1238f8e451d2a5d03df2309ef0780ab5038ec"
+    },
+    "phase2_false.nl": {
+      "source_sha256": "794772acda78ca75a6965a6bc4b56dab7fea148b0c5fc17192024aeb92c47768",
+      "generated_sha256": "5b4ce031a53167cef5600733114c41a34a350c851d1ea72a3dda58bb2920bf3c",
+      "passive_sha256": "fbaaf1a541cb545a916ff66da3f1fc35708e4198a5f1fce817e7e2106154d5fa"
+    }
+  },
+  "result": "LIMITED NATIVE PASS"
+}

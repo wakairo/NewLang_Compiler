@@ -1,0 +1,22 @@
+{
+  "gcc": {
+    "path": "/workspace/r656-normal-native/build-gcc/newlangc",
+    "newlangc_sha256": "dfd34b769efcff136e8181c56701da23c46284b965cda8546658929bfe6856f7"
+  },
+  "clang": {
+    "path": "/workspace/r656-normal-native/build-clang/newlangc",
+    "newlangc_sha256": "017818fd9536e918538296b040e7f96b873bc95196d91dbab5623e3765d1c344"
+  },
+  "asan": {
+    "path": "/workspace/r656-normal-native/build-asan/newlangc",
+    "newlangc_sha256": "2d55777211a1444785f782b8447b7841f67517df940b4743f94aabd1954179e4"
+  },
+  "ubsan": {
+    "path": "/workspace/r656-normal-native/build-ubsan/newlangc",
+    "newlangc_sha256": "888d0d315859a3da0d0d28ddb3fb6275bdda44dd95c2d617e58d6a528da47220"
+  },
+  "gcc-release": {
+    "path": "/workspace/r656-normal-native/build-gcc-release/newlangc",
+    "newlangc_sha256": "45c65a0e8a7b6044894516facf204f1934d51fb93c38028521ea78b2c39ff3fd"
+  }
+}

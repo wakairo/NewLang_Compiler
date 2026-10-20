@@ -1,0 +1,83 @@
+FROZEN phase2_true.nl blob=415a7d4be78e72c6825af130abb62ae58ef6d505 sha256=22c95ca06448d5292ddf50ae3d723e7c08923e0a972ef9ec2507ffa31064cb10
+FROZEN phase2_false.nl blob=0a6b7f2904e277152d0b1e635c5e662425d291f1 sha256=794772acda78ca75a6965a6bc4b56dab7fea148b0c5fc17192024aeb92c47768
+FROZEN PHASE2_ORACLE.json blob=77459cf82c8644f2e95c1f969a99db9225ba01dd sha256=e2ee609f54f439f796c30f4f2a92716ddeb3d2eef72615a54d7ac59ebcea88f3
+cc-version: rc=0 stdout=232 stderr=0
+phase2_true-check: rc=0 stdout=0 stderr=0
+phase2_true-emit: rc=0 stdout=2889 stderr=0
+phase2_true-determinism: rc=0 stdout=2889 stderr=0
+phase2_true-O0-plain-build: rc=0 stdout=0 stderr=0
+phase2_true-O0-plain-run: rc=0 stdout=0 stderr=0
+phase2_true-O0-passive-build: rc=0 stdout=0 stderr=0
+phase2_true-O0-passive-run: rc=0 stdout=564 stderr=0
+roots first@0x7fff673e9cf7 second@0x7fff673e9cf5 size=2
+initial-first left@0x7fff673e9cf7=57 right@0x7fff673e9cf8=209
+initial-second left@0x7fff673e9cf5=131 right@0x7fff673e9cf6=244
+condition=1
+selected=186
+first-read-old=57
+first-returned-old=57
+after-first-first left@0x7fff673e9cf7=186 right@0x7fff673e9cf8=209
+after-first-second left@0x7fff673e9cf5=131 right@0x7fff673e9cf6=244
+second-input=57
+second-read-old=131
+second-returned-old=131
+final-first left@0x7fff673e9cf7=186 right@0x7fff673e9cf8=209
+final-second left@0x7fff673e9cf5=57 right@0x7fff673e9cf6=244
+phase2_true-O2-plain-build: rc=0 stdout=0 stderr=0
+phase2_true-O2-plain-run: rc=0 stdout=0 stderr=0
+phase2_true-O2-passive-build: rc=0 stdout=0 stderr=0
+phase2_true-O2-passive-run: rc=0 stdout=564 stderr=0
+roots first@0x7ffe84d0ad5c second@0x7ffe84d0ad5e size=2
+initial-first left@0x7ffe84d0ad5c=57 right@0x7ffe84d0ad5d=209
+initial-second left@0x7ffe84d0ad5e=131 right@0x7ffe84d0ad5f=244
+condition=1
+selected=186
+first-read-old=57
+first-returned-old=57
+after-first-first left@0x7ffe84d0ad5c=186 right@0x7ffe84d0ad5d=209
+after-first-second left@0x7ffe84d0ad5e=131 right@0x7ffe84d0ad5f=244
+second-input=57
+second-read-old=131
+second-returned-old=131
+final-first left@0x7ffe84d0ad5c=186 right@0x7ffe84d0ad5d=209
+final-second left@0x7ffe84d0ad5e=57 right@0x7ffe84d0ad5f=244
+phase2_false-check: rc=0 stdout=0 stderr=0
+phase2_false-emit: rc=0 stdout=2889 stderr=0
+phase2_false-determinism: rc=0 stdout=2889 stderr=0
+phase2_false-O0-plain-build: rc=0 stdout=0 stderr=0
+phase2_false-O0-plain-run: rc=0 stdout=0 stderr=0
+phase2_false-O0-passive-build: rc=0 stdout=0 stderr=0
+phase2_false-O0-passive-run: rc=0 stdout=557 stderr=0
+roots first@0x7ffc02cc3087 second@0x7ffc02cc3085 size=2
+initial-first left@0x7ffc02cc3087=28 right@0x7ffc02cc3088=183
+initial-second left@0x7ffc02cc3085=87 right@0x7ffc02cc3086=164
+condition=0
+selected=19
+first-read-old=28
+first-returned-old=28
+after-first-first left@0x7ffc02cc3087=19 right@0x7ffc02cc3088=183
+after-first-second left@0x7ffc02cc3085=87 right@0x7ffc02cc3086=164
+second-input=28
+second-read-old=87
+second-returned-old=87
+final-first left@0x7ffc02cc3087=19 right@0x7ffc02cc3088=183
+final-second left@0x7ffc02cc3085=28 right@0x7ffc02cc3086=164
+phase2_false-O2-plain-build: rc=0 stdout=0 stderr=0
+phase2_false-O2-plain-run: rc=0 stdout=0 stderr=0
+phase2_false-O2-passive-build: rc=0 stdout=0 stderr=0
+phase2_false-O2-passive-run: rc=0 stdout=557 stderr=0
+roots first@0x7fff357bfa5c second@0x7fff357bfa5e size=2
+initial-first left@0x7fff357bfa5c=28 right@0x7fff357bfa5d=183
+initial-second left@0x7fff357bfa5e=87 right@0x7fff357bfa5f=164
+condition=0
+selected=19
+first-read-old=28
+first-returned-old=28
+after-first-first left@0x7fff357bfa5c=19 right@0x7fff357bfa5d=183
+after-first-second left@0x7fff357bfa5e=87 right@0x7fff357bfa5f=164
+second-input=28
+second-read-old=87
+second-returned-old=87
+final-first left@0x7fff357bfa5c=19 right@0x7fff357bfa5d=183
+final-second left@0x7fff357bfa5e=28 right@0x7fff357bfa5f=164
+R656 TRUE+FALSE normal CLI strict C17/native LIMITED PASS

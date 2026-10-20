@@ -1,0 +1,60 @@
+phase2_false-O0-passive-run.stdout
+roots first@0x7ffe81438efe second@0x7ffe81438efc size=2
+initial-first left@0x7ffe81438efe=28 right@0x7ffe81438eff=183
+initial-second left@0x7ffe81438efc=87 right@0x7ffe81438efd=164
+condition=0
+selected=19
+first-read-old=28
+first-returned-old=28
+after-first-first left@0x7ffe81438efe=19 right@0x7ffe81438eff=183
+after-first-second left@0x7ffe81438efc=87 right@0x7ffe81438efd=164
+second-input=28
+second-read-old=87
+second-returned-old=87
+final-first left@0x7ffe81438efe=19 right@0x7ffe81438eff=183
+final-second left@0x7ffe81438efc=28 right@0x7ffe81438efd=164
+phase2_false-O2-passive-run.stdout
+roots first@0x7ffdae0a835c second@0x7ffdae0a835e size=2
+initial-first left@0x7ffdae0a835c=28 right@0x7ffdae0a835d=183
+initial-second left@0x7ffdae0a835e=87 right@0x7ffdae0a835f=164
+condition=0
+selected=19
+first-read-old=28
+first-returned-old=28
+after-first-first left@0x7ffdae0a835c=19 right@0x7ffdae0a835d=183
+after-first-second left@0x7ffdae0a835e=87 right@0x7ffdae0a835f=164
+second-input=28
+second-read-old=87
+second-returned-old=87
+final-first left@0x7ffdae0a835c=19 right@0x7ffdae0a835d=183
+final-second left@0x7ffdae0a835e=28 right@0x7ffdae0a835f=164
+phase2_true-O0-passive-run.stdout
+roots first@0x7ffd74c1e90e second@0x7ffd74c1e90c size=2
+initial-first left@0x7ffd74c1e90e=57 right@0x7ffd74c1e90f=209
+initial-second left@0x7ffd74c1e90c=131 right@0x7ffd74c1e90d=244
+condition=1
+selected=186
+first-read-old=57
+first-returned-old=57
+after-first-first left@0x7ffd74c1e90e=186 right@0x7ffd74c1e90f=209
+after-first-second left@0x7ffd74c1e90c=131 right@0x7ffd74c1e90d=244
+second-input=57
+second-read-old=131
+second-returned-old=131
+final-first left@0x7ffd74c1e90e=186 right@0x7ffd74c1e90f=209
+final-second left@0x7ffd74c1e90c=57 right@0x7ffd74c1e90d=244
+phase2_true-O2-passive-run.stdout
+roots first@0x7ffc8fd12d3c second@0x7ffc8fd12d3e size=2
+initial-first left@0x7ffc8fd12d3c=57 right@0x7ffc8fd12d3d=209
+initial-second left@0x7ffc8fd12d3e=131 right@0x7ffc8fd12d3f=244
+condition=1
+selected=186
+first-read-old=57
+first-returned-old=57
+after-first-first left@0x7ffc8fd12d3c=186 right@0x7ffc8fd12d3d=209
+after-first-second left@0x7ffc8fd12d3e=131 right@0x7ffc8fd12d3f=244
+second-input=57
+second-read-old=131
+second-returned-old=131
+final-first left@0x7ffc8fd12d3c=186 right@0x7ffc8fd12d3d=209
+final-second left@0x7ffc8fd12d3e=57 right@0x7ffc8fd12d3f=244

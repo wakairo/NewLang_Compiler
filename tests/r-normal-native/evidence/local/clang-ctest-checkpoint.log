@@ -1,0 +1,4 @@
+Internal ctest changing into directory: /workspace/r656-normal-native/build-clang
+Test project /workspace/r656-normal-native/build-clang
+        Start   1: r656_normal_native.integration
+  1/359 Test   #1: r656_normal_native.integration ..................   Passed    1.22 sec

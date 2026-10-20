@@ -1,0 +1,4 @@
+Internal ctest changing into directory: /workspace/r656-normal-native/build-ubsan
+Test project /workspace/r656-normal-native/build-ubsan
+        Start   1: r656_normal_native.integration
+  1/359 Test   #1: r656_normal_native.integration ..................   Passed    2.42 sec

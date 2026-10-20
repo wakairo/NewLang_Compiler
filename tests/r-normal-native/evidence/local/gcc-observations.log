@@ -1,0 +1,60 @@
+phase2_false-O0-passive-run.stdout
+roots first@0x7ffd0e4ee4b7 second@0x7ffd0e4ee4b5 size=2
+initial-first left@0x7ffd0e4ee4b7=28 right@0x7ffd0e4ee4b8=183
+initial-second left@0x7ffd0e4ee4b5=87 right@0x7ffd0e4ee4b6=164
+condition=0
+selected=19
+first-read-old=28
+first-returned-old=28
+after-first-first left@0x7ffd0e4ee4b7=19 right@0x7ffd0e4ee4b8=183
+after-first-second left@0x7ffd0e4ee4b5=87 right@0x7ffd0e4ee4b6=164
+second-input=28
+second-read-old=87
+second-returned-old=87
+final-first left@0x7ffd0e4ee4b7=19 right@0x7ffd0e4ee4b8=183
+final-second left@0x7ffd0e4ee4b5=28 right@0x7ffd0e4ee4b6=164
+phase2_false-O2-passive-run.stdout
+roots first@0x7fff54ff429c second@0x7fff54ff429e size=2
+initial-first left@0x7fff54ff429c=28 right@0x7fff54ff429d=183
+initial-second left@0x7fff54ff429e=87 right@0x7fff54ff429f=164
+condition=0
+selected=19
+first-read-old=28
+first-returned-old=28
+after-first-first left@0x7fff54ff429c=19 right@0x7fff54ff429d=183
+after-first-second left@0x7fff54ff429e=87 right@0x7fff54ff429f=164
+second-input=28
+second-read-old=87
+second-returned-old=87
+final-first left@0x7fff54ff429c=19 right@0x7fff54ff429d=183
+final-second left@0x7fff54ff429e=28 right@0x7fff54ff429f=164
+phase2_true-O0-passive-run.stdout
+roots first@0x7ffe8252d977 second@0x7ffe8252d975 size=2
+initial-first left@0x7ffe8252d977=57 right@0x7ffe8252d978=209
+initial-second left@0x7ffe8252d975=131 right@0x7ffe8252d976=244
+condition=1
+selected=186
+first-read-old=57
+first-returned-old=57
+after-first-first left@0x7ffe8252d977=186 right@0x7ffe8252d978=209
+after-first-second left@0x7ffe8252d975=131 right@0x7ffe8252d976=244
+second-input=57
+second-read-old=131
+second-returned-old=131
+final-first left@0x7ffe8252d977=186 right@0x7ffe8252d978=209
+final-second left@0x7ffe8252d975=57 right@0x7ffe8252d976=244
+phase2_true-O2-passive-run.stdout
+roots first@0x7fff9006b50c second@0x7fff9006b50e size=2
+initial-first left@0x7fff9006b50c=57 right@0x7fff9006b50d=209
+initial-second left@0x7fff9006b50e=131 right@0x7fff9006b50f=244
+condition=1
+selected=186
+first-read-old=57
+first-returned-old=57
+after-first-first left@0x7fff9006b50c=186 right@0x7fff9006b50d=209
+after-first-second left@0x7fff9006b50e=131 right@0x7fff9006b50f=244
+second-input=57
+second-read-old=131
+second-returned-old=131
+final-first left@0x7fff9006b50c=186 right@0x7fff9006b50d=209
+final-second left@0x7fff9006b50e=57 right@0x7fff9006b50f=244
