@@ -87,9 +87,9 @@ static bool one_case(const char *path)
         NLSemanticPlaceView child;
         REQUIRE(nl_semantic_place_view(world, root.fixed_fields[0], &child));
         NLSemanticScopeView scope;
-        REQUIRE(nl_semantic_scope_view(post, loan_records[k]->loan.scope,
-                                       &scope) &&
-                !scope.active && !scope.parent && !scope.parent_authority);
+        REQUIRE(
+            nl_semantic_scope_view(post, loan_records[k]->loan.scope, &scope));
+        REQUIRE(!scope.active && !scope.parent && !scope.parent_authority);
         REQUIRE(writes[k]->field.parent_fact == root.current_fact &&
                 writes[k]->field.child_fact == child.current_fact);
         REQUIRE(writes[k]->field.base == declarations[k]->symbol &&
@@ -110,13 +110,13 @@ static bool one_case(const char *path)
     const NLValueFactId first_post = writes[0]->field.child_post_fact;
     const NLValueFactId second_pre = writes[1]->field.child_fact;
     const NLValueFactId second_post = writes[1]->field.child_post_fact;
-    REQUIRE(writes[0]->span.start_byte < writes[1]->span.start_byte &&
-            writes[0]->field.parent != writes[1]->field.parent &&
-            first_post > 0 && first_post <= post->last_value_fact &&
-            second_post <= post->last_value_fact &&
-            first_post != second_pre && first_post < second_post &&
-            first_post < writes[0]->field.parent_post_fact &&
-            second_post < writes[1]->field.parent_post_fact);
+    REQUIRE(writes[0]->span.start_byte < writes[1]->span.start_byte);
+    REQUIRE(writes[0]->field.parent != writes[1]->field.parent);
+    REQUIRE(first_post > 0 && first_post <= post->last_value_fact);
+    REQUIRE(second_post <= post->last_value_fact);
+    REQUIRE(first_post != second_pre && first_post < second_post);
+    REQUIRE(first_post < writes[0]->field.parent_post_fact);
+    REQUIRE(second_post < writes[1]->field.parent_post_fact);
 
     changed = writes[1];
     original_post_fact = second_post;
