@@ -92,20 +92,27 @@ def main():
         need(git_blob(data) == obj["blob"], "independent pre-execution source was modified")
     with tempfile.TemporaryDirectory(prefix="r653-source-owned-") as td:
         work = Path(td)
+        src = root / "bad_type.nl"
+        for args in ([compiler, "--check", src], [compiler, src]):
+            p = checked_run(args, 3)
+            need(not p.stdout and "error(semantic)" in p.stderr,
+                 f"invalid typed comparison not rejected: {p.stderr}")
+        print("R653 negative bad_type: semantic 3; no generated C", flush=True)
         for name in ["true_world.nl", "false_world.nl"]:
             obj = frozen["cases"][name]
             oracle = obj["oracle"]
             src = root / name
             ck = checked_run([compiler, "--check", src])
             need(not ck.stdout and not ck.stderr, "successful --check must be silent")
-            emit = checked_run([compiler, src])
-            need(bool(emit.stdout) and not emit.stderr, "source-issued actual C17 missing")
-            repeat = checked_run([compiler, src])
-            need(emit.stdout == repeat.stdout, "C17 nondeterminism")
             pub = checked_run([probe, src, oracle["old"][0], oracle["old"][1],
                                oracle["fields"][0], oracle["fields"][1],
                                oracle["arm_values"][0], oracle["arm_values"][1]])
             need("R653_OWNED_OK" in pub.stdout, "public owned proof/negative gate absent")
+            print(f"R653 public checked-owned {name}: {pub.stdout.strip()}", flush=True)
+            emit = checked_run([compiler, src])
+            need(bool(emit.stdout) and not emit.stderr, "source-issued actual C17 missing")
+            repeat = checked_run([compiler, src])
+            need(emit.stdout == repeat.stdout, "C17 nondeterminism")
             watched, refs = observe_c(emit.stdout, oracle)
             native(work, cc, name + "-plain", emit.stdout, sanitizer)
             native(work, cc, name + "-passive", watched, sanitizer)
@@ -119,12 +126,6 @@ def main():
                               "c17_sha256": hashlib.sha256(emit.stdout.encode()).hexdigest(),
                               "native": "GCC/Clang strict C17 O0+O2 plain/passive PASS",
                               "negative_observer": "wrong-field 91", "owned": pub.stdout.strip()}))
-        src = root / "bad_type.nl"
-        for args in ([compiler, "--check", src], [compiler, src]):
-            p = checked_run(args, 3)
-            need(not p.stdout and "error(semantic)" in p.stderr,
-                 f"invalid typed comparison not rejected: {p.stderr}")
-        print("R653 negative bad_type: semantic 3; no generated C")
 
 
 if __name__ == "__main__":

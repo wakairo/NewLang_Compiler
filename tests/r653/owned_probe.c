@@ -47,10 +47,10 @@ static bool run_probe(const char *source, const size_t expected_old[2],
     CHECK(if_id && count_writes == 2 && count_loans == 2);
     const NLCheckedNodeView *join = nl_checked_node_view(f, if_id);
     CHECK(join->normal_arms == 2 && join->result_count == 1);
-    const NLCheckedFragment *arms[2] = {
-        nl_checked_if_arm(f, if_id, 0), nl_checked_if_arm(f, if_id, 1)};
-    CHECK(arms[0] && arms[1] && nl_checked_context(arms[0]) !=
-          nl_checked_context(arms[1]));
+    const NLCheckedFragment *arms[2] = {nl_checked_if_arm(f, if_id, 0),
+                                        nl_checked_if_arm(f, if_id, 1)};
+    CHECK(arms[0] && arms[1] &&
+          nl_checked_context(arms[0]) != nl_checked_context(arms[1]));
     for (size_t a = 0; a < 2; ++a) {
         const NLCheckedFragment *arm = arms[a];
         const NLCheckedNodeView *last =
@@ -65,9 +65,8 @@ static bool run_probe(const char *source, const size_t expected_old[2],
         NLCheckedField field = writes[i]->field;
         CHECK(field.present && field.index == expected_field[i] &&
               field.parent && field.child && field.old_value &&
-              field.new_value && field.parent_fact &&
-              field.child_fact && field.parent_post_fact &&
-              field.child_post_fact);
+              field.new_value && field.parent_fact && field.child_fact &&
+              field.parent_post_fact && field.child_post_fact);
         NLSemanticValueView old;
         CHECK(nl_semantic_value_view(main_world, field.old_value, &old) &&
               old.scalar_known && old.scalar_value == expected_old[i]);
