@@ -1,0 +1,47 @@
+[
+  {
+    "source": "wrong_quantity.nl",
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/workspace/p647/tests/p647/wrong_quantity.nl:6:26-6:27: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands\n",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/workspace/p647/tests/p647/wrong_quantity.nl:6:26-6:27: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands\n",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "source": "extra_arm_local.nl",
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": "",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "c17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p647/tests/p647/extra_arm_local.nl\n",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  {
+    "source": "one_if_control.nl",
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": "",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "c17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p647/tests/p647/one_if_control.nl\n",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  }
+]

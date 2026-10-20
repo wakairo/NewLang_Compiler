@@ -1,0 +1,1 @@
+/workspace/p647/tests/p647/wrong_quantity.nl:6:26-6:27: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands

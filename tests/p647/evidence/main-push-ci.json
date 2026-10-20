@@ -1,0 +1,72 @@
+[
+  {
+    "run": {
+      "id": 39347001925,
+      "name": "Compiler frontend/C17 reference (NO LLVM; PARTIAL)",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "f58f1b166780569704ace110d74110ede07b86d2",
+      "run_attempt": 1,
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/39347001925"
+    },
+    "jobs": [
+      {
+        "id": 118381904833,
+        "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/39347001925/job/118381904833"
+      }
+    ]
+  },
+  {
+    "run": {
+      "id": 39347001923,
+      "name": "Compiler validation",
+      "event": "push",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "f58f1b166780569704ace110d74110ede07b86d2",
+      "run_attempt": 1,
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/39347001923"
+    },
+    "jobs": [
+      {
+        "id": 118381904767,
+        "name": "Clang",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/39347001923/job/118381904767"
+      },
+      {
+        "id": 118381904884,
+        "name": "GCC Release",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/39347001923/job/118381904884"
+      },
+      {
+        "id": 118381904903,
+        "name": "UBSan",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/39347001923/job/118381904903"
+      },
+      {
+        "id": 118381904974,
+        "name": "ASan",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/39347001923/job/118381904974"
+      },
+      {
+        "id": 118381905016,
+        "name": "GCC",
+        "status": "completed",
+        "conclusion": "success",
+        "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/39347001923/job/118381905016"
+      }
+    ]
+  }
+]
