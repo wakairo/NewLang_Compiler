@@ -1,0 +1,31 @@
+{
+  "authority": "4c39ddd25039ce605bd51e2b39996e4a5820b7ed",
+  "canonical": "Draft17.33",
+  "before_execution": true,
+  "sources": {
+    "examples/device_settings_swap.nl": "8e2703e6eb736a438aab15f4b25835eb8470724dde697000e0a714510e47290f",
+    "tests/fixtures/node_initial_some.nl": "b8199651020a2ae4135811684187b42eb04d4816b714bba687fbfc90784c1409",
+    "tests/p685/wrong_write.nl": "bfbc597b5d8dd30a8f1597c0ef7ee512405a748e15875fa303e17706b52d16b9",
+    "tests/p685/rich_body.nl": "189c0960ece1769bcdf5f02fa7700b048db591b7aee9160ae1ce04accda39925"
+  },
+  "positive": [
+    "examples/device_settings_swap.nl",
+    "tests/fixtures/node_initial_some.nl"
+  ],
+  "expectations": {
+    "positive": "check0/stdout-C0/native exit0 no guest stdout; new named C must match stdout bytes",
+    "negative": {
+      "tests/p685/wrong_write.nl": 3,
+      "tests/p685/rich_body.nl": 4
+    },
+    "failure_preservation": [
+      "source input=output path/symlink/hardlink rejected1 unchanged",
+      "semantic3/backend4 preserve sentinel SHA no temporary",
+      "bad destination/directory/read-only parent1 unchanged",
+      "actual sink failure1 preserve old target",
+      "flush/close/rename fault1 preserve old target"
+    ],
+    "old_modes": "--check/default/experimental export unchanged",
+    "guarantee": "atomic pathname visibility on stable local POSIX Linux filesystem; no crash/power-fail/concurrent hostile-FS transaction"
+  }
+}
