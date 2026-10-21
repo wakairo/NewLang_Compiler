@@ -314,7 +314,12 @@ if(BUILD_TESTING)
     foreach(r675_negative
         negative_unknown negative_initializer_type negative_decl_type
         negative_escape negative_replace_type)
-        add_test(NAME r675_${r675_negative}_semantic.integration
+        if(r675_negative STREQUAL "negative_decl_type")
+            set(r675_negative_test_name "r675_negative_decl_type_source_profile.integration")
+        else()
+            set(r675_negative_test_name "r675_${r675_negative}_semantic.integration")
+        endif()
+        add_test(NAME ${r675_negative_test_name}
             COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r675/blind_test.py"
             "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r675_public_probe>"
             "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${r675_negative}")

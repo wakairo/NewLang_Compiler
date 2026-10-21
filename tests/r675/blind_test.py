@@ -172,14 +172,25 @@ def positive(compiler, probe, cc, sanitizer, tmp, name, field, index, old,
 
 
 # These *distinct source questions* were frozen before the original BLIND run.
-# The added calibrated diagnostic contract is CHECK3 + semantic category +
-# bracketed structured code (identical in --check and emit), never parser/CLI.
+# NON-BLIND calibrated CHECK3 source-layer category and exact code, identical
+# in --check and emit, including source-profile unsupported (not backend4).
 NEGATIVE_INTENT = {
     "negative_unknown": "unknown-declared-field",
     "negative_initializer_type": "incorrect-constructor-field-type",
     "negative_decl_type": "ineligible-nominal-declaration-type",
     "negative_escape": "scoped-write-ref-escape",
     "negative_replace_type": "incorrect-replace-input-type",
+}
+
+
+# NON-BLIND calibrated CHECK-only diagnostic observations at R HEAD 769f512...
+# Neither these codes nor their categories were part of the original BLIND oracle.
+EXPECTED_DIAGNOSTICS = {
+    "negative_unknown": ("semantic", "FIELD-UNKNOWN-FIELD"),
+    "negative_initializer_type": ("semantic", "P5-FIELD-TYPE"),
+    "negative_decl_type": ("unsupported", "AVS-DECL-PROFILE"),
+    "negative_escape": ("semantic", "P8-EXIT-DEPENDENCY"),
+    "negative_replace_type": ("semantic", "P3-TYPE-MISMATCH"),
 }
 
 
@@ -200,27 +211,34 @@ def negative(compiler, name, strict=False):
             if r.returncode != 3:
                 raise AssertionError(f"{name}: {mode} rc={r.returncode}, expected CHECK3")
             match = re.search(
-                r"(?m)error\\(semantic\\)\\[([A-Z][0-9]+-[A-Z0-9-]+)\\]:\\s*(\\S[^\\r\\n]*)",
+                r"error\((semantic|unsupported)\)\[([A-Z][A-Z0-9]*(?:-[A-Z0-9]+)+)\]:\s*(\S[^\r\n]*)",
                 r.stderr)
             if match is None:
                 raise AssertionError(
-                    f"{name}: {mode} has no bracketed semantic diagnostic; "
-                    "parser, precision, CLI, and backend are not semantic PASS")
-            diagnostics.append((mode, match.group(1), match.group(2).strip()))
+                    f"{name}: {mode} has no structured source-level diagnostic; "
+                    "parser, CLI, and backend are not source-layer PASS")
+            category, code, message = match.groups()
+            expected = EXPECTED_DIAGNOSTICS[name]
+            if (category, code) != expected:
+                raise AssertionError(
+                    f"{name}: {mode} diagnostic {(category, code)} != {expected}")
+            if not message.strip():
+                raise AssertionError(f"{name}: {mode} diagnostic has no explanation")
+            diagnostics.append((mode, category, code))
     if strict:
         if name not in NEGATIVE_INTENT or len(diagnostics) != 2:
             raise AssertionError("unexpected negative source / diagnostic cardinality")
-        if diagnostics[0][1] != diagnostics[1][1]:
+        if diagnostics[0][1:] != diagnostics[1][1:]:
             raise AssertionError(
-                f"{name}: CHECK/emit diagnostic-code disagreement {diagnostics}")
-        code = diagnostics[0][1]
-        print(f"R675 CALIBRATED {name} semantic CHECK3/emit3 "
+                f"{name}: CHECK/emit category-code disagreement {diagnostics}")
+        category, code = diagnostics[0][1:]
+        print(f"R675 CALIBRATED {name} {category} CHECK3/emit3 "
               f"code=[{code}] intent={NEGATIVE_INTENT[name]} zero C PASS",
               flush=True)
         record_actions_summary(
             f"| {name} | {NEGATIVE_INTENT[name]} | "
-            f"3 / error(semantic)[{code}] | "
-            f"3 / error(semantic)[{code}] | ZERO C / PASS |")
+            f"3 / error({category})[{code}] | "
+            f"3 / error({category})[{code}] | ZERO C / PASS |")
 
 
 def main():
