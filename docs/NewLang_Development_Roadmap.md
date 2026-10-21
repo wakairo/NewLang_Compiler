@@ -28,7 +28,7 @@
 
 **旧checkpointの扱い：** 次節の2026-10-19版は当時の判断・成果の履歴であり、この現行計画で上書きしない。旧節のDraft17.32や旧SHAを現mainのauthorityと誤読しない。
 
-## 現行checkpoint — 2026-10-19（#624採用：v0 compiler-first、Product GO能動判定を一時保留）
+## 前回checkpoint（履歴） — 2026-10-19（#624採用：v0 compiler-first、Product GO能動判定を一時保留）
 
 **Coordinationによる投資段階の変更：** [Issue #624の裁定](https://github.com/wakairo/NewLang_Compiler/issues/624)は、固定Compiler/main [`35fa23efaa641b96c610324735b714891be2bbac`](https://github.com/wakairo/NewLang_Compiler/commit/35fa23efaa641b96c610324735b714891be2bbac)、[CURRENT_SPEC](reference/CURRENT_SPEC.md)→**Draft17.32**を出発点とし、**v0 compilerを普通に使えるところまで実装する作業を最優先**にする。Product GO二段階条件は変えず、通常compilerの次工程を決めるための仮想的なProduct GO採点・追加市場調査を**初回実利用checkpointまで能動的に一時保留**する。H1 #268はHOLD／UNDECIDED、L3 Product GOは未達。これは製品化のGOでも一般的なsoundness PASSでもなく、v0の実装と実使用から正負の情報を得る限定Explorationである。Product Strategy §§1.1–1.4と[Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go)が正本であり、本checkpointは実装の優先順だけを示す。
 
