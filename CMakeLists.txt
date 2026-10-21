@@ -1068,3 +1068,14 @@ if(BUILD_TESTING)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
 endif()
+
+# R716 independent blind-only material. No compiler, authority, or producer edits.
+if(BUILD_TESTING)
+    add_executable(r716_blind_public_probe tests/r716/probe.c)
+    target_link_libraries(r716_blind_public_probe PRIVATE newlang_parser newlang_semantic)
+    add_test(NAME r716_blind_original_field_if.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r716/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r716_blind_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r716")
+endif()
