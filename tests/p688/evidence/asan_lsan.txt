@@ -1,0 +1,10 @@
+Internal ctest changing into directory: /workspace/p688-address
+Test project /workspace/p688-address
+    Start 67: p688_c17_scalar_export.integration
+1/2 Test #67: p688_c17_scalar_export.integration ...   Passed    7.64 sec
+    Start 68: p688_selected_call_oom.unit
+2/2 Test #68: p688_selected_call_oom.unit ..........   Passed    0.26 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   7.93 sec

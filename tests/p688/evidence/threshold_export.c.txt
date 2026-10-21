@@ -1,0 +1,18 @@
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+
+#include <limits.h>
+_Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+#include "newlang/experimental_c17_u8_export_v0.h"
+static uint8_t nl_fn_10(void);
+
+static uint8_t nl_fn_10(void)
+{
+    return 17;
+}
+
+uint8_t newlang_c17_u8_export_v0(void)
+{
+    return nl_fn_10();
+}

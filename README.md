@@ -67,6 +67,15 @@ module privacy or safe-library guarantee. It is a technical composition step,
 not a complete real-user checkpoint or Product GO. The separate factored-C
 comparison and evidence limits are in [`tests/p679`](tests/p679/README.md).
 
+## Experimental C17 scalar consumer
+
+`newlangc --experimental-c17-u8-export FUNCTION SOURCE` can emit a producer-only
+C17 translation unit for one source-checked, zero-argument `u8` helper in the
+existing finite Copy body profile. An independent C17 consumer includes the
+versioned header and links a separately compiled producer object. This opt-in
+target ABI is experimental; it is not source FFI, record-state export or a
+safe-library guarantee. See [the contract, commands and evidence](tests/p688/README.md).
+
 ## Initial Some: first-user quickstart (no LLVM)
 
 On **Ubuntu 24.04 x86_64** (including WSL2 Ubuntu 24.04), the existing

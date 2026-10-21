@@ -1,0 +1,152 @@
+{
+  "compiler": "Debian clang version 23.1.2 (++20260920034005+85ac56026243-1~exp1~20260920034024.76)",
+  "sanitizer": "none",
+  "positive": [
+    {
+      "source": "threshold.nl",
+      "value": 17,
+      "optimization": "-O0",
+      "separate_objects": true,
+      "consumer_exit": 0,
+      "owned": {
+        "function": 10,
+        "result_value": 1,
+        "value": 17,
+        "inputs_destroyed": true,
+        "genuine_call_body_equal": true
+      },
+      "producer_sha256": "956c2f3bd000670a8fa44ef11c113ebb463bef30a0d2a8d143a2a1a749ddd5a0"
+    },
+    {
+      "source": "threshold.nl",
+      "value": 17,
+      "optimization": "-O2",
+      "separate_objects": true,
+      "consumer_exit": 0,
+      "owned": {
+        "function": 10,
+        "result_value": 1,
+        "value": 17,
+        "inputs_destroyed": true,
+        "genuine_call_body_equal": true
+      },
+      "producer_sha256": "956c2f3bd000670a8fa44ef11c113ebb463bef30a0d2a8d143a2a1a749ddd5a0"
+    },
+    {
+      "source": "limit.nl",
+      "value": 53,
+      "optimization": "-O0",
+      "separate_objects": true,
+      "consumer_exit": 0,
+      "owned": {
+        "function": 11,
+        "result_value": 2,
+        "value": 53,
+        "inputs_destroyed": true,
+        "genuine_call_body_equal": true
+      },
+      "producer_sha256": "862b07ef997ebd7a4858d1dc4dec9a726cc62194207081c45facbc37f121ed8f"
+    },
+    {
+      "source": "limit.nl",
+      "value": 53,
+      "optimization": "-O2",
+      "separate_objects": true,
+      "consumer_exit": 0,
+      "owned": {
+        "function": 11,
+        "result_value": 2,
+        "value": 53,
+        "inputs_destroyed": true,
+        "genuine_call_body_equal": true
+      },
+      "producer_sha256": "862b07ef997ebd7a4858d1dc4dec9a726cc62194207081c45facbc37f121ed8f"
+    }
+  ],
+  "negative": [
+    {
+      "source": "threshold.nl",
+      "selector": "unknown",
+      "exit": 4,
+      "diagnostic": "C17-U8-EXPORT-SELECTOR",
+      "stdout_bytes": 0
+    },
+    {
+      "source": "threshold.nl",
+      "selector": "main",
+      "exit": 4,
+      "diagnostic": "C17-U8-EXPORT-SELECTOR",
+      "stdout_bytes": 0
+    },
+    {
+      "source": "threshold.nl",
+      "selector": "",
+      "exit": 4,
+      "diagnostic": "C17-U8-EXPORT-SELECTOR",
+      "stdout_bytes": 0
+    },
+    {
+      "source": "threshold.nl",
+      "selector": "low_threshold();main",
+      "exit": 4,
+      "diagnostic": "C17-U8-EXPORT-SELECTOR",
+      "stdout_bytes": 0
+    },
+    {
+      "source": "formal.nl",
+      "selector": "param",
+      "exit": 4,
+      "diagnostic": "C17-U8-EXPORT-SELECTOR",
+      "stdout_bytes": 0
+    },
+    {
+      "source": "unit_result.nl",
+      "selector": "no_result",
+      "exit": 4,
+      "diagnostic": "C17-U8-EXPORT-SELECTOR",
+      "stdout_bytes": 0
+    },
+    {
+      "source": "rich_calibrated.nl",
+      "selector": "richer",
+      "exit": 4,
+      "diagnostic": "C17-U8-EXPORT-UNSUPPORTED",
+      "stdout_bytes": 0
+    },
+    {
+      "source": "rich.nl",
+      "selector": "richer",
+      "exit": 3,
+      "diagnostic": "P13-IF-OPEN",
+      "stdout_bytes": 0
+    },
+    {
+      "source": "bad_return.nl",
+      "selector": "invalid",
+      "exit": 3,
+      "diagnostic": "P8-BODY-RESULT",
+      "stdout_bytes": 0
+    },
+    {
+      "source": "duplicate.nl",
+      "selector": "same",
+      "exit": 3,
+      "diagnostic": "P11-DUPLICATE-FUNCTION",
+      "stdout_bytes": 0
+    },
+    {
+      "source": "main_u8.nl",
+      "selector": "main",
+      "exit": 4,
+      "diagnostic": "C17-U8-EXPORT-SELECTOR",
+      "stdout_bytes": 0
+    }
+  ],
+  "link_controls": [
+    "private static refused twice",
+    "duplicate producer refused",
+    "wrong prototype with header refused",
+    "synthetic CHAR_BIT16 refused; not actual C28x"
+  ],
+  "io": "/dev/full output failure CLI1; arbitrary I/O is not transactional"
+}

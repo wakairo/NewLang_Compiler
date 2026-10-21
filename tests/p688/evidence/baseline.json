@@ -1,0 +1,142 @@
+{
+  "compiler": "92367144da5c672282b91fd291962e3b923492b3",
+  "production_diff_before": "empty",
+  "cases": {
+    "threshold": {
+      "check": {
+        "exit": 0,
+        "stdout_bytes": 0,
+        "diagnostic": ""
+      },
+      "ordinary": {
+        "exit": 0,
+        "stdout_bytes": 556,
+        "diagnostic": ""
+      },
+      "export": {
+        "exit": 2,
+        "stdout_bytes": 0,
+        "diagnostic": "error(cli)[P0-CLI-ARGUMENT]: expected exactly one argument\nnote: use --help for usage\n"
+      }
+    },
+    "limit": {
+      "check": {
+        "exit": 0,
+        "stdout_bytes": 0,
+        "diagnostic": ""
+      },
+      "ordinary": {
+        "exit": 0,
+        "stdout_bytes": 707,
+        "diagnostic": ""
+      },
+      "export": {
+        "exit": 2,
+        "stdout_bytes": 0,
+        "diagnostic": "error(cli)[P0-CLI-ARGUMENT]: expected exactly one argument\nnote: use --help for usage\n"
+      }
+    },
+    "formal": {
+      "check": {
+        "exit": 0,
+        "stdout_bytes": 0,
+        "diagnostic": ""
+      },
+      "ordinary": {
+        "exit": 0,
+        "stdout_bytes": 616,
+        "diagnostic": ""
+      },
+      "export": {
+        "exit": 2,
+        "stdout_bytes": 0,
+        "diagnostic": "error(cli)[P0-CLI-ARGUMENT]: expected exactly one argument\nnote: use --help for usage\n"
+      }
+    },
+    "unit_result": {
+      "check": {
+        "exit": 0,
+        "stdout_bytes": 0,
+        "diagnostic": ""
+      },
+      "ordinary": {
+        "exit": 0,
+        "stdout_bytes": 501,
+        "diagnostic": ""
+      },
+      "export": {
+        "exit": 2,
+        "stdout_bytes": 0,
+        "diagnostic": "error(cli)[P0-CLI-ARGUMENT]: expected exactly one argument\nnote: use --help for usage\n"
+      }
+    },
+    "rich": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "diagnostic": "tests/p688/rich.nl:1:20-1:25: error(syntax)[P13-IF-OPEN]: if requires (condition)\n"
+      },
+      "ordinary": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "diagnostic": "tests/p688/rich.nl:1:20-1:25: error(syntax)[P13-IF-OPEN]: if requires (condition)\n"
+      },
+      "export": {
+        "exit": 2,
+        "stdout_bytes": 0,
+        "diagnostic": "error(cli)[P0-CLI-ARGUMENT]: expected exactly one argument\nnote: use --help for usage\n"
+      }
+    },
+    "bad_return": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "diagnostic": "tests/p688/bad_return.nl:1:17-1:23: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+      },
+      "ordinary": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "diagnostic": "tests/p688/bad_return.nl:1:17-1:23: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+      },
+      "export": {
+        "exit": 2,
+        "stdout_bytes": 0,
+        "diagnostic": "error(cli)[P0-CLI-ARGUMENT]: expected exactly one argument\nnote: use --help for usage\n"
+      }
+    },
+    "main_u8": {
+      "check": {
+        "exit": 0,
+        "stdout_bytes": 0,
+        "diagnostic": ""
+      },
+      "ordinary": {
+        "exit": 4,
+        "stdout_bytes": 0,
+        "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p688/main_u8.nl\n"
+      },
+      "export": {
+        "exit": 2,
+        "stdout_bytes": 0,
+        "diagnostic": "error(cli)[P0-CLI-ARGUMENT]: expected exactly one argument\nnote: use --help for usage\n"
+      }
+    },
+    "duplicate": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "diagnostic": "tests/p688/duplicate.nl:2:4-2:8: error(semantic)[P11-DUPLICATE-FUNCTION]: ordinary declaration name already established\n"
+      },
+      "ordinary": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "diagnostic": "tests/p688/duplicate.nl:2:4-2:8: error(semantic)[P11-DUPLICATE-FUNCTION]: ordinary declaration name already established\n"
+      },
+      "export": {
+        "exit": 2,
+        "stdout_bytes": 0,
+        "diagnostic": "error(cli)[P0-CLI-ARGUMENT]: expected exactly one argument\nnote: use --help for usage\n"
+      }
+    }
+  }
+}
