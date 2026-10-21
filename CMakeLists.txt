@@ -110,6 +110,13 @@ if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
     # SPECULATIVE PR533 opt-in: default compiler/parser stay OFF. Test-only
     # rebuild of the SAME parser exercises Production semantics/owned/C17.
+    add_executable(r708_public_probe tests/r708/public_probe.c)
+    target_link_libraries(r708_public_probe PRIVATE newlang_parser newlang_semantic)
+    add_test(NAME r708_independent_m2.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r708/independent_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r708_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r708")
     add_executable(p706_gate_test tests/p706/gate_test.c)
     target_link_libraries(p706_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
     target_link_options(p706_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
