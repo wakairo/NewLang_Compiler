@@ -399,7 +399,8 @@ static bool negatives(void)
     CHECK(register_source(
         c, "struct Other{left:u8,right:u8}fn unused()->unit{unit}"));
     CHECK(run_ok(c, "let wrong=Other{left:u8(1),right:u8(2)};"));
-    /* Draft17.33 bounded source rule: preserved and reviewed legacy oracle migration. */
+    /* Draft17.33 bounded source rule: preserved and reviewed legacy oracle
+     * migration. */
     CHECK(p671_other_read(c, "wrong", "wrong@left", 1, 2));
     CHECK(register_source(c, "struct Cell{next:Option<ptr<Cell>>,payload:u8}"));
     CHECK(test_rejected(

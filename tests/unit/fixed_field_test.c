@@ -389,7 +389,8 @@ static bool negatives(void)
     CHECK(register_source(
         c, "struct Other{left:u8,right:u8}fn other()->unit{unit}"));
     CHECK(run_ok(c, "let other_pair=Other{left:u8(7),right:u8(9)};"));
-    /* Draft17.33 bounded source rule: preserved and reviewed legacy oracle migration. */
+    /* Draft17.33 bounded source rule: preserved and reviewed legacy oracle
+     * migration. */
     CHECK(p671_other_read(c, "other_pair", "other_pair@left", 7, 9));
     NLTypeId sum;
     const NLSumVariant variants[] = {{"left", 0}};
