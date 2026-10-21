@@ -1,0 +1,99 @@
+{
+  "frozen_utc": "2026-10-21T13:59:15.670073+00:00",
+  "note": "Supplementary cases frozen before first execution, after primary implementation. No original source/oracle changed.",
+  "sha256": {
+    "repeated_true.nl": "02bd6f952d9265a5bff28632751a6272911384edd59774a46ea309fac971302d",
+    "repeated_false.nl": "aebec12f5b63813ef92a5fcf694adeca6738a83171dbbf7dd79c4ce17b6c17ab",
+    "noncopy_availability.nl": "24323f61a5fa1c006f06e9fb8842ef99bebaf89cfd9dc03555946b96d01e3acc",
+    "wrong_field.nl": "8101b7e426d4255c790f782742c724fe055e294feecee74605318a7fe67c998c",
+    "sole_normal.nl": "f3bc52b1631e791351c6324a51285f20bb79472a78040f4dfa817e955364ec2b"
+  },
+  "positive": {
+    "repeated_true": {
+      "initial": [
+        11,
+        72
+      ],
+      "index": 1,
+      "taken": 0,
+      "post": [
+        11,
+        72
+      ],
+      "old": 9,
+      "changes": [
+        2,
+        2
+      ],
+      "updates": [
+        [
+          [
+            1,
+            9,
+            72
+          ],
+          [
+            1,
+            72,
+            9
+          ]
+        ],
+        [
+          [
+            1,
+            240,
+            72
+          ],
+          [
+            1,
+            61,
+            240
+          ]
+        ]
+      ]
+    },
+    "repeated_false": {
+      "initial": [
+        11,
+        72
+      ],
+      "index": 1,
+      "taken": 1,
+      "post": [
+        11,
+        61
+      ],
+      "old": 240,
+      "changes": [
+        2,
+        2
+      ],
+      "updates": [
+        [
+          [
+            1,
+            9,
+            72
+          ],
+          [
+            1,
+            72,
+            9
+          ]
+        ],
+        [
+          [
+            1,
+            240,
+            72
+          ],
+          [
+            1,
+            61,
+            240
+          ]
+        ]
+      ]
+    }
+  }
+}

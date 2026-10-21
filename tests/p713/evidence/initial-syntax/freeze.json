@@ -1,0 +1,114 @@
+{
+  "authority": "e917906f0416bf6132af3b5649a4f7fc5bdf47ba",
+  "canonical": "Draft17.33",
+  "frozen_utc": "2026-10-21T13:43:50.640780+00:00",
+  "expect_before_implementation": "SOURCE accepted; CHECK3/P6-JOIN-PRECISION, no C. Both actual arms remain checked for known conditions. No native result before successful owned validation.",
+  "positive": {
+    "both_true": {
+      "initial": [
+        42,
+        111
+      ],
+      "index": 1,
+      "incoming": [
+        205,
+        17
+      ],
+      "taken": 0,
+      "post": [
+        42,
+        205
+      ],
+      "old": 111,
+      "changes": [
+        1,
+        1
+      ],
+      "sha256": "f3633e7d50c3588b09b9f99b7be71ff65a3a8b60a3258123674ffc1c9fb0e11b"
+    },
+    "both_false": {
+      "initial": [
+        42,
+        111
+      ],
+      "index": 1,
+      "incoming": [
+        205,
+        17
+      ],
+      "taken": 1,
+      "post": [
+        42,
+        17
+      ],
+      "old": 111,
+      "changes": [
+        1,
+        1
+      ],
+      "sha256": "952503114ab64f285971906f7eb28a20fe48061df4be86d674af770eb8c2987c"
+    },
+    "one_true": {
+      "initial": [
+        8,
+        193
+      ],
+      "index": 0,
+      "incoming": [
+        64,
+        null
+      ],
+      "taken": 0,
+      "post": [
+        64,
+        193
+      ],
+      "old": 8,
+      "changes": [
+        1,
+        0
+      ],
+      "sha256": "2774e4a5aca701bb753e53b7ae53a9f1014ed412945672a3ef009bfc635b9ee7"
+    },
+    "one_false": {
+      "initial": [
+        8,
+        193
+      ],
+      "index": 0,
+      "incoming": [
+        64,
+        null
+      ],
+      "taken": 1,
+      "post": [
+        8,
+        193
+      ],
+      "old": 8,
+      "changes": [
+        1,
+        0
+      ],
+      "sha256": "d16aee9f5c2455da4cfb68fd20d82fb4a03024063affced29fa95e858a31caf9"
+    }
+  },
+  "negative": {
+    "wrong_type": {
+      "sha256": "81344cf04b4deb834e2da95093036c41c6d764f51cda92ae9bb589334ee344f9",
+      "expected": "wrong_type/result/escape semantic, wrong_root conservative precision; actual diagnostic to be measured"
+    },
+    "wrong_arm_result": {
+      "sha256": "e2a7057771ee7b2cc5303e8734a6e212cdd62f625b9b4b361c4803092b06a6d8",
+      "expected": "wrong_type/result/escape semantic, wrong_root conservative precision; actual diagnostic to be measured"
+    },
+    "loan_escape": {
+      "sha256": "7e6e07f59d26cca3f416fe0717746270368267e254113e47c57b1d523f2036a2",
+      "expected": "wrong_type/result/escape semantic, wrong_root conservative precision; actual diagnostic to be measured"
+    },
+    "wrong_root": {
+      "sha256": "fb476c326a63d4542d57ba5c9b7a4676ed8fd7104f24d377fd3807bdb697a670",
+      "expected": "wrong_type/result/escape semantic, wrong_root conservative precision; actual diagnostic to be measured"
+    }
+  }
+}

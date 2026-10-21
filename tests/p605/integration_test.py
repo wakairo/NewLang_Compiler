@@ -21,6 +21,13 @@ def main():
         data = (root.parent.parent / name).read_bytes()
         if name == 'src/semantic_internal.h':
             full_digest = hashlib.sha256(data).hexdigest()
+            # P713: exact artifact-owned IF history attachment, no arithmetic
+            # authority or historical bytes changed. Reject every other delta.
+            if_fields = (b'    struct NLIfFieldProof *if_fields;\n'
+                         b'    void (*destroy_if_fields)(NLCheckedFragment *);\n')
+            if_record = b'struct NLCheckedFragment {\n' + if_fields
+            assert data.count(if_fields) == data.count(if_record) == 1
+            data = data.replace(if_record, b'struct NLCheckedFragment {\n', 1)
             # P701: exact private artifact attachment only; preserve the
             # original entire-header digest and all arithmetic proof hashes.
             copy_fields = (b'    struct NLCopyBodyProof *copy_body;\n'

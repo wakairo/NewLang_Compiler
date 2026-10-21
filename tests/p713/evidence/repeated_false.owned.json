@@ -1,0 +1,86 @@
+{
+  "if": 18,
+  "condition": 17,
+  "condition_value": 8,
+  "base": 1,
+  "root": 1,
+  "child": 3,
+  "index": 1,
+  "incarnation": 1,
+  "parent_before": 1,
+  "parent_after": 7,
+  "child_after": 6,
+  "result_id": 11,
+  "arms": [
+    {
+      "changes": 2,
+      "parent_fact": 13,
+      "child_fact": 12,
+      "events": [
+        {
+          "node": 4,
+          "change": true,
+          "old_id": 1,
+          "new_id": 11,
+          "result_id": 1,
+          "ref": 4,
+          "incoming_symbol": 0
+        },
+        {
+          "node": 9,
+          "change": false,
+          "old_id": 11,
+          "new_id": 0,
+          "result_id": 13,
+          "ref": 0,
+          "incoming_symbol": 0
+        },
+        {
+          "node": 14,
+          "change": true,
+          "old_id": 11,
+          "new_id": 16,
+          "result_id": 11,
+          "ref": 7,
+          "incoming_symbol": 5
+        }
+      ]
+    },
+    {
+      "changes": 2,
+      "parent_fact": 12,
+      "child_fact": 11,
+      "events": [
+        {
+          "node": 4,
+          "change": true,
+          "old_id": 1,
+          "new_id": 11,
+          "result_id": 1,
+          "ref": 4,
+          "incoming_symbol": 0
+        },
+        {
+          "node": 11,
+          "change": true,
+          "old_id": 11,
+          "new_id": 15,
+          "result_id": 11,
+          "ref": 6,
+          "incoming_symbol": 0
+        }
+      ]
+    }
+  ],
+  "result_binding": 4,
+  "reads": [
+    {
+      "symbol": 5,
+      "index": 1
+    },
+    {
+      "symbol": 6,
+      "index": 0
+    }
+  ]
+}

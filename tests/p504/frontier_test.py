@@ -79,9 +79,7 @@ def main():
                 "bool_as_ref.nl": (3, "semantic", "P3-WRITE-REF-REQUIRED"),
                 "unknown.nl": (3, "precision", "USIZE-EQUALITY-PRECISION"),
                 "chain.nl": (3, "unsupported", "USIZE-EQUALITY-SOURCE-PRECISION"),
-                "split_operator.nl": (3, "unsupported", "P5-EXPRESSION-UNSUPPORTED"),
-                "full_guard_true.nl": (3, "precision", "P6-JOIN-PRECISION"),
-                "full_guard_false.nl": (3, "precision", "P6-JOIN-PRECISION")}
+                "split_operator.nl": (3, "unsupported", "P5-EXPRESSION-UNSUPPORTED")}
     for name, digest in frozen["p497_migration"]["immutable_sources"].items():
         require(hashlib.sha256((root.parent / "p497" / name).read_bytes()).hexdigest() == digest,
                 f"adopted source changed: {name}")
@@ -121,6 +119,10 @@ def main():
                                       bindings=bindings, private_gate=gate.stdout.strip(), c17=0,
                                       c_sha256=hashlib.sha256(emitted.stdout.encode()).hexdigest(),
                                       native=statuses, sanitizer=sanitizer)))
+            elif name.startswith("full_guard_"):
+                sys.path.insert(0, str(root.parent / 'p713'))
+                from legacy import exercise
+                exercise(compiler, source, cc, sanitizer)
             elif name in ("if_true.nl", "if_false.nl"):
                 require(checked.returncode == 0 and not checked.stdout and not checked.stderr and
                         emitted.returncode == 4 and not emitted.stdout and
@@ -136,7 +138,7 @@ def main():
                     require(result.returncode == status and not result.stdout and
                             f"error({category})[{code}]" in result.stderr, f"wrong refusal: {result}")
                 print(json.dumps(dict(source=name, exit=status, diagnostic=checked.stderr.strip(), c_bytes=0)))
-    print("P504 normal usize equality native FINITE; IF effects/Pair join HOLD")
+    print("P504 equality regressions preserved; old field-join frontier advanced by P713")
 
 
 if __name__ == "__main__":

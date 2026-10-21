@@ -44,12 +44,12 @@ def main():
             print(json.dumps(dict(source=str(source),check=check.returncode,c17=emitted.returncode,c_bytes=len(emitted.stdout),diagnostic=emitted.stderr.strip(),**extra)))
     for filename,oracle in json.loads((root.parent/'p631/freeze.json').read_text())['new_cases'].items():
         print(json.dumps(local.observe_case(compiler,root.parent/'p631'/filename,cc,sanitizer,oracle,probe=probe,local_probe=local_probe)))
-    # Existing legal effectful source remains unsupported, not a new admitted arm.
+    # P713 advances the unchanged P514 effectful source; preserve original SHA.
     source = root.parent/'p514/branch_effect.nl'
     h.require(hashlib.sha256(source.read_bytes()).hexdigest() == '757f895f06c84bcbcfc1efa60bcb3cb1b4b39fa7245ebb2bb090d861f64feceb','effect control changed')
-    check,emitted = h.run([compiler,'--check',str(source)]),h.run([compiler,str(source)])
-    h.require(all(p.returncode == 3 and not p.stdout and 'error(precision)[P6-JOIN-PRECISION]' in p.stderr for p in (check,emitted)),'effectful first precision boundary changed')
-    print(json.dumps(dict(source=str(source),check=3,c17=3,c_bytes=0,diagnostic=emitted.stderr.strip())))
+    sys.path.insert(0, str(root.parent / 'p713'))
+    from legacy import exercise
+    exercise(compiler, source, cc, sanitizer)
 
 
 if __name__ == '__main__':

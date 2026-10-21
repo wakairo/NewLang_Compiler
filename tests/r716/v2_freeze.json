@@ -1,0 +1,48 @@
+{
+  "authority": {
+    "original_main": "e917906f0416bf6132af3b5649a4f7fc5bdf47ba",
+    "candidate": "18dcb161f9be164fdac986c36cd5bbb820c903d5",
+    "canonical": "Draft17.33",
+    "R_first_issue_comment": 6328466829
+  },
+  "v1_preserved": {
+    "comment_sha256": "#716 first issue comment",
+    "source_paths": [
+      "tests/r716/A_true.nl",
+      "tests/r716/A_false.nl",
+      "tests/r716/B_true.nl",
+      "tests/r716/B_false.nl",
+      "tests/r716/N_wrong_type.nl"
+    ],
+    "status": "first source A_true --check P3-UNKNOWN-BINDING at literal true; both arms not reached",
+    "CIs": [
+      39691158791,
+      39691158811,
+      39691302415,
+      39691302429
+    ]
+  },
+  "v2_correction": "Syntactic condition correction only for positive sources: if(true|false) -> if(usize(2)<usize(9)|usize(9)<usize(2)) with unchanged normal arms, nominal, operands, old/new/sibling oracle and expected world-join invariants. Semantic negative additionally replaces unresolved true argument with well-formed wrong-type usize(7), still predicting type mismatch. Predicted before first v2 execution; all first versions remain untouched. Copy preservation, no producer oracle.",
+  "versions": {
+    "A_true_v2.nl": {
+      "sha256": "e2eece88f51dcc42cdaf17bc71943d19cb6b9f83b58cd0f7020a83ecde6e761b",
+      "oracle": "old=19,current=37,sibling=61,index=1,Change=(1,1)"
+    },
+    "A_false_v2.nl": {
+      "sha256": "3b65bb3ac7f636f73544a1a083f35de830850af2a1f67d730bcc6cf80bbb5a7b",
+      "oracle": "old=19,current=83,sibling=61,index=1,Change=(1,1)"
+    },
+    "B_true_v2.nl": {
+      "sha256": "5bb05d781ffdecc5f1db1640b304f273b286345565b8e563f4b981c2c655b483",
+      "oracle": "old=74,current=106,sibling=23,index=0,Change=(1,0)"
+    },
+    "B_false_v2.nl": {
+      "sha256": "127fbb99819d5d664e0fa0cd313a7a4390df4907b3641045e536c43ad3e64d4d",
+      "oracle": "old=74,current=74,sibling=23,index=0,Change=(1,0)"
+    },
+    "N_wrong_type_v2.nl": {
+      "sha256": "ce95e50a31015d14b04f43b2a1137063929239aac0174ae5d58a02bcef2e30d0",
+      "oracle": "semantic wrong-u8-type reject; zero C; named output preserved"
+    }
+  }
+}

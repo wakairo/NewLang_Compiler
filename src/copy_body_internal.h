@@ -62,4 +62,11 @@ NLCheckStatus nl_copy_body_parameters(NLCheckedFragment *,
                                       const NLCheckedFragment *,
                                       NLCheckedNodeId, const NLSymbolId[2],
                                       const NLSemanticContext *);
+void nl_copy_state_destroy(NLCopyCallAnchor *);
+NLCheckStatus nl_copy_state_anchor(const NLSemanticContext *,
+                                   NLCopyCallAnchor *);
+bool nl_copy_state_matches(const NLSemanticContext *, const NLCopyCallAnchor *);
+bool nl_copy_trio(const NLSemanticContext *, NLPlaceId, NLSemanticPlaceView[3]);
+bool nl_copy_plain(const NLSemanticContext *, NLValueId, NLTypeId);
+bool nl_copy_same_types(const NLSemanticContext *, const NLSemanticContext *);
 #endif

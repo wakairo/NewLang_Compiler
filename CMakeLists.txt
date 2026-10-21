@@ -98,7 +98,7 @@ add_library(newlang_parser STATIC src/parser.c)
 target_link_libraries(newlang_parser PUBLIC newlang_syntax newlang_lexer newlang_diagnostic)
 add_library(newlang_checked STATIC src/checked.c)
 target_link_libraries(newlang_checked PUBLIC newlang_syntax)
-add_library(newlang_semantic STATIC src/copy_body.c src/array4.c src/usize_addition.c src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/node_join.c src/node_links.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
+add_library(newlang_semantic STATIC src/copy_body.c src/if_field.c src/array4.c src/usize_addition.c src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/node_join.c src/node_links.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
 target_link_libraries(newlang_semantic PUBLIC newlang_checked newlang_diagnostic newlang_parser)
 add_library(newlang_checked_c_node STATIC src/checked_c_node.c src/checked_c_five.c)
 target_link_libraries(newlang_checked_c_node PUBLIC newlang_semantic)
@@ -110,6 +110,19 @@ if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
     # SPECULATIVE PR533 opt-in: default compiler/parser stay OFF. Test-only
     # rebuild of the SAME parser exercises Production semantics/owned/C17.
+    add_executable(p713_gate_test tests/p713/gate_test.c)
+    target_link_libraries(p713_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
+    target_link_options(p713_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p713_if_field_proof_oom.unit COMMAND p713_gate_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p713/both_true.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p713/one_false.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p713/repeated_true.nl")
+    add_test(NAME p713_if_field_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p713/native.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p713_public_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p713")
+    add_executable(p713_public_probe tests/p713/public_probe.c)
+    target_link_libraries(p713_public_probe PRIVATE newlang_parser newlang_semantic)
     add_executable(p706_gate_test tests/p706/gate_test.c)
     target_link_libraries(p706_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
     target_link_options(p706_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
@@ -1054,4 +1067,15 @@ if(BUILD_TESTING)
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+endif()
+
+# R716 independent blind-only material. No compiler, authority, or producer edits.
+if(BUILD_TESTING)
+    add_executable(r716_blind_public_probe tests/r716/probe.c)
+    target_link_libraries(r716_blind_public_probe PRIVATE newlang_parser newlang_semantic)
+    add_test(NAME r716_blind_original_field_if.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r716/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r716_blind_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r716")
 endif()

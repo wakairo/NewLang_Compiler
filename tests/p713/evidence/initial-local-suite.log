@@ -1,0 +1,809 @@
+Internal ctest changing into directory: /workspace/p713-build
+Test project /workspace/p713-build
+        Start   5: p701_stateful_native.integration
+        Start   3: p706_ref_write_native.integration
+        Start  43: p605_arithmetic_comparison.integration
+        Start   2: p706_proof_handoff_oom.unit
+  1/383 Test   #2: p706_proof_handoff_oom.unit ...........................   Passed    0.56 sec
+        Start  44: p605_mutant_phase.unit
+  2/383 Test  #43: p605_arithmetic_comparison.integration ................   Passed    0.66 sec
+        Start   4: p701_proof_rollback_oom.unit
+  3/383 Test   #4: p701_proof_rollback_oom.unit ..........................   Passed    0.11 sec
+        Start  21: p634_historical_hash.unit
+  4/383 Test  #44: p605_mutant_phase.unit ................................   Passed    0.31 sec
+        Start   1: p713_if_field_proof_oom.unit
+  5/383 Test  #21: p634_historical_hash.unit .............................   Passed    0.11 sec
+        Start   6: p572_three_node_owned.unit
+  6/383 Test   #6: p572_three_node_owned.unit ............................   Passed    0.04 sec
+        Start   7: p572_three_node_fault.unit
+  7/383 Test   #3: p706_ref_write_native.integration .....................   Passed    1.07 sec
+        Start   8: p572_source_oom.unit
+  8/383 Test   #7: p572_three_node_fault.unit ............................   Passed    0.20 sec
+        Start   9: p572_three_node_native.integration
+  9/383 Test   #8: p572_source_oom.unit ..................................   Passed    0.15 sec
+        Start  10: p534_source_owned.unit
+ 10/383 Test  #10: p534_source_owned.unit ................................   Passed    0.01 sec
+        Start  11: p534_oom.unit
+ 11/383 Test  #11: p534_oom.unit .........................................   Passed    0.00 sec
+        Start  12: p534_issuer_fault.unit
+ 12/383 Test  #12: p534_issuer_fault.unit ................................   Passed    0.00 sec
+        Start  13: p534_array_native.integration
+ 13/383 Test   #1: p713_if_field_proof_oom.unit ..........................   Passed    0.40 sec
+        Start  14: p541_source_owned.unit
+ 14/383 Test  #14: p541_source_owned.unit ................................   Passed    0.01 sec
+        Start  15: p541_oom.unit
+ 15/383 Test  #15: p541_oom.unit .........................................   Passed    0.04 sec
+        Start  16: p541_issuer_fault.unit
+ 16/383 Test  #16: p541_issuer_fault.unit ................................   Passed    0.03 sec
+        Start  17: p541_array_native.integration
+ 17/383 Test   #9: p572_three_node_native.integration ....................   Passed    0.61 sec
+        Start  18: p636_plain_source_indices.unit
+ 18/383 Test  #18: p636_plain_source_indices.unit ........................   Passed    0.01 sec
+        Start  19: p636_local_arm_indices.unit
+ 19/383 Test  #19: p636_local_arm_indices.unit ...........................   Passed    0.02 sec
+        Start  20: p636_equal_arm_indices.unit
+ 20/383 Test  #20: p636_equal_arm_indices.unit ...........................   Passed    0.01 sec
+        Start  22: p634_same_value_ended_root.unit
+ 21/383 Test  #22: p634_same_value_ended_root.unit .......................   Passed    0.01 sec
+        Start  23: p634_unequal_ended_root.unit
+ 22/383 Test  #23: p634_unequal_ended_root.unit ..........................   Passed    0.00 sec
+        Start  24: p633_equal_outer_derivation.unit
+ 23/383 Test  #24: p633_equal_outer_derivation.unit ......................   Passed    0.00 sec
+        Start  25: p633_local_cli.integration
+ 24/383 Test   #5: p701_stateful_native.integration ......................   Passed    1.87 sec
+        Start  26: p633_both_false_oom.unit
+ 25/383 Test  #26: p633_both_false_oom.unit ..............................   Passed    0.07 sec
+        Start  27: p633_outer_true_oom.unit
+ 26/383 Test  #27: p633_outer_true_oom.unit ..............................   Passed    0.04 sec
+        Start  28: p633_pure_true_oom.unit
+ 27/383 Test  #28: p633_pure_true_oom.unit ...............................   Passed    0.01 sec
+        Start  29: p633_local_same_value.unit
+ 28/383 Test  #29: p633_local_same_value.unit ............................   Passed    0.04 sec
+        Start  30: p633_local_different_values.unit
+ 29/383 Test  #30: p633_local_different_values.unit ......................   Passed    0.01 sec
+        Start  31: p651_cli_native.integration
+ 30/383 Test  #13: p534_array_native.integration .........................   Passed    0.84 sec
+        Start  32: p651_true_proof.unit
+ 31/383 Test  #32: p651_true_proof.unit ..................................   Passed    0.07 sec
+        Start  33: p651_false_proof.unit
+ 32/383 Test  #33: p651_false_proof.unit .................................   Passed    0.08 sec
+        Start  34: p651_oom.unit
+ 33/383 Test  #34: p651_oom.unit .........................................   Passed    0.04 sec
+        Start  35: p633_equal_world_origin.unit
+ 34/383 Test  #35: p633_equal_world_origin.unit ..........................   Passed    0.00 sec
+        Start  36: p633_unequal_world_origin.unit
+ 35/383 Test  #36: p633_unequal_world_origin.unit ........................   Passed    0.00 sec
+        Start  37: p628_cli_pair_if.integration
+ 36/383 Test  #31: p651_cli_native.integration ...........................   Passed    1.13 sec
+        Start  38: p628_true_oom.unit
+ 37/383 Test  #38: p628_true_oom.unit ....................................   Passed    0.06 sec
+        Start  39: p628_false_oom.unit
+ 38/383 Test  #17: p541_array_native.integration .........................   Passed    1.87 sec
+        Start  40: p628_alias_oom.unit
+ 39/383 Test  #39: p628_false_oom.unit ...................................   Passed    0.03 sec
+        Start  41: p626_cli_copy_if.integration
+ 40/383 Test  #40: p628_alias_oom.unit ...................................   Passed    0.03 sec
+        Start  42: p626_if_oom.unit
+ 41/383 Test  #42: p626_if_oom.unit ......................................   Passed    0.02 sec
+        Start  45: p603_comparison_parser.unit
+ 42/383 Test  #45: p603_comparison_parser.unit ...........................   Passed    0.00 sec
+        Start  46: p603_comparison_values.unit
+ 43/383 Test  #46: p603_comparison_values.unit ...........................   Passed    0.00 sec
+        Start  47: p603_comparison_rollback.unit
+ 44/383 Test  #47: p603_comparison_rollback.unit .........................   Passed    0.00 sec
+        Start  48: p603_comparison_oom.unit
+ 45/383 Test  #48: p603_comparison_oom.unit ..............................   Passed    0.00 sec
+        Start  49: p603_comparison_native.integration
+ 46/383 Test  #37: p628_cli_pair_if.integration ..........................   Passed    4.19 sec
+        Start  50: p504_equality_parser.unit
+ 47/383 Test  #50: p504_equality_parser.unit .............................   Passed    0.00 sec
+        Start  51: p504_equality_values.unit
+ 48/383 Test  #41: p626_cli_copy_if.integration ..........................   Passed    3.23 sec
+ 49/383 Test  #51: p504_equality_values.unit .............................   Passed    0.00 sec
+        Start  52: p504_equality_rollback.unit
+        Start  53: p504_equality_oom.unit
+ 50/383 Test  #52: p504_equality_rollback.unit ...........................   Passed    0.00 sec
+        Start  54: p504_equality_native.integration
+ 51/383 Test  #53: p504_equality_oom.unit ................................   Passed    0.01 sec
+        Start  55: p508_poison.unit
+ 52/383 Test  #55: p508_poison.unit ......................................   Passed    0.16 sec
+        Start  56: p508_oom.unit
+ 53/383 Test  #56: p508_oom.unit .........................................   Passed    0.01 sec
+        Start  57: p508_copy_selection_native.integration
+ 54/383 Test  #25: p633_local_cli.integration ............................***Failed    6.45 sec
+{"source": "/workspace/p713/tests/p630/then_true.nl", "source_sha256": "1816dc3c68fdeaddf0141c5a1c75dd935722b06f91e7d934c9ca17bd51bf9031", "check": 0, "c17": 0, "c17_sha256": "687a27bb13e255895117851136f29cca2d75cbc451f8d3c4a5e46776b669b42d", "public": {"if": 21, "condition_symbol": 4, "bool": 1, "selected_symbol": 5, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 1, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [5, 0], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p713/tests/p630/then_false.nl", "source_sha256": "5186078d29654f1550fa759f049b0ade6ca2c3c6299339c08985e5fc7743f17a", "check": 0, "c17": 0, "c17_sha256": "ed69cf9a473270b5ec50d60be483f00a330edc234addf9787492c00500af8ea3", "public": {"if": 21, "condition_symbol": 4, "bool": 0, "selected_symbol": 5, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 0, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [5, 0], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p713/tests/p630/else_false.nl", "source_sha256": "ac1249ed02d68a718f8635ff563696406ca608344a03000805dfe2a52d60de6c", "check": 0, "c17": 0, "c17_sha256": "cefdb7e215af0f2045853d5ca1876d0be1d85b39845f873d088a7cfcba52e771", "public": {"if": 21, "condition_symbol": 4, "bool": 0, "selected_symbol": 5, "arms": [83, 24], "arm_locals": [0, 1], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 0, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [0, 5], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p713/tests/p630/wrong_type.nl", "check": 3, "c17": 3, "c_bytes": 0, "diagnostic": "/workspace/p713/tests/p630/wrong_type.nl:5:26-5:27: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands", "rollback": "P514_REJECT phase=registration code=USIZE-LESS-THAN-TYPE rollback=PASS artifact=NULL"}
+{"source": "/workspace/p713/tests/p630/range_arm.nl", "check": 3, "c17": 3, "c_bytes": 0, "diagnostic": "/workspace/p713/tests/p630/range_arm.nl:6:41-6:48: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255", "rollback": "P514_REJECT phase=registration code=V1-U8-LITERAL-RANGE rollback=PASS artifact=NULL"}
+{"source": "/workspace/p713/tests/p630/two_locals.nl", "check": 0, "c17": 4, "c_bytes": 0, "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p713/tests/p630/two_locals.nl"}
+{"source": "/workspace/p713/tests/p630/nested_arm.nl", "check": 0, "c17": 4, "c_bytes": 0, "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p713/tests/p630/nested_arm.nl"}
+{"source": "/workspace/p713/tests/p630/pure_true.nl", "source_sha256": "380926380dff1682ac638ec08035b0b498632ec2af32189e2685271b9476053a", "check": 0, "c17": 0, "c17_sha256": "3c829da467aab49de6b97d4f98a10dd1a3ec45ffcee617a8a25c9e326e09ecd9", "public": {"if": 14, "condition_symbol": 3, "bool": 1, "selected_symbol": 4, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": null, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91]}, "sanitizer": "none"}
+{"source": "/workspace/p713/tests/p630/pure_false.nl", "source_sha256": "c452b259b7679fd7f269387af2995e06a7b28c71426645b87712ec11b761699b", "check": 0, "c17": 0, "c17_sha256": "f9d5570f2fae03f3209d2bdeeb910765fb8eb2d2e1580cd1ce52fd3ea6d6264b", "public": {"if": 14, "condition_symbol": 3, "bool": 0, "selected_symbol": 4, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": null, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91]}, "sanitizer": "none"}
+{"source": "/workspace/p713/tests/p630/both_false.nl", "source_sha256": "9eb66c3f15469ac534f4806ecff8c309f6e20248120d65463590594ec9926281", "check": 0, "c17": 0, "c17_sha256": "865cb931dcc6b2d837d3653d59d83bb707b8f209327b5d195d19a92322f815a0", "public": {"if": 21, "condition_symbol": 4, "bool": 0, "selected_symbol": 5, "arms": [83, 24], "arm_locals": [1, 1], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 0, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [5, 5], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p713/tests/p630/outer_true.nl", "source_sha256": "c04722d1fecc035660307f15422cf46df255ac5e422575e08a1c5b7fe61fdc58", "check": 0, "c17": 0, "c17_sha256": "c641ea5e8c4da7be6e917d9ad12fb10e9e5f3e207292154076f98f55caa3ba23", "public": {"if": 24, "condition_symbol": 5, "bool": 1, "selected_symbol": 6, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 24, "bool": 1, "condition_symbol": 5, "equal_symbol": 5, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [6, 0], "selected_symbol": 6, "input_symbol": 6, "original_symbol": 3, "old_symbol": 8, "after_symbol": 9, "sibling_symbol": 10, "ref_symbol": 7, "replace_node": 29, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 11], "left_facts": [4, 10], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p713/tests/p631/same_value_local.nl", "source_sha256": "bbea3f108929785345d95502f09f68db9186107b0da65f08a7a229d4b83b2abe", "check": 0, "c17": 0, "c17_sha256": "f872b7be9875a0c26e44efeb795419c2274301e68711b689ae5083149bf2dc2b", "public": {"if": 21, "condition_symbol": 4, "bool": 0, "selected_symbol": 5, "arms": [83, 83], "arm_locals": [1, 1], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 0, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 83], "arm_symbols": [5, 5], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none"}
+{"source": "/workspace/p713/tests/p631/duplicate_outer.nl", "source_sha256": "9d45e58c10609644169c09136346c0498afd53bef81d76e23e725398fb5a316e", "check": 0, "c17": 0, "c17_sha256": "c6e44f899f17e5e654a2ca35d9e6ad880a9375600b8046bf6795f483d03471d0", "public": {"if": 27, "condition_symbol": 6, "bool": 1, "selected_symbol": 7, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 27, "bool": 1, "condition_symbol": 6, "equal_symbol": 6, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [7, 0], "selected_symbol": 7, "input_symbol": 7, "original_symbol": 3, "old_symbol": 9, "after_symbol": 10, "sibling_symbol": 11, "ref_symbol": 8, "replace_node": 32, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 12], "left_facts": [4, 11], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none"}
+effectful first precision boundary changed
+
+        Start  58: r675_blind_source_owned_native.integration
+ 55/383 Test  #58: r675_blind_source_owned_native.integration ............   Passed    0.22 sec
+        Start  59: r675_index1_native_or_backend4.integration
+ 56/383 Test  #59: r675_index1_native_or_backend4.integration ............   Passed    0.12 sec
+        Start  60: r675_negative_unknown_semantic.integration
+ 57/383 Test  #60: r675_negative_unknown_semantic.integration ............   Passed    0.09 sec
+        Start  61: r675_negative_initializer_type_semantic.integration
+ 58/383 Test  #61: r675_negative_initializer_type_semantic.integration ...   Passed    0.12 sec
+        Start  62: r675_negative_decl_type_source_profile.integration
+ 59/383 Test  #62: r675_negative_decl_type_source_profile.integration ....   Passed    0.08 sec
+        Start  63: r675_negative_escape_semantic.integration
+ 60/383 Test  #63: r675_negative_escape_semantic.integration .............   Passed    0.09 sec
+        Start  64: r675_negative_replace_type_semantic.integration
+ 61/383 Test  #64: r675_negative_replace_type_semantic.integration .......   Passed    0.08 sec
+        Start  65: p671_other_fragment.unit
+ 62/383 Test  #65: p671_other_fragment.unit ..............................   Passed    0.00 sec
+        Start  66: p671_packet_stamp.integration
+ 63/383 Test  #66: p671_packet_stamp.integration .........................   Passed    0.33 sec
+        Start  67: p671_route_stamp.integration
+ 64/383 Test  #54: p504_equality_native.integration ......................***Failed    2.98 sec
+{"source": "bool_as_ref.nl", "exit": 3, "diagnostic": "/workspace/p713/tests/p504/bool_as_ref.nl:5:11-5:16: error(semantic)[P3-WRITE-REF-REQUIRED]: destination needs ref<write,T>", "c_bytes": 0}
+{"source": "chain.nl", "exit": 3, "diagnostic": "/workspace/p713/tests/p504/chain.nl:1:73-1:75: error(unsupported)[USIZE-EQUALITY-SOURCE-PRECISION]: only one flat binary operation of names or typed literals is supported", "c_bytes": 0}
+{"source": "copied_renamed.nl", "sha256": "8b63429c8d979f19ded4e7eef6c21f4c5c8a186d036c412d71e21598fae3ebab", "check": 0, "public": {"left": 17, "right": 17, "bool": 1, "equality": 13, "children": [11, 12], "symbols": [2, 3], "values": [4, 5, 6], "operator": [73, 75], "bool_symbol": 4, "if_checks": 0, "authority": 0}, "bindings": {"1": ["usize", 17], "2": ["usize", 17], "3": ["usize", 17], "4": ["bool", 1]}, "private_gate": "CONTROLS rejected=12 original=PASS snapshot=UNCHANGED", "c17": 0, "c_sha256": "2de7a2ee022c3ca28da9925115eeca9c1efbffab8d693b26da21de0b8fe19881", "native": {"plain": [0, 0], "observed": [0, 0], "wrong_comparison": [91, 91]}, "sanitizer": "none"}
+{"source": "copy_false.nl", "sha256": "e6b07be7784b64f8a99f87ff8341fef6f3cae2fe4e3685c33d4f4f4c03c26598", "check": 0, "public": {"left": 2, "right": 3, "bool": 0, "equality": 10, "children": [8, 9], "symbols": [1, 2], "values": [3, 4, 5], "operator": [42, 44], "bool_symbol": 3, "if_checks": 0, "authority": 0}, "bindings": {"1": ["usize", 2], "2": ["usize", 3], "3": ["bool", 0], "4": ["bool", 0]}, "private_gate": "CONTROLS rejected=12 original=PASS snapshot=UNCHANGED", "c17": 0, "c_sha256": "1397cff0dcde8b150157ac0e39410ebfcb94365c57dafe6efa54a2e14c2f53f2", "native": {"plain": [0, 0], "observed": [0, 0], "wrong_comparison": [91, 91], "wrong_copy": [91, 91]}, "sanitizer": "none"}
+{"source": "copy_true.nl", "sha256": "0ec4a7a1ae30bdd192ad5680e95002c7af9db323148d881c5d82880a843a0315", "check": 0, "public": {"left": 2, "right": 2, "bool": 1, "equality": 10, "children": [8, 9], "symbols": [1, 2], "values": [3, 4, 5], "operator": [42, 44], "bool_symbol": 3, "if_checks": 0, "authority": 0}, "bindings": {"1": ["usize", 2], "2": ["usize", 2], "3": ["bool", 1], "4": ["bool", 1]}, "private_gate": "CONTROLS rejected=12 original=PASS snapshot=UNCHANGED", "c17": 0, "c_sha256": "ac80f6e29dea007db0b710e90b582bd1b8f934a06fcc3320c4809873317aadc6", "native": {"plain": [0, 0], "observed": [0, 0], "wrong_comparison": [91, 91], "wrong_copy": [91, 91]}, "sanitizer": "none"}
+{"source": "direct_false.nl", "sha256": "fe1b704115f206a14e7f5a1e58e15025998359e36071eecd160b961ac7c7c21f", "check": 0, "public": {"left": 17, "right": 19, "bool": 0, "equality": 4, "children": [2, 3], "symbols": [0, 0], "values": [1, 2, 3], "operator": [20, 22], "bool_symbol": 1, "if_checks": 0, "authority": 0}, "bindings": {"1": ["bool", 0], "2": ["bool", 0]}, "private_gate": "CONTROLS rejected=10 original=PASS snapshot=UNCHANGED", "c17": 0, "c_sha256": "76cdff31c05b8b2b41bb3e1c9b532c798805c7b4a240ceba1b3307a1243b57e8", "native": {"plain": [0, 0], "observed": [0, 0], "wrong_comparison": [91, 91], "wrong_copy": [91, 91]}, "sanitizer": "none"}
+{"source": "equal_false.nl", "sha256": "45bf0f4e861374e7a3e78218ff3147f0f23d9efb17c730cde2f7e83e0a1e6954", "check": 0, "public": {"left": 2, "right": 3, "bool": 0, "equality": 10, "children": [8, 9], "symbols": [1, 2], "values": [3, 4, 5], "operator": [51, 53], "bool_symbol": 3, "if_checks": 0, "authority": 0}, "bindings": {"1": ["usize", 2], "2": ["usize", 3], "3": ["bool", 0]}, "private_gate": "CONTROLS rejected=12 original=PASS snapshot=UNCHANGED", "c17": 0, "c_sha256": "bd559dca09a8114e7e05bfa421aac621133e715863e71f3dcaddcd1ab57ab966", "native": {"plain": [0, 0], "observed": [0, 0], "wrong_comparison": [91, 91]}, "sanitizer": "none"}
+{"source": "equal_true.nl", "sha256": "6a473c7e5c2cec1d96739b6de6f2b1bdc8d48b1024c495992857cb78f81b7506", "check": 0, "public": {"left": 2, "right": 2, "bool": 1, "equality": 10, "children": [8, 9], "symbols": [1, 2], "values": [3, 4, 5], "operator": [51, 53], "bool_symbol": 3, "if_checks": 0, "authority": 0}, "bindings": {"1": ["usize", 2], "2": ["usize", 2], "3": ["bool", 1]}, "private_gate": "CONTROLS rejected=12 original=PASS snapshot=UNCHANGED", "c17": 0, "c_sha256": "aeaa84b706c9e72eb0f8134664f5c2bb66d5c494c95f976a412738c28909b7fd", "native": {"plain": [0, 0], "observed": [0, 0], "wrong_comparison": [91, 91]}, "sanitizer": "none"}
+wrong refusal: CompletedProcess(args=['/workspace/p713-build/newlangc', '--check', '/workspace/p713/tests/p504/full_guard_false.nl'], returncode=0, stdout='', stderr='')
+
+        Start  68: p671_pair_control.integration
+ 65/383 Test  #67: p671_route_stamp.integration ..........................   Passed    0.37 sec
+        Start  69: p671_packet_stamp_oom.unit
+ 66/383 Test  #69: p671_packet_stamp_oom.unit ............................   Passed    0.01 sec
+        Start  70: p671_route_stamp_oom.unit
+ 67/383 Test  #70: p671_route_stamp_oom.unit .............................   Passed    0.00 sec
+        Start  71: p671_negative.integration
+ 68/383 Test  #49: p603_comparison_native.integration ....................   Passed    6.47 sec
+        Start  72: p694_named_output.integration
+ 69/383 Test  #68: p671_pair_control.integration .........................   Passed    0.35 sec
+        Start  73: p688_c17_scalar_export.integration
+ 70/383 Test  #71: p671_negative.integration .............................   Passed    0.09 sec
+        Start  74: p688_selected_call_oom.unit
+ 71/383 Test  #74: p688_selected_call_oom.unit ...........................   Passed    0.03 sec
+        Start  75: p685_zero_formal_u8.integration
+ 72/383 Test  #57: p508_copy_selection_native.integration ................   Passed    3.67 sec
+        Start  76: p685_shared_call_gate_oom.unit
+ 73/383 Test  #72: p694_named_output.integration .........................   Passed    0.58 sec
+        Start  77: p679_device_settings_swap.integration
+ 74/383 Test  #76: p685_shared_call_gate_oom.unit ........................   Passed    0.03 sec
+        Start  78: p679_invalid_source.integration
+ 75/383 Test  #78: p679_invalid_source.integration .......................   Passed    0.07 sec
+        Start  79: p514_poison.unit
+ 76/383 Test  #75: p685_zero_formal_u8.integration .......................   Passed    0.71 sec
+        Start  80: p514_oom.unit
+ 77/383 Test  #80: p514_oom.unit .........................................   Passed    0.06 sec
+        Start  81: p514_composition_native.integration
+ 78/383 Test  #79: p514_poison.unit ......................................   Passed    0.31 sec
+        Start  82: p517_identity_poison.unit
+ 79/383 Test  #81: p514_composition_native.integration ...................***Failed    0.13 sec
+semantic failure rollback:CompletedProcess(args=['/workspace/p713-build/p514_gate_test', 'reject', '/workspace/p713/tests/p514/branch_effect.nl'], returncode=1, stdout='', stderr='/workspace/p713/tests/p514/gate_test.c:463: out == NULL\n')
+
+        Start  83: p517_oom.unit
+ 80/383 Test  #77: p679_device_settings_swap.integration .................   Passed    0.43 sec
+        Start  84: p517_r516_composition_native.integration
+ 81/383 Test  #83: p517_oom.unit .........................................   Passed    0.02 sec
+        Start  85: p521_call_evidence.unit
+ 82/383 Test  #85: p521_call_evidence.unit ...............................   Passed    0.06 sec
+        Start  86: p521_identity_poison.unit
+ 83/383 Test  #73: p688_c17_scalar_export.integration ....................   Passed    1.03 sec
+        Start  87: p521_oom.unit
+ 84/383 Test  #82: p517_identity_poison.unit .............................   Passed    0.12 sec
+        Start  88: p521_copy_call_composition_native.integration
+ 85/383 Test  #87: p521_oom.unit .........................................   Passed    0.02 sec
+        Start  89: diagnostics.unit
+ 86/383 Test  #89: diagnostics.unit ......................................   Passed    0.00 sec
+        Start  90: source.unit
+ 87/383 Test  #90: source.unit ...........................................   Passed    0.00 sec
+        Start  91: lexer.unit
+ 88/383 Test  #91: lexer.unit ............................................   Passed    0.00 sec
+        Start  92: source_lexer.integration
+ 89/383 Test  #86: p521_identity_poison.unit .............................   Passed    0.11 sec
+        Start  93: parser_type.unit
+ 90/383 Test  #93: parser_type.unit ......................................   Passed    0.01 sec
+        Start  94: parser_expression.unit
+ 91/383 Test  #92: source_lexer.integration ..............................   Passed    0.08 sec
+ 92/383 Test  #94: parser_expression.unit ................................   Passed    0.00 sec
+        Start  95: parser_loan.unit
+        Start  96: parser_ownership.unit
+ 93/383 Test  #95: parser_loan.unit ......................................   Passed    0.00 sec
+        Start  97: parser_limits.unit
+ 94/383 Test  #96: parser_ownership.unit .................................   Passed    0.00 sec
+        Start  98: parser_diagnostics.unit
+ 95/383 Test  #98: parser_diagnostics.unit ...............................   Passed    0.00 sec
+        Start  99: source_parser.integration
+ 96/383 Test  #97: parser_limits.unit ....................................   Passed    0.01 sec
+        Start 100: semantic_type.unit
+ 97/383 Test #100: semantic_type.unit ....................................   Passed    0.00 sec
+        Start 101: semantic_value_use.unit
+ 98/383 Test #101: semantic_value_use.unit ...............................   Passed    0.00 sec
+        Start 102: semantic_domain.unit
+ 99/383 Test #102: semantic_domain.unit ..................................   Passed    0.00 sec
+        Start 103: semantic_transition.unit
+100/383 Test #103: semantic_transition.unit ..............................   Passed    0.00 sec
+        Start 104: semantic_loan.unit
+101/383 Test #104: semantic_loan.unit ....................................   Passed    0.01 sec
+        Start 105: semantic_failure.unit
+102/383 Test  #99: source_parser.integration .............................   Passed    0.09 sec
+        Start 106: source_semantic.integration
+103/383 Test #106: source_semantic.integration ...........................   Passed    0.00 sec
+        Start 107: raw_claim.unit
+104/383 Test #107: raw_claim.unit ........................................   Passed    0.00 sec
+        Start 108: raw_byte.unit
+105/383 Test #108: raw_byte.unit .........................................   Passed    0.00 sec
+        Start 109: raw_copy.unit
+106/383 Test #105: semantic_failure.unit .................................   Passed    0.15 sec
+        Start 110: raw_access.unit
+107/383 Test #110: raw_access.unit .......................................   Passed    0.00 sec
+        Start 111: raw_current.unit
+108/383 Test #111: raw_current.unit ......................................   Passed    0.00 sec
+        Start 112: raw_failure.unit
+109/383 Test #112: raw_failure.unit ......................................   Passed    0.01 sec
+        Start 113: raw_limit.unit
+110/383 Test #109: raw_copy.unit .........................................   Passed    0.11 sec
+        Start 114: raw_diagnostic.unit
+111/383 Test #114: raw_diagnostic.unit ...................................   Passed    0.00 sec
+        Start 115: raw_reborrow.unit
+112/383 Test #115: raw_reborrow.unit .....................................   Passed    0.00 sec
+        Start 116: raw_partition.unit
+113/383 Test #116: raw_partition.unit ....................................   Passed    0.04 sec
+        Start 117: raw_storage_cycle.integration
+114/383 Test #117: raw_storage_cycle.integration .........................   Passed    0.00 sec
+        Start 118: p5_parser.unit
+115/383 Test #118: p5_parser.unit ........................................   Passed    0.00 sec
+        Start 119: p5_binding.unit
+116/383 Test #119: p5_binding.unit .......................................   Passed    0.00 sec
+        Start 120: p5_receiving.unit
+117/383 Test #120: p5_receiving.unit .....................................   Passed    0.00 sec
+        Start 121: p5_aggregate.unit
+118/383 Test #121: p5_aggregate.unit .....................................   Passed    0.00 sec
+        Start 122: p5_failure.unit
+119/383 Test #122: p5_failure.unit .......................................   Passed    0.01 sec
+        Start 123: p5_diagnostic.unit
+120/383 Test #123: p5_diagnostic.unit ....................................   Passed    0.07 sec
+        Start 124: p5_source_checked.integration
+121/383 Test #124: p5_source_checked.integration .........................   Passed    0.00 sec
+        Start 125: p6_parser.unit
+122/383 Test #125: p6_parser.unit ........................................   Passed    0.00 sec
+        Start 126: p6_registry.unit
+123/383 Test #126: p6_registry.unit ......................................   Passed    0.00 sec
+        Start 127: p6_consuming.unit
+124/383 Test #127: p6_consuming.unit .....................................   Passed    0.01 sec
+        Start 128: p6_borrowed.unit
+125/383 Test #128: p6_borrowed.unit ......................................   Passed    0.01 sec
+        Start 129: p6_storage.unit
+126/383 Test #129: p6_storage.unit .......................................   Passed    0.01 sec
+        Start 130: p6_lifetime.unit
+127/383 Test #130: p6_lifetime.unit ......................................   Passed    0.00 sec
+        Start 131: p6_failure.unit
+128/383 Test #131: p6_failure.unit .......................................   Passed    0.02 sec
+        Start 132: p6_source_checked.integration
+129/383 Test #132: p6_source_checked.integration .........................   Passed    0.01 sec
+        Start 133: p7_lifecycle.unit
+130/383 Test #133: p7_lifecycle.unit .....................................   Passed    0.00 sec
+        Start 134: p7_boundary.unit
+131/383 Test #134: p7_boundary.unit ......................................   Passed    0.00 sec
+        Start 135: p7_invalid.unit
+132/383 Test #135: p7_invalid.unit .......................................   Passed    0.04 sec
+        Start 136: p7_identity.unit
+133/383 Test #136: p7_identity.unit ......................................   Passed    0.00 sec
+        Start 137: p7_failure.unit
+134/383 Test #137: p7_failure.unit .......................................   Passed    0.01 sec
+        Start 138: p7_source_checked.integration
+135/383 Test #138: p7_source_checked.integration .........................   Passed    0.01 sec
+        Start 139: p8_registration.unit
+136/383 Test #139: p8_registration.unit ..................................   Passed    0.00 sec
+        Start 140: p8_exit.unit
+137/383 Test #140: p8_exit.unit ..........................................   Passed    0.00 sec
+        Start 141: p8_ownership.unit
+138/383 Test #141: p8_ownership.unit .....................................   Passed    0.00 sec
+        Start 142: p8_failure.unit
+139/383 Test #142: p8_failure.unit .......................................   Passed    0.00 sec
+        Start 143: p8_source_checked.integration
+140/383 Test #143: p8_source_checked.integration .........................   Passed    0.01 sec
+        Start 144: p9_syntax.unit
+141/383 Test #144: p9_syntax.unit ........................................   Passed    0.00 sec
+        Start 145: p9_transfer.unit
+142/383 Test #145: p9_transfer.unit ......................................   Passed    0.00 sec
+        Start 146: p9_exit.unit
+143/383 Test #146: p9_exit.unit ..........................................   Passed    0.00 sec
+        Start 147: p9_failure.unit
+144/383 Test #147: p9_failure.unit .......................................   Passed    0.06 sec
+        Start 148: p9_effects.unit
+145/383 Test #148: p9_effects.unit .......................................   Passed    0.01 sec
+        Start 149: p9_availability.unit
+146/383 Test #149: p9_availability.unit ..................................   Passed    0.03 sec
+        Start 150: p9_decoder.integration
+147/383 Test #150: p9_decoder.integration ................................   Passed    0.01 sec
+        Start 151: p11_grammar.unit
+148/383 Test #151: p11_grammar.unit ......................................   Passed    0.01 sec
+        Start 152: p11_names.unit
+149/383 Test #152: p11_names.unit ........................................   Passed    0.01 sec
+        Start 153: p11_visibility.unit
+150/383 Test #153: p11_visibility.unit ...................................   Passed    0.04 sec
+        Start 154: p11_precision.unit
+151/383 Test #154: p11_precision.unit ....................................   Passed    0.00 sec
+        Start 155: p11_behavior.unit
+152/383 Test #155: p11_behavior.unit .....................................   Passed    0.01 sec
+        Start 156: p11_failure.unit
+153/383 Test #156: p11_failure.unit ......................................   Passed    0.02 sec
+        Start 157: p11_limits.unit
+154/383 Test #157: p11_limits.unit .......................................   Passed    0.09 sec
+        Start 158: p12_ingress.unit
+155/383 Test #158: p12_ingress.unit ......................................   Passed    0.01 sec
+        Start 159: p12_header.unit
+156/383 Test #159: p12_header.unit .......................................   Passed    0.00 sec
+        Start 160: p12_member.unit
+157/383 Test #160: p12_member.unit .......................................   Passed    0.01 sec
+        Start 161: p12_failure.unit
+158/383 Test #161: p12_failure.unit ......................................   Passed    0.01 sec
+        Start 162: p14_pre_exits.unit
+159/383 Test #162: p14_pre_exits.unit ....................................   Passed    0.04 sec
+        Start 163: p14_pre_header.unit
+160/383 Test #163: p14_pre_header.unit ...................................   Passed    0.00 sec
+        Start 164: p14_pre_origins.unit
+161/383 Test #164: p14_pre_origins.unit ..................................   Passed    0.00 sec
+        Start 165: p14_pre_failure.unit
+162/383 Test #165: p14_pre_failure.unit ..................................   Passed    0.00 sec
+        Start 166: p14_pre_integration.unit
+163/383 Test #166: p14_pre_integration.unit ..............................   Passed    0.00 sec
+        Start 167: p14_w1.unit
+164/383 Test #167: p14_w1.unit ...........................................   Passed    0.00 sec
+        Start 168: p14_w2.unit
+165/383 Test #168: p14_w2.unit ...........................................   Passed    0.00 sec
+        Start 169: p14_w3.unit
+166/383 Test #169: p14_w3.unit ...........................................   Passed    0.00 sec
+        Start 170: p14_w4.unit
+167/383 Test #170: p14_w4.unit ...........................................   Passed    0.00 sec
+        Start 171: p14_w5.unit
+168/383 Test #171: p14_w5.unit ...........................................   Passed    0.00 sec
+        Start 172: p14_w6.unit
+169/383 Test #172: p14_w6.unit ...........................................   Passed    0.00 sec
+        Start 173: p14_w7.unit
+170/383 Test #173: p14_w7.unit ...........................................   Passed    0.00 sec
+        Start 174: p14_w8.unit
+171/383 Test #174: p14_w8.unit ...........................................   Passed    0.00 sec
+        Start 175: p14_w9.unit
+172/383 Test #175: p14_w9.unit ...........................................   Passed    0.00 sec
+        Start 176: p14_w10.unit
+173/383 Test #176: p14_w10.unit ..........................................   Passed    0.00 sec
+        Start 177: p14_w11.unit
+174/383 Test #177: p14_w11.unit ..........................................   Passed    0.00 sec
+        Start 178: p14_w12.unit
+175/383 Test #178: p14_w12.unit ..........................................   Passed    0.01 sec
+        Start 179: p14_w13.unit
+176/383 Test #179: p14_w13.unit ..........................................   Passed    0.00 sec
+        Start 180: p14_w14.unit
+177/383 Test #180: p14_w14.unit ..........................................   Passed    0.00 sec
+        Start 181: p14_w15.unit
+178/383 Test #181: p14_w15.unit ..........................................   Passed    0.00 sec
+        Start 182: p14_w16.unit
+179/383 Test #182: p14_w16.unit ..........................................   Passed    0.00 sec
+        Start 183: p14_w17.unit
+180/383 Test #183: p14_w17.unit ..........................................   Passed    0.00 sec
+        Start 184: p14_w18.unit
+181/383 Test #184: p14_w18.unit ..........................................   Passed    0.00 sec
+        Start 185: p14_w19.unit
+182/383 Test #185: p14_w19.unit ..........................................   Passed    0.00 sec
+        Start 186: p14_w20.unit
+183/383 Test #186: p14_w20.unit ..........................................   Passed    0.00 sec
+        Start 187: p14_w21.unit
+184/383 Test #187: p14_w21.unit ..........................................   Passed    0.00 sec
+        Start 188: p14_w22.unit
+185/383 Test #188: p14_w22.unit ..........................................   Passed    0.00 sec
+        Start 189: p14_w23.unit
+186/383 Test #189: p14_w23.unit ..........................................   Passed    0.04 sec
+        Start 190: p14_w24.unit
+187/383 Test #190: p14_w24.unit ..........................................   Passed    0.00 sec
+        Start 191: p14_w25.unit
+188/383 Test #191: p14_w25.unit ..........................................   Passed    0.00 sec
+        Start 192: p14_w26.unit
+189/383 Test #192: p14_w26.unit ..........................................   Passed    0.00 sec
+        Start 193: p14_w27.unit
+190/383 Test #193: p14_w27.unit ..........................................   Passed    0.00 sec
+        Start 194: p14_w28.unit
+191/383 Test #194: p14_w28.unit ..........................................   Passed    0.01 sec
+        Start 195: p14_w29.unit
+192/383 Test #195: p14_w29.unit ..........................................   Passed    0.01 sec
+        Start 196: p14_w30.unit
+193/383 Test #196: p14_w30.unit ..........................................   Passed    0.00 sec
+        Start 197: p14_w31.unit
+194/383 Test #197: p14_w31.unit ..........................................   Passed    0.00 sec
+        Start 198: p14_w32.unit
+195/383 Test #198: p14_w32.unit ..........................................   Passed    0.00 sec
+        Start 199: p14_w33.unit
+196/383 Test #199: p14_w33.unit ..........................................   Passed    0.00 sec
+        Start 200: p14_w34.unit
+197/383 Test #200: p14_w34.unit ..........................................   Passed    0.00 sec
+        Start 201: p14_w35.unit
+198/383 Test #201: p14_w35.unit ..........................................   Passed    0.01 sec
+        Start 202: p14_w36.unit
+199/383 Test #202: p14_w36.unit ..........................................   Passed    0.00 sec
+        Start 203: p14_w37.unit
+200/383 Test #203: p14_w37.unit ..........................................   Passed    0.00 sec
+        Start 204: p14_w38.unit
+201/383 Test #204: p14_w38.unit ..........................................   Passed    0.00 sec
+        Start 205: p14_w39.unit
+202/383 Test #205: p14_w39.unit ..........................................   Passed    0.04 sec
+        Start 206: p14_w40.unit
+203/383 Test #206: p14_w40.unit ..........................................   Passed    0.21 sec
+        Start 207: p13_grammar.unit
+204/383 Test #207: p13_grammar.unit ......................................   Passed    0.00 sec
+        Start 208: p13_bool.unit
+205/383 Test #208: p13_bool.unit .........................................   Passed    0.00 sec
+        Start 209: p13_flow.unit
+206/383 Test #209: p13_flow.unit .........................................   Passed    0.00 sec
+        Start 210: p13_identity.unit
+207/383 Test #210: p13_identity.unit .....................................   Passed    0.00 sec
+        Start 211: p13_ref.unit
+208/383 Test #211: p13_ref.unit ..........................................   Passed    0.00 sec
+        Start 212: p13_effects.unit
+209/383 Test #212: p13_effects.unit ......................................   Passed    0.00 sec
+        Start 213: p13_nested.unit
+210/383 Test #213: p13_nested.unit .......................................   Passed    0.00 sec
+        Start 214: p13_failure.unit
+211/383 Test #113: raw_limit.unit ........................................   Passed    1.11 sec
+        Start 215: p13_limits.unit
+212/383 Test #214: p13_failure.unit ......................................   Passed    0.02 sec
+        Start 216: p10_admission.unit
+213/383 Test #216: p10_admission.unit ....................................   Passed    0.01 sec
+        Start 217: p10_builtin.unit
+214/383 Test #217: p10_builtin.unit ......................................   Passed    0.00 sec
+        Start 218: p10_failure.unit
+215/383 Test #218: p10_failure.unit ......................................   Passed    0.01 sec
+        Start 219: r4_01_argument_compatibility.unit
+216/383 Test #219: r4_01_argument_compatibility.unit .....................   Passed    0.04 sec
+        Start 220: cli.check_source
+217/383 Test #220: cli.check_source ......................................   Passed    0.32 sec
+        Start 221: frontend_build_policy.integration
+218/383 Test #215: p13_limits.unit .......................................   Passed    1.29 sec
+        Start 222: cli.version
+219/383 Test #222: cli.version ...........................................   Passed    0.04 sec
+        Start 223: cli.help
+220/383 Test #223: cli.help ..............................................   Passed    0.07 sec
+        Start 224: cli.no_arguments
+221/383 Test #224: cli.no_arguments ......................................   Passed    0.03 sec
+        Start 225: cli.invalid_option
+222/383 Test #225: cli.invalid_option ....................................   Passed    0.07 sec
+        Start 226: cli.extra_argument
+223/383 Test #226: cli.extra_argument ....................................   Passed    0.08 sec
+        Start 227: local_root_parser.unit
+224/383 Test #227: local_root_parser.unit ................................   Passed    0.00 sec
+        Start 228: local_root_evidence.unit
+225/383 Test #228: local_root_evidence.unit ..............................   Passed    0.00 sec
+        Start 229: local_root_direct_write_root.unit
+226/383 Test #229: local_root_direct_write_root.unit .....................   Passed    0.00 sec
+        Start 230: local_root_mutation.unit
+227/383 Test #230: local_root_mutation.unit ..............................   Passed    0.00 sec
+        Start 231: local_root_negatives.unit
+228/383 Test #231: local_root_negatives.unit .............................   Passed    0.00 sec
+        Start 232: local_root_conflict.unit
+229/383 Test #232: local_root_conflict.unit ..............................   Passed    0.00 sec
+        Start 233: local_root_resource.unit
+230/383 Test #233: local_root_resource.unit ..............................   Passed    0.02 sec
+        Start 234: local_root_failures.unit
+231/383 Test #234: local_root_failures.unit ..............................   Passed    0.00 sec
+        Start 235: local_root_checked_c.integration
+232/383 Test #221: frontend_build_policy.integration .....................   Passed    1.41 sec
+        Start 236: avs_parser.unit
+233/383 Test #236: avs_parser.unit .......................................   Passed    0.00 sec
+        Start 237: avs_evidence.unit
+234/383 Test #237: avs_evidence.unit .....................................   Passed    0.01 sec
+        Start 238: avs_rejection.unit
+235/383 Test #238: avs_rejection.unit ....................................   Passed    0.00 sec
+        Start 239: avs_ownership.unit
+236/383 Test #239: avs_ownership.unit ....................................   Passed    0.00 sec
+        Start 240: avs_failures.unit
+237/383 Test #240: avs_failures.unit .....................................   Passed    0.00 sec
+        Start 241: north_star_avs_checked_c.integration
+238/383 Test #235: local_root_checked_c.integration ......................   Passed    0.51 sec
+        Start 242: p497_usize_parser.unit
+239/383 Test #242: p497_usize_parser.unit ................................   Passed    0.00 sec
+        Start 243: p497_usize_values.unit
+240/383 Test #243: p497_usize_values.unit ................................   Passed    0.00 sec
+        Start 244: p497_usize_body.unit
+241/383 Test #244: p497_usize_body.unit ..................................   Passed    0.00 sec
+        Start 245: p497_usize_failures.unit
+242/383 Test #245: p497_usize_failures.unit ..............................   Passed    0.00 sec
+        Start 246: p497_usize_native.integration
+243/383 Test #241: north_star_avs_checked_c.integration ..................   Passed    0.38 sec
+        Start 247: allocated_node_source.integration
+244/383 Test #247: allocated_node_source.integration .....................   Passed    0.11 sec
+        Start 248: heap_link_source.integration
+245/383 Test #248: heap_link_source.integration ..........................   Passed    0.15 sec
+        Start 249: heap_link_failures.unit
+246/383 Test  #88: p521_copy_call_composition_native.integration .........   Passed    3.89 sec
+        Start 250: heap_link_evidence.unit
+247/383 Test #250: heap_link_evidence.unit ...............................   Passed    0.01 sec
+        Start 251: heap_link_supporting_claims.unit
+248/383 Test #251: heap_link_supporting_claims.unit ......................   Passed    0.00 sec
+        Start 252: heap_link_backend.unit
+249/383 Test #252: heap_link_backend.unit ................................   Passed    0.01 sec
+        Start 253: heap_link_native.integration
+250/383 Test #249: heap_link_failures.unit ...............................   Passed    0.55 sec
+        Start 254: allocated_node_native.integration
+251/383 Test #246: p497_usize_native.integration .........................***Failed    0.95 sec
+{"source": "literal.nl", "checked": 0, "public": "USIZE value=3 copied=3 literal_value=1 copy_value=2 symbol=1 span=14:22 native_max=18446744073709551615 authority=0", "c_sha256": "99f0d05d0dfedbc8800e17c0a88cf4d140842ce6d45005d49c0fdb6cc9abc021", "native": {"plain": [0, 0], "observed": [0, 0], "broken_carrier": [91, 91]}, "target_guard": "REJECT"}
+{"source": "literal9.nl", "checked": 0, "public": "USIZE value=9 copied=9 literal_value=1 copy_value=2 symbol=1 span=14:22 native_max=18446744073709551615 authority=0", "c_sha256": "43ec271d4a39fd1d291ca3bff66e11e848deef16aa201d8bba051b05ca388540", "native": {"plain": [0, 0], "observed": [0, 0], "broken_carrier": [91, 91]}, "target_guard": "REJECT"}
+comparison frontier changed: CompletedProcess(args=['/workspace/p713-build/newlangc', '--check', '/workspace/p713/tests/p497/guard_true.nl'], returncode=0, stdout='', stderr='')
+
+        Start 255: allocated_backend.unit
+252/383 Test #255: allocated_backend.unit ................................   Passed    0.00 sec
+        Start 256: live_tail_handoff_backend.unit
+253/383 Test #256: live_tail_handoff_backend.unit ........................   Passed    0.02 sec
+        Start 257: live_tail_handoff_native.integration
+254/383 Test #253: heap_link_native.integration ..........................   Passed    2.56 sec
+        Start 258: live_tail_return_backend.unit
+255/383 Test #258: live_tail_return_backend.unit .........................   Passed    0.02 sec
+        Start 259: live_tail_return_native.integration
+256/383 Test #254: allocated_node_native.integration .....................   Passed    2.45 sec
+        Start 260: live_tail_return_evidence.unit
+257/383 Test #260: live_tail_return_evidence.unit ........................   Passed    0.01 sec
+        Start 261: live_tail_return_oom.unit
+258/383 Test #257: live_tail_handoff_native.integration ..................   Passed    2.40 sec
+        Start 262: live_tail_return_source.integration
+259/383 Test #262: live_tail_return_source.integration ...................   Passed    0.49 sec
+        Start 263: packet_fork_evidence.unit
+260/383 Test #263: packet_fork_evidence.unit .............................   Passed    0.02 sec
+        Start 264: packet_fork_oom.unit
+261/383 Test #261: live_tail_return_oom.unit .............................   Passed    1.50 sec
+        Start 265: packet_fork_source.integration
+262/383 Test #264: packet_fork_oom.unit ..................................   Passed    3.40 sec
+        Start 266: packet_retention_evidence.unit
+263/383 Test #266: packet_retention_evidence.unit ........................   Passed    0.01 sec
+        Start 267: packet_retention_oom.unit
+264/383 Test #265: packet_fork_source.integration ........................   Passed    2.79 sec
+        Start 268: packet_retention_source.integration
+265/383 Test #259: live_tail_return_native.integration ...................   Passed    7.20 sec
+        Start 269: custody_source_evidence.unit
+266/383 Test #269: custody_source_evidence.unit ..........................   Passed    0.10 sec
+        Start 270: custody_source_oom.unit
+267/383 Test #267: packet_retention_oom.unit .............................   Passed    3.25 sec
+        Start 271: custody_source.integration
+268/383 Test #268: packet_retention_source.integration ...................   Passed    2.92 sec
+        Start 272: custody_codegen_oom.unit
+269/383 Test #272: custody_codegen_oom.unit ..............................   Passed    1.78 sec
+        Start 273: custody_native.integration
+270/383 Test #271: custody_source.integration ............................   Passed    5.03 sec
+        Start 274: custody_definition_evidence.unit
+271/383 Test #274: custody_definition_evidence.unit ......................   Passed    0.00 sec
+        Start 275: custody_definition_oom.unit
+272/383 Test #270: custody_source_oom.unit ...............................   Passed    7.91 sec
+        Start 276: custody_source_hold.integration
+273/383 Test  #84: p517_r516_composition_native.integration ..............   Passed   22.11 sec
+        Start 277: typed_owner_definition.unit
+274/383 Test #277: typed_owner_definition.unit ...........................   Passed    0.04 sec
+        Start 278: typed_owner_evidence.unit
+275/383 Test #278: typed_owner_evidence.unit .............................   Passed    0.01 sec
+        Start 279: typed_owner_precision.unit
+276/383 Test #279: typed_owner_precision.unit ............................   Passed    0.01 sec
+        Start 280: typed_owner_faults.unit
+277/383 Test #276: custody_source_hold.integration .......................   Passed    0.80 sec
+        Start 281: typed_owner_source.integration
+278/383 Test #281: typed_owner_source.integration ........................   Passed    0.60 sec
+        Start 282: two_heap_backend_lifecycle.unit
+279/383 Test #282: two_heap_backend_lifecycle.unit .......................   Passed    0.01 sec
+        Start 283: two_heap_backend.unit
+280/383 Test #283: two_heap_backend.unit .................................   Passed    0.01 sec
+        Start 284: two_heap_native.integration
+281/383 Test #275: custody_definition_oom.unit ...........................   Passed    4.50 sec
+        Start 285: two_heap_fields.unit
+282/383 Test #285: two_heap_fields.unit ..................................   Passed    0.01 sec
+        Start 286: two_heap_lifecycle.unit
+283/383 Test #286: two_heap_lifecycle.unit ...............................   Passed    0.00 sec
+        Start 287: two_heap_failures.unit
+284/383 Test #280: typed_owner_faults.unit ...............................   Passed    2.50 sec
+        Start 288: two_heap_source.integration
+285/383 Test #288: two_heap_source.integration ...........................   Passed    0.58 sec
+        Start 289: captured_closure_2_worlds.unit
+286/383 Test #289: captured_closure_2_worlds.unit ........................   Passed    0.00 sec
+        Start 290: captured_closure_3_worlds.unit
+287/383 Test #290: captured_closure_3_worlds.unit ........................   Passed    0.00 sec
+        Start 291: captured_closure_5_worlds.unit
+288/383 Test #287: two_heap_failures.unit ................................   Passed    1.58 sec
+        Start 292: captured_closure_poison.unit
+289/383 Test #291: captured_closure_5_worlds.unit ........................   Passed    0.02 sec
+        Start 293: captured_closure_oom.unit
+290/383 Test #292: captured_closure_poison.unit ..........................   Passed    0.04 sec
+        Start 294: captured_closure_checker-oom.unit
+291/383 Test #293: captured_closure_oom.unit .............................   Passed    0.47 sec
+        Start 295: captured_closure_source.integration
+292/383 Test #273: custody_native.integration ............................   Passed   10.21 sec
+        Start 296: five_root_evidence.unit
+293/383 Test #296: five_root_evidence.unit ...............................   Passed    0.08 sec
+        Start 297: five_root_poison.unit
+294/383 Test #297: five_root_poison.unit .................................   Passed    0.14 sec
+        Start 298: five_root_oom.unit
+295/383 Test #295: captured_closure_source.integration ...................   Passed    0.64 sec
+        Start 299: five_root_checker-oom.unit
+296/383 Test #294: captured_closure_checker-oom.unit .....................   Passed    3.20 sec
+        Start 300: five_root_source.integration
+297/383 Test #284: two_heap_native.integration ...........................   Passed    5.88 sec
+        Start 301: five_root_backend.unit
+298/383 Test #298: five_root_oom.unit ....................................   Passed    3.10 sec
+        Start 302: five_root_native.integration
+299/383 Test #300: five_root_source.integration ..........................   Passed    2.21 sec
+        Start 303: allocated_join_evidence.unit
+300/383 Test #303: allocated_join_evidence.unit ..........................   Passed    0.04 sec
+        Start 304: allocated_join_failures.unit
+301/383 Test #304: allocated_join_failures.unit ..........................   Passed    0.41 sec
+        Start 305: allocated_join_source.integration
+302/383 Test #305: allocated_join_source.integration .....................   Passed    0.41 sec
+        Start 306: allocated_node_evidence.unit
+303/383 Test #306: allocated_node_evidence.unit ..........................   Passed    0.01 sec
+        Start 307: allocated_node_operands.unit
+304/383 Test #307: allocated_node_operands.unit ..........................   Passed    0.00 sec
+        Start 308: allocated_node_failures.unit
+305/383 Test #308: allocated_node_failures.unit ..........................   Passed    0.48 sec
+        Start 309: p466_composition.integration
+306/383 Test #301: five_root_backend.unit ................................   Passed    3.08 sec
+        Start 310: p471_crossroot_frontier.integration
+307/383 Test #309: p466_composition.integration ..........................   Passed    0.93 sec
+        Start 311: p490_postjoin_frontier.integration
+308/383 Test #310: p471_crossroot_frontier.integration ...................   Passed    1.42 sec
+        Start 312: node_initial_some_controls.unit
+309/383 Test #312: node_initial_some_controls.unit .......................   Passed    0.01 sec
+        Start 313: node_initial_some_oom.unit
+310/383 Test #313: node_initial_some_oom.unit ............................   Passed    0.00 sec
+        Start 314: node_initial_native.integration
+311/383 Test #311: p490_postjoin_frontier.integration ....................   Passed    1.00 sec
+        Start 315: node_join_native_carrier.unit
+312/383 Test #315: node_join_native_carrier.unit .........................   Passed    0.00 sec
+        Start 316: node_join_native_oom.unit
+313/383 Test #316: node_join_native_oom.unit .............................   Passed    0.07 sec
+        Start 317: node_join_native.integration
+314/383 Test #314: node_initial_native.integration .......................   Passed    1.71 sec
+        Start 318: checked_c_node.unit
+315/383 Test #318: checked_c_node.unit ...................................   Passed    0.04 sec
+        Start 319: node_two_normal_join_public_proof.unit
+316/383 Test #319: node_two_normal_join_public_proof.unit ................   Passed    0.00 sec
+        Start 320: node_join_both_arms_public_proof.unit
+317/383 Test #320: node_join_both_arms_public_proof.unit .................   Passed    0.00 sec
+        Start 321: node_join_same_locator_public_proof.unit
+318/383 Test #321: node_join_same_locator_public_proof.unit ..............   Passed    0.01 sec
+        Start 322: node_join_post_write_public_proof.unit
+319/383 Test #322: node_join_post_write_public_proof.unit ................   Passed    0.01 sec
+        Start 323: node_join_public_negative.unit
+320/383 Test #323: node_join_public_negative.unit ........................   Passed    0.02 sec
+        Start 324: node_join_public_oom.unit
+321/383 Test #324: node_join_public_oom.unit .............................   Passed    0.07 sec
+        Start 325: node_two_normal_join.unit
+322/383 Test #325: node_two_normal_join.unit .............................   Passed    0.01 sec
+        Start 326: node_join_actual_none.unit
+323/383 Test #326: node_join_actual_none.unit ............................   Passed    0.00 sec
+        Start 327: node_join_other_original.unit
+324/383 Test #327: node_join_other_original.unit .........................   Passed    0.00 sec
+        Start 328: node_join_both_arms.unit
+325/383 Test #328: node_join_both_arms.unit ..............................   Passed    0.00 sec
+        Start 329: node_join_clear_occurrence.unit
+326/383 Test #329: node_join_clear_occurrence.unit .......................   Passed    0.00 sec
+        Start 330: node_join_saved_copy.unit
+327/383 Test #330: node_join_saved_copy.unit .............................   Passed    0.00 sec
+        Start 331: node_join_same_locator.unit
+328/383 Test #331: node_join_same_locator.unit ...........................   Passed    0.01 sec
+        Start 332: node_join_post_write.unit
+329/383 Test #332: node_join_post_write.unit .............................   Passed    0.00 sec
+        Start 333: node_join_negatives.unit
+330/383 Test #333: node_join_negatives.unit ..............................   Passed    0.00 sec
+        Start 334: node_join_owner.unit
+331/383 Test #334: node_join_owner.unit ..................................   Passed    0.00 sec
+        Start 335: node_join_private-ids.unit
+332/383 Test #335: node_join_private-ids.unit ............................   Passed    0.04 sec
+        Start 336: node_join_dependencies.unit
+333/383 Test #336: node_join_dependencies.unit ...........................   Passed    0.00 sec
+        Start 337: node_join_oom.unit
+334/383 Test #337: node_join_oom.unit ....................................   Passed    0.39 sec
+        Start 338: node_join_both_public_oom.unit
+335/383 Test #302: five_root_native.integration ..........................   Passed    6.58 sec
+336/383 Test #338: node_join_both_public_oom.unit ........................   Passed    0.12 sec
+        Start 339: node_join_both_issuer_oom.unit
+        Start 340: node_join_owned_poison.unit
+337/383 Test #340: node_join_owned_poison.unit ...........................   Passed    0.01 sec
+        Start 341: node_join_source.integration
+338/383 Test #317: node_join_native.integration ..........................   Passed    2.09 sec
+        Start 342: node_link_evidence.unit
+339/383 Test #342: node_link_evidence.unit ...............................   Passed    0.01 sec
+        Start 343: node_link_transitions.unit
+340/383 Test #343: node_link_transitions.unit ............................   Passed    0.00 sec
+        Start 344: node_link_dependencies.unit
+341/383 Test #344: node_link_dependencies.unit ...........................   Passed    0.01 sec
+        Start 345: node_link_negatives.unit
+342/383 Test #345: node_link_negatives.unit ..............................   Passed    0.01 sec
+        Start 346: node_link_liveness.unit
+343/383 Test #346: node_link_liveness.unit ...............................   Passed    0.00 sec
+        Start 347: node_link_resource.unit
+344/383 Test #347: node_link_resource.unit ...............................   Passed    0.00 sec
+        Start 348: node_link_failures.unit
+345/383 Test #341: node_join_source.integration ..........................   Passed    0.27 sec
+        Start 349: node_topology.integration
+346/383 Test #339: node_join_both_issuer_oom.unit ........................   Passed    0.43 sec
+        Start 350: node_link_source.integration
+347/383 Test #348: node_link_failures.unit ...............................   Passed    0.31 sec
+        Start 351: recursive_type_parser.unit
+348/383 Test #351: recursive_type_parser.unit ............................   Passed    0.00 sec
+        Start 352: recursive_type_identity.unit
+349/383 Test #352: recursive_type_identity.unit ..........................   Passed    0.01 sec
+        Start 353: recursive_type_source.unit
+350/383 Test #353: recursive_type_source.unit ............................   Passed    0.04 sec
+        Start 354: recursive_type_cycle.unit
+351/383 Test #354: recursive_type_cycle.unit .............................   Passed    0.00 sec
+        Start 355: recursive_type_negatives.unit
+352/383 Test #355: recursive_type_negatives.unit .........................   Passed    0.00 sec
+        Start 356: recursive_type_failures.unit
+353/383 Test #356: recursive_type_failures.unit ..........................   Passed    0.01 sec
+        Start 357: recursive_declaration.integration
+354/383 Test #357: recursive_declaration.integration .....................   Passed    0.10 sec
+        Start 358: fixed_field_parser.unit
+355/383 Test #358: fixed_field_parser.unit ...............................   Passed    0.01 sec
+        Start 359: fixed_field_state.unit
+356/383 Test #359: fixed_field_state.unit ................................   Passed    0.00 sec
+        Start 360: fixed_field_evidence.unit
+357/383 Test #360: fixed_field_evidence.unit .............................   Passed    0.00 sec
+        Start 361: fixed_field_dependencies.unit
+358/383 Test #350: node_link_source.integration ..........................   Passed    0.20 sec
+359/383 Test #361: fixed_field_dependencies.unit .........................   Passed    0.01 sec
+        Start 362: fixed_field_negatives.unit
+        Start 363: fixed_field_failures.unit
+360/383 Test #362: fixed_field_negatives.unit ............................   Passed    0.00 sec
+        Start 364: fixed_field_resource.unit
+361/383 Test #364: fixed_field_resource.unit .............................   Passed    0.01 sec
+        Start 365: fixed_field_checked_c.integration
+362/383 Test #363: fixed_field_failures.unit .............................   Passed    0.05 sec
+        Start 366: u8_parser.unit
+363/383 Test #366: u8_parser.unit ........................................   Passed    0.00 sec
+        Start 367: u8_values.unit
+364/383 Test #367: u8_values.unit ........................................   Passed    0.00 sec
+        Start 368: u8_body.unit
+365/383 Test #368: u8_body.unit ..........................................   Passed    0.00 sec
+        Start 369: u8_failures.unit
+366/383 Test #369: u8_failures.unit ......................................   Passed    0.00 sec
+        Start 370: nested_u8_checked_c.integration
+367/383 Test #299: five_root_checker-oom.unit ............................   Passed   10.76 sec
+        Start 371: u8_call_checked_c.integration
+368/383 Test #365: fixed_field_checked_c.integration .....................   Passed    0.86 sec
+        Start 372: north_star_v1_checked_c.integration
+369/383 Test #372: north_star_v1_checked_c.integration ...................   Passed    0.44 sec
+        Start 373: north_star_v0_checked_c.integration
+370/383 Test #373: north_star_v0_checked_c.integration ...................   Passed    0.20 sec
+        Start 374: p589_parser_oom.unit
+371/383 Test #374: p589_parser_oom.unit ..................................   Passed    0.04 sec
+        Start 375: p589_usize_addition.integration
+372/383 Test #370: nested_u8_checked_c.integration .......................   Passed    2.02 sec
+        Start 376: p596_shared_proof.unit
+373/383 Test #376: p596_shared_proof.unit ................................   Passed    0.00 sec
+        Start 377: p596_parser_oom.unit
+374/383 Test #377: p596_parser_oom.unit ..................................   Passed    0.00 sec
+        Start 378: p596_usize_subtraction.integration
+375/383 Test #349: node_topology.integration .............................   Passed    2.56 sec
+        Start 379: c17_target_model.integration
+376/383 Test #371: u8_call_checked_c.integration .........................   Passed    2.00 sec
+        Start 380: bootstrap_retry.offline
+377/383 Test #380: bootstrap_retry.offline ...............................   Passed    0.62 sec
+        Start 381: artifacts.integrity
+378/383 Test #381: artifacts.integrity ...................................   Passed    0.09 sec
+        Start 382: oracle.adapter
+379/383 Test #382: oracle.adapter ........................................   Passed    0.22 sec
+        Start 383: oracle.smoke
+380/383 Test #375: p589_usize_addition.integration .......................   Passed    3.14 sec
+381/383 Test #379: c17_target_model.integration ..........................   Passed    2.51 sec
+382/383 Test #383: oracle.smoke ..........................................   Passed    1.65 sec
+383/383 Test #378: p596_usize_subtraction.integration ....................   Passed    3.93 sec
+
+99% tests passed, 4 tests failed out of 383
+
+Total Test time (real) =  53.50 sec
+
+The following tests FAILED:
+	 25 - p633_local_cli.integration (Failed)
+	 54 - p504_equality_native.integration (Failed)
+	 81 - p514_composition_native.integration (Failed)
+	246 - p497_usize_native.integration (Failed)
