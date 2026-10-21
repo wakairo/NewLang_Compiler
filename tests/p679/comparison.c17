@@ -1,0 +1,19 @@
+#include <stdint.h>
+typedef struct { uint8_t port, mode; } DeviceSettings;
+typedef struct { uint8_t old_mode, old_port; } SwapReceipt;
+static SwapReceipt swap_settings(DeviceSettings *device)
+{
+    const uint8_t saved_port = device->port;
+    const uint8_t old_mode = device->mode;
+    device->mode = saved_port;
+    const uint8_t old_port = device->port;
+    device->port = old_mode;
+    return (SwapReceipt){old_mode, old_port};
+}
+int main(void)
+{
+    DeviceSettings device = {.mode = 31, .port = 7};
+    const SwapReceipt receipt = swap_settings(&device);
+    return device.port == 31 && device.mode == 7 &&
+           receipt.old_mode == 31 && receipt.old_port == 7 ? 0 : 1;
+}

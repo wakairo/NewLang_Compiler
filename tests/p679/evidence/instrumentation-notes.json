@@ -1,0 +1,7 @@
+{
+  "program_and_oracles_changed": false,
+  "initial_format_only_issue": "Stage0 public observer was initially formatted outside the repository using formatter default style. On migration, repository style check reported differences. Applied repository clang-format only to this new test C helper; no semantic assertions, program bytes, numerical oracle or comparison bytes changed.",
+  "initial_guest_or_semantic_failure": null,
+  "new_independent_proof_architecture": false,
+  "c_name_mapping": "Checked semantic symbol IDs map to current emitter carrier names; temporary spellings discovered from emitted declarations. Observer changes do not grant source authority."
+}

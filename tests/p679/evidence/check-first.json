@@ -1,0 +1,26 @@
+{
+  "utc": "2026-10-21T01:26:28.246635+00:00",
+  "compiler_sha": "c3963b625e9e91a1de08318bdf153019a3a8c99c",
+  "compiler_binary_sha256": "fdeb5e8e329171d105313d32070d24834829d8f3081630f0d8a83890253bac8d",
+  "results": {
+    "device_settings_swap.nl": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": []
+    },
+    "unknown_member.nl": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": [
+        "/workspace/p679-evidence/unknown_member.nl:4:22-4:36: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal"
+      ]
+    },
+    "wrong_input_type.nl": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": [
+        "/workspace/p679-evidence/wrong_input_type.nl:6:61-6:70: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type"
+      ]
+    }
+  }
+}

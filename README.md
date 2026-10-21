@@ -26,7 +26,7 @@ Break/ref joins. Rich cyclic correlations remain structured precision rejections
 ## Authority
 
 The canonical language authority is the Draft selected by
-`docs/reference/CURRENT_SPEC.md` (currently **Draft 17.30**), followed by reviewed
+[`docs/reference/CURRENT_SPEC.md`](docs/reference/CURRENT_SPEC.md), followed by reviewed
 process/backend contracts and merged implementation/formal evidence.
 Historical reports, the task prompt and conversation do not override the Draft.
 Backend Contract v0.4 defines backend obligations. The Charter, Handoff Manifest
@@ -40,6 +40,32 @@ See the [P2 grammar audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md),
 [P4 raw-storage contract](docs/P4_RAW_STORAGE_SEMANTIC_SLICE_CONTRACT.md) and
 [P5 source contract](docs/P5_SOURCE_FRONTEND_SLICE_CONTRACT.md) and
 [P6 sum contract](docs/P6_CLOSED_SUM_SOURCE_SLICE_CONTRACT.md).
+
+## Two-byte settings swap (ordinary CLI, no LLVM)
+
+On Ubuntu 24.04 x86_64, the standalone
+[`examples/device_settings_swap.nl`](examples/device_settings_swap.nl) uses
+Draft17.33's bounded two-u8 nominal fields: two separate scoped writes swap
+`port=7, mode=31` to `port=31, mode=7`, forwarding the first `replace`'s actual
+old Copy to the second write. With the frontend-only setup below (GCC13,
+CMake >=3.28,<4, Python >=3.12), run:
+
+```sh
+./build-frontend/newlangc --check examples/device_settings_swap.nl
+./build-frontend/newlangc examples/device_settings_swap.nl > build-frontend/settings.c
+gcc-13 -std=c17 -Wall -Wextra -Wpedantic -Werror build-frontend/settings.c -o build-frontend/settings
+./build-frontend/settings
+echo $?
+ctest --test-dir build-frontend -R '^p679_' --output-on-failure
+```
+
+Expected: silent CHECK, generated C17, executable exit0 and **no NewLang guest
+stdout**. The registered regression separately observes actual original fields,
+old values and forwarding at O0/O2; exit0 alone does not display those values.
+This finite lexical example has no heap Allocation/Domain, general nominal ABI,
+module privacy or safe-library guarantee. It is a technical composition step,
+not a complete real-user checkpoint or Product GO. The separate factored-C
+comparison and evidence limits are in [`tests/p679`](tests/p679/README.md).
 
 ## Initial Some: first-user quickstart (no LLVM)
 

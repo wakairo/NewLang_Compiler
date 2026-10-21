@@ -344,6 +344,20 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p671/negative.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p514_gate_test>")
 
+    # P679: ordinary adopted source, no compiler/issuer changes.
+    add_executable(p679_public_probe tests/p679/public_probe.c)
+    target_include_directories(p679_public_probe PRIVATE tests/support)
+    target_link_libraries(p679_public_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME p679_device_settings_swap.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p679/native.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p679_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/examples/device_settings_swap.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p679/freeze.json"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p679/comparison.c17")
+    add_test(NAME p679_invalid_source.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p679/negative.py" "$<TARGET_FILE:newlangc>")
+
     add_executable(p514_gate_test tests/p514/gate_test.c)
     target_link_libraries(p514_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
     target_link_options(p514_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)
