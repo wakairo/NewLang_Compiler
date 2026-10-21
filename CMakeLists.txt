@@ -324,7 +324,7 @@ if(BUILD_TESTING)
             "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r675_public_probe>"
             "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${r675_negative}")
     endforeach()
-    # P671 discardable NON-NORMATIVE nominal eligibility trial; DO NOT MERGE.
+    # P671 retained bounded nominal field eligibility regression evidence.
     add_executable(p671_public_probe tests/p671/public_probe.c)
     target_link_libraries(p671_public_probe PRIVATE newlang_semantic newlang_parser)
     add_executable(p671_fragment_probe tests/p671/fragment_probe.c)

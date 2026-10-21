@@ -56,8 +56,8 @@ bool nl_fixed_type(const NLSemanticContext *c, NLTypeId type)
     if (type == 0 || type > c->type_count)
         return false;
     const NLTypeEntry *t = &c->types[type - 1];
-    /* P671 NON-NORMATIVE trial: declaration metadata, never source spelling.
-     * Draft17.32 still selects Pair; this candidate must not merge unchanged.
+    /* Draft17.33 bounded two-u8 nominal source eligibility: source metadata,
+     * never a type-name/field-spelling whitelist or raw C offset authority.
      */
     if (t->incomplete || t->recursive_header ||
         t->view.kind != NL_TYPE_NOMINAL || t->view.field_count != 2 ||
