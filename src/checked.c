@@ -27,6 +27,8 @@ NLCheckStatus nl_checked_add(NLCheckedFragment *fragment,
 void nl_checked_destroy(NLCheckedFragment *fragment)
 {
     if (fragment != NULL) {
+        if (fragment->destroy_copy_body != NULL)
+            fragment->destroy_copy_body(fragment);
         if (fragment->destroy_usize_additions != NULL)
             fragment->destroy_usize_additions(fragment);
         if (fragment->destroy_node_joins != NULL)

@@ -98,7 +98,7 @@ add_library(newlang_parser STATIC src/parser.c)
 target_link_libraries(newlang_parser PUBLIC newlang_syntax newlang_lexer newlang_diagnostic)
 add_library(newlang_checked STATIC src/checked.c)
 target_link_libraries(newlang_checked PUBLIC newlang_syntax)
-add_library(newlang_semantic STATIC src/array4.c src/usize_addition.c src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/node_join.c src/node_links.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
+add_library(newlang_semantic STATIC src/copy_body.c src/array4.c src/usize_addition.c src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/node_join.c src/node_links.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
 target_link_libraries(newlang_semantic PUBLIC newlang_checked newlang_diagnostic newlang_parser)
 add_library(newlang_checked_c_node STATIC src/checked_c_node.c src/checked_c_five.c)
 target_link_libraries(newlang_checked_c_node PUBLIC newlang_semantic)
@@ -110,6 +110,17 @@ if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
     # SPECULATIVE PR533 opt-in: default compiler/parser stay OFF. Test-only
     # rebuild of the SAME parser exercises Production semantics/owned/C17.
+    add_executable(p701_gate_test tests/p701/gate_test.c)
+    target_link_libraries(p701_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
+    target_link_options(p701_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p701_proof_rollback_oom.unit COMMAND p701_gate_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p701/internal_one.nl" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p701/internal_two.nl")
+    add_test(NAME p701_stateful_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p701/native.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p701_public_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p701")
+    add_executable(p701_public_probe tests/p701/public_probe.c)
+    target_link_libraries(p701_public_probe PRIVATE newlang_parser newlang_semantic)
     add_library(newlang_parser_p534 STATIC src/parser.c)
     target_compile_definitions(newlang_parser_p534 PRIVATE NEWLANG_EXPERIMENTAL_OPTION_ARRAY4_SOURCE=1)
     target_link_libraries(newlang_parser_p534 PUBLIC newlang_syntax newlang_lexer newlang_diagnostic)

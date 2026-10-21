@@ -1,3 +1,4 @@
+#include "copy_body_internal.h"
 #include "newlang/parser.h"
 #include "semantic_internal.h"
 
@@ -26,6 +27,7 @@ typedef struct Check {
     size_t *branch_budget; /* synchronous finite checking/replay work */
     size_t *body_budget;   /* borrowed counter for this synchronous body walk */
     bool in_function_body, definition, terminated, in_source_loan;
+    bool capture_copy_body; /* actual zero-formal u8 call, not definition */
     NLTypeId function_result;
     size_t function_binding_floor, function_scope_floor, function_place_floor;
     size_t function_value_prefix;
@@ -1291,6 +1293,10 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                                                   check->artifact, call, c),
                                               span))
                     return false;
+                if (check->capture_copy_body &&
+                    !host(check, nl_copy_body_before(check->artifact, call, c),
+                          span))
+                    return false;
                 if (!host(check,
                           nl_fixed_change(c, place, second,
                                           kind == NL_CHECKED_STORE),
@@ -1309,6 +1315,11 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                         (NLCheckedResult){old.type, old.current_value};
                 }
                 *view(check, call) = operation;
+                if (check->capture_copy_body &&
+                    !host(check,
+                          nl_copy_body_event(check->artifact, call, c, false),
+                          span))
+                    return false;
                 if ((record || record_join || record_links) &&
                     !host(check, nl_captured_change_end(check->artifact, c),
                           span))
@@ -2353,18 +2364,23 @@ static NLCheckedNodeId field_read(Check *check, const NLSyntaxView *s)
     if (!host(check, nl_sem_copy_value(c, evidence.old_value, &copy), s->span))
         return 0;
     const NLSemanticValueView v = c->values[copy - 1];
-    return add(check,
-               (NLCheckedNodeView){
-                   .kind = NL_CHECKED_FIELD_READ,
-                   .span = s->span,
-                   .type = evidence.type,
-                   .symbol = evidence.base,
-                   .value_use = NL_VALUE_COPIED,
-                   .field = evidence,
-                   .result_count = 1,
-                   .results = {{evidence.type, copy}},
-                   .has_scalar_result = v.scalar_known,
-                   .scalar_result = {v.type, v.scalar_known, v.scalar_value}});
+    const NLCheckedNodeId id =
+        add(check, (NLCheckedNodeView){.kind = NL_CHECKED_FIELD_READ,
+                                       .span = s->span,
+                                       .type = evidence.type,
+                                       .symbol = evidence.base,
+                                       .value_use = NL_VALUE_COPIED,
+                                       .field = evidence,
+                                       .result_count = 1,
+                                       .results = {{evidence.type, copy}},
+                                       .has_scalar_result = v.scalar_known,
+                                       .scalar_result = {v.type, v.scalar_known,
+                                                         v.scalar_value}});
+    if (id != 0 && check->capture_copy_body &&
+        !host(check, nl_copy_body_event(check->artifact, id, c, false),
+              s->span))
+        return 0;
+    return id;
 }
 
 /* The source payload is decimal mathematical-integer evidence, not a C
@@ -3149,6 +3165,11 @@ static NLCheckedNodeId source_binding(Check *check, const NLSyntaxView *syntax)
             view(check, result)->name = spans[i];
         }
     }
+    if (result != 0 && check->capture_copy_body &&
+        !host(check,
+              nl_copy_body_event(check->artifact, result, check->context, true),
+              syntax->span))
+        result = 0;
     if (result != 0 && rhs.kind == NL_CHECKED_ARRAY4_CONSTRUCTOR &&
         !host(check, nl_array4_capture(check->artifact, result, check->context),
               syntax->span))
@@ -3259,6 +3280,12 @@ static NLCheckedNodeId source_return(Check *check, const NLSyntaxView *syntax)
              "return expression must exactly match the function result");
         return 0;
     }
+    if (check->capture_copy_body &&
+        !host(check,
+              nl_copy_body_exit(check->artifact, check->context,
+                                value.results[0]),
+              syntax->span))
+        return 0;
     if (!end_bindings(check, check->function_binding_floor, syntax->span))
         return 0;
     NLCheckStatus status =
@@ -3355,6 +3382,15 @@ static NLCheckedNodeId source_block(Check *check, const NLSyntaxView *syntax)
         memcpy(view(check, id)->results, result.results,
                sizeof(result.results));
     }
+    if (!check->terminated && check->capture_copy_body &&
+        check->artifact->body_owner != NULL &&
+        syntax == nl_syntax_node_view(nl_syntax_tree_root(
+                      check->artifact->body_owner->syntax)) &&
+        !host(
+            check,
+            nl_copy_body_exit(check->artifact, c, view(check, id)->results[0]),
+            syntax->span))
+        goto cleanup;
     if (!check->terminated && !end_bindings(check, floor, syntax->span))
         goto cleanup;
     if (check->terminated) {
@@ -3561,6 +3597,9 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         goto failure;
     body.artifact->body_owner = function->body;
     body.artifact->release_body = nl_body_release;
+    body.capture_copy_body =
+        !body.definition && function->count == 0 &&
+        function->result == nl_semantic_core_type(c, NL_TYPE_U8);
     for (size_t i = 0; i < function->count; ++i) {
         const NLCheckedNodeView argument = *view(caller, arguments[i]);
         NLValueId value =
@@ -3781,6 +3820,11 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     else
         memcpy(view(caller, call_id)->results, result.results,
                sizeof(result.results));
+    if (!host(&body,
+              nl_copy_body_seal(body.artifact, caller->artifact, call_id,
+                                body.body_function),
+              call_span))
+        goto failure;
     caller->artifact->bodies[count] = body.artifact;
     caller->artifact->body_calls[count] = call_id;
     ++caller->artifact->body_count;

@@ -1,0 +1,122 @@
+{
+  "internal_one": {
+    "sha256": "bd4d03f727eae0e75900d391fe401b8af3dbe8576c2e7392b626f88f579920c7",
+    "returned": 86,
+    "caller_old": 3,
+    "caller_current": 86,
+    "caller_sibling": 4,
+    "before": "CHECK0, backend4/V1-BACKEND-UNSUPPORTED/zero-C",
+    "callee_initial": [
+      11,
+      64
+    ],
+    "updates": [
+      [
+        1,
+        86,
+        64
+      ]
+    ],
+    "caller_index": 0
+  },
+  "internal_two": {
+    "sha256": "60ab5b8e41ca7f80c64367dadab236ee0158a6d6a5328d39bc33ebd4d73bcdba",
+    "returned": 137,
+    "caller_old": 3,
+    "caller_current": 137,
+    "caller_sibling": 4,
+    "before": "CHECK0, backend4/V1-BACKEND-UNSUPPORTED/zero-C",
+    "callee_initial": [
+      137,
+      29
+    ],
+    "updates": [
+      [
+        0,
+        201,
+        137
+      ],
+      [
+        1,
+        137,
+        29
+      ]
+    ],
+    "caller_index": 0
+  },
+  "valve": {
+    "sha256": "f5ccf4cd11d6d738b60fdb6c401bc12e18c955c99df3a07a29518690a3a53fd5",
+    "returned": 55,
+    "caller_old": 3,
+    "caller_current": 55,
+    "caller_sibling": 4,
+    "before": "CHECK0, backend4/V1-BACKEND-UNSUPPORTED/zero-C",
+    "callee_initial": [
+      55,
+      174
+    ],
+    "updates": [
+      [
+        0,
+        90,
+        55
+      ]
+    ],
+    "caller_index": 1
+  },
+  "signal": {
+    "sha256": "c909f29e7e9070387fe5a78ad284ec3f854585cbe89185cf3339772de19e2cd5",
+    "returned": 207,
+    "caller_old": 3,
+    "caller_current": 207,
+    "caller_sibling": 4,
+    "before": "CHECK0, backend4/V1-BACKEND-UNSUPPORTED/zero-C",
+    "callee_initial": [
+      9,
+      207
+    ],
+    "updates": [
+      [
+        1,
+        31,
+        207
+      ],
+      [
+        0,
+        207,
+        9
+      ]
+    ],
+    "caller_index": 1
+  },
+  "three_changes": {
+    "sha256": "915f6ca0a5a7ef80acffde2282cf832a6c0991b468822a64802406d22b795f30",
+    "returned": 38,
+    "caller_old": 3,
+    "caller_current": 38,
+    "caller_sibling": 4,
+    "before": "CHECK0, backend4/V1-BACKEND-UNSUPPORTED/zero-C",
+    "callee_initial": [
+      12,
+      38
+    ],
+    "updates": [
+      [
+        0,
+        61,
+        12
+      ],
+      [
+        1,
+        12,
+        38
+      ],
+      [
+        0,
+        38,
+        61
+      ]
+    ],
+    "caller_index": 0
+  }
+}
