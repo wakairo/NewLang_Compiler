@@ -1,3 +1,6 @@
+#ifndef _XOPEN_SOURCE
+#define _XOPEN_SOURCE 700
+#endif
 #include "checked_c_target.h"
 #include "newlang/array4.h"
 #include "newlang/checked.h"
@@ -10,11 +13,14 @@
 #include "newlang/usize_subtraction.h"
 #include "semantic_internal.h"
 
+#include <errno.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 static const char help[] =
     "Usage: newlangc [--version | --help | SOURCE]\n"
@@ -2732,8 +2738,8 @@ static size_t v0_export_function(const NLSemanticContext *c, const char *name)
     return selected;
 }
 
-static int compile_v0(const char *path, bool check_only,
-                      const char *export_name)
+static int compile_v0_to(const char *path, bool check_only,
+                         const char *export_name, FILE *output)
 {
     static const char entry_text[] = "main()";
     char *export_call = NULL;
@@ -2856,8 +2862,8 @@ static int compile_v0(const char *path, bool check_only,
         const NLCheckStatus array_status =
             nl_checked_array4_c17(entry, &node_c, &node_length);
         if (array_status == NL_CHECK_OK) {
-            result = fwrite(node_c, 1, node_length, stdout) == node_length &&
-                             fflush(stdout) == 0
+            result = fwrite(node_c, 1, node_length, output) == node_length &&
+                             fflush(output) == 0
                          ? 0
                          : report_error("V0-C-OUTPUT",
                                         "failed to emit Checked-C", path, 1);
@@ -2875,8 +2881,8 @@ static int compile_v0(const char *path, bool check_only,
         const NLNodeCStatus status =
             nl_checked_c_node(entry, &node_c, &node_length);
         if (status == NL_NODE_C_OK) {
-            result = fwrite(node_c, 1, node_length, stdout) == node_length &&
-                             fflush(stdout) == 0
+            result = fwrite(node_c, 1, node_length, output) == node_length &&
+                             fflush(output) == 0
                          ? 0
                          : report_error("V0-C-OUTPUT",
                                         "failed to emit Checked-C", path, 1);
@@ -2899,7 +2905,7 @@ static int compile_v0(const char *path, bool check_only,
 emit:
     program.entry_function = root_view->function;
 
-    if (!v0_emit_c(stdout, &program) || fflush(stdout) != 0) {
+    if (!v0_emit_c(output, &program) || fflush(output) != 0) {
         result =
             report_error("V0-C-OUTPUT", "failed to emit Checked-C", path, 1);
         goto cleanup;
@@ -2919,6 +2925,105 @@ cleanup:
     return result;
 }
 
+static int compile_v0(const char *path, bool check_only,
+                      const char *export_name)
+{
+    return compile_v0_to(path, check_only, export_name, stdout);
+}
+
+/* Local POSIX files only. The compiler never changes cwd. Parent resolution
+ * is fixed before staging; hostile concurrent path mutation is not supported.
+ * Final symlinks/special files and every source inode alias are refused. */
+static bool output_target_safe(const char *target, const char *source)
+{
+    struct stat input, destination;
+    if (stat(source, &input) != 0 || !S_ISREG(input.st_mode))
+        return false;
+    if (lstat(target, &destination) != 0)
+        return errno == ENOENT;
+    return S_ISREG(destination.st_mode) &&
+           (input.st_dev != destination.st_dev ||
+            input.st_ino != destination.st_ino);
+}
+
+static int emit_c17_to(const char *output, const char *source)
+{
+    char *directory = NULL, *parent = NULL, *target = NULL, *temporary = NULL;
+    FILE *stream = NULL;
+    int fd = -1, result = 1;
+    bool created = false;
+    const char *slash = strrchr(output, '/');
+    const char *leaf = slash ? slash + 1 : output;
+    if (*leaf == '\0' || strcmp(leaf, ".") == 0 || strcmp(leaf, "..") == 0)
+        goto io_error;
+    directory = strdup(output);
+    if (directory == NULL)
+        goto io_error;
+    if (slash == NULL) {
+        directory[0] = '.';
+        directory[1] = '\0';
+    } else {
+        directory[slash - output + (slash == output)] = '\0';
+    }
+    parent = realpath(directory, NULL);
+    if (parent == NULL)
+        goto io_error;
+    size_t length = strlen(parent), name_length = strlen(leaf);
+    if (name_length > SIZE_MAX - sizeof("/.tmp.XXXXXX") ||
+        length > SIZE_MAX - name_length - sizeof("/.tmp.XXXXXX"))
+        goto io_error;
+    target = malloc(length + name_length + 2);
+    temporary = malloc(length + name_length + sizeof("/.tmp.XXXXXX"));
+    if (target == NULL || temporary == NULL)
+        goto io_error;
+    memcpy(target, parent, length);
+    if (target[length - 1] != '/')
+        target[length++] = '/';
+    memcpy(target + length, leaf, name_length + 1);
+    if (!output_target_safe(target, source))
+        goto io_error;
+    strcpy(temporary, target);
+    strcat(temporary, ".tmp.XXXXXX");
+    fd = mkstemp(temporary); /* exclusive, unpredictable, mode0600 sibling */
+    if (fd < 0)
+        goto io_error;
+    created = true;
+    stream = fdopen(fd, "wb");
+    if (stream == NULL)
+        goto io_error;
+    fd = -1; /* stream owns the descriptor */
+    result = compile_v0_to(source, false, NULL, stream);
+    const int closed = fclose(stream);
+    stream = NULL;
+    if (closed != 0 && result == 0)
+        goto io_error;
+    if (result == 0) {
+        if (!output_target_safe(target, source) ||
+            rename(temporary, target) != 0)
+            goto io_error;
+        created = false;
+    }
+    goto cleanup;
+
+io_error:
+    result = report_error("V0-C-FILE", "cannot safely write named C17 output",
+                          output, 1);
+cleanup:
+    if (stream != NULL)
+        (void)fclose(stream);
+    if (fd >= 0)
+        (void)close(fd);
+    if (created && unlink(temporary) != 0)
+        result =
+            report_error("V0-C-FILE-CLEANUP",
+                         "cannot remove temporary C17 output", temporary, 1);
+    free(temporary);
+    free(target);
+    free(parent);
+    free(directory);
+    return result;
+}
+
 int main(int argc, char **argv)
 {
     if (argc == 1 || (argc == 2 && strcmp(argv[1], "--help") == 0)) {
@@ -2926,6 +3031,10 @@ int main(int argc, char **argv)
     }
     if (argc == 3 && strcmp(argv[1], "--check") == 0 && argv[2][0] != '-') {
         return compile_v0(argv[2], true, NULL);
+    }
+    if (argc == 4 && strcmp(argv[1], "--emit-c17-to") == 0 &&
+        argv[2][0] != '-' && argv[3][0] != '-') {
+        return emit_c17_to(argv[2], argv[3]);
     }
     if (argc == 4 && strcmp(argv[1], "--experimental-c17-u8-export") == 0 &&
         argv[3][0] != '-') {

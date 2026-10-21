@@ -41,6 +41,16 @@ See the [P2 grammar audit](docs/P2_MINIMAL_SYNTAX_CONTRACT.md),
 [P5 source contract](docs/P5_SOURCE_FRONTEND_SLICE_CONTRACT.md) and
 [P6 sum contract](docs/P6_CLOSED_SUM_SOURCE_SLICE_CONTRACT.md).
 
+## Named C17 output (POSIX host)
+
+Use `newlangc --emit-c17-to OUTPUT.c SOURCE.nl` to preserve an existing output
+when compilation or saving fails. The compiler stages the same normal C17 bytes
+in a private sibling file, then replaces the target only after emission, flush
+and close succeed. Source aliases and symlink/special-file destinations are
+refused. Default stdout and `--check` retain their existing behavior.
+See [the file-handling contract and tests](tests/p694/README.md) for platform,
+permissions, concurrency and crash limits.
+
 ## Two-byte settings swap (ordinary CLI, no LLVM)
 
 On Ubuntu 24.04 x86_64, the standalone

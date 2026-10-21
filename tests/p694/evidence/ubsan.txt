@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /workspace/p694-undefined
+Test project /workspace/p694-undefined
+    Start 67: p694_named_output.integration
+1/1 Test #67: p694_named_output.integration ....   Passed    2.35 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   2.41 sec

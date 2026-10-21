@@ -1,0 +1,122 @@
+{
+  "compiler": "x86_64-linux-gnu-gcc-13 (Debian 13.3.0-16) 13.3.0",
+  "sanitizer": "none",
+  "native": [
+    {
+      "source": "examples/device_settings_swap.nl",
+      "optimization": "-O0",
+      "named_sha256": "cd4f22d82e5107286cb2735fec224fc9ddb7f716c468fe4112f3ab3f06b61a4c",
+      "native_exit": 0
+    },
+    {
+      "source": "examples/device_settings_swap.nl",
+      "optimization": "-O2",
+      "named_sha256": "cd4f22d82e5107286cb2735fec224fc9ddb7f716c468fe4112f3ab3f06b61a4c",
+      "native_exit": 0
+    },
+    {
+      "source": "tests/fixtures/node_initial_some.nl",
+      "optimization": "-O0",
+      "named_sha256": "6040f24fd9aedffe07ca6178822bb6c8b94b2aaf33f1a39b8df9207b545af4b6",
+      "native_exit": 0
+    },
+    {
+      "source": "tests/fixtures/node_initial_some.nl",
+      "optimization": "-O2",
+      "named_sha256": "6040f24fd9aedffe07ca6178822bb6c8b94b2aaf33f1a39b8df9207b545af4b6",
+      "native_exit": 0
+    }
+  ],
+  "failures": [
+    {
+      "destination": "/tmp/p694-xlglvnnc/result with space.c",
+      "exit": 3,
+      "old_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f",
+      "diagnostic": "/workspace/p694/tests/p685/wrong_write.nl:6:78-6:87: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    },
+    {
+      "destination": "/tmp/p694-xlglvnnc/result with space.c",
+      "exit": 4,
+      "old_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f",
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p694/tests/p685/rich_body.nl\n"
+    },
+    {
+      "destination": "/tmp/p694-xlglvnnc/input.nl",
+      "exit": 1,
+      "old_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f",
+      "diagnostic": "error(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p694-xlglvnnc/input.nl\n"
+    },
+    {
+      "destination": "/tmp/p694-xlglvnnc/symlink.c",
+      "exit": 1,
+      "old_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f",
+      "diagnostic": "error(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p694-xlglvnnc/symlink.c\n"
+    },
+    {
+      "destination": "/tmp/p694-xlglvnnc/symlink.c",
+      "exit": 1,
+      "old_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f",
+      "diagnostic": "error(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p694-xlglvnnc/symlink.c\n"
+    },
+    {
+      "destination": "/tmp/p694-xlglvnnc/input.nl",
+      "exit": 1,
+      "old_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f",
+      "diagnostic": "error(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p694-xlglvnnc/input.nl\n"
+    },
+    {
+      "destination": "/tmp/p694-xlglvnnc/symlink.c",
+      "exit": 1,
+      "old_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f",
+      "diagnostic": "error(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p694-xlglvnnc/symlink.c\n"
+    },
+    {
+      "destination": "/tmp/p694-xlglvnnc/sub/../input.nl",
+      "exit": 1,
+      "old_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f",
+      "diagnostic": "error(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p694-xlglvnnc/sub/../input.nl\n"
+    },
+    {
+      "destination": "/tmp/p694-xlglvnnc/sub",
+      "exit": 1,
+      "old_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f",
+      "diagnostic": "error(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p694-xlglvnnc/sub\n"
+    },
+    {
+      "destination": "/tmp/p694-xlglvnnc/absent/out.c",
+      "exit": 1,
+      "old_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f",
+      "diagnostic": "error(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p694-xlglvnnc/absent/out.c\n"
+    },
+    {
+      "destination": "/tmp/p694-xlglvnnc/fifo",
+      "exit": 1,
+      "old_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f",
+      "diagnostic": "error(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p694-xlglvnnc/fifo\n"
+    },
+    {
+      "destination": "/tmp/p694-xlglvnnc/sub/blocked.c",
+      "exit": 1,
+      "old_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f",
+      "diagnostic": "error(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p694-xlglvnnc/sub/blocked.c\n"
+    },
+    {
+      "destination": "/tmp/p694-xlglvnnc/result with space.c",
+      "exit": 1,
+      "old_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f",
+      "diagnostic": "error(cli)[V0-C-OUTPUT]: failed to emit Checked-C\nnote: /tmp/p694-xlglvnnc/input.nl\n"
+    },
+    {
+      "destination": "/tmp/p694-xlglvnnc/fresh.c",
+      "exit": 3,
+      "old_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f",
+      "diagnostic": "/workspace/p694/tests/p685/wrong_write.nl:6:78-6:87: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    }
+  ],
+  "fault_controls": [
+    "fault=1 old artifact preserved; temporary removed\nfault=2 old artifact preserved; temporary removed\nfault=3 old artifact preserved; temporary removed\nwrapped allocation failures=364 preserved/cleanup; recovery=PASS\n",
+    "fault=1 old artifact preserved; temporary removed\nfault=2 old artifact preserved; temporary removed\nfault=3 old artifact preserved; temporary removed\nwrapped allocation failures=307 preserved/cleanup; recovery=PASS\n"
+  ],
+  "test_only_array_byte_equal": true,
+  "stdout_dev_full_unchanged": true
+}

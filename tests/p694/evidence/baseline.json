@@ -1,0 +1,82 @@
+{
+  "examples/device_settings_swap.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "stdout": {
+      "exit": 0,
+      "stdout_bytes": 1564,
+      "stderr": "",
+      "sha256": "cd4f22d82e5107286cb2735fec224fc9ddb7f716c468fe4112f3ab3f06b61a4c"
+    },
+    "named": {
+      "exit": 2,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[P0-CLI-ARGUMENT]: expected exactly one argument\nnote: use --help for usage\n"
+    }
+  },
+  "tests/fixtures/node_initial_some.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "stdout": {
+      "exit": 0,
+      "stdout_bytes": 1522,
+      "stderr": "",
+      "sha256": "6040f24fd9aedffe07ca6178822bb6c8b94b2aaf33f1a39b8df9207b545af4b6"
+    },
+    "named": {
+      "exit": 2,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[P0-CLI-ARGUMENT]: expected exactly one argument\nnote: use --help for usage\n"
+    }
+  },
+  "tests/p685/wrong_write.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/workspace/p694/tests/p685/wrong_write.nl:6:78-6:87: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    },
+    "stdout": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/workspace/p694/tests/p685/wrong_write.nl:6:78-6:87: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    },
+    "named": {
+      "exit": 2,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[P0-CLI-ARGUMENT]: expected exactly one argument\nnote: use --help for usage\n"
+    }
+  },
+  "tests/p685/rich_body.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "stdout": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p694/tests/p685/rich_body.nl\n"
+    },
+    "named": {
+      "exit": 2,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[P0-CLI-ARGUMENT]: expected exactly one argument\nnote: use --help for usage\n"
+    }
+  },
+  "shell_redirection": {
+    "exit": 3,
+    "before_sha256": "2f36a83616a80d46792f9e2c5b40f74a17dca2265057a18101853a19f443bd04",
+    "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "after_bytes": 0
+  },
+  "stdout_dev_full": {
+    "exit": 1,
+    "stderr": "error(cli)[V0-C-OUTPUT]: failed to emit Checked-C\nnote: /workspace/p694/examples/device_settings_swap.nl\n"
+  }
+}
