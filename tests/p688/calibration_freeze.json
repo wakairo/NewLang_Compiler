@@ -1,0 +1,7 @@
+{
+  "reason": "original rich.nl omitted mandatory condition parentheses: test syntax mistake, original preserved; same intended richer-body negative",
+  "sha256": "da0440d666f72ead6920094cadc776669d8961224c60cb7700e1800b34fb9712",
+  "expected_check": 0,
+  "expected_export": 4,
+  "expected_stdout_bytes": 0
+}

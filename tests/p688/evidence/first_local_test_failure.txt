@@ -1,0 +1,24 @@
+Internal ctest changing into directory: /workspace/p688-build
+Test project /workspace/p688-build
+    Start 67: p688_c17_scalar_export.integration
+1/2 Test #67: p688_c17_scalar_export.integration ...***Failed    0.11 sec
+Traceback (most recent call last):
+  File "/workspace/p688/tests/p688/native.py", line 151, in <module>
+    print(json.dumps(exercise(*sys.argv[1:]), indent=2))
+                     ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p688/tests/p688/native.py", line 88, in exercise
+    require(r.returncode == 0, r)
+  File "/workspace/p688/tests/p688/native.py", line 17, in require
+    raise AssertionError(why)
+AssertionError: CompletedProcess(args=['/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13', '-std=c17', '-Wall', '-Wextra', '-Wpedantic', '-Werror', '-I', '/workspace/p688/include', '-O0', '-c', '/tmp/p688-m6f4wets/wrong_oracle.c', '-o', '/tmp/p688-m6f4wets/wrong_oracle.o'], returncode=1, stdout=b'', stderr=b'/tmp/p688-m6f4wets/wrong_oracle.c:1:10: fatal error: newlang/experimental_c99_u8_export_v0.h: No such file or directory\n    1 | #include "newlang/experimental_c99_u8_export_v0.h"\n      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\ncompilation terminated.\n')
+
+    Start 68: p688_selected_call_oom.unit
+2/2 Test #68: p688_selected_call_oom.unit ..........   Passed    0.02 sec
+
+50% tests passed, 1 tests failed out of 2
+
+Total Test time (real) =   0.14 sec
+
+The following tests FAILED:
+	 67 - p688_c17_scalar_export.integration (Failed)
+Errors while running CTest
