@@ -344,6 +344,14 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p671/negative.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p514_gate_test>")
 
+    # R690 first-pass independent C17 ABI/return/refusal audit; R-only assets.
+    add_test(NAME r690_independent_external_u8_abi.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r690/independent_native.py"
+        "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}")
+
     add_executable(p688_public_probe tests/p688/public_probe.c)
     target_include_directories(p688_public_probe PRIVATE tests/support)
     target_link_libraries(p688_public_probe PRIVATE newlang_semantic newlang_parser)
