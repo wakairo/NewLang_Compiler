@@ -54,8 +54,17 @@ def main():
         for stem, selector, expected, wrong_rc in sources:
             source = original / f"{stem}.nl"
             checked = execute(newlangc, "--check", source)
-            require(checked.returncode == 0 and checked.stdout == b"" and
-                    checked.stderr == b"", f"{stem}: source CHECK", checked)
+            if stem == "lantern":
+                # NON-BLIND CALIBRATION ONLY: keep the original BLIND
+                # CHECK0 oracle in original/oracle.md and historical CI.
+                require(checked.returncode == 3 and checked.stdout == b"" and
+                        b"P3-UNKNOWN-CALLEE" in checked.stderr,
+                        "CALIBRATED lantern ordinary --check CLI3 / "
+                        "P3-UNKNOWN-CALLEE (original BLIND CHECK0 falsified)",
+                        checked)
+            else:
+                require(checked.returncode == 0 and checked.stdout == b"" and
+                        checked.stderr == b"", f"{stem}: source CHECK", checked)
 
             exported = execute(newlangc, "--experimental-c17-u8-export",
                                selector, source)
@@ -201,7 +210,8 @@ def main():
         require(built.returncode == 0, "default C builds normally", built)
         ran = execute(ordinary_exe)
         require(ran.returncode == 0, "default native process exits0", ran)
-    print("R690 FIRST-PASS BOUNDED PASS: independent C17 ABI and scalar value",
+    print("R690 NON-BLIND CALIBRATED BOUNDED PASS: independent C17 ABI, "
+          "scalar values 29/61, and original refusal oracles",
           flush=True)
 
 
