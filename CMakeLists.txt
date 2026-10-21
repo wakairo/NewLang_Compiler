@@ -108,6 +108,16 @@ target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic n
 include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
+    # R704: independent BLIND source/proof/native witness; R-owned only.
+    add_executable(r704_source_probe tests/r704/source_probe.c)
+    target_include_directories(r704_source_probe PRIVATE tests/support)
+    target_link_libraries(r704_source_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME r704_blind_source_proof_native.integration
+        COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r704/blind_native.py"
+            "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r704_source_probe>"
+            "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r704")
     # SPECULATIVE PR533 opt-in: default compiler/parser stay OFF. Test-only
     # rebuild of the SAME parser exercises Production semantics/owned/C17.
     add_executable(p701_gate_test tests/p701/gate_test.c)
