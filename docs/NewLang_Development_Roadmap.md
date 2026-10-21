@@ -12,7 +12,21 @@
 > 運用は [Development Process](NewLang_Project_Development_Process.md) に従う。
 > この文書は正本を置換せず、将来の更新時は「観測した事実」と「新しい投資案」を分ける。
 
-## 現行実装計画 — 2026-10-21（v0完成のcritical path、更新可能な仮説）
+## 現行実装計画 — 2026-10-21（#700一回限り棚卸し完了 → v0-M1 #701を先行実装）
+
+> **変わり得る実装計画・エビデンス地図に限る。** v0完成までの継続的な優先順位戦略は[Development Process §4.3.2](NewLang_Project_Development_Process.md#432-v0-compiler-completion-の実装優先順位継続的な方針)だけを正本とする。個別機構の採否・依存関係・予算・実行順は新たなsource/native/反例に応じて本Roadmapを日付つきで更新し、旧checkpointは履歴として保存する。言語正本は[CURRENT_SPEC](reference/CURRENT_SPEC.md)→**Draft17.33**（本checkpoint）であり、Roadmapの記述は新しいsource/proof/ABI ruleを作らない。
+
+**基準main・完了した周辺作業：** Compiler/main `fe3e0b81d64246df14e2ec4bb76a137630582f17`、親 `493a01fab35b915b5d8ebc1195c9128d595ac195`、[統合後FULL5 #39574991400](https://github.com/wakairo/NewLang_Compiler/actions/runs/39574991400) GCC/GCC Release/Clang/ASan/UBSan **5/5 SUCCESS**と[NO LLVM PARTIAL #39574991381](https://github.com/wakairo/NewLang_Compiler/actions/runs/39574991381) **SUCCESS**（いずれもmain-push、attempt1、同じSHA）。通常CLIの名前付きC17出力[PR #695](https://github.com/wakairo/NewLang_Compiler/pull/695)・help[PR #697](https://github.com/wakairo/NewLang_Compiler/pull/697)は既に統合され、[C #696完了](https://github.com/wakairo/NewLang_Compiler/issues/696#issuecomment-6312938809)。これ以上の周辺的なhelp／sink改善を、必要なv0機構より優先しない。
+
+**棚卸し実測→最初の真の依存：** [P #700一回限りの最終報告](https://github.com/wakairo/NewLang_Compiler/issues/700#issuecomment-6312705230)／[C採用裁定](https://github.com/wakairo/NewLang_Compiler/issues/700#issuecomment-6312988653)は、2件の**本当に呼び出される**普通のstateful関数source（Fan 1 scoped Change→Copy86→別元caller field、Meter 2 Changes＋old Copy転送→Copy137→別元caller field）が**SOURCE/CHECK0だが普通のC17はCLI4／0 bytes**で止まると実測。最初のdriver admissionはscalar-only `v1_copy_body`だが、そのguardだけ外してはlexical EndRoot後の元parent/child current ValueFact・Copy origin／typed returnが真正に確認できない。[P #692](https://github.com/wakairo/NewLang_Compiler/issues/692)の古いfact／field／Copy変更を許す共通predicate実測と[M #693](https://github.com/wakairo/NewLang_Compiler/issues/693)の安価な既存predicate転用＋**外部**stateful u8 export **NO-GO**は保存する。**内部NewLang関数合成の必要性**を、その外部ABI案のNO-GOで棄却しない。
+
+**次の優先実装 — M1（現在の先頭・実装認可済、成果は未実装）：** [Track P Issue #701](https://github.com/wakairo/NewLang_Compiler/issues/701)で、ordinary calleeの元lexical 2-u8 recordへのscope付き1/2回更新、古い値のCopy/現在field読取り、return→本当のcall result→callerの別元field writeまでを、元source発行のcurrentness／時系列Copy由来を**検証してから**通常C17/native化する共通経路を実装する。第一段階でchecker live時点のtrustworthy snapshot／ordered operation＋Copy origin対応の最小形を選び、必要な issuer-owned historical receipt は正しい権限境界・lifecycle／OOM rollback付きで実装する。値／field名／write-count固定の専用predicateや古いfactを信じるbackend guard緩和は不可。**費用が大きいだけではこの必須機構を置換しない**。1件のP-owned DRAFT・真正source/native・負例／障害注入・固定CIの後、Cと独立Rが新trust境界を裁定するまでmainへ昇格しない。大きな意味論や権限変更が不可避なら実装途中でC/Mに戻すが、M1を必須候補から消さない。現時点では実装成功・新proof soundness・native PASS未確認。
+
+**M1後の依存候補／並行可能性（固定した一本道ではない）：** (a) 同じfield/Copy検証核をcaller-provided `ref<write,u8>` helperとpost-state formal substitutionへ再利用するM2、(b) Pairの2-arm更新後currentness／join precisionとreturn/failure exitのM3、(c) **独立レーン**で既存 §18.1b/c LiveTail producer/recipient/terminalの**結果local経由の合法sourceがbackend4**となる一般nonCopy owner flow、(d) 現canonicalで選択されたArray<Option<u8>,4>の直接None構築が通常sourceではparser3・test-only opt-inではnative可というadmission差、(e) v0 nucleusの`unchecked`／minimal generics（未実装だからDeferredと呼ばない）。本棚卸しは**A traceがheap custodyの先行条件**だとは証明していない。heapにはAllocation/Storage/LifetimeDomain責任・失敗時cleanupが別途必要。branch joinは別arm world-qualified事実が必要。各レーンの依存辺は実装結果で再評価する。未選択のgeneral FFI、modules／separate compilation、concurrency、source-visible lifetimes/effectsやH1全操作を自動的にv0完成条件に足さない。
+
+**次の変更条件と証拠境界：** M1の source→CHECK→authentic owned（必要な場合）→C17→GCC/Clang O0/O2 nativeで本物のcallee field・old/current Copy・caller別元field carrierを受動観測。wrong root/index/world、stale parent/child ValueFact、old Copyをcurrent readへ偽装、変異／順序差、source/owner替え、scope逃避、OOM／rollback等の意味のある拒否と独立Rのfirst-passを分ける。CI green・checker0・test-only tool・helper未呼出しのmain native0から能力を水増ししない。新しいdependency・仕様設計矛盾が見つかれば**このRoadmapのみ**を更新し、変更不要なProcess §4.3.2に個別task名／予算／順序を持ち込まない。H1 #268 HOLD、Product GO能動判定PAUSED（#624）、著者＋ordinary-safe callerのUB防止監査局所性のProduct PASSは未実証。
+
+## 前回の実装計画（履歴） — 2026-10-21（#700棚卸し前の仮説）
 
 > **この節は時点依存の計画・coverage地図であり、固定の実装戦略・新しい言語仕様・一括の実装認可ではない。** 優先順位の継続的な判断原則は[Development Process §4.3.2](NewLang_Project_Development_Process.md#432-v0-compiler-completion-の実装優先順位継続的な方針)、v0 source/semanticsの正本は[CURRENT_SPEC](reference/CURRENT_SPEC.md)とDraft17.33。以下の候補順は実証された依存関係に従って随時修正する。旧checkpoint／過去のNO-GO・CI verdictは保存する。
 
