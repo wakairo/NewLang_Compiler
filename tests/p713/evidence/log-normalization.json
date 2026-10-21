@@ -1,0 +1,47 @@
+{
+  "initial-frontier-migration.log": {
+    "original_sha256": "76e22675392d53d23dca1baffe51fe8a84114dbe3ed1b54577870801ceda5630",
+    "stored_sha256": "76e22675392d53d23dca1baffe51fe8a84114dbe3ed1b54577870801ceda5630",
+    "note": "CTest transcript; line-end spaces only normalized"
+  },
+  "initial-local-suite.log": {
+    "original_sha256": "b8f4cef73cffe2126c0324fea94d8c7bf1040444720e4f05e6bb71ed0266a564",
+    "stored_sha256": "b8f4cef73cffe2126c0324fea94d8c7bf1040444720e4f05e6bb71ed0266a564",
+    "note": "CTest transcript; line-end spaces only normalized"
+  },
+  "initial-unexecuted-mutation-expectation.log": {
+    "original_sha256": "70f17643524185b86622ccafdba6227b0721931d24568564b4cc75146ad631c1",
+    "stored_sha256": "d05043b4faf9f13b9a8ddc8ba855116abdb791e545184cbd676057b651351372",
+    "note": "CTest transcript; line-end spaces only normalized"
+  },
+  "local-gcc13-p713.log": {
+    "original_sha256": "7833804e3e2b28f7662eef1cd46f5c37aaaeef0446ccd1ff962b93102519eaeb",
+    "stored_sha256": "e96fb85d4035ab3a7c025214cb1eacc8507c348e829d4f0f02bd7b64a01adc00",
+    "note": "CTest transcript; line-end spaces only normalized"
+  },
+  "local-gcc13-suite.log": {
+    "original_sha256": "b212edafff5799a4d22377611dc695e761762ced5ed699786740c62361f49d01",
+    "stored_sha256": "b212edafff5799a4d22377611dc695e761762ced5ed699786740c62361f49d01",
+    "note": "CTest transcript; line-end spaces only normalized"
+  },
+  "old-frontier-first-failures.log": {
+    "original_sha256": "e0ee30214bc3150e2273499a4d9f4c97816abd5caa40d852a4cea3b47317b9a9",
+    "stored_sha256": "e0ee30214bc3150e2273499a4d9f4c97816abd5caa40d852a4cea3b47317b9a9",
+    "note": "CTest transcript; line-end spaces only normalized"
+  },
+  "local-asan-lsan.log": {
+    "original_sha256": "4d418dcdc24a533d3899a74beb5ed078983d4653c28d8545f209a0ffc2f48d83",
+    "stored_sha256": "22d6a660d0f5f91d0cc9084f5ca4e221d5a83e8ad4158ce702273cb405870e18",
+    "note": "CTest transcript; line-end spaces only normalized"
+  },
+  "local-ubsan.log": {
+    "original_sha256": "4a0b51cdce7eaf772e0d32a78d7d209eb68ff383868ebb92ebda3a0863559dcf",
+    "stored_sha256": "f9c13089ce8b0ab843cd3873649d029530123ef4287cd20ac66c5d00d1c6dd9d",
+    "note": "CTest transcript; line-end spaces only normalized"
+  },
+  "local-gcc13-release.log": {
+    "original_sha256": "012b050ac23734ff79afa690eff62d925fc5a177a2c20cabaa7526dd0c38cadb",
+    "stored_sha256": "5a20656802d98d675fc142db62be70f71f5a54c54d3539738b41e6adcb91f981",
+    "note": "CTest transcript; line-end spaces only normalized"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "if": 18,
+  "condition": 17,
+  "condition_value": 8,
+  "base": 1,
+  "root": 1,
+  "child": 3,
+  "index": 1,
+  "incarnation": 1,
+  "parent_before": 1,
+  "parent_after": 7,
+  "child_after": 6,
+  "result_id": 11,
+  "arms": [
+    {
+      "changes": 1,
+      "parent_fact": 8,
+      "child_fact": 7,
+      "events": [
+        {
+          "node": 4,
+          "change": true,
+          "old_id": 1,
+          "new_id": 11,
+          "result_id": 1,
+          "ref": 4,
+          "incoming_symbol": 0
+        }
+      ]
+    },
+    {
+      "changes": 1,
+      "parent_fact": 8,
+      "child_fact": 7,
+      "events": [
+        {
+          "node": 4,
+          "change": true,
+          "old_id": 1,
+          "new_id": 11,
+          "result_id": 1,
+          "ref": 4,
+          "incoming_symbol": 0
+        }
+      ]
+    }
+  ],
+  "result_binding": 4,
+  "reads": [
+    {
+      "symbol": 5,
+      "index": 1
+    },
+    {
+      "symbol": 6,
+      "index": 0
+    }
+  ]
+}

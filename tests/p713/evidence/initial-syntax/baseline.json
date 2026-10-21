@@ -1,0 +1,98 @@
+{
+  "one_false.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/one_false.nl:5:15-5:23: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/one_false.nl:5:15-5:23: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    }
+  },
+  "both_true.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/both_true.nl:5:16-5:22: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/both_true.nl:5:16-5:22: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    }
+  },
+  "both_false.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/both_false.nl:5:16-5:22: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/both_false.nl:5:16-5:22: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    }
+  },
+  "wrong_type.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/wrong_type.nl:5:16-5:22: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/wrong_type.nl:5:16-5:22: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    }
+  },
+  "wrong_arm_result.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/wrong_arm_result.nl:5:15-5:23: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/wrong_arm_result.nl:5:15-5:23: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    }
+  },
+  "one_true.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/one_true.nl:5:15-5:23: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/one_true.nl:5:15-5:23: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    }
+  },
+  "loan_escape.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/loan_escape.nl:5:16-5:22: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/loan_escape.nl:5:16-5:22: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    }
+  },
+  "wrong_root.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/wrong_root.nl:6:16-6:22: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/wrong_root.nl:6:16-6:22: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+      "stdout_bytes": 0
+    }
+  }
+}

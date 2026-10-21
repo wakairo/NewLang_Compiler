@@ -1,0 +1,22 @@
+{
+  "repeated_true": {
+    "check": 0,
+    "diagnostic": ""
+  },
+  "repeated_false": {
+    "check": 0,
+    "diagnostic": ""
+  },
+  "noncopy_availability": {
+    "check": 3,
+    "diagnostic": "tests/p713/noncopy_availability.nl:4:15-4:32: error(unsupported)[ALLOCATED-SOURCE-PROFILE]: domain creation requires the allocated H source world\n"
+  },
+  "wrong_field": {
+    "check": 3,
+    "diagnostic": "tests/p713/wrong_field.nl:5:13-9:3: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  "sole_normal": {
+    "check": 0,
+    "diagnostic": ""
+  }
+}

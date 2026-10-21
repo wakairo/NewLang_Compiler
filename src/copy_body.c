@@ -9,14 +9,15 @@
  * those facts are captured independently while the original is still live. */
 #include "copy_body_internal.h"
 
-static void free_anchor(NLCopyCallAnchor *a)
+void nl_copy_state_destroy(NLCopyCallAnchor *a)
 {
     free(a->places);
     free(a->values);
     free(a->scopes);
     free(a->bindings);
 }
-static NLCheckStatus anchor(const NLSemanticContext *c, NLCopyCallAnchor *a)
+NLCheckStatus nl_copy_state_anchor(const NLSemanticContext *c,
+                                   NLCopyCallAnchor *a)
 {
     a->place_count = c->place_count;
     a->value_count = c->value_count;
@@ -44,7 +45,8 @@ static NLCheckStatus anchor(const NLSemanticContext *c, NLCopyCallAnchor *a)
     }
     return NL_CHECK_OK;
 }
-static bool anchored(const NLSemanticContext *c, const NLCopyCallAnchor *a)
+bool nl_copy_state_matches(const NLSemanticContext *c,
+                           const NLCopyCallAnchor *a)
 {
     if (!c || c->place_count != a->place_count ||
         c->value_count != a->value_count || c->scope_count != a->scope_count ||
@@ -78,8 +80,8 @@ static void destroy(NLCheckedFragment *f)
     }
     nl_semantic_destroy(p->entry);
     nl_semantic_destroy(p->handoff);
-    free_anchor(&p->entry_anchor);
-    free_anchor(&p->handoff_anchor);
+    nl_copy_state_destroy(&p->entry_anchor);
+    nl_copy_state_destroy(&p->handoff_anchor);
     nl_semantic_destroy(p->pending);
     nl_semantic_destroy(p->exit);
     free(p->exit_scopes);
@@ -104,8 +106,8 @@ static NLCheckStatus scopes(const NLSemanticContext *c,
     memcpy(*out, c->scopes, *count * sizeof(**out));
     return NL_CHECK_OK;
 }
-static bool trio(const NLSemanticContext *c, NLPlaceId root,
-                 NLSemanticPlaceView out[3])
+bool nl_copy_trio(const NLSemanticContext *c, NLPlaceId root,
+                  NLSemanticPlaceView out[3])
 {
     if (!c || !root || root > c->place_count)
         return false;
@@ -176,7 +178,7 @@ NLCheckStatus nl_copy_body_parameters(NLCheckedFragment *f,
         return NL_CHECK_OK;
     const NLCheckedNodeView *l = nl_checked_node_view(caller, loan);
     NLSemanticPlaceView trio_entry[3];
-    if (!trio(c, l->field.parent, trio_entry))
+    if (!nl_copy_trio(c, l->field.parent, trio_entry))
         return NL_CHECK_OK;
     NLCopyBodyProof *p = calloc(1, sizeof(*p));
     if (!p)
@@ -201,7 +203,7 @@ NLCheckStatus nl_copy_body_parameters(NLCheckedFragment *f,
     p->parameter_types[1] = fn->parameters[1];
     NLCheckStatus status = nl_sem_clone(c, &p->entry);
     if (status == NL_CHECK_OK)
-        status = anchor(c, &p->entry_anchor);
+        status = nl_copy_state_anchor(c, &p->entry_anchor);
     p->parameters.entry = p->entry;
     return status;
 }
@@ -287,8 +289,8 @@ NLCheckStatus nl_copy_body_event(NLCheckedFragment *f, NLCheckedNodeId id,
     e->view.before = e->before;
     e->view.after = e->after;
     e->issued = e->view;
-    if (!trio(c, root, e->post) ||
-        (e->before && !trio(e->before, root, e->pre)))
+    if (!nl_copy_trio(c, root, e->post) ||
+        (e->before && !nl_copy_trio(e->before, root, e->pre)))
         return NL_CHECK_INTERNAL_ERROR;
     for (size_t i = 0; i < 3; ++i) {
         e->post_values[i] = c->values[e->post[i].current_value - 1];
@@ -353,7 +355,7 @@ NLCheckStatus nl_copy_body_seal(NLCheckedFragment *f,
     if (p->formal_write) {
         NLCheckStatus status = nl_sem_clone(c, &p->handoff);
         if (status == NL_CHECK_OK)
-            status = anchor(c, &p->handoff_anchor);
+            status = nl_copy_state_anchor(c, &p->handoff_anchor);
         if (status != NL_CHECK_OK)
             return status;
         p->parameters.handoff = p->handoff;
@@ -450,7 +452,7 @@ static bool same_event(const NLCopyBodyEventView *a,
            a->result == b->result && a->incoming == b->incoming &&
            memcmp(&a->field, &b->field, sizeof(a->field)) == 0;
 }
-static bool plain(const NLSemanticContext *c, NLValueId id, NLTypeId t)
+bool nl_copy_plain(const NLSemanticContext *c, NLValueId id, NLTypeId t)
 {
     if (!id || id > c->value_count)
         return false;
@@ -468,11 +470,11 @@ static bool same_places(const NLSemanticPlaceView a[3],
 }
 static bool same_values(const NLSemanticContext *c,
                         const NLSemanticPlaceView a[3],
-                        const NLSemanticValueView anchor[3])
+                        const NLSemanticValueView issued[3])
 {
     for (size_t i = 0; i < 3; ++i)
-        if (memcmp(&c->values[a[i].current_value - 1], &anchor[i],
-                   sizeof(anchor[i])))
+        if (memcmp(&c->values[a[i].current_value - 1], &issued[i],
+                   sizeof(issued[i])))
             return false;
     return true;
 }
@@ -532,7 +534,7 @@ static const CopyEvent *next_event(Replay *r, NLCheckedNodeId id,
         return NULL;
     NLSemanticPlaceView after[3];
     const NLPlaceId root = e->view.field.parent;
-    if (!trio(e->after, root, after) || !same_places(after, e->post) ||
+    if (!nl_copy_trio(e->after, root, after) || !same_places(after, e->post) ||
         !same_values(e->after, after, e->post_values))
         return NULL;
     if (e->view.result &&
@@ -547,7 +549,7 @@ static const CopyEvent *next_event(Replay *r, NLCheckedNodeId id,
         if (kind == NL_COPY_BODY_READ) {
             if (!modeled(r, after, root))
                 return NULL;
-        } else if (!trio(e->before, root, before) ||
+        } else if (!nl_copy_trio(e->before, root, before) ||
                    !same_places(before, e->pre) ||
                    !same_values(e->before, before, e->pre_values) ||
                    !modeled(r, before, root) || !e->view.incoming ||
@@ -564,8 +566,9 @@ static const CopyEvent *next_event(Replay *r, NLCheckedNodeId id,
 static bool field_at(const NLSemanticContext *c, const NLCheckedField *e)
 {
     NLSemanticPlaceView a[3];
-    if (!trio(c, e->parent, a) || !e->present || !e->dependency_compatible ||
-        e->index >= 2 || e->base == 0 || e->base > c->binding_count ||
+    if (!nl_copy_trio(c, e->parent, a) || !e->present ||
+        !e->dependency_compatible || e->index >= 2 || e->base == 0 ||
+        e->base > c->binding_count ||
         c->bindings[e->base - 1].view.place != e->parent)
         return false;
     const NLSemanticPlaceView child = a[e->index + 1];
@@ -584,7 +587,7 @@ static bool scalar(Replay *r, NLCheckedNodeId id)
     const NLCheckedNodeView *n = &r->f->nodes[id - 1];
     return n->type == r->u8 && n->result_count == 1 &&
            n->results[0].type == r->u8 &&
-           plain(r->proof->exit, n->results[0].value, r->u8);
+           nl_copy_plain(r->proof->exit, n->results[0].value, r->u8);
 }
 static bool expression(Replay *r, NLCheckedNodeId id,
                        const NLCheckedNodeView *loan)
@@ -629,7 +632,7 @@ static bool expression(Replay *r, NLCheckedNodeId id,
              field_at(e->after, &n->field) &&
              n->field.old_value != n->results[0].value &&
              e->view.result == n->results[0].value &&
-             plain(e->after, e->view.result, r->u8) &&
+             nl_copy_plain(e->after, e->view.result, r->u8) &&
              e->after->values[e->view.result - 1].scalar_value ==
                  e->after->values[n->field.old_value - 1].scalar_value &&
              memcmp(&n->field, &e->view.field, sizeof(n->field)) == 0;
@@ -791,7 +794,7 @@ static bool expression(Replay *r, NLCheckedNodeId id,
                                         e->view.incoming, false);
         NLSemanticPlaceView actual[3];
         ok = r->status == NL_CHECK_OK &&
-             trio(replay, n->field.parent, actual) &&
+             nl_copy_trio(replay, n->field.parent, actual) &&
              same_places(actual, e->post);
         nl_semantic_destroy(replay);
         if (ok)
@@ -820,16 +823,16 @@ static bool same_body_view(const NLCopyBodyView *a, const NLCopyBodyView *b)
            a->result.type == b->result.type &&
            a->result.value == b->result.value && a->live_exit == b->live_exit;
 }
-static bool same_types(const NLSemanticContext *c,
-                       const NLSemanticContext *anchor)
+bool nl_copy_same_types(const NLSemanticContext *c,
+                        const NLSemanticContext *reference)
 {
-    if (!c || !anchor)
+    if (!c || !reference)
         return false;
     for (size_t i = 0;
-         i < (anchor->type_count < c->type_count ? anchor->type_count
-                                                 : c->type_count);
+         i < (reference->type_count < c->type_count ? reference->type_count
+                                                    : c->type_count);
          ++i) {
-        const NLTypeEntry *a = &c->types[i], *b = &anchor->types[i];
+        const NLTypeEntry *a = &c->types[i], *b = &reference->types[i];
         if (memcmp(&a->view, &b->view, sizeof(a->view)) ||
             memcmp(a->field_types, b->field_types, sizeof(a->field_types)) ||
             memcmp(a->variant_types, b->variant_types,
@@ -861,8 +864,8 @@ static bool parameter_entry(const NLCopyBodyProof *p,
         !same_parameters(&p->parameters, &p->issued_parameters) ||
         p->parameters.entry != p->entry ||
         p->parameters.handoff != p->handoff ||
-        !anchored(p->entry, &p->entry_anchor) ||
-        !anchored(p->handoff, &p->handoff_anchor) ||
+        !nl_copy_state_matches(p->entry, &p->entry_anchor) ||
+        !nl_copy_state_matches(p->handoff, &p->handoff_anchor) ||
         nl_sem_validate(p->entry) != NL_CHECK_OK ||
         nl_sem_validate(p->handoff) != NL_CHECK_OK ||
         memcmp(call, &p->call_node, sizeof(*call)) ||
@@ -957,7 +960,8 @@ static bool parameter_entry(const NLCopyBodyProof *p,
            v.reference.writable &&
            v.reference.provenance == NL_PROVENANCE_VALID &&
            !v.reference.occurrence_dependency &&
-           plain(entry, p->arguments[1].results[0].value, fn->parameters[1]);
+           nl_copy_plain(entry, p->arguments[1].results[0].value,
+                         fn->parameters[1]);
 }
 NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
                                             NLCheckedNodeId id,
@@ -1001,13 +1005,13 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
         p->exit->scope_count != p->scope_count ||
         (p->scope_count && memcmp(p->exit->scopes, p->exit_scopes,
                                   p->scope_count * sizeof(*p->exit_scopes))) ||
-        c->type_count < p->exit->type_count || !same_types(c, p->exit) ||
-        nl_sem_validate(c) != NL_CHECK_OK ||
+        c->type_count < p->exit->type_count ||
+        !nl_copy_same_types(c, p->exit) || nl_sem_validate(c) != NL_CHECK_OK ||
         nl_sem_validate(p->exit) != NL_CHECK_OK)
         return INVALID;
-    if (p->formal_write &&
-        (!same_types(p->entry, p->exit) || !same_types(p->handoff, p->exit) ||
-         !parameter_entry(p, caller, call)))
+    if (p->formal_write && (!nl_copy_same_types(p->entry, p->exit) ||
+                            !nl_copy_same_types(p->handoff, p->exit) ||
+                            !parameter_entry(p, caller, call)))
         return INVALID;
     Replay r = {.proof = p,
                 .f = f,
@@ -1022,7 +1026,7 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
     status = INVALID;
     if (p->formal_write) {
         NLSemanticPlaceView initial[3];
-        if (!trio(p->entry, p->parameters.field.parent, initial))
+        if (!nl_copy_trio(p->entry, p->parameters.field.parent, initial))
             goto done;
         install(&r, p->parameters.field.parent, initial);
     }
@@ -1045,13 +1049,13 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
     }
     bool changed = false;
     for (const CopyEvent *e = p->first; e; e = e->next) {
-        if (!same_types(e->after, p->exit))
+        if (!nl_copy_same_types(e->after, p->exit))
             goto done;
         changed |= e->view.kind == NL_COPY_BODY_CHANGE;
         if (e->view.kind != NL_COPY_BODY_INITIALIZE)
             continue;
         NLSemanticPlaceView exit[3];
-        if (!trio(p->exit, e->view.field.parent, exit) ||
+        if (!nl_copy_trio(p->exit, e->view.field.parent, exit) ||
             !modeled(&r, exit, e->view.field.parent))
             goto done;
     }
@@ -1065,8 +1069,10 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
     if (p->formal_write) {
         NLSemanticPlaceView end[3];
         const NLPlaceId original = p->parameters.field.parent;
-        if (!trio(p->exit, original, end) || !modeled(&r, end, original) ||
-            !trio(p->handoff, original, end) || !modeled(&r, end, original))
+        if (!nl_copy_trio(p->exit, original, end) ||
+            !modeled(&r, end, original) ||
+            !nl_copy_trio(p->handoff, original, end) ||
+            !modeled(&r, end, original))
             goto done;
         /* Every caller place retains its identity/state except the traced
          * root+child. Formal storage is callee-owned, not a caller change. */
@@ -1095,7 +1101,7 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
         if (n->type != r.u8 || n->result_count != 1)
             continue;
         const NLValueId v = n->results[0].value;
-        if (!plain(p->exit, v, r.u8) || !plain(c, v, r.u8) ||
+        if (!nl_copy_plain(p->exit, v, r.u8) || !nl_copy_plain(c, v, r.u8) ||
             p->exit->values[v - 1].scalar_known !=
                 c->values[v - 1].scalar_known ||
             p->exit->values[v - 1].scalar_value !=

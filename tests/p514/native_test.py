@@ -97,8 +97,7 @@ def main():
     errors = {'wrong_condition.nl': ('semantic', 'P13-IF-CONDITION'),
               'invalid_else.nl': ('semantic', 'P3-WRITE-REF-REQUIRED'),
               'ref_escape.nl': ('unsupported', 'LOCAL-LOAN-PROFILE'),
-              'branch_effect.nl': ('precision', 'P6-JOIN-PRECISION'),
-              'hold_control.nl': ('precision', 'P6-JOIN-PRECISION')}
+              }
     with tempfile.TemporaryDirectory(prefix='p514-native-') as tmp:
         folder = Path(tmp)
         for name, digest in manifest['source_sha256'].items():
@@ -125,6 +124,10 @@ def main():
                 print(json.dumps(dict(source=name, sha256=digest, check=0, owned=evidence, c17=0,
                                       c_sha256=hashlib.sha256(emitted.stdout.encode()).hexdigest(),
                                       native=native, gate=poison.stdout.strip(), sanitizer=sanitizer)))
+            elif name in ('branch_effect.nl', 'hold_control.nl'):
+                sys.path.insert(0, str(root.parent / 'p713'))
+                from legacy import exercise
+                exercise(compiler, file, cc, sanitizer)
             elif name in errors:
                 rollback = run([gate, 'reject', str(file)])
                 require(rollback.returncode == 0 and 'artifact=NULL' in rollback.stdout and
@@ -139,7 +142,7 @@ def main():
                         emitted.returncode == 4 and not emitted.stdout and 'V1-BACKEND-UNSUPPORTED' in emitted.stderr,
                         f'broader finite boundary changed: {check} {emitted}')
                 print(json.dumps(dict(source=name, check=0, c17=4, native='NOT REACHED')))
-    print('P514 pure value selection then one original Pair write; no branch memory phi/Product claim')
+    print('P514 old pure selection regressions; structural field-join frontier advanced by P713')
 
 
 if __name__ == '__main__':

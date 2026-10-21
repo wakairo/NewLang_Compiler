@@ -1,0 +1,12 @@
+{
+  "base": "e917906f0416bf6132af3b5649a4f7fc5bdf47ba",
+  "local": "P Work/Codex; GCC13 Debug NO LLVM / Clang23.1.2; remote full pin23.1.3 unchanged",
+  "interruption": "usage limit interrupted work after initial local experiments, resumed 2026-10-21 22:25 UTC; frozen source/oracles unchanged",
+  "calibrations": [
+    "required IF parentheses corrected and re-frozen before Production editing",
+    "replay receiver type compared to scalar initializer rather than unit binding node",
+    "old legal precision expectations migrated, then existing boolean-origin authentication reused for IF identifier conditions",
+    "native old/field mutation only applies to actually executed writing arm; passive observer pointer must not be mutated"
+  ],
+  "ci": "not launched at this record; final Issue report supplies actual exact candidate runs"
+}
