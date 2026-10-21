@@ -1,0 +1,86 @@
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+
+#include <limits.h>
+_Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+
+static void nl_fn_10(void);
+static uint8_t nl_fn_11(void);
+
+static void nl_fn_10(void)
+{
+    const uint8_t nl_call_2 = nl_fn_11();
+    (void)nl_call_2;
+    const uint8_t nl_local_8 = nl_call_2;
+    (void)nl_local_8;
+    nl_type_10 nl_local_9 = { .f0 = 3, .f1 = 4, };
+    (void)nl_local_9;
+    uint8_t nl_loan_result_4;
+    {
+        uint8_t *const nl_local_10 = &nl_local_9.f0;
+        (void)nl_local_10;
+        const uint8_t nl_replace_old_14 = *nl_local_10;
+        *nl_local_10 = nl_local_8;
+        nl_loan_result_4 = nl_replace_old_14;
+    }
+    (void)nl_loan_result_4;
+    const uint8_t nl_local_11 = nl_loan_result_4;
+    (void)nl_local_11;
+    const uint8_t nl_local_12 = nl_local_9.f0;
+    (void)nl_local_12;
+    const uint8_t nl_local_13 = nl_local_9.f1;
+    (void)nl_local_13;
+    (void)nl_local_11;
+    (void)nl_local_12;
+    (void)nl_local_13;
+    (void)0;
+}
+
+static uint8_t nl_fn_11(void)
+{
+    nl_type_10 nl_local_1 = { .f0 = 12, .f1 = 38, };
+    (void)nl_local_1;
+    uint8_t nl_loan_result_1;
+    {
+        uint8_t *const nl_local_2 = &nl_local_1.f0;
+        (void)nl_local_2;
+        const uint8_t nl_replace_old_11 = *nl_local_2;
+        *nl_local_2 = 61;
+        nl_loan_result_1 = nl_replace_old_11;
+    }
+    (void)nl_loan_result_1;
+    const uint8_t nl_local_3 = nl_loan_result_1;
+    (void)nl_local_3;
+    uint8_t nl_loan_result_2;
+    {
+        uint8_t *const nl_local_4 = &nl_local_1.f1;
+        (void)nl_local_4;
+        const uint8_t nl_replace_old_18 = *nl_local_4;
+        *nl_local_4 = nl_local_3;
+        nl_loan_result_2 = nl_replace_old_18;
+    }
+    (void)nl_loan_result_2;
+    const uint8_t nl_local_5 = nl_loan_result_2;
+    (void)nl_local_5;
+    uint8_t nl_loan_result_3;
+    {
+        uint8_t *const nl_local_6 = &nl_local_1.f0;
+        (void)nl_local_6;
+        const uint8_t nl_replace_old_25 = *nl_local_6;
+        *nl_local_6 = nl_local_5;
+        nl_loan_result_3 = nl_replace_old_25;
+    }
+    (void)nl_loan_result_3;
+    const uint8_t nl_local_7 = nl_loan_result_3;
+    (void)nl_local_7;
+    (void)nl_local_7;
+    return nl_local_1.f0;
+}
+
+int main(void)
+{
+    nl_fn_10();
+    return 0;
+}

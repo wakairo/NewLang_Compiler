@@ -1,0 +1,6 @@
+copy proof rejects=91 validator_OOM=27 unchanged=PASS restored=PASS
+copy proof rejects=122 validator_OOM=53 unchanged=PASS restored=PASS
+registration OOM positions=267 rollback=PASS
+main-call OOM positions=213 rollback=PASS artifact=NULL
+registration OOM positions=436 rollback=PASS
+main-call OOM positions=348 rollback=PASS artifact=NULL

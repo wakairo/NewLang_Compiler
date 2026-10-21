@@ -133,6 +133,8 @@ NLCheckStatus nl_usize_arithmetic_capture(NLCheckedFragment *, NLCheckedNodeId,
                                           const NLSyntaxNode *,
                                           const NLSemanticContext *);
 struct NLCheckedFragment {
+    struct NLCopyBodyProof *copy_body;
+    void (*destroy_copy_body)(NLCheckedFragment *);
     struct NLUsizeAdditionProof *usize_additions;
     void (*destroy_usize_additions)(NLCheckedFragment *);
     NLSemanticContext *array4_world; /* owned live placement checkpoint */

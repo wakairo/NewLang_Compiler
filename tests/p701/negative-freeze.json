@@ -1,0 +1,50 @@
+{
+  "wrong_write": {
+    "sha256": "2f8dc33ece8c3dc5d24a27b2d36e67d9ed42ccc2101d4c04a0f9e8515e591874",
+    "check": 3,
+    "emit": 3,
+    "stdout_empty": true,
+    "code": "P3-TYPE-MISMATCH",
+    "category": "semantic"
+  },
+  "read_only": {
+    "sha256": "109080e769ae3419ebaf335234c32307b0e43342ff67017fda37adfd8ff86202",
+    "check": 3,
+    "emit": 3,
+    "stdout_empty": true,
+    "code": "LOCAL-LOAN-PROFILE",
+    "category": "unsupported"
+  },
+  "wrong_return": {
+    "sha256": "8d0692c2bf3e5a81b8503c678aeff43c3f25306f6f48a8a8c29a8e5a0412c0d4",
+    "check": 3,
+    "emit": 3,
+    "stdout_empty": true,
+    "code": "P8-BODY-RESULT",
+    "category": "semantic"
+  },
+  "scope_escape": {
+    "sha256": "b4b491670572d41788c4b15d43f38454d242a355304e1efb4cfe7520a764a75f",
+    "check": 3,
+    "emit": 3,
+    "stdout_empty": true,
+    "code": "P8-EXIT-DEPENDENCY",
+    "category": "semantic"
+  },
+  "richer_if": {
+    "sha256": "9121fc57fc0910cc743a363e9440a270ca678c03d07fca479256aa965654fc27",
+    "check": 0,
+    "emit": 4,
+    "stdout_empty": true,
+    "code": "V1-BACKEND-UNSUPPORTED",
+    "category": "cli"
+  },
+  "bad_ref_authority": {
+    "sha256": "bfe41d36f6e77209094370b4a1ab70305d84fb3ee4d01e737fb53f5301f386fb",
+    "check": 3,
+    "emit": 3,
+    "stdout_empty": true,
+    "code": "P3-TYPE-MISMATCH",
+    "category": "semantic"
+  }
+}

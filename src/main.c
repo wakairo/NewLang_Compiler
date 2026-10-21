@@ -5,6 +5,7 @@
 #include "newlang/array4.h"
 #include "newlang/checked.h"
 #include "newlang/checked_c_node.h"
+#include "newlang/copy_body.h"
 #include "newlang/diagnostic.h"
 #include "newlang/parser.h"
 #include "newlang/semantic.h"
@@ -68,6 +69,7 @@ typedef struct {
     const NLCheckedFragment *formal_body; /* current validation only */
     NLSymbolId formal;
     size_t scalar_depth; /* at most relay + leaf; not a general call graph */
+    NLCheckStatus copy_body_status; /* explicit validator OOM/resource */
 } V0Program;
 
 static V0Function *v0_find_function(V0Program *program, size_t function)
@@ -2085,10 +2087,26 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
         program->formal_body = body;
         program->formal = parameter;
         NLCheckedNodeId returned = 0;
-        const bool valid =
-            v1_copy_body(body, program, &returned) &&
-            call->results[0].value ==
-                nl_checked_node_view(body, returned)->results[0].value;
+        NLCopyBodyView proof;
+        const bool temporal = nl_checked_copy_body_view(fragment, id, &proof);
+        bool valid = !temporal && v1_copy_body(body, program, &returned) &&
+                     call->results[0].value ==
+                         nl_checked_node_view(body, returned)->results[0].value;
+        /* Stateful internal returns require the new issuer-owned temporal
+         * certificate. Do not widen the separate foreign export contract. */
+        if (temporal && !program->u8_export && parameter == 0) {
+            const NLCheckStatus status =
+                nl_checked_copy_body_validate(fragment, id, &proof);
+            if (status == NL_CHECK_OUT_OF_MEMORY ||
+                status == NL_CHECK_RESOURCE_LIMIT)
+                program->copy_body_status = status;
+            valid = status == NL_CHECK_OK;
+            for (size_t i = 1; valid && i <= nl_checked_node_count(body); ++i) {
+                const NLCheckedNodeView *v = nl_checked_node_view(body, i);
+                if (v->kind == NL_CHECKED_AGGREGATE)
+                    valid = avs_shape(body, v->type, program);
+            }
+        }
         program->formal_body = saved_body;
         program->formal = saved_formal;
         --program->scalar_depth;
@@ -2867,6 +2885,13 @@ static int compile_v0_to(const char *path, bool check_only,
     if (root_view == NULL || root_view->type != program.unit ||
         root_view->result_count != 0 ||
         !v0_validate_call(entry, root, &program)) {
+        if (program.copy_body_status == NL_CHECK_OUT_OF_MEMORY ||
+            program.copy_body_status == NL_CHECK_RESOURCE_LIMIT) {
+            result =
+                report_error("COPY-BODY-C-RESOURCE",
+                             "stateful Copy proof validation failed", path, 1);
+            goto cleanup;
+        }
         char *node_c = NULL;
         size_t node_length = 0;
         const NLCheckStatus array_status =

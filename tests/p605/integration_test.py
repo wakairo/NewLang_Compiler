@@ -20,6 +20,14 @@ def main():
     for name, digest in json.loads((root / 'frozen.json').read_text())['adopted_proof_files'].items():
         data = (root.parent.parent / name).read_bytes()
         if name == 'src/semantic_internal.h':
+            full_digest = hashlib.sha256(data).hexdigest()
+            # P701: exact private artifact attachment only; preserve the
+            # original entire-header digest and all arithmetic proof hashes.
+            copy_fields = (b'    struct NLCopyBodyProof *copy_body;\n'
+                           b'    void (*destroy_copy_body)(NLCheckedFragment *);\n')
+            copy_record = b'struct NLCheckedFragment {\n' + copy_fields
+            assert data.count(copy_fields) == data.count(copy_record) == 1
+            data = data.replace(copy_record, b'struct NLCheckedFragment {\n', 1)
             # Issue634: preserve the original full-header checksum, allowing
             # exactly the private P633 arm correlation field in its record.
             addition = (b'    /* Borrowed issuance-time identity, independent of the current child\n'
@@ -30,7 +38,6 @@ def main():
                       b'    struct NLCheckedFragment *artifact; /* owns hypothetical arm context */\n'
                       + addition + b'} NLCheckedArm;')
             assert data.count(addition) == data.count(record) == 1
-            full_digest = hashlib.sha256(data).hexdigest()
             data = data.replace(record, record.replace(addition, b''), 1)
             assert hashlib.sha256(data).hexdigest() == digest
             print(json.dumps(dict(header=name, candidate_sha256=full_digest,

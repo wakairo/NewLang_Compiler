@@ -1,0 +1,10 @@
+Internal ctest changing into directory: /workspace/p701-address
+Test project /workspace/p701-address
+    Start 1: p701_proof_rollback_oom.unit
+1/2 Test #1: p701_proof_rollback_oom.unit .......   Passed    1.41 sec
+    Start 2: p701_stateful_native.integration
+2/2 Test #2: p701_stateful_native.integration ...   Passed   10.74 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =  12.17 sec

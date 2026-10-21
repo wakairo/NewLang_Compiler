@@ -1,0 +1,62 @@
+{
+  "internal_one": {
+    "check": {
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "emit": {
+      "status": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p701/internal_one.nl\n"
+    }
+  },
+  "internal_two": {
+    "check": {
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "emit": {
+      "status": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p701/internal_two.nl\n"
+    }
+  },
+  "valve": {
+    "check": {
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "emit": {
+      "status": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p701/valve.nl\n"
+    }
+  },
+  "signal": {
+    "check": {
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "emit": {
+      "status": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p701/signal.nl\n"
+    }
+  },
+  "three_changes": {
+    "check": {
+      "status": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "emit": {
+      "status": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p701/three_changes.nl\n"
+    }
+  }
+}

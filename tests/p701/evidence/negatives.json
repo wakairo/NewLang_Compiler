@@ -1,0 +1,112 @@
+{
+  "wrong_write": {
+    "check_before": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/wrong_write.nl:2:25-2:43: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    },
+    "check_candidate": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/wrong_write.nl:2:25-2:43: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    },
+    "emit_before": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/wrong_write.nl:2:25-2:43: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    },
+    "emit_candidate": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/wrong_write.nl:2:25-2:43: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    }
+  },
+  "read_only": {
+    "check_before": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/read_only.nl:5:31-5:32: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n"
+    },
+    "check_candidate": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/read_only.nl:5:31-5:32: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n"
+    },
+    "emit_before": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/read_only.nl:5:31-5:32: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n"
+    },
+    "emit_candidate": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/read_only.nl:5:31-5:32: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n"
+    }
+  },
+  "wrong_return": {
+    "check_before": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/wrong_return.nl:2:25-2:43: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+    },
+    "check_candidate": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/wrong_return.nl:2:25-2:43: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+    },
+    "emit_before": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/wrong_return.nl:2:25-2:43: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+    },
+    "emit_candidate": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/wrong_return.nl:2:25-2:43: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+    }
+  },
+  "scope_escape": {
+    "check_before": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/scope_escape.nl:2:25-2:43: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+    },
+    "check_candidate": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/scope_escape.nl:2:25-2:43: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+    },
+    "emit_before": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/scope_escape.nl:2:25-2:43: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+    },
+    "emit_candidate": {
+      "status": 3,
+      "stdout": 0,
+      "stderr": "tests/p701/scope_escape.nl:2:25-2:43: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+    }
+  },
+  "richer_if": {
+    "check_before": {
+      "status": 0,
+      "stdout": 0,
+      "stderr": ""
+    },
+    "check_candidate": {
+      "status": 0,
+      "stdout": 0,
+      "stderr": ""
+    },
+    "emit_before": {
+      "status": 4,
+      "stdout": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p701/richer_if.nl\n"
+    },
+    "emit_candidate": {
+      "status": 4,
+      "stdout": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p701/richer_if.nl\n"
+    }
+  }
+}

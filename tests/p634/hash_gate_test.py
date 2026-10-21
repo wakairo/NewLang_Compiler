@@ -50,6 +50,9 @@ def main():
             'misplaced_block': header.replace(block,b'',1)+block,
             'changed_pointer': header.replace(b'*context_origin;',b'*other_origin;',1),
             'unrelated_header_change': header+b'\n/* unrelated change */\n',
+            'missing_p701_field': header.replace(b'    struct NLCopyBodyProof *copy_body;\n',b'',1),
+            'duplicate_p701_field': header+b'    struct NLCopyBodyProof *copy_body;\n',
+            'changed_p701_field': header.replace(b'*copy_body;',b'*other_copy_body;',1),
         }
         rejected=[]
         for label,data in attacks.items():
