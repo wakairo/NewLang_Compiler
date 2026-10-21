@@ -1,0 +1,1 @@
+{"calls":[{"call":18,"function":11,"loan":16,"scope":1,"ref_formal":4,"value_formal":5,"source_root":1,"source_symbol":1,"caller_ref":3,"index":0,"incoming_symbol":0,"parent_fact":1,"parent_post":11,"child_fact":2,"child_post":10,"returned_id":1,"changes":[{"node":2,"old_id":1,"incoming_id":11}]}],"direct":[{"node":25,"symbol":2,"root":4,"index":1,"ref":7,"incoming_symbol":6}]}

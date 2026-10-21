@@ -1,0 +1,98 @@
+{
+  "closed_scope.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p706/closed_scope.nl:8:24-8:28: error(semantic)[P3-UNKNOWN-BINDING]: unknown semantic binding\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p706/closed_scope.nl:8:24-8:28: error(semantic)[P3-UNKNOWN-BINDING]: unknown semantic binding\n",
+      "stdout_bytes": 0
+    }
+  },
+  "copy_as_ref.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p706/copy_as_ref.nl:6:52-6:58: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p706/copy_as_ref.nl:6:52-6:58: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n",
+      "stdout_bytes": 0
+    }
+  },
+  "escaped_formal.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p706/escaped_formal.nl:2:1-2:61: error(precision)[P8-SIGNATURE-PRECISION]: signature needs unsupported body analysis\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p706/escaped_formal.nl:2:1-2:61: error(precision)[P8-SIGNATURE-PRECISION]: signature needs unsupported body analysis\n",
+      "stdout_bytes": 0
+    }
+  },
+  "read_authority.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p706/read_authority.nl:6:31-6:32: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p706/read_authority.nl:6:31-6:32: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n",
+      "stdout_bytes": 0
+    }
+  },
+  "settings.nl": {
+    "check": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p706/settings.nl\n",
+      "stdout_bytes": 0
+    }
+  },
+  "window.nl": {
+    "check": {
+      "exit": 0,
+      "diagnostic": "",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 4,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p706/window.nl\n",
+      "stdout_bytes": 0
+    }
+  },
+  "wrong_return.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p706/wrong_return.nl:6:45-6:65: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p706/wrong_return.nl:6:45-6:65: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n",
+      "stdout_bytes": 0
+    }
+  },
+  "wrong_value.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p706/wrong_value.nl:6:57-6:67: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p706/wrong_value.nl:6:57-6:67: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n",
+      "stdout_bytes": 0
+    }
+  }
+}
