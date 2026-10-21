@@ -81,7 +81,7 @@ def passive(emitted, o):
     hb = insert_after(hb, hstore,
                       f"if (nl_local_{hroot}.f0 != {o['inner_post'][0]} || nl_local_{hroot}.f1 != {o['inner_post'][1]}) exit(72);")
     # Refresh offset lookup after inserts.
-    hreturn = exactly(rf"return nl_local_{hreturn.group(1)};", hb)
+    hreturn = exactly(r"return nl_local_(\d+);", hb)
     hb = hb[:hreturn.start()] + (
         f"if (nl_local_{hreturn.group(1)} != {o['returned']} || nl_local_{hroot}.f0 != {o['inner_post'][0]} || nl_local_{hroot}.f1 != {o['inner_post'][1]}) exit(73);\n    "
     ) + hb[hreturn.start():]

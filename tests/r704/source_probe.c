@@ -92,16 +92,16 @@ static bool probe(const char *path, size_t result, size_t internal_old,
             CHECK(scalar(c, e.incoming, internal_new));
             corrupted = e;
             corrupted.field.index = 1 - field;
-            CHECK(nl_checked_copy_body_event_validate(f, call_id, i,
-                                                      &corrupted) != NL_CHECK_OK);
+            CHECK(nl_checked_copy_body_event_validate(
+                      f, call_id, i, &corrupted) != NL_CHECK_OK);
             corrupted = e;
             corrupted.before = e.after;
-            CHECK(nl_checked_copy_body_event_validate(f, call_id, i,
-                                                      &corrupted) != NL_CHECK_OK);
+            CHECK(nl_checked_copy_body_event_validate(
+                      f, call_id, i, &corrupted) != NL_CHECK_OK);
             corrupted = e;
             corrupted.incoming = e.result;
-            CHECK(nl_checked_copy_body_event_validate(f, call_id, i,
-                                                      &corrupted) != NL_CHECK_OK);
+            CHECK(nl_checked_copy_body_event_validate(
+                      f, call_id, i, &corrupted) != NL_CHECK_OK);
         } else if (e.kind == NL_COPY_BODY_READ) {
             CHECK(e.field.parent == callee_root && ++reads <= 2);
         } else
@@ -109,14 +109,16 @@ static bool probe(const char *path, size_t result, size_t internal_old,
     }
     CHECK(init == 1 && changed == 1 && reads == 2);
     CHECK(!nl_checked_copy_body_event(f, call_id, view.event_count,
-                                     &(NLCopyBodyEventView){0}));
+                                      &(NLCopyBodyEventView){0}));
     CHECK(caller_write->field.present &&
           caller_write->field.parent != callee_root &&
           caller_write->field.index == dest_field);
     CHECK(scalar(c, caller_write->field.old_value, caller_old));
     CHECK(scalar(c, caller_write->field.new_value, result));
     CHECK(nl_checked_copy_body_validate(f, call_id, NULL) == NL_CHECK_OK);
-    printf("{\"call\":%zu,\"events\":%zu,\"result\":%zu,\"callee_root\":%zu,\"caller_root\":%zu,\"internal_field\":%zu,\"caller_field\":%zu,\"copied_event_corruptions_rejected\":true}\n",
+    printf("{\"call\":%zu,\"events\":%zu,\"result\":%zu,\"callee_root\":%zu,"
+           "\"caller_root\":%zu,\"internal_field\":%zu,\"caller_field\":%zu,"
+           "\"copied_event_corruptions_rejected\":true}\n",
            call_id, view.event_count, result, callee_root,
            caller_write->field.parent, field, dest_field);
     node_checked_destroy(&n);
@@ -127,10 +129,8 @@ int main(int argc, char **argv)
 {
     return argc == 8 &&
                    probe(argv[1], strtoul(argv[2], NULL, 10),
-                         strtoul(argv[3], NULL, 10),
-                         strtoul(argv[4], NULL, 10),
-                         strtoul(argv[5], NULL, 10),
-                         strtoul(argv[6], NULL, 10),
+                         strtoul(argv[3], NULL, 10), strtoul(argv[4], NULL, 10),
+                         strtoul(argv[5], NULL, 10), strtoul(argv[6], NULL, 10),
                          strtoul(argv[7], NULL, 10))
                ? 0
                : 1;
