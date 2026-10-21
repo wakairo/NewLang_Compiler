@@ -11,6 +11,13 @@ typedef struct CopyEvent {
     size_t before_count, after_count;
     struct CopyEvent *next;
 } CopyEvent;
+typedef struct {
+    NLSemanticPlaceView *places;
+    NLSemanticValueView *values;
+    NLSemanticScopeView *scopes;
+    NLSemanticBindingView *bindings;
+    size_t place_count, value_count, scope_count, binding_count;
+} NLCopyCallAnchor;
 typedef struct NLCopyBodyProof {
     const NLCheckedFragment *owner, *caller;
     const NLFunctionBody *body;
@@ -26,6 +33,19 @@ typedef struct NLCopyBodyProof {
     const NLCheckedNodeView *nodes_origin;
     size_t count;
     bool sealed;
+    bool formal_write;
+    NLCopyBodyParameters parameters, issued_parameters;
+    NLSemanticContext *entry, *handoff;
+    NLCopyCallAnchor entry_anchor, handoff_anchor;
+    NLCheckedNodeView arguments[2], call_node, loan_node;
+    NLCheckedNodeView *caller_nodes;
+    const NLCheckedNodeView *caller_nodes_origin;
+    size_t caller_count;
+    NLCheckedNodeId caller_root;
+    const NLSource *caller_source;
+    const NLFunctionBody *caller_body;
+    NLTypeId parameter_types[2];
+
 } NLCopyBodyProof;
 
 NLCheckStatus nl_copy_body_event(NLCheckedFragment *, NLCheckedNodeId,
@@ -35,6 +55,11 @@ NLCheckStatus nl_copy_body_before(NLCheckedFragment *, NLCheckedNodeId,
 NLCheckStatus nl_copy_body_exit(NLCheckedFragment *, const NLSemanticContext *,
                                 NLCheckedResult);
 NLCheckStatus nl_copy_body_seal(NLCheckedFragment *, const NLCheckedFragment *,
-                                NLCheckedNodeId, size_t);
+                                NLCheckedNodeId, size_t,
+                                const NLSemanticContext *);
 
+NLCheckStatus nl_copy_body_parameters(NLCheckedFragment *,
+                                      const NLCheckedFragment *,
+                                      NLCheckedNodeId, const NLSymbolId[2],
+                                      const NLSemanticContext *);
 #endif

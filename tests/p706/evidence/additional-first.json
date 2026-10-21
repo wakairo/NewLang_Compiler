@@ -1,0 +1,18 @@
+{
+  "read_scalar": {
+    "check": 3,
+    "diagnostic": "tests/p706/read_scalar.nl:2:61-2:62: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  },
+  "conflicting_loan": {
+    "check": 3,
+    "diagnostic": "tests/p706/conflicting_loan.nl:3:107-3:108: error(unsupported)[P5-EXPRESSION-UNSUPPORTED]: expression extension outside P5\n"
+  },
+  "callee_escape": {
+    "check": 3,
+    "diagnostic": "tests/p706/callee_escape.nl:1:67-1:94: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+  },
+  "relay": {
+    "check": 0,
+    "diagnostic": ""
+  }
+}

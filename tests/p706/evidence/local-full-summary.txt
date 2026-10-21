@@ -1,0 +1,6 @@
+GCC13 frontend-only, all production code at candidate content; full pass before the later addition/repair of the full-driver OOM test. That test was subsequently run separately under GCC13/ASan/UBSan. Exact full candidate suite is independently exercised by the PR FULL5/PARTIAL runs.
+382/382 Test  #94: parser_loan.unit ......................................   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 382
+
+Total Test time (real) =  62.56 sec

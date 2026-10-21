@@ -27,7 +27,7 @@ typedef struct Check {
     size_t *branch_budget; /* synchronous finite checking/replay work */
     size_t *body_budget;   /* borrowed counter for this synchronous body walk */
     bool in_function_body, definition, terminated, in_source_loan;
-    bool capture_copy_body; /* actual zero-formal u8 call, not definition */
+    bool capture_copy_body; /* actual supported u8 call, not definition */
     NLTypeId function_result;
     size_t function_binding_floor, function_scope_floor, function_place_floor;
     size_t function_value_prefix;
@@ -3600,6 +3600,7 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     body.capture_copy_body =
         !body.definition && function->count == 0 &&
         function->result == nl_semantic_core_type(c, NL_TYPE_U8);
+    NLSymbolId copy_parameters[2] = {0};
     for (size_t i = 0; i < function->count; ++i) {
         const NLCheckedNodeView argument = *view(caller, arguments[i]);
         NLValueId value =
@@ -3625,6 +3626,8 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                                        value, binding_floor, &symbol),
                   (NLSourceSpan){0}))
             goto failure;
+        if (i < 2)
+            copy_parameters[i] = symbol;
         if (function->owner_producer) {
             view(caller, call_id)->producer.parameters[i] = symbol;
             if (i == 3)
@@ -3639,6 +3642,15 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                 c->places[c->bindings[symbol - 1].view.place - 1]
                     .implicit_local = true;
         }
+    }
+    if (!body.definition && function->count == 2 &&
+        function->result == nl_semantic_core_type(c, NL_TYPE_U8)) {
+        if (!host(&body,
+                  nl_copy_body_parameters(body.artifact, caller->artifact,
+                                          call_id, copy_parameters, c),
+                  call_span))
+            goto failure;
+        body.capture_copy_body = body.artifact->copy_body != NULL;
     }
     if (!function_block(&body, nl_syntax_node_view(nl_syntax_tree_root(
                                    function->body->syntax))))
@@ -3822,7 +3834,7 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                sizeof(result.results));
     if (!host(&body,
               nl_copy_body_seal(body.artifact, caller->artifact, call_id,
-                                body.body_function),
+                                body.body_function, c),
               call_span))
         goto failure;
     caller->artifact->bodies[count] = body.artifact;
