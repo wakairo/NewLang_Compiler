@@ -4,12 +4,22 @@ import sys
 
 HELP = (
     "Usage: newlangc [--version | --help | SOURCE]\n"
+    "       newlangc --check SOURCE\n"
+    "       newlangc --emit-c17-to OUTPUT SOURCE\n"
+    "       newlangc --experimental-c17-u8-export FUNCTION SOURCE\n"
     "NewLang production compiler P0 bootstrap.\n"
     "  --version  Print the deterministic compiler version.\n"
     "  --help     Print this help.\n"
-    "  SOURCE     Validate V0/V1/AVS/local-root and emit Checked-C to stdout.\n"
-    "Checked-C is a bounded bootstrap/reference execution path; LLVM remains "
-    "the planned primary backend.\n"
+    "  --check SOURCE  Validate source without backend emission.\n"
+    "  SOURCE          Emit supported checked-profile C17 to stdout.\n"
+    "  --emit-c17-to OUTPUT SOURCE\n"
+    "             Stage and replace a named C17 file (POSIX local host).\n"
+    "  --experimental-c17-u8-export FUNCTION SOURCE\n"
+    "             Experimental Copy-only u8 export with a fixed C17 header;\n"
+    "             not general FFI.\n"
+    "Only supported checked profiles emit C17; --check success does not "
+    "guarantee\n"
+    "backend emission. LLVM remains the planned primary backend.\n"
 )
 CASES = {
     "version": (["--version"], 0, "newlangc 0.1.0 (P0 bootstrap)\n", ""),
