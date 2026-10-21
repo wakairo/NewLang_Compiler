@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-21T02:53:59.912737+00:00",
+  "purpose": "richer CHECK-valid u8 body control; frozen before its first execution",
+  "sources": {
+    "unsupported_call.nl": "eab7031ea984feea98f7fe0d8585db0ed8f8051162cdfade712e4911707c1987"
+  },
+  "expectations": {
+    "unsupported_call.nl": {
+      "check": 0,
+      "default_emit": 4,
+      "experimental_emit": 4,
+      "c_bytes": 0
+    }
+  }
+}

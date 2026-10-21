@@ -1,0 +1,18 @@
+{
+  "gcc13_full": "375/375 PASS",
+  "initial_local_failures": [
+    "missing CMake from PATH, corrected by existing activation script",
+    "missing stdlib include in new probe",
+    "incorrect probe assumption: Copy reuse has new ValueId20, traced by authentic symbol7 from read13",
+    "initial private gate assumed binding-before-initializer; corrected source node relation",
+    "initial help addition conflicted with two strict existing CLI tests; removed; existing tests untouched",
+    "supplemental source had function before leading struct; source/oracle preserved, declaration order calibrated separately"
+  ],
+  "private_gate_allocations": 0,
+  "registration_fail_at_N": 187,
+  "entry_fail_at_N": 82,
+  "compiler_changed": [
+    "src/main.c"
+  ],
+  "canonical_public_api_issuer_checker_changes": false
+}

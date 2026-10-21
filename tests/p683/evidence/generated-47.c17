@@ -1,0 +1,58 @@
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+
+#include <limits.h>
+_Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+/* Experimental diagnostic status data, NOT application success. */
+#if !defined(__linux__) || !defined(__x86_64__)
+#error NewLang experimental u8 status requires Linux x86_64
+#endif
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+
+static uint8_t nl_fn_10(void);
+
+static uint8_t nl_fn_10(void)
+{
+    nl_type_10 nl_local_1 = { .f1 = 47, .f0 = 7, };
+    (void)nl_local_1;
+    const uint8_t nl_local_2 = nl_local_1.f0;
+    (void)nl_local_2;
+    uint8_t nl_loan_result_1;
+    {
+        uint8_t *const nl_local_3 = &nl_local_1.f1;
+        (void)nl_local_3;
+        const uint8_t nl_replace_old_14 = *nl_local_3;
+        *nl_local_3 = nl_local_2;
+        nl_loan_result_1 = nl_replace_old_14;
+    }
+    (void)nl_loan_result_1;
+    const uint8_t nl_local_4 = nl_loan_result_1;
+    (void)nl_local_4;
+    uint8_t nl_loan_result_2;
+    {
+        uint8_t *const nl_local_5 = &nl_local_1.f0;
+        (void)nl_local_5;
+        const uint8_t nl_replace_old_21 = *nl_local_5;
+        *nl_local_5 = nl_local_4;
+        nl_loan_result_2 = nl_replace_old_21;
+    }
+    (void)nl_loan_result_2;
+    const uint8_t nl_local_6 = nl_loan_result_2;
+    (void)nl_local_6;
+    const uint8_t nl_local_7 = nl_local_1.f0;
+    (void)nl_local_7;
+    const uint8_t nl_local_8 = nl_local_1.f1;
+    (void)nl_local_8;
+    (void)nl_local_2;
+    (void)nl_local_4;
+    (void)nl_local_6;
+    (void)nl_local_7;
+    (void)nl_local_8;
+    return nl_local_7;
+}
+
+int main(void)
+{
+    return (int)nl_fn_10();
+}

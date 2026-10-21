@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-21T02:54:53.264140+00:00",
+  "purpose": "one harmless declaration-order correction of test program before renewed execution; old source/oracle retained",
+  "sources": {
+    "unsupported_call_calibrated.nl": "70b63f647a9e160edb02972b2bdc5a33101e7cc7186be6097e62816582939bb5"
+  },
+  "expectations": {
+    "unsupported_call_calibrated.nl": {
+      "check": 0,
+      "default_emit": 4,
+      "experimental_emit": 4,
+      "c_bytes": 0
+    }
+  }
+}

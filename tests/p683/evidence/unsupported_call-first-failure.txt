@@ -1,0 +1,1 @@
+Frozen expected CHECK0; actual CHECK3 / AVS-DECL-PROFILE at2:1-2:45. Test source mistakenly put a function before the required leading struct. This is a test-program mistake, not a compiler regression. Original bytes and initial supplemental freeze retained.

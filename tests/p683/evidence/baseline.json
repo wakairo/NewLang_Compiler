@@ -1,0 +1,62 @@
+{
+  "status31.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "default": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p683/status31.nl\n"
+    }
+  },
+  "status47.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "default": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p683/status47.nl\n"
+    }
+  },
+  "unsupported.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "default": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p683/unsupported.nl\n"
+    }
+  },
+  "wrong_input.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p683/wrong_input.nl:6:61-6:70: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    },
+    "default": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p683/wrong_input.nl:6:61-6:70: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    }
+  },
+  "wrong_result.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p683/wrong_result.nl:1:14-1:20: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+    },
+    "default": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p683/wrong_result.nl:1:14-1:20: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+    }
+  }
+}

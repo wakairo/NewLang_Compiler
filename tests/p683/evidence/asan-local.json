@@ -1,0 +1,111 @@
+{
+  "results": {
+    "status31.nl": {
+      "check": 0,
+      "default": 4,
+      "opt_in": 0,
+      "owned": {
+        "root": 1,
+        "children": [
+          2,
+          3
+        ],
+        "scopes": [
+          1,
+          2
+        ],
+        "writes": [
+          14,
+          21
+        ],
+        "read_symbols": [
+          2,
+          7,
+          8
+        ],
+        "call_result": 20,
+        "tail_result": 20,
+        "old_copy_forwarded": true,
+        "value": 31,
+        "sibling": 7,
+        "closed_and_ended": true
+      },
+      "c_sha256": "2c993264fe43dbcc16c91fc94873d6c9bc0e1598c8674a93dc746050ab702a80",
+      "normal_status_O0_O2": [
+        31,
+        31
+      ],
+      "guest_stdout_bytes": 0,
+      "guest_stderr_bytes": 0
+    },
+    "status47.nl": {
+      "check": 0,
+      "default": 4,
+      "opt_in": 0,
+      "owned": {
+        "root": 1,
+        "children": [
+          2,
+          3
+        ],
+        "scopes": [
+          1,
+          2
+        ],
+        "writes": [
+          14,
+          21
+        ],
+        "read_symbols": [
+          2,
+          7,
+          8
+        ],
+        "call_result": 20,
+        "tail_result": 20,
+        "old_copy_forwarded": true,
+        "value": 47,
+        "sibling": 7,
+        "closed_and_ended": true
+      },
+      "c_sha256": "23cf3bf56a0b73c8d96f2a3c4b18ab1d124ca3e17ec00d59aa57cc95faf6c3f1",
+      "normal_status_O0_O2": [
+        47,
+        47
+      ],
+      "guest_stdout_bytes": 0,
+      "guest_stderr_bytes": 0
+    },
+    "wrong_result.nl": {
+      "check": 3,
+      "default": 3,
+      "opt_in": 3,
+      "c_bytes": 0,
+      "diagnostic": "P8-BODY-RESULT"
+    },
+    "wrong_input.nl": {
+      "check": 3,
+      "default": 3,
+      "opt_in": 3,
+      "c_bytes": 0,
+      "diagnostic": "P3-TYPE-MISMATCH"
+    },
+    "unsupported.nl": {
+      "check": 0,
+      "default": 4,
+      "opt_in": 4,
+      "c_bytes": 0,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED"
+    },
+    "unsupported_call_calibrated.nl": {
+      "check": 0,
+      "default": 4,
+      "opt_in": 4,
+      "c_bytes": 0,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED"
+    }
+  },
+  "signal_control": -15,
+  "sanitizer": "address",
+  "interpretation": "nonzero diagnostic data; conventional failure, NOT guest stdout/application success/Product GO"
+}

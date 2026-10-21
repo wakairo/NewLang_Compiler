@@ -1,0 +1,3 @@
+The following tests FAILED:
+	215 - cli.help (Failed)
+	216 - cli.no_arguments (Failed)

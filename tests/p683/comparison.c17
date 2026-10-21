@@ -1,0 +1,15 @@
+#include <stdint.h>
+typedef struct { uint8_t port, mode; } DeviceSettings;
+static uint8_t swap_settings(DeviceSettings *device)
+{
+    const uint8_t saved = device->port;
+    const uint8_t old_mode = device->mode;
+    device->mode = saved;
+    device->port = old_mode;
+    return device->port;
+}
+int main(void)
+{
+    DeviceSettings device = {.mode = INITIAL_MODE, .port = 7};
+    return (int)swap_settings(&device);
+}

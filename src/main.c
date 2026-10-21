@@ -48,6 +48,7 @@ typedef struct {
     size_t entry_function;
     NLTypeId unit, u8, aggregate;
     bool uses_usize;
+    bool posix_u8_exit; /* explicit target experiment; default remains unit */
     const NLCheckedFragment *formal_body; /* current validation only */
     NLSymbolId formal;
     size_t scalar_depth; /* at most relay + leaf; not a general call graph */
@@ -2178,6 +2179,143 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
     }
 }
 
+/* Opt-in target transport only. Reuse the normal record/loan gates, then
+ * constrain this entry to one local record and the two-write Copy-old chain.
+ * The live checker-owned call/body are the trust boundary, not scalar_known. */
+static bool posix_u8_entry(const NLCheckedFragment *f, V0Program *p)
+{
+    const NLCheckedNodeView *call = nl_checked_node_view(f, nl_checked_root(f));
+    const NLSemanticContext *c = nl_checked_context(f);
+    const NLCheckedFragment *body = nl_checked_call_body(f, nl_checked_root(f));
+    if (!call || !c || !body || call->kind != NL_CHECKED_REGISTERED_CALL ||
+        !call->body_backed || call->function == 0 ||
+        call->function > c->function_count || call->argument_count ||
+        call->first_argument || call->terminates || call->type != p->u8 ||
+        call->result_count != 1 || nl_checked_context(body) != c)
+        return false;
+    const NLFunctionEntry *fn = &c->functions[call->function - 1];
+    if (!fn->body || fn->kind != NL_CHECKED_REGISTERED_CALL || fn->count ||
+        fn->result != p->u8 || fn->body->count ||
+        body->body_owner != fn->body || body->source != fn->body->source ||
+        fn->caller_effects || fn->hidden_dependencies || fn->owner_receiver ||
+        fn->owner_producer || fn->custody_recipient)
+        return false;
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(body, nl_checked_root(body));
+    const NLCheckedNodeView *tail =
+        root ? nl_checked_node_view(body, root->tail) : NULL;
+    NLSemanticValueView result;
+    if (!root || root->kind != NL_CHECKED_BLOCK || root->terminates ||
+        root->type != p->u8 || root->result_count != 1 ||
+        root->results[0].type != p->u8 || !tail ||
+        tail->kind != NL_CHECKED_IDENTIFIER ||
+        tail->value_use != NL_VALUE_COPIED || tail->type != p->u8 ||
+        tail->result_count != 1 || tail->results[0].type != p->u8 ||
+        call->results[0].type != p->u8 ||
+        call->results[0].value != root->results[0].value ||
+        root->results[0].value != tail->results[0].value ||
+        !nl_semantic_value_view(c, tail->results[0].value, &result) ||
+        result.type != p->u8 || result.dependencies != NL_DEPENDENCY_FREE ||
+        result.value_dependency_count ||
+        nl_control_exits_count(nl_checked_control_exits(body)) ||
+        !v0_validate_node(body, nl_checked_root(body), p))
+        return false;
+    const NLCheckedNodeView *writes[2] = {0}, *loans[2] = {0}, *returned = NULL;
+    NLSymbolId old = 0;
+    size_t wc = 0, lc = 0, records = 0;
+    for (size_t i = 1; i <= nl_checked_node_count(body); ++i) {
+        const NLCheckedNodeView *v = nl_checked_node_view(body, i);
+        switch (v->kind) {
+        case NL_CHECKED_REPLACE:
+            if (wc == 2)
+                return false;
+            writes[wc++] = v;
+            break;
+        case NL_CHECKED_LOAN_HEADER: {
+            NLSemanticScopeView scope;
+            if (lc == 2 || !v->field.present ||
+                v->loan.access != NL_ACCESS_WRITE ||
+                !nl_semantic_scope_view(c, v->loan.scope, &scope) ||
+                scope.active)
+                return false;
+            loans[lc++] = v;
+            break;
+        }
+        case NL_CHECKED_AGGREGATE:
+            ++records;
+            break;
+        case NL_CHECKED_BINDING: {
+            const NLCheckedNodeView *init =
+                nl_checked_node_view(body, v->initializer);
+            if (v->symbol == tail->symbol)
+                returned = init;
+            if (init && init->kind == NL_CHECKED_LOAN_HEADER &&
+                init == loans[0])
+                old = v->symbol;
+            break;
+        }
+        case NL_CHECKED_IDENTIFIER:
+        case NL_CHECKED_U8_LITERAL:
+        case NL_CHECKED_FIELD_READ:
+        case NL_CHECKED_BLOCK:
+        case NL_CHECKED_STATEMENT:
+        case NL_CHECKED_RECEIVER:
+        case NL_CHECKED_AGGREGATE_FIELD:
+            break;
+        default:
+            return false;
+        }
+    }
+    if (p->count || records != 1 || wc != 2 || lc != 2 || !old || !returned ||
+        returned->kind != NL_CHECKED_FIELD_READ ||
+        loans[0]->loan.scope == loans[1]->loan.scope)
+        return false;
+    const NLCheckedField a = writes[0]->field, b = writes[1]->field,
+                         r = returned->field;
+    const NLCheckedNodeView *first_ref =
+        nl_checked_node_view(body, writes[0]->first_argument);
+    const NLCheckedNodeView *first_input =
+        first_ref ? nl_checked_node_view(body, first_ref->next_argument) : NULL;
+    const NLCheckedNodeView *saved = NULL;
+    for (size_t i = 1; first_input && i <= nl_checked_node_count(body); ++i) {
+        const NLCheckedNodeView *v = nl_checked_node_view(body, i);
+        if (v->kind == NL_CHECKED_BINDING && v->symbol == first_input->symbol)
+            saved = nl_checked_node_view(body, v->initializer);
+    }
+    NLSemanticPlaceView original;
+    if (!first_input || first_input->kind != NL_CHECKED_IDENTIFIER || !saved ||
+        saved->kind != NL_CHECKED_FIELD_READ || saved->field.child != b.child ||
+        saved->field.parent != a.parent ||
+        saved->field.parent_fact != a.parent_fact ||
+        saved->field.child_fact != b.child_fact ||
+        !nl_semantic_place_view(c, a.parent, &original) ||
+        !original.implicit_local || !original.independent_root ||
+        original.incarnation != a.parent_incarnation || original.live ||
+        original.current_fact || original.current_value)
+        return false;
+    const NLCheckedNodeView *ref =
+        nl_checked_node_view(body, writes[1]->first_argument);
+    const NLCheckedNodeView *input =
+        ref ? nl_checked_node_view(body, ref->next_argument) : NULL;
+    if (!a.present || !b.present || !r.present || a.index != 1 ||
+        b.index != 0 || a.base != b.base || a.parent != b.parent ||
+        a.child == b.child || a.parent_incarnation != b.parent_incarnation ||
+        a.parent_post_fact != b.parent_fact || r.parent != b.parent ||
+        r.child != b.child || r.base != b.base ||
+        r.parent_incarnation != b.parent_incarnation ||
+        r.child_incarnation != b.child_incarnation ||
+        r.parent_fact != b.parent_post_fact ||
+        r.child_fact != b.child_post_fact || !input ||
+        input->kind != NL_CHECKED_IDENTIFIER || input->symbol != old ||
+        input->value_use != NL_VALUE_COPIED ||
+        loans[0]->results[0].value != a.old_value ||
+        loans[1]->results[0].value != b.old_value)
+        return false;
+    p->functions[p->count++] = (V0Function){call->function, body, p->u8, 0};
+    p->entry_function = call->function;
+    return true;
+}
+
 static bool v0_indent(FILE *stream, size_t depth)
 {
     for (size_t i = 0; i < depth; ++i)
@@ -2614,12 +2752,33 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
     return fputs("}\n", stream) >= 0;
 }
 
-static bool v0_emit_signature(FILE *stream, const V0Function *fn)
+static bool v0_emit_signature(FILE *stream, const V0Function *fn,
+                              bool typed_entry)
 {
     if (fn->parameter != 0)
         return fprintf(stream, "static uint8_t nl_fn_%zu(uint8_t nl_local_%zu)",
                        fn->function, fn->parameter) >= 0;
-    return fprintf(stream, "static void nl_fn_%zu(void)", fn->function) >= 0;
+    return fprintf(stream,
+                   !typed_entry ? "static void nl_fn_%zu(void)"
+                                : "static uint8_t nl_fn_%zu(void)",
+                   fn->function) >= 0;
+}
+
+static bool posix_u8_body(FILE *stream, const V0Function *fn)
+{
+    const NLCheckedFragment *f = fn->body;
+    const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
+    if (fputs("{\n", stream) < 0)
+        return false;
+    for (NLCheckedNodeId i = root->first_item; i != 0;) {
+        const NLCheckedNodeView *v = nl_checked_node_view(f, i);
+        if (!v0_emit_node(stream, f, i, 1))
+            return false;
+        i = v->next_item;
+    }
+    return fputs("    return ", stream) >= 0 &&
+           v1_emit_scalar(stream, nl_checked_node_view(f, root->tail)) &&
+           fputs(";\n}\n", stream) >= 0;
 }
 
 static bool v0_emit_c(FILE *stream, const V0Program *program)
@@ -2628,6 +2787,15 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
             "/* North Star V0/V1/AVS Checked-C reference output. */\n#include "
             "<stdint.h>\n\n" NL_C17_U8_TARGET_GUARD,
             stream) < 0)
+        return false;
+
+    if (program->posix_u8_exit &&
+        fputs("/* Experimental diagnostic status data, NOT application "
+              "success. */\n"
+              "#if !defined(__linux__) || !defined(__x86_64__)\n"
+              "#error NewLang experimental u8 status requires Linux x86_64\n"
+              "#endif\n",
+              stream) < 0)
         return false;
 
     /* The frontend currently has a native-size_t quantity target, not a
@@ -2647,7 +2815,8 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
         return false;
 
     for (size_t i = 0; i < program->count; ++i)
-        if (!v0_emit_signature(stream, &program->functions[i]) ||
+        if (!v0_emit_signature(stream, &program->functions[i],
+                               program->posix_u8_exit) ||
             fputs(";\n", stream) < 0)
             return false;
     if (fputc('\n', stream) == EOF)
@@ -2657,15 +2826,21 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
         const V0Function function = program->functions[i];
         const NLCheckedNodeView *root =
             nl_checked_node_view(function.body, nl_checked_root(function.body));
-        if (root == NULL || !v0_emit_signature(stream, &function) ||
+        if (root == NULL ||
+            !v0_emit_signature(stream, &function, program->posix_u8_exit) ||
             fputc('\n', stream) == EOF ||
-            !(function.parameter != 0
-                  ? v1_emit_body(stream, &function)
+            !(function.parameter != 0 ? v1_emit_body(stream, &function)
+              : program->posix_u8_exit
+                  ? posix_u8_body(stream, &function)
                   : v0_emit_block(stream, function.body, root, 0)) ||
             fputc('\n', stream) == EOF)
             return false;
     }
 
+    if (program->posix_u8_exit)
+        return fprintf(stream,
+                       "int main(void)\n{\n    return (int)nl_fn_%zu();\n}\n",
+                       program->entry_function) >= 0;
     return fputs("int main(void)\n{\n", stream) >= 0 &&
            fprintf(stream, "    nl_fn_%zu();\n", program->entry_function) >=
                0 &&
@@ -2692,7 +2867,7 @@ static int render_check_failure(const NLSource *source,
                         nl_source_name(source), 3);
 }
 
-static int compile_v0(const char *path, bool check_only)
+static int compile_v0(const char *path, bool check_only, bool posix_u8_exit)
 {
     static const char entry_text[] = "main()";
     NLSource *source = NULL, *entry_source = NULL;
@@ -2769,7 +2944,15 @@ static int compile_v0(const char *path, bool check_only)
     const NLCheckedNodeView *root_view = nl_checked_node_view(entry, root);
     V0Program program = {.unit = nl_semantic_unit_type(context),
                          .u8 = nl_semantic_core_type(context, NL_TYPE_U8)};
-    if (root_view == NULL || !v0_validate_call(entry, root, &program)) {
+    if (posix_u8_exit) {
+        program.posix_u8_exit = true;
+        if (!posix_u8_entry(entry, &program)) {
+            result = report_error("V1-BACKEND-UNSUPPORTED",
+                                  "entry outside experimental POSIX u8 profile",
+                                  path, 4);
+            goto cleanup;
+        }
+    } else if (root_view == NULL || !v0_validate_call(entry, root, &program)) {
         char *node_c = NULL;
         size_t node_length = 0;
         const NLCheckStatus array_status =
@@ -2842,7 +3025,17 @@ int main(int argc, char **argv)
         return fputs(help, stdout) >= 0 && fflush(stdout) == 0 ? 0 : 1;
     }
     if (argc == 3 && strcmp(argv[1], "--check") == 0 && argv[2][0] != '-') {
-        return compile_v0(argv[2], true);
+        return compile_v0(argv[2], true, false);
+    }
+    if (argc == 3 && strcmp(argv[1], "--experimental-posix-u8-exit") == 0 &&
+        argv[2][0] != '-') {
+#if defined(__linux__) && defined(__x86_64__)
+        return compile_v0(argv[2], false, true);
+#else
+        return report_error("V1-BACKEND-UNSUPPORTED",
+                            "POSIX u8 transport requires Linux x86_64", argv[2],
+                            4);
+#endif
     }
     if (argc != 2) {
         return report_error("P0-CLI-ARGUMENT", "expected exactly one argument",
@@ -2857,5 +3050,5 @@ int main(int argc, char **argv)
     if (argv[1][0] == '-') {
         return report_error("P0-CLI-OPTION", "unknown option", argv[1], 2);
     }
-    return compile_v0(argv[1], false);
+    return compile_v0(argv[1], false, false);
 }

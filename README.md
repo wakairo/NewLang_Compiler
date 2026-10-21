@@ -67,6 +67,17 @@ module privacy or safe-library guarantee. It is a technical composition step,
 not a complete real-user checkpoint or Product GO. The separate factored-C
 comparison and evidence limits are in [`tests/p679`](tests/p679/README.md).
 
+## Experimental diagnostic status transport (Linux x86_64)
+
+`newlangc --experimental-posix-u8-exit SOURCE` is an explicit, nonnormative
+POSIX-like target experiment for one bounded two-field/two-write `main()->u8`
+program. It transports the **actual computed Copy** through the generated
+callee into process termination status. Status31/47 is conventionally
+**failure**, not successful application output; guest stdout remains empty.
+Default compilation and `--check` are unchanged. See
+[the frozen sources, commands, target limits and tests](tests/p683/README.md).
+This does not add general entry semantics, I/O, FFI or a stable return ABI.
+
 ## Initial Some: first-user quickstart (no LLVM)
 
 On **Ubuntu 24.04 x86_64** (including WSL2 Ubuntu 24.04), the existing

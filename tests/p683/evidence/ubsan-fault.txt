@@ -1,0 +1,3 @@
+68: private gate rejects=8 original=PASS allocations=0
+68: registration fail-at-N=187 rollback=PASS
+68: entry fail-at-N=82 rollback=PASS artifact=NULL

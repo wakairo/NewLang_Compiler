@@ -1,0 +1,60 @@
+{
+  "utc": "2026-10-21T02:44:54.774419+00:00",
+  "compiler": "eabae4b5e0e352d00ea1a770abae30a25e34befb",
+  "canonical": "Draft17.33",
+  "option": "--experimental-posix-u8-exit",
+  "sources": {
+    "status31.nl": "34f4c8f0d241f79a99c2e7b38215b91e90e3e829b72ef63345cb282100d4b12f",
+    "status47.nl": "62365a7530d08c28c6438bd2d7ccaefd9f83538deec24c53c9b5ed02b28e2b17",
+    "wrong_result.nl": "a26e27d9c5de2d3b0c0440168c7b136eeb111acc8a49146bdeff6862ac80ad4d",
+    "wrong_input.nl": "86b6816fd4b737c2a03ed91dc9aa0db25df16a4721d4244a4cdc5198d2f337f0",
+    "unsupported.nl": "6ad6f1a7717fa1321a8df2e16ab9a9ac3cba8511c1fcb5ff25aaa618111f4fe7"
+  },
+  "expectations": {
+    "status31.nl": {
+      "check": 0,
+      "default_emit": 4,
+      "experimental_emit": 0,
+      "guest_status": 31,
+      "final": [
+        31,
+        7
+      ]
+    },
+    "status47.nl": {
+      "check": 0,
+      "default_emit": 4,
+      "experimental_emit": 0,
+      "guest_status": 47,
+      "final": [
+        47,
+        7
+      ]
+    },
+    "wrong_result.nl": {
+      "check": 3,
+      "emit": 3,
+      "c_bytes": 0
+    },
+    "wrong_input.nl": {
+      "check": 3,
+      "emit": 3,
+      "c_bytes": 0
+    },
+    "unsupported.nl": {
+      "check": 0,
+      "default_emit": 4,
+      "experimental_emit": 4,
+      "c_bytes": 0
+    }
+  },
+  "native": "unchanged generated C17; GCC13 / Clang O0 O2; no guest stdout/stderr; normal nonzero is diagnostic data, conventional failure",
+  "commands": [
+    "newlangc --check SOURCE",
+    "newlangc SOURCE",
+    "newlangc --experimental-posix-u8-exit SOURCE",
+    "CC -std=c17 -Wall -Wextra -Wpedantic -Werror -O{0,2} GENERATED.c -o GUEST",
+    "subprocess.run([GUEST],capture_output=True)"
+  ],
+  "negative_control": "negative subprocess returncode indicates signal; never equate compiler codes to guest statuses"
+}
