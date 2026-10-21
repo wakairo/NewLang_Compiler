@@ -135,6 +135,8 @@ C17/nativeのPASSやCHECK0／CI greenは、soundness theoremでもProduct GOで�
 
 **手堅い能力投資の条件：** 既選択の意味論に忠実であり、複数の具体的なsource／workloadへ再利用可能な見込みがあり、初めて不成立になるparser／CHECK／public issuer／C17／nativeの境界を反証可能な形で特定でき、実装・テスト・診断・将来互換性を含む費用が限定されていること。失敗時にも次の投資判断が改善することを含める。逆に、単一fixtureのためだけの専用profile・複雑なpublic validator・world複製の増殖を能力蓄積と数えない。新しい大きなproof/source/semantic機構を必要としたら、既存checked、正当な局所unchecked、別source構成、小さなlibrary境界を比較して停止・再裁定する。**安全性の独立検証を実装速度と引き換えに省略しない。**
 
+**v0 compiler完成までの優先順位との関係：** 上の「費用が限定されている」「新しい大きな機構なら停止・再裁定」は、個別工程の認可と安全性の境界を示すもので、**完成に不可欠な選択済みv0能力を費用だけで飛ばす原則ではない**。その長期的な実装優先順位は[Development Process §4.3.2](NewLang_Project_Development_Process.md#432-v0-compiler-completion-の実装優先順位継続的な方針)を唯一の運用上の正本とし、時点依存の先行機構・ロードマップは[Development Roadmap](NewLang_Development_Roadmap.md)に置く。Product GOと本Strategyの§1.1価値仮説は変更しない。
+
 **証拠と費用の境界：** SOURCE/CHECK／公開owned／C17/nativeの成功はCAPABILITY evidenceであり、一般soundnessでも§1.1のProduct GOでもない。製品化には実際のC採用理由、well-factored Cとの監査局所性改善、導入・運用・toolchain費用の検証が必要である。研究資源は**再利用可能なcompiler実装・基盤研究を重要な投資先として優先**しつつ、R/Fの独立安全性検証とVの価値探索を維持する。60/20/20等の比率は実測に基づく最適値ではなく、**固定quotaや追加の一律承認gateにしない**。具体的な許可・停止は[Development Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go)に従う。
 
 **長期の選択肢：** 初期のC後継価値を優先しながら、将来必要な型・APIだけに厳格なownership・exclusive access・不変条件保護を選べるよう発展し、Rustを合理的に選ぶ領域へも届く可能性を不必要に閉ざさない。これは現在のv0で包括的なRust型の規律や未選択機構を導入する許可ではなく、§6 no-foreclosureの長期的視野である。
