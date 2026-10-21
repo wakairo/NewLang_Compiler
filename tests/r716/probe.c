@@ -1,5 +1,6 @@
 #include "../support/node_checked.h"
 #include "newlang/if_field.h"
+#include <stdlib.h>
 
 static bool inspect(const char *path, size_t index, size_t first, size_t second)
 {
@@ -16,11 +17,12 @@ static bool inspect(const char *path, size_t index, size_t first, size_t second)
         CHECK(++found == 1 && view.index == index);
         CHECK(nl_checked_if_field_validate(body, id, &view) == NL_CHECK_OK);
         NLSemanticPlaceView initial, post, child, sibling, sibling_initial;
-        CHECK(nl_semantic_place_view(view.entry, view.root, &initial) &&
-              nl_semantic_place_view(view.post, view.root, &post) &&
-              nl_semantic_place_view(view.post, view.child, &child) &&
-              nl_semantic_place_view(view.post, view.sibling, &sibling) &&
-              nl_semantic_place_view(view.entry, view.sibling, &sibling_initial));
+        CHECK(
+            nl_semantic_place_view(view.entry, view.root, &initial) &&
+            nl_semantic_place_view(view.post, view.root, &post) &&
+            nl_semantic_place_view(view.post, view.child, &child) &&
+            nl_semantic_place_view(view.post, view.sibling, &sibling) &&
+            nl_semantic_place_view(view.entry, view.sibling, &sibling_initial));
         CHECK(initial.incarnation == post.incarnation &&
               post.incarnation == view.incarnation &&
               child.incarnation == view.child_incarnation &&
@@ -63,24 +65,25 @@ static bool inspect(const char *path, size_t index, size_t first, size_t second)
             CHECK(nl_semantic_snapshot(a->world, &snapshot));
             for (size_t s = 1; s <= snapshot.scopes; ++s) {
                 NLSemanticScopeView scope;
-                CHECK(nl_semantic_scope_view(a->world, s, &scope) && !scope.active);
+                CHECK(nl_semantic_scope_view(a->world, s, &scope) &&
+                      !scope.active);
             }
             size_t count = 0;
             printf("%s{\"changes\":%zu,\"parent_fact\":%zu,\"child_fact\":%zu,"
                    "\"events\":[",
-                   arm ? "," : "", a->change_count,
-                   parent.current_fact, field.current_fact);
+                   arm ? "," : "", a->change_count, parent.current_fact,
+                   field.current_fact);
             for (size_t e = 0; e < a->event_count; ++e) {
                 NLIfFieldEvent event;
                 CHECK(nl_checked_if_field_event(body, id, arm, e, &event) &&
-                      nl_checked_if_field_event_validate(body, id, arm, e,
-                                                         &event) == NL_CHECK_OK);
+                      nl_checked_if_field_event_validate(
+                          body, id, arm, e, &event) == NL_CHECK_OK);
                 const NLCheckedNodeView *operation =
                     nl_checked_node_view(a->artifact, event.node);
                 size_t reference = 0;
                 if (event.change) {
-                    const NLCheckedNodeView *arg =
-                        nl_checked_node_view(a->artifact, operation->first_argument);
+                    const NLCheckedNodeView *arg = nl_checked_node_view(
+                        a->artifact, operation->first_argument);
                     CHECK(arg && event.field.index == index &&
                           event.field.parent == view.root &&
                           event.field.child == view.child);
@@ -110,7 +113,7 @@ static bool inspect(const char *path, size_t index, size_t first, size_t second)
         change;                                                                \
         CHECK(nl_checked_if_field_validate(body, id, &corrupt) ==              \
               NL_CHECK_ANALYSIS_PRECISION_LIMIT);                              \
-        CHECK(nl_checked_if_field_validate(body, id, &view) == NL_CHECK_OK);    \
+        CHECK(nl_checked_if_field_validate(body, id, &view) == NL_CHECK_OK);   \
         ++refused;                                                             \
     } while (0)
         BAD(corrupt.root++);
@@ -131,8 +134,8 @@ static bool inspect(const char *path, size_t index, size_t first, size_t second)
         BAD(corrupt.arms[0].world = view.post);
         BAD(corrupt.arms[0] = corrupt.arms[1]);
 #undef BAD
-        printf("],\"result_binding\":%zu,\"rejected_public\":%zu}\n",
-               binding, refused);
+        printf("],\"result_binding\":%zu,\"rejected_public\":%zu}\n", binding,
+               refused);
     }
     CHECK(found == 1);
     node_checked_destroy(&node);
@@ -142,6 +145,7 @@ static bool inspect(const char *path, size_t index, size_t first, size_t second)
 int main(int argc, char **argv)
 {
     return argc == 5 && inspect(argv[1], (size_t)atoi(argv[2]),
-                                (size_t)atoi(argv[3]),
-                                (size_t)atoi(argv[4])) ? 0 : 1;
+                                (size_t)atoi(argv[3]), (size_t)atoi(argv[4]))
+               ? 0
+               : 1;
 }
