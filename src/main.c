@@ -1961,7 +1961,8 @@ static bool v1_call_parameter(const NLCheckedFragment *f, NLCheckedNodeId id,
         return false;
     *parameter = 0;
     if (fn->count == 0)
-        return call->type == p->unit && call->first_argument == 0;
+        return (call->type == p->unit || call->type == p->u8) &&
+               call->first_argument == 0;
     const NLCheckedNodeView *arg =
         nl_checked_node_view(f, call->first_argument);
     if (fn->parameters[0] != p->u8 || call->type != p->u8 || arg == NULL ||
@@ -2052,7 +2053,7 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
     NLSymbolId parameter = 0;
     if (!v1_call_parameter(fragment, id, program, &parameter))
         return false;
-    const bool scalar = parameter != 0;
+    const bool scalar = call->type == program->u8;
     if (scalar
             ? (call->result_count != 1 || call->results[0].type != program->u8)
             : (call->result_count != 0))
@@ -2079,7 +2080,8 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
     }
     V0Function *prior = v0_find_function(program, call->function);
     if (prior != NULL)
-        return prior->result == call->type && (prior->parameter != 0) == scalar;
+        return prior->result == call->type &&
+               (prior->parameter != 0) == (parameter != 0);
     if (program->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
         return false;
     program->functions[program->count++] =
@@ -2345,7 +2347,8 @@ static bool v1_emit_call(FILE *stream, const NLCheckedFragment *f,
     if (!v0_indent(stream, depth) ||
         fprintf(stream, "const uint8_t nl_call_%zu = nl_fn_%zu(", id,
                 v->function) < 0 ||
-        !v1_emit_scalar(stream, nl_checked_node_view(f, v->first_argument)) ||
+        (v->argument_count != 0 &&
+         !v1_emit_scalar(stream, nl_checked_node_view(f, v->first_argument))) ||
         fputs(");\n", stream) < 0 || !v0_indent(stream, depth))
         return false;
     return fprintf(stream, "(void)nl_call_%zu;\n", id) >= 0;
@@ -2585,7 +2588,8 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
     const NLCheckedFragment *f = fn->body;
     const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
     if (fputs("{\n", stream) < 0 ||
-        fprintf(stream, "    (void)nl_local_%zu;\n", fn->parameter) < 0)
+        (fn->parameter != 0 &&
+         fprintf(stream, "    (void)nl_local_%zu;\n", fn->parameter) < 0))
         return false;
     for (NLCheckedNodeId i = root->first_item; i != 0;) {
         const NLCheckedNodeView *v = nl_checked_node_view(f, i);
@@ -2614,12 +2618,15 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
     return fputs("}\n", stream) >= 0;
 }
 
-static bool v0_emit_signature(FILE *stream, const V0Function *fn)
+static bool v0_emit_signature(FILE *stream, const V0Function *fn, NLTypeId u8)
 {
     if (fn->parameter != 0)
         return fprintf(stream, "static uint8_t nl_fn_%zu(uint8_t nl_local_%zu)",
                        fn->function, fn->parameter) >= 0;
-    return fprintf(stream, "static void nl_fn_%zu(void)", fn->function) >= 0;
+    return fprintf(stream,
+                   fn->result == u8 ? "static uint8_t nl_fn_%zu(void)"
+                                    : "static void nl_fn_%zu(void)",
+                   fn->function) >= 0;
 }
 
 static bool v0_emit_c(FILE *stream, const V0Program *program)
@@ -2647,7 +2654,7 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
         return false;
 
     for (size_t i = 0; i < program->count; ++i)
-        if (!v0_emit_signature(stream, &program->functions[i]) ||
+        if (!v0_emit_signature(stream, &program->functions[i], program->u8) ||
             fputs(";\n", stream) < 0)
             return false;
     if (fputc('\n', stream) == EOF)
@@ -2657,9 +2664,10 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
         const V0Function function = program->functions[i];
         const NLCheckedNodeView *root =
             nl_checked_node_view(function.body, nl_checked_root(function.body));
-        if (root == NULL || !v0_emit_signature(stream, &function) ||
+        if (root == NULL ||
+            !v0_emit_signature(stream, &function, program->u8) ||
             fputc('\n', stream) == EOF ||
-            !(function.parameter != 0
+            !(function.result == program->u8
                   ? v1_emit_body(stream, &function)
                   : v0_emit_block(stream, function.body, root, 0)) ||
             fputc('\n', stream) == EOF)
@@ -2769,7 +2777,11 @@ static int compile_v0(const char *path, bool check_only)
     const NLCheckedNodeView *root_view = nl_checked_node_view(entry, root);
     V0Program program = {.unit = nl_semantic_unit_type(context),
                          .u8 = nl_semantic_core_type(context, NL_TYPE_U8)};
-    if (root_view == NULL || !v0_validate_call(entry, root, &program)) {
+    /* Preserve the existing unit-only CLI entry. Ordinary helper return
+     * support does not select a process-entry/result transport contract. */
+    if (root_view == NULL || root_view->type != program.unit ||
+        root_view->result_count != 0 ||
+        !v0_validate_call(entry, root, &program)) {
         char *node_c = NULL;
         size_t node_length = 0;
         const NLCheckStatus array_status =

@@ -357,6 +357,13 @@ remains part of the suite.
 
 Accepted source constructs beyond this finite emitter profile still
 fail closed with `V1-BACKEND-UNSUPPORTED` rather than silently producing C.
+Zero-argument ordinary `u8` helpers also reuse that bounded Copy-body/return
+path in the default CLI; [two independent field-write examples and tests](tests/p685/README.md)
+cover literal/copy-local tails and explicit returns. The actual helper return
+feeds the existing scoped field write. CLI entry remains `main()->unit`, with
+exit0 and no guest numeric stdout; richer IF/effect bodies and general ABI
+are outside this slice.
+
 Two parameters, scoped-ref parameters, and richer callee bodies are not
 covered by this example; the merged two-normal-arm `Node` checker admits
 certain state-changing matches through checked-owned evidence but **cannot

@@ -94,13 +94,13 @@ def main():
                                       frozen_prediction=oracle['expected'])))
                 continue
             if name == 'function_arrow':
-                # Pre-edit baseline already has CHECK0 / backend4. Keep this
-                # arrow-parser control distinct from a native capability claim.
-                require(checked.returncode == 0 and not checked.stdout and not checked.stderr and
-                        emitted.returncode == 4 and not emitted.stdout and
-                        'V1-BACKEND-UNSUPPORTED' in emitted.stderr, 'arrow baseline changed')
-                print(json.dumps(dict(source=name, check=0, c17=4, native='NOT REACHED',
-                                      calibration='unchanged baseline backend profile')))
+                # P685 advances only this zero-formal u8-call boundary. The
+                # original source/hash, frozen oracle and old logs are unchanged.
+                require(checked.returncode == emitted.returncode == 0 and not checked.stdout and
+                        not checked.stderr and not emitted.stderr, 'arrow call admission failed')
+                outcome = native(folder, cc, name, emitted.stdout, 0, sanitizer)
+                print(json.dumps(dict(source=name, check=0, c17=0, native=outcome,
+                                      calibration='P685 ordinary zero-formal call; unit guest exit0, not numeric output')))
                 continue
             require(checked.returncode == emitted.returncode == 0 and not checked.stdout and
                     not checked.stderr and not emitted.stderr, f'admission {name}: {checked} {emitted}')

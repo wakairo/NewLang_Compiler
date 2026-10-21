@@ -1,0 +1,108 @@
+{
+  "results": {
+    "pump.nl": {
+      "check": 0,
+      "emit": 0,
+      "owned": {
+        "function": 10,
+        "call": 9,
+        "call_result": 4,
+        "body_result": 4,
+        "root": 1,
+        "root_symbol": 1,
+        "incarnation": 1,
+        "field_index": 0,
+        "child": 2,
+        "sibling_child": 3,
+        "incoming_symbol": 2,
+        "ref_symbol": 3,
+        "old_symbol": 4,
+        "read_symbols": [
+          5,
+          6
+        ],
+        "value": 17,
+        "old": 5,
+        "sibling": 83,
+        "closed_and_ended": true,
+        "actual_return_to_store": true
+      },
+      "c_sha256": "38840c9fe114eec89e2b7b2a1c3e084edd184ce5267d7f0d299c31f3d972e3e8",
+      "native": {
+        "original": [
+          0,
+          0
+        ],
+        "passive": [
+          0,
+          0
+        ]
+      }
+    },
+    "sensor.nl": {
+      "check": 0,
+      "emit": 0,
+      "owned": {
+        "function": 11,
+        "call": 9,
+        "call_result": 5,
+        "body_result": 5,
+        "root": 1,
+        "root_symbol": 1,
+        "incarnation": 1,
+        "field_index": 1,
+        "child": 3,
+        "sibling_child": 2,
+        "incoming_symbol": 3,
+        "ref_symbol": 4,
+        "old_symbol": 5,
+        "read_symbols": [
+          6,
+          7
+        ],
+        "value": 53,
+        "old": 4,
+        "sibling": 9,
+        "closed_and_ended": true,
+        "actual_return_to_store": true
+      },
+      "c_sha256": "c351f336646fe5560e8d0dd71b7330c5092a71293149c3e8d1cb61c80dfd81ca",
+      "native": {
+        "original": [
+          0,
+          0
+        ],
+        "passive": [
+          0,
+          0
+        ]
+      }
+    },
+    "wrong_return.nl": {
+      "check": 3,
+      "emit": 3,
+      "c_bytes": 0,
+      "diagnostic": "P8-BODY-RESULT"
+    },
+    "wrong_write.nl": {
+      "check": 3,
+      "emit": 3,
+      "c_bytes": 0,
+      "diagnostic": "P3-TYPE-MISMATCH"
+    },
+    "rich_body.nl": {
+      "check": 0,
+      "emit": 4,
+      "c_bytes": 0,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED"
+    },
+    "nonunit_entry.nl": {
+      "check": 0,
+      "emit": 4,
+      "c_bytes": 0,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED"
+    }
+  },
+  "sanitizer": "address",
+  "scope": "finite ordinary zero-formal u8 return into field write; no guest output/status API or Product GO"
+}
