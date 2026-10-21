@@ -12,7 +12,23 @@
 > 運用は [Development Process](NewLang_Project_Development_Process.md) に従う。
 > この文書は正本を置換せず、将来の更新時は「観測した事実」と「新しい投資案」を分ける。
 
-## 現行checkpoint — 2026-10-19（#624採用：v0 compiler-first、Product GO能動判定を一時保留）
+## 現行実装計画 — 2026-10-21（v0完成のcritical path、更新可能な仮説）
+
+> **この節は時点依存の計画・coverage地図であり、固定の実装戦略・新しい言語仕様・一括の実装認可ではない。** 優先順位の継続的な判断原則は[Development Process §4.3.2](NewLang_Project_Development_Process.md#432-v0-compiler-completion-の実装優先順位継続的な方針)、v0 source/semanticsの正本は[CURRENT_SPEC](reference/CURRENT_SPEC.md)とDraft17.33。以下の候補順は実証された依存関係に従って随時修正する。旧checkpoint／過去のNO-GO・CI verdictは保存する。
+
+**現在地・実行中:** Compiler/main `4e7ee1f2a6426618a719cf9bb047d3b2e4636047`（[PR #695](https://github.com/wakairo/NewLang_Compiler/pull/695)の名前付きC17出力統合後）、`CURRENT_SPEC`→**Draft17.33**。[main-push FULL5 #39566806877](https://github.com/wakairo/NewLang_Compiler/actions/runs/39566806877)全5 SUCCESS、[NO LLVM PARTIAL #39566806850](https://github.com/wakairo/NewLang_Compiler/actions/runs/39566806850) SUCCESS。普通のCLIでは有限のlexical Node・2-u8 nominalのscoped field Change／old Copy、Copy返却を持つ小さな普通の関数、target-only pure scalar C17 export等は**それぞれ別の有限coverage**として確認済み。ただし任意合成、heap owner一般化、ユーザー向けの安全な公開libraryや一般FFIを達成したわけではない。[CLI help #696](https://github.com/wakairo/NewLang_Compiler/issues/696)／[P DRAFT PR #697](https://github.com/wakairo/NewLang_Compiler/pull/697)は**既に着手済みの小修正として継続**。本計画は#696を停止・差し替えず、その後の主投資の選択を改める。
+
+**次の大きな一歩を決める最初の作業 — v0実装coverage／依存関係の棚卸し:** 大規模な新コードに着手する前に、canonicalで選択済みの意味論／既存normal CLIで実装済みの能力／限定profileやtest-only opt-in／明示Deferred／独立proofの未確認点を**区別**した簡潔なmatrixを作る。各v0必須候補について、最初のparser・checker・真正issuer・backend・native障害と、何に依存するか・別の実装法はあるかを確認する。これにより必要機構のcritical pathの**先頭**を選定する。一般のProduct GO再採点ではなくv0実装順の決定である。この棚卸しの実行者・範囲・費用は別Issueで認可する。
+
+**第一候補（棚卸し後に採否裁定）：普通の状態変更関数を値の返却／利用まで合成する。** [P #692](https://github.com/wakairo/NewLang_Compiler/issues/692#issuecomment-6309724068)では、独立した1回／2回のscoped write後のCopy `fn()->u8`がSOURCE/CHECK・真のbody/call resultまで到達する一方、**選択済み実験的C17外部exportはCLI4**で、以前の汎用node predicateはstale parent/child fact・wrong field index・old Copy resultを**独立した時系列証明としては拒否できなかった**。[M #693](https://github.com/wakairo/NewLang_Compiler/issues/693#issuecomment-6310429018)の**NO-GO-DEFER**は「既存証拠だけの安価なshared validatorとstateful外部u8 export」という**特定の案・範囲**に対するもので、普通のv0関数合成の必要性を否定したものではない。まず**NewLang内部のordinary call→stateful body→typed result→caller側の実使用**がv0完成にどこまで必要かを確かめる。必須であり真正なsource-issued時系列receiptが必要なら、費用の大小ではなく正しい依存関係と安全性を基準にM/P/F/Rの段階的設計・実装を別途検討する。**実験的foreign C17 u8 exportの拡張と混同しない**。現在の記述は新issuerの認可ではない。
+
+**続く重要な候補（厳密な直列順序は未確定）：** fallible heap-originalのAllocation/LifetimeDomainとnonCopy ownerの関数間handoff・終了／refund／teardownを、既存の**限定されたheap／LiveTail源・C17/native証拠**からどこまで一般化すべきか評価する。分岐／失敗時／複数元rootと実値のcurrentness・依存関係を、少数の既存fixture専用gateでなく適切なcompiler経路として合成する。Array4等の**test-only opt-in**と普通のCLI対応の差も、選択済みsource構築に対して明示的に扱う。どれが先行条件かは棚卸しで確認し、未選択のsource-visible lifetime・汎用FFI・concurrency・separate compilation等は自動的にv0必須へ追加しない。実装コストの大きさそれ自体で必須機構を永久に後回しにせず、検証可能な小工程に分ける。
+
+**到達判定と変更条件：** 重要な段階ごとに**二つ以上の独立したsource／期待値のある正常系・負例／正確なissuer origin（必要な場合）／C17/nativeの実結果／OOM・rollback・本当の権限境界の拒否**を区別して実測する。適用する独立R/Fは危険なproof/issuer/owner境界の実態に従う。checker成功・PR CI green・test-only opt-in・C consumerのstatus0だけで一般実装やProduct GOを宣言しない。実際の依存関係、言語矛盾、信頼できるissuer不成立、別のより簡潔な設計が分かったときに**この計画順序を更新**する。必要機構の見積費用増加は工程分割・再裁定の理由だが、無関係な周辺修正へ逃れる理由にはしない。完成criteriaと必要機構のmatrixは棚卸しで明記するまで**未確定**。H1 #268 HOLD、Product GO能動採点PAUSED（#624）は維持する。
+
+**旧checkpointの扱い：** 次節の2026-10-19版は当時の判断・成果の履歴であり、この現行計画で上書きしない。旧節のDraft17.32や旧SHAを現mainのauthorityと誤読しない。
+
+## 前回checkpoint（履歴） — 2026-10-19（#624採用：v0 compiler-first、Product GO能動判定を一時保留）
 
 **Coordinationによる投資段階の変更：** [Issue #624の裁定](https://github.com/wakairo/NewLang_Compiler/issues/624)は、固定Compiler/main [`35fa23efaa641b96c610324735b714891be2bbac`](https://github.com/wakairo/NewLang_Compiler/commit/35fa23efaa641b96c610324735b714891be2bbac)、[CURRENT_SPEC](reference/CURRENT_SPEC.md)→**Draft17.32**を出発点とし、**v0 compilerを普通に使えるところまで実装する作業を最優先**にする。Product GO二段階条件は変えず、通常compilerの次工程を決めるための仮想的なProduct GO採点・追加市場調査を**初回実利用checkpointまで能動的に一時保留**する。H1 #268はHOLD／UNDECIDED、L3 Product GOは未達。これは製品化のGOでも一般的なsoundness PASSでもなく、v0の実装と実使用から正負の情報を得る限定Explorationである。Product Strategy §§1.1–1.4と[Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go)が正本であり、本checkpointは実装の優先順だけを示す。
 
