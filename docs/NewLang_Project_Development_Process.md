@@ -282,6 +282,23 @@ NewLangの不完全な実装地図を改善する**探索投資（Exploration）
 
 **再評価の実物checkpointと早期STOP：** 最初の通常`newlangc`から、既に採用された機構を組み合わせた**新しい小規模な利用者風のsingle-semantic-unit program**についてSOURCE／semantic CHECK／必要な元source-issued owned／実C17→GCC/Clang nativeを追跡でき、意味のある負例・診断・エラー／cleanupと使い方を示せた時点で、Coordinationはその**成功・不自然さ・未実装境界**を用い、能動的Product GO評価をいつ何に対して再開すべきか裁定する。到達前でも権限偽造／根本的soundness問題、通常経路に不可欠な設計矛盾、費用・scopeの急増、強い具体的利用者反証でSTOPして再裁定する。初回CLI技術CHECKPOINTは製品価値・一般soundnessの合格ではなく、H1 #268 HOLD／UNDECIDEDはそのまま。新しい時限KPI、固定資源比率、全Track追加承認は設けない。実際の初回作業は[Roadmap](NewLang_Development_Roadmap.md)の最新checkpointに従い、個別Issueで費用と停止条件を定める。
 
+### 4.3.2 v0 compiler completion の実装優先順位（継続的な方針）
+
+**正本と適用範囲：** この節は、v0 production compilerを実際に作って設計の良否を学ぶ段階における、**Coordinationの長期的な優先順位判断基準**である。具体的な次の機構・Issue番号・順序・予算・到達状況はここで固定せず、[Development Roadmap](NewLang_Development_Roadmap.md)の**日付付き現行実装計画**で更新する。個々のIssueとPRは実装・検証の認可単位であって、この節やcanonical specificationを上書きしない。
+
+**完成に向けた基本方針：** 当面の主目的は、[CURRENT_SPEC](reference/CURRENT_SPEC.md)が選ぶ**v0の実装対象となる意味論の核**を、普通の利用者がsingle semantic unitでsourceを書き、semantic CHECK、必要な真正のsource-issued evidence、backend生成、実際のnative実行・異常系確認まで使えるproduction compilerとして実装することにある。実装で見つかった不自然さ・反例・費用・実装不能性は、言語設計を改めるための**積極的な知見**であり、小さな実装のPASSを増やすこと自体をゴールとしない。現時点の有限source profileと、意味論上必要な仕組みを混同しない。**既選択のv0機能を原則実装予定とする**一方、Draftの明示的なDeferred／v0非目標を自動的に実装対象へ昇格させない。v0として「必要な能力」かどうかと、既存compilerが対応済みかどうかは別々に棚卸し・裁定する。
+
+**優先順位の決め方（上から順）：**
+1. **依存関係／完成へのcritical path：** v0の必要能力Bが能力Aに依存するなら、原則Aから進める。低費用・短期成功・CI greenだけを理由に依存先Aを迂回して周辺の便利機能を繰り返し選ばない。A/Bの必要性・真の依存関係が未確認なら、まずその事実を絞って調査する。
+2. **共通性と情報利得：** 同じ前提を満たす代替実装からは、複数の独立sourceや次のv0機構に再利用でき、core/source/issuer/backendの本当の問題を反証可能にする案を優先する。fixture専用のgate、数値・field順への特例や証拠の後付けを「進捗」と数えない。
+3. **費用と運用負担：** 工数、CI、保守・検証費用、競合する作業は、**実装の分割・順序・予算・代替方式の選択**に使う。**必須機構の見積費用が大きいという理由だけで、その機構を無期限に延期・回避するのは不適切**である。ただし高コストの実装を無制限に一括認可する意味でもない。必要な投資を小さなsource→proof→backendの検証可能な工程に分け、各工程の停止条件と次の裁定主体を明確にする。
+
+**NO-GOの解釈：** 「既存機構を少量の変更で再利用する案はNO-GO」「ある外部ABIやfixtureは優先しない」は、**その案に対する判定**であって、その背後にあるv0の必須能力までNO-GOとする根拠ではない。根本の設計矛盾、真正な権限を発行・保存できない問題、必要性の反証、v0範囲の再選定などはCoordinationへ戻して、仕様・構成・開発順序を改めて裁定する。単なるLOC見積増加や予定超過だけを言語機能の撤退理由としない。
+
+**安全性・変更境界：** 選択済み意味論の忠実実装と、source規則・公開proof issuer・Allocation/Domain・新しいtrusted evidenceの**設計／権限境界の変更**を区別する。後者は§4.2の履歴確認と§4.3 Goal Alignment、必要なF/R独立検証を経て段階的に認可する。fail-closed、no authority amplification、異常系・OOM/rollback・真のorigin一致を緩めて実装を完走したことにはしない。費用やリスクが大きければ**一時停止して方式と予算を再裁定**するが、それだけでv0 completionのcritical pathから消さない。Product GO・Cに対する監査局所性の実証は引き続き別の証拠層とする。
+
+**更新規律：** この長期的な優先順位原則を変えるときだけ本節を明示的に改訂する。優先する具体機構・依存関係・候補順・実装範囲・評価checkpointが変わるたびに本節を変更してはならない。最新の仮説・未確認点・決定に至った実測はRoadmapへ日付と固定authority付きで置き、以前のNo-GoやCIの証拠を遡及的に書き換えない。
+
 ## 5. Finding分類
 
 必要に応じて次のような分類を用いる。
