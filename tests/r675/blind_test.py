@@ -1,4 +1,5 @@
 """R675 BLIND independent normal-CLI checks, passive emitted-C observer."""
+import os
 import pathlib
 import re
 import subprocess
@@ -22,6 +23,20 @@ NEGATIVE = (
 def invoke(command):
     return subprocess.run(command, text=True, stdout=subprocess.PIPE,
                           stderr=subprocess.PIPE, check=False)
+
+
+def record_actions_summary(row):
+    """Keep successful per-case diagnostics outside CTest's suppressed stdout."""
+    if os.environ.get("GITHUB_ACTIONS") != "true":
+        return
+    target = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not target:
+        raise AssertionError("GitHub Actions Step Summary unavailable")
+    with open(target, "a", encoding="utf-8") as summary:
+        summary.write("\n### R675 calibrated read-only observation\n\n")
+        summary.write("| Case | Source category | CLI CHECK | CLI emit | Observed outcome |\n")
+        summary.write("| --- | --- | --- | --- | --- |\n")
+        summary.write(row + "\n")
 
 
 def native_observe(text, target_index, initial, sibling, new):
@@ -127,7 +142,7 @@ def positive(compiler, probe, cc, sanitizer, tmp, name, field, index, old,
                 "BACKEND-UNSUPPORTED" in emission.stderr):
             print("R675 SOURCE-VALID / BACKEND4 limitation, C17 and native NOT REACHED",
                   flush=True)
-            return
+            return "backend4"
         raise AssertionError(f"{name}: unexpected backend rejection or partial C")
     if not emission.stdout or emission.stderr:
         raise AssertionError("C17 success without clean real output")
@@ -153,10 +168,24 @@ def positive(compiler, probe, cc, sanitizer, tmp, name, field, index, old,
         raise AssertionError("actual guest/native mismatch")
     physical_validate(guest.stdout, index, old, sibling, new)
     print(f"R675 {name} strict C17/physical original root PASS", flush=True)
+    return "native"
 
 
-def negative(compiler, name):
+# These *distinct source questions* were frozen before the original BLIND run.
+# The added calibrated diagnostic contract is CHECK3 + semantic category +
+# bracketed structured code (identical in --check and emit), never parser/CLI.
+NEGATIVE_INTENT = {
+    "negative_unknown": "unknown-declared-field",
+    "negative_initializer_type": "incorrect-constructor-field-type",
+    "negative_decl_type": "ineligible-nominal-declaration-type",
+    "negative_escape": "scoped-write-ref-escape",
+    "negative_replace_type": "incorrect-replace-input-type",
+}
+
+
+def negative(compiler, name, strict=False):
     source = DIRECTORY / (name + ".nl")
+    diagnostics = []
     for mode in ("check", "emit"):
         args = [compiler, "--check", str(source)] if mode == "check" else [
             compiler, str(source)]
@@ -167,19 +196,68 @@ def negative(compiler, name):
             raise AssertionError(f"{name}: accepted invalid source or partial C")
         if "cli:" in r.stderr.lower() and "usage" in r.stderr.lower():
             raise AssertionError(f"{name}: CLI failure rather than actual parse/check")
+        if strict:
+            if r.returncode != 3:
+                raise AssertionError(f"{name}: {mode} rc={r.returncode}, expected CHECK3")
+            match = re.search(
+                r"(?m)error\\(semantic\\)\\[([A-Z][0-9]+-[A-Z0-9-]+)\\]:\\s*(\\S[^\\r\\n]*)",
+                r.stderr)
+            if match is None:
+                raise AssertionError(
+                    f"{name}: {mode} has no bracketed semantic diagnostic; "
+                    "parser, precision, CLI, and backend are not semantic PASS")
+            diagnostics.append((mode, match.group(1), match.group(2).strip()))
+    if strict:
+        if name not in NEGATIVE_INTENT or len(diagnostics) != 2:
+            raise AssertionError("unexpected negative source / diagnostic cardinality")
+        if diagnostics[0][1] != diagnostics[1][1]:
+            raise AssertionError(
+                f"{name}: CHECK/emit diagnostic-code disagreement {diagnostics}")
+        code = diagnostics[0][1]
+        print(f"R675 CALIBRATED {name} semantic CHECK3/emit3 "
+              f"code=[{code}] intent={NEGATIVE_INTENT[name]} zero C PASS",
+              flush=True)
+        record_actions_summary(
+            f"| {name} | {NEGATIVE_INTENT[name]} | "
+            f"3 / error(semantic)[{code}] | "
+            f"3 / error(semantic)[{code}] | ZERO C / PASS |")
 
 
 def main():
+    if len(sys.argv) not in (5, 6):
+        raise AssertionError("R675 requires compiler probe cc sanitizer [case]")
     compiler, probe, cc, sanitizer = sys.argv[1:5]
+    case = sys.argv[5] if len(sys.argv) == 6 else "all"
     with tempfile.TemporaryDirectory(prefix="r675-source-native-") as folder:
         tmp = pathlib.Path(folder)
-        for case in POSITIVE:
-            positive(compiler, probe, cc, sanitizer, tmp, *case)
-        for name in NEGATIVE:
-            negative(compiler, name)
+        if case == "all":
+            # Preserve the complete original seven-source BLIND regression.
+            for positive_case in POSITIVE:
+                positive(compiler, probe, cc, sanitizer, tmp, *positive_case)
+            for name in NEGATIVE:
+                negative(compiler, name)
+        elif case == "index1":
+            # Only a completed actual strict-C17/native observation returns 0.
+            result = positive(compiler, probe, cc, sanitizer, tmp, *POSITIVE[1])
+            if result == "native":
+                record_actions_summary(
+                    "| positive_index1 (Quiver@depth) | source-valid index1 | "
+                    "0 / clean | 0 / real C17 | strict C17 + physical native PASS |")
+                return 0
+            if result == "backend4":
+                record_actions_summary(
+                    "| positive_index1 (Quiver@depth) | source-valid index1 | "
+                    "0 / clean | 4 / BACKEND-UNSUPPORTED, zero C | "
+                    "native NOT REACHED; explicit backend4 SKIPPED |")
+                return 77
+            raise AssertionError("index1 returned no observable backend/native status")
+        elif case in NEGATIVE:
+            negative(compiler, case, strict=True)
+        else:
+            raise AssertionError(f"R675 unregistered test mode: {case}")
     print("R675 BLIND first-pass SOURCE / owned / C17 / native / semantic negatives DONE",
           flush=True)
-
+    return 0
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

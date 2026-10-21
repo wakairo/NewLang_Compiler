@@ -304,6 +304,21 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r675/blind_test.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r675_public_probe>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
+    # R675 calibrated observability: status visible with normal nonverbose CTest.
+    add_test(NAME r675_index1_native_or_backend4.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r675/blind_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r675_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "index1")
+    set_tests_properties(r675_index1_native_or_backend4.integration PROPERTIES
+        SKIP_RETURN_CODE 77)
+    foreach(r675_negative
+        negative_unknown negative_initializer_type negative_decl_type
+        negative_escape negative_replace_type)
+        add_test(NAME r675_${r675_negative}_semantic.integration
+            COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r675/blind_test.py"
+            "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r675_public_probe>"
+            "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${r675_negative}")
+    endforeach()
     # P671 discardable NON-NORMATIVE nominal eligibility trial; DO NOT MERGE.
     add_executable(p671_public_probe tests/p671/public_probe.c)
     target_link_libraries(p671_public_probe PRIVATE newlang_semantic newlang_parser)
