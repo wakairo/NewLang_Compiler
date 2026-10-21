@@ -1,0 +1,58 @@
+Local producer log; trailing whitespace normalized.
+Internal ctest changing into directory: /workspace/p706-undefined
+UpdateCTestConfiguration  from :/workspace/p706-undefined/DartConfiguration.tcl
+Parse Config file:/workspace/p706-undefined/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p706-undefined/DartConfiguration.tcl
+Parse Config file:/workspace/p706-undefined/DartConfiguration.tcl
+Test project /workspace/p706-undefined
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: p706_proof_handoff_oom.unit
+
+1: Test command: /workspace/p706-undefined/p706_gate_test "/workspace/p706/tests/p706/settings.nl" "/workspace/p706/tests/p706/window.nl"
+1: Working Directory: /workspace/p706-undefined
+1: Environment variables:
+1:  PYTHONDONTWRITEBYTECODE=1
+1:  PYTHONHASHSEED=0
+1:  LC_ALL=C
+1:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+1:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+1: Test timeout computed to be: 90
+1: backend admission OOM positions=62 explicit_resource=PASS
+1: copy proof rejects=81 validator_OOM=31 unchanged=PASS restored=PASS
+1: backend admission OOM positions=62 explicit_resource=PASS
+1: copy proof rejects=82 validator_OOM=31 unchanged=PASS restored=PASS
+1: registration OOM positions=283 rollback=PASS
+1: main-call OOM positions=253 rollback=PASS artifact=NULL
+1: registration OOM positions=417 rollback=PASS
+1: main-call OOM positions=322 rollback=PASS artifact=NULL
+1: normal driver OOM positions=709 existing_host_oom_CLI3=619 zero_partial_C=PASS
+1: normal driver OOM positions=918 existing_host_oom_CLI3=828 zero_partial_C=PASS
+1/2 Test #1: p706_proof_handoff_oom.unit .........   Passed    0.81 sec
+test 2
+    Start 2: p706_ref_write_native.integration
+
+2: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p706/tests/p706/native.py" "/workspace/p706-undefined/newlangc" "/workspace/p706-undefined/p706_public_probe" "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23" "undefined" "/workspace/p706/tests/p706"
+2: Working Directory: /workspace/p706-undefined
+2: Environment variables:
+2:  PYTHONDONTWRITEBYTECODE=1
+2:  PYTHONHASHSEED=0
+2:  LC_ALL=C
+2:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+2:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+2: Test timeout computed to be: 90
+2: {"relay": {"C17": 0, "C17_sha256": "ce4c697c7bdb451cb54c903d0dba1e975e18704f00140d48ced51d7e10e79368", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"calls": [{"call": 18, "caller_ref": 3, "changes": [{"incoming_id": 11, "node": 2, "old_id": 1}], "child_fact": 3, "child_post": 10, "function": 10, "incoming_symbol": 0, "index": 1, "loan": 16, "parent_fact": 1, "parent_post": 11, "ref_formal": 4, "returned_id": 13, "scope": 1, "source_root": 1, "source_symbol": 1, "value_formal": 5}, {"call": 25, "caller_ref": 8, "changes": [{"incoming_id": 18, "node": 2, "old_id": 4}], "child_fact": 5, "child_post": 17, "function": 10, "incoming_symbol": 7, "index": 0, "loan": 23, "parent_fact": 4, "parent_post": 18, "ref_formal": 9, "returned_id": 20, "scope": 2, "source_root": 4, "source_symbol": 2, "value_formal": 10}], "direct": [{"incoming_symbol": 12, "index": 0, "node": 32, "ref": 13, "root": 1, "symbol": 1}]}, "validator": 0}, "settings": {"C17": 0, "C17_sha256": "caa017dded20ae1c04762f02403e669303e64bdcd8a3deadb4a3262f93b4f345", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"calls": [{"call": 18, "caller_ref": 3, "changes": [{"incoming_id": 11, "node": 2, "old_id": 1}], "child_fact": 2, "child_post": 10, "function": 11, "incoming_symbol": 0, "index": 0, "loan": 16, "parent_fact": 1, "parent_post": 11, "ref_formal": 4, "returned_id": 1, "scope": 1, "source_root": 1, "source_symbol": 1, "value_formal": 5}], "direct": [{"incoming_symbol": 6, "index": 1, "node": 25, "ref": 7, "root": 4, "symbol": 2}]}, "validator": 0}, "window": {"C17": 0, "C17_sha256": "0c8dc54517b036bf937b6fd3de5d05ae675ebe6a894409783536f2e09337f98c", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"calls": [{"call": 18, "caller_ref": 3, "changes": [{"incoming_id": 11, "node": 2, "old_id": 1}], "child_fact": 3, "child_post": 10, "function": 10, "incoming_symbol": 0, "index": 1, "loan": 16, "parent_fact": 1, "parent_post": 11, "ref_formal": 4, "returned_id": 13, "scope": 1, "source_root": 1, "source_symbol": 1, "value_formal": 5}], "direct": [{"incoming_symbol": 7, "index": 0, "node": 25, "ref": 8, "root": 4, "symbol": 2}]}, "validator": 0}}
+2/2 Test #2: p706_ref_write_native.integration ...   Passed    1.37 sec
+
+The following tests passed:
+	p706_proof_handoff_oom.unit
+	p706_ref_write_native.integration
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   2.19 sec

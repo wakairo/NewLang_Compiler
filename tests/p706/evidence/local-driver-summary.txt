@@ -1,0 +1,12 @@
+Last driver test diagnostics and zero-output classification under absolute source paths:
+1: backend admission OOM positions=62 explicit_resource=PASS
+1: copy proof rejects=81 validator_OOM=31 unchanged=PASS restored=PASS
+1: backend admission OOM positions=62 explicit_resource=PASS
+1: copy proof rejects=82 validator_OOM=31 unchanged=PASS restored=PASS
+1: registration OOM positions=283 rollback=PASS
+1: main-call OOM positions=253 rollback=PASS artifact=NULL
+1: registration OOM positions=417 rollback=PASS
+1: main-call OOM positions=322 rollback=PASS artifact=NULL
+1: normal driver OOM positions=709 existing_host_oom_CLI3=619 zero_partial_C=PASS
+1: normal driver OOM positions=918 existing_host_oom_CLI3=828 zero_partial_C=PASS
+100% tests passed, 0 tests failed out of 2

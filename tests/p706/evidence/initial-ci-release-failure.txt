@@ -1,0 +1,11 @@
+Initial candidate 5c30103008ad9e0c51a7301137964d5c4522ca21.
+FULL5 run 39599116464, GCC Release job 119218789893, attempt1.
+Compilation failure in newly added test, not a native/source semantic result.
+2026-10-21T12:23:45.1210825Z /home/runner/work/NewLang_Compiler/NewLang_Compiler/tests/p706/gate_test.c:436:19: error: ignoring return value of ‘fread’ declared with attribute ‘warn_unused_result’ [-Werror=unused-result]
+2026-10-21T12:23:45.1212368Z   436 |             (void)fread(buffer, 1, sizeof(buffer) - 1, diagnostics);
+2026-10-21T12:23:46.4974468Z gmake[2]: *** [CMakeFiles/p706_gate_test.dir/build.make:79: CMakeFiles/p706_gate_test.dir/tests/p706/gate_test.c.o] Error 1
+2026-10-21T12:23:46.4976739Z gmake[1]: *** [CMakeFiles/Makefile2:1727: CMakeFiles/p706_gate_test.dir/all] Error 2
+2026-10-21T12:23:47.4647920Z gmake: *** [Makefile:101: all] Error 2
+Repair checks fread's returned byte count and stream error. Strict flags,
+Production implementation, frozen source and oracles remain unchanged.
+Existing workflow/job is not rerun; the corrected HEAD gets its natural PR CI.

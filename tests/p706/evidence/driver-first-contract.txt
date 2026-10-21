@@ -1,0 +1,12 @@
+Local new driver test expectation calibration; no compiler/source/diagnostic change.
+error(cli)[V0-SOURCE-IO]: cannot read source
+note: tests/p706/settings.nl
+error(cli)[V0-SOURCE-IO]: cannot read source
+note: tests/p706/settings.nl
+error(cli)[V0-PARSER]: cannot create parser
+note: tests/p706/settings.nl
+tests/p706/settings.nl:1:1-1:1: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while creating syntax owner
+driver stop point=4 status=3 length=0
+/workspace/p706/tests/p706/gate_test.c:440: fclose(diagnostics) == 0 && ok && fail_at && fail_at < 8000
+Preserve existing host parser/checker OOM CLI3; accept only explicit error(host)/OUT-OF-MEMORY at CLI3, plus CLI1 resource failures; always require zero output.
+A subsequent local CTest exposed cached stdio offsets when stderr and its capture stream shared one descriptor. The test now truncates/rewinds per injected invocation before classifying that invocation's diagnostic; production unchanged.

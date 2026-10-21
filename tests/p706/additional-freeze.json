@@ -1,0 +1,55 @@
+{
+  "frozen_utc": "2026-10-21T12:06:23.798619+00:00",
+  "sha256": {
+    "read_scalar.nl": "798d08db2a16d6a84ab2572b7a5e884f115147d53a9f83579d567b036028db2c",
+    "conflicting_loan.nl": "fd355b6368b43857cc61f1c7243663452b19d2f91105ce621d416f7442672552",
+    "callee_escape.nl": "2125331b9bba88514802863ee99c02c8f0f710691525f1a404ab296490222e36",
+    "relay.nl": "800cd1eaf447846d91dd0a85fb315b6a13cf4e2da9f199d2bbd755c78f540e82"
+  },
+  "relay": {
+    "initial": {
+      "a": [
+        39,
+        80
+      ],
+      "b": [
+        160,
+        210
+      ]
+    },
+    "calls": [
+      {
+        "source": "a",
+        "index": 1,
+        "old": 80,
+        "incoming": 0,
+        "post": [
+          39,
+          0
+        ]
+      },
+      {
+        "source": "b",
+        "index": 0,
+        "old": 160,
+        "incoming": 80,
+        "post": [
+          80,
+          210
+        ]
+      }
+    ],
+    "last_write": {
+      "source": "a",
+      "index": 0,
+      "old": 39,
+      "incoming": 160,
+      "post": [
+        160,
+        0
+      ]
+    },
+    "expect": "SOURCE/CHECK0; candidate authentic proof/real native. Same helper must reuse actual arguments, not first call constants."
+  },
+  "negative_expectation": "read scalar authority mismatch semantic; exclusive nested conflict may stop earlier at finite profile (classify); callee escape semantic if source profile permits"
+}

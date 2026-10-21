@@ -26,6 +26,24 @@ typedef struct {
     const NLSemanticContext *live_exit;
 } NLCopyBodyView;
 
+/* Explicit ordinary parameter substitution for the finite write-u8 call.
+ * The entry/handoff worlds are historical observations, never live authority.
+ * Actual source arguments and fresh formal symbols belong to this exact call.
+ */
+typedef struct {
+    const NLSemanticContext *entry, *handoff;
+    NLCheckedNodeId loan, arguments[2];
+    NLSymbolId parameters[2];
+    NLCheckedField field;
+} NLCopyBodyParameters;
+bool nl_checked_copy_body_parameters(const NLCheckedFragment *caller,
+                                     NLCheckedNodeId call,
+                                     NLCopyBodyParameters *out);
+NLCheckStatus
+nl_checked_copy_body_parameters_validate(const NLCheckedFragment *caller,
+                                         NLCheckedNodeId call,
+                                         const NLCopyBodyParameters *candidate);
+
 /* Observation is not validation. Outputs are untouched on failure. */
 bool nl_checked_copy_body_view(const NLCheckedFragment *caller,
                                NLCheckedNodeId call, NLCopyBodyView *out);

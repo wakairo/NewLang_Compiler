@@ -1,0 +1,69 @@
+{
+  "authority": "45aa20cc1584a24c9d1a79ec99e034c7fb13c50e",
+  "frozen_utc": "2026-10-21T11:57:14.575786+00:00",
+  "expectation_before_execution": "positive SOURCE/CHECK 0, owned call body present; current M1 backend4; negative phase must be measured, no claimed authority rejection before parsing",
+  "positive": {
+    "settings": {
+      "source": "original",
+      "target": "receiver",
+      "source_index": 0,
+      "target_index": 1,
+      "initial": [
+        31,
+        94
+      ],
+      "incoming": 167,
+      "old": 31,
+      "post": [
+        167,
+        94
+      ],
+      "target_initial": [
+        18,
+        52
+      ],
+      "target_post": [
+        18,
+        31
+      ],
+      "target_old": 52,
+      "helper": "update"
+    },
+    "window": {
+      "source": "destination",
+      "target": "archive",
+      "source_index": 1,
+      "target_index": 0,
+      "initial": [
+        6,
+        203
+      ],
+      "incoming": 14,
+      "old": 203,
+      "post": [
+        6,
+        14
+      ],
+      "target_initial": [
+        71,
+        45
+      ],
+      "target_post": [
+        203,
+        45
+      ],
+      "target_old": 71,
+      "helper": "exchange"
+    }
+  },
+  "sha256": {
+    "wrong_value.nl": "60c49ee04b595971d1b5b3040e1429ace280262fcb80cd79862359e25ef75adb",
+    "closed_scope.nl": "a57e9194becb92ce411c01eae9ab309768f04a6fbe3475ab4933ef9c8f488824",
+    "window.nl": "be146d7de6bfac5f19855ceba6198916f8cf3cb242a46b44e71d69dd874a3ea4",
+    "read_authority.nl": "ea871c8c63bffc0eac2e7295e7699124ec8641de6798a0ae087db7cc701ff395",
+    "wrong_return.nl": "0b23ac7a023f955f2c648c110f88e5ff7f860f4f53b7b7b1726f11942bfc5286",
+    "settings.nl": "439f2f4d43e969df2acea0d9d0401faa49c696ecdb32057905b802fdd07acffd",
+    "copy_as_ref.nl": "5765eba756bd6858182ab048a9dbcbfa7e8c49c0e645fb4757056dc6a79f5e8a",
+    "escaped_formal.nl": "2e31f5ef110aeacdced8b95623bcc27722cbc4d0bbde2d811452a39e6d33d22d"
+  }
+}

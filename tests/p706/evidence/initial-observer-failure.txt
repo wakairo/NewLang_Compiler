@@ -1,0 +1,15 @@
+Local pre-CI instrumentation failure; original generated C was unchanged.
+2: /tmp/tmpgdehla02/settings-passive.c:28:13: error: storing the address of local variable 'nl_local_2' in 'obs_2_1' [-Werror=dangling-pointer=]
+2:    28 |     obs_2_1 = &nl_local_2.f1;
+2:       |     ~~~~~~~~^~~~~~~~~~~~~~~~
+2: /tmp/tmpgdehla02/settings-passive.c: In function 'main':
+2: /tmp/tmpgdehla02/settings-passive.c:26:16: note: 'nl_local_2' declared here
+2:    26 |     nl_type_10 nl_local_2 = { .f1 = 52, .f0 = 18, };
+2:       |                ^~~~~~~~~~
+2: /tmp/tmpgdehla02/settings-passive.c:7:32: note: 'obs_2_1' declared here
+2:     7 | static const volatile uint8_t *obs_2_1;
+2:       |                                ^~~~~~~
+2: In function 'nl_fn_10',
+2:     inlined from 'main' at /tmp/tmpgdehla02/settings-passive.c:84:5:
+2: /tmp/tmpgdehla02/settings-passive.c:27:13: error: storing the address of local variable 'nl_local_2' in 'obs_2_0' [-Werror=dangling-pointer=]
+Observer repair: clear borrowed observer pointers before caller locals end. Strict warnings unchanged.
