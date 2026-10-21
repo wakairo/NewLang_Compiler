@@ -12,19 +12,19 @@ import tempfile
 
 
 HASHES = {
-    "A_true": "f359b4f959cb7dd535a2244276e96e0625a28ea9ebce7c806dd6834f1a7bb394",
-    "A_false": "773d09e2a7b9afe0c2eec3ce5b8087cf22fcd6318404e9390eceb968479dce55",
-    "B_true": "b0f644f77d44988aa489b5055188f6e677e84e4ef4e0430868b69db0c7c9770c",
-    "B_false": "bbbc6a03fb8b7630f0a68b084d6fd55896125f022a861344dfc0b3deb66e5408",
-    "N_wrong_type": "1ec2fbf18278be5bed8ea6d0f608723290663ed2075c919e549fbd576315817a",
+    "A_true_v2": "f359b4f959cb7dd535a2244276e96e0625a28ea9ebce7c806dd6834f1a7bb394",
+    "A_false_v2": "773d09e2a7b9afe0c2eec3ce5b8087cf22fcd6318404e9390eceb968479dce55",
+    "B_true_v2": "b0f644f77d44988aa489b5055188f6e677e84e4ef4e0430868b69db0c7c9770c",
+    "B_false_v2": "bbbc6a03fb8b7630f0a68b084d6fd55896125f022a861344dfc0b3deb66e5408",
+    "N_wrong_type_v2": "1ec2fbf18278be5bed8ea6d0f608723290663ed2075c919e549fbd576315817a",
 }
 # (declared field index, initial physical bytes, selected normal arm,
 #  old returned Copy, final physical bytes, write events per arm)
 ORACLE = {
-    "A_true": (1, (61, 19), 0, 19, (61, 37), (1, 1)),
-    "A_false": (1, (61, 19), 1, 19, (61, 83), (1, 1)),
-    "B_true": (0, (74, 23), 0, 74, (106, 23), (1, 0)),
-    "B_false": (0, (74, 23), 1, 74, (74, 23), (1, 0)),
+    "A_true_v2": (1, (61, 19), 0, 19, (61, 37), (1, 1)),
+    "A_false_v2": (1, (61, 19), 1, 19, (61, 83), (1, 1)),
+    "B_true_v2": (0, (74, 23), 0, 74, (106, 23), (1, 0)),
+    "B_false_v2": (0, (74, 23), 1, 74, (74, 23), (1, 0)),
 }
 
 
@@ -94,8 +94,7 @@ def instrument(code, proof, oracle):
                 (ref, index, nid, oracle[1][index], check(initial)))
             _, write_end, _ = unique(
                 r"\*nl_local_%d = [^;]+;" % ref, lo, hi)
-            expected_field = final[index] if a == selected else (
-                37 if index == 1 else 106)
+            expected_field = ((37, 83)[a] if index == 1 else 106)
             expected_state = list(initial)
             expected_state[index] = expected_field
             add(write_end, "\n            ++r716_changes;\n"
@@ -124,7 +123,7 @@ def exercise(compiler, probe, cc, sanitizer, directory):
                     "frozen source SHA changed: " + name)
             checked = run(compiler, "--check", path)
             emitted = run(compiler, path)
-            if name == "N_wrong_type":
+            if name == "N_wrong_type_v2":
                 require(checked.returncode != 0 and not checked.stdout and
                         b"error(" in checked.stderr,
                         "wrong type not semantically rejected: " + repr(checked))
