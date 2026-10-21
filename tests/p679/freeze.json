@@ -1,0 +1,76 @@
+{
+  "frozen_at_utc": "2026-10-21T01:25:53.569265+00:00",
+  "before_any_program_execution": true,
+  "compiler_main": "c3963b625e9e91a1de08318bdf153019a3a8c99c",
+  "canonical": "Draft17.33",
+  "origin": "new intended DeviceSettings operation from Issue679 contract; no PR395 source/oracle read or reused",
+  "cosmetic_normalization": "Issue example rendered with newline-separated ordinary syntax only; no source rule/operation change",
+  "sha256": {
+    "device_settings_swap.nl": "8e2703e6eb736a438aab15f4b25835eb8470724dde697000e0a714510e47290f",
+    "unknown_member.nl": "6cc43ef78ddfd4d8d8fcc8fca84b419152b4c2b74a3061b6f22351fff69dde17",
+    "wrong_input_type.nl": "63939359fe87124e4e94e7974069e90fcb29a9bb00491fc2d2b825579ba11052",
+    "comparison.c": "cacbc1cf48883c0d7b3c014aae5b7719a0d58bfcd90e838695b6eaeaad459d41"
+  },
+  "operation": {
+    "declaration_order": [
+      "port",
+      "mode"
+    ],
+    "constructor_order": [
+      "mode",
+      "port"
+    ],
+    "initial": [
+      7,
+      31
+    ],
+    "saved_port": 7,
+    "first_write": {
+      "field_index": 1,
+      "input": "saved_port",
+      "old": 31,
+      "after": [
+        7,
+        7
+      ]
+    },
+    "second_write": {
+      "field_index": 0,
+      "input": "actual returned old_mode Copy from first write, never literal surrogate",
+      "old": 7,
+      "after": [
+        31,
+        7
+      ]
+    },
+    "physical": "same original lexical root and two distinct fixed children/incarnations; port sibling7 until second write; mode sibling7 after second; both loan scopes close; normal root end leaves no live claims",
+    "stdout": "no guest stdout: main()->unit; native exit0 alone does not demonstrate values",
+    "normal_expected": {
+      "parser": 0,
+      "registration": 0,
+      "check_cli": 0,
+      "c17_cli": 0,
+      "native": 0,
+      "failure_if_unsupported": "record first exact phase, stop without alternative source or compiler patch"
+    }
+  },
+  "negative_expected": {
+    "unknown_member.nl": {
+      "parser": 0,
+      "diagnostic": "FIELD-UNKNOWN-FIELD",
+      "check_cli": 3,
+      "c17_cli": 3,
+      "c_bytes": 0
+    },
+    "wrong_input_type.nl": {
+      "parser": 0,
+      "diagnostic": "P3-TYPE-MISMATCH",
+      "check_cli": 3,
+      "c17_cli": 3,
+      "c_bytes": 0
+    }
+  },
+  "c_comparison_boundary": "separate small factored C operation, not host seed for NewLang guest; C caller owes live nonnull writable DeviceSettings pointer and correct access/lifetime/alias policy; no measured performance or audit-locality benefit",
+  "historical_gate": "N/A: unchanged Draft17.33 source/test exercise, no language/API/semantic selection",
+  "stop": "first source/check/owned/backend/native barrier; only success permits example/README/new regression DRAFT and one natural CI pair"
+}

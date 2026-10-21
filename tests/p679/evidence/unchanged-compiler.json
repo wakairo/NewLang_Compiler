@@ -1,0 +1,9 @@
+{
+  "utc": "2026-10-21T01:35:43.061650+00:00",
+  "fixed_compiler_sha": "c3963b625e9e91a1de08318bdf153019a3a8c99c",
+  "binary_sha256": "fdeb5e8e329171d105313d32070d24834829d8f3081630f0d8a83890253bac8d",
+  "unchanged_from_stage0": true,
+  "compiler_public_api_issuer_validator_old_tests": "all unchanged",
+  "llvm": "not used locally; full CI unchanged",
+  "local_host": "Debian GCC13.3.0; retained Clang23.1.2; target README quickstart Ubuntu24.04 exercised by Actions"
+}

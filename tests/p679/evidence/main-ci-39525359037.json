@@ -1,0 +1,42 @@
+{
+  "run": {
+    "id": 39525359037,
+    "head_sha": "c3963b625e9e91a1de08318bdf153019a3a8c99c",
+    "status": "completed",
+    "conclusion": "success",
+    "run_attempt": 1,
+    "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/39525359037"
+  },
+  "jobs": [
+    {
+      "id": 118978578859,
+      "name": "UBSan",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 118978579020,
+      "name": "ASan",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 118978579060,
+      "name": "Clang",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 118978579066,
+      "name": "GCC",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 118978579092,
+      "name": "GCC Release",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ]
+}
