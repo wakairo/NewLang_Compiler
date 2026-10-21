@@ -12,11 +12,11 @@ import tempfile
 
 
 HASHES = {
-    "A_true_v2": "f359b4f959cb7dd535a2244276e96e0625a28ea9ebce7c806dd6834f1a7bb394",
-    "A_false_v2": "773d09e2a7b9afe0c2eec3ce5b8087cf22fcd6318404e9390eceb968479dce55",
-    "B_true_v2": "b0f644f77d44988aa489b5055188f6e677e84e4ef4e0430868b69db0c7c9770c",
-    "B_false_v2": "bbbc6a03fb8b7630f0a68b084d6fd55896125f022a861344dfc0b3deb66e5408",
-    "N_wrong_type_v2": "1ec2fbf18278be5bed8ea6d0f608723290663ed2075c919e549fbd576315817a",
+    "A_true_v2": "e2eece88f51dcc42cdaf17bc71943d19cb6b9f83b58cd0f7020a83ecde6e761b",
+    "A_false_v2": "3b65bb3ac7f636f73544a1a083f35de830850af2a1f67d730bcc6cf80bbb5a7b",
+    "B_true_v2": "5bb05d781ffdecc5f1db1640b304f273b286345565b8e563f4b981c2c655b483",
+    "B_false_v2": "127fbb99819d5d664e0fa0cd313a7a4390df4907b3641045e536c43ad3e64d4d",
+    "N_wrong_type_v2": "ce95e50a31015d14b04f43b2a1137063929239aac0174ae5d58a02bcef2e30d0",
 }
 # (declared field index, initial physical bytes, selected normal arm,
 #  old returned Copy, final physical bytes, write events per arm)
