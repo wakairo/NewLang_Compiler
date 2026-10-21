@@ -73,6 +73,10 @@ def main() -> None:
             source = root / f"{name}.nl"
             source.write_text(DECL + "fn u8fn()->u8{u8(11)}fn main()->unit{"
                               "let p=Pair{left:u8(7),right:u8(9)};" + body + "}")
+            if name == "call":
+                # Same source now uses P685's reusable zero-formal Copy call.
+                positive(root, compiler, cc, name, source.read_text())
+                continue
             result = run([compiler, str(source)])
             if result.returncode != 4 or result.stdout or "V1-BACKEND-UNSUPPORTED" not in result.stderr:
                 raise SystemExit(f"accepted outside backend profile lost distinction: {result}")

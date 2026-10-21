@@ -344,6 +344,20 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p671/negative.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p514_gate_test>")
 
+    add_executable(p685_public_probe tests/p685/public_probe.c)
+    target_include_directories(p685_public_probe PRIVATE tests/support)
+    target_link_libraries(p685_public_probe PRIVATE newlang_semantic newlang_parser)
+    add_executable(p685_gate_test tests/p685/gate_test.c)
+    target_include_directories(p685_gate_test PRIVATE tests/support)
+    target_link_libraries(p685_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
+    target_link_options(p685_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p685_zero_formal_u8.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p685/native.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p685_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p685")
+    add_test(NAME p685_shared_call_gate_oom.unit COMMAND p685_gate_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p685/pump.nl" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p685/sensor.nl")
+
     # P679: ordinary adopted source, no compiler/issuer changes.
     add_executable(p679_public_probe tests/p679/public_probe.c)
     target_include_directories(p679_public_probe PRIVATE tests/support)

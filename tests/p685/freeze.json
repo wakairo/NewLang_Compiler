@@ -1,0 +1,83 @@
+{
+  "utc": "2026-10-21T03:26:26.521442+00:00",
+  "compiler": "eabae4b5e0e352d00ea1a770abae30a25e34befb",
+  "canonical": "Draft17.33",
+  "sources": {
+    "pump.nl": "380e8b16a73e72a184e2deb61a5f84c02b21489d45e34effaaf3d79eb55c98d6",
+    "sensor.nl": "8804e08bcdd0c04969530a8d5e584c8bc873d7e23082a91a126d8f3d2355b39a",
+    "wrong_return.nl": "85086dd2af9a7b9fb8a930df553a9346de75d8d2281316d115e834c69f2324bc",
+    "wrong_write.nl": "bfbc597b5d8dd30a8f1597c0ef7ee512405a748e15875fa303e17706b52d16b9",
+    "rich_body.nl": "189c0960ece1769bcdf5f02fa7700b048db591b7aee9160ae1ce04accda39925",
+    "nonunit_entry.nl": "f59e521e24be377868936ab01ba732a4562beca2635f60f0d83e834da1748fff"
+  },
+  "positive": {
+    "pump.nl": {
+      "value": 17,
+      "old": 5,
+      "sibling": 83,
+      "field_index": 0,
+      "initial": [
+        5,
+        83
+      ],
+      "final": [
+        17,
+        83
+      ]
+    },
+    "sensor.nl": {
+      "value": 53,
+      "old": 4,
+      "sibling": 9,
+      "field_index": 1,
+      "initial": [
+        9,
+        4
+      ],
+      "final": [
+        9,
+        53
+      ]
+    }
+  },
+  "expectations": {
+    "pump.nl": {
+      "check": 0,
+      "baseline_emit": 4,
+      "candidate_emit": 0
+    },
+    "sensor.nl": {
+      "check": 0,
+      "baseline_emit": 4,
+      "candidate_emit": 0
+    },
+    "wrong_return.nl": {
+      "check": 3,
+      "baseline_emit": 3,
+      "candidate_emit": 3
+    },
+    "wrong_write.nl": {
+      "check": 3,
+      "baseline_emit": 3,
+      "candidate_emit": 3
+    },
+    "rich_body.nl": {
+      "check": 0,
+      "baseline_emit": 4,
+      "candidate_emit": 4
+    },
+    "nonunit_entry.nl": {
+      "check": 0,
+      "baseline_emit": 4,
+      "candidate_emit": 4
+    }
+  },
+  "native": "GCC13 and Clang strict C17 O0/O2; original exit0 no guest stdout; separate passive physical observer reads actual original root, helper return, write input, old Copy, post-state and sibling; no value/permission injection",
+  "commands": [
+    "newlangc --check SOURCE",
+    "newlangc SOURCE > GENERATED.c",
+    "CC -std=c17 -Wall -Wextra -Wpedantic -Werror -O{0,2} GENERATED.c -o GUEST",
+    "GUEST"
+  ],
+  "scope": "default CLI; no flags, program-entry/status changes, new source/issuer, or PR684 incorporation"
+}

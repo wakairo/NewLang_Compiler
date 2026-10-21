@@ -1,0 +1,74 @@
+{
+  "pump.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "emit": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p685/pump.nl\n"
+    }
+  },
+  "sensor.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "emit": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p685/sensor.nl\n"
+    }
+  },
+  "wrong_return.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p685/wrong_return.nl:10:21-10:29: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+    },
+    "emit": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p685/wrong_return.nl:10:21-10:29: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+    }
+  },
+  "wrong_write.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p685/wrong_write.nl:6:78-6:87: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    },
+    "emit": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p685/wrong_write.nl:6:78-6:87: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    }
+  },
+  "rich_body.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "emit": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p685/rich_body.nl\n"
+    }
+  },
+  "nonunit_entry.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "emit": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p685/nonunit_entry.nl\n"
+    }
+  }
+}

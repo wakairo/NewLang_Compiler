@@ -1,0 +1,6 @@
+68: shared gate rejects=6 allocations=0 state=UNCHANGED
+68: shared gate rejects=6 allocations=0 state=UNCHANGED
+68: registration OOM positions=213 rollback=PASS
+68: main-call OOM positions=73 rollback=PASS artifact=NULL
+68: registration OOM positions=323 rollback=PASS
+68: main-call OOM positions=127 rollback=PASS artifact=NULL

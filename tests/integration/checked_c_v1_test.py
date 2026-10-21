@@ -28,12 +28,10 @@ def main() -> None:
         positive(root, compiler, cc, "unused", "fn main()->unit{let x=u8(255);unit}\n")
         negative(root, compiler, "n1", "fn main()->unit{let x=u8(256);unit}\n", "V1-U8-LITERAL-RANGE")
         negative(root, compiler, "n2", "fn main()->unit{let x=7;unit}\n", "P5-EXPECTED-EXPRESSION")
-        # Checker-accepted u8 function result is beyond the V1 backend subset.
-        unsupported = root / "unsupported.nl"
-        unsupported.write_text("fn scalar()->u8{u8(7)}\nfn main()->unit{scalar();unit}\n", encoding="utf-8")
-        result = run([compiler, str(unsupported)])
-        if result.returncode != 4 or result.stdout or "V1-BACKEND-UNSUPPORTED" not in result.stderr:
-            raise SystemExit(f"backend-unsupported boundary lost: {result}")
+        # P685 reuses the normal typed-return gate for zero-formal helpers.
+        # Keep the original source; old backend4 evidence remains historical.
+        positive(root, compiler, cc, "unsupported",
+                 "fn scalar()->u8{u8(7)}\nfn main()->unit{scalar();unit}\n")
     print("V1 P1/E2/E3 execute; N1/N2 reject before emission; E1 in u8_body.unit")
 
 
