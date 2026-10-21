@@ -1,0 +1,14 @@
+[
+  {
+    "mode": "check",
+    "exit": 0,
+    "diagnostic": "",
+    "stdout_bytes": 0
+  },
+  {
+    "mode": "ordinary",
+    "exit": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p688/rich_calibrated.nl\n",
+    "stdout_bytes": 0
+  }
+]

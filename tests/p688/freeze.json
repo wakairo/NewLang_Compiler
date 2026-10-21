@@ -1,0 +1,55 @@
+{
+  "authority": "92367144da5c672282b91fd291962e3b923492b3",
+  "canonical": "Draft17.33",
+  "stage": "pre-execution freeze",
+  "files": {
+    "threshold.nl": "4d6800161e925397dce15d85d070a092b1395b7e4a127c9e98eb1c319ba72735",
+    "limit.nl": "b4879e21d2d1497bcc17c3f527e81793f4f235cba3d59385a4c350b284983549",
+    "threshold_consumer.c": "f647ab78e94ea5b468d68ad40ff29fb1ee6b10b6b49e2f92fd3ffddeefcc0ec3",
+    "limit_consumer.c": "dc90d681c411e01b99725ec2cc165e7333e96f7553c14c59923c9ff3038d37a9",
+    "formal.nl": "e81c7213066cdb6b36aa74ac258ca401fe578c139a8dd20fc0641e40e5459e46",
+    "unit_result.nl": "d0df1b765eb43120066005b2535ce6c67f9798111d0d31e111debeea18565829",
+    "rich.nl": "692e3dcf4c00acb230719b567dd6cdec8b9a04be0beb161aa9ac4433c477216d",
+    "bad_return.nl": "ac6d6de619f9c834850d99f91d10b76eace65dee6b867e9affb1df9e7dea84dd",
+    "main_u8.nl": "f59e521e24be377868936ab01ba732a4562beca2635f60f0d83e834da1748fff",
+    "duplicate.nl": "5f56231a65d9bddd14e73c27cb94e5c6ed592690aba01678c99fb23b6407c2a1"
+  },
+  "positive": {
+    "threshold.nl": {
+      "selector": "low_threshold",
+      "value": 17,
+      "consumer": "threshold_consumer.c"
+    },
+    "limit.nl": {
+      "selector": "upper_limit",
+      "value": 53,
+      "consumer": "limit_consumer.c"
+    }
+  },
+  "expectations": {
+    "positive": "CHECK0, existing ordinary C17/native0; export absent in baseline CLI2, candidate separate-TU runtime17/53 exit0",
+    "formal.nl": "CHECK0, export4/zero C (nonzero formal)",
+    "unit_result.nl": "CHECK0, export4/zero C (wrong result)",
+    "rich.nl": "CHECK0, export4/zero C (existing finite Copy-body gate)",
+    "bad_return.nl": "semantic3/zero C",
+    "main_u8.nl": "CHECK0, ordinary emit4, export4/zero C (entry excluded)",
+    "duplicate.nl": "semantic3/zero C (duplicate registration)"
+  },
+  "selector_controls": [
+    "unknown",
+    "main",
+    "low_threshold();main",
+    "empty"
+  ],
+  "link_controls": [
+    "private static symbol unavailable",
+    "duplicate producer symbol refused",
+    "wrong prototype with provided header diagnosed"
+  ],
+  "constraints": [
+    "no host constant in producer",
+    "unchanged compiler baseline before production patch",
+    "consumer and producer separate objects",
+    "all admitted callees genuinely parsed and checked"
+  ]
+}

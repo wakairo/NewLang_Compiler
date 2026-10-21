@@ -48,6 +48,7 @@ typedef struct {
     size_t entry_function;
     NLTypeId unit, u8, aggregate;
     bool uses_usize;
+    bool u8_export; /* opt-in target wrapper, never source authority */
     const NLCheckedFragment *formal_body; /* current validation only */
     NLSymbolId formal;
     size_t scalar_depth; /* at most relay + leaf; not a general call graph */
@@ -2637,6 +2638,11 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
             stream) < 0)
         return false;
 
+    if (program->u8_export &&
+        fputs("#include \"newlang/experimental_c17_u8_export_v0.h\"\n",
+              stream) < 0)
+        return false;
+
     /* The frontend currently has a native-size_t quantity target, not a
      * cross-target integer model. Refuse mismatched C targets explicitly. */
     if (program->uses_usize &&
@@ -2674,6 +2680,12 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
             return false;
     }
 
+    if (program->u8_export)
+        return fprintf(stream,
+                       "uint8_t newlang_c17_u8_export_v0(void)\n{\n"
+                       "    return nl_fn_%zu();\n}\n",
+                       program->entry_function) >= 0;
+
     return fputs("int main(void)\n{\n", stream) >= 0 &&
            fprintf(stream, "    nl_fn_%zu();\n", program->entry_function) >=
                0 &&
@@ -2700,9 +2712,32 @@ static int render_check_failure(const NLSource *source,
                         nl_source_name(source), 3);
 }
 
-static int compile_v0(const char *path, bool check_only)
+/* Selection is only a target policy prefilter. Admission still requires a
+ * fresh parser/checker-issued named call and the unchanged body/result gate. */
+static size_t v0_export_function(const NLSemanticContext *c, const char *name)
+{
+    size_t selected = 0;
+    if (strcmp(name, "main") == 0)
+        return 0;
+    for (size_t i = 0; i < c->function_count; ++i) {
+        const NLFunctionEntry *fn = &c->functions[i];
+        if (strcmp(fn->name, name) != 0)
+            continue;
+        if (selected || fn->kind != NL_CHECKED_REGISTERED_CALL ||
+            fn->body == NULL || fn->count != 0 ||
+            fn->result != nl_semantic_core_type(c, NL_TYPE_U8))
+            return 0;
+        selected = i + 1;
+    }
+    return selected;
+}
+
+static int compile_v0(const char *path, bool check_only,
+                      const char *export_name)
 {
     static const char entry_text[] = "main()";
+    char *export_call = NULL;
+    size_t selected = 0;
     NLSource *source = NULL, *entry_source = NULL;
     NLParser *parser = NULL, *entry_parser = NULL;
     NLSyntaxTree *unit = NULL, *entry_tree = NULL;
@@ -2742,7 +2777,28 @@ static int compile_v0(const char *path, bool check_only)
         goto cleanup;
     }
 
-    if (nl_source_create(entry_text, sizeof(entry_text) - 1, "<v0-entry>",
+    if (export_name != NULL) {
+        selected = v0_export_function(context, export_name);
+        if (!selected) {
+            result = report_error("C17-U8-EXPORT-SELECTOR",
+                                  "select one non-main zero-formal u8 function",
+                                  export_name, 4);
+            goto cleanup;
+        }
+        /* Exact registered ordinary source name, not arbitrary CLI syntax. */
+        const char *name = context->functions[selected - 1].name;
+        const size_t length = strlen(name);
+        if (length > SIZE_MAX - 3 ||
+            (export_call = malloc(length + 3)) == NULL) {
+            result = report_error("V0-ENTRY",
+                                  "cannot create checked entry call", path, 1);
+            goto cleanup;
+        }
+        memcpy(export_call, name, length);
+        memcpy(export_call + length, "()", 3);
+    }
+    const char *call_text = export_call ? export_call : entry_text;
+    if (nl_source_create(call_text, strlen(call_text), "<v0-entry>",
                          &entry_source) != NL_SOURCE_OK ||
         nl_parser_create(entry_source, &entry_parser) != NL_PARSE_OK) {
         result = report_error("V0-ENTRY", "cannot create checked entry call",
@@ -2776,7 +2832,20 @@ static int compile_v0(const char *path, bool check_only)
     const NLCheckedNodeId root = nl_checked_root(entry);
     const NLCheckedNodeView *root_view = nl_checked_node_view(entry, root);
     V0Program program = {.unit = nl_semantic_unit_type(context),
-                         .u8 = nl_semantic_core_type(context, NL_TYPE_U8)};
+                         .u8 = nl_semantic_core_type(context, NL_TYPE_U8),
+                         .u8_export = export_name != NULL};
+    if (program.u8_export) {
+        if (root_view == NULL || root_view->function != selected ||
+            root_view->type != program.u8 || root_view->argument_count != 0 ||
+            !v0_validate_call(entry, root, &program)) {
+            result = report_error("C17-U8-EXPORT-UNSUPPORTED",
+                                  "checked function is outside the finite "
+                                  "Copy u8 export body profile",
+                                  path, 4);
+            goto cleanup;
+        }
+        goto emit;
+    }
     /* Preserve the existing unit-only CLI entry. Ordinary helper return
      * support does not select a process-entry/result transport contract. */
     if (root_view == NULL || root_view->type != program.unit ||
@@ -2827,6 +2896,7 @@ static int compile_v0(const char *path, bool check_only)
                               path, 4);
         goto cleanup;
     }
+emit:
     program.entry_function = root_view->function;
 
     if (!v0_emit_c(stdout, &program) || fflush(stdout) != 0) {
@@ -2837,6 +2907,7 @@ static int compile_v0(const char *path, bool check_only)
     result = 0;
 
 cleanup:
+    free(export_call);
     nl_checked_destroy(entry);
     nl_syntax_tree_destroy(entry_tree);
     nl_parser_destroy(entry_parser);
@@ -2854,7 +2925,11 @@ int main(int argc, char **argv)
         return fputs(help, stdout) >= 0 && fflush(stdout) == 0 ? 0 : 1;
     }
     if (argc == 3 && strcmp(argv[1], "--check") == 0 && argv[2][0] != '-') {
-        return compile_v0(argv[2], true);
+        return compile_v0(argv[2], true, NULL);
+    }
+    if (argc == 4 && strcmp(argv[1], "--experimental-c17-u8-export") == 0 &&
+        argv[3][0] != '-') {
+        return compile_v0(argv[3], false, argv[2]);
     }
     if (argc != 2) {
         return report_error("P0-CLI-ARGUMENT", "expected exactly one argument",
@@ -2869,5 +2944,5 @@ int main(int argc, char **argv)
     if (argv[1][0] == '-') {
         return report_error("P0-CLI-OPTION", "unknown option", argv[1], 2);
     }
-    return compile_v0(argv[1], false);
+    return compile_v0(argv[1], false, NULL);
 }
