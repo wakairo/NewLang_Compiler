@@ -1,4 +1,5 @@
 #include "copy_body_internal.h"
+#include "if_field_internal.h"
 #include "newlang/parser.h"
 #include "semantic_internal.h"
 
@@ -1293,6 +1294,9 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                                                   check->artifact, call, c),
                                               span))
                     return false;
+                if (!host(check, nl_if_field_before(check->artifact, call, c),
+                          span))
+                    return false;
                 if (check->capture_copy_body &&
                     !host(check, nl_copy_body_before(check->artifact, call, c),
                           span))
@@ -1315,6 +1319,9 @@ static bool primitive(Check *check, NLCheckedNodeId call,
                         (NLCheckedResult){old.type, old.current_value};
                 }
                 *view(check, call) = operation;
+                if (!host(check, nl_if_field_event(check->artifact, call, c),
+                          span))
+                    return false;
                 if (check->capture_copy_body &&
                     !host(check,
                           nl_copy_body_event(check->artifact, call, c, false),
@@ -2376,6 +2383,9 @@ static NLCheckedNodeId field_read(Check *check, const NLSyntaxView *s)
                                        .has_scalar_result = v.scalar_known,
                                        .scalar_result = {v.type, v.scalar_known,
                                                          v.scalar_value}});
+    if (id != 0 &&
+        !host(check, nl_if_field_event(check->artifact, id, c), s->span))
+        return 0;
     if (id != 0 && check->capture_copy_body &&
         !host(check, nl_copy_body_event(check->artifact, id, c, false),
               s->span))
@@ -3832,6 +3842,8 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     else
         memcpy(view(caller, call_id)->results, result.results,
                sizeof(result.results));
+    if (!host(&body, nl_if_field_seal(body.artifact), call_span))
+        goto failure;
     if (!host(&body,
               nl_copy_body_seal(body.artifact, caller->artifact, call_id,
                                 body.body_function, c),
@@ -4070,10 +4082,12 @@ static bool same_place_frame(NLSemanticPlaceView a, NLSemanticPlaceView b)
            a.placement.length == b.placement.length;
 }
 
-static bool arm_frame(Check *check, const NLSemanticContext *before,
-                      const NLSemanticContext *after, NLPlaceId root,
-                      size_t persistent_places, size_t persistent_scopes,
-                      bool changed[NL_SEMANTIC_MAX_ENTRIES], NLSourceSpan span)
+static bool arm_frame_with_field(Check *check, const NLSemanticContext *before,
+                                 const NLSemanticContext *after, NLPlaceId root,
+                                 size_t persistent_places,
+                                 size_t persistent_scopes,
+                                 bool changed[NL_SEMANTIC_MAX_ENTRIES],
+                                 NLSourceSpan span, NLPlaceId aggregate)
 {
     /* Existing scopes, domains, raw backing facts cannot silently diverge.
      * New local scopes/packages remain arm-owned. */
@@ -4103,7 +4117,9 @@ static bool arm_frame(Check *check, const NLSemanticContext *before,
     }
     for (size_t i = 0; i < persistent_places; ++i) {
         const NLSemanticPlaceView a = before->places[i], b = after->places[i];
-        if (i + 1 == root || (root != 0 && a.parent_sum == root))
+        if ((aggregate &&
+             (i + 1 == aggregate || a.parent_aggregate == aggregate)) ||
+            i + 1 == root || (root != 0 && a.parent_sum == root))
             continue;
         if (!same_place_frame(a, b)) {
             /* Ordinary outer affine consumption is joined separately below. */
@@ -4129,6 +4145,15 @@ static bool arm_frame(Check *check, const NLSemanticContext *before,
 precision:
     match_precision(check, span);
     return false;
+}
+
+static bool arm_frame(Check *check, const NLSemanticContext *before,
+                      const NLSemanticContext *after, NLPlaceId root,
+                      size_t places, size_t scopes,
+                      bool changed[NL_SEMANTIC_MAX_ENTRIES], NLSourceSpan span)
+{
+    return arm_frame_with_field(check, before, after, root, places, scopes,
+                                changed, span, 0);
 }
 
 static bool save_arm(Check *check, NLCheckedNodeId match,
@@ -4377,6 +4402,8 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
     if (id == 0)
         return 0;
     NLSemanticContext *c = check->context;
+    if (!host(check, nl_if_field_prepare(check->artifact, id, c), syntax->span))
+        return 0;
     const NLSyntaxNode *arms[] = {syntax->data.conditional.then_block,
                                   syntax->data.conditional.else_block};
     NLCheckedFragment *evidence[2] = {NULL, NULL};
@@ -4402,6 +4429,10 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
                                 .if_arm_index = i,
                                 .branch_value_prefix = c->value_count,
                                 .branch_fact_prefix = c->last_value_fact};
+        if (!host(&branch,
+                  nl_if_field_fork(check->artifact, id, i, branch.artifact),
+                  syntax->span))
+            goto failure;
         NLCheckedNodeId body = expression(&branch, arms[i]);
         if (body == 0)
             goto failure;
@@ -4523,6 +4554,11 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
                  "outer non-Copy availability differs between normal arms");
             return 0;
         }
+    NLPlaceId field_join_root = 0;
+    if (!returning &&
+        !host(check, nl_if_field_plan(check->artifact, id, c, &field_join_root),
+              syntax->span))
+        return 0;
     bool changed[NL_SEMANTIC_MAX_ENTRIES] = {false};
     NLSemanticValueView joined_ref = {.type = types[0]};
     const bool reference = c->types[types[0] - 1].view.kind == NL_TYPE_REF;
@@ -4565,9 +4601,10 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
             check->diagnostic = branch.diagnostic;
             return 0;
         }
-        if (!arm_frame(check, c, post[i], 0,
-                       returning ? check->function_place_floor : c->place_count,
-                       c->scope_count, changed, syntax->span))
+        if (!arm_frame_with_field(
+                check, c, post[i], 0,
+                returning ? check->function_place_floor : c->place_count,
+                c->scope_count, changed, syntax->span, field_join_root))
             return 0;
     }
     for (size_t j = 0; j < c->binding_count; ++j) {
@@ -4590,6 +4627,12 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
     for (size_t j = 0; j < c->place_count; ++j)
         if (changed[j] && !widen_place(check, j, syntax->span))
             return 0;
+    if (field_join_root) {
+        if (!host(check, nl_if_field_commit(check->artifact, id, c),
+                  syntax->span))
+            return 0;
+        refresh_bindings(check, field_join_root);
+    }
     NLValueId output = identity;
     if (counts[0] != 0 && output == 0) {
         output = new_value(check,
@@ -4616,6 +4659,8 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
         if (counts[0] != 0)
             view(check, id)->results[0] = (NLCheckedResult){types[0], output};
     }
+    if (!host(check, nl_if_field_finish(check->artifact, id, c), syntax->span))
+        return 0;
     return id;
 }
 

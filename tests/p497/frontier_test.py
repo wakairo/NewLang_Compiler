@@ -85,9 +85,12 @@ def main():
                                   native=statuses, target_guard="REJECT")))
         # P504 deliberately advances these immutable historical source frontiers.
         # Prior parser results remain in baseline.json; no source/hash is changed.
+        # P713 now proves and lowers these unchanged structural IF sources.
+        sys.path.insert(0, str(source_dir.parent / 'p713'))
+        from legacy import exercise
+        for name in ('guard_true.nl', 'guard_false.nl'):
+            exercise(compiler, source_dir / name, cc, 'none')
         frontiers = {
-            "guard_true.nl": ("precision", "P6-JOIN-PRECISION"),
-            "guard_false.nl": ("precision", "P6-JOIN-PRECISION"),
             "wrong_type.nl": ("semantic", "USIZE-EQUALITY-TYPE"),
             "false_authority.nl": ("semantic", "P3-WRITE-REF-REQUIRED"),
         }

@@ -44,7 +44,17 @@ def main():
         provenance = check()
         assert provenance['historical_sha256'] == files['src/semantic_internal.h']
         assert provenance['candidate_sha256'] == hashlib.sha256(header).hexdigest()
+        # P713 exact attachment receives the same missing/duplicate/position/
+        # original-header mutation checks; the historical digest is unchanged.
+        if_fields = (b'    struct NLIfFieldProof *if_fields;\n'
+                     b'    void (*destroy_if_fields)(NLCheckedFragment *);\n')
+        if_record = b'struct NLCheckedFragment {\n' + if_fields
+        assert header.count(if_record) == header.count(if_fields) == 1
         attacks = {
+            'missing_if_block': header.replace(if_fields,b'',1),
+            'duplicate_if_block': header+if_fields,
+            'misplaced_if_block': header.replace(if_fields,b'',1)+if_fields,
+            'wrong_if_type': header.replace(b'NLIfFieldProof *if_fields',b'NLIfFieldProof *bogus'),
             'missing_block': header.replace(block,b'',1),
             'duplicate_block': header+block,
             'misplaced_block': header.replace(block,b'',1)+block,

@@ -1,0 +1,77 @@
+Internal ctest changing into directory: /workspace/p713-build
+UpdateCTestConfiguration  from :/workspace/p713-build/DartConfiguration.tcl
+Parse Config file:/workspace/p713-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p713-build/DartConfiguration.tcl
+Parse Config file:/workspace/p713-build/DartConfiguration.tcl
+Test project /workspace/p713-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: p713_if_field_proof_oom.unit
+
+1: Test command: /workspace/p713-build/p713_gate_test "/workspace/p713/tests/p713/both_true.nl" "/workspace/p713/tests/p713/one_false.nl" "/workspace/p713/tests/p713/repeated_true.nl"
+1: Working Directory: /workspace/p713-build
+1: Environment variables:
+1:  PYTHONDONTWRITEBYTECODE=1
+1:  PYTHONHASHSEED=0
+1:  LC_ALL=C
+1:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+1:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+1: Test timeout computed to be: 90
+1: equal-byte different source Copy IDs rejected=0
+1: IF rejects=101 validator_OOM=79 rollback=PASS
+1: IF admission_OOM=79 explicit_resource=PASS
+1: equal-byte different source Copy IDs rejected=3
+1: IF rejects=95 validator_OOM=54 rollback=PASS
+1: IF admission_OOM=54 explicit_resource=PASS
+1: equal-byte different source Copy IDs rejected=24
+1: IF rejects=206 validator_OOM=134 rollback=PASS
+1: IF admission_OOM=134 explicit_resource=PASS
+1: registration OOM positions=417 rollback=PASS
+1: main-call OOM positions=313 rollback=PASS artifact=NULL
+1: normal driver OOM positions=906 existing_host_oom_CLI3=799 zero_partial_C=PASS
+1/2 Test #1: p713_if_field_proof_oom.unit .......   Passed    0.19 sec
+test 2
+    Start 2: p713_if_field_native.integration
+
+2: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p713/tests/p713/native.py" "/workspace/p713-build/newlangc" "/workspace/p713-build/p713_public_probe" "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13" "none" "/workspace/p713/tests/p713"
+2: Working Directory: /workspace/p713-build
+2: Environment variables:
+2:  PYTHONDONTWRITEBYTECODE=1
+2:  PYTHONHASHSEED=0
+2:  LC_ALL=C
+2:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+2:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+2: Test timeout computed to be: 90
+2: Traceback (most recent call last):
+2:   File "/workspace/p713/tests/p713/native.py", line 167, in <module>
+2:     exercise(*sys.argv[1:])
+2:   File "/workspace/p713/tests/p713/native.py", line 130, in exercise
+2:     require(guest.returncode == (91 if label in mutants else 0) and not guest.stdout and not guest.stderr, guest)
+2:   File "/workspace/p713/tests/p713/native.py", line 17, in require
+2:     raise AssertionError(why)
+2: AssertionError: CompletedProcess(args=['/tmp/tmpla2g8tpa/one_falsewrong_old-O0'], returncode=0, stdout=b'', stderr=b'')
+2/2 Test #2: p713_if_field_native.integration ...***Failed    1.74 sec
+Traceback (most recent call last):
+  File "/workspace/p713/tests/p713/native.py", line 167, in <module>
+    exercise(*sys.argv[1:])
+  File "/workspace/p713/tests/p713/native.py", line 130, in exercise
+    require(guest.returncode == (91 if label in mutants else 0) and not guest.stdout and not guest.stderr, guest)
+  File "/workspace/p713/tests/p713/native.py", line 17, in require
+    raise AssertionError(why)
+AssertionError: CompletedProcess(args=['/tmp/tmpla2g8tpa/one_falsewrong_old-O0'], returncode=0, stdout=b'', stderr=b'')
+
+
+The following tests passed:
+	p713_if_field_proof_oom.unit
+
+50% tests passed, 1 tests failed out of 2
+
+Total Test time (real) =   1.93 sec
+
+The following tests FAILED:
+	  2 - p713_if_field_native.integration (Failed)

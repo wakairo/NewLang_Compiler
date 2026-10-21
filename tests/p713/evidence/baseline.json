@@ -1,0 +1,98 @@
+{
+  "one_false.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/one_false.nl:5:12-9:3: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/one_false.nl:5:12-9:3: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+      "stdout_bytes": 0
+    }
+  },
+  "both_true.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/both_true.nl:5:13-9:3: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/both_true.nl:5:13-9:3: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+      "stdout_bytes": 0
+    }
+  },
+  "both_false.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/both_false.nl:5:13-9:3: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/both_false.nl:5:13-9:3: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+      "stdout_bytes": 0
+    }
+  },
+  "wrong_type.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/wrong_type.nl:8:54-8:63: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/wrong_type.nl:8:54-8:63: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n",
+      "stdout_bytes": 0
+    }
+  },
+  "wrong_arm_result.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/wrong_arm_result.nl:5:12-9:3: error(semantic)[P13-IF-RESULT]: normal if arms require the same single result type\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/wrong_arm_result.nl:5:12-9:3: error(semantic)[P13-IF-RESULT]: normal if arms require the same single result type\n",
+      "stdout_bytes": 0
+    }
+  },
+  "one_true.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/one_true.nl:5:12-9:3: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/one_true.nl:5:12-9:3: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+      "stdout_bytes": 0
+    }
+  },
+  "loan_escape.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/loan_escape.nl:6:4-6:46: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/loan_escape.nl:6:4-6:46: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n",
+      "stdout_bytes": 0
+    }
+  },
+  "wrong_root.nl": {
+    "check": {
+      "exit": 3,
+      "diagnostic": "tests/p713/wrong_root.nl:6:13-10:3: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "diagnostic": "tests/p713/wrong_root.nl:6:13-10:3: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+      "stdout_bytes": 0
+    }
+  }
+}

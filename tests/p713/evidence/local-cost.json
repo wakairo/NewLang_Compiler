@@ -1,0 +1,42 @@
+{
+  "both_true": {
+    "samples": [
+      {
+        "wall_seconds": 0.0025457719893893227,
+        "max_rss_kib": 7252,
+        "cpu_seconds": 0.002059
+      },
+      {
+        "wall_seconds": 0.0018313159962417558,
+        "max_rss_kib": 7252,
+        "cpu_seconds": 0.001689
+      },
+      {
+        "wall_seconds": 0.001907130004838109,
+        "max_rss_kib": 7252,
+        "cpu_seconds": 0.001782
+      }
+    ],
+    "note": "Local GCC13 Debug NO LLVM normal driver; startup included; not a scalability guarantee."
+  },
+  "repeated_true": {
+    "samples": [
+      {
+        "wall_seconds": 0.002279391002957709,
+        "max_rss_kib": 7252,
+        "cpu_seconds": 0.002029
+      },
+      {
+        "wall_seconds": 0.0019607720023486763,
+        "max_rss_kib": 7252,
+        "cpu_seconds": 0.0018169999999999998
+      },
+      {
+        "wall_seconds": 0.0018630740087246522,
+        "max_rss_kib": 7252,
+        "cpu_seconds": 0.0016099999999999999
+      }
+    ],
+    "note": "Local GCC13 Debug NO LLVM normal driver; startup included; not a scalability guarantee."
+  }
+}

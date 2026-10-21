@@ -7,6 +7,7 @@
 #include "newlang/checked_c_node.h"
 #include "newlang/copy_body.h"
 #include "newlang/diagnostic.h"
+#include "newlang/if_field.h"
 #include "newlang/parser.h"
 #include "newlang/semantic.h"
 #include "newlang/source.h"
@@ -301,7 +302,9 @@ static bool boolean_scalar_at(const NLCheckedFragment *f, NLCheckedNodeId id,
             conditional != NULL && conditional->kind == NL_CHECKED_IF &&
             bool_root_value(f, condition_of) &&
             conditional->initializer == id && v != NULL &&
-            v->kind == NL_CHECKED_USIZE_EQUALITY;
+            (v->kind == NL_CHECKED_USIZE_EQUALITY ||
+             v->kind == NL_CHECKED_USIZE_LESS_THAN ||
+             v->kind == NL_CHECKED_IDENTIFIER);
         if (v == NULL || (!bool_root_value(f, id) && !direct_condition) ||
             v->type != boolean || v->terminates || v->result_count != 1 ||
             v->results[0].type != boolean ||
@@ -2176,6 +2179,52 @@ static bool v0_validate_block(const NLCheckedFragment *fragment,
     return block->tail == 0 || v0_validate_node(fragment, block->tail, program);
 }
 
+static bool if_field_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
+                               V0Program *p)
+{
+    NLIfFieldView view;
+    if (!nl_checked_if_field_view(f, id, &view))
+        return false;
+    NLCheckStatus status = nl_checked_if_field_validate(f, id, &view);
+    if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
+        p->copy_body_status = status;
+    if (status != NL_CHECK_OK || p->u8_export || p->scalar_depth ||
+        !avs_shape(f, view.nominal, p) ||
+        !boolean_scalar_at(f, view.condition, p, id))
+        return false;
+    /* Source-issued entry binding establishes the physical C carrier. */
+    const NLCheckedNodeView *declaration = NULL;
+    for (size_t i = 1; i <= nl_checked_node_count(f); ++i) {
+        const NLCheckedNodeView *n = nl_checked_node_view(f, i);
+        if (n->kind == NL_CHECKED_BINDING && n->symbol == view.base) {
+            if (declaration)
+                return false;
+            declaration = n;
+        }
+    }
+    if (!declaration ||
+        declaration->span.end_byte >
+            nl_checked_node_view(f, id)->span.start_byte ||
+        !avs_construction(f, declaration->initializer, p))
+        return false;
+    NLSemanticBindingView binding;
+    NLSemanticPlaceView root;
+    return nl_semantic_binding_view(view.entry, view.base, &binding) &&
+           nl_semantic_place_view(view.entry, view.root, &root) &&
+           binding.place == view.root && binding.availability == NL_AVAILABLE &&
+           root.incarnation == view.incarnation && root.type == view.nominal &&
+           root.fixed_fields[view.index] == view.child;
+}
+
+static bool copy_or_field_if(const NLCheckedFragment *f, NLCheckedNodeId id,
+                             V0Program *p)
+{
+    NLIfFieldView issued;
+    return nl_checked_if_field_view(f, id, &issued)
+               ? if_field_selection(f, id, p)
+               : copy_if_selection(f, id, p);
+}
+
 static bool v0_validate_node(const NLCheckedFragment *fragment,
                              NLCheckedNodeId id, V0Program *program)
 {
@@ -2196,6 +2245,8 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                quantity_scalar(fragment, id, program) ||
                boolean_scalar(fragment, id, program) ||
                gate_ptr(fragment, id, program);
+    case NL_CHECKED_IF:
+        return if_field_selection(fragment, id, program);
     case NL_CHECKED_PTR_FROM_REF:
         return gate_ptr(fragment, id, program);
     case NL_CHECKED_REPLACE:
@@ -2218,7 +2269,7 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                 boolean_scalar(fragment, view->initializer, program) ||
                 (receiver->type == program->u8 &&
                  ((initializer->kind == NL_CHECKED_IF &&
-                   copy_if_selection(fragment, view->initializer, program)) ||
+                   copy_or_field_if(fragment, view->initializer, program)) ||
                   v1_scalar(fragment, view->initializer, program) ||
                   (initializer->kind == NL_CHECKED_REGISTERED_CALL &&
                    initializer->type == program->u8 &&
@@ -2409,6 +2460,10 @@ static bool gate_symbol_written(const NLCheckedFragment *f, NLSymbolId symbol)
 {
     for (size_t i = 1; i <= nl_checked_node_count(f); ++i) {
         const NLCheckedNodeView *n = nl_checked_node_view(f, i);
+        NLIfFieldView joined;
+        if (n && n->kind == NL_CHECKED_IF &&
+            nl_checked_if_field_view(f, i, &joined) && joined.base == symbol)
+            return true;
         if (n != NULL && n->kind == NL_CHECKED_LOAN_HEADER &&
             n->loan.implicit_local && !n->loan.from_ptr &&
             n->loan.access == NL_ACCESS_WRITE && n->loan.source == symbol)
@@ -2463,6 +2518,69 @@ static bool emit_less_operands(FILE *stream, const NLCheckedFragment *f,
            v1_emit_scalar(stream, right) && fputs(";\n", stream) >= 0;
 }
 
+/* Called only after public IF validation plus exact caller carrier mapping.
+ * Never lower the checker's unknown/known scalar as a chosen arm constant. */
+static bool emit_if_field(FILE *stream, const NLCheckedFragment *f,
+                          NLCheckedNodeId id, NLSymbolId binding, size_t depth)
+{
+    const NLCheckedNodeView *choice = nl_checked_node_view(f, id);
+    const NLCheckedNodeView *condition =
+        nl_checked_node_view(f, choice->initializer);
+    if (!emit_less_operands(stream, f, condition, depth))
+        return false;
+    if (choice->result_count &&
+        (!v0_indent(stream, depth) ||
+         fprintf(stream, "uint8_t nl_if_result_%zu;\n", id) < 0))
+        return false;
+    if (!v0_indent(stream, depth) || fputs("if (", stream) < 0 ||
+        !emit_quantity_bool(stream, f, condition) || fputs(") {\n", stream) < 0)
+        return false;
+    for (size_t a = 0; a < 2; ++a) {
+        const NLCheckedFragment *arm = nl_checked_if_arm(f, id, a);
+        const NLCheckedNodeView *ar =
+            nl_checked_node_view(arm, nl_checked_root(arm));
+        const NLCheckedNodeView *body =
+            nl_checked_node_view(arm, ar->initializer);
+        for (NLCheckedNodeId item = body->first_item; item;) {
+            const NLCheckedNodeView *n = nl_checked_node_view(arm, item);
+            if (!v0_emit_node(stream, arm, item, depth + 1))
+                return false;
+            item = n->next_item;
+        }
+        const NLCheckedNodeView *tail = nl_checked_node_view(arm, body->tail);
+        if (choice->result_count) {
+            if (tail->kind == NL_CHECKED_LOAN_HEADER &&
+                !gate_emit_loan(stream, arm, tail, depth + 1))
+                return false;
+            if (!v0_indent(stream, depth + 1) ||
+                fprintf(stream, "nl_if_result_%zu = ", id) < 0)
+                return false;
+            if (tail->kind == NL_CHECKED_LOAN_HEADER) {
+                if (fprintf(stream, "nl_loan_result_%zu", tail->loan.scope) < 0)
+                    return false;
+            } else if (!v1_emit_scalar(stream, tail))
+                return false;
+            if (fputs(";\n", stream) < 0)
+                return false;
+        } else if (body->tail &&
+                   !v0_emit_node(stream, arm, body->tail, depth + 1))
+            return false;
+        if (!v0_indent(stream, depth) ||
+            fputs(a == 0 ? "} else {\n" : "}\n", stream) < 0)
+            return false;
+    }
+    if (binding &&
+        (!v0_indent(stream, depth) ||
+         fprintf(stream, "const uint8_t nl_local_%zu = nl_if_result_%zu;\n",
+                 binding, id) < 0 ||
+         !v0_indent(stream, depth) ||
+         fprintf(stream, "(void)nl_local_%zu;\n", binding) < 0))
+        return false;
+    return !choice->result_count || binding ||
+           (v0_indent(stream, depth) &&
+            fprintf(stream, "(void)nl_if_result_%zu;\n", id) >= 0);
+}
+
 static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                          NLCheckedNodeId id, size_t depth)
 {
@@ -2486,6 +2604,8 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                     ? gate_emit_ptr(stream, fragment, view)
                     : emit_quantity_bool(stream, fragment, view)) &&
                fputs(";\n", stream) >= 0;
+    case NL_CHECKED_IF:
+        return emit_if_field(stream, fragment, id, 0, depth);
     case NL_CHECKED_REPLACE:
         return gate_emit_replace(stream, fragment, id, depth, true);
     case NL_CHECKED_LOAN_HEADER:
@@ -2520,6 +2640,11 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
             gate_symbol_written(fragment, view->symbol) ? "" : "const ";
         if (initializer == NULL)
             return false;
+        NLIfFieldView field_join;
+        if (initializer->kind == NL_CHECKED_IF &&
+            nl_checked_if_field_view(fragment, view->initializer, &field_join))
+            return emit_if_field(stream, fragment, view->initializer,
+                                 view->symbol, depth);
         if (initializer->kind == NL_CHECKED_REPLACE &&
             !gate_emit_replace(stream, fragment, view->initializer, depth,
                                false))
