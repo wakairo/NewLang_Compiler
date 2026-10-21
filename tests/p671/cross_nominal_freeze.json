@@ -1,0 +1,11 @@
+{
+  "utc": "2026-10-20T13:22:50.267755+00:00",
+  "before_run_and_test_implementation": true,
+  "source": "struct Pair{left:u8,right:u8}fn pair_unused()->unit{unit}",
+  "source_sha256": "00d0d58063398517c239671dc83dfc0966b3a5745f875c5490ceea6b66da4b64",
+  "fragment": "let Pair{left,right}=other_pair;",
+  "expected_status": "NL_CHECK_SEMANTIC_ERROR",
+  "expected_diagnostic": "P5-DESTRUCTURE-TYPE",
+  "expected_rollback": true,
+  "scope": "Two separately source-registered distinct nominal types; not a multi-nominal normal-CLI admission claim"
+}

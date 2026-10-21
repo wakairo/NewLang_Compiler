@@ -1,0 +1,78 @@
+{
+  "utc": "2026-10-20T13:17:07.474708+00:00",
+  "compiler": "a0de7a86d04d00d75a2484dfed4184ccb177e06c",
+  "before_any_candidate_edit": true,
+  "legacy": {
+    "fixed_field_negatives": {
+      "argv": [
+        "/workspace/p671-baseline/fixed_field_test",
+        "negatives"
+      ],
+      "exit": 0,
+      "stdout": [],
+      "stderr": []
+    },
+    "node_link_negatives": {
+      "argv": [
+        "/workspace/p671-baseline/node_link_test",
+        "negatives",
+        "tests/fixtures/node_link_semantic.nl"
+      ],
+      "exit": 0,
+      "stdout": [],
+      "stderr": []
+    }
+  },
+  "cli": {
+    "packet_stamp": {
+      "check": {
+        "exit": 3,
+        "stderr": [
+          "tests/p670/packet_stamp.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local"
+        ],
+        "bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "stderr": [
+          "tests/p670/packet_stamp.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local"
+        ],
+        "bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "route_stamp": {
+      "check": {
+        "exit": 3,
+        "stderr": [
+          "tests/p670/route_stamp.nl:4:32-4:45: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local"
+        ],
+        "bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 3,
+        "stderr": [
+          "tests/p670/route_stamp.nl:4:32-4:45: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local"
+        ],
+        "bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "pair_control": {
+      "check": {
+        "exit": 0,
+        "stderr": [],
+        "bytes": 0,
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "c17": {
+        "exit": 0,
+        "stderr": [],
+        "bytes": 1091,
+        "stdout_sha256": "d5709a9524e6bd7e7faa71cb615def82f00d92737d2ec2b12374848d890f5058"
+      }
+    }
+  }
+}

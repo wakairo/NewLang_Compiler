@@ -1,0 +1,6 @@
+{
+  "cpu_max": "200000 100000",
+  "initial_concurrency": "four independent local regression suites, j4/j3/j3/j3; oversubscribed 2 CPU quota",
+  "ci_settings": "unchanged serial ctest in each independent Actions job; one natural FULL5+PARTIAL pair only",
+  "reason_for_isolated_replay": "actual 90-second timeouts in preexisting p517/p633 native integrations, preserve first failures; no semantic or instrumentation expectation changes"
+}

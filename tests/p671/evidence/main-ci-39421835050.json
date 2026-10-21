@@ -1,0 +1,18 @@
+{
+  "run": {
+    "id": 39421835050,
+    "head_sha": "a0de7a86d04d00d75a2484dfed4184ccb177e06c",
+    "status": "completed",
+    "conclusion": "success",
+    "run_attempt": 1,
+    "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/39421835050"
+  },
+  "jobs": [
+    {
+      "id": 118624444809,
+      "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ]
+}

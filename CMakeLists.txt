@@ -297,6 +297,53 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p508" "${NEWLANG_SANITIZER}")
     add_executable(p514_public_probe tests/p514/public_probe.c)
     target_link_libraries(p514_public_probe PRIVATE newlang_semantic)
+    # R675 independently frozen blind source, public owned, C17/native.
+    add_executable(r675_public_probe tests/r675/public_probe.c)
+    target_link_libraries(r675_public_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME r675_blind_source_owned_native.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r675/blind_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r675_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
+    # R675 calibrated observability: status visible with normal nonverbose CTest.
+    add_test(NAME r675_index1_native_or_backend4.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r675/blind_test.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r675_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "index1")
+    set_tests_properties(r675_index1_native_or_backend4.integration PROPERTIES
+        SKIP_RETURN_CODE 77)
+    foreach(r675_negative
+        negative_unknown negative_initializer_type negative_decl_type
+        negative_escape negative_replace_type)
+        if(r675_negative STREQUAL "negative_decl_type")
+            set(r675_negative_test_name "r675_negative_decl_type_source_profile.integration")
+        else()
+            set(r675_negative_test_name "r675_${r675_negative}_semantic.integration")
+        endif()
+        add_test(NAME ${r675_negative_test_name}
+            COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r675/blind_test.py"
+            "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r675_public_probe>"
+            "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${r675_negative}")
+    endforeach()
+    # P671 retained bounded nominal field eligibility regression evidence.
+    add_executable(p671_public_probe tests/p671/public_probe.c)
+    target_link_libraries(p671_public_probe PRIVATE newlang_semantic newlang_parser)
+    add_executable(p671_fragment_probe tests/p671/fragment_probe.c)
+    target_link_libraries(p671_fragment_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME p671_other_fragment.unit COMMAND p671_fragment_probe)
+    foreach(case packet_stamp route_stamp pair_control)
+        add_test(NAME p671_${case}.integration COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p671/native.py"
+            "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p671_public_probe>"
+            "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${case}.nl")
+    endforeach()
+    foreach(case packet_stamp route_stamp)
+        add_test(NAME p671_${case}_oom.unit COMMAND p514_gate_test oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p670/${case}.nl")
+    endforeach()
+    add_test(NAME p671_negative.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p671/negative.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p514_gate_test>")
+
     add_executable(p514_gate_test tests/p514/gate_test.c)
     target_link_libraries(p514_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
     target_link_options(p514_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc -Wl,--wrap=calloc)

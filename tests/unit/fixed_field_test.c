@@ -1,4 +1,5 @@
 #include "../../src/semantic_internal.h"
+#include "../p671/fragment.h"
 #include "../support/semantic_check.h"
 #include <stdint.h>
 #include <stdlib.h>
@@ -388,8 +389,9 @@ static bool negatives(void)
     CHECK(register_source(
         c, "struct Other{left:u8,right:u8}fn other()->unit{unit}"));
     CHECK(run_ok(c, "let other_pair=Other{left:u8(7),right:u8(9)};"));
-    CHECK(test_rejected(c, "other_pair@left", TEST_SOURCE,
-                        NL_CHECK_SEMANTIC_UNSUPPORTED, "FIELD-PROFILE"));
+    /* Draft17.33 bounded source rule: preserved and reviewed legacy oracle
+     * migration. */
+    CHECK(p671_other_read(c, "other_pair", "other_pair@left", 7, 9));
     NLTypeId sum;
     const NLSumVariant variants[] = {{"left", 0}};
     CHECK(nl_semantic_register_sum(c, "x", variants, 1, &sum) == NL_CHECK_OK);

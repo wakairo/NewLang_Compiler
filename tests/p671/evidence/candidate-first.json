@@ -1,0 +1,144 @@
+{
+  "tests/p670/unknown_field.nl": {
+    "check": {
+      "exit": 3,
+      "stderr": [
+        "tests/p670/unknown_field.nl:4:31-4:43: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal"
+      ],
+      "bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "c17": {
+      "exit": 3,
+      "stderr": [
+        "tests/p670/unknown_field.nl:4:31-4:43: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal"
+      ],
+      "bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "tests/p670/packet_stamp.nl": {
+    "check": {
+      "exit": 0,
+      "stderr": [],
+      "bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "c17": {
+      "exit": 0,
+      "stderr": [],
+      "bytes": 1093,
+      "stdout_sha256": "610b8fb2821e6692578ed18a1aa49d9134cd24da6fadfbe5c0c173bee7492e97"
+    }
+  },
+  "tests/p670/route_stamp.nl": {
+    "check": {
+      "exit": 0,
+      "stderr": [],
+      "bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "c17": {
+      "exit": 0,
+      "stderr": [],
+      "bytes": 1092,
+      "stdout_sha256": "e0d436e97e4e3d93495c73f9248640f61907ca2271e421d98d51f08b30d782bf"
+    }
+  },
+  "tests/p670/pair_control.nl": {
+    "check": {
+      "exit": 0,
+      "stderr": [],
+      "bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "c17": {
+      "exit": 0,
+      "stderr": [],
+      "bytes": 1091,
+      "stdout_sha256": "d5709a9524e6bd7e7faa71cb615def82f00d92737d2ec2b12374848d890f5058"
+    }
+  },
+  "tests/p670/wrong_initializer.nl": {
+    "check": {
+      "exit": 3,
+      "stderr": [
+        "tests/p670/wrong_initializer.nl:3:35-3:44: error(semantic)[P5-FIELD-TYPE]: aggregate initializer type differs from registered field"
+      ],
+      "bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "c17": {
+      "exit": 3,
+      "stderr": [
+        "tests/p670/wrong_initializer.nl:3:35-3:44: error(semantic)[P5-FIELD-TYPE]: aggregate initializer type differs from registered field"
+      ],
+      "bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "tests/p670/wrong_replacement.nl": {
+    "check": {
+      "exit": 3,
+      "stderr": [
+        "tests/p670/wrong_replacement.nl:4:64-4:74: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type"
+      ],
+      "bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "c17": {
+      "exit": 3,
+      "stderr": [
+        "tests/p670/wrong_replacement.nl:4:64-4:74: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type"
+      ],
+      "bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "tests/p671/ended_binding.nl": {
+    "check": {
+      "exit": 3,
+      "stderr": [
+        "tests/p671/ended_binding.nl:2:80-2:94: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local"
+      ],
+      "bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "c17": {
+      "exit": 3,
+      "stderr": [
+        "tests/p671/ended_binding.nl:2:80-2:94: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local"
+      ],
+      "bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "tests/p671/escaped_ref.nl": {
+    "check": {
+      "exit": 3,
+      "stderr": [
+        "tests/p671/escaped_ref.nl:4:20-4:56: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope"
+      ],
+      "bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "c17": {
+      "exit": 3,
+      "stderr": [
+        "tests/p671/escaped_ref.nl:4:20-4:56: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope"
+      ],
+      "bytes": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "fixed_field_negatives": {
+    "exit": 0,
+    "stdout": [],
+    "stderr": []
+  },
+  "node_link_negatives": {
+    "exit": 0,
+    "stdout": [],
+    "stderr": []
+  }
+}

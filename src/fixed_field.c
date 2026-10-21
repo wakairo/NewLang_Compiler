@@ -56,16 +56,17 @@ bool nl_fixed_type(const NLSemanticContext *c, NLTypeId type)
     if (type == 0 || type > c->type_count)
         return false;
     const NLTypeEntry *t = &c->types[type - 1];
-    if (t->name == NULL || strcmp(t->name, "Pair") != 0 ||
+    /* Draft17.33 bounded two-u8 nominal source eligibility: source metadata,
+     * never a type-name/field-spelling whitelist or raw C offset authority.
+     */
+    if (t->incomplete || t->recursive_header ||
         t->view.kind != NL_TYPE_NOMINAL || t->view.field_count != 2 ||
         !t->view.is_copy || !t->view.is_discardable)
         return false;
     const NLTypeId u8 = nl_semantic_core_type(c, NL_TYPE_U8);
     return t->field_types[0] == u8 && t->field_types[1] == u8 &&
-           ((strcmp(t->field_names[0], "left") == 0 &&
-             strcmp(t->field_names[1], "right") == 0) ||
-            (strcmp(t->field_names[0], "right") == 0 &&
-             strcmp(t->field_names[1], "left") == 0));
+           t->field_names[0] != NULL && t->field_names[1] != NULL &&
+           strcmp(t->field_names[0], t->field_names[1]) != 0;
 }
 
 NLCheckStatus nl_fixed_attach(NLSemanticContext *c, NLPlaceId root)

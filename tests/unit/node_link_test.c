@@ -1,4 +1,5 @@
 #include "../../src/semantic_internal.h"
+#include "../p671/fragment.h"
 #include "../support/semantic_check.h"
 #include <stdint.h>
 #include <stdlib.h>
@@ -398,8 +399,9 @@ static bool negatives(void)
     CHECK(register_source(
         c, "struct Other{left:u8,right:u8}fn unused()->unit{unit}"));
     CHECK(run_ok(c, "let wrong=Other{left:u8(1),right:u8(2)};"));
-    CHECK(test_rejected(c, "wrong@left", TEST_SOURCE,
-                        NL_CHECK_SEMANTIC_UNSUPPORTED, "FIELD-PROFILE"));
+    /* Draft17.33 bounded source rule: preserved and reviewed legacy oracle
+     * migration. */
+    CHECK(p671_other_read(c, "wrong", "wrong@left", 1, 2));
     CHECK(register_source(c, "struct Cell{next:Option<ptr<Cell>>,payload:u8}"));
     CHECK(test_rejected(
         c, "loan_write(head@next){|w|replace(w,Option<ptr<Cell>>::None)}",

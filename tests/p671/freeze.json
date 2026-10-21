@@ -1,0 +1,53 @@
+{
+  "frozen_at_utc": "2026-10-20T13:18:12.792785+00:00",
+  "before_candidate_code_and_tests": true,
+  "authority": "a0de7a86d04d00d75a2484dfed4184ccb177e06c",
+  "candidate": "EXPERIMENTAL NON-NORMATIVE; canonical remains Pair-only",
+  "legacy": [
+    {
+      "file": "tests/unit/fixed_field_test.c",
+      "historical_sha256": "8b371dc40fce4d0cb189cc2ea94b4bfcbf36905d16c534973edc16981495a177",
+      "source": "other_pair@left",
+      "historical_status": "NL_CHECK_SEMANTIC_UNSUPPORTED",
+      "historical_diagnostic": "FIELD-PROFILE",
+      "historical_observed_exit": 0,
+      "candidate_status": "NL_CHECK_OK",
+      "nominal": "source-registered Other, never Pair identity",
+      "root": "available independent implicit lexical root with exact original incarnation and current parent ValueFact",
+      "children": "two nonindependent original children, declaration indices0/1, each same original parent/incarnation and current fact/value; Copy read does not change parent/child facts or sibling",
+      "copy_value": 7,
+      "sibling_value": 9,
+      "expected_field_index": 0
+    },
+    {
+      "file": "tests/unit/node_link_test.c",
+      "historical_sha256": "e4a3dab9b1a3a9f9c1978207a15cf0b8b9dc8b14037dcc910be7875a84b7c4e4",
+      "source": "wrong@left",
+      "historical_status": "NL_CHECK_SEMANTIC_UNSUPPORTED",
+      "historical_diagnostic": "FIELD-PROFILE",
+      "historical_observed_exit": 0,
+      "candidate_status": "NL_CHECK_OK",
+      "nominal": "source-registered Other, never Pair identity",
+      "root": "available independent implicit lexical root with exact original incarnation and current parent ValueFact",
+      "children": "two nonindependent original children, declaration indices0/1, each same original parent/incarnation and current fact/value; Copy read does not change parent/child facts or sibling",
+      "copy_value": 1,
+      "sibling_value": 2,
+      "expected_field_index": 0
+    }
+  ],
+  "normal_sources": "unchanged tests/p670/freeze.json",
+  "new_negatives": {
+    "escaped_ref.nl": {
+      "sha256": "61d7eb7bc01e4829f2e09ab43f8901d1488a35c811b401c633f11f8a58c69207",
+      "trial_check": 3,
+      "trial_c17": 3,
+      "expected_diagnostic": "P8-EXIT-DEPENDENCY"
+    },
+    "ended_binding.nl": {
+      "sha256": "1c11b648339baa038d8ff01fdabf307bd6231724fa280fdffe6bda5563bdb1a4",
+      "trial_check": 3,
+      "trial_c17": 3,
+      "expected_diagnostic": "FIELD-PROFILE"
+    }
+  }
+}

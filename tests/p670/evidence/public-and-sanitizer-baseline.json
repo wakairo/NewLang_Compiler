@@ -1,0 +1,647 @@
+{
+  "build": {
+    "packet_stamp.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 2,
+        "category": "unsupported",
+        "diagnostic": "FIELD-PROFILE",
+        "span": [
+          152,
+          164
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "route_stamp.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 2,
+        "category": "unsupported",
+        "diagnostic": "FIELD-PROFILE",
+        "span": [
+          151,
+          164
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "unknown_field.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 2,
+        "category": "unsupported",
+        "diagnostic": "FIELD-PROFILE",
+        "span": [
+          152,
+          164
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "wrong_replacement.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 2,
+        "category": "unsupported",
+        "diagnostic": "FIELD-PROFILE",
+        "span": [
+          152,
+          164
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "wrong_initializer.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 1,
+        "category": "semantic",
+        "diagnostic": "P5-FIELD-TYPE",
+        "span": [
+          98,
+          107
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "legacy_other": {
+      "probe_exit": 0,
+      "stdout": {
+        "source_kind": "registered Other + source fragment",
+        "shape_two_u8_copy_discardable": true,
+        "type": 10,
+        "original_root": 1,
+        "incarnation": 1,
+        "available": true,
+        "fixed_children": 0,
+        "implicit_local": false,
+        "field_labels": [
+          "left",
+          "right"
+        ],
+        "read_status": 2,
+        "diagnostic": "FIELD-PROFILE",
+        "public_snapshot_unchanged": true,
+        "read_artifact": null
+      },
+      "stderr": ""
+    },
+    "pair_owned": {
+      "probe_exit": 0,
+      "stdout": {
+        "nominal": 10,
+        "root_symbol": 1,
+        "root": 1,
+        "incarnation": 1,
+        "child": 2,
+        "sibling": 3,
+        "field_index": 0,
+        "parent_facts": [
+          1,
+          6
+        ],
+        "child_facts": [
+          2,
+          5
+        ],
+        "scope_closed": true,
+        "ref_symbol": 2,
+        "old_symbol": 3,
+        "values": [
+          212,
+          6,
+          89
+        ]
+      },
+      "stderr": ""
+    },
+    "cli_packet_stamp.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/packet_stamp.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/packet_stamp.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "cli_route_stamp.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/route_stamp.nl:4:32-4:45: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/route_stamp.nl:4:32-4:45: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "cli_pair_control.nl": {
+      "check": {
+        "exit": 0,
+        "stdout_bytes": 0,
+        "stderr": ""
+      },
+      "c17": {
+        "exit": 0,
+        "stdout_bytes": 1091,
+        "stderr": ""
+      }
+    },
+    "cli_unknown_field.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/unknown_field.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/unknown_field.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "cli_wrong_replacement.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_replacement.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_replacement.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "cli_wrong_initializer.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_initializer.nl:3:35-3:44: error(semantic)[P5-FIELD-TYPE]: aggregate initializer type differs from registered field\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_initializer.nl:3:35-3:44: error(semantic)[P5-FIELD-TYPE]: aggregate initializer type differs from registered field\n"
+      }
+    }
+  },
+  "build-asan": {
+    "packet_stamp.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 2,
+        "category": "unsupported",
+        "diagnostic": "FIELD-PROFILE",
+        "span": [
+          152,
+          164
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "route_stamp.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 2,
+        "category": "unsupported",
+        "diagnostic": "FIELD-PROFILE",
+        "span": [
+          151,
+          164
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "unknown_field.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 2,
+        "category": "unsupported",
+        "diagnostic": "FIELD-PROFILE",
+        "span": [
+          152,
+          164
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "wrong_replacement.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 2,
+        "category": "unsupported",
+        "diagnostic": "FIELD-PROFILE",
+        "span": [
+          152,
+          164
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "wrong_initializer.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 1,
+        "category": "semantic",
+        "diagnostic": "P5-FIELD-TYPE",
+        "span": [
+          98,
+          107
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "legacy_other": {
+      "probe_exit": 0,
+      "stdout": {
+        "source_kind": "registered Other + source fragment",
+        "shape_two_u8_copy_discardable": true,
+        "type": 10,
+        "original_root": 1,
+        "incarnation": 1,
+        "available": true,
+        "fixed_children": 0,
+        "implicit_local": false,
+        "field_labels": [
+          "left",
+          "right"
+        ],
+        "read_status": 2,
+        "diagnostic": "FIELD-PROFILE",
+        "public_snapshot_unchanged": true,
+        "read_artifact": null
+      },
+      "stderr": ""
+    },
+    "pair_owned": {
+      "probe_exit": 0,
+      "stdout": {
+        "nominal": 10,
+        "root_symbol": 1,
+        "root": 1,
+        "incarnation": 1,
+        "child": 2,
+        "sibling": 3,
+        "field_index": 0,
+        "parent_facts": [
+          1,
+          6
+        ],
+        "child_facts": [
+          2,
+          5
+        ],
+        "scope_closed": true,
+        "ref_symbol": 2,
+        "old_symbol": 3,
+        "values": [
+          212,
+          6,
+          89
+        ]
+      },
+      "stderr": ""
+    },
+    "cli_packet_stamp.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/packet_stamp.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/packet_stamp.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "cli_route_stamp.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/route_stamp.nl:4:32-4:45: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/route_stamp.nl:4:32-4:45: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "cli_pair_control.nl": {
+      "check": {
+        "exit": 0,
+        "stdout_bytes": 0,
+        "stderr": ""
+      },
+      "c17": {
+        "exit": 0,
+        "stdout_bytes": 1091,
+        "stderr": ""
+      }
+    },
+    "cli_unknown_field.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/unknown_field.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/unknown_field.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "cli_wrong_replacement.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_replacement.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_replacement.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "cli_wrong_initializer.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_initializer.nl:3:35-3:44: error(semantic)[P5-FIELD-TYPE]: aggregate initializer type differs from registered field\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_initializer.nl:3:35-3:44: error(semantic)[P5-FIELD-TYPE]: aggregate initializer type differs from registered field\n"
+      }
+    }
+  },
+  "build-ubsan": {
+    "packet_stamp.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 2,
+        "category": "unsupported",
+        "diagnostic": "FIELD-PROFILE",
+        "span": [
+          152,
+          164
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "route_stamp.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 2,
+        "category": "unsupported",
+        "diagnostic": "FIELD-PROFILE",
+        "span": [
+          151,
+          164
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "unknown_field.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 2,
+        "category": "unsupported",
+        "diagnostic": "FIELD-PROFILE",
+        "span": [
+          152,
+          164
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "wrong_replacement.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 2,
+        "category": "unsupported",
+        "diagnostic": "FIELD-PROFILE",
+        "span": [
+          152,
+          164
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "wrong_initializer.nl": {
+      "probe_exit": 0,
+      "stdout": {
+        "parse": 0,
+        "registration": 1,
+        "category": "semantic",
+        "diagnostic": "P5-FIELD-TYPE",
+        "span": [
+          98,
+          107
+        ],
+        "public_snapshot_unchanged": true,
+        "entry": "NOT_ENTERED",
+        "owned": "NOT_ISSUED",
+        "c17": "NOT_ENTERED"
+      },
+      "stderr": ""
+    },
+    "legacy_other": {
+      "probe_exit": 0,
+      "stdout": {
+        "source_kind": "registered Other + source fragment",
+        "shape_two_u8_copy_discardable": true,
+        "type": 10,
+        "original_root": 1,
+        "incarnation": 1,
+        "available": true,
+        "fixed_children": 0,
+        "implicit_local": false,
+        "field_labels": [
+          "left",
+          "right"
+        ],
+        "read_status": 2,
+        "diagnostic": "FIELD-PROFILE",
+        "public_snapshot_unchanged": true,
+        "read_artifact": null
+      },
+      "stderr": ""
+    },
+    "pair_owned": {
+      "probe_exit": 0,
+      "stdout": {
+        "nominal": 10,
+        "root_symbol": 1,
+        "root": 1,
+        "incarnation": 1,
+        "child": 2,
+        "sibling": 3,
+        "field_index": 0,
+        "parent_facts": [
+          1,
+          6
+        ],
+        "child_facts": [
+          2,
+          5
+        ],
+        "scope_closed": true,
+        "ref_symbol": 2,
+        "old_symbol": 3,
+        "values": [
+          212,
+          6,
+          89
+        ]
+      },
+      "stderr": ""
+    },
+    "cli_packet_stamp.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/packet_stamp.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/packet_stamp.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "cli_route_stamp.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/route_stamp.nl:4:32-4:45: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/route_stamp.nl:4:32-4:45: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "cli_pair_control.nl": {
+      "check": {
+        "exit": 0,
+        "stdout_bytes": 0,
+        "stderr": ""
+      },
+      "c17": {
+        "exit": 0,
+        "stdout_bytes": 1091,
+        "stderr": ""
+      }
+    },
+    "cli_unknown_field.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/unknown_field.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/unknown_field.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "cli_wrong_replacement.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_replacement.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_replacement.nl:4:31-4:43: error(unsupported)[FIELD-PROFILE]: field base requires a direct Pair or completed recursive local\n"
+      }
+    },
+    "cli_wrong_initializer.nl": {
+      "check": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_initializer.nl:3:35-3:44: error(semantic)[P5-FIELD-TYPE]: aggregate initializer type differs from registered field\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout_bytes": 0,
+        "stderr": "tests/p670/wrong_initializer.nl:3:35-3:44: error(semantic)[P5-FIELD-TYPE]: aggregate initializer type differs from registered field\n"
+      }
+    }
+  }
+}
