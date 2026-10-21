@@ -149,7 +149,7 @@ def witness(code, facts, oracle):
     append(changed, "\n    ".join(checks_post))
     if "direct" in oracle:
         item = direct[0]
-        require(expected_pre[roots[1]][item["index"]] == item["old"],
+        require(expected_pre[roots[1]][item["index"]] == oracle["direct"]["old"],
                 "second original old byte")
         old2 = only(
             rf"const uint8_t nl_replace_old_{item['node']} = "
@@ -158,7 +158,7 @@ def witness(code, facts, oracle):
         append(old2,
                f"if (nl_local_{item['ref']} != "
                f"r708_ob_{roots[1]}_{item['index']} || "
-               f"nl_replace_old_{item['node']} != {item['old']}) abort();")
+               f"nl_replace_old_{item['node']} != {oracle['direct']['old']}) abort();")
         store2 = only(rf"\*nl_local_{item['ref']} = [^;]+;", code)
         expected_pre[roots[1]][item["index"]] = oracle["old"][0]
         require(tuple(tuple(expected_pre[s]) for s in roots) ==

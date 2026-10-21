@@ -12,8 +12,7 @@ static bool bad_parameters(const NLCheckedFragment *f, size_t call,
     return nl_checked_copy_body_parameters_validate(f, call, &p) ==
            NL_CHECK_ANALYSIS_PRECISION_LIMIT;
 }
-static bool bad_body(const NLCheckedFragment *f, size_t call,
-                     NLCopyBodyView p)
+static bool bad_body(const NLCheckedFragment *f, size_t call, NLCopyBodyView p)
 {
     return nl_checked_copy_body_validate(f, call, &p) ==
            NL_CHECK_ANALYSIS_PRECISION_LIMIT;
@@ -56,12 +55,13 @@ static bool examine(const char *path, size_t required_calls)
             nl_checked_node_view(caller, p.arguments[1]);
         CHECK(loan && ref && input && loan->loan.scope && ref->symbol);
         NLSemanticScopeView active, after_call, ended;
-        CHECK(nl_semantic_scope_view(p.entry, loan->loan.scope, &active) &&
-              active.active &&
-              nl_semantic_scope_view(p.handoff, loan->loan.scope, &after_call) &&
-              after_call.active &&
-              nl_semantic_scope_view(n.context, loan->loan.scope, &ended) &&
-              !ended.active);
+        CHECK(
+            nl_semantic_scope_view(p.entry, loan->loan.scope, &active) &&
+            active.active &&
+            nl_semantic_scope_view(p.handoff, loan->loan.scope, &after_call) &&
+            after_call.active &&
+            nl_semantic_scope_view(n.context, loan->loan.scope, &ended) &&
+            !ended.active);
         NLSemanticPlaceView parent_before, parent_after, child_before,
             child_after, sibling_before, sibling_after;
         CHECK(nl_semantic_place_view(p.entry, p.field.parent, &parent_before) &&
@@ -75,8 +75,7 @@ static bool examine(const char *path, size_t required_calls)
               nl_semantic_place_view(p.handoff, p.field.child, &child_after) &&
               child_before.incarnation == child_after.incarnation &&
               child_before.current_fact != child_after.current_fact);
-        const size_t sibling =
-            parent_before.fixed_fields[1 - p.field.index];
+        const size_t sibling = parent_before.fixed_fields[1 - p.field.index];
         CHECK(sibling && sibling != p.field.child &&
               nl_semantic_place_view(p.entry, sibling, &sibling_before) &&
               nl_semantic_place_view(p.handoff, sibling, &sibling_after) &&
@@ -177,7 +176,8 @@ static bool examine(const char *path, size_t required_calls)
         tampered.live_exit = nl_checked_context(other.entry);
         CHECK(bad_body(caller, id, tampered));
         ++rejects;
-        /* Revalidation after each borrowed-view edit must retain real origin. */
+        /* Revalidation after each borrowed-view edit must retain real origin.
+         */
         CHECK(nl_checked_copy_body_validate(caller, id, NULL) == NL_CHECK_OK);
         printf("%s{\"call\":%zu,\"function\":%zu,\"root\":%zu,"
                "\"symbol\":%zu,\"index\":%zu,\"ref\":%zu,"
@@ -185,11 +185,11 @@ static bool examine(const char *path, size_t required_calls)
                "\"old_id\":%zu,\"incoming_id\":%zu,"
                "\"change\":%zu,\"parent_before\":%zu,\"parent_after\":%zu,"
                "\"child_before\":%zu,\"child_after\":%zu}",
-               calls ? "," : "", id, b.function, p.field.parent,
-               p.field.base, p.field.index, ref->symbol, p.parameters[1],
-               input->symbol, old_id, incoming_id, change_node,
-               parent_before.current_fact, parent_after.current_fact,
-               child_before.current_fact, child_after.current_fact);
+               calls ? "," : "", id, b.function, p.field.parent, p.field.base,
+               p.field.index, ref->symbol, p.parameters[1], input->symbol,
+               old_id, incoming_id, change_node, parent_before.current_fact,
+               parent_after.current_fact, child_before.current_fact,
+               child_after.current_fact);
         ++calls;
     }
     CHECK(calls == required_calls && rejects >= required_calls * 13);
@@ -216,6 +216,5 @@ static bool examine(const char *path, size_t required_calls)
 }
 int main(int argc, char **argv)
 {
-    return argc == 3 && examine(argv[1], (size_t)(argv[2][0] - '0')) ? 0
-                                                                      : 1;
+    return argc == 3 && examine(argv[1], (size_t)(argv[2][0] - '0')) ? 0 : 1;
 }
