@@ -433,7 +433,10 @@ static bool driver_oom(const char *path)
             CHECK(fflush(stderr) == 0 && fflush(diagnostics) == 0 &&
                   fseek(diagnostics, 0, SEEK_SET) == 0);
             char buffer[2048] = {0};
-            (void)fread(buffer, 1, sizeof(buffer) - 1, diagnostics);
+            const size_t read_count =
+                fread(buffer, 1, sizeof(buffer) - 1, diagnostics);
+            CHECK(!ferror(diagnostics));
+            buffer[read_count] = '\0';
             host_oom = strstr(buffer, "error(host)") &&
                        strstr(buffer, "OUT-OF-MEMORY");
             CHECK(fseek(diagnostics, 0, SEEK_END) == 0);

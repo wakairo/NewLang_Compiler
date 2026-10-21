@@ -135,6 +135,12 @@ The added driver test initially expected all OOM to be CLI1; the unchanged
 driver actually reports host parser/checker OOM at CLI3. The test was calibrated
 to require explicit `error(host)` / `OUT-OF-MEMORY` at CLI3 and retain zero bytes,
 without changing production diagnostics (first mismatch also preserved).
+Initial candidate `5c30103008ad9e0c51a7301137964d5c4522ca21` FULL5
+39599116464 / GCC Release 119218789893 failed while compiling this new test:
+fortified GCC rejects an ignored `fread` return even with a void cast. The repair
+uses the returned byte count and checks the stream error. No warning flag,
+Production code, source/oracle, or expected guest result was changed. The initial
+job remains immutable and is not rerun; the repair HEAD gets natural PR CI.
 
 Additional per-call cost: two full semantic history worlds (entry and handoff),
 private flat place/value/scope/binding anchors and a completed caller graph copy,
