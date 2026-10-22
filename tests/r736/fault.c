@@ -1,4 +1,5 @@
-/* R736 finite fault injection in real source registration and borrowed validation. */
+/* R736 finite fault injection in real source registration and borrowed
+ * validation. */
 #include "../support/node_checked.h"
 #include "newlang/checked.h"
 #include "newlang/checked_c_node.h"
@@ -93,7 +94,8 @@ static bool registration(const char *path)
     nl_parser_destroy(parser);
     nl_source_destroy(source);
     CHECK(rollback + other > 0);
-    printf("R736_REGISTRATION_OOM tested=%zu explicit_oom=%zu other_fail_closed=%zu rollback_recovery=PASS\n",
+    printf("R736_REGISTRATION_OOM tested=%zu explicit_oom=%zu "
+           "other_fail_closed=%zu rollback_recovery=PASS\n",
            rollback + other, rollback, other);
     return true;
 }
@@ -118,8 +120,8 @@ static bool public_fault(const char *path)
         if (passed)
             break;
         NLSemanticBindingView restored;
-        CHECK(calls > position && nl_semantic_binding_view(v.returned, v.local,
-                                                           &restored) &&
+        CHECK(calls > position &&
+              nl_semantic_binding_view(v.returned, v.local, &restored) &&
               restored.availability == original.availability &&
               restored.value == original.value &&
               restored.place == original.place &&
@@ -136,8 +138,9 @@ static bool public_fault(const char *path)
         puts("R736_EMIT baseline admitted; further emit OOM required");
     } else {
         CHECK(c == NULL && length == 919);
-        printf("R736_EMIT baseline_status=%d OOM_NOT_TESTED_NO_SUCCESS_BASELINE\n",
-               (int)stage);
+        printf(
+            "R736_EMIT baseline_status=%d OOM_NOT_TESTED_NO_SUCCESS_BASELINE\n",
+            (int)stage);
     }
     printf("R736_PUBLIC_VALIDATOR_OOM positions=%zu borrowed_unmodified=PASS\n",
            faulted);

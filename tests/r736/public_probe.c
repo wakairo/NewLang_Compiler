@@ -157,9 +157,8 @@ int main(int argc, char **argv)
     TestNode independent = {0};
     producers = 0;
     mutations = 0;
-    if (!node_checked_load(argv[1], &independent) ||
-        !walk(independent.entry) || producers != 1 || mutations != 26 ||
-        original_call != captured_call ||
+    if (!node_checked_load(argv[1], &independent) || !walk(independent.entry) ||
+        producers != 1 || mutations != 26 || original_call != captured_call ||
         original_view.result.value != captured_view.result.value ||
         original_view.returned == captured_view.returned ||
         nl_checked_producer_local_return_valid(original_owner, original_call,
@@ -167,7 +166,8 @@ int main(int argc, char **argv)
         !nl_checked_producer_local_return_valid(original_owner, original_call,
                                                 &original_view))
         return 1;
-    printf("R736_FOREIGN_WORLD same_numeric=%zu separate_contexts=1 rejected=PASS\n",
+    printf("R736_FOREIGN_WORLD same_numeric=%zu separate_contexts=1 "
+           "rejected=PASS\n",
            original_view.result.value);
     node_checked_destroy(&independent);
     node_checked_destroy(&n);
