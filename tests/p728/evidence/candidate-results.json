@@ -1,0 +1,47 @@
+[
+  {
+    "name": "brake_true",
+    "source_sha256": "a737f7dab2a0297440af02990cee8e6efef963479f7e3037319eb7718f95241a",
+    "check": 0,
+    "public": 0,
+    "c17": 0,
+    "c17_bytes": 2445,
+    "c17_sha256": "19a109c710d1002d2c07c46b176cb4110a89c3184f8802cd0655475bd1825d17"
+  },
+  {
+    "name": "brake_false",
+    "source_sha256": "fe60a7ab2406509bee4830b7c25d5cebe0d87710d94107aeb5a6866b3787003f",
+    "check": 0,
+    "public": 0,
+    "c17": 0,
+    "c17_bytes": 2446,
+    "c17_sha256": "99f62c75208c89c65bd8d525ebd0b0c6903e22dded8435a0b3ff1c7774ac7f14"
+  },
+  {
+    "name": "valve_true",
+    "source_sha256": "2f7aecdfc6595068eaf5fbb4565b534338cf6cf9e9681e62f603aaa91bfe6ed8",
+    "check": 0,
+    "public": 0,
+    "c17": 0,
+    "c17_bytes": 2633,
+    "c17_sha256": "be7c76c88328eb7114622cd296ba2bf83474b6473a43d234729a1ac071a66810"
+  },
+  {
+    "name": "valve_false",
+    "source_sha256": "349b82dd83b23dd494f2ec7ea1df84c31ae25ac109b7ac4fe8fa631c025044ae",
+    "check": 0,
+    "public": 0,
+    "c17": 0,
+    "c17_bytes": 2634,
+    "c17_sha256": "9253a126ae7c8b0718cf00a23135b42ba9cbe8f4c4d1e73dfdd2287e037e91e2"
+  },
+  {
+    "name": "inherited/A0v2-usize-terminal",
+    "source_sha256": "b00d4c58cb77c9180c9a3e17bc3396ea72888fc71a8deff21c8e2f8588018180",
+    "check": 0,
+    "public": 0,
+    "c17": 0,
+    "c17_bytes": 2316,
+    "c17_sha256": "703d64a313e2a609cbff90744b2bd6d6baa050b3a27a9a70d314ce6a8fc6ddf1"
+  }
+]

@@ -1,0 +1,74 @@
+[
+  {
+    "source": "read_ref.nl",
+    "sha256": "3d5bae237ed35ef52cfeb767deae92aadf006c1b79a8fd2e01e211388d245542",
+    "check": 3,
+    "emit": 3,
+    "diagnostic": "LOCAL-LOAN-PROFILE",
+    "classification": "unsupported loan_read field source profile, not a semantic read-ref verdict"
+  },
+  {
+    "source": "escape.nl",
+    "sha256": "6a49767219c0a2b9f16f9881d2cf8af5a824a1d08c672a495a5c95ad98ab7d2f",
+    "check": 3,
+    "emit": 3,
+    "diagnostic": "P8-EXIT-DEPENDENCY",
+    "classification": "semantic rejection"
+  },
+  {
+    "source": "wrong_return.nl",
+    "sha256": "05ff91375e46157587e829bcb31533a46d9823fbfe57cf9661b9b200de3451cb",
+    "check": 3,
+    "emit": 3,
+    "diagnostic": "P9-RETURN-TYPE",
+    "classification": "semantic rejection"
+  },
+  {
+    "source": "wrong_argument.nl",
+    "sha256": "16ef6f9cfe90050f5aebc7527707719f87066639ea8b0f07c6010ff8d72ed58a",
+    "check": 3,
+    "emit": 3,
+    "diagnostic": "P3-TYPE-MISMATCH",
+    "classification": "semantic rejection"
+  },
+  {
+    "source": "explicit_unit_tail.nl",
+    "sha256": "95b7b855ebe6831e552fad284856bc81f65ac20756a714c854191d307c0feccb",
+    "check": 0,
+    "emit": 4,
+    "diagnostic": "V1-BACKEND-UNSUPPORTED",
+    "classification": "finite wrapper profile precision refusal"
+  },
+  {
+    "source": "extra_statement.nl",
+    "sha256": "86b01ed67020d048a0a86c1b731a94a7cb76b73786733120c04ee6e87f302f29",
+    "check": 0,
+    "emit": 4,
+    "diagnostic": "V1-BACKEND-UNSUPPORTED",
+    "classification": "finite wrapper profile precision refusal"
+  },
+  {
+    "source": "extra_after.nl",
+    "sha256": "2d537367f53247f3d7643c1c52d392478cdc6c3051ed2b89c2a20484be27f9f4",
+    "check": 0,
+    "emit": 4,
+    "diagnostic": "V1-BACKEND-UNSUPPORTED",
+    "classification": "finite wrapper profile precision refusal"
+  },
+  {
+    "source": "two_calls.nl",
+    "sha256": "b9f8d4019777ae8215f0558b181de46dd96bdb575388c2ab426f42911a32c447",
+    "check": 0,
+    "emit": 4,
+    "diagnostic": "V1-BACKEND-UNSUPPORTED",
+    "classification": "finite wrapper profile precision refusal"
+  },
+  {
+    "source": "binding_wrapper.nl",
+    "sha256": "3176804f2fab0883e27c540e82ab2b0be3760a64024a12e52b8f0b3a97d8f114",
+    "check": 0,
+    "emit": 4,
+    "diagnostic": "V1-BACKEND-UNSUPPORTED",
+    "classification": "finite wrapper profile precision refusal"
+  }
+]

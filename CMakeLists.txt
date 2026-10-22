@@ -119,6 +119,20 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p718/native.py" "$<TARGET_FILE:newlangc>"
         "$<TARGET_FILE:p718_public_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p718")
+    add_executable(p728_gate_test tests/p728/gate_test.c)
+    target_link_libraries(p728_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
+    add_test(NAME p728_unit_statement_proof.unit COMMAND p728_gate_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p728/brake_false.nl" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p728/valve_true.nl")
+    # Reuse the M5 integrity/allocator-injection suite on the new P-owned
+    # statement callers, without duplicating its world/replay/OOM machinery.
+    add_test(NAME p728_unit_statement_history_oom.unit COMMAND p722_gate_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p728/brake_false.nl" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p728/valve_true.nl")
+    add_executable(p728_public_probe tests/p728/public_probe.c)
+    target_link_libraries(p728_public_probe PRIVATE newlang_parser newlang_semantic)
+    add_test(NAME p728_unit_statement_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p728/native.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p728_public_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p728")
     add_executable(p722_gate_test tests/p722/gate_test.c)
     target_link_libraries(p722_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
     target_link_options(p722_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)

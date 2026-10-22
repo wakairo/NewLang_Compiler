@@ -2375,23 +2375,41 @@ static bool v0_indent(FILE *stream, size_t depth)
 static bool v0_emit_node(FILE *, const NLCheckedFragment *, NLCheckedNodeId,
                          size_t);
 
-static bool v0_emit_block(FILE *stream, const NLCheckedFragment *fragment,
+static bool v0_emit_items(FILE *stream, const NLCheckedFragment *fragment,
                           const NLCheckedNodeView *block, size_t depth)
 {
-    if (!v0_indent(stream, depth) || fputs("{\n", stream) < 0)
-        return false;
-
     NLCheckedNodeId item = block->first_item;
     while (item != 0) {
         const NLCheckedNodeView *view = nl_checked_node_view(fragment, item);
-        if (view == NULL || !v0_emit_node(stream, fragment, item, depth + 1))
+        if (view == NULL || !v0_emit_node(stream, fragment, item, depth))
             return false;
         item = view->next_item;
     }
-    if (block->tail != 0 &&
-        !v0_emit_node(stream, fragment, block->tail, depth + 1))
+    if (block->tail != 0 && !v0_emit_node(stream, fragment, block->tail, depth))
+        return false;
+    return true;
+}
+static bool v0_emit_block(FILE *stream, const NLCheckedFragment *fragment,
+                          const NLCheckedNodeView *block, size_t depth)
+{
+    if (!v0_indent(stream, depth) || fputs("{\n", stream) < 0 ||
+        !v0_emit_items(stream, fragment, block, depth + 1))
         return false;
     return v0_indent(stream, depth) && fputs("}\n", stream) >= 0;
+}
+
+static bool v0_emit_unit_body(FILE *stream, const V0Function *fn,
+                              const NLCheckedNodeView *root)
+{
+    /* Discardable source formals need not be read. As in the scalar body
+     * emitter, suppress strict-C unused warnings without a guest operation. */
+    return fputs("{\n", stream) >= 0 &&
+           (!fn->parameter ||
+            fprintf(stream, "    (void)nl_local_%zu;\n", fn->parameter) >= 0) &&
+           (!fn->ref_parameter || fprintf(stream, "    (void)nl_local_%zu;\n",
+                                          fn->ref_parameter) >= 0) &&
+           v0_emit_items(stream, fn->body, root, 1) &&
+           fputs("}\n", stream) >= 0;
 }
 
 static bool avs_emit_initializer(FILE *stream,
@@ -2995,7 +3013,7 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
             fputc('\n', stream) == EOF ||
             !(function.result == program->u8
                   ? v1_emit_body(stream, &function)
-                  : v0_emit_block(stream, function.body, root, 0)) ||
+                  : v0_emit_unit_body(stream, &function, root)) ||
             fputc('\n', stream) == EOF)
             return false;
     }

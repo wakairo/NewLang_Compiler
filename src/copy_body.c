@@ -860,6 +860,83 @@ bool nl_copy_same_types(const NLSemanticContext *c,
 }
 /* Validate actual->formal substitution against the issuance-time caller
  * world, not final ended locals, equal scalars, or names as authority. */
+/* M5.1: a unit call may be the sole statement of the caller's scoped body.
+ * parameter_entry first authenticates this entire source-issued caller graph.
+ * Still reconstruct its exact effect/order boundary here: no tail, bindings,
+ * second statement, shared call, or orphan operation inside this loan. The
+ * wrapper discards no Copy/ref result and cannot terminate the caller. The
+ * callee's RETURN target is checked separately by the unit/IF replay proof. */
+static bool unit_statement_link(const NLCopyBodyProof *p,
+                                const NLCheckedFragment *caller,
+                                const NLCheckedNodeView *block,
+                                const NLCheckedNodeView *call)
+{
+    if (!p->unit_call || block->tail || block->item_count != 1 ||
+        block->next_item || !block->first_item || call->next_item ||
+        call->next_argument)
+        return false;
+    const NLCheckedNodeView *statement =
+        nl_checked_node_view(caller, block->first_item);
+    if (!statement || statement->kind != NL_CHECKED_STATEMENT ||
+        statement->initializer != p->call || statement->type != 1 ||
+        statement->result_count || statement->terminates ||
+        statement->next_item || statement->tail || statement->first_item ||
+        statement->item_count || statement->first_argument ||
+        statement->argument_count || statement->next_argument ||
+        statement->has_scalar_result || statement->has_reference_result ||
+        !(p->parameters.loan < p->call &&
+          p->call < p->parameters.arguments[0] &&
+          p->parameters.arguments[0] < p->parameters.arguments[1] &&
+          p->parameters.arguments[1] < block->first_item) ||
+        statement->span.start_byte != call->span.start_byte ||
+        statement->span.end_byte <= call->span.end_byte ||
+        block->span.start_byte >= statement->span.start_byte ||
+        block->span.end_byte <= statement->span.end_byte)
+        return false;
+    NLSourceView suffix;
+    if (!nl_source_view(
+            caller->source,
+            (NLSourceSpan){call->span.end_byte, statement->span.end_byte},
+            &suffix) ||
+        !suffix.length || suffix.bytes[suffix.length - 1] != ';')
+        return false;
+    const NLCheckedNodeView *loan =
+        nl_checked_node_view(caller, p->parameters.loan);
+    const NLCheckedNodeId allowed[] = {
+        loan->initializer, p->call, p->parameters.arguments[0],
+        p->parameters.arguments[1], block->first_item};
+    for (size_t a = 0; a < 2; ++a) {
+        const NLCheckedNodeView *arg =
+            nl_checked_node_view(caller, p->parameters.arguments[a]);
+        if (!arg || arg->span.start_byte <= call->span.start_byte ||
+            arg->span.end_byte >= call->span.end_byte ||
+            arg->span.end_byte <= arg->span.start_byte)
+            return false;
+    }
+    if (p->arguments[0].span.end_byte > p->arguments[1].span.start_byte)
+        return false;
+    for (size_t i = 0; i < caller->count; ++i) {
+        const NLCheckedNodeView *n = &caller->nodes[i];
+        const NLCheckedNodeId id = i + 1;
+        if (n->span.start_byte >= block->span.start_byte &&
+            n->span.end_byte <= block->span.end_byte) {
+            bool found = false;
+            for (size_t j = 0; j < sizeof(allowed) / sizeof(*allowed); ++j)
+                found = found || id == allowed[j];
+            if (!found)
+                return false;
+        }
+        /* A call is executed once through this wrapper, never also through
+         * a tail/argument/second item in the same source graph. */
+        if (n->tail == p->call || n->first_item == p->call ||
+            n->next_item == p->call || n->first_argument == p->call ||
+            n->next_argument == p->call ||
+            (n->initializer == p->call && id != block->first_item))
+            return false;
+    }
+    return true;
+}
+
 static bool parameter_entry(const NLCopyBodyProof *p,
                             const NLCheckedFragment *caller,
                             const NLCheckedNodeView *call)
@@ -918,9 +995,25 @@ static bool parameter_entry(const NLCopyBodyProof *p,
         return false;
     const NLCheckedNodeView *block =
         nl_checked_node_view(caller, loan->initializer);
-    /* The finite caller linkage is a direct call tail in this scoped body.
-     * Richer callers remain checked but need their own C lowering contract. */
-    if (!block || block->kind != NL_CHECKED_BLOCK || block->tail != p->call ||
+    if (p->unit_call) {
+        size_t uses = 0;
+        for (size_t i = 0; i < caller->count; ++i) {
+            const NLCheckedNodeView *n = &caller->nodes[i];
+            uses += (n->tail == p->call) + (n->initializer == p->call) +
+                    (n->first_item == p->call) + (n->next_item == p->call) +
+                    (n->first_argument == p->call) +
+                    (n->next_argument == p->call);
+        }
+        /* In either spelling, the genuine call has exactly one executing
+         * parent. A wrapper plus a second tail would execute it twice. */
+        if (uses != 1)
+            return false;
+    }
+    /* Keep the original direct-tail contract. The separate unit-statement
+     * route proves its wrapper and complete scoped effect boundary. */
+    if (!block || block->kind != NL_CHECKED_BLOCK ||
+        (block->tail != p->call &&
+         !unit_statement_link(p, caller, block, call)) ||
         block->terminates || block->result_count != (p->unit_call ? 0U : 1U) ||
         loan->result_count != block->result_count ||
         (p->unit_call ? (block->type != 1 || loan->type != 1 ||

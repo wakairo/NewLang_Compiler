@@ -1,0 +1,27 @@
+wrapper structural rejects=23 plus foreign caller issuer; recovery=PASS
+wrapper structural rejects=23 plus foreign caller issuer; recovery=PASS
+return history_worlds=11 flat_anchor_bytes=218192 graph_seal_bytes=62208 (excludes nested semantic storage)
+same-byte old Copy id=7 differs from issued id=1 rejected
+same-byte old Copy id=20 differs from issued id=1 rejected
+same-byte old Copy id=30 differs from issued id=1 rejected
+equal-byte different Copy origin rejects=3
+same-byte foreign old Copy id=7 issued=1 rejected
+same-byte foreign old Copy id=7 issued=1 rejected
+unit call_exit_worlds=4 additional_operation_worlds=2 extra_flat_anchor_bytes=64880 (excludes nested semantic storage)
+unit-call rejects=108 validator_OOM=137 rollback=PASS
+return admission_OOM=238 explicit_resource=PASS
+return history_worlds=13 flat_anchor_bytes=276280 graph_seal_bytes=74304 (excludes nested semantic storage)
+same-byte old Copy id=7 differs from issued id=2 rejected
+same-byte old Copy id=20 differs from issued id=2 rejected
+same-byte old Copy id=30 differs from issued id=2 rejected
+equal-byte different Copy origin rejects=3
+same-byte foreign old Copy id=7 issued=2 rejected
+same-byte foreign old Copy id=7 issued=2 rejected
+same-byte foreign old Copy id=7 issued=2 rejected
+same-number foreign streams node=2 old=2 incoming=18 different_worlds=YES
+unit call_exit_worlds=4 additional_operation_worlds=2 extra_flat_anchor_bytes=64880 (excludes nested semantic storage)
+unit-call rejects=134 validator_OOM=170 rollback=PASS
+return admission_OOM=304 explicit_resource=PASS
+registration OOM positions=1225 rollback=PASS
+main-call OOM positions=813 rollback=PASS artifact=NULL
+normal driver OOM positions=2420 existing_host_oom_CLI3=2154 zero_partial_C=PASS

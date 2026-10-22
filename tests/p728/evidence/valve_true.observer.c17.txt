@@ -1,0 +1,133 @@
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+
+#include <limits.h>
+_Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+#include <stddef.h>
+_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
+
+#include <stdlib.h>
+static unsigned observer_phase, observer_calls, observer_stores, observer_arm;
+static const volatile uint8_t *observer_1_0;
+static const volatile uint8_t *observer_1_1;
+static const volatile uint8_t *observer_2_0;
+static const volatile uint8_t *observer_2_1;
+
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+
+static void nl_fn_10(void);
+static void nl_fn_11(uint8_t *nl_local_6, uint8_t nl_local_7);
+
+static void nl_fn_10(void)
+{
+    nl_type_10 nl_local_1 = { .f1 = 207, .f0 = 38, };
+    observer_1_0 = &nl_local_1.f0;
+    observer_1_1 = &nl_local_1.f1;
+    if (*observer_1_0 != 38 || *observer_1_1 != 207) exit(91);
+    (void)nl_local_1;
+    nl_type_10 nl_local_2 = { .f0 = 68, .f1 = 14, };
+    observer_2_0 = &nl_local_2.f0;
+    observer_2_1 = &nl_local_2.f1;
+    if (*observer_2_0 != 68 || *observer_2_1 != 14) exit(91);
+    (void)nl_local_2;
+    const uint8_t nl_local_3 = nl_local_1.f0;
+    if (observer_phase != 0 || nl_local_3 != 38) exit(91);
+    (void)nl_local_3;
+    const uint8_t nl_local_4 = nl_local_1.f1;
+    if (observer_phase != 0 || nl_local_4 != 207) exit(91);
+    (void)nl_local_4;
+    {
+        uint8_t *const nl_local_5 = &nl_local_1.f0;
+        (void)nl_local_5;
+        observer_phase=1;
+        nl_fn_11(nl_local_5, 82);
+        if (observer_calls != 1 || observer_phase != 2 || *observer_1_0 != 224 || *observer_1_1 != 207 || *observer_2_0 != 68 || *observer_2_1 != 14) exit(91);
+        observer_phase=4;
+    }
+    const uint8_t nl_local_11 = nl_local_1.f0;
+    if (observer_phase != 4 || nl_local_11 != 224) exit(91);
+    (void)nl_local_11;
+    const uint8_t nl_local_12 = nl_local_1.f1;
+    if (observer_phase != 4 || nl_local_12 != 207) exit(91);
+    (void)nl_local_12;
+    uint8_t nl_loan_result_2;
+    {
+        uint8_t *const nl_local_13 = &nl_local_2.f1;
+        (void)nl_local_13;
+        const uint8_t nl_replace_old_37 = *nl_local_13;
+        if (observer_phase != 4 || nl_replace_old_37 != 14 || nl_local_13 != observer_2_1) exit(91);
+        *nl_local_13 = nl_local_11;
+        if (*observer_1_0 != 224 || *observer_1_1 != 207 || *observer_2_0 != 68 || *observer_2_1 != 224) exit(91);
+        observer_phase=5;
+        nl_loan_result_2 = nl_replace_old_37;
+    }
+    (void)nl_loan_result_2;
+    const uint8_t nl_local_14 = nl_loan_result_2;
+    (void)nl_local_14;
+    const uint8_t nl_local_15 = nl_local_2.f1;
+    if (observer_phase != 5 || nl_local_15 != 224) exit(91);
+    (void)nl_local_15;
+    (void)nl_local_3;
+    (void)nl_local_4;
+    (void)nl_local_11;
+    (void)nl_local_12;
+    (void)nl_local_14;
+    (void)nl_local_15;
+    (void)0;
+    if (observer_phase != 5) exit(91);
+    observer_phase=6;
+    observer_1_0=0;
+    observer_1_1=0;
+    observer_2_0=0;
+    observer_2_1=0;
+}
+
+static void nl_fn_11(uint8_t *nl_local_6, uint8_t nl_local_7)
+{
+    ++observer_calls;
+    if (observer_phase != 1 || nl_local_6 != observer_1_0 || *observer_1_0 != 38 || *observer_1_1 != 207 || *observer_2_0 != 68 || *observer_2_1 != 14) exit(91);
+    (void)nl_local_7;
+    (void)nl_local_6;
+    const size_t nl_local_8 = ((size_t)UINTMAX_C(3));
+    (void)nl_local_8;
+    const size_t nl_local_9 = ((size_t)UINTMAX_C(8));
+    (void)nl_local_9;
+    const size_t nl_less_left_8 = nl_local_8;
+    const size_t nl_less_right_8 = nl_local_9;
+    if ((nl_less_left_8 < nl_less_right_8)) {
+        observer_arm=0;
+        const uint8_t nl_replace_old_2 = *nl_local_6;
+        if (nl_replace_old_2 != 38 || nl_local_6 != observer_1_0) exit(91);
+        *nl_local_6 = 224;
+        ++observer_stores;
+        if (*observer_1_0 != 224 || *observer_1_1 != 207 || *observer_2_0 != 68 || *observer_2_1 != 14) exit(91);
+        const uint8_t nl_local_10 = nl_replace_old_2;
+        (void)nl_local_10;
+        (void)nl_local_10;
+        (void)0;
+        observer_phase=2;
+        return;
+    } else {
+        observer_arm=1;
+        const uint8_t nl_replace_old_2 = *nl_local_6;
+        if (nl_replace_old_2 != 38 || nl_local_6 != observer_1_0) exit(91);
+        *nl_local_6 = nl_local_7;
+        ++observer_stores;
+        if (*observer_1_0 != 82 || *observer_1_1 != 207 || *observer_2_0 != 68 || *observer_2_1 != 14) exit(91);
+        const uint8_t nl_local_10 = nl_replace_old_2;
+        (void)nl_local_10;
+        (void)nl_local_10;
+        (void)0;
+    }
+    if (observer_phase != 1 || observer_arm != 1) exit(91);
+    observer_phase=3;
+    (void)0;
+}
+
+int main(void)
+{
+    nl_fn_10();
+    if (observer_phase != 6 || observer_calls != 1 || observer_stores != 1) return 91;
+    return 0;
+}
