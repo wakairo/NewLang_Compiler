@@ -1,0 +1,6 @@
+{
+  "source": "bad_read_formal.nl",
+  "sha256": "f2e12dd20fff83c48c86fb3c0a24259938eb0f1e55f2ebf1f15db32ca14c12be",
+  "diagnostic": "P3-WRITE-REQUIRED",
+  "classification": "semantic prediction before execution"
+}

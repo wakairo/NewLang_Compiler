@@ -1,0 +1,16 @@
+return history_worlds=11 flat_anchor_bytes=192112 graph_seal_bytes=62208 (excludes nested semantic storage)
+same-byte old Copy id=18 differs from issued id=2 rejected
+equal-byte different Copy origin rejects=1
+unit call_exit_worlds=4 additional_operation_worlds=2 extra_flat_anchor_bytes=57056 (excludes nested semantic storage)
+unit-call rejects=102 validator_OOM=129 rollback=PASS
+return admission_OOM=224 explicit_resource=PASS
+return history_worlds=13 flat_anchor_bytes=244984 graph_seal_bytes=74304 (excludes nested semantic storage)
+same-byte old Copy id=18 differs from issued id=1 rejected
+equal-byte different Copy origin rejects=1
+same-number foreign streams node=2 old=1 incoming=16 different_worlds=YES
+unit call_exit_worlds=4 additional_operation_worlds=2 extra_flat_anchor_bytes=57056 (excludes nested semantic storage)
+unit-call rejects=126 validator_OOM=160 rollback=PASS
+return admission_OOM=286 explicit_resource=PASS
+registration OOM positions=1163 rollback=PASS
+main-call OOM positions=763 rollback=PASS artifact=NULL
+normal driver OOM positions=2281 existing_host_oom_CLI3=2029 zero_partial_C=PASS

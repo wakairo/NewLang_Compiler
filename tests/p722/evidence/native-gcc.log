@@ -1,0 +1,20 @@
+before_true -O2 caller-skipped strict compile refusal; native NOT RUN
+before_true CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+before_false -O0 wrong-store strict compile refusal; native NOT RUN
+before_false -O2 caller-skipped strict compile refusal; native NOT RUN
+before_false -O2 wrong-store strict compile refusal; native NOT RUN
+before_false CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+after_true -O0 wrong-store strict compile refusal; native NOT RUN
+after_true -O2 caller-skipped strict compile refusal; native NOT RUN
+after_true -O2 wrong-store strict compile refusal; native NOT RUN
+after_true CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+after_false -O0 wrong-store strict compile refusal; native NOT RUN
+after_false -O2 caller-skipped strict compile refusal; native NOT RUN
+after_false -O2 wrong-store strict compile refusal; native NOT RUN
+after_false CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+bad_return_type.nl semantic CHECK3 zero C preserved output P9-RETURN-TYPE
+bad_store_type.nl semantic CHECK3 zero C preserved output P3-TYPE-MISMATCH
+bad_read_actual.nl semantic CHECK3 zero C preserved output LOCAL-LOAN-PROFILE
+bad_escape.nl semantic CHECK3 zero C preserved output P8-EXIT-DEPENDENCY
+bad_scope.nl semantic CHECK3 zero C preserved output P3-UNKNOWN-BINDING
+bad_read_formal.nl semantic CHECK3 zero C preserved output P3-TYPE-MISMATCH

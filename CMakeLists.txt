@@ -119,6 +119,17 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p718/native.py" "$<TARGET_FILE:newlangc>"
         "$<TARGET_FILE:p718_public_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p718")
+    add_executable(p722_gate_test tests/p722/gate_test.c)
+    target_link_libraries(p722_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
+    target_link_options(p722_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p722_callee_return_proof_oom.unit COMMAND p722_gate_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p722/before_false.nl" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p722/after_false.nl")
+    add_test(NAME p722_callee_return_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p722/native.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p722_public_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p722")
+    add_executable(p722_public_probe tests/p722/public_probe.c)
+    target_link_libraries(p722_public_probe PRIVATE newlang_parser newlang_semantic)
     add_executable(p718_public_probe tests/p718/public_probe.c)
     target_link_libraries(p718_public_probe PRIVATE newlang_parser newlang_semantic)
     add_executable(p713_gate_test tests/p713/gate_test.c)
