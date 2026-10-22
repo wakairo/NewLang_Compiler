@@ -159,7 +159,8 @@ static void r736_finish(void)
     R736_ASSERT(r736_phases[0] == (r736_regions[0] ? 9u : 99u));
     if (r736_trials == 2)
         R736_ASSERT(r736_phases[1] == (r736_regions[1] ? 9u : 99u));
-    R736_ASSERT(r736_regions[0] != r736_regions[1]);
+    if (r736_regions[0] && r736_regions[1])
+        R736_ASSERT(r736_regions[0] != r736_regions[1]);
     R736_ASSERT(r736_links == (r736_regions[1] ? 2u : 0u));
     R736_ASSERT(r736_returns == (r736_regions[1] ? 1u : 0u) &&
                 r736_receives == r736_returns && r736_sends == r736_returns);

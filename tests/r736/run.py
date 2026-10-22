@@ -24,6 +24,7 @@ for name,sha in expected.items():
 print("R736 immutable oracle hashes=4/4",flush=True)
 with tempfile.TemporaryDirectory(prefix="r736-") as d:
     scratch=Path(d)
+    conservative_refusals=[]
     for name in expected:
         path=root/name
         r=call([compiler,"--check",path])
@@ -39,12 +40,21 @@ with tempfile.TemporaryDirectory(prefix="r736-") as d:
             assert refused.returncode!=0 and sink.read_bytes()==b"R736_OLD_CONTENT\n"
             print("R736 NEGATIVE fail-closed named-output preserved",name,flush=True)
             continue
-        assert r.returncode==0 and not r.stdout and not r.stderr,("SOURCE-CHECK REFUSAL",name,r.stderr)
+        if r.returncode!=0:
+            print("R736 SOURCE CHECK REFUSAL — separate precision/legality finding",name,r.stderr,flush=True)
+            conservative_refusals.append((name,"SOURCE CHECK REFUSAL"))
+            continue
+        assert not r.stdout and not r.stderr
         observed=call([public,path])
         print("R736 PUBLIC",name,observed.returncode,observed.stdout[:1600],observed.stderr[:700],flush=True)
         assert observed.returncode==0,("SOURCE ISSUER/PUBLIC PROOF REFUSAL",name,observed.stderr)
         generated=call([compiler,path])
-        assert generated.returncode==0 and generated.stdout and not generated.stderr,("BACKEND REFUSAL",name,generated.stderr)
+        if generated.returncode!=0:
+            print("R736 BACKEND REFUSAL — no C/native claim",name,generated.stderr,flush=True)
+            assert not generated.stdout, ("partial stdout C",name)
+            conservative_refusals.append((name,"C17 BACKEND UNSUPPORTED"))
+            continue
+        assert generated.stdout and not generated.stderr
         assert 'int main(void)' in generated.stdout
         assert generated.stdout.count('malloc(')==2,("allocation emission sites",name)
         c=scratch/(name+".c")
@@ -79,4 +89,6 @@ with tempfile.TemporaryDirectory(prefix="r736-") as d:
                     if observer:
                         m=re.search(r"R736_NATIVE allocations=(\d+) frees=(\d+) linked=(\d+) returned=(\d+) received=(\d+)",executed.stdout)
                         assert m and tuple(map(int,m.groups()))==(expect,expect,int(expect==2),int(expect==2),int(expect==2))
+    if conservative_refusals:
+        raise AssertionError(("R736 FIRST-PASS BOUNDED COVERAGE INCONCLUSIVE",conservative_refusals))
 print("R736 fully checked + native PASS for both frozen positive families and two negatives",flush=True)
