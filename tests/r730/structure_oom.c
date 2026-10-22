@@ -1,4 +1,5 @@
-/* R730 independent, public borrowed view structure and bounded allocator-fault replay. */
+/* R730 independent, public borrowed view structure and bounded allocator-fault
+ * replay. */
 #include "../support/node_checked.h"
 #include "newlang/copy_body.h"
 #include <stdbool.h>
@@ -66,8 +67,7 @@ static bool verify(const char *path)
         CHECK(statement != NULL && statement->kind == NL_CHECKED_STATEMENT);
         CHECK(statement->initializer == id && statement->next_item == 0);
         CHECK(statement->tail == 0 && statement->item_count == 0);
-        CHECK(statement->first_argument == 0 &&
-              statement->argument_count == 0);
+        CHECK(statement->first_argument == 0 && statement->argument_count == 0);
         const NLCheckedNodeView *call = nl_checked_node_view(caller, id);
         CHECK(call != NULL && call->kind == NL_CHECKED_REGISTERED_CALL);
         CHECK(call->argument_count == 2 && call->result_count == 0);
@@ -76,12 +76,10 @@ static bool verify(const char *path)
         for (size_t k = 1; k <= nl_checked_node_count(caller); ++k) {
             const NLCheckedNodeView *node = nl_checked_node_view(caller, k);
             CHECK(node != NULL);
-            parent_references += (node->initializer == id) +
-                                 (node->first_item == id) +
-                                 (node->next_item == id) +
-                                 (node->tail == id) +
-                                 (node->first_argument == id) +
-                                 (node->next_argument == id);
+            parent_references +=
+                (node->initializer == id) + (node->first_item == id) +
+                (node->next_item == id) + (node->tail == id) +
+                (node->first_argument == id) + (node->next_argument == id);
         }
         CHECK(parent_references == 1);
         bool saw_oom = false;

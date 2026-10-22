@@ -27,7 +27,7 @@ def main():
             raw = source.read_bytes()
             check(len(raw) == case["bytes"], "pretest byte count differs")
             check(hashlib.sha256(raw).hexdigest() == case["sha256"], "pretest SHA differs")
-            check(raw.endswith(b"\\n") and not raw.startswith(b"\\xef\\xbb\\xbf"), "encoding differs")
+            check(raw.endswith(bytes([10])) and not raw.startswith(bytes([0xef, 0xbb, 0xbf])), "encoding differs")
             semantic = run(compiler, "--check", source)
             check(semantic.returncode in (0, 3) and not semantic.stdout,
                   "unexpected source status or partial check output", semantic)
