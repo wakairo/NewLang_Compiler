@@ -1,0 +1,4 @@
+CLEANUP legacy_arm=0 regions=1 all_closed=PASS
+CLEANUP legacy_arm=1 regions=2 all_closed=PASS
+LOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS
+PUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0

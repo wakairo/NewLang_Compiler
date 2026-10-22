@@ -1,0 +1,3 @@
+FINAL options=1 loans=4 projections=2 reads=0 updates=2 no_read=1
+error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: tests/p738/sprout.nl

@@ -1,0 +1,189 @@
+Internal ctest changing into directory: /workspace/p738-build
+UpdateCTestConfiguration  from :/workspace/p738-build/DartConfiguration.tcl
+Parse Config file:/workspace/p738-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p738-build/DartConfiguration.tcl
+Parse Config file:/workspace/p738-build/DartConfiguration.tcl
+Test project /workspace/p738-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 266
+    Start 266: p738_no_read_flow.unit
+
+266: Test command: /workspace/p738-build/p738_gate_test "/workspace/p738/tests/p738/sprout.nl" "/workspace/p738/tests/p738/ticket.nl"
+266: Working Directory: /workspace/p738-build
+266: Environment variables: 
+266:  PYTHONDONTWRITEBYTECODE=1
+266:  PYTHONHASHSEED=0
+266:  LC_ALL=C
+266:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+266:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+266: Test timeout computed to be: 90
+266: P738 attach/ref/currentness/edge/world correspondence rejects=29 restore_identical_C=PASS
+266: P738 attach/ref/currentness/edge/world correspondence rejects=29 restore_identical_C=PASS
+1/7 Test #266: p738_no_read_flow.unit .....................   Passed    0.02 sec
+test 267
+    Start 267: p738_local_return_existing_controls.unit
+
+267: Test command: /workspace/p738-build/p733_gate_test "/workspace/p738/tests/p738/sprout.nl" "/workspace/p738/tests/p738/ticket.nl"
+267: Working Directory: /workspace/p738-build
+267: Environment variables: 
+267:  PYTHONDONTWRITEBYTECODE=1
+267:  PYTHONHASHSEED=0
+267:  LC_ALL=C
+267:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+267:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+267: Test timeout computed to be: 90
+267: 22 certificate/body/world/profile controls leave no output; 19 OOM positions (3 staging + 16 validator scratch) retry identically
+267: local-return issuer-seal bytes=31280 nodes=17 additional_semantic_worlds=0
+267: local-return structural/origin rejects=79; validator malloc/calloc/realloc OOM=4; admission/staging OOM=19; rollback+recovery+NULL output PASS
+267: 22 certificate/body/world/profile controls leave no output; 19 OOM positions (3 staging + 16 validator scratch) retry identically
+267: local-return issuer-seal bytes=31280 nodes=17 additional_semantic_worlds=0
+267: local-return structural/origin rejects=79; validator malloc/calloc/realloc OOM=4; admission/staging OOM=19; rollback+recovery+NULL output PASS
+2/7 Test #267: p738_local_return_existing_controls.unit ...   Passed    0.07 sec
+test 268
+    Start 268: p738_sprout_history_oom.unit
+
+268: Test command: /workspace/p738-build/p733_history_test "oom" "/workspace/p738/tests/p738/sprout.nl"
+268: Working Directory: /workspace/p738-build
+268: Environment variables: 
+268:  PYTHONDONTWRITEBYTECODE=1
+268:  PYTHONHASHSEED=0
+268:  LC_ALL=C
+268:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+268:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+268: Test timeout computed to be: 90
+268: owned live-return entry/post/correlation after AST teardown; 41 corruptions rejected; whole destructure and distinct terminal receiver; native subset checked separately
+268: registration/branch/return/destructure OOM rollback: 1387 + 1010 fault points, clean completion
+3/7 Test #268: p738_sprout_history_oom.unit ...............   Passed    0.52 sec
+test 269
+    Start 269: p738_ticket_history_oom.unit
+
+269: Test command: /workspace/p738-build/p733_history_test "oom" "/workspace/p738/tests/p738/ticket.nl"
+269: Working Directory: /workspace/p738-build
+269: Environment variables: 
+269:  PYTHONDONTWRITEBYTECODE=1
+269:  PYTHONHASHSEED=0
+269:  LC_ALL=C
+269:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+269:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+269: Test timeout computed to be: 90
+269: owned live-return entry/post/correlation after AST teardown; 41 corruptions rejected; whole destructure and distinct terminal receiver; native subset checked separately
+269: registration/branch/return/destructure OOM rollback: 1355 + 997 fault points, clean completion
+4/7 Test #269: p738_ticket_history_oom.unit ...............   Passed    0.48 sec
+test 270
+    Start 270: p738_no_read_driver_oom.unit
+
+270: Test command: /workspace/p738-build/p733_driver_test "oom" "/workspace/p738/tests/p738/sprout.nl"
+270: Working Directory: /workspace/p738-build
+270: Environment variables: 
+270:  PYTHONDONTWRITEBYTECODE=1
+270:  PYTHONHASHSEED=0
+270:  LC_ALL=C
+270:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+270:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+270: Test timeout computed to be: 90
+270: normal driver fail-at-N positions=2718 CLI1=31 CLI3=2671 legacy_bool_CLI4=16 zero_partial_C=PASS recovery=PASS
+270: CLI3 explicit_OOM=2659 existing_generic_V0_CHECK=12 internal=0
+5/7 Test #270: p738_no_read_driver_oom.unit ...............   Passed    1.76 sec
+test 271
+    Start 271: p738_source_rollback.unit
+
+271: Test command: /workspace/p738-build/p733_driver_test "reject" "/workspace/p738/tests/p738/double_consume.nl" "/workspace/p738/tests/p738/wrong_backing.nl" "/workspace/p738/tests/p738/wrong_domain.nl" "/workspace/p738/tests/p738/wrong_root.nl" "/workspace/p738/tests/p738/active_loan.nl" "/workspace/p738/tests/p738/wrong_receiver.nl" "/workspace/p738/tests/p738/reuse_donor.nl" "/workspace/p738/tests/p738/no_cleanup.nl" "/workspace/p738/tests/p738/wrong_initial_target.nl" "/workspace/p738/tests/p738/missing_initial_some.nl" "/workspace/p738/tests/p738/read_actual.nl"
+271: Working Directory: /workspace/p738-build
+271: Environment variables: 
+271:  PYTHONDONTWRITEBYTECODE=1
+271:  PYTHONHASHSEED=0
+271:  LC_ALL=C
+271:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+271:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+271: Test timeout computed to be: 90
+271: rejection phase=registration status=1 rollback=PASS artifact=NULL
+271: rejection phase=registration status=1 rollback=PASS artifact=NULL
+271: rejection phase=registration status=1 rollback=PASS artifact=NULL
+271: rejection phase=registration status=1 rollback=PASS artifact=NULL
+271: rejection phase=registration status=1 rollback=PASS artifact=NULL
+271: rejection phase=registration status=1 rollback=PASS artifact=NULL
+271: rejection phase=registration status=1 rollback=PASS artifact=NULL
+271: rejection phase=registration status=1 rollback=PASS artifact=NULL
+271: rejection phase=registration status=1 rollback=PASS artifact=NULL
+271: rejection phase=registration status=1 rollback=PASS artifact=NULL
+271: rejection phase=registration status=1 rollback=PASS artifact=NULL
+6/7 Test #271: p738_source_rollback.unit ..................   Passed    0.01 sec
+test 272
+    Start 272: p738_no_read_native.integration
+
+272: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p738/tests/p738/native.py" "/workspace/p738-build/newlangc" "/workspace/p738-build/handoff_checked_probe" "/workspace/p738-build/p733_public_probe" "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13" "none" "/workspace/p738/tests/p738"
+272: Working Directory: /workspace/p738-build
+272: Environment variables: 
+272:  PYTHONDONTWRITEBYTECODE=1
+272:  PYTHONHASHSEED=0
+272:  LC_ALL=C
+272:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+272:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+272: Test timeout computed to be: 90
+272: sprout CLEANUP legacy_arm=0 regions=1 all_closed=PASS
+272: CLEANUP legacy_arm=1 regions=2 all_closed=PASS
+272: LOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS
+272: PUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0
+272: sprout-O0True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+272: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+272: sprout-O0True 2 OBSERVED head=55ab65ae32a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+272: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+272: sprout-O0True success OBSERVED head=5636694b32a0 tail=5636694b32c0 trials=2 free=2 roots=4 changes=2 copy=0 scopes=4 receiver=1 receiver_free=1 donor_free=1
+272: LIVE_RETURN producer=1 returned=1 received=1 original_tail=5636694b32c0
+272: sprout-O2True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+272: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+272: sprout-O2True 2 OBSERVED head=5590b52bb2a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+272: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+272: sprout-O2True success OBSERVED head=55dc3232a2a0 tail=55dc3232a2c0 trials=2 free=2 roots=4 changes=2 copy=0 scopes=4 receiver=1 receiver_free=1 donor_free=1
+272: LIVE_RETURN producer=1 returned=1 received=1 original_tail=55dc3232a2c0
+272: sprout no-pre-read genuine local/call/return, unchanged+passive O0/O2, original identity+cleanup PASS
+272: ticket CLEANUP legacy_arm=0 regions=1 all_closed=PASS
+272: CLEANUP legacy_arm=1 regions=2 all_closed=PASS
+272: LOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS
+272: PUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0
+272: ticket-O0True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+272: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+272: ticket-O0True 2 OBSERVED head=55f59d0fb2a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+272: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+272: ticket-O0True success OBSERVED head=55d9716162a0 tail=55d9716162c0 trials=2 free=2 roots=3 changes=2 copy=0 scopes=3 receiver=1 receiver_free=1 donor_free=1
+272: LIVE_RETURN producer=1 returned=1 received=1 original_tail=55d9716162c0
+272: ticket-O2True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+272: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+272: ticket-O2True 2 OBSERVED head=55e7bebf12a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+272: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+272: ticket-O2True success OBSERVED head=56189e65b2a0 tail=56189e65b2c0 trials=2 free=2 roots=3 changes=2 copy=0 scopes=3 receiver=1 receiver_free=1 donor_free=1
+272: LIVE_RETURN producer=1 returned=1 received=1 original_tail=56189e65b2c0
+272: ticket no-pre-read genuine local/call/return, unchanged+passive O0/O2, original identity+cleanup PASS
+272: double_consume P193-DEFINITION-CONSUMED refusal unchanged; zero C/named output preserved
+272: wrong_backing P193-CALL-BACKING refusal unchanged; zero C/named output preserved
+272: wrong_domain P3-REF-CONFLICT refusal unchanged; zero C/named output preserved
+272: wrong_root P193-CALL-DOMAIN refusal unchanged; zero C/named output preserved
+272: active_loan P3-REF-CONFLICT refusal unchanged; zero C/named output preserved
+272: wrong_receiver P193-CALL-DOMAIN refusal unchanged; zero C/named output preserved
+272: reuse_donor P3-USE-AFTER-CONSUME refusal unchanged; zero C/named output preserved
+272: no_cleanup P5-SCOPE-OBLIGATION refusal unchanged; zero C/named output preserved
+272: wrong_initial_target P208-CALL-HEAD-VALUE refusal unchanged; zero C/named output preserved
+272: missing_initial_some P208-CALL-HEAD-VALUE refusal unchanged; zero C/named output preserved
+272: read_actual P3-TYPE-MISMATCH refusal unchanged; zero C/named output preserved
+272: profile_direct_no_local CHECK0; finite backend4 preserved; no C/named output overwrite
+272: profile_read_without_match CHECK0; finite backend4 preserved; no C/named output overwrite
+272: profile_pointer_alias CHECK0; finite backend4 preserved; no C/named output overwrite
+7/7 Test #272: p738_no_read_native.integration ............   Passed    0.92 sec
+
+The following tests passed:
+	p738_no_read_flow.unit
+	p738_local_return_existing_controls.unit
+	p738_sprout_history_oom.unit
+	p738_ticket_history_oom.unit
+	p738_no_read_driver_oom.unit
+	p738_source_rollback.unit
+	p738_no_read_native.integration
+
+100% tests passed, 0 tests failed out of 7
+
+Total Test time (real) =   3.79 sec

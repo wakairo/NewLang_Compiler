@@ -1,0 +1,111 @@
+{
+  "base": "663a84916d3c7695f7c6accd7e42a4fa94e850e1",
+  "base_tree": "621caeaad4b770da9e6750efe7ca52fc63bcf604",
+  "original_compiler_base": "4eca3eb3bebd4069fc982fd94332970bfd7f15f0",
+  "docs_only_main": "5928ea7195339904e5f367f5c12ec6919591f386",
+  "canonical": "Draft17.33",
+  "freeze_commit": "bede168b0a2931ad2306d2cc06d279afbeabd3a8",
+  "R_A_sha256": "676f662afca5254e3399ebb1195d4fe75cefc239180fe8602590a8c01bb320ee",
+  "R737_unchanged": true,
+  "P735_issuer_API_sources_unchanged": true,
+  "local": {
+    "frontend": {
+      "tests": 404,
+      "failed": 0
+    },
+    "final_targeted": {
+      "tests": 7,
+      "failed": 0
+    },
+    "ASan_LSan": {
+      "tests": 31,
+      "failed": 0
+    },
+    "UBSan": {
+      "tests": 31,
+      "failed": 0
+    },
+    "native_each_compiler": {
+      "P_sources": 2,
+      "external_R_A": 1,
+      "executions": 36,
+      "optimization": [
+        "O0",
+        "O2"
+      ],
+      "mode": [
+        "unchanged_C",
+        "passive_observer"
+      ],
+      "allocation": [
+        "failure1",
+        "failure2",
+        "success"
+      ],
+      "host": [
+        "GCC 13.3.0",
+        "Clang 23.1.2"
+      ],
+      "sanitized_native": "Same three sources/36 executions also passed Clang ASan/LSan and UBSan"
+    },
+    "controls_each_source": {
+      "new_flow": 29,
+      "P733_local": 79,
+      "old_backend": 22,
+      "old_owner": 41
+    },
+    "OOM_bound": 10000,
+    "validator_faults_each": 4,
+    "emission_faults_each": 19,
+    "history_faults": {
+      "sprout": [
+        1387,
+        1010
+      ],
+      "ticket": [
+        1355,
+        997
+      ]
+    },
+    "driver_faults": {
+      "positions": 2718,
+      "CLI1": 31,
+      "CLI3_explicit_OOM": 2659,
+      "CLI3_generic_V0_CHECK": 12,
+      "legacy_bool_CLI4": 16,
+      "internal": 0,
+      "partial_C": 0
+    },
+    "precision_cases": 3,
+    "semantic_cases": 11,
+    "old_lane_C": "pending,cargo,control byte-identical to P735; actual source-observations.json records hashes",
+    "proof_memory": "No new issuer-owned proof allocation/world; only transient emitter correspondence fields + reused validator scratch"
+  },
+  "CI": "Natural fixed-head FULL5/PARTIAL IDs recorded in PR/terminal Issue report; local frontend is PARTIAL",
+  "evidence_sha256": {
+    "P-source-baseline.json": "83230ea97deee06f49f1a9d617c02d9bc7a8b68f67cce942cfadf02e3ea545c4",
+    "R-historical-controls.json": "e37728db9ea7ecd127810d117da46408bd5782d3abd2611deaab84e3ae3fd8ed",
+    "candidate-observations.json": "f9b61ec93bb002d4f95480197dd95fba376a086ed573a5fb57c99bf3b5d691f8",
+    "diagnostic-emitter.c.txt": "4c15d690f13ee58cbf56558d5eeff94730295961bd1e52c5232c3fdd92622bef",
+    "first-lane-refinement.txt": "0c0f4f64191fb75d70b6423d5f1373aa03ba1c1890f312c376e090a1d15b1132",
+    "first-operand-control-failure.txt": "c460b01a990781195b30d98384b5687e7651867fecef5fbcf3c632d893b59b2c",
+    "first-ref-reject.txt": "c406f6624ecceba95fa70e577638761613df6cd0d1c423060c63f3131e7c85db",
+    "first-reject.txt": "616806153ba63c634724ba2945fa2f8492ea45920fd0809a3126489d182bb34c",
+    "format.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "frozen-candidate-baseline.json": "dc02db38cd3adf415deec9c35a5037213101c713708a36022204fdb99a646c30",
+    "local-asan.txt": "3269912d9df36f43edc698ac243de36880e0a0c23b2c0927c6488722db1bea0b",
+    "local-full.txt": "f7d0dd5fd2219f1a62986275b2fbf4073edc8aebfd1debb016b0f78871bd2099",
+    "local-targets.txt": "dbbb56e7440f095e13cfa30a06e96d85f57af28479c9d6dcb386e08c1f1acc3a",
+    "local-ubsan.txt": "a817518bfe080160018760b38ccd401906d1a54a718b2791e66b3e1308639795",
+    "native-asan.txt": "3bf9fdcbbec1610d7b498cc318948aa27f50f7725c00d0efbd1bfac2129ca181",
+    "native-clang.txt": "d4a8f7bcbcf2b2131dc9d55a0f54912f49325c7387170855e9e6ec97993ec654",
+    "native-gcc.txt": "f153da031beacf2806205b2460f1f58e9411c35b66d637cc5f3f3d86fc1fbd86",
+    "native-ubsan.txt": "92535b7ced7e88765465a11a14c3be25e7caf69ebcb9c952c2ee4158499ccf7d",
+    "positive_direct_local_return.c17.txt": "63cdd423114603fcf828ea2eb5b79848f1d15b6b172c4fd97fb8a40f0e4642b6",
+    "positive_direct_local_return.public.txt": "edc79c56b0d9cf9ad6786aa5be84c0c4db284f98b5b109a7a202a68017eb5a75",
+    "sprout.c17.txt": "c6fcee947248042a9ab4e392465e8d61bea04fb0120398b53d0617fe5ae197b1",
+    "sprout.public.txt": "edc79c56b0d9cf9ad6786aa5be84c0c4db284f98b5b109a7a202a68017eb5a75",
+    "ticket.c17.txt": "1a07c083e9458e53a0c456b2ed6c8420c56af9bbc18bf1e07720db872bada1f8",
+    "ticket.public.txt": "edc79c56b0d9cf9ad6786aa5be84c0c4db284f98b5b109a7a202a68017eb5a75"
+  }
+}

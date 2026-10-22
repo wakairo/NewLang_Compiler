@@ -1,0 +1,116 @@
+{
+  "sprout": {
+    "source_sha256": "a9e24ba9ba0436f417118fbee3bd1706ab8f20faa29ef195f690c87b3ea2ca5e",
+    "check": {
+      "exit": 0,
+      "bytes": 0,
+      "stderr": ""
+    },
+    "public": {
+      "exit": 0,
+      "bytes": 322,
+      "stderr": "",
+      "observed": "CLEANUP legacy_arm=0 regions=1 all_closed=PASS\nCLEANUP legacy_arm=1 regions=2 all_closed=PASS\nLOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS\nPUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0\n"
+    },
+    "c17": {
+      "exit": 0,
+      "bytes": 12588,
+      "stderr": "",
+      "sha256": "c6fcee947248042a9ab4e392465e8d61bea04fb0120398b53d0617fe5ae197b1"
+    }
+  },
+  "ticket": {
+    "source_sha256": "752c120c7b17fb12a9c94d2853d85d758fd7d159754170ca0259df51e1aa2ac9",
+    "check": {
+      "exit": 0,
+      "bytes": 0,
+      "stderr": ""
+    },
+    "public": {
+      "exit": 0,
+      "bytes": 322,
+      "stderr": "",
+      "observed": "CLEANUP legacy_arm=0 regions=1 all_closed=PASS\nCLEANUP legacy_arm=1 regions=2 all_closed=PASS\nLOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS\nPUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0\n"
+    },
+    "c17": {
+      "exit": 0,
+      "bytes": 12231,
+      "stderr": "",
+      "sha256": "1a07c083e9458e53a0c456b2ed6c8420c56af9bbc18bf1e07720db872bada1f8"
+    }
+  },
+  "positive_direct_local_return": {
+    "source_sha256": "676f662afca5254e3399ebb1195d4fe75cefc239180fe8602590a8c01bb320ee",
+    "check": {
+      "exit": 0,
+      "bytes": 0,
+      "stderr": ""
+    },
+    "public": {
+      "exit": 0,
+      "bytes": 322,
+      "stderr": "",
+      "observed": "CLEANUP legacy_arm=0 regions=1 all_closed=PASS\nCLEANUP legacy_arm=1 regions=2 all_closed=PASS\nLOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS\nPUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0\n"
+    },
+    "c17": {
+      "exit": 0,
+      "bytes": 12587,
+      "stderr": "",
+      "sha256": "63cdd423114603fcf828ea2eb5b79848f1d15b6b172c4fd97fb8a40f0e4642b6"
+    }
+  },
+  "pre-read-control-pending": {
+    "byte_identical_C": true,
+    "bytes": 13844,
+    "sha256": "387209b4c9b1cac18864eeed603b9dcd7bc9d0d87dc7387e4dddb04d5cac02dd"
+  },
+  "pre-read-control-cargo": {
+    "byte_identical_C": true,
+    "bytes": 13845,
+    "sha256": "d194ab27ac247936ada2ee488b0ea81e46dfadbdfaa63f05c07dd1b5301039fc"
+  },
+  "pre-read-control-control": {
+    "byte_identical_C": true,
+    "bytes": 13711,
+    "sha256": "c974629f88649c6fde4aea3b18f0397c02a409ef4e1985f6126582d37bffeaea"
+  },
+  "R736-positive_custody_local_return": {
+    "source_sha256": "9f483e577ab20f84bbefa1bc5a21cb3c13f660ead45975a50ebbfc803280c41e",
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/workspace/r736-evidence/tests/r736/positive_custody_local_return.nl:1:34-1:40: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/workspace/r736-evidence/tests/r736/positive_custody_local_return.nl:1:34-1:40: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n"
+    }
+  },
+  "R736-negative_move_twice": {
+    "source_sha256": "91c17d2c615d2b227d390fb83be3786e58fa21ab615e6ce1b628949d3d3c4c9c",
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/workspace/r736-evidence/tests/r736/negative_move_twice.nl:14:12-14:19: error(semantic)[P193-DEFINITION-CONSUMED]: symbolic non-Copy responsibility was consumed\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/workspace/r736-evidence/tests/r736/negative_move_twice.nl:14:12-14:19: error(semantic)[P193-DEFINITION-CONSUMED]: symbolic non-Copy responsibility was consumed\n"
+    }
+  },
+  "R736-negative_wrong_original": {
+    "source_sha256": "d1e84b069b52b01c7b74242e7f0c4820ba962a3a61b5ef08a4c3ffd5d38b40d2",
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/workspace/r736-evidence/tests/r736/negative_wrong_original.nl:73:25-73:68: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/workspace/r736-evidence/tests/r736/negative_wrong_original.nl:73:25-73:68: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n"
+    }
+  }
+}

@@ -1,0 +1,65 @@
+sprout CLEANUP legacy_arm=0 regions=1 all_closed=PASS
+CLEANUP legacy_arm=1 regions=2 all_closed=PASS
+LOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS
+PUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0
+sprout-O0True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+sprout-O0True 2 OBSERVED head=224602f0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+sprout-O0True success OBSERVED head=300a32f0 tail=300a3310 trials=2 free=2 roots=4 changes=2 copy=0 scopes=4 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=300a3310
+sprout-O2True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+sprout-O2True 2 OBSERVED head=331e02f0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+sprout-O2True success OBSERVED head=224e12f0 tail=224e1310 trials=2 free=2 roots=4 changes=2 copy=0 scopes=4 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=224e1310
+sprout no-pre-read genuine local/call/return, unchanged+passive O0/O2, original identity+cleanup PASS
+ticket CLEANUP legacy_arm=0 regions=1 all_closed=PASS
+CLEANUP legacy_arm=1 regions=2 all_closed=PASS
+LOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS
+PUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0
+ticket-O0True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+ticket-O0True 2 OBSERVED head=2af612f0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+ticket-O0True success OBSERVED head=118f02f0 tail=118f0310 trials=2 free=2 roots=3 changes=2 copy=0 scopes=3 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=118f0310
+ticket-O2True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+ticket-O2True 2 OBSERVED head=392c62f0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+ticket-O2True success OBSERVED head=24d662f0 tail=24d66310 trials=2 free=2 roots=3 changes=2 copy=0 scopes=3 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=24d66310
+ticket no-pre-read genuine local/call/return, unchanged+passive O0/O2, original identity+cleanup PASS
+inherited-R-A CLEANUP legacy_arm=0 regions=1 all_closed=PASS
+CLEANUP legacy_arm=1 regions=2 all_closed=PASS
+LOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS
+PUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0
+inherited-R-A-O0True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+inherited-R-A-O0True 2 OBSERVED head=9c702f0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+inherited-R-A-O0True success OBSERVED head=1a6f12f0 tail=1a6f1310 trials=2 free=2 roots=4 changes=2 copy=0 scopes=4 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=1a6f1310
+inherited-R-A-O2True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+inherited-R-A-O2True 2 OBSERVED head=3ffe62f0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+inherited-R-A-O2True success OBSERVED head=3434c2f0 tail=3434c310 trials=2 free=2 roots=4 changes=2 copy=0 scopes=4 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=3434c310
+inherited-R-A no-pre-read genuine local/call/return, unchanged+passive O0/O2, original identity+cleanup PASS
+double_consume P193-DEFINITION-CONSUMED refusal unchanged; zero C/named output preserved
+wrong_backing P193-CALL-BACKING refusal unchanged; zero C/named output preserved
+wrong_domain P3-REF-CONFLICT refusal unchanged; zero C/named output preserved
+wrong_root P193-CALL-DOMAIN refusal unchanged; zero C/named output preserved
+active_loan P3-REF-CONFLICT refusal unchanged; zero C/named output preserved
+wrong_receiver P193-CALL-DOMAIN refusal unchanged; zero C/named output preserved
+reuse_donor P3-USE-AFTER-CONSUME refusal unchanged; zero C/named output preserved
+no_cleanup P5-SCOPE-OBLIGATION refusal unchanged; zero C/named output preserved
+wrong_initial_target P208-CALL-HEAD-VALUE refusal unchanged; zero C/named output preserved
+missing_initial_some P208-CALL-HEAD-VALUE refusal unchanged; zero C/named output preserved
+read_actual P3-TYPE-MISMATCH refusal unchanged; zero C/named output preserved
+profile_direct_no_local CHECK0; finite backend4 preserved; no C/named output overwrite
+profile_read_without_match CHECK0; finite backend4 preserved; no C/named output overwrite
+profile_pointer_alias CHECK0; finite backend4 preserved; no C/named output overwrite

@@ -1,0 +1,20 @@
+{
+  "profile_direct_no_local": {
+    "sha256": "4a79451d76e328f43cccf29712b537ed651f9834ed1635fc565aae26ef1de6b0",
+    "expected_check": 0,
+    "expected_c17": 4,
+    "expected": "postimplementation P-calibrated finite boundary probe, not a frozen preimplementation positive. No local witness or incomplete legacy read/match lane: reject finite backend profile, not semantic ownership."
+  },
+  "profile_read_without_match": {
+    "sha256": "f35b395295af6abb5596cd52253bb842e68f2b92da757f2fd3995ffbab5f9068",
+    "expected_check": 0,
+    "expected_c17": 4,
+    "expected": "postimplementation P-calibrated finite boundary probe, not a frozen preimplementation positive. No local witness or incomplete legacy read/match lane: reject finite backend profile, not semantic ownership."
+  },
+  "profile_pointer_alias": {
+    "sha256": "93486539e8eec8decc24bdc1610a6bc9f54d883fb513f28718a65728a8b31bba",
+    "expected_check": 0,
+    "expected_c17": 4,
+    "expected": "postimplementation P precision probe; direct original carrier required, no general Copy-alias provenance search"
+  }
+}
