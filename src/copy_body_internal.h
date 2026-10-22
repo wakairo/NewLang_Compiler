@@ -33,7 +33,11 @@ typedef struct NLCopyBodyProof {
     const NLCheckedNodeView *nodes_origin;
     size_t count;
     bool sealed;
-    bool formal_write;
+    bool formal_write, unit_call;
+    NLSemanticContext *normal_end;
+    NLCopyCallAnchor normal_end_anchor;
+    NLCheckedNodeId conditional;
+    size_t binding_floor, place_floor, scope_floor;
     NLCopyBodyParameters parameters, issued_parameters;
     NLSemanticContext *entry, *handoff;
     NLCopyCallAnchor entry_anchor, handoff_anchor;
@@ -62,6 +66,8 @@ NLCheckStatus nl_copy_body_parameters(NLCheckedFragment *,
                                       const NLCheckedFragment *,
                                       NLCheckedNodeId, const NLSymbolId[2],
                                       const NLSemanticContext *);
+NLCheckStatus nl_copy_unit_entry_validate(const NLCheckedFragment *);
+NLCheckStatus nl_copy_end_locals(NLSemanticContext *, size_t, size_t, size_t);
 void nl_copy_state_destroy(NLCopyCallAnchor *);
 NLCheckStatus nl_copy_state_anchor(const NLSemanticContext *,
                                    NLCopyCallAnchor *);

@@ -1,0 +1,52 @@
+{
+  "base": "5ce78224383948aad65133081494d43e30cc0835",
+  "tree": "c5cfb350d2b05ff6b82a9e1136ef892c0fb888b8",
+  "canonical": "Draft17.33",
+  "oracle_origin": "Before implementation: ordinary function returns to caller, true/false source comparisons; no host injection",
+  "cases": [
+    {
+      "name": "before_true",
+      "sha256": "aa7ce6e6146fd4c1d73c17d083eeb7fffb9feb1552d63337ac4970470369d4ac",
+      "terminal": true,
+      "original": 41,
+      "current": 41,
+      "sibling": 193,
+      "archive_old": 67,
+      "archive_new": 41,
+      "index": 0
+    },
+    {
+      "name": "before_false",
+      "sha256": "784b1395dee0156683cc0920e524d33908908ac4499480f0718c9de82bd4d14f",
+      "terminal": false,
+      "original": 41,
+      "current": 87,
+      "sibling": 193,
+      "archive_old": 67,
+      "archive_new": 87,
+      "index": 0
+    },
+    {
+      "name": "after_true",
+      "sha256": "3c0520b8befccbcd49e55e0934e0428664f8e847c5eb2d48a56ae33977d86d16",
+      "terminal": false,
+      "original": 29,
+      "current": 62,
+      "sibling": 151,
+      "archive_old": 72,
+      "archive_new": 62,
+      "index": 1
+    },
+    {
+      "name": "after_false",
+      "sha256": "a116ce71562ac447ce6b28dfd7e2ec0f1118b2750a31a45344839de819974188",
+      "terminal": true,
+      "original": 29,
+      "current": 219,
+      "sibling": 151,
+      "archive_old": 72,
+      "archive_new": 219,
+      "index": 1
+    }
+  ]
+}

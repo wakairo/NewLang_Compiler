@@ -1,0 +1,14 @@
+{
+  "final-wrapper-tests": {
+    "raw_sha256": "a5a676d5287085514445f4c1fbf859b10e8f312a936906e6b37ce33397ae0d49",
+    "stored_sha256": "a5a676d5287085514445f4c1fbf859b10e8f312a936906e6b37ce33397ae0d49"
+  },
+  "final-wrapper-asan": {
+    "raw_sha256": "b131f68bfbca4bc698d571f27fc057123b48c94e2bb72d73fbd0c66e4bbc5a7a",
+    "stored_sha256": "b131f68bfbca4bc698d571f27fc057123b48c94e2bb72d73fbd0c66e4bbc5a7a"
+  },
+  "final-wrapper-ubsan": {
+    "raw_sha256": "919b0592268238aed93050db1ebff23586924c72353e5ec0c74d005fd643ab28",
+    "stored_sha256": "919b0592268238aed93050db1ebff23586924c72353e5ec0c74d005fd643ab28"
+  }
+}

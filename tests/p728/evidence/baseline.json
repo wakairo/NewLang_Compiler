@@ -1,0 +1,282 @@
+{
+  "binding_wrapper.nl": {
+    "sha256": "3176804f2fab0883e27c540e82ab2b0be3760a64024a12e52b8f0b3a97d8f114",
+    "stages": {
+      "check": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public": {
+        "exit": 0,
+        "stdout": "call=24 function=11 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x559619e4b5e0 handoff=0x559619ecaaf0 IF_entry=0x559619e39620 IF_post=0x559619de2440 return_live=0x559619e2bdc0 ended=0x559619e7f820\nloan block=23 tail=0 first_item=27 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=2 initializer=24 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+        "stderr": ""
+      },
+      "c17": {
+        "exit": 4,
+        "stdout": "",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p728/tests/p728/binding_wrapper.nl\n"
+      }
+    }
+  },
+  "brake_false.nl": {
+    "sha256": "fe60a7ab2406509bee4830b7c25d5cebe0d87710d94107aeb5a6866b3787003f",
+    "stages": {
+      "check": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public": {
+        "exit": 0,
+        "stdout": "call=24 function=11 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x5623b8143360 handoff=0x5623b81c2810 IF_entry=0x5623b8131460 IF_post=0x5623b80ee040 return_live=0x5623b80ecee0 ended=0x5623b8177580\nloan block=23 tail=0 first_item=27 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+        "stderr": ""
+      },
+      "c17": {
+        "exit": 4,
+        "stdout": "",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p728/tests/p728/brake_false.nl\n"
+      }
+    }
+  },
+  "brake_true.nl": {
+    "sha256": "a737f7dab2a0297440af02990cee8e6efef963479f7e3037319eb7718f95241a",
+    "stages": {
+      "check": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public": {
+        "exit": 0,
+        "stdout": "call=24 function=11 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x561b3c5ec360 handoff=0x561b3c66b810 IF_entry=0x561b3c5da460 IF_post=0x561b3c597040 return_live=0x561b3c595ee0 ended=0x561b3c620580\nloan block=23 tail=0 first_item=27 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+        "stderr": ""
+      },
+      "c17": {
+        "exit": 4,
+        "stdout": "",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p728/tests/p728/brake_true.nl\n"
+      }
+    }
+  },
+  "escape.nl": {
+    "sha256": "6a49767219c0a2b9f16f9881d2cf8af5a824a1d08c672a495a5c95ad98ab7d2f",
+    "stages": {
+      "check": {
+        "exit": 3,
+        "stdout": "",
+        "stderr": "/workspace/p728/tests/p728/escape.nl:10:5-10:72: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+      },
+      "public": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "tests/p728/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\ntests/p728/baseline_probe.c:8: node_checked_load(path, &n)\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout": "",
+        "stderr": "/workspace/p728/tests/p728/escape.nl:10:5-10:72: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+      }
+    }
+  },
+  "explicit_unit_tail.nl": {
+    "sha256": "95b7b855ebe6831e552fad284856bc81f65ac20756a714c854191d307c0feccb",
+    "stages": {
+      "check": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public": {
+        "exit": 0,
+        "stdout": "call=24 function=11 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x55ce381a54a0 handoff=0x55ce38224950 IF_entry=0x55ce381935a0 IF_post=0x55ce38150180 return_live=0x55ce3814f020 ended=0x55ce381d96c0\nloan block=23 tail=28 first_item=27 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+        "stderr": ""
+      },
+      "c17": {
+        "exit": 4,
+        "stdout": "",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p728/tests/p728/explicit_unit_tail.nl\n"
+      }
+    }
+  },
+  "extra_after.nl": {
+    "sha256": "2d537367f53247f3d7643c1c52d392478cdc6c3051ed2b89c2a20484be27f9f4",
+    "stages": {
+      "check": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public": {
+        "exit": 0,
+        "stdout": "call=24 function=11 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x557532b845e0 handoff=0x557532c03a90 IF_entry=0x557532b726e0 IF_post=0x557532b2f2c0 return_live=0x557532b2e160 ended=0x557532bb8800\nloan block=23 tail=0 first_item=27 item_count=2 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=29\nloan item=29 kind=28 initializer=28 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+        "stderr": ""
+      },
+      "c17": {
+        "exit": 4,
+        "stdout": "",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p728/tests/p728/extra_after.nl\n"
+      }
+    }
+  },
+  "extra_statement.nl": {
+    "sha256": "86b01ed67020d048a0a86c1b731a94a7cb76b73786733120c04ee6e87f302f29",
+    "stages": {
+      "check": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public": {
+        "exit": 0,
+        "stdout": "call=26 function=11 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x564a8f56ebd0 handoff=0x564a8f516990 IF_entry=0x564a8f56f6e0 IF_post=0x564a8f5af840 return_live=0x564a8f524260 ended=0x564a8f5afa10\nloan block=23 tail=0 first_item=25 item_count=2 result_count=0 type=1 terminates=0 call_unit=1\nloan item=25 kind=28 initializer=24 next=29\nloan item=29 kind=28 initializer=26 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+        "stderr": ""
+      },
+      "c17": {
+        "exit": 4,
+        "stdout": "",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p728/tests/p728/extra_statement.nl\n"
+      }
+    }
+  },
+  "read_ref.nl": {
+    "sha256": "3d5bae237ed35ef52cfeb767deae92aadf006c1b79a8fd2e01e211388d245542",
+    "stages": {
+      "check": {
+        "exit": 3,
+        "stdout": "",
+        "stderr": "/workspace/p728/tests/p728/read_ref.nl:10:21-10:22: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n"
+      },
+      "public": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "tests/p728/../support/node_checked.h:25: nl_parser_parse_function_unit(parser, &unit, NULL) == NL_PARSE_OK\ntests/p728/baseline_probe.c:8: node_checked_load(path, &n)\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout": "",
+        "stderr": "/workspace/p728/tests/p728/read_ref.nl:10:21-10:22: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n"
+      }
+    }
+  },
+  "two_calls.nl": {
+    "sha256": "b9f8d4019777ae8215f0558b181de46dd96bdb575388c2ab426f42911a32c447",
+    "stages": {
+      "check": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public": {
+        "exit": 1,
+        "stdout": "call=24 function=11 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x5595138cceb0 handoff=0x5595138f92d0 IF_entry=0x5595138781b0 IF_post=0x55951399c2c0 return_live=0x559513902850 ended=0x5595138bc730\nloan block=23 tail=0 first_item=27 item_count=2 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=31\nloan item=31 kind=28 initializer=28 next=0\nunit_status=3 if_status=3 parameters_status=3\ncall=28 function=11 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x559513a108e0 handoff=0x5595138ca3d0 IF_entry=0x5595138bc660 IF_post=0x55951395de70 return_live=0x5595139f2870 ended=0x55951389e2d0\nloan block=23 tail=0 first_item=27 item_count=2 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=31\nloan item=31 kind=28 initializer=28 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+        "stderr": "tests/p728/baseline_probe.c:50: found == 1\n"
+      },
+      "c17": {
+        "exit": 4,
+        "stdout": "",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p728/tests/p728/two_calls.nl\n"
+      }
+    }
+  },
+  "valve_false.nl": {
+    "sha256": "349b82dd83b23dd494f2ec7ea1df84c31ae25ac109b7ac4fe8fa631c025044ae",
+    "stages": {
+      "check": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public": {
+        "exit": 0,
+        "stdout": "call=24 function=11 root=1 child=2 field=0 scope=1 normal_arm=1 worlds entry=0x55d31f649ee0 handoff=0x55d31f60e7d0 IF_entry=0x55d31f5d95e0 IF_post=0x55d31f6e6690 return_live=0x55d31f659720 ended=0x55d31f5d18b0\nloan block=23 tail=0 first_item=27 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+        "stderr": ""
+      },
+      "c17": {
+        "exit": 4,
+        "stdout": "",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p728/tests/p728/valve_false.nl\n"
+      }
+    }
+  },
+  "valve_true.nl": {
+    "sha256": "2f7aecdfc6595068eaf5fbb4565b534338cf6cf9e9681e62f603aaa91bfe6ed8",
+    "stages": {
+      "check": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public": {
+        "exit": 0,
+        "stdout": "call=24 function=11 root=1 child=2 field=0 scope=1 normal_arm=1 worlds entry=0x5599ebc2aee0 handoff=0x5599ebbef7d0 IF_entry=0x5599ebbba5e0 IF_post=0x5599ebcc7690 return_live=0x5599ebc3a720 ended=0x5599ebbb28b0\nloan block=23 tail=0 first_item=27 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+        "stderr": ""
+      },
+      "c17": {
+        "exit": 4,
+        "stdout": "",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p728/tests/p728/valve_true.nl\n"
+      }
+    }
+  },
+  "wrong_argument.nl": {
+    "sha256": "16ef6f9cfe90050f5aebc7527707719f87066639ea8b0f07c6010ff8d72ed58a",
+    "stages": {
+      "check": {
+        "exit": 3,
+        "stdout": "",
+        "stderr": "/workspace/p728/tests/p728/wrong_argument.nl:10:47-10:52: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+      },
+      "public": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "tests/p728/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\ntests/p728/baseline_probe.c:8: node_checked_load(path, &n)\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout": "",
+        "stderr": "/workspace/p728/tests/p728/wrong_argument.nl:10:47-10:52: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+      }
+    }
+  },
+  "wrong_return.nl": {
+    "sha256": "05ff91375e46157587e829bcb31533a46d9823fbfe57cf9661b9b200de3451cb",
+    "stages": {
+      "check": {
+        "exit": 3,
+        "stdout": "",
+        "stderr": "/workspace/p728/tests/p728/wrong_return.nl:10:42-10:63: error(semantic)[P9-RETURN-TYPE]: return expression must exactly match the function result\n"
+      },
+      "public": {
+        "exit": 1,
+        "stdout": "",
+        "stderr": "tests/p728/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\ntests/p728/baseline_probe.c:8: node_checked_load(path, &n)\n"
+      },
+      "c17": {
+        "exit": 3,
+        "stdout": "",
+        "stderr": "/workspace/p728/tests/p728/wrong_return.nl:10:42-10:63: error(semantic)[P9-RETURN-TYPE]: return expression must exactly match the function result\n"
+      }
+    }
+  },
+  "inherited/A0v2-usize-terminal.nl": {
+    "sha256": "b00d4c58cb77c9180c9a3e17bc3396ea72888fc71a8deff21c8e2f8588018180",
+    "stages": {
+      "check": {
+        "exit": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public": {
+        "exit": 0,
+        "stdout": "call=24 function=10 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x5568b068a180 handoff=0x5568b06132e0 IF_entry=0x5568b063a630 IF_post=0x5568b0707900 return_live=0x5568b0647140 ended=0x5568b061b140\nloan block=23 tail=0 first_item=27 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+        "stderr": ""
+      },
+      "c17": {
+        "exit": 4,
+        "stdout": "",
+        "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p728/tests/p728/inherited/A0v2-usize-terminal.nl\n"
+      }
+    }
+  }
+}

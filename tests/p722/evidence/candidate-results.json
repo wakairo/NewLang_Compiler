@@ -1,0 +1,74 @@
+[
+  {
+    "source": "before_true.nl",
+    "source_sha256": "aa7ce6e6146fd4c1d73c17d083eeb7fffb9feb1552d63337ac4970470369d4ac",
+    "stage": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "diagnostic": "",
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "before_true.nl",
+    "source_sha256": "aa7ce6e6146fd4c1d73c17d083eeb7fffb9feb1552d63337ac4970470369d4ac",
+    "stage": "c17",
+    "exit": 0,
+    "stdout_bytes": 2213,
+    "diagnostic": "",
+    "stdout_sha256": "1f4a430480625a3b06b0b76d414ce2b55dd0ea502eccca5f5acb57a86ff44229"
+  },
+  {
+    "source": "before_false.nl",
+    "source_sha256": "784b1395dee0156683cc0920e524d33908908ac4499480f0718c9de82bd4d14f",
+    "stage": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "diagnostic": "",
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "before_false.nl",
+    "source_sha256": "784b1395dee0156683cc0920e524d33908908ac4499480f0718c9de82bd4d14f",
+    "stage": "c17",
+    "exit": 0,
+    "stdout_bytes": 2213,
+    "diagnostic": "",
+    "stdout_sha256": "25882b94aefde533390357d04a55c35a2201d3515d935d23b2fbbc0dc467f642"
+  },
+  {
+    "source": "after_true.nl",
+    "source_sha256": "3c0520b8befccbcd49e55e0934e0428664f8e847c5eb2d48a56ae33977d86d16",
+    "stage": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "diagnostic": "",
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "after_true.nl",
+    "source_sha256": "3c0520b8befccbcd49e55e0934e0428664f8e847c5eb2d48a56ae33977d86d16",
+    "stage": "c17",
+    "exit": 0,
+    "stdout_bytes": 2398,
+    "diagnostic": "",
+    "stdout_sha256": "cace333bc16f21e267731e25ba919de1f70f02b88bf197d48acef28db213fe18"
+  },
+  {
+    "source": "after_false.nl",
+    "source_sha256": "a116ce71562ac447ce6b28dfd7e2ec0f1118b2750a31a45344839de819974188",
+    "stage": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "diagnostic": "",
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "after_false.nl",
+    "source_sha256": "a116ce71562ac447ce6b28dfd7e2ec0f1118b2750a31a45344839de819974188",
+    "stage": "c17",
+    "exit": 0,
+    "stdout_bytes": 2399,
+    "diagnostic": "",
+    "stdout_sha256": "549f600530547c219f851693a9b9af10f2772f6969807afb807ddf3497242171"
+  }
+]

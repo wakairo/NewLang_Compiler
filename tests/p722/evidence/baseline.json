@@ -1,0 +1,58 @@
+[
+  {
+    "source": "tests/p722/after_false.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p722/after_false.nl:14:40-14:61: error(precision)[P13-JOIN-PRECISION]: conditional package identity or correlated state is not representable\n"
+  },
+  {
+    "source": "tests/p722/after_false.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p722/after_false.nl:14:40-14:61: error(precision)[P13-JOIN-PRECISION]: conditional package identity or correlated state is not representable\n"
+  },
+  {
+    "source": "tests/p722/after_true.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p722/after_true.nl:14:40-14:61: error(precision)[P13-JOIN-PRECISION]: conditional package identity or correlated state is not representable\n"
+  },
+  {
+    "source": "tests/p722/after_true.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p722/after_true.nl:14:40-14:61: error(precision)[P13-JOIN-PRECISION]: conditional package identity or correlated state is not representable\n"
+  },
+  {
+    "source": "tests/p722/before_false.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p722/before_false.nl:12:37-12:58: error(precision)[P13-JOIN-PRECISION]: conditional package identity or correlated state is not representable\n"
+  },
+  {
+    "source": "tests/p722/before_false.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p722/before_false.nl:12:37-12:58: error(precision)[P13-JOIN-PRECISION]: conditional package identity or correlated state is not representable\n"
+  },
+  {
+    "source": "tests/p722/before_true.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p722/before_true.nl:12:37-12:58: error(precision)[P13-JOIN-PRECISION]: conditional package identity or correlated state is not representable\n"
+  },
+  {
+    "source": "tests/p722/before_true.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "tests/p722/before_true.nl:12:37-12:58: error(precision)[P13-JOIN-PRECISION]: conditional package identity or correlated state is not representable\n"
+  }
+]

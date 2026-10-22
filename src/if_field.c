@@ -580,13 +580,19 @@ static bool walk(Replay *r, NLCheckedNodeId id, const NLCheckedNodeView *loan)
         break;
     }
     case NL_CHECKED_REPLACE: {
-        if (!loan || !scalar(r, n) || n->argument_count != 2)
+        const NLCopyBodyProof *cp = r->p->owner->copy_body;
+        const bool formal = !loan && cp && cp->unit_call;
+        if ((!loan && !formal) || !scalar(r, n) || n->argument_count != 2)
             break;
+        const NLSymbolId symbol =
+            formal ? cp->parameters.parameters[0] : loan->loan.ref_symbol;
+        const NLScopeId scope =
+            formal ? cp->loan_node.loan.scope : loan->loan.scope;
         const NLCheckedNodeView *ref = take(r, n->first_argument);
         if (!ref || ref->kind != NL_CHECKED_IDENTIFIER ||
-            ref->symbol != loan->loan.ref_symbol ||
-            ref->value_use != NL_VALUE_COPIED || ref->result_count != 1 ||
-            !ref->next_argument || !walk(r, ref->next_argument, loan))
+            ref->symbol != symbol || ref->value_use != NL_VALUE_COPIED ||
+            ref->result_count != 1 || !ref->next_argument ||
+            !walk(r, ref->next_argument, loan))
             break;
         const NLCheckedNodeView *incoming =
             &r->f->nodes[ref->next_argument - 1];
@@ -618,10 +624,9 @@ static bool walk(Replay *r, NLCheckedNodeId id, const NLCheckedNodeView *loan)
             v.reference.incarnation != n->field.child_incarnation ||
             !v.reference.readable || !v.reference.writable ||
             v.reference.provenance != NL_PROVENANCE_VALID ||
-            v.reference.occurrence_dependency ||
-            v.reference.scope != loan->loan.scope ||
-            loan->loan.scope > e->before->scope_count ||
-            !e->before->scopes[loan->loan.scope - 1].active)
+            v.reference.occurrence_dependency || v.reference.scope != scope ||
+            !scope || scope > e->before->scope_count ||
+            !e->before->scopes[scope - 1].active)
             break;
         NLSemanticContext *replay = NULL;
         r->status = nl_sem_clone(e->before, &replay);
@@ -944,6 +949,22 @@ bool nl_checked_if_return_event(const NLCheckedFragment *f, NLCheckedNodeId id,
  * equality. */
 static NLCheckStatus replay_return_exit(const NLIfFieldProof *p)
 {
+    const NLCopyBodyProof *cp = p->owner->copy_body;
+    if (cp && cp->unit_call) {
+        if (p->binding_floor != cp->binding_floor ||
+            p->place_floor != cp->place_floor ||
+            p->scope_floor != cp->scope_floor)
+            return INVALID;
+        NLSemanticContext *c = NULL;
+        NLCheckStatus s = nl_sem_clone(p->return_live, &c);
+        if (s == NL_CHECK_OK)
+            s = nl_copy_end_locals(c, p->binding_floor, p->place_floor,
+                                   p->scope_floor);
+        if (s == NL_CHECK_OK && !nl_copy_state_matches(c, &p->exit_anchor))
+            s = INVALID;
+        nl_semantic_destroy(c);
+        return s;
+    }
     if (p->binding_floor || p->place_floor || p->scope_floor ||
         p->return_live->domain_count || p->return_live->region_count ||
         p->return_live->occurrence_count)
@@ -1119,7 +1140,8 @@ NLCheckStatus nl_checked_if_return_validate(const NLCheckedFragment *f,
          memcmp(candidate, &p->return_issued, sizeof(*candidate))) ||
         !same_view(&p->view, &p->issued) ||
         !same_view(&p->view, &p->return_view.field) || f->source != p->source ||
-        f->body_owner != p->body || !p->body || p->body->count ||
+        f->body_owner != p->body || !p->body ||
+        (p->body->count && (!f->copy_body || !f->copy_body->unit_call)) ||
         f->nodes != p->parent_origin || !f->nodes ||
         f->root != p->parent_root || f->count != p->parent_count ||
         !p->parent_nodes ||
@@ -1133,6 +1155,11 @@ NLCheckStatus nl_checked_if_return_validate(const NLCheckedFragment *f,
         !nl_copy_same_types(f->context, p->post) ||
         !nl_copy_same_types(p->return_live, p->entry))
         return INVALID;
+    if (f->copy_body && f->copy_body->unit_call) {
+        NLCheckStatus s = nl_copy_unit_entry_validate(f);
+        if (s != NL_CHECK_OK)
+            return s;
+    }
     const NLIfReturnView *v = &p->return_view;
     if (v->normal_arm > 1 || p->return_arm != 1 - v->normal_arm ||
         p->entry != v->field.entry || p->post != v->field.post ||
@@ -1169,10 +1196,10 @@ NLCheckStatus nl_checked_if_return_validate(const NLCheckedFragment *f,
     if (!edge || !outer || nl_control_exits_count(f->exits) != 1 ||
         edge->kind != NL_EXIT_RETURN || outer->kind != NL_EXIT_RETURN ||
         edge->target != p->exit_target || outer->target != p->exit_target ||
-        edge->state != p->exit_state || edge->count != 1 || outer->count != 1 ||
-        edge->values[0].type != 1 || edge->values[0].value ||
-        outer->values[0].type != 1 || outer->values[0].value ||
-        v->returned.type != 1 || v->returned.value ||
+        p->exit_target != f->function_target || edge->state != p->exit_state ||
+        edge->count != 1 || outer->count != 1 || edge->values[0].type != 1 ||
+        edge->values[0].value || outer->values[0].type != 1 ||
+        outer->values[0].value || v->returned.type != 1 || v->returned.value ||
         !nl_copy_state_matches(v->return_ended, &p->exit_anchor) ||
         !nl_copy_state_matches(
             nl_control_state_context((NLControlState *)edge->state),
@@ -1210,4 +1237,37 @@ nl_checked_if_return_event_validate(const NLCheckedFragment *f,
     return !e || (candidate && !same_event(candidate, &e->issued))
                ? INVALID
                : nl_checked_if_return_validate(f, id, NULL);
+}
+
+/* Only this source-issued actual/formal unit call may join an original
+ * aggregate across its function's RETURN and normal edges. The structural
+ * join is a fresh Unknown child and parent, never a chosen fork value. */
+NLPlaceId nl_if_call_root(const NLCheckedFragment *f)
+{
+    const NLCopyBodyProof *cp = f ? f->copy_body : NULL;
+    const NLIfFieldProof *p = f ? f->if_fields : NULL;
+    if (!cp || !cp->unit_call || !cp->formal_write || !p || p->next ||
+        !p->one_normal || !p->ready || !p->complete ||
+        p->view.root != cp->parameters.field.parent ||
+        p->view.child != cp->parameters.field.child ||
+        p->view.index != cp->parameters.field.index ||
+        p->binding_floor != cp->binding_floor ||
+        p->place_floor != cp->place_floor || p->scope_floor != cp->scope_floor)
+        return 0;
+    return p->view.root;
+}
+NLCheckStatus nl_if_call_join(NLCheckedFragment *f, NLSemanticContext *c)
+{
+    NLPlaceId root = nl_if_call_root(f);
+    if (!root)
+        return INVALID;
+    NLCopyBodyProof *cp = f->copy_body;
+    if (cp->normal_end)
+        return NL_CHECK_INTERNAL_ERROR;
+    cp->conditional = f->if_fields->view.conditional;
+    NLCheckStatus s = nl_sem_clone(c, &cp->normal_end);
+    if (s == NL_CHECK_OK)
+        s = nl_copy_state_anchor(c, &cp->normal_end_anchor);
+    return s == NL_CHECK_OK ? structural_join(c, cp->parameters.field.child)
+                            : s;
 }
