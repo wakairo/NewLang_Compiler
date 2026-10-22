@@ -1,0 +1,68 @@
+[
+  {
+    "source": "/workspace/p722-gate-final.log",
+    "evidence": "validator-oom.log",
+    "original_sha256": "1302bbb1550161a05a41fd055bf4b9a88272e78f139afcb5427a8f3859fd9d12",
+    "saved_sha256": "1302bbb1550161a05a41fd055bf4b9a88272e78f139afcb5427a8f3859fd9d12",
+    "normalization": "line-end whitespace only"
+  },
+  {
+    "source": "/workspace/p722-native-gcc.log",
+    "evidence": "native-gcc.log",
+    "original_sha256": "1d2f9cb4654912b16b6ee27f7fefaddce4118388684223c6ab96cf0732cd08b3",
+    "saved_sha256": "1d2f9cb4654912b16b6ee27f7fefaddce4118388684223c6ab96cf0732cd08b3",
+    "normalization": "line-end whitespace only"
+  },
+  {
+    "source": "/workspace/p722-native-clang.log",
+    "evidence": "native-clang.log",
+    "original_sha256": "298cfbbd7295fabd488eafc79d82c5bd5b46249f22d640b184f139d4bf0f7bea",
+    "saved_sha256": "298cfbbd7295fabd488eafc79d82c5bd5b46249f22d640b184f139d4bf0f7bea",
+    "normalization": "line-end whitespace only"
+  },
+  {
+    "source": "/workspace/p722-final-tests.log",
+    "evidence": "local-full-frontend.log",
+    "original_sha256": "99d2e9363bb987a38bb6bc5eb031f76c75cd1ea664f8c06764d324c9bac8e0e0",
+    "saved_sha256": "99d2e9363bb987a38bb6bc5eb031f76c75cd1ea664f8c06764d324c9bac8e0e0",
+    "normalization": "line-end whitespace only"
+  },
+  {
+    "source": "/workspace/p722-asan-final-tests.log",
+    "evidence": "local-asan-m1-m5.log",
+    "original_sha256": "6f827b288f7205ccae6f0568e363c7fe1f040f7bade77a835fbb80ff9ca77dfe",
+    "saved_sha256": "6f827b288f7205ccae6f0568e363c7fe1f040f7bade77a835fbb80ff9ca77dfe",
+    "normalization": "line-end whitespace only"
+  },
+  {
+    "source": "/workspace/p722-ubsan-final-tests.log",
+    "evidence": "local-ubsan-m1-m5.log",
+    "original_sha256": "9c7405d9887817320300146c1b82950388505ffc23e1812717330465f4e1af08",
+    "saved_sha256": "9c7405d9887817320300146c1b82950388505ffc23e1812717330465f4e1af08",
+    "normalization": "line-end whitespace only"
+  },
+  {
+    "evidence": "evidence/development/first-local-full-regression.log",
+    "original_sha256": "3433b6a0cb3043488115378a103eb61f11af895e61e80b75935030d9cd0131c7",
+    "saved_sha256": "3433b6a0cb3043488115378a103eb61f11af895e61e80b75935030d9cd0131c7",
+    "normalization": "line-end whitespace only"
+  },
+  {
+    "evidence": "evidence/development/first-native-harness-failure.log",
+    "original_sha256": "afedc6f7f9a7c9e03bfd52d292af5847398ac29a25db4847323be4272dd6bc35",
+    "saved_sha256": "afedc6f7f9a7c9e03bfd52d292af5847398ac29a25db4847323be4272dd6bc35",
+    "normalization": "line-end whitespace only"
+  },
+  {
+    "evidence": "evidence/development/second-native-harness-failure.log",
+    "original_sha256": "c09781f16985b5bc145b07f3e1e1d4985d1f990cbc2d9488b76c675fc8e7ff0d",
+    "saved_sha256": "c09781f16985b5bc145b07f3e1e1d4985d1f990cbc2d9488b76c675fc8e7ff0d",
+    "normalization": "line-end whitespace only"
+  },
+  {
+    "evidence": "local-release-fortify-m1-m5.log",
+    "original_sha256": "f14a396a246c468358fb845b565a570560384316cf4bef2bc457210e8d3d4282",
+    "saved_sha256": "f14a396a246c468358fb845b565a570560384316cf4bef2bc457210e8d3d4282",
+    "normalization": "line-end whitespace only"
+  }
+]

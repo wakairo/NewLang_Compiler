@@ -108,6 +108,13 @@ target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic n
 include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
+    # R725: independent, R-owned proof and strict native tests. Do not merge.
+    add_executable(r725_public_gate tests/r725/public_gate.c)
+    target_link_libraries(r725_public_gate PRIVATE newlang_semantic)
+    add_test(NAME r725_independent_calibrated.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r725/check_calibrated.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:r725_public_gate>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r725")
     # SPECULATIVE PR533 opt-in: default compiler/parser stay OFF. Test-only
     # rebuild of the SAME parser exercises Production semantics/owned/C17.
     add_executable(p718_gate_test tests/p718/gate_test.c)
@@ -119,6 +126,17 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p718/native.py" "$<TARGET_FILE:newlangc>"
         "$<TARGET_FILE:p718_public_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p718")
+    add_executable(p722_gate_test tests/p722/gate_test.c)
+    target_link_libraries(p722_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
+    target_link_options(p722_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p722_callee_return_proof_oom.unit COMMAND p722_gate_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p722/before_false.nl" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p722/after_false.nl")
+    add_test(NAME p722_callee_return_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p722/native.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p722_public_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p722")
+    add_executable(p722_public_probe tests/p722/public_probe.c)
+    target_link_libraries(p722_public_probe PRIVATE newlang_parser newlang_semantic)
     add_executable(p718_public_probe tests/p718/public_probe.c)
     target_link_libraries(p718_public_probe PRIVATE newlang_parser newlang_semantic)
     add_executable(p713_gate_test tests/p713/gate_test.c)

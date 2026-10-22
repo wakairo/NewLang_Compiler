@@ -3668,8 +3668,10 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                     .implicit_local = true;
         }
     }
-    if (!body.definition && function->count == 2 &&
-        function->result == nl_semantic_core_type(c, NL_TYPE_U8)) {
+    if (function->count == 2 &&
+        ((!body.definition &&
+          function->result == nl_semantic_core_type(c, NL_TYPE_U8)) ||
+         function->result == 1)) {
         if (!host(&body,
                   nl_copy_body_parameters(body.artifact, caller->artifact,
                                           call_id, copy_parameters, c),
@@ -4760,7 +4762,8 @@ static bool if_exit_evidence(Check *check, const NLCheckedFragment *artifact,
             if (a.current_value != other.current_value ||
                 a.current_fact != other.current_fact ||
                 a.current_value > arm_prefix || a.current_fact > arm_facts) {
-                if (!flat_copy(c, a.type)) {
+                if (!flat_copy(c, a.type) &&
+                    j + 1 != nl_if_call_root(check->artifact)) {
                     if_precision(check, parent->span);
                     return false;
                 }
@@ -4779,6 +4782,7 @@ static bool join_if_function_exits(Check *check)
                                 ? (NLCheckedResult){.type = root.type}
                                 : root.results[0];
     bool found = false, changed[NL_SEMANTIC_MAX_ENTRIES] = {false};
+    NLPlaceId call_root = nl_if_call_root(check->artifact);
     if (!if_exit_evidence(check, check->artifact, final,
                           check->context->value_count,
                           check->context->last_value_fact, &found, changed))
@@ -4811,8 +4815,17 @@ static bool join_if_function_exits(Check *check)
     if (!found)
         return true;
     for (size_t i = 0; i < check->function_place_floor; ++i)
-        if (changed[i] && !widen_place(check, i, root.span))
+        if (changed[i] && i + 1 != call_root &&
+            (!call_root ||
+             i + 1 != check->artifact->copy_body->parameters.field.child) &&
+            !widen_place(check, i, root.span))
             return false;
+    if (call_root) {
+        if (!host(check, nl_if_call_join(check->artifact, check->context),
+                  root.span))
+            return false;
+        refresh_bindings(check, call_root);
+    }
     if (flat_copy(check->context, final.type) && final.value != 0) {
         nl_sem_end_value(check->context, final.value);
         final.value = new_value(

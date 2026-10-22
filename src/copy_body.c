@@ -1,5 +1,6 @@
 #include "newlang/copy_body.h"
 #include "semantic_internal.h"
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -8,6 +9,7 @@
  * The completed graph seal authenticates identity, not lost lifetime state:
  * those facts are captured independently while the original is still live. */
 #include "copy_body_internal.h"
+#include "if_field_internal.h"
 
 void nl_copy_state_destroy(NLCopyCallAnchor *a)
 {
@@ -78,6 +80,8 @@ static void destroy(NLCheckedFragment *f)
         free(e->scopes_after);
         free(e);
     }
+    nl_semantic_destroy(p->normal_end);
+    nl_copy_state_destroy(&p->normal_end_anchor);
     nl_semantic_destroy(p->entry);
     nl_semantic_destroy(p->handoff);
     nl_copy_state_destroy(&p->entry_anchor);
@@ -191,6 +195,10 @@ NLCheckStatus nl_copy_body_parameters(NLCheckedFragment *f,
     p->body = f->body_owner;
     p->source = f->source;
     p->formal_write = true;
+    p->unit_call = fn->result == 1;
+    p->binding_floor = parameters[0] - 1;
+    p->place_floor = c->bindings[parameters[0] - 1].view.place - 1;
+    p->scope_floor = c->scope_count;
     p->parameters = (NLCopyBodyParameters){
         .loan = loan,
         .arguments = {n->first_argument, a->next_argument},
@@ -424,7 +432,8 @@ nl_checked_copy_body_parameters_validate(const NLCheckedFragment *c,
     if (!p || !p->formal_write ||
         (v && !same_parameters(v, &p->issued_parameters)))
         return INVALID;
-    return nl_checked_copy_body_validate(c, id, NULL);
+    return p->unit_call ? nl_checked_copy_unit_validate(c, id, NULL)
+                        : nl_checked_copy_body_validate(c, id, NULL);
 }
 static const CopyEvent *event_at(const NLCopyBodyProof *p, size_t index)
 {
@@ -912,10 +921,12 @@ static bool parameter_entry(const NLCopyBodyProof *p,
     /* The finite caller linkage is a direct call tail in this scoped body.
      * Richer callers remain checked but need their own C lowering contract. */
     if (!block || block->kind != NL_CHECKED_BLOCK || block->tail != p->call ||
-        block->terminates || block->result_count != 1 ||
-        loan->result_count != 1 ||
-        block->results[0].value != call->results[0].value ||
-        loan->results[0].value != call->results[0].value)
+        block->terminates || block->result_count != (p->unit_call ? 0U : 1U) ||
+        loan->result_count != block->result_count ||
+        (p->unit_call ? (block->type != 1 || loan->type != 1 ||
+                         call->type != 1 || call->result_count)
+                      : (block->results[0].value != call->results[0].value ||
+                         loan->results[0].value != call->results[0].value)))
         return false;
     for (size_t i = 0; i < 2; ++i) {
         const NLCheckedNodeView *arg =
@@ -1126,4 +1137,308 @@ nl_checked_copy_body_event_validate(const NLCheckedFragment *caller,
     if (!e || (candidate && !same_event(candidate, &e->issued)))
         return INVALID;
     return nl_checked_copy_body_validate(caller, call, NULL);
+}
+
+/* Replay the selected Copy/ref local teardown. Prefix caller places/scopes
+ * are retained; ending a callee must not end the caller's scoped write loan. */
+NLCheckStatus nl_copy_end_locals(NLSemanticContext *c, size_t bindings,
+                                 size_t places, size_t scopes_floor)
+{
+    if (!c || bindings > c->binding_count || places > c->place_count ||
+        scopes_floor > c->scope_count || c->domain_count || c->region_count ||
+        c->occurrence_count)
+        return INVALID;
+    for (size_t i = bindings; i < c->binding_count; ++i) {
+        NLBindingEntry *b = &c->bindings[i];
+        if (b->hidden)
+            continue;
+        if (b->view.availability == NL_AVAILABLE) {
+            if (!b->view.type || b->view.type > c->type_count ||
+                !c->types[b->view.type - 1].view.is_copy ||
+                !c->types[b->view.type - 1].view.is_discardable)
+                return INVALID;
+            NLCheckStatus s =
+                nl_fixed_end_dependencies(c, b->view.place, bindings);
+            if (s != NL_CHECK_OK)
+                return s;
+            nl_fixed_detach(c, b->view.place);
+            nl_sem_end_value(c, b->view.value);
+            NLSemanticPlaceView *place = &c->places[b->view.place - 1];
+            place->live = false;
+            place->current_value = place->current_fact =
+                place->governing_domain = 0;
+            b->view.availability = NL_CONSUMED;
+        }
+        b->hidden = true;
+    }
+    return nl_sem_function_exit(c, scopes_floor, places);
+}
+NLCheckStatus nl_copy_unit_entry_validate(const NLCheckedFragment *f)
+{
+    const NLCopyBodyProof *p = f ? f->copy_body : NULL;
+    const NLCheckedNodeView *call =
+        p ? nl_checked_node_view(p->caller, p->call) : NULL;
+    if (!p || !p->unit_call || !p->formal_write || !p->sealed ||
+        p->owner != f || proof(p->caller, p->call) != p || !call ||
+        !parameter_entry(p, p->caller, call))
+        return INVALID;
+    return NL_CHECK_OK;
+}
+bool nl_checked_copy_unit_view(const NLCheckedFragment *caller,
+                               NLCheckedNodeId id, NLCopyUnitView *out)
+{
+    const NLCopyBodyProof *p = proof(caller, id);
+    if (!p || !p->unit_call || !out || !p->normal_end)
+        return false;
+    *out = (NLCopyUnitView){.parameters = p->parameters,
+                            .body = p->owner,
+                            .conditional = p->conditional,
+                            .normal_end = p->normal_end,
+                            .postcall = p->handoff,
+                            .function = p->view.function};
+    return true;
+}
+/* Rewalk the complete caller-independent callee prefix. Each value is read
+ * in the actual IF-entry world; equal IDs in its forks are irrelevant. The
+ * only effectful node here is the separately replay-validated IF. */
+typedef struct {
+    const NLCheckedFragment *f;
+    const NLSemanticContext *world;
+    NLCheckedNodeId conditional;
+    bool *seen;
+    NLValueId *bound;
+    size_t depth;
+} UnitPrefix;
+static bool unit_prefix_walk(UnitPrefix *r, NLCheckedNodeId id)
+{
+    if (!id || id > r->f->count || r->seen[id] ||
+        ++r->depth > NL_SEMANTIC_MAX_DEPTH) {
+        if (id && id <= r->f->count && !r->seen[id])
+            --r->depth;
+        return false;
+    }
+    r->seen[id] = true;
+    const NLCheckedNodeView *n = &r->f->nodes[id - 1];
+    const NLSemanticContext *c = r->world;
+    bool ok = false;
+    if (id == r->conditional) {
+        ok = unit_prefix_walk(r, n->initializer);
+        /* Common replay subtree has already passed its own full graph walk. */
+        for (size_t i = 0; ok && i < r->f->count; ++i) {
+            const NLCheckedNodeView *a = &r->f->nodes[i];
+            if (i + 1 != id && a->span.start_byte >= n->span.start_byte &&
+                a->span.end_byte <= n->span.end_byte)
+                r->seen[i + 1] = true;
+        }
+    } else if (n->kind == NL_CHECKED_BLOCK && id == r->f->root) {
+        size_t count = 0;
+        ok = !n->terminates && n->type == 1 && !n->result_count;
+        for (NLCheckedNodeId item = n->first_item; ok && item;) {
+            ok = unit_prefix_walk(r, item);
+            ++count;
+            if (!ok)
+                break;
+            item = r->f->nodes[item - 1].next_item;
+        }
+        ok = ok && count == n->item_count && unit_prefix_walk(r, n->tail);
+    } else if (n->kind == NL_CHECKED_STATEMENT) {
+        ok = n->initializer == r->conditional &&
+             unit_prefix_walk(r, n->initializer);
+    } else if (n->kind == NL_CHECKED_UNIT) {
+        ok = n->type == 1 && !n->result_count;
+    } else if (n->kind == NL_CHECKED_BINDING) {
+        if (n->symbol && n->symbol <= c->binding_count &&
+            !r->bound[n->symbol] && n->argument_count == 1 &&
+            unit_prefix_walk(r, n->initializer)) {
+            const NLCheckedNodeView *value =
+                nl_checked_node_view(r->f, n->initializer);
+            const NLCheckedNodeView *recv =
+                nl_checked_node_view(r->f, n->first_argument);
+            ok = recv && !r->seen[n->first_argument] &&
+                 recv->kind == NL_CHECKED_RECEIVER &&
+                 recv->symbol == n->symbol && !recv->next_argument &&
+                 recv->type == value->type && value->result_count == 1 &&
+                 value->type == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
+                 c->bindings[n->symbol - 1].view.value ==
+                     value->results[0].value;
+            if (ok) {
+                r->seen[n->first_argument] = true;
+                r->bound[n->symbol] = value->results[0].value;
+            }
+        }
+    } else if (n->kind == NL_CHECKED_USIZE_LITERAL ||
+               n->kind == NL_CHECKED_IDENTIFIER ||
+               n->kind == NL_CHECKED_USIZE_LESS_THAN) {
+        NLTypeId type = nl_semantic_core_type(
+            c, n->kind == NL_CHECKED_USIZE_LESS_THAN ? NL_TYPE_BOOL
+                                                     : NL_TYPE_USIZE);
+        if (n->type == type && n->result_count == 1 &&
+            n->results[0].type == type &&
+            nl_copy_plain(c, n->results[0].value, type)) {
+            NLSemanticValueView value = c->values[n->results[0].value - 1];
+            if (n->kind == NL_CHECKED_USIZE_LITERAL) {
+                ok = n->has_scalar_result && n->scalar_result.known &&
+                     n->scalar_result.type == type && value.scalar_known &&
+                     value.scalar_value == n->scalar_result.value;
+            } else if (n->kind == NL_CHECKED_IDENTIFIER) {
+                NLValueId origin = n->symbol && n->symbol <= c->binding_count
+                                       ? r->bound[n->symbol]
+                                       : 0;
+                ok = origin && n->value_use == NL_VALUE_COPIED &&
+                     intrinsic(&value, &c->values[origin - 1]);
+            } else {
+                const NLCheckedNodeView *a =
+                    nl_checked_node_view(r->f, n->first_argument);
+                const NLCheckedNodeView *b =
+                    a ? nl_checked_node_view(r->f, a->next_argument) : NULL;
+                ok = n->argument_count == 2 && a && b && !b->next_argument &&
+                     a->type == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
+                     b->type == a->type &&
+                     unit_prefix_walk(r, n->first_argument) &&
+                     unit_prefix_walk(r, a->next_argument);
+                if (ok) {
+                    NLSemanticValueView left =
+                                            c->values[a->results[0].value - 1],
+                                        right =
+                                            c->values[b->results[0].value - 1];
+                    ok = left.scalar_known && right.scalar_known &&
+                         value.scalar_known &&
+                         value.scalar_value ==
+                             (size_t)(left.scalar_value < right.scalar_value);
+                }
+            }
+        }
+    }
+    --r->depth;
+    return ok;
+}
+static NLCheckStatus unit_prefix_validate(const NLCopyBodyProof *p,
+                                          const NLIfReturnView *returned)
+{
+    UnitPrefix r = {.f = p->owner,
+                    .world = returned->field.entry,
+                    .conditional = p->conditional};
+    r.seen = calloc(r.f->count + 1, sizeof(*r.seen));
+    r.bound = calloc(r.world->binding_count + 1, sizeof(*r.bound));
+    NLCheckStatus s = NL_CHECK_OUT_OF_MEMORY;
+    if (r.seen && r.bound) {
+        s = unit_prefix_walk(&r, r.f->root) ? NL_CHECK_OK : INVALID;
+        for (size_t i = 1; s == NL_CHECK_OK && i <= r.f->count; ++i)
+            if (!r.seen[i])
+                s = INVALID;
+    }
+    free(r.seen);
+    free(r.bound);
+    return s;
+}
+NLCheckStatus nl_checked_copy_unit_validate(const NLCheckedFragment *caller,
+                                            NLCheckedNodeId id,
+                                            const NLCopyUnitView *candidate)
+{
+    NLCopyUnitView v;
+    if (!nl_checked_copy_unit_view(caller, id, &v) ||
+        (candidate &&
+         (candidate->body != v.body ||
+          candidate->conditional != v.conditional ||
+          candidate->normal_end != v.normal_end ||
+          candidate->postcall != v.postcall ||
+          candidate->function != v.function ||
+          !same_parameters(&candidate->parameters, &v.parameters))))
+        return INVALID;
+    const NLCopyBodyProof *p = proof(caller, id);
+    const NLCheckedFragment *f = p->owner;
+    const NLCheckedNodeView *call = nl_checked_node_view(caller, id);
+    if (!call || call->kind != NL_CHECKED_REGISTERED_CALL ||
+        !call->body_backed || call->terminates || call->type != 1 ||
+        call->result_count || call->function != v.function || !v.function ||
+        v.function > p->entry->function_count ||
+        p->entry->functions[v.function - 1].result != 1 ||
+        p->entry->functions[v.function - 1].body != p->body ||
+        f->source != p->source || f->body_owner != p->body ||
+        p->source != p->body->source || f->count != p->count ||
+        f->nodes != p->nodes_origin || !p->nodes ||
+        memcmp(f->nodes, p->nodes, p->count * sizeof(*p->nodes)) ||
+        f->root != p->view.root || f->body_count || f->arm_count != 2 ||
+        !nl_copy_state_matches(p->normal_end, &p->normal_end_anchor) ||
+        nl_copy_unit_entry_validate(f) != NL_CHECK_OK)
+        return INVALID;
+    NLIfReturnView returned;
+    if (!nl_checked_if_return_view(f, p->conditional, &returned) ||
+        returned.field.root != v.parameters.field.parent ||
+        returned.field.child != v.parameters.field.child ||
+        returned.field.index != v.parameters.field.index)
+        return INVALID;
+    const NLCheckedNodeView *loan =
+        nl_checked_node_view(caller, v.parameters.loan);
+    if (!loan || !loan->loan.scope ||
+        loan->loan.scope > caller->context->scope_count ||
+        caller->context->scopes[loan->loan.scope - 1].active)
+        return INVALID;
+    /* Caller-visible readback uses the conservative postcall facts, not
+     * either arm's numeric IDs. Stop at the next actual mutation. */
+    size_t stop = SIZE_MAX;
+    for (size_t i = 0; i < caller->count; ++i) {
+        const NLCheckedNodeView *n = &caller->nodes[i];
+        if (n->span.start_byte >= loan->span.end_byte &&
+            (n->kind == NL_CHECKED_REPLACE ||
+             n->kind == NL_CHECKED_REGISTERED_CALL ||
+             n->kind == NL_CHECKED_IF) &&
+            n->span.start_byte < stop)
+            stop = n->span.start_byte;
+    }
+    for (size_t i = 0; i < caller->count; ++i) {
+        const NLCheckedNodeView *n = &caller->nodes[i];
+        if (n->kind != NL_CHECKED_FIELD_READ ||
+            n->field.parent != v.parameters.field.parent ||
+            n->span.start_byte < loan->span.end_byte ||
+            n->span.start_byte >= stop)
+            continue;
+        if (!field_at(p->handoff, &n->field) || n->result_count != 1 ||
+            !nl_copy_plain(caller->context, n->results[0].value, n->type) ||
+            !intrinsic(&caller->context->values[n->results[0].value - 1],
+                       &p->handoff->values[n->field.old_value - 1]))
+            return INVALID;
+    }
+    NLCheckStatus s =
+        nl_checked_if_return_validate(f, p->conditional, &returned);
+    if (s != NL_CHECK_OK)
+        return s;
+    s = unit_prefix_validate(p, &returned);
+    if (s != NL_CHECK_OK || !p->exit || p->pending)
+        return s == NL_CHECK_OK ? INVALID : s;
+    NLSemanticPlaceView a[3], b[3];
+    if (!nl_copy_trio(p->exit, v.parameters.field.parent, a) ||
+        !nl_copy_trio(returned.field.post, v.parameters.field.parent, b) ||
+        memcmp(a, b, sizeof(a)))
+        return INVALID;
+    NLSemanticContext *replay = NULL;
+    s = nl_sem_clone(p->exit, &replay);
+    if (s == NL_CHECK_OK)
+        s = nl_copy_end_locals(replay, p->binding_floor, p->place_floor,
+                               p->scope_floor);
+    if (s == NL_CHECK_OK &&
+        !nl_copy_state_matches(replay, &p->normal_end_anchor))
+        s = INVALID;
+    if (s == NL_CHECK_OK) {
+        NLValueId value = 0;
+        s = nl_fixed_change_dependencies(replay, v.parameters.field.child, 0);
+        if (s == NL_CHECK_OK)
+            s = nl_sem_new_value(
+                replay,
+                (NLSemanticValueView){
+                    .type = nl_semantic_core_type(replay, NL_TYPE_U8)},
+                &value);
+        if (s == NL_CHECK_OK)
+            s = nl_fixed_change(replay, v.parameters.field.child, value, false);
+        for (size_t j = 0; s == NL_CHECK_OK && j < replay->binding_count; ++j)
+            if (replay->bindings[j].view.place == v.parameters.field.parent &&
+                replay->bindings[j].view.availability == NL_AVAILABLE)
+                replay->bindings[j].view.value =
+                    replay->places[v.parameters.field.parent - 1].current_value;
+        if (s == NL_CHECK_OK &&
+            !nl_copy_state_matches(replay, &p->handoff_anchor))
+            s = INVALID;
+    }
+    nl_semantic_destroy(replay);
+    return s;
 }
