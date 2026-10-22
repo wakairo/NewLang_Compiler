@@ -17,35 +17,41 @@ static bool verify(const char *path, size_t index)
         if (!nl_checked_copy_unit_view(caller, id, &v))
             continue;
         CHECK(nl_checked_copy_unit_validate(caller, id, &v) == NL_CHECK_OK);
-        CHECK(nl_checked_copy_body_parameters_validate(caller, id, &v.parameters)
-              == NL_CHECK_OK);
+        CHECK(nl_checked_copy_body_parameters_validate(
+                  caller, id, &v.parameters) == NL_CHECK_OK);
         NLIfReturnView ir;
         CHECK(nl_checked_if_return_view(v.body, v.conditional, &ir));
-        CHECK(nl_checked_if_return_validate(v.body, v.conditional, &ir)
-              == NL_CHECK_OK);
+        CHECK(nl_checked_if_return_validate(v.body, v.conditional, &ir) ==
+              NL_CHECK_OK);
         CHECK(ir.field.index == index);
         NLSemanticPlaceView before, after, sibling_old, sibling_new, child;
         NLSemanticValueView unknown;
-        CHECK(nl_semantic_place_view(v.parameters.entry, ir.field.root, &before));
+        CHECK(
+            nl_semantic_place_view(v.parameters.entry, ir.field.root, &before));
         CHECK(nl_semantic_place_view(v.postcall, ir.field.root, &after));
         CHECK(nl_semantic_place_view(v.parameters.entry, ir.field.sibling,
                                      &sibling_old));
-        CHECK(nl_semantic_place_view(v.postcall, ir.field.sibling, &sibling_new));
+        CHECK(
+            nl_semantic_place_view(v.postcall, ir.field.sibling, &sibling_new));
         CHECK(nl_semantic_place_view(v.postcall, ir.field.child, &child));
-        CHECK(nl_semantic_value_view(v.postcall, child.current_value, &unknown));
-        CHECK(before.live && after.live && before.incarnation == after.incarnation);
+        CHECK(
+            nl_semantic_value_view(v.postcall, child.current_value, &unknown));
+        CHECK(before.live && after.live &&
+              before.incarnation == after.incarnation);
         CHECK(before.current_fact != after.current_fact);
         CHECK(before.fixed_fields[index] == ir.field.child);
         CHECK(sibling_old.current_fact == sibling_new.current_fact);
         CHECK(sibling_old.current_value == sibling_new.current_value);
         CHECK(!unknown.scalar_known);
         size_t rejected = 0;
-#define BAD_VIEW(expr) do { \
-    NLCopyUnitView bad = v; expr; \
-    CHECK(nl_checked_copy_unit_validate(caller, id, &bad) != NL_CHECK_OK); \
-    CHECK(nl_checked_copy_unit_validate(caller, id, &v) == NL_CHECK_OK); \
-    ++rejected; \
-} while (0)
+#define BAD_VIEW(expr)                                                         \
+    do {                                                                       \
+        NLCopyUnitView bad = v;                                                \
+        expr;                                                                  \
+        CHECK(nl_checked_copy_unit_validate(caller, id, &bad) != NL_CHECK_OK); \
+        CHECK(nl_checked_copy_unit_validate(caller, id, &v) == NL_CHECK_OK);   \
+        ++rejected;                                                            \
+    } while (0)
         BAD_VIEW(bad.function++);
         BAD_VIEW(bad.body = NULL);
         BAD_VIEW(bad.conditional++);
@@ -68,34 +74,37 @@ static bool verify(const char *path, size_t index)
 #undef BAD_VIEW
         NLIfReturnView fork = ir;
         fork.normal_arm = 1 - ir.normal_arm;
-        CHECK(nl_checked_if_return_validate(v.body, v.conditional, &fork)
-              != NL_CHECK_OK);
-        CHECK(nl_checked_if_return_validate(v.body, v.conditional, &ir)
-              == NL_CHECK_OK);
+        CHECK(nl_checked_if_return_validate(v.body, v.conditional, &fork) !=
+              NL_CHECK_OK);
+        CHECK(nl_checked_if_return_validate(v.body, v.conditional, &ir) ==
+              NL_CHECK_OK);
         ++rejected;
         fork = ir;
         fork.return_node++;
-        CHECK(nl_checked_if_return_validate(v.body, v.conditional, &fork)
-              != NL_CHECK_OK);
+        CHECK(nl_checked_if_return_validate(v.body, v.conditional, &fork) !=
+              NL_CHECK_OK);
         ++rejected;
         for (size_t stream = 0; stream < 3; ++stream) {
             size_t events = stream == 2 ? ir.replay_events
                                         : ir.field.arms[stream].event_count;
             for (size_t j = 0; j < events; ++j) {
                 NLIfFieldEvent valid;
-                CHECK(nl_checked_if_return_event(v.body, v.conditional,
-                                                  stream, j, &valid));
-                CHECK(nl_checked_if_return_event_validate(
-                    v.body, v.conditional, stream, j, &valid) == NL_CHECK_OK);
+                CHECK(nl_checked_if_return_event(v.body, v.conditional, stream,
+                                                 j, &valid));
+                CHECK(nl_checked_if_return_event_validate(v.body, v.conditional,
+                                                          stream, j, &valid) ==
+                      NL_CHECK_OK);
                 NLIfFieldEvent bad = valid;
                 bad.field.child++;
-                CHECK(nl_checked_if_return_event_validate(
-                    v.body, v.conditional, stream, j, &bad) != NL_CHECK_OK);
+                CHECK(nl_checked_if_return_event_validate(v.body, v.conditional,
+                                                          stream, j,
+                                                          &bad) != NL_CHECK_OK);
                 ++rejected;
                 bad = valid;
                 bad.result++;
-                CHECK(nl_checked_if_return_event_validate(
-                    v.body, v.conditional, stream, j, &bad) != NL_CHECK_OK);
+                CHECK(nl_checked_if_return_event_validate(v.body, v.conditional,
+                                                          stream, j,
+                                                          &bad) != NL_CHECK_OK);
                 ++rejected;
             }
         }

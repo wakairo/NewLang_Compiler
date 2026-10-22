@@ -111,8 +111,8 @@ if(BUILD_TESTING)
     # R725: independent, R-owned proof and strict native tests. Do not merge.
     add_executable(r725_public_gate tests/r725/public_gate.c)
     target_link_libraries(r725_public_gate PRIVATE newlang_semantic)
-    add_test(NAME r725_independent_blind.integration COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r725/check.py" "$<TARGET_FILE:newlangc>"
+    add_test(NAME r725_independent_calibrated.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r725/check_calibrated.py" "$<TARGET_FILE:newlangc>"
         "$<TARGET_FILE:r725_public_gate>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/r725")
     # SPECULATIVE PR533 opt-in: default compiler/parser stay OFF. Test-only
