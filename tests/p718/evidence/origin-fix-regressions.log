@@ -1,0 +1,172 @@
+Internal ctest changing into directory: /workspace/p718-build
+UpdateCTestConfiguration  from :/workspace/p718-build/DartConfiguration.tcl
+Parse Config file:/workspace/p718-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p718-build/DartConfiguration.tcl
+Parse Config file:/workspace/p718-build/DartConfiguration.tcl
+Test project /workspace/p718-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: p718_if_return_proof_oom.unit
+
+1: Test command: /workspace/p718-build/p718_gate_test "/workspace/p718/tests/p718/return_false.nl" "/workspace/p718/tests/p718/continue_false.nl"
+1: Working Directory: /workspace/p718-build
+1: Environment variables:
+1:  PYTHONDONTWRITEBYTECODE=1
+1:  PYTHONHASHSEED=0
+1:  LC_ALL=C
+1:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+1:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+1: Test timeout computed to be: 90
+1: return rejects=106 validator_OOM=78 rollback=PASS
+1: return admission_OOM=78 explicit_resource=PASS
+1: return rejects=132 validator_OOM=106 rollback=PASS
+1: return admission_OOM=106 explicit_resource=PASS
+1: registration OOM positions=536 rollback=PASS
+1: main-call OOM positions=439 rollback=PASS artifact=NULL
+1: normal driver OOM positions=1143 existing_host_oom_CLI3=1037 zero_partial_C=PASS
+1/8 Test #1: p718_if_return_proof_oom.unit .......   Passed    0.20 sec
+test 2
+    Start 2: p718_if_return_native.integration
+
+2: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p718/tests/p718/native.py" "/workspace/p718-build/newlangc" "/workspace/p718-build/p718_public_probe" "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13" "none" "/workspace/p718/tests/p718"
+2: Working Directory: /workspace/p718-build
+2: Environment variables:
+2:  PYTHONDONTWRITEBYTECODE=1
+2:  PYTHONHASHSEED=0
+2:  LC_ALL=C
+2:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+2:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+2: Test timeout computed to be: 90
+2: [{"C17": 0, "C_sha256": "cc9f91cca1f1ff7f8e16511fd3da9ee37edb267122fd657d5a4c4f20532a11c1", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "removed_return": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 1, "binding": 5, "child": 3, "current": 91, "if": 18, "index": 1, "normal": 1, "old": 57, "parent_after": 8, "parent_before": 1, "reads": [{"index": 1, "symbol": 6}, {"index": 0, "symbol": 7}], "return_node": 3, "root": 1, "streams": [{"changes": 0, "events": []}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 1, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 1, "ref": 4}]}]}, "sanitizer": "none", "sha256": "f1541a3b4ee1e07eca1b78408b51e59c46a2049decf7d4eea5aa614f49debf26", "source": "/workspace/p718/tests/p718/return_true.nl"}, {"C17": 0, "C_sha256": "0d6a317d1038a76659ff079acfbe7198f65935ba6ed4b24ebaca6a97d73d36d7", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_field": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_old": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 1, "binding": 5, "child": 3, "current": 91, "if": 18, "index": 1, "normal": 1, "old": 57, "parent_after": 8, "parent_before": 1, "reads": [{"index": 1, "symbol": 6}, {"index": 0, "symbol": 7}], "return_node": 3, "root": 1, "streams": [{"changes": 0, "events": []}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 1, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 1, "ref": 4}]}]}, "sanitizer": "none", "sha256": "1045546c74d31d690fcd29ceaabdeb7b9a070e19f16cf81a95525158c228db67", "source": "/workspace/p718/tests/p718/return_false.nl"}, {"C17": 0, "C_sha256": "88c76277269368a5862938e983732448ad598861d0d1a36d00a2eea6dc62b6ba", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_field": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_old": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 3, "binding": 5, "child": 4, "current": 38, "if": 18, "index": 0, "normal": 0, "old": 23, "parent_after": 8, "parent_before": 3, "reads": [{"index": 0, "symbol": 6}, {"index": 1, "symbol": 7}], "return_node": 12, "root": 3, "streams": [{"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 4, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 4, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 4, "ref": 4}]}]}, "sanitizer": "none", "sha256": "d14d775e0c28ab1a250d8448bae0e315288ab6948356956d62588df16e81187f", "source": "/workspace/p718/tests/p718/continue_true.nl"}, {"C17": 0, "C_sha256": "b2a870a3062a5dad6659867cfa7291686318425371fc9253345bc5058410260c", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "removed_return": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_field": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_old": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 3, "binding": 5, "child": 4, "current": 38, "if": 18, "index": 0, "normal": 0, "old": 23, "parent_after": 8, "parent_before": 3, "reads": [{"index": 0, "symbol": 6}, {"index": 1, "symbol": 7}], "return_node": 12, "root": 3, "streams": [{"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 4, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 4, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 4, "ref": 4}]}]}, "sanitizer": "none", "sha256": "d368df5374c8ce23c87f0af6f1fb99bcb9b94fe3e6fe9143d588fafd5a4d19f2", "source": "/workspace/p718/tests/p718/continue_false.nl"}, {"C17": 0, "C_sha256": "4d3a60f16564b2d5a7b911ffd5862adfc1fc33c8e6425a3156376d6f93d2a2cb", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "removed_return": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 1, "binding": 5, "child": 3, "current": 17, "if": 18, "index": 1, "normal": 1, "old": 111, "parent_after": 8, "parent_before": 1, "reads": [{"index": 1, "symbol": 6}, {"index": 0, "symbol": 7}], "return_node": 3, "root": 1, "streams": [{"changes": 0, "events": []}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 1, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 1, "ref": 4}]}]}, "sanitizer": "none", "sha256": "f3bc52b1631e791351c6324a51285f20bb79472a78040f4dfa817e955364ec2b", "source": "/workspace/p718/tests/p713/sole_normal.nl"}]
+2/8 Test #2: p718_if_return_native.integration ...   Passed    1.67 sec
+test 3
+    Start 3: p713_if_field_proof_oom.unit
+
+3: Test command: /workspace/p718-build/p713_gate_test "/workspace/p718/tests/p713/both_true.nl" "/workspace/p718/tests/p713/one_false.nl" "/workspace/p718/tests/p713/repeated_true.nl"
+3: Working Directory: /workspace/p718-build
+3: Environment variables:
+3:  PYTHONDONTWRITEBYTECODE=1
+3:  PYTHONHASHSEED=0
+3:  LC_ALL=C
+3:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+3:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+3: Test timeout computed to be: 90
+3: receipt history_worlds=8 flat_anchor_bytes=103648 graph_seal_bytes=81216 (excludes nested semantic allocations)
+3: equal-byte different source Copy IDs rejected=0
+3: IF rejects=103 validator_OOM=79 rollback=PASS
+3: IF admission_OOM=79 explicit_resource=PASS
+3: receipt history_worlds=7 flat_anchor_bytes=83992 graph_seal_bytes=74304 (excludes nested semantic allocations)
+3: equal-byte different source Copy IDs rejected=3
+3: IF rejects=97 validator_OOM=54 rollback=PASS
+3: IF admission_OOM=54 explicit_resource=PASS
+3: receipt history_worlds=13 flat_anchor_bytes=209192 graph_seal_bytes=127872 (excludes nested semantic allocations)
+3: equal-byte different source Copy IDs rejected=24
+3: IF rejects=208 validator_OOM=134 rollback=PASS
+3: IF admission_OOM=134 explicit_resource=PASS
+3: registration OOM positions=417 rollback=PASS
+3: main-call OOM positions=313 rollback=PASS artifact=NULL
+3: normal driver OOM positions=906 existing_host_oom_CLI3=799 zero_partial_C=PASS
+3/8 Test #3: p713_if_field_proof_oom.unit ........   Passed    0.17 sec
+test 4
+    Start 4: p713_if_field_native.integration
+
+4: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p718/tests/p713/native.py" "/workspace/p718-build/newlangc" "/workspace/p718-build/p713_public_probe" "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13" "none" "/workspace/p718/tests/p713"
+4: Working Directory: /workspace/p718-build
+4: Environment variables:
+4:  PYTHONDONTWRITEBYTECODE=1
+4:  PYTHONHASHSEED=0
+4:  LC_ALL=C
+4:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+4:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+4: Test timeout computed to be: 90
+4: {"both_false": {"C17": 0, "C17_sha256": "3f6884f500a1fada34c4e421f536069b41613f4e38504bd16b1005e5b708f16e", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"arms": [{"changes": 1, "child_fact": 7, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}], "parent_fact": 8}, {"changes": 1, "child_fact": 7, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}], "parent_fact": 8}], "base": 1, "child": 3, "child_after": 6, "condition": 17, "condition_value": 8, "if": 18, "incarnation": 1, "index": 1, "parent_after": 7, "parent_before": 1, "reads": [{"index": 1, "symbol": 5}, {"index": 0, "symbol": 6}], "result_binding": 4, "result_id": 11, "root": 1}, "synthetic_C_negative": ["wrong_condition", "wrong_field", "wrong_old"], "validator": 0}, "both_true": {"C17": 0, "C17_sha256": "c465d80b78612336c147c05e168f28c50db3bd9d116301120ab621a074548ce8", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"arms": [{"changes": 1, "child_fact": 7, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}], "parent_fact": 8}, {"changes": 1, "child_fact": 7, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}], "parent_fact": 8}], "base": 1, "child": 3, "child_after": 6, "condition": 17, "condition_value": 8, "if": 18, "incarnation": 1, "index": 1, "parent_after": 7, "parent_before": 1, "reads": [{"index": 1, "symbol": 5}, {"index": 0, "symbol": 6}], "result_binding": 4, "result_id": 11, "root": 1}, "synthetic_C_negative": ["wrong_condition", "wrong_field", "wrong_old"], "validator": 0}, "one_false": {"C17": 0, "C17_sha256": "af71cab7be967fa2a03fdf85217f99c17e9462a9b9f1dd6d2bf2762ee8214cf0", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"arms": [{"changes": 1, "child_fact": 7, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 2, "ref": 4, "result_id": 2}], "parent_fact": 8}, {"changes": 0, "child_fact": 2, "events": [{"change": false, "incoming_symbol": 0, "new_id": 0, "node": 2, "old_id": 2, "ref": 0, "result_id": 9}], "parent_fact": 1}], "base": 1, "child": 2, "child_after": 6, "condition": 17, "condition_value": 8, "if": 18, "incarnation": 1, "index": 0, "parent_after": 7, "parent_before": 1, "reads": [{"index": 0, "symbol": 5}, {"index": 1, "symbol": 6}], "result_binding": 4, "result_id": 11, "root": 1}, "synthetic_C_negative": ["wrong_condition"], "validator": 0}, "one_true": {"C17": 0, "C17_sha256": "4cb05c6399ac7836c60f3396092d5f1f422dd926f8385b0bc8cd3a07e99b7d63", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"arms": [{"changes": 1, "child_fact": 7, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 2, "ref": 4, "result_id": 2}], "parent_fact": 8}, {"changes": 0, "child_fact": 2, "events": [{"change": false, "incoming_symbol": 0, "new_id": 0, "node": 2, "old_id": 2, "ref": 0, "result_id": 9}], "parent_fact": 1}], "base": 1, "child": 2, "child_after": 6, "condition": 17, "condition_value": 8, "if": 18, "incarnation": 1, "index": 0, "parent_after": 7, "parent_before": 1, "reads": [{"index": 0, "symbol": 5}, {"index": 1, "symbol": 6}], "result_binding": 4, "result_id": 11, "root": 1}, "synthetic_C_negative": ["wrong_condition", "wrong_field", "wrong_old"], "validator": 0}, "repeated_false": {"C17": 0, "C17_sha256": "9fd64ee79576cb3e5724d2b127f4849940c0f0d4751166f447bb1b7ec425ddd3", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"arms": [{"changes": 2, "child_fact": 12, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}, {"change": false, "incoming_symbol": 0, "new_id": 0, "node": 9, "old_id": 11, "ref": 0, "result_id": 13}, {"change": true, "incoming_symbol": 5, "new_id": 16, "node": 14, "old_id": 11, "ref": 7, "result_id": 11}], "parent_fact": 13}, {"changes": 2, "child_fact": 11, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}, {"change": true, "incoming_symbol": 0, "new_id": 15, "node": 11, "old_id": 11, "ref": 6, "result_id": 11}], "parent_fact": 12}], "base": 1, "child": 3, "child_after": 6, "condition": 17, "condition_value": 8, "if": 18, "incarnation": 1, "index": 1, "parent_after": 7, "parent_before": 1, "reads": [{"index": 1, "symbol": 5}, {"index": 0, "symbol": 6}], "result_binding": 4, "result_id": 11, "root": 1}, "synthetic_C_negative": ["wrong_condition", "wrong_field", "wrong_old"], "validator": 0}, "repeated_true": {"C17": 0, "C17_sha256": "1dae2b45f78991d43edaed79f0eb90ca0b1bd4cca35009196754c7a23f06025d", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"arms": [{"changes": 2, "child_fact": 12, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}, {"change": false, "incoming_symbol": 0, "new_id": 0, "node": 9, "old_id": 11, "ref": 0, "result_id": 13}, {"change": true, "incoming_symbol": 5, "new_id": 16, "node": 14, "old_id": 11, "ref": 7, "result_id": 11}], "parent_fact": 13}, {"changes": 2, "child_fact": 11, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}, {"change": true, "incoming_symbol": 0, "new_id": 15, "node": 11, "old_id": 11, "ref": 6, "result_id": 11}], "parent_fact": 12}], "base": 1, "child": 3, "child_after": 6, "condition": 17, "condition_value": 8, "if": 18, "incarnation": 1, "index": 1, "parent_after": 7, "parent_before": 1, "reads": [{"index": 1, "symbol": 5}, {"index": 0, "symbol": 6}], "result_binding": 4, "result_id": 11, "root": 1}, "synthetic_C_negative": ["wrong_condition", "wrong_field", "wrong_old"], "validator": 0}}
+4/8 Test #4: p713_if_field_native.integration ....   Passed    1.77 sec
+test 5
+    Start 5: p706_proof_handoff_oom.unit
+
+5: Test command: /workspace/p718-build/p706_gate_test "/workspace/p718/tests/p706/settings.nl" "/workspace/p718/tests/p706/window.nl"
+5: Working Directory: /workspace/p718-build
+5: Environment variables:
+5:  PYTHONDONTWRITEBYTECODE=1
+5:  PYTHONHASHSEED=0
+5:  LC_ALL=C
+5:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+5:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+5: Test timeout computed to be: 90
+5: backend admission OOM positions=62 explicit_resource=PASS
+5: copy proof rejects=81 validator_OOM=31 unchanged=PASS restored=PASS
+5: backend admission OOM positions=62 explicit_resource=PASS
+5: copy proof rejects=82 validator_OOM=31 unchanged=PASS restored=PASS
+5: registration OOM positions=283 rollback=PASS
+5: main-call OOM positions=253 rollback=PASS artifact=NULL
+5: registration OOM positions=417 rollback=PASS
+5: main-call OOM positions=322 rollback=PASS artifact=NULL
+5: normal driver OOM positions=709 existing_host_oom_CLI3=619 zero_partial_C=PASS
+5: normal driver OOM positions=918 existing_host_oom_CLI3=828 zero_partial_C=PASS
+5/8 Test #5: p706_proof_handoff_oom.unit .........   Passed    0.26 sec
+test 6
+    Start 6: p706_ref_write_native.integration
+
+6: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p718/tests/p706/native.py" "/workspace/p718-build/newlangc" "/workspace/p718-build/p706_public_probe" "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13" "none" "/workspace/p718/tests/p706"
+6: Working Directory: /workspace/p718-build
+6: Environment variables:
+6:  PYTHONDONTWRITEBYTECODE=1
+6:  PYTHONHASHSEED=0
+6:  LC_ALL=C
+6:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+6:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+6: Test timeout computed to be: 90
+6: {"relay": {"C17": 0, "C17_sha256": "ce4c697c7bdb451cb54c903d0dba1e975e18704f00140d48ced51d7e10e79368", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"calls": [{"call": 18, "caller_ref": 3, "changes": [{"incoming_id": 11, "node": 2, "old_id": 1}], "child_fact": 3, "child_post": 10, "function": 10, "incoming_symbol": 0, "index": 1, "loan": 16, "parent_fact": 1, "parent_post": 11, "ref_formal": 4, "returned_id": 13, "scope": 1, "source_root": 1, "source_symbol": 1, "value_formal": 5}, {"call": 25, "caller_ref": 8, "changes": [{"incoming_id": 18, "node": 2, "old_id": 4}], "child_fact": 5, "child_post": 17, "function": 10, "incoming_symbol": 7, "index": 0, "loan": 23, "parent_fact": 4, "parent_post": 18, "ref_formal": 9, "returned_id": 20, "scope": 2, "source_root": 4, "source_symbol": 2, "value_formal": 10}], "direct": [{"incoming_symbol": 12, "index": 0, "node": 32, "ref": 13, "root": 1, "symbol": 1}]}, "validator": 0}, "settings": {"C17": 0, "C17_sha256": "caa017dded20ae1c04762f02403e669303e64bdcd8a3deadb4a3262f93b4f345", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"calls": [{"call": 18, "caller_ref": 3, "changes": [{"incoming_id": 11, "node": 2, "old_id": 1}], "child_fact": 2, "child_post": 10, "function": 11, "incoming_symbol": 0, "index": 0, "loan": 16, "parent_fact": 1, "parent_post": 11, "ref_formal": 4, "returned_id": 1, "scope": 1, "source_root": 1, "source_symbol": 1, "value_formal": 5}], "direct": [{"incoming_symbol": 6, "index": 1, "node": 25, "ref": 7, "root": 4, "symbol": 2}]}, "validator": 0}, "window": {"C17": 0, "C17_sha256": "0c8dc54517b036bf937b6fd3de5d05ae675ebe6a894409783536f2e09337f98c", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"calls": [{"call": 18, "caller_ref": 3, "changes": [{"incoming_id": 11, "node": 2, "old_id": 1}], "child_fact": 3, "child_post": 10, "function": 10, "incoming_symbol": 0, "index": 1, "loan": 16, "parent_fact": 1, "parent_post": 11, "ref_formal": 4, "returned_id": 13, "scope": 1, "source_root": 1, "source_symbol": 1, "value_formal": 5}], "direct": [{"incoming_symbol": 7, "index": 0, "node": 25, "ref": 8, "root": 4, "symbol": 2}]}, "validator": 0}}
+6/8 Test #6: p706_ref_write_native.integration ...   Passed    0.44 sec
+test 7
+    Start 7: p701_proof_rollback_oom.unit
+
+7: Test command: /workspace/p718-build/p701_gate_test "/workspace/p718/tests/p701/internal_one.nl" "/workspace/p718/tests/p701/internal_two.nl"
+7: Working Directory: /workspace/p718-build
+7: Environment variables:
+7:  PYTHONDONTWRITEBYTECODE=1
+7:  PYTHONHASHSEED=0
+7:  LC_ALL=C
+7:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+7:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+7: Test timeout computed to be: 90
+7: copy proof rejects=91 validator_OOM=27 unchanged=PASS restored=PASS
+7: copy proof rejects=122 validator_OOM=53 unchanged=PASS restored=PASS
+7: registration OOM positions=267 rollback=PASS
+7: main-call OOM positions=213 rollback=PASS artifact=NULL
+7: registration OOM positions=436 rollback=PASS
+7: main-call OOM positions=348 rollback=PASS artifact=NULL
+7/8 Test #7: p701_proof_rollback_oom.unit ........   Passed    0.05 sec
+test 8
+    Start 8: p701_stateful_native.integration
+
+8: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p718/tests/p701/native.py" "/workspace/p718-build/newlangc" "/workspace/p718-build/p701_public_probe" "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13" "none" "/workspace/p718/tests/p701"
+8: Working Directory: /workspace/p718-build
+8: Environment variables:
+8:  PYTHONDONTWRITEBYTECODE=1
+8:  PYTHONHASHSEED=0
+8:  LC_ALL=C
+8:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+8:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+8: Test timeout computed to be: 90
+8: {"internal_one": {"C17_sha256": "d2afcba01ac3849a5f1b40b4d2966c14a9231c4e38466f509f39cef92e1b5d46", "checked": 0, "emit": 0, "evidence": {"call": 2, "callee_root": 1, "callee_symbol": 1, "caller_change": 14, "caller_incoming": 4, "caller_index": 0, "caller_ref": 6, "caller_root": 7, "caller_symbol": 5, "changes": [{"child_fact": 3, "child_post": 5, "incoming_symbol": 0, "index": 1, "node": 11, "parent_fact": 1, "parent_post": 6, "ref": 2}], "function": 11, "result": 86}, "native": "original+passive O0/O2 PASS", "owned_validator": 0}, "internal_two": {"C17_sha256": "127385e1f073a009640473757da33b99af596809716466b5ee2bdce6b037ba60", "checked": 0, "emit": 0, "evidence": {"call": 2, "callee_root": 1, "callee_symbol": 1, "caller_change": 14, "caller_incoming": 7, "caller_index": 0, "caller_ref": 9, "caller_root": 10, "caller_symbol": 8, "changes": [{"child_fact": 2, "child_post": 5, "incoming_symbol": 0, "index": 0, "node": 11, "parent_fact": 1, "parent_post": 6, "ref": 2}, {"child_fact": 3, "child_post": 9, "incoming_symbol": 3, "index": 1, "node": 18, "parent_fact": 6, "parent_post": 10, "ref": 4}], "function": 11, "result": 137}, "native": "original+passive O0/O2 PASS", "owned_validator": 0}, "signal": {"C17_sha256": "78c91a70e8385fc48d680180320805e7898ba0c36c211f61bb7cb67810a4efd8", "checked": 0, "emit": 0, "evidence": {"call": 2, "callee_root": 1, "callee_symbol": 1, "caller_change": 14, "caller_incoming": 6, "caller_index": 1, "caller_ref": 8, "caller_root": 9, "caller_symbol": 7, "changes": [{"child_fact": 3, "child_post": 5, "incoming_symbol": 0, "index": 1, "node": 11, "parent_fact": 1, "parent_post": 6, "ref": 2}, {"child_fact": 2, "child_post": 9, "incoming_symbol": 3, "index": 0, "node": 18, "parent_fact": 6, "parent_post": 10, "ref": 4}], "function": 11, "result": 207}, "native": "original+passive O0/O2 PASS", "owned_validator": 0}, "three_changes": {"C17_sha256": "b7fbda786b74ac4c517a7e6dd90178c732609ed117f98fa54773286455c3b9eb", "checked": 0, "emit": 0, "evidence": {"call": 2, "callee_root": 1, "callee_symbol": 1, "caller_change": 14, "caller_incoming": 8, "caller_index": 0, "caller_ref": 10, "caller_root": 11, "caller_symbol": 9, "changes": [{"child_fact": 2, "child_post": 5, "incoming_symbol": 0, "index": 0, "node": 11, "parent_fact": 1, "parent_post": 6, "ref": 2}, {"child_fact": 3, "child_post": 9, "incoming_symbol": 3, "index": 1, "node": 18, "parent_fact": 6, "parent_post": 10, "ref": 4}, {"child_fact": 5, "child_post": 13, "incoming_symbol": 5, "index": 0, "node": 25, "parent_fact": 10, "parent_post": 14, "ref": 6}], "function": 11, "result": 38}, "native": "original+passive O0/O2 PASS", "owned_validator": 0}, "valve": {"C17_sha256": "a45421917232b31efcf727b48dfd85110169c19d30a9506c4bf01f01049c9452", "checked": 0, "emit": 0, "evidence": {"call": 9, "callee_root": 4, "callee_symbol": 2, "caller_change": 14, "caller_incoming": 5, "caller_index": 1, "caller_ref": 6, "caller_root": 1, "caller_symbol": 1, "changes": [{"child_fact": 5, "child_post": 8, "incoming_symbol": 0, "index": 0, "node": 11, "parent_fact": 4, "parent_post": 9, "ref": 3}], "function": 11, "result": 55}, "native": "original+passive O0/O2 PASS", "owned_validator": 0}}
+8/8 Test #8: p701_stateful_native.integration ....   Passed    0.67 sec
+
+The following tests passed:
+	p718_if_return_proof_oom.unit
+	p718_if_return_native.integration
+	p713_if_field_proof_oom.unit
+	p713_if_field_native.integration
+	p706_proof_handoff_oom.unit
+	p706_ref_write_native.integration
+	p701_proof_rollback_oom.unit
+	p701_stateful_native.integration
+
+100% tests passed, 0 tests failed out of 8
+
+Total Test time (real) =   5.24 sec

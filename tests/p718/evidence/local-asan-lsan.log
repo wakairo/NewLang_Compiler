@@ -1,0 +1,58 @@
+Internal ctest changing into directory: /workspace/p718-address
+UpdateCTestConfiguration  from :/workspace/p718-address/DartConfiguration.tcl
+Parse Config file:/workspace/p718-address/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p718-address/DartConfiguration.tcl
+Parse Config file:/workspace/p718-address/DartConfiguration.tcl
+Test project /workspace/p718-address
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: p718_if_return_proof_oom.unit
+
+1: Test command: /workspace/p718-address/p718_gate_test "/workspace/p718/tests/p718/return_false.nl" "/workspace/p718/tests/p718/continue_false.nl"
+1: Working Directory: /workspace/p718-address
+1: Environment variables:
+1:  PYTHONDONTWRITEBYTECODE=1
+1:  PYTHONHASHSEED=0
+1:  LC_ALL=C
+1:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+1:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+1: Test timeout computed to be: 90
+1: return history_worlds=11 flat_anchor_bytes=119632 graph_seal_bytes=86400 (excludes nested semantic storage)
+1: equal-byte different Copy origin rejects=1
+1: return rejects=111 validator_OOM=78 rollback=PASS
+1: return admission_OOM=78 explicit_resource=PASS
+1: return history_worlds=13 flat_anchor_bytes=163576 graph_seal_bytes=101952 (excludes nested semantic storage)
+1: equal-byte different Copy origin rejects=1
+1: return rejects=140 validator_OOM=106 rollback=PASS
+1: return admission_OOM=106 explicit_resource=PASS
+1: registration OOM positions=536 rollback=PASS
+1: main-call OOM positions=439 rollback=PASS artifact=NULL
+1: normal driver OOM positions=1143 existing_host_oom_CLI3=1037 zero_partial_C=PASS
+1/2 Test #1: p718_if_return_proof_oom.unit .......   Passed    2.76 sec
+test 2
+    Start 2: p718_if_return_native.integration
+
+2: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p718/tests/p718/native.py" "/workspace/p718-address/newlangc" "/workspace/p718-address/p718_public_probe" "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23" "address" "/workspace/p718/tests/p718"
+2: Working Directory: /workspace/p718-address
+2: Environment variables:
+2:  PYTHONDONTWRITEBYTECODE=1
+2:  PYTHONHASHSEED=0
+2:  LC_ALL=C
+2:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+2:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+2: Test timeout computed to be: 90
+2: [{"C17": 0, "C_sha256": "cc9f91cca1f1ff7f8e16511fd3da9ee37edb267122fd657d5a4c4f20532a11c1", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "removed_return": [{"compile": 1, "diagnostic": "/tmp/tmpo6dy7e_w/removed_return.c:56:32: error: variable 'nl_if_result_18' is uninitialized when used here [-Werror,-Wuninitialized]\n   56 |     const uint8_t nl_local_5 = nl_if_result_18;\n      |                                ^~~~~~~~~~~~~~~\n/tmp/tmpo6dy7e_w/removed_return.c:30:28: note: initialize the variable 'nl_if_result_18' to silence this warning\n   30 |     uint8_t nl_if_result_18;\n      |                            ^\n      |                             = '\\0'\n1 error generated.\n", "native": "NOT RUN"}, {"compile": 1, "diagnostic": "/tmp/tmpo6dy7e_w/removed_return.c:56:32: error: variable 'nl_if_result_18' is uninitialized when used here [-Werror,-Wuninitialized]\n   56 |     const uint8_t nl_local_5 = nl_if_result_18;\n      |                                ^~~~~~~~~~~~~~~\n/tmp/tmpo6dy7e_w/removed_return.c:30:28: note: initialize the variable 'nl_if_result_18' to silence this warning\n   30 |     uint8_t nl_if_result_18;\n      |                            ^\n      |                             = '\\0'\n1 error generated.\n", "native": "NOT RUN"}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 1, "binding": 5, "child": 3, "current": 91, "if": 18, "index": 1, "normal": 1, "old": 57, "parent_after": 8, "parent_before": 1, "reads": [{"index": 1, "symbol": 6}, {"index": 0, "symbol": 7}], "return_node": 3, "root": 1, "streams": [{"changes": 0, "events": []}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 1, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 1, "ref": 4}]}]}, "sanitizer": "address", "sha256": "f1541a3b4ee1e07eca1b78408b51e59c46a2049decf7d4eea5aa614f49debf26", "source": "/workspace/p718/tests/p718/return_true.nl"}, {"C17": 0, "C_sha256": "0d6a317d1038a76659ff079acfbe7198f65935ba6ed4b24ebaca6a97d73d36d7", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_field": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_old": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 1, "binding": 5, "child": 3, "current": 91, "if": 18, "index": 1, "normal": 1, "old": 57, "parent_after": 8, "parent_before": 1, "reads": [{"index": 1, "symbol": 6}, {"index": 0, "symbol": 7}], "return_node": 3, "root": 1, "streams": [{"changes": 0, "events": []}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 1, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 1, "ref": 4}]}]}, "sanitizer": "address", "sha256": "1045546c74d31d690fcd29ceaabdeb7b9a070e19f16cf81a95525158c228db67", "source": "/workspace/p718/tests/p718/return_false.nl"}, {"C17": 0, "C_sha256": "88c76277269368a5862938e983732448ad598861d0d1a36d00a2eea6dc62b6ba", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_field": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_old": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 3, "binding": 5, "child": 4, "current": 38, "if": 18, "index": 0, "normal": 0, "old": 23, "parent_after": 8, "parent_before": 3, "reads": [{"index": 0, "symbol": 6}, {"index": 1, "symbol": 7}], "return_node": 12, "root": 3, "streams": [{"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 4, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 4, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 4, "ref": 4}]}]}, "sanitizer": "address", "sha256": "d14d775e0c28ab1a250d8448bae0e315288ab6948356956d62588df16e81187f", "source": "/workspace/p718/tests/p718/continue_true.nl"}, {"C17": 0, "C_sha256": "b2a870a3062a5dad6659867cfa7291686318425371fc9253345bc5058410260c", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "removed_return": [{"compile": 1, "diagnostic": "/tmp/tmpf3cq9ff5/removed_return.c:72:32: error: variable 'nl_if_result_18' is uninitialized when used here [-Werror,-Wuninitialized]\n   72 |     const uint8_t nl_local_5 = nl_if_result_18;\n      |                                ^~~~~~~~~~~~~~~\n/tmp/tmpf3cq9ff5/removed_return.c:30:28: note: initialize the variable 'nl_if_result_18' to silence this warning\n   30 |     uint8_t nl_if_result_18;\n      |                            ^\n      |                             = '\\0'\n1 error generated.\n", "native": "NOT RUN"}, {"compile": 1, "diagnostic": "/tmp/tmpf3cq9ff5/removed_return.c:72:32: error: variable 'nl_if_result_18' is uninitialized when used here [-Werror,-Wuninitialized]\n   72 |     const uint8_t nl_local_5 = nl_if_result_18;\n      |                                ^~~~~~~~~~~~~~~\n/tmp/tmpf3cq9ff5/removed_return.c:30:28: note: initialize the variable 'nl_if_result_18' to silence this warning\n   30 |     uint8_t nl_if_result_18;\n      |                            ^\n      |                             = '\\0'\n1 error generated.\n", "native": "NOT RUN"}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_field": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_old": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 3, "binding": 5, "child": 4, "current": 38, "if": 18, "index": 0, "normal": 0, "old": 23, "parent_after": 8, "parent_before": 3, "reads": [{"index": 0, "symbol": 6}, {"index": 1, "symbol": 7}], "return_node": 12, "root": 3, "streams": [{"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 4, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 4, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 4, "ref": 4}]}]}, "sanitizer": "address", "sha256": "d368df5374c8ce23c87f0af6f1fb99bcb9b94fe3e6fe9143d588fafd5a4d19f2", "source": "/workspace/p718/tests/p718/continue_false.nl"}, {"C17": 0, "C_sha256": "4d3a60f16564b2d5a7b911ffd5862adfc1fc33c8e6425a3156376d6f93d2a2cb", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "removed_return": [{"compile": 1, "diagnostic": "/tmp/tmp16jyn24f/removed_return.c:56:32: error: variable 'nl_if_result_18' is uninitialized when used here [-Werror,-Wuninitialized]\n   56 |     const uint8_t nl_local_5 = nl_if_result_18;\n      |                                ^~~~~~~~~~~~~~~\n/tmp/tmp16jyn24f/removed_return.c:30:28: note: initialize the variable 'nl_if_result_18' to silence this warning\n   30 |     uint8_t nl_if_result_18;\n      |                            ^\n      |                             = '\\0'\n1 error generated.\n", "native": "NOT RUN"}, {"compile": 1, "diagnostic": "/tmp/tmp16jyn24f/removed_return.c:56:32: error: variable 'nl_if_result_18' is uninitialized when used here [-Werror,-Wuninitialized]\n   56 |     const uint8_t nl_local_5 = nl_if_result_18;\n      |                                ^~~~~~~~~~~~~~~\n/tmp/tmp16jyn24f/removed_return.c:30:28: note: initialize the variable 'nl_if_result_18' to silence this warning\n   30 |     uint8_t nl_if_result_18;\n      |                            ^\n      |                             = '\\0'\n1 error generated.\n", "native": "NOT RUN"}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 1, "binding": 5, "child": 3, "current": 17, "if": 18, "index": 1, "normal": 1, "old": 111, "parent_after": 8, "parent_before": 1, "reads": [{"index": 1, "symbol": 6}, {"index": 0, "symbol": 7}], "return_node": 3, "root": 1, "streams": [{"changes": 0, "events": []}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 1, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 1, "ref": 4}]}]}, "sanitizer": "address", "sha256": "f3bc52b1631e791351c6324a51285f20bb79472a78040f4dfa817e955364ec2b", "source": "/workspace/p718/tests/p713/sole_normal.nl"}]
+2/2 Test #2: p718_if_return_native.integration ...   Passed   21.65 sec
+
+The following tests passed:
+	p718_if_return_proof_oom.unit
+	p718_if_return_native.integration
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =  24.42 sec

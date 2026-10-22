@@ -1,0 +1,101 @@
+{
+  "base": "345e58be1bf805f2bc12cc802608f344351e7cd8",
+  "canonical": "Draft17.33",
+  "utc": "2026-10-22T02:27:31.119175+00:00",
+  "positive": {
+    "return_true": {
+      "sha256": "f1541a3b4ee1e07eca1b78408b51e59c46a2049decf7d4eea5aa614f49debf26",
+      "normal_arm": 1,
+      "taken": 0,
+      "initial": [
+        206,
+        57
+      ],
+      "index": 1,
+      "normal_post": [
+        206,
+        91
+      ],
+      "old": 57,
+      "terminal_store": null,
+      "return": "unit",
+      "expected_base": "SOURCE/CHECK0 then backend4, not a semantic refusal"
+    },
+    "return_false": {
+      "sha256": "1045546c74d31d690fcd29ceaabdeb7b9a070e19f16cf81a95525158c228db67",
+      "normal_arm": 1,
+      "taken": 1,
+      "initial": [
+        206,
+        57
+      ],
+      "index": 1,
+      "normal_post": [
+        206,
+        91
+      ],
+      "old": 57,
+      "terminal_store": null,
+      "return": "unit",
+      "expected_base": "SOURCE/CHECK0 then backend4, not a semantic refusal"
+    },
+    "continue_true": {
+      "sha256": "d14d775e0c28ab1a250d8448bae0e315288ab6948356956d62588df16e81187f",
+      "normal_arm": 0,
+      "taken": 0,
+      "initial": [
+        23,
+        144
+      ],
+      "index": 0,
+      "normal_post": [
+        38,
+        144
+      ],
+      "old": 23,
+      "terminal_store": 219,
+      "return": "unit",
+      "expected_base": "SOURCE/CHECK0 then backend4, not a semantic refusal"
+    },
+    "continue_false": {
+      "sha256": "d368df5374c8ce23c87f0af6f1fb99bcb9b94fe3e6fe9143d588fafd5a4d19f2",
+      "normal_arm": 0,
+      "taken": 1,
+      "initial": [
+        23,
+        144
+      ],
+      "index": 0,
+      "normal_post": [
+        38,
+        144
+      ],
+      "old": 23,
+      "terminal_store": 219,
+      "return": "unit",
+      "expected_base": "SOURCE/CHECK0 then backend4, not a semantic refusal"
+    }
+  },
+  "negative": {
+    "bad_return_type": {
+      "sha256": "ad9b2117c4cfb7cb69a326c50925223cccc42221422d54bbc7f629c1214f801c",
+      "expected": "semantic/unsupported rejection, exact diagnostic measured on base"
+    },
+    "escape": {
+      "sha256": "9b9465dcb621c6a915da53790e115970594231c9e93a3dc85d579f01acb0dd9e",
+      "expected": "semantic/unsupported rejection, exact diagnostic measured on base"
+    },
+    "unknown_field": {
+      "sha256": "59a2362ee4e2fd546138103868b6a6aa9d5191398156f1f6796105931d0005e1",
+      "expected": "semantic/unsupported rejection, exact diagnostic measured on base"
+    },
+    "bad_terminal_store": {
+      "sha256": "b15b53276182d831bcd8c81ffbfb8c878afa7682b3f8c1458f901e6db407b192",
+      "expected": "semantic/unsupported rejection, exact diagnostic measured on base"
+    },
+    "return_ref": {
+      "sha256": "7b7ebc4f5cb86e058de19960a269b7cb853fd16d4a3037b0cc69fc8ccd199961",
+      "expected": "semantic/unsupported rejection, exact diagnostic measured on base"
+    }
+  }
+}

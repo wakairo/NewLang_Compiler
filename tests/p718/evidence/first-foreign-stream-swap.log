@@ -1,0 +1,4 @@
+foreign stream swap status=0 admission=1
+/workspace/p718/tests/p718/gate_test.c:183: swapped == NL_CHECK_ANALYSIS_PRECISION_LIMIT && !admitted && valid(&n)
+return rejects=106 validator_OOM=78 rollback=PASS
+return admission_OOM=78 explicit_resource=PASS

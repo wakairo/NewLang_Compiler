@@ -1,0 +1,1 @@
+First backend edit added a duplicate NL_CHECKED_RETURN switch case. GCC rejected the build (src/main.c duplicate case value); no new binary/native evidence was produced. Removed the new case and reused the existing unit RETURN emitter. Frozen NewLang sources/oracles were unchanged. This is an implementation build error, not a source/semantic rejection.
