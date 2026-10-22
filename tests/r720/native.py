@@ -8,7 +8,7 @@ import sys
 import tempfile
 
 FROZEN = {
-    "a_true": ("371d7669738523b27a0771b7fe5a4c61b42c0d15c51347ed38c918e3efc471f2", "A", True, [73,142], [73,142], 0, 0, 0),
+    "a_true": ("371d7669738523b27a0771b7fe5a4c61b42c0d15c51347ed38c918e3efc471f2", "A", True, [73,142], [73,142], 0, 0, 1),
     "a_false": ("4527029967daabde6ba6fd0183217149d0f810271297c467c4862945ab75312c", "A", False, [73,142], [73,58], 1, 1, 0),
     "b_true": ("e789c5cefb50ec085221d6a03ccffccec70267f53fdf63dcbe7a8d82e694747d", "B", True, [201,29], [166,29], 1, 1, 0),
     "b_false": ("aa45d052f931b4e29d33848b55474584a0940982bf5aa61ac3aade7f21cdc1c0", "B", False, [201,29], [93,29], 1, 0, 1),
@@ -148,6 +148,20 @@ def exercise(compiler, probe, compiler_c, sanitizer, source_dir):
                 and output.read_bytes() == b"R720_EXISTING_OUTPUT\n",
                 "negative named-output rollback")
         report["return_type_bad"] = "SEMANTIC_REJECT_NO_C_ROLLBACK"
+        scope = src/"scope_escape.nl"
+        require(hashlib.sha256(scope.read_bytes()).hexdigest() ==
+                "b536b80549881a49dc566746082b8aabe170635c0d168de3ef19d9fb38a6c6c2",
+                "supplementary scope negative SHA drift")
+        for args in [["--check"], []]:
+            failure = cmd(compiler, *args, scope)
+            require(failure.returncode == 3 and not failure.stdout and failure.stderr,
+                    f"nonescaping scoped ref source expected semantic reject: {failure}")
+        output.write_bytes(b"R720_SCOPE_KEEP\\n")
+        failure = cmd(compiler, "--emit-c17-to", output, scope)
+        require(failure.returncode == 3 and not failure.stdout and
+                output.read_bytes() == b"R720_SCOPE_KEEP\\n",
+                "escaped scoped ref emitted C or overwrote output")
+        report["scope_escape"] = "SEMANTIC_REJECT_NO_C_ROLLBACK"
     print(json.dumps(report,sort_keys=True))
 
 

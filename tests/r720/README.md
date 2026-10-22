@@ -12,3 +12,20 @@ R-only branch based on exact fixed candidate, not mergeable standalone without t
 ## Initial CI retained (no source/oracle changes)
 
 Initial R HEAD `6001892c27ec70e41562d3c52b21b66566a6ad0b`; [FULL5 #39719219145](https://github.com/wakairo/NewLang_Compiler/actions/runs/39719219145) and [PARTIAL #39719219225](https://github.com/wakairo/NewLang_Compiler/actions/runs/39719219225). First Clang job failed pinned clang-format on R-owned probe.c; exact correction in CI artifact 12400576490. Initial GCC/PARTIAL test failed the R passive observer `one actual terminal return`: incorrect R regex assumed `return 0;`, real generated unit return is `return;`. An unrelated redundant A_FALSE-only driver assertion was found and removed before that scenario first executed. This is **harness-only correction**, not a change to independent semantic oracle. Original SHA-bearing five source files and issue freeze never revised. First failures and workflow run URLs retained.
+
+## Supplementary negative and second R-owned observer correction
+
+Second R head `76cfe66a58ef4acc9ce25d922aaedd9b4816d5a5` natural FULL5 [#39719615251](https://github.com/wakairo/NewLang_Compiler/actions/runs/39719615251), PARTIAL [#39719615246](https://github.com/wakairo/NewLang_Compiler/actions/runs/39719615246); retain independently even if it fails. Before results from all four normal/terminal executions, a further **R-only observer metadata typo** was found: the preinspection original freeze says A_TRUE is a terminal return with no continuation; test metadata had `terminal=0`. Correct to `terminal=1` without changing the original source, semantic oracle or emitter. This is not candidate semantic calibration.
+
+A separately designated **supplementary post-initial-freeze** negative source `scope_escape.nl` (not advertised as initial BLIND corpus) tests illegal survival of a scoped write-loan binder beyond its loan expression. UTF8 LF final newline; SHA256 `b536b80549881a49dc566746082b8aabe170635c0d168de3ef19d9fb38a6c6c2`. Oracle fixed before first execution: semantic rejection, no C, existing named output unchanged, no owned proof. Exact source:
+
+```text
+struct EscapeGuard { hot:u8, cold:u8 }
+fn main()->unit {
+ let object=EscapeGuard{cold:u8(7),hot:u8(3)};
+ let dangling=loan_write(object@hot){|out|out};
+ dangling;unit
+}
+```
+
+Producer source/oracle was never copied for this additional negative. Scope and type negatives must not be conflated.
