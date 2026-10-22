@@ -1,0 +1,57 @@
+[
+  {
+    "source": "evidence/p746/sources/archive_window.nl",
+    "exit": 0,
+    "stdout": "lexer=1 tokens=758 eof=4103\nattempt=1 parser=2 tree=NULL code=AVS-DECL-PROFILE span=147:186 registration=NOT_ATTEMPTED owned=ABSENT\nattempt=2 parser=2 tree=NULL code=AVS-DECL-PROFILE span=147:186 registration=NOT_ATTEMPTED owned=ABSENT\n"
+  },
+  {
+    "source": "evidence/p746/sources/calibration_batch.nl",
+    "exit": 0,
+    "stdout": "lexer=1 tokens=735 eof=3905\nattempt=1 parser=2 tree=NULL code=AVS-DECL-PROFILE span=148:192 registration=NOT_ATTEMPTED owned=ABSENT\nattempt=2 parser=2 tree=NULL code=AVS-DECL-PROFILE span=148:192 registration=NOT_ATTEMPTED owned=ABSENT\n"
+  },
+  {
+    "source": "evidence/p746/sources/negative_consumed_owner.nl",
+    "exit": 0,
+    "stdout": "lexer=1 tokens=744 eof=3980\nattempt=1 parser=2 tree=NULL code=AVS-DECL-PROFILE span=148:192 registration=NOT_ATTEMPTED owned=ABSENT\nattempt=2 parser=2 tree=NULL code=AVS-DECL-PROFILE span=148:192 registration=NOT_ATTEMPTED owned=ABSENT\n"
+  },
+  {
+    "source": "evidence/p746/sources/negative_escaped_scope.nl",
+    "exit": 0,
+    "stdout": "lexer=1 tokens=748 eof=3936\nattempt=1 parser=2 tree=NULL code=AVS-DECL-PROFILE span=148:192 registration=NOT_ATTEMPTED owned=ABSENT\nattempt=2 parser=2 tree=NULL code=AVS-DECL-PROFILE span=148:192 registration=NOT_ATTEMPTED owned=ABSENT\n"
+  },
+  {
+    "source": "evidence/p746/sources/negative_missing_cleanup.nl",
+    "exit": 0,
+    "stdout": "lexer=1 tokens=728 eof=3847\nattempt=1 parser=2 tree=NULL code=AVS-DECL-PROFILE span=148:192 registration=NOT_ATTEMPTED owned=ABSENT\nattempt=2 parser=2 tree=NULL code=AVS-DECL-PROFILE span=148:192 registration=NOT_ATTEMPTED owned=ABSENT\n"
+  },
+  {
+    "source": "evidence/p746/sources/negative_read_only.nl",
+    "exit": 0,
+    "stdout": "lexer=1 tokens=735 eof=3904\nattempt=1 parser=2 tree=NULL code=AVS-DECL-PROFILE span=148:192 registration=NOT_ATTEMPTED owned=ABSENT\nattempt=2 parser=2 tree=NULL code=AVS-DECL-PROFILE span=148:192 registration=NOT_ATTEMPTED owned=ABSENT\n"
+  },
+  {
+    "source": "evidence/p746/sources/negative_wrong_domain.nl",
+    "exit": 0,
+    "stdout": "lexer=1 tokens=735 eof=3904\nattempt=1 parser=2 tree=NULL code=AVS-DECL-PROFILE span=148:192 registration=NOT_ATTEMPTED owned=ABSENT\nattempt=2 parser=2 tree=NULL code=AVS-DECL-PROFILE span=148:192 registration=NOT_ATTEMPTED owned=ABSENT\n"
+  },
+  {
+    "source": "evidence/p746/calibration/archive_window_reordered.nl",
+    "exit": 0,
+    "stdout": "lexer=1 tokens=758 eof=4103\nattempt=1 parser=2 tree=NULL code=AVS-DECL-PROFILE span=126:186 registration=NOT_ATTEMPTED owned=ABSENT\nattempt=2 parser=2 tree=NULL code=AVS-DECL-PROFILE span=126:186 registration=NOT_ATTEMPTED owned=ABSENT\n"
+  },
+  {
+    "source": "evidence/p746/calibration/calibration_batch_reordered.nl",
+    "exit": 0,
+    "stdout": "lexer=1 tokens=735 eof=3905\nattempt=1 parser=2 tree=NULL code=AVS-DECL-PROFILE span=131:192 registration=NOT_ATTEMPTED owned=ABSENT\nattempt=2 parser=2 tree=NULL code=AVS-DECL-PROFILE span=131:192 registration=NOT_ATTEMPTED owned=ABSENT\n"
+  },
+  {
+    "source": "evidence/p746/calibration/minimal_copy_first.nl",
+    "exit": 0,
+    "stdout": "lexer=1 tokens=38 eof=112\nattempt=1 parser=2 tree=NULL code=AVS-DECL-PROFILE span=37:89 registration=NOT_ATTEMPTED owned=ABSENT\nattempt=2 parser=2 tree=NULL code=AVS-DECL-PROFILE span=37:89 registration=NOT_ATTEMPTED owned=ABSENT\n"
+  },
+  {
+    "source": "evidence/p746/calibration/minimal_heap_first.nl",
+    "exit": 0,
+    "stdout": "lexer=1 tokens=38 eof=112\nattempt=1 parser=2 tree=NULL code=AVS-DECL-PROFILE span=53:89 registration=NOT_ATTEMPTED owned=ABSENT\nattempt=2 parser=2 tree=NULL code=AVS-DECL-PROFILE span=53:89 registration=NOT_ATTEMPTED owned=ABSENT\n"
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "calibration_batch": {
+    "bytes": 3905,
+    "lines": 84,
+    "functions": 4,
+    "allocation_sites": 2,
+    "lexical_record_constructions": 2,
+    "stateful_copy_helper_calls": 1,
+    "copy_result_to_second_lexical_original": 1,
+    "owner_local_constructions": 1,
+    "explicit_return_statements": 2,
+    "heap_allocation_execution": "NOT REACHED",
+    "runtime_cost": "NOT MEASURED",
+    "physical_identity": "ONLY PREDICTED ROLES, no issued IDs or carriers"
+  },
+  "archive_window": {
+    "bytes": 4103,
+    "lines": 85,
+    "functions": 4,
+    "allocation_sites": 2,
+    "lexical_record_constructions": 2,
+    "stateful_copy_helper_calls": 1,
+    "copy_result_to_second_lexical_original": 1,
+    "owner_local_constructions": 1,
+    "explicit_return_statements": 2,
+    "heap_allocation_execution": "NOT REACHED",
+    "runtime_cost": "NOT MEASURED",
+    "physical_identity": "ONLY PREDICTED ROLES, no issued IDs or carriers"
+  }
+}

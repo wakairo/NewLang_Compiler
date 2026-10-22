@@ -1,0 +1,70 @@
+{
+  "checked_at_utc": "2026-10-22T14:17:54.931Z",
+  "implementation_base": "02884b759c86272c0f97c6ab74d3230c49ae5e27",
+  "tree": "0a6ddaabd800044bb54ca6f308046ec79b322f05",
+  "canonical": "Draft17.33",
+  "runs": [
+    {
+      "id": 39790920491,
+      "name": "Compiler validation",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "02884b759c86272c0f97c6ab74d3230c49ae5e27",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/39790920491",
+      "jobs": [
+        {
+          "id": 119866403396,
+          "name": "GCC Release",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 119866403554,
+          "name": "Clang",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 119866403589,
+          "name": "ASan",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 119866403777,
+          "name": "GCC",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "id": 119866404356,
+          "name": "UBSan",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 39790920334,
+      "name": "Compiler frontend/C17 reference (NO LLVM; PARTIAL)",
+      "event": "push",
+      "head_branch": "main",
+      "head_sha": "02884b759c86272c0f97c6ab74d3230c49ae5e27",
+      "status": "completed",
+      "conclusion": "success",
+      "run_attempt": 1,
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/39790920334",
+      "jobs": [
+        {
+          "id": 119866401908,
+          "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ]
+}

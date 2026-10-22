@@ -1,0 +1,100 @@
+[
+  {
+    "source": "archive_window.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "evidence/p746/sources/archive_window.nl:3:1-3:40: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "archive_window.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "evidence/p746/sources/archive_window.nl:3:1-3:40: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "calibration_batch.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "evidence/p746/sources/calibration_batch.nl:3:1-3:45: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "calibration_batch.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "evidence/p746/sources/calibration_batch.nl:3:1-3:45: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "negative_consumed_owner.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "evidence/p746/sources/negative_consumed_owner.nl:3:1-3:45: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "negative_consumed_owner.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "evidence/p746/sources/negative_consumed_owner.nl:3:1-3:45: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "negative_escaped_scope.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "evidence/p746/sources/negative_escaped_scope.nl:3:1-3:45: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "negative_escaped_scope.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "evidence/p746/sources/negative_escaped_scope.nl:3:1-3:45: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "negative_missing_cleanup.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "evidence/p746/sources/negative_missing_cleanup.nl:3:1-3:45: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "negative_missing_cleanup.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "evidence/p746/sources/negative_missing_cleanup.nl:3:1-3:45: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "negative_read_only.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "evidence/p746/sources/negative_read_only.nl:3:1-3:45: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "negative_read_only.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "evidence/p746/sources/negative_read_only.nl:3:1-3:45: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "negative_wrong_domain.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "evidence/p746/sources/negative_wrong_domain.nl:3:1-3:45: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "negative_wrong_domain.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "diagnostic": "evidence/p746/sources/negative_wrong_domain.nl:3:1-3:45: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  }
+]
