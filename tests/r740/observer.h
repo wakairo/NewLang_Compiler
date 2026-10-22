@@ -169,6 +169,90 @@ static void r736_finish(void)
            expected, r736_frees, r736_links / 2, r736_returns, r736_receives,
            (size_t)r736_regions[0], (size_t)r736_regions[1]);
 }
+/* R740 post-first-failure mechanical repair: instrument NEW visible emitted
+ * hooks, read-only. These callbacks do not write guest heap state. */
+static unsigned r740_arms, r740_roots_seen, r740_fields_seen;
+static unsigned r740_scope_exits, r740_handoffs, r740_receiver_enters;
+static unsigned r740_receiver_exits, r740_returned;
+
+static void r740_arm(unsigned choice)
+{
+    R736_ASSERT(choice == 1 || choice == 2);
+    ++r740_arms;
+}
+static void r740_root(const nl_node *p, size_t domain, unsigned write,
+                      size_t place, size_t incarnation, size_t scope)
+{
+    unsigned i = r736_region(p);
+    R736_ASSERT(r736_roots[i] == p && r736_phases[i] == 4);
+    R736_ASSERT(domain == r736_domain_ids[i] && write <= 1);
+    R736_ASSERT(place && incarnation && scope);
+    ++r740_roots_seen;
+}
+static void r740_field(const nl_node *parent, const nl_node_option *field,
+                       unsigned write, size_t nominal, size_t index,
+                       size_t child, size_t incarnation, size_t scope)
+{
+    R736_ASSERT(parent == r736_roots[0]);
+    R736_ASSERT(field == &r736_roots[0]->f0);
+    R736_ASSERT(write == 1 && nominal && index == 0);
+    R736_ASSERT(child && incarnation && scope);
+    ++r740_fields_seen;
+}
+static void r740_scope_end(size_t scope)
+{
+    R736_ASSERT(scope != 0);
+    ++r740_scope_exits;
+}
+static void r740_handoff(const nl_node *p, const void *handle, size_t domain,
+                         const nl_allocation *a, const nl_domain *d)
+{
+    R736_ASSERT(r740_handoffs++ == 0 && r736_links == 2);
+    R736_ASSERT(r736_returns == 1 && r736_receives == 1);
+    R736_ASSERT(p == r736_roots[1]);
+    R736_ASSERT((uintptr_t)handle == r736_regions[1]);
+    R736_ASSERT(domain == r736_domain_ids[1] && a && d);
+    R736_ASSERT(r736_phases[1] == 4 && r736_free_calls() == 0);
+}
+static void r740_receiver_enter(const nl_node *p, const void *handle,
+                                size_t domain, size_t pointer_id,
+                                size_t allocation_id, size_t domain_id,
+                                size_t unused_id, const nl_allocation *a,
+                                const nl_domain *d)
+{
+    R736_ASSERT(r740_receiver_enters++ == 0 && r740_handoffs == 1);
+    R736_ASSERT(p == r736_roots[1]);
+    R736_ASSERT((uintptr_t)handle == r736_regions[1]);
+    R736_ASSERT(domain == r736_domain_ids[1]);
+    R736_ASSERT(pointer_id && allocation_id && domain_id && unused_id);
+    R736_ASSERT(a && d && (uintptr_t)a->handle == r736_regions[1]);
+    R736_ASSERT(d->token == r736_domain_ids[1]);
+    R736_ASSERT(r736_phases[1] == 4);
+}
+static void r740_receiver_exit(void)
+{
+    R736_ASSERT(r740_receiver_exits++ == 0 && r740_receiver_enters == 1);
+    R736_ASSERT(r736_phases[1] == 9 && r736_frees == 1);
+}
+static void r740_returned(const nl_allocation *a, const nl_domain *d)
+{
+    R736_ASSERT(r740_returned++ == 0 && r740_receiver_exits == 1);
+    R736_ASSERT(a && d && r736_phases[1] == 9);
+}
+static void r740_finish(void)
+{
+    unsigned success = !!r736_regions[1];
+    R736_ASSERT(r740_handoffs == success);
+    R736_ASSERT(r740_receiver_enters == success);
+    R736_ASSERT(r740_receiver_exits == success);
+    R736_ASSERT(r740_returned == success);
+    if (success) {
+        R736_ASSERT(r740_fields_seen >= 2 && r740_roots_seen >= 2);
+        R736_ASSERT(r740_scope_exits > 0 && r740_arms > 0);
+    } else {
+        R736_ASSERT(r740_fields_seen == 0);
+    }
+}
 #define NL_HEAP_TRIAL(p, n, a) r736_trial(p, n, a)
 #define NL_HEAP_SLOT(p, n) r736_slot(p, n)
 #define NL_HEAP_DOMAIN(d) r736_domain(d)
@@ -182,4 +266,20 @@ static void r736_finish(void)
 #define NL_LIVE_ENTER(h, p, a, d) r736_enter(h, p, a, d)
 #define NL_LIVE_RETURN(v) r736_return(v)
 #define NL_LIVE_RECEIVE(v, a, d) r736_receive(v, a, d)
-#define NL_HEAP_FINISH() r736_finish()
+#define NL_HEAP_FINISH() \
+    do { \
+        r736_finish(); \
+        r740_finish(); \
+    } while (0)
+
+#define NL_HEAP_ARM(choice) r740_arm(choice)
+#define NL_HEAP_ROOT(p, d, write, place, inc, scope) \
+    r740_root(p, d, write, place, inc, scope)
+#define NL_HEAP_FIELD(parent, field, w, nominal, index, child, inc, scope) \
+    r740_field(parent, field, w, nominal, index, child, inc, scope)
+#define NL_HEAP_SCOPE_END(scope) r740_scope_end(scope)
+#define NL_HEAP_HANDOFF(p, a, d, ap, dp) r740_handoff(p, a, d, ap, dp)
+#define NL_HEAP_RECEIVER_ENTER(p, a, d, pid, aid, did, uid, ap, dp) \
+    r740_receiver_enter(p, a, d, pid, aid, did, uid, ap, dp)
+#define NL_HEAP_RECEIVER_EXIT() r740_receiver_exit()
+#define NL_HEAP_RETURNED(ap, dp) r740_returned(ap, dp)

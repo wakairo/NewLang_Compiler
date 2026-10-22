@@ -150,8 +150,7 @@ static bool public_fault(const char *path)
                 free(fault_c);
                 break;
             }
-            CHECK(calls > position && fault_c == NULL &&
-                  fault_length == 919);
+            CHECK(calls > position && fault_c == NULL && fault_length == 919);
             ++failures;
             if (st == NL_NODE_C_OUT_OF_MEMORY)
                 ++explicit_oom;
@@ -165,7 +164,8 @@ static bool public_fault(const char *path)
         }
         CHECK(failures > 0);
         printf("R740_EMIT_OOM faulted=%zu explicit_oom=%zu "
-               "atomic_output_recovery=PASS\n", failures, explicit_oom);
+               "atomic_output_recovery=PASS\n",
+               failures, explicit_oom);
     } else {
         CHECK(c == NULL && length == 919);
         printf(
