@@ -108,6 +108,13 @@ target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic n
 include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
+    # R730: inherited R725 unchanged v2 source, NON-BLIND calibrated verification.
+    add_executable(r730_public_gate tests/r730/public_gate.c)
+    target_link_libraries(r730_public_gate PRIVATE newlang_semantic)
+    add_test(NAME r730_calibrated.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r730/check_calibrated.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:r730_public_gate>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r730")
     # SPECULATIVE PR533 opt-in: default compiler/parser stay OFF. Test-only
     # rebuild of the SAME parser exercises Production semantics/owned/C17.
     add_executable(p718_gate_test tests/p718/gate_test.c)
