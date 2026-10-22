@@ -790,6 +790,20 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/native.py" "$<TARGET_FILE:newlangc>"
         "$<TARGET_FILE:handoff_checked_probe>" "$<TARGET_FILE:p733_public_probe>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738")
+    # Track R740 NON-BLIND calibrated, historical SHA and new pretest freeze.
+    add_executable(r740_fault_gate tests/r740/fault.c)
+    target_link_libraries(r740_fault_gate PRIVATE newlang_checked_c_node newlang_semantic newlang_parser)
+    target_link_options(r740_fault_gate PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME r740_calibrated_registration_validator_emitter_oom.unit
+        COMMAND r740_fault_gate "${CMAKE_CURRENT_SOURCE_DIR}/tests/r740/positive_direct_local_return.nl")
+    add_executable(r740_public_probe tests/r740/public_probe.c)
+    target_link_libraries(r740_public_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME r740_calibrated_local_return_native.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r740/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r740_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r740")
     add_executable(p733_gate_test tests/p733/gate_test.c)
     target_link_libraries(p733_gate_test PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
     target_link_options(p733_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
