@@ -910,7 +910,13 @@ static bool unit_statement_link(const NLCopyBodyProof *p,
             nl_checked_node_view(caller, p->parameters.arguments[a]);
         if (!arg || arg->span.start_byte <= call->span.start_byte ||
             arg->span.end_byte >= call->span.end_byte ||
-            arg->span.end_byte <= arg->span.start_byte)
+            arg->span.end_byte <= arg->span.start_byte || arg->initializer ||
+            arg->first_item || arg->tail || arg->item_count ||
+            arg->first_argument || arg->argument_count ||
+            (a == 0 ? arg->kind != NL_CHECKED_IDENTIFIER
+                    : (arg->kind != NL_CHECKED_U8_LITERAL &&
+                       arg->kind != NL_CHECKED_IDENTIFIER &&
+                       arg->kind != NL_CHECKED_FIELD_READ)))
             return false;
     }
     if (p->arguments[0].span.end_byte > p->arguments[1].span.start_byte)

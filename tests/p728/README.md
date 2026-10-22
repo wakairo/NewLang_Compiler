@@ -48,7 +48,9 @@ loan_write(original@field) { |actual| helper(actual, scalar); }
 The block has no tail and exactly one unit, nonterminal STATEMENT wrapper. Its
 initializer is this exact named-direct `(ref<write,u8>,u8)->unit` call; arguments
 and wrapper have their issued order and nested source spans. Only the block,
-call, two arguments and wrapper may occur inside this scoped body. A complete
+call, two pure leaf arguments and wrapper may occur inside this scoped body.
+The ref is an identifier; the scalar is a literal/identifier/field read, never
+a nested call or compound operation. A complete
 graph scan rejects a shared call, duplicate executing parent or orphan operation.
 The existing tail-call path remains supported, with call uniqueness checked for
 both unit spellings. The wrapper does not discard a returned ref/Copy package or
@@ -125,6 +127,14 @@ Dedicated sanitizer builds use `-DNEWLANG_SANITIZER=address` (with leak detectio
 or `undefined`. Local compiler is GCC13 / Clang23.1.2; unchanged repository
 FULL5 uses its locked LLVM/Clang23.1.3. Natural PR attempt-1 FULL5 + NO LLVM
 PARTIAL results and exact candidate/virtual-merge SHAs are recorded in Issue728.
+First published candidate `8b1c49c6d601f8c8b81df606050abc7467c1961c` started
+its natural pair before the final scope audit. That audit found a nested scalar
+call could pass the public unit validator while C17 still rejected it. Commit
+`f3827a7` froze that additional negative and its pre-correction outcomes. The
+corrected statement route explicitly requires pure leaf arguments; this is a
+profile precision correction, not a runtime authority failure or new semantics.
+The first candidate and its complete Actions history are retained, and the
+corrected final HEAD receives a separate natural attempt-1 pair (not a rerun).
 `first-local-failures.txt` preserves the initial wrapper+tail mutation failure
 and inherited unused-formal strict-C warning before repair; no Actions rerun
 can erase a first failure. Generated C `.txt` files are exact compiler stdout;

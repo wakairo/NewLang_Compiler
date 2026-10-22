@@ -70,5 +70,13 @@
     "emit": 4,
     "diagnostic": "V1-BACKEND-UNSUPPORTED",
     "classification": "finite wrapper profile precision refusal"
+  },
+  {
+    "source": "nested_call.nl",
+    "sha256": "aa52c8e59409fa330a65a31cfc1f1411684a54c8ea25732fd7b54d7bd24b8271",
+    "check": 0,
+    "emit": 4,
+    "diagnostic": "V1-BACKEND-UNSUPPORTED",
+    "classification": "post-candidate review: nested call excluded by public wrapper leaf-argument profile"
   }
 ]

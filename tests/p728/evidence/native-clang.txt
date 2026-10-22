@@ -12,3 +12,4 @@ extra_statement.nl finite wrapper profile precision refusal CHECK0 CLI4 zero C p
 extra_after.nl finite wrapper profile precision refusal CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
 two_calls.nl finite wrapper profile precision refusal CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
 binding_wrapper.nl finite wrapper profile precision refusal CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
+nested_call.nl post-candidate review: nested call excluded by public wrapper leaf-argument profile CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
