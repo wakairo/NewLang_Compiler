@@ -1,0 +1,54 @@
+Internal ctest changing into directory: /workspace/p733-asan-build
+Test project /workspace/p733-asan-build
+      Start   1: p718_if_return_proof_oom.unit
+      Start   2: p718_if_return_native.integration
+ 1/24 Test   #1: p718_if_return_proof_oom.unit ............   Passed    7.78 sec
+      Start   3: p728_unit_statement_proof.unit
+ 2/24 Test   #3: p728_unit_statement_proof.unit ...........   Passed    0.74 sec
+      Start   4: p728_unit_statement_history_oom.unit
+ 3/24 Test   #2: p718_if_return_native.integration ........   Passed   38.69 sec
+      Start   5: p728_unit_statement_native.integration
+ 4/24 Test   #4: p728_unit_statement_history_oom.unit .....   Passed   32.98 sec
+      Start   6: p722_callee_return_proof_oom.unit
+ 5/24 Test   #6: p722_callee_return_proof_oom.unit ........   Passed    9.56 sec
+      Start   7: p722_callee_return_native.integration
+ 6/24 Test   #5: p728_unit_statement_native.integration ...   Passed   18.28 sec
+      Start   8: p713_if_field_proof_oom.unit
+ 7/24 Test   #8: p713_if_field_proof_oom.unit .............   Passed    2.27 sec
+      Start   9: p713_if_field_native.integration
+ 8/24 Test   #7: p722_callee_return_native.integration ....   Passed   13.00 sec
+      Start  10: p706_proof_handoff_oom.unit
+ 9/24 Test  #10: p706_proof_handoff_oom.unit ..............   Passed    2.80 sec
+      Start  11: p706_ref_write_native.integration
+10/24 Test  #11: p706_ref_write_native.integration ........   Passed    5.46 sec
+      Start  12: p701_proof_rollback_oom.unit
+11/24 Test  #12: p701_proof_rollback_oom.unit .............   Passed    0.51 sec
+      Start  13: p701_stateful_native.integration
+12/24 Test   #9: p713_if_field_native.integration .........   Passed   16.17 sec
+      Start 269: p733_local_owner_driver_oom.unit
+13/24 Test  #13: p701_stateful_native.integration .........   Passed    3.55 sec
+      Start 270: p733_local_owner_source_rollback.unit
+14/24 Test #270: p733_local_owner_source_rollback.unit ....   Passed    0.05 sec
+      Start 271: p733_local_owner_native.integration
+15/24 Test #271: p733_local_owner_native.integration ......   Passed    4.27 sec
+      Start 272: live_tail_return_backend.unit
+16/24 Test #272: live_tail_return_backend.unit ............   Passed    0.19 sec
+      Start 273: live_tail_return_native.integration
+17/24 Test #273: live_tail_return_native.integration ......   Passed   12.67 sec
+      Start 274: live_tail_return_evidence.unit
+18/24 Test #274: live_tail_return_evidence.unit ...........   Passed    0.03 sec
+      Start 275: live_tail_return_oom.unit
+19/24 Test #269: p733_local_owner_driver_oom.unit .........   Passed   18.92 sec
+      Start 276: live_tail_return_source.integration
+20/24 Test #276: live_tail_return_source.integration ......   Passed    1.76 sec
+      Start 267: p733_pending_history_oom.unit
+21/24 Test #275: live_tail_return_oom.unit ................   Passed    5.16 sec
+      Start 268: p733_cargo_history_oom.unit
+22/24 Test #267: p733_pending_history_oom.unit ............   Passed    5.42 sec
+      Start 266: p733_local_owner_proof.unit
+23/24 Test #266: p733_local_owner_proof.unit ..............   Passed    0.34 sec
+24/24 Test #268: p733_cargo_history_oom.unit ..............   Passed    4.58 sec
+
+100% tests passed, 0 tests failed out of 24
+
+Total Test time (real) = 103.36 sec

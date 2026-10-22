@@ -48,9 +48,17 @@ def main():
         # original-header mutation checks; the historical digest is unchanged.
         if_fields = (b'    struct NLIfFieldProof *if_fields;\n'
                      b'    void (*destroy_if_fields)(NLCheckedFragment *);\n')
-        if_record = b'struct NLCheckedFragment {\n' + if_fields
+        owner_fields = (b'    struct NLProducerLocalProof *producer_local;\n'
+                        b'    void (*destroy_producer_local)(NLCheckedFragment *);\n')
+        owner_record = b'struct NLCheckedFragment {\n' + owner_fields
+        assert header.count(owner_fields) == header.count(owner_record) == 1
+        if_record = owner_record + if_fields
         assert header.count(if_record) == header.count(if_fields) == 1
         attacks = {
+            'missing_owner_block': header.replace(owner_fields,b'',1),
+            'duplicate_owner_block': header+owner_fields,
+            'misplaced_owner_block': header.replace(owner_fields,b'',1)+owner_fields,
+            'wrong_owner_type': header.replace(b'NLProducerLocalProof *producer_local',b'NLProducerLocalProof *fake_local'),
             'missing_if_block': header.replace(if_fields,b'',1),
             'duplicate_if_block': header+if_fields,
             'misplaced_if_block': header.replace(if_fields,b'',1)+if_fields,

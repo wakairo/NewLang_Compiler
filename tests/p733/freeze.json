@@ -1,0 +1,77 @@
+{
+  "base": "4eca3eb3bebd4069fc982fd94332970bfd7f15f0",
+  "tree": "7f81471300049065a34311b40e9ba5071cacb423",
+  "canonical": "Draft17.33",
+  "cases": [
+    {
+      "name": "pending",
+      "sha256": "94956e756d2946490cf0633f975b6afebb46d6d9452b4d0d182c2ec51381f13f",
+      "head_payload": 11,
+      "tail_payload": 67,
+      "expected": "CHECK0/public original owner valid; before backend CLI4, after strict C17/native both allocation success and failure at attempt1/2; head next Some(original tail)->None, tail remains live in local/return/receive, original A/D/Backing/incarnation preserved, unique transfer and once cleanup"
+    },
+    {
+      "name": "cargo",
+      "sha256": "d72c3d40863ccf705fbbfba27fda8672ffe043cad82e439e7b02970e14aeb01f",
+      "head_payload": 29,
+      "tail_payload": 211,
+      "expected": "CHECK0/public original owner valid; before backend CLI4, after strict C17/native both allocation success and failure at attempt1/2; head next Some(original tail)->None, tail remains live in local/return/receive, original A/D/Backing/incarnation preserved, unique transfer and once cleanup"
+    }
+  ],
+  "negatives": [
+    {
+      "name": "double_consume",
+      "sha256": "722d2d96ec515462f9ef161305757c51ebd2743783b59ca2e5d367900a6444a5",
+      "expect": "reject semantic/definition precision; no authority grant or C17; snapshot rollback, no artifact"
+    },
+    {
+      "name": "discard_owner",
+      "sha256": "1bc9a240430a0d36224da2bd22aad889f8bcb964a130b34431ea131068ef3134",
+      "expect": "reject semantic/definition precision; no authority grant or C17; snapshot rollback, no artifact"
+    },
+    {
+      "name": "missing_member",
+      "sha256": "da70de639f7beb00a563cd47a0531fad719c8eb8dc02dd1339f20ff70521e95a",
+      "expect": "reject semantic/definition precision; no authority grant or C17; snapshot rollback, no artifact"
+    },
+    {
+      "name": "wrong_backing",
+      "sha256": "aa5d770d51c584bbd5a6a9d050b655a9e8f4e7aca99111c8baec0f433f124f5b",
+      "expect": "reject semantic/definition precision; no authority grant or C17; snapshot rollback, no artifact"
+    },
+    {
+      "name": "wrong_domain",
+      "sha256": "4b2509b9a1eeba8d462e6db12402ed817be3583f5a77d4a5b497e10a9b22cfeb",
+      "expect": "reject semantic/definition precision; no authority grant or C17; snapshot rollback, no artifact"
+    },
+    {
+      "name": "wrong_root",
+      "sha256": "4a41e762e17de44b2ba04ed257097698985db3a659f4f8ec69d84e2a334ecebf",
+      "expect": "reject semantic/definition precision; no authority grant or C17; snapshot rollback, no artifact"
+    },
+    {
+      "name": "active_loan",
+      "sha256": "1bb0e3192cfa881ec48008ae18fde1df5acdd2e458b328a0800eea651b5825e6",
+      "expect": "reject semantic/definition precision; no authority grant or C17; snapshot rollback, no artifact"
+    },
+    {
+      "name": "wrong_receiver",
+      "sha256": "2d880925b90c86cef5ee01ba37d95ff1a7b1f3e0ceda7a292628a3e543773520",
+      "expect": "reject semantic/definition precision; no authority grant or C17; snapshot rollback, no artifact"
+    },
+    {
+      "name": "reuse_donor",
+      "sha256": "dc04c2b3c3d923b4de40146f7ef107bfc6b579bd10080b341b2b5b929115554b",
+      "expect": "reject semantic/definition precision; no authority grant or C17; snapshot rollback, no artifact"
+    },
+    {
+      "name": "no_cleanup",
+      "sha256": "c6012088066a663b71d59ec595e326dbf46413d22d883ed022028f97f65bfcf9",
+      "expect": "reject semantic/definition precision; no authority grant or C17; snapshot rollback, no artifact"
+    }
+  ],
+  "control_sha256": "fe6671d59794d3c96b935c97cf30753dc49a83ed7c3b560b2715afc0e8ba5e4f",
+  "inherited_sha256": "b640c1f2b9289824090be9fca40479e9e9eb0a4fb74e15f4a646561e0f87221e",
+  "oom": "fail-at-N bounded 10000 per stage, null output and unchanged public state; preserve named output on failure",
+  "native": "ordinary CLI generated C unchanged plus separate passive read-only observer; GCC/Clang O0/O2; platform failure selection attempts1/2, no-failure uses real malloc/free"
+}

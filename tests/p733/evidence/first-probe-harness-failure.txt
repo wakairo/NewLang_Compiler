@@ -1,0 +1,18 @@
+Internal ctest changing into directory: /workspace/p733-build
+Test project /workspace/p733-build
+    Start 266: p733_local_owner_native.integration
+1/1 Test #266: p733_local_owner_native.integration ...***Failed    0.05 sec
+Traceback (most recent call last):
+  File "/workspace/p733/tests/p733/native.py", line 42, in <module>
+    assert view.returncode == 0 and not view.stderr, view.stderr
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b''
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.05 sec
+
+The following tests FAILED:
+	266 - p733_local_owner_native.integration (Failed)
+Errors while running CTest

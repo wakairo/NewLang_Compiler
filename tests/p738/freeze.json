@@ -1,0 +1,90 @@
+{
+  "original_compiler_base": "4eca3eb3bebd4069fc982fd94332970bfd7f15f0",
+  "candidate_base": "663a84916d3c7695f7c6accd7e42a4fa94e850e1",
+  "tree": "621caeaad4b770da9e6750efe7ca52fc63bcf604",
+  "canonical": "Draft17.33",
+  "R736_frozen_commit": "b91ebc7df77f98c3a0d33427472cc078a3239e8f",
+  "R736_head": "ccc4b4a95ca5ebadab4354df157ee33badd2b959",
+  "R_A_sha256": "676f662afca5254e3399ebb1195d4fe75cefc239180fe8602590a8c01bb320ee",
+  "cases": [
+    {
+      "name": "sprout",
+      "sha256": "a9e24ba9ba0436f417118fbee3bd1706ab8f20faa29ef195f690c87b3ea2ca5e",
+      "head_payload": 17,
+      "tail_payload": 149,
+      "pre_read": false,
+      "return_read": true,
+      "receiver_read": true,
+      "expected": "CHECK0, authentic original/local-return proof PASS; initial C17 CLI4 zero bytes; after certified optional-read lane normal C17 and unchanged/passive GCC/Clang O0/O2 native, original two H/A/D preserved, Some(original tail)->None, local consume and callee RETURN, one caller receipt then once tail/head cleanup; failure1 no frees, failure2 only head freed"
+    },
+    {
+      "name": "ticket",
+      "sha256": "752c120c7b17fb12a9c94d2853d85d758fd7d159754170ca0259df51e1aa2ac9",
+      "head_payload": 23,
+      "tail_payload": 199,
+      "pre_read": false,
+      "return_read": true,
+      "receiver_read": false,
+      "expected": "CHECK0, authentic original/local-return proof PASS; initial C17 CLI4 zero bytes; after certified optional-read lane normal C17 and unchanged/passive GCC/Clang O0/O2 native, original two H/A/D preserved, Some(original tail)->None, local consume and callee RETURN, one caller receipt then once tail/head cleanup; failure1 no frees, failure2 only head freed"
+    }
+  ],
+  "negatives": [
+    {
+      "name": "double_consume",
+      "sha256": "d2dbd55f4d208e31832f4a0bcbed9fe338b0c64febd35d73d24b9e3d00927dba",
+      "expected": "Same source semantic/definition refusal as unchanged P735; CLI3 zero C, existing named output preserved, atomic semantic rollback"
+    },
+    {
+      "name": "wrong_backing",
+      "sha256": "e7b0ff367ad4acfc2efd3cf238916d728ec421be408522d5ade1f7e6f2e2c954",
+      "expected": "Same source semantic/definition refusal as unchanged P735; CLI3 zero C, existing named output preserved, atomic semantic rollback"
+    },
+    {
+      "name": "wrong_domain",
+      "sha256": "c6671ede2011b59b852adca127f884f8af95c8ba456a0440b3ff8dfa442229f2",
+      "expected": "Same source semantic/definition refusal as unchanged P735; CLI3 zero C, existing named output preserved, atomic semantic rollback"
+    },
+    {
+      "name": "wrong_root",
+      "sha256": "5916a1aaca957f8781a498dae5102893131ae0340d58a4f9dfe560a93bb634cd",
+      "expected": "Same source semantic/definition refusal as unchanged P735; CLI3 zero C, existing named output preserved, atomic semantic rollback"
+    },
+    {
+      "name": "active_loan",
+      "sha256": "6ebfb86e77edc6f61608fecda2682695b709779f968d7afadc40bb9b85034f67",
+      "expected": "Same source semantic/definition refusal as unchanged P735; CLI3 zero C, existing named output preserved, atomic semantic rollback"
+    },
+    {
+      "name": "wrong_receiver",
+      "sha256": "f42f532afbd0e2b501083fdd2d5dec56664d7ccdf655b15e6b018640a3a76ee8",
+      "expected": "Same source semantic/definition refusal as unchanged P735; CLI3 zero C, existing named output preserved, atomic semantic rollback"
+    },
+    {
+      "name": "reuse_donor",
+      "sha256": "807b65b96930671151d7155a46c0069bffd32f24b27308218e6cd438ab44c583",
+      "expected": "Same source semantic/definition refusal as unchanged P735; CLI3 zero C, existing named output preserved, atomic semantic rollback"
+    },
+    {
+      "name": "no_cleanup",
+      "sha256": "89108c3af38e52853c7196130961f00a7f81b3d7433e5995a6d71b496556af58",
+      "expected": "Same source semantic/definition refusal as unchanged P735; CLI3 zero C, existing named output preserved, atomic semantic rollback"
+    },
+    {
+      "name": "wrong_initial_target",
+      "sha256": "4f113a2286d5932dfe9b910df4e8a003221739bcf042acf2a558389358591538",
+      "expected": "Semantic/definition proof must reject before emission; zero C and named output preservation"
+    },
+    {
+      "name": "missing_initial_some",
+      "sha256": "21df69b4422325c15cfa056b69fd4a592cd66e8a874c1b12281c24e4b9caf5b4",
+      "expected": "Semantic/definition proof must reject before emission; zero C and named output preservation"
+    },
+    {
+      "name": "read_actual",
+      "sha256": "c675578b95a7f7730396c0b2e86530c62f4237e2eadb3f2aadd254aeb09e389e",
+      "expected": "Semantic/definition proof must reject before emission; zero C and named output preservation"
+    }
+  ],
+  "oom_bound": 10000,
+  "native": "2 source x O0/O2 x unchanged/passive x failure1/failure2/success per compiler; extra immutable R A from separate read-only checkout, NON-BLIND P reproduction not new R evidence"
+}

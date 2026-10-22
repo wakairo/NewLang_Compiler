@@ -84,7 +84,7 @@ precision = source.replace(op, "match seen {Some(q)=>{" + op + "},None=>{" + op 
 # No C/executable path: accepted source is intentionally pre-backend unsupported.
 with tempfile.TemporaryDirectory() as directory:
     root = pathlib.Path(directory)
-    supported = {"primary", "renamed", "declaration-order", "tail-argument-aliases", "reversed-inner-arms", "reversed-constructor-fields"}
+    supported = {"producer-result-local", "primary", "renamed", "declaration-order", "tail-argument-aliases", "reversed-inner-arms", "reversed-constructor-fields"}
     for name, text in positives.items():
         path = root / (name + ".nl")
         path.write_text(text)

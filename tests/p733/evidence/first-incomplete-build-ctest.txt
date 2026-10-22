@@ -1,0 +1,607 @@
+Internal ctest changing into directory: /workspace/p733-asan-build
+Test project /workspace/p733-asan-build
+      Start   1: p718_if_return_proof_oom.unit
+Could not find executable /workspace/p733-asan-build/p718_gate_test
+Looked in the following places:
+/workspace/p733-asan-build/p718_gate_test
+/workspace/p733-asan-build/p718_gate_test
+/workspace/p733-asan-build/Release/p718_gate_test
+/workspace/p733-asan-build/Release/p718_gate_test
+/workspace/p733-asan-build/Debug/p718_gate_test
+/workspace/p733-asan-build/Debug/p718_gate_test
+/workspace/p733-asan-build/MinSizeRel/p718_gate_test
+/workspace/p733-asan-build/MinSizeRel/p718_gate_test
+/workspace/p733-asan-build/RelWithDebInfo/p718_gate_test
+/workspace/p733-asan-build/RelWithDebInfo/p718_gate_test
+/workspace/p733-asan-build/Deployment/p718_gate_test
+/workspace/p733-asan-build/Deployment/p718_gate_test
+/workspace/p733-asan-build/Development/p718_gate_test
+/workspace/p733-asan-build/Development/p718_gate_test
+workspace/p733-asan-build/p718_gate_test
+workspace/p733-asan-build/p718_gate_test
+workspace/p733-asan-build/Release/p718_gate_test
+workspace/p733-asan-build/Release/p718_gate_test
+workspace/p733-asan-build/Debug/p718_gate_test
+workspace/p733-asan-build/Debug/p718_gate_test
+workspace/p733-asan-build/MinSizeRel/p718_gate_test
+workspace/p733-asan-build/MinSizeRel/p718_gate_test
+workspace/p733-asan-build/RelWithDebInfo/p718_gate_test
+workspace/p733-asan-build/RelWithDebInfo/p718_gate_test
+workspace/p733-asan-build/Deployment/p718_gate_test
+workspace/p733-asan-build/Deployment/p718_gate_test
+workspace/p733-asan-build/Development/p718_gate_test
+workspace/p733-asan-build/Development/p718_gate_test
+Unable to find executable: /workspace/p733-asan-build/p718_gate_test
+ 1/24 Test   #1: p718_if_return_proof_oom.unit ............***Not Run   0.00 sec
+      Start   2: p718_if_return_native.integration
+      Start   3: p728_unit_statement_proof.unit
+Could not find executable /workspace/p733-asan-build/p728_gate_test
+Looked in the following places:
+/workspace/p733-asan-build/p728_gate_test
+/workspace/p733-asan-build/p728_gate_test
+/workspace/p733-asan-build/Release/p728_gate_test
+/workspace/p733-asan-build/Release/p728_gate_test
+/workspace/p733-asan-build/Debug/p728_gate_test
+/workspace/p733-asan-build/Debug/p728_gate_test
+/workspace/p733-asan-build/MinSizeRel/p728_gate_test
+/workspace/p733-asan-build/MinSizeRel/p728_gate_test
+/workspace/p733-asan-build/RelWithDebInfo/p728_gate_test
+/workspace/p733-asan-build/RelWithDebInfo/p728_gate_test
+/workspace/p733-asan-build/Deployment/p728_gate_test
+/workspace/p733-asan-build/Deployment/p728_gate_test
+/workspace/p733-asan-build/Development/p728_gate_test
+/workspace/p733-asan-build/Development/p728_gate_test
+workspace/p733-asan-build/p728_gate_test
+workspace/p733-asan-build/p728_gate_test
+workspace/p733-asan-build/Release/p728_gate_test
+workspace/p733-asan-build/Release/p728_gate_test
+workspace/p733-asan-build/Debug/p728_gate_test
+workspace/p733-asan-build/Debug/p728_gate_test
+workspace/p733-asan-build/MinSizeRel/p728_gate_test
+workspace/p733-asan-build/MinSizeRel/p728_gate_test
+workspace/p733-asan-build/RelWithDebInfo/p728_gate_test
+workspace/p733-asan-build/RelWithDebInfo/p728_gate_test
+workspace/p733-asan-build/Deployment/p728_gate_test
+workspace/p733-asan-build/Deployment/p728_gate_test
+workspace/p733-asan-build/Development/p728_gate_test
+workspace/p733-asan-build/Development/p728_gate_test
+Unable to find executable: /workspace/p733-asan-build/p728_gate_test
+ 2/24 Test   #3: p728_unit_statement_proof.unit ...........***Not Run   0.00 sec
+      Start   4: p728_unit_statement_history_oom.unit
+Could not find executable /workspace/p733-asan-build/p722_gate_test
+Looked in the following places:
+/workspace/p733-asan-build/p722_gate_test
+/workspace/p733-asan-build/p722_gate_test
+/workspace/p733-asan-build/Release/p722_gate_test
+/workspace/p733-asan-build/Release/p722_gate_test
+/workspace/p733-asan-build/Debug/p722_gate_test
+/workspace/p733-asan-build/Debug/p722_gate_test
+/workspace/p733-asan-build/MinSizeRel/p722_gate_test
+/workspace/p733-asan-build/MinSizeRel/p722_gate_test
+/workspace/p733-asan-build/RelWithDebInfo/p722_gate_test
+/workspace/p733-asan-build/RelWithDebInfo/p722_gate_test
+/workspace/p733-asan-build/Deployment/p722_gate_test
+/workspace/p733-asan-build/Deployment/p722_gate_test
+/workspace/p733-asan-build/Development/p722_gate_test
+/workspace/p733-asan-build/Development/p722_gate_test
+workspace/p733-asan-build/p722_gate_test
+workspace/p733-asan-build/p722_gate_test
+workspace/p733-asan-build/Release/p722_gate_test
+workspace/p733-asan-build/Release/p722_gate_test
+workspace/p733-asan-build/Debug/p722_gate_test
+workspace/p733-asan-build/Debug/p722_gate_test
+workspace/p733-asan-build/MinSizeRel/p722_gate_test
+workspace/p733-asan-build/MinSizeRel/p722_gate_test
+workspace/p733-asan-build/RelWithDebInfo/p722_gate_test
+workspace/p733-asan-build/RelWithDebInfo/p722_gate_test
+workspace/p733-asan-build/Deployment/p722_gate_test
+workspace/p733-asan-build/Deployment/p722_gate_test
+workspace/p733-asan-build/Development/p722_gate_test
+workspace/p733-asan-build/Development/p722_gate_test
+Unable to find executable: /workspace/p733-asan-build/p722_gate_test
+ 3/24 Test   #4: p728_unit_statement_history_oom.unit .....***Not Run   0.00 sec
+      Start   5: p728_unit_statement_native.integration
+ 4/24 Test   #2: p718_if_return_native.integration ........***Failed    0.21 sec
+Traceback (most recent call last):
+  File "/workspace/p733/tests/p718/native.py", line 145, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/p733/tests/p718/native.py", line 127, in main
+    rows.append(one(compiler,probe,cc,sanitizer,source,oracle))
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p733/tests/p718/native.py", line 84, in one
+    check=run([compiler,'--check',source]);emitted=run([compiler,source]);public=run([probe,source])
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p733/tests/p718/native.py", line 12, in run
+    return subprocess.run(list(map(str,args)),capture_output=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/p733-asan-build/newlangc'
+
+      Start   6: p722_callee_return_proof_oom.unit
+Could not find executable /workspace/p733-asan-build/p722_gate_test
+Looked in the following places:
+/workspace/p733-asan-build/p722_gate_test
+/workspace/p733-asan-build/p722_gate_test
+/workspace/p733-asan-build/Release/p722_gate_test
+/workspace/p733-asan-build/Release/p722_gate_test
+/workspace/p733-asan-build/Debug/p722_gate_test
+/workspace/p733-asan-build/Debug/p722_gate_test
+/workspace/p733-asan-build/MinSizeRel/p722_gate_test
+/workspace/p733-asan-build/MinSizeRel/p722_gate_test
+/workspace/p733-asan-build/RelWithDebInfo/p722_gate_test
+/workspace/p733-asan-build/RelWithDebInfo/p722_gate_test
+/workspace/p733-asan-build/Deployment/p722_gate_test
+/workspace/p733-asan-build/Deployment/p722_gate_test
+/workspace/p733-asan-build/Development/p722_gate_test
+/workspace/p733-asan-build/Development/p722_gate_test
+workspace/p733-asan-build/p722_gate_test
+workspace/p733-asan-build/p722_gate_test
+workspace/p733-asan-build/Release/p722_gate_test
+workspace/p733-asan-build/Release/p722_gate_test
+workspace/p733-asan-build/Debug/p722_gate_test
+workspace/p733-asan-build/Debug/p722_gate_test
+workspace/p733-asan-build/MinSizeRel/p722_gate_test
+workspace/p733-asan-build/MinSizeRel/p722_gate_test
+workspace/p733-asan-build/RelWithDebInfo/p722_gate_test
+workspace/p733-asan-build/RelWithDebInfo/p722_gate_test
+workspace/p733-asan-build/Deployment/p722_gate_test
+workspace/p733-asan-build/Deployment/p722_gate_test
+workspace/p733-asan-build/Development/p722_gate_test
+workspace/p733-asan-build/Development/p722_gate_test
+Unable to find executable: /workspace/p733-asan-build/p722_gate_test
+ 5/24 Test   #6: p722_callee_return_proof_oom.unit ........***Not Run   0.00 sec
+      Start   7: p722_callee_return_native.integration
+ 6/24 Test   #5: p728_unit_statement_native.integration ...***Failed    0.27 sec
+Traceback (most recent call last):
+  File "/workspace/p733/tests/p728/native.py", line 173, in <module>
+    main()
+  File "/workspace/p733/tests/p728/native.py", line 116, in main
+    checked = run([compiler, '--check', source])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p733/tests/p728/native.py", line 12, in run
+    return subprocess.run(list(map(str, args)), capture_output=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/p733-asan-build/newlangc'
+
+      Start   8: p713_if_field_proof_oom.unit
+Could not find executable /workspace/p733-asan-build/p713_gate_test
+Looked in the following places:
+/workspace/p733-asan-build/p713_gate_test
+/workspace/p733-asan-build/p713_gate_test
+/workspace/p733-asan-build/Release/p713_gate_test
+/workspace/p733-asan-build/Release/p713_gate_test
+/workspace/p733-asan-build/Debug/p713_gate_test
+/workspace/p733-asan-build/Debug/p713_gate_test
+/workspace/p733-asan-build/MinSizeRel/p713_gate_test
+/workspace/p733-asan-build/MinSizeRel/p713_gate_test
+/workspace/p733-asan-build/RelWithDebInfo/p713_gate_test
+/workspace/p733-asan-build/RelWithDebInfo/p713_gate_test
+/workspace/p733-asan-build/Deployment/p713_gate_test
+/workspace/p733-asan-build/Deployment/p713_gate_test
+/workspace/p733-asan-build/Development/p713_gate_test
+/workspace/p733-asan-build/Development/p713_gate_test
+workspace/p733-asan-build/p713_gate_test
+workspace/p733-asan-build/p713_gate_test
+workspace/p733-asan-build/Release/p713_gate_test
+workspace/p733-asan-build/Release/p713_gate_test
+workspace/p733-asan-build/Debug/p713_gate_test
+workspace/p733-asan-build/Debug/p713_gate_test
+workspace/p733-asan-build/MinSizeRel/p713_gate_test
+workspace/p733-asan-build/MinSizeRel/p713_gate_test
+workspace/p733-asan-build/RelWithDebInfo/p713_gate_test
+workspace/p733-asan-build/RelWithDebInfo/p713_gate_test
+workspace/p733-asan-build/Deployment/p713_gate_test
+workspace/p733-asan-build/Deployment/p713_gate_test
+workspace/p733-asan-build/Development/p713_gate_test
+workspace/p733-asan-build/Development/p713_gate_test
+Unable to find executable: /workspace/p733-asan-build/p713_gate_test
+ 7/24 Test   #8: p713_if_field_proof_oom.unit .............***Not Run   0.00 sec
+      Start   9: p713_if_field_native.integration
+ 8/24 Test   #7: p722_callee_return_native.integration ....***Failed    0.25 sec
+Traceback (most recent call last):
+  File "/workspace/p733/tests/p722/native.py", line 169, in <module>
+    main()
+  File "/workspace/p733/tests/p722/native.py", line 115, in main
+    checked = run([compiler, '--check', source])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p733/tests/p722/native.py", line 12, in run
+    return subprocess.run(list(map(str, args)), capture_output=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/p733-asan-build/newlangc'
+
+      Start  10: p706_proof_handoff_oom.unit
+Could not find executable /workspace/p733-asan-build/p706_gate_test
+Looked in the following places:
+/workspace/p733-asan-build/p706_gate_test
+/workspace/p733-asan-build/p706_gate_test
+/workspace/p733-asan-build/Release/p706_gate_test
+/workspace/p733-asan-build/Release/p706_gate_test
+/workspace/p733-asan-build/Debug/p706_gate_test
+/workspace/p733-asan-build/Debug/p706_gate_test
+/workspace/p733-asan-build/MinSizeRel/p706_gate_test
+/workspace/p733-asan-build/MinSizeRel/p706_gate_test
+/workspace/p733-asan-build/RelWithDebInfo/p706_gate_test
+/workspace/p733-asan-build/RelWithDebInfo/p706_gate_test
+/workspace/p733-asan-build/Deployment/p706_gate_test
+/workspace/p733-asan-build/Deployment/p706_gate_test
+/workspace/p733-asan-build/Development/p706_gate_test
+/workspace/p733-asan-build/Development/p706_gate_test
+workspace/p733-asan-build/p706_gate_test
+workspace/p733-asan-build/p706_gate_test
+workspace/p733-asan-build/Release/p706_gate_test
+workspace/p733-asan-build/Release/p706_gate_test
+workspace/p733-asan-build/Debug/p706_gate_test
+workspace/p733-asan-build/Debug/p706_gate_test
+workspace/p733-asan-build/MinSizeRel/p706_gate_test
+workspace/p733-asan-build/MinSizeRel/p706_gate_test
+workspace/p733-asan-build/RelWithDebInfo/p706_gate_test
+workspace/p733-asan-build/RelWithDebInfo/p706_gate_test
+workspace/p733-asan-build/Deployment/p706_gate_test
+workspace/p733-asan-build/Deployment/p706_gate_test
+workspace/p733-asan-build/Development/p706_gate_test
+workspace/p733-asan-build/Development/p706_gate_test
+Unable to find executable: /workspace/p733-asan-build/p706_gate_test
+ 9/24 Test  #10: p706_proof_handoff_oom.unit ..............***Not Run   0.00 sec
+      Start  11: p706_ref_write_native.integration
+10/24 Test   #9: p713_if_field_native.integration .........***Failed    0.22 sec
+Traceback (most recent call last):
+  File "/workspace/p733/tests/p713/native.py", line 177, in <module>
+    exercise(*sys.argv[1:])
+  File "/workspace/p733/tests/p713/native.py", line 96, in exercise
+    checked = run([compiler, '--check', source])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p733/tests/p713/native.py", line 12, in run
+    return subprocess.run(list(map(str, args)), capture_output=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/p733-asan-build/newlangc'
+
+      Start  12: p701_proof_rollback_oom.unit
+Could not find executable /workspace/p733-asan-build/p701_gate_test
+Looked in the following places:
+/workspace/p733-asan-build/p701_gate_test
+/workspace/p733-asan-build/p701_gate_test
+/workspace/p733-asan-build/Release/p701_gate_test
+/workspace/p733-asan-build/Release/p701_gate_test
+/workspace/p733-asan-build/Debug/p701_gate_test
+/workspace/p733-asan-build/Debug/p701_gate_test
+/workspace/p733-asan-build/MinSizeRel/p701_gate_test
+/workspace/p733-asan-build/MinSizeRel/p701_gate_test
+/workspace/p733-asan-build/RelWithDebInfo/p701_gate_test
+/workspace/p733-asan-build/RelWithDebInfo/p701_gate_test
+/workspace/p733-asan-build/Deployment/p701_gate_test
+/workspace/p733-asan-build/Deployment/p701_gate_test
+/workspace/p733-asan-build/Development/p701_gate_test
+/workspace/p733-asan-build/Development/p701_gate_test
+workspace/p733-asan-build/p701_gate_test
+workspace/p733-asan-build/p701_gate_test
+workspace/p733-asan-build/Release/p701_gate_test
+workspace/p733-asan-build/Release/p701_gate_test
+workspace/p733-asan-build/Debug/p701_gate_test
+workspace/p733-asan-build/Debug/p701_gate_test
+workspace/p733-asan-build/MinSizeRel/p701_gate_test
+workspace/p733-asan-build/MinSizeRel/p701_gate_test
+workspace/p733-asan-build/RelWithDebInfo/p701_gate_test
+workspace/p733-asan-build/RelWithDebInfo/p701_gate_test
+workspace/p733-asan-build/Deployment/p701_gate_test
+workspace/p733-asan-build/Deployment/p701_gate_test
+workspace/p733-asan-build/Development/p701_gate_test
+workspace/p733-asan-build/Development/p701_gate_test
+Unable to find executable: /workspace/p733-asan-build/p701_gate_test
+11/24 Test  #12: p701_proof_rollback_oom.unit .............***Not Run   0.00 sec
+      Start  13: p701_stateful_native.integration
+12/24 Test  #11: p706_ref_write_native.integration ........***Failed    0.21 sec
+Traceback (most recent call last):
+  File "/workspace/p733/tests/p706/native.py", line 183, in <module>
+    exercise(*sys.argv[1:])
+  File "/workspace/p733/tests/p706/native.py", line 124, in exercise
+    checked = run([compiler, '--check', source])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p733/tests/p706/native.py", line 16, in run
+    return subprocess.run(list(map(str, args)), capture_output=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/p733-asan-build/newlangc'
+
+      Start 266: p733_local_owner_proof.unit
+13/24 Test  #13: p701_stateful_native.integration .........***Failed    0.29 sec
+Traceback (most recent call last):
+  File "/workspace/p733/tests/p701/native.py", line 150, in <module>
+    exercise(*sys.argv[1:])
+  File "/workspace/p733/tests/p701/native.py", line 91, in exercise
+    checked = run([compiler, '--check', source])
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p733/tests/p701/native.py", line 12, in run
+    return subprocess.run(list(map(str, args)), capture_output=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/p733-asan-build/newlangc'
+
+      Start 267: p733_pending_history_oom.unit
+14/24 Test #266: p733_local_owner_proof.unit ..............   Passed    1.92 sec
+      Start 268: p733_cargo_history_oom.unit
+15/24 Test #268: p733_cargo_history_oom.unit ..............   Passed   22.26 sec
+      Start 269: p733_local_owner_driver_oom.unit
+Could not find executable /workspace/p733-asan-build/p733_driver_test
+Looked in the following places:
+/workspace/p733-asan-build/p733_driver_test
+/workspace/p733-asan-build/p733_driver_test
+/workspace/p733-asan-build/Release/p733_driver_test
+/workspace/p733-asan-build/Release/p733_driver_test
+/workspace/p733-asan-build/Debug/p733_driver_test
+/workspace/p733-asan-build/Debug/p733_driver_test
+/workspace/p733-asan-build/MinSizeRel/p733_driver_test
+/workspace/p733-asan-build/MinSizeRel/p733_driver_test
+/workspace/p733-asan-build/RelWithDebInfo/p733_driver_test
+/workspace/p733-asan-build/RelWithDebInfo/p733_driver_test
+/workspace/p733-asan-build/Deployment/p733_driver_test
+/workspace/p733-asan-build/Deployment/p733_driver_test
+/workspace/p733-asan-build/Development/p733_driver_test
+/workspace/p733-asan-build/Development/p733_driver_test
+workspace/p733-asan-build/p733_driver_test
+workspace/p733-asan-build/p733_driver_test
+workspace/p733-asan-build/Release/p733_driver_test
+workspace/p733-asan-build/Release/p733_driver_test
+workspace/p733-asan-build/Debug/p733_driver_test
+workspace/p733-asan-build/Debug/p733_driver_test
+workspace/p733-asan-build/MinSizeRel/p733_driver_test
+workspace/p733-asan-build/MinSizeRel/p733_driver_test
+workspace/p733-asan-build/RelWithDebInfo/p733_driver_test
+workspace/p733-asan-build/RelWithDebInfo/p733_driver_test
+workspace/p733-asan-build/Deployment/p733_driver_test
+workspace/p733-asan-build/Deployment/p733_driver_test
+workspace/p733-asan-build/Development/p733_driver_test
+workspace/p733-asan-build/Development/p733_driver_test
+Unable to find executable: /workspace/p733-asan-build/p733_driver_test
+16/24 Test #269: p733_local_owner_driver_oom.unit .........***Not Run   0.00 sec
+      Start 270: p733_local_owner_source_rollback.unit
+Could not find executable /workspace/p733-asan-build/p733_driver_test
+Looked in the following places:
+/workspace/p733-asan-build/p733_driver_test
+/workspace/p733-asan-build/p733_driver_test
+/workspace/p733-asan-build/Release/p733_driver_test
+/workspace/p733-asan-build/Release/p733_driver_test
+/workspace/p733-asan-build/Debug/p733_driver_test
+/workspace/p733-asan-build/Debug/p733_driver_test
+/workspace/p733-asan-build/MinSizeRel/p733_driver_test
+/workspace/p733-asan-build/MinSizeRel/p733_driver_test
+/workspace/p733-asan-build/RelWithDebInfo/p733_driver_test
+/workspace/p733-asan-build/RelWithDebInfo/p733_driver_test
+/workspace/p733-asan-build/Deployment/p733_driver_test
+/workspace/p733-asan-build/Deployment/p733_driver_test
+/workspace/p733-asan-build/Development/p733_driver_test
+/workspace/p733-asan-build/Development/p733_driver_test
+workspace/p733-asan-build/p733_driver_test
+workspace/p733-asan-build/p733_driver_test
+workspace/p733-asan-build/Release/p733_driver_test
+workspace/p733-asan-build/Release/p733_driver_test
+workspace/p733-asan-build/Debug/p733_driver_test
+workspace/p733-asan-build/Debug/p733_driver_test
+workspace/p733-asan-build/MinSizeRel/p733_driver_test
+workspace/p733-asan-build/MinSizeRel/p733_driver_test
+workspace/p733-asan-build/RelWithDebInfo/p733_driver_test
+workspace/p733-asan-build/RelWithDebInfo/p733_driver_test
+workspace/p733-asan-build/Deployment/p733_driver_test
+workspace/p733-asan-build/Deployment/p733_driver_test
+workspace/p733-asan-build/Development/p733_driver_test
+workspace/p733-asan-build/Development/p733_driver_test
+Unable to find executable: /workspace/p733-asan-build/p733_driver_test
+17/24 Test #270: p733_local_owner_source_rollback.unit ....***Not Run   0.00 sec
+      Start 271: p733_local_owner_native.integration
+18/24 Test #271: p733_local_owner_native.integration ......***Failed    0.15 sec
+Traceback (most recent call last):
+  File "/workspace/p733/tests/p733/native.py", line 39, in <module>
+    checked = subprocess.run([compiler,'--check',source],capture_output=True)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/p733-asan-build/newlangc'
+
+      Start 272: live_tail_return_backend.unit
+Could not find executable /workspace/p733-asan-build/live_return_backend_test
+Looked in the following places:
+/workspace/p733-asan-build/live_return_backend_test
+/workspace/p733-asan-build/live_return_backend_test
+/workspace/p733-asan-build/Release/live_return_backend_test
+/workspace/p733-asan-build/Release/live_return_backend_test
+/workspace/p733-asan-build/Debug/live_return_backend_test
+/workspace/p733-asan-build/Debug/live_return_backend_test
+/workspace/p733-asan-build/MinSizeRel/live_return_backend_test
+/workspace/p733-asan-build/MinSizeRel/live_return_backend_test
+/workspace/p733-asan-build/RelWithDebInfo/live_return_backend_test
+/workspace/p733-asan-build/RelWithDebInfo/live_return_backend_test
+/workspace/p733-asan-build/Deployment/live_return_backend_test
+/workspace/p733-asan-build/Deployment/live_return_backend_test
+/workspace/p733-asan-build/Development/live_return_backend_test
+/workspace/p733-asan-build/Development/live_return_backend_test
+workspace/p733-asan-build/live_return_backend_test
+workspace/p733-asan-build/live_return_backend_test
+workspace/p733-asan-build/Release/live_return_backend_test
+workspace/p733-asan-build/Release/live_return_backend_test
+workspace/p733-asan-build/Debug/live_return_backend_test
+workspace/p733-asan-build/Debug/live_return_backend_test
+workspace/p733-asan-build/MinSizeRel/live_return_backend_test
+workspace/p733-asan-build/MinSizeRel/live_return_backend_test
+workspace/p733-asan-build/RelWithDebInfo/live_return_backend_test
+workspace/p733-asan-build/RelWithDebInfo/live_return_backend_test
+workspace/p733-asan-build/Deployment/live_return_backend_test
+workspace/p733-asan-build/Deployment/live_return_backend_test
+workspace/p733-asan-build/Development/live_return_backend_test
+workspace/p733-asan-build/Development/live_return_backend_test
+Unable to find executable: /workspace/p733-asan-build/live_return_backend_test
+19/24 Test #272: live_tail_return_backend.unit ............***Not Run   0.00 sec
+      Start 273: live_tail_return_native.integration
+20/24 Test #273: live_tail_return_native.integration ......***Failed    0.29 sec
+Traceback (most recent call last):
+  File "/workspace/p733/tests/integration/live_return_native_test.py", line 159, in <module>
+    for name,text in variants.items(): positive(pathlib.Path(directory),name,text,corruption=name=="primary")
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p733/tests/integration/live_return_native_test.py", line 81, in positive
+    emitted, retry = run([compiler,str(path)]),run([compiler,str(path)])
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p733/tests/integration/live_return_native_test.py", line 14, in run
+    return subprocess.run(args, capture_output=True, text=True, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/p733-asan-build/newlangc'
+
+      Start 274: live_tail_return_evidence.unit
+Could not find executable /workspace/p733-asan-build/live_tail_return_test
+Looked in the following places:
+/workspace/p733-asan-build/live_tail_return_test
+/workspace/p733-asan-build/live_tail_return_test
+/workspace/p733-asan-build/Release/live_tail_return_test
+/workspace/p733-asan-build/Release/live_tail_return_test
+/workspace/p733-asan-build/Debug/live_tail_return_test
+/workspace/p733-asan-build/Debug/live_tail_return_test
+/workspace/p733-asan-build/MinSizeRel/live_tail_return_test
+/workspace/p733-asan-build/MinSizeRel/live_tail_return_test
+/workspace/p733-asan-build/RelWithDebInfo/live_tail_return_test
+/workspace/p733-asan-build/RelWithDebInfo/live_tail_return_test
+/workspace/p733-asan-build/Deployment/live_tail_return_test
+/workspace/p733-asan-build/Deployment/live_tail_return_test
+/workspace/p733-asan-build/Development/live_tail_return_test
+/workspace/p733-asan-build/Development/live_tail_return_test
+workspace/p733-asan-build/live_tail_return_test
+workspace/p733-asan-build/live_tail_return_test
+workspace/p733-asan-build/Release/live_tail_return_test
+workspace/p733-asan-build/Release/live_tail_return_test
+workspace/p733-asan-build/Debug/live_tail_return_test
+workspace/p733-asan-build/Debug/live_tail_return_test
+workspace/p733-asan-build/MinSizeRel/live_tail_return_test
+workspace/p733-asan-build/MinSizeRel/live_tail_return_test
+workspace/p733-asan-build/RelWithDebInfo/live_tail_return_test
+workspace/p733-asan-build/RelWithDebInfo/live_tail_return_test
+workspace/p733-asan-build/Deployment/live_tail_return_test
+workspace/p733-asan-build/Deployment/live_tail_return_test
+workspace/p733-asan-build/Development/live_tail_return_test
+workspace/p733-asan-build/Development/live_tail_return_test
+Unable to find executable: /workspace/p733-asan-build/live_tail_return_test
+21/24 Test #274: live_tail_return_evidence.unit ...........***Not Run   0.00 sec
+      Start 275: live_tail_return_oom.unit
+Could not find executable /workspace/p733-asan-build/live_tail_return_test
+Looked in the following places:
+/workspace/p733-asan-build/live_tail_return_test
+/workspace/p733-asan-build/live_tail_return_test
+/workspace/p733-asan-build/Release/live_tail_return_test
+/workspace/p733-asan-build/Release/live_tail_return_test
+/workspace/p733-asan-build/Debug/live_tail_return_test
+/workspace/p733-asan-build/Debug/live_tail_return_test
+/workspace/p733-asan-build/MinSizeRel/live_tail_return_test
+/workspace/p733-asan-build/MinSizeRel/live_tail_return_test
+/workspace/p733-asan-build/RelWithDebInfo/live_tail_return_test
+/workspace/p733-asan-build/RelWithDebInfo/live_tail_return_test
+/workspace/p733-asan-build/Deployment/live_tail_return_test
+/workspace/p733-asan-build/Deployment/live_tail_return_test
+/workspace/p733-asan-build/Development/live_tail_return_test
+/workspace/p733-asan-build/Development/live_tail_return_test
+workspace/p733-asan-build/live_tail_return_test
+workspace/p733-asan-build/live_tail_return_test
+workspace/p733-asan-build/Release/live_tail_return_test
+workspace/p733-asan-build/Release/live_tail_return_test
+workspace/p733-asan-build/Debug/live_tail_return_test
+workspace/p733-asan-build/Debug/live_tail_return_test
+workspace/p733-asan-build/MinSizeRel/live_tail_return_test
+workspace/p733-asan-build/MinSizeRel/live_tail_return_test
+workspace/p733-asan-build/RelWithDebInfo/live_tail_return_test
+workspace/p733-asan-build/RelWithDebInfo/live_tail_return_test
+workspace/p733-asan-build/Deployment/live_tail_return_test
+workspace/p733-asan-build/Deployment/live_tail_return_test
+workspace/p733-asan-build/Development/live_tail_return_test
+workspace/p733-asan-build/Development/live_tail_return_test
+Unable to find executable: /workspace/p733-asan-build/live_tail_return_test
+22/24 Test #275: live_tail_return_oom.unit ................***Not Run   0.00 sec
+      Start 276: live_tail_return_source.integration
+23/24 Test #276: live_tail_return_source.integration ......***Failed    0.21 sec
+Traceback (most recent call last):
+  File "/workspace/p733/tests/integration/live_tail_return_test.py", line 91, in <module>
+    runs = [subprocess.run([compiler, str(path)], capture_output=True) for _ in range(2)]
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 548, in run
+    with Popen(*popenargs, **kwargs) as process:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1026, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 1955, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/p733-asan-build/newlangc'
+
+24/24 Test #267: p733_pending_history_oom.unit ............   Passed   25.36 sec
+
+13% tests passed, 21 tests failed out of 24
+
+Total Test time (real) =  26.19 sec
+
+The following tests FAILED:
+	  1 - p718_if_return_proof_oom.unit (Not Run)
+	  2 - p718_if_return_native.integration (Failed)
+	  3 - p728_unit_statement_proof.unit (Not Run)
+	  4 - p728_unit_statement_history_oom.unit (Not Run)
+	  5 - p728_unit_statement_native.integration (Failed)
+	  6 - p722_callee_return_proof_oom.unit (Not Run)
+	  7 - p722_callee_return_native.integration (Failed)
+	  8 - p713_if_field_proof_oom.unit (Not Run)
+	  9 - p713_if_field_native.integration (Failed)
+	 10 - p706_proof_handoff_oom.unit (Not Run)
+	 11 - p706_ref_write_native.integration (Failed)
+	 12 - p701_proof_rollback_oom.unit (Not Run)
+	 13 - p701_stateful_native.integration (Failed)
+	269 - p733_local_owner_driver_oom.unit (Not Run)
+	270 - p733_local_owner_source_rollback.unit (Not Run)
+	271 - p733_local_owner_native.integration (Failed)
+	272 - live_tail_return_backend.unit (Not Run)
+	273 - live_tail_return_native.integration (Failed)
+	274 - live_tail_return_evidence.unit (Not Run)
+	275 - live_tail_return_oom.unit (Not Run)
+	276 - live_tail_return_source.integration (Failed)
+Errors while running CTest

@@ -1,0 +1,174 @@
+Internal ctest changing into directory: /workspace/p733-build
+UpdateCTestConfiguration  from :/workspace/p733-build/DartConfiguration.tcl
+Parse Config file:/workspace/p733-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p733-build/DartConfiguration.tcl
+Parse Config file:/workspace/p733-build/DartConfiguration.tcl
+Test project /workspace/p733-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 29
+    Start  29: p634_historical_hash.unit
+
+29: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p733/tests/p634/hash_gate_test.py" "/workspace/p733"
+29: Working Directory: /workspace/p733-build
+29: Environment variables: 
+29:  PYTHONDONTWRITEBYTECODE=1
+29:  PYTHONHASHSEED=0
+29:  LC_ALL=C
+29:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+29:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+29: Test timeout computed to be: 90
+29: {"genuine": "PASS", "provenance": {"header": "src/semantic_internal.h", "candidate_sha256": "92766597c230e2e54ccd938f7eefb373dc67faaf330c6c0791846f01a3558a67", "historical_sha256": "15e89aefc0f1574afdc77e6826e79f51902897b8b7ed57650f7a2b82ead1bed2", "exact_private_block_removed": 1}, "rejected": ["missing_owner_block", "duplicate_owner_block", "misplaced_owner_block", "wrong_owner_type", "missing_if_block", "duplicate_if_block", "misplaced_if_block", "wrong_if_type", "missing_block", "duplicate_block", "misplaced_block", "changed_pointer", "unrelated_header_change", "missing_p701_field", "duplicate_p701_field", "changed_p701_field", "src/usize_addition.c", "include/newlang/usize_addition.h", "include/newlang/usize_subtraction.h"], "historical_manifest": "UNCHANGED"}
+1/7 Test  #29: p634_historical_hash.unit ...............   Passed    0.15 sec
+test 266
+    Start 266: p733_local_owner_proof.unit
+
+266: Test command: /workspace/p733-build/p733_gate_test "/workspace/p733/tests/p733/pending.nl" "/workspace/p733/tests/p733/cargo.nl"
+266: Working Directory: /workspace/p733-build
+266: Environment variables: 
+266:  PYTHONDONTWRITEBYTECODE=1
+266:  PYTHONHASHSEED=0
+266:  LC_ALL=C
+266:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+266:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+266: Test timeout computed to be: 90
+266: 22 certificate/body/world/profile controls leave no output; 15 OOM positions (3 staging + 12 validator scratch) retry identically
+266: local-return issuer-seal bytes=31280 nodes=17 additional_semantic_worlds=0
+266: local-return structural/origin rejects=79; validator malloc/calloc/realloc OOM=4; admission/staging OOM=15; rollback+recovery+NULL output PASS
+266: 22 certificate/body/world/profile controls leave no output; 15 OOM positions (3 staging + 12 validator scratch) retry identically
+266: local-return issuer-seal bytes=31280 nodes=17 additional_semantic_worlds=0
+266: local-return structural/origin rejects=79; validator malloc/calloc/realloc OOM=4; admission/staging OOM=15; rollback+recovery+NULL output PASS
+2/7 Test #266: p733_local_owner_proof.unit .............   Passed    0.30 sec
+test 267
+    Start 267: p733_pending_history_oom.unit
+
+267: Test command: /workspace/p733-build/p733_history_test "oom" "/workspace/p733/tests/p733/pending.nl"
+267: Working Directory: /workspace/p733-build
+267: Environment variables: 
+267:  PYTHONDONTWRITEBYTECODE=1
+267:  PYTHONHASHSEED=0
+267:  LC_ALL=C
+267:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+267:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+267: Test timeout computed to be: 90
+267: owned live-return entry/post/correlation after AST teardown; 41 corruptions rejected; whole destructure and distinct terminal receiver; native subset checked separately
+267: registration/branch/return/destructure OOM rollback: 1611 + 1201 fault points, clean completion
+3/7 Test #267: p733_pending_history_oom.unit ...........   Passed    1.90 sec
+test 268
+    Start 268: p733_cargo_history_oom.unit
+
+268: Test command: /workspace/p733-build/p733_history_test "oom" "/workspace/p733/tests/p733/cargo.nl"
+268: Working Directory: /workspace/p733-build
+268: Environment variables: 
+268:  PYTHONDONTWRITEBYTECODE=1
+268:  PYTHONHASHSEED=0
+268:  LC_ALL=C
+268:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+268:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+268: Test timeout computed to be: 90
+268: owned live-return entry/post/correlation after AST teardown; 41 corruptions rejected; whole destructure and distinct terminal receiver; native subset checked separately
+268: registration/branch/return/destructure OOM rollback: 1602 + 1201 fault points, clean completion
+4/7 Test #268: p733_cargo_history_oom.unit .............   Passed    1.23 sec
+test 269
+    Start 269: p733_local_owner_driver_oom.unit
+
+269: Test command: /workspace/p733-build/p733_driver_test "oom" "/workspace/p733/tests/p733/pending.nl"
+269: Working Directory: /workspace/p733-build
+269: Environment variables: 
+269:  PYTHONDONTWRITEBYTECODE=1
+269:  PYTHONHASHSEED=0
+269:  LC_ALL=C
+269:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+269:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+269: Test timeout computed to be: 90
+269: normal driver fail-at-N positions=3163 CLI1=32 CLI3=3119 legacy_bool_CLI4=12 zero_partial_C=PASS recovery=PASS
+5/7 Test #269: p733_local_owner_driver_oom.unit ........   Passed    3.92 sec
+test 270
+    Start 270: p733_local_owner_source_rollback.unit
+
+270: Test command: /workspace/p733-build/p733_driver_test "reject" "/workspace/p733/tests/p733/double_consume.nl" "/workspace/p733/tests/p733/discard_owner.nl" "/workspace/p733/tests/p733/missing_member.nl" "/workspace/p733/tests/p733/wrong_backing.nl" "/workspace/p733/tests/p733/wrong_domain.nl" "/workspace/p733/tests/p733/wrong_root.nl" "/workspace/p733/tests/p733/active_loan.nl" "/workspace/p733/tests/p733/wrong_receiver.nl" "/workspace/p733/tests/p733/reuse_donor.nl" "/workspace/p733/tests/p733/no_cleanup.nl"
+270: Working Directory: /workspace/p733-build
+270: Environment variables: 
+270:  PYTHONDONTWRITEBYTECODE=1
+270:  PYTHONHASHSEED=0
+270:  LC_ALL=C
+270:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+270:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+270: Test timeout computed to be: 90
+270: rejection phase=registration status=1 rollback=PASS artifact=NULL
+270: rejection phase=registration status=1 rollback=PASS artifact=NULL
+270: rejection phase=registration status=1 rollback=PASS artifact=NULL
+270: rejection phase=registration status=1 rollback=PASS artifact=NULL
+270: rejection phase=registration status=1 rollback=PASS artifact=NULL
+270: rejection phase=registration status=1 rollback=PASS artifact=NULL
+270: rejection phase=registration status=1 rollback=PASS artifact=NULL
+270: rejection phase=registration status=1 rollback=PASS artifact=NULL
+270: rejection phase=registration status=1 rollback=PASS artifact=NULL
+270: rejection phase=registration status=1 rollback=PASS artifact=NULL
+6/7 Test #270: p733_local_owner_source_rollback.unit ...   Passed    0.04 sec
+test 271
+    Start 271: p733_local_owner_native.integration
+
+271: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p733/tests/p733/native.py" "/workspace/p733-build/newlangc" "/workspace/p733-build/handoff_checked_probe" "/workspace/p733-build/p733_public_probe" "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13" "none" "/workspace/p733/tests/p733"
+271: Working Directory: /workspace/p733-build
+271: Environment variables: 
+271:  PYTHONDONTWRITEBYTECODE=1
+271:  PYTHONHASHSEED=0
+271:  LC_ALL=C
+271:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+271:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+271: Test timeout computed to be: 90
+271: pendingO0 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+271: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+271: pendingO0 2 OBSERVED head=55bdbd27a2a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+271: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+271: pendingO0 both OBSERVED head=55dd964292a0 tail=55dd964292c0 trials=2 free=2 roots=6 changes=2 copy=1 scopes=6 receiver=1 receiver_free=1 donor_free=1
+271: LIVE_RETURN producer=1 returned=1 received=1 original_tail=55dd964292c0
+271: pendingO2 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+271: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+271: pendingO2 2 OBSERVED head=5651e48852a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+271: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+271: pendingO2 both OBSERVED head=55ab9345e2a0 tail=55ab9345e2c0 trials=2 free=2 roots=6 changes=2 copy=1 scopes=6 receiver=1 receiver_free=1 donor_free=1
+271: LIVE_RETURN producer=1 returned=1 received=1 original_tail=55ab9345e2c0
+271: pending genuine public local-return + legacy cleanup observations PASS; O0/O2, allocation fail1/2/success, unchanged/passive PASS
+271: cargoO0 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+271: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+271: cargoO0 2 OBSERVED head=55b8301922a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+271: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+271: cargoO0 both OBSERVED head=5624eb9ce2a0 tail=5624eb9ce2c0 trials=2 free=2 roots=6 changes=2 copy=1 scopes=6 receiver=1 receiver_free=1 donor_free=1
+271: LIVE_RETURN producer=1 returned=1 received=1 original_tail=5624eb9ce2c0
+271: cargoO2 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+271: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+271: cargoO2 2 OBSERVED head=55e7c276f2a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+271: LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+271: cargoO2 both OBSERVED head=55655cf392a0 tail=55655cf392c0 trials=2 free=2 roots=6 changes=2 copy=1 scopes=6 receiver=1 receiver_free=1 donor_free=1
+271: LIVE_RETURN producer=1 returned=1 received=1 original_tail=55655cf392c0
+271: cargo genuine public local-return + legacy cleanup observations PASS; O0/O2, allocation fail1/2/success, unchanged/passive PASS
+271: double_consume source refusal unchanged; zero C; named sink preserved P193-DEFINITION-CONSUMED
+271: discard_owner source refusal unchanged; zero C; named sink preserved P193-DEFINITION-OBLIGATION
+271: missing_member source refusal unchanged; zero C; named sink preserved P208-DEFINITION-RETURN
+271: wrong_backing source refusal unchanged; zero C; named sink preserved P193-CALL-BACKING
+271: wrong_domain source refusal unchanged; zero C; named sink preserved P3-REF-CONFLICT
+271: wrong_root source refusal unchanged; zero C; named sink preserved P193-CALL-DOMAIN
+271: active_loan source refusal unchanged; zero C; named sink preserved P3-REF-CONFLICT
+271: wrong_receiver source refusal unchanged; zero C; named sink preserved P193-CALL-DOMAIN
+271: reuse_donor source refusal unchanged; zero C; named sink preserved P3-USE-AFTER-CONSUME
+271: no_cleanup source refusal unchanged; zero C; named sink preserved P5-SCOPE-OBLIGATION
+7/7 Test #271: p733_local_owner_native.integration .....   Passed    1.65 sec
+
+The following tests passed:
+	p634_historical_hash.unit
+	p733_local_owner_proof.unit
+	p733_pending_history_oom.unit
+	p733_cargo_history_oom.unit
+	p733_local_owner_driver_oom.unit
+	p733_local_owner_source_rollback.unit
+	p733_local_owner_native.integration
+
+100% tests passed, 0 tests failed out of 7
+
+Total Test time (real) =   9.20 sec

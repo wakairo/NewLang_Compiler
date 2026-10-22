@@ -1,6 +1,7 @@
 #include "copy_body_internal.h"
 #include "if_field_internal.h"
 #include "newlang/parser.h"
+#include "producer_local_internal.h"
 #include "semantic_internal.h"
 
 #include <stdint.h>
@@ -3864,6 +3865,10 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     if (!host(&body,
               nl_copy_body_seal(body.artifact, caller->artifact, call_id,
                                 body.body_function, c),
+              call_span))
+        goto failure;
+    if (!host(&body,
+              nl_producer_local_seal(body.artifact, caller->artifact, call_id),
               call_span))
         goto failure;
     caller->artifact->bodies[count] = body.artifact;

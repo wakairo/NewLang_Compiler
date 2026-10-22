@@ -1,0 +1,20 @@
+{
+  "positive_custody_local_return": {
+    "exit": 3,
+    "stderr": "/workspace/r736-evidence/tests/r736/positive_custody_local_return.nl:1:34-1:40: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n",
+    "source_sha256": "9f483e577ab20f84bbefa1bc5a21cb3c13f660ead45975a50ebbfc803280c41e",
+    "named_output_preserved": true
+  },
+  "negative_move_twice": {
+    "exit": 3,
+    "stderr": "/workspace/r736-evidence/tests/r736/negative_move_twice.nl:14:12-14:19: error(semantic)[P193-DEFINITION-CONSUMED]: symbolic non-Copy responsibility was consumed\n",
+    "source_sha256": "91c17d2c615d2b227d390fb83be3786e58fa21ab615e6ce1b628949d3d3c4c9c",
+    "named_output_preserved": true
+  },
+  "negative_wrong_original": {
+    "exit": 3,
+    "stderr": "/workspace/r736-evidence/tests/r736/negative_wrong_original.nl:73:25-73:68: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n",
+    "source_sha256": "d1e84b069b52b01c7b74242e7f0c4820ba962a3a61b5ef08a4c3ffd5d38b40d2",
+    "named_output_preserved": true
+  }
+}

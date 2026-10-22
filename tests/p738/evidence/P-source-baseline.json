@@ -1,0 +1,208 @@
+{
+  "sprout": {
+    "check": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "public": {
+      "exit": 0,
+      "stdout": "CLEANUP legacy_arm=0 regions=1 all_closed=PASS\nCLEANUP legacy_arm=1 regions=2 all_closed=PASS\nLOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS\nPUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0\n",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p738/sprout.nl\n"
+    }
+  },
+  "ticket": {
+    "check": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "public": {
+      "exit": 0,
+      "stdout": "CLEANUP legacy_arm=0 regions=1 all_closed=PASS\nCLEANUP legacy_arm=1 regions=2 all_closed=PASS\nLOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS\nPUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0\n",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p738/ticket.nl\n"
+    }
+  },
+  "double_consume": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/double_consume.nl:17:12-17:24: error(semantic)[P193-DEFINITION-CONSUMED]: symbolic non-Copy responsibility was consumed\n"
+    },
+    "public": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "/workspace/p733/tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/double_consume.nl:17:12-17:24: error(semantic)[P193-DEFINITION-CONSUMED]: symbolic non-Copy responsibility was consumed\n"
+    }
+  },
+  "wrong_backing": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/wrong_backing.nl:84:25-85:71: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n"
+    },
+    "public": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "/workspace/p733/tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/wrong_backing.nl:84:25-85:71: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n"
+    }
+  },
+  "wrong_domain": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/wrong_domain.nl:85:64-85:70: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n"
+    },
+    "public": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "/workspace/p733/tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/wrong_domain.nl:85:64-85:70: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n"
+    }
+  },
+  "wrong_root": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/wrong_root.nl:84:25-85:71: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n"
+    },
+    "public": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "/workspace/p733/tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/wrong_root.nl:84:25-85:71: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n"
+    }
+  },
+  "active_loan": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/active_loan.nl:84:104-84:110: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n"
+    },
+    "public": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "/workspace/p733/tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/active_loan.nl:84:104-84:110: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n"
+    }
+  },
+  "wrong_receiver": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/wrong_receiver.nl:93:21-94:63: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n"
+    },
+    "public": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "/workspace/p733/tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/wrong_receiver.nl:93:21-94:63: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n"
+    }
+  },
+  "reuse_donor": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/reuse_donor.nl:88:21-88:33: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n"
+    },
+    "public": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "/workspace/p733/tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/reuse_donor.nl:88:21-88:33: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n"
+    }
+  },
+  "no_cleanup": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/no_cleanup.nl:61:38-102:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n"
+    },
+    "public": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "/workspace/p733/tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/no_cleanup.nl:61:38-102:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n"
+    }
+  },
+  "wrong_initial_target": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/wrong_initial_target.nl:84:25-85:76: error(semantic)[P208-CALL-HEAD-VALUE]: head Some payload has different source provenance\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/wrong_initial_target.nl:84:25-85:76: error(semantic)[P208-CALL-HEAD-VALUE]: head Some payload has different source provenance\n"
+    }
+  },
+  "missing_initial_some": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/missing_initial_some.nl:84:25-85:76: error(semantic)[P208-CALL-HEAD-VALUE]: head link must currently be Some of tail\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/missing_initial_some.nl:84:25-85:76: error(semantic)[P208-CALL-HEAD-VALUE]: head link must currently be Some of tail\n"
+    }
+  },
+  "read_actual": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/read_actual.nl:85:29-85:46: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p738/read_actual.nl:85:29-85:46: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+    }
+  }
+}

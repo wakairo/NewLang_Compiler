@@ -1,0 +1,3 @@
+P738 FIRST allocated_expr:1614 reloans=1 reads=0 projections=1 link_updates=1 link_value=32 root_fact=26 link_fact=25 occurrence=1
+error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /workspace/r736-evidence/tests/r736/positive_direct_local_return.nl

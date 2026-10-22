@@ -1,0 +1,5 @@
+P738 REF span=1778:1807 snippet=ref_from_ptr(write, node0, s0 write=1 head_role_expected_write=0
+P738 exact rejecting write-sequence guard at allocated_expr:1614
+P738 FIRST expr:828 reloans=1 reads=0 projections=1 link_updates=1 link_value=32 root_fact=26 link_fact=25 occurrence=1
+error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /workspace/r736-evidence/tests/r736/positive_direct_local_return.nl

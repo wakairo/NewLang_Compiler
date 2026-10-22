@@ -1,0 +1,40 @@
+{
+  "R_A_CHECK": {
+    "command": [
+      "/workspace/p733-build/newlangc",
+      "--check",
+      "/workspace/r736-evidence/tests/r736/positive_direct_local_return.nl"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "R_A_PUBLIC": {
+    "command": [
+      "/workspace/p733-build/p733_public_probe",
+      "/workspace/r736-evidence/tests/r736/positive_direct_local_return.nl"
+    ],
+    "exit": 0,
+    "stdout": "CLEANUP legacy_arm=0 regions=1 all_closed=PASS\nCLEANUP legacy_arm=1 regions=2 all_closed=PASS\nLOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS\nPUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0\n",
+    "stderr": ""
+  },
+  "R_A_C17": {
+    "command": [
+      "/workspace/p733-build/newlangc",
+      "/workspace/r736-evidence/tests/r736/positive_direct_local_return.nl"
+    ],
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/r736-evidence/tests/r736/positive_direct_local_return.nl\n"
+  },
+  "R_B_CHECK": {
+    "command": [
+      "/workspace/p733-build/newlangc",
+      "--check",
+      "/workspace/r736-evidence/tests/r736/positive_custody_local_return.nl"
+    ],
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/workspace/r736-evidence/tests/r736/positive_custody_local_return.nl:1:34-1:40: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n"
+  }
+}

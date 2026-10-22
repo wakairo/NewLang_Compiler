@@ -760,6 +760,70 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/handoff_native_test.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:handoff_checked_probe>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/live_tail_handoff.nl" "${NEWLANG_SANITIZER}")
+    add_executable(p738_gate_test tests/p738/gate_test.c)
+    target_link_libraries(p738_gate_test PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p738_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p738_no_read_flow.unit COMMAND p738_gate_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/sprout.nl" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/ticket.nl")
+    add_test(NAME p738_local_return_existing_controls.unit COMMAND p733_gate_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/sprout.nl" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/ticket.nl")
+    foreach(case sprout ticket)
+        add_test(NAME p738_${case}_history_oom.unit COMMAND p733_history_test oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/${case}.nl")
+    endforeach()
+    add_test(NAME p738_no_read_driver_oom.unit COMMAND p733_driver_test oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/sprout.nl")
+    add_test(NAME p738_source_rollback.unit COMMAND p733_driver_test reject
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/double_consume.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/wrong_backing.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/wrong_domain.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/wrong_root.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/active_loan.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/wrong_receiver.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/reuse_donor.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/no_cleanup.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/wrong_initial_target.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/missing_initial_some.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/read_actual.nl"
+    )
+    add_test(NAME p738_no_read_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738/native.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:handoff_checked_probe>" "$<TARGET_FILE:p733_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p738")
+    add_executable(p733_gate_test tests/p733/gate_test.c)
+    target_link_libraries(p733_gate_test PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p733_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p733_local_owner_proof.unit COMMAND p733_gate_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/pending.nl" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/cargo.nl")
+    add_executable(p733_history_test tests/p733/history_test.c)
+    target_link_libraries(p733_history_test PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p733_history_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    foreach(case pending cargo)
+        add_test(NAME p733_${case}_history_oom.unit COMMAND p733_history_test oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/${case}.nl")
+    endforeach()
+    add_executable(p733_public_probe tests/p733/public_probe.c)
+    add_executable(p733_driver_test tests/p733/driver_test.c)
+    target_link_libraries(p733_driver_test PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p733_driver_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p733_local_owner_driver_oom.unit COMMAND p733_driver_test oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/pending.nl")
+    add_test(NAME p733_local_owner_source_rollback.unit COMMAND p733_driver_test reject
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/double_consume.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/discard_owner.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/missing_member.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/wrong_backing.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/wrong_domain.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/wrong_root.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/active_loan.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/wrong_receiver.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/reuse_donor.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/no_cleanup.nl")
+    target_link_libraries(p733_public_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME p733_local_owner_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733/native.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:handoff_checked_probe>" "$<TARGET_FILE:p733_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p733")
     add_executable(live_return_backend_test tests/unit/live_return_backend_test.c)
     target_link_libraries(live_return_backend_test PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
     target_link_options(live_return_backend_test PRIVATE -Wl,--wrap=malloc)

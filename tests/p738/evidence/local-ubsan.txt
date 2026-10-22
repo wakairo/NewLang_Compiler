@@ -1,0 +1,68 @@
+Internal ctest changing into directory: /workspace/p738-ubsan-build
+Test project /workspace/p738-ubsan-build
+      Start   9: p713_if_field_native.integration
+      Start   5: p728_unit_statement_native.integration
+ 1/31 Test   #5: p728_unit_statement_native.integration .....   Passed   22.09 sec
+      Start   7: p722_callee_return_native.integration
+ 2/31 Test   #9: p713_if_field_native.integration ...........   Passed   27.29 sec
+      Start   2: p718_if_return_native.integration
+ 3/31 Test   #7: p722_callee_return_native.integration ......   Passed   20.01 sec
+      Start   6: p722_callee_return_proof_oom.unit
+ 4/31 Test   #2: p718_if_return_native.integration ..........   Passed   23.73 sec
+      Start 280: live_tail_return_native.integration
+ 5/31 Test   #6: p722_callee_return_proof_oom.unit ..........   Passed   10.12 sec
+      Start   4: p728_unit_statement_history_oom.unit
+ 6/31 Test   #4: p728_unit_statement_history_oom.unit .......   Passed   14.89 sec
+      Start 276: p733_local_owner_driver_oom.unit
+ 7/31 Test #280: live_tail_return_native.integration ........   Passed   30.05 sec
+      Start  13: p701_stateful_native.integration
+ 8/31 Test  #13: p701_stateful_native.integration ...........   Passed    9.91 sec
+      Start  11: p706_ref_write_native.integration
+ 9/31 Test #276: p733_local_owner_driver_oom.unit ...........   Passed   24.16 sec
+      Start 270: p738_no_read_driver_oom.unit
+10/31 Test  #11: p706_ref_write_native.integration ..........   Passed    5.69 sec
+      Start 278: p733_local_owner_native.integration
+11/31 Test #270: p738_no_read_driver_oom.unit ...............   Passed   13.60 sec
+      Start 272: p738_no_read_native.integration
+12/31 Test #278: p733_local_owner_native.integration ........   Passed    9.03 sec
+      Start 275: p733_cargo_history_oom.unit
+13/31 Test #275: p733_cargo_history_oom.unit ................   Passed    6.09 sec
+      Start 282: live_tail_return_oom.unit
+14/31 Test #272: p738_no_read_native.integration ............   Passed    8.01 sec
+      Start   1: p718_if_return_proof_oom.unit
+15/31 Test   #1: p718_if_return_proof_oom.unit ..............   Passed    2.48 sec
+      Start 274: p733_pending_history_oom.unit
+16/31 Test #282: live_tail_return_oom.unit ..................   Passed    6.17 sec
+      Start  10: p706_proof_handoff_oom.unit
+17/31 Test  #10: p706_proof_handoff_oom.unit ................   Passed    3.40 sec
+      Start   8: p713_if_field_proof_oom.unit
+18/31 Test #274: p733_pending_history_oom.unit ..............   Passed    7.03 sec
+      Start 268: p738_sprout_history_oom.unit
+19/31 Test   #8: p713_if_field_proof_oom.unit ...............   Passed    1.90 sec
+      Start 269: p738_ticket_history_oom.unit
+20/31 Test #269: p738_ticket_history_oom.unit ...............   Passed    2.79 sec
+      Start 283: live_tail_return_source.integration
+21/31 Test #283: live_tail_return_source.integration ........   Passed    0.56 sec
+      Start 273: p733_local_owner_proof.unit
+22/31 Test #273: p733_local_owner_proof.unit ................   Passed    0.19 sec
+      Start 267: p738_local_return_existing_controls.unit
+23/31 Test #268: p738_sprout_history_oom.unit ...............   Passed    4.43 sec
+      Start  12: p701_proof_rollback_oom.unit
+24/31 Test  #12: p701_proof_rollback_oom.unit ...............   Passed    0.35 sec
+      Start   3: p728_unit_statement_proof.unit
+25/31 Test #267: p738_local_return_existing_controls.unit ...   Passed    0.37 sec
+      Start 266: p738_no_read_flow.unit
+26/31 Test   #3: p728_unit_statement_proof.unit .............   Passed    0.11 sec
+      Start 279: live_tail_return_backend.unit
+27/31 Test #266: p738_no_read_flow.unit .....................   Passed    0.11 sec
+      Start 277: p733_local_owner_source_rollback.unit
+28/31 Test #279: live_tail_return_backend.unit ..............   Passed    0.03 sec
+      Start 271: p738_source_rollback.unit
+29/31 Test #277: p733_local_owner_source_rollback.unit ......   Passed    0.07 sec
+      Start 281: live_tail_return_evidence.unit
+30/31 Test #271: p738_source_rollback.unit ..................   Passed    0.06 sec
+31/31 Test #281: live_tail_return_evidence.unit .............   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 31
+
+Total Test time (real) = 127.41 sec

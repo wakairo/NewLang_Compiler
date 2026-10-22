@@ -1,0 +1,240 @@
+{
+  "active_loan.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/active_loan.nl:97:104-97:110: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n"
+    },
+    "owned": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/active_loan.nl:97:104-97:110: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n"
+    }
+  },
+  "cargo.nl": {
+    "check": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "owned": {
+      "exit": 0,
+      "stdout": "producer=65 valid=1 root=16 incarnation=19 region=2 domain=2 result=55\nnode=1 kind=27 symbol=0 init=0 first=0 next=0 argc=0 result=0 use=0 span=0:206\nnode=2 kind=10 symbol=0 init=0 first=3 next=0 argc=2 result=32 use=0 span=21:76\nnode=3 kind=1 symbol=25 init=0 first=0 next=0 argc=0 result=51 use=1 span=38:47\nbinding=25 value=49 place=33 available=1\nnode=4 kind=34 symbol=0 init=0 first=0 next=0 argc=0 result=52 use=0 span=49:75\nnode=5 kind=2 symbol=29 init=2 first=6 next=14 argc=1 result=0 use=0 span=6:76\nbinding=29 value=32 place=37 available=1\nnode=6 kind=30 symbol=29 init=0 first=0 next=0 argc=0 result=0 use=4 span=10:18\nbinding=29 value=32 place=37 available=1\nnode=7 kind=31 symbol=0 init=0 first=9 next=0 argc=3 result=55 use=0 span=94:185\nnode=8 kind=1 symbol=28 init=0 first=0 next=0 argc=0 result=18 use=2 span=127:128\nbinding=28 value=18 place=36 available=1\nnode=9 kind=32 symbol=0 init=8 first=0 next=0 argc=0 result=0 use=0 span=113:128\nnode=10 kind=1 symbol=27 init=0 first=0 next=0 argc=0 result=13 use=2 span=156:157\nbinding=27 value=13 place=35 available=1\nnode=11 kind=32 symbol=0 init=10 first=0 next=0 argc=0 result=0 use=0 span=138:157\nnode=12 kind=1 symbol=26 init=0 first=0 next=0 argc=0 result=54 use=1 span=178:179\nbinding=26 value=50 place=34 available=1\nnode=13 kind=32 symbol=0 init=12 first=0 next=0 argc=0 result=0 use=0 span=167:179\nnode=14 kind=2 symbol=30 init=7 first=15 next=17 argc=1 result=0 use=0 span=82:185\nbinding=30 value=55 place=39 available=1\nnode=15 kind=30 symbol=30 init=0 first=0 next=0 argc=0 result=0 use=4 span=86:91\nbinding=30 value=55 place=39 available=1\nnode=16 kind=1 symbol=30 init=0 first=0 next=0 argc=0 result=55 use=2 span=198:203\nbinding=30 value=55 place=39 available=1\nnode=17 kind=39 symbol=0 init=16 first=0 next=0 argc=0 result=0 use=0 span=191:204\n",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p733/cargo.nl\n"
+    }
+  },
+  "control.nl": {
+    "check": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "owned": {
+      "exit": 0,
+      "stdout": "producer=65 valid=1 root=16 incarnation=19 region=2 domain=2 result=55\nnode=1 kind=27 symbol=0 init=0 first=0 next=0 argc=0 result=0 use=0 span=0:180\nnode=2 kind=10 symbol=0 init=0 first=3 next=0 argc=2 result=32 use=0 span=21:73\nnode=3 kind=1 symbol=25 init=0 first=0 next=0 argc=0 result=51 use=1 span=38:47\nbinding=25 value=49 place=33 available=1\nnode=4 kind=34 symbol=0 init=0 first=0 next=0 argc=0 result=52 use=0 span=49:72\nnode=5 kind=2 symbol=29 init=2 first=6 next=14 argc=1 result=0 use=0 span=6:73\nbinding=29 value=32 place=37 available=1\nnode=6 kind=30 symbol=29 init=0 first=0 next=0 argc=0 result=0 use=4 span=10:18\nbinding=29 value=32 place=37 available=1\nnode=7 kind=31 symbol=0 init=0 first=9 next=0 argc=3 result=55 use=0 span=86:177\nnode=8 kind=1 symbol=26 init=0 first=0 next=0 argc=0 result=54 use=1 span=116:117\nbinding=26 value=50 place=34 available=1\nnode=9 kind=32 symbol=0 init=8 first=0 next=0 argc=0 result=0 use=0 span=105:117\nnode=10 kind=1 symbol=27 init=0 first=0 next=0 argc=0 result=13 use=2 span=145:146\nbinding=27 value=13 place=35 available=1\nnode=11 kind=32 symbol=0 init=10 first=0 next=0 argc=0 result=0 use=0 span=127:146\nnode=12 kind=1 symbol=28 init=0 first=0 next=0 argc=0 result=18 use=2 span=170:171\nbinding=28 value=18 place=36 available=1\nnode=13 kind=32 symbol=0 init=12 first=0 next=0 argc=0 result=0 use=0 span=156:171\nnode=14 kind=39 symbol=0 init=7 first=0 next=0 argc=0 result=0 use=0 span=79:178\n",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 0,
+      "stdout": "/* Bounded Checked-C representation, not a NewLang ABI. */\n#include <stdint.h>\n#include <stddef.h>\n#include <stdlib.h>\n#include <limits.h>\n_Static_assert(CHAR_BIT == 8, \"NewLang C17 requires 8-bit bytes\");\n_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, \"NewLang C17 requires exact 8-bit uint8_t\");\ntypedef struct nl_node nl_node;\ntypedef struct { unsigned tag; const nl_node *ptr; } nl_node_option;\nstruct nl_node { nl_node_option f0; uint8_t f1; };\n#ifdef NEWLANG_NODE_OBSERVER\n#include NEWLANG_NODE_OBSERVER\n#else\n#define NL_NODE_BIND(...) ((void)0)\n#define NL_NODE_REPLACE(...) ((void)0)\n#define NL_NODE_ARM(...) ((void)0)\n#define NL_NODE_RELOAN(...) ((void)0)\n#define NL_NODE_FINISH() ((void)0)\n#endif\n_Static_assert(sizeof(nl_node)==24 && _Alignof(nl_node)==8, \"checked H target layout\");\n_Static_assert(sizeof(void*)==8 && offsetof(nl_node,f0)==0 && offsetof(nl_node,f1)==16, \"private member plan\");\n_Static_assert(sizeof(nl_node_option)==16 && _Alignof(nl_node_option)==8 && _Generic(((nl_node *)0)->f0,nl_node_option:1,default:0) && _Generic(((nl_node *)0)->f1,uint8_t:1,default:0) && _Generic(((nl_node_option *)0)->ptr,const nl_node *:1,default:0), \"private member types\");\ntypedef struct {void *handle;} nl_allocation;\ntypedef struct {unsigned char *bytes;size_t length;} nl_storage;\ntypedef struct {unsigned char *bytes;size_t length;} nl_slot;\ntypedef struct {size_t token;} nl_domain;\ntypedef struct {const nl_node *ptr;nl_allocation allocation;nl_domain domain;} nl_live_tail;\ntypedef struct {unsigned tag;nl_live_tail packet;} nl_custody;\ntypedef struct {nl_allocation allocation;nl_storage raw;} nl_backing;\n#ifdef NEWLANG_HEAP_OBSERVER\n#include NEWLANG_HEAP_OBSERVER\n#else\n#define NL_HEAP_TRIAL(...) ((void)0)\n#define NL_HEAP_ARM(...) ((void)0)\n#define NL_HEAP_DOMAIN(...) ((void)0)\n#define NL_HEAP_SLOT(...) ((void)0)\n#define NL_HEAP_INITIALIZE(...) ((void)0)\n#define NL_HEAP_RELOAN(...) ((void)0)\n#define NL_HEAP_ROOT(...) ((void)0)\n#define NL_HEAP_FIELD(...) ((void)0)\n#define NL_HEAP_COPY(...) ((void)0)\n#define NL_HEAP_CHANGE(...) ((void)0)\n#define NL_HEAP_SCOPE_END(...) ((void)0)\n#define NL_HEAP_END(...) ((void)0)\n#define NL_HEAP_RAW(...) ((void)0)\n#define NL_HEAP_FINALIZE(...) ((void)0)\n#define NL_HEAP_RELEASE(...) ((void)0)\n#define NL_HEAP_FINISH() ((void)0)\n#define NL_HEAP_HANDOFF(...) ((void)0)\n#define NL_HEAP_RECEIVER_ENTER(...) ((void)0)\n#define NL_HEAP_RECEIVER_EXIT() ((void)0)\n#define NL_HEAP_RETURNED(...) ((void)0)\n#define NL_LIVE_SEND(...) ((void)0)\n#define NL_LIVE_ENTER(...) ((void)0)\n#define NL_LIVE_RETURN(...) ((void)0)\n#define NL_LIVE_RECEIVE(...) ((void)0)\n#endif\n#ifndef NL_CUSTODY_ENTER\n#define NL_CUSTODY_ENTER(...) ((void)0)\n#define NL_CUSTODY_STORED(...) ((void)0)\n#define NL_CUSTODY_RETURNED(...) ((void)0)\n#define NL_CUSTODY_EXTRACT(...) ((void)0)\n#define NL_CUSTODY_NONE(...) ((void)0)\n#define NL_CUSTODY_POLICY(...) ((void)0)\n#define NL_CUSTODY_LOAN(...) ((void)0)\n#endif\nstatic void nl_owner_12(const nl_node *nl_b_16_35,nl_allocation nl_b_16_36,nl_domain nl_b_16_37) {\nNL_HEAP_RECEIVER_ENTER(nl_b_16_35,nl_b_16_36.handle,nl_b_16_37.token,16,35,36,37,&nl_b_16_36,&nl_b_16_37);\n{ const nl_domain *nl_b_17_38 = &nl_b_16_37;\n(void)nl_b_17_38;\nconst nl_node * nl_v_78 = nl_b_16_35;\nconst nl_domain * nl_v_79 = nl_b_17_38;\nconst nl_node * nl_v_80 = nl_v_78;\nNL_HEAP_ROOT(nl_v_80,nl_v_79->token,0,16,19,7);\n(void)nl_v_79;\nconst nl_node * nl_b_17_39 = nl_v_80;\n(void)nl_b_17_39;\nNL_NODE_BIND(17, 39, 4, &nl_b_17_39);\nNL_HEAP_SCOPE_END(7);\n}\nnl_slot nl_v_81;\n{ const nl_domain *nl_b_18_40 = &nl_b_16_37;\n(void)nl_b_18_40;\nconst nl_node * nl_v_82 = nl_b_16_35;\nNL_HEAP_END(nl_v_82,nl_b_18_40->token);\nnl_slot nl_v_83 = {(unsigned char *)nl_v_82,24};\nnl_v_81 = nl_v_83;\n}\nnl_slot nl_b_16_41 = nl_v_81;\n(void)nl_b_16_41;\nNL_NODE_BIND(16, 41, 4, &nl_b_16_41);\nnl_slot nl_v_84 = nl_b_16_41;\nnl_b_16_41 = (nl_slot){0};\nnl_storage nl_v_85 = {nl_v_84.bytes,nl_v_84.length};\nNL_HEAP_RAW(nl_v_85.bytes,nl_v_85.length);\nnl_storage nl_b_16_42 = nl_v_85;\n(void)nl_b_16_42;\nNL_NODE_BIND(16, 42, 4, &nl_b_16_42);\nnl_domain nl_v_86 = nl_b_16_37;\nnl_b_16_37 = (nl_domain){0};\nNL_HEAP_FINALIZE(nl_v_86.token);\n(void)nl_v_86;\nnl_allocation nl_v_87 = nl_b_16_36;\nnl_b_16_36 = (nl_allocation){0};\nnl_storage nl_v_88 = nl_b_16_42;\nnl_b_16_42 = (nl_storage){0};\nNL_HEAP_RELEASE(nl_v_87.handle,nl_v_88.bytes,nl_v_88.length);\nfree(nl_v_87.handle);\nnl_v_87.handle=NULL;\nnl_v_88.bytes=NULL;\n(void)nl_v_88;\nNL_HEAP_RECEIVER_EXIT();\n}\nstatic nl_live_tail nl_producer_10(nl_node_option * nl_b_14_25,const nl_node * nl_b_14_26,nl_allocation nl_b_14_27,nl_domain nl_b_14_28) {\nNL_LIVE_ENTER(nl_b_14_25,nl_b_14_26,nl_b_14_27.handle,nl_b_14_28.token);\nnl_node_option * nl_v_64 = nl_b_14_25;\nnl_node_option nl_v_65 = { 0, NULL };\nnl_node_option nl_v_66 = *nl_v_64;\n*nl_v_64 = nl_v_65;\nNL_HEAP_CHANGE(nl_v_64,&nl_v_66,2);\n(void)nl_v_66;\nconst nl_node * nl_v_67 = nl_b_14_26;\nnl_allocation nl_v_68 = nl_b_14_27;\nnl_b_14_27 = (nl_allocation){0};\nnl_domain nl_v_69 = nl_b_14_28;\nnl_b_14_28 = (nl_domain){0};\nnl_live_tail nl_v_70 = {nl_v_67,nl_v_68,nl_v_69};\nNL_LIVE_RETURN(nl_v_70);\nreturn nl_v_70;\n}\nint main(void) {\nvoid *nl_heap_1 = malloc(24);\nNL_HEAP_TRIAL(nl_heap_1,24,8);\nif (nl_heap_1 == NULL) {\nNL_HEAP_ARM(1);\n}\nif (nl_heap_1 != NULL) {\nNL_HEAP_ARM(2);\nnl_backing nl_b_2_1 = { {nl_heap_1}, {(unsigned char *)nl_heap_1,24} };\nnl_backing nl_v_2 = nl_b_2_1;\nnl_b_2_1 = (nl_backing){0};\nnl_allocation nl_b_2_2 = nl_v_2.allocation;\n(void)nl_b_2_2;\nnl_storage nl_b_2_3 = nl_v_2.raw;\n(void)nl_b_2_3;\nnl_v_2 = (nl_backing){0};\nnl_allocation nl_v_3 = nl_b_2_2;\nnl_b_2_2 = (nl_allocation){0};\nnl_allocation nl_b_2_4 = nl_v_3;\n(void)nl_b_2_4;\nNL_NODE_BIND(2, 4, 4, &nl_b_2_4);\nnl_storage nl_v_4 = nl_b_2_3;\nnl_b_2_3 = (nl_storage){0};\nnl_slot nl_v_5 = {nl_v_4.bytes,nl_v_4.length};\nNL_HEAP_SLOT(nl_v_5.bytes,nl_v_5.length);\nnl_slot nl_b_2_5 = nl_v_5;\n(void)nl_b_2_5;\nNL_NODE_BIND(2, 5, 4, &nl_b_2_5);\nnl_domain nl_v_6 = {1};\nNL_HEAP_DOMAIN(nl_v_6.token);\nnl_domain nl_b_2_6 = nl_v_6;\n(void)nl_b_2_6;\nNL_NODE_BIND(2, 6, 4, &nl_b_2_6);\nconst nl_node * nl_v_7;\n{ const nl_domain *nl_b_3_7 = &nl_b_2_6;\n(void)nl_b_3_7;\nnl_slot nl_v_8 = nl_b_2_5;\nnl_b_2_5 = (nl_slot){0};\nnl_node_option nl_v_9 = { 0, NULL };\nuint8_t nl_v_10 = 1;\nnl_node nl_v_11 = { nl_v_9, nl_v_10 };\nconst nl_domain * nl_v_12 = nl_b_3_7;\n*(nl_node *)nl_v_8.bytes = nl_v_11;\nconst nl_node *nl_v_13 = (nl_node *)nl_v_8.bytes;\nNL_HEAP_INITIALIZE(nl_v_13,nl_v_12->token);\n(void)nl_v_12;\nnl_v_7 = nl_v_13;\n}\nconst nl_node * const nl_b_2_8 = nl_v_7;\n(void)nl_b_2_8;\nNL_NODE_BIND(2, 8, 2, &nl_b_2_8);\nvoid *nl_heap_14 = malloc(24);\nNL_HEAP_TRIAL(nl_heap_14,24,8);\nif (nl_heap_14 == NULL) {\nNL_HEAP_ARM(1);\nnl_slot nl_v_15;\n{ const nl_domain *nl_b_5_9 = &nl_b_2_6;\n(void)nl_b_5_9;\nconst nl_node * nl_v_16 = nl_b_2_8;\nNL_HEAP_END(nl_v_16,nl_b_5_9->token);\nnl_slot nl_v_17 = {(unsigned char *)nl_v_16,24};\nnl_v_15 = nl_v_17;\n}\nnl_slot nl_b_4_10 = nl_v_15;\n(void)nl_b_4_10;\nNL_NODE_BIND(4, 10, 4, &nl_b_4_10);\nnl_slot nl_v_18 = nl_b_4_10;\nnl_b_4_10 = (nl_slot){0};\nnl_storage nl_v_19 = {nl_v_18.bytes,nl_v_18.length};\nNL_HEAP_RAW(nl_v_19.bytes,nl_v_19.length);\nnl_storage nl_b_4_11 = nl_v_19;\n(void)nl_b_4_11;\nNL_NODE_BIND(4, 11, 4, &nl_b_4_11);\nnl_domain nl_v_20 = nl_b_2_6;\nnl_b_2_6 = (nl_domain){0};\nNL_HEAP_FINALIZE(nl_v_20.token);\n(void)nl_v_20;\nnl_allocation nl_v_21 = nl_b_2_4;\nnl_b_2_4 = (nl_allocation){0};\nnl_storage nl_v_22 = nl_b_4_11;\nnl_b_4_11 = (nl_storage){0};\nNL_HEAP_RELEASE(nl_v_21.handle,nl_v_22.bytes,nl_v_22.length);\nfree(nl_v_21.handle);\nnl_v_21.handle=NULL;\nnl_v_22.bytes=NULL;\n(void)nl_v_22;\n}\nif (nl_heap_14 != NULL) {\nNL_HEAP_ARM(2);\nnl_backing nl_b_6_9 = { {nl_heap_14}, {(unsigned char *)nl_heap_14,24} };\nnl_backing nl_v_23 = nl_b_6_9;\nnl_b_6_9 = (nl_backing){0};\nnl_allocation nl_b_6_10 = nl_v_23.allocation;\n(void)nl_b_6_10;\nnl_storage nl_b_6_11 = nl_v_23.raw;\n(void)nl_b_6_11;\nnl_v_23 = (nl_backing){0};\nnl_allocation nl_v_24 = nl_b_6_10;\nnl_b_6_10 = (nl_allocation){0};\nnl_allocation nl_b_6_12 = nl_v_24;\n(void)nl_b_6_12;\nNL_NODE_BIND(6, 12, 4, &nl_b_6_12);\nnl_storage nl_v_25 = nl_b_6_11;\nnl_b_6_11 = (nl_storage){0};\nnl_slot nl_v_26 = {nl_v_25.bytes,nl_v_25.length};\nNL_HEAP_SLOT(nl_v_26.bytes,nl_v_26.length);\nnl_slot nl_b_6_13 = nl_v_26;\n(void)nl_b_6_13;\nNL_NODE_BIND(6, 13, 4, &nl_b_6_13);\nnl_domain nl_v_27 = {2};\nNL_HEAP_DOMAIN(nl_v_27.token);\nnl_domain nl_b_6_14 = nl_v_27;\n(void)nl_b_6_14;\nNL_NODE_BIND(6, 14, 4, &nl_b_6_14);\nconst nl_node * nl_v_28;\n{ const nl_domain *nl_b_7_15 = &nl_b_6_14;\n(void)nl_b_7_15;\nnl_slot nl_v_29 = nl_b_6_13;\nnl_b_6_13 = (nl_slot){0};\nnl_node_option nl_v_30 = { 0, NULL };\nuint8_t nl_v_31 = 2;\nnl_node nl_v_32 = { nl_v_30, nl_v_31 };\nconst nl_domain * nl_v_33 = nl_b_7_15;\n*(nl_node *)nl_v_29.bytes = nl_v_32;\nconst nl_node *nl_v_34 = (nl_node *)nl_v_29.bytes;\nNL_HEAP_INITIALIZE(nl_v_34,nl_v_33->token);\n(void)nl_v_33;\nnl_v_28 = nl_v_34;\n}\nconst nl_node * const nl_b_6_16 = nl_v_28;\n(void)nl_b_6_16;\nNL_NODE_BIND(6, 16, 2, &nl_b_6_16);\nnl_node_option nl_v_35;\n{ const nl_domain *nl_b_8_17 = &nl_b_2_6;\n(void)nl_b_8_17;\nconst nl_node * nl_v_36 = nl_b_2_8;\nconst nl_domain * nl_v_37 = nl_b_8_17;\nnl_node * nl_v_38 = (nl_node *)nl_v_36;\nNL_HEAP_ROOT(nl_v_38,nl_v_37->token,1,5,8,3);\n(void)nl_v_37;\nnl_node * nl_b_8_18 = nl_v_38;\n(void)nl_b_8_18;\nNL_NODE_BIND(8, 18, 4, &nl_b_8_18);\nnl_node * nl_v_39 = nl_b_8_18;\nnl_node_option * nl_v_40 = &nl_v_39->f0;\nNL_HEAP_FIELD(nl_v_39,nl_v_40,1,10,0,9,9,3);\nconst nl_node * nl_v_41 = nl_b_6_16;\nnl_node_option nl_v_42 = { 1, nl_v_41 };\nnl_node_option nl_v_43 = *nl_v_40;\n*nl_v_40 = nl_v_42;\nNL_HEAP_CHANGE(nl_v_40,&nl_v_43,1);\nnl_v_35 = nl_v_43;\nNL_HEAP_SCOPE_END(3);\n}\nnl_node_option nl_b_6_19 = nl_v_35;\n(void)nl_b_6_19;\nNL_NODE_BIND(6, 19, 3, &nl_b_6_19);\nnl_node_option nl_v_44;\n{ const nl_domain *nl_b_9_20 = &nl_b_2_6;\n(void)nl_b_9_20;\nconst nl_node * nl_v_45 = nl_b_2_8;\nconst nl_domain * nl_v_46 = nl_b_9_20;\nconst nl_node * nl_v_47 = nl_v_45;\nNL_HEAP_ROOT(nl_v_47,nl_v_46->token,0,5,8,4);\n(void)nl_v_46;\nconst nl_node * nl_b_9_21 = nl_v_47;\n(void)nl_b_9_21;\nNL_NODE_BIND(9, 21, 4, &nl_b_9_21);\nconst nl_node * nl_v_48 = nl_b_9_21;\nconst nl_node_option * nl_v_49 = &nl_v_48->f0;\nNL_HEAP_FIELD(nl_v_48,nl_v_49,0,10,0,9,9,4);\nnl_node_option nl_v_50 = *nl_v_49;\nNL_HEAP_COPY(nl_v_49,&nl_v_50);\nnl_v_44 = nl_v_50;\nNL_HEAP_SCOPE_END(4);\n}\nnl_node_option nl_b_6_22 = nl_v_44;\n(void)nl_b_6_22;\nNL_NODE_BIND(6, 22, 3, &nl_b_6_22);\nnl_node_option nl_v_51 = nl_b_6_22;\nswitch (nl_v_51.tag) {\ncase 0: {\nNL_NODE_ARM(1, nl_v_51.ptr);\nbreak; }\ncase 1: {\nconst nl_node *const nl_b_11_23 = nl_v_51.ptr;\nNL_NODE_ARM(2, nl_b_11_23);\n(void)nl_b_11_23;\n{ const nl_domain *nl_b_12_24 = &nl_b_6_14;\n(void)nl_b_12_24;\nconst nl_node * nl_v_52 = nl_b_11_23;\nconst nl_domain * nl_v_53 = nl_b_12_24;\nconst nl_node * nl_v_54 = nl_v_52;\nNL_HEAP_ROOT(nl_v_54,nl_v_53->token,0,16,19,5);\n(void)nl_v_53;\nconst nl_node * nl_b_12_25 = nl_v_54;\n(void)nl_b_12_25;\nNL_NODE_BIND(12, 25, 4, &nl_b_12_25);\nNL_HEAP_SCOPE_END(5);\n}\nbreak; }\n}\nnl_live_tail nl_v_55;\n{ const nl_domain *nl_b_13_23 = &nl_b_2_6;\n(void)nl_b_13_23;\nconst nl_node * nl_v_56 = nl_b_2_8;\nconst nl_domain * nl_v_57 = nl_b_13_23;\nnl_node * nl_v_58 = (nl_node *)nl_v_56;\nNL_HEAP_ROOT(nl_v_58,nl_v_57->token,1,5,8,5);\n(void)nl_v_57;\nnl_node * nl_b_13_24 = nl_v_58;\n(void)nl_b_13_24;\nNL_NODE_BIND(13, 24, 4, &nl_b_13_24);\nnl_node * nl_v_59 = nl_b_13_24;\nnl_node_option * nl_v_60 = &nl_v_59->f0;\nNL_HEAP_FIELD(nl_v_59,nl_v_60,1,10,0,9,9,5);\nconst nl_node * nl_v_61 = nl_b_6_16;\nnl_allocation nl_v_62 = nl_b_6_12;\nnl_b_6_12 = (nl_allocation){0};\nnl_domain nl_v_63 = nl_b_6_14;\nnl_b_6_14 = (nl_domain){0};\nNL_LIVE_SEND(nl_v_61,nl_v_62.handle,nl_v_63.token,&nl_b_6_12,&nl_b_6_14);\nnl_live_tail nl_v_71 = nl_producer_10(nl_v_60,nl_v_61,nl_v_62,nl_v_63);\nNL_LIVE_RECEIVE(nl_v_71,&nl_b_6_12,&nl_b_6_14);\nnl_v_55 = nl_v_71;\nNL_HEAP_SCOPE_END(5);\n}\nconst nl_node * nl_b_6_30 = nl_v_55.ptr;\n(void)nl_b_6_30;\nnl_allocation nl_b_6_31 = nl_v_55.allocation;\n(void)nl_b_6_31;\nnl_domain nl_b_6_32 = nl_v_55.domain;\n(void)nl_b_6_32;\nnl_v_55 = (nl_live_tail){0};\n{ const nl_domain *nl_b_15_33 = &nl_b_6_32;\n(void)nl_b_15_33;\nconst nl_node * nl_v_72 = nl_b_6_30;\nconst nl_domain * nl_v_73 = nl_b_15_33;\nconst nl_node * nl_v_74 = nl_v_72;\nNL_HEAP_ROOT(nl_v_74,nl_v_73->token,0,16,19,6);\n(void)nl_v_73;\nconst nl_node * nl_b_15_34 = nl_v_74;\n(void)nl_b_15_34;\nNL_NODE_BIND(15, 34, 4, &nl_b_15_34);\nNL_HEAP_SCOPE_END(6);\n}\nconst nl_node * nl_v_75 = nl_b_6_30;\nnl_allocation nl_v_76 = nl_b_6_31;\nnl_b_6_31 = (nl_allocation){0};\nnl_domain nl_v_77 = nl_b_6_32;\nnl_b_6_32 = (nl_domain){0};\nNL_HEAP_HANDOFF(nl_v_75,nl_v_76.handle,nl_v_77.token,&nl_b_6_31,&nl_b_6_32);\nnl_owner_12(nl_v_75,nl_v_76,nl_v_77);\nNL_HEAP_RETURNED(&nl_b_6_31,&nl_b_6_32);\nnl_slot nl_v_89;\n{ const nl_domain *nl_b_19_43 = &nl_b_2_6;\n(void)nl_b_19_43;\nconst nl_node * nl_v_90 = nl_b_2_8;\nNL_HEAP_END(nl_v_90,nl_b_19_43->token);\nnl_slot nl_v_91 = {(unsigned char *)nl_v_90,24};\nnl_v_89 = nl_v_91;\n}\nnl_slot nl_b_6_44 = nl_v_89;\n(void)nl_b_6_44;\nNL_NODE_BIND(6, 44, 4, &nl_b_6_44);\nnl_slot nl_v_92 = nl_b_6_44;\nnl_b_6_44 = (nl_slot){0};\nnl_storage nl_v_93 = {nl_v_92.bytes,nl_v_92.length};\nNL_HEAP_RAW(nl_v_93.bytes,nl_v_93.length);\nnl_storage nl_b_6_45 = nl_v_93;\n(void)nl_b_6_45;\nNL_NODE_BIND(6, 45, 4, &nl_b_6_45);\nnl_domain nl_v_94 = nl_b_2_6;\nnl_b_2_6 = (nl_domain){0};\nNL_HEAP_FINALIZE(nl_v_94.token);\n(void)nl_v_94;\nnl_allocation nl_v_95 = nl_b_2_4;\nnl_b_2_4 = (nl_allocation){0};\nnl_storage nl_v_96 = nl_b_6_45;\nnl_b_6_45 = (nl_storage){0};\nNL_HEAP_RELEASE(nl_v_95.handle,nl_v_96.bytes,nl_v_96.length);\nfree(nl_v_95.handle);\nnl_v_95.handle=NULL;\nnl_v_96.bytes=NULL;\n(void)nl_v_96;\n}\n}\nNL_HEAP_FINISH();\nreturn 0;\n}\n",
+      "stderr": ""
+    }
+  },
+  "discard_owner.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/discard_owner.nl:16:5-16:18: error(semantic)[P193-DEFINITION-OBLIGATION]: non-Discardable conditional result is discarded\n"
+    },
+    "owned": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/discard_owner.nl:16:5-16:18: error(semantic)[P193-DEFINITION-OBLIGATION]: non-Discardable conditional result is discarded\n"
+    }
+  },
+  "double_consume.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/double_consume.nl:17:12-17:24: error(semantic)[P193-DEFINITION-CONSUMED]: symbolic non-Copy responsibility was consumed\n"
+    },
+    "owned": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/double_consume.nl:17:12-17:24: error(semantic)[P193-DEFINITION-CONSUMED]: symbolic non-Copy responsibility was consumed\n"
+    }
+  },
+  "missing_member.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/missing_member.nl:11:24-15:6: error(semantic)[P208-DEFINITION-RETURN]: complete LiveTail requires prior detach\n"
+    },
+    "owned": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/missing_member.nl:11:24-15:6: error(semantic)[P208-DEFINITION-RETURN]: complete LiveTail requires prior detach\n"
+    }
+  },
+  "no_cleanup.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/no_cleanup.nl:61:38-115:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n"
+    },
+    "owned": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/no_cleanup.nl:61:38-115:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n"
+    }
+  },
+  "pending.nl": {
+    "check": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "owned": {
+      "exit": 0,
+      "stdout": "producer=65 valid=1 root=16 incarnation=19 region=2 domain=2 result=55\nnode=1 kind=27 symbol=0 init=0 first=0 next=0 argc=0 result=0 use=0 span=0:217\nnode=2 kind=10 symbol=0 init=0 first=3 next=0 argc=2 result=32 use=0 span=21:73\nnode=3 kind=1 symbol=25 init=0 first=0 next=0 argc=0 result=51 use=1 span=38:47\nbinding=25 value=49 place=33 available=1\nnode=4 kind=34 symbol=0 init=0 first=0 next=0 argc=0 result=52 use=0 span=49:72\nnode=5 kind=2 symbol=29 init=2 first=6 next=14 argc=1 result=0 use=0 span=6:73\nbinding=29 value=32 place=37 available=1\nnode=6 kind=30 symbol=29 init=0 first=0 next=0 argc=0 result=0 use=4 span=10:18\nbinding=29 value=32 place=37 available=1\nnode=7 kind=31 symbol=0 init=0 first=9 next=0 argc=3 result=55 use=0 span=98:189\nnode=8 kind=1 symbol=26 init=0 first=0 next=0 argc=0 result=54 use=1 span=128:129\nbinding=26 value=50 place=34 available=1\nnode=9 kind=32 symbol=0 init=8 first=0 next=0 argc=0 result=0 use=0 span=117:129\nnode=10 kind=1 symbol=27 init=0 first=0 next=0 argc=0 result=13 use=2 span=157:158\nbinding=27 value=13 place=35 available=1\nnode=11 kind=32 symbol=0 init=10 first=0 next=0 argc=0 result=0 use=0 span=139:158\nnode=12 kind=1 symbol=28 init=0 first=0 next=0 argc=0 result=18 use=2 span=182:183\nbinding=28 value=18 place=36 available=1\nnode=13 kind=32 symbol=0 init=12 first=0 next=0 argc=0 result=0 use=0 span=168:183\nnode=14 kind=2 symbol=30 init=7 first=15 next=17 argc=1 result=0 use=0 span=79:189\nbinding=30 value=55 place=39 available=1\nnode=15 kind=30 symbol=30 init=0 first=0 next=0 argc=0 result=0 use=4 span=83:95\nbinding=30 value=55 place=39 available=1\nnode=16 kind=1 symbol=30 init=0 first=0 next=0 argc=0 result=55 use=2 span=202:214\nbinding=30 value=55 place=39 available=1\nnode=17 kind=39 symbol=0 init=16 first=0 next=0 argc=0 result=0 use=0 span=195:215\n",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p733/pending.nl\n"
+    }
+  },
+  "reuse_donor.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/reuse_donor.nl:101:21-101:33: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n"
+    },
+    "owned": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/reuse_donor.nl:101:21-101:33: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n"
+    }
+  },
+  "wrong_backing.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/wrong_backing.nl:97:25-98:71: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n"
+    },
+    "owned": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/wrong_backing.nl:97:25-98:71: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n"
+    }
+  },
+  "wrong_domain.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/wrong_domain.nl:98:64-98:70: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n"
+    },
+    "owned": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/wrong_domain.nl:98:64-98:70: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n"
+    }
+  },
+  "wrong_receiver.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/wrong_receiver.nl:106:21-107:63: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n"
+    },
+    "owned": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/wrong_receiver.nl:106:21-107:63: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n"
+    }
+  },
+  "wrong_root.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/wrong_root.nl:97:25-98:71: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n"
+    },
+    "owned": {
+      "exit": 1,
+      "stdout": "",
+      "stderr": "tests/p733/../support/node_checked.h:28: nl_semantic_register_function_unit(out->context, inputs, 1, NULL) == NL_CHECK_OK\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "tests/p733/wrong_root.nl:97:25-98:71: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n"
+    }
+  },
+  "inherited/producer-result-local.nl": {
+    "check": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "owned": {
+      "exit": 0,
+      "stdout": "producer=65 valid=1 root=16 incarnation=19 region=2 domain=2 result=55\nnode=1 kind=27 symbol=0 init=0 first=0 next=0 argc=0 result=0 use=0 span=0:203\nnode=2 kind=10 symbol=0 init=0 first=3 next=0 argc=2 result=32 use=0 span=21:73\nnode=3 kind=1 symbol=25 init=0 first=0 next=0 argc=0 result=51 use=1 span=38:47\nbinding=25 value=49 place=33 available=1\nnode=4 kind=34 symbol=0 init=0 first=0 next=0 argc=0 result=52 use=0 span=49:72\nnode=5 kind=2 symbol=29 init=2 first=6 next=14 argc=1 result=0 use=0 span=6:73\nbinding=29 value=32 place=37 available=1\nnode=6 kind=30 symbol=29 init=0 first=0 next=0 argc=0 result=0 use=4 span=10:18\nbinding=29 value=32 place=37 available=1\nnode=7 kind=31 symbol=0 init=0 first=9 next=0 argc=3 result=55 use=0 span=91:182\nnode=8 kind=1 symbol=26 init=0 first=0 next=0 argc=0 result=54 use=1 span=121:122\nbinding=26 value=50 place=34 available=1\nnode=9 kind=32 symbol=0 init=8 first=0 next=0 argc=0 result=0 use=0 span=110:122\nnode=10 kind=1 symbol=27 init=0 first=0 next=0 argc=0 result=13 use=2 span=150:151\nbinding=27 value=13 place=35 available=1\nnode=11 kind=32 symbol=0 init=10 first=0 next=0 argc=0 result=0 use=0 span=132:151\nnode=12 kind=1 symbol=28 init=0 first=0 next=0 argc=0 result=18 use=2 span=175:176\nbinding=28 value=18 place=36 available=1\nnode=13 kind=32 symbol=0 init=12 first=0 next=0 argc=0 result=0 use=0 span=161:176\nnode=14 kind=2 symbol=30 init=7 first=15 next=17 argc=1 result=0 use=0 span=79:182\nbinding=30 value=55 place=39 available=1\nnode=15 kind=30 symbol=30 init=0 first=0 next=0 argc=0 result=0 use=4 span=83:88\nbinding=30 value=55 place=39 available=1\nnode=16 kind=1 symbol=30 init=0 first=0 next=0 argc=0 result=55 use=2 span=195:200\nbinding=30 value=55 place=39 available=1\nnode=17 kind=39 symbol=0 init=16 first=0 next=0 argc=0 result=0 use=0 span=188:201\n",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p733/inherited/producer-result-local.nl\n"
+    }
+  }
+}

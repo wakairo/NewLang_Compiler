@@ -21,6 +21,13 @@ def main():
         data = (root.parent.parent / name).read_bytes()
         if name == 'src/semantic_internal.h':
             full_digest = hashlib.sha256(data).hexdigest()
+            # P733: one exact owned producer-local observation attachment.
+            # Keep the historical entire-header digest and arithmetic bytes.
+            owner_fields = (b'    struct NLProducerLocalProof *producer_local;\n'
+                            b'    void (*destroy_producer_local)(NLCheckedFragment *);\n')
+            owner_record = b'struct NLCheckedFragment {\n' + owner_fields
+            assert data.count(owner_fields) == data.count(owner_record) == 1
+            data = data.replace(owner_record,b'struct NLCheckedFragment {\n',1)
             # P713: exact artifact-owned IF history attachment, no arithmetic
             # authority or historical bytes changed. Reject every other delta.
             if_fields = (b'    struct NLIfFieldProof *if_fields;\n'

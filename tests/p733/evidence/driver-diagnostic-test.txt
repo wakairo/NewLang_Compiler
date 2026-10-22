@@ -1,0 +1,34 @@
+Internal ctest changing into directory: /workspace/p733-build
+UpdateCTestConfiguration  from :/workspace/p733-build/DartConfiguration.tcl
+Parse Config file:/workspace/p733-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p733-build/DartConfiguration.tcl
+Parse Config file:/workspace/p733-build/DartConfiguration.tcl
+Test project /workspace/p733-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 269
+    Start 269: p733_local_owner_driver_oom.unit
+
+269: Test command: /workspace/p733-build/p733_driver_test "oom" "/workspace/p733/tests/p733/pending.nl"
+269: Working Directory: /workspace/p733-build
+269: Environment variables: 
+269:  PYTHONDONTWRITEBYTECODE=1
+269:  PYTHONHASHSEED=0
+269:  LC_ALL=C
+269:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+269:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+269: Test timeout computed to be: 90
+269: normal driver fail-at-N positions=3163 CLI1=32 CLI3=3119 legacy_bool_CLI4=12 zero_partial_C=PASS recovery=PASS
+269: CLI3 explicit_OOM=3107 existing_generic_V0_CHECK=12 internal=0
+1/1 Test #269: p733_local_owner_driver_oom.unit ...   Passed    2.12 sec
+
+The following tests passed:
+	p733_local_owner_driver_oom.unit
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   2.13 sec
