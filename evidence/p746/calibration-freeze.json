@@ -1,0 +1,10 @@
+{
+  "frozen_utc": "2026-10-22T14:16:07.679036+00:00",
+  "expected": "NL_PARSE_SYNTAX_UNSUPPORTED / AVS-DECL-PROFILE in both declaration orders; no semantic registration/owned/C17/native. Original frozen programs unchanged. Minimal examples contain no heap/lifetime operations and distinguish profile refusal from ownership invalidity.",
+  "sha256": {
+    "calibration_batch_reordered.nl": "dace1664f9ba21f102e6ec123825ef4c75e026cc82d0105da3fa8aff97caf110",
+    "archive_window_reordered.nl": "5bd6dfab35b34a65529a888df2d061562c6ec576a912b1a4f623e36576beef87",
+    "minimal_heap_first.nl": "2ac2104666a3713c80cf0dcca422b036d4c8eeddf92f317e776bae14204df160",
+    "minimal_copy_first.nl": "b3ec5dfe9735dc44106c1b1a44bff8e8431fd1452eec3924f407eb3ca99c1c14"
+  }
+}
