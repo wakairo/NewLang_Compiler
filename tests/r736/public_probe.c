@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include <string.h>
 static unsigned producers, mutations;
+static const NLCheckedFragment *captured_owner;
+static NLCheckedNodeId captured_call;
+static NLProducerLocalReturnView captured_view;
 static bool mutate_and_check(const NLCheckedFragment *f, size_t id,
                              const NLProducerLocalReturnView *orig)
 {
@@ -122,6 +125,9 @@ static bool walk(const NLCheckedFragment *f)
                 before.placement.region != after.placement.region ||
                 before.governing_domain != after.governing_domain)
                 return false;
+            captured_owner = f;
+            captured_call = id;
+            captured_view = v;
             ++producers;
             printf("R736_SOURCE_ISSUED producer=%zu local=%zu return=%zu "
                    "original_root=%zu original_region=%zu domain=%zu "
@@ -145,6 +151,25 @@ int main(int argc, char **argv)
     if (argc != 2 || !node_checked_load(argv[1], &n) || !walk(n.entry) ||
         producers != 1 || mutations != 26)
         return 1;
+    const NLCheckedFragment *original_owner = captured_owner;
+    NLCheckedNodeId original_call = captured_call;
+    NLProducerLocalReturnView original_view = captured_view;
+    TestNode independent = {0};
+    producers = 0;
+    mutations = 0;
+    if (!node_checked_load(argv[1], &independent) ||
+        !walk(independent.entry) || producers != 1 || mutations != 26 ||
+        original_call != captured_call ||
+        original_view.result.value != captured_view.result.value ||
+        original_view.returned == captured_view.returned ||
+        nl_checked_producer_local_return_valid(original_owner, original_call,
+                                               &captured_view) ||
+        !nl_checked_producer_local_return_valid(original_owner, original_call,
+                                                &original_view))
+        return 1;
+    printf("R736_FOREIGN_WORLD same_numeric=%zu separate_contexts=1 rejected=PASS\n",
+           original_view.result.value);
+    node_checked_destroy(&independent);
     node_checked_destroy(&n);
     puts("R736_PUBLIC_PASS");
     return 0;
