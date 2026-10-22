@@ -12,7 +12,27 @@
 > 運用は [Development Process](NewLang_Project_Development_Process.md) に従う。
 > この文書は正本を置換せず、将来の更新時は「観測した事実」と「新しい投資案」を分ける。
 
-## 現行実装計画 — 2026-10-21（v0-M1/M2 main統合 → v0-M3 #713 実装認可）
+## 現行実装計画 — 2026-10-22（v0-M1–M4 main統合 → v0-M5 #722 RELEASE）
+
+> **日付付き・非規範の実装checkpoint。** 継続的な優先順位と安全性の正本は[Development Process §4.3.2](NewLang_Project_Development_Process.md#432-v0-compiler-completion-の実装優先順位継続的な方針)／§7、製品の評価基準は[Product Strategy §1.1](NewLang_Product_Value_Strategy.md#11-ub-prevention-audit-locality-value-hypothesis)／§1.3、言語の正本は[CURRENT_SPEC](reference/CURRENT_SPEC.md)→**Draft17.33**。以下は固定mainの到達と別Issueで認可された次工程の**区別**であり、Issue・RELEASEはWork/Codex作業者の自動起動ではない。
+
+**固定mainと採用後CI：** Compiler/main **`5ce78224383948aad65133081494d43e30cc0835`**、parent `345e58be1bf805f2bc12cc802608f344351e7cd8`、tree `c5cfb350d2b05ff6b82a9e1136ef892c0fb888b8`。自然な同SHA `main push`／attempt1の[FULL5 #39722593501](https://github.com/wakairo/NewLang_Compiler/actions/runs/39722593501)はGCC/GCC Release/Clang/ASan/UBSan **5/5 SUCCESS**、[NO LLVM PARTIAL #39722593509](https://github.com/wakairo/NewLang_Compiler/actions/runs/39722593509)は**SUCCESS**。P候補CI／R専用CI／統合後main CIは互いに代用しない。canonical/spec/Processの意味論変更はない。
+
+**採用済みv0-M1–M4（いずれも有限）：**
+- **M1:** [P #701／PR #703](https://github.com/wakairo/NewLang_Compiler/issues/701) + [fresh R #704](https://github.com/wakairo/NewLang_Compiler/issues/704)で、callee自身のlexical元recordの順序付きstateful Change・Copy返却から別caller originalでの実使用までをsource-issued証拠→C17/native化。
+- **M2:** [P #706／PR #707](https://github.com/wakairo/NewLang_Compiler/issues/706) + [fresh R #708](https://github.com/wakairo/NewLang_Compiler/issues/708)で、caller-original `ref<write,u8>` actual→formal handoff、元field Change／old Copy、caller post-stateをsource-issued証拠と実nativeで有限検証。
+- **M3:** [P #713／PR #715](https://github.com/wakairo/NewLang_Compiler/issues/713) + [fresh R #716](https://github.com/wakairo/NewLang_Compiler/issues/716)で、同一2-u8 lexical originalのtwo-**normal**-arm IF（双方Changeまたは片方no-write）の合流・新ValueFact・旧Copyと実C17/nativeを有限検証。R初回の非法文法とsyntax修正版は分けて保持。
+- **M4:** [P #718／merged PR #719](https://github.com/wakairo/NewLang_Compiler/issues/718) + [fresh R #720](https://github.com/wakairo/NewLang_Compiler/issues/720#issuecomment-6332700781)で、**一つのNORMALと独立したcalleeではない`main()->unit`のterminal RETURN**を持つIFの元field scoped Change、発行元別world/stream/return-target validation、実return-before-post-IF、strict C17/nativeを限定採用。Pは開発中private streamを異世界の同数値IDに取り違える検証漏れを発見・修復し履歴保存。R独立のprivate issuer任意改変／fail-at-N OOMは**NOT TESTED**で、P所有の負例・OOM検証をRの証拠に読み替えない。R専用[DRAFT PR #721](https://github.com/wakairo/NewLang_Compiler/pull/721)は**DO NOT MERGE**。
+
+**次のcritical path — v0-M5 `#722`（RELEASE済、結果未受領）：** [Issue #722](https://github.com/wakairo/NewLang_Compiler/issues/722#issuecomment-6332829717)でCoordinationが上記固定mainと統合後CIを確認して**実質的P implementationを正式認可**した。M2のcaller-original scoped ref formalとM4のone-normal／terminal unit RETURNを、**実際のnamed-direct stateful callee**で合成する。calleeのRETURNはcallerに戻り、callerの実元fieldのpostcall currentness、sibling、old Copy由来、loan終了を失わせず、逆にcallee-localの失効済factを移植しない。二つの異なるsource/oracle×実runtime両armを編集前freezeし、未変更mainの最初の不足→source/checker→実際の発行元付きowned／独立validator→strict C17/native GCC/Clang O0/O2→wrong-world/stream、同数値異発行元ID、negative／OOM／rollback／FULL5+PARTIALを一つのP DRAFT PRで検証する。**#722 RELEASEは起動の許可であって自動起動・実装完了・採用ではない。** CはPの固定候補と最終報告後に、新trust boundaryへのfresh BLIND Rおよびmerge条件を別途裁定する。事前にP実装、独立R、一般soundnessを先取りして認定しない。
+
+**形式・アルゴリズムの境界：** [F #710](https://github.com/wakairo/NewLang_Compiler/issues/710#issuecomment-6317603048)は固定original／Change／sibling等の既存Lean定理と実production issued typed Copy→caller使用をつなぐformal refinementが未完成（core contradictionの確認なし）と分類し、後続M2–M4／M5を形式証明したわけではない。[O #711](https://github.com/wakairo/NewLang_Compiler/issues/711#issuecomment-6317219444)のsnapshot対delta比較はsyntheticであり実Cの性能・issuer原権限は未測定。実測ボトルネックなしにproduction snapshotを置換しない。別のProofやO調査をM5の機械的な一律gateにしない。
+
+**製品への接続／代替と投資STOP：** これは選択済みv0意味論を利用者風sourceで使うための**compiler能力／安全性探索**で、Rustに対する勝利やProduct GOではない。[Product Strategy §1.1](NewLang_Product_Value_Strategy.md#11-ub-prevention-audit-locality-value-hypothesis)の製品価値は、Cを選ぶ実際の積極的理由の確認後に、well-factored Cに比べた**library author＋ordinary-safe callerのUB防止L/R/P/V/C監査・再監査の依存閉包とsafe-reachable stateの保護**で評価する。unchecked行数、fixture green、C17 status0だけで数えず、実用API・物理identity／失敗／破棄を伴うNewLang-native libraryは未実証。**Product GO能動判定は[#624](https://github.com/wakairo/NewLang_Compiler/issues/624)によりPAUSED、H1 [#268](https://github.com/wakairo/NewLang_Compiler/issues/268) HOLD/UNDECIDED**。新規大規模owner／proof／encapsulationやsource ruleはProcess §§4.2–4.3で別裁定し、既存checked、正当な局所unchecked（実装済みと推定しない）、小library境界、別workloadと比較する。権限の偽造・world/source origin不一致・新normative ruleや真に非有界な再設計が必要ならPは最小反例で**STOP→C**。費用だけでv0の必須機構を永久に後回しにせず、scopeと実測で順序を更新する。
+
+**並列に残る別のv0完成レーン：** fallible heap originalとnonCopy owner handoff/return/cleanup、通常CLIのArray4 direct construction（現状test-only opt-inとの差）、`unchecked`／minimal generics等の既選択nucleusは、M5に解決済みとも自動着手対象ともみなさない。general FFI・concurrency・separate compilation・source-visible lifetime/effect・traits等の明示的非目標を自動昇格しない。次の工程は依存・費用・反例をみてCが別途裁定する。
+
+## 前回の実装計画（履歴） — 2026-10-21（v0-M1/M2 main統合 → v0-M3 #713 実装認可）
 
 > **実装順・依存・到達状況に関する日付付きcheckpoint（非規範）。** 継続的な優先順位基準は[Development Process §4.3.2](NewLang_Project_Development_Process.md)、仕様の正本は[CURRENT_SPEC](reference/CURRENT_SPEC.md)→**Draft17.33**。前回のM1未実装計画と以前のcheckpointは、下記の履歴節として原文を保持する。個別Issueの起票・認可だけでTrackの実作業は起動しない。Process、canonical、Product GO条件は本更新で変更しない。
 
