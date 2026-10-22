@@ -1,0 +1,76 @@
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+
+#include <limits.h>
+_Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+#include <stddef.h>
+_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
+
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+
+static void nl_fn_11(void);
+static void nl_fn_10(uint8_t *nl_local_6, uint8_t nl_local_7);
+
+static void nl_fn_11(void)
+{
+    nl_type_10 nl_local_1 = { .f0 = 23, .f1 = 34, };
+    (void)nl_local_1;
+    nl_type_10 nl_local_2 = { .f0 = 51, .f1 = 62, };
+    (void)nl_local_2;
+    const uint8_t nl_local_3 = nl_local_1.f1;
+    (void)nl_local_3;
+    const uint8_t nl_local_4 = nl_local_1.f0;
+    (void)nl_local_4;
+    {
+        uint8_t *const nl_local_5 = &nl_local_1.f1;
+        (void)nl_local_5;
+        nl_fn_10(nl_local_5, 0);
+    }
+    const uint8_t nl_local_11 = nl_local_1.f1;
+    (void)nl_local_11;
+    const uint8_t nl_local_12 = nl_local_1.f0;
+    (void)nl_local_12;
+    uint8_t nl_loan_result_2;
+    {
+        uint8_t *const nl_local_13 = &nl_local_2.f0;
+        (void)nl_local_13;
+        const uint8_t nl_replace_old_36 = *nl_local_13;
+        *nl_local_13 = 89;
+        nl_loan_result_2 = nl_replace_old_36;
+    }
+    (void)nl_loan_result_2;
+    const uint8_t nl_local_14 = nl_loan_result_2;
+    (void)nl_local_14;
+    const uint8_t nl_local_15 = nl_local_2.f0;
+    (void)nl_local_15;
+    const uint8_t nl_local_16 = nl_local_2.f1;
+    (void)nl_local_16;
+    (void)0;
+}
+
+static void nl_fn_10(uint8_t *nl_local_6, uint8_t nl_local_7)
+{
+    const size_t nl_local_8 = ((size_t)UINTMAX_C(2));
+    (void)nl_local_8;
+    const size_t nl_local_9 = ((size_t)UINTMAX_C(5));
+    (void)nl_local_9;
+    const size_t nl_less_left_8 = nl_local_8;
+    const size_t nl_less_right_8 = nl_local_9;
+    if ((nl_less_left_8 < nl_less_right_8)) {
+        (void)0;
+        return;
+    } else {
+        const uint8_t nl_replace_old_2 = *nl_local_6;
+        *nl_local_6 = 141;
+        const uint8_t nl_local_10 = nl_replace_old_2;
+        (void)nl_local_10;
+    }
+    (void)0;
+}
+
+int main(void)
+{
+    nl_fn_11();
+    return 0;
+}

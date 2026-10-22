@@ -1,0 +1,137 @@
+[
+  {
+    "source": "tests/p727/variants/normal-unit-tail-only.nl",
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p727/variants/normal-unit-tail-only.nl\n"
+    },
+    "public": {
+      "exit": 0,
+      "stdout_bytes": 394,
+      "stdout": "call=24 function=10 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x560abe277290 handoff=0x560abe209710 IF_entry=0x560abe227740 IF_post=0x560abe293d80 return_live=0x560abe234250 ended=0x560abe208250\nloan block=23 tail=0 first_item=27 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+      "stderr": ""
+    },
+    "first-invariant": {
+      "exit": 0,
+      "stdout_bytes": 394,
+      "stdout": "call=24 function=10 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x556edc417290 handoff=0x556edc3a9710 IF_entry=0x556edc3c7740 IF_post=0x556edc433d80 return_live=0x556edc3d4250 ended=0x556edc3a8250\nloan block=23 tail=0 first_item=27 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+      "stderr": "P727 parameter_entry reject original-line=930\nP727 nl_checked_copy_unit_validate reject original-line=1364\nP727 parameter_entry reject original-line=930\nP727 parameter_entry reject original-line=930\nP727 nl_checked_copy_unit_validate reject original-line=1364\n"
+    }
+  },
+  {
+    "source": "tests/p727/variants/tail-call-only.nl",
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 0,
+      "stdout_bytes": 2272,
+      "stdout": "",
+      "stderr": ""
+    },
+    "public": {
+      "exit": 0,
+      "stdout_bytes": 351,
+      "stdout": "call=24 function=10 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x5620dae2f540 handoff=0x5620daeae310 IF_entry=0x5620dae100b0 IF_post=0x5620dae05ff0 return_live=0x5620dae1f4b0 ended=0x5620dae3bd70\nloan block=23 tail=24 first_item=0 item_count=0 result_count=0 type=1 terminates=0 call_unit=1\nunit_status=0 if_status=0 parameters_status=0\n",
+      "stderr": ""
+    },
+    "first-invariant": {
+      "exit": 0,
+      "stdout_bytes": 351,
+      "stdout": "call=24 function=10 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x560df28be540 handoff=0x560df293d310 IF_entry=0x560df289f0b0 IF_post=0x560df2894ff0 return_live=0x560df28ae4b0 ended=0x560df28cad70\nloan block=23 tail=24 first_item=0 item_count=0 result_count=0 type=1 terminates=0 call_unit=1\nunit_status=0 if_status=0 parameters_status=0\n",
+      "stderr": ""
+    }
+  },
+  {
+    "source": "tests/p727/variants/without-precall-copy.nl",
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p727/variants/without-precall-copy.nl\n"
+    },
+    "public": {
+      "exit": 0,
+      "stdout_bytes": 394,
+      "stdout": "call=21 function=10 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x5652be565e70 handoff=0x5652be648e40 IF_entry=0x5652be573390 IF_post=0x5652be57c720 return_live=0x5652be5eb0b0 ended=0x5652be591c00\nloan block=20 tail=0 first_item=24 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=24 kind=28 initializer=21 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+      "stderr": ""
+    },
+    "first-invariant": {
+      "exit": 0,
+      "stdout_bytes": 394,
+      "stdout": "call=21 function=10 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x55ce08502e70 handoff=0x55ce085e5e40 IF_entry=0x55ce08510390 IF_post=0x55ce08519720 return_live=0x55ce085880b0 ended=0x55ce0852ec00\nloan block=20 tail=0 first_item=24 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=24 kind=28 initializer=21 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+      "stderr": "P727 parameter_entry reject original-line=930\nP727 nl_checked_copy_unit_validate reject original-line=1364\nP727 parameter_entry reject original-line=930\nP727 parameter_entry reject original-line=930\nP727 nl_checked_copy_unit_validate reject original-line=1364\n"
+    }
+  },
+  {
+    "source": "tests/p727/variants/without-precall-sibling.nl",
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p727/variants/without-precall-sibling.nl\n"
+    },
+    "public": {
+      "exit": 0,
+      "stdout_bytes": 394,
+      "stdout": "call=21 function=10 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x55ee736fae70 handoff=0x55ee737dde40 IF_entry=0x55ee73708390 IF_post=0x55ee73711720 return_live=0x55ee737800b0 ended=0x55ee73726c00\nloan block=20 tail=0 first_item=24 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=24 kind=28 initializer=21 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+      "stderr": ""
+    },
+    "first-invariant": {
+      "exit": 0,
+      "stdout_bytes": 394,
+      "stdout": "call=21 function=10 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x5651d5fe1e70 handoff=0x5651d60c4e40 IF_entry=0x5651d5fef390 IF_post=0x5651d5ff8720 return_live=0x5651d60670b0 ended=0x5651d600dc00\nloan block=20 tail=0 first_item=24 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=24 kind=28 initializer=21 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+      "stderr": "P727 parameter_entry reject original-line=930\nP727 nl_checked_copy_unit_validate reject original-line=1364\nP727 parameter_entry reject original-line=930\nP727 parameter_entry reject original-line=930\nP727 nl_checked_copy_unit_validate reject original-line=1364\n"
+    }
+  },
+  {
+    "source": "tests/p727/variants/without-second-original-write.nl",
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p727/variants/without-second-original-write.nl\n"
+    },
+    "public": {
+      "exit": 0,
+      "stdout_bytes": 394,
+      "stdout": "call=24 function=10 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x562636fbd7c0 handoff=0x56263703c920 IF_entry=0x562636f9e330 IF_post=0x562636fb80a0 return_live=0x562637029270 ended=0x562636fca2f0\nloan block=23 tail=0 first_item=27 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+      "stderr": ""
+    },
+    "first-invariant": {
+      "exit": 0,
+      "stdout_bytes": 394,
+      "stdout": "call=24 function=10 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x558bd765e7c0 handoff=0x558bd76dd920 IF_entry=0x558bd763f330 IF_post=0x558bd76590a0 return_live=0x558bd76ca270 ended=0x558bd766b2f0\nloan block=23 tail=0 first_item=27 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+      "stderr": "P727 parameter_entry reject original-line=930\nP727 nl_checked_copy_unit_validate reject original-line=1364\nP727 parameter_entry reject original-line=930\nP727 parameter_entry reject original-line=930\nP727 nl_checked_copy_unit_validate reject original-line=1364\n"
+    }
+  }
+]

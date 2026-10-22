@@ -1,0 +1,32 @@
+[
+  {
+    "source": "tests/p727/variants/tail-call-only.nl",
+    "sha256": "12a2434480404f9a966282fe6a7f7ea1b5da0a71434f934d7a6042b811e00779",
+    "prediction": "CHECK0; tail-call-only expected validator0/C17 admitted; all other single deltas expected first guard unchanged",
+    "origin": "P-owned post-finding reduction of exact R A0v2; not R recalibration or oracle replacement"
+  },
+  {
+    "source": "tests/p727/variants/normal-unit-tail-only.nl",
+    "sha256": "b8fc40688462a990df9476d2250a6434dee252d4631a8cf7e755eb24823c865d",
+    "prediction": "CHECK0; tail-call-only expected validator0/C17 admitted; all other single deltas expected first guard unchanged",
+    "origin": "P-owned post-finding reduction of exact R A0v2; not R recalibration or oracle replacement"
+  },
+  {
+    "source": "tests/p727/variants/without-precall-copy.nl",
+    "sha256": "a24238260d5ae1a56deaf58da3f874e7c3a8085c181d7a8d7c1cdd0de8967898",
+    "prediction": "CHECK0; tail-call-only expected validator0/C17 admitted; all other single deltas expected first guard unchanged",
+    "origin": "P-owned post-finding reduction of exact R A0v2; not R recalibration or oracle replacement"
+  },
+  {
+    "source": "tests/p727/variants/without-precall-sibling.nl",
+    "sha256": "b43f3aafa87e91cd105e4f6b1443c88ed4b4b67a323a45e93934bd7633f007c1",
+    "prediction": "CHECK0; tail-call-only expected validator0/C17 admitted; all other single deltas expected first guard unchanged",
+    "origin": "P-owned post-finding reduction of exact R A0v2; not R recalibration or oracle replacement"
+  },
+  {
+    "source": "tests/p727/variants/without-second-original-write.nl",
+    "sha256": "c0b44cb03b35a7d2040e688b33a076b847148de94a8c960f30cce519c914b4be",
+    "prediction": "CHECK0; tail-call-only expected validator0/C17 admitted; all other single deltas expected first guard unchanged",
+    "origin": "P-owned post-finding reduction of exact R A0v2; not R recalibration or oracle replacement"
+  }
+]

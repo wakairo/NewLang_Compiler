@@ -1,0 +1,1 @@
+P-owned instrumented build only: copy of exact candidate src/copy_body.c, stderr before existing false/INVALID returns in parameter_entry and unit validator; predicates/statuses unchanged. No R or Production file edited.

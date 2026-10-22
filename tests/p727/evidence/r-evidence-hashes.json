@@ -1,0 +1,61 @@
+{
+  "candidate": "13532ab30c55b74a6685be278fa2669b8300d6a1",
+  "r_head": "e33d903738dcba43b45ddc75a978c63f5674c84d",
+  "provenance": "Post-finding P forensic copies; R NON-BLIND calibrated evidence remains immutable",
+  "files": [
+    {
+      "original": "tests/r725/A0v2-usize-terminal.nl",
+      "p_copy": "tests/p727/repro/A0v2-usize-terminal.nl",
+      "sha256": "b00d4c58cb77c9180c9a3e17bc3396ea72888fc71a8deff21c8e2f8588018180",
+      "bytes": 832
+    },
+    {
+      "original": "tests/r725/A1v2-usize-normal.nl",
+      "p_copy": "tests/p727/repro/A1v2-usize-normal.nl",
+      "sha256": "3753a4b92754383c09914bec88357e239f3b104955183fe27ebd5d3a35ae83f1",
+      "bytes": 832
+    },
+    {
+      "original": "tests/r725/B0v2-usize-terminal-store.nl",
+      "p_copy": "tests/p727/repro/B0v2-usize-terminal-store.nl",
+      "sha256": "2d28e0630010d41a95baeeb9098483e019b85d834e7dd1f47adf6d51ab2ce602",
+      "bytes": 908
+    },
+    {
+      "original": "tests/r725/B1v2-usize-normal-store.nl",
+      "p_copy": "tests/p727/repro/B1v2-usize-normal-store.nl",
+      "sha256": "bf9da2615c5fcf4e9df2121b0975fb8295e3e970b4c2454a6ec02f19029779c4",
+      "bytes": 908
+    },
+    {
+      "original": "tests/r725/public_gate.c",
+      "p_copy": "tests/p727/repro/public_gate.c",
+      "sha256": "6c91aa7df977e8c5daee9640b808cd0dc01621e80c6777bb8cda499ea6915e0a",
+      "bytes": 6195
+    },
+    {
+      "original": "tests/r725/calibrated.json",
+      "p_copy": "tests/p727/repro/calibrated.json",
+      "sha256": "69579e7e35cb55baccbf6c24d58b72edecfc3e9b39c09de5cc78c053121344e3",
+      "bytes": 2042
+    },
+    {
+      "original": "tests/r725/freeze.json",
+      "p_copy": "tests/p727/repro/freeze.json",
+      "sha256": "27f4b6689fce449943bfcbedeedbc8145e916b13ed3636fd0b32b3dde5119205",
+      "bytes": 2409
+    },
+    {
+      "original": "tests/r725/N0-loan-local-return.nl",
+      "p_copy": "tests/p727/repro/N0-loan-local-return.nl",
+      "sha256": "47acb937b2399e24af630955dc70b4127b8468cbab38ef59c311fdaa52f2e1e4",
+      "bytes": 207
+    },
+    {
+      "original": "tests/r725/N1-write-through-read-ref.nl",
+      "p_copy": "tests/p727/repro/N1-write-through-read-ref.nl",
+      "sha256": "2ccb5be7a32d9049897b00895a040857459263975eb1b98f065ae2db73cfedb7",
+      "bytes": 280
+    }
+  ]
+}

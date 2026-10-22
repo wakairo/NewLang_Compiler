@@ -1,0 +1,52 @@
+[
+  {
+    "path": "tests/p727/evidence/instrumentation-policy.txt",
+    "sha256": "a3584737586b24324f3cf1953357971745c92093138ad3ca52d77c862c1ea1eb",
+    "bytes": 221
+  },
+  {
+    "path": "tests/p727/evidence/instrumented-copy-body.c.txt",
+    "sha256": "eea95961747d33242569144f9c1797ec608f01fbb3e77d61a4e2f382aae6a6f3",
+    "bytes": 64507
+  },
+  {
+    "path": "tests/p727/evidence/phase-a-original.json",
+    "sha256": "ee6eae6766c9682f969b6b5914d5ab10335185d750da7b56f3d6b784e2b34703",
+    "bytes": 2352
+  },
+  {
+    "path": "tests/p727/evidence/r-evidence-hashes.json",
+    "sha256": "96470d403791e753b6139797e59fc69d595e9212cf99d8324b842237510f9a6e",
+    "bytes": 2285
+  },
+  {
+    "path": "tests/p727/evidence/reproduced-results.json",
+    "sha256": "05d63755947c125ae9170763b364833ae34f409f73ce685f3ee1c8952a5cdbd1",
+    "bytes": 13499
+  },
+  {
+    "path": "tests/p727/evidence/tail-call-only.c17.txt",
+    "sha256": "5639b363d45a29d1aa342400ce4ecfed98805ad7f37a56ebc1a88547a40d6ade",
+    "bytes": 2272
+  },
+  {
+    "path": "tests/p727/evidence/variant-freeze.json",
+    "sha256": "66c71847a23cdb24e7816107756d85dea7c3427207b7104c22f0b94a0f6a31ab",
+    "bytes": 1965
+  },
+  {
+    "path": "tests/p727/evidence/variant-results.json",
+    "sha256": "7a08a9ea2353a53456f5c07e107f0a79fa0b2f7900df348ff10a55d8ec7c2466",
+    "bytes": 8072
+  },
+  {
+    "execution_artifact": "/workspace/p722-base-build/newlangc",
+    "sha256": "7f018e54b7385e1f541a12f8683a9d244d7d5d6935bc0f14450ed7f52bb51b77",
+    "bytes": 1498848
+  },
+  {
+    "execution_artifact": "/workspace/p722-base-build/libnewlang_semantic.a",
+    "sha256": "b02092ae520a4b2eac6512f3ff4ec2cdae069ea1670ae6e6d13c2dcf68bd85fc",
+    "bytes": 1792696
+  }
+]

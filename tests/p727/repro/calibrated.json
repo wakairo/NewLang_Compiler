@@ -1,0 +1,45 @@
+{
+  "authority": {
+    "candidate": "13532ab30c55b74a6685be278fa2669b8300d6a1",
+    "frozen_comment": 6333976135,
+    "classification": "NON-BLIND CALIBRATED"
+  },
+  "cases": [
+    {
+      "file": "A0v2-usize-terminal.nl",
+      "original": "A0-return-before-store.nl",
+      "sha256": "b00d4c58cb77c9180c9a3e17bc3396ea72888fc71a8deff21c8e2f8588018180",
+      "bytes": 832,
+      "oracle": "A terminal before store: original hull target keel index1 34->34, sibling port index0 23->23, old_copy 34; auxiliary original port 51->89 (replace returns 51), auxiliary keel 62; callee exits; caller continues.",
+      "index": 1,
+      "terminal": true
+    },
+    {
+      "file": "A1v2-usize-normal.nl",
+      "original": "A1-normal-store.nl",
+      "sha256": "3753a4b92754383c09914bec88357e239f3b104955183fe27ebd5d3a35ae83f1",
+      "bytes": 832,
+      "oracle": "A normal: original hull target keel index1 34->141, sibling port 23->23, old_copy 34, callee replace returns 34; auxiliary original port 51->89 (returns 51), keel 62; caller continues.",
+      "index": 1,
+      "terminal": false
+    },
+    {
+      "file": "B0v2-usize-terminal-store.nl",
+      "original": "B0-terminal-store.nl",
+      "sha256": "2d28e0630010d41a95baeeb9098483e019b85d834e7dd1f47adf6d51ab2ce602",
+      "bytes": 908,
+      "oracle": "B terminal AFTER real store: original device beam index0 67->211, sibling casing index1 12->12, old_copy 67, callee replace returns 67; independent standby casing 44->200 (returns 44), beam 18; caller continues after callee RETURN.",
+      "index": 0,
+      "terminal": true
+    },
+    {
+      "file": "B1v2-usize-normal-store.nl",
+      "original": "B1-normal-store.nl",
+      "sha256": "bf9da2615c5fcf4e9df2121b0975fb8295e3e970b4c2454a6ec02f19029779c4",
+      "bytes": 908,
+      "oracle": "B normal: original device beam index0 67->97, sibling casing 12->12, old_copy 67, callee replace returns 67; independent standby casing 44->200 (returns 44), beam 18; caller continues.",
+      "index": 0,
+      "terminal": false
+    }
+  ]
+}

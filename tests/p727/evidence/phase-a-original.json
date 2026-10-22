@@ -1,0 +1,54 @@
+[
+  {
+    "name": "unchanged-cli-check",
+    "command": [
+      "/workspace/p722-base-build/newlangc",
+      "--check",
+      "tests/p727/repro/A0v2-usize-terminal.nl"
+    ],
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  {
+    "name": "unchanged-cli-c17",
+    "command": [
+      "/workspace/p722-base-build/newlangc",
+      "tests/p727/repro/A0v2-usize-terminal.nl"
+    ],
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p727/repro/A0v2-usize-terminal.nl\n"
+  },
+  {
+    "name": "unchanged-R-gate",
+    "command": [
+      "/tmp/p727-r-gate",
+      "tests/p727/repro/A0v2-usize-terminal.nl",
+      "1"
+    ],
+    "exit": 1,
+    "stdout": "",
+    "stderr": "tests/p727/repro/public_gate.c:19: nl_checked_copy_unit_validate(caller, id, &v) == NL_CHECK_OK\n"
+  },
+  {
+    "name": "P-public-status",
+    "command": [
+      "/tmp/p727-public-status",
+      "tests/p727/repro/A0v2-usize-terminal.nl"
+    ],
+    "exit": 0,
+    "stdout": "call=24 function=10 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x558b6eab1680 handoff=0x558b6eb30450 IF_entry=0x558b6ea921f0 IF_post=0x558b6eb7e8a0 return_live=0x558b6eaa15f0 ended=0x558b6eabdeb0\nloan block=23 tail=0 first_item=27 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+    "stderr": ""
+  },
+  {
+    "name": "P-instrumented-status",
+    "command": [
+      "/tmp/p727-instrumented-status",
+      "tests/p727/repro/A0v2-usize-terminal.nl"
+    ],
+    "exit": 0,
+    "stdout": "call=24 function=10 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x5600d3f38680 handoff=0x5600d3fb7450 IF_entry=0x5600d3f191f0 IF_post=0x5600d40058a0 return_live=0x5600d3f285f0 ended=0x5600d3f44eb0\nloan block=23 tail=0 first_item=27 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=0\nunit_status=3 if_status=3 parameters_status=3\n",
+    "stderr": "P727 parameter_entry reject original-line=930\nP727 nl_checked_copy_unit_validate reject original-line=1364\nP727 parameter_entry reject original-line=930\nP727 parameter_entry reject original-line=930\nP727 nl_checked_copy_unit_validate reject original-line=1364\n"
+  }
+]
