@@ -1,0 +1,26 @@
+Internal ctest changing into directory: /workspace/p722-ubsan-build
+Test project /workspace/p722-ubsan-build
+      Start  2: p718_if_return_native.integration
+      Start  6: p713_if_field_native.integration
+      Start  4: p722_callee_return_native.integration
+      Start  3: p722_callee_return_proof_oom.unit
+ 1/10 Test  #3: p722_callee_return_proof_oom.unit .......   Passed   15.44 sec
+      Start 10: p701_stateful_native.integration
+ 2/10 Test  #4: p722_callee_return_native.integration ...   Passed   26.54 sec
+      Start  8: p706_ref_write_native.integration
+ 3/10 Test #10: p701_stateful_native.integration ........   Passed   19.01 sec
+      Start  1: p718_if_return_proof_oom.unit
+ 4/10 Test  #8: p706_ref_write_native.integration .......   Passed   11.90 sec
+      Start  5: p713_if_field_proof_oom.unit
+ 5/10 Test  #1: p718_if_return_proof_oom.unit ...........   Passed    4.69 sec
+      Start  7: p706_proof_handoff_oom.unit
+ 6/10 Test  #2: p718_if_return_native.integration .......   Passed   39.38 sec
+      Start  9: p701_proof_rollback_oom.unit
+ 7/10 Test  #9: p701_proof_rollback_oom.unit ............   Passed    0.72 sec
+ 8/10 Test  #5: p713_if_field_proof_oom.unit ............   Passed    2.71 sec
+ 9/10 Test  #7: p706_proof_handoff_oom.unit .............   Passed    4.00 sec
+10/10 Test  #6: p713_if_field_native.integration ........   Passed   45.94 sec
+
+100% tests passed, 0 tests failed out of 10
+
+Total Test time (real) =  45.99 sec

@@ -1,0 +1,23 @@
+{
+  "candidate": "8b1c49c6d601f8c8b81df606050abc7467c1961c",
+  "source": "nested_call.nl",
+  "sha256": "aa52c8e59409fa330a65a31cfc1f1411684a54c8ea25732fd7b54d7bd24b8271",
+  "oracle": "CHECK0, public ANALYSIS_PRECISION required for nested call outside statement profile, C174 with zero bytes; preserve named output",
+  "observed": {
+    "check": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "public": {
+      "exit": 0,
+      "stdout": "call=24 function=12 root=1 child=3 field=1 scope=1 normal_arm=1 worlds entry=0x5576d43ded50 handoff=0x5576d43b2630 IF_entry=0x5576d44145c0 IF_post=0x5576d443b940 return_live=0x5576d4403a90 ended=0x5576d43b9790\nloan block=23 tail=0 first_item=27 item_count=1 result_count=0 type=1 terminates=0 call_unit=1\nloan item=27 kind=28 initializer=24 next=0\nunit_status=0 if_status=0 parameters_status=0\n",
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p728/nested_call.nl\n"
+    }
+  }
+}

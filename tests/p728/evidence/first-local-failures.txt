@@ -1,0 +1,40 @@
+Internal ctest changing into directory: /workspace/p728-build
+Test project /workspace/p728-build
+    Start 3: p728_unit_statement_proof_oom.unit
+1/2 Test #3: p728_unit_statement_proof_oom.unit .......***Failed    0.00 sec
+/workspace/p728/tests/p728/gate_test.c:610: nl_checked_copy_unit_validate(caller, call, NULL) == NL_CHECK_ANALYSIS_PRECISION_LIMIT && nl_checked_copy_body_parameters_validate(caller, call, NULL) == NL_CHECK_ANALYSIS_PRECISION_LIMIT && !valid(&n)
+
+    Start 4: p728_unit_statement_native.integration
+2/2 Test #4: p728_unit_statement_native.integration ...***Failed    1.20 sec
+brake_true -O2 caller-skipped strict compile refusal; native NOT RUN
+brake_true CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+brake_false -O0 wrong-store strict compile refusal; native NOT RUN
+brake_false -O2 caller-skipped strict compile refusal; native NOT RUN
+brake_false -O2 wrong-store strict compile refusal; native NOT RUN
+brake_false CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+valve_true -O0 wrong-store strict compile refusal; native NOT RUN
+valve_true -O2 caller-skipped strict compile refusal; native NOT RUN
+valve_true -O2 wrong-store strict compile refusal; native NOT RUN
+valve_true CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+valve_false -O0 wrong-store strict compile refusal; native NOT RUN
+valve_false -O2 caller-skipped strict compile refusal; native NOT RUN
+valve_false -O2 wrong-store strict compile refusal; native NOT RUN
+valve_false CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+Traceback (most recent call last):
+  File "/workspace/p728/tests/p728/native.py", line 169, in <module>
+    main()
+  File "/workspace/p728/tests/p728/native.py", line 132, in main
+    require(built.returncode == 0, built.stderr)
+  File "/workspace/p728/tests/p728/native.py", line 17, in require
+    raise AssertionError(message)
+AssertionError: b"/tmp/tmpdjdgzzvr/unchanged.c: In function 'nl_fn_10':\n/tmp/tmpdjdgzzvr/unchanged.c:52:51: error: unused parameter 'nl_local_7' [-Werror=unused-parameter]\n   52 | static void nl_fn_10(uint8_t *nl_local_6, uint8_t nl_local_7)\n      |                                           ~~~~~~~~^~~~~~~~~~\ncc1: all warnings being treated as errors\n"
+
+
+0% tests passed, 2 tests failed out of 2
+
+Total Test time (real) =   1.21 sec
+
+The following tests FAILED:
+	  3 - p728_unit_statement_proof_oom.unit (Failed)
+	  4 - p728_unit_statement_native.integration (Failed)
+Errors while running CTest

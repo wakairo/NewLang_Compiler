@@ -1,0 +1,35 @@
+[
+  {
+    "source": "bad_return_type.nl",
+    "sha256": "9cbe50a6547ff9626113520802c4336eaf1410f8a9b48ceb8b8ac13e65447622",
+    "diagnostic": "P9-RETURN-TYPE"
+  },
+  {
+    "source": "bad_store_type.nl",
+    "sha256": "dfeb72f766701f8e20253282461802b0ddfd49bf3d8a905794085607c123c11d",
+    "diagnostic": "P3-TYPE-MISMATCH"
+  },
+  {
+    "source": "bad_read_actual.nl",
+    "sha256": "90fab6d11f0f9ee6f32b71e206ae3d95cae6842746809099dbb9b11f33bd7361",
+    "diagnostic": "LOCAL-LOAN-PROFILE",
+    "classification": "unsupported source loan_read(field), not a semantic read-only authority verdict"
+  },
+  {
+    "source": "bad_escape.nl",
+    "sha256": "a6a20bad71c8f77b429ad903095fee739e68a89e6d8569b300d5a03dcb027472",
+    "diagnostic": "P8-EXIT-DEPENDENCY"
+  },
+  {
+    "source": "bad_scope.nl",
+    "sha256": "184a7e278ca32a054868e3bb5bde3f741674e0dde94065929243241a04f4bd36",
+    "diagnostic": "P3-UNKNOWN-BINDING",
+    "classification": "semantic"
+  },
+  {
+    "source": "bad_read_formal.nl",
+    "sha256": "f2e12dd20fff83c48c86fb3c0a24259938eb0f1e55f2ebf1f15db32ca14c12be",
+    "diagnostic": "P3-TYPE-MISMATCH",
+    "classification": "semantic read ref cannot supply replace write operand"
+  }
+]

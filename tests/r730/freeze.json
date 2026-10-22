@@ -1,0 +1,51 @@
+{
+  "authority": {
+    "candidate": "13532ab30c55b74a6685be278fa2669b8300d6a1",
+    "canonical": "Draft17.33",
+    "first_comment": 6333828978
+  },
+  "cases": [
+    {
+      "file": "A0-return-before-store.nl",
+      "sha256": "2b4525ec68ebf538f5be69dec0668dab99043d42abb9e83ac312309390e30a37",
+      "bytes": 788,
+      "index": 1,
+      "oracle": "A terminal before store: original hull target keel index1 34->34, sibling port index0 23->23, old_copy 34; auxiliary original port 51->89 (replace returns 51), auxiliary keel 62; callee exits; caller continues."
+    },
+    {
+      "file": "A1-normal-store.nl",
+      "sha256": "8a327ceae120d80abfdea9b1ea04157e7a22619e4ab3970389509e4fe902cc0e",
+      "bytes": 788,
+      "index": 1,
+      "oracle": "A normal: original hull target keel index1 34->141, sibling port 23->23, old_copy 34, callee replace returns 34; auxiliary original port 51->89 (returns 51), keel 62; caller continues."
+    },
+    {
+      "file": "B0-terminal-store.nl",
+      "sha256": "1b322a1a70977747c96b8a544b3c40b3bb1cf749f98b0e0f5fa3e54d25c0d9bc",
+      "bytes": 864,
+      "index": 0,
+      "oracle": "B terminal AFTER real store: original device beam index0 67->211, sibling casing index1 12->12, old_copy 67, callee replace returns 67; independent standby casing 44->200 (returns 44), beam 18; caller continues after callee RETURN."
+    },
+    {
+      "file": "B1-normal-store.nl",
+      "sha256": "a4070a92b94dae4dfef9a41ae962591717f881a720966e4660900d0e754f4295",
+      "bytes": 864,
+      "index": 0,
+      "oracle": "B normal: original device beam index0 67->97, sibling casing 12->12, old_copy 67, callee replace returns 67; independent standby casing 44->200 (returns 44), beam 18; caller continues."
+    },
+    {
+      "file": "N0-loan-local-return.nl",
+      "sha256": "47acb937b2399e24af630955dc70b4127b8468cbab38ef59c311fdaa52f2e1e4",
+      "bytes": 207,
+      "index": 0,
+      "oracle": "Semantic/source REJECT: return inside loan body is not return-enabled; zero partial C17, no output overwriting."
+    },
+    {
+      "file": "N1-write-through-read-ref.nl",
+      "sha256": "2ccb5be7a32d9049897b00895a040857459263975eb1b98f065ae2db73cfedb7",
+      "bytes": 280,
+      "index": 0,
+      "oracle": "Semantic CHECK REJECT: ref<read,u8> cannot be used as write authority by replace; invalid even if helper never called; zero partial C17, no output overwriting."
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+brake_true -O2 caller-skipped strict compile refusal; native NOT RUN
+brake_true CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+brake_false -O2 caller-skipped strict compile refusal; native NOT RUN
+brake_false CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+valve_true -O2 caller-skipped strict compile refusal; native NOT RUN
+valve_true CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+valve_false -O2 caller-skipped strict compile refusal; native NOT RUN
+valve_false CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+inherited/A0v2-usize-terminal -O2 caller-skipped strict compile refusal; native NOT RUN
+inherited/A0v2-usize-terminal CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+read_ref.nl unsupported loan_read field source profile, not a semantic read-ref verdict CHECK3 CLI3 zero C preserved output LOCAL-LOAN-PROFILE
+escape.nl semantic rejection CHECK3 CLI3 zero C preserved output P8-EXIT-DEPENDENCY
+wrong_return.nl semantic rejection CHECK3 CLI3 zero C preserved output P9-RETURN-TYPE
+wrong_argument.nl semantic rejection CHECK3 CLI3 zero C preserved output P3-TYPE-MISMATCH
+explicit_unit_tail.nl finite wrapper profile precision refusal CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
+extra_statement.nl finite wrapper profile precision refusal CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
+extra_after.nl finite wrapper profile precision refusal CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
+two_calls.nl finite wrapper profile precision refusal CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
+binding_wrapper.nl finite wrapper profile precision refusal CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
+nested_call.nl post-candidate review: nested call excluded by public wrapper leaf-argument profile CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED

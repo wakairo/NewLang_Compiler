@@ -1,0 +1,22 @@
+{
+  "local-frontend.txt": {
+    "raw_sha256": "c9f3d9b37823719e12ecedc83aa3f840d0a7d945f4f9448c9b6764672e6d86a2",
+    "stored_sha256": "c9f3d9b37823719e12ecedc83aa3f840d0a7d945f4f9448c9b6764672e6d86a2",
+    "normalization": "line-ending trailing whitespace only; original /workspace log retained"
+  },
+  "local-asan.txt": {
+    "raw_sha256": "d4dcd1c762af7bc1c23f9e9843d418b943e87c5877773aeb72e9934b79b30024",
+    "stored_sha256": "d4dcd1c762af7bc1c23f9e9843d418b943e87c5877773aeb72e9934b79b30024",
+    "normalization": "line-ending trailing whitespace only; original /workspace log retained"
+  },
+  "local-ubsan.txt": {
+    "raw_sha256": "1183f105529916a9a29099f861bb8bb9723aef8892056defa6c17409aa89d6dc",
+    "stored_sha256": "1183f105529916a9a29099f861bb8bb9723aef8892056defa6c17409aa89d6dc",
+    "normalization": "line-ending trailing whitespace only; original /workspace log retained"
+  },
+  "format.txt": {
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stored_sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+    "normalization": "line-ending trailing whitespace only; original /workspace log retained"
+  }
+}

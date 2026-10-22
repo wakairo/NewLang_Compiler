@@ -1,0 +1,136 @@
+{
+  "base": "13532ab30c55b74a6685be278fa2669b8300d6a1",
+  "tree": "ec18bd9a5f44c1becc993910b363a02c296728c8",
+  "canonical": "Draft17.33",
+  "oracle_origin": "P independent pre-implementation scalar simulation; statement caller; no host guest values",
+  "cases": [
+    {
+      "name": "brake_true",
+      "sha256": "a737f7dab2a0297440af02990cee8e6efef963479f7e3037319eb7718f95241a",
+      "terminal": true,
+      "original": 53,
+      "current": 53,
+      "sibling": 174,
+      "archive_old": 26,
+      "archive_new": 53,
+      "index": 1,
+      "initial": [
+        174,
+        53
+      ],
+      "archive": [
+        26,
+        91
+      ],
+      "old_copy_origin": "source replace of device target; no field change on early before-write RETURN"
+    },
+    {
+      "name": "brake_false",
+      "sha256": "fe60a7ab2406509bee4830b7c25d5cebe0d87710d94107aeb5a6866b3787003f",
+      "terminal": false,
+      "original": 53,
+      "current": 106,
+      "sibling": 174,
+      "archive_old": 26,
+      "archive_new": 106,
+      "index": 1,
+      "initial": [
+        174,
+        53
+      ],
+      "archive": [
+        26,
+        91
+      ],
+      "old_copy_origin": "source replace of device target; no field change on early before-write RETURN"
+    },
+    {
+      "name": "valve_true",
+      "sha256": "2f7aecdfc6595068eaf5fbb4565b534338cf6cf9e9681e62f603aaa91bfe6ed8",
+      "terminal": true,
+      "original": 38,
+      "current": 224,
+      "sibling": 207,
+      "archive_old": 14,
+      "archive_new": 224,
+      "index": 0,
+      "initial": [
+        38,
+        207
+      ],
+      "archive": [
+        68,
+        14
+      ],
+      "old_copy_origin": "source replace of device target; no field change on early before-write RETURN"
+    },
+    {
+      "name": "valve_false",
+      "sha256": "349b82dd83b23dd494f2ec7ea1df84c31ae25ac109b7ac4fe8fa631c025044ae",
+      "terminal": false,
+      "original": 38,
+      "current": 82,
+      "sibling": 207,
+      "archive_old": 14,
+      "archive_new": 82,
+      "index": 0,
+      "initial": [
+        38,
+        207
+      ],
+      "archive": [
+        68,
+        14
+      ],
+      "old_copy_origin": "source replace of device target; no field change on early before-write RETURN"
+    }
+  ],
+  "negative_freeze": [
+    {
+      "source": "read_ref.nl",
+      "sha256": "3d5bae237ed35ef52cfeb767deae92aadf006c1b79a8fd2e01e211388d245542",
+      "expect": "semantic reject"
+    },
+    {
+      "source": "escape.nl",
+      "sha256": "6a49767219c0a2b9f16f9881d2cf8af5a824a1d08c672a495a5c95ad98ab7d2f",
+      "expect": "semantic reject"
+    },
+    {
+      "source": "wrong_return.nl",
+      "sha256": "05ff91375e46157587e829bcb31533a46d9823fbfe57cf9661b9b200de3451cb",
+      "expect": "semantic reject"
+    },
+    {
+      "source": "wrong_argument.nl",
+      "sha256": "16ef6f9cfe90050f5aebc7527707719f87066639ea8b0f07c6010ff8d72ed58a",
+      "expect": "semantic reject"
+    },
+    {
+      "source": "explicit_unit_tail.nl",
+      "sha256": "95b7b855ebe6831e552fad284856bc81f65ac20756a714c854191d307c0feccb",
+      "expect": "CHECK0, precision reject, no C17; explicit unit tail separately unsupported"
+    },
+    {
+      "source": "extra_statement.nl",
+      "sha256": "86b01ed67020d048a0a86c1b731a94a7cb76b73786733120c04ee6e87f302f29",
+      "expect": "CHECK0, precision reject, no C17; explicit unit tail separately unsupported"
+    },
+    {
+      "source": "extra_after.nl",
+      "sha256": "2d537367f53247f3d7643c1c52d392478cdc6c3051ed2b89c2a20484be27f9f4",
+      "expect": "CHECK0, precision reject, no C17; explicit unit tail separately unsupported"
+    },
+    {
+      "source": "two_calls.nl",
+      "sha256": "b9f8d4019777ae8215f0558b181de46dd96bdb575388c2ab426f42911a32c447",
+      "expect": "CHECK0, precision reject, no C17; explicit unit tail separately unsupported"
+    },
+    {
+      "source": "binding_wrapper.nl",
+      "sha256": "3176804f2fab0883e27c540e82ab2b0be3760a64024a12e52b8f0b3a97d8f114",
+      "expect": "CHECK0, precision reject, no C17; explicit unit tail separately unsupported"
+    }
+  ],
+  "oom_oracle": "fail-at-N: NULL artifact/unchanged public state or explicit OOM; no partial output; recovery; named output preserved"
+}

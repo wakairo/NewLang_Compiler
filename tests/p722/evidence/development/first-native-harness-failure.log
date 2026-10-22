@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/p722/tests/p722/native.py", line 168, in <module>
+    main()
+  File "/workspace/p722/tests/p722/native.py", line 153, in main
+    require(written.returncode == 0 and named.read_bytes() == generated.stdout, 'named output equality')
+  File "/workspace/p722/tests/p722/native.py", line 17, in require
+    raise AssertionError(message)
+AssertionError: named output equality

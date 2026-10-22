@@ -62,4 +62,19 @@ NLCheckStatus
 nl_checked_copy_body_event_validate(const NLCheckedFragment *caller,
                                     NLCheckedNodeId call, size_t index,
                                     const NLCopyBodyEventView *candidate);
+/* Unit-returning direct call with one normal IF edge and one callee RETURN.
+ * The postcall world is a conservative structural join, never either fork.
+ * This receipt borrows immutable history and grants no present authority. */
+typedef struct {
+    NLCopyBodyParameters parameters;
+    const NLCheckedFragment *body;
+    NLCheckedNodeId conditional;
+    const NLSemanticContext *normal_end, *postcall;
+    size_t function;
+} NLCopyUnitView;
+bool nl_checked_copy_unit_view(const NLCheckedFragment *, NLCheckedNodeId,
+                               NLCopyUnitView *);
+NLCheckStatus nl_checked_copy_unit_validate(const NLCheckedFragment *,
+                                            NLCheckedNodeId,
+                                            const NLCopyUnitView *);
 #endif
