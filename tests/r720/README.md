@@ -29,3 +29,7 @@ fn main()->unit {
 ```
 
 Producer source/oracle was never copied for this additional negative. Scope and type negatives must not be conflated.
+
+## Second initial repair run — mechanical Python observer failure
+
+At second fixed R head `76cfe66a58ef4acc9ce25d922aaedd9b4816d5a5` PARTIAL [#39719615246](https://github.com/wakairo/NewLang_Compiler/actions/runs/39719615246), `r720_blind_return.integration` halted with `TypeError: 'int' object is not subscriptable` in observer construction, before any R-observed native results. The R script parameter `post` held an expected boolean flag, while the expression mistakenly indexed it as an expected field-value array (the original `end` input). Fix reference to `end[index]` and `end[1-index]` only. No guest source, physical values, branch oracle, producer compiler/proof or warnings changed. Third run from `ee07bcf93bc88ad9a658ec80bdd67c830d5e665c` may retain this same R-owned failure.

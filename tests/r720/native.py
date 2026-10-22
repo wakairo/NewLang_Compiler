@@ -31,7 +31,7 @@ def find_one(text, regex, low=0, high=None):
     return found[0].start()+low, found[0].end()+low, found[0]
 
 
-def passive(code, proof, family, chosen, start, end, writes, post, terminal):
+def passive(code, proof, family, chosen, start, end, writes, post_flag, terminal):
     base = proof["base"]
     index = proof["index"]
     expected_index = 1 if family == "A" else 0
@@ -85,7 +85,7 @@ def passive(code, proof, family, chosen, start, end, writes, post, terminal):
     result_re = rf"const uint8_t nl_local_\d+ = nl_if_result_{proof['if']};"
     p1,p2,_ = find_one(code, result_re, finish)
     initial_old = start[index]
-    insert(p2, f"\n    r720_post=1; if (r720_arm != {selected} || r720_changes != {writes} || *r720_field_{index} != {post[index]} || *r720_field_{1-index} != {post[1-index]} || nl_if_result_{proof['if']} != {initial_old}) exit(91);")
+    insert(p2, f"\n    r720_post=1; if (r720_arm != {selected} || r720_changes != {writes} || *r720_field_{index} != {end[index]} || *r720_field_{1-index} != {end[1-index]} || nl_if_result_{proof['if']} != {initial_old}) exit(91);")
     header = "#include <stdlib.h>\nstatic unsigned r720_arm=99,r720_changes,r720_post,r720_return;\n"
     header += ("static void r720_end(void){if(r720_arm!="+str(selected)+
                " || r720_changes!="+str(writes)+" || r720_post!="+str(0 if terminal else 1)+
