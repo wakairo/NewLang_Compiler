@@ -6,7 +6,7 @@ void *__real_malloc(size_t);
 void *__real_calloc(size_t, size_t);
 void *__real_realloc(void *, size_t);
 static bool injecting;
-static size_t calls, fail_at;
+static size_t calls, fail_at, host_diagnostics, generic_diagnostics;
 void *__wrap_malloc(size_t n)
 {
     return injecting && calls++ == fail_at ? NULL : __real_malloc(n);
@@ -109,6 +109,34 @@ static bool driver_oom(const char *path)
             ok = false;
             break;
         }
+        if (fflush(stderr) || fflush(diagnostics) ||
+            fseek(diagnostics, 0, SEEK_SET)) {
+            ok = false;
+            break;
+        }
+        char message[8192] = {0};
+        size_t got = fread(message, 1, sizeof(message) - 1, diagnostics);
+        message[got] = 0;
+        bool classified =
+            result == 1   ? strstr(message, "error(internal)") == NULL
+            : result == 4 ? strstr(message, "V1-BACKEND-UNSUPPORTED") != NULL
+                          : ((strstr(message, "OUT-OF-MEMORY") != NULL ||
+                              strstr(message, "[V0-CHECK]") != NULL) &&
+                             strstr(message, "error(internal)") == NULL);
+        if (!classified) {
+            fseek(diagnostics, 0, SEEK_END);
+            fprintf(diagnostics,
+                    "unclassified failure position=%zu status=%d\n", fail_at,
+                    result);
+            ok = false;
+            break;
+        }
+        if (result == 3) {
+            if (strstr(message, "OUT-OF-MEMORY"))
+                ++host_diagnostics;
+            else
+                ++generic_diagnostics;
+        }
         ++status_count[result];
     }
     CHECK(fflush(stderr) == 0 && dup2(saved, STDERR_FILENO) >= 0 &&
@@ -123,6 +151,8 @@ static bool driver_oom(const char *path)
     printf("normal driver fail-at-N positions=%zu CLI1=%zu CLI3=%zu "
            "legacy_bool_CLI4=%zu zero_partial_C=PASS recovery=PASS\n",
            fail_at, status_count[1], status_count[3], status_count[4]);
+    printf("CLI3 explicit_OOM=%zu existing_generic_V0_CHECK=%zu internal=0\n",
+           host_diagnostics, generic_diagnostics);
     return true;
 }
 int main(int argc, char **argv)

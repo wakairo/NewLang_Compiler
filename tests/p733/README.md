@@ -113,8 +113,10 @@ calloc fail-at-N. New explicit bound is 10000 per stage; no fault budget is
 silently expanded. Driver OOM injects all three allocators across the entire
 ordinary compile path and requires no partial C and eventual successful retry.
 Some inherited bool validation scratch OOM returns CLI4; this is counted
-separately from CLI1 resource and CLI3 host diagnostics, not called a semantic
-rejection. Dedicated validators/semantic checks also assert snapshot rollback.
+separately from CLI1 and CLI3 failures, not called a semantic rejection.
+The supplementary diagnostic audit classifies CLI3 into 3107 explicit OOM and
+12 inherited generic V0-CHECK diagnostics, with no internal diagnostic. All
+3163 failures still expose zero C; no driver diagnostic policy is changed. Dedicated validators/semantic checks also assert snapshot rollback.
 
 First local failures are preserved separately: an incorrect harness assumption
 that this legacy route exported a generic closure view; a Clang-only unused

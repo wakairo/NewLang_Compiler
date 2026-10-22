@@ -65,9 +65,19 @@
       "CLI1": 32,
       "CLI3": 3119,
       "legacy_bool_CLI4": 12,
-      "partial_C_bytes": 0
+      "partial_C_bytes": 0,
+      "CLI3_explicit_OOM": 3107,
+      "CLI3_existing_generic_V0_CHECK": 12,
+      "internal_diagnostics": 0
     },
-    "local_log_note": "local-frontend was a complete 397-test run; subsequent targeted seven-test run covers final new test controls, logging and exact historical hash gate. Raw CTest whitespace is retained."
+    "local_log_note": "local-frontend was a complete 397-test run; subsequent targeted seven-test run covers final new test controls, logging and exact historical hash gate. Raw CTest whitespace is retained.",
+    "supplementary_driver_diagnostic_test": {
+      "tests": 1,
+      "failures": 0,
+      "CLI3_explicit_OOM": 3107,
+      "CLI3_generic_V0_CHECK": 12,
+      "internal": 0
+    }
   },
   "ci": "Natural candidate pull_request FULL5/PARTIAL pending; exact SHA/tree/run IDs in PR and terminal Issue report",
   "unchanged_source_oracles": true,
@@ -79,6 +89,8 @@
     "cargo.legacy_owner.txt": "6a802e496efde02dc65726c274991c524621dd519e4e0f27d491a68e39a18432",
     "cargo.public.txt": "cb6fdde5d1d1f81f5348b9f1c806015ee8f7e1b5e484bac7a0e69130a50eb5e0",
     "control.c17.txt": "c974629f88649c6fde4aea3b18f0397c02a409ef4e1985f6126582d37bffeaea",
+    "driver-diagnostic-audit.txt": "f962035b65cc9d51cffb19650f3fde9781acfbfaade9400867b1931611fa3df8",
+    "driver-diagnostic-test.txt": "33ab07749312d3a5b6ac65a126d5c80383067dc4528f7ff5a049e48fde8857aa",
     "first-clang-probe-build.txt": "f460e0366ae58d6b2f993fbf15d2ea214775a5ad8043064fbac841d5d304c690",
     "first-copy-origin-failure.txt": "eabb6e73b34e9a4c1bf0be55c1145384a3372f0e41e4f30de41020331db43118",
     "first-incomplete-build-ctest.txt": "a50938d7290e85e39c26df5541e861627794165e2e90d127db35625d57c06471",
@@ -95,5 +107,6 @@
     "pending.public.txt": "cb6fdde5d1d1f81f5348b9f1c806015ee8f7e1b5e484bac7a0e69130a50eb5e0",
     "pristine-control-native.txt": "1d7bc783d5b12002dd955ffce7ffb8e18a1fcc12e33c83e89b65579263f8e422",
     "producer-result-local.c17.txt": "946ef63d1b3a23698a92e871f8d7bbc83041014c7827018973e635cb88297806"
-  }
+  },
+  "first_candidate": "5c8e67c707c396e8a7f73d78a84a0513e0354b1a; compiler implementation unchanged in final diagnostic-test/documentation refinement"
 }
