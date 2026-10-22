@@ -11,3 +11,4 @@ fn main()->unit {
  };
  let actual=anchor@latch;let peer=anchor@flag;
  previous;actual;peer;unit
+}
