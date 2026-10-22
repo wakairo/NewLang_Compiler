@@ -119,6 +119,12 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p718/native.py" "$<TARGET_FILE:newlangc>"
         "$<TARGET_FILE:p718_public_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p718")
+    add_executable(r720_public_probe tests/r720/public_probe.c)
+    target_link_libraries(r720_public_probe PRIVATE newlang_parser newlang_semantic)
+    add_test(NAME r720_blind_return.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r720/native.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:r720_public_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r720")
     add_executable(p718_public_probe tests/p718/public_probe.c)
     target_link_libraries(p718_public_probe PRIVATE newlang_parser newlang_semantic)
     add_executable(p713_gate_test tests/p713/gate_test.c)
