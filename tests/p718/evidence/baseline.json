@@ -1,0 +1,132 @@
+{
+  "tests/p718/bad_return_type.nl": {
+    "sha256": "ad9b2117c4cfb7cb69a326c50925223cccc42221422d54bbc7f629c1214f801c",
+    "check": {
+      "exit": 3,
+      "C_bytes": 0,
+      "diagnostic": "tests/p718/bad_return_type.nl:6:4-6:17: error(semantic)[P9-RETURN-TYPE]: return expression must exactly match the function result\n"
+    },
+    "c17": {
+      "exit": 3,
+      "C_bytes": 0,
+      "diagnostic": "tests/p718/bad_return_type.nl:6:4-6:17: error(semantic)[P9-RETURN-TYPE]: return expression must exactly match the function result\n"
+    }
+  },
+  "tests/p718/bad_terminal_store.nl": {
+    "sha256": "b15b53276182d831bcd8c81ffbfb8c878afa7682b3f8c1458f901e6db407b192",
+    "check": {
+      "exit": 3,
+      "C_bytes": 0,
+      "diagnostic": "tests/p718/bad_terminal_store.nl:8:66-8:76: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    },
+    "c17": {
+      "exit": 3,
+      "C_bytes": 0,
+      "diagnostic": "tests/p718/bad_terminal_store.nl:8:66-8:76: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    }
+  },
+  "tests/p718/continue_false.nl": {
+    "sha256": "d368df5374c8ce23c87f0af6f1fb99bcb9b94fe3e6fe9143d588fafd5a4d19f2",
+    "check": {
+      "exit": 0,
+      "C_bytes": 0,
+      "diagnostic": ""
+    },
+    "c17": {
+      "exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p718/continue_false.nl\n"
+    }
+  },
+  "tests/p718/continue_true.nl": {
+    "sha256": "d14d775e0c28ab1a250d8448bae0e315288ab6948356956d62588df16e81187f",
+    "check": {
+      "exit": 0,
+      "C_bytes": 0,
+      "diagnostic": ""
+    },
+    "c17": {
+      "exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p718/continue_true.nl\n"
+    }
+  },
+  "tests/p718/escape.nl": {
+    "sha256": "9b9465dcb621c6a915da53790e115970594231c9e93a3dc85d579f01acb0dd9e",
+    "check": {
+      "exit": 3,
+      "C_bytes": 0,
+      "diagnostic": "tests/p718/escape.nl:8:4-8:43: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+    },
+    "c17": {
+      "exit": 3,
+      "C_bytes": 0,
+      "diagnostic": "tests/p718/escape.nl:8:4-8:43: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+    }
+  },
+  "tests/p718/return_false.nl": {
+    "sha256": "1045546c74d31d690fcd29ceaabdeb7b9a070e19f16cf81a95525158c228db67",
+    "check": {
+      "exit": 0,
+      "C_bytes": 0,
+      "diagnostic": ""
+    },
+    "c17": {
+      "exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p718/return_false.nl\n"
+    }
+  },
+  "tests/p718/return_ref.nl": {
+    "sha256": "7b7ebc4f5cb86e058de19960a269b7cb853fd16d4a3037b0cc69fc8ccd199961",
+    "check": {
+      "exit": 3,
+      "C_bytes": 0,
+      "diagnostic": "tests/p718/return_ref.nl:6:11-6:40: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+    },
+    "c17": {
+      "exit": 3,
+      "C_bytes": 0,
+      "diagnostic": "tests/p718/return_ref.nl:6:11-6:40: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+    }
+  },
+  "tests/p718/return_true.nl": {
+    "sha256": "f1541a3b4ee1e07eca1b78408b51e59c46a2049decf7d4eea5aa614f49debf26",
+    "check": {
+      "exit": 0,
+      "C_bytes": 0,
+      "diagnostic": ""
+    },
+    "c17": {
+      "exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p718/return_true.nl\n"
+    }
+  },
+  "tests/p718/unknown_field.nl": {
+    "sha256": "59a2362ee4e2fd546138103868b6a6aa9d5191398156f1f6796105931d0005e1",
+    "check": {
+      "exit": 3,
+      "C_bytes": 0,
+      "diagnostic": "tests/p718/unknown_field.nl:6:15-6:28: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal\n"
+    },
+    "c17": {
+      "exit": 3,
+      "C_bytes": 0,
+      "diagnostic": "tests/p718/unknown_field.nl:6:15-6:28: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal\n"
+    }
+  },
+  "tests/p713/sole_normal.nl": {
+    "sha256": "f3bc52b1631e791351c6324a51285f20bb79472a78040f4dfa817e955364ec2b",
+    "check": {
+      "exit": 0,
+      "C_bytes": 0,
+      "diagnostic": ""
+    },
+    "c17": {
+      "exit": 4,
+      "C_bytes": 0,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p713/sole_normal.nl\n"
+    }
+  }
+}

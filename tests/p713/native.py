@@ -164,7 +164,9 @@ def exercise(compiler, probe, cc, sanitizer, directory):
             emit = run([compiler, source])
             require(check.returncode == extras[name]['check'] and not check.stdout, check)
             if name == 'sole_normal':
-                require(emit.returncode == 4 and not emit.stdout and b'V1-BACKEND-UNSUPPORTED' in emit.stderr, emit)
+                # P718 advances this immutable one-normal/RETURN source; full
+                # source-issued proof and passive native coverage live in p718/native.py.
+                require(emit.returncode == 0 and emit.stdout and not emit.stderr, emit)
             else:
                 code = extras[name]['diagnostic'].split('error(', 1)[1].split(':', 1)[0]
                 require(emit.returncode == 3 and not emit.stdout and code.encode() in emit.stderr, emit)
