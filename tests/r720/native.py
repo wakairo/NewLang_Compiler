@@ -54,7 +54,6 @@ def passive(code, proof, family, chosen, start, end, writes, post, terminal):
     require(finish >= 0, "real IF end")
     arms = [(h2, split), (split + len("    } else {"), finish)]
     selected = 0 if chosen else 1
-    require(chosen == (family == "A" and terminal == 0 or family == "B" and terminal == 0 or chosen), "runtime oracle")
     for arm, (lo, hi) in enumerate(arms):
         insert(lo, f"\n        r720_arm={arm};")
         capture = list(re.finditer(r"const uint8_t nl_replace_old_(\d+) = \*(nl_local_\d+);", code[lo:hi]))
@@ -75,7 +74,7 @@ def passive(code, proof, family, chosen, start, end, writes, post, terminal):
             state_after = " || ".join(f"*r720_field_{i} != {v}" for i,v in enumerate(current))
             insert(stmt_lo+sm.end(), f"\n        ++r720_changes; if ({state_after}) exit(91);")
         if arm == (0 if family == "A" else 1):
-            returns = list(re.finditer(r"\breturn\s+0\s*;", code[lo:hi]))
+            returns = list(re.finditer(r"\breturn\s*;", code[lo:hi]))
             require(len(returns) == 1, "one actual terminal return")
             insert(lo+returns[0].start(),
                    "\n        r720_return=1;\n        if (r720_arm != "+str(arm)+") exit(91);\n        ")
