@@ -37,4 +37,28 @@ NLCheckStatus
 nl_checked_if_field_event_validate(const NLCheckedFragment *, NLCheckedNodeId,
                                    size_t arm, size_t index,
                                    const NLIfFieldEvent *candidate);
+/* One NORMAL edge and one distinct function RETURN. The field view is the
+ * normal continuation only; returned IDs belong to return_live/return_ended,
+ * never to that continuation. All pointers borrow the actual checked owner. */
+typedef struct {
+    NLIfFieldView field;
+    size_t normal_arm;
+    NLCheckedNodeId replay_root, return_node;
+    const NLSemanticContext *return_live, *return_ended;
+    NLCheckedResult returned;
+    size_t replay_events, replay_changes;
+} NLIfReturnView;
+bool nl_checked_if_return_view(const NLCheckedFragment *, NLCheckedNodeId,
+                               NLIfReturnView *);
+NLCheckStatus nl_checked_if_return_validate(const NLCheckedFragment *,
+                                            NLCheckedNodeId,
+                                            const NLIfReturnView *);
+/* stream 0/1 denotes the original fork; stream 2 is the genuine re-execution
+ * of the sole normal source arm in the common world. */
+bool nl_checked_if_return_event(const NLCheckedFragment *, NLCheckedNodeId,
+                                size_t stream, size_t index, NLIfFieldEvent *);
+NLCheckStatus nl_checked_if_return_event_validate(const NLCheckedFragment *,
+                                                  NLCheckedNodeId,
+                                                  size_t stream, size_t index,
+                                                  const NLIfFieldEvent *);
 #endif

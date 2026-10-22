@@ -3296,6 +3296,13 @@ static NLCheckedNodeId source_return(Check *check, const NLSyntaxView *syntax)
                                 value.results[0]),
               syntax->span))
         return 0;
+    if (!host(check,
+              nl_if_return_before(check->artifact, check->context,
+                                  check->function_binding_floor,
+                                  check->function_place_floor,
+                                  check->function_scope_floor),
+              syntax->span))
+        return 0;
     if (!end_bindings(check, check->function_binding_floor, syntax->span))
         return 0;
     NLCheckStatus status =
@@ -3322,11 +3329,19 @@ static NLCheckedNodeId source_return(Check *check, const NLSyntaxView *syntax)
     if (!host(check, recorded, syntax->span))
         return 0;
     check->terminated = true;
-    return add(check, (NLCheckedNodeView){.kind = NL_CHECKED_RETURN,
-                                          .span = syntax->span,
-                                          .initializer = expression_id,
-                                          .terminates = true,
-                                          .returned = check->returned});
+    NLCheckedNodeId returned_node =
+        add(check, (NLCheckedNodeView){.kind = NL_CHECKED_RETURN,
+                                       .span = syntax->span,
+                                       .initializer = expression_id,
+                                       .terminates = true,
+                                       .returned = check->returned});
+    if (returned_node &&
+        !host(
+            check,
+            nl_if_return_after(check->artifact, returned_node, check->context),
+            syntax->span))
+        return 0;
+    return returned_node;
 }
 
 static bool custody_continue_block(Check *, const NLSyntaxView *,
@@ -4499,6 +4514,9 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
          * already retained from both forked arms; do not duplicate that set. */
         NLControlExits *proof = check->artifact->exits;
         NLControlExits *loop_proof = check->artifact->loop_returns;
+        if (!host(check, nl_if_return_begin(check->artifact, id, sole),
+                  syntax->span))
+            return 0;
         check->artifact->exits = NULL;
         check->artifact->loop_returns = NULL;
         NLCheckedNodeId body = expression(check, arms[sole]);
@@ -4514,6 +4532,9 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
         view(check, id)->result_count = result.result_count;
         memcpy(view(check, id)->results, result.results,
                sizeof(result.results));
+        if (!host(check, nl_if_return_finish(check->artifact, id, c),
+                  syntax->span))
+            return 0;
         return id;
     }
     const bool returning = normal == 0;

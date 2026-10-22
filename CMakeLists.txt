@@ -110,6 +110,23 @@ if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
     # SPECULATIVE PR533 opt-in: default compiler/parser stay OFF. Test-only
     # rebuild of the SAME parser exercises Production semantics/owned/C17.
+    add_executable(p718_gate_test tests/p718/gate_test.c)
+    target_link_libraries(p718_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
+    target_link_options(p718_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p718_if_return_proof_oom.unit COMMAND p718_gate_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p718/return_false.nl" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p718/continue_false.nl")
+    add_test(NAME p718_if_return_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p718/native.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p718_public_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p718")
+    add_executable(r720_public_probe tests/r720/public_probe.c)
+    target_link_libraries(r720_public_probe PRIVATE newlang_parser newlang_semantic)
+    add_test(NAME r720_blind_return.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r720/native.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:r720_public_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r720")
+    add_executable(p718_public_probe tests/p718/public_probe.c)
+    target_link_libraries(p718_public_probe PRIVATE newlang_parser newlang_semantic)
     add_executable(p713_gate_test tests/p713/gate_test.c)
     target_link_libraries(p713_gate_test PRIVATE newlang_checked_c_node newlang_semantic)
     target_link_options(p713_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)

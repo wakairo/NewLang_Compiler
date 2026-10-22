@@ -1,0 +1,54 @@
+{
+  "if": 18,
+  "normal": 1,
+  "return_node": 3,
+  "base": 1,
+  "root": 1,
+  "child": 3,
+  "index": 1,
+  "binding": 5,
+  "current": 91,
+  "old": 57,
+  "parent_before": 1,
+  "parent_after": 8,
+  "streams": [
+    {
+      "changes": 0,
+      "events": []
+    },
+    {
+      "changes": 1,
+      "events": [
+        {
+          "node": 4,
+          "change": true,
+          "old": 1,
+          "incoming": 11,
+          "ref": 4
+        }
+      ]
+    },
+    {
+      "changes": 1,
+      "events": [
+        {
+          "node": 22,
+          "change": true,
+          "old": 1,
+          "incoming": 11,
+          "ref": 4
+        }
+      ]
+    }
+  ],
+  "reads": [
+    {
+      "symbol": 6,
+      "index": 1
+    },
+    {
+      "symbol": 7,
+      "index": 0
+    }
+  ]
+}

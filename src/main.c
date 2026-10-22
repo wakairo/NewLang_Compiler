@@ -2179,17 +2179,11 @@ static bool v0_validate_block(const NLCheckedFragment *fragment,
     return block->tail == 0 || v0_validate_node(fragment, block->tail, program);
 }
 
-static bool if_field_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
-                               V0Program *p)
+static bool if_original_carrier(const NLCheckedFragment *f, NLCheckedNodeId id,
+                                const NLIfFieldView *proof, V0Program *p)
 {
-    NLIfFieldView view;
-    if (!nl_checked_if_field_view(f, id, &view))
-        return false;
-    NLCheckStatus status = nl_checked_if_field_validate(f, id, &view);
-    if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
-        p->copy_body_status = status;
-    if (status != NL_CHECK_OK || p->u8_export || p->scalar_depth ||
-        !avs_shape(f, view.nominal, p) ||
+    const NLIfFieldView view = *proof;
+    if (p->u8_export || p->scalar_depth || !avs_shape(f, view.nominal, p) ||
         !boolean_scalar_at(f, view.condition, p, id))
         return false;
     /* Source-issued entry binding establishes the physical C carrier. */
@@ -2216,9 +2210,34 @@ static bool if_field_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
            root.fixed_fields[view.index] == view.child;
 }
 
+static bool if_field_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
+                               V0Program *p)
+{
+    NLIfFieldView v;
+    if (!nl_checked_if_field_view(f, id, &v))
+        return false;
+    NLCheckStatus status = nl_checked_if_field_validate(f, id, &v);
+    if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
+        p->copy_body_status = status;
+    return status == NL_CHECK_OK && if_original_carrier(f, id, &v, p);
+}
+static bool if_return_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
+                                V0Program *p)
+{
+    NLIfReturnView v;
+    if (!nl_checked_if_return_view(f, id, &v))
+        return false;
+    NLCheckStatus status = nl_checked_if_return_validate(f, id, &v);
+    if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
+        p->copy_body_status = status;
+    return status == NL_CHECK_OK && if_original_carrier(f, id, &v.field, p);
+}
 static bool copy_or_field_if(const NLCheckedFragment *f, NLCheckedNodeId id,
                              V0Program *p)
 {
+    NLIfReturnView returned;
+    if (nl_checked_if_return_view(f, id, &returned))
+        return if_return_selection(f, id, p);
     NLIfFieldView issued;
     return nl_checked_if_field_view(f, id, &issued)
                ? if_field_selection(f, id, p)
@@ -2245,8 +2264,12 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                quantity_scalar(fragment, id, program) ||
                boolean_scalar(fragment, id, program) ||
                gate_ptr(fragment, id, program);
-    case NL_CHECKED_IF:
-        return if_field_selection(fragment, id, program);
+    case NL_CHECKED_IF: {
+        NLIfReturnView returned;
+        return nl_checked_if_return_view(fragment, id, &returned)
+                   ? if_return_selection(fragment, id, program)
+                   : if_field_selection(fragment, id, program);
+    }
     case NL_CHECKED_PTR_FROM_REF:
         return gate_ptr(fragment, id, program);
     case NL_CHECKED_REPLACE:
@@ -2460,6 +2483,11 @@ static bool gate_symbol_written(const NLCheckedFragment *f, NLSymbolId symbol)
 {
     for (size_t i = 1; i <= nl_checked_node_count(f); ++i) {
         const NLCheckedNodeView *n = nl_checked_node_view(f, i);
+        NLIfReturnView returned;
+        if (n && n->kind == NL_CHECKED_IF &&
+            nl_checked_if_return_view(f, i, &returned) &&
+            returned.field.base == symbol)
+            return true;
         NLIfFieldView joined;
         if (n && n->kind == NL_CHECKED_IF &&
             nl_checked_if_field_view(f, i, &joined) && joined.base == symbol)
@@ -2548,7 +2576,9 @@ static bool emit_if_field(FILE *stream, const NLCheckedFragment *f,
             item = n->next_item;
         }
         const NLCheckedNodeView *tail = nl_checked_node_view(arm, body->tail);
-        if (choice->result_count) {
+        if (ar->terminates) {
+            /* The independently validated RETURN above has no normal result. */
+        } else if (choice->result_count) {
             if (tail->kind == NL_CHECKED_LOAN_HEADER &&
                 !gate_emit_loan(stream, arm, tail, depth + 1))
                 return false;
@@ -2641,8 +2671,12 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
         if (initializer == NULL)
             return false;
         NLIfFieldView field_join;
+        NLIfReturnView return_join;
         if (initializer->kind == NL_CHECKED_IF &&
-            nl_checked_if_field_view(fragment, view->initializer, &field_join))
+            (nl_checked_if_field_view(fragment, view->initializer,
+                                      &field_join) ||
+             nl_checked_if_return_view(fragment, view->initializer,
+                                       &return_join)))
             return emit_if_field(stream, fragment, view->initializer,
                                  view->symbol, depth);
         if (initializer->kind == NL_CHECKED_REPLACE &&

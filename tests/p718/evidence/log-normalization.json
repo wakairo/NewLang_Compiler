@@ -1,0 +1,47 @@
+{
+  "first-foreign-stream-swap.log": {
+    "original_sha256": "deb411287434ff3d35e05f1d2aceb204209ba518dadd58e9e709a4cc28fb6bf2",
+    "stored_sha256": "deb411287434ff3d35e05f1d2aceb204209ba518dadd58e9e709a4cc28fb6bf2",
+    "note": "Only CTest line-end whitespace normalized"
+  },
+  "first-native-gcc.log": {
+    "original_sha256": "8da9a6413abd6319c9e31375ebae5614ee1fe27389731ff7be9f75b8435862b6",
+    "stored_sha256": "e6363a2ee7623d50d92112ed146e9a9b1d0f9f331515423d9e4288f708ca9db6",
+    "note": "Only CTest line-end whitespace normalized"
+  },
+  "first-unconnected-helper-build.log": {
+    "original_sha256": "44cd4ce66c0a2ef0f8623e5958e918da7f3cbd997e9859765cf67855147260c2",
+    "stored_sha256": "44cd4ce66c0a2ef0f8623e5958e918da7f3cbd997e9859765cf67855147260c2",
+    "note": "Only CTest line-end whitespace normalized"
+  },
+  "local-asan-lsan.log": {
+    "original_sha256": "3203ad5efc7ede2cf36a067ac2dfa47aa8400a3281c1d54589ef0cb4c2994a31",
+    "stored_sha256": "ab2a800bd671fbd18e30e8ebe23f69bc2f8bdcb8295ad329f85493ed4cc525b1",
+    "note": "Only CTest line-end whitespace normalized"
+  },
+  "local-gcc13-p718.log": {
+    "original_sha256": "5c8275d1f6913f4366c6580ad7e1fc7c86d447ddc511b7871b36543d70079fa8",
+    "stored_sha256": "e7fc66ae87bb0a491bbc8a59e2c135c1ebef7c8903f3286e8e03c277cbc62c65",
+    "note": "Only CTest line-end whitespace normalized"
+  },
+  "local-gcc13-release.log": {
+    "original_sha256": "a0971ff5dbed185d3bd4ed274a56268d60468c04510eea5a3bf25e1ff7e08963",
+    "stored_sha256": "084f16e308c9d734f6752f32d2ef29d92771589a571d4dd2328eb99be07ed052",
+    "note": "Only CTest line-end whitespace normalized"
+  },
+  "local-gcc13-suite.log": {
+    "original_sha256": "2e24efb49a3a8fe9d14496b7ec724c19021ab76470bcf5c1f53f43b5a015bfcd",
+    "stored_sha256": "2e24efb49a3a8fe9d14496b7ec724c19021ab76470bcf5c1f53f43b5a015bfcd",
+    "note": "Only CTest line-end whitespace normalized"
+  },
+  "local-ubsan.log": {
+    "original_sha256": "7a696438632241e5cda8f96d3e362e99d1313fd2cbac9d2369ea3b3b7a74e290",
+    "stored_sha256": "5d5d49c19bb40c3a4391e8f2aed1cf6b764c241b51e8d5864324683b090af80d",
+    "note": "Only CTest line-end whitespace normalized"
+  },
+  "origin-fix-regressions.log": {
+    "original_sha256": "67ce27b2120280b246ed8019765206b0dc8424380702f74bf84c126f0225a154",
+    "stored_sha256": "79dd6b09b7916636186cbd0d66025193aad9dd43b8936d438fcbbe0671dfe5fb",
+    "note": "Only CTest line-end whitespace normalized"
+  }
+}
