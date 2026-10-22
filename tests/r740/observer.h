@@ -173,7 +173,7 @@ static void r736_finish(void)
  * hooks, read-only. These callbacks do not write guest heap state. */
 static unsigned r740_arms, r740_roots_seen, r740_fields_seen;
 static unsigned r740_scope_exits, r740_handoffs, r740_receiver_enters;
-static unsigned r740_receiver_exits, r740_returned;
+static unsigned r740_receiver_exits, r740_return_count;
 
 static void r740_arm(unsigned choice)
 {
@@ -236,7 +236,7 @@ static void r740_receiver_exit(void)
 }
 static void r740_returned(const nl_allocation *a, const nl_domain *d)
 {
-    R736_ASSERT(r740_returned++ == 0 && r740_receiver_exits == 1);
+    R736_ASSERT(r740_return_count++ == 0 && r740_receiver_exits == 1);
     R736_ASSERT(a && d && r736_phases[1] == 9);
 }
 static void r740_finish(void)
@@ -245,7 +245,7 @@ static void r740_finish(void)
     R736_ASSERT(r740_handoffs == success);
     R736_ASSERT(r740_receiver_enters == success);
     R736_ASSERT(r740_receiver_exits == success);
-    R736_ASSERT(r740_returned == success);
+    R736_ASSERT(r740_return_count == success);
     if (success) {
         R736_ASSERT(r740_fields_seen >= 2 && r740_roots_seen >= 2);
         R736_ASSERT(r740_scope_exits > 0 && r740_arms > 0);
@@ -266,20 +266,20 @@ static void r740_finish(void)
 #define NL_LIVE_ENTER(h, p, a, d) r736_enter(h, p, a, d)
 #define NL_LIVE_RETURN(v) r736_return(v)
 #define NL_LIVE_RECEIVE(v, a, d) r736_receive(v, a, d)
-#define NL_HEAP_FINISH() \
-    do { \
-        r736_finish(); \
-        r740_finish(); \
+#define NL_HEAP_FINISH()                                                       \
+    do {                                                                       \
+        r736_finish();                                                         \
+        r740_finish();                                                         \
     } while (0)
 
 #define NL_HEAP_ARM(choice) r740_arm(choice)
-#define NL_HEAP_ROOT(p, d, write, place, inc, scope) \
+#define NL_HEAP_ROOT(p, d, write, place, inc, scope)                           \
     r740_root(p, d, write, place, inc, scope)
-#define NL_HEAP_FIELD(parent, field, w, nominal, index, child, inc, scope) \
+#define NL_HEAP_FIELD(parent, field, w, nominal, index, child, inc, scope)     \
     r740_field(parent, field, w, nominal, index, child, inc, scope)
 #define NL_HEAP_SCOPE_END(scope) r740_scope_end(scope)
 #define NL_HEAP_HANDOFF(p, a, d, ap, dp) r740_handoff(p, a, d, ap, dp)
-#define NL_HEAP_RECEIVER_ENTER(p, a, d, pid, aid, did, uid, ap, dp) \
+#define NL_HEAP_RECEIVER_ENTER(p, a, d, pid, aid, did, uid, ap, dp)            \
     r740_receiver_enter(p, a, d, pid, aid, did, uid, ap, dp)
 #define NL_HEAP_RECEIVER_EXIT() r740_receiver_exit()
 #define NL_HEAP_RETURNED(ap, dp) r740_returned(ap, dp)
