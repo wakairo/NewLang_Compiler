@@ -1799,7 +1799,8 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
     return reject(e);
 }
 
-/* Exact two-item producer body. Its scope/relational certificate is checked
+/* Exact direct-result or source-certified whole-local producer body. Its
+ * scope/relational certificate is checked
  * first; this traversal validates each actual operand and emits in checked
  * source order. It is deliberately not a general aggregate/return backend. */
 static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
@@ -1820,18 +1821,29 @@ static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
         e->reads != (e->custody ? 0u : 1u) ||
         e->projections != (e->custody ? 1u : 2u) || body == NULL ||
         body->kind != NL_CHECKED_BLOCK || !body->terminates ||
-        body->item_count != 2 || body->tail != 0 ||
+        (body->item_count != 2 && body->item_count != 3) || body->tail != 0 ||
         body->returned.type != e->live_tail ||
         body->returned.value != v->producer.result)
         return reject(e);
     const NLCheckedNodeView *binding =
         nl_checked_node_view(f, body->first_item);
+    NLProducerLocalReturnView local_return = {0};
+    const bool local_result = body->item_count == 3;
+    if (local_result && (!nl_checked_producer_local_return_view(
+                             env->artifact, id, &local_return) ||
+                         !nl_checked_producer_local_return_valid(
+                             env->artifact, id, &local_return)))
+        return reject(e);
     const NLCheckedNodeView *ret =
-        binding == NULL ? NULL : nl_checked_node_view(f, binding->next_item);
+        local_result      ? nl_checked_node_view(f, local_return.return_node)
+        : binding == NULL ? NULL
+                          : nl_checked_node_view(f, binding->next_item);
     const NLCheckedNodeView *replace =
         binding == NULL ? NULL : nl_checked_node_view(f, binding->initializer);
     const NLCheckedNodeView *aggregate =
-        ret == NULL ? NULL : nl_checked_node_view(f, ret->initializer);
+        local_result  ? nl_checked_node_view(f, local_return.construction)
+        : ret == NULL ? NULL
+                      : nl_checked_node_view(f, ret->initializer);
     if (binding == NULL || binding->kind != NL_CHECKED_BINDING ||
         binding->argument_count != 1 || ret == NULL ||
         ret->kind != NL_CHECKED_RETURN || !ret->terminates ||
@@ -1991,10 +2003,24 @@ static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
     size_t packed = ++e->temp;
     if (ok)
         ok = item == 0 &&
-             put(e,
-                 "nl_live_tail nl_v_%zu = {nl_v_%zu,nl_v_%zu,nl_v_%zu};\n"
-                 "NL_LIVE_RETURN(nl_v_%zu);\nreturn nl_v_%zu;\n}\n",
-                 packed, values[0].temp, values[1].temp, values[2].temp, packed,
+             put(e, "nl_live_tail nl_v_%zu = {nl_v_%zu,nl_v_%zu,nl_v_%zu};\n",
+                 packed, values[0].temp, values[1].temp, values[2].temp);
+    if (ok && local_result) {
+        /* The checked constructor is bound, then consumed at the issued
+         * RETURN use. Only packet carriers move; the original H stays put. */
+        size_t result = ++e->temp;
+        ok = put(e,
+                 "nl_live_tail nl_b_%zu_%zu = nl_v_%zu;\n"
+                 "nl_v_%zu = (nl_live_tail){0};\n"
+                 "nl_live_tail nl_v_%zu = nl_b_%zu_%zu;\n"
+                 "nl_b_%zu_%zu = (nl_live_tail){0};\n",
+                 callee.frame, local_return.local, packed, packed, result,
+                 callee.frame, local_return.local, callee.frame,
+                 local_return.local);
+        packed = result;
+    }
+    if (ok)
+        ok = put(e, "NL_LIVE_RETURN(nl_v_%zu);\nreturn nl_v_%zu;\n}\n", packed,
                  packed);
     e->producer_used = e->used;
     e->text = main_text;

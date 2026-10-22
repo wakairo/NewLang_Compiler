@@ -1,4 +1,5 @@
-#include "semantic_internal.h"
+#include "producer_local_internal.h"
+#include <stdlib.h>
 
 #include <string.h>
 
@@ -737,4 +738,365 @@ bool nl_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id, bool raw)
 bool nl_checked_producer_valid(const NLCheckedFragment *f, NLCheckedNodeId id)
 {
     return nl_producer_valid(f, id, true);
+}
+
+static bool local_projection(const NLCheckedFragment *f, NLCheckedNodeId id,
+                             const NLCheckedFragment *body,
+                             NLProducerLocalReturnView *out)
+{
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(body, nl_checked_root(body));
+    const NLCheckedNodeView *first =
+        root ? nl_checked_node_view(body, root->first_item) : NULL;
+    const NLCheckedNodeView *local =
+        first ? nl_checked_node_view(body, first->next_item) : NULL;
+    const NLCheckedNodeView *ret =
+        local ? nl_checked_node_view(body, local->next_item) : NULL;
+    if (!out || !call || !call->producer.return_proved || !root ||
+        root->kind != NL_CHECKED_BLOCK || root->item_count != 3 || !local ||
+        local->kind != NL_CHECKED_BINDING || !ret ||
+        ret->kind != NL_CHECKED_RETURN)
+        return false;
+    *out = (NLProducerLocalReturnView){body,
+                                       nl_checked_producer_entry(f, id),
+                                       nl_checked_producer_return(f, id),
+                                       first->next_item,
+                                       local->initializer,
+                                       ret->initializer,
+                                       local->next_item,
+                                       local->symbol,
+                                       ret->returned};
+    return true;
+}
+bool nl_checked_producer_local_return_view(const NLCheckedFragment *f,
+                                           NLCheckedNodeId id,
+                                           NLProducerLocalReturnView *out)
+{
+    return local_projection(f, id, nl_checked_call_body(f, id), out);
+}
+static void local_destroy(NLCheckedFragment *body)
+{
+    if (body->producer_local) {
+        free(body->producer_local->nodes);
+        free(body->producer_local);
+    }
+}
+NLCheckStatus nl_producer_local_seal(NLCheckedFragment *body,
+                                     const NLCheckedFragment *caller,
+                                     NLCheckedNodeId call)
+{
+    NLProducerLocalReturnView issued;
+    if (!local_projection(caller, call, body, &issued) || body->count != 17)
+        return NL_CHECK_OK; /* CHECK-legal larger profiles remain unsupported.
+                             */
+    if (body->producer_local)
+        return NL_CHECK_INTERNAL_ERROR;
+    NLProducerLocalProof *p = calloc(1, sizeof(*p));
+    if (!p)
+        return NL_CHECK_OUT_OF_MEMORY;
+    p->nodes = malloc(body->count * sizeof(*p->nodes));
+    if (!p->nodes) {
+        free(p);
+        return NL_CHECK_OUT_OF_MEMORY;
+    }
+    p->caller = caller;
+    p->body = body;
+    p->context = body->context;
+    p->call = call;
+    p->root = body->root;
+    p->count = body->count;
+    p->origin = body->nodes;
+    memcpy(p->nodes, body->nodes, body->count * sizeof(*p->nodes));
+    p->call_node = *nl_checked_node_view(caller, call);
+    p->source = body->source;
+    p->plan = body->body_owner;
+    p->target = body->function_target;
+    const NLControlExitView *edge = nl_control_exit_view(body->exits, 0);
+    p->exit_state = edge ? edge->state : NULL;
+    p->issued = issued;
+    body->producer_local = p;
+    body->destroy_producer_local = local_destroy;
+    return NL_CHECK_OK;
+}
+static bool local_span(NLSourceSpan a, NLSourceSpan b)
+{
+    return a.start_byte == b.start_byte && a.end_byte == b.end_byte;
+}
+static bool local_text(const NLSource *source, NLSourceSpan span,
+                       const char *text)
+{
+    NLSourceView v;
+    return text && nl_source_view(source, span, &v) &&
+           v.length == strlen(text) && !memcmp(v.bytes, text, v.length);
+}
+/* Each mark is one actual issued operation, with its retained source origin.
+ * The selected graph has exactly 17 nodes; a duplicate edge or orphan fails.
+ * This is source correspondence only: R/O/A/D authority comes from the existing
+ * independently validated producer entry/return worlds, never source tokens. */
+static const NLCheckedNodeView *
+local_mark(const NLCheckedFragment *body, NLCheckedNodeId id,
+           NLCheckedKind kind, const NLSyntaxNode *syntax, bool seen[17])
+{
+    const NLSyntaxView *s = nl_syntax_node_view(syntax);
+    const NLCheckedNodeView *n = nl_checked_node_view(body, id);
+    if (!id || id > 17 || seen[id - 1] || !s || !n || n->kind != kind ||
+        !local_span(n->span, s->span))
+        return NULL;
+    seen[id - 1] = true;
+    return n;
+}
+bool nl_checked_producer_local_return_valid(
+    const NLCheckedFragment *f, NLCheckedNodeId id,
+    const NLProducerLocalReturnView *candidate)
+{
+    NLProducerLocalReturnView v;
+    if (!nl_checked_producer_local_return_view(f, id, &v) ||
+        !nl_checked_producer_valid(f, id))
+        return false;
+    if (candidate &&
+        (candidate->body != v.body || candidate->entry != v.entry ||
+         candidate->returned != v.returned ||
+         candidate->declaration != v.declaration ||
+         candidate->construction != v.construction ||
+         candidate->consumer != v.consumer ||
+         candidate->return_node != v.return_node ||
+         candidate->local != v.local ||
+         candidate->result.type != v.result.type ||
+         candidate->result.value != v.result.value))
+        return false;
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    const NLCheckedFragment *body = v.body;
+    const NLProducerLocalProof *seal = body->producer_local;
+    if (!seal || seal->caller != f || seal->body != body ||
+        seal->context != body->context || seal->call != id ||
+        seal->root != body->root || seal->count != body->count ||
+        body->count != 17 || seal->origin != body->nodes || !seal->nodes ||
+        memcmp(seal->nodes, body->nodes, body->count * sizeof(*body->nodes)) ||
+        seal->source != body->source || seal->plan != body->body_owner ||
+        seal->target != body->function_target ||
+        memcmp(&seal->call_node.producer, &call->producer,
+               sizeof(call->producer)) ||
+        seal->issued.body != v.body || seal->issued.entry != v.entry ||
+        seal->issued.returned != v.returned || seal->issued.local != v.local ||
+        seal->issued.declaration != v.declaration ||
+        seal->issued.construction != v.construction ||
+        seal->issued.consumer != v.consumer ||
+        seal->issued.return_node != v.return_node ||
+        seal->issued.result.type != v.result.type ||
+        seal->issued.result.value != v.result.value)
+        return false;
+    const NLFunctionBody *plan = body->body_owner;
+    const NLSemanticContext *b = v.returned;
+    if (!plan || body->source != plan->source || !plan->syntax ||
+        nl_syntax_tree_source(plan->syntax) != plan->source ||
+        body->count != 17 || body->arm_count || body->body_count || !v.local ||
+        v.local > b->binding_count)
+        return false;
+    const NLControlExitView *edge = nl_control_exit_view(body->exits, 0);
+    const NLSemanticContext *exit =
+        edge ? nl_control_state_context((NLControlState *)edge->state) : NULL;
+    if (!edge || !exit || nl_control_exits_count(body->exits) != 1 ||
+        edge->kind != NL_EXIT_RETURN || !body->function_target ||
+        edge->target != body->function_target ||
+        edge->state != seal->exit_state || edge->count != 1 ||
+        edge->values[0].type != v.result.type ||
+        edge->values[0].value != v.result.value ||
+        call->function > exit->function_count ||
+        exit->functions[call->function - 1].body != plan ||
+        nl_sem_validate(exit) != NL_CHECK_OK)
+        return false;
+    NLSemanticSnapshot expected, actual;
+    if (!nl_semantic_snapshot(b, &expected) ||
+        !nl_semantic_snapshot(exit, &actual) ||
+        memcmp(&expected, &actual, sizeof(actual)) ||
+        memcmp(b->values, exit->values, b->value_count * sizeof(*b->values)) ||
+        memcmp(b->places, exit->places, b->place_count * sizeof(*b->places)) ||
+        memcmp(b->domains, exit->domains,
+               b->domain_count * sizeof(*b->domains)) ||
+        memcmp(b->scopes, exit->scopes, b->scope_count * sizeof(*b->scopes)))
+        return false;
+    for (size_t i = 0; i < b->binding_count; ++i)
+        if (memcmp(&b->bindings[i].view, &exit->bindings[i].view,
+                   sizeof(b->bindings[i].view)) ||
+            b->bindings[i].hidden != exit->bindings[i].hidden ||
+            strcmp(b->bindings[i].name, exit->bindings[i].name))
+            return false;
+    if (b->occurrence_count &&
+        memcmp(b->occurrences, exit->occurrences,
+               b->occurrence_count * sizeof(*b->occurrences)))
+        return false;
+    for (size_t i = 0; i < b->region_count; ++i) {
+        const NLRawRegionEntry *x = &b->regions[i], *y = &exit->regions[i];
+        if (memcmp(&x->view, &y->view, sizeof(x->view)) ||
+            x->count != y->count ||
+            (x->count && memcmp(x->intervals, y->intervals,
+                                x->count * sizeof(*x->intervals))))
+            return false;
+    }
+    for (size_t i = 0; i < body->count; ++i) {
+        const NLCheckedNodeView *n = &body->nodes[i];
+        bool binding_node = n->kind == NL_CHECKED_BINDING;
+        bool field_node = n->kind == NL_CHECKED_AGGREGATE_FIELD;
+        bool has_init =
+            binding_node || field_node || n->kind == NL_CHECKED_RETURN;
+        bool has_args = binding_node || n->kind == NL_CHECKED_AGGREGATE ||
+                        n->kind == NL_CHECKED_REPLACE;
+        bool ref_arg = n->kind == NL_CHECKED_IDENTIFIER &&
+                       n->symbol == call->producer.parameters[0];
+        if ((!has_init && n->initializer) ||
+            (!has_args && (n->first_argument || n->argument_count)) ||
+            (!field_node && !ref_arg && n->next_argument) ||
+            (!binding_node && n->next_item) ||
+            (n->kind != NL_CHECKED_BLOCK && (n->first_item || n->item_count)) ||
+            n->tail)
+            return false;
+    }
+    const NLSyntaxNode *tree = nl_syntax_tree_root(plan->syntax);
+    const NLSyntaxView *block = nl_syntax_node_view(tree);
+    if (!block || block->kind != NL_SYNTAX_BLOCK ||
+        block->data.block.item_count != 3 || block->data.block.tail)
+        return false;
+    const NLSyntaxNode *s0 = block->data.block.items,
+                       *s1 = nl_syntax_next_argument(s0),
+                       *s2 = nl_syntax_next_argument(s1);
+    const NLSyntaxView *a0 = nl_syntax_node_view(s0),
+                       *a1 = nl_syntax_node_view(s1),
+                       *a2 = nl_syntax_node_view(s2);
+    if (!a0 || a0->kind != NL_SYNTAX_BINDING || !a1 ||
+        a1->kind != NL_SYNTAX_BINDING || !a2 || a2->kind != NL_SYNTAX_RETURN ||
+        nl_syntax_next_argument(s2))
+        return false;
+    bool seen[17] = {false};
+    const NLCheckedNodeView *root =
+        local_mark(body, body->root, NL_CHECKED_BLOCK, tree, seen);
+    const NLCheckedNodeView *old =
+        root ? local_mark(body, root->first_item, NL_CHECKED_BINDING, s0, seen)
+             : NULL;
+    const NLCheckedNodeView *decl =
+        old ? local_mark(body, old->next_item, NL_CHECKED_BINDING, s1, seen)
+            : NULL;
+    const NLCheckedNodeView *ret =
+        decl ? local_mark(body, decl->next_item, NL_CHECKED_RETURN, s2, seen)
+             : NULL;
+    if (!root || !old || !decl || !ret || root->item_count != 3 || root->tail ||
+        !root->terminates || root->result_count ||
+        root->returned.value != v.result.value ||
+        root->returned.type != v.result.type || old->terminates ||
+        decl->terminates || !ret->terminates || ret->next_item ||
+        ret->result_count || old->argument_count != 1 ||
+        decl->argument_count != 1 || old->type != 1 || decl->type != 1 ||
+        old->result_count || decl->result_count || old->symbol == v.local ||
+        decl->symbol != v.local || decl->initializer != v.construction ||
+        ret->initializer != v.consumer ||
+        v.result.value != call->producer.result || v.result.type != call->type)
+        return false;
+    const NLSyntaxNode *initializers[2] = {a0->data.binding.initializer,
+                                           a1->data.binding.initializer};
+    const NLCheckedNodeView *declarations[2] = {old, decl};
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedNodeView *d = declarations[i];
+        const NLSyntaxView *ast = i ? a1 : a0;
+        const NLCheckedNodeView *r =
+            nl_checked_node_view(body, d->first_argument);
+        if (!r || !r->symbol || r->symbol > b->binding_count ||
+            r->symbol != d->symbol)
+            return false;
+        if (!r || r->kind != NL_CHECKED_RECEIVER || r->next_argument ||
+            r->result_count || r->value_use != NL_VALUE_RECEIVED ||
+            !local_span(r->span, ast->data.binding.name) ||
+            !local_text(plan->source, ast->data.binding.name,
+                        b->bindings[r->symbol - 1].name) ||
+            d->first_argument > 17 || seen[d->first_argument - 1])
+            return false;
+        seen[d->first_argument - 1] = true;
+    }
+    const NLCheckedNodeView *aggregate = local_mark(
+        body, v.construction, NL_CHECKED_AGGREGATE, initializers[1], seen);
+    const NLCheckedNodeView *use =
+        local_mark(body, v.consumer, NL_CHECKED_IDENTIFIER,
+                   a2->data.statement.expression, seen);
+    const NLSyntaxView *source_aggregate = nl_syntax_node_view(initializers[1]);
+    const NLSyntaxView *source_use =
+        nl_syntax_node_view(a2->data.statement.expression);
+    const NLBindingEntry *binding = &b->bindings[v.local - 1];
+    if (!aggregate || !use || source_aggregate->kind != NL_SYNTAX_AGGREGATE ||
+        source_aggregate->data.aggregate.count != 3 ||
+        source_use->kind != NL_SYNTAX_EXPR_NAME ||
+        !local_text(plan->source, source_use->data.name, binding->name) ||
+        aggregate->type != call->type || aggregate->result_count != 1 ||
+        aggregate->results[0].value != v.result.value ||
+        aggregate->argument_count != 3 || use->symbol != v.local ||
+        use->value_use != NL_VALUE_CONSUMED || use->type != call->type ||
+        use->result_count != 1 || use->results[0].value != v.result.value ||
+        binding->view.value != v.result.value ||
+        binding->view.type != call->type ||
+        binding->view.availability != NL_CONSUMED || !binding->hidden ||
+        !binding->view.place || binding->view.place > b->place_count ||
+        binding->view.place == call->producer.root ||
+        b->places[binding->view.place - 1].live ||
+        b->places[binding->view.place - 1].current_value)
+        return false;
+    const NLSemanticValueView package = b->values[v.result.value - 1];
+    bool fields[3] = {false};
+    NLCheckedNodeId field = aggregate->first_argument;
+    const NLSyntaxNode *source_field = source_aggregate->data.aggregate.fields;
+    for (size_t i = 0; i < 3; ++i) {
+        const NLCheckedNodeView *n = local_mark(
+            body, field, NL_CHECKED_AGGREGATE_FIELD, source_field, seen);
+        const NLSyntaxView *sf = nl_syntax_node_view(source_field);
+        if (!n || n->field_index >= 3 || fields[n->field_index] || !sf ||
+            sf->kind != NL_SYNTAX_FIELD ||
+            !local_text(plan->source, sf->data.binding.name,
+                        b->types[call->type - 1].field_names[n->field_index]))
+            return false;
+        size_t k = n->field_index;
+        fields[k] = true;
+        const NLCheckedNodeView *arg =
+            local_mark(body, n->initializer, NL_CHECKED_IDENTIFIER,
+                       sf->data.binding.initializer, seen);
+        if (!arg || arg->symbol != call->producer.parameters[k + 1] ||
+            arg->symbol == v.local || arg->result_count != 1 ||
+            arg->results[0].value != package.fields[k] ||
+            arg->type != n->type ||
+            arg->value_use != (k ? NL_VALUE_CONSUMED : NL_VALUE_COPIED))
+            return false;
+        field = n->next_argument;
+        source_field = nl_syntax_next_argument(source_field);
+    }
+    if (field || source_field)
+        return false;
+    const NLCheckedNodeView *replace = local_mark(
+        body, old->initializer, NL_CHECKED_REPLACE, initializers[0], seen);
+    const NLSyntaxView *rs = nl_syntax_node_view(initializers[0]);
+    if (!replace || rs->kind != NL_SYNTAX_EXPR_CALL ||
+        rs->data.call.argument_count != 2 ||
+        !local_text(plan->source, rs->data.call.callee, "replace") ||
+        replace->argument_count != 2 || replace->result_count != 1 ||
+        replace->field.parent != call->producer.head.parent ||
+        replace->field.child != call->producer.head.child ||
+        replace->field.old_value != call->producer.head_before ||
+        replace->field.new_value != call->producer.head_after ||
+        replace->results[0].value != call->producer.head_before)
+        return false;
+    const NLSyntaxNode *ra = rs->data.call.arguments;
+    const NLCheckedNodeView *ref = local_mark(body, replace->first_argument,
+                                              NL_CHECKED_IDENTIFIER, ra, seen);
+    const NLCheckedNodeView *none =
+        ref ? local_mark(body, ref->next_argument, NL_CHECKED_SUM_CONSTRUCTOR,
+                         nl_syntax_next_argument(ra), seen)
+            : NULL;
+    if (!ref || !none || ref->symbol != call->producer.parameters[0] ||
+        ref->value_use != NL_VALUE_COPIED || none->next_argument ||
+        none->variant != 1 || none->argument_count || none->result_count != 1 ||
+        none->results[0].value != call->producer.head_after ||
+        none->type != replace->type ||
+        nl_checked_node_view(body, old->first_argument)->type !=
+            replace->type ||
+        nl_checked_node_view(body, decl->first_argument)->type != call->type)
+        return false;
+    for (size_t i = 0; i < 17; ++i)
+        if (!seen[i])
+            return false;
+    return true;
 }

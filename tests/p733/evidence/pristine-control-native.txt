@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /workspace/p733-base-build
+Test project /workspace/p733-base-build
+    Start 267: live_tail_return_native.integration
+1/1 Test #267: live_tail_return_native.integration ...   Passed    3.20 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   3.21 sec

@@ -271,6 +271,25 @@ const NLCheckedFragment *
 nl_checked_custody_continuation(const NLCheckedFragment *, NLCheckedNodeId,
                                 size_t);
 bool nl_checked_producer_valid(const NLCheckedFragment *, NLCheckedNodeId);
+/* Historical source-issued whole local -> RETURN linkage. A view is borrowed
+ * observation, not ownership authority. Validation combines the retained
+ * immutable producer source plan, complete finite checked graph, consumed
+ * local and existing original-owner entry/return certificate. false includes
+ * scratch OOM in that existing bool validator; it never mutates public state.
+ */
+typedef struct {
+    const NLCheckedFragment *body;
+    const NLSemanticContext *entry, *returned;
+    NLCheckedNodeId declaration, construction, consumer, return_node;
+    NLSymbolId local;
+    NLCheckedResult result;
+} NLProducerLocalReturnView;
+bool nl_checked_producer_local_return_view(const NLCheckedFragment *,
+                                           NLCheckedNodeId,
+                                           NLProducerLocalReturnView *);
+bool nl_checked_producer_local_return_valid(
+    const NLCheckedFragment *, NLCheckedNodeId,
+    const NLProducerLocalReturnView *candidate);
 const NLSemanticContext *nl_checked_producer_entry(const NLCheckedFragment *,
                                                    NLCheckedNodeId);
 const NLSemanticContext *nl_checked_producer_return(const NLCheckedFragment *,

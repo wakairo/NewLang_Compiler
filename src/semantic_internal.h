@@ -133,6 +133,8 @@ NLCheckStatus nl_usize_arithmetic_capture(NLCheckedFragment *, NLCheckedNodeId,
                                           const NLSyntaxNode *,
                                           const NLSemanticContext *);
 struct NLCheckedFragment {
+    struct NLProducerLocalProof *producer_local;
+    void (*destroy_producer_local)(NLCheckedFragment *);
     struct NLIfFieldProof *if_fields;
     void (*destroy_if_fields)(NLCheckedFragment *);
     struct NLCopyBodyProof *copy_body;

@@ -1,0 +1,20 @@
+Internal ctest changing into directory: /workspace/p733-build
+Test project /workspace/p733-build
+    Start 266: p733_local_owner_proof.unit
+1/4 Test #266: p733_local_owner_proof.unit ...........***Failed    0.01 sec
+/workspace/p733/tests/p733/gate_test.c:69: !nl_checked_producer_local_return_valid(f, id, NULL)
+
+    Start 267: p733_pending_history_oom.unit
+2/4 Test #267: p733_pending_history_oom.unit .........   Passed    0.69 sec
+    Start 268: p733_cargo_history_oom.unit
+3/4 Test #268: p733_cargo_history_oom.unit ...........   Passed    0.69 sec
+    Start 269: p733_local_owner_native.integration
+4/4 Test #269: p733_local_owner_native.integration ...   Passed    0.96 sec
+
+75% tests passed, 1 tests failed out of 4
+
+Total Test time (real) =   2.35 sec
+
+The following tests FAILED:
+	266 - p733_local_owner_proof.unit (Failed)
+Errors while running CTest

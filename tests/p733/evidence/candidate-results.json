@@ -1,0 +1,84 @@
+{
+  "pending": {
+    "source_sha256": "94956e756d2946490cf0633f975b6afebb46d6d9452b4d0d182c2ec51381f13f",
+    "check": {
+      "exit": 0,
+      "stderr": "",
+      "bytes": 0
+    },
+    "c17": {
+      "exit": 0,
+      "stderr": "",
+      "bytes": 13844
+    },
+    "generated_sha256": "387209b4c9b1cac18864eeed603b9dcd7bc9d0d87dc7387e4dddb04d5cac02dd",
+    "public": {
+      "exit": 0,
+      "stdout": "CLEANUP legacy_arm=0 regions=1 all_closed=PASS\nCLEANUP legacy_arm=1 regions=2 all_closed=PASS\nLOCAL call=65 binding=30 construction=7 consume=16 return=17 package=55 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS\nPUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0\n",
+      "stderr": ""
+    },
+    "legacy_owner": {
+      "exit": 0,
+      "stdout": "owned live-return entry/post/correlation after AST teardown; 41 corruptions rejected; whole destructure and distinct terminal receiver; native subset checked separately\n"
+    },
+    "legacy_backend": {
+      "exit": 0,
+      "stdout": "22 certificate/body/world/profile controls leave no output; 15 OOM positions (3 staging + 12 validator scratch) retry identically\n"
+    }
+  },
+  "cargo": {
+    "source_sha256": "d72c3d40863ccf705fbbfba27fda8672ffe043cad82e439e7b02970e14aeb01f",
+    "check": {
+      "exit": 0,
+      "stderr": "",
+      "bytes": 0
+    },
+    "c17": {
+      "exit": 0,
+      "stderr": "",
+      "bytes": 13845
+    },
+    "generated_sha256": "d194ab27ac247936ada2ee488b0ea81e46dfadbdfaa63f05c07dd1b5301039fc",
+    "public": {
+      "exit": 0,
+      "stdout": "CLEANUP legacy_arm=0 regions=1 all_closed=PASS\nCLEANUP legacy_arm=1 regions=2 all_closed=PASS\nLOCAL call=65 binding=30 construction=7 consume=16 return=17 package=55 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS\nPUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0\n",
+      "stderr": ""
+    },
+    "legacy_owner": {
+      "exit": 0,
+      "stdout": "owned live-return entry/post/correlation after AST teardown; 41 corruptions rejected; whole destructure and distinct terminal receiver; native subset checked separately\n"
+    },
+    "legacy_backend": {
+      "exit": 0,
+      "stdout": "22 certificate/body/world/profile controls leave no output; 15 OOM positions (3 staging + 12 validator scratch) retry identically\n"
+    }
+  },
+  "control": {
+    "source_sha256": "fe6671d59794d3c96b935c97cf30753dc49a83ed7c3b560b2715afc0e8ba5e4f",
+    "check": {
+      "exit": 0,
+      "stderr": "",
+      "bytes": 0
+    },
+    "c17": {
+      "exit": 0,
+      "stderr": "",
+      "bytes": 13711
+    },
+    "generated_sha256": "c974629f88649c6fde4aea3b18f0397c02a409ef4e1985f6126582d37bffeaea"
+  },
+  "inherited/producer-result-local": {
+    "source_sha256": "b640c1f2b9289824090be9fca40479e9e9eb0a4fb74e15f4a646561e0f87221e",
+    "check": {
+      "exit": 0,
+      "stderr": "",
+      "bytes": 0
+    },
+    "c17": {
+      "exit": 0,
+      "stderr": "",
+      "bytes": 13842
+    },
+    "generated_sha256": "946ef63d1b3a23698a92e871f8d7bbc83041014c7827018973e635cb88297806"
+  }
+}

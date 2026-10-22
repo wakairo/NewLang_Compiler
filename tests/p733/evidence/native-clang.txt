@@ -1,0 +1,36 @@
+pendingO0 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+pendingO0 2 OBSERVED head=55e04ac2e2a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+pendingO0 both OBSERVED head=5644819472a0 tail=5644819472c0 trials=2 free=2 roots=6 changes=2 copy=1 scopes=6 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=5644819472c0
+pendingO2 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+pendingO2 2 OBSERVED head=5647075992a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+pendingO2 both OBSERVED head=55c0ccae72a0 tail=55c0ccae72c0 trials=2 free=2 roots=6 changes=2 copy=1 scopes=6 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=55c0ccae72c0
+pending genuine public local-return + legacy cleanup observations PASS; O0/O2, allocation fail1/2/success, unchanged/passive PASS
+cargoO0 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+cargoO0 2 OBSERVED head=55fb3b7ac2a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+cargoO0 both OBSERVED head=5586bb2232a0 tail=5586bb2232c0 trials=2 free=2 roots=6 changes=2 copy=1 scopes=6 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=5586bb2232c0
+cargoO2 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+cargoO2 2 OBSERVED head=55cd6ac242a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+cargoO2 both OBSERVED head=564b2fc602a0 tail=564b2fc602c0 trials=2 free=2 roots=6 changes=2 copy=1 scopes=6 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=564b2fc602c0
+cargo genuine public local-return + legacy cleanup observations PASS; O0/O2, allocation fail1/2/success, unchanged/passive PASS
+double_consume source refusal unchanged; zero C; named sink preserved P193-DEFINITION-CONSUMED
+discard_owner source refusal unchanged; zero C; named sink preserved P193-DEFINITION-OBLIGATION
+missing_member source refusal unchanged; zero C; named sink preserved P208-DEFINITION-RETURN
+wrong_backing source refusal unchanged; zero C; named sink preserved P193-CALL-BACKING
+wrong_domain source refusal unchanged; zero C; named sink preserved P3-REF-CONFLICT
+wrong_root source refusal unchanged; zero C; named sink preserved P193-CALL-DOMAIN
+active_loan source refusal unchanged; zero C; named sink preserved P3-REF-CONFLICT
+wrong_receiver source refusal unchanged; zero C; named sink preserved P193-CALL-DOMAIN
+reuse_donor source refusal unchanged; zero C; named sink preserved P3-USE-AFTER-CONSUME
+no_cleanup source refusal unchanged; zero C; named sink preserved P5-SCOPE-OBLIGATION
