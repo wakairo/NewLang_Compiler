@@ -760,6 +760,15 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/handoff_native_test.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:handoff_checked_probe>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/fixtures/live_tail_handoff.nl" "${NEWLANG_SANITIZER}")
+    # R736 frozen FIRST-PASS BLIND source/public/native tests (R-only).
+    add_executable(r736_public_probe tests/r736/public_probe.c)
+    target_link_libraries(r736_public_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME r736_blind_local_return.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r736/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r736_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r736")
     add_executable(p733_gate_test tests/p733/gate_test.c)
     target_link_libraries(p733_gate_test PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
     target_link_options(p733_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
