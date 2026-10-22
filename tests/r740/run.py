@@ -14,7 +14,11 @@ expected={
 "positive_custody_local_return.nl":"9f483e577ab20f84bbefa1bc5a21cb3c13f660ead45975a50ebbfc803280c41e",
 "negative_move_twice.nl":"91c17d2c615d2b227d390fb83be3786e58fa21ab615e6ce1b628949d3d3c4c9c",
 "negative_wrong_original.nl":"d1e84b069b52b01c7b74242e7f0c4820ba962a3a61b5ef08a4c3ffd5d38b40d2",
-"calibrated_caller_inline.nl":"89ec73f7a2f145c57cdc1b5499f6035fec609671b760cbad90b8330defeadb80"
+"calibrated_caller_inline.nl":"89ec73f7a2f145c57cdc1b5499f6035fec609671b760cbad90b8330defeadb80",
+"calibrated_ctor_reordered_receiver.nl":"8cb6f92098df394d0b5a00a7164eba9bc0260f5a40b4c7ae188b6f6e95872eec",
+"negative_wrong_attach_carrier.nl":"da862504c4d62c02bb526ed43d01208c5eb6654310aa6935e15e76654ffb435b",
+"negative_uncleared_original_link.nl":"249a531683d2c189f3dd36b6fe2db84554324427349d6bed33d274d2a68f37bf",
+"negative_double_detach_effect.nl":"cccb9fca9c9c29f6be8ed0bf7a539e7d49869262a4397842636ec82ef3fd2c78"
 }
 def call(args,**kw):
     return subprocess.run([str(x) for x in args],capture_output=True,text=True,**kw)
@@ -22,13 +26,35 @@ for name,sha in expected.items():
     data=(root/name).read_bytes()
     assert hashlib.sha256(data).hexdigest()==sha,(name,"historical SHA mismatch")
     assert data.endswith(b"\n") and b"\r" not in data
-print("R740 historical immutable hashes=4/4 plus C pretest freeze=1/1",flush=True)
+print("R740 SHA-gate original=4/4 C=1/1 D=1/1 negatives=3/3",flush=True)
 with tempfile.TemporaryDirectory(prefix="r736-") as d:
     scratch=Path(d)
     conservative_refusals=[]
     for name in expected:
         path=root/name
         r=call([compiler,"--check",path])
+        if name=="calibrated_caller_inline.nl":
+            assert r.returncode==3 and not r.stdout and "P208-UNIT-PROFILE" in r.stderr, ("C HISTORICAL PRECISION REFUSAL",r.stderr)
+            assert "distinct known terminal receiver" in r.stderr
+            emitted=call([compiler,path])
+            assert emitted.returncode!=0 and not emitted.stdout
+            sink=scratch/"named.c"
+            sink.write_bytes(b"R736_OLD_CONTENT\\n")
+            refused=call([compiler,"--emit-c17-to",sink,path])
+            assert refused.returncode!=0 and sink.read_bytes()==b"R736_OLD_CONTENT\\n"
+            print("R740 C preserved profile refusal + no partial C + named sink unchanged",flush=True)
+            continue
+        if name in ("negative_wrong_attach_carrier.nl","negative_uncleared_original_link.nl","negative_double_detach_effect.nl"):
+            assert r.returncode in (0,3) and not r.stdout, ("UNEXPECTED R SECURITY SOURCE STATUS",name,r.returncode,r.stderr)
+            emitted=call([compiler,path])
+            assert emitted.returncode!=0 and not emitted.stdout,("R SECURITY NEGATIVE EMITTED C / STOP",name,emitted.stderr)
+            sink=scratch/"named.c"
+            sink.write_bytes(b"R736_OLD_CONTENT\\n")
+            refused=call([compiler,"--emit-c17-to",sink,path])
+            assert refused.returncode!=0 and sink.read_bytes()==b"R736_OLD_CONTENT\\n"
+            print("R740 NEW SECURITY NEGATIVE",name,"CHECK",r.returncode,"EMIT",emitted.returncode,
+                  "diagnostic",r.stderr[:350] or emitted.stderr[:350],"zero_C=PASS",flush=True)
+            continue
         negative=name.startswith("negative_") or name=="positive_custody_local_return.nl"
         print("R736 CHECK",name,"exit",r.returncode,"stderr",r.stderr[:700],flush=True)
         if negative:
@@ -98,4 +124,4 @@ with tempfile.TemporaryDirectory(prefix="r736-") as d:
                         assert m and tuple(map(int,m.groups()))==(expect,expect,int(expect==2),int(expect==2),int(expect==2))
     if conservative_refusals:
         raise AssertionError(("R740 CALIBRATED ADMISSION GAP",conservative_refusals))
-print("R740 A + calibrated C source-to-native PASS; B unsupported and N1/N2 rejected",flush=True)
+print("R740 A + calibrated D source-to-native PASS; C historical precision unsupported; B/N1/N2/N3/N4/N5 rejected",flush=True)
