@@ -108,6 +108,19 @@ target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic n
 include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
+    # R730: bounded new negative shapes and independent public structural/OOM tests.
+    add_executable(r730_structure_oom tests/r730/structure_oom.c)
+    target_link_libraries(r730_structure_oom PRIVATE newlang_semantic)
+    target_link_options(r730_structure_oom PRIVATE
+        -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME r730_source_shape_negative.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r730/shape_negatives.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r730")
+    add_test(NAME r730_public_structure_oom.unit COMMAND "$<TARGET_FILE:r730_structure_oom>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r730/A0v2-usize-terminal.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r730/A1v2-usize-normal.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r730/B0v2-usize-terminal-store.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r730/B1v2-usize-normal-store.nl")
     # R730: inherited R725 unchanged v2 source, NON-BLIND calibrated verification.
     add_executable(r730_public_gate tests/r730/public_gate.c)
     target_link_libraries(r730_public_gate PRIVATE newlang_semantic)

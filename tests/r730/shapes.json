@@ -1,0 +1,24 @@
+{
+  "authority": {
+    "classification": "NON-BLIND CALIBRATED",
+    "frozen_issue_comment": 6335930120,
+    "inherited_case": "A0v2-usize-terminal.nl"
+  },
+  "cases": [
+    {
+      "file": "S0-two-statements-two-calls.nl",
+      "bytes": 873,
+      "sha256": "ba4b2203f4be0a41d49419951ad58cc75d677825dcac89cd444db2d7ef4b19fd"
+    },
+    {
+      "file": "S1-prefix-binding-statement.nl",
+      "bytes": 859,
+      "sha256": "b6552238ec2bcb63628803f33b1621336356d4f3c5bd7f2cf7721bc141ee9b7a"
+    },
+    {
+      "file": "S2-extra-unit-tail.nl",
+      "bytes": 845,
+      "sha256": "cf5e06c0a456234aaedd74d092d4c0fce2a17dfeb5d0d6982926ff2bc18596ef"
+    }
+  ]
+}
