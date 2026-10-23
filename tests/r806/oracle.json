@@ -1,0 +1,110 @@
+{
+  "classification": "FRESH FIRST-PASS BLIND",
+  "issue": 806,
+  "authority": {
+    "main": "77d83dfc00850b14fd7c3bc95e7e3c12e34161fb",
+    "canonical": "Draft17.34",
+    "candidate": "7863e4fc2196273f3a33f5a1b33d1958f9b73b51"
+  },
+  "basis": "Draft17.34 16.3.8 17.1 17.4 18.1b.4 and 3.2, no P #790/#800 implementation/test/oracle access",
+  "profile1": {
+    "changed_index": 1,
+    "recipient_index": 0,
+    "alpha_before": [
+      33,
+      147
+    ],
+    "alpha_after": [
+      33,
+      61
+    ],
+    "beta_before": [
+      219,
+      52
+    ],
+    "beta_after": [
+      147,
+      52
+    ],
+    "old_copy": 147,
+    "evicted": 219,
+    "siblings": [
+      33,
+      52
+    ],
+    "heap_payloads": [
+      23,
+      197
+    ]
+  },
+  "profile2": {
+    "changed_index": 0,
+    "recipient_index": 1,
+    "alpha_before": [
+      11,
+      168
+    ],
+    "alpha_after": [
+      92,
+      168
+    ],
+    "beta_before": [
+      74,
+      205
+    ],
+    "beta_after": [
+      74,
+      11
+    ],
+    "old_copy": 11,
+    "evicted": 205,
+    "siblings": [
+      168,
+      74
+    ],
+    "heap_payloads": [
+      89,
+      131
+    ]
+  },
+  "heap_worlds": {
+    "no_injection": {
+      "allocations": 2,
+      "frees": [
+        "original tail",
+        "original head"
+      ],
+      "T_arm": true
+    },
+    "fail1": {
+      "allocations": 0,
+      "frees": [],
+      "T_arm": false
+    },
+    "fail2": {
+      "allocations": 1,
+      "frees": [
+        "original head"
+      ],
+      "T_arm": false
+    }
+  },
+  "ownership": "two genuine distinct H heap original addresses and R/A/D, returned LiveTail owns original tail without cloning, caller consumes once, physical freeing tail then head. OOM branches free only surviving original.",
+  "negative": {
+    "wrong_field": "reject unknown declared T field",
+    "duplicate_owner": "reject repeated nonCopy consume",
+    "wrong_domain": "reject foreign H domain",
+    "bad_t_type": "reject non-two-u8 T",
+    "foreign_world": "reject proof with foreign world even if numeric IDs match",
+    "stale_copy": "reject stale current old Copy",
+    "sentinel": "failed CLI4 preserves named C17 output"
+  },
+  "ctest_names": [
+    "r806_arm_copy_source.unit",
+    "r806_arm_copy_issuer.unit",
+    "r806_arm_copy_c17.integration",
+    "r806_arm_copy_native.integration"
+  ],
+  "native": "actual strict emitted C17, GCC/Clang O0/O2, malloc 0/1/2 fault injection; ONLY real pointer/free observation; never fake missing observer hooks; T field numeric native values NOT TESTED until independently observable.",
+  "stops": "one natural FULL5 and PARTIAL attempt1; no mutation of frozen source/oracle or retries after first substantive failure; source ineligible is INCONCLUSIVE, not PASS"
+}

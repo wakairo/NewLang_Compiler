@@ -1,0 +1,15 @@
+{
+  "schema": "R806-v1-SHA256",
+  "pre_exposure_commit": "9a9a84a8da9e70e72e056d4d6cd11cb4a428cb5b",
+  "candidate": "7863e4fc2196273f3a33f5a1b33d1958f9b73b51",
+  "files": {
+    "tests/r806/sources/arm_index1.nl": "107af00586efca880c5928df16cb6eea6a532472e41c27ee5d5f8504114a4c8a",
+    "tests/r806/sources/arm_index0.nl": "31da8b4ff01afc721a2c84d9616d08c37c71b8c0582f7a39572decdc979ac87f",
+    "tests/r806/sources/wrong_field.nl": "83a524427f8762211777ddb84599a2fa14d9f548dfbc9be0350701dd78e2dabe",
+    "tests/r806/sources/duplicate_owner.nl": "fdb065e37f7c4526ea5cb1fad15dcf48b4c1acaf54e7177c359a2d191845241b",
+    "tests/r806/sources/wrong_domain.nl": "298567a8555ca43169721672355cccdaf60656e667122dc542cce8b2bcffddd5",
+    "tests/r806/sources/bad_t_type.nl": "dbf378eeca3d4014f02e98b98e27a2d03796f9e8730eae0ba0e662b71545de1e",
+    "tests/r806/oracle.json": "31caeafa4a4923358ba242132266eb2b952a25f10a72c7bfeb299f6d0860ce9c"
+  },
+  "hashing": "Exact fetched ASCII UTF8 with LF, SHA256 independently self-tested with abc vector; no P #790/#800 source/test/patch inspected."
+}
