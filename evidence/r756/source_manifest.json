@@ -1,0 +1,80 @@
+[
+  {
+    "file": "h_first.nl",
+    "sha256": "f8173007d6b9d5d0063500375e402303e8fcfefcbc8dcb3b4a8d5907176e953e",
+    "bytes": 4495,
+    "expected": "SOURCE_ELIGIBLE; Stage1 CHECK expected; mixed C17 MUST REFUSE"
+  },
+  {
+    "file": "t_first_interposed.nl",
+    "sha256": "cf398b41322426a70ae9766902a9f639fcd695dadaf0927537b2671b2b3c2593",
+    "bytes": 4404,
+    "expected": "SOURCE_ELIGIBLE; Stage1 CHECK expected; mixed C17 MUST REFUSE"
+  },
+  {
+    "file": "n_bad_second_t_type.nl",
+    "sha256": "c703bdcba89759035c6d616ec14c44bdd71e3463b963dcaea7f3390570e8f4f9",
+    "bytes": 4498,
+    "expected": "REJECT/no output or authority"
+  },
+  {
+    "file": "n_bad_second_h_target.nl",
+    "sha256": "89c9d1049dbb48d5714484d9920007ad2f22653859eb5e28c7b93434dcb6d06c",
+    "bytes": 4406,
+    "expected": "REJECT/no output or authority"
+  },
+  {
+    "file": "n_h_t_name_collision.nl",
+    "sha256": "3612f6541cbbbb358aab8e725349a6fd819dc454032ebaeee8921cfb22a73013",
+    "bytes": 4494,
+    "expected": "REJECT/no output or authority"
+  },
+  {
+    "file": "n_two_h_nominals.nl",
+    "sha256": "68607ad1b87515b96d1d4b199fba172f02e28712beabe0905e0aa436874a4aa8",
+    "bytes": 4558,
+    "expected": "REJECT/no output or authority"
+  },
+  {
+    "file": "n_two_t_nominals.nl",
+    "sha256": "ddd597715e13fbe1c0d5c8182dbc6ce167a5c3988918ff04b65c226dd02b912e",
+    "bytes": 4443,
+    "expected": "REJECT/no output or authority"
+  },
+  {
+    "file": "n_unknown_t_field.nl",
+    "sha256": "85be84912be1012073054cab2047df3f65e80376e0db68b76e416a01affbc251",
+    "bytes": 4499,
+    "expected": "REJECT/no output or authority"
+  },
+  {
+    "file": "n_bad_uncalled_body.nl",
+    "sha256": "b2ea59b7d003dbe5fc8efa0936c554ff74dc542b0222e7a964e113cfe658459f",
+    "bytes": 4536,
+    "expected": "REJECT/no output or authority"
+  },
+  {
+    "file": "n_duplicate_function.nl",
+    "sha256": "33d5d06692e175f34949196a9ea517e1937c83722cec7c64870ebb526495b729",
+    "bytes": 4602,
+    "expected": "REJECT/no output or authority"
+  },
+  {
+    "file": "n_read_write_escalation.nl",
+    "sha256": "b22900514b6e5d6426445f71483add88be5e9dc2031fab02d0286bd9c6e47d05",
+    "bytes": 4494,
+    "expected": "REJECT/no output or authority"
+  },
+  {
+    "file": "n_double_consume_owner.nl",
+    "sha256": "fa493f807b38a83c2cac81437f9f4f1739b4342531dabd98bbc347f7c33de2b5",
+    "bytes": 4569,
+    "expected": "REJECT/no output or authority"
+  },
+  {
+    "file": "n_missing_failure_cleanup.nl",
+    "sha256": "8f0358729634ae91a50754a4df581718f296c2e1d29447e69f703f88bf36e964",
+    "bytes": 4439,
+    "expected": "REJECT/no output or authority"
+  }
+]
