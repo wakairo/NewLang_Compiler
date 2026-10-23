@@ -1,0 +1,43 @@
+{
+  "utc": "2026-10-23T00:49:54.447556+00:00",
+  "compiler": "01151032569ad52ac50d164918b5de4cf90d1d7b",
+  "canonical": "Draft17.34 \u00a716.3.8",
+  "expected_before_change": "Mixed source parser unsupported; no registration/owned/C17.",
+  "expected_after_stage1": "Three positives parse/register/check 0 with separate Packet/Controls TypeIds, H self-pointer Packet. Mixed emission conservative backend4/zero C, no dual-carrier proof claimed. Negatives either source profile or semantic refusal; exact classification measured.",
+  "oracle": {
+    "old": 28,
+    "displaced": 177,
+    "current": [
+      93,
+      144
+    ],
+    "archive": [
+      2,
+      28
+    ],
+    "heap_hook_payload": [
+      46,
+      182
+    ],
+    "two_heap_originals": "two different allocation/Domain/root/incarnation identities of Packet; explicit cleanup all 0/1/2-success branches. Source CHECK only; no physical native claims."
+  },
+  "sha256": {
+    "order_h_t.nl": "7150547cfa2e0f3af4dd172da9c49a2f6121d581c02989de2b4c459d8fda6d14",
+    "order_t_h.nl": "b1188a031d38780bca35f47a8573e1614eb904b5c1bf151fb69cd8c9332ebc9e",
+    "two_original_hook.nl": "be6e58218d74d22bb68cda9e515399c4c77f3c4dcfca42ce20f96cb23e097528",
+    "negative_two_t.nl": "bf00424c06761780f3b3d148dd65644b43477e2a69a0531374e1136000afa338",
+    "negative_two_h.nl": "e5c7495a08a5bafcefbe90df92e5e37bc2f680de8a2e6b37253a34f86f568ab5",
+    "negative_same_nominal.nl": "47e533704d57f66a84532758fa477beff9304ee293f68c9f96d63d46d282c9c7",
+    "negative_fn_collision.nl": "9f329538233c612dda4dab8edfe04ccf8d630f89d002d120f2c355796e498f38",
+    "negative_duplicate_fn.nl": "574f6b17a1e6d207e3e198bf416672982367514a2b6546901398d651e2be9a93",
+    "negative_wrong_self.nl": "5fa5b0b0a3b9d927ba41df2caf025da48199a7b3e58f77ae534d2aad1580910d",
+    "negative_reversed_h.nl": "6578069822e9a4226286715cfdc0fc54252a1216a6b76e79c947b513ad93cb24",
+    "negative_duplicate_field.nl": "df163d9825a83f7314b00e8e0157b612b81105b2b776de8d027e1ef2eda1dfcc",
+    "negative_wrong_field_type.nl": "a06745fdd0de0b2e836ce5a8c717006ae1c068e92ca561e87d7654b55c73d232",
+    "negative_late_definition.nl": "4432e829e6b35f0318ffec7e96cb1afdcff31edc0264ab4f7a012690d1590055",
+    "negative_unknown_type.nl": "f698953835ff6e7a04bb974537442e1466a288df8e3d0fc2cebcfaf6241982c9",
+    "negative_wrong_copy.nl": "13d22e3833ba11c396a25f66b5d954ba2b1da0469c9662ff0edd214449970bcb",
+    "negative_read_only.nl": "c664efc66fcdd7de81acac0c849d4794d05d362687f582d50186ae603893133f",
+    "negative_three_link.nl": "16ffd22da56cd30f83962bbd33c2bf57fb8a4229b6c974e2eb966f8db2ff0940"
+  }
+}
