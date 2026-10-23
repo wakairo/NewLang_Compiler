@@ -52,6 +52,25 @@ static NLCheckStatus string_copy(const char *text, char **out)
     memcpy(*out, text, strlen(text) + 1);
     return NL_CHECK_OK;
 }
+/* Prepare only the existing supported-target type plan, never an allocation
+ * or lifetime fact. Registration owns a private clone. Unsupported targets
+ * acquire no layout knowledge here; actual allocation keeps its old fence. */
+NLCheckStatus nl_allocated_prepare_layout(NLSemanticContext *c, NLTypeId h)
+{
+    if (!nl_recursive_local_type(c, h))
+        return NL_CHECK_SEMANTIC_UNSUPPORTED;
+#if defined(__linux__) && defined(__x86_64__)
+    const size_t size = c->types[h - 1].view.field_count == 4 ? 56 : 24;
+    if (c->types[h - 1].view.layout_known &&
+        (c->types[h - 1].view.size != size ||
+         c->types[h - 1].view.alignment != 8))
+        return NL_CHECK_SEMANTIC_UNSUPPORTED;
+    c->types[h - 1].view.layout_known = true;
+    c->types[h - 1].view.size = size;
+    c->types[h - 1].view.alignment = 8;
+#endif
+    return NL_CHECK_OK;
+}
 NLCheckStatus nl_allocated_registry(NLSemanticContext *c, NLTypeId h,
                                     NLTypeId *option)
 {
@@ -68,14 +87,9 @@ NLCheckStatus nl_allocated_registry(NLSemanticContext *c, NLTypeId h,
             return NL_CHECK_OK;
         }
     }
-    const size_t size = c->types[h - 1].view.field_count == 4 ? 56 : 24;
-    if (c->types[h - 1].view.layout_known &&
-        (c->types[h - 1].view.size != size ||
-         c->types[h - 1].view.alignment != 8))
-        return NL_CHECK_SEMANTIC_UNSUPPORTED;
-    c->types[h - 1].view.layout_known = true;
-    c->types[h - 1].view.size = size;
-    c->types[h - 1].view.alignment = 8;
+    NLCheckStatus layout = nl_allocated_prepare_layout(c, h);
+    if (layout != NL_CHECK_OK)
+        return layout;
     NLTypeId bundle, sum;
     NLCheckStatus s = nl_sem_nominal(c, "OneBacking", false, false, &bundle);
     if (s != NL_CHECK_OK)

@@ -8,6 +8,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Private cross-TU declaration; keep the historical shared header unchanged. */
+NLCheckStatus nl_allocated_prepare_layout(NLSemanticContext *, NLTypeId);
+
 typedef struct LoopControl {
     struct LoopControl *parent; /* borrowed lexical target stack */
     NLControlTarget *target;
@@ -9206,7 +9209,8 @@ cleanup:
     return ok;
 }
 
-static bool register_recursive(Check *check, const NLSyntaxView *s)
+static bool register_recursive(Check *check, const NLSyntaxView *s,
+                               NLTypeId *registered)
 {
     if (!lexical_source_name(check, s->data.avs_struct.name))
         return false;
@@ -9258,6 +9262,8 @@ static bool register_recursive(Check *check, const NLSyntaxView *s)
     ok = host(check,
               nl_recursive_complete(check->context, header, fields, count),
               s->span);
+    if (ok && registered)
+        *registered = header;
     goto cleanup;
 collision:
     fail(check, NL_CHECK_SEMANTIC_ERROR, s->span, "REC-DECL-DUPLICATE",
@@ -9363,7 +9369,16 @@ register_function_unit(NLSemanticContext *context,
     if (recursive != NULL) {
         check.source = nl_syntax_tree_source(inputs[recursive_input]);
         input = recursive_input;
-        if (!register_recursive(&check, recursive))
+        NLTypeId registered_h = 0;
+        if (!register_recursive(&check, recursive, &registered_h))
+            goto failure;
+        /* Stabilize the existing target representation before any mixed
+         * Copy body can snapshot the completed H. No values, backing or
+         * domains are created, and the ordinary equality validator is kept. */
+        if (mixed &&
+            !host(&check,
+                  nl_allocated_prepare_layout(check.context, registered_h),
+                  recursive->span))
             goto failure;
         if (recursive->data.avs_struct.count == 4 &&
             (count != 1 || total != 1 ||

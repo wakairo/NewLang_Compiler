@@ -1,0 +1,7 @@
+COPY call=18 H=11 T=10 type_prefix=1 layout=1/1 size=24/24 align=8/8 body=0 parameters=0
+ORIGINAL root=1 child=3 index=1 incarnation=1 old=204 new=75 sibling=17 scope_closed=PASS
+COPY call=25 H=11 T=10 type_prefix=1 layout=1/1 size=24/24 align=8/8 body=0 parameters=0
+ORIGINAL root=4 child=5 index=0 incarnation=4 old=6 new=204 sibling=199 scope_closed=PASS
+SEMANTIC cleanup_arm=0 original_regions=1 all_closed=PASS
+SEMANTIC cleanup_arm=1 original_regions=2 all_closed=PASS
+SOURCE_OWNED Copy_calls=2 H_originals=2 legacy_closed=1 T_certificate_only NO_MIXED_NATIVE

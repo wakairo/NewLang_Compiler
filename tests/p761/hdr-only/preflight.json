@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-23T04:05:44.731943+00:00",
+  "release": "https://github.com/wakairo/NewLang_Compiler/issues/761#issuecomment-6357022431",
+  "compiler_main": "0eb528e6f3bc1dc2ce3f606690dc67be78fecbd4",
+  "canonical": "Draft17.34",
+  "saved_head": "17d0d10d80925ecf59dd85b02471718a4927ae92",
+  "header_exact_bytes_equal_fixed_main": true,
+  "header_sha256": "92766597c230e2e54ccd938f7eefb373dc67faaf330c6c0791846f01a3558a67",
+  "preserved_manifest_entries_unchanged": 44,
+  "first_red_full_log_sha256": "51307d423eb47ccbfa079b0f77e603a558c7d6ad76f8cc0c116e020739a57722",
+  "first_red_details_sha256": "20b8976116482ababb3fc569562ec5fd9bbc13fa9da3ec5feb28c56881782dae",
+  "repair": "Remove one private prototype from semantic_internal.h; declare it source-locally in semantic_check.c, unchanged implementation. No extra declaration required by current strict warning policy.",
+  "historical_gate_change": false,
+  "validator_or_layout_logic_change": false
+}

@@ -1,0 +1,58 @@
+{
+  "compiler": "0eb528e6f3bc1dc2ce3f606690dc67be78fecbd4",
+  "canonical": "Draft17.34",
+  "utc": "2026-10-23T02:50:36.743551+00:00",
+  "expected_before": "Two positives CHECK0, genuine owned Copy views, public Copy-body/parameters ANALYSIS_PRECISION_LIMIT due H layout unknown->known; emitter CLI4 zero bytes.",
+  "expected_after": "Only existing public T Copy proof becomes valid; exact H nominal and layout stable in all snapshots. Original roots/scopes/Copy origin unchanged; H cleanup semantic 0/1/2 success branches remain checked. Mixed emitter remains CLI4. No joined H carrier or native claim.",
+  "oracle": {
+    "limits_h_first.nl": {
+      "source_field_index": 0,
+      "old": 32,
+      "current": [
+        91,
+        168
+      ],
+      "sink_index": 1,
+      "sink": [
+        4,
+        32
+      ],
+      "displaced": 219,
+      "heap_payload": [
+        57,
+        143
+      ],
+      "copy_calls": 1
+    },
+    "tuning_t_first.nl": {
+      "source_field_index": 1,
+      "old": 204,
+      "current": [
+        17,
+        75
+      ],
+      "sink_index": 0,
+      "sink": [
+        204,
+        199
+      ],
+      "displaced": 6,
+      "heap_payload": [
+        62,
+        187
+      ],
+      "copy_calls": 2
+    }
+  },
+  "negative_prediction": "CLI3 semantic/profile refusal; classify first actual phase, not inferred from nonzero alone.",
+  "sha256": {
+    "limits_h_first.nl": "cfb4efb5f7ea48725d4afd1bd322b7338de848adda4d20d280381fd676eca301",
+    "tuning_t_first.nl": "a6d88092de961e8d453cfb104ed84747ead45f6c4fbd68be6bd3299d2fbe3c75",
+    "negative_wrong_domain.nl": "dc5589edc2b0b1e255048cab98404a3d06b963032a661ed2e4c77c017926f071",
+    "negative_wrong_allocation.nl": "48c7fbd47803396bb582a52d81cde239c32e7b963ac596b3b8de183e1c99dc65",
+    "negative_consumed_domain.nl": "e8f432575d48687bde7b733b613bbdc6678e304add145605f117790b70a5cc2a",
+    "negative_escaped_ref.nl": "8b65031361796269e4ab881305eb0e7c91f18a9382f41b6dd8ff3d25cf6a2ac0",
+    "negative_copy_ref.nl": "b59e892de2dccda2dacaaa3416d8109c46110dfa3e46150deddc9fb50f1b1d21",
+    "negative_wrong_self.nl": "979ba15e97ee9108a080a5e7c58f5552b3e92bc458e382aa933465b516c7c24f"
+  }
+}

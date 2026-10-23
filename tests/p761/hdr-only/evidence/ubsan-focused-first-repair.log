@@ -1,0 +1,24 @@
+Internal ctest changing into directory: /workspace/p761-ubsan
+Test project /workspace/p761-ubsan
+    Start 247: p761_tuning_t_first_oom.unit
+    Start 245: p761_limits_h_first_oom.unit
+1/9 Test #245: p761_limits_h_first_oom.unit .....   Passed    1.90 sec
+    Start 251: p761_cli.integration
+2/9 Test #247: p761_tuning_t_first_oom.unit .....   Passed    2.05 sec
+    Start 249: p761_foreign_h_refusal.unit
+3/9 Test #249: p761_foreign_h_refusal.unit ......   Passed    0.04 sec
+    Start 248: p761_foreign_t_refusal.unit
+4/9 Test #248: p761_foreign_t_refusal.unit ......   Passed    0.08 sec
+    Start 250: p761_layout_metadata.unit
+5/9 Test #250: p761_layout_metadata.unit ........   Passed    0.01 sec
+    Start 252: p761_uncalled.unit
+6/9 Test #252: p761_uncalled.unit ...............   Passed    0.01 sec
+    Start 244: p761_limits_h_first_proof.unit
+7/9 Test #244: p761_limits_h_first_proof.unit ...   Passed    0.05 sec
+    Start 246: p761_tuning_t_first_proof.unit
+8/9 Test #246: p761_tuning_t_first_proof.unit ...   Passed    0.01 sec
+9/9 Test #251: p761_cli.integration .............   Passed    0.73 sec
+
+100% tests passed, 0 tests failed out of 9
+
+Total Test time (real) =   2.69 sec
