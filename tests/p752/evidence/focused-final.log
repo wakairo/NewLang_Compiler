@@ -1,0 +1,46 @@
+Internal ctest changing into directory: /workspace/p752-build
+Test project /workspace/p752-build
+      Start 244: p752_driver_oom.unit
+      Start 245: p752_cli.integration
+ 1/20 Test #245: p752_cli.integration .................   Passed    0.18 sec
+      Start 251: p752_two_original_hook_oom.unit
+ 2/20 Test #244: p752_driver_oom.unit .................   Passed    0.35 sec
+      Start 247: p752_order_h_t_oom.unit
+ 3/20 Test #247: p752_order_h_t_oom.unit ..............   Passed    0.05 sec
+      Start 249: p752_order_t_h_oom.unit
+ 4/20 Test #249: p752_order_t_h_oom.unit ..............   Passed    0.05 sec
+      Start 261: p752_negative_h_fn_collision.unit
+ 5/20 Test #261: p752_negative_h_fn_collision.unit ....   Passed    0.00 sec
+      Start 250: p752_two_original_hook.unit
+ 6/20 Test #250: p752_two_original_hook.unit ..........   Passed    0.00 sec
+      Start 254: p752_negative_fn_collision.unit
+ 7/20 Test #254: p752_negative_fn_collision.unit ......   Passed    0.00 sec
+      Start 246: p752_order_h_t.unit
+ 8/20 Test #246: p752_order_h_t.unit ..................   Passed    0.00 sec
+      Start 258: p752_placements.unit
+ 9/20 Test #258: p752_placements.unit .................   Passed    0.00 sec
+      Start 260: p752_negative_real_read_ref.unit
+10/20 Test #260: p752_negative_real_read_ref.unit .....   Passed    0.00 sec
+      Start 259: p752_negative_foreign_nominal.unit
+11/20 Test #259: p752_negative_foreign_nominal.unit ...   Passed    0.00 sec
+      Start 255: p752_negative_late_definition.unit
+12/20 Test #255: p752_negative_late_definition.unit ...   Passed    0.00 sec
+      Start 252: p752_negative_duplicate_field.unit
+13/20 Test #252: p752_negative_duplicate_field.unit ...   Passed    0.00 sec
+      Start 257: p752_negative_wrong_copy.unit
+14/20 Test #257: p752_negative_wrong_copy.unit ........   Passed    0.00 sec
+      Start 248: p752_order_t_h.unit
+15/20 Test #248: p752_order_t_h.unit ..................   Passed    0.00 sec
+      Start 256: p752_negative_unknown_type.unit
+16/20 Test #256: p752_negative_unknown_type.unit ......   Passed    0.00 sec
+      Start 253: p752_negative_duplicate_fn.unit
+17/20 Test #253: p752_negative_duplicate_fn.unit ......   Passed    0.00 sec
+      Start 262: p752_negative_no_main.unit
+18/20 Test #262: p752_negative_no_main.unit ...........   Passed    0.00 sec
+      Start 263: p752_multi_input.unit
+19/20 Test #263: p752_multi_input.unit ................   Passed    0.00 sec
+20/20 Test #251: p752_two_original_hook_oom.unit ......   Passed    0.35 sec
+
+100% tests passed, 0 tests failed out of 20
+
+Total Test time (real) =   0.55 sec

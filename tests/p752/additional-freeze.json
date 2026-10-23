@@ -1,0 +1,10 @@
+{
+  "utc": "2026-10-23T00:57:39.464598+00:00",
+  "note": "Additional calibrated negatives after initial implementation; original preimplementation source/oracle freeze unchanged. Expected semantic/profile refusal; no production extension for these tests.",
+  "sha256": {
+    "negative_foreign_nominal.nl": "dc3cdb36d160dfe70e7e017758101f224562ce905bc9d691c80664235c0bd9e4",
+    "negative_real_read_ref.nl": "8d9dd0ccd811ec5bab1451a8610e2504cb4352387988752d3911c54f7e78186f",
+    "negative_h_fn_collision.nl": "b643dffb43f4e7ca5ce746a34feb9c67051469ab69d84307fef7e59141233207",
+    "negative_no_main.nl": "907027dd4ffae76cde48de12735709ddbea4568fd3a57e7e0e08078dfd2529f0"
+  }
+}

@@ -9285,8 +9285,9 @@ register_function_unit(NLSemanticContext *context,
     Check check = {.source = nl_syntax_tree_source(inputs[0]),
                    .closure_probe = closure_probe};
     FunctionDeclaration *declarations = NULL;
-    const NLSyntaxView *recursive = NULL;
-    size_t recursive_input = 0;
+    const NLSyntaxView *recursive = NULL, *avs = NULL;
+    size_t recursive_input = 0, avs_input = 0;
+    bool avs_leading = false;
     size_t total = 0, input = 0;
     if (!host(&check, nl_sem_clone(context, &check.context), (NLSourceSpan){0}))
         goto failure;
@@ -9310,14 +9311,15 @@ register_function_unit(NLSemanticContext *context,
                 continue;
             }
             if (s->kind == NL_SYNTAX_AVS_STRUCT) {
-                if (count != 1 || n != root->data.function_unit.declarations) {
+                if (avs != NULL) {
                     fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, s->span,
                          "AVS-UNIT-PROFILE",
-                         "AVS declarations require a single source unit");
+                         "requires exactly one two-u8 nominal declaration");
                     goto failure;
                 }
-                if (!register_avs(&check, s))
-                    goto failure;
+                avs = s;
+                avs_input = input;
+                avs_leading = n == root->data.function_unit.declarations;
                 continue;
             }
             if (total == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS) {
@@ -9340,6 +9342,23 @@ register_function_unit(NLSemanticContext *context,
             if (d->name == NULL)
                 goto failure;
         }
+    }
+    /* Collect the complete closed category before registering either type.
+     * All nominal completion and all signatures/definitions share the clone;
+     * failure at any point discards the entire transaction. No issuer delta. */
+    const bool mixed = avs != NULL && recursive != NULL;
+    if (avs != NULL) {
+        check.source = nl_syntax_tree_source(inputs[avs_input]);
+        input = avs_input;
+        if (count != 1 || (!mixed && !avs_leading) ||
+            (mixed && recursive->data.avs_struct.count != 2)) {
+            fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, avs->span,
+                 "AVS-UNIT-PROFILE",
+                 "requires one leading T input or one one-link H plus T input");
+            goto failure;
+        }
+        if (!register_avs(&check, avs))
+            goto failure;
     }
     if (recursive != NULL) {
         check.source = nl_syntax_tree_source(inputs[recursive_input]);
@@ -9480,6 +9499,23 @@ register_function_unit(NLSemanticContext *context,
              "P8-SIGNATURE-PRECISION",
              "signature needs unsupported body analysis");
         goto failure;
+    }
+    if (mixed) {
+        bool main_found = false;
+        for (size_t i = 0; i < total; ++i) {
+            const FunctionDeclaration *d = &declarations[i];
+            if (strcmp(d->name, "main") == 0 &&
+                d->syntax->data.function.count == 0 &&
+                check.context->functions[d->function - 1].result ==
+                    nl_semantic_unit_type(check.context))
+                main_found = true;
+        }
+        if (!main_found) {
+            fail(&check, NL_CHECK_SEMANTIC_UNSUPPORTED, avs->span,
+                 "MIXED-UNIT-MAIN-PROFILE",
+                 "mixed H plus T requires an ordinary main()->unit");
+            goto failure;
+        }
     }
     if (owner_producers != 0 && owner_receivers != 1) {
         fail(&check, NL_CHECK_ANALYSIS_PRECISION_LIMIT, (NLSourceSpan){0},

@@ -1836,7 +1836,8 @@ static NLSyntaxNode *function_unit(NLParser *parser)
         return NULL;
     NLSyntaxNode *head = NULL, *tail = NULL;
     size_t functions = 0, recursive = 0;
-    bool avs = false;
+    bool avs = false, avs_leading = false, one_link = true;
+    NLSourceSpan avs_span = {0};
     while (peek(parser) && parser->token.kind != NL_TOKEN_EOF) {
         const bool structure = word(parser, "struct");
         NLSyntaxNode *declaration =
@@ -1845,13 +1846,15 @@ static NLSyntaxNode *function_unit(NLParser *parser)
             return NULL;
         if (structure) {
             if (declaration->view.kind == NL_SYNTAX_RECURSIVE_STRUCT) {
+                ++recursive;
+                one_link =
+                    one_link && declaration->view.data.avs_struct.count == 2;
+            } else {
                 if (avs)
                     goto struct_profile;
-                ++recursive;
-            } else {
-                if (avs || recursive != 0 || functions != 0)
-                    goto struct_profile;
                 avs = true;
+                avs_leading = head == NULL;
+                avs_span = declaration->view.span;
             }
         } else {
             ++functions;
@@ -1867,6 +1870,15 @@ static NLSyntaxNode *function_unit(NLParser *parser)
     }
     if (parser->status != NL_PARSE_OK)
         return NULL;
+    /* Draft17.34 selects only one H + one T. A deferred T position is
+     * justified only after the complete physical unit proves that category;
+     * T-only keeps its old leading-declaration fence. H-only is unchanged. */
+    if (avs && (recursive ? (recursive != 1 || !one_link || functions == 0)
+                          : !avs_leading)) {
+        fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, avs_span, "AVS-DECL-PROFILE",
+             "requires one leading T or exactly one one-link H plus one T");
+        return NULL;
+    }
     if (functions == 0 && recursive == 0) {
         fail(parser, NL_PARSE_SYNTAX_ERROR, parser->token.span,
              "P11-DECLARATION", "expected at least one fn declaration");

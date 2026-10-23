@@ -1,0 +1,79 @@
+Internal ctest changing into directory: /workspace/p752-build
+Test project /workspace/p752-build
+      Start 251: p752_two_original_hook_oom.unit
+      Start 247: p752_order_h_t_oom.unit
+ 1/20 Test #247: p752_order_h_t_oom.unit ..............   Passed    0.05 sec
+      Start 249: p752_order_t_h_oom.unit
+ 2/20 Test #249: p752_order_t_h_oom.unit ..............   Passed    0.04 sec
+      Start 250: p752_two_original_hook.unit
+ 3/20 Test #250: p752_two_original_hook.unit ..........   Passed    0.00 sec
+      Start 246: p752_order_h_t.unit
+ 4/20 Test #246: p752_order_h_t.unit ..................   Passed    0.00 sec
+      Start 258: p752_placements.unit
+ 5/20 Test #258: p752_placements.unit .................   Passed    0.00 sec
+      Start 255: p752_negative_late_definition.unit
+ 6/20 Test #255: p752_negative_late_definition.unit ...   Passed    0.00 sec
+      Start 248: p752_order_t_h.unit
+ 7/20 Test #248: p752_order_t_h.unit ..................   Passed    0.00 sec
+      Start 257: p752_negative_wrong_copy.unit
+ 8/20 Test #257: p752_negative_wrong_copy.unit ........   Passed    0.00 sec
+      Start 259: p752_negative_foreign_nominal.unit
+ 9/20 Test #259: p752_negative_foreign_nominal.unit ...   Passed    0.00 sec
+      Start 256: p752_negative_unknown_type.unit
+10/20 Test #256: p752_negative_unknown_type.unit ......   Passed    0.00 sec
+      Start 253: p752_negative_duplicate_fn.unit
+11/20 Test #253: p752_negative_duplicate_fn.unit ......   Passed    0.00 sec
+      Start 252: p752_negative_duplicate_field.unit
+12/20 Test #252: p752_negative_duplicate_field.unit ...   Passed    0.00 sec
+      Start 260: p752_negative_real_read_ref.unit
+13/20 Test #260: p752_negative_real_read_ref.unit .....   Passed    0.00 sec
+      Start 254: p752_negative_fn_collision.unit
+14/20 Test #254: p752_negative_fn_collision.unit ......   Passed    0.00 sec
+      Start 261: p752_negative_h_fn_collision.unit
+15/20 Test #261: p752_negative_h_fn_collision.unit ....   Passed    0.00 sec
+      Start 262: p752_negative_no_main.unit
+16/20 Test #262: p752_negative_no_main.unit ...........   Passed    0.00 sec
+      Start 263: p752_multi_input.unit
+17/20 Test #263: p752_multi_input.unit ................   Passed    0.00 sec
+      Start 244: p752_driver_oom.unit
+18/20 Test #251: p752_two_original_hook_oom.unit ......   Passed    0.36 sec
+      Start 245: p752_cli.integration
+19/20 Test #245: p752_cli.integration .................***Failed    0.14 sec
+order_h_t.nl COPY original=1 child=2 nominal=10 old_fact=1 post_fact=11 old_Copy=13 existing_validators=PASS
+H=11 T=10 self=11 signatures=PASS source_owned=PASS heap_originals=0 NO_DUAL_CARRIER_PROOF
+order_h_t.nl CHECK 0 C17 4 zero C / named output preservation PASS
+order_t_h.nl COPY original=1 child=2 nominal=10 old_fact=1 post_fact=11 old_Copy=13 existing_validators=PASS
+H=11 T=10 self=11 signatures=PASS source_owned=PASS heap_originals=0 NO_DUAL_CARRIER_PROOF
+order_t_h.nl CHECK 0 C17 4 zero C / named output preservation PASS
+two_original_hook.nl COPY existing_view=present validators=PRECISION_LIMIT Stage2_NOT_IMPLEMENTED
+H=11 T=10 self=11 signatures=PASS source_owned=PASS heap_originals=2 NO_DUAL_CARRIER_PROOF
+two_original_hook.nl CHECK 0 C17 4 zero C / named output preservation PASS
+negative_two_t.nl CHECK 3 C17 3 zero C / named output preservation PASS
+negative_two_h.nl CHECK 3 C17 3 zero C / named output preservation PASS
+negative_same_nominal.nl CHECK 3 C17 3 zero C / named output preservation PASS
+negative_fn_collision.nl CHECK 3 C17 3 zero C / named output preservation PASS
+negative_duplicate_fn.nl CHECK 3 C17 3 zero C / named output preservation PASS
+negative_wrong_self.nl CHECK 3 C17 3 zero C / named output preservation PASS
+negative_reversed_h.nl CHECK 3 C17 3 zero C / named output preservation PASS
+negative_duplicate_field.nl CHECK 3 C17 3 zero C / named output preservation PASS
+negative_wrong_field_type.nl CHECK 3 C17 3 zero C / named output preservation PASS
+negative_late_definition.nl CHECK 3 C17 3 zero C / named output preservation PASS
+negative_unknown_type.nl CHECK 3 C17 3 zero C / named output preservation PASS
+negative_wrong_copy.nl CHECK 3 C17 3 zero C / named output preservation PASS
+negative_read_only.nl CHECK 3 C17 3 zero C / named output preservation PASS
+negative_three_link.nl CHECK 3 C17 3 zero C / named output preservation PASS
+Traceback (most recent call last):
+  File "/workspace/p752/tests/p752/cli.py", line 58, in <module>
+    assert ('['+code+']').encode() in checked.stderr,(source,checked.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (PosixPath('/workspace/p752/tests/p752/additional/negative_foreign_nominal.nl'), b'/workspace/p752/tests/p752/additional/negative_foreign_nominal.nl:10:96-10:103: error(semantic)[P5-DESTRUCTURE-TYPE]: destructuring RHS must be the selected aggregate\n')
+
+20/20 Test #244: p752_driver_oom.unit .................   Passed    0.39 sec
+
+95% tests passed, 1 tests failed out of 20
+
+Total Test time (real) =   0.52 sec
+
+The following tests FAILED:
+	245 - p752_cli.integration (Failed)
+Errors while running CTest

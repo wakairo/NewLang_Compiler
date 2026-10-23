@@ -1,0 +1,40 @@
+Internal ctest changing into directory: /workspace/p752-build
+Test project /workspace/p752-build
+      Start 244: p752_order_h_t.unit
+      Start 245: p752_order_h_t_oom.unit
+ 1/13 Test #244: p752_order_h_t.unit ..................   Passed    0.01 sec
+      Start 246: p752_order_t_h.unit
+ 2/13 Test #246: p752_order_t_h.unit ..................   Passed    0.00 sec
+      Start 247: p752_order_t_h_oom.unit
+ 3/13 Test #245: p752_order_h_t_oom.unit ..............   Passed    0.04 sec
+      Start 248: p752_two_original_hook.unit
+ 4/13 Test #247: p752_order_t_h_oom.unit ..............   Passed    0.03 sec
+      Start 249: p752_two_original_hook_oom.unit
+ 5/13 Test #248: p752_two_original_hook.unit ..........***Failed    0.00 sec
+/workspace/p752/tests/p752/unit_test.c:66: p.field.nominal == t_type && nl_checked_copy_body_view(f, i, &b) && nl_checked_copy_body_validate(f, i, &b) == NL_CHECK_OK && nl_checked_copy_body_parameters_validate(f, i, &p) == NL_CHECK_OK
+/workspace/p752/tests/p752/unit_test.c:99: walk(body)
+/workspace/p752/tests/p752/unit_test.c:144: walk(a.artifact) && copy_calls == 1 && initializations == (hook ? 2u : 0u)
+
+      Start 250: p752_negative_duplicate_field.unit
+ 6/13 Test #250: p752_negative_duplicate_field.unit ...   Passed    0.00 sec
+      Start 251: p752_negative_duplicate_fn.unit
+ 7/13 Test #251: p752_negative_duplicate_fn.unit ......   Passed    0.00 sec
+      Start 252: p752_negative_fn_collision.unit
+ 8/13 Test #252: p752_negative_fn_collision.unit ......   Passed    0.00 sec
+      Start 253: p752_negative_late_definition.unit
+ 9/13 Test #253: p752_negative_late_definition.unit ...   Passed    0.00 sec
+      Start 254: p752_negative_unknown_type.unit
+10/13 Test #254: p752_negative_unknown_type.unit ......   Passed    0.00 sec
+      Start 255: p752_negative_wrong_copy.unit
+11/13 Test #255: p752_negative_wrong_copy.unit ........   Passed    0.00 sec
+      Start 256: p752_multi_input.unit
+12/13 Test #256: p752_multi_input.unit ................   Passed    0.00 sec
+13/13 Test #249: p752_two_original_hook_oom.unit ......   Passed    0.25 sec
+
+92% tests passed, 1 tests failed out of 13
+
+Total Test time (real) =   0.31 sec
+
+The following tests FAILED:
+	248 - p752_two_original_hook.unit (Failed)
+Errors while running CTest

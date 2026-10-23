@@ -1,0 +1,2 @@
+call=18 valid=3 body_world=1 types=0 graph_anchor=1 root=1/1 count=35/35 entry_validate=0 exit_validate=0 caller_validate=0
+changed_type=11 kind=1 layout=0/1 size=0/24 alignment=0/8

@@ -1,0 +1,324 @@
+[
+  {
+    "source": "tests/p752/sources/negative_duplicate_field.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_duplicate_field.nl:2:1-2:37: error(semantic)[AVS-DECL-REGISTRATION]: aggregate name or fields conflict with established identities\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_duplicate_field.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_duplicate_field.nl:2:1-2:37: error(semantic)[AVS-DECL-REGISTRATION]: aggregate name or fields conflict with established identities\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_duplicate_fn.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_duplicate_fn.nl:4:4-4:13: error(semantic)[P11-DUPLICATE-FUNCTION]: ordinary declaration name already established\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_duplicate_fn.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_duplicate_fn.nl:4:4-4:13: error(semantic)[P11-DUPLICATE-FUNCTION]: ordinary declaration name already established\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_fn_collision.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_fn_collision.nl:3:4-3:12: error(semantic)[P11-DUPLICATE-FUNCTION]: ordinary declaration name already established\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_fn_collision.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_fn_collision.nl:3:4-3:12: error(semantic)[P11-DUPLICATE-FUNCTION]: ordinary declaration name already established\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_late_definition.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_late_definition.nl:12:17-12:23: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_late_definition.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_late_definition.nl:12:17-12:23: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_read_only.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_read_only.nl:8:30-8:31: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_read_only.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_read_only.nl:8:30-8:31: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_reversed_h.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_reversed_h.nl:1:30-1:36: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_reversed_h.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_reversed_h.nl:1:30-1:36: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_same_nominal.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_same_nominal.nl:1:1-1:54: error(semantic)[REC-DECL-DUPLICATE]: recursive declaration conflicts with an established name\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_same_nominal.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_same_nominal.nl:1:1-1:54: error(semantic)[REC-DECL-DUPLICATE]: recursive declaration conflicts with an established name\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_three_link.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_three_link.nl:2:1-2:40: error(unsupported)[AVS-DECL-PROFILE]: requires one leading T or exactly one one-link H plus one T\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_three_link.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_three_link.nl:2:1-2:40: error(unsupported)[AVS-DECL-PROFILE]: requires one leading T or exactly one one-link H plus one T\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_two_h.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_two_h.nl:3:1-3:40: error(unsupported)[AVS-DECL-PROFILE]: requires one leading T or exactly one one-link H plus one T\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_two_h.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_two_h.nl:3:1-3:40: error(unsupported)[AVS-DECL-PROFILE]: requires one leading T or exactly one one-link H plus one T\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_two_t.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_two_t.nl:3:1-3:24: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_two_t.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_two_t.nl:3:1-3:24: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_unknown_type.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_unknown_type.nl:12:14-12:21: error(semantic)[P3-UNKNOWN-TYPE]: unknown semantic type name\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_unknown_type.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_unknown_type.nl:12:14-12:21: error(semantic)[P3-UNKNOWN-TYPE]: unknown semantic type name\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_wrong_copy.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_wrong_copy.nl:8:50-8:59: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_wrong_copy.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_wrong_copy.nl:8:50-8:59: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_wrong_field_type.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_wrong_field_type.nl:2:36-2:40: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_wrong_field_type.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_wrong_field_type.nl:2:36-2:40: error(unsupported)[AVS-DECL-PROFILE]: only two-u8 or exact Option<ptr<H>>,u8 profile\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_wrong_self.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_wrong_self.nl:1:34-1:42: error(unsupported)[REC-SELF-TARGET]: exact Option target requires the bounded nominal header\n"
+  },
+  {
+    "source": "tests/p752/sources/negative_wrong_self.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/sources/negative_wrong_self.nl:1:34-1:42: error(unsupported)[REC-SELF-TARGET]: exact Option target requires the bounded nominal header\n"
+  },
+  {
+    "source": "tests/p752/sources/order_h_t.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stderr": ""
+  },
+  {
+    "source": "tests/p752/sources/order_h_t.nl",
+    "mode": "c17",
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: tests/p752/sources/order_h_t.nl\n"
+  },
+  {
+    "source": "tests/p752/sources/order_t_h.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stderr": ""
+  },
+  {
+    "source": "tests/p752/sources/order_t_h.nl",
+    "mode": "c17",
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: tests/p752/sources/order_t_h.nl\n"
+  },
+  {
+    "source": "tests/p752/sources/two_original_hook.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stderr": ""
+  },
+  {
+    "source": "tests/p752/sources/two_original_hook.nl",
+    "mode": "c17",
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: tests/p752/sources/two_original_hook.nl\n"
+  },
+  {
+    "source": "tests/p752/additional/negative_foreign_nominal.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/additional/negative_foreign_nominal.nl:10:96-10:103: error(semantic)[P5-DESTRUCTURE-TYPE]: destructuring RHS must be the selected aggregate\n"
+  },
+  {
+    "source": "tests/p752/additional/negative_foreign_nominal.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/additional/negative_foreign_nominal.nl:10:96-10:103: error(semantic)[P5-DESTRUCTURE-TYPE]: destructuring RHS must be the selected aggregate\n"
+  },
+  {
+    "source": "tests/p752/additional/negative_h_fn_collision.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/additional/negative_h_fn_collision.nl:12:4-12:10: error(semantic)[P11-DUPLICATE-FUNCTION]: ordinary declaration name already established\n"
+  },
+  {
+    "source": "tests/p752/additional/negative_h_fn_collision.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/additional/negative_h_fn_collision.nl:12:4-12:10: error(semantic)[P11-DUPLICATE-FUNCTION]: ordinary declaration name already established\n"
+  },
+  {
+    "source": "tests/p752/additional/negative_no_main.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/additional/negative_no_main.nl:3:1-3:40: error(unsupported)[MIXED-UNIT-MAIN-PROFILE]: mixed H plus T requires an ordinary main()->unit\n"
+  },
+  {
+    "source": "tests/p752/additional/negative_no_main.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/additional/negative_no_main.nl:3:1-3:40: error(unsupported)[MIXED-UNIT-MAIN-PROFILE]: mixed H plus T requires an ordinary main()->unit\n"
+  },
+  {
+    "source": "tests/p752/additional/negative_real_read_ref.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/additional/negative_real_read_ref.nl:10:56-10:57: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  },
+  {
+    "source": "tests/p752/additional/negative_real_read_ref.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p752/additional/negative_real_read_ref.nl:10:56-10:57: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  },
+  {
+    "source": "tests/p752/history/archive_window.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stderr": ""
+  },
+  {
+    "source": "tests/p752/history/archive_window.nl",
+    "mode": "c17",
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: tests/p752/history/archive_window.nl\n"
+  },
+  {
+    "source": "tests/p752/history/calibration_batch.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stderr": ""
+  },
+  {
+    "source": "tests/p752/history/calibration_batch.nl",
+    "mode": "c17",
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: tests/p752/history/calibration_batch.nl\n"
+  }
+]

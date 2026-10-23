@@ -3167,6 +3167,25 @@ static int compile_v0_to(const char *path, bool check_only,
         goto cleanup;
     }
 
+    /* Stage1 source admission is not a dual-carrier backend certificate.
+     * The actual registered unit must fail closed before either independent
+     * Copy/Node emitter can accidentally accept only part of a mixed program.
+     * --check above still reports the genuine existing semantic result. */
+    bool has_h = false, has_t = false;
+    const NLSyntaxView *unit_view =
+        nl_syntax_node_view(nl_syntax_tree_root(unit));
+    for (const NLSyntaxNode *n = unit_view->data.function_unit.declarations;
+         n != NULL; n = nl_syntax_next_argument(n)) {
+        const NLSyntaxKind kind = nl_syntax_node_view(n)->kind;
+        has_h = has_h || kind == NL_SYNTAX_RECURSIVE_STRUCT;
+        has_t = has_t || kind == NL_SYNTAX_AVS_STRUCT;
+    }
+    if (has_h && has_t) {
+        result = report_error("V1-BACKEND-UNSUPPORTED",
+                              "mixed H plus T has no dual-carrier C17 proof",
+                              path, 4);
+        goto cleanup;
+    }
     const NLCheckedNodeId root = nl_checked_root(entry);
     const NLCheckedNodeView *root_view = nl_checked_node_view(entry, root);
     V0Program program = {.unit = nl_semantic_unit_type(context),

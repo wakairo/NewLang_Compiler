@@ -687,6 +687,37 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(p752_driver_test tests/p752/driver_test.c)
+    target_link_libraries(p752_driver_test PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p752_driver_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p752_driver_oom.unit COMMAND p752_driver_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p752/sources/order_h_t.nl")
+    add_test(NAME p752_cli.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p752/cli.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p752_unit_test>" "$<TARGET_FILE:p733_public_probe>")
+    add_executable(p752_unit_test tests/p752/unit_test.c)
+    target_link_libraries(p752_unit_test PRIVATE newlang_semantic newlang_parser)
+    target_link_options(p752_unit_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    foreach(source order_h_t order_t_h two_original_hook)
+        add_test(NAME p752_${source}.unit COMMAND p752_unit_test positive
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p752/sources/${source}.nl")
+        add_test(NAME p752_${source}_oom.unit COMMAND p752_unit_test oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p752/sources/${source}.nl")
+    endforeach()
+    foreach(source negative_duplicate_field negative_duplicate_fn negative_fn_collision
+                   negative_late_definition negative_unknown_type negative_wrong_copy)
+        add_test(NAME p752_${source}.unit COMMAND p752_unit_test negative
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p752/sources/${source}.nl"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p752/sources/order_h_t.nl")
+    endforeach()
+    add_test(NAME p752_placements.unit COMMAND p752_unit_test placement)
+    foreach(source negative_foreign_nominal negative_real_read_ref negative_h_fn_collision negative_no_main)
+        add_test(NAME p752_${source}.unit COMMAND p752_unit_test negative
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p752/additional/${source}.nl"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p752/sources/order_h_t.nl")
+    endforeach()
+    add_test(NAME p752_multi_input.unit COMMAND p752_unit_test multi
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p752/sources/order_h_t.nl")
     add_executable(avs_test tests/unit/avs_test.c)
     target_link_libraries(avs_test PRIVATE newlang_semantic newlang_parser)
     target_link_options(avs_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)

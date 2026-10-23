@@ -1,0 +1,25 @@
+/* Read-only calibrated diagnostic transcript, not production code or a new proof.
+Compile as C with -Iinclude -Itests/p752 and the ordinary semantic/parser libs. */
+#include "../support/node_checked.h"
+#include "../../src/copy_body_internal.h"
+#include <stdio.h>
+static bool inspect(const char *path){
+TestNode n={0};CHECK(node_checked_load(path,&n));
+const NLCheckedFragment *caller=nl_checked_call_body(n.entry,nl_checked_root(n.entry));
+for(size_t id=1;id<=nl_checked_node_count(caller);++id){
+ NLCopyBodyView v;if(!nl_checked_copy_body_view(caller,id,&v))continue;
+ const NLCopyBodyProof *p=v.body->copy_body;
+ printf("call=%zu valid=%d body_world=%u types=%u graph_anchor=%u root=%zu/%zu count=%zu/%zu entry_validate=%d exit_validate=%d caller_validate=%d\n",id,
+ nl_checked_copy_body_validate(caller,id,&v),
+ nl_checked_context(v.body)==nl_checked_context(caller),
+ nl_copy_same_types(nl_checked_context(caller),p->exit),
+ caller->nodes==p->caller_nodes_origin && caller->count==p->caller_count && !memcmp(caller->nodes,p->caller_nodes,p->caller_count*sizeof(*caller->nodes)),
+ caller->root,p->caller_root,caller->count,p->caller_count,
+ nl_sem_validate(p->entry),nl_sem_validate(p->exit),nl_sem_validate(nl_checked_context(caller)));
+ for(size_t t=1;t<=p->exit->type_count;++t){
+ NLSemanticTypeView before,after; if(!nl_semantic_type_view(p->exit,t,&before)||!nl_semantic_type_view(nl_checked_context(caller),t,&after))continue;
+ if(memcmp(&before,&after,sizeof before))printf("changed_type=%zu kind=%u layout=%u/%u size=%zu/%zu alignment=%zu/%zu\n",t,before.kind,before.layout_known,after.layout_known,before.size,after.size,before.alignment,after.alignment);
+ }
+}
+node_checked_destroy(&n);return true;}
+int main(int argc,char **argv){return argc==2 && inspect(argv[1])?0:1;}

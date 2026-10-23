@@ -1,0 +1,10 @@
+[ 18%] Built target newlang_source
+[ 18%] Built target newlang_diagnostic
+[ 18%] Built target newlang_lexer
+[ 27%] Built target newlang_syntax
+[ 36%] Built target newlang_checked
+[ 36%] Built target newlang_parser
+[ 90%] Built target newlang_semantic
+[100%] Building C object CMakeFiles/p752_unit_test.dir/tests/p752/unit_test.c.o
+[100%] Linking C executable p752_unit_test
+[100%] Built target p752_unit_test
