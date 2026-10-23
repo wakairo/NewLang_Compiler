@@ -117,7 +117,7 @@ jobs:
           esac
           if test "$detected_nproc" -lt 1; then echo "::error::T753 nproc must be positive"; exit 1; fi
           ctest_cap=4
-          if test "${{ matrix.name }}" = "ASan" || test "${{ matrix.name }}" = "UBSan"; then ctest_cap=2; fi
+          if test "${{ matrix.name }}" = "ASan" || test "${{ matrix.name }}" = "UBSan"; then ctest_cap=4; fi
           ctest_workers="$detected_nproc"
           if test "$ctest_workers" -gt "$ctest_cap"; then ctest_workers="$ctest_cap"; fi
           echo "T753 chosen CTest workers=$ctest_workers detected=$detected_nproc cap=$ctest_cap"
@@ -126,8 +126,182 @@ jobs:
           echo "T753 build_wall_seconds=$(( $(date +%s) - build_started ))"
           ctest_started=$(date +%s)
           set +e
-          ctest --test-dir build --parallel "$ctest_workers" --output-on-failure
-          ctest_status=$?
+          if test "${{ matrix.name }}" = "ASan" || test "${{ matrix.name }}" = "UBSan"; then
+            python3 - "$ctest_workers" <<'PY'
+          import os
+          import pathlib
+          import subprocess
+          import sys
+          import time
+          
+          workers = sys.argv[1]
+          proc = subprocess.Popen(
+              ["ctest", "--test-dir", "build", "--parallel", workers, "--output-on-failure"]
+          )
+          started = time.monotonic()
+          cg_path = None
+          mount_point = None
+          cg_error = "no cgroup2 mount/self path"
+          try:
+              rel = next(
+                  (line.split("::", 1)[1].strip() for line in
+                   pathlib.Path("/proc/self/cgroup").read_text().splitlines()
+                   if line.startswith("0::")), None
+              )
+              if rel is not None:
+                  for line in pathlib.Path("/proc/self/mountinfo").read_text().splitlines():
+                      pre, sep, post = line.partition(" - ")
+                      if sep and post.split()[0] == "cgroup2":
+                          f = pre.split()
+                          root, mount = pathlib.Path(f[3]), pathlib.Path(f[4])
+                          sub = pathlib.Path(rel)
+                          try:
+                              suffix = sub.relative_to(root)
+                          except ValueError:
+                              continue
+                          candidate = mount / suffix
+                          if candidate.is_dir():
+                              cg_path, mount_point = candidate, mount
+                              cg_error = "none"
+                              break
+          except Exception as ex:
+              cg_error = type(ex).__name__
+          
+          def read(name, folder=None):
+              if folder is None:
+                  folder = cg_path
+              if folder is None:
+                  return None
+              try:
+                  return (folder / name).read_text().strip()
+              except (OSError, ValueError):
+                  return None
+          
+          def integer(name, folder=None):
+              raw = read(name, folder)
+              try:
+                  return int(raw) if raw is not None and raw != "max" else None
+              except ValueError:
+                  return None
+          
+          limits = []
+          if cg_path is not None:
+              folder = cg_path
+              while True:
+                  limit = integer("memory.max", folder)
+                  if limit is not None:
+                      limits.append(limit)
+                  if folder == mount_point or folder.parent == folder:
+                      break
+                  folder = folder.parent
+          effective_limit = min(limits) if limits else None
+          cpu_raw = read("cpu.max")
+          cpu_quota = None
+          if cpu_raw:
+              fields = cpu_raw.split()
+              if len(fields) == 2 and fields[0] != "max":
+                  try:
+                      cpu_quota = int(fields[0]) / int(fields[1])
+                  except (ValueError, ZeroDivisionError):
+                      pass
+          cpu_stat_start = read("cpu.stat")
+          event_start = read("memory.events")
+          swap_start = integer("memory.swap.current")
+          pressure_start = read("cpu.pressure")
+          peak_file_start = integer("memory.peak")
+          max_current = 0
+          max_rss_sum = 0
+          max_descendants = 0
+          samples = 0
+          sample_errors = 0
+          
+          def descendant_rss():
+              parents = {}
+              rss = {}
+              for pidstr in os.listdir("/proc"):
+                  if not pidstr.isdigit():
+                      continue
+                  try:
+                      stat = pathlib.Path("/proc", pidstr, "stat").read_text()
+                      fields = stat[stat.rfind(")") + 2:].split()
+                      parents[int(pidstr)] = int(fields[1])
+                      status = pathlib.Path("/proc", pidstr, "status").read_text()
+                      item = next((line for line in status.splitlines()
+                                   if line.startswith("VmRSS:")), None)
+                      rss[int(pidstr)] = int(item.split()[1]) * 1024 if item else 0
+                  except (OSError, ValueError, IndexError):
+                      continue
+              active = {proc.pid}
+              while True:
+                  extra = {pid for pid, parent in parents.items() if parent in active}
+                  if extra.issubset(active):
+                      break
+                  active |= extra
+              return sum(rss.get(pid, 0) for pid in active), len(active)
+          
+          def sample():
+              global max_current, max_rss_sum, max_descendants, samples, sample_errors
+              samples += 1
+              val = integer("memory.current")
+              if val is not None:
+                  max_current = max(max_current, val)
+              try:
+                  rss, count = descendant_rss()
+                  max_rss_sum = max(max_rss_sum, rss)
+                  max_descendants = max(max_descendants, count)
+              except (OSError, ValueError):
+                  sample_errors += 1
+          
+          try:
+              while proc.poll() is None:
+                  sample()
+                  try:
+                      proc.wait(timeout=0.75)
+                  except subprocess.TimeoutExpired:
+                      pass
+              sample()
+          finally:
+              code = proc.wait()
+          elapsed = round(time.monotonic() - started, 3)
+          peak_file_end = integer("memory.peak")
+          event_end = read("memory.events")
+          swap_end = integer("memory.swap.current")
+          pressure_end = read("cpu.pressure")
+          cpu_stat_end = read("cpu.stat")
+          print(
+              f"T760 sampler=M0 cap2 result={code} monitor_wall_seconds={elapsed} "
+              f"samples={samples} interval_target_ms=750 sample_errors={sample_errors}",
+              flush=True
+          )
+          print(
+              f"T760 cgroup2={cg_path is not None} lookup_error={cg_error} "
+              f"finite_memory_limit_bytes={effective_limit} cpu_max={cpu_raw!r} "
+              f"cpu_quota_cores={cpu_quota} observed_memory_current_peak_bytes="
+              f"{max_current if max_current else None} memory_peak_file_start={peak_file_start} "
+              f"memory_peak_file_end={peak_file_end}",
+              flush=True
+          )
+          print(
+              f"T760 memory_events_start={event_start!r} memory_events_end={event_end!r} "
+              f"swap_current_start={swap_start} swap_current_end={swap_end} "
+              f"cpu_stat_start={cpu_stat_start!r} cpu_stat_end={cpu_stat_end!r}",
+              flush=True
+          )
+          print(
+              f"T760 cpu_pressure_start={pressure_start!r} "
+              f"cpu_pressure_end={pressure_end!r} "
+              f"descendant_sample_rss_sum_max_bytes={max_rss_sum} "
+              f"descendant_count_max={max_descendants} "
+              "rss_is_non_authoritative_shared_pages_double_counted_short_lived_children_missed=True",
+              flush=True
+          )
+          sys.exit(code)
+          PY
+            ctest_status=$?
+          else
+            ctest --test-dir build --parallel "$ctest_workers" --output-on-failure
+            ctest_status=$?
+          fi
           set -e
           echo "T753 ctest_wall_seconds=$(( $(date +%s) - ctest_started )) exit=$ctest_status"
           if test -r /sys/fs/cgroup/memory.peak; then echo "T753 memory_peak_bytes=$(cat /sys/fs/cgroup/memory.peak)"; fi
