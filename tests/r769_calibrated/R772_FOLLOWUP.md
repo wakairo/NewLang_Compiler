@@ -1,0 +1,25 @@
+# R772 bounded NON-BLIND calibrated correction — PRE-CI evidence
+
+**Not a fresh BLIND result.** Authorized by [#772 Coordination RELEASE](https://github.com/wakairo/NewLang_Compiler/issues/772#issuecomment-6358006949). Execution: normal Chat + GitHub connector + a NEW R-only GitHub branch + GitHub Actions. No Work/Codex/P local execution, merge, or main modification.
+
+## Immutable history / authority
+- Parent of this follow-up: R769 first failed HEAD `d59dce06e223a9d1d92f5d79bdcc762e624ee54a`, DRAFT PR #771 unchanged. Historical R769 FULL5 [39903696227](https://github.com/wakairo/NewLang_Compiler/actions/runs/39903696227) and PARTIAL [39903696189](https://github.com/wakairo/NewLang_Compiler/actions/runs/39903696189) remain **FAIL** (oom_A/B abort before registration at bogus `function_count==1`; Clang format red). R769 terminal **INCONCLUSIVE**. No retroactive repair of original red.
+- Fixed P/compiler candidate `492652101a10bb573ffdfc020771334aa1dba375`, PR #764 branch `p761-type-layout-stage2a` must remain at exact SHA; Draft17.34 §16.3.8. PR base must be this P branch, not main.
+- Original R765 fresh FIRST-PASS BLIND 14 frozen cases, `tests/r765_firstpass/frozen_oracle.json`, PR #768, and historical failures are immutable.
+- Positive A `H_first_mixed`: source SHA256 `a491dbce3e0a7625d3c237fdf4241590e64547ceb7ce7b921a81fa4b2f6fe733`, oracle SHA256 `3f95612d812cbb83ed96affcb9f4304b029d263503f258a4c0a105dd2ceaf9c8`.
+- Positive B `T_first_interposed`: source SHA256 `619f1b8f396b923ccc4a8c2275ab29ea5b53dff6755b0ea20890740751cdb568`, oracle SHA256 `a6c9353aa942653ea6899e0997cca3bf19a846d5a038ed689cb3886d50e23c04`.
+- R769 suite.py and README prior versions, all five new CTest names, 14 R765 names, public foreign-world injections/denials, parser fault windows, validator modes, retry predicates and unchecked-profile limitations remain intact.
+
+## Mechanically justified correction and falsification
+The exact pinned `src/semantic.c` `nl_semantic_create` installs **nine signature-only prelude functions**: `LifetimeDomain`, `ptr_from_ref`, `finalize_domain`, `initialize`, `take`, `destroy`, `replace`, `store`, `swap`. `preserve()` subsequently registers exactly one R-owned source function `intact`, making **10 actual registered entries**, not one. The old `ctx->functions[0].body` is a prelude body (NULL), NOT the preserved source body.
+
+Allowed source change: only `tests/r769_calibrated/probe.c`. Replace `register_oom`'s invalid `function_count == 1` and index0 body assumption with an identity-based lookup: exact nine expected prelude names/kinds, one `intact` of `NL_CHECKED_REGISTERED_CALL` with non-NULL retained body, unique matches and exact ten functions. Snapshot actual original `intact` index and body after `test_state()`. At **each** injected registration failure, retain the existing exact `NL_CHECK_OUT_OF_MEMORY` / `attempts > n` / complete `test_unchanged()`, plus re-verify all 10 names/kinds and unchanged `intact` index/body. No magic skip or weakened state test. Successful same-context retry still must add functions without acquiring allocation/backing/domain/place authority. Expose triggered registration and public-validator allocation positions in existing per-test stdout, distinguishing zero allocation stages and unsupported positions. All old parser + foreign + CLI negative cases untouched.
+
+Other changes are exclusively the **exact pinned Clang23.1.3 formatted-line patch from the original R769 first-attempt Clang log** for `probe.c` (whitespace/reflow only). No workflow/sanitizer/signed apt/pin/test registry/CMake/toolchain/source/oracle/production modification.
+
+Falsifiable: `oom_A`, `oom_B` each reach actual register fail-at-N at selected 0–31/middle/last three **when reached**, return precise OOM with complete preexisting state+body invariant; restore allocator and succeed same-context retry. Public Copy body, actual-to-formal parameters, and event validators each measure real allocation count; test OOM+state immutable+retry at selected positions if any allocations exist. A zero-allocation validator mode is reported `zero sites / OOM not exercised`, never a fabricated PASS. Any failed public-validator retry, substantive dirty rollback, sanitizer leak or accepted forgery => **STOP** and report original first red without rerun-to-green.
+
+Expected named CTests: FULL5 `453/453` GCC, GCC Release, Clang, ASan, UBSan; distinct NO LLVM PARTIAL `452/452`. EXACTLY one natural first-attempt pair; subsequent correction requires separate C authorization and must be mechanical-only. R cannot merge/close/adjudicate P #764. Product GO #624 PAUSED; cJSON H1 #268 HOLD.
+
+## Post-edit immutable probe digest
+The candidate edited `probe.c` SHA256 is recorded in a separate **pre-CI** Issue #772 comment and below before opening the new DRAFT PR.
