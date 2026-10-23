@@ -687,6 +687,17 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_test(NAME p790_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p790/native.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p778_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p790")
+    add_test(NAME p790_arm_integrity.unit COMMAND p785_integrity
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p790/sources/meter.nl")
+    add_test(NAME p790_arm_oom.unit COMMAND p785_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p790/sources/valve.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p790/sources/meter.nl")
+    add_test(NAME p790_driver_oom.unit COMMAND p774_driver_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p790/sources/meter.nl")
     add_executable(p785_public tests/p785/public.c)
     add_executable(p785_integrity tests/p785/integrity.c)
     add_executable(p785_oom tests/p785/oom.c)
