@@ -52,7 +52,6 @@ static size_t function(const NLSemanticContext *c, const char *name)
 }
 static size_t copy_calls, initializations;
 static NLTypeId t_type, h_type;
-static bool heap_hook;
 static NLPlaceId heap_roots[2];
 static NLDomainId heap_domains[2];
 static NLBackingRegionId heap_regions[2];
@@ -69,27 +68,9 @@ static bool walk(const NLCheckedFragment *f)
             NLCheckStatus bs = nl_checked_copy_body_validate(f, i, &b),
                           ps = nl_checked_copy_body_parameters_validate(f, i,
                                                                         &p);
-            if (heap_hook) {
-                /* Existing scalar replay cannot certify the later heap worlds.
-                 * Stage1 preserves this precision fence; no joined proof is
-                 * synthesized. The independent Copy-only mixed case below
-                 * still requires successful existing validators. */
-                CHECK(bs == NL_CHECK_ANALYSIS_PRECISION_LIMIT && bs == ps);
-                printf("COPY existing_view=present validators=PRECISION_LIMIT "
-                       "same_body_caller_world=%u Stage2_NOT_IMPLEMENTED\n",
-                       nl_checked_context(b.body) == nl_checked_context(f));
-                NLSemanticTypeView earlier_h, later_h;
-                CHECK(nl_semantic_type_view(b.live_exit, h_type, &earlier_h) &&
-                      nl_semantic_type_view(nl_checked_context(f), h_type,
-                                            &later_h));
-                printf("H layout_known=%u->%u size=%zu->%zu "
-                       "alignment=%zu->%zu existing_type_epoch_fence\n",
-                       earlier_h.layout_known, later_h.layout_known,
-                       earlier_h.size, later_h.size, earlier_h.alignment,
-                       later_h.alignment);
-                ++copy_calls;
-                continue;
-            }
+            /* P761: the old Stage1 precision observation is preserved in
+             * evidence. Stable mixed layout staging now enables the unchanged
+             * public Copy validators even when heap operations follow. */
             CHECK(bs == NL_CHECK_OK && ps == NL_CHECK_OK);
             NLSemanticPlaceView before, after, sibling_before, sibling_after;
             CHECK(nl_semantic_place_view(p.entry, p.field.parent, &before) &&
@@ -187,7 +168,6 @@ static bool positive(const char *path, bool hook)
     TestChecked a = {0};
     CHECK(test_run(c, "main()", TEST_EXPRESSION, NL_CHECK_OK, NULL, &a));
     copy_calls = initializations = 0;
-    heap_hook = hook;
     CHECK(walk(a.artifact) && copy_calls == 1 &&
           initializations == (hook ? 2u : 0u));
     if (hook)

@@ -1,0 +1,10 @@
+{
+  "utc": "2026-10-23T02:57:46.587807+00:00",
+  "note": "Calibrated supplementary controls after initial minimal candidate. Original preimplementation freeze unchanged. Foreign same-shape sources must CHECK0 with distinct source worlds, uncalled helper has no Copy-call certificate, ended original reacquisition must refuse.",
+  "sha256": {
+    "foreign_t.nl": "fde20f46d3283090a474dc59ff39ba64c943e15c526d461e95e681386bdfcac8",
+    "foreign_h.nl": "89e4cf3d3a2520e7d430572049e2fd0dcc5dcfdab218e763e25dffc3828b0ec2",
+    "uncalled.nl": "bead5b28a751b13c93df01a7b5456912fb712c33a6edf7674aef4d2d59bc4a30",
+    "negative_ended_root.nl": "29e659073d24d95ff07d07bb82e30fe78af23d34cb2dc0fef170e97214108423"
+  }
+}

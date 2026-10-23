@@ -90,6 +90,45 @@ static bool walk(const NLCheckedFragment *f)
                    p.field.parent, p.field.child, p.field.index,
                    before.incarnation, old.scalar_value, new_value.scalar_value,
                    sibling.scalar_value);
+            if (calls == 0) {
+                NLSymbolId saved = 0;
+                for (size_t k = 1; k <= nl_checked_node_count(f); ++k) {
+                    const NLCheckedNodeView *binding =
+                        nl_checked_node_view(f, k);
+                    if (binding->kind == NL_CHECKED_BINDING &&
+                        binding->initializer == p.loan)
+                        saved = binding->symbol;
+                }
+                CHECK(saved);
+                size_t consumers = 0;
+                for (size_t k = 1; k <= nl_checked_node_count(f); ++k) {
+                    const NLCheckedNodeView *op = nl_checked_node_view(f, k);
+                    if (op->argument_count != 2)
+                        continue;
+                    const NLCheckedNodeView *ref =
+                        nl_checked_node_view(f, op->first_argument);
+                    const NLCheckedNodeView *arg =
+                        ref ? nl_checked_node_view(f, ref->next_argument)
+                            : NULL;
+                    if (!arg || arg->kind != NL_CHECKED_IDENTIFIER ||
+                        arg->symbol != saved)
+                        continue;
+                    NLPlaceId destination = 0;
+                    NLCopyBodyParameters q;
+                    if (op->kind == NL_CHECKED_REPLACE)
+                        destination = op->field.parent;
+                    else if (nl_checked_copy_body_parameters(f, k, &q))
+                        destination = q.field.parent;
+                    if (destination) {
+                        CHECK(destination != p.field.parent);
+                        ++consumers;
+                    }
+                }
+                CHECK(consumers == 1);
+                printf("CALLER returned_Copy_binding=%zu "
+                       "distinct_original_consumers=%zu source_graph=PASS\n",
+                       saved, consumers);
+            }
             ++calls;
         }
         if (n->kind == NL_CHECKED_INITIALIZE) {
