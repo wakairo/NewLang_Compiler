@@ -1287,6 +1287,19 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # Track R #806 FIRST-PASS BLIND, dedicated R source/oracle, pinned P candidate.
+    foreach(r806_mode source issuer c17 native)
+        set(r806_suffix "unit")
+        if(r806_mode STREQUAL "c17" OR r806_mode STREQUAL "native")
+            set(r806_suffix "integration")
+        endif()
+        add_test(NAME r806_arm_copy_${r806_mode}.${r806_suffix}
+            COMMAND "${Python3_EXECUTABLE}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/r806/test.py"
+                "${r806_mode}" "$<TARGET_FILE:newlangc>"
+                "$<TARGET_FILE:p778_probe>" "${CMAKE_C_COMPILER}"
+                "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r806")
+    endforeach()
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
