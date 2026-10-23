@@ -1239,6 +1239,28 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # R #776: one fixed independent corpus, four CTest names (K=4).
+    # Existing Production tests remain untouched; no alternative runtime.
+    add_test(NAME r776_native_h_first.integration
+        COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r776/independent_gate.py"
+            nativeA "$<TARGET_FILE:newlangc>"
+            "${CMAKE_CURRENT_SOURCE_DIR}" "${NEWLANG_SANITIZER}")
+    add_test(NAME r776_native_t_interposed.integration
+        COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r776/independent_gate.py"
+            nativeB "$<TARGET_FILE:newlangc>"
+            "${CMAKE_CURRENT_SOURCE_DIR}" "${NEWLANG_SANITIZER}")
+    add_test(NAME r776_negative_boundaries.integration
+        COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r776/independent_gate.py"
+            negative "$<TARGET_FILE:newlangc>"
+            "${CMAKE_CURRENT_SOURCE_DIR}" "${NEWLANG_SANITIZER}")
+    add_test(NAME r776_emitter_atomicity.integration
+        COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r776/independent_gate.py"
+            atomicity "$<TARGET_FILE:newlangc>"
+            "${CMAKE_CURRENT_SOURCE_DIR}" "${NEWLANG_SANITIZER}")
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
