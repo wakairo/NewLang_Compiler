@@ -23,3 +23,5 @@ Expected named CTests: FULL5 `453/453` GCC, GCC Release, Clang, ASan, UBSan; dis
 
 ## Post-edit immutable probe digest
 The candidate edited `probe.c` SHA256 is recorded in a separate **pre-CI** Issue #772 comment and below before opening the new DRAFT PR.
+
+- Corrected R772 `tests/r769_calibrated/probe.c` complete UTF-8 bytes SHA256: **`a9da94cd5d3538bfe092db1737d2da40d6ce9922150ed388805104d3df892afb`** (verified against historic R769 SHA256 before edit). Code commit: [`b85c3aebc2c9c29e00e14f5afd8e996cffd85027`](https://github.com/wakairo/NewLang_Compiler/commit/b85c3aebc2c9c29e00e14f5afd8e996cffd85027), blob `cf806f6113900ec0872442d385ff6c7b89d55a24`. Exactly 12 old Clang-format hunks applied, then solely R-owned setup/authenticity and observed fail-at-index instrumentation. This is the proposed probe content **before first R772 CI**, not an observed CI verdict.
