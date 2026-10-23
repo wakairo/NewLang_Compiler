@@ -1,0 +1,637 @@
+Start testing: Oct 23 07:41 UTC
+----------------------------------------------------------
+245/437 Testing: p774_pump_reserve_gate.unit
+245/437 Test: p774_pump_reserve_gate.unit
+Command: "/workspace/p774-undefined/p774_gate_test" "/workspace/p774/tests/p774/sources/pump_reserve.nl"
+Directory: /workspace/p774-undefined
+"p774_pump_reserve_gate.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+GATE genuine=PASS equal_numeric_foreign_worlds=refused mutations=24 restored=PASS OOM_total_allocations=195 selected_positions=16 explicit_oom=12 legacy_bool_unsupported=4 five_worlds_unchanged=PASS output_slots=PASS retry=PASS
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"p774_pump_reserve_gate.unit" end time: Oct 23 07:41 UTC
+"p774_pump_reserve_gate.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+246/437 Testing: p774_scale_reserve_gate.unit
+246/437 Test: p774_scale_reserve_gate.unit
+Command: "/workspace/p774-undefined/p774_gate_test" "/workspace/p774/tests/p774/sources/scale_reserve.nl"
+Directory: /workspace/p774-undefined
+"p774_scale_reserve_gate.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+GATE genuine=PASS equal_numeric_foreign_worlds=refused mutations=22 restored=PASS OOM_total_allocations=391 selected_positions=16 explicit_oom=12 legacy_bool_unsupported=4 five_worlds_unchanged=PASS output_slots=PASS retry=PASS
+<end of output>
+Test time =   0.16 sec
+----------------------------------------------------------
+Test Passed.
+"p774_scale_reserve_gate.unit" end time: Oct 23 07:41 UTC
+"p774_scale_reserve_gate.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+244/437 Testing: p774_driver_oom.unit
+244/437 Test: p774_driver_oom.unit
+Command: "/workspace/p774-undefined/p774_driver_oom" "/workspace/p774/tests/p774/sources/pump_reserve.nl"
+Directory: /workspace/p774-undefined
+"p774_driver_oom.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+DRIVER OOM_total=4186 selected_positions=16 CLI1=6 CLI3=10 CLI4=0 zero_partial_C=PASS no_internal=PASS retry=PASS
+<end of output>
+Test time =   0.29 sec
+----------------------------------------------------------
+Test Passed.
+"p774_driver_oom.unit" end time: Oct 23 07:41 UTC
+"p774_driver_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+248/437 Testing: p761_limits_h_first_proof.unit
+248/437 Test: p761_limits_h_first_proof.unit
+Command: "/workspace/p774-undefined/p761_probe" "valid" "/workspace/p774/tests/p761/sources/limits_h_first.nl"
+Directory: /workspace/p774-undefined
+"p761_limits_h_first_proof.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+COPY call=18 H=11 T=10 type_prefix=1 layout=1/1 size=24/24 align=8/8 body=0 parameters=0
+ORIGINAL root=1 child=2 index=0 incarnation=1 old=32 new=91 sibling=168 scope_closed=PASS
+CALLER returned_Copy_binding=7 distinct_original_consumers=1 source_graph=PASS
+SEMANTIC cleanup_arm=0 original_regions=1 all_closed=PASS
+SEMANTIC cleanup_arm=1 original_regions=2 all_closed=PASS
+SOURCE_OWNED Copy_calls=1 H_originals=2 legacy_closed=1 T_certificate_only NO_MIXED_NATIVE
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p761_limits_h_first_proof.unit" end time: Oct 23 07:41 UTC
+"p761_limits_h_first_proof.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+249/437 Testing: p761_limits_h_first_oom.unit
+249/437 Test: p761_limits_h_first_oom.unit
+Command: "/workspace/p774-undefined/p761_oom_test" "/workspace/p774/tests/p761/sources/limits_h_first.nl"
+Directory: /workspace/p774-undefined
+"p761_limits_h_first_oom.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+OOM parser=237 partial_tree=0 retry=PASS
+OOM registration=1183 clone/types/completion/signatures/late-body rollback=PASS
+<end of output>
+Test time =   1.98 sec
+----------------------------------------------------------
+Test Passed.
+"p761_limits_h_first_oom.unit" end time: Oct 23 07:41 UTC
+"p761_limits_h_first_oom.unit" time elapsed: 00:00:01
+----------------------------------------------------------
+
+250/437 Testing: p761_tuning_t_first_proof.unit
+250/437 Test: p761_tuning_t_first_proof.unit
+Command: "/workspace/p774-undefined/p761_probe" "valid" "/workspace/p774/tests/p761/sources/tuning_t_first.nl"
+Directory: /workspace/p774-undefined
+"p761_tuning_t_first_proof.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+COPY call=18 H=11 T=10 type_prefix=1 layout=1/1 size=24/24 align=8/8 body=0 parameters=0
+ORIGINAL root=1 child=3 index=1 incarnation=1 old=204 new=75 sibling=17 scope_closed=PASS
+CALLER returned_Copy_binding=7 distinct_original_consumers=1 source_graph=PASS
+COPY call=25 H=11 T=10 type_prefix=1 layout=1/1 size=24/24 align=8/8 body=0 parameters=0
+ORIGINAL root=4 child=5 index=0 incarnation=4 old=6 new=204 sibling=199 scope_closed=PASS
+SEMANTIC cleanup_arm=0 original_regions=1 all_closed=PASS
+SEMANTIC cleanup_arm=1 original_regions=2 all_closed=PASS
+SOURCE_OWNED Copy_calls=2 H_originals=2 legacy_closed=1 T_certificate_only NO_MIXED_NATIVE
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p761_tuning_t_first_proof.unit" end time: Oct 23 07:41 UTC
+"p761_tuning_t_first_proof.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+251/437 Testing: p761_tuning_t_first_oom.unit
+251/437 Test: p761_tuning_t_first_oom.unit
+Command: "/workspace/p774-undefined/p761_oom_test" "/workspace/p774/tests/p761/sources/tuning_t_first.nl"
+Directory: /workspace/p774-undefined
+"p761_tuning_t_first_oom.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+OOM parser=237 partial_tree=0 retry=PASS
+OOM registration=1305 clone/types/completion/signatures/late-body rollback=PASS
+<end of output>
+Test time =   2.16 sec
+----------------------------------------------------------
+Test Passed.
+"p761_tuning_t_first_oom.unit" end time: Oct 23 07:41 UTC
+"p761_tuning_t_first_oom.unit" time elapsed: 00:00:02
+----------------------------------------------------------
+
+252/437 Testing: p761_foreign_t_refusal.unit
+252/437 Test: p761_foreign_t_refusal.unit
+Command: "/workspace/p774-undefined/p761_gate_test" "/workspace/p774/tests/p761/sources/limits_h_first.nl" "/workspace/p774/tests/p761/controls/foreign_t.nl"
+Directory: /workspace/p774-undefined
+"p761_foreign_t_refusal.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+PUBLIC_OOM validator=0 positions=36 immutable_worlds=PASS retry=PASS
+PUBLIC_OOM validator=1 positions=36 immutable_worlds=PASS retry=PASS
+PUBLIC_OOM validator=2 positions=36 immutable_worlds=PASS retry=PASS
+TAMPER refusals=32 equal_numeric_foreign_ids=verified restoration=PASS
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"p761_foreign_t_refusal.unit" end time: Oct 23 07:41 UTC
+"p761_foreign_t_refusal.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+253/437 Testing: p761_foreign_h_refusal.unit
+253/437 Test: p761_foreign_h_refusal.unit
+Command: "/workspace/p774-undefined/p761_gate_test" "/workspace/p774/tests/p761/sources/limits_h_first.nl" "/workspace/p774/tests/p761/controls/foreign_h.nl"
+Directory: /workspace/p774-undefined
+"p761_foreign_h_refusal.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+PUBLIC_OOM validator=0 positions=36 immutable_worlds=PASS retry=PASS
+PUBLIC_OOM validator=1 positions=36 immutable_worlds=PASS retry=PASS
+PUBLIC_OOM validator=2 positions=36 immutable_worlds=PASS retry=PASS
+TAMPER refusals=32 equal_numeric_foreign_ids=verified restoration=PASS
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"p761_foreign_h_refusal.unit" end time: Oct 23 07:41 UTC
+"p761_foreign_h_refusal.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+254/437 Testing: p761_layout_metadata.unit
+254/437 Test: p761_layout_metadata.unit
+Command: "/workspace/p774-undefined/p761_metadata_test" "/workspace/p774/tests/p761/sources/limits_h_first.nl"
+Directory: /workspace/p774-undefined
+"p761_layout_metadata.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+REGISTRATION: stable existing H target metadata; values/places/domains/backing/OneBacking=0; no allocation authority
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p761_layout_metadata.unit" end time: Oct 23 07:41 UTC
+"p761_layout_metadata.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+247/437 Testing: p774_mixed_owner_copy_native.integration
+247/437 Test: p774_mixed_owner_copy_native.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3" "/workspace/p774/tests/p774/native.py" "/workspace/p774-undefined/newlangc" "/workspace/p774-undefined/p774_probe" "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23" "undefined" "/workspace/p774/tests/p774"
+Directory: /workspace/p774-undefined
+"p774_mixed_owner_copy_native.integration" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+pump_reserve.nl COPY depth=1 call=18 span=169:199 nominal=10 root=1 child=2 index=0 incarnation=1 old=23 new=87 sibling=144 body_status=0 parameters_status=0
+ARM parent_depth=1 match=48 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+ARM parent_depth=1 match=48 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+INITIALIZE depth=2 node=19 root=21 incarnation=24 backing=1 domain=1 span=805:924
+ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+INITIALIZE depth=3 node=19 root=32 incarnation=35 backing=2 domain=2 span=1715:1845
+REF_SCOPE place=21 scope=5
+REF_SCOPE place=21 scope=6
+PRODUCER depth=3 call=50 root=32 incarnation=35 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=39 availability=1 packet=69 same_ptr_root=1 same_allocation=1 same_domain=1
+PROJECTION nominal=11 child=25 incarnation=25
+REF_SCOPE place=32 scope=7
+RECEIVER depth=3 call=69 root=32 incarnation=35 backing=2 domain=2 post_proved=1 entry_original_exact=1
+NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+SUMMARY Copy_calls=1 H_producers=1 owner_receivers=1 H_initializations=2
+{"source": "pump_reserve.nl", "opt": "-O0", "cc": "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23", "sanitizer": "undefined", "fail": "1", "c_sha256": "aeb6fdf9e02a3abbeb7f60188d966d927e5504d9b41941e7d213e93d3157b0e3", "observed": "OBSERVED T=87,144/5,23 CopyCalls=1 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "pump_reserve.nl", "opt": "-O0", "cc": "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23", "sanitizer": "undefined", "fail": "2", "c_sha256": "aeb6fdf9e02a3abbeb7f60188d966d927e5504d9b41941e7d213e93d3157b0e3", "observed": "OBSERVED T=87,144/5,23 CopyCalls=1 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55e029e32300,0"}
+{"source": "pump_reserve.nl", "opt": "-O0", "cc": "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23", "sanitizer": "undefined", "fail": "0", "c_sha256": "aeb6fdf9e02a3abbeb7f60188d966d927e5504d9b41941e7d213e93d3157b0e3", "observed": "OBSERVED T=87,144/5,23 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=563e93b63300,563e93b63320"}
+{"source": "pump_reserve.nl", "opt": "-O2", "cc": "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23", "sanitizer": "undefined", "fail": "1", "c_sha256": "aeb6fdf9e02a3abbeb7f60188d966d927e5504d9b41941e7d213e93d3157b0e3", "observed": "OBSERVED T=87,144/5,23 CopyCalls=1 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "pump_reserve.nl", "opt": "-O2", "cc": "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23", "sanitizer": "undefined", "fail": "2", "c_sha256": "aeb6fdf9e02a3abbeb7f60188d966d927e5504d9b41941e7d213e93d3157b0e3", "observed": "OBSERVED T=87,144/5,23 CopyCalls=1 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55ea18cc4300,0"}
+{"source": "pump_reserve.nl", "opt": "-O2", "cc": "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23", "sanitizer": "undefined", "fail": "0", "c_sha256": "aeb6fdf9e02a3abbeb7f60188d966d927e5504d9b41941e7d213e93d3157b0e3", "observed": "OBSERVED T=87,144/5,23 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=55de8072f300,55de8072f320"}
+scale_reserve.nl COPY depth=1 call=18 span=164:194 nominal=10 root=1 child=3 index=1 incarnation=1 old=218 new=69 sibling=31 body_status=0 parameters_status=0
+COPY depth=1 call=25 span=249:278 nominal=10 root=4 child=5 index=0 incarnation=4 old=8 new=218 sibling=190 body_status=0 parameters_status=0
+ARM parent_depth=1 match=48 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+ARM parent_depth=1 match=48 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+INITIALIZE depth=2 node=19 root=24 incarnation=27 backing=1 domain=1 span=799:913
+ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+INITIALIZE depth=3 node=19 root=35 incarnation=38 backing=2 domain=2 span=1695:1820
+REF_SCOPE place=24 scope=5
+REF_SCOPE place=24 scope=6
+PRODUCER depth=3 call=50 root=35 incarnation=38 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=42 availability=1 packet=72 same_ptr_root=1 same_allocation=1 same_domain=1
+PROJECTION nominal=11 child=28 incarnation=28
+REF_SCOPE place=35 scope=7
+RECEIVER depth=3 call=69 root=35 incarnation=38 backing=2 domain=2 post_proved=1 entry_original_exact=1
+NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+SUMMARY Copy_calls=2 H_producers=1 owner_receivers=1 H_initializations=2
+{"source": "scale_reserve.nl", "opt": "-O0", "cc": "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23", "sanitizer": "undefined", "fail": "1", "c_sha256": "0ba3ff4b97a6e93a582d18b75b759f4689dbed0a6bd7b31192c6bdbadca9d80a", "observed": "OBSERVED T=31,69/218,190 CopyCalls=2 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "scale_reserve.nl", "opt": "-O0", "cc": "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23", "sanitizer": "undefined", "fail": "2", "c_sha256": "0ba3ff4b97a6e93a582d18b75b759f4689dbed0a6bd7b31192c6bdbadca9d80a", "observed": "OBSERVED T=31,69/218,190 CopyCalls=2 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55ea32b9d300,0"}
+{"source": "scale_reserve.nl", "opt": "-O0", "cc": "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23", "sanitizer": "undefined", "fail": "0", "c_sha256": "0ba3ff4b97a6e93a582d18b75b759f4689dbed0a6bd7b31192c6bdbadca9d80a", "observed": "OBSERVED T=31,69/218,190 CopyCalls=2 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=55ee07365300,55ee07365320"}
+{"source": "scale_reserve.nl", "opt": "-O2", "cc": "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23", "sanitizer": "undefined", "fail": "1", "c_sha256": "0ba3ff4b97a6e93a582d18b75b759f4689dbed0a6bd7b31192c6bdbadca9d80a", "observed": "OBSERVED T=31,69/218,190 CopyCalls=2 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "scale_reserve.nl", "opt": "-O2", "cc": "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23", "sanitizer": "undefined", "fail": "2", "c_sha256": "0ba3ff4b97a6e93a582d18b75b759f4689dbed0a6bd7b31192c6bdbadca9d80a", "observed": "OBSERVED T=31,69/218,190 CopyCalls=2 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55b0fa331300,0"}
+{"source": "scale_reserve.nl", "opt": "-O2", "cc": "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23", "sanitizer": "undefined", "fail": "0", "c_sha256": "0ba3ff4b97a6e93a582d18b75b759f4689dbed0a6bd7b31192c6bdbadca9d80a", "observed": "OBSERVED T=31,69/218,190 CopyCalls=2 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=56533ceb8300,56533ceb8320"}
+negative_wrong_allocation.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_wrong_allocation.nl:74:21-74:76: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion
+negative_wrong_domain.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_wrong_domain.nl:68:63-68:75: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability
+negative_consumed_allocation.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_consumed_allocation.nl:74:21-74:39: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding
+negative_missing_cleanup.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_missing_cleanup.nl:51:39-80:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit
+negative_copy_as_ref.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_copy_as_ref.nl:26:67-26:72: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter
+negative_scoped_escape.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_scoped_escape.nl:28:17-28:21: error(semantic)[P3-UNKNOWN-CALLEE]: unknown semantic callee
+negative_read_actual.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_read_actual.nl:26:34-26:35: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field
+negative_wrong_h_target.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_wrong_h_target.nl:1:44-1:54: error(unsupported)[REC-SELF-TARGET]: exact Option target requires the bounded nominal header
+negative_scoped_binding.nl refused first observed phase /workspace/p774/tests/p774/supplement/negative_scoped_binding.nl:32:33-32:39: error(semantic)[P3-UNKNOWN-BINDING]: unknown semantic binding
+negative_read_reference.nl refused first observed phase /workspace/p774/tests/p774/supplement/negative_read_reference.nl:33:46-33:51: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter
+negative_wrong_reloan_domain.nl refused first observed phase /workspace/p774/tests/p774/supplement/negative_wrong_reloan_domain.nl:61:41-61:76: error(semantic)[ALLOCATED-DOMAIN-MISMATCH]: pointer requires matching readable live domain
+negative_wrong_owner_ptr.nl refused first observed phase /workspace/p774/tests/p774/supplement/negative_wrong_owner_ptr.nl:67:29-68:78: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root
+<end of output>
+Test time =   5.20 sec
+----------------------------------------------------------
+Test Passed.
+"p774_mixed_owner_copy_native.integration" end time: Oct 23 07:41 UTC
+"p774_mixed_owner_copy_native.integration" time elapsed: 00:00:05
+----------------------------------------------------------
+
+256/437 Testing: p761_uncalled.unit
+256/437 Test: p761_uncalled.unit
+Command: "/workspace/p774-undefined/p761_gate_test" "uncalled" "/workspace/p774/tests/p761/controls/uncalled.nl"
+Directory: /workspace/p774-undefined
+"p761_uncalled.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+UNCALLED: definition is not a caller Copy-call certificate
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p761_uncalled.unit" end time: Oct 23 07:41 UTC
+"p761_uncalled.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+255/437 Testing: p761_cli.integration
+255/437 Test: p761_cli.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3" "/workspace/p774/tests/p761/cli.py" "/workspace/p774-undefined/newlangc" "/workspace/p774-undefined/p761_probe"
+Directory: /workspace/p774-undefined
+"p761_cli.integration" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+limits_h_first.nl COPY call=18 H=11 T=10 type_prefix=1 layout=1/1 size=24/24 align=8/8 body=0 parameters=0
+ORIGINAL root=1 child=2 index=0 incarnation=1 old=32 new=91 sibling=168 scope_closed=PASS
+CALLER returned_Copy_binding=7 distinct_original_consumers=1 source_graph=PASS
+SEMANTIC cleanup_arm=0 original_regions=1 all_closed=PASS
+SEMANTIC cleanup_arm=1 original_regions=2 all_closed=PASS
+SOURCE_OWNED Copy_calls=1 H_originals=2 legacy_closed=1 T_certificate_only NO_MIXED_NATIVE
+limits_h_first.nl CHECK 0 C17 4 no partial C/named preservation PASS
+tuning_t_first.nl COPY call=18 H=11 T=10 type_prefix=1 layout=1/1 size=24/24 align=8/8 body=0 parameters=0
+ORIGINAL root=1 child=3 index=1 incarnation=1 old=204 new=75 sibling=17 scope_closed=PASS
+CALLER returned_Copy_binding=7 distinct_original_consumers=1 source_graph=PASS
+COPY call=25 H=11 T=10 type_prefix=1 layout=1/1 size=24/24 align=8/8 body=0 parameters=0
+ORIGINAL root=4 child=5 index=0 incarnation=4 old=6 new=204 sibling=199 scope_closed=PASS
+SEMANTIC cleanup_arm=0 original_regions=1 all_closed=PASS
+SEMANTIC cleanup_arm=1 original_regions=2 all_closed=PASS
+SOURCE_OWNED Copy_calls=2 H_originals=2 legacy_closed=1 T_certificate_only NO_MIXED_NATIVE
+tuning_t_first.nl CHECK 0 C17 4 no partial C/named preservation PASS
+negative_wrong_domain.nl CHECK 3 C17 3 no partial C/named preservation PASS
+negative_wrong_allocation.nl CHECK 3 C17 3 no partial C/named preservation PASS
+negative_consumed_domain.nl CHECK 3 C17 3 no partial C/named preservation PASS
+negative_escaped_ref.nl CHECK 3 C17 3 no partial C/named preservation PASS
+negative_copy_ref.nl CHECK 3 C17 3 no partial C/named preservation PASS
+negative_wrong_self.nl CHECK 3 C17 3 no partial C/named preservation PASS
+foreign_t.nl CHECK 0 C17 4 no partial C/named preservation PASS
+foreign_h.nl CHECK 0 C17 4 no partial C/named preservation PASS
+uncalled.nl CHECK 0 C17 4 no partial C/named preservation PASS
+negative_ended_root.nl CHECK 3 C17 3 no partial C/named preservation PASS
+PUBLIC T COPY CERTIFICATE ONLY; mixed C17/native remains unsupported
+<end of output>
+Test time =   0.99 sec
+----------------------------------------------------------
+Test Passed.
+"p761_cli.integration" end time: Oct 23 07:41 UTC
+"p761_cli.integration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+299/437 Testing: p738_no_read_flow.unit
+299/437 Test: p738_no_read_flow.unit
+Command: "/workspace/p774-undefined/p738_gate_test" "/workspace/p774/tests/p738/sprout.nl" "/workspace/p774/tests/p738/ticket.nl"
+Directory: /workspace/p774-undefined
+"p738_no_read_flow.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+P738 attach/ref/currentness/edge/world correspondence rejects=29 restore_identical_C=PASS
+P738 attach/ref/currentness/edge/world correspondence rejects=29 restore_identical_C=PASS
+<end of output>
+Test time =   0.18 sec
+----------------------------------------------------------
+Test Passed.
+"p738_no_read_flow.unit" end time: Oct 23 07:41 UTC
+"p738_no_read_flow.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+300/437 Testing: p738_local_return_existing_controls.unit
+300/437 Test: p738_local_return_existing_controls.unit
+Command: "/workspace/p774-undefined/p733_gate_test" "/workspace/p774/tests/p738/sprout.nl" "/workspace/p774/tests/p738/ticket.nl"
+Directory: /workspace/p774-undefined
+"p738_local_return_existing_controls.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+22 certificate/body/world/profile controls leave no output; 19 OOM positions (3 staging + 16 validator scratch) retry identically
+local-return issuer-seal bytes=31280 nodes=17 additional_semantic_worlds=0
+local-return structural/origin rejects=79; validator malloc/calloc/realloc OOM=4; admission/staging OOM=19; rollback+recovery+NULL output PASS
+22 certificate/body/world/profile controls leave no output; 19 OOM positions (3 staging + 16 validator scratch) retry identically
+local-return issuer-seal bytes=31280 nodes=17 additional_semantic_worlds=0
+local-return structural/origin rejects=79; validator malloc/calloc/realloc OOM=4; admission/staging OOM=19; rollback+recovery+NULL output PASS
+<end of output>
+Test time =   0.43 sec
+----------------------------------------------------------
+Test Passed.
+"p738_local_return_existing_controls.unit" end time: Oct 23 07:41 UTC
+"p738_local_return_existing_controls.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+301/437 Testing: p738_sprout_history_oom.unit
+301/437 Test: p738_sprout_history_oom.unit
+Command: "/workspace/p774-undefined/p733_history_test" "oom" "/workspace/p774/tests/p738/sprout.nl"
+Directory: /workspace/p774-undefined
+"p738_sprout_history_oom.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+owned live-return entry/post/correlation after AST teardown; 41 corruptions rejected; whole destructure and distinct terminal receiver; native subset checked separately
+registration/branch/return/destructure OOM rollback: 1387 + 1010 fault points, clean completion
+<end of output>
+Test time =   3.74 sec
+----------------------------------------------------------
+Test Passed.
+"p738_sprout_history_oom.unit" end time: Oct 23 07:41 UTC
+"p738_sprout_history_oom.unit" time elapsed: 00:00:03
+----------------------------------------------------------
+
+302/437 Testing: p738_ticket_history_oom.unit
+302/437 Test: p738_ticket_history_oom.unit
+Command: "/workspace/p774-undefined/p733_history_test" "oom" "/workspace/p774/tests/p738/ticket.nl"
+Directory: /workspace/p774-undefined
+"p738_ticket_history_oom.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+owned live-return entry/post/correlation after AST teardown; 41 corruptions rejected; whole destructure and distinct terminal receiver; native subset checked separately
+registration/branch/return/destructure OOM rollback: 1355 + 997 fault points, clean completion
+<end of output>
+Test time =   3.61 sec
+----------------------------------------------------------
+Test Passed.
+"p738_ticket_history_oom.unit" end time: Oct 23 07:41 UTC
+"p738_ticket_history_oom.unit" time elapsed: 00:00:03
+----------------------------------------------------------
+
+304/437 Testing: p738_source_rollback.unit
+304/437 Test: p738_source_rollback.unit
+Command: "/workspace/p774-undefined/p733_driver_test" "reject" "/workspace/p774/tests/p738/double_consume.nl" "/workspace/p774/tests/p738/wrong_backing.nl" "/workspace/p774/tests/p738/wrong_domain.nl" "/workspace/p774/tests/p738/wrong_root.nl" "/workspace/p774/tests/p738/active_loan.nl" "/workspace/p774/tests/p738/wrong_receiver.nl" "/workspace/p774/tests/p738/reuse_donor.nl" "/workspace/p774/tests/p738/no_cleanup.nl" "/workspace/p774/tests/p738/wrong_initial_target.nl" "/workspace/p774/tests/p738/missing_initial_some.nl" "/workspace/p774/tests/p738/read_actual.nl"
+Directory: /workspace/p774-undefined
+"p738_source_rollback.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"p738_source_rollback.unit" end time: Oct 23 07:41 UTC
+"p738_source_rollback.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+305/437 Testing: p738_no_read_native.integration
+305/437 Test: p738_no_read_native.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3" "/workspace/p774/tests/p738/native.py" "/workspace/p774-undefined/newlangc" "/workspace/p774-undefined/handoff_checked_probe" "/workspace/p774-undefined/p733_public_probe" "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23" "undefined" "/workspace/p774/tests/p738"
+Directory: /workspace/p774-undefined
+"p738_no_read_native.integration" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+sprout CLEANUP legacy_arm=0 regions=1 all_closed=PASS
+CLEANUP legacy_arm=1 regions=2 all_closed=PASS
+LOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS
+PUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0
+sprout-O0True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+sprout-O0True 2 OBSERVED head=35ed32f0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+sprout-O0True success OBSERVED head=3132a2f0 tail=3132a310 trials=2 free=2 roots=4 changes=2 copy=0 scopes=4 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=3132a310
+sprout-O2True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+sprout-O2True 2 OBSERVED head=409262f0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+sprout-O2True success OBSERVED head=9bf52f0 tail=9bf5310 trials=2 free=2 roots=4 changes=2 copy=0 scopes=4 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=9bf5310
+sprout no-pre-read genuine local/call/return, unchanged+passive O0/O2, original identity+cleanup PASS
+ticket CLEANUP legacy_arm=0 regions=1 all_closed=PASS
+CLEANUP legacy_arm=1 regions=2 all_closed=PASS
+LOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS
+PUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0
+ticket-O0True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+ticket-O0True 2 OBSERVED head=65022f0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+ticket-O0True success OBSERVED head=23dd52f0 tail=23dd5310 trials=2 free=2 roots=3 changes=2 copy=0 scopes=3 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=23dd5310
+ticket-O2True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+ticket-O2True 2 OBSERVED head=3e6d02f0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+ticket-O2True success OBSERVED head=1c73c2f0 tail=1c73c310 trials=2 free=2 roots=3 changes=2 copy=0 scopes=3 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=1c73c310
+ticket no-pre-read genuine local/call/return, unchanged+passive O0/O2, original identity+cleanup PASS
+double_consume P193-DEFINITION-CONSUMED refusal unchanged; zero C/named output preserved
+wrong_backing P193-CALL-BACKING refusal unchanged; zero C/named output preserved
+wrong_domain P3-REF-CONFLICT refusal unchanged; zero C/named output preserved
+wrong_root P193-CALL-DOMAIN refusal unchanged; zero C/named output preserved
+active_loan P3-REF-CONFLICT refusal unchanged; zero C/named output preserved
+wrong_receiver P193-CALL-DOMAIN refusal unchanged; zero C/named output preserved
+reuse_donor P3-USE-AFTER-CONSUME refusal unchanged; zero C/named output preserved
+no_cleanup P5-SCOPE-OBLIGATION refusal unchanged; zero C/named output preserved
+wrong_initial_target P208-CALL-HEAD-VALUE refusal unchanged; zero C/named output preserved
+missing_initial_some P208-CALL-HEAD-VALUE refusal unchanged; zero C/named output preserved
+read_actual P3-TYPE-MISMATCH refusal unchanged; zero C/named output preserved
+profile_direct_no_local CHECK0; finite backend4 preserved; no C/named output overwrite
+profile_read_without_match CHECK0; finite backend4 preserved; no C/named output overwrite
+profile_pointer_alias CHECK0; finite backend4 preserved; no C/named output overwrite
+<end of output>
+Test time =   6.52 sec
+----------------------------------------------------------
+Test Passed.
+"p738_no_read_native.integration" end time: Oct 23 07:42 UTC
+"p738_no_read_native.integration" time elapsed: 00:00:06
+----------------------------------------------------------
+
+306/437 Testing: p733_local_owner_proof.unit
+306/437 Test: p733_local_owner_proof.unit
+Command: "/workspace/p774-undefined/p733_gate_test" "/workspace/p774/tests/p733/pending.nl" "/workspace/p774/tests/p733/cargo.nl"
+Directory: /workspace/p774-undefined
+"p733_local_owner_proof.unit" start time: Oct 23 07:42 UTC
+Output:
+----------------------------------------------------------
+22 certificate/body/world/profile controls leave no output; 15 OOM positions (3 staging + 12 validator scratch) retry identically
+local-return issuer-seal bytes=31280 nodes=17 additional_semantic_worlds=0
+local-return structural/origin rejects=79; validator malloc/calloc/realloc OOM=4; admission/staging OOM=15; rollback+recovery+NULL output PASS
+22 certificate/body/world/profile controls leave no output; 15 OOM positions (3 staging + 12 validator scratch) retry identically
+local-return issuer-seal bytes=31280 nodes=17 additional_semantic_worlds=0
+local-return structural/origin rejects=79; validator malloc/calloc/realloc OOM=4; admission/staging OOM=15; rollback+recovery+NULL output PASS
+<end of output>
+Test time =   0.28 sec
+----------------------------------------------------------
+Test Passed.
+"p733_local_owner_proof.unit" end time: Oct 23 07:42 UTC
+"p733_local_owner_proof.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+307/437 Testing: p733_pending_history_oom.unit
+307/437 Test: p733_pending_history_oom.unit
+Command: "/workspace/p774-undefined/p733_history_test" "oom" "/workspace/p774/tests/p733/pending.nl"
+Directory: /workspace/p774-undefined
+"p733_pending_history_oom.unit" start time: Oct 23 07:42 UTC
+Output:
+----------------------------------------------------------
+owned live-return entry/post/correlation after AST teardown; 41 corruptions rejected; whole destructure and distinct terminal receiver; native subset checked separately
+registration/branch/return/destructure OOM rollback: 1611 + 1201 fault points, clean completion
+<end of output>
+Test time =   4.03 sec
+----------------------------------------------------------
+Test Passed.
+"p733_pending_history_oom.unit" end time: Oct 23 07:42 UTC
+"p733_pending_history_oom.unit" time elapsed: 00:00:04
+----------------------------------------------------------
+
+303/437 Testing: p738_no_read_driver_oom.unit
+303/437 Test: p738_no_read_driver_oom.unit
+Command: "/workspace/p774-undefined/p733_driver_test" "oom" "/workspace/p774/tests/p738/sprout.nl"
+Directory: /workspace/p774-undefined
+"p738_no_read_driver_oom.unit" start time: Oct 23 07:41 UTC
+Output:
+----------------------------------------------------------
+normal driver fail-at-N positions=2718 CLI1=31 CLI3=2671 legacy_bool_CLI4=16 zero_partial_C=PASS recovery=PASS
+CLI3 explicit_OOM=2659 existing_generic_V0_CHECK=12 internal=0
+<end of output>
+Test time =  12.27 sec
+----------------------------------------------------------
+Test Passed.
+"p738_no_read_driver_oom.unit" end time: Oct 23 07:42 UTC
+"p738_no_read_driver_oom.unit" time elapsed: 00:00:12
+----------------------------------------------------------
+
+308/437 Testing: p733_cargo_history_oom.unit
+308/437 Test: p733_cargo_history_oom.unit
+Command: "/workspace/p774-undefined/p733_history_test" "oom" "/workspace/p774/tests/p733/cargo.nl"
+Directory: /workspace/p774-undefined
+"p733_cargo_history_oom.unit" start time: Oct 23 07:42 UTC
+Output:
+----------------------------------------------------------
+owned live-return entry/post/correlation after AST teardown; 41 corruptions rejected; whole destructure and distinct terminal receiver; native subset checked separately
+registration/branch/return/destructure OOM rollback: 1602 + 1201 fault points, clean completion
+<end of output>
+Test time =   4.69 sec
+----------------------------------------------------------
+Test Passed.
+"p733_cargo_history_oom.unit" end time: Oct 23 07:42 UTC
+"p733_cargo_history_oom.unit" time elapsed: 00:00:04
+----------------------------------------------------------
+
+310/437 Testing: p733_local_owner_source_rollback.unit
+310/437 Test: p733_local_owner_source_rollback.unit
+Command: "/workspace/p774-undefined/p733_driver_test" "reject" "/workspace/p774/tests/p733/double_consume.nl" "/workspace/p774/tests/p733/discard_owner.nl" "/workspace/p774/tests/p733/missing_member.nl" "/workspace/p774/tests/p733/wrong_backing.nl" "/workspace/p774/tests/p733/wrong_domain.nl" "/workspace/p774/tests/p733/wrong_root.nl" "/workspace/p774/tests/p733/active_loan.nl" "/workspace/p774/tests/p733/wrong_receiver.nl" "/workspace/p774/tests/p733/reuse_donor.nl" "/workspace/p774/tests/p733/no_cleanup.nl"
+Directory: /workspace/p774-undefined
+"p733_local_owner_source_rollback.unit" start time: Oct 23 07:42 UTC
+Output:
+----------------------------------------------------------
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+rejection phase=registration status=1 rollback=PASS artifact=NULL
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"p733_local_owner_source_rollback.unit" end time: Oct 23 07:42 UTC
+"p733_local_owner_source_rollback.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+311/437 Testing: p733_local_owner_native.integration
+311/437 Test: p733_local_owner_native.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3" "/workspace/p774/tests/p733/native.py" "/workspace/p774-undefined/newlangc" "/workspace/p774-undefined/handoff_checked_probe" "/workspace/p774-undefined/p733_public_probe" "/workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23" "undefined" "/workspace/p774/tests/p733"
+Directory: /workspace/p774-undefined
+"p733_local_owner_native.integration" start time: Oct 23 07:42 UTC
+Output:
+----------------------------------------------------------
+pendingO0 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+pendingO0 2 OBSERVED head=276cf2f0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+pendingO0 both OBSERVED head=3060f2f0 tail=3060f310 trials=2 free=2 roots=6 changes=2 copy=1 scopes=6 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=3060f310
+pendingO2 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+pendingO2 2 OBSERVED head=10f8c2f0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+pendingO2 both OBSERVED head=2c05b2f0 tail=2c05b310 trials=2 free=2 roots=6 changes=2 copy=1 scopes=6 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=2c05b310
+pending genuine public local-return + legacy cleanup observations PASS; O0/O2, allocation fail1/2/success, unchanged/passive PASS
+cargoO0 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+cargoO0 2 OBSERVED head=14482f0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+cargoO0 both OBSERVED head=cded2f0 tail=cded310 trials=2 free=2 roots=6 changes=2 copy=1 scopes=6 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=cded310
+cargoO2 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+cargoO2 2 OBSERVED head=26ae02f0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+cargoO2 both OBSERVED head=1434a2f0 tail=1434a310 trials=2 free=2 roots=6 changes=2 copy=1 scopes=6 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=1434a310
+cargo genuine public local-return + legacy cleanup observations PASS; O0/O2, allocation fail1/2/success, unchanged/passive PASS
+double_consume source refusal unchanged; zero C; named sink preserved P193-DEFINITION-CONSUMED
+discard_owner source refusal unchanged; zero C; named sink preserved P193-DEFINITION-OBLIGATION
+missing_member source refusal unchanged; zero C; named sink preserved P208-DEFINITION-RETURN
+wrong_backing source refusal unchanged; zero C; named sink preserved P193-CALL-BACKING
+wrong_domain source refusal unchanged; zero C; named sink preserved P3-REF-CONFLICT
+wrong_root source refusal unchanged; zero C; named sink preserved P193-CALL-DOMAIN
+active_loan source refusal unchanged; zero C; named sink preserved P3-REF-CONFLICT
+wrong_receiver source refusal unchanged; zero C; named sink preserved P193-CALL-DOMAIN
+reuse_donor source refusal unchanged; zero C; named sink preserved P3-USE-AFTER-CONSUME
+no_cleanup source refusal unchanged; zero C; named sink preserved P5-SCOPE-OBLIGATION
+<end of output>
+Test time =   6.81 sec
+----------------------------------------------------------
+Test Passed.
+"p733_local_owner_native.integration" end time: Oct 23 07:42 UTC
+"p733_local_owner_native.integration" time elapsed: 00:00:06
+----------------------------------------------------------
+
+309/437 Testing: p733_local_owner_driver_oom.unit
+309/437 Test: p733_local_owner_driver_oom.unit
+Command: "/workspace/p774-undefined/p733_driver_test" "oom" "/workspace/p774/tests/p733/pending.nl"
+Directory: /workspace/p774-undefined
+"p733_local_owner_driver_oom.unit" start time: Oct 23 07:42 UTC
+Output:
+----------------------------------------------------------
+normal driver fail-at-N positions=3163 CLI1=32 CLI3=3119 legacy_bool_CLI4=12 zero_partial_C=PASS recovery=PASS
+CLI3 explicit_OOM=3107 existing_generic_V0_CHECK=12 internal=0
+<end of output>
+Test time =  11.50 sec
+----------------------------------------------------------
+Test Passed.
+"p733_local_owner_driver_oom.unit" end time: Oct 23 07:42 UTC
+"p733_local_owner_driver_oom.unit" time elapsed: 00:00:11
+----------------------------------------------------------
+
+End testing: Oct 23 07:42 UTC

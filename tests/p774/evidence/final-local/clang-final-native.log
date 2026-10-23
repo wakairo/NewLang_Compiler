@@ -1,0 +1,55 @@
+pump_reserve.nl COPY depth=1 call=18 span=169:199 nominal=10 root=1 child=2 index=0 incarnation=1 old=23 new=87 sibling=144 body_status=0 parameters_status=0
+ARM parent_depth=1 match=48 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+ARM parent_depth=1 match=48 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+INITIALIZE depth=2 node=19 root=21 incarnation=24 backing=1 domain=1 span=805:924
+ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+INITIALIZE depth=3 node=19 root=32 incarnation=35 backing=2 domain=2 span=1715:1845
+REF_SCOPE place=21 scope=5
+REF_SCOPE place=21 scope=6
+PRODUCER depth=3 call=50 root=32 incarnation=35 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=39 availability=1 packet=69 same_ptr_root=1 same_allocation=1 same_domain=1
+PROJECTION nominal=11 child=25 incarnation=25
+REF_SCOPE place=32 scope=7
+RECEIVER depth=3 call=69 root=32 incarnation=35 backing=2 domain=2 post_proved=1 entry_original_exact=1
+NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+SUMMARY Copy_calls=1 H_producers=1 owner_receivers=1 H_initializations=2
+{"source": "pump_reserve.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "1", "c_sha256": "aeb6fdf9e02a3abbeb7f60188d966d927e5504d9b41941e7d213e93d3157b0e3", "observed": "OBSERVED T=87,144/5,23 CopyCalls=1 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "pump_reserve.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "2", "c_sha256": "aeb6fdf9e02a3abbeb7f60188d966d927e5504d9b41941e7d213e93d3157b0e3", "observed": "OBSERVED T=87,144/5,23 CopyCalls=1 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55e924d6f2a0,0"}
+{"source": "pump_reserve.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "0", "c_sha256": "aeb6fdf9e02a3abbeb7f60188d966d927e5504d9b41941e7d213e93d3157b0e3", "observed": "OBSERVED T=87,144/5,23 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=55a80db0b2a0,55a80db0b2c0"}
+{"source": "pump_reserve.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "1", "c_sha256": "aeb6fdf9e02a3abbeb7f60188d966d927e5504d9b41941e7d213e93d3157b0e3", "observed": "OBSERVED T=87,144/5,23 CopyCalls=1 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "pump_reserve.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "2", "c_sha256": "aeb6fdf9e02a3abbeb7f60188d966d927e5504d9b41941e7d213e93d3157b0e3", "observed": "OBSERVED T=87,144/5,23 CopyCalls=1 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=558348cfd2a0,0"}
+{"source": "pump_reserve.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "0", "c_sha256": "aeb6fdf9e02a3abbeb7f60188d966d927e5504d9b41941e7d213e93d3157b0e3", "observed": "OBSERVED T=87,144/5,23 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=5610226bf2a0,5610226bf2c0"}
+scale_reserve.nl COPY depth=1 call=18 span=164:194 nominal=10 root=1 child=3 index=1 incarnation=1 old=218 new=69 sibling=31 body_status=0 parameters_status=0
+COPY depth=1 call=25 span=249:278 nominal=10 root=4 child=5 index=0 incarnation=4 old=8 new=218 sibling=190 body_status=0 parameters_status=0
+ARM parent_depth=1 match=48 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+ARM parent_depth=1 match=48 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+INITIALIZE depth=2 node=19 root=24 incarnation=27 backing=1 domain=1 span=799:913
+ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+INITIALIZE depth=3 node=19 root=35 incarnation=38 backing=2 domain=2 span=1695:1820
+REF_SCOPE place=24 scope=5
+REF_SCOPE place=24 scope=6
+PRODUCER depth=3 call=50 root=35 incarnation=38 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=42 availability=1 packet=72 same_ptr_root=1 same_allocation=1 same_domain=1
+PROJECTION nominal=11 child=28 incarnation=28
+REF_SCOPE place=35 scope=7
+RECEIVER depth=3 call=69 root=35 incarnation=38 backing=2 domain=2 post_proved=1 entry_original_exact=1
+NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+SUMMARY Copy_calls=2 H_producers=1 owner_receivers=1 H_initializations=2
+{"source": "scale_reserve.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "1", "c_sha256": "0ba3ff4b97a6e93a582d18b75b759f4689dbed0a6bd7b31192c6bdbadca9d80a", "observed": "OBSERVED T=31,69/218,190 CopyCalls=2 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "scale_reserve.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "2", "c_sha256": "0ba3ff4b97a6e93a582d18b75b759f4689dbed0a6bd7b31192c6bdbadca9d80a", "observed": "OBSERVED T=31,69/218,190 CopyCalls=2 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=5588fdb362a0,0"}
+{"source": "scale_reserve.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "0", "c_sha256": "0ba3ff4b97a6e93a582d18b75b759f4689dbed0a6bd7b31192c6bdbadca9d80a", "observed": "OBSERVED T=31,69/218,190 CopyCalls=2 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=56212dbab2a0,56212dbab2c0"}
+{"source": "scale_reserve.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "1", "c_sha256": "0ba3ff4b97a6e93a582d18b75b759f4689dbed0a6bd7b31192c6bdbadca9d80a", "observed": "OBSERVED T=31,69/218,190 CopyCalls=2 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "scale_reserve.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "2", "c_sha256": "0ba3ff4b97a6e93a582d18b75b759f4689dbed0a6bd7b31192c6bdbadca9d80a", "observed": "OBSERVED T=31,69/218,190 CopyCalls=2 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=56015aef92a0,0"}
+{"source": "scale_reserve.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "0", "c_sha256": "0ba3ff4b97a6e93a582d18b75b759f4689dbed0a6bd7b31192c6bdbadca9d80a", "observed": "OBSERVED T=31,69/218,190 CopyCalls=2 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=560ba53f72a0,560ba53f72c0"}
+negative_wrong_allocation.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_wrong_allocation.nl:74:21-74:76: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion
+negative_wrong_domain.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_wrong_domain.nl:68:63-68:75: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability
+negative_consumed_allocation.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_consumed_allocation.nl:74:21-74:39: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding
+negative_missing_cleanup.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_missing_cleanup.nl:51:39-80:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit
+negative_copy_as_ref.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_copy_as_ref.nl:26:67-26:72: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter
+negative_scoped_escape.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_scoped_escape.nl:28:17-28:21: error(semantic)[P3-UNKNOWN-CALLEE]: unknown semantic callee
+negative_read_actual.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_read_actual.nl:26:34-26:35: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field
+negative_wrong_h_target.nl refused first observed phase /workspace/p774/tests/p774/sources/negative_wrong_h_target.nl:1:44-1:54: error(unsupported)[REC-SELF-TARGET]: exact Option target requires the bounded nominal header
+negative_scoped_binding.nl refused first observed phase /workspace/p774/tests/p774/supplement/negative_scoped_binding.nl:32:33-32:39: error(semantic)[P3-UNKNOWN-BINDING]: unknown semantic binding
+negative_read_reference.nl refused first observed phase /workspace/p774/tests/p774/supplement/negative_read_reference.nl:33:46-33:51: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter
+negative_wrong_reloan_domain.nl refused first observed phase /workspace/p774/tests/p774/supplement/negative_wrong_reloan_domain.nl:61:41-61:76: error(semantic)[ALLOCATED-DOMAIN-MISMATCH]: pointer requires matching readable live domain
+negative_wrong_owner_ptr.nl refused first observed phase /workspace/p774/tests/p774/supplement/negative_wrong_owner_ptr.nl:67:29-68:78: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root
