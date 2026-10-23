@@ -1,0 +1,37 @@
+{
+  "negative_scope_escape.nl": {
+    "exit": 3,
+    "preserved": true,
+    "stderr": "/tmp/night793/evidence/p793/sources/negative_scope_escape.nl:9:17-9:55: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+  },
+  "negative_wrong_field.nl": {
+    "exit": 3,
+    "preserved": true,
+    "stderr": "/tmp/night793/evidence/p793/sources/negative_wrong_field.nl:11:20-11:31: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal\n"
+  },
+  "negative_read_formal.nl": {
+    "exit": 3,
+    "preserved": true,
+    "stderr": "/tmp/night793/evidence/p793/sources/negative_read_formal.nl:3:26-3:32: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  },
+  "thermal_true.nl": {
+    "exit": 4,
+    "preserved": true,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/night793/evidence/p793/sources/thermal_true.nl\n"
+  },
+  "thermal_false.nl": {
+    "exit": 4,
+    "preserved": true,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/night793/evidence/p793/sources/thermal_false.nl\n"
+  },
+  "router_false.nl": {
+    "exit": 3,
+    "preserved": true,
+    "stderr": "/tmp/night793/evidence/p793/sources/router_false.nl:10:17-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  "router_true.nl": {
+    "exit": 3,
+    "preserved": true,
+    "stderr": "/tmp/night793/evidence/p793/sources/router_true.nl:10:17-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  }
+}

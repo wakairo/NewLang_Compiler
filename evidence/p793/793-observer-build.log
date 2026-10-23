@@ -1,0 +1,15 @@
+/tmp/night798/public-observer.c: In function ‘main’:
+/tmp/night798/public-observer.c:51:42: error: ‘EXIT_SUCCESS’ undeclared (first use in this function)
+   51 |     return argc==2 && observe(argv[1]) ? EXIT_SUCCESS : EXIT_FAILURE;
+      |                                          ^~~~~~~~~~~~
+/tmp/night798/public-observer.c:5:1: note: ‘EXIT_SUCCESS’ is defined in header ‘<stdlib.h>’; did you forget to ‘#include <stdlib.h>’?
+    4 | #include "newlang/if_field.h"
+  +++ |+#include <stdlib.h>
+    5 | static bool walk(const NLCheckedFragment *f, size_t depth)
+/tmp/night798/public-observer.c:51:42: note: each undeclared identifier is reported only once for each function it appears in
+   51 |     return argc==2 && observe(argv[1]) ? EXIT_SUCCESS : EXIT_FAILURE;
+      |                                          ^~~~~~~~~~~~
+/tmp/night798/public-observer.c:51:57: error: ‘EXIT_FAILURE’ undeclared (first use in this function)
+   51 |     return argc==2 && observe(argv[1]) ? EXIT_SUCCESS : EXIT_FAILURE;
+      |                                                         ^~~~~~~~~~~~
+/tmp/night798/public-observer.c:51:57: note: ‘EXIT_FAILURE’ is defined in header ‘<stdlib.h>’; did you forget to ‘#include <stdlib.h>’?

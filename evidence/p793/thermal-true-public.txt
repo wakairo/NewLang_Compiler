@@ -1,0 +1,5 @@
+IF depth=1 node=25 normal_arms=1 terminates=0 field_view=0
+COPY depth=2 node=4 span=266:294 body_status=3 parameters_status=3 root=1 child=2 index=0 incarnation=1 pre_fact=2 post_fact=12 old_known=1/61 new_known=1/88 sibling_known=1/170 distinct_entry_handoff=1
+COPY depth=2 node=4 span=382:411 body_status=3 parameters_status=3 root=1 child=2 index=0 incarnation=1 pre_fact=2 post_fact=12 old_known=1/61 new_known=1/105 sibling_known=1/170 distinct_entry_handoff=1
+COPY depth=1 node=29 span=382:411 body_status=0 parameters_status=0 root=1 child=2 index=0 incarnation=1 pre_fact=2 post_fact=12 old_known=1/61 new_known=1/105 sibling_known=1/170 distinct_entry_handoff=1
+COPY depth=1 node=39 span=508:544 body_status=0 parameters_status=0 root=4 child=6 index=1 incarnation=4 pre_fact=6 post_fact=20 old_known=1/232 new_known=1/105 sibling_known=1/16 distinct_entry_handoff=1

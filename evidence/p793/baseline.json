@@ -1,0 +1,86 @@
+{
+  "negative_read_formal.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night793/evidence/p793/sources/negative_read_formal.nl:3:26-3:32: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+    },
+    "C17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night793/evidence/p793/sources/negative_read_formal.nl:3:26-3:32: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+    }
+  },
+  "negative_scope_escape.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night793/evidence/p793/sources/negative_scope_escape.nl:9:17-9:55: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+    },
+    "C17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night793/evidence/p793/sources/negative_scope_escape.nl:9:17-9:55: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+    }
+  },
+  "negative_wrong_field.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night793/evidence/p793/sources/negative_wrong_field.nl:11:20-11:31: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal\n"
+    },
+    "C17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night793/evidence/p793/sources/negative_wrong_field.nl:11:20-11:31: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal\n"
+    }
+  },
+  "router_false.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night793/evidence/p793/sources/router_false.nl:10:17-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+    },
+    "C17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night793/evidence/p793/sources/router_false.nl:10:17-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+    }
+  },
+  "router_true.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night793/evidence/p793/sources/router_true.nl:10:17-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+    },
+    "C17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night793/evidence/p793/sources/router_true.nl:10:17-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+    }
+  },
+  "thermal_false.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "C17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/night793/evidence/p793/sources/thermal_false.nl\n"
+    }
+  },
+  "thermal_true.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "C17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/night793/evidence/p793/sources/thermal_true.nl\n"
+    }
+  }
+}
