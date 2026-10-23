@@ -1,0 +1,97 @@
+{
+  "authority": "02884b759c86272c0f97c6ab74d3230c49ae5e27",
+  "tree": "0a6ddaabd800044bb54ca6f308046ec79b322f05",
+  "canonical": "Draft17.33",
+  "frozen_utc": "2026-10-22T14:14:06.328103+00:00",
+  "prediction": "Both independently authored programs eligible selected source; expect CHECK0/proof success, predict backend composition barrier between allocated and fixed-field lowerers. No compiler change before freeze. Lifecycle syntax calibrated from canonical and adopted tests; new ordering/dataflow are authored here, not independent BLIND evidence.",
+  "sha256": {
+    "calibration_batch.nl": "7197abc253ceac6839ab51c4ed72e5ee1f56c95f5e36a6991214fd95bbad84ce",
+    "archive_window.nl": "9fbdc2594e54ba2587fb951e7ed38af2e058311f00b70f321a5499d40d399bc7",
+    "negative_read_only.nl": "61243d59409e0a7bdf1d6e9e248cc7da2633b2b389e775ab48eb964e31b3e974",
+    "negative_consumed_owner.nl": "c84dc03338aedc4671e80166b19e113dfc4a3ce19edde57d05649e4b761d739e",
+    "negative_wrong_domain.nl": "9e2c0a465808f0bdd408b404830a107c124b1d6ad8bbb12f8aa76fb11d572544",
+    "negative_missing_cleanup.nl": "4797c567a126b0a86834a7e058501d9d3ed89d10247cb7700fe9d5a07d1e6584",
+    "negative_escaped_scope.nl": "42475a92f7738f99ac7d6f9f540128531c403ee4151edf33c8a42c51682b9b6f"
+  },
+  "oracle": {
+    "calibration_batch.nl": {
+      "lexical_before_allocation": true,
+      "source_initial": [
+        26,
+        118
+      ],
+      "source_after": [
+        63,
+        118
+      ],
+      "sink_initial": [
+        4,
+        202
+      ],
+      "sink_after": [
+        4,
+        26
+      ],
+      "old": 26,
+      "displaced": 202,
+      "heap_payload": [
+        37,
+        151
+      ],
+      "failure_worlds": [
+        {
+          "allocations": 0,
+          "frees": 0
+        },
+        {
+          "allocations": 1,
+          "frees": 1
+        },
+        {
+          "allocations": 2,
+          "frees": 2
+        }
+      ]
+    },
+    "archive_window.nl": {
+      "lexical_after_link_before_return": true,
+      "source_initial": [
+        12,
+        193
+      ],
+      "source_after": [
+        12,
+        71
+      ],
+      "sink_initial": [
+        88,
+        207
+      ],
+      "sink_after": [
+        193,
+        207
+      ],
+      "old": 193,
+      "displaced": 88,
+      "heap_payload": [
+        59,
+        211
+      ],
+      "failure_worlds": [
+        {
+          "allocations": 0,
+          "frees": 0
+        },
+        {
+          "allocations": 1,
+          "frees": 1
+        },
+        {
+          "allocations": 2,
+          "frees": 2
+        }
+      ]
+    }
+  },
+  "negative_expectation": "No semantic acceptance of readonly ref, consumed owner, wrong original Domain, leaked Allocation, escaped scoped ref. Native only after complete authentic source proof and C17 emission."
+}

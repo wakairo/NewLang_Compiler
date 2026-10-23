@@ -1,0 +1,36 @@
+[
+  {
+    "source": "order_h_t",
+    "mode": "positive",
+    "stdout": "COPY original=1 child=2 nominal=10 old_fact=1 post_fact=11 old_Copy=13 existing_validators=PASS\nH=11 T=10 self=11 signatures=PASS source_owned=PASS heap_originals=0 NO_DUAL_CARRIER_PROOF\n"
+  },
+  {
+    "source": "order_h_t",
+    "mode": "oom",
+    "stdout": "OOM parser=82 partial_tree=0 retry=PASS\nOOM registration=517 clone/types/completion/signatures/late-body rollback=PASS\n"
+  },
+  {
+    "source": "order_t_h",
+    "mode": "positive",
+    "stdout": "COPY original=1 child=2 nominal=10 old_fact=1 post_fact=11 old_Copy=13 existing_validators=PASS\nH=11 T=10 self=11 signatures=PASS source_owned=PASS heap_originals=0 NO_DUAL_CARRIER_PROOF\n"
+  },
+  {
+    "source": "order_t_h",
+    "mode": "oom",
+    "stdout": "OOM parser=82 partial_tree=0 retry=PASS\nOOM registration=517 clone/types/completion/signatures/late-body rollback=PASS\n"
+  },
+  {
+    "source": "two_original_hook",
+    "mode": "positive",
+    "stdout": "COPY existing_view=present validators=PRECISION_LIMIT same_body_caller_world=1 Stage2_NOT_IMPLEMENTED\nH layout_known=0->1 size=0->24 alignment=0->8 existing_type_epoch_fence\nH=11 T=10 self=11 signatures=PASS source_owned=PASS heap_originals=2 NO_DUAL_CARRIER_PROOF\n"
+  },
+  {
+    "source": "two_original_hook",
+    "mode": "oom",
+    "stdout": "OOM parser=229 partial_tree=0 retry=PASS\nOOM registration=1226 clone/types/completion/signatures/late-body rollback=PASS\n"
+  },
+  {
+    "driver": "normal newlangc path, no physical guest execution",
+    "stdout": "DRIVER check=1 positions=974 CLI0=0 CLI1=28 CLI3=946 CLI4=0 zero_partial_C=PASS no_internal=PASS recovery=PASS\nDRIVER check=0 positions=974 CLI0=0 CLI1=28 CLI3=946 CLI4=0 zero_partial_C=PASS no_internal=PASS recovery=PASS\n"
+  }
+]

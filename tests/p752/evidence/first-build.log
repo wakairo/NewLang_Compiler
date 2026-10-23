@@ -1,0 +1,64 @@
+[  0%] Building C object CMakeFiles/newlang_source.dir/src/source.c.o
+[  1%] Building C object CMakeFiles/newlang_diagnostic.dir/src/diagnostic.c.o
+[  1%] Linking C static library libnewlang_diagnostic.a
+[  1%] Linking C static library libnewlang_source.a
+[  1%] Built target newlang_source
+[  1%] Built target newlang_diagnostic
+[  2%] Building C object CMakeFiles/newlang_syntax.dir/src/syntax.c.o
+[  2%] Building C object CMakeFiles/source_test.dir/tests/unit/source_test.c.o
+[  3%] Building C object CMakeFiles/diagnostic_test.dir/tests/unit/diagnostic_test.c.o
+[  3%] Building C object CMakeFiles/newlang_lexer.dir/src/lexer.c.o
+[  3%] Linking C static library libnewlang_syntax.a
+[  3%] Linking C executable diagnostic_test
+[  3%] Built target newlang_syntax
+[  4%] Linking C static library libnewlang_lexer.a
+[  4%] Linking C executable source_test
+[  4%] Built target diagnostic_test
+[  4%] Building C object CMakeFiles/newlang_checked.dir/src/checked.c.o
+[  4%] Built target newlang_lexer
+[  4%] Built target source_test
+[  4%] Building C object CMakeFiles/newlang_parser.dir/src/parser.c.o
+[  5%] Building C object CMakeFiles/newlang_parser_p534.dir/src/parser.c.o
+[  5%] Building C object CMakeFiles/lexer_test.dir/tests/unit/lexer_test.c.o
+[  5%] Linking C static library libnewlang_checked.a
+[  5%] Built target newlang_checked
+[  6%] Linking C executable lexer_test
+[  6%] Building C object CMakeFiles/lexical_frontend_test.dir/tests/integration/lexical_frontend_test.c.o
+[  6%] Built target lexer_test
+[  6%] Linking C executable lexical_frontend_test
+[  6%] Linking C static library libnewlang_parser.a
+[  6%] Built target lexical_frontend_test
+[  6%] Linking C static library libnewlang_parser_p534.a
+[  6%] Built target newlang_parser
+[  6%] Built target newlang_parser_p534
+[  6%] Building C object CMakeFiles/newlang_semantic.dir/src/copy_body.c.o
+[  7%] Building C object CMakeFiles/syntax_frontend_test.dir/tests/integration/syntax_frontend_test.c.o
+[  7%] Building C object CMakeFiles/parser_test.dir/tests/unit/parser_test.c.o
+[  7%] Building C object CMakeFiles/newlang_semantic.dir/src/if_field.c.o
+[  7%] Linking C executable syntax_frontend_test
+[  7%] Built target syntax_frontend_test
+[  8%] Building C object CMakeFiles/newlang_semantic.dir/src/array4.c.o
+[  9%] Linking C executable parser_test
+[  9%] Building C object CMakeFiles/newlang_semantic.dir/src/usize_addition.c.o
+[ 10%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o
+[ 10%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic.c.o
+[ 10%] Built target parser_test
+[ 10%] Building C object CMakeFiles/newlang_semantic.dir/src/recursive_type.c.o
+[ 10%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_node.c.o
+[ 11%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_join.c.o
+[ 11%] Building C object CMakeFiles/newlang_semantic.dir/src/captured_closure.c.o
+[ 11%] Building C object CMakeFiles/newlang_semantic.dir/src/node_join.c.o
+[ 12%] Building C object CMakeFiles/newlang_semantic.dir/src/node_links.c.o
+[ 12%] Building C object CMakeFiles/newlang_semantic.dir/src/packet_fork.c.o
+[ 12%] Building C object CMakeFiles/newlang_semantic.dir/src/fixed_field.c.o
+[ 13%] Building C object CMakeFiles/newlang_semantic.dir/src/sum.c.o
+/workspace/p752/src/semantic_check.c: In function ‘register_function_unit’:
+[ 13%] Building C object CMakeFiles/newlang_semantic.dir/src/raw_storage.c.o
+/workspace/p752/src/semantic_check.c:9509:58: error: ‘NLFunctionEntry’ has no member named ‘view’
+ 9509 |                 check.context->functions[d->function - 1].view.result ==
+      |                                                          ^
+[ 13%] Building C object CMakeFiles/newlang_semantic.dir/src/function_body.c.o
+gmake[2]: *** [CMakeFiles/newlang_semantic.dir/build.make:149: CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o] Error 1
+gmake[2]: *** Waiting for unfinished jobs....
+gmake[1]: *** [CMakeFiles/Makefile2:751: CMakeFiles/newlang_semantic.dir/all] Error 2
+gmake: *** [Makefile:101: all] Error 2
