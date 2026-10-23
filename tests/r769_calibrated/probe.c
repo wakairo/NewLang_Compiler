@@ -276,8 +276,8 @@ typedef struct {
 } R772Intact;
 
 static bool r772_preserved_functions(const NLSemanticContext *ctx,
-                                    const R772Intact *baseline,
-                                    R772Intact *observed)
+                                     const R772Intact *baseline,
+                                     R772Intact *observed)
 {
     static const struct {
         const char *name;
