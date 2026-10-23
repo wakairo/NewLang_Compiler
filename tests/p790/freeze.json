@@ -1,0 +1,88 @@
+{
+  "base": "5cd860e844703b6b778299689399b9d7fab64b44",
+  "expectation": {
+    "CHECK": 0,
+    "public_body": 0,
+    "public_parameters": 0,
+    "baseline_C17": 4,
+    "baseline_named": "unchanged",
+    "valve": {
+      "calls": 1,
+      "T": [
+        [
+          22,
+          83
+        ],
+        [
+          14,
+          203
+        ]
+      ],
+      "updates": [
+        [
+          0,
+          1,
+          83,
+          164,
+          22
+        ]
+      ],
+      "H": [
+        116,
+        192
+      ]
+    },
+    "meter": {
+      "calls": 2,
+      "T": [
+        [
+          19,
+          68
+        ],
+        [
+          126,
+          35
+        ]
+      ],
+      "updates": [
+        [
+          0,
+          1,
+          68,
+          211,
+          19
+        ],
+        [
+          1,
+          0,
+          126,
+          68,
+          35
+        ]
+      ],
+      "H": [
+        33,
+        157
+      ]
+    },
+    "failure_worlds": {
+      "0": [
+        2,
+        2
+      ],
+      "1": [
+        0,
+        0
+      ],
+      "2": [
+        1,
+        1
+      ]
+    }
+  },
+  "sha256": {
+    "meter.nl": "99869b9d0ecc7d819cd5ade43bb1d218086074f6281a50d042ccc4c1dcfbb82c",
+    "valve.nl": "8e27c707e7ea1130068a30cba3a2a9a14696dcf7af87629b97fb3a3bc223b7eb"
+  },
+  "gate": "public failure STOP; first backend greater generality STOP; no issuer changes"
+}
