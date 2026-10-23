@@ -65,9 +65,9 @@ static bool same(const NLSemanticSnapshot *a, const NLSemanticSnapshot *b)
 {
 #define EQ(k) (a->k == b->k)
     return EQ(types) && EQ(bindings) && EQ(values) && EQ(places) &&
-           EQ(domains) && EQ(scopes) && EQ(functions) &&
-           EQ(last_incarnation) && EQ(last_value_fact) &&
-           EQ(backing_regions) && EQ(raw_intervals) && EQ(occurrences);
+           EQ(domains) && EQ(scopes) && EQ(functions) && EQ(last_incarnation) &&
+           EQ(last_value_fact) && EQ(backing_regions) && EQ(raw_intervals) &&
+           EQ(occurrences);
 #undef EQ
 }
 static bool type_inspect(const NLSemanticContext *ctx, const char *link,
@@ -81,21 +81,20 @@ static bool type_inspect(const NLSemanticContext *ctx, const char *link,
     NLTypeId h = 0, t = 0;
     for (NLTypeId id = 1; id <= ss.types; ++id) {
         NLSemanticTypeView v = {0};
-        if (!nl_semantic_type_view(ctx, id, &v) ||
-            v.kind != NL_TYPE_NOMINAL || v.field_count != 2)
+        if (!nl_semantic_type_view(ctx, id, &v) || v.kind != NL_TYPE_NOMINAL ||
+            v.field_count != 2)
             continue;
         NLAggregateField f0 = {0}, f1 = {0};
         if (!nl_semantic_aggregate_field_view(ctx, id, 0, &f0) ||
-            !nl_semantic_aggregate_field_view(ctx, id, 1, &f1) ||
-            !f0.name || !f1.name)
+            !nl_semantic_aggregate_field_view(ctx, id, 1, &f1) || !f0.name ||
+            !f1.name)
             continue;
         if (strcmp(f0.name, a) == 0 && strcmp(f1.name, b) == 0) {
-            CHECK(t == 0 && f0.type == u8 && f1.type == u8 &&
-                  v.is_copy && v.is_discardable);
+            CHECK(t == 0 && f0.type == u8 && f1.type == u8 && v.is_copy &&
+                  v.is_discardable);
             t = id;
         }
-        if (strcmp(f0.name, link) == 0 &&
-            strcmp(f1.name, "payload") == 0) {
+        if (strcmp(f0.name, link) == 0 && strcmp(f1.name, "payload") == 0) {
             CHECK(h == 0 && f1.type == u8);
             h = id;
         }
@@ -112,15 +111,16 @@ static bool type_inspect(const NLSemanticContext *ctx, const char *link,
            (size_t)h, (size_t)t, (size_t)p, a, b, ss.functions);
     return true;
 }
-static bool positive(const char *source, const char *link,
-                     const char *a, const char *b)
+static bool positive(const char *source, const char *link, const char *a,
+                     const char *b)
 {
     Input i = {0};
     CHECK(input_open(source, &i) && i.parse == NL_PARSE_OK);
     NLSemanticContext *ctx = NULL;
     CHECK(nl_semantic_create(&ctx) == NL_CHECK_OK);
     const NLSyntaxTree *unit[] = {i.unit};
-    NLCheckStatus result = nl_semantic_register_function_unit(ctx, unit, 1, NULL);
+    NLCheckStatus result =
+        nl_semantic_register_function_unit(ctx, unit, 1, NULL);
     printf("R756 positive REGISTER %s status=%d\n", source, (int)result);
     CHECK(result == NL_CHECK_OK);
     CHECK(type_inspect(ctx, link, a, b));
@@ -154,7 +154,8 @@ static bool negative(const char *bad_path, const char *good_path)
         CHECK(result != NL_CHECK_OK);
     } else {
         printf("R756 negative %s PARSER rejection; "
-               "cannot count as semantic CHECK rejection\n", bad_path);
+               "cannot count as semantic CHECK rejection\n",
+               bad_path);
     }
     CHECK(nl_semantic_snapshot(ctx, &after) && same(&before, &after));
     const NLSyntaxTree *repair[] = {good.unit};
@@ -190,8 +191,8 @@ static bool fault_sweep(const char *source)
             CHECK(status != NL_CHECK_OK && same(&before, &after));
             CHECK(nl_semantic_register_function_unit(ctx, items, 1, NULL) ==
                   NL_CHECK_OK);
-            printf("R756 OOM fail_at=%zu status=%d rollback/retry=OK\n",
-                   j, (int)status);
+            printf("R756 OOM fail_at=%zu status=%d rollback/retry=OK\n", j,
+                   (int)status);
         } else {
             CHECK(status == NL_CHECK_OK);
         }
@@ -207,13 +208,12 @@ static bool gate(int argc, char **argv)
     CHECK(positive(argv[1], "successor", "incoming", "outgoing"));
     CHECK(positive(argv[2], "child", "top", "base"));
     static const char *cases[] = {
-        "n_bad_second_t_type.nl", "n_bad_second_h_target.nl",
-        "n_h_t_name_collision.nl", "n_two_h_nominals.nl",
-        "n_two_t_nominals.nl", "n_unknown_t_field.nl",
-        "n_bad_uncalled_body.nl", "n_duplicate_function.nl",
-        "n_read_write_escalation.nl", "n_double_consume_owner.nl",
-        "n_missing_failure_cleanup.nl"
-    };
+        "n_bad_second_t_type.nl",      "n_bad_second_h_target.nl",
+        "n_h_t_name_collision.nl",     "n_two_h_nominals.nl",
+        "n_two_t_nominals.nl",         "n_unknown_t_field.nl",
+        "n_bad_uncalled_body.nl",      "n_duplicate_function.nl",
+        "n_read_write_escalation.nl",  "n_double_consume_owner.nl",
+        "n_missing_failure_cleanup.nl"};
     const char *slash = strrchr(argv[1], '/');
     CHECK(slash != NULL);
     char full[4096];
