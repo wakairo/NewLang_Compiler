@@ -1,0 +1,99 @@
+{
+  "issue": 787,
+  "mode": "FRESH FIRST-PASS BLIND; normal Chat + GitHub connector + GitHub Actions",
+  "main": "77d83dfc00850b14fd7c3bc95e7e3c12e34161fb",
+  "candidate": "5cd860e844703b6b778299689399b9d7fab64b44",
+  "canonical": "Draft17.34",
+  "inputs": {
+    "positive_two_calls.nl": {
+      "sha256": "203cd075c2fa789a8dfe051d9604cfb8afc044ccb3a99980cdc130e98489049e",
+      "bytes": 3877
+    },
+    "positive_second_field.nl": {
+      "sha256": "c6fdae9e6fa7bb5fa10b01cfb850ee7e602dda831ae8044eb19d4585a4eff8e1",
+      "bytes": 3598
+    },
+    "negative_double_release.nl": {
+      "sha256": "527353c8288ebbe409867a3786829b815cae0003e9843225c282e9f2bd91d578",
+      "bytes": 3675
+    },
+    "negative_wrong_original.nl": {
+      "sha256": "b5c650d0f74842bda225fadc1482b9cc587494c4f0adee97c025c10189ea4ee9",
+      "bytes": 3594
+    },
+    "negative_read_loan.nl": {
+      "sha256": "4bc796799cdb67da87bfe7aed05ae57fd3ee64cd64be4d6cc9353bba52b65756",
+      "bytes": 3597
+    }
+  },
+  "oracles": {
+    "positive_two_calls.nl": {
+      "H_alloc": "0/1/2 original allocations; tail original returned, consumed once by retire_tail, then head released once",
+      "T": [
+        {
+          "index": 0,
+          "old": 21,
+          "new": 64,
+          "sibling": 174
+        },
+        {
+          "index": 1,
+          "old": 196,
+          "new": 33,
+          "sibling": 88
+        }
+      ],
+      "public": "Both body and parameters NL_CHECK_OK at actual arm owner/world; zero on foreign",
+      "check": 0,
+      "cli4": 4
+    },
+    "positive_second_field.nl": {
+      "H_alloc": "0/1/2; original tail returned then release_tail once, head independently",
+      "T": [
+        {
+          "index": 1,
+          "old": 177,
+          "new": 91,
+          "sibling": 43
+        }
+      ],
+      "public": "Both body and parameters NL_CHECK_OK at actual arm owner/world; zero on foreign",
+      "check": 0,
+      "cli4": 4
+    }
+  },
+  "negatives": {
+    "negative_double_release.nl": "semantic nonCopy single-consume rejection (CHECK nonzero; no C17)",
+    "negative_wrong_original.nl": "source semantic/typed owner wrong root/allocation/domain rejection (CHECK nonzero; no C17)",
+    "negative_read_loan.nl": "source write permission from read-only loan refused (CHECK nonzero; no C17)",
+    "copied_public_views": "foreign same-numeric world/arm, graph root/count/source/order, formal loan/field/fact/entry, ownership mismatch -> validator != NL_CHECK_OK",
+    "OOM": "fault-injected completed arm issuer path with did_fail and stable graph/output + retry, no permission grant"
+  },
+  "cli": "For both new R-B-like H-success-arm T Copy sources, '--check' succeeds and normal/newlangc named stdout C17 remains CLI4, zero C, unchanged named sentinel; no B native.",
+  "historical": {
+    "R-B": {
+      "sha256": "12c5c66c413a57fd78549cb4563c71c6831d0f151b53b2d4569d32f7b50a1af5",
+      "baseline_public": "precision3/3",
+      "candidate_public": "0/0",
+      "cli": 4
+    },
+    "R-A": {
+      "sha256": "a516361123d26de17ac6e5f9a81cc530f50b6509379a960ca20e78a2df0b6a0d",
+      "native": "strict GCC/Clang O0/O2, ASan/UBSan, 0/1/2 fail-world unchanged"
+    }
+  },
+  "ctests": [
+    "r787_source_arm_copy.unit",
+    "r787_provenance_negative.unit",
+    "r787_arm_snapshot_oom.unit",
+    "r787_cli_regression.integration"
+  ],
+  "expected_inventory": {
+    "K": 4,
+    "FULL5": 452,
+    "PARTIAL": 451,
+    "delta": "only llvm.c_api"
+  },
+  "escape": "No oracle retuning or rerun on first semantic red; original frozen evidence retained; any mechanical repair only following separate C authorization.",
+  "pre_candidate_freeze_head_before_manifest": "71b58a6b244fd2a2299e0d368d5587c13c0791e0"
+}

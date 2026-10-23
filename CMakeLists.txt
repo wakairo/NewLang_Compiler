@@ -687,6 +687,28 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    # R #787 FIRST-PASS BLIND: independent, frozen source and oracle.
+    # Candidate is a pinned immutable P HEAD; R owns only the harness.
+    add_executable(r787_public tests/r787/public.c)
+    add_executable(r787_integrity tests/r787/integrity.c)
+    add_executable(r787_oom tests/r787/oom.c)
+    foreach(target r787_public r787_integrity r787_oom)
+        target_link_libraries(${target} PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    endforeach()
+    target_link_options(r787_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=nl_copy_body_seal_calls)
+    add_test(NAME r787_source_arm_copy.unit COMMAND r787_public
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r787/frozen/positive_two_calls.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r787/frozen/positive_second_field.nl")
+    add_test(NAME r787_provenance_negative.unit COMMAND r787_integrity
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r787/frozen/positive_two_calls.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r787/frozen/positive_second_field.nl")
+    add_test(NAME r787_arm_snapshot_oom.unit COMMAND r787_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r787/frozen/positive_two_calls.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r787/frozen/positive_second_field.nl")
+    add_test(NAME r787_cli_regression.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r787/cli.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}")
     add_executable(p785_public tests/p785/public.c)
     add_executable(p785_integrity tests/p785/integrity.c)
     add_executable(p785_oom tests/p785/oom.c)
