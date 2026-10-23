@@ -1,0 +1,6 @@
+Gate0 diagnostic harness initial compile only; Production compiler unchanged.
+error: NLSemanticValueView has no member named scalar (3 references)
+error: NLCheckedNodeView has no member named captured_heap_closed; did you mean captured_frame_closed?
+The installed public headers declare scalar_value and captured_frame_closed.
+Mechanical probe API corrections only; no source/oracle/expected result changed.
+No NewLang CHECK/public validator/native result was produced by that failed C build.

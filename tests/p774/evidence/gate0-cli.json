@@ -1,0 +1,192 @@
+[
+  {
+    "source": "pump_reserve.nl",
+    "sha256": "1d56ceb2e0ce0deef26d1d11e8ff2defebc4abb39673ffb5a7cbb377acad9be0",
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: tests/p774/sources/pump_reserve.nl\n"
+    },
+    "named": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "sentinel_preserved": true
+    }
+  },
+  {
+    "source": "scale_reserve.nl",
+    "sha256": "8ebef748a0930d1b895726cc384b659e3a4644c962fda02b6ce60c8e906473dc",
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: tests/p774/sources/scale_reserve.nl\n"
+    },
+    "named": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "sentinel_preserved": true
+    }
+  },
+  {
+    "source": "negative_wrong_allocation.nl",
+    "sha256": "b874b5048f2aa68ee670f58b15085bef4164a273ac20700f393ea2cdebf7b495",
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_wrong_allocation.nl:74:21-74:76: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_wrong_allocation.nl:74:21-74:76: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n"
+    },
+    "named": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "sentinel_preserved": true
+    }
+  },
+  {
+    "source": "negative_wrong_domain.nl",
+    "sha256": "4931da1d27913cb5018496f25087635354e515024d67a00e009671d290febe5e",
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_wrong_domain.nl:68:63-68:75: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_wrong_domain.nl:68:63-68:75: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n"
+    },
+    "named": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "sentinel_preserved": true
+    }
+  },
+  {
+    "source": "negative_consumed_allocation.nl",
+    "sha256": "4ebc4a3ffa4a9fe9cb74afc685b7e891e01dd9427eae9193548fc1b68c86060f",
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_consumed_allocation.nl:74:21-74:39: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_consumed_allocation.nl:74:21-74:39: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n"
+    },
+    "named": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "sentinel_preserved": true
+    }
+  },
+  {
+    "source": "negative_missing_cleanup.nl",
+    "sha256": "4ad5529694374fb89ba33be501337a1a6ceabe1bea8b1dd278ca74ca2fb1802b",
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_missing_cleanup.nl:51:39-80:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_missing_cleanup.nl:51:39-80:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n"
+    },
+    "named": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "sentinel_preserved": true
+    }
+  },
+  {
+    "source": "negative_copy_as_ref.nl",
+    "sha256": "7f6a96640aeb4459dd340fc74e0136edcaf0608c72c1af3cbbe4f057a457ebef",
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_copy_as_ref.nl:26:67-26:72: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_copy_as_ref.nl:26:67-26:72: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+    },
+    "named": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "sentinel_preserved": true
+    }
+  },
+  {
+    "source": "negative_scoped_escape.nl",
+    "sha256": "61d041ea421c9b4263421ba4ac92a13d791af7055341f8ee3df842268a947660",
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_scoped_escape.nl:28:17-28:21: error(semantic)[P3-UNKNOWN-CALLEE]: unknown semantic callee\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_scoped_escape.nl:28:17-28:21: error(semantic)[P3-UNKNOWN-CALLEE]: unknown semantic callee\n"
+    },
+    "named": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "sentinel_preserved": true
+    }
+  },
+  {
+    "source": "negative_read_actual.nl",
+    "sha256": "fcca178d6a3f81fb771ba61d0a2680844192feb0df1b17057af1c8e3df330066",
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_read_actual.nl:26:34-26:35: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_read_actual.nl:26:34-26:35: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n"
+    },
+    "named": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "sentinel_preserved": true
+    }
+  },
+  {
+    "source": "negative_wrong_h_target.nl",
+    "sha256": "939253bccd8aa5ca501ce499a17651a1b70b025d1a53b9b6587eb53c5c802649",
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_wrong_h_target.nl:1:44-1:54: error(unsupported)[REC-SELF-TARGET]: exact Option target requires the bounded nominal header\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "tests/p774/sources/negative_wrong_h_target.nl:1:44-1:54: error(unsupported)[REC-SELF-TARGET]: exact Option target requires the bounded nominal header\n"
+    },
+    "named": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "sentinel_preserved": true
+    }
+  }
+]
