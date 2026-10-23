@@ -1,0 +1,12 @@
+{
+  "utc": "2026-10-23T12:03:31.822045+00:00",
+  "note": "Supplemental semantic negatives frozen before execution, after public proof gate reached; original positive and external freeze unchanged",
+  "expected": {
+    "negative_domain.nl": "CLI3 original ptr/Domain mismatch",
+    "negative_duplicate.nl": "CLI3 consumed owner local reused"
+  },
+  "sha256": {
+    "negative_domain.nl": "29c84f0395a6dafe71ada7839b29b6f1185a02d081cd3845d49fd6954b26ec80",
+    "negative_duplicate.nl": "5fd69ccf2679baef726e054643db1ab3d0120b265ab9f821e460d8e872ef4814"
+  }
+}

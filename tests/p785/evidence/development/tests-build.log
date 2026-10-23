@@ -1,0 +1,38 @@
+[  9%] Built target newlang_diagnostic
+[ 18%] Built target newlang_source
+[ 18%] Built target newlang_syntax
+[ 27%] Built target newlang_lexer
+[ 36%] Built target newlang_checked
+[ 36%] Built target newlang_parser
+[ 90%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Built target newlangc
+[ 10%] Built target newlang_diagnostic
+[ 20%] Built target newlang_source
+[ 30%] Built target newlang_lexer
+[ 30%] Built target newlang_syntax
+[ 40%] Built target newlang_checked
+[ 40%] Built target newlang_parser
+[100%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p785_public.dir/tests/p785/public.c.o
+[100%] Linking C executable p785_public
+[100%] Built target p785_public
+[  9%] Built target newlang_source
+[ 18%] Built target newlang_diagnostic
+[ 27%] Built target newlang_lexer
+[ 27%] Built target newlang_syntax
+[ 36%] Built target newlang_parser
+[ 36%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p785_integrity.dir/tests/p785/integrity.c.o
+/workspace/p785/tests/p785/integrity.c: In function ‘run’:
+/workspace/p785/tests/p785/integrity.c:60:28: error: initialization discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
+   60 |         NLSource *source = a.caller->source;
+      |                            ^
+cc1: all warnings being treated as errors
+gmake[3]: *** [CMakeFiles/p785_integrity.dir/build.make:79: CMakeFiles/p785_integrity.dir/tests/p785/integrity.c.o] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:4963: CMakeFiles/p785_integrity.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:4970: CMakeFiles/p785_integrity.dir/rule] Error 2
+gmake: *** [Makefile:1694: p785_integrity] Error 2

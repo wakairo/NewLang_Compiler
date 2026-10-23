@@ -687,6 +687,25 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(p785_public tests/p785/public.c)
+    add_executable(p785_integrity tests/p785/integrity.c)
+    add_executable(p785_oom tests/p785/oom.c)
+    foreach(target p785_public p785_integrity p785_oom)
+        target_link_libraries(${target} PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    endforeach()
+    target_link_options(p785_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=nl_copy_body_seal_calls)
+    add_test(NAME p785_r_b_public.unit COMMAND p785_public
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p778/external_r776/positive_t_interposed.nl" 1)
+    add_test(NAME p785_pressure_arm_public.unit COMMAND p785_public
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785/sources/pressure_arm.nl" 2)
+    add_test(NAME p785_arm_integrity.unit COMMAND p785_integrity
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785/sources/pressure_arm.nl")
+    add_test(NAME p785_issuer_oom.unit COMMAND p785_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p778/external_r776/positive_t_interposed.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785/sources/pressure_arm.nl")
+    add_test(NAME p785_cli_boundaries.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785/cli.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785")
     add_executable(p778_probe tests/p778/probe.c)
     add_executable(p778_gate_test tests/p778/gate_test.c)
     foreach(target p778_probe p778_gate_test)

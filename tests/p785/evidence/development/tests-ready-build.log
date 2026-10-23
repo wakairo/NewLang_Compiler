@@ -1,0 +1,20 @@
+[  9%] Built target newlang_source
+[ 18%] Built target newlang_diagnostic
+[ 27%] Built target newlang_lexer
+[ 27%] Built target newlang_syntax
+[ 36%] Built target newlang_checked
+[ 36%] Built target newlang_parser
+[ 90%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Built target p785_integrity
+[  9%] Built target newlang_source
+[ 18%] Built target newlang_diagnostic
+[ 27%] Built target newlang_syntax
+[ 27%] Built target newlang_lexer
+[ 27%] Built target newlang_parser
+[ 36%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[ 90%] Building C object CMakeFiles/p785_oom.dir/tests/p785/oom.c.o
+[100%] Linking C executable p785_oom
+[100%] Built target p785_oom

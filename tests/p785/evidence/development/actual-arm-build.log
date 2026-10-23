@@ -1,0 +1,22 @@
+[  0%] Built target newlang_diagnostic
+[  8%] Built target newlang_source
+[ 25%] Built target newlang_syntax
+[ 25%] Built target newlang_lexer
+[ 33%] Built target newlang_parser
+[ 41%] Built target newlang_checked
+[ 41%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o
+[ 41%] Linking C static library libnewlang_semantic.a
+[ 91%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable newlangc
+[100%] Built target newlangc
+[  7%] Built target newlang_source
+[  7%] Built target newlang_diagnostic
+[ 15%] Built target newlang_syntax
+[ 23%] Built target newlang_lexer
+[ 38%] Built target newlang_parser
+[ 38%] Built target newlang_checked
+[ 84%] Built target newlang_semantic
+[ 92%] Built target newlang_checked_c_node
+[ 92%] Linking C executable p778_probe
+[100%] Built target p778_probe

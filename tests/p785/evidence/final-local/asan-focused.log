@@ -1,0 +1,40 @@
+Internal ctest changing into directory: /tmp/p785-address
+Test project /tmp/p785-address
+      Start   1: p718_if_return_proof_oom.unit
+ 1/17 Test   #1: p718_if_return_proof_oom.unit ..............   Passed    3.80 sec
+      Start   3: p728_unit_statement_proof.unit
+ 2/17 Test   #3: p728_unit_statement_proof.unit .............   Passed    0.26 sec
+      Start   8: p713_if_field_proof_oom.unit
+ 3/17 Test   #8: p713_if_field_proof_oom.unit ...............   Passed    2.18 sec
+      Start 244: p785_r_b_public.unit
+ 4/17 Test #244: p785_r_b_public.unit .......................   Passed    0.04 sec
+      Start 245: p785_pressure_arm_public.unit
+ 5/17 Test #245: p785_pressure_arm_public.unit ..............   Passed    0.07 sec
+      Start 246: p785_arm_integrity.unit
+ 6/17 Test #246: p785_arm_integrity.unit ....................   Passed    0.11 sec
+      Start 247: p785_issuer_oom.unit
+ 7/17 Test #247: p785_issuer_oom.unit .......................   Passed    0.20 sec
+      Start 248: p785_cli_boundaries.integration
+ 8/17 Test #248: p785_cli_boundaries.integration ............   Passed    1.20 sec
+      Start 249: p778_sensor_spare_gate.unit
+ 9/17 Test #249: p778_sensor_spare_gate.unit ................   Passed    0.29 sec
+      Start 250: p778_valve_spare_gate.unit
+10/17 Test #250: p778_valve_spare_gate.unit .................   Passed    0.31 sec
+      Start 251: p778_r_a_gate.unit
+11/17 Test #251: p778_r_a_gate.unit .........................   Passed    0.23 sec
+      Start 252: p778_driver_oom.unit
+12/17 Test #252: p778_driver_oom.unit .......................   Passed    0.58 sec
+      Start 253: p778_source_native.integration
+13/17 Test #253: p778_source_native.integration .............   Passed    3.74 sec
+      Start 254: p774_driver_oom.unit
+14/17 Test #254: p774_driver_oom.unit .......................   Passed    0.38 sec
+      Start 255: p774_pump_reserve_gate.unit
+15/17 Test #255: p774_pump_reserve_gate.unit ................   Passed    0.12 sec
+      Start 256: p774_scale_reserve_gate.unit
+16/17 Test #256: p774_scale_reserve_gate.unit ...............   Passed    0.15 sec
+      Start 257: p774_mixed_owner_copy_native.integration
+17/17 Test #257: p774_mixed_owner_copy_native.integration ...   Passed    2.65 sec
+
+100% tests passed, 0 tests failed out of 17
+
+Total Test time (real) =  16.33 sec

@@ -1,0 +1,26 @@
+[  9%] Built target newlang_diagnostic
+[ 18%] Built target newlang_source
+[ 27%] Built target newlang_lexer
+[ 27%] Built target newlang_syntax
+[ 27%] Built target newlang_parser
+[ 36%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Built target p785_integrity
+[  9%] Built target newlang_source
+[ 18%] Built target newlang_diagnostic
+[ 27%] Built target newlang_lexer
+[ 27%] Built target newlang_syntax
+[ 36%] Built target newlang_checked
+[ 36%] Built target newlang_parser
+[ 90%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[ 90%] Building C object CMakeFiles/p785_oom.dir/tests/p785/oom.c.o
+[100%] Linking C executable p785_oom
+/usr/bin/ld: CMakeFiles/p785_oom.dir/tests/p785/oom.c.o: in function `__wrap_nl_copy_body_seal_calls':
+/workspace/p785/tests/p785/oom.c:29:(.text+0x22b2): undefined reference to `__real_calloc'
+collect2: error: ld returned 1 exit status
+gmake[3]: *** [CMakeFiles/p785_oom.dir/build.make:111: p785_oom] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:5002: CMakeFiles/p785_oom.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:5009: CMakeFiles/p785_oom.dir/rule] Error 2
+gmake: *** [Makefile:1707: p785_oom] Error 2

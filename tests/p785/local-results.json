@@ -1,0 +1,106 @@
+{
+  "utc": "2026-10-23T12:14:32.493629+00:00",
+  "main": "77d83dfc00850b14fd7c3bc95e7e3c12e34161fb",
+  "freeze_commit": "ee0f6f2",
+  "frontend_first": {
+    "passed": 447,
+    "total": 447,
+    "seconds": 126.41
+  },
+  "asan_lsan": {
+    "passed": 17,
+    "total": 17,
+    "seconds": 16.33
+  },
+  "ubsan": {
+    "passed": 17,
+    "total": 17,
+    "seconds": 9.53
+  },
+  "final_additional_integrity": "new-current/sibling Copy-result substitutions refused; integrity rerun regular/ASan/UBSan PASS",
+  "new_K": 5,
+  "expected_full": 448,
+  "expected_partial": 447,
+  "R_B": {
+    "call": 74,
+    "caller_root": 136,
+    "caller_nodes": 136,
+    "T_root": 37,
+    "T_child": 39,
+    "index": 1,
+    "old": 184,
+    "new": 27,
+    "sibling": 7,
+    "public_body": 0,
+    "public_parameters": 0,
+    "CLI_CHECK": 0,
+    "CLI_C17": 4,
+    "C_bytes": 0,
+    "named_unchanged": true,
+    "native": "NOT TESTED"
+  },
+  "P_source": {
+    "calls": [
+      74,
+      81
+    ],
+    "caller_nodes": 141,
+    "old": [
+      237,
+      14
+    ],
+    "new": [
+      97,
+      237
+    ],
+    "sibling": [
+      57,
+      203
+    ],
+    "public_body": [
+      0,
+      0
+    ],
+    "public_parameters": [
+      0,
+      0
+    ],
+    "CLI_C17": 4
+  },
+  "tamper": {
+    "graph_mutations": 30,
+    "same_number_alien_world": "refused",
+    "parent_sibling_wrong_index_handles": "refused",
+    "current_new_or_sibling_as_old_Copy_result": "refused",
+    "restore": "PASS"
+  },
+  "OOM": {
+    "actual_source_issued_snapshot_sites": 3,
+    "R_B_positions": [
+      0
+    ],
+    "P_positions": [
+      0,
+      1
+    ],
+    "observed_staged_copies_on_second_P_fault": 1,
+    "arm_and_registered_world_unchanged": true,
+    "all_attachments_unpublished": true,
+    "failure_status": "NL_CHECK_OUT_OF_MEMORY",
+    "failure_artifact": null,
+    "retry_public_status": 0,
+    "coverage_note": "new caller snapshot allocations for these inputs, not all compiler allocations"
+  },
+  "snapshot_bytes_local_LP64": {
+    "node_size": 1728,
+    "R_B": 235008,
+    "P_two_calls": 487296,
+    "pending_stack_bytes": 512
+  },
+  "limits": "allocated-match completion only; existing direct-call proof kind, validator unchanged; no full-parent program mutation certificate, generalized recursive seals or B native",
+  "core_blob": {
+    "src/copy_body.c": "7a2da394d5e4fd8090e4dde735e5f25df5f13641",
+    "src/semantic_check.c": "1be7c4fea080c696e9152250df682d57523347ce",
+    "src/copy_body_internal.h": "091b533a575f21df2258984ac7070be02f2554c2"
+  }
+}

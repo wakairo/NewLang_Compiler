@@ -1,0 +1,130 @@
+#include "arm.h"
+#include <stdint.h>
+static bool active, snapshot, reached;
+static size_t allocations, fail_at, failures, staged_before_failure;
+void *__real_malloc(size_t);
+void *__wrap_malloc(size_t size)
+{
+    if (active && snapshot && allocations++ == fail_at) {
+        reached = true;
+        return NULL;
+    }
+    return __real_malloc(size);
+}
+NLCheckStatus __real_nl_copy_body_seal_calls(NLCheckedFragment *);
+#define VERIFY(x)                                                              \
+    do {                                                                       \
+        if (!(x)) {                                                            \
+            fprintf(stderr, "OOM harness line%d\n", __LINE__);                 \
+            abort();                                                           \
+        }                                                                      \
+    } while (0)
+NLCheckStatus __wrap_nl_copy_body_seal_calls(NLCheckedFragment *f)
+{
+    const NLCheckedNodeView *r = nl_checked_node_view(f, f->root);
+    bool arm = active && r && r->kind == NL_CHECKED_MATCH_ARM;
+    TestState *before = NULL;
+    if (arm) {
+        before = calloc(1, sizeof(*before));
+        VERIFY(before && test_state((NLSemanticContext *)f->context, before));
+    }
+    size_t start = allocations;
+    snapshot = arm;
+    NLCheckStatus s = __real_nl_copy_body_seal_calls(f);
+    snapshot = false;
+    if (arm && s == NL_CHECK_OUT_OF_MEMORY) {
+        ++failures;
+        staged_before_failure = allocations - start - 1;
+        VERIFY(reached &&
+               test_unchanged((NLSemanticContext *)f->context, before));
+        for (size_t i = 0; i < f->body_count; ++i) {
+            NLCopyBodyProof *p = f->bodies[i]->copy_body;
+            if (p && p->formal_write && p->sealed)
+                VERIFY(p->caller == f && !p->caller_nodes &&
+                       !p->caller_nodes_origin && !p->caller_count);
+        }
+    }
+    free(before);
+    return s;
+}
+static bool registered(const char *path, NLSemanticContext **c)
+{
+    NLSource *s = NULL;
+    NLParser *p = NULL;
+    NLSyntaxTree *tree = NULL;
+    CHECK(nl_source_load(path, &s) == NL_SOURCE_OK &&
+          nl_parser_create(s, &p) == NL_PARSE_OK &&
+          nl_parser_parse_function_unit(p, &tree, NULL) == NL_PARSE_OK &&
+          nl_semantic_create(c) == NL_CHECK_OK);
+    const NLSyntaxTree *units[] = {tree};
+    CHECK(nl_semantic_register_function_unit(*c, units, 1, NULL) ==
+          NL_CHECK_OK);
+    nl_syntax_tree_destroy(tree);
+    nl_parser_destroy(p);
+    nl_source_destroy(s);
+    return true;
+}
+static bool run(const char *path)
+{
+    NLSource *source = NULL;
+    NLParser *parser = NULL;
+    NLSyntaxTree *entry = NULL;
+    CHECK(nl_source_create("main()", 6, "p785-real-source-entry", &source) ==
+              NL_SOURCE_OK &&
+          nl_parser_create(source, &parser) == NL_PARSE_OK &&
+          nl_parser_parse_expression_fragment(parser, &entry, NULL) ==
+              NL_PARSE_OK);
+    NLSemanticContext *c = NULL;
+    NLCheckedFragment *out = NULL;
+    CHECK(registered(path, &c));
+    active = true;
+    fail_at = SIZE_MAX;
+    allocations = 0;
+    reached = false;
+    NLCheckStatus status = nl_semantic_check_expression(c, entry, &out, NULL);
+    active = false;
+    size_t total = allocations;
+    CHECK(status == NL_CHECK_OK && out && !reached && total >= 1 && total <= 2);
+    nl_checked_destroy(out);
+    nl_semantic_destroy(c);
+    c = NULL;
+    for (size_t i = 0; i < total; ++i) {
+        CHECK(registered(path, &c));
+        TestState *before = calloc(1, sizeof(*before));
+        CHECK(before && test_state(c, before));
+        out = NULL;
+        allocations = failures = 0;
+        reached = false;
+        fail_at = i;
+        active = true;
+        status = nl_semantic_check_expression(c, entry, &out, NULL);
+        active = false;
+        CHECK(status == NL_CHECK_OUT_OF_MEMORY && reached && failures == 1 &&
+              !out && test_unchanged(c, before));
+        CHECK(nl_semantic_check_expression(c, entry, &out, NULL) ==
+                  NL_CHECK_OK &&
+              out);
+        ArmCall found[8];
+        size_t count = 0;
+        CHECK(collect(out, NULL, 0, 0, found, &count, 0) && count);
+        for (size_t j = 0; j < count; ++j)
+            CHECK(valid(found[j]));
+        printf(
+            "OOM actual completed-arm snapshot position=%zu/%zu reached=1 "
+            "staged_before_failure=%zu arm_and_registered_worlds_unchanged=1 "
+            "attachments_unpublished=1 artifact_NULL=1 retry_public0=1\n",
+            i, total, staged_before_failure);
+        free(before);
+        nl_checked_destroy(out);
+        nl_semantic_destroy(c);
+        c = NULL;
+    }
+    nl_syntax_tree_destroy(entry);
+    nl_parser_destroy(parser);
+    nl_source_destroy(source);
+    return true;
+}
+int main(int argc, char **argv)
+{
+    return argc == 3 && run(argv[1]) && run(argv[2]) ? 0 : 1;
+}
