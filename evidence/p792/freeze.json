@@ -1,0 +1,30 @@
+{
+  "base": "77d83dfc00850b14fd7c3bc95e7e3c12e34161fb",
+  "canonical": "Draft17.34 \u00a718.1c",
+  "source": {
+    "pending_mail.nl": "fd8493794d7cfaab0113350273b817753902b2a00098f3aca12c7dbacbe1e8cc",
+    "reuse_after_deposit.nl": "b378950f1a8a745deaf99983b32068a871600f21e08f906c9b903bf77a27b233",
+    "drop_displaced_none.nl": "1552ee7cdeb8720f9f15b19d0ce2faf13fd60c60984dbb651f153ef182c5f160"
+  },
+  "oracle": {
+    "success": "two exact independent original H, original tail owner local RETURN -> message -> one Some inbox deposit -> one extraction -> terminal tail then head free; no preread; payloads77/152",
+    "allocation_failures": {
+      "first": [
+        0,
+        0
+      ],
+      "second": [
+        1,
+        1
+      ],
+      "none": [
+        2,
+        2
+      ]
+    },
+    "reuse_after_deposit": "semantic nonCopy use-after-consume, if positive profile reached",
+    "drop_displaced_none": "semantic definition rejection of nonDiscardable old None",
+    "public_gate": "STOP if no genuine whole custody source receipt; no new issuer authorized",
+    "identity": "distinct heap root/incarnation/backing/domain for head and tail; one nonCopy owner location at every transfer"
+  }
+}
