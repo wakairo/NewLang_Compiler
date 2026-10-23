@@ -1,4 +1,4 @@
-# NewLang v0 仕様書（Draft 17.34 — PROPOSED / UNMERGED）
+# NewLang v0 仕様書（Draft 17.34）
 
 > 状態: **設計検証用ドラフト**
 >
@@ -10,17 +10,17 @@
 
 
 
-## Draft 17.34 の主変更候補 — Issue #749: single-unit exactly one recursive H + one two-u8 Copy T（**PROPOSED / UNMERGED**）
+## Draft 17.34 の主変更 — Issue #749: single-unit exactly one recursive H + one two-u8 Copy T（**ADOPTED / BOUNDED WHEN CURRENT_SPEC SELECTS**）
 
-**Authority / status:** このDraft17.34は、Compiler/main `02884b759c86272c0f97c6ab74d3230c49ae5e27`の実装を固定し、Roadmap-only main `9f14e83026d5790f247a347d8a6b7295b4fa431f`（CURRENT_SPEC→**Draft17.33**）をベースとする**未採用のsource-only候補**である。Issue #747のread-only調査とCoordinationの§4.2 Gate A–C裁定、Issue #749の候補作成認可に基づく。**本ファイルの存在・PR/CI成功によってcurrent canonicalは変わらない。** Draft17.33のcoreと既選定sourceの全内容はそのまま継承する。
+**Authority / status:** 本Draft17.34は、Compiler実装固定base `02884b759c86272c0f97c6ab74d3230c49ae5e27`と旧Roadmap-only main `9f14e83026d5790f247a347d8a6b7295b4fa431f`（当時のCURRENT_SPEC→Draft17.33）からの**限定source-only拡張**である。[M #747](https://github.com/wakairo/NewLang_Compiler/issues/747#issuecomment-6353754862)と[M #749候補](https://github.com/wakairo/NewLang_Compiler/issues/749#issuecomment-6354014024)を経て、[Coordination §4.2 Gate E](https://github.com/wakairo/NewLang_Compiler/issues/749#issuecomment-6354167119)で既存Draft・Ledgerとの独立照合をACCEPTした。**このDraftがnormativeとなるのは、該当mainのCURRENT_SPECがDraft17.34を選択したときだけ**であり、候補PRやCIのみでは切り替わらない。Draft17.33のcoreと既選定sourceの全内容はそのまま継承する。混合H+Tのparser／semantic／issued-owned／C17/nativeは本source選定時点では未実装・未検証である。
 
 **ただ一つのsource admission差分:** §16.3.8で、選定済みの**一つのcompleted one-link recursive H declaration**（§16.3、§3.2の同一Hに対する二つのfallible allocation site／§18.1a–bの限定owner producer/terminal receiver）と、Draft17.33 §17.1の**一つのcomplete nonrecursive exact-two-u8 Copy+Discardable nominal T declaration**を、**同じ単一semantic unit、同じphysical source input**で宣言し、それぞれの*既存の*bounded known-direct function/source operationを利用することだけを明示的に追加する。H/Tの宣言順序はどちらも許し、§18.1の既存function宣言・definition-time checkingを維持したうえで、両structの間のordinary `fn` placementも**この混合profile限りの新しいsource順序選択**と明記する。一般`compilation_unit := item*`や他のnominal/source categoryを選定しない。既存の五root／三link H専用main profileはこの追加経路の対象外であり、当該profileの従来制約を変更しない。
 
 **法則は変更しない:** Hの二つの**実original allocations**は同じ一つのH nominalの別incarnation／別backing／Allocation／Domainである。Tの二つのlexical originalsは同じ一つのT nominalの独立root／field childである。Tのcurrent ValueFact、旧Copy返値、scoped nonescaping ordinary `ref<write,u8>`／Change／callerへのstate propagationと、HのnonCopy `LiveTail` local→RETURN→callerでの同じR/A/D責任保存は§3/10–14/16–18/20/24/26–27をそのまま適用する。**合成によって権限・provenance・currentness factを発行しない。** 別nominalで型が一致しないところはstructureや数値IDの一致で代用できない。
 
-**STOP・no-foreclosure:** 一般multi-nominal、多H／多T宣言、同一unit外とのsource結合、recursive H増設、多link Hへ任意helperを足すこと、arbitrary cross-nominal value conversion、generic Array/sum、CFG/effect/alias／ref/ptr privilege、source-visible lifetime、general public ABI/FFI、module visibility／ordinary-safe library APIを開かない。旧DI-001/006/007/009–014/017をKEEPし、**INTENTIONALLY EXTENDするのは閉じたsource-unit共存だけ**。実装のparser・registration・issued-owned/public validator・dual-C17/native適格性は**別々の検証gate**であり、未対応なら偽証拠・partial Cなしに拒否する。P #746の二系統は実際にはparser `AVS-DECL-PROFILE`で停止し、混合のCHECK/native安全性は**未検証**。§4.2 Gate E独立Coordination reviewの後にしか採用できない。Value Strategy §1.1のauthor＋ordinary-safe callerのUB防止監査依存閉包改善も未測定であり、Product GO PAUSED・H1 HOLDを変更しない。
+**STOP・no-foreclosure:** 一般multi-nominal、多H／多T宣言、同一unit外とのsource結合、recursive H増設、多link Hへ任意helperを足すこと、arbitrary cross-nominal value conversion、generic Array/sum、CFG/effect/alias／ref/ptr privilege、source-visible lifetime、general public ABI/FFI、module visibility／ordinary-safe library APIを開かない。旧DI-001/006/007/009–014/017をKEEPし、**INTENTIONALLY EXTENDするのは閉じたsource-unit共存だけ**。実装のparser・registration・issued-owned/public validator・dual-C17/native適格性は**別々の検証gate**であり、未対応なら偽証拠・partial Cなしに拒否する。P #746の二系統は実際にはparser `AVS-DECL-PROFILE`で停止し、混合のCHECK/native安全性は**未検証**。§4.2 Gate EのCoordination審査後、CURRENT_SPECの明示的なmain採用時にのみnormativeとなる。Value Strategy §1.1のauthor＋ordinary-safe callerのUB防止監査依存閉包改善も未測定であり、Product GO PAUSED・H1 HOLDを変更しない。
 
-**正本差分位置:** このrevision-introductionと§16.3.8のみがDraft17.33からの新しい規範source選定候補である。§16.1／§17.1の既存Tのfield source、§18.1a–cの各H callable profile、他の旧revision節を遡及変更しない。Ledger DI-018は非規範の履歴索引（PROPOSED/UNMERGED）とする。
+**正本差分位置:** このrevision-introductionと§16.3.8のみがDraft17.33から新しく選定するbounded source ruleである。§16.1／§17.1の既存Tのfield source、§18.1a–cの各H callable profile、他の旧revision節を遡及変更しない。Ledger DI-018は非規範の履歴索引（CURRENT_SPECによるDraft17.34選択時にADOPTED / BOUNDED）とする。
 
 ## Draft 17.33 の主変更 — Issue #673: name-independent two-u8 nominal direct-field source（限定採用・CURRENT_SPEC 選択時）
 
@@ -6769,7 +6769,7 @@ payload field / nested / ptr-base / ref-base / general Node member sourceは追�
 旧`node.next` spellingはDraft 17.23のlive field sourceとして不適格である。
 
 
-### 16.3.8 Draft 17.34 候補 — exactly one completed H + exactly one two-u8 T の同一unit source合成（**PROPOSED / UNMERGED**）
+### 16.3.8 Draft 17.34 — exactly one completed H + exactly one two-u8 T の同一unit source合成（**CURRENT_SPEC選択時にADOPTED / BOUNDED**）
 
 **本節だけのpositive unit profile**（既存§16.3／§17.1の各個source法則を維持）:
 
@@ -6842,7 +6842,7 @@ fn release_batch(edge:ref<write,Option<ptr<QueueItem>>>,
 // this interposed arrangement is a candidate source sketch, NOT tested.
 ```
 
-**§4.2 disposition and implementation gating:** **KEEP** DI-001 `@`/`::`, DI-006/007 scope/projection, DI-009–014 bounded R/A/D/owner/nonCopy/failure worlds, DI-017 name-independent two-u8 T and both-field Copy semantics. **INTENTIONALLY EXTEND (source-only)** one physical unit's H+T coexistence, declaration order and bounded `fn` interposition under old signatures/bodies. **REPLACE** no existing value/ownership/ABI rule. **DEFER** general multiple-nominal/recursive recursion, different semantic units, generalized API/ABI/FFI/modules, visibility/private library invariants, Array/Some/element, traits/effects, broader H shape/call effects. Gate E independent reviewer must compare Draft17.20 Pair, 17.21 H, 17.23 link, 17.26 two static same-H sites, 17.27–29 H owner source, 17.33 T source and DI-001/006/007/009–014/017, plus P #746 original error and M #747 decision. A future P Stage1 tests parser/nominal registration/transaction and Stage2 tests independently authentic dual-carrier checked C17/native and all safety negatives; neither is authorized by this draft. Stop before accepting forged issuer facts/new authority or relaxing an older exact function profile.
+**§4.2 disposition and implementation gating:** [Coordination Gate E](https://github.com/wakairo/NewLang_Compiler/issues/749#issuecomment-6354167119)で旧Draft・DIと差分を独立審査済み。**KEEP** DI-001 `@`/`::`, DI-006/007 scope/projection, DI-009–014 bounded R/A/D/owner/nonCopy/failure worlds, DI-017 name-independent two-u8 T and both-field Copy semantics. **INTENTIONALLY EXTEND (source-only)** one physical unit's H+T coexistence, declaration order and bounded `fn` interposition under old signatures/bodies. **REPLACE** no existing value/ownership/ABI rule. **DEFER** general multiple-nominal/recursive recursion, different semantic units, generalized API/ABI/FFI/modules, visibility/private library invariants, Array/Some/element, traits/effects, broader H shape/call effects. Gate EはDraft17.20 Pair、17.21 H、17.23 link、17.26同一Hの二site、17.27–29 H owner source、17.33 T source、DI-001/006/007/009–014/017、P #746初回拒否、M #747裁定を照合済み。 A future P Stage1 tests parser/nominal registration/transaction and Stage2 tests independently authentic dual-carrier checked C17/native and all safety negatives; neither is authorized by this draft. Stop before accepting forged issuer facts/new authority or relaxing an older exact function profile.
 
 
 ---
