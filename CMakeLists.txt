@@ -1279,4 +1279,32 @@ if(BUILD_TESTING)
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+    # R803 independent BLIND sources/oracle are frozen in tests/r803/ORACLE.md.
+    # Do not substitute P-owned source files for these R source inputs.
+    add_executable(r803_public_probe tests/r803/public_probe.c)
+    target_link_libraries(r803_public_probe PRIVATE newlang_parser newlang_semantic
+        newlang_checked_c_node)
+    add_test(NAME r803_array_one_public.unit COMMAND r803_public_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803/one.nl" 1)
+    add_test(NAME r803_array_two_world.unit COMMAND r803_public_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803/two.nl" 2)
+    add_test(NAME r803_array_negative.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803/driver.py" negative
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r803_public_probe>"
+        "$<TARGET_FILE:p791_parser_oom>" "$<TARGET_FILE:p791_issuer_oom>"
+        "$<TARGET_FILE:p694_fault_test>" "${CMAKE_C_COMPILER}"
+        "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803")
+    add_test(NAME r803_array_oom.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803/driver.py" oom
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r803_public_probe>"
+        "$<TARGET_FILE:p791_parser_oom>" "$<TARGET_FILE:p791_issuer_oom>"
+        "$<TARGET_FILE:p694_fault_test>" "${CMAKE_C_COMPILER}"
+        "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803")
+    add_test(NAME r803_array_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803/driver.py" native
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r803_public_probe>"
+        "$<TARGET_FILE:p791_parser_oom>" "$<TARGET_FILE:p791_issuer_oom>"
+        "$<TARGET_FILE:p694_fault_test>" "${CMAKE_C_COMPILER}"
+        "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803")
+
 endif()
