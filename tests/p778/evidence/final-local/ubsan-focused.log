@@ -1,0 +1,68 @@
+Internal ctest changing into directory: /workspace/p778-undefined
+Test project /tmp/p778-undefined
+      Start 244: p778_sensor_spare_gate.unit
+ 1/31 Test #244: p778_sensor_spare_gate.unit ................   Passed    0.06 sec
+      Start 245: p778_valve_spare_gate.unit
+ 2/31 Test #245: p778_valve_spare_gate.unit .................   Passed    0.07 sec
+      Start 246: p778_r_a_gate.unit
+ 3/31 Test #246: p778_r_a_gate.unit .........................   Passed    0.06 sec
+      Start 247: p778_driver_oom.unit
+ 4/31 Test #247: p778_driver_oom.unit .......................   Passed    0.09 sec
+      Start 248: p778_source_native.integration
+ 5/31 Test #248: p778_source_native.integration .............   Passed    2.64 sec
+      Start 249: p774_driver_oom.unit
+ 6/31 Test #249: p774_driver_oom.unit .......................   Passed    0.15 sec
+      Start 250: p774_pump_reserve_gate.unit
+ 7/31 Test #250: p774_pump_reserve_gate.unit ................   Passed    0.04 sec
+      Start 251: p774_scale_reserve_gate.unit
+ 8/31 Test #251: p774_scale_reserve_gate.unit ...............   Passed    0.08 sec
+      Start 252: p774_mixed_owner_copy_native.integration
+ 9/31 Test #252: p774_mixed_owner_copy_native.integration ...   Passed    1.82 sec
+      Start 253: p761_limits_h_first_proof.unit
+10/31 Test #253: p761_limits_h_first_proof.unit .............   Passed    0.01 sec
+      Start 254: p761_limits_h_first_oom.unit
+11/31 Test #254: p761_limits_h_first_oom.unit ...............   Passed    0.54 sec
+      Start 255: p761_tuning_t_first_proof.unit
+12/31 Test #255: p761_tuning_t_first_proof.unit .............   Passed    0.01 sec
+      Start 256: p761_tuning_t_first_oom.unit
+13/31 Test #256: p761_tuning_t_first_oom.unit ...............   Passed    0.62 sec
+      Start 257: p761_foreign_t_refusal.unit
+14/31 Test #257: p761_foreign_t_refusal.unit ................   Passed    0.01 sec
+      Start 258: p761_foreign_h_refusal.unit
+15/31 Test #258: p761_foreign_h_refusal.unit ................   Passed    0.02 sec
+      Start 259: p761_layout_metadata.unit
+16/31 Test #259: p761_layout_metadata.unit ..................   Passed    0.01 sec
+      Start 260: p761_cli.integration
+17/31 Test #260: p761_cli.integration .......................   Passed    0.27 sec
+      Start 261: p761_uncalled.unit
+18/31 Test #261: p761_uncalled.unit .........................   Passed    0.00 sec
+      Start 304: p738_no_read_flow.unit
+19/31 Test #304: p738_no_read_flow.unit .....................   Passed    0.05 sec
+      Start 305: p738_local_return_existing_controls.unit
+20/31 Test #305: p738_local_return_existing_controls.unit ...   Passed    0.16 sec
+      Start 306: p738_sprout_history_oom.unit
+21/31 Test #306: p738_sprout_history_oom.unit ...............   Passed    1.12 sec
+      Start 307: p738_ticket_history_oom.unit
+22/31 Test #307: p738_ticket_history_oom.unit ...............   Passed    1.00 sec
+      Start 308: p738_no_read_driver_oom.unit
+23/31 Test #308: p738_no_read_driver_oom.unit ...............   Passed    3.07 sec
+      Start 309: p738_source_rollback.unit
+24/31 Test #309: p738_source_rollback.unit ..................   Passed    0.02 sec
+      Start 310: p738_no_read_native.integration
+25/31 Test #310: p738_no_read_native.integration ............   Passed    1.91 sec
+      Start 311: p733_local_owner_proof.unit
+26/31 Test #311: p733_local_owner_proof.unit ................   Passed    0.14 sec
+      Start 312: p733_pending_history_oom.unit
+27/31 Test #312: p733_pending_history_oom.unit ..............   Passed    1.41 sec
+      Start 313: p733_cargo_history_oom.unit
+28/31 Test #313: p733_cargo_history_oom.unit ................   Passed    1.75 sec
+      Start 314: p733_local_owner_driver_oom.unit
+29/31 Test #314: p733_local_owner_driver_oom.unit ...........   Passed    4.37 sec
+      Start 315: p733_local_owner_source_rollback.unit
+30/31 Test #315: p733_local_owner_source_rollback.unit ......   Passed    0.01 sec
+      Start 316: p733_local_owner_native.integration
+31/31 Test #316: p733_local_owner_native.integration ........   Passed    1.68 sec
+
+100% tests passed, 0 tests failed out of 31
+
+Total Test time (real) =  23.21 sec

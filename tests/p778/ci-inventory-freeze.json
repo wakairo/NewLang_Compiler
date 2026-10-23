@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-23T09:20:29.438597+00:00",
+  "new_K": 5,
+  "names": [
+    "p778_sensor_spare_gate.unit",
+    "p778_valve_spare_gate.unit",
+    "p778_r_a_gate.unit",
+    "p778_driver_oom.unit",
+    "p778_source_native.integration"
+  ],
+  "old_full": 438,
+  "old_partial": 437,
+  "expected_full": 443,
+  "expected_partial": 442,
+  "only_difference": "llvm.c_api",
+  "budget": "one natural first-attempt pair; no substantive rerun"
+}

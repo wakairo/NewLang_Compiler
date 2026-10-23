@@ -1,0 +1,62 @@
+{
+  "utc": "2026-10-23T09:26:21.727040+00:00",
+  "main": "168c1cdafe929051ef08ff58f858fab045b17763",
+  "predecessor": "96922455e18f0bd103c7bc7a208dbe915ed7ea98",
+  "freeze_commit": "166537c",
+  "gate0_decision_commit": "3e1d5b9",
+  "frontend_first": "442/442 PASS,155.28s; added actual-H-arm snapshot assertions then new five tests PASS",
+  "asan_lsan": "31/31 PASS,51.49s",
+  "ubsan": "31/31 PASS,23.21s",
+  "native": "GCC13.3 / Clang23.1.2 O0/O2, three real sources, each 0/1/2 allocations, unmodified generated C and passive observer separately",
+  "backend_OOM": {
+    "sensor": {
+      "positions": 16,
+      "opportunities": 199,
+      "explicit_oom": 11,
+      "legacy_bool_unsupported": 5
+    },
+    "valve": {
+      "positions": 16,
+      "opportunities": 395,
+      "explicit_oom": 11,
+      "legacy_bool_unsupported": 5
+    },
+    "external_R_A": {
+      "positions": 16,
+      "opportunities": 199,
+      "explicit_oom": 11,
+      "legacy_bool_unsupported": 5
+    },
+    "worlds_unchanged": 5,
+    "extra_actual_H_arm_positions": 3
+  },
+  "driver_OOM": {
+    "positions": 16,
+    "opportunities": 4244,
+    "CLI1": 6,
+    "CLI3": 9,
+    "CLI4": 1,
+    "partial_C_bytes": 0,
+    "retry": "PASS"
+  },
+  "mutations": {
+    "old_gate": [
+      24,
+      22,
+      24
+    ],
+    "caller_carrier": [
+      9,
+      9,
+      9
+    ],
+    "foreign_same_numeric_worlds": "refused"
+  },
+  "first_history": "initial test macro missing; initial probe selected callee instead of caller local; first native observer assertion preserved, source/oracle/backend guards unchanged for correction. Sanitizer links initially disk-full; only own new build directories moved to /tmp via symlinks; inherited environment and checks unchanged. No Actions yet.",
+  "B": "CHECK0, Copy public precision3 due caller sealed graph attachment mismatch, C174/zero/named preserved; NOT IMPLEMENTED",
+  "generated_C_sha256": {
+    "sensor_spare.c17.txt": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826",
+    "valve_spare.c17.txt": "0b161e9501208a329956aed3ef2e92806d3ccd269276ba24c942f27be00f8925",
+    "positive_h_first.c17.txt": "a0a7aeafd43bcd9e2cf2dde3504fb85f4a95e24ca866ddf49533e93609702693"
+  }
+}

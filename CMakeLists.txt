@@ -687,6 +687,24 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(p778_probe tests/p778/probe.c)
+    add_executable(p778_gate_test tests/p778/gate_test.c)
+    foreach(target p778_probe p778_gate_test)
+        target_link_libraries(${target} PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    endforeach()
+    target_link_options(p778_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    foreach(source sensor_spare valve_spare)
+        add_test(NAME p778_${source}_gate.unit COMMAND p778_gate_test
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p778/sources/${source}.nl")
+    endforeach()
+    add_test(NAME p778_r_a_gate.unit COMMAND p778_gate_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p778/external_r776/positive_h_first.nl")
+    add_test(NAME p778_driver_oom.unit COMMAND p774_driver_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p778/sources/sensor_spare.nl")
+    add_test(NAME p778_source_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p778/native.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p778_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p778")
     add_executable(p774_probe tests/p774/gate0_probe.c)
     add_executable(p774_gate_test tests/p774/gate_test.c)
     add_executable(p774_driver_oom tests/p774/driver_oom.c)

@@ -1,0 +1,81 @@
+sensor_spare.nl COPY depth=1 call=18 span=172:199 nominal=10 root=1 child=2 index=0 incarnation=1 old=37 new=101 sibling=156 body_status=0 parameters_status=0
+ARM parent_depth=1 match=48 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+ARM parent_depth=1 match=48 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+INITIALIZE depth=2 node=19 root=21 incarnation=24 backing=1 domain=1 span=800:914
+ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+INITIALIZE depth=3 node=19 root=32 incarnation=35 backing=2 domain=2 span=1696:1821
+REF_SCOPE place=21 scope=5
+REF_SCOPE place=21 scope=6
+PRODUCER depth=3 call=50 root=32 incarnation=35 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=39 availability=1 packet=69 same_ptr_root=1 same_allocation=1 same_domain=1
+PROJECTION nominal=11 child=25 incarnation=25
+CALLER_LOCAL depth=3 node=56 symbol=40 availability=1 value=69 fields=68,37,42
+REF_SCOPE place=32 scope=7
+RECEIVER depth=3 call=72 root=32 incarnation=35 backing=2 domain=2 post_proved=1 entry_original_exact=1
+REF_SCOPE place=32 scope=8
+NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+SUMMARY Copy_calls=1 H_producers=1 owner_receivers=1 H_initializations=2
+{"source": "sensor_spare.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "1", "c_sha256": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826", "observed": "OBSERVED T=101,156/9,37 CopyCalls=1 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "sensor_spare.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "2", "c_sha256": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826", "observed": "OBSERVED T=101,156/9,37 CopyCalls=1 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=563e11d552a0,0"}
+{"source": "sensor_spare.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "0", "c_sha256": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826", "observed": "OBSERVED T=101,156/9,37 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=557e82c472a0,557e82c472c0"}
+{"source": "sensor_spare.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "1", "c_sha256": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826", "observed": "OBSERVED T=101,156/9,37 CopyCalls=1 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "sensor_spare.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "2", "c_sha256": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826", "observed": "OBSERVED T=101,156/9,37 CopyCalls=1 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55f80a09c2a0,0"}
+{"source": "sensor_spare.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "0", "c_sha256": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826", "observed": "OBSERVED T=101,156/9,37 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=55e586bc72a0,55e586bc72c0"}
+valve_spare.nl COPY depth=1 call=18 span=158:185 nominal=10 root=1 child=3 index=1 incarnation=1 old=226 new=83 sibling=43 body_status=0 parameters_status=0
+COPY depth=1 call=25 span=240:266 nominal=10 root=4 child=5 index=0 incarnation=4 old=12 new=226 sibling=198 body_status=0 parameters_status=0
+ARM parent_depth=1 match=48 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+ARM parent_depth=1 match=48 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+INITIALIZE depth=2 node=19 root=24 incarnation=27 backing=1 domain=1 span=782:890
+ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+INITIALIZE depth=3 node=19 root=35 incarnation=38 backing=2 domain=2 span=1672:1791
+REF_SCOPE place=24 scope=5
+REF_SCOPE place=24 scope=6
+PRODUCER depth=3 call=50 root=35 incarnation=38 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=42 availability=1 packet=72 same_ptr_root=1 same_allocation=1 same_domain=1
+PROJECTION nominal=11 child=28 incarnation=28
+CALLER_LOCAL depth=3 node=56 symbol=43 availability=1 value=72 fields=71,40,45
+REF_SCOPE place=35 scope=7
+RECEIVER depth=3 call=72 root=35 incarnation=38 backing=2 domain=2 post_proved=1 entry_original_exact=1
+REF_SCOPE place=35 scope=8
+NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+SUMMARY Copy_calls=2 H_producers=1 owner_receivers=1 H_initializations=2
+{"source": "valve_spare.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "1", "c_sha256": "0b161e9501208a329956aed3ef2e92806d3ccd269276ba24c942f27be00f8925", "observed": "OBSERVED T=43,83/226,198 CopyCalls=2 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "valve_spare.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "2", "c_sha256": "0b161e9501208a329956aed3ef2e92806d3ccd269276ba24c942f27be00f8925", "observed": "OBSERVED T=43,83/226,198 CopyCalls=2 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55e5ee0b72a0,0"}
+{"source": "valve_spare.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "0", "c_sha256": "0b161e9501208a329956aed3ef2e92806d3ccd269276ba24c942f27be00f8925", "observed": "OBSERVED T=43,83/226,198 CopyCalls=2 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=564045e8e2a0,564045e8e2c0"}
+{"source": "valve_spare.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "1", "c_sha256": "0b161e9501208a329956aed3ef2e92806d3ccd269276ba24c942f27be00f8925", "observed": "OBSERVED T=43,83/226,198 CopyCalls=2 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "valve_spare.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "2", "c_sha256": "0b161e9501208a329956aed3ef2e92806d3ccd269276ba24c942f27be00f8925", "observed": "OBSERVED T=43,83/226,198 CopyCalls=2 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55c1b5fde2a0,0"}
+{"source": "valve_spare.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "0", "c_sha256": "0b161e9501208a329956aed3ef2e92806d3ccd269276ba24c942f27be00f8925", "observed": "OBSERVED T=43,83/226,198 CopyCalls=2 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=5572985982a0,5572985982c0"}
+positive_h_first.nl COPY depth=1 call=18 span=177:200 nominal=10 root=1 child=2 index=0 incarnation=1 old=41 new=96 sibling=149 body_status=0 parameters_status=0
+ARM parent_depth=1 match=43 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+ARM parent_depth=1 match=43 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+INITIALIZE depth=2 node=19 root=22 incarnation=25 backing=1 domain=1 span=798:897
+ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+INITIALIZE depth=3 node=19 root=33 incarnation=36 backing=2 domain=2 span=1622:1722
+REF_SCOPE place=22 scope=5
+REF_SCOPE place=22 scope=6
+PRODUCER depth=3 call=50 root=33 incarnation=36 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=40 availability=1 packet=66 same_ptr_root=1 same_allocation=1 same_domain=1
+PROJECTION nominal=11 child=26 incarnation=26
+CALLER_LOCAL depth=3 node=56 symbol=41 availability=1 value=66 fields=65,34,39
+REF_SCOPE place=33 scope=7
+RECEIVER depth=3 call=72 root=33 incarnation=36 backing=2 domain=2 post_proved=1 entry_original_exact=1
+REF_SCOPE place=33 scope=8
+NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+SUMMARY Copy_calls=1 H_producers=1 owner_receivers=1 H_initializations=2
+{"source": "positive_h_first.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "1", "c_sha256": "a0a7aeafd43bcd9e2cf2dde3504fb85f4a95e24ca866ddf49533e93609702693", "observed": "OBSERVED T=96,149/11,41 CopyCalls=1 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "positive_h_first.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "2", "c_sha256": "a0a7aeafd43bcd9e2cf2dde3504fb85f4a95e24ca866ddf49533e93609702693", "observed": "OBSERVED T=96,149/11,41 CopyCalls=1 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=563b4a8472a0,0"}
+{"source": "positive_h_first.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "0", "c_sha256": "a0a7aeafd43bcd9e2cf2dde3504fb85f4a95e24ca866ddf49533e93609702693", "observed": "OBSERVED T=96,149/11,41 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=559ebf2972a0,559ebf2972c0"}
+{"source": "positive_h_first.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "1", "c_sha256": "a0a7aeafd43bcd9e2cf2dde3504fb85f4a95e24ca866ddf49533e93609702693", "observed": "OBSERVED T=96,149/11,41 CopyCalls=1 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "positive_h_first.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "2", "c_sha256": "a0a7aeafd43bcd9e2cf2dde3504fb85f4a95e24ca866ddf49533e93609702693", "observed": "OBSERVED T=96,149/11,41 CopyCalls=1 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55a8229be2a0,0"}
+{"source": "positive_h_first.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "0", "c_sha256": "a0a7aeafd43bcd9e2cf2dde3504fb85f4a95e24ca866ddf49533e93609702693", "observed": "OBSERVED T=96,149/11,41 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=562ce7b402a0,562ce7b402c0"}
+negative_owner_reuse.nl refused first observed phase /workspace/p778/tests/p778/sources/negative_owner_reuse.nl:72:34-72:44: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding
+negative_wrong_domain.nl refused first observed phase /workspace/p778/tests/p778/sources/negative_wrong_domain.nl:73:38-73:72: error(semantic)[ALLOCATED-DOMAIN-MISMATCH]: pointer requires matching readable live domain
+negative_copy_ref.nl refused first observed phase /workspace/p778/tests/p778/sources/negative_copy_ref.nl:27:64-27:70: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter
+negative_wrong_allocation.nl refused first observed phase /workspace/p778/tests/p778/sources/negative_wrong_allocation.nl:76:21-76:75: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion
+negative_two_t_nominals.nl refused first observed phase /workspace/p778/tests/p778/external_r776/negative_two_t_nominals.nl:4:1-4:35: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate
+negative_read_to_write.nl refused first observed phase /workspace/p778/tests/p778/external_r776/negative_read_to_write.nl:25:38-25:39: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field
+negative_unknown_field.nl refused first observed phase /workspace/p778/tests/p778/external_r776/negative_unknown_field.nl:25:34-25:45: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal
+negative_wrong_allocation.nl refused first observed phase /workspace/p778/tests/p778/external_r776/negative_wrong_allocation.nl:54:119-54:174: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion
+negative_stale_link.nl refused first observed phase /workspace/p778/tests/p778/external_r776/negative_stale_link.nl:55:119-55:174: error(semantic)[P208-CALL-HEAD-VALUE]: head link must currently be Some of tail
+negative_double_consume.nl refused first observed phase /workspace/p778/tests/p778/external_r776/negative_double_consume.nl:58:44-58:60: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding
+R-B calibrated CHECK0/public Copy precision3/C174 zeroC named preserved
