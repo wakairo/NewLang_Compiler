@@ -1,0 +1,86 @@
+{
+  "arm_backend_unsupported.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "C17": {
+      "exit": 4,
+      "stdout_bytes": 0,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/night794/evidence/p794/sources/arm_backend_unsupported.nl\n"
+    }
+  },
+  "array_one.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night794/evidence/p794/sources/array_one.nl:1:50-1:52: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "C17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night794/evidence/p794/sources/array_one.nl:1:50-1:52: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    }
+  },
+  "array_two.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night794/evidence/p794/sources/array_two.nl:1:50-1:52: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "C17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night794/evidence/p794/sources/array_two.nl:1:50-1:52: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    }
+  },
+  "malformed.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night794/evidence/p794/sources/malformed.nl:1:29-1:30: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    "C17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night794/evidence/p794/sources/malformed.nl:1:29-1:30: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    }
+  },
+  "prefix_supported.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "C17": {
+      "exit": 0,
+      "stdout_bytes": 14564,
+      "stderr": ""
+    }
+  },
+  "scalar_io_control.nl": {
+    "check": {
+      "exit": 0,
+      "stdout_bytes": 0,
+      "stderr": ""
+    },
+    "C17": {
+      "exit": 0,
+      "stdout_bytes": 556,
+      "stderr": ""
+    }
+  },
+  "semantic_wrong_return.nl": {
+    "check": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night794/evidence/p794/sources/semantic_wrong_return.nl:2:19-2:33: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+    },
+    "C17": {
+      "exit": 3,
+      "stdout_bytes": 0,
+      "stderr": "/tmp/night794/evidence/p794/sources/semantic_wrong_return.nl:2:19-2:33: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+    }
+  }
+}

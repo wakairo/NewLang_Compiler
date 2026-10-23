@@ -1,0 +1,22 @@
+[  7%] Built target newlang_source
+[  7%] Built target newlang_diagnostic
+[ 15%] Built target newlang_syntax
+[ 23%] Built target newlang_lexer
+[ 30%] Built target newlang_checked
+[ 38%] Built target newlang_parser
+[ 84%] Built target newlang_semantic
+[ 92%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p778_probe.dir/tests/p778/probe.c.o
+[100%] Linking C executable p778_probe
+[100%] Built target p778_probe
+[  0%] Built target newlang_diagnostic
+[  8%] Built target newlang_source
+[ 16%] Built target newlang_lexer
+[ 25%] Built target newlang_syntax
+[ 33%] Built target newlang_parser
+[ 41%] Built target newlang_checked
+[ 91%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p694_fault_test.dir/tests/p694/fault_test.c.o
+[100%] Linking C executable p694_fault_test
+[100%] Built target p694_fault_test

@@ -1,0 +1,57 @@
+{
+  "phases": {
+    "prefix_supported.nl": {
+      "CHECK": 0,
+      "C17": 0,
+      "named": 0,
+      "category_matches_prediction": true
+    },
+    "arm_backend_unsupported.nl": {
+      "CHECK": 0,
+      "C17": 4,
+      "named": 4,
+      "category_matches_prediction": true
+    },
+    "semantic_wrong_return.nl": {
+      "CHECK": 3,
+      "C17": 3,
+      "named": 3,
+      "category_matches_prediction": true
+    },
+    "malformed.nl": {
+      "CHECK": 3,
+      "C17": 3,
+      "named": 3,
+      "category_matches_prediction": false
+    },
+    "array_one.nl": {
+      "CHECK": 3,
+      "C17": 3,
+      "named": 3,
+      "category_matches_prediction": true
+    },
+    "array_two.nl": {
+      "CHECK": 3,
+      "C17": 3,
+      "named": 3,
+      "category_matches_prediction": true
+    },
+    "scalar_io_control.nl": {
+      "CHECK": 0,
+      "C17": 0,
+      "named": 0,
+      "category_matches_prediction": true
+    }
+  },
+  "host_faults": "fault=1 old artifact preserved; temporary removed\nfault=2 old artifact preserved; temporary removed\nfault=3 old artifact preserved; temporary removed\nwrapped allocation failures=175 preserved/cleanup; recovery=PASS\n",
+  "host_diagnostic_counts": {
+    "error(host)[P2-OUT-OF-MEMORY]:": 14,
+    "error(cli)[V0-CHECKER]:": 20,
+    "error(cli)[V0-ENTRY]:": 4,
+    "error(cli)[V0-SOURCE-IO]:": 3,
+    "error(host)[P3-OUT-OF-MEMORY]:": 131,
+    "error(cli)[V0-C-OUTPUT]:": 1,
+    "error(cli)[V0-PARSER]:": 1,
+    "error(cli)[V0-C-FILE]:": 4
+  }
+}

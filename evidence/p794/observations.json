@@ -1,0 +1,298 @@
+{
+  "prefix_supported.nl": {
+    "check": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "normal": {
+      "exit": 0,
+      "stdout": "/* Bounded Checked-C representation, not a NewLang ABI. */\n#include <stdint.h>\n#include <stddef.h>\n#include <stdlib.h>\n#include <limits.h>\n_Static_assert(CHAR_BIT == 8, \"NewLang C17 requires 8-bit bytes\");\n_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, \"NewLang C17 requires exact 8-bit uint8_t\");\ntypedef struct nl_node nl_node;\ntypedef struct { unsigned tag; const nl_node *ptr; } nl_node_option;\nstruct nl_node { nl_node_option f0; uint8_t f1; };\n#ifdef NEWLANG_NODE_OBSERVER\n#include NEWLANG_NODE_OBSERVER\n#else\n#define NL_NODE_BIND(...) ((void)0)\n#define NL_NODE_REPLACE(...) ((void)0)\n#define NL_NODE_ARM(...) ((void)0)\n#define NL_NODE_RELOAN(...) ((void)0)\n#define NL_NODE_FINISH() ((void)0)\n#endif\n_Static_assert(sizeof(nl_node)==24 && _Alignof(nl_node)==8, \"checked H target layout\");\n_Static_assert(sizeof(void*)==8 && offsetof(nl_node,f0)==0 && offsetof(nl_node,f1)==16, \"private member plan\");\n_Static_assert(sizeof(nl_node_option)==16 && _Alignof(nl_node_option)==8 && _Generic(((nl_node *)0)->f0,nl_node_option:1,default:0) && _Generic(((nl_node *)0)->f1,uint8_t:1,default:0) && _Generic(((nl_node_option *)0)->ptr,const nl_node *:1,default:0), \"private member types\");\ntypedef struct {void *handle;} nl_allocation;\ntypedef struct {unsigned char *bytes;size_t length;} nl_storage;\ntypedef struct {unsigned char *bytes;size_t length;} nl_slot;\ntypedef struct {size_t token;} nl_domain;\ntypedef struct {const nl_node *ptr;nl_allocation allocation;nl_domain domain;} nl_live_tail;\ntypedef struct {unsigned tag;nl_live_tail packet;} nl_custody;\ntypedef struct {nl_allocation allocation;nl_storage raw;} nl_backing;\n#ifdef NEWLANG_HEAP_OBSERVER\n#include NEWLANG_HEAP_OBSERVER\n#else\n#define NL_HEAP_TRIAL(...) ((void)0)\n#define NL_HEAP_ARM(...) ((void)0)\n#define NL_HEAP_DOMAIN(...) ((void)0)\n#define NL_HEAP_SLOT(...) ((void)0)\n#define NL_HEAP_INITIALIZE(...) ((void)0)\n#define NL_HEAP_RELOAN(...) ((void)0)\n#define NL_HEAP_ROOT(...) ((void)0)\n#define NL_HEAP_FIELD(...) ((void)0)\n#define NL_HEAP_COPY(...) ((void)0)\n#define NL_HEAP_CHANGE(...) ((void)0)\n#define NL_HEAP_SCOPE_END(...) ((void)0)\n#define NL_HEAP_END(...) ((void)0)\n#define NL_HEAP_RAW(...) ((void)0)\n#define NL_HEAP_FINALIZE(...) ((void)0)\n#define NL_HEAP_RELEASE(...) ((void)0)\n#define NL_HEAP_FINISH() ((void)0)\n#define NL_HEAP_HANDOFF(...) ((void)0)\n#define NL_HEAP_RECEIVER_ENTER(...) ((void)0)\n#define NL_HEAP_RECEIVER_EXIT() ((void)0)\n#define NL_HEAP_RETURNED(...) ((void)0)\n#define NL_LIVE_SEND(...) ((void)0)\n#define NL_LIVE_ENTER(...) ((void)0)\n#define NL_LIVE_RETURN(...) ((void)0)\n#define NL_LIVE_RECEIVE(...) ((void)0)\n#endif\n#ifndef NL_CUSTODY_ENTER\n#define NL_CUSTODY_ENTER(...) ((void)0)\n#define NL_CUSTODY_STORED(...) ((void)0)\n#define NL_CUSTODY_RETURNED(...) ((void)0)\n#define NL_CUSTODY_EXTRACT(...) ((void)0)\n#define NL_CUSTODY_NONE(...) ((void)0)\n#define NL_CUSTODY_POLICY(...) ((void)0)\n#define NL_CUSTODY_LOAN(...) ((void)0)\n#endif\ntypedef struct {uint8_t f0,f1;} nl_copy_record;\n#ifndef NL_MIXED_OWNER_LOCAL\n#define NL_MIXED_OWNER_LOCAL(...) ((void)0)\n#endif\n#ifndef NL_MIXED_COPY_BIND\n#define NL_MIXED_COPY_BIND(...) ((void)0)\n#endif\n#ifndef NL_MIXED_COPY_STORE\n#define NL_MIXED_COPY_STORE(...) ((void)0)\n#endif\n#ifndef NL_MIXED_COPY_CALL\n#define NL_MIXED_COPY_CALL(...) ((void)0)\n#endif\nstatic uint8_t nl_copy_state_12(uint8_t *target,uint8_t next){uint8_t old=*target;*target=next;NL_MIXED_COPY_CALL(target,old,next);return old;}\nstatic void nl_owner_11(const nl_node *nl_b_12_49,nl_allocation nl_b_12_50,nl_domain nl_b_12_51) {\nNL_HEAP_RECEIVER_ENTER(nl_b_12_49,nl_b_12_50.handle,nl_b_12_51.token,12,49,50,51,&nl_b_12_50,&nl_b_12_51);\n{ const nl_domain *nl_b_13_52 = &nl_b_12_51;\n(void)nl_b_13_52;\nconst nl_node * nl_v_86 = nl_b_12_49;\nconst nl_domain * nl_v_87 = nl_b_13_52;\nconst nl_node * nl_v_88 = nl_v_86;\nNL_HEAP_ROOT(nl_v_88,nl_v_87->token,0,35,38,8);\n(void)nl_v_87;\nconst nl_node * nl_b_13_53 = nl_v_88;\n(void)nl_b_13_53;\nNL_NODE_BIND(13, 53, 4, &nl_b_13_53);\nNL_HEAP_SCOPE_END(8);\n}\nnl_slot nl_v_89;\n{ const nl_domain *nl_b_14_54 = &nl_b_12_51;\n(void)nl_b_14_54;\nconst nl_node * nl_v_90 = nl_b_12_49;\nNL_HEAP_END(nl_v_90,nl_b_14_54->token);\nnl_slot nl_v_91 = {(unsigned char *)nl_v_90,24};\nnl_v_89 = nl_v_91;\n}\nnl_slot nl_b_12_55 = nl_v_89;\n(void)nl_b_12_55;\nNL_NODE_BIND(12, 55, 4, &nl_b_12_55);\nnl_slot nl_v_92 = nl_b_12_55;\nnl_b_12_55 = (nl_slot){0};\nnl_storage nl_v_93 = {nl_v_92.bytes,nl_v_92.length};\nNL_HEAP_RAW(nl_v_93.bytes,nl_v_93.length);\nnl_storage nl_b_12_56 = nl_v_93;\n(void)nl_b_12_56;\nNL_NODE_BIND(12, 56, 4, &nl_b_12_56);\nnl_domain nl_v_94 = nl_b_12_51;\nnl_b_12_51 = (nl_domain){0};\nNL_HEAP_FINALIZE(nl_v_94.token);\n(void)nl_v_94;\nnl_allocation nl_v_95 = nl_b_12_50;\nnl_b_12_50 = (nl_allocation){0};\nnl_storage nl_v_96 = nl_b_12_56;\nnl_b_12_56 = (nl_storage){0};\nNL_HEAP_RELEASE(nl_v_95.handle,nl_v_96.bytes,nl_v_96.length);\nfree(nl_v_95.handle);\nnl_v_95.handle=NULL;\nnl_v_96.bytes=NULL;\n(void)nl_v_96;\nNL_HEAP_RECEIVER_EXIT();\n}\nstatic nl_live_tail nl_producer_10(nl_node_option * nl_b_10_37,const nl_node * nl_b_10_38,nl_allocation nl_b_10_39,nl_domain nl_b_10_40) {\nNL_LIVE_ENTER(nl_b_10_37,nl_b_10_38,nl_b_10_39.handle,nl_b_10_40.token);\nnl_node_option * nl_v_70 = nl_b_10_37;\nnl_node_option nl_v_71 = { 0, NULL };\nnl_node_option nl_v_72 = *nl_v_70;\n*nl_v_70 = nl_v_71;\nNL_HEAP_CHANGE(nl_v_70,&nl_v_72,2);\n(void)nl_v_72;\nnl_allocation nl_v_73 = nl_b_10_39;\nnl_b_10_39 = (nl_allocation){0};\nconst nl_node * nl_v_74 = nl_b_10_38;\nnl_domain nl_v_75 = nl_b_10_40;\nnl_b_10_40 = (nl_domain){0};\nnl_live_tail nl_v_76 = {nl_v_74,nl_v_73,nl_v_75};\nnl_live_tail nl_b_10_42 = nl_v_76;\nnl_v_76 = (nl_live_tail){0};\nNL_MIXED_OWNER_LOCAL(&nl_b_10_42);\nnl_live_tail nl_v_77 = nl_b_10_42;\nnl_b_10_42 = (nl_live_tail){0};\nNL_LIVE_RETURN(nl_v_77);\nreturn nl_v_77;\n}\nint main(void) {\nuint8_t nl_v_1 = 42;\nuint8_t nl_v_2 = 17;\nnl_copy_record nl_v_3 = {nl_v_1,nl_v_2};\nnl_copy_record nl_b_0_1 = nl_v_3;\nNL_MIXED_COPY_BIND(0,1,&nl_b_0_1.f0,&nl_b_0_1.f1);\nuint8_t nl_v_4 = 213;\nuint8_t nl_v_5 = 66;\nnl_copy_record nl_v_6 = {nl_v_4,nl_v_5};\nnl_copy_record nl_b_0_2 = nl_v_6;\nNL_MIXED_COPY_BIND(0,2,&nl_b_0_2.f0,&nl_b_0_2.f1);\nuint8_t nl_v_7 = 98;\nuint8_t nl_v_8 = nl_copy_state_12(&nl_b_0_1.f0,nl_v_7);\nuint8_t nl_b_0_7 = nl_v_8;\n(void)nl_b_0_7;\nNL_NODE_BIND(0, 7, 4, &nl_b_0_7);\nuint8_t nl_v_9 = nl_b_0_7;\nuint8_t nl_v_10 = nl_copy_state_12(&nl_b_0_2.f1,nl_v_9);\nuint8_t nl_b_0_12 = nl_v_10;\n(void)nl_b_0_12;\nNL_NODE_BIND(0, 12, 4, &nl_b_0_12);\nuint8_t nl_v_11=nl_b_0_1.f0;\nuint8_t nl_b_0_13 = nl_v_11;\n(void)nl_b_0_13;\nNL_NODE_BIND(0, 13, 4, &nl_b_0_13);\nuint8_t nl_v_12=nl_b_0_1.f1;\nuint8_t nl_b_0_14 = nl_v_12;\n(void)nl_b_0_14;\nNL_NODE_BIND(0, 14, 4, &nl_b_0_14);\nuint8_t nl_v_13=nl_b_0_2.f1;\nuint8_t nl_b_0_15 = nl_v_13;\n(void)nl_b_0_15;\nNL_NODE_BIND(0, 15, 4, &nl_b_0_15);\nuint8_t nl_v_14 = nl_b_0_12;\n(void)nl_v_14;\nuint8_t nl_v_15 = nl_b_0_13;\n(void)nl_v_15;\nuint8_t nl_v_16 = nl_b_0_14;\n(void)nl_v_16;\nuint8_t nl_v_17 = nl_b_0_15;\n(void)nl_v_17;\nvoid *nl_heap_18 = malloc(24);\nNL_HEAP_TRIAL(nl_heap_18,24,8);\nif (nl_heap_18 == NULL) {\nNL_HEAP_ARM(1);\n}\nif (nl_heap_18 != NULL) {\nNL_HEAP_ARM(2);\nnl_backing nl_b_2_16 = { {nl_heap_18}, {(unsigned char *)nl_heap_18,24} };\nnl_backing nl_v_19 = nl_b_2_16;\nnl_b_2_16 = (nl_backing){0};\nnl_allocation nl_b_2_17 = nl_v_19.allocation;\n(void)nl_b_2_17;\nnl_storage nl_b_2_18 = nl_v_19.raw;\n(void)nl_b_2_18;\nnl_v_19 = (nl_backing){0};\nnl_allocation nl_v_20 = nl_b_2_17;\nnl_b_2_17 = (nl_allocation){0};\nnl_allocation nl_b_2_19 = nl_v_20;\n(void)nl_b_2_19;\nNL_NODE_BIND(2, 19, 4, &nl_b_2_19);\nnl_storage nl_v_21 = nl_b_2_18;\nnl_b_2_18 = (nl_storage){0};\nnl_slot nl_v_22 = {nl_v_21.bytes,nl_v_21.length};\nNL_HEAP_SLOT(nl_v_22.bytes,nl_v_22.length);\nnl_slot nl_b_2_20 = nl_v_22;\n(void)nl_b_2_20;\nNL_NODE_BIND(2, 20, 4, &nl_b_2_20);\nnl_domain nl_v_23 = {1};\nNL_HEAP_DOMAIN(nl_v_23.token);\nnl_domain nl_b_2_21 = nl_v_23;\n(void)nl_b_2_21;\nNL_NODE_BIND(2, 21, 4, &nl_b_2_21);\nconst nl_node * nl_v_24;\n{ const nl_domain *nl_b_3_22 = &nl_b_2_21;\n(void)nl_b_3_22;\nnl_slot nl_v_25 = nl_b_2_20;\nnl_b_2_20 = (nl_slot){0};\nnl_node_option nl_v_26 = { 0, NULL };\nuint8_t nl_v_27 = 81;\nnl_node nl_v_28 = { nl_v_26, nl_v_27 };\nconst nl_domain * nl_v_29 = nl_b_3_22;\n*(nl_node *)nl_v_25.bytes = nl_v_28;\nconst nl_node *nl_v_30 = (nl_node *)nl_v_25.bytes;\nNL_HEAP_INITIALIZE(nl_v_30,nl_v_29->token);\n(void)nl_v_29;\nnl_v_24 = nl_v_30;\n}\nconst nl_node * const nl_b_2_23 = nl_v_24;\n(void)nl_b_2_23;\nNL_NODE_BIND(2, 23, 2, &nl_b_2_23);\nvoid *nl_heap_31 = malloc(24);\nNL_HEAP_TRIAL(nl_heap_31,24,8);\nif (nl_heap_31 == NULL) {\nNL_HEAP_ARM(1);\nnl_slot nl_v_32;\n{ const nl_domain *nl_b_5_24 = &nl_b_2_21;\n(void)nl_b_5_24;\nconst nl_node * nl_v_33 = nl_b_2_23;\nNL_HEAP_END(nl_v_33,nl_b_5_24->token);\nnl_slot nl_v_34 = {(unsigned char *)nl_v_33,24};\nnl_v_32 = nl_v_34;\n}\nnl_slot nl_b_4_25 = nl_v_32;\n(void)nl_b_4_25;\nNL_NODE_BIND(4, 25, 4, &nl_b_4_25);\nnl_slot nl_v_35 = nl_b_4_25;\nnl_b_4_25 = (nl_slot){0};\nnl_storage nl_v_36 = {nl_v_35.bytes,nl_v_35.length};\nNL_HEAP_RAW(nl_v_36.bytes,nl_v_36.length);\nnl_storage nl_b_4_26 = nl_v_36;\n(void)nl_b_4_26;\nNL_NODE_BIND(4, 26, 4, &nl_b_4_26);\nnl_domain nl_v_37 = nl_b_2_21;\nnl_b_2_21 = (nl_domain){0};\nNL_HEAP_FINALIZE(nl_v_37.token);\n(void)nl_v_37;\nnl_allocation nl_v_38 = nl_b_2_19;\nnl_b_2_19 = (nl_allocation){0};\nnl_storage nl_v_39 = nl_b_4_26;\nnl_b_4_26 = (nl_storage){0};\nNL_HEAP_RELEASE(nl_v_38.handle,nl_v_39.bytes,nl_v_39.length);\nfree(nl_v_38.handle);\nnl_v_38.handle=NULL;\nnl_v_39.bytes=NULL;\n(void)nl_v_39;\n}\nif (nl_heap_31 != NULL) {\nNL_HEAP_ARM(2);\nnl_backing nl_b_6_24 = { {nl_heap_31}, {(unsigned char *)nl_heap_31,24} };\nnl_backing nl_v_40 = nl_b_6_24;\nnl_b_6_24 = (nl_backing){0};\nnl_allocation nl_b_6_25 = nl_v_40.allocation;\n(void)nl_b_6_25;\nnl_storage nl_b_6_26 = nl_v_40.raw;\n(void)nl_b_6_26;\nnl_v_40 = (nl_backing){0};\nnl_allocation nl_v_41 = nl_b_6_25;\nnl_b_6_25 = (nl_allocation){0};\nnl_allocation nl_b_6_27 = nl_v_41;\n(void)nl_b_6_27;\nNL_NODE_BIND(6, 27, 4, &nl_b_6_27);\nnl_storage nl_v_42 = nl_b_6_26;\nnl_b_6_26 = (nl_storage){0};\nnl_slot nl_v_43 = {nl_v_42.bytes,nl_v_42.length};\nNL_HEAP_SLOT(nl_v_43.bytes,nl_v_43.length);\nnl_slot nl_b_6_28 = nl_v_43;\n(void)nl_b_6_28;\nNL_NODE_BIND(6, 28, 4, &nl_b_6_28);\nnl_domain nl_v_44 = {2};\nNL_HEAP_DOMAIN(nl_v_44.token);\nnl_domain nl_b_6_29 = nl_v_44;\n(void)nl_b_6_29;\nNL_NODE_BIND(6, 29, 4, &nl_b_6_29);\nconst nl_node * nl_v_45;\n{ const nl_domain *nl_b_7_30 = &nl_b_6_29;\n(void)nl_b_7_30;\nnl_slot nl_v_46 = nl_b_6_28;\nnl_b_6_28 = (nl_slot){0};\nnl_node_option nl_v_47 = { 0, NULL };\nuint8_t nl_v_48 = 143;\nnl_node nl_v_49 = { nl_v_47, nl_v_48 };\nconst nl_domain * nl_v_50 = nl_b_7_30;\n*(nl_node *)nl_v_46.bytes = nl_v_49;\nconst nl_node *nl_v_51 = (nl_node *)nl_v_46.bytes;\nNL_HEAP_INITIALIZE(nl_v_51,nl_v_50->token);\n(void)nl_v_50;\nnl_v_45 = nl_v_51;\n}\nconst nl_node * const nl_b_6_31 = nl_v_45;\n(void)nl_b_6_31;\nNL_NODE_BIND(6, 31, 2, &nl_b_6_31);\nnl_node_option nl_v_52;\n{ const nl_domain *nl_b_8_32 = &nl_b_2_21;\n(void)nl_b_8_32;\nconst nl_node * nl_v_53 = nl_b_2_23;\nconst nl_domain * nl_v_54 = nl_b_8_32;\nnl_node * nl_v_55 = (nl_node *)nl_v_53;\nNL_HEAP_ROOT(nl_v_55,nl_v_54->token,1,24,27,5);\n(void)nl_v_54;\nnl_node * nl_b_8_33 = nl_v_55;\n(void)nl_b_8_33;\nNL_NODE_BIND(8, 33, 4, &nl_b_8_33);\nnl_node * nl_v_56 = nl_b_8_33;\nnl_node_option * nl_v_57 = &nl_v_56->f0;\nNL_HEAP_FIELD(nl_v_56,nl_v_57,1,11,0,28,28,5);\nconst nl_node * nl_v_58 = nl_b_6_31;\nnl_node_option nl_v_59 = { 1, nl_v_58 };\nnl_node_option nl_v_60 = *nl_v_57;\n*nl_v_57 = nl_v_59;\nNL_HEAP_CHANGE(nl_v_57,&nl_v_60,1);\nnl_v_52 = nl_v_60;\nNL_HEAP_SCOPE_END(5);\n}\nnl_node_option nl_b_6_34 = nl_v_52;\n(void)nl_b_6_34;\nNL_NODE_BIND(6, 34, 3, &nl_b_6_34);\nnl_live_tail nl_v_61;\n{ const nl_domain *nl_b_9_35 = &nl_b_2_21;\n(void)nl_b_9_35;\nconst nl_node * nl_v_62 = nl_b_2_23;\nconst nl_domain * nl_v_63 = nl_b_9_35;\nnl_node * nl_v_64 = (nl_node *)nl_v_62;\nNL_HEAP_ROOT(nl_v_64,nl_v_63->token,1,24,27,6);\n(void)nl_v_63;\nnl_node * nl_b_9_36 = nl_v_64;\n(void)nl_b_9_36;\nNL_NODE_BIND(9, 36, 4, &nl_b_9_36);\nnl_node * nl_v_65 = nl_b_9_36;\nnl_node_option * nl_v_66 = &nl_v_65->f0;\nNL_HEAP_FIELD(nl_v_65,nl_v_66,1,11,0,28,28,6);\nconst nl_node * nl_v_67 = nl_b_6_31;\nnl_allocation nl_v_68 = nl_b_6_27;\nnl_b_6_27 = (nl_allocation){0};\nnl_domain nl_v_69 = nl_b_6_29;\nnl_b_6_29 = (nl_domain){0};\nNL_LIVE_SEND(nl_v_67,nl_v_68.handle,nl_v_69.token,&nl_b_6_27,&nl_b_6_29);\nnl_live_tail nl_v_78 = nl_producer_10(nl_v_66,nl_v_67,nl_v_68,nl_v_69);\nNL_LIVE_RECEIVE(nl_v_78,&nl_b_6_27,&nl_b_6_29);\nnl_v_61 = nl_v_78;\nNL_HEAP_SCOPE_END(6);\n}\nnl_live_tail nl_b_6_43 = nl_v_61;\nnl_v_61 = (nl_live_tail){0};\nNL_NODE_BIND(6,43,4,&nl_b_6_43);\nnl_live_tail nl_v_79 = nl_b_6_43;\nnl_b_6_43 = (nl_live_tail){0};\nconst nl_node * nl_b_6_44 = nl_v_79.ptr;\n(void)nl_b_6_44;\nnl_domain nl_b_6_45 = nl_v_79.domain;\n(void)nl_b_6_45;\nnl_allocation nl_b_6_46 = nl_v_79.allocation;\n(void)nl_b_6_46;\nnl_v_79 = (nl_live_tail){0};\n{ const nl_domain *nl_b_11_47 = &nl_b_6_45;\n(void)nl_b_11_47;\nconst nl_node * nl_v_80 = nl_b_6_44;\nconst nl_domain * nl_v_81 = nl_b_11_47;\nconst nl_node * nl_v_82 = nl_v_80;\nNL_HEAP_ROOT(nl_v_82,nl_v_81->token,0,35,38,7);\n(void)nl_v_81;\nconst nl_node * nl_b_11_48 = nl_v_82;\n(void)nl_b_11_48;\nNL_NODE_BIND(11, 48, 4, &nl_b_11_48);\nNL_HEAP_SCOPE_END(7);\n}\nconst nl_node * nl_v_83 = nl_b_6_44;\nnl_allocation nl_v_84 = nl_b_6_46;\nnl_b_6_46 = (nl_allocation){0};\nnl_domain nl_v_85 = nl_b_6_45;\nnl_b_6_45 = (nl_domain){0};\nNL_HEAP_HANDOFF(nl_v_83,nl_v_84.handle,nl_v_85.token,&nl_b_6_46,&nl_b_6_45);\nnl_owner_11(nl_v_83,nl_v_84,nl_v_85);\nNL_HEAP_RETURNED(&nl_b_6_46,&nl_b_6_45);\nnl_slot nl_v_97;\n{ const nl_domain *nl_b_15_57 = &nl_b_2_21;\n(void)nl_b_15_57;\nconst nl_node * nl_v_98 = nl_b_2_23;\nNL_HEAP_END(nl_v_98,nl_b_15_57->token);\nnl_slot nl_v_99 = {(unsigned char *)nl_v_98,24};\nnl_v_97 = nl_v_99;\n}\nnl_slot nl_b_6_58 = nl_v_97;\n(void)nl_b_6_58;\nNL_NODE_BIND(6, 58, 4, &nl_b_6_58);\nnl_slot nl_v_100 = nl_b_6_58;\nnl_b_6_58 = (nl_slot){0};\nnl_storage nl_v_101 = {nl_v_100.bytes,nl_v_100.length};\nNL_HEAP_RAW(nl_v_101.bytes,nl_v_101.length);\nnl_storage nl_b_6_59 = nl_v_101;\n(void)nl_b_6_59;\nNL_NODE_BIND(6, 59, 4, &nl_b_6_59);\nnl_domain nl_v_102 = nl_b_2_21;\nnl_b_2_21 = (nl_domain){0};\nNL_HEAP_FINALIZE(nl_v_102.token);\n(void)nl_v_102;\nnl_allocation nl_v_103 = nl_b_2_19;\nnl_b_2_19 = (nl_allocation){0};\nnl_storage nl_v_104 = nl_b_6_59;\nnl_b_6_59 = (nl_storage){0};\nNL_HEAP_RELEASE(nl_v_103.handle,nl_v_104.bytes,nl_v_104.length);\nfree(nl_v_103.handle);\nnl_v_103.handle=NULL;\nnl_v_104.bytes=NULL;\n(void)nl_v_104;\n}\n}\nNL_HEAP_FINISH();\nreturn 0;\n}\n",
+      "stderr": ""
+    },
+    "named": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "target_sha256": "36c1b66b3a65d3216e1f796f7f0f5a322e8c90a1156999bda9cae8bf8cd01f95",
+    "deterministic_repeat": true,
+    "category_prediction": null,
+    "actual_category": null,
+    "category_prediction_match": true,
+    "public": {
+      "exit": 0,
+      "stdout": "COPY depth=1 call=18 span=164:192 nominal=10 root=1 child=2 index=0 incarnation=1 old=42 new=98 sibling=17 body_status=0 parameters_status=0\nCOPY depth=1 call=25 span=246:273 nominal=10 root=4 child=6 index=1 incarnation=4 old=66 new=42 sibling=213 body_status=0 parameters_status=0\nARM parent_depth=1 match=48 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0\nARM parent_depth=1 match=48 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0\nINITIALIZE depth=2 node=19 root=24 incarnation=27 backing=1 domain=1 span=792:906\nARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1\nARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1\nINITIALIZE depth=3 node=19 root=35 incarnation=38 backing=2 domain=2 span=1694:1819\nREF_SCOPE place=24 scope=5\nREF_SCOPE place=24 scope=6\nPRODUCER depth=3 call=50 root=35 incarnation=38 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=42 availability=1 packet=72 same_ptr_root=1 same_allocation=1 same_domain=1\nPROJECTION nominal=11 child=28 incarnation=28\nCALLER_LOCAL depth=3 node=56 symbol=43 availability=1 value=72 fields=71,40,45\nREF_SCOPE place=35 scope=7\nRECEIVER depth=3 call=72 root=35 incarnation=38 backing=2 domain=2 post_proved=1 entry_original_exact=1\nREF_SCOPE place=35 scope=8\nNODE_BACKEND status=0 output_null=0 output_length_unchanged=0\nSUMMARY Copy_calls=2 H_producers=1 owner_receivers=1 H_initializations=2\n",
+      "stderr": ""
+    },
+    "native_unmodified_C17": [
+      {
+        "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+        "opt": "-O0",
+        "guest": {
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "C_sha256": "36c1b66b3a65d3216e1f796f7f0f5a322e8c90a1156999bda9cae8bf8cd01f95"
+      },
+      {
+        "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+        "opt": "-O2",
+        "guest": {
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "C_sha256": "36c1b66b3a65d3216e1f796f7f0f5a322e8c90a1156999bda9cae8bf8cd01f95"
+      },
+      {
+        "compiler": "/tmp/night798/sdk/extracted/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+        "opt": "-O0",
+        "guest": {
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "C_sha256": "36c1b66b3a65d3216e1f796f7f0f5a322e8c90a1156999bda9cae8bf8cd01f95"
+      },
+      {
+        "compiler": "/tmp/night798/sdk/extracted/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+        "opt": "-O2",
+        "guest": {
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "C_sha256": "36c1b66b3a65d3216e1f796f7f0f5a322e8c90a1156999bda9cae8bf8cd01f95"
+      }
+    ]
+  },
+  "arm_backend_unsupported.nl": {
+    "check": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "normal": {
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/night794/evidence/p794/sources/arm_backend_unsupported.nl\n"
+    },
+    "named": {
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/night794/evidence/p794/sources/arm_backend_unsupported.nl\n"
+    },
+    "target_sha256": "86004d65c4f387c95467c6cee92bc1f1f8cb04d6650be09fbd1e359834a56766",
+    "deterministic_repeat": true,
+    "category_prediction": null,
+    "actual_category": null,
+    "category_prediction_match": true,
+    "public": {
+      "exit": 0,
+      "stdout": "ARM parent_depth=1 match=3 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0\nARM parent_depth=1 match=3 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0\nINITIALIZE depth=2 node=19 root=5 incarnation=8 backing=1 domain=1 span=379:493\nARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1\nARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1\nINITIALIZE depth=3 node=19 root=16 incarnation=19 backing=2 domain=2 span=1281:1406\nREF_SCOPE place=5 scope=3\nREF_SCOPE place=5 scope=4\nPRODUCER depth=3 call=50 root=16 incarnation=19 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=27 availability=1 packet=45 same_ptr_root=1 same_allocation=1 same_domain=1\nPROJECTION nominal=11 child=9 incarnation=9\nCALLER_LOCAL depth=3 node=56 symbol=28 availability=1 value=45 fields=44,13,18\nCOPY depth=3 call=74 span=2252:2280 nominal=10 root=37 child=38 index=0 incarnation=37 old=42 new=98 sibling=17 body_status=3 parameters_status=3\nCOPY depth=3 call=81 span=2350:2377 nominal=10 root=40 child=42 index=1 incarnation=40 old=66 new=42 sibling=213 body_status=3 parameters_status=3\nREF_SCOPE place=16 scope=7\nRECEIVER depth=3 call=117 root=16 incarnation=19 backing=2 domain=2 post_proved=1 entry_original_exact=1\nREF_SCOPE place=16 scope=8\nNODE_BACKEND status=1 output_null=1 output_length_unchanged=1\nSUMMARY Copy_calls=2 H_producers=1 owner_receivers=1 H_initializations=2\n",
+      "stderr": ""
+    }
+  },
+  "semantic_wrong_return.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night794/evidence/p794/sources/semantic_wrong_return.nl:2:19-2:33: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+    },
+    "normal": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night794/evidence/p794/sources/semantic_wrong_return.nl:2:19-2:33: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+    },
+    "named": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night794/evidence/p794/sources/semantic_wrong_return.nl:2:19-2:33: error(semantic)[P8-BODY-RESULT]: normal body result must exactly match the declared single result\n"
+    },
+    "target_sha256": "86004d65c4f387c95467c6cee92bc1f1f8cb04d6650be09fbd1e359834a56766",
+    "deterministic_repeat": true,
+    "category_prediction": "semantic",
+    "actual_category": "semantic",
+    "category_prediction_match": true
+  },
+  "malformed.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night794/evidence/p794/sources/malformed.nl:1:29-1:30: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    "normal": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night794/evidence/p794/sources/malformed.nl:1:29-1:30: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    "named": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night794/evidence/p794/sources/malformed.nl:1:29-1:30: error(unsupported)[P5-EXPECTED-EXPRESSION]: expected name, call, registered aggregate or lexical block\n"
+    },
+    "target_sha256": "86004d65c4f387c95467c6cee92bc1f1f8cb04d6650be09fbd1e359834a56766",
+    "deterministic_repeat": true,
+    "category_prediction": "syntax",
+    "actual_category": "unsupported",
+    "category_prediction_match": false
+  },
+  "array_one.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night794/evidence/p794/sources/array_one.nl:1:50-1:52: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "normal": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night794/evidence/p794/sources/array_one.nl:1:50-1:52: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "named": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night794/evidence/p794/sources/array_one.nl:1:50-1:52: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "target_sha256": "86004d65c4f387c95467c6cee92bc1f1f8cb04d6650be09fbd1e359834a56766",
+    "deterministic_repeat": true,
+    "category_prediction": "unsupported",
+    "actual_category": "unsupported",
+    "category_prediction_match": true
+  },
+  "array_two.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night794/evidence/p794/sources/array_two.nl:1:50-1:52: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "normal": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night794/evidence/p794/sources/array_two.nl:1:50-1:52: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "named": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night794/evidence/p794/sources/array_two.nl:1:50-1:52: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "target_sha256": "86004d65c4f387c95467c6cee92bc1f1f8cb04d6650be09fbd1e359834a56766",
+    "deterministic_repeat": true,
+    "category_prediction": "unsupported",
+    "actual_category": "unsupported",
+    "category_prediction_match": true
+  },
+  "scalar_io_control.nl": {
+    "check": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "normal": {
+      "exit": 0,
+      "stdout": "/* North Star V0/V1/AVS Checked-C reference output. */\n#include <stdint.h>\n\n#include <limits.h>\n_Static_assert(CHAR_BIT == 8, \"NewLang C17 requires 8-bit bytes\");\n_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, \"NewLang C17 requires exact 8-bit uint8_t\");\nstatic void nl_fn_10(void);\nstatic uint8_t nl_fn_11(void);\n\nstatic void nl_fn_10(void)\n{\n    const uint8_t nl_call_2 = nl_fn_11();\n    (void)nl_call_2;\n    (void)0;\n}\n\nstatic uint8_t nl_fn_11(void)\n{\n    return 63;\n}\n\nint main(void)\n{\n    nl_fn_10();\n    return 0;\n}\n",
+      "stderr": ""
+    },
+    "named": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "target_sha256": "bdbf2116c655ff62bd70cab4063da2ec370d31d901a04bc4cc660f3113acb925",
+    "deterministic_repeat": true,
+    "category_prediction": null,
+    "actual_category": null,
+    "category_prediction_match": true,
+    "native_unmodified_C17": [
+      {
+        "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+        "opt": "-O0",
+        "guest": {
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "C_sha256": "bdbf2116c655ff62bd70cab4063da2ec370d31d901a04bc4cc660f3113acb925"
+      },
+      {
+        "compiler": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13",
+        "opt": "-O2",
+        "guest": {
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "C_sha256": "bdbf2116c655ff62bd70cab4063da2ec370d31d901a04bc4cc660f3113acb925"
+      },
+      {
+        "compiler": "/tmp/night798/sdk/extracted/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+        "opt": "-O0",
+        "guest": {
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "C_sha256": "bdbf2116c655ff62bd70cab4063da2ec370d31d901a04bc4cc660f3113acb925"
+      },
+      {
+        "compiler": "/tmp/night798/sdk/extracted/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+        "opt": "-O2",
+        "guest": {
+          "exit": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        "C_sha256": "bdbf2116c655ff62bd70cab4063da2ec370d31d901a04bc4cc660f3113acb925"
+      }
+    ]
+  },
+  "retry": {
+    "rejected": {
+      "exit": 4,
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/night794/evidence/p794/sources/arm_backend_unsupported.nl\n"
+    },
+    "success": {
+      "exit": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    "bytes_equal": true
+  },
+  "symlink_destination": {
+    "exit": 1,
+    "stdout": "",
+    "stderr": "error(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p794-observe-8g_25gwp/link.c\n"
+  },
+  "missing_parent": {
+    "exit": 1,
+    "stdout": "",
+    "stderr": "error(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p794-observe-8g_25gwp/missing/out.c\n"
+  },
+  "source_alias": {
+    "exit": 1,
+    "stdout": "",
+    "stderr": "error(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\n"
+  },
+  "real_driver_io_and_OOM": {
+    "exit": 0,
+    "stdout": "fault=1 old artifact preserved; temporary removed\nfault=2 old artifact preserved; temporary removed\nfault=3 old artifact preserved; temporary removed\nwrapped allocation failures=175 preserved/cleanup; recovery=PASS\n",
+    "stderr": "error(cli)[V0-C-OUTPUT]: failed to emit Checked-C\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p794-observe-8g_25gwp/saved.c\nerror(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p794-observe-8g_25gwp/saved.c\nerror(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p794-observe-8g_25gwp/saved.c\nerror(cli)[V0-C-FILE]: cannot safely write named C17 output\nnote: /tmp/p794-observe-8g_25gwp/saved.c\nerror(cli)[V0-SOURCE-IO]: cannot read source\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-SOURCE-IO]: cannot read source\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-SOURCE-IO]: cannot read source\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-PARSER]: cannot create parser\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:1: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while creating syntax owner\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-3:1: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while constructing syntax\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:4-1:17: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while constructing syntax\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:21-1:23: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while constructing syntax\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:25: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while constructing syntax\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:26-1:28: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while constructing syntax\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:4-2:8: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while constructing syntax\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:12-2:16: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while constructing syntax\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:18: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while constructing syntax\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:19-2:32: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while constructing syntax\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:19-2:35: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while constructing syntax\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:35-2:39: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while constructing syntax\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-CHECKER]: cannot create semantic context\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:1: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:1: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:1: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:1: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:1: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:1: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:1: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:1: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:1: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:1: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:1: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:1: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:4-1:17: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:4-2:8: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:1-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:1-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:17-2:41: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:19-2:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:19-2:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:19-2:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:19-2:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:19-2:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:2:19-2:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:24-1:34: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n/tmp/night794/evidence/p794/sources/scalar_io_control.nl:1:26-1:32: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\nerror(cli)[V0-ENTRY]: cannot create checked entry call\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-ENTRY]: cannot create checked entry call\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-ENTRY]: cannot create checked entry call\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\nerror(cli)[V0-ENTRY]: cannot create checked entry call\nnote: /tmp/night794/evidence/p794/sources/scalar_io_control.nl\n<v0-entry>:1:1-1:1: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while creating syntax owner\n<v0-entry>:1:1-1:5: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while constructing syntax\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n<v0-entry>:1:1-1:7: error(host)[P3-OUT-OF-MEMORY]: host allocation failed during semantic checking\n"
+  },
+  "host_fault_diagnostic_counts": {
+    "error(host)[P2-OUT-OF-MEMORY]:": 14,
+    "error(cli)[V0-CHECKER]:": 20,
+    "error(cli)[V0-ENTRY]:": 4,
+    "error(cli)[V0-SOURCE-IO]:": 3,
+    "error(host)[P3-OUT-OF-MEMORY]:": 131,
+    "error(cli)[V0-C-OUTPUT]:": 1,
+    "error(cli)[V0-PARSER]:": 1,
+    "error(cli)[V0-C-FILE]:": 4
+  },
+  "help": {
+    "exit": 0,
+    "stdout": "Usage: newlangc [--version | --help | SOURCE]\n       newlangc --check SOURCE\n       newlangc --emit-c17-to OUTPUT SOURCE\n       newlangc --experimental-c17-u8-export FUNCTION SOURCE\nNewLang production compiler P0 bootstrap.\n  --version  Print the deterministic compiler version.\n  --help     Print this help.\n  --check SOURCE  Validate source without backend emission.\n  SOURCE          Emit supported checked-profile C17 to stdout.\n  --emit-c17-to OUTPUT SOURCE\n             Stage and replace a named C17 file (POSIX local host).\n  --experimental-c17-u8-export FUNCTION SOURCE\n             Experimental Copy-only u8 export with a fixed C17 header;\n             not general FFI.\nOnly supported checked profiles emit C17; --check success does not guarantee\nbackend emission. LLVM remains the planned primary backend.\n",
+    "stderr": ""
+  }
+}

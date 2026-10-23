@@ -1,0 +1,51 @@
+from pathlib import Path
+import hashlib,json,subprocess,tempfile,os,re
+r=Path('/tmp/night794/evidence/p794');b=Path('/tmp/night793-base');compiler=b/'newlangc'
+f=json.loads((r/'freeze.json').read_text());result={}
+def run(args): return subprocess.run(list(map(str,args)),capture_output=True)
+def record(p):return {'exit':p.returncode,'stdout':p.stdout.decode(errors='replace'),'stderr':p.stderr.decode(errors='replace')}
+with tempfile.TemporaryDirectory(prefix='p794-observe-') as tmp:
+ t=Path(tmp);target=t/'saved.c';sentinel=b'int main(void){return 0;}\n'
+ for name,digest in f['source'].items():
+  source=r/'sources'/name;assert hashlib.sha256(source.read_bytes()).hexdigest()==digest
+  checked=run([compiler,'--check',source]);normal=run([compiler,source]);repeat=run([compiler,source]);assert (normal.returncode,normal.stdout,normal.stderr)==(repeat.returncode,repeat.stdout,repeat.stderr)
+  target.write_bytes(sentinel);named=run([compiler,'--emit-c17-to',target,source]);expected=f['oracle'][source.stem];assert checked.returncode==expected['check'] and normal.returncode==named.returncode==expected['compile']
+  assert not checked.stdout and not named.stdout
+  if normal.returncode: assert not normal.stdout and target.read_bytes()==sentinel
+  else:assert not normal.stderr and not named.stderr and target.read_bytes()==normal.stdout
+  assert list(t.iterdir())==[target], 'private output stage leaked'
+  actual_category=re.search(rb'error\(([^)]+)\)',checked.stderr)
+  category=actual_category[1].decode() if actual_category else None
+  result[name]={'check':record(checked),'normal':record(normal),'named':record(named),'target_sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'deterministic_repeat':True,'category_prediction':expected.get('category'),'actual_category':category,'category_prediction_match':expected.get('category') in (None,category)}
+  # Actual source-owned observations only. No graph tamper or synthetic world.
+  if name in ('prefix_supported.nl','arm_backend_unsupported.nl'):
+   p=run([b/'p778_probe',source]);assert p.returncode==0
+   result[name]['public']=record(p)
+   copies=re.findall(rb'body_status=(\d+) parameters_status=(\d+)',p.stdout)
+   assert copies==([(b'0',b'0')]*2 if name=='prefix_supported.nl' else [(b'3',b'3')]*2)
+  if normal.returncode==0:
+   cfile=t/'actual.c';cfile.write_bytes(normal.stdout);rows=[]
+   fmt=Path('/tmp/night798/formatter-path').read_text();clang=Path(fmt).parent/'clang-23'
+   for cc in ['/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13',str(clang)]:
+    for opt in ['-O0','-O2']:
+     exe=t/'actual';p=run([cc,'-std=c17','-pedantic-errors','-Wall','-Wextra','-Werror',opt,cfile,'-o',exe]);assert p.returncode==0,(p.stderr.decode(),cc)
+     guest=run([exe]);assert guest.returncode==0 and not guest.stderr and not guest.stdout;rows.append({'compiler':cc,'opt':opt,'guest':record(guest),'C_sha256':hashlib.sha256(normal.stdout).hexdigest()});exe.unlink()
+   cfile.unlink();result[name]['native_unmodified_C17']=rows
+ # Valid retry after any refusal changes only the destination, no source edits.
+ source=r/'sources/scalar_io_control.nl';good=run([compiler,source]);before=r/'sources/arm_backend_unsupported.nl'
+ target.write_bytes(sentinel);rejected=run([compiler,'--emit-c17-to',target,before]);assert rejected.returncode==4 and target.read_bytes()==sentinel
+ retry=run([compiler,'--emit-c17-to',target,source]);assert retry.returncode==0 and target.read_bytes()==good.stdout
+ result['retry']={'rejected':record(rejected),'success':record(retry),'bytes_equal':True}
+ other=t/'other.c';other.write_bytes(sentinel);link=t/'link.c';link.symlink_to(other)
+ z=run([compiler,'--emit-c17-to',link,source]);assert z.returncode==1 and not z.stdout and other.read_bytes()==sentinel and link.is_symlink();result['symlink_destination']=record(z)
+ z=run([compiler,'--emit-c17-to',t/'missing'/'out.c',source]);assert z.returncode==1 and not z.stdout and not (t/'missing').exists();result['missing_parent']=record(z)
+ digest=hashlib.sha256(source.read_bytes()).hexdigest();z=run([compiler,'--emit-c17-to',source,source]);assert z.returncode==1 and not z.stdout and hashlib.sha256(source.read_bytes()).hexdigest()==digest;result['source_alias']=record(z)
+ faults=run([b/'p694_fault_test',source,target]);assert faults.returncode==0,(faults.stdout,faults.stderr)
+ result['real_driver_io_and_OOM']=record(faults)
+ result['host_fault_diagnostic_counts']={x.decode():len(re.findall(re.escape(x),faults.stderr)) for x in set(re.findall(rb'error\([^\n]+?\]\:',faults.stderr))}
+help_=run([compiler,'--help']);assert help_.returncode==0 and not help_.stderr
+for flag in [b'--check',b'--emit-c17-to',b'--experimental-c17-u8-export',b'--help',b'--version']:assert flag in help_.stdout
+assert b'--check success does not guarantee' in help_.stdout
+result['help']=record(help_)
+(r/'observations.json').write_text(json.dumps(result,indent=2)+'\n')
+print(json.dumps({'phases':{n:{'CHECK':v['check']['exit'],'C17':v['normal']['exit'],'named':v['named']['exit'],'category_matches_prediction':v['category_prediction_match']} for n,v in result.items() if isinstance(v,dict) and 'check' in v},'host_faults':result['real_driver_io_and_OOM']['stdout'],'host_diagnostic_counts':result['host_fault_diagnostic_counts']},indent=2))
