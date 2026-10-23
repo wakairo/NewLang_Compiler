@@ -96,3 +96,32 @@ PAUSED and H1268 HOLD remain. VALUE-ALIGNMENT-RISK: a successful finite native
 composition still does not measure author+ordinary-safe caller audit/re-audit
 dependency closure vs well-factored C; carrier bookkeeping adds maintenance cost.
 C owns new-issuer decisions, any fresh R and adoption.
+
+## Foreseen regression-expectation migration before full testing
+
+Read-only inventory found living tests/p752/cli.py always expects backend4 even
+for its historical calibration_batch.nl. The reusable prefix+owner path also
+supports that source; deliberately rejecting its name would be a fixture
+exception. Preserve that source, historical freeze/oracle/first observation and
+all P/R bytes. The current harness must separately recognize new C17 success
+for this one already-authored positive (ordinary/named identical full C), while
+all other old unsupported and all negative results retain the same guards.
+Archive the old script. This is an intentional current-coverage expectation
+migration, not a retroactive rewrite of the historical Stage1 oracle or a
+relaxation of any semantic/proof rejection. archive_window remains unsupported.
+
+## First native observer setup red, separate transparent correction
+
+The first prototype output compiled/run as strict C17 (GCC O0 / Clang O2).
+Observed GCC O0 failure worlds0/1 allocated roots passed. Successful allocation
+reached observer line164, where the harness wrongly assumed the existing
+producer-local lowering invokes NL_NODE_BIND. Inspection of unchanged generated
+C proves that private producer lowering has no such callback, so local_bind=0;
+no wrong guest packet/free or oracle discrepancy was observed. Preserve that
+first log and observer version. Add an explicitly passive mixed-only
+NL_MIXED_OWNER_LOCAL callback between existing local construction and consume;
+the later existing RETURN callback can then read the now-zero local. No new
+store/authority, expectation change, source change or observation text-rewrite.
+This is a test-instrumentation correction under the Issue's §7.6-style separate
+correction decision, not a semantic rejection relabeled PASS or CI retry.
+Unmodified newly generated C is archived separately from the initial output.

@@ -1,6 +1,7 @@
 #include "newlang/checked_c_node.h"
 #include "checked_c_five.h"
 #include "checked_c_target.h"
+#include "newlang/copy_body.h"
 #include "newlang/node_join.h"
 #include "newlang/node_links.h"
 #include "newlang/raw_storage.h"
@@ -23,6 +24,10 @@ typedef struct {
     size_t frame;
     NLPlaceId place;
     NLIncarnationId incarnation;
+    NLValueFactId copy_fact, copy_fact_child[2];
+    NLPlaceId copy_child[2];
+    NLIncarnationId copy_inc[2];
+    NLValueId copy_value[2];
 } Local;
 typedef struct {
     unsigned stage;
@@ -65,6 +70,10 @@ typedef struct {
     size_t allocations, destroys, releases, domains, finalized, slots, erased,
         reloans, option_bindings, link_updates;
     NLTypeId bundle;
+    NLTypeId copy_type;
+    size_t copy_function, copy_calls, copy_expected_calls, copy_roots;
+    const NLCheckedFragment *copy_issuer;
+    const NLSemanticContext *copy_anchor;
     NLTypeId node, option, ptr, u8, unit;
     NLNodeCStatus status;
 } Emit;
@@ -214,6 +223,8 @@ static bool add_local(Emit *e, Env *env, NLSymbolId symbol, NLTypeId type,
 }
 static const char *ctype(const Emit *e, const Env *env, NLTypeId type)
 {
+    if (e->copy_type && type == e->copy_type)
+        return "nl_copy_record";
     if (type == e->node)
         return "nl_node";
     if (type == e->option)
@@ -303,6 +314,7 @@ static bool field(Emit *e, const Env *env, const NLCheckedField *f,
                : reject(e);
 }
 static bool expr(Emit *, Env *, NLCheckedNodeId, Value *);
+#include "checked_c_copy_internal.h"
 static bool producer_call(Emit *, Env *, NLCheckedNodeId,
                           const NLCheckedNodeView *, Value *);
 static bool live_destructure(Emit *, Env *, const NLCheckedNodeView *, Value *);
@@ -787,6 +799,21 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
           v->type == e->custody_type) ||
          (v->kind == NL_CHECKED_LOAN_HEADER && v->loan.implicit_local)))
         return custody_expr(e, env, id, v, out);
+    if (e->copy_type && v->kind == NL_CHECKED_AGGREGATE &&
+        v->type == e->copy_type)
+        return copy_constructor(e, env, v, out);
+    if (e->copy_type && v->kind == NL_CHECKED_LOAN_HEADER &&
+        v->field.nominal == e->copy_type)
+        return copy_loan(e, env, v, out);
+    if (e->copy_type && v->kind == NL_CHECKED_FIELD_READ) {
+        Local *l = copy_field(e, env, &v->field);
+        if (!l || v->type != e->u8 || v->field.access != NL_ACCESS_READ ||
+            v->result_count != 1)
+            return reject(e);
+        out->temp = ++e->temp;
+        return put(e, "uint8_t nl_v_%zu=nl_b_%zu_%zu.f%zu;\n", out->temp,
+                   l->frame, l->symbol, v->field.index);
+    }
     if (v->kind == NL_CHECKED_REGISTERED_CALL)
         return v->producer.entry_proved ? producer_call(e, env, id, v, out)
                                         : owner_call(e, env, id, v, out);
@@ -831,8 +858,23 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
         Value value = {0};
         if (!expr(e, env, v->initializer, &value) || r->type != value.type ||
             ctype(e, env, value.type) == NULL ||
-            !add_local(e, env, r->symbol, r->type, r->type == e->node))
+            !add_local(e, env, r->symbol, r->type,
+                       r->type == e->node ||
+                           (e->copy_type && r->type == e->copy_type)))
             return reject(e);
+        if (e->copy_type && r->type == e->copy_type) {
+            if (!copy_bind(e, env, &env->locals[env->count - 1],
+                           v->initializer) ||
+                !put(e,
+                     "nl_copy_record nl_b_%zu_%zu = "
+                     "nl_v_%zu;\nNL_MIXED_COPY_BIND(%zu,%zu,&nl_b_%zu_%zu.f0,&"
+                     "nl_b_%zu_%zu.f1);\n",
+                     env->frame, r->symbol, value.temp, env->frame, r->symbol,
+                     env->frame, r->symbol, env->frame, r->symbol))
+                return reject(e);
+            out->type = e->unit;
+            return true;
+        }
         if (e->allocated && r->type == e->ptr && env->heap_place != 0 &&
             env->heap_symbol == 0)
             env->heap_symbol = r->symbol;
@@ -938,6 +980,13 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
                    ctype(e, env, v->type));
     }
     if (v->kind == NL_CHECKED_U8_LITERAL) {
+        if (e->copy_type && env->artifact == e->copy_issuer) {
+            NLSemanticValueView scalar;
+            if (!copy_plain(nl_checked_context(env->artifact),
+                            v->results[0].value, e->u8, &scalar) ||
+                scalar.scalar_value != v->scalar_result.value)
+                return reject(e);
+        }
         if (v->type != e->u8 || !v->has_scalar_result ||
             v->scalar_result.type != e->u8 || !v->scalar_result.known ||
             v->scalar_result.value > 255)
@@ -2150,12 +2199,17 @@ static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
         size_t result = ++e->temp;
         ok = put(e,
                  "nl_live_tail nl_b_%zu_%zu = nl_v_%zu;\n"
-                 "nl_v_%zu = (nl_live_tail){0};\n"
-                 "nl_live_tail nl_v_%zu = nl_b_%zu_%zu;\n"
-                 "nl_b_%zu_%zu = (nl_live_tail){0};\n",
-                 callee.frame, local_return.local, packed, packed, result,
-                 callee.frame, local_return.local, callee.frame,
-                 local_return.local);
+                 "nl_v_%zu = (nl_live_tail){0};\n",
+                 callee.frame, local_return.local, packed, packed);
+        if (ok && e->copy_type)
+            ok = put(e, "NL_MIXED_OWNER_LOCAL(&nl_b_%zu_%zu);\n", callee.frame,
+                     local_return.local);
+        if (ok)
+            ok = put(e,
+                     "nl_live_tail nl_v_%zu = nl_b_%zu_%zu;\n"
+                     "nl_b_%zu_%zu = (nl_live_tail){0};\n",
+                     result, callee.frame, local_return.local, callee.frame,
+                     local_return.local);
         packed = result;
     }
     if (ok)
@@ -2907,6 +2961,14 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             }
         }
     }
+    if (!copy_prepare(&e, body)) {
+        free(e.text);
+        return e.status;
+    }
+    if (e.copy_type && (!e.allocated || !e.two_heap || !e.live_tail)) {
+        free(e.text);
+        return NL_NODE_C_UNSUPPORTED;
+    }
     if (!e.allocated) {
         NLNodeLinksView links;
         if (nl_checked_node_links_view(body, &links)) {
@@ -2995,11 +3057,31 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             "#define NL_CUSTODY_POLICY(...) ((void)0)\n"
             "#define NL_CUSTODY_LOAN(...) ((void)0)\n#endif\n");
     }
+    if (e.copy_type && !put(&e,
+                            "typedef struct {uint8_t f0,f1;} nl_copy_record;\n"
+                            "#ifndef NL_MIXED_OWNER_LOCAL\n#define "
+                            "NL_MIXED_OWNER_LOCAL(...) ((void)0)\n#endif\n"
+                            "#ifndef NL_MIXED_COPY_BIND\n#define "
+                            "NL_MIXED_COPY_BIND(...) ((void)0)\n#endif\n"
+                            "#ifndef NL_MIXED_COPY_STORE\n#define "
+                            "NL_MIXED_COPY_STORE(...) ((void)0)\n#endif\n"
+                            "#ifndef NL_MIXED_COPY_CALL\n#define "
+                            "NL_MIXED_COPY_CALL(...) ((void)0)\n#endif\n"
+                            "static uint8_t nl_copy_state_%zu(uint8_t "
+                            "*target,uint8_t next){uint8_t "
+                            "old=*target;*target=next;NL_MIXED_COPY_CALL("
+                            "target,old,next);return old;}\n",
+                            e.copy_function)) {
+        free(e.text);
+        return e.status;
+    }
     const size_t main_offset = e.used;
     (void)put(&e, "int main(void) {\n");
     Value result = {0};
     if (!block(&e, &env, nl_checked_root(body), &result) ||
         e.roots != (e.three_lexical_links ? 3u : 2u) || result.type != e.unit ||
+        (e.copy_type &&
+         (e.copy_roots != 2 || e.copy_calls != e.copy_expected_calls)) ||
         (e.no_pre_read && e.producer_calls != 1) ||
         (e.custody && (!e.custody_authorized || e.recipient_calls != 1)) ||
         (e.allocated &&

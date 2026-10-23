@@ -1,0 +1,216 @@
+#include "../../src/copy_body_internal.h"
+#include "../support/node_checked.h"
+#include "newlang/checked_c_node.h"
+#include "newlang/copy_body.h"
+#include <stdlib.h>
+static bool injecting, hit;
+static size_t allocations, fail_at;
+void *__real_malloc(size_t);
+void *__real_calloc(size_t, size_t);
+void *__real_realloc(void *, size_t);
+static bool fail(void)
+{
+    if (!injecting)
+        return false;
+    size_t index = allocations++;
+    if (index != fail_at)
+        return false;
+    hit = true;
+    return true;
+}
+void *__wrap_malloc(size_t n)
+{
+    return fail() ? NULL : __real_malloc(n);
+}
+void *__wrap_calloc(size_t n, size_t s)
+{
+    return fail() ? NULL : __real_calloc(n, s);
+}
+void *__wrap_realloc(void *p, size_t n)
+{
+    return fail() ? NULL : __real_realloc(p, n);
+}
+static NLCheckedFragment *main_body(TestNode *n)
+{
+    return (NLCheckedFragment *)nl_checked_call_body(n->entry,
+                                                     nl_checked_root(n->entry));
+}
+static bool producer(NLCheckedFragment *f, NLCheckedFragment **parent,
+                     NLCheckedNodeId *id)
+{
+    for (size_t i = 1; i <= f->count; ++i) {
+        if (f->nodes[i - 1].producer.entry_proved) {
+            *parent = f;
+            *id = i;
+            return true;
+        }
+        if (f->nodes[i - 1].kind == NL_CHECKED_MATCH)
+            for (size_t a = 0; a < f->nodes[i - 1].item_count; ++a)
+                if (producer((NLCheckedFragment *)nl_checked_match_arm(f, i, a),
+                             parent, id))
+                    return true;
+    }
+    return false;
+}
+static bool refused(const NLCheckedFragment *f)
+{
+    char *out = NULL;
+    size_t length = 731;
+    NLNodeCStatus s = nl_checked_c_node(f, &out, &length);
+    bool good = s == NL_NODE_C_UNSUPPORTED && out == NULL && length == 731;
+    free(out);
+    return good;
+}
+static bool gate(const char *path)
+{
+    TestNode n = {0}, foreign = {0};
+    CHECK(node_checked_load(path, &n) && node_checked_load(path, &foreign));
+    NLCheckedFragment *body = main_body(&n), *other = main_body(&foreign),
+                      *h = NULL;
+    NLCheckedNodeId call = 0, hid = 0;
+    NLCopyBodyParameters p, fp;
+    NLCopyBodyView v, fv;
+    for (size_t i = 1; i <= body->count; ++i)
+        if (nl_checked_copy_body_parameters(body, i, &p)) {
+            call = i;
+            break;
+        }
+    CHECK(call && nl_checked_copy_body_parameters(other, call, &fp) &&
+          nl_checked_copy_body_view(body, call, &v) &&
+          nl_checked_copy_body_view(other, call, &fv));
+    CHECK(p.field.parent == fp.field.parent && p.entry != fp.entry &&
+          v.body != fv.body && producer(body, &h, &hid));
+    CHECK(nl_checked_copy_body_validate(body, call, &fv) != NL_CHECK_OK &&
+          nl_checked_copy_body_parameters_validate(body, call, &fp) !=
+              NL_CHECK_OK);
+    NLProducerLocalReturnView owner, foreign_owner;
+    NLCheckedFragment *fh = NULL;
+    NLCheckedNodeId fi = 0;
+    CHECK(producer(other, &fh, &fi) && fi == hid &&
+          nl_checked_producer_local_return_view(h, hid, &owner) &&
+          nl_checked_producer_local_return_view(fh, fi, &foreign_owner));
+    CHECK(!nl_checked_producer_local_return_valid(h, hid, &foreign_owner));
+    char *baseline = NULL;
+    size_t bytes = 0;
+    CHECK(nl_checked_c_node(n.entry, &baseline, &bytes) == NL_NODE_C_OK &&
+          baseline && bytes);
+    size_t mutations = 0;
+#define MUTATE(change, restore)                                                \
+    do {                                                                       \
+        change;                                                                \
+        CHECK(refused(n.entry));                                               \
+        restore;                                                               \
+        char *again = NULL;                                                    \
+        size_t size = 0;                                                       \
+        CHECK(nl_checked_c_node(n.entry, &again, &size) == NL_NODE_C_OK &&     \
+              size == bytes && !memcmp(again, baseline, bytes));               \
+        free(again);                                                           \
+        ++mutations;                                                           \
+    } while (0)
+    NLCheckedNodeView loan = body->nodes[p.loan - 1],
+                      copy = body->nodes[call - 1], hcall = h->nodes[hid - 1];
+    MUTATE(body->nodes[p.loan - 1].field.parent++,
+           body->nodes[p.loan - 1] = loan);
+    MUTATE(body->nodes[p.loan - 1].field.index = 1 - p.field.index,
+           body->nodes[p.loan - 1] = loan);
+    MUTATE(body->nodes[p.loan - 1].field.child_fact++,
+           body->nodes[p.loan - 1] = loan);
+    MUTATE(body->nodes[p.loan - 1].field.parent_fact++,
+           body->nodes[p.loan - 1] = loan);
+    MUTATE(body->nodes[p.loan - 1].loan.scope++,
+           body->nodes[p.loan - 1] = loan);
+    MUTATE(body->nodes[p.loan - 1].loan.body_nonescape_proved = false,
+           body->nodes[p.loan - 1] = loan);
+    MUTATE(body->nodes[p.loan - 1].loan.access = NL_ACCESS_READ,
+           body->nodes[p.loan - 1] = loan);
+    MUTATE(body->nodes[call - 1].results[0].value++,
+           body->nodes[call - 1] = copy);
+    NLCheckedNodeView argument = body->nodes[p.arguments[1] - 1];
+    MUTATE(body->nodes[p.arguments[1] - 1].results[0].value++,
+           body->nodes[p.arguments[1] - 1] = argument);
+    MUTATE(h->nodes[hid - 1].producer.root++, h->nodes[hid - 1] = hcall);
+    MUTATE(h->nodes[hid - 1].producer.domain++, h->nodes[hid - 1] = hcall);
+    MUTATE(h->nodes[hid - 1].producer.range.region++,
+           h->nodes[hid - 1] = hcall);
+    MUTATE(h->nodes[hid - 1].producer.return_world = foreign_owner.returned,
+           h->nodes[hid - 1] = hcall);
+    NLCheckedFragment *callee = (NLCheckedFragment *)owner.body;
+    NLCheckedNodeView returned = callee->nodes[owner.return_node - 1];
+    MUTATE(callee->nodes[owner.return_node - 1].returned.value++,
+           callee->nodes[owner.return_node - 1] = returned);
+    const NLSource *source = ((NLCheckedFragment *)v.body)->copy_body->source;
+    MUTATE(((NLCheckedFragment *)v.body)->copy_body->source =
+               nl_checked_source(fv.body),
+           ((NLCheckedFragment *)v.body)->copy_body->source = source);
+#undef MUTATE
+    const NLSemanticContext *worlds[] = {n.context, p.entry, p.handoff,
+                                         owner.entry, owner.returned};
+    TestState *states = calloc(5, sizeof(*states));
+    CHECK(states);
+    for (size_t i = 0; i < 5; ++i)
+        CHECK(test_state(worlds[i], &states[i]));
+    allocations = 0;
+    fail_at = SIZE_MAX;
+    hit = false;
+    injecting = true;
+    char *out = NULL;
+    size_t size = 0;
+    NLNodeCStatus s = nl_checked_c_node(n.entry, &out, &size);
+    injecting = false;
+    CHECK(s == NL_NODE_C_OK && !hit && size == bytes &&
+          !memcmp(out, baseline, bytes));
+    free(out);
+    size_t total = allocations, positions[16] = {0,
+                                                 1,
+                                                 2,
+                                                 3,
+                                                 4,
+                                                 5,
+                                                 6,
+                                                 7,
+                                                 total / 8,
+                                                 total / 4,
+                                                 total / 3,
+                                                 total / 2,
+                                                 3 * total / 4,
+                                                 7 * total / 8,
+                                                 total - 2,
+                                                 total - 1};
+    size_t oom = 0, unsupported = 0;
+    CHECK(total > 16);
+    for (size_t j = 0; j < 16; ++j) {
+        fail_at = positions[j];
+        allocations = 0;
+        hit = false;
+        out = NULL;
+        size = 731;
+        injecting = true;
+        s = nl_checked_c_node(n.entry, &out, &size);
+        injecting = false;
+        CHECK(hit && out == NULL && size == 731 &&
+              (s == NL_NODE_C_OUT_OF_MEMORY || s == NL_NODE_C_UNSUPPORTED));
+        if (s == NL_NODE_C_OUT_OF_MEMORY)
+            ++oom;
+        else
+            ++unsupported;
+        for (size_t i = 0; i < 5; ++i)
+            CHECK(test_unchanged(worlds[i], &states[i]));
+        CHECK(nl_checked_c_node(n.entry, &out, &size) == NL_NODE_C_OK &&
+              size == bytes && !memcmp(out, baseline, bytes));
+        free(out);
+    }
+    printf("GATE genuine=PASS equal_numeric_foreign_worlds=refused "
+           "mutations=%zu restored=PASS OOM_total_allocations=%zu "
+           "selected_positions=16 explicit_oom=%zu legacy_bool_unsupported=%zu "
+           "five_worlds_unchanged=PASS output_slots=PASS retry=PASS\n",
+           mutations, total, oom, unsupported);
+    free(states);
+    free(baseline);
+    node_checked_destroy(&n);
+    node_checked_destroy(&foreign);
+    return true;
+}
+int main(int argc, char **argv)
+{
+    return argc == 2 && gate(argv[1]) ? 0 : 1;
+}

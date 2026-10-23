@@ -687,6 +687,24 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(p774_probe tests/p774/gate0_probe.c)
+    add_executable(p774_gate_test tests/p774/gate_test.c)
+    add_executable(p774_driver_oom tests/p774/driver_oom.c)
+    foreach(target p774_probe p774_gate_test p774_driver_oom)
+        target_link_libraries(${target} PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    endforeach()
+    target_link_options(p774_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    target_link_options(p774_driver_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p774_driver_oom.unit COMMAND p774_driver_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p774/sources/pump_reserve.nl")
+    foreach(source pump_reserve scale_reserve)
+        add_test(NAME p774_${source}_gate.unit COMMAND p774_gate_test
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p774/sources/${source}.nl")
+    endforeach()
+    add_test(NAME p774_mixed_owner_copy_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p774/native.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p774_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p774")
     add_executable(p761_probe tests/p761/probe.c)
     add_executable(p761_metadata_test tests/p761/metadata_test.c)
     add_executable(p761_gate_test tests/p761/gate_test.c)

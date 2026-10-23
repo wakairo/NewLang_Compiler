@@ -44,6 +44,9 @@ static bool walk(const NLCheckedFragment *f, size_t depth)
                 nl_checked_copy_body_parameters_validate(f, id, &parameters));
             ++copies;
         }
+        if (n->kind == NL_CHECKED_REF_FROM_PTR && n->has_reference_result)
+            printf("REF_SCOPE place=%zu scope=%zu\n", n->reference_result.place,
+                   n->reference_result.scope);
         if (n->kind == NL_CHECKED_INITIALIZE) {
             printf("INITIALIZE depth=%zu node=%zu root=%zu incarnation=%zu "
                    "backing=%zu domain=%zu span=%zu:%zu\n",
@@ -89,6 +92,9 @@ static bool walk(const NLCheckedFragment *f, size_t depth)
                 members &&
                     allocation.allocation_region == n->producer.range.region,
                 members && domain.domain == n->producer.domain);
+            printf("PROJECTION nominal=%zu child=%zu incarnation=%zu\n",
+                   n->producer.head.nominal, n->producer.head.child,
+                   n->producer.head.child_incarnation);
             ++producers;
         }
         if (n->owner_call.entry_proved) {

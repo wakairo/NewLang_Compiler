@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Stage1 source/check admission and strict no-mixed-output contract."""
+"""Stage1 source/check and current bounded Stage2B backend boundary.
+Historical Stage1 inputs/oracles/results remain immutable.
+"""
 from pathlib import Path
 import hashlib
 import json
@@ -49,13 +51,18 @@ with tempfile.TemporaryDirectory(prefix='p752-cli-') as d:
     d=Path(d);target=d/'existing.c';fresh=d/'absent.c'
     for source in cases:
         negative=source.stem.startswith('negative_')
+        # P774 advances this genuine historical prefix+owner positive only.
+        # Its immutable source/oracle/old Stage1 observations remain historical.
+        mixed_native=source.parent.name=='history' and source.name=='calibration_batch.nl' 
         checked=run([compiler,'--check',source]); emitted=run([compiler,source])
         assert checked.returncode==(3 if negative else 0),checked.stderr.decode()
-        assert emitted.returncode==(3 if negative else 4),emitted.stderr.decode()
-        assert not checked.stdout and not emitted.stdout
+        assert emitted.returncode==(3 if negative else 0 if mixed_native else 4),emitted.stderr.decode()
+        assert not checked.stdout and (bool(emitted.stdout) if mixed_native else not emitted.stdout)
         if negative:
             code=expected[source.stem]
             assert ('['+code+']').encode() in checked.stderr,(source,checked.stderr)
+        elif mixed_native:
+            assert not checked.stderr and not emitted.stderr
         else:
             assert not checked.stderr and b'V1-BACKEND-UNSUPPORTED' in emitted.stderr
         for destination in [target,fresh]:
@@ -64,7 +71,11 @@ with tempfile.TemporaryDirectory(prefix='p752-cli-') as d:
             else:assert not destination.exists()
             named=run([compiler,'--emit-c17-to',destination,source])
             assert named.returncode==emitted.returncode and not named.stdout
-            assert destination.read_bytes()==sentinel if destination==target else not destination.exists()
+            if mixed_native:
+                assert destination.read_bytes()==emitted.stdout
+                if destination==fresh:destination.unlink()
+            else:
+                assert destination.read_bytes()==sentinel if destination==target else not destination.exists()
             assert not list(d.glob(destination.name+'.*'))
         if not negative:
             if source.parent.name=='history':
@@ -74,5 +85,5 @@ with tempfile.TemporaryDirectory(prefix='p752-cli-') as d:
             else:
                 observed=run([probe,'positive',source]);assert observed.returncode==0,observed.stderr.decode()
                 print(source.name,observed.stdout.decode().strip())
-        print(source.name,'CHECK',checked.returncode,'C17',emitted.returncode,'zero C / named output preservation PASS')
-print('MIXED NATIVE NOT TESTED / NOT AUTHORIZED; no generated guest C17')
+        print(source.name,'CHECK',checked.returncode,'C17',emitted.returncode,'full C17 / named equality PASS' if mixed_native else 'zero C / named output preservation PASS')
+print('Historical Stage1 freeze unchanged; P774 prefix+owner C17 positive, other mixed profiles fail closed; native in separate P774 tests')

@@ -3167,10 +3167,9 @@ static int compile_v0_to(const char *path, bool check_only,
         goto cleanup;
     }
 
-    /* Stage1 source admission is not a dual-carrier backend certificate.
-     * The actual registered unit must fail closed before either independent
-     * Copy/Node emitter can accidentally accept only part of a mixed program.
-     * --check above still reports the genuine existing semantic result. */
+    /* Mixed registration alone is insufficient. Only the complete staged
+     * H/Copy consumer below can accept this source; unsupported/failed proof
+     * paths leave the output untouched. */
     bool has_h = false, has_t = false;
     const NLSyntaxView *unit_view =
         nl_syntax_node_view(nl_syntax_tree_root(unit));
@@ -3181,9 +3180,27 @@ static int compile_v0_to(const char *path, bool check_only,
         has_t = has_t || kind == NL_SYNTAX_AVS_STRUCT;
     }
     if (has_h && has_t) {
-        result = report_error("V1-BACKEND-UNSUPPORTED",
-                              "mixed H plus T has no dual-carrier C17 proof",
-                              path, 4);
+        char *mixed_c = NULL;
+        size_t mixed_length = 0;
+        const NLNodeCStatus status =
+            nl_checked_c_node(entry, &mixed_c, &mixed_length);
+        if (status == NL_NODE_C_OK) {
+            result = fwrite(mixed_c, 1, mixed_length, output) == mixed_length &&
+                             fflush(output) == 0
+                         ? 0
+                         : report_error("V0-C-OUTPUT",
+                                        "failed to emit Checked-C", path, 1);
+        } else if (status == NL_NODE_C_OUT_OF_MEMORY ||
+                   status == NL_NODE_C_RESOURCE_LIMIT) {
+            result = report_error("NODE-C-RESOURCE",
+                                  "bounded mixed emission resource failure",
+                                  path, 1);
+        } else {
+            result = report_error(
+                "V1-BACKEND-UNSUPPORTED",
+                "mixed H plus T has no dual-carrier C17 proof", path, 4);
+        }
+        free(mixed_c);
         goto cleanup;
     }
     const NLCheckedNodeId root = nl_checked_root(entry);
