@@ -6,6 +6,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define R787_VERIFY(condition)                                                 \
+    do {                                                                       \
+        if (!(condition)) {                                                    \
+            fprintf(stderr, "R787 issuer observer failed at %d\\n", __LINE__); \
+            abort();                                                           \
+        }                                                                      \
+    } while (0)
+
 static bool enabled, in_seal, did_fail;
 static size_t seen, fail_at, issuer_failures, staged;
 void *__real_malloc(size_t);
@@ -25,22 +33,22 @@ NLCheckStatus __wrap_nl_copy_body_seal_calls(NLCheckedFragment *f)
     TestState *before = NULL;
     if (exact_arm) {
         before = calloc(1, sizeof(*before));
-        CHECK(before && test_state((NLSemanticContext *)f->context, before));
+        R787_VERIFY(before && test_state((NLSemanticContext *)f->context, before));
     }
     size_t start = seen;
     in_seal = exact_arm;
     NLCheckStatus status = __real_nl_copy_body_seal_calls(f);
     in_seal = false;
     if (exact_arm && status == NL_CHECK_OUT_OF_MEMORY) {
-        CHECK(did_fail && seen > start && before &&
-              test_unchanged((NLSemanticContext *)f->context, before));
+        R787_VERIFY(did_fail && seen > start && before &&
+                    test_unchanged((NLSemanticContext *)f->context, before));
         ++issuer_failures;
         staged = seen - start - 1;
         for (size_t i = 0; i < f->body_count; ++i) {
             const NLCopyBodyProof *proof = f->bodies[i]->copy_body;
             if (proof && proof->formal_write && proof->sealed)
-                CHECK(proof->caller == f && !proof->caller_nodes &&
-                      !proof->caller_nodes_origin && !proof->caller_count);
+                R787_VERIFY(proof->caller == f && !proof->caller_nodes &&
+                            !proof->caller_nodes_origin && !proof->caller_count);
         }
     }
     free(before);
