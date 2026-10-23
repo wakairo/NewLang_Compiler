@@ -1,0 +1,126 @@
+Internal ctest changing into directory: /tmp/night790-build
+UpdateCTestConfiguration  from :/tmp/night790-build/DartConfiguration.tcl
+Parse Config file:/tmp/night790-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/night790-build/DartConfiguration.tcl
+Parse Config file:/tmp/night790-build/DartConfiguration.tcl
+Test project /tmp/night790-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 244
+    Start 244: p790_native.integration
+
+244: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/night790/tests/p790/native.py" "/tmp/night790-build/newlangc" "/tmp/night790-build/p778_probe" "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13" "none" "/tmp/night790/tests/p790"
+244: Working Directory: /tmp/night790-build
+244: Environment variables: 
+244:  PYTHONDONTWRITEBYTECODE=1
+244:  PYTHONHASHSEED=0
+244:  LC_ALL=C
+244:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+244:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+244: Test timeout computed to be: 90
+244: meter.nl ARM parent_depth=1 match=3 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+244: ARM parent_depth=1 match=3 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+244: INITIALIZE depth=2 node=19 root=5 incarnation=8 backing=1 domain=1 span=375:485
+244: ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+244: ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+244: INITIALIZE depth=3 node=19 root=16 incarnation=19 backing=2 domain=2 span=1267:1388
+244: REF_SCOPE place=5 scope=3
+244: REF_SCOPE place=5 scope=4
+244: PRODUCER depth=3 call=50 root=16 incarnation=19 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=27 availability=1 packet=45 same_ptr_root=1 same_allocation=1 same_domain=1
+244: PROJECTION nominal=11 child=9 incarnation=9
+244: CALLER_LOCAL depth=3 node=56 symbol=28 availability=1 value=45 fields=44,13,18
+244: COPY depth=3 call=74 span=2233:2265 nominal=10 root=37 child=39 index=1 incarnation=37 old=68 new=211 sibling=19 body_status=0 parameters_status=0
+244: COPY depth=3 call=81 span=2337:2367 nominal=10 root=40 child=41 index=0 incarnation=40 old=126 new=68 sibling=35 body_status=0 parameters_status=0
+244: REF_SCOPE place=16 scope=7
+244: RECEIVER depth=3 call=117 root=16 incarnation=19 backing=2 domain=2 post_proved=1 entry_original_exact=1
+244: REF_SCOPE place=16 scope=8
+244: NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+244: SUMMARY Copy_calls=2 H_producers=1 owner_receivers=1 H_initializations=2
+244: {"source": "meter.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "1", "c_sha256": "8b8da7327fc4abd91e622d921831bb41468e880ea30c658585ccac7b99d58761", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+244: {"source": "meter.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "2", "c_sha256": "8b8da7327fc4abd91e622d921831bb41468e880ea30c658585ccac7b99d58761", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=562f431822a0,0"}
+244: {"source": "meter.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "0", "c_sha256": "8b8da7327fc4abd91e622d921831bb41468e880ea30c658585ccac7b99d58761", "observed": "OBSERVED T=19,211/68,35 CopyCalls=2 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=563bff8452a0,563bff8452c0"}
+244: {"source": "meter.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "1", "c_sha256": "8b8da7327fc4abd91e622d921831bb41468e880ea30c658585ccac7b99d58761", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+244: {"source": "meter.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "2", "c_sha256": "8b8da7327fc4abd91e622d921831bb41468e880ea30c658585ccac7b99d58761", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55c4b7f1d2a0,0"}
+244: {"source": "meter.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "0", "c_sha256": "8b8da7327fc4abd91e622d921831bb41468e880ea30c658585ccac7b99d58761", "observed": "OBSERVED T=19,211/68,35 CopyCalls=2 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=5563b70042a0,5563b70042c0"}
+244: valve.nl ARM parent_depth=1 match=3 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+244: ARM parent_depth=1 match=3 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+244: INITIALIZE depth=2 node=19 root=5 incarnation=8 backing=1 domain=1 span=375:486
+244: ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+244: ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+244: INITIALIZE depth=3 node=19 root=16 incarnation=19 backing=2 domain=2 span=1268:1389
+244: REF_SCOPE place=5 scope=3
+244: REF_SCOPE place=5 scope=4
+244: PRODUCER depth=3 call=50 root=16 incarnation=19 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=27 availability=1 packet=45 same_ptr_root=1 same_allocation=1 same_domain=1
+244: PROJECTION nominal=11 child=9 incarnation=9
+244: CALLER_LOCAL depth=3 node=56 symbol=28 availability=1 value=45 fields=44,13,18
+244: COPY depth=3 call=74 span=2238:2268 nominal=10 root=37 child=39 index=1 incarnation=37 old=83 new=164 sibling=22 body_status=0 parameters_status=0
+244: REF_SCOPE place=16 scope=6
+244: RECEIVER depth=3 call=113 root=16 incarnation=19 backing=2 domain=2 post_proved=1 entry_original_exact=1
+244: REF_SCOPE place=16 scope=7
+244: NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+244: SUMMARY Copy_calls=1 H_producers=1 owner_receivers=1 H_initializations=2
+244: {"source": "valve.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "1", "c_sha256": "90d8be0f86ca65a11408556daea44df590bbcd1bb6a7d624e98b79fe5d7852f4", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+244: {"source": "valve.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "2", "c_sha256": "90d8be0f86ca65a11408556daea44df590bbcd1bb6a7d624e98b79fe5d7852f4", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=5598d73f12a0,0"}
+244: {"source": "valve.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "0", "c_sha256": "90d8be0f86ca65a11408556daea44df590bbcd1bb6a7d624e98b79fe5d7852f4", "observed": "OBSERVED T=22,164/14,203 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=55f2acee32a0,55f2acee32c0"}
+244: {"source": "valve.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "1", "c_sha256": "90d8be0f86ca65a11408556daea44df590bbcd1bb6a7d624e98b79fe5d7852f4", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+244: {"source": "valve.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "2", "c_sha256": "90d8be0f86ca65a11408556daea44df590bbcd1bb6a7d624e98b79fe5d7852f4", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55e722e052a0,0"}
+244: {"source": "valve.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "0", "c_sha256": "90d8be0f86ca65a11408556daea44df590bbcd1bb6a7d624e98b79fe5d7852f4", "observed": "OBSERVED T=22,164/14,203 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=55c043d242a0,55c043d242c0"}
+1/4 Test #244: p790_native.integration ..........   Passed    0.74 sec
+test 245
+    Start 245: p790_arm_integrity.unit
+
+245: Test command: /tmp/night790-build/p785_integrity "/tmp/night790/tests/p790/sources/meter.nl"
+245: Working Directory: /tmp/night790-build
+245: Environment variables: 
+245:  PYTHONDONTWRITEBYTECODE=1
+245:  PYTHONHASHSEED=0
+245:  LC_ALL=C
+245:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+245:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+245: Test timeout computed to be: 90
+245: INTEGRITY same-number alien worlds refused; parent/sibling/index lookup refused; graph/source/variant/facts/Copy/formal mutations=30 restore=PASS
+2/4 Test #245: p790_arm_integrity.unit ..........   Passed    0.01 sec
+test 246
+    Start 246: p790_arm_oom.unit
+
+246: Test command: /tmp/night790-build/p785_oom "/tmp/night790/tests/p790/sources/valve.nl" "/tmp/night790/tests/p790/sources/meter.nl"
+246: Working Directory: /tmp/night790-build
+246: Environment variables: 
+246:  PYTHONDONTWRITEBYTECODE=1
+246:  PYTHONHASHSEED=0
+246:  LC_ALL=C
+246:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+246:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+246: Test timeout computed to be: 90
+246: OOM actual completed-arm snapshot position=0/1 reached=1 staged_before_failure=0 arm_and_registered_worlds_unchanged=1 attachments_unpublished=1 artifact_NULL=1 retry_public0=1
+246: OOM actual completed-arm snapshot position=0/2 reached=1 staged_before_failure=0 arm_and_registered_worlds_unchanged=1 attachments_unpublished=1 artifact_NULL=1 retry_public0=1
+246: OOM actual completed-arm snapshot position=1/2 reached=1 staged_before_failure=1 arm_and_registered_worlds_unchanged=1 attachments_unpublished=1 artifact_NULL=1 retry_public0=1
+3/4 Test #246: p790_arm_oom.unit ................   Passed    0.02 sec
+test 247
+    Start 247: p790_driver_oom.unit
+
+247: Test command: /tmp/night790-build/p774_driver_oom "/tmp/night790/tests/p790/sources/meter.nl"
+247: Working Directory: /tmp/night790-build
+247: Environment variables: 
+247:  PYTHONDONTWRITEBYTECODE=1
+247:  PYTHONHASHSEED=0
+247:  LC_ALL=C
+247:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+247:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+247: Test timeout computed to be: 90
+247: DRIVER OOM_total=5650 selected_positions=16 CLI1=8 CLI3=8 CLI4=0 zero_partial_C=PASS no_internal=PASS retry=PASS
+4/4 Test #247: p790_driver_oom.unit .............   Passed    0.07 sec
+
+The following tests passed:
+	p790_native.integration
+	p790_arm_integrity.unit
+	p790_arm_oom.unit
+	p790_driver_oom.unit
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   0.86 sec

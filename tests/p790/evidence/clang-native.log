@@ -1,0 +1,47 @@
+meter.nl ARM parent_depth=1 match=3 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+ARM parent_depth=1 match=3 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+INITIALIZE depth=2 node=19 root=5 incarnation=8 backing=1 domain=1 span=375:485
+ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+INITIALIZE depth=3 node=19 root=16 incarnation=19 backing=2 domain=2 span=1267:1388
+REF_SCOPE place=5 scope=3
+REF_SCOPE place=5 scope=4
+PRODUCER depth=3 call=50 root=16 incarnation=19 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=27 availability=1 packet=45 same_ptr_root=1 same_allocation=1 same_domain=1
+PROJECTION nominal=11 child=9 incarnation=9
+CALLER_LOCAL depth=3 node=56 symbol=28 availability=1 value=45 fields=44,13,18
+COPY depth=3 call=74 span=2233:2265 nominal=10 root=37 child=39 index=1 incarnation=37 old=68 new=211 sibling=19 body_status=0 parameters_status=0
+COPY depth=3 call=81 span=2337:2367 nominal=10 root=40 child=41 index=0 incarnation=40 old=126 new=68 sibling=35 body_status=0 parameters_status=0
+REF_SCOPE place=16 scope=7
+RECEIVER depth=3 call=117 root=16 incarnation=19 backing=2 domain=2 post_proved=1 entry_original_exact=1
+REF_SCOPE place=16 scope=8
+NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+SUMMARY Copy_calls=2 H_producers=1 owner_receivers=1 H_initializations=2
+{"source": "meter.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "1", "c_sha256": "8b8da7327fc4abd91e622d921831bb41468e880ea30c658585ccac7b99d58761", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "meter.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "2", "c_sha256": "8b8da7327fc4abd91e622d921831bb41468e880ea30c658585ccac7b99d58761", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55f1f55ad2a0,0"}
+{"source": "meter.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "0", "c_sha256": "8b8da7327fc4abd91e622d921831bb41468e880ea30c658585ccac7b99d58761", "observed": "OBSERVED T=19,211/68,35 CopyCalls=2 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=5625134a52a0,5625134a52c0"}
+{"source": "meter.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "1", "c_sha256": "8b8da7327fc4abd91e622d921831bb41468e880ea30c658585ccac7b99d58761", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "meter.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "2", "c_sha256": "8b8da7327fc4abd91e622d921831bb41468e880ea30c658585ccac7b99d58761", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55afb6fd52a0,0"}
+{"source": "meter.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "0", "c_sha256": "8b8da7327fc4abd91e622d921831bb41468e880ea30c658585ccac7b99d58761", "observed": "OBSERVED T=19,211/68,35 CopyCalls=2 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=55b9f1dc72a0,55b9f1dc72c0"}
+valve.nl ARM parent_depth=1 match=3 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+ARM parent_depth=1 match=3 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+INITIALIZE depth=2 node=19 root=5 incarnation=8 backing=1 domain=1 span=375:486
+ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+INITIALIZE depth=3 node=19 root=16 incarnation=19 backing=2 domain=2 span=1268:1389
+REF_SCOPE place=5 scope=3
+REF_SCOPE place=5 scope=4
+PRODUCER depth=3 call=50 root=16 incarnation=19 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=27 availability=1 packet=45 same_ptr_root=1 same_allocation=1 same_domain=1
+PROJECTION nominal=11 child=9 incarnation=9
+CALLER_LOCAL depth=3 node=56 symbol=28 availability=1 value=45 fields=44,13,18
+COPY depth=3 call=74 span=2238:2268 nominal=10 root=37 child=39 index=1 incarnation=37 old=83 new=164 sibling=22 body_status=0 parameters_status=0
+REF_SCOPE place=16 scope=6
+RECEIVER depth=3 call=113 root=16 incarnation=19 backing=2 domain=2 post_proved=1 entry_original_exact=1
+REF_SCOPE place=16 scope=7
+NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+SUMMARY Copy_calls=1 H_producers=1 owner_receivers=1 H_initializations=2
+{"source": "valve.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "1", "c_sha256": "90d8be0f86ca65a11408556daea44df590bbcd1bb6a7d624e98b79fe5d7852f4", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "valve.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "2", "c_sha256": "90d8be0f86ca65a11408556daea44df590bbcd1bb6a7d624e98b79fe5d7852f4", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=5573aae542a0,0"}
+{"source": "valve.nl", "opt": "-O0", "cc": "clang-23", "sanitizer": "none", "fail": "0", "c_sha256": "90d8be0f86ca65a11408556daea44df590bbcd1bb6a7d624e98b79fe5d7852f4", "observed": "OBSERVED T=22,164/14,203 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=562bf41532a0,562bf41532c0"}
+{"source": "valve.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "1", "c_sha256": "90d8be0f86ca65a11408556daea44df590bbcd1bb6a7d624e98b79fe5d7852f4", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "valve.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "2", "c_sha256": "90d8be0f86ca65a11408556daea44df590bbcd1bb6a7d624e98b79fe5d7852f4", "observed": "OBSERVED T=0,0/0,0 CopyCalls=0 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55e3e8e202a0,0"}
+{"source": "valve.nl", "opt": "-O2", "cc": "clang-23", "sanitizer": "none", "fail": "0", "c_sha256": "90d8be0f86ca65a11408556daea44df590bbcd1bb6a7d624e98b79fe5d7852f4", "observed": "OBSERVED T=22,164/14,203 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=561f7c2b12a0,561f7c2b12c0"}
