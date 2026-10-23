@@ -376,7 +376,6 @@ NLCheckStatus nl_sem_check_function_block(NLSemanticContext *,
 
 /* Private-candidate operations; caller rolls back the entire candidate on
  * failure. */
-NLCheckStatus nl_allocated_prepare_layout(NLSemanticContext *, NLTypeId);
 NLCheckStatus nl_allocated_registry(NLSemanticContext *, NLTypeId, NLTypeId *);
 /* Derive a CLOSED prefix from the incoming single live allocated H only.
  * This is a comparison target, never source cleanup or an arm import.

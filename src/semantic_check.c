@@ -8,6 +8,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+/* Private cross-TU declaration; keep the historical shared header unchanged. */
+NLCheckStatus nl_allocated_prepare_layout(NLSemanticContext *, NLTypeId);
+
 typedef struct LoopControl {
     struct LoopControl *parent; /* borrowed lexical target stack */
     NLControlTarget *target;
