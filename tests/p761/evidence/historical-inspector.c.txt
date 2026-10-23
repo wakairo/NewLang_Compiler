@@ -1,0 +1,12 @@
+#include "/workspace/p761/tests/support/node_checked.h"
+#include "newlang/copy_body.h"
+static bool walk(const NLCheckedFragment *f){
+for(size_t id=1;id<=nl_checked_node_count(f);++id){
+ const NLCheckedNodeView *node=nl_checked_node_view(f,id);
+ NLCopyBodyView b;NLCopyBodyParameters p;
+ if(nl_checked_copy_body_parameters(f,id,&p)&&nl_checked_copy_body_view(f,id,&b))
+ printf("call=%zu root=%zu index=%zu body_status=%d parameters_status=%d\n",id,p.field.parent,p.field.index,nl_checked_copy_body_validate(f,id,&b),nl_checked_copy_body_parameters_validate(f,id,&p));
+ const NLCheckedFragment *body=nl_checked_call_body(f,id);if(body)CHECK(walk(body));
+ if(node->kind==NL_CHECKED_MATCH)for(size_t a=0;a<node->item_count;++a)CHECK(walk(nl_checked_match_arm(f,id,a)));
+}return true;}
+int main(int argc,char **argv){TestNode n={0};if(argc!=2||!node_checked_load(argv[1],&n)||!walk(n.entry))return 1;node_checked_destroy(&n);return 0;}

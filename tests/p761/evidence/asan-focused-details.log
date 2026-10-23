@@ -1,0 +1,193 @@
+Start testing: Oct 23 03:05 UTC
+----------------------------------------------------------
+244/433 Testing: p761_limits_h_first_proof.unit
+244/433 Test: p761_limits_h_first_proof.unit
+Command: "/workspace/p761-asan/p761_probe" "valid" "/workspace/p761/tests/p761/sources/limits_h_first.nl"
+Directory: /workspace/p761-asan
+"p761_limits_h_first_proof.unit" start time: Oct 23 03:05 UTC
+Output:
+----------------------------------------------------------
+COPY call=18 H=11 T=10 type_prefix=1 layout=1/1 size=24/24 align=8/8 body=0 parameters=0
+ORIGINAL root=1 child=2 index=0 incarnation=1 old=32 new=91 sibling=168 scope_closed=PASS
+CALLER returned_Copy_binding=7 distinct_original_consumers=1 source_graph=PASS
+SEMANTIC cleanup_arm=0 original_regions=1 all_closed=PASS
+SEMANTIC cleanup_arm=1 original_regions=2 all_closed=PASS
+SOURCE_OWNED Copy_calls=1 H_originals=2 legacy_closed=1 T_certificate_only NO_MIXED_NATIVE
+<end of output>
+Test time =   0.17 sec
+----------------------------------------------------------
+Test Passed.
+"p761_limits_h_first_proof.unit" end time: Oct 23 03:05 UTC
+"p761_limits_h_first_proof.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+246/433 Testing: p761_tuning_t_first_proof.unit
+246/433 Test: p761_tuning_t_first_proof.unit
+Command: "/workspace/p761-asan/p761_probe" "valid" "/workspace/p761/tests/p761/sources/tuning_t_first.nl"
+Directory: /workspace/p761-asan
+"p761_tuning_t_first_proof.unit" start time: Oct 23 03:05 UTC
+Output:
+----------------------------------------------------------
+COPY call=18 H=11 T=10 type_prefix=1 layout=1/1 size=24/24 align=8/8 body=0 parameters=0
+ORIGINAL root=1 child=3 index=1 incarnation=1 old=204 new=75 sibling=17 scope_closed=PASS
+CALLER returned_Copy_binding=7 distinct_original_consumers=1 source_graph=PASS
+COPY call=25 H=11 T=10 type_prefix=1 layout=1/1 size=24/24 align=8/8 body=0 parameters=0
+ORIGINAL root=4 child=5 index=0 incarnation=4 old=6 new=204 sibling=199 scope_closed=PASS
+SEMANTIC cleanup_arm=0 original_regions=1 all_closed=PASS
+SEMANTIC cleanup_arm=1 original_regions=2 all_closed=PASS
+SOURCE_OWNED Copy_calls=2 H_originals=2 legacy_closed=1 T_certificate_only NO_MIXED_NATIVE
+<end of output>
+Test time =   0.19 sec
+----------------------------------------------------------
+Test Passed.
+"p761_tuning_t_first_proof.unit" end time: Oct 23 03:05 UTC
+"p761_tuning_t_first_proof.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+245/433 Testing: p761_limits_h_first_oom.unit
+245/433 Test: p761_limits_h_first_oom.unit
+Command: "/workspace/p761-asan/p761_oom_test" "/workspace/p761/tests/p761/sources/limits_h_first.nl"
+Directory: /workspace/p761-asan
+"p761_limits_h_first_oom.unit" start time: Oct 23 03:05 UTC
+Output:
+----------------------------------------------------------
+OOM parser=237 partial_tree=0 retry=PASS
+OOM registration=1183 clone/types/completion/signatures/late-body rollback=PASS
+<end of output>
+Test time =   8.14 sec
+----------------------------------------------------------
+Test Passed.
+"p761_limits_h_first_oom.unit" end time: Oct 23 03:05 UTC
+"p761_limits_h_first_oom.unit" time elapsed: 00:00:08
+----------------------------------------------------------
+
+248/433 Testing: p761_foreign_t_refusal.unit
+248/433 Test: p761_foreign_t_refusal.unit
+Command: "/workspace/p761-asan/p761_gate_test" "/workspace/p761/tests/p761/sources/limits_h_first.nl" "/workspace/p761/tests/p761/controls/foreign_t.nl"
+Directory: /workspace/p761-asan
+"p761_foreign_t_refusal.unit" start time: Oct 23 03:05 UTC
+Output:
+----------------------------------------------------------
+PUBLIC_OOM validator=0 positions=36 immutable_worlds=PASS retry=PASS
+PUBLIC_OOM validator=1 positions=36 immutable_worlds=PASS retry=PASS
+PUBLIC_OOM validator=2 positions=36 immutable_worlds=PASS retry=PASS
+TAMPER refusals=32 equal_numeric_foreign_ids=verified restoration=PASS
+<end of output>
+Test time =   0.23 sec
+----------------------------------------------------------
+Test Passed.
+"p761_foreign_t_refusal.unit" end time: Oct 23 03:05 UTC
+"p761_foreign_t_refusal.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+249/433 Testing: p761_foreign_h_refusal.unit
+249/433 Test: p761_foreign_h_refusal.unit
+Command: "/workspace/p761-asan/p761_gate_test" "/workspace/p761/tests/p761/sources/limits_h_first.nl" "/workspace/p761/tests/p761/controls/foreign_h.nl"
+Directory: /workspace/p761-asan
+"p761_foreign_h_refusal.unit" start time: Oct 23 03:05 UTC
+Output:
+----------------------------------------------------------
+PUBLIC_OOM validator=0 positions=36 immutable_worlds=PASS retry=PASS
+PUBLIC_OOM validator=1 positions=36 immutable_worlds=PASS retry=PASS
+PUBLIC_OOM validator=2 positions=36 immutable_worlds=PASS retry=PASS
+TAMPER refusals=32 equal_numeric_foreign_ids=verified restoration=PASS
+<end of output>
+Test time =   0.22 sec
+----------------------------------------------------------
+Test Passed.
+"p761_foreign_h_refusal.unit" end time: Oct 23 03:05 UTC
+"p761_foreign_h_refusal.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+250/433 Testing: p761_layout_metadata.unit
+250/433 Test: p761_layout_metadata.unit
+Command: "/workspace/p761-asan/p761_metadata_test" "/workspace/p761/tests/p761/sources/limits_h_first.nl"
+Directory: /workspace/p761-asan
+"p761_layout_metadata.unit" start time: Oct 23 03:05 UTC
+Output:
+----------------------------------------------------------
+REGISTRATION: stable existing H target metadata; values/places/domains/backing/OneBacking=0; no allocation authority
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"p761_layout_metadata.unit" end time: Oct 23 03:05 UTC
+"p761_layout_metadata.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+247/433 Testing: p761_tuning_t_first_oom.unit
+247/433 Test: p761_tuning_t_first_oom.unit
+Command: "/workspace/p761-asan/p761_oom_test" "/workspace/p761/tests/p761/sources/tuning_t_first.nl"
+Directory: /workspace/p761-asan
+"p761_tuning_t_first_oom.unit" start time: Oct 23 03:05 UTC
+Output:
+----------------------------------------------------------
+OOM parser=237 partial_tree=0 retry=PASS
+OOM registration=1305 clone/types/completion/signatures/late-body rollback=PASS
+<end of output>
+Test time =   8.58 sec
+----------------------------------------------------------
+Test Passed.
+"p761_tuning_t_first_oom.unit" end time: Oct 23 03:05 UTC
+"p761_tuning_t_first_oom.unit" time elapsed: 00:00:08
+----------------------------------------------------------
+
+252/433 Testing: p761_uncalled.unit
+252/433 Test: p761_uncalled.unit
+Command: "/workspace/p761-asan/p761_gate_test" "uncalled" "/workspace/p761/tests/p761/controls/uncalled.nl"
+Directory: /workspace/p761-asan
+"p761_uncalled.unit" start time: Oct 23 03:05 UTC
+Output:
+----------------------------------------------------------
+UNCALLED: definition is not a caller Copy-call certificate
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"p761_uncalled.unit" end time: Oct 23 03:05 UTC
+"p761_uncalled.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+251/433 Testing: p761_cli.integration
+251/433 Test: p761_cli.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3" "/workspace/p761/tests/p761/cli.py" "/workspace/p761-asan/newlangc" "/workspace/p761-asan/p761_probe"
+Directory: /workspace/p761-asan
+"p761_cli.integration" start time: Oct 23 03:05 UTC
+Output:
+----------------------------------------------------------
+limits_h_first.nl COPY call=18 H=11 T=10 type_prefix=1 layout=1/1 size=24/24 align=8/8 body=0 parameters=0
+ORIGINAL root=1 child=2 index=0 incarnation=1 old=32 new=91 sibling=168 scope_closed=PASS
+CALLER returned_Copy_binding=7 distinct_original_consumers=1 source_graph=PASS
+SEMANTIC cleanup_arm=0 original_regions=1 all_closed=PASS
+SEMANTIC cleanup_arm=1 original_regions=2 all_closed=PASS
+SOURCE_OWNED Copy_calls=1 H_originals=2 legacy_closed=1 T_certificate_only NO_MIXED_NATIVE
+limits_h_first.nl CHECK 0 C17 4 no partial C/named preservation PASS
+tuning_t_first.nl COPY call=18 H=11 T=10 type_prefix=1 layout=1/1 size=24/24 align=8/8 body=0 parameters=0
+ORIGINAL root=1 child=3 index=1 incarnation=1 old=204 new=75 sibling=17 scope_closed=PASS
+CALLER returned_Copy_binding=7 distinct_original_consumers=1 source_graph=PASS
+COPY call=25 H=11 T=10 type_prefix=1 layout=1/1 size=24/24 align=8/8 body=0 parameters=0
+ORIGINAL root=4 child=5 index=0 incarnation=4 old=6 new=204 sibling=199 scope_closed=PASS
+SEMANTIC cleanup_arm=0 original_regions=1 all_closed=PASS
+SEMANTIC cleanup_arm=1 original_regions=2 all_closed=PASS
+SOURCE_OWNED Copy_calls=2 H_originals=2 legacy_closed=1 T_certificate_only NO_MIXED_NATIVE
+tuning_t_first.nl CHECK 0 C17 4 no partial C/named preservation PASS
+negative_wrong_domain.nl CHECK 3 C17 3 no partial C/named preservation PASS
+negative_wrong_allocation.nl CHECK 3 C17 3 no partial C/named preservation PASS
+negative_consumed_domain.nl CHECK 3 C17 3 no partial C/named preservation PASS
+negative_escaped_ref.nl CHECK 3 C17 3 no partial C/named preservation PASS
+negative_copy_ref.nl CHECK 3 C17 3 no partial C/named preservation PASS
+negative_wrong_self.nl CHECK 3 C17 3 no partial C/named preservation PASS
+foreign_t.nl CHECK 0 C17 4 no partial C/named preservation PASS
+foreign_h.nl CHECK 0 C17 4 no partial C/named preservation PASS
+uncalled.nl CHECK 0 C17 4 no partial C/named preservation PASS
+negative_ended_root.nl CHECK 3 C17 3 no partial C/named preservation PASS
+PUBLIC T COPY CERTIFICATE ONLY; mixed C17/native remains unsupported
+<end of output>
+Test time =   3.36 sec
+----------------------------------------------------------
+Test Passed.
+"p761_cli.integration" end time: Oct 23 03:05 UTC
+"p761_cli.integration" time elapsed: 00:00:03
+----------------------------------------------------------
+
+End testing: Oct 23 03:05 UTC

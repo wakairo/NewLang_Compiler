@@ -687,6 +687,32 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(p761_probe tests/p761/probe.c)
+    add_executable(p761_metadata_test tests/p761/metadata_test.c)
+    add_executable(p761_gate_test tests/p761/gate_test.c)
+    add_executable(p761_oom_test tests/p761/oom_test.c)
+    foreach(target p761_probe p761_gate_test p761_oom_test p761_metadata_test)
+        target_link_libraries(${target} PRIVATE newlang_semantic newlang_parser)
+    endforeach()
+    target_link_options(p761_gate_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    target_link_options(p761_oom_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    foreach(source limits_h_first tuning_t_first)
+        add_test(NAME p761_${source}_proof.unit COMMAND p761_probe valid
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p761/sources/${source}.nl")
+        add_test(NAME p761_${source}_oom.unit COMMAND p761_oom_test
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p761/sources/${source}.nl")
+    endforeach()
+    foreach(foreign foreign_t foreign_h)
+        add_test(NAME p761_${foreign}_refusal.unit COMMAND p761_gate_test
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p761/sources/limits_h_first.nl"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p761/controls/${foreign}.nl")
+    endforeach()
+    add_test(NAME p761_layout_metadata.unit COMMAND p761_metadata_test
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p761/sources/limits_h_first.nl")
+    add_test(NAME p761_cli.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p761/cli.py" "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p761_probe>")
+    add_test(NAME p761_uncalled.unit COMMAND p761_gate_test uncalled
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p761/controls/uncalled.nl")
     add_executable(p752_driver_test tests/p752/driver_test.c)
     target_link_libraries(p752_driver_test PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
     target_link_options(p752_driver_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
@@ -1195,6 +1221,23 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+
+    # R765 first natural CI: immutable source/oracle SHA and public Copy proof.
+    add_executable(r765_firstpass_probe tests/r765_firstpass/probe.c)
+    target_link_libraries(r765_firstpass_probe PRIVATE newlang_semantic newlang_parser)
+    foreach(r765_case
+            H_first_mixed T_first_interposed
+            wrong_H_self_target unknown_T_field invalid_uncalled_helper
+            wrong_T_field_type extra_recursive_H extra_two_u8_T
+            duplicate_top_name lost_tail_authority cross_domain_reloan
+            forged_write_arg missing_head_cleanup wrong_tail_receiver)
+        add_test(NAME r765_${r765_case}.firstpass
+            COMMAND "${Python3_EXECUTABLE}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/r765_firstpass/cli.py"
+                "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r765_firstpass_probe>"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/r765_firstpass/frozen_oracle.json"
+                "${r765_case}")
+    endforeach()
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")

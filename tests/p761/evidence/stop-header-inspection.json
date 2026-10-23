@@ -1,0 +1,13 @@
+{
+  "kind": "READ_ONLY_STOP_DIAGNOSIS_NOT_A_RECLASSIFIED_TEST_PASS",
+  "utc": "2026-10-23T03:13:19.599390+00:00",
+  "fixed_base": "0eb528e6f3bc1dc2ce3f606690dc67be78fecbd4",
+  "header_before_sha256": "92766597c230e2e54ccd938f7eefb373dc67faaf330c6c0791846f01a3558a67",
+  "header_candidate_sha256": "4dd0746559bceb57eda0c68489c62144f50b8b2127ce3cef0f5aad2b195a0778",
+  "new_exact_private_declaration": "NLCheckStatus nl_allocated_prepare_layout(NLSemanticContext *, NLTypeId);\n",
+  "new_declaration_count": 1,
+  "removing_only_new_declaration_restores_exact_base_header": true,
+  "historical_normalized_header_digest_retained_in_P605_manifest": "15e89aefc0f1574afdc77e6826e79f51902897b8b7ed57650f7a2b82ead1bed2",
+  "failure_phase": "both tests assert historical header digest before native composition; no downstream arithmetic execution reached by these two tests",
+  "action": "STOP; no gate/source/oracle/manifest migration, no production repair, no test retry or Actions"
+}
