@@ -1287,6 +1287,19 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # R809 bounded CALIBRATED: independent frozen lexical LiveTail source; 4 CTests.
+    add_executable(r809_public tests/r809/public.c)
+    target_link_libraries(r809_public PRIVATE newlang_semantic newlang_parser
+        newlang_checked_c_node)
+    foreach(kind source public c17 native)
+        add_test(NAME r809_${kind}.${kind}.integration
+            COMMAND "${Python3_EXECUTABLE}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/r809/test.py"
+                ${kind} "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p778_probe>"
+                "$<TARGET_FILE:r809_public>" "${CMAKE_C_COMPILER}"
+                "${NEWLANG_SANITIZER}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/r809")
+    endforeach()
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
