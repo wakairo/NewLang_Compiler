@@ -1,0 +1,53 @@
+[  0%] Building C object CMakeFiles/newlang_diagnostic.dir/src/diagnostic.c.o
+[  8%] Building C object CMakeFiles/newlang_source.dir/src/source.c.o
+[  8%] Linking C static library libnewlang_diagnostic.a
+[  8%] Linking C static library libnewlang_source.a
+[  8%] Built target newlang_diagnostic
+[  8%] Built target newlang_source
+[ 16%] Building C object CMakeFiles/newlang_syntax.dir/src/syntax.c.o
+[ 16%] Building C object CMakeFiles/newlang_lexer.dir/src/lexer.c.o
+[ 25%] Linking C static library libnewlang_lexer.a
+[ 25%] Linking C static library libnewlang_syntax.a
+[ 25%] Built target newlang_lexer
+[ 25%] Built target newlang_syntax
+[ 25%] Building C object CMakeFiles/newlang_parser.dir/src/parser.c.o
+[ 33%] Building C object CMakeFiles/newlang_checked.dir/src/checked.c.o
+[ 33%] Linking C static library libnewlang_checked.a
+[ 33%] Built target newlang_checked
+[ 41%] Linking C static library libnewlang_parser.a
+[ 41%] Built target newlang_parser
+[ 41%] Building C object CMakeFiles/newlang_semantic.dir/src/copy_body.c.o
+[ 50%] Building C object CMakeFiles/newlang_semantic.dir/src/if_field.c.o
+[ 50%] Building C object CMakeFiles/newlang_semantic.dir/src/array4.c.o
+[ 50%] Building C object CMakeFiles/newlang_semantic.dir/src/usize_addition.c.o
+[ 58%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic.c.o
+[ 58%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o
+[ 58%] Building C object CMakeFiles/newlang_semantic.dir/src/recursive_type.c.o
+/workspace/p785/src/semantic_check.c: In function ‘source_if’:
+/workspace/p785/src/semantic_check.c:4500:13: error: ‘branch’ undeclared (first use in this function)
+ 4500 |         if (branch.artifact->root == 0 ||
+      |             ^~~~~~
+/workspace/p785/src/semantic_check.c:4500:13: note: each undeclared identifier is reported only once for each function it appears in
+/workspace/p785/src/semantic_check.c:4501:70: error: ‘a’ undeclared (first use in this function)
+ 4501 |             !host(&branch, nl_copy_body_seal_calls(branch.artifact), a->span))
+      |                                                                      ^
+/workspace/p785/src/semantic_check.c:4496:5: error: this ‘for’ clause does not guard... [-Werror=misleading-indentation]
+ 4496 |     for (size_t i = 0; i < 2; ++i)
+      |     ^~~
+/workspace/p785/src/semantic_check.c:4503:9: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘for’
+ 4503 |         if (!host(check,
+      |         ^~
+/workspace/p785/src/semantic_check.c:4505:51: error: ‘i’ undeclared (first use in this function)
+ 4505 |                                          evidence[i]->exits),
+      |                                                   ^
+[ 66%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_node.c.o
+[ 66%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_join.c.o
+[ 66%] Building C object CMakeFiles/newlang_semantic.dir/src/captured_closure.c.o
+[ 66%] Building C object CMakeFiles/newlang_semantic.dir/src/node_join.c.o
+[ 75%] Building C object CMakeFiles/newlang_semantic.dir/src/node_links.c.o
+cc1: all warnings being treated as errors
+gmake[3]: *** [CMakeFiles/newlang_semantic.dir/build.make:149: CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o] Error 1
+gmake[3]: *** Waiting for unfinished jobs....
+gmake[2]: *** [CMakeFiles/Makefile2:784: CMakeFiles/newlang_semantic.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:868: CMakeFiles/newlangc.dir/rule] Error 2
+gmake: *** [Makefile:238: newlangc] Error 2

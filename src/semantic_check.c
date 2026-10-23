@@ -6083,7 +6083,12 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
                                              .type = 1,
                                              .normal_frame_unchanged =
                                                  closed_prefix == NULL});
-        if (branch.artifact->root == 0)
+        /* Seal this real completed allocation arm before any publication.
+         * Only its direct source-owned callees can receive its immutable graph;
+         * a failure leaves parent/closure ownership on the old cleanup path. */
+        if (branch.artifact->root == 0 ||
+            !host(&branch, nl_copy_body_seal_calls(branch.artifact),
+                  arms[i]->span))
             goto failure;
         if (closure != NULL) {
             closure->branches[i].arm = branch.artifact;

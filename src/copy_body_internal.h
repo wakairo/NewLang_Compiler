@@ -61,6 +61,7 @@ NLCheckStatus nl_copy_body_exit(NLCheckedFragment *, const NLSemanticContext *,
 NLCheckStatus nl_copy_body_seal(NLCheckedFragment *, const NLCheckedFragment *,
                                 NLCheckedNodeId, size_t,
                                 const NLSemanticContext *);
+NLCheckStatus nl_copy_body_seal_calls(NLCheckedFragment *);
 
 NLCheckStatus nl_copy_body_parameters(NLCheckedFragment *,
                                       const NLCheckedFragment *,

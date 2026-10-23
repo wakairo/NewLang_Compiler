@@ -1,0 +1,58 @@
+[  8%] Building C object CMakeFiles/newlang_diagnostic.dir/src/diagnostic.c.o
+[  8%] Building C object CMakeFiles/newlang_source.dir/src/source.c.o
+[  8%] Linking C static library libnewlang_diagnostic.a
+[  8%] Linking C static library libnewlang_source.a
+[  8%] Built target newlang_diagnostic
+[  8%] Built target newlang_source
+[ 16%] Building C object CMakeFiles/newlang_lexer.dir/src/lexer.c.o
+[ 16%] Building C object CMakeFiles/newlang_syntax.dir/src/syntax.c.o
+[ 25%] Linking C static library libnewlang_syntax.a
+[ 25%] Linking C static library libnewlang_lexer.a
+[ 25%] Built target newlang_lexer
+[ 25%] Built target newlang_syntax
+[ 25%] Building C object CMakeFiles/newlang_parser.dir/src/parser.c.o
+[ 33%] Building C object CMakeFiles/newlang_checked.dir/src/checked.c.o
+[ 33%] Linking C static library libnewlang_checked.a
+[ 33%] Built target newlang_checked
+[ 41%] Linking C static library libnewlang_parser.a
+[ 41%] Built target newlang_parser
+[ 50%] Building C object CMakeFiles/newlang_semantic.dir/src/copy_body.c.o
+[ 50%] Building C object CMakeFiles/newlang_semantic.dir/src/if_field.c.o
+[ 50%] Building C object CMakeFiles/newlang_semantic.dir/src/array4.c.o
+[ 50%] Building C object CMakeFiles/newlang_semantic.dir/src/usize_addition.c.o
+[ 58%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic.c.o
+[ 58%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o
+[ 58%] Building C object CMakeFiles/newlang_semantic.dir/src/recursive_type.c.o
+[ 66%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_node.c.o
+[ 66%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_join.c.o
+[ 66%] Building C object CMakeFiles/newlang_semantic.dir/src/captured_closure.c.o
+[ 66%] Building C object CMakeFiles/newlang_semantic.dir/src/node_join.c.o
+[ 75%] Building C object CMakeFiles/newlang_semantic.dir/src/node_links.c.o
+[ 75%] Building C object CMakeFiles/newlang_semantic.dir/src/packet_fork.c.o
+[ 75%] Building C object CMakeFiles/newlang_semantic.dir/src/fixed_field.c.o
+[ 83%] Building C object CMakeFiles/newlang_semantic.dir/src/sum.c.o
+[ 83%] Building C object CMakeFiles/newlang_semantic.dir/src/raw_storage.c.o
+[ 83%] Building C object CMakeFiles/newlang_semantic.dir/src/function_body.c.o
+[ 91%] Building C object CMakeFiles/newlang_semantic.dir/src/typed_owner.c.o
+[ 91%] Building C object CMakeFiles/newlang_semantic.dir/src/custody.c.o
+[ 91%] Building C object CMakeFiles/newlang_semantic.dir/src/control.c.o
+[ 91%] Linking C static library libnewlang_semantic.a
+[ 91%] Built target newlang_semantic
+[ 91%] Building C object CMakeFiles/newlang_checked_c_node.dir/src/checked_c_node.c.o
+[ 91%] Building C object CMakeFiles/newlang_checked_c_node.dir/src/checked_c_five.c.o
+[100%] Linking C static library libnewlang_checked_c_node.a
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/newlangc.dir/src/main.c.o
+[100%] Linking C executable newlangc
+[100%] Built target newlangc
+[  0%] Built target newlang_diagnostic
+[  7%] Built target newlang_source
+[ 23%] Built target newlang_syntax
+[ 23%] Built target newlang_lexer
+[ 30%] Built target newlang_parser
+[ 38%] Built target newlang_checked
+[ 84%] Built target newlang_semantic
+[ 92%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p778_probe.dir/tests/p778/probe.c.o
+[100%] Linking C executable p778_probe
+[100%] Built target p778_probe

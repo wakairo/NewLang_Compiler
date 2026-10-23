@@ -1,0 +1,7 @@
+Static review before candidate execution found insertion at first repeated exits_union site in function_if, not function_match. No source run or proof claim with that code. Moved exact block into function_match before first candidate probe.
+        /* The actual arm graph is now complete and still private. Seal only
+         * its own direct callees before parent exit/arm publication; failure
+         * destroys this arm and all staged evidence through the old path. */
+        if (branch.artifact->root == 0 ||
+            !host(&branch, nl_copy_body_seal_calls(branch.artifact), a->span))
+            goto failure;

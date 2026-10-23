@@ -329,31 +329,58 @@ NLCheckStatus nl_copy_body_exit(NLCheckedFragment *f,
     p->view.live_exit = p->exit;
     return s;
 }
-NLCheckStatus nl_copy_body_seal(NLCheckedFragment *f,
-                                const NLCheckedFragment *caller,
-                                NLCheckedNodeId call, size_t function,
-                                const NLSemanticContext *c)
+NLCheckStatus nl_copy_body_seal_calls(NLCheckedFragment *f)
 {
     /* Each completed parent authenticates the entire caller graph. At the
      * inner call's return the surrounding loan/body was still being checked.
-     * No partially built graph is exported as a completed call witness. */
+     * Stage every direct child's copy before publishing any attachment. This
+     * also closes completed match-arm callers without importing parent worlds.
+     * No recursion or partially built graph is a completed call witness. */
+    if (f->body_count > 64)
+        return NL_CHECK_RESOURCE_LIMIT;
+    NLCheckedNodeView *pending[64] = {0};
+    NLCheckStatus status = NL_CHECK_OK;
     for (size_t i = 0; i < f->body_count; ++i) {
         NLCopyBodyProof *child = f->bodies[i]->copy_body;
         if (!child || !child->formal_write || !child->sealed)
             continue;
         if (child->caller != f || child->caller_nodes || !f->count ||
-            f->count > NL_SEMANTIC_MAX_ENTRIES)
-            return NL_CHECK_INTERNAL_ERROR;
-        child->caller_nodes = malloc(f->count * sizeof(*f->nodes));
-        if (!child->caller_nodes)
-            return NL_CHECK_OUT_OF_MEMORY;
-        memcpy(child->caller_nodes, f->nodes, f->count * sizeof(*f->nodes));
+            f->count > NL_SEMANTIC_MAX_ENTRIES) {
+            status = NL_CHECK_INTERNAL_ERROR;
+            goto failure;
+        }
+        pending[i] = malloc(f->count * sizeof(*f->nodes));
+        if (!pending[i]) {
+            status = NL_CHECK_OUT_OF_MEMORY;
+            goto failure;
+        }
+        memcpy(pending[i], f->nodes, f->count * sizeof(*f->nodes));
+    }
+    for (size_t i = 0; i < f->body_count; ++i) {
+        if (!pending[i])
+            continue;
+        NLCopyBodyProof *child = f->bodies[i]->copy_body;
+        child->caller_nodes = pending[i];
         child->caller_nodes_origin = f->nodes;
         child->caller_count = f->count;
         child->caller_root = f->root;
         child->caller_source = f->source;
         child->caller_body = f->body_owner;
     }
+    return NL_CHECK_OK;
+failure:
+    for (size_t i = 0; i < f->body_count; ++i)
+        free(pending[i]);
+    return status;
+}
+NLCheckStatus nl_copy_body_seal(NLCheckedFragment *f,
+                                const NLCheckedFragment *caller,
+                                NLCheckedNodeId call, size_t function,
+                                const NLSemanticContext *c)
+{
+    const NLCheckStatus completed = nl_copy_body_seal_calls(f);
+    if (completed != NL_CHECK_OK)
+        return completed;
     NLCopyBodyProof *p = f->copy_body;
     if (!p)
         return NL_CHECK_OK;

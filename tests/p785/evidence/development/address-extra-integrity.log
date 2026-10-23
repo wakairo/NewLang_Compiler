@@ -1,0 +1,33 @@
+Internal ctest changing into directory: /tmp/p785-address
+UpdateCTestConfiguration  from :/tmp/p785-address/DartConfiguration.tcl
+Parse Config file:/tmp/p785-address/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p785-address/DartConfiguration.tcl
+Parse Config file:/tmp/p785-address/DartConfiguration.tcl
+Test project /tmp/p785-address
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 246
+    Start 246: p785_arm_integrity.unit
+
+246: Test command: /tmp/p785-address/p785_integrity "/workspace/p785/tests/p785/sources/pressure_arm.nl"
+246: Working Directory: /tmp/p785-address
+246: Environment variables: 
+246:  PYTHONDONTWRITEBYTECODE=1
+246:  PYTHONHASHSEED=0
+246:  LC_ALL=C
+246:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+246:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+246: Test timeout computed to be: 90
+246: INTEGRITY same-number alien worlds refused; parent/sibling/index lookup refused; graph/source/variant/facts/Copy/formal mutations=30 restore=PASS
+1/1 Test #246: p785_arm_integrity.unit ..........   Passed    0.07 sec
+
+The following tests passed:
+	p785_arm_integrity.unit
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.08 sec

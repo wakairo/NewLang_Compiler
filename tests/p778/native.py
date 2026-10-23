@@ -82,6 +82,6 @@ with tempfile.TemporaryDirectory(prefix='p778-native-') as temporary:
  target=tmp/'b-saved.c';target.write_bytes(b'B original correct C')
  named=run([compiler,'--emit-c17-to',target,b]);assert named.returncode==4 and target.read_bytes()==b'B original correct C'
  evidence=run([probe,b]);require(evidence,'B public probe')
- assert 'body_status=3 parameters_status=3' in evidence.stdout.decode()
+ assert 'body_status=0 parameters_status=0' in evidence.stdout.decode()
  assert 'NODE_BACKEND status=1 output_null=1 output_length_unchanged=1' in evidence.stdout.decode()
- print('R-B calibrated CHECK0/public Copy precision3/C174 zeroC named preserved')
+ print('R-B calibrated CHECK0/public Copy0/C174 zeroC named preserved')

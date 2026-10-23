@@ -1,0 +1,112 @@
+Internal ctest changing into directory: /tmp/p785-candidate
+UpdateCTestConfiguration  from :/tmp/p785-candidate/DartConfiguration.tcl
+Parse Config file:/tmp/p785-candidate/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p785-candidate/DartConfiguration.tcl
+Parse Config file:/tmp/p785-candidate/DartConfiguration.tcl
+Test project /tmp/p785-candidate
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 244
+    Start 244: p785_r_b_public.unit
+
+244: Test command: /tmp/p785-candidate/p785_public "/workspace/p785/tests/p778/external_r776/positive_t_interposed.nl" "1"
+244: Working Directory: /tmp/p785-candidate
+244: Environment variables: 
+244:  PYTHONDONTWRITEBYTECODE=1
+244:  PYTHONHASHSEED=0
+244:  LC_ALL=C
+244:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+244:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+244: Test timeout computed to be: 90
+244: PUBLIC call=74 arm_root=136 count=136 parent_match=30 index=1 field=1 root=37 child=39 old=184 new=27 sibling=7 body=0 parameters=0 seal=exact source/world=exact
+244: B C17 unchanged: unsupported/slots intact; native NOT TESTED
+1/5 Test #244: p785_r_b_public.unit ..............   Passed    0.00 sec
+test 245
+    Start 245: p785_pressure_arm_public.unit
+
+245: Test command: /tmp/p785-candidate/p785_public "/workspace/p785/tests/p785/sources/pressure_arm.nl" "2"
+245: Working Directory: /tmp/p785-candidate
+245: Environment variables: 
+245:  PYTHONDONTWRITEBYTECODE=1
+245:  PYTHONHASHSEED=0
+245:  LC_ALL=C
+245:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+245:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+245: Test timeout computed to be: 90
+245: PUBLIC call=74 arm_root=141 count=141 parent_match=30 index=1 field=1 root=37 child=39 old=237 new=97 sibling=57 body=0 parameters=0 seal=exact source/world=exact
+245: PUBLIC call=81 arm_root=141 count=141 parent_match=30 index=1 field=0 root=40 child=41 old=14 new=237 sibling=203 body=0 parameters=0 seal=exact source/world=exact
+245: B C17 unchanged: unsupported/slots intact; native NOT TESTED
+2/5 Test #245: p785_pressure_arm_public.unit .....   Passed    0.01 sec
+test 246
+    Start 246: p785_arm_integrity.unit
+
+246: Test command: /tmp/p785-candidate/p785_integrity "/workspace/p785/tests/p785/sources/pressure_arm.nl"
+246: Working Directory: /tmp/p785-candidate
+246: Environment variables: 
+246:  PYTHONDONTWRITEBYTECODE=1
+246:  PYTHONHASHSEED=0
+246:  LC_ALL=C
+246:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+246:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+246: Test timeout computed to be: 90
+246: INTEGRITY same-number alien worlds refused; parent/sibling/index lookup refused; graph/source/variant/facts/Copy/formal mutations=30 restore=PASS
+3/5 Test #246: p785_arm_integrity.unit ...........   Passed    0.01 sec
+test 247
+    Start 247: p785_issuer_oom.unit
+
+247: Test command: /tmp/p785-candidate/p785_oom "/workspace/p785/tests/p778/external_r776/positive_t_interposed.nl" "/workspace/p785/tests/p785/sources/pressure_arm.nl"
+247: Working Directory: /tmp/p785-candidate
+247: Environment variables: 
+247:  PYTHONDONTWRITEBYTECODE=1
+247:  PYTHONHASHSEED=0
+247:  LC_ALL=C
+247:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+247:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+247: Test timeout computed to be: 90
+247: /workspace/p785/tests/p785/oom.c:54: nl_source_load(path, &s) == NL_SOURCE_OK && nl_parser_create(s, &p) == NL_PARSE_OK && nl_parser_parse_function_unit(p, &tree, NULL) == NL_PARSE_OK && nl_semantic_create(c) == NL_CHECK_OK
+247: /workspace/p785/tests/p785/oom.c:90: registered(path, &c)
+4/5 Test #247: p785_issuer_oom.unit ..............***Failed    0.00 sec
+test 248
+    Start 248: p785_cli_boundaries.integration
+
+248: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p785/tests/p785/cli.py" "/tmp/p785-candidate/newlangc" "/workspace/p785/tests/p785"
+248: Working Directory: /tmp/p785-candidate
+248: Environment variables: 
+248:  PYTHONDONTWRITEBYTECODE=1
+248:  PYTHONHASHSEED=0
+248:  LC_ALL=C
+248:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+248:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+248: Test timeout computed to be: 90
+248: pressure_arm.nl CHECK0 / C174 / zero C / named unchanged; B native NOT TESTED
+248: positive_t_interposed.nl CHECK0 / C174 / zero C / named unchanged; B native NOT TESTED
+248: R-A normal/named C17 byte-identical regression PASS; native remains separate existing suite
+248: negative_wrong_allocation.nl /workspace/p785/tests/p778/external_r776/negative_wrong_allocation.nl:54:119-54:174: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion
+248: negative_stale_link.nl /workspace/p785/tests/p778/external_r776/negative_stale_link.nl:55:119-55:174: error(semantic)[P208-CALL-HEAD-VALUE]: head link must currently be Some of tail
+248: negative_unknown_field.nl /workspace/p785/tests/p778/external_r776/negative_unknown_field.nl:25:34-25:45: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal
+248: negative_read_to_write.nl /workspace/p785/tests/p778/external_r776/negative_read_to_write.nl:25:38-25:39: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field
+248: negative_two_t_nominals.nl /workspace/p785/tests/p778/external_r776/negative_two_t_nominals.nl:4:1-4:35: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate
+248: negative_double_consume.nl /workspace/p785/tests/p778/external_r776/negative_double_consume.nl:58:44-58:60: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding
+248: negative_domain.nl /workspace/p785/tests/p785/sources/negative_domain.nl:73:38-73:72: error(semantic)[ALLOCATED-DOMAIN-MISMATCH]: pointer requires matching readable live domain
+248: negative_duplicate.nl /workspace/p785/tests/p785/sources/negative_duplicate.nl:72:34-72:44: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding
+5/5 Test #248: p785_cli_boundaries.integration ...   Passed    0.11 sec
+
+The following tests passed:
+	p785_r_b_public.unit
+	p785_pressure_arm_public.unit
+	p785_arm_integrity.unit
+	p785_cli_boundaries.integration
+
+80% tests passed, 1 tests failed out of 5
+
+Total Test time (real) =   0.15 sec
+
+The following tests FAILED:
+	247 - p785_issuer_oom.unit (Failed)
+Errors while running CTest
+Output from these tests are in: /tmp/p785-candidate/Testing/Temporary/LastTest.log
+Use "--rerun-failed --output-on-failure" to re-run the failed cases verbosely.

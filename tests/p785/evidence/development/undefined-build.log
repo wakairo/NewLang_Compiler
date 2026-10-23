@@ -1,0 +1,168 @@
+[  9%] Building C object CMakeFiles/newlang_diagnostic.dir/src/diagnostic.c.o
+[  9%] Building C object CMakeFiles/newlang_source.dir/src/source.c.o
+[ 18%] Linking C static library libnewlang_source.a
+[ 18%] Linking C static library libnewlang_diagnostic.a
+[ 18%] Built target newlang_source
+[ 18%] Built target newlang_diagnostic
+[ 18%] Building C object CMakeFiles/newlang_syntax.dir/src/syntax.c.o
+[ 18%] Building C object CMakeFiles/newlang_lexer.dir/src/lexer.c.o
+[ 18%] Linking C static library libnewlang_syntax.a
+[ 27%] Linking C static library libnewlang_lexer.a
+[ 27%] Built target newlang_syntax
+[ 27%] Building C object CMakeFiles/newlang_checked.dir/src/checked.c.o
+[ 27%] Built target newlang_lexer
+[ 27%] Building C object CMakeFiles/newlang_parser.dir/src/parser.c.o
+[ 36%] Linking C static library libnewlang_checked.a
+[ 36%] Built target newlang_checked
+[ 36%] Linking C static library libnewlang_parser.a
+[ 36%] Built target newlang_parser
+[ 36%] Building C object CMakeFiles/newlang_semantic.dir/src/if_field.c.o
+[ 36%] Building C object CMakeFiles/newlang_semantic.dir/src/copy_body.c.o
+[ 45%] Building C object CMakeFiles/newlang_semantic.dir/src/array4.c.o
+[ 45%] Building C object CMakeFiles/newlang_semantic.dir/src/usize_addition.c.o
+[ 45%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic.c.o
+[ 54%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o
+[ 54%] Building C object CMakeFiles/newlang_semantic.dir/src/recursive_type.c.o
+[ 54%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_node.c.o
+[ 54%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_join.c.o
+[ 63%] Building C object CMakeFiles/newlang_semantic.dir/src/captured_closure.c.o
+[ 63%] Building C object CMakeFiles/newlang_semantic.dir/src/node_join.c.o
+[ 63%] Building C object CMakeFiles/newlang_semantic.dir/src/node_links.c.o
+[ 72%] Building C object CMakeFiles/newlang_semantic.dir/src/packet_fork.c.o
+[ 72%] Building C object CMakeFiles/newlang_semantic.dir/src/fixed_field.c.o
+[ 72%] Building C object CMakeFiles/newlang_semantic.dir/src/sum.c.o
+[ 72%] Building C object CMakeFiles/newlang_semantic.dir/src/raw_storage.c.o
+[ 81%] Building C object CMakeFiles/newlang_semantic.dir/src/function_body.c.o
+[ 81%] Building C object CMakeFiles/newlang_semantic.dir/src/custody.c.o
+[ 81%] Building C object CMakeFiles/newlang_semantic.dir/src/typed_owner.c.o
+[ 90%] Building C object CMakeFiles/newlang_semantic.dir/src/control.c.o
+[ 90%] Linking C static library libnewlang_semantic.a
+[ 90%] Built target newlang_semantic
+[ 90%] Building C object CMakeFiles/newlang_checked_c_node.dir/src/checked_c_node.c.o
+[ 90%] Building C object CMakeFiles/newlang_checked_c_node.dir/src/checked_c_five.c.o
+[ 90%] Linking C static library libnewlang_checked_c_node.a
+[ 90%] Built target newlang_checked_c_node
+[ 90%] Building C object CMakeFiles/newlangc.dir/src/main.c.o
+[100%] Linking C executable newlangc
+[100%] Built target newlangc
+[ 10%] Built target newlang_diagnostic
+[ 20%] Built target newlang_source
+[ 30%] Built target newlang_lexer
+[ 30%] Built target newlang_syntax
+[ 30%] Built target newlang_parser
+[ 40%] Built target newlang_checked
+[100%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p785_public.dir/tests/p785/public.c.o
+[100%] Linking C executable p785_public
+[100%] Built target p785_public
+[  9%] Built target newlang_source
+[ 18%] Built target newlang_diagnostic
+[ 18%] Built target newlang_syntax
+[ 27%] Built target newlang_lexer
+[ 36%] Built target newlang_checked
+[ 36%] Built target newlang_parser
+[ 90%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p785_integrity.dir/tests/p785/integrity.c.o
+[100%] Linking C executable p785_integrity
+[100%] Built target p785_integrity
+[  9%] Built target newlang_diagnostic
+[ 18%] Built target newlang_source
+[ 27%] Built target newlang_lexer
+[ 27%] Built target newlang_syntax
+[ 36%] Built target newlang_checked
+[ 36%] Built target newlang_parser
+[ 90%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[ 90%] Building C object CMakeFiles/p785_oom.dir/tests/p785/oom.c.o
+[100%] Linking C executable p785_oom
+[100%] Built target p785_oom
+[ 10%] Built target newlang_source
+[ 20%] Built target newlang_diagnostic
+[ 30%] Built target newlang_lexer
+[ 30%] Built target newlang_syntax
+[ 40%] Built target newlang_checked
+[ 40%] Built target newlang_parser
+[100%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p778_probe.dir/tests/p778/probe.c.o
+[100%] Linking C executable p778_probe
+[100%] Built target p778_probe
+[  9%] Built target newlang_diagnostic
+[ 18%] Built target newlang_source
+[ 27%] Built target newlang_lexer
+[ 27%] Built target newlang_syntax
+[ 36%] Built target newlang_checked
+[ 36%] Built target newlang_parser
+[ 90%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p778_gate_test.dir/tests/p778/gate_test.c.o
+[100%] Linking C executable p778_gate_test
+[100%] Built target p778_gate_test
+[ 10%] Built target newlang_diagnostic
+[ 20%] Built target newlang_source
+[ 30%] Built target newlang_lexer
+[ 30%] Built target newlang_syntax
+[ 30%] Built target newlang_parser
+[ 40%] Built target newlang_checked
+[100%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p774_driver_oom.dir/tests/p774/driver_oom.c.o
+[100%] Linking C executable p774_driver_oom
+[100%] Built target p774_driver_oom
+[ 10%] Built target newlang_source
+[ 20%] Built target newlang_diagnostic
+[ 30%] Built target newlang_lexer
+[ 30%] Built target newlang_syntax
+[ 40%] Built target newlang_checked
+[ 40%] Built target newlang_parser
+[100%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p774_probe.dir/tests/p774/gate0_probe.c.o
+[100%] Linking C executable p774_probe
+[100%] Built target p774_probe
+[  9%] Built target newlang_source
+[ 18%] Built target newlang_diagnostic
+[ 18%] Built target newlang_syntax
+[ 27%] Built target newlang_lexer
+[ 36%] Built target newlang_checked
+[ 36%] Built target newlang_parser
+[ 90%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[ 90%] Building C object CMakeFiles/p774_gate_test.dir/tests/p774/gate_test.c.o
+[100%] Linking C executable p774_gate_test
+[100%] Built target p774_gate_test
+[  9%] Built target newlang_diagnostic
+[ 18%] Built target newlang_source
+[ 27%] Built target newlang_lexer
+[ 27%] Built target newlang_syntax
+[ 27%] Built target newlang_parser
+[ 36%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p713_gate_test.dir/tests/p713/gate_test.c.o
+[100%] Linking C executable p713_gate_test
+[100%] Built target p713_gate_test
+[ 10%] Built target newlang_source
+[ 20%] Built target newlang_diagnostic
+[ 20%] Built target newlang_syntax
+[ 30%] Built target newlang_checked
+[ 40%] Built target newlang_lexer
+[ 40%] Built target newlang_parser
+[100%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p718_gate_test.dir/tests/p718/gate_test.c.o
+[100%] Linking C executable p718_gate_test
+[100%] Built target p718_gate_test
+[ 10%] Built target newlang_source
+[ 20%] Built target newlang_diagnostic
+[ 30%] Built target newlang_lexer
+[ 30%] Built target newlang_syntax
+[ 30%] Built target newlang_parser
+[ 40%] Built target newlang_checked
+[100%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p728_gate_test.dir/tests/p728/gate_test.c.o
+[100%] Linking C executable p728_gate_test
+[100%] Built target p728_gate_test

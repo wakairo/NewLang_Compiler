@@ -1,0 +1,11 @@
+-- The C compiler identification is Clang 23.1.2
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: /workspace/NewLang_Compiler/.deps/toolchains/debian-13-x86_64-dd0a726af2b91f32/usr/bin/clang-23 - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Frontend-only: LLVM discovery and llvm.c_api smoke omitted
+-- Found Python3: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 (found suitable version "3.12.14", minimum required is "3.12") found components: Interpreter
+-- Configuring done (1.1s)
+-- Generating done (0.4s)
+-- Build files have been written to: /tmp/p785-undefined

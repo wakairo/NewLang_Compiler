@@ -1,0 +1,47 @@
+[  9%] Built target newlang_source
+[ 18%] Built target newlang_diagnostic
+[ 27%] Built target newlang_lexer
+[ 27%] Built target newlang_syntax
+[ 36%] Built target newlang_checked
+[ 36%] Built target newlang_parser
+[ 90%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p785_integrity.dir/tests/p785/integrity.c.o
+[100%] Linking C executable p785_integrity
+[100%] Built target p785_integrity
+[  9%] Built target newlang_source
+[ 18%] Built target newlang_diagnostic
+[ 27%] Built target newlang_lexer
+[ 27%] Built target newlang_syntax
+[ 36%] Built target newlang_checked
+[ 36%] Built target newlang_parser
+[ 90%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[ 90%] Building C object CMakeFiles/p785_oom.dir/tests/p785/oom.c.o
+/workspace/p785/tests/p785/oom.c: In function ‘__wrap_nl_copy_body_seal_calls’:
+/workspace/p785/tests/p785/oom.c:30:38: error: passing argument 1 of ‘test_state’ discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
+   30 |         VERIFY(before && test_state(f->context, before));
+      |                                     ~^~~~~~~~~
+/workspace/p785/tests/p785/oom.c:18:15: note: in definition of macro ‘VERIFY’
+   18 |         if (!(x)) {                                                            \
+      |               ^
+In file included from /workspace/p785/tests/p785/../support/node_checked.h:3,
+                 from /workspace/p785/tests/p785/arm.h:4,
+                 from /workspace/p785/tests/p785/oom.c:1:
+/workspace/p785/tests/p785/../support/semantic_check.h:205:50: note: expected ‘NLSemanticContext *’ but argument is of type ‘const NLSemanticContext *’
+  205 | static inline bool test_state(NLSemanticContext *context, TestState *state)
+      |                               ~~~~~~~~~~~~~~~~~~~^~~~~~~
+/workspace/p785/tests/p785/oom.c:39:43: error: passing argument 1 of ‘test_unchanged’ discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
+   39 |         VERIFY(reached && test_unchanged(f->context, before));
+      |                                          ~^~~~~~~~~
+/workspace/p785/tests/p785/oom.c:18:15: note: in definition of macro ‘VERIFY’
+   18 |         if (!(x)) {                                                            \
+      |               ^
+/workspace/p785/tests/p785/../support/semantic_check.h:247:54: note: expected ‘NLSemanticContext *’ but argument is of type ‘const NLSemanticContext *’
+  247 | static inline bool test_unchanged(NLSemanticContext *context,
+      |                                   ~~~~~~~~~~~~~~~~~~~^~~~~~~
+cc1: all warnings being treated as errors
+gmake[3]: *** [CMakeFiles/p785_oom.dir/build.make:79: CMakeFiles/p785_oom.dir/tests/p785/oom.c.o] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:5002: CMakeFiles/p785_oom.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:5009: CMakeFiles/p785_oom.dir/rule] Error 2
+gmake: *** [Makefile:1707: p785_oom] Error 2

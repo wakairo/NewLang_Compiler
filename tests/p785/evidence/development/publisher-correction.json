@@ -1,0 +1,3 @@
+{
+  "body": "Track: P — Gate0発行経路の実測補足（scope不変）\n\n最初の試作を実sourceで確認したところ、R-Bの `caller_nodes==NULL` がそのまま残りました。**次のvalidator predicateへ進んだ結果ではありません。** `function_match`先頭のdispatchを追うと、`try_allocate_one`のmatchは`allocated_match`へ委譲され、実際のA root構築／save_armは固定mainの同関数（旧6077–6092付近）でした。M/Gate0の一般`function_match`完了箇所という説明を、この実測で精密化します。\n\n認可は「実completed Aのtrusted issuer lifecycle／publish前」であり、新しいsource権限は不要です。一般match側の未到達hookは除去し、**allocated_matchの実root完成・postcondition検査後、closure/parentへの保存前**だけで同じprivate direct-child snapshot helperを呼びます。A以外のworldを借用せず、backend／validatorは変更しません。元欠落の実測logを保存します。ここでcaller snapshotが完成した後、別のpublic precision3が出たら所定どおりSTOPします。"
+}
