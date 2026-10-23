@@ -1,0 +1,123 @@
+{
+  "utc": "2026-10-23T09:11:59.819701+00:00",
+  "base": "96922455e18f0bd103c7bc7a208dbe915ed7ea98",
+  "canonical": "Draft17.34",
+  "origin": "P-authored variations of own immutable P774 sources; R-A/B copied verbatim separately as post-FIRST-PASS NON-BLIND calibrated external regressions",
+  "oracle": {
+    "sensor_spare.nl": {
+      "order": "H/function/T",
+      "H_payload": [
+        53,
+        181
+      ],
+      "copy_calls": 1,
+      "caller_owner_local": "held_spare; exactly one whole consume by destructure",
+      "terminal_scoped_read": true,
+      "T_original0": {
+        "initial": [
+          37,
+          156
+        ],
+        "index": 0,
+        "old": 37,
+        "new": 101,
+        "sibling": 156
+      },
+      "T_original1": {
+        "initial": [
+          9,
+          211
+        ],
+        "index": 1,
+        "old": 211,
+        "new": 37,
+        "sibling": 9
+      }
+    },
+    "valve_spare.nl": {
+      "order": "T/function/H",
+      "H_payload": [
+        89,
+        241
+      ],
+      "copy_calls": 2,
+      "caller_owner_local": "held_spare; exactly one whole consume by destructure",
+      "terminal_scoped_read": true,
+      "T_original0": {
+        "initial": [
+          43,
+          226
+        ],
+        "index": 1,
+        "old": 226,
+        "new": 83,
+        "sibling": 43
+      },
+      "T_original1": {
+        "initial": [
+          12,
+          198
+        ],
+        "index": 0,
+        "old": 12,
+        "new": 226,
+        "sibling": 198
+      }
+    }
+  },
+  "fail_worlds": {
+    "fail_first": {
+      "trials": 1,
+      "allocations": 0,
+      "frees": 0,
+      "producer_calls": 0
+    },
+    "fail_second": {
+      "trials": 2,
+      "allocations": 1,
+      "frees": 1,
+      "free_originals": [
+        "front"
+      ],
+      "producer_calls": 0
+    },
+    "success": {
+      "trials": 2,
+      "allocations": 2,
+      "frees": 2,
+      "free_originals": [
+        "reserve",
+        "front"
+      ],
+      "producer_calls": 1,
+      "owner_local_construct_consume_return_receive": "exactly once; same reserve ptr, Allocation/Domain/backing; front link Some(reserve)->None; no duplicate ownership"
+    }
+  },
+  "negative_expected": {
+    "negative_owner_reuse.nl": "CLI3 consumed packet reuse",
+    "negative_wrong_allocation.nl": "CLI3 mismatched original backing",
+    "negative_wrong_domain.nl": "CLI3 pointer/domain mismatch",
+    "negative_copy_ref.nl": "CLI3 u8 to write formal"
+  },
+  "expected_before": "P positives CHECK0, genuine existing H/T validators pass; CLI4 at intermediate caller-owner destructure",
+  "expected_after": "A/P positives normal/named C17/native O0/O2 0/1/2 failures; B CHECK0, public Copy precision3, C17 unsupported zero output",
+  "sha256": {
+    "sensor_spare.nl": "7ec50aae762d2da304bc2800a46ff268388e67c6d5b8e9149c8dba0a213495c8",
+    "negative_owner_reuse.nl": "66420b1dda697ad3760c8df004e4fa8c0b07b5a72c55b2df05028af2b74bf127",
+    "negative_wrong_domain.nl": "77dff83ef04247cf0ffa931f185eb2050823e846c36e8ffe1ba98a49952210b3",
+    "negative_copy_ref.nl": "c221d08fe4aa776fa252a18b5ad17c29370c5ae820aeab97be5303f6a04db935",
+    "negative_wrong_allocation.nl": "c1bc1d59d4359c5b459825e90c765e3955314aedc27f3545dafeeb042eba988c",
+    "valve_spare.nl": "a462218998a6a1bbb994b1964743c3c6c8e40f132960edc1f18d1a6dfcc55707"
+  },
+  "external_sha256": {
+    "positive_h_first.nl": "a516361123d26de17ac6e5f9a81cc530f50b6509379a960ca20e78a2df0b6a0d",
+    "negative_two_t_nominals.nl": "7eb7671a8aa23481eccbbca515f25be3462e309ab14c55df8072afc2a6ed6cf4",
+    "negative_read_to_write.nl": "1acdbb1a4e57791bf727e91be7f269e515de60cc71bc3c720c6e05f8b83f62a6",
+    "negative_unknown_field.nl": "d885f552102df4f1fdd3ea08b0cbe0af0be2ca812d8f9fd211f993212ad089ed",
+    "positive_t_interposed.nl": "12c5c66c413a57fd78549cb4563c71c6831d0f151b53b2d4569d32f7b50a1af5",
+    "negative_wrong_allocation.nl": "8168f9c3c9f60242e753aa53360059fd91204a60eb10de729482d4f3aeba5538",
+    "negative_stale_link.nl": "40d05f7f7391227d614aba3433ba6380d77e69ca3852f3c10add57a403f0f04b",
+    "oracle.json": "2c14f494b84c0bfe9a93500fa962e7fa163d798f5cd9a900353189b42fca7a22",
+    "negative_double_consume.nl": "97222566d152c499901a4a7e2b623a7f8ab355c637f9e8d9d993b2823658c971"
+  }
+}

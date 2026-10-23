@@ -1,0 +1,16 @@
+COPY depth=1 call=18 span=177:200 nominal=10 root=1 child=2 index=0 incarnation=1 old=41 new=96 sibling=149 body_status=0 parameters_status=0
+ARM parent_depth=1 match=43 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+ARM parent_depth=1 match=43 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+INITIALIZE depth=2 node=19 root=22 incarnation=25 backing=1 domain=1 span=798:897
+ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+INITIALIZE depth=3 node=19 root=33 incarnation=36 backing=2 domain=2 span=1622:1722
+REF_SCOPE place=22 scope=5
+REF_SCOPE place=22 scope=6
+PRODUCER depth=3 call=50 root=33 incarnation=36 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=40 availability=1 packet=66 same_ptr_root=1 same_allocation=1 same_domain=1
+PROJECTION nominal=11 child=26 incarnation=26
+REF_SCOPE place=33 scope=7
+RECEIVER depth=3 call=72 root=33 incarnation=36 backing=2 domain=2 post_proved=1 entry_original_exact=1
+REF_SCOPE place=33 scope=8
+NODE_BACKEND status=1 output_null=1 output_length_unchanged=1
+SUMMARY Copy_calls=1 H_producers=1 owner_receivers=1 H_initializations=2
