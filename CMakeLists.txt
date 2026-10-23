@@ -199,6 +199,25 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p572_public_probe>"
         "$<TARGET_FILE:p534_semantic_gate>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p572" "${NEWLANG_SANITIZER}")
+    add_executable(p791_one_probe tests/p534/public_probe.c)
+    add_executable(p791_two_probe tests/p541/public_probe.c)
+    add_executable(p791_issuer_oom tests/p514/gate_test.c)
+    add_executable(p791_parser_oom tests/p791/parser_oom.c)
+    foreach(target p791_one_probe p791_two_probe p791_issuer_oom p791_parser_oom)
+        target_link_libraries(${target} PRIVATE newlang_parser newlang_semantic newlang_checked_c_node)
+    endforeach()
+    foreach(target p791_issuer_oom p791_parser_oom)
+        target_link_options(${target} PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    endforeach()
+    add_test(NAME p791_one_owned.unit COMMAND p791_one_probe "${CMAKE_CURRENT_SOURCE_DIR}/tests/p791/sources/one.nl")
+    add_test(NAME p791_two_owned.unit COMMAND p791_two_probe "${CMAKE_CURRENT_SOURCE_DIR}/tests/p791/sources/two.nl")
+    add_test(NAME p791_issuer_oom.unit COMMAND p791_issuer_oom oom "${CMAKE_CURRENT_SOURCE_DIR}/tests/p791/sources/two.nl")
+    add_test(NAME p791_parser_oom.unit COMMAND p791_parser_oom "${CMAKE_CURRENT_SOURCE_DIR}/tests/p791/sources/two.nl")
+    add_test(NAME p791_normal_cli.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p791/native.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p791_one_probe>" "$<TARGET_FILE:p791_two_probe>"
+        "$<TARGET_FILE:p694_fault_test>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p791")
     add_executable(p534_public_probe tests/p534/public_probe.c)
     target_link_libraries(p534_public_probe PRIVATE newlang_parser_p534 newlang_semantic)
     add_test(NAME p534_source_owned.unit COMMAND p534_public_probe "${CMAKE_CURRENT_SOURCE_DIR}/tests/p534/original.nl")
