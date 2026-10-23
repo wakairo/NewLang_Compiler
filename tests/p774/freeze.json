@@ -1,0 +1,124 @@
+{
+  "utc": "2026-10-23T06:43:43.527846+00:00",
+  "fixed_compiler": "168c1cdafe929051ef08ff58f858fab045b17763",
+  "canonical": "Draft17.34",
+  "release": "https://github.com/wakairo/NewLang_Compiler/issues/774#issuecomment-6358807511",
+  "stage": "Gate0 before source execution or production intervention",
+  "origin": "independently P-authored workload bytes/oracles; grammar learned from canonical and historical P controls, no R source/oracle incorporated",
+  "commands": [
+    "newlangc --check SOURCE",
+    "newlangc SOURCE",
+    "newlangc --emit-c17-to TARGET SOURCE"
+  ],
+  "predictions": {
+    "source_check": "both positives parse/register/CHECK0; individual helper bodies independently checked",
+    "public_copy": "body+parameters genuine T receipt validate0 when T operations precede H allocations; A one call, B two calls",
+    "public_owner": "measure actual H local-RETURN producer validity and owner entry/return plus caller cleanup; do not assume full certificate from mere CHECK0",
+    "cli_c17": "fixed main CLI4 V1-BACKEND-UNSUPPORTED, zero bytes and named sentinel preserved",
+    "negative": "all eight refuse CLI3 at semantic/profile stage; retain exact first diagnostic, do not relabel source/profile refusal as ownership proof",
+    "native_if_released": {
+      "fail_first": {
+        "trials": 1,
+        "allocations": 0,
+        "frees": 0,
+        "producer_calls": 0
+      },
+      "fail_second": {
+        "trials": 2,
+        "allocations": 1,
+        "frees": 1,
+        "free_originals": [
+          "front"
+        ],
+        "producer_calls": 0
+      },
+      "success": {
+        "trials": 2,
+        "allocations": 2,
+        "frees": 2,
+        "free_originals": [
+          "reserve",
+          "front"
+        ],
+        "producer_calls": 1,
+        "owner_local_construct_consume_return_receive": "exactly once; same reserve ptr, Allocation/Domain/backing; front link Some(reserve)->None; no duplicate ownership"
+      }
+    }
+  },
+  "oracle": {
+    "pump_reserve.nl": {
+      "order": "H/function/T",
+      "T_original0": {
+        "initial": [
+          23,
+          144
+        ],
+        "index": 0,
+        "old": 23,
+        "new": 87,
+        "sibling": 144
+      },
+      "T_original1": {
+        "initial": [
+          5,
+          201
+        ],
+        "index": 1,
+        "old": 201,
+        "new": 23,
+        "sibling": 5
+      },
+      "H_payload": [
+        41,
+        163
+      ],
+      "copy_calls": 1
+    },
+    "scale_reserve.nl": {
+      "order": "T/function/H",
+      "T_original0": {
+        "initial": [
+          31,
+          218
+        ],
+        "index": 1,
+        "old": 218,
+        "new": 69,
+        "sibling": 31
+      },
+      "T_original1": {
+        "initial": [
+          8,
+          190
+        ],
+        "index": 0,
+        "old": 8,
+        "new": 218,
+        "sibling": 190
+      },
+      "H_payload": [
+        76,
+        229
+      ],
+      "copy_calls": 2
+    }
+  },
+  "identity_contract": {
+    "T": "two lexical originals of the one T nominal, own field child/index/incarnation/fact and closed scope; old Copy actual def-use flows to other original, no heap authority",
+    "H": "two heap originals of the one H nominal, distinct real backing/Allocation/Domain/incarnations; exact reserve nonCopy packet producer local->RETURN->caller destructure->terminal cleanup; front separately cleaned on all applicable paths",
+    "worlds": "all IDs qualified by actual source owner and owned entry/body/arm/return world; equal numbers or layouts grant nothing"
+  },
+  "stop": "Gate0 new issuer/public privilege/API/normative rule or genuine original authority gap => STOP with evidence; only existing sound source-issued reuse may enter Stage2B1",
+  "sha256": {
+    "pump_reserve.nl": "1d56ceb2e0ce0deef26d1d11e8ff2defebc4abb39673ffb5a7cbb377acad9be0",
+    "scale_reserve.nl": "8ebef748a0930d1b895726cc384b659e3a4644c962fda02b6ce60c8e906473dc",
+    "negative_wrong_allocation.nl": "b874b5048f2aa68ee670f58b15085bef4164a273ac20700f393ea2cdebf7b495",
+    "negative_wrong_domain.nl": "4931da1d27913cb5018496f25087635354e515024d67a00e009671d290febe5e",
+    "negative_consumed_allocation.nl": "4ebc4a3ffa4a9fe9cb74afc685b7e891e01dd9427eae9193548fc1b68c86060f",
+    "negative_missing_cleanup.nl": "4ad5529694374fb89ba33be501337a1a6ceabe1bea8b1dd278ca74ca2fb1802b",
+    "negative_copy_as_ref.nl": "7f6a96640aeb4459dd340fc74e0136edcaf0608c72c1af3cbbe4f057a457ebef",
+    "negative_scoped_escape.nl": "61d041ea421c9b4263421ba4ac92a13d791af7055341f8ee3df842268a947660",
+    "negative_read_actual.nl": "fcca178d6a3f81fb771ba61d0a2680844192feb0df1b17057af1c8e3df330066",
+    "negative_wrong_h_target.nl": "939253bccd8aa5ca501ce499a17651a1b70b025d1a53b9b6587eb53c5c802649"
+  }
+}
