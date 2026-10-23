@@ -100,10 +100,18 @@ jobs:
             if test -r "$f"; then echo "T753 $f=$(cat "$f")"; fi
           done
           ctest --version | head -n 1
-          echo "T753 chosen CTest workers=2"
+          detected_nproc=$(nproc)
+          case "$detected_nproc" in
+            ""|*[!0-9]*) echo "::error::T753 invalid nproc: $detected_nproc"; exit 1 ;;
+          esac
+          if test "$detected_nproc" -lt 1; then echo "::error::T753 nproc must be positive"; exit 1; fi
+          ctest_cap=4
+          ctest_workers="$detected_nproc"
+          if test "$ctest_workers" -gt "$ctest_cap"; then ctest_workers="$ctest_cap"; fi
+          echo "T753 chosen CTest workers=$ctest_workers detected=$detected_nproc cap=$ctest_cap"
           ctest_started=$(date +%s)
           set +e
-          ctest --test-dir build-frontend --parallel 2 --output-on-failure
+          ctest --test-dir build-frontend --parallel "$ctest_workers" --output-on-failure
           ctest_status=$?
           set -e
           echo "T753 ctest_wall_seconds=$(( $(date +%s) - ctest_started )) exit=$ctest_status"
