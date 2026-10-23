@@ -33,7 +33,8 @@ NLCheckStatus __wrap_nl_copy_body_seal_calls(NLCheckedFragment *f)
     TestState *before = NULL;
     if (exact_arm) {
         before = calloc(1, sizeof(*before));
-        R787_VERIFY(before && test_state((NLSemanticContext *)f->context, before));
+        R787_VERIFY(before &&
+                    test_state((NLSemanticContext *)f->context, before));
     }
     size_t start = seen;
     in_seal = exact_arm;
@@ -48,7 +49,8 @@ NLCheckStatus __wrap_nl_copy_body_seal_calls(NLCheckedFragment *f)
             const NLCopyBodyProof *proof = f->bodies[i]->copy_body;
             if (proof && proof->formal_write && proof->sealed)
                 R787_VERIFY(proof->caller == f && !proof->caller_nodes &&
-                            !proof->caller_nodes_origin && !proof->caller_count);
+                            !proof->caller_nodes_origin &&
+                            !proof->caller_count);
         }
     }
     free(before);
@@ -71,8 +73,7 @@ static bool setup(const char *path, NLSemanticContext **context)
     nl_source_destroy(source);
     return true;
 }
-static bool count_calls(const NLCheckedFragment *f, size_t *count,
-                        size_t depth)
+static bool count_calls(const NLCheckedFragment *f, size_t *count, size_t depth)
 {
     CHECK(f && depth < 24);
     for (size_t i = 0; i < f->body_count; ++i) {
@@ -84,8 +85,8 @@ static bool count_calls(const NLCheckedFragment *f, size_t *count,
                   nl_checked_copy_body_parameters(f, f->body_calls[i], &p) &&
                   nl_checked_copy_body_validate(f, f->body_calls[i], &v) ==
                       NL_CHECK_OK &&
-                  nl_checked_copy_body_parameters_validate(
-                      f, f->body_calls[i], &p) == NL_CHECK_OK);
+                  nl_checked_copy_body_parameters_validate(f, f->body_calls[i],
+                                                           &p) == NL_CHECK_OK);
             ++*count;
         }
         CHECK(count_calls(b, count, depth + 1));
@@ -115,8 +116,7 @@ static bool exercise(const char *path, size_t expected)
         nl_semantic_check_expression(context, entry, &checked, NULL);
     enabled = false;
     size_t sites = seen;
-    CHECK(status == NL_CHECK_OK && checked && !did_fail &&
-          sites == expected);
+    CHECK(status == NL_CHECK_OK && checked && !did_fail && sites == expected);
     nl_checked_destroy(checked);
     nl_semantic_destroy(context);
     for (size_t i = 0; i < sites; ++i) {
@@ -135,10 +135,10 @@ static bool exercise(const char *path, size_t expected)
               issuer_failures == 1 && !checked &&
               test_unchanged(context, original));
         CHECK(nl_semantic_check_expression(context, entry, &checked, NULL) ==
-              NL_CHECK_OK && checked);
+                  NL_CHECK_OK &&
+              checked);
         size_t valid_calls = 0;
-        CHECK(count_calls(checked, &valid_calls, 0) &&
-              valid_calls == expected);
+        CHECK(count_calls(checked, &valid_calls, 0) && valid_calls == expected);
         printf("R787_OOM path=%s exact_arm_malloc_position=%zu/%zu "
                "did_fail=1 staged_before_failure=%zu "
                "transaction_unchanged=1 retry_public0=1\n",
@@ -154,6 +154,5 @@ static bool exercise(const char *path, size_t expected)
 }
 int main(int argc, char **argv)
 {
-    return argc == 3 && exercise(argv[1], 2) && exercise(argv[2], 1)
-               ? 0 : 1;
+    return argc == 3 && exercise(argv[1], 2) && exercise(argv[2], 1) ? 0 : 1;
 }

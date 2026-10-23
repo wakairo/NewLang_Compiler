@@ -10,16 +10,16 @@ typedef struct {
     size_t arm_index;
 } Found;
 static bool discover(NLCheckedFragment *f, NLCheckedFragment *parent,
-                     NLCheckedNodeId match, size_t arm_index,
-                     Found found[4], size_t *n, size_t depth)
+                     NLCheckedNodeId match, size_t arm_index, Found found[4],
+                     size_t *n, size_t depth)
 {
     CHECK(f && depth < 24);
     for (size_t i = 0; i < f->body_count; ++i) {
         NLCheckedFragment *body = f->bodies[i];
         if (parent && body->copy_body && body->copy_body->formal_write) {
             CHECK(*n < 4);
-            found[(*n)++] = (Found){f, body, parent, f->body_calls[i],
-                                   match, arm_index};
+            found[(*n)++] =
+                (Found){f, body, parent, f->body_calls[i], match, arm_index};
         }
         CHECK(discover(body, NULL, 0, 0, found, n, depth + 1));
     }
@@ -27,8 +27,8 @@ static bool discover(NLCheckedFragment *f, NLCheckedFragment *parent,
         size_t ordinal = 0;
         for (size_t j = 0; j < i; ++j)
             ordinal += f->arms[j].match == f->arms[i].match;
-        CHECK(discover(f->arms[i].artifact, f, f->arms[i].match, ordinal,
-                       found, n, depth + 1));
+        CHECK(discover(f->arms[i].artifact, f, f->arms[i].match, ordinal, found,
+                       n, depth + 1));
     }
     return true;
 }
@@ -56,7 +56,7 @@ static bool test(const char *path, size_t expected)
                   NL_CHECK_OK);
 #define BODY(change)                                                           \
     do {                                                                       \
-        NLCopyBodyView forged = view;                                           \
+        NLCopyBodyView forged = view;                                          \
         change;                                                                \
         CHECK(nl_checked_copy_body_validate(a.arm, a.call, &forged) !=         \
               NL_CHECK_OK);                                                    \
@@ -64,11 +64,10 @@ static bool test(const char *path, size_t expected)
     } while (0)
 #define PARAM(change)                                                          \
     do {                                                                       \
-        NLCopyBodyParameters forged = p;                                        \
+        NLCopyBodyParameters forged = p;                                       \
         change;                                                                \
-        CHECK(nl_checked_copy_body_parameters_validate(a.arm, a.call,         \
-                                                        &forged) !=             \
-              NL_CHECK_OK);                                                    \
+        CHECK(nl_checked_copy_body_parameters_validate(                        \
+                  a.arm, a.call, &forged) != NL_CHECK_OK);                     \
         ++rejections;                                                          \
     } while (0)
         BODY(forged = foreign);
