@@ -1,0 +1,79 @@
+{
+  "issue": 809,
+  "mode": "NON-BLIND calibrated, not the original R806 first pass",
+  "base_main": "d04341f816853b241e8f2b0dc4a4cbcc14a14dc6",
+  "canonical": "Draft17.34",
+  "candidate": "7863e4fc2196273f3a33f5a1b33d1958f9b73b51",
+  "sources": [
+    "lexical_dual_copy.nl"
+  ],
+  "positive": {
+    "H_nominal": "RelayCell",
+    "T_nominal": "SignalDuo",
+    "H_payload_head": 71,
+    "H_payload_tail": 182,
+    "T_initial_alpha": [
+      41,
+      172
+    ],
+    "T_initial_beta": [
+      94,
+      63
+    ],
+    "T_final_alpha": [
+      41,
+      206
+    ],
+    "T_final_beta": [
+      172,
+      63
+    ],
+    "Copy_calls": [
+      {
+        "root": "alpha",
+        "field_index": 1,
+        "old": 172,
+        "new": 206,
+        "sibling": 41
+      },
+      {
+        "root": "beta",
+        "field_index": 0,
+        "old": 94,
+        "new": 172,
+        "sibling": 63
+      }
+    ],
+    "owner": "producer local nonCopy LiveTail consumes original tail A/D, caller owns and consumes once; unchanged heap original root/backing/pointer/domain; physical tail free precedes head free"
+  },
+  "worlds": {
+    "0": {
+      "request_count": 2,
+      "allocated": 2,
+      "frees": 2,
+      "T_entered": true
+    },
+    "1": {
+      "request_count": 1,
+      "allocated": 0,
+      "frees": 0,
+      "T_entered": false
+    },
+    "2": {
+      "request_count": 2,
+      "allocated": 1,
+      "frees": 1,
+      "T_entered": false
+    }
+  },
+  "negative": {
+    "foreign_field.nl": "CHECK rejects invalid declared-field",
+    "duplicate_owner.nl": "CHECK rejects second consumption",
+    "wrong_domain.nl": "CHECK rejects foreign lifetime domain",
+    "wrong_allocation.nl": "CHECK rejects head allocation used for tail",
+    "wrong_t_type.nl": "CHECK rejects non-two-u8 T",
+    "consumed_domain.nl": "CHECK rejects using consumed tail domain after release"
+  },
+  "native": "Plain strict C17 GCC/Clang O0/O2 vs distinct passive wrapped/Clang O2 -fno-builtin-malloc -fno-builtin-free observational build. Do not attribute observer malloc/free results to plain O2.",
+  "stop": "ONE initial natural FULL5 + PARTIAL attempt1; fail at first actual proof/native/observer layer and preserve logs; no rerun or oracle correction"
+}
