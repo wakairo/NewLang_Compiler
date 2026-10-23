@@ -1,0 +1,43 @@
+{
+  "base": "77d83dfc00850b14fd7c3bc95e7e3c12e34161fb",
+  "canonical": "Draft17.34",
+  "source": {
+    "one.nl": "4b026d0732f897efd647a110ff295659e1efbcb283a89c3c1e8f495401e3bf98",
+    "two.nl": "03f775fa08e584fcbad18aec58bea43346d0419a77092118889018ee1960bad6",
+    "arity3.nl": "6549755096db031b3f0ee1ec55e90988cb813ef5985fd97fcc1c9fc37f41bb20",
+    "arity5.nl": "0d522d998e6ed912add9c4e69dea66968524d9477fcbb807fa5993d0f69b2169",
+    "wrong_type.nl": "54ec8641244765e88c5d7ffe51ad6fdf59057e3a1184ed72eb5e16e3783be0f3",
+    "copy_array.nl": "a7806056e4bda03d78e00b91c0d52d1bfffb9bfe0295cce068c8ade26e447c1b",
+    "standalone_option.nl": "93491a2392c7cb6b6db275682215da9c195521f2879472615bbe5b3bc98b0141",
+    "option_function.nl": "84f795b8bb7edcc96b8477c3bf0fe93edcb8909e1f962ea0200a1be3385fb284",
+    "indirect.nl": "4a464aa08bcfaaf649415d099e080df0898e24c536f91c65cfd4184cd7b47249"
+  },
+  "oracle": {
+    "one": {
+      "originals": 1,
+      "dependent_options": 4,
+      "array_changes": 4
+    },
+    "two": {
+      "originals": 2,
+      "dependent_options": 8,
+      "array_changes": 8
+    },
+    "arity3": "semantic ARRAY4-INITIALIZER-ARITY",
+    "arity5": "semantic ARRAY4-INITIALIZER-ARITY",
+    "wrong_type": "semantic ARRAY4-ELEMENT-TYPE",
+    "copy_array": "implementation unsupported; source eligibility UNDECIDED, not illegal",
+    "standalone_option": "implementation unsupported; source eligibility UNDECIDED, not illegal",
+    "option_function": "implementation unsupported; source eligibility UNDECIDED, not illegal",
+    "indirect": "outside selected immediate-leaf profile; unsupported"
+  },
+  "K": [
+    "p791_one_owned.unit",
+    "p791_two_owned.unit",
+    "p791_normal_cli.integration",
+    "p791_issuer_oom.unit",
+    "p791_parser_oom.unit"
+  ],
+  "expected_FULL5": 448,
+  "expected_PARTIAL": 447
+}
