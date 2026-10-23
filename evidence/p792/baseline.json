@@ -1,0 +1,38 @@
+{
+  "drop_displaced_none.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night792/evidence/p792/sources/drop_displaced_none.nl:22:5-22:10: error(semantic)[CUSTODY-DEFINITION-OLD-NONE]: exact old None must be consumed once by the first bounded consuming match\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night792/evidence/p792/sources/drop_displaced_none.nl:22:5-22:10: error(semantic)[CUSTODY-DEFINITION-OLD-NONE]: exact old None must be consumed once by the first bounded consuming match\n"
+    }
+  },
+  "pending_mail.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night792/evidence/p792/sources/pending_mail.nl:95:53-95:60: error(precision)[CUSTODY-PACKET-ORIGIN-PRECISION]: available intact original packet requires qualified parent producer and current child-world correspondence\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night792/evidence/p792/sources/pending_mail.nl:95:53-95:60: error(precision)[CUSTODY-PACKET-ORIGIN-PRECISION]: available intact original packet requires qualified parent producer and current child-world correspondence\n"
+    }
+  },
+  "reuse_after_deposit.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night792/evidence/p792/sources/reuse_after_deposit.nl:95:53-95:60: error(precision)[CUSTODY-PACKET-ORIGIN-PRECISION]: available intact original packet requires qualified parent producer and current child-world correspondence\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night792/evidence/p792/sources/reuse_after_deposit.nl:95:53-95:60: error(precision)[CUSTODY-PACKET-ORIGIN-PRECISION]: available intact original packet requires qualified parent producer and current child-world correspondence\n"
+    }
+  }
+}

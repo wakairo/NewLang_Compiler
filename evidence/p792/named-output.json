@@ -1,0 +1,6 @@
+{
+  "exit": 3,
+  "stdout": "",
+  "stderr": "/tmp/night792/evidence/p792/sources/pending_mail.nl:95:53-95:60: error(precision)[CUSTODY-PACKET-ORIGIN-PRECISION]: available intact original packet requires qualified parent producer and current child-world correspondence\n",
+  "named_preserved": true
+}
