@@ -1,0 +1,8 @@
+IF depth=1 node=25 normal_arms=1 terminates=0 field_view=0
+COPY depth=2 node=4 span=233:253 body_status=3 parameters_status=3 root=1 child=3 index=1 incarnation=1 pre_fact=3 post_fact=12 old_known=1/54 new_known=1/97 sibling_known=1/181 distinct_entry_handoff=1
+COPY depth=2 node=11 span=302:321 body_status=3 parameters_status=3 root=4 child=5 index=0 incarnation=4 pre_fact=5 post_fact=19 old_known=1/26 new_known=1/54 sibling_known=1/220 distinct_entry_handoff=1
+COPY depth=2 node=4 span=419:440 body_status=3 parameters_status=3 root=1 child=3 index=1 incarnation=1 pre_fact=3 post_fact=12 old_known=1/54 new_known=1/148 sibling_known=1/181 distinct_entry_handoff=1
+COPY depth=2 node=11 span=489:508 body_status=3 parameters_status=3 root=4 child=5 index=0 incarnation=4 pre_fact=5 post_fact=19 old_known=1/26 new_known=1/54 sibling_known=1/220 distinct_entry_handoff=1
+COPY depth=1 node=29 span=419:440 body_status=0 parameters_status=0 root=1 child=3 index=1 incarnation=1 pre_fact=3 post_fact=12 old_known=1/54 new_known=1/148 sibling_known=1/181 distinct_entry_handoff=1
+COPY depth=1 node=36 span=489:508 body_status=0 parameters_status=0 root=4 child=5 index=0 incarnation=4 pre_fact=5 post_fact=19 old_known=1/26 new_known=1/54 sibling_known=1/220 distinct_entry_handoff=1
+COPY depth=1 node=51 span=617:638 body_status=0 parameters_status=0 root=4 child=6 index=1 incarnation=4 pre_fact=6 post_fact=28 old_known=1/220 new_known=1/148 sibling_known=1/54 distinct_entry_handoff=1

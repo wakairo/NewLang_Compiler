@@ -1,0 +1,24 @@
+{
+  "disposition": "STOP \u2014 P-authored frozen negative source-profile/oracle mismatch",
+  "production_changed": false,
+  "positive_gate0": "4 CHECK0; actual IF-arm body/parameters3/3; parent projection/later0/0",
+  "first_unexpected_case": "read_only.nl",
+  "expected": "semantic type mismatch",
+  "actual": {
+    "cli": 3,
+    "class": "unsupported",
+    "code": "LOCAL-LOAN-PROFILE",
+    "span": "10:37-10:38",
+    "stdout_bytes": 0
+  },
+  "interpretation": "P negative calibration mistake; not issuer unsoundness and not proof that the authorized IF snapshot implementation is impossible",
+  "action": "preserve all frozen bytes/oracles/results; no implementation, oracle tuning, K tests, PR or Actions; request Coordination scope for a separately frozen legitimate read-only negative",
+  "not_tested": [
+    "candidate actual IF-arm success",
+    "foreign-world/wrong-arm/stale-fact proof tamper",
+    "two-stage issuer OOM/rollback",
+    "candidate full frontend/sanitizers",
+    "candidate FULL5/PARTIAL",
+    "native"
+  ]
+}

@@ -1,0 +1,90 @@
+/* Read-only diagnostic observer of registered actual source-owned artifacts. */
+#include "../../tests/support/node_checked.h"
+#include "newlang/copy_body.h"
+#include "newlang/if_field.h"
+#include <stdlib.h>
+static bool walk(const NLCheckedFragment *f, size_t depth)
+{
+    CHECK(f && depth < 20);
+    for (size_t id = 1; id <= nl_checked_node_count(f); ++id) {
+        const NLCheckedNodeView *node = nl_checked_node_view(f, id);
+        NLCopyBodyView v;
+        NLCopyBodyParameters p;
+        if (nl_checked_copy_body_view(f, id, &v)) {
+            printf("COPY depth=%zu node=%zu span=%zu:%zu body_status=%d", depth,
+                   id, node->span.start_byte, node->span.end_byte,
+                   nl_checked_copy_body_validate(f, id, &v));
+            if (nl_checked_copy_body_parameters(f, id, &p)) {
+                NLSemanticPlaceView old, current, parent, sibling;
+                NLSemanticValueView a, b, other;
+                CHECK(nl_semantic_place_view(p.entry, p.field.child, &old) &&
+                      nl_semantic_place_view(p.handoff, p.field.child,
+                                             &current) &&
+                      nl_semantic_place_view(p.handoff, p.field.parent,
+                                             &parent) &&
+                      nl_semantic_place_view(
+                          p.handoff, parent.fixed_fields[1 - p.field.index],
+                          &sibling) &&
+                      nl_semantic_value_view(p.entry, old.current_value, &a) &&
+                      nl_semantic_value_view(p.handoff, current.current_value,
+                                             &b) &&
+                      nl_semantic_value_view(p.handoff, sibling.current_value,
+                                             &other));
+                printf(" parameters_status=%d root=%zu child=%zu index=%zu "
+                       "incarnation=%zu pre_fact=%zu post_fact=%zu "
+                       "old_known=%d/%llu "
+                       "new_known=%d/%llu sibling_known=%d/%llu "
+                       "distinct_entry_handoff=%d",
+                       nl_checked_copy_body_parameters_validate(f, id, &p),
+                       p.field.parent, p.field.child, p.field.index,
+                       p.field.parent_incarnation, old.current_fact,
+                       current.current_fact, a.scalar_known,
+                       (unsigned long long)a.scalar_value, b.scalar_known,
+                       (unsigned long long)b.scalar_value, other.scalar_known,
+                       (unsigned long long)other.scalar_value,
+                       p.entry != p.handoff);
+            }
+#ifdef P793_PRIVATE_SEAL_DIAGNOSTIC
+            const NLCheckedFragment *child = nl_checked_call_body(f, id);
+            const NLCopyBodyProof *seal = child ? child->copy_body : NULL;
+            printf(" private_seal=%d caller_exact=%d caller_nodes=%d",
+                   seal != NULL, seal && seal->caller == f,
+                   seal && seal->caller_nodes != NULL);
+#endif
+            putchar('\n');
+        }
+        if (node->kind == NL_CHECKED_IF) {
+            NLIfFieldView v;
+            bool issued = nl_checked_if_field_view(f, id, &v);
+            printf("IF depth=%zu node=%zu normal_arms=%zu terminates=%d "
+                   "field_view=%d",
+                   depth, id, node->normal_arms, node->terminates, issued);
+            if (issued)
+                printf(" field_status=%d root=%zu child=%zu index=%zu",
+                       nl_checked_if_field_validate(f, id, &v), v.root, v.child,
+                       v.index);
+            putchar('\n');
+            for (size_t i = 0; i < 2; ++i) {
+                const NLCheckedFragment *a = nl_checked_if_arm(f, id, i);
+                if (a)
+                    CHECK(walk(a, depth + 1));
+            }
+        }
+        const NLCheckedFragment *body = nl_checked_call_body(f, id);
+        if (body)
+            CHECK(walk(body, depth + 1));
+    }
+    return true;
+}
+static bool observe(const char *path)
+{
+    TestNode n = {0};
+    CHECK(node_checked_load(path, &n));
+    bool result = walk(n.entry, 0);
+    node_checked_destroy(&n);
+    return result;
+}
+int main(int argc, char **argv)
+{
+    return argc == 2 && observe(argv[1]) ? EXIT_SUCCESS : EXIT_FAILURE;
+}

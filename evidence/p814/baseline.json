@@ -1,0 +1,102 @@
+{
+  "charge_false.nl": {
+    "check": {
+      "exit": 0,
+      "stderr": "",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 4,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p813/sources/charge_false.nl\n",
+      "stdout_bytes": 0
+    },
+    "public_exit": 0
+  },
+  "charge_true.nl": {
+    "check": {
+      "exit": 0,
+      "stderr": "",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 4,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p813/sources/charge_true.nl\n",
+      "stdout_bytes": 0
+    },
+    "public_exit": 0
+  },
+  "escape.nl": {
+    "check": {
+      "exit": 3,
+      "stderr": "tests/p813/sources/escape.nl:4:14-4:43: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "stderr": "tests/p813/sources/escape.nl:4:14-4:43: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n",
+      "stdout_bytes": 0
+    }
+  },
+  "pump_false.nl": {
+    "check": {
+      "exit": 0,
+      "stderr": "",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 4,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p813/sources/pump_false.nl\n",
+      "stdout_bytes": 0
+    },
+    "public_exit": 0
+  },
+  "pump_true.nl": {
+    "check": {
+      "exit": 0,
+      "stderr": "",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 4,
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: tests/p813/sources/pump_true.nl\n",
+      "stdout_bytes": 0
+    },
+    "public_exit": 0
+  },
+  "read_only.nl": {
+    "check": {
+      "exit": 3,
+      "stderr": "tests/p813/sources/read_only.nl:10:37-10:38: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "stderr": "tests/p813/sources/read_only.nl:10:37-10:38: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n",
+      "stdout_bytes": 0
+    }
+  },
+  "wrong_field.nl": {
+    "check": {
+      "exit": 3,
+      "stderr": "tests/p813/sources/wrong_field.nl:10:32-10:46: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "stderr": "tests/p813/sources/wrong_field.nl:10:32-10:46: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal\n",
+      "stdout_bytes": 0
+    }
+  },
+  "wrong_return.nl": {
+    "check": {
+      "exit": 3,
+      "stderr": "tests/p813/sources/wrong_return.nl:11:17-11:30: error(semantic)[P9-RETURN-TYPE]: return expression must exactly match the function result\n",
+      "stdout_bytes": 0
+    },
+    "c17": {
+      "exit": 3,
+      "stderr": "tests/p813/sources/wrong_return.nl:11:17-11:30: error(semantic)[P9-RETURN-TYPE]: return expression must exactly match the function result\n",
+      "stdout_bytes": 0
+    }
+  }
+}
