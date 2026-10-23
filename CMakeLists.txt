@@ -1199,3 +1199,21 @@ if(BUILD_TESTING)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
 endif()
+
+
+# R756 independent registered-source / public-API audit; R-owned only.
+if(BUILD_TESTING)
+    add_executable(r756_public_gate tests/r756/gate.c)
+    target_link_libraries(r756_public_gate PRIVATE
+        newlang_checked_c_node newlang_semantic newlang_parser)
+    target_link_options(r756_public_gate PRIVATE
+        -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME r756_independent_public_registration_rollback_oom.unit
+        COMMAND r756_public_gate
+          "${CMAKE_CURRENT_SOURCE_DIR}/evidence/r756/independent/h_first.nl"
+          "${CMAKE_CURRENT_SOURCE_DIR}/evidence/r756/independent/t_first_interposed.nl")
+    add_test(NAME r756_independent_source_c17_fail_closed.integration
+        COMMAND "${Python3_EXECUTABLE}"
+          "${CMAKE_CURRENT_SOURCE_DIR}/tests/r756/audit.py"
+          "$<TARGET_FILE:newlangc>")
+endif()
