@@ -1,0 +1,17 @@
+{
+  "utc": "2026-10-23T09:09:00.723845+00:00",
+  "candidate": "96922455e18f0bd103c7bc7a208dbe915ed7ea98",
+  "tree": "19eeab03ad1f8d4d708d63f754035950014c067a",
+  "external_R_SHA256": {
+    "negative_double_consume.nl": "97222566d152c499901a4a7e2b623a7f8ab355c637f9e8d9d993b2823658c971",
+    "negative_read_to_write.nl": "1acdbb1a4e57791bf727e91be7f269e515de60cc71bc3c720c6e05f8b83f62a6",
+    "negative_stale_link.nl": "40d05f7f7391227d614aba3433ba6380d77e69ca3852f3c10add57a403f0f04b",
+    "negative_two_t_nominals.nl": "7eb7671a8aa23481eccbbca515f25be3462e309ab14c55df8072afc2a6ed6cf4",
+    "negative_unknown_field.nl": "d885f552102df4f1fdd3ea08b0cbe0af0be2ca812d8f9fd211f993212ad089ed",
+    "negative_wrong_allocation.nl": "8168f9c3c9f60242e753aa53360059fd91204a60eb10de729482d4f3aeba5538",
+    "oracle.json": "2c14f494b84c0bfe9a93500fa962e7fa163d798f5cd9a900353189b42fca7a22",
+    "positive_h_first.nl": "a516361123d26de17ac6e5f9a81cc530f50b6509379a960ca20e78a2df0b6a0d",
+    "positive_t_interposed.nl": "12c5c66c413a57fd78549cb4563c71c6831d0f151b53b2d4569d32f7b50a1af5"
+  },
+  "R_first_red": "a2e6a1abd2b4dfe7921aba24cb984aaeec735aba"
+}

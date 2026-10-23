@@ -1,0 +1,137 @@
+-- Frontend-only: LLVM discovery and llvm.c_api smoke omitted
+-- Configuring done (0.1s)
+-- Generating done (0.2s)
+-- Build files have been written to: /workspace/p778-build
+[  1%] Built target newlang_source
+[  1%] Built target newlang_diagnostic
+[  2%] Built target source_test
+[  3%] Built target newlang_syntax
+[  4%] Built target newlang_lexer
+[  4%] Built target diagnostic_test
+[  5%] Built target newlang_parser
+[  5%] Built target newlang_parser_p534
+[  6%] Built target newlang_checked
+[  7%] Built target lexer_test
+[  7%] Built target lexical_frontend_test
+[  8%] Built target parser_test
+[  8%] Built target syntax_frontend_test
+[ 14%] Built target newlang_semantic
+[ 15%] Built target p718_public_probe
+[ 16%] Built target newlang_checked_c_node
+[ 16%] Built target p728_public_probe
+[ 16%] Built target p722_public_probe
+[ 17%] Built target p713_public_probe
+[ 18%] Built target p706_public_probe
+[ 19%] Built target p701_gate_test
+[ 19%] Built target p572_fault_test
+[ 19%] Built target p701_public_probe
+[ 20%] Built target newlangc_p534
+[ 21%] Built target p572_public_probe
+[ 22%] Built target p534_public_probe
+[ 22%] Built target p534_fault_test
+[ 22%] Built target p534_semantic_gate
+[ 23%] Built target p541_public_probe
+[ 24%] Built target p541_fault_test
+[ 25%] Built target p636_index_gate
+[ 26%] Built target p633_derivation_gate
+[ 26%] Built target p633_local_gate
+[ 26%] Built target p634_ended_root_gate
+[ 26%] Built target p651_gate
+[ 27%] Built target p633_public_probe
+[ 27%] Built target p628_public_probe
+[ 28%] Built target p633_origin_gate
+[ 29%] Built target p626_comparison_gate
+[ 30%] Built target p626_public_probe
+[ 31%] Built target p603_public_probe
+[ 31%] Built target p605_public_probe
+[ 31%] Built target p603_gate_probe
+[ 32%] Built target p504_public_probe
+[ 33%] Built target p603_comparison_test
+[ 34%] Built target p504_equality_test
+[ 35%] Built target p508_public_probe
+[ 35%] Built target p504_gate_probe
+[ 35%] Built target p508_gate_test
+[ 35%] Built target p514_public_probe
+[ 35%] Built target r675_public_probe
+[ 36%] Built target p671_public_probe
+[ 37%] Built target p671_fragment_probe
+[ 37%] Built target p694_fault_test
+[ 38%] Built target p688_public_probe
+[ 38%] Built target p685_public_probe
+[ 39%] Built target p688_gate_test
+[ 40%] Built target p685_gate_test
+[ 40%] Built target p679_public_probe
+[ 40%] Built target p517_public_probe
+[ 41%] Built target p514_gate_test
+[ 42%] Built target p517_gate_test
+[ 43%] Built target p521_call_gate
+[ 44%] Built target p521_owned_probe
+[ 44%] Built target semantic_test
+[ 45%] Built target semantic_frontend_test
+[ 46%] Built target raw_storage_test
+[ 47%] Built target raw_storage_cycle_test
+[ 48%] Built target source_slice_test
+[ 48%] Built target source_slice_frontend_test
+[ 49%] Built target sum_slice_test
+[ 49%] Built target sum_frontend_test
+[ 49%] Built target ref_join_test
+[ 50%] Built target ref_join_frontend_test
+[ 50%] Built target function_body_test
+[ 51%] Built target function_source_test
+[ 52%] Built target function_body_frontend_test
+[ 53%] Built target return_test
+[ 54%] Built target structural_name_test
+[ 55%] Built target control_test
+[ 56%] Built target if_test
+[ 57%] Built target loop_test
+[ 58%] Building C object CMakeFiles/p778_probe.dir/tests/p778/probe.c.o
+[ 59%] Built target local_root_test
+[ 60%] Built target unit_name_test
+[ 60%] Built target argument_compatibility_test
+[ 60%] Building C object CMakeFiles/p778_gate_test.dir/tests/p778/gate_test.c.o
+[ 60%] Linking C executable p778_probe
+[ 61%] Built target p774_probe
+/workspace/p778/tests/p778/gate_test.c: In function ‘caller_carrier’:
+/workspace/p778/tests/p778/gate_test.c:44:5: error: implicit declaration of function ‘MUTATE’ [-Werror=implicit-function-declaration]
+   44 |     MUTATE(h->nodes[binding - 1].symbol++, h->nodes[binding - 1] = b);
+      |     ^~~~~~
+/workspace/p778/tests/p778/gate_test.c:44:66: error: operation on ‘*(h->nodes + ((sizetype)(binding * 1728) + 18446744073709549888))’ may be undefined [-Werror=sequence-point]
+   44 |     MUTATE(h->nodes[binding - 1].symbol++, h->nodes[binding - 1] = b);
+      |                                            ~~~~~~~~~~~~~~~~~~~~~~^~~
+/workspace/p778/tests/p778/gate_test.c:45:68: error: operation on ‘*(h->nodes + ((sizetype)(receiver * 1728) + 18446744073709549888))’ may be undefined [-Werror=sequence-point]
+   45 |     MUTATE(h->nodes[receiver - 1].symbol++, h->nodes[receiver - 1] = r);
+      |                                             ~~~~~~~~~~~~~~~~~~~~~~~^~~
+/workspace/p778/tests/p778/gate_test.c:47:30: error: operation on ‘*(h->nodes + ((sizetype)(use * 1728) + 18446744073709549888))’ may be undefined [-Werror=sequence-point]
+   47 |            h->nodes[use - 1] = u);
+      |            ~~~~~~~~~~~~~~~~~~^~~
+/workspace/p778/tests/p778/gate_test.c:48:68: error: operation on ‘*(h->nodes + ((sizetype)(use * 1728) + 18446744073709549888))’ may be undefined [-Werror=sequence-point]
+   48 |     MUTATE(h->nodes[use - 1].results[0].value++, h->nodes[use - 1] = u);
+      |                                                  ~~~~~~~~~~~~~~~~~~^~~
+/workspace/p778/tests/p778/gate_test.c:49:58: error: operation on ‘*(h->nodes + ((sizetype)(use * 1728) + 18446744073709549888))’ may be undefined [-Werror=sequence-point]
+   49 |     MUTATE(h->nodes[use - 1].symbol++, h->nodes[use - 1] = u);
+      |                                        ~~~~~~~~~~~~~~~~~~^~~
+/workspace/p778/tests/p778/gate_test.c:51:32: error: operation on ‘*(h->nodes + ((sizetype)(split * 1728) + 18446744073709549888))’ may be undefined [-Werror=sequence-point]
+   51 |            h->nodes[split - 1] = s);
+      |            ~~~~~~~~~~~~~~~~~~~~^~~
+/workspace/p778/tests/p778/gate_test.c:52:72: error: operation on ‘*(h->nodes + ((sizetype)(split * 1728) + 18446744073709549888))’ may be undefined [-Werror=sequence-point]
+   52 |     MUTATE(h->nodes[split - 1].argument_count = 2, h->nodes[split - 1] = s);
+      |                                                    ~~~~~~~~~~~~~~~~~~~~^~~
+/workspace/p778/tests/p778/gate_test.c:55:69: error: operation on ‘*(h->nodes + ((sizetype)(first * 1728) + 18446744073709549888))’ may be undefined [-Werror=sequence-point]
+   55 |     MUTATE(h->nodes[first - 1].field_index = 3, h->nodes[first - 1] = member);
+      |                                                 ~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+/workspace/p778/tests/p778/gate_test.c:56:67: error: operation on ‘*(h->nodes + ((sizetype)(first * 1728) + 18446744073709549888))’ may be undefined [-Werror=sequence-point]
+   56 |     MUTATE(h->nodes[first - 1].type = packet, h->nodes[first - 1] = member);
+      |                                               ~~~~~~~~~~~~~~~~~~~~^~~~~~~~
+[ 61%] Built target p774_gate_test
+[ 61%] Built target p778_probe
+[ 62%] Built target p761_probe
+[ 63%] Built target p774_driver_oom
+[ 64%] Built target p761_metadata_test
+cc1: all warnings being treated as errors
+gmake[2]: *** [CMakeFiles/p778_gate_test.dir/build.make:79: CMakeFiles/p778_gate_test.dir/tests/p778/gate_test.c.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:4954: CMakeFiles/p778_gate_test.dir/all] Error 2
+gmake[1]: *** Waiting for unfinished jobs....
+[ 64%] Built target p761_gate_test
+[ 64%] Built target p761_oom_test
+[ 65%] Built target p752_driver_test
+gmake: *** [Makefile:101: all] Error 2

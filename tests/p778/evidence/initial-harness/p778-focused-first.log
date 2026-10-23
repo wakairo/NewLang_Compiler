@@ -1,0 +1,145 @@
+Internal ctest changing into directory: /workspace/p778-build
+Test project /workspace/p778-build
+    Start 244: p778_sensor_spare_gate.unit
+Could not find executable /workspace/p778-build/p778_gate_test
+Looked in the following places:
+/workspace/p778-build/p778_gate_test
+/workspace/p778-build/p778_gate_test
+/workspace/p778-build/Release/p778_gate_test
+/workspace/p778-build/Release/p778_gate_test
+/workspace/p778-build/Debug/p778_gate_test
+/workspace/p778-build/Debug/p778_gate_test
+/workspace/p778-build/MinSizeRel/p778_gate_test
+/workspace/p778-build/MinSizeRel/p778_gate_test
+/workspace/p778-build/RelWithDebInfo/p778_gate_test
+/workspace/p778-build/RelWithDebInfo/p778_gate_test
+/workspace/p778-build/Deployment/p778_gate_test
+/workspace/p778-build/Deployment/p778_gate_test
+/workspace/p778-build/Development/p778_gate_test
+/workspace/p778-build/Development/p778_gate_test
+workspace/p778-build/p778_gate_test
+workspace/p778-build/p778_gate_test
+workspace/p778-build/Release/p778_gate_test
+workspace/p778-build/Release/p778_gate_test
+workspace/p778-build/Debug/p778_gate_test
+workspace/p778-build/Debug/p778_gate_test
+workspace/p778-build/MinSizeRel/p778_gate_test
+workspace/p778-build/MinSizeRel/p778_gate_test
+workspace/p778-build/RelWithDebInfo/p778_gate_test
+workspace/p778-build/RelWithDebInfo/p778_gate_test
+workspace/p778-build/Deployment/p778_gate_test
+workspace/p778-build/Deployment/p778_gate_test
+workspace/p778-build/Development/p778_gate_test
+workspace/p778-build/Development/p778_gate_test
+Unable to find executable: /workspace/p778-build/p778_gate_test
+1/5 Test #244: p778_sensor_spare_gate.unit ......***Not Run   0.00 sec
+    Start 245: p778_valve_spare_gate.unit
+Could not find executable /workspace/p778-build/p778_gate_test
+Looked in the following places:
+/workspace/p778-build/p778_gate_test
+/workspace/p778-build/p778_gate_test
+/workspace/p778-build/Release/p778_gate_test
+/workspace/p778-build/Release/p778_gate_test
+/workspace/p778-build/Debug/p778_gate_test
+/workspace/p778-build/Debug/p778_gate_test
+/workspace/p778-build/MinSizeRel/p778_gate_test
+/workspace/p778-build/MinSizeRel/p778_gate_test
+/workspace/p778-build/RelWithDebInfo/p778_gate_test
+/workspace/p778-build/RelWithDebInfo/p778_gate_test
+/workspace/p778-build/Deployment/p778_gate_test
+/workspace/p778-build/Deployment/p778_gate_test
+/workspace/p778-build/Development/p778_gate_test
+/workspace/p778-build/Development/p778_gate_test
+workspace/p778-build/p778_gate_test
+workspace/p778-build/p778_gate_test
+workspace/p778-build/Release/p778_gate_test
+workspace/p778-build/Release/p778_gate_test
+workspace/p778-build/Debug/p778_gate_test
+workspace/p778-build/Debug/p778_gate_test
+workspace/p778-build/MinSizeRel/p778_gate_test
+workspace/p778-build/MinSizeRel/p778_gate_test
+workspace/p778-build/RelWithDebInfo/p778_gate_test
+workspace/p778-build/RelWithDebInfo/p778_gate_test
+workspace/p778-build/Deployment/p778_gate_test
+workspace/p778-build/Deployment/p778_gate_test
+workspace/p778-build/Development/p778_gate_test
+workspace/p778-build/Development/p778_gate_test
+Unable to find executable: /workspace/p778-build/p778_gate_test
+2/5 Test #245: p778_valve_spare_gate.unit .......***Not Run   0.00 sec
+    Start 246: p778_r_a_gate.unit
+Could not find executable /workspace/p778-build/p778_gate_test
+Looked in the following places:
+/workspace/p778-build/p778_gate_test
+/workspace/p778-build/p778_gate_test
+/workspace/p778-build/Release/p778_gate_test
+/workspace/p778-build/Release/p778_gate_test
+/workspace/p778-build/Debug/p778_gate_test
+/workspace/p778-build/Debug/p778_gate_test
+/workspace/p778-build/MinSizeRel/p778_gate_test
+/workspace/p778-build/MinSizeRel/p778_gate_test
+/workspace/p778-build/RelWithDebInfo/p778_gate_test
+/workspace/p778-build/RelWithDebInfo/p778_gate_test
+/workspace/p778-build/Deployment/p778_gate_test
+/workspace/p778-build/Deployment/p778_gate_test
+/workspace/p778-build/Development/p778_gate_test
+/workspace/p778-build/Development/p778_gate_test
+workspace/p778-build/p778_gate_test
+workspace/p778-build/p778_gate_test
+workspace/p778-build/Release/p778_gate_test
+workspace/p778-build/Release/p778_gate_test
+workspace/p778-build/Debug/p778_gate_test
+workspace/p778-build/Debug/p778_gate_test
+workspace/p778-build/MinSizeRel/p778_gate_test
+workspace/p778-build/MinSizeRel/p778_gate_test
+workspace/p778-build/RelWithDebInfo/p778_gate_test
+workspace/p778-build/RelWithDebInfo/p778_gate_test
+workspace/p778-build/Deployment/p778_gate_test
+workspace/p778-build/Deployment/p778_gate_test
+workspace/p778-build/Development/p778_gate_test
+workspace/p778-build/Development/p778_gate_test
+Unable to find executable: /workspace/p778-build/p778_gate_test
+3/5 Test #246: p778_r_a_gate.unit ...............***Not Run   0.00 sec
+    Start 247: p778_driver_oom.unit
+4/5 Test #247: p778_driver_oom.unit .............   Passed    0.06 sec
+    Start 248: p778_source_native.integration
+5/5 Test #248: p778_source_native.integration ...***Failed    0.17 sec
+sensor_spare.nl COPY depth=1 call=18 span=172:199 nominal=10 root=1 child=2 index=0 incarnation=1 old=37 new=101 sibling=156 body_status=0 parameters_status=0
+ARM parent_depth=1 match=48 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+ARM parent_depth=1 match=48 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+INITIALIZE depth=2 node=19 root=21 incarnation=24 backing=1 domain=1 span=800:914
+ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+INITIALIZE depth=3 node=19 root=32 incarnation=35 backing=2 domain=2 span=1696:1821
+REF_SCOPE place=21 scope=5
+REF_SCOPE place=21 scope=6
+PRODUCER depth=3 call=50 root=32 incarnation=35 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=39 availability=1 packet=69 same_ptr_root=1 same_allocation=1 same_domain=1
+PROJECTION nominal=11 child=25 incarnation=25
+CALLER_LOCAL depth=4 node=14 symbol=39 availability=1 value=69 fields=68,37,42
+CALLER_LOCAL depth=3 node=56 symbol=40 availability=1 value=69 fields=68,37,42
+REF_SCOPE place=32 scope=7
+RECEIVER depth=3 call=72 root=32 incarnation=35 backing=2 domain=2 post_proved=1 entry_original_exact=1
+REF_SCOPE place=32 scope=8
+NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+SUMMARY Copy_calls=1 H_producers=1 owner_receivers=1 H_initializations=2
+{"source": "sensor_spare.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "1", "c_sha256": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826", "observed": "OBSERVED T=101,156/9,37 CopyCalls=1 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+{"source": "sensor_spare.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "2", "c_sha256": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826", "observed": "OBSERVED T=101,156/9,37 CopyCalls=1 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55cf252852a0,0"}
+Traceback (most recent call last):
+  File "/workspace/p778/tests/p778/native.py", line 63, in <module>
+    guest=run([observed],env=env);require(guest,'observed native failure world '+fail)
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p778/tests/p778/native.py", line 11, in require
+    def require(p,what):assert p.returncode==0,(what,p.returncode,p.stdout.decode(errors='replace'),p.stderr.decode(errors='replace'))
+                               ^^^^^^^^^^^^^^^
+AssertionError: ('observed native failure world 0', -6, '', 'P778 observer line190\n')
+
+
+20% tests passed, 4 tests failed out of 5
+
+Total Test time (real) =   0.23 sec
+
+The following tests FAILED:
+	244 - p778_sensor_spare_gate.unit (Not Run)
+	245 - p778_valve_spare_gate.unit (Not Run)
+	246 - p778_r_a_gate.unit (Not Run)
+	248 - p778_source_native.integration (Failed)
+Errors while running CTest

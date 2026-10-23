@@ -1,0 +1,98 @@
+{
+  "protocol": "R776 FRESH FIRST-PASS BLIND, before candidate execution/producer implementation inspection",
+  "compiler_main": "168c1cdafe929051ef08ff58f858fab045b17763",
+  "candidate_sha": "96922455e18f0bd103c7bc7a208dbe915ed7ea98",
+  "canonical": "Draft17.34",
+  "execution": "normal Chat + GitHub connector + R-only branch + GitHub Actions",
+  "positive": {
+    "positive_h_first": {
+      "H": "LedgerNode original head and tail separately allocated, original owner A_t/D_t carried via producer-local LiveTail then caller, tail released before head; no replacement copies of originals",
+      "T": {
+        "panel_before": [
+          41,
+          149
+        ],
+        "panel_after": [
+          96,
+          149
+        ],
+        "reserve_before": [
+          11,
+          209
+        ],
+        "reserve_after": [
+          11,
+          41
+        ],
+        "old_panel": 41,
+        "old_reserve": 209
+      },
+      "worlds": {
+        "fail_1": "0 allocations / 0 frees",
+        "fail_2": "1 head allocation / 1 head free",
+        "success": "2 distinct allocations / 2 frees, tail then head"
+      }
+    },
+    "positive_t_interposed": {
+      "H": "QueueAtom originals 83/237; H producer return occurs before T scoped named write in both-Some branch; original owner released exactly once tail then head",
+      "T": {
+        "panel_before": [
+          7,
+          184
+        ],
+        "panel_after": [
+          7,
+          27
+        ],
+        "reserve_before": [
+          66,
+          118
+        ],
+        "reserve_after": [
+          184,
+          118
+        ],
+        "old_panel": 184,
+        "old_reserve": 66
+      },
+      "worlds": {
+        "fail_1": "0 allocations / 0 frees",
+        "fail_2": "1 head allocation / 1 head free",
+        "success": "2 distinct allocations / 2 frees, tail then head"
+      }
+    }
+  },
+  "negative": {
+    "negative_wrong_allocation": "semantic CHECK must reject foreign A_h for p_t/D_t; no emitted C",
+    "negative_stale_link": "semantic CHECK must reject producer precondition link current None; no emitted C",
+    "negative_unknown_field": "source field resolution / AVS reject undeclared T field before valid public proof",
+    "negative_read_to_write": "source/ref eligibility or semantic CHECK reject read-scoped ref used for write; no emitted C",
+    "negative_two_t_nominals": "source profile/AVS reject second T nominal; no emitted C",
+    "negative_double_consume": "semantic affine CHECK rejects second terminal call; no emitted C"
+  },
+  "backend": {
+    "valid_but_unsupported": "fail closed; zero stdout C, named output sentinel unchanged",
+    "emitter_oom": "fail closed; zero incomplete C and preserve named-output old target"
+  },
+  "test_plan": {
+    "ctest_K": 4,
+    "ctest_names": [
+      "r776_native_h_first.integration",
+      "r776_native_t_interposed.integration",
+      "r776_negative_boundaries.integration",
+      "r776_emitter_atomicity.integration"
+    ],
+    "full_expected": 442,
+    "partial_expected": 441
+  },
+  "source_sha256": {
+    "tests/r776/frozen/positive_h_first.nl": "a516361123d26de17ac6e5f9a81cc530f50b6509379a960ca20e78a2df0b6a0d",
+    "tests/r776/frozen/positive_t_interposed.nl": "12c5c66c413a57fd78549cb4563c71c6831d0f151b53b2d4569d32f7b50a1af5",
+    "tests/r776/frozen/negative_wrong_allocation.nl": "8168f9c3c9f60242e753aa53360059fd91204a60eb10de729482d4f3aeba5538",
+    "tests/r776/frozen/negative_stale_link.nl": "40d05f7f7391227d614aba3433ba6380d77e69ca3852f3c10add57a403f0f04b",
+    "tests/r776/frozen/negative_unknown_field.nl": "d885f552102df4f1fdd3ea08b0cbe0af0be2ca812d8f9fd211f993212ad089ed",
+    "tests/r776/frozen/negative_read_to_write.nl": "1acdbb1a4e57791bf727e91be7f269e515de60cc71bc3c720c6e05f8b83f62a6",
+    "tests/r776/frozen/negative_two_t_nominals.nl": "7eb7671a8aa23481eccbbca515f25be3462e309ab14c55df8072afc2a6ed6cf4",
+    "tests/r776/frozen/negative_double_consume.nl": "97222566d152c499901a4a7e2b623a7f8ab355c637f9e8d9d993b2823658c971"
+  }
+}

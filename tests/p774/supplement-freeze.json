@@ -1,0 +1,16 @@
+{
+  "utc": "2026-10-23T07:25:36.273922+00:00",
+  "note": "Calibrated supplemental negative sources after initial candidate; original ten-source preimplementation freeze retained. Fix intended negative coverage gaps, not original source/oracle bytes. Freeze before executing these four inputs.",
+  "expected": {
+    "negative_scoped_binding.nl": "CLI3 semantic unknown target binder outside closed loan; unlike original unknown read callee",
+    "negative_read_reference.nl": "CLI3 P3-TYPE-MISMATCH actual local scalar read ref to write formal; original field read-loan form is unsupported profile",
+    "negative_wrong_reloan_domain.nl": "CLI3 wrong Domain stability when making front ref, distinct from original active-loan move conflict",
+    "negative_wrong_owner_ptr.nl": "CLI3 wrong original ptr/backing/domain producer precondition"
+  },
+  "sha256": {
+    "negative_scoped_binding.nl": "c8a1239c67f084d65e96c0b9eee6945926da26d38b8e8627983e63091f6e5e68",
+    "negative_read_reference.nl": "66918c72552c06ddfa2d3240a2b2f7fcef78b171ab904a75056f6b2241602145",
+    "negative_wrong_reloan_domain.nl": "d7b6177480d9c1b93b591da10273e963fea246ebffd9542a4fcd3d5b587de4b5",
+    "negative_wrong_owner_ptr.nl": "22f96bbe04bcce2b6bc8020af65a7c58f3b89bb4318ab0845de287301cd0d6e1"
+  }
+}

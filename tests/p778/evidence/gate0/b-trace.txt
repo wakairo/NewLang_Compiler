@@ -1,0 +1,6 @@
+TRACE shape:286
+TRACE expr:905
+TRACE expr:864
+TRACE block:434
+TRACE allocated_match:1480
+TRACE allocated_match:1480

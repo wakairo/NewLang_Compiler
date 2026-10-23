@@ -1,0 +1,21 @@
+{
+  "check": {
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stderr": "",
+    "named_unchanged": null
+  },
+  "emit": {
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p778-intake/r776/tests/r776/frozen/positive_t_interposed.nl\n",
+    "named_unchanged": null
+  },
+  "named": {
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p778-intake/r776/tests/r776/frozen/positive_t_interposed.nl\n",
+    "named_unchanged": true
+  },
+  "public_probe_exit": 0
+}

@@ -1,0 +1,59 @@
+{
+  "utc": "2026-10-23T08:00:14.250167+00:00",
+  "fixed_main": "168c1cdafe929051ef08ff58f858fab045b17763",
+  "canonical": "Draft17.34",
+  "code_commit": "6dc68a706b4e3b16f3e4b6d9aa776e1e59ca0bfb",
+  "code_tree": "47be32e6d2055943c3d5236face8465fffd1e578",
+  "gate0_freeze_commit": "667f4dd",
+  "gate0_diagnosis_commit": "2e44a91",
+  "frontend_first": {
+    "pass": 437,
+    "total": 437,
+    "seconds": 163.87
+  },
+  "local_asan_lsan": {
+    "pass": 26,
+    "total": 26,
+    "seconds": 66.4,
+    "clang": "23.1.2"
+  },
+  "local_ubsan": {
+    "pass": 26,
+    "total": 26,
+    "seconds": 33.17,
+    "clang": "23.1.2"
+  },
+  "native": "GCC13 / Clang23 O0/O2, unmodified generated C; separate passive builds, real 0/1/2 allocation worlds, two distinct originals and one owner local->consume->RETURN->receive->terminal release",
+  "tamper": {
+    "pump": 24,
+    "scale": 22,
+    "foreign_same_numeric_source_worlds": "refused"
+  },
+  "selected_backend_OOM": {
+    "pump": {
+      "allocations": 195,
+      "positions": 16,
+      "explicit_OOM": 12,
+      "legacy_bool_UNSUPPORTED": 4
+    },
+    "scale": {
+      "allocations": 391,
+      "positions": 16,
+      "explicit_OOM": 12,
+      "legacy_bool_UNSUPPORTED": 4
+    },
+    "world_snapshots": 5,
+    "all_output_slots_untouched": true
+  },
+  "selected_driver_OOM": {
+    "allocations": 4186,
+    "positions": 16,
+    "CLI1": 6,
+    "CLI3": 10,
+    "CLI4": 0,
+    "partial_C_bytes": 0,
+    "retry": "PASS"
+  },
+  "initial_history": "Probe C API typos/const annotations and missing passive local callback retained; no source/oracle or sanitizer policy relaxation. New observer callback reads actual existing C local before and after consume; corrected candidate C archived separately.",
+  "remaining": "T prefix only before closed two-H owner suffix; one ordinary single-replace/old-return helper, two T originals. No interleaved T effects or generalized H/owner/effect/CFG/FFI. No new public joint proof or independent R/Product GO."
+}

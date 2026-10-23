@@ -1,0 +1,176 @@
+Internal ctest changing into directory: /workspace/p778-build
+UpdateCTestConfiguration  from :/workspace/p778-build/DartConfiguration.tcl
+Parse Config file:/workspace/p778-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p778-build/DartConfiguration.tcl
+Parse Config file:/workspace/p778-build/DartConfiguration.tcl
+Test project /tmp/p778-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 244
+    Start 244: p778_sensor_spare_gate.unit
+
+244: Test command: /workspace/p778-build/p778_gate_test "/workspace/p778/tests/p778/sources/sensor_spare.nl"
+244: Working Directory: /tmp/p778-build
+244: Environment variables: 
+244:  PYTHONDONTWRITEBYTECODE=1
+244:  PYTHONHASHSEED=0
+244:  LC_ALL=C
+244:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+244:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+244: Test timeout computed to be: 90
+244: GATE genuine=PASS equal_numeric_foreign_worlds=refused mutations=24 restored=PASS OOM_total_allocations=199 selected_positions=16 explicit_oom=11 legacy_bool_unsupported=5 five_worlds_unchanged=PASS output_slots=PASS retry=PASS
+244: P778 caller custody mutations=9 arm_world_unchanged=PASS arm_OOM_positions=3 retry=PASS source=/workspace/p778/tests/p778/sources/sensor_spare.nl
+1/5 Test #244: p778_sensor_spare_gate.unit ......   Passed    0.15 sec
+test 245
+    Start 245: p778_valve_spare_gate.unit
+
+245: Test command: /workspace/p778-build/p778_gate_test "/workspace/p778/tests/p778/sources/valve_spare.nl"
+245: Working Directory: /tmp/p778-build
+245: Environment variables: 
+245:  PYTHONDONTWRITEBYTECODE=1
+245:  PYTHONHASHSEED=0
+245:  LC_ALL=C
+245:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+245:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+245: Test timeout computed to be: 90
+245: GATE genuine=PASS equal_numeric_foreign_worlds=refused mutations=22 restored=PASS OOM_total_allocations=395 selected_positions=16 explicit_oom=11 legacy_bool_unsupported=5 five_worlds_unchanged=PASS output_slots=PASS retry=PASS
+245: P778 caller custody mutations=9 arm_world_unchanged=PASS arm_OOM_positions=3 retry=PASS source=/workspace/p778/tests/p778/sources/valve_spare.nl
+2/5 Test #245: p778_valve_spare_gate.unit .......   Passed    0.09 sec
+test 246
+    Start 246: p778_r_a_gate.unit
+
+246: Test command: /workspace/p778-build/p778_gate_test "/workspace/p778/tests/p778/external_r776/positive_h_first.nl"
+246: Working Directory: /tmp/p778-build
+246: Environment variables: 
+246:  PYTHONDONTWRITEBYTECODE=1
+246:  PYTHONHASHSEED=0
+246:  LC_ALL=C
+246:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+246:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+246: Test timeout computed to be: 90
+246: GATE genuine=PASS equal_numeric_foreign_worlds=refused mutations=24 restored=PASS OOM_total_allocations=199 selected_positions=16 explicit_oom=11 legacy_bool_unsupported=5 five_worlds_unchanged=PASS output_slots=PASS retry=PASS
+246: P778 caller custody mutations=9 arm_world_unchanged=PASS arm_OOM_positions=3 retry=PASS source=/workspace/p778/tests/p778/external_r776/positive_h_first.nl
+3/5 Test #246: p778_r_a_gate.unit ...............   Passed    0.03 sec
+test 247
+    Start 247: p778_driver_oom.unit
+
+247: Test command: /workspace/p778-build/p774_driver_oom "/workspace/p778/tests/p778/sources/sensor_spare.nl"
+247: Working Directory: /tmp/p778-build
+247: Environment variables: 
+247:  PYTHONDONTWRITEBYTECODE=1
+247:  PYTHONHASHSEED=0
+247:  LC_ALL=C
+247:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+247:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+247: Test timeout computed to be: 90
+247: DRIVER OOM_total=4244 selected_positions=16 CLI1=6 CLI3=9 CLI4=1 zero_partial_C=PASS no_internal=PASS retry=PASS
+4/5 Test #247: p778_driver_oom.unit .............   Passed    0.17 sec
+test 248
+    Start 248: p778_source_native.integration
+
+248: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/workspace/p778/tests/p778/native.py" "/workspace/p778-build/newlangc" "/workspace/p778-build/p778_probe" "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13" "none" "/workspace/p778/tests/p778"
+248: Working Directory: /tmp/p778-build
+248: Environment variables: 
+248:  PYTHONDONTWRITEBYTECODE=1
+248:  PYTHONHASHSEED=0
+248:  LC_ALL=C
+248:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+248:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+248: Test timeout computed to be: 90
+248: sensor_spare.nl COPY depth=1 call=18 span=172:199 nominal=10 root=1 child=2 index=0 incarnation=1 old=37 new=101 sibling=156 body_status=0 parameters_status=0
+248: ARM parent_depth=1 match=48 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+248: ARM parent_depth=1 match=48 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+248: INITIALIZE depth=2 node=19 root=21 incarnation=24 backing=1 domain=1 span=800:914
+248: ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+248: ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+248: INITIALIZE depth=3 node=19 root=32 incarnation=35 backing=2 domain=2 span=1696:1821
+248: REF_SCOPE place=21 scope=5
+248: REF_SCOPE place=21 scope=6
+248: PRODUCER depth=3 call=50 root=32 incarnation=35 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=39 availability=1 packet=69 same_ptr_root=1 same_allocation=1 same_domain=1
+248: PROJECTION nominal=11 child=25 incarnation=25
+248: CALLER_LOCAL depth=3 node=56 symbol=40 availability=1 value=69 fields=68,37,42
+248: REF_SCOPE place=32 scope=7
+248: RECEIVER depth=3 call=72 root=32 incarnation=35 backing=2 domain=2 post_proved=1 entry_original_exact=1
+248: REF_SCOPE place=32 scope=8
+248: NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+248: SUMMARY Copy_calls=1 H_producers=1 owner_receivers=1 H_initializations=2
+248: {"source": "sensor_spare.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "1", "c_sha256": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826", "observed": "OBSERVED T=101,156/9,37 CopyCalls=1 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+248: {"source": "sensor_spare.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "2", "c_sha256": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826", "observed": "OBSERVED T=101,156/9,37 CopyCalls=1 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55626ad412a0,0"}
+248: {"source": "sensor_spare.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "0", "c_sha256": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826", "observed": "OBSERVED T=101,156/9,37 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=5579c8a272a0,5579c8a272c0"}
+248: {"source": "sensor_spare.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "1", "c_sha256": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826", "observed": "OBSERVED T=101,156/9,37 CopyCalls=1 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+248: {"source": "sensor_spare.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "2", "c_sha256": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826", "observed": "OBSERVED T=101,156/9,37 CopyCalls=1 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=5586ea21c2a0,0"}
+248: {"source": "sensor_spare.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "0", "c_sha256": "a09d65f03b1d1e2a07c90d16718ace5f466fe7cff3a61b9b358a1040d1c7e826", "observed": "OBSERVED T=101,156/9,37 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=561d06dd52a0,561d06dd52c0"}
+248: valve_spare.nl COPY depth=1 call=18 span=158:185 nominal=10 root=1 child=3 index=1 incarnation=1 old=226 new=83 sibling=43 body_status=0 parameters_status=0
+248: COPY depth=1 call=25 span=240:266 nominal=10 root=4 child=5 index=0 incarnation=4 old=12 new=226 sibling=198 body_status=0 parameters_status=0
+248: ARM parent_depth=1 match=48 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+248: ARM parent_depth=1 match=48 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+248: INITIALIZE depth=2 node=19 root=24 incarnation=27 backing=1 domain=1 span=782:890
+248: ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+248: ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+248: INITIALIZE depth=3 node=19 root=35 incarnation=38 backing=2 domain=2 span=1672:1791
+248: REF_SCOPE place=24 scope=5
+248: REF_SCOPE place=24 scope=6
+248: PRODUCER depth=3 call=50 root=35 incarnation=38 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=42 availability=1 packet=72 same_ptr_root=1 same_allocation=1 same_domain=1
+248: PROJECTION nominal=11 child=28 incarnation=28
+248: CALLER_LOCAL depth=3 node=56 symbol=43 availability=1 value=72 fields=71,40,45
+248: REF_SCOPE place=35 scope=7
+248: RECEIVER depth=3 call=72 root=35 incarnation=38 backing=2 domain=2 post_proved=1 entry_original_exact=1
+248: REF_SCOPE place=35 scope=8
+248: NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+248: SUMMARY Copy_calls=2 H_producers=1 owner_receivers=1 H_initializations=2
+248: {"source": "valve_spare.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "1", "c_sha256": "0b161e9501208a329956aed3ef2e92806d3ccd269276ba24c942f27be00f8925", "observed": "OBSERVED T=43,83/226,198 CopyCalls=2 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+248: {"source": "valve_spare.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "2", "c_sha256": "0b161e9501208a329956aed3ef2e92806d3ccd269276ba24c942f27be00f8925", "observed": "OBSERVED T=43,83/226,198 CopyCalls=2 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=56340aef42a0,0"}
+248: {"source": "valve_spare.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "0", "c_sha256": "0b161e9501208a329956aed3ef2e92806d3ccd269276ba24c942f27be00f8925", "observed": "OBSERVED T=43,83/226,198 CopyCalls=2 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=55c8905992a0,55c8905992c0"}
+248: {"source": "valve_spare.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "1", "c_sha256": "0b161e9501208a329956aed3ef2e92806d3ccd269276ba24c942f27be00f8925", "observed": "OBSERVED T=43,83/226,198 CopyCalls=2 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+248: {"source": "valve_spare.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "2", "c_sha256": "0b161e9501208a329956aed3ef2e92806d3ccd269276ba24c942f27be00f8925", "observed": "OBSERVED T=43,83/226,198 CopyCalls=2 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=559ebecda2a0,0"}
+248: {"source": "valve_spare.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "0", "c_sha256": "0b161e9501208a329956aed3ef2e92806d3ccd269276ba24c942f27be00f8925", "observed": "OBSERVED T=43,83/226,198 CopyCalls=2 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=558ec1f2f2a0,558ec1f2f2c0"}
+248: positive_h_first.nl COPY depth=1 call=18 span=177:200 nominal=10 root=1 child=2 index=0 incarnation=1 old=41 new=96 sibling=149 body_status=0 parameters_status=0
+248: ARM parent_depth=1 match=43 arm=0 backing_regions=0 domains=0 all_closed=1 captured_closed=0
+248: ARM parent_depth=1 match=43 arm=1 backing_regions=1 domains=1 all_closed=1 captured_closed=0
+248: INITIALIZE depth=2 node=19 root=22 incarnation=25 backing=1 domain=1 span=798:897
+248: ARM parent_depth=2 match=30 arm=0 backing_regions=1 domains=1 all_closed=1 captured_closed=1
+248: ARM parent_depth=2 match=30 arm=1 backing_regions=2 domains=2 all_closed=1 captured_closed=1
+248: INITIALIZE depth=3 node=19 root=33 incarnation=36 backing=2 domain=2 span=1622:1722
+248: REF_SCOPE place=22 scope=5
+248: REF_SCOPE place=22 scope=6
+248: PRODUCER depth=3 call=50 root=33 incarnation=36 backing=2 domain=2 original_valid=1 local_view=1 local_valid=1 body_same_caller_world=1 entry_distinct_return=1 construction=7 consumer=16 return_node=17 local=40 availability=1 packet=66 same_ptr_root=1 same_allocation=1 same_domain=1
+248: PROJECTION nominal=11 child=26 incarnation=26
+248: CALLER_LOCAL depth=3 node=56 symbol=41 availability=1 value=66 fields=65,34,39
+248: REF_SCOPE place=33 scope=7
+248: RECEIVER depth=3 call=72 root=33 incarnation=36 backing=2 domain=2 post_proved=1 entry_original_exact=1
+248: REF_SCOPE place=33 scope=8
+248: NODE_BACKEND status=0 output_null=0 output_length_unchanged=0
+248: SUMMARY Copy_calls=1 H_producers=1 owner_receivers=1 H_initializations=2
+248: {"source": "positive_h_first.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "1", "c_sha256": "a0a7aeafd43bcd9e2cf2dde3504fb85f4a95e24ca866ddf49533e93609702693", "observed": "OBSERVED T=96,149/11,41 CopyCalls=1 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+248: {"source": "positive_h_first.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "2", "c_sha256": "a0a7aeafd43bcd9e2cf2dde3504fb85f4a95e24ca866ddf49533e93609702693", "observed": "OBSERVED T=96,149/11,41 CopyCalls=1 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=55c9ef2202a0,0"}
+248: {"source": "positive_h_first.nl", "opt": "-O0", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "0", "c_sha256": "a0a7aeafd43bcd9e2cf2dde3504fb85f4a95e24ca866ddf49533e93609702693", "observed": "OBSERVED T=96,149/11,41 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=5639254452a0,5639254452c0"}
+248: {"source": "positive_h_first.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "1", "c_sha256": "a0a7aeafd43bcd9e2cf2dde3504fb85f4a95e24ca866ddf49533e93609702693", "observed": "OBSERVED T=96,149/11,41 CopyCalls=1 trials=1 allocations=0 frees=0 producer=0 local_consumed=0 returned=0 received=0 H=0,0"}
+248: {"source": "positive_h_first.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "2", "c_sha256": "a0a7aeafd43bcd9e2cf2dde3504fb85f4a95e24ca866ddf49533e93609702693", "observed": "OBSERVED T=96,149/11,41 CopyCalls=1 trials=2 allocations=1 frees=1 producer=0 local_consumed=0 returned=0 received=0 H=56386ae1d2a0,0"}
+248: {"source": "positive_h_first.nl", "opt": "-O2", "cc": "/workspace/p605-tools/usr/bin/x86_64-linux-gnu-gcc-13", "sanitizer": "none", "fail": "0", "c_sha256": "a0a7aeafd43bcd9e2cf2dde3504fb85f4a95e24ca866ddf49533e93609702693", "observed": "OBSERVED T=96,149/11,41 CopyCalls=1 trials=2 allocations=2 frees=2 producer=1 local_consumed=1 returned=1 received=1 H=55a5451532a0,55a5451532c0"}
+248: negative_owner_reuse.nl refused first observed phase /workspace/p778/tests/p778/sources/negative_owner_reuse.nl:72:34-72:44: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding
+248: negative_wrong_domain.nl refused first observed phase /workspace/p778/tests/p778/sources/negative_wrong_domain.nl:73:38-73:72: error(semantic)[ALLOCATED-DOMAIN-MISMATCH]: pointer requires matching readable live domain
+248: negative_copy_ref.nl refused first observed phase /workspace/p778/tests/p778/sources/negative_copy_ref.nl:27:64-27:70: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter
+248: negative_wrong_allocation.nl refused first observed phase /workspace/p778/tests/p778/sources/negative_wrong_allocation.nl:76:21-76:75: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion
+248: negative_two_t_nominals.nl refused first observed phase /workspace/p778/tests/p778/external_r776/negative_two_t_nominals.nl:4:1-4:35: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate
+248: negative_read_to_write.nl refused first observed phase /workspace/p778/tests/p778/external_r776/negative_read_to_write.nl:25:38-25:39: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field
+248: negative_unknown_field.nl refused first observed phase /workspace/p778/tests/p778/external_r776/negative_unknown_field.nl:25:34-25:45: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal
+248: negative_wrong_allocation.nl refused first observed phase /workspace/p778/tests/p778/external_r776/negative_wrong_allocation.nl:54:119-54:174: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion
+248: negative_stale_link.nl refused first observed phase /workspace/p778/tests/p778/external_r776/negative_stale_link.nl:55:119-55:174: error(semantic)[P208-CALL-HEAD-VALUE]: head link must currently be Some of tail
+248: negative_double_consume.nl refused first observed phase /workspace/p778/tests/p778/external_r776/negative_double_consume.nl:58:44-58:60: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding
+248: R-B calibrated CHECK0/public Copy precision3/C174 zeroC named preserved
+5/5 Test #248: p778_source_native.integration ...   Passed    3.52 sec
+
+The following tests passed:
+	p778_sensor_spare_gate.unit
+	p778_valve_spare_gate.unit
+	p778_r_a_gate.unit
+	p778_driver_oom.unit
+	p778_source_native.integration
+
+100% tests passed, 0 tests failed out of 5
+
+Total Test time (real) =   3.98 sec

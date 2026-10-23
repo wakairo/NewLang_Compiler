@@ -25,6 +25,12 @@ typedef enum {
  * and represents caller-local Option<LiveTail> with a private tagged carrier.
  * The two source-proven exact-None eliminations create no cleanup or runtime
  * ownership policy. Borrowed pointers to evidence stay world-qualified.
+ * Mixed exactly-one-H/one-two-u8-T units may reuse those same issued H
+ * certificates after a straight-line T prefix: two lexical T originals,
+ * authenticated single-replace named Copy calls and exact old-Copy transfer.
+ * The private carrier ledger validates source-issued T entry/handoff facts;
+ * it creates no checker state, ownership, public proof or foreign-world right.
+ * T effects in hypothetical H arms, or unsupported callee shapes, fail closed.
  * Other LiveTail body/result profiles remain explicitly unsupported.
  * Not a general recursive or allocator backend. */
 NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *, char **out,
