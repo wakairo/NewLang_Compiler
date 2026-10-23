@@ -1,0 +1,108 @@
+{
+  "track": "R #780",
+  "mode": "NON-BLIND calibrated; original R #776 first red remains COVERAGE FAIL",
+  "fixed_main": "168c1cdafe929051ef08ff58f858fab045b17763",
+  "candidate": "2ade9ded5279be0212a0eaa4c7531d7f5edd750a",
+  "canonical": "Draft17.34",
+  "frozen_r_a_sha256": "a516361123d26de17ac6e5f9a81cc530f50b6509379a960ca20e78a2df0b6a0d",
+  "frozen_r_b_sha256": "12c5c66c413a57fd78549cb4563c71c6831d0f151b53b2d4569d32f7b50a1af5",
+  "frozen_original_oracle_sha256": "2c14f494b84c0bfe9a93500fa962e7fa163d798f5cd9a900353189b42fca7a22",
+  "variant_sha256": "ea6502aeb4f67d958159e07ad88b6c56360a8fc137e8a29943f082c74592df5c",
+  "variant_source": "tests/r780/frozen/positive_index_swapped.nl",
+  "variant_oracle": {
+    "H_payloads": [
+      37,
+      218
+    ],
+    "H_fail_worlds": [
+      {
+        "trial": 1,
+        "allocations": 0,
+        "frees": 0
+      },
+      {
+        "trial": 2,
+        "allocations": 1,
+        "frees": 1,
+        "order": [
+          "head"
+        ]
+      },
+      {
+        "trial": 2,
+        "allocations": 2,
+        "frees": 2,
+        "order": [
+          "tail",
+          "head"
+        ]
+      }
+    ],
+    "T_panel_initial": [
+      185,
+      27
+    ],
+    "T_panel_final": [
+      185,
+      132
+    ],
+    "T_panel_index": 1,
+    "T_panel_old": 27,
+    "T_reserve_initial": [
+      211,
+      9
+    ],
+    "T_reserve_final": [
+      27,
+      9
+    ],
+    "T_reserve_index": 0,
+    "T_reserve_old": 211
+  },
+  "primary_oracle": {
+    "H_payloads": [
+      61,
+      173
+    ],
+    "T_panel_initial": [
+      41,
+      149
+    ],
+    "T_panel_final": [
+      96,
+      149
+    ],
+    "T_panel_index": 0,
+    "T_panel_old": 41,
+    "T_reserve_initial": [
+      11,
+      209
+    ],
+    "T_reserve_final": [
+      11,
+      41
+    ],
+    "T_reserve_index": 1,
+    "T_reserve_old": 209
+  },
+  "negatives": "unchanged 6 frozen R #776 files; report first actual stage separately",
+  "r_b": "CHECK0; public T Copy precision3; backend CLI4/zero C/named sentinel",
+  "ci": {
+    "K": 5,
+    "full5": 448,
+    "partial": 447,
+    "names": [
+      "r780_native_original.integration",
+      "r780_native_variant.integration",
+      "r780_public_provenance.unit",
+      "r780_negative_and_b.integration",
+      "r780_oom_atomicity.unit"
+    ]
+  },
+  "predecessor": {
+    "issue": 776,
+    "pr": 777,
+    "first_red_full5": 39926815001,
+    "first_red_partial": 39926814953
+  }
+}
