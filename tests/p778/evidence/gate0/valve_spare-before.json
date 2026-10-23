@@ -1,0 +1,8 @@
+{
+  "check": 0,
+  "check_stderr": "",
+  "emit": 4,
+  "emit_bytes": 0,
+  "emit_stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: tests/p778/sources/valve_spare.nl\n",
+  "probe": 0
+}
