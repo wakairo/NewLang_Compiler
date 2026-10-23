@@ -1257,6 +1257,30 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # R #780: independent post-first-pass calibrated evidence (K=5).
+    # Freeze-only R #776 files are copied by blob, never rewritten.
+    add_executable(r780_public_provenance tests/r780/public_provenance.c)
+    target_link_libraries(r780_public_provenance PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    add_executable(r780_oom_atomicity tests/r780/oom_atomicity.c)
+    target_link_libraries(r780_oom_atomicity PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(r780_oom_atomicity PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME r780_native_original.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r780/native.py"
+        original "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}")
+    add_test(NAME r780_native_variant.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r780/native.py"
+        variant "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}")
+    add_test(NAME r780_public_provenance.unit
+        COMMAND r780_public_provenance
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r776/frozen/positive_h_first.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r780/frozen/positive_index_swapped.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r776/frozen/positive_t_interposed.nl")
+    add_test(NAME r780_negative_and_b.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r780/negative_b.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}")
+    add_test(NAME r780_oom_atomicity.unit
+        COMMAND r780_oom_atomicity
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r776/frozen/positive_h_first.nl")
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
