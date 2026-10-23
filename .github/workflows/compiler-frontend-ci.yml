@@ -45,7 +45,15 @@ jobs:
             "$RUNNER_TEMP/newlang-frontend-configure.log"
           grep -Fx "NEWLANG_FRONTEND_ONLY:BOOL=ON" build-frontend/CMakeCache.txt
           grep -Fx "BUILD_TESTING:BOOL=ON" build-frontend/CMakeCache.txt
-          cmake --build build-frontend --parallel 2
+          detected_nproc=$(nproc)
+          case "$detected_nproc" in
+            ""|*[!0-9]*) echo "::error::T762 invalid build nproc: $detected_nproc"; exit 1 ;;
+          esac
+          if test "$detected_nproc" -lt 1; then echo "::error::T762 build nproc must be positive"; exit 1; fi
+          echo "T762 build workers=$detected_nproc detected_nproc=$detected_nproc"
+          build_started=$(date +%s)
+          cmake --build build-frontend --parallel "$detected_nproc"
+          echo "T762 build_wall_seconds=$(( $(date +%s) - build_started ))"
 
       - name: Inventory all CTests and assert Production CHECK, C17/native and public validators
         shell: bash

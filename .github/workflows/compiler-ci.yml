@@ -121,8 +121,9 @@ jobs:
           ctest_workers="$detected_nproc"
           if test "$ctest_workers" -gt "$ctest_cap"; then ctest_workers="$ctest_cap"; fi
           echo "T753 chosen CTest workers=$ctest_workers detected=$detected_nproc cap=$ctest_cap"
+          echo "T762 build workers=$detected_nproc detected_nproc=$detected_nproc"
           build_started=$(date +%s)
-          cmake --build build --parallel 2
+          cmake --build build --parallel "$detected_nproc"
           echo "T753 build_wall_seconds=$(( $(date +%s) - build_started ))"
           ctest_started=$(date +%s)
           set +e
