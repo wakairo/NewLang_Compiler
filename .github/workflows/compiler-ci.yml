@@ -38,10 +38,37 @@ jobs:
           persist-credentials: false
       - name: Host prerequisites from signed Ubuntu repositories
         run: |
+          set -euo pipefail
+          echo "T757 Stage A1: preinstalled tools before signed apt"
+          echo "T757 ImageOS=${ImageOS:-unset} ImageVersion=${ImageVersion:-unset} PATH=$PATH"
+          for tool in cmake gcc-13 g++-13 make python3 zstd; do
+            echo "T757 tool $tool=$(command -v "$tool")"
+          done
+          cmake_before=$(command -v cmake)
+          cmake_version=$(cmake --version | sed -n '1s/^cmake version //p')
+          echo "T757 cmake_before=$cmake_before version=$cmake_version"
+          python3 - "$cmake_version" <<'PY'
+          import re
+          import sys
+          match = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", sys.argv[1])
+          if not match:
+              sys.exit("STOP: unknown preinstalled CMake version")
+          major, minor, patch = map(int, match.groups())
+          if not ((3, 28) <= (major, minor) < (4, 0)):
+              sys.exit("STOP: preinstalled CMake outside project policy [3.28,4.0)")
+          PY
+          for pkg in gcc-13 g++-13 make python3 zstd libstdc++6 zlib1g-dev libzstd-dev libtinfo-dev libxml2-dev; do
+            dpkg-query -W -f='${binary:Package}=${Status} ${Version}\n' "$pkg" || true
+          done
+          apt_started=$(date +%s)
           sudo apt-get update
           sudo apt-get install --no-install-recommends -y \
-            gcc-13 g++-13 make cmake python3 zstd \
+            gcc-13 g++-13 make python3 zstd \
             libstdc++6 zlib1g-dev libzstd-dev libtinfo-dev libxml2-dev
+          echo "T757 A1 apt_seconds=$(( $(date +%s) - apt_started ))"
+          test "$(command -v cmake)" = "$cmake_before"
+          echo "T757 cmake_after=$(command -v cmake) version=$(cmake --version | sed -n '1s/^cmake version //p')"
+          test "$(cmake --version | sed -n '1s/^cmake version //p')" = "$cmake_version"
       - name: Restore untrusted fixed-SHA curated SDK archive cache
         id: sdk-cache
         uses: actions/cache/restore@3edfce9056124e459a23f683a21433670d47daca
