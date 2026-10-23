@@ -1,0 +1,78 @@
+{
+  "base": "77d83dfc00850b14fd7c3bc95e7e3c12e34161fb",
+  "canonical": "Draft17.34",
+  "source": {
+    "prefix_supported.nl": "ac838852e6d83e005b31f99f10b59daf2436556a70bdf5d54b08aa16ed1995ea",
+    "arm_backend_unsupported.nl": "aa6d444f7621df67ff8ac63e712a4cb65aa4608bd62864a4abc984dd93ae6c0d",
+    "semantic_wrong_return.nl": "5b1faa12d0575417e0fc18a3ca5190b0ceb9d88fe1710d0dbbecbf5dd10d29fb",
+    "malformed.nl": "099999865258753cc0965a01a30728c76ab10739e24439228b455961ba972c4b",
+    "array_one.nl": "330024a0dcf6d7b64e8786a4ce95d6675c9ad09ce5a22fd704e72088822ced9b",
+    "array_two.nl": "ae526c1968884c4562249ac4e02d105a7bfd9e76df206cf6e314c9b1239a82e4",
+    "scalar_io_control.nl": "064f20473073546219ebc3ff14c8d9419ef15b8acea4e665af57280dd930538f"
+  },
+  "oracle": {
+    "prefix_supported": {
+      "check": 0,
+      "compile": 0,
+      "public_Copy": "all applicable body/parameters0",
+      "native": 0,
+      "T_old": [
+        42,
+        66
+      ],
+      "T_final": [
+        [
+          98,
+          17
+        ],
+        [
+          213,
+          42
+        ]
+      ],
+      "H_payload": [
+        81,
+        143
+      ]
+    },
+    "arm_backend_unsupported": {
+      "check": 0,
+      "compile": 4,
+      "C_bytes": 0,
+      "public_Copy": "arm body/parameters may be precision3 at adopted main; P786 unadopted, never substitute",
+      "classification": "selected source, backend/owned profile not implemented"
+    },
+    "semantic_wrong_return": {
+      "check": 3,
+      "compile": 3,
+      "category": "semantic",
+      "C_bytes": 0
+    },
+    "malformed": {
+      "check": 3,
+      "compile": 3,
+      "category": "syntax",
+      "C_bytes": 0
+    },
+    "array_one": {
+      "check": 3,
+      "compile": 3,
+      "category": "unsupported",
+      "source_eligibility": "selected direct A/B; ordinary parser support missing at fixed main; P801 not adopted"
+    },
+    "array_two": {
+      "check": 3,
+      "compile": 3,
+      "category": "unsupported",
+      "source_eligibility": "selected direct A/B; ordinary parser support missing at fixed main; P801 not adopted"
+    },
+    "scalar_io_control": {
+      "check": 0,
+      "compile": 0,
+      "native": 0
+    }
+  },
+  "named_contract": "success exactly matches normal stdout; reject/host failure preserves existing correct bytes, no stage residue; after rejection valid retry succeeds",
+  "host_faults": "existing fixed-main p694 filesystem/malloc harness on new scalar control only; no semantic-world tamper; not exhaustive H allocation-failure coverage",
+  "diagnostic_contract": "keep phase categories/codes/exit ABI; repeat same-path source diagnostics deterministic; no source-rule or checker changes"
+}
