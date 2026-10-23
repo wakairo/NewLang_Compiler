@@ -1,0 +1,90 @@
+{
+  "base": "77d83dfc00850b14fd7c3bc95e7e3c12e34161fb",
+  "canonical": "Draft17.34",
+  "source": {
+    "router_true.nl": "8534e4a80e43aaea5e6a0879632e4046fde59c7b512a22dad204e5a7c7b67a18",
+    "router_false.nl": "4d16abc9e185fd9a2bc7cf266307458c69cdeeb22036c6414a45ea052f63d521",
+    "thermal_false.nl": "5a68203de5b0dd34a954f00c0d5e16e4c882378c6120703dbc99c243d0d79b66",
+    "thermal_true.nl": "5edd3db04a2a5d3dc25c6bf3d6986d888477d6bc1fb681dfb7734e95b8bdcfba",
+    "negative_read_formal.nl": "bb0fef81ecd51c66b3b8b12058c104629ee3f66a6ca8c5d154e2df969a469146",
+    "negative_wrong_field.nl": "410c5e931d0e3a4e82296d363c22da04a5800f43c341be6e3a6f480c9e07f7ed",
+    "negative_scope_escape.nl": "52c7ced443264085a5f511804157b3298c402df6f601204c89f345b736fd0cc1"
+  },
+  "prediction": "selected T-only known calls + existing IF; expect source CHECK possible, first public IF/call proof may have precision limitation; no issuer fixes allowed",
+  "oracle": {
+    "router_true": {
+      "runtime_calls": 2,
+      "old": [
+        67,
+        29
+      ],
+      "live": [
+        12,
+        94
+      ],
+      "history": [
+        94,
+        185
+      ]
+    },
+    "router_false": {
+      "runtime_calls": 2,
+      "old": [
+        67,
+        29
+      ],
+      "live": [
+        12,
+        133
+      ],
+      "history": [
+        133,
+        185
+      ]
+    },
+    "thermal_false": {
+      "runtime_calls": 2,
+      "old": [
+        61,
+        232
+      ],
+      "sensor": [
+        105,
+        170
+      ],
+      "journal": [
+        16,
+        105
+      ]
+    },
+    "thermal_true": {
+      "runtime_calls": 1,
+      "old": [
+        61
+      ],
+      "sensor_before_return": [
+        88,
+        170
+      ],
+      "journal_unmodified": [
+        16,
+        232
+      ],
+      "post_if_read_and_second_call": "not executed"
+    }
+  },
+  "identity": "one nominal; two original lexical record roots, distinct root/incarnation, first index1/router or0/thermal; second independent original index0/router or1/thermal; sibling facts preserved; second incoming is actual postcall FIELD_READ result, not host/literal replacement",
+  "negative_expectation": {
+    "negative_read_formal": "semantic write via read-ref refused",
+    "negative_wrong_field": "semantic unknown declared field refused",
+    "negative_scope_escape": "no loan/ref scope escape"
+  },
+  "public_controls_if_gate_passes": [
+    "foreign source world with same numeric IDs",
+    "wrong actual field/formal",
+    "pre-change fact restored as current",
+    "post-change Copy used as returned old",
+    "cross-arm world substitute"
+  ],
+  "STOP": "first semantic/source/public precision; do not add issuer/proof/CFG/effect mechanism"
+}
