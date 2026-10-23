@@ -77,8 +77,25 @@ jobs:
           . .deps/activate.sh
           cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type || 'Debug' }} \
             -DNEWLANG_SANITIZER=${{ matrix.sanitizer }}
+          echo "T753 runner nproc=$(nproc) nproc_all=$(nproc --all)"
+          echo "T753 affinity=$(grep "^Cpus_allowed_list:" /proc/self/status || true)"
+          grep -E "^Mem(Total|Available):" /proc/meminfo | sed "s/^/T753 /"
+          for f in /sys/fs/cgroup/cpu.max /sys/fs/cgroup/memory.max /sys/fs/cgroup/memory.current; do
+            if test -r "$f"; then echo "T753 $f=$(cat "$f")"; fi
+          done
+          ctest --version | head -n 1
+          echo "T753 chosen CTest workers=2"
+          build_started=$(date +%s)
           cmake --build build --parallel 2
-          ctest --test-dir build --output-on-failure
+          echo "T753 build_wall_seconds=$(( $(date +%s) - build_started ))"
+          ctest_started=$(date +%s)
+          set +e
+          ctest --test-dir build --parallel 2 --output-on-failure
+          ctest_status=$?
+          set -e
+          echo "T753 ctest_wall_seconds=$(( $(date +%s) - ctest_started )) exit=$ctest_status"
+          if test -r /sys/fs/cgroup/memory.peak; then echo "T753 memory_peak_bytes=$(cat /sys/fs/cgroup/memory.peak)"; fi
+          exit "$ctest_status"
 
       - name: Save verified original archive only on trusted successful main push
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && steps.sdk-cache.outputs.cache-hit != 'true'

@@ -93,7 +93,22 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          ctest --test-dir build-frontend --output-on-failure
+          echo "T753 runner nproc=$(nproc) nproc_all=$(nproc --all)"
+          echo "T753 affinity=$(grep "^Cpus_allowed_list:" /proc/self/status || true)"
+          grep -E "^Mem(Total|Available):" /proc/meminfo | sed "s/^/T753 /"
+          for f in /sys/fs/cgroup/cpu.max /sys/fs/cgroup/memory.max /sys/fs/cgroup/memory.current; do
+            if test -r "$f"; then echo "T753 $f=$(cat "$f")"; fi
+          done
+          ctest --version | head -n 1
+          echo "T753 chosen CTest workers=2"
+          ctest_started=$(date +%s)
+          set +e
+          ctest --test-dir build-frontend --parallel 2 --output-on-failure
+          ctest_status=$?
+          set -e
+          echo "T753 ctest_wall_seconds=$(( $(date +%s) - ctest_started )) exit=$ctest_status"
+          if test -r /sys/fs/cgroup/memory.peak; then echo "T753 memory_peak_bytes=$(cat /sys/fs/cgroup/memory.peak)"; fi
+          exit "$ctest_status"
 
       - name: Verify real Production source/checker CLI path (NO LLVM; PARTIAL)
         shell: bash
