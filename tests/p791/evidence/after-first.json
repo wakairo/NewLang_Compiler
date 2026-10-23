@@ -1,0 +1,110 @@
+{
+  "arity3.nl": {
+    "check": {
+      "exit": 3,
+      "bytes": 0,
+      "stderr": "/tmp/night791/tests/p791/sources/arity3.nl:2:25-2:96: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n"
+    },
+    "c17": {
+      "exit": 3,
+      "bytes": 0,
+      "stderr": "/tmp/night791/tests/p791/sources/arity3.nl:2:25-2:96: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n"
+    }
+  },
+  "arity5.nl": {
+    "check": {
+      "exit": 3,
+      "bytes": 0,
+      "stderr": "/tmp/night791/tests/p791/sources/arity5.nl:2:25-2:130: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n"
+    },
+    "c17": {
+      "exit": 3,
+      "bytes": 0,
+      "stderr": "/tmp/night791/tests/p791/sources/arity5.nl:2:25-2:130: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n"
+    }
+  },
+  "copy_array.nl": {
+    "check": {
+      "exit": 3,
+      "bytes": 0,
+      "stderr": "/tmp/night791/tests/p791/sources/copy_array.nl:1:1-6:1: error(unsupported)[ARRAY4-FORM-UNSUPPORTED]: normal Array4 implementation supports only one or two direct local constructors followed by unit; other source forms are not implemented\n"
+    },
+    "c17": {
+      "exit": 3,
+      "bytes": 0,
+      "stderr": "/tmp/night791/tests/p791/sources/copy_array.nl:1:1-6:1: error(unsupported)[ARRAY4-FORM-UNSUPPORTED]: normal Array4 implementation supports only one or two direct local constructors followed by unit; other source forms are not implemented\n"
+    }
+  },
+  "indirect.nl": {
+    "check": {
+      "exit": 3,
+      "bytes": 0,
+      "stderr": "/tmp/night791/tests/p791/sources/indirect.nl:1:27-1:33: error(unsupported)[ARRAY4-FORM-UNSUPPORTED]: standalone Option<u8> source support is not implemented\n"
+    },
+    "c17": {
+      "exit": 3,
+      "bytes": 0,
+      "stderr": "/tmp/night791/tests/p791/sources/indirect.nl:1:27-1:33: error(unsupported)[ARRAY4-FORM-UNSUPPORTED]: standalone Option<u8> source support is not implemented\n"
+    }
+  },
+  "one.nl": {
+    "check": {
+      "exit": 0,
+      "bytes": 0,
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 0,
+      "bytes": 696,
+      "stderr": ""
+    }
+  },
+  "option_function.nl": {
+    "check": {
+      "exit": 3,
+      "bytes": 0,
+      "stderr": "/tmp/night791/tests/p791/sources/option_function.nl:1:13-1:19: error(unsupported)[ARRAY4-FORM-UNSUPPORTED]: standalone Option<u8> source support is not implemented\n"
+    },
+    "c17": {
+      "exit": 3,
+      "bytes": 0,
+      "stderr": "/tmp/night791/tests/p791/sources/option_function.nl:1:13-1:19: error(unsupported)[ARRAY4-FORM-UNSUPPORTED]: standalone Option<u8> source support is not implemented\n"
+    }
+  },
+  "standalone_option.nl": {
+    "check": {
+      "exit": 3,
+      "bytes": 0,
+      "stderr": "/tmp/night791/tests/p791/sources/standalone_option.nl:1:27-1:33: error(unsupported)[ARRAY4-FORM-UNSUPPORTED]: standalone Option<u8> source support is not implemented\n"
+    },
+    "c17": {
+      "exit": 3,
+      "bytes": 0,
+      "stderr": "/tmp/night791/tests/p791/sources/standalone_option.nl:1:27-1:33: error(unsupported)[ARRAY4-FORM-UNSUPPORTED]: standalone Option<u8> source support is not implemented\n"
+    }
+  },
+  "two.nl": {
+    "check": {
+      "exit": 0,
+      "bytes": 0,
+      "stderr": ""
+    },
+    "c17": {
+      "exit": 0,
+      "bytes": 895,
+      "stderr": ""
+    }
+  },
+  "wrong_type.nl": {
+    "check": {
+      "exit": 3,
+      "bytes": 0,
+      "stderr": "/tmp/night791/tests/p791/sources/wrong_type.nl:2:45-2:50: error(semantic)[ARRAY4-ELEMENT-TYPE]: initializer must have exact Option<u8> type\n"
+    },
+    "c17": {
+      "exit": 3,
+      "bytes": 0,
+      "stderr": "/tmp/night791/tests/p791/sources/wrong_type.nl:2:45-2:50: error(semantic)[ARRAY4-ELEMENT-TYPE]: initializer must have exact Option<u8> type\n"
+    }
+  }
+}

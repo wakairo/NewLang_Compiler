@@ -17,7 +17,8 @@ struct NLParser {
     bool have_token;
     size_t depth;
     bool match_scrutinee;
-    NLSyntaxTree *tree; /* Owned only while a fragment call is active. */
+    bool array4_initializer; /* Ordinary direct-constructor context only. */
+    NLSyntaxTree *tree;      /* Owned only while a fragment call is active. */
     NLParseStatus status;
     NLParseDiagnostic failure;
 };
@@ -184,7 +185,14 @@ static NLSyntaxNode *option_ptr(NLParser *parser, NLSourceSpan start)
     if (!expect_punct(parser, '<', "REC-TYPE-PROFILE",
                       "expected Option argument"))
         goto profile;
-    if (NEWLANG_EXPERIMENTAL_OPTION_ARRAY4_SOURCE && word(parser, "u8")) {
+    if (word(parser, "u8")) {
+        if (!NEWLANG_EXPERIMENTAL_OPTION_ARRAY4_SOURCE &&
+            !parser->array4_initializer) {
+            fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, start,
+                 "ARRAY4-FORM-UNSUPPORTED",
+                 "standalone Option<u8> source support is not implemented");
+            return NULL;
+        }
         consume(parser);
         if (!peek(parser))
             return NULL;
@@ -1126,6 +1134,7 @@ static NLSyntaxNode *source_primary(NLParser *parser, bool flat_atom)
 {
     if (!enter(parser))
         return NULL;
+    const bool saved_array = parser->array4_initializer;
     NLSyntaxNode *result = NULL;
     if (word(parser, "loop")) {
         result = source_loop(parser);
@@ -1173,8 +1182,7 @@ static NLSyntaxNode *source_primary(NLParser *parser, bool flat_atom)
              "expected name, call, registered aggregate or lexical block");
         goto done;
     }
-    const bool exact_array =
-        NEWLANG_EXPERIMENTAL_OPTION_ARRAY4_SOURCE && word(parser, "Array");
+    const bool exact_array = word(parser, "Array");
     const bool exact_option = word(parser, "Option");
     const bool u8_literal = word(parser, "u8");
     const bool usize_literal = word(parser, "usize");
@@ -1189,6 +1197,7 @@ static NLSyntaxNode *source_primary(NLParser *parser, bool flat_atom)
     const NLSourceSpan name = parser->token.span;
     consume(parser);
     if (exact_array && punct(parser, '<')) {
+        parser->array4_initializer = true;
         NLSyntaxNode *t = array4_type(parser, name);
         if (t == NULL || !expect_punct(parser, '{', "ARRAY4-OPEN",
                                        "expected Array initializer"))
@@ -1449,6 +1458,7 @@ static NLSyntaxNode *source_primary(NLParser *parser, bool flat_atom)
              "P5-EXPRESSION-UNSUPPORTED", "expression extension outside P5");
     }
 done:
+    parser->array4_initializer = saved_array;
     --parser->depth;
     return parser->status == NL_PARSE_OK ? result : NULL;
 }
@@ -1888,6 +1898,61 @@ static NLSyntaxNode *function_unit(NLParser *parser)
     return root;
 }
 
+/* An implementation-support fence, not a prohibition of Array Copy or
+ * standalone Option in the language. Keep the broader historical test parser
+ * unchanged. Both unit parsing and retained-body reparsing use this fence. */
+static bool array4_word(const NLParser *parser, NLSourceSpan span,
+                        const char *word)
+{
+    NLSourceView text;
+    return nl_source_view(parser->source, span, &text) &&
+           text.length == strlen(word) &&
+           !memcmp(text.bytes, word, text.length);
+}
+static void array4_support(NLParser *parser)
+{
+    if (NEWLANG_EXPERIMENTAL_OPTION_ARRAY4_SOURCE)
+        return;
+    size_t constructors = 0;
+    for (const NLSyntaxNode *n = parser->tree->nodes; n; n = n->owned_next)
+        constructors += n->view.kind == NL_SYNTAX_ARRAY4_CONSTRUCTOR;
+    if (!constructors)
+        return;
+    const NLSyntaxView *root = &parser->tree->root->view;
+    const NLSyntaxNode *body = parser->tree->root;
+    if (root->kind == NL_SYNTAX_FUNCTION_UNIT) {
+        const NLSyntaxNode *fn = root->data.function_unit.declarations;
+        if (root->data.function_unit.count != 1 || !fn ||
+            fn->view.kind != NL_SYNTAX_FUNCTION ||
+            fn->view.data.function.count ||
+            !array4_word(parser, fn->view.data.function.name, "main"))
+            goto unsupported;
+        body = fn->view.data.function.body;
+    }
+    if (!body || body->view.kind != NL_SYNTAX_BLOCK || constructors > 2 ||
+        body->view.data.block.item_count != constructors)
+        goto unsupported;
+    const NLSyntaxNode *item = body->view.data.block.items;
+    for (size_t i = 0; i < constructors; ++i) {
+        if (!item || item->view.kind != NL_SYNTAX_BINDING ||
+            !item->view.data.binding.initializer ||
+            item->view.data.binding.initializer->view.kind !=
+                NL_SYNTAX_ARRAY4_CONSTRUCTOR)
+            goto unsupported;
+        item = item->argument_next;
+    }
+    const NLSyntaxNode *tail = body->view.data.block.tail;
+    if (!item && tail && tail->view.kind == NL_SYNTAX_EXPR_NAME &&
+        array4_word(parser, tail->view.data.name, "unit"))
+        return;
+unsupported:
+    fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, root->span,
+         "ARRAY4-FORM-UNSUPPORTED",
+         "normal Array4 implementation supports only one or two direct local "
+         "constructors followed by unit; other source forms are not "
+         "implemented");
+}
+
 typedef NLSyntaxNode *(*Fragment)(NLParser *parser);
 
 static NLParseStatus fragment(NLParser *parser, NLSyntaxTree **out_tree,
@@ -1902,6 +1967,7 @@ static NLParseStatus fragment(NLParser *parser, NLSyntaxTree **out_tree,
         (void)nl_lexer_init(&parser->lexer, parser->source);
     parser->have_token = false;
     parser->depth = 0;
+    parser->array4_initializer = false;
     parser->status = NL_PARSE_OK;
     parser->tree = nl_syntax_tree_create(parser->source);
     if (parser->tree == NULL) {
@@ -1910,6 +1976,8 @@ static NLParseStatus fragment(NLParser *parser, NLSyntaxTree **out_tree,
              "host allocation failed while creating syntax owner");
     } else {
         parser->tree->root = parse(parser);
+        if (parser->status == NL_PARSE_OK && parser->tree->root)
+            array4_support(parser);
         if (parser->status == NL_PARSE_OK && peek(parser) &&
             parser->token.kind != NL_TOKEN_EOF) {
             fail(parser, NL_PARSE_SYNTAX_UNSUPPORTED, parser->token.span,

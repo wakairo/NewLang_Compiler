@@ -1,0 +1,110 @@
+{
+  "indirect.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/indirect.nl:1:34-1:36: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/indirect.nl:1:34-1:36: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    }
+  },
+  "option_function.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/option_function.nl:1:20-1:22: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/option_function.nl:1:20-1:22: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    }
+  },
+  "standalone_option.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/standalone_option.nl:1:34-1:36: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/standalone_option.nl:1:34-1:36: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    }
+  },
+  "copy_array.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/copy_array.nl:2:38-2:40: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/copy_array.nl:2:38-2:40: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    }
+  },
+  "wrong_type.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/wrong_type.nl:2:38-2:40: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/wrong_type.nl:2:38-2:40: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    }
+  },
+  "arity5.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/arity5.nl:2:38-2:40: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/arity5.nl:2:38-2:40: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    }
+  },
+  "arity3.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/arity3.nl:2:38-2:40: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/arity3.nl:2:38-2:40: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    }
+  },
+  "two.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/two.nl:2:36-2:38: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/two.nl:2:36-2:38: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    }
+  },
+  "one.nl": {
+    "check": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/one.nl:2:38-2:40: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    },
+    "c17": {
+      "exit": 3,
+      "stdout": "",
+      "stderr": "/tmp/night791/tests/p791/sources/one.nl:2:38-2:40: error(unsupported)[REC-TYPE-PROFILE]: only exact Option<ptr<nominal>> is in this slice\n"
+    }
+  }
+}
