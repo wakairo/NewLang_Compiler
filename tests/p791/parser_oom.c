@@ -17,7 +17,7 @@ void *__wrap_realloc(void *p, size_t n)
 {
     return active && calls++ == at ? NULL : __real_realloc(p, n);
 }
-int main(int argc, char **argv)
+static bool run(int argc, char **argv)
 {
     NLSource *source = NULL;
     NLParser *parser = NULL;
@@ -44,5 +44,9 @@ int main(int argc, char **argv)
     printf("P791 parser reached OOM positions=%zu clean/reuse=PASS\n", at);
     nl_parser_destroy(parser);
     nl_source_destroy(source);
-    return 0;
+    return true;
+}
+int main(int argc, char **argv)
+{
+    return run(argc, argv) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
