@@ -1,0 +1,114 @@
+[
+  {
+    "source": "limits_h_first.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stderr": ""
+  },
+  {
+    "source": "limits_h_first.nl",
+    "mode": "c17",
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: tests/p761/sources/limits_h_first.nl\n"
+  },
+  {
+    "source": "negative_consumed_domain.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p761/sources/negative_consumed_domain.nl:24:88-24:94: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n"
+  },
+  {
+    "source": "negative_consumed_domain.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p761/sources/negative_consumed_domain.nl:24:88-24:94: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n"
+  },
+  {
+    "source": "negative_copy_ref.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p761/sources/negative_copy_ref.nl:7:50-7:56: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  },
+  {
+    "source": "negative_copy_ref.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p761/sources/negative_copy_ref.nl:7:50-7:56: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  },
+  {
+    "source": "negative_escaped_ref.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p761/sources/negative_escaped_ref.nl:9:22-9:27: error(semantic)[P3-UNKNOWN-BINDING]: unknown semantic binding\n"
+  },
+  {
+    "source": "negative_escaped_ref.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p761/sources/negative_escaped_ref.nl:9:22-9:27: error(semantic)[P3-UNKNOWN-BINDING]: unknown semantic binding\n"
+  },
+  {
+    "source": "negative_wrong_allocation.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p761/sources/negative_wrong_allocation.nl:4:16-4:16: error(semantic)[P4-ALLOCATION-MISMATCH]: Allocation and Storage have different BackingRegion identities\n"
+  },
+  {
+    "source": "negative_wrong_allocation.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p761/sources/negative_wrong_allocation.nl:4:16-4:16: error(semantic)[P4-ALLOCATION-MISMATCH]: Allocation and Storage have different BackingRegion identities\n"
+  },
+  {
+    "source": "negative_wrong_domain.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p761/sources/negative_wrong_domain.nl:23:67-23:73: error(semantic)[P3-DOMAIN-MISMATCH]: lifetime-ending authority refers to wrong LifetimeDomain\n"
+  },
+  {
+    "source": "negative_wrong_domain.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p761/sources/negative_wrong_domain.nl:23:67-23:73: error(semantic)[P3-DOMAIN-MISMATCH]: lifetime-ending authority refers to wrong LifetimeDomain\n"
+  },
+  {
+    "source": "negative_wrong_self.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p761/sources/negative_wrong_self.nl:1:32-1:38: error(unsupported)[REC-SELF-TARGET]: exact Option target requires the bounded nominal header\n"
+  },
+  {
+    "source": "negative_wrong_self.nl",
+    "mode": "c17",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stderr": "tests/p761/sources/negative_wrong_self.nl:1:32-1:38: error(unsupported)[REC-SELF-TARGET]: exact Option target requires the bounded nominal header\n"
+  },
+  {
+    "source": "tuning_t_first.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stderr": ""
+  },
+  {
+    "source": "tuning_t_first.nl",
+    "mode": "c17",
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: tests/p761/sources/tuning_t_first.nl\n"
+  }
+]
