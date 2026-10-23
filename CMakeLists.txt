@@ -1238,6 +1238,19 @@ if(BUILD_TESTING)
                 "${CMAKE_CURRENT_SOURCE_DIR}/tests/r765_firstpass/frozen_oracle.json"
                 "${r765_case}")
     endforeach()
+    # R769 NON-BLIND calibrated, new independent tests (old R765 immutable).
+    add_executable(r769_calibrated_probe tests/r769_calibrated/probe.c)
+    target_link_libraries(r769_calibrated_probe PRIVATE newlang_semantic newlang_parser)
+    target_link_options(r769_calibrated_probe PRIVATE
+        -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    foreach(r769_case foreign_A foreign_B oom_A oom_B negative_stages)
+        add_test(NAME r769_${r769_case}.calibrated
+            COMMAND "${Python3_EXECUTABLE}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/r769_calibrated/suite.py"
+                "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r769_calibrated_probe>"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/r765_firstpass/frozen_oracle.json"
+                "${r769_case}")
+    endforeach()
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
