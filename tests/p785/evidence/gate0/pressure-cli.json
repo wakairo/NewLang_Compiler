@@ -1,0 +1,21 @@
+{
+  "check": {
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stderr": "",
+    "named_preserved": null
+  },
+  "emit": {
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: tests/p785/sources/pressure_arm.nl\n",
+    "named_preserved": null
+  },
+  "named": {
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: tests/p785/sources/pressure_arm.nl\n",
+    "named_preserved": true
+  },
+  "probe_exit": 0
+}

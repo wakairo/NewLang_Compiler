@@ -1,0 +1,47 @@
+{
+  "utc": "2026-10-23T11:53:34.967196+00:00",
+  "fixed_main": "77d83dfc00850b14fd7c3bc95e7e3c12e34161fb",
+  "canonical": "Draft17.34",
+  "source_origin": "P-authored variation of own frozen valve source, operations now after actual owner RETURN in inner H Some; NON-BLIND, not an R fixture substitution",
+  "source_sha256": "3cfd5ca0027f14c8ee2c1c064d679bcb8ddd27dae1339165347ca0ad4c50f82f",
+  "external_R_B_sha256": "12c5c66c413a57fd78549cb4563c71c6831d0f151b53b2d4569d32f7b50a1af5",
+  "external_R_A_sha256": "a516361123d26de17ac6e5f9a81cc530f50b6509379a960ca20e78a2df0b6a0d",
+  "external_R_oracle_sha256": "2c14f494b84c0bfe9a93500fa962e7fa163d798f5cd9a900353189b42fca7a22",
+  "oracle": {
+    "T0_initial": [
+      57,
+      237
+    ],
+    "T0_index": 1,
+    "T0_old": 237,
+    "T0_new": 97,
+    "T0_sibling": 57,
+    "T1_initial": [
+      14,
+      203
+    ],
+    "T1_index": 0,
+    "T1_old": 14,
+    "T1_new": 237,
+    "T1_sibling": 203,
+    "H_payload": [
+      105,
+      249
+    ],
+    "T_calls": 2,
+    "actual_H_sites": 2,
+    "owner_local_RETURN": "original tail exactly once; no rights from T"
+  },
+  "before_expected": "CHECK0, arm public Copy body+parameters3 at !caller_nodes; C17 CLI4 zero/named unchanged",
+  "after_gate": "only authentic snapshot completion then public validators OK; if next predicate3 STOP; C17 must remain4 zero/named unchanged; no B native",
+  "planned_K": 5,
+  "names": [
+    "p785_r_b_public.unit",
+    "p785_pressure_arm_public.unit",
+    "p785_arm_integrity.unit",
+    "p785_issuer_oom.unit",
+    "p785_cli_boundaries.integration"
+  ],
+  "expected_full": 448,
+  "expected_partial": 447
+}
