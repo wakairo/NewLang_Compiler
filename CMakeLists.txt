@@ -1310,3 +1310,16 @@ if(BUILD_TESTING)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
 endif()
+
+# R860: bounded source-original Array4 evidence in retained *build* stdout.
+# R-only diagnostic; no CTest/producer/fixture changes, no fast gate.
+if(BUILD_TESTING)
+    add_custom_target(r859_original_array4_physical_audit ALL
+        COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r859/physical_audit.py"
+            "$<TARGET_FILE:newlangc>"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r859"
+            "${NEWLANG_SANITIZER}"
+        DEPENDS newlangc
+        VERBATIM)
+endif()
