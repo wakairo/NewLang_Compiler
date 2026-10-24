@@ -22,6 +22,7 @@ static bool exercise(const char *path)
     CHECK(before &&
           test_state((NLSemanticContext *)o.returned.field.entry, before));
     calls = 0;
+    hit = false;
     fail_at = SIZE_MAX;
     injecting = true;
     NLCheckStatus s = unit_prefix_validate(p, &o.returned);
