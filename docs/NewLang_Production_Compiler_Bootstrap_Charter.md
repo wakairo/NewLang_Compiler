@@ -1,5 +1,7 @@
 # NewLang Production Compiler Bootstrap Charter
 
+> **Historical P0 charter (not the current backend rollout selection).** この文書の「Primary backend: LLVM」およびDraft17.4はP0着手時の構想・参照基点を保存する記述。2026-10-24のCoordinationが採用した**現v0の実装経路**は [Backend 実行方針とアーキテクチャ裁定](NewLang_Backend_Execution_Policy.md) を参照。現行言語正本は [CURRENT_SPEC](reference/CURRENT_SPEC.md) が指定するDraft。将来のLLVM backend選択肢を廃止したものではない。
+
 **Status:** Production compiler track bootstrap charter  
 **Scope:** P0 — Production Compiler Bootstrap  
 **Language implementation:** C  
