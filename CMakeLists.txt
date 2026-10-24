@@ -1297,6 +1297,20 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # R848: independent source-issued callee IF Copy and conservative caller join.
+    add_executable(r848_probe tests/r848/probe.c)
+    target_link_libraries(r848_probe PRIVATE newlang_semantic newlang_parser)
+    target_link_options(r848_probe PRIVATE -Wl,--wrap=malloc
+        -Wl,--wrap=nl_copy_body_seal_calls)
+    add_test(NAME r848_heliograph_public.unit COMMAND r848_probe public
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r848/heliograph.nl" 0 1 214 163 37)
+    add_test(NAME r848_barometer_public.unit COMMAND r848_probe public
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r848/barometer.nl" 1 1 92 48 11)
+    add_test(NAME r848_world_loan_return_negative.unit COMMAND r848_probe negative
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r848/heliograph.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r848/barometer.nl")
+    add_test(NAME r848_issuer_oom_rollback.unit COMMAND r848_probe oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r848/heliograph.nl")
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
