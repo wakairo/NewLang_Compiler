@@ -108,6 +108,13 @@ target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic n
 include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
+    # R881 is a NEW calibrated replay; old R875 witness remains untouched.
+    add_executable(r881_owned_probe tests/r881/owned_probe.c)
+    target_link_libraries(r881_owned_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME r881_calibrated_replay.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r881/verify.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:r881_owned_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r881")
     # SPECULATIVE PR533 opt-in: default compiler/parser stay OFF. Test-only
     # rebuild of the SAME parser exercises Production semantics/owned/C17.
     add_executable(p718_gate_test tests/p718/gate_test.c)
