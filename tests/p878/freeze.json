@@ -1,0 +1,358 @@
+{
+  "base": "a8057d1f82e1c6ca498d1ff43860fdf9822b97a0",
+  "tree": "4b0f7f1b4b40b7594c403f9af751f2ead33b166f",
+  "canonical": "Draft17.34",
+  "cases": {
+    "relay_equal_binding.nl": {
+      "family": "relay",
+      "shape": "binding",
+      "original": [
+        82,
+        199
+      ],
+      "receiver": [
+        23,
+        141
+      ],
+      "field_index": 0,
+      "old": 82,
+      "incoming": 156,
+      "sibling": 199,
+      "normal_arm": 0,
+      "truth": true,
+      "runtime_field": 156,
+      "stores": 1,
+      "operator": "==",
+      "before": {
+        "check_exit": 0,
+        "binding_emit_exit": 4,
+        "statement_emit_exit": 0
+      }
+    },
+    "relay_equal_statement.nl": {
+      "family": "relay",
+      "shape": "statement",
+      "original": [
+        82,
+        199
+      ],
+      "receiver": [
+        23,
+        141
+      ],
+      "field_index": 0,
+      "old": 82,
+      "incoming": 156,
+      "sibling": 199,
+      "normal_arm": 0,
+      "truth": true,
+      "runtime_field": 156,
+      "stores": 1,
+      "operator": "==",
+      "before": {
+        "check_exit": 0,
+        "binding_emit_exit": 4,
+        "statement_emit_exit": 0
+      }
+    },
+    "relay_unequal_binding.nl": {
+      "family": "relay",
+      "shape": "binding",
+      "original": [
+        82,
+        199
+      ],
+      "receiver": [
+        23,
+        141
+      ],
+      "field_index": 0,
+      "old": 82,
+      "incoming": 156,
+      "sibling": 199,
+      "normal_arm": 0,
+      "truth": false,
+      "runtime_field": 82,
+      "stores": 0,
+      "operator": "==",
+      "before": {
+        "check_exit": 0,
+        "binding_emit_exit": 4,
+        "statement_emit_exit": 0
+      }
+    },
+    "relay_unequal_statement.nl": {
+      "family": "relay",
+      "shape": "statement",
+      "original": [
+        82,
+        199
+      ],
+      "receiver": [
+        23,
+        141
+      ],
+      "field_index": 0,
+      "old": 82,
+      "incoming": 156,
+      "sibling": 199,
+      "normal_arm": 0,
+      "truth": false,
+      "runtime_field": 82,
+      "stores": 0,
+      "operator": "==",
+      "before": {
+        "check_exit": 0,
+        "binding_emit_exit": 4,
+        "statement_emit_exit": 0
+      }
+    },
+    "relay_less_binding.nl": {
+      "family": "relay",
+      "shape": "binding",
+      "original": [
+        82,
+        199
+      ],
+      "receiver": [
+        23,
+        141
+      ],
+      "field_index": 0,
+      "old": 82,
+      "incoming": 156,
+      "sibling": 199,
+      "normal_arm": 0,
+      "truth": true,
+      "runtime_field": 156,
+      "stores": 1,
+      "operator": "<",
+      "before": {
+        "check_exit": 0,
+        "binding_emit_exit": 4,
+        "statement_emit_exit": 0
+      }
+    },
+    "relay_less_statement.nl": {
+      "family": "relay",
+      "shape": "statement",
+      "original": [
+        82,
+        199
+      ],
+      "receiver": [
+        23,
+        141
+      ],
+      "field_index": 0,
+      "old": 82,
+      "incoming": 156,
+      "sibling": 199,
+      "normal_arm": 0,
+      "truth": true,
+      "runtime_field": 156,
+      "stores": 1,
+      "operator": "<",
+      "before": {
+        "check_exit": 0,
+        "binding_emit_exit": 4,
+        "statement_emit_exit": 0
+      }
+    },
+    "audio_equal_binding.nl": {
+      "family": "audio",
+      "shape": "binding",
+      "original": [
+        206,
+        44
+      ],
+      "receiver": [
+        119,
+        13
+      ],
+      "field_index": 1,
+      "old": 44,
+      "incoming": 87,
+      "sibling": 206,
+      "normal_arm": 1,
+      "truth": true,
+      "runtime_field": 44,
+      "stores": 0,
+      "operator": "==",
+      "before": {
+        "check_exit": 0,
+        "binding_emit_exit": 4,
+        "statement_emit_exit": 0
+      }
+    },
+    "audio_equal_statement.nl": {
+      "family": "audio",
+      "shape": "statement",
+      "original": [
+        206,
+        44
+      ],
+      "receiver": [
+        119,
+        13
+      ],
+      "field_index": 1,
+      "old": 44,
+      "incoming": 87,
+      "sibling": 206,
+      "normal_arm": 1,
+      "truth": true,
+      "runtime_field": 44,
+      "stores": 0,
+      "operator": "==",
+      "before": {
+        "check_exit": 0,
+        "binding_emit_exit": 4,
+        "statement_emit_exit": 0
+      }
+    },
+    "audio_unequal_binding.nl": {
+      "family": "audio",
+      "shape": "binding",
+      "original": [
+        206,
+        44
+      ],
+      "receiver": [
+        119,
+        13
+      ],
+      "field_index": 1,
+      "old": 44,
+      "incoming": 87,
+      "sibling": 206,
+      "normal_arm": 1,
+      "truth": false,
+      "runtime_field": 87,
+      "stores": 1,
+      "operator": "==",
+      "before": {
+        "check_exit": 0,
+        "binding_emit_exit": 4,
+        "statement_emit_exit": 0
+      }
+    },
+    "audio_unequal_statement.nl": {
+      "family": "audio",
+      "shape": "statement",
+      "original": [
+        206,
+        44
+      ],
+      "receiver": [
+        119,
+        13
+      ],
+      "field_index": 1,
+      "old": 44,
+      "incoming": 87,
+      "sibling": 206,
+      "normal_arm": 1,
+      "truth": false,
+      "runtime_field": 87,
+      "stores": 1,
+      "operator": "==",
+      "before": {
+        "check_exit": 0,
+        "binding_emit_exit": 4,
+        "statement_emit_exit": 0
+      }
+    },
+    "audio_less_binding.nl": {
+      "family": "audio",
+      "shape": "binding",
+      "original": [
+        206,
+        44
+      ],
+      "receiver": [
+        119,
+        13
+      ],
+      "field_index": 1,
+      "old": 44,
+      "incoming": 87,
+      "sibling": 206,
+      "normal_arm": 1,
+      "truth": true,
+      "runtime_field": 44,
+      "stores": 0,
+      "operator": "<",
+      "before": {
+        "check_exit": 0,
+        "binding_emit_exit": 4,
+        "statement_emit_exit": 0
+      }
+    },
+    "audio_less_statement.nl": {
+      "family": "audio",
+      "shape": "statement",
+      "original": [
+        206,
+        44
+      ],
+      "receiver": [
+        119,
+        13
+      ],
+      "field_index": 1,
+      "old": 44,
+      "incoming": 87,
+      "sibling": 206,
+      "normal_arm": 1,
+      "truth": true,
+      "runtime_field": 44,
+      "stores": 0,
+      "operator": "<",
+      "before": {
+        "check_exit": 0,
+        "binding_emit_exit": 4,
+        "statement_emit_exit": 0
+      }
+    }
+  },
+  "negative": {
+    "wrong_argument.nl": {
+      "exit": 3,
+      "diagnostic": "P3-TYPE-MISMATCH"
+    },
+    "wrong_return.nl": {
+      "exit": 3,
+      "diagnostic": "P9-RETURN-TYPE"
+    },
+    "parse_error.nl": {
+      "exit": 3,
+      "diagnostic": "P5-EXPECTED-NAME"
+    }
+  },
+  "profile": {
+    "unit_literal_profile.nl": {
+      "check_exit": 0,
+      "emit_exit": 4,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED"
+    }
+  },
+  "source_sha256": {
+    "audio_equal_binding.nl": "3924bd89b627660ebe01afc8e2f4603b04d50e3604c5650b7cea193a92a7c6b1",
+    "audio_equal_statement.nl": "4b356d0291900cff22991124e439fba1bf690148b7230a3141b8a878e5e44eee",
+    "audio_less_binding.nl": "67c14fec73c5ee0747467c12326d178a981d0c085f56a77ec7ff0c7b5fc589dd",
+    "audio_less_statement.nl": "5997aad7c5e7c94a1f3be83b225d58493057180acaac60f86a96e572c21fc6b0",
+    "audio_unequal_binding.nl": "8a26ee0f10efc42656cd3ded71ad42838b82575ac46ecd2e4d1f48d87dbf3972",
+    "audio_unequal_statement.nl": "39d7551af6572e1e376d610acb377a22703f8806cf57693bdbad53eaa84e32bb",
+    "parse_error.nl": "c045b7b59d9ca69aef9f08c6504c3134a57e690c758d377cd21884e63256ddaa",
+    "relay_equal_binding.nl": "37f0b02c60960406ed7e641ab457a31d608da9666385aef1d7ef9e192f855d0b",
+    "relay_equal_statement.nl": "a9a37ce238ffc48555f00f3fff9b48b5f174b7a6f80572b042d255f8b9e9d815",
+    "relay_less_binding.nl": "87c27fe6cee292481aebbd4ca9fc0308dc580f7da43b6031e13e549cb0450579",
+    "relay_less_statement.nl": "568660c0876ae54ca4d4454db9105df4b71823ab8dbd6b20b98d0e954a235c00",
+    "relay_unequal_binding.nl": "da21ec969b1d0403f6f66b7e7e0cd60af16852d4feccc68a55f4ec1fcd540fdb",
+    "relay_unequal_statement.nl": "1ee35c38f181fa25725090a46d19c853000bb59ee2ba5ce7df86039fa7ae219f",
+    "unit_literal_profile.nl": "d4f1873375720e0c24bb486d92eca93a9c9f94d67aa7ad6c87feb329adf9612a",
+    "wrong_argument.nl": "ea6ea00b2f91266f0662048809771a00adb115bb031be4f4235e07de3f40cb8e",
+    "wrong_return.nl": "74f77a4cc29b2dd2ae8c913190053202497a90c9b4bcbc7d2fcd44302a23a118"
+  }
+}

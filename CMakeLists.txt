@@ -708,6 +708,25 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/cli.py" "$<TARGET_FILE:newlangc>"
         "$<TARGET_FILE:p866_public>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866" native)
+    add_executable(p878_guard tests/p878/guard.c)
+    target_link_libraries(p878_guard PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    add_test(NAME p878_unit_binding_public.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/cli.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p866_public>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878" public)
+    add_test(NAME p878_backend_guards.unit COMMAND p878_guard
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/relay_equal_binding.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/audio_unequal_binding.nl")
+    add_test(NAME p878_prefix_integrity.unit COMMAND p866_integrity
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/relay_equal_binding.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/audio_unequal_binding.nl")
+    add_test(NAME p878_reached_prefix_oom.unit COMMAND p866_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/relay_unequal_binding.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/audio_equal_binding.nl")
+    add_test(NAME p878_source_cli.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/cli.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p866_public>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878" native)
     add_executable(p817_public tests/p817/public.c)
     add_executable(p817_integrity tests/p817/integrity.c)
     add_executable(p817_oom tests/p817/oom.c)
