@@ -687,6 +687,27 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(p817_public tests/p817/public.c)
+    add_executable(p817_integrity tests/p817/integrity.c)
+    add_executable(p817_oom tests/p817/oom.c)
+    foreach(target p817_public p817_integrity p817_oom)
+        target_link_libraries(${target} PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    endforeach()
+    target_link_options(p817_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=nl_copy_body_seal_calls)
+    add_test(NAME p817_pump_public.unit COMMAND p817_public
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/pump_true.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/pump_false.nl" 0)
+    add_test(NAME p817_charge_public.unit COMMAND p817_public
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/charge_true.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/charge_false.nl" 1)
+    add_test(NAME p817_arm_integrity.unit COMMAND p817_integrity
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/charge_false.nl")
+    add_test(NAME p817_issuer_oom.unit COMMAND p817_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/pump_false.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/charge_false.nl")
+    add_test(NAME p817_cli_boundaries.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p817/cli.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}")
     add_executable(p785_public tests/p785/public.c)
     add_executable(p785_integrity tests/p785/integrity.c)
     add_executable(p785_oom tests/p785/oom.c)
