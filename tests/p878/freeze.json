@@ -326,8 +326,8 @@
       "diagnostic": "P9-RETURN-TYPE"
     },
     "parse_error.nl": {
-      "exit": 2,
-      "diagnostic": null
+      "exit": 3,
+      "diagnostic": "P5-EXPECTED-NAME"
     }
   },
   "profile": {
