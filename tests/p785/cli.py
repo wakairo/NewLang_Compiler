@@ -1,4 +1,4 @@
-"""Ordinary CLI boundary only; no R-B native/backend expansion."""
+"""Ordinary CLI boundary only; P790 backend expectation migration; old test bytes archived."""
 from pathlib import Path
 import hashlib,json,subprocess,sys,tempfile
 compiler,root=sys.argv[1:];r=Path(root)
@@ -10,10 +10,10 @@ with tempfile.TemporaryDirectory(prefix='p785-cli-') as tmp:
  for source,digest in [(r/'sources/pressure_arm.nl',f['source_sha256']),(external/'positive_t_interposed.nl',f['external_R_B_sha256'])]:
   assert hashlib.sha256(source.read_bytes()).hexdigest()==digest
   p=run([compiler,'--check',source]);assert p.returncode==0 and not p.stdout and not p.stderr
-  p=run([compiler,source]);assert p.returncode==4 and not p.stdout and b'V1-BACKEND-UNSUPPORTED' in p.stderr
+  p=run([compiler,source]);assert p.returncode==0 and p.stdout and not p.stderr
   target.write_bytes(b'correct original C')
-  named=run([compiler,'--emit-c17-to',target,source]);assert named.returncode==4 and not named.stdout and target.read_bytes()==b'correct original C'
-  print(source.name,'CHECK0 / C174 / zero C / named unchanged; B native NOT TESTED')
+  named=run([compiler,'--emit-c17-to',target,source]);assert named.returncode==0 and not named.stdout and target.read_bytes()==p.stdout
+  print(source.name,'CHECK0 / C170 / named exact; native separate P790')
  a=external/'positive_h_first.nl';assert hashlib.sha256(a.read_bytes()).hexdigest()==f['external_R_A_sha256']
  p=run([compiler,'--check',a]);assert p.returncode==0
  p=run([compiler,a]);assert p.returncode==0 and p.stdout and not p.stderr

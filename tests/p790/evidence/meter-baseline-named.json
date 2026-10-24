@@ -1,0 +1,6 @@
+{
+  "exit": 4,
+  "stdout": "",
+  "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/night790/tests/p790/sources/meter.nl\n",
+  "preserved": true
+}
