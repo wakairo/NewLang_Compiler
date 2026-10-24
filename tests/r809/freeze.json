@@ -1,0 +1,17 @@
+{
+  "schema": "R809-Gate0-v1",
+  "frozen_before_harness_and_CI": true,
+  "base": "7863e4fc2196273f3a33f5a1b33d1958f9b73b51",
+  "canonical": "Draft17.34",
+  "source_bytes": "GitHub R-only freeze commit, LF ASCII, no post-freeze overwrite",
+  "sha256": {
+    "tests/r809/sources/lexical_dual_copy.nl": "45669ebbea34ffef6bb041e77fe30ccb0489df0eafcb86bf55ed15c817c2be82",
+    "tests/r809/sources/foreign_field.nl": "365dd9ce3f8c455acc38ab8c4920150ac9c0503530429f1c3e6865e346de6b39",
+    "tests/r809/sources/duplicate_owner.nl": "07f6979e3ceafb3e1ac510f0bd3a5b1993c376454314fc433d96f43f1196a86b",
+    "tests/r809/sources/wrong_domain.nl": "8ee41b001956e9bf18c8e266b63f425119ffd2e690b7c8997f32bd14fa200a8c",
+    "tests/r809/sources/wrong_allocation.nl": "c3168fed1e4ef057fee495a567044d09c4fdfcf5e55d5b30b25a3f4893013c2c",
+    "tests/r809/sources/wrong_t_type.nl": "2d1d71e71b3044bd4400ca18b7c0127938a6079cf9160df41d68ac71a2f88fb4",
+    "tests/r809/sources/consumed_domain.nl": "733071226891df94315a6f807c090507137dbafd21523e89cc90e79d06d7583d",
+    "tests/r809/oracle.json": "59c95b5077a266661f1f489a74597baf9ed4aa5fbe76feb076857e892d01e469"
+  }
+}
