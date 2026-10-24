@@ -51,6 +51,17 @@ refused. Default stdout and `--check` retain their existing behavior.
 See [the file-handling contract and tests](tests/p694/README.md) for platform,
 permissions, concurrency and crash limits.
 
+## Direct Array4 construction (bounded ordinary CLI)
+
+`newlangc --check SOURCE.nl` and ordinary C17 emission support a `main()->unit`
+containing one or two direct local `Array<Option<u8>,4>` constructions, each
+with four immediate `Option<u8>::None` initializers, followed by `unit`.
+[Examples and implementation limits](tests/p791/README.md) show the exact shape.
+Array Copy, standalone Option and Option-returning functions remain **implementation
+unsupported**; this is not a language-level prohibition or a decision on their
+source eligibility. No indexing, element borrowing or container operations are
+provided by this construction path.
+
 ## Two-byte settings swap (ordinary CLI, no LLVM)
 
 On Ubuntu 24.04 x86_64, the standalone

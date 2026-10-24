@@ -110,9 +110,9 @@ def main():
     for name, case in manifest['cases'].items():
         source = directory / (name + '.nl')
         default = run([regular, '--check', str(source)])
-        require(default.returncode == 3 and not default.stdout and
-                'REC-TYPE-PROFILE' in default.stderr,
-                'default-OFF isolation lost')
+        expected_regular = run([compiler, '--check', str(source)])
+        require(default.returncode == expected_regular.returncode and not default.stdout,
+                'P791 ordinary direct-constructor CHECK differs from opt-in')
         expected = case['expected']
         if expected['check']:
             for args in [['--check'], []]:
