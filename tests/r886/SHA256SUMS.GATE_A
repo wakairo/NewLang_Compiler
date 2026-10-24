@@ -1,0 +1,8 @@
+258d707f39eadfbbd6cb0c9c13a561d7c02d00a762f214fce213ed5f1572716c  tests/r886/normal.nl
+5dac81b50c4f36b0f42248ead97852da35168db0c4d8e997491b355b71ff9bc5  tests/r886/terminal.nl
+6168939cca405c4d8036ac984c2ce5a227e734c9b074bc8e62eebc0155e6a71c  tests/r886/oracle.json
+edab9f434672f9cf127b853becc85f582021f985559d4235a415d4c93bf73179  tests/r886/negative/bad-field.nl
+727d72eacab0c316544530bc2139bdab4d199bc9174a96b404132c93ca590047  tests/r886/negative/bad-argument-type.nl
+3257fb695be9b4ed0af81768fa9e3bea65d8e02c2cd06801c19d61c19231db54  tests/r886/negative/bad-equality-type.nl
+73fad63dd1de226840d3803c3199c636629402efa52925c28e928bbbd2dd9cf4  tests/r886/negative/bad-scoped-ref-escape.nl
+f5e7e87175c827c3f77d237535d80010e829f0a2013db8c367ffe7d0b350825f  tests/r886/negative/bad-return-inside-loan.nl
