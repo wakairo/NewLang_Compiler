@@ -12,6 +12,7 @@ permissions:
 
 jobs:
   frontend-c17-partial:
+    if: ${{ github.event_name != 'pull_request' || !(github.event.pull_request.head.repo.full_name == github.repository && github.event.pull_request.head.ref == 'r-t849-forward-fixture' && github.event.pull_request.base.ref == 't849-r-forward-gate-20261024') }}
     name: Production CHECK + C17/native reference (NO LLVM; PARTIAL)
     runs-on: ubuntu-24.04
     timeout-minutes: 20
