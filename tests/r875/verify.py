@@ -40,11 +40,11 @@ def single(pattern, text):
 
 
 def function_scope(c, name):
-    m = single(r"\\b(?:static\\s+)?(?:void|int)\\s+" + re.escape(name)
-               + r"\\(void\\)\\s*\\{", c)
+    m = single(r"\b(?:static\s+)?(?:void|int)\s+" + re.escape(name)
+               + r"\(void\)\s*\{", c)
     opening = m.end() - 1
     depth = 1
-    tokens = re.finditer(r'''/\\*.*?\\*/|//[^\\n]*|"(?:\\\\.|[^"\\\\])*"|'(?:\\\\.|[^'\\\\])*'|[{}]''',
+    tokens = re.finditer(r'''/\*.*?\*/|//[^\n]*|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|[{}]''',
                          c[opening + 1:], re.DOTALL)
     for token in tokens:
         if token.group() == "{":
@@ -63,8 +63,8 @@ def observer(c, facts, initial_a, initial_b, final_a, final_b):
     expected_initial = {first: initial_a, second: initial_b}
     expected_final = {first: final_a, second: final_b}
     main_open, main_close = function_scope(c, "main")
-    call = single(r"\\bnl_fn_\\d+\\(\\);", c[main_open + 1:main_close])
-    owner_name = re.search(r"nl_fn_\\d+", call.group()).group()
+    call = single(r"\bnl_fn_\d+\(\);", c[main_open + 1:main_close])
+    owner_name = re.search(r"nl_fn_\d+", call.group()).group()
     owner_open, owner_close = function_scope(c, owner_name)
     assert owner_open < owner_close
     inserted = {}
@@ -73,15 +73,15 @@ def observer(c, facts, initial_a, initial_b, final_a, final_b):
         for index in range(2):
             declarations.append(f"static const volatile uint8_t *r875_{binding}_{index};")
     for binding, values in expected_initial.items():
-        ctor = single(r"(?:const )?nl_type_\\d+ nl_local_" + str(binding)
-                      + r" = \\{[^;]+;", c)
+        ctor = single(r"(?:const )?nl_type_\d+ nl_local_" + str(binding)
+                      + r" = \{[^;]+;", c)
         assert owner_open < ctor.start() < ctor.end() < owner_close
         checks = []
         for index, value in enumerate(values):
             name = f"r875_{binding}_{index}"
             checks.append(f"{name}=&nl_local_{binding}.f{index};")
             checks.append(f"if (*{name}!={value}) exit(93);")
-        inserted[ctor.end()] = "\\n    " + "\\n    ".join(checks) + "\\n"
+        inserted[ctor.end()] = "\n    " + "\n    ".join(checks) + "\n"
     last_checks = []
     for binding, values in expected_final.items():
         for index, value in enumerate(values):
@@ -90,13 +90,13 @@ def observer(c, facts, initial_a, initial_b, final_a, final_b):
     for binding in expected_initial:
         for index in range(2):
             last_checks.append(f"r875_{binding}_{index}=NULL;")
-    inserted[owner_close] = "\\n    " + "\\n    ".join(last_checks) + "\\n"
-    wrapper_return = single(r"\\breturn 0;\\s*\\}", c[main_open:main_close])
+    inserted[owner_close] = "\n    " + "\n    ".join(last_checks) + "\n"
+    wrapper_return = single(r"\breturn 0;\s*\}", c[main_open:main_close + 1])
     position = main_open + wrapper_return.start()
-    inserted[position] = "if (!r875_ok) return 93;\\n    "
+    inserted[position] = "if (!r875_ok) return 93;\n    "
     for position, text in sorted(inserted.items(), reverse=True):
         c = c[:position] + text + c[position:]
-    return c.replace("typedef struct", "\\n".join(declarations) + "\\n\\ntypedef struct", 1)
+    return c.replace("typedef struct", "\n".join(declarations) + "\n\ntypedef struct", 1)
 
 
 with tempfile.TemporaryDirectory(prefix="r875-") as scratch:
