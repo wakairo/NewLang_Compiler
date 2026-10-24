@@ -111,7 +111,8 @@ static bool inspect(const char *path, const char *foreign_path, size_t arm,
         NLIfFieldEvent changed_event = event;
         changed_event.field.child++;
         CHECK(nl_checked_if_return_event_validate(u.body, u.conditional, arm, 0,
-                                                  &changed_event) != NL_CHECK_OK);
+                                                  &changed_event) !=
+              NL_CHECK_OK);
         changed_event = event;
         changed_event.change = false;
         CHECK(nl_checked_if_return_event_validate(u.body, u.conditional, arm, 0,
