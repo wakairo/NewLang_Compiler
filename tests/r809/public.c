@@ -23,33 +23,43 @@ static bool test(const char *filename)
         CHECK(nl_checked_copy_body_parameters(a.caller, a.call, &par));
         CHECK(nl_checked_copy_body_view(b.caller, b.call, &other_body));
         CHECK(nl_checked_copy_body_parameters(b.caller, b.call, &other_par));
-        /* Equal numeric call and place IDs are not enough across issuer/world. */
+        /* Equal numeric call and place IDs are not enough across issuer/world.
+         */
         CHECK(par.field.parent == other_par.field.parent);
-        CHECK(nl_checked_copy_body_validate(a.caller, a.call, &other_body) != NL_CHECK_OK);
-        CHECK(nl_checked_copy_body_parameters_validate(a.caller, a.call, &other_par) != NL_CHECK_OK);
+        CHECK(nl_checked_copy_body_validate(a.caller, a.call, &other_body) !=
+              NL_CHECK_OK);
+        CHECK(nl_checked_copy_body_parameters_validate(
+                  a.caller, a.call, &other_par) != NL_CHECK_OK);
         NLCopyBodyParameters corrupt = par;
         corrupt.entry = other_par.entry;
-        CHECK(nl_checked_copy_body_parameters_validate(a.caller, a.call, &corrupt) != NL_CHECK_OK);
+        CHECK(nl_checked_copy_body_parameters_validate(
+                  a.caller, a.call, &corrupt) != NL_CHECK_OK);
         corrupt = par;
         corrupt.handoff = other_par.handoff;
-        CHECK(nl_checked_copy_body_parameters_validate(a.caller, a.call, &corrupt) != NL_CHECK_OK);
+        CHECK(nl_checked_copy_body_parameters_validate(
+                  a.caller, a.call, &corrupt) != NL_CHECK_OK);
         corrupt = par;
         corrupt.field.index = 1 - par.field.index;
-        CHECK(nl_checked_copy_body_parameters_validate(a.caller, a.call, &corrupt) != NL_CHECK_OK);
+        CHECK(nl_checked_copy_body_parameters_validate(
+                  a.caller, a.call, &corrupt) != NL_CHECK_OK);
         corrupt = par;
         ++corrupt.field.child_fact;
-        CHECK(nl_checked_copy_body_parameters_validate(a.caller, a.call, &corrupt) != NL_CHECK_OK);
+        CHECK(nl_checked_copy_body_parameters_validate(
+                  a.caller, a.call, &corrupt) != NL_CHECK_OK);
         corrupt = par;
         ++corrupt.loan;
-        CHECK(nl_checked_copy_body_parameters_validate(a.caller, a.call, &corrupt) != NL_CHECK_OK);
+        CHECK(nl_checked_copy_body_parameters_validate(
+                  a.caller, a.call, &corrupt) != NL_CHECK_OK);
         NLSemanticPlaceView parent = {0}, child = {0};
         CHECK(nl_semantic_place_view(par.handoff, par.field.parent, &parent));
         CHECK(nl_semantic_place_view(par.handoff, par.field.child, &child));
         NLCopyBodyView stale = body;
         stale.result.value = child.current_value;
-        CHECK(nl_checked_copy_body_validate(a.caller, a.call, &stale) != NL_CHECK_OK);
+        CHECK(nl_checked_copy_body_validate(a.caller, a.call, &stale) !=
+              NL_CHECK_OK);
         CHECK(valid(a)); /* Never change the genuine issuer view. */
-        printf("R809_ALIEN_COPY call=%zu field_index=%zu old-world-only status=REJECTED\n",
+        printf("R809_ALIEN_COPY call=%zu field_index=%zu old-world-only "
+               "status=REJECTED\n",
                (size_t)a.call, par.field.index);
     }
     node_checked_destroy(&foreign);

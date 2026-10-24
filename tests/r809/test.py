@@ -95,8 +95,8 @@ def c17():
     for lineno, line in enumerate(data.decode("utf-8").splitlines(), 1):
         if re.search(r"\bNL_(?:HEAP|LIVE|MIXED)_[A-Z0-9_]+\s*\(", line):
             print("R815_HOOK_LINE %d %s" % (lineno, line.strip()), flush=True)
-    print("R815_GATE_A_DIAGNOSTIC_RED_EVIDENCE_ONLY", flush=True)
-    raise SystemExit(86)
+    assert digest == "808ae39616f4dfc0da0cb78a09273b059c9f5e0f73cc8c693e21036c59493482", digest
+    print("R815_GATE_A_INVARIANCE_OK", flush=True)
 
 def native():
     checked()

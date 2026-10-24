@@ -39,8 +39,14 @@ void __wrap_free(void *p)
     ++freed;
     __real_free(p);
 }
-size_t test_malloc_calls(void) { return reqs; }
-size_t test_free_calls(void) { return freed; }
+size_t test_malloc_calls(void)
+{
+    return reqs;
+}
+size_t test_free_calls(void)
+{
+    return freed;
+}
 uintptr_t test_allocated_address(size_t index)
 {
     return index < 2 ? addresses[index] : 0;

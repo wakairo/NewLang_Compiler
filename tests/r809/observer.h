@@ -3,21 +3,21 @@
  * Inspect real generated fields, original pointers, owner transfers and frees.
  * Never initialize, repair, write or synthesize guest memory/authority.
  */
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #define R809_ASSERT(x)                                                         \
     do {                                                                       \
-        if (!(x)) {                                                             \
+        if (!(x)) {                                                            \
             fprintf(stderr, "R809 observer violation line %d: %s\n", __LINE__, \
                     #x);                                                       \
             abort();                                                           \
         }                                                                      \
     } while (0)
-#define R809_UNSUPPORTED(label)                                                 \
+#define R809_UNSUPPORTED(label)                                                \
     do {                                                                       \
-        fprintf(stderr, "R809 UNSUPPORTED observer hook: %s\n", label);         \
+        fprintf(stderr, "R809 UNSUPPORTED observer hook: %s\n", label);        \
         abort();                                                               \
     } while (0)
 size_t test_malloc_calls(void);
@@ -34,6 +34,10 @@ static size_t r809_receiver_exit, r809_handoff, r809_returned;
 static const nl_live_tail *r809_local_packet;
 static uint8_t *r809_t[2][2];
 static size_t r809_troots, r809_copies;
+static size_t r809_root_count[2], r809_field_count, r809_heap_copy_count;
+static const nl_node *r809_active_parent;
+static size_t r809_active_root, r809_active_incarnation;
+static unsigned r809_active_write;
 static unsigned r809_tlast[2][2];
 static unsigned r809_old[2] = {172, 94};
 static unsigned r809_new[2] = {206, 172};
@@ -91,18 +95,61 @@ static void r809_initialize(const nl_node *p, size_t domain)
 static void r809_root(const nl_node *p, size_t domain, unsigned write,
                       size_t root, size_t incarnation, size_t scope)
 {
+    static const size_t head_scopes[3] = {3, 4, 5};
+    static const unsigned head_writes[3] = {1, 0, 1};
+    static const size_t tail_scopes[3] = {5, 8, 9};
     size_t i = r809_slot_index(p);
     R809_ASSERT(r809_phase[i] == 4 && domain == r809_domain[i]);
     R809_ASSERT(!r809_active && scope && root && incarnation && write <= 1u);
+    if (i == 0) {
+        R809_ASSERT(root == 5 && incarnation == 8 && r809_root_count[0] < 3);
+        R809_ASSERT(scope == head_scopes[r809_root_count[0]] &&
+                    write == head_writes[r809_root_count[0]]);
+    } else {
+        R809_ASSERT(root == 16 && incarnation == 19 && r809_root_count[1] < 3);
+        R809_ASSERT(scope == tail_scopes[r809_root_count[1]] && write == 0);
+    }
+    ++r809_root_count[i];
     r809_active = scope;
+    r809_active_parent = p;
+    r809_active_root = root;
+    r809_active_incarnation = incarnation;
+    r809_active_write = write;
 }
 static void r809_field(const nl_node *p, const nl_node_option *field,
                        unsigned write, size_t nominal, size_t index,
                        size_t child, size_t incarnation, size_t scope)
 {
-    R809_ASSERT(p == r809_node[0] && field == &p->f0);
-    R809_ASSERT(write == 1 && index == 0 && nominal && child && incarnation);
-    R809_ASSERT(r809_active && scope == r809_active);
+    static const unsigned writes[3] = {1, 0, 1};
+    static const size_t scopes[3] = {3, 4, 5};
+    R809_ASSERT(r809_field_count < 3 && r809_phase[0] == 4 &&
+                r809_phase[1] == 4);
+    R809_ASSERT(p == r809_node[0] && field == &r809_node[0]->f0);
+    R809_ASSERT(write == writes[r809_field_count] && nominal == 11 &&
+                index == 0 && child == 9 && incarnation == 9);
+    R809_ASSERT(r809_active == scope && scope == scopes[r809_field_count]);
+    R809_ASSERT(r809_active_parent == p && r809_active_root == 5 &&
+                r809_active_incarnation == 8 && r809_active_write == write);
+    if (r809_field_count == 0)
+        R809_ASSERT(field->tag == 0 && field->ptr == NULL);
+    else
+        R809_ASSERT(field->tag == 1 && field->ptr == r809_node[1]);
+    ++r809_field_count;
+}
+/* Real guest read copies Option<ptr<RelayCell>> from original head.next.
+ * Passive: compare independently produced destination bytes; never modify. */
+static void r809_copy_link(const nl_node_option *original,
+                           const nl_node_option *copied)
+{
+    R809_ASSERT(r809_field_count == 2 && r809_heap_copy_count == 0);
+    R809_ASSERT(r809_active == 4 && r809_active_parent == r809_node[0] &&
+                r809_active_root == 5 && r809_active_incarnation == 8 &&
+                r809_active_write == 0);
+    R809_ASSERT(original == &r809_node[0]->f0 && copied != original);
+    R809_ASSERT(r809_phase[0] == 4 && r809_phase[1] == 4);
+    R809_ASSERT(original->tag == 1 && copied->tag == original->tag &&
+                original->ptr == r809_node[1] && copied->ptr == original->ptr);
+    ++r809_heap_copy_count;
 }
 static void r809_change_link(const nl_node_option *field,
                              const nl_node_option *prior, size_t change)
@@ -122,6 +169,10 @@ static void r809_scope_end(size_t scope)
 {
     R809_ASSERT(r809_active == scope && scope != 0);
     r809_active = 0;
+    r809_active_parent = NULL;
+    r809_active_root = 0;
+    r809_active_incarnation = 0;
+    r809_active_write = 0;
     ++r809_scope_count;
 }
 static void r809_packet(const nl_live_tail *value)
@@ -134,11 +185,12 @@ static void r809_packet(const nl_live_tail *value)
 static void r809_send(const nl_node *p, void *a, size_t d,
                       const nl_allocation *old_a, const nl_domain *old_d)
 {
-    R809_ASSERT(r809_live_send++ == 0 && p == r809_node[1] &&
-                a == (void *)p && d == r809_domain[1]);
+    R809_ASSERT(r809_live_send++ == 0 && p == r809_node[1] && a == (void *)p &&
+                d == r809_domain[1]);
     R809_ASSERT(old_a->handle == NULL && old_d->token == 0);
 }
-static void r809_enter(nl_node_option *edge, const nl_node *p, void *a, size_t d)
+static void r809_enter(nl_node_option *edge, const nl_node *p, void *a,
+                       size_t d)
 {
     R809_ASSERT(r809_live_enter++ == 0 && edge == &r809_node[0]->f0);
     R809_ASSERT(edge->tag == 1 && edge->ptr == r809_node[1]);
@@ -160,7 +212,8 @@ static void r809_return_packet(nl_live_tail returned)
                 r809_local_packet->domain.token == 0);
 }
 static void r809_receive_packet(nl_live_tail received,
-                                const nl_allocation *old_a, const nl_domain *old_d)
+                                const nl_allocation *old_a,
+                                const nl_domain *old_d)
 {
     R809_ASSERT(r809_live_return == 1 && r809_live_receive++ == 0);
     r809_packet(&received);
@@ -186,8 +239,7 @@ static void r809_copy_call(uint8_t *field, uint8_t old, uint8_t value)
     R809_ASSERT(field == r809_t[call][r809_index[call]]);
     R809_ASSERT(old == r809_old[call] && value == r809_new[call]);
     R809_ASSERT(*field == value);
-    R809_ASSERT(*r809_t[call][1 - r809_index[call]] ==
-                (call == 0 ? 41u : 63u));
+    R809_ASSERT(*r809_t[call][1 - r809_index[call]] == (call == 0 ? 41u : 63u));
 }
 static void r809_verify_t(void)
 {
@@ -201,7 +253,8 @@ static void r809_verify_t(void)
         }
 }
 static void r809_handoff_owner(const nl_node *p, void *a, size_t d,
-                               const nl_allocation *old_a, const nl_domain *old_d)
+                               const nl_allocation *old_a,
+                               const nl_domain *old_d)
 {
     R809_ASSERT(r809_handoff++ == 0 && !r809_active);
     R809_ASSERT(p == r809_node[1] && a == (void *)p && d == r809_domain[1]);
@@ -283,6 +336,8 @@ static void r809_finish(void)
             R809_ASSERT(r809_phase[i] == 9);
     if (successful == 2) {
         R809_ASSERT(r809_node[0] && r809_node[1] && r809_change == 2);
+        R809_ASSERT(r809_field_count == 3 && r809_heap_copy_count == 1);
+        R809_ASSERT(r809_root_count[0] == 3 && r809_root_count[1] == 3);
         R809_ASSERT(r809_live_send == 1 && r809_live_enter == 1 &&
                     r809_live_return == 1 && r809_live_receive == 1);
         R809_ASSERT(r809_local_count == 1 && r809_receiver_enter == 1 &&
@@ -290,45 +345,46 @@ static void r809_finish(void)
                     r809_returned == 1 && r809_copies == 2);
     } else {
         R809_ASSERT(r809_change == 0 && r809_troots == 0 && r809_copies == 0);
+        R809_ASSERT(r809_field_count == 0 && r809_heap_copy_count == 0);
+        R809_ASSERT(r809_root_count[0] == 0 && r809_root_count[1] == 0);
         R809_ASSERT(r809_local_count == 0 && r809_live_send == 0 &&
                     r809_live_receive == 0 && r809_receiver_enter == 0);
     }
     printf("R809_OBSERVER requests=%zu allocations=%zu frees=%zu "
            "T=%u,%u/%u,%u COPY=%zu lexical=%zu received=%zu "
            "original_head=%p original_tail=%p scopes=%zu\n",
-           requests, successful, r809_frees,
-           r809_tlast[0][0], r809_tlast[0][1],
-           r809_tlast[1][0], r809_tlast[1][1], r809_copies,
-           r809_local_count, r809_live_receive,
-           (void *)r809_addr[0], (void *)r809_addr[1], r809_scope_count);
+           requests, successful, r809_frees, r809_tlast[0][0], r809_tlast[0][1],
+           r809_tlast[1][0], r809_tlast[1][1], r809_copies, r809_local_count,
+           r809_live_receive, (void *)r809_addr[0], (void *)r809_addr[1],
+           r809_scope_count);
 }
-#define NL_HEAP_TRIAL(p,n,a) r809_trial(p,n,a)
+#define NL_HEAP_TRIAL(p, n, a) r809_trial(p, n, a)
 #define NL_HEAP_ARM(a) r809_arm(a)
-#define NL_HEAP_SLOT(p,n) r809_slot(p,n)
+#define NL_HEAP_SLOT(p, n) r809_slot(p, n)
 #define NL_HEAP_DOMAIN(d) r809_new_domain(d)
-#define NL_HEAP_INITIALIZE(p,d) r809_initialize(p,d)
-#define NL_HEAP_ROOT(p,d,w,r,i,s) r809_root(p,d,w,r,i,s)
-#define NL_HEAP_FIELD(p,f,w,n,i,c,x,s) r809_field(p,f,w,n,i,c,x,s)
-#define NL_HEAP_CHANGE(f,o,s) r809_change_link(f,o,s)
+#define NL_HEAP_INITIALIZE(p, d) r809_initialize(p, d)
+#define NL_HEAP_ROOT(p, d, w, r, i, s) r809_root(p, d, w, r, i, s)
+#define NL_HEAP_FIELD(p, f, w, n, i, c, x, s) r809_field(p, f, w, n, i, c, x, s)
+#define NL_HEAP_CHANGE(f, o, s) r809_change_link(f, o, s)
 #define NL_HEAP_SCOPE_END(s) r809_scope_end(s)
-#define NL_HEAP_END(p,d) r809_end(p,d)
-#define NL_HEAP_RAW(p,n) r809_raw(p,n)
+#define NL_HEAP_END(p, d) r809_end(p, d)
+#define NL_HEAP_RAW(p, n) r809_raw(p, n)
 #define NL_HEAP_FINALIZE(d) r809_finalize(d)
-#define NL_HEAP_RELEASE(p,b,n) r809_release(p,b,n)
-#define NL_HEAP_HANDOFF(p,a,d,ap,dp) r809_handoff_owner(p,a,d,ap,dp)
-#define NL_HEAP_RECEIVER_ENTER(p,a,d,f,ps,as,ds,ap,dp)                         \
-    r809_receive_enter(p,a,d,f,ps,as,ds,ap,dp)
+#define NL_HEAP_RELEASE(p, b, n) r809_release(p, b, n)
+#define NL_HEAP_HANDOFF(p, a, d, ap, dp) r809_handoff_owner(p, a, d, ap, dp)
+#define NL_HEAP_RECEIVER_ENTER(p, a, d, f, ps, as, ds, ap, dp)                 \
+    r809_receive_enter(p, a, d, f, ps, as, ds, ap, dp)
 #define NL_HEAP_RECEIVER_EXIT() r809_receiver_leave()
-#define NL_HEAP_RETURNED(a,d) r809_owner_returned(a,d)
+#define NL_HEAP_RETURNED(a, d) r809_owner_returned(a, d)
 #define NL_HEAP_FINISH() r809_finish()
-#define NL_LIVE_SEND(p,a,d,ap,dp) r809_send(p,a,d,ap,dp)
-#define NL_LIVE_ENTER(e,p,a,d) r809_enter(e,p,a,d)
+#define NL_LIVE_SEND(p, a, d, ap, dp) r809_send(p, a, d, ap, dp)
+#define NL_LIVE_ENTER(e, p, a, d) r809_enter(e, p, a, d)
 #define NL_LIVE_RETURN(p) r809_return_packet(p)
-#define NL_LIVE_RECEIVE(p,a,d) r809_receive_packet(p,a,d)
+#define NL_LIVE_RECEIVE(p, a, d) r809_receive_packet(p, a, d)
 #define NL_MIXED_OWNER_LOCAL(p) r809_local(p)
-#define NL_MIXED_COPY_BIND(f,s,a,b) r809_copy_bind(f,s,a,b)
-#define NL_MIXED_COPY_CALL(p,o,n) r809_copy_call(p,o,n)
+#define NL_MIXED_COPY_BIND(f, s, a, b) r809_copy_bind(f, s, a, b)
+#define NL_MIXED_COPY_CALL(p, o, n) r809_copy_call(p, o, n)
 /* Deliberately STOP instead of silently dropping an unverified extra hook. */
 #define NL_HEAP_RELOAN(...) R809_UNSUPPORTED("NL_HEAP_RELOAN")
-#define NL_HEAP_COPY(...) R809_UNSUPPORTED("NL_HEAP_COPY")
+#define NL_HEAP_COPY(p, v) r809_copy_link(p, v)
 #define NL_MIXED_COPY_STORE(...) R809_UNSUPPORTED("NL_MIXED_COPY_STORE")
