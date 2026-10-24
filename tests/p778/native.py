@@ -74,14 +74,14 @@ with tempfile.TemporaryDirectory(prefix='p778-native-') as temporary:
   p=run([compiler,'--emit-c17-to',target,source]);assert p.returncode==3 and target.read_bytes()==b'correct output'
   print(name,'refused first observed phase',checked.stderr.decode().strip())
 
- # Valid B remains unsupported; public Copy receipt's precision failure is distinct from CHECK.
+ # P790 migration: valid B now emits; public Copy receipt's precision failure is distinct from CHECK.
  b=r/'external_r776/positive_t_interposed.nl'
  assert hashlib.sha256(b.read_bytes()).hexdigest()==manifest['external_sha256'][b.name]
  checked=run([compiler,'--check',b]);require(checked,'B CHECK')
- emitted=run([compiler,b]);assert emitted.returncode==4 and not emitted.stdout
+ emitted=run([compiler,b]);assert emitted.returncode==0 and emitted.stdout and not emitted.stderr
  target=tmp/'b-saved.c';target.write_bytes(b'B original correct C')
- named=run([compiler,'--emit-c17-to',target,b]);assert named.returncode==4 and target.read_bytes()==b'B original correct C'
+ named=run([compiler,'--emit-c17-to',target,b]);assert named.returncode==0 and target.read_bytes()==emitted.stdout
  evidence=run([probe,b]);require(evidence,'B public probe')
  assert 'body_status=0 parameters_status=0' in evidence.stdout.decode()
- assert 'NODE_BACKEND status=1 output_null=1 output_length_unchanged=1' in evidence.stdout.decode()
- print('R-B calibrated CHECK0/public Copy0/C174 zeroC named preserved')
+ assert 'NODE_BACKEND status=0' in evidence.stdout.decode()
+ print('P790 R-B calibrated CHECK0/public Copy0/C170 named exact; native in P790')

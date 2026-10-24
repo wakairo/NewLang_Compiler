@@ -3185,8 +3185,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
     Value result = {0};
     if (!block(&e, &env, nl_checked_root(body), &result) || e.pending_live ||
         e.roots != (e.three_lexical_links ? 3u : 2u) || result.type != e.unit ||
-        (e.copy_type &&
-         (e.copy_roots != 2 || e.copy_calls != e.copy_expected_calls)) ||
+        (e.copy_type && (!e.copy_roots || e.copy_roots > 2 ||
+                         e.copy_calls != e.copy_expected_calls)) ||
         (e.no_pre_read && e.producer_calls != 1) ||
         (e.custody && (!e.custody_authorized || e.recipient_calls != 1)) ||
         (e.allocated &&

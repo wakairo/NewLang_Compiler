@@ -68,9 +68,10 @@ static bool run(const char *path, size_t expected)
     }
     char *text = NULL;
     size_t length = 923;
-    CHECK(nl_checked_c_node(n.entry, &text, &length) == NL_NODE_C_UNSUPPORTED &&
-          !text && length == 923);
-    printf("B C17 unchanged: unsupported/slots intact; native NOT TESTED\n");
+    CHECK(nl_checked_c_node(n.entry, &text, &length) == NL_NODE_C_OK && text &&
+          length > 0);
+    free(text);
+    printf("P790 migration: issued public proof and C17 OK; native separate\n");
     node_checked_destroy(&n);
     return true;
 }
