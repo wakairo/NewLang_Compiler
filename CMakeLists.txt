@@ -687,6 +687,12 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(r875_owned_probe tests/r875/owned_probe.c)
+    target_link_libraries(r875_owned_probe PRIVATE newlang_semantic newlang_parser)
+    add_test(NAME r875_fresh_blind_unit.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r875/verify.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:r875_owned_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r875")
     add_executable(p866_public tests/p866/public.c)
     add_executable(p866_integrity tests/p866/integrity.c)
     add_executable(p866_oom tests/p866/oom.c)
