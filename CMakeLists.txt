@@ -1297,6 +1297,18 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # R856: original R848 source bytes, separate diagnostic observer/cleanup.
+    add_executable(r856_probe tests/r856/probe.c)
+    target_link_libraries(r856_probe PRIVATE newlang_semantic newlang_parser)
+    target_link_options(r856_probe PRIVATE -Wl,--wrap=malloc
+        -Wl,--wrap=calloc -Wl,--wrap=realloc
+        -Wl,--wrap=nl_copy_body_seal_calls)
+    add_test(NAME r856_heliograph_diagnostic.unit COMMAND r856_probe public
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r856/heliograph.nl" 0 1 214 163 37)
+    add_test(NAME r856_barometer_diagnostic.unit COMMAND r856_probe public
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r856/barometer.nl" 1 1 92 48 11)
+    add_test(NAME r856_issuer_baseline_diagnostic.unit COMMAND r856_probe baseline
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r856/heliograph.nl")
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
