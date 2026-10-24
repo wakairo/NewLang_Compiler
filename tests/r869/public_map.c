@@ -71,7 +71,8 @@ static int validate(const NLCheckedFragment *body, size_t expected)
             !nl_source_view(nl_checked_source(body), binding->name, &name) ||
             name.length == 0 || name.length > 120 ||
             !nl_semantic_type_view(world, record->array_type, &array) ||
-            !nl_semantic_type_view(world, record->element_type, &element_type) ||
+            !nl_semantic_type_view(world, record->element_type,
+                                   &element_type) ||
             array.kind != NL_TYPE_ARRAY || array.element_count != 4 ||
             array.target != record->element_type ||
             element_type.kind != NL_TYPE_SUM)
