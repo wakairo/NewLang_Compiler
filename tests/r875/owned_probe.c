@@ -130,9 +130,11 @@ static bool inspect(const char *path, const char *foreign_path, size_t arm,
 
 int main(int argc, char **argv)
 {
-    return argc == 3 &&
-                   inspect(argv[1], argv[2], 0, 31, 72) &&
-                   inspect(argv[2], argv[1], 1, 57, 94)
-               ? 0
-               : 1;
+    if (argc != 3)
+        return 1;
+    if (!inspect(argv[1], argv[2], 0, 31, 72))
+        return 1;
+    if (!inspect(argv[2], argv[1], 1, 57, 94))
+        return 1;
+    return 0;
 }
