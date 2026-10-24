@@ -706,6 +706,67 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(p866_public tests/p866/public.c)
+    add_executable(p866_integrity tests/p866/integrity.c)
+    add_executable(p866_oom tests/p866/oom.c)
+    foreach(target p866_public p866_integrity p866_oom)
+        target_link_libraries(${target} PRIVATE newlang_semantic newlang_parser)
+    endforeach()
+    target_link_options(p866_oom PRIVATE -Wl,--wrap=calloc)
+    add_test(NAME p866_equality_public.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/cli.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p866_public>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866" public)
+    add_test(NAME p866_prefix_integrity.unit COMMAND p866_integrity
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/trim_true.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/fan_false.nl")
+    add_test(NAME p866_reached_validator_oom.unit COMMAND p866_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/trim_false.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/fan_true.nl")
+    add_test(NAME p866_source_cli.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/cli.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p866_public>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866" native)
+    add_executable(p878_guard tests/p878/guard.c)
+    target_link_libraries(p878_guard PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    add_test(NAME p878_unit_binding_public.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/cli.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p866_public>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878" public)
+    add_test(NAME p878_backend_guards.unit COMMAND p878_guard
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/relay_equal_binding.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/audio_unequal_binding.nl")
+    add_test(NAME p878_prefix_integrity.unit COMMAND p866_integrity
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/relay_equal_binding.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/audio_unequal_binding.nl")
+    add_test(NAME p878_reached_prefix_oom.unit COMMAND p866_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/relay_unequal_binding.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/audio_equal_binding.nl")
+    add_test(NAME p878_source_cli.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/cli.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p866_public>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878" native)
+    add_executable(p817_public tests/p817/public.c)
+    add_executable(p817_integrity tests/p817/integrity.c)
+    add_executable(p817_oom tests/p817/oom.c)
+    foreach(target p817_public p817_integrity p817_oom)
+        target_link_libraries(${target} PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    endforeach()
+    target_link_options(p817_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=nl_copy_body_seal_calls)
+    add_test(NAME p817_pump_public.unit COMMAND p817_public
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/pump_true.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/pump_false.nl" 0)
+    add_test(NAME p817_charge_public.unit COMMAND p817_public
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/charge_true.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/charge_false.nl" 1)
+    add_test(NAME p817_arm_integrity.unit COMMAND p817_integrity
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/charge_false.nl")
+    add_test(NAME p817_issuer_oom.unit COMMAND p817_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/pump_false.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/charge_false.nl")
+    add_test(NAME p817_cli_boundaries.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p817/cli.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}")
     add_test(NAME p790_native.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p790/native.py" "$<TARGET_FILE:newlangc>"
         "$<TARGET_FILE:p778_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
