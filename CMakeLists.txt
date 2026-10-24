@@ -1307,4 +1307,20 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:p694_fault_test>" "${CMAKE_C_COMPILER}"
         "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803")
 
+    # R825: bounded independent named-output identity observation only.
+    add_executable(r825_fault_cli tests/r825/fault_cli.c)
+    target_link_libraries(r825_fault_cli PRIVATE newlang_checked_c_node
+        newlang_semantic)
+    target_link_options(r825_fault_cli PRIVATE -Wl,--wrap=malloc
+        -Wl,--wrap=calloc -Wl,--wrap=realloc
+        -Wl,--wrap=nl_parser_parse_function_unit
+        -Wl,--wrap=nl_semantic_register_function_unit
+        -Wl,--wrap=nl_semantic_check_expression)
+    add_test(NAME r825_named_output_oom_inode.unit
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r825/inode_oom.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r825_fault_cli>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803")
+    set_tests_properties(r825_named_output_oom_inode.unit PROPERTIES TIMEOUT 180)
+
 endif()
