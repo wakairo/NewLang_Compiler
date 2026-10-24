@@ -62,9 +62,9 @@ static bool inspect(const char *path, size_t expected)
         NLSemanticSnapshot snapshot;
         CHECK(world != NULL && nl_semantic_snapshot(world, &snapshot) &&
               snapshot.places == 5 * (i + 1) &&
-              snapshot.values == 5 * (i + 1) &&
-              snapshot.bindings == i + 1 && !snapshot.domains &&
-              !snapshot.backing_regions && !snapshot.occurrences);
+              snapshot.values == 5 * (i + 1) && snapshot.bindings == i + 1 &&
+              !snapshot.domains && !snapshot.backing_regions &&
+              !snapshot.occurrences);
         size_t original_count = 0;
         for (size_t id = 1; id <= snapshot.places; ++id) {
             NLSemanticPlaceView place;
@@ -113,8 +113,7 @@ static bool inspect(const char *path, size_t expected)
                   nl_checked_array4_world_at(f, 1));
         for (size_t a = 0; a < 4; ++a)
             for (size_t b = 0; b < 4; ++b)
-                CHECK(roots[0].elements[a].place !=
-                      roots[1].elements[b].place);
+                CHECK(roots[0].elements[a].place != roots[1].elements[b].place);
     }
     for (size_t i = 0; i < expected; ++i) {
         NLSemanticPlaceView ended;
