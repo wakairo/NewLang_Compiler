@@ -35,6 +35,7 @@
 | 過去案の位置付けと source/semantic 変更前の確認 | [Design Decision Procedure](NewLang_Design_Decision_Procedure.md)、[Design-Intent Ledger](NewLang_Design_Intent_Ledger.md) |
 | Track、Issue、レビュー、独立 R、Goal Alignment、停止確認 | [Development Process](NewLang_Project_Development_Process.md) §§3–4,7 |
 | 再利用可能なcompiler能力の投資、探索投資と製品化投資、Exploration GO / Product GO、予測→実測→地図の更新 | [Development Process §4.3.1](NewLang_Project_Development_Process.md#431-exploration-go-and-product-go) |
+| 現v0の出力backend運用方針（direct C17継続）、歴史的LLVM intent、Track B0/B1の検証済み／未採用境界 | [Backend 実行方針とアーキテクチャ裁定](NewLang_Backend_Execution_Policy.md)（Coordination-adopted operational policy。言語正本やBackend Contract v0.4を置換しない） |
 | H1 固有の凍結条件（一般的な言語要件とは別） | [H1 Issue #268](https://github.com/wakairo/NewLang_Compiler/issues/268) |
 | 今回の目標逸脱と反省点（正本ではなく evidence） | [Coordination #368](https://github.com/wakairo/NewLang_Compiler/issues/368)、[V #369](https://github.com/wakairo/NewLang_Compiler/issues/369) |
 
