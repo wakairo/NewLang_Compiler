@@ -93,7 +93,7 @@ def c17():
         print("R815_B64 " + encoded[offset:offset+96], flush=True)
     print("R815_GATE_A_END", flush=True)
     for lineno, line in enumerate(data.decode("utf-8").splitlines(), 1):
-        if re.search(r"\\bNL_(?:HEAP|LIVE|MIXED)_[A-Z0-9_]+\\s*\\(", line):
+        if re.search(r"\bNL_(?:HEAP|LIVE|MIXED)_[A-Z0-9_]+\s*\(", line):
             print("R815_HOOK_LINE %d %s" % (lineno, line.strip()), flush=True)
     print("R815_GATE_A_DIAGNOSTIC_RED_EVIDENCE_ONLY", flush=True)
     raise SystemExit(86)
