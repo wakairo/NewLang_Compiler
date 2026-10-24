@@ -1301,3 +1301,22 @@ if(BUILD_TESTING)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
 endif()
+
+# Track R #824: independent R-only FIRST-PASS BLIND probe, source frozen in issue.
+if(BUILD_TESTING)
+    add_executable(r824_if_arm_probe tests/r824/arm_probe.c)
+    target_link_libraries(r824_if_arm_probe PRIVATE newlang_semantic)
+    target_link_options(r824_if_arm_probe PRIVATE
+        -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME r824_arm_true_index1_public.unit COMMAND r824_if_arm_probe
+        positive "${CMAKE_CURRENT_SOURCE_DIR}/tests/r824/r824_true_flag.nl"
+        0 1 43 87 12)
+    add_test(NAME r824_arm_else_index0_public.unit COMMAND r824_if_arm_probe
+        positive "${CMAKE_CURRENT_SOURCE_DIR}/tests/r824/r824_false_ticks.nl"
+        1 0 28 16 74)
+    add_test(NAME r824_cross_world_forgery.unit COMMAND r824_if_arm_probe
+        forgery "${CMAKE_CURRENT_SOURCE_DIR}/tests/r824/r824_true_flag.nl"
+        0 "${CMAKE_CURRENT_SOURCE_DIR}/tests/r824/r824_false_ticks.nl" 1)
+    add_test(NAME r824_expired_loan_and_fault.unit COMMAND r824_if_arm_probe
+        scope-fault "${CMAKE_CURRENT_SOURCE_DIR}/tests/r824/r824_true_flag.nl" 0)
+endif()
