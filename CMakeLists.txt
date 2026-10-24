@@ -115,6 +115,14 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/r881/verify.py" "$<TARGET_FILE:newlangc>"
         "$<TARGET_FILE:r881_owned_probe>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/r881")
+    # R883 receipt-only: passing CTest stdout is hidden by --output-on-failure.
+    add_custom_target(r883_receipts ALL
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r881/verify.py"
+            "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r881_owned_probe>"
+            "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r881"
+        DEPENDS newlangc r881_owned_probe
+        VERBATIM)
     # SPECULATIVE PR533 opt-in: default compiler/parser stay OFF. Test-only
     # rebuild of the SAME parser exercises Production semantics/owned/C17.
     add_executable(p718_gate_test tests/p718/gate_test.c)
