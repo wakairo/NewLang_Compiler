@@ -1,0 +1,121 @@
+{
+  "base": "b3a07d89871ba3bd8441821ba4656d7c73a2fd22",
+  "tree": "ce344e08083c6c478c2d473d032caee7c2531233",
+  "canonical": "Draft17.34",
+  "source_sha256": {
+    "fan_false.nl": "68a517b1d4756cb0dce4cf8892641660abc51d7ffa3a2e930d29fc0e67f5cb4e",
+    "fan_less.nl": "d044d32212e2e0d2a89dec5202babd37b26f94e6a4d97e1359f020c626178930",
+    "fan_true.nl": "613ab29822b231ed07fcd114963eaf9930f9a20faf1fc1fd1af361b2f9278ce6",
+    "trim_false.nl": "fc25360596c95a6d31468d4d4aec8ede3cfc1fc3fec4926bd0c6a7dcefe39c0d",
+    "trim_less.nl": "65b1fc608159622cee29dadd87c6787e90ebd47e83c58eae0c3ee34108bac52d",
+    "trim_true.nl": "bba22e0c427170fe0ff4ce273058e579fc455e3d99a11cd28743a51c46fbece7",
+    "wrong_actual.nl": "61cc12d0b9316ae1a70b302e7b89d5610ec8d06c017eae125d4d545c243b7642",
+    "wrong_return.nl": "effccd6a30b7c71084f81ac4c960c7959346cf4bca96663a41d489e82fbfd0c7"
+  },
+  "cases": {
+    "trim_true.nl": {
+      "normal_arm": 1,
+      "field_index": 0,
+      "old": 37,
+      "incoming": 109,
+      "sibling": 183,
+      "truth": true,
+      "runtime_field": 37,
+      "operator": "=="
+    },
+    "trim_false.nl": {
+      "normal_arm": 1,
+      "field_index": 0,
+      "old": 37,
+      "incoming": 109,
+      "sibling": 183,
+      "truth": false,
+      "runtime_field": 109,
+      "operator": "=="
+    },
+    "trim_less.nl": {
+      "normal_arm": 1,
+      "field_index": 0,
+      "old": 37,
+      "incoming": 109,
+      "sibling": 183,
+      "truth": true,
+      "runtime_field": 37,
+      "operator": "<"
+    },
+    "fan_true.nl": {
+      "normal_arm": 0,
+      "field_index": 1,
+      "old": 57,
+      "incoming": 132,
+      "sibling": 167,
+      "truth": true,
+      "runtime_field": 132,
+      "operator": "=="
+    },
+    "fan_false.nl": {
+      "normal_arm": 0,
+      "field_index": 1,
+      "old": 57,
+      "incoming": 132,
+      "sibling": 167,
+      "truth": false,
+      "runtime_field": 57,
+      "operator": "=="
+    },
+    "fan_less.nl": {
+      "normal_arm": 0,
+      "field_index": 1,
+      "old": 57,
+      "incoming": 132,
+      "sibling": 167,
+      "truth": false,
+      "runtime_field": 57,
+      "operator": "<"
+    }
+  },
+  "baseline": {
+    "CHECK": 0,
+    "dedicated_IF_return": 0,
+    "equality_unit_and_parameters": 3,
+    "less_unit_and_parameters": 0
+  },
+  "candidate": {
+    "unit_parameters_dedicated_events": 0,
+    "caller_postcall": "conservative unknown, never normal incoming scalar",
+    "C17": "measure existing emitter unchanged; if supported observe oracle, otherwise record CLI4/no partial output; no backend extension"
+  },
+  "negative": {
+    "wrong_actual.nl": "semantic P3-TYPE-MISMATCH",
+    "wrong_return.nl": "semantic P9-RETURN-TYPE"
+  },
+  "K": 4,
+  "tests": [
+    "p866_equality_public.unit",
+    "p866_prefix_integrity.unit",
+    "p866_reached_validator_oom.unit",
+    "p866_source_cli.integration"
+  ],
+  "expected_FULL5": 457,
+  "expected_PARTIAL": 456,
+  "intended_files": [
+    "src/copy_body.c",
+    "CMakeLists.txt",
+    "tests/p866/freeze.json",
+    "tests/p866/support.h",
+    "tests/p866/public.c",
+    "tests/p866/integrity.c",
+    "tests/p866/oom.c",
+    "tests/p866/cli.py",
+    "tests/p866/README.md",
+    "tests/p866/sources/fan_false.nl",
+    "tests/p866/sources/fan_less.nl",
+    "tests/p866/sources/fan_true.nl",
+    "tests/p866/sources/trim_false.nl",
+    "tests/p866/sources/trim_less.nl",
+    "tests/p866/sources/trim_true.nl",
+    "tests/p866/sources/wrong_actual.nl",
+    "tests/p866/sources/wrong_return.nl"
+  ],
+  "stop": "first later unit proof guard, new authority/source rule, unexpected predicate/format/sanitizer/native/CI; no repair outside prefix"
+}
