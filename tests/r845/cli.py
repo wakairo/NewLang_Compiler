@@ -63,6 +63,24 @@ def native_compile(c_source, out, cc, optimization):
             repr((executed.returncode, executed.stdout[:300], executed.stderr[:300])))
 
 
+def audit(lines):
+    """Passive R851 reporter; do not influence an existing R845 test verdict."""
+    target = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not target:
+        print("R851 AUDIT=UNARCHIVED (runner summary absent)", flush=True)
+        return
+    message = "### R851 R845-owned passive audit\n" + "".join(
+        "- " + line[:500] + "\n" for line in lines[:8])
+    try:
+        fd = os.open(target, os.O_WRONLY | os.O_APPEND)
+        try:
+            os.write(fd, message.encode("utf-8"))
+        finally:
+            os.close(fd)
+    except OSError:
+        print("R851 AUDIT=UNARCHIVED (runner summary unavailable)", flush=True)
+
+
 def plain_native(cli, root):
     compilers = [shutil.which("gcc"), shutil.which("clang")]
     require(all(compilers), "independent GCC and Clang required")
@@ -82,8 +100,41 @@ def plain_native(cli, root):
                   (name, digest), flush=True)
             labels = (("cobalt_inventory",) if i == 0 else
                       ("valley_register", "terrace_register"))
+            prior_passes = physical_passes
             if physical.test(c17, labels, folder, compilers):
                 physical_passes += 1
+            witnessed = physical_passes > prior_passes
+            details = "physical=NOT TESTED (original lexical carrier not identified)"
+            if witnessed:
+                # Read-only metadata inspection after the existing test result.
+                try:
+                    rendered = physical.derivative(c17, labels)
+                    carriers = [physical._record_carrier(c17.decode("utf-8"), x)
+                                for x in labels]
+                    if rendered is not None and all(x is not None for x in carriers):
+                        source_carriers = ",".join(
+                            "%s:%s%s" % (x[0], x[1],
+                                         "." + x[2] if x[2] else "[4]")
+                            for x in carriers)
+                        details = (
+                            "physical=WITNESS original_live_local=%s "
+                            "insertion_char=%d derived_sha256=%s "
+                            "positions=0,1,2,3 full_Option_stride="
+                            "runtime_asserted_equal_to_sizeof_element "
+                            "numeric_stride_bytes=NOT ARCHIVED "
+                            "simultaneous_original_carriers=%d "
+                            "nonoverlap=%s" %
+                            (source_carriers, max(x[3] for x in carriers),
+                             hashlib.sha256(rendered).hexdigest(), len(carriers),
+                             "runtime_asserted" if len(carriers) == 2
+                             else "not_applicable"))
+                    else:
+                        details = "physical=NOT TESTED (witness metadata unavailable)"
+                except (AttributeError, TypeError, ValueError, UnicodeError):
+                    details = "physical=NOT TESTED (passive metadata unavailable)"
+            audit(["mode=native source=%s original_c17_sha256=%s "
+                   "strict_GCC_Clang_O0_O2=PASS" % (name, digest),
+                   details])
         print("R845 PHYSICAL DERIVATIVE witnessed=%d/2; %s" %
               (physical_passes, "FINITE PASS" if physical_passes == 2
                else "INCOMPLETE/NOT TESTED"), flush=True)
@@ -99,11 +150,14 @@ def reject_sources(cli, root):
             print("R845 NEGATIVE %s command=%s exit=%d" %
                   (name, "CHECK" if "--check" in cmd else "EMIT",
                    result.returncode), flush=True)
+    audit(["mode=negative four_R839_sources=4 check_and_emit=PASS "
+           "nonzero_exit_no_C_stdout=asserted; exact_diagnostics=NOT TESTED"])
 
 
 def named_fault(cli, root, shim_source, sanitizer):
     if sanitizer and sanitizer.lower() not in ("", "none", "off", "0"):
         print("R845 NAMED REACHED FAULT=NOT TESTED on sanitizer runner", flush=True)
+        audit(["mode=fault sanitizer=ON reached_failure=NOT TESTED"])
         return
     with tempfile.TemporaryDirectory(prefix="r845-fault-") as tmp:
         folder = Path(tmp)
@@ -119,6 +173,7 @@ def named_fault(cli, root, shim_source, sanitizer):
         source = str(root / POS[1])
         sentinel = b"R845 named output SENTINEL\\x00\\xff\\n"
         reached = []
+        reached_audit = []
         for index in range(1, 97):
             output.write_bytes(sentinel)
             before = output.stat()
@@ -143,6 +198,8 @@ def named_fault(cli, root, shim_source, sanitizer):
             require(set(p.name for p in dest.iterdir()) == {output.name},
                     "fault left temporary sibling; index=%d" % index)
             reached.append(index)
+            reached_audit.append((index, result.returncode, before.st_dev,
+                                  before.st_ino, after.st_dev, after.st_ino))
             print("R845 REACHED FAULT PHASE UNKNOWN index=%d return=%d "
                   "bytes=preserved inode=preserved siblings=0" %
                   (index, result.returncode), flush=True)
@@ -164,6 +221,20 @@ def named_fault(cli, root, shim_source, sanitizer):
         native_compile(output, folder / "clean-retry", gcc, "-O0")
         print("R845 NAMED CLEAN RETRY C17 SHA256=" +
               hashlib.sha256(c17).hexdigest(), flush=True)
+        audit([
+            "mode=named_fault original_source=%s source_sha256=%s "
+            "allocator_trace=R845_REACHED_FAIL=asserted PHASE=UNKNOWN" %
+            (POS[1], SHA[POS[1]]),
+            "sentinel_bytes=%d sentinel_sha256=%s preexisting_target=preserved "
+            "temp_siblings=0 assertions=PASS" %
+            (len(sentinel), hashlib.sha256(sentinel).hexdigest()),
+            *("fail_at=%d return=%d before_dev_ino=%d:%d "
+              "after_dev_ino=%d:%d bytes_inode_temp=preserved" % row
+              for row in reached_audit),
+            "clean_retry=PASS C17_sha256=%s matches_stdout=PASS "
+            "strict_GCC_O0_native=PASS temporary_siblings=0" %
+            hashlib.sha256(c17).hexdigest()
+        ])
 
 
 def main():

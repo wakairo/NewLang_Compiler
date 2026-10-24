@@ -13,9 +13,9 @@ static int parse(NLSource *source, int function_unit, NLSyntaxTree **tree)
     if (nl_parser_create(source, &parser) != NL_PARSE_OK)
         return 0;
     NLParseStatus status =
-        function_unit ? nl_parser_parse_function_unit(parser, tree, &diagnostic)
-                      : nl_parser_parse_expression_fragment(parser, tree,
-                                                            &diagnostic);
+        function_unit
+            ? nl_parser_parse_function_unit(parser, tree, &diagnostic)
+            : nl_parser_parse_expression_fragment(parser, tree, &diagnostic);
     nl_parser_destroy(parser);
     return status == NL_PARSE_OK && *tree != NULL;
 }
