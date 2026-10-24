@@ -41,8 +41,33 @@ def passive(text, v, o):
         return ' || '.join(f'*watch_{b}_{i} != {value}'
                            for b, values in values.items()
                            for i, value in enumerate(values))
+    def function_body(name):
+        definition = one(rf'\b(?:static\s+)?(?:void|int)\s+{re.escape(name)}\(void\)\s*\{{')
+        opening = definition.end() - 1
+        depth = 1
+        # Ignore comments/literals when matching actual C lexical braces.
+        tokens = re.finditer(r'''/\*.*?\*/|//[^\n]*|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|[{}]''',
+                             text[opening + 1:], re.S)
+        for token in tokens:
+            if token.group() == '{':
+                depth += 1
+            elif token.group() == '}':
+                depth -= 1
+                if depth == 0:
+                    return opening, opening + 1 + token.start()
+        raise AssertionError('unclosed owning C function')
+    main_open, main_close = function_body('main')
+    entries = list(re.finditer(r'\b(nl_fn_\d+)\(\);',
+                               text[main_open + 1:main_close]))
+    assert len(entries) == 1
+    owner_open, owner_close = function_body(entries[0].group(1))
+    # These frozen source entry bodies have no terminating edge. Callee
+    # RETURN belongs to another function, never to this owning scope.
+    assert not re.search(r'\breturn\b', text[owner_open + 1:owner_close])
+    edits[owner_open + 1] = '\n    watch_calls=watch_stores=watch_continued=watch_checked=0;'
     for b, values in initial.items():
         ctor = one(rf'(?:const )?nl_type_\d+ nl_local_{b} = \{{[^;]+;')
+        assert owner_open < ctor.start() < ctor.end() < owner_close
         after(ctor, ''.join(f'\n    watch_{b}_{i}=&nl_local_{b}.f{i};'
                             for i in range(2)) + '\n    if (' +
               ' || '.join(f'*watch_{b}_{i}!={value}'
@@ -51,6 +76,7 @@ def passive(text, v, o):
     entry = one(rf'static void nl_fn_{function}\(uint8_t \*nl_local_{ref}, uint8_t nl_local_{incoming}\)\n\{{')
     after(entry, f'\n    ++watch_calls; if (nl_local_{ref} != watch_{base}_{index} || nl_local_{incoming}!={o["incoming"]} || {states(initial)}) exit(91);')
     actual = one(rf'nl_fn_{function}\(nl_local_{v["caller_ref"]}, [^;]+;')
+    assert owner_open < actual.start() < actual.end() < owner_close
     after(actual, f'\n    ++watch_continued; if (watch_calls!=1 || *watch_{base}_{index}!={o["runtime_field"]} || *watch_{base}_{1-index}!={o["sibling"]}) exit(91);')
     event = v['streams'][v['normal']][0]
     capture = one(rf'const uint8_t nl_replace_old_{event["node"]} = \*nl_local_{ref};')
@@ -66,11 +92,17 @@ def passive(text, v, o):
         # Receiver read happens after the caller's direct write.
         after(binding, f'\n    if (nl_local_{read["symbol"]}!={value}) exit(91);')
     selected = (o['truth'] and o['normal_arm'] == 0) or (not o['truth'] and o['normal_arm'] == 1)
+    # Dereference originals only before the owning block ends. Clear every
+    # address before return; wrapper main retains only scalar observations.
+    edits[owner_close] = f'    if (watch_calls!=1 || watch_continued!=1 || watch_stores!={int(selected)} || {states(final)}) exit(91);\n    watch_checked=1;\n'
+    edits[owner_close] += ''.join(f'    watch_{b}_{i}=NULL;\n'
+                                  for b in initial for i in range(2))
     end = one(r'    return 0;\n}')
-    edits[end.start()] = f'    if (watch_calls!=1 || watch_continued!=1 || watch_stores!={int(selected)} || {states(final)}) return 91;\n'
+    assert main_open < end.start() < main_close
+    edits[end.start()] = f'    if (watch_checked!=1 || watch_calls!=1 || watch_continued!=1 || watch_stores!={int(selected)}) return 91;\n'
     for position, addition in sorted(edits.items(), reverse=True):
         text = text[:position] + addition + text[position:]
-    declarations = '#include <stdlib.h>\nstatic unsigned watch_calls,watch_stores,watch_continued;\n'
+    declarations = '#include <stdlib.h>\nstatic unsigned watch_calls,watch_stores,watch_continued,watch_checked;\n'
     declarations += ''.join(f'static const volatile uint8_t *watch_{b}_{i};\n'
                             for b in initial for i in range(2))
     return text.replace('typedef struct', declarations + '\ntypedef struct', 1)
