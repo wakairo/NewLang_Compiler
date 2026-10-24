@@ -1394,10 +1394,12 @@ static bool unit_prefix_walk(UnitPrefix *r, NLCheckedNodeId id)
         }
     } else if (n->kind == NL_CHECKED_USIZE_LITERAL ||
                n->kind == NL_CHECKED_IDENTIFIER ||
-               n->kind == NL_CHECKED_USIZE_LESS_THAN) {
-        NLTypeId type = nl_semantic_core_type(
-            c, n->kind == NL_CHECKED_USIZE_LESS_THAN ? NL_TYPE_BOOL
-                                                     : NL_TYPE_USIZE);
+               n->kind == NL_CHECKED_USIZE_LESS_THAN ||
+               n->kind == NL_CHECKED_USIZE_EQUALITY) {
+        const bool comparison = n->kind == NL_CHECKED_USIZE_LESS_THAN ||
+                                n->kind == NL_CHECKED_USIZE_EQUALITY;
+        NLTypeId type =
+            nl_semantic_core_type(c, comparison ? NL_TYPE_BOOL : NL_TYPE_USIZE);
         if (n->type == type && n->result_count == 1 &&
             n->results[0].type == type &&
             nl_copy_plain(c, n->results[0].value, type)) {
@@ -1430,7 +1432,11 @@ static bool unit_prefix_walk(UnitPrefix *r, NLCheckedNodeId id)
                     ok = left.scalar_known && right.scalar_known &&
                          value.scalar_known &&
                          value.scalar_value ==
-                             (size_t)(left.scalar_value < right.scalar_value);
+                             (size_t)(n->kind == NL_CHECKED_USIZE_EQUALITY
+                                          ? left.scalar_value ==
+                                                right.scalar_value
+                                          : left.scalar_value <
+                                                right.scalar_value);
                 }
             }
         }

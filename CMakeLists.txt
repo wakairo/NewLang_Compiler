@@ -687,6 +687,27 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(p866_public tests/p866/public.c)
+    add_executable(p866_integrity tests/p866/integrity.c)
+    add_executable(p866_oom tests/p866/oom.c)
+    foreach(target p866_public p866_integrity p866_oom)
+        target_link_libraries(${target} PRIVATE newlang_semantic newlang_parser)
+    endforeach()
+    target_link_options(p866_oom PRIVATE -Wl,--wrap=calloc)
+    add_test(NAME p866_equality_public.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/cli.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p866_public>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866" public)
+    add_test(NAME p866_prefix_integrity.unit COMMAND p866_integrity
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/trim_true.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/fan_false.nl")
+    add_test(NAME p866_reached_validator_oom.unit COMMAND p866_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/trim_false.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/fan_true.nl")
+    add_test(NAME p866_source_cli.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/cli.py" "$<TARGET_FILE:newlangc>"
+        "$<TARGET_FILE:p866_public>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866" native)
     add_executable(p817_public tests/p817/public.c)
     add_executable(p817_integrity tests/p817/integrity.c)
     add_executable(p817_oom tests/p817/oom.c)
