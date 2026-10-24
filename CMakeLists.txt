@@ -1306,6 +1306,26 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # R845: one independently frozen calibrated Array4 cohort (5 names).
+    add_executable(r845_public_probe tests/r845/public_probe.c)
+    target_link_libraries(r845_public_probe PRIVATE newlang_parser
+        newlang_semantic newlang_checked_c_node)
+    add_test(NAME r845_public_one.unit COMMAND r845_public_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r845/r839_azurite_1root.nl" "1")
+    add_test(NAME r845_public_two.unit COMMAND r845_public_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r845/r839_terraces_2root.nl" "2")
+    add_test(NAME r845_plain_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r845/cli.py" "native"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r845"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r845/fault.c" "${NEWLANG_SANITIZER}")
+    add_test(NAME r845_negative_source.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r845/cli.py" "negative"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r845"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r845/fault.c" "${NEWLANG_SANITIZER}")
+    add_test(NAME r845_named_fault.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r845/cli.py" "fault"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r845"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r845/fault.c" "${NEWLANG_SANITIZER}")
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
