@@ -5,14 +5,28 @@
 > 採用時点の履歴スナップショット：2026-10-13、Compiler/main `adc63b64b656b3d6e0501f29eaeee5181927dc14`、
 > FormalProof/main `a8de4ebb4099f4742fc161d26867740dcac48414`。
 > 本書は順序と判定基準についての**採用済み・非規範的な開発ガイド**であり、Issue/PRの起票だけで実装やTrackを開始しない。
-> 当初採用時点の言語正本はDraft17.32。現在の正本は [CURRENT_SPEC](reference/CURRENT_SPEC.md) → **Draft17.33**、
+> 当初採用時点の言語正本はDraft17.32。現在の正本は [CURRENT_SPEC](reference/CURRENT_SPEC.md) が指すDraft（2026-10-24時点 **Draft17.34**）、
 > 製品の正本は [Product / Value Strategy](NewLang_Product_Value_Strategy.md)、
 > [North Star](NewLang_North_Star_Product_Validation.md)、
 > [C-Replacement Coverage Map](NewLang_C_Replacement_Coverage_Map.md)。
 > 運用は [Development Process](NewLang_Project_Development_Process.md) に従う。
 > この文書は正本を置換せず、将来の更新時は「観測した事実」と「新しい投資案」を分ける。
 
-## 現行実装計画 — 2026-10-23（v0-M1–M6.1 main統合 → v0-M7 mixed source gate #747）
+## 現行実装計画 — 2026-10-24（v0 H+T source-owned C17 backend採用、次は独立Rのsource/proof gate）
+
+> **非規範・日付付き実装checkpoint**。Compiler/main `d8cea0663baacc910c4f27129ee0c30d4c290975`、[CURRENT_SPEC](reference/CURRENT_SPEC.md) → **Draft17.34**。後日にmainが進めばこの固定SHAは履歴になる。戦略・証明・言語規範を本節で改訂しない。採用経路と非採用案の区別は[Backend Execution Policy](NewLang_Backend_Execution_Policy.md)、優先順位の根拠は[Process §4.3.2](NewLang_Project_Development_Process.md)、製品価値の尺度は[Product Strategy §1.1](NewLang_Product_Value_Strategy.md)を正とする。
+
+**採用済みの有限実装能力（事実）：** [PR #827](https://github.com/wakairo/NewLang_Compiler/pull/827)を`d8cea0663baacc910c4f27129ee0c30d4c290975`としてsquash統合。既存の本物のsource-issued H success-armと別original Tのscoped Copyを、strict C17 emitterとGCC/Clang nativeへ接続する**選定済みの狭いprofile**。古いP #799候補と新main適用PR #827のbackend-only変更27ファイルはすべてblob同一（6改変＋21追加）、既存issuer主要3ファイルも一致し、issuer履歴の重複適用なし。固定旧候補に対する[R #815](https://github.com/wakairo/NewLang_Compiler/issues/815#issuecomment-6377402385)は**NON-BLIND calibrated有限PASS**（元のH所有者/実allocation失敗0/1/2、真のFIELD WRITE→READ→WRITE、Option Copy、T旧値/新値/兄弟の受動native観測）。新mainへ正確に再構成した候補の自然なPR Actions [FULL5 #40046536070](https://github.com/wakairo/NewLang_Compiler/actions/runs/40046536070)はGCC/GCC Release/Clang/ASan/UBSan **各452/452 PASS**、[PARTIAL #40046536087](https://github.com/wakairo/NewLang_Compiler/actions/runs/40046536087)は**451/451 PASS**。**merge後のmain-push Actionsの個別結果はこのcheckpointでは未確認**（利用GitHubコネクタのcommit-runs照会はPR eventに限定）。候補CIとmain-push CIを同じPASSとは呼ばない。[T #828](https://github.com/wakairo/NewLang_Compiler/issues/828)がread-onlyで確認予定。元のR #806 fresh BLIND INCONCLUSIVE／R #809 calibrated INCONCLUSIVE／R #812 pre-CI STOPはそれぞれ保持し、R #815の較正後PASSで遡及上書きしない。実験的PlanTrace/MIR/LLVM新backendは**未採用**。
+
+**まだ未採用の次のtrusted issuer — v0-M8a：** [P #817の固定DRAFT PR #822](https://github.com/wakairo/NewLang_Compiler/pull/822)は、Tのみの一方normal／他方`return unit`のIF-armで、実sourceから発行された既存private caller Copy snapshotをcompleted armへ適用する限定候補。P側の初回FULL5各453/PARTIAL452はPASSし、actual original-arm body/parameters 3/3→0/0、multi-child OOM rollbackもPの有限証拠だが、**独立採用判定ではない**。独立[R #824](https://github.com/wakairo/NewLang_Compiler/issues/824)の**fresh FIRST-PASS BLINDはINCONCLUSIVE**：独自sourceが登録段階で拒否、ClangでR所有formatter不適合、ASanでR所有失敗経路のcleanup不足。original-arm issuerの真の独立検証は**未到達**。Coordinationは[§7.6のread-only診断→条件付き機械修復・追加一組CI](https://github.com/wakairo/NewLang_Compiler/issues/824#issuecomment-6377849065)を認可済み。旧R source／oracle／初回CIは保持し、後続でfirst-passをPASSへ改称しない。**PR #822は未統合・HOLD**。M8b（二normal armでstateful known callのpoststate→join）とM8c（このIF-sourceのC17）は別の後続不足であり、M8aの局所issuer修復と混同しない。
+
+**Array4通常CLIの未統合profile：** 固定[P #801](https://github.com/wakairo/NewLang_Compiler/pull/801)に対し、元[R #803 FIRST-PASS BLIND](https://github.com/wakairo/NewLang_Compiler/issues/803)はformat起因でINCONCLUSIVE。[R #816](https://github.com/wakairo/NewLang_Compiler/issues/816#issuecomment-6377317865)がピン留めformatのみ修正した**NON-BLIND calibrated有限PASS**で、選定済み1/2-root `Array<Option<u8>,4>`の普通CLI、公的検証、strict C17/native等を観測。残る実到達parser/issuer OOM世界での**既存named-output inode同一性は未測定**。独立[R #825](https://github.com/wakairo/NewLang_Compiler/issues/825)は元証拠を保存し、固定formatterをChat/GitHub上で事前実行できず**CI前STOP/INCONCLUSIVE**。Coordinationは[最初のGitHub Clang CIを正式なformatter gateとする限定代替](https://github.com/wakairo/NewLang_Compiler/issues/825#issuecomment-6377852084)を認可したが、まだ新しい実行結果がない。**P #801は旧基点・DRAFT/HOLDのまま**。一般Array Copy/Some/index/heap/FFI・未裁定C/E/Fは本profileのPASSに含めない。
+
+**最新の実行順（既にRELEASE済みで、Issue起票だけではworker自動開始ではない）：** (1) **R #824**：元fresh BLINDを保持したまま登録診断とR所有formatter／clean-upの条件付き修復を一組のCIで実測し、真正なIF-arm発行元、別world拒否と実到達OOMを判定。言語規則や期待される原値を変えるならSTOP→C/M。 (2) 並走可能な **R #825**：固定R branchから一組の自然FULL5/PARTIALで実parser/issuer faultのbytes/dev/inode・temporary・clean retryを確定。最初のredは保存し勝手に再実行しない。 (3) **T #828**：main-push CI実結果と、通常Chat＋GitHubのみのRに適合する固定clang-format事前検査経路をread-onlyで報告。 (4) **独立Rが有効な有限判定を出してから**、必要なら別のP専用current-main取り込み／blob同一性確認／自然CI／新たなR変更範囲判断を行う。旧P #822/#801やR専用PRはそのままmerge/rebaseしない。新しいMIR／一般CFG／normative source権限は現段階で拡大しない。
+
+**製品価値との境界：** 元owner/field/currentness/provenanceをcompilerに確認させる構成要素は増えたが、**実library author＋ordinary-safe callerのUB防止監査・再監査の依存閉包**がwell-factored Cより狭いかは**未測定**。一般soundness、全面uncheckedゼロ、Product GOの証拠ではない。Product GO active scoring [#624](https://github.com/wakairo/NewLang_Compiler/issues/624) **PAUSED**、cJSON H1 [#268](https://github.com/wakairo/NewLang_Compiler/issues/268) **HOLD**。
+
+## 前回の実装計画（履歴）— 2026-10-23（v0-M1–M6.1 main統合 → v0-M7 mixed source gate #747）
 
 > **非規範／観測時点の実装地図**。言語正本は [CURRENT_SPEC](reference/CURRENT_SPEC.md) → **Draft17.33**、優先順位原則は [Development Process §4.3.2](NewLang_Project_Development_Process.md)、価値の判定基準は [Product Value Strategy §1.1](NewLang_Product_Value_Strategy.md)。以下のsource gateやHOLDは規範的な新禁止／新許可ではない。前回2026-10-22の実装計画は直下に履歴保存する。
 
