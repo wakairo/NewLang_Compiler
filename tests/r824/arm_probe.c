@@ -13,8 +13,9 @@ static size_t allocation_index, fail_index;
 
 void *__wrap_malloc(size_t n)
 {
-    return inject_failure && allocation_index++ == fail_index ? NULL
-                                                             : __real_malloc(n);
+    return inject_failure && allocation_index++ == fail_index
+               ? NULL
+               : __real_malloc(n);
 }
 
 void *__wrap_calloc(size_t n, size_t count)
@@ -47,11 +48,77 @@ static bool scalar(const NLSemanticContext *world, NLValueId id,
            value.scalar_value == expected;
 }
 
+/* R831 diagnostic-only loader: immutable original .nl and oracle. */
+static bool r831_checked_load(const char *path, TestNode *out)
+{
+    NLSource *source = NULL;
+    NLParser *parser = NULL;
+    NLSyntaxTree *unit = NULL;
+    NLParser *entry_parser = NULL;
+    NLSyntaxTree *entry = NULL;
+    bool accepted = false;
+
+    if (nl_source_load(path, &source) != NL_SOURCE_OK)
+        goto cleanup;
+    if (nl_parser_create(source, &parser) != NL_PARSE_OK)
+        goto cleanup;
+    if (nl_parser_parse_function_unit(parser, &unit, NULL) != NL_PARSE_OK)
+        goto cleanup;
+    if (nl_semantic_create(&out->context) != NL_CHECK_OK)
+        goto cleanup;
+
+    const NLSyntaxTree *inputs[] = {unit};
+    NLFunctionUnitDiagnostic diagnostic = {0};
+    const NLCheckStatus status =
+        nl_semantic_register_function_unit(out->context, inputs, 1, &diagnostic);
+    if (status != NL_CHECK_OK) {
+        const NLDiagnostic *d = &diagnostic.diagnostic.diagnostic;
+        fprintf(stderr, "R831 register status=%d category=%s "
+                        "code=%s message=%s\n",
+                (int)status, d->category ? d->category : "(none)",
+                d->code ? d->code : "(none)",
+                d->message ? d->message : "(none)");
+        if (d->code != NULL)
+            (void)nl_check_diagnostic_render(stderr, source,
+                                             &diagnostic.diagnostic);
+        goto cleanup;
+    }
+    nl_syntax_tree_destroy(unit);
+    unit = NULL;
+    nl_parser_destroy(parser);
+    parser = NULL;
+    nl_source_destroy(source);
+    source = NULL;
+
+    if (nl_source_create("main()", 6, "node-native-entry",
+                         &out->entry_source) != NL_SOURCE_OK)
+        goto cleanup;
+    if (nl_parser_create(out->entry_source, &entry_parser) != NL_PARSE_OK)
+        goto cleanup;
+    if (nl_parser_parse_expression_fragment(entry_parser, &entry, NULL) !=
+        NL_PARSE_OK)
+        goto cleanup;
+    if (nl_semantic_check_expression(out->context, entry, &out->entry,
+                                     NULL) != NL_CHECK_OK)
+        goto cleanup;
+    accepted = true;
+
+cleanup:
+    nl_syntax_tree_destroy(entry);
+    nl_parser_destroy(entry_parser);
+    nl_syntax_tree_destroy(unit);
+    nl_parser_destroy(parser);
+    nl_source_destroy(source);
+    if (!accepted)
+        node_checked_destroy(out);
+    return accepted;
+}
+
 static bool open_case(const char *path, size_t normal_arm, R824Case *out)
 {
-    CHECK(node_checked_load(path, &out->node));
-    const NLCheckedFragment *main_body = nl_checked_call_body(
-        out->node.entry, nl_checked_root(out->node.entry));
+    CHECK(r831_checked_load(path, &out->node));
+    const NLCheckedFragment *main_body =
+        nl_checked_call_body(out->node.entry, nl_checked_root(out->node.entry));
     CHECK(main_body != NULL);
     size_t matching_if = 0, matching_call = 0;
     for (size_t id = 1; id <= nl_checked_node_count(main_body); ++id) {
@@ -62,10 +129,10 @@ static bool open_case(const char *path, size_t normal_arm, R824Case *out)
             nl_checked_if_arm(main_body, id, normal_arm);
         const NLCheckedFragment *terminal =
             nl_checked_if_arm(main_body, id, 1 - normal_arm);
-        CHECK(arm && terminal && !nl_checked_node_view(
-                                     arm, nl_checked_root(arm))->terminates &&
-              nl_checked_node_view(
-                  terminal, nl_checked_root(terminal))->terminates &&
+        CHECK(arm && terminal &&
+              !nl_checked_node_view(arm, nl_checked_root(arm))->terminates &&
+              nl_checked_node_view(terminal, nl_checked_root(terminal))
+                  ->terminates &&
               node->normal_arms == 1);
         ++matching_if;
         for (size_t call = 1; call <= nl_checked_node_count(arm); ++call) {
@@ -133,8 +200,8 @@ static bool positive(const char *path, size_t arm, size_t index, unsigned old,
     CHECK(body->event_count == 1 &&
           nl_checked_copy_body_event(item.arm, item.call, 0, &event) &&
           event.kind == NL_COPY_BODY_CHANGE &&
-          nl_checked_copy_body_event_validate(item.arm, item.call, 0,
-                                              &event) == NL_CHECK_OK);
+          nl_checked_copy_body_event_validate(item.arm, item.call, 0, &event) ==
+              NL_CHECK_OK);
     printf("R824 original arm=%zu index=%zu old=%u new=%u sibling=%u "
            "body/parameters/event=OK original-world=OK\n",
            arm, index, old, current, sibling);
@@ -161,8 +228,8 @@ static bool forgery(const char *path, size_t arm, const char *other,
     do {                                                                       \
         NLCopyBodyParameters altered = a.args;                                 \
         change;                                                                \
-        CHECK(nl_checked_copy_body_parameters_validate(                      \
-                  a.arm, a.call, &altered) != NL_CHECK_OK);                     \
+        CHECK(nl_checked_copy_body_parameters_validate(                        \
+                  a.arm, a.call, &altered) != NL_CHECK_OK);                    \
         ++rejects;                                                             \
     } while (0)
     REJECT_BODY(altered.body = b.body.body);
@@ -261,12 +328,12 @@ static bool scope_and_fault(const char *path, size_t arm)
     const NLCheckedNodeView *loan =
         nl_checked_node_view(item.arm, item.args.loan);
     NLSemanticScopeView before, after;
-    CHECK(loan && loan->loan.scope &&
-          nl_semantic_scope_view(item.args.handoff, loan->loan.scope,
-                                 &before) &&
-          nl_semantic_scope_view(nl_checked_context(item.arm),
-                                 loan->loan.scope, &after) &&
-          before.active && !after.active);
+    CHECK(
+        loan && loan->loan.scope &&
+        nl_semantic_scope_view(item.args.handoff, loan->loan.scope, &before) &&
+        nl_semantic_scope_view(nl_checked_context(item.arm), loan->loan.scope,
+                               &after) &&
+        before.active && !after.active);
     NLCopyBodyParameters invalid = item.args;
     invalid.loan++;
     CHECK(nl_checked_copy_body_parameters_validate(item.arm, item.call,
@@ -291,9 +358,7 @@ int main(int argc, char **argv)
                    ? 0
                    : 1;
     if (argc == 4 && strcmp(argv[1], "scope-fault") == 0)
-        return scope_and_fault(argv[2],
-                               (size_t)strtoul(argv[3], NULL, 10))
-                   ? 0
-                   : 1;
+        return scope_and_fault(argv[2], (size_t)strtoul(argv[3], NULL, 10)) ? 0
+                                                                            : 1;
     return 2;
 }
