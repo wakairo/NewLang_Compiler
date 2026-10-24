@@ -1,0 +1,33 @@
+{
+  "charge_false.nl": {
+    "check": 0,
+    "public_observation_byte_identical_to_p814": true
+  },
+  "charge_true.nl": {
+    "check": 0,
+    "public_observation_byte_identical_to_p814": true
+  },
+  "pump_false.nl": {
+    "check": 0,
+    "public_observation_byte_identical_to_p814": true
+  },
+  "pump_true.nl": {
+    "check": 0,
+    "public_observation_byte_identical_to_p814": true
+  },
+  "new_negative": {
+    "exit": 3,
+    "stderr": "tests/p817/sources/wrong_copy_actual.nl:8:64-8:73: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n",
+    "stdout_bytes": 0
+  },
+  "named": {
+    "invocation": "--emit-c17-to DEST SOURCE",
+    "exit": 3,
+    "stderr": "tests/p817/sources/wrong_copy_actual.nl:8:64-8:73: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n",
+    "stdout_bytes": 0,
+    "sentinel_preserved": true,
+    "temporary_remains": false
+  },
+  "baseline_executable_sha256": "d0b759ada2cdf00beb46b7b58720f7e89f9e888c57f505254aae16c03cc18d50",
+  "harness_note": "Initial named-output harness used unsupported --output flag (CLI2), preserved separately; corrected invocation only to documented --emit-c17-to, no frozen source/oracle changes. Primary new negative reached exact intended semantic layer on its first execution."
+}

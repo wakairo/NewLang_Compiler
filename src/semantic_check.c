@@ -4477,7 +4477,12 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
                     .results = {outcomes[i].results[0], outcomes[i].results[1]},
                     .terminates = branch.terminated,
                     .returned = branch.returned});
+        /* This is the actual completed IF-arm graph, not the sole-normal
+         * replay in the parent world. Seal its direct callees before the arm
+         * is published; an allocation failure leaves no child attachments. */
         if (branch.artifact->root == 0 ||
+            !host(&branch, nl_copy_body_seal_calls(branch.artifact),
+                  syntax->span) ||
             !save_arm(check, id, branch.artifact, syntax->span))
             goto failure;
         evidence[i] = branch.artifact;

@@ -1,0 +1,9 @@
+{
+  "exit": 2,
+  "stderr": "error(cli)[P0-CLI-ARGUMENT]: expected exactly one argument\nnote: use --help for usage\n",
+  "stdout_bytes": 0,
+  "sentinel_preserved": true,
+  "files": [
+    "existing.c"
+  ]
+}
