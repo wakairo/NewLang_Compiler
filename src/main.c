@@ -2285,6 +2285,25 @@ static bool copy_or_field_if(const NLCheckedFragment *f, NLCheckedNodeId id,
                : copy_if_selection(f, id, p);
 }
 
+/* Unit has no C carrier. Keep this shape gate shared with emission; the
+ * initializer still needs the complete scoped loan/call proof walk below. */
+static bool v0_unit_loan_binding(const NLCheckedFragment *fragment,
+                                 const NLCheckedNodeView *view)
+{
+    const NLTypeId unit = nl_semantic_unit_type(nl_checked_context(fragment));
+    const NLCheckedNodeView *receiver =
+        nl_checked_node_view(fragment, view->first_argument);
+    const NLCheckedNodeView *initializer =
+        nl_checked_node_view(fragment, view->initializer);
+    return view->kind == NL_CHECKED_BINDING && view->type == unit &&
+           view->result_count == 0 && view->argument_count == 1 &&
+           view->symbol != 0 && receiver != NULL && initializer != NULL &&
+           receiver->kind == NL_CHECKED_RECEIVER &&
+           receiver->symbol == view->symbol && receiver->type == unit &&
+           initializer->kind == NL_CHECKED_LOAN_HEADER &&
+           initializer->type == unit && initializer->result_count == 0;
+}
+
 static bool v0_validate_node(const NLCheckedFragment *fragment,
                              NLCheckedNodeId id, V0Program *program)
 {
@@ -2329,7 +2348,9 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                receiver->kind == NL_CHECKED_RECEIVER &&
                receiver->symbol == view->symbol &&
                receiver->type == initializer->type &&
-               (quantity_scalar(fragment, view->initializer, program) ||
+               ((v0_unit_loan_binding(fragment, view) &&
+                 v0_validate_node(fragment, view->initializer, program)) ||
+                quantity_scalar(fragment, view->initializer, program) ||
                 boolean_scalar(fragment, view->initializer, program) ||
                 (receiver->type == program->u8 &&
                  ((initializer->kind == NL_CHECKED_IF &&
@@ -2732,6 +2753,10 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
             gate_symbol_written(fragment, view->symbol) ? "" : "const ";
         if (initializer == NULL)
             return false;
+        /* Evaluate the authentic loan once at the binding's source position.
+         * A zero-result unit loan neither declares nor reads a u8 result. */
+        if (v0_unit_loan_binding(fragment, view))
+            return gate_emit_loan(stream, fragment, initializer, depth);
         NLIfFieldView field_join;
         NLIfReturnView return_join;
         if (initializer->kind == NL_CHECKED_IF &&
