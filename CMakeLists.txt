@@ -1279,4 +1279,48 @@ if(BUILD_TESTING)
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+    # R803 independent BLIND sources/oracle are frozen in tests/r803/ORACLE.md.
+    # Do not substitute P-owned source files for these R source inputs.
+    add_executable(r803_public_probe tests/r803/public_probe.c)
+    target_link_libraries(r803_public_probe PRIVATE newlang_parser newlang_semantic
+        newlang_checked_c_node)
+    add_test(NAME r803_array_one_public.unit COMMAND r803_public_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803/one.nl" 1)
+    add_test(NAME r803_array_two_world.unit COMMAND r803_public_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803/two.nl" 2)
+    add_test(NAME r803_array_negative.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803/driver.py" negative
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r803_public_probe>"
+        "$<TARGET_FILE:p791_parser_oom>" "$<TARGET_FILE:p791_issuer_oom>"
+        "$<TARGET_FILE:p694_fault_test>" "${CMAKE_C_COMPILER}"
+        "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803")
+    add_test(NAME r803_array_oom.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803/driver.py" oom
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r803_public_probe>"
+        "$<TARGET_FILE:p791_parser_oom>" "$<TARGET_FILE:p791_issuer_oom>"
+        "$<TARGET_FILE:p694_fault_test>" "${CMAKE_C_COMPILER}"
+        "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803")
+    add_test(NAME r803_array_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803/driver.py" native
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r803_public_probe>"
+        "$<TARGET_FILE:p791_parser_oom>" "$<TARGET_FILE:p791_issuer_oom>"
+        "$<TARGET_FILE:p694_fault_test>" "${CMAKE_C_COMPILER}"
+        "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803")
+
+    # R825: bounded independent named-output identity observation only.
+    add_executable(r825_fault_cli tests/r825/fault_cli.c)
+    target_link_libraries(r825_fault_cli PRIVATE newlang_checked_c_node
+        newlang_semantic)
+    target_link_options(r825_fault_cli PRIVATE -Wl,--wrap=malloc
+        -Wl,--wrap=calloc -Wl,--wrap=realloc
+        -Wl,--wrap=nl_parser_parse_function_unit
+        -Wl,--wrap=nl_semantic_register_function_unit
+        -Wl,--wrap=nl_semantic_check_expression)
+    add_test(NAME r825_named_output_oom_inode.unit
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r825/inode_oom.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r825_fault_cli>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r803")
+    set_tests_properties(r825_named_output_oom_inode.unit PROPERTIES TIMEOUT 180)
+
 endif()
