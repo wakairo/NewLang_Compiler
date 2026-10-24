@@ -1,0 +1,21 @@
+R874 NEW FRESH FIRST-PASS BLIND ORACLE v1; LF-only ASCII files with final LF.
+Fixed P candidate HEAD: a8057d1f82e1c6ca498d1ff43860fdf9822b97a0
+Fixed P candidate tree: 4b0f7f1b4b40b7594c403f9af751f2ead33b166f
+P parent HEAD: b3a07d89871ba3bd8441821ba4656d7c73a2fd22
+Historic main base: d04341f816853b241e8f2b0dc4a4cbcc14a14dc6
+Target PR base: p866-copy-equality-prefix (must match fixed P HEAD).
+Canonical: main CURRENT_SPEC -> Draft17.34.
+R cohort: fresh and independently named, not P fixture-derived.
+cipher_then.nl: expected SOURCE accept, semantic CHECK accept, actual public source-issued IF-return proof/normal-THEN and typed args accept; exact main native process exit 222 (17 + 29 + 17 + 71 + 29 + 5 + 43 + 11). Normal THEN equality true updates primary@ember 17->71; old Copy=17; primary@frost 29 stable; root and field incarnation preserved. Terminating ELSE equality false returns 5 without updating secondary@ember 43 or secondary@frost 11. Caller postcall numeric field fact may be Unknown (must not be inferred concrete merely because runtime arguments are constants). Loan scope closes before direct field read. Genuine callee normal arm Change, source-issued old/result/current/sibling and original source root provenance must validate.
+orbit_else.nl: expected SOURCE accept, semantic CHECK accept, actual public source-issued IF-return proof/normal-ELSE and typed args accept; exact main native process exit 218 (31 + 31 + 83 + 7 + 6 + 47 + 13). Normal ELSE equality false updates leader@north 31->83, old Copy=31; leader@south=7 stable; root and field incarnation preserved. Terminating THEN equality true returns 6 without updating trailer@north 47 or trailer@south 13. Caller postcall numeric field fact may be Unknown, not wrongly treated as known.
+Native: STRICT C17 GCC and Clang at O0/O2, actual native exit status 222 / 218; sanitizer clean when reached; malformed source must not emit successful owned artifacts.
+Negative source mutations (not rewritten oracle):
+N1 modify first function call second argument to u8(12) instead of usize(12): typed formal mismatch, SOURCE/CHECK rejection.
+N2 replace primary@ember with primary@missing: no field, source rejection.
+N3 remove mandatory ELSE lexical arm: source rejection.
+N4 insert return u8(1); inside a loan body: source rejection for return-enabled context violation.
+N5 foreign owner/public view/callee identity, original root/ProjectionId/field/index, stale-old/current ValueFact, missing Change, forged normal/return event, wrong arity/formal/typed argument: reject via actual public validator(s), without minting synthesized proof objects.
+N6 raw malformed parse: reject with nonzero and no surviving named output.
+Failure/OOM: count only reached injection; file and temp rollback and clean retry if actually demonstrated. Never mark untriggered OOM PASS.
+STOP if source is not truly selected Draft17.34 profile or authentic public issuance/validator cannot be reached, and preserve frozen oracle without repair.
+No exact diagnostic text is predicted; require nonzero/rejection category and no false acceptance. No claim of general soundness, Product GO, or audit-locality PASS.
