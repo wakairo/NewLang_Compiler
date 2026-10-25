@@ -502,6 +502,47 @@ Rは§7.1–7.3のBLINDならproducerの実装・fixture・oracleを見る**前*
 自身の入力・予測・SHAを凍結し、後の較正をfresh BLINDと混同しない。
 Issue RELEASEはRの自動起動・新権限の授与・merge許可ではない。
 
+**`r-fast/**` ref作成時のFAST算入と、推奨する一回目のref作成順序：**
+`r-fast/**` という**branch/refの作成そのもの**がGitHubの `push` eventになり、
+採用済みR-FASTを**直ちに起動し得る**。R専用sourceを追加する前に
+固定P候補HEADのSHAへbranchを作った場合、その元P HEADでのFASTも
+**実際の1 runとしてそのIssueのFAST予算に算入**する（準備前・baseline・
+no-opと呼んで除外しない）。限られた予算を有効に使うため、標準順序は
+(a) §7.1–7.3に従ってR独立source／negative／oracleとSHAを先行凍結、
+(b) 承認済み**完全固定P候補SHAを親**とするR所有blob／tree／
+初回完全test+最小CTest登録の**commit objectをrefなしで作成**し、
+(c) その**完成済みR commitの完全SHAを直接指す**新しい
+`r-fast/r<issue>-<purpose>` refを**初めて作成**する、である。
+先にP HEADを指す空branchを作ってからR commitへ更新する二段階を
+標準としない。これはGitオブジェクト／refの作成順序であり、
+特定のCLIコマンドやP同等local実行を要求せず、BLIND中のP実装・
+fixture・oracleの参照を認めない。GitHubの利用可能なUI／接続手段が
+refなしcommit→そのcommit直指し新refを提供せず、
+P HEADからのbranch作成しかできない場合は、**作成前**に
+Coordinationがbaseline FAST 1回分を含む追加予算／明示例外と
+代替手順を当該Issue・起動promptに承認するか、STOPする。
+歴史的R branchのref・source・oracleはこのために変更しない。
+
+**branch全体のActions台帳とSTOP：** branch作成の直後、追加pushの前、
+さらにR DRAFT PRの前に、**その`r-fast/**` branch/refに対する
+全期間のR-FAST workflow `event=push` run**を一覧・ページ跨ぎで確認し、
+**最初のbranch-create P HEAD run、過去のR HEAD、queued・cancelled・
+failed・successを含めて** run URL/ID、head SHA、branch、event、
+run_attempt、status/conclusionを保存する。単一commitの
+`fetch_commit_workflow_runs(R HEAD)`等のHEAD絞り込みは
+**branch全体のFAST予算管理には使用できない**。実際に発生した全run数
+（branch作成由来を含む）をIssue固有の有限FAST上限と照合し、
+許可済み残枠・§7.6機械修復の規律・先行凍結を満たさなければ
+次のpush／PRをSTOPする。初回P HEADでのGREENは、R所有testが
+そのHEADにまだない以上、今回R sourceのpreflight成功ではない。
+**採用可能なpre-PR FAST成功は、今回R所有source／登録が揃った同一の
+R HEAD SHA／branchで実行した`completed/success`だけ**である。
+以前のBLIND／calibratedの判定と原SHA／失敗runは不変とし、
+個別Issue予算を超えた場合も事後的にrunを数え直して免責しない。
+§7.6の修復回数に全project共通の2回制限は設けず、
+Coordinationの明示例外、独立性および通常FULL5＋PARTIALの
+別予算・実実行義務を引き続き適用する。
+
 **PRより先に確認する実物：** Rは承認済みの固定P候補HEADを起点に
 上記接頭辞の**新規**専用branchを作り、凍結したR所有source／harnessと
 最小CTest登録をまとめたcommitを**DRAFT PR作成前にpush**する。

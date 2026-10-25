@@ -60,16 +60,37 @@ checkout を該当する固定 commit に合わせてから、内容と対象 C/
    BLINDならP実装・fixture・oracleを見る前に、R独自のsource・negative・
    oracle・期待値・SHAを凍結する。Rは通常Chat＋専用GitHub branch＋Actionsだけを使い、
    P同等local実行環境を代用しない。
-2. **GitHubに新しいR branchを作り、PRより先に一度pushする。**
-   GitHubのGit refを**固定P候補のその完全commit SHA**へ向け、
-   branchを`r-fast/r<issue>-<purpose>`とする
-   （実例：[R886 branch `r-fast/r886-m8-independent-if-return`](https://github.com/wakairo/NewLang_Compiler/tree/c6f7f66c6a316ae091c8b408e0e0890f8e5c4ed3)）。
-   R所有source／test harness／最小CMake CTest登録をまとめ、現branchの
-   不変**R HEAD SHA**を控えてpush。これがworkflowのopt-in：
-   `.github/workflows/r-preflight.yml` のtriggerは**`push` of `r-fast/**`だけ**。
-   `r899-exact-stage0-independent` 等の通常branch名や
-   `pull_request`／DRAFT PR作成では**R-FASTを起動しない**。
-3. **Actionsの実成功を照合する。** Repository → **Actions** →
+2. **R所有の完成commitを先に作成し、そのSHAにbranchを直接作る。**
+   すでに凍結したR source／harness／最低限のCTest登録をGitHub上の
+   **blob → tree → commit object（親は完全固定P候補HEAD SHA）**として
+   作り、最初は**どの`r-fast/**` refも作らない**。親が本当に固定PのSHA、
+   commitのtreeにR source／CTest名があることと、完成R commitの
+   **完全SHA**を確認する。その後で一度だけ
+   **`r-fast/r<issue>-<purpose>` という新規branch/refを、P HEADではなく
+   完成R commit SHAへ直接作成**する。GitHub API／Git object対応アプリなら
+   「create blob/tree → create commit(parent=P SHA) → create branch(sha=R commit)」
+   の順番にする。GitHub UIが未参照commitの作成やSHA直指定branch作成を
+   提供しない場合、このUIに存在しない操作ができると仮定しない。
+   **P HEADへの空branch作成を強行せず**、Coordinationからbaseline-run分を
+   含む追加FAST予算・代替手段の事前承認を得るかSTOP。
+   **重要：`r-fast/**` refの作成そのものが`event=push`でFASTを起動する**。
+   P HEADに空branchを作ればそこで1本、R commitへ更新すれば別の1本が
+   自然発生する。作成時のrunもBudgetから除外しない。
+   `r899-...`など接頭辞が違うbranchや`pull_request`では現行
+   `.github/workflows/r-preflight.yml`のFAST triggerを満たさない。
+3. **branch全体のFAST実行を列挙してから成功を照合する。**
+   **branch作成直後／次のpush直前／DRAFT PR直前**に、Repository →
+   **Actions** → `R-FAST self-service pre-PR preparation (NOT R validation)` →
+   **対象branch `r-fast/r<issue>-<purpose>`で絞り**、`event=push`の
+   **全runをページ跨ぎで取得**する。GitHub Actionsのbranch filterまたは
+   GitHub RESTのworkflow runs一覧（`branch`／`event=push` filter）を使い、
+   **R HEADだけのcommit runs取得ではない**ことを確認。
+   作成時のP HEADでのrun、過去HEADのRED、cancelled／queuedなども
+   含む**全run ID・SHA・ref・attempt・status/conclusionの台帳**を
+   当該IssueのFAST実行上限と突き合わせ、残枠がないまま次push／PRを
+   起動しない。最終候補SHA上のR所有CTest登録が存在しない旧P HEADの
+   GREENはpre-PR R成功ではない。個別runを調べるには Repository →
+   **Actions** →
    **R-FAST self-service pre-PR preparation (NOT R validation)** →
    対象の**push run**を開き、URL/ID・attempt・branch・event・
    `head_sha` が**いまPRに出すR HEADと完全一致**するか確認する。
@@ -88,6 +109,25 @@ checkout を該当する固定 commit に合わせてから、内容と対象 C/
    [Process §7.6](NewLang_Project_Development_Process.md#76-独立実測の自律修復と証拠の保持)
    に従い、**認可済みのR所有機械的修復だけ**を元source／oracle SHA・失敗runを
    保存して次の有限pushで再確認する。無許可retry／追加pushはしない。
+   **予算算入の実例（固定された歴史的結果、再実行しない）：**
+   [T904のbranch作成FAST #40176271506](https://github.com/wakairo/NewLang_Compiler/actions/runs/40176271506)
+   はbranch `r-fast/r904-t-source-check-pilot` の**変更前base SHA
+   `0981a87db7121fd357d88b964d6b0040a961f41b`**で
+   `push`／attempt1／SUCCESS。その後の[T-only RED #40176341366](https://github.com/wakairo/NewLang_Compiler/actions/runs/40176341366)
+   `b63e472f84a4480012964fa0bc1a04a951be36d1`（FAIL）と
+   [T-only GREEN #40176542790](https://github.com/wakairo/NewLang_Compiler/actions/runs/40176542790)
+   `6fbfa88edc9e6f672579600c7516cb198a201f67`（SUCCESS）を合わせ
+   **branch全体3 run／認可2 run超過、T904全体OVER-BUDGET STOP**。
+   synthetic source CHECK はT-only未採用実験であり、現行mainのFAST機能ではない。
+   対照的に[R910は無refの完成R commitから直接branchを作成](https://github.com/wakairo/NewLang_Compiler/issues/910#issuecomment-6396034011)：
+   最初の[FAST #40181431466](https://github.com/wakairo/NewLang_Compiler/actions/runs/40181431466)
+   は完成R `e520342f3749b4e01d6bd98a21e0f20da5f87e90` でFORMAT RED、
+   次の[FAST #40181581234](https://github.com/wakairo/NewLang_Compiler/actions/runs/40181581234)
+   はR書式だけ修正した `107b172b39b558bbec1a2ebdbcc7dced292925a5`で
+   format／GCC build／483件 `ctest -N` 登録PASS、**branch全体2 run／予算2**。
+   ただしR910の本来のFULL5＋PARTIALは後で失敗し総合INCONCLUSIVE／STOP；
+   **FAST GREENをR安全性PASSと呼ばない**。
+
 4. **FAST成功後にだけ固定P向けDRAFT R PRを開く。**
    Baseは**同じ固定P候補HEADのbranch**、headは検証した専用R HEAD。
    別に自然起動する**FULL5（GCC／GCC Release／Clang／ASan／UBSan）と
