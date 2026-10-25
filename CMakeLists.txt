@@ -1401,6 +1401,24 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # Independent R907 private-diagnostic falsification, no new authority.
+    add_executable(r907_probe tests/r907/probe.c)
+    target_include_directories(r907_probe PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+    target_link_libraries(r907_probe PRIVATE newlang_semantic newlang_parser)
+    set(r907_sources "${CMAKE_CURRENT_SOURCE_DIR}/tests/r907")
+    add_test(NAME r907_positive.unit COMMAND r907_probe positive
+        "${r907_sources}/r907_quartz.nl" "${r907_sources}/r907_tide.nl")
+    add_test(NAME r907_checked_graph_integrity.unit COMMAND r907_probe tamper
+        "${r907_sources}/r907_quartz.nl" "${r907_sources}/r907_tide.nl")
+    add_test(NAME r907_return_not_old.unit COMMAND r907_probe negative
+        "${r907_sources}/r907_return_incoming.nl"
+        "${r907_sources}/r907_return_literal_old.nl")
+    add_test(NAME r907_no_call.unit COMMAND r907_probe nocall
+        "${r907_sources}/r907_no_call.nl"
+        "${r907_sources}/r907_no_call.nl")
+    add_test(NAME r907_cli_guard.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r907/cli.py"
+        "$<TARGET_FILE:newlangc>" "${r907_sources}")
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
