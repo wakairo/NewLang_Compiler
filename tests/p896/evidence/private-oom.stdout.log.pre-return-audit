@@ -1,0 +1,13 @@
+P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+P896 same-context retry after capture OOM: source CHECK3 unchanged, two verified diagnostic records
+P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+P896 same-context retry after capture OOM: source CHECK3 unchanged, two verified diagnostic records
+P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+P896 capture calloc and PRE-clone calloc reached, no public artifact; clean retry OK

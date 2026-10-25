@@ -1,0 +1,32 @@
+[  0%] Building C object CMakeFiles/newlang_diagnostic.dir/src/diagnostic.c.o
+[  0%] Building C object CMakeFiles/newlang_source.dir/src/source.c.o
+[  9%] Linking C static library libnewlang_diagnostic.a
+[ 18%] Linking C static library libnewlang_source.a
+[ 18%] Built target newlang_diagnostic
+[ 18%] Built target newlang_source
+[ 18%] Building C object CMakeFiles/newlang_lexer.dir/src/lexer.c.o
+[ 18%] Building C object CMakeFiles/newlang_syntax.dir/src/syntax.c.o
+[ 18%] Linking C static library libnewlang_syntax.a
+[ 18%] Linking C static library libnewlang_lexer.a
+[ 18%] Built target newlang_syntax
+[ 18%] Built target newlang_lexer
+[ 18%] Building C object CMakeFiles/newlang_parser.dir/src/parser.c.o
+[ 18%] Building C object CMakeFiles/newlang_checked.dir/src/checked.c.o
+[ 18%] Linking C static library libnewlang_checked.a
+[ 18%] Built target newlang_checked
+[ 27%] Linking C static library libnewlang_parser.a
+[ 27%] Built target newlang_parser
+[ 27%] Building C object CMakeFiles/newlang_semantic.dir/src/array4.c.o
+[ 27%] Building C object CMakeFiles/newlang_semantic.dir/src/if_field.c.o
+[ 36%] Building C object CMakeFiles/newlang_semantic.dir/src/copy_body.c.o
+[ 36%] Building C object CMakeFiles/newlang_semantic.dir/src/usize_addition.c.o
+In file included from /tmp/p896/src/if_field_internal.h:3,
+                 from /tmp/p896/src/if_field.c:1:
+/tmp/p896/src/copy_body_internal.h:98:5: error: unknown type name ‘uint64_t’
+   98 |     uint64_t old_value, incoming, sibling;
+      |     ^~~~~~~~
+gmake[3]: *** [CMakeFiles/newlang_semantic.dir/build.make:93: CMakeFiles/newlang_semantic.dir/src/if_field.c.o] Error 1
+gmake[3]: *** Waiting for unfinished jobs....
+gmake[2]: *** [CMakeFiles/Makefile2:826: CMakeFiles/newlang_semantic.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:910: CMakeFiles/newlangc.dir/rule] Error 2
+gmake: *** [Makefile:238: newlangc] Error 2

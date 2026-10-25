@@ -706,6 +706,25 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(p896_private tests/p896/private.c)
+    target_link_libraries(p896_private PRIVATE newlang_semantic newlang_parser)
+    add_executable(p896_oom tests/p896/private.c)
+    target_compile_definitions(p896_oom PRIVATE P896_OOM=1)
+    target_link_libraries(p896_oom PRIVATE newlang_semantic newlang_parser)
+    target_link_options(p896_oom PRIVATE -Wl,--wrap=calloc -Wl,--wrap=nl_definition_call_begin)
+    set(p896_src "${CMAKE_CURRENT_SOURCE_DIR}/tests/p896/sources")
+    add_test(NAME p896_definition_capture.unit COMMAND p896_private capture
+        "${p896_src}/p793_router_true.nl" "${p896_src}/p793_router_false.nl"
+        "${p896_src}/p892_budget_true.nl" "${p896_src}/p892_budget_false.nl"
+        "${p896_src}/channel_true.nl" "${p896_src}/channel_false.nl")
+    add_test(NAME p896_private_negative.unit COMMAND p896_private negative
+        "${p896_src}/channel_true.nl" "${p896_src}/channel_false.nl"
+        "${p896_src}/negative_return_incoming.nl" "${p896_src}/negative_return_literal.nl"
+        "${p896_src}/no_call.nl")
+    add_test(NAME p896_capture_oom.unit COMMAND p896_oom oom "${p896_src}/channel_true.nl")
+    add_test(NAME p896_unchanged_cli.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p896/cli.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p896")
     add_executable(p866_public tests/p866/public.c)
     add_executable(p866_integrity tests/p866/integrity.c)
     add_executable(p866_oom tests/p866/oom.c)

@@ -1,0 +1,63 @@
+[  0%] Built target newlang_diagnostic
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_lexer
+[ 20%] Built target newlang_syntax
+[ 20%] Built target newlang_checked
+[ 30%] Built target newlang_parser
+[ 30%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic.c.o
+[ 30%] Building C object CMakeFiles/newlang_semantic.dir/src/copy_body.c.o
+[ 40%] Building C object CMakeFiles/newlang_semantic.dir/src/if_field.c.o
+[ 50%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o
+[ 50%] Building C object CMakeFiles/newlang_semantic.dir/src/recursive_type.c.o
+[ 50%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_node.c.o
+[ 60%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_join.c.o
+[ 60%] Building C object CMakeFiles/newlang_semantic.dir/src/captured_closure.c.o
+[ 60%] Building C object CMakeFiles/newlang_semantic.dir/src/node_join.c.o
+[ 60%] Building C object CMakeFiles/newlang_semantic.dir/src/node_links.c.o
+[ 70%] Building C object CMakeFiles/newlang_semantic.dir/src/packet_fork.c.o
+[ 70%] Building C object CMakeFiles/newlang_semantic.dir/src/fixed_field.c.o
+[ 70%] Building C object CMakeFiles/newlang_semantic.dir/src/sum.c.o
+[ 70%] Building C object CMakeFiles/newlang_semantic.dir/src/raw_storage.c.o
+[ 80%] Building C object CMakeFiles/newlang_semantic.dir/src/function_body.c.o
+[ 80%] Building C object CMakeFiles/newlang_semantic.dir/src/typed_owner.c.o
+[ 80%] Building C object CMakeFiles/newlang_semantic.dir/src/custody.c.o
+[ 90%] Building C object CMakeFiles/newlang_semantic.dir/src/control.c.o
+[ 90%] Linking C static library libnewlang_semantic.a
+[ 90%] Built target newlang_semantic
+[100%] Building C object CMakeFiles/newlang_checked_c_node.dir/src/checked_c_five.c.o
+[100%] Building C object CMakeFiles/newlang_checked_c_node.dir/src/checked_c_node.c.o
+[100%] Linking C static library libnewlang_checked_c_node.a
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/newlangc.dir/src/main.c.o
+[100%] Linking C executable newlangc
+[100%] Built target newlangc
+[  0%] Built target newlang_source
+[  0%] Built target newlang_diagnostic
+[ 11%] Built target newlang_lexer
+[ 22%] Built target newlang_syntax
+[ 22%] Built target newlang_checked
+[ 33%] Built target newlang_parser
+[100%] Built target newlang_semantic
+[100%] Building C object CMakeFiles/p896_private.dir/tests/p896/private.c.o
+/tmp/p896/tests/p896/private.c: In function ‘observe’:
+/tmp/p896/tests/p896/private.c:87:35: error: assignment discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
+   87 |     refuses(p,*v);body->body_owner=owner;
+      |                                   ^
+/tmp/p896/tests/p896/private.c: In function ‘run’:
+/tmp/p896/tests/p896/private.c:152:71: error: passing argument 4 of ‘nl_semantic_register_function_unit’ from incompatible pointer type [-Werror=incompatible-pointer-types]
+  152 |     NLCheckStatus status=nl_semantic_register_function_unit(c,units,1,&d);
+      |                                                                       ^~
+      |                                                                       |
+      |                                                                       NLCheckDiagnostic *
+In file included from /tmp/p896/include/newlang/checked.h:4,
+                 from /tmp/p896/include/newlang/copy_body.h:3,
+                 from /tmp/p896/tests/p896/../../src/copy_body_internal.h:3,
+                 from /tmp/p896/tests/p896/private.c:1:
+/tmp/p896/include/newlang/semantic.h:427:31: note: expected ‘NLFunctionUnitDiagnostic *’ but argument is of type ‘NLCheckDiagnostic *’
+  427 |     NLFunctionUnitDiagnostic *diagnostic);
+      |     ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~
+cc1: all warnings being treated as errors
+gmake[3]: *** [CMakeFiles/p896_private.dir/build.make:79: CMakeFiles/p896_private.dir/tests/p896/private.c.o] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:5118: CMakeFiles/p896_private.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:5125: CMakeFiles/p896_private.dir/rule] Error 2
+gmake: *** [Makefile:1733: p896_private] Error 2

@@ -1,0 +1,54 @@
+{
+  "base": "0981a87db7121fd357d88b964d6b0040a961f41b",
+  "canonical": "Draft17.34",
+  "intent": "private diagnostic only; P793 and P892 plus new Channel alias-copy-return profile; every effectful IF still CHECK3/P6, no public IF, no C",
+  "sources": {
+    "channel_false.nl": "67c65f01ffcfb422a6a22bb9569df22567d10b45fc28b4fbd3f199fe71eb7324",
+    "channel_true.nl": "82a0347d7a43d1d20bd3907aae2e6af5685dbe2be8c92e4eae54f451a1b88965",
+    "negative_return_incoming.nl": "32d3170a135e9e8301f01de69fc4c1a112cd5fc1336ee97a07bd26dde8e7f213",
+    "negative_return_literal.nl": "1418e0b3dfa14d7e7a03ee8be94673cf3374089643b86bb9b551c0e41cffbc47",
+    "no_call.nl": "a95256ed12c91d9112828b90af05e3d05d60df369d2fb4f64e9e09cbdb07c33e"
+  },
+  "normal_observation": {
+    "channel_true/false": {
+      "PRE_old": 73,
+      "sibling": 19,
+      "other": [
+        161,
+        10
+      ],
+      "incoming_each_arm": [
+        103,
+        217
+      ],
+      "return_def_use": "previous <- replace; retained <- Copy previous; return Copy retained",
+      "capture_records_per_definition": 2,
+      "worlds": "two distinct qualified IF arms; no postjoin/acceptance change"
+    }
+  },
+  "negative_oracle": {
+    "return_incoming": "capture PRE succeeds; independent RETURN-old def-use rejected",
+    "return_literal": "capture PRE succeeds; independent RETURN-old rejected even same scalar73",
+    "no_call": "source CHECK0; zero capture records, never a verified call"
+  },
+  "private_negative_matrix": [
+    "wrong callee/registered body",
+    "swapped ordered actuals",
+    "wrong root/child/index/incarnation",
+    "wrong sibling/other original",
+    "foreign graph owner with same NodeId",
+    "wrong/closed/missing scope/loan",
+    "omitted/duplicate/reordered call ordinal/count",
+    "changed/missing body/RETURN/replace",
+    "new/incoming/literal pretending old",
+    "no call pretending call"
+  ],
+  "not_granted": [
+    "IF source admission",
+    "public proof",
+    "current authority",
+    "Unknown join",
+    "backend",
+    "native"
+  ]
+}

@@ -1,0 +1,31 @@
+Internal ctest changing into directory: /tmp/p896-build
+Test project /tmp/p896-build
+    Start 249: p896_definition_capture.unit
+1/4 Test #249: p896_definition_capture.unit .....***Failed    0.00 sec
+/tmp/p896/tests/p896/private.c:159: !c->binding_count && !c->place_count && !c->scope_count && !c->function_count && !c->value_count && !c->domains
+P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old67 incoming94 sibling12 replacements1 failure_line0
+P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old67 incoming133 sibling12 replacements1 failure_line0
+
+    Start 250: p896_private_negative.unit
+2/4 Test #250: p896_private_negative.unit .......***Failed    0.00 sec
+/tmp/p896/tests/p896/private.c:159: !c->binding_count && !c->place_count && !c->scope_count && !c->function_count && !c->value_count && !c->domains
+P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+
+    Start 251: p896_capture_oom.unit
+3/4 Test #251: p896_capture_oom.unit ............Subprocess aborted***Exception:   0.00 sec
+/tmp/p896/tests/p896/private.c:159: !c->binding_count && !c->place_count && !c->scope_count && !c->function_count && !c->value_count && !c->domains
+P896 line177: run(argv[2],false,false)
+
+    Start 252: p896_unchanged_cli.integration
+4/4 Test #252: p896_unchanged_cli.integration ...   Passed    0.06 sec
+
+25% tests passed, 3 tests failed out of 4
+
+Total Test time (real) =   0.07 sec
+
+The following tests FAILED:
+	249 - p896_definition_capture.unit (Failed)
+	250 - p896_private_negative.unit (Failed)
+	251 - p896_capture_oom.unit (Subprocess aborted)
+Errors while running CTest

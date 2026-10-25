@@ -1,0 +1,15 @@
+{
+  "base": "0981a87db7121fd357d88b964d6b0040a961f41b",
+  "all_public_headers_unchanged": true,
+  "sha256": {
+    "src/if_field.c": "06c09d6c2a1eb98c1fc0302c618a4aba20e098a10e95b58819aedfca79e903f2",
+    "src/if_field_internal.h": "807c80c3cc9789a9da4be269fdbe37eb80302956702cb87455e666290b831a6a",
+    "src/main.c": "ea806234ffaa6b595d911788c968a33db24ffd96790c3988feb7e38fd090275c",
+    "src/semantic_internal.h": "92766597c230e2e54ccd938f7eefb373dc67faaf330c6c0791846f01a3558a67",
+    "src/parser.c": "1d2268ecc6a775f8c4c1e3ff63edd4bca917fcc43baa7b2c33276bf9fc0a4ee0",
+    "include/newlang/if_field.h": "0e09aef8b208d932a571f6d07d794bdd97b1c1fe5b33e43aabfbd2c0866b4914",
+    "include/newlang/copy_body.h": "fe2e918f35154de4843e334f2133daac380ec9b405f21e8cad94b8ce0f14b5bc",
+    "docs/reference/CURRENT_SPEC.md": "8b1a51b340c88a5ef79bfe12c51f8d9c759773c9d44091dc60dff7ab7dd92849"
+  },
+  "source_freeze_sha256": "cf72644ab78b7e7c32313da2800d88f29b3657622ee591018267d3f846bfa98e"
+}
