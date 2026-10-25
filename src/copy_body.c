@@ -1751,6 +1751,8 @@ static const NLSyntaxView *dc_find_if(const NLSyntaxNode *n, NLSourceSpan span,
         return s;
     if (s->kind == NL_SYNTAX_BINDING)
         return dc_find_if(s->data.binding.initializer, span, depth + 1);
+    if (s->kind == NL_SYNTAX_STATEMENT)
+        return dc_find_if(s->data.statement.expression, span, depth + 1);
     if (s->kind == NL_SYNTAX_BLOCK) {
         for (const NLSyntaxNode *i = s->data.block.items; i;
              i = nl_syntax_next_argument(i)) {
