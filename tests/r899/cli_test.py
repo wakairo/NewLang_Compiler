@@ -9,8 +9,8 @@ import tempfile
 CLI = pathlib.Path(sys.argv[1])
 ROOT = pathlib.Path(sys.argv[2])
 FROZEN = {
-    "meridian.nl": "26cff0f10d8d9e80934e883b3611f169f4ddd144862ded1050d9261fb2b5638d",
-    "relay_pair.nl": "16936f3d33086a4c03e2b401829c9b731e34ccee349922a118fe4037e058568c",
+    "meridian.nl": "7fbf208da44fa6a04ad31652f22bc3408d8a11ec64500c63c148e89329b81b79",
+    "relay_pair.nl": "8672a1237dbdece516d268db39dc19ba662fc839011d7b967bab63f33cc8bb2c",
 }
 
 

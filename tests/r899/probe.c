@@ -32,8 +32,8 @@ static void demand_rejection(const NLDefinitionCallCapture *capture,
     NLDefinitionCallResult result = {0};
     NLCheckStatus s = nl_definition_call_validate(capture, v, &result);
     if (s == NL_CHECK_OK || s == NL_CHECK_OUT_OF_MEMORY) {
-        fprintf(stderr, "R899 BAD NEGATIVE %s: %s status=%d\n",
-                current.name, name, (int)s);
+        fprintf(stderr, "R899 BAD NEGATIVE %s: %s status=%d\n", current.name,
+                name, (int)s);
         ++current.failed;
     } else {
         ++current.rejected;
@@ -137,27 +137,25 @@ static void receive(const NLDefinitionCallCapture *capture,
     if (!output.pre_verified || !output.return_old_verified ||
         !output.loan_closed || !output.old_known || !output.sibling_known ||
         output.replacements != 1 || !output.returned ||
-        output.old_value != current.old ||
-        output.sibling != current.sibling ||
+        output.old_value != current.old || output.sibling != current.sibling ||
         output.incoming != current.incoming[v->arm]) {
         problem("PRE / source old-Copy / sibling / loan mismatch");
         return;
     }
-    if (!v->caller || !v->callee || !v->parent || !v->world ||
-        !v->pre || !v->post || v->caller == v->callee ||
+    if (!v->caller || !v->callee || !v->parent || !v->world || !v->pre ||
+        !v->post || v->caller == v->callee ||
         v->caller->if_parent != v->parent ||
-        v->caller->if_arm_index != v->arm ||
-        !v->field.present || v->field.index != current.field_index ||
-        !v->field.parent || !v->field.child ||
-        v->field.parent == v->other || v->field.child == v->sibling ||
-        !v->arguments[0] || !v->arguments[1] || !v->loan ||
-        !v->scope || v->pending_count != 1 || v->ordinal != 0) {
+        v->caller->if_arm_index != v->arm || !v->field.present ||
+        v->field.index != current.field_index || !v->field.parent ||
+        !v->field.child || v->field.parent == v->other ||
+        v->field.child == v->sibling || !v->arguments[0] || !v->arguments[1] ||
+        !v->loan || !v->scope || v->pending_count != 1 || v->ordinal != 0) {
         problem("qualified root/child/arm/callee/loan provenance invalid");
         return;
     }
     fprintf(stdout,
-            "R899 POS %s arm=%zu PRE-old=%" PRIu64
-            " incoming=%" PRIu64 " sibling=%" PRIu64
+            "R899 POS %s arm=%zu PRE-old=%" PRIu64 " incoming=%" PRIu64
+            " sibling=%" PRIu64
             " field=%zu CALL=%zu loan=%zu callee RETURN-old=YES\n",
             current.name, v->arm, output.old_value, output.incoming,
             output.sibling, v->field.index, v->call, v->loan);
@@ -198,9 +196,10 @@ static int fail_kind;
 static size_t faults_hit;
 extern void *__real_calloc(size_t, size_t);
 extern void *__real_malloc(size_t);
-extern NLDefinitionCallCapture *__real_nl_definition_call_begin(
-    const NLCheckedFragment *, NLCheckedNodeId, const NLCheckedNodeId[2],
-    size_t, const NLSemanticContext *);
+extern NLDefinitionCallCapture *
+__real_nl_definition_call_begin(const NLCheckedFragment *, NLCheckedNodeId,
+                                const NLCheckedNodeId[2], size_t,
+                                const NLSemanticContext *);
 
 void *__wrap_calloc(size_t count, size_t size)
 {
@@ -242,15 +241,15 @@ int main(int argc, char **argv)
         return 2;
     }
     current.name = argv[1];
-    current.expect_positive = !strcmp(argv[1], "meridian") ||
-                              !strcmp(argv[1], "relay");
+    current.expect_positive =
+        !strcmp(argv[1], "meridian") || !strcmp(argv[1], "relay");
     current.expect_no_call = !strcmp(argv[1], "no-call");
-    current.expect_oom = !strcmp(argv[1], "capture-oom") ||
-                         !strcmp(argv[1], "clone-oom");
+    current.expect_oom =
+        !strcmp(argv[1], "capture-oom") || !strcmp(argv[1], "clone-oom");
 #ifdef R899_OOM
-    fail_kind = !strcmp(argv[1], "capture-oom")
-                    ? 1
-                    : !strcmp(argv[1], "clone-oom") ? 2 : 0;
+    fail_kind = !strcmp(argv[1], "capture-oom") ? 1
+                : !strcmp(argv[1], "clone-oom") ? 2
+                                                : 0;
     current.expect_positive = false;
 #else
     if (current.expect_oom) {
@@ -296,35 +295,35 @@ int main(int argc, char **argv)
 
     nl_definition_call_observer(receive, NULL);
     const NLSyntaxTree *inputs[] = {tree};
-    checked = nl_semantic_register_function_unit(context, inputs, 1,
-                                                  &diagnostic);
+    checked =
+        nl_semantic_register_function_unit(context, inputs, 1, &diagnostic);
     nl_definition_call_observer(NULL, NULL);
 
     printf("R899 %s checked=%d first=%s callbacks=%zu rejects=%zu\n",
            current.name, (int)checked,
            diagnostic.diagnostic.diagnostic.code
-               ? diagnostic.diagnostic.diagnostic.code : "(none)",
+               ? diagnostic.diagnostic.diagnostic.code
+               : "(none)",
            current.observations, current.rejected);
     if (!current.expect_no_call) {
         if (checked != NL_CHECK_ANALYSIS_PRECISION_LIMIT ||
             !diagnostic.diagnostic.diagnostic.code ||
-            strcmp(diagnostic.diagnostic.diagnostic.code,
-                   "P6-JOIN-PRECISION"))
+            strcmp(diagnostic.diagnostic.diagnostic.code, "P6-JOIN-PRECISION"))
             problem("first CHECK barrier not CHECK3/P6-JOIN-PRECISION");
     }
     if (current.expect_positive &&
-        (current.observations != 2 || !current.seen[0] ||
-         !current.seen[1] || current.rejected < 22))
+        (current.observations != 2 || !current.seen[0] || !current.seen[1] ||
+         current.rejected < 22))
         problem("two actual armed private observations/negatives absent");
     if (!current.expect_positive && !current.expect_oom &&
         !current.expect_no_call &&
         (current.observations != 2 || current.rejected != 2))
-        problem("wrong-RETURN negative must be observed and privately rejected");
+        problem(
+            "wrong-RETURN negative must be observed and privately rejected");
     if (current.expect_no_call && current.observations != 0)
         problem("missing CALL yielded a receipt");
 #ifdef R899_OOM
-    if (current.expect_oom &&
-        (faults_hit != 1 || current.observations < 1))
+    if (current.expect_oom && (faults_hit != 1 || current.observations < 1))
         problem("capture or PRE-clone allocation OOM was not REACHED");
 #endif
     if (!nl_semantic_snapshot(context, &after) ||
@@ -336,8 +335,7 @@ int main(int argc, char **argv)
     if (current.expect_oom) {
         diagnostic = (NLFunctionUnitDiagnostic){0};
         const NLCheckStatus second =
-            nl_semantic_register_function_unit(context, inputs, 1,
-                                               &diagnostic);
+            nl_semantic_register_function_unit(context, inputs, 1, &diagnostic);
         if (second != NL_CHECK_ANALYSIS_PRECISION_LIMIT ||
             !nl_semantic_snapshot(context, &after) ||
             memcmp(&original, &after, sizeof(original)))
