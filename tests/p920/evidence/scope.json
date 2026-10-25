@@ -1,0 +1,16 @@
+{
+  "base": "58f54c155d2b9515ad4f277c96186bf73e599290",
+  "protected_unchanged": [
+    "src/copy_body_internal.h",
+    "src/semantic_check.c",
+    "src/semantic_internal.h",
+    "src/checked.c",
+    "src/if_field.c",
+    "src/main.c",
+    "src/parser.c",
+    "docs/reference/CURRENT_SPEC.md"
+  ],
+  "old_P917_P905_P896_fixtures_unchanged": true,
+  "replay_and_Stage0_exact": true,
+  "freeze_sha256": "221cafd5da192f0654e95777e8de8aea18aa17ea28fc486f8cfab56f9a749fb4"
+}

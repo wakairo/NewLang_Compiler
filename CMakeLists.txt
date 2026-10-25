@@ -706,6 +706,18 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(p920_edges tests/p920/edges.c)
+    target_include_directories(p920_edges PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+    target_link_libraries(p920_edges PRIVATE newlang_semantic newlang_parser)
+    target_link_options(p920_edges PRIVATE -Wl,--wrap=nl_definition_owned_take)
+    set(p920_src "${CMAKE_CURRENT_SOURCE_DIR}/tests/p920/sources")
+    add_test(NAME p920_parent_arm_edges.unit COMMAND p920_edges fixed post
+        "${p920_src}/tune_true.nl" "${p920_src}/tune_false.nl")
+    add_test(NAME p920_take_edge_rollback.unit COMMAND p920_edges fixed take
+        "${p920_src}/tune_true.nl" "${p920_src}/tune_false.nl")
+    add_test(NAME p920_cli_unchanged.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p920/cli.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p920")
     add_executable(p917_probe tests/p917/probe.c)
     target_link_libraries(p917_probe PRIVATE newlang_semantic newlang_parser)
     add_executable(p917_oom tests/p917/oom.c)

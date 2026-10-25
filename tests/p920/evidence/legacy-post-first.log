@@ -1,0 +1,35 @@
+original after input/registration destruction arm0 private=0 PRE1 old1 close1
+original after input/registration destruction arm1 private=0 PRE1 old1 close1
+post fault1: canonical edge mutation reached
+mutated parent edge arm0 private=0 PRE1 old1 close1
+mutated parent edge arm1 private=0 PRE1 old1 close1
+restored exact entries arm0 private=0 PRE1 old1 close1
+restored exact entries arm1 private=0 PRE1 old1 close1
+post fault2: canonical edge mutation reached
+mutated parent edge arm0 private=0 PRE1 old1 close1
+mutated parent edge arm1 private=0 PRE1 old1 close1
+restored exact entries arm0 private=0 PRE1 old1 close1
+restored exact entries arm1 private=0 PRE1 old1 close1
+post fault3: canonical edge mutation reached
+mutated parent edge arm0 private=0 PRE1 old1 close1
+mutated parent edge arm1 private=0 PRE1 old1 close1
+restored exact entries arm0 private=0 PRE1 old1 close1
+restored exact entries arm1 private=0 PRE1 old1 close1
+original after input/registration destruction arm0 private=0 PRE1 old1 close1
+original after input/registration destruction arm1 private=0 PRE1 old1 close1
+post fault1: canonical edge mutation reached
+mutated parent edge arm0 private=0 PRE1 old1 close1
+mutated parent edge arm1 private=0 PRE1 old1 close1
+restored exact entries arm0 private=0 PRE1 old1 close1
+restored exact entries arm1 private=0 PRE1 old1 close1
+post fault2: canonical edge mutation reached
+mutated parent edge arm0 private=0 PRE1 old1 close1
+mutated parent edge arm1 private=0 PRE1 old1 close1
+restored exact entries arm0 private=0 PRE1 old1 close1
+restored exact entries arm1 private=0 PRE1 old1 close1
+post fault3: canonical edge mutation reached
+mutated parent edge arm0 private=0 PRE1 old1 close1
+mutated parent edge arm1 private=0 PRE1 old1 close1
+restored exact entries arm0 private=0 PRE1 old1 close1
+restored exact entries arm1 private=0 PRE1 old1 close1
+P920 legacy post finished; source CHECK3 unchanged

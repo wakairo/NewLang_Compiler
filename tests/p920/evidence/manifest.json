@@ -1,0 +1,25 @@
+{
+  "sha256": {
+    "tests/p920/README.md": "ec1803482de82ccd24c667a973e71a7bf5bbfedd11ffcb66bec799242851740c",
+    "tests/p920/cli.py": "866037d179e371eb97ca541f67af9a90a053c51b8d4792bd3e389273fbe32ebb",
+    "tests/p920/edges.c": "c451e10eb79a40d1b437a94e02137107f08b293efef08f4ee570764d644eca15",
+    "tests/p920/evidence/baseline-cli.json": "1efb9d9e7f1f5f27a8aa845207550cfb58e8f082b86865c9a856b3b591f12594",
+    "tests/p920/evidence/build-first.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/p920/evidence/cli-three-way.json": "b5f6e04ebb91c0fbc292bbb17d678d4c9e619ecc9e7d07ffa850a5e704c71244",
+    "tests/p920/evidence/edges-precode.c.txt": "45e7cc584644ed9fcb7b7014b578cea7fb155196df438234015310730bd9b25b",
+    "tests/p920/evidence/formatter-preparation.json": "82afb19fc20359fe58146726ea623f96d7a55bb3e405ed99958505d1068d0764",
+    "tests/p920/evidence/gate-a.md": "99dcfe04a7fdbcb8efa72d1f0c6f182be812dd2a4173bd846ef951ed06806270",
+    "tests/p920/evidence/legacy-post-first.log": "325a3856abf4e0a2dcb3ee2b1d62790e82dbacaeccfe90eb86fbd8021ccc89b7",
+    "tests/p920/evidence/legacy-take-first.log": "5440b09d170cf0757bec004d5788f2a39111ed845eea629b70996c738c76c94c",
+    "tests/p920/evidence/local-asan-lsan-first.log": "a40bdcc2e4d79d8668040206bd9f74604e9136d1250cc41fb65d3eaeb93ad675",
+    "tests/p920/evidence/local-focused-first.log": "bd9f8b6a12efd31b18d5661af88734fd5d477140534115fcca896709f3994006",
+    "tests/p920/evidence/local-full-first.log": "b7a30a03d968cc04e307d5b161daecbea77d1002ffcb38fcd633fe5136806a57",
+    "tests/p920/evidence/local-release-first.log": "190befdd644c0925a9bf2bb31e8c01486c0b5a0d3c6814134bf954dfbf889431",
+    "tests/p920/evidence/local-ubsan-first.log": "16ec4aa6dd9a3579656ca6bf38fb83e944259c70037421f8911e66a38b5f204a",
+    "tests/p920/evidence/pinned-format-preflight.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/p920/evidence/scope.json": "e445af6a07854f3bfc41af29809298f32ed6ded930fd0f5d1a95a9344718041d",
+    "tests/p920/freeze.json": "221cafd5da192f0654e95777e8de8aea18aa17ea28fc486f8cfab56f9a749fb4",
+    "tests/p920/sources/tune_false.nl": "e0dbd72858f388ea3d947f16cf0eb48ec4d802e34a78e12d8158b8afbc33ef4d",
+    "tests/p920/sources/tune_true.nl": "3bafaa827632529f28f32e935684c624b4ee4ca6a3e80070575be1bc6680c515"
+  }
+}

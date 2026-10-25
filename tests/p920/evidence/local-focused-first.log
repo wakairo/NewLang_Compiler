@@ -1,0 +1,122 @@
+Internal ctest changing into directory: /tmp/p920-build
+UpdateCTestConfiguration  from :/tmp/p920-build/DartConfiguration.tcl
+Parse Config file:/tmp/p920-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p920-build/DartConfiguration.tcl
+Parse Config file:/tmp/p920-build/DartConfiguration.tcl
+Test project /tmp/p920-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 249
+    Start 249: p920_parent_arm_edges.unit
+
+249: Test command: /tmp/p920-build/p920_edges "fixed" "post" "/tmp/p920/tests/p920/sources/tune_true.nl" "/tmp/p920/tests/p920/sources/tune_false.nl"
+249: Working Directory: /tmp/p920-build
+249: Environment variables: 
+249:  PYTHONDONTWRITEBYTECODE=1
+249:  PYTHONHASHSEED=0
+249:  LC_ALL=C
+249:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+249:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+249: Test timeout computed to be: 90
+249: original after input/registration destruction arm0 private=0 PRE1 old1 close1
+249: original after input/registration destruction arm1 private=0 PRE1 old1 close1
+249: post fault1: canonical edge mutation reached
+249: mutated parent edge arm0 private=3 PRE0 old0 close0
+249: mutated parent edge arm1 private=3 PRE0 old0 close0
+249: restored exact entries arm0 private=0 PRE1 old1 close1
+249: restored exact entries arm1 private=0 PRE1 old1 close1
+249: post fault2: canonical edge mutation reached
+249: mutated parent edge arm0 private=3 PRE0 old0 close0
+249: mutated parent edge arm1 private=3 PRE0 old0 close0
+249: restored exact entries arm0 private=0 PRE1 old1 close1
+249: restored exact entries arm1 private=0 PRE1 old1 close1
+249: post fault3: canonical edge mutation reached
+249: mutated parent edge arm0 private=3 PRE0 old0 close0
+249: mutated parent edge arm1 private=3 PRE0 old0 close0
+249: restored exact entries arm0 private=0 PRE1 old1 close1
+249: restored exact entries arm1 private=0 PRE1 old1 close1
+249: original after input/registration destruction arm0 private=0 PRE1 old1 close1
+249: original after input/registration destruction arm1 private=0 PRE1 old1 close1
+249: post fault1: canonical edge mutation reached
+249: mutated parent edge arm0 private=3 PRE0 old0 close0
+249: mutated parent edge arm1 private=3 PRE0 old0 close0
+249: restored exact entries arm0 private=0 PRE1 old1 close1
+249: restored exact entries arm1 private=0 PRE1 old1 close1
+249: post fault2: canonical edge mutation reached
+249: mutated parent edge arm0 private=3 PRE0 old0 close0
+249: mutated parent edge arm1 private=3 PRE0 old0 close0
+249: restored exact entries arm0 private=0 PRE1 old1 close1
+249: restored exact entries arm1 private=0 PRE1 old1 close1
+249: post fault3: canonical edge mutation reached
+249: mutated parent edge arm0 private=3 PRE0 old0 close0
+249: mutated parent edge arm1 private=3 PRE0 old0 close0
+249: restored exact entries arm0 private=0 PRE1 old1 close1
+249: restored exact entries arm1 private=0 PRE1 old1 close1
+249: P920 fixed post finished; source CHECK3 unchanged
+1/3 Test #249: p920_parent_arm_edges.unit .......   Passed    0.00 sec
+test 250
+    Start 250: p920_take_edge_rollback.unit
+
+250: Test command: /tmp/p920-build/p920_edges "fixed" "take" "/tmp/p920/tests/p920/sources/tune_true.nl" "/tmp/p920/tests/p920/sources/tune_false.nl"
+250: Working Directory: /tmp/p920-build
+250: Environment variables: 
+250:  PYTHONDONTWRITEBYTECODE=1
+250:  PYTHONHASHSEED=0
+250:  LC_ALL=C
+250:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+250:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+250: Test timeout computed to be: 90
+250: take fault1 hit, original transferred=0 (expected0), original edges restored
+250: take fault1: rejected with zero records, SAME registration context retry complete
+250: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+250: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+250: take fault2 hit, original transferred=0 (expected0), original edges restored
+250: take fault2: rejected with zero records, SAME registration context retry complete
+250: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+250: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+250: take fault3 hit, original transferred=0 (expected0), original edges restored
+250: take fault3: rejected with zero records, SAME registration context retry complete
+250: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+250: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+250: take fault1 hit, original transferred=0 (expected0), original edges restored
+250: take fault1: rejected with zero records, SAME registration context retry complete
+250: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+250: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+250: take fault2 hit, original transferred=0 (expected0), original edges restored
+250: take fault2: rejected with zero records, SAME registration context retry complete
+250: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+250: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+250: take fault3 hit, original transferred=0 (expected0), original edges restored
+250: take fault3: rejected with zero records, SAME registration context retry complete
+250: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+250: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+250: P920 fixed take finished; source CHECK3 unchanged
+2/3 Test #250: p920_take_edge_rollback.unit .....   Passed    0.00 sec
+test 251
+    Start 251: p920_cli_unchanged.integration
+
+251: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p920/tests/p920/cli.py" "/tmp/p920-build/newlangc" "/tmp/p920/tests/p920"
+251: Working Directory: /tmp/p920-build
+251: Environment variables: 
+251:  PYTHONDONTWRITEBYTECODE=1
+251:  PYTHONHASHSEED=0
+251:  LC_ALL=C
+251:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+251:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+251: Test timeout computed to be: 90
+251: tune_false.nl CHECK3/P6 / zero C17 / named output preserved
+251: tune_true.nl CHECK3/P6 / zero C17 / named output preserved
+3/3 Test #251: p920_cli_unchanged.integration ...   Passed    0.04 sec
+
+The following tests passed:
+	p920_parent_arm_edges.unit
+	p920_take_edge_rollback.unit
+	p920_cli_unchanged.integration
+
+100% tests passed, 0 tests failed out of 3
+
+Total Test time (real) =   0.05 sec

@@ -1,0 +1,32 @@
+{
+  "base": "58f54c155d2b9515ad4f277c96186bf73e599290",
+  "source_sha256": {
+    "tune_false.nl": "e0dbd72858f388ea3d947f16cf0eb48ec4d802e34a78e12d8158b8afbc33ef4d",
+    "tune_true.nl": "3bafaa827632529f28f32e935684c624b4ee4ca6a3e80070575be1bc6680c515"
+  },
+  "harness_sha256": "45e7cc584644ed9fcb7b7014b578cea7fb155196df438234015310730bd9b25b",
+  "oracle": {
+    "field_index": 1,
+    "old": 94,
+    "incoming": [
+      13,
+      207
+    ],
+    "sibling": 36,
+    "other": [
+      182,
+      61
+    ],
+    "normal_check": 3,
+    "diagnostic": "P6-JOIN-PRECISION"
+  },
+  "steps": [
+    "both positives after input/parser/registration destruction",
+    "whole NLCheckedArm swap changes canonical getter; legacy0/fixed3 both; restore both0",
+    "match0=0 changes canonical getter; legacy0/fixed3 both; restore both0",
+    "context_origin0=other valid world; legacy0/fixed3 both; restore both0",
+    "pre-transfer same three faults: legacy moved, fixed no transfer/private count0; SAME context retry + both0"
+  ],
+  "classification": "P-owned calibrated; F67 static STOP remains; no guest/public/native PASS",
+  "supported": "one IF, two NORMAL arms, no unrelated IF; predecessor IF remains unsupported"
+}
