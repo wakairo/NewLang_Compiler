@@ -69,15 +69,14 @@ static void on_call(const NLDefinitionCallCapture *capture,
         result.replacements != 1 || !result.old_known ||
         !result.sibling_known || result.old_value != c->old ||
         result.incoming != c->incoming[view->arm] ||
-        result.sibling != c->sibling ||
-        view->field.index != c->field_index || !view->field.present ||
-        !view->field.parent || !view->field.child || !view->other ||
-        view->other == view->field.parent || !view->field.child_incarnation ||
-        !view->field.parent_incarnation || !view->scope ||
-        !view->caller || !view->callee || !view->parent || !view->pre ||
-        !view->post || !view->world || !view->call ||
-        !view->arguments[0] || !view->arguments[1] ||
-        !view->formals[0] || !view->formals[1]) {
+        result.sibling != c->sibling || view->field.index != c->field_index ||
+        !view->field.present || !view->field.parent || !view->field.child ||
+        !view->other || view->other == view->field.parent ||
+        !view->field.child_incarnation || !view->field.parent_incarnation ||
+        !view->scope || !view->caller || !view->callee || !view->parent ||
+        !view->pre || !view->post || !view->world || !view->call ||
+        !view->arguments[0] || !view->arguments[1] || !view->formals[0] ||
+        !view->formals[1]) {
         problem(c, "positive old-Copy/PRE/original/loan mismatch");
         return;
     }
@@ -121,7 +120,7 @@ static void on_call(const NLDefinitionCallCapture *capture,
 
     NLCheckedNodeView *owned =
         (NLCheckedNodeView *)(void *)nl_checked_node_view(view->caller,
-                                                        view->call);
+                                                          view->call);
     if (!owned) {
         problem(c, "missing checked source CALL");
         return;
@@ -152,8 +151,8 @@ static bool run_one(const char *path, RCase *scenario, bool expect_registration)
     const NLParseStatus parsed =
         nl_parser_parse_function_unit(parser, &tree, &syntax);
     if (parsed != NL_PARSE_OK) {
-        fprintf(stderr, "R907 SOURCE GATE %s parse=%d first=%s\n",
-                path, parsed, syntax.diagnostic.code);
+        fprintf(stderr, "R907 SOURCE GATE %s parse=%d first=%s\n", path, parsed,
+                syntax.diagnostic.code);
         goto done;
     }
     nl_parser_destroy(parser);
@@ -166,9 +165,8 @@ static bool run_one(const char *path, RCase *scenario, bool expect_registration)
     const NLCheckStatus registered =
         nl_semantic_register_function_unit(semantic, inputs, 1, &diagnostic);
     nl_definition_call_observer(NULL, NULL);
-    fprintf(stderr, "R907 SOURCE %s register=%d first=%s callbacks=%zu\n",
-            path, registered, diagnostic.diagnostic.diagnostic.code,
-            scenario->calls);
+    fprintf(stderr, "R907 SOURCE %s register=%d first=%s callbacks=%zu\n", path,
+            registered, diagnostic.diagnostic.diagnostic.code, scenario->calls);
     if (expect_registration) {
         if (registered != NL_CHECK_OK)
             goto done;
@@ -177,10 +175,12 @@ static bool run_one(const char *path, RCase *scenario, bool expect_registration)
                       "P6-JOIN-PRECISION") != 0) {
         goto done;
     }
-    if (!scenario->failed && scenario->calls == (expect_registration ? 0u : 2u) &&
+    if (!scenario->failed &&
+        scenario->calls == (expect_registration ? 0u : 2u) &&
         scenario->arm_mask == (expect_registration ? 0u : 3u) &&
-        scenario->good ==
-            (expect_registration ? 0u : scenario->expect_private_ok ? 2u : 0u) &&
+        scenario->good == (expect_registration           ? 0u
+                           : scenario->expect_private_ok ? 2u
+                                                         : 0u) &&
         scenario->rejected ==
             (!scenario->expect_private_ok && !expect_registration ? 2u : 0u))
         ok = true;
