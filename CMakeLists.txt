@@ -1371,3 +1371,25 @@ if(BUILD_TESTING)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
 endif()
+
+# R886 evidence-only, fixed P885 main-line cohort. ALL receipt emits plain C17
+# evidence into successful build logs (CTest output is otherwise suppressed).
+# This custom target DOES execute R's calibrated checker and guest native tests
+# during R-FAST builds; R-FAST's own "registration only" text does not apply to it.
+if(BUILD_TESTING)
+    add_executable(r886_public_probe tests/r886/owned_probe.c)
+    target_link_libraries(r886_public_probe PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    add_test(NAME r886_independent.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r886/verify.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r886_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r886")
+    add_custom_target(r886_receipt ALL
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r886/verify.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:r886_public_probe>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r886"
+        DEPENDS newlangc r886_public_probe
+        COMMENT "R886 SOURCE/PROOF/GUEST RECEIPT with full raw C17 and SHA256 in successful logs"
+        VERBATIM)
+endif()

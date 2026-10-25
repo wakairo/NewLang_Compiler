@@ -1,0 +1,78 @@
+{
+  "phase": "R886 independent Gate A frozen before producer tests/code/expected readings",
+  "candidate": "3485401972ffe881df08d64d2e2cf5208b9b7c43",
+  "branch": "r-fast/r886-m8-independent-if-return",
+  "canonical": "Draft17.34",
+  "normal": {
+    "source": "normal.nl",
+    "predicate": "73 == 73 -> true",
+    "callee": "edit(ref<write,u8>,u8)->unit",
+    "calleeReplaceCount": 1,
+    "calleeReturnCount": 0,
+    "root": "origin",
+    "field": "mark",
+    "fieldIndex": 0,
+    "originalFieldBefore": 67,
+    "originalFieldAfter": 143,
+    "sibling": "seal",
+    "siblingIndex": 1,
+    "siblingBefore": 109,
+    "siblingAfter": 109,
+    "receiver": "receiver",
+    "receiverFieldBefore": 211,
+    "receiverFieldAfter": 53,
+    "receiverSibling": 29,
+    "receiverOldCopy": 211,
+    "callerContinues": true,
+    "postcall": "Unknown, not asserted concrete"
+  },
+  "terminal": {
+    "source": "terminal.nl",
+    "predicate": "44 == 45 -> false",
+    "callee": "maybe_patch(ref<write,u8>,u8)->unit",
+    "calleeReplaceCount": 0,
+    "calleeReturnCount": 1,
+    "root": "original",
+    "field": "amount",
+    "fieldIndex": 0,
+    "originalFieldBefore": 48,
+    "originalFieldAfter": 48,
+    "sibling": "seal",
+    "siblingIndex": 1,
+    "siblingBefore": 161,
+    "siblingAfter": 161,
+    "receiver": "observer",
+    "receiverFieldBefore": 216,
+    "receiverFieldAfter": 35,
+    "receiverSibling": 81,
+    "receiverOldCopy": 216,
+    "callerContinues": true,
+    "postcall": "Unknown, not asserted concrete"
+  },
+  "negative": [
+    "bad-field.nl",
+    "bad-argument-type.nl",
+    "bad-equality-type.nl",
+    "bad-scoped-ref-escape.nl",
+    "bad-return-inside-loan.nl"
+  ],
+  "publicTamper": [
+    "if_return.return_node",
+    "if_return.normal_arm",
+    "copy_unit.parameters.parameters[0]",
+    "copy_unit.parameters.field.child",
+    "normal_copy_event.field.child",
+    "caller unit postcall foreign context"
+  ],
+  "namedOutput": [
+    "write pre-existing sentinel before failing check/emit",
+    "expect preserved bytes and fail-closed negative"
+  ],
+  "oom": "NOT TESTED unless actual R-owned injectable fail indices reached",
+  "strictHost": "GCC13 and Clang23.1.3, -std=c17 -Wall -Wextra -Werror -pedantic-errors, O0/O2",
+  "sanitizer": "host/guest ASan/UBSan",
+  "expectedCTestBase": {
+    "FULL5": 471,
+    "PARTIAL": 470
+  }
+}
