@@ -49,8 +49,7 @@ void *__wrap_malloc(size_t bytes)
 {
     if (active == PRE && in_begin && in_pre_clone && begins == 1) {
         ++pre_malloc_attempts;
-        if (pre_malloc_attempts == 1 &&
-            bytes == sizeof(NLSemanticContext)) {
+        if (pre_malloc_attempts == 1 && bytes == sizeof(NLSemanticContext)) {
             ++hit;
             fprintf(stderr,
                     "R912 TRUE PRE nl_sem_clone first malloc size=%zu hit=%u\n",
@@ -61,9 +60,9 @@ void *__wrap_malloc(size_t bytes)
     return __real_malloc(bytes);
 }
 NLCheckStatus __real_nl_sem_clone(const NLSemanticContext *,
-                                 NLSemanticContext **);
+                                  NLSemanticContext **);
 NLCheckStatus __wrap_nl_sem_clone(const NLSemanticContext *source,
-                                 NLSemanticContext **out)
+                                  NLSemanticContext **out)
 {
     if (active == PRE && in_begin) {
         ++pre_clone_entries;
