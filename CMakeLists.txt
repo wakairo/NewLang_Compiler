@@ -706,6 +706,21 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(p901_probe tests/p901/probe.c)
+    target_link_libraries(p901_probe PRIVATE newlang_semantic newlang_parser)
+    set(p901_src "${CMAKE_CURRENT_SOURCE_DIR}/tests/p901/sources")
+    add_test(NAME p901_statement_positive.unit COMMAND p901_probe capture
+        "${p901_src}/r899_meridian.nl" "${p901_src}/r899_relay_pair.nl"
+        "${p901_src}/scan_true.nl" "${p901_src}/scan_false.nl")
+    add_test(NAME p901_statement_integrity.unit COMMAND p901_probe negative
+        "${p901_src}/r899_meridian.nl" "${p901_src}/r899_relay_pair.nl"
+        "${p901_src}/scan_true.nl" "${p901_src}/scan_false.nl"
+        "${p901_src}/negative_return_incoming.nl" "${p901_src}/negative_return_literal.nl"
+        "${p901_src}/no_call.nl")
+    add_test(NAME p901_statement_oom.unit COMMAND p896_oom oom "${p901_src}/r899_meridian.nl")
+    add_test(NAME p901_cli_unchanged.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p901/cli.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p901")
     add_executable(p896_private tests/p896/private.c)
     target_link_libraries(p896_private PRIVATE newlang_semantic newlang_parser)
     add_executable(p896_oom tests/p896/private.c)

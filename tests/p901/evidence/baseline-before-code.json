@@ -1,0 +1,191 @@
+[
+  {
+    "source": "negative_return_incoming.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "3e2d9f8aafb280bf7d6afd344bb44103e768f6ff04358182daae3c6d17b05287",
+    "diagnostic": "/tmp/p901-preflight/sources/negative_return_incoming.nl:11:5-15:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "negative_return_incoming.nl",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "3e2d9f8aafb280bf7d6afd344bb44103e768f6ff04358182daae3c6d17b05287",
+    "diagnostic": "/tmp/p901-preflight/sources/negative_return_incoming.nl:11:5-15:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "negative_return_incoming.nl",
+    "mode": "named",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "3e2d9f8aafb280bf7d6afd344bb44103e768f6ff04358182daae3c6d17b05287",
+    "diagnostic": "/tmp/p901-preflight/sources/negative_return_incoming.nl:11:5-15:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "negative_return_literal.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "3cf532ccb782825df9f2d903878fac5b0fb1f06b631e6fd05e5853c8c20aebf7",
+    "diagnostic": "/tmp/p901-preflight/sources/negative_return_literal.nl:11:5-15:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "negative_return_literal.nl",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "3cf532ccb782825df9f2d903878fac5b0fb1f06b631e6fd05e5853c8c20aebf7",
+    "diagnostic": "/tmp/p901-preflight/sources/negative_return_literal.nl:11:5-15:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "negative_return_literal.nl",
+    "mode": "named",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "3cf532ccb782825df9f2d903878fac5b0fb1f06b631e6fd05e5853c8c20aebf7",
+    "diagnostic": "/tmp/p901-preflight/sources/negative_return_literal.nl:11:5-15:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "no_call.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "no_call.nl",
+    "mode": "emit",
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "5a6f5b06652e91541af3355e54cf309f6f2993fbb9ba08438ec6662f543f9162",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p901-preflight/sources/no_call.nl\n"
+  },
+  {
+    "source": "no_call.nl",
+    "mode": "named",
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "5a6f5b06652e91541af3355e54cf309f6f2993fbb9ba08438ec6662f543f9162",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p901-preflight/sources/no_call.nl\n"
+  },
+  {
+    "source": "r899_meridian.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "fba2a2c204f73da0502902b65fb3804ba61d926573591aeb4f5e25c8977c11fd",
+    "diagnostic": "/tmp/p901-preflight/sources/r899_meridian.nl:14:5-22:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "r899_meridian.nl",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "fba2a2c204f73da0502902b65fb3804ba61d926573591aeb4f5e25c8977c11fd",
+    "diagnostic": "/tmp/p901-preflight/sources/r899_meridian.nl:14:5-22:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "r899_meridian.nl",
+    "mode": "named",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "fba2a2c204f73da0502902b65fb3804ba61d926573591aeb4f5e25c8977c11fd",
+    "diagnostic": "/tmp/p901-preflight/sources/r899_meridian.nl:14:5-22:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "r899_relay_pair.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "ecc01092c76ce33495e757d13220859f6cbbed5cccdd6899748485aceb8f182a",
+    "diagnostic": "/tmp/p901-preflight/sources/r899_relay_pair.nl:14:5-22:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "r899_relay_pair.nl",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "ecc01092c76ce33495e757d13220859f6cbbed5cccdd6899748485aceb8f182a",
+    "diagnostic": "/tmp/p901-preflight/sources/r899_relay_pair.nl:14:5-22:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "r899_relay_pair.nl",
+    "mode": "named",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "ecc01092c76ce33495e757d13220859f6cbbed5cccdd6899748485aceb8f182a",
+    "diagnostic": "/tmp/p901-preflight/sources/r899_relay_pair.nl:14:5-22:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "scan_false.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "8fb1ecb42bc8ff86f7189da21e73304d3dca87cc8c9b2185856d892addb64ea3",
+    "diagnostic": "/tmp/p901-preflight/sources/scan_false.nl:11:5-15:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "scan_false.nl",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "8fb1ecb42bc8ff86f7189da21e73304d3dca87cc8c9b2185856d892addb64ea3",
+    "diagnostic": "/tmp/p901-preflight/sources/scan_false.nl:11:5-15:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "scan_false.nl",
+    "mode": "named",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "8fb1ecb42bc8ff86f7189da21e73304d3dca87cc8c9b2185856d892addb64ea3",
+    "diagnostic": "/tmp/p901-preflight/sources/scan_false.nl:11:5-15:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "scan_true.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "a780b5dcb787da2de7d27149cd6d4cefcf6d3350f145dc789615d38c507e3a7e",
+    "diagnostic": "/tmp/p901-preflight/sources/scan_true.nl:11:5-15:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "scan_true.nl",
+    "mode": "emit",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "a780b5dcb787da2de7d27149cd6d4cefcf6d3350f145dc789615d38c507e3a7e",
+    "diagnostic": "/tmp/p901-preflight/sources/scan_true.nl:11:5-15:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "scan_true.nl",
+    "mode": "named",
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "a780b5dcb787da2de7d27149cd6d4cefcf6d3350f145dc789615d38c507e3a7e",
+    "diagnostic": "/tmp/p901-preflight/sources/scan_true.nl:11:5-15:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  }
+]

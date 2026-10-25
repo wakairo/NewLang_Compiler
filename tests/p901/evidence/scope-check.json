@@ -1,0 +1,15 @@
+{
+  "base": "b65c39fac1cf56e276c03a53fff802fb0c243957",
+  "production_diff_exact": "dc_find_if: two-line STATEMENT expression recursion",
+  "protected_paths_unchanged": [
+    "src/semantic_check.c",
+    "src/copy_body_internal.h",
+    "src/if_field.c",
+    "src/if_field_internal.h",
+    "src/main.c",
+    "src/parser.c",
+    "docs/reference/CURRENT_SPEC.md"
+  ],
+  "all_source_sha_unchanged": true,
+  "freeze_sha256": "cea9d343115abe510c659f7673c94e4bc913b495ce6b9743f4b9ae3d19f066ab"
+}

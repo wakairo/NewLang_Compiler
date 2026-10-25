@@ -1,0 +1,49 @@
+#include "/tmp/p896/src/copy_body_internal.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+static size_t callbacks;
+static bool same(NLSourceSpan a,NLSourceSpan b) {return a.start_byte==b.start_byte&&a.end_byte==b.end_byte;}
+static const NLSyntaxView *old_find(const NLSyntaxNode *node,NLSourceSpan span,size_t depth) {
+ const NLSyntaxView *s=nl_syntax_node_view(node);
+ if(!s||depth>16)return NULL;
+ if(s->kind==NL_SYNTAX_IF&&same(s->span,span))return s;
+ if(s->kind==NL_SYNTAX_BINDING)return old_find(s->data.binding.initializer,span,depth+1);
+ if(s->kind==NL_SYNTAX_BLOCK) {
+  for(const NLSyntaxNode *i=s->data.block.items;i;i=nl_syntax_next_argument(i)) {
+   const NLSyntaxView *found=old_find(i,span,depth+1);if(found)return found;
+  }
+  return old_find(s->data.block.tail,span,depth+1);
+ }
+ return NULL;
+}
+static void observe(const NLDefinitionCallCapture *p,const NLDefinitionCallView *v,NLCheckStatus status,void *unused) {
+ (void)unused;++callbacks;
+ if(!p||!v||status!=NL_CHECK_OK)abort();
+ const NLCheckedFragment *f=v->caller,*b=v->callee;
+ const NLFunctionEntry *cf=&v->pre->functions[v->caller_function-1],*fn=&v->pre->functions[v->function-1];
+ const NLCheckedNodeView *choice=nl_checked_node_view(v->parent,f->if_parent_node);
+ bool prior=f&&b&&f->context==v->world&&f->if_parent==v->parent&&f->if_arm_index==v->arm&&f->body_count==1&&f->body_calls[0]==v->call&&f->bodies[0]==b&&nl_checked_call_body(f,v->call)==b&&b->context==f->context&&!b->copy_body&&b->body_owner==v->body&&b->source==v->body->source&&!b->arm_count&&!b->body_count&&cf->body&&cf->body->source==f->source&&fn->body==v->body&&fn->count==2&&fn->parameters&&fn->body->count==2&&fn->result==fn->parameters[1]&&fn->result==nl_semantic_core_type(v->pre,NL_TYPE_U8)&&!v->ordinal&&v->pending_count==1&&v->arm<2&&v->pre&&v->post&&choice&&choice->kind==NL_CHECKED_IF;
+ size_t exact_ast=0,exact_checked=0;
+ const NLSyntaxNode *root=nl_syntax_tree_root(cf->body->syntax);const NLSyntaxView *body=nl_syntax_node_view(root);
+ for(const NLSyntaxNode *i=body->data.block.items;i;i=nl_syntax_next_argument(i)) {
+  const NLSyntaxView *statement=nl_syntax_node_view(i);
+  if(statement->kind==NL_SYNTAX_STATEMENT) {
+   const NLSyntaxView *expression=nl_syntax_node_view(statement->data.statement.expression);
+   if(expression&&expression->kind==NL_SYNTAX_IF&&same(expression->span,choice->span))++exact_ast;
+  }
+ }
+ for(size_t i=1;i<=v->parent->count;++i){const NLCheckedNodeView *n=nl_checked_node_view(v->parent,i);if(n->kind==NL_CHECKED_IF&&same(n->span,choice->span))++exact_checked;}
+ NLDefinitionCallResult r;NLCheckStatus validation=nl_definition_call_validate(p,v,&r);
+ printf("arm%zu prior_gates=%d old_find=%d exact_STATEMENT_IF=%zu exact_checked_IF=%zu span=%zu:%zu validator=%d pre=%d old=%d failure_line=%zu root=%zu child=%zu index=%zu\n",v->arm,prior,old_find(root,choice->span,0)!=NULL,exact_ast,exact_checked,choice->span.start_byte,choice->span.end_byte,validation,r.pre_verified,r.return_old_verified,r.failure_line,v->field.parent,v->field.child,v->field.index);
+ if(!prior||old_find(root,choice->span,0)||exact_ast!=1||exact_checked!=1||validation!=NL_CHECK_ANALYSIS_PRECISION_LIMIT||r.pre_verified||r.failure_line)abort();
+}
+int main(int argc,char **argv) {
+ if(argc!=2)return 2;
+ NLSource *s=NULL;NLParser *p=NULL;NLSyntaxTree *tree=NULL;NLSemanticContext *c=NULL;
+ if(nl_source_load(argv[1],&s)!=NL_SOURCE_OK||nl_parser_create(s,&p)!=NL_PARSE_OK||nl_parser_parse_function_unit(p,&tree,NULL)!=NL_PARSE_OK||nl_semantic_create(&c)!=NL_CHECK_OK)return 1;
+ nl_definition_call_observer(observe,NULL);const NLSyntaxTree *units[]={tree};NLFunctionUnitDiagnostic d={0};NLCheckStatus status=nl_semantic_register_function_unit(c,units,1,&d);nl_definition_call_observer(NULL,NULL);
+ printf("registration=%d diagnostic=%s callbacks=%zu\n",status,d.diagnostic.diagnostic.code,callbacks);
+ nl_semantic_destroy(c);nl_syntax_tree_destroy(tree);nl_parser_destroy(p);nl_source_destroy(s);
+ return status==NL_CHECK_ANALYSIS_PRECISION_LIMIT&&callbacks==2?0:1;
+}

@@ -1,0 +1,78 @@
+{
+  "production_base": "b65c39fac1cf56e276c03a53fff802fb0c243957",
+  "base_tree": "1721a4d1fbd75d0c6cb87ee33ce0a674dabfbdc2",
+  "main": "0981a87db7121fd357d88b964d6b0040a961f41b",
+  "canonical": "Draft17.34",
+  "external_R_source_head": "270533d84109c9490afb7c0c13a89cdcc0fecc02",
+  "cohort": "P-owned NON-BLIND calibrated regressions; external R positives unchanged, no R harness/oracle edits",
+  "sha256": {
+    "negative_return_incoming.nl": "fd241f7180bc23e0f9ae7c80f39a141eb206b6d7f790b266959ab17579250f7f",
+    "negative_return_literal.nl": "a4e736fc977371083fe185c8d8b309f1b0f0749e72bb48ef2e7aa28833564cbe",
+    "no_call.nl": "e0ffdef04470b8f5da1e7c511bdae74619123c74a201f3a57efd254920a59c9d",
+    "r899_meridian.nl": "7fbf208da44fa6a04ad31652f22bc3408d8a11ec64500c63c148e89329b81b79",
+    "r899_relay_pair.nl": "8672a1237dbdece516d268db39dc19ba662fc839011d7b967bab63f33cc8bb2c",
+    "scan_false.nl": "e4415a51938367540a133b54149153ae973866c24b5683ea892c8fa979df6548",
+    "scan_true.nl": "56ae662dd14610426ee5b3e66c7ee7d69e827712a821c1f56562280e1203db75"
+  },
+  "positive_oracles": {
+    "r899_meridian": {
+      "index": 0,
+      "old": 37,
+      "incoming": [
+        81,
+        118
+      ],
+      "sibling": 163,
+      "other": [
+        59,
+        201
+      ]
+    },
+    "r899_relay_pair": {
+      "index": 1,
+      "old": 212,
+      "incoming": [
+        65,
+        147
+      ],
+      "sibling": 43,
+      "other": [
+        174,
+        26
+      ]
+    },
+    "scan_true/false": {
+      "index": 1,
+      "old": 56,
+      "incoming": [
+        126,
+        209
+      ],
+      "sibling": 11,
+      "other": [
+        187,
+        9
+      ],
+      "unrelated_prefix_IF": "pure discarded Copy IF precedes target statement IF; exact target span required"
+    }
+  },
+  "before_fix": {
+    "positive_private": "status3, pre0, failure_line0 at missing STATEMENT AST descent",
+    "effectful_cli": "CHECK3 P6-JOIN-PRECISION, emit3 zero C, named sentinel retained"
+  },
+  "after_fix": {
+    "positive_private": "status0 PRE+RETURN-old+loan-closure, two real arm captures per source",
+    "negative_return_incoming/literal": "PRE verified then RETURN-old rejected, never vacuous AST lookup refusal",
+    "no_call": "CHECK0, zero callbacks; successful registration is not failure rollback",
+    "effectful_cli": "byte-identical exit/stdout/stderr to fixed P before repair; CHECK3/no public IF/no C"
+  },
+  "negative_oracle": [
+    "wrong target span",
+    "unrelated real IF in same caller AST",
+    "wrong registered caller body/source owner",
+    "foreign arm body with same NodeIDs",
+    "inherited P896 wrong actual/formal/root/field/facts/loan/RETURN target/state controls"
+  ],
+  "oom": "reuse P-owned capture calloc and PRE-clone calloc injection, same-context retry; no R harness reuse; no new allocation in repair",
+  "scope": "only dc_find_if STATEMENT expression recursion; all other guards/depth16 unchanged"
+}
