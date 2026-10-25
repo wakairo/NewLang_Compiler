@@ -45,3 +45,64 @@ checkout を該当する固定 commit に合わせてから、内容と対象 C/
 別の修正手段 `bash scripts/format.sh` は**実ファイルを変更する**ため、差分と凍結済み R の
 元 source/oracle の SHA・初回 finding を保存してから、独立検証 Issue §7.6 の予算内で行う。
 フォーマット以外の予測・guest 値・安全性・authority を変えてはならない。
+
+## R-FAST：新規RのPR前準備（GitHub操作例、non-normative）
+
+**規則の唯一の正本は[Development Process §7.6](NewLang_Project_Development_Process.md#76-独立実測の自律修復と証拠の保持)**。
+以下は[Issue #903](https://github.com/wakairo/NewLang_Compiler/issues/903)の新規R向け手順メモであり、
+このRunbook自体はrepair回数・独立性・CI予算・例外を新たに決定しない。
+既存の上記HTTP404限定retryの説明も、Rの手動retry許可へ拡張しない。
+
+1. **Gate A／固定SHAを先に記録する。** Coordination RELEASEから
+   immutableな**P候補HEAD完全SHA**、main/canonical、対象R Issue、
+   `r-fast/r<issue>-<purpose>` という**具体的branch名**、
+   FASTのpush予算、別のFULL5＋PARTIAL予算、STOPを控える。
+   BLINDならP実装・fixture・oracleを見る前に、R独自のsource・negative・
+   oracle・期待値・SHAを凍結する。Rは通常Chat＋専用GitHub branch＋Actionsだけを使い、
+   P同等local実行環境を代用しない。
+2. **GitHubに新しいR branchを作り、PRより先に一度pushする。**
+   GitHubのGit refを**固定P候補のその完全commit SHA**へ向け、
+   branchを`r-fast/r<issue>-<purpose>`とする
+   （実例：[R886 branch `r-fast/r886-m8-independent-if-return`](https://github.com/wakairo/NewLang_Compiler/tree/c6f7f66c6a316ae091c8b408e0e0890f8e5c4ed3)）。
+   R所有source／test harness／最小CMake CTest登録をまとめ、現branchの
+   不変**R HEAD SHA**を控えてpush。これがworkflowのopt-in：
+   `.github/workflows/r-preflight.yml` のtriggerは**`push` of `r-fast/**`だけ**。
+   `r899-exact-stage0-independent` 等の通常branch名や
+   `pull_request`／DRAFT PR作成では**R-FASTを起動しない**。
+3. **Actionsの実成功を照合する。** Repository → **Actions** →
+   **R-FAST self-service pre-PR preparation (NOT R validation)** →
+   対象の**push run**を開き、URL/ID・attempt・branch・event・
+   `head_sha` が**いまPRに出すR HEADと完全一致**するか確認する。
+   `completed/success` の各stepから固定Clang**23.1.3** formatter PASS、
+   GCC `NEWLANG_FRONTEND_ONLY=ON` build PASS、
+   `ctest -N` のユニークな登録名前群（**今回追加したR CTest名**を含む）
+   とrequired core名PASSを確認。**`ctest -N` の実CTest数は0**、
+   source `newlangc --check`／public proof／C17/native／負例／OOM／ASan／UBSanは
+   **現行FASTの標準検査ではNOT TESTED**。
+   実例：[T862成功#40080841697](https://github.com/wakairo/NewLang_Compiler/actions/runs/40080841697)
+   （`push`/HEAD `d0e4f3756907a0b784d040b3186c89018f927b6e`／attempt1）
+   と[R886成功#40144734152](https://github.com/wakairo/NewLang_Compiler/actions/runs/40144734152)
+   （`push`/HEAD `c6f7f66c6a316ae091c8b408e0e0890f8e5c4ed3`／attempt1）。
+   **別HEADの古いGREEN、missing／queued／cancelled／failedはPASSではない**。
+   formatter REDならActionsのreview-only suggestions patchを確認し、
+   [Process §7.6](NewLang_Project_Development_Process.md#76-独立実測の自律修復と証拠の保持)
+   に従い、**認可済みのR所有機械的修復だけ**を元source／oracle SHA・失敗runを
+   保存して次の有限pushで再確認する。無許可retry／追加pushはしない。
+4. **FAST成功後にだけ固定P向けDRAFT R PRを開く。**
+   Baseは**同じ固定P候補HEADのbranch**、headは検証した専用R HEAD。
+   別に自然起動する**FULL5（GCC／GCC Release／Clang／ASan／UBSan）と
+   NO-LLVM PARTIAL**の6つの**実行**jobについて、
+   run URL／ID／event／head／attempt、skippedなし、実CTest・元sourceからの
+   CHECK→真正owned→C17/native・negative/sanitizer／未到達項目を記録する。
+   FAST成功はFULL5/PARTIALの省略・merge・R独立性の認定ではない。
+   例外はCoordinationが個別Issue**および起動prompt**に事前明記した場合のみ。
+   Rは失敗・見当たらないrun・SHA不一致・予算超過ならSTOPしてCへ戻す。
+
+**source CHECKの現況（T #904）：** [T904](https://github.com/wakairo/NewLang_Compiler/issues/904)は
+軽量source-smokeの**GUARDED PILOT RELEASE**であり、
+**現在の採用済み`r-preflight.yml`には存在しない／未実装・未採用**。
+`u8 == u8` に対する`USIZE-EQUALITY-TYPE`のようなsource診断は
+現行のformat／build／`ctest -N`だけでは検出できない。
+仮に将来source-smokeを採用しても、その最初のsource診断到達は
+source-issued proof／C17/native／実OOMのPASSではない。
+T実装・C採用・Docs改訂の**別判断までは現在の操作・必須gateとして扱わない**。
