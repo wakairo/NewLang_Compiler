@@ -1,0 +1,29 @@
+{
+  "authority": "d04341f816853b241e8f2b0dc4a4cbcc14a14dc6",
+  "branch_base": "82496eeeede9e82eb24ab1ff9186e7a0071744a6",
+  "canonical": "Draft17.34",
+  "new_negative": {
+    "path": "tests/p817/sources/wrong_copy_actual.nl",
+    "sha256": "a46b8c212d0afeef51680301c3b15d67730761136da27add7ba71a7a4be561a4",
+    "admission": "same selected loan_write(local@field), genuine ref<write,u8> actual; second actual is usize Copy binding; helper definition itself valid",
+    "expected": {
+      "exit": 3,
+      "layer": "semantic",
+      "diagnostic": "P3-TYPE-MISMATCH",
+      "stdout_bytes": 0,
+      "named_output": "old sentinel unchanged, no temporary remains"
+    }
+  },
+  "historical_evidence": "P814 bytes/oracles unchanged; read_only.nl remains SOURCE-UNSUPPORTED, not semantic PASS",
+  "positive_baseline": "all four P814 sources CHECK0; actual IF-arm body/parameters3/3, projected/later0/0",
+  "candidate": "actual original IF-arm body AND parameters0/0; no C17 extension",
+  "K": 5,
+  "ctests": [
+    "p817_pump_public.unit",
+    "p817_charge_public.unit",
+    "p817_arm_integrity.unit",
+    "p817_issuer_oom.unit",
+    "p817_cli_boundaries.integration"
+  ],
+  "stop": "first unexpected source/proof/foreign-world/fact/OOM/format/CI result; one natural FULL5/PARTIAL pair"
+}

@@ -1,0 +1,95 @@
+{
+  "authority": "d04341f816853b241e8f2b0dc4a4cbcc14a14dc6",
+  "canonical": "Draft17.34",
+  "sources": {
+    "charge_false.nl": "5ad114e6f978c2b3cd4923a1bccff5c82ce7c51413b1ef01070d9697645acc92",
+    "charge_true.nl": "eb030bb74af49276166b4c36843717a55c8df259ab1c5ed52ea514db53d3688a",
+    "escape.nl": "ec18e680ba55404e0440492978a12b08e1dd2cb2d03e445ac25ffdc24ed4f22d",
+    "pump_false.nl": "352c924ef74022243909c6f306bbd0df2af397196cf807eedb0832d7e9223f58",
+    "pump_true.nl": "ebf01ad21fdbc9b48e8ecf06f72819a8ea353fd3a6499b6d2683ec5e27218ee4",
+    "read_only.nl": "b78de8d1feb87d1e15151ab5a2b6a50cb68f93afc9edbd103898778bc43ba403",
+    "wrong_field.nl": "7d7baa39098cb27c671999050915b69dc83694c20d10c400f4faef013c93afe3",
+    "wrong_return.nl": "8f8d24eb85bbbca32a27d147255bc0c932b58573f2f841664cdc75442cc6000e"
+  },
+  "baseline": {
+    "positive_check": 0,
+    "actual_if_arm_body": 3,
+    "actual_if_arm_parameters": 3,
+    "projected_normal_and_later": 0,
+    "c17": "record only; no backend change authorized"
+  },
+  "candidate": {
+    "actual_if_arm_body": 0,
+    "actual_if_arm_parameters": 0,
+    "wrong_world_arm_field_fact_scope": "reject",
+    "c17": "measure unchanged fail-closed, no success required"
+  },
+  "oracle": {
+    "pump_true": {
+      "terminal": true,
+      "old": 43,
+      "new": 73,
+      "sibling": 198,
+      "continuation": false
+    },
+    "pump_false": {
+      "terminal": false,
+      "old": 43,
+      "new": 126,
+      "sibling": 198,
+      "later_old": 211,
+      "later_new": 126,
+      "later_sibling": 17
+    },
+    "charge_true": {
+      "terminal": true,
+      "calls": 2,
+      "old": [
+        54,
+        26
+      ],
+      "new": [
+        97,
+        54
+      ],
+      "sibling": [
+        181,
+        220
+      ]
+    },
+    "charge_false": {
+      "terminal": false,
+      "calls": 2,
+      "old": [
+        54,
+        26
+      ],
+      "new": [
+        148,
+        54
+      ],
+      "sibling": [
+        181,
+        220
+      ],
+      "later_old": 220,
+      "later_new": 148,
+      "later_sibling": 54
+    }
+  },
+  "negatives": {
+    "read_only": "semantic type mismatch",
+    "wrong_field": "semantic unknown field",
+    "escape": "semantic exit dependency",
+    "wrong_return": "semantic return type"
+  },
+  "K": 5,
+  "ctests": [
+    "p813_pump_public.unit",
+    "p813_charge_public.unit",
+    "p813_arm_integrity.unit",
+    "p813_issuer_oom.unit",
+    "p813_cli_boundaries.integration"
+  ],
+  "stop": "first source/profile or authenticity or CI failure; no backend/public schema change"
+}
