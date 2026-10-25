@@ -151,3 +151,15 @@ jobs:
           print("R-FAST ONLY format, host build, test registration. "
                 "SOURCE/CHECK/PROOF/C17/NATIVE/NEGATIVE/OOM/ASAN/UBSAN NOT TESTED")
           PY
+
+      - name: Self-test absent-manifest and unsafe-input fail-closed behavior (NO guest execution)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B scripts/r_fast_source_smoke.py --self-test
+
+      - name: Optional frozen R-owned source eligibility CHECK (NOT proof)
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -B scripts/r_fast_source_smoke.py "$PWD" build-frontend/newlangc

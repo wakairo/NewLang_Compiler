@@ -1,0 +1,11 @@
+{
+  "issue": 904,
+  "sources": [
+    {
+      "file": "t904_equality.nl",
+      "sha256": "164a17f6bc689eb895a1da9a00618d9a788e273d04db369d352ab639a9118551",
+      "expect_exit": 0,
+      "first_diagnostic": null
+    }
+  ]
+}
