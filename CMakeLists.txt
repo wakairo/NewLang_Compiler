@@ -1401,6 +1401,22 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # R912 NEW calibrated: real PRE clone malloc, restored foreign owner,
+    # and four frozen sources x three legal ordinary CLI modes.
+    add_executable(r912_probe tests/r912/probe.c)
+    target_include_directories(r912_probe PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+    target_link_libraries(r912_probe PRIVATE newlang_semantic newlang_parser)
+    target_link_options(r912_probe PRIVATE -Wl,--wrap=calloc -Wl,--wrap=malloc
+        -Wl,--wrap=nl_sem_clone -Wl,--wrap=nl_definition_call_begin)
+    foreach(r912_mode capture pre foreign borrow)
+        add_test(NAME r912_${r912_mode}.unit COMMAND r912_probe ${r912_mode}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r912/r907_quartz.nl"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r912/r907_tide.nl")
+    endforeach()
+    add_test(NAME r912_cli_byte_diff.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r912/cli_diff.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r912")
+    set_tests_properties(r912_cli_byte_diff.integration PROPERTIES TIMEOUT 240)
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
