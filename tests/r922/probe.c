@@ -18,8 +18,19 @@ typedef struct {
     unsigned old, incoming[2], sibling, other[2];
     size_t field_index;
 } Trial;
-typedef enum { NONE, HOST_CALLOC, PENDING_CALLOC, PRE_MALLOC, POST_MALLOC } Fault;
-typedef enum { IDLE, OPEN_SESSION, PENDING_CALL, ATTACH_POST } Stage;
+typedef enum {
+    NONE,
+    HOST_CALLOC,
+    PENDING_CALLOC,
+    PRE_MALLOC,
+    POST_MALLOC
+} Fault;
+typedef enum {
+    IDLE,
+    OPEN_SESSION,
+    PENDING_CALL,
+    ATTACH_POST
+} Stage;
 static Fault requested;
 static Stage stage;
 static bool cloning;
@@ -74,9 +85,10 @@ NLCheckStatus __wrap_nl_definition_owned_open(NLDefinitionOwned **p)
     stage = IDLE;
     return s;
 }
-NLDefinitionOwnedPending *__real_nl_definition_owned_call(
-    const NLCheckedFragment *, NLCheckedNodeId, const NLCheckedNodeId[2],
-    size_t, const NLSemanticContext *);
+NLDefinitionOwnedPending *
+__real_nl_definition_owned_call(const NLCheckedFragment *, NLCheckedNodeId,
+                                const NLCheckedNodeId[2], size_t,
+                                const NLSemanticContext *);
 NLDefinitionOwnedPending *__wrap_nl_definition_owned_call(
     const NLCheckedFragment *f, NLCheckedNodeId call,
     const NLCheckedNodeId args[2], size_t function, const NLSemanticContext *c)
@@ -125,8 +137,8 @@ static NLCheckStatus register_input(Input *in)
 {
     const NLSyntaxTree *unit[] = {in->tree};
     NLFunctionUnitDiagnostic d = {0};
-    NLCheckStatus s = nl_semantic_register_function_unit(in->context, unit, 1,
-                                                          &d);
+    NLCheckStatus s =
+        nl_semantic_register_function_unit(in->context, unit, 1, &d);
     fprintf(stderr, "R922 source-check status=%d code=%s\n", (int)s,
             d.diagnostic.diagnostic.code);
     if (requested == NONE &&
@@ -196,10 +208,11 @@ static bool positive(const NLDefinitionOwned *w, const Trial *t,
                 !scalar(v->post, other1[0].fixed_fields[j], t->other[j]))
                 return false;
         fprintf(stderr,
-                "R922 PRIVATE arm=%zu old=%llu new=%llu sibling=%llu field=%zu positive\n",
+                "R922 PRIVATE arm=%zu old=%llu new=%llu sibling=%llu field=%zu "
+                "positive\n",
                 v->arm, (unsigned long long)r.old_value,
-                (unsigned long long)r.incoming,
-                (unsigned long long)r.sibling, v->field.index);
+                (unsigned long long)r.incoming, (unsigned long long)r.sibling,
+                v->field.index);
     }
     return seen[0] && seen[1];
 }
@@ -256,8 +269,8 @@ static bool mutate_restore(NLDefinitionOwned *w, const Trial *t)
     p->arms[0] = saved;
     if (!proof_rejected || !positive(w, t, v))
         return false;
-    fprintf(stderr,
-            "R922 mutation whole-swap/match/context_origin/proof reject-restored\n");
+    fprintf(stderr, "R922 mutation whole-swap/match/context_origin/proof "
+                    "reject-restored\n");
     return true;
 }
 static bool test_positive(const Trial *t)
@@ -280,8 +293,7 @@ static bool test_positive(const Trial *t)
 static bool foreign(const Trial *t)
 {
     Input first = {0}, second = {0};
-    if (!input_open(&first, t->path) ||
-        !input_open(&second, t->path)) {
+    if (!input_open(&first, t->path) || !input_open(&second, t->path)) {
         input_destroy(&first);
         input_destroy(&second);
         return false;
@@ -319,8 +331,8 @@ static bool foreign(const Trial *t)
     nl_definition_owned_destroy(b);
     nl_definition_owned_destroy(a);
     if (ok)
-        fprintf(stderr,
-                "R922 genuine foreign independently owned equal numeric NodeId rejected/restored\n");
+        fprintf(stderr, "R922 genuine foreign independently owned equal "
+                        "numeric NodeId rejected/restored\n");
     return ok;
 }
 static bool fault(const Trial *t, Fault f)
@@ -354,7 +366,8 @@ static bool fault(const Trial *t, Fault f)
     }
     input_destroy(&in);
     if (triggered)
-        fprintf(stderr, "R922 reached OOM fault=%d rollback/same-context retry\n",
+        fprintf(stderr,
+                "R922 reached OOM fault=%d rollback/same-context retry\n",
                 (int)f);
     return triggered;
 }
@@ -381,13 +394,13 @@ static bool negative(const char *path)
         for (size_t i = 0; i < 2; ++i) {
             const NLDefinitionOwnedLink *v = nl_definition_owned_link(w, i);
             NLDefinitionCallResult result = {0};
-            if (nl_definition_owned_validate(w, i, v, &result) ==
-                NL_CHECK_OK)
+            if (nl_definition_owned_validate(w, i, v, &result) == NL_CHECK_OK)
                 refused = false;
         }
     }
     if (refused)
-        fprintf(stderr, "R922 negative original-old issuer refused path=%s code=%d\n",
+        fprintf(stderr,
+                "R922 negative original-old issuer refused path=%s code=%d\n",
                 path, (int)status);
     nl_definition_owned_destroy(w);
     input_destroy(&in);
@@ -397,19 +410,18 @@ int main(int argc, char **argv)
 {
     if (argc < 4)
         return 2;
-    const Trial t[2] = {
-        {.path = argv[2],
-         .old = 26,
-         .incoming = {63, 118},
-         .sibling = 137,
-         .other = {79, 204},
-         .field_index = 0},
-        {.path = argv[3],
-         .old = 75,
-         .incoming = {33, 142},
-         .sibling = 229,
-         .other = {14, 186},
-         .field_index = 1}};
+    const Trial t[2] = {{.path = argv[2],
+                         .old = 26,
+                         .incoming = {63, 118},
+                         .sibling = 137,
+                         .other = {79, 204},
+                         .field_index = 0},
+                        {.path = argv[3],
+                         .old = 75,
+                         .incoming = {33, 142},
+                         .sibling = 229,
+                         .other = {14, 186},
+                         .field_index = 1}};
     if (!strcmp(argv[1], "owned")) {
         for (size_t i = 0; i < 2; ++i)
             if (!test_positive(&t[i]))
