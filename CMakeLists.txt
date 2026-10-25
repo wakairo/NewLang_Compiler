@@ -706,6 +706,30 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(r919_owned_probe tests/r919/probe.c)
+    target_link_libraries(r919_owned_probe PRIVATE newlang_semantic newlang_parser)
+    add_executable(r919_owned_oom tests/r919/oom.c)
+    target_link_libraries(r919_owned_oom PRIVATE newlang_semantic newlang_parser)
+    target_link_options(r919_owned_oom PRIVATE -Wl,--wrap=calloc -Wl,--wrap=malloc
+        -Wl,--wrap=nl_sem_clone -Wl,--wrap=nl_definition_owned_open
+        -Wl,--wrap=nl_definition_owned_call
+        -Wl,--wrap=nl_definition_owned_attach)
+    set(r919_src "${CMAKE_CURRENT_SOURCE_DIR}/tests/r919")
+    add_test(NAME r919_owned_provenance.unit COMMAND r919_owned_probe
+        "${r919_src}/harbor_true.nl" "${r919_src}/orchard_false.nl"
+        "${r919_src}/harbor_return_incoming.nl"
+        "${r919_src}/harbor_return_literal_old.nl"
+        "${r919_src}/orchard_return_incoming.nl"
+        "${r919_src}/orchard_return_literal_old.nl"
+        "${r919_src}/harbor_no_call.nl"
+        "${r919_src}/orchard_duplicate_call.nl")
+    foreach(site session pending pre post)
+        add_test(NAME r919_owned_oom_${site}.unit COMMAND r919_owned_oom
+            ${site} "${r919_src}/harbor_true.nl")
+    endforeach()
+    add_test(NAME r919_cli_parity.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r919/cli_diff.py"
+        "${r919_src}")
     add_executable(p917_probe tests/p917/probe.c)
     target_link_libraries(p917_probe PRIVATE newlang_semantic newlang_parser)
     add_executable(p917_oom tests/p917/oom.c)
