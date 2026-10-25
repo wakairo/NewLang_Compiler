@@ -488,6 +488,63 @@ Rが実測まで自律的に到達するための運用原則**である。
 §7.1–7.3の独立性を緩めず、Rによる有限のPASSを一般soundnessや
 Product GOへ昇格させない。最終的な受理・merge・次scopeはCoordinationが裁定する。
 
+
+#### 新規RのDRAFT PR前のR-FAST準備（forward-only、単一の運用規則）
+
+**適用とCoordination RELEASE：** 採用済みの `.github/workflows/r-preflight.yml` を
+固定P候補が含む**今後の新規R**では、通常Chat＋R専用GitHub branch＋Actions
+（P同等のlocal実行環境は使用しない）による**PR前R-FASTを既定の必須準備**とする。
+Coordinationは対象Issueと起動promptに、immutableなP候補の**完全SHA**
+（main基点も該当時に固定）、canonical、`r-fast/r<issue>-<purpose>` の専用branch名、
+R独自source・negative・oracleの凍結方法とSHA、廉価FAST push試行の個別上限、
+**別予算の自然なFULL5＋NO-LLVM PARTIAL各1組**、最初の安全性STOPを明記する。
+Rは§7.1–7.3のBLINDならproducerの実装・fixture・oracleを見る**前**に
+自身の入力・予測・SHAを凍結し、後の較正をfresh BLINDと混同しない。
+Issue RELEASEはRの自動起動・新権限の授与・merge許可ではない。
+
+**PRより先に確認する実物：** Rは承認済みの固定P候補HEADを起点に
+上記接頭辞の**新規**専用branchを作り、凍結したR所有source／harnessと
+最小CTest登録をまとめたcommitを**DRAFT PR作成前にpush**する。
+GitHub Actionsの `R-FAST self-service pre-PR preparation (NOT R validation)` について、
+実際の `event=push`、`refs/heads/r-fast/**` に該当するbranch、pushした
+**同一の不変R HEAD SHA**、run URL/ID／attempt、`completed/success`、
+固定Clang **23.1.3** formatter、GCC **frontend-only host build**、
+`ctest -N` の一意な登録一覧と**今回のR test名**を確認・記録してからPRを開く。
+単なるworkflowファイルの存在、queue中／cancelled／missing／failed、
+異なるHEAD/refの古いGREEN、PRのFULL CI、`ctest -N` の名前だけでは
+**R-FAST成功と認定しない**。runがない・一致しない・失敗した時点で
+**NOT VERIFIED／STOP**とし、§7.6の事前承認済み修復予算で扱える
+機械的REDだけを元のSHA・ログ・結果を保存して独立に修正・再push・再確認できる。
+それ以外や予算外はSTOP→Coordination。source修正なら別の新SHAと
+**再実行前の独立した期待値**が必要で、V1の拒否や初回BLIND gradingを
+V2の成功で上書きしない。修復の普遍的な「一回限り」制限は設けない
+（Issueごとの有限予算と本§の自律修復・STOPが優先する）。
+
+**証拠階層・後続：** 現行R-FASTが直接実施するのは
+厳格な書式・host build・CTest名の**登録検査だけ**で、
+`ctest -N` は**CTestを0件実行**する。NewLangのsource semantic
+`newlangc --check`、真正なsource-issued owned/public proof、C17/native、
+source negative、到達OOM、ASan/UBSanや本来のFULL5＋PARTIALを
+合格と認定する機能ではない（build時にR独自targetが動作しても、
+それは別途実行・ログ・証拠範囲を明示する）。
+FASTの実SUCCESS後に、固定P候補をbaseとする**R DRAFT PR**を開き、
+通常の**FULL5のGCC／GCC Release／Clang／ASan／UBSan 5つの実行ジョブ**
+＋**NO-LLVM PARTIAL 1つの実行ジョブ**を独立の自然CIとして確認する。
+6ジョブの実実行・正しいSHA／attemptと適用される
+CHECK→公開owned→C17/native・負例／sanitizerの証拠を別途判定し、
+skippedやFAST GREENを代用しない。新規run・manual retry・rebase・
+compilerやoracleの修正・Rからのmergeをこの規則だけで許可しない。
+
+**例外と未実装の境界：** 対象候補にworkflowが存在しない旧固定baseなどで
+FASTの前提が成立しないときだけ、Coordinationが**個別Issueと起動promptの両方**で
+理由・代替手段・証拠と予算・STOPを**明示承認**できる。歴史的R branchへ
+workflowをbackport／rebaseして既存source・oracle・CIを変更してはならない。
+[T #904](https://github.com/wakairo/NewLang_Compiler/issues/904)の軽量
+source CHECKは**別件でRELEASEされた未実装・未採用のパイロット**であり、
+現在のR-FASTに存在せず、必須条件でもない。Tによる成功実装とCの採用、
+さらにDによる本§改訂があるまでは、source eligibilityをFASTの
+成功から推定しない（例：`u8 == u8` の型診断は現行FASTでは発見しない）。
+
 ## 8. 相関したvalidationを避ける
 
 各trackは異なる問いを持つ。
