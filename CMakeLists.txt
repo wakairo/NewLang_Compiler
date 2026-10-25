@@ -1434,7 +1434,28 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # NEW independent R922 V2: private only, never production semantics.
+    add_executable(r922_probe tests/r922/probe.c)
+    target_include_directories(r922_probe PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+    target_link_libraries(r922_probe PRIVATE newlang_semantic newlang_parser)
+    target_link_options(r922_probe PRIVATE -Wl,--wrap=calloc -Wl,--wrap=malloc
+        -Wl,--wrap=nl_sem_clone -Wl,--wrap=nl_definition_owned_open
+        -Wl,--wrap=nl_definition_owned_call
+        -Wl,--wrap=nl_definition_owned_attach)
+    foreach(r922_mode owned foreign fault)
+        add_test(NAME r922_${r922_mode}.unit COMMAND r922_probe ${r922_mode}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r922/r922_v2_meridian.nl"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r922/r922_v2_glacier.nl")
+    endforeach()
+    add_test(NAME r922_source_negatives.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r922/run.py" negative
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r922" "$<TARGET_FILE:r922_probe>")
+    add_test(NAME r922_cli_byte_diff.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r922/run.py" cli
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r922")
+
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+    set_tests_properties(r922_cli_byte_diff.integration PROPERTIES TIMEOUT 300)
 endif()
