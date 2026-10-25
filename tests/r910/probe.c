@@ -6,7 +6,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-enum Mode { CAPTURE, PRE, FOREIGN, BORROW };
+enum Mode {
+    CAPTURE,
+    PRE,
+    FOREIGN,
+    BORROW
+};
 typedef struct {
     const char *file;
     enum Mode mode;
@@ -47,9 +52,10 @@ void *__wrap_calloc(size_t n, size_t size)
     }
     return __real_calloc(n, size);
 }
-NLDefinitionCallCapture *__real_nl_definition_call_begin(
-    const NLCheckedFragment *, NLCheckedNodeId, const NLCheckedNodeId[2],
-    size_t, const NLSemanticContext *);
+NLDefinitionCallCapture *
+__real_nl_definition_call_begin(const NLCheckedFragment *, NLCheckedNodeId,
+                                const NLCheckedNodeId[2], size_t,
+                                const NLSemanticContext *);
 NLDefinitionCallCapture *__wrap_nl_definition_call_begin(
     const NLCheckedFragment *caller, NLCheckedNodeId call,
     const NLCheckedNodeId args[2], size_t fn, const NLSemanticContext *context)
@@ -90,8 +96,8 @@ static void close_fixture(Fixture *f)
     nl_syntax_tree_destroy(f->tree);
     nl_source_destroy(f->source);
 }
-static void observe(const NLDefinitionCallCapture *, const NLDefinitionCallView *,
-                    NLCheckStatus, void *);
+static void observe(const NLDefinitionCallCapture *,
+                    const NLDefinitionCallView *, NLCheckStatus, void *);
 static bool register_once(Fixture *f, Case *s)
 {
     const NLSyntaxTree *inputs[] = {f->tree};
@@ -213,7 +219,8 @@ static void observe(const NLDefinitionCallCapture *capture,
                        .arrival = {s->arrival[0], s->arrival[1]},
                        .sibling = s->sibling};
         if (!open_fixture(&foreign, s->file)) {
-            error(s, "could not create second independent real checked context");
+            error(s,
+                  "could not create second independent real checked context");
         } else {
             if (!register_once(&foreign, &second) || second.failed ||
                 second.callbacks != 2 || !second.spliced)
@@ -225,8 +232,8 @@ static void observe(const NLDefinitionCallCapture *capture,
         outer_case = NULL;
     }
 }
-static bool run(const char *file, enum Mode selected, unsigned old,
-                unsigned a, unsigned b, unsigned sibling)
+static bool run(const char *file, enum Mode selected, unsigned old, unsigned a,
+                unsigned b, unsigned sibling)
 {
     Fixture f = {0};
     Case s = {.file = file,
@@ -261,8 +268,8 @@ static bool run(const char *file, enum Mode selected, unsigned old,
     } else {
         if (s.callbacks != 2 || s.successes != 2 || s.arms != 3)
             error(&s, "both normal arm callbacks not reached");
-        if (selected == PRE && (hit != 1 || validation_allocs < 1 ||
-                                s.oom_callbacks != 1))
+        if (selected == PRE &&
+            (hit != 1 || validation_allocs < 1 || s.oom_callbacks != 1))
             error(&s, "PRE calloc reached count or retry absent");
         if (selected == FOREIGN && !s.spliced)
             error(&s, "foreign independent checked graph not witnessed");
