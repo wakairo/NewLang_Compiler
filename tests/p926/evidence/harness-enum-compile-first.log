@@ -1,0 +1,18 @@
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_diagnostic
+[ 10%] Built target newlang_lexer
+[ 20%] Built target newlang_syntax
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[ 90%] Building C object CMakeFiles/p926_probe.dir/tests/p926/probe.c.o
+/tmp/p926/tests/p926/probe.c: In function ‘mutations’:
+/tmp/p926/tests/p926/probe.c:126:33: error: ‘NL_DEPENDENCY_UNKNOWN’ undeclared (first use in this function); did you mean ‘NL_DEPENDENCIES_UNKNOWN’?
+  126 |     e->values[0].dependencies = NL_DEPENDENCY_UNKNOWN;
+      |                                 ^~~~~~~~~~~~~~~~~~~~~
+      |                                 NL_DEPENDENCIES_UNKNOWN
+/tmp/p926/tests/p926/probe.c:126:33: note: each undeclared identifier is reported only once for each function it appears in
+gmake[3]: *** [CMakeFiles/p926_probe.dir/build.make:79: CMakeFiles/p926_probe.dir/tests/p926/probe.c.o] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:5136: CMakeFiles/p926_probe.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:5143: CMakeFiles/p926_probe.dir/rule] Error 2
+gmake: *** [Makefile:1733: p926_probe] Error 2

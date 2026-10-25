@@ -1,0 +1,38 @@
+{
+  "parent_freeze_sha256": "460ee842c44feb9506dda7590db3056c984067c070edf766e1da71b95d0c0565",
+  "negative_sources": {
+    "quota_decl_swapped.nl": {
+      "sha256": "843e29bd571c6f7bc4c8a2fb092ff511bae0945467f22dea15073391d7ad80e5",
+      "expectation": "Legitimate source CHECK3/P6; private prefix0 if actually registered, but prefix3 if substituted only into original producer raw-copy input; function body bytes unchanged"
+    },
+    "frame_decl_swapped.nl": {
+      "sha256": "f4f23b7aaf41de79e981456b3c0ea7391765756bfab3b1c49a751b9ebb023a9e",
+      "expectation": "Legitimate source CHECK3/P6; private prefix0 if actually registered, but prefix3 if substituted only into original producer raw-copy input; function body bytes unchanged"
+    }
+  },
+  "constructor_faults": {
+    "foreign_same_text_unit": "real unit_begin argument from another live Source owner -> source-plan token mismatch, private count0/status3; restore SAME context healthy",
+    "wrong_function_ordinal": "real plan hook function1 substituted for actual sorted FunctionId10/11 -> prefix3, original CALL replay0",
+    "raw_nominal_copy": "unit copy API receives changed decl bytes only -> actual registry mismatch -> prefix3, original CALL replay0"
+  },
+  "graph_mutations": [
+    "swap nominal field name pointers in observed entry",
+    "binding/root place splice",
+    "whole checked prefix binding node splice",
+    "checked field index/order",
+    "literal payload/result source mismatch",
+    "condition truth/operand/kind",
+    "root/child incarnation",
+    "ValueFact and fresh counters",
+    "dependency knowledge",
+    "member carrier",
+    "after-fork world as common entry",
+    "same-text foreign function body owner"
+  ],
+  "faults": {
+    "owned_raw_unit_malloc1": "actually fault raw-byte malloc, count0/no prefix success, same original context retry",
+    "owned_raw_unit_malloc2": "actually fault Source descriptor malloc after bytes allocation, cleanup/count0, same context retry",
+    "fresh_prefix_machine_malloc": "fault first actual nl_semantic_create malloc during fresh verification, return OOM/entryfalse then same closed owner retry0"
+  },
+  "classification": "P-owned pre-runtime addendum for transforms preregistered in original pre-code freeze; no R fixture/oracle"
+}

@@ -1,0 +1,592 @@
+Internal ctest changing into directory: /tmp/p926-ubsan
+UpdateCTestConfiguration  from :/tmp/p926-ubsan/DartConfiguration.tcl
+Parse Config file:/tmp/p926-ubsan/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p926-ubsan/DartConfiguration.tcl
+Parse Config file:/tmp/p926-ubsan/DartConfiguration.tcl
+Test project /tmp/p926-ubsan
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 249
+      Start 249: p926_prefix_origin.unit
+
+249: Test command: /tmp/p926-ubsan/p926_probe "positive" "/tmp/p926/tests/p926/sources/quota_true.nl" "/tmp/p926/tests/p926/sources/frame_false.nl"
+249: Working Directory: /tmp/p926-ubsan
+249: Environment variables: 
+249:  PYTHONDONTWRITEBYTECODE=1
+249:  PYTHONHASHSEED=0
+249:  LC_ALL=C
+249:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+249:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+249: Test timeout computed to be: 90
+249: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+249: independent two-root/child/carrier/incarnation/field/old/sibling/registry oracle PASS (NO Domain mint)
+249: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+249: independent two-root/child/carrier/incarnation/field/old/sibling/registry oracle PASS (NO Domain mint)
+249: P926 source-prefix refusals0; PARTIAL C memory only / rich HOLD / ordinary CHECK3
+ 1/19 Test #249: p926_prefix_origin.unit ..........   Passed    0.01 sec
+test 250
+      Start 250: p926_prefix_integrity.unit
+
+250: Test command: /tmp/p926-ubsan/p926_probe "negative" "/tmp/p926/tests/p926/sources/quota_true.nl" "/tmp/p926/tests/p926/sources/frame_false.nl"
+250: Working Directory: /tmp/p926-ubsan
+250: Environment variables: 
+250:  PYTHONDONTWRITEBYTECODE=1
+250:  PYTHONHASHSEED=0
+250:  LC_ALL=C
+250:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+250:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+250: Test timeout computed to be: 90
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: independent two-root/child/carrier/incarnation/field/old/sibling/registry oracle PASS (NO Domain mint)
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative actual nominal declaration index mismatch with retained raw unit status3 registry0 roots0 condition0 entry0 failure2930
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative first original binding spliced to second root status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative same numeric payload wrong incarnation status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative child stale/wrong ValueFact status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative fresh fact counter not derived by source status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative fresh incarnation counter not derived by source status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative literal dependency mismatch status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative field numeric scalar with wrong aggregate carrier status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative whole checked root binding source-order splice status3 registry1 roots0 condition0 entry0 failure2969
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative checked initializer field order/index status3 registry1 roots0 condition0 entry0 failure2969
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative checked literal not source decimal status3 registry1 roots0 condition0 entry0 failure2969
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative computed condition truth falsified status3 registry1 roots1 condition0 entry0 failure3030
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative condition source operand changed status3 registry1 roots1 condition0 entry0 failure3009
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative condition operator changed status3 registry1 roots1 condition0 entry0 failure3000
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative genuine after-fork world supplied as common entry status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative same-text genuine foreign function plan owner status3 registry0 roots0 condition0 entry0 failure2912
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: origin fault1 reached, rejected, original owner preserved / SAME registration context retry OK
+250: negative changed raw nominal only, same function bodies status3 registry0 roots0 condition0 entry0 failure2930
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: origin fault2 reached, rejected, original owner preserved / SAME registration context retry OK
+250: negative source ordinal substituted as registry FunctionId status3 registry0 roots0 condition0 entry0 failure2896
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: origin fault3 reached, rejected, original owner preserved / SAME registration context retry OK
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: independent two-root/child/carrier/incarnation/field/old/sibling/registry oracle PASS (NO Domain mint)
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative actual nominal declaration index mismatch with retained raw unit status3 registry0 roots0 condition0 entry0 failure2930
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative first original binding spliced to second root status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative same numeric payload wrong incarnation status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative child stale/wrong ValueFact status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative fresh fact counter not derived by source status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative fresh incarnation counter not derived by source status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative literal dependency mismatch status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative field numeric scalar with wrong aggregate carrier status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative whole checked root binding source-order splice status3 registry1 roots0 condition0 entry0 failure2969
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative checked initializer field order/index status3 registry1 roots0 condition0 entry0 failure2969
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative checked literal not source decimal status3 registry1 roots0 condition0 entry0 failure2969
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative computed condition truth falsified status3 registry1 roots1 condition0 entry0 failure3030
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative condition source operand changed status3 registry1 roots1 condition0 entry0 failure3009
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative condition operator changed status3 registry1 roots1 condition0 entry0 failure3000
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative genuine after-fork world supplied as common entry status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative same-text genuine foreign function plan owner status3 registry0 roots0 condition0 entry0 failure2912
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: origin fault1 reached, rejected, original owner preserved / SAME registration context retry OK
+250: negative changed raw nominal only, same function bodies status3 registry0 roots0 condition0 entry0 failure2930
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: origin fault2 reached, rejected, original owner preserved / SAME registration context retry OK
+250: negative source ordinal substituted as registry FunctionId status3 registry0 roots0 condition0 entry0 failure2896
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: origin fault3 reached, rejected, original owner preserved / SAME registration context retry OK
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: P926 source-prefix refusals36; PARTIAL C memory only / rich HOLD / ordinary CHECK3
+ 2/19 Test #250: p926_prefix_integrity.unit .......   Passed    0.03 sec
+test 251
+      Start 251: p926_prefix_oom.unit
+
+251: Test command: /tmp/p926-ubsan/p926_oom "oom" "/tmp/p926/tests/p926/sources/quota_true.nl"
+251: Working Directory: /tmp/p926-ubsan
+251: Environment variables: 
+251:  PYTHONDONTWRITEBYTECODE=1
+251:  PYTHONHASHSEED=0
+251:  LC_ALL=C
+251:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+251:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+251: Test timeout computed to be: 90
+251: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+251: owned raw unit malloc fault4 actual hit1, no partial record, SAME context retry OK
+251: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+251: owned raw unit malloc fault5 actual hit1, no partial record, SAME context retry OK
+251: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+251: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+251: fresh prefix machine actual malloc OOM / SAME retained owner retry OK
+ 3/19 Test #251: p926_prefix_oom.unit .............   Passed    0.01 sec
+test 252
+      Start 252: p926_cli_unchanged.integration
+
+252: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p926/tests/p926/cli.py" "/tmp/p926-ubsan/newlangc" "/tmp/p926/tests/p926"
+252: Working Directory: /tmp/p926-ubsan
+252: Environment variables: 
+252:  PYTHONDONTWRITEBYTECODE=1
+252:  PYTHONHASHSEED=0
+252:  LC_ALL=C
+252:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+252:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+252: Test timeout computed to be: 90
+252: frame_false.nl ordinary CHECK3/P6, no C17, existing output preserved
+252: quota_true.nl ordinary CHECK3/P6, no C17, existing output preserved
+252: quota_decl_swapped.nl ordinary CHECK3/P6, no C17, existing output preserved
+252: frame_decl_swapped.nl ordinary CHECK3/P6, no C17, existing output preserved
+ 4/19 Test #252: p926_cli_unchanged.integration ...   Passed    0.07 sec
+test 253
+      Start 253: p920_parent_arm_edges.unit
+
+253: Test command: /tmp/p926-ubsan/p920_edges "fixed" "post" "/tmp/p926/tests/p920/sources/tune_true.nl" "/tmp/p926/tests/p920/sources/tune_false.nl"
+253: Working Directory: /tmp/p926-ubsan
+253: Environment variables: 
+253:  PYTHONDONTWRITEBYTECODE=1
+253:  PYTHONHASHSEED=0
+253:  LC_ALL=C
+253:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+253:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+253: Test timeout computed to be: 90
+253: original after input/registration destruction arm0 private=0 PRE1 old1 close1
+253: original after input/registration destruction arm1 private=0 PRE1 old1 close1
+253: post fault1: canonical edge mutation reached
+253: mutated parent edge arm0 private=3 PRE0 old0 close0
+253: mutated parent edge arm1 private=3 PRE0 old0 close0
+253: restored exact entries arm0 private=0 PRE1 old1 close1
+253: restored exact entries arm1 private=0 PRE1 old1 close1
+253: post fault2: canonical edge mutation reached
+253: mutated parent edge arm0 private=3 PRE0 old0 close0
+253: mutated parent edge arm1 private=3 PRE0 old0 close0
+253: restored exact entries arm0 private=0 PRE1 old1 close1
+253: restored exact entries arm1 private=0 PRE1 old1 close1
+253: post fault3: canonical edge mutation reached
+253: mutated parent edge arm0 private=3 PRE0 old0 close0
+253: mutated parent edge arm1 private=3 PRE0 old0 close0
+253: restored exact entries arm0 private=0 PRE1 old1 close1
+253: restored exact entries arm1 private=0 PRE1 old1 close1
+253: original after input/registration destruction arm0 private=0 PRE1 old1 close1
+253: original after input/registration destruction arm1 private=0 PRE1 old1 close1
+253: post fault1: canonical edge mutation reached
+253: mutated parent edge arm0 private=3 PRE0 old0 close0
+253: mutated parent edge arm1 private=3 PRE0 old0 close0
+253: restored exact entries arm0 private=0 PRE1 old1 close1
+253: restored exact entries arm1 private=0 PRE1 old1 close1
+253: post fault2: canonical edge mutation reached
+253: mutated parent edge arm0 private=3 PRE0 old0 close0
+253: mutated parent edge arm1 private=3 PRE0 old0 close0
+253: restored exact entries arm0 private=0 PRE1 old1 close1
+253: restored exact entries arm1 private=0 PRE1 old1 close1
+253: post fault3: canonical edge mutation reached
+253: mutated parent edge arm0 private=3 PRE0 old0 close0
+253: mutated parent edge arm1 private=3 PRE0 old0 close0
+253: restored exact entries arm0 private=0 PRE1 old1 close1
+253: restored exact entries arm1 private=0 PRE1 old1 close1
+253: P920 fixed post finished; source CHECK3 unchanged
+ 5/19 Test #253: p920_parent_arm_edges.unit .......   Passed    0.01 sec
+test 254
+      Start 254: p920_take_edge_rollback.unit
+
+254: Test command: /tmp/p926-ubsan/p920_edges "fixed" "take" "/tmp/p926/tests/p920/sources/tune_true.nl" "/tmp/p926/tests/p920/sources/tune_false.nl"
+254: Working Directory: /tmp/p926-ubsan
+254: Environment variables: 
+254:  PYTHONDONTWRITEBYTECODE=1
+254:  PYTHONHASHSEED=0
+254:  LC_ALL=C
+254:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+254:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+254: Test timeout computed to be: 90
+254: take fault1 hit, original transferred=0 (expected0), original edges restored
+254: take fault1: rejected with zero records, SAME registration context retry complete
+254: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+254: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+254: take fault2 hit, original transferred=0 (expected0), original edges restored
+254: take fault2: rejected with zero records, SAME registration context retry complete
+254: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+254: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+254: take fault3 hit, original transferred=0 (expected0), original edges restored
+254: take fault3: rejected with zero records, SAME registration context retry complete
+254: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+254: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+254: take fault1 hit, original transferred=0 (expected0), original edges restored
+254: take fault1: rejected with zero records, SAME registration context retry complete
+254: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+254: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+254: take fault2 hit, original transferred=0 (expected0), original edges restored
+254: take fault2: rejected with zero records, SAME registration context retry complete
+254: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+254: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+254: take fault3 hit, original transferred=0 (expected0), original edges restored
+254: take fault3: rejected with zero records, SAME registration context retry complete
+254: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+254: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+254: P920 fixed take finished; source CHECK3 unchanged
+ 6/19 Test #254: p920_take_edge_rollback.unit .....   Passed    0.01 sec
+test 255
+      Start 255: p920_cli_unchanged.integration
+
+255: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p926/tests/p920/cli.py" "/tmp/p926-ubsan/newlangc" "/tmp/p926/tests/p920"
+255: Working Directory: /tmp/p926-ubsan
+255: Environment variables: 
+255:  PYTHONDONTWRITEBYTECODE=1
+255:  PYTHONHASHSEED=0
+255:  LC_ALL=C
+255:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+255:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+255: Test timeout computed to be: 90
+255: tune_false.nl CHECK3/P6 / zero C17 / named output preserved
+255: tune_true.nl CHECK3/P6 / zero C17 / named output preserved
+ 7/19 Test #255: p920_cli_unchanged.integration ...   Passed    0.06 sec
+test 256
+      Start 256: p917_owned_lifetime.unit
+
+256: Test command: /tmp/p926-ubsan/p917_probe "capture" "/tmp/p926/tests/p917/sources/quota_true.nl" "/tmp/p926/tests/p917/sources/quota_false.nl" "/tmp/p926/tests/p917/sources/sensor_true.nl" "/tmp/p926/tests/p917/sources/sensor_false.nl"
+256: Working Directory: /tmp/p926-ubsan
+256: Environment variables: 
+256:  PYTHONDONTWRITEBYTECODE=1
+256:  PYTHONHASHSEED=0
+256:  LC_ALL=C
+256:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+256:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+256: Test timeout computed to be: 90
+256: owned after destruction: /tmp/p926/tests/p917/sources/quota_true.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+256: owned after destruction: /tmp/p926/tests/p917/sources/quota_true.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+256: owned after destruction: /tmp/p926/tests/p917/sources/quota_false.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+256: owned after destruction: /tmp/p926/tests/p917/sources/quota_false.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+256: owned after destruction: /tmp/p926/tests/p917/sources/sensor_true.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+256: owned after destruction: /tmp/p926/tests/p917/sources/sensor_true.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+256: owned after destruction: /tmp/p926/tests/p917/sources/sensor_false.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+256: owned after destruction: /tmp/p926/tests/p917/sources/sensor_false.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+256: P917 private owned source-instance replay; refusals0; CHECK3 kept
+ 8/19 Test #256: p917_owned_lifetime.unit .........   Passed    0.01 sec
+test 257
+      Start 257: p917_owned_integrity.unit
+
+257: Test command: /tmp/p926-ubsan/p917_probe "negative" "/tmp/p926/tests/p917/sources/quota_true.nl" "/tmp/p926/tests/p917/sources/quota_false.nl" "/tmp/p926/tests/p917/sources/sensor_true.nl" "/tmp/p926/tests/p917/sources/sensor_false.nl" "/tmp/p926/tests/p917/sources/quota_wrong_return_incoming.nl" "/tmp/p926/tests/p917/sources/quota_wrong_return_literal.nl" "/tmp/p926/tests/p917/sources/sensor_wrong_return_incoming.nl" "/tmp/p926/tests/p917/sources/sensor_wrong_return_literal.nl" "/tmp/p926/tests/p917/sources/missing_call.nl" "/tmp/p926/tests/p917/sources/duplicate_call.nl"
+257: Working Directory: /tmp/p926-ubsan
+257: Environment variables: 
+257:  PYTHONDONTWRITEBYTECODE=1
+257:  PYTHONHASHSEED=0
+257:  LC_ALL=C
+257:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+257:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+257: Test timeout computed to be: 90
+257: owned after destruction: /tmp/p926/tests/p917/sources/quota_true.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+257: owned after destruction: /tmp/p926/tests/p917/sources/quota_true.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+257: owned after destruction: /tmp/p926/tests/p917/sources/quota_false.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+257: owned after destruction: /tmp/p926/tests/p917/sources/quota_false.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+257: owned after destruction: /tmp/p926/tests/p917/sources/sensor_true.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+257: owned after destruction: /tmp/p926/tests/p917/sources/sensor_true.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+257: owned after destruction: /tmp/p926/tests/p917/sources/sensor_false.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+257: owned after destruction: /tmp/p926/tests/p917/sources/sensor_false.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+257: P917 private owned source-instance replay; refusals264; CHECK3 kept
+ 9/19 Test #257: p917_owned_integrity.unit ........   Passed    0.02 sec
+test 258
+      Start 258: p917_cli_unchanged.integration
+
+258: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p926/tests/p917/cli.py" "/tmp/p926-ubsan/newlangc" "/tmp/p926/tests/p917"
+258: Working Directory: /tmp/p926-ubsan
+258: Environment variables: 
+258:  PYTHONDONTWRITEBYTECODE=1
+258:  PYTHONHASHSEED=0
+258:  LC_ALL=C
+258:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+258:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+258: Test timeout computed to be: 90
+258: quota_true.nl CHECK3 / no public IF / zero C / named output preserved
+258: quota_false.nl CHECK3 / no public IF / zero C / named output preserved
+258: quota_wrong_return_incoming.nl CHECK3 / no public IF / zero C / named output preserved
+258: quota_wrong_return_literal.nl CHECK3 / no public IF / zero C / named output preserved
+258: missing_call.nl CHECK3 / no public IF / zero C / named output preserved
+258: duplicate_call.nl CHECK3 / no public IF / zero C / named output preserved
+258: sensor_true.nl CHECK3 / no public IF / zero C / named output preserved
+258: sensor_false.nl CHECK3 / no public IF / zero C / named output preserved
+258: sensor_wrong_return_incoming.nl CHECK3 / no public IF / zero C / named output preserved
+258: sensor_wrong_return_literal.nl CHECK3 / no public IF / zero C / named output preserved
+10/19 Test #258: p917_cli_unchanged.integration ...   Passed    0.18 sec
+test 259
+      Start 259: p917_owned_oom.unit
+
+259: Test command: /tmp/p926-ubsan/p917_oom "/tmp/p926/tests/p917/sources/quota_true.nl"
+259: Working Directory: /tmp/p926-ubsan
+259: Environment variables: 
+259:  PYTHONDONTWRITEBYTECODE=1
+259:  PYTHONHASHSEED=0
+259:  LC_ALL=C
+259:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+259:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+259: Test timeout computed to be: 90
+259: new owned fault1 hit1 requests1, zero partial records, same-context retry/replay OK; CHECK3 rollback kept
+259: new owned fault2 hit1 requests1, zero partial records, same-context retry/replay OK; CHECK3 rollback kept
+259: new owned fault3 hit1 requests1, zero partial records, same-context retry/replay OK; CHECK3 rollback kept
+11/19 Test #259: p917_owned_oom.unit ..............   Passed    0.01 sec
+test 260
+      Start 260: p901_statement_positive.unit
+
+260: Test command: /tmp/p926-ubsan/p901_probe "capture" "/tmp/p926/tests/p901/sources/r899_meridian.nl" "/tmp/p926/tests/p901/sources/r899_relay_pair.nl" "/tmp/p926/tests/p901/sources/scan_true.nl" "/tmp/p926/tests/p901/sources/scan_false.nl"
+260: Working Directory: /tmp/p926-ubsan
+260: Environment variables: 
+260:  PYTHONDONTWRITEBYTECODE=1
+260:  PYTHONHASHSEED=0
+260:  LC_ALL=C
+260:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+260:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+260: Test timeout computed to be: 90
+260: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming81 sibling163 replacements1 failure_line0
+260: P901 root1 child2 index0 inc1/2 scope1 arm0 PREold37 new81 sibling163 verified
+260: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming118 sibling163 replacements1 failure_line0
+260: P901 root1 child2 index0 inc1/2 scope1 arm1 PREold37 new118 sibling163 verified
+260: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old212 incoming65 sibling43 replacements1 failure_line0
+260: P901 root1 child3 index1 inc1/3 scope1 arm0 PREold212 new65 sibling43 verified
+260: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old212 incoming147 sibling43 replacements1 failure_line0
+260: P901 root1 child3 index1 inc1/3 scope1 arm1 PREold212 new147 sibling43 verified
+260: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming126 sibling11 replacements1 failure_line0
+260: P901 root1 child3 index1 inc1/3 scope1 arm0 PREold56 new126 sibling11 verified
+260: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming209 sibling11 replacements1 failure_line0
+260: P901 root1 child3 index1 inc1/3 scope1 arm1 PREold56 new209 sibling11 verified
+260: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming126 sibling11 replacements1 failure_line0
+260: P901 root1 child3 index1 inc1/3 scope1 arm0 PREold56 new126 sibling11 verified
+260: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming209 sibling11 replacements1 failure_line0
+260: P901 root1 child3 index1 inc1/3 scope1 arm1 PREold56 new209 sibling11 verified
+260: P901 calibrated private rejection count0 (extra owner/span0, unrelated IF0); source CHECK3 unchanged
+12/19 Test #260: p901_statement_positive.unit .....   Passed    0.01 sec
+test 261
+      Start 261: p901_statement_integrity.unit
+
+261: Test command: /tmp/p926-ubsan/p901_probe "negative" "/tmp/p926/tests/p901/sources/r899_meridian.nl" "/tmp/p926/tests/p901/sources/r899_relay_pair.nl" "/tmp/p926/tests/p901/sources/scan_true.nl" "/tmp/p926/tests/p901/sources/scan_false.nl" "/tmp/p926/tests/p901/sources/negative_return_incoming.nl" "/tmp/p926/tests/p901/sources/negative_return_literal.nl" "/tmp/p926/tests/p901/sources/no_call.nl"
+261: Working Directory: /tmp/p926-ubsan
+261: Environment variables: 
+261:  PYTHONDONTWRITEBYTECODE=1
+261:  PYTHONHASHSEED=0
+261:  LC_ALL=C
+261:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+261:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+261: Test timeout computed to be: 90
+261: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming81 sibling163 replacements1 failure_line0
+261: P901 root1 child2 index0 inc1/2 scope1 arm0 PREold37 new81 sibling163 verified
+261: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming118 sibling163 replacements1 failure_line0
+261: P901 root1 child2 index0 inc1/2 scope1 arm1 PREold37 new118 sibling163 verified
+261: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old212 incoming65 sibling43 replacements1 failure_line0
+261: P901 root1 child3 index1 inc1/3 scope1 arm0 PREold212 new65 sibling43 verified
+261: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old212 incoming147 sibling43 replacements1 failure_line0
+261: P901 root1 child3 index1 inc1/3 scope1 arm1 PREold212 new147 sibling43 verified
+261: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming126 sibling11 replacements1 failure_line0
+261: P901 root1 child3 index1 inc1/3 scope1 arm0 PREold56 new126 sibling11 verified
+261: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming209 sibling11 replacements1 failure_line0
+261: P901 root1 child3 index1 inc1/3 scope1 arm1 PREold56 new209 sibling11 verified
+261: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming126 sibling11 replacements1 failure_line0
+261: P901 root1 child3 index1 inc1/3 scope1 arm0 PREold56 new126 sibling11 verified
+261: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming209 sibling11 replacements1 failure_line0
+261: P901 root1 child3 index1 inc1/3 scope1 arm1 PREold56 new209 sibling11 verified
+261: P896 arm0 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old56 incoming126 sibling11 replacements1 failure_line2187
+261: P896 arm1 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old56 incoming209 sibling11 replacements1 failure_line2187
+261: P896 arm0 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old56 incoming126 sibling11 replacements1 failure_line2187
+261: P896 arm1 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old56 incoming209 sibling11 replacements1 failure_line2187
+261: P901 calibrated private rejection count364 (extra owner/span28, unrelated IF4); source CHECK3 unchanged
+13/19 Test #261: p901_statement_integrity.unit ....   Passed    0.02 sec
+test 262
+      Start 262: p901_statement_oom.unit
+
+262: Test command: /tmp/p926-ubsan/p896_oom "oom" "/tmp/p926/tests/p901/sources/r899_meridian.nl"
+262: Working Directory: /tmp/p926-ubsan
+262: Environment variables: 
+262:  PYTHONDONTWRITEBYTECODE=1
+262:  PYTHONHASHSEED=0
+262:  LC_ALL=C
+262:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+262:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+262: Test timeout computed to be: 90
+262: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming118 sibling163 replacements1 failure_line0
+262: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming81 sibling163 replacements1 failure_line0
+262: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming118 sibling163 replacements1 failure_line0
+262: P896 same-context retry after capture OOM: source CHECK3 unchanged, two verified diagnostic records
+262: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming81 sibling163 replacements1 failure_line0
+262: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming118 sibling163 replacements1 failure_line0
+262: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming81 sibling163 replacements1 failure_line0
+262: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming81 sibling163 replacements1 failure_line0
+262: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming118 sibling163 replacements1 failure_line0
+262: P896 same-context retry after capture OOM: source CHECK3 unchanged, two verified diagnostic records
+262: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming81 sibling163 replacements1 failure_line0
+262: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming118 sibling163 replacements1 failure_line0
+262: P896 capture calloc and PRE-clone calloc reached, no public artifact; clean retry OK
+14/19 Test #262: p901_statement_oom.unit ..........   Passed    0.01 sec
+test 263
+      Start 263: p901_cli_unchanged.integration
+
+263: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p926/tests/p901/cli.py" "/tmp/p926-ubsan/newlangc" "/tmp/p926/tests/p901"
+263: Working Directory: /tmp/p926-ubsan
+263: Environment variables: 
+263:  PYTHONDONTWRITEBYTECODE=1
+263:  PYTHONHASHSEED=0
+263:  LC_ALL=C
+263:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+263:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+263: Test timeout computed to be: 90
+263: negative_return_incoming.nl CHECK3 / zero C17 / output preserved
+263: negative_return_literal.nl CHECK3 / zero C17 / output preserved
+263: r899_meridian.nl CHECK3 / zero C17 / output preserved
+263: r899_relay_pair.nl CHECK3 / zero C17 / output preserved
+263: scan_false.nl CHECK3 / zero C17 / output preserved
+263: scan_true.nl CHECK3 / zero C17 / output preserved
+15/19 Test #263: p901_cli_unchanged.integration ...   Passed    0.11 sec
+test 264
+      Start 264: p896_definition_capture.unit
+
+264: Test command: /tmp/p926-ubsan/p896_private "capture" "/tmp/p926/tests/p896/sources/p793_router_true.nl" "/tmp/p926/tests/p896/sources/p793_router_false.nl" "/tmp/p926/tests/p896/sources/p892_budget_true.nl" "/tmp/p926/tests/p896/sources/p892_budget_false.nl" "/tmp/p926/tests/p896/sources/channel_true.nl" "/tmp/p926/tests/p896/sources/channel_false.nl"
+264: Working Directory: /tmp/p926-ubsan
+264: Environment variables: 
+264:  PYTHONDONTWRITEBYTECODE=1
+264:  PYTHONHASHSEED=0
+264:  LC_ALL=C
+264:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+264:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+264: Test timeout computed to be: 90
+264: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old67 incoming94 sibling12 replacements1 failure_line0
+264: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old67 incoming133 sibling12 replacements1 failure_line0
+264: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old67 incoming94 sibling12 replacements1 failure_line0
+264: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old67 incoming133 sibling12 replacements1 failure_line0
+264: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old42 incoming76 sibling203 replacements1 failure_line0
+264: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old42 incoming154 sibling203 replacements1 failure_line0
+264: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old42 incoming76 sibling203 replacements1 failure_line0
+264: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old42 incoming154 sibling203 replacements1 failure_line0
+264: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+264: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+264: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+264: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+264: P896 private mutations rejected0; never public proof/admission
+16/19 Test #264: p896_definition_capture.unit .....   Passed    0.01 sec
+test 265
+      Start 265: p896_private_negative.unit
+
+265: Test command: /tmp/p926-ubsan/p896_private "negative" "/tmp/p926/tests/p896/sources/channel_true.nl" "/tmp/p926/tests/p896/sources/channel_false.nl" "/tmp/p926/tests/p896/sources/negative_return_incoming.nl" "/tmp/p926/tests/p896/sources/negative_return_literal.nl" "/tmp/p926/tests/p896/sources/no_call.nl"
+265: Working Directory: /tmp/p926-ubsan
+265: Environment variables: 
+265:  PYTHONDONTWRITEBYTECODE=1
+265:  PYTHONHASHSEED=0
+265:  LC_ALL=C
+265:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+265:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+265: Test timeout computed to be: 90
+265: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+265: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+265: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+265: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+265: P896 arm0 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old73 incoming103 sibling19 replacements1 failure_line2187
+265: P896 arm1 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old73 incoming217 sibling19 replacements1 failure_line2187
+265: P896 arm0 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old73 incoming103 sibling19 replacements1 failure_line2187
+265: P896 arm1 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old73 incoming217 sibling19 replacements1 failure_line2187
+265: P896 private mutations rejected168; never public proof/admission
+17/19 Test #265: p896_private_negative.unit .......   Passed    0.01 sec
+test 266
+      Start 266: p896_capture_oom.unit
+
+266: Test command: /tmp/p926-ubsan/p896_oom "oom" "/tmp/p926/tests/p896/sources/channel_true.nl"
+266: Working Directory: /tmp/p926-ubsan
+266: Environment variables: 
+266:  PYTHONDONTWRITEBYTECODE=1
+266:  PYTHONHASHSEED=0
+266:  LC_ALL=C
+266:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+266:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+266: Test timeout computed to be: 90
+266: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+266: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+266: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+266: P896 same-context retry after capture OOM: source CHECK3 unchanged, two verified diagnostic records
+266: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+266: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+266: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+266: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+266: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+266: P896 same-context retry after capture OOM: source CHECK3 unchanged, two verified diagnostic records
+266: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+266: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+266: P896 capture calloc and PRE-clone calloc reached, no public artifact; clean retry OK
+18/19 Test #266: p896_capture_oom.unit ............   Passed    0.01 sec
+test 267
+      Start 267: p896_unchanged_cli.integration
+
+267: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p926/tests/p896/cli.py" "/tmp/p926-ubsan/newlangc" "/tmp/p926/tests/p896"
+267: Working Directory: /tmp/p926-ubsan
+267: Environment variables: 
+267:  PYTHONDONTWRITEBYTECODE=1
+267:  PYTHONHASHSEED=0
+267:  LC_ALL=C
+267:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+267:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+267: Test timeout computed to be: 90
+267: channel_false.nl CHECK3 / C0 / named preserved / private observer off
+267: channel_true.nl CHECK3 / C0 / named preserved / private observer off
+267: negative_return_incoming.nl CHECK3 / C0 / named preserved / private observer off
+267: negative_return_literal.nl CHECK3 / C0 / named preserved / private observer off
+267: p793_router_false.nl CHECK3 / C0 / named preserved / private observer off
+267: p793_router_true.nl CHECK3 / C0 / named preserved / private observer off
+267: p892_budget_false.nl CHECK3 / C0 / named preserved / private observer off
+267: p892_budget_true.nl CHECK3 / C0 / named preserved / private observer off
+19/19 Test #267: p896_unchanged_cli.integration ...   Passed    0.14 sec
+
+The following tests passed:
+	p926_prefix_origin.unit
+	p926_prefix_integrity.unit
+	p926_prefix_oom.unit
+	p926_cli_unchanged.integration
+	p920_parent_arm_edges.unit
+	p920_take_edge_rollback.unit
+	p920_cli_unchanged.integration
+	p917_owned_lifetime.unit
+	p917_owned_integrity.unit
+	p917_cli_unchanged.integration
+	p917_owned_oom.unit
+	p901_statement_positive.unit
+	p901_statement_integrity.unit
+	p901_statement_oom.unit
+	p901_cli_unchanged.integration
+	p896_definition_capture.unit
+	p896_private_negative.unit
+	p896_capture_oom.unit
+	p896_unchanged_cli.integration
+
+100% tests passed, 0 tests failed out of 19
+
+Total Test time (real) =   0.75 sec

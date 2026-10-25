@@ -9326,6 +9326,7 @@ register_function_unit(NLSemanticContext *context,
     }
     Check check = {.source = nl_syntax_tree_source(inputs[0]),
                    .closure_probe = closure_probe};
+    nl_definition_prefix_unit_begin(check.source, count);
     FunctionDeclaration *declarations = NULL;
     const NLSyntaxView *recursive = NULL, *avs = NULL;
     size_t recursive_input = 0, avs_input = 0;
@@ -9595,6 +9596,9 @@ register_function_unit(NLSemanticContext *context,
                       &check.context->functions[d->function - 1].body),
                   span))
             goto failure;
+        nl_definition_prefix_plan(
+            check.source, span, d->function,
+            check.context->functions[d->function - 1].body);
     }
     /* Symbolic obligations are checked before any ordinary definition walks a
      * known call, independent of declaration/name order or favorable callers.
@@ -9631,6 +9635,7 @@ failure:
             free((void *)declarations[i].parameters[j].name);
     }
     free(declarations);
+    nl_definition_prefix_unit_end();
     nl_semantic_destroy(check.context);
     if (check.status != NL_CHECK_OK && diagnostic != NULL)
         *diagnostic = (NLFunctionUnitDiagnostic){input, check.diagnostic};

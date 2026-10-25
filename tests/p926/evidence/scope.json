@@ -1,0 +1,44 @@
+{
+  "base": "02d3d32e96a834f8918569a2c4e1f282d6476965",
+  "branch": "p926-source-prefix-origin",
+  "production_allowlist": [
+    "CMakeLists.txt",
+    "src/copy_body.c",
+    "src/copy_body_internal.h",
+    "src/semantic_check.c"
+  ],
+  "protected_bytes": [
+    {
+      "file": "src/if_field.c",
+      "base_and_candidate_sha256": "06c09d6c2a1eb98c1fc0302c618a4aba20e098a10e95b58819aedfca79e903f2"
+    },
+    {
+      "file": "src/checked.c",
+      "base_and_candidate_sha256": "b6bfb1589b9bdf58dde5284c3d76274389e64e3edc97762c2265a3c51faf2bbb"
+    },
+    {
+      "file": "src/function_body.c",
+      "base_and_candidate_sha256": "cc2925e983ddffb35b0c663fd7a3d969adaa25c98b10de3fdb679c09b1bc8575"
+    },
+    {
+      "file": "src/semantic_internal.h",
+      "base_and_candidate_sha256": "92766597c230e2e54ccd938f7eefb373dc67faaf330c6c0791846f01a3558a67"
+    },
+    {
+      "file": "src/parser.c",
+      "base_and_candidate_sha256": "1d2268ecc6a775f8c4c1e3ff63edd4bca917fcc43baa7b2c33276bf9fc0a4ee0"
+    },
+    {
+      "file": "src/main.c",
+      "base_and_candidate_sha256": "ea806234ffaa6b595d911788c968a33db24ffd96790c3988feb7e38fd090275c"
+    },
+    {
+      "file": "docs/reference/CURRENT_SPEC.md",
+      "base_and_candidate_sha256": "8b1a51b340c88a5ef79bfe12c51f8d9c759773c9d44091dc60dff7ab7dd92849"
+    }
+  ],
+  "old_canonical_arm_edges_unchanged": true,
+  "old_call_replay_unchanged": true,
+  "public_headers_workflows_all_old_tests_and_docs_unchanged": true,
+  "no_ci_started_yet": true
+}

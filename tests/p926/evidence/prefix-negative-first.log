@@ -1,0 +1,131 @@
+Internal ctest changing into directory: /tmp/p926-build
+UpdateCTestConfiguration  from :/tmp/p926-build/DartConfiguration.tcl
+Parse Config file:/tmp/p926-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p926-build/DartConfiguration.tcl
+Parse Config file:/tmp/p926-build/DartConfiguration.tcl
+Test project /tmp/p926-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 250
+    Start 250: p926_prefix_integrity.unit
+
+250: Test command: /tmp/p926-build/p926_probe "negative" "/tmp/p926/tests/p926/sources/quota_true.nl" "/tmp/p926/tests/p926/sources/frame_false.nl"
+250: Working Directory: /tmp/p926-build
+250: Environment variables: 
+250:  PYTHONDONTWRITEBYTECODE=1
+250:  PYTHONHASHSEED=0
+250:  LC_ALL=C
+250:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+250:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+250: Test timeout computed to be: 90
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: independent two-root/child/carrier/incarnation/field/old/sibling/registry oracle PASS (NO Domain mint)
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative actual nominal declaration index mismatch with retained raw unit status3 registry0 roots0 condition0 entry0 failure2928
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative first original binding spliced to second root status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative same numeric payload wrong incarnation status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative child stale/wrong ValueFact status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative fresh fact counter not derived by source status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative fresh incarnation counter not derived by source status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative literal dependency mismatch status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative field numeric scalar with wrong aggregate carrier status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative whole checked root binding source-order splice status3 registry1 roots0 condition0 entry0 failure2968
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative checked initializer field order/index status3 registry1 roots0 condition0 entry0 failure2968
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative checked literal not source decimal status3 registry1 roots0 condition0 entry0 failure2968
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative computed condition truth falsified status3 registry1 roots1 condition0 entry0 failure3024
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative condition source operand changed status3 registry1 roots1 condition0 entry0 failure3008
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative condition operator changed status3 registry1 roots1 condition0 entry0 failure2998
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative genuine after-fork world supplied as common entry status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: negative same-text genuine foreign function plan owner status3 registry0 roots0 condition0 entry0 failure2901
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: origin fault1 reached, rejected, original owner preserved / SAME registration context retry OK
+250: negative changed raw nominal only, same function bodies status3 registry0 roots0 condition0 entry0 failure2928
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: origin fault2 reached, rejected, original owner preserved / SAME registration context retry OK
+250: negative source ordinal substituted as registry FunctionId status3 registry0 roots0 condition0 entry0 failure2895
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: origin fault3 reached, rejected, original owner preserved / SAME registration context retry OK
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: independent two-root/child/carrier/incarnation/field/old/sibling/registry oracle PASS (NO Domain mint)
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative actual nominal declaration index mismatch with retained raw unit status3 registry0 roots0 condition0 entry0 failure2928
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative first original binding spliced to second root status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative same numeric payload wrong incarnation status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative child stale/wrong ValueFact status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative fresh fact counter not derived by source status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative fresh incarnation counter not derived by source status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative literal dependency mismatch status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative field numeric scalar with wrong aggregate carrier status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative whole checked root binding source-order splice status3 registry1 roots0 condition0 entry0 failure2968
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative checked initializer field order/index status3 registry1 roots0 condition0 entry0 failure2968
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative checked literal not source decimal status3 registry1 roots0 condition0 entry0 failure2968
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative computed condition truth falsified status3 registry1 roots1 condition0 entry0 failure3024
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative condition source operand changed status3 registry1 roots1 condition0 entry0 failure3008
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative condition operator changed status3 registry1 roots1 condition0 entry0 failure2998
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative genuine after-fork world supplied as common entry status3 registry1 roots1 condition1 entry0 failure3036
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: negative same-text genuine foreign function plan owner status3 registry0 roots0 condition0 entry0 failure2901
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: origin fault1 reached, rejected, original owner preserved / SAME registration context retry OK
+250: negative changed raw nominal only, same function bodies status3 registry0 roots0 condition0 entry0 failure2928
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: origin fault2 reached, rejected, original owner preserved / SAME registration context retry OK
+250: negative source ordinal substituted as registry FunctionId status3 registry0 roots0 condition0 entry0 failure2895
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: origin fault3 reached, rejected, original owner preserved / SAME registration context retry OK
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+250: P926 source-prefix refusals36; PARTIAL C memory only / rich HOLD / ordinary CHECK3
+1/1 Test #250: p926_prefix_integrity.unit .......   Passed    0.01 sec
+
+The following tests passed:
+	p926_prefix_integrity.unit
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.02 sec
