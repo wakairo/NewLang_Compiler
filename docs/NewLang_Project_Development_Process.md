@@ -543,6 +543,34 @@ R HEAD SHA／branchで実行した`completed/success`だけ**である。
 Coordinationの明示例外、独立性および通常FULL5＋PARTIALの
 別予算・実実行義務を引き続き適用する。
 
+**新規Rの標準的な安価FAST予算とRの自律裁量（Coordination C37、forward-only）：**
+Coordinationが**今後の新規R Issueに明記して割り当てる標準は、
+branch作成分を含む自然なFAST `push` runをIssueごとに最大6回**
+（**「標準6回の個別予算」**）とし、その範囲内のR所有formatter／
+harness／CMake／CLI引数・構文綴り等の**機械的修復のpush時機・束ね方・
+使用枠はRに委ねる**。これは以前のrollout限定2回に代わる
+**個別Issueの標準budget**であり、§7.6の普遍的な6回修復上限、
+独立性／安全性の閾値、無期限の自動延長ではない。
+CoordinationはIssue・起動promptで根拠付きの**別の有限FAST予算**
+（6回より少ない／多い）も個別承認でき、認可枠超過前には別の
+Coordination裁定が必要である。**そのbranchの4回目FAST実runの後、
+5回目を消費する前**にRが当該Issueへ**情報共有checkpoint**
+（全branch run ID／SHA／結果、最初の故障層、現在HEAD、
+残り予算と§7.6に沿う修復方針）を短く投稿する。
+これは監査用の**通知でありCの追加GO/approval gateではなく**、
+承認済みの5回目／6回目はその予算内でRが自律実施できる。
+繰り返す同一REDは原因分析を優先して不必要なpushを避ける。
+**未使用FAST枠があっても**、予測に反するsemantic CHECK、
+source-owned／issuer／proof／owner／loan／OOM／C17/native／sanitizerの
+異常・unsoundness疑い、BLIND情報漏洩、元oracle／guest identityの
+変更やR所有の機械的修復で説明できない失敗は本§既定どおり
+**直ちにSTOP→Coordination**する。成功側のsource-checkを捏造せず、
+元のV1 source・SHA・CI／初回findingと次V2の事前期待値を保全する。
+**真のFULL5 5ジョブ＋NO-LLVM PARTIAL 1ジョブ**の独立した
+自然PR CI予算は従来どおりIssueごとに別枠とし、manual retryや
+FASTを用いたFULL省略は許さない。T904の歴史的3/2超過や
+R910の当時2/2、別のFULL総合INCONCLUSIVEは遡及変更しない。
+
 **PRより先に確認する実物：** Rは承認済みの固定P候補HEADを起点に
 上記接頭辞の**新規**専用branchを作り、凍結したR所有source／harnessと
 最小CTest登録をまとめたcommitを**DRAFT PR作成前にpush**する。

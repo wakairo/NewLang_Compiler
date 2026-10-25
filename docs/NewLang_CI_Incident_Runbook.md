@@ -53,6 +53,15 @@ checkout を該当する固定 commit に合わせてから、内容と対象 C/
 このRunbook自体はrepair回数・独立性・CI予算・例外を新たに決定しない。
 既存の上記HTTP404限定retryの説明も、Rの手動retry許可へ拡張しない。
 
+**FAST残枠の確認（[§7.6の標準6回・個別裁定](NewLang_Project_Development_Process.md#76-独立実測の自律修復と証拠の保持)）：**
+通常の新規RではCoordinationが当該Issueに明記した
+**「標準6回の個別予算」**（branch-create FASTを含む自然`push`run）を
+Rがbranch-wide Actions台帳で管理する。6回は普遍的な安全性基準でも
+自動補充でもなく、CがIssue別に異なる有限予算を定める場合はそちらを使う。
+§7.6のR所有の機械的修復は残枠内で自律的に行えるが、
+未知のsemantic/proof／owner/loan／OOM/native／sanitizer異常や
+BLIND／oracleの汚染は残枠に関係なく即STOPとなる。
+
 1. **Gate A／固定SHAを先に記録する。** Coordination RELEASEから
    immutableな**P候補HEAD完全SHA**、main/canonical、対象R Issue、
    `r-fast/r<issue>-<purpose>` という**具体的branch名**、
@@ -127,6 +136,13 @@ checkout を該当する固定 commit に合わせてから、内容と対象 C/
    format／GCC build／483件 `ctest -N` 登録PASS、**branch全体2 run／予算2**。
    ただしR910の本来のFULL5＋PARTIALは後で失敗し総合INCONCLUSIVE／STOP；
    **FAST GREENをR安全性PASSと呼ばない**。
+
+   **4回目FAST後・5回目の前**には、§7.6に従って
+   RがIssueへ**情報共有checkpoint**（branch全実run／HEAD／初回失敗層／
+   残枠と修復予定）を投稿する。これは**Cの新規承認待ちではない**ため、
+   すでに当該Issueで承認済みの5回目・6回目は範囲内でRが判断する。
+   ただし原因不明のproof／安全性／権限／source期待値逸脱や予算超過は
+   FAST修復で押し通さずSTOP→Coordinationとする。
 
 4. **FAST成功後にだけ固定P向けDRAFT R PRを開く。**
    Baseは**同じ固定P候補HEADのbranch**、headは検証した専用R HEAD。
