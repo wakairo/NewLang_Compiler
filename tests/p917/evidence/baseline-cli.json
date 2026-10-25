@@ -1,0 +1,62 @@
+[
+  {
+    "source": "duplicate_call.nl",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p917-gate-a/sources/duplicate_call.nl:10:5-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "missing_call.nl",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p917-gate-a/sources/missing_call.nl:10:5-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "quota_false.nl",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p917-gate-a/sources/quota_false.nl:10:5-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "quota_true.nl",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p917-gate-a/sources/quota_true.nl:10:5-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "quota_wrong_return_incoming.nl",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p917-gate-a/sources/quota_wrong_return_incoming.nl:10:5-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "quota_wrong_return_literal.nl",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p917-gate-a/sources/quota_wrong_return_literal.nl:10:5-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "sensor_false.nl",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p917-gate-a/sources/sensor_false.nl:10:5-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "sensor_true.nl",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p917-gate-a/sources/sensor_true.nl:10:5-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "sensor_wrong_return_incoming.nl",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p917-gate-a/sources/sensor_wrong_return_incoming.nl:10:5-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "sensor_wrong_return_literal.nl",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p917-gate-a/sources/sensor_wrong_return_literal.nl:10:5-14:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  }
+]

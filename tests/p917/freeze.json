@@ -1,0 +1,131 @@
+{
+  "base": "6e8be7c313d19b41ca2d45ae608b4dabb01b22e7",
+  "classification": "P-owned pre-code independent numerical oracle, not Red Team",
+  "sources": [
+    {
+      "file": "quota_true.nl",
+      "sha256": "160796acf588c3e36825725233aafaf7589890ec663d3f36211c21004e85bd62",
+      "old": 17,
+      "incoming": [
+        64,
+        122
+      ],
+      "sibling": 203,
+      "other": [
+        61,
+        87
+      ],
+      "index": 1,
+      "check": 3,
+      "diagnostic": "P6-JOIN-PRECISION",
+      "private_arms": 2
+    },
+    {
+      "file": "quota_false.nl",
+      "sha256": "290eed0330222a88925f63bba0e1bbda076d1b6e6cb4b2c4ee543dd3df502f7c",
+      "old": 17,
+      "incoming": [
+        64,
+        122
+      ],
+      "sibling": 203,
+      "other": [
+        61,
+        87
+      ],
+      "index": 1,
+      "check": 3,
+      "diagnostic": "P6-JOIN-PRECISION",
+      "private_arms": 2
+    },
+    {
+      "file": "quota_wrong_return_incoming.nl",
+      "sha256": "56b07ecd9745885efd1d154bbd14a98a22c246b388572348e577697b3623a7ab",
+      "check": 3,
+      "private_result": "reject RETURN-old after PRE"
+    },
+    {
+      "file": "quota_wrong_return_literal.nl",
+      "sha256": "cce0a906832f0912e3dcccceb6c0a50da3622103207e4dd51af7a00ad49114c8",
+      "check": 3,
+      "private_result": "reject RETURN-old after PRE"
+    },
+    {
+      "file": "missing_call.nl",
+      "sha256": "dbfc132f4082218f083a62801c6fd894557c569f2d7337b51f9e5c0c56a5a453",
+      "check": 3,
+      "private_result": "missing one arm CALL rejects"
+    },
+    {
+      "file": "duplicate_call.nl",
+      "sha256": "bf8559f943ae8e0cb70aa35d814c89bd7f3d57baa980ca49aa0130890e358477",
+      "check": 3,
+      "private_result": "duplicate CALL rejects"
+    },
+    {
+      "file": "sensor_true.nl",
+      "sha256": "9e283b1dfb4a7e808cbb39acdd31d1e3fa674515d41f668ef2bde8463139fef1",
+      "old": 231,
+      "incoming": [
+        19,
+        173
+      ],
+      "sibling": 6,
+      "other": [
+        48,
+        155
+      ],
+      "index": 0,
+      "check": 3,
+      "diagnostic": "P6-JOIN-PRECISION",
+      "private_arms": 2
+    },
+    {
+      "file": "sensor_false.nl",
+      "sha256": "17346e126c7740035d620e7cbfbb723e6c07d9b059ee83a38e4b5aaa341d25e9",
+      "old": 231,
+      "incoming": [
+        19,
+        173
+      ],
+      "sibling": 6,
+      "other": [
+        48,
+        155
+      ],
+      "index": 0,
+      "check": 3,
+      "diagnostic": "P6-JOIN-PRECISION",
+      "private_arms": 2
+    },
+    {
+      "file": "sensor_wrong_return_incoming.nl",
+      "sha256": "7473e69eb5b14018a618e25a9cd488c00dcbb6a0be7d8af94e634403415ecdc3",
+      "check": 3,
+      "private_result": "reject RETURN-old after PRE"
+    },
+    {
+      "file": "sensor_wrong_return_literal.nl",
+      "sha256": "220363bdfa762020964b7cbdc1edfceb04dc8f902fdd3cbcb537d44b29234a27",
+      "check": 3,
+      "private_result": "reject RETURN-old after PRE"
+    }
+  ],
+  "mutations": [
+    "foreign numeric CALL graph",
+    "swapped arm/world",
+    "wrong caller/callee/source owner",
+    "wrong root/child/index/incarnation",
+    "stale parent/child fact",
+    "wrong active loan",
+    "arg order/formals",
+    "missing/duplicate CALL",
+    "postcall value as old"
+  ],
+  "new_oom": [
+    "owned PRE allocation/clone",
+    "owned POST clone",
+    "owner handoff failure"
+  ],
+  "constraints": "normal CHECK3, no public proof, no C17/native; private witness after source/parser/context destruction; observer OFF and optional Stage0 callbacks ended"
+}

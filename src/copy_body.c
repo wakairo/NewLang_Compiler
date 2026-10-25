@@ -1592,31 +1592,31 @@ void nl_definition_call_observer(NLDefinitionCallObserver observer, void *user)
     definition_observer = observer;
     definition_user = user;
 }
-NLDefinitionCallCapture *
-nl_definition_call_begin(const NLCheckedFragment *caller, NLCheckedNodeId call,
-                         const NLCheckedNodeId args[2], size_t caller_function,
-                         const NLSemanticContext *c)
+static bool dc_describe(const NLCheckedFragment *caller, NLCheckedNodeId call,
+                        const NLCheckedNodeId args[2], size_t caller_function,
+                        const NLSemanticContext *c,
+                        NLDefinitionCallView *description)
 {
-    if (!definition_observer || !caller || !caller->if_parent)
-        return NULL;
+    if (!caller || !caller->if_parent)
+        return false;
     /* Stage0 observes lexical T only, never allocated/H or sum ownership. */
     if (c->domain_count || c->region_count || c->occurrence_count)
-        return NULL;
+        return false;
     for (size_t i = 0; i < c->type_count; ++i)
         if (c->types[i].recursive_header)
-            return NULL;
+            return false;
     const NLCheckedNodeView *n = nl_checked_node_view(caller, call);
     if (!n || n->kind != NL_CHECKED_REGISTERED_CALL || !n->function ||
         n->function > c->function_count || !caller_function ||
         caller_function > c->function_count)
-        return NULL;
+        return false;
     const NLFunctionEntry *fn = &c->functions[n->function - 1];
     if (!fn->body || fn->count != 2 || !fn->parameters ||
         fn->parameters[1] != nl_semantic_core_type(c, NL_TYPE_U8) ||
         fn->result != fn->parameters[1] || fn->caller_effects ||
         fn->hidden_dependencies || fn->owner_producer || fn->owner_receiver ||
         fn->custody_recipient || n->function == caller_function)
-        return NULL;
+        return false;
     const NLSemanticTypeView t = c->types[fn->parameters[0] - 1].view;
     const NLCheckedNodeView *a = nl_checked_node_view(caller, args[0]);
     const NLCheckedNodeView *b = nl_checked_node_view(caller, args[1]);
@@ -1625,27 +1625,27 @@ nl_definition_call_begin(const NLCheckedFragment *caller, NLCheckedNodeId call,
         a->result_count != 1 || b->result_count != 1 ||
         a->type != fn->parameters[0] || b->type != fn->parameters[1] ||
         !a->results[0].value || a->results[0].value > c->value_count)
-        return NULL;
+        return false;
     const NLReferenceFacts r = c->values[a->results[0].value - 1].reference;
     if (!r.place || r.place > c->place_count || !r.scope ||
         r.scope > c->scope_count || !c->scopes[r.scope - 1].active)
-        return NULL;
+        return false;
     const NLPlaceId root = c->places[r.place - 1].parent_aggregate;
     NLSemanticPlaceView parts[3];
     if (!root || !nl_copy_trio(c, root, parts))
-        return NULL;
+        return false;
     NLCheckedNodeId loan = 0;
     for (size_t i = 1; i <= caller->count; ++i) {
         const NLCheckedNodeView *l = nl_checked_node_view(caller, i);
         if (l->kind == NL_CHECKED_LOAN_HEADER && l->field.present &&
             l->loan.ref_symbol == a->symbol && l->loan.scope == r.scope) {
             if (loan)
-                return NULL;
+                return false;
             loan = i;
         }
     }
     if (!loan)
-        return NULL;
+        return false;
     NLPlaceId other = 0;
     size_t roots = 0;
     for (size_t i = 1; i <= c->place_count; ++i) {
@@ -1657,6 +1657,33 @@ nl_definition_call_begin(const NLCheckedFragment *caller, NLCheckedNodeId call,
         }
     }
     if (roots != 2 || !other)
+        return false;
+    const NLCheckedField field = nl_checked_node_view(caller, loan)->field;
+    *description = (NLDefinitionCallView){
+        .caller = caller,
+        .parent = caller->if_parent,
+        .world = c,
+        .body = fn->body,
+        .caller_function = caller_function,
+        .function = n->function,
+        .arm = caller->if_arm_index,
+        .call = call,
+        .arguments = {args[0], args[1]},
+        .loan = loan,
+        .field = field,
+        .sibling = parts[0].fixed_fields[1 - field.index],
+        .other = other,
+        .scope = r.scope};
+    return true;
+}
+NLDefinitionCallCapture *
+nl_definition_call_begin(const NLCheckedFragment *caller, NLCheckedNodeId call,
+                         const NLCheckedNodeId args[2], size_t caller_function,
+                         const NLSemanticContext *c)
+{
+    NLDefinitionCallView description = {0};
+    if (!definition_observer ||
+        !dc_describe(caller, call, args, caller_function, c, &description))
         return NULL;
     NLDefinitionCallCapture *p = calloc(1, sizeof(*p));
     NLCheckStatus s = p ? nl_sem_clone(c, &p->pre) : NL_CHECK_OUT_OF_MEMORY;
@@ -1668,23 +1695,8 @@ nl_definition_call_begin(const NLCheckedFragment *caller, NLCheckedNodeId call,
         definition_observer(NULL, NULL, s, definition_user);
         return NULL;
     }
-    const NLCheckedField field = nl_checked_node_view(caller, loan)->field;
-    p->view = (NLDefinitionCallView){.caller = caller,
-                                     .parent = caller->if_parent,
-                                     .world = c,
-                                     .pre = p->pre,
-                                     .body = fn->body,
-                                     .caller_function = caller_function,
-                                     .function = n->function,
-                                     .arm = caller->if_arm_index,
-                                     .call = call,
-                                     .arguments = {args[0], args[1]},
-                                     .loan = loan,
-                                     .field = field,
-                                     .sibling =
-                                         parts[0].fixed_fields[1 - field.index],
-                                     .other = other,
-                                     .scope = r.scope};
+    p->view = description;
+    p->view.pre = p->pre;
     p->observer = definition_observer;
     p->user = definition_user;
     return p;
@@ -1813,21 +1825,14 @@ static bool dc_scalar(const NLSemanticContext *c, NLValueId id)
 /* Reconstruct the checked operation from its original AST and fresh replay
  * state. No expected scalar, saved POST or issued summary supplies the effect.
  */
-NLCheckStatus nl_definition_call_validate(const NLDefinitionCallCapture *p,
-                                          const NLDefinitionCallView *candidate,
-                                          NLDefinitionCallResult *out)
+static NLCheckStatus dc_replay(const NLDefinitionCallView *v,
+                               const NLSemanticContext *pre,
+                               const NLSemanticContext *post,
+                               NLDefinitionCallResult *out)
 {
-    if (!out)
-        return INVALID;
     *out = (NLDefinitionCallResult){0};
-    if (!p || !candidate || p->status != NL_CHECK_OK)
-        return INVALID;
-    const NLDefinitionCallView *v = &p->view;
-    /* Check borrowed identity before dereferencing a candidate pointer. The
-     * positive path below independently interprets source and checked graphs.
-     */
-    if (memcmp(v, candidate, sizeof(*v)) || v->ordinal ||
-        v->pending_count != 1 || v->arm > 1 || !p->pre || !p->post)
+    if (!v || !pre || !post || v->ordinal || v->pending_count != 1 ||
+        v->arm > 1)
         return INVALID;
     const NLCheckedFragment *f = v->caller, *b = v->callee;
     if (!f || !b || f->context != v->world || f->if_parent != v->parent ||
@@ -1836,15 +1841,14 @@ NLCheckStatus nl_definition_call_validate(const NLDefinitionCallCapture *p,
         nl_checked_call_body(f, v->call) != b || b->context != f->context ||
         b->copy_body || b->body_owner != v->body ||
         b->source != v->body->source || b->arm_count || b->body_count ||
-        !v->caller_function || v->caller_function > p->pre->function_count)
+        !v->caller_function || v->caller_function > pre->function_count)
         return INVALID;
-    const NLFunctionEntry *caller_fn =
-        &p->pre->functions[v->caller_function - 1];
-    const NLFunctionEntry *fn = &p->pre->functions[v->function - 1];
+    const NLFunctionEntry *caller_fn = &pre->functions[v->caller_function - 1];
+    const NLFunctionEntry *fn = &pre->functions[v->function - 1];
     if (!caller_fn->body || caller_fn->body->source != f->source ||
         fn->body != v->body || fn->count != 2 || !fn->parameters ||
         fn->body->count != 2 || fn->result != fn->parameters[1] ||
-        fn->result != nl_semantic_core_type(p->pre, NL_TYPE_U8))
+        fn->result != nl_semantic_core_type(pre, NL_TYPE_U8))
         return INVALID;
     const NLCheckedNodeView *choice =
         nl_checked_node_view(f->if_parent, f->if_parent_node);
@@ -2022,7 +2026,7 @@ NLCheckStatus nl_definition_call_validate(const NLDefinitionCallCapture *p,
         new_node->result_count == 1 && new_node->results[0].value == incoming &&
         new_node->type == fn->result && new_node->scalar_result.known &&
         new_node->scalar_result.value == number && dc_scalar(m, incoming));
-    DC_DO(dc_equal(m, p->pre));
+    DC_DO(dc_equal(m, pre));
     /* Plain scalar history is not a liveness dependency on the old field.
      * Preserve Unknown explicitly in observations rather than invent a byte. */
     for (size_t i = 1; i < 3; ++i) {
@@ -2215,7 +2219,7 @@ NLCheckStatus nl_definition_call_validate(const NLDefinitionCallCapture *p,
                edge->values[0].value == out->returned);
     DC_DO(nl_copy_end_locals(m, floor, places, scopes_floor));
     DC_DO(dc_equal(m, nl_control_state_context((NLControlState *)edge->state)));
-    DC_DO(dc_equal(m, p->post));
+    DC_DO(dc_equal(m, post));
     out->return_old_verified = true;
     /* Now close the actual enclosing lexical loan; not the callee RETURN. */
     DC_DO(nl_copy_end_locals(m, initial_bindings, m->place_count,
@@ -2232,4 +2236,242 @@ done:
 #undef DC_REQUIRE
 #undef DC_DO
     return s;
+}
+
+NLCheckStatus nl_definition_call_validate(const NLDefinitionCallCapture *p,
+                                          const NLDefinitionCallView *candidate,
+                                          NLDefinitionCallResult *out)
+{
+    if (!out)
+        return INVALID;
+    *out = (NLDefinitionCallResult){0};
+    if (!p || !candidate || p->status != NL_CHECK_OK ||
+        memcmp(&p->view, candidate, sizeof(*candidate)))
+        return INVALID;
+    return dc_replay(&p->view, p->pre, p->post, out);
+}
+
+/* A private construction session owns ORIGINAL checker graphs. It never
+ * retains a Stage0 capture/view, calls an observer, or creates a public event.
+ * Pending references are used only after membership in the retained original
+ * tree has been established. No graph with invented/rebased IDs is built. */
+struct NLDefinitionOwnedPending {
+    NLDefinitionOwnedLink link;
+    NLSemanticContext *pre, *post;
+    struct NLDefinitionOwnedPending *next;
+};
+struct NLDefinitionOwned {
+    NLDefinitionOwnedPending *first, *last;
+    NLCheckedFragment *root;
+    size_t count;
+    NLCheckStatus status;
+    bool closed;
+};
+static _Thread_local NLDefinitionOwned *owned_session;
+
+static void owned_discard(NLDefinitionOwned *w)
+{
+    while (w->first) {
+        NLDefinitionOwnedPending *p = w->first;
+        w->first = p->next;
+        nl_semantic_destroy(p->pre);
+        nl_semantic_destroy(p->post);
+        free(p);
+    }
+    w->last = NULL;
+    w->count = 0;
+}
+NLCheckStatus nl_definition_owned_open(NLDefinitionOwned **out)
+{
+    if (!out || owned_session)
+        return INVALID;
+    *out = NULL;
+    NLDefinitionOwned *w = calloc(1, sizeof(*w));
+    if (!w)
+        return NL_CHECK_OUT_OF_MEMORY;
+    owned_session = *out = w;
+    return NL_CHECK_OK;
+}
+void nl_definition_owned_close(NLDefinitionOwned *w)
+{
+    if (!w || owned_session != w)
+        return;
+    owned_session = NULL;
+    w->closed = true;
+    if (!w->root && w->status == NL_CHECK_OK)
+        w->status = INVALID;
+    if (w->status != NL_CHECK_OK)
+        owned_discard(w);
+}
+void nl_definition_owned_destroy(NLDefinitionOwned *w)
+{
+    if (!w)
+        return;
+    if (owned_session == w)
+        nl_definition_owned_close(w);
+    /* PRE/POST retain registered source plans independently of the tree.
+     * Drop records first, then nested graph/control owners, root context last.
+     */
+    owned_discard(w);
+    nl_checked_destroy(w->root);
+    free(w);
+}
+NLCheckStatus nl_definition_owned_status(const NLDefinitionOwned *w)
+{
+    return w && w->closed ? w->status : INVALID;
+}
+size_t nl_definition_owned_count(const NLDefinitionOwned *w)
+{
+    return nl_definition_owned_status(w) == NL_CHECK_OK ? w->count : 0;
+}
+const NLDefinitionOwnedLink *
+nl_definition_owned_link(const NLDefinitionOwned *w, size_t index)
+{
+    if (index >= nl_definition_owned_count(w))
+        return NULL;
+    const NLDefinitionOwnedPending *p = w->first;
+    while (index--)
+        p = p->next;
+    return &p->link;
+}
+NLDefinitionOwnedPending *
+nl_definition_owned_call(const NLCheckedFragment *f, NLCheckedNodeId call,
+                         const NLCheckedNodeId arguments[2], size_t function,
+                         const NLSemanticContext *c)
+{
+    NLDefinitionOwned *w = owned_session;
+    if (!w || w->status != NL_CHECK_OK)
+        return NULL;
+    if (w->root) { /* Exactly one definition instance, no reentry. */
+        w->status = INVALID;
+        return NULL;
+    }
+    NLDefinitionCallView d = {0}; /* temporary descriptor, never an observer */
+    if (!dc_describe(f, call, arguments, function, c, &d)) {
+        w->status = INVALID;
+        return NULL;
+    }
+    NLDefinitionOwnedPending *p = calloc(1, sizeof(*p));
+    NLCheckStatus s = p ? nl_sem_clone(c, &p->pre) : NL_CHECK_OUT_OF_MEMORY;
+    if (s != NL_CHECK_OK) {
+        free(p);
+        w->status = s;
+        return NULL;
+    }
+    p->link = (NLDefinitionOwnedLink){.caller = f,
+                                      .parent = f->if_parent,
+                                      .world = c,
+                                      .pre = p->pre,
+                                      .body = d.body,
+                                      .caller_function = function,
+                                      .function = d.function,
+                                      .arm = d.arm,
+                                      .call = call,
+                                      .arguments = {arguments[0], arguments[1]},
+                                      .loan = d.loan,
+                                      .field = d.field,
+                                      .sibling = d.sibling,
+                                      .other = d.other,
+                                      .scope = d.scope};
+    if (w->last)
+        w->last->next = p;
+    else
+        w->first = p;
+    w->last = p;
+    ++w->count;
+    return p;
+}
+void nl_definition_owned_attach(NLDefinitionOwnedPending *p,
+                                const NLCheckedFragment *body,
+                                const NLSymbolId formals[2],
+                                const NLSemanticContext *c)
+{
+    if (!p || !owned_session)
+        return;
+    NLCheckStatus s = nl_sem_clone(c, &p->post);
+    if (s != NL_CHECK_OK) {
+        owned_session->status = s;
+        return;
+    }
+    p->link.callee = body;
+    p->link.post = p->post;
+    memcpy(p->link.formals, formals, sizeof(p->link.formals));
+}
+void nl_definition_owned_take(NLCheckedFragment **root, NLSemanticContext **c)
+{
+    NLDefinitionOwned *w = owned_session;
+    if (!w || !w->first)
+        return;
+    /* Check membership by pointer comparison before dereferencing a pending
+     * graph: incomplete branches may already have been destroyed on error. */
+    if (w->status != NL_CHECK_OK || w->root || !root || !*root || !c || !*c ||
+        (*root)->context != *c || w->count != 2 || (*root)->arm_count != 2)
+        goto fail;
+    bool arm_seen[2] = {false, false};
+    for (NLDefinitionOwnedPending *p = w->first; p; p = p->next) {
+        bool member = false;
+        for (size_t i = 0; i < (*root)->arm_count; ++i)
+            member |= (*root)->arms[i].artifact == p->link.caller;
+        if (!member || !p->pre || !p->post || p->link.parent != *root ||
+            p->link.arm > 1 || arm_seen[p->link.arm])
+            goto fail;
+        arm_seen[p->link.arm] = true;
+        p->link.pending_count = 1;
+    }
+    w->root = *root;
+    w->root->destroy_context = nl_semantic_destroy;
+    *root = NULL;
+    *c = NULL;
+    return;
+fail:
+    if (w->status == NL_CHECK_OK)
+        w->status = INVALID;
+    owned_discard(w);
+}
+NLCheckStatus nl_definition_owned_validate(const NLDefinitionOwned *w,
+                                           size_t index,
+                                           const NLDefinitionOwnedLink *v,
+                                           NLDefinitionCallResult *out)
+{
+    if (!out)
+        return INVALID;
+    *out = (NLDefinitionCallResult){0};
+    const NLDefinitionOwnedLink *issued = nl_definition_owned_link(w, index);
+    if (!issued || !v || memcmp(issued, v, sizeof(*v)) || !w->root ||
+        v->parent != w->root || v->arm > 1)
+        return INVALID;
+    /* Original parent owns these graph instances, including separate callee
+     * namespaces. Membership, not equal IDs/context addresses, qualifies IDs.
+     */
+    bool member = false;
+    for (size_t i = 0; i < w->root->arm_count; ++i)
+        member |= w->root->arms[i].artifact == v->caller;
+    if (!member || v->caller->if_parent != w->root ||
+        v->caller->if_arm_index != v->arm)
+        return INVALID;
+    const NLDefinitionCallView replay = {
+        .caller = v->caller,
+        .callee = v->callee,
+        .parent = v->parent,
+        .world = v->world,
+        .pre = v->pre,
+        .post = v->post,
+        .body = v->body,
+        .caller_function = v->caller_function,
+        .function = v->function,
+        .arm = v->arm,
+        .ordinal = v->ordinal,
+        .pending_count = v->pending_count,
+        .call = v->call,
+        .arguments = {v->arguments[0], v->arguments[1]},
+        .loan = v->loan,
+        .formals = {v->formals[0], v->formals[1]},
+        .field = v->field,
+        .sibling = v->sibling,
+        .other = v->other,
+        .scope = v->scope};
+    /* No cached successful result: walk source/graph and independently execute
+     * from common entry on EVERY invocation, comparing PRE/POST only afterward.
+     */
+    return dc_replay(&replay, v->pre, v->post, out);
 }

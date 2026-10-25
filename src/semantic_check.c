@@ -3593,6 +3593,12 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
             ? nl_definition_call_begin(caller->artifact, call_id, arguments,
                                        caller->body_function, c)
             : NULL;
+    NLDefinitionOwnedPending *owned_call =
+        caller->definition && caller->artifact->if_parent &&
+                function->count == 2
+            ? nl_definition_owned_call(caller->artifact, call_id, arguments,
+                                       caller->body_function, c)
+            : NULL;
     Check body = {.caller = caller,
                   .body_budget = caller->body_budget,
                   .branch_budget = caller->branch_budget,
@@ -3889,6 +3895,7 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     ++caller->artifact->body_count;
     nl_definition_call_attach(definition_call, body.artifact, copy_parameters,
                               c);
+    nl_definition_owned_attach(owned_call, body.artifact, copy_parameters, c);
     nl_definition_call_push(&caller->definition_calls, definition_call);
     return true;
 failure:
@@ -9075,6 +9082,8 @@ static bool check_definition(Check *registration, size_t function_id)
 failure:
     registration->status = definition.status;
     registration->diagnostic = definition.diagnostic;
+    /* Private owner handoff never alters status or publishes source proof. */
+    nl_definition_owned_take(&definition.artifact, &definition.context);
     nl_checked_destroy(definition.artifact);
     nl_semantic_destroy(definition.context);
     return false;

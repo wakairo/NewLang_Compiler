@@ -1,0 +1,3 @@
+arm0 parent0x562c46659fd0 caller0x562c4666a5f0 callee0x562c46662c10 world0x562c46659880 PRE0x562c46667fa0 CALL4 loan2 actual5/6 formal4/5 original1 child2 inc1/2 index0 scope1 old231 new19 sibling6 replay0 source_owner_retained=1
+arm1 parent0x562c46659fd0 caller0x562c4669da50 callee0x562c4669dcb0 world0x562c46663b20 PRE0x562c46667fa0 CALL4 loan2 actual5/6 formal4/5 original1 child2 inc1/2 index0 scope1 old231 new173 sibling6 replay0 source_owner_retained=1
+after callback + registration + original input/context destruction: primitive records2, no borrowed pointer dereferenced, CHECK3 P6-JOIN-PRECISION

@@ -706,6 +706,27 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(p917_probe tests/p917/probe.c)
+    target_link_libraries(p917_probe PRIVATE newlang_semantic newlang_parser)
+    add_executable(p917_oom tests/p917/oom.c)
+    target_link_libraries(p917_oom PRIVATE newlang_semantic newlang_parser)
+    target_link_options(p917_oom PRIVATE -Wl,--wrap=calloc -Wl,--wrap=malloc
+        -Wl,--wrap=nl_sem_clone -Wl,--wrap=nl_definition_owned_call
+        -Wl,--wrap=nl_definition_owned_attach)
+    set(p917_src "${CMAKE_CURRENT_SOURCE_DIR}/tests/p917/sources")
+    add_test(NAME p917_owned_lifetime.unit COMMAND p917_probe capture
+        "${p917_src}/quota_true.nl" "${p917_src}/quota_false.nl"
+        "${p917_src}/sensor_true.nl" "${p917_src}/sensor_false.nl")
+    add_test(NAME p917_owned_integrity.unit COMMAND p917_probe negative
+        "${p917_src}/quota_true.nl" "${p917_src}/quota_false.nl"
+        "${p917_src}/sensor_true.nl" "${p917_src}/sensor_false.nl"
+        "${p917_src}/quota_wrong_return_incoming.nl" "${p917_src}/quota_wrong_return_literal.nl"
+        "${p917_src}/sensor_wrong_return_incoming.nl" "${p917_src}/sensor_wrong_return_literal.nl"
+        "${p917_src}/missing_call.nl" "${p917_src}/duplicate_call.nl")
+    add_test(NAME p917_cli_unchanged.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p917/cli.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p917")
+    add_test(NAME p917_owned_oom.unit COMMAND p917_oom "${p917_src}/quota_true.nl")
     add_executable(p901_probe tests/p901/probe.c)
     target_link_libraries(p901_probe PRIVATE newlang_semantic newlang_parser)
     set(p901_src "${CMAKE_CURRENT_SOURCE_DIR}/tests/p901/sources")
