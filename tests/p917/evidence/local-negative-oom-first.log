@@ -1,0 +1,82 @@
+Internal ctest changing into directory: /tmp/p917-build
+UpdateCTestConfiguration  from :/tmp/p917-build/DartConfiguration.tcl
+Parse Config file:/tmp/p917-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p917-build/DartConfiguration.tcl
+Parse Config file:/tmp/p917-build/DartConfiguration.tcl
+Test project /tmp/p917-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 250
+    Start 250: p917_owned_integrity.unit
+
+250: Test command: /tmp/p917-build/p917_probe "negative" "/tmp/p917/tests/p917/sources/quota_true.nl" "/tmp/p917/tests/p917/sources/quota_false.nl" "/tmp/p917/tests/p917/sources/sensor_true.nl" "/tmp/p917/tests/p917/sources/sensor_false.nl" "/tmp/p917/tests/p917/sources/quota_wrong_return_incoming.nl" "/tmp/p917/tests/p917/sources/quota_wrong_return_literal.nl" "/tmp/p917/tests/p917/sources/sensor_wrong_return_incoming.nl" "/tmp/p917/tests/p917/sources/sensor_wrong_return_literal.nl" "/tmp/p917/tests/p917/sources/missing_call.nl" "/tmp/p917/tests/p917/sources/duplicate_call.nl"
+250: Working Directory: /tmp/p917-build
+250: Environment variables: 
+250:  PYTHONDONTWRITEBYTECODE=1
+250:  PYTHONHASHSEED=0
+250:  LC_ALL=C
+250:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+250:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+250: Test timeout computed to be: 90
+250: owned after destruction: /tmp/p917/tests/p917/sources/quota_true.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+250: owned after destruction: /tmp/p917/tests/p917/sources/quota_true.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+250: owned after destruction: /tmp/p917/tests/p917/sources/quota_false.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+250: owned after destruction: /tmp/p917/tests/p917/sources/quota_false.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+250: owned after destruction: /tmp/p917/tests/p917/sources/sensor_true.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+250: owned after destruction: /tmp/p917/tests/p917/sources/sensor_true.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+250: owned after destruction: /tmp/p917/tests/p917/sources/sensor_false.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+250: owned after destruction: /tmp/p917/tests/p917/sources/sensor_false.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+250: P917 private owned source-instance replay; refusals264; CHECK3 kept
+1/3 Test #250: p917_owned_integrity.unit ........   Passed    0.01 sec
+test 251
+    Start 251: p917_cli_unchanged.integration
+
+251: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p917/tests/p917/cli.py" "/tmp/p917-build/newlangc" "/tmp/p917/tests/p917"
+251: Working Directory: /tmp/p917-build
+251: Environment variables: 
+251:  PYTHONDONTWRITEBYTECODE=1
+251:  PYTHONHASHSEED=0
+251:  LC_ALL=C
+251:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+251:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+251: Test timeout computed to be: 90
+251: quota_true.nl CHECK3 / no public IF / zero C / named output preserved
+251: quota_false.nl CHECK3 / no public IF / zero C / named output preserved
+251: quota_wrong_return_incoming.nl CHECK3 / no public IF / zero C / named output preserved
+251: quota_wrong_return_literal.nl CHECK3 / no public IF / zero C / named output preserved
+251: missing_call.nl CHECK3 / no public IF / zero C / named output preserved
+251: duplicate_call.nl CHECK3 / no public IF / zero C / named output preserved
+251: sensor_true.nl CHECK3 / no public IF / zero C / named output preserved
+251: sensor_false.nl CHECK3 / no public IF / zero C / named output preserved
+251: sensor_wrong_return_incoming.nl CHECK3 / no public IF / zero C / named output preserved
+251: sensor_wrong_return_literal.nl CHECK3 / no public IF / zero C / named output preserved
+2/3 Test #251: p917_cli_unchanged.integration ...   Passed    0.07 sec
+test 252
+    Start 252: p917_owned_oom.unit
+
+252: Test command: /tmp/p917-build/p917_oom "/tmp/p917/tests/p917/sources/quota_true.nl"
+252: Working Directory: /tmp/p917-build
+252: Environment variables: 
+252:  PYTHONDONTWRITEBYTECODE=1
+252:  PYTHONHASHSEED=0
+252:  LC_ALL=C
+252:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+252:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+252: Test timeout computed to be: 90
+252: new owned fault1 hit1 requests1, zero partial records, same-context retry/replay OK; CHECK3 rollback kept
+252: new owned fault2 hit1 requests1, zero partial records, same-context retry/replay OK; CHECK3 rollback kept
+252: new owned fault3 hit1 requests1, zero partial records, same-context retry/replay OK; CHECK3 rollback kept
+3/3 Test #252: p917_owned_oom.unit ..............   Passed    0.00 sec
+
+The following tests passed:
+	p917_owned_integrity.unit
+	p917_cli_unchanged.integration
+	p917_owned_oom.unit
+
+100% tests passed, 0 tests failed out of 3
+
+Total Test time (real) =   0.09 sec

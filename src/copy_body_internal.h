@@ -119,4 +119,41 @@ void nl_definition_call_finish(NLDefinitionCallCapture **, bool);
 NLCheckStatus nl_definition_call_validate(const NLDefinitionCallCapture *,
                                           const NLDefinitionCallView *,
                                           NLDefinitionCallResult *);
+
+/* P917 private NONPUBLISHING construction experiment. An explicit session
+ * owns the actual failed definition tree and independent PRE/POST copies.
+ * These are NOT Stage0 observer borrows or public checked proof. No callback
+ * retention/reentry, public admission, IF join or backend entitlement. */
+typedef struct NLDefinitionOwned NLDefinitionOwned;
+typedef struct NLDefinitionOwnedPending NLDefinitionOwnedPending;
+typedef struct {
+    const NLCheckedFragment *caller, *callee, *parent;
+    const NLSemanticContext *world, *pre, *post;
+    const NLFunctionBody *body;
+    size_t caller_function, function, arm, ordinal, pending_count;
+    NLCheckedNodeId call, arguments[2], loan;
+    NLSymbolId formals[2];
+    NLCheckedField field;
+    NLPlaceId sibling, other;
+    NLScopeId scope;
+} NLDefinitionOwnedLink;
+NLCheckStatus nl_definition_owned_open(NLDefinitionOwned **);
+void nl_definition_owned_close(NLDefinitionOwned *);
+void nl_definition_owned_destroy(NLDefinitionOwned *);
+size_t nl_definition_owned_count(const NLDefinitionOwned *);
+NLCheckStatus nl_definition_owned_status(const NLDefinitionOwned *);
+const NLDefinitionOwnedLink *nl_definition_owned_link(const NLDefinitionOwned *,
+                                                      size_t);
+NLCheckStatus nl_definition_owned_validate(const NLDefinitionOwned *, size_t,
+                                           const NLDefinitionOwnedLink *,
+                                           NLDefinitionCallResult *);
+NLDefinitionOwnedPending *nl_definition_owned_call(const NLCheckedFragment *,
+                                                   NLCheckedNodeId,
+                                                   const NLCheckedNodeId[2],
+                                                   size_t,
+                                                   const NLSemanticContext *);
+void nl_definition_owned_attach(NLDefinitionOwnedPending *,
+                                const NLCheckedFragment *, const NLSymbolId[2],
+                                const NLSemanticContext *);
+void nl_definition_owned_take(NLCheckedFragment **, NLSemanticContext **);
 #endif

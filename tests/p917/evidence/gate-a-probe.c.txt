@@ -1,0 +1,68 @@
+#include "/tmp/p901/src/copy_body_internal.h"
+#include "/tmp/p901/src/if_field_internal.h"
+#include "newlang/parser.h"
+#include <stdio.h>
+#include <stdlib.h>
+static size_t calls;
+static uintptr_t worlds[2];
+static void inspect(const NLDefinitionCallCapture *capture,
+                    const NLDefinitionCallView *v, NLCheckStatus status,
+                    void *unused)
+{
+    (void)unused;
+    if (!capture || !v || status != NL_CHECK_OK || v->arm > 1)
+        abort();
+    NLDefinitionCallResult r;
+    NLCheckStatus result = nl_definition_call_validate(capture, v, &r);
+    const NLCheckedFragment *f = v->caller, *b = v->callee;
+    const NLFunctionBody *caller = v->pre->functions[v->caller_function-1].body;
+    NLIfFieldProof *entry = f->if_parent->if_fields;
+    while (entry && entry->view.conditional != f->if_parent_node)
+        entry = entry->next;
+    if (result || !r.pre_verified || !r.return_old_verified || !r.loan_closed ||
+        !entry || entry->arms[v->arm] != f || !entry->entry ||
+        f->bodies[0] != b || b->body_owner != v->body ||
+        caller->source != f->source || b->source != v->body->source ||
+        !v->pre->scopes[v->scope-1].active ||
+        v->world->scopes[v->scope-1].active || b->context != f->context)
+        abort();
+    const NLCheckedNodeView *a = nl_checked_node_view(f,v->arguments[0]);
+    NLReferenceFacts ref = v->pre->values[a->results[0].value-1].reference;
+    if (ref.place != v->field.child || ref.incarnation != v->field.child_incarnation)
+        abort();
+    NLSemanticContext *copy = NULL;
+    if (nl_sem_clone(v->pre, &copy) ||
+        copy->functions[v->caller_function-1].body != caller ||
+        copy->functions[v->function-1].body != v->body)
+        abort();
+    printf("arm%zu parent%p caller%p callee%p world%p PRE%p "
+           "CALL%zu loan%zu actual%zu/%zu formal%zu/%zu "
+           "original%zu child%zu inc%zu/%zu index%zu scope%zu "
+           "old%llu new%llu sibling%llu replay%d source_owner_retained=1\n",
+           v->arm,(void*)v->parent,(void*)f,(void*)b,(void*)v->world,(void*)v->pre,
+           v->call,v->loan,v->arguments[0],v->arguments[1],v->formals[0],v->formals[1],
+           v->field.parent,v->field.child,v->field.parent_incarnation,
+           v->field.child_incarnation,v->field.index,v->scope,
+           (unsigned long long)r.old_value,(unsigned long long)r.incoming,
+           (unsigned long long)r.sibling,result);
+    nl_semantic_destroy(copy);
+    worlds[v->arm]=(uintptr_t)v->world;
+    ++calls;
+}
+int main(int argc,char **argv)
+{
+    if(argc!=2)return 2;
+    NLSource *s=NULL;NLParser *p=NULL;NLSyntaxTree *t=NULL;NLSemanticContext *c=NULL;
+    if(nl_source_load(argv[1],&s)||nl_parser_create(s,&p)||
+       nl_parser_parse_function_unit(p,&t,NULL)||nl_semantic_create(&c))return 1;
+    const NLSyntaxTree *units[]={t};NLFunctionUnitDiagnostic d={0};
+    nl_definition_call_observer(inspect,NULL);
+    NLCheckStatus status=nl_semantic_register_function_unit(c,units,1,&d);
+    nl_definition_call_observer(NULL,NULL);
+    nl_semantic_destroy(c);nl_syntax_tree_destroy(t);nl_parser_destroy(p);nl_source_destroy(s);
+    printf("after callback + registration + original input/context destruction: "
+           "primitive records%zu, no borrowed pointer dereferenced, CHECK%d %s\n",
+           calls,status,d.diagnostic.diagnostic.code);
+    return status==NL_CHECK_ANALYSIS_PRECISION_LIMIT && calls==2 &&
+           worlds[0] && worlds[1] && worlds[0]!=worlds[1] ? 0:1;
+}

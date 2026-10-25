@@ -1,0 +1,317 @@
+Internal ctest changing into directory: /tmp/p917-ubsan
+UpdateCTestConfiguration  from :/tmp/p917-ubsan/DartConfiguration.tcl
+Parse Config file:/tmp/p917-ubsan/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p917-ubsan/DartConfiguration.tcl
+Parse Config file:/tmp/p917-ubsan/DartConfiguration.tcl
+Test project /tmp/p917-ubsan
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 249
+      Start 249: p917_owned_lifetime.unit
+
+249: Test command: /tmp/p917-ubsan/p917_probe "capture" "/tmp/p917/tests/p917/sources/quota_true.nl" "/tmp/p917/tests/p917/sources/quota_false.nl" "/tmp/p917/tests/p917/sources/sensor_true.nl" "/tmp/p917/tests/p917/sources/sensor_false.nl"
+249: Working Directory: /tmp/p917-ubsan
+249: Environment variables: 
+249:  PYTHONDONTWRITEBYTECODE=1
+249:  PYTHONHASHSEED=0
+249:  LC_ALL=C
+249:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+249:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+249: Test timeout computed to be: 90
+249: owned after destruction: /tmp/p917/tests/p917/sources/quota_true.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+249: owned after destruction: /tmp/p917/tests/p917/sources/quota_true.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+249: owned after destruction: /tmp/p917/tests/p917/sources/quota_false.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+249: owned after destruction: /tmp/p917/tests/p917/sources/quota_false.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+249: owned after destruction: /tmp/p917/tests/p917/sources/sensor_true.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+249: owned after destruction: /tmp/p917/tests/p917/sources/sensor_true.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+249: owned after destruction: /tmp/p917/tests/p917/sources/sensor_false.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+249: owned after destruction: /tmp/p917/tests/p917/sources/sensor_false.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+249: P917 private owned source-instance replay; refusals0; CHECK3 kept
+ 1/12 Test #249: p917_owned_lifetime.unit .........   Passed    0.02 sec
+test 250
+      Start 250: p917_owned_integrity.unit
+
+250: Test command: /tmp/p917-ubsan/p917_probe "negative" "/tmp/p917/tests/p917/sources/quota_true.nl" "/tmp/p917/tests/p917/sources/quota_false.nl" "/tmp/p917/tests/p917/sources/sensor_true.nl" "/tmp/p917/tests/p917/sources/sensor_false.nl" "/tmp/p917/tests/p917/sources/quota_wrong_return_incoming.nl" "/tmp/p917/tests/p917/sources/quota_wrong_return_literal.nl" "/tmp/p917/tests/p917/sources/sensor_wrong_return_incoming.nl" "/tmp/p917/tests/p917/sources/sensor_wrong_return_literal.nl" "/tmp/p917/tests/p917/sources/missing_call.nl" "/tmp/p917/tests/p917/sources/duplicate_call.nl"
+250: Working Directory: /tmp/p917-ubsan
+250: Environment variables: 
+250:  PYTHONDONTWRITEBYTECODE=1
+250:  PYTHONHASHSEED=0
+250:  LC_ALL=C
+250:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+250:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+250: Test timeout computed to be: 90
+250: owned after destruction: /tmp/p917/tests/p917/sources/quota_true.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+250: owned after destruction: /tmp/p917/tests/p917/sources/quota_true.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+250: owned after destruction: /tmp/p917/tests/p917/sources/quota_false.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+250: owned after destruction: /tmp/p917/tests/p917/sources/quota_false.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+250: owned after destruction: /tmp/p917/tests/p917/sources/sensor_true.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+250: owned after destruction: /tmp/p917/tests/p917/sources/sensor_true.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+250: owned after destruction: /tmp/p917/tests/p917/sources/sensor_false.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+250: owned after destruction: /tmp/p917/tests/p917/sources/sensor_false.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+250: P917 private owned source-instance replay; refusals264; CHECK3 kept
+ 2/12 Test #250: p917_owned_integrity.unit ........   Passed    0.03 sec
+test 251
+      Start 251: p917_cli_unchanged.integration
+
+251: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p917/tests/p917/cli.py" "/tmp/p917-ubsan/newlangc" "/tmp/p917/tests/p917"
+251: Working Directory: /tmp/p917-ubsan
+251: Environment variables: 
+251:  PYTHONDONTWRITEBYTECODE=1
+251:  PYTHONHASHSEED=0
+251:  LC_ALL=C
+251:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+251:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+251: Test timeout computed to be: 90
+251: quota_true.nl CHECK3 / no public IF / zero C / named output preserved
+251: quota_false.nl CHECK3 / no public IF / zero C / named output preserved
+251: quota_wrong_return_incoming.nl CHECK3 / no public IF / zero C / named output preserved
+251: quota_wrong_return_literal.nl CHECK3 / no public IF / zero C / named output preserved
+251: missing_call.nl CHECK3 / no public IF / zero C / named output preserved
+251: duplicate_call.nl CHECK3 / no public IF / zero C / named output preserved
+251: sensor_true.nl CHECK3 / no public IF / zero C / named output preserved
+251: sensor_false.nl CHECK3 / no public IF / zero C / named output preserved
+251: sensor_wrong_return_incoming.nl CHECK3 / no public IF / zero C / named output preserved
+251: sensor_wrong_return_literal.nl CHECK3 / no public IF / zero C / named output preserved
+ 3/12 Test #251: p917_cli_unchanged.integration ...   Passed    0.48 sec
+test 252
+      Start 252: p917_owned_oom.unit
+
+252: Test command: /tmp/p917-ubsan/p917_oom "/tmp/p917/tests/p917/sources/quota_true.nl"
+252: Working Directory: /tmp/p917-ubsan
+252: Environment variables: 
+252:  PYTHONDONTWRITEBYTECODE=1
+252:  PYTHONHASHSEED=0
+252:  LC_ALL=C
+252:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+252:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+252: Test timeout computed to be: 90
+252: new owned fault1 hit1 requests1, zero partial records, same-context retry/replay OK; CHECK3 rollback kept
+252: new owned fault2 hit1 requests1, zero partial records, same-context retry/replay OK; CHECK3 rollback kept
+252: new owned fault3 hit1 requests1, zero partial records, same-context retry/replay OK; CHECK3 rollback kept
+ 4/12 Test #252: p917_owned_oom.unit ..............   Passed    0.01 sec
+test 253
+      Start 253: p901_statement_positive.unit
+
+253: Test command: /tmp/p917-ubsan/p901_probe "capture" "/tmp/p917/tests/p901/sources/r899_meridian.nl" "/tmp/p917/tests/p901/sources/r899_relay_pair.nl" "/tmp/p917/tests/p901/sources/scan_true.nl" "/tmp/p917/tests/p901/sources/scan_false.nl"
+253: Working Directory: /tmp/p917-ubsan
+253: Environment variables: 
+253:  PYTHONDONTWRITEBYTECODE=1
+253:  PYTHONHASHSEED=0
+253:  LC_ALL=C
+253:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+253:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+253: Test timeout computed to be: 90
+253: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming81 sibling163 replacements1 failure_line0
+253: P901 root1 child2 index0 inc1/2 scope1 arm0 PREold37 new81 sibling163 verified
+253: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming118 sibling163 replacements1 failure_line0
+253: P901 root1 child2 index0 inc1/2 scope1 arm1 PREold37 new118 sibling163 verified
+253: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old212 incoming65 sibling43 replacements1 failure_line0
+253: P901 root1 child3 index1 inc1/3 scope1 arm0 PREold212 new65 sibling43 verified
+253: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old212 incoming147 sibling43 replacements1 failure_line0
+253: P901 root1 child3 index1 inc1/3 scope1 arm1 PREold212 new147 sibling43 verified
+253: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming126 sibling11 replacements1 failure_line0
+253: P901 root1 child3 index1 inc1/3 scope1 arm0 PREold56 new126 sibling11 verified
+253: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming209 sibling11 replacements1 failure_line0
+253: P901 root1 child3 index1 inc1/3 scope1 arm1 PREold56 new209 sibling11 verified
+253: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming126 sibling11 replacements1 failure_line0
+253: P901 root1 child3 index1 inc1/3 scope1 arm0 PREold56 new126 sibling11 verified
+253: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming209 sibling11 replacements1 failure_line0
+253: P901 root1 child3 index1 inc1/3 scope1 arm1 PREold56 new209 sibling11 verified
+253: P901 calibrated private rejection count0 (extra owner/span0, unrelated IF0); source CHECK3 unchanged
+ 5/12 Test #253: p901_statement_positive.unit .....   Passed    0.01 sec
+test 254
+      Start 254: p901_statement_integrity.unit
+
+254: Test command: /tmp/p917-ubsan/p901_probe "negative" "/tmp/p917/tests/p901/sources/r899_meridian.nl" "/tmp/p917/tests/p901/sources/r899_relay_pair.nl" "/tmp/p917/tests/p901/sources/scan_true.nl" "/tmp/p917/tests/p901/sources/scan_false.nl" "/tmp/p917/tests/p901/sources/negative_return_incoming.nl" "/tmp/p917/tests/p901/sources/negative_return_literal.nl" "/tmp/p917/tests/p901/sources/no_call.nl"
+254: Working Directory: /tmp/p917-ubsan
+254: Environment variables: 
+254:  PYTHONDONTWRITEBYTECODE=1
+254:  PYTHONHASHSEED=0
+254:  LC_ALL=C
+254:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+254:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+254: Test timeout computed to be: 90
+254: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming81 sibling163 replacements1 failure_line0
+254: P901 root1 child2 index0 inc1/2 scope1 arm0 PREold37 new81 sibling163 verified
+254: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming118 sibling163 replacements1 failure_line0
+254: P901 root1 child2 index0 inc1/2 scope1 arm1 PREold37 new118 sibling163 verified
+254: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old212 incoming65 sibling43 replacements1 failure_line0
+254: P901 root1 child3 index1 inc1/3 scope1 arm0 PREold212 new65 sibling43 verified
+254: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old212 incoming147 sibling43 replacements1 failure_line0
+254: P901 root1 child3 index1 inc1/3 scope1 arm1 PREold212 new147 sibling43 verified
+254: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming126 sibling11 replacements1 failure_line0
+254: P901 root1 child3 index1 inc1/3 scope1 arm0 PREold56 new126 sibling11 verified
+254: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming209 sibling11 replacements1 failure_line0
+254: P901 root1 child3 index1 inc1/3 scope1 arm1 PREold56 new209 sibling11 verified
+254: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming126 sibling11 replacements1 failure_line0
+254: P901 root1 child3 index1 inc1/3 scope1 arm0 PREold56 new126 sibling11 verified
+254: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old56 incoming209 sibling11 replacements1 failure_line0
+254: P901 root1 child3 index1 inc1/3 scope1 arm1 PREold56 new209 sibling11 verified
+254: P896 arm0 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old56 incoming126 sibling11 replacements1 failure_line2186
+254: P896 arm1 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old56 incoming209 sibling11 replacements1 failure_line2186
+254: P896 arm0 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old56 incoming126 sibling11 replacements1 failure_line2186
+254: P896 arm1 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old56 incoming209 sibling11 replacements1 failure_line2186
+254: P901 calibrated private rejection count364 (extra owner/span28, unrelated IF4); source CHECK3 unchanged
+ 6/12 Test #254: p901_statement_integrity.unit ....   Passed    0.05 sec
+test 255
+      Start 255: p901_statement_oom.unit
+
+255: Test command: /tmp/p917-ubsan/p896_oom "oom" "/tmp/p917/tests/p901/sources/r899_meridian.nl"
+255: Working Directory: /tmp/p917-ubsan
+255: Environment variables: 
+255:  PYTHONDONTWRITEBYTECODE=1
+255:  PYTHONHASHSEED=0
+255:  LC_ALL=C
+255:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+255:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+255: Test timeout computed to be: 90
+255: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming118 sibling163 replacements1 failure_line0
+255: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming81 sibling163 replacements1 failure_line0
+255: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming118 sibling163 replacements1 failure_line0
+255: P896 same-context retry after capture OOM: source CHECK3 unchanged, two verified diagnostic records
+255: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming81 sibling163 replacements1 failure_line0
+255: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming118 sibling163 replacements1 failure_line0
+255: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming81 sibling163 replacements1 failure_line0
+255: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming81 sibling163 replacements1 failure_line0
+255: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming118 sibling163 replacements1 failure_line0
+255: P896 same-context retry after capture OOM: source CHECK3 unchanged, two verified diagnostic records
+255: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming81 sibling163 replacements1 failure_line0
+255: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old37 incoming118 sibling163 replacements1 failure_line0
+255: P896 capture calloc and PRE-clone calloc reached, no public artifact; clean retry OK
+ 7/12 Test #255: p901_statement_oom.unit ..........   Passed    0.01 sec
+test 256
+      Start 256: p901_cli_unchanged.integration
+
+256: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p917/tests/p901/cli.py" "/tmp/p917-ubsan/newlangc" "/tmp/p917/tests/p901"
+256: Working Directory: /tmp/p917-ubsan
+256: Environment variables: 
+256:  PYTHONDONTWRITEBYTECODE=1
+256:  PYTHONHASHSEED=0
+256:  LC_ALL=C
+256:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+256:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+256: Test timeout computed to be: 90
+256: negative_return_incoming.nl CHECK3 / zero C17 / output preserved
+256: negative_return_literal.nl CHECK3 / zero C17 / output preserved
+256: r899_meridian.nl CHECK3 / zero C17 / output preserved
+256: r899_relay_pair.nl CHECK3 / zero C17 / output preserved
+256: scan_false.nl CHECK3 / zero C17 / output preserved
+256: scan_true.nl CHECK3 / zero C17 / output preserved
+ 8/12 Test #256: p901_cli_unchanged.integration ...   Passed    0.33 sec
+test 257
+      Start 257: p896_definition_capture.unit
+
+257: Test command: /tmp/p917-ubsan/p896_private "capture" "/tmp/p917/tests/p896/sources/p793_router_true.nl" "/tmp/p917/tests/p896/sources/p793_router_false.nl" "/tmp/p917/tests/p896/sources/p892_budget_true.nl" "/tmp/p917/tests/p896/sources/p892_budget_false.nl" "/tmp/p917/tests/p896/sources/channel_true.nl" "/tmp/p917/tests/p896/sources/channel_false.nl"
+257: Working Directory: /tmp/p917-ubsan
+257: Environment variables: 
+257:  PYTHONDONTWRITEBYTECODE=1
+257:  PYTHONHASHSEED=0
+257:  LC_ALL=C
+257:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+257:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+257: Test timeout computed to be: 90
+257: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old67 incoming94 sibling12 replacements1 failure_line0
+257: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old67 incoming133 sibling12 replacements1 failure_line0
+257: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old67 incoming94 sibling12 replacements1 failure_line0
+257: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old67 incoming133 sibling12 replacements1 failure_line0
+257: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old42 incoming76 sibling203 replacements1 failure_line0
+257: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old42 incoming154 sibling203 replacements1 failure_line0
+257: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old42 incoming76 sibling203 replacements1 failure_line0
+257: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old42 incoming154 sibling203 replacements1 failure_line0
+257: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+257: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+257: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+257: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+257: P896 private mutations rejected0; never public proof/admission
+ 9/12 Test #257: p896_definition_capture.unit .....   Passed    0.05 sec
+test 258
+      Start 258: p896_private_negative.unit
+
+258: Test command: /tmp/p917-ubsan/p896_private "negative" "/tmp/p917/tests/p896/sources/channel_true.nl" "/tmp/p917/tests/p896/sources/channel_false.nl" "/tmp/p917/tests/p896/sources/negative_return_incoming.nl" "/tmp/p917/tests/p896/sources/negative_return_literal.nl" "/tmp/p917/tests/p896/sources/no_call.nl"
+258: Working Directory: /tmp/p917-ubsan
+258: Environment variables: 
+258:  PYTHONDONTWRITEBYTECODE=1
+258:  PYTHONHASHSEED=0
+258:  LC_ALL=C
+258:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+258:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+258: Test timeout computed to be: 90
+258: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+258: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+258: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+258: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+258: P896 arm0 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old73 incoming103 sibling19 replacements1 failure_line2186
+258: P896 arm1 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old73 incoming217 sibling19 replacements1 failure_line2186
+258: P896 arm0 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old73 incoming103 sibling19 replacements1 failure_line2186
+258: P896 arm1 call4 PRE=1 RETURN_OLD=0 CLOSED=0 status3 old73 incoming217 sibling19 replacements1 failure_line2186
+258: P896 private mutations rejected168; never public proof/admission
+10/12 Test #258: p896_private_negative.unit .......   Passed    0.02 sec
+test 259
+      Start 259: p896_capture_oom.unit
+
+259: Test command: /tmp/p917-ubsan/p896_oom "oom" "/tmp/p917/tests/p896/sources/channel_true.nl"
+259: Working Directory: /tmp/p917-ubsan
+259: Environment variables: 
+259:  PYTHONDONTWRITEBYTECODE=1
+259:  PYTHONHASHSEED=0
+259:  LC_ALL=C
+259:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+259:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+259: Test timeout computed to be: 90
+259: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+259: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+259: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+259: P896 same-context retry after capture OOM: source CHECK3 unchanged, two verified diagnostic records
+259: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+259: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+259: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+259: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+259: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+259: P896 same-context retry after capture OOM: source CHECK3 unchanged, two verified diagnostic records
+259: P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+259: P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+259: P896 capture calloc and PRE-clone calloc reached, no public artifact; clean retry OK
+11/12 Test #259: p896_capture_oom.unit ............   Passed    0.03 sec
+test 260
+      Start 260: p896_unchanged_cli.integration
+
+260: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p917/tests/p896/cli.py" "/tmp/p917-ubsan/newlangc" "/tmp/p917/tests/p896"
+260: Working Directory: /tmp/p917-ubsan
+260: Environment variables: 
+260:  PYTHONDONTWRITEBYTECODE=1
+260:  PYTHONHASHSEED=0
+260:  LC_ALL=C
+260:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+260:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+260: Test timeout computed to be: 90
+260: channel_false.nl CHECK3 / C0 / named preserved / private observer off
+260: channel_true.nl CHECK3 / C0 / named preserved / private observer off
+260: negative_return_incoming.nl CHECK3 / C0 / named preserved / private observer off
+260: negative_return_literal.nl CHECK3 / C0 / named preserved / private observer off
+260: p793_router_false.nl CHECK3 / C0 / named preserved / private observer off
+260: p793_router_true.nl CHECK3 / C0 / named preserved / private observer off
+260: p892_budget_false.nl CHECK3 / C0 / named preserved / private observer off
+260: p892_budget_true.nl CHECK3 / C0 / named preserved / private observer off
+12/12 Test #260: p896_unchanged_cli.integration ...   Passed    0.50 sec
+
+The following tests passed:
+	p917_owned_lifetime.unit
+	p917_owned_integrity.unit
+	p917_cli_unchanged.integration
+	p917_owned_oom.unit
+	p901_statement_positive.unit
+	p901_statement_integrity.unit
+	p901_statement_oom.unit
+	p901_cli_unchanged.integration
+	p896_definition_capture.unit
+	p896_private_negative.unit
+	p896_capture_oom.unit
+	p896_unchanged_cli.integration
+
+100% tests passed, 0 tests failed out of 12
+
+Total Test time (real) =   1.60 sec

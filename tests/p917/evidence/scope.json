@@ -1,0 +1,12 @@
+{
+  "base": "6e8be7c313d19b41ca2d45ae608b4dabb01b22e7",
+  "changed_existing": [
+    "CMakeLists.txt",
+    "src/copy_body.c",
+    "src/copy_body_internal.h",
+    "src/semantic_check.c"
+  ],
+  "protected_unchanged": true,
+  "p905_dc_find_if_exact": true,
+  "freeze_sha256": "2d1f5fdd30d7e3bf82ca456ce2610f7cc43e11372f34e7c2a7684221fdac3648"
+}

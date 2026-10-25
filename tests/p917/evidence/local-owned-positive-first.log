@@ -1,0 +1,41 @@
+Internal ctest changing into directory: /tmp/p917-build
+UpdateCTestConfiguration  from :/tmp/p917-build/DartConfiguration.tcl
+Parse Config file:/tmp/p917-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p917-build/DartConfiguration.tcl
+Parse Config file:/tmp/p917-build/DartConfiguration.tcl
+Test project /tmp/p917-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 249
+    Start 249: p917_owned_lifetime.unit
+
+249: Test command: /tmp/p917-build/p917_probe "capture" "/tmp/p917/tests/p917/sources/quota_true.nl" "/tmp/p917/tests/p917/sources/quota_false.nl" "/tmp/p917/tests/p917/sources/sensor_true.nl" "/tmp/p917/tests/p917/sources/sensor_false.nl"
+249: Working Directory: /tmp/p917-build
+249: Environment variables: 
+249:  PYTHONDONTWRITEBYTECODE=1
+249:  PYTHONHASHSEED=0
+249:  LC_ALL=C
+249:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+249:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+249: Test timeout computed to be: 90
+249: owned after destruction: /tmp/p917/tests/p917/sources/quota_true.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+249: owned after destruction: /tmp/p917/tests/p917/sources/quota_true.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+249: owned after destruction: /tmp/p917/tests/p917/sources/quota_false.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+249: owned after destruction: /tmp/p917/tests/p917/sources/quota_false.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+249: owned after destruction: /tmp/p917/tests/p917/sources/sensor_true.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+249: owned after destruction: /tmp/p917/tests/p917/sources/sensor_true.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+249: owned after destruction: /tmp/p917/tests/p917/sources/sensor_false.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+249: owned after destruction: /tmp/p917/tests/p917/sources/sensor_false.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+249: P917 private owned source-instance replay; refusals0; CHECK3 kept
+1/1 Test #249: p917_owned_lifetime.unit .........   Passed    0.00 sec
+
+The following tests passed:
+	p917_owned_lifetime.unit
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.01 sec
