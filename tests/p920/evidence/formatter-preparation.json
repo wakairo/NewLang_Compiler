@@ -1,0 +1,7 @@
+{
+  "reason": "External /tmp pre-code probe used fallback LLVM formatting; repository dry-run correctly rejected it before any production build/test. Derived harness is pinned repository clang-format ONLY; source/oracle/control logic unchanged.",
+  "original_harness_sha256": "45e7cc584644ed9fcb7b7014b578cea7fb155196df438234015310730bd9b25b",
+  "formatted_harness_sha256": "c451e10eb79a40d1b437a94e02137107f08b293efef08f4ee570764d644eca15",
+  "original_preserved": "evidence/edges-precode.c.txt",
+  "freeze_unchanged_sha256": "221cafd5da192f0654e95777e8de8aea18aa17ea28fc486f8cfab56f9a749fb4"
+}

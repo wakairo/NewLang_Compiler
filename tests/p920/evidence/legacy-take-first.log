@@ -1,0 +1,19 @@
+take fault1 hit, original transferred=1 (expected1), original edges restored
+healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+take fault2 hit, original transferred=1 (expected1), original edges restored
+healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+take fault3 hit, original transferred=1 (expected1), original edges restored
+healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+take fault1 hit, original transferred=1 (expected1), original edges restored
+healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+take fault2 hit, original transferred=1 (expected1), original edges restored
+healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+take fault3 hit, original transferred=1 (expected1), original edges restored
+healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+P920 legacy take finished; source CHECK3 unchanged

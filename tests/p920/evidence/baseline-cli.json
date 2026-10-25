@@ -1,0 +1,30 @@
+[
+  {
+    "source": "tune_false.nl",
+    "compiler": "/tmp/p917-build/newlangc",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p920-gate-a/sources/tune_false.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "tune_false.nl",
+    "compiler": "/tmp/p901-build/newlangc",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p920-gate-a/sources/tune_false.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "tune_true.nl",
+    "compiler": "/tmp/p917-build/newlangc",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p920-gate-a/sources/tune_true.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "tune_true.nl",
+    "compiler": "/tmp/p901-build/newlangc",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p920-gate-a/sources/tune_true.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  }
+]

@@ -2397,6 +2397,43 @@ void nl_definition_owned_attach(NLDefinitionOwnedPending *p,
     p->link.post = p->post;
     memcpy(p->link.formals, formals, sizeof(p->link.formals));
 }
+/* Authenticate the actual parent-owned, source-ordered IF edges, not merely
+ * the set of children or the separate proof/backpointer view. Check BOTH arms
+ * on transfer and on EVERY replay; equal NodeIds/world contents are no seal. */
+static bool owned_arm_edges(const NLCheckedFragment *root,
+                            const NLDefinitionOwnedLink *v)
+{
+    /* Pending callers may have been freed on an incomplete-check path. Do not
+     * dereference one until its exact stored parent edge is established. */
+    if (!root || !v || v->parent != root || root->arm_count != 2 ||
+        !root->arms || v->arm > 1 || !v->caller ||
+        root->arms[v->arm].artifact != v->caller)
+        return false;
+    const NLCheckedNodeId id = v->caller->if_parent_node;
+    const NLCheckedNodeView *choice = nl_checked_node_view(root, id);
+    if (!choice || choice->kind != NL_CHECKED_IF || choice->normal_arms != 2)
+        return false;
+    const NLIfFieldProof *p = root->if_fields;
+    while (p && p->view.conditional != id)
+        p = p->next;
+    if (!p || p->owner != root || p->source != root->source || !p->entry ||
+        p->view.entry != p->entry)
+        return false;
+    for (size_t a = 0; a < 2; ++a) {
+        const NLCheckedArm *edge = &root->arms[a];
+        const NLCheckedFragment *f = edge->artifact;
+        if (!f || edge->match != id || nl_checked_if_arm(root, id, a) != f ||
+            p->arms[a] != f || p->view.arms[a].artifact != f ||
+            f->if_parent != root || f->if_parent_node != id ||
+            f->if_arm_index != a || f->source != root->source || !f->context ||
+            edge->context_origin != f->context ||
+            p->view.arms[a].world != f->context)
+            return false;
+    }
+    return root->arms[0].artifact != root->arms[1].artifact &&
+           root->arms[0].context_origin != root->arms[1].context_origin &&
+           v->world == root->arms[v->arm].context_origin;
+}
 void nl_definition_owned_take(NLCheckedFragment **root, NLSemanticContext **c)
 {
     NLDefinitionOwned *w = owned_session;
@@ -2409,11 +2446,8 @@ void nl_definition_owned_take(NLCheckedFragment **root, NLSemanticContext **c)
         goto fail;
     bool arm_seen[2] = {false, false};
     for (NLDefinitionOwnedPending *p = w->first; p; p = p->next) {
-        bool member = false;
-        for (size_t i = 0; i < (*root)->arm_count; ++i)
-            member |= (*root)->arms[i].artifact == p->link.caller;
-        if (!member || !p->pre || !p->post || p->link.parent != *root ||
-            p->link.arm > 1 || arm_seen[p->link.arm])
+        if (!owned_arm_edges(*root, &p->link) || !p->pre || !p->post ||
+            arm_seen[p->link.arm])
             goto fail;
         arm_seen[p->link.arm] = true;
         p->link.pending_count = 1;
@@ -2440,14 +2474,7 @@ NLCheckStatus nl_definition_owned_validate(const NLDefinitionOwned *w,
     if (!issued || !v || memcmp(issued, v, sizeof(*v)) || !w->root ||
         v->parent != w->root || v->arm > 1)
         return INVALID;
-    /* Original parent owns these graph instances, including separate callee
-     * namespaces. Membership, not equal IDs/context addresses, qualifies IDs.
-     */
-    bool member = false;
-    for (size_t i = 0; i < w->root->arm_count; ++i)
-        member |= w->root->arms[i].artifact == v->caller;
-    if (!member || v->caller->if_parent != w->root ||
-        v->caller->if_arm_index != v->arm)
+    if (!owned_arm_edges(w->root, v))
         return INVALID;
     const NLDefinitionCallView replay = {
         .caller = v->caller,

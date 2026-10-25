@@ -1,0 +1,209 @@
+Internal ctest changing into directory: /tmp/p920-release
+UpdateCTestConfiguration  from :/tmp/p920-release/DartConfiguration.tcl
+Parse Config file:/tmp/p920-release/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p920-release/DartConfiguration.tcl
+Parse Config file:/tmp/p920-release/DartConfiguration.tcl
+Test project /tmp/p920-release
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 249
+    Start 249: p920_parent_arm_edges.unit
+
+249: Test command: /tmp/p920-release/p920_edges "fixed" "post" "/tmp/p920/tests/p920/sources/tune_true.nl" "/tmp/p920/tests/p920/sources/tune_false.nl"
+249: Working Directory: /tmp/p920-release
+249: Environment variables: 
+249:  PYTHONDONTWRITEBYTECODE=1
+249:  PYTHONHASHSEED=0
+249:  LC_ALL=C
+249:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+249:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+249: Test timeout computed to be: 90
+249: original after input/registration destruction arm0 private=0 PRE1 old1 close1
+249: original after input/registration destruction arm1 private=0 PRE1 old1 close1
+249: post fault1: canonical edge mutation reached
+249: mutated parent edge arm0 private=3 PRE0 old0 close0
+249: mutated parent edge arm1 private=3 PRE0 old0 close0
+249: restored exact entries arm0 private=0 PRE1 old1 close1
+249: restored exact entries arm1 private=0 PRE1 old1 close1
+249: post fault2: canonical edge mutation reached
+249: mutated parent edge arm0 private=3 PRE0 old0 close0
+249: mutated parent edge arm1 private=3 PRE0 old0 close0
+249: restored exact entries arm0 private=0 PRE1 old1 close1
+249: restored exact entries arm1 private=0 PRE1 old1 close1
+249: post fault3: canonical edge mutation reached
+249: mutated parent edge arm0 private=3 PRE0 old0 close0
+249: mutated parent edge arm1 private=3 PRE0 old0 close0
+249: restored exact entries arm0 private=0 PRE1 old1 close1
+249: restored exact entries arm1 private=0 PRE1 old1 close1
+249: original after input/registration destruction arm0 private=0 PRE1 old1 close1
+249: original after input/registration destruction arm1 private=0 PRE1 old1 close1
+249: post fault1: canonical edge mutation reached
+249: mutated parent edge arm0 private=3 PRE0 old0 close0
+249: mutated parent edge arm1 private=3 PRE0 old0 close0
+249: restored exact entries arm0 private=0 PRE1 old1 close1
+249: restored exact entries arm1 private=0 PRE1 old1 close1
+249: post fault2: canonical edge mutation reached
+249: mutated parent edge arm0 private=3 PRE0 old0 close0
+249: mutated parent edge arm1 private=3 PRE0 old0 close0
+249: restored exact entries arm0 private=0 PRE1 old1 close1
+249: restored exact entries arm1 private=0 PRE1 old1 close1
+249: post fault3: canonical edge mutation reached
+249: mutated parent edge arm0 private=3 PRE0 old0 close0
+249: mutated parent edge arm1 private=3 PRE0 old0 close0
+249: restored exact entries arm0 private=0 PRE1 old1 close1
+249: restored exact entries arm1 private=0 PRE1 old1 close1
+249: P920 fixed post finished; source CHECK3 unchanged
+1/7 Test #249: p920_parent_arm_edges.unit .......   Passed    0.00 sec
+test 250
+    Start 250: p920_take_edge_rollback.unit
+
+250: Test command: /tmp/p920-release/p920_edges "fixed" "take" "/tmp/p920/tests/p920/sources/tune_true.nl" "/tmp/p920/tests/p920/sources/tune_false.nl"
+250: Working Directory: /tmp/p920-release
+250: Environment variables: 
+250:  PYTHONDONTWRITEBYTECODE=1
+250:  PYTHONHASHSEED=0
+250:  LC_ALL=C
+250:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+250:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+250: Test timeout computed to be: 90
+250: take fault1 hit, original transferred=0 (expected0), original edges restored
+250: take fault1: rejected with zero records, SAME registration context retry complete
+250: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+250: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+250: take fault2 hit, original transferred=0 (expected0), original edges restored
+250: take fault2: rejected with zero records, SAME registration context retry complete
+250: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+250: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+250: take fault3 hit, original transferred=0 (expected0), original edges restored
+250: take fault3: rejected with zero records, SAME registration context retry complete
+250: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+250: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+250: take fault1 hit, original transferred=0 (expected0), original edges restored
+250: take fault1: rejected with zero records, SAME registration context retry complete
+250: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+250: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+250: take fault2 hit, original transferred=0 (expected0), original edges restored
+250: take fault2: rejected with zero records, SAME registration context retry complete
+250: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+250: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+250: take fault3 hit, original transferred=0 (expected0), original edges restored
+250: take fault3: rejected with zero records, SAME registration context retry complete
+250: healthy restored/retry owner arm0 private=0 PRE1 old1 close1
+250: healthy restored/retry owner arm1 private=0 PRE1 old1 close1
+250: P920 fixed take finished; source CHECK3 unchanged
+2/7 Test #250: p920_take_edge_rollback.unit .....   Passed    0.00 sec
+test 251
+    Start 251: p920_cli_unchanged.integration
+
+251: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p920/tests/p920/cli.py" "/tmp/p920-release/newlangc" "/tmp/p920/tests/p920"
+251: Working Directory: /tmp/p920-release
+251: Environment variables: 
+251:  PYTHONDONTWRITEBYTECODE=1
+251:  PYTHONHASHSEED=0
+251:  LC_ALL=C
+251:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+251:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+251: Test timeout computed to be: 90
+251: tune_false.nl CHECK3/P6 / zero C17 / named output preserved
+251: tune_true.nl CHECK3/P6 / zero C17 / named output preserved
+3/7 Test #251: p920_cli_unchanged.integration ...   Passed    0.04 sec
+test 252
+    Start 252: p917_owned_lifetime.unit
+
+252: Test command: /tmp/p920-release/p917_probe "capture" "/tmp/p920/tests/p917/sources/quota_true.nl" "/tmp/p920/tests/p917/sources/quota_false.nl" "/tmp/p920/tests/p917/sources/sensor_true.nl" "/tmp/p920/tests/p917/sources/sensor_false.nl"
+252: Working Directory: /tmp/p920-release
+252: Environment variables: 
+252:  PYTHONDONTWRITEBYTECODE=1
+252:  PYTHONHASHSEED=0
+252:  LC_ALL=C
+252:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+252:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+252: Test timeout computed to be: 90
+252: owned after destruction: /tmp/p920/tests/p917/sources/quota_true.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+252: owned after destruction: /tmp/p920/tests/p917/sources/quota_true.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+252: owned after destruction: /tmp/p920/tests/p917/sources/quota_false.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+252: owned after destruction: /tmp/p920/tests/p917/sources/quota_false.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+252: owned after destruction: /tmp/p920/tests/p917/sources/sensor_true.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+252: owned after destruction: /tmp/p920/tests/p917/sources/sensor_true.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+252: owned after destruction: /tmp/p920/tests/p917/sources/sensor_false.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+252: owned after destruction: /tmp/p920/tests/p917/sources/sensor_false.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+252: P917 private owned source-instance replay; refusals0; CHECK3 kept
+4/7 Test #252: p917_owned_lifetime.unit .........   Passed    0.00 sec
+test 253
+    Start 253: p917_owned_integrity.unit
+
+253: Test command: /tmp/p920-release/p917_probe "negative" "/tmp/p920/tests/p917/sources/quota_true.nl" "/tmp/p920/tests/p917/sources/quota_false.nl" "/tmp/p920/tests/p917/sources/sensor_true.nl" "/tmp/p920/tests/p917/sources/sensor_false.nl" "/tmp/p920/tests/p917/sources/quota_wrong_return_incoming.nl" "/tmp/p920/tests/p917/sources/quota_wrong_return_literal.nl" "/tmp/p920/tests/p917/sources/sensor_wrong_return_incoming.nl" "/tmp/p920/tests/p917/sources/sensor_wrong_return_literal.nl" "/tmp/p920/tests/p917/sources/missing_call.nl" "/tmp/p920/tests/p917/sources/duplicate_call.nl"
+253: Working Directory: /tmp/p920-release
+253: Environment variables: 
+253:  PYTHONDONTWRITEBYTECODE=1
+253:  PYTHONHASHSEED=0
+253:  LC_ALL=C
+253:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+253:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+253: Test timeout computed to be: 90
+253: owned after destruction: /tmp/p920/tests/p917/sources/quota_true.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+253: owned after destruction: /tmp/p920/tests/p917/sources/quota_true.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+253: owned after destruction: /tmp/p920/tests/p917/sources/quota_false.nl arm0 CALL4 root1 child3 inc1/3 old17 new64 sibling203 PRE/RETURN/close OK
+253: owned after destruction: /tmp/p920/tests/p917/sources/quota_false.nl arm1 CALL4 root1 child3 inc1/3 old17 new122 sibling203 PRE/RETURN/close OK
+253: owned after destruction: /tmp/p920/tests/p917/sources/sensor_true.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+253: owned after destruction: /tmp/p920/tests/p917/sources/sensor_true.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+253: owned after destruction: /tmp/p920/tests/p917/sources/sensor_false.nl arm0 CALL4 root1 child2 inc1/2 old231 new19 sibling6 PRE/RETURN/close OK
+253: owned after destruction: /tmp/p920/tests/p917/sources/sensor_false.nl arm1 CALL4 root1 child2 inc1/2 old231 new173 sibling6 PRE/RETURN/close OK
+253: P917 private owned source-instance replay; refusals264; CHECK3 kept
+5/7 Test #253: p917_owned_integrity.unit ........   Passed    0.00 sec
+test 254
+    Start 254: p917_cli_unchanged.integration
+
+254: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p920/tests/p917/cli.py" "/tmp/p920-release/newlangc" "/tmp/p920/tests/p917"
+254: Working Directory: /tmp/p920-release
+254: Environment variables: 
+254:  PYTHONDONTWRITEBYTECODE=1
+254:  PYTHONHASHSEED=0
+254:  LC_ALL=C
+254:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+254:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+254: Test timeout computed to be: 90
+254: quota_true.nl CHECK3 / no public IF / zero C / named output preserved
+254: quota_false.nl CHECK3 / no public IF / zero C / named output preserved
+254: quota_wrong_return_incoming.nl CHECK3 / no public IF / zero C / named output preserved
+254: quota_wrong_return_literal.nl CHECK3 / no public IF / zero C / named output preserved
+254: missing_call.nl CHECK3 / no public IF / zero C / named output preserved
+254: duplicate_call.nl CHECK3 / no public IF / zero C / named output preserved
+254: sensor_true.nl CHECK3 / no public IF / zero C / named output preserved
+254: sensor_false.nl CHECK3 / no public IF / zero C / named output preserved
+254: sensor_wrong_return_incoming.nl CHECK3 / no public IF / zero C / named output preserved
+254: sensor_wrong_return_literal.nl CHECK3 / no public IF / zero C / named output preserved
+6/7 Test #254: p917_cli_unchanged.integration ...   Passed    0.07 sec
+test 255
+    Start 255: p917_owned_oom.unit
+
+255: Test command: /tmp/p920-release/p917_oom "/tmp/p920/tests/p917/sources/quota_true.nl"
+255: Working Directory: /tmp/p920-release
+255: Environment variables: 
+255:  PYTHONDONTWRITEBYTECODE=1
+255:  PYTHONHASHSEED=0
+255:  LC_ALL=C
+255:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+255:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+255: Test timeout computed to be: 90
+255: new owned fault1 hit1 requests1, zero partial records, same-context retry/replay OK; CHECK3 rollback kept
+255: new owned fault2 hit1 requests1, zero partial records, same-context retry/replay OK; CHECK3 rollback kept
+255: new owned fault3 hit1 requests1, zero partial records, same-context retry/replay OK; CHECK3 rollback kept
+7/7 Test #255: p917_owned_oom.unit ..............   Passed    0.00 sec
+
+The following tests passed:
+	p920_parent_arm_edges.unit
+	p920_take_edge_rollback.unit
+	p920_cli_unchanged.integration
+	p917_owned_lifetime.unit
+	p917_owned_integrity.unit
+	p917_cli_unchanged.integration
+	p917_owned_oom.unit
+
+100% tests passed, 0 tests failed out of 7
+
+Total Test time (real) =   0.13 sec
