@@ -502,6 +502,75 @@ Rは§7.1–7.3のBLINDならproducerの実装・fixture・oracleを見る**前*
 自身の入力・予測・SHAを凍結し、後の較正をfresh BLINDと混同しない。
 Issue RELEASEはRの自動起動・新権限の授与・merge許可ではない。
 
+**`r-fast/**` ref作成時のFAST算入と、推奨する一回目のref作成順序：**
+`r-fast/**` という**branch/refの作成そのもの**がGitHubの `push` eventになり、
+採用済みR-FASTを**直ちに起動し得る**。R専用sourceを追加する前に
+固定P候補HEADのSHAへbranchを作った場合、その元P HEADでのFASTも
+**実際の1 runとしてそのIssueのFAST予算に算入**する（準備前・baseline・
+no-opと呼んで除外しない）。限られた予算を有効に使うため、標準順序は
+(a) §7.1–7.3に従ってR独立source／negative／oracleとSHAを先行凍結、
+(b) 承認済み**完全固定P候補SHAを親**とするR所有blob／tree／
+初回完全test+最小CTest登録の**commit objectをrefなしで作成**し、
+(c) その**完成済みR commitの完全SHAを直接指す**新しい
+`r-fast/r<issue>-<purpose>` refを**初めて作成**する、である。
+先にP HEADを指す空branchを作ってからR commitへ更新する二段階を
+標準としない。これはGitオブジェクト／refの作成順序であり、
+特定のCLIコマンドやP同等local実行を要求せず、BLIND中のP実装・
+fixture・oracleの参照を認めない。GitHubの利用可能なUI／接続手段が
+refなしcommit→そのcommit直指し新refを提供せず、
+P HEADからのbranch作成しかできない場合は、**作成前**に
+Coordinationがbaseline FAST 1回分を含む追加予算／明示例外と
+代替手順を当該Issue・起動promptに承認するか、STOPする。
+歴史的R branchのref・source・oracleはこのために変更しない。
+
+**branch全体のActions台帳とSTOP：** branch作成の直後、追加pushの前、
+さらにR DRAFT PRの前に、**その`r-fast/**` branch/refに対する
+全期間のR-FAST workflow `event=push` run**を一覧・ページ跨ぎで確認し、
+**最初のbranch-create P HEAD run、過去のR HEAD、queued・cancelled・
+failed・successを含めて** run URL/ID、head SHA、branch、event、
+run_attempt、status/conclusionを保存する。単一commitの
+`fetch_commit_workflow_runs(R HEAD)`等のHEAD絞り込みは
+**branch全体のFAST予算管理には使用できない**。実際に発生した全run数
+（branch作成由来を含む）をIssue固有の有限FAST上限と照合し、
+許可済み残枠・§7.6機械修復の規律・先行凍結を満たさなければ
+次のpush／PRをSTOPする。初回P HEADでのGREENは、R所有testが
+そのHEADにまだない以上、今回R sourceのpreflight成功ではない。
+**採用可能なpre-PR FAST成功は、今回R所有source／登録が揃った同一の
+R HEAD SHA／branchで実行した`completed/success`だけ**である。
+以前のBLIND／calibratedの判定と原SHA／失敗runは不変とし、
+個別Issue予算を超えた場合も事後的にrunを数え直して免責しない。
+§7.6の修復回数に全project共通の2回制限は設けず、
+Coordinationの明示例外、独立性および通常FULL5＋PARTIALの
+別予算・実実行義務を引き続き適用する。
+
+**新規Rの標準的な安価FAST予算とRの自律裁量（Coordination C37、forward-only）：**
+Coordinationが**今後の新規R Issueに明記して割り当てる標準は、
+branch作成分を含む自然なFAST `push` runをIssueごとに最大6回**
+（**「標準6回の個別予算」**）とし、その範囲内のR所有formatter／
+harness／CMake／CLI引数・構文綴り等の**機械的修復のpush時機・束ね方・
+使用枠はRに委ねる**。これは以前のrollout限定2回に代わる
+**個別Issueの標準budget**であり、§7.6の普遍的な6回修復上限、
+独立性／安全性の閾値、無期限の自動延長ではない。
+CoordinationはIssue・起動promptで根拠付きの**別の有限FAST予算**
+（6回より少ない／多い）も個別承認でき、認可枠超過前には別の
+Coordination裁定が必要である。**そのbranchの4回目FAST実runの後、
+5回目を消費する前**にRが当該Issueへ**情報共有checkpoint**
+（全branch run ID／SHA／結果、最初の故障層、現在HEAD、
+残り予算と§7.6に沿う修復方針）を短く投稿する。
+これは監査用の**通知でありCの追加GO/approval gateではなく**、
+承認済みの5回目／6回目はその予算内でRが自律実施できる。
+繰り返す同一REDは原因分析を優先して不必要なpushを避ける。
+**未使用FAST枠があっても**、予測に反するsemantic CHECK、
+source-owned／issuer／proof／owner／loan／OOM／C17/native／sanitizerの
+異常・unsoundness疑い、BLIND情報漏洩、元oracle／guest identityの
+変更やR所有の機械的修復で説明できない失敗は本§既定どおり
+**直ちにSTOP→Coordination**する。成功側のsource-checkを捏造せず、
+元のV1 source・SHA・CI／初回findingと次V2の事前期待値を保全する。
+**真のFULL5 5ジョブ＋NO-LLVM PARTIAL 1ジョブ**の独立した
+自然PR CI予算は従来どおりIssueごとに別枠とし、manual retryや
+FASTを用いたFULL省略は許さない。T904の歴史的3/2超過や
+R910の当時2/2、別のFULL総合INCONCLUSIVEは遡及変更しない。
+
 **PRより先に確認する実物：** Rは承認済みの固定P候補HEADを起点に
 上記接頭辞の**新規**専用branchを作り、凍結したR所有source／harnessと
 最小CTest登録をまとめたcommitを**DRAFT PR作成前にpush**する。
