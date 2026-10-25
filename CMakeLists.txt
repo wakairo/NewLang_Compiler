@@ -1371,3 +1371,19 @@ if(BUILD_TESTING)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
 endif()
+
+# R869 independent source-issued original full Option[4] observation.
+# One ALL build target only, no new/changed CTests.
+if(BUILD_TESTING)
+    add_executable(r869_public_map tests/r869/public_map.c)
+    target_link_libraries(r869_public_map PRIVATE newlang_parser newlang_semantic)
+    add_custom_target(r869_original_array4_physical_audit ALL
+        COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r869/physical_audit.py"
+            "$<TARGET_FILE:newlangc>"
+            "$<TARGET_FILE:r869_public_map>"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r869"
+            "${NEWLANG_SANITIZER}"
+        DEPENDS newlangc r869_public_map
+        VERBATIM)
+endif()
