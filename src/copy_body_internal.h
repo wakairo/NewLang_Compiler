@@ -2,6 +2,7 @@
 #define NEWLANG_COPY_BODY_INTERNAL_H
 #include "newlang/copy_body.h"
 #include "semantic_internal.h"
+#include <stdint.h>
 typedef struct CopyEvent {
     NLCopyBodyEventView view, issued;
     NLSemanticContext *before, *after;
@@ -76,4 +77,46 @@ bool nl_copy_state_matches(const NLSemanticContext *, const NLCopyCallAnchor *);
 bool nl_copy_trio(const NLSemanticContext *, NLPlaceId, NLSemanticPlaceView[3]);
 bool nl_copy_plain(const NLSemanticContext *, NLValueId, NLTypeId);
 bool nl_copy_same_types(const NLSemanticContext *, const NLSemanticContext *);
+
+/* Stage0 diagnostics ONLY. No observation is a proof or a live capability.
+ * Explicitly enabled by a private synchronous observer; ordinary CLI is off.
+ * All pointers borrow the current source check, and expire at callback return.
+ */
+typedef struct NLDefinitionCallCapture NLDefinitionCallCapture;
+typedef struct {
+    const NLCheckedFragment *caller, *callee, *parent;
+    const NLSemanticContext *world, *pre, *post;
+    const NLFunctionBody *body;
+    size_t caller_function, function, arm, ordinal, pending_count;
+    NLCheckedNodeId call, arguments[2], loan;
+    NLSymbolId formals[2];
+    NLCheckedField field;
+    NLPlaceId sibling, other;
+    NLScopeId scope;
+} NLDefinitionCallView;
+typedef struct {
+    bool pre_verified, return_old_verified, loan_closed;
+    bool old_known, sibling_known;
+    uint64_t old_value, incoming, sibling;
+    NLValueId returned;
+    size_t replacements, failure_line;
+} NLDefinitionCallResult;
+typedef void (*NLDefinitionCallObserver)(const NLDefinitionCallCapture *,
+                                         const NLDefinitionCallView *,
+                                         NLCheckStatus, void *);
+void nl_definition_call_observer(NLDefinitionCallObserver, void *);
+NLDefinitionCallCapture *nl_definition_call_begin(const NLCheckedFragment *,
+                                                  NLCheckedNodeId,
+                                                  const NLCheckedNodeId[2],
+                                                  size_t,
+                                                  const NLSemanticContext *);
+void nl_definition_call_attach(NLDefinitionCallCapture *,
+                               const NLCheckedFragment *, const NLSymbolId[2],
+                               const NLSemanticContext *);
+void nl_definition_call_push(NLDefinitionCallCapture **,
+                             NLDefinitionCallCapture *);
+void nl_definition_call_finish(NLDefinitionCallCapture **, bool);
+NLCheckStatus nl_definition_call_validate(const NLDefinitionCallCapture *,
+                                          const NLDefinitionCallView *,
+                                          NLDefinitionCallResult *);
 #endif

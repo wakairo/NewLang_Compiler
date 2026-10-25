@@ -1,0 +1,14 @@
+Internal ctest changing into directory: /tmp/p896-asan
+Test project /tmp/p896-asan
+    Start 249: p896_definition_capture.unit
+1/4 Test #249: p896_definition_capture.unit .....   Passed    0.14 sec
+    Start 250: p896_private_negative.unit
+2/4 Test #250: p896_private_negative.unit .......   Passed    0.14 sec
+    Start 251: p896_capture_oom.unit
+3/4 Test #251: p896_capture_oom.unit ............   Passed    0.09 sec
+    Start 252: p896_unchanged_cli.integration
+4/4 Test #252: p896_unchanged_cli.integration ...   Passed    1.51 sec
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   1.90 sec

@@ -1,0 +1,24 @@
+[  0%] Built target newlang_diagnostic
+[  0%] Built target newlang_source
+[ 20%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_checked
+[ 30%] Built target newlang_parser
+[ 30%] Building C object CMakeFiles/newlang_semantic.dir/src/copy_body.c.o
+/tmp/p896/src/copy_body.c: In function ‘nl_definition_call_validate’:
+/tmp/p896/src/copy_body.c:2215:52: error: passing argument 1 of ‘nl_control_state_context’ discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
+ 2215 |     DC_DO(dc_equal(m, nl_control_state_context(edge->state)));
+      |                                                ~~~~^~~~~~~
+/tmp/p896/src/copy_body.c:1915:14: note: in definition of macro ‘DC_DO’
+ 1915 |         s = (x);                                                               \
+      |              ^
+In file included from /tmp/p896/src/semantic_internal.h:4,
+                 from /tmp/p896/src/copy_body.c:2:
+/tmp/p896/src/control.h:38:45: note: expected ‘NLControlState *’ but argument is of type ‘const NLControlState *’
+   38 | NLSemanticContext *nl_control_state_context(NLControlState *); /* borrowed */
+      |                                             ^~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+gmake[3]: *** [CMakeFiles/newlang_semantic.dir/build.make:79: CMakeFiles/newlang_semantic.dir/src/copy_body.c.o] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:832: CMakeFiles/newlang_semantic.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:916: CMakeFiles/newlangc.dir/rule] Error 2
+gmake: *** [Makefile:238: newlangc] Error 2

@@ -1,0 +1,13 @@
+P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old67 incoming94 sibling12 replacements1 failure_line0
+P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old67 incoming133 sibling12 replacements1 failure_line0
+P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old67 incoming94 sibling12 replacements1 failure_line0
+P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old67 incoming133 sibling12 replacements1 failure_line0
+P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old42 incoming76 sibling203 replacements1 failure_line0
+P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old42 incoming154 sibling203 replacements1 failure_line0
+P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old42 incoming76 sibling203 replacements1 failure_line0
+P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old42 incoming154 sibling203 replacements1 failure_line0
+P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+P896 arm0 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming103 sibling19 replacements1 failure_line0
+P896 arm1 call4 PRE=1 RETURN_OLD=1 CLOSED=1 status0 old73 incoming217 sibling19 replacements1 failure_line0
+P896 private mutations rejected0; never public proof/admission

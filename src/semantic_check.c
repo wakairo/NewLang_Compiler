@@ -33,6 +33,7 @@ typedef struct Check {
     size_t *body_budget;   /* borrowed counter for this synchronous body walk */
     bool in_function_body, definition, terminated, in_source_loan;
     bool capture_copy_body; /* actual supported u8 call, not definition */
+    NLDefinitionCallCapture *definition_calls; /* private Stage0 diagnostics */
     NLTypeId function_result;
     size_t function_binding_floor, function_scope_floor, function_place_floor;
     size_t function_value_prefix;
@@ -3584,6 +3585,14 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     const size_t binding_floor = c->binding_count, scope_floor = c->scope_count,
                  place_floor = c->place_count;
     const NLSourceSpan call_span = view(caller, call_id)->span;
+    /* Actuals have been evaluated/reference_live checked by call(). This
+     * optional diagnostic PRE precedes ALL formal binding/body mutation. */
+    NLDefinitionCallCapture *definition_call =
+        caller->definition && caller->artifact->if_parent &&
+                function->count == 2
+            ? nl_definition_call_begin(caller->artifact, call_id, arguments,
+                                       caller->body_function, c)
+            : NULL;
     Check body = {.caller = caller,
                   .body_budget = caller->body_budget,
                   .branch_budget = caller->branch_budget,
@@ -3617,6 +3626,7 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
                             view(caller, call_id)->producer.entry_proved);
     body.artifact = malloc(sizeof(*body.artifact));
     if (body.artifact == NULL) {
+        nl_definition_call_finish(&definition_call, false);
         (void)host(caller, NL_CHECK_OUT_OF_MEMORY, call_span);
         return false;
     }
@@ -3877,8 +3887,12 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     caller->artifact->bodies[count] = body.artifact;
     caller->artifact->body_calls[count] = call_id;
     ++caller->artifact->body_count;
+    nl_definition_call_attach(definition_call, body.artifact, copy_parameters,
+                              c);
+    nl_definition_call_push(&caller->definition_calls, definition_call);
     return true;
 failure:
+    nl_definition_call_finish(&definition_call, false);
     /* Report a body diagnostic at the CALL site. The detailed definition
      * diagnostic has already been checked against its own source at
      * registration. */
@@ -4436,6 +4450,7 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
     size_t normal = 0, sole = 0;
     for (size_t i = 0; i < 2; ++i) {
         Check branch = *check;
+        branch.definition_calls = NULL;
         branch.context = NULL;
         branch.artifact = NULL;
         if (!host(&branch, nl_sem_clone(c, &branch.context), syntax->span))
@@ -4485,9 +4500,11 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
                   syntax->span) ||
             !save_arm(check, id, branch.artifact, syntax->span))
             goto failure;
+        nl_definition_call_finish(&branch.definition_calls, true);
         evidence[i] = branch.artifact;
         continue;
     failure:
+        nl_definition_call_finish(&branch.definition_calls, false);
         if (branch.status != NL_CHECK_OK) {
             check->status = branch.status;
             check->diagnostic = branch.diagnostic;
