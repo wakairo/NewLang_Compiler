@@ -3,7 +3,7 @@
   "sources": [
     {
       "file": "t904_equality.nl",
-      "sha256": "164a17f6bc689eb895a1da9a00618d9a788e273d04db369d352ab639a9118551",
+      "sha256": "ba6f21bd6886723d516bba676b3bc17f11bb2301597b72e30e563eb098e46c7e",
       "expect_exit": 0,
       "first_diagnostic": null
     }
