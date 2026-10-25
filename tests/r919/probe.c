@@ -57,8 +57,8 @@ static bool registration(Input *in)
     fprintf(stderr, "R919 CHECK status=%d first=%s\n", status,
             diagnostic.diagnostic.diagnostic.code);
     return status == NL_CHECK_ANALYSIS_PRECISION_LIMIT &&
-           strcmp(diagnostic.diagnostic.diagnostic.code,
-                  "P6-JOIN-PRECISION") == 0;
+           strcmp(diagnostic.diagnostic.diagnostic.code, "P6-JOIN-PRECISION") ==
+               0;
 }
 
 static NLDefinitionOwned *construct(Input *in)
@@ -78,32 +78,32 @@ static NLDefinitionOwned *construct(Input *in)
 
 static bool validate(const NLDefinitionOwned *owner, size_t index, Oracle o)
 {
-    const NLDefinitionOwnedLink *link =
-        nl_definition_owned_link(owner, index);
+    const NLDefinitionOwnedLink *link = nl_definition_owned_link(owner, index);
     NLDefinitionCallResult result = {0};
     NLCheckStatus status =
         nl_definition_owned_validate(owner, index, link, &result);
-    if (status != NL_CHECK_OK || !link ||
-        !result.pre_verified || !result.return_old_verified ||
-        !result.loan_closed || !result.old_known || !result.sibling_known ||
+    if (status != NL_CHECK_OK || !link || !result.pre_verified ||
+        !result.return_old_verified || !result.loan_closed ||
+        !result.old_known || !result.sibling_known ||
         result.replacements != 1 || link->arm > 1 ||
         result.old_value != o.old_value ||
         result.incoming != o.incoming[link->arm] ||
         result.sibling != o.sibling || link->field.index != o.index ||
         !link->field.parent || !link->field.child ||
-        link->field.parent == link->other || !link->callee ||
-        !link->caller || !link->parent || !link->world || !link->pre ||
-        !link->post || !link->body || !link->loan || !link->formals[0] ||
-        !link->formals[1]) {
-        fprintf(stderr, "R919 invalid arm index=%zu status=%d old=%llu "
-                        "incoming=%llu sibling=%llu\n",
+        link->field.parent == link->other || !link->callee || !link->caller ||
+        !link->parent || !link->world || !link->pre || !link->post ||
+        !link->body || !link->loan || !link->formals[0] || !link->formals[1]) {
+        fprintf(stderr,
+                "R919 invalid arm index=%zu status=%d old=%llu "
+                "incoming=%llu sibling=%llu\n",
                 index, status, (unsigned long long)result.old_value,
                 (unsigned long long)result.incoming,
                 (unsigned long long)result.sibling);
         return false;
     }
-    fprintf(stderr, "R919 REAL old=%u incoming=%u sibling=%u "
-                    "arm=%zu field-index=%zu root=%zu child=%zu other=%zu\n",
+    fprintf(stderr,
+            "R919 REAL old=%u incoming=%u sibling=%u "
+            "arm=%zu field-index=%zu root=%zu child=%zu other=%zu\n",
             o.old_value, o.incoming[link->arm], o.sibling, link->arm,
             link->field.index, link->field.parent, link->field.child,
             link->other);
@@ -159,13 +159,13 @@ static void foreign_probe(NLDefinitionOwned *original, Oracle oracle,
     NLCheckedFragment *saved = caller->bodies[0];
     caller->bodies[0] = (NLCheckedFragment *)(void *)b->callee;
     NLDefinitionCallResult rejected = {0};
-    NLCheckStatus refusal = nl_definition_owned_validate(
-        original, 0, a, &rejected);
+    NLCheckStatus refusal =
+        nl_definition_owned_validate(original, 0, a, &rejected);
     caller->bodies[0] = saved;
     require(refusal != NL_CHECK_OK, "actual foreign owned graph accepted");
     require(validate(original, 0, oracle), "positive after restoration");
-    fprintf(stderr, "R919 foreign_actual_edge_result=%d NodeId=%zu\n",
-            refusal, a->call);
+    fprintf(stderr, "R919 foreign_actual_edge_result=%d NodeId=%zu\n", refusal,
+            a->call);
 }
 
 static void graph_probe(NLDefinitionOwned *owner, Oracle oracle)
@@ -193,8 +193,8 @@ static void graph_probe(NLDefinitionOwned *owner, Oracle oracle)
     NLCheckedKind saved = node->kind;
     node->kind = NL_CHECKED_UNIT;
     NLDefinitionCallResult result = {0};
-    NLCheckStatus refused = nl_definition_owned_validate(
-        owner, 0, link, &result);
+    NLCheckStatus refused =
+        nl_definition_owned_validate(owner, 0, link, &result);
     node->kind = saved;
     require(refused != NL_CHECK_OK, "actual checked RETURN forgery accepted");
     require(validate(owner, 0, oracle), "positive after RETURN restoration");
@@ -249,10 +249,10 @@ int main(int argc, char **argv)
 {
     if (argc != 9)
         return 2;
-    Oracle harbor = {.old_value = 216, .incoming = {48, 117},
-                     .sibling = 74, .index = 0};
-    Oracle orchard = {.old_value = 27, .incoming = {189, 53},
-                      .sibling = 90, .index = 1};
+    Oracle harbor = {
+        .old_value = 216, .incoming = {48, 117}, .sibling = 74, .index = 0};
+    Oracle orchard = {
+        .old_value = 27, .incoming = {189, 53}, .sibling = 90, .index = 1};
     NLDefinitionOwned *first = make_owner(argv[1], harbor);
     NLDefinitionOwned *second = make_owner(argv[2], orchard);
     /* A distinct registration context of the same corpus produces colliding

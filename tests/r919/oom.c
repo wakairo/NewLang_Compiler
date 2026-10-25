@@ -7,7 +7,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-enum Site { NONE, SESSION, PENDING, PRE_CLONE, POST_CLONE };
+enum Site {
+    NONE,
+    SESSION,
+    PENDING,
+    PRE_CLONE,
+    POST_CLONE
+};
 static enum Site site;
 static bool in_open, in_call, in_attach, in_clone;
 static unsigned hits, clone_entries, allocations, call_count, attach_count;
@@ -29,8 +35,7 @@ void *__real_malloc(size_t);
 void *__wrap_malloc(size_t bytes)
 {
     if (in_clone && !hits && bytes == sizeof(NLSemanticContext) &&
-        ((site == PRE_CLONE && in_call) ||
-         (site == POST_CLONE && in_attach))) {
+        ((site == PRE_CLONE && in_call) || (site == POST_CLONE && in_attach))) {
         ++allocations;
         ++hits;
         fprintf(stderr,
@@ -42,12 +47,12 @@ void *__wrap_malloc(size_t bytes)
 }
 
 NLCheckStatus __real_nl_sem_clone(const NLSemanticContext *,
-                                 NLSemanticContext **);
+                                  NLSemanticContext **);
 NLCheckStatus __wrap_nl_sem_clone(const NLSemanticContext *source,
-                                 NLSemanticContext **out)
+                                  NLSemanticContext **out)
 {
-    bool relevant = (site == PRE_CLONE && in_call) ||
-                    (site == POST_CLONE && in_attach);
+    bool relevant =
+        (site == PRE_CLONE && in_call) || (site == POST_CLONE && in_attach);
     if (relevant)
         ++clone_entries;
     bool saved = in_clone;
@@ -66,13 +71,15 @@ NLCheckStatus __wrap_nl_definition_owned_open(NLDefinitionOwned **out)
     return result;
 }
 
-NLDefinitionOwnedPending *__real_nl_definition_owned_call(
-    const NLCheckedFragment *, NLCheckedNodeId, const NLCheckedNodeId[2],
-    size_t, const NLSemanticContext *);
-NLDefinitionOwnedPending *__wrap_nl_definition_owned_call(
-    const NLCheckedFragment *fragment, NLCheckedNodeId call,
-    const NLCheckedNodeId args[2], size_t function,
-    const NLSemanticContext *context)
+NLDefinitionOwnedPending *
+__real_nl_definition_owned_call(const NLCheckedFragment *, NLCheckedNodeId,
+                                const NLCheckedNodeId[2], size_t,
+                                const NLSemanticContext *);
+NLDefinitionOwnedPending *
+__wrap_nl_definition_owned_call(const NLCheckedFragment *fragment,
+                                NLCheckedNodeId call,
+                                const NLCheckedNodeId args[2], size_t function,
+                                const NLSemanticContext *context)
 {
     ++call_count;
     in_call = true;
@@ -86,9 +93,10 @@ void __real_nl_definition_owned_attach(NLDefinitionOwnedPending *,
                                        const NLCheckedFragment *,
                                        const NLSymbolId[2],
                                        const NLSemanticContext *);
-void __wrap_nl_definition_owned_attach(
-    NLDefinitionOwnedPending *p, const NLCheckedFragment *body,
-    const NLSymbolId formals[2], const NLSemanticContext *world)
+void __wrap_nl_definition_owned_attach(NLDefinitionOwnedPending *p,
+                                       const NLCheckedFragment *body,
+                                       const NLSymbolId formals[2],
+                                       const NLSemanticContext *world)
 {
     if (p)
         ++attach_count;
@@ -132,8 +140,8 @@ static bool register_source(Input *in)
     fprintf(stderr, "R919 OOM source CHECK=%d first=%s\n", status,
             diagnostic.diagnostic.diagnostic.code);
     return status == NL_CHECK_ANALYSIS_PRECISION_LIMIT &&
-           strcmp(diagnostic.diagnostic.diagnostic.code,
-                  "P6-JOIN-PRECISION") == 0;
+           strcmp(diagnostic.diagnostic.diagnostic.code, "P6-JOIN-PRECISION") ==
+               0;
 }
 
 int main(int argc, char **argv)
