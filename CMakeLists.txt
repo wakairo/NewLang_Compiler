@@ -1386,6 +1386,40 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # Independent R899 exact Stage0 definition-CALL PRIVATE diagnostic cohort.
+    add_executable(r899_probe tests/r899/probe.c)
+    target_include_directories(r899_probe PRIVATE src)
+    target_link_libraries(r899_probe PRIVATE newlang_semantic newlang_parser)
+    add_executable(r899_fault_probe tests/r899/probe.c)
+    target_include_directories(r899_fault_probe PRIVATE src)
+    target_compile_definitions(r899_fault_probe PRIVATE R899_OOM=1)
+    target_link_libraries(r899_fault_probe PRIVATE newlang_semantic newlang_parser)
+    target_link_options(r899_fault_probe PRIVATE
+        -Wl,--wrap=malloc -Wl,--wrap=calloc
+        -Wl,--wrap=nl_definition_call_begin)
+    foreach(case meridian relay wrong literal no-call)
+        if(case STREQUAL "relay")
+            set(r899_file "relay_pair.nl")
+        elseif(case STREQUAL "wrong")
+            set(r899_file "wrong_return.nl")
+        elseif(case STREQUAL "literal")
+            set(r899_file "literal_old.nl")
+        elseif(case STREQUAL "no-call")
+            set(r899_file "no_call.nl")
+        else()
+            set(r899_file "meridian.nl")
+        endif()
+        add_test(NAME r899_${case}_private.unit COMMAND r899_probe
+            "${case}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r899/${r899_file}")
+    endforeach()
+    foreach(failure capture-oom clone-oom)
+        add_test(NAME r899_${failure}.unit COMMAND r899_fault_probe
+            "${failure}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r899/meridian.nl")
+    endforeach()
+    add_test(NAME r899_cli_unchanged.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r899/cli_test.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r899")
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
