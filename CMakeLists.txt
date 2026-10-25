@@ -706,6 +706,25 @@ if(BUILD_TESTING)
         COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/checked_c_local_root_test.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}")
+    add_executable(p926_probe tests/p926/probe.c)
+    add_executable(p926_oom tests/p926/probe.c)
+    target_compile_definitions(p926_oom PRIVATE P926_OOM=1)
+    foreach(p926_target p926_probe p926_oom)
+        target_link_libraries(${p926_target} PRIVATE newlang_semantic newlang_parser)
+        target_link_options(${p926_target} PRIVATE -Wl,--wrap=nl_definition_prefix_unit_begin
+            -Wl,--wrap=nl_definition_prefix_plan -Wl,--wrap=nl_source_create
+            -Wl,--wrap=nl_definition_prefix_validate)
+    endforeach()
+    target_link_options(p926_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=nl_semantic_create)
+    set(p926_src "${CMAKE_CURRENT_SOURCE_DIR}/tests/p926/sources")
+    add_test(NAME p926_prefix_origin.unit COMMAND p926_probe positive
+        "${p926_src}/quota_true.nl" "${p926_src}/frame_false.nl")
+    add_test(NAME p926_prefix_integrity.unit COMMAND p926_probe negative
+        "${p926_src}/quota_true.nl" "${p926_src}/frame_false.nl")
+    add_test(NAME p926_prefix_oom.unit COMMAND p926_oom oom "${p926_src}/quota_true.nl")
+    add_test(NAME p926_cli_unchanged.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p926/cli.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p926")
     add_executable(p920_edges tests/p920/edges.c)
     target_include_directories(p920_edges PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
     target_link_libraries(p920_edges PRIVATE newlang_semantic newlang_parser)

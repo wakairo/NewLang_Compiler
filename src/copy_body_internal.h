@@ -156,4 +156,21 @@ void nl_definition_owned_attach(NLDefinitionOwnedPending *,
                                 const NLCheckedFragment *, const NLSymbolId[2],
                                 const NLSemanticContext *);
 void nl_definition_owned_take(NLCheckedFragment **, NLSemanticContext **);
+
+/* P926 separate PRIVATE prefix experiment. Partial typed C fixed-memory only;
+ * no accepted-rich/Domain reflection, public certificate, Change or join. */
+typedef struct {
+    bool registry_verified, roots_verified, condition_verified, entry_verified;
+    bool truth;
+    NLPlaceId roots[2];
+    NLCheckedNodeId condition, conditional;
+    size_t failure_line;
+} NLDefinitionPrefixResult;
+NLCheckStatus nl_definition_prefix_open(NLDefinitionOwned **);
+void nl_definition_prefix_unit_begin(const NLSource *, size_t);
+void nl_definition_prefix_plan(const NLSource *, NLSourceSpan, size_t,
+                               NLFunctionBody *);
+void nl_definition_prefix_unit_end(void);
+NLCheckStatus nl_definition_prefix_validate(const NLDefinitionOwned *,
+                                            NLDefinitionPrefixResult *);
 #endif

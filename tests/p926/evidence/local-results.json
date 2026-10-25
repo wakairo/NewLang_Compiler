@@ -1,0 +1,35 @@
+{
+  "fixed_base": "02d3d32e96a834f8918569a2c4e1f282d6476965",
+  "main": "38b0954be6b1466a2982e7c58e1070ac76a9fafc",
+  "canonical": "Draft17.34",
+  "local_frontend": {
+    "first": 489,
+    "after_test_only_clang_preparation": 489,
+    "failed": 0
+  },
+  "local_release": {
+    "passed": 11,
+    "failed": 0
+  },
+  "local_asan_lsan": {
+    "passed": 19,
+    "failed": 0
+  },
+  "local_ubsan": {
+    "passed": 19,
+    "failed": 0
+  },
+  "faults_reached": {
+    "raw_source_byte_malloc": 1,
+    "raw_source_descriptor_malloc": 1,
+    "verifier_fresh_machine_malloc": 1
+  },
+  "graph_source_registry_rejects": 36,
+  "cli_parity_source_modes": 12,
+  "ci": "not yet started; at most one natural FULL5+PARTIAL pair after commit/PR",
+  "grade": "P-owned finite PARTIAL typed C memory only; rich reflection HOLD; ordinary CHECK3/P6; NO public Change/CHECK0/C17/native; NOT independent R/F",
+  "host_preparation_failures": [
+    "initial test enum spelling compile error (preserved)",
+    "Clang ASan/UBSan harness unused-but-set OOM variable (preserved), no semantic/proof/oracle changes"
+  ]
+}

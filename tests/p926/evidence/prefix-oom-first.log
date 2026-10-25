@@ -1,0 +1,39 @@
+Internal ctest changing into directory: /tmp/p926-build
+UpdateCTestConfiguration  from :/tmp/p926-build/DartConfiguration.tcl
+Parse Config file:/tmp/p926-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p926-build/DartConfiguration.tcl
+Parse Config file:/tmp/p926-build/DartConfiguration.tcl
+Test project /tmp/p926-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 251
+    Start 251: p926_prefix_oom.unit
+
+251: Test command: /tmp/p926-build/p926_oom "oom" "/tmp/p926/tests/p926/sources/quota_true.nl"
+251: Working Directory: /tmp/p926-build
+251: Environment variables: 
+251:  PYTHONDONTWRITEBYTECODE=1
+251:  PYTHONHASHSEED=0
+251:  LC_ALL=C
+251:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+251:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+251: Test timeout computed to be: 90
+251: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+251: owned raw unit malloc fault4 actual hit1, no partial record, SAME context retry OK
+251: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+251: owned raw unit malloc fault5 actual hit1, no partial record, SAME context retry OK
+251: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+251: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+251: fresh prefix machine actual malloc OOM / SAME retained owner retry OK
+1/1 Test #251: p926_prefix_oom.unit .............   Passed    0.00 sec
+
+The following tests passed:
+	p926_prefix_oom.unit
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.01 sec

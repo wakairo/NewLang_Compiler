@@ -1,0 +1,82 @@
+/* Read-only feasibility tool, NOT an issuer: raw source owned by this tool. */
+#include "copy_body_internal.h"
+#include "if_field_internal.h"
+#include "newlang/parser.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define R(x) do { if (!(x)) {fprintf(stderr,"gate line%d %s\n",__LINE__,#x);exit(1);} } while(0)
+static const NLSource *raw;
+static const NLSyntaxTree *unit;
+static size_t observations;
+static char *name(const NLSource *s,NLSourceSpan span)
+{
+    NLSourceView text;R(nl_source_view(s,span,&text));char *n=malloc(text.length+1);R(n);memcpy(n,text.bytes,text.length);n[text.length]=0;return n;
+}
+static bool text(const NLSource *s,NLSourceSpan span,const char *expected)
+{
+    char *n=name(s,span);bool same=!strcmp(n,expected);free(n);return same;
+}
+static NLTypeId type(NLSemanticContext *m,const NLSyntaxNode *n)
+{
+    const NLSyntaxView *s=nl_syntax_node_view(n);R(s);
+    if(s->kind==NL_SYNTAX_TYPE_REF){NLTypeId t=type(m,s->data.ref_type.target),r=0;R(nl_sem_compound(m,NL_TYPE_REF,t,s->data.ref_type.access,s->data.ref_type.is_exclusive,&r)==0);return r;}
+    R(s->kind==NL_SYNTAX_TYPE_NAME);char *nme=name(raw,s->data.name);NLTypeId t=0;for(size_t i=0;i<m->type_count;++i)if(m->types[i].name&&!strcmp(m->types[i].name,nme))t=i+1;free(nme);R(t);return t;
+}
+static NLValueId literal(NLSemanticContext *m,const NLSyntaxNode *node)
+{
+    const NLSyntaxView *s=nl_syntax_node_view(node);R(s&&(s->kind==NL_SYNTAX_U8_LITERAL||s->kind==NL_SYNTAX_USIZE_LITERAL));
+    size_t max=s->kind==NL_SYNTAX_U8_LITERAL?255:SIZE_MAX;NLSourceView v;R(nl_source_view(raw,s->kind==NL_SYNTAX_U8_LITERAL?s->data.u8_digits:s->data.usize_digits,&v)&&v.length);
+    size_t number=0;for(size_t i=0;i<v.length;++i){R(v.bytes[i]>='0'&&v.bytes[i]<='9');size_t d=(size_t)(v.bytes[i]-'0');R(number<=(max-d)/10);number=number*10+d;}
+    NLValueId id=0;R(nl_sem_new_value(m,(NLSemanticValueView){.type=nl_semantic_core_type(m,s->kind==NL_SYNTAX_U8_LITERAL?NL_TYPE_U8:NL_TYPE_USIZE),.scalar_known=true,.scalar_value=number},&id)==0);return id;
+}
+static void observe(const NLDefinitionCallCapture *capture,const NLDefinitionCallView *v,NLCheckStatus status,void *unused)
+{
+    (void)unused;R(status==0&&capture&&v);
+    NLSemanticContext *m=NULL;R(nl_semantic_create(&m)==0);size_t core_functions=m->function_count;
+    const NLSyntaxView *u=nl_syntax_node_view(nl_syntax_tree_root(unit));R(u->kind==NL_SYNTAX_FUNCTION_UNIT&&u->data.function_unit.count==3);
+    const NLSyntaxNode *decl=u->data.function_unit.declarations;const NLSyntaxView *t=nl_syntax_node_view(decl);R(t->kind==NL_SYNTAX_AVS_STRUCT&&t->data.avs_struct.count==2);
+    NLAggregateField fields[2];const NLSyntaxNode *f=t->data.avs_struct.fields;char *labels[2];
+    for(size_t i=0;i<2;++i){const NLSyntaxView *p=nl_syntax_node_view(f);R(p);labels[i]=name(raw,p->data.parameter.name);fields[i]=(NLAggregateField){labels[i],type(m,p->data.parameter.type)};f=nl_syntax_next_argument(f);}R(!f);
+    char *nominal=name(raw,t->data.avs_struct.name);NLTypeId nominal_id=0;R(nl_semantic_register_aggregate(m,nominal,fields,2,&nominal_id)==0);
+    const NLSyntaxView *fn[2];char *names[2];decl=nl_syntax_next_argument(decl);
+    for(size_t i=0;i<2;++i){fn[i]=nl_syntax_node_view(decl);R(fn[i]&&fn[i]->kind==NL_SYNTAX_FUNCTION);names[i]=name(raw,fn[i]->data.function.name);decl=nl_syntax_next_argument(decl);}R(!decl);
+    if(strcmp(names[0],names[1])>0){char *n=names[0];names[0]=names[1];names[1]=n;const NLSyntaxView *s=fn[0];fn[0]=fn[1];fn[1]=s;}
+    const NLSyntaxView *main_fn=NULL;size_t main_id=0;
+    for(size_t i=0;i<2;++i){
+      NLTypeId params[2]={0};size_t count=0;for(const NLSyntaxNode *p=fn[i]->data.function.parameters;p;p=nl_syntax_next_argument(p)){R(count<2);params[count++]=type(m,nl_syntax_node_view(p)->data.parameter.type);}
+      R(count==fn[i]->data.function.count);NLTypeId result=type(m,fn[i]->data.function.result);
+      R(nl_semantic_register_function(m,names[i],params,count,result,false,false)==0);
+      size_t id=m->function_count;const NLFunctionEntry *actual=&v->pre->functions[id-1];
+      R(!strcmp(actual->name,names[i])&&actual->count==count&&actual->result==result&&actual->body&&actual->body->count==count&&!memcmp(actual->parameters,params,count*sizeof(*params)));
+      const NLSyntaxView *b=nl_syntax_node_view(fn[i]->data.function.body);NLSourceView bytes;R(nl_source_view(raw,b->span,&bytes)&&nl_source_length(actual->body->source)==bytes.length);NLSourceView copy;R(nl_source_view(actual->body->source,(NLSourceSpan){0,bytes.length},&copy)&&!memcmp(copy.bytes,bytes.bytes,bytes.length));
+      if(!strcmp(names[i],"main")){R(!count&&result==1);main_fn=fn[i];main_id=id;}
+    }
+    R(main_fn&&main_id==v->caller_function&&m->function_count==v->pre->function_count);
+    const NLSyntaxView *block=nl_syntax_node_view(main_fn->data.function.body);R(block&&block->kind==NL_SYNTAX_BLOCK);
+    const NLSyntaxNode *item=block->data.block.items;
+    for(size_t i=0;i<2;++i){
+      const NLSyntaxView *binding=nl_syntax_node_view(item);R(binding&&binding->kind==NL_SYNTAX_BINDING);const NLSyntaxView *aggregate=nl_syntax_node_view(binding->data.binding.initializer);R(aggregate&&aggregate->kind==NL_SYNTAX_AGGREGATE&&text(raw,aggregate->data.aggregate.type_name,nominal)&&aggregate->data.aggregate.count==2);
+      NLSemanticValueView package={.type=nominal_id,.field_count=2};size_t seen=0;
+      for(const NLSyntaxNode *p=aggregate->data.aggregate.fields;p;p=nl_syntax_next_argument(p)){
+        const NLSyntaxView *field=nl_syntax_node_view(p);size_t index=2;for(size_t j=0;j<2;++j)if(text(raw,field->data.binding.name,labels[j]))index=j;R(index<2&&!(seen&(1U<<index)));seen|=1U<<index;package.fields[index]=literal(m,field->data.binding.initializer);
+      }R(seen==3);
+      NLValueId value=0;R(nl_sem_new_value(m,package,&value)==0);for(size_t j=0;j<2;++j){m->values[package.fields[j]-1].carrier=NL_CARRIER_AGGREGATE;m->values[package.fields[j]-1].aggregate_owner=value;}
+      char *n=name(raw,binding->data.binding.name);NLSymbolId symbol=0;R(nl_sem_bind_in_scope(m,n,value,0,&symbol)==0);free(n);m->places[m->bindings[symbol-1].view.place-1].implicit_local=true;item=nl_syntax_next_argument(item);
+    }
+    const NLSyntaxView *stmt=nl_syntax_node_view(item);R(stmt&&stmt->kind==NL_SYNTAX_STATEMENT);const NLSyntaxView *conditional=nl_syntax_node_view(stmt->data.statement.expression);R(conditional&&conditional->kind==NL_SYNTAX_IF);
+    const NLSyntaxView *condition=nl_syntax_node_view(conditional->data.conditional.condition);R(condition&&condition->kind==NL_SYNTAX_USIZE_EQUALITY);
+    NLValueId lhs=literal(m,condition->data.equality.left),rhs=literal(m,condition->data.equality.right),truth=0;
+    R(nl_sem_new_value(m,(NLSemanticValueView){.type=nl_semantic_core_type(m,NL_TYPE_BOOL),.scalar_known=true,.scalar_value=m->values[lhs-1].scalar_value==m->values[rhs-1].scalar_value},&truth)==0);nl_sem_end_value(m,lhs);nl_sem_end_value(m,rhs);nl_sem_end_value(m,truth);
+    const NLIfFieldProof *p=v->parent->if_fields;while(p&&p->view.conditional!=v->caller->if_parent_node)p=p->next;R(p&&p->entry);
+    NLCopyCallAnchor a={0};R(nl_copy_state_anchor(m,&a)==0&&m->type_count==p->entry->type_count&&nl_copy_same_types(m,p->entry)&&nl_copy_state_matches(p->entry,&a)&&m->last_incarnation==p->entry->last_incarnation&&m->last_value_fact==p->entry->last_value_fact);
+    R(!m->domain_count&&!m->scope_count&&!m->region_count&&!m->occurrence_count&&m->binding_count==2&&m->place_count==6&&m->value_count==9);
+    printf("fresh raw-unit prefix equality arm%zu main-registry%zu (core%zu), %zu values/%zu places, inc%zu fact%zu, truth%zu, lexical Domain=0 NO invented authority\n",v->arm,main_id,core_functions,m->value_count,m->place_count,m->last_incarnation,m->last_value_fact,m->values[truth-1].scalar_value);
+    ++observations;nl_copy_state_destroy(&a);nl_semantic_destroy(m);free(nominal);free(labels[0]);free(labels[1]);free(names[0]);free(names[1]);
+}
+int main(int argc,char **argv)
+{
+    R(argc==2);NLSource *s=NULL;NLParser *parser=NULL;NLSyntaxTree *tree=NULL;NLSemanticContext *c=NULL;R(nl_source_load(argv[1],&s)==0&&nl_parser_create(s,&parser)==0&&nl_parser_parse_function_unit(parser,&tree,NULL)==0&&nl_semantic_create(&c)==0);raw=s;unit=tree;
+    nl_definition_call_observer(observe,NULL);const NLSyntaxTree *inputs[]={tree};NLFunctionUnitDiagnostic d={0};NLCheckStatus status=nl_semantic_register_function_unit(c,inputs,1,&d);nl_definition_call_observer(NULL,NULL);
+    printf("normal register%d %s, observations%zu; external feasibility input NOT a producer-issued retained unit receipt\n",status,d.diagnostic.diagnostic.code,observations);R(status==3&&observations==2);nl_semantic_destroy(c);nl_syntax_tree_destroy(tree);nl_parser_destroy(parser);nl_source_destroy(s);return 0;
+}

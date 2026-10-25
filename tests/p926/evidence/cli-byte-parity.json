@@ -1,0 +1,295 @@
+{
+  "fixed_base": "02d3d32e96a834f8918569a2c4e1f282d6476965",
+  "source_modes": 12,
+  "executions": 24,
+  "records": [
+    {
+      "source": "sources/frame_false.nl",
+      "sha256": "d20c63d7772df7e1c5ff9f6cb1c1efc9ed6c6d6debb499843c6b0661da406658",
+      "modes": [
+        {
+          "mode": "check",
+          "exact_equal": true,
+          "records": [
+            {
+              "compiler": "P921",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/sources/frame_false.nl:5:5-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "55a7307c1c3d8381d099b686895c63f330df702f24002d5a571eb28bba20962e"
+            },
+            {
+              "compiler": "P926",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/sources/frame_false.nl:5:5-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "55a7307c1c3d8381d099b686895c63f330df702f24002d5a571eb28bba20962e"
+            }
+          ]
+        },
+        {
+          "mode": "stdout",
+          "exact_equal": true,
+          "records": [
+            {
+              "compiler": "P921",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/sources/frame_false.nl:5:5-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "55a7307c1c3d8381d099b686895c63f330df702f24002d5a571eb28bba20962e"
+            },
+            {
+              "compiler": "P926",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/sources/frame_false.nl:5:5-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "55a7307c1c3d8381d099b686895c63f330df702f24002d5a571eb28bba20962e"
+            }
+          ]
+        },
+        {
+          "mode": "named",
+          "exact_equal": true,
+          "records": [
+            {
+              "compiler": "P921",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/sources/frame_false.nl:5:5-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "55a7307c1c3d8381d099b686895c63f330df702f24002d5a571eb28bba20962e"
+            },
+            {
+              "compiler": "P926",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/sources/frame_false.nl:5:5-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "55a7307c1c3d8381d099b686895c63f330df702f24002d5a571eb28bba20962e"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "sources/quota_true.nl",
+      "sha256": "6e56e9045a4ba038a7cae84ac36c518d9df5acd05f53cd20e473e7ad0307aea1",
+      "modes": [
+        {
+          "mode": "check",
+          "exact_equal": true,
+          "records": [
+            {
+              "compiler": "P921",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/sources/quota_true.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "721bbced9f5edbccbb67f2779af717697e562997c474db2dddda9fd6341a15df"
+            },
+            {
+              "compiler": "P926",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/sources/quota_true.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "721bbced9f5edbccbb67f2779af717697e562997c474db2dddda9fd6341a15df"
+            }
+          ]
+        },
+        {
+          "mode": "stdout",
+          "exact_equal": true,
+          "records": [
+            {
+              "compiler": "P921",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/sources/quota_true.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "721bbced9f5edbccbb67f2779af717697e562997c474db2dddda9fd6341a15df"
+            },
+            {
+              "compiler": "P926",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/sources/quota_true.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "721bbced9f5edbccbb67f2779af717697e562997c474db2dddda9fd6341a15df"
+            }
+          ]
+        },
+        {
+          "mode": "named",
+          "exact_equal": true,
+          "records": [
+            {
+              "compiler": "P921",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/sources/quota_true.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "721bbced9f5edbccbb67f2779af717697e562997c474db2dddda9fd6341a15df"
+            },
+            {
+              "compiler": "P926",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/sources/quota_true.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "721bbced9f5edbccbb67f2779af717697e562997c474db2dddda9fd6341a15df"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "negatives/frame_decl_swapped.nl",
+      "sha256": "f4f23b7aaf41de79e981456b3c0ea7391765756bfab3b1c49a751b9ebb023a9e",
+      "modes": [
+        {
+          "mode": "check",
+          "exact_equal": true,
+          "records": [
+            {
+              "compiler": "P921",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/negatives/frame_decl_swapped.nl:5:5-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "49aa3276016d901918acac762d866cf102b724733acc9172e9c4a909e9546e89"
+            },
+            {
+              "compiler": "P926",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/negatives/frame_decl_swapped.nl:5:5-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "49aa3276016d901918acac762d866cf102b724733acc9172e9c4a909e9546e89"
+            }
+          ]
+        },
+        {
+          "mode": "stdout",
+          "exact_equal": true,
+          "records": [
+            {
+              "compiler": "P921",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/negatives/frame_decl_swapped.nl:5:5-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "49aa3276016d901918acac762d866cf102b724733acc9172e9c4a909e9546e89"
+            },
+            {
+              "compiler": "P926",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/negatives/frame_decl_swapped.nl:5:5-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "49aa3276016d901918acac762d866cf102b724733acc9172e9c4a909e9546e89"
+            }
+          ]
+        },
+        {
+          "mode": "named",
+          "exact_equal": true,
+          "records": [
+            {
+              "compiler": "P921",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/negatives/frame_decl_swapped.nl:5:5-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "49aa3276016d901918acac762d866cf102b724733acc9172e9c4a909e9546e89"
+            },
+            {
+              "compiler": "P926",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/negatives/frame_decl_swapped.nl:5:5-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "49aa3276016d901918acac762d866cf102b724733acc9172e9c4a909e9546e89"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "source": "negatives/quota_decl_swapped.nl",
+      "sha256": "843e29bd571c6f7bc4c8a2fb092ff511bae0945467f22dea15073391d7ad80e5",
+      "modes": [
+        {
+          "mode": "check",
+          "exact_equal": true,
+          "records": [
+            {
+              "compiler": "P921",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/negatives/quota_decl_swapped.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "b3355b998bd5c79641432e6fbad144ee3952c1e7e0bb8b15343831344e684823"
+            },
+            {
+              "compiler": "P926",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/negatives/quota_decl_swapped.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "b3355b998bd5c79641432e6fbad144ee3952c1e7e0bb8b15343831344e684823"
+            }
+          ]
+        },
+        {
+          "mode": "stdout",
+          "exact_equal": true,
+          "records": [
+            {
+              "compiler": "P921",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/negatives/quota_decl_swapped.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "b3355b998bd5c79641432e6fbad144ee3952c1e7e0bb8b15343831344e684823"
+            },
+            {
+              "compiler": "P926",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/negatives/quota_decl_swapped.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "b3355b998bd5c79641432e6fbad144ee3952c1e7e0bb8b15343831344e684823"
+            }
+          ]
+        },
+        {
+          "mode": "named",
+          "exact_equal": true,
+          "records": [
+            {
+              "compiler": "P921",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/negatives/quota_decl_swapped.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "b3355b998bd5c79641432e6fbad144ee3952c1e7e0bb8b15343831344e684823"
+            },
+            {
+              "compiler": "P926",
+              "exit": 3,
+              "stdout_hex": "",
+              "stderr_utf8": "/tmp/p926/tests/p926/negatives/quota_decl_swapped.nl:9:5-13:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+              "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+              "stderr_sha256": "b3355b998bd5c79641432e6fbad144ee3952c1e7e0bb8b15343831344e684823"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

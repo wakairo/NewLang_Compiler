@@ -1,0 +1,36 @@
+Internal ctest changing into directory: /tmp/p926-build
+UpdateCTestConfiguration  from :/tmp/p926-build/DartConfiguration.tcl
+Parse Config file:/tmp/p926-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p926-build/DartConfiguration.tcl
+Parse Config file:/tmp/p926-build/DartConfiguration.tcl
+Test project /tmp/p926-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 252
+    Start 252: p926_cli_unchanged.integration
+
+252: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p926/tests/p926/cli.py" "/tmp/p926-build/newlangc" "/tmp/p926/tests/p926"
+252: Working Directory: /tmp/p926-build
+252: Environment variables: 
+252:  PYTHONDONTWRITEBYTECODE=1
+252:  PYTHONHASHSEED=0
+252:  LC_ALL=C
+252:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+252:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+252: Test timeout computed to be: 90
+252: frame_false.nl ordinary CHECK3/P6, no C17, existing output preserved
+252: quota_true.nl ordinary CHECK3/P6, no C17, existing output preserved
+252: quota_decl_swapped.nl ordinary CHECK3/P6, no C17, existing output preserved
+252: frame_decl_swapped.nl ordinary CHECK3/P6, no C17, existing output preserved
+1/1 Test #252: p926_cli_unchanged.integration ...   Passed    0.05 sec
+
+The following tests passed:
+	p926_cli_unchanged.integration
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.06 sec

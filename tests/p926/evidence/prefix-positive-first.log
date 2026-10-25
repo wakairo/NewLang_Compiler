@@ -1,0 +1,37 @@
+Internal ctest changing into directory: /tmp/p926-build
+UpdateCTestConfiguration  from :/tmp/p926-build/DartConfiguration.tcl
+Parse Config file:/tmp/p926-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p926-build/DartConfiguration.tcl
+Parse Config file:/tmp/p926-build/DartConfiguration.tcl
+Test project /tmp/p926-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 249
+    Start 249: p926_prefix_origin.unit
+
+249: Test command: /tmp/p926-build/p926_probe "positive" "/tmp/p926/tests/p926/sources/quota_true.nl" "/tmp/p926/tests/p926/sources/frame_false.nl"
+249: Working Directory: /tmp/p926-build
+249: Environment variables: 
+249:  PYTHONDONTWRITEBYTECODE=1
+249:  PYTHONHASHSEED=0
+249:  LC_ALL=C
+249:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+249:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+249: Test timeout computed to be: 90
+249: prefix status0 registry1 roots1 condition1 entry1 truth1 roots1/4 IF19 failure0
+249: independent two-root/child/carrier/incarnation/field/old/sibling/registry oracle PASS (NO Domain mint)
+249: prefix status0 registry1 roots1 condition1 entry1 truth0 roots1/4 IF19 failure0
+249: independent two-root/child/carrier/incarnation/field/old/sibling/registry oracle PASS (NO Domain mint)
+249: P926 source-prefix refusals0; PARTIAL C memory only / rich HOLD / ordinary CHECK3
+1/1 Test #249: p926_prefix_origin.unit ..........   Passed    0.00 sec
+
+The following tests passed:
+	p926_prefix_origin.unit
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.01 sec

@@ -1,4 +1,5 @@
 #include "newlang/copy_body.h"
+#include "newlang/parser.h"
 #include "semantic_internal.h"
 #include <stdint.h>
 #include <stdlib.h>
@@ -2266,6 +2267,15 @@ struct NLDefinitionOwned {
     size_t count;
     NLCheckStatus status;
     bool closed;
+    bool prefix, unit_done;
+    const NLSource *unit_input; /* registration-scope token ONLY, then NULL */
+    NLSource *unit;             /* OWNED original full raw unit bytes */
+    struct {
+        NLFunctionBody *body; /* owned retain of actual created plan */
+        NLSourceSpan span;    /* original unit BODY span */
+        size_t function;
+    } plans[2];
+    size_t plan_count;
 };
 static _Thread_local NLDefinitionOwned *owned_session;
 
@@ -2314,6 +2324,9 @@ void nl_definition_owned_destroy(NLDefinitionOwned *w)
      */
     owned_discard(w);
     nl_checked_destroy(w->root);
+    for (size_t i = 0; i < w->plan_count; ++i)
+        nl_body_release(w->plans[i].body);
+    nl_source_destroy(w->unit);
     free(w);
 }
 NLCheckStatus nl_definition_owned_status(const NLDefinitionOwned *w)
@@ -2501,4 +2514,543 @@ NLCheckStatus nl_definition_owned_validate(const NLDefinitionOwned *w,
      * from common entry on EVERY invocation, comparing PRE/POST only afterward.
      */
     return dc_replay(&replay, v->pre, v->post, out);
+}
+
+NLCheckStatus nl_definition_prefix_open(NLDefinitionOwned **out)
+{
+    NLCheckStatus s = nl_definition_owned_open(out);
+    if (s == NL_CHECK_OK)
+        (*out)->prefix = true;
+    return s;
+}
+void nl_definition_prefix_unit_begin(const NLSource *source, size_t count)
+{
+    NLDefinitionOwned *w = owned_session;
+    if (!w || !w->prefix || w->status != NL_CHECK_OK)
+        return;
+    if (count != 1 || !source || w->unit || w->unit_done) {
+        w->status = INVALID;
+        return;
+    }
+    NLSourceView bytes;
+    if (!nl_source_view(source, (NLSourceSpan){0, nl_source_length(source)},
+                        &bytes)) {
+        w->status = INVALID;
+        return;
+    }
+    NLSourceStatus s = nl_source_create(bytes.bytes, bytes.length,
+                                        nl_source_name(source), &w->unit);
+    if (s != NL_SOURCE_OK) {
+        w->status = s == NL_SOURCE_OUT_OF_MEMORY ? NL_CHECK_OUT_OF_MEMORY
+                                                 : NL_CHECK_RESOURCE_LIMIT;
+        return;
+    }
+    w->unit_input = source;
+}
+void nl_definition_prefix_plan(const NLSource *source, NLSourceSpan span,
+                               size_t function, NLFunctionBody *body)
+{
+    NLDefinitionOwned *w = owned_session;
+    if (!w || !w->prefix || w->status != NL_CHECK_OK)
+        return;
+    if (!w->unit || w->unit_done || source != w->unit_input || !body ||
+        !function || w->plan_count == 2) {
+        w->status = INVALID;
+        return;
+    }
+    NLCheckStatus s = nl_body_retain(body);
+    if (s != NL_CHECK_OK) {
+        w->status = s;
+        return;
+    }
+    const size_t i = w->plan_count++;
+    w->plans[i].function = function;
+    w->plans[i].span = span;
+    w->plans[i].body = body;
+}
+void nl_definition_prefix_unit_end(void)
+{
+    NLDefinitionOwned *w = owned_session;
+    if (!w || !w->prefix)
+        return;
+    w->unit_input = NULL; /* no original input borrow survives this boundary */
+    w->unit_done = true;
+    if (w->status == NL_CHECK_OK && (!w->unit || w->plan_count != 2))
+        w->status = INVALID;
+}
+
+/* Independently reparse the OWNED WHOLE unit, not a retained body fragment or
+ * observed entry. Only existing primitive constructors operate on the fresh
+ * scratch machine. This is partial typed C memory, NOT rich Domain issuance. */
+static bool prefix_name(const NLSource *source, NLSourceSpan span,
+                        char out[256])
+{
+    NLSourceView v;
+    if (!nl_source_view(source, span, &v) || !v.length || v.length >= 256)
+        return false;
+    memcpy(out, v.bytes, v.length);
+    out[v.length] = 0;
+    return true;
+}
+static NLCheckStatus prefix_type(NLSemanticContext *m, const NLSource *source,
+                                 const NLSyntaxNode *node, NLTypeId *out)
+{
+    const NLSyntaxView *s = nl_syntax_node_view(node);
+    if (!s)
+        return INVALID;
+    if (s->kind == NL_SYNTAX_TYPE_REF) {
+        const NLSyntaxView *target =
+            nl_syntax_node_view(s->data.ref_type.target);
+        if (!target || target->kind != NL_SYNTAX_TYPE_NAME ||
+            !dc_name(source, target->data.name, "u8") ||
+            s->data.ref_type.access != NL_ACCESS_WRITE ||
+            s->data.ref_type.is_exclusive)
+            return INVALID;
+        return nl_sem_compound(m, NL_TYPE_REF,
+                               nl_semantic_core_type(m, NL_TYPE_U8),
+                               NL_ACCESS_WRITE, false, out);
+    }
+    if (s->kind != NL_SYNTAX_TYPE_NAME)
+        return INVALID;
+    if (dc_name(source, s->data.name, "u8"))
+        *out = nl_semantic_core_type(m, NL_TYPE_U8);
+    else if (dc_name(source, s->data.name, "unit"))
+        *out = nl_semantic_unit_type(m);
+    else
+        return INVALID;
+    return NL_CHECK_OK;
+}
+typedef struct {
+    const NLSource *unit;
+    const NLCheckedFragment *graph;
+    NLSemanticContext *machine;
+    bool *seen;
+    size_t offset;
+} PrefixWalk;
+static bool prefix_span(const PrefixWalk *p, NLSourceSpan actual,
+                        NLSourceSpan raw)
+{
+    return raw.start_byte >= p->offset && raw.end_byte >= p->offset &&
+           actual.start_byte == raw.start_byte - p->offset &&
+           actual.end_byte == raw.end_byte - p->offset;
+}
+static const NLCheckedNodeView *prefix_take(PrefixWalk *p, NLCheckedNodeId id,
+                                            NLCheckedKind kind,
+                                            NLSourceSpan raw)
+{
+    const NLCheckedNodeView *n = dc_take(p->graph, id, p->seen);
+    return n && n->kind == kind && prefix_span(p, n->span, raw) ? n : NULL;
+}
+static NLCheckStatus prefix_literal(PrefixWalk *p, const NLSyntaxNode *node,
+                                    NLCheckedNodeId id, NLValueId *out)
+{
+    const NLSyntaxView *s = nl_syntax_node_view(node);
+    if (!s ||
+        (s->kind != NL_SYNTAX_U8_LITERAL && s->kind != NL_SYNTAX_USIZE_LITERAL))
+        return INVALID;
+    const bool quantity = s->kind == NL_SYNTAX_USIZE_LITERAL;
+    const NLCheckedNodeView *n = prefix_take(
+        p, id, quantity ? NL_CHECKED_USIZE_LITERAL : NL_CHECKED_U8_LITERAL,
+        s->span);
+    NLSourceView digits;
+    if (!n ||
+        !nl_source_view(p->unit,
+                        quantity ? s->data.usize_digits : s->data.u8_digits,
+                        &digits) ||
+        !digits.length)
+        return INVALID;
+    const size_t maximum = quantity ? SIZE_MAX : 255;
+    size_t number = 0;
+    for (size_t i = 0; i < digits.length; ++i) {
+        if (digits.bytes[i] < '0' || digits.bytes[i] > '9')
+            return INVALID;
+        const size_t d = (size_t)(digits.bytes[i] - '0');
+        if (number > (maximum - d) / 10)
+            return INVALID;
+        number = number * 10 + d;
+    }
+    const NLTypeId type = nl_semantic_core_type(
+        p->machine, quantity ? NL_TYPE_USIZE : NL_TYPE_U8);
+    NLCheckStatus status = nl_sem_new_value(
+        p->machine,
+        (NLSemanticValueView){
+            .type = type, .scalar_known = true, .scalar_value = number},
+        out);
+    if (status != NL_CHECK_OK)
+        return status;
+    return n->type == type && n->result_count == 1 &&
+                   n->results[0].type == type && n->results[0].value == *out &&
+                   n->has_scalar_result && n->scalar_result.type == type &&
+                   n->scalar_result.known && n->scalar_result.value == number
+               ? NL_CHECK_OK
+               : INVALID;
+}
+static NLCheckStatus prefix_binding(PrefixWalk *p, const NLSyntaxView *binding,
+                                    NLCheckedNodeId id, NLTypeId nominal,
+                                    const char *nominal_name, NLPlaceId *root)
+{
+    if (!binding || binding->kind != NL_SYNTAX_BINDING)
+        return INVALID;
+    const NLSyntaxView *ast =
+        nl_syntax_node_view(binding->data.binding.initializer);
+    const NLCheckedNodeView *b =
+        prefix_take(p, id, NL_CHECKED_BINDING, binding->span);
+    if (!b || !ast || ast->kind != NL_SYNTAX_AGGREGATE ||
+        ast->data.aggregate.count != 2 ||
+        !dc_name(p->unit, ast->data.aggregate.type_name, nominal_name))
+        return INVALID;
+    const NLCheckedNodeView *aggregate =
+        prefix_take(p, b->initializer, NL_CHECKED_AGGREGATE, ast->span);
+    if (!aggregate || aggregate->type != nominal ||
+        aggregate->argument_count != 2)
+        return INVALID;
+    NLSemanticValueView package = {.type = nominal, .field_count = 2};
+    NLCheckedNodeId field_id = aggregate->first_argument;
+    size_t used = 0;
+    NLCheckStatus status = NL_CHECK_OK;
+    for (const NLSyntaxNode *a = ast->data.aggregate.fields; a;
+         a = nl_syntax_next_argument(a)) {
+        const NLSyntaxView *field_ast = nl_syntax_node_view(a);
+        const NLCheckedNodeView *field =
+            field_ast ? prefix_take(p, field_id, NL_CHECKED_AGGREGATE_FIELD,
+                                    field_ast->span)
+                      : NULL;
+        if (!field)
+            return INVALID;
+        size_t index = 2;
+        for (size_t i = 0; i < 2; ++i)
+            if (dc_name(p->unit, field_ast->data.binding.name,
+                        p->machine->types[nominal - 1].field_names[i]))
+                index = i;
+        if (index == 2 || (used & (1U << index)) ||
+            field->field_index != index ||
+            !prefix_span(p, field->name, field_ast->data.binding.name) ||
+            field->type != nl_semantic_core_type(p->machine, NL_TYPE_U8))
+            return INVALID;
+        used |= 1U << index;
+        status = prefix_literal(p, field_ast->data.binding.initializer,
+                                field->initializer, &package.fields[index]);
+        if (status != NL_CHECK_OK)
+            return status;
+        field_id = field->next_argument;
+    }
+    if (used != 3 || field_id)
+        return INVALID;
+    NLValueId value = 0;
+    status = nl_sem_new_value(p->machine, package, &value);
+    if (status != NL_CHECK_OK)
+        return status;
+    for (size_t i = 0; i < 2; ++i) {
+        NLSemanticValueView *member =
+            &p->machine->values[package.fields[i] - 1];
+        member->carrier = NL_CARRIER_AGGREGATE;
+        member->aggregate_owner = value;
+    }
+    char name[256];
+    if (!prefix_name(p->unit, binding->data.binding.name, name))
+        return INVALID;
+    NLSymbolId symbol = 0;
+    status = nl_sem_bind_in_scope(p->machine, name, value, 0, &symbol);
+    if (status != NL_CHECK_OK)
+        return status;
+    *root = p->machine->bindings[symbol - 1].view.place;
+    /* Existing ordinary lexical binding rule; NOT a Domain/Allocation grant. */
+    p->machine->places[*root - 1].implicit_local = true;
+    const NLCheckedNodeView *receiver = prefix_take(
+        p, b->first_argument, NL_CHECKED_RECEIVER, binding->data.binding.name);
+    return aggregate->result_count == 1 &&
+                   aggregate->results[0].type == nominal &&
+                   aggregate->results[0].value == value &&
+                   b->symbol == symbol && b->argument_count == 1 && receiver &&
+                   !receiver->next_argument && receiver->symbol == symbol &&
+                   receiver->type == nominal &&
+                   receiver->value_use == NL_VALUE_RECEIVED &&
+                   prefix_span(p, b->name, binding->data.binding.name)
+               ? NL_CHECK_OK
+               : INVALID;
+}
+NLCheckStatus nl_definition_prefix_validate(const NLDefinitionOwned *w,
+                                            NLDefinitionPrefixResult *out)
+{
+    if (!out)
+        return INVALID;
+    *out = (NLDefinitionPrefixResult){0};
+    if (!w || !w->prefix || !w->closed)
+        return INVALID;
+    if (w->status != NL_CHECK_OK)
+        return w->status;
+    if (!w->unit_done || w->unit_input || !w->unit || w->plan_count != 2 ||
+        nl_definition_owned_count(w) != 2)
+        return INVALID;
+    NLSemanticContext *m = NULL;
+    NLParser *parser = NULL;
+    NLSyntaxTree *tree = NULL;
+    PrefixWalk walk = {.unit = w->unit, .graph = w->root};
+    NLCheckStatus status = INVALID;
+#define PR_REQUIRE(x)                                                          \
+    do {                                                                       \
+        if (!(x)) {                                                            \
+            out->failure_line = __LINE__;                                      \
+            status = INVALID;                                                  \
+            goto done;                                                         \
+        }                                                                      \
+    } while (0)
+#define PR_DO(x)                                                               \
+    do {                                                                       \
+        status = (x);                                                          \
+        if (status != NL_CHECK_OK) {                                           \
+            out->failure_line = __LINE__;                                      \
+            goto done;                                                         \
+        }                                                                      \
+    } while (0)
+    NLParseStatus parse = nl_parser_create(w->unit, &parser);
+    if (parse == NL_PARSE_OK)
+        parse = nl_parser_parse_function_unit(parser, &tree, NULL);
+    if (parse != NL_PARSE_OK) {
+        status =
+            parse == NL_PARSE_OUT_OF_MEMORY ? NL_CHECK_OUT_OF_MEMORY : INVALID;
+        goto done;
+    }
+    PR_DO(nl_semantic_create(&m)); /* no observed registry/state seeds */
+    walk.machine = m;
+    const size_t core_functions = m->function_count;
+    const NLSyntaxView *unit = nl_syntax_node_view(nl_syntax_tree_root(tree));
+    PR_REQUIRE(unit && unit->kind == NL_SYNTAX_FUNCTION_UNIT &&
+               unit->data.function_unit.count == 3);
+    const NLSyntaxNode *decl = unit->data.function_unit.declarations;
+    const NLSyntaxView *nominal_ast = nl_syntax_node_view(decl);
+    PR_REQUIRE(nominal_ast && nominal_ast->kind == NL_SYNTAX_AVS_STRUCT &&
+               nominal_ast->data.avs_struct.count == 2);
+    char nominal_name[256], labels[2][256];
+    PR_REQUIRE(
+        prefix_name(w->unit, nominal_ast->data.avs_struct.name, nominal_name));
+    NLAggregateField fields[2];
+    const NLSyntaxNode *field = nominal_ast->data.avs_struct.fields;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLSyntaxView *f = nl_syntax_node_view(field);
+        NLTypeId type = 0;
+        PR_REQUIRE(f &&
+                   prefix_name(w->unit, f->data.parameter.name, labels[i]));
+        PR_DO(prefix_type(m, w->unit, f->data.parameter.type, &type));
+        PR_REQUIRE(type == nl_semantic_core_type(m, NL_TYPE_U8));
+        fields[i] = (NLAggregateField){labels[i], type};
+        field = nl_syntax_next_argument(field);
+    }
+    PR_REQUIRE(!field);
+    NLTypeId nominal = 0;
+    PR_DO(nl_semantic_register_aggregate(m, nominal_name, fields, 2, &nominal));
+    const NLSyntaxView *functions[2];
+    char names[2][256];
+    decl = nl_syntax_next_argument(decl);
+    for (size_t i = 0; i < 2; ++i) {
+        functions[i] = nl_syntax_node_view(decl);
+        PR_REQUIRE(
+            functions[i] && functions[i]->kind == NL_SYNTAX_FUNCTION &&
+            prefix_name(w->unit, functions[i]->data.function.name, names[i]));
+        decl = nl_syntax_next_argument(decl);
+    }
+    PR_REQUIRE(!decl && strcmp(names[0], names[1]));
+    size_t order[2] = {0, 1};
+    if (strcmp(names[0], names[1]) > 0) {
+        order[0] = 1;
+        order[1] = 0;
+    }
+    const NLSyntaxView *main_body = NULL;
+    size_t main_id = 0;
+    const NLSemanticContext *observed = NULL;
+    PR_REQUIRE(w->root && !w->root->root && w->root->if_fields &&
+               !w->root->if_fields->next);
+    const NLIfFieldProof *entry = w->root->if_fields;
+    PR_REQUIRE(entry->owner == w->root && entry->source == w->root->source &&
+               entry->view.entry == entry->entry && entry->entry);
+    observed = entry->entry; /* target ONLY, never a machine initializer */
+    for (size_t ordinal = 0; ordinal < 2; ++ordinal) {
+        const size_t i = order[ordinal];
+        const NLSyntaxView *f = functions[i];
+        NLTypeId parameters[2] = {0}, result = 0;
+        char parameter_names[2][256];
+        size_t count = 0;
+        for (const NLSyntaxNode *p = f->data.function.parameters; p;
+             p = nl_syntax_next_argument(p)) {
+            const NLSyntaxView *v = nl_syntax_node_view(p);
+            PR_REQUIRE(v && count < 2 &&
+                       prefix_name(w->unit, v->data.parameter.name,
+                                   parameter_names[count]));
+            PR_DO(prefix_type(m, w->unit, v->data.parameter.type,
+                              &parameters[count]));
+            ++count;
+        }
+        PR_DO(prefix_type(m, w->unit, f->data.function.result, &result));
+        PR_REQUIRE(count == f->data.function.count);
+        const bool is_main = !strcmp(names[i], "main");
+        PR_REQUIRE(
+            is_main ? (!count && result == 1)
+                    : (count == 2 &&
+                       m->types[parameters[0] - 1].view.kind == NL_TYPE_REF &&
+                       parameters[1] == nl_semantic_core_type(m, NL_TYPE_U8) &&
+                       result == parameters[1]));
+        PR_DO(nl_semantic_register_function(m, names[i], parameters, count,
+                                            result, false, false));
+        const size_t id = m->function_count;
+        PR_REQUIRE(id <= observed->function_count &&
+                   w->plans[ordinal].function == id && w->plans[ordinal].body);
+        const NLFunctionEntry *actual = &observed->functions[id - 1];
+        const NLFunctionBody *body = w->plans[ordinal].body;
+        const NLSyntaxView *body_ast =
+            nl_syntax_node_view(f->data.function.body);
+        PR_REQUIRE(body_ast && body_ast->kind == NL_SYNTAX_BLOCK &&
+                   actual->body == body && body->count == count &&
+                   actual->kind == NL_CHECKED_REGISTERED_CALL && actual->name &&
+                   !strcmp(actual->name, names[i]) && actual->count == count &&
+                   actual->result == result && !actual->caller_effects &&
+                   !actual->hidden_dependencies && !actual->owner_receiver &&
+                   !actual->owner_producer && !actual->custody_recipient &&
+                   (!count || (actual->parameters &&
+                               !memcmp(actual->parameters, parameters,
+                                       count * sizeof(*parameters)))) &&
+                   dc_span(w->plans[ordinal].span, body_ast->span) &&
+                   nl_syntax_tree_source(body->syntax) == body->source);
+        NLSourceView original, copied;
+        PR_REQUIRE(nl_source_view(w->unit, body_ast->span, &original) &&
+                   original.length == nl_source_length(body->source) &&
+                   nl_source_view(body->source,
+                                  (NLSourceSpan){0, original.length},
+                                  &copied) &&
+                   !memcmp(original.bytes, copied.bytes, original.length));
+        for (size_t j = 0; j < count; ++j)
+            PR_REQUIRE(!strcmp(body->parameter_names[j], parameter_names[j]));
+        if (is_main) {
+            PR_REQUIRE(!main_body && w->root->source == body->source);
+            main_body = body_ast;
+            main_id = id;
+        }
+    }
+    PR_REQUIRE(main_body && observed->function_count == core_functions + 2 &&
+               m->type_count == observed->type_count &&
+               nl_copy_same_types(m, observed));
+    for (size_t i = 0; i < m->type_count; ++i) {
+        PR_REQUIRE(m->types[i].option_target ==
+                       observed->types[i].option_target &&
+                   m->types[i].allocated_target ==
+                       observed->types[i].allocated_target &&
+                   m->types[i].one_backing_target ==
+                       observed->types[i].one_backing_target &&
+                   m->types[i].live_tail_target ==
+                       observed->types[i].live_tail_target);
+        PR_REQUIRE((!m->types[i].name && !observed->types[i].name) ||
+                   (m->types[i].name && observed->types[i].name &&
+                    !strcmp(m->types[i].name, observed->types[i].name)));
+    }
+    for (size_t i = 0; i < 2; ++i) {
+        const NLDefinitionOwnedLink *v = nl_definition_owned_link(w, i);
+        PR_REQUIRE(v && v->caller_function == main_id &&
+                   owned_arm_edges(w->root, v) &&
+                   v->pre->functions[main_id - 1].body ==
+                       observed->functions[main_id - 1].body);
+    }
+    out->registry_verified = true;
+    walk.offset = main_body->span.start_byte;
+    walk.seen = calloc(w->root->count + 1, sizeof(*walk.seen));
+    if (!walk.seen) {
+        status = NL_CHECK_OUT_OF_MEMORY;
+        goto done;
+    }
+    const NLCheckedNodeView *block =
+        prefix_take(&walk, 1, NL_CHECKED_BLOCK, main_body->span);
+    PR_REQUIRE(block && block->item_count == 2 && !block->tail &&
+               main_body->data.block.item_count == 3);
+    const NLSyntaxNode *item = main_body->data.block.items;
+    NLCheckedNodeId checked = block->first_item;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedNodeView *binding =
+            nl_checked_node_view(w->root, checked);
+        PR_REQUIRE(binding);
+        PR_DO(prefix_binding(&walk, nl_syntax_node_view(item), checked, nominal,
+                             nominal_name, &out->roots[i]));
+        checked = binding->next_item;
+        item = nl_syntax_next_argument(item);
+    }
+    PR_REQUIRE(!checked && out->roots[0] != out->roots[1]);
+    out->roots_verified = true;
+    const NLSyntaxView *s = nl_syntax_node_view(item);
+    PR_REQUIRE(
+        s && !nl_syntax_next_argument(item) &&
+        (s->kind == NL_SYNTAX_STATEMENT || s->kind == NL_SYNTAX_BINDING));
+    const NLSyntaxView *conditional = nl_syntax_node_view(
+        s->kind == NL_SYNTAX_STATEMENT ? s->data.statement.expression
+                                       : s->data.binding.initializer);
+    PR_REQUIRE(conditional && conditional->kind == NL_SYNTAX_IF);
+    out->conditional = entry->view.conditional;
+    const NLCheckedNodeView *choice =
+        prefix_take(&walk, out->conditional, NL_CHECKED_IF, conditional->span);
+    PR_REQUIRE(choice && choice->normal_arms == 2 && choice->item_count == 2 &&
+               out->conditional == w->root->count);
+    out->condition = choice->initializer;
+    const NLSyntaxView *condition =
+        nl_syntax_node_view(conditional->data.conditional.condition);
+    PR_REQUIRE(condition && (condition->kind == NL_SYNTAX_USIZE_EQUALITY ||
+                             condition->kind == NL_SYNTAX_USIZE_LESS_THAN));
+    const bool less = condition->kind == NL_SYNTAX_USIZE_LESS_THAN;
+    const NLCheckedNodeView *comparison = prefix_take(
+        &walk, out->condition,
+        less ? NL_CHECKED_USIZE_LESS_THAN : NL_CHECKED_USIZE_EQUALITY,
+        condition->span);
+    PR_REQUIRE(comparison && comparison->argument_count == 2 &&
+               prefix_span(&walk, comparison->name,
+                           condition->data.equality.operator_span));
+    const NLCheckedNodeView *left =
+        nl_checked_node_view(w->root, comparison->first_argument);
+    PR_REQUIRE(left && left->next_argument);
+    const NLCheckedNodeView *right =
+        nl_checked_node_view(w->root, left->next_argument);
+    PR_REQUIRE(right && !right->next_argument);
+    NLValueId a = 0, b = 0, value = 0;
+    PR_DO(prefix_literal(&walk, condition->data.equality.left,
+                         comparison->first_argument, &a));
+    PR_DO(prefix_literal(&walk, condition->data.equality.right,
+                         left->next_argument, &b));
+    const NLTypeId quantity = nl_semantic_core_type(m, NL_TYPE_USIZE);
+    PR_REQUIRE(m->values[a - 1].type == quantity &&
+               m->values[b - 1].type == quantity);
+    out->truth =
+        less ? m->values[a - 1].scalar_value < m->values[b - 1].scalar_value
+             : m->values[a - 1].scalar_value == m->values[b - 1].scalar_value;
+    const NLTypeId boolean = nl_semantic_core_type(m, NL_TYPE_BOOL);
+    PR_DO(nl_sem_new_value(m,
+                           (NLSemanticValueView){.type = boolean,
+                                                 .scalar_known = true,
+                                                 .scalar_value = out->truth},
+                           &value));
+    PR_REQUIRE(comparison->type == boolean && comparison->result_count == 1 &&
+               comparison->results[0].type == boolean &&
+               comparison->results[0].value == value &&
+               comparison->has_scalar_result &&
+               comparison->scalar_result.type == boolean &&
+               comparison->scalar_result.known &&
+               comparison->scalar_result.value == out->truth);
+    nl_sem_end_value(m, a);
+    nl_sem_end_value(m, b);
+    nl_sem_end_value(m, value);
+    PR_REQUIRE(dc_covered(w->root, walk.seen));
+    out->condition_verified = true;
+    PR_DO(dc_equal(m, observed));
+    PR_REQUIRE(!observed->domain_count && !observed->scope_count &&
+               !observed->region_count && !observed->occurrence_count &&
+               observed->binding_count == m->binding_count);
+    for (size_t i = 0; i < m->binding_count; ++i)
+        PR_REQUIRE(m->bindings[i].hidden == observed->bindings[i].hidden &&
+                   !strcmp(m->bindings[i].name, observed->bindings[i].name));
+    out->entry_verified = true;
+    status = NL_CHECK_OK;
+done:
+    if (status != NL_CHECK_OK && status != NL_CHECK_OUT_OF_MEMORY &&
+        status != NL_CHECK_RESOURCE_LIMIT)
+        status = INVALID;
+    free(walk.seen);
+    nl_semantic_destroy(m);
+    nl_syntax_tree_destroy(tree);
+    nl_parser_destroy(parser);
+#undef PR_REQUIRE
+#undef PR_DO
+    return status;
 }

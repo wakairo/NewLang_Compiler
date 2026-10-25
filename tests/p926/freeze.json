@@ -1,0 +1,132 @@
+{
+  "base": "02d3d32e96a834f8918569a2c4e1f282d6476965",
+  "source_sha256": {
+    "frame_false.nl": "d20c63d7772df7e1c5ff9f6cb1c1efc9ed6c6d6debb499843c6b0661da406658",
+    "quota_true.nl": "6e56e9045a4ba038a7cae84ac36c518d9df5acd05f53cd20e473e7ad0307aea1"
+  },
+  "oracles": {
+    "quota_true.nl": {
+      "root_declaration_order": [
+        "live",
+        "idle"
+      ],
+      "initial_by_declared_field": [
+        [
+          149,
+          77
+        ],
+        [
+          28,
+          215
+        ]
+      ],
+      "initializer_field_order": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "target_root": 0,
+      "target_field": 0,
+      "old": 149,
+      "incoming": [
+        51,
+        92
+      ],
+      "condition": [
+        "==",
+        3,
+        3,
+        true
+      ],
+      "function_source_order": [
+        "zexchange",
+        "main"
+      ],
+      "function_registry_order": [
+        "main",
+        "zexchange"
+      ]
+    },
+    "frame_false.nl": {
+      "root_declaration_order": [
+        "cold",
+        "warm"
+      ],
+      "initial_by_declared_field": [
+        [
+          160,
+          33
+        ],
+        [
+          41,
+          203
+        ]
+      ],
+      "initializer_field_order": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "target_root": 1,
+      "target_field": 1,
+      "old": 203,
+      "incoming": [
+        11,
+        87
+      ],
+      "condition": [
+        "==",
+        4,
+        9,
+        false
+      ],
+      "function_source_order": [
+        "main",
+        "adjust"
+      ],
+      "function_registry_order": [
+        "adjust",
+        "main"
+      ]
+    }
+  },
+  "expected_entry": {
+    "bindings": 2,
+    "places": 6,
+    "values": 9,
+    "scopes": 0,
+    "domains": 0,
+    "regions": 0,
+    "last_incarnation": 6,
+    "last_value_fact": 6,
+    "field_dependencies": "literal-derived empty, aggregate-owned children",
+    "condition_temporary_carriers": "ended before fork"
+  },
+  "expected_cli": {
+    "check": 3,
+    "diagnostic": "P6-JOIN-PRECISION",
+    "C17": "not reached"
+  },
+  "negative_plan": [
+    "raw nominal declaration order against actual registry",
+    "first/second root initializer/source order",
+    "foreign same-body unit/function/plan owner",
+    "checked root/child identity splice",
+    "incarnation/ValueFact/dependency/cut mutation",
+    "condition operand/operator/truth mutation",
+    "after-fork world as common entry",
+    "source ordinal as FunctionId",
+    "new unit capture allocation OOM and same-context retry"
+  ],
+  "classification": "new P-owned pre-code and pre-runtime oracle, partial typed C fixed memory only; accepted rich/domain reflection HOLD"
+}
