@@ -1401,6 +1401,20 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # R910 independently authored nonpublishing, real fault/owner tests.
+    add_executable(r910_probe tests/r910/probe.c)
+    target_include_directories(r910_probe PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+    target_link_libraries(r910_probe PRIVATE newlang_semantic newlang_parser)
+    target_link_options(r910_probe PRIVATE -Wl,--wrap=calloc -Wl,--wrap=nl_definition_call_begin)
+    foreach(r910_mode capture pre foreign borrow)
+        add_test(NAME r910_${r910_mode}.unit COMMAND r910_probe ${r910_mode}
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r910/r907_quartz.nl"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r910/r907_tide.nl")
+    endforeach()
+    add_test(NAME r910_cli_byte_diff.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r910/cli_diff.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r910")
+    set_tests_properties(r910_cli_byte_diff.integration PROPERTIES TIMEOUT 240)
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
