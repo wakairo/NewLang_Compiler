@@ -7,7 +7,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef enum { NO_MUTATION, SWAP, MATCH, ORIGIN } Mutation;
+typedef enum {
+    NO_MUTATION,
+    SWAP,
+    MATCH,
+    ORIGIN
+} Mutation;
 typedef struct {
     const char *path, *name;
     unsigned old, newer[2], sibling, other[2];
@@ -31,19 +36,25 @@ static void fail(const char *cause)
 static const char *kind(Mutation m)
 {
     switch (m) {
-    case SWAP: return "swap";
-    case MATCH: return "match";
-    case ORIGIN: return "context_origin";
-    default: return "none";
+    case SWAP:
+        return "swap";
+    case MATCH:
+        return "match";
+    case ORIGIN:
+        return "context_origin";
+    default:
+        return "none";
     }
 }
-NLDefinitionOwnedPending *__real_nl_definition_owned_call(
-    const NLCheckedFragment *, NLCheckedNodeId, const NLCheckedNodeId[2],
-    size_t, const NLSemanticContext *);
-NLDefinitionOwnedPending *__wrap_nl_definition_owned_call(
-    const NLCheckedFragment *f, NLCheckedNodeId call,
-    const NLCheckedNodeId args[2], size_t function,
-    const NLSemanticContext *context)
+NLDefinitionOwnedPending *
+__real_nl_definition_owned_call(const NLCheckedFragment *, NLCheckedNodeId,
+                                const NLCheckedNodeId[2], size_t,
+                                const NLSemanticContext *);
+NLDefinitionOwnedPending *
+__wrap_nl_definition_owned_call(const NLCheckedFragment *f,
+                                NLCheckedNodeId call,
+                                const NLCheckedNodeId args[2], size_t function,
+                                const NLSemanticContext *context)
 {
     NLDefinitionOwnedPending *p =
         __real_nl_definition_owned_call(f, call, args, function, context);
@@ -64,7 +75,8 @@ void __wrap_nl_definition_owned_attach(NLDefinitionOwnedPending *p,
     if (armed && p)
         ++attach_hits;
 }
-void __real_nl_definition_owned_take(NLCheckedFragment **, NLSemanticContext **);
+void __real_nl_definition_owned_take(NLCheckedFragment **,
+                                     NLSemanticContext **);
 void __wrap_nl_definition_owned_take(NLCheckedFragment **root,
                                      NLSemanticContext **context)
 {
@@ -85,8 +97,8 @@ void __wrap_nl_definition_owned_take(NLCheckedFragment **root,
     }
     NLCheckedArm before[2] = {parent->arms[0], parent->arms[1]};
     if (!before[0].artifact || !before[1].artifact ||
-        before[0].artifact == before[1].artifact ||
-        !before[0].context_origin || !before[1].context_origin ||
+        before[0].artifact == before[1].artifact || !before[0].context_origin ||
+        !before[1].context_origin ||
         before[0].context_origin == before[1].context_origin) {
         fail("two distinct original arms and worlds not found");
         __real_nl_definition_owned_take(root, context);
@@ -95,14 +107,13 @@ void __wrap_nl_definition_owned_take(NLCheckedFragment **root,
     NLCheckedNodeId id = before[0].artifact->if_parent_node;
     const NLCheckedNodeView *node = nl_checked_node_view(parent, id);
     const NLIfFieldProof *proof = parent->if_fields;
-    if (!id || before[0].match != id || before[1].match != id ||
-        !node || node->kind != NL_CHECKED_IF || node->normal_arms != 2 ||
+    if (!id || before[0].match != id || before[1].match != id || !node ||
+        node->kind != NL_CHECKED_IF || node->normal_arms != 2 ||
         before[0].artifact->if_parent != parent ||
         before[1].artifact->if_parent != parent ||
         before[0].artifact->if_arm_index != 0 ||
         before[1].artifact->if_arm_index != 1 ||
-        proof->view.conditional != id ||
-        proof->arms[0] != before[0].artifact ||
+        proof->view.conditional != id || proof->arms[0] != before[0].artifact ||
         proof->arms[1] != before[1].artifact ||
         nl_checked_if_arm(parent, id, 0) != before[0].artifact ||
         nl_checked_if_arm(parent, id, 1) != before[1].artifact) {
@@ -131,8 +142,7 @@ void __wrap_nl_definition_owned_take(NLCheckedFragment **root,
                   nl_checked_if_arm(parent, id, 1) == NULL;
     else
         changed = nl_checked_if_arm(parent, id, 0) == before[0].artifact &&
-                  parent->arms[0].context_origin ==
-                      before[1].context_origin;
+                  parent->arms[0].context_origin == before[1].context_origin;
     fprintf(stderr,
             "R924 PRE-TAKE-HIT family=%s mutation=%s "
             "two_pending=1 canonical_changed=%d\n",
@@ -170,11 +180,11 @@ static bool open_input(Input *in, const char *path)
 {
     NLParser *parser = NULL;
     NLParseDiagnostic d = {0};
-    bool ok = nl_source_load(path, &in->source) == NL_SOURCE_OK &&
-              nl_parser_create(in->source, &parser) == NL_PARSE_OK &&
-              nl_parser_parse_function_unit(parser, &in->tree, &d) ==
-                  NL_PARSE_OK &&
-              nl_semantic_create(&in->context) == NL_CHECK_OK;
+    bool ok =
+        nl_source_load(path, &in->source) == NL_SOURCE_OK &&
+        nl_parser_create(in->source, &parser) == NL_PARSE_OK &&
+        nl_parser_parse_function_unit(parser, &in->tree, &d) == NL_PARSE_OK &&
+        nl_semantic_create(&in->context) == NL_CHECK_OK;
     nl_parser_destroy(parser);
     return ok;
 }
@@ -188,8 +198,7 @@ static NLDefinitionOwned *registered(Input *in)
     const NLSyntaxTree *inputs[] = {in->tree};
     NLFunctionUnitDiagnostic diagnostic = {0};
     NLCheckStatus status =
-        nl_semantic_register_function_unit(in->context, inputs, 1,
-                                           &diagnostic);
+        nl_semantic_register_function_unit(in->context, inputs, 1, &diagnostic);
     if (status != NL_CHECK_ANALYSIS_PRECISION_LIMIT ||
         !diagnostic.diagnostic.diagnostic.code ||
         strcmp(diagnostic.diagnostic.diagnostic.code, "P6-JOIN-PRECISION"))
@@ -210,12 +219,10 @@ static bool validate(const NLDefinitionOwned *w, const Case *t)
             link->field.index != t->index ||
             nl_definition_owned_validate(w, i, link, &result) != NL_CHECK_OK ||
             !result.pre_verified || !result.return_old_verified ||
-            !result.loan_closed || !result.old_known ||
-            !result.sibling_known || result.replacements != 1 ||
-            result.old_value != t->old ||
+            !result.loan_closed || !result.old_known || !result.sibling_known ||
+            result.replacements != 1 || result.old_value != t->old ||
             result.incoming != t->newer[link->arm] ||
-            result.sibling != t->sibling ||
-            link->field.parent == link->other ||
+            result.sibling != t->sibling || link->field.parent == link->other ||
             link->field.child == link->other)
             return false;
         seen[link->arm] = true;
@@ -233,16 +240,15 @@ static bool validate(const NLDefinitionOwned *w, const Case *t)
             return false;
         for (size_t j = 0; j < 2; ++j) {
             NLSemanticValueView value = {0};
-            if (!nl_semantic_value_view(link->pre,
-                                        other_a[j + 1].current_value, &value) ||
+            if (!nl_semantic_value_view(link->pre, other_a[j + 1].current_value,
+                                        &value) ||
                 !value.scalar_known || value.scalar_value != t->other[j])
                 return false;
         }
         fprintf(stderr,
                 "R924 RETRY-POSITIVE family=%s arm=%zu old=%llu new=%llu "
                 "sibling=%llu index=%zu\n",
-                t->name, link->arm,
-                (unsigned long long)result.old_value,
+                t->name, link->arm, (unsigned long long)result.old_value,
                 (unsigned long long)result.incoming,
                 (unsigned long long)result.sibling, link->field.index);
     }
@@ -278,9 +284,8 @@ static bool trial(const Case *t, Mutation m)
     }
     injected = NO_MUTATION;
     NLDefinitionOwned *retry = registered(&input);
-    bool context_identical =
-        input.context == same_context && retry &&
-        nl_definition_owned_status(retry) == NL_CHECK_OK;
+    bool context_identical = input.context == same_context && retry &&
+                             nl_definition_owned_status(retry) == NL_CHECK_OK;
     /* The successful owned witness must survive source and registration
        teardown, unlike the failed checker-owned original. */
     dispose(&input);
@@ -300,8 +305,7 @@ int main(int argc, char **argv)
         {argv[1], "meridian-index0", 26, {63, 118}, 137, {79, 204}, 0},
         {argv[2], "glacier-index1", 75, {33, 142}, 229, {14, 186}, 1}};
     for (size_t i = 0; i < 2 && !failed; ++i)
-        for (Mutation m = SWAP; m <= ORIGIN && !failed;
-             m = (Mutation)(m + 1))
+        for (Mutation m = SWAP; m <= ORIGIN && !failed; m = (Mutation)(m + 1))
             if (!trial(&cases[i], m))
                 fail("pre-take reject/restore/retry failed");
     return failed ? 1 : 0;
