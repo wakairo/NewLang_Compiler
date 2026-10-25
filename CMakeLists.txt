@@ -1437,4 +1437,22 @@ if(BUILD_TESTING)
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+    # R924 R-only pre-Take owner corruption, independent of producer fixtures.
+    add_executable(r924_pretake_probe tests/r924/pretake_probe.c)
+    target_include_directories(r924_pretake_probe PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+    target_link_libraries(r924_pretake_probe PRIVATE newlang_semantic newlang_parser)
+    target_link_options(r924_pretake_probe PRIVATE
+        -Wl,--wrap=nl_definition_owned_take
+        -Wl,--wrap=nl_definition_owned_call
+        -Wl,--wrap=nl_definition_owned_attach)
+    add_test(NAME r924_true_pretake_custody.unit COMMAND r924_pretake_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r924/r922_v2_meridian.nl"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r924/r922_v2_glacier.nl")
+    # Archive a successful physical witness in normal Actions build logs.
+    add_custom_command(TARGET r924_pretake_probe POST_BUILD
+        COMMAND "$<TARGET_FILE:r924_pretake_probe>"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r924/r922_v2_meridian.nl"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r924/r922_v2_glacier.nl"
+        COMMENT "R924 pre-take source edge rejection, rollback, same-context retry"
+        VERBATIM)
 endif()
