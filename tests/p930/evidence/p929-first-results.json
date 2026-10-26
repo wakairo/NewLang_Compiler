@@ -1,0 +1,113 @@
+[
+  {
+    "source": "budget_true.nl",
+    "mode": "check",
+    "argv": [
+      "/tmp/p929-build/newlangc",
+      "--check",
+      "/tmp/p929-evidence/sources/budget_true.nl"
+    ],
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_utf8": "",
+    "when_utc": "2026-10-26T01:43:32.142304+00:00"
+  },
+  {
+    "source": "budget_true.nl",
+    "mode": "stdout",
+    "argv": [
+      "/tmp/p929-build/newlangc",
+      "/tmp/p929-evidence/sources/budget_true.nl"
+    ],
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "2bb700c46f69223f27035276da74aca32412bf8834dcb93d09e99aa795ce86ce",
+    "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p929-evidence/sources/budget_true.nl\n",
+    "when_utc": "2026-10-26T01:43:32.143445+00:00"
+  },
+  {
+    "source": "budget_true.nl",
+    "mode": "named",
+    "argv": [
+      "/tmp/p929-build/newlangc",
+      "--emit-c17-to",
+      "/tmp/p929-evidence/outputs/budget_true/existing.c",
+      "/tmp/p929-evidence/sources/budget_true.nl"
+    ],
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "2bb700c46f69223f27035276da74aca32412bf8834dcb93d09e99aa795ce86ce",
+    "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p929-evidence/sources/budget_true.nl\n",
+    "when_utc": "2026-10-26T01:43:32.144995+00:00",
+    "sentinel_retained": true,
+    "no_temporary_files": true,
+    "named_output_sha256": "6b6ccc3a0246a703d5ef583398ccaa198930233d55501e70c2294443cb2e5f34"
+  },
+  {
+    "source": "budget_false.nl",
+    "mode": "check",
+    "argv": [
+      "/tmp/p929-build/newlangc",
+      "--check",
+      "/tmp/p929-evidence/sources/budget_false.nl"
+    ],
+    "exit": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_utf8": "",
+    "when_utc": "2026-10-26T01:43:32.146145+00:00"
+  },
+  {
+    "source": "budget_false.nl",
+    "mode": "stdout",
+    "argv": [
+      "/tmp/p929-build/newlangc",
+      "/tmp/p929-evidence/sources/budget_false.nl"
+    ],
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "102a91011744e8917f0c430e1e10f791086802e7fc04fc1d48ee0e88d3fcbdf6",
+    "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p929-evidence/sources/budget_false.nl\n",
+    "when_utc": "2026-10-26T01:43:32.147555+00:00"
+  },
+  {
+    "source": "budget_false.nl",
+    "mode": "named",
+    "argv": [
+      "/tmp/p929-build/newlangc",
+      "--emit-c17-to",
+      "/tmp/p929-evidence/outputs/budget_false/existing.c",
+      "/tmp/p929-evidence/sources/budget_false.nl"
+    ],
+    "exit": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "102a91011744e8917f0c430e1e10f791086802e7fc04fc1d48ee0e88d3fcbdf6",
+    "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p929-evidence/sources/budget_false.nl\n",
+    "when_utc": "2026-10-26T01:43:32.148758+00:00",
+    "sentinel_retained": true,
+    "no_temporary_files": true,
+    "named_output_sha256": "6b6ccc3a0246a703d5ef583398ccaa198930233d55501e70c2294443cb2e5f34"
+  },
+  {
+    "source": "missing_field.nl",
+    "mode": "check",
+    "argv": [
+      "/tmp/p929-build/newlangc",
+      "--check",
+      "/tmp/p929-evidence/sources/missing_field.nl"
+    ],
+    "exit": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "545a5699eee695dc676875f6ba7af99abd085864b45b181ee48d2d42adb46783",
+    "stderr_utf8": "/tmp/p929-evidence/sources/missing_field.nl:3:29-3:44: error(semantic)[P5-AGGREGATE-FIELD-COUNT]: all aggregate fields must occur exactly once\n",
+    "when_utc": "2026-10-26T01:43:32.150497+00:00"
+  }
+]

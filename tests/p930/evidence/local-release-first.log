@@ -1,0 +1,104 @@
+Internal ctest changing into directory: /tmp/p930-release
+UpdateCTestConfiguration  from :/tmp/p930-release/DartConfiguration.tcl
+Parse Config file:/tmp/p930-release/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p930-release/DartConfiguration.tcl
+Parse Config file:/tmp/p930-release/DartConfiguration.tcl
+Test project /tmp/p930-release
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: p930_live_pre_if.unit
+
+1: Test command: /tmp/p930-release/p930_observe "positive" "/tmp/p930/tests/p930/sources"
+1: Working Directory: /tmp/p930-release
+1: Environment variables: 
+1:  PYTHONDONTWRITEBYTECODE=1
+1:  PYTHONHASHSEED=0
+1:  LC_ALL=C
+1:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+1:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+1: Test timeout computed to be: 90
+1: P930 session1 phase1 input=94399876428928 owner=94399876448112 actual-world=94399876454688 artifact-world=94399876454688 snapshot=94399876450432 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+1: P930 session1 phase2 input=94399876428928 owner=94399876637504 actual-world=94399876454688 artifact-world=94399876439232 snapshot=94399876501232 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+1: P930 session2 phase1 input=94399876440256 owner=94399876448112 actual-world=94399876450432 artifact-world=94399876450432 snapshot=94399876451472 main10 roots1/4 inc/fact-distinct6 values[17,232]/[64,105] order01/10 truth0 cut-before-arms public-view-absent
+1: P930 session2 phase2 input=94399876440256 owner=94399876452592 actual-world=94399876450432 artifact-world=94399876439232 snapshot=94399876454688 main10 roots1/4 inc/fact-distinct6 values[17,232]/[64,105] order01/10 truth0 cut-before-arms public-view-absent
+1: P930 session3 phase1 input=94399876460416 owner=94399876448112 actual-world=94399876451472 artifact-world=94399876451472 snapshot=94399876665600 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order01/01 truth1 cut-before-arms public-view-absent
+1: P930 session3 phase2 input=94399876460416 owner=94399876591072 actual-world=94399876451472 artifact-world=94399876432816 snapshot=94399876454688 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order01/01 truth1 cut-before-arms public-view-absent
+1: P930 session4 phase1 input=94399876454928 owner=94399876448112 actual-world=94399876501232 artifact-world=94399876501232 snapshot=94399876454688 main10 roots1/4 inc/fact-distinct6 values[72,224]/[186,9] order10/01 truth1 cut-before-arms public-view-absent
+1: P930 session4 phase2 input=94399876454928 owner=94399876591072 actual-world=94399876501232 artifact-world=94399876440080 snapshot=94399876450432 main10 roots1/4 inc/fact-distinct6 values[72,224]/[186,9] order10/01 truth1 cut-before-arms public-view-absent
+1: P930 copied scalar observations only; mismatched root/field/order comparisons rejected0; no public authority or C17 admission
+1/4 Test #1: p930_live_pre_if.unit ............   Passed    0.00 sec
+test 2
+    Start 2: p930_order_root_negative.unit
+
+2: Test command: /tmp/p930-release/p930_observe "negative" "/tmp/p930/tests/p930/sources"
+2: Working Directory: /tmp/p930-release
+2: Environment variables: 
+2:  PYTHONDONTWRITEBYTECODE=1
+2:  PYTHONHASHSEED=0
+2:  LC_ALL=C
+2:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+2:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+2: Test timeout computed to be: 90
+2: P930 session1 phase1 input=94902108554368 owner=94902108573552 actual-world=94902108580128 artifact-world=94902108580128 snapshot=94902108575872 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+2: P930 session1 phase2 input=94902108554368 owner=94902108762944 actual-world=94902108580128 artifact-world=94902108564672 snapshot=94902108626672 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+2: P930 session2 phase1 input=94902108565696 owner=94902108573552 actual-world=94902108575872 artifact-world=94902108575872 snapshot=94902108576912 main10 roots1/4 inc/fact-distinct6 values[17,232]/[64,105] order01/10 truth0 cut-before-arms public-view-absent
+2: P930 session2 phase2 input=94902108565696 owner=94902108578032 actual-world=94902108575872 artifact-world=94902108564672 snapshot=94902108580128 main10 roots1/4 inc/fact-distinct6 values[17,232]/[64,105] order01/10 truth0 cut-before-arms public-view-absent
+2: P930 session3 phase1 input=94902108585856 owner=94902108573552 actual-world=94902108576912 artifact-world=94902108576912 snapshot=94902108791040 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order01/01 truth1 cut-before-arms public-view-absent
+2: P930 session3 phase2 input=94902108585856 owner=94902108716512 actual-world=94902108576912 artifact-world=94902108558256 snapshot=94902108580128 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order01/01 truth1 cut-before-arms public-view-absent
+2: P930 session4 phase1 input=94902108580368 owner=94902108573552 actual-world=94902108626672 artifact-world=94902108626672 snapshot=94902108580128 main10 roots1/4 inc/fact-distinct6 values[72,224]/[186,9] order10/01 truth1 cut-before-arms public-view-absent
+2: P930 session4 phase2 input=94902108580368 owner=94902108716512 actual-world=94902108626672 artifact-world=94902108565520 snapshot=94902108575872 main10 roots1/4 inc/fact-distinct6 values[72,224]/[186,9] order10/01 truth1 cut-before-arms public-view-absent
+2: P930 copied scalar observations only; mismatched root/field/order comparisons rejected26; no public authority or C17 admission
+2/4 Test #2: p930_order_root_negative.unit ....   Passed    0.00 sec
+test 3
+    Start 3: p930_prepare_oom.unit
+
+3: Test command: /tmp/p930-release/p930_oom "oom" "/tmp/p930/tests/p930/sources"
+3: Working Directory: /tmp/p930-release
+3: Environment variables: 
+3:  PYTHONDONTWRITEBYTECODE=1
+3:  PYTHONHASHSEED=0
+3:  LC_ALL=C
+3:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+3:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+3: Test timeout computed to be: 90
+3: P930 actual prepare OOM site1 hit1: zero observations, original inventory unchanged; SAME context retry
+3: P930 session1 phase1 input=94347993527424 owner=94347993546608 actual-world=94347993553184 artifact-world=94347993553184 snapshot=94347993558096 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+3: P930 session1 phase2 input=94347993527424 owner=94347993737424 actual-world=94347993553184 artifact-world=94347993537728 snapshot=94347993556928 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+3: P930 actual prepare OOM site2 hit1: zero observations, original inventory unchanged; SAME context retry
+3: P930 session2 phase1 input=94347993539712 owner=94347993546608 actual-world=94347993558096 artifact-world=94347993558096 snapshot=94347993574784 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+3: P930 session2 phase2 input=94347993539712 owner=94347993551440 actual-world=94347993558096 artifact-world=94347993537728 snapshot=94347993553184 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+3/4 Test #3: p930_prepare_oom.unit ............   Passed    0.00 sec
+test 4
+    Start 4: p930_ordinary_cli.integration
+
+4: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p930/tests/p930/cli.py" "/tmp/p930-release/newlangc" "/tmp/p930/tests/p930"
+4: Working Directory: /tmp/p930-release
+4: Environment variables: 
+4:  PYTHONDONTWRITEBYTECODE=1
+4:  PYTHONHASHSEED=0
+4:  LC_ALL=C
+4:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+4:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+4: Test timeout computed to be: 90
+4: budget_false.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved
+4: budget_true.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved
+4: missing_field.nl CHECK 3 C17 3 P5-AGGREGATE-FIELD-COUNT sentinel/no-temp preserved
+4: order_only.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved
+4: root_values_swapped.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved
+4: wrong_condition.nl CHECK 3 C17 3 P13-IF-CONDITION sentinel/no-temp preserved
+4/4 Test #4: p930_ordinary_cli.integration ....   Passed    0.05 sec
+
+The following tests passed:
+	p930_live_pre_if.unit
+	p930_order_root_negative.unit
+	p930_prepare_oom.unit
+	p930_ordinary_cli.integration
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   0.07 sec

@@ -1,0 +1,336 @@
+{
+  "source": "/tmp/p929-evidence/sources/budget_true.nl",
+  "source_sha256": "febac1afa9d58bb166740df1c47d640d2baeda8acae5f89a4b5b12dd691d3687",
+  "inferior_exit": 0,
+  "records": [
+    {
+      "kind": "actual_plan_created",
+      "unit_source": "0x56172e972480",
+      "unit_sha256": "febac1afa9d58bb166740df1c47d640d2baeda8acae5f89a4b5b12dd691d3687",
+      "unit_length": 249,
+      "body_span": [
+        65,
+        248
+      ],
+      "body": "0x56172e978c70",
+      "body_source": "0x56172e97a050",
+      "body_sha256": "a4c257f4396b2ad9955a1bfc11aab0878e9aeef998c10de5c5e08d00519bc1c3",
+      "body_length": 183
+    },
+    {
+      "kind": "live_pre_if_snapshot",
+      "sequence": 0,
+      "phase": "definition",
+      "owner": "0x56172e976f70",
+      "source_context": "0x56172e978920",
+      "artifact_context": "0x56172e978920",
+      "entry": "0x56172e977880",
+      "body_owner": "0x0",
+      "registered_main": 10,
+      "body_source": "0x56172e97a050",
+      "entry_unit_sha256": "febac1afa9d58bb166740df1c47d640d2baeda8acae5f89a4b5b12dd691d3687",
+      "entry_body_sha256": "a4c257f4396b2ad9955a1bfc11aab0878e9aeef998c10de5c5e08d00519bc1c3",
+      "if_node": 19,
+      "body_if_span": [
+        132,
+        171
+      ],
+      "whole_if_span": [
+        197,
+        236
+      ],
+      "condition": {
+        "node": 18,
+        "value": 9,
+        "type": 9,
+        "known": true,
+        "truth": true,
+        "carrier": "NL_CARRIER_ENDED",
+        "operands": [
+          {
+            "value": 7,
+            "type": 7,
+            "scalar": 12,
+            "carrier": "NL_CARRIER_ENDED"
+          },
+          {
+            "value": 8,
+            "type": 7,
+            "scalar": 40,
+            "carrier": "NL_CARRIER_ENDED"
+          }
+        ]
+      },
+      "counts": {
+        "binding": 2,
+        "place": 6,
+        "value": 9,
+        "scope": 0,
+        "domain": 0,
+        "region": 0,
+        "occurrence": 0
+      },
+      "last_incarnation": 6,
+      "last_fact": 6,
+      "roots": [
+        {
+          "binding": "primary",
+          "root": 1,
+          "incarnation": 1,
+          "fact": 1,
+          "package": 3,
+          "carrier": "NL_CARRIER_PLACE",
+          "implicit_local": true,
+          "governing_domain_marker": 0,
+          "children": [
+            {
+              "place": 2,
+              "index": 0,
+              "label": "consumed",
+              "incarnation": 2,
+              "fact": 2,
+              "value": 2,
+              "scalar": 186,
+              "aggregate_owner": 3,
+              "carrier": "NL_CARRIER_AGGREGATE",
+              "independent_root": false
+            },
+            {
+              "place": 3,
+              "index": 1,
+              "label": "remaining",
+              "incarnation": 3,
+              "fact": 3,
+              "value": 1,
+              "scalar": 9,
+              "aggregate_owner": 3,
+              "carrier": "NL_CARRIER_AGGREGATE",
+              "independent_root": false
+            }
+          ]
+        },
+        {
+          "binding": "backup",
+          "root": 4,
+          "incarnation": 4,
+          "fact": 4,
+          "package": 6,
+          "carrier": "NL_CARRIER_PLACE",
+          "implicit_local": true,
+          "governing_domain_marker": 0,
+          "children": [
+            {
+              "place": 5,
+              "index": 0,
+              "label": "consumed",
+              "incarnation": 5,
+              "fact": 5,
+              "value": 4,
+              "scalar": 72,
+              "aggregate_owner": 6,
+              "carrier": "NL_CARRIER_AGGREGATE",
+              "independent_root": false
+            },
+            {
+              "place": 6,
+              "index": 1,
+              "label": "remaining",
+              "incarnation": 6,
+              "fact": 6,
+              "value": 5,
+              "scalar": 224,
+              "aggregate_owner": 6,
+              "carrier": "NL_CARRIER_AGGREGATE",
+              "independent_root": false
+            }
+          ]
+        }
+      ],
+      "arms_created": false,
+      "proof_sealed": false,
+      "stack": [
+        "source_if",
+        "expression",
+        "source_statement",
+        "source_block",
+        "function_block",
+        "check_definition",
+        "register_function_unit",
+        "nl_semantic_register_function_unit",
+        "compile_v0_to",
+        "compile_v0",
+        "main"
+      ]
+    },
+    {
+      "kind": "owner_destroy",
+      "owner": "0x56172e976f70",
+      "snapshot_record": 1
+    },
+    {
+      "kind": "entry_destroy",
+      "entry": "0x56172e977880",
+      "snapshot_record": 1
+    },
+    {
+      "kind": "live_pre_if_snapshot",
+      "sequence": 1,
+      "phase": "actual_caller",
+      "owner": "0x56172e9a4430",
+      "source_context": "0x56172e978920",
+      "artifact_context": "0x56172e974cc0",
+      "entry": "0x56172e983380",
+      "body_owner": "0x56172e978c70",
+      "registered_main": 10,
+      "body_source": "0x56172e97a050",
+      "entry_unit_sha256": "febac1afa9d58bb166740df1c47d640d2baeda8acae5f89a4b5b12dd691d3687",
+      "entry_body_sha256": "a4c257f4396b2ad9955a1bfc11aab0878e9aeef998c10de5c5e08d00519bc1c3",
+      "if_node": 19,
+      "body_if_span": [
+        132,
+        171
+      ],
+      "whole_if_span": [
+        197,
+        236
+      ],
+      "condition": {
+        "node": 18,
+        "value": 9,
+        "type": 9,
+        "known": true,
+        "truth": true,
+        "carrier": "NL_CARRIER_ENDED",
+        "operands": [
+          {
+            "value": 7,
+            "type": 7,
+            "scalar": 12,
+            "carrier": "NL_CARRIER_ENDED"
+          },
+          {
+            "value": 8,
+            "type": 7,
+            "scalar": 40,
+            "carrier": "NL_CARRIER_ENDED"
+          }
+        ]
+      },
+      "counts": {
+        "binding": 2,
+        "place": 6,
+        "value": 9,
+        "scope": 0,
+        "domain": 0,
+        "region": 0,
+        "occurrence": 0
+      },
+      "last_incarnation": 6,
+      "last_fact": 6,
+      "roots": [
+        {
+          "binding": "primary",
+          "root": 1,
+          "incarnation": 1,
+          "fact": 1,
+          "package": 3,
+          "carrier": "NL_CARRIER_PLACE",
+          "implicit_local": true,
+          "governing_domain_marker": 0,
+          "children": [
+            {
+              "place": 2,
+              "index": 0,
+              "label": "consumed",
+              "incarnation": 2,
+              "fact": 2,
+              "value": 2,
+              "scalar": 186,
+              "aggregate_owner": 3,
+              "carrier": "NL_CARRIER_AGGREGATE",
+              "independent_root": false
+            },
+            {
+              "place": 3,
+              "index": 1,
+              "label": "remaining",
+              "incarnation": 3,
+              "fact": 3,
+              "value": 1,
+              "scalar": 9,
+              "aggregate_owner": 3,
+              "carrier": "NL_CARRIER_AGGREGATE",
+              "independent_root": false
+            }
+          ]
+        },
+        {
+          "binding": "backup",
+          "root": 4,
+          "incarnation": 4,
+          "fact": 4,
+          "package": 6,
+          "carrier": "NL_CARRIER_PLACE",
+          "implicit_local": true,
+          "governing_domain_marker": 0,
+          "children": [
+            {
+              "place": 5,
+              "index": 0,
+              "label": "consumed",
+              "incarnation": 5,
+              "fact": 5,
+              "value": 4,
+              "scalar": 72,
+              "aggregate_owner": 6,
+              "carrier": "NL_CARRIER_AGGREGATE",
+              "independent_root": false
+            },
+            {
+              "place": 6,
+              "index": 1,
+              "label": "remaining",
+              "incarnation": 6,
+              "fact": 6,
+              "value": 5,
+              "scalar": 224,
+              "aggregate_owner": 6,
+              "carrier": "NL_CARRIER_AGGREGATE",
+              "independent_root": false
+            }
+          ]
+        }
+      ],
+      "arms_created": false,
+      "proof_sealed": false,
+      "stack": [
+        "source_if",
+        "expression",
+        "source_statement",
+        "source_block",
+        "function_block",
+        "run_body",
+        "call",
+        "expression",
+        "check_fragment",
+        "nl_semantic_check_expression",
+        "compile_v0_to",
+        "compile_v0",
+        "main"
+      ]
+    },
+    {
+      "kind": "owner_destroy",
+      "owner": "0x56172e9a4430",
+      "snapshot_record": 4
+    },
+    {
+      "kind": "entry_destroy",
+      "entry": "0x56172e983380",
+      "snapshot_record": 4
+    }
+  ],
+  "errors": [],
+  "live_owner_tokens_after_exit": 0,
+  "live_entry_tokens_after_exit": 0
+}

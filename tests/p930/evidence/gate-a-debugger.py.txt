@@ -1,0 +1,95 @@
+import gdb, json, hashlib, os
+source_path=os.environ['P930_SOURCE']; output=os.environ['P930_OUTPUT']
+expected=json.load(open('/tmp/p929-evidence/freeze.json'))
+source_name=os.path.basename(source_path); oracle=expected['positive_oracles'][source_name]
+assert hashlib.sha256(open(source_path,'rb').read()).hexdigest()==expected['sources'][source_name]['sha256']
+records=[]; plans=[]; live_owners={}; live_entries={}; errors=[]
+def integer(x): return int(x)
+def address(x): return hex(int(x))
+def text(x): return x.string()
+def raw(source):
+    s=source.dereference();return bytes(gdb.selected_inferior().read_memory(s['bytes'],int(s['length'])))
+def stack():
+    a=[];f=gdb.newest_frame()
+    while f:a.append(f.name());f=f.older()
+    return a
+class PlanDone(gdb.FinishBreakpoint):
+    def __init__(self,source,span,out):
+        super().__init__(gdb.newest_frame(),internal=True);self.src=source;self.span=span;self.out=out
+    def stop(self):
+        try:
+            assert int(self.return_value)==0
+            body=self.out.dereference();bs=body.dereference()['source'];u=raw(self.src);b=raw(bs)
+            assert u[self.span[0]:self.span[1]]==b
+            rec={'kind':'actual_plan_created','unit_source':address(self.src),'unit_sha256':hashlib.sha256(u).hexdigest(),'unit_length':len(u),'body_span':self.span,'body':address(body),'body_source':address(bs),'body_sha256':hashlib.sha256(b).hexdigest(),'body_length':len(b)}
+            assert rec['unit_sha256']==expected['sources'][source_name]['sha256'];plans.append(rec);records.append(rec)
+        except Exception as e:errors.append('plan:'+repr(e));return True
+        return False
+class Plan(gdb.Breakpoint):
+    def stop(self):
+        f=gdb.newest_frame();s=f.read_var('span');PlanDone(f.read_var('source'),[int(s['start_byte']),int(s['end_byte'])],f.read_var('out'));return False
+class Prepared(gdb.FinishBreakpoint):
+    def __init__(self,owner,ctx,conditional,definition):
+        super().__init__(gdb.newest_frame(),internal=True);self.owner=owner;self.ctx=ctx;self.conditional=conditional;self.definition=definition
+    def stop(self):
+        try:
+            assert int(self.return_value)==0
+            owner=self.owner.dereference();p=owner['if_fields'].dereference();entry=p['entry'];e=entry.dereference()
+            assert p['owner']==self.owner and p['source']==owner['source'] and p['view']['entry']==entry and entry!=self.ctx
+            assert not int(p['arms'][0]) and not int(p['arms'][1]) and int(owner['arm_count'])==0
+            assert not bool(p['ready']) and not bool(p['sealed'])
+            assert len(plans)==1;plan=plans[0]
+            assert address(owner['source'])==plan['body_source']
+            if not self.definition:assert address(owner['body_owner'])==plan['body']
+            main=[i for i in range(int(e['function_count'])) if text(e['functions'][i]['name'])=='main'];assert len(main)==1
+            fn=e['functions'][main[0]];assert address(fn['body'])==plan['body'] and int(fn['count'])==0
+            choice=owner['nodes'][self.conditional-1];cond_id=int(choice['initializer']);cond=owner['nodes'][cond_id-1];value=int(cond['results'][0]['value']);cv=e['values'][value-1]
+            assert int(cond['type'])==int(cv['type']) and bool(cv['scalar_known']) and int(cv['scalar_value'])==int(oracle['condition'][3])
+            assert str(cv['carrier'])=='NL_CARRIER_ENDED'
+            operands=[];n=int(cond['first_argument'])
+            for k in range(2):
+                node=owner['nodes'][n-1];v=e['values'][int(node['results'][0]['value'])-1]
+                assert str(v['carrier'])=='NL_CARRIER_ENDED' and bool(v['scalar_known']) and int(v['scalar_value'])==oracle['condition'][k+1]
+                operands.append({'value':int(node['results'][0]['value']),'type':int(v['type']),'scalar':int(v['scalar_value']),'carrier':str(v['carrier'])});n=int(node['next_argument'])
+            assert n==0
+            roots=[];ids=[];incs=[];facts=[]
+            assert int(e['binding_count'])==2 and int(e['place_count'])==6
+            for i in range(2):
+                binding=e['bindings'][i];bv=binding['view'];rid=int(bv['place']);root=e['places'][rid-1];package=e['values'][int(root['current_value'])-1];typ=e['types'][int(root['type'])-1]
+                assert text(binding['name'])==oracle['binding_order'][i] and str(bv['availability'])=='NL_AVAILABLE'
+                assert bool(root['live']) and bool(root['independent_root']) and bool(root['implicit_local']) and int(root['governing_domain'])==0 and int(root['fixed_field_count'])==2
+                assert str(package['carrier'])=='NL_CARRIER_PLACE' and int(package['owner_place'])==rid
+                children=[]
+                for j in range(2):
+                    cid=int(root['fixed_fields'][j]);child=e['places'][cid-1];val=e['values'][int(child['current_value'])-1]
+                    assert text(typ['field_names'][j])==oracle['declaration'][j]
+                    assert bool(child['live']) and not bool(child['independent_root']) and int(child['parent_aggregate'])==rid and int(child['parent_incarnation'])==int(root['incarnation']) and int(child['parent_field_index'])==j
+                    assert int(package['fields'][j])==int(child['current_value']) and str(val['carrier'])=='NL_CARRIER_AGGREGATE' and int(val['aggregate_owner'])==int(root['current_value'])
+                    assert bool(val['scalar_known']) and int(val['scalar_value'])==oracle['fields_by_decl_index'][i][j] and str(val['dependencies'])=='NL_DEPENDENCY_FREE' and int(val['value_dependency_count'])==0
+                    children.append({'place':cid,'index':j,'label':text(typ['field_names'][j]),'incarnation':int(child['incarnation']),'fact':int(child['current_fact']),'value':int(child['current_value']),'scalar':int(val['scalar_value']),'aggregate_owner':int(val['aggregate_owner']),'carrier':str(val['carrier']),'independent_root':bool(child['independent_root'])})
+                roots.append({'binding':text(binding['name']),'root':rid,'incarnation':int(root['incarnation']),'fact':int(root['current_fact']),'package':int(root['current_value']),'carrier':str(package['carrier']),'implicit_local':bool(root['implicit_local']),'governing_domain_marker':int(root['governing_domain']),'children':children})
+                for place in [root]+[e['places'][x['place']-1] for x in children]:ids.append((int(place['incarnation']),int(place['current_fact'])));incs.append(int(place['incarnation']));facts.append(int(place['current_fact']))
+            assert roots[0]['root']!=roots[1]['root'] and len(set(incs))==6 and len(set(facts))==6
+            rec={'kind':'live_pre_if_snapshot','sequence':len(live_entries)+sum(x.get('kind')=='entry_destroy' for x in records),'phase':'definition' if self.definition else 'actual_caller','owner':address(self.owner),'source_context':address(self.ctx),'artifact_context':address(owner['context']),'entry':address(entry),'body_owner':address(owner['body_owner']),'registered_main':main[0]+1,'body_source':address(owner['source']),'entry_unit_sha256':plan['unit_sha256'],'entry_body_sha256':plan['body_sha256'],'if_node':self.conditional,'body_if_span':[int(choice['span']['start_byte']),int(choice['span']['end_byte'])],'whole_if_span':[plan['body_span'][0]+int(choice['span']['start_byte']),plan['body_span'][0]+int(choice['span']['end_byte'])],'condition':{'node':cond_id,'value':value,'type':int(cv['type']),'known':bool(cv['scalar_known']),'truth':bool(cv['scalar_value']),'carrier':str(cv['carrier']),'operands':operands},'counts':{key:int(e[key+'_count']) for key in ['binding','place','value','scope','domain','region','occurrence']},'last_incarnation':int(e['last_incarnation']),'last_fact':int(e['last_value_fact']),'roots':roots,'arms_created':False,'proof_sealed':bool(p['sealed']),'stack':stack()}
+            records.append(rec);live_owners[int(self.owner)]=len(records)-1;live_entries[int(entry)]=len(records)-1
+            gdb.write('P930 live entry '+json.dumps(rec)+'\n')
+        except Exception as x:errors.append('prepare:'+repr(x));return True
+        return False
+class Prepare(gdb.Breakpoint):
+    def stop(self):
+        f=gdb.newest_frame();check=f.older().read_var('check').dereference();Prepared(f.read_var('f'),f.read_var('c'),int(f.read_var('id')),bool(check['definition']));return False
+class OwnerEnd(gdb.Breakpoint):
+    def stop(self):
+        ptr=int(gdb.newest_frame().read_var('fragment'))
+        if ptr in live_owners:records.append({'kind':'owner_destroy','owner':hex(ptr),'snapshot_record':live_owners.pop(ptr)})
+        return False
+class EntryEnd(gdb.Breakpoint):
+    def stop(self):
+        ptr=int(gdb.newest_frame().read_var('context'))
+        if ptr in live_entries:records.append({'kind':'entry_destroy','entry':hex(ptr),'snapshot_record':live_entries.pop(ptr)})
+        return False
+Plan('nl_body_create_span',internal=True);Prepare('nl_if_field_prepare',internal=True);OwnerEnd('nl_checked_destroy',internal=True);EntryEnd('nl_semantic_destroy',internal=True)
+def exited(e):
+    result={'source':source_path,'source_sha256':expected['sources'][source_name]['sha256'],'inferior_exit':getattr(e,'exit_code',None),'records':records,'errors':errors,'live_owner_tokens_after_exit':len(live_owners),'live_entry_tokens_after_exit':len(live_entries)}
+    open(output,'w').write(json.dumps(result,indent=2)+'\n')
+gdb.events.exited.connect(exited)

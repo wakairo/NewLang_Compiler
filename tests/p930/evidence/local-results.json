@@ -1,0 +1,37 @@
+{
+  "base": "38b0954be6b1466a2982e7c58e1070ac76a9fafc",
+  "branch": "p930-live-prefix-observation",
+  "full_frontend": {
+    "passed": 474,
+    "failed": 0,
+    "compiler": "GCC13.3.0"
+  },
+  "focused_address_lsan": {
+    "passed": 4,
+    "failed": 0,
+    "local_compiler": "Debian Clang23.1.2; not pinned FULL5"
+  },
+  "focused_ubsan": {
+    "passed": 4,
+    "failed": 0,
+    "local_compiler": "Debian Clang23.1.2; not pinned FULL5"
+  },
+  "local_format": "23.1.2 dry-run PASS; actual pinned23.1.3 format pending natural Clang CI",
+  "observed_sources": 4,
+  "observed_phases_per_source": 2,
+  "mismatched_diagnostic_comparisons_rejected": 26,
+  "OOM_actual_hits": {
+    "proof_calloc": 1,
+    "entry_clone_context_malloc": 1
+  },
+  "cli_source_mode_pairs": 18,
+  "cli_baseline_candidate_executions": 36,
+  "ci_runs_started": 0,
+  "no_production_api_checker_backend_workflow_canonical_change": true,
+  "scope": "private diagnostic/CTest only; A/C formal refinement UNPROVED; D HOLD; no public authority; existing unit IF C17 unsupported",
+  "focused_release": {
+    "passed": 4,
+    "failed": 0,
+    "compiler": "GCC13.3.0"
+  }
+}

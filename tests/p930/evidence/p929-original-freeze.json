@@ -1,0 +1,122 @@
+{
+  "fixed_compiler": "38b0954be6b1466a2982e7c58e1070ac76a9fafc",
+  "canonical": "Draft17.34",
+  "created_utc": "2026-10-26T01:42:12.240586+00:00",
+  "executions_so_far": 0,
+  "sources": {
+    "budget_false.nl": {
+      "sha256": "b4738981b36bf450a77cb1f593b2d8c8f8fd6f0c8703a6d6e8e66cc390a2deb1",
+      "utf8_lf_bytes": 251
+    },
+    "budget_true.nl": {
+      "sha256": "febac1afa9d58bb166740df1c47d640d2baeda8acae5f89a4b5b12dd691d3687",
+      "utf8_lf_bytes": 249
+    },
+    "missing_field.nl": {
+      "sha256": "7066df8897d102cc0d9612453671e4a14e16253af3f14d7727c0b64559f79671",
+      "utf8_lf_bytes": 232
+    },
+    "wrong_condition.nl": {
+      "sha256": "f0d96d2972fd0fc0667e0cab146e389e8d58cc6db08f0db3f424bec471b1dd03",
+      "utf8_lf_bytes": 236
+    }
+  },
+  "positive_oracles": {
+    "budget_true.nl": {
+      "declaration": [
+        "consumed",
+        "remaining"
+      ],
+      "binding_order": [
+        "primary",
+        "backup"
+      ],
+      "fields_by_decl_index": [
+        [
+          186,
+          9
+        ],
+        [
+          72,
+          224
+        ]
+      ],
+      "initializer_source_indices": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "condition": [
+        "<",
+        12,
+        40,
+        true
+      ]
+    },
+    "budget_false.nl": {
+      "declaration": [
+        "remaining",
+        "consumed"
+      ],
+      "binding_order": [
+        "queued",
+        "reserve"
+      ],
+      "fields_by_decl_index": [
+        [
+          17,
+          232
+        ],
+        [
+          64,
+          105
+        ]
+      ],
+      "initializer_source_indices": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "condition": [
+        "==",
+        21,
+        22,
+        false
+      ]
+    }
+  },
+  "common_expectation": {
+    "root_count": 2,
+    "dependent_children": 4,
+    "separate_child_owner": false,
+    "condition_temporaries_ended": true,
+    "source_lexical_support": "from block enter and binding events; NOT explicit Domain/Allocation",
+    "check_exit": 0,
+    "c17": "may be finite backend-profile rejection; acceptance not assumed; no native without actual C17",
+    "public_entry": "normal CLI provides no dump flag; C relation unobservable unless an EXISTING lawful observation exposes the required entry"
+  },
+  "negative_oracles": {
+    "missing_field.nl": {
+      "check_exit": 2,
+      "first_expected_code": "P5-AGGREGATE-FIELD-COUNT",
+      "grounding": "semantic_check.c aggregate_fields count guard lines2859-2867; selected aggregate must contain every declared field once"
+    },
+    "wrong_condition.nl": {
+      "check_exit": 2,
+      "first_expected_code": "P13-IF-CONDITION",
+      "grounding": "semantic_check.c source_if bool check lines4411-4422"
+    }
+  },
+  "run_plan": "two positive + two controls, three ordinary CLI modes each; first unexpected source/check refusal STOP with downstream NOT TESTED; no source edits/retries; native only for real emitted unmodified C17; no private C harness/API/snapshot invented",
+  "ci_budget": 0
+}

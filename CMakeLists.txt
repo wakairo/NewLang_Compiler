@@ -108,6 +108,23 @@ target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic n
 include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
+    # P930 diagnostic-only wrappers: production libraries/CLI remain unchanged.
+    add_executable(p930_observe tests/p930/observe.c)
+    add_executable(p930_oom tests/p930/observe.c)
+    target_compile_definitions(p930_oom PRIVATE P930_OOM=1)
+    foreach(p930_target p930_observe p930_oom)
+        target_link_libraries(${p930_target} PRIVATE newlang_semantic newlang_parser)
+        target_link_options(${p930_target} PRIVATE -Wl,--wrap=nl_body_create_span
+            -Wl,--wrap=nl_if_field_prepare)
+    endforeach()
+    target_link_options(p930_oom PRIVATE -Wl,--wrap=calloc -Wl,--wrap=malloc)
+    set(p930_sources "${CMAKE_CURRENT_SOURCE_DIR}/tests/p930/sources")
+    add_test(NAME p930_live_pre_if.unit COMMAND p930_observe positive "${p930_sources}")
+    add_test(NAME p930_order_root_negative.unit COMMAND p930_observe negative "${p930_sources}")
+    add_test(NAME p930_prepare_oom.unit COMMAND p930_oom oom "${p930_sources}")
+    add_test(NAME p930_ordinary_cli.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p930/cli.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p930")
     # SPECULATIVE PR533 opt-in: default compiler/parser stay OFF. Test-only
     # rebuild of the SAME parser exercises Production semantics/owned/C17.
     add_executable(p718_gate_test tests/p718/gate_test.c)

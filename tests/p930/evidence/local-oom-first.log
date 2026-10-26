@@ -1,0 +1,38 @@
+Internal ctest changing into directory: /tmp/p930-build
+UpdateCTestConfiguration  from :/tmp/p930-build/DartConfiguration.tcl
+Parse Config file:/tmp/p930-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p930-build/DartConfiguration.tcl
+Parse Config file:/tmp/p930-build/DartConfiguration.tcl
+Test project /tmp/p930-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 3
+    Start 3: p930_prepare_oom.unit
+
+3: Test command: /tmp/p930-build/p930_oom "oom" "/tmp/p930/tests/p930/sources"
+3: Working Directory: /tmp/p930-build
+3: Environment variables: 
+3:  PYTHONDONTWRITEBYTECODE=1
+3:  PYTHONHASHSEED=0
+3:  LC_ALL=C
+3:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+3:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+3: Test timeout computed to be: 90
+3: P930 actual prepare OOM site1 hit1: zero observations, original inventory unchanged; SAME context retry
+3: P930 session1 phase1 input=94018674222208 owner=94018674241392 actual-world=94018674247968 artifact-world=94018674247968 snapshot=94018674252880 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+3: P930 session1 phase2 input=94018674222208 owner=94018674432208 actual-world=94018674247968 artifact-world=94018674232512 snapshot=94018674251712 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+3: P930 actual prepare OOM site2 hit1: zero observations, original inventory unchanged; SAME context retry
+3: P930 session2 phase1 input=94018674234496 owner=94018674241392 actual-world=94018674252880 artifact-world=94018674252880 snapshot=94018674269568 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+3: P930 session2 phase2 input=94018674234496 owner=94018674246224 actual-world=94018674252880 artifact-world=94018674232512 snapshot=94018674247968 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+1/1 Test #3: p930_prepare_oom.unit ............   Passed    0.00 sec
+
+The following tests passed:
+	p930_prepare_oom.unit
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.01 sec

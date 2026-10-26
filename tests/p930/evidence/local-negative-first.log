@@ -1,0 +1,41 @@
+Internal ctest changing into directory: /tmp/p930-build
+UpdateCTestConfiguration  from :/tmp/p930-build/DartConfiguration.tcl
+Parse Config file:/tmp/p930-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p930-build/DartConfiguration.tcl
+Parse Config file:/tmp/p930-build/DartConfiguration.tcl
+Test project /tmp/p930-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 2
+    Start 2: p930_order_root_negative.unit
+
+2: Test command: /tmp/p930-build/p930_observe "negative" "/tmp/p930/tests/p930/sources"
+2: Working Directory: /tmp/p930-build
+2: Environment variables: 
+2:  PYTHONDONTWRITEBYTECODE=1
+2:  PYTHONHASHSEED=0
+2:  LC_ALL=C
+2:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+2:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+2: Test timeout computed to be: 90
+2: P930 session1 phase1 input=94716180563072 owner=94716180582256 actual-world=94716180588832 artifact-world=94716180588832 snapshot=94716180584576 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+2: P930 session1 phase2 input=94716180563072 owner=94716180771648 actual-world=94716180588832 artifact-world=94716180573376 snapshot=94716180635376 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+2: P930 session2 phase1 input=94716180574400 owner=94716180582256 actual-world=94716180584576 artifact-world=94716180584576 snapshot=94716180585616 main10 roots1/4 inc/fact-distinct6 values[17,232]/[64,105] order01/10 truth0 cut-before-arms public-view-absent
+2: P930 session2 phase2 input=94716180574400 owner=94716180586736 actual-world=94716180584576 artifact-world=94716180573376 snapshot=94716180588832 main10 roots1/4 inc/fact-distinct6 values[17,232]/[64,105] order01/10 truth0 cut-before-arms public-view-absent
+2: P930 session3 phase1 input=94716180594560 owner=94716180582256 actual-world=94716180585616 artifact-world=94716180585616 snapshot=94716180799744 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order01/01 truth1 cut-before-arms public-view-absent
+2: P930 session3 phase2 input=94716180594560 owner=94716180725216 actual-world=94716180585616 artifact-world=94716180566960 snapshot=94716180588832 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order01/01 truth1 cut-before-arms public-view-absent
+2: P930 session4 phase1 input=94716180589072 owner=94716180582256 actual-world=94716180635376 artifact-world=94716180635376 snapshot=94716180588832 main10 roots1/4 inc/fact-distinct6 values[72,224]/[186,9] order10/01 truth1 cut-before-arms public-view-absent
+2: P930 session4 phase2 input=94716180589072 owner=94716180725216 actual-world=94716180635376 artifact-world=94716180574224 snapshot=94716180584576 main10 roots1/4 inc/fact-distinct6 values[72,224]/[186,9] order10/01 truth1 cut-before-arms public-view-absent
+2: P930 copied scalar observations only; mismatched root/field/order comparisons rejected26; no public authority or C17 admission
+1/1 Test #2: p930_order_root_negative.unit ....   Passed    0.00 sec
+
+The following tests passed:
+	p930_order_root_negative.unit
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.01 sec
