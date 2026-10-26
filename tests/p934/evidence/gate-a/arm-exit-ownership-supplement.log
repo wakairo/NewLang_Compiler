@@ -1,0 +1,12 @@
+Breakpoint 1 at 0xf9c1: file /tmp/p934-gate-a/source/src/main.c, line 2258.
+warning: opening /proc/self/mem file failed: Read-only file system (30)
+warning: opening /proc/PID/mem file for lwp 45417.45417 failed: Read-only file system (30)
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Breakpoint 1, if_field_selection (f=0x561c8ab78430, id=19, p=0x7fffc7d2dfa0) at /tmp/p934-gate-a/source/src/main.c:2258
+2258	    if (!nl_checked_if_field_view(f, id, &v))
+$1 = (NLControlExits *) 0x0
+$2 = (NLControlExits *) 0x0
+$3 = (NLControlExits *) 0x0
+$4 = 6

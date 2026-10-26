@@ -1,0 +1,55 @@
+import gdb,json,os
+records=[];errors=[];active=False
+out=os.environ['P934_TRACE_OUT']
+def number(v): return int(v)
+def pointer(v): return hex(int(v))
+def snapshot(f,id):
+ d=f.dereference();node=d['nodes'][id-1];result={'fragment':pointer(f),'world':pointer(d['context']),'node':id,'kind':str(node['kind']),'normal_arms':number(node['normal_arms']),'type':number(node['type']),'result_count':number(node['result_count']),'terminates':bool(node['terminates']),'arm_count':number(d['arm_count']),'body_owner':pointer(d['body_owner']),'function_target':pointer(d['function_target']),'declarations':[],'arms':[]}
+ for i in range(number(d['count'])):
+  n=d['nodes'][i]
+  if str(n['kind'])=='NL_CHECKED_BINDING':
+   initializer=d['nodes'][number(n['initializer'])-1]
+   result['declarations'].append({'symbol':number(n['symbol']),'initializer_kind':str(initializer['kind']),'initializer_type':number(initializer['type']),'initializer_result':number(initializer['results'][0]['value']) if number(initializer['result_count']) else 0})
+ for a in range(number(d['arm_count'])):
+  link=d['arms'][a]
+  if number(link['match'])!=id:continue
+  arm=link['artifact'];v=arm.dereference();c=v['context'].dereference();root=v['nodes'][number(v['root'])-1]
+  data={'artifact':pointer(arm),'world':pointer(v['context']),'context_origin':pointer(link['context_origin']),'parent':pointer(v['if_parent']),'parent_node':number(v['if_parent_node']),'index':number(v['if_arm_index']),'source':pointer(v['source']),'branch_value_prefix':number(v['branch_value_prefix']),'branch_fact_prefix':number(v['branch_fact_prefix']),'scope_count':number(c['scope_count']),'domain_count':number(c['domain_count']),'region_count':number(c['region_count']),'nodes':[{'kind':str(v['nodes'][i]['kind']),'type':number(v['nodes'][i]['type']),'result_count':number(v['nodes'][i]['result_count']),'terminates':bool(v['nodes'][i]['terminates'])} for i in range(number(v['count']))],'originals':[]}
+  for i in range(number(c['binding_count'])):
+   b=c['bindings'][i]['view'];rid=number(b['place']);r=c['places'][rid-1];package=c['values'][number(r['current_value'])-1]
+   data['originals'].append({'symbol':i+1,'place':rid,'type':number(r['type']),'incarnation':number(r['incarnation']),'fact':number(r['current_fact']),'live':bool(r['live']),'value':number(r['current_value']),'carrier':str(package['carrier']),'owner_place':number(package['owner_place']),'fields':[{'place':number(r['fixed_fields'][j]),'fact':number(c['places'][number(r['fixed_fields'][j])-1]['current_fact']),'value':number(c['places'][number(r['fixed_fields'][j])-1]['current_value']),'scalar':number(c['values'][number(package['fields'][j])-1]['scalar_value']),'aggregate_owner_VALUE':number(c['values'][number(package['fields'][j])-1]['aggregate_owner'])} for j in range(number(r['fixed_field_count']))]})
+  result['arms'].append(data)
+ p=d['if_fields']
+ while int(p) and number(p.dereference()['view']['conditional'])!=id:p=p.dereference()['next']
+ if int(p):
+  q=p.dereference();result['private_field_receipt']={'ready':bool(q['ready']),'complete':bool(q['complete']),'sealed':bool(q['sealed']),'root':number(q['view']['root']),'entry':pointer(q['entry']),'events':[number(q['view']['arms'][a]['event_count']) for a in range(2)],'changes':[number(q['view']['arms'][a]['change_count']) for a in range(2)]}
+ return result
+class Done(gdb.FinishBreakpoint):
+ def __init__(self,name,info):super().__init__(gdb.newest_frame(),internal=True);self.name=name;self.info=info
+ def stop(self):
+  try:records.append({'function':self.name,'return':int(self.return_value),**self.info})
+  except Exception as e: errors.append(repr(e));return True
+  return False
+class Enter(gdb.Breakpoint):
+ def stop(self):
+  global active
+  try:
+   frame=gdb.newest_frame();name=frame.name()
+   if name=='v0_validate_call':active=True
+   if not active:return False
+   info={}
+   if name in ['v0_validate_call','v0_validate_node','avs_construction','avs_shape']:
+    f=frame.read_var('fragment');info['fragment']=pointer(f)
+    if name=='avs_shape': info['type']=number(frame.read_var('type'))
+    else:
+     id=number(frame.read_var('id'));v=f.dereference()['nodes'][id-1];info.update(node=id,kind=str(v['kind']))
+   if name in ['if_field_selection','nl_checked_if_field_view','nl_checked_if_return_view']:
+    f=frame.read_var('f');id=number(frame.read_var('id'));info.update(fragment=pointer(f),node=id)
+    if name=='if_field_selection':info['actual_graph']=snapshot(f,id)
+   Done(name,info)
+  except Exception as e:errors.append(str(e));return True
+  return False
+for name in ['v0_validate_call','v0_validate_node','avs_construction','avs_shape','if_field_selection','nl_checked_if_field_view','nl_checked_if_return_view','nl_checked_array4_c17','nl_checked_c_node']:Enter(name,internal=True)
+def exited(event):
+ with open(out,'w') as f:json.dump({'exit':event.exit_code if hasattr(event,'exit_code') else None,'records':records,'errors':errors},f,indent=2)
+gdb.events.exited.connect(exited)

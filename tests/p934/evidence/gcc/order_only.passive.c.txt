@@ -1,0 +1,49 @@
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+#include <limits.h>
+_Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+#include <stddef.h>
+_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
+
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+
+static void nl_fn_10(void);
+
+static void nl_fn_10(void)
+{
+    const nl_type_10 nl_local_1 = { .f0 = 186, .f1 = 9, };
+    (void)nl_local_1;
+    const nl_type_10 nl_local_2 = { .f0 = 72, .f1 = 224, };
+    const volatile uint8_t *const watch_0_0 = &nl_local_1.f0;
+    const volatile uint8_t *const watch_0_1 = &nl_local_1.f1;
+    const volatile uint8_t *const watch_1_0 = &nl_local_2.f0;
+    const volatile uint8_t *const watch_1_1 = &nl_local_2.f1;
+    unsigned int observed_arm = 2;
+    if (*watch_0_0 != 186 || *watch_0_1 != 9 || *watch_1_0 != 72 || *watch_1_1 != 224 || &nl_local_1 == &nl_local_2 || watch_0_0 == watch_0_1 || watch_1_0 == watch_1_1) abort();
+    (void)nl_local_2;
+    const size_t nl_less_left_16 = ((size_t)UINTMAX_C(12));
+    const size_t nl_less_right_16 = ((size_t)UINTMAX_C(40));
+    if ((nl_less_left_16 < nl_less_right_16)) {
+        observed_arm = 0;
+        (void)0;
+    } else {
+        observed_arm = 1;
+        (void)0;
+    }
+    if (observed_arm != 0 || *watch_0_0 != 186 || *watch_0_1 != 9 || *watch_1_0 != 72 || *watch_1_1 != 224 || watch_0_0 != &nl_local_1.f0 || watch_0_1 != &nl_local_1.f1 || watch_1_0 != &nl_local_2.f0 || watch_1_1 != &nl_local_2.f1 || &nl_local_1 == &nl_local_2 || watch_0_0 == watch_0_1 || watch_1_0 == watch_1_1) abort();
+    printf("P934 roots=%p/%p values=%u,%u/%u,%u arm=%u size=%zu offset=%zu\n",
+           (const void *)&nl_local_1, (const void *)&nl_local_2,
+           (unsigned)*watch_0_0, (unsigned)*watch_0_1, (unsigned)*watch_1_0, (unsigned)*watch_1_1,
+           observed_arm, sizeof(nl_local_1), offsetof(nl_type_10, f1));
+    (void)0;
+}
+
+int main(void)
+{
+    nl_fn_10();
+    return 0;
+}

@@ -1,0 +1,252 @@
+{
+  "base": "fbbf8a0261669ce0e8920e5b019134268a6a58c1",
+  "frozen_utc": "2026-10-26T05:56:05.638728+00:00",
+  "GateA": "https://github.com/wakairo/NewLang_Compiler/issues/934#issuecomment-6409264998",
+  "positives": [
+    {
+      "path": "tests/p930/sources/budget_true.nl",
+      "sha256": "febac1afa9d58bb166740df1c47d640d2baeda8acae5f89a4b5b12dd691d3687",
+      "fields_in_declaration_order": [
+        [
+          186,
+          9
+        ],
+        [
+          72,
+          224
+        ]
+      ],
+      "initializer_indices": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "truth": true,
+      "baseline_check": 0,
+      "baseline_C17": 4,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "native_unmodified_exit": 0,
+      "passive_originals_distinct": true,
+      "passive_before_after_same_fields": true
+    },
+    {
+      "path": "tests/p930/sources/budget_false.nl",
+      "sha256": "b4738981b36bf450a77cb1f593b2d8c8f8fd6f0c8703a6d6e8e66cc390a2deb1",
+      "fields_in_declaration_order": [
+        [
+          17,
+          232
+        ],
+        [
+          64,
+          105
+        ]
+      ],
+      "initializer_indices": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "truth": false,
+      "baseline_check": 0,
+      "baseline_C17": 4,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "native_unmodified_exit": 0,
+      "passive_originals_distinct": true,
+      "passive_before_after_same_fields": true
+    },
+    {
+      "path": "tests/p930/sources/order_only.nl",
+      "sha256": "62b1113c821fd6f7bc629ca6db8f4146a263d92c1b3a1ba1a933bf157f8854b8",
+      "fields_in_declaration_order": [
+        [
+          186,
+          9
+        ],
+        [
+          72,
+          224
+        ]
+      ],
+      "initializer_indices": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "truth": true,
+      "baseline_check": 0,
+      "baseline_C17": 4,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "native_unmodified_exit": 0,
+      "passive_originals_distinct": true,
+      "passive_before_after_same_fields": true
+    },
+    {
+      "path": "tests/p930/sources/root_values_swapped.nl",
+      "sha256": "687519610b6fb7a800c0557152774ca76c15150b651d14a7967fb25e206c1aee",
+      "fields_in_declaration_order": [
+        [
+          72,
+          224
+        ],
+        [
+          186,
+          9
+        ]
+      ],
+      "initializer_indices": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "truth": true,
+      "baseline_check": 0,
+      "baseline_C17": 4,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "native_unmodified_exit": 0,
+      "passive_originals_distinct": true,
+      "passive_before_after_same_fields": true
+    },
+    {
+      "path": "tests/p934/sources/quota_equal.nl",
+      "sha256": "4993ce35be8ca946f8a504017bf63268004d3b278eb2dd846366592531650fb1",
+      "fields_in_declaration_order": [
+        [
+          255,
+          0
+        ],
+        [
+          203,
+          41
+        ]
+      ],
+      "initializer_indices": [
+        [
+          1,
+          0
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "truth": true,
+      "baseline_check": 0,
+      "baseline_C17": 4,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "native_unmodified_exit": 0,
+      "passive_originals_distinct": true,
+      "passive_before_after_same_fields": true
+    },
+    {
+      "path": "tests/p934/sources/band_less.nl",
+      "sha256": "1527e0663966245ff5dca0c10c4fdbb02b4d792f29ca2587bf65e71bbd085704",
+      "fields_in_declaration_order": [
+        [
+          1,
+          128
+        ],
+        [
+          254,
+          250
+        ]
+      ],
+      "initializer_indices": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "truth": false,
+      "baseline_check": 0,
+      "baseline_C17": 4,
+      "candidate_check": 0,
+      "candidate_C17": 0,
+      "native_unmodified_exit": 0,
+      "passive_originals_distinct": true,
+      "passive_before_after_same_fields": true
+    }
+  ],
+  "negative_controls": [
+    {
+      "path": "tests/p930/sources/missing_field.nl",
+      "sha256": "7066df8897d102cc0d9612453671e4a14e16253af3f14d7727c0b64559f79671",
+      "check": 3,
+      "C17": 3,
+      "diagnostic": "P5-AGGREGATE-FIELD-COUNT"
+    },
+    {
+      "path": "tests/p930/sources/wrong_condition.nl",
+      "sha256": "f0d96d2972fd0fc0667e0cab146e389e8d58cc6db08f0db3f424bec471b1dd03",
+      "check": 3,
+      "C17": 3,
+      "diagnostic": "P13-IF-CONDITION"
+    },
+    {
+      "path": "tests/p934/sources/stateful_two_normal.nl",
+      "sha256": "6e524831fa97af2122b8fa1c058043c08ab12b91a9ebbbc35c62eae397724650",
+      "check": 3,
+      "C17": 3,
+      "diagnostic": "P6-JOIN-PRECISION"
+    },
+    {
+      "path": "tests/p934/sources/closed_loan.nl",
+      "sha256": "c4c93b87932f4114fffec05d94a9925d332a3eea4b0de4edab7d5bda39324d1b",
+      "check": 0,
+      "C17": 4,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED"
+    },
+    {
+      "path": "tests/p706/copy_as_ref.nl",
+      "sha256": "5765eba756bd6858182ab048a9dbcbfa7e8c49c0e645fb4757056dc6a79f5e8a",
+      "check": 3,
+      "C17": 3,
+      "diagnostic": null
+    },
+    {
+      "path": "tests/p774/sources/negative_wrong_domain.nl",
+      "sha256": "4931da1d27913cb5018496f25087635354e515024d67a00e009671d290febe5e",
+      "check": 3,
+      "C17": 3,
+      "diagnostic": null
+    }
+  ],
+  "historical_files_unchanged": {
+    "tests/p930/freeze.json": "0f96413af3008104d0774bb8641f585a2b7065b377bb001c9867fb18e559a309",
+    "tests/p930/evidence/p929-original-freeze.json": "a3a2edce6419da968e019fcd46d106624f93c77dfd76fffb9b347a4f940ad33b",
+    "tests/p932/freeze.json": "c851008e0694d839bd01c024e6e169486d980d7affd95fa61a99fa32e9f05aab",
+    "tests/p932/evidence/gate-b-adapter-first.log": "532f6f98aa0b6c0b2cc6f0a3c9689960930650b0b6d00bbc40cd6359f7e5110e",
+    "tests/p932/c55/pre-run-freeze.json": "df085fdb10e2795c355f0f4184dc7650a882ad833e1c19c7bb2ec65d5bb32067"
+  },
+  "witness": "Raw C17 bytes preserved and compiled/run separately O0/O2. Passive copy reads SAME emitted original locals only while function is live, observes selected arm without modifying guest fields; it is explicitly instrumented and does not prove bare O2 object addresses. No host grants, scalar source values are comparison oracle only.",
+  "scope": "No new source/semantic/proof authority; closed normal unit arms only. Unsupported stateful calls/loans/domain controls stay fail-closed. Any first source/carrier/native/OOM mismatch STOP without retuning."
+}
