@@ -1,0 +1,9 @@
+{
+  "base": "fbbf8a0261669ce0e8920e5b019134268a6a58c1",
+  "tree": "dea21a61ecc898eca2f7df3632ab5dfafc391a3f",
+  "compiler_sha256": "8e15dbcfeee0bb7c366245db5c2e4d56a5265739c59c0c00637d21c946b9666b",
+  "archive_sha256": "ae7275daabaa50f6b95bfe98280ae5da60445dcb6b5f40ec73bd168b7bdf7ba5",
+  "branch_created": false,
+  "CI_runs": 0,
+  "mode": "GCC13 Debug ordinary frontend-only compiler built from unmodified fixed archive; GDB read-only, no inferior function calls or memory writes"
+}

@@ -2273,6 +2273,125 @@ static bool if_return_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
         p->copy_body_status = status;
     return status == NL_CHECK_OK && if_original_carrier(f, id, &v.field, p);
 }
+
+/* A pure unit IF has no field Change certificate to consume. Admit only the
+ * source-issued two-original constructor prefix and two empty normal arms.
+ * This is a lowering predicate, never a replacement for an effect validator. */
+static bool pure_unit_if(const NLCheckedFragment *f, NLCheckedNodeId id,
+                         V0Program *p)
+{
+    const NLCheckedNodeView *choice = nl_checked_node_view(f, id);
+    const NLCheckedNodeView *root = nl_checked_node_view(f, nl_checked_root(f));
+    if (p->u8_export || p->scalar_depth || p->formal_body || !f->body_owner ||
+        f->if_parent || !choice || !root || choice->type != p->unit ||
+        choice->result_count || choice->terminates ||
+        choice->normal_arms != 2 || root->kind != NL_CHECKED_BLOCK ||
+        root->item_count != 3 || root->terminates || root->result_count ||
+        root->type != p->unit || f->arm_count != 2)
+        return false;
+    const NLSemanticContext *worlds[2] = {NULL, NULL};
+    for (size_t a = 0; a < 2; ++a) {
+        const NLCheckedArm *link = &f->arms[a];
+        const NLCheckedFragment *arm = nl_checked_if_arm(f, id, a);
+        if (!arm || arm == f || link->match != id || link->artifact != arm ||
+            link->context_origin != arm->context || arm->if_parent != f ||
+            arm->if_parent_node != id || arm->if_arm_index != a ||
+            arm->source != f->source || arm->count != 3 || arm->arm_count ||
+            arm->body_count || arm->exits || arm->loop_returns)
+            return false;
+        const NLCheckedNodeView *ar =
+            nl_checked_node_view(arm, nl_checked_root(arm));
+        const NLCheckedNodeView *block =
+            ar ? nl_checked_node_view(arm, ar->initializer) : NULL;
+        const NLCheckedNodeView *tail =
+            block ? nl_checked_node_view(arm, block->tail) : NULL;
+        if (!ar || ar->kind != NL_CHECKED_IF_ARM || ar->type != p->unit ||
+            ar->result_count || ar->terminates || !block ||
+            block->kind != NL_CHECKED_BLOCK || block->item_count ||
+            block->first_item || block->type != p->unit ||
+            block->result_count || block->terminates || !tail ||
+            tail->kind != NL_CHECKED_UNIT || tail->type != p->unit ||
+            tail->result_count || tail->terminates)
+            return false;
+        const NLSemanticContext *c = arm->context;
+        if (!c || c->binding_count != 2 || c->place_count != 6 ||
+            c->scope_count || c->domain_count || c->region_count ||
+            c->occurrence_count || arm->branch_value_prefix != c->value_count ||
+            arm->branch_fact_prefix != c->last_value_fact ||
+            nl_sem_validate(c) != NL_CHECK_OK)
+            return false;
+        worlds[a] = c;
+    }
+    /* These are authenticated siblings of this exact fork, not unrelated
+     * worlds equated because their numeric IDs happen to match. */
+    const NLSemanticContext *c = worlds[0], *other = worlds[1];
+    if (c == other || c->value_count != other->value_count ||
+        c->last_incarnation != other->last_incarnation ||
+        c->last_value_fact != other->last_value_fact ||
+        memcmp(c->places, other->places, c->place_count * sizeof(*c->places)) ||
+        memcmp(c->values, other->values, c->value_count * sizeof(*c->values)))
+        return false;
+    NLCheckedNodeId item = root->first_item;
+    NLPlaceId prior = 0;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedNodeView *binding = nl_checked_node_view(f, item);
+        const NLCheckedNodeView *aggregate =
+            binding ? nl_checked_node_view(f, binding->initializer) : NULL;
+        if (!binding || binding->kind != NL_CHECKED_BINDING ||
+            !binding->symbol || binding->symbol > c->binding_count ||
+            !aggregate || !avs_construction(f, binding->initializer, p))
+            return false;
+        const NLSemanticBindingView b = c->bindings[binding->symbol - 1].view;
+        const NLSemanticBindingView other_b =
+            other->bindings[binding->symbol - 1].view;
+        NLSemanticPlaceView r;
+        NLSemanticValueView package;
+        if (memcmp(&b, &other_b, sizeof(b)) ||
+            c->bindings[binding->symbol - 1].hidden ||
+            other->bindings[binding->symbol - 1].hidden ||
+            b.availability != NL_AVAILABLE || b.type != aggregate->type ||
+            b.place == prior || !nl_semantic_place_view(c, b.place, &r) ||
+            !r.live || !r.independent_root || !r.implicit_local ||
+            r.governing_domain || r.fixed_field_count != 2 ||
+            r.type != b.type || r.current_value != b.value ||
+            aggregate->results[0].value != b.value ||
+            !nl_semantic_value_view(c, b.value, &package) ||
+            package.type != b.type || package.carrier != NL_CARRIER_PLACE ||
+            package.owner_place != b.place || package.field_count != 2)
+            return false;
+        prior = b.place;
+        for (NLCheckedNodeId field = aggregate->first_argument; field;) {
+            const NLCheckedNodeView *q = nl_checked_node_view(f, field);
+            const NLCheckedNodeView *literal =
+                q ? nl_checked_node_view(f, q->initializer) : NULL;
+            NLSemanticPlaceView child;
+            NLSemanticValueView member;
+            if (!q || q->field_index >= 2 || !literal ||
+                literal->kind != NL_CHECKED_U8_LITERAL ||
+                !nl_semantic_place_view(c, r.fixed_fields[q->field_index],
+                                        &child) ||
+                !child.live || child.parent_aggregate != b.place ||
+                child.parent_incarnation != r.incarnation ||
+                child.parent_field_index != q->field_index ||
+                child.current_value != literal->results[0].value ||
+                package.fields[q->field_index] != child.current_value ||
+                !nl_semantic_value_view(c, child.current_value, &member) ||
+                member.carrier != NL_CARRIER_AGGREGATE ||
+                member.aggregate_owner != b.value || !member.scalar_known ||
+                member.scalar_value != literal->scalar_result.value)
+                return false;
+            field = q->next_argument;
+        }
+        item = binding->next_item;
+    }
+    const NLCheckedNodeView *statement = nl_checked_node_view(f, item);
+    const NLCheckedNodeView *tail = nl_checked_node_view(f, root->tail);
+    return statement && statement->kind == NL_CHECKED_STATEMENT &&
+           statement->initializer == id && !statement->next_item && tail &&
+           tail->kind == NL_CHECKED_UNIT && tail->type == p->unit &&
+           !tail->result_count && !tail->terminates &&
+           boolean_scalar_at(f, choice->initializer, p, id);
+}
 static bool copy_or_field_if(const NLCheckedFragment *f, NLCheckedNodeId id,
                              V0Program *p)
 {
@@ -2326,9 +2445,10 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                gate_ptr(fragment, id, program);
     case NL_CHECKED_IF: {
         NLIfReturnView returned;
-        return nl_checked_if_return_view(fragment, id, &returned)
-                   ? if_return_selection(fragment, id, program)
-                   : if_field_selection(fragment, id, program);
+        return pure_unit_if(fragment, id, program) ||
+               (nl_checked_if_return_view(fragment, id, &returned)
+                    ? if_return_selection(fragment, id, program)
+                    : if_field_selection(fragment, id, program));
     }
     case NL_CHECKED_PTR_FROM_REF:
         return gate_ptr(fragment, id, program);
@@ -2629,7 +2749,8 @@ static bool emit_less_operands(FILE *stream, const NLCheckedFragment *f,
            v1_emit_scalar(stream, right) && fputs(";\n", stream) >= 0;
 }
 
-/* Called only after public IF validation plus exact caller carrier mapping.
+/* Called after effect-proof validation/carrier mapping OR pure_unit_if's
+ * exact source-issued empty-arm/two-original validation.
  * Never lower the checker's unknown/known scalar as a chosen arm constant. */
 static bool emit_if_field(FILE *stream, const NLCheckedFragment *f,
                           NLCheckedNodeId id, NLSymbolId binding, size_t depth)

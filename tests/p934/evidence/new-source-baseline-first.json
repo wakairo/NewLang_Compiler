@@ -1,0 +1,194 @@
+[
+  {
+    "source": "tests/p930/sources/budget_true.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "expected": 0
+  },
+  {
+    "source": "tests/p930/sources/budget_true.nl",
+    "mode": "C17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934/tests/p930/sources/budget_true.nl\n",
+    "expected": 4
+  },
+  {
+    "source": "tests/p930/sources/budget_false.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "expected": 0
+  },
+  {
+    "source": "tests/p930/sources/budget_false.nl",
+    "mode": "C17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934/tests/p930/sources/budget_false.nl\n",
+    "expected": 4
+  },
+  {
+    "source": "tests/p930/sources/order_only.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "expected": 0
+  },
+  {
+    "source": "tests/p930/sources/order_only.nl",
+    "mode": "C17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934/tests/p930/sources/order_only.nl\n",
+    "expected": 4
+  },
+  {
+    "source": "tests/p930/sources/root_values_swapped.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "expected": 0
+  },
+  {
+    "source": "tests/p930/sources/root_values_swapped.nl",
+    "mode": "C17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934/tests/p930/sources/root_values_swapped.nl\n",
+    "expected": 4
+  },
+  {
+    "source": "tests/p934/sources/quota_equal.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "expected": 0
+  },
+  {
+    "source": "tests/p934/sources/quota_equal.nl",
+    "mode": "C17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934/tests/p934/sources/quota_equal.nl\n",
+    "expected": 4
+  },
+  {
+    "source": "tests/p934/sources/band_less.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "expected": 0
+  },
+  {
+    "source": "tests/p934/sources/band_less.nl",
+    "mode": "C17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934/tests/p934/sources/band_less.nl\n",
+    "expected": 4
+  },
+  {
+    "source": "tests/p930/sources/missing_field.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934/tests/p930/sources/missing_field.nl:3:29-3:44: error(semantic)[P5-AGGREGATE-FIELD-COUNT]: all aggregate fields must occur exactly once\n",
+    "expected": 3
+  },
+  {
+    "source": "tests/p930/sources/missing_field.nl",
+    "mode": "C17",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934/tests/p930/sources/missing_field.nl:3:29-3:44: error(semantic)[P5-AGGREGATE-FIELD-COUNT]: all aggregate fields must occur exactly once\n",
+    "expected": 3
+  },
+  {
+    "source": "tests/p930/sources/wrong_condition.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934/tests/p930/sources/wrong_condition.nl:5:8-5:13: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+    "expected": 3
+  },
+  {
+    "source": "tests/p930/sources/wrong_condition.nl",
+    "mode": "C17",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934/tests/p930/sources/wrong_condition.nl:5:8-5:13: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+    "expected": 3
+  },
+  {
+    "source": "tests/p934/sources/stateful_two_normal.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934/tests/p934/sources/stateful_two_normal.nl:8:5-12:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+    "expected": 3
+  },
+  {
+    "source": "tests/p934/sources/stateful_two_normal.nl",
+    "mode": "C17",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934/tests/p934/sources/stateful_two_normal.nl:8:5-12:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+    "expected": 3
+  },
+  {
+    "source": "tests/p934/sources/closed_loan.nl",
+    "mode": "check",
+    "exit": 0,
+    "stdout": "",
+    "stderr": "",
+    "expected": 0
+  },
+  {
+    "source": "tests/p934/sources/closed_loan.nl",
+    "mode": "C17",
+    "exit": 4,
+    "stdout": "",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p934/tests/p934/sources/closed_loan.nl\n",
+    "expected": 4
+  },
+  {
+    "source": "tests/p706/copy_as_ref.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934/tests/p706/copy_as_ref.nl:6:52-6:58: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n",
+    "expected": 3
+  },
+  {
+    "source": "tests/p706/copy_as_ref.nl",
+    "mode": "C17",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934/tests/p706/copy_as_ref.nl:6:52-6:58: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n",
+    "expected": 3
+  },
+  {
+    "source": "tests/p774/sources/negative_wrong_domain.nl",
+    "mode": "check",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934/tests/p774/sources/negative_wrong_domain.nl:68:63-68:75: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n",
+    "expected": 3
+  },
+  {
+    "source": "tests/p774/sources/negative_wrong_domain.nl",
+    "mode": "C17",
+    "exit": 3,
+    "stdout": "",
+    "stderr": "/tmp/p934/tests/p774/sources/negative_wrong_domain.nl:68:63-68:75: error(semantic)[P3-REF-CONFLICT]: operation conflicts with a live reference capability\n",
+    "expected": 3
+  }
+]
