@@ -1,0 +1,404 @@
+{
+  "classification": "fresh P930 calibrated baseline/candidate comparisons; original P929 failed oracle/history unchanged",
+  "source_modes": 18,
+  "executions": 36,
+  "equal": true,
+  "comparisons": [
+    {
+      "source": "budget_false.nl",
+      "mode": "check",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 0,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_utf8": "",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 0,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_utf8": "",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "budget_false.nl",
+      "mode": "stdout",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "3bc20f8d0fd59656d514a0eaa9c3d145672843679da1db54fdcbdd2b64d71c1a",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/budget_false.nl\n",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "3bc20f8d0fd59656d514a0eaa9c3d145672843679da1db54fdcbdd2b64d71c1a",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/budget_false.nl\n",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "budget_false.nl",
+      "mode": "named",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "3bc20f8d0fd59656d514a0eaa9c3d145672843679da1db54fdcbdd2b64d71c1a",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/budget_false.nl\n",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "3bc20f8d0fd59656d514a0eaa9c3d145672843679da1db54fdcbdd2b64d71c1a",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/budget_false.nl\n",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "budget_true.nl",
+      "mode": "check",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 0,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_utf8": "",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 0,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_utf8": "",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "budget_true.nl",
+      "mode": "stdout",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "ca5ab6d2dc24fed26234d507fe2e2c479d7aa9a2fbcae1c5e948db9e1e7e1c3d",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/budget_true.nl\n",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "ca5ab6d2dc24fed26234d507fe2e2c479d7aa9a2fbcae1c5e948db9e1e7e1c3d",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/budget_true.nl\n",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "budget_true.nl",
+      "mode": "named",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "ca5ab6d2dc24fed26234d507fe2e2c479d7aa9a2fbcae1c5e948db9e1e7e1c3d",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/budget_true.nl\n",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "ca5ab6d2dc24fed26234d507fe2e2c479d7aa9a2fbcae1c5e948db9e1e7e1c3d",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/budget_true.nl\n",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "missing_field.nl",
+      "mode": "check",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 3,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "744555bd5516a6f3a1085f98948fb940e4b95566730d98ca23bdb485349c9bd2",
+          "stderr_utf8": "/tmp/p930/tests/p930/sources/missing_field.nl:3:29-3:44: error(semantic)[P5-AGGREGATE-FIELD-COUNT]: all aggregate fields must occur exactly once\n",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 3,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "744555bd5516a6f3a1085f98948fb940e4b95566730d98ca23bdb485349c9bd2",
+          "stderr_utf8": "/tmp/p930/tests/p930/sources/missing_field.nl:3:29-3:44: error(semantic)[P5-AGGREGATE-FIELD-COUNT]: all aggregate fields must occur exactly once\n",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "missing_field.nl",
+      "mode": "stdout",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 3,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "744555bd5516a6f3a1085f98948fb940e4b95566730d98ca23bdb485349c9bd2",
+          "stderr_utf8": "/tmp/p930/tests/p930/sources/missing_field.nl:3:29-3:44: error(semantic)[P5-AGGREGATE-FIELD-COUNT]: all aggregate fields must occur exactly once\n",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 3,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "744555bd5516a6f3a1085f98948fb940e4b95566730d98ca23bdb485349c9bd2",
+          "stderr_utf8": "/tmp/p930/tests/p930/sources/missing_field.nl:3:29-3:44: error(semantic)[P5-AGGREGATE-FIELD-COUNT]: all aggregate fields must occur exactly once\n",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "missing_field.nl",
+      "mode": "named",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 3,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "744555bd5516a6f3a1085f98948fb940e4b95566730d98ca23bdb485349c9bd2",
+          "stderr_utf8": "/tmp/p930/tests/p930/sources/missing_field.nl:3:29-3:44: error(semantic)[P5-AGGREGATE-FIELD-COUNT]: all aggregate fields must occur exactly once\n",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 3,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "744555bd5516a6f3a1085f98948fb940e4b95566730d98ca23bdb485349c9bd2",
+          "stderr_utf8": "/tmp/p930/tests/p930/sources/missing_field.nl:3:29-3:44: error(semantic)[P5-AGGREGATE-FIELD-COUNT]: all aggregate fields must occur exactly once\n",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "order_only.nl",
+      "mode": "check",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 0,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_utf8": "",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 0,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_utf8": "",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "order_only.nl",
+      "mode": "stdout",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "58a92b029ad0d6807858de443ac4781ab303e3d114bbcbb762e2a871cce3a9ba",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/order_only.nl\n",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "58a92b029ad0d6807858de443ac4781ab303e3d114bbcbb762e2a871cce3a9ba",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/order_only.nl\n",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "order_only.nl",
+      "mode": "named",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "58a92b029ad0d6807858de443ac4781ab303e3d114bbcbb762e2a871cce3a9ba",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/order_only.nl\n",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "58a92b029ad0d6807858de443ac4781ab303e3d114bbcbb762e2a871cce3a9ba",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/order_only.nl\n",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "root_values_swapped.nl",
+      "mode": "check",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 0,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_utf8": "",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 0,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_utf8": "",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "root_values_swapped.nl",
+      "mode": "stdout",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e86267b4c24a78b572a6fa17fb31362ecade70e21bf6123dc3450bc62cd99f46",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/root_values_swapped.nl\n",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e86267b4c24a78b572a6fa17fb31362ecade70e21bf6123dc3450bc62cd99f46",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/root_values_swapped.nl\n",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "root_values_swapped.nl",
+      "mode": "named",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e86267b4c24a78b572a6fa17fb31362ecade70e21bf6123dc3450bc62cd99f46",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/root_values_swapped.nl\n",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 4,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "e86267b4c24a78b572a6fa17fb31362ecade70e21bf6123dc3450bc62cd99f46",
+          "stderr_utf8": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p930/tests/p930/sources/root_values_swapped.nl\n",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "wrong_condition.nl",
+      "mode": "check",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 3,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "8d884fd3cc4f3da8dadbabe77f2a5cbf9e19df10715c294f45c2eb07cfb0dc5b",
+          "stderr_utf8": "/tmp/p930/tests/p930/sources/wrong_condition.nl:5:8-5:13: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 3,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "8d884fd3cc4f3da8dadbabe77f2a5cbf9e19df10715c294f45c2eb07cfb0dc5b",
+          "stderr_utf8": "/tmp/p930/tests/p930/sources/wrong_condition.nl:5:8-5:13: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "wrong_condition.nl",
+      "mode": "stdout",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 3,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "8d884fd3cc4f3da8dadbabe77f2a5cbf9e19df10715c294f45c2eb07cfb0dc5b",
+          "stderr_utf8": "/tmp/p930/tests/p930/sources/wrong_condition.nl:5:8-5:13: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 3,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "8d884fd3cc4f3da8dadbabe77f2a5cbf9e19df10715c294f45c2eb07cfb0dc5b",
+          "stderr_utf8": "/tmp/p930/tests/p930/sources/wrong_condition.nl:5:8-5:13: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+          "sentinel_preserved": true
+        }
+      ]
+    },
+    {
+      "source": "wrong_condition.nl",
+      "mode": "named",
+      "rows": [
+        {
+          "compiler": "fixed-main",
+          "exit": 3,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "8d884fd3cc4f3da8dadbabe77f2a5cbf9e19df10715c294f45c2eb07cfb0dc5b",
+          "stderr_utf8": "/tmp/p930/tests/p930/sources/wrong_condition.nl:5:8-5:13: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+          "sentinel_preserved": true
+        },
+        {
+          "compiler": "candidate",
+          "exit": 3,
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_sha256": "8d884fd3cc4f3da8dadbabe77f2a5cbf9e19df10715c294f45c2eb07cfb0dc5b",
+          "stderr_utf8": "/tmp/p930/tests/p930/sources/wrong_condition.nl:5:8-5:13: error(semantic)[P13-IF-CONDITION]: if condition requires one exact core bool result\n",
+          "sentinel_preserved": true
+        }
+      ]
+    }
+  ]
+}
