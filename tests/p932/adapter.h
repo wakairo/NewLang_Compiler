@@ -86,7 +86,7 @@ static P932Source p932_derive(const NLSyntaxTree *tree, const NLSource *s)
         field = a->data.aggregate.fields;
         for (size_t j = 0; j < 2; ++j) {
             const NLSyntaxView *f = nl_syntax_node_view(field);
-            R(f && f->kind == NL_SYNTAX_BINDING);
+            R(f && f->kind == NL_SYNTAX_FIELD);
             size_t k = p932_text(s, f->data.binding.name, p.labels[0]) ? 0 : 1;
             R(p932_text(s, f->data.binding.name, p.labels[k]) &&
               (!j || k != p.order[i][0]));
