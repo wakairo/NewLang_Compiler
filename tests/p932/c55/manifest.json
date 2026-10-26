@@ -1,0 +1,25 @@
+{
+  "original_STOP_commit": "2b4e8cc1d269085edc22ca3a44f801ee3631b29b",
+  "current_adapter_sha256": "bb271e51f19207e64e70978b561952898d1ddb44ecb9e9c0d07489608eb9c5bb",
+  "artifacts": {
+    "README.md": "eb3115563e09a585efaaeceeeb270d324fa6a990ef0c7b2f2a1ea483ca304bec",
+    "address-build-first.log": "649707a436b6634653f5154132194119cf781bb3a7409c8bc513d896d16c2273",
+    "address-configure-first.log": "1ad39a84ec1a418e1372f138c90f783b6c803590e675aa1abc0b447248fd53c7",
+    "address-ctest-first.log": "9ed112036be5f63e87663d6b0cf22cd23cd96774f84e79aca1fb7c672457f5b7",
+    "address-tool.txt": "2465bd76a45fe211828dc4d2625ac973ef77132a5d52375cc3ebfec456019c90",
+    "build-first.log": "658aa4edb6f8ced7fbca6e504b53379cc3d9223d7f9578f9788a921fcb752ac3",
+    "configure-first.log": "0221db71b7bbbe1b1531de0e8e69f728a69d1b5bef769513cfdea2f6b2be6363",
+    "ctest-first.log": "b30b7036c81c43d75c235025f0cbd9c302bdef222ebd2abe390834f07e5d3cf0",
+    "first-focused-outcomes.json": "93992b11c647759ed5afc051006a435b1fa33b79bf36fa63caa919e795096f1b",
+    "format-launch-first.log": "5f9583ab1707ff795cd33dfd0d9b5c912ff0c0c109f662f390e6fbe48653976c",
+    "format-script-first.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "full-frontend-first.log": "b31173b9e1bedbbf487dfcc569daf119c1b5d10bceced267c8c172425db18801",
+    "gcc-tool.txt": "32e4579e143ca60fc0a81f0dd7d41921276b5eef02aad6eed717dccf692280e2",
+    "one-token.diff": "4472c2f099b38622088dd443910c94d56f5c4b9c50e309cea1f1020d380ce6ff",
+    "pre-run-freeze.json": "df085fdb10e2795c355f0f4184dc7650a882ad833e1c19c7bb2ec65d5bb32067",
+    "undefined-build-first.log": "afd85029ea1e0320396e6a6c006023d670462b898798c99f872b4be9eaa89036",
+    "undefined-configure-first.log": "b259a5161f706edf2efc805f546c25c675a93c0aa02ceae44d4b1bf989dd9114",
+    "undefined-ctest-first.log": "6bab4ab68f13a0dd3115f6afc50cb6f4a3ef4ca091024c6ab7355f254af0d38b",
+    "undefined-tool.txt": "2465bd76a45fe211828dc4d2625ac973ef77132a5d52375cc3ebfec456019c90"
+  }
+}

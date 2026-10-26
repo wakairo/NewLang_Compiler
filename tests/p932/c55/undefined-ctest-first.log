@@ -1,0 +1,124 @@
+Internal ctest changing into directory: /tmp/p932-undefined
+UpdateCTestConfiguration  from :/tmp/p932-undefined/DartConfiguration.tcl
+Parse Config file:/tmp/p932-undefined/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p932-undefined/DartConfiguration.tcl
+Parse Config file:/tmp/p932-undefined/DartConfiguration.tcl
+Test project /tmp/p932-undefined
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: p930_live_pre_if.unit
+
+1: Test command: /tmp/p932-undefined/p930_observe "positive" "/tmp/p932/tests/p930/sources"
+1: Working Directory: /tmp/p932-undefined
+1: Environment variables: 
+1:  PYTHONDONTWRITEBYTECODE=1
+1:  PYTHONHASHSEED=0
+1:  LC_ALL=C
+1:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+1:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+1: Test timeout computed to be: 90
+1: P932 source-AST/type10/block1 session1 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+1: P930 session1 phase1 input=94383416111856 owner=94383416139648 actual-world=94383416124592 artifact-world=94383416124592 snapshot=94383416141968 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+1: P932 source-AST/type10/block1 session1 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+1: P930 session1 phase2 input=94383416111856 owner=94383416321104 actual-world=94383416124592 artifact-world=94383416122672 snapshot=94383416184832 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+1: P932 source-AST/type10/block1 session2 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+1: P930 session2 phase1 input=94383416123664 owner=94383416139648 actual-world=94383416141968 artifact-world=94383416141968 snapshot=94383416349200 main10 roots1/4 inc/fact-distinct6 values[17,232]/[64,105] order01/10 truth0 cut-before-arms public-view-absent
+1: P932 source-AST/type10/block1 session2 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+1: P930 session2 phase2 input=94383416123664 owner=94383416136592 actual-world=94383416141968 artifact-world=94383416125184 snapshot=94383416184832 main10 roots1/4 inc/fact-distinct6 values[17,232]/[64,105] order01/10 truth0 cut-before-arms public-view-absent
+1: P932 source-AST/type10/block1 session3 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+1: P930 session3 phase1 input=94383416321072 owner=94383416139648 actual-world=94383416142928 artifact-world=94383416142928 snapshot=94383416184832 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order01/01 truth1 cut-before-arms public-view-absent
+1: P932 source-AST/type10/block1 session3 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+1: P930 session3 phase2 input=94383416321072 owner=94383416274736 actual-world=94383416142928 artifact-world=94383416123488 snapshot=94383416124592 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order01/01 truth1 cut-before-arms public-view-absent
+1: P932 source-AST/type10/block1 session4 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+1: P930 session4 phase1 input=94383416141776 owner=94383416139648 actual-world=94383416184832 artifact-world=94383416184832 snapshot=94383416141968 main10 roots1/4 inc/fact-distinct6 values[72,224]/[186,9] order10/01 truth1 cut-before-arms public-view-absent
+1: P932 source-AST/type10/block1 session4 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+1: P930 session4 phase2 input=94383416141776 owner=94383416321104 actual-world=94383416184832 artifact-world=94383416123488 snapshot=94383416142928 main10 roots1/4 inc/fact-distinct6 values[72,224]/[186,9] order10/01 truth1 cut-before-arms public-view-absent
+1: P930 copied scalar observations only; mismatched root/field/order comparisons rejected0; no public authority or C17 admission
+1/4 Test #1: p930_live_pre_if.unit ............   Passed    0.01 sec
+test 2
+    Start 2: p930_order_root_negative.unit
+
+2: Test command: /tmp/p932-undefined/p930_observe "negative" "/tmp/p932/tests/p930/sources"
+2: Working Directory: /tmp/p932-undefined
+2: Environment variables: 
+2:  PYTHONDONTWRITEBYTECODE=1
+2:  PYTHONHASHSEED=0
+2:  LC_ALL=C
+2:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+2:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+2: Test timeout computed to be: 90
+2: P932 source-AST/type10/block1 session1 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches3 rejected; history/activeBlocks UNPROVED
+2: P930 session1 phase1 input=94792873599728 owner=94792873627520 actual-world=94792873612464 artifact-world=94792873612464 snapshot=94792873629840 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+2: P932 source-AST/type10/block1 session1 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches4 rejected; history/activeBlocks UNPROVED
+2: P930 session1 phase2 input=94792873599728 owner=94792873808976 actual-world=94792873612464 artifact-world=94792873610544 snapshot=94792873672704 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+2: P932 source-AST/type10/block1 session2 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches3 rejected; history/activeBlocks UNPROVED
+2: P930 session2 phase1 input=94792873611536 owner=94792873627520 actual-world=94792873629840 artifact-world=94792873629840 snapshot=94792873837072 main10 roots1/4 inc/fact-distinct6 values[17,232]/[64,105] order01/10 truth0 cut-before-arms public-view-absent
+2: P932 source-AST/type10/block1 session2 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches4 rejected; history/activeBlocks UNPROVED
+2: P930 session2 phase2 input=94792873611536 owner=94792873624464 actual-world=94792873629840 artifact-world=94792873613056 snapshot=94792873672704 main10 roots1/4 inc/fact-distinct6 values[17,232]/[64,105] order01/10 truth0 cut-before-arms public-view-absent
+2: P932 source-AST/type10/block1 session3 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches4 rejected; history/activeBlocks UNPROVED
+2: P930 session3 phase1 input=94792873808944 owner=94792873627520 actual-world=94792873630800 artifact-world=94792873630800 snapshot=94792873672704 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order01/01 truth1 cut-before-arms public-view-absent
+2: P932 source-AST/type10/block1 session3 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches5 rejected; history/activeBlocks UNPROVED
+2: P930 session3 phase2 input=94792873808944 owner=94792873762608 actual-world=94792873630800 artifact-world=94792873611360 snapshot=94792873612464 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order01/01 truth1 cut-before-arms public-view-absent
+2: P932 source-AST/type10/block1 session4 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches3 rejected; history/activeBlocks UNPROVED
+2: P930 session4 phase1 input=94792873629648 owner=94792873627520 actual-world=94792873672704 artifact-world=94792873672704 snapshot=94792873629840 main10 roots1/4 inc/fact-distinct6 values[72,224]/[186,9] order10/01 truth1 cut-before-arms public-view-absent
+2: P932 source-AST/type10/block1 session4 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches4 rejected; history/activeBlocks UNPROVED
+2: P930 session4 phase2 input=94792873629648 owner=94792873808976 actual-world=94792873672704 artifact-world=94792873611360 snapshot=94792873630800 main10 roots1/4 inc/fact-distinct6 values[72,224]/[186,9] order10/01 truth1 cut-before-arms public-view-absent
+2: P930 copied scalar observations only; mismatched root/field/order comparisons rejected26; no public authority or C17 admission
+2/4 Test #2: p930_order_root_negative.unit ....   Passed    0.01 sec
+test 3
+    Start 3: p930_prepare_oom.unit
+
+3: Test command: /tmp/p932-undefined/p930_oom "oom" "/tmp/p932/tests/p930/sources"
+3: Working Directory: /tmp/p932-undefined
+3: Environment variables: 
+3:  PYTHONDONTWRITEBYTECODE=1
+3:  PYTHONHASHSEED=0
+3:  LC_ALL=C
+3:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+3:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+3: Test timeout computed to be: 90
+3: P930 actual prepare OOM site1 hit1: zero observations, original inventory unchanged; SAME context retry
+3: P932 source-AST/type10/block1 session1 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+3: P930 session1 phase1 input=93892829180656 owner=93892829208448 actual-world=93892829193984 artifact-world=93892829193984 snapshot=93892829193392 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+3: P932 source-AST/type10/block1 session1 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+3: P930 session1 phase2 input=93892829180656 owner=93892829391328 actual-world=93892829193984 artifact-world=93892829191472 snapshot=93892829253584 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+3: P930 actual prepare OOM site2 hit1: zero observations, original inventory unchanged; SAME context retry
+3: P932 source-AST/type10/block1 session2 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+3: P930 session2 phase1 input=93892829193600 owner=93892829208448 actual-world=93892829193392 artifact-world=93892829193392 snapshot=93892829228704 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+3: P932 source-AST/type10/block1 session2 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+3: P930 session2 phase2 input=93892829193600 owner=93892829205776 actual-world=93892829193392 artifact-world=93892829191472 snapshot=93892829193984 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+3/4 Test #3: p930_prepare_oom.unit ............   Passed    0.01 sec
+test 4
+    Start 4: p930_ordinary_cli.integration
+
+4: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3 "/tmp/p932/tests/p930/cli.py" "/tmp/p932-undefined/newlangc" "/tmp/p932/tests/p930"
+4: Working Directory: /tmp/p932-undefined
+4: Environment variables: 
+4:  PYTHONDONTWRITEBYTECODE=1
+4:  PYTHONHASHSEED=0
+4:  LC_ALL=C
+4:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+4:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+4: Test timeout computed to be: 90
+4: budget_false.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved
+4: budget_true.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved
+4: missing_field.nl CHECK 3 C17 3 P5-AGGREGATE-FIELD-COUNT sentinel/no-temp preserved
+4: order_only.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved
+4: root_values_swapped.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved
+4: wrong_condition.nl CHECK 3 C17 3 P13-IF-CONDITION sentinel/no-temp preserved
+4/4 Test #4: p930_ordinary_cli.integration ....   Passed    0.37 sec
+
+The following tests passed:
+	p930_live_pre_if.unit
+	p930_order_root_negative.unit
+	p930_prepare_oom.unit
+	p930_ordinary_cli.integration
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   0.42 sec

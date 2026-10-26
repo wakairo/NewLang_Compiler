@@ -1,0 +1,32 @@
+{
+  "first_focused_exit": 0,
+  "first_focused_tests": {
+    "passed": 4,
+    "failed": 0
+  },
+  "new_source_derived_refusals_per_capture": [
+    3,
+    4,
+    3,
+    4,
+    4,
+    5,
+    3,
+    4
+  ],
+  "new_source_derived_refusals_total": 30,
+  "old_expected_refusals": 26,
+  "actual_prepare_OOM_lines": [
+    "3: P930 actual prepare OOM site1 hit1: zero observations, original inventory unchanged; SAME context retry",
+    "3: P930 actual prepare OOM site2 hit1: zero observations, original inventory unchanged; SAME context retry"
+  ],
+  "CLI_observations": [
+    "4: budget_false.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved",
+    "4: budget_true.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved",
+    "4: missing_field.nl CHECK 3 C17 3 P5-AGGREGATE-FIELD-COUNT sentinel/no-temp preserved",
+    "4: order_only.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved",
+    "4: root_values_swapped.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved",
+    "4: wrong_condition.nl CHECK 3 C17 3 P13-IF-CONDITION sentinel/no-temp preserved"
+  ],
+  "grade": "P finite non-authoritative diagnostic comparisons; not public proof/semantic negative theorem/general refinement/native"
+}
