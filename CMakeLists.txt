@@ -814,6 +814,17 @@ if(BUILD_TESTING)
     add_test(NAME p785_cli_boundaries.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785/cli.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785")
+    add_executable(p945_integrity tests/p945/integrity.c)
+    target_link_libraries(p945_integrity PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    foreach(source dispatch_journal_r1 thermal_recovery_r1)
+        add_test(NAME p945_${source}_integrity.unit COMMAND p945_integrity
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p945/sources/${source}.nl")
+        add_test(NAME p945_${source}_oom.unit COMMAND p774_driver_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p945/sources/${source}.nl")
+    endforeach()
+    add_test(NAME p945_source_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p945/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p945")
     add_executable(p778_probe tests/p778/probe.c)
     add_executable(p778_gate_test tests/p778/gate_test.c)
     foreach(target p778_probe p778_gate_test)

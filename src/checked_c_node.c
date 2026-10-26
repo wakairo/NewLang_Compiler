@@ -57,6 +57,12 @@ typedef struct {
     /* Backend admission only: the exact already-issued local producer call
      * licensing the no-pre-read lane; never a new owner/Domain authority. */
     bool no_pre_read;
+    /* Emission roles after a certified local LiveTail return. Borrowed only
+     * during this synchronous traversal; not semantic authority. */
+    size_t caller_tail_reads, receiver_tail_reads;
+    const NLCheckedNodeView *caller_tail_read, *active_owner_call;
+    const NLCheckedFragment *active_owner_body;
+    NLCheckedNodeId active_owner_id;
     const NLCheckedFragment *no_read_issuer;
     NLCheckedNodeId no_read_call;
     const NLCheckedFragment *attach_issuer;
@@ -320,6 +326,7 @@ static bool field(Emit *e, const Env *env, const NLCheckedField *f,
                : reject(e);
 }
 static bool expr(Emit *, Env *, NLCheckedNodeId, Value *);
+#include "checked_c_copy_if_internal.h"
 #include "checked_c_copy_internal.h"
 static bool producer_call(Emit *, Env *, NLCheckedNodeId,
                           const NLCheckedNodeView *, Value *);
@@ -342,6 +349,86 @@ static bool same_reference(NLReferenceFacts a, NLReferenceFacts b)
            a.readable == b.readable && a.writable == b.writable &&
            a.occurrence_dependency == b.occurrence_dependency;
 }
+static bool terminal_role_lane(const Emit *e)
+{
+    return e->copy_type && e->live_tail && e->no_pre_read && !e->custody;
+}
+
+/* The same source-issued producer original licenses the optional caller read
+ * and its later terminal. No count supplies a missing owner relationship. */
+static bool terminal_sequence(const Emit *e, const Env *env,
+                              const NLCheckedNodeView *call)
+{
+    const NLCheckedFragment *f = env->artifact;
+    const NLCheckedNodeView *producer = get(env, e->producer_node);
+    if (!terminal_role_lane(e) || e->producer_issuer != f ||
+        e->no_read_issuer != f || e->no_read_call != e->producer_node ||
+        e->producer_calls != 1 || e->pending_live || e->owner_calls ||
+        e->active_owner_call || e->active_owner_body ||
+        e->receiver_tail_reads || e->caller_tail_reads > 1 || !producer ||
+        !nl_checked_producer_valid(f, e->producer_node) ||
+        !producer->producer.return_proved ||
+        producer->span.end_byte > call->span.start_byte ||
+        producer->producer.root != call->owner_call.root ||
+        producer->producer.incarnation != call->owner_call.incarnation ||
+        producer->producer.domain != call->owner_call.domain ||
+        memcmp(&producer->producer.range, &call->owner_call.range,
+               sizeof(call->owner_call.range)) ||
+        e->reloans != e->projections + e->reads + e->caller_tail_reads)
+        return false;
+    if (!e->caller_tail_reads)
+        return e->caller_tail_read == NULL;
+    const NLCheckedNodeView *read = e->caller_tail_read;
+    bool owned = false;
+    for (size_t id = 1; id <= nl_checked_node_count(f); ++id)
+        owned |= nl_checked_node_view(f, id) == read;
+    return owned && read->kind == NL_CHECKED_REF_FROM_PTR &&
+           !read->reference_result.writable &&
+           producer->span.end_byte < read->span.start_byte &&
+           read->span.end_byte < call->span.start_byte &&
+           read->lifetime_place == call->owner_call.root &&
+           read->lifetime_incarnation == call->owner_call.incarnation &&
+           read->lifetime_domain == call->owner_call.domain;
+}
+
+/* Classify an actually traversed read, while retaining every ordinary
+ * ref_from_ptr provenance/scope/target/operand check below. */
+static bool terminal_read_role(const Emit *e, const Env *env,
+                               const NLCheckedNodeView *read, const Env *target)
+{
+    const NLCheckedNodeView *origin =
+        e->owner_calls ? e->active_owner_call : get(env, e->producer_node);
+    if (!origin || !target || read->reference_result.writable ||
+        target->region_slot != 1 || e->producer_calls != 1 || e->pending_live ||
+        e->link_updates != 2 || e->projections != 2 || e->reads ||
+        e->caller_tail_reads > 1 ||
+        target->heap_place != read->lifetime_place ||
+        target->heap_incarnation != read->lifetime_incarnation ||
+        target->heap_domain != read->lifetime_domain ||
+        env->stability_domain != target->heap_domain ||
+        e->lifecycle[1].stage != 4)
+        return false;
+    if (!e->owner_calls)
+        return env->artifact == e->producer_issuer && !e->active_owner_body &&
+               !e->active_owner_call && !e->caller_tail_reads &&
+               !e->caller_tail_read && !e->receiver_tail_reads &&
+               origin->producer.root == target->heap_place &&
+               origin->producer.incarnation == target->heap_incarnation &&
+               origin->producer.domain == target->heap_domain &&
+               origin->span.end_byte < read->span.start_byte &&
+               e->reloans == e->projections + e->reads;
+    return e->owner_calls == 1 && e->owner_read && !e->receiver_tail_reads &&
+           env->artifact == e->active_owner_body &&
+           nl_checked_node_view(e->producer_issuer, e->active_owner_id) ==
+               origin &&
+           nl_checked_call_body(e->producer_issuer, e->active_owner_id) ==
+               env->artifact &&
+           origin->owner_call.root == target->heap_place &&
+           origin->owner_call.incarnation == target->heap_incarnation &&
+           origin->owner_call.domain == target->heap_domain &&
+           e->reloans == e->projections + e->reads + e->caller_tail_reads;
+}
+
 static bool selected_reference(const Env *env, const NLCheckedNodeView *arg,
                                NLSemanticValueView *value)
 {
@@ -799,6 +886,8 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
     if (v == NULL || v->terminates || v->result_count > 1)
         return reject(e);
     *out = (Value){.type = v->type};
+    if (e->copy_type && v->kind == NL_CHECKED_IF)
+        return copy_value_if(e, env, id, v, out);
     if (e->custody &&
         (v->custody_call.entry_proved || v->custody_extraction.present ||
          (v->kind == NL_CHECKED_REPLACE && v->type == e->custody_type) ||
@@ -1766,18 +1855,22 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
         if (write && e->two_heap && e->live_tail && !e->custody &&
             e->reloans == 1 && !no_read_entry(e, env, v))
             return reject(e);
+        const bool role_read = terminal_role_lane(e) && e->producer_calls;
+        if (role_read && !terminal_read_role(e, env, v, target))
+            return reject(e);
         if ((!e->two_heap && e->destroys != 0) ||
-            e->reloans >= (e->two_heap    ? 4u + (e->live_tail != 0 ? 1u : 0u) +
-                                                (e->owner_read ? 1u : 0u) -
-                                                (e->no_pre_read ? 2u : 0u)
-                           : e->heap_link ? 3u
-                                          : 1u) ||
-            (e->heap_link &&
-             write != (e->custody ? e->reloans < 2
-                       : e->two_heap
-                           ? (e->reloans == 0 ||
-                              e->reloans == (e->no_pre_read ? 1u : 3u))
-                           : e->reloans != 1)) ||
+            (!role_read &&
+             (e->reloans >= (e->two_heap ? 4u + (e->live_tail != 0 ? 1u : 0u) +
+                                               (e->owner_read ? 1u : 0u) -
+                                               (e->no_pre_read ? 2u : 0u)
+                             : e->heap_link ? 3u
+                                            : 1u) ||
+              (e->heap_link &&
+               write != (e->custody ? e->reloans < 2
+                         : e->two_heap
+                             ? (e->reloans == 0 ||
+                                e->reloans == (e->no_pre_read ? 1u : 3u))
+                             : e->reloans != 1)))) ||
             v->argument_count != 2 || a->value_use != NL_VALUE_COPIED ||
             a->type != e->ptr || st == NULL ||
             st->value_use != NL_VALUE_COPIED || st->next_argument != 0 ||
@@ -1820,6 +1913,14 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
             !expr(e, env, a->next_argument, &stable))
             return reject(e);
         ++e->reloans;
+        if (role_read) {
+            if (e->owner_calls)
+                ++e->receiver_tail_reads;
+            else {
+                ++e->caller_tail_reads;
+                e->caller_tail_read = v;
+            }
+        }
         out->temp = ++e->temp;
         if (e->heap_link)
             return put(
@@ -2401,9 +2502,11 @@ static bool owner_evidence(Emit *e, Env *env, NLCheckedNodeId id,
     const Env *h = region(env, v->owner_call.range.region);
     if (!e->two_heap || e->pending_live || e->owner_calls != 0 ||
         e->allocations != 2 ||
-        e->reloans != (e->custody ? 2u
-                                  : 4u + (e->live_tail != 0 ? 1u : 0u) -
-                                        (e->no_pre_read ? 2u : 0u)) ||
+        (terminal_role_lane(e)
+             ? !terminal_sequence(e, env, v)
+             : e->reloans != (e->custody ? 2u
+                                         : 4u + (e->live_tail != 0 ? 1u : 0u) -
+                                               (e->no_pre_read ? 2u : 0u))) ||
         e->link_updates != 2 ||
         e->projections != (e->custody || e->no_pre_read ? 2u : 3u) ||
         e->reads != (e->custody || e->no_pre_read ? 0u : 1u) || h == NULL ||
@@ -2589,6 +2692,11 @@ static bool owner_call(Emit *e, Env *env, NLCheckedNodeId id,
     e->used = e->receiver_used;
     ++e->owner_calls;
     e->owner_read = v->owner_call.definition.step_count == 5;
+    if (terminal_role_lane(e)) {
+        e->active_owner_call = v;
+        e->active_owner_body = body;
+        e->active_owner_id = id;
+    }
     bool ok = put(e, "static void nl_owner_%zu", v->function) &&
               (!e->custody || put(e, "_%zu", receiver.frame)) &&
               put(e,
@@ -2618,7 +2726,12 @@ static bool owner_call(Emit *e, Env *env, NLCheckedNodeId id,
              head.owner_symbol == e->lifecycle[0].owner_symbol &&
              head.domain_frame == e->lifecycle[0].domain_frame &&
              head.domain_symbol == e->lifecycle[0].domain_symbol &&
+             (!terminal_role_lane(e) ||
+              e->receiver_tail_reads == (e->owner_read ? 1u : 0u)) &&
              put(e, "NL_HEAP_RECEIVER_EXIT();\n}\n");
+    e->active_owner_call = NULL;
+    e->active_owner_body = NULL;
+    e->active_owner_id = 0;
     e->receiver_used = e->used;
     e->text = main_text;
     e->used = main_used;
@@ -3205,12 +3318,20 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
           e.erased != (e.custody    ? 5u
                        : e.two_heap ? 3u
                                     : 1u) ||
-          e.reloans != (e.custody     ? 4u
-                        : e.two_heap  ? 4u + (e.live_tail != 0 ? 1u : 0u) +
-                                            (e.owner_read ? 1u : 0u) -
-                                            (e.no_pre_read ? 2u : 0u)
-                        : e.heap_link ? 3u
-                                      : 1u) ||
+          (terminal_role_lane(&e)
+               ? (e.active_owner_call || e.active_owner_body ||
+                  e.caller_tail_reads > 1 ||
+                  e.receiver_tail_reads != (e.owner_read ? 1u : 0u) ||
+                  e.owner_calls != 1 ||
+                  e.reloans != e.projections + e.reads + e.caller_tail_reads +
+                                   e.receiver_tail_reads)
+               : e.reloans != (e.custody ? 4u
+                               : e.two_heap
+                                   ? 4u + (e.live_tail != 0 ? 1u : 0u) +
+                                         (e.owner_read ? 1u : 0u) -
+                                         (e.no_pre_read ? 2u : 0u)
+                               : e.heap_link ? 3u
+                                             : 1u)) ||
           (e.heap_link &&
            (e.projections != (e.custody || e.no_pre_read ? 2u : 3u) ||
             e.reads != (e.custody || e.no_pre_read ? 0u : 1u))) ||
