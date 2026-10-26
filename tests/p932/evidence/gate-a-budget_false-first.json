@@ -1,0 +1,206 @@
+{
+  "exit": 0,
+  "records": [
+    {
+      "kind": "source_AST_before_snapshot",
+      "source_sha256": "b4738981b36bf450a77cb1f593b2d8c8f8fd6f0c8703a6d6e8e66cc390a2deb1",
+      "core": {
+        "nominal": "InputBudget",
+        "labels": [
+          "remaining",
+          "consumed"
+        ],
+        "bindings": [
+          "queued",
+          "reserve"
+        ],
+        "initializer_order": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ]
+        ],
+        "source_literals": [
+          [
+            17,
+            232
+          ],
+          [
+            105,
+            64
+          ]
+        ],
+        "declared_values": [
+          [
+            17,
+            232
+          ],
+          [
+            64,
+            105
+          ]
+        ],
+        "body_span": [
+          65,
+          250
+        ],
+        "binding_spans": [
+          [
+            71,
+            128
+          ],
+          [
+            134,
+            192
+          ]
+        ],
+        "target_max": 18446744073709551615,
+        "target_value_bits": 64,
+        "condition": {
+          "operator": "==",
+          "left": 21,
+          "right": 22,
+          "truth": false
+        }
+      }
+    },
+    {
+      "kind": "derived_core_to_actual_entry",
+      "key": {
+        "unit_ast": "0x557dc440d5a0",
+        "unit": "0x557dc440d480",
+        "plan": "0x557dc4413c70",
+        "phase": "definition",
+        "block_creation": {
+          "event": 1,
+          "block": 1,
+          "function_target": "0x557dc4412230",
+          "owner": "0x557dc4411fd0"
+        },
+        "entry": "0x557dc44128c0",
+        "check_world": "0x557dc4413920",
+        "graph_world": "0x557dc4413920"
+      },
+      "registered_nominal": 10,
+      "rows": [
+        {
+          "root_place": 1,
+          "child_place": 2,
+          "field": 0,
+          "scalar": 17,
+          "raw_member_owner_VALUE": 3,
+          "normalized_owner_PLACE": 1
+        },
+        {
+          "root_place": 1,
+          "child_place": 3,
+          "field": 1,
+          "scalar": 232,
+          "raw_member_owner_VALUE": 3,
+          "normalized_owner_PLACE": 1
+        },
+        {
+          "root_place": 4,
+          "child_place": 5,
+          "field": 0,
+          "scalar": 64,
+          "raw_member_owner_VALUE": 6,
+          "normalized_owner_PLACE": 4
+        },
+        {
+          "root_place": 4,
+          "child_place": 6,
+          "field": 1,
+          "scalar": 105,
+          "raw_member_owner_VALUE": 6,
+          "normalized_owner_PLACE": 4
+        }
+      ],
+      "condition": false,
+      "new_discriminator": "raw owner ValueIds not substituted for normalized root PlaceIds; checked aggregate TypeId agrees with source nominal registry"
+    },
+    {
+      "kind": "block_owner_end",
+      "record": {
+        "event": 1,
+        "block": 1,
+        "function_target": "0x557dc4412230",
+        "owner": "0x557dc4411fd0"
+      }
+    },
+    {
+      "kind": "derived_core_to_actual_entry",
+      "key": {
+        "unit_ast": "0x557dc440d5a0",
+        "unit": "0x557dc440d480",
+        "plan": "0x557dc4413c70",
+        "phase": "actual_main",
+        "block_creation": {
+          "event": 2,
+          "block": 1,
+          "function_target": "0x557dc4412a00",
+          "owner": "0x557dc443f410"
+        },
+        "entry": "0x557dc441e380",
+        "check_world": "0x557dc4413920",
+        "graph_world": "0x557dc440fcc0"
+      },
+      "registered_nominal": 10,
+      "rows": [
+        {
+          "root_place": 1,
+          "child_place": 2,
+          "field": 0,
+          "scalar": 17,
+          "raw_member_owner_VALUE": 3,
+          "normalized_owner_PLACE": 1
+        },
+        {
+          "root_place": 1,
+          "child_place": 3,
+          "field": 1,
+          "scalar": 232,
+          "raw_member_owner_VALUE": 3,
+          "normalized_owner_PLACE": 1
+        },
+        {
+          "root_place": 4,
+          "child_place": 5,
+          "field": 0,
+          "scalar": 64,
+          "raw_member_owner_VALUE": 6,
+          "normalized_owner_PLACE": 4
+        },
+        {
+          "root_place": 4,
+          "child_place": 6,
+          "field": 1,
+          "scalar": 105,
+          "raw_member_owner_VALUE": 6,
+          "normalized_owner_PLACE": 4
+        }
+      ],
+      "condition": false,
+      "new_discriminator": "raw owner ValueIds not substituted for normalized root PlaceIds; checked aggregate TypeId agrees with source nominal registry"
+    },
+    {
+      "kind": "block_owner_end",
+      "record": {
+        "event": 2,
+        "block": 1,
+        "function_target": "0x557dc4412a00",
+        "owner": "0x557dc443f410"
+      }
+    },
+    {
+      "kind": "registered_plan_end",
+      "body": "0x557dc4413c70"
+    }
+  ],
+  "errors": [],
+  "remaining_blocks": 0
+}

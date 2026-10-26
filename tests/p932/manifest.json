@@ -1,0 +1,19 @@
+{
+  "evidence/gate-a-ast-observe.gdb": "c87ef54862205e5230e08a27855b71f0b82983f5995cc8746198fdb14c1bd5f5",
+  "evidence/gate-a-ast-observe.py": "06fc57979091de27c19b442124f54ebeda5e175168fbeea4b6cadbb8af5b667b",
+  "evidence/gate-a-budget_false-first.json": "c2a1a768cc7106a8dd6a52afcb42e72707fc2bbd090fde32553fc4c4d5de1a87",
+  "evidence/gate-a-budget_false-first.log": "ef8c2b370c6d9e305cad1159042404d2cafdd50845bb6f82ab35c2b80ebdcda8",
+  "evidence/gate-a-environment.json": "ab11dc6ee107e94b3713d67186c0940f4928646ceb1df8a003cf836b1b1597dd",
+  "evidence/gate-a-order_only-first.json": "11b3cb575d46abd4461cc94b10c98e1a6d3f90f447c30d92fc98ca555748e3b6",
+  "evidence/gate-a-order_only-first.log": "e4f5aa5c532fc00e8b7c463351ddafd2aa15f97336ee078d75c5d20460313f28",
+  "evidence/gate-a-report.md": "2faf6cb1f8650dde8edb7c67b0ea3b7726ca023e566e0df5292f7cbe3ca1711c",
+  "evidence/gate-a-root_values_swapped-first.json": "200e3139ad3fe5187d616403be44e3be5489ea0b06be7e77e2911f4c1dc7f088",
+  "evidence/gate-a-root_values_swapped-first.log": "62366958a554efed1918a7c21e78e7bbaa71614273bf6cd195207b685f60e970",
+  "evidence/gate-a-true-first.json": "fa0af695ffacdd8dfd49f86ea5a252242b2987895561a2efef144a82e59b0d66",
+  "evidence/gate-a-true-first.log": "69a980035ef519fa12707c5f8dc13cb09137ca228a0895e06c651af8610fc051",
+  "evidence/gate-b-adapter-first.log": "532f6f98aa0b6c0b2cc6f0a3c9689960930650b0b6d00bbc40cd6359f7e5110e",
+  "evidence/gate-b-build-first.log": "9ae1c000a23abe671377dfd0f1d9a70640eb10e67ffc5218eb66d6cb5ac93817",
+  "evidence/gate-b-configure-first.log": "fd2e731d07ea06c6a7948f2e99c08c726084257e1e75a2b928511019b4ed0174",
+  "freeze.json": "c851008e0694d839bd01c024e6e169486d980d7affd95fa61a99fa32e9f05aab",
+  "adapter.h": "0f5f928d26bb3cb0dc93e22a0192872f9c56c917d3deca4155adf1a885b7bdaf"
+}

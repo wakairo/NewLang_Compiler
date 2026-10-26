@@ -14,6 +14,8 @@
         }                                                                      \
     } while (0)
 
+#include "../p932/adapter.h"
+
 typedef struct {
     const char *file, *names[2], *labels[2];
     size_t values[2][2], order[2][2], operands[2];
@@ -59,7 +61,8 @@ typedef struct {
     int fault;
     size_t hit;
     const Expected *expect;
-    const NLSource *unit; /* borrow ONLY inside live Input session */
+    const NLSource *unit;          /* borrow ONLY inside live Input session */
+    const NLSyntaxTree *unit_tree; /* same live client-owned original AST */
     NLFunctionBody *plan; /* actual creation token, cleared before cleanup */
     NLSourceSpan body_span;
     Observation observations[2]; /* scalar copies, NEVER C/world pointers */
@@ -129,6 +132,8 @@ static void observe(NLCheckedFragment *f, NLCheckedNodeId id,
     R(state.plan && state.plan_count == 1 && f->source == state.plan->source &&
       nl_syntax_tree_source(state.plan->syntax) == f->source);
     R(state.phase == 1 ? !f->body_owner : f->body_owner == state.plan);
+    p932_observe(state.unit_tree, state.unit, state.plan, state.body_span, f,
+                 id, actual, state.session, state.phase, state.negative);
     const NLSemanticContext *c = p->entry;
     size_t main_id = 0;
     for (size_t i = 0; i < c->function_count; ++i)
@@ -377,6 +382,7 @@ static Observation run(const char *path, size_t index, int fault)
       nl_parser_parse_function_unit(parser, &tree, NULL) == NL_PARSE_OK &&
       nl_semantic_create(&c) == NL_CHECK_OK);
     state.unit = source;
+    state.unit_tree = tree;
     NLSemanticSnapshot before, after;
     R(nl_semantic_snapshot(c, &before));
     const NLSyntaxTree *inputs[] = {tree};
@@ -404,6 +410,7 @@ static Observation run(const char *path, size_t index, int fault)
     state.active = false;
     state.plan = NULL;
     state.unit = NULL;
+    state.unit_tree = NULL;
     nl_semantic_destroy(c);
     nl_syntax_tree_destroy(tree);
     nl_parser_destroy(parser);
