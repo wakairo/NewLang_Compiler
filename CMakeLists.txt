@@ -814,6 +814,18 @@ if(BUILD_TESTING)
     add_test(NAME p785_cli_boundaries.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785/cli.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785")
+    add_executable(p953_integrity tests/p953/integrity.c)
+    target_include_directories(p953_integrity PRIVATE tests/support)
+    target_link_libraries(p953_integrity PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    foreach(source echo window_true)
+        add_test(NAME p953_${source}_integrity.unit COMMAND p953_integrity
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p953/sources/${source}.nl")
+        add_test(NAME p953_${source}_oom.unit COMMAND p774_driver_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p953/sources/${source}.nl")
+    endforeach()
+    add_test(NAME p953_source_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p953/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p953")
     add_executable(p945_integrity tests/p945/integrity.c)
     target_link_libraries(p945_integrity PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
     foreach(source dispatch_journal_r1 thermal_recovery_r1)

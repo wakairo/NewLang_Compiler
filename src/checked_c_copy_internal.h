@@ -122,11 +122,272 @@ static bool copy_prepare(Emit *e, const NLCheckedFragment *body)
 /* A nested Copy original is allowed only in the exact publicly validated
  * caller fragment after its one producer has returned the original H owner.
  * All fields still use that fragment's entry/handoff identities. */
+/* Authenticate an earlier constructor through the completed caller seal and
+ * an exact forward, H-effect-free prefix, not a future producer receipt. */
+static bool copy_pre_h(Emit *e, const Env *q, const NLSemanticContext *entry)
+{
+    if (!q || q->region_slot > 1 || !q->backing || !q->heap_symbol ||
+        q->stability_scope || q->stability_domain || q->stability_place)
+        return false;
+    const HeapLifecycle *life = &e->lifecycle[q->region_slot];
+    NLSemanticPlaceView root;
+    NLSemanticBackingView backing;
+    NLSemanticDomainView domain;
+    NLSemanticBindingView a, d, p;
+    NLSemanticValueView av, dv, pv, value;
+    if (life->stage != 4 || life->owner_frame != q->frame ||
+        life->domain_frame != q->frame ||
+        !nl_semantic_place_view(entry, q->heap_place, &root) || !root.live ||
+        root.type != e->node || !root.independent_root || root.implicit_local ||
+        root.incarnation != q->heap_incarnation || !root.current_fact ||
+        root.governing_domain != q->heap_domain ||
+        root.placement.region != q->backing || root.placement.start ||
+        root.placement.length != 24 || root.fixed_field_count != 2 ||
+        !nl_semantic_backing_view(entry, q->backing, &backing) ||
+        !backing.live || backing.size != 24 || backing.alignment != 8 ||
+        !backing.ordinary_read || !backing.ordinary_write ||
+        !nl_semantic_domain_view(entry, q->heap_domain, &domain) ||
+        !domain.live ||
+        !nl_semantic_binding_view(entry, life->owner_symbol, &a) ||
+        !nl_semantic_binding_view(entry, life->domain_symbol, &d) ||
+        !nl_semantic_binding_view(entry, q->heap_symbol, &p) ||
+        a.availability != NL_AVAILABLE || d.availability != NL_AVAILABLE ||
+        p.availability != NL_AVAILABLE ||
+        !nl_semantic_value_view(entry, a.value, &av) ||
+        !nl_semantic_value_view(entry, d.value, &dv) ||
+        !nl_semantic_value_view(entry, p.value, &pv) ||
+        av.allocation_region != q->backing || dv.domain != q->heap_domain ||
+        domain.value != d.value || pv.reference.place != q->heap_place ||
+        pv.reference.incarnation != q->heap_incarnation || pv.reference.scope ||
+        pv.reference.occurrence_dependency ||
+        pv.reference.provenance != NL_PROVENANCE_VALID ||
+        !pv.reference.readable || !pv.reference.writable ||
+        !nl_semantic_value_view(entry, root.current_value, &value) ||
+        value.field_count != 2)
+        return false;
+    /* Locate the actual earlier initialization in this Env's own issuer.
+     * Complete reference facts, not cross-world numeric equality alone. */
+    const NLCheckedNodeView *init = NULL;
+    for (size_t i = 1; i <= nl_checked_node_count(q->artifact); ++i) {
+        const NLCheckedNodeView *b = nl_checked_node_view(q->artifact, i);
+        if (b->kind != NL_CHECKED_BINDING || b->symbol != q->heap_symbol)
+            continue;
+        const NLCheckedNodeView *loan = get(q, b->initializer),
+                                *block =
+                                    loan ? get(q, loan->initializer) : NULL;
+        if (init || !loan || loan->kind != NL_CHECKED_LOAN_HEADER ||
+            !loan->loan.body_nonescape_proved || !block || block->item_count)
+            return false;
+        init = get(q, block->tail);
+    }
+    if (!init || init->kind != NL_CHECKED_INITIALIZE ||
+        init->lifetime_place != q->heap_place ||
+        init->lifetime_incarnation != q->heap_incarnation ||
+        init->lifetime_domain != q->heap_domain ||
+        init->backing != q->backing ||
+        !same_reference(init->reference_result, pv.reference))
+        return false;
+    const NLCheckedNodeView *slot = get(q, init->first_argument),
+                            *aggregate =
+                                slot ? get(q, slot->next_argument) : NULL;
+    NLSemanticValueView born;
+    if (!aggregate || aggregate->kind != NL_CHECKED_AGGREGATE ||
+        aggregate->result_count != 1 ||
+        !nl_semantic_value_view(nl_checked_context(q->artifact),
+                                aggregate->results[0].value, &born) ||
+        born.field_count != 2 ||
+        memcmp(born.fields, value.fields, 2 * sizeof(*born.fields)))
+        return false;
+    for (size_t i = 0; i < 2; ++i) {
+        NLSemanticPlaceView child;
+        NLSemanticValueView current;
+        if (!nl_semantic_place_view(entry, root.fixed_fields[i], &child) ||
+            !child.live || child.parent_aggregate != q->heap_place ||
+            child.parent_incarnation != root.incarnation ||
+            child.parent_field_index != i || !child.current_fact ||
+            child.current_value != value.fields[i] ||
+            !nl_semantic_value_view(entry, child.current_value, &current) ||
+            (i == 0 && (current.variant != 1 || current.sum_payload ||
+                        child.payload_occurrence)))
+            return false;
+    }
+    size_t allocations = 0, domains = 0;
+    for (size_t i = 1; i <= entry->value_count; ++i) {
+        const NLSemanticValueView *v = &entry->values[i - 1];
+        if (v->carrier == NL_CARRIER_ENDED)
+            continue;
+        if (v->allocation_region == q->backing) {
+            if (i != a.value)
+                return false;
+            ++allocations;
+        }
+        if (v->domain == q->heap_domain) {
+            if (i != d.value)
+                return false;
+            ++domains;
+        }
+        if (v->occupancy.region == q->backing || v->slot_place == q->heap_place)
+            return false;
+    }
+    return allocations == 1 && domains == 1;
+}
+static bool copy_pre_constructor(Emit *e, const Env *env,
+                                 NLCheckedNodeId binding, NLPlaceId *place,
+                                 NLCheckedNodeId *constructor)
+{
+    const NLCheckedNodeView *b = get(env, binding),
+                            *v = b ? get(env, b->initializer) : NULL,
+                            *receiver = b ? get(env, b->first_argument) : NULL;
+    NLSemanticBindingView local;
+    NLSemanticPlaceView root;
+    if (!b || b->kind != NL_CHECKED_BINDING || b->argument_count != 1 ||
+        b->type != e->unit || !receiver ||
+        receiver->kind != NL_CHECKED_RECEIVER ||
+        receiver->type != e->copy_type || receiver->symbol != b->symbol ||
+        receiver->next_argument || !v || v->kind != NL_CHECKED_AGGREGATE ||
+        v->type != e->copy_type || v->argument_count != 2 ||
+        !nl_semantic_binding_view(e->copy_anchor, b->symbol, &local) ||
+        local.availability != NL_AVAILABLE || local.type != e->copy_type ||
+        !nl_semantic_place_view(e->copy_anchor, local.place, &root) ||
+        !root.live || !root.implicit_local || !root.independent_root ||
+        root.governing_domain || root.fixed_field_count != 2 ||
+        root.type != e->copy_type || !root.current_fact || !root.incarnation)
+        return false;
+    bool seen[2] = {false, false};
+    NLCheckedNodeId next = v->first_argument;
+    size_t end = v->span.start_byte;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedNodeView *f = get(env, next),
+                                *literal = f ? get(env, f->initializer) : NULL;
+        NLSemanticPlaceView child;
+        size_t scalar;
+        if (!f || f->kind != NL_CHECKED_AGGREGATE_FIELD || f->field_index > 1 ||
+            seen[f->field_index] || !literal ||
+            literal->kind != NL_CHECKED_U8_LITERAL ||
+            literal->span.start_byte < end ||
+            !copy_if_literal(env->artifact, literal, e->u8, 255, &scalar) ||
+            !nl_semantic_place_view(
+                e->copy_anchor, root.fixed_fields[f->field_index], &child) ||
+            !child.live || child.parent_aggregate != local.place ||
+            child.parent_incarnation != root.incarnation ||
+            child.parent_field_index != f->field_index || !child.current_fact ||
+            child.current_value != literal->results[0].value)
+            return false;
+        seen[f->field_index] = true;
+        end = literal->span.end_byte;
+        next = f->next_argument;
+    }
+    if (next)
+        return false;
+    *place = local.place;
+    *constructor = b->initializer;
+    return true;
+}
+static bool copy_pre_world(Emit *e, const Env *env)
+{
+    if (env->artifact != e->copy_issuer || !e->copy_anchor || !e->two_heap ||
+        !e->live_tail || e->custody || e->allocations != 2 ||
+        e->producer_calls || e->owner_calls || e->link_updates || e->reloans ||
+        e->copy_expected_calls != 1 || e->copy_calls > 1 ||
+        e->lifecycle[0].stage != 4 || e->lifecycle[1].stage != 4)
+        return false;
+    if (e->pre_copy_issuer)
+        return e->pre_copy_issuer == env->artifact;
+    const Env *head = env->parent;
+    if (!head || head->region_slot != 0 || env->region_slot != 1 ||
+        head->backing == env->backing ||
+        head->heap_domain == env->heap_domain ||
+        !copy_pre_h(e, head, e->copy_anchor) ||
+        !copy_pre_h(e, env, e->copy_anchor))
+        return false;
+    for (const Env *q = env; q->parent; q = q->parent) {
+        size_t matches = 0;
+        const NLCheckedFragment *parent = q->parent->artifact;
+        for (size_t i = 0; i < parent->arm_count; ++i) {
+            const NLCheckedArm *a = &parent->arms[i];
+            if (a->artifact == q->artifact &&
+                a->context_origin == nl_checked_context(q->artifact) &&
+                (nl_checked_match_arm(parent, a->match, 0) == q->artifact ||
+                 nl_checked_match_arm(parent, a->match, 1) == q->artifact))
+                ++matches;
+        }
+        const NLCheckedNodeView *r = get(q, nl_checked_root(q->artifact));
+        if (matches != 1 || !r || r->kind != NL_CHECKED_MATCH_ARM ||
+            r->variant != 2)
+            return false;
+    }
+    const NLCheckedNodeView *root = get(env, nl_checked_root(env->artifact)),
+                            *block = root ? get(env, root->tail) : NULL;
+    if (!block || block->kind != NL_CHECKED_BLOCK)
+        return false;
+    NLCheckedNodeId item = block->first_item, after = 0;
+    for (size_t i = 0; i < block->item_count; ++i) {
+        const NLCheckedNodeView *b = get(env, item);
+        if (!b)
+            return false;
+        if (b->kind == NL_CHECKED_BINDING && b->symbol == env->heap_symbol) {
+            if (after)
+                return false;
+            after = b->next_item;
+        }
+        item = b->next_item;
+    }
+    NLPlaceId places[2];
+    NLCheckedNodeId constructors[2];
+    for (size_t i = 0; i < 2; ++i) {
+        if (!copy_pre_constructor(e, env, after, &places[i], &constructors[i]))
+            return false;
+        after = get(env, after)->next_item;
+    }
+    if (places[0] == places[1])
+        return false;
+    const NLCheckedNodeView *choice = get(env, after),
+                            *conditional =
+                                choice ? get(env, choice->initializer) : NULL;
+    if (!choice || choice->kind != NL_CHECKED_BINDING || !conditional ||
+        conditional->kind != NL_CHECKED_IF || conditional->normal_arms != 2)
+        return false;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedFragment *a =
+            nl_checked_if_arm(env->artifact, choice->initializer, i);
+        const NLCheckedNodeView *r =
+                                    nl_checked_node_view(a, nl_checked_root(a)),
+                                *b = r ? nl_checked_node_view(a, r->initializer)
+                                       : NULL,
+                                *v =
+                                    b ? nl_checked_node_view(a, b->tail) : NULL;
+        if (!a || nl_checked_node_count(a) != 3 || !r || r->terminates || !b ||
+            b->item_count || !v || v->kind != NL_CHECKED_U8_LITERAL)
+            return false;
+    }
+    const NLCheckedNodeView *binding = get(env, choice->next_item),
+                            *loan =
+                                binding ? get(env, binding->initializer) : NULL,
+                            *body = loan ? get(env, loan->initializer) : NULL,
+                            *call = body ? get(env, body->tail) : NULL;
+    NLCopyBodyParameters p;
+    if (!binding || binding->kind != NL_CHECKED_BINDING || !loan ||
+        loan->kind != NL_CHECKED_LOAN_HEADER || !body || body->item_count ||
+        !call || call->kind != NL_CHECKED_REGISTERED_CALL ||
+        !copy_call_proof(e, env->artifact, body->tail, &p) ||
+        p.entry != e->copy_anchor || p.loan != binding->initializer ||
+        p.field.parent != places[0])
+        return false;
+    for (size_t i = 0; i < p.entry->scope_count; ++i)
+        if (p.entry->scopes[i].active && i + 1 != loan->loan.scope)
+            return false;
+    memcpy(e->pre_copy_constructors, constructors, sizeof(constructors));
+    memcpy(e->pre_copy_places, places, sizeof(places));
+    e->pre_copy_issuer = env->artifact;
+    return true;
+}
 static bool copy_carrier_world(Emit *e, const Env *env)
 {
     return env->artifact == e->copy_issuer &&
-           (!e->allocations || (e->allocations == 2 && e->producer_calls == 1 &&
-                                e->owner_calls == 0));
+           (!e->allocations ||
+            (e->allocations == 2 && e->producer_calls == 1 &&
+             e->owner_calls == 0) ||
+            copy_pre_world(e, env));
 }
 static bool copy_bind(Emit *e, Env *env, Local *l, NLCheckedNodeId constructor)
 {
@@ -142,6 +403,10 @@ static bool copy_bind(Emit *e, Env *env, Local *l, NLCheckedNodeId constructor)
         root.type != e->copy_type || root.incarnation != l->incarnation ||
         b.place != l->place || !root.live || !root.independent_root ||
         !root.implicit_local || root.governing_domain || ++e->copy_roots > 2)
+        return reject(e);
+    if (e->pre_copy_issuer && !e->producer_calls &&
+        constructor != e->pre_copy_constructors[0] &&
+        constructor != e->pre_copy_constructors[1])
         return reject(e);
     l->copy_fact = root.current_fact;
     NLCheckedNodeId member = init->first_argument;
@@ -179,6 +444,10 @@ static Local *copy_field(Emit *e, Env *env, const NLCheckedField *f)
         !f->dependency_compatible || f->nominal != e->copy_type ||
         f->type != e->u8 || f->index > 1)
         return NULL;
+    if (e->pre_copy_issuer && !e->producer_calls &&
+        f->parent != e->pre_copy_places[0] &&
+        f->parent != e->pre_copy_places[1])
+        return NULL;
     for (size_t i = 0; i < env->count; ++i) {
         Local *l = &env->locals[i];
         if (l->symbol == f->base && l->type == e->copy_type &&
@@ -196,6 +465,10 @@ static bool copy_constructor(Emit *e, Env *env, const NLCheckedNodeView *v,
 {
     if (!copy_carrier_world(e, env) || v->type != e->copy_type ||
         v->argument_count != 2)
+        return reject(e);
+    if (e->pre_copy_issuer && !e->producer_calls &&
+        v != get(env, e->pre_copy_constructors[0]) &&
+        v != get(env, e->pre_copy_constructors[1]))
         return reject(e);
     Value values[2] = {0};
     bool seen[2] = {0};

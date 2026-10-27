@@ -86,6 +86,10 @@ typedef struct {
     size_t copy_function, copy_calls, copy_expected_calls, copy_roots;
     const NLCheckedFragment *copy_issuer;
     const NLSemanticContext *copy_anchor;
+    /* Borrowed admission ledger, never a semantic capability. */
+    const NLCheckedFragment *pre_copy_issuer;
+    NLCheckedNodeId pre_copy_constructors[2];
+    NLPlaceId pre_copy_places[2];
     NLTypeId node, option, ptr, u8, unit;
     NLNodeCStatus status;
 } Emit;
@@ -326,6 +330,7 @@ static bool field(Emit *e, const Env *env, const NLCheckedField *f,
                : reject(e);
 }
 static bool expr(Emit *, Env *, NLCheckedNodeId, Value *);
+static bool same_reference(NLReferenceFacts, NLReferenceFacts);
 #include "checked_c_copy_if_internal.h"
 #include "checked_c_copy_internal.h"
 static bool producer_call(Emit *, Env *, NLCheckedNodeId,

@@ -1,0 +1,25 @@
+{
+  "origin": "Echo exact R949 freeze; other cases new P-owned expanded controls, not R results",
+  "cases": {
+    "echo.nl": {
+      "sha256": "005a09a8fa2d16aa0de012faea2b2b1cef1ed91a9ed50f0c1f326d39a2f2d1f9",
+      "bytes": 4327,
+      "expected": "CHECK0/C17/native"
+    },
+    "third_original.nl": {
+      "sha256": "e68cd54ddb8b84fcf30962e831cf2a707e1a786532d5bf0ed1aa2cc0b58f29af",
+      "bytes": 4396,
+      "expected": "CHECK0/backend4 (extra T original outside qualified prefix)"
+    },
+    "window_true.nl": {
+      "sha256": "02c2f4f2fa2fc9060b93bb71fdf1f20279aad233cbb50f5df9a275ebb77a4939",
+      "bytes": 4342,
+      "expected": "CHECK0/C17/native"
+    },
+    "wrong_domain.nl": {
+      "sha256": "dac5d348f15bd6a10e5d48e2568977cee2a4120ff63a7d14b01dc0527d345267",
+      "bytes": 4326,
+      "expected": "CHECK3 wrong governing Domain"
+    }
+  }
+}
