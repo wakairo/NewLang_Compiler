@@ -32,7 +32,7 @@ Coordination must adjudicate the replay-view contract before further work.
 ## Finite completed evidence
 
 - Clang23.1.3 ASan+LSan: new P96526/26 gates passed (two initial direct Window
-  gates plus the other24 CTests). All new ownership probes passed492 trials.
+  gates plus the other24 CTests). All new ownership probes passed494 trials.
   Window's first trial targets the real nested T IF whole arm. Restored trials
   emit identical healthy C; unrestored destruction frees original A fragments
   and array bases once, frees no B pointers, and B remains usable/destroys once.
