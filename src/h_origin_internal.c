@@ -25,8 +25,34 @@ typedef struct {
     HEdge edges[2];
     bool complete, released;
 } HSite;
+typedef enum {
+    PENDING,
+    COMMITTED,
+    DETACHED
+} CustodyState;
+typedef struct CustodyEdge {
+    struct CustodyEdge *next;
+    NLCheckedFragment *child;
+    const NLSemanticContext *world;
+    NLCustodyRole role;
+    NLCheckedNodeId site;
+    size_t slot;
+    CustodyState state;
+} CustodyEdge;
+typedef struct CustodyParent {
+    struct CustodyParent *next;
+    NLCheckedFragment *fragment;
+    const NLSemanticContext *world;
+    const NLSource *source;
+    CustodyEdge *edges;
+    NLCheckedArm *arms;
+    NLCheckedFragment **bodies;
+    NLCheckedNodeId *calls;
+    size_t arm_count, body_count, arm_capacity, body_capacity, call_capacity;
+} CustodyParent;
 struct NLHOriginOwner {
     NLCheckedFragment *root, *invocation;
+    CustodyParent *parents;
     const NLSemanticContext *registration;
     NLFunctionBody *plan; /* retained once, without a graph ownership cycle */
     const NLSource *source;
@@ -35,8 +61,204 @@ struct NLHOriginOwner {
     NLCheckedNodeView call_view;
     HSite sites[2];
     size_t count;
-    bool body_owned, closed, aborted;
+    bool body_owned, closed, aborted, published;
 };
+static CustodyParent *custody_parent(const struct NLHOriginOwner *o,
+                                     const NLCheckedFragment *f)
+{
+    if (o)
+        for (CustodyParent *p = o->parents; p; p = p->next)
+            if (p->fragment == f)
+                return p;
+    return NULL;
+}
+NLCheckStatus nl_h_custody_attach(NLCheckedFragment *parent,
+                                  NLCheckedFragment *child)
+{
+    if (!child || child->h_origin)
+        return NL_CHECK_INTERNAL_ERROR;
+    struct NLHOriginOwner *o = parent ? parent->h_origin : NULL;
+    if (parent && !custody_parent(o, parent))
+        return NL_CHECK_INTERNAL_ERROR;
+    if (!parent) {
+        o = calloc(1, sizeof(*o));
+        if (!o)
+            return NL_CHECK_OUT_OF_MEMORY;
+        o->root = child;
+        o->registration = child->context;
+    }
+    CustodyParent *p = calloc(1, sizeof(*p));
+    if (!p) {
+        if (!parent)
+            free(o);
+        return NL_CHECK_OUT_OF_MEMORY;
+    }
+    *p = (CustodyParent){.next = o->parents,
+                         .fragment = child,
+                         .world = child->context,
+                         .source = child->source};
+    o->parents = p;
+    child->h_origin = o;
+    return NL_CHECK_OK;
+}
+NLCheckStatus nl_h_custody_reserve(NLCheckedFragment *parent,
+                                   NLCheckedFragment *child, NLCustodyRole role,
+                                   NLCheckedNodeId site, size_t slot)
+{
+    CustodyParent *p = custody_parent(parent->h_origin, parent);
+    if (!p || !child || child->h_origin != parent->h_origin ||
+        !custody_parent(parent->h_origin, child) ||
+        (role == NL_CUSTODY_ARM && slot != p->arm_count) ||
+        (role == NL_CUSTODY_BODY && slot != p->body_count) ||
+        (role == NL_CUSTODY_CONTINUATION && slot >= 2))
+        return NL_CHECK_INTERNAL_ERROR;
+    for (CustodyEdge *e = p->edges; e; e = e->next)
+        if (e->child == child || (e->role == role && e->slot == slot))
+            return NL_CHECK_INTERNAL_ERROR;
+    CustodyEdge *e = calloc(1, sizeof(*e));
+    if (!e)
+        return NL_CHECK_OUT_OF_MEMORY;
+    *e = (CustodyEdge){.next = p->edges,
+                       .child = child,
+                       .world = child->context,
+                       .role = role,
+                       .site = site,
+                       .slot = slot,
+                       .state = PENDING};
+    p->edges = e;
+    /* The child remains local throughout reservation. Each successful realloc
+     * immediately updates the canonical buffer owner, even if phase 2 or a
+     * later seal fails. Counts advance only in the infallible commit below. */
+    if (role == NL_CUSTODY_ARM) {
+        NLCheckedArm *arms = realloc(p->arms, (slot + 1) * sizeof(*arms));
+        if (!arms)
+            return NL_CHECK_OUT_OF_MEMORY;
+        p->arms = parent->arms = arms;
+        p->arm_capacity = slot + 1;
+    } else if (role == NL_CUSTODY_BODY) {
+        NLCheckedFragment **bodies =
+            realloc(p->bodies, (slot + 1) * sizeof(*bodies));
+        if (!bodies)
+            return NL_CHECK_OUT_OF_MEMORY;
+        p->bodies = parent->bodies = bodies;
+        p->body_capacity = slot + 1;
+        NLCheckedNodeId *calls = realloc(p->calls, (slot + 1) * sizeof(*calls));
+        if (!calls)
+            return NL_CHECK_OUT_OF_MEMORY;
+        p->calls = parent->body_calls = calls;
+        p->call_capacity = slot + 1;
+    }
+    return NL_CHECK_OK;
+}
+void nl_h_custody_commit(NLCheckedFragment *parent, NLCheckedFragment *child,
+                         NLCustodyRole role, size_t slot)
+{
+    CustodyParent *p = custody_parent(parent->h_origin, parent);
+    for (CustodyEdge *e = p->edges; e; e = e->next)
+        if (e->state == PENDING && e->child == child && e->role == role &&
+            e->slot == slot) {
+            if (role == NL_CUSTODY_ARM) {
+                p->arms[slot] = (NLCheckedArm){e->site, child, e->world};
+                parent->arm_count = ++p->arm_count;
+            } else if (role == NL_CUSTODY_BODY) {
+                p->bodies[slot] = child;
+                p->calls[slot] = e->site;
+                parent->body_count = ++p->body_count;
+            } else {
+                parent->custody_continuations[slot] = child;
+            }
+            e->state = COMMITTED;
+            return;
+        }
+}
+bool nl_h_custody_validate(const NLCheckedFragment *root)
+{
+    const struct NLHOriginOwner *o = root ? root->h_origin : NULL;
+    if (!o || o->root != root || !custody_parent(o, root))
+        return false;
+    for (const CustodyParent *p = o->parents; p; p = p->next) {
+        const NLCheckedFragment *f = p->fragment;
+        /* Counts and allocation bases precede every view access. Canonical
+         * endpoints alone select the next parent, never a challenged getter. */
+        if (f->h_origin != o || f->context != p->world ||
+            f->source != p->source || f->arm_count != p->arm_count ||
+            f->body_count != p->body_count || f->arms != p->arms ||
+            f->bodies != p->bodies || f->body_calls != p->calls ||
+            p->arm_count > p->arm_capacity ||
+            p->body_count > p->body_capacity ||
+            p->body_count > p->call_capacity)
+            return false;
+        size_t arms = 0, bodies = 0;
+        bool continuation[2] = {false, false};
+        for (const CustodyEdge *e = p->edges; e; e = e->next) {
+            if (e->state != COMMITTED || !custody_parent(o, e->child))
+                return false;
+            if (e->role == NL_CUSTODY_ARM) {
+                if (e->slot >= p->arm_count)
+                    return false;
+                const NLCheckedArm *v = &p->arms[e->slot];
+                if (v->artifact != e->child || v->match != e->site ||
+                    v->context_origin != e->world)
+                    return false;
+                ++arms;
+            } else if (e->role == NL_CUSTODY_BODY) {
+                if (e->slot >= p->body_count ||
+                    p->bodies[e->slot] != e->child ||
+                    p->calls[e->slot] != e->site)
+                    return false;
+                ++bodies;
+            } else {
+                if (e->slot >= 2 || continuation[e->slot] ||
+                    f->custody_continuations[e->slot] != e->child)
+                    return false;
+                continuation[e->slot] = true;
+            }
+            if (e->child->context != e->world)
+                return false;
+        }
+        if (arms != p->arm_count || bodies != p->body_count)
+            return false;
+        for (size_t i = 0; i < 2; ++i)
+            if (!continuation[i] && f->custody_continuations[i])
+                return false;
+    }
+    return true;
+}
+bool nl_h_origin_has_sites(const NLCheckedFragment *root)
+{
+    return root && root->h_origin && root->h_origin->count != 0;
+}
+bool nl_h_custody_view_valid(const NLCheckedFragment *f)
+{
+    /* CHECK builds trusted local prefixes. Once published, getters must reject
+     * challenged counts/bases before selecting any child, including the scalar
+     * and ordinary T CLI consumers that do not use the H emitter. */
+    return !f || !f->h_origin || !f->h_origin->published ||
+           nl_h_custody_validate(f->h_origin->root);
+}
+bool nl_h_custody_destroy_children(NLCheckedFragment *f, bool continuations)
+{
+    if (!f->h_origin)
+        return false;
+    CustodyParent *p = custody_parent(f->h_origin, f);
+    if (!p)
+        return true;
+    for (CustodyEdge *e = p->edges; e; e = e->next)
+        if (e->state == COMMITTED &&
+            (e->role == NL_CUSTODY_CONTINUATION) == continuations) {
+            e->state = DETACHED;
+            nl_checked_destroy(e->child);
+        }
+    if (!continuations) {
+        free(p->arms);
+        free(p->bodies);
+        free(p->calls);
+        p->arms = NULL;
+        p->bodies = NULL;
+        p->calls = NULL;
+    }
+    return true;
+}
 static HSite *site(struct NLHOriginOwner *o, const NLCheckedFragment *parent,
                    NLCheckedNodeId match)
 {
@@ -55,23 +277,16 @@ NLCheckStatus nl_h_origin_site(NLCheckedFragment *root,
     if (!root || !invocation || !invocation->body_owner || !parent || !cut)
         return NL_CHECK_INTERNAL_ERROR;
     struct NLHOriginOwner *o = root->h_origin;
-    if (!o) {
-        o = calloc(1, sizeof(*o));
-        if (!o)
-            return NL_CHECK_OUT_OF_MEMORY;
+    if (!o || parent->h_origin != o || invocation->h_origin != o)
+        return NL_CHECK_INTERNAL_ERROR;
+    if (!o->invocation) {
         NLCheckStatus s = nl_body_retain(invocation->body_owner);
-        if (s != NL_CHECK_OK) {
-            free(o);
+        if (s != NL_CHECK_OK)
             return s;
-        }
-        o->root = root;
-        o->registration = root->context;
         o->invocation = invocation;
         o->plan = invocation->body_owner;
         o->source = invocation->source;
         o->call = call;
-        root->h_origin = o;
-        invocation->h_origin = o;
     }
     /* A non-single-entry composition remains CHECK-valid but cannot produce
      * this bounded backend witness. Never import its additional graph. */
@@ -152,6 +367,8 @@ void nl_h_origin_take_body(NLCheckedFragment *parent, NLCheckedFragment *body,
 void nl_h_origin_close(NLCheckedFragment *root)
 {
     struct NLHOriginOwner *o = root->h_origin;
+    if (o && o->root == root)
+        o->published = true;
     if (o && o->root == root && o->body_owned && !o->aborted &&
         root->root == o->call) {
         bool complete = o->count > 0;
@@ -169,7 +386,7 @@ static bool same_node(const NLCheckedFragment *f, NLCheckedNodeId id,
 bool nl_h_origin_validate(const NLCheckedFragment *root)
 {
     const struct NLHOriginOwner *o = root ? root->h_origin : NULL;
-    if (!o || o->root != root || !o->closed || o->aborted ||
+    if (!nl_h_custody_validate(root) || !o->closed || o->aborted ||
         root->context != o->registration || root->root != o->call ||
         !o->body_owned || o->body_slot >= root->body_count ||
         root->bodies[o->body_slot] != o->invocation ||
@@ -232,30 +449,24 @@ bool nl_h_origin_edge(const NLCheckedFragment *root,
     HSite *p = site(root->h_origin, parent, match);
     return p && p->edges[ordinal].child == child;
 }
-NLCheckedFragment *nl_h_origin_owned_child(NLCheckedFragment *parent,
-                                           size_t slot, bool body)
-{
-    struct NLHOriginOwner *o = parent->h_origin;
-    if (o) {
-        if (body && o->root == parent && o->body_owned && o->body_slot == slot)
-            return o->invocation;
-        if (!body)
-            for (size_t i = 0; i < o->count; ++i) {
-                HSite *p = &o->sites[i];
-                if (p->parent != parent || p->released)
-                    continue;
-                for (size_t j = 0; j < 2; ++j)
-                    if (p->edges[j].owned && p->edges[j].slot == slot)
-                        return p->edges[j].child;
-            }
-    }
-    return body ? parent->bodies[slot] : parent->arms[slot].artifact;
-}
 void nl_h_origin_release_fragment(NLCheckedFragment *f)
 {
     struct NLHOriginOwner *o = f->h_origin;
     if (!o)
         return;
+    CustodyParent **link = &o->parents;
+    while (*link && (*link)->fragment != f)
+        link = &(*link)->next;
+    if (*link) {
+        CustodyParent *p = *link;
+        *link = p->next;
+        while (p->edges) {
+            CustodyEdge *e = p->edges;
+            p->edges = e->next;
+            free(e);
+        }
+        free(p);
+    }
     /* No dereferences of child/world/parent endpoints during bookkeeping:
      * earlier local failure cleanup may already have released those objects. */
     if (f == o->root) {

@@ -2,6 +2,27 @@
 #define NEWLANG_H_ORIGIN_INTERNAL_H
 #include "semantic_internal.h"
 
+/* Memory custody only: zero H sites confer no H-origin authority. Every real
+ * CHECK fragment joins before it can publish children. The root owns metadata;
+ * child attachments borrow it. Pending edges do not own their endpoints. */
+typedef enum {
+    NL_CUSTODY_ARM,
+    NL_CUSTODY_BODY,
+    NL_CUSTODY_CONTINUATION
+} NLCustodyRole;
+NLCheckStatus nl_h_custody_attach(NLCheckedFragment *parent,
+                                  NLCheckedFragment *child);
+NLCheckStatus nl_h_custody_reserve(NLCheckedFragment *parent,
+                                   NLCheckedFragment *child, NLCustodyRole role,
+                                   NLCheckedNodeId site, size_t slot);
+void nl_h_custody_commit(NLCheckedFragment *parent, NLCheckedFragment *child,
+                         NLCustodyRole role, size_t slot);
+bool nl_h_custody_validate(const NLCheckedFragment *root);
+bool nl_h_custody_view_valid(const NLCheckedFragment *fragment);
+bool nl_h_origin_has_sites(const NLCheckedFragment *root);
+/* Returns false only for artifacts outside the CHECK-owned protocol. */
+bool nl_h_custody_destroy_children(NLCheckedFragment *, bool continuations);
+
 /* CHECK-only construction; no public authority or externally supplied receipt.
  * The incomplete type is deliberately not defined in the shared header. */
 NLCheckStatus nl_h_origin_site(NLCheckedFragment *root,
@@ -24,6 +45,5 @@ bool nl_h_origin_edge(const NLCheckedFragment *root,
                       const NLCheckedFragment *parent, NLCheckedNodeId match,
                       size_t ordinal, const NLCheckedFragment *child);
 /* Canonical custody is independent of exchangeable graph-view entries. */
-NLCheckedFragment *nl_h_origin_owned_child(NLCheckedFragment *, size_t, bool);
 void nl_h_origin_release_fragment(NLCheckedFragment *);
 #endif

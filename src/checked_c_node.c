@@ -3146,7 +3146,9 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
 {
     if (entry == NULL || out == NULL || length == NULL || *out != NULL)
         return NL_NODE_C_UNSUPPORTED;
-    if (entry->h_origin && !nl_h_origin_validate(entry))
+    if (entry->h_origin && !nl_h_custody_validate(entry))
+        return NL_NODE_C_UNSUPPORTED;
+    if (nl_h_origin_has_sites(entry) && !nl_h_origin_validate(entry))
         return NL_NODE_C_UNSUPPORTED;
     const NLCheckedNodeId call = nl_checked_root(entry);
     const NLCheckedNodeView *v = nl_checked_node_view(entry, call);

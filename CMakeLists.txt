@@ -814,6 +814,35 @@ if(BUILD_TESTING)
     add_test(NAME p785_cli_boundaries.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785/cli.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785")
+    add_test(NAME p965_freeze.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/freeze_test.py")
+    add_executable(p965_ownership tests/p965/ownership.c)
+    target_include_directories(p965_ownership PRIVATE tests/support)
+    target_link_libraries(p965_ownership PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p965_ownership PRIVATE -Wl,--wrap=free)
+    add_executable(p965_oom tests/p965/oom.c)
+    target_include_directories(p965_oom PRIVATE tests/support)
+    target_link_libraries(p965_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p965_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc -Wl,--wrap=nl_h_custody_attach -Wl,--wrap=nl_h_custody_reserve)
+    foreach(source echo window t_only plain loop continuation four_field lexical)
+        set(p965_backend node)
+        if(source STREQUAL "t_only" OR source STREQUAL "plain" OR source STREQUAL "loop")
+            set(p965_backend scalar)
+        endif()
+        add_test(NAME p965_${source}_ownership.unit COMMAND p965_ownership
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/sources/${source}.nl" "${p965_backend}")
+        add_test(NAME p965_${source}_oom.unit COMMAND p965_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/sources/${source}.nl" CHECK "${p965_backend}")
+        add_test(NAME p965_${source}_definition_oom.unit COMMAND p965_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/sources/${source}.nl" definition "${p965_backend}")
+    endforeach()
+    add_executable(p965_output tests/p965/output.c)
+    target_include_directories(p965_output PRIVATE tests/support)
+    target_link_libraries(p965_output PRIVATE newlang_semantic newlang_parser newlang_checked_c_node newlang_diagnostic)
+    target_link_options(p965_output PRIVATE -Wl,--wrap=nl_checked_c_node)
+    add_test(NAME p965_named_if.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/output.py" "$<TARGET_FILE:p965_output>" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/sources/window.nl")
     add_executable(p961_oom tests/p961/oom.c)
     target_include_directories(p961_oom PRIVATE tests/support)
     target_link_libraries(p961_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)

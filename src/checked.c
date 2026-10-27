@@ -53,13 +53,15 @@ void nl_checked_destroy(NLCheckedFragment *fragment)
         nl_control_exits_destroy(fragment->loop_returns);
         nl_control_exits_destroy(fragment->exits);
         nl_control_target_destroy(fragment->function_target);
-        for (size_t i = 0; i < fragment->arm_count; ++i)
-            nl_checked_destroy(nl_h_origin_owned_child(fragment, i, false));
-        free(fragment->arms);
-        for (size_t i = 0; i < fragment->body_count; ++i)
-            nl_checked_destroy(nl_h_origin_owned_child(fragment, i, true));
-        free(fragment->bodies);
-        free(fragment->body_calls);
+        if (!nl_h_custody_destroy_children(fragment, false)) {
+            for (size_t i = 0; i < fragment->arm_count; ++i)
+                nl_checked_destroy(fragment->arms[i].artifact);
+            free(fragment->arms);
+            for (size_t i = 0; i < fragment->body_count; ++i)
+                nl_checked_destroy(fragment->bodies[i]);
+            free(fragment->bodies);
+            free(fragment->body_calls);
+        }
         if (fragment->destroy_packet_world != NULL) {
             fragment->destroy_packet_world(fragment->packet_entry);
             fragment->destroy_packet_world(fragment->packet_post);
@@ -69,8 +71,9 @@ void nl_checked_destroy(NLCheckedFragment *fragment)
             fragment->destroy_custody_world(fragment->custody_entry);
             fragment->destroy_custody_world(fragment->custody_post);
         }
-        for (size_t i = 0; i < 2; ++i)
-            nl_checked_destroy(fragment->custody_continuations[i]);
+        if (!nl_h_custody_destroy_children(fragment, true))
+            for (size_t i = 0; i < 2; ++i)
+                nl_checked_destroy(fragment->custody_continuations[i]);
         free(fragment->array4_issued);
         nl_semantic_destroy(fragment->array4_world);
         while (fragment->array4_more != NULL) {
@@ -137,7 +140,7 @@ const NLCheckedFragment *nl_checked_match_arm(const NLCheckedFragment *f,
                                               NLCheckedNodeId match,
                                               size_t index)
 {
-    if (f != NULL)
+    if (f != NULL && nl_h_custody_view_valid(f))
         for (size_t i = 0; i < f->arm_count; ++i)
             if (f->arms[i].match == match) {
                 if (index == 0)
@@ -169,7 +172,7 @@ const NLCheckedFragment *nl_checked_loop_body(const NLCheckedFragment *f,
 const NLCheckedFragment *nl_checked_call_body(const NLCheckedFragment *f,
                                               NLCheckedNodeId call)
 {
-    if (f != NULL)
+    if (f != NULL && nl_h_custody_view_valid(f))
         for (size_t i = 0; i < f->body_count; ++i)
             if (f->body_calls[i] == call)
                 return f->bodies[i];
