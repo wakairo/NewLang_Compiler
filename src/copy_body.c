@@ -1,4 +1,5 @@
 #include "newlang/copy_body.h"
+#include "h_origin_internal.h"
 #include "semantic_internal.h"
 #include <stdint.h>
 #include <stdlib.h>
@@ -412,8 +413,21 @@ NLCheckStatus nl_copy_body_seal(NLCheckedFragment *f,
     return NL_CHECK_OK;
 }
 
-static const NLCopyBodyProof *proof(const NLCheckedFragment *caller,
-                                    NLCheckedNodeId id)
+/* Retrieving sealed history is independent of current caller admission.
+ * The ledger supplies the original body, never an untrusted current table. */
+static const NLCopyBodyProof *
+proof_for_observation(const NLCheckedFragment *caller, NLCheckedNodeId id)
+{
+    const NLCheckedFragment *f = nl_h_custody_observe_body(caller, id);
+    const NLCopyBodyProof *p = f ? f->copy_body : NULL;
+    return p && p->sealed && p->owner == f && p->caller == caller &&
+                   p->call == id
+               ? p
+               : NULL;
+}
+/* Validators must still admit the present graph before trusting its proof. */
+static const NLCopyBodyProof *
+proof_for_validation(const NLCheckedFragment *caller, NLCheckedNodeId id)
 {
     const NLCheckedFragment *f = nl_checked_call_body(caller, id);
     const NLCopyBodyProof *p = f ? f->copy_body : NULL;
@@ -425,7 +439,7 @@ static const NLCopyBodyProof *proof(const NLCheckedFragment *caller,
 bool nl_checked_copy_body_view(const NLCheckedFragment *c, NLCheckedNodeId id,
                                NLCopyBodyView *out)
 {
-    const NLCopyBodyProof *p = proof(c, id);
+    const NLCopyBodyProof *p = proof_for_observation(c, id);
     if (!p || !out)
         return false;
     *out = p->view;
@@ -435,7 +449,7 @@ bool nl_checked_copy_body_parameters(const NLCheckedFragment *c,
                                      NLCheckedNodeId id,
                                      NLCopyBodyParameters *out)
 {
-    const NLCopyBodyProof *p = proof(c, id);
+    const NLCopyBodyProof *p = proof_for_observation(c, id);
     if (!p || !p->formal_write || !out)
         return false;
     *out = p->parameters;
@@ -455,7 +469,7 @@ nl_checked_copy_body_parameters_validate(const NLCheckedFragment *c,
                                          NLCheckedNodeId id,
                                          const NLCopyBodyParameters *v)
 {
-    const NLCopyBodyProof *p = proof(c, id);
+    const NLCopyBodyProof *p = proof_for_validation(c, id);
     if (!p || !p->formal_write ||
         (v && !same_parameters(v, &p->issued_parameters)))
         return INVALID;
@@ -474,7 +488,7 @@ static const CopyEvent *event_at(const NLCopyBodyProof *p, size_t index)
 bool nl_checked_copy_body_event(const NLCheckedFragment *c, NLCheckedNodeId id,
                                 size_t index, NLCopyBodyEventView *out)
 {
-    const CopyEvent *e = event_at(proof(c, id), index);
+    const CopyEvent *e = event_at(proof_for_observation(c, id), index);
     if (!e || !out)
         return false;
     *out = e->view;
@@ -1104,7 +1118,7 @@ NLCheckStatus nl_checked_copy_body_validate(const NLCheckedFragment *caller,
                                             NLCheckedNodeId id,
                                             const NLCopyBodyView *candidate)
 {
-    const NLCopyBodyProof *p = proof(caller, id);
+    const NLCopyBodyProof *p = proof_for_validation(caller, id);
     if (!p || !caller->nodes ||
         (candidate && !same_body_view(candidate, &p->view)))
         return INVALID;
@@ -1259,7 +1273,7 @@ nl_checked_copy_body_event_validate(const NLCheckedFragment *caller,
                                     NLCheckedNodeId call, size_t index,
                                     const NLCopyBodyEventView *candidate)
 {
-    const CopyEvent *e = event_at(proof(caller, call), index);
+    const CopyEvent *e = event_at(proof_for_validation(caller, call), index);
     if (!e || (candidate && !same_event(candidate, &e->issued)))
         return INVALID;
     return nl_checked_copy_body_validate(caller, call, NULL);
@@ -1305,15 +1319,15 @@ NLCheckStatus nl_copy_unit_entry_validate(const NLCheckedFragment *f)
     const NLCheckedNodeView *call =
         p ? nl_checked_node_view(p->caller, p->call) : NULL;
     if (!p || !p->unit_call || !p->formal_write || !p->sealed ||
-        p->owner != f || proof(p->caller, p->call) != p || !call ||
-        !parameter_entry(p, p->caller, call))
+        p->owner != f || proof_for_validation(p->caller, p->call) != p ||
+        !call || !parameter_entry(p, p->caller, call))
         return INVALID;
     return NL_CHECK_OK;
 }
 bool nl_checked_copy_unit_view(const NLCheckedFragment *caller,
                                NLCheckedNodeId id, NLCopyUnitView *out)
 {
-    const NLCopyBodyProof *p = proof(caller, id);
+    const NLCopyBodyProof *p = proof_for_observation(caller, id);
     if (!p || !p->unit_call || !out || !p->normal_end)
         return false;
     *out = (NLCopyUnitView){.parameters = p->parameters,
@@ -1467,6 +1481,9 @@ NLCheckStatus nl_checked_copy_unit_validate(const NLCheckedFragment *caller,
                                             NLCheckedNodeId id,
                                             const NLCopyUnitView *candidate)
 {
+    const NLCopyBodyProof *p = proof_for_validation(caller, id);
+    if (!p || !p->unit_call)
+        return INVALID;
     NLCopyUnitView v;
     if (!nl_checked_copy_unit_view(caller, id, &v) ||
         (candidate &&
@@ -1477,7 +1494,6 @@ NLCheckStatus nl_checked_copy_unit_validate(const NLCheckedFragment *caller,
           candidate->function != v.function ||
           !same_parameters(&candidate->parameters, &v.parameters))))
         return INVALID;
-    const NLCopyBodyProof *p = proof(caller, id);
     const NLCheckedFragment *f = p->owner;
     const NLCheckedNodeView *call = nl_checked_node_view(caller, id);
     if (!call || call->kind != NL_CHECKED_REGISTERED_CALL ||

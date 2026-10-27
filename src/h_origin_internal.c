@@ -72,6 +72,22 @@ static CustodyParent *custody_parent(const struct NLHOriginOwner *o,
                 return p;
     return NULL;
 }
+const NLCheckedFragment *
+nl_h_custody_observe_body(const NLCheckedFragment *parent, NLCheckedNodeId call)
+{
+    const struct NLHOriginOwner *o = parent ? parent->h_origin : NULL;
+    const CustodyParent *p = custody_parent(o, parent);
+    if (!p || !custody_parent(o, o->root))
+        return NULL;
+    /* Do not inspect mutable parent nodes/world/source or body tables. This
+     * borrows already owned history and does not authenticate present access.
+     * Pending children remain local; detached children may already be dead. */
+    for (const CustodyEdge *e = p->edges; e; e = e->next)
+        if (e->state == COMMITTED && e->role == NL_CUSTODY_BODY &&
+            e->site == call && custody_parent(o, e->child))
+            return e->child;
+    return NULL;
+}
 NLCheckStatus nl_h_custody_attach(NLCheckedFragment *parent,
                                   NLCheckedFragment *child)
 {

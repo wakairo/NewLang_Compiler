@@ -17,6 +17,10 @@ NLCheckStatus nl_h_custody_reserve(NLCheckedFragment *parent,
                                    NLCheckedNodeId site, size_t slot);
 void nl_h_custody_commit(NLCheckedFragment *parent, NLCheckedFragment *child,
                          NLCustodyRole role, size_t slot);
+/* Historical observation only. The actual parent and recorded call select a
+ * live COMMITTED BODY; current world/view integrity is not authenticated. */
+const NLCheckedFragment *nl_h_custody_observe_body(const NLCheckedFragment *,
+                                                   NLCheckedNodeId);
 bool nl_h_custody_validate(const NLCheckedFragment *root);
 /* Borrowed structural views only; never an owner/source-authority receipt. */
 bool nl_h_custody_borrow_valid(const NLCheckedFragment *fragment);

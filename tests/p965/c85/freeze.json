@@ -1,0 +1,15 @@
+{
+  "resume": "d702109a14053bc2339d3e215301fbaaa01817a2",
+  "original_freeze": "cf3231f87e3d6f1a5c13eb29e3ab017a8ee7560c52c90ceb73c916ee5e5c1a49",
+  "stage": "C85 full supplemental source/oracle frozen before any new build/test execution",
+  "sha256": {
+    "tests/p965/c85/observer.c": "df64982b10f4041e507069b9535f0a512b16d808ae747922ce4047d724df94c6",
+    "tests/p965/c85/observe.py": "cdace77eaf32652a31fa7c5d60444ec05fd63d81ca92ebfe3e8dd2b57ec43924",
+    "tests/p965/c85/oracle.json": "9673d219b26c2821985fc425a094790ef068c4a719475e858490adc39cd2c55c",
+    "tests/p965/shared.h": "65a7dca6813d07db3ddfc4b694fdb44e85deb905747a6acc71c0d3e72270cb5f",
+    "tests/p813/sources/charge_false.nl": "5ad114e6f978c2b3cd4923a1bccff5c82ce7c51413b1ef01070d9697645acc92",
+    "tests/p866/sources/trim_true.nl": "bba22e0c427170fe0ff4ce273058e579fc455e3d99a11cd28743a51c46fbece7",
+    "tests/p866/sources/fan_false.nl": "68a517b1d4756cb0dce4cf8892641660abc51d7ffa3a2e930d29fc0e67f5cb4e",
+    "tests/p878/sources/relay_equal_binding.nl": "37f0b02c60960406ed7e641ab457a31d608da9666385aef1d7ef9e192f855d0b"
+  }
+}
