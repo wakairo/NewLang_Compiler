@@ -86,32 +86,52 @@ static bool probe(const char *path)
     NLParser *p = NULL;
     NLSyntaxTree *unit = NULL, *entry = NULL;
     NLSemanticContext *base = NULL, *c = NULL;
-    CHECK(nl_source_load(path, &s) == NL_SOURCE_OK);
-    CHECK(nl_parser_create(s, &p) == NL_PARSE_OK);
-    CHECK(nl_parser_parse_function_unit(p, &unit, NULL) == NL_PARSE_OK);
-    CHECK(nl_semantic_create(&base) == NL_CHECK_OK);
-    const NLSyntaxTree *inputs[] = {unit};
-    CHECK(nl_semantic_register_function_unit(base, inputs, 1, NULL) ==
-          NL_CHECK_OK);
-    nl_syntax_tree_destroy(unit);
-    nl_parser_destroy(p);
-    nl_source_destroy(s);
-    CHECK(nl_source_create("main()", 6, "p961-oom-entry", &s) == NL_SOURCE_OK);
-    CHECK(nl_parser_create(s, &p) == NL_PARSE_OK);
-    CHECK(nl_parser_parse_expression_fragment(p, &entry, NULL) == NL_PARSE_OK);
-    CHECK(nl_sem_clone(base, &c) == NL_CHECK_OK);
     NLCheckedFragment *f = NULL;
+    char *text = NULL;
+    bool ok = false;
+    /* Helpers own no resources; failures here must dispose all probe owners.
+     * Keep the failing condition visible, then leave through one cleanup path.
+     */
+#define REQUIRE(condition)                                                     \
+    do {                                                                       \
+        if (!(condition)) {                                                    \
+            fprintf(stderr, "%s:%d: %s\n", __FILE__, __LINE__, #condition);    \
+            goto cleanup;                                                      \
+        }                                                                      \
+    } while (0)
+    REQUIRE(nl_source_load(path, &s) == NL_SOURCE_OK);
+    REQUIRE(nl_parser_create(s, &p) == NL_PARSE_OK);
+    REQUIRE(nl_parser_parse_function_unit(p, &unit, NULL) == NL_PARSE_OK);
+    REQUIRE(nl_semantic_create(&base) == NL_CHECK_OK);
+    const NLSyntaxTree *inputs[] = {unit};
+    REQUIRE(nl_semantic_register_function_unit(base, inputs, 1, NULL) ==
+            NL_CHECK_OK);
+    nl_syntax_tree_destroy(unit);
+    unit = NULL;
+    nl_parser_destroy(p);
+    p = NULL;
+    nl_source_destroy(s);
+    s = NULL;
+    REQUIRE(nl_source_create("main()", 6, "p961-oom-entry", &s) ==
+            NL_SOURCE_OK);
+    REQUIRE(nl_parser_create(s, &p) == NL_PARSE_OK);
+    REQUIRE(nl_parser_parse_expression_fragment(p, &entry, NULL) ==
+            NL_PARSE_OK);
+    REQUIRE(nl_sem_clone(base, &c) == NL_CHECK_OK);
     at = SIZE_MAX;
     injecting = recording = true;
     NLCheckStatus status = nl_semantic_check_expression(c, entry, &f, NULL);
     injecting = recording = false;
-    CHECK(status == NL_CHECK_OK && f && f->h_origin && !hit && count == calls);
-    CHECK(choose(f->h_origin, "root-origin-calloc") && collect(f, true));
-    CHECK(nl_h_origin_validate(f));
+    REQUIRE(status == NL_CHECK_OK && f && f->h_origin && !hit &&
+            count == calls);
+    REQUIRE(choose(f->h_origin, "root-origin-calloc") && collect(f, true));
+    REQUIRE(nl_h_origin_validate(f));
     nl_checked_destroy(f);
+    f = NULL;
     nl_semantic_destroy(c);
+    c = NULL;
     for (size_t i = 0; i < selected_count; ++i) {
-        CHECK(nl_sem_clone(base, &c) == NL_CHECK_OK);
+        REQUIRE(nl_sem_clone(base, &c) == NL_CHECK_OK);
         f = NULL;
         calls = 0;
         at = selected[i];
@@ -119,25 +139,36 @@ static bool probe(const char *path)
         injecting = true;
         status = nl_semantic_check_expression(c, entry, &f, NULL);
         injecting = false;
-        CHECK(status == NL_CHECK_OUT_OF_MEMORY && !f);
-        CHECK(hit && calls > at && nl_packet_same_entry(base, c));
-        CHECK(nl_semantic_check_expression(c, entry, &f, NULL) == NL_CHECK_OK &&
-              f && nl_h_origin_validate(f));
-        char *text = NULL;
+        REQUIRE(status == NL_CHECK_OUT_OF_MEMORY && !f);
+        REQUIRE(hit && calls > at && nl_packet_same_entry(base, c));
+        REQUIRE(nl_semantic_check_expression(c, entry, &f, NULL) ==
+                    NL_CHECK_OK &&
+                f && nl_h_origin_validate(f));
         size_t bytes = 0;
-        CHECK(nl_checked_c_node(f, &text, &bytes) == NL_NODE_C_OK && bytes);
+        REQUIRE(nl_checked_c_node(f, &text, &bytes) == NL_NODE_C_OK && bytes);
         free(text);
+        text = NULL;
         nl_checked_destroy(f);
+        f = NULL;
         nl_semantic_destroy(c);
+        c = NULL;
         printf("P961 OOM position=%zu unpublished/rollback/retry PASS\n", at);
     }
+    printf("P961 reached CHECK OOM positions=%zu (close is infallible)\n",
+           selected_count);
+    ok = true;
+cleanup:
+    injecting = recording = false;
+    free(text);
+    nl_checked_destroy(f);
+    nl_semantic_destroy(c);
     nl_syntax_tree_destroy(entry);
+    nl_syntax_tree_destroy(unit);
     nl_parser_destroy(p);
     nl_source_destroy(s);
     nl_semantic_destroy(base);
-    printf("P961 reached CHECK OOM positions=%zu (close is infallible)\n",
-           selected_count);
-    return true;
+#undef REQUIRE
+    return ok;
 }
 int main(int argc, char **argv)
 {
