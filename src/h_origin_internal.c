@@ -171,7 +171,37 @@ void nl_h_custody_commit(NLCheckedFragment *parent, NLCheckedFragment *child,
             return;
         }
 }
-bool nl_h_custody_validate(const NLCheckedFragment *root)
+static bool observed_arm(const struct NLHOriginOwner *o, const CustodyEdge *e,
+                         const NLCheckedFragment *view)
+{
+    const NLCheckedFragment *original = e->child;
+    /* A borrowed structural observation is not a second CHECK child. A real
+     * member of either owner, a different world, or a different child table
+     * cannot substitute for this original. Node contents remain inputs to the
+     * existing semantic consumer; this grants no ownership or H authority. */
+    if (!view || custody_parent(o, view) || view->h_origin != o ||
+        view->context != e->world || view->source != original->source ||
+        view->root != original->root || view->count != original->count ||
+        view->capacity != original->capacity || (view->count && !view->nodes) ||
+        view->body_owner != original->body_owner ||
+        view->if_parent != original->if_parent ||
+        view->if_parent_node != original->if_parent_node ||
+        view->if_arm_index != original->if_arm_index ||
+        view->branch_value_prefix != original->branch_value_prefix ||
+        view->branch_fact_prefix != original->branch_fact_prefix ||
+        view->arms != original->arms ||
+        view->arm_count != original->arm_count ||
+        view->bodies != original->bodies ||
+        view->body_calls != original->body_calls ||
+        view->body_count != original->body_count)
+        return false;
+    for (size_t i = 0; i < 2; ++i)
+        if (view->custody_continuations[i] !=
+            original->custody_continuations[i])
+            return false;
+    return true;
+}
+static bool validate_custody(const NLCheckedFragment *root, bool observation)
 {
     const struct NLHOriginOwner *o = root ? root->h_origin : NULL;
     if (!o || o->root != root || !custody_parent(o, root))
@@ -197,8 +227,10 @@ bool nl_h_custody_validate(const NLCheckedFragment *root)
                 if (e->slot >= p->arm_count)
                     return false;
                 const NLCheckedArm *v = &p->arms[e->slot];
-                if (v->artifact != e->child || v->match != e->site ||
-                    v->context_origin != e->world)
+                if ((v->artifact != e->child &&
+                     (!observation || o->count ||
+                      !observed_arm(o, e, v->artifact))) ||
+                    v->match != e->site || v->context_origin != e->world)
                     return false;
                 ++arms;
             } else if (e->role == NL_CUSTODY_BODY) {
@@ -224,17 +256,25 @@ bool nl_h_custody_validate(const NLCheckedFragment *root)
     }
     return true;
 }
+bool nl_h_custody_validate(const NLCheckedFragment *root)
+{
+    /* Emission/source authority always requires actual canonical membership,
+     * including zero-H-site entries. Observations never satisfy this check. */
+    return validate_custody(root, false);
+}
 bool nl_h_origin_has_sites(const NLCheckedFragment *root)
 {
     return root && root->h_origin && root->h_origin->count != 0;
 }
-bool nl_h_custody_view_valid(const NLCheckedFragment *f)
+bool nl_h_custody_borrow_valid(const NLCheckedFragment *f)
 {
-    /* CHECK builds trusted local prefixes. Once published, getters must reject
-     * challenged counts/bases before selecting any child, including the scalar
-     * and ordinary T CLI consumers that do not use the H emitter. */
+    /* Getters lend a view to the existing structural verifier, not an owned
+     * child receipt. Count/base guards and all BODY/CONTINUATION identities
+     * remain strict. H-site entries retain strict ARM identity too; the H/C17
+     * entry and branch consumers separately use nl_h_custody_validate and the
+     * original H witness. CHECK's unpublished local prefixes stay trusted. */
     return !f || !f->h_origin || !f->h_origin->published ||
-           nl_h_custody_validate(f->h_origin->root);
+           validate_custody(f->h_origin->root, true);
 }
 bool nl_h_custody_destroy_children(NLCheckedFragment *f, bool continuations)
 {

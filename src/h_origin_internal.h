@@ -18,7 +18,8 @@ NLCheckStatus nl_h_custody_reserve(NLCheckedFragment *parent,
 void nl_h_custody_commit(NLCheckedFragment *parent, NLCheckedFragment *child,
                          NLCustodyRole role, size_t slot);
 bool nl_h_custody_validate(const NLCheckedFragment *root);
-bool nl_h_custody_view_valid(const NLCheckedFragment *fragment);
+/* Borrowed structural views only; never an owner/source-authority receipt. */
+bool nl_h_custody_borrow_valid(const NLCheckedFragment *fragment);
 bool nl_h_origin_has_sites(const NLCheckedFragment *root);
 /* Returns false only for artifacts outside the CHECK-owned protocol. */
 bool nl_h_custody_destroy_children(NLCheckedFragment *, bool continuations);

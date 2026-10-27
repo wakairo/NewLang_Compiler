@@ -140,7 +140,7 @@ const NLCheckedFragment *nl_checked_match_arm(const NLCheckedFragment *f,
                                               NLCheckedNodeId match,
                                               size_t index)
 {
-    if (f != NULL && nl_h_custody_view_valid(f))
+    if (f != NULL && nl_h_custody_borrow_valid(f))
         for (size_t i = 0; i < f->arm_count; ++i)
             if (f->arms[i].match == match) {
                 if (index == 0)
@@ -172,7 +172,7 @@ const NLCheckedFragment *nl_checked_loop_body(const NLCheckedFragment *f,
 const NLCheckedFragment *nl_checked_call_body(const NLCheckedFragment *f,
                                               NLCheckedNodeId call)
 {
-    if (f != NULL && nl_h_custody_view_valid(f))
+    if (f != NULL && nl_h_custody_borrow_valid(f))
         for (size_t i = 0; i < f->body_count; ++i)
             if (f->body_calls[i] == call)
                 return f->bodies[i];
