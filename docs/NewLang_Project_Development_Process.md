@@ -14,6 +14,7 @@ NewLangは、部分的に独立した複数trackで開発する。
 - **M — 仕様策定 / 設計**
 - **F — 形式証明 / 意味論の形式化**
 - **P — production compiler実装**
+- **B — backend architecture / compiler implementation research（助言のみ）**
 - **R — 独立Red Team review**
 - **V — Value / Product Validation**
 - **O — Python意味論・解析アルゴリズム研究（暫定）**
@@ -49,7 +50,7 @@ docs/NewLang_C_Replacement_Coverage_Map.md
 **Ledgerはnon-normative evidence indexであり、現在のDraftを上書きしない。**
 設計判断を選択・変更する前の必須照合手順は
 [NewLang 設計判断手順](NewLang_Design_Decision_Procedure.md) に定める。
-暫定Track Oの運用上のCharterは[Track O研究Charter](NewLang_Track_O_Research_Charter.md)、暫定Track TのCharterは[Track T開発基盤Charter](NewLang_Track_T_Tooling_Charter.md)とする。いずれもproject processの文書であり、言語仕様のnormative Draftを上書きしない。
+Track Bの運用上のCharterは[Track B Backend Architecture Advisory Charter](NewLang_Track_B_Architecture_Advisory_Charter.md)、暫定Track OのCharterは[Track O研究Charter](NewLang_Track_O_Research_Charter.md)、暫定Track TのCharterは[Track T開発基盤Charter](NewLang_Track_T_Tooling_Charter.md)とする。いずれもproject processの文書であり、言語仕様のnormative Draftを上書きしない。
 
 UTF-8で問題なく管理できる文書は日本語を基本とし、必要に応じて英語版を併記する。
 一方、shell操作やtoolchain上で前面に現れるcommit message等は、互換性・可搬性を優先して英語ASCIIを基本とする。
@@ -78,6 +79,14 @@ Fは選択されたsemantic claimを形式化し、矛盾、欠けたinvariant�
 Pはcanonical semanticsを現実的なcompilerで表現・診断・検査し、最終的にloweringできるかを検証する。
 
 implementation difficultyは重要なfeedbackだが、backend convenienceだけを理由にsource semanticsを変更しない。
+
+### B — Backend Architecture / Compiler Implementation Research（助言）
+
+Bは、既存コンパイラの原典・実source・実装アルゴリズムを調べ、現backendの制約や安全上の疑問、再利用できる機構・代替案・検証計画を**独立に提案する非執行Track**である。CがIssue単位でRELEASEした範囲だけを扱い、常設・自動監視・必須のB sign-offは行わない。
+
+**PがProduction実装の機長、Bは助言する副操縦士、Coordinationが優先順位・scope・安全性STOP・採用を裁定する。** PはCの認可内で実装責任を一元的に持ち、BはPに直接指示したりbranch/PRを変更したり、実装・CI・mergeを自律起動したりしない。安全性上の根拠を見つけた場合はB Issueへ記録してCへ報告し、STOP REQUESTED／ACKを含む§4.1に従う。M/F/Rの独立権限は変更しない。
+
+詳細な担当境界、報告から採用までの手順、B0/B1の歴史、source-owned proof/physical carrierに関する禁止事項は[Track B Backend Architecture Advisory Charter](NewLang_Track_B_Architecture_Advisory_Charter.md)を参照。既定のdirect checked→C17は[Backend Execution Policy](NewLang_Backend_Execution_Policy.md)を維持し、B研究だけでIR/LLVMや新issuerを採用しない。
 
 ### V — Value / Product Validation
 
@@ -173,6 +182,7 @@ Track: Coordination
 Track: M
 Track: F
 Track: P
+Track: B
 Track: R
 Track: V
 Track: Q
