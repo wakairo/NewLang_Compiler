@@ -1,0 +1,9 @@
+C85 standalone compiler: /usr/bin/gcc sanitizer: none
+C85 standalone source: tests/p813/sources/charge_false.nl mode: u8
+/workspace/p965/tests/p965/c85/observer.c:165: o.caller != foreign.caller && o.caller->context != foreign.caller->context && o.caller->source != foreign.caller->source && o.caller->root != 1 && o.caller->count > 1
+Traceback (most recent call last):
+  File "/workspace/p965/tests/p965/c85/observe.py", line 33, in <module>
+    subprocess.run([str(probe), str(root / source), mode], env=environment, check=True)
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['/tmp/p965-c85-observer-e3yl114a/observer', '/workspace/p965/tests/p813/sources/charge_false.nl', 'u8']' returned non-zero exit status 1.

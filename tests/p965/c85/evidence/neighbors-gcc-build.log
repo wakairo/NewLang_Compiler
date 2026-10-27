@@ -1,0 +1,130 @@
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_diagnostic
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[ 90%] Building C object CMakeFiles/p866_integrity.dir/tests/p866/integrity.c.o
+[100%] Linking C executable p866_integrity
+[100%] Built target p866_integrity
+[  0%] Built target newlang_source
+[ 11%] Built target newlang_syntax
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_diagnostic
+[ 33%] Built target newlang_parser
+[ 33%] Built target newlang_checked
+[100%] Built target newlang_semantic
+[100%] Building C object CMakeFiles/p866_oom.dir/tests/p866/oom.c.o
+[100%] Linking C executable p866_oom
+[100%] Built target p866_oom
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_diagnostic
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p878_guard
+[100%] Built target p878_guard
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_diagnostic
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p706_gate_test
+[100%] Built target p706_gate_test
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_diagnostic
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p713_gate_test
+[100%] Built target p713_gate_test
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_diagnostic
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p718_gate_test
+[100%] Built target p718_gate_test
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_diagnostic
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p722_gate_test
+[100%] Built target p722_gate_test
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_diagnostic
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p728_gate_test
+[100%] Built target p728_gate_test
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_diagnostic
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p774_gate_test
+[100%] Built target p774_gate_test
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_diagnostic
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p778_gate_test
+[100%] Built target p778_gate_test
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_diagnostic
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p817_public
+[100%] Built target p817_public
+[  0%] Built target newlang_source
+[  9%] Built target newlang_syntax
+[ 18%] Built target newlang_lexer
+[ 18%] Built target newlang_diagnostic
+[ 27%] Built target newlang_parser
+[ 27%] Built target newlang_checked
+[ 81%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Linking C executable p817_oom
+[100%] Built target p817_oom
+[  0%] Built target newlang_source
+[  9%] Built target newlang_syntax
+[ 18%] Built target newlang_lexer
+[ 18%] Built target newlang_diagnostic
+[ 27%] Built target newlang_parser
+[ 27%] Built target newlang_checked
+[ 81%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[ 90%] Linking C executable p945_integrity
+[100%] Built target p945_integrity

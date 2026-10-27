@@ -1,0 +1,125 @@
+{
+  "authority": "https://github.com/wakairo/NewLang_Compiler/issues/965#issuecomment-6442168066",
+  "preregistration": "https://github.com/wakairo/NewLang_Compiler/issues/965#issuecomment-6442670703",
+  "status": "STOP / local Gate NO / LOCAL ONLY / no automatic repair or rerun",
+  "branch": "p965-canonical-custody-children",
+  "main": "d579c761a78e3c84765e35061f77936789788d82",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "pr962_base": "24dac612697fcfcfdfcfabc35418c5e6f0a7b0b3",
+  "resume_checkpoint": "d702109a14053bc2339d3e215301fbaaa01817a2",
+  "tested_head": "f03c4db6b335817359137ad64f381ededfa43546",
+  "tested_tree": "36a40ef3d9734296cec8e10ad61a3921bd27cc9d",
+  "production_scope": [
+    "src/h_origin_internal.c",
+    "src/h_origin_internal.h",
+    "src/copy_body.c"
+  ],
+  "core": {
+    "configs": [
+      "gcc",
+      "clang",
+      "asan",
+      "ubsan"
+    ],
+    "tests_per_config": 5,
+    "total_pass": 20,
+    "tests": [
+      "p633_local_same_value.unit",
+      "p633_local_different_values.unit",
+      "p817_arm_integrity.unit",
+      "p785_arm_integrity.unit",
+      "p790_arm_integrity.unit"
+    ]
+  },
+  "neighbors": {
+    "gcc_pass": 20,
+    "clang": "NOT RUN",
+    "asan": "NOT RUN",
+    "ubsan": "NOT RUN",
+    "evidence": "neighbors-gcc-FIRST-details.log"
+  },
+  "first_failure": {
+    "command": "python3 tests/p965/c85/observe.py /workspace/p965-build-gcc /usr/bin/gcc none",
+    "source": "tests/p813/sources/charge_false.nl",
+    "mode": "u8",
+    "phase": "fixture precondition before baseline gets/validates, shallow-parent checks and 12-mutation loop",
+    "line": 165,
+    "assertion": "o.caller != foreign.caller && o.caller->context != foreign.caller->context && o.caller->source != foreign.caller->source && o.caller->root != 1 && o.caller->count > 1",
+    "probe_exit": 1,
+    "runner_exception": "subprocess.CalledProcessError",
+    "log": "observer-gcc-FIRST.log",
+    "log_sha256": "0748471e6e035252fa17317889cc88b7b63967e73328e5abe041a8ec50d37a70",
+    "classification": "additive probe setup RED; failed conjunct unknown; no evidence of authorization acceptance or production memory failure at this assertion",
+    "not_done": "No source/oracle edit, rerun, diagnostic execution, extra build/test or remote operation after failure. The runner automatically removed its TemporaryDirectory executable on failure; no rebuild to recover it."
+  },
+  "not_run": [
+    "remaining 3 supplemental source cases",
+    "supplemental clang/asan/ubsan",
+    "neighbor clang/asan/ubsan",
+    "original P965 494 ownership trials",
+    "original P965 502 CHECK/registration reached OOM failpoints",
+    "P961/P953 ownership/output matrix",
+    "full frontend 515",
+    "historical P605/P634 execution",
+    "pinned clang-format gate",
+    "strict healthy CLI -> raw C17 GCC/Clang O0/O2 native Echo/Window heap0/1/2 and guest sanitizers"
+  ],
+  "current_oom_observations": {
+    "p866": [
+      "trim_false prefix indices0,1: did_fail=1 status=OOM unchanged=1 public_retry0=1",
+      "fan_true prefix indices0,1: did_fail=1 status=OOM unchanged=1 public_retry0=1"
+    ],
+    "p878": [
+      "relay_unequal_binding prefix indices0,1: did_fail=1 status=OOM unchanged=1 public_retry0=1",
+      "audio_equal_binding prefix indices0,1: did_fail=1 status=OOM unchanged=1 public_retry0=1"
+    ],
+    "p817": [
+      "pump_false completed-arm snapshot indices0..1/2 reached=1",
+      "charge_false completed-arm snapshot indices0..3/4 reached=1"
+    ],
+    "other_neighbors": "P706/P713/P718/P722/P728/P774/P778 original OOM logs preserved in neighbors-gcc-FIRST-details.log; not counted as the original P965 502 matrix"
+  },
+  "toolchain": {
+    "gcc": "14.2.0",
+    "clang": "pinned curated 23.1.3",
+    "cmake": "3.31.10",
+    "python": "3.12.14",
+    "build_type": "Debug",
+    "sanitizers": {
+      "asan": "Clang address + leak detection",
+      "ubsan": "Clang undefined"
+    }
+  },
+  "remote": {
+    "push": 0,
+    "new_pr": 0,
+    "actions": 0,
+    "full5": 0,
+    "partial": 0,
+    "run_ids": [],
+    "merge_tree": "NOT REACHED",
+    "existing_pr_edits": 0,
+    "ready": 0,
+    "merge": 0,
+    "r_f_launch": 0
+  },
+  "source_sha256": {
+    "src/h_origin_internal.c": "3bf157da8bc4dd97191c2af1245fe289439530d2eb5db4909f2b7a98c33457d8",
+    "src/h_origin_internal.h": "07091dd7fca811361db83577b8a8e1a984fb27281dd8cf77be32a6ef9cfafd27",
+    "src/copy_body.c": "b72811638076445e6dd12d8d4deecf59d18f568e158b724f7a682a5120d84790",
+    "tests/p965/freeze.json": "cf3231f87e3d6f1a5c13eb29e3ab017a8ee7560c52c90ceb73c916ee5e5c1a49",
+    "tests/p965/evidence/gcc-full-first.log": "6448509eb5a2904af8a861a90cff9a00d3851130841ec683cdb780f50460f093",
+    "tests/p965/c83/evidence/gcc-full-FIRST.log": "9bf14a65a336b272a654192a14fa85d6659d9a39c855aa08ea340b3b47d9aea5",
+    "tests/p965/c85/freeze.json": "bf3b75236b2da72767f5fd04cc50a63ddd29da2f8d24c70b3c0ab4d5318ffa7c",
+    "tests/p965/c85/observer.c": "df64982b10f4041e507069b9535f0a512b16d808ae747922ce4047d724df94c6",
+    "tests/p965/c85/observe.py": "cdace77eaf32652a31fa7c5d60444ec05fd63d81ca92ebfe3e8dd2b57ec43924",
+    "tests/p965/c85/oracle.json": "9673d219b26c2821985fc425a094790ef068c4a719475e858490adc39cd2c55c",
+    "tests/p965/shared.h": "65a7dca6813d07db3ddfc4b694fdb44e85deb905747a6acc71c0d3e72270cb5f",
+    "tests/p813/sources/charge_false.nl": "5ad114e6f978c2b3cd4923a1bccff5c82ce7c51413b1ef01070d9697645acc92",
+    "tests/p866/sources/trim_true.nl": "bba22e0c427170fe0ff4ce273058e579fc455e3d99a11cd28743a51c46fbece7",
+    "tests/p866/sources/fan_false.nl": "68a517b1d4756cb0dce4cf8892641660abc51d7ffa3a2e930d29fc0e67f5cb4e",
+    "tests/p878/sources/relay_equal_binding.nl": "37f0b02c60960406ed7e641ab457a31d608da9666385aef1d7ef9e192f855d0b"
+  },
+  "preservation": "All old tests/oracles/freeze/SHA/RED logs unchanged; R963 BLIND fixtures never read or changed. Only additive evidence/documentation after STOP.",
+  "value_alignment_risk": "Finite core regressions improved, but supplemental observation assumptions are unvalidated and the new test has an invalid/unproven fixture precondition. Canonical ownership and OOM/native coverage have not been remeasured on C85. Separate history/current authority increases private audit load. Human UB audit burden versus C remains UNMEASURED; no safety proof, Product GO, or HOLD upgrade. Return to Coordination for any next release."
+}

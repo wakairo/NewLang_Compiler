@@ -1,0 +1,19 @@
+Start testing: Oct 27 13:09 UTC
+----------------------------------------------------------
+268/515 Testing: p790_arm_integrity.unit
+268/515 Test: p790_arm_integrity.unit
+Command: "/workspace/p965-build-clang/p785_integrity" "/workspace/p965/tests/p790/sources/meter.nl"
+Directory: /workspace/p965-build-clang
+"p790_arm_integrity.unit" start time: Oct 27 13:09 UTC
+Output:
+----------------------------------------------------------
+INTEGRITY same-number alien worlds refused; parent/sibling/index lookup refused; graph/source/variant/facts/Copy/formal mutations=30 restore=PASS
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p790_arm_integrity.unit" end time: Oct 27 13:09 UTC
+"p790_arm_integrity.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 27 13:09 UTC
