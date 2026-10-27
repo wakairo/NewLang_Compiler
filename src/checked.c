@@ -1,3 +1,4 @@
+#include "h_origin_internal.h"
 #include "semantic_internal.h"
 
 #include <stdlib.h>
@@ -53,10 +54,10 @@ void nl_checked_destroy(NLCheckedFragment *fragment)
         nl_control_exits_destroy(fragment->exits);
         nl_control_target_destroy(fragment->function_target);
         for (size_t i = 0; i < fragment->arm_count; ++i)
-            nl_checked_destroy(fragment->arms[i].artifact);
+            nl_checked_destroy(nl_h_origin_owned_child(fragment, i, false));
         free(fragment->arms);
         for (size_t i = 0; i < fragment->body_count; ++i)
-            nl_checked_destroy(fragment->bodies[i]);
+            nl_checked_destroy(nl_h_origin_owned_child(fragment, i, true));
         free(fragment->bodies);
         free(fragment->body_calls);
         if (fragment->destroy_packet_world != NULL) {
@@ -84,6 +85,7 @@ void nl_checked_destroy(NLCheckedFragment *fragment)
             fragment->release_body(fragment->body_owner);
         if (fragment->destroy_context != NULL)
             fragment->destroy_context((NLSemanticContext *)fragment->context);
+        nl_h_origin_release_fragment(fragment);
         free(fragment->nodes);
         free(fragment);
     }

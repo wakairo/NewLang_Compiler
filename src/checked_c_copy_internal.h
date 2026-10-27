@@ -300,22 +300,8 @@ static bool copy_pre_world(Emit *e, const Env *env)
         !copy_pre_h(e, head, e->copy_anchor) ||
         !copy_pre_h(e, env, e->copy_anchor))
         return false;
-    for (const Env *q = env; q->parent; q = q->parent) {
-        size_t matches = 0;
-        const NLCheckedFragment *parent = q->parent->artifact;
-        for (size_t i = 0; i < parent->arm_count; ++i) {
-            const NLCheckedArm *a = &parent->arms[i];
-            if (a->artifact == q->artifact &&
-                a->context_origin == nl_checked_context(q->artifact) &&
-                (nl_checked_match_arm(parent, a->match, 0) == q->artifact ||
-                 nl_checked_match_arm(parent, a->match, 1) == q->artifact))
-                ++matches;
-        }
-        const NLCheckedNodeView *r = get(q, nl_checked_root(q->artifact));
-        if (matches != 1 || !r || r->kind != NL_CHECKED_MATCH_ARM ||
-            r->variant != 2)
-            return false;
-    }
+    if (!nl_h_origin_validate(e->origin_root))
+        return false;
     const NLCheckedNodeView *root = get(env, nl_checked_root(env->artifact)),
                             *block = root ? get(env, root->tail) : NULL;
     if (!block || block->kind != NL_CHECKED_BLOCK)

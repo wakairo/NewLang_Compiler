@@ -1,6 +1,7 @@
 #include "newlang/checked_c_node.h"
 #include "checked_c_five.h"
 #include "checked_c_target.h"
+#include "h_origin_internal.h"
 #include "newlang/copy_body.h"
 #include "newlang/node_join.h"
 #include "newlang/node_links.h"
@@ -84,6 +85,7 @@ typedef struct {
     NLTypeId bundle;
     NLTypeId copy_type;
     size_t copy_function, copy_calls, copy_expected_calls, copy_roots;
+    const NLCheckedFragment *origin_root;
     const NLCheckedFragment *copy_issuer;
     const NLSemanticContext *copy_anchor;
     /* Borrowed admission ledger, never a semantic capability. */
@@ -1519,6 +1521,8 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
             nl_checked_match_arm(env->artifact, id, i);
         const NLCheckedNodeView *a =
             nl_checked_node_view(arm, nl_checked_root(arm));
+        if (!nl_h_origin_edge(e->origin_root, env->artifact, id, i, arm))
+            return reject(e);
         if (a == NULL || a->kind != NL_CHECKED_MATCH_ARM || a->variant < 1 ||
             a->variant > 2 || seen[a->variant - 1] || a->terminates ||
             a->type != e->unit ||
@@ -3142,6 +3146,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
 {
     if (entry == NULL || out == NULL || length == NULL || *out != NULL)
         return NL_NODE_C_UNSUPPORTED;
+    if (entry->h_origin && !nl_h_origin_validate(entry))
+        return NL_NODE_C_UNSUPPORTED;
     const NLCheckedNodeId call = nl_checked_root(entry);
     const NLCheckedNodeView *v = nl_checked_node_view(entry, call);
     const NLCheckedFragment *body = nl_checked_call_body(entry, call);
@@ -3161,7 +3167,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
             return nl_checked_c_five(body, out, length);
         }
     }
-    Emit e = {.unit = nl_semantic_unit_type(c),
+    Emit e = {.origin_root = entry,
+              .unit = nl_semantic_unit_type(c),
               .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
     if (v->type != e.unit)
         return NL_NODE_C_UNSUPPORTED;

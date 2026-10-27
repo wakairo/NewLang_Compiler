@@ -1,0 +1,29 @@
+#include "copy_body_internal.h"
+#include "node_checked.h"
+#include "newlang/checked_c_node.h"
+#include <stdlib.h>
+static NLCheckedFragment *find(NLCheckedFragment *f) {
+ for(size_t i=1;i<=f->count;i++){NLCopyBodyParameters p;if(nl_checked_copy_body_parameters(f,i,&p))return f;}
+ for(size_t i=0;i<f->arm_count;i++){NLCheckedFragment *r=find(f->arms[i].artifact);if(r)return r;}
+ for(size_t i=0;i<f->body_count;i++){NLCheckedFragment *r=find(f->bodies[i]);if(r)return r;}
+ return NULL;
+}
+static NLCheckedArm *edge(NLCheckedFragment *f,const NLCheckedFragment *child) {
+ for(size_t i=0;i<f->arm_count;i++)if(f->arms[i].artifact==child)return &f->arms[i];
+ for(size_t i=0;i<f->arm_count;i++){NLCheckedArm *r=edge(f->arms[i].artifact,child);if(r)return r;}
+ for(size_t i=0;i<f->body_count;i++){NLCheckedArm *r=edge(f->bodies[i],child);if(r)return r;}
+ return NULL;
+}
+static bool probe(const char *path) {
+ TestNode a={0},b={0};CHECK(node_checked_load(path,&a)&&node_checked_load(path,&b));
+ NLCheckedFragment *fa=find(a.entry),*fb=find(b.entry);CHECK(fa&&fb&&fa!=fb);
+ NLCheckedArm *ea=edge(a.entry,fa),*eb=edge(b.entry,fb);CHECK(ea&&eb);
+ char *c=NULL;size_t z=0;CHECK(nl_checked_c_node(a.entry,&c,&z)==NL_NODE_C_OK);free(c);c=NULL;z=0;
+ NLCheckedArm saved=*ea;*ea=*eb;
+ NLNodeCStatus s=nl_checked_c_node(a.entry,&c,&z);
+ *ea=saved;printf("whole foreign owned arm entry: status=%d bytes=%zu same_source=%u same_body=%u\n",(int)s,z,fa->source==fb->source,fa->body_owner==fb->body_owner);free(c);c=NULL;z=0;
+ CHECK(nl_checked_c_node(a.entry,&c,&z)==NL_NODE_C_OK);free(c);
+ node_checked_destroy(&a);node_checked_destroy(&b);
+ return s!=NL_NODE_C_OK;
+}
+int main(int argc,char **argv){return argc==2&&probe(argv[1])?0:1;}

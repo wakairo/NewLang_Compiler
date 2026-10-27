@@ -1,4 +1,5 @@
 #include "copy_body_internal.h"
+#include "h_origin_internal.h"
 #include "if_field_internal.h"
 #include "newlang/parser.h"
 #include "producer_local_internal.h"
@@ -21,6 +22,8 @@ typedef struct LoopControl {
 } LoopControl;
 
 typedef struct Check {
+    NLCheckedFragment *origin_root, *origin_invocation;
+    NLCheckedNodeId origin_call;
     const struct Check *caller; /* borrowed synchronous active call chain */
     NLSemanticContext *context;
     NLCheckedFragment *artifact;
@@ -3626,6 +3629,13 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         goto failure;
     body.artifact->body_owner = function->body;
     body.artifact->release_body = nl_body_release;
+    body.origin_root = caller->origin_root;
+    body.origin_invocation = caller->origin_invocation;
+    body.origin_call = caller->origin_call;
+    if (!caller->definition && caller->artifact == caller->origin_root) {
+        body.origin_invocation = body.artifact;
+        body.origin_call = call_id;
+    }
     body.capture_copy_body =
         !body.definition && function->count == 0 &&
         function->result == nl_semantic_core_type(c, NL_TYPE_U8);
@@ -3877,6 +3887,7 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     caller->artifact->bodies[count] = body.artifact;
     caller->artifact->body_calls[count] = call_id;
     ++caller->artifact->body_count;
+    nl_h_origin_take_body(caller->artifact, body.artifact, call_id, count);
     return true;
 failure:
     /* Report a body diagnostic at the CALL site. The detailed definition
@@ -5996,6 +6007,14 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
                                    .match_binding_prefix = c->binding_count});
     if (id == 0)
         return 0;
+    if (!check->definition && !certified && check->origin_root &&
+        check->origin_invocation &&
+        !host(check,
+              nl_h_origin_site(check->origin_root, check->origin_invocation,
+                               check->origin_call, check->artifact, id, init,
+                               c),
+              syntax->span))
+        return 0;
     NLSemanticContext *closed_prefix = NULL;
     NLCheckedNodeView certificate = {0};
     NLCapturedClosure *closure = NULL;
@@ -6045,6 +6064,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         branch.artifact->source = check->source;
         branch.artifact->context = branch.context;
         branch.artifact->destroy_context = nl_semantic_destroy;
+        nl_h_origin_fork(check->artifact, id, i, branch.artifact);
         if (closure != NULL &&
             !host(&branch,
                   nl_sem_clone(branch.context, &closure->branches[i].entry),
@@ -6099,8 +6119,11 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
             closure->branches[i].arm = branch.artifact;
             closure->branches[i].world = branch.context;
         }
+        nl_h_origin_arm(check->artifact, id, i, branch.artifact);
+        const size_t ownership_slot = check->artifact->arm_count;
         if (!save_arm(check, id, branch.artifact, arms[i]->span))
             goto failure;
+        nl_h_origin_take_arm(check->artifact, id, i, ownership_slot);
         continue;
     failure:
         if (branch.status != NL_CHECK_OK) {
@@ -6150,6 +6173,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
     view(check, id)->normal_arms = 2;
     view(check, id)->normal_frame_unchanged =
         !certificate.captured_frame_closed;
+    nl_h_origin_finish_site(check->artifact, id);
     return id;
 }
 
@@ -8521,6 +8545,7 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
     }
     *check.artifact =
         (NLCheckedFragment){.source = check.source, .context = context};
+    check.origin_root = check.artifact;
     const NLCheckStatus dependency_status =
         nl_fixed_dependencies(check.context);
     if (dependency_status != NL_CHECK_OK) {
@@ -8567,6 +8592,7 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
         goto failure;
     }
     nl_sem_commit(context, check.context);
+    nl_h_origin_close(check.artifact);
     *out = check.artifact;
     return NL_CHECK_OK;
 failure:

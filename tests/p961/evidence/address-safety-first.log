@@ -1,0 +1,20 @@
+Internal ctest changing into directory: /tmp/p961/address
+Test project /tmp/p961/address
+    Start 276: p961_original_foreign.unit
+1/7 Test #276: p961_original_foreign.unit ........   Passed    0.05 sec
+    Start 277: p961_echo_origin.unit
+2/7 Test #277: p961_echo_origin.unit .............   Passed    0.25 sec
+    Start 278: p961_window_true_origin.unit
+3/7 Test #278: p961_window_true_origin.unit ......   Passed    0.24 sec
+    Start 279: p953_echo_integrity.unit
+4/7 Test #279: p953_echo_integrity.unit ..........   Passed    0.09 sec
+    Start 280: p953_echo_oom.unit
+5/7 Test #280: p953_echo_oom.unit ................   Passed    1.18 sec
+    Start 281: p953_window_true_integrity.unit
+6/7 Test #281: p953_window_true_integrity.unit ...   Passed    0.07 sec
+    Start 282: p953_window_true_oom.unit
+7/7 Test #282: p953_window_true_oom.unit .........   Passed    0.31 sec
+
+100% tests passed, 0 tests failed out of 7
+
+Total Test time (real) =   2.19 sec

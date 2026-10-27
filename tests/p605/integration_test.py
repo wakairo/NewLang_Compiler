@@ -21,6 +21,12 @@ def main():
         data = (root.parent.parent / name).read_bytes()
         if name == 'src/semantic_internal.h':
             full_digest = hashlib.sha256(data).hexdigest()
+            # P961: exactly one root-bound private H origin attachment.
+            # Preserve the historical full header and every older block gate.
+            h_fields = b'    struct NLHOriginOwner *h_origin;\n'
+            h_record = b'struct NLCheckedFragment {\n' + h_fields
+            assert data.count(h_fields) == data.count(h_record) == 1
+            data = data.replace(h_record, b'struct NLCheckedFragment {\n', 1)
             # P733: one exact owned producer-local observation attachment.
             # Keep the historical entire-header digest and arithmetic bytes.
             owner_fields = (b'    struct NLProducerLocalProof *producer_local;\n'

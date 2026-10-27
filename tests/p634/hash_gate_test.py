@@ -50,11 +50,18 @@ def main():
                      b'    void (*destroy_if_fields)(NLCheckedFragment *);\n')
         owner_fields = (b'    struct NLProducerLocalProof *producer_local;\n'
                         b'    void (*destroy_producer_local)(NLCheckedFragment *);\n')
-        owner_record = b'struct NLCheckedFragment {\n' + owner_fields
+        h_fields = b'    struct NLHOriginOwner *h_origin;\n'
+        h_record = b'struct NLCheckedFragment {\n' + h_fields
+        assert header.count(h_fields) == header.count(h_record) == 1
+        owner_record = h_record + owner_fields
         assert header.count(owner_fields) == header.count(owner_record) == 1
         if_record = owner_record + if_fields
         assert header.count(if_record) == header.count(if_fields) == 1
         attacks = {
+            'missing_h_block': header.replace(h_fields,b'',1),
+            'duplicate_h_block': header+h_fields,
+            'misplaced_h_block': header.replace(h_fields,b'',1)+h_fields,
+            'changed_h_type': header.replace(b'NLHOriginOwner *h_origin',b'NLHOriginOwner *foreign_origin'),
             'missing_owner_block': header.replace(owner_fields,b'',1),
             'duplicate_owner_block': header+owner_fields,
             'misplaced_owner_block': header.replace(owner_fields,b'',1)+owner_fields,
