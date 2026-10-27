@@ -273,8 +273,20 @@ bool nl_h_custody_borrow_valid(const NLCheckedFragment *f)
      * remain strict. H-site entries retain strict ARM identity too; the H/C17
      * entry and branch consumers separately use nl_h_custody_validate and the
      * original H witness. CHECK's unpublished local prefixes stay trusted. */
-    return !f || !f->h_origin || !f->h_origin->published ||
-           validate_custody(f->h_origin->root, true);
+    if (!f || !f->h_origin || !f->h_origin->published)
+        return true;
+    const struct NLHOriginOwner *o = f->h_origin;
+    if (!validate_custody(o->root, true))
+        return false;
+    if (custody_parent(o, f))
+        return true;
+    /* A nonmember may only be the already checked current ARM observation.
+     * An unrelated shallow parent cannot borrow the root's valid counts. */
+    for (const CustodyParent *p = o->parents; p; p = p->next)
+        for (const CustodyEdge *e = p->edges; e; e = e->next)
+            if (e->role == NL_CUSTODY_ARM && p->arms[e->slot].artifact == f)
+                return true;
+    return false;
 }
 bool nl_h_custody_destroy_children(NLCheckedFragment *f, bool continuations)
 {
