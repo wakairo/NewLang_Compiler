@@ -867,6 +867,13 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/fan_false.nl" unit)
     add_test(NAME p965_c89_observe_relay.unit COMMAND p965_c89_observer
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/relay_equal_binding.nl" unit)
+    add_executable(p965_c89_entry_source tests/p965/c89/entry_source.c)
+    target_include_directories(p965_c89_entry_source PRIVATE tests/support)
+    target_link_libraries(p965_c89_entry_source PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    foreach(source echo window)
+        add_test(NAME p965_c89_entry_${source}.unit COMMAND p965_c89_entry_source
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/sources/${source}.nl")
+    endforeach()
     add_executable(p961_oom tests/p961/oom.c)
     target_include_directories(p961_oom PRIVATE tests/support)
     target_link_libraries(p961_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)

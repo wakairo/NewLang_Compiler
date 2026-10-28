@@ -224,13 +224,20 @@ static bool validate_custody(const NLCheckedFragment *root, bool observation)
         return false;
     for (const CustodyParent *p = o->parents; p; p = p->next) {
         const NLCheckedFragment *f = p->fragment;
+        /* Self-contained entry wrappers may release only the synthetic call
+         * spelling after taking ownership of the context. The actual CHECK
+         * root and all retained function/arm sources stay authenticated. Test
+         * this state first: the released spelling itself is no longer live. */
+        const bool source_matches =
+            (f == o->root && !f->source &&
+             f->destroy_context == nl_semantic_destroy) ||
+            f->source == p->source;
         /* Counts and allocation bases precede every view access. Canonical
          * endpoints alone select the next parent, never a challenged getter. */
-        if (f->h_origin != o || f->context != p->world ||
-            f->source != p->source || f->arm_count != p->arm_count ||
-            f->body_count != p->body_count || f->arms != p->arms ||
-            f->bodies != p->bodies || f->body_calls != p->calls ||
-            p->arm_count > p->arm_capacity ||
+        if (f->h_origin != o || f->context != p->world || !source_matches ||
+            f->arm_count != p->arm_count || f->body_count != p->body_count ||
+            f->arms != p->arms || f->bodies != p->bodies ||
+            f->body_calls != p->calls || p->arm_count > p->arm_capacity ||
             p->body_count > p->body_capacity ||
             p->body_count > p->call_capacity)
             return false;

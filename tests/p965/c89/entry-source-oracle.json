@@ -1,0 +1,7 @@
+{
+  "authority": "Issue965 C89 autonomous same-scope repair",
+  "first_red": "f5cee643 full GCC test429 captured_closure_2_worlds, old oracle unchanged; first raw log preserved",
+  "necessity": "Legacy private captured closure helper and unchanged public source test wrapper release synthetic main() spelling after making the actual root own its context. New custody must recognize this source-lifetime state without accepting changed retained body/arm source or foreign source.",
+  "expected": "Borrowed-context root with sourceNULL remains refused. The same actual CHECK root owning its context may release only entry spelling: canonical custody and original H emission remain valid and byte-identical. Foreign nonNULL root source and body sourceNULL are refused even in self-owned wrapper. A context destroyed once, B healthy. All existing core/owner/OOM/H/Copy oracles unchanged.",
+  "safety": "No new root membership, body/arm source exception, world equality shortcut, count/base ownership change or source/guest authority; root must be actual original owner member and callback is exact nl_semantic_destroy. Released source state is checked before comparing old spelling pointer."
+}
