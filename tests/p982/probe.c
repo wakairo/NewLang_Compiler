@@ -64,8 +64,14 @@ static bool run(const char *path)
     for (size_t i = 0; i < f->arm_count; ++i)
         if (f->arms[i].artifact == arm)
             edge = i;
-    CHECK(edge != SIZE_MAX && arm->count == 3 &&
-          arm->nodes[0].kind == NL_CHECKED_U8_LITERAL &&
+    const NLCheckedNodeView *arm_root =
+        nl_checked_node_view(arm, nl_checked_root(arm));
+    const NLCheckedNodeView *arm_block =
+        arm_root ? nl_checked_node_view(arm, arm_root->initializer) : NULL;
+    const NLCheckedNodeId literal_id = arm_block ? arm_block->tail : 0;
+    CHECK(edge != SIZE_MAX && arm->count == 3 && arm_root && arm_block &&
+          literal_id && literal_id <= arm->count &&
+          arm->nodes[literal_id - 1].kind == NL_CHECKED_U8_LITERAL &&
           arm->context->place_count >= originals[1]);
     NLSemanticContext *current = (NLSemanticContext *)f->context;
     const size_t copy_function = f->nodes[x.call - 1].function - 1,
@@ -81,7 +87,7 @@ static bool run(const char *path)
                         terminal_fn = current->functions[terminal_function];
         const NLSource *source = f->source;
         NLSemanticContext *arm_context = (NLSemanticContext *)arm->context;
-        NLCheckedNodeView literal = arm->nodes[0];
+        NLCheckedNodeView literal = arm->nodes[literal_id - 1];
         const NLValueFactId fact =
             arm_context->places[originals[0] - 1].current_fact;
         switch (fault) {
@@ -146,7 +152,7 @@ static bool run(const char *path)
             arm->context = other_arm->context;
             break;
         case 17:
-            arm->nodes[0].scalar_result.value ^= 1;
+            arm->nodes[literal_id - 1].scalar_result.value ^= 1;
             break;
         case 18:
             arm_context->places[originals[0] - 1].current_fact ^= 1;
@@ -172,7 +178,7 @@ static bool run(const char *path)
         current->functions[producer_function] = producer_fn;
         current->functions[terminal_function] = terminal_fn;
         arm->context = arm_context;
-        arm->nodes[0] = literal;
+        arm->nodes[literal_id - 1] = literal;
         arm_context->places[originals[0] - 1].current_fact = fact;
         f->arms[edge].artifact = arm;
         const bool refused =
