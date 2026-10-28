@@ -1,0 +1,16 @@
+[
+  {
+    "label": "configure",
+    "exit": 0,
+    "seconds": 1.107,
+    "log": "candidate1-gcc-configure-FIRST.log",
+    "SHA256": "ddd889b1d6b960762f69188f6ca6837d4595e0c01660591e8b35c96aa64ba06f"
+  },
+  {
+    "label": "build",
+    "exit": 0,
+    "seconds": 28.339,
+    "log": "candidate1-gcc-build-FIRST.log",
+    "SHA256": "d6d19f9ae9a9d78b2fe6659db7493e5680270903dfa27f0963ab4902c553389a"
+  }
+]

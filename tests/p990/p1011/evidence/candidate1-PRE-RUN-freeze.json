@@ -1,0 +1,20 @@
+{
+  "head": "2d4b3fe2500a8a472940294807731f7922254561",
+  "tree": "27ee130164346af8fed7321adb898509b42673f2",
+  "parent": "ca2a21b64abec7c519ffd7423fb90186ff33e7bd",
+  "stage": "PRE-RUN candidate1, no repaired verifier/selftest execution",
+  "v5_count": 566,
+  "files": {
+    "tests/p982/freeze_test.py": "a2915cdba736c2d44f0aa1fad668ab62660af5765a9eb7b125a19e28e2ba1bdd",
+    "tests/p990/current-freeze-v5.json": "c5793be5673438ccc6e6eb3145fd13de63e19ad13b4547a5a862e0483d6b010d",
+    "tests/p990/freeze_selftest.py": "d52a4f9f11bdbdbf46220a16a1631d3643257fd025cd3f2a6c1fc9ef1419e484",
+    "tests/p990/p1011/README.md": "81a244832ae33677d51faf54ca55522bc2d7a9168f75ec3fc7ce78c48126ae4c",
+    "tests/p990/p1011/oracle-v1.json": "e9e1aa090a666344d03725da89d26f9ae4c6fdcccc2ad09f5154c03ff9a5f446",
+    "tests/p990/p1011/parent-repro.py": "a05a4210a5956299938bd2bf4449d388d4bea277c39d70b167403dca7f2f0b55",
+    "tests/support/versioned_freeze.py": "716e9743070bf26890b938a48a99e2638ce5e6a4946c3b8caedb5d1f5804489a"
+  },
+  "patches": {
+    "candidate1-full.patch": "0425b576c6f0e09df840dab30411ce6d76a77d1a437ee1bd34df546fcde86b4e",
+    "candidate1-code.patch": "a704e19c4ae7f3edb9ce16afbbd2c010c5273a03684c8d9915d2fe4a10dd1e77"
+  }
+}

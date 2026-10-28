@@ -1,0 +1,9 @@
+{
+  "case": "coedited-current-v5",
+  "exit": 1,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "c34eb903cfd74f14e8a390f0df32e6e2dcc9f465faa0adcae30117c588d278fa",
+  "changed_first_red_sha256": "17ead27f1986b17888af7375abcd9996d637351db156983f6e638a7655119311",
+  "no_clobber": true,
+  "old_v1_v4_unchanged": true
+}

@@ -1,0 +1,16 @@
+[
+  {
+    "label": "lineage",
+    "exit": 0,
+    "seconds": 0.525,
+    "log": "candidate1-lineage-FIRST.log",
+    "SHA256": "d5e8bf5fde8c0d3af363025e34e7278d903f113463ba9b1dab308c1e474f98f9"
+  },
+  {
+    "label": "protocol",
+    "exit": 0,
+    "seconds": 5.893,
+    "log": "candidate1-protocol-FIRST.log",
+    "SHA256": "7a042cd3dc3e167f623eb2c54cc4d4f429edd587e470ad4056c8201c7b230029"
+  }
+]

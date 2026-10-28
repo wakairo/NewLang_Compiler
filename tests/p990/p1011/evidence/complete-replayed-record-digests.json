@@ -1,0 +1,23 @@
+[
+  {
+    "actual": "C107-reacquired-old-oom.json",
+    "original": "tests/p990/evidence/reacquired-old-oom.json",
+    "count": 502,
+    "SHA256": "aa106648866d12d50b07c831b076be913081937359a85c8a094ffb39186e0d2d",
+    "serialized_bytes_identical": true
+  },
+  {
+    "actual": "C107-reacquired-P982-emitter.json",
+    "original": "tests/p990/evidence/reacquired-P982-emitter-oom.json",
+    "count": 1788,
+    "SHA256": "7a930a0449c16e3a03fa8f49a2b2a2cd76c2e162583f5cc869de90fbb79d3f2d",
+    "serialized_bytes_identical": true
+  },
+  {
+    "actual": "C107-reacquired-P990-emitter.json",
+    "original": "tests/p990/evidence/complete-new-emitter-oom.json",
+    "count": 3388,
+    "SHA256": "c3eb11893d396ff3e6b3127c36c5942a03b732ccf5ef13a20f0f2efb3fc6ac0f",
+    "serialized_bytes_identical": true
+  }
+]

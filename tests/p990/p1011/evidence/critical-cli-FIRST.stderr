@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/tmp/p1011-raw-cli-34ixqvcj/tests/p982/freeze_test.py", line 10, in <module>
+    count = verify(root, CURRENT)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/p1011-raw-cli-34ixqvcj/tests/support/versioned_freeze.py", line 316, in verify
+    return _verify(Path(root).resolve(), manifest)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/p1011-raw-cli-34ixqvcj/tests/support/versioned_freeze.py", line 279, in _verify
+    required.update(reviewed_history(root))
+                    ^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/p1011-raw-cli-34ixqvcj/tests/support/versioned_freeze.py", line 268, in reviewed_history
+    require(digest(data) == P982_FIRST_RED_SHA and
+  File "/tmp/p1011-raw-cli-34ixqvcj/tests/support/versioned_freeze.py", line 79, in require
+    raise FreezeError(message)
+versioned_freeze.FreezeError: original P982 first RED changed
