@@ -12,6 +12,7 @@ import tempfile
 cli, cc, sanitizer, directory, group = sys.argv[1:]
 root = Path(directory)
 oracle = json.loads((root / "oracle-v1.json").read_text())
+calibration = json.loads((root / "oracle-v2.json").read_text())
 
 
 def run(args, **kw):
@@ -37,7 +38,16 @@ def preserved(target, sentinel, before):
 with tempfile.TemporaryDirectory(prefix="p990-") as temp:
     temp = Path(temp)
     if group == "negative":
-        layered = json.loads((root / "negative-layered-v1.json").read_text())["profiles"]
+        layered = json.loads((root / "negative-layered-v2.json").read_text())["profiles"]
+        original = json.loads((root / "negative-layered-v1.json").read_text())["profiles"]
+        assert original["negative_duplicate_return.nl"] == {"CHECK": 0, "C17": 4}
+        normalized = run([cli, root / "sources/negative_duplicate_return.nl"])
+        ok(normalized)
+        direct = run([cli, root / "sources/before_direct.nl"])
+        ok(direct)
+        assert normalized.stdout == direct.stdout
+        print("P990 V1 ORACLE RED RETAINED: expected4/actual0; one-issued-return "
+              "normalization is separately covered by frozen V2 controls", flush=True)
         for name, expected in layered.items():
             source = root / "sources" / name
             target = temp / "named.c"
@@ -48,16 +58,30 @@ with tempfile.TemporaryDirectory(prefix="p990-") as temp:
                 args = [cli] + (["--check"] if mode == "check" else
                                ["--emit-c17-to", target] if mode == "named" else []) + [source]
                 result = run(args)
-                assert result.returncode == expected["CHECK" if mode == "check" else "C17"]
+                wanted = expected["CHECK" if mode == "check" else "C17"]
+                if result.returncode != wanted:
+                    artifact = os.environ.get("P990_EVIDENCE_DIR")
+                    if artifact:
+                        failure = Path(artifact)
+                        failure.mkdir(parents=True, exist_ok=True)
+                        (failure / (name + "-" + mode + "-RED.stdout")).write_bytes(result.stdout)
+                        (failure / (name + "-" + mode + "-RED.stderr")).write_bytes(result.stderr)
+                    raise AssertionError((name, mode, wanted, result.returncode))
                 assert not result.stdout
                 preserved(target, sentinel, before)
             print("P990 NEGATIVE SOURCE/NAMED", name,
                   expected["CHECK"], expected["C17"], flush=True)
         sys.exit(0)
     assert group in ["new", "p986"]
-    profiles = oracle["positive_profiles"] if group == "new" else oracle["P986_unchanged_controls"]
-    for name, expected in profiles.items():
-        source = root / ("sources" if group == "new" else "p986") / name
+    if group == "new":
+        profiles = [(root / "sources" / name, name, row)
+                    for name, row in oracle["positive_profiles"].items()]
+        profiles += [(root / name, Path(name).name, row)
+                     for name, row in calibration["calibration_controls"].items()]
+    else:
+        profiles = [(root / "p986" / name, name, row)
+                    for name, row in oracle["P986_unchanged_controls"].items()]
+    for source, name, expected in profiles:
         ok(run([cli, "--check", source]))
         result = run([cli, source])
         ok(result)

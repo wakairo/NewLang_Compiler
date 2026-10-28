@@ -975,6 +975,14 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_h_read_bound.nl" "0" "1" "107")
     add_test(NAME p990_p986_t_before_h_read_bound_oom.unit COMMAND p990_oom
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_h_read_bound.nl")
+    add_test(NAME p990_unreachable_direct_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/negative_duplicate_return.nl" "1" "1" "121")
+    add_test(NAME p990_unreachable_direct_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/negative_duplicate_return.nl")
+    add_test(NAME p990_unreachable_bound_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/calibration_unreachable_bound_v2.nl" "0" "1" "121")
+    add_test(NAME p990_unreachable_bound_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/calibration_unreachable_bound_v2.nl")
     add_test(NAME p990_new_native.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "new")
