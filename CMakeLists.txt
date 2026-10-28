@@ -843,6 +843,18 @@ if(BUILD_TESTING)
     add_test(NAME p965_named_if.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/output.py" "$<TARGET_FILE:p965_output>" "$<TARGET_FILE:newlangc>"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/sources/window.nl")
+    add_executable(p965_c89_guard tests/p965/c89/guard.c)
+    target_include_directories(p965_c89_guard PRIVATE tests/support)
+    target_link_libraries(p965_c89_guard PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p965_c89_guard PRIVATE -Wl,--wrap=nl_h_custody_reserve -Wl,--wrap=nl_h_custody_commit -Wl,--wrap=nl_checked_destroy)
+    add_test(NAME p965_c89_guard_charge.unit COMMAND p965_c89_guard
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/charge_false.nl" u8)
+    add_test(NAME p965_c89_guard_trim.unit COMMAND p965_c89_guard
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/trim_true.nl" unit)
+    add_test(NAME p965_c89_guard_fan.unit COMMAND p965_c89_guard
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/fan_false.nl" unit)
+    add_test(NAME p965_c89_guard_relay.unit COMMAND p965_c89_guard
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/relay_equal_binding.nl" unit)
     add_executable(p961_oom tests/p961/oom.c)
     target_include_directories(p961_oom PRIVATE tests/support)
     target_link_libraries(p961_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
