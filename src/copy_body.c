@@ -1031,7 +1031,20 @@ static bool parameter_entry(const NLCopyBodyProof *p,
         call->first_argument != p->parameters.arguments[0] ||
         fn->parameters[1] != nl_semantic_core_type(entry, NL_TYPE_U8))
         return false;
-    if (now->count != 2 || !now->parameters ||
+    /* The current registry entry, not only its address/signature, must still
+     * select the original CHECK-issued callable. History supplies no right to
+     * a replacement plan or a different result/effect/owner category. */
+    if (fn->body != p->body || now->body != p->body ||
+        fn->kind != NL_CHECKED_REGISTERED_CALL || now->kind != fn->kind ||
+        fn->result != call->type || now->result != fn->result ||
+        now->caller_effects != fn->caller_effects ||
+        now->hidden_dependencies != fn->hidden_dependencies ||
+        now->owner_receiver != fn->owner_receiver ||
+        now->owner_producer != fn->owner_producer ||
+        now->custody_recipient != fn->custody_recipient ||
+        nl_checked_context(p->owner) != current ||
+        p->owner->body_owner != p->body || p->owner->source != p->source ||
+        p->body->source != p->source || now->count != 2 || !now->parameters ||
         memcmp(now->parameters, p->parameter_types, sizeof(p->parameter_types)))
         return false;
     const NLSemanticTypeView t = entry->types[fn->parameters[0] - 1].view;

@@ -1,0 +1,33 @@
+{
+  "authority": "Issue974 C93 autonomous private safety repair, current main438170098d5b98096f1ad1f1f200dc1f326c75c3, implementation baseline d579c761a78e3c84765e35061f77936789788d82, Draft17.34",
+  "parent": "fce069982e4b4ac8aa1b0488166490e54b66ae9f",
+  "sources": "Only existing P-owned charge_false, trim_true, fan_false, relay_equal_binding profiles. No R963/R970 source/oracle/fixture read or reused.",
+  "genuine": "A/B independently CHECKed from one registration, same plan/source but different worlds/owners. F independently registered and CHECKed from same source with equal numerical function ID/signature and distinct retained helper body. All are actual original artifacts, no mocked/borrowed issuer.",
+  "healthy": "Historical body/parameters/unit receipt identities stable. Healthy scalar body/parameters/event or UNIT/unit-entry/parameters validators OK. A byte-equal parameter array with unchanged genuine plan stays valid.",
+  "entry_faults": {
+    "0": "different genuine F body, equal signature",
+    "1": "body NULL",
+    "2": "unit result to u8 or scalar result to unit",
+    "3": "kind U8_LITERAL",
+    "4": "caller_effects toggle",
+    "5": "hidden_dependencies toggle",
+    "6": "owner_receiver toggle",
+    "7": "owner_producer toggle",
+    "8": "custody_recipient toggle",
+    "9": "count1",
+    "10": "parametersNULL",
+    "11": "second parameter type unit",
+    "12": "true CHECK B world",
+    "13": "foreign source",
+    "14": "functionsNULL original positive count",
+    "15": "functionsNULL count0",
+    "16": "count0",
+    "17": "count below original call index"
+  },
+  "entry_expected": "All18 faults retain original historical GET; current UNIT/unit-entry/parameters or scalar/body/parameters/event validators return ANALYSIS_PRECISION_LIMIT. Every field/table/world restored BEFORE assertions or teardown; healthy validate again. A destroyed first; same-plan B and different-registration F still healthy and independently destroyed.",
+  "v0_expected": "On real original call, v1_call_parameter healthy handoff succeeds. With same current context and original positive count but functionsNULL: historical GET true, v1_call_parameter false with SIZE_MAX parameter sentinel unchanged, v0_validate_call false and original V0Program bytes unchanged, export lookup0. Restore table before any cleanup; healthy handoff/Copy validator OK.",
+  "named_expected": "Real CLI CHECK wrapped only after success; temporary functionsNULL with genuine positive count. Actual V0 consumer returns CLI4/V1-BACKEND-UNSUPPORTED, no C stdout, named previous bytes/dev/ino unchanged/no tmp artifact; exact table restored before root teardown; no-mutation retry CLI0 with nonempty C17.",
+  "guard_preflight": "Copy authenticates bounded original/current function entries including plan/result/category/flags, owner source and current callee world. V0 checks functions presence before first member and parameters before indexing; export prefilter also bounds absent table. No known unsafe negative executed on old code. No malformed generated C native execution.",
+  "limits": "Live genuine objects and actual unchanged backing allocations; no arbitrary dangling pointer, counterfeit opaque proof/ledger or forged allocation length promise. Original child/count/base unrestored ownership oracle remains separate.",
+  "iteration": "Freeze every new variant before first execution; retain first RED/source/oracle/SHA and safely self-repair inside C93 without per-failure C approval. No old test/oracle changes."
+}

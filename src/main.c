@@ -1981,14 +1981,16 @@ static bool v1_call_parameter(const NLCheckedFragment *f, NLCheckedNodeId id,
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLSemanticContext *c = nl_checked_context(f);
     const NLCheckedFragment *body = nl_checked_call_body(f, id);
-    if (call == NULL || c == NULL || body == NULL || call->function == 0 ||
-        call->function > c->function_count || nl_checked_context(body) != c)
+    if (call == NULL || c == NULL || c->functions == NULL || body == NULL ||
+        call->function == 0 || call->function > c->function_count ||
+        nl_checked_context(body) != c)
         return false;
     const NLFunctionEntry *fn = &c->functions[call->function - 1];
     if (fn->kind != NL_CHECKED_REGISTERED_CALL || fn->body == NULL ||
         body->body_owner != fn->body || body->source != fn->body->source ||
         fn->result != call->type || fn->count != call->argument_count ||
-        fn->body->count != fn->count || fn->count > 2 || fn->caller_effects ||
+        fn->body->count != fn->count || fn->count > 2 ||
+        (fn->count && !fn->parameters) || fn->caller_effects ||
         fn->hidden_dependencies || fn->owner_receiver || fn->owner_producer ||
         fn->custody_recipient)
         return false;
@@ -3080,7 +3082,7 @@ static int render_check_failure(const NLSource *source,
 static size_t v0_export_function(const NLSemanticContext *c, const char *name)
 {
     size_t selected = 0;
-    if (strcmp(name, "main") == 0)
+    if (c == NULL || c->functions == NULL || strcmp(name, "main") == 0)
         return 0;
     for (size_t i = 0; i < c->function_count; ++i) {
         const NLFunctionEntry *fn = &c->functions[i];
