@@ -44,7 +44,8 @@ There is no workflow, CMake, test-name, Production or old fixture modification.
 
 ## Frozen probes and first evidence
 
-parent-repro-v1.py.txt and parent-repro-oracle-v1.json reproduce F81 using
+parent-repro-v1.py.base64 and parent-repro-oracle-v1.json.base64 preserve the
+exact frozen source/oracle bytes (base64 decode) and reproduce F81 using
 only scratch copies and the exact original verifier. Their complete source
 and oracle were published BEFORE execution in Issue999 comment6468977231.
 parent-repro-FIRST.log SHA256:
@@ -71,6 +72,9 @@ filesystem writer/TOCTOU guarantee is claimed.
 
 ## Evidence and value boundary
 
+preparation-FIRST-RED.json preserves the pre-freeze static whitespace failure
+and local commit1d341ed. No candidate had executed. Exact original source/oracle
+bytes including their trailing blank are retained in base64, not normalized.
 New candidate execution results are recorded separately after pre-run freeze.
 Existing P990 owner494/OOM502/P9821788/new3388/source/native0-1-2/named-output
 CTest paths stay enabled; their actual local/CI replay is reported, not inferred
@@ -82,4 +86,3 @@ compiler tooling audit/re-audit and maintenance dependencies. They add zero
 ordinary-safe caller source proof duties. Human UB audit/re-audit closure
 reduction versus well-factored C, performance and maintenance cost are
 UNMEASURED. Product GO PAUSED / H1 HOLD. DRAFT HOLD; no READY/merge or new F/R.
-
