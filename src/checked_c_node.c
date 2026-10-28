@@ -92,6 +92,11 @@ typedef struct {
     const NLCheckedFragment *pre_copy_issuer;
     NLCheckedNodeId pre_copy_constructors[2];
     NLPlaceId pre_copy_places[2];
+    /* Synchronous observations of already validated source calls, never new
+     * owner receipts. Kept only for this one checked-artifact traversal. */
+    const NLCheckedFragment *terminal_issuer, *post_copy_issuer;
+    NLCheckedNodeId terminal_node;
+    NLBackingRegionId post_copy_regions[2];
     NLTypeId node, option, ptr, u8, unit;
     NLNodeCStatus status;
 } Emit;
@@ -333,6 +338,7 @@ static bool field(Emit *e, const Env *env, const NLCheckedField *f,
 }
 static bool expr(Emit *, Env *, NLCheckedNodeId, Value *);
 static bool same_reference(NLReferenceFacts, NLReferenceFacts);
+static bool copy_post_world(Emit *, const Env *);
 #include "checked_c_copy_if_internal.h"
 #include "checked_c_copy_internal.h"
 static bool producer_call(Emit *, Env *, NLCheckedNodeId,
@@ -2747,19 +2753,25 @@ static bool owner_call(Emit *e, Env *env, NLCheckedNodeId id,
     if (!ok)
         return reject(e);
     out->type = e->unit;
-    return put(e,
-               "NL_HEAP_HANDOFF(nl_v_%zu,nl_v_%zu.handle,nl_v_%zu.token,&nl_b_%"
-               "zu_%zu,&nl_b_%zu_%zu);\n"
-               "nl_owner_%zu",
-               args[0].temp, args[1].temp, args[2].temp, donors[1]->frame,
-               donors[1]->symbol, donors[2]->frame, donors[2]->symbol,
-               v->function) &&
-           (!e->custody || put(e, "_%zu", receiver.frame)) &&
-           put(e,
-               "(nl_v_%zu,nl_v_%zu,nl_v_%zu);\n"
-               "NL_HEAP_RETURNED(&nl_b_%zu_%zu,&nl_b_%zu_%zu);\n",
-               args[0].temp, args[1].temp, args[2].temp, donors[1]->frame,
-               donors[1]->symbol, donors[2]->frame, donors[2]->symbol);
+    const bool emitted =
+        put(e,
+            "NL_HEAP_HANDOFF(nl_v_%zu,nl_v_%zu.handle,nl_v_%zu.token,&nl_b_%"
+            "zu_%zu,&nl_b_%zu_%zu);\n"
+            "nl_owner_%zu",
+            args[0].temp, args[1].temp, args[2].temp, donors[1]->frame,
+            donors[1]->symbol, donors[2]->frame, donors[2]->symbol,
+            v->function) &&
+        (!e->custody || put(e, "_%zu", receiver.frame)) &&
+        put(e,
+            "(nl_v_%zu,nl_v_%zu,nl_v_%zu);\n"
+            "NL_HEAP_RETURNED(&nl_b_%zu_%zu,&nl_b_%zu_%zu);\n",
+            args[0].temp, args[1].temp, args[2].temp, donors[1]->frame,
+            donors[1]->symbol, donors[2]->frame, donors[2]->symbol);
+    if (emitted && !e->custody) {
+        e->terminal_issuer = env->artifact;
+        e->terminal_node = id;
+    }
+    return emitted;
 }
 
 /* §18.1c only. The complete owned certificate authorizes the finite world
@@ -3314,6 +3326,7 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         e.roots != (e.three_lexical_links ? 3u : 2u) || result.type != e.unit ||
         (e.copy_type && (!e.copy_roots || e.copy_roots > 2 ||
                          e.copy_calls != e.copy_expected_calls)) ||
+        (e.post_copy_issuer && e.copy_roots != 2) ||
         (e.no_pre_read && e.producer_calls != 1) ||
         (e.custody && (!e.custody_authorized || e.recipient_calls != 1)) ||
         (e.allocated &&

@@ -6,7 +6,8 @@
  * Literal-only forks must retain its complete original prefix. No fork-local
  * place or authority is imported into the C carrier environment. */
 static bool copy_if_prefix_same(const NLSemanticContext *arm,
-                                const NLSemanticContext *entry, size_t prefix)
+                                const NLSemanticContext *entry, size_t prefix,
+                                const NLBackingRegionId ended[2])
 {
     NLSemanticSnapshot a, b;
     if (!nl_semantic_snapshot(arm, &a) || !nl_semantic_snapshot(entry, &b) ||
@@ -36,9 +37,17 @@ static bool copy_if_prefix_same(const NLSemanticContext *arm,
 #undef SAME_VIEW
     for (size_t j = 1; j <= a.backing_regions; ++j) {
         NLSemanticBackingView region;
-        if (!nl_semantic_backing_view(arm, j, &region) || !region.live ||
-            region.size != 24)
+        if (!nl_semantic_backing_view(arm, j, &region) || region.size != 24)
             return false;
+        /* Full backing/domain/place/value views above still agree. A retired
+         * original has no raw representation to read. Only the two H regions
+         * authenticated by the postterminal admission may take this route. */
+        if (!region.live) {
+            if (!ended || (j != ended[0] && j != ended[1]) || a.raw_intervals ||
+                b.raw_intervals)
+                return false;
+            continue;
+        }
         for (size_t offset = 0; offset < region.size; ++offset) {
             NLRawRepView x, y;
             if (!nl_semantic_raw_rep_view(arm, j, offset, &x) ||
@@ -118,6 +127,9 @@ static bool copy_value_if(Emit *e, const Env *env, NLCheckedNodeId id,
         return reject(e);
     const NLCheckedFragment *arms[2] = {nl_checked_if_arm(f, id, 0),
                                         nl_checked_if_arm(f, id, 1)};
+    const NLBackingRegionId *ended =
+        e->post_copy_issuer && copy_post_world(e, env) ? e->post_copy_regions
+                                                       : NULL;
     size_t choices[2];
     NLSemanticSnapshot first = {0};
     for (size_t a = 0; a < 2; ++a) {
@@ -147,7 +159,7 @@ static bool copy_value_if(Emit *e, const Env *env, NLCheckedNodeId id,
             !nl_semantic_snapshot(nl_checked_context(arm), &state) ||
             state.last_value_fact != arm->branch_fact_prefix ||
             !copy_if_prefix_same(nl_checked_context(arm), e->copy_anchor,
-                                 arm->branch_value_prefix))
+                                 arm->branch_value_prefix, ended))
             return reject(e);
         if (a && memcmp(&state, &first, sizeof(state)))
             return reject(e);

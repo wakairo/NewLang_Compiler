@@ -367,13 +367,129 @@ static bool copy_pre_world(Emit *e, const Env *env)
     e->pre_copy_issuer = env->artifact;
     return true;
 }
+/* The present H callable must still be the retained source callable. Its own
+ * CHECK-issued entry snapshot, not a numeric function ID, supplies history. */
+static bool copy_post_callable(const NLCheckedFragment *f, NLCheckedNodeId id,
+                               const NLSemanticContext *entry, size_t count)
+{
+    const NLSemanticContext *current = nl_checked_context(f);
+    const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+    const NLCheckedFragment *body = nl_checked_call_body(f, id);
+    if (!entry || !current || !entry->functions || !current->functions ||
+        !call || !call->function || call->function > entry->function_count ||
+        call->function > current->function_count || !body ||
+        nl_checked_context(body) != current)
+        return false;
+    const NLFunctionEntry *old = &entry->functions[call->function - 1],
+                          *now = &current->functions[call->function - 1];
+    if (!old->body || now->body != old->body || body->body_owner != old->body ||
+        body->source != old->body->source ||
+        old->kind != NL_CHECKED_REGISTERED_CALL || now->kind != old->kind ||
+        old->result != call->type || now->result != old->result ||
+        old->count != count || now->count != count ||
+        old->body->count != count || call->argument_count != count ||
+        !old->parameters || !now->parameters ||
+        memcmp(old->parameters, now->parameters, count * sizeof(NLTypeId)) ||
+        old->caller_effects != now->caller_effects ||
+        old->hidden_dependencies != now->hidden_dependencies ||
+        old->owner_producer != now->owner_producer ||
+        old->owner_receiver != now->owner_receiver ||
+        old->custody_recipient != now->custody_recipient)
+        return false;
+    NLCheckedNodeId argument = call->first_argument;
+    for (size_t i = 0; i < count; ++i) {
+        const NLCheckedNodeView *a = nl_checked_node_view(f, argument);
+        if (!a || a->parameter_type != old->parameters[i])
+            return false;
+        argument = a->next_argument;
+    }
+    return !argument;
+}
+static bool copy_post_h(const Emit *e, const Env *q,
+                        const NLSemanticContext *entry)
+{
+    NLSemanticPlaceView root;
+    NLSemanticBackingView backing;
+    NLSemanticDomainView domain;
+    if (!q || q->region_slot > 1 || !q->backing || !q->heap_place ||
+        !q->heap_domain || q->stability_scope || q->stability_domain ||
+        q->stability_place || e->lifecycle[q->region_slot].stage != 8 ||
+        !nl_semantic_place_view(entry, q->heap_place, &root) || root.live ||
+        root.type != e->node || root.incarnation != q->heap_incarnation ||
+        root.current_fact || root.current_value || root.governing_domain ||
+        root.placement.region ||
+        !nl_semantic_backing_view(entry, q->backing, &backing) ||
+        backing.live || backing.size != 24 || backing.alignment != 8 ||
+        !nl_semantic_domain_view(entry, q->heap_domain, &domain) || domain.live)
+        return false;
+    for (size_t i = 0; i < entry->value_count; ++i) {
+        const NLSemanticValueView *v = &entry->values[i];
+        if (v->carrier != NL_CARRIER_ENDED &&
+            (v->allocation_region == q->backing ||
+             v->occupancy.region == q->backing ||
+             v->slot_place == q->heap_place || v->domain == q->heap_domain))
+            return false;
+    }
+    return true;
+}
+static bool copy_post_world(Emit *e, const Env *env)
+{
+    if (!env || env->artifact != e->copy_issuer || !e->copy_anchor ||
+        !e->two_heap || !e->live_tail || e->custody || e->pre_copy_issuer ||
+        e->allocations != 2 || e->producer_calls != 1 || e->owner_calls != 1 ||
+        e->pending_live || e->active_owner_call || e->active_owner_body ||
+        e->producer_issuer != env->artifact ||
+        e->terminal_issuer != env->artifact || e->copy_expected_calls != 1 ||
+        (e->post_copy_issuer && e->post_copy_issuer != env->artifact) ||
+        (!e->post_copy_issuer && (e->copy_roots || e->copy_calls)))
+        return false;
+    const Env *head = env->parent;
+    const NLCheckedNodeView *producer = get(env, e->producer_node),
+                            *terminal = get(env, e->terminal_node);
+    NLSemanticSnapshot snapshot;
+    if (!head || head->region_slot != 0 || env->region_slot != 1 ||
+        head->backing == env->backing || head->heap_place == env->heap_place ||
+        head->heap_domain == env->heap_domain ||
+        !nl_semantic_snapshot(e->copy_anchor, &snapshot) ||
+        snapshot.backing_regions != 2 || snapshot.domains != 2 ||
+        snapshot.raw_intervals || !copy_post_h(e, head, e->copy_anchor) ||
+        !copy_post_h(e, env, e->copy_anchor) ||
+        !nl_h_origin_validate(e->origin_root) || !producer || !terminal ||
+        !nl_checked_producer_valid(env->artifact, e->producer_node) ||
+        !producer->producer.return_proved ||
+        producer->span.end_byte >= terminal->span.start_byte ||
+        !terminal->owner_call.entry_proved ||
+        !terminal->owner_call.post_proved ||
+        terminal->owner_call.root != env->heap_place ||
+        terminal->owner_call.incarnation != env->heap_incarnation ||
+        terminal->owner_call.domain != env->heap_domain ||
+        terminal->owner_call.range.region != env->backing ||
+        terminal->owner_call.range.start ||
+        terminal->owner_call.range.length != 24 ||
+        producer->producer.root != terminal->owner_call.root ||
+        producer->producer.incarnation != terminal->owner_call.incarnation ||
+        producer->producer.domain != terminal->owner_call.domain ||
+        memcmp(&producer->producer.range, &terminal->owner_call.range,
+               sizeof(producer->producer.range)) ||
+        !copy_post_callable(
+            env->artifact, e->producer_node,
+            nl_checked_producer_entry(env->artifact, e->producer_node), 4) ||
+        !copy_post_callable(
+            env->artifact, e->terminal_node,
+            nl_checked_owner_entry(env->artifact, e->terminal_node), 3))
+        return false;
+    e->post_copy_issuer = env->artifact;
+    e->post_copy_regions[0] = head->backing;
+    e->post_copy_regions[1] = env->backing;
+    return true;
+}
 static bool copy_carrier_world(Emit *e, const Env *env)
 {
     return env->artifact == e->copy_issuer &&
            (!e->allocations ||
             (e->allocations == 2 && e->producer_calls == 1 &&
              e->owner_calls == 0) ||
-            copy_pre_world(e, env));
+            copy_post_world(e, env) || copy_pre_world(e, env));
 }
 static bool copy_bind(Emit *e, Env *env, Local *l, NLCheckedNodeId constructor)
 {
