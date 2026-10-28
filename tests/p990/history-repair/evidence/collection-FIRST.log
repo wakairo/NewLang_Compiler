@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/workspace/p999-artifacts/collect-local.py", line 79, in <module>
+    assert len(hashes) == 18 and all(len(values) == 1 for values in hashes.values())
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

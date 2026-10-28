@@ -1,0 +1,165 @@
+[
+  {
+    "CLI_exit": 1,
+    "CLI_stdout": "empty",
+    "case": "f81-coherent-v1-v2-v3",
+    "error": "historical freeze SHA256: tests/p990/current-freeze-v1.json",
+    "named_bytes_dev_ino": "unchanged",
+    "status": "REJECT"
+  },
+  {
+    "case": "past-v2-coherent-successors",
+    "error": "historical freeze SHA256: tests/p990/current-freeze-v2.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "past-v3-coherent-successor",
+    "error": "historical freeze SHA256: tests/p990/current-freeze-v3.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "mutable-anchor-claim",
+    "error": "historical freeze SHA256: tests/p990/current-freeze-v1.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "coherent-first-path-swap",
+    "error": "historical freeze SHA256: tests/p990/current-freeze-v2.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "first-generation-path-alias",
+    "error": "historical freeze path",
+    "status": "REJECT"
+  },
+  {
+    "case": "mutable-anchor-field",
+    "error": "freeze manifest fields",
+    "status": "REJECT"
+  },
+  {
+    "case": "drop-P990-observer",
+    "error": "freeze coverage lost: tests/p990/observer.h",
+    "status": "REJECT"
+  },
+  {
+    "case": "drop-P990-runner",
+    "error": "freeze coverage lost: tests/p990/run.py",
+    "status": "REJECT"
+  },
+  {
+    "case": "drop-P990-v2-source-manifest",
+    "error": "freeze coverage lost: tests/p990/source-freeze-v2.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "drop-P990-v2-oracle",
+    "error": "freeze coverage lost: tests/p990/oracle-v2.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "drop-original-P982-source",
+    "error": "freeze coverage lost: tests/p982/sources/after_true.nl",
+    "status": "REJECT"
+  },
+  {
+    "case": "drop-original-P990-oracle",
+    "error": "freeze coverage lost: tests/p990/oracle-v1.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "drop-T997-runner",
+    "error": "freeze coverage lost: cmake/independent-r-manifest.py",
+    "status": "REJECT"
+  },
+  {
+    "case": "intermediate-drop-restored-only-in-current",
+    "error": "freeze coverage lost: tests/p990/observer.h",
+    "status": "REJECT"
+  },
+  {
+    "case": "changed-v2-source-with-current-digest",
+    "error": "original P990 frozen input changed: tests/p990/sources/negative_additional_return_v2.nl",
+    "status": "REJECT"
+  },
+  {
+    "case": "changed-v2-oracle-with-current-digest",
+    "error": "original P990 frozen input changed: tests/p990/oracle-v2.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "changed-original-first-RED-with-current-digest",
+    "error": "original P990 evidence changed: tests/p990/evidence/candidate1-lineage-FIRST.stderr",
+    "status": "REJECT"
+  },
+  {
+    "case": "changed-T997-runner-with-current-digest",
+    "error": "immutable T997 blob mismatch: cmake/independent-r-manifest.py",
+    "status": "REJECT"
+  },
+  {
+    "case": "missing-old-support",
+    "error": "missing freeze input: tests/p990/lineage/original/CMakeLists.txt.data",
+    "status": "REJECT"
+  },
+  {
+    "case": "unmatched-P982-parent-OID",
+    "error": "immutable P982 parent/tree changed",
+    "status": "REJECT"
+  },
+  {
+    "case": "unmatched-retained-parent-commit",
+    "error": "retained parent commit digest",
+    "status": "REJECT"
+  },
+  {
+    "case": "symlink-original-generation",
+    "error": "symlink freeze path: tests/p990/current-freeze-v1.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "symlink-intermediate-directory",
+    "error": "symlink freeze path: tests/p990/lineage/parent-snapshot-v1.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "nonregular-current-input",
+    "error": "nonregular freeze path: tests/p990/observer.h",
+    "status": "REJECT"
+  },
+  {
+    "case": "invalid-current-JSON",
+    "error": "invalid freeze JSON",
+    "status": "REJECT"
+  },
+  {
+    "case": "duplicate-current-JSON-key",
+    "error": "duplicate freeze JSON key: schema",
+    "status": "REJECT"
+  },
+  {
+    "case": "absolute-manifest-path",
+    "error": "nonlocal freeze path: /tmp/c107-do-not-read",
+    "status": "REJECT"
+  },
+  {
+    "case": "traversal-manifest-path",
+    "error": "nonlocal freeze path: ../c107-do-not-read",
+    "status": "REJECT"
+  },
+  {
+    "case": "backslash-manifest-path",
+    "error": "invalid freeze path",
+    "status": "REJECT"
+  },
+  {
+    "case": "noncanonical-manifest-path",
+    "error": "nonlocal freeze path: tests/p990/./observer.h",
+    "status": "REJECT"
+  },
+  {
+    "case": "invalid-current-digest-format",
+    "error": "freeze SHA256 format: src/checked_c_copy_internal.h",
+    "status": "REJECT"
+  }
+]
