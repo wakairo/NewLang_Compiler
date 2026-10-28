@@ -1,0 +1,18 @@
+Breakpoint 1 at 0x2d04: file /workspace/p982/tests/p982/probe.c, line 67.
+warning: opening /proc/self/mem file failed: Read-only file system (30)
+warning: opening /proc/PID/mem file for lwp 73701.73701 failed: Read-only file system (30)
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+
+Breakpoint 1, run (path=0x7fffffffe382 "/workspace/p982/tests/p982/sources/after_true.nl") at /workspace/p982/tests/p982/probe.c:67
+67	    CHECK(edge != SIZE_MAX && arm->count == 3 &&
+$1 = 0
+$2 = 3
+$3 = NL_CHECKED_BLOCK
+$4 = NL_CHECKED_U8_LITERAL
+$5 = NL_CHECKED_IF_ARM
+$6 = 3
+$7 = 56
+$8 = 54
+/workspace/p982/tests/p982/probe.c:67: edge != SIZE_MAX && arm->count == 3 && arm->nodes[0].kind == NL_CHECKED_U8_LITERAL && arm->context->place_count >= originals[1]
+[Inferior 1 (process 73701) exited with code 01]
