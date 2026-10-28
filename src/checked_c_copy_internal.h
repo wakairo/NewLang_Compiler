@@ -52,27 +52,42 @@ static bool copy_call_proof(Emit *e, const NLCheckedFragment *f,
         (e->copy_function && e->copy_function != v.function))
         return reject(e);
     const NLCheckedNodeView *root = nl_checked_node_view(v.body, v.root);
+    /* These are two spellings of the same already-validated Change. The
+     * RETURN syntax supplies no authority: its initializer must be this
+     * actual call's source-owned event and returned old Copy result. */
+    const bool direct = root && root->item_count == 1;
     const NLCheckedNodeView *binding =
-        root ? nl_checked_node_view(v.body, root->first_item) : NULL;
+        root && !direct ? nl_checked_node_view(v.body, root->first_item) : NULL;
     const NLCheckedNodeView *ret =
-        binding ? nl_checked_node_view(v.body, binding->next_item) : NULL;
+        direct    ? nl_checked_node_view(v.body, root->first_item)
+        : binding ? nl_checked_node_view(v.body, binding->next_item)
+                  : NULL;
+    const NLCheckedNodeId initializer =
+        direct ? (ret ? ret->initializer : 0)
+               : (binding ? binding->initializer : 0);
     const NLCheckedNodeView *replace =
-        binding ? nl_checked_node_view(v.body, binding->initializer) : NULL;
+        nl_checked_node_view(v.body, initializer);
     const NLCheckedNodeView *old =
-        ret ? nl_checked_node_view(v.body, ret->initializer) : NULL;
+        ret && !direct ? nl_checked_node_view(v.body, ret->initializer) : NULL;
     const NLCheckedNodeView *ref =
         replace ? nl_checked_node_view(v.body, replace->first_argument) : NULL;
     const NLCheckedNodeView *next =
         ref ? nl_checked_node_view(v.body, ref->next_argument) : NULL;
-    if (!root || root->kind != NL_CHECKED_BLOCK || root->item_count != 2 ||
-        root->tail || !binding || binding->kind != NL_CHECKED_BINDING || !ret ||
-        ret->kind != NL_CHECKED_RETURN || ret->next_item || !replace ||
+    if (!root || root->kind != NL_CHECKED_BLOCK ||
+        (root->item_count != 1 && root->item_count != 2) || root->tail ||
+        !ret || ret->kind != NL_CHECKED_RETURN || ret->next_item || !replace ||
         replace->kind != NL_CHECKED_REPLACE || replace->argument_count != 2 ||
-        event.node != binding->initializer || !old ||
-        old->kind != NL_CHECKED_IDENTIFIER || old->symbol != binding->symbol ||
-        old->value_use != NL_VALUE_COPIED || !ref ||
-        ref->kind != NL_CHECKED_IDENTIFIER || ref->symbol != p->parameters[0] ||
-        !next || next->kind != NL_CHECKED_IDENTIFIER ||
+        event.node != initializer ||
+        (!direct && (!binding || binding->kind != NL_CHECKED_BINDING || !old ||
+                     old->kind != NL_CHECKED_IDENTIFIER ||
+                     old->symbol != binding->symbol ||
+                     old->value_use != NL_VALUE_COPIED)) ||
+        (direct && (!ret->terminates || replace->result_count != 1 ||
+                    replace->results[0].type != e->u8 ||
+                    ret->returned.value != replace->results[0].value)) ||
+        !ref || ref->kind != NL_CHECKED_IDENTIFIER ||
+        ref->symbol != p->parameters[0] || !next ||
+        next->kind != NL_CHECKED_IDENTIFIER ||
         next->symbol != p->parameters[1] || next->next_argument ||
         replace->type != e->u8 || ret->returned.type != e->u8 ||
         ret->returned.value != v.result.value)

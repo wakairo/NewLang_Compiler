@@ -924,6 +924,68 @@ if(BUILD_TESTING)
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982")
     add_test(NAME p982_freeze.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/freeze_test.py")
+    add_executable(p990_probe tests/p990/probe.c)
+    target_include_directories(p990_probe PRIVATE tests/support)
+    target_link_libraries(p990_probe PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    add_executable(p990_oom tests/p990/oom.c)
+    target_include_directories(p990_oom PRIVATE tests/support)
+    target_link_libraries(p990_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p990_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p990_before_direct_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/before_direct.nl" "1" "1" "121")
+    add_test(NAME p990_before_direct_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/before_direct.nl")
+    add_test(NAME p990_after_true_direct_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_true_direct.nl" "1" "1" "151")
+    add_test(NAME p990_after_true_direct_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_true_direct.nl")
+    add_test(NAME p990_after_false_direct_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_false_direct.nl" "1" "1" "151")
+    add_test(NAME p990_after_false_direct_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_false_direct.nl")
+    add_test(NAME p990_before_bound_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/before_bound.nl" "0" "1" "121")
+    add_test(NAME p990_before_bound_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/before_bound.nl")
+    add_test(NAME p990_after_true_bound_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_true_bound.nl" "0" "1" "151")
+    add_test(NAME p990_after_true_bound_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_true_bound.nl")
+    add_test(NAME p990_after_false_bound_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_false_bound.nl" "0" "1" "151")
+    add_test(NAME p990_after_false_bound_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_false_bound.nl")
+    add_test(NAME p990_p986_t_only_direct_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_only_direct.nl" "1" "0" "107")
+    add_test(NAME p990_p986_t_only_bound_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_only_bound.nl" "0" "0" "107")
+    add_test(NAME p990_p986_t_before_allocation_direct_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_allocation_direct.nl" "1" "1" "107")
+    add_test(NAME p990_p986_t_before_allocation_direct_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_allocation_direct.nl")
+    add_test(NAME p990_p986_t_before_allocation_bound_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_allocation_bound.nl" "0" "1" "107")
+    add_test(NAME p990_p986_t_before_allocation_bound_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_allocation_bound.nl")
+    add_test(NAME p990_p986_t_before_h_read_direct_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_h_read_direct.nl" "1" "1" "107")
+    add_test(NAME p990_p986_t_before_h_read_direct_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_h_read_direct.nl")
+    add_test(NAME p990_p986_t_before_h_read_bound_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_h_read_bound.nl" "0" "1" "107")
+    add_test(NAME p990_p986_t_before_h_read_bound_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_h_read_bound.nl")
+    add_test(NAME p990_new_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "new")
+    add_test(NAME p990_p986_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "p986")
+    add_test(NAME p990_negative_sources.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "negative")
+    add_test(NAME p990_freeze_protocol.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/freeze_selftest.py")
     add_executable(p961_oom tests/p961/oom.c)
     target_include_directories(p961_oom PRIVATE tests/support)
     target_link_libraries(p961_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)

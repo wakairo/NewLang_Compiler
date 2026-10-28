@@ -1,10 +1,11 @@
+"""Prospective C103 successor; original checker/manifests remain in parent history."""
 from pathlib import Path
-import hashlib
-import json
+import sys
 
 root = Path(__file__).resolve().parents[2]
-for manifest in ["source-freeze-v1.json", "harness-freeze-v3.json"]:
-    data = json.loads((root / "tests/p982" / manifest).read_text())
-    for name, expected in data["files"].items():
-        assert hashlib.sha256((root / name).read_bytes()).hexdigest() == expected, name
-print("P982 frozen independent source/oracle/production/harness hashes PASS")
+sys.path.insert(0, str(root / "tests/support"))
+from versioned_freeze import verify
+
+CURRENT = "tests/p990/current-freeze-v1.json"
+count = verify(root, CURRENT)
+print("P982 original Git/source/oracle lineage and current versioned hashes PASS", count)
