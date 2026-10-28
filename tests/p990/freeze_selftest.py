@@ -160,11 +160,18 @@ with scratch() as work:
 
 def coherent(work, first=1, first_path_swap=False, claimed_anchor=False):
     changed = {}
-    for row in oracle["reviewed_generations"]:
-        generation, name = row["generation"], row["path"]
+    # Keep the old oracle immutable, but include newly historical intermediates.
+    chain = []
+    name = current["previous"]["path"]
+    while name:
+        data = (work / name).read_bytes()
+        doc = json.loads(data)
+        chain.append((doc["generation"], name, data))
+        name = doc["previous"]["path"] if doc["previous"] else None
+    for generation, name, data in reversed(chain):
         if generation < first:
             continue
-        value = json.loads(originals[name])
+        value = json.loads(data)
         if generation == first:
             if first_path_swap:
                 alias = "tests/p990/protocol-c107-first-alias.json"
@@ -345,3 +352,117 @@ counterexample("invalid-current-digest-format", bad_sha)
 assert {row["case"] for row in new_results} == oracle["negatives"].keys()
 print("P999 C107 provenance history: 3 new controls and", len(new_results),
       "new deliberate rejections PASS; original 2 controls/7 rejections retained")
+
+# C111 adds only the finite original P982 evidence obligation found by F82.
+p1011 = json.loads((root / "tests/p990/p1011/oracle-v1.json").read_bytes())
+assert len(p1011["cohort"]) == 22
+for row in p1011["reviewed_generations"]:
+    data = (root / row["path"]).read_bytes()
+    assert sha(data) == row["sha256"]
+    assert hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest() == row["oid"]
+for name, expected in p1011["cohort"].items():
+    assert sha((root / name).read_bytes()) == expected
+assert current["generation"] == 5
+print("P1011 CONTROL honest-v5-original-history-and-evidence PASS")
+
+p1011_next = "tests/p990/p1011-future-v6.json"
+with scratch() as work:
+    changes = (header, "CMakeLists.txt", "src/checked_c_node.c")
+    for name in changes:
+        suffix = b"\n# P1011 future control\n" if name == "CMakeLists.txt" else b"\n/* P1011 future control */\n"
+        (work / name).write_bytes((work / name).read_bytes() + suffix)
+    (work / wrapper).write_text((work / wrapper).read_text().replace(current_name, p1011_next))
+    forward(work, p1011_next, changed=(*changes, wrapper))
+    verify(work, p1011_next)
+    assert all(sha((work / name).read_bytes()) == expected
+               for name, expected in p1011["cohort"].items())
+    print("P1011 CONTROL legitimate-v6-current-header-CMake-proof-consumer-update PASS")
+
+p1011_results = []
+first_red = p1011["first_red"]["path"]
+
+
+def p1011_rejected(label, mutate, expected, cli=False):
+    with scratch() as work:
+        result = mutate(work)
+        selected = result if isinstance(result, str) else current_name
+        error = rejected(work, selected, expected)
+        row = {"case": label, "status": "REJECT", "error": error}
+        if cli:
+            sentinel = work / "p1011-existing-output.bin"
+            original = b"P1011 KEEP EXISTING OUTPUT\n"
+            sentinel.write_bytes(original)
+            before = sentinel.stat()
+            run = subprocess.run([sys.executable, str(work / wrapper)], cwd=work,
+                                 capture_output=True, text=True, timeout=15)
+            assert run.returncode == 1 and not run.stdout
+            assert expected in run.stderr
+            after = sentinel.stat()
+            assert sentinel.read_bytes() == original
+            assert (before.st_dev, before.st_ino) == (after.st_dev, after.st_ino)
+            row.update(CLI_exit=run.returncode, CLI_stdout="empty",
+                       named_bytes_dev_ino="unchanged")
+        p1011_results.append(row)
+        print("P1011 CASE", json.dumps(row, sort_keys=True))
+
+
+def coedit_evidence(work, name, future=False):
+    data = (work / name).read_bytes()
+    if name == first_red:
+        records = json.loads(data)
+        records[0]["kind"] = "P1011 SIMULATED COHERENT HISTORY REWRITE"
+        changed = (json.dumps(records, indent=2) + "\n").encode()
+    else:
+        changed = data + b"\n"
+    assert sha(data) != sha(changed)
+    (work / name).write_bytes(changed)
+    if future:
+        return forward(work, p1011_next, changed=(name,))
+    value = json.loads(current_bytes)
+    value["files"][name] = sha(changed)
+    write(work, current_name, value)
+    return current_name
+
+
+p1011_rejected("coedited-current-v5", lambda work: coedit_evidence(work, first_red),
+               p1011["candidate_negatives"]["coedited_current_v5"], cli=True)
+for name in p1011["cohort"]:
+    expected = ("original P982 first RED changed" if name == first_red else
+                "original P982 evidence changed: " + name)
+    p1011_rejected("coedited-future-v6:" + name,
+                   lambda work, name=name: coedit_evidence(work, name, future=True), expected)
+
+p1011_rejected("historical-v4-coherent-update", lambda work: coherent(work, first=4),
+               p1011["candidate_negatives"]["historical_v4_coherent_update"])
+
+
+def drop_first_red(work):
+    value = json.loads(current_bytes)
+    del value["files"][first_red]
+    write(work, current_name, value)
+
+
+p1011_rejected("missing-first-red-key", drop_first_red,
+               p1011["candidate_negatives"]["missing_first_red_key"])
+
+
+def first_red_symlink(work):
+    alias = work / "p1011-first-red-alias.json"
+    alias.write_bytes((work / first_red).read_bytes())
+    (work / first_red).unlink()
+    (work / first_red).symlink_to(alias)
+
+
+p1011_rejected("first-red-symlink", first_red_symlink,
+               p1011["candidate_negatives"]["first_red_symlink"])
+
+
+def first_red_nonregular(work):
+    (work / first_red).unlink()
+    (work / first_red).mkdir()
+
+
+p1011_rejected("first-red-nonregular", first_red_nonregular,
+               p1011["candidate_negatives"]["first_red_nonregular"])
+assert len(p1011_results) == 27
+print("P1011 C111: 2 controls and 27 deliberate rejections PASS; old expectations retained")

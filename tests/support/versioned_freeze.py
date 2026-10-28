@@ -5,7 +5,7 @@ bytes and original blob paths are authenticated against the pinned parent tree.
 Unchanged protected inputs are checked both historically and currently. A new
 manifest generation changes current expectations without editing earlier ones.
 
-C107 pins the three reviewed P990 generations independently of mutable
+C107/C111 pin reviewed P990/P999 generations independently of mutable
 successor manifests. Changes to these literals or verifier are trusted-source
 changes requiring Coordination review and independent F follow-up; a manifest
 cannot authorize them. This is not protection against changing trusted code.
@@ -36,7 +36,15 @@ BASELINES = {
     3: ("tests/p990/current-freeze-v3.json",
         "d636d2772584a16256ace830ecd4e82e352d0b8d80bf63172fa1ecaedf6829b8",
         "9f81177516e7e1f178e3cdf7e9a99aaaf19923ca"),
+    # C111: original P1003 ca2a21b, tree d59f6547d72e8421943024b421ef15f74f2baaac.
+    4: ("tests/p990/current-freeze-v4.json",
+        "2effb5d5da27f337a68147887428f0a06bdef5184dedbb8b8ceaec6d684510af",
+        "e6f0946976d550973cf69de7d539b161b08b316d"),
 }
+# C111/F82: independently checked against original P984 c981ff7, not current JSON.
+P982_FIRST_RED = "tests/p982/evidence/first-reds.json"
+P982_FIRST_RED_SHA = "f4ef793e961c3d60a3f071fa3286c95197f55ec5c554a22d1d8ca05909ae9658"
+P982_FIRST_RED_OID = "8c9f97b51c04113436ddc7efc0c38480dcdecceb"
 # Reviewed T998 4c3ed993fa8a94c7a2850ff98677127d96c31a6b,
 # tree a0c648cc10305462cf902530decdc06e8f92552b. No R source enrollment.
 TOOLING_BLOBS = {
@@ -232,10 +240,13 @@ def reviewed_history(root):
         require(git_oid("blob", local(root, name).read_bytes()) == oid,
                 "immutable T997 blob mismatch: " + name)
     baseline = None
-    for name, _, _ in BASELINES.values():
+    for generation, (name, _, _) in BASELINES.items():
         baseline, _ = manifest_data(root, name)
         required.add(name)
         required.update(baseline["files"])
+        if generation == 3:
+            p982_evidence = {path: expected for path, expected in baseline["files"].items()
+                             if path.startswith("tests/p982/evidence/")}
     # Original source/oracle/recorded JSON remains immutable; current code and
     # observers/runners can evolve under a reviewed new current generation.
     for name, expected in baseline["files"].items():
@@ -252,6 +263,13 @@ def reviewed_history(root):
         require(digest(local(root, name).read_bytes()) == expected,
                 "original P990 evidence changed: " + name)
         required.add(name)
+    # Only original historical P982 evidence, never arbitrary current code.
+    data = local(root, P982_FIRST_RED).read_bytes()
+    require(digest(data) == P982_FIRST_RED_SHA and
+            git_oid("blob", data) == P982_FIRST_RED_OID, "original P982 first RED changed")
+    for name, expected in p982_evidence.items():
+        require(digest(local(root, name).read_bytes()) == expected,
+                "original P982 evidence changed: " + name)
     return required
 
 
