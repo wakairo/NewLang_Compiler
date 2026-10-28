@@ -1,0 +1,92 @@
+Internal ctest changing into directory: /workspace/p974-build-clang
+Test project /workspace/p974-build-clang
+      Start 276: p965_freeze.unit
+ 1/43 Test #276: p965_freeze.unit ........................   Passed    0.10 sec
+      Start 277: p965_echo_ownership.unit
+ 2/43 Test #277: p965_echo_ownership.unit ................   Passed    0.40 sec
+      Start 278: p965_echo_oom.unit
+ 3/43 Test #278: p965_echo_oom.unit ......................   Passed    0.23 sec
+      Start 279: p965_echo_definition_oom.unit
+ 4/43 Test #279: p965_echo_definition_oom.unit ...........   Passed    0.10 sec
+      Start 280: p965_window_ownership.unit
+ 5/43 Test #280: p965_window_ownership.unit ..............   Passed    0.36 sec
+      Start 281: p965_window_oom.unit
+ 6/43 Test #281: p965_window_oom.unit ....................   Passed    0.20 sec
+      Start 282: p965_window_definition_oom.unit
+ 7/43 Test #282: p965_window_definition_oom.unit .........   Passed    0.15 sec
+      Start 283: p965_t_only_ownership.unit
+ 8/43 Test #283: p965_t_only_ownership.unit ..............   Passed    0.02 sec
+      Start 284: p965_t_only_oom.unit
+ 9/43 Test #284: p965_t_only_oom.unit ....................   Passed    0.01 sec
+      Start 285: p965_t_only_definition_oom.unit
+10/43 Test #285: p965_t_only_definition_oom.unit .........   Passed    0.01 sec
+      Start 286: p965_plain_ownership.unit
+11/43 Test #286: p965_plain_ownership.unit ...............   Passed    0.01 sec
+      Start 287: p965_plain_oom.unit
+12/43 Test #287: p965_plain_oom.unit .....................   Passed    0.00 sec
+      Start 288: p965_plain_definition_oom.unit
+13/43 Test #288: p965_plain_definition_oom.unit ..........   Passed    0.00 sec
+      Start 289: p965_loop_ownership.unit
+14/43 Test #289: p965_loop_ownership.unit ................   Passed    0.00 sec
+      Start 290: p965_loop_oom.unit
+15/43 Test #290: p965_loop_oom.unit ......................   Passed    0.00 sec
+      Start 291: p965_loop_definition_oom.unit
+16/43 Test #291: p965_loop_definition_oom.unit ...........   Passed    0.03 sec
+      Start 292: p965_continuation_ownership.unit
+17/43 Test #292: p965_continuation_ownership.unit ........   Passed    1.25 sec
+      Start 293: p965_continuation_oom.unit
+18/43 Test #293: p965_continuation_oom.unit ..............   Passed    0.51 sec
+      Start 294: p965_continuation_definition_oom.unit
+19/43 Test #294: p965_continuation_definition_oom.unit ...   Passed    0.26 sec
+      Start 295: p965_four_field_ownership.unit
+20/43 Test #295: p965_four_field_ownership.unit ..........   Passed    2.91 sec
+      Start 296: p965_four_field_oom.unit
+21/43 Test #296: p965_four_field_oom.unit ................   Passed    1.18 sec
+      Start 297: p965_four_field_definition_oom.unit
+22/43 Test #297: p965_four_field_definition_oom.unit .....   Passed    0.60 sec
+      Start 298: p965_lexical_ownership.unit
+23/43 Test #298: p965_lexical_ownership.unit .............   Passed    0.02 sec
+      Start 299: p965_lexical_oom.unit
+24/43 Test #299: p965_lexical_oom.unit ...................   Passed    0.01 sec
+      Start 300: p965_lexical_definition_oom.unit
+25/43 Test #300: p965_lexical_definition_oom.unit ........   Passed    0.01 sec
+      Start 301: p965_named_if.integration
+26/43 Test #301: p965_named_if.integration ...............   Passed    0.11 sec
+      Start 302: p965_c89_guard_charge.unit
+27/43 Test #302: p965_c89_guard_charge.unit ..............   Passed    0.01 sec
+      Start 303: p965_c89_guard_trim.unit
+28/43 Test #303: p965_c89_guard_trim.unit ................   Passed    0.03 sec
+      Start 304: p965_c89_guard_fan.unit
+29/43 Test #304: p965_c89_guard_fan.unit .................   Passed    0.01 sec
+      Start 305: p965_c89_guard_relay.unit
+30/43 Test #305: p965_c89_guard_relay.unit ...............   Passed    0.01 sec
+      Start 306: p965_c89_observe_charge.unit
+31/43 Test #306: p965_c89_observe_charge.unit ............   Passed    0.01 sec
+      Start 307: p965_c89_observe_trim.unit
+32/43 Test #307: p965_c89_observe_trim.unit ..............   Passed    0.01 sec
+      Start 308: p965_c89_observe_fan.unit
+33/43 Test #308: p965_c89_observe_fan.unit ...............   Passed    0.01 sec
+      Start 309: p965_c89_observe_relay.unit
+34/43 Test #309: p965_c89_observe_relay.unit .............   Passed    0.01 sec
+      Start 310: p965_c89_entry_echo.unit
+35/43 Test #310: p965_c89_entry_echo.unit ................   Passed    0.01 sec
+      Start 311: p965_c89_entry_window.unit
+36/43 Test #311: p965_c89_entry_window.unit ..............   Passed    0.05 sec
+      Start 322: p961_reached_oom.unit
+37/43 Test #322: p961_reached_oom.unit ...................   Passed    0.11 sec
+      Start 323: p961_named_foreign.integration
+38/43 Test #323: p961_named_foreign.integration ..........   Passed    0.10 sec
+      Start 324: p961_original_foreign.unit
+39/43 Test #324: p961_original_foreign.unit ..............   Passed    0.01 sec
+      Start 325: p961_echo_origin.unit
+40/43 Test #325: p961_echo_origin.unit ...................   Passed    0.02 sec
+      Start 326: p961_window_true_origin.unit
+41/43 Test #326: p961_window_true_origin.unit ............   Passed    0.05 sec
+      Start 327: p953_echo_integrity.unit
+42/43 Test #327: p953_echo_integrity.unit ................   Passed    0.03 sec
+      Start 329: p953_window_true_integrity.unit
+43/43 Test #329: p953_window_true_integrity.unit .........   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 43
+
+Total Test time (real) =   9.00 sec

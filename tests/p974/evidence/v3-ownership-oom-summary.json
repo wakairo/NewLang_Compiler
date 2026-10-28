@@ -1,0 +1,38 @@
+{
+  "gcc": {
+    "ownership_trials": 494,
+    "reached_oom": 502,
+    "modes": {
+      "CHECK": 320,
+      "definition": 182
+    },
+    "original_complete_records_match": true
+  },
+  "clang": {
+    "ownership_trials": 494,
+    "reached_oom": 502,
+    "modes": {
+      "CHECK": 320,
+      "definition": 182
+    },
+    "original_complete_records_match": true
+  },
+  "asan": {
+    "ownership_trials": 494,
+    "reached_oom": 502,
+    "modes": {
+      "CHECK": 320,
+      "definition": 182
+    },
+    "original_complete_records_match": true
+  },
+  "ubsan": {
+    "ownership_trials": 494,
+    "reached_oom": 502,
+    "modes": {
+      "CHECK": 320,
+      "definition": 182
+    },
+    "original_complete_records_match": true
+  }
+}

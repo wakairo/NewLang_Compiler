@@ -1,0 +1,26 @@
+Internal ctest changing into directory: /workspace/p974-build-ubsan
+Test project /workspace/p974-build-ubsan
+      Start 312: p974_charge_entry.unit
+ 1/10 Test #312: p974_charge_entry.unit ....................   Passed    0.02 sec
+      Start 313: p974_charge_v0.unit
+ 2/10 Test #313: p974_charge_v0.unit .......................   Passed    0.01 sec
+      Start 314: p974_trim_entry.unit
+ 3/10 Test #314: p974_trim_entry.unit ......................   Passed    0.02 sec
+      Start 315: p974_trim_v0.unit
+ 4/10 Test #315: p974_trim_v0.unit .........................   Passed    0.01 sec
+      Start 316: p974_fan_entry.unit
+ 5/10 Test #316: p974_fan_entry.unit .......................   Passed    0.02 sec
+      Start 317: p974_fan_v0.unit
+ 6/10 Test #317: p974_fan_v0.unit ..........................   Passed    0.01 sec
+      Start 318: p974_relay_entry.unit
+ 7/10 Test #318: p974_relay_entry.unit .....................   Passed    0.01 sec
+      Start 319: p974_relay_v0.unit
+ 8/10 Test #319: p974_relay_v0.unit ........................   Passed    0.01 sec
+      Start 320: p974_named_charge_precision.integration
+ 9/10 Test #320: p974_named_charge_precision.integration ...   Passed    0.05 sec
+      Start 321: p974_named_v0_valid.integration
+10/10 Test #321: p974_named_v0_valid.integration ...........   Passed    0.05 sec
+
+100% tests passed, 0 tests failed out of 10
+
+Total Test time (real) =   0.22 sec
