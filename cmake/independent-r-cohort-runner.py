@@ -1,6 +1,7 @@
 """T993 reviewed CHECK-only CTest runner. No native/ownership proof is inferred."""
 import hashlib
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -25,7 +26,12 @@ def main():
         if result.returncode != 0 or result.stderr:
             raise SystemExit(f"T993 CHECK expected accept; rc={result.returncode} stderr={result.stderr[:180]!r}")
     else:
-        if result.returncode not in (2, 3, 4) or not result.stderr.startswith(b"error("):
+        # The CLI may prefix a diagnostic with the exact source location.
+        # Accept only a structured compiler error, never arbitrary nonzero exits.
+        expected = (
+            rb"(?:^|: )error\((?:parser|semantic|cli)\)\[[A-Za-z0-9-]+\]: "
+        )
+        if result.returncode not in (2, 3, 4) or not re.search(expected, result.stderr):
             raise SystemExit(f"T993 CHECK expected compiler diagnostic rejection; rc={result.returncode} stderr={result.stderr[:180]!r}")
     print(f"T993_REAL_CTEST_EXECUTED mode={mode} sha256={digest} rc={result.returncode}", flush=True)
     print("T993 CHECK-only, NOT native/C17/OOM/proof validation", flush=True)
