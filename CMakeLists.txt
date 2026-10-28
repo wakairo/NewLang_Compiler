@@ -906,6 +906,24 @@ if(BUILD_TESTING)
     add_test(NAME p974_named_v0_valid.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p974/named-v3.py" "$<TARGET_FILE:p974_driver>"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p631/same_value_local.nl" 0)
+    add_executable(p982_probe tests/p982/probe.c)
+    target_include_directories(p982_probe PRIVATE tests/support)
+    target_link_libraries(p982_probe PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    add_executable(p982_oom tests/p982/oom.c)
+    target_include_directories(p982_oom PRIVATE tests/support)
+    target_link_libraries(p982_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p982_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    foreach(p982_source after_true after_false second_true second_false)
+        add_test(NAME p982_${p982_source}_auth.unit COMMAND p982_probe
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/sources/${p982_source}.nl")
+        add_test(NAME p982_${p982_source}_oom.unit COMMAND p982_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/sources/${p982_source}.nl")
+    endforeach()
+    add_test(NAME p982_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982")
+    add_test(NAME p982_freeze.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/freeze_test.py")
     add_executable(p961_oom tests/p961/oom.c)
     target_include_directories(p961_oom PRIVATE tests/support)
     target_link_libraries(p961_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
