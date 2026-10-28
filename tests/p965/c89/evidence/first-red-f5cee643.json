@@ -1,0 +1,22 @@
+{
+  "candidate": "f5cee64347ac0ee504d2661dc742c6da02f9180c",
+  "tree": "19fe9d04334b042f5191adf95c5aa9dbb8174792",
+  "stage": "full GCC frontend FIRST",
+  "first_failed_test": "captured_closure_2_worlds.unit",
+  "line": "tests/unit/captured_closure_test.c:236",
+  "progress": "428 PASS, first RED #429; remaining94 not run",
+  "first_failed_assertion": "f != NULL && nl_checked_captured_closure_view(f, match(f), &view)",
+  "source_sha256": {
+    "tests/unit/captured_closure_test.c": "108dd2ef015b6cf7fd71e97d02289b53537324499631c1330284fa5c1c5ec6cf",
+    "src/h_origin_internal.c": "3bf157da8bc4dd97191c2af1245fe289439530d2eb5db4909f2b7a98c33457d8",
+    "src/checked.c": "d9b9fc79521ea12a296c21d1f21c7b478e5f7f791c54509c3397b07f684202e5",
+    "src/semantic_check.c": "e155bfbd673cf62ff1532ea1fc1f2c9837070d4a20a4f6a80f06777cf393eecc",
+    "src/copy_body.c": "6e2cb11c97d1d34e6e2e7e318d8d327fe9c71df4685c8520465c3b52a69498a9"
+  },
+  "logs": {
+    "gcc-full-FIRST.log": "df1c48ad299ff661f0087f28bdcd944575bea16c687824faef0699a7a18fc66c",
+    "gcc-full-FIRST-details.log": "92e69346d421a62fef3dba4689eaf2e6fcebde2da2b3f216a34dbcb3285db520",
+    "gcc-full-FIRST-failed-tests.log": "6a04c7d05207505dededaff91ca6b2b221812eb8040dda113208e17f494ece92"
+  },
+  "diagnosis": "Existing probe and public source test wrapper clear the owned root entry spelling after CHECK and take context destruction responsibility. New custody source equality rejects that legacy detached spelling state, so body getter returns NULL. Original CHECK-issued body source and plan remain retained. No old oracle changed."
+}

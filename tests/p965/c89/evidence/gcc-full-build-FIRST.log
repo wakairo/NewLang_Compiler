@@ -1,0 +1,347 @@
+[  0%] Built target newlang_diagnostic
+[  1%] Built target newlang_source
+[  1%] Linking C executable diagnostic_test
+[  2%] Built target newlang_lexer
+[  2%] Built target newlang_syntax
+[  2%] Linking C executable source_test
+[  2%] Built target diagnostic_test
+[  2%] Linking C executable lexer_test
+[  3%] Built target source_test
+[  3%] Linking C executable lexical_frontend_test
+[  3%] Built target lexer_test
+[  3%] Built target newlang_parser
+[  4%] Built target newlang_checked
+[  5%] Built target lexical_frontend_test
+[  5%] Linking C static library libnewlang_parser_p534.a
+[  6%] Linking C executable parser_test
+[  7%] Built target newlang_parser_p534
+[  7%] Linking C executable syntax_frontend_test
+[  7%] Built target parser_test
+[ 12%] Built target newlang_semantic
+[ 13%] Built target syntax_frontend_test
+[ 14%] Built target newlang_checked_c_node
+[ 14%] Linking C executable p930_observe
+[ 14%] Linking C executable p930_oom
+[ 15%] Built target p930_observe
+[ 15%] Built target p930_oom
+[ 15%] Built target p718_gate_test
+[ 16%] Built target p728_gate_test
+[ 16%] Linking C executable p728_public_probe
+[ 16%] Built target p722_gate_test
+[ 16%] Linking C executable p722_public_probe
+[ 16%] Built target p728_public_probe
+[ 16%] Linking C executable p718_public_probe
+[ 17%] Built target p722_public_probe
+[ 17%] Built target p713_gate_test
+[ 18%] Built target p718_public_probe
+[ 18%] Linking C executable p713_public_probe
+[ 18%] Built target p706_gate_test
+[ 18%] Linking C executable p706_public_probe
+[ 19%] Built target p713_public_probe
+[ 19%] Linking C executable p701_gate_test
+[ 20%] Built target p706_public_probe
+[ 20%] Linking C executable p701_public_probe
+[ 20%] Built target p701_gate_test
+[ 21%] Linking C executable newlangc_p534
+[ 22%] Built target p701_public_probe
+[ 22%] Linking C executable p572_public_probe
+[ 22%] Built target newlangc_p534
+[ 23%] Built target p572_public_probe
+[ 23%] Linking C executable p572_fault_test
+[ 23%] Linking C executable p791_one_probe
+[ 23%] Built target p572_fault_test
+[ 24%] Built target p791_one_probe
+[ 24%] Linking C executable p791_two_probe
+[ 24%] Linking C executable p791_issuer_oom
+[ 25%] Built target p791_two_probe
+[ 25%] Linking C executable p791_parser_oom
+[ 25%] Built target p791_issuer_oom
+[ 25%] Linking C executable p534_public_probe
+[ 25%] Built target p791_parser_oom
+[ 25%] Linking C executable p534_semantic_gate
+[ 25%] Built target p534_public_probe
+[ 25%] Linking C executable p534_fault_test
+[ 26%] Built target p534_semantic_gate
+[ 26%] Linking C executable p541_public_probe
+[ 27%] Built target p534_fault_test
+[ 27%] Linking C executable p541_fault_test
+[ 28%] Built target p541_public_probe
+[ 28%] Linking C executable p636_index_gate
+[ 28%] Built target p541_fault_test
+[ 29%] Linking C executable p634_ended_root_gate
+[ 29%] Built target p636_index_gate
+[ 30%] Built target p634_ended_root_gate
+[ 30%] Linking C executable p633_derivation_gate
+[ 30%] Built target p633_local_gate
+[ 31%] Linking C executable p651_gate
+[ 31%] Built target p633_derivation_gate
+[ 31%] Linking C executable p633_public_probe
+[ 31%] Built target p651_gate
+[ 32%] Linking C executable p633_origin_gate
+[ 32%] Built target p633_public_probe
+[ 32%] Linking C executable p628_public_probe
+[ 32%] Built target p633_origin_gate
+[ 32%] Built target p628_public_probe
+[ 33%] Linking C executable p626_public_probe
+[ 33%] Linking C executable p626_comparison_gate
+[ 33%] Built target p626_public_probe
+[ 34%] Linking C executable p605_public_probe
+[ 34%] Built target p626_comparison_gate
+[ 34%] Linking C executable p603_public_probe
+[ 34%] Built target p605_public_probe
+[ 35%] Linking C executable p603_gate_probe
+[ 35%] Built target p603_public_probe
+[ 35%] Linking C executable p603_comparison_test
+[ 35%] Built target p603_gate_probe
+[ 35%] Linking C executable p504_public_probe
+[ 35%] Built target p603_comparison_test
+[ 36%] Linking C executable p504_gate_probe
+[ 36%] Built target p504_public_probe
+[ 36%] Linking C executable p504_equality_test
+[ 36%] Built target p504_gate_probe
+[ 36%] Linking C executable p508_public_probe
+[ 36%] Built target p504_equality_test
+[ 37%] Linking C executable p508_gate_test
+[ 37%] Built target p508_public_probe
+[ 37%] Linking C executable p514_public_probe
+[ 37%] Built target p508_gate_test
+[ 37%] Linking C executable r675_public_probe
+[ 37%] Built target p514_public_probe
+[ 37%] Linking C executable p671_public_probe
+[ 37%] Built target r675_public_probe
+[ 37%] Linking C executable p671_fragment_probe
+[ 38%] Built target p671_public_probe
+[ 38%] Linking C executable p694_fault_test
+[ 38%] Built target p671_fragment_probe
+[ 38%] Linking C executable p688_public_probe
+[ 39%] Built target p694_fault_test
+[ 39%] Linking C executable p688_gate_test
+[ 39%] Built target p688_public_probe
+[ 39%] Linking C executable p685_public_probe
+[ 40%] Built target p688_gate_test
+[ 40%] Built target p685_public_probe
+[ 40%] Linking C executable p685_gate_test
+[ 40%] Linking C executable p679_public_probe
+[ 41%] Built target p685_gate_test
+[ 41%] Built target p679_public_probe
+[ 41%] Linking C executable p514_gate_test
+[ 41%] Linking C executable p517_public_probe
+[ 42%] Built target p517_public_probe
+[ 42%] Built target p514_gate_test
+[ 42%] Linking C executable p521_owned_probe
+[ 42%] Linking C executable p517_gate_test
+[ 42%] Built target p521_owned_probe
+[ 43%] Built target p517_gate_test
+[ 43%] Linking C executable p521_call_gate
+[ 43%] Linking C executable semantic_test
+[ 44%] Built target p521_call_gate
+[ 44%] Built target semantic_test
+[ 44%] Linking C executable semantic_frontend_test
+[ 44%] Linking C executable raw_storage_test
+[ 45%] Built target semantic_frontend_test
+[ 45%] Built target raw_storage_test
+[ 46%] Linking C executable raw_storage_cycle_test
+[ 46%] Linking C executable source_slice_test
+[ 46%] Built target raw_storage_cycle_test
+[ 46%] Built target source_slice_test
+[ 46%] Linking C executable source_slice_frontend_test
+[ 46%] Linking C executable sum_slice_test
+[ 47%] Built target source_slice_frontend_test
+[ 47%] Built target sum_slice_test
+[ 47%] Linking C executable sum_frontend_test
+[ 47%] Linking C executable ref_join_test
+[ 48%] Built target sum_frontend_test
+[ 49%] Built target ref_join_test
+[ 49%] Linking C executable ref_join_frontend_test
+[ 50%] Linking C executable function_body_test
+[ 50%] Built target ref_join_frontend_test
+[ 50%] Built target function_body_test
+[ 50%] Linking C executable function_body_frontend_test
+[ 50%] Linking C executable return_test
+[ 50%] Built target function_body_frontend_test
+[ 50%] Built target return_test
+[ 50%] Linking C executable function_source_test
+[ 50%] Linking C executable structural_name_test
+[ 50%] Built target function_source_test
+[ 50%] Built target structural_name_test
+[ 50%] Linking C executable control_test
+[ 50%] Linking C executable loop_test
+[ 50%] Built target control_test
+[ 51%] Built target loop_test
+[ 51%] Linking C executable if_test
+[ 52%] Linking C executable unit_name_test
+[ 53%] Built target if_test
+[ 53%] Built target unit_name_test
+[ 53%] Linking C executable argument_compatibility_test
+[ 53%] Linking C executable local_root_test
+[ 53%] Built target argument_compatibility_test
+[ 53%] Linking C executable p866_public
+[ 53%] Built target local_root_test
+[ 54%] Built target p866_integrity
+[ 54%] Built target p866_oom
+[ 55%] Built target p866_public
+[ 55%] Built target p878_guard
+[ 55%] Built target p817_public
+[ 55%] Built target p817_integrity
+[ 56%] Built target p817_oom
+[ 56%] Linking C executable p785_public
+[ 57%] Built target p785_integrity
+[ 57%] Linking C executable p785_oom
+[ 58%] Built target p785_public
+[ 58%] Building C object CMakeFiles/p965_ownership.dir/tests/p965/ownership.c.o
+[ 58%] Built target p785_oom
+[ 58%] Building C object CMakeFiles/p965_oom.dir/tests/p965/oom.c.o
+[ 58%] Linking C executable p965_ownership
+[ 58%] Linking C executable p965_oom
+[ 58%] Built target p965_ownership
+[ 58%] Built target p965_oom
+[ 58%] Built target p965_c89_guard
+[ 58%] Building C object CMakeFiles/p965_output.dir/tests/p965/output.c.o
+[ 59%] Built target p965_c89_observer
+[ 59%] Building C object CMakeFiles/p961_oom.dir/tests/p961/oom.c.o
+[ 59%] Linking C executable p961_oom
+[ 59%] Built target p961_oom
+[ 60%] Linking C executable p961_output
+[ 60%] Built target p961_output
+[ 60%] Linking C executable p961_original
+[ 60%] Built target p961_original
+[ 60%] Building C object CMakeFiles/p961_origin.dir/tests/p961/origin.c.o
+[ 61%] Linking C executable p961_origin
+[ 61%] Built target p961_origin
+[ 62%] Linking C executable p953_integrity
+[ 62%] Built target p953_integrity
+[ 63%] Built target p945_integrity
+[ 64%] Linking C executable p965_output
+[ 64%] Linking C executable p778_probe
+[ 64%] Built target p965_output
+[ 64%] Built target p778_probe
+[ 65%] Built target p778_gate_test
+[ 65%] Linking C executable p774_probe
+[ 66%] Built target p774_gate_test
+[ 66%] Linking C executable p774_driver_oom
+[ 66%] Built target p774_probe
+[ 67%] Linking C executable p761_probe
+[ 67%] Built target p774_driver_oom
+[ 68%] Linking C executable p761_metadata_test
+[ 68%] Built target p761_probe
+[ 68%] Linking C executable p761_gate_test
+[ 68%] Built target p761_metadata_test
+[ 68%] Linking C executable p761_oom_test
+[ 68%] Built target p761_gate_test
+[ 68%] Linking C executable p752_driver_test
+[ 68%] Built target p761_oom_test
+[ 69%] Linking C executable p752_unit_test
+[ 69%] Built target p752_driver_test
+[ 70%] Linking C executable avs_test
+[ 70%] Built target p752_unit_test
+[ 70%] Linking C executable u8_literal_test
+[ 70%] Built target avs_test
+[ 70%] Linking C executable p497_literal_test
+[ 71%] Built target u8_literal_test
+[ 72%] Linking C executable p497_public_probe
+[ 72%] Built target p497_literal_test
+[ 72%] Built target p497_public_probe
+[ 73%] Linking C executable fixed_field_test
+[ 74%] Linking C executable recursive_type_test
+[ 74%] Built target fixed_field_test
+[ 74%] Built target recursive_type_test
+[ 74%] Linking C executable heap_link_test
+[ 74%] Linking C executable heap_link_support_test
+[ 75%] Built target heap_link_support_test
+[ 75%] Built target heap_link_test
+[ 75%] Linking C executable heap_link_backend_test
+[ 75%] Linking C executable heap_link_checked_probe
+[ 76%] Built target heap_link_backend_test
+[ 76%] Built target heap_link_checked_probe
+[ 76%] Linking C executable allocated_backend_test
+[ 77%] Linking C executable allocated_checked_probe
+[ 77%] Built target allocated_backend_test
+[ 77%] Built target allocated_checked_probe
+[ 77%] Linking C executable handoff_backend_test
+[ 77%] Linking C executable handoff_checked_probe
+[ 78%] Built target handoff_backend_test
+[ 78%] Built target handoff_checked_probe
+[ 79%] Linking C executable p738_gate_test
+[ 79%] Linking C executable p733_gate_test
+[ 79%] Built target p738_gate_test
+[ 79%] Built target p733_gate_test
+[ 80%] Linking C executable p733_history_test
+[ 80%] Linking C executable p733_public_probe
+[ 80%] Built target p733_history_test
+[ 80%] Built target p733_public_probe
+[ 81%] Linking C executable p733_driver_test
+[ 81%] Linking C executable live_return_backend_test
+[ 81%] Built target live_return_backend_test
+[ 81%] Built target p733_driver_test
+[ 81%] Linking C executable live_tail_return_test
+[ 82%] Linking C executable packet_fork_test
+[ 83%] Built target live_tail_return_test
+[ 83%] Built target packet_fork_test
+[ 83%] Linking C executable packet_retention_test
+[ 84%] Linking C executable custody_source_test
+[ 84%] Built target packet_retention_test
+[ 84%] Built target custody_source_test
+[ 85%] Linking C executable custody_checked_probe
+[ 85%] Linking C executable custody_definition_test
+[ 85%] Built target custody_definition_test
+[ 85%] Built target custody_checked_probe
+[ 85%] Linking C executable typed_owner_test
+[ 85%] Linking C executable two_heap_checked_probe
+[ 86%] Built target two_heap_checked_probe
+[ 87%] Built target typed_owner_test
+[ 87%] Linking C executable two_heap_backend_test
+[ 87%] Linking C executable two_heap_test
+[ 87%] Built target two_heap_test
+[ 87%] Built target two_heap_backend_test
+[ 87%] Linking C executable captured_closure_test
+[ 87%] Linking C executable five_checked_probe
+[ 87%] Built target five_checked_probe
+[ 87%] Built target captured_closure_test
+[ 88%] Linking C executable five_backend_test
+[ 88%] Linking C executable allocated_join_test
+[ 88%] Built target five_backend_test
+[ 88%] Built target allocated_join_test
+[ 89%] Linking C executable allocated_node_test
+[ 90%] Linking C executable p466_public_probe
+[ 90%] Built target allocated_node_test
+[ 90%] Built target p466_public_probe
+[ 90%] Linking C executable p471_public_probe
+[ 91%] Linking C executable p490_public_probe
+[ 91%] Built target p471_public_probe
+[ 91%] Built target p490_public_probe
+[ 91%] Linking C executable node_link_test
+[ 92%] Linking C executable node_initial_test
+[ 92%] Built target node_link_test
+[ 93%] Linking C executable node_join_native_test
+[ 93%] Built target node_initial_test
+[ 93%] Linking C executable node_join_native_probe
+[ 93%] Built target node_join_native_test
+[ 93%] Linking C executable node_checked_probe
+[ 93%] Built target node_join_native_probe
+[ 94%] Linking C executable checked_c_node_test
+[ 94%] Built target node_checked_probe
+[ 94%] Linking C executable node_join_proof_test
+[ 94%] Built target checked_c_node_test
+[ 95%] Linking C executable node_join_test
+[ 95%] Built target node_join_proof_test
+[ 95%] Linking C executable nested_u8_checked_probe
+[ 95%] Built target node_join_test
+[ 95%] Linking C executable u8_call_checked_probe
+[ 95%] Built target nested_u8_checked_probe
+[ 95%] Linking C executable p589_public_probe
+[ 95%] Built target u8_call_checked_probe
+[ 95%] Linking C executable p589_gate_test
+[ 95%] Built target p589_public_probe
+[ 95%] Linking C executable p589_parser_oom_test
+[ 95%] Built target p589_gate_test
+[ 96%] Linking C executable p596_public_probe
+[ 97%] Built target p589_parser_oom_test
+[ 97%] Linking C executable p596_gate_test
+[ 97%] Built target p596_public_probe
+[ 98%] Linking C executable p596_parser_oom_test
+[ 99%] Built target p596_gate_test
+[ 99%] Linking C executable p596_proof_core_test
+[ 99%] Built target p596_parser_oom_test
+[ 99%] Linking C executable newlangc
+[ 99%] Built target p596_proof_core_test
+[100%] Built target newlangc

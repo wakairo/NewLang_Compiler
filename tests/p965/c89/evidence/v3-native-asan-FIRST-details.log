@@ -1,0 +1,35 @@
+Start testing: Oct 28 00:23 UTC
+----------------------------------------------------------
+321/525 Testing: p953_source_native.integration
+321/525 Test: p953_source_native.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p965/tests/p953/run.py" "/workspace/p965-build-asan/newlangc" "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23" "address" "/workspace/p965/tests/p953"
+Directory: /workspace/p965-build-asan
+"p953_source_native.integration" start time: Oct 28 00:23 UTC
+Output:
+----------------------------------------------------------
+{"source": "echo.nl", "C_sha256": "3131c98cf5b21cf64b99164ff80ef4d91cb2736d9da011939abc004fbf59043a", "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23", "opt": "-O0", "sanitizer": "address", "allocation_successes": 0, "observation": "P945 physical original=PASS T=0,0/0,0 old=0 calls=0 allocations=0 frees=0 caller_read=0 callee_read=0"}
+{"source": "echo.nl", "C_sha256": "3131c98cf5b21cf64b99164ff80ef4d91cb2736d9da011939abc004fbf59043a", "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23", "opt": "-O0", "sanitizer": "address", "allocation_successes": 1, "observation": "P945 physical original=PASS T=0,0/0,0 old=0 calls=0 allocations=1 frees=1 caller_read=0 callee_read=0"}
+{"source": "echo.nl", "C_sha256": "3131c98cf5b21cf64b99164ff80ef4d91cb2736d9da011939abc004fbf59043a", "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23", "opt": "-O0", "sanitizer": "address", "allocation_successes": 2, "observation": "P945 physical original=PASS T=61,137/189,11 old=189 calls=1 allocations=2 frees=2 caller_read=0 callee_read=1"}
+{"source": "echo.nl", "C_sha256": "3131c98cf5b21cf64b99164ff80ef4d91cb2736d9da011939abc004fbf59043a", "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23", "opt": "-O2", "sanitizer": "address", "allocation_successes": 0, "observation": "P945 physical original=PASS T=0,0/0,0 old=0 calls=0 allocations=0 frees=0 caller_read=0 callee_read=0"}
+{"source": "echo.nl", "C_sha256": "3131c98cf5b21cf64b99164ff80ef4d91cb2736d9da011939abc004fbf59043a", "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23", "opt": "-O2", "sanitizer": "address", "allocation_successes": 1, "observation": "P945 physical original=PASS T=0,0/0,0 old=0 calls=0 allocations=1 frees=1 caller_read=0 callee_read=0"}
+{"source": "echo.nl", "C_sha256": "3131c98cf5b21cf64b99164ff80ef4d91cb2736d9da011939abc004fbf59043a", "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23", "opt": "-O2", "sanitizer": "address", "allocation_successes": 2, "observation": "P945 physical original=PASS T=61,137/189,11 old=189 calls=1 allocations=2 frees=2 caller_read=0 callee_read=1"}
+REACHED FILE WRITE/FLUSH FAILURE + RETRY echo.nl
+NEGATIVE third_original.nl 0 4 error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof
+note: /workspace/p965/tests/p953/sources/third_original.nl
+{"source": "window_true.nl", "C_sha256": "ce0f3171dc9f0499036d2245d4deaf55627b2f61e399e55d78a8c90d58254f5c", "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23", "opt": "-O0", "sanitizer": "address", "allocation_successes": 0, "observation": "P945 physical original=PASS T=0,0/0,0 old=0 calls=0 allocations=0 frees=0 caller_read=0 callee_read=0"}
+{"source": "window_true.nl", "C_sha256": "ce0f3171dc9f0499036d2245d4deaf55627b2f61e399e55d78a8c90d58254f5c", "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23", "opt": "-O0", "sanitizer": "address", "allocation_successes": 1, "observation": "P945 physical original=PASS T=0,0/0,0 old=0 calls=0 allocations=1 frees=1 caller_read=0 callee_read=0"}
+{"source": "window_true.nl", "C_sha256": "ce0f3171dc9f0499036d2245d4deaf55627b2f61e399e55d78a8c90d58254f5c", "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23", "opt": "-O0", "sanitizer": "address", "allocation_successes": 2, "observation": "P945 physical original=PASS T=128,73/17,155 old=155 calls=1 allocations=2 frees=2 caller_read=0 callee_read=1"}
+{"source": "window_true.nl", "C_sha256": "ce0f3171dc9f0499036d2245d4deaf55627b2f61e399e55d78a8c90d58254f5c", "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23", "opt": "-O2", "sanitizer": "address", "allocation_successes": 0, "observation": "P945 physical original=PASS T=0,0/0,0 old=0 calls=0 allocations=0 frees=0 caller_read=0 callee_read=0"}
+{"source": "window_true.nl", "C_sha256": "ce0f3171dc9f0499036d2245d4deaf55627b2f61e399e55d78a8c90d58254f5c", "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23", "opt": "-O2", "sanitizer": "address", "allocation_successes": 1, "observation": "P945 physical original=PASS T=0,0/0,0 old=0 calls=0 allocations=1 frees=1 caller_read=0 callee_read=0"}
+{"source": "window_true.nl", "C_sha256": "ce0f3171dc9f0499036d2245d4deaf55627b2f61e399e55d78a8c90d58254f5c", "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23", "opt": "-O2", "sanitizer": "address", "allocation_successes": 2, "observation": "P945 physical original=PASS T=128,73/17,155 old=155 calls=1 allocations=2 frees=2 caller_read=0 callee_read=1"}
+REACHED FILE WRITE/FLUSH FAILURE + RETRY window_true.nl
+NEGATIVE wrong_domain.nl 3 3 /workspace/p965/tests/p953/sources/wrong_domain.nl:91:21-91:78: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root
+<end of output>
+Test time =   1.87 sec
+----------------------------------------------------------
+Test Passed.
+"p953_source_native.integration" end time: Oct 28 00:23 UTC
+"p953_source_native.integration" time elapsed: 00:00:01
+----------------------------------------------------------
+
+End testing: Oct 28 00:23 UTC

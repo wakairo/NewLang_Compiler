@@ -1,0 +1,38 @@
+{
+  "clang": {
+    "ownership_trials": 494,
+    "actual_reached_oom": 502,
+    "modes": {
+      "CHECK": 320,
+      "definition": 182
+    },
+    "original_frozen_full_records_identical": true
+  },
+  "asan": {
+    "ownership_trials": 494,
+    "actual_reached_oom": 502,
+    "modes": {
+      "CHECK": 320,
+      "definition": 182
+    },
+    "original_frozen_full_records_identical": true
+  },
+  "ubsan": {
+    "ownership_trials": 494,
+    "actual_reached_oom": 502,
+    "modes": {
+      "CHECK": 320,
+      "definition": 182
+    },
+    "original_frozen_full_records_identical": true
+  },
+  "gcc": {
+    "ownership_trials": 494,
+    "actual_reached_oom": 502,
+    "modes": {
+      "CHECK": 320,
+      "definition": 182
+    },
+    "original_frozen_full_records_identical": true
+  }
+}

@@ -1,0 +1,14 @@
+Internal ctest changing into directory: /workspace/p965-build-gcc
+Test project /workspace/p965-build-gcc
+    Start 302: p965_c89_guard_charge.unit
+1/4 Test #302: p965_c89_guard_charge.unit .......   Passed    0.02 sec
+    Start 303: p965_c89_guard_trim.unit
+2/4 Test #303: p965_c89_guard_trim.unit .........   Passed    0.01 sec
+    Start 304: p965_c89_guard_fan.unit
+3/4 Test #304: p965_c89_guard_fan.unit ..........   Passed    0.01 sec
+    Start 305: p965_c89_guard_relay.unit
+4/4 Test #305: p965_c89_guard_relay.unit ........   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   0.05 sec

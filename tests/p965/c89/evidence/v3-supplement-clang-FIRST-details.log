@@ -1,0 +1,263 @@
+Start testing: Oct 28 00:22 UTC
+----------------------------------------------------------
+302/525 Testing: p965_c89_guard_charge.unit
+302/525 Test: p965_c89_guard_charge.unit
+Command: "/workspace/p965-build-clang/p965_c89_guard" "/workspace/p965/tests/p813/sources/charge_false.nl" "u8"
+Directory: /workspace/p965-build-clang
+"p965_c89_guard_charge.unit" start time: Oct 28 00:22 UTC
+Output:
+----------------------------------------------------------
+C89 old conjuncts caller=1 world=1 source=1 root_not1=0 count_gt1=1 root=1 count=77 call=29
+C89 guard u8 fault=0 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=1 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=2 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=3 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=4 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=5 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=6 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=7 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=8 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=9 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=10 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=11 GET=true VALIDATE=INVALID restore=OK
+C89 genuine shared-plan CHECK B survives A destruction
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_guard_charge.unit" end time: Oct 28 00:22 UTC
+"p965_c89_guard_charge.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+303/525 Testing: p965_c89_guard_trim.unit
+303/525 Test: p965_c89_guard_trim.unit
+Command: "/workspace/p965-build-clang/p965_c89_guard" "/workspace/p965/tests/p866/sources/trim_true.nl" "unit"
+Directory: /workspace/p965-build-clang
+"p965_c89_guard_trim.unit" start time: Oct 28 00:22 UTC
+Output:
+----------------------------------------------------------
+C89 old conjuncts caller=1 world=1 source=1 root_not1=0 count_gt1=1 root=1 count=51 call=21
+C89 guard unit fault=0 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=1 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=2 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=3 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=4 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=5 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=6 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=7 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=8 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=9 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=10 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=11 GET=true VALIDATE=INVALID restore=OK
+C89 genuine shared-plan CHECK B survives A destruction
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_guard_trim.unit" end time: Oct 28 00:22 UTC
+"p965_c89_guard_trim.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+304/525 Testing: p965_c89_guard_fan.unit
+304/525 Test: p965_c89_guard_fan.unit
+Command: "/workspace/p965-build-clang/p965_c89_guard" "/workspace/p965/tests/p866/sources/fan_false.nl" "unit"
+Directory: /workspace/p965-build-clang
+"p965_c89_guard_fan.unit" start time: Oct 28 00:22 UTC
+Output:
+----------------------------------------------------------
+C89 old conjuncts caller=1 world=1 source=1 root_not1=0 count_gt1=1 root=1 count=51 call=21
+C89 guard unit fault=0 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=1 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=2 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=3 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=4 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=5 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=6 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=7 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=8 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=9 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=10 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=11 GET=true VALIDATE=INVALID restore=OK
+C89 genuine shared-plan CHECK B survives A destruction
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_guard_fan.unit" end time: Oct 28 00:22 UTC
+"p965_c89_guard_fan.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+305/525 Testing: p965_c89_guard_relay.unit
+305/525 Test: p965_c89_guard_relay.unit
+Command: "/workspace/p965-build-clang/p965_c89_guard" "/workspace/p965/tests/p878/sources/relay_equal_binding.nl" "unit"
+Directory: /workspace/p965-build-clang
+"p965_c89_guard_relay.unit" start time: Oct 28 00:22 UTC
+Output:
+----------------------------------------------------------
+C89 old conjuncts caller=1 world=1 source=1 root_not1=0 count_gt1=1 root=1 count=42 call=21
+C89 guard unit fault=0 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=1 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=2 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=3 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=4 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=5 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=6 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=7 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=8 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=9 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=10 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=11 GET=true VALIDATE=INVALID restore=OK
+C89 genuine shared-plan CHECK B survives A destruction
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_guard_relay.unit" end time: Oct 28 00:22 UTC
+"p965_c89_guard_relay.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+306/525 Testing: p965_c89_observe_charge.unit
+306/525 Test: p965_c89_observe_charge.unit
+Command: "/workspace/p965-build-clang/p965_c89_observer" "/workspace/p965/tests/p813/sources/charge_false.nl" "u8"
+Directory: /workspace/p965-build-clang
+"p965_c89_observe_charge.unit" start time: Oct 28 00:22 UTC
+Output:
+----------------------------------------------------------
+C89 observer u8 fault=0 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=1 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=2 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=3 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=4 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=5 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=6 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=7 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=8 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=9 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=10 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=11 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer actual BODY transfers=8 pending GET=NULL; committed GET=original; detached GET=NULL; B healthy
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_observe_charge.unit" end time: Oct 28 00:22 UTC
+"p965_c89_observe_charge.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+307/525 Testing: p965_c89_observe_trim.unit
+307/525 Test: p965_c89_observe_trim.unit
+Command: "/workspace/p965-build-clang/p965_c89_observer" "/workspace/p965/tests/p866/sources/trim_true.nl" "unit"
+Directory: /workspace/p965-build-clang
+"p965_c89_observe_trim.unit" start time: Oct 28 00:22 UTC
+Output:
+----------------------------------------------------------
+C89 observer unit fault=0 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=1 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=2 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=3 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=4 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=5 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=6 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=7 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=8 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=9 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=10 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=11 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer actual BODY transfers=2 pending GET=NULL; committed GET=original; detached GET=NULL; B healthy
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_observe_trim.unit" end time: Oct 28 00:22 UTC
+"p965_c89_observe_trim.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+308/525 Testing: p965_c89_observe_fan.unit
+308/525 Test: p965_c89_observe_fan.unit
+Command: "/workspace/p965-build-clang/p965_c89_observer" "/workspace/p965/tests/p866/sources/fan_false.nl" "unit"
+Directory: /workspace/p965-build-clang
+"p965_c89_observe_fan.unit" start time: Oct 28 00:22 UTC
+Output:
+----------------------------------------------------------
+C89 observer unit fault=0 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=1 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=2 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=3 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=4 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=5 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=6 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=7 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=8 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=9 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=10 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=11 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer actual BODY transfers=2 pending GET=NULL; committed GET=original; detached GET=NULL; B healthy
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_observe_fan.unit" end time: Oct 28 00:22 UTC
+"p965_c89_observe_fan.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+309/525 Testing: p965_c89_observe_relay.unit
+309/525 Test: p965_c89_observe_relay.unit
+Command: "/workspace/p965-build-clang/p965_c89_observer" "/workspace/p965/tests/p878/sources/relay_equal_binding.nl" "unit"
+Directory: /workspace/p965-build-clang
+"p965_c89_observe_relay.unit" start time: Oct 28 00:22 UTC
+Output:
+----------------------------------------------------------
+C89 observer unit fault=0 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=1 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=2 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=3 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=4 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=5 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=6 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=7 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=8 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=9 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=10 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=11 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer actual BODY transfers=2 pending GET=NULL; committed GET=original; detached GET=NULL; B healthy
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_observe_relay.unit" end time: Oct 28 00:22 UTC
+"p965_c89_observe_relay.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+310/525 Testing: p965_c89_entry_echo.unit
+310/525 Test: p965_c89_entry_echo.unit
+Command: "/workspace/p965-build-clang/p965_c89_entry_source" "/workspace/p965/tests/p965/sources/echo.nl"
+Directory: /workspace/p965-build-clang
+"p965_c89_entry_echo.unit" start time: Oct 28 00:22 UTC
+Output:
+----------------------------------------------------------
+C89 owned root entry spelling released; foreign root/body source refused; canonical A cleanup and genuine B healthy
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_entry_echo.unit" end time: Oct 28 00:22 UTC
+"p965_c89_entry_echo.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+311/525 Testing: p965_c89_entry_window.unit
+311/525 Test: p965_c89_entry_window.unit
+Command: "/workspace/p965-build-clang/p965_c89_entry_source" "/workspace/p965/tests/p965/sources/window.nl"
+Directory: /workspace/p965-build-clang
+"p965_c89_entry_window.unit" start time: Oct 28 00:22 UTC
+Output:
+----------------------------------------------------------
+C89 owned root entry spelling released; foreign root/body source refused; canonical A cleanup and genuine B healthy
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_entry_window.unit" end time: Oct 28 00:22 UTC
+"p965_c89_entry_window.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 28 00:22 UTC

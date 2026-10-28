@@ -1,0 +1,16 @@
+Internal ctest changing into directory: /workspace/p965-build-clang
+Test project /workspace/p965-build-clang
+    Start  46: p633_local_same_value.unit
+1/5 Test  #46: p633_local_same_value.unit .........   Passed    0.00 sec
+    Start  47: p633_local_different_values.unit
+2/5 Test  #47: p633_local_different_values.unit ...   Passed    0.00 sec
+    Start 264: p817_arm_integrity.unit
+3/5 Test #264: p817_arm_integrity.unit ............   Passed    0.01 sec
+    Start 268: p790_arm_integrity.unit
+4/5 Test #268: p790_arm_integrity.unit ............   Passed    0.02 sec
+    Start 273: p785_arm_integrity.unit
+5/5 Test #273: p785_arm_integrity.unit ............   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 5
+
+Total Test time (real) =   0.06 sec

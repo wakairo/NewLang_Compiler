@@ -1,0 +1,277 @@
+[  0%] Built target newlang_diagnostic
+[ 11%] Built target newlang_source
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_syntax
+[ 22%] Built target newlang_parser
+[ 33%] Built target newlang_checked
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p965_c89_guard
+[100%] Built target p965_c89_guard
+[ 10%] Built target newlang_diagnostic
+[ 10%] Built target newlang_source
+[ 20%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 80%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Linking C executable p965_c89_observer
+[100%] Built target p965_c89_observer
+[ 10%] Built target newlang_diagnostic
+[ 10%] Built target newlang_source
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_syntax
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 80%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Built target p965_c89_entry_source
+[ 10%] Built target newlang_diagnostic
+[ 10%] Built target newlang_source
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_syntax
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 80%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[ 90%] Linking C executable p633_local_gate
+[100%] Built target p633_local_gate
+[ 10%] Built target newlang_source
+[ 10%] Built target newlang_diagnostic
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_syntax
+[ 20%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 80%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[ 90%] Linking C executable p817_integrity
+[100%] Built target p817_integrity
+[ 11%] Built target newlang_source
+[ 11%] Built target newlang_diagnostic
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_syntax
+[ 33%] Built target newlang_checked
+[ 33%] Built target newlang_parser
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p785_integrity
+[100%] Built target p785_integrity
+[ 11%] Built target newlang_source
+[ 11%] Built target newlang_diagnostic
+[ 11%] Built target newlang_syntax
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_parser
+[ 33%] Built target newlang_checked
+[ 88%] Built target newlang_semantic
+[100%] Linking C executable p866_integrity
+[100%] Built target p866_integrity
+[ 12%] Built target newlang_source
+[ 12%] Built target newlang_diagnostic
+[ 25%] Built target newlang_lexer
+[ 25%] Built target newlang_syntax
+[ 25%] Built target newlang_parser
+[ 37%] Built target newlang_checked
+[100%] Built target newlang_semantic
+[100%] Linking C executable p866_oom
+[100%] Built target p866_oom
+[ 11%] Built target newlang_diagnostic
+[ 11%] Built target newlang_source
+[ 22%] Built target newlang_syntax
+[ 22%] Built target newlang_lexer
+[ 33%] Built target newlang_checked
+[ 33%] Built target newlang_parser
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p878_guard
+[100%] Built target p878_guard
+[ 11%] Built target newlang_source
+[ 11%] Built target newlang_diagnostic
+[ 11%] Built target newlang_syntax
+[ 22%] Built target newlang_lexer
+[ 33%] Built target newlang_checked
+[ 33%] Built target newlang_parser
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p706_gate_test
+[100%] Built target p706_gate_test
+[ 11%] Built target newlang_diagnostic
+[ 11%] Built target newlang_source
+[ 22%] Built target newlang_syntax
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_parser
+[ 33%] Built target newlang_checked
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p713_gate_test
+[100%] Built target p713_gate_test
+[ 11%] Built target newlang_source
+[ 11%] Built target newlang_diagnostic
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_syntax
+[ 33%] Built target newlang_checked
+[ 33%] Built target newlang_parser
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p718_gate_test
+[100%] Built target p718_gate_test
+[ 11%] Built target newlang_source
+[ 11%] Built target newlang_diagnostic
+[ 11%] Built target newlang_syntax
+[ 22%] Built target newlang_lexer
+[ 33%] Built target newlang_checked
+[ 33%] Built target newlang_parser
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p722_gate_test
+[100%] Built target p722_gate_test
+[ 11%] Built target newlang_source
+[ 11%] Built target newlang_diagnostic
+[ 22%] Built target newlang_syntax
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_parser
+[ 33%] Built target newlang_checked
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p728_gate_test
+[100%] Built target p728_gate_test
+[ 11%] Built target newlang_diagnostic
+[ 11%] Built target newlang_source
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_syntax
+[ 33%] Built target newlang_parser
+[ 33%] Built target newlang_checked
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p774_gate_test
+[100%] Built target p774_gate_test
+[  0%] Built target newlang_diagnostic
+[ 11%] Built target newlang_source
+[ 11%] Built target newlang_syntax
+[ 22%] Built target newlang_lexer
+[ 33%] Built target newlang_checked
+[ 33%] Built target newlang_parser
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p778_gate_test
+[100%] Built target p778_gate_test
+[ 10%] Built target newlang_source
+[ 10%] Built target newlang_diagnostic
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_syntax
+[ 20%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 80%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[ 90%] Linking C executable p817_public
+[100%] Built target p817_public
+[ 11%] Built target newlang_source
+[ 11%] Built target newlang_diagnostic
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_syntax
+[ 33%] Built target newlang_parser
+[ 33%] Built target newlang_checked
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p817_oom
+[100%] Built target p817_oom
+[ 10%] Built target newlang_source
+[ 10%] Built target newlang_diagnostic
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_syntax
+[ 20%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 80%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Linking C executable p945_integrity
+[100%] Built target p945_integrity
+[  0%] Built target newlang_diagnostic
+[ 11%] Built target newlang_source
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_syntax
+[ 33%] Built target newlang_parser
+[ 33%] Built target newlang_checked
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p965_ownership
+[100%] Built target p965_ownership
+[  0%] Built target newlang_diagnostic
+[ 11%] Built target newlang_source
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_syntax
+[ 22%] Built target newlang_parser
+[ 33%] Built target newlang_checked
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p965_oom
+[100%] Built target p965_oom
+[ 10%] Built target newlang_diagnostic
+[ 10%] Built target newlang_source
+[ 20%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 80%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Linking C executable p965_output
+[100%] Built target p965_output
+[  0%] Built target newlang_diagnostic
+[ 10%] Built target newlang_source
+[ 20%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 30%] Built target newlang_checked
+[ 30%] Built target newlang_parser
+[ 80%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[ 90%] Linking C executable newlangc
+[100%] Built target newlangc
+[ 11%] Built target newlang_source
+[ 11%] Built target newlang_diagnostic
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_syntax
+[ 22%] Built target newlang_parser
+[ 33%] Built target newlang_checked
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p953_integrity
+[100%] Built target p953_integrity
+[  0%] Built target newlang_diagnostic
+[ 11%] Built target newlang_source
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_syntax
+[ 33%] Built target newlang_parser
+[ 33%] Built target newlang_checked
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p961_origin
+[100%] Built target p961_origin
+[ 10%] Built target newlang_source
+[ 10%] Built target newlang_diagnostic
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_syntax
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 80%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Linking C executable p961_original
+[100%] Built target p961_original
+[ 10%] Built target newlang_source
+[ 10%] Built target newlang_diagnostic
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_syntax
+[ 20%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 80%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Linking C executable p961_oom
+[100%] Built target p961_oom
+[ 11%] Built target newlang_source
+[ 11%] Built target newlang_diagnostic
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_syntax
+[ 22%] Built target newlang_parser
+[ 33%] Built target newlang_checked
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p961_output
+[100%] Built target p961_output
