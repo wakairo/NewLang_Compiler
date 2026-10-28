@@ -1,0 +1,3 @@
+NL_R_COHORT_V1
+r993_synthetic_good|check_accept|tests/t993/sources/good.nl|9a7cf03899eee6fa85a9490b7dfdd6a13f54650564f2258f569657bb9d2f29e0
+r993_synthetic_bad|check_reject|tests/t993/sources/bad.nl|f69f628d8fd0ad5a348d291b0a0c118e073f24d158676fb6370a9f47809ecc15
