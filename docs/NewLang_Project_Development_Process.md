@@ -221,6 +221,51 @@ AI実行環境による作業中断が発生した場合は、実際の作業範
 
 **並行Trackの停止・差替え：** Issueへの作業コメントが0件でも、別チャットで着手済みの可能性がある。Coordinationは変更時に `STOP REQUESTED` と既知/不明の稼働状況を記録し、作業者は次の大きな書込みやPR公開前に現行Issueの停止指示を確認し、停止・保全した範囲を `STOP ACK` として報告する（可能な場合）。**ACK未確認は停止確認済みではない**。GitHubのIssue closeだけで別チャットが自動停止するとは扱わず、必要なら利用者から直接伝える。
 
+#### 4.1.2 各Trackの裁量と認可scope内の自律反復
+
+**基本原則：各Trackが元から持つ裁量を活かす。** Coordinationが目的・担当・scope・
+独立性・費用／CI上限・受入条件を認可したら、その内側での作業の進め方、
+局所的な不具合の調査・修復、検証順序は**担当Track自身が判断してよい**。
+失敗した候補ごと、formatterやfixtureの修正ごと、private実装の小変更ごとに
+Coordinationの再RELEASEを求めることを既定にしない。
+Issue固有の明示的な制限・STOP条件はこの原則に優先する。
+この原則は権限を新設するものではなく、§3の責務と各Charterを優先する。
+
+**「候補・危険な実行の停止」と「Trackの作業自体の停止」を区別する。**
+テスト・検証機材・内部実装が失敗したら、その失敗した候補／危険な実行を止め、
+元source・oracle・SHA・最初の結果・ログ・到達した層を保全する。
+既知のUBや不正な権限のまま実行を強行せず、失敗を後続の成功で遡及的にPASSへ変更しない。
+**認可scope内で安全に原因を調べ、別候補として修復・再検証できる場合は、
+Trackの作業そのものを止めずに自律継続してよい。**
+新候補の証拠と結果を区別し、初回の失敗は残す。通常の局所修正は、
+実測のまとまったcheckpointでIssueへ報告すればよく、修正ごとの許可申請やIssue乱立を要しない。
+
+**裁量の所在は変えない。** Pは認可されたcompiler private実装・テストの機長であり、
+Bは副操縦士として助言するがProductionを変更しない。Mは意味論の検討・裁定、
+Fは独立したproof／反例調査をそれぞれの権限内で進め、canonicalへの採用や
+他Trackの結果変更を自動的には行わない。Rは§7.1–7.3の情報隔離と§7.6の
+独立実測・自律修復規則を**優先**し、原source・予測・初回findingの独立性を守る。
+R専用GitHub branch＋Actionsが指定されたIssueでは、認可のないP同等の
+実行環境へ移らない。T・Oは各Charter／Issueで限定されたtooling・研究を行い、
+VはProduct Validation、Qは品質観察・助言、Bは非執行の助言を、それぞれ既存の
+責務と認可scopeの内側で進める。いずれも他Trackの権限、
+固定対象、source issuer、CIのtrust boundaryを自律的には変更しない。
+
+**Coordinationへ戻す境界：** canonical／公開source・API・ABI・意味論・権限の
+変更が必要な場合、認可scope・固定SHA・実行環境・CI／費用上限を超える場合、
+証拠やBLIND独立性が損なわれた場合、根本的な所有権・provenance・
+lifetimeの矛盾をscope内で安全に解消できない場合、および
+優先順位の変更、他Trackへの新規RELEASE、PRのREADY／merge、
+Product GO等の採用判断が必要な場合は、作業を保全してCoordinationへ報告・裁定を求める。
+**実際の安全性違反やunsoundness疑いは隠さず速やかに報告し、
+未解決の候補を安全性PASSとして公開・採用しない。**
+危険な実行を停止した事実だけを理由に、通常のscope内修復まで禁止する必要はない。
+
+Coordinationは**境界を設定し、証拠を評価し、track間を裁定する役割**に集中する。
+自律反復は無期限の予算・包括的なmerge権限ではない。§4.1の
+`STOP REQUESTED`／`STOP ACK`、§4.2／§4.3のgate、§7のR独立性、
+既存Charter・Issueの明示的な権限境界を維持する。
+
 ### 4.2 Historical design-intent gate（設計判断の必須照合）
 
 **必須手順:** [NewLang_Design_Decision_Procedure.md](NewLang_Design_Decision_Procedure.md)
