@@ -1,0 +1,11 @@
+P982 original Git/source/oracle lineage and current versioned hashes PASS 506
+P990 freeze current-generation control PASS
+P990 freeze counterexample REJECTED original Git blob mismatch
+P990 freeze counterexample REJECTED current freeze digest: src/checked_c_copy_internal.h
+P990 freeze counterexample REJECTED original Git blob mismatch
+P990 freeze counterexample REJECTED current freeze digest: src/checked_c_node.c
+P990 freeze forward-generation production-change control PASS
+P990 freeze counterexample REJECTED current freeze digest: src/checked_c_node.c
+P990 freeze counterexample REJECTED previous freeze digest
+P990 freeze counterexample REJECTED original Git blob mismatch
+P990 versioned freeze: two controls and seven deliberate failures PASS

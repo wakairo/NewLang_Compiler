@@ -1,0 +1,434 @@
+[
+  {
+    "source": "before_direct.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/before_direct.nl"
+    ],
+    "rc": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "before_direct.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/before_direct.nl"
+    ],
+    "rc": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "07e25ddee1c7e7fe739acbec1952cc59515a393320e57b55fa228d89a1582e7c",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p990/tests/p990/sources/before_direct.nl\n"
+  },
+  {
+    "source": "after_true_direct.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/after_true_direct.nl"
+    ],
+    "rc": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "after_true_direct.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/after_true_direct.nl"
+    ],
+    "rc": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "a20f94556e33eb5af7317cdc6409c97955df3991bfeee11f8dc5099b67dff969",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p990/tests/p990/sources/after_true_direct.nl\n"
+  },
+  {
+    "source": "after_false_direct.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/after_false_direct.nl"
+    ],
+    "rc": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "after_false_direct.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/after_false_direct.nl"
+    ],
+    "rc": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "6d53ac41488ccf2f07277d9141f3c24b35fa9d82c49c1748786114c06a34d911",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p990/tests/p990/sources/after_false_direct.nl\n"
+  },
+  {
+    "source": "before_bound.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/before_bound.nl"
+    ],
+    "rc": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "before_bound.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/before_bound.nl"
+    ],
+    "rc": 0,
+    "stdout_bytes": 13722,
+    "stdout_sha256": "1c9a85562de4a2743f30581a742b2bb9895f92390ced504e8338ef14ea388ca3",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "after_true_bound.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/after_true_bound.nl"
+    ],
+    "rc": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "after_true_bound.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/after_true_bound.nl"
+    ],
+    "rc": 0,
+    "stdout_bytes": 14007,
+    "stdout_sha256": "20606056c3fd7f7814d426bc780b1a475a5bc0826c85778b2130e5bf21c0611c",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "after_false_bound.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/after_false_bound.nl"
+    ],
+    "rc": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "after_false_bound.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/after_false_bound.nl"
+    ],
+    "rc": 0,
+    "stdout_bytes": 14007,
+    "stdout_sha256": "755f1631cd98788daf80caa5fe1319dfeacb64e32f88d116792b2b33ae26f1a9",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "negative_extra_change.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/negative_extra_change.nl"
+    ],
+    "rc": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "negative_extra_change.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/negative_extra_change.nl"
+    ],
+    "rc": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "66dce3d3dd6b2e71ec83ebec427e3e6a8d042af105a46576579f66c84e6f0db4",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p990/tests/p990/sources/negative_extra_change.nl\n"
+  },
+  {
+    "source": "negative_wrong_return.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/negative_wrong_return.nl"
+    ],
+    "rc": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "negative_wrong_return.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/negative_wrong_return.nl"
+    ],
+    "rc": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3f4ca6d76f441d592e18557a43f76acef1067ec9ce52899c68a47dba327ccc9",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p990/tests/p990/sources/negative_wrong_return.nl\n"
+  },
+  {
+    "source": "negative_wrong_formal.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/negative_wrong_formal.nl"
+    ],
+    "rc": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "973181e229d44e5d15041324c4393376ee835c25a67f6e5645820a3daf58c711",
+    "diagnostic": "/workspace/p990/tests/p990/sources/negative_wrong_formal.nl:40:20-40:26: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  },
+  {
+    "source": "negative_wrong_formal.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/negative_wrong_formal.nl"
+    ],
+    "rc": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "973181e229d44e5d15041324c4393376ee835c25a67f6e5645820a3daf58c711",
+    "diagnostic": "/workspace/p990/tests/p990/sources/negative_wrong_formal.nl:40:20-40:26: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  },
+  {
+    "source": "negative_wrong_field.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/negative_wrong_field.nl"
+    ],
+    "rc": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "b8cd41c27fe698834c8d1e5835cb6debf7a1df8d4409da28823f1a2b372d4ac3",
+    "diagnostic": "/workspace/p990/tests/p990/sources/negative_wrong_field.nl:39:26-39:38: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal\n"
+  },
+  {
+    "source": "negative_wrong_field.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/negative_wrong_field.nl"
+    ],
+    "rc": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "b8cd41c27fe698834c8d1e5835cb6debf7a1df8d4409da28823f1a2b372d4ac3",
+    "diagnostic": "/workspace/p990/tests/p990/sources/negative_wrong_field.nl:39:26-39:38: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal\n"
+  },
+  {
+    "source": "negative_escape_ref.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/negative_escape_ref.nl"
+    ],
+    "rc": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "7e86fec95ba33b8d085e6872515242e90f40d2ebfeaf9dc010b2aca11b979e7f",
+    "diagnostic": "/workspace/p990/tests/p990/sources/negative_escape_ref.nl:39:15-41:6: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+  },
+  {
+    "source": "negative_escape_ref.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/negative_escape_ref.nl"
+    ],
+    "rc": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "7e86fec95ba33b8d085e6872515242e90f40d2ebfeaf9dc010b2aca11b979e7f",
+    "diagnostic": "/workspace/p990/tests/p990/sources/negative_escape_ref.nl:39:15-41:6: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+  },
+  {
+    "source": "negative_duplicate_return.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/negative_duplicate_return.nl"
+    ],
+    "rc": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "negative_duplicate_return.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/negative_duplicate_return.nl"
+    ],
+    "rc": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "76729d0eeb123feaf723ad3329aeb9d84d8f053c0fef6791bab97a3a22fcf9f0",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p990/tests/p990/sources/negative_duplicate_return.nl\n"
+  },
+  {
+    "source": "negative_bad_branch.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/negative_bad_branch.nl"
+    ],
+    "rc": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "7b3b9d319d149e2b596b916c75a2671843c6867a2c29fa5d432b35aad92c7eb4",
+    "diagnostic": "/workspace/p990/tests/p990/sources/negative_bad_branch.nl:44:9-44:30: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "negative_bad_branch.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/negative_bad_branch.nl"
+    ],
+    "rc": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "7b3b9d319d149e2b596b916c75a2671843c6867a2c29fa5d432b35aad92c7eb4",
+    "diagnostic": "/workspace/p990/tests/p990/sources/negative_bad_branch.nl:44:9-44:30: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "negative_wrong_owner.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/negative_wrong_owner.nl"
+    ],
+    "rc": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e4849a16b6736fcb2282fb3b07acdacef554c97a977a0fd11b9d1056d412fff9",
+    "diagnostic": "/workspace/p990/tests/p990/sources/negative_wrong_owner.nl:87:21-87:73: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n"
+  },
+  {
+    "source": "negative_wrong_owner.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/negative_wrong_owner.nl"
+    ],
+    "rc": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e4849a16b6736fcb2282fb3b07acdacef554c97a977a0fd11b9d1056d412fff9",
+    "diagnostic": "/workspace/p990/tests/p990/sources/negative_wrong_owner.nl:87:21-87:73: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n"
+  },
+  {
+    "source": "negative_duplicate_owner.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/negative_duplicate_owner.nl"
+    ],
+    "rc": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "558e10d5ae216080a27f3eed7317e92717d3ce63eb0010e1b970ead66eb41849",
+    "diagnostic": "/workspace/p990/tests/p990/sources/negative_duplicate_owner.nl:88:48-88:64: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n"
+  },
+  {
+    "source": "negative_duplicate_owner.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/negative_duplicate_owner.nl"
+    ],
+    "rc": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "558e10d5ae216080a27f3eed7317e92717d3ce63eb0010e1b970ead66eb41849",
+    "diagnostic": "/workspace/p990/tests/p990/sources/negative_duplicate_owner.nl:88:48-88:64: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n"
+  },
+  {
+    "source": "negative_ended_domain.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "--check",
+      "/workspace/p990/tests/p990/sources/negative_ended_domain.nl"
+    ],
+    "rc": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "74c2373ea0dfb2f6ccbd0483d24323155217332b2772a7dcc920178847b78aba",
+    "diagnostic": "/workspace/p990/tests/p990/sources/negative_ended_domain.nl:88:31-88:43: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n"
+  },
+  {
+    "source": "negative_ended_domain.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p982-build-gcc/newlangc",
+      "/workspace/p990/tests/p990/sources/negative_ended_domain.nl"
+    ],
+    "rc": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "74c2373ea0dfb2f6ccbd0483d24323155217332b2772a7dcc920178847b78aba",
+    "diagnostic": "/workspace/p990/tests/p990/sources/negative_ended_domain.nl:88:31-88:43: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n"
+  }
+]

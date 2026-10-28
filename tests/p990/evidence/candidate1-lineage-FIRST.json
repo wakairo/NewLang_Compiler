@@ -1,0 +1,12 @@
+[
+  {
+    "name": "lineage",
+    "command": [
+      "python3",
+      "/workspace/p990/tests/p982/freeze_test.py"
+    ],
+    "rc": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "aa83e390af954d5322fa6ffe36111487a56b41ccffbef35b053aac69723bec7b"
+  }
+]

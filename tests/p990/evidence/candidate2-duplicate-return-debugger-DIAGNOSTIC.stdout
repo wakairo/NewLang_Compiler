@@ -1,0 +1,469 @@
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+P986 {"backend": "mixed-node", "context": "0x555555635ee0", "entry": "0x55555563bf90", "event": "BACKEND_ENTRY", "origin": "0x55555564d150", "source": "0x55555565ad60"}
+P986 {"callable": {"actual_plan_matches": true, "actual_source_matches": true, "argument_count": 4, "body": "0x55555569adf0", "caller_effects": false, "custody_recipient": false, "function": 10, "hidden_dependencies": false, "in_bounds": true, "kind": "NL_CHECKED_REGISTERED_CALL", "owner_producer": true, "owner_receiver": false, "plan": "0x555555637ff0", "plan_source": "0x55555563b570", "result": 15}, "caller": "0x5555557382d0", "context": "0x55555564bb80", "domain": 2, "entry": "0x5555556bc310", "entry_proved": true, "event": "H_PRODUCER_ISSUED", "head": {"current_fact": 42, "current_value": 49, "fields": [{"fact": 41, "incarnation": 21, "index": 0, "live": true, "parent": 17, "parent_incarnation": 20, "place": 21, "value": {"carrier": "NL_CARRIER_AGGREGATE", "domain": 0, "field_count": 0, "id": 48, "known": false, "region": 0, "scalar": 0, "slot": 0, "type": 13}}, {"fact": 26, "incarnation": 22, "index": 1, "live": true, "parent": 17, "parent_incarnation": 20, "place": 22, "value": {"carrier": "NL_CARRIER_AGGREGATE", "domain": 0, "field_count": 0, "id": 25, "known": true, "region": 0, "scalar": 97, "slot": 0, "type": 6}}], "governing_domain": 1, "implicit_local": 0, "incarnation": 20, "independent_root": 1, "live": 1, "place": 17, "region": 1, "type": 11}, "head_domain": 1, "incarnation": 31, "inputs": [{"carrier": "NL_CARRIER_LOOSE", "domain": 0, "field_count": 0, "id": 55, "known": false, "region": 0, "scalar": 0, "slot": 0, "type": 14}, {"carrier": "NL_CARRIER_LOOSE", "domain": 0, "field_count": 0, "id": 56, "known": false, "region": 0, "scalar": 0, "slot": 0, "type": 12}, {"carrier": "NL_CARRIER_LOOSE", "domain": 0, "field_count": 0, "id": 29, "known": false, "region": 2, "scalar": 0, "slot": 0, "type": 3}, {"carrier": "NL_CARRIER_LOOSE", "domain": 2, "field_count": 0, "id": 34, "known": false, "region": 0, "scalar": 0, "slot": 0, "type": 2}], "node": 50, "region": 2, "return_proved": true, "returned": "0x5555556f6f40", "returned_packet": {"carrier": "NL_CARRIER_LOOSE", "domain": 0, "field_count": 3, "id": 61, "known": false, "region": 0, "scalar": 0, "slot": 0, "type": 15}, "root": 28, "source": "0x55555563c200", "tail": {"current_fact": 35, "current_value": 38, "fields": [{"fact": 36, "incarnation": 32, "index": 0, "live": true, "parent": 28, "parent_incarnation": 31, "place": 32, "value": {"carrier": "NL_CARRIER_AGGREGATE", "domain": 0, "field_count": 0, "id": 36, "known": false, "region": 0, "scalar": 0, "slot": 0, "type": 13}}, {"fact": 37, "incarnation": 33, "index": 1, "live": true, "parent": 28, "parent_incarnation": 31, "place": 33, "value": {"carrier": "NL_CARRIER_AGGREGATE", "domain": 0, "field_count": 0, "id": 37, "known": true, "region": 0, "scalar": 173, "slot": 0, "type": 6}}], "governing_domain": 2, "implicit_local": 0, "incarnation": 31, "independent_root": 1, "live": 1, "place": 28, "region": 2, "type": 11}}
+P986 {"callable": {"actual_plan_matches": true, "actual_source_matches": true, "argument_count": 3, "body": "0x5555556f68c0", "caller_effects": false, "custody_recipient": false, "function": 11, "hidden_dependencies": false, "in_bounds": true, "kind": "NL_CHECKED_REGISTERED_CALL", "owner_producer": false, "owner_receiver": true, "plan": "0x555555638e80", "plan_source": "0x55555563cee0", "result": 1}, "caller": "0x5555557382d0", "context": "0x55555564bb80", "domain": 2, "entry": "0x555555703e30", "entry_proved": true, "event": "H_TERMINAL_ISSUED", "incarnation": 31, "inputs": [{"carrier": "NL_CARRIER_LOOSE", "domain": 0, "field_count": 0, "id": 62, "known": false, "region": 0, "scalar": 0, "slot": 0, "type": 12}, {"carrier": "NL_CARRIER_LOOSE", "domain": 0, "field_count": 0, "id": 29, "known": false, "region": 2, "scalar": 0, "slot": 0, "type": 3}, {"carrier": "NL_CARRIER_LOOSE", "domain": 2, "field_count": 0, "id": 34, "known": false, "region": 0, "scalar": 0, "slot": 0, "type": 2}], "node": 63, "post_proved": true, "region": 2, "root": 28, "source": "0x55555563c200"}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_h_custody_validate", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_h_custody_validate", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_h_origin_validate", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "return_profile", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "return_profile", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "return_profile", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_checked_producer_valid", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "return_profile", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "return_profile", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "return_profile", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "return_profile", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "return_profile", "state": null, "value": 1}
+P986 {"call": 18, "caller": "0x55555565cbe0", "event": "RETURN", "function": "nl_checked_copy_body_parameters", "state": null, "value": 1}
+P986 {"event": "CALLEE_RETURN_NODES", "node_count": 5, "returns": [5]}
+P986 {"body": "0x555555658930", "body_source": "0x55555563f1f0", "body_world": "0x555555635ee0", "call": 18, "callable": {"actual_plan_matches": true, "actual_source_matches": true, "argument_count": 2, "body": "0x555555658930", "caller_effects": false, "custody_recipient": false, "function": 13, "hidden_dependencies": false, "in_bounds": true, "kind": "NL_CHECKED_REGISTERED_CALL", "owner_producer": false, "owner_receiver": false, "plan": "0x55555564a0b0", "plan_source": "0x55555563f1f0", "result": 6}, "caller": "0x55555565cbe0", "caller_matches": true, "caller_source": "0x55555563c200", "caller_world": "0x555555635ee0", "entry": "0x5555556be240", "event": "COPY_AUTH", "event_count": 1, "event_kind": "NL_COPY_BODY_CHANGE", "field_index": 0, "field_parent": 4, "first_kind": "NL_CHECKED_RETURN", "handoff": "0x55555569cba0", "later_writes": [{"index": 1, "new": {"carrier": "NL_CARRIER_ENDED", "domain": 0, "field_count": 0, "id": 15, "known": true, "region": 0, "scalar": 121, "slot": 0, "type": 6}, "node": 25, "old": {"carrier": "NL_CARRIER_ENDED", "domain": 0, "field_count": 0, "id": 1, "known": true, "region": 0, "scalar": 17, "slot": 0, "type": 6}, "parent": 1, "rhs_kind": "NL_CHECKED_IDENTIFIER", "value_use": "NL_VALUE_COPIED"}], "nodes_match": true, "old_copy": {"carrier": "NL_CARRIER_LOOSE", "domain": 0, "field_count": 0, "id": 4, "known": true, "region": 0, "scalar": 121, "slot": 0, "type": 6}, "owner_matches": true, "parameters": [4, 5], "root_items": 1, "root_kind": "NL_CHECKED_BLOCK", "root_tail": 0, "roots": [{"entry": {"current_fact": 1, "current_value": 3, "fields": [{"fact": 2, "incarnation": 2, "index": 0, "live": true, "parent": 1, "parent_incarnation": 1, "place": 2, "value": {"carrier": "NL_CARRIER_AGGREGATE", "domain": 0, "field_count": 0, "id": 2, "known": true, "region": 0, "scalar": 83, "slot": 0, "type": 6}}, {"fact": 3, "incarnation": 3, "index": 1, "live": true, "parent": 1, "parent_incarnation": 1, "place": 3, "value": {"carrier": "NL_CARRIER_AGGREGATE", "domain": 0, "field_count": 0, "id": 1, "known": true, "region": 0, "scalar": 17, "slot": 0, "type": 6}}], "governing_domain": 0, "implicit_local": 1, "incarnation": 1, "independent_root": 1, "live": 1, "place": 1, "region": 0, "type": 10}, "handoff": {"current_fact": 1, "current_value": 3, "fields": [{"fact": 2, "incarnation": 2, "index": 0, "live": true, "parent": 1, "parent_incarnation": 1, "place": 2, "value": {"carrier": "NL_CARRIER_AGGREGATE", "domain": 0, "field_count": 0, "id": 2, "known": true, "region": 0, "scalar": 83, "slot": 0, "type": 6}}, {"fact": 3, "incarnation": 3, "index": 1, "live": true, "parent": 1, "parent_incarnation": 1, "place": 3, "value": {"carrier": "NL_CARRIER_AGGREGATE", "domain": 0, "field_count": 0, "id": 1, "known": true, "region": 0, "scalar": 17, "slot": 0, "type": 6}}], "governing_domain": 0, "implicit_local": 1, "incarnation": 1, "independent_root": 1, "live": 1, "place": 1, "region": 0, "type": 10}}, {"entry": {"current_fact": 4, "current_value": 6, "fields": [{"fact": 5, "incarnation": 5, "index": 0, "live": true, "parent": 4, "parent_incarnation": 4, "place": 5, "value": {"carrier": "NL_CARRIER_AGGREGATE", "domain": 0, "field_count": 0, "id": 4, "known": true, "region": 0, "scalar": 121, "slot": 0, "type": 6}}, {"fact": 6, "incarnation": 6, "index": 1, "live": true, "parent": 4, "parent_incarnation": 4, "place": 6, "value": {"carrier": "NL_CARRIER_AGGREGATE", "domain": 0, "field_count": 0, "id": 5, "known": true, "region": 0, "scalar": 201, "slot": 0, "type": 6}}], "governing_domain": 0, "implicit_local": 1, "incarnation": 4, "independent_root": 1, "live": 1, "place": 4, "region": 0, "type": 10}, "handoff": {"current_fact": 11, "current_value": 12, "fields": [{"fact": 10, "incarnation": 5, "index": 0, "live": true, "parent": 4, "parent_incarnation": 4, "place": 5, "value": {"carrier": "NL_CARRIER_AGGREGATE", "domain": 0, "field_count": 0, "id": 11, "known": true, "region": 0, "scalar": 37, "slot": 0, "type": 6}}, {"fact": 6, "incarnation": 6, "index": 1, "live": true, "parent": 4, "parent_incarnation": 4, "place": 6, "value": {"carrier": "NL_CARRIER_AGGREGATE", "domain": 0, "field_count": 0, "id": 5, "known": true, "region": 0, "scalar": 201, "slot": 0, "type": 6}}], "governing_domain": 0, "implicit_local": 1, "incarnation": 4, "independent_root": 1, "live": 1, "place": 4, "region": 0, "type": 10}}], "sealed": true, "source_matches": true}
+P986 {"call": 18, "caller": "0x55555565cbe0", "event": "RETURN", "function": "nl_checked_copy_body_view", "state": null, "value": 1}
+P986 {"call": 18, "caller": "0x55555565cbe0", "event": "RETURN", "function": "nl_checked_copy_body_parameters", "state": null, "value": 1}
+P986 {"call": 18, "caller": "0x55555565cbe0", "event": "RETURN", "function": "nl_checked_copy_body_validate", "state": null, "value": 0}
+P986 {"call": 18, "caller": "0x55555565cbe0", "event": "RETURN", "function": "nl_checked_copy_body_validate", "state": null, "value": 0}
+P986 {"call": 18, "caller": "0x55555565cbe0", "event": "RETURN", "function": "nl_checked_copy_body_parameters_validate", "state": null, "value": 0}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "copy_call_proof", "state": {"allocations": 0, "copy_calls": 0, "copy_expected_calls": 0, "copy_issuer": "0x0", "copy_roots": 0, "link_updates": 0, "no_pre_read": false, "owner_calls": 0, "pending_live": 0, "producer_calls": 0, "projections": 0, "reads": 0, "reloans": 0, "stages": [0, 0]}, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "copy_prepare", "state": {"allocations": 0, "copy_calls": 0, "copy_expected_calls": 1, "copy_issuer": "0x55555565cbe0", "copy_roots": 0, "link_updates": 0, "no_pre_read": false, "owner_calls": 0, "pending_live": 0, "producer_calls": 0, "projections": 0, "reads": 0, "reloans": 0, "stages": [0, 0]}, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "copy_carrier_world", "state": {"allocations": 0, "copy_calls": 0, "copy_expected_calls": 1, "copy_issuer": "0x55555565cbe0", "copy_roots": 0, "link_updates": 0, "no_pre_read": false, "owner_calls": 0, "pending_live": 0, "producer_calls": 0, "projections": 0, "reads": 0, "reloans": 0, "stages": [0, 0]}, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "copy_carrier_world", "state": {"allocations": 0, "copy_calls": 0, "copy_expected_calls": 1, "copy_issuer": "0x55555565cbe0", "copy_roots": 0, "link_updates": 0, "no_pre_read": false, "owner_calls": 0, "pending_live": 0, "producer_calls": 0, "projections": 0, "reads": 0, "reloans": 0, "stages": [0, 0]}, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "copy_carrier_world", "state": {"allocations": 0, "copy_calls": 0, "copy_expected_calls": 1, "copy_issuer": "0x55555565cbe0", "copy_roots": 1, "link_updates": 0, "no_pre_read": false, "owner_calls": 0, "pending_live": 0, "producer_calls": 0, "projections": 0, "reads": 0, "reloans": 0, "stages": [0, 0]}, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "copy_carrier_world", "state": {"allocations": 0, "copy_calls": 0, "copy_expected_calls": 1, "copy_issuer": "0x55555565cbe0", "copy_roots": 1, "link_updates": 0, "no_pre_read": false, "owner_calls": 0, "pending_live": 0, "producer_calls": 0, "projections": 0, "reads": 0, "reloans": 0, "stages": [0, 0]}, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "copy_carrier_world", "state": {"allocations": 0, "copy_calls": 0, "copy_expected_calls": 1, "copy_issuer": "0x55555565cbe0", "copy_roots": 2, "link_updates": 0, "no_pre_read": false, "owner_calls": 0, "pending_live": 0, "producer_calls": 0, "projections": 0, "reads": 0, "reloans": 0, "stages": [0, 0]}, "value": 1}
+P986 {"call": 18, "caller": "0x55555565cbe0", "event": "RETURN", "function": "nl_checked_copy_body_view", "state": null, "value": 1}
+P986 {"call": 18, "caller": "0x55555565cbe0", "event": "RETURN", "function": "nl_checked_copy_body_parameters", "state": null, "value": 1}
+P986 {"call": 18, "caller": "0x55555565cbe0", "event": "RETURN", "function": "nl_checked_copy_body_validate", "state": null, "value": 0}
+P986 {"call": 18, "caller": "0x55555565cbe0", "event": "RETURN", "function": "nl_checked_copy_body_validate", "state": null, "value": 0}
+P986 {"call": 18, "caller": "0x55555565cbe0", "event": "RETURN", "function": "nl_checked_copy_body_parameters_validate", "state": null, "value": 0}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "copy_call_proof", "state": {"allocations": 0, "copy_calls": 0, "copy_expected_calls": 1, "copy_issuer": "0x55555565cbe0", "copy_roots": 2, "link_updates": 0, "no_pre_read": false, "owner_calls": 0, "pending_live": 0, "producer_calls": 0, "projections": 0, "reads": 0, "reloans": 0, "stages": [0, 0]}, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "copy_carrier_world", "state": {"allocations": 0, "copy_calls": 0, "copy_expected_calls": 1, "copy_issuer": "0x55555565cbe0", "copy_roots": 2, "link_updates": 0, "no_pre_read": false, "owner_calls": 0, "pending_live": 0, "producer_calls": 0, "projections": 0, "reads": 0, "reloans": 0, "stages": [0, 0]}, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "copy_carrier_world", "state": {"allocations": 0, "copy_calls": 1, "copy_expected_calls": 1, "copy_issuer": "0x55555565cbe0", "copy_roots": 2, "link_updates": 0, "no_pre_read": false, "owner_calls": 0, "pending_live": 0, "producer_calls": 0, "projections": 0, "reads": 0, "reloans": 0, "stages": [0, 0]}, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "copy_carrier_world", "state": {"allocations": 0, "copy_calls": 1, "copy_expected_calls": 1, "copy_issuer": "0x55555565cbe0", "copy_roots": 2, "link_updates": 0, "no_pre_read": false, "owner_calls": 0, "pending_live": 0, "producer_calls": 0, "projections": 0, "reads": 0, "reloans": 0, "stages": [0, 0]}, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_h_custody_validate", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_h_origin_validate", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_h_custody_validate", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_h_origin_validate", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_h_custody_validate", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_h_origin_validate", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_h_custody_validate", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_h_origin_validate", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_checked_producer_valid", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_checked_producer_valid", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_checked_producer_valid", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_checked_producer_valid", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_checked_producer_valid", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "owner_evidence", "state": null, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "terminal_read_role", "state": {"allocations": 2, "copy_calls": 1, "copy_expected_calls": 1, "copy_issuer": "0x55555565cbe0", "copy_roots": 2, "link_updates": 2, "no_pre_read": true, "owner_calls": 1, "pending_live": 0, "producer_calls": 1, "projections": 2, "reads": 0, "reloans": 2, "stages": [4, 4]}, "value": 1}
+P986 {"call": null, "caller": null, "event": "RETURN", "function": "nl_checked_c_node", "state": null, "value": 0}
+/* Bounded Checked-C representation, not a NewLang ABI. */
+#include <stdint.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <limits.h>
+_Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+typedef struct nl_node nl_node;
+typedef struct { unsigned tag; const nl_node *ptr; } nl_node_option;
+struct nl_node { nl_node_option f0; uint8_t f1; };
+#ifdef NEWLANG_NODE_OBSERVER
+#include NEWLANG_NODE_OBSERVER
+#else
+#define NL_NODE_BIND(...) ((void)0)
+#define NL_NODE_REPLACE(...) ((void)0)
+#define NL_NODE_ARM(...) ((void)0)
+#define NL_NODE_RELOAN(...) ((void)0)
+#define NL_NODE_FINISH() ((void)0)
+#endif
+_Static_assert(sizeof(nl_node)==24 && _Alignof(nl_node)==8, "checked H target layout");
+_Static_assert(sizeof(void*)==8 && offsetof(nl_node,f0)==0 && offsetof(nl_node,f1)==16, "private member plan");
+_Static_assert(sizeof(nl_node_option)==16 && _Alignof(nl_node_option)==8 && _Generic(((nl_node *)0)->f0,nl_node_option:1,default:0) && _Generic(((nl_node *)0)->f1,uint8_t:1,default:0) && _Generic(((nl_node_option *)0)->ptr,const nl_node *:1,default:0), "private member types");
+typedef struct {void *handle;} nl_allocation;
+typedef struct {unsigned char *bytes;size_t length;} nl_storage;
+typedef struct {unsigned char *bytes;size_t length;} nl_slot;
+typedef struct {size_t token;} nl_domain;
+typedef struct {const nl_node *ptr;nl_allocation allocation;nl_domain domain;} nl_live_tail;
+typedef struct {unsigned tag;nl_live_tail packet;} nl_custody;
+typedef struct {nl_allocation allocation;nl_storage raw;} nl_backing;
+#ifdef NEWLANG_HEAP_OBSERVER
+#include NEWLANG_HEAP_OBSERVER
+#else
+#define NL_HEAP_TRIAL(...) ((void)0)
+#define NL_HEAP_ARM(...) ((void)0)
+#define NL_HEAP_DOMAIN(...) ((void)0)
+#define NL_HEAP_SLOT(...) ((void)0)
+#define NL_HEAP_INITIALIZE(...) ((void)0)
+#define NL_HEAP_RELOAN(...) ((void)0)
+#define NL_HEAP_ROOT(...) ((void)0)
+#define NL_HEAP_FIELD(...) ((void)0)
+#define NL_HEAP_COPY(...) ((void)0)
+#define NL_HEAP_CHANGE(...) ((void)0)
+#define NL_HEAP_SCOPE_END(...) ((void)0)
+#define NL_HEAP_END(...) ((void)0)
+#define NL_HEAP_RAW(...) ((void)0)
+#define NL_HEAP_FINALIZE(...) ((void)0)
+#define NL_HEAP_RELEASE(...) ((void)0)
+#define NL_HEAP_FINISH() ((void)0)
+#define NL_HEAP_HANDOFF(...) ((void)0)
+#define NL_HEAP_RECEIVER_ENTER(...) ((void)0)
+#define NL_HEAP_RECEIVER_EXIT() ((void)0)
+#define NL_HEAP_RETURNED(...) ((void)0)
+#define NL_LIVE_SEND(...) ((void)0)
+#define NL_LIVE_ENTER(...) ((void)0)
+#define NL_LIVE_RETURN(...) ((void)0)
+#define NL_LIVE_RECEIVE(...) ((void)0)
+#endif
+#ifndef NL_CUSTODY_ENTER
+#define NL_CUSTODY_ENTER(...) ((void)0)
+#define NL_CUSTODY_STORED(...) ((void)0)
+#define NL_CUSTODY_RETURNED(...) ((void)0)
+#define NL_CUSTODY_EXTRACT(...) ((void)0)
+#define NL_CUSTODY_NONE(...) ((void)0)
+#define NL_CUSTODY_POLICY(...) ((void)0)
+#define NL_CUSTODY_LOAN(...) ((void)0)
+#endif
+typedef struct {uint8_t f0,f1;} nl_copy_record;
+#ifndef NL_MIXED_OWNER_LOCAL
+#define NL_MIXED_OWNER_LOCAL(...) ((void)0)
+#endif
+#ifndef NL_MIXED_COPY_BIND
+#define NL_MIXED_COPY_BIND(...) ((void)0)
+#endif
+#ifndef NL_MIXED_COPY_STORE
+#define NL_MIXED_COPY_STORE(...) ((void)0)
+#endif
+#ifndef NL_MIXED_COPY_CALL
+#define NL_MIXED_COPY_CALL(...) ((void)0)
+#endif
+static uint8_t nl_copy_state_13(uint8_t *target,uint8_t next){uint8_t old=*target;*target=next;NL_MIXED_COPY_CALL(target,old,next);return old;}
+static void nl_owner_11(const nl_node *nl_b_11_40,nl_allocation nl_b_11_41,nl_domain nl_b_11_42) {
+NL_HEAP_RECEIVER_ENTER(nl_b_11_40,nl_b_11_41.handle,nl_b_11_42.token,11,40,41,42,&nl_b_11_41,&nl_b_11_42);
+{ const nl_domain *nl_b_12_43 = &nl_b_11_42;
+(void)nl_b_12_43;
+const nl_node * nl_v_76 = nl_b_11_40;
+const nl_domain * nl_v_77 = nl_b_12_43;
+const nl_node * nl_v_78 = nl_v_76;
+NL_HEAP_ROOT(nl_v_78,nl_v_77->token,0,28,31,7);
+(void)nl_v_77;
+const nl_node * nl_b_12_44 = nl_v_78;
+(void)nl_b_12_44;
+NL_NODE_BIND(12, 44, 4, &nl_b_12_44);
+NL_HEAP_SCOPE_END(7);
+}
+nl_slot nl_v_79;
+{ const nl_domain *nl_b_13_45 = &nl_b_11_42;
+(void)nl_b_13_45;
+const nl_node * nl_v_80 = nl_b_11_40;
+NL_HEAP_END(nl_v_80,nl_b_13_45->token);
+nl_slot nl_v_81 = {(unsigned char *)nl_v_80,24};
+nl_v_79 = nl_v_81;
+}
+nl_slot nl_b_11_46 = nl_v_79;
+(void)nl_b_11_46;
+NL_NODE_BIND(11, 46, 4, &nl_b_11_46);
+nl_slot nl_v_82 = nl_b_11_46;
+nl_b_11_46 = (nl_slot){0};
+nl_storage nl_v_83 = {nl_v_82.bytes,nl_v_82.length};
+NL_HEAP_RAW(nl_v_83.bytes,nl_v_83.length);
+nl_storage nl_b_11_47 = nl_v_83;
+(void)nl_b_11_47;
+NL_NODE_BIND(11, 47, 4, &nl_b_11_47);
+nl_domain nl_v_84 = nl_b_11_42;
+nl_b_11_42 = (nl_domain){0};
+NL_HEAP_FINALIZE(nl_v_84.token);
+(void)nl_v_84;
+nl_allocation nl_v_85 = nl_b_11_41;
+nl_b_11_41 = (nl_allocation){0};
+nl_storage nl_v_86 = nl_b_11_47;
+nl_b_11_47 = (nl_storage){0};
+NL_HEAP_RELEASE(nl_v_85.handle,nl_v_86.bytes,nl_v_86.length);
+free(nl_v_85.handle);
+nl_v_85.handle=NULL;
+nl_v_86.bytes=NULL;
+(void)nl_v_86;
+NL_HEAP_RECEIVER_EXIT();
+}
+static nl_live_tail nl_producer_10(nl_node_option * nl_b_10_30,const nl_node * nl_b_10_31,nl_allocation nl_b_10_32,nl_domain nl_b_10_33) {
+NL_LIVE_ENTER(nl_b_10_30,nl_b_10_31,nl_b_10_32.handle,nl_b_10_33.token);
+nl_node_option * nl_v_63 = nl_b_10_30;
+nl_node_option nl_v_64 = { 0, NULL };
+nl_node_option nl_v_65 = *nl_v_63;
+*nl_v_63 = nl_v_64;
+NL_HEAP_CHANGE(nl_v_63,&nl_v_65,2);
+(void)nl_v_65;
+const nl_node * nl_v_66 = nl_b_10_31;
+nl_allocation nl_v_67 = nl_b_10_32;
+nl_b_10_32 = (nl_allocation){0};
+nl_domain nl_v_68 = nl_b_10_33;
+nl_b_10_33 = (nl_domain){0};
+nl_live_tail nl_v_69 = {nl_v_66,nl_v_67,nl_v_68};
+nl_live_tail nl_b_10_35 = nl_v_69;
+nl_v_69 = (nl_live_tail){0};
+NL_MIXED_OWNER_LOCAL(&nl_b_10_35);
+nl_live_tail nl_v_70 = nl_b_10_35;
+nl_b_10_35 = (nl_live_tail){0};
+NL_LIVE_RETURN(nl_v_70);
+return nl_v_70;
+}
+int main(void) {
+uint8_t nl_v_1 = 17;
+uint8_t nl_v_2 = 83;
+nl_copy_record nl_v_3 = {nl_v_2,nl_v_1};
+nl_copy_record nl_b_0_1 = nl_v_3;
+NL_MIXED_COPY_BIND(0,1,&nl_b_0_1.f0,&nl_b_0_1.f1);
+uint8_t nl_v_4 = 121;
+uint8_t nl_v_5 = 201;
+nl_copy_record nl_v_6 = {nl_v_4,nl_v_5};
+nl_copy_record nl_b_0_2 = nl_v_6;
+NL_MIXED_COPY_BIND(0,2,&nl_b_0_2.f0,&nl_b_0_2.f1);
+uint8_t nl_v_7 = 37;
+uint8_t nl_v_8 = nl_copy_state_13(&nl_b_0_2.f0,nl_v_7);
+uint8_t nl_b_0_6 = nl_v_8;
+(void)nl_b_0_6;
+NL_NODE_BIND(0, 6, 4, &nl_b_0_6);
+uint8_t nl_v_9 = nl_b_0_6;
+uint8_t nl_v_10 = nl_b_0_1.f1;
+nl_b_0_1.f1=nl_v_9;
+NL_MIXED_COPY_STORE(&nl_b_0_1.f1,nl_v_10,nl_v_9);
+uint8_t nl_b_0_8 = nl_v_10;
+(void)nl_b_0_8;
+NL_NODE_BIND(0, 8, 4, &nl_b_0_8);
+void *nl_heap_11 = malloc(24);
+NL_HEAP_TRIAL(nl_heap_11,24,8);
+if (nl_heap_11 == NULL) {
+NL_HEAP_ARM(1);
+}
+if (nl_heap_11 != NULL) {
+NL_HEAP_ARM(2);
+nl_backing nl_b_2_9 = { {nl_heap_11}, {(unsigned char *)nl_heap_11,24} };
+nl_backing nl_v_12 = nl_b_2_9;
+nl_b_2_9 = (nl_backing){0};
+nl_allocation nl_b_2_10 = nl_v_12.allocation;
+(void)nl_b_2_10;
+nl_storage nl_b_2_11 = nl_v_12.raw;
+(void)nl_b_2_11;
+nl_v_12 = (nl_backing){0};
+nl_allocation nl_v_13 = nl_b_2_10;
+nl_b_2_10 = (nl_allocation){0};
+nl_allocation nl_b_2_12 = nl_v_13;
+(void)nl_b_2_12;
+NL_NODE_BIND(2, 12, 4, &nl_b_2_12);
+nl_storage nl_v_14 = nl_b_2_11;
+nl_b_2_11 = (nl_storage){0};
+nl_slot nl_v_15 = {nl_v_14.bytes,nl_v_14.length};
+NL_HEAP_SLOT(nl_v_15.bytes,nl_v_15.length);
+nl_slot nl_b_2_13 = nl_v_15;
+(void)nl_b_2_13;
+NL_NODE_BIND(2, 13, 4, &nl_b_2_13);
+nl_domain nl_v_16 = {1};
+NL_HEAP_DOMAIN(nl_v_16.token);
+nl_domain nl_b_2_14 = nl_v_16;
+(void)nl_b_2_14;
+NL_NODE_BIND(2, 14, 4, &nl_b_2_14);
+const nl_node * nl_v_17;
+{ const nl_domain *nl_b_3_15 = &nl_b_2_14;
+(void)nl_b_3_15;
+nl_slot nl_v_18 = nl_b_2_13;
+nl_b_2_13 = (nl_slot){0};
+nl_node_option nl_v_19 = { 0, NULL };
+uint8_t nl_v_20 = 97;
+nl_node nl_v_21 = { nl_v_19, nl_v_20 };
+const nl_domain * nl_v_22 = nl_b_3_15;
+*(nl_node *)nl_v_18.bytes = nl_v_21;
+const nl_node *nl_v_23 = (nl_node *)nl_v_18.bytes;
+NL_HEAP_INITIALIZE(nl_v_23,nl_v_22->token);
+(void)nl_v_22;
+nl_v_17 = nl_v_23;
+}
+const nl_node * const nl_b_2_16 = nl_v_17;
+(void)nl_b_2_16;
+NL_NODE_BIND(2, 16, 2, &nl_b_2_16);
+void *nl_heap_24 = malloc(24);
+NL_HEAP_TRIAL(nl_heap_24,24,8);
+if (nl_heap_24 == NULL) {
+NL_HEAP_ARM(1);
+nl_slot nl_v_25;
+{ const nl_domain *nl_b_5_17 = &nl_b_2_14;
+(void)nl_b_5_17;
+const nl_node * nl_v_26 = nl_b_2_16;
+NL_HEAP_END(nl_v_26,nl_b_5_17->token);
+nl_slot nl_v_27 = {(unsigned char *)nl_v_26,24};
+nl_v_25 = nl_v_27;
+}
+nl_slot nl_b_4_18 = nl_v_25;
+(void)nl_b_4_18;
+NL_NODE_BIND(4, 18, 4, &nl_b_4_18);
+nl_slot nl_v_28 = nl_b_4_18;
+nl_b_4_18 = (nl_slot){0};
+nl_storage nl_v_29 = {nl_v_28.bytes,nl_v_28.length};
+NL_HEAP_RAW(nl_v_29.bytes,nl_v_29.length);
+nl_storage nl_b_4_19 = nl_v_29;
+(void)nl_b_4_19;
+NL_NODE_BIND(4, 19, 4, &nl_b_4_19);
+nl_domain nl_v_30 = nl_b_2_14;
+nl_b_2_14 = (nl_domain){0};
+NL_HEAP_FINALIZE(nl_v_30.token);
+(void)nl_v_30;
+nl_allocation nl_v_31 = nl_b_2_12;
+nl_b_2_12 = (nl_allocation){0};
+nl_storage nl_v_32 = nl_b_4_19;
+nl_b_4_19 = (nl_storage){0};
+NL_HEAP_RELEASE(nl_v_31.handle,nl_v_32.bytes,nl_v_32.length);
+free(nl_v_31.handle);
+nl_v_31.handle=NULL;
+nl_v_32.bytes=NULL;
+(void)nl_v_32;
+}
+if (nl_heap_24 != NULL) {
+NL_HEAP_ARM(2);
+nl_backing nl_b_6_17 = { {nl_heap_24}, {(unsigned char *)nl_heap_24,24} };
+nl_backing nl_v_33 = nl_b_6_17;
+nl_b_6_17 = (nl_backing){0};
+nl_allocation nl_b_6_18 = nl_v_33.allocation;
+(void)nl_b_6_18;
+nl_storage nl_b_6_19 = nl_v_33.raw;
+(void)nl_b_6_19;
+nl_v_33 = (nl_backing){0};
+nl_allocation nl_v_34 = nl_b_6_18;
+nl_b_6_18 = (nl_allocation){0};
+nl_allocation nl_b_6_20 = nl_v_34;
+(void)nl_b_6_20;
+NL_NODE_BIND(6, 20, 4, &nl_b_6_20);
+nl_storage nl_v_35 = nl_b_6_19;
+nl_b_6_19 = (nl_storage){0};
+nl_slot nl_v_36 = {nl_v_35.bytes,nl_v_35.length};
+NL_HEAP_SLOT(nl_v_36.bytes,nl_v_36.length);
+nl_slot nl_b_6_21 = nl_v_36;
+(void)nl_b_6_21;
+NL_NODE_BIND(6, 21, 4, &nl_b_6_21);
+nl_domain nl_v_37 = {2};
+NL_HEAP_DOMAIN(nl_v_37.token);
+nl_domain nl_b_6_22 = nl_v_37;
+(void)nl_b_6_22;
+NL_NODE_BIND(6, 22, 4, &nl_b_6_22);
+const nl_node * nl_v_38;
+{ const nl_domain *nl_b_7_23 = &nl_b_6_22;
+(void)nl_b_7_23;
+nl_slot nl_v_39 = nl_b_6_21;
+nl_b_6_21 = (nl_slot){0};
+nl_node_option nl_v_40 = { 0, NULL };
+uint8_t nl_v_41 = 173;
+nl_node nl_v_42 = { nl_v_40, nl_v_41 };
+const nl_domain * nl_v_43 = nl_b_7_23;
+*(nl_node *)nl_v_39.bytes = nl_v_42;
+const nl_node *nl_v_44 = (nl_node *)nl_v_39.bytes;
+NL_HEAP_INITIALIZE(nl_v_44,nl_v_43->token);
+(void)nl_v_43;
+nl_v_38 = nl_v_44;
+}
+const nl_node * const nl_b_6_24 = nl_v_38;
+(void)nl_b_6_24;
+NL_NODE_BIND(6, 24, 2, &nl_b_6_24);
+nl_node_option nl_v_45;
+{ const nl_domain *nl_b_8_25 = &nl_b_2_14;
+(void)nl_b_8_25;
+const nl_node * nl_v_46 = nl_b_2_16;
+const nl_domain * nl_v_47 = nl_b_8_25;
+nl_node * nl_v_48 = (nl_node *)nl_v_46;
+NL_HEAP_ROOT(nl_v_48,nl_v_47->token,1,17,20,5);
+(void)nl_v_47;
+nl_node * nl_b_8_26 = nl_v_48;
+(void)nl_b_8_26;
+NL_NODE_BIND(8, 26, 4, &nl_b_8_26);
+nl_node * nl_v_49 = nl_b_8_26;
+nl_node_option * nl_v_50 = &nl_v_49->f0;
+NL_HEAP_FIELD(nl_v_49,nl_v_50,1,11,0,21,21,5);
+const nl_node * nl_v_51 = nl_b_6_24;
+nl_node_option nl_v_52 = { 1, nl_v_51 };
+nl_node_option nl_v_53 = *nl_v_50;
+*nl_v_50 = nl_v_52;
+NL_HEAP_CHANGE(nl_v_50,&nl_v_53,1);
+nl_v_45 = nl_v_53;
+NL_HEAP_SCOPE_END(5);
+}
+nl_node_option nl_b_6_27 = nl_v_45;
+(void)nl_b_6_27;
+NL_NODE_BIND(6, 27, 3, &nl_b_6_27);
+nl_live_tail nl_v_54;
+{ const nl_domain *nl_b_9_28 = &nl_b_2_14;
+(void)nl_b_9_28;
+const nl_node * nl_v_55 = nl_b_2_16;
+const nl_domain * nl_v_56 = nl_b_9_28;
+nl_node * nl_v_57 = (nl_node *)nl_v_55;
+NL_HEAP_ROOT(nl_v_57,nl_v_56->token,1,17,20,6);
+(void)nl_v_56;
+nl_node * nl_b_9_29 = nl_v_57;
+(void)nl_b_9_29;
+NL_NODE_BIND(9, 29, 4, &nl_b_9_29);
+nl_node * nl_v_58 = nl_b_9_29;
+nl_node_option * nl_v_59 = &nl_v_58->f0;
+NL_HEAP_FIELD(nl_v_58,nl_v_59,1,11,0,21,21,6);
+const nl_node * nl_v_60 = nl_b_6_24;
+nl_allocation nl_v_61 = nl_b_6_20;
+nl_b_6_20 = (nl_allocation){0};
+nl_domain nl_v_62 = nl_b_6_22;
+nl_b_6_22 = (nl_domain){0};
+NL_LIVE_SEND(nl_v_60,nl_v_61.handle,nl_v_62.token,&nl_b_6_20,&nl_b_6_22);
+nl_live_tail nl_v_71 = nl_producer_10(nl_v_59,nl_v_60,nl_v_61,nl_v_62);
+NL_LIVE_RECEIVE(nl_v_71,&nl_b_6_20,&nl_b_6_22);
+nl_v_54 = nl_v_71;
+NL_HEAP_SCOPE_END(6);
+}
+nl_live_tail nl_b_6_36 = nl_v_54;
+nl_v_54 = (nl_live_tail){0};
+NL_NODE_BIND(6,36,4,&nl_b_6_36);
+nl_live_tail nl_v_72 = nl_b_6_36;
+nl_b_6_36 = (nl_live_tail){0};
+const nl_node * nl_b_6_37 = nl_v_72.ptr;
+(void)nl_b_6_37;
+nl_allocation nl_b_6_38 = nl_v_72.allocation;
+(void)nl_b_6_38;
+nl_domain nl_b_6_39 = nl_v_72.domain;
+(void)nl_b_6_39;
+nl_v_72 = (nl_live_tail){0};
+const nl_node * nl_v_73 = nl_b_6_37;
+nl_allocation nl_v_74 = nl_b_6_38;
+nl_b_6_38 = (nl_allocation){0};
+nl_domain nl_v_75 = nl_b_6_39;
+nl_b_6_39 = (nl_domain){0};
+NL_HEAP_HANDOFF(nl_v_73,nl_v_74.handle,nl_v_75.token,&nl_b_6_38,&nl_b_6_39);
+nl_owner_11(nl_v_73,nl_v_74,nl_v_75);
+NL_HEAP_RETURNED(&nl_b_6_38,&nl_b_6_39);
+nl_slot nl_v_87;
+{ const nl_domain *nl_b_14_48 = &nl_b_2_14;
+(void)nl_b_14_48;
+const nl_node * nl_v_88 = nl_b_2_16;
+NL_HEAP_END(nl_v_88,nl_b_14_48->token);
+nl_slot nl_v_89 = {(unsigned char *)nl_v_88,24};
+nl_v_87 = nl_v_89;
+}
+nl_slot nl_b_6_49 = nl_v_87;
+(void)nl_b_6_49;
+NL_NODE_BIND(6, 49, 4, &nl_b_6_49);
+nl_slot nl_v_90 = nl_b_6_49;
+nl_b_6_49 = (nl_slot){0};
+nl_storage nl_v_91 = {nl_v_90.bytes,nl_v_90.length};
+NL_HEAP_RAW(nl_v_91.bytes,nl_v_91.length);
+nl_storage nl_b_6_50 = nl_v_91;
+(void)nl_b_6_50;
+NL_NODE_BIND(6, 50, 4, &nl_b_6_50);
+nl_domain nl_v_92 = nl_b_2_14;
+nl_b_2_14 = (nl_domain){0};
+NL_HEAP_FINALIZE(nl_v_92.token);
+(void)nl_v_92;
+nl_allocation nl_v_93 = nl_b_2_12;
+nl_b_2_12 = (nl_allocation){0};
+nl_storage nl_v_94 = nl_b_6_50;
+nl_b_6_50 = (nl_storage){0};
+NL_HEAP_RELEASE(nl_v_93.handle,nl_v_94.bytes,nl_v_94.length);
+free(nl_v_93.handle);
+nl_v_93.handle=NULL;
+nl_v_94.bytes=NULL;
+(void)nl_v_94;
+}
+}
+NL_HEAP_FINISH();
+return 0;
+}
+[Inferior 1 (process 156880) exited normally]
+P986 {"code": 0, "event": "INFERIOR_EXIT"}
+P986 {"counts": {"copy_call_proof:entry": 2, "copy_call_proof:return:1": 2, "copy_carrier_world:entry": 8, "copy_carrier_world:return:1": 8, "copy_prepare:entry": 1, "copy_prepare:return:1": 1, "nl_checked_c_node:entry": 1, "nl_checked_c_node:return:0": 1, "nl_checked_copy_body_parameters:entry": 177, "nl_checked_copy_body_parameters:return:0": 174, "nl_checked_copy_body_parameters:return:1": 3, "nl_checked_copy_body_parameters_validate:entry": 2, "nl_checked_copy_body_parameters_validate:return:0": 2, "nl_checked_copy_body_validate:entry": 4, "nl_checked_copy_body_validate:return:0": 4, "nl_checked_copy_body_view:entry": 2, "nl_checked_copy_body_view:return:1": 2, "nl_checked_producer_valid:entry": 6, "nl_checked_producer_valid:return:1": 6, "nl_h_custody_validate:entry": 6, "nl_h_custody_validate:return:1": 6, "nl_h_origin_validate:entry": 5, "nl_h_origin_validate:return:1": 5, "owner_evidence:entry": 1, "owner_evidence:return:1": 1, "return_profile:entry": 8, "return_profile:return:1": 8, "terminal_read_role:entry": 1, "terminal_read_role:return:1": 1}, "event": "SUMMARY", "first_reject": null, "observer_error": null}

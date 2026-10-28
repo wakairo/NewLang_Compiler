@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/workspace/p990/tests/p982/freeze_test.py", line 10, in <module>
+    count = verify(root, CURRENT)
+            ^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p990/tests/support/versioned_freeze.py", line 153, in verify
+    require(required <= files.keys(), "current freeze omits protected inputs")
+  File "/workspace/p990/tests/support/versioned_freeze.py", line 36, in require
+    raise FreezeError(message)
+versioned_freeze.FreezeError: current freeze omits protected inputs
