@@ -64,10 +64,14 @@ static bool probe(const char *path, bool unit)
     bool admitted = v1_call_parameter(o.caller, o.call, &program, &parameter);
     bool validated = v0_validate_call(o.caller, o.call, &program);
     size_t exported = v0_export_function(current, "p974_absent_export");
+    char *fallback = NULL;
+    size_t length = 777;
+    NLCheckStatus array = nl_checked_array4_c17(a.entry, &fallback, &length);
     current->functions = functions;
     CHECK(observed && !admitted && !validated && !exported &&
           parameter == SIZE_MAX && current->function_count == count &&
-          !memcmp(&before, &program, sizeof(program)));
+          !memcmp(&before, &program, sizeof(program)) &&
+          array == NL_CHECK_SEMANTIC_UNSUPPORTED && !fallback && length == 777);
     CHECK(v1_call_parameter(o.caller, o.call, &program, &parameter) &&
           parameter);
     CHECK(p974_validate(&o, unit, true));
