@@ -900,9 +900,12 @@ if(BUILD_TESTING)
         add_test(NAME p974_${profile}_v0.unit COMMAND p974_driver probe
             "${CMAKE_CURRENT_SOURCE_DIR}/${p974_source}" "${p974_kind}")
     endforeach()
-    add_test(NAME p974_named_v0.integration COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p974/named.py" "$<TARGET_FILE:p974_driver>"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/charge_false.nl")
+    add_test(NAME p974_named_charge_precision.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p974/named-v3.py" "$<TARGET_FILE:p974_driver>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/charge_false.nl" 4)
+    add_test(NAME p974_named_v0_valid.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p974/named-v3.py" "$<TARGET_FILE:p974_driver>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p631/same_value_local.nl" 0)
     add_executable(p961_oom tests/p961/oom.c)
     target_include_directories(p961_oom PRIVATE tests/support)
     target_link_libraries(p961_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
