@@ -1496,3 +1496,8 @@ if(BUILD_TESTING)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
 endif()
+
+# R970: isolated R-owned first-pass test registration on dedicated branch only.
+if(BUILD_TESTING AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/r970/CTest.cmake")
+    include("${CMAKE_CURRENT_SOURCE_DIR}/tests/r970/CTest.cmake")
+endif()

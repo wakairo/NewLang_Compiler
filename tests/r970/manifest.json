@@ -1,0 +1,91 @@
+{
+  "origin": "R963 immutable first + distinct supplemental source freeze",
+  "candidate": "fce069982e4b4ac8aa1b0488166490e54b66ae9f",
+  "compiler_main": "d579c761a78e3c84765e35061f77936789788d82",
+  "cases": [
+    {
+      "name": "A-POS",
+      "sha256": "f43c87581f71df375008e804f86a1894812a0c7efc5de867018c168b89107e8a",
+      "bytes": 4616,
+      "comment": 6437394806,
+      "expect": "positive"
+    },
+    {
+      "name": "B-POS",
+      "sha256": "eb2cef08eace4f9a103200f9380a0f7156499e5d4ccfcc5e9143031479b10771",
+      "bytes": 4659,
+      "comment": 6437394806,
+      "expect": "positive"
+    },
+    {
+      "name": "A-NEG-WRONG-PTR",
+      "sha256": "7a17fa2e5bdf26a7142d665e65d086551e84cf0277c97f82ab433237b5182092",
+      "bytes": 4612,
+      "comment": 6437394806,
+      "expect": "semantic_negative"
+    },
+    {
+      "name": "A-NEG-BAD-FIELD",
+      "sha256": "34624bc583e50cf811c6e08e4371b50804e90d9bf64f6f64e955635ff7476b2c",
+      "bytes": 4617,
+      "comment": 6437394806,
+      "expect": "semantic_negative"
+    },
+    {
+      "name": "B-NEG-BAD-PRODUCER",
+      "sha256": "3733e597a86f719bc9215ed8df22f506515b09001fe39624828ddfaaeb202d58",
+      "bytes": 4659,
+      "comment": 6437394806,
+      "expect": "semantic_negative"
+    },
+    {
+      "name": "B-NEG-DOUBLE-OWNER",
+      "sha256": "e96d1c9e446250dd090e7573792fd2d217609419b513907a3739f77205353aa2",
+      "bytes": 4748,
+      "comment": 6437394806,
+      "expect": "semantic_negative"
+    },
+    {
+      "name": "A2-POS-TF",
+      "sha256": "e74900488cea7d74f9011a1c06e5e9a80f252da77e1bd9b5d057f042df32ff58",
+      "bytes": 4931,
+      "comment": 6437510768,
+      "expect": "positive"
+    },
+    {
+      "name": "B2-POS-FT",
+      "sha256": "a68bec4543b419f588e9e694b5b561538aa44af8d37a69a2447f0c6794453ec1",
+      "bytes": 4975,
+      "comment": 6437510768,
+      "expect": "positive"
+    },
+    {
+      "name": "A2-NEG-MISSING-ELSE",
+      "sha256": "cd3a5b7952ab80404ad928526e92d78e73b0f8d2f4f997c5f3537e5aa9c8bc20",
+      "bytes": 4852,
+      "comment": 6437510768,
+      "expect": "grammar_negative"
+    },
+    {
+      "name": "A2-NEG-ARM-RESULT",
+      "sha256": "ff0295999c3c069b31354e5ff8ce46ca3bfea7575d605c7cf7f087cac09212e8",
+      "bytes": 4878,
+      "comment": 6437510768,
+      "expect": "semantic_negative"
+    },
+    {
+      "name": "B2-NEG-TAIL-DOMAIN",
+      "sha256": "df0a8b4b14b489599045b6218b2297a274b5745cd1f8c240842a72732dfc277e",
+      "bytes": 4975,
+      "comment": 6437510768,
+      "expect": "semantic_negative"
+    },
+    {
+      "name": "B2-NEG-OWNER-SWAP",
+      "sha256": "4eca73b90d7da7f23183482bb8220dd570c248c9ea93bdb84ebe598f63888fdf",
+      "bytes": 4975,
+      "comment": 6437510768,
+      "expect": "semantic_negative"
+    }
+  ]
+}
