@@ -13,7 +13,7 @@
     "tests/p974/support.h": "ed165eb29875a49078d469448405f1b7aebfae30a5a3641b89a5eec829c07945",
     "tests/p982/freeze_test.py": "4979712ccf4c9eb3cee71534de131d1077405f2d2e9a1587a61b4a5514d3c50f",
     "tests/p982/observer.h": "f604b388fa64f444f8dd08f6f9794cac85edc37e9304daf491d8b730e0356e20",
-    "tests/p982/oom.c": "d2f39dd77fde6b7b3bab0597ef2e82e6f7cdd2f233488ac82fe16a14e7eece1d",
+    "tests/p982/oom.c": "27b06abdb62f7c22642b088c3f10d96b13f81ef4265d993669aaf5973cc52453",
     "tests/p982/oracle-v1.json": "07c8dd069b534484ee7ae64e1c3f4fa45325ceea08c768326512f18fd6b0c0d2",
     "tests/p982/probe.c": "94e32fae2d3798e94714fd10704ca696e657676b26d70cd481db982d5c1d8cf9",
     "tests/p982/run.py": "e52e56373297a8d1e9c2ae131aa7dfe0f1dae0c717413632d4d5de536bf3c91c",

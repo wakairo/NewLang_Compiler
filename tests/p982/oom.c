@@ -43,6 +43,7 @@ static bool run(const char *path)
     P974Observation o;
     CHECK(registry(path, &base) && checked(base, &a) &&
           p974_find(a.entry, false, &o));
+    CHECK(p974_get(&o, false));
     NLSemanticSnapshot before, after;
     CHECK(nl_semantic_snapshot(a.context, &before));
     char *expected = NULL;
