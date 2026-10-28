@@ -67,7 +67,7 @@ static bool run(const char *path)
     CHECK(edge != SIZE_MAX && arm->count == 3 &&
           arm->nodes[0].kind == NL_CHECKED_U8_LITERAL &&
           arm->context->place_count >= originals[1]);
-    NLSemanticContext *current = f->context;
+    NLSemanticContext *current = (NLSemanticContext *)f->context;
     const size_t copy_function = f->nodes[x.call - 1].function - 1,
                  producer_function = f->nodes[producer - 1].function - 1,
                  terminal_function = f->nodes[terminal - 1].function - 1;
@@ -80,7 +80,7 @@ static bool run(const char *path)
                         producer_fn = current->functions[producer_function],
                         terminal_fn = current->functions[terminal_function];
         const NLSource *source = f->source;
-        NLSemanticContext *arm_context = arm->context;
+        NLSemanticContext *arm_context = (NLSemanticContext *)arm->context;
         NLCheckedNodeView literal = arm->nodes[0];
         const NLValueFactId fact =
             arm_context->places[originals[0] - 1].current_fact;
