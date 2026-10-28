@@ -246,8 +246,9 @@ Fは独立したproof／反例調査をそれぞれの権限内で進め、canon
 他Trackの結果変更を自動的には行わない。Rは§7.1–7.3の情報隔離と§7.6の
 独立実測・自律修復規則を**優先**し、原source・予測・初回findingの独立性を守る。
 R専用GitHub branch＋Actionsが指定されたIssueでは、認可のないP同等の
-実行環境へ移らない。T・Oは各Charter／Issueで限定されたtooling・研究のみを、
-V・Q・Bは各々の非執行・助言の範囲で進める。いずれも他Trackの権限、
+実行環境へ移らない。T・Oは各Charter／Issueで限定されたtooling・研究を行い、
+VはProduct Validation、Qは品質観察・助言、Bは非執行の助言を、それぞれ既存の
+責務と認可scopeの内側で進める。いずれも他Trackの権限、
 固定対象、source issuer、CIのtrust boundaryを自律的には変更しない。
 
 **Coordinationへ戻す境界：** canonical／公開source・API・ABI・意味論・権限の
