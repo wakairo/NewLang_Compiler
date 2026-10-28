@@ -1,9 +1,12 @@
 """Counterexamples and a genuine forward-generation control, in scratch copies."""
 from pathlib import Path
+from contextlib import contextmanager
+import base64
 import hashlib
 import json
 import runpy
 import shutil
+import subprocess
 import sys
 import tempfile
 
@@ -26,6 +29,7 @@ def rejected(work, manifest, text):
     except FreezeError as error:
         assert text in str(error), (text, str(error))
         print("P990 freeze counterexample REJECTED", text)
+        return str(error)
     else:
         raise AssertionError("freeze accepted deliberate mutation: " + text)
 
@@ -90,3 +94,254 @@ with tempfile.TemporaryDirectory(prefix="p990-freeze-") as temp:
     (work / next_name).write_text(json.dumps(bad))
     rejected(work, next_name, "original Git blob mismatch")
 print("P990 versioned freeze: two controls and seven deliberate failures PASS")
+
+# C107 forward-only additions. The original seven negative expectations and
+# controls above stay intact; no historic manifest or first RED is rewritten.
+oracle = json.loads((root / "tests/p990/history-repair/oracle-v1.json").read_text())
+originals = {}
+for row in oracle["reviewed_generations"]:
+    data = (root / row["path"]).read_bytes()
+    assert sha(data) == row["sha256"]
+    assert hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest() == row["oid"]
+    originals[row["path"]] = data
+print("P999 CONTROL reviewed-original-v1-v2-v3 PASS")
+
+
+@contextmanager
+def scratch():
+    with tempfile.TemporaryDirectory(prefix="p999-freeze-") as temp:
+        work = Path(temp)
+        for name in set(current["files"]) | {current_name}:
+            target = work / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(root / name, target)
+        yield work
+
+
+def write(work, name, value):
+    (work / name).write_text(json.dumps(value, indent=2) + "\n")
+    return sha((work / name).read_bytes())
+
+
+def forward(work, name, previous_name=current_name, changed=(), removed=()):
+    data = (work / previous_name).read_bytes()
+    value = json.loads(data)
+    value["generation"] += 1
+    value["previous"] = {"path": previous_name, "sha256": sha(data)}
+    value["stage"] = "C107 scratch forward-generation control"
+    value["files"][previous_name] = sha(data)
+    for path in changed:
+        value["files"][path] = sha((work / path).read_bytes())
+    for path in removed:
+        del value["files"][path]
+    write(work, name, value)
+    return name
+
+
+next_name = "tests/p990/protocol-c107-v5.json"
+header = "src/checked_c_copy_internal.h"
+wrapper = "tests/p982/freeze_test.py"
+with scratch() as work:
+    for name, comment in [(header, b"\n/* C107 legitimate future code */\n"),
+                          ("CMakeLists.txt", b"\n# C107 legitimate future CMake\n")]:
+        (work / name).write_bytes((work / name).read_bytes() + comment)
+    (work / wrapper).write_text((work / wrapper).read_text().replace(current_name, next_name))
+    selected = forward(work, next_name, changed=(header, "CMakeLists.txt", wrapper))
+    verify(work, selected)
+    assert all((work / name).read_bytes() == data for name, data in originals.items())
+    print("P999 CONTROL v5-new-production-and-CMake-original-history-retained PASS")
+
+with scratch() as work:
+    forward(work, next_name)
+    sixth = forward(work, "tests/p990/protocol-c107-v6.json", next_name)
+    verify(work, sixth)
+    print("P999 CONTROL intermediate-generation-coverage-retained PASS")
+
+
+def coherent(work, first=1, first_path_swap=False, claimed_anchor=False):
+    changed = {}
+    for row in oracle["reviewed_generations"]:
+        generation, name = row["generation"], row["path"]
+        if generation < first:
+            continue
+        value = json.loads(originals[name])
+        if generation == first:
+            if first_path_swap:
+                alias = "tests/p990/protocol-c107-first-alias.json"
+                (work / alias).write_bytes(originals[oracle["reviewed_generations"][0]["path"]])
+                value["previous"]["path"] = alias
+                value["files"][alias] = sha((work / alias).read_bytes())
+            else:
+                value["files"][header] = "0" * 64
+        if value["previous"] and value["previous"]["path"] in changed:
+            value["previous"]["sha256"] = changed[value["previous"]["path"]]
+        for prior, expected in changed.items():
+            value["files"][prior] = expected
+        changed[name] = write(work, name, value)
+    value = json.loads(current_bytes)
+    value["previous"]["sha256"] = changed[value["previous"]["path"]]
+    value["files"].update(changed)
+    if claimed_anchor:
+        value["baseline_anchors"] = changed
+    write(work, current_name, value)
+    # These are coherent linked data, not the old single-zero predecessor test.
+    for name in [*changed, current_name]:
+        doc = json.loads((work / name).read_bytes())
+        previous = doc["previous"]
+        if previous:
+            assert sha((work / previous["path"]).read_bytes()) == previous["sha256"]
+            assert doc["files"][previous["path"]] == previous["sha256"]
+    assert sha((work / header).read_bytes()) == current["files"][header]
+    return current_name
+
+
+new_results = []
+
+
+def counterexample(label, mutate):
+    with scratch() as work:
+        result = mutate(work)
+        selected = result if isinstance(result, str) else current_name
+        message = rejected(work, selected, oracle["negatives"][label])
+        row = {"case": label, "status": "REJECT", "error": message}
+        if label == "f81-coherent-v1-v2-v3":
+            sentinel = work / "c107-named-output.bin"
+            sentinel.write_bytes(b"C107 EXISTING OUTPUT MUST SURVIVE\n")
+            before = sentinel.stat()
+            run = subprocess.run([sys.executable, str(work / wrapper)], cwd=work,
+                                 capture_output=True, text=True, timeout=15)
+            assert run.returncode == 1 and not run.stdout, (run.returncode, run.stdout)
+            assert "historical freeze SHA256" in run.stderr
+            after = sentinel.stat()
+            assert sentinel.read_bytes() == b"C107 EXISTING OUTPUT MUST SURVIVE\n"
+            assert (before.st_dev, before.st_ino) == (after.st_dev, after.st_ino)
+            row.update({"CLI_exit": run.returncode, "CLI_stdout": "empty",
+                        "named_bytes_dev_ino": "unchanged"})
+        new_results.append(row)
+        print("P999 CASE", json.dumps(row, sort_keys=True))
+
+
+counterexample("f81-coherent-v1-v2-v3", lambda work: coherent(work))
+counterexample("past-v2-coherent-successors", lambda work: coherent(work, first=2))
+counterexample("past-v3-coherent-successor", lambda work: coherent(work, first=3))
+counterexample("mutable-anchor-claim", lambda work: coherent(work, claimed_anchor=True))
+counterexample("coherent-first-path-swap",
+               lambda work: coherent(work, first=2, first_path_swap=True))
+
+
+def first_alias(work):
+    name = "tests/p990/protocol-c107-first-alias.json"
+    (work / name).write_bytes(originals[oracle["reviewed_generations"][0]["path"]])
+    return name
+
+
+counterexample("first-generation-path-alias", first_alias)
+
+
+def self_claim(work):
+    value = json.loads(current_bytes)
+    value["baseline_anchors"] = {row["path"]: row["sha256"]
+                                for row in oracle["reviewed_generations"]}
+    write(work, current_name, value)
+
+
+counterexample("mutable-anchor-field", self_claim)
+for label, path in oracle["coverage_drops"].items():
+    counterexample(label, lambda work, path=path: forward(work, next_name, removed=(path,)))
+
+
+def intermediate_drop(work):
+    forward(work, next_name, removed=("tests/p990/observer.h",))
+    sixth = forward(work, "tests/p990/protocol-c107-v6.json", next_name)
+    value = json.loads((work / sixth).read_bytes())
+    value["files"]["tests/p990/observer.h"] = current["files"]["tests/p990/observer.h"]
+    write(work, sixth, value)
+    return sixth
+
+
+counterexample("intermediate-drop-restored-only-in-current", intermediate_drop)
+
+
+def changed_input(work, path):
+    (work / path).write_bytes((work / path).read_bytes() + b"\n")
+    return forward(work, next_name, changed=(path,))
+
+
+counterexample("changed-v2-source-with-current-digest",
+               lambda work: changed_input(work, "tests/p990/sources/negative_additional_return_v2.nl"))
+counterexample("changed-v2-oracle-with-current-digest",
+               lambda work: changed_input(work, "tests/p990/oracle-v2.json"))
+counterexample("changed-original-first-RED-with-current-digest",
+               lambda work: changed_input(work, "tests/p990/evidence/candidate1-lineage-FIRST.stderr"))
+counterexample("changed-T997-runner-with-current-digest",
+               lambda work: changed_input(work, "cmake/independent-r-manifest.py"))
+counterexample("missing-old-support",
+               lambda work: (work / "tests/p990/lineage/original/CMakeLists.txt.data").unlink())
+
+
+def bad_parent(work, commit=False):
+    name = "tests/p990/lineage/parent-snapshot-v1.json"
+    value = json.loads((work / name).read_bytes())
+    if commit:
+        data = base64.b64decode(value["commit_base64"]) + b"\n"
+        value["commit_base64"] = base64.b64encode(data).decode()
+    else:
+        value["parent"] = "0" * 40
+    write(work, name, value)
+
+
+counterexample("unmatched-P982-parent-OID", bad_parent)
+counterexample("unmatched-retained-parent-commit", lambda work: bad_parent(work, commit=True))
+
+
+def symlink_old(work):
+    name = oracle["reviewed_generations"][0]["path"]
+    alias = work / "c107-original-v1.json"
+    alias.write_bytes((work / name).read_bytes())
+    (work / name).unlink()
+    (work / name).symlink_to(alias)
+
+
+counterexample("symlink-original-generation", symlink_old)
+
+
+def symlink_parent(work):
+    (work / "tests/p990").rename(work / "c107-relocated")
+    (work / "tests/p990").symlink_to("../c107-relocated", target_is_directory=True)
+
+
+counterexample("symlink-intermediate-directory", symlink_parent)
+
+
+def nonregular(work):
+    path = work / "tests/p990/observer.h"
+    path.unlink()
+    path.mkdir()
+
+
+counterexample("nonregular-current-input", nonregular)
+counterexample("invalid-current-JSON", lambda work: (work / current_name).write_bytes(b"{"))
+counterexample("duplicate-current-JSON-key",
+               lambda work: (work / current_name).write_bytes(b'{"schema":1,' + current_bytes.lstrip()[1:]))
+
+
+def malicious_path(work, path):
+    value = json.loads(current_bytes)
+    value["files"][path] = "0" * 64
+    write(work, current_name, value)
+
+
+for label, path in oracle["malicious_paths"].items():
+    counterexample(label, lambda work, path=path: malicious_path(work, path))
+
+
+def bad_sha(work):
+    value = json.loads(current_bytes)
+    value["files"][header] = "0" * 63
+    write(work, current_name, value)
+
+
+counterexample("invalid-current-digest-format", bad_sha)
+assert {row["case"] for row in new_results} == oracle["negatives"].keys()
+print("P999 C107 provenance history: 3 new controls and", len(new_results),
+      "new deliberate rejections PASS; original 2 controls/7 rejections retained")

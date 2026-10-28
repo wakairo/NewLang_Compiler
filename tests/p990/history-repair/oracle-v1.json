@@ -1,0 +1,87 @@
+{
+  "release": "C107",
+  "stage": "PRE-RUN source/oracle expectations; no candidate execution yet",
+  "parent": "4c3ed993fa8a94c7a2850ff98677127d96c31a6b",
+  "parent_tree": "a0c648cc10305462cf902530decdc06e8f92552b",
+  "reviewed_P990": "8f8ac04c8b91d164d93a0d45639efce3efe36568",
+  "reviewed_P990_tree": "312cf43cae2ce27e34f677a5214243991e2ca514",
+  "reviewed_generations": [
+    {
+      "generation": 1,
+      "path": "tests/p990/current-freeze-v1.json",
+      "sha256": "e1f07f8a30fe927d374c76fd802c8c10d861090d6abe25e6ef090ee65b99aab4",
+      "oid": "cd6e30902968e65c8ecf580dd404b3247035e7ec"
+    },
+    {
+      "generation": 2,
+      "path": "tests/p990/current-freeze-v2.json",
+      "sha256": "e6bf940e5b5e7ccbcc43ae269f51bfda5dc5f5638306916dd81d64df81785989",
+      "oid": "f3a79d52250879e39b5abece92343097603e6c1a"
+    },
+    {
+      "generation": 3,
+      "path": "tests/p990/current-freeze-v3.json",
+      "sha256": "d636d2772584a16256ace830ecd4e82e352d0b8d80bf63172fa1ecaedf6829b8",
+      "oid": "9f81177516e7e1f178e3cdf7e9a99aaaf19923ca"
+    }
+  ],
+  "controls": [
+    "reviewed-original-v1-v2-v3",
+    "v5-new-production-and-CMake-original-history-retained",
+    "intermediate-generation-coverage-retained"
+  ],
+  "legacy": "Original two controls/seven deliberate rejection expectations retained, not renamed/disabled",
+  "coverage_drops": {
+    "drop-P990-observer": "tests/p990/observer.h",
+    "drop-P990-runner": "tests/p990/run.py",
+    "drop-P990-v2-source-manifest": "tests/p990/source-freeze-v2.json",
+    "drop-P990-v2-oracle": "tests/p990/oracle-v2.json",
+    "drop-original-P982-source": "tests/p982/sources/after_true.nl",
+    "drop-original-P990-oracle": "tests/p990/oracle-v1.json",
+    "drop-T997-runner": "cmake/independent-r-manifest.py"
+  },
+  "malicious_paths": {
+    "absolute-manifest-path": "/tmp/c107-do-not-read",
+    "traversal-manifest-path": "../c107-do-not-read",
+    "backslash-manifest-path": "tests\\p990\\observer.h",
+    "noncanonical-manifest-path": "tests/p990/./observer.h"
+  },
+  "negatives": {
+    "f81-coherent-v1-v2-v3": "historical freeze SHA256: tests/p990/current-freeze-v1.json",
+    "past-v2-coherent-successors": "historical freeze SHA256: tests/p990/current-freeze-v2.json",
+    "past-v3-coherent-successor": "historical freeze SHA256: tests/p990/current-freeze-v3.json",
+    "mutable-anchor-claim": "historical freeze SHA256: tests/p990/current-freeze-v1.json",
+    "coherent-first-path-swap": "historical freeze SHA256: tests/p990/current-freeze-v2.json",
+    "first-generation-path-alias": "historical freeze path",
+    "mutable-anchor-field": "freeze manifest fields",
+    "drop-P990-observer": "freeze coverage lost: tests/p990/observer.h",
+    "drop-P990-runner": "freeze coverage lost: tests/p990/run.py",
+    "drop-P990-v2-source-manifest": "freeze coverage lost: tests/p990/source-freeze-v2.json",
+    "drop-P990-v2-oracle": "freeze coverage lost: tests/p990/oracle-v2.json",
+    "drop-original-P982-source": "freeze coverage lost: tests/p982/sources/after_true.nl",
+    "drop-original-P990-oracle": "freeze coverage lost: tests/p990/oracle-v1.json",
+    "drop-T997-runner": "freeze coverage lost: cmake/independent-r-manifest.py",
+    "intermediate-drop-restored-only-in-current": "freeze coverage lost: tests/p990/observer.h",
+    "changed-v2-source-with-current-digest": "original P990 frozen input changed: tests/p990/sources/negative_additional_return_v2.nl",
+    "changed-v2-oracle-with-current-digest": "original P990 frozen input changed: tests/p990/oracle-v2.json",
+    "changed-original-first-RED-with-current-digest": "original P990 evidence changed: tests/p990/evidence/candidate1-lineage-FIRST.stderr",
+    "changed-T997-runner-with-current-digest": "immutable T997 blob mismatch: cmake/independent-r-manifest.py",
+    "missing-old-support": "missing freeze input: tests/p990/lineage/original/CMakeLists.txt.data",
+    "unmatched-P982-parent-OID": "immutable P982 parent/tree changed",
+    "unmatched-retained-parent-commit": "retained parent commit digest",
+    "symlink-original-generation": "symlink freeze path: tests/p990/current-freeze-v1.json",
+    "symlink-intermediate-directory": "symlink freeze path: tests/p990/lineage/parent-snapshot-v1.json",
+    "nonregular-current-input": "nonregular freeze path: tests/p990/observer.h",
+    "invalid-current-JSON": "invalid freeze JSON",
+    "duplicate-current-JSON-key": "duplicate freeze JSON key: schema",
+    "absolute-manifest-path": "nonlocal freeze path",
+    "traversal-manifest-path": "nonlocal freeze path",
+    "backslash-manifest-path": "invalid freeze path",
+    "noncanonical-manifest-path": "nonlocal freeze path",
+    "invalid-current-digest-format": "freeze SHA256 format: src/checked_c_copy_internal.h"
+  },
+  "expected_behavior": "Every negative raises FreezeError containing its pre-frozen expected message, never library success. Exact F81 coherent rewrite also runs actual wrapper subprocess: exit1, empty stdout, historical SHA error; existing sentinel bytes/device/inode unchanged. No compiler named-output API is invoked by these test-script negatives; inherited P990 named-output gates still execute.",
+  "original_first_RED": "P990 v1/v2 failures remain unchanged; no retrospective PASS. C107 baseline reproduction accepted coherent history+lost observer and is preserved separately.",
+  "security_boundary": "Only scratch files mutate; no source compiler graph/native authority change, no verifier edit in counterexamples, no R996/R985/R979 source/oracle access. Trusted verifier changes require Coordination review and independent F follow-up; cannot prevent simultaneous edits of trusted source/test/anchors.",
+  "value_alignment_risk": "Added compiler tooling trusted audit/maintenance dependencies, zero source/caller duties added; C-relative human audit cost/benefit UNMEASURED, Product GO PAUSED/H1 HOLD"
+}

@@ -1,0 +1,85 @@
+"""P999/C107: readonly reproduction of F81 on the exact unmodified parent.
+Only temporary copies of manifests are mutated. No compiler or R source runs.
+"""
+from pathlib import Path
+import hashlib
+import json
+import runpy
+import shutil
+import subprocess
+import sys
+import tempfile
+
+sys.dont_write_bytecode = True
+root = Path(sys.argv[1]).resolve()
+parent = "4c3ed993fa8a94c7a2850ff98677127d96c31a6b"
+assert subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip() == parent
+helper = root / "tests/support/versioned_freeze.py"
+helper_bytes = helper.read_bytes()
+assert hashlib.sha1(b"blob " + str(len(helper_bytes)).encode() + b"\0" + helper_bytes).hexdigest() == "6b5ab3b42c9919035a01548ef0c6e3233ead2690"
+verify = runpy.run_path(str(helper))["verify"]
+names = [f"tests/p990/current-freeze-v{i}.json" for i in (1, 2, 3)]
+expected = [
+    "e1f07f8a30fe927d374c76fd802c8c10d861090d6abe25e6ef090ee65b99aab4",
+    "e6bf940e5b5e7ccbcc43ae269f51bfda5dc5f5638306916dd81d64df81785989",
+    "d636d2772584a16256ace830ecd4e82e352d0b8d80bf63172fa1ecaedf6829b8",
+]
+original = {name: (root / name).read_bytes() for name in names}
+assert [hashlib.sha256(original[name]).hexdigest() for name in names] == expected
+current = json.loads(original[names[2]])
+inputs = set(current["files"]) | {names[2]}
+header = "src/checked_c_copy_internal.h"
+observer = "tests/p990/observer.h"
+assert observer in current["files"]
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+def write(work, name, value):
+    path = work / name
+    path.write_text(json.dumps(value, indent=2) + "\n")
+    return sha(path.read_bytes())
+
+results = []
+for case in ("original", "coherent-v1-v2-v3", "future-drop-observer"):
+    with tempfile.TemporaryDirectory(prefix="p999-parent-") as temp:
+        work = Path(temp)
+        for name in inputs:
+            target = work / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(root / name, target)
+        selected = names[2]
+        if case == "coherent-v1-v2-v3":
+            first = json.loads(original[names[0]])
+            first["files"][header] = "0" * 64
+            h1 = write(work, names[0], first)
+            second = json.loads(original[names[1]])
+            second["previous"]["sha256"] = h1
+            second["files"][names[0]] = h1
+            h2 = write(work, names[1], second)
+            third = json.loads(original[names[2]])
+            third["previous"]["sha256"] = h2
+            third["files"][names[0]] = h1
+            third["files"][names[1]] = h2
+            write(work, names[2], third)
+        elif case == "future-drop-observer":
+            future = json.loads(original[names[2]])
+            future["generation"] = 4
+            future["previous"] = {"path": names[2], "sha256": sha(original[names[2]])}
+            future["files"][names[2]] = sha(original[names[2]])
+            del future["files"][observer]
+            (work / observer).write_bytes((work / observer).read_bytes() + b"\n")
+            selected = "tests/p990/parent-repro-future.json"
+            write(work, selected, future)
+        count = verify(work, selected)
+        assert sha((work / header).read_bytes()) == current["files"][header]
+        assert (work / "tests/support/versioned_freeze.py").read_bytes() == helper_bytes
+        results.append({"case": case, "parent_verifier": "ACCEPT",
+                        "count": count, "original_compiler_unchanged": True,
+                        "mutated_history_sha256": {
+                            name: sha((work / name).read_bytes()) for name in names}})
+        print(json.dumps(results[-1], sort_keys=True))
+assert [sha((root / name).read_bytes()) for name in names] == expected
+assert helper.read_bytes() == helper_bytes
+print("P999 PARENT GATE B REPRODUCED: coherent history rewrite and lost coverage accepted; original files unchanged")
+
