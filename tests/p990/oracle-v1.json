@@ -1,0 +1,342 @@
+{
+  "authority": "Issue990 C103; main438170098d5b98096f1ad1f1f200dc1f326c75c3 CURRENT_SPEC->Draft17.34",
+  "immutable_parent": "c981ff742865731decb434c2382a6fb418c83de5",
+  "origin": "All new sources independently P-authored; P986 full sources/oracles retained byte-identical; no R979/R985 source/oracle/fixture read or reused.",
+  "positive_profiles": {
+    "before_direct.nl": {
+      "T00": 83,
+      "T01": 17,
+      "T10": 121,
+      "T11": 201,
+      "CALL_ROOT": 1,
+      "I0": 0,
+      "I1": 1,
+      "NEXT": 37,
+      "HV0": 97,
+      "HV1": 173,
+      "POST": 0,
+      "H_LOCAL": 1,
+      "HEAD_READ": 0,
+      "CALLER_READ": 0,
+      "RETURN_DIRECT": 1
+    },
+    "after_true_direct.nl": {
+      "T00": 61,
+      "T01": 151,
+      "T10": 233,
+      "T11": 29,
+      "CALL_ROOT": 0,
+      "I0": 1,
+      "I1": 0,
+      "NEXT": 89,
+      "HV0": 47,
+      "HV1": 193,
+      "POST": 1,
+      "H_LOCAL": 1,
+      "HEAD_READ": 0,
+      "CALLER_READ": 0,
+      "RETURN_DIRECT": 1
+    },
+    "after_false_direct.nl": {
+      "T00": 61,
+      "T01": 151,
+      "T10": 233,
+      "T11": 29,
+      "CALL_ROOT": 0,
+      "I0": 1,
+      "I1": 0,
+      "NEXT": 43,
+      "HV0": 47,
+      "HV1": 193,
+      "POST": 1,
+      "H_LOCAL": 1,
+      "HEAD_READ": 0,
+      "CALLER_READ": 0,
+      "RETURN_DIRECT": 1
+    },
+    "before_bound.nl": {
+      "T00": 83,
+      "T01": 17,
+      "T10": 121,
+      "T11": 201,
+      "CALL_ROOT": 1,
+      "I0": 0,
+      "I1": 1,
+      "NEXT": 37,
+      "HV0": 97,
+      "HV1": 173,
+      "POST": 0,
+      "H_LOCAL": 1,
+      "HEAD_READ": 0,
+      "CALLER_READ": 0,
+      "RETURN_DIRECT": 0
+    },
+    "after_true_bound.nl": {
+      "T00": 61,
+      "T01": 151,
+      "T10": 233,
+      "T11": 29,
+      "CALL_ROOT": 0,
+      "I0": 1,
+      "I1": 0,
+      "NEXT": 89,
+      "HV0": 47,
+      "HV1": 193,
+      "POST": 1,
+      "H_LOCAL": 1,
+      "HEAD_READ": 0,
+      "CALLER_READ": 0,
+      "RETURN_DIRECT": 0
+    },
+    "after_false_bound.nl": {
+      "T00": 61,
+      "T01": 151,
+      "T10": 233,
+      "T11": 29,
+      "CALL_ROOT": 0,
+      "I0": 1,
+      "I1": 0,
+      "NEXT": 43,
+      "HV0": 47,
+      "HV1": 193,
+      "POST": 1,
+      "H_LOCAL": 1,
+      "HEAD_READ": 0,
+      "CALLER_READ": 0,
+      "RETURN_DIRECT": 0
+    }
+  },
+  "P986_unchanged_controls": {
+    "t_only_direct.nl": {
+      "CHECK": 0,
+      "GET": true,
+      "current_VALIDATE": "OK",
+      "C17_after_repair": 0,
+      "parent_initial_result_preserved": true,
+      "RETURN_DIRECT": 1,
+      "mixed": false
+    },
+    "t_only_bound.nl": {
+      "CHECK": 0,
+      "GET": true,
+      "current_VALIDATE": "OK",
+      "C17_after_repair": 0,
+      "parent_initial_result_preserved": true,
+      "RETURN_DIRECT": 0,
+      "mixed": false
+    },
+    "t_before_allocation_direct.nl": {
+      "CHECK": 0,
+      "GET": true,
+      "current_VALIDATE": "OK",
+      "C17_after_repair": 0,
+      "parent_initial_result_preserved": true,
+      "RETURN_DIRECT": 1,
+      "mixed": true,
+      "T00": 31,
+      "T01": 107,
+      "T10": 59,
+      "T11": 219,
+      "CALL_ROOT": 0,
+      "I0": 1,
+      "I1": 0,
+      "NEXT": 73,
+      "HV0": 81,
+      "HV1": 163,
+      "POST": 0,
+      "H_LOCAL": 1,
+      "HEAD_READ": 0,
+      "CALLER_READ": 0
+    },
+    "t_before_allocation_bound.nl": {
+      "CHECK": 0,
+      "GET": true,
+      "current_VALIDATE": "OK",
+      "C17_after_repair": 0,
+      "parent_initial_result_preserved": true,
+      "RETURN_DIRECT": 0,
+      "mixed": true,
+      "T00": 31,
+      "T01": 107,
+      "T10": 59,
+      "T11": 219,
+      "CALL_ROOT": 0,
+      "I0": 1,
+      "I1": 0,
+      "NEXT": 73,
+      "HV0": 81,
+      "HV1": 163,
+      "POST": 0,
+      "H_LOCAL": 1,
+      "HEAD_READ": 0,
+      "CALLER_READ": 0
+    },
+    "t_before_h_read_direct.nl": {
+      "CHECK": 0,
+      "GET": true,
+      "current_VALIDATE": "OK",
+      "C17_after_repair": 0,
+      "parent_initial_result_preserved": true,
+      "RETURN_DIRECT": 1,
+      "mixed": true,
+      "T00": 31,
+      "T01": 107,
+      "T10": 59,
+      "T11": 219,
+      "CALL_ROOT": 0,
+      "I0": 1,
+      "I1": 0,
+      "NEXT": 73,
+      "HV0": 81,
+      "HV1": 163,
+      "POST": 0,
+      "H_LOCAL": 0,
+      "HEAD_READ": 1,
+      "CALLER_READ": 1
+    },
+    "t_before_h_read_bound.nl": {
+      "CHECK": 0,
+      "GET": true,
+      "current_VALIDATE": "OK",
+      "C17_after_repair": 0,
+      "parent_initial_result_preserved": true,
+      "RETURN_DIRECT": 0,
+      "mixed": true,
+      "T00": 31,
+      "T01": 107,
+      "T10": 59,
+      "T11": 219,
+      "CALL_ROOT": 0,
+      "I0": 1,
+      "I1": 0,
+      "NEXT": 73,
+      "HV0": 81,
+      "HV1": 163,
+      "POST": 0,
+      "H_LOCAL": 0,
+      "HEAD_READ": 1,
+      "CALLER_READ": 1
+    }
+  },
+  "negative_sources": {
+    "negative_extra_change.nl": {
+      "expected_output_bytes": 0,
+      "CHECK_prediction": "UNKNOWN pre-run: legal but outside selected exact one-Change old-Copy finite form, or earlier CHECK refusal",
+      "C17_must_reject_codes": [
+        3,
+        4
+      ],
+      "named_old_bytes_dev_ino": true,
+      "native": "NOT TESTED; do not execute unsupported C"
+    },
+    "negative_wrong_return.nl": {
+      "expected_output_bytes": 0,
+      "CHECK_prediction": "UNKNOWN pre-run: legal but outside selected exact one-Change old-Copy finite form, or earlier CHECK refusal",
+      "C17_must_reject_codes": [
+        3,
+        4
+      ],
+      "named_old_bytes_dev_ino": true,
+      "native": "NOT TESTED; do not execute unsupported C"
+    },
+    "negative_wrong_formal.nl": {
+      "expected_output_bytes": 0,
+      "CHECK_prediction": 3,
+      "C17_must_reject_codes": [
+        3,
+        4
+      ],
+      "named_old_bytes_dev_ino": true,
+      "native": "NOT TESTED; do not execute unsupported C"
+    },
+    "negative_wrong_field.nl": {
+      "expected_output_bytes": 0,
+      "CHECK_prediction": 3,
+      "C17_must_reject_codes": [
+        3,
+        4
+      ],
+      "named_old_bytes_dev_ino": true,
+      "native": "NOT TESTED; do not execute unsupported C"
+    },
+    "negative_escape_ref.nl": {
+      "expected_output_bytes": 0,
+      "CHECK_prediction": 3,
+      "C17_must_reject_codes": [
+        3,
+        4
+      ],
+      "named_old_bytes_dev_ino": true,
+      "native": "NOT TESTED; do not execute unsupported C"
+    },
+    "negative_duplicate_return.nl": {
+      "expected_output_bytes": 0,
+      "CHECK_prediction": "UNKNOWN pre-run: legal but outside selected exact one-Change old-Copy finite form, or earlier CHECK refusal",
+      "C17_must_reject_codes": [
+        3,
+        4
+      ],
+      "named_old_bytes_dev_ino": true,
+      "native": "NOT TESTED; do not execute unsupported C"
+    },
+    "negative_bad_branch.nl": {
+      "expected_output_bytes": 0,
+      "CHECK_prediction": "UNKNOWN pre-run: legal but outside selected exact one-Change old-Copy finite form, or earlier CHECK refusal",
+      "C17_must_reject_codes": [
+        3,
+        4
+      ],
+      "named_old_bytes_dev_ino": true,
+      "native": "NOT TESTED; do not execute unsupported C"
+    },
+    "negative_wrong_owner.nl": {
+      "expected_output_bytes": 0,
+      "CHECK_prediction": 3,
+      "C17_must_reject_codes": [
+        3,
+        4
+      ],
+      "named_old_bytes_dev_ino": true,
+      "native": "NOT TESTED; do not execute unsupported C"
+    },
+    "negative_duplicate_owner.nl": {
+      "expected_output_bytes": 0,
+      "CHECK_prediction": 3,
+      "C17_must_reject_codes": [
+        3,
+        4
+      ],
+      "named_old_bytes_dev_ino": true,
+      "native": "NOT TESTED; do not execute unsupported C"
+    },
+    "negative_ended_domain.nl": {
+      "expected_output_bytes": 0,
+      "CHECK_prediction": 3,
+      "C17_must_reject_codes": [
+        3,
+        4
+      ],
+      "named_old_bytes_dev_ino": true,
+      "native": "NOT TESTED; do not execute unsupported C"
+    }
+  },
+  "positive_pipeline": {
+    "CHECK": 0,
+    "actual_GET": true,
+    "current_body_and_parameters_VALIDATE": "NL_CHECK_OK",
+    "single_event": "NL_COPY_BODY_CHANGE with exact original call/initializer/body provenance",
+    "C17": 0,
+    "native": "strict GCC14.2 and Clang23.1.3 O0/O2; unchanged C17 physical originals/old Copy/new current/siblings; true guest 0/1/2 H cleanup"
+  },
+  "metadata_negatives": "Real A/B/F CHECK contexts only: wrong caller/source/world/loan/field/formal/old result, extra CHANGE/return shape/escaped scope, stale/current callee body/kind/result/signature/effect, foreign body/arm; restore public metadata before assertions/teardown. No forged pointers/length or private proof corruption.",
+  "OOM": "Reacquire old494 owner/502 CHECK+definition and P9821788 emitter positions per configuration, plus separate every reached new successful-invocation emitter allocation position; reject/unpublished unchanged counter snapshot and exact byte retry. Preserve actual status, including conservative UNSUPPORTED through bool validators.",
+  "freeze_lineage": "Immutable P982 source/oracle/manifests/checker provenance in fixed parent; prospective versioned successor protects current production/CMake/harness, intentional protected-file mutation and changed-file wrong digest must FAIL. No old test excluded/xfail.",
+  "first_RED": "P986 exact original CHECK0/current OK -> mixed direct C17RC4 before carrier; retain original oracle/false prediction. Every new failure candidate/log frozen forward-only.",
+  "stop": "False current/original/owner/physical rights, expired borrowed evidence, public issuer/semantics/general CFG needed, immutable parent drift, freeze provenance weakened or CI>12 => STOP Coordination. Local mechanical fixes may continue as new frozen candidates.",
+  "remote_budget": {
+    "natural_pairs_max": 2,
+    "jobs_max": 12,
+    "manual_same_SHA_rerun": 0
+  },
+  "VALUE_ALIGNMENT_RISK": "One new finite return spelling branch retains same CHECK/Change authority; no new user provenance/owner bookkeeping. Compiler audit dependencies and forward-freeze maintenance must be assessed; C-relative author+caller human audit benefit UNMEASURED. Product GO PAUSED/H1 HOLD."
+}

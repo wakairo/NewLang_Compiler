@@ -1,0 +1,72 @@
+{
+  "authority": "Issue986 C101 optional later H read/direct-return matched pair, after first2 pairs had valid current authority",
+  "compiler_head": "c981ff742865731decb434c2382a6fb418c83de5",
+  "compiler_tree": "aa01141aa821f4433725aa3b533cccd268cb064f",
+  "sources": [
+    "t_before_h_read_direct.nl",
+    "t_before_h_read_bound.nl"
+  ],
+  "origin": "P-authored V1 names/values retained; no R source/oracle/fixture read or reused",
+  "existing_freeze": "V1 unchanged, including false prediction that pre-allocation bound would refuse. Actual base bound emits C17; no source correction.",
+  "T_oracle": {
+    "direct_helper": "one source item: return replace(cell,incoming); one actual Change returns old Copy",
+    "bound_helper": "let prior=replace(cell,incoming); return prior; one actual Change; extra ephemeral binding/AST shape is not semantic authority",
+    "T_originals": 2,
+    "T_fields": {
+      "reserve": 0,
+      "signal": 1
+    },
+    "front_initial": [
+      31,
+      107
+    ],
+    "back_initial": [
+      59,
+      219
+    ],
+    "incoming": 73,
+    "old_Copy": 107,
+    "displaced_Copy": 59,
+    "front_final": [
+      31,
+      73
+    ],
+    "back_final": [
+      107,
+      219
+    ],
+    "siblings": [
+      31,
+      219
+    ],
+    "H_payloads": [
+      81,
+      163
+    ],
+    "H_identity": "two distinct original O/R/Allocation/LifetimeDomain; original live tail producer handoff then terminal exactly once",
+    "W0": "T phase already executed, zero successful H allocations; no H cleanup",
+    "W1": "T phase already executed; head cleanup once; tail allocation fails",
+    "W2": "T phase already executed; unlink original head->tail, true original LiveTail transfer, terminal frees tail once, caller frees head once"
+  },
+  "H_additions": "After link Some(tail), read original head@onward; consume observed Option by nested MATCH; Some(seen_tail) read-reloan uses original tail domain; producer uses direct RETURN(LiveTail aggregate); whole caller destructure followed by original returned ptr/domain read-reloan and terminal cleanup.",
+  "anticipated": {
+    "CHECK": 0,
+    "Copy_GET": true,
+    "Copy_current_VALIDATE": "NL_CHECK_OK",
+    "H_origin": true,
+    "producer_VALID": true,
+    "direct_copy": "Hypothesis first refusal remains copy_call_proof AST1 vs expected2 after actual current validation, C17RC4.",
+    "bound_copy": "Hypothesis conventional head-read/direct aggregate producer and caller reloan reaches valid old H profile; C17RC0 if supported, otherwise first actual H return/terminal/role consumer must be identified. First actual H gate UNKNOWN pre-run; no bypass."
+  },
+  "stage_rule": "Authenticate actual source/call/entry and original H O/R/A/D/loan/return proof before treating private source-shape refusal as GateYES. NO/STOP on true ownership/currentness mismatch; UNKNOWN if prerequisite unproven.",
+  "output_and_native": "RC4 => no output/named preservation/native+heap0/1/2 NOT TESTED; RC0 => preserve exact emitted C17 and hash. Native only genuine valid output, separately bounded.",
+  "scope": {
+    "pairs_used_after_this": 3,
+    "pair_limit_approx": 4,
+    "production_edit": 0,
+    "branch_PR_push": 0,
+    "GitHub_CI": 0,
+    "debugger": "existing frozen readonly observer-v1, no inferior function calls or state writes"
+  },
+  "value_risk": "Direct old Copy and direct original LiveTail return must not require fake bindings or temporal reorder solely for backend; new private shape rules increase compiler audit cost. Human audit comparison UNMEASURED; no ProductGO."
+}
