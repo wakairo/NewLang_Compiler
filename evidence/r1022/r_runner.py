@@ -28,7 +28,8 @@ CASES = (
     ("NEG-4-field-loan-escape", "34f2cf52aa41d4d3151f5a6e82ae7e126e34449bba155c1018e48cc9268e8d30"),
 )
 ORACLE = "6310ec8f87a3a5c87540b0a16047277c2fd742af61b27d0f9dc823c3fb9507f1"
-WORKFLOW = ".github/workflows/r-original-first.yml" # currently absent: fail closed
+WORKFLOW = ".github/workflows/r-original-first.yml" # future C-only installation, absent here
+FIRST_REF = "refs/heads/r-first/r1016-original-first" # no R-FAST overlap
 LOG_CAP = 65536
 C_CAP = 1048576
 CHILD_FSIZE = 2 * 1024 * 1024
@@ -86,7 +87,7 @@ def plain(argv, timeout=10):
 def gate(approved, journal):
     if (os.environ.get("GITHUB_ACTIONS") != "true" or
         os.environ.get("GITHUB_EVENT_NAME") != "push" or
-        not os.environ.get("GITHUB_REF", "").startswith("refs/heads/r-fast/") or
+        os.environ.get("GITHUB_REF") != FIRST_REF or
         os.environ.get("GITHUB_REPOSITORY") != "wakairo/NewLang_Compiler"):
         raise RuntimeError("unapproved event/ref; reviewed FIRST workflow not yet installed")
     if len(approved) != 40 or any(c not in "0123456789abcdef" for c in approved):
@@ -102,7 +103,8 @@ def gate(approved, journal):
         raise RuntimeError("fixed P1015 target tree mismatch")
     if plain(["/usr/bin/git", "merge-base", TARGET, "HEAD"]) != TARGET:
         raise RuntimeError("foreign compiler ancestry")
-    # Production is never changed by R; separately approved future workflow\n    # must be independently pinned and reviewed in a later C release.
+    # Production is never changed by R. Future C release must independently
+    # pin the active workflow and exact approved checkout.
     subprocess.run(["/usr/bin/git", "diff", "--quiet", TARGET, "HEAD", "--",
                    "src", "include", "cmake", "CMakeLists.txt"],
                    cwd=ROOT, check=True, timeout=10)
@@ -137,7 +139,8 @@ class Journal:
         data = (json.dumps(x, sort_keys=True, ensure_ascii=True) + "\n").encode()
         if len(data) > 16384:
             raise RuntimeError("unbounded journal record")
-        os.write(self.fd, data)
+        if os.write(self.fd, data) != len(data):
+            raise RuntimeError("partial FIRST journal write: evidence loss")
         os.fsync(self.fd)
     def close(self):
         os.fsync(self.fd)
@@ -151,7 +154,11 @@ def limits():
 
 def stage(argv, folder, name, journal, env=None):
     # No candidate-driven argv, shell, cwd, executable or environment.
-    if not argv or (argv[0] not in APPROVED_TOOLS and\n        argv[0] != str(ROOT / "build-frontend/newlangc") and\n        not str(argv[0]).startswith(str(folder.parent) + os.sep)):
+    if not argv or (
+        argv[0] not in APPROVED_TOOLS
+        and argv[0] != str(ROOT / "build-frontend/newlangc")
+        and not str(argv[0]).startswith(str(folder.parent) + os.sep)
+    ):
         raise RuntimeError("unapproved child command")
     journal.write({"stage": name, "phase": "BEGIN", "argv": argv})
     paths = [folder / (name + "." + suffix) for suffix in ("stdout", "stderr")]
@@ -218,19 +225,20 @@ def observe(m, folder, work, journal):
                    str(HERE / "r_probe.c"), "-o", str(probe),
                    "-Wl,--start-group"] + [str(ROOT / "build-frontend" / ("lib" + x + ".a"))
                       for x in libs] + ["-Wl,--end-group"]
-    result = stage(build_probe, folder, "public-probe-build", journal)
-    if result["exit"] != 0:
+    probe_build = stage(build_probe, folder, "public-probe-build", journal)
+    if probe_build["exit"] != 0:
         journal.write({"visibility": "NOT_OBSERVABLE", "layer": "probe_build"})
     for index, (name, frozen) in enumerate(CASES):
         src = HERE / "sources" / (name + ".nl")
         journal.write({"case": name, "phase": "FIRST_BEGIN", "original_sha256": frozen,
                        "case_index": index})
         check = stage([str(compiler), "--check", str(src)], folder, name+"-check", journal)
-        if result["exit"] == 0:
+        if probe_build["exit"] == 0 and check["exit"] == 0:
             stage([str(probe), str(src)], folder, name+"-public-current", journal)
         else:
             journal.write({"case": name, "public_current": "NOT_OBSERVABLE",
-                           "first_layer": "probe_build"})
+                           "first_layer": ("CHECK" if check["exit"] != 0
+                                            else "probe_build")})
         out = folder / (name + "-named.c")
         if index >= 2:
             with out.open("xb") as f:

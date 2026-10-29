@@ -1,0 +1,98 @@
+# C121 review-only future workflow source: INERT at evidence/r1022.
+# Installation under .github/workflows requires a separate C release.
+name: R1016 original FIRST (future C-reviewed)
+on:
+  push:
+    branches:
+      - 'r-first/r1016-original-first'
+permissions:
+  contents: read
+concurrency:
+  group: r1016-original-first
+  cancel-in-progress: false
+jobs:
+  original_first:
+    if: ${{ github.repository == 'wakairo/NewLang_Compiler' && github.event_name == 'push' && github.ref == 'refs/heads/r-first/r1016-original-first' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    # This MUST be C-created with independent reviewers and self-review disabled.
+    environment: r-first-c-reviewed
+    env:
+      R1023_C_REVIEWED_COMMIT: ${{ vars.R1016_FIRST_APPROVED_COMMIT }}
+      R1023_C_WORKFLOW_BLOB: ${{ vars.R1016_FIRST_APPROVED_WORKFLOW_BLOB }}
+      R1023_C_R_RUNNER_PY_SHA256: ${{ vars.R1016_FIRST_RUNNER_SHA256 }}
+      R1023_C_R_PROBE_C_SHA256: ${{ vars.R1016_FIRST_PROBE_SHA256 }}
+      R1023_C_R_OBSERVER_H_SHA256: ${{ vars.R1016_FIRST_OBSERVER_SHA256 }}
+      R1023_C_COMPILER_BINARY_SHA256: ${{ vars.R1016_FIRST_COMPILER_BINARY_SHA256 }}
+    steps:
+      - name: Checkout pushed immutable SHA without write credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Stop on foreign event, merge, checkout, tree or unpinned code
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_EVENT_NAME" = push
+          test "$GITHUB_REF" = refs/heads/r-first/r1016-original-first
+          test "$GITHUB_REPOSITORY" = wakairo/NewLang_Compiler
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git status --porcelain)" = ""
+          test "${#R1023_C_REVIEWED_COMMIT}" -eq 40
+          test "$GITHUB_SHA" = "$R1023_C_REVIEWED_COMMIT"
+          test "$(git rev-list --parents -n1 HEAD | wc -w)" -eq 2
+          git merge-base --is-ancestor e10207ac21219ce190d50135208cc1c5046c02b1 HEAD
+          test "$(git rev-parse c9fbdb8d3ce4c238c4e33fb710fefc20ff6654bb^{tree})" = ccd82e0bffa3fa0f5d3a5b04083df1d8e18ce7cc
+          test "$(git rev-parse HEAD:.github/workflows/r-original-first.yml)" = "$R1023_C_WORKFLOW_BLOB"
+          for item in R1023_C_R_RUNNER_PY_SHA256 R1023_C_R_PROBE_C_SHA256 R1023_C_R_OBSERVER_H_SHA256 R1023_C_COMPILER_BINARY_SHA256; do
+            test "$(printenv "$item" | wc -c)" -eq 65
+          done
+          # Fixed R1022 first publication is an exact PR1015 child.
+          test "$(git rev-parse 0d933749005f0a2d9ed5777627e91732bb568547^)" = c9fbdb8d3ce4c238c4e33fb710fefc20ff6654bb
+          git diff --quiet c9fbdb8d3ce4c238c4e33fb710fefc20ff6654bb HEAD -- src include cmake CMakeLists.txt
+      - name: Signed prerequisites and pinned LLVM bootstrap; fail if clang missing
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make python3 zstd
+          python3 scripts/bootstrap.py
+          . .deps/activate.sh
+          clang-format-23 --version | grep -F '23.1.3'
+          test -x /usr/bin/gcc-13
+          test -x /usr/bin/clang-23
+          gcc-13 -dumpfullversion | grep -E '^13\.'
+          /usr/bin/clang-23 --version | grep -F 'clang version 23.1.3'
+          # C must separately supply /usr/bin/clang-23 with trusted provenance.
+          # No substitute LLVM binary or silent toolchain fallback is allowed.
+      - name: Fixed frontend-only compiler build and independently pinned binary
+        shell: bash
+        run: |
+          set -euo pipefail
+          CC=/usr/bin/gcc-13 cmake -S . -B build-frontend -DNEWLANG_FRONTEND_ONLY=ON -DCMAKE_BUILD_TYPE=Debug
+          grep -Fx NEWLANG_FRONTEND_ONLY:BOOL=ON build-frontend/CMakeCache.txt
+          cmake --build build-frontend --parallel 2
+          test -f build-frontend/newlangc
+          test "$(sha256sum build-frontend/newlangc | cut -d' ' -f1)" = "$R1023_C_COMPILER_BINARY_SHA256"
+      - name: Exactly one original six FIRST (raw evidence; not a PASS)
+        shell: bash
+        run: |
+          set -euo pipefail
+          /usr/bin/python3 evidence/r1022/r_runner.py --execute --approved-sha "$R1023_C_REVIEWED_COMMIT"
+      - name: Upload original FIRST even on failure; failure is evidence loss
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r1016-first-${{ github.run_id }}-attempt${{ github.run_attempt }}-${{ github.sha }}
+          path: ${{ runner.temp }}/R1023-FIRST-${{ github.run_id }}-${{ github.run_attempt }}/
+          if-no-files-found: error
+          overwrite: false
+          retention-days: 14
+          compression-level: 0
+# Upload failure, job loss or missing FIRST journal => REMOTE CUSTODY NOT ESTABLISHED.
+# No retry masquerading as FIRST. r-preflight.yml triggers only r-fast/**.
+# compiler-ci.yml and compiler-frontend-ci.yml trigger PR or main push only.
+# Instrumented observer is not clean C/native proof; ASan, UBSan, host OOM
+# and complete original H/T R/A/D/current/sibling witnesses are NOT COVERED.

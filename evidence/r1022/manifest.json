@@ -69,5 +69,21 @@
     "r_probe_sha256": "ef4a2505d34d0acfc4951cd17527c3e1cdf707a8fb0c919ae608df0052ba3f49",
     "review_sha256": "4eace5a3c09e4a3f09af6e8b27d4c8fa6e80272729a472244e205747a51e1eee",
     "provenance_note": "not sufficient to authorize execution; only separately reviewed C/external pinned SHA and workflow"
+  },
+  "r1024_source_only": {
+    "fixed_parent_commit": "e10207ac21219ce190d50135208cc1c5046c02b1",
+    "fixed_parent_tree": "e6dc7bfeebb93d7ba65cfd63e5b8cbeab85e9cfb",
+    "status": "C121 SOURCE-ONLY / CI0 / Actions0 / compiler0 / native0 / Python0 / tests0 / PR0",
+    "future_opt_in_ref": "refs/heads/r-first/r1016-original-first",
+    "r_runner_sha256": "1ccf05534b0ba5877ca28e8b54f1b9bf680d25a9c4c16e49040db708213c7b94",
+    "r_runner_git_blob": "6346aeb4665283be5aaa7e3374330228b5a2986f",
+    "r_probe_sha256": "ef4a2505d34d0acfc4951cd17527c3e1cdf707a8fb0c919ae608df0052ba3f49",
+    "r_observer_sha256": "c99a3663f7e7fb12057cc6a2c41cbb2bdde96211d2dafd6f6b4477bca1f40889",
+    "inert_workflow_review_path": "evidence/r1022/r-original-first.workflow-review.yml",
+    "inert_workflow_review_sha256": "489fcc59f9ba92a3f45e68ab83489641792325e6d3e79d6e2a3e26a33b052cc5",
+    "inert_workflow_review_git_blob": "91463347811241e18a83df2581e5feb65fe999e2",
+    "future_required_external": "protected C-reviewed exact checkout, actual active workflow blob and compiler binary SHA256, independently pinned toolchain and environment approval",
+    "frozen_original": "original six .nl and oracle seven immutable; FIRST not run",
+    "durability": "fsynced raw local only; remote durable iff if:always upload succeeds; failure remains evidence loss"
   }
 }
