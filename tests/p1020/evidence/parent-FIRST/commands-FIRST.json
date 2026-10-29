@@ -1,0 +1,452 @@
+[
+  {
+    "label": "control_return_false-check",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/control_return_false.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_false-emit",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/control_return_false.c",
+      "/workspace/p1020/tests/p1020/sources/control_return_false.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_false-named",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/control_return_false-existing.c",
+      "/workspace/p1020/tests/p1020/sources/control_return_false.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_false-public",
+    "command": [
+      "/workspace/p1019/pr1015-public-probe-v2",
+      "/workspace/p1020/tests/p1020/sources/control_return_false.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "b0c2c688cbebd0b823d3fbdeeae76193c64fc7ed4b591abd370f26f49ba0381d",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_true-check",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/control_return_true.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_true-emit",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/control_return_true.c",
+      "/workspace/p1020/tests/p1020/sources/control_return_true.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_true-named",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/control_return_true-existing.c",
+      "/workspace/p1020/tests/p1020/sources/control_return_true.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_true-public",
+    "command": [
+      "/workspace/p1019/pr1015-public-probe-v2",
+      "/workspace/p1020/tests/p1020/sources/control_return_true.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "b0c2c688cbebd0b823d3fbdeeae76193c64fc7ed4b591abd370f26f49ba0381d",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "negative_loan_escape-check",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/negative_loan_escape.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "7f3e126f0beb0b4b3e90124958a5e675af3c713399e416e884255a16cb300f67"
+  },
+  {
+    "label": "negative_loan_escape-emit",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/negative_loan_escape.c",
+      "/workspace/p1020/tests/p1020/sources/negative_loan_escape.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "7f3e126f0beb0b4b3e90124958a5e675af3c713399e416e884255a16cb300f67"
+  },
+  {
+    "label": "negative_loan_escape-named",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/negative_loan_escape-existing.c",
+      "/workspace/p1020/tests/p1020/sources/negative_loan_escape.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "7f3e126f0beb0b4b3e90124958a5e675af3c713399e416e884255a16cb300f67"
+  },
+  {
+    "label": "negative_loan_escape-public",
+    "command": [
+      "/workspace/p1019/pr1015-public-probe-v2",
+      "/workspace/p1020/tests/p1020/sources/negative_loan_escape.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "a0e41c5629aaf405058a59afa850bc813774311c0926510632ffa0af832b54bb",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "negative_read_write-check",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/negative_read_write.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "b005343229487e293cd565d026cd20d132cb5a17fc9dacd22b648169d85e6dee"
+  },
+  {
+    "label": "negative_read_write-emit",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/negative_read_write.c",
+      "/workspace/p1020/tests/p1020/sources/negative_read_write.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "b005343229487e293cd565d026cd20d132cb5a17fc9dacd22b648169d85e6dee"
+  },
+  {
+    "label": "negative_read_write-named",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/negative_read_write-existing.c",
+      "/workspace/p1020/tests/p1020/sources/negative_read_write.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "b005343229487e293cd565d026cd20d132cb5a17fc9dacd22b648169d85e6dee"
+  },
+  {
+    "label": "negative_read_write-public",
+    "command": [
+      "/workspace/p1019/pr1015-public-probe-v2",
+      "/workspace/p1020/tests/p1020/sources/negative_read_write.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e81001f7e099ae6b9589c70da8170f431a216ed7a4f302d36b4137937767aeeb",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-check",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/two_normal_equal.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-emit",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/two_normal_equal.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_equal.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "762c232ec2893edf93c87b1a8753ff9a2f83f1021258d115aa2ce9c36039789b"
+  },
+  {
+    "label": "two_normal_equal-named",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/two_normal_equal-existing.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_equal.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "762c232ec2893edf93c87b1a8753ff9a2f83f1021258d115aa2ce9c36039789b"
+  },
+  {
+    "label": "two_normal_equal-public",
+    "command": [
+      "/workspace/p1019/pr1015-public-probe-v2",
+      "/workspace/p1020/tests/p1020/sources/two_normal_equal.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "64f35f43dfff4c348076b696e36fbbd1b059751ce6799db96ebd05eb4e9ac9ce",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-check",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/two_normal_false.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-emit",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/two_normal_false.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_false.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "6c4c1f2fb6ea9584c3dcf16281e334ec609fe18adc429f650a7c75d0597c911b"
+  },
+  {
+    "label": "two_normal_false-named",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/two_normal_false-existing.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_false.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "6c4c1f2fb6ea9584c3dcf16281e334ec609fe18adc429f650a7c75d0597c911b"
+  },
+  {
+    "label": "two_normal_false-public",
+    "command": [
+      "/workspace/p1019/pr1015-public-probe-v2",
+      "/workspace/p1020/tests/p1020/sources/two_normal_false.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "64f35f43dfff4c348076b696e36fbbd1b059751ce6799db96ebd05eb4e9ac9ce",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-check",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/two_normal_index1.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-emit",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/two_normal_index1.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_index1.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "eef3d290eea35f57d2680acc5da84dca3bc73f06fbc81bf37125be85106cc306"
+  },
+  {
+    "label": "two_normal_index1-named",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/two_normal_index1-existing.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_index1.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "eef3d290eea35f57d2680acc5da84dca3bc73f06fbc81bf37125be85106cc306"
+  },
+  {
+    "label": "two_normal_index1-public",
+    "command": [
+      "/workspace/p1019/pr1015-public-probe-v2",
+      "/workspace/p1020/tests/p1020/sources/two_normal_index1.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "23ff8b2895cd32347bb73e4a2b540ffd1ca2dd2d3f9b5fffe55e57076165bf4f",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-check",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/two_normal_true.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-emit",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/two_normal_true.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_true.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "b8b6a0efb2427111441b19f427e35c941a3cbdb947ef52b36010617fdac4097e"
+  },
+  {
+    "label": "two_normal_true-named",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/two_normal_true-existing.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_true.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "b8b6a0efb2427111441b19f427e35c941a3cbdb947ef52b36010617fdac4097e"
+  },
+  {
+    "label": "two_normal_true-public",
+    "command": [
+      "/workspace/p1019/pr1015-public-probe-v2",
+      "/workspace/p1020/tests/p1020/sources/two_normal_true.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "64f35f43dfff4c348076b696e36fbbd1b059751ce6799db96ebd05eb4e9ac9ce",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "unsupported_two_changes-check",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/unsupported_two_changes.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "unsupported_two_changes-emit",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/unsupported_two_changes.c",
+      "/workspace/p1020/tests/p1020/sources/unsupported_two_changes.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "2015ef9b0edb8574d2777ea25baaec898cc709cb45571afc6f1fe3229b58d8d1"
+  },
+  {
+    "label": "unsupported_two_changes-named",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/unsupported_two_changes-existing.c",
+      "/workspace/p1020/tests/p1020/sources/unsupported_two_changes.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "2015ef9b0edb8574d2777ea25baaec898cc709cb45571afc6f1fe3229b58d8d1"
+  },
+  {
+    "label": "unsupported_two_changes-public",
+    "command": [
+      "/workspace/p1019/pr1015-public-probe-v2",
+      "/workspace/p1020/tests/p1020/sources/unsupported_two_changes.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "435ef5d00cd120f3885fce038c3c940e61ed6f126f5179c2ac9160da7ea28744",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "unsupported_zero_change-check",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/unsupported_zero_change.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "unsupported_zero_change-emit",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/unsupported_zero_change.c",
+      "/workspace/p1020/tests/p1020/sources/unsupported_zero_change.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "c76fe08c08b343f59047815a4c4b5145cfb3366b91729b0715b4081cfb9bcc22"
+  },
+  {
+    "label": "unsupported_zero_change-named",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/baseline-FIRST/unsupported_zero_change-existing.c",
+      "/workspace/p1020/tests/p1020/sources/unsupported_zero_change.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "c76fe08c08b343f59047815a4c4b5145cfb3366b91729b0715b4081cfb9bcc22"
+  },
+  {
+    "label": "unsupported_zero_change-public",
+    "command": [
+      "/workspace/p1019/pr1015-public-probe-v2",
+      "/workspace/p1020/tests/p1020/sources/unsupported_zero_change.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "d31ab09f98b2b33d7b711600232c5cb17bf5c597aea0b722097eab4eba8805b1",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

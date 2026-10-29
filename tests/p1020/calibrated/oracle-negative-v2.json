@@ -1,0 +1,9 @@
+{
+  "release": "C118 separate calibrated source PRE-RUN",
+  "original_negative": "tests/p1020/sources/negative_read_write.nl stays unchanged: parent first parse LOCAL-LOAN-PROFILE, intended negative UNREACHED",
+  "source": "tests/p1020/calibrated/negative_read_definition.nl",
+  "reason": "remove unsupported read-field loan source entirely; independently checked uncalled read-formal function comes first by name, so no earlier actual/formal mismatch",
+  "expected": "definition-time semantic rejection of replace(read-ref,u8), before C17; diagnostic and span must identify actual replace condition; an earlier unrelated boundary is UNREACHED, never PASS",
+  "source_law": "Draft18.1 independently checks invalid uncalled bodies; replace requires ordinary write-ref, read capability cannot supply it",
+  "no_new_authority": true
+}

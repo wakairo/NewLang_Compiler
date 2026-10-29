@@ -398,6 +398,9 @@ NLCheckStatus nl_copy_body_seal(NLCheckedFragment *f,
     if (!p->exit || p->pending || !f->count ||
         f->count > NL_SEMANTIC_MAX_ENTRIES)
         return NL_CHECK_OK; /* unproved richer body stays backend unsupported */
+    const NLCheckStatus joined = nl_if_call_seal_two_normal(f, c);
+    if (joined != NL_CHECK_OK)
+        return joined;
     if (p->formal_write) {
         NLCheckStatus status = nl_sem_clone(c, &p->handoff);
         if (status == NL_CHECK_OK)
@@ -1482,11 +1485,10 @@ static bool unit_prefix_walk(UnitPrefix *r, NLCheckedNodeId id)
     return ok;
 }
 static NLCheckStatus unit_prefix_validate(const NLCopyBodyProof *p,
-                                          const NLIfReturnView *returned)
+                                          const NLIfFieldView *field)
 {
-    UnitPrefix r = {.f = p->owner,
-                    .world = returned->field.entry,
-                    .conditional = p->conditional};
+    UnitPrefix r = {
+        .f = p->owner, .world = field->entry, .conditional = p->conditional};
     r.seen = calloc(r.f->count + 1, sizeof(*r.seen));
     r.bound = calloc(r.world->binding_count + 1, sizeof(*r.bound));
     NLCheckStatus s = NL_CHECK_OUT_OF_MEMORY;
@@ -1532,11 +1534,18 @@ NLCheckStatus nl_checked_copy_unit_validate(const NLCheckedFragment *caller,
         !nl_copy_state_matches(p->normal_end, &p->normal_end_anchor) ||
         nl_copy_unit_entry_validate(f) != NL_CHECK_OK)
         return INVALID;
-    NLIfReturnView returned;
-    if (!nl_checked_if_return_view(f, p->conditional, &returned) ||
-        returned.field.root != v.parameters.field.parent ||
-        returned.field.child != v.parameters.field.child ||
-        returned.field.index != v.parameters.field.index)
+    NLIfReturnView returned = {0};
+    NLIfFieldView field;
+    const bool two_normal = nl_if_call_two_normal_view(f, &field);
+    if (!two_normal) {
+        if (!nl_checked_if_return_view(f, p->conditional, &returned))
+            return INVALID;
+        field = returned.field;
+    }
+    if (field.conditional != p->conditional ||
+        field.root != v.parameters.field.parent ||
+        field.child != v.parameters.field.child ||
+        field.index != v.parameters.field.index)
         return INVALID;
     const NLCheckedNodeView *loan =
         nl_checked_node_view(caller, v.parameters.loan);
@@ -1570,15 +1579,17 @@ NLCheckStatus nl_checked_copy_unit_validate(const NLCheckedFragment *caller,
             return INVALID;
     }
     NLCheckStatus s =
-        nl_checked_if_return_validate(f, p->conditional, &returned);
+        two_normal
+            ? nl_checked_if_field_validate(f, p->conditional, &field)
+            : nl_checked_if_return_validate(f, p->conditional, &returned);
     if (s != NL_CHECK_OK)
         return s;
-    s = unit_prefix_validate(p, &returned);
+    s = unit_prefix_validate(p, &field);
     if (s != NL_CHECK_OK || !p->exit || p->pending)
         return s == NL_CHECK_OK ? INVALID : s;
     NLSemanticPlaceView a[3], b[3];
     if (!nl_copy_trio(p->exit, v.parameters.field.parent, a) ||
-        !nl_copy_trio(returned.field.post, v.parameters.field.parent, b) ||
+        !nl_copy_trio(field.post, v.parameters.field.parent, b) ||
         memcmp(a, b, sizeof(a)))
         return INVALID;
     NLSemanticContext *replay = NULL;
@@ -1589,7 +1600,7 @@ NLCheckStatus nl_checked_copy_unit_validate(const NLCheckedFragment *caller,
     if (s == NL_CHECK_OK &&
         !nl_copy_state_matches(replay, &p->normal_end_anchor))
         s = INVALID;
-    if (s == NL_CHECK_OK) {
+    if (s == NL_CHECK_OK && !two_normal) {
         NLValueId value = 0;
         s = nl_fixed_change_dependencies(replay, v.parameters.field.child, 0);
         if (s == NL_CHECK_OK)
@@ -1605,10 +1616,9 @@ NLCheckStatus nl_checked_copy_unit_validate(const NLCheckedFragment *caller,
                 replay->bindings[j].view.availability == NL_AVAILABLE)
                 replay->bindings[j].view.value =
                     replay->places[v.parameters.field.parent - 1].current_value;
-        if (s == NL_CHECK_OK &&
-            !nl_copy_state_matches(replay, &p->handoff_anchor))
-            s = INVALID;
     }
+    if (s == NL_CHECK_OK && !nl_copy_state_matches(replay, &p->handoff_anchor))
+        s = INVALID;
     nl_semantic_destroy(replay);
     return s;
 }

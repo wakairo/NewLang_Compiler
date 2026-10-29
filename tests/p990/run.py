@@ -158,3 +158,7 @@ if group == "new":
                       cli, cc, sanitizer])
     ok(additional)
     print(additional.stdout.decode(), end="", flush=True)
+    bounded_unit = run([sys.executable, root.parent / "p1020/run.py",
+                       cli, cc, sanitizer])
+    ok(bounded_unit)
+    print(bounded_unit.stdout.decode(), end="", flush=True)

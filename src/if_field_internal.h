@@ -38,6 +38,9 @@ typedef struct NLIfFieldProof {
 } NLIfFieldProof;
 NLPlaceId nl_if_call_root(const NLCheckedFragment *);
 NLCheckStatus nl_if_call_join(NLCheckedFragment *, NLSemanticContext *);
+bool nl_if_call_two_normal_view(const NLCheckedFragment *, NLIfFieldView *);
+NLCheckStatus nl_if_call_seal_two_normal(NLCheckedFragment *,
+                                         const NLSemanticContext *);
 NLCheckStatus nl_if_field_prepare(NLCheckedFragment *, NLCheckedNodeId,
                                   const NLSemanticContext *);
 NLCheckStatus nl_if_field_fork(NLCheckedFragment *, NLCheckedNodeId, size_t,

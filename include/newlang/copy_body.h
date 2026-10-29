@@ -62,8 +62,11 @@ NLCheckStatus
 nl_checked_copy_body_event_validate(const NLCheckedFragment *caller,
                                     NLCheckedNodeId call, size_t index,
                                     const NLCopyBodyEventView *candidate);
-/* Unit-returning direct call with one normal IF edge and one callee RETURN.
+/* Unit-returning direct call with one normal IF edge and one callee RETURN,
+ * or two normal unit arms each containing one source-issued field Change.
  * The postcall world is a conservative structural join, never either fork.
+ * normal_end is the cleanup-normalized normal end (common end for two normal
+ * arms). Both original arms and actual/formal cleanup are replay-validated.
  * This receipt borrows immutable history and grants no present authority. */
 typedef struct {
     NLCopyBodyParameters parameters;

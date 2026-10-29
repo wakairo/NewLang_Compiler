@@ -2,6 +2,7 @@
 #define _XOPEN_SOURCE 700
 #endif
 #include "checked_c_target.h"
+#include "if_field_internal.h"
 #include "newlang/array4.h"
 #include "newlang/checked.h"
 #include "newlang/checked_c_node.h"
@@ -67,7 +68,8 @@ typedef struct {
     size_t entry_function;
     NLTypeId unit, u8, aggregate;
     bool uses_usize;
-    bool u8_export; /* opt-in target wrapper, never source authority */
+    bool u8_export;       /* opt-in target wrapper, never source authority */
+    bool two_normal_unit; /* validated new profile; passive C hooks only */
     const NLCopyBodyParameters *unit_parameters;
     const NLCheckedFragment *formal_body; /* current validation only */
     NLSymbolId formal;
@@ -2136,6 +2138,9 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
         program->unit_parameters = saved_unit;
         if (!valid)
             return false;
+        NLIfFieldView joined;
+        if (nl_if_call_two_normal_view(body, &joined))
+            program->two_normal_unit = true;
     }
     if (scalar) {
         if (program->scalar_depth >= 2)
@@ -2399,13 +2404,35 @@ static bool v0_emit_node(FILE *, const NLCheckedFragment *, NLCheckedNodeId,
                          size_t);
 
 static bool v0_emit_items(FILE *stream, const NLCheckedFragment *fragment,
-                          const NLCheckedNodeView *block, size_t depth)
+                          const NLCheckedNodeView *block, size_t depth,
+                          bool observe)
 {
     NLCheckedNodeId item = block->first_item;
     while (item != 0) {
         const NLCheckedNodeView *view = nl_checked_node_view(fragment, item);
         if (view == NULL || !v0_emit_node(stream, fragment, item, depth))
             return false;
+        /* Optional native observations read the caller's original live C
+         * carrier after the actual source operation, never a model copy. */
+        if (observe && view->kind == NL_CHECKED_BINDING) {
+            const NLCheckedNodeView *value =
+                nl_checked_node_view(fragment, view->initializer);
+            if (value->kind == NL_CHECKED_AGGREGATE &&
+                (!v0_indent(stream, depth) ||
+                 fprintf(stream,
+                         "NL_UNIT_CALL_BIND(&nl_local_%zu.f0, "
+                         "&nl_local_%zu.f1);\n",
+                         view->symbol, view->symbol) < 0))
+                return false;
+            if (value->kind == NL_CHECKED_FIELD_READ &&
+                (!v0_indent(stream, depth) ||
+                 fprintf(stream,
+                         "NL_UNIT_CALL_READ(&nl_local_%zu.f%zu, "
+                         "nl_local_%zu);\n",
+                         value->field.base, value->field.index,
+                         view->symbol) < 0))
+                return false;
+        }
         item = view->next_item;
     }
     if (block->tail != 0 && !v0_emit_node(stream, fragment, block->tail, depth))
@@ -2416,13 +2443,13 @@ static bool v0_emit_block(FILE *stream, const NLCheckedFragment *fragment,
                           const NLCheckedNodeView *block, size_t depth)
 {
     if (!v0_indent(stream, depth) || fputs("{\n", stream) < 0 ||
-        !v0_emit_items(stream, fragment, block, depth + 1))
+        !v0_emit_items(stream, fragment, block, depth + 1, false))
         return false;
     return v0_indent(stream, depth) && fputs("}\n", stream) >= 0;
 }
 
 static bool v0_emit_unit_body(FILE *stream, const V0Function *fn,
-                              const NLCheckedNodeView *root)
+                              const NLCheckedNodeView *root, bool observe)
 {
     /* Discardable source formals need not be read. As in the scalar body
      * emitter, suppress strict-C unused warnings without a guest operation. */
@@ -2431,7 +2458,7 @@ static bool v0_emit_unit_body(FILE *stream, const V0Function *fn,
             fprintf(stream, "    (void)nl_local_%zu;\n", fn->parameter) >= 0) &&
            (!fn->ref_parameter || fprintf(stream, "    (void)nl_local_%zu;\n",
                                           fn->ref_parameter) >= 0) &&
-           v0_emit_items(stream, fn->body, root, 1) &&
+           v0_emit_items(stream, fn->body, root, 1, observe) &&
            fputs("}\n", stream) >= 0;
 }
 
@@ -2639,6 +2666,9 @@ static bool emit_if_field(FILE *stream, const NLCheckedFragment *f,
     const NLCheckedNodeView *choice = nl_checked_node_view(f, id);
     const NLCheckedNodeView *condition =
         nl_checked_node_view(f, choice->initializer);
+    NLIfFieldView joined;
+    const bool observe =
+        nl_if_call_two_normal_view(f, &joined) && joined.conditional == id;
     if (!emit_less_operands(stream, f, condition, depth))
         return false;
     if (choice->result_count &&
@@ -2680,6 +2710,22 @@ static bool emit_if_field(FILE *stream, const NLCheckedFragment *f,
         } else if (body->tail &&
                    !v0_emit_node(stream, arm, body->tail, depth + 1))
             return false;
+        if (observe) {
+            NLIfFieldEvent event;
+            if (!nl_checked_if_field_event(f, id, a, 0, &event))
+                return false;
+            const NLCheckedNodeView *change =
+                nl_checked_node_view(arm, event.node);
+            const NLCheckedNodeView *ref =
+                change ? nl_checked_node_view(arm, change->first_argument)
+                       : NULL;
+            if (!ref || !v0_indent(stream, depth + 1) ||
+                fprintf(stream,
+                        "NL_UNIT_CALL_CHANGE(nl_local_%zu, "
+                        "nl_replace_old_%zu);\n",
+                        ref->symbol, event.node) < 0)
+                return false;
+        }
         if (!v0_indent(stream, depth) ||
             fputs(a == 0 ? "} else {\n" : "}\n", stream) < 0)
             return false;
@@ -3024,6 +3070,18 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
                 program->aggregate) < 0)
         return false;
 
+    if (program->two_normal_unit &&
+        fputs("#ifdef NEWLANG_UNIT_CALL_OBSERVER\n"
+              "#include NEWLANG_UNIT_CALL_OBSERVER\n#endif\n"
+              "#ifndef NL_UNIT_CALL_BIND\n"
+              "#define NL_UNIT_CALL_BIND(...) ((void)0)\n#endif\n"
+              "#ifndef NL_UNIT_CALL_CHANGE\n"
+              "#define NL_UNIT_CALL_CHANGE(...) ((void)0)\n#endif\n"
+              "#ifndef NL_UNIT_CALL_READ\n"
+              "#define NL_UNIT_CALL_READ(...) ((void)0)\n#endif\n\n",
+              stream) < 0)
+        return false;
+
     for (size_t i = 0; i < program->count; ++i)
         if (!v0_emit_signature(stream, &program->functions[i], program->u8) ||
             fputs(";\n", stream) < 0)
@@ -3040,7 +3098,10 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
             fputc('\n', stream) == EOF ||
             !(function.result == program->u8
                   ? v1_emit_body(stream, &function)
-                  : v0_emit_unit_body(stream, &function, root)) ||
+                  : v0_emit_unit_body(stream, &function, root,
+                                      program->two_normal_unit &&
+                                          function.function ==
+                                              program->entry_function)) ||
             fputc('\n', stream) == EOF)
             return false;
     }

@@ -473,3 +473,10 @@ with scratch() as work:
     selected = coherent(work, first=5)
     rejected(work, selected, "historical freeze SHA256: tests/p990/current-freeze-v5.json")
 print("P1013 C112 original-v5 external-anchor counterexample REJECTED")
+
+# C118 carries forward all reviewed v6 coverage without allowing a later
+# generation to co-edit the externally fixed original predecessor.
+with scratch() as work:
+    selected = coherent(work, first=6)
+    rejected(work, selected, "historical freeze SHA256: tests/p990/current-freeze-v6.json")
+print("P1020 C118 original-v6 external-anchor counterexample REJECTED")
