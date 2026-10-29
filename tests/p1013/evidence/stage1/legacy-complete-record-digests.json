@@ -1,0 +1,17 @@
+{
+  "C107-reacquired-old-oom.json": {
+    "records": 502,
+    "sha256": "aa106648866d12d50b07c831b076be913081937359a85c8a094ffb39186e0d2d",
+    "complete_original_records_equal": true
+  },
+  "C107-reacquired-P982-emitter.json": {
+    "records": 1788,
+    "sha256": "7a930a0449c16e3a03fa8f49a2b2a2cd76c2e162583f5cc869de90fbb79d3f2d",
+    "complete_original_records_equal": true
+  },
+  "C107-reacquired-P990-emitter.json": {
+    "records": 3388,
+    "sha256": "c3eb11893d396ff3e6b3127c36c5942a03b732ccf5ef13a20f0f2efb3fc6ac0f",
+    "complete_original_records_equal": true
+  }
+}

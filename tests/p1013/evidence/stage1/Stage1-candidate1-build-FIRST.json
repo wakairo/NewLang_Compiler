@@ -1,0 +1,33 @@
+[
+  {
+    "name": "configure",
+    "command": [
+      "/workspace/p965-build-tools/cmake/data/bin/cmake",
+      "-S",
+      "/workspace/p1013",
+      "-B",
+      "/workspace/p1013-build-gcc",
+      "-DCMAKE_BUILD_TYPE=Debug",
+      "-DNEWLANG_FRONTEND_ONLY=ON",
+      "-DCMAKE_PROJECT_INCLUDE=/workspace/p1013/cmake/independent-r-tests-hook.cmake"
+    ],
+    "exit": 0,
+    "seconds": 0.845,
+    "log": "Stage1-candidate1-configure-FIRST.log",
+    "SHA256": "5173bb460eefce186317bfe625b45359418d5eddf1d67b776a3c5ec63cbad2b3"
+  },
+  {
+    "name": "build",
+    "command": [
+      "/workspace/p965-build-tools/cmake/data/bin/cmake",
+      "--build",
+      "/workspace/p1013-build-gcc",
+      "--parallel",
+      "2"
+    ],
+    "exit": 0,
+    "seconds": 22.732,
+    "log": "Stage1-candidate1-build-FIRST.log",
+    "SHA256": "b54110be659cf0d1a463a0d5a8d2c105865f4a3d039b6b55d034de6091c58216"
+  }
+]

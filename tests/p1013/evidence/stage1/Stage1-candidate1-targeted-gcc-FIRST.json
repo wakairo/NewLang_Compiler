@@ -1,0 +1,14 @@
+{
+  "head": "544614d1081400bd16e8697b0d2028257fdb1cee",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "/workspace/p1013/tests/p1013/production/run.py",
+    "/workspace/p1013-build-gcc/newlangc",
+    "/usr/bin/gcc",
+    "none"
+  ],
+  "exit": 0,
+  "seconds": 3.048,
+  "log": "Stage1-candidate1-targeted-gcc-FIRST.log",
+  "SHA256": "e9780ac395b8b1efbdd2b94750522861806dd8a107f4ac1bcc3b30be4b4d5ee7"
+}

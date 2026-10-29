@@ -1,0 +1,14 @@
+{
+  "source": "collect-legacy-v1.py (external exact source retained)",
+  "source_sha256": "facf808c0c122a8cae2694dab20fe542726a0611a6dd076a2225f1ac00c25da2",
+  "first_collection_exit": 0,
+  "first_collection_log_sha256": "918a67fa8eb96397083c849d03b480c8cec7e655c320bdeda150d38015b73e5a",
+  "packaging_RED": {
+    "stage": "output evidence packaging, not candidate/test execution",
+    "exit": 2,
+    "log_sha256": "bcd3da5d31cfa205ac971d68b821b23d2f46a1cea0e319eba46ce0a7bf906b8e",
+    "reason": "exact read-only collector copy has one trailing-whitespace line and extra EOF blank line",
+    "preservation": "original collector source and first failed diffcheck unchanged in external artifacts; no test/source/oracle/code changes or test rerun",
+    "correction": "retain collector byte hash and exact external source; omit its redundant text copy from committed output evidence"
+  }
+}

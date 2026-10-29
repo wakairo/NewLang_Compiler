@@ -1,0 +1,29 @@
+{
+  "head": "544614d1081400bd16e8697b0d2028257fdb1cee",
+  "targeted_GCC_PASS": true,
+  "positive_sources": 5,
+  "same_source_current_calls_each": 2,
+  "physical_native_profiles": 18,
+  "actual_heap_worlds": [
+    0,
+    1,
+    2
+  ],
+  "metadata_rejections": 54,
+  "H_rejections": 12,
+  "unrestored_foreign_child_B_survival": 3,
+  "negative_sources": 4,
+  "named_reached_error_exact_retry": 5,
+  "new_reached_OOM_by_source": {
+    "mixed_same.nl": 403,
+    "mixed_distinct.nl": 403,
+    "mixed_distinct_direct.nl": 403
+  },
+  "new_reached_OOM_status_counts": {
+    "2": 1149,
+    "1": 60
+  },
+  "new_reached_OOM_total": 1209,
+  "ordinary_T_native_physical": "INCONCLUSIVE (unit exit only)",
+  "CI_jobs": 0
+}
