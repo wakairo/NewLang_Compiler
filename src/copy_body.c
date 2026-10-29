@@ -1484,8 +1484,8 @@ static bool unit_prefix_walk(UnitPrefix *r, NLCheckedNodeId id)
     --r->depth;
     return ok;
 }
-static NLCheckStatus unit_prefix_validate(const NLCopyBodyProof *p,
-                                          const NLIfFieldView *field)
+static NLCheckStatus unit_prefix_field_validate(const NLCopyBodyProof *p,
+                                                const NLIfFieldView *field)
 {
     UnitPrefix r = {
         .f = p->owner, .world = field->entry, .conditional = p->conditional};
@@ -1501,6 +1501,11 @@ static NLCheckStatus unit_prefix_validate(const NLCopyBodyProof *p,
     free(r.seen);
     free(r.bound);
     return s;
+}
+static NLCheckStatus unit_prefix_validate(const NLCopyBodyProof *p,
+                                          const NLIfReturnView *returned)
+{
+    return unit_prefix_field_validate(p, &returned->field);
 }
 NLCheckStatus nl_checked_copy_unit_validate(const NLCheckedFragment *caller,
                                             NLCheckedNodeId id,
@@ -1584,7 +1589,8 @@ NLCheckStatus nl_checked_copy_unit_validate(const NLCheckedFragment *caller,
             : nl_checked_if_return_validate(f, p->conditional, &returned);
     if (s != NL_CHECK_OK)
         return s;
-    s = unit_prefix_validate(p, &field);
+    s = two_normal ? unit_prefix_field_validate(p, &field)
+                   : unit_prefix_validate(p, &returned);
     if (s != NL_CHECK_OK || !p->exit || p->pending)
         return s == NL_CHECK_OK ? INVALID : s;
     NLSemanticPlaceView a[3], b[3];
