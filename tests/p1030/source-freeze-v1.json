@@ -1,0 +1,19 @@
+{
+  "release": "C127 P-owned PRE-RUN source/baseline freeze; not blind/R evidence",
+  "parent": "c7ff99cf7d9087aa67226185e736802b1cee073f",
+  "parent_tree": "0f929e775c74b4a576e2630dd86286060c59f1dd",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "source_execution_count": 0,
+  "baseline_CLI": "/workspace/p1020-build-gcc/newlangc",
+  "baseline_CLI_SHA256": "221cecfd3e127fb1738cb73b8b15e1324bbed2ef66dd668f6d2c5f79d2cd74c2",
+  "files": {
+    "tests/p1030/baseline.py": "eae84dbf41f256f77104129d5679f12a8d0a32034ebdcb63bf763ee4c8b10f1f",
+    "tests/p1030/oracle-v1.json": "01939dbf29464022347ede377a0110e772cf9bccc60a70700df0799e22bca1fb",
+    "tests/p1030/probe.c": "4e7425ef7a3dbf07bb9cfd7b1f0bf71c776dc97a857078f133827103c0b15160",
+    "tests/p1030/sources/heap_before_pair.nl": "20df343adb83e990c15819bf11d29d8d330abffc9464454fd2371768a850a891",
+    "tests/p1030/sources/negative_double_terminal.nl": "5eb712c154cdddfc4d6e867a86c1370168594433bed3a400d1651b8899a12aea",
+    "tests/p1030/sources/negative_read_definition.nl": "7f7986b18a30b322336076f5a3da655db712ae33789115ff6ba62fa49c9e86ec",
+    "tests/p1030/sources/pair_before_heap.nl": "ee8ad83a1796eb688ef0de02d0b166c3f7131791080c868e4f72e14f0219877a",
+    "tests/p1030/sources/unsupported_third_call.nl": "47d26ee1760dc1e8261e6750b7913d57acbd1836a4a5961ebe5e304546aeb260"
+  }
+}
