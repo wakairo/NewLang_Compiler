@@ -1,0 +1,42 @@
+test_01_no_manifest_means_zero (__main__.TestSyntheticNativeBridge.test_01_no_manifest_means_zero) ... ok
+test_02_no_approval_blocks (__main__.TestSyntheticNativeBridge.test_02_no_approval_blocks) ... ok
+test_03_valid_external_synthetic_approval_and_no_R_execution (__main__.TestSyntheticNativeBridge.test_03_valid_external_synthetic_approval_and_no_R_execution) ... ok
+test_04_manifest_self_updated_SHA_not_external_approval (__main__.TestSyntheticNativeBridge.test_04_manifest_self_updated_SHA_not_external_approval) ... ok
+test_05_wrong_header (__main__.TestSyntheticNativeBridge.test_05_wrong_header) ... ok
+test_06_duplicate_name (__main__.TestSyntheticNativeBridge.test_06_duplicate_name) ... ok
+test_07_mixed_cohort (__main__.TestSyntheticNativeBridge.test_07_mixed_cohort) ... FAIL
+test_08_path_traversal_and_absolute (__main__.TestSyntheticNativeBridge.test_08_path_traversal_and_absolute) ... ok
+test_09_symlink_and_hardlink_source (__main__.TestSyntheticNativeBridge.test_09_symlink_and_hardlink_source) ... ok
+test_10_non_regular_or_missing_source (__main__.TestSyntheticNativeBridge.test_10_non_regular_or_missing_source) ... ok
+test_11_source_runner_observer_oracle_sha_drift (__main__.TestSyntheticNativeBridge.test_11_source_runner_observer_oracle_sha_drift) ... ok
+test_12_bad_mode (__main__.TestSyntheticNativeBridge.test_12_bad_mode) ... ok
+test_13_CRLF_and_oversized_manifest (__main__.TestSyntheticNativeBridge.test_13_CRLF_and_oversized_manifest) ... ok
+test_14_untrusted_manifest_command_not_evaluated (__main__.TestSyntheticNativeBridge.test_14_untrusted_manifest_command_not_evaluated) ... ok
+test_15_missing_receipt_even_child_exit0 (__main__.TestSyntheticNativeBridge.test_15_missing_receipt_even_child_exit0) ... ok
+test_16_duplicate_JSON_keys_and_missing_case (__main__.TestSyntheticNativeBridge.test_16_duplicate_JSON_keys_and_missing_case) ... ok
+test_17_missing_guest2_not_a_pass (__main__.TestSyntheticNativeBridge.test_17_missing_guest2_not_a_pass) ... ok
+test_18_guest0_not_reached_and_wrong_alloc (__main__.TestSyntheticNativeBridge.test_18_guest0_not_reached_and_wrong_alloc) ... ok
+test_19_missing_clang_and_modified_C17 (__main__.TestSyntheticNativeBridge.test_19_missing_clang_and_modified_C17) ... ok
+test_20_negative_generic_parser_rejection_is_not_semantic (__main__.TestSyntheticNativeBridge.test_20_negative_generic_parser_rejection_is_not_semantic) ... ok
+test_21_negative_no_clobber_and_fake_observed_false (__main__.TestSyntheticNativeBridge.test_21_negative_no_clobber_and_fake_observed_false) ... ok
+test_22_receipt_case_order_and_approval_head_drift (__main__.TestSyntheticNativeBridge.test_22_receipt_case_order_and_approval_head_drift) ... ok
+test_23_runner_mutates_source_after_its_own_exit (__main__.TestSyntheticNativeBridge.test_23_runner_mutates_source_after_its_own_exit) ... ok
+test_24_forced_child_failure (__main__.TestSyntheticNativeBridge.test_24_forced_child_failure) ... ok
+test_25_forced_child_timeout (__main__.TestSyntheticNativeBridge.test_25_forced_child_timeout) ... ok
+
+======================================================================
+FAIL: test_07_mixed_cohort (__main__.TestSyntheticNativeBridge.test_07_mixed_cohort)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/mnt/data/t1014/tests/t1014/test_native_bridge.py", line 122, in test_07_mixed_cohort
+    self.assertStop(self.parse, "cohort")
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/data/t1014/tests/t1014/test_native_bridge.py", line 76, in assertStop
+    self.assertIn(keyword, str(ctx.exception))
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'cohort' not found in 'T1014 STOP: bad case name/mode/source/SHA'
+
+----------------------------------------------------------------------
+Ran 25 tests in 12.545s
+
+FAILED (failures=1)
