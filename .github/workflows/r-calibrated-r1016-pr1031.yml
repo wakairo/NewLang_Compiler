@@ -1,0 +1,84 @@
+# C132 source registration ONLY; separate C exact SHA release before any future push.
+# No GitHub Environment, dispatch, PR, main, R-review, r-first, or retry.
+name: R1016 post-FIRST CALIBRATED PR1031 (future C-reviewed)
+on:
+  push:
+    branches:
+      - 'r-calibrated/r1016-pr1031'
+permissions:
+  contents: read
+concurrency:
+  group: r1032-calibrated-r1016-pr1031
+  cancel-in-progress: false
+jobs:
+  calibrated:
+    if: ${{ github.repository == 'wakairo/NewLang_Compiler' && github.event_name == 'push' && github.ref == 'refs/heads/r-calibrated/r1016-pr1031' && github.run_attempt == 1 }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - name: Checkout future C-reviewed pushed R executor exactly, without credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Stop foreign run or executor source drift
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REPOSITORY" = wakairo/NewLang_Compiler
+          test "$GITHUB_EVENT_NAME" = push
+          test "$GITHUB_REF" = refs/heads/r-calibrated/r1016-pr1031
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          test "$GITHUB_WORKFLOW_REF" = "wakairo/NewLang_Compiler/.github/workflows/r-calibrated-r1016-pr1031.yml@refs/heads/r-calibrated/r1016-pr1031"
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          test "$(git rev-parse HEAD^)" = 9f917c58dfb38c9ff057b82d3a12a9e068b3222f
+          test "$(git rev-list --parents -n1 HEAD | wc -w)" -eq 2
+          test "$(git rev-parse HEAD:evidence/r1028/original-first-40849018312-attempt1.zip)" = 7467df2023c84fe86409f815136df779de728bae
+      - name: Checkout physical fixed PR1031 HEAD (not a test-merge)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: a56cd08c23548852504cf95e94eb6c9a56f3dd8f
+          path: candidate
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Verify PR1031 fixed tree, bootstrap independently locked toolchain
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C candidate rev-parse HEAD)" = a56cd08c23548852504cf95e94eb6c9a56f3dd8f
+          test "$(git -C candidate rev-parse HEAD^{tree})" = a2cd1c9a9c66a8686d7e4b99f545b82865ef3877
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make python3 zstd
+          (cd candidate && python3 scripts/bootstrap.py)
+      - name: Build only exact PR1031 frontend/compiler, never P's test suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd candidate
+          . .deps/activate.sh
+          test -x "$NEWLANG_SDK_ROOT/bin/clang-23"
+          "$NEWLANG_SDK_ROOT/bin/clang-23" --version | grep -F 'clang version 23.1.3'
+          CC=/usr/bin/gcc-13 cmake -S . -B build-frontend -DNEWLANG_FRONTEND_ONLY=ON -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Debug
+          grep -Fx 'NEWLANG_FRONTEND_ONLY:BOOL=ON' build-frontend/CMakeCache.txt
+          grep -Fx 'BUILD_TESTING:BOOL=OFF' build-frontend/CMakeCache.txt
+          cmake --build build-frontend --parallel 2
+          test -f build-frontend/newlangc
+          sha256sum build-frontend/newlangc
+      - name: Exactly one post-FIRST CALIBRATED raw observation
+        shell: bash
+        run: |
+          set -euo pipefail
+          . candidate/.deps/activate.sh
+          /usr/bin/python3 evidence/r1032/r_calibrated.py --execute
+      - name: Retain CALIBRATED raw even on failure (upload failure is evidence loss)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r1032-CALIBRATED-${{ github.run_id }}-attempt${{ github.run_attempt }}-${{ github.ref_name }}-${{ github.sha }}
+          path: ${{ runner.temp }}/R1032-CALIBRATED-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.sha }}/
+          if-no-files-found: error
+          overwrite: false
+          retention-days: 14
+          compression-level: 0
+# C132 NO execution now; external C prereview cannot be inferred from push.

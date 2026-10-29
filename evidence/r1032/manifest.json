@@ -1,0 +1,25 @@
+{
+  "schema": "R1032_CALIBRATED_SOURCE_ONLY_V1",
+  "authorization": "Compiler Issue 1032 C132; source registration only; no execution",
+  "parent": "9f917c58dfb38c9ff057b82d3a12a9e068b3222f",
+  "future_branch": "r-calibrated/r1016-pr1031",
+  "pr1031_head": "a56cd08c23548852504cf95e94eb6c9a56f3dd8f",
+  "pr1031_tree": "a2cd1c9a9c66a8686d7e4b99f545b82865ef3877",
+  "R1016_seven": "evidence/r1022/manifest.json; frozen 2 positives + 4 negatives + oracle",
+  "FIRST_run": "40849018312 attempt1",
+  "FIRST_zip": "evidence/r1028/original-first-40849018312-attempt1.zip",
+  "FIRST_zip_sha256": "0d074152c822d1b45a71ccee37a91fcfb1fea2eae2ce8fff8c27a35f3c3daac9",
+  "FIRST_zip_blob": "7467df2023c84fe86409f815136df779de728bae",
+  "workflow": ".github/workflows/r-calibrated-r1016-pr1031.yml",
+  "coverage": {
+    "source_CHECK": "RAW_ACTUAL",
+    "public_current": "R owned original probe source actual GET/VALIDATE; provisional",
+    "C17": "RAW_ACTUAL",
+    "negative_no_clobber": "RAW_SENTINEL",
+    "guest_successes": "0/1/2 original R observer",
+    "H_T_complete_original_identity": "NOT_OBSERVABLE",
+    "host_OOM": "NOT_OBSERVABLE",
+    "ASan_LSan_UBSan": "NOT_OBSERVABLE"
+  },
+  "approval": "External C fixed-executor prereview required before future one-shot push; source-only registration is not approval"
+}
