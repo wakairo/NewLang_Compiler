@@ -1,0 +1,18 @@
+{
+  "release": "C127 candidate harness PRE-RUN; original source/oracle-v1 untouched",
+  "actual_baseline": "original representative CHECK0/public two calls body+parameters+event0/CLI4, first original private reject copy_two_helpers_before_h at checked_c_copy_internal.h:173, no text/sentinel length777/named bytes dev ino preserved",
+  "baseline_driver_raw_SHA256": "e131dda247f73a5bb2b532a4eed18de200f4d6c5868de0aac578556fe65c8299",
+  "source_rejections": {
+    "negative_read_definition.nl": {"CHECK": 3, "C17": 3, "diagnostic": "P3-TYPE-MISMATCH", "layer": "actual replace destination at definition line4:26-32, intended condition REACHED"},
+    "negative_double_terminal.nl": {"CHECK": 3, "C17": 3, "diagnostic": "P3-USE-AFTER-CONSUME", "layer": "second terminal original consumed binding line90, intended condition REACHED"},
+    "unsupported_third_call.nl": {"CHECK": 0, "C17": 4, "diagnostic": "V1-BACKEND-UNSUPPORTED", "layer": "third actual call outside selected two-call consumer, not canonical illegality"}
+  },
+  "positive": "both nominal declaration orders, actual current/old/incoming/sibling as original oracle, CLI-C17 success, two different source-ID C helper symbols, same original one T with distinct actual child addresses, real H source/current/physical and NULL-only guest0/1/2",
+  "metadata": "each positive: 2 actual calls x7 restored current faults, 2x3 supplied-view mismatches with actual healthy, 4 H original/return faults, 1 foreign B child left unrestored when A destroyed; public current/C17 fail closed, exact retry after restore, B healthy and independently destroyed",
+  "OOM": "each positive: enumerate and fail every actually reached nl_checked_c_node host malloc/calloc/realloc; preserve unpublished NULL/length777, semantic summary, original owner/current and exact output retry; record exact indices/kind/bytes/status and no universal rollback theorem",
+  "physical": "strict C17 GCC13/Clang23.1.3 O0/O2 raw and unchanged issued C plus passive observer; guest0/1/2 all T effects before H, original H A/D/pointer/live-tail/teardown observations. No source memory repair or synthetic-only physical claim",
+  "old_C_identity": "new independent driver compares fixed base CLI and actual candidate outputs for old P982/P990/P986/calibration/P1013/P1020 six positive groups; every accepted original C byte sequence must be identical",
+  "history": "old trusted versioned_freeze.py bytes unchanged; new P-owned external v7 SHA/OID anchor, all1666 keys inherited; old source/oracle/evidence/data retained; scratch coherent coedit v7/v8, lost coverage, coedited old source/oracle/firstRED all reject",
+  "named": "two positives: actual write-error bytes/dev/ino/no-temp/exact retry; three source negatives stdout/fresh/existing no C and no clobber",
+  "CI_budget": "max one fresh DRAFT HOLD PR on exact c7 parent, natural FULL5+PARTIAL max two pairs12jobs; no manual same-SHA rerun, CI-only push, READY/merge/F/R run"
+}

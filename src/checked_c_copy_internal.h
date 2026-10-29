@@ -134,9 +134,12 @@ static bool copy_prepare_at(Emit *e, const NLCheckedFragment *body,
     }
     return true;
 }
-/* A second C symbol is selected only for two genuine calls on the same
- * original field in main's straight-line prefix before its first H trial.
- * The one-function profiles retain their existing admission and C bytes. */
+/* Two genuine calls use the same original two-field carrier in main's
+ * straight-line prefix before its first H trial. Different fields must be
+ * the two distinct current children of that same original, not equal IDs
+ * borrowed from another world. Per-call public current checks above and
+ * the serializer's evolving Local ledger still authenticate each Change.
+ * The one-function and same-field profiles retain their original C bytes. */
 static bool copy_two_helpers_before_h(Emit *e, const NLCheckedFragment *body)
 {
     if (!e->copy_second_function)
@@ -163,14 +166,39 @@ static bool copy_two_helpers_before_h(Emit *e, const NLCheckedFragment *body)
             field = p.field;
             loan = p.loan;
             function = node->function;
-        } else if (p.field.nominal != field.nominal ||
-                   p.field.parent != field.parent ||
-                   p.field.child != field.child ||
-                   p.field.index != field.index ||
-                   p.field.parent_incarnation != field.parent_incarnation ||
-                   p.field.child_incarnation != field.child_incarnation ||
-                   p.loan == loan || node->function == function) {
-            return reject(e);
+        } else {
+            if (p.field.nominal != field.nominal ||
+                p.field.parent != field.parent ||
+                p.field.parent_incarnation != field.parent_incarnation ||
+                p.loan == loan || node->function == function)
+                return reject(e);
+            if (p.field.index == field.index) {
+                if (p.field.child != field.child ||
+                    p.field.child_incarnation != field.child_incarnation)
+                    return reject(e);
+            } else {
+                NLSemanticPlaceView root, first, second;
+                if (field.index > 1 || p.field.index > 1 ||
+                    !nl_semantic_place_view(p.entry, p.field.parent, &root) ||
+                    !root.live || root.type != field.nominal ||
+                    root.incarnation != field.parent_incarnation ||
+                    root.fixed_field_count != 2 ||
+                    root.fixed_fields[field.index] != field.child ||
+                    root.fixed_fields[p.field.index] != p.field.child ||
+                    field.child == p.field.child ||
+                    !nl_semantic_place_view(p.entry, field.child, &first) ||
+                    !nl_semantic_place_view(p.entry, p.field.child, &second) ||
+                    !first.live || !second.live ||
+                    first.incarnation != field.child_incarnation ||
+                    second.incarnation != p.field.child_incarnation ||
+                    first.parent_aggregate != p.field.parent ||
+                    second.parent_aggregate != p.field.parent ||
+                    first.parent_incarnation != root.incarnation ||
+                    second.parent_incarnation != root.incarnation ||
+                    first.parent_field_index != field.index ||
+                    second.parent_field_index != p.field.index)
+                    return reject(e);
+            }
         }
         if (node->span.end_byte > last_call)
             last_call = node->span.end_byte;

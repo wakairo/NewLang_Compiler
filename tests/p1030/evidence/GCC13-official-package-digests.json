@@ -1,0 +1,48 @@
+{
+  "metadata_URL": "https://archive.ubuntu.com/ubuntu/dists/noble-updates/main/binary-amd64/Packages.xz",
+  "metadata_SHA256": "8965447433642cb1c1b73a90d7bdd0cb353153583572bd9bed641fb716827c49",
+  "packages": [
+    {
+      "Package": "cpp-13",
+      "Version": "13.3.0-6ubuntu2~24.04.1",
+      "Filename": "pool/main/g/gcc-13/cpp-13_13.3.0-6ubuntu2~24.04.1_amd64.deb",
+      "SHA256": "c7535331fbb183c802c3bf4b6b210872dcc12d0421b3212b3c4b940f2c59ed3a",
+      "Size": "1042"
+    },
+    {
+      "Package": "cpp-13-x86-64-linux-gnu",
+      "Version": "13.3.0-6ubuntu2~24.04.1",
+      "Filename": "pool/main/g/gcc-13/cpp-13-x86-64-linux-gnu_13.3.0-6ubuntu2~24.04.1_amd64.deb",
+      "SHA256": "2ca48bf0c2d6465bc39322899715a85d934b4d7442dd5586a7bebbe3ce0f806b",
+      "Size": "10714542"
+    },
+    {
+      "Package": "gcc-13",
+      "Version": "13.3.0-6ubuntu2~24.04.1",
+      "Filename": "pool/main/g/gcc-13/gcc-13_13.3.0-6ubuntu2~24.04.1_amd64.deb",
+      "SHA256": "7438ff160b020a74970672189ecae25d0ca650de6d7f543f12a3134192cffbd9",
+      "Size": "494262"
+    },
+    {
+      "Package": "gcc-13-base",
+      "Version": "13.3.0-6ubuntu2~24.04.1",
+      "Filename": "pool/main/g/gcc-13/gcc-13-base_13.3.0-6ubuntu2~24.04.1_amd64.deb",
+      "SHA256": "e859aca26585bb91113a451f1e66bc0e5283cb08797d679aacc1d936ae6dff8e",
+      "Size": "51616"
+    },
+    {
+      "Package": "gcc-13-x86-64-linux-gnu",
+      "Version": "13.3.0-6ubuntu2~24.04.1",
+      "Filename": "pool/main/g/gcc-13/gcc-13-x86-64-linux-gnu_13.3.0-6ubuntu2~24.04.1_amd64.deb",
+      "SHA256": "a134b0319a82d14581b3a14820d2832af4ec9778ed8b9b4ddaeecfb0555ec325",
+      "Size": "21084546"
+    },
+    {
+      "Package": "libgcc-13-dev",
+      "Version": "13.3.0-6ubuntu2~24.04.1",
+      "Filename": "pool/main/g/gcc-13/libgcc-13-dev_13.3.0-6ubuntu2~24.04.1_amd64.deb",
+      "SHA256": "cd689db2691edaa10f37329307292796bb599e722e0505c79e14caaa1fe9a93a",
+      "Size": "2680642"
+    }
+  ]
+}

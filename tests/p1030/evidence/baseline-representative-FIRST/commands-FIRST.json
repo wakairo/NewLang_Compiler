@@ -1,0 +1,183 @@
+[
+  {
+    "label": "first-source-CHECK",
+    "command": [
+      "/workspace/p1020-build-gcc/newlangc",
+      "--check",
+      "/workspace/p1030/tests/p1030/sources/pair_before_heap.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "build-public-probe",
+    "command": [
+      "/usr/bin/gcc",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-g",
+      "-O0",
+      "-fno-pie",
+      "-no-pie",
+      "-I/workspace/p1030/include",
+      "/workspace/p1030/tests/p1030/probe.c",
+      "-Wl,--start-group",
+      "/workspace/p1020-build-gcc/libnewlang_semantic.a",
+      "/workspace/p1020-build-gcc/libnewlang_parser.a",
+      "/workspace/p1020-build-gcc/libnewlang_checked_c_node.a",
+      "/workspace/p1020-build-gcc/libnewlang_lexer.a",
+      "/workspace/p1020-build-gcc/libnewlang_checked.a",
+      "/workspace/p1020-build-gcc/libnewlang_syntax.a",
+      "/workspace/p1020-build-gcc/libnewlang_source.a",
+      "/workspace/p1020-build-gcc/libnewlang_diagnostic.a",
+      "-Wl,--end-group",
+      "-o",
+      "/workspace/p1030-artifacts/baseline-representative-FIRST/public"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "first-public-current",
+    "command": [
+      "/workspace/p1030-artifacts/baseline-representative-FIRST/public",
+      "/workspace/p1030/tests/p1030/sources/pair_before_heap.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "5496b8a3f2d04c483eace92727085777f805e97e3214f7be5ae804a4c1d84048",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "first-C17",
+    "command": [
+      "/workspace/p1020-build-gcc/newlangc",
+      "/workspace/p1030/tests/p1030/sources/pair_before_heap.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "c1850617b5f0ca55c214b6c222b5b61b07c7bf30fac2599b1f0e2fa8e09175b1"
+  },
+  {
+    "label": "first-named",
+    "command": [
+      "/workspace/p1020-build-gcc/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1030-artifacts/baseline-representative-FIRST/existing-output.bin",
+      "/workspace/p1030/tests/p1030/sources/pair_before_heap.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "c1850617b5f0ca55c214b6c222b5b61b07c7bf30fac2599b1f0e2fa8e09175b1"
+  },
+  {
+    "label": "build-original-instrumented-emitter",
+    "command": [
+      "/usr/bin/gcc",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-g",
+      "-O0",
+      "-fno-pie",
+      "-no-pie",
+      "-I/workspace/p1030/include",
+      "-finstrument-functions",
+      "-c",
+      "/workspace/p1030/src/checked_c_node.c",
+      "-o",
+      "/workspace/p1030-artifacts/baseline-representative-FIRST/original-node.o"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "build-instrumented-probe",
+    "command": [
+      "/usr/bin/gcc",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-g",
+      "-O0",
+      "-fno-pie",
+      "-no-pie",
+      "-I/workspace/p1030/include",
+      "/workspace/p1030/tests/p1030/probe.c",
+      "/workspace/p1030-artifacts/baseline-representative-FIRST/original-node.o",
+      "-Wl,--start-group",
+      "/workspace/p1020-build-gcc/libnewlang_semantic.a",
+      "/workspace/p1020-build-gcc/libnewlang_parser.a",
+      "/workspace/p1020-build-gcc/libnewlang_checked_c_node.a",
+      "/workspace/p1020-build-gcc/libnewlang_lexer.a",
+      "/workspace/p1020-build-gcc/libnewlang_checked.a",
+      "/workspace/p1020-build-gcc/libnewlang_syntax.a",
+      "/workspace/p1020-build-gcc/libnewlang_source.a",
+      "/workspace/p1020-build-gcc/libnewlang_diagnostic.a",
+      "-Wl,--end-group",
+      "-o",
+      "/workspace/p1030-artifacts/baseline-representative-FIRST/instrumented"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "debug-symbols",
+    "command": [
+      "nm",
+      "-n",
+      "/workspace/p1030-artifacts/baseline-representative-FIRST/instrumented"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "77dd74bdf40a425034cc7a1cefc2c9ed4aab160b6d39ebdfb82805120e650beb",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "reject-map-000000000040210b",
+    "command": [
+      "addr2line",
+      "-f",
+      "-e",
+      "/workspace/p1030-artifacts/baseline-representative-FIRST/instrumented",
+      "000000000040210b"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "2a4e143638b0b7c319d31cc6e47672305a2395eb9a6d88fd76fa0d5771c4db74",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "first-original-reject",
+    "command": [
+      "/workspace/p1030-artifacts/baseline-representative-FIRST/instrumented",
+      "/workspace/p1030/tests/p1030/sources/pair_before_heap.nl",
+      "000000000040210b"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "0ae58c4fecf6e1d786554d62884ed9f2de35112af518f8b0e23c9fb5873ab3a5",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "first-reject-location",
+    "command": [
+      "addr2line",
+      "-f",
+      "-e",
+      "/workspace/p1030-artifacts/baseline-representative-FIRST/instrumented",
+      "0x405c18",
+      "0x405c17"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "d03e32029caeebca69584c3316135a4a10af43f3c0542b094d0f84ac7056e1dd",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

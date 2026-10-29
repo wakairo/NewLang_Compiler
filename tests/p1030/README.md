@@ -1,0 +1,76 @@
+# P1030 / C127 selective mixed dual-field calls
+
+The fixed Production parent is PR1025 c7ff99cf7d9087aa67226185e736802b1cee073f,
+tree 0f929e775c74b4a576e2630dd86286060c59f1dd, on fixed PR1015 c9fbdb8.
+CURRENT_SPEC selects canonical Draft17.34. These are new P-authored programs,
+values, negatives and expected results, not BLIND or independent R evidence.
+No R1016/R996/R1000 original source/oracle/runner/raw artifact was accessed.
+
+The first representative was frozen before execution. It passed real source
+CHECK and both actual calls' public body/parameters/event current validators.
+The original emitter's first refusal was measured with its unchanged,
+instrumented translation unit at `copy_two_helpers_before_h`, private header
+line173. CLI4/no C/named file bytes/dev/ino preserved. Both nominal declaration
+orders have the same CHECK/current/admission boundary. Frozen original source,
+oracle, probe, driver and first raw outcomes remain unchanged.
+
+The smallest implementation changes only the private two-helper admission in
+`src/checked_c_copy_internal.h`. Calls still require two distinct genuine
+functions and loans, the same original T/root/incarnation, both public current
+proofs, main's straight-line prefix before H, and the original per-operation
+Local ledger. If targets differ, their child/incarnation/index relationships
+must be the two live children of that same current root. The existing serializer
+already emits each actual field, incoming old Copy and source-function symbol;
+it is reused without inventing checker facts, cached rights or a new ABI.
+Same-field and one-function paths retain original output. Richer shapes are
+still unsupported; this is not generic CFG or full-v0 coverage.
+
+The independent P contract starts T=(58,203), changes field1 203→97 while
+sibling58 survives, then a different helper changes field0 58→203 using the
+first actual old Copy while sibling97 survives. Nominal declarations occur
+T-before-H and H-before-T in separate complete source files. H's original
+head/tail marks29/181, pointer/Allocation/Domain/Backing relation, local LiveTail
+return, caller and receiver reads, independent head and tail cleanup, and
+guest0/1/2 successful allocations remain the existing canonical profile.
+Both T calls precede H, so H allocation failure never licenses a T operation.
+
+`probe.c` observes actual source-issued public current, not historical GET alone.
+`consumer.c` separately rejects wrong current call/plan/context/actual/loan/field/
+source and supplied-view mismatches, wrong H original/return, and leaves B's
+genuine child in A presentation when destroying A before testing B survival.
+Some metadata faults reject at a seal/issuer boundary; they are not claims of
+independent reachability of every deeper guard. `oom.c` faults every reached
+host emitter allocation, records kind/bytes/status/index, and checks no output,
+semantic summary/current/owner retention and exact retry. Summary equality is
+not a universal bytewise world rollback theorem.
+
+`observer.h` reuses the existing P-owned H lifecycle observation pattern with
+new dual-field T expectations. It reads actual live T fields through volatile
+access, actual old/result/address correspondence, original H/Allocation/Domain
+and LiveTail/teardown hooks. It never repairs guest data; the shared platform
+wrapper delegates malloc/free and injects NULL only. Final checks use saved
+integers/counters, not dereferences of expired T/H objects. `run.py` compiles
+unchanged issued C bytes with GCC13/Clang23.1.3 strict C17 O0/O2, passive observed
+and raw guest paths, source/metadata/OOM/no-clobber and old29-C-byte identities.
+Unit exit0 alone remains physically INCONCLUSIVE.
+
+Original v1-v7/first results/data and v7's1666 input keys are inherited by
+prospective v8. `tests/support/versioned_freeze.py` is unchanged. New P-owned
+`history_v8.py` separately pins fixed original v7 SHA/blob from PR1025 and
+F85/C128's predecessor review, then uses the unchanged historical verifier and
+preserves predecessor source/oracle/raw data. F85's finite static A covers only
+PR1025, not this code. Scratch counterexamples reject coherent v7/v8 rewriting,
+lost coverage and current-digest coedits of old source/oracle/first RED. Root
+CMake, workflow, toolchain and T/R hooks are unchanged; the existing P990 new
+integration invokes this additional suite after retaining all predecessor suites.
+
+GCC13 is an isolated validation compiler under `/workspace` from official Ubuntu
+packages with recorded matching package-index SHA256; repository toolchain pins
+are unchanged. Detailed generated-C records use `.c.data`/stdout names so their
+original bytes are preserved without being reformatted as authored C.
+
+VALUE-ALIGNMENT-RISK: extra private mapping/history increases compiler-maintainer
+audit/re-audit cost. The library author plus ordinary-safe caller's human UB-audit
+closure benefit over well-factored C, performance and cost are UNMEASURED.
+Product GO PAUSED/H1 HOLD. One fresh DRAFT HOLD only after local gates, natural
+FULL5+PARTIAL max2 pairs12jobs; no same-SHA manual rerun, READY/merge or F/R launch.

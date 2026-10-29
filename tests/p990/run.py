@@ -162,3 +162,7 @@ if group == "new":
                        cli, cc, sanitizer])
     ok(bounded_unit)
     print(bounded_unit.stdout.decode(), end="", flush=True)
+    dual_fields = run([sys.executable, root.parent / "p1030/run.py",
+                      cli, cc, sanitizer])
+    ok(dual_fields)
+    print(dual_fields.stdout.decode(), end="", flush=True)
