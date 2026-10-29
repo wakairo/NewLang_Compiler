@@ -4,7 +4,7 @@ name: R1016 post-FIRST CALIBRATED PR1031 (future C-reviewed)
 on:
   push:
     branches:
-      - 'r-calibrated/r1016-pr1031'
+      - 'r-calibrated/r1016-pr1031-v2'
 permissions:
   contents: read
 concurrency:
@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   calibrated:
-    if: ${{ github.repository == 'wakairo/NewLang_Compiler' && github.event_name == 'push' && github.ref == 'refs/heads/r-calibrated/r1016-pr1031' && github.run_attempt == 1 }}
+    if: ${{ github.repository == 'wakairo/NewLang_Compiler' && github.event_name == 'push' && github.ref == 'refs/heads/r-calibrated/r1016-pr1031-v2' && github.run_attempt == 1 }}
     runs-on: ubuntu-24.04
     timeout-minutes: 75
     steps:
@@ -28,11 +28,11 @@ jobs:
           set -euo pipefail
           test "$GITHUB_REPOSITORY" = wakairo/NewLang_Compiler
           test "$GITHUB_EVENT_NAME" = push
-          test "$GITHUB_REF" = refs/heads/r-calibrated/r1016-pr1031
+          test "$GITHUB_REF" = refs/heads/r-calibrated/r1016-pr1031-v2
           test "$GITHUB_RUN_ATTEMPT" = 1
-          test "$GITHUB_WORKFLOW_REF" = "wakairo/NewLang_Compiler/.github/workflows/r-calibrated-r1016-pr1031.yml@refs/heads/r-calibrated/r1016-pr1031"
+          test "$GITHUB_WORKFLOW_REF" = "wakairo/NewLang_Compiler/.github/workflows/r-calibrated-r1016-pr1031.yml@refs/heads/r-calibrated/r1016-pr1031-v2"
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
-          test "$(git rev-parse HEAD^)" = 9f917c58dfb38c9ff057b82d3a12a9e068b3222f
+          test "$(git rev-parse HEAD^)" = 68ee20aa286f1510fe62696a7fba1a9f9dff06f8
           test "$(git rev-list --parents -n1 HEAD | wc -w)" -eq 2
           test "$(git rev-parse HEAD:evidence/r1028/original-first-40849018312-attempt1.zip)" = 7467df2023c84fe86409f815136df779de728bae
       - name: Checkout physical fixed PR1031 HEAD (not a test-merge)
@@ -75,7 +75,7 @@ jobs:
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: r1032-CALIBRATED-${{ github.run_id }}-attempt${{ github.run_attempt }}-${{ github.ref_name }}-${{ github.sha }}
+          name: r1032-CALIBRATED-${{ github.run_id }}-attempt${{ github.run_attempt }}-r1016-pr1031-v2-${{ github.sha }}
           path: ${{ runner.temp }}/R1032-CALIBRATED-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.sha }}/
           if-no-files-found: error
           overwrite: false

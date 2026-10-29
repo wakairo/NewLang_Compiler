@@ -15,10 +15,10 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[2]
 R0 = ROOT / "evidence/r1022"
 CANDIDATE = ROOT / "candidate"
-BASE = "9f917c58dfb38c9ff057b82d3a12a9e068b3222f"
+BASE = "68ee20aa286f1510fe62696a7fba1a9f9dff06f8"
 TARGET = "a56cd08c23548852504cf95e94eb6c9a56f3dd8f"
 TREE = "a2cd1c9a9c66a8686d7e4b99f545b82865ef3877"
-REF = "refs/heads/r-calibrated/r1016-pr1031"
+REF = "refs/heads/r-calibrated/r1016-pr1031-v2"
 WORKFLOW = ".github/workflows/r-calibrated-r1016-pr1031.yml"
 ZIP = "evidence/r1028/original-first-40849018312-attempt1.zip"
 ZIP_HASH = "0d074152c822d1b45a71ccee37a91fcfb1fea2eae2ce8fff8c27a35f3c3daac9"
@@ -63,7 +63,8 @@ def gate(j):
     if git("rev-parse","HEAD^")!=BASE or len(git("rev-list","--parents","-n1","HEAD").split())!=2:
         raise RuntimeError("R executor must be the one C132 staging child")
     diff=git("diff","--name-status",BASE,"HEAD","--").splitlines()
-    if set(diff)!={"A\t"+p for p in ALLOWED}:
+    expected={"M\t"+WORKFLOW,"M\tevidence/r1032/r_calibrated.py"}
+    if len(diff)!=2 or set(diff)!=expected:
         raise RuntimeError("unreviewed R source diff: "+repr(diff))
     if (git("rev-parse","HEAD:"+ZIP)!="7467df2023c84fe86409f815136df779de728bae"
         or git("rev-parse","HEAD:.github/workflows/r-original-first.yml")!="81c26afe4906d2513bfb733cf1896c67ef38ae2a"
