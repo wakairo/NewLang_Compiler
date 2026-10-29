@@ -162,3 +162,99 @@ BLIND／oracleの汚染は残枠に関係なく即STOPとなる。
 仮に将来source-smokeを採用しても、その最初のsource診断到達は
 source-issued proof／C17/native／実OOMのPASSではない。
 T実装・C採用・Docs改訂の**別判断までは現在の操作・必須gateとして扱わない**。
+
+## R Actions：FIRSTとCALIBRATEDのraw証拠保存（事例に基づく非規範手順）
+
+> **これはチェックリストであり、新たな審査gate・R権限・再実行許可ではない。**
+> 独立性、初回RED、修復、予算、STOPの唯一の運用正本は
+> [Development Process §7.1–7.6](NewLang_Project_Development_Process.md#76-独立実測の自律修復と証拠の保持)。
+> 本節は[Issue #1042](https://github.com/wakairo/NewLang_Compiler/issues/1042)時点の
+> [FIRST #1028](https://github.com/wakairo/NewLang_Compiler/issues/1028#issuecomment-6492943231)、
+> [v1 #1033](https://github.com/wakairo/NewLang_Compiler/issues/1033)、
+> [v2 #1035](https://github.com/wakairo/NewLang_Compiler/issues/1035#issuecomment-6496956123)
+> で実際に発生した**保管の成否**を説明する。R専用の通常Chat＋GitHub＋Actionsで読める手順であり、
+> P同等のcompiler実行環境、元R oracleの再生成、追加のR実行を要求しない。
+
+1. **実行前にFIRSTかCALIBRATEDかを固定する。** Issueの外部RELEASE、対象compiler PRの
+   **完全HEAD／tree SHA**、canonical、R専用executorの**完全commit／tree／parent SHA**、
+   凍結したR独立source・negative・oracleのbytes／SHA、source閲覧制限、
+   期待する最初の故障層とCI予算・STOPを記録する。初回FIRSTで得たREDや
+   BLINDの格付けは後から上書きしない。修復／対象変更を伴う後続は**別の
+   CALIBRATED cohort、branch、run、source版（必要なら新oracle）**として
+   分離し、producer由来の期待値を独立oracleと呼ばない。
+2. **source-onlyの保管と実行イベントを分ける。** workflowの実際の
+   `on.push.branches` とguardを読んで、Actionsが起動しない
+   **R専用review／staging branch**に固定済みsource・runner・workflowを
+   保管・静的レビューする。一回限りの実測が個別に認可された場合に限り、
+   承認済み完成commitのSHAを**専用の`r-first/...`または
+   `r-calibrated/...`実行refへ直接作成**する。ref作成もpushイベントに
+   なり得るため、base SHAを指す空branchの作成や試しpushをしない。
+   例：FIRST `r-first/r1016-original-first` とv2
+   `r-calibrated/r1016-pr1031-v2`は別の一度だけの実行。
+   **既存FIRST/v1/v2 runの再実行は不可**。通常の`r-fast/**`準備と
+   例外的one-shot R実測の起動条件・予算は混同しない。
+3. **upload前の名前・出力保全を確認する。** `actions/upload-artifact`の
+   **`name`はASCII英数字・`-`・`_`・`.`のみ**の一意な識別子とし、
+   `run_id`、`attempt`、固定した**slash-freeのref識別子**、
+   executor SHAを含める。例：
+   `r1032-CALIBRATED-40874742688-attempt1-r1016-pr1031-v2-1edc429ff22513db1b47bd1cbd3fcda31f573d53`。
+   **`github.ref_name`をそのままnameへ展開しない**：`r-calibrated/...`
+   の`/`が混入した[v1実例](https://github.com/wakairo/NewLang_Compiler/actions/runs/40869364041)
+   ではrunnerが43ローカルファイルを作ってもアップロードが失敗した。
+   現実にR runnerが作るraw出力ディレクトリを`path`へ正確に対応させ、
+   **`if: always()`**で失敗時もアップロードを試み、
+   `if-no-files-found: error`、`overwrite: false`、有限retentionを
+   維持する。これらは**アップロード保証ではない**のでstepの実結果を読む。
+4. **runの緑色ではなく、サーバー上のartifact実体をGETする。**
+   GitHub Actionsの対象runで`event`、branch/ref、`head_sha`、
+   `run_attempt`、job、raw観測stepとupload stepの**各status/conclusion**を
+   記録する。次に **Actions → run → Artifacts**、または認証済み
+   GitHub APIの**run artifacts一覧GET**で`artifact_id`・名前・size・
+   `digest`・`expired/expires_at`を確認し、**artifact ZIPを実際にGET**
+   する。ログの「43ファイル作成」「uploadを試行」だけでは
+   **REMOTE RAW CUSTODYは未成立**。artifactが**0件／GET不可**なら
+   **RAW LOST／UNVERIFIED**を残し、推測でZIP・結果を再構成しない。
+   v1は[run40869364041 attempt1](https://github.com/wakairo/NewLang_Compiler/actions/runs/40869364041)
+   のartifactが**0件**であり、v2の成功をv1に遡及適用できない。
+5. **GETしたZIPの内容をバイト単位で監査する。** 実ダウンロードZIPそのものの
+   **byte sizeとSHA256**をGitHub `digest`／jobログ／固定manifestに照合し、
+   ZIP member数・重複名・絶対path／`..`逸脱の有無、**全memberのCRC**を検査する。
+   内部の`FIRST-RAW.jsonl`または`CALIBRATED-RAW.jsonl`を
+   **文字列要約でなく実バイト**としてSHA256・byte size・JSONL行数・
+   各行のJSON parseを確認。`BEGIN/END`、期待stage数、最終capture marker、
+   **各stdout/stderr memberの実bytes・SHA256とJSONL記録値**を突き合わせる。
+   一部ファイルだけ合致しても「全一致」としない。negativeは
+   **named-output sentinelの前後bytes/SHAと、実際に観測した場合のみ
+   device/inode・一時file非生成**を比較する。reject／no-clobberの観測は
+   その負例の狙いの深いguardを直接通過した証明とは限らない。
+   ZIPを実測できる認証済みdownload／byte-safe検査手段がなければ
+   **未検証**と報告し、CI成功だけでSHA・member数を断言しない。
+6. **retention終了前の不変archiveを別途保管する。** `expires_at`を
+   実artifact metadataから確認する（下記の二例は14日、普遍的TTLではない）。
+   Rに別途認可された**Actions非発火のreview/evidence branch**へ、
+   実際にGETして照合した**元ZIPを再圧縮・再生成せず同一バイトで**置き、
+   小さいprovenance説明文を添える。Git書込み後に**Git blob実bytesを
+   再取得して同じZIP SHA256／size／CRC／JSONL／stream hashes**を照合する。
+   バイナリをbyte-safeにGitへ渡せない場合はGit保管成功と主張せずSTOPし、
+   認証済みの手動download・hash確認・`git add`・commit／push等の
+   引継ぎを記録する。**原FIRST ZIP／R凍結7ファイル、別cohortの証拠、
+   P/T fixture、workflowを変更しない**。
+7. **証拠の所在と実測gradeを別欄で報告する。** `FIRST`／
+   `NON-BLIND CALIBRATED`、固定P/R SHA、run URL/ID／attempt／
+   artifact ID、raw監査結果、Git archiveの有無とretention期限、
+   **最初の実際のRED**（source CHECK、public-current、backendなど）、
+   各caseの最初の拒否診断、no-clobber、**NOT_OBSERVABLE／NOT TESTED**、
+   その後の独立した修復／再実測を別々に記載する。
+   **Actions job success／artifact receipt成功はsemantic/C17/native PASSではない**。
+   FIRSTの記録が期限切れやupload失敗で欠けても、
+   「同じFIRSTを再実行した」ことにはできない。後続は個別Coordination
+   RELEASEの別名の試行としてのみ扱い、READY／merge／Product GOの裁定はしない。
+
+**実例の到達点（各runは異なる元の観測であり、再格付けしない）：**
+
+| 固定実行と保管 | 実際のraw／最初の境界 |
+| --- | --- |
+| [FIRST #40849018312／attempt1](https://github.com/wakairo/NewLang_Compiler/actions/runs/40849018312)、artifact `12885619839`、ZIP **27,685 bytes**／SHA256 `0d074152c822d1b45a71ccee37a91fcfb1fea2eae2ce8fff8c27a35f3c3daac9`。元ZIPは[Git保管済み](https://github.com/wakairo/NewLang_Compiler/blob/438170098d5b98096f1ad1f1f200dc1f326c75c3/evidence/r1028/FIRST-ARCHIVE.md) | **39/39 CRC、FIRST JSONL 72件**。元R probeのGCC `-Werror=misleading-indentation` **RED**、正例2件 CHECK0だがC17 **exit4 BACKEND RED**、元H/T物理は**NOT_OBSERVABLE**。negative4は早期reject＋named no-clobber（NEG1の意図したdeep guardは未立証）。 |
+| [CALIBRATED v1 #40869364041／attempt1](https://github.com/wakairo/NewLang_Compiler/actions/runs/40869364041) | slash-bearing artifact名により**artifact 0件／RAW LOST**。ローカルに作った43ファイルをremote rawや意味論のPASSに数えず、FIRSTやv2から補完しない。 |
+| [CALIBRATED v2 #40874742688／attempt1](https://github.com/wakairo/NewLang_Compiler/actions/runs/40874742688)、artifact `12897102916`、ZIP **33,200 bytes**／SHA256 `6baa3c9ef24b472d58c936abe9e414c81d8c11978f8f8ff48ec7f3bbbe6c0aa9`、remote保管は実証済み、Gitへのbyte不変archiveは[別R1046](https://github.com/wakairo/NewLang_Compiler/issues/1046)の責務 | **43/43 CRC、CALIBRATED JSONL 73件、15 stage pairs／30 stdout-stderr SHA一致**。正例2件CHECK0とpublic-current一部を観測、C17 **exit4 BACKEND RED**。負例4件CHECK3/emit3／no-clobber。元H/T physical・native・host OOM・sanitizerは**NOT_OBSERVABLE／未検証**。 |
+
