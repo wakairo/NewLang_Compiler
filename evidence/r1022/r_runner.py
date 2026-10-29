@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""R1026 C123 SOURCE REGISTRATION ONLY. Future original FIRST requires a separate C release.
+"""R1027 C125 ENV-FREE SOURCE FIX ONLY. Future original FIRST requires a separate C release.
 No P fixture/runner, T bridge, shell manifest, synthetic issuer or auto-PASS.
-Do not execute during C123. Every future stage is raw, append-only evidence.
+Do not execute during C125. Every future stage is raw, append-only evidence.
 """
 import argparse
 import hashlib
@@ -17,6 +17,7 @@ import tempfile
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 ORIGINAL = "0d933749005f0a2d9ed5777627e91732bb568547"
+FIXED_R1026 = "1e636a02b66eaffabc19b42a98ca73d422161f87"
 TARGET = "c9fbdb8d3ce4c238c4e33fb710fefc20ff6654bb"
 TARGET_TREE = "ccd82e0bffa3fa0f5d3a5b04083df1d8e18ce7cc"
 CASES = (
@@ -34,7 +35,8 @@ LOG_CAP = 65536
 C_CAP = 1048576
 CHILD_FSIZE = 2 * 1024 * 1024
 APPROVED_TOOLS = {"/usr/bin/git", "/usr/bin/gcc-13", "/usr/bin/python3"}
-# Exact SDK Clang is added only after C-approved byte/version/path verification.
+# Exact SDK Clang is added after path/version and actual byte observation.
+# Its self-measured SHA256 is NOT an independent C-approved binary pin.
 
 def sha(data):
     return hashlib.sha256(data).hexdigest()
@@ -117,11 +119,9 @@ def curated_clang(journal):
     if os.environ.get("PATH", "").split(os.pathsep)[0] != str(bin_dir):
         raise RuntimeError("SDK activation not first on PATH")
     digest = sha(regular(actual, 512 * 1024 * 1024, bin_dir))
-    approved_digest = os.environ.get("R1023_C_CLANG_BINARY_SHA256", "")
-    if (len(approved_digest) != 64 or
-        any(c not in "0123456789abcdef" for c in approved_digest) or
-        digest != approved_digest):
-        raise RuntimeError("curated clang bytes not independently approved")
+    # Actual SHA256 is retained as raw evidence; no fabricated binary preapproval.
+    if len(digest) != 64:
+        raise RuntimeError("invalid observed SDK clang SHA256")
     trusted_env = {"PATH": str(bin_dir) + ":/usr/bin:/bin", "LANG": "C"}
     version_run = subprocess.run([str(alias), "--version"], cwd=ROOT,
         env=trusted_env, capture_output=True, timeout=10, check=True)
@@ -132,56 +132,73 @@ def curated_clang(journal):
     journal.write({"toolchain": "curated LLVM 23.1.3 SDK",
                    "sdk_root": str(sdk), "toolchain_lock_sha256": sha(lock_bytes),
                    "clang_alias": str(alias), "clang_binary": str(actual),
-                   "clang_sha256": digest, "clang_banner": banner})
+                   "clang_sha256": digest, "clang_banner": banner,
+                   "clang_sha256_provenance": "observed_actual_NOT_independently_preapproved"})
     return str(alias), trusted_env
 
-def gate(approved, journal):
+def gate(journal):
     if os.environ.get("GITHUB_RUN_ATTEMPT") != "1":
         raise RuntimeError("original FIRST rerun forbidden")
     if (os.environ.get("GITHUB_ACTIONS") != "true" or
         os.environ.get("GITHUB_EVENT_NAME") != "push" or
         os.environ.get("GITHUB_REF") != FIRST_REF or
         os.environ.get("GITHUB_REPOSITORY") != "wakairo/NewLang_Compiler"):
-        raise RuntimeError("unapproved event/ref; reviewed FIRST workflow not yet installed")
-    if len(approved) != 40 or any(c not in "0123456789abcdef" for c in approved):
-        raise RuntimeError("invalid external C-approved SHA")
-    if (os.environ.get("R1023_C_REVIEWED_COMMIT") != approved or
-        os.environ.get("GITHUB_SHA") != approved or
-        plain(["/usr/bin/git", "rev-parse", "HEAD"]) != approved or
-        plain(["/usr/bin/git", "status", "--porcelain"]) != ""):
-        raise RuntimeError("checkout/event/reviewed executor SHA mismatch")
+        raise RuntimeError("foreign event/repo/ref; original FIRST is opt-in only")
+    checkout = os.environ.get("GITHUB_SHA", "")
+    if (len(checkout) != 40 or
+        any(c not in "0123456789abcdef" for c in checkout) or
+        plain(["/usr/bin/git", "rev-parse", "HEAD"]) != checkout or
+        plain(["/usr/bin/git", "status", "--porcelain",
+               "--untracked-files=no"]) != ""):
+        raise RuntimeError("event/checkout/working-tree identity mismatch")
+    # C's exact-commit prereview is out-of-band, before the later one push.
+    # GitHub event metadata cannot assert independently approved status.
+    if (len(plain(["/usr/bin/git", "rev-list", "--parents", "-n1",
+                   "HEAD"]).split()) != 2 or
+        plain(["/usr/bin/git", "rev-parse", "HEAD^"]) != FIXED_R1026):
+        raise RuntimeError("FIRST must be one direct child of fixed R1026")
     if plain(["/usr/bin/git", "rev-parse", ORIGINAL + "^"]) != TARGET:
-        raise RuntimeError("immutable R1022 first publication parent mismatch")
+        raise RuntimeError("immutable R1022 first-publication parent mismatch")
     if plain(["/usr/bin/git", "rev-parse", TARGET + "^{tree}"]) != TARGET_TREE:
-        raise RuntimeError("fixed P1015 target tree mismatch")
+        raise RuntimeError("fixed PR1015 target tree mismatch")
     if plain(["/usr/bin/git", "merge-base", TARGET, "HEAD"]) != TARGET:
         raise RuntimeError("foreign compiler ancestry")
-    # Production is never changed by R. Future C release must independently
-    # pin the active workflow and exact approved checkout.
     subprocess.run(["/usr/bin/git", "diff", "--quiet", TARGET, "HEAD", "--",
-                   "src", "include", "cmake", "CMakeLists.txt"],
+                    "src", "include", "cmake", "CMakeLists.txt",
+                    "scripts/bootstrap.py", "scripts/toolchain-lock.json"],
                    cwd=ROOT, check=True, timeout=10)
+    allowed = {WORKFLOW, "evidence/r1022/r_runner.py",
+               "evidence/r1022/manifest.json", "evidence/r1022/REVIEW.md"}
+    changed = set(plain(["/usr/bin/git", "diff", "--name-only",
+                         FIXED_R1026, "HEAD", "--"]).splitlines())
+    if changed != allowed:
+        raise RuntimeError("unexpected changed files since fixed R1026")
     for name, _ in CASES:
         path = "evidence/r1022/sources/" + name + ".nl"
         if plain(["/usr/bin/git", "rev-parse", "HEAD:" + path]) != plain(
            ["/usr/bin/git", "rev-parse", ORIGINAL + ":" + path]):
-            raise RuntimeError("published original blob differs from first freeze")
+            raise RuntimeError("original frozen source Git blob mismatch")
     path = "evidence/r1022/oracle/R1016-FIRST-ORIGINAL-v1.txt"
     if plain(["/usr/bin/git", "rev-parse", "HEAD:" + path]) != plain(
        ["/usr/bin/git", "rev-parse", ORIGINAL + ":" + path]):
-        raise RuntimeError("original oracle git object differs")
-    expected_ref = "wakairo/NewLang_Compiler/" + WORKFLOW + "@" + os.environ["GITHUB_REF"]
+        raise RuntimeError("original frozen oracle Git blob mismatch")
+    expected_ref = "wakairo/NewLang_Compiler/" + WORKFLOW + "@" + FIRST_REF
     if os.environ.get("GITHUB_WORKFLOW_REF") != expected_ref:
-        raise RuntimeError("foreign workflow ref")
-    w = plain(["/usr/bin/git", "rev-parse", "HEAD:" + WORKFLOW])
-    if len(os.environ.get("R1023_C_WORKFLOW_BLOB", "")) != 40 or w != os.environ.get("R1023_C_WORKFLOW_BLOB"):
-        raise RuntimeError("workflow source not independently pinned")
-    for name in ("r_runner.py", "r_probe.c", "r_observer.h"):
-        real = sha(regular(HERE / name, 131072, HERE))
-        if os.environ.get("R1023_C_" + name.upper().replace(".", "_") + "_SHA256") != real:
-            raise RuntimeError("independent code SHA pin absent or mismatched: " + name)
-        journal.write({"code": name, "sha256": real})
-    return w
+        raise RuntimeError("foreign workflow source ref")
+    code_files = (WORKFLOW, "evidence/r1022/r_runner.py",
+                  "evidence/r1022/r_probe.c", "evidence/r1022/r_observer.h",
+                  "evidence/r1022/manifest.json", "evidence/r1022/REVIEW.md")
+    for path in code_files:
+        blob = plain(["/usr/bin/git", "rev-parse", "HEAD:" + path])
+        actual_blob = plain(["/usr/bin/git", "hash-object", path])
+        if blob != actual_blob:
+            raise RuntimeError("working source differs from Git blob: " + path)
+        payload = regular(ROOT / path, 131072)
+        journal.write({"code": path, "git_blob": blob, "sha256": sha(payload)})
+    journal.write({"checkout_sha": checkout, "parent_sha": FIXED_R1026,
+                   "approval": "C_OUT_OF_BAND_PREREVIEW_REQUIRED_NOT_MACHINE_VERIFIED",
+                   "workflow_ref": expected_ref})
+    return plain(["/usr/bin/git", "rev-parse", "HEAD:" + WORKFLOW])
 
 class Journal:
     def __init__(self, folder):
@@ -267,10 +284,10 @@ def observe(m, folder, work, journal, clang, clang_env):
     if not compiler.is_file() or compiler.is_symlink() or compiler.stat().st_nlink != 1:
         raise RuntimeError("actual compiler binary missing")
     real_binary = sha(regular(compiler, 32 * 1024 * 1024))
-    if os.environ.get("R1023_C_COMPILER_BINARY_SHA256") != real_binary:
-        raise RuntimeError("built compiler SHA not externally attested")
+    if len(real_binary) != 64:
+        raise RuntimeError("invalid observed source-built compiler SHA256")
     journal.write({"compiler_binary_sha256": real_binary, "target_source_tree": TARGET_TREE,
-                   "binary_build_provenance": "requires separately audited Actions job"})
+                   "binary_build_provenance": "source-locked GCC13 frontend-only build; actual SHA observed NOT independently preapproved"})
     libs = ["newlang_semantic", "newlang_checked", "newlang_parser",
             "newlang_syntax", "newlang_lexer", "newlang_source", "newlang_diagnostic"]
     build_probe = ["/usr/bin/gcc-13", "-std=c17", "-Wall", "-Wextra",
@@ -353,7 +370,6 @@ def main():
     ap=argparse.ArgumentParser()
     ap.add_argument("--inventory",action="store_true")
     ap.add_argument("--execute",action="store_true")
-    ap.add_argument("--approved-sha",default="")
     a=ap.parse_args()
     if a.inventory==a.execute:ap.error("one mode required")
     if a.inventory:
@@ -373,11 +389,12 @@ def main():
     try:
         journal.write({"phase":"FIRST_OPEN","run_id":run,"attempt":attempt,
                        "event":os.environ.get("GITHUB_EVENT_NAME"),"ref":os.environ.get("GITHUB_REF"),
-                       "event_sha":os.environ.get("GITHUB_SHA"),"approved_sha":a.approved_sha})
+                       "event_sha":os.environ.get("GITHUB_SHA"),
+                       "approval":"external C prereview required before later push; NOT machine-attested"})
         inventory()
         journal.write({"phase":"ORIGINAL_FROZEN_7_OF_7"})
-        workflow=gate(a.approved_sha,journal)
-        journal.write({"workflow_blob":workflow,"checkout_sha":a.approved_sha})
+        workflow=gate(journal)
+        journal.write({"workflow_blob":workflow,"checkout_sha":os.environ.get("GITHUB_SHA")})
         clang, clang_env = curated_clang(journal)
         with tempfile.TemporaryDirectory(prefix="r1023-transient-",dir=parent) as scratch:
             observe(None,folder,Path(scratch),journal,clang,clang_env)

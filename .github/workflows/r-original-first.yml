@@ -1,5 +1,6 @@
-# C123 real source path staged ONLY on nontriggering r-review/**.
-# FIRST blocked until C independently releases exactly one future r-first push.
+# C125 Environment-free source-only registration on nontriggering r-review/**.
+# C must approve the exact staged HEAD/tree/bytes out of band BEFORE a distinct
+# future single r-first push. GitHub event metadata is not independent approval.
 name: R1016 original FIRST (future C-reviewed)
 on:
   push:
@@ -15,16 +16,8 @@ jobs:
     if: ${{ github.repository == 'wakairo/NewLang_Compiler' && github.event_name == 'push' && github.ref == 'refs/heads/r-first/r1016-original-first' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 75
-    # This MUST be C-created with independent reviewers and self-review disabled.
-    environment: r-first-c-reviewed
-    env:
-      R1023_C_REVIEWED_COMMIT: ${{ vars.R1016_FIRST_APPROVED_COMMIT }}
-      R1023_C_WORKFLOW_BLOB: ${{ vars.R1016_FIRST_APPROVED_WORKFLOW_BLOB }}
-      R1023_C_R_RUNNER_PY_SHA256: ${{ vars.R1016_FIRST_RUNNER_SHA256 }}
-      R1023_C_R_PROBE_C_SHA256: ${{ vars.R1016_FIRST_PROBE_SHA256 }}
-      R1023_C_R_OBSERVER_H_SHA256: ${{ vars.R1016_FIRST_OBSERVER_SHA256 }}
-      R1023_C_COMPILER_BINARY_SHA256: ${{ vars.R1016_FIRST_COMPILER_BINARY_SHA256 }}
-      R1023_C_CLANG_BINARY_SHA256: ${{ vars.R1016_FIRST_SDK_CLANG_SHA256 }}
+    # No GitHub Environment or as-yet-unset approval variables/secrets.
+    # Later C approval of this exact commit is a separate external act.
     steps:
       - name: Checkout pushed immutable SHA without write credentials
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -32,7 +25,7 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
           persist-credentials: false
-      - name: Stop on foreign event, merge, checkout, tree or unpinned code
+      - name: Stop on foreign event, checkout, fixed parent or source drift
         shell: bash
         run: |
           set -euo pipefail
@@ -43,15 +36,13 @@ jobs:
           test "$GITHUB_WORKFLOW_REF" = "wakairo/NewLang_Compiler/.github/workflows/r-original-first.yml@refs/heads/r-first/r1016-original-first"
           test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
           test "$(git status --porcelain)" = ""
-          test "${#R1023_C_REVIEWED_COMMIT}" -eq 40
-          test "$GITHUB_SHA" = "$R1023_C_REVIEWED_COMMIT"
+          # A push SHA identifies code but does not independently prove C approval.
           test "$(git rev-list --parents -n1 HEAD | wc -w)" -eq 2
-          git merge-base --is-ancestor e10207ac21219ce190d50135208cc1c5046c02b1 HEAD
+          test "$(git rev-parse HEAD^)" = 1e636a02b66eaffabc19b42a98ca73d422161f87
           test "$(git rev-parse c9fbdb8d3ce4c238c4e33fb710fefc20ff6654bb^{tree})" = ccd82e0bffa3fa0f5d3a5b04083df1d8e18ce7cc
-          test "$(git rev-parse HEAD:.github/workflows/r-original-first.yml)" = "$R1023_C_WORKFLOW_BLOB"
-          for item in R1023_C_R_RUNNER_PY_SHA256 R1023_C_R_PROBE_C_SHA256 R1023_C_R_OBSERVER_H_SHA256 R1023_C_COMPILER_BINARY_SHA256 R1023_C_CLANG_BINARY_SHA256; do
-            test "$(printenv "$item" | wc -c)" -eq 65
-          done
+          test "$(git hash-object .github/workflows/r-original-first.yml)" = "$(git rev-parse HEAD:.github/workflows/r-original-first.yml)"
+          unexpected=$(git diff --name-only 1e636a02b66eaffabc19b42a98ca73d422161f87 HEAD -- . ':(exclude).github/workflows/r-original-first.yml' ':(exclude)evidence/r1022/r_runner.py' ':(exclude)evidence/r1022/manifest.json' ':(exclude)evidence/r1022/REVIEW.md')
+          test -z "$unexpected"
           # Fixed R1022 first publication is an exact PR1015 child.
           test "$(git rev-parse 0d933749005f0a2d9ed5777627e91732bb568547^)" = c9fbdb8d3ce4c238c4e33fb710fefc20ff6654bb
           git diff --quiet c9fbdb8d3ce4c238c4e33fb710fefc20ff6654bb HEAD -- src include cmake CMakeLists.txt scripts/bootstrap.py scripts/toolchain-lock.json
@@ -76,12 +67,14 @@ jobs:
             *) echo "STOP: clang escaped SDK bin"; exit 1 ;;
           esac
           test -x "$clang_real"
-          test "$(sha256sum "$clang_real" | cut -d' ' -f1)" = "$R1023_C_CLANG_BINARY_SHA256"
+          clang_sha=$(sha256sum "$clang_real" | cut -d' ' -f1)
+          test "${#clang_sha}" -eq 64
+          echo "Actual curated SDK clang SHA256: $clang_sha (observed; NOT independently preapproved)"
           "$NEWLANG_SDK_ROOT/bin/clang-23" --version | grep -F 'clang version 23.1.3'
           gcc-13 -dumpfullversion | grep -E '^13\.'
           printf 'NEWLANG_SDK_ROOT=%s\n' "$NEWLANG_SDK_ROOT" >> "$GITHUB_ENV"
           # No untrusted system-clang fallback or /usr/bin/clang-23 assumption.
-      - name: Fixed frontend-only compiler build and independently pinned binary
+      - name: Fixed frontend-only compiler build and observed binary identity
         shell: bash
         run: |
           set -euo pipefail
@@ -89,13 +82,15 @@ jobs:
           grep -Fx NEWLANG_FRONTEND_ONLY:BOOL=ON build-frontend/CMakeCache.txt
           cmake --build build-frontend --parallel 2
           test -f build-frontend/newlangc
-          test "$(sha256sum build-frontend/newlangc | cut -d' ' -f1)" = "$R1023_C_COMPILER_BINARY_SHA256"
+          compiler_sha=$(sha256sum build-frontend/newlangc | cut -d' ' -f1)
+          test "${#compiler_sha}" -eq 64
+          echo "Actual source-built compiler SHA256: $compiler_sha (observed; NOT independently preapproved)"
       - name: Exactly one original six FIRST (raw evidence; not a PASS)
         shell: bash
         run: |
           set -euo pipefail
           . .deps/activate.sh
-          /usr/bin/python3 evidence/r1022/r_runner.py --execute --approved-sha "$R1023_C_REVIEWED_COMMIT"
+          /usr/bin/python3 evidence/r1022/r_runner.py --execute
       - name: Upload original FIRST even on failure; failure is evidence loss
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -107,6 +102,8 @@ jobs:
           retention-days: 14
           compression-level: 0
 # Upload failure, job loss or missing FIRST journal => REMOTE CUSTODY NOT ESTABLISHED.
+# The exact source must first receive an independent C review; that approval
+# cannot be inferred from a branch push or any recorded self-measured hash.
 # No retry masquerading as FIRST. r-preflight.yml triggers only r-fast/**.
 # compiler-ci.yml and compiler-frontend-ci.yml trigger PR or main push only.
 # Instrumented observer is not clean C/native proof; ASan, UBSan, host OOM
