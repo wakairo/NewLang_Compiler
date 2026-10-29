@@ -162,11 +162,7 @@ if group == "new":
                        cli, cc, sanitizer])
     ok(bounded_unit)
     print(bounded_unit.stdout.decode(), end="", flush=True)
-    dual_fields = run([sys.executable, root.parent / "p1030/run.py",
+    dual_fields = run([sys.executable, root.parent / "p1045/p1030_forward.py",
                       cli, cc, sanitizer])
     ok(dual_fields)
     print(dual_fields.stdout.decode(), end="", flush=True)
-    two_originals = run([sys.executable, root.parent / "p1045/run.py",
-                        cli, cc, sanitizer])
-    ok(two_originals)
-    print(two_originals.stdout.decode(), end="", flush=True)
