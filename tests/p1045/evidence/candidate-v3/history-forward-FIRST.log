@@ -1,0 +1,8 @@
+P982 original Git/source/oracle lineage and current versioned hashes PASS 1982
+P1030 HISTORY REJECT coedit-predecessor P1030 fixed original-v7 SHA256
+P1030 HISTORY REJECT drop-old-key freeze coverage lost: tests/p1020/oracle-v1.json
+P1030 HISTORY REJECT old-source P1030 preserved original-v7 data: tests/p1020/sources/two_normal_true.nl
+P1030 HISTORY REJECT old-oracle P1030 preserved original-v7 data: tests/p1020/oracle-v1.json
+P1030 HISTORY REJECT old-first-RED P1030 preserved original-v7 data: tests/p1020/evidence/candidate-v1/gcc-build-FIRST.log
+P1030 history original-v7 external anchor/data/coverage PASS
+P1045 FORWARD original P1030 five rejection oracles retained with coherent history propagation

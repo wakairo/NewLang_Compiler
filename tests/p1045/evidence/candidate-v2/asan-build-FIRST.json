@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/cmake",
+    "--build",
+    "/workspace/p1045-build-asan",
+    "--parallel",
+    "2",
+    "--target",
+    "newlangc"
+  ],
+  "exit": 0,
+  "seconds": 3.0504926170033286,
+  "raw_SHA256": "8381c3a4520ec976c1706a75766814feccadd90faadf3cb64d9a94557f7c69ce"
+}

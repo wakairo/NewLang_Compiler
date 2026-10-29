@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/ctest",
+    "--test-dir",
+    "/workspace/p1045-build-clang",
+    "--parallel",
+    "4",
+    "--output-on-failure",
+    "--verbose"
+  ],
+  "exit": 0,
+  "seconds": 161.62168399700022,
+  "raw_SHA256": "348151011f7e5bf371d0b540ac1006747b6b91cc0689a70241d757710470ed6e"
+}

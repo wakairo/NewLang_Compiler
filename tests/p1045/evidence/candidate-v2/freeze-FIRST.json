@@ -1,0 +1,9 @@
+{
+  "command": [
+    "python3",
+    "tests/p982/freeze_test.py"
+  ],
+  "exit": 0,
+  "seconds": 1.0500511089994689,
+  "raw_SHA256": "f20f3deb62da7250ee304e81f36f5e071da1369c380a0314ca0f1610a3d2b3a4"
+}

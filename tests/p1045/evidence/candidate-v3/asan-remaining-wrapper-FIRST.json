@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/ctest",
+    "--test-dir",
+    "/workspace/p1045-build-asan",
+    "--parallel",
+    "1",
+    "--output-on-failure",
+    "--verbose",
+    "-R",
+    "^p990_new_native\\.integration$"
+  ],
+  "exit": 0,
+  "seconds": 62.70242109000537,
+  "raw_SHA256": "d70ef4f192bb392d013b030d99dac62e8458e07beaeae21321ca20db96d72abf"
+}
