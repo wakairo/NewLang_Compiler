@@ -59,7 +59,8 @@ static void scan(const NLCheckedFragment *f,unsigned depth,Counts *s){
         }
         if(v->kind==NL_CHECKED_MATCH){
             for(size_t k=0;k<16;++k){const NLCheckedFragment *arm=nl_checked_match_arm(f,id,k);
-                if(!arm)break;scan(arm,depth+1,s);}
+                if(!arm)break;
+                scan(arm,depth+1,s);}
         }else if(v->kind==NL_CHECKED_IF){
             for(size_t k=0;k<2;++k){const NLCheckedFragment *arm=nl_checked_if_arm(f,id,k);
                 if(arm)scan(arm,depth+1,s);}
