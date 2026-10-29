@@ -1,0 +1,1 @@
+/workspace/p1045/tests/p1045/sources/prefix_two_originals.nl:96:25-96:28: error(semantic)[P5-DUPLICATE-BINDING]: binding name already exists in current lexical scope

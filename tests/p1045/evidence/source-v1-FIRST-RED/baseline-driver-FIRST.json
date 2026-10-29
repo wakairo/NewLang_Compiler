@@ -1,0 +1,12 @@
+{
+  "command": [
+    "python3",
+    "tests/p1045/baseline.py",
+    "/workspace/p1045-parent-build/newlangc",
+    "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+    "/workspace/p1045-artifacts/baseline-FIRST"
+  ],
+  "exit": 1,
+  "seconds": 1.49542620399734,
+  "log_SHA256": "29f6e7dfdfbac82babca05930ffe1c571d9e263b817e4c46431fbe6d05a5be10"
+}
