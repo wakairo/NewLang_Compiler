@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /workspace/p1020-build-asan
+Test project /workspace/p1020-build-asan
+    Start 101: p517_r516_composition_native.integration
+1/1 Test #101: p517_r516_composition_native.integration ...   Passed   34.84 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =  34.87 sec

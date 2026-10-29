@@ -1,0 +1,236 @@
+tests/p1020/evidence/parent-FIRST/control_return_false-existing.c:6:81: error: code should be clang-formatted [-Wclang-format-violations]
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+                                                                                ^
+tests/p1020/evidence/parent-FIRST/control_return_false-existing.c:8:60: error: code should be clang-formatted [-Wclang-format-violations]
+_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
+                                                           ^
+tests/p1020/evidence/parent-FIRST/control_return_false-existing.c:10:17: error: code should be clang-formatted [-Wclang-format-violations]
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+                ^
+tests/p1020/evidence/parent-FIRST/control_return_false-existing.c:10:29: error: code should be clang-formatted [-Wclang-format-violations]
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+                            ^
+tests/p1020/evidence/parent-FIRST/control_return_false-existing.c:10:41: error: code should be clang-formatted [-Wclang-format-violations]
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+                                        ^
+tests/p1020/evidence/parent-FIRST/control_return_false-existing.c:17:30: error: code should be clang-formatted [-Wclang-format-violations]
+    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
+                             ^
+tests/p1020/evidence/parent-FIRST/control_return_false-existing.c:17:40: error: code should be clang-formatted [-Wclang-format-violations]
+    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
+                                       ^
+tests/p1020/evidence/parent-FIRST/control_return_false-existing.c:17:51: error: code should be clang-formatted [-Wclang-format-violations]
+    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
+                                                  ^
+tests/p1020/evidence/parent-FIRST/control_return_false.c:6:81: error: code should be clang-formatted [-Wclang-format-violations]
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+                                                                                ^
+tests/p1020/evidence/parent-FIRST/control_return_false.c:8:60: error: code should be clang-formatted [-Wclang-format-violations]
+_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
+                                                           ^
+tests/p1020/evidence/parent-FIRST/control_return_false.c:10:17: error: code should be clang-formatted [-Wclang-format-violations]
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+                ^
+tests/p1020/evidence/parent-FIRST/control_return_false.c:10:29: error: code should be clang-formatted [-Wclang-format-violations]
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+                            ^
+tests/p1020/evidence/parent-FIRST/control_return_false.c:10:41: error: code should be clang-formatted [-Wclang-format-violations]
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+                                        ^
+tests/p1020/evidence/parent-FIRST/control_return_false.c:17:30: error: code should be clang-formatted [-Wclang-format-violations]
+    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
+                             ^
+tests/p1020/evidence/parent-FIRST/control_return_false.c:17:40: error: code should be clang-formatted [-Wclang-format-violations]
+    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
+                                       ^
+tests/p1020/evidence/parent-FIRST/control_return_false.c:17:51: error: code should be clang-formatted [-Wclang-format-violations]
+    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
+                                                  ^
+tests/p1020/evidence/parent-FIRST/control_return_true-existing.c:6:81: error: code should be clang-formatted [-Wclang-format-violations]
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+                                                                                ^
+tests/p1020/evidence/parent-FIRST/control_return_true-existing.c:8:60: error: code should be clang-formatted [-Wclang-format-violations]
+_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
+                                                           ^
+tests/p1020/evidence/parent-FIRST/control_return_true-existing.c:10:17: error: code should be clang-formatted [-Wclang-format-violations]
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+                ^
+tests/p1020/evidence/parent-FIRST/control_return_true-existing.c:10:29: error: code should be clang-formatted [-Wclang-format-violations]
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+                            ^
+tests/p1020/evidence/parent-FIRST/control_return_true-existing.c:10:41: error: code should be clang-formatted [-Wclang-format-violations]
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+                                        ^
+tests/p1020/evidence/parent-FIRST/control_return_true-existing.c:17:30: error: code should be clang-formatted [-Wclang-format-violations]
+    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
+                             ^
+tests/p1020/evidence/parent-FIRST/control_return_true-existing.c:17:40: error: code should be clang-formatted [-Wclang-format-violations]
+    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
+                                       ^
+tests/p1020/evidence/parent-FIRST/control_return_true-existing.c:17:51: error: code should be clang-formatted [-Wclang-format-violations]
+    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
+                                                  ^
+tests/p1020/evidence/parent-FIRST/control_return_true.c:6:81: error: code should be clang-formatted [-Wclang-format-violations]
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+                                                                                ^
+tests/p1020/evidence/parent-FIRST/control_return_true.c:8:60: error: code should be clang-formatted [-Wclang-format-violations]
+_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
+                                                           ^
+tests/p1020/evidence/parent-FIRST/control_return_true.c:10:17: error: code should be clang-formatted [-Wclang-format-violations]
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+                ^
+tests/p1020/evidence/parent-FIRST/control_return_true.c:10:29: error: code should be clang-formatted [-Wclang-format-violations]
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+                            ^
+tests/p1020/evidence/parent-FIRST/control_return_true.c:10:41: error: code should be clang-formatted [-Wclang-format-violations]
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+                                        ^
+tests/p1020/evidence/parent-FIRST/control_return_true.c:17:30: error: code should be clang-formatted [-Wclang-format-violations]
+    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
+                             ^
+tests/p1020/evidence/parent-FIRST/control_return_true.c:17:40: error: code should be clang-formatted [-Wclang-format-violations]
+    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
+                                       ^
+tests/p1020/evidence/parent-FIRST/control_return_true.c:17:51: error: code should be clang-formatted [-Wclang-format-violations]
+    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
+                                                  ^
+clang-format failed (exit 1); generating exact suggestions with /workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-format-23
+Checked checkout: b1b76b948455b23c9504d58abe37cbe2e9e0d4cd
+clang-format version: clang-format version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)
+Suggested patch for 4 C/H file(s): /workspace/p1020-artifacts/recovery-c122/format-FIRST.patch
+Review the complete patch, then: git apply --check '/workspace/p1020-artifacts/recovery-c122/format-FIRST.patch' && git apply '/workspace/p1020-artifacts/recovery-c122/format-FIRST.patch'
+Alternative after review: bash scripts/format.sh
+----- BEGIN EXACT clang-format SUGGESTIONS -----
+--- a/tests/p1020/evidence/parent-FIRST/control_return_false-existing.c
++++ b/tests/p1020/evidence/parent-FIRST/control_return_false-existing.c
+@@ -3,18 +3,26 @@
+ 
+ #include <limits.h>
+ _Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+-_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
++_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255,
++               "NewLang C17 requires exact 8-bit uint8_t");
+ #include <stddef.h>
+-_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
++_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615),
++               "NewLang usize target mismatch");
+ 
+-typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
++typedef struct {
++    uint8_t f0;
++    uint8_t f1;
++} nl_type_10;
+ 
+ static void nl_fn_10(void);
+ static void nl_fn_11(uint8_t *nl_local_3, uint8_t nl_local_4);
+ 
+ static void nl_fn_10(void)
+ {
+-    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
++    nl_type_10 nl_local_1 = {
++        .f0 = 37,
++        .f1 = 229,
++    };
+     (void)nl_local_1;
+     {
+         uint8_t *const nl_local_2 = &nl_local_1.f0;
+--- a/tests/p1020/evidence/parent-FIRST/control_return_false.c
++++ b/tests/p1020/evidence/parent-FIRST/control_return_false.c
+@@ -3,18 +3,26 @@
+ 
+ #include <limits.h>
+ _Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+-_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
++_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255,
++               "NewLang C17 requires exact 8-bit uint8_t");
+ #include <stddef.h>
+-_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
++_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615),
++               "NewLang usize target mismatch");
+ 
+-typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
++typedef struct {
++    uint8_t f0;
++    uint8_t f1;
++} nl_type_10;
+ 
+ static void nl_fn_10(void);
+ static void nl_fn_11(uint8_t *nl_local_3, uint8_t nl_local_4);
+ 
+ static void nl_fn_10(void)
+ {
+-    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
++    nl_type_10 nl_local_1 = {
++        .f0 = 37,
++        .f1 = 229,
++    };
+     (void)nl_local_1;
+     {
+         uint8_t *const nl_local_2 = &nl_local_1.f0;
+--- a/tests/p1020/evidence/parent-FIRST/control_return_true-existing.c
++++ b/tests/p1020/evidence/parent-FIRST/control_return_true-existing.c
+@@ -3,18 +3,26 @@
+ 
+ #include <limits.h>
+ _Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+-_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
++_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255,
++               "NewLang C17 requires exact 8-bit uint8_t");
+ #include <stddef.h>
+-_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
++_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615),
++               "NewLang usize target mismatch");
+ 
+-typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
++typedef struct {
++    uint8_t f0;
++    uint8_t f1;
++} nl_type_10;
+ 
+ static void nl_fn_10(void);
+ static void nl_fn_11(uint8_t *nl_local_3, uint8_t nl_local_4);
+ 
+ static void nl_fn_10(void)
+ {
+-    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
++    nl_type_10 nl_local_1 = {
++        .f0 = 37,
++        .f1 = 229,
++    };
+     (void)nl_local_1;
+     {
+         uint8_t *const nl_local_2 = &nl_local_1.f0;
+--- a/tests/p1020/evidence/parent-FIRST/control_return_true.c
++++ b/tests/p1020/evidence/parent-FIRST/control_return_true.c
+@@ -3,18 +3,26 @@
+ 
+ #include <limits.h>
+ _Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+-_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
++_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255,
++               "NewLang C17 requires exact 8-bit uint8_t");
+ #include <stddef.h>
+-_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
++_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615),
++               "NewLang usize target mismatch");
+ 
+-typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
++typedef struct {
++    uint8_t f0;
++    uint8_t f1;
++} nl_type_10;
+ 
+ static void nl_fn_10(void);
+ static void nl_fn_11(uint8_t *nl_local_3, uint8_t nl_local_4);
+ 
+ static void nl_fn_10(void)
+ {
+-    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
++    nl_type_10 nl_local_1 = {
++        .f0 = 37,
++        .f1 = 229,
++    };
+     (void)nl_local_1;
+     {
+         uint8_t *const nl_local_2 = &nl_local_1.f0;
+----- END EXACT clang-format SUGGESTIONS -----

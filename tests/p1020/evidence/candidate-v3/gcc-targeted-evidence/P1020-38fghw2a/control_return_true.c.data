@@ -1,0 +1,52 @@
+/* North Star V0/V1/AVS Checked-C reference output. */
+#include <stdint.h>
+
+#include <limits.h>
+_Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
+#include <stddef.h>
+_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
+
+typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
+
+static void nl_fn_10(void);
+static void nl_fn_11(uint8_t *nl_local_3, uint8_t nl_local_4);
+
+static void nl_fn_10(void)
+{
+    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
+    (void)nl_local_1;
+    {
+        uint8_t *const nl_local_2 = &nl_local_1.f0;
+        (void)nl_local_2;
+        nl_fn_11(nl_local_2, 83);
+    }
+    const uint8_t nl_local_6 = nl_local_1.f0;
+    (void)nl_local_6;
+    const uint8_t nl_local_7 = nl_local_1.f1;
+    (void)nl_local_7;
+    (void)0;
+}
+
+static void nl_fn_11(uint8_t *nl_local_3, uint8_t nl_local_4)
+{
+    (void)nl_local_4;
+    (void)nl_local_3;
+    if ((((size_t)UINTMAX_C(21)) == ((size_t)UINTMAX_C(21)))) {
+        const uint8_t nl_replace_old_2 = *nl_local_3;
+        *nl_local_3 = nl_local_4;
+        const uint8_t nl_local_5 = nl_replace_old_2;
+        (void)nl_local_5;
+        (void)0;
+    } else {
+        (void)0;
+        return;
+    }
+    (void)0;
+}
+
+int main(void)
+{
+    nl_fn_10();
+    return 0;
+}

@@ -1,0 +1,44 @@
+{
+  "HEAD": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd",
+  "tree": "9f1f9242b5ef897ca9f5b9767a3139d6c6765e51",
+  "method": "ONLY two timeout tests, in original ascending inventory order; no code/build/timeout/env changes; originals preserved before retry",
+  "commands": [
+    [
+      "/workspace/p965-build-tools/cmake/data/bin/ctest",
+      "--test-dir",
+      "/workspace/p1020-build-asan",
+      "--parallel",
+      "3",
+      "--output-on-failure",
+      "-R",
+      "^p517_r516_composition_native\\.integration$"
+    ],
+    [
+      "/workspace/p965-build-tools/cmake/data/bin/ctest",
+      "--test-dir",
+      "/workspace/p1020-build-asan",
+      "--parallel",
+      "3",
+      "--output-on-failure",
+      "-R",
+      "^p990_new_native\\.integration$"
+    ]
+  ],
+  "binaries_and_flags_SHA256": {
+    "/workspace/p1020-build-asan/newlangc": "7c4aea7c1d6bbbdd40ef87c8874de104ae0011800874351c38a51b445bff50cd",
+    "/workspace/p1020-build-asan/libnewlang_checked.a": "f706a66ed84716920bbb06ed2e6696fa8ce228245f1eecfd146d2131c11c2b7a",
+    "/workspace/p1020-build-asan/libnewlang_checked_c_node.a": "e6cba90d02b3bae359b730153015bd3a2ca655973ec39dafc76c3baa91397bab",
+    "/workspace/p1020-build-asan/libnewlang_diagnostic.a": "b89a0fae533d43f7c43067ab3dfbb1af16b42f6dea1fe58be1442cfbcbe84541",
+    "/workspace/p1020-build-asan/libnewlang_lexer.a": "5c5fe66e991574e304be83c1c4f6ec0de662b0a25b95c7e77f0b9765da689a4d",
+    "/workspace/p1020-build-asan/libnewlang_parser.a": "e14f301aaf1059df7288d1efc2a069b6fa3aa9cd26cd1f065a94e55cc2a45a58",
+    "/workspace/p1020-build-asan/libnewlang_parser_p534.a": "fcbf2fcadc237030182cb53ca17e35fb234de2918277d2d8bdc471406e8618c5",
+    "/workspace/p1020-build-asan/libnewlang_semantic.a": "cc463fa0fbe189bd82658a99b95c2e70e2b21133c81c24a065738d83661486c6",
+    "/workspace/p1020-build-asan/libnewlang_source.a": "a2f9de26ca80184db235d88ad3cb03c6a9c09cfd5c7d72da63d1fd7288835d54",
+    "/workspace/p1020-build-asan/libnewlang_syntax.a": "e4d23f6962c817d40a620564112d621f2a981333bf18f02aa4a6be4807157632",
+    "/workspace/p1020-build-asan/p517_public_probe": "a70d25b723048397031e32a86180ce1ef3d6285c03da8ab76e13735f0bae1c4c",
+    "/workspace/p1020-build-asan/p517_gate_test": "e3039e5f91bbccf12f3f888fdb654171bc784f7fbbf7d3c867db5feb1fb9d75b",
+    "/workspace/p1020-build-asan/p514_gate_test": "ddaaf1cd36cbfca22bcdc382a7a3ae417c81700a39d6779af0d3d9997bb10a49",
+    "/workspace/p1020-build-asan/CMakeFiles/newlangc.dir/flags.make": "ca9c28b3dd533b44bccb5bdd3af93629475e67804b008b2543b28d6b163a4203",
+    "/workspace/p1020-build-asan/CMakeFiles/newlangc.dir/link.txt": "706d118e74136b825c53e84a39ba2b68ebac0bbf53eee38ef11130c09f5b900c"
+  }
+}

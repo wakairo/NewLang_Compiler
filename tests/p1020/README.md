@@ -59,3 +59,29 @@ VALUE-ALIGNMENT-RISK: current replay and history growth add maintainer audit
 cost. The author plus ordinary safe caller's C-relative UB prevention audit
 closure reduction, performance and cost are UNMEASURED. Product GO remains
 PAUSED / H1 HOLD. DRAFT HOLD; no independent F/R run or READY/merge permission.
+
+## C122 recovery and published evidence
+
+The original v3 commit is b1b76b948455b23c9504d58abe37cbe2e9e0d4cd,
+tree 9f1f9242b5ef897ca9f5b9767a3139d6c6765e51. Its exact source, oracle,
+freezes and first REDs were recovered from the same P environment, without
+reconstructing code from SHA text. Full UBSan had genuinely completed 577/577;
+that result was accepted without rerunning it. The original full ASan/LSan run
+completed with 575 passes and two 90-second timeouts, which remain a RED run.
+Only those two incomplete tests (#101 and #358) were then run in original order
+on unchanged v3/build/toolchain/settings, each within the original 90-second
+timeout: 34.84 and 34.40 seconds. Their successful completion plus the original
+575 gives coverage of all 577 names; this is not a second green whole run.
+Already green GCC/Clang/targeted/OOM tests were not repeated for recovery.
+
+Raw runs, completion status, per-test coverage and missing-only logs are under
+`evidence/candidate-v3` and `evidence/recovery-c122`. The first pinned-format
+check caught archived generated C being classified as authored C. It is kept
+as a first RED, not suppressed. Issued C bytes are not reformatted: raw C data
+now has `.c.data` names, with exact old path/SHA/commit mappings in
+`evidence/raw-C-archive-map-v1.json`. The originals remain in the frozen v3 Git
+tree and original local raw directory. No authored C file, source/oracle,
+original v1-v6 manifest or formatting checker is changed by this packaging.
+Prospective v7 still inherits all original v6 keys and anchors. Historical
+harness freezes are interpreted in their recorded candidate trees, rather
+than being silently rewritten to match the current tree.

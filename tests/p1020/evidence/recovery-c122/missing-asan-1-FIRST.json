@@ -1,0 +1,16 @@
+{
+  "test": "p517_r516_composition_native.integration",
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/ctest",
+    "--test-dir",
+    "/workspace/p1020-build-asan",
+    "--parallel",
+    "3",
+    "--output-on-failure",
+    "-R",
+    "^p517_r516_composition_native\\.integration$"
+  ],
+  "exit": 0,
+  "seconds": 34.90723808000257,
+  "log_SHA256": "05dad7b3068e1b860126db7acf1c6955c8aab7133ff459ebd0260b2adb8d072f"
+}
