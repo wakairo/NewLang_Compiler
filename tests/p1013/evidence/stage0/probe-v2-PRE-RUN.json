@@ -1,0 +1,8 @@
+{
+  "source_execution": "NOT RUN",
+  "compiler": "gcc (Debian 14.2.0-19) 14.2.0",
+  "probe_SHA256": "816d83bc195e1d4816af2f0d2641d516ca4100f3723cf927ccc1d551261812c9",
+  "original_node_source_SHA256": "b2666be2ead2bd159f5cd473912507ced561eb3085d02092c34efa5d29a38064",
+  "reject_pc": "0x0000000000402431",
+  "location": "reject\n/workspace/p1013/src/checked_c_node.c:126\n"
+}

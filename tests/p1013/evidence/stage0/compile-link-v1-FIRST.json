@@ -1,0 +1,55 @@
+[
+  {
+    "command": [
+      "/usr/bin/gcc",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-g",
+      "-O0",
+      "-fno-pie",
+      "-I/workspace/p1013/include",
+      "-finstrument-functions",
+      "-c",
+      "/workspace/p1013/src/checked_c_node.c",
+      "-o",
+      "/workspace/p1013-artifacts/stage0-build-v1/node.trace.o"
+    ],
+    "exit": 0,
+    "log": "compile-0-FIRST.log",
+    "SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "/usr/bin/gcc",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-g",
+      "-O0",
+      "-fno-pie",
+      "-I/workspace/p1013/include",
+      "-no-pie",
+      "/workspace/p1013/tests/p1013/stage0/probe.c",
+      "/workspace/p1013-artifacts/stage0-build-v1/node.trace.o",
+      "-Wl,--start-group",
+      "/workspace/p1011-build-gcc/libnewlang_semantic.a",
+      "/workspace/p1011-build-gcc/libnewlang_parser.a",
+      "/workspace/p1011-build-gcc/libnewlang_lexer.a",
+      "/workspace/p1011-build-gcc/libnewlang_checked.a",
+      "/workspace/p1011-build-gcc/libnewlang_syntax.a",
+      "/workspace/p1011-build-gcc/libnewlang_source.a",
+      "/workspace/p1011-build-gcc/libnewlang_diagnostic.a",
+      "-Wl,--end-group",
+      "-o",
+      "/workspace/p1013-artifacts/stage0-build-v1/probe"
+    ],
+    "exit": 1,
+    "log": "compile-1-FIRST.log",
+    "SHA256": "aa57485536a7493ae2794a783f05b93e63dcb1ceb7fe6bc810c9ffcb44ec9053"
+  }
+]

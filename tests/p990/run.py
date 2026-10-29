@@ -150,3 +150,11 @@ with tempfile.TemporaryDirectory(prefix="p990-") as temp:
         ok(run([cli, "--emit-c17-to", target, source]))
         assert target.read_bytes() == result.stdout
         print("P990 REACHED OUTPUT ERROR/EXACT RETRY", name, flush=True)
+
+# C112's new P-owned source/oracle suite uses this existing test registration.
+# The original P990 inputs, checks and expected observations above are retained.
+if group == "new":
+    additional = run([sys.executable, root.parent / "p1013/production/run.py",
+                      cli, cc, sanitizer])
+    ok(additional)
+    print(additional.stdout.decode(), end="", flush=True)

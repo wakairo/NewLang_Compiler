@@ -40,6 +40,10 @@ BASELINES = {
     4: ("tests/p990/current-freeze-v4.json",
         "2effb5d5da27f337a68147887428f0a06bdef5184dedbb8b8ceaec6d684510af",
         "e6f0946976d550973cf69de7d539b161b08b316d"),
+    # C112 prospective v6: F83-reviewed fixed P1012 32035c9, tree 815f31d6.
+    5: ("tests/p990/current-freeze-v5.json",
+        "c5793be5673438ccc6e6eb3145fd13de63e19ad13b4547a5a862e0483d6b010d",
+        "f2855aacc4d4fe62a181ea9be28c08be6247b721"),
 }
 # C111/F82: independently checked against original P984 c981ff7, not current JSON.
 P982_FIRST_RED = "tests/p982/evidence/first-reds.json"

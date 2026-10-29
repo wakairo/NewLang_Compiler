@@ -362,10 +362,10 @@ for row in p1011["reviewed_generations"]:
     assert hashlib.sha1(b"blob " + str(len(data)).encode() + b"\0" + data).hexdigest() == row["oid"]
 for name, expected in p1011["cohort"].items():
     assert sha((root / name).read_bytes()) == expected
-assert current["generation"] == 5
+assert current["generation"] >= 5
 print("P1011 CONTROL honest-v5-original-history-and-evidence PASS")
 
-p1011_next = "tests/p990/p1011-future-v6.json"
+p1011_next = f"tests/p990/p1011-future-v{current['generation'] + 1}.json"
 with scratch() as work:
     changes = (header, "CMakeLists.txt", "src/checked_c_node.c")
     for name in changes:
@@ -466,3 +466,10 @@ p1011_rejected("first-red-nonregular", first_red_nonregular,
                p1011["candidate_negatives"]["first_red_nonregular"])
 assert len(p1011_results) == 27
 print("P1011 C111: 2 controls and 27 deliberate rejections PASS; old expectations retained")
+
+# The independently reviewed original v5 becomes history only in C112's v6.
+# Do not let a successor coherently replace that original historical manifest.
+with scratch() as work:
+    selected = coherent(work, first=5)
+    rejected(work, selected, "historical freeze SHA256: tests/p990/current-freeze-v5.json")
+print("P1013 C112 original-v5 external-anchor counterexample REJECTED")

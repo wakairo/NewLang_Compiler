@@ -49,7 +49,8 @@ static bool copy_call_proof(Emit *e, const NLCheckedFragment *f,
         event.kind != NL_COPY_BODY_CHANGE ||
         !copy_shape(e, nl_checked_context(f), p->field.nominal) ||
         (e->copy_type && e->copy_type != p->field.nominal) ||
-        (e->copy_function && e->copy_function != v.function))
+        (e->copy_second_function && e->copy_function != v.function &&
+         e->copy_second_function != v.function))
         return reject(e);
     const NLCheckedNodeView *root = nl_checked_node_view(v.body, v.root);
     /* These are two spellings of the same already-validated Change. The
@@ -93,7 +94,10 @@ static bool copy_call_proof(Emit *e, const NLCheckedFragment *f,
         ret->returned.value != v.result.value)
         return reject(e);
     e->copy_type = p->field.nominal;
-    e->copy_function = v.function;
+    if (!e->copy_function)
+        e->copy_function = v.function;
+    else if (e->copy_function != v.function)
+        e->copy_second_function = v.function;
     return true;
 }
 static bool copy_prepare_at(Emit *e, const NLCheckedFragment *body,
@@ -130,9 +134,54 @@ static bool copy_prepare_at(Emit *e, const NLCheckedFragment *body,
     }
     return true;
 }
+/* A second C symbol is selected only for two genuine calls on the same
+ * original field in main's straight-line prefix before its first H trial.
+ * The one-function profiles retain their existing admission and C bytes. */
+static bool copy_two_helpers_before_h(Emit *e, const NLCheckedFragment *body)
+{
+    if (!e->copy_second_function)
+        return true;
+    if (e->copy_expected_calls != 2 || e->copy_issuer != body)
+        return reject(e);
+    size_t first_trial = SIZE_MAX, last_call = 0, calls = 0;
+    size_t function = 0;
+    NLCheckedNodeId loan = 0;
+    NLCheckedField field = {0};
+    for (size_t id = 1; id <= nl_checked_node_count(body); ++id) {
+        const NLCheckedNodeView *node = nl_checked_node_view(body, id);
+        if (!node)
+            return reject(e);
+        if (node->kind == NL_CHECKED_TRY_ALLOCATE_ONE &&
+            node->span.start_byte < first_trial)
+            first_trial = node->span.start_byte;
+        NLCopyBodyParameters p;
+        if (!nl_checked_copy_body_parameters(body, id, &p))
+            continue;
+        if (++calls > 2 || node->kind != NL_CHECKED_REGISTERED_CALL)
+            return reject(e);
+        if (calls == 1) {
+            field = p.field;
+            loan = p.loan;
+            function = node->function;
+        } else if (p.field.nominal != field.nominal ||
+                   p.field.parent != field.parent ||
+                   p.field.child != field.child ||
+                   p.field.index != field.index ||
+                   p.field.parent_incarnation != field.parent_incarnation ||
+                   p.field.child_incarnation != field.child_incarnation ||
+                   p.loan == loan || node->function == function) {
+            return reject(e);
+        }
+        if (node->span.end_byte > last_call)
+            last_call = node->span.end_byte;
+    }
+    return (calls == 2 && first_trial != SIZE_MAX &&
+            last_call <= first_trial) ||
+           reject(e);
+}
 static bool copy_prepare(Emit *e, const NLCheckedFragment *body)
 {
-    return copy_prepare_at(e, body, 0);
+    return copy_prepare_at(e, body, 0) && copy_two_helpers_before_h(e, body);
 }
 /* A nested Copy original is allowed only in the exact publicly validated
  * caller fragment after its one producer has returned the original H owner.
@@ -682,7 +731,7 @@ static bool copy_loan(Emit *e, Env *env, const NLCheckedNodeView *v, Value *out)
         if (!put(e,
                  "uint8_t nl_v_%zu = "
                  "nl_copy_state_%zu(&nl_b_%zu_%zu.f%zu,nl_v_%zu);\n",
-                 out->temp, e->copy_function, l->frame, l->symbol, index,
+                 out->temp, tail->function, l->frame, l->symbol, index,
                  incoming.temp))
             return false;
         ++e->copy_calls;
