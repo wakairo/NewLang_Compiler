@@ -44,8 +44,8 @@ static bool inspect(const NLCheckedFragment *f, size_t depth, Observation *o)
                 nl_checked_node_view(f, node->initializer);
             if (trial && trial->kind == NL_CHECKED_TRY_ALLOCATE_ONE)
                 for (size_t arm = 0; arm < 2; ++arm)
-                    CHECK(inspect(nl_checked_match_arm(f, id, arm),
-                                  depth + 1, o));
+                    CHECK(inspect(nl_checked_match_arm(f, id, arm), depth + 1,
+                                  o));
         }
         NLCopyBodyParameters p;
         if (!nl_checked_copy_body_parameters(f, id, &p))
@@ -57,8 +57,10 @@ static bool inspect(const NLCheckedFragment *f, size_t depth, Observation *o)
               body.event_count == 1 &&
               nl_checked_copy_body_event(f, id, 0, &event));
         const NLCheckStatus bs = nl_checked_copy_body_validate(f, id, &body),
-                            ps = nl_checked_copy_body_parameters_validate(f, id, &p),
-                            es = nl_checked_copy_body_event_validate(f, id, 0, &event);
+                            ps = nl_checked_copy_body_parameters_validate(f, id,
+                                                                          &p),
+                            es = nl_checked_copy_body_event_validate(f, id, 0,
+                                                                     &event);
         printf("P1045 CURRENT ordinal=%zu depth=%zu function=%zu call=%zu "
                "body=%d parameters=%d event=%d GET=YES\n",
                o->count, depth, body.function, id, (int)bs, (int)ps, (int)es);
@@ -73,10 +75,10 @@ static bool inspect(const NLCheckedFragment *f, size_t depth, Observation *o)
               root.fixed_fields[p.field.index] == p.field.child &&
               nl_semantic_place_view(p.entry, p.field.child, &before) &&
               nl_semantic_place_view(p.handoff, p.field.child, &after) &&
-              nl_semantic_place_view(p.entry,
-                  root.fixed_fields[1 - p.field.index], &sibling0) &&
-              nl_semantic_place_view(p.handoff,
-                  root.fixed_fields[1 - p.field.index], &sibling1) &&
+              nl_semantic_place_view(
+                  p.entry, root.fixed_fields[1 - p.field.index], &sibling0) &&
+              nl_semantic_place_view(
+                  p.handoff, root.fixed_fields[1 - p.field.index], &sibling1) &&
               scalar(p.entry, before.current_value, &old) &&
               scalar(p.handoff, after.current_value, &next) &&
               scalar(p.handoff, body.result.value, &returned) &&
@@ -108,8 +110,8 @@ static bool inspect(const NLCheckedFragment *f, size_t depth, Observation *o)
                "loan=%zu index=%zu old=%zu next=%zu sibling=%zu "
                "separate_originals=YES sibling_current=UNCHANGED\n",
                o->count++, p.field.parent, p.field.child,
-               p.field.parent_incarnation, p.loan, p.field.index,
-               old, next, sibling);
+               p.field.parent_incarnation, p.loan, p.field.index, old, next,
+               sibling);
     }
     return true;
 }
@@ -126,8 +128,8 @@ static bool run(const char *path)
     char *text = NULL;
     size_t length = 777;
     const NLNodeCStatus status = nl_checked_c_node(node.entry, &text, &length);
-    printf("P1045 C17 status=%d published=%s length=%zu\n",
-           (int)status, text ? "YES" : "NO", length);
+    printf("P1045 C17 status=%d published=%s length=%zu\n", (int)status,
+           text ? "YES" : "NO", length);
     CHECK((status == NL_NODE_C_OK && text && length) ||
           (status == NL_NODE_C_UNSUPPORTED && !text && length == 777));
     free(text);

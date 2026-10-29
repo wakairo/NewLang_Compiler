@@ -170,6 +170,7 @@ static bool copy_two_helpers(Emit *e, const NLCheckedFragment *body)
             if (p.field.nominal != field.nominal || p.loan == loan ||
                 node->function == function)
                 return reject(e);
+            e->copy_expected_roots = p.field.parent == field.parent ? 1 : 2;
             if (p.field.parent != field.parent) {
                 NLSemanticPlaceView roots[2], children[2];
                 const NLCheckedField *fields[2] = {&field, &p.field};
@@ -403,11 +404,14 @@ static bool copy_pre_constructor(Emit *e, const Env *env,
 }
 static bool copy_pre_world(Emit *e, const Env *env)
 {
+    const bool two_calls =
+        e->copy_expected_calls == 2 && e->copy_second_function;
     if (env->artifact != e->copy_issuer || !e->copy_anchor || !e->two_heap ||
         !e->live_tail || e->custody || e->allocations != 2 ||
         e->producer_calls || e->owner_calls || e->link_updates || e->reloans ||
-        e->copy_expected_calls != 1 || e->copy_calls > 1 ||
-        e->lifecycle[0].stage != 4 || e->lifecycle[1].stage != 4)
+        (e->copy_expected_calls != 1 && !two_calls) ||
+        e->copy_calls > e->copy_expected_calls || e->lifecycle[0].stage != 4 ||
+        e->lifecycle[1].stage != 4)
         return false;
     if (e->pre_copy_issuer)
         return e->pre_copy_issuer == env->artifact;
@@ -445,27 +449,32 @@ static bool copy_pre_world(Emit *e, const Env *env)
     }
     if (places[0] == places[1])
         return false;
-    const NLCheckedNodeView *choice = get(env, after),
-                            *conditional =
-                                choice ? get(env, choice->initializer) : NULL;
-    if (!choice || choice->kind != NL_CHECKED_BINDING || !conditional ||
-        conditional->kind != NL_CHECKED_IF || conditional->normal_arms != 2)
-        return false;
-    for (size_t i = 0; i < 2; ++i) {
-        const NLCheckedFragment *a =
-            nl_checked_if_arm(env->artifact, choice->initializer, i);
-        const NLCheckedNodeView *r =
-                                    nl_checked_node_view(a, nl_checked_root(a)),
-                                *b = r ? nl_checked_node_view(a, r->initializer)
-                                       : NULL,
-                                *v =
-                                    b ? nl_checked_node_view(a, b->tail) : NULL;
-        if (!a || nl_checked_node_count(a) != 3 || !r || r->terminates || !b ||
-            b->item_count || !v || v->kind != NL_CHECKED_U8_LITERAL)
+    const NLCheckedNodeView *binding = get(env, after);
+    if (!two_calls) {
+        const NLCheckedNodeView *choice = binding,
+                                *conditional =
+                                    choice ? get(env, choice->initializer)
+                                           : NULL;
+        if (!choice || choice->kind != NL_CHECKED_BINDING || !conditional ||
+            conditional->kind != NL_CHECKED_IF || conditional->normal_arms != 2)
             return false;
+        for (size_t i = 0; i < 2; ++i) {
+            const NLCheckedFragment *a =
+                nl_checked_if_arm(env->artifact, choice->initializer, i);
+            const NLCheckedNodeView *r = nl_checked_node_view(
+                                        a, nl_checked_root(a)),
+                                    *b = r ? nl_checked_node_view(
+                                                 a, r->initializer)
+                                           : NULL,
+                                    *v = b ? nl_checked_node_view(a, b->tail)
+                                           : NULL;
+            if (!a || nl_checked_node_count(a) != 3 || !r || r->terminates ||
+                !b || b->item_count || !v || v->kind != NL_CHECKED_U8_LITERAL)
+                return false;
+        }
+        binding = get(env, choice->next_item);
     }
-    const NLCheckedNodeView *binding = get(env, choice->next_item),
-                            *loan =
+    const NLCheckedNodeView *loan =
                                 binding ? get(env, binding->initializer) : NULL,
                             *body = loan ? get(env, loan->initializer) : NULL,
                             *call = body ? get(env, body->tail) : NULL;
@@ -480,6 +489,31 @@ static bool copy_pre_world(Emit *e, const Env *env)
     for (size_t i = 0; i < p.entry->scope_count; ++i)
         if (p.entry->scopes[i].active && i + 1 != loan->loan.scope)
             return false;
+    if (two_calls) {
+        /* Two adjacent ordinary calls follow the two authenticated literal
+         * originals, before any link/owner effect. Each actual call still
+         * supplies its own current proof and later evolves its own Local. */
+        const NLCheckedNodeView *second = get(env, binding->next_item),
+                                *second_loan =
+                                    second ? get(env, second->initializer)
+                                           : NULL,
+                                *second_body =
+                                    second_loan
+                                        ? get(env, second_loan->initializer)
+                                        : NULL,
+                                *second_call = second_body
+                                                   ? get(env, second_body->tail)
+                                                   : NULL;
+        NLCopyBodyParameters q;
+        if (!second || second->kind != NL_CHECKED_BINDING || !second_loan ||
+            second_loan->kind != NL_CHECKED_LOAN_HEADER || !second_body ||
+            second_body->item_count || !second_call ||
+            second_call->kind != NL_CHECKED_REGISTERED_CALL ||
+            !copy_call_proof(e, env->artifact, second_body->tail, &q) ||
+            q.loan != second->initializer || q.field.parent != places[1] ||
+            q.field.parent == p.field.parent)
+            return false;
+    }
     memcpy(e->pre_copy_constructors, constructors, sizeof(constructors));
     memcpy(e->pre_copy_places, places, sizeof(places));
     e->pre_copy_issuer = env->artifact;

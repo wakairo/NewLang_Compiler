@@ -1,0 +1,44 @@
+[
+  {
+    "candidate": "970ba21ac109b950efcd1c9a2e0687b4bf722c7e",
+    "source": "declaration_order",
+    "command": [
+      "/workspace/p1045-artifacts/admission-v1/preflight-FIRST/instrumented",
+      "tests/p1045/sources-v2/declaration_order.nl",
+      "000000000040254f"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "39f3ef51a613bca8e546502605957011f939d149c8a8681f652dc8e1efecc487",
+    "first_helper_reject": null,
+    "native": "NOT TESTED"
+  },
+  {
+    "candidate": "970ba21ac109b950efcd1c9a2e0687b4bf722c7e",
+    "source": "after_producer",
+    "command": [
+      "/workspace/p1045-artifacts/admission-v1/preflight-FIRST/instrumented",
+      "tests/p1045/sources-v2/after_producer.nl",
+      "000000000040254f"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "5747321acac90ad102de325fc11459709d0920c91568edba918c9fd103a43968",
+    "first_helper_reject": null,
+    "native": "NOT TESTED"
+  },
+  {
+    "candidate": "970ba21ac109b950efcd1c9a2e0687b4bf722c7e",
+    "source": "before_link",
+    "command": [
+      "/workspace/p1045-artifacts/admission-v1/preflight-FIRST/instrumented",
+      "tests/p1045/sources-v2/before_link.nl",
+      "000000000040254f"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "b726f7081ebd8b3862f77f1d50c6f6941aa2b770a55d40717aa6b79ac5ed16fa",
+    "first_helper_reject": [
+      "copy_constructor",
+      "/workspace/p1045/src/checked_c_copy_internal.h:688"
+    ],
+    "native": "NOT TESTED"
+  }
+]

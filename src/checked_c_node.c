@@ -85,7 +85,7 @@ typedef struct {
     NLTypeId bundle;
     NLTypeId copy_type;
     size_t copy_function, copy_second_function;
-    size_t copy_calls, copy_expected_calls, copy_roots;
+    size_t copy_calls, copy_expected_calls, copy_roots, copy_expected_roots;
     const NLCheckedFragment *origin_root;
     const NLCheckedFragment *copy_issuer;
     const NLSemanticContext *copy_anchor;
@@ -3336,7 +3336,7 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         e.roots != (e.three_lexical_links ? 3u : 2u) || result.type != e.unit ||
         (e.copy_type && (!e.copy_roots || e.copy_roots > 2 ||
                          e.copy_calls != e.copy_expected_calls)) ||
-        (e.copy_second_function && e.copy_roots != 1) ||
+        (e.copy_second_function && e.copy_roots != e.copy_expected_roots) ||
         (e.post_copy_issuer && e.copy_roots != 2) ||
         (e.no_pre_read && e.producer_calls != 1) ||
         (e.custody && (!e.custody_authorized || e.recipient_calls != 1)) ||

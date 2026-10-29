@@ -1,0 +1,9 @@
+{
+  "candidate": "970ba21ac109b950efcd1c9a2e0687b4bf722c7e",
+  "first_preflight_exit": 1,
+  "raw_SHA256": "6eec1632b8ab750f9b80bb0396f4fd99edd34e50b54c650dd5678173d716a94d",
+  "observed": "prefix/declaration/after-producer all genuine public current0 but C17 unsupported with no reject() helper callback; before-link callback mapped copy_constructor:688",
+  "source_analysis": "remaining direct finalization predicate checked_c_node.c copy_second_function && copy_roots !=1 disallows admitted two lexical originals; first predicate is not claimed debugger-observed",
+  "diagnostic_limit": "collector expected reject() callback even for direct finalization path; absence preserved, no unsafe native was executed",
+  "repair": "derive expected roots1/2 from actual admitted two-call parents and check exact emitted root count; before-link uses original H evidence plus exact existing literal-constructor source prefix and own two current calls"
+}
