@@ -95,3 +95,22 @@ The other first full failure was the new v7 anchor masking a legacy v1-v6
 diagnostic in scratch history tests. Existing trusted verification now runs
 first; the original verifier and old tests are unchanged. New v7/data/coverage
 counterexamples still run afterward. Production bytes are unchanged from v1.
+
+The repaired GCC13 wrappers both passed; the original575 unaffected passes and
+these two repaired checks cover577 registered names, with the forward epoch
+and original RED distinguished. Clang completed a genuine577/577 full run.
+New-source and transferred-source gates passed strict GCC13/Clang O0/O2 and
+ASan+LSan/UBSan, including18 physical guest cases/group. Emitter OOM reached
+403 positions/source:806 for the two independently authored P originals plus
+403 for the transferred old P regression. Both categories remain explicit.
+The old29 accepted C outputs are byte-identical to the fixed parent. Original
+owner494/OOM502/P9821788/P9903388/P1013 1209/P1020 1654 observations are retained
+from the successful full and repaired suites. These finite P results neither
+exercise nor claim that any independent R original has become green.
+
+Full gate logs, first REDs and finite point summaries are plaintext. Newly
+collected per-command stdout/stderr/C snapshots are additionally stored in
+deterministic lossless ZIPs with per-member SHA/size indexes, reducing file-copy
+overhead in history counterexample tests. Every member was byte-verified; the
+original external artifact directories and all predecessor evidence remain
+untouched. This is archive packaging, not execution or checker suppression.

@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/cmake",
+    "--build",
+    "/workspace/p1030-build-asan",
+    "--target",
+    "newlangc",
+    "--parallel",
+    "4"
+  ],
+  "exit": 0,
+  "seconds": 6.599954397002875
+}

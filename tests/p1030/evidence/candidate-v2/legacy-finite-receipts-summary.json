@@ -1,0 +1,11 @@
+{
+  "source": "successful candidate-v2 full Clang577 detailed log",
+  "P965_owner_trials": 494,
+  "P965_OOM": 502,
+  "P982_OOM": 1788,
+  "P990_original_OOM": 3388,
+  "P1013_OOM": 1209,
+  "P1020_new_OOM": 1654,
+  "P1030_independent_original_OOM": 806,
+  "P1030_transferred_old_positive_OOM": 403
+}
