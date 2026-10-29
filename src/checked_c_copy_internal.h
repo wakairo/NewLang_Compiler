@@ -134,31 +134,31 @@ static bool copy_prepare_at(Emit *e, const NLCheckedFragment *body,
     }
     return true;
 }
-/* Two genuine calls use the same original two-field carrier in main's
- * straight-line prefix before its first H trial. Different fields must be
- * the two distinct current children of that same original, not equal IDs
- * borrowed from another world. Per-call public current checks above and
- * the serializer's evolving Local ledger still authenticate each Change.
- * The one-function and same-field profiles retain their original C bytes. */
-static bool copy_two_helpers_before_h(Emit *e, const NLCheckedFragment *body)
+/* Both calls belong to one source-issued caller already visited by prepare.
+ * A nested caller still has to pass the serializer's H carrier-world checks.
+ * Distinct lexical originals never share child authority: authenticate each
+ * through that caller's actual entry and the evolving Local ledger. Main's
+ * prefix and the existing same-original cases retain their old conditions. */
+static bool copy_two_helpers(Emit *e, const NLCheckedFragment *body)
 {
     if (!e->copy_second_function)
         return true;
-    if (e->copy_expected_calls != 2 || e->copy_issuer != body)
+    if (e->copy_expected_calls != 2 || !e->copy_issuer)
         return reject(e);
+    const NLCheckedFragment *caller = e->copy_issuer;
     size_t first_trial = SIZE_MAX, last_call = 0, calls = 0;
     size_t function = 0;
     NLCheckedNodeId loan = 0;
     NLCheckedField field = {0};
-    for (size_t id = 1; id <= nl_checked_node_count(body); ++id) {
-        const NLCheckedNodeView *node = nl_checked_node_view(body, id);
+    for (size_t id = 1; id <= nl_checked_node_count(caller); ++id) {
+        const NLCheckedNodeView *node = nl_checked_node_view(caller, id);
         if (!node)
             return reject(e);
         if (node->kind == NL_CHECKED_TRY_ALLOCATE_ONE &&
             node->span.start_byte < first_trial)
             first_trial = node->span.start_byte;
         NLCopyBodyParameters p;
-        if (!nl_checked_copy_body_parameters(body, id, &p))
+        if (!nl_checked_copy_body_parameters(caller, id, &p))
             continue;
         if (++calls > 2 || node->kind != NL_CHECKED_REGISTERED_CALL)
             return reject(e);
@@ -167,12 +167,38 @@ static bool copy_two_helpers_before_h(Emit *e, const NLCheckedFragment *body)
             loan = p.loan;
             function = node->function;
         } else {
-            if (p.field.nominal != field.nominal ||
-                p.field.parent != field.parent ||
-                p.field.parent_incarnation != field.parent_incarnation ||
-                p.loan == loan || node->function == function)
+            if (p.field.nominal != field.nominal || p.loan == loan ||
+                node->function == function)
                 return reject(e);
-            if (p.field.index == field.index) {
+            if (p.field.parent != field.parent) {
+                NLSemanticPlaceView roots[2], children[2];
+                const NLCheckedField *fields[2] = {&field, &p.field};
+                for (size_t i = 0; i < 2; ++i) {
+                    const NLCheckedField *f = fields[i];
+                    if (f->index > 1 ||
+                        !nl_semantic_place_view(p.entry, f->parent,
+                                                &roots[i]) ||
+                        !roots[i].live || !roots[i].independent_root ||
+                        !roots[i].implicit_local || roots[i].governing_domain ||
+                        roots[i].type != f->nominal ||
+                        roots[i].incarnation != f->parent_incarnation ||
+                        roots[i].fixed_field_count != 2 ||
+                        roots[i].fixed_fields[f->index] != f->child ||
+                        !nl_semantic_place_view(p.entry, f->child,
+                                                &children[i]) ||
+                        !children[i].live ||
+                        children[i].incarnation != f->child_incarnation ||
+                        children[i].parent_aggregate != f->parent ||
+                        children[i].parent_incarnation !=
+                            roots[i].incarnation ||
+                        children[i].parent_field_index != f->index)
+                        return reject(e);
+                }
+                if (field.child == p.field.child)
+                    return reject(e);
+            } else if (p.field.parent_incarnation != field.parent_incarnation) {
+                return reject(e);
+            } else if (p.field.index == field.index) {
                 if (p.field.child != field.child ||
                     p.field.child_incarnation != field.child_incarnation)
                     return reject(e);
@@ -203,13 +229,13 @@ static bool copy_two_helpers_before_h(Emit *e, const NLCheckedFragment *body)
         if (node->span.end_byte > last_call)
             last_call = node->span.end_byte;
     }
-    return (calls == 2 && first_trial != SIZE_MAX &&
-            last_call <= first_trial) ||
+    return (calls == 2 && (caller != body || (first_trial != SIZE_MAX &&
+                                              last_call <= first_trial))) ||
            reject(e);
 }
 static bool copy_prepare(Emit *e, const NLCheckedFragment *body)
 {
-    return copy_prepare_at(e, body, 0) && copy_two_helpers_before_h(e, body);
+    return copy_prepare_at(e, body, 0) && copy_two_helpers(e, body);
 }
 /* A nested Copy original is allowed only in the exact publicly validated
  * caller fragment after its one producer has returned the original H owner.

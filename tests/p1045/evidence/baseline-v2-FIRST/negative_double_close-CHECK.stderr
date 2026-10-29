@@ -1,0 +1,1 @@
+/workspace/p1045/tests/p1045/sources-v2/negative_double_close.nl:93:44-93:60: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding
