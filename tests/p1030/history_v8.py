@@ -25,10 +25,10 @@ def predecessor(root):
 
 
 def verify(root, current):
-    original = predecessor(root)
     from versioned_freeze import manifest_data, require, verify as legacy_verify
     # Preserve the existing verifier's historical failure diagnostics first.
     count = legacy_verify(root, current)
+    original = predecessor(root)
     value, _ = manifest_data(Path(root), current)
     require(value["generation"] >= 8 and original <= value["files"].keys(),
             "P1030 lost original-v7 coverage")

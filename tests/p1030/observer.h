@@ -15,6 +15,15 @@
 size_t test_malloc_calls(void);
 size_t test_free_calls(void);
 uintptr_t test_allocated_address(size_t);
+#ifndef P1030_T0
+#define P1030_T0 58
+#define P1030_T1 203
+#define P1030_FIRST_INDEX 1
+#define P1030_NEXT0 97
+#define P1030_NEXT1 203
+#define P1030_H0 29
+#define P1030_H1 181
+#endif
 static uint8_t *t_fields[2];
 static uintptr_t t_addresses[2], allocated[2];
 static size_t domains[2], binds, calls, trials, initialized, changes, active;
@@ -38,8 +47,8 @@ static void bind_copy(size_t frame, size_t symbol, uint8_t *a, uint8_t *b)
 {
     (void)frame;
     (void)symbol;
-    REQUIRE(binds++ == 0 && !trials && a != b && peek(a) == 58 &&
-            peek(b) == 203);
+    REQUIRE(binds++ == 0 && !trials && a != b && peek(a) == P1030_T0 &&
+            peek(b) == P1030_T1);
     t_fields[0] = a;
     t_fields[1] = b;
     t_addresses[0] = (uintptr_t)a;
@@ -47,19 +56,25 @@ static void bind_copy(size_t frame, size_t symbol, uint8_t *a, uint8_t *b)
 }
 static void copy_call(uint8_t *p, uint8_t old, uint8_t next)
 {
-    const size_t index = calls ? 0 : 1;
+    const size_t index = calls ? 1 - P1030_FIRST_INDEX : P1030_FIRST_INDEX;
     REQUIRE(binds == 1 && calls < 2 && !trials && p == t_fields[index]);
-    REQUIRE(old == (calls ? 58 : 203) && next == (calls ? 203 : 97));
-    REQUIRE(peek(p) == next && peek(t_fields[1 - index]) == (calls ? 97 : 58));
+    REQUIRE(old == (calls ? (P1030_FIRST_INDEX ? P1030_T0 : P1030_T1)
+                          : (P1030_FIRST_INDEX ? P1030_T1 : P1030_T0)) &&
+            next == (calls ? P1030_NEXT1 : P1030_NEXT0));
+    REQUIRE(
+        peek(p) == next &&
+        peek(t_fields[1 - index]) ==
+            (calls ? P1030_NEXT0 : (P1030_FIRST_INDEX ? P1030_T0 : P1030_T1)));
     observed_old[calls] = old;
     observed_new[calls] = peek(p);
     observed_sibling[calls++] = peek(t_fields[1 - index]);
 }
 static void trial(void *p, size_t bytes, size_t alignment)
 {
-    REQUIRE(binds == 1 && calls == 2 && peek(t_fields[0]) == 203 &&
-            peek(t_fields[1]) == 97 && trials < 2 && bytes == 24 &&
-            alignment == 8);
+    REQUIRE(binds == 1 && calls == 2 &&
+            peek(t_fields[P1030_FIRST_INDEX]) == P1030_NEXT0 &&
+            peek(t_fields[1 - P1030_FIRST_INDEX]) == P1030_NEXT1 &&
+            trials < 2 && bytes == 24 && alignment == 8);
     REQUIRE(test_malloc_calls() == trials + 1 &&
             (uintptr_t)p == test_allocated_address(trials));
     allocated[trials++] = (uintptr_t)p;
@@ -68,7 +83,7 @@ static void initialize(const nl_node *p, size_t domain)
 {
     size_t i = original(p);
     REQUIRE(i == initialized++ && !p->f0.tag && !p->f0.ptr &&
-            p->f1 == (i ? 181 : 29) && domain);
+            p->f1 == (i ? P1030_H1 : P1030_H0) && domain);
     domains[i] = domain;
     if (i)
         REQUIRE(allocated[0] != allocated[1] && domains[0] != domain);
@@ -166,7 +181,7 @@ static void end_root(const nl_node *p, size_t domain)
 {
     size_t i = original(p);
     REQUIRE(!ended[i] && domain == domains[i] && !active && !p->f0.tag &&
-            !p->f0.ptr && p->f1 == (i ? 181 : 29));
+            !p->f0.ptr && p->f1 == (i ? P1030_H1 : P1030_H0));
     if (allocated[1])
         REQUIRE(changes == 2 &&
                 (i ? in_receiver : (!in_receiver && frees == 1)));
@@ -210,13 +225,14 @@ static void finish(void)
     for (size_t i = 0; i < successes; ++i)
         REQUIRE(ended[i] && finalized[i] && releasing[i] && freed[i]);
     printf("P1030 physical old=%u,%u new=%u,%u sibling=%u,%u calls=%zu "
-           "indices=1,0 same_original_T=YES live_original_reads=YES "
+           "indices=%zu,%zu same_original_T=YES live_original_reads=YES "
            "field0=%" PRIxPTR " field1=%" PRIxPTR
            " allocations=%zu frees=%zu trials=%zu live_tail=%zu "
            "original_H=YES teardown=YES\n",
            observed_old[0], observed_old[1], observed_new[0], observed_new[1],
-           observed_sibling[0], observed_sibling[1], calls, t_addresses[0],
-           t_addresses[1], successes, frees, trials, terminals);
+           observed_sibling[0], observed_sibling[1], calls,
+           (size_t)P1030_FIRST_INDEX, (size_t)(1 - P1030_FIRST_INDEX),
+           t_addresses[0], t_addresses[1], successes, frees, trials, terminals);
 }
 #define NL_MIXED_COPY_BIND(f, s, a, b) bind_copy(f, s, a, b)
 #define NL_MIXED_COPY_CALL(p, o, n) copy_call(p, o, n)

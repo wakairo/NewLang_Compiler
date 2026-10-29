@@ -17,6 +17,7 @@ repo = data.parents[1]
 original = json.loads((data / "oracle-v1.json").read_bytes())
 oracle = json.loads((data / "oracle-v2.json").read_bytes())
 old = json.loads((data / "old-C-identity-v1.json").read_bytes())
+compatibility = json.loads((data / "p1013-forward-oracle-v1.json").read_bytes())
 sha = lambda b: hashlib.sha256(b).hexdigest()
 commands = []
 evidence = os.environ.get("P1030_EVIDENCE_DIR")
@@ -61,16 +62,27 @@ with tempfile.TemporaryDirectory(prefix="p1030-") as directory:
     libraries = [cli.parent / ("libnewlang_" + n + ".a") for n in [
         "semantic", "parser", "checked_c_node", "lexer", "checked", "syntax", "source", "diagnostic"]]
     assert all(p.is_file() for p in libraries)
-    for name in ["probe", "consumer", "oom"]:
+    for name in ["probe", "compat_probe", "consumer", "oom"]:
         wraps = ["-Wl,--wrap=" + n for n in ["malloc", "calloc", "realloc"]] if name == "oom" else []
         ok(invoke("build-" + name, [cc, *flags, "-g", "-O0", "-fno-pie", "-no-pie",
                   "-I" + str(repo / "include"), data / (name + ".c"),
                   "-Wl,--start-group", *libraries, "-Wl,--end-group", *wraps, "-o", temp / name]))
-    for name in original["positive"]:
-        source = data / "sources" / name
-        label = source.stem
+    profiles = [(data / "sources" / name, False) for name in original["positive"]]
+    profiles.append((repo / "tests/p1013/production/unsupported_sibling.nl", True))
+    for source, forward in profiles:
+        if forward:
+            assert sha(source.read_bytes()) == compatibility["transferred_positive"]["old_source_SHA256"]
+        name = source.name
+        label = source.stem + ("-forward" if forward else "")
+        expected_physical = ("old=41,173 new=67,109 sibling=173,67 calls=2" if forward else
+                             "old=203,58 new=97,203 sibling=58,97 calls=2")
+        indices = "0,1" if forward else "1,0"
+        definitions = (["-DP1030_T0=41", "-DP1030_T1=173", "-DP1030_FIRST_INDEX=0",
+                        "-DP1030_NEXT0=67", "-DP1030_NEXT1=109", "-DP1030_H0=23",
+                        "-DP1030_H1=199"] if forward else [])
         ok(invoke(label + "-CHECK", [cli, "--check", source]))
-        public = invoke(label + "-public-current", [temp / "probe", source]); ok(public)
+        public = invoke(label + "-public-current",
+                        [temp / ("compat_probe" if forward else "probe"), source]); ok(public)
         assert public.stdout.count(b"body=0 parameters=0 event=0") == 2
         assert b"P1030 C17 status=0 published=YES" in public.stdout
         print(public.stdout.decode(), end="", flush=True)
@@ -108,7 +120,7 @@ with tempfile.TemporaryDirectory(prefix="p1030-") as directory:
                       repo / "tests/integration/two_heap_platform.c",
                       "-Wl,--wrap=malloc", "-Wl,--wrap=free",
                       '-DNEWLANG_HEAP_OBSERVER="' + str(data / "observer.h") + '"',
-                      "-o", observed]))
+                      *definitions, "-o", observed]))
             for failure, successes in [("1", 0), ("2", 1), ("0", 2)]:
                 result = invoke(label + opt + "-guest" + str(successes), [observed],
                                 env=dict(os.environ, NEWLANG_TEST_FAIL_CALL=failure,
@@ -116,8 +128,8 @@ with tempfile.TemporaryDirectory(prefix="p1030-") as directory:
                                          UBSAN_OPTIONS="halt_on_error=1:print_stacktrace=1"))
                 ok(result)
                 text = result.stdout.decode().strip()
-                assert "old=203,58 new=97,203 sibling=58,97 calls=2" in text
-                assert "indices=1,0 same_original_T=YES live_original_reads=YES" in text
+                assert expected_physical in text
+                assert f"indices={indices} same_original_T=YES live_original_reads=YES" in text
                 assert f"allocations={successes} frees={successes}" in text
                 assert f"live_tail={int(successes == 2)} original_H=YES teardown=YES" in text
                 print(json.dumps({"P1030": "physical", "source": name, "cc": cc,

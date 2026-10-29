@@ -74,3 +74,24 @@ audit/re-audit cost. The library author plus ordinary-safe caller's human UB-aud
 closure benefit over well-factored C, performance and cost are UNMEASURED.
 Product GO PAUSED/H1 HOLD. One fresh DRAFT HOLD only after local gates, natural
 FULL5+PARTIAL max2 pairs12jobs; no same-SHA manual rerun, READY/merge or F/R launch.
+
+## Forward C112 regression epoch
+
+Candidate-v1 full regression retained a RED: the immutable old P1013
+`unsupported_sibling.nl` is a canonical-legal program newly covered by this
+two-field implementation, so its old C112 expectation C17=4 is obsolete for
+the new coverage. Its original source/oracle/runner are unchanged, and the
+first failing raw run is retained. New P-owned `p1013_forward.py` retains all
+five original positives and the three still-negative sources. The old fourth
+case is transferred into active positive public-current, original physical
+T/H, guest0/1/2, metadata, OOM and named-output checks in `run.py`, with its own
+new frozen forward oracle/probe. It is not omitted or regraded as a green
+original-oracle run. The old program also tests the opposite field order0→1
+and old41/173→67/109, while the new independent P originals remain1→0 with
+old58/203→203/97. No source-spelling/value-specific Production exception is
+introduced merely to keep a previously unsupported legal source rejected.
+
+The other first full failure was the new v7 anchor masking a legacy v1-v6
+diagnostic in scratch history tests. Existing trusted verification now runs
+first; the original verifier and old tests are unchanged. New v7/data/coverage
+counterexamples still run afterward. Production bytes are unchanged from v1.
