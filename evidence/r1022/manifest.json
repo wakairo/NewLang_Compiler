@@ -1,0 +1,64 @@
+{
+  "schema": "R1022_SOURCE_PUBLICATION_V1",
+  "frozen_issue": 1016,
+  "frozen_comment": "https://github.com/wakairo/NewLang_Compiler/issues/1016#issuecomment-6486267080",
+  "compiler_main": "438170098d5b98096f1ad1f1f200dc1f326c75c3",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "pr1015_head": "c9fbdb8d3ce4c238c4e33fb710fefc20ff6654bb",
+  "pr1015_tree": "ccd82e0bffa3fa0f5d3a5b04083df1d8e18ce7cc",
+  "cohort": "original FIRST-PASS BLIND, NOT EXECUTED",
+  "cases": [
+    {
+      "id": "POS-A-register-before-H",
+      "path": "sources/POS-A-register-before-H.nl",
+      "bytes": 4629,
+      "sha256": "d3d6c24be29d8961b74ece10cdca1bbb04d129a864f30841950e7fd751cdd128",
+      "kind": "positive"
+    },
+    {
+      "id": "POS-B-H-before-register",
+      "path": "sources/POS-B-H-before-register.nl",
+      "bytes": 3788,
+      "sha256": "8c182063787b8508bf4c303fddd273b42ce8fa55242cb7381aab5c89ccf057dd",
+      "kind": "positive"
+    },
+    {
+      "id": "NEG-1-missing-Some-link",
+      "path": "sources/NEG-1-missing-Some-link.nl",
+      "bytes": 4373,
+      "sha256": "8846b35fc4236db2fbf26a35239d6b3a5eb91f11bfb0fcd84d1610b1a3ad7de1",
+      "kind": "negative"
+    },
+    {
+      "id": "NEG-2-wrong-tail-original-pointer",
+      "path": "sources/NEG-2-wrong-tail-original-pointer.nl",
+      "bytes": 4629,
+      "sha256": "13f773cfa72556a18e3a2d4bc6c161d67599a840816bb10ad5a027bc45d1077c",
+      "kind": "negative"
+    },
+    {
+      "id": "NEG-3-double-nonCopy-terminal",
+      "path": "sources/NEG-3-double-nonCopy-terminal.nl",
+      "bytes": 4705,
+      "sha256": "1e0186d565e9fc5a87e37c8ef8cbdb7bee19e14c5da5dd4d373457612626b6f7",
+      "kind": "negative"
+    },
+    {
+      "id": "NEG-4-field-loan-escape",
+      "path": "sources/NEG-4-field-loan-escape.nl",
+      "bytes": 4691,
+      "sha256": "34f2cf52aa41d4d3151f5a6e82ae7e126e34449bba155c1018e48cc9268e8d30",
+      "kind": "negative"
+    }
+  ],
+  "oracle": {
+    "path": "oracle/R1016-FIRST-ORIGINAL-v1.txt",
+    "bytes": 5154,
+    "sha256": "6310ec8f87a3a5c87540b0a16047277c2fd742af61b27d0f9dc823c3fb9507f1"
+  },
+  "not_in_cohort": [
+    "R996",
+    "R1000"
+  ],
+  "native_witness": "NOT TESTED; current/physical proof separately required"
+}
