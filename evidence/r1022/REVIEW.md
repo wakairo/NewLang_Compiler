@@ -1,42 +1,26 @@
-# R1022 C119 R-only source publication
+# R1023 C120 — Source-only trust repair (not a test result)
 
-No code, test, compiler, native, sanitizer, OOM or CI has been executed.
-This is a new, original FIRST-PASS BLIND source/oracle cohort frozen at
-https://github.com/wakairo/NewLang_Compiler/issues/1016#issuecomment-6486267080
+**Scope:** One corrective commit on `r-review/r1022-six-original-source-only`, parent `0d933749005f0a2d9ed5777627e91732bb568547`. Immutable original six `.nl` and oracle **must not be edited**; R996/R1000 are excluded. Production is fixed PR1015 HEAD `c9fbdb8d3ce4c238c4e33fb710fefc20ff6654bb`, tree `ccd82e0bffa3fa0f5d3a5b04083df1d8e18ce7cc`. Only sources were published; R executor, validator, compiler, native, test and CI executions are **zero**.
 
-The six .nl files and oracle text are immutable exact original payloads
-with the SHA256 and byte counts in manifest.json. R996/R1000 are separate
-and absent. No T1014 bridge or P fixture, oracle, runner or receipt used.
+## Provenance and first-run boundary
 
-R-owned r_runner.py is a FUTURE candidate. Its explicit Actions-only
-execution gate demands a C-approved exact SHA and checkout. It uses fixed
-program paths and argv, no shell or manifest command execution. It records
-genuine newlangc --check, named --emit-c17-to and no-clobber, exact C17
-bytes, clean GCC13/Clang23 O0/O2 and separate instrumented 0/1/2 worlds.
-C119 authorizes none of these commands to run now. Results are raw and
-never auto-graded as native/semantic PASS.
+The R-owned `r_runner.py` is **not executable under this authorization**. Its future execution gate requires all of: GitHub Actions push on an explicitly permitted `r-fast/**` R-only ref, repository/event/HEAD/clean-worktree match, C-external reviewed new executor commit, exact PR1015 source/tree ancestry, original R1022 source/oracle Git blob equality, no modifications to production source/include/cmake/CMake, a future separately reviewed workflow `.github/workflows/r-original-first.yml` at the exact workflow ref and externally pinned blob, independently pinned runner/probe/observer SHA256, and externally pinned built compiler *binary* SHA256. None of these environment variables, an Actions manifest, `GITHUB_SHA`, or a local binary *alone* is independent attestation: a separately authored, reviewed Actions job must verify checkout/materialization/build/source provenance and inject C-approved constants out of the candidate's control. The future workflow does **not exist in this release**; gate deliberately fails closed until separate C authorization. No candidate-controlled shell text, path, oracle, command or synthetic proof can be used.
 
-R-owned r_observer.h is passive per-event logging and bounded guest NULL
-injection, not synthetic proof. Actual pointer records are ephemeral. It
-cannot prove original Region/Allocation/Domain IDs or source-issued
-current/issuer status. A live R-owned public API probe covering genuine
-call body, parameters, events, current GET/VALIDATE and old/current/sibling
-physical witnesses remains REQUIRED and NOT IMPLEMENTED. Unobserved
-channels stay NOT OBSERVABLE; numeric host IDs are not source authority.
-The instrumented guest is NOT equivalent to unmodified clean execution.
+The future R-owned public probe source `r_probe.c` follows the same public CLI entry route as fixed `src/main.c`: frozen original `.nl` load → function-unit parse → semantic unit registration → parser-issued `main()` entry envelope → `nl_semantic_check_expression` → owned `NLCheckedFragment`. It traverses actual source-issued registered calls and owned callee/IF/MATCH/LOOP fragments, retrieves original `nl_checked_copy_body_view`, `nl_checked_copy_body_parameters`, `nl_checked_copy_body_event`, and calls **actual** `nl_checked_copy_body_validate(...,NULL)`, `nl_checked_copy_body_parameters_validate`, and `nl_checked_copy_body_event_validate(...,NULL)`; producer observations use `nl_checked_producer_valid` and original entry/return accessors. It keeps source, trees, semantic context and checked owners live until borrowed validation completes; checked artifacts are destroyed before owners. The synthesized `main()` is solely a public program entry (same as compiler), not a forged helper or fabricated current world. If original CHECK or a particular public validator is unsupported/unreached, stdout says **UNREACHED/NOT_OBSERVABLE**, not current PASS. This is a **static API mapping**, not proof the source profile is accepted. Public provenance IDs are **not physical C pointers**.
 
-Trust blockers for future release:
-- independent review of HEAD/tree and all helper SHA/ABI/limits
-- independently authored R public issuer/current probe with valid lifetime
-- inspect whether generated C can use this observer without changes
-- review consistent original source CHECK/semantic negative first layer
-- preserve original first RED/INCONCLUSIVE and named output bytes/dev/ino
-- source CHECK success but emitter UNSUPPORTED must remain inconclusive
-- separately approved branch/PR/workflow wiring and finite Actions budget
-  including first branch creation and push
-- persist first-run records with reviewed bounded artifact retention
-- no P-like local runtime, no self-approval, no Product GO/soundness claim
+The `r_observer.h` lives only at the fixed generated `#ifdef NEWLANG_HEAP_OBSERVER` include hook; it never changes emitted C bytes. It injects 0/1/2 guest successful `malloc(24)` budgets and logs real pointer/free events. `NL_MIXED_COPY_CALL` can sample `*target` at the original live post-write callback and log physical field address/old/new/current byte; it cannot infer the containing original T root or sibling field from that pointer. H macros log observed passing values, not automatic R/A/D/provenance/LiveTail proof. No dereference after free, and no abstract ID equality is declared proof of physical identity. **Original H R/A/D / original T field + sibling topology remains NOT OBSERVABLE** absent a complete source-native witness. The original positive programs are suspected to be outside fixed PR1015's private C17 emitter; emit refusal after CHECK acceptance must remain the FIRST **RED/INCONCLUSIVE** result, never an original-source rewrite.
 
-Fixed parent HEAD c9fbdb8d3ce4c238c4e33fb710fefc20ff6654bb
-Fixed parent tree ccd82e0bffa3fa0f5d3a5b04083df1d8e18ce7cc
-Canonical CURRENT_SPEC -> Draft17.34; new source/IR policy DEFERRED.
+## Durable raw custody design (future only)
+
+`r_runner.py` is fail-closed. At start it creates a **fresh, non-overwriting**, mode-0700 `$RUNNER_TEMP/R1023-FIRST-<run_id>-<attempt>` directory. It immediately creates `FIRST-RAW.jsonl` with O_EXCL and fsyncs **every BEGIN/END/STOP and per-case FIRST_BEGIN/FIRST_END**. Each fixed child command uses argument arrays, `shell=False`, a fixed cwd/env, process group, wall/CPU/address/file limits, separately named O_EXCL stdout+stderr, output byte counts and SHA256 and fsync; the original first stdout/stderr/exit and earliest observed failure are preserved even if a later step errors. Each negative's named C sentinel is snapshotted before/after with exact bytes and dev/ino, saved copies, and no-clobber reported distinctly from semantic cause. Any exact unaltered C17 emission remains persisted in the evidence directory with SHA256, separate from scratch binaries. Actual public GET/current probe stdout/stderr and clean/instrumented GCC13/Clang23 O0/O2 guest worlds 0/1/2 are separate raw channels. **No automatic green verdict** follows an exit code or schema.
+
+The scratch directory is disposable, **not** the raw evidence directory. The latter is never removed by the R runner. However, **local Actions runner storage is not permanent**: a future trusted workflow MUST perform `actions/upload-artifact` with `if: always()`, a run/attempt/commit-unique artifact name, no overwrite, bounded retention, and verify upload succeeds before any first-run custody success claim. If the job/runner dies before upload, the remote durable FIRST capture is **NOT ESTABLISHED**; C must not infer evidence from the journal design. The release must plan failure handling for that case before authorizing the first run. No Actions workflow is added or edited here.
+
+## Further blockers / proposed finite future routing (NOT authorized)
+
+1. C independently code-review exact HEAD/tree and each helper SHA; verify source provenance, public API/ABI and static compile/link possibility. The existing R-FAST `r-preflight.yml` is *push format/build/registration only* (not original R-first execution), triggered on `r-fast/**`; existing FULL5/PARTIAL are PR-triggered and cannot be silently run on this staging branch. Do not use T1014 native bridge or a P fixture/oracle.
+2. Under **separate C release only**, create/review a dedicated R-only first-run workflow and finite R-only opt-in branch, pin workflow and native compiler build provenance and binary SHA, ensure safe branch trigger. Suggested strict first budget: **1 branch-creation push (counts), 1 reviewed R first-run Actions workflow run of exactly six original cases**, no retry disguised as FIRST. Existing R-FAST may also trigger on such branch, so C must account for or prevent that additional run; if impossible, defer/choose a separately approved non-overlapping event strategy. FULL5+PARTIAL not implicitly authorized.
+3. If probe fails build/source CHECK/semantic registration, record actual first layer and immutable RED; never label semantics or physical proof validated. Require exact negative first reason vs generic unsupported, original unmodified C17 and binary identity, H0/1/2 physical topology, T old/new/sibling, host OOM independent from guest OOM, ASan/UBSan, and no-clobber; each missing channel **INCONCLUSIVE/NOT OBSERVABLE**. Native exit 0 cannot substitute. FIRST raw evidence is immutable through any later calibrated pass.
+4. Neither source publication nor a future published artifact alone measures the Value Strategy §1.1 author and ordinary-safe caller human UB prevention audit/re-audit closure versus well-factored C; tooling trust maintenance creates a distinct cost. Draft17.34 remains, Product GO paused.
+
+**C120: CODE AUTHORING ONLY / NO PR / NO ACTIONS / NO CI / NO COMPILER / NO NATIVE / NO TEST / NO EXECUTION.**

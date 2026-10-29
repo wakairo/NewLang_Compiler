@@ -60,5 +60,14 @@
     "R996",
     "R1000"
   ],
-  "native_witness": "NOT TESTED; current/physical proof separately required"
+  "native_witness": "NOT TESTED; current/physical proof separately required",
+  "r1023_source_only": {
+    "fixed_publication_commit": "0d933749005f0a2d9ed5777627e91732bb568547",
+    "scope": "SOURCE-ONLY; NO RUN; NO WORKFLOW; NO PR",
+    "r_runner_sha256": "365663e383400f61ea3862a49b83c1fba34e779e6806cdac736ef8ecf6bb2280",
+    "r_observer_sha256": "c99a3663f7e7fb12057cc6a2c41cbb2bdde96211d2dafd6f6b4477bca1f40889",
+    "r_probe_sha256": "ef4a2505d34d0acfc4951cd17527c3e1cdf707a8fb0c919ae608df0052ba3f49",
+    "review_sha256": "4eace5a3c09e4a3f09af6e8b27d4c8fa6e80272729a472244e205747a51e1eee",
+    "provenance_note": "not sufficient to authorize execution; only separately reviewed C/external pinned SHA and workflow"
+  }
 }

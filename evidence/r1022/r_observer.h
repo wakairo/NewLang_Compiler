@@ -1,4 +1,4 @@
-/* R1022 standalone passive hook header. C119 source only; NEVER RUN now.
+/* R1023 C120 independently reviewed native observer candidate. SOURCE ONLY. NEVER RUN now.
  * Only future compiler-emitted unmodified C includes this on an observed build.
  * No T bridge, P fixture/runner or generated source edits.
  */
@@ -12,8 +12,11 @@ static unsigned r1022_budget = 3u, r1022_success, r1022_frees, r1022_events;
 static uintptr_t r1022_alloc_ptrs[2];
 static void r1022_log(const char *label, const void *p, unsigned long v)
 {
-    if (r1022_events++ < 256u)
+    if (r1022_events < 256u)
         (void)fprintf(stderr, "R1022_OBS %s %p %lu\n", label, p, v);
+    else if (r1022_events == 256u)
+        (void)fputs("R1022_OBS OVERFLOW NOT_OBSERVABLE\n", stderr);
+    ++r1022_events;
 }
 static unsigned r1022_world(void)
 {
@@ -85,8 +88,20 @@ static void r1022_free(void *p)
 #define NL_LIVE_ENTER(...) r1022_log("LIVE_ENTER", NULL, 0ul)
 #define NL_LIVE_RETURN(...) r1022_log("LIVE_RETURN", NULL, 0ul)
 #define NL_LIVE_RECEIVE(...) r1022_log("LIVE_RECEIVE", NULL, 0ul)
+/* The compiler emits this hook after *target=next. Reading that byte at the
+ * precise live callback is physical, unlike semantic IDs. The macro cannot
+ * recover its containing original T base or unchanged sibling field. */
+static void r1023_copy_live(const uint8_t *p, unsigned long old, unsigned long fresh)
+{
+    if (!p) { r1022_log("COPY_NULL_NOT_OBSERVABLE", p, old); return; }
+    r1022_log("COPY_PHYSICAL_OLD_NEW", p, 256ul * old + fresh);
+    r1022_log("COPY_PHYSICAL_CURRENT_BYTE", p, (unsigned long)*p);
+}
 #define NL_MIXED_COPY_CALL(ptr, old, fresh) \
-    r1022_log("COPY_CALL_OLD_NEW", (ptr), 256ul * (unsigned long)(old) + (fresh))
+    r1023_copy_live((const uint8_t *)(ptr), (unsigned long)(old), (unsigned long)(fresh))
+#define NL_MIXED_COPY_BIND(...) r1022_log("COPY_BIND_UNRESOLVED", NULL, 0ul)
+#define NL_MIXED_COPY_STORE(...) r1022_log("COPY_STORE_UNRESOLVED", NULL, 0ul)
+#define NL_MIXED_OWNER_LOCAL(...) r1022_log("OWNER_LOCAL_UNRESOLVED", NULL, 0ul)
 /* These are transient pointer values and host events, NOT proof of
  * original region/allocation/domain/incarnation/current or sibling state.
  * Never dereference a borrowed view after owner destruction.
