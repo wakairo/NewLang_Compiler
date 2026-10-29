@@ -145,7 +145,7 @@ static bool p1020_negative(const char *path)
     CHECK(p1020_failed(&a, &x, "current-owner-kind"));
     fn->owner_receiver = false;
     RESTORED();
-    NLSemanticContext *caller_world = x.caller->context;
+    const NLSemanticContext *caller_world = x.caller->context;
     x.caller->context = b.context;
     CHECK(p1020_failed(&a, &x, "foreign-current-caller-world"));
     x.caller->context = caller_world;
