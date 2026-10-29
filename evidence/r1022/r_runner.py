@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""R1023 C120 SOURCE ONLY. Future original FIRST requires a separate C release.
+"""R1026 C123 SOURCE REGISTRATION ONLY. Future original FIRST requires a separate C release.
 No P fixture/runner, T bridge, shell manifest, synthetic issuer or auto-PASS.
-Never execute during C120. Every future stage is raw, append-only evidence.
+Do not execute during C123. Every future stage is raw, append-only evidence.
 """
 import argparse
 import hashlib
@@ -28,13 +28,13 @@ CASES = (
     ("NEG-4-field-loan-escape", "34f2cf52aa41d4d3151f5a6e82ae7e126e34449bba155c1018e48cc9268e8d30"),
 )
 ORACLE = "6310ec8f87a3a5c87540b0a16047277c2fd742af61b27d0f9dc823c3fb9507f1"
-WORKFLOW = ".github/workflows/r-original-first.yml" # future C-only installation, absent here
+WORKFLOW = ".github/workflows/r-original-first.yml" # R-review registration; FIRST remains C-locked
 FIRST_REF = "refs/heads/r-first/r1016-original-first" # no R-FAST overlap
 LOG_CAP = 65536
 C_CAP = 1048576
 CHILD_FSIZE = 2 * 1024 * 1024
-APPROVED_TOOLS = {"/usr/bin/git", "/usr/bin/gcc-13", "/usr/bin/clang-23",
-                  "/usr/bin/python3"}
+APPROVED_TOOLS = {"/usr/bin/git", "/usr/bin/gcc-13", "/usr/bin/python3"}
+# Exact SDK Clang is added only after C-approved byte/version/path verification.
 
 def sha(data):
     return hashlib.sha256(data).hexdigest()
@@ -84,7 +84,60 @@ def plain(argv, timeout=10):
                        capture_output=True, timeout=timeout, check=True)
     return p.stdout.decode("utf-8", "strict").strip()
 
+def curated_clang(journal):
+    # Only the fixed source-locked, activated, project-owned SDK is trusted.
+    supplied = os.environ.get("NEWLANG_SDK_ROOT", "")
+    if not supplied or not os.path.isabs(supplied):
+        raise RuntimeError("curated NEWLANG_SDK_ROOT missing/relative")
+    sdk = Path(supplied)
+    toolchains = ROOT / ".deps/toolchains"
+    if (toolchains.is_symlink() or not toolchains.is_dir() or
+        sdk.is_symlink() or not sdk.is_dir() or sdk.resolve(strict=True) != sdk):
+        raise RuntimeError("untrusted SDK path or symlink")
+    if sdk.parent == toolchains:
+        prefix = sdk
+    elif sdk.parent.parent == toolchains:
+        prefix = sdk.parent
+    else:
+        raise RuntimeError("SDK escaped fixed .deps/toolchains")
+    lock_bytes = regular(ROOT / "scripts/toolchain-lock.json", 131072)
+    identity = sha(lock_bytes)[:16]
+    if prefix.is_symlink() or prefix.name != "ubuntu-24.04-x86_64-" + identity:
+        raise RuntimeError("SDK prefix not content-addressed by pinned lock")
+    if regular(prefix / ".complete", 128, prefix) != (identity + "\n").encode():
+        raise RuntimeError("SDK completion marker mismatch")
+    bin_dir = sdk / "bin"
+    alias = bin_dir / "clang-23"
+    if bin_dir.is_symlink() or not bin_dir.is_dir():
+        raise RuntimeError("SDK bin directory invalid")
+    actual = alias.resolve(strict=True)
+    if (actual.parent != bin_dir or not actual.is_file() or
+        actual.is_symlink() or not os.access(actual, os.X_OK)):
+        raise RuntimeError("clang-23 is not a trusted SDK bin executable")
+    if os.environ.get("PATH", "").split(os.pathsep)[0] != str(bin_dir):
+        raise RuntimeError("SDK activation not first on PATH")
+    digest = sha(regular(actual, 512 * 1024 * 1024, bin_dir))
+    approved_digest = os.environ.get("R1023_C_CLANG_BINARY_SHA256", "")
+    if (len(approved_digest) != 64 or
+        any(c not in "0123456789abcdef" for c in approved_digest) or
+        digest != approved_digest):
+        raise RuntimeError("curated clang bytes not independently approved")
+    trusted_env = {"PATH": str(bin_dir) + ":/usr/bin:/bin", "LANG": "C"}
+    version_run = subprocess.run([str(alias), "--version"], cwd=ROOT,
+        env=trusted_env, capture_output=True, timeout=10, check=True)
+    banner = version_run.stdout.decode("utf-8", "strict").splitlines()[0]
+    if not banner.startswith("clang version 23.1.3"):
+        raise RuntimeError("curated clang version differs from LLVM 23.1.3")
+    APPROVED_TOOLS.add(str(alias))
+    journal.write({"toolchain": "curated LLVM 23.1.3 SDK",
+                   "sdk_root": str(sdk), "toolchain_lock_sha256": sha(lock_bytes),
+                   "clang_alias": str(alias), "clang_binary": str(actual),
+                   "clang_sha256": digest, "clang_banner": banner})
+    return str(alias), trusted_env
+
 def gate(approved, journal):
+    if os.environ.get("GITHUB_RUN_ATTEMPT") != "1":
+        raise RuntimeError("original FIRST rerun forbidden")
     if (os.environ.get("GITHUB_ACTIONS") != "true" or
         os.environ.get("GITHUB_EVENT_NAME") != "push" or
         os.environ.get("GITHUB_REF") != FIRST_REF or
@@ -208,7 +261,7 @@ def snapshot(path, folder, name, journal):
     journal.write({"snapshot": name, **metadata})
     return metadata
 
-def observe(m, folder, work, journal):
+def observe(m, folder, work, journal, clang, clang_env):
     compiler = ROOT / "build-frontend/newlangc"
     probe = work / "r1023-probe"
     if not compiler.is_file() or compiler.is_symlink() or compiler.stat().st_nlink != 1:
@@ -268,21 +321,23 @@ def observe(m, folder, work, journal):
                 if not c_data: raise RuntimeError("empty C17 output")
                 journal.write({"case": name, "unaltered_generated_c17": out.name,
                                "sha256": sha(c_data), "bytes": len(c_data)})
-                for cc in ("/usr/bin/gcc-13", "/usr/bin/clang-23"):
+                for cc in ("/usr/bin/gcc-13", clang):
                     for opt in ("0", "2"):
                         key = name+"-"+Path(cc).name+"-O"+opt
                         exe = work / key
                         base = [cc, "-std=c17", "-Wall", "-Wextra", "-Werror",
                                 "-pedantic-errors", "-O"+opt]
                         b = stage(base + [str(out), "-o", str(exe)],
-                                  folder,key+"-clean-build",journal)
+                                  folder,key+"-clean-build",journal,
+                                  env=clang_env if cc == clang else None)
                         if b["exit"] != 0: continue
                         stage([str(exe)],folder,key+"-clean",journal)
                         obs = work / (key+"-observer")
                         ob = stage(base + ["-I",str(HERE),
                                 '-DNEWLANG_HEAP_OBSERVER="r_observer.h"',
                                 str(out),"-o",str(obs)],
-                                folder,key+"-observer-build",journal)
+                                folder,key+"-observer-build",journal,
+                                env=clang_env if cc == clang else None)
                         if ob["exit"] != 0: continue
                         for budget in (0,1,2):
                             stage([str(obs)],folder,key+"-world-"+str(budget),journal,
@@ -323,8 +378,9 @@ def main():
         journal.write({"phase":"ORIGINAL_FROZEN_7_OF_7"})
         workflow=gate(a.approved_sha,journal)
         journal.write({"workflow_blob":workflow,"checkout_sha":a.approved_sha})
+        clang, clang_env = curated_clang(journal)
         with tempfile.TemporaryDirectory(prefix="r1023-transient-",dir=parent) as scratch:
-            observe(None,folder,Path(scratch),journal)
+            observe(None,folder,Path(scratch),journal,clang,clang_env)
         journal.write({"phase":"FIRST_CAPTURE_END","claim":"RAW_ONLY_NOT_PASS"})
     except BaseException as exc:
         journal.write({"phase":"FIRST_STOP","error_type":type(exc).__name__,

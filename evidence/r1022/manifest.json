@@ -85,5 +85,21 @@
     "future_required_external": "protected C-reviewed exact checkout, actual active workflow blob and compiler binary SHA256, independently pinned toolchain and environment approval",
     "frozen_original": "original six .nl and oracle seven immutable; FIRST not run",
     "durability": "fsynced raw local only; remote durable iff if:always upload succeeds; failure remains evidence loss"
+  },
+  "r1026_source_only": {
+    "fixed_parent_commit": "849cd3fe431efb3e2f18cbac4f1e4c546828f788",
+    "fixed_parent_tree": "e002dafa1f8518a30bc94032781c3912a732f509",
+    "status": "C123 SOURCE ONLY / Actions0 CI0 compiler0 native0 test0 formatter0 PR0",
+    "branch": "r-review/r1022-six-original-source-only",
+    "future_opt_in_ref": "refs/heads/r-first/r1016-original-first",
+    "runner_sha256": "709d3015a509114c6f1d3c60bfd6b33317899005b582d586e421cf36d6439103",
+    "workflow_path": ".github/workflows/r-original-first.yml",
+    "workflow_sha256": "11028329bc72bc80ce7340403609aa37765f46c08250d8615c3e2b026b62d4f1",
+    "review_sha256": "cf152ab3a4d0396500b0ab76d1323ddf4b6014f85cb0e38cdcf5c318d6af1f04",
+    "inert_original_workflow_sha256": "489fcc59f9ba92a3f45e68ab83489641792325e6d3e79d6e2a3e26a33b052cc5",
+    "clang_provenance": "NEWLANG_SDK_ROOT/bin/clang-23 in curated LLVM 23.1.3; C external SHA required",
+    "external_gate": "C-approved exact checkout/workflow/blob/helper/SDK/compiler SHA, protected Environment with independent reviewers and self-review disabled; unverified",
+    "frozen": "7/7 original sources+oracle unchanged; FIRST not observed",
+    "durability": "local fsync + if:always non-overwrite upload; remote only on upload success"
   }
 }
