@@ -1,0 +1,1591 @@
+{
+  "release": "C150 local mandatory verification complete; DRAFT HOLD only, pre-publication CI0",
+  "tested": {
+    "HEAD": "c8dc2a54c78627e02429a0372cf542c59ba3caed",
+    "tree": "2d621704d704dd15bea24aa3fb1adf84beb02bea",
+    "Production_SHA256": "a2ecb82ede7d20fa870da773d37d293cd7b53009123f87898779a73a45153546",
+    "harness_v7_SHA256": "9c7b96ef1d9caba24c06bb02fdb0a081ca4db4957dd8b39ea37314cef4ce5279"
+  },
+  "parent_HEAD": "4c039095455e0df32eebf538b0f9db1db1e089cc",
+  "parent_tree": "6c8dd17e7921becc3f02d66aefaf1c9c6130d87d",
+  "canonical": "CURRENT_SPEC Draft17.34",
+  "positive_profiles": 6,
+  "parent_first_backend_holes": [
+    "terminal_explicit_return",
+    "producer_direct_result",
+    "failure_scope_read"
+  ],
+  "negative_profiles": {
+    "CHECK0_current0_backend4": 7,
+    "CHECK3": 6,
+    "no_clobber": true
+  },
+  "local_full": {
+    "gcc": 591,
+    "clang": 591,
+    "clang_parts": [
+      1,
+      590
+    ],
+    "asan_related": 122,
+    "asan_parts": [
+      39,
+      1,
+      82
+    ],
+    "ubsan_related": 122,
+    "LLVM_infrastructure_smoke": "not locally run; sole natural FULL5 may cover"
+  },
+  "measurements": {
+    "gcc": {
+      "physical": [
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffe1cc3cd00,7ffe1cc3cd01 T1=7ffe1cc3cd40,7ffe1cc3cd41 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffd73ec9770,7ffd73ec9771 T1=7ffd73ec97b0,7ffd73ec97b1 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffe97bf9a30,7ffe97bf9a31 T1=7ffe97bf9a70,7ffe97bf9a71 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffe04ebcece,7ffe04ebcecf T1=7ffe04ebcef0,7ffe04ebcef1 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffd12e3932e,7ffd12e3932f T1=7ffd12e39350,7ffd12e39351 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffe7912d9be,7ffe7912d9bf T1=7ffe7912d9e0,7ffe7912d9e1 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffcd003ba00,7ffcd003ba01 T1=7ffcd003ba40,7ffcd003ba41 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fffb5a67520,7fffb5a67521 T1=7fffb5a67560,7fffb5a67561 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffce2fecf80,7ffce2fecf81 T1=7ffce2fecfc0,7ffce2fecfc1 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffda9de49fe,7ffda9de49ff T1=7ffda9de4a20,7ffda9de4a21 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffec832d9ae,7ffec832d9af T1=7ffec832d9d0,7ffec832d9d1 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffc084251ae,7ffc084251af T1=7ffc084251d0,7ffc084251d1 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fffed8b1b60,7fffed8b1b61 T1=7fffed8b1ba0,7fffed8b1ba1 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffd3d04c300,7ffd3d04c301 T1=7ffd3d04c340,7ffd3d04c341 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffff9301350,7ffff9301351 T1=7ffff9301390,7ffff9301391 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fff4f2fbd4e,7fff4f2fbd4f T1=7fff4f2fbd70,7fff4f2fbd71 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffd256d514e,7ffd256d514f T1=7ffd256d5170,7ffd256d5171 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe1b7a23de,7ffe1b7a23df T1=7ffe1b7a2400,7ffe1b7a2401 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffc3d5bb160,7ffc3d5bb161 T1=7ffc3d5bb1a0,7ffc3d5bb1a1 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffeb5487a80,7ffeb5487a81 T1=7ffeb5487ac0,7ffeb5487ac1 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffee871da10,7ffee871da11 T1=7ffee871da50,7ffee871da51 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffd69283bd4,7ffd69283bd5 T1=7ffd69283bd6,7ffd69283bd7 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe2ce808e4,7ffe2ce808e5 T1=7ffe2ce808e6,7ffe2ce808e7 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fff7a149ff4,7fff7a149ff5 T1=7fff7a149ff6,7fff7a149ff7 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe2648ac00,7ffe2648ac01 T1=7ffe2648ac40,7ffe2648ac41 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffd04dc5900,7ffd04dc5901 T1=7ffd04dc5940,7ffd04dc5941 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=1,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fff4d59d220,7fff4d59d221 T1=7fff4d59d260,7fff4d59d261 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffddb8019ae,7ffddb8019af T1=7ffddb8019d0,7ffddb8019d1 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe7c8c7eae,7ffe7c8c7eaf T1=7ffe7c8c7ed0,7ffe7c8c7ed1 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=1,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe964d394e,7ffe964d394f T1=7ffe964d3970,7ffe964d3971 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffc2e576a70,7ffc2e576a71 T1=7ffc2e576ab0,7ffc2e576ab1 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffca278a880,7ffca278a881 T1=7ffca278a8c0,7ffca278a8c1 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffdf2c83c80,7ffdf2c83c81 T1=7ffdf2c83cc0,7ffdf2c83cc1 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffef5420e0e,7ffef5420e0f T1=7ffef5420e30,7ffef5420e31 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffd6b61163e,7ffd6b61163f T1=7ffd6b611660,7ffd6b611661 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffdc90937ae,7ffdc90937af T1=7ffdc90937d0,7ffdc90937d1 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        }
+      ],
+      "OOM_positions": [
+        459,
+        455,
+        463,
+        455,
+        459,
+        459
+      ],
+      "total_reached": 2750,
+      "OOM_status2": 2634,
+      "conservative_unsupported_status1": 116,
+      "host_actual_current_faults": 84,
+      "supplied_view_faults": 36,
+      "H_owner_faults": 24,
+      "world_faults": 42,
+      "foreign_B_unrestored_A_destroy": 12
+    },
+    "clang": {
+      "physical": [
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7fff53047682,7fff53047683 T1=7fff5304767c,7fff5304767d allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffe68820102,7ffe68820103 T1=7ffe688200fc,7ffe688200fd allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7fffd457bc02,7fffd457bc03 T1=7fffd457bbfc,7fffd457bbfd allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffeea65ef00,7ffeea65ef01 T1=7ffeea65eefe,7ffeea65eeff allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffef09163a0,7ffef09163a1 T1=7ffef091639e,7ffef091639f allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffe1695bf00,7ffe1695bf01 T1=7ffe1695befe,7ffe1695beff allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffd38a52652,7ffd38a52653 T1=7ffd38a5264c,7ffd38a5264d allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffd41685042,7ffd41685043 T1=7ffd4168503c,7ffd4168503d allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffc422374f2,7ffc422374f3 T1=7ffc422374ec,7ffc422374ed allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7fffccbc66c0,7fffccbc66c1 T1=7fffccbc66be,7fffccbc66bf allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffd838b10d0,7ffd838b10d1 T1=7ffd838b10ce,7ffd838b10cf allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffd7dd38930,7ffd7dd38931 T1=7ffd7dd3892e,7ffd7dd3892f allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffedb79eff2,7ffedb79eff3 T1=7ffedb79efec,7ffedb79efed allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffedb94de62,7ffedb94de63 T1=7ffedb94de5c,7ffedb94de5d allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffeb2bf9912,7ffeb2bf9913 T1=7ffeb2bf990c,7ffeb2bf990d allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffc48d6def0,7ffc48d6def1 T1=7ffc48d6deee,7ffc48d6deef allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe8a23a4f0,7ffe8a23a4f1 T1=7ffe8a23a4ee,7ffe8a23a4ef allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffd4d4f3a60,7ffd4d4f3a61 T1=7ffd4d4f3a5e,7ffd4d4f3a5f allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fff4ca5b212,7fff4ca5b213 T1=7fff4ca5b20c,7fff4ca5b20d allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffca22d2a32,7ffca22d2a33 T1=7ffca22d2a2c,7ffca22d2a2d allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe54f48e62,7ffe54f48e63 T1=7ffe54f48e5c,7ffe54f48e5d allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffc819effd0,7ffc819effd1 T1=7ffc819effce,7ffc819effcf allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffdff7d46f0,7ffdff7d46f1 T1=7ffdff7d46ee,7ffdff7d46ef allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffdeb689c40,7ffdeb689c41 T1=7ffdeb689c3e,7ffdeb689c3f allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffd490dc342,7ffd490dc343 T1=7ffd490dc33c,7ffd490dc33d allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fff6da0e652,7fff6da0e653 T1=7fff6da0e64c,7fff6da0e64d allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe20da8312,7ffe20da8313 T1=7ffe20da830c,7ffe20da830d allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffccf3a4250,7ffccf3a4251 T1=7ffccf3a424e,7ffccf3a424f allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffed5e31150,7ffed5e31151 T1=7ffed5e3114e,7ffed5e3114f allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe03d3fa60,7ffe03d3fa61 T1=7ffe03d3fa5e,7ffe03d3fa5f allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fffbf81bc1a,7fffbf81bc1b T1=7fffbf81bc14,7fffbf81bc15 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fff909a427a,7fff909a427b T1=7fff909a4274,7fff909a4275 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=1,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe8240504a,7ffe8240504b T1=7ffe82405044,7ffe82405045 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffea72dec50,7ffea72dec51 T1=7ffea72dec4e,7ffea72dec4f allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffd5f322620,7ffd5f322621 T1=7ffd5f32261e,7ffd5f32261f allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=1,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffcaa03a7e0,7ffcaa03a7e1 T1=7ffcaa03a7de,7ffcaa03a7df allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        }
+      ],
+      "OOM_positions": [
+        459,
+        459,
+        463,
+        455,
+        455,
+        459
+      ],
+      "total_reached": 2750,
+      "OOM_status2": 2634,
+      "conservative_unsupported_status1": 116,
+      "host_actual_current_faults": 84,
+      "supplied_view_faults": 36,
+      "H_owner_faults": 24,
+      "world_faults": 42,
+      "foreign_B_unrestored_A_destroy": 12
+    },
+    "asan": {
+      "physical": [
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7b43662f00e0,7b43662f00e1 T1=7b43662f00f0,7b43662f00f1 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7bd1b72f00e0,7bd1b72f00e1 T1=7bd1b72f00f0,7bd1b72f00f1 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7b54e98f00e0,7b54e98f00e1 T1=7b54e98f00f0,7b54e98f00f1 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7b392d8f0020,7b392d8f0021 T1=7b392d8f0030,7b392d8f0031 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7b71476f0020,7b71476f0021 T1=7b71476f0030,7b71476f0031 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7b9f428f0020,7b9f428f0021 T1=7b9f428f0030,7b9f428f0031 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7b5dc78f00e0,7b5dc78f00e1 T1=7b5dc78f00f0,7b5dc78f00f1 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7bdd038f00e0,7bdd038f00e1 T1=7bdd038f00f0,7bdd038f00f1 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7b47810f00e0,7b47810f00e1 T1=7b47810f00f0,7b47810f00f1 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7b1c40ef0020,7b1c40ef0021 T1=7b1c40ef0030,7b1c40ef0031 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7bc1d36f0020,7bc1d36f0021 T1=7bc1d36f0030,7bc1d36f0031 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7bd6db8f0020,7bd6db8f0021 T1=7bd6db8f0030,7bd6db8f0031 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b3dbe8f00e0,7b3dbe8f00e1 T1=7b3dbe8f00f0,7b3dbe8f00f1 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b836a8f00e0,7b836a8f00e1 T1=7b836a8f00f0,7b836a8f00f1 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b6baacf00e0,7b6baacf00e1 T1=7b6baacf00f0,7b6baacf00f1 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b344aef0020,7b344aef0021 T1=7b344aef0030,7b344aef0031 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7bb9368f0020,7bb9368f0021 T1=7bb9368f0030,7bb9368f0031 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7bd0cccf0020,7bd0cccf0021 T1=7bd0cccf0030,7bd0cccf0031 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b8a15af00e0,7b8a15af00e1 T1=7b8a15af00f0,7b8a15af00f1 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7bbfcd4f00e0,7bbfcd4f00e1 T1=7bbfcd4f00f0,7bbfcd4f00f1 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7bdeb38f00e0,7bdeb38f00e1 T1=7bdeb38f00f0,7bdeb38f00f1 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b12290f0020,7b12290f0021 T1=7b12290f0030,7b12290f0031 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b1e94cf0020,7b1e94cf0021 T1=7b1e94cf0030,7b1e94cf0031 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b23696f0020,7b23696f0021 T1=7b23696f0030,7b23696f0031 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b27536f00e0,7b27536f00e1 T1=7b27536f00f0,7b27536f00f1 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7bd7b2ef00e0,7bd7b2ef00e1 T1=7bd7b2ef00f0,7bd7b2ef00f1 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b3cfdcf00e0,7b3cfdcf00e1 T1=7b3cfdcf00f0,7b3cfdcf00f1 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7bcbdf2f0020,7bcbdf2f0021 T1=7bcbdf2f0030,7bcbdf2f0031 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ba89acf0020,7ba89acf0021 T1=7ba89acf0030,7ba89acf0031 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7be90aaf0020,7be90aaf0021 T1=7be90aaf0030,7be90aaf0031 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b9cb96f00e0,7b9cb96f00e1 T1=7b9cb96f00f0,7b9cb96f00f1 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b6e94cf00e0,7b6e94cf00e1 T1=7b6e94cf00f0,7b6e94cf00f1 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=1,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b721daf00e0,7b721daf00e1 T1=7b721daf00f0,7b721daf00f1 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b4324af0020,7b4324af0021 T1=7b4324af0030,7b4324af0031 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ba4e5cf0020,7ba4e5cf0021 T1=7ba4e5cf0030,7ba4e5cf0031 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=1,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7b4a612f0020,7b4a612f0021 T1=7b4a612f0030,7b4a612f0031 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        }
+      ],
+      "OOM_positions": [
+        459,
+        459,
+        455,
+        463,
+        455,
+        459
+      ],
+      "total_reached": 2750,
+      "OOM_status2": 2634,
+      "conservative_unsupported_status1": 116,
+      "host_actual_current_faults": 84,
+      "supplied_view_faults": 36,
+      "H_owner_faults": 24,
+      "world_faults": 42,
+      "foreign_B_unrestored_A_destroy": 12
+    },
+    "ubsan": {
+      "physical": [
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffcae34a522,7ffcae34a523 T1=7ffcae34a51c,7ffcae34a51d allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffe87b2d792,7ffe87b2d793 T1=7ffe87b2d78c,7ffe87b2d78d allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffdd2661d02,7ffdd2661d03 T1=7ffdd2661cfc,7ffdd2661cfd allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffcc0a20dc0,7ffcc0a20dc1 T1=7ffcc0a20dd6,7ffcc0a20dd7 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffc60d60e50,7ffc60d60e51 T1=7ffc60d60e66,7ffc60d60e67 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_closed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffd9e3c8010,7ffd9e3c8011 T1=7ffd9e3c8026,7ffd9e3c8027 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffeaad41042,7ffeaad41043 T1=7ffeaad4103c,7ffeaad4103d allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffc76df2ba2,7ffc76df2ba3 T1=7ffc76df2b9c,7ffc76df2b9d allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffcb9f7d5c2,7ffcb9f7d5c3 T1=7ffcb9f7d5bc,7ffcb9f7d5bd allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffe7d42d430,7ffe7d42d431 T1=7ffe7d42d446,7ffe7d42d447 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7ffc0bd6def0,7ffc0bd6def1 T1=7ffc0bd6df06,7ffc0bd6df07 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "regression_reversed",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=16,9 direct_old=193 final=250,77;16,9 T0=7fffbad529d0,7fffbad529d1 T1=7fffbad529e6,7fffbad529e7 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fffc291fcb2,7fffc291fcb3 T1=7fffc291fcac,7fffc291fcad allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffc276f5302,7ffc276f5303 T1=7ffc276f52fc,7ffc276f52fd allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe8e680132,7ffe8e680133 T1=7ffe8e68012c,7ffe8e68012d allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffcf7e58600,7ffcf7e58601 T1=7ffcf7e58616,7ffcf7e58617 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fffdecb00b0,7fffdecb00b1 T1=7fffdecb00c6,7fffdecb00c7 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_without_probe",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffc77d32090,7ffc77d32091 T1=7ffc77d320a6,7ffc77d320a7 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffddd5577a2,7ffddd5577a3 T1=7ffddd55779c,7ffddd55779d allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffc58906792,7ffc58906793 T1=7ffc5890678c,7ffc5890678d allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe84618282,7ffe84618283 T1=7ffe8461827c,7ffe8461827d allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fffe4ecbec0,7fffe4ecbec1 T1=7fffe4ecbed6,7fffe4ecbed7 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fffdb8d1d60,7fffdb8d1d61 T1=7fffdb8d1d76,7fffdb8d1d77 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "terminal_explicit_return",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "81eb1da28ab384499e28e6efdb7fb7afa610c47ab2764ed0ee87f29fead308fb",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fff1e61ee30,7fff1e61ee31 T1=7fff1e61ee46,7fff1e61ee47 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fff22bc6232,7fff22bc6233 T1=7fff22bc622c,7fff22bc622d allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe3a07ee22,7ffe3a07ee23 T1=7ffe3a07ee1c,7ffe3a07ee1d allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fff38950e82,7fff38950e83 T1=7fff38950e7c,7fff38950e7d allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffcb0a96fa0,7ffcb0a96fa1 T1=7ffcb0a96fb6,7ffcb0a96fb7 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffc7e97aa40,7ffc7e97aa41 T1=7ffc7e97aa56,7ffc7e97aa57 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "producer_direct_result",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffee3b26150,7ffee3b26151 T1=7ffee3b26166,7ffee3b26167 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffc0e15513a,7ffc0e15513b T1=7ffc0e155134,7ffc0e155135 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fffb591f23a,7fffb591f23b T1=7fffb591f234,7fffb591f235 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=1,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe670ff48a,7ffe670ff48b T1=7ffe670ff484,7ffe670ff485 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe57952840,7ffe57952841 T1=7ffe57952856,7ffe57952857 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES H_reads=0,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7ffe845ea1f0,7ffe845ea1f1 T1=7ffe845ea206,7ffe845ea207 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES H_reads=1,0,0"
+        },
+        {
+          "P1062": "physical",
+          "source": "failure_scope_read",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "c1fec6c2afba894f8015e9e1d75ff2b4d3881e88038844d16dd4d679ccee1c24",
+          "observations": "P1062 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=58,94 direct_old=220 final=167,141;94,58 T0=7fff26ad0a00,7fff26ad0a01 T1=7fff26ad0a16,7fff26ad0a17 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES H_reads=0,1,1"
+        }
+      ],
+      "OOM_positions": [
+        459,
+        459,
+        455,
+        463,
+        455,
+        459
+      ],
+      "total_reached": 2750,
+      "OOM_status2": 2634,
+      "conservative_unsupported_status1": 116,
+      "host_actual_current_faults": 84,
+      "supplied_view_faults": 36,
+      "H_owner_faults": 24,
+      "world_faults": 42,
+      "foreign_B_unrestored_A_destroy": 12
+    }
+  },
+  "original_P965": {
+    "gcc": {
+      "owner_attempts": 494,
+      "CHECK_ledger_OOM": 502
+    },
+    "clang": {
+      "owner_attempts": 494,
+      "CHECK_ledger_OOM": 502
+    },
+    "ubsan": {
+      "owner_attempts": 494,
+      "CHECK_ledger_OOM": 502
+    },
+    "asan": {
+      "owner_attempts": 494,
+      "CHECK_ledger_OOM": 502
+    }
+  },
+  "old_generated_C_identities": 44,
+  "source_freeze_SHA256": "a9e5403f67550c178c73155a742f3a51eb583b15837454d052329762342b5534",
+  "original_v11": {
+    "SHA256": "e78dc38e5dabc83fd7b619c43479ed293871fc67d830aeb98ddac26cac5b6bd4",
+    "Git_blob": "e3b51f0cdd971418477aed4a5744b8a16789f073",
+    "inherited_keys": 2307
+  },
+  "first_RED_and_repairs": "Parent initial3holes; v1 terminating unit body type0; v2 observer optional function unused; v4 old counter lane regression; v5 new history negative filename; v6 P738 old finite profile boundary; formatter-only; ENOSPC safe own build relocation; ASan P633 timeout90 recovered11.10sec after load relief. All originals/raw preserved; no source/oracle/timeout edits.",
+  "independence": "No R1016/R1051/R1057/R1060 original source/oracle/runner/raw and no B1061 R details accessed/reused; no R/F launch/request. F90 only fixed-parent conditional static A read after independent freeze, no claim of new-candidate F proof.",
+  "limits": "Only finite P six-source family tested, not original blind R POS-B or all lawful H variants, third helper/escaping reference/general CFG. No Product GO/formal soundness/comparative cost or performance claim.",
+  "VALUE_ALIGNMENT_RISK": "B net63 private C lines/two borrowed Env pointers/no new heap object or issuer vs A honest NOCHANGE support matrix; broader audit/observer/history dependency and repeat cost real, human UB audit/re-audit closure advantage vs factored C and performance UNMEASURED. KEEP17.34 / REPLACE NONE / faithful4.2 N/A.",
+  "aggregation_note": "An initial results-only aggregation assertion mixed legacy same-text owner/OOM records from full CTest logs; corrected by exact P1062 line prefix. No compiler/test/oracle/input/result bytes changed."
+}
