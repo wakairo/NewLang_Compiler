@@ -1,0 +1,23 @@
+{
+  "release": "C144 P1055 source/oracle/read-only baseline harness PRE-RUN",
+  "parent": "ade11ebec808f5a95e8831a7ae6ee6f6da2b0dbe",
+  "files": {
+    "tests/p1055/baseline.py": "137dfb349182a8d7191411d323ea697bb12121ae6a90b35d5d6ea8779b62942e",
+    "tests/p1055/oracle-v1.json": "7678b7458c4d35f3146fad4777ecce71e1bd58a0ae780251fcac375f62796a7b",
+    "tests/p1055/probe.c": "52a674c44170d7e345459805d3de7d7e74321d7e09bc998aaad7e4629831d320",
+    "tests/p1055/sources/binding_copy_return.nl": "6abd602bf32965d6787e4cc432e6333f332c0662de7b9073567d2c7abfa21f2c",
+    "tests/p1055/sources/binding_return.nl": "b41b1c9ae31903063a2735b1a0363dfbcf88fefe0d1890dc07aa1929177b2a97",
+    "tests/p1055/sources/binding_tail.nl": "2bb9586b8080dc4e1f9d93294da231e5d77ac18efed7ecf91d79cff4068656ce",
+    "tests/p1055/sources/direct_return.nl": "67748f580d61bcc49859f9c88c1434aa87c96da7fe5bec3952ab409d429c9301",
+    "tests/p1055/sources/negative_alias_incoming_equal.nl": "11da48ddd355c14d46df1f9ad0424006a4171f65754761363c4d03e1e0f4e132",
+    "tests/p1055/sources/negative_constant_equal.nl": "1e5ef0fd0dac1c43a631110ef8b0ef45a50117b396c8cd66186f83e3de44e98c",
+    "tests/p1055/sources/negative_double_change.nl": "912d4e5002138fd62a583a7012ff21af30b9b8330605e65afae7c2015cc3d6b1",
+    "tests/p1055/sources/negative_ended_loan.nl": "6f6cb7150f06861e791342d469ce6bcb79dd2072150cde525225e846c3ee1f58",
+    "tests/p1055/sources/negative_incoming_different.nl": "643ab9dd1dbc4d986a392a977ee0f18b4bb1168c83c217535cf220780c06272b",
+    "tests/p1055/sources/negative_incoming_equal.nl": "c99aab52b24cbf73ff946fc7539999a55d490e4c9c185f583130dd1f59cef45c",
+    "tests/p1055/sources/negative_other_change_equal.nl": "462800aa494975289cb07deee9c509c1f96d6119ec5fde81871ea3e7567bd3e4",
+    "tests/p1055/sources/negative_scalar_as_borrow.nl": "8cc54369ea55b024fe9efbbb61a16b627d88e626d371a7f8d6eaab15cbb9ab05",
+    "tests/p1055/sources/renamed_reverse_chain_tail.nl": "cc703b0b365476e69398057608c5fea974cb42fd52480eac6fb978ab81a750e5",
+    "tests/p1055/sources/unsupported_after_closed_h.nl": "55fa3766720a8c64e4e3977e9bfb859d74cb437e650204441d74feba9bae3ae6"
+  }
+}
