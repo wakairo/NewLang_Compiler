@@ -232,3 +232,27 @@ or authority. The previous six-source supported/unsupported boundary and the
 unknown original blind R POS-B/general proof remain unchanged. Comparative human
 audit cost and performance remain UNMEASURED; the additional inventory check has
 real maintenance cost, and green CI is not a Product GO.
+
+The first repair is commit `71afa788a7a9dfdca608eb723db291b814e1731e`, tree
+`2d2e12fbd59178a682af46fea08e7bdc2b4fea7d`, prospective v12 SHA256
+`6567f69ac979dc99b1c85842656ecd83a7c71ce8e8c690f8a141b4f1fd97622f`.
+A fresh detached checkout, clean and cache-free before and after, passed Git
+inventory/current freeze, all five original history negatives and the added
+ambient-input rejection. GCC13.3 Debug built the unchanged compiler from that
+checkout. All seven originally failing CTests passed (two plus five disjoint
+completed tests), including real native/current/owner/OOM consumers.
+
+The first local CTest invocation stopped when a legacy forward runner needed
+the original `p990_oom` executable, which had not been built by `--target newlangc`.
+That preparation RED and full log remain in the new raw archive. Building only
+the missing unchanged CMake target fixed the environment; the failed and four
+never-run tests then passed on the same commit/flags/oracles. The two earlier
+PASS tests were not repeated. No compiler, safety or oracle repair was required.
+
+`evidence/c152/clean-checkout-v1.json` records this exact measured epoch. The
+complete new raw ZIP is `evidence/c152/clean-checkout-raw-v1.zip`, SHA256
+`36d2fbb42865857d2a8501c48c79a8d6b4156e1488932ee0674e05c6ec36e2e4`,
+77,858 bytes, 34 entries including its hash manifest. This later documentation
+commit adds evidence and refreshes its prospective hashes only. Its final
+HEAD/tree/manifest identity and natural CI results are recorded in Issue1062;
+neither the original six CI FAILs nor the preparation RED becomes a PASS.
