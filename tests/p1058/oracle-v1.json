@@ -1,0 +1,197 @@
+{
+  "release": "C148 P1058 independent complete source/oracle PRE-RUN",
+  "parent_HEAD": "469852922f2780370a79440fa427b4fc93ae1def",
+  "parent_tree": "1d400b211bd2c42485e9929a8b7e36f3afe275ab",
+  "canonical": "CURRENT_SPEC Draft17.34",
+  "parent_compiler_SHA256": "cbca93893ed5de7d683da54d8dec30edad185fc16a3ba2382b8ad7cd3a4ff163",
+  "provenance": "Preserved GCC13 parent binary/static libraries from P1055 implementation277ed62; all compiled src/include bytes identical to fixed published4698529, last commit evidence only. No R source accessed.",
+  "positive": {
+    "closed_then_two": {
+      "CHECK": 0,
+      "parent_C17": 4,
+      "candidate_C17": 0,
+      "calls": 2,
+      "helper_old": [
+        37,
+        112
+      ],
+      "helper_next": [
+        154,
+        37
+      ],
+      "helper_sibling": [
+        209,
+        68
+      ],
+      "root_initial": [
+        [
+          37,
+          209
+        ],
+        [
+          68,
+          112
+        ]
+      ],
+      "helper_indices": [
+        0,
+        1
+      ],
+      "direct_index": 0,
+      "direct_old": 68,
+      "direct_next": 112,
+      "final": [
+        [
+          154,
+          209
+        ],
+        [
+          112,
+          37
+        ]
+      ],
+      "H": [
+        29,
+        173
+      ]
+    },
+    "reversed_worlds": {
+      "CHECK": 0,
+      "parent_C17": 4,
+      "candidate_C17": 0,
+      "calls": 2,
+      "helper_old": [
+        16,
+        9
+      ],
+      "helper_next": [
+        77,
+        16
+      ],
+      "helper_sibling": [
+        250,
+        193
+      ],
+      "root_initial": [
+        [
+          250,
+          16
+        ],
+        [
+          9,
+          193
+        ]
+      ],
+      "helper_indices": [
+        1,
+        0
+      ],
+      "direct_index": 1,
+      "direct_old": 193,
+      "direct_next": 9,
+      "final": [
+        [
+          250,
+          77
+        ],
+        [
+          16,
+          9
+        ]
+      ],
+      "H": [
+        101,
+        47
+      ]
+    }
+  },
+  "negative": {
+    "wrong_incoming_equal": {
+      "CHECK_allowed": [
+        0
+      ],
+      "C17": 4,
+      "calls": 2,
+      "meaning": "lawful source, unsupported old-origin/call-cardinality/original scope; current must authenticate existing evidence, not authorize lowering"
+    },
+    "wrong_constant_equal": {
+      "CHECK_allowed": [
+        0
+      ],
+      "C17": 4,
+      "calls": 2,
+      "meaning": "lawful source, unsupported old-origin/call-cardinality/original scope; current must authenticate existing evidence, not authorize lowering"
+    },
+    "same_original_calls": {
+      "CHECK_allowed": [
+        0
+      ],
+      "C17": 4,
+      "calls": 2,
+      "meaning": "lawful source, unsupported old-origin/call-cardinality/original scope; current must authenticate existing evidence, not authorize lowering"
+    },
+    "one_registered_call": {
+      "CHECK_allowed": [
+        0
+      ],
+      "C17": 4,
+      "calls": 1,
+      "meaning": "lawful source, unsupported old-origin/call-cardinality/original scope; current must authenticate existing evidence, not authorize lowering"
+    },
+    "zero_registered_calls": {
+      "CHECK_allowed": [
+        0
+      ],
+      "C17": 4,
+      "calls": 0,
+      "meaning": "lawful source, unsupported old-origin/call-cardinality/original scope; current must authenticate existing evidence, not authorize lowering"
+    },
+    "third_registered_call": {
+      "CHECK_allowed": [
+        0
+      ],
+      "C17": 4,
+      "calls": 3,
+      "meaning": "lawful source, unsupported old-origin/call-cardinality/original scope; current must authenticate existing evidence, not authorize lowering"
+    },
+    "missing_failure_arm": {
+      "CHECK_allowed": [
+        2,
+        3
+      ],
+      "C17": "same-as-CHECK",
+      "calls": 2,
+      "meaning": "semantic-invalid source; parser eligibility may reject before semantic, record actual layer; never backend proof"
+    },
+    "missing_failure_cleanup": {
+      "CHECK_allowed": [
+        2,
+        3
+      ],
+      "C17": "same-as-CHECK",
+      "calls": 2,
+      "meaning": "semantic-invalid source; parser eligibility may reject before semantic, record actual layer; never backend proof"
+    },
+    "success_only_name_after_join": {
+      "CHECK_allowed": [
+        2,
+        3
+      ],
+      "C17": "same-as-CHECK",
+      "calls": 2,
+      "meaning": "semantic-invalid source; parser eligibility may reject before semantic, record actual layer; never backend proof"
+    },
+    "wrong_H_domain": {
+      "CHECK_allowed": [
+        2,
+        3
+      ],
+      "C17": "same-as-CHECK",
+      "calls": 2,
+      "meaning": "semantic-invalid source; parser eligibility may reject before semantic, record actual layer; never backend proof"
+    }
+  },
+  "physical": "H all normal/failure/cleanup worlds are fully closed before either fresh T original is constructed, both call returns and direct-write old observed, distinct live T fields/addresses and sibling; guest successes0/1/2 map original allocation/free/trials 0/0/1,1/1/2,2/2/2. No rawexit0 physicalPASS.",
+  "public": "real CHECK per source; GET historical vs current checked separately; positives actual2 calls distinct helpers/loans/roots, event1actualold; invalid source is NOT backend-origin proof.",
+  "safety_stop": "Any forged/missing current, unexpected unsafe acceptance, new issuer/law/API/ABI/IR/world proof, owner cleanup mismatch; no dangerous native. No extra CI after first natural FULL5/PARTIAL6jobs."
+}
