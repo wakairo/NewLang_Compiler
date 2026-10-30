@@ -1,0 +1,28 @@
+{
+  "source_only_freeze_commit": "55c7f81cae2d7c0871383df73c5fa3192bf5273c",
+  "candidate_v1": "3a8cd282b1b65840d73cc0b15dbcf1b992b9aa1e",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "first_original_backend_refusal": {
+    "sources": [
+      "t_then_h.nl",
+      "h_then_t.nl"
+    ],
+    "public_current": "all three actuals body/parameters/event OK0",
+    "CHECK": 0,
+    "C17": 4,
+    "first_function": "copy_call_proof",
+    "first_file_line": "src/checked_c_copy_internal.h:54",
+    "first_return_PC": "0x405b5a",
+    "raw": "evidence/baseline-FIRST/"
+  },
+  "first_preparation_RED": {
+    "kind": "configure missing llvm-config-23, no compiler/probe execution",
+    "log": "evidence/parent-build/",
+    "recovery": "explicit authorized frontend-only option, no toolchain/CI change"
+  },
+  "old_negative_oracle_FIRST_RED": "ZIP member compatibility-original-oracle-FIRST-RED.json; original expected4 actual0, active new positive separately measured",
+  "metadata_first_RED": "ZIP member inventory-classification-FIRST-RED.json; two faulty name-prefix assumptions corrected without Production change",
+  "diagnostic_loss": "ZIP member gcc-LastTest-inventory-sideeffect-FIRST.json; original GCC577 PASS stdout+exit retained, no fabricated detailed log",
+  "v1_direct_ASan": "PASS102.50s under contention; no90s CTest claim. New v2 selectedprofiles3/3PASS under unchanged90s",
+  "production_candidate_failures": "no unexpected compiler/native/current/owner/OOM failure observed in v1/v2 local gates; this is finite evidence only"
+}

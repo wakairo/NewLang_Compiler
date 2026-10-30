@@ -1,0 +1,940 @@
+{
+  "release": "C137 P1036 finite local results v1; P-owned evidence not independent acceptance",
+  "production_candidate": "3a8cd282b1b65840d73cc0b15dbcf1b992b9aa1e",
+  "production_header_SHA256": "d5963a3dbe63f789e3ade137bd67b08d7c91b430600852d08771818b3180936b",
+  "production_node_SHA256": "8d6b889d58fe876f93206845553db7d1d525af7335d6dae0a64bd3e3af82d0df",
+  "conditions": {
+    "gcc13": {
+      "command_record": "v1-gcc13-target-FIRST.json",
+      "stdout_SHA256": "2f7aecbb7b52adf40e3caa70331639e4b8f49f88584e51c74ccdd090f1f481bd",
+      "current_public_OK": 9,
+      "physical_trials": 18,
+      "physical_observations": [
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffd5eb8bf66 field1=7ffd5eb8bf67 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffcf74bd286 field1=7ffcf74bd287 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffd73f591b6 field1=7ffd73f591b7 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffed9ecc75e field1=7ffed9ecc75f allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffcfbb0c07e field1=7ffcfbb0c07f allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7fff9d6ee8ae field1=7fff9d6ee8af allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7fff03b5a096 field1=7fff03b5a097 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffee8c80366 field1=7ffee8c80367 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffc2a591016 field1=7ffc2a591017 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffd239a8d8e field1=7ffd239a8d8f allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffc704151ce field1=7ffc704151cf allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffcc7ea27be field1=7ffcc7ea27bf allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7ffdf4f31ec6 field1=7ffdf4f31ec7 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7ffd4c545876 field1=7ffd4c545877 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7ffe34ab41f6 field1=7ffe34ab41f7 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7ffd83678b8e field1=7ffd83678b8f allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7fff7a3637ce field1=7fff7a3637cf allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7ffc4660dc9e field1=7ffc4660dc9f allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        }
+      ],
+      "OOM_per_source": [
+        643,
+        643,
+        647
+      ],
+      "OOM_total": 1933,
+      "OOM_status_counts": {
+        "2": 1873,
+        "1": 60
+      },
+      "negative_counts": {
+        "actual_metadata": 63,
+        "third_stale": 9,
+        "H_producer": 12,
+        "foreign_A_destroy_B_survive": 3,
+        "third_result_confusion": 3,
+        "planned_return_mutant": 3
+      },
+      "old_C32_exact": true,
+      "named_reached_write_error_and_exact_retry": true,
+      "native_raw_unit_exit": "physical INCONCLUSIVE alone"
+    },
+    "clang": {
+      "command_record": "v1-clang-target-FIRST.json",
+      "stdout_SHA256": "9e4bc773cc1a10cd47fc04f34a767efb9a0835bbec87cfef347dc3f72bab6c7c",
+      "current_public_OK": 9,
+      "physical_trials": 18,
+      "physical_observations": [
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffd427fabc6 field1=7ffd427fabc7 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffcb2bd84c6 field1=7ffcb2bd84c7 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffc26664da6 field1=7ffc26664da7 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffd92a8390e field1=7ffd92a8390f allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffcf827e5ae field1=7ffcf827e5af allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffcef6f6c9e field1=7ffcef6f6c9f allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffffe4e1016 field1=7ffffe4e1017 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffd1f1a2d36 field1=7ffd1f1a2d37 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7fff648920d6 field1=7fff648920d7 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffd3f00c46e field1=7ffd3f00c46f allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffdadcf1f7e field1=7ffdadcf1f7f allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffe9b42c29e field1=7ffe9b42c29f allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7ffd98b71e86 field1=7ffd98b71e87 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7fffd6eec416 field1=7fffd6eec417 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7ffecfe3f276 field1=7ffecfe3f277 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 0,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7fff748eb6ae field1=7fff748eb6af allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 1,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7fff21b7524e field1=7fff21b7524f allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "none",
+          "guest_successes": 2,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7ffcec459d6e field1=7ffcec459d6f allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        }
+      ],
+      "OOM_per_source": [
+        643,
+        643,
+        647
+      ],
+      "OOM_total": 1933,
+      "OOM_status_counts": {
+        "2": 1873,
+        "1": 60
+      },
+      "negative_counts": {
+        "actual_metadata": 63,
+        "third_stale": 9,
+        "H_producer": 12,
+        "foreign_A_destroy_B_survive": 3,
+        "third_result_confusion": 3,
+        "planned_return_mutant": 3
+      },
+      "old_C32_exact": true,
+      "named_reached_write_error_and_exact_retry": true,
+      "native_raw_unit_exit": "physical INCONCLUSIVE alone"
+    },
+    "asan": {
+      "command_record": "v1-asan-target-FIRST.json",
+      "stdout_SHA256": "99d126c65914e655dcf2b080b4521c00312139278c5135a549a54ad3c3d41e92",
+      "current_public_OK": 9,
+      "physical_trials": 18,
+      "physical_observations": [
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7b75ce0f0020 field1=7b75ce0f0021 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7b1eb2ef0020 field1=7b1eb2ef0021 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7bf9b96f0020 field1=7bf9b96f0021 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7b911d8f0020 field1=7b911d8f0021 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7bd06ecf0020 field1=7bd06ecf0021 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7b5f988f0020 field1=7b5f988f0021 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7baa010f0020 field1=7baa010f0021 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7b552f8f0020 field1=7b552f8f0021 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7bfa3aef0020 field1=7bfa3aef0021 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7bcc070f0020 field1=7bcc070f0021 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7b9ee96f0020 field1=7b9ee96f0021 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7b45c5cf0020 field1=7b45c5cf0021 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7bd261af0020 field1=7bd261af0021 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7b24886f0020 field1=7b24886f0021 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7be677cf0020 field1=7be677cf0021 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 0,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7b89082f0020 field1=7b89082f0021 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 1,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7b5e0b4f0020 field1=7b5e0b4f0021 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "address",
+          "guest_successes": 2,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7bdce5ef0020 field1=7bdce5ef0021 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        }
+      ],
+      "OOM_per_source": [
+        643,
+        643,
+        647
+      ],
+      "OOM_total": 1933,
+      "OOM_status_counts": {
+        "2": 1873,
+        "1": 60
+      },
+      "negative_counts": {
+        "actual_metadata": 63,
+        "third_stale": 9,
+        "H_producer": 12,
+        "foreign_A_destroy_B_survive": 3,
+        "third_result_confusion": 3,
+        "planned_return_mutant": 0
+      },
+      "old_C32_exact": true,
+      "named_reached_write_error_and_exact_retry": true,
+      "native_raw_unit_exit": "physical INCONCLUSIVE alone"
+    },
+    "ubsan": {
+      "command_record": "v1-ubsan-target-FIRST.json",
+      "stdout_SHA256": "1dcdda0b7316c37f45db686ac2ea4f063b0bfc2fe1231fa09c974e0348437bf1",
+      "current_public_OK": 9,
+      "physical_trials": 18,
+      "physical_observations": [
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7fff6062b3e6 field1=7fff6062b3e7 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7fff5915a5c6 field1=7fff5915a5c7 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffec4ceefc6 field1=7ffec4ceefc7 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffe67a9b936 field1=7ffe67a9b937 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffc55bcd556 field1=7ffc55bcd557 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "t_then_h.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "67b3e00ac9ac64f73f91c41937ac0392462d2da3ffb60c8ea5f980b3c8594822",
+          "observations": "P1036 physical old=173,37,94 new=94,173,37 sibling=37,94,173 calls=3 indices=1,0,1 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7fff703f1a76 field1=7fff703f1a77 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffcf0fe2416 field1=7ffcf0fe2417 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffcd80c3896 field1=7ffcd80c3897 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffc04961496 field1=7ffc04961497 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffc797ad7f6 field1=7ffc797ad7f7 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffc309b61a6 field1=7ffc309b61a7 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "h_then_t.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "873ffae7988f463e869ffbef3f75c48b85b736b5d35c0f43b0efaffdd35cba32",
+          "observations": "P1036 physical old=37,173,94 new=94,37,173 sibling=173,94,37 calls=3 indices=0,1,0 same_original_T=YES live_original_reads=YES third_actual_return=94 field0=7ffde6409486 field1=7ffde6409487 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7ffceb3d1a16 field1=7ffceb3d1a17 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7ffdcba8ef16 field1=7ffdcba8ef17 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O0",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7ffe05ca4e16 field1=7ffe05ca4e17 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 0,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7ffdf19a6236 field1=7ffdf19a6237 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 1,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7ffd171425e6 field1=7ffd171425e7 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"
+        },
+        {
+          "P1036": "physical",
+          "source": "unsupported_third_helper.nl",
+          "cc": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "opt": "-O2",
+          "sanitizer": "undefined",
+          "guest_successes": 2,
+          "C_SHA256": "26cef5f27a16af4158091436d039b7914b626e26560f6c8bc07fa3858348a55a",
+          "observations": "P1036 physical old=41,67,109 new=67,109,151 sibling=173,173,173 calls=3 indices=0,0,0 same_original_T=YES live_original_reads=YES third_actual_return=109 field0=7ffe385107b6 field1=7ffe385107b7 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"
+        }
+      ],
+      "OOM_per_source": [
+        643,
+        643,
+        647
+      ],
+      "OOM_total": 1933,
+      "OOM_status_counts": {
+        "2": 1873,
+        "1": 60
+      },
+      "negative_counts": {
+        "actual_metadata": 63,
+        "third_stale": 9,
+        "H_producer": 12,
+        "foreign_A_destroy_B_survive": 3,
+        "third_result_confusion": 3,
+        "planned_return_mutant": 0
+      },
+      "old_C32_exact": true,
+      "named_reached_write_error_and_exact_retry": true,
+      "native_raw_unit_exit": "physical INCONCLUSIVE alone"
+    }
+  },
+  "old_regressions": {
+    "gcc13": {
+      "passed": 577,
+      "command_record": "v1-gcc13-old-all-FIRST.json",
+      "stdout_SHA256": "a0cb95b380d5925d5934ec8022813a75049c96a19348dab10f36ed6e7007b282"
+    },
+    "clang": {
+      "passed": 577,
+      "command_record": "v1-clang-old-all-FIRST.json",
+      "stdout_SHA256": "ddc38a8fbf3d3b4eeb86ac7da9b9d2bcfd243f560e1520e5d6cf260eabdc755c"
+    },
+    "asan": {
+      "passed": 114,
+      "command_record": "v1-asan-old-target-FIRST.json",
+      "stdout_SHA256": "0c17346683a505eb5dfbb8dfd6f1ce9bf4fd2921f4bf6c5c93ed1d5c975455bd"
+    },
+    "ubsan": {
+      "passed": 114,
+      "command_record": "v1-ubsan-old-target-FIRST.json",
+      "stdout_SHA256": "29ff6871de62b25c0973940f6783915e3c20a5aeda788abce7e3a74dfeaa96d3"
+    }
+  },
+  "old_owner": {
+    "clang": {
+      "ownership_trials": 494,
+      "CHECK_OOM_positions": 502,
+      "detailed_log": "v1-clang-LastTest.log",
+      "SHA256": "09c9fa97a8dd9819eca9334822396419262d7131a09bb003e0aedb5b94fe6a30"
+    },
+    "asan": {
+      "ownership_trials": 494,
+      "CHECK_OOM_positions": 502,
+      "detailed_log": "v1-asan-LastTest.log",
+      "SHA256": "094179d22a2d4bea392233d4357cd9b7797aaa78251e2aa6479d0c98256a2a22"
+    },
+    "ubsan": {
+      "ownership_trials": 494,
+      "CHECK_OOM_positions": 502,
+      "detailed_log": "v1-ubsan-LastTest.log",
+      "SHA256": "eb90b30a8b8486efe8beff133c3b06363653280e085195d483a3452798149288"
+    }
+  },
+  "new_R_cohort": 0,
+  "R1035_1016_originals": "NOT READ/NOT REUSED/NOT LAUNCHED",
+  "legacy_R675_R4_regressions": "retained as part of original577, not new independent R execution",
+  "limitations": [
+    "finite P-owned validation, no independent F/R approval",
+    "GCC detailed LastTest overwritten by concurrent inventory; genuine577 PASS stdout/exit preserved, no rerun/fabrication",
+    "metadata inventory prefix assumptions failed twice; original full inventory and error note preserved",
+    "original P1013 expected backend4 now observes0; original oracle remains RED, active forward positive separately passes",
+    "raw native exit0 alone physically INCONCLUSIVE",
+    "all-state rollback theorem and general arbitrary program semantics not claimed",
+    "human author/caller audit closure, factoredC comparison, performance/productcost UNMEASURED"
+  ],
+  "harness_v2": {
+    "freeze_commit": "88c0746add015b7095bfbb28dcfb83ee9c528016",
+    "production_change_from_v1": false,
+    "partition_ctest_count": 3,
+    "original_tests_unchanged": 577,
+    "partial_inventory": 580,
+    "full_expected": 581,
+    "timeout_seconds_unchanged": 90,
+    "observed_seconds": [
+      6.66,
+      4.96,
+      13.14
+    ],
+    "relevant_rerun_reason": "new profile dispatch/registration/90s budget, original v1 driver unchanged",
+    "command_record": "v2-asan-partition-FIRST.json",
+    "stdout_SHA256": "8ce235202402d8a3f1be1e014611966c0f5b42f01a111db7be0ff379ef83019b",
+    "result": "PASS all3, source profile checks retained; other green regressions not repeated"
+  },
+  "artifacts": {
+    "archive": "tests/p1036/evidence/local-measurements-v1.zip",
+    "index": "tests/p1036/evidence/local-measurements-index-v1.json",
+    "archive_SHA256": "3b081a154facdb8964ce7d75ee2d6955991a168e71dfb12e6ef61a9af085f6a5",
+    "members": 1355
+  },
+  "toolchains": {
+    "GCC13": {
+      "path": "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+      "version": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "binary_SHA256": "1b99826121ae6682a634e5efe09bd3e3df58ce58e0b28f849114ab5b89139c26"
+    },
+    "Clang23.1.3": {
+      "path": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "version": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)",
+      "binary_SHA256": "913453afb492abab17025139852413ba7fd7a52b4fb75fcce58ff3fe399d0a9e"
+    }
+  },
+  "compiler_binaries": {
+    "gcc13": "ec90f6180f3dd602155913bfaebd761c128fa4e2f0e34fe830346bccd2fa894f",
+    "clang": "b1fc0ef3887a6ef382779c9ae5c7a640d143c836d435bff2d82793255ec8572d",
+    "asan": "f411a0ae118d20bf04b6312f651a60b4ad2487af5b57134806f47e47574bf371",
+    "ubsan": "c7adbc51ada46e3c8de8063a0abc41070235ffb7339156f5894370d0b9c76395"
+  }
+}
