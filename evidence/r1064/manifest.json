@@ -1,0 +1,120 @@
+{
+  "schema": "R1064_C153_PR1063_INDEPENDENT_INTEGRATED_EXECUTOR_V1",
+  "authority": "Issue #1064 C153; original R1016 seven calibrated and new pre-producer independent freeze, 1 initial + <=5 mechanical, total <=6 natural calibrated runs",
+  "main": "438170098d5b98096f1ad1f1f200dc1f326c75c3",
+  "canonical": "docs/reference/CURRENT_SPEC.md -> Draft17.34; KEEP, no new issuer, API, ABI, or design",
+  "value_boundary": "Human UB prevention audit/re-audit dependency closure for library author AND ordinary-safe caller versus well-factored C; unmeasured, Product GO PAUSED/H1 HOLD",
+  "staging_ref": "NO_STAGING_REQUIRED",
+  "fixed_R_parent": "f56e5ab3d4bd61ef44e68c9631a7fa78cb21252d",
+  "fixed_R_parent_tree": "0b38954defa8f1c916683af7963ab020b64c32e4",
+  "fixed_R_parent_sole_parent": "afa6aae755289e27b90aaaf13ff42313b324ecd7",
+  "future_ref": "refs/heads/r-calibrated/r1016-pr1063",
+  "future_ref_state": "ABSENT BEFORE FIRST FULL COMMIT REF",
+  "future_workflow": ".github/workflows/r-calibrated-r1016-pr1063.yml",
+  "future_release_guard": "Actual GITHUB_SHA must equal checked out HEAD; fixed sole parent, original files, four allowlisted paths and physical PR1059 SHA/tree",
+  "target_pr": 1063,
+  "target_head": "b49a5e24d9fa56d367e116ce037a067c7e1cca38",
+  "target_tree": "5dd16c6582b9157bc7de5ffecb8818cab0b20955",
+  "target_base": "4c039095455e0df32eebf538b0f9db1db1e089cc",
+  "target_base_tree": "6c8dd17e7921becc3f02d66aefaf1c9c6130d87d",
+  "allowed_added_paths": [
+    ".github/workflows/r-calibrated-r1016-pr1063.yml",
+    "evidence/r1064/r_calibrated.py",
+    "evidence/r1064/manifest.json",
+    "evidence/r1064/README.md",
+    "evidence/r1064/sources/INTEGRATED-local-return.nl",
+    "evidence/r1064/oracle/INTEGRATED-local-return-EXPECTATIONS.json"
+  ],
+  "frozen_original_7": {
+    "POS-A-register-before-H.nl": "d9a40ea83d7b51b19bd20cd6e562a6d6a8697da4",
+    "POS-B-H-before-register.nl": "6d1a03a1d2c1f89ae19c413bc3cba553d6aeb97b",
+    "NEG-1-missing-Some-link.nl": "a89fff7304df7405b113b9d4625b098de36c5d87",
+    "NEG-2-wrong-tail-original-pointer.nl": "055853059ad8253973c4c4271842a49a10da0fff",
+    "NEG-3-double-nonCopy-terminal.nl": "db72bc023c9cf03cec6f066117007fed3f8064e8",
+    "NEG-4-field-loan-escape.nl": "d3a0de975edf014d34c7c2ed145cdcedf08ba354",
+    "R1016-FIRST-ORIGINAL-v1.txt": "ddf7dc87bca92cdbf16407814f15e9092bce9e27"
+  },
+  "history": {
+    "FIRST": {
+      "run": "40849018312/attempt1",
+      "archive_git_blob": "7467df2023c84fe86409f815136df779de728bae",
+      "sha256": "0d074152c822d1b45a71ccee37a91fcfb1fea2eae2ce8fff8c27a35f3c3daac9",
+      "bytes": 27685,
+      "classification": "RED original"
+    },
+    "v1": {
+      "run": "40869364041/attempt1",
+      "raw": "LOST, no reinterpretation"
+    },
+    "v2": {
+      "run": "40874742688/attempt1",
+      "archive_git_blob": "b85e5e794b03d1d623e71d3a5fa6d36cccf18060",
+      "sha256": "6baa3c9ef24b472d58c936abe9e414c81d8c11978f8f8ff48ec7f3bbbe6c0aa9",
+      "bytes": 33200,
+      "classification": "C17 RED positives"
+    },
+    "R1051": {
+      "run": "40984457279/attempt1",
+      "artifact": 12946890022,
+      "sha256": "b79662261d7bbb23626cf57e9852f13b2f69e5dd192893214feb36bd878a075a",
+      "bytes": 48639,
+      "classification": "two positive true C17 RED/no native, negative four CHECK3/no-clobber"
+    },
+    "R1052": {
+      "archive_commit": "7f4691a0b4fd4ea0ea09f16e835930f0899b373a",
+      "archive_git_blob": "eb680f99bfd30fd4e27a3e5f8c562e811a59a70e",
+      "sha256": "b79662261d7bbb23626cf57e9852f13b2f69e5dd192893214feb36bd878a075a",
+      "bytes": 48639,
+      "archive_path": "evidence/r1052/calibrated-pr1048-40984457279-attempt1.zip",
+      "status": "separate branch, unmodified/not copied"
+    },
+    "R1057": {
+      "run": "41015924765/attempt1",
+      "artifact": 12959691321,
+      "sha256": "aae11fae2100b39fd8c69a46e6ef07fe378bfde77e40b1b40360c5a462a5a2c0",
+      "bytes": 106658,
+      "classification": "POS-B true C17 RED/no native; four negatives refused; retained untouched"
+    },
+    "R1060": {
+      "run": "41026541892/attempt1",
+      "executor": "f56e5ab3d4bd61ef44e68c9631a7fa78cb21252d",
+      "raw_sha256": "6e68c98864bd4711cff09bf8dfdbab69485bb43a77b07ca266d43f70bd121206",
+      "classification": "POS-B C17 true RED old PR1059 unchanged"
+    }
+  },
+  "static_evidence": "All 7 frozen original byte+Git OID checked at future Action, full raw separately for each natural run; prior R1057 original result is historical and non-regraded",
+  "pending": "F91 concurrently read-only, no signoff prerequisite, concrete unsafe STOP if seen; no P/T fixture/oracle/runner",
+  "never": "Modify original R/P/T source, oracle, runners, ZIP, original RED; local P-equivalent test; manual dispatch/rerun, PR, READY, merge, Product GO",
+  "c145_original_review_commit": "cbe601871ace8d548b38d2e8d6773baf788d0a37",
+  "run_budget": {
+    "initial_natural_push": 1,
+    "additional_mechanical_pushes_at_most": 5,
+    "total_natural_push_runs_at_most": 6,
+    "optional_rfast_runs_at_most": 6
+  },
+  "original_source_only_stage_sha": "cbe601871ace8d548b38d2e8d6773baf788d0a37",
+  "r1057_executor_parent": "afa6aae755289e27b90aaaf13ff42313b324ecd7",
+  "r1057_executor_parent_tree": "dcee8ee440f8264ae519e0d09ebcb161f8e41e29",
+  "r1057_four_immutable_blobs": {
+    ".github/workflows/r-calibrated-r1016-pr1056.yml": "33255ecf5a5941a5cc92b05a526edbf089010f03",
+    "evidence/r1057/r_calibrated.py": "cc49080e88768e7163f37e7c70ff871b45c62d47",
+    "evidence/r1057/manifest.json": "0fe1308bb0132905066ff93d2858627255118359",
+    "evidence/r1057/README.md": "d21625e098844789e557f8d6456065ec6a72888f"
+  },
+  "independently_frozen_new": {
+    "source_git_blob": "c3a2a755577cdff6d32dfbae9e9bef47ac9d9df3",
+    "oracle_git_blob": "11793e38f9832fb09de7b45e30869803df260967",
+    "source_path": "evidence/r1064/sources/INTEGRATED-local-return.nl",
+    "oracle_path": "evidence/r1064/oracle/INTEGRATED-local-return-EXPECTATIONS.json",
+    "source_bytes": 5118,
+    "oracle_bytes": 1592,
+    "freeze_issue_comment": 6529844841,
+    "pre_producer_code_test_oracle_inspection": true
+  },
+  "r1060_previous_blobs": {
+    ".github/workflows/r-calibrated-r1016-pr1059.yml": "fcc021aeaf17356fea9ad1c76109f4aa09eecf41",
+    "evidence/r1060/r_calibrated.py": "8d601093d41ee238ba8aab6980ae58d305edb69d",
+    "evidence/r1060/manifest.json": "307e1b6c2cb387770b73ab93b67113680f104958",
+    "evidence/r1060/README.md": "d3fe9adc3075ebc045160d63aa6fc1d1d876cdea"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "authority": "Compiler/main 438170098d5b98096f1ad1f1f200dc1f326c75c3; CURRENT_SPEC Draft17.34 §§16.3.8,17.1,18.1b; Development Process §7",
+  "created_pre_producer_inspection": true,
+  "case": "r1064_independent_integrated_local_return",
+  "expected_kind": "lawful bounded mixed H/T source unit, H nonCopy local-return and terminal, scoped unused read in tail-failure arm, then two original T Copy update with old return",
+  "allocation_worlds": {
+    "0": "first allocation fails; zero H heap original; T follows match",
+    "1": "head allocation succeeds, tail fails; one head released; scoped unused read only; T follows match",
+    "2": "both allocations succeed; tail original carried by local LiveTail return then terminally consumed once, head separately released; T follows match"
+  },
+  "expected_t": {
+    "first_low": 19,
+    "first_high_old": 77,
+    "first_high_new": 91,
+    "second_low_old": 42,
+    "second_low_new": 77,
+    "second_high_unchanged": 158,
+    "displaced": 42,
+    "previous": 77
+  },
+  "expected_layers": "CHECK0/current authentic public owned/strict C17/native 0-1-2 if all supported; on uncovered exact shape fail closed without any unsafe issuance",
+  "unsound_signals": "wrong original/owner or cross-world borrow, unsafe false acceptance, C17 UB, partial owned or emitted C on failure",
+  "notes": "Prediction not observation; on source syntax typo use §7.6 only without changing semantic obligations; source scaffold is canonical Draft example, not a P file; names and T numbers selected independently.",
+  "producer_exposure_before_freeze": false
+}

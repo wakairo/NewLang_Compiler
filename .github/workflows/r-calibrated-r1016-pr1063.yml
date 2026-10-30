@@ -1,0 +1,124 @@
+# C153 bounded independent R CALIBRATED release, exact opt-in execution ref only.
+# Previous C145 source-only review remains historically untouched.
+name: R1016 post-FIRST CALIBRATED PR1063
+on:
+  push:
+    branches:
+      - 'r-calibrated/r1016-pr1063'
+permissions:
+  contents: read
+concurrency:
+  group: r1064-calibrated-r1016-pr1063
+  cancel-in-progress: false
+jobs:
+  calibrated:
+    if: ${{ github.repository == 'wakairo/NewLang_Compiler' && github.event_name == 'push' && github.ref == 'refs/heads/r-calibrated/r1016-pr1063' && github.run_attempt == 1 }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - name: Checkout exact C153 pushed R executor without credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Allocate non-reusable raw and fail closed on foreign source/ref
+        shell: bash
+        run: |
+          set -euo pipefail
+          raw="$RUNNER_TEMP/R1064-CALIBRATED-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT-$GITHUB_SHA"
+          (umask 077 && mkdir -m 700 "$raw")
+          trap 'sha256sum "$raw/preflight.stdout" "$raw/preflight.stderr" > "$raw/preflight.sha256"' EXIT
+          {
+            test "$GITHUB_REPOSITORY" = wakairo/NewLang_Compiler
+            test "$GITHUB_EVENT_NAME" = push
+            test "$GITHUB_REF" = refs/heads/r-calibrated/r1016-pr1063
+            test "$GITHUB_RUN_ATTEMPT" = 1
+            test "$GITHUB_WORKFLOW_REF" = "wakairo/NewLang_Compiler/.github/workflows/r-calibrated-r1016-pr1063.yml@refs/heads/r-calibrated/r1016-pr1063"
+            # GitHub event SHA must equal the immutable checked-out HEAD.
+            # Self-referential future executor SHA literals are impossible.
+            test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+            git rev-parse 'HEAD^{tree}'
+            git diff --name-status f56e5ab3d4bd61ef44e68c9631a7fa78cb21252d HEAD
+            for f in .github/workflows/r-calibrated-r1016-pr1063.yml evidence/r1064/r_calibrated.py evidence/r1064/manifest.json evidence/r1064/README.md evidence/r1064/sources/INTEGRATED-local-return.nl evidence/r1064/oracle/INTEGRATED-local-return-EXPECTATIONS.json; do git rev-parse "HEAD:$f"; sha256sum "$f"; done
+            test "$(git rev-parse HEAD:evidence/r1064/sources/INTEGRATED-local-return.nl)" = c3a2a755577cdff6d32dfbae9e9bef47ac9d9df3
+            test "$(git rev-parse HEAD:evidence/r1064/oracle/INTEGRATED-local-return-EXPECTATIONS.json)" = 11793e38f9832fb09de7b45e30869803df260967
+            test "$(git rev-parse HEAD^)" = f56e5ab3d4bd61ef44e68c9631a7fa78cb21252d
+            test "$(git rev-parse HEAD:evidence/r1022/sources/POS-A-register-before-H.nl)" = d9a40ea83d7b51b19bd20cd6e562a6d6a8697da4
+            test "$(git rev-parse HEAD:evidence/r1022/sources/POS-B-H-before-register.nl)" = 6d1a03a1d2c1f89ae19c413bc3cba553d6aeb97b
+            test "$(git rev-parse HEAD:evidence/r1022/sources/NEG-1-missing-Some-link.nl)" = a89fff7304df7405b113b9d4625b098de36c5d87
+            test "$(git rev-parse HEAD:evidence/r1022/sources/NEG-2-wrong-tail-original-pointer.nl)" = 055853059ad8253973c4c4271842a49a10da0fff
+            test "$(git rev-parse HEAD:evidence/r1022/sources/NEG-3-double-nonCopy-terminal.nl)" = db72bc023c9cf03cec6f066117007fed3f8064e8
+            test "$(git rev-parse HEAD:evidence/r1022/sources/NEG-4-field-loan-escape.nl)" = d3a0de975edf014d34c7c2ed145cdcedf08ba354
+            test "$(git rev-parse HEAD:evidence/r1022/oracle/R1016-FIRST-ORIGINAL-v1.txt)" = ddf7dc87bca92cdbf16407814f15e9092bce9e27
+            test "$(git rev-parse HEAD:.github/workflows/r-calibrated-r1016-pr1048.yml)" = e7b1b49f191a540bb4863b3fbf6cd177c5b5146c
+            test "$(git rev-list --parents -n1 HEAD | wc -w)" -eq 2
+            test "$(git status --porcelain --untracked-files=no)" = ""
+            test "$(git rev-parse HEAD:.github/workflows/r-calibrated-r1016-pr1056.yml)" = 33255ecf5a5941a5cc92b05a526edbf089010f03
+            test "$(git rev-parse HEAD:evidence/r1057/r_calibrated.py)" = cc49080e88768e7163f37e7c70ff871b45c62d47
+            test "$(git rev-parse HEAD:evidence/r1057/manifest.json)" = 0fe1308bb0132905066ff93d2858627255118359
+            test "$(git rev-parse HEAD:evidence/r1057/README.md)" = d21625e098844789e557f8d6456065ec6a72888f
+            test "$(git rev-parse HEAD:.github/workflows/r-calibrated-r1016-pr1059.yml)" = fcc021aeaf17356fea9ad1c76109f4aa09eecf41
+            test "$(git rev-parse HEAD:evidence/r1060/r_calibrated.py)" = 8d601093d41ee238ba8aab6980ae58d305edb69d
+            test "$(git rev-parse HEAD:evidence/r1060/manifest.json)" = 307e1b6c2cb387770b73ab93b67113680f104958
+            test "$(git rev-parse HEAD:evidence/r1060/README.md)" = d3fe9adc3075ebc045160d63aa6fc1d1d876cdea
+            test "$(git rev-parse HEAD:evidence/r1028/original-first-40849018312-attempt1.zip)" = 7467df2023c84fe86409f815136df779de728bae
+            test "$(git rev-parse HEAD:evidence/r1035/calibrated-v2-40874742688-attempt1.zip)" = b85e5e794b03d1d623e71d3a5fa6d36cccf18060
+            echo "R1064 C153 actual SHA/ref/parent and frozen custody verified; no READY or adoption permission"
+          } >"$raw/preflight.stdout" 2>"$raw/preflight.stderr"
+      - name: Checkout physical fixed PR1063 HEAD (no synthetic test merge)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: b49a5e24d9fa56d367e116ce037a067c7e1cca38
+          path: candidate
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Capture fixed candidate preflight, bootstrap and GCC13 frontend build without P suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          raw="$RUNNER_TEMP/R1064-CALIBRATED-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT-$GITHUB_SHA"
+          capture() {
+            label="$1"; shift
+            set +e
+            "$@" >"$raw/$label.stdout" 2>"$raw/$label.stderr"
+            result=$?
+            set -e
+            printf "%s\n" "$result" > "$raw/$label.exit"
+            sha256sum "$raw/$label.stdout" "$raw/$label.stderr" >> "$raw/setup.sha256"
+            test "$result" -eq 0
+          }
+          test "$(git -C candidate rev-parse HEAD)" = b49a5e24d9fa56d367e116ce037a067c7e1cca38
+          test "$(git -C candidate rev-parse HEAD^{tree})" = 5dd16c6582b9157bc7de5ffecb8818cab0b20955
+          capture apt-update sudo apt-get update
+          capture apt-install sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make python3 zstd
+          cd candidate
+          capture bootstrap /usr/bin/python3 scripts/bootstrap.py
+          . .deps/activate.sh
+          test -x "$NEWLANG_SDK_ROOT/bin/clang-23"
+          capture clang-version "$NEWLANG_SDK_ROOT/bin/clang-23" --version
+          grep -F 'clang version 23.1.3' "$raw/clang-version.stdout"
+          capture cmake-configure env CC=/usr/bin/gcc-13 cmake -S . -B build-frontend -DNEWLANG_FRONTEND_ONLY=ON -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Debug
+          grep -Fx 'NEWLANG_FRONTEND_ONLY:BOOL=ON' build-frontend/CMakeCache.txt
+          grep -Fx 'BUILD_TESTING:BOOL=OFF' build-frontend/CMakeCache.txt
+          capture cmake-build cmake --build build-frontend --parallel 2
+          test -f build-frontend/newlangc
+          sha256sum build-frontend/newlangc > "$raw/compiler.sha256"
+      - name: C153 post-FIRST calibrated original cohort (distinct new attempt1 per allowed push)
+        shell: bash
+        run: |
+          set -euo pipefail
+          . candidate/.deps/activate.sh
+          /usr/bin/python3 evidence/r1064/r_calibrated.py --execute
+      - name: Retain immutable raw on success AND failure; failed upload means EVIDENCE LOST
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r1064-CALIBRATED-${{ github.run_id }}-attempt${{ github.run_attempt }}-r1016-pr1063-${{ github.sha }}
+          path: ${{ runner.temp }}/R1064-CALIBRATED-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.sha }}/
+          if-no-files-found: error
+          overwrite: false
+          retention-days: 14
+          compression-level: 0
+# C153 budget max six total natural push runs: first plus five R-owned mechanical repairs.
+# No r-review/**, workflow_dispatch, PR, main, or r-fast triggers.
