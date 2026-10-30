@@ -1,0 +1,4 @@
+P1058 TWO_HELPERS calls=2 main=1 first_trial=12 last_call=3345 roots=2
+P1058 FIRST_REJECT /workspace/p1058-artifacts/diagnostic-v1/src/checked_c_copy_internal.h:285 copy_two_helpers
+error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof
+note: tests/p1058/sources/reversed_worlds.nl

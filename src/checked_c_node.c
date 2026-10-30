@@ -89,6 +89,10 @@ typedef struct {
     const NLCheckedFragment *origin_root;
     const NLCheckedFragment *copy_issuer;
     const NLSemanticContext *copy_anchor;
+    /* One main MATCH scheduled by source order; completed only after both
+     * normal arms have passed the existing H carrier/cleanup checks. */
+    NLCheckedNodeId copy_after_match;
+    bool copy_h_closed;
     /* Borrowed admission ledger, never a semantic capability. */
     const NLCheckedFragment *pre_copy_issuer;
     NLCheckedNodeId pre_copy_constructors[2];
@@ -1512,6 +1516,11 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
         return reject(e);
     const size_t site = e->allocations++;
     HeapLifecycle incoming[2] = {e->lifecycle[0], e->lifecycle[1]};
+    const bool closing = e->copy_after_match == id &&
+                         env->artifact == e->copy_issuer && !env->parent;
+    if (closing && (site || e->copy_h_closed || env->backing ||
+                    env->heap_place || env->heap_domain))
+        return reject(e);
     if (e->two_heap &&
         ((site == 0 && incoming[0].stage != 0) ||
          (site == 1 && (incoming[0].stage != 4 || incoming[1].stage != 0))))
@@ -1606,11 +1615,24 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
               (a->variant == 2 && e->lifecycle[site].stage != 8))) ||
             !put(e, "}\n"))
             return reject(e);
+        if (closing &&
+            (e->lifecycle[0].stage != (a->variant == 2 ? 8u : 0u) ||
+             e->lifecycle[1].stage || e->lifecycle[0].owner_symbol ||
+             e->lifecycle[0].domain_symbol || e->lifecycle[1].owner_symbol ||
+             e->lifecycle[1].domain_symbol || e->pending_live ||
+             e->active_owner_call || e->active_owner_body))
+            return reject(e);
     }
     /* Both owned paths were separately validated, then project only the
      * common ancestor carrier lifecycle. No branch-local IDs escape. */
     e->lifecycle[0] = site == 1 ? (HeapLifecycle){.stage = 8} : incoming[0];
     e->lifecycle[1] = incoming[1];
+    if (closing) {
+        if (!seen[0] || !seen[1] || e->allocations != 2 ||
+            e->producer_calls != 1 || e->owner_calls != 1)
+            return reject(e);
+        e->copy_h_closed = true;
+    }
     out->type = e->unit;
     return true;
 }

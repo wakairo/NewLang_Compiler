@@ -188,6 +188,44 @@ static bool copy_prepare_at(Emit *e, const NLCheckedFragment *body,
  * Distinct lexical originals never share child authority: authenticate each
  * through that caller's actual entry and the evolving Local ledger. Main's
  * prefix and the existing same-original cases retain their old conditions. */
+/* Schedule only a source-owned outer H MATCH followed by two fresh literal
+ * originals. This is no completion proof: allocated_match must separately
+ * validate every arm, including None cleanup, before copy_closed_world can
+ * admit the common main continuation. No H-success snapshot is reused. */
+static bool copy_closed_plan(Emit *e, const NLCheckedFragment *body)
+{
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(body, nl_checked_root(body));
+    const NLCheckedNodeView *statement =
+        root ? nl_checked_node_view(body, root->first_item) : NULL;
+    const NLCheckedNodeView *match =
+        statement ? nl_checked_node_view(body, statement->initializer) : NULL;
+    if (body != e->copy_issuer ||
+        body != nl_checked_call_body(e->origin_root,
+                                     nl_checked_root(e->origin_root)) ||
+        e->copy_expected_roots != 2 || e->copy_expected_calls != 2 || !root ||
+        root->kind != NL_CHECKED_BLOCK || root->terminates || !statement ||
+        statement->kind != NL_CHECKED_STATEMENT || !match ||
+        match->kind != NL_CHECKED_MATCH || !match->normal_frame_unchanged ||
+        match->captured_frame_closed || match->normal_arms != 2 ||
+        match->item_count != 2 || match->terminates || match->type != e->unit)
+        return false;
+    NLCheckedNodeId item = statement->next_item;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLCheckedNodeView *binding = nl_checked_node_view(body, item),
+                                *init = binding
+                                            ? nl_checked_node_view(
+                                                  body, binding->initializer)
+                                            : NULL;
+        if (!binding || binding->kind != NL_CHECKED_BINDING || !init ||
+            init->kind != NL_CHECKED_AGGREGATE || init->type != e->copy_type ||
+            match->span.end_byte >= init->span.start_byte)
+            return false;
+        item = binding->next_item;
+    }
+    e->copy_after_match = statement->initializer;
+    return true;
+}
 static bool copy_two_helpers(Emit *e, const NLCheckedFragment *body)
 {
     if (!e->copy_second_function)
@@ -279,8 +317,10 @@ static bool copy_two_helpers(Emit *e, const NLCheckedFragment *body)
         if (node->span.end_byte > last_call)
             last_call = node->span.end_byte;
     }
-    return (calls == 2 && (caller != body || (first_trial != SIZE_MAX &&
-                                              last_call <= first_trial))) ||
+    return (calls == 2 &&
+            (caller != body ||
+             (first_trial != SIZE_MAX && last_call <= first_trial) ||
+             copy_closed_plan(e, body))) ||
            reject(e);
 }
 static bool copy_prepare(Emit *e, const NLCheckedFragment *body)
@@ -684,13 +724,32 @@ static bool copy_post_world(Emit *e, const Env *env)
     e->post_copy_regions[1] = env->backing;
     return true;
 }
+static bool copy_closed_world(const Emit *e, const Env *env)
+{
+    NLSemanticSnapshot common;
+    if (!e->copy_after_match || !e->copy_h_closed || env->parent ||
+        env->backing || env->heap_place || env->heap_domain ||
+        env->artifact != e->copy_issuer || e->copy_expected_roots != 2 ||
+        e->copy_expected_calls != 2 || e->allocations != 2 ||
+        e->producer_calls != 1 || e->owner_calls != 1 || e->pending_live ||
+        e->active_owner_call || e->active_owner_body ||
+        !nl_semantic_snapshot(e->copy_anchor, &common) ||
+        common.backing_regions || common.domains || common.raw_intervals)
+        return false;
+    for (size_t i = 0; i < 2; ++i)
+        if (e->lifecycle[i].stage || e->lifecycle[i].owner_symbol ||
+            e->lifecycle[i].domain_symbol)
+            return false;
+    return true;
+}
 static bool copy_carrier_world(Emit *e, const Env *env)
 {
     return env->artifact == e->copy_issuer &&
            (!e->allocations ||
             (e->allocations == 2 && e->producer_calls == 1 &&
              e->owner_calls == 0) ||
-            copy_post_world(e, env) || copy_pre_world(e, env));
+            copy_post_world(e, env) || copy_pre_world(e, env) ||
+            copy_closed_world(e, env));
 }
 static bool copy_bind(Emit *e, Env *env, Local *l, NLCheckedNodeId constructor)
 {

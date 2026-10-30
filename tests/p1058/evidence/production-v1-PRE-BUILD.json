@@ -1,0 +1,8 @@
+{
+  "parent": "469852922f2780370a79440fa427b4fc93ae1def",
+  "scope": "only header/node private backend; source-ordered main match schedule, completion recorded only after both H arms validated, zero H resources in genuine main T entry",
+  "files": {
+    "src/checked_c_copy_internal.h": "6c3653d2d0388c1ff1be7f8db3e828144be12dd9d51b722e8d2804612d96d23d",
+    "src/checked_c_node.c": "e4189bf2ec21b3bf24d7826a0c4167dfde6673f1339a258b9cb2815d1abfc1d1"
+  }
+}

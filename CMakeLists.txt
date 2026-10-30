@@ -1002,6 +1002,11 @@ if(BUILD_TESTING)
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1055/run.py" "$<TARGET_FILE:newlangc>"
             "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1055_profile}")
     endforeach()
+    foreach(p1058_profile IN ITEMS 0 1)
+        add_test(NAME p1058_closed_h_${p1058_profile}.integration COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1058/run.py" "$<TARGET_FILE:newlangc>"
+            "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1058_profile}")
+    endforeach()
     add_executable(p961_oom tests/p961/oom.c)
     target_include_directories(p961_oom PRIVATE tests/support)
     target_link_libraries(p961_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
