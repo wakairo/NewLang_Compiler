@@ -1,0 +1,80 @@
+{
+  "schema": "R1057_C146_PR1056_CALIBRATED_EXECUTOR_V2",
+  "authority": "Issue #1057 C146 bounded post-FIRST R-only CALIBRATED; first natural push 1 plus at most 2 R-owned mechanical repair push runs; total <=3",
+  "main": "438170098d5b98096f1ad1f1f200dc1f326c75c3",
+  "canonical": "docs/reference/CURRENT_SPEC.md -> Draft17.34; KEEP, no new issuer, API, ABI, or design",
+  "value_boundary": "Human UB prevention audit/re-audit dependency closure for library author AND ordinary-safe caller versus well-factored C; unmeasured, Product GO PAUSED/H1 HOLD",
+  "staging_ref": "refs/heads/r-review/r1057-pr1056-calibrated-source-only",
+  "fixed_R_parent": "68f7fe6a0f0ff934a827fd9ad0459bc9d67caeaa",
+  "fixed_R_parent_tree": "77ac35417e52ff29274ec5008806382401c6660a",
+  "fixed_R_parent_sole_parent": "e161666b611a9fe6b501cb132b7c7e916c5f5d2b",
+  "future_ref": "refs/heads/r-calibrated/r1016-pr1056",
+  "future_ref_state": "ABSENT before C146 first complete executor ref push",
+  "future_workflow": ".github/workflows/r-calibrated-r1016-pr1056.yml",
+  "future_release_guard": "Actual GITHUB_SHA must equal checked out HEAD; fixed sole parent, original files, four allowlisted paths and physical PR1056 SHA/tree",
+  "target_pr": 1056,
+  "target_head": "469852922f2780370a79440fa427b4fc93ae1def",
+  "target_tree": "1d400b211bd2c42485e9929a8b7e36f3afe275ab",
+  "target_base": "ade11ebec808f5a95e8831a7ae6ee6f6da2b0dbe",
+  "target_base_tree": "70305183f8951038d296ac9a9ecae1f8e8750e4f",
+  "allowed_added_paths": [
+    ".github/workflows/r-calibrated-r1016-pr1056.yml",
+    "evidence/r1057/r_calibrated.py",
+    "evidence/r1057/manifest.json",
+    "evidence/r1057/README.md"
+  ],
+  "frozen_original_7": {
+    "POS-A-register-before-H.nl": "d9a40ea83d7b51b19bd20cd6e562a6d6a8697da4",
+    "POS-B-H-before-register.nl": "6d1a03a1d2c1f89ae19c413bc3cba553d6aeb97b",
+    "NEG-1-missing-Some-link.nl": "a89fff7304df7405b113b9d4625b098de36c5d87",
+    "NEG-2-wrong-tail-original-pointer.nl": "055853059ad8253973c4c4271842a49a10da0fff",
+    "NEG-3-double-nonCopy-terminal.nl": "db72bc023c9cf03cec6f066117007fed3f8064e8",
+    "NEG-4-field-loan-escape.nl": "d3a0de975edf014d34c7c2ed145cdcedf08ba354",
+    "R1016-FIRST-ORIGINAL-v1.txt": "ddf7dc87bca92cdbf16407814f15e9092bce9e27"
+  },
+  "history": {
+    "FIRST": {
+      "run": "40849018312/attempt1",
+      "archive_git_blob": "7467df2023c84fe86409f815136df779de728bae",
+      "sha256": "0d074152c822d1b45a71ccee37a91fcfb1fea2eae2ce8fff8c27a35f3c3daac9",
+      "bytes": 27685,
+      "classification": "RED original"
+    },
+    "v1": {
+      "run": "40869364041/attempt1",
+      "raw": "LOST, no reinterpretation"
+    },
+    "v2": {
+      "run": "40874742688/attempt1",
+      "archive_git_blob": "b85e5e794b03d1d623e71d3a5fa6d36cccf18060",
+      "sha256": "6baa3c9ef24b472d58c936abe9e414c81d8c11978f8f8ff48ec7f3bbbe6c0aa9",
+      "bytes": 33200,
+      "classification": "C17 RED positives"
+    },
+    "R1051": {
+      "run": "40984457279/attempt1",
+      "artifact": 12946890022,
+      "sha256": "b79662261d7bbb23626cf57e9852f13b2f69e5dd192893214feb36bd878a075a",
+      "bytes": 48639,
+      "classification": "two positive true C17 RED/no native, negative four CHECK3/no-clobber"
+    },
+    "R1052": {
+      "archive_commit": "7f4691a0b4fd4ea0ea09f16e835930f0899b373a",
+      "archive_git_blob": "eb680f99bfd30fd4e27a3e5f8c562e811a59a70e",
+      "sha256": "b79662261d7bbb23626cf57e9852f13b2f69e5dd192893214feb36bd878a075a",
+      "bytes": 48639,
+      "archive_path": "evidence/r1052/calibrated-pr1048-40984457279-attempt1.zip",
+      "status": "separate branch, unmodified/not copied"
+    }
+  },
+  "static_evidence": "Source-only until first independent push; observed R run IDs/artifacts are reported separately, not machine-asserted here",
+  "pending": "Independent R raw experiment and F89 result; C final safety/adoption judgement; no F89 wait unless concrete F safety STOP",
+  "never": "Modify original R/P/T source, oracle, runners, ZIP, original RED; local P-equivalent test; manual dispatch/rerun, PR, READY, merge, Product GO",
+  "c145_original_review_commit": "cbe601871ace8d548b38d2e8d6773baf788d0a37",
+  "run_budget": {
+    "initial_natural_push": 1,
+    "additional_mechanical_pushes_at_most": 2,
+    "total_natural_push_runs_at_most": 3
+  },
+  "original_source_only_stage_sha": "cbe601871ace8d548b38d2e8d6773baf788d0a37"
+}
