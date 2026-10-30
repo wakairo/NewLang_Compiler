@@ -1,0 +1,12 @@
+{
+  "command": [
+    "python3",
+    "/workspace/p1036/tests/p1036/baseline.py",
+    "/workspace/p1036-parent-build/newlangc",
+    "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+    "/workspace/p1036-artifacts/baseline-FIRST"
+  ],
+  "exit": 0,
+  "stdout_SHA256": "63310f943898ac14bd76a3dbe8180d36dce121bfad594546bee25782dd0d3003",
+  "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

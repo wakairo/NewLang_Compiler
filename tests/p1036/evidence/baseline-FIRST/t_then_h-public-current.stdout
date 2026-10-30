@@ -1,0 +1,10 @@
+P1036 CURRENT ordinal=0 function=14 call=11 body=0 parameters=0 event=0 GET=YES
+P1036 RESULT ordinal=0 binding=6
+P1036 VALUES ordinal=0 index=1 old=173 next=94 sibling=37 root=1 root_incarnation=1 child=3 child_incarnation=3 entry_parent_fact=1 handoff_parent_fact=8 sibling_fact=UNCHANGED
+P1036 CURRENT ordinal=1 function=13 call=18 body=0 parameters=0 event=0 GET=YES
+P1036 RESULT ordinal=1 binding=10
+P1036 VALUES ordinal=1 index=0 old=37 next=173 sibling=94 root=1 root_incarnation=1 child=2 child_incarnation=2 entry_parent_fact=8 handoff_parent_fact=15 sibling_fact=UNCHANGED
+P1036 CURRENT ordinal=2 function=15 call=25 body=0 parameters=0 event=0 GET=YES
+P1036 RESULT ordinal=2 binding=15
+P1036 VALUES ordinal=2 index=1 old=94 next=37 sibling=173 root=1 root_incarnation=1 child=3 child_incarnation=3 entry_parent_fact=15 handoff_parent_fact=21 sibling_fact=UNCHANGED
+P1036 C17 status=1 published=NO length=777

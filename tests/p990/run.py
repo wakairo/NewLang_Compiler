@@ -154,7 +154,7 @@ with tempfile.TemporaryDirectory(prefix="p990-") as temp:
 # C112's new P-owned source/oracle suite uses this existing test registration.
 # The original P990 inputs, checks and expected observations above are retained.
 if group == "new":
-    additional = run([sys.executable, root.parent / "p1030/p1013_forward.py",
+    additional = run([sys.executable, root.parent / "p1036/p1013_forward.py",
                       cli, cc, sanitizer])
     ok(additional)
     print(additional.stdout.decode(), end="", flush=True)
@@ -162,7 +162,7 @@ if group == "new":
                        cli, cc, sanitizer])
     ok(bounded_unit)
     print(bounded_unit.stdout.decode(), end="", flush=True)
-    dual_fields = run([sys.executable, root.parent / "p1030/run.py",
+    dual_fields = run([sys.executable, root.parent / "p1036/p1030_forward.py",
                       cli, cc, sanitizer])
     ok(dual_fields)
     print(dual_fields.stdout.decode(), end="", flush=True)

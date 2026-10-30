@@ -1,0 +1,15 @@
+{"source": "tests/p1036/sources/t_then_h.nl", "source_SHA256": "49895c903da0d1f28af5c18744db9d8906355f24f141012753d093dd427fb3cc", "compiler_SHA256": "26f0c0b1821c16f4329111dcbc776f5113234d84161a37d1874ccd48f7ccefdb", "CHECK": 0, "GET_actual": 3, "body_parameters_event_current": [0, 0, 0], "CLI_C17": 4, "no_C": true, "named_bytes_dev_ino_no_temp": "preserved", "first_reject_PC": "0x405b5a", "first_private_reject": ["copy_call_proof", "/workspace/p1036/src/checked_c_copy_internal.h:54"], "native": "NOT TESTED"}
+{"source": "tests/p1036/sources/h_then_t.nl", "source_SHA256": "6cf920aa36d72d7f78c4f972ba2260e18767f8d71c99e93423cf3b3f8e66ce90", "compiler_SHA256": "26f0c0b1821c16f4329111dcbc776f5113234d84161a37d1874ccd48f7ccefdb", "CHECK": 0, "GET_actual": 3, "body_parameters_event_current": [0, 0, 0], "CLI_C17": 4, "no_C": true, "named_bytes_dev_ino_no_temp": "preserved", "first_reject_PC": "0x405b5a", "first_private_reject": ["copy_call_proof", "/workspace/p1036/src/checked_c_copy_internal.h:54"], "native": "NOT TESTED"}
+P1036 SOURCE REFUSAL negative_read_actual.nl CHECK 3 /workspace/p1036/tests/p1036/sources/negative_read_actual.nl:39:9-39:34: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter
+P1036 SOURCE REFUSAL negative_read_actual.nl C17 3 /workspace/p1036/tests/p1036/sources/negative_read_actual.nl:39:9-39:34: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter
+P1036 SOURCE REFUSAL negative_loan_escape.nl CHECK 3 /workspace/p1036/tests/p1036/sources/negative_loan_escape.nl:44:21-47:6: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope
+P1036 SOURCE REFUSAL negative_loan_escape.nl C17 3 /workspace/p1036/tests/p1036/sources/negative_loan_escape.nl:44:21-47:6: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope
+P1036 SOURCE REFUSAL negative_double_terminal.nl CHECK 3 /workspace/p1036/tests/p1036/sources/negative_double_terminal.nl:98:48-98:64: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding
+P1036 SOURCE REFUSAL negative_double_terminal.nl C17 3 /workspace/p1036/tests/p1036/sources/negative_double_terminal.nl:98:48-98:64: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding
+P1036 SOURCE REFUSAL unsupported_fourth_helper.nl CHECK 0 
+P1036 SOURCE REFUSAL unsupported_fourth_helper.nl C17 4 error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof
+note: /workspace/p1036/tests/p1036/sources/unsupported_fourth_helper.nl
+P1036 SOURCE REFUSAL unsupported_other_original.nl CHECK 0 
+P1036 SOURCE REFUSAL unsupported_other_original.nl C17 4 error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof
+note: /workspace/p1036/tests/p1036/sources/unsupported_other_original.nl
+P1036 literal pinned-parent source/current/C17 baseline DONE; native/R NOT TESTED

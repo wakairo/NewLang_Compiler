@@ -1,0 +1,7 @@
+-- Frontend-only: LLVM discovery and llvm.c_api smoke omitted
+-- Found Python3: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12 (found suitable version "3.12.14", minimum required is "3.12") found components: Interpreter
+-- T991: exactly two approved synthetic CTests registered
+-- T993: no approved R manifest; zero R CTests registered
+-- Configuring done (0.2s)
+-- Generating done (0.3s)
+-- Build files have been written to: /workspace/p1036-parent-build

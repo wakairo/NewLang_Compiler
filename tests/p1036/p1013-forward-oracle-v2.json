@@ -1,0 +1,136 @@
+{
+  "release": "C137 P1036 forward-only C112 epoch; all original source/oracle/runner remain immutable",
+  "stage": "PRE-RUN P1036 v1",
+  "parent": "a56cd08c23548852504cf95e94eb6c9a56f3dd8f",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "prerequisite": "Stage0 actual both source-issued call/body/loan and both public validators OK; only mixed distinct rejected first at copy_call_proof function identity guard; Issue1013 comment6484014944",
+  "positive_sources": [
+    "tests/p1013/stage0/ordinary_same.nl",
+    "tests/p1013/stage0/ordinary_distinct.nl",
+    "tests/p1013/stage0/mixed_same.nl",
+    "tests/p1013/stage0/mixed_distinct.nl",
+    "tests/p1013/production/mixed_distinct_direct.nl"
+  ],
+  "CHECK": 0,
+  "GET": "both real call body/parameters succeed",
+  "current_VALIDATORS": "both body/parameters/event return OK0 for each call",
+  "two_changes": {
+    "old": [
+      41,
+      67
+    ],
+    "next": [
+      67,
+      109
+    ],
+    "sibling": [
+      173,
+      173
+    ],
+    "same_original_field_address": true,
+    "distinct_scoped_loans": true,
+    "before_any_H_allocation": true
+  },
+  "function_mapping": "same-helper declares one matching source-ID C symbol called twice; different helpers declare two matching source-ID C symbols each called once; actual per-call validation and original field address must agree",
+  "unchanged_parent_C": {
+    "ordinary_same.nl": "b1f954d064f366dc4a98bc90d4df1bc8fbdb81a173843b580fa6387dac025074",
+    "ordinary_distinct.nl": "b90a54b7838373a2b27e61aa89008695ea2885cdbaf70aec60c0c02eb90d680a",
+    "mixed_same.nl": "79670a957616765528bfde8a8ccbe548b23fe1f611445a7f32e40e98a466b50f"
+  },
+  "physical": {
+    "ordinary": "unit exit and generated C identity measured, native T fields otherwise INCONCLUSIVE",
+    "mixed": "actual unchanged original C plus passive existing observer hooks; two Changes at same original field address, sibling173, true original head/tail addresses/A/D and LiveTail local/return/terminal; exact end/finalize/release/free and no double ownership",
+    "heap_successes": [
+      0,
+      1,
+      2
+    ],
+    "trials": [
+      1,
+      2,
+      2
+    ],
+    "frees": [
+      0,
+      1,
+      2
+    ],
+    "live_tail": [
+      0,
+      0,
+      1
+    ],
+    "H_marks": [
+      23,
+      199
+    ],
+    "compilers": "GCC and Clang strict C17 O0/O2, ASan/LSan/UBSan inherited"
+  },
+  "metadata_negatives": {
+    "per_actual_call": 9,
+    "total": 18,
+    "expected": "both current body and parameters validators refuse; emitter UNSUPPORTED, no text publication, unchanged length777; restore then exact-byte C retry",
+    "kinds": [
+      "same ABI other function ID",
+      "field index",
+      "sibling as target child",
+      "loan escape flag",
+      "foreign current caller context",
+      "foreign source identity",
+      "foreign actual body presentation",
+      "same ABI other callable plan",
+      "missing/stale child fact"
+    ]
+  },
+  "H_negatives": {
+    "total": 4,
+    "expected": "producer validator refuses and no C publication; exact-byte retry after restore",
+    "kinds": [
+      "head Domain instead of tail Domain",
+      "head Allocation instead of tail Allocation",
+      "head root instead of tail root",
+      "missing original return proof"
+    ]
+  },
+  "ownership_negative": "Leave B's actual body in A mutable presentation, reject C, destroy A unrestored, B public proofs/emitter still healthy and exact, destroy B once",
+  "negative_sources": {
+    "tests/p1013/stage0/negative_loan_escape.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "tests/p1013/production/negative_double_consume.nl": {
+      "CHECK": 3,
+      "C17": 3
+    }
+  },
+  "OOM": "Unchanged P990 generic engine on each new positive mixed source: record actual emitted allocation positions, inject only reached malloc/calloc/realloc one at a time; no C publication/length777 unchanged; semantic summary and original H/current proof preserved; healthy retry exact original emitted C bytes. OOM vs conservative UNSUPPORTED recorded, not universal all-state rollback.",
+  "named_output": "reached RLIMIT_FSIZE error/no-clobber bytes/dev/ino and exact successful retry; invalid/unsupported sources fresh output absent and existing named output unchanged",
+  "history": "original v1-v5/source/oracle/first RED/evidence immutable, forward v6 566+ coverage; trusted P1011 verifier unchanged; no root CMake/T/workflow/R inputs changes",
+  "limits": "P-owned finite evidence, no independent F/R acceptance or Product GO",
+  "VALUE_ALIGNMENT_RISK": "Extra private mapping/profile checks and proof revalidation grow compiler-maintainer audit/maintenance cost; no new caller proof duties/public issuer/core policy; author+ordinary-safe caller human UB audit closure benefit vs well-factored C, performance/cost UNMEASURED.",
+  "transferred_positive": {
+    "source": "tests/p1013/production/unsupported_sibling.nl",
+    "original_C112_oracle": {
+      "CHECK": 0,
+      "C17": 4
+    },
+    "new_C127_expected": {
+      "CHECK": 0,
+      "C17": 0
+    },
+    "validation": "new P1030 current and original native physical assertions for index0->1, old41/173, next67/109, siblings173/67, H original23/199, guest0/1/2; not R evidence",
+    "old_source_SHA256": "e0c6926adf829e23af3baf582af43ac8a250ee735cd31331c4b0dbfbd08d88bd"
+  },
+  "transferred_third_positive": {
+    "source": "tests/p1013/production/unsupported_third_helper.nl",
+    "original_oracle": {
+      "CHECK": 0,
+      "C17": 4
+    },
+    "new_expected": {
+      "CHECK": 0,
+      "C17": 0
+    },
+    "active_suite": "tests/p1036/run.py/current.c/observer.h/consumer.c/oom.c; public current, old41/67/109 next67/109/151 sibling173/173/173; guest0/1/2 strict native, named no-clobber, host negative and reached OOM"
+  }
+}
