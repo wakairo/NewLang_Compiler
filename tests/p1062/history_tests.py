@@ -12,7 +12,7 @@ root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "tests/support"))
 sys.path.insert(0, str(root / "tests/p1058"))
 from versioned_freeze import FreezeError
-from history_v12 import V11 as V8, verify
+from history_v12 import V11 as V8, verify, check_git_inventory, render
 
 CURRENT = runpy.run_path(str(root / "tests/p982/freeze_test.py"))["CURRENT"]
 current = json.loads((root / CURRENT).read_bytes())
@@ -82,3 +82,26 @@ for fault in ["coedit-v11-v12", "drop-original-key", "old-source", "old-oracle",
         else:
             raise AssertionError("accepted rewritten original history: " + fault)
 print("P1062 history original-v11 external anchor/data/coverage PASS", flush=True)
+
+# C152: an ambient file with matching bytes must not become an input merely
+# because it exists. Keep the five original history oracles above unchanged.
+count = check_git_inventory(root, CURRENT)
+expected = render(root, CURRENT)
+assert expected == (root / CURRENT).read_bytes()
+with tempfile.TemporaryDirectory(prefix=".c152-", dir=root / "tests/p1062") as directory:
+    ambient = Path(directory) / "untracked.txt"
+    ambient.write_bytes(b"untracked ambient input, not a source or authority\n")
+    assert render(root, CURRENT) == expected
+    forged = json.loads(expected)
+    name = str(ambient.relative_to(root))
+    forged["files"][name] = sha(ambient.read_bytes())
+    candidate = Path(directory) / "candidate.json"
+    candidate.write_text(json.dumps(forged, indent=2) + "\n")
+    try:
+        check_git_inventory(root, str(candidate.relative_to(root)))
+    except FreezeError as error:
+        assert "untracked prospective freeze input: " + name in str(error)
+        print("P1062 GIT INPUT REJECT matching untracked file", flush=True)
+    else:
+        raise AssertionError("accepted an untracked prospective input")
+print("P1062 Git-only regeneration/ambient independence PASS", count, flush=True)

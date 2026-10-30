@@ -179,3 +179,56 @@ issuer/API/ABI/IR or general interpreter) remain deferred.
 At most one new DRAFT/HOLD stacked PR and one natural FULL5+PARTIAL group (six
 jobs) are allowed after local safety. CI results are reported to Issue1062 and
 the PR metadata; no post-CI push, dispatch, rerun or independent R retest request.
+
+## C152 mechanical recovery of the published input inventory
+
+The C150 publication above is an immutable historical result, not a current CI
+PASS. Its HEAD `0502751b03f927fc224a253a3f1aaffa11291be9` / tree
+`0d020e2b2bc6c3216b1f5f65d2d21fad59f0a36b` failed all six first jobs on FULL
+`41045748786` and PARTIAL `41045748815`, attempt1. All seven failing tests
+propagated the same missing-input error from `p982_freeze.unit`. Prospective v12
+had included an ignored, untracked Python cache. Local passes used that ambient
+file and did not demonstrate clean-checkout reproducibility.
+
+The exact original v12 is retained as `evidence/c152/original-v12-FIRST.json`,
+SHA256 `7ff8ce60009d145b170a04fa81a8f9e51ff03f5dae7dd37ba41d8d41fb126e1a`,
+Git blob `8e8dcc9b10ef678e86b7094ddc7be32656151c9e`. The original decoded six-job
+log ZIP is retained byte-for-byte, SHA256
+`50e8c853b77c2670d4d8af5dfe0b1841d4381f3e39d966572ab74532af580aa8`.
+Neither those original FAIL results nor earlier sources/oracles are regraded.
+
+C152 permits this prospective v12 bookkeeping correction on the same branch and
+PR1063, with at most three additional natural FULL5+PARTIAL sets. It supersedes
+only the earlier no-post-first-CI-push budget. Stop at the first reproducible
+green set; no manual reruns/dispatch, Production changes, READY/merge/Product GO
+or new independent F/R run is authorized.
+
+Regeneration now uses the Git index rather than a recursive filesystem scan:
+the unchanged v11 inventory and its manifest are required, tracked P1062 inputs
+are added, and every selected file must equal its staged Git blob. Existing
+legitimate tracked coverage is retained. Untracked ambient files cannot become
+inputs, even when their content hash matches. Historical scratch-copy verification
+remains offline and retains every original fail-closed check and external anchor.
+
+After staging the intended bookkeeping files, regenerate and check with:
+
+```sh
+PYTHONDONTWRITEBYTECODE=1 python3 -B tests/p1062/history_v12.py --refresh
+PYTHONDONTWRITEBYTECODE=1 python3 -B tests/p1062/history_v12.py --check-git
+```
+
+The original five history counterexamples stay unchanged. The P1062 history
+runner additionally checks deterministic regeneration, ambient-file independence
+and refusal of a coherently hashed untracked input. The first fresh detached
+checkout of the original failed HEAD reproduced the missing-cache refusal with
+zero source caches. Repair verification uses a fresh Git checkout with caches
+absent and all seven originally failing CTests; exact new SHA/tree, clean results
+and subsequent natural CI are reported separately in Issue1062 and PR metadata.
+
+Production `src/**`/`include/**`, the original 22 frozen inputs, all v1–v11 history,
+original first source/diagnostic/CI RED, and parent PRs remain unchanged. This
+corrects evidence reproducibility only; it adds no compiler feature, language law
+or authority. The previous six-source supported/unsupported boundary and the
+unknown original blind R POS-B/general proof remain unchanged. Comparative human
+audit cost and performance remain UNMEASURED; the additional inventory check has
+real maintenance cost, and green CI is not a Product GO.
