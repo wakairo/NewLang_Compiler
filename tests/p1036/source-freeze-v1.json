@@ -1,0 +1,19 @@
+{
+  "release": "C137 P1036 source-only PRE-RUN",
+  "parent": "a56cd08c23548852504cf95e94eb6c9a56f3dd8f",
+  "parent_tree": "a2cd1c9a9c66a8686d7e4b99f545b82865ef3877",
+  "main": "438170098d5b98096f1ad1f1f200dc1f326c75c3",
+  "files": {
+    "tests/p1036/README.md": "93dd334cb03601c398ed51e57eca45c9846a1e5aa337cfe676b7b326f485510b",
+    "tests/p1036/baseline.py": "31e40f5aa4435160b8026722ad1c129054932051029c2b5bdd3104343abe7ecc",
+    "tests/p1036/oracle-v1.json": "be07b1064308269f8077a5fe217fd3875b9cb43334eda6203bbed7e9def97421",
+    "tests/p1036/probe.c": "838f9740a50cd7e4d64d1328a2c2968ab8668c2e83535e359f2ec157246ac61a",
+    "tests/p1036/sources/h_then_t.nl": "6cf920aa36d72d7f78c4f972ba2260e18767f8d71c99e93423cf3b3f8e66ce90",
+    "tests/p1036/sources/negative_double_terminal.nl": "6204b93f3a43ba105de68843aa8707034255546af870ec43eb8e20a2fffc0cc9",
+    "tests/p1036/sources/negative_loan_escape.nl": "c57b811dfcde116336eb254a31fc56a921a248cb4aa10020922d1016f3531e93",
+    "tests/p1036/sources/negative_read_actual.nl": "3ac091fb6dbafaf25d7f411cc68523e7b3f3f7178c0e6ef99d64b3d446b1bf74",
+    "tests/p1036/sources/t_then_h.nl": "49895c903da0d1f28af5c18744db9d8906355f24f141012753d093dd427fb3cc",
+    "tests/p1036/sources/unsupported_fourth_helper.nl": "1b3840bed68b95808493e60c061581429f27919882a32832ab849c36fabb265e",
+    "tests/p1036/sources/unsupported_other_original.nl": "9a9658f3ac30eb70fb9ce6a12cc6b67fd2b196ebe88cfc1969c0379f06713dc0"
+  }
+}
