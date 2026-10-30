@@ -1,0 +1,10 @@
+{
+  "parent": "4c039095455e0df32eebf538b0f9db1db1e089cc",
+  "source_freeze_commit": "278c7c7bc89d2cd44e37d39f3341b9661a590ea0",
+  "files": {
+    "src/checked_c_node.c": "480b7f903152117a9155b9f0a41634dd4965dc11540cb7bb5923d01a0c42a83d",
+    "tests/p1062/source-freeze-v1.json": "a9e5403f67550c178c73155a742f3a51eb583b15837454d052329762342b5534",
+    "tests/p1062/oracle-v1.json": "9847539057aee9139d55e43d15ee29b3903f35d03c0d9a578d7f826fe12e05c6"
+  },
+  "decision": "B bounded two borrowed Env markers, existing producer_valid, final owned unit result normalization, effect-free unit borrow with source/operand/range/scope and live H stage4. No public issuer/world/api changes; all cleanup/Copy/all-arm postguards unchanged. No native before negatives."
+}

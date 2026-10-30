@@ -1,0 +1,13 @@
+{
+  "release": "C150 P1062 PRE-RUN runtime oracle v1",
+  "source_oracle_SHA256": "9847539057aee9139d55e43d15ee29b3903f35d03c0d9a578d7f826fe12e05c6",
+  "producer_local_packets": {
+    "regression_closed": 1,
+    "regression_reversed": 1,
+    "terminal_without_probe": 1,
+    "terminal_explicit_return": 1,
+    "producer_direct_result": 0,
+    "failure_scope_read": 1
+  },
+  "required": "All frozen source/oracle unchanged; 13 source negatives BEFORE native; public current authentic; all3 actual Copy returns + distinct typed T original addresses and fields/sibling; original H root/inc/Domain, full cleanup in guest0/1/2; precise head/caller/receiver read counts from source oracle; GCC/Clang C17 O0/O2 native; all reached emitter OOM positions must hit, output unpublished, before/after snapshot and owner/current intact, exact retry; foreign B body/arm survives A unrestored destroy; 44 old C exact; five history attacks rejected; planned defined-u8 second-return mutant must explicitly fail RET1, never merely any signal. No historical oracle weakening."
+}

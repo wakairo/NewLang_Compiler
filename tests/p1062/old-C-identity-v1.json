@@ -1,0 +1,183 @@
+{
+  "parent": "469852922f2780370a79440fa427b4fc93ae1def",
+  "sources": {
+    "tests/p1013/production/mixed_distinct_direct.nl": {
+      "source_SHA256": "56f976789b7fe3cd320ad81787367523ae3ad6645513c145a9e9ed44cd515665",
+      "C_SHA256": "5193732f8e2c47f23cb6a99bd791ce59166c548fb3b089ccfe838e68595b1f39"
+    },
+    "tests/p1013/production/unsupported_sibling.nl": {
+      "source_SHA256": "e0c6926adf829e23af3baf582af43ac8a250ee735cd31331c4b0dbfbd08d88bd",
+      "C_SHA256": "bca25658bdfe19c03ec722445eb313b45d44a8614dfa9a08df4ea413e6f49b23"
+    },
+    "tests/p1013/stage0/mixed_distinct.nl": {
+      "source_SHA256": "6eecf3906cecc25c3562d2aa1c0f641f2497774183a92ab097a5a7f233acef58",
+      "C_SHA256": "44d2a6e412432f9a50139eefcbad94729be9a7ad3763c6a0af618be92e0992ab"
+    },
+    "tests/p1013/stage0/mixed_same.nl": {
+      "source_SHA256": "05f59a04b08103f61667f393863879e3ef5056b3560b858962b78746e0453775",
+      "C_SHA256": "79670a957616765528bfde8a8ccbe548b23fe1f611445a7f32e40e98a466b50f"
+    },
+    "tests/p1013/stage0/ordinary_distinct.nl": {
+      "source_SHA256": "f2867462d8ca8e272675709741631bab086af20d9d9f389d226b83be3899fcfb",
+      "C_SHA256": "b90a54b7838373a2b27e61aa89008695ea2885cdbaf70aec60c0c02eb90d680a"
+    },
+    "tests/p1013/stage0/ordinary_same.nl": {
+      "source_SHA256": "2dbb7bc6409b94ff74ab87f2349775392f22a55c2dc363aa6999f59ba1b74cdd",
+      "C_SHA256": "b1f954d064f366dc4a98bc90d4df1bc8fbdb81a173843b580fa6387dac025074"
+    },
+    "tests/p1020/sources/control_return_false.nl": {
+      "source_SHA256": "7312ca7242e2c3dc4b1e3b08bea51676b2ffcd2a0918ea1509d4830058963eb0",
+      "C_SHA256": "20335eeeec898956b771ed5758ac3236806f0fb4b2067501d3fbba57bc34cf2b"
+    },
+    "tests/p1020/sources/control_return_true.nl": {
+      "source_SHA256": "7ffe18c0260d2f9ec575975fb80ac33eff1ae22ecf09c64acf5181bcd193f8d7",
+      "C_SHA256": "fbb04c87d7a8c11c31e062b272d8d93d407c459caf03c9a5207a0879ae629167"
+    },
+    "tests/p1020/sources/two_normal_equal.nl": {
+      "source_SHA256": "eb43a5d47e9703e2521bcf7afd3eb6c72413d61a97e3be62087e22378dd23f67",
+      "C_SHA256": "78d6420376f9bb3ca423b11f4cacf2e6044ff5b392c85fbe776fd6b99b610784"
+    },
+    "tests/p1020/sources/two_normal_false.nl": {
+      "source_SHA256": "8d01eff65c7435e48298a7b7c2035623aee30f9d08ef08a16e4ebc53e44019ed",
+      "C_SHA256": "eb04263f682cd59bbac65393968cff7b88bcb6c2c21f95dc40e37c0d1c001b37"
+    },
+    "tests/p1020/sources/two_normal_index1.nl": {
+      "source_SHA256": "0259256f952c1a0213b500c7d53dc95afa53df1a9d025b0c35cf0b803b8c0e4b",
+      "C_SHA256": "cbd0b2b473c611590e11a4c2edfa16ea36f3bfde8eabffbb8f9c26683f0d23b2"
+    },
+    "tests/p1020/sources/two_normal_true.nl": {
+      "source_SHA256": "e840b106e98507f2d4cccb2d3f39522e1b2589716c1829a2b8a2a0c179869b69",
+      "C_SHA256": "7d892a2d88104abc14152220a4eb68509bb6f4d4b0c80ef3a56fcd2650b60770"
+    },
+    "tests/p1030/sources/heap_before_pair.nl": {
+      "source_SHA256": "20df343adb83e990c15819bf11d29d8d330abffc9464454fd2371768a850a891",
+      "C_SHA256": "3be790aeea27399524438bd4694bb6915e9293b4301880d99371997346605075"
+    },
+    "tests/p1030/sources/pair_before_heap.nl": {
+      "source_SHA256": "ee8ad83a1796eb688ef0de02d0b166c3f7131791080c868e4f72e14f0219877a",
+      "C_SHA256": "3be790aeea27399524438bd4694bb6915e9293b4301880d99371997346605075"
+    },
+    "tests/p1045/sources-v2/after_producer.nl": {
+      "source_SHA256": "5159242cd9b13f70659517f66670e2d907e087a9f3ced9f1d56cec8283402d67",
+      "C_SHA256": "af5a50b1913cd0879f7724d44b589a595151d2b48258a97634b35903ed978235"
+    },
+    "tests/p1045/sources-v2/before_link.nl": {
+      "source_SHA256": "11147d0fde926200563742fdc2013f72392acc5c4dff61bff182497574ecbbf9",
+      "C_SHA256": "980679c5c96ff554262fb25bb7e17ef1114a04e1f877f1a49c59a523cd58ab1a"
+    },
+    "tests/p1045/sources-v2/declaration_order.nl": {
+      "source_SHA256": "8873e0223b4be0a5fb05b43bc87792e5d51773fb70b0906e36ffb78229bdbad8",
+      "C_SHA256": "c33339567a9e00a2ad59553d1f3f94e1e59a93ac7f6eda80492ab552a0add415"
+    },
+    "tests/p1045/sources-v2/prefix_two_originals.nl": {
+      "source_SHA256": "468b812184e3c05723ae94d6fcd08bd8538044828ec8bf892297c185376f2eda",
+      "C_SHA256": "c33339567a9e00a2ad59553d1f3f94e1e59a93ac7f6eda80492ab552a0add415"
+    },
+    "tests/p1055/sources/binding_return.nl": {
+      "source_SHA256": "b41b1c9ae31903063a2735b1a0363dfbcf88fefe0d1890dc07aa1929177b2a97",
+      "C_SHA256": "262f58b80f080fa36f3bd1404dbe01ce55a0b2e4ea7d4b37809c635eb981c4f9"
+    },
+    "tests/p1055/sources/direct_return.nl": {
+      "source_SHA256": "67748f580d61bcc49859f9c88c1434aa87c96da7fe5bec3952ab409d429c9301",
+      "C_SHA256": "79e416636f219a2f9867b4b8926d99979cd6f26b1f44d77315023f512dfe9a91"
+    },
+    "tests/p982/sources/after_false.nl": {
+      "source_SHA256": "ef1d67b5f402d9343909b0e62b6d35304b4661c2ffdbe42f99654cffcf58a33e",
+      "C_SHA256": "dbab1ebd3668746f89a1eff5f23b22cebfb651ae20c6d387ea4135c7e52a7a6f"
+    },
+    "tests/p982/sources/after_true.nl": {
+      "source_SHA256": "fe01780671fb4d2834323f2a8c0074e8296dd8ce6ca4bfd27139856592344c73",
+      "C_SHA256": "d40c528a95829c3f2c93c4884ae2ca668cf48ef1f0a197752b846751f35bac6b"
+    },
+    "tests/p982/sources/second_false.nl": {
+      "source_SHA256": "1932b58967f400dc4ffdd928dedd9737a52d707f4ca705bc10b11308c01cb21b",
+      "C_SHA256": "0427a1a5d3ff15d17e4149ada8fdaa319e41c57daf9cd6d69b2e8054bcddafb6"
+    },
+    "tests/p982/sources/second_true.nl": {
+      "source_SHA256": "d7cf70ecc94e17ea500acf3a6273c173c3fe791b9dee43a2b45e881359fc3518",
+      "C_SHA256": "9c187d36b7a7272899a8a7d9a660f4de38cb4319413a1e5e048784b48901b12b"
+    },
+    "tests/p990/p986/t_before_allocation_bound.nl": {
+      "source_SHA256": "1de0c43fcf9696bb70adaac18cd2f509866d4b030d68fca54a1f25b8b750bfb0",
+      "C_SHA256": "4d66a0d803433d40f406895485f07779b683aa67761c16ccee70d46e2c8c5536"
+    },
+    "tests/p990/p986/t_before_allocation_direct.nl": {
+      "source_SHA256": "11dae439e1ec017bcc705ee63d3b2c328a9b83624e29d8c2c0619274d3523055",
+      "C_SHA256": "f40b169d753f2fbe0b6bd9aa07527de06e352dfbb72e075633047f43dd42ae41"
+    },
+    "tests/p990/p986/t_before_h_read_bound.nl": {
+      "source_SHA256": "9ec7a58582de6d47dd519b999232a8265ff4fd1887aa30827775c5e170d78d98",
+      "C_SHA256": "dc787493b12ab9ea4c9c2457ec9ffea0433da4ad9f0aead95bcc6982c26e6229"
+    },
+    "tests/p990/p986/t_before_h_read_direct.nl": {
+      "source_SHA256": "3bc744886de50f6456e6e59c4c964091928f02a4f3e3d54cd9df5efb9af7a7f3",
+      "C_SHA256": "4f6e30e757f8b366eeb5c06e7fc62281d51f67d4c81993f91b9a15537c8712cf"
+    },
+    "tests/p990/p986/t_only_bound.nl": {
+      "source_SHA256": "cbc8fac90352febc6925a39a76bd747fdaf7f2ca03fc978300c4d32df0535cd3",
+      "C_SHA256": "49983b6b5df809ae556aa3806daf1cdfb41153197415103f5fc7c6b6ff91943f"
+    },
+    "tests/p990/p986/t_only_direct.nl": {
+      "source_SHA256": "37dfec293a692f02e851d11fce8a9a491ad1a0f9551c58df32b7acdf9a50165a",
+      "C_SHA256": "fe63f66c29c24cf905bd215f7470af652fa0a35bb69bfd4671c8a811f1d45c8f"
+    },
+    "tests/p990/sources/after_false_bound.nl": {
+      "source_SHA256": "4b3894aa099ddf39366c460f1880207805c6ada2e60102902c76a7f148aeb10d",
+      "C_SHA256": "755f1631cd98788daf80caa5fe1319dfeacb64e32f88d116792b2b33ae26f1a9"
+    },
+    "tests/p990/sources/after_false_direct.nl": {
+      "source_SHA256": "4b01fa2e75ee0a9bd574b8bd7629cf5f516ac2cc5d798e22fbb0a262e5e8e7e7",
+      "C_SHA256": "b4da0dc8516f744e0d36a03a14db55f6f614ffcf861af8fd18974cb5621bd85f"
+    },
+    "tests/p990/sources/after_true_bound.nl": {
+      "source_SHA256": "4514ba19bef127414e5545930ecc4aad2ade14bbc5d886cdd3d830963b937e8d",
+      "C_SHA256": "20606056c3fd7f7814d426bc780b1a475a5bc0826c85778b2130e5bf21c0611c"
+    },
+    "tests/p990/sources/after_true_direct.nl": {
+      "source_SHA256": "1320bf0ba4e30a219671ff89927bae277f2fad524e45317f57c1f6876bbce3bb",
+      "C_SHA256": "1473e8c3867122a2f3f50cf27cd67ef580f28e60df385cfeaa80469401100b52"
+    },
+    "tests/p990/sources/before_bound.nl": {
+      "source_SHA256": "f3d24ccd3ad7905e003ff2c561d3efbb64d5d5e05fa1477598efca59c035a43f",
+      "C_SHA256": "1c9a85562de4a2743f30581a742b2bb9895f92390ced504e8338ef14ea388ca3"
+    },
+    "tests/p990/sources/before_direct.nl": {
+      "source_SHA256": "312291544d6b013c2c4bd37a8cb7d5899d9f00e77cc0e2e904cb454830bfdd7f",
+      "C_SHA256": "18c61d1ec8eb3e9e6544e643925b1d0355c202e21364d137a79f7361cca2ab5d"
+    },
+    "tests/p990/sources/calibration_unreachable_bound_v2.nl": {
+      "source_SHA256": "6c6c603d3a3695f4e4c0f8a09355cf40c403db5bdadc0941617bada913bc3ee8",
+      "C_SHA256": "1c9a85562de4a2743f30581a742b2bb9895f92390ced504e8338ef14ea388ca3"
+    },
+    "tests/p990/sources/negative_duplicate_return.nl": {
+      "source_SHA256": "bd908c83f7074939cddadab9c8adec79098142ca50c70dec5c7e16297334145f",
+      "C_SHA256": "18c61d1ec8eb3e9e6544e643925b1d0355c202e21364d137a79f7361cca2ab5d"
+    },
+    "tests/p1055/sources/binding_tail.nl": {
+      "source_SHA256": "2bb9586b8080dc4e1f9d93294da231e5d77ac18efed7ecf91d79cff4068656ce",
+      "C_SHA256": "262f58b80f080fa36f3bd1404dbe01ce55a0b2e4ea7d4b37809c635eb981c4f9"
+    },
+    "tests/p1055/sources/binding_copy_return.nl": {
+      "source_SHA256": "6abd602bf32965d6787e4cc432e6333f332c0662de7b9073567d2c7abfa21f2c",
+      "C_SHA256": "f7c171b8ca0ee0aa59ea09bcd001cf695d48667812f8b60e02a2b5d07f9506c3"
+    },
+    "tests/p1055/sources/renamed_reverse_chain_tail.nl": {
+      "source_SHA256": "cc703b0b365476e69398057608c5fea974cb42fd52480eac6fb978ab81a750e5",
+      "C_SHA256": "87bb1bee9785a5ae08bf8f52f7eee47d46eb36fca1a74e0158e71a6db09e4a9c"
+    },
+    "tests/p1062/sources/regression_closed.nl": {
+      "source_SHA256": "234c331fde90dcb38d181418e47ba59ad0bd6635f0d19dde04f59087ef680952",
+      "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da"
+    },
+    "tests/p1062/sources/regression_reversed.nl": {
+      "source_SHA256": "0b7e6fc9eba9d3a30e08af8e812e018b957c165a7f3f627b4c7637d5ccad40b2",
+      "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720"
+    },
+    "tests/p1062/sources/terminal_without_probe.nl": {
+      "source_SHA256": "36ffb08cc272764347252d1af90142db327be42209577270b758788b9af55437",
+      "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66"
+    }
+  },
+  "release": "C148 P1058 original accepted C byte identities, measured fixed PR1056 binary before candidate execution",
+  "purpose": "Prospective P1062: exact inherited41 plus3 already accepted fixed-parent C outputs; no old table edits."
+}

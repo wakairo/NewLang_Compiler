@@ -120,6 +120,10 @@ typedef struct Env {
     const NLNodeJoinView
         *node_join; /* borrowed only during synchronous arm emit */
     size_t node_join_arm;
+    /* Borrowed, source-owned nodes, valid only in this synchronous scope.
+     * These normalize unit results; they do not issue ownership or authority.
+     */
+    const NLCheckedNodeView *unit_function_body, *unit_observation;
     const struct Env *parent;
     const NLCheckedFragment *artifact;
 } Env;
@@ -533,8 +537,12 @@ static bool initial_some(Emit *e, const Env *env, const NLCheckedNodeView *some)
 static bool block(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
 {
     const NLCheckedNodeView *v = get(env, id);
-    if (v == NULL || v->kind != NL_CHECKED_BLOCK || v->terminates ||
-        v->type != e->unit || v->result_count != 0 || env->depth >= C_DEPTH)
+    const bool unit_return = v && v == env->unit_function_body &&
+                             v->terminates && v->returned.type == e->unit &&
+                             v->item_count && !v->tail;
+    if (v == NULL || v->kind != NL_CHECKED_BLOCK ||
+        (v->terminates && !unit_return) || v->type != e->unit ||
+        v->result_count != 0 || env->depth >= C_DEPTH)
         return reject(e);
     NLCheckedNodeId item = v->first_item;
     bool custody_suffix = false;
@@ -542,6 +550,17 @@ static bool block(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
     for (size_t i = 0; i < v->item_count; ++i) {
         const NLCheckedNodeView *n = get(env, item);
         Value ignored = {0};
+        if (unit_return && i + 1 == v->item_count) {
+            const NLCheckedNodeView *value =
+                n ? get(env, n->initializer) : NULL;
+            /* Only the owning function's final, literal unit result. All
+             * preceding cleanup is traversed and owner_call checks its post. */
+            --env->depth;
+            return n && n->kind == NL_CHECKED_RETURN && n->terminates &&
+                   !n->next_item && n->returned.type == e->unit && value &&
+                   value->kind == NL_CHECKED_UNIT && value->type == e->unit &&
+                   !value->terminates && expr(e, env, n->initializer, out);
+        }
         if (n == NULL || !expr(e, env, item, &ignored))
             return reject(e);
         if (ignored.temp != 0 && !put(e, "(void)nl_v_%zu;\n", ignored.temp))
@@ -1638,7 +1657,7 @@ static bool allocated_match(Emit *e, Env *env, NLCheckedNodeId id,
 }
 /* A skipped read/match must be replaced by actual source-issued link/owner
  * evidence, not by fewer counters. Bind this exact ref definition/projection
- * to one certified local-return call and to the first emitted attach's current
+ * to one certified producer call and to the first emitted attach's current
  * Some/facts/occurrence. Remaining ref/scope/carrier checks still run below. */
 static bool no_read_entry(Emit *e, Env *env, const NLCheckedNodeView *ref)
 {
@@ -1658,10 +1677,7 @@ static bool no_read_entry(Emit *e, Env *env, const NLCheckedNodeView *ref)
         const NLCheckedNodeView *call = nl_checked_node_view(f, i);
         if (!call->producer.entry_proved)
             continue;
-        NLProducerLocalReturnView local_return;
-        if (found ||
-            !nl_checked_producer_local_return_view(f, i, &local_return) ||
-            !nl_checked_producer_local_return_valid(f, i, &local_return))
+        if (found || !nl_checked_producer_valid(f, i))
             return false;
         const NLCheckedNodeView *projection = get(env, call->first_argument),
                                 *base =
@@ -1754,6 +1770,32 @@ static bool no_read_entry(Emit *e, Env *env, const NLCheckedNodeView *ref)
     return true;
 }
 
+/* A nonescaping unit borrow with an unused read reference has no topology
+ * effect. Classify its actual body, not its spelling or source-arm number.
+ * The ref itself still passes every ordinary scope/provenance/operand check. */
+static const NLCheckedNodeView *unit_observation(const Emit *e, const Env *env,
+                                                 NLCheckedNodeId id)
+{
+    const NLCheckedNodeView *b = get(env, id);
+    const NLCheckedNodeView *n = b ? get(env, b->first_item) : NULL;
+    const NLCheckedNodeView *tail = b ? get(env, b->tail) : NULL;
+    const NLCheckedNodeView *ref = n ? get(env, n->initializer) : NULL;
+    const NLCheckedNodeView *receiver = n ? get(env, n->first_argument) : NULL;
+    return e->two_heap && e->live_tail && !e->custody && b &&
+                   b->kind == NL_CHECKED_BLOCK && !b->terminates &&
+                   b->type == e->unit && !b->result_count &&
+                   b->item_count == 1 && tail &&
+                   tail->kind == NL_CHECKED_UNIT && n &&
+                   n->kind == NL_CHECKED_BINDING && !n->next_item &&
+                   n->argument_count == 1 && receiver &&
+                   receiver->kind == NL_CHECKED_RECEIVER &&
+                   receiver->symbol == n->symbol && !receiver->next_argument &&
+                   ref && ref->kind == NL_CHECKED_REF_FROM_PTR &&
+                   ref->has_reference_result && !ref->reference_result.writable
+               ? ref
+               : NULL;
+}
+
 static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
                            Value *out)
 {
@@ -1826,18 +1868,19 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
             if (h.domain_frame != src->frame || h.domain_symbol != src->symbol)
                 return reject(e);
         }
-        Env body = {.artifact = env->artifact,
-                    .parent = env,
-                    .prefix = SIZE_MAX,
-                    .frame = ++e->frames,
-                    .depth = env->depth + 1,
-                    .backing =
-                        selected == NULL ? env->backing : selected->backing,
-                    .region_slot = selected == NULL ? env->region_slot
-                                                    : selected->region_slot,
-                    .stability_scope = l->scope,
-                    .stability_domain = l->domain,
-                    .stability_place = db.place};
+        Env body = {
+            .artifact = env->artifact,
+            .parent = env,
+            .prefix = SIZE_MAX,
+            .frame = ++e->frames,
+            .depth = env->depth + 1,
+            .backing = selected == NULL ? env->backing : selected->backing,
+            .region_slot =
+                selected == NULL ? env->region_slot : selected->region_slot,
+            .stability_scope = l->scope,
+            .stability_domain = l->domain,
+            .stability_place = db.place,
+            .unit_observation = unit_observation(e, env, v->initializer)};
         if (!add_local(e, &body, l->ref_symbol, binder.type, false) ||
             !put(e,
                  "{ const nl_domain *nl_b_%zu_%zu = "
@@ -1858,7 +1901,7 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
             env->heap_domain = body.heap_domain;
         }
         out->temp = result;
-        if (e->heap_link && !l->is_exclusive &&
+        if ((e->heap_link || body.unit_observation) && !l->is_exclusive &&
             !put(e, "NL_HEAP_SCOPE_END(%zu);\n", l->scope))
             return false;
         return put(e, "}\n");
@@ -1887,17 +1930,23 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
         NLSemanticValueView pv, rv, sv;
         NLSemanticBackingView backing;
         const bool write = v->reference_result.writable;
-        if (e->reloans == 0)
-            e->heap_link = write;
         const Env *target = heap(env, v);
+        const bool role_lane = terminal_role_lane(e) && e->producer_calls;
+        const bool role_read =
+            role_lane && terminal_read_role(e, env, v, target);
+        const bool observation =
+            !write && !role_read && env->unit_observation == v;
+        if ((role_lane && !role_read && !observation) ||
+            (observation && (!target || target->region_slot >= 2 ||
+                             e->lifecycle[target->region_slot].stage != 4)))
+            return reject(e);
+        if (!observation && e->reloans == 0)
+            e->heap_link = write;
         if (write && e->two_heap && e->live_tail && !e->custody &&
             e->reloans == 1 && !no_read_entry(e, env, v))
             return reject(e);
-        const bool role_read = terminal_role_lane(e) && e->producer_calls;
-        if (role_read && !terminal_read_role(e, env, v, target))
-            return reject(e);
         if ((!e->two_heap && e->destroys != 0) ||
-            (!role_read &&
+            (!role_read && !observation &&
              (e->reloans >= (e->two_heap ? 4u + (e->live_tail != 0 ? 1u : 0u) +
                                                (e->owner_read ? 1u : 0u) -
                                                (e->no_pre_read ? 2u : 0u)
@@ -1950,7 +1999,8 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
             !expr(e, env, v->first_argument, &p) ||
             !expr(e, env, a->next_argument, &stable))
             return reject(e);
-        ++e->reloans;
+        if (!observation)
+            ++e->reloans;
         if (role_read) {
             if (e->owner_calls)
                 ++e->receiver_tail_reads;
@@ -1960,7 +2010,7 @@ static bool allocated_expr(Emit *e, Env *env, const NLCheckedNodeView *v,
             }
         }
         out->temp = ++e->temp;
-        if (e->heap_link)
+        if (e->heap_link || observation)
             return put(
                 e,
                 "%s nl_v_%zu = %snl_v_%zu;\n"
@@ -2176,8 +2226,7 @@ static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
     NLProducerLocalReturnView local_return = {0};
     const bool local_result = body->item_count == 3;
     if (e->no_pre_read &&
-        (!local_result || e->no_read_issuer != env->artifact ||
-         e->no_read_call != id))
+        (e->no_read_issuer != env->artifact || e->no_read_call != id))
         return reject(e);
     if (local_result && (!nl_checked_producer_local_return_view(
                              env->artifact, id, &local_return) ||
@@ -2707,6 +2756,8 @@ static bool owner_call(Emit *e, Env *env, NLCheckedNodeId id,
     const HeapLifecycle head = e->lifecycle[0];
     const NLCheckedFragment *body = nl_checked_call_body(env->artifact, id);
     Env receiver = {.artifact = body,
+                    .unit_function_body =
+                        nl_checked_node_view(body, nl_checked_root(body)),
                     .frame = ++e->frames,
                     .region_slot = 1,
                     .backing = target->backing,
