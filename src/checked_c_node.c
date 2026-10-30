@@ -1781,8 +1781,11 @@ static const NLCheckedNodeView *unit_observation(const Emit *e, const Env *env,
     const NLCheckedNodeView *tail = b ? get(env, b->tail) : NULL;
     const NLCheckedNodeView *ref = n ? get(env, n->initializer) : NULL;
     const NLCheckedNodeView *receiver = n ? get(env, n->first_argument) : NULL;
-    return e->two_heap && e->live_tail && !e->custody && b &&
-                   b->kind == NL_CHECKED_BLOCK && !b->terminates &&
+    /* The existing closed-main plan selects this normalization. Other H
+     * consumers keep their topology/read protocol and emitted bytes intact;
+     * this plan supplies no missing operand, liveness or ownership evidence. */
+    return e->copy_after_match && e->two_heap && e->live_tail && !e->custody &&
+                   b && b->kind == NL_CHECKED_BLOCK && !b->terminates &&
                    b->type == e->unit && !b->result_count &&
                    b->item_count == 1 && tail &&
                    tail->kind == NL_CHECKED_UNIT && n &&
