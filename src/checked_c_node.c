@@ -1677,7 +1677,13 @@ static bool no_read_entry(Emit *e, Env *env, const NLCheckedNodeView *ref)
         const NLCheckedNodeView *call = nl_checked_node_view(f, i);
         if (!call->producer.entry_proved)
             continue;
-        if (found || !nl_checked_producer_valid(f, i))
+        NLProducerLocalReturnView local_return;
+        if (found ||
+            (e->copy_after_match ? !nl_checked_producer_valid(f, i)
+                                 : (!nl_checked_producer_local_return_view(
+                                        f, i, &local_return) ||
+                                    !nl_checked_producer_local_return_valid(
+                                        f, i, &local_return))))
             return false;
         const NLCheckedNodeView *projection = get(env, call->first_argument),
                                 *base =
@@ -2229,7 +2235,8 @@ static bool producer_call(Emit *e, Env *env, NLCheckedNodeId id,
     NLProducerLocalReturnView local_return = {0};
     const bool local_result = body->item_count == 3;
     if (e->no_pre_read &&
-        (e->no_read_issuer != env->artifact || e->no_read_call != id))
+        ((!e->copy_after_match && !local_result) ||
+         e->no_read_issuer != env->artifact || e->no_read_call != id))
         return reject(e);
     if (local_result && (!nl_checked_producer_local_return_view(
                              env->artifact, id, &local_return) ||
@@ -2760,7 +2767,9 @@ static bool owner_call(Emit *e, Env *env, NLCheckedNodeId id,
     const NLCheckedFragment *body = nl_checked_call_body(env->artifact, id);
     Env receiver = {.artifact = body,
                     .unit_function_body =
-                        nl_checked_node_view(body, nl_checked_root(body)),
+                        e->copy_after_match
+                            ? nl_checked_node_view(body, nl_checked_root(body))
+                            : NULL,
                     .frame = ++e->frames,
                     .region_slot = 1,
                     .backing = target->backing,
