@@ -1811,7 +1811,7 @@
     "tests/p1058/sources/wrong_incoming_equal.nl": "3d17013e65f31e6165fb3dcb93678d8efc6bd92e93cec76889d428a00db30b87",
     "tests/p1058/sources/zero_registered_calls.nl": "e2d30f70840b87b2687747e3eabda13e84c204fe3b870aa7644f74e442620d1d",
     "tests/p1058/support.h": "d1f3c27b09c588349191df9a001ff9407c74547ccfdc2f817c2c23349e76ae9b",
-    "tests/p1062/RESULTS.md": "5f5eb30802f6984cb108c20b7e1601548f7dfb1f77c1d8109769185638bdb4a6",
+    "tests/p1062/RESULTS.md": "dc490bea23d4562f3817e0b47542af5ef5369ca974cc963a903fbef577dea778",
     "tests/p1062/__pycache__/history_v12.cpython-312.pyc": "54009c47945452d4a1aa112994f0c8932bdaef1d01bcfa3ef3e6740ab41b84f5",
     "tests/p1062/baseline.py": "ac0559dbb11265ec5592a6072a5553d636057c4272ed6e231f7320371e5cae78",
     "tests/p1062/consumer.c": "7379c8138ff319d5aaff5613aa2a9807e31b5ffa5e00609fe0cf7e9b2bc72284",

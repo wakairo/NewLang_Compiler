@@ -22,9 +22,15 @@ oracle SHA256 is
 `9847539057aee9139d55e43d15ee29b3903f35d03c0d9a578d7f826fe12e05c6`.
 
 No R1016/R1051/R1057/R1060 original source, names/values, oracle, runner or raw,
-and no B1061 R-specific analysis, was accessed or reused. F90's fixed-parent
+and no B1061 original report, was accessed or reused. F90's fixed-parent
 conditional static A was read only after the independent freeze. It is not a
 formal proof of this new candidate. No new F/R execution or R retest was asked.
+
+After the implementation and all local gates were complete, the publication
+authority check read C151's Coordination summary of F90 (including its high-level
+mention of B's local-return guard hypothesis). This was after the independent
+source freeze, diagnostic and repair history. No fixture, oracle or implementation
+change derives from that summary; B1061 itself remains unread.
 
 All six positives have genuine CHECK0, actual Copy GET and body/parameters/event
 current0, H origin validation, producer entry/valid/return evidence, and terminal
