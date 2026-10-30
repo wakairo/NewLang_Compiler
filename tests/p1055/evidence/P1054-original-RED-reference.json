@@ -1,0 +1,7 @@
+{
+  "original_issue": "https://github.com/wakairo/NewLang_Compiler/issues/1054#issuecomment-6514448411",
+  "raw_path": "/workspace/p1054-artifacts/observations-FIRST/binding_tail-C17-stdout.stderr",
+  "original_SHA256": "b54ebcf8ec112f51afa947a4dc7632f4bcd492e2ea7d020cbaee8c1c7483fd6c",
+  "original_C17": 4,
+  "classification": "original diagnostic RED preserved, later P1055 candidate result separate"
+}

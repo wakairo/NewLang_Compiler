@@ -1,0 +1,943 @@
+[
+  {
+    "source": "direct_return",
+    "source_SHA256": "67748f580d61bcc49859f9c88c1434aa87c96da7fe5bec3952ab409d429c9301",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1055": "current",
+        "ordinal": 0,
+        "call": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 0,
+        "index": 0,
+        "old": 83,
+        "next": 146,
+        "returned": 83,
+        "sibling": 211,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 5,
+        "old_forward_source": true
+      },
+      {
+        "P1055": "current",
+        "ordinal": 1,
+        "call": 18,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 0,
+        "index": 1,
+        "old": 211,
+        "next": 83,
+        "returned": 211,
+        "sibling": 146,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 9,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 0,
+    "diagnostic": "",
+    "C_SHA256": "79e416636f219a2f9867b4b8926d99979cd6f26b1f44d77315023f512dfe9a91",
+    "first_private_runtime_predicate": "UNKNOWN; uninstrumented fixed binary",
+    "native": "NOT TESTED"
+  },
+  {
+    "source": "binding_return",
+    "source_SHA256": "b41b1c9ae31903063a2735b1a0363dfbcf88fefe0d1890dc07aa1929177b2a97",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1055": "current",
+        "ordinal": 0,
+        "call": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 1,
+        "index": 0,
+        "old": 83,
+        "next": 146,
+        "returned": 83,
+        "sibling": 211,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 6,
+        "old_forward_source": true
+      },
+      {
+        "P1055": "current",
+        "ordinal": 1,
+        "call": 18,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 0,
+        "index": 1,
+        "old": 211,
+        "next": 83,
+        "returned": 211,
+        "sibling": 146,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 10,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 0,
+    "diagnostic": "",
+    "C_SHA256": "262f58b80f080fa36f3bd1404dbe01ce55a0b2e4ea7d4b37809c635eb981c4f9",
+    "first_private_runtime_predicate": "UNKNOWN; uninstrumented fixed binary",
+    "native": "NOT TESTED"
+  },
+  {
+    "source": "binding_tail",
+    "source_SHA256": "2bb9586b8080dc4e1f9d93294da231e5d77ac18efed7ecf91d79cff4068656ce",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1055": "current",
+        "ordinal": 0,
+        "call": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 1,
+        "index": 0,
+        "old": 83,
+        "next": 146,
+        "returned": 83,
+        "sibling": 211,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 6,
+        "old_forward_source": true
+      },
+      {
+        "P1055": "current",
+        "ordinal": 1,
+        "call": 18,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 0,
+        "index": 1,
+        "old": 211,
+        "next": 83,
+        "returned": 211,
+        "sibling": 146,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 10,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1055/tests/p1055/sources/binding_tail.nl\n",
+    "C_SHA256": null,
+    "first_private_runtime_predicate": "UNKNOWN; uninstrumented fixed binary",
+    "native": "NOT TESTED"
+  },
+  {
+    "source": "binding_copy_return",
+    "source_SHA256": "6abd602bf32965d6787e4cc432e6333f332c0662de7b9073567d2c7abfa21f2c",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1055": "current",
+        "ordinal": 0,
+        "call": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 2,
+        "index": 0,
+        "old": 83,
+        "next": 146,
+        "returned": 83,
+        "sibling": 211,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 7,
+        "old_forward_source": true
+      },
+      {
+        "P1055": "current",
+        "ordinal": 1,
+        "call": 18,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 0,
+        "index": 1,
+        "old": 211,
+        "next": 83,
+        "returned": 211,
+        "sibling": 146,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 11,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1055/tests/p1055/sources/binding_copy_return.nl\n",
+    "C_SHA256": null,
+    "first_private_runtime_predicate": "UNKNOWN; uninstrumented fixed binary",
+    "native": "NOT TESTED"
+  },
+  {
+    "source": "renamed_reverse_chain_tail",
+    "source_SHA256": "cc703b0b365476e69398057608c5fea974cb42fd52480eac6fb978ab81a750e5",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1055": "current",
+        "ordinal": 0,
+        "call": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 3,
+        "index": 1,
+        "old": 43,
+        "next": 107,
+        "returned": 43,
+        "sibling": 188,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 8,
+        "old_forward_source": true
+      },
+      {
+        "P1055": "current",
+        "ordinal": 1,
+        "call": 18,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 0,
+        "index": 0,
+        "old": 188,
+        "next": 43,
+        "returned": 188,
+        "sibling": 107,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 12,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1055/tests/p1055/sources/renamed_reverse_chain_tail.nl\n",
+    "C_SHA256": null,
+    "first_private_runtime_predicate": "UNKNOWN; uninstrumented fixed binary",
+    "native": "NOT TESTED"
+  },
+  {
+    "source": "negative_incoming_different",
+    "source_SHA256": "643ab9dd1dbc4d986a392a977ee0f18b4bb1168c83c217535cf220780c06272b",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1055": "current",
+        "ordinal": 0,
+        "call": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": -1,
+        "binding_hops": 0,
+        "index": 0,
+        "old": 83,
+        "next": 146,
+        "returned": 146,
+        "sibling": 211,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 6,
+        "old_forward_source": true
+      },
+      {
+        "P1055": "current",
+        "ordinal": 1,
+        "call": 18,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 0,
+        "index": 1,
+        "old": 211,
+        "next": 146,
+        "returned": 211,
+        "sibling": 146,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 10,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1055/tests/p1055/sources/negative_incoming_different.nl\n",
+    "C_SHA256": null,
+    "first_private_runtime_predicate": "UNKNOWN; uninstrumented fixed binary",
+    "native": "NOT TESTED"
+  },
+  {
+    "source": "negative_incoming_equal",
+    "source_SHA256": "c99aab52b24cbf73ff946fc7539999a55d490e4c9c185f583130dd1f59cef45c",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1055": "current",
+        "ordinal": 0,
+        "call": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": -1,
+        "binding_hops": 0,
+        "index": 0,
+        "old": 83,
+        "next": 83,
+        "returned": 83,
+        "sibling": 211,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 6,
+        "old_forward_source": true
+      },
+      {
+        "P1055": "current",
+        "ordinal": 1,
+        "call": 18,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 0,
+        "index": 1,
+        "old": 211,
+        "next": 83,
+        "returned": 211,
+        "sibling": 83,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 10,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1055/tests/p1055/sources/negative_incoming_equal.nl\n",
+    "C_SHA256": null,
+    "first_private_runtime_predicate": "UNKNOWN; uninstrumented fixed binary",
+    "native": "NOT TESTED"
+  },
+  {
+    "source": "negative_constant_equal",
+    "source_SHA256": "1e5ef0fd0dac1c43a631110ef8b0ef45a50117b396c8cd66186f83e3de44e98c",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1055": "current",
+        "ordinal": 0,
+        "call": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": -1,
+        "binding_hops": 0,
+        "index": 0,
+        "old": 83,
+        "next": 146,
+        "returned": 83,
+        "sibling": 211,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 6,
+        "old_forward_source": true
+      },
+      {
+        "P1055": "current",
+        "ordinal": 1,
+        "call": 18,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 0,
+        "index": 1,
+        "old": 211,
+        "next": 83,
+        "returned": 211,
+        "sibling": 146,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 10,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1055/tests/p1055/sources/negative_constant_equal.nl\n",
+    "C_SHA256": null,
+    "first_private_runtime_predicate": "UNKNOWN; uninstrumented fixed binary",
+    "native": "NOT TESTED"
+  },
+  {
+    "source": "negative_alias_incoming_equal",
+    "source_SHA256": "11da48ddd355c14d46df1f9ad0424006a4171f65754761363c4d03e1e0f4e132",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1055": "current",
+        "ordinal": 0,
+        "call": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": -1,
+        "binding_hops": 1,
+        "index": 0,
+        "old": 83,
+        "next": 83,
+        "returned": 83,
+        "sibling": 211,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 7,
+        "old_forward_source": true
+      },
+      {
+        "P1055": "current",
+        "ordinal": 1,
+        "call": 18,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 0,
+        "index": 1,
+        "old": 211,
+        "next": 83,
+        "returned": 211,
+        "sibling": 83,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 11,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1055/tests/p1055/sources/negative_alias_incoming_equal.nl\n",
+    "C_SHA256": null,
+    "first_private_runtime_predicate": "UNKNOWN; uninstrumented fixed binary",
+    "native": "NOT TESTED"
+  },
+  {
+    "source": "negative_double_change",
+    "source_SHA256": "912d4e5002138fd62a583a7012ff21af30b9b8330605e65afae7c2015cc3d6b1",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1055": "current",
+        "ordinal": 0,
+        "call": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 0,
+        "event": 1,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 0,
+        "event_count": 2,
+        "returned_event": 0,
+        "binding_hops": 1,
+        "index": 0,
+        "old": 83,
+        "next": 83,
+        "returned": 83,
+        "sibling": 211,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 7,
+        "old_forward_source": true
+      },
+      {
+        "P1055": "current",
+        "ordinal": 1,
+        "call": 18,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 0,
+        "index": 1,
+        "old": 211,
+        "next": 83,
+        "returned": 211,
+        "sibling": 83,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 11,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1055/tests/p1055/sources/negative_double_change.nl\n",
+    "C_SHA256": null,
+    "first_private_runtime_predicate": "UNKNOWN; uninstrumented fixed binary",
+    "native": "NOT TESTED"
+  },
+  {
+    "source": "negative_other_change_equal",
+    "source_SHA256": "462800aa494975289cb07deee9c509c1f96d6119ec5fde81871ea3e7567bd3e4",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1055": "current",
+        "ordinal": 0,
+        "call": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 1,
+        "index": 0,
+        "old": 83,
+        "next": 146,
+        "returned": 83,
+        "sibling": 83,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 6,
+        "old_forward_source": true
+      },
+      {
+        "P1055": "current",
+        "ordinal": 1,
+        "call": 18,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": -1,
+        "binding_hops": 1,
+        "index": 1,
+        "old": 83,
+        "next": 83,
+        "returned": 83,
+        "sibling": 146,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 12,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1055/tests/p1055/sources/negative_other_change_equal.nl\n",
+    "C_SHA256": null,
+    "first_private_runtime_predicate": "UNKNOWN; uninstrumented fixed binary",
+    "native": "NOT TESTED"
+  },
+  {
+    "source": "unsupported_after_closed_h",
+    "source_SHA256": "55fa3766720a8c64e4e3977e9bfb859d74cb437e650204441d74feba9bae3ae6",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1055": "current",
+        "ordinal": 0,
+        "call": 14,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 0,
+        "index": 0,
+        "old": 83,
+        "next": 146,
+        "returned": 83,
+        "sibling": 211,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 5,
+        "old_forward_source": true
+      },
+      {
+        "P1055": "current",
+        "ordinal": 1,
+        "call": 21,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1055": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1055": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 0,
+        "index": 1,
+        "old": 211,
+        "next": 83,
+        "returned": 211,
+        "sibling": 146,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 9,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1055/tests/p1055/sources/unsupported_after_closed_h.nl\n",
+    "C_SHA256": null,
+    "first_private_runtime_predicate": "UNKNOWN; uninstrumented fixed binary",
+    "native": "NOT TESTED"
+  },
+  {
+    "source": "negative_scalar_as_borrow",
+    "source_SHA256": "8cc54369ea55b024fe9efbbb61a16b627d88e626d371a7f8d6eaab15cbb9ab05",
+    "CHECK": 3,
+    "public": null,
+    "C17": 3,
+    "diagnostic": "/workspace/p1055/tests/p1055/sources/negative_scalar_as_borrow.nl:33:35-33:41: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n",
+    "C_SHA256": null,
+    "first_private_runtime_predicate": "UNKNOWN; uninstrumented fixed binary",
+    "native": "NOT TESTED"
+  },
+  {
+    "source": "negative_ended_loan",
+    "source_SHA256": "6f6cb7150f06861e791342d469ce6bcb79dd2072150cde525225e846c3ee1f58",
+    "CHECK": 3,
+    "public": null,
+    "C17": 3,
+    "diagnostic": "/workspace/p1055/tests/p1055/sources/negative_ended_loan.nl:33:22-35:6: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n",
+    "C_SHA256": null,
+    "first_private_runtime_predicate": "UNKNOWN; uninstrumented fixed binary",
+    "native": "NOT TESTED"
+  }
+]
