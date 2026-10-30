@@ -537,11 +537,11 @@ static bool initial_some(Emit *e, const Env *env, const NLCheckedNodeView *some)
 static bool block(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
 {
     const NLCheckedNodeView *v = get(env, id);
-    const bool unit_return = v && v == env->unit_function_body &&
-                             v->terminates && v->returned.type == e->unit &&
-                             v->item_count && !v->tail;
+    const bool unit_return =
+        v && v == env->unit_function_body && v->terminates && v->type == 0 &&
+        v->returned.type == e->unit && v->item_count && !v->tail;
     if (v == NULL || v->kind != NL_CHECKED_BLOCK ||
-        (v->terminates && !unit_return) || v->type != e->unit ||
+        (!unit_return && (v->terminates || v->type != e->unit)) ||
         v->result_count != 0 || env->depth >= C_DEPTH)
         return reject(e);
     NLCheckedNodeId item = v->first_item;

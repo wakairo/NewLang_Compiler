@@ -1,0 +1,9 @@
+{
+  "candidate_HEAD": "5091208a25cab89fbaecf049c069aa3c01972a7c",
+  "candidate_tree": "67a5d3f3c56cc6b4cd18331079ca66457c0f4116",
+  "first_RED": "v1-gcc-target-FIRST.stderr",
+  "first_RED_SHA256": "66f885aaa18e6c3c9241e4c6ffc9ec9b3e3ab390fcd4060c31c0f38e8b2c1050",
+  "diagnostic_source_SHA256": "e0e0a6cfd2c263003e3874c0554465b40ca6979a035e61acadf688333169040e",
+  "restricted_source": "tests/p1062/sources/terminal_explicit_return.nl",
+  "diagnostic": "reject location plus observed unit body/node fields only; predicates unchanged, never published as Production"
+}

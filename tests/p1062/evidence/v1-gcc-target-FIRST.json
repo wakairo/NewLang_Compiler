@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tests/p1062/run.py",
+    "/workspace/p1062-gcc-build/newlangc",
+    "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+    "none"
+  ],
+  "exit": 1,
+  "raw_host_UTC_start": "2026-10-30T10:37:36.272406+00:00",
+  "raw_host_UTC_finish": "2026-10-30T10:37:39.400036+00:00",
+  "stdout_SHA256": "ddb3ccb70e4a92e0b44eee0addb23378a375ca44974b89d12fea863824bab0f8",
+  "stderr_SHA256": "66f885aaa18e6c3c9241e4c6ffc9ec9b3e3ab390fcd4060c31c0f38e8b2c1050"
+}

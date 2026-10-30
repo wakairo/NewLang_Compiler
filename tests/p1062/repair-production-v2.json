@@ -1,0 +1,7 @@
+{
+  "candidate_v1": "5091208a25cab89fbaecf049c069aa3c01972a7c",
+  "first_RED_SHA256": "66f885aaa18e6c3c9241e4c6ffc9ec9b3e3ab390fcd4060c31c0f38e8b2c1050",
+  "actual_first_failure": "terminal_explicit_return still backend4; authenticated terminating block has type0/no normal result and returned.type=unit, unlike normal unit block type1. No unsafe native/new source admitted. Earlier 3profiles physical+owner+all reachedOOM PASS.",
+  "repair": "Production v2: accept type0 only for exact authenticated owner body with final literal-unit RETURN. Same source/oracle/native assertions, every prior cleanup and owner postcheck remain; no other block/return support.",
+  "first_run_raw": "outer stdout/stderr preserved; v1 per-command capture was unset, so full individual raw/C artifacts only forthcoming with explicit P1062_EVIDENCE_DIR, do not invent missing v1 raw."
+}
