@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/workspace/p1058/tests/p1058/run.py", line 141, in <module>
+    ok(invoke(name+opt+'-physical-build',[cc,*flags,opt,c,repo/'tests/integration/two_heap_platform.c',
+  File "/workspace/p1058/tests/p1058/run.py", line 39, in ok
+    assert r.returncode==0 and not r.stderr,(r.returncode,r.stdout,r.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (1, b'', b'In file included from /tmp/p1058-gbu_8dz1/closed_then_two.c:31:\n/workspace/p1058/tests/p1058/observer.h: In function \xe2\x80\x98send_owner\xe2\x80\x99:\n/workspace/p1058/tests/p1058/observer.h:175:9: error: \xe2\x80\x98P1058_PHASE\xe2\x80\x99 undeclared (first use in this function); did you mean \xe2\x80\x98P1058_H0\xe2\x80\x99?\n  175 |     if (P1058_PHASE == 1)\n      |         ^~~~~~~~~~~\n      |         P1058_H0\n/workspace/p1058/tests/p1058/observer.h:175:9: note: each undeclared identifier is reported only once for each function it appears in\n')

@@ -172,10 +172,7 @@ static void packet(nl_live_tail p)
 static void send_owner(const nl_node *p, void *a, size_t d,
                        const nl_allocation *old_a, const nl_domain *old_d)
 {
-    if (P1058_PHASE == 1)
-        REQUIRE(!binds && !calls);
-    else
-        REQUIRE(binds == 2 && calls == 2);
+    REQUIRE(!binds && !calls && !stores);
     REQUIRE(sent++ == 0 && (uintptr_t)p == allocated[1] &&
             (uintptr_t)a == allocated[1] && d == domains[1] && !old_a->handle &&
             !old_d->token);

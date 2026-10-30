@@ -58,7 +58,7 @@ T/R hooks or toolchain changes. One new DRAFT on fixed PR1056 and one natural
 FULL5/PARTIAL group (six jobs) are the entire C148 budget; CI RED stops further
 publication. P1036 STOP and old PR1048/1050/1056 HOLD remain.
 
-VALUE-ALIGNMENT-RISK: the 83-added/3-removed Production candidate and a small
+VALUE-ALIGNMENT-RISK: the 84-added/3-removed Production candidate and a small
 test-history anchor increase trusted inspection and evidence maintenance cost.
 The author plus ordinary-safe caller UB audit/re-audit dependency closure
 versus factored C, performance and product cost remain UNMEASURED. Alternative
