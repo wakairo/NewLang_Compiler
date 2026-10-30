@@ -57,8 +57,9 @@ static void t_phase(void)
             frees == successes && test_free_calls() == successes && !active &&
             !in_receiver);
     if (successes == 2)
-        REQUIRE(changes == 2 && sent == 1 && entered == 1 && local_owner == P1062_LOCAL_PACKETS &&
-                returned == 1 && received == 1 && terminals == 1 &&
+        REQUIRE(changes == 2 && sent == 1 && entered == 1 &&
+                local_owner == P1062_LOCAL_PACKETS && returned == 1 &&
+                received == 1 && terminals == 1 &&
                 caller_reads == P1062_CALLER_READS &&
                 callee_reads == P1062_RECEIVER_READS && !head_reads);
     else

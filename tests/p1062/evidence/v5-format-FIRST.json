@@ -1,0 +1,14 @@
+{
+  "command": [
+    "env",
+    "CLANG_FORMAT=/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-format-23",
+    "FORMAT_SUGGESTIONS_PATCH=/workspace/p1062-artifacts/v5-format-suggestions.patch",
+    "bash",
+    "scripts/check-format.sh"
+  ],
+  "exit": 1,
+  "raw_host_UTC_start": "2026-10-30T10:41:16.547062+00:00",
+  "raw_host_UTC_finish": "2026-10-30T10:41:22.419156+00:00",
+  "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_SHA256": "e7f2c70e4296b7127c557e7639c837d0ce2b8ea785921f08d08d8781f955bae0"
+}
