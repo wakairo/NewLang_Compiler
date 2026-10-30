@@ -210,7 +210,7 @@ static void enter_owner(nl_node_option *edge, const nl_node *p, void *a,
             (uintptr_t)p == allocated[1] && (uintptr_t)a == allocated[1] &&
             d == domains[1]);
 }
-static void local_packet(const nl_live_tail *p)
+static inline void local_packet(const nl_live_tail *p)
 {
     REQUIRE(local_owner++ == 0);
     packet(*p);
