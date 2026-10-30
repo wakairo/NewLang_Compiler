@@ -1,0 +1,100 @@
+# C139 SOURCE-ONLY R-review publication; ONLY distinct future exact opt-in ref, after C SHA review.
+# DO NOT create the future branch or run this workflow under Issue #1049.
+name: R1016 post-FIRST CALIBRATED PR1048 (future C-reviewed)
+on:
+  push:
+    branches:
+      - 'r-calibrated/r1016-pr1048'
+permissions:
+  contents: read
+concurrency:
+  group: r1049-calibrated-r1016-pr1048
+  cancel-in-progress: false
+jobs:
+  calibrated:
+    if: ${{ github.repository == 'wakairo/NewLang_Compiler' && github.event_name == 'push' && github.ref == 'refs/heads/r-calibrated/r1016-pr1048' && github.run_attempt == 1 }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    steps:
+      - name: Checkout future C-reviewed exact pushed R executor without credentials
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Allocate non-reusable raw and fail closed on foreign source/ref
+        shell: bash
+        run: |
+          set -euo pipefail
+          raw="$RUNNER_TEMP/R1049-CALIBRATED-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT-$GITHUB_SHA"
+          (umask 077 && mkdir -m 700 "$raw")
+          trap 'sha256sum "$raw/preflight.stdout" "$raw/preflight.stderr" > "$raw/preflight.sha256"' EXIT
+          {
+            test "$GITHUB_REPOSITORY" = wakairo/NewLang_Compiler
+            test "$GITHUB_EVENT_NAME" = push
+            test "$GITHUB_REF" = refs/heads/r-calibrated/r1016-pr1048
+            test "$GITHUB_RUN_ATTEMPT" = 1
+            test "$GITHUB_WORKFLOW_REF" = "wakairo/NewLang_Compiler/.github/workflows/r-calibrated-r1016-pr1048.yml@refs/heads/r-calibrated/r1016-pr1048"
+            test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+            test "$(git rev-parse HEAD^)" = e161666b611a9fe6b501cb132b7c7e916c5f5d2b
+            test "$(git rev-list --parents -n1 HEAD | wc -w)" -eq 2
+            test "$(git status --porcelain --untracked-files=no)" = ""
+            test "$(git rev-parse HEAD:evidence/r1028/original-first-40849018312-attempt1.zip)" = 7467df2023c84fe86409f815136df779de728bae
+            test "$(git rev-parse HEAD:evidence/r1035/calibrated-v2-40874742688-attempt1.zip)" = b85e5e794b03d1d623e71d3a5fa6d36cccf18060
+            echo "R1049 raw preflight: C external approval NOT machine-attested"
+          } >"$raw/preflight.stdout" 2>"$raw/preflight.stderr"
+      - name: Checkout physical fixed PR1048 HEAD (no synthetic test merge)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ade11ebec808f5a95e8831a7ae6ee6f6da2b0dbe
+          path: candidate
+          fetch-depth: 1
+          persist-credentials: false
+      - name: Capture fixed candidate preflight, bootstrap and GCC13 frontend build without P suite
+        shell: bash
+        run: |
+          set -euo pipefail
+          raw="$RUNNER_TEMP/R1049-CALIBRATED-$GITHUB_RUN_ID-$GITHUB_RUN_ATTEMPT-$GITHUB_SHA"
+          capture() {
+            label="$1"; shift
+            set +e
+            "$@" >"$raw/$label.stdout" 2>"$raw/$label.stderr"
+            result=$?
+            set -e
+            printf "%s\n" "$result" > "$raw/$label.exit"
+            sha256sum "$raw/$label.stdout" "$raw/$label.stderr" >> "$raw/setup.sha256"
+            test "$result" -eq 0
+          }
+          test "$(git -C candidate rev-parse HEAD)" = ade11ebec808f5a95e8831a7ae6ee6f6da2b0dbe
+          test "$(git -C candidate rev-parse HEAD^{tree})" = 70305183f8951038d296ac9a9ecae1f8e8750e4f
+          capture apt-update sudo apt-get update
+          capture apt-install sudo apt-get install --no-install-recommends -y gcc-13 g++-13 make python3 zstd
+          cd candidate
+          capture bootstrap /usr/bin/python3 scripts/bootstrap.py
+          . .deps/activate.sh
+          test -x "$NEWLANG_SDK_ROOT/bin/clang-23"
+          capture clang-version "$NEWLANG_SDK_ROOT/bin/clang-23" --version
+          grep -F 'clang version 23.1.3' "$raw/clang-version.stdout"
+          capture cmake-configure env CC=/usr/bin/gcc-13 cmake -S . -B build-frontend -DNEWLANG_FRONTEND_ONLY=ON -DBUILD_TESTING=OFF -DCMAKE_BUILD_TYPE=Debug
+          grep -Fx 'NEWLANG_FRONTEND_ONLY:BOOL=ON' build-frontend/CMakeCache.txt
+          grep -Fx 'BUILD_TESTING:BOOL=OFF' build-frontend/CMakeCache.txt
+          capture cmake-build cmake --build build-frontend --parallel 2
+          test -f build-frontend/newlangc
+          sha256sum build-frontend/newlangc > "$raw/compiler.sha256"
+      - name: Exactly one post-FIRST CALIBRATED R original cohort (only after separate C release)
+        shell: bash
+        run: |
+          set -euo pipefail
+          . candidate/.deps/activate.sh
+          /usr/bin/python3 evidence/r1049/r_calibrated.py --execute
+      - name: Retain immutable raw on success AND failure; failed upload means EVIDENCE LOST
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r1049-CALIBRATED-${{ github.run_id }}-attempt${{ github.run_attempt }}-r1016-pr1048-${{ github.sha }}
+          path: ${{ runner.temp }}/R1049-CALIBRATED-${{ github.run_id }}-${{ github.run_attempt }}-${{ github.sha }}/
+          if-no-files-found: error
+          overwrite: false
+          retention-days: 14
+          compression-level: 0
+# SOURCE ONLY; external C exact commit/tree/sha review is required BEFORE future single branch push.

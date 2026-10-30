@@ -1,0 +1,69 @@
+{
+  "schema": "R1049_C139_CALIBRATED_SOURCE_ONLY_V1",
+  "authority": "Compiler Issue #1049 C139, post-FIRST non-BLIND; SOURCE-REGISTRATION ONLY",
+  "publisher_branch": "r-review/r1022-six-original-source-only",
+  "fixed_parent_head": "e161666b611a9fe6b501cb132b7c7e916c5f5d2b",
+  "fixed_parent_tree": "6eccec9eb3914dc9687dd2bd98f5e3558878f3a0",
+  "target_pr": 1048,
+  "target_head": "ade11ebec808f5a95e8831a7ae6ee6f6da2b0dbe",
+  "target_tree": "70305183f8951038d296ac9a9ecae1f8e8750e4f",
+  "target_base": "a56cd08c23548852504cf95e94eb6c9a56f3dd8f",
+  "future_opt_in_ref": "refs/heads/r-calibrated/r1016-pr1048",
+  "future_ref_state": "ABSENT before registration; not authorized to create now",
+  "allowed_added_paths": [
+    ".github/workflows/r-calibrated-r1016-pr1048.yml",
+    "evidence/r1049/README.md",
+    "evidence/r1049/manifest.json",
+    "evidence/r1049/r_calibrated.py"
+  ],
+  "immutable_original_seven": {
+    "source": "evidence/r1022/manifest.json",
+    "original": "R1016 original independent 2 positives 4 negatives and frozen oracle",
+    "git_blobs": {
+      "POS-A-register-before-H.nl": "d9a40ea83d7b51b19bd20cd6e562a6d6a8697da4",
+      "POS-B-H-before-register.nl": "6d1a03a1d2c1f89ae19c413bc3cba553d6aeb97b",
+      "NEG-1-missing-Some-link.nl": "a89fff7304df7405b113b9d4625b098de36c5d87",
+      "NEG-2-wrong-tail-original-pointer.nl": "055853059ad8253973c4c4271842a49a10da0fff",
+      "NEG-3-double-nonCopy-terminal.nl": "db72bc023c9cf03cec6f066117007fed3f8064e8",
+      "NEG-4-field-loan-escape.nl": "d3a0de975edf014d34c7c2ed145cdcedf08ba354",
+      "R1016-FIRST-ORIGINAL-v1.txt": "ddf7dc87bca92cdbf16407814f15e9092bce9e27"
+    }
+  },
+  "history": {
+    "FIRST": {
+      "run": "40849018312/attempt1",
+      "source_head": "380cedc4ed62d0d873ce95bff74bd5098e885c8a",
+      "ref": "r-first/r1016-original-first",
+      "archive": "evidence/r1028/original-first-40849018312-attempt1.zip",
+      "git_blob": "7467df2023c84fe86409f815136df779de728bae",
+      "sha256": "0d074152c822d1b45a71ccee37a91fcfb1fea2eae2ce8fff8c27a35f3c3daac9",
+      "bytes": 27685,
+      "raw": "original positives CHECK0 but C17 unsupported; 4 negatives CHECK refusal/no-clobber"
+    },
+    "v1": {
+      "run": "40869364041/attempt1",
+      "executor": "68ee20aa286f1510fe62696a7fba1a9f9dff06f8",
+      "ref": "r-calibrated/r1016-pr1031",
+      "raw": "artifact upload failed; RAW LOST"
+    },
+    "v2": {
+      "run": "40874742688/attempt1",
+      "executor": "1edc429ff22513db1b47bd1cbd3fcda31f573d53",
+      "ref": "r-calibrated/r1016-pr1031-v2",
+      "archive": "evidence/r1035/calibrated-v2-40874742688-attempt1.zip",
+      "git_blob": "b85e5e794b03d1d623e71d3a5fa6d36cccf18060",
+      "sha256": "6baa3c9ef24b472d58c936abe9e414c81d8c11978f8f8ff48ec7f3bbbe6c0aa9",
+      "bytes": 33200,
+      "raw": "positive C17 exit4; negatives CHECK3/no-clobber; public current partial"
+    }
+  },
+  "coverage": {
+    "positive": "SOURCE/CHECK/current/C17; GCC13 and curated LLVM23.1.3 Clang O0/O2 strict native and R-owned observer 0/1/2 IF reached",
+    "negative": "earliest CHECK vs emit, named output snapshot sha/size/device/inode; intended guard NOT verified without diagnostics",
+    "physical": "partial callbacks only; H region/allocation/domain and T base old/new/sibling NOT OBSERVABLE without real identity",
+    "host_OOM": "NOT IMPLEMENTED",
+    "ASan_LSan_UBSan": "NOT IMPLEMENTED"
+  },
+  "no_execution": "No branch, Actions, CI, compiler, native, tests, formatter, environment, PR, merge or READY. Prior events not rerun.",
+  "approval": "Separate independent C exact source HEAD/tree/blob review and one-shot RELEASE required"
+}
