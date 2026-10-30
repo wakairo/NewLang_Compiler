@@ -1,0 +1,9 @@
+{
+  "previous_candidate_HEAD": "304fa315dc05e44e0f268544235d763a8e8da190",
+  "first_result": "v2-gcc-target-FIRST exit1; all10source negatives remainrefused, C17/strictO0 raw plusphysicalguest0and1 PASS; guest2 aborted in observer handoff calls==2 condition BEFORE original pointer/Allocation/Domain clauses",
+  "stderr_SHA256": "32287d3362bf0a7bbca21aecc3c56f31e9436f913401b2fc6f3862cd75f774c6",
+  "runtime_assert_stderr_SHA256": "51c580090dea8808f789d6214479ff51fd6335e350216a6b6ccc0fe37dc1608",
+  "repair": "last inherited P1045 pre-H-T calls==2 assumption becomes no Tbind/call/store in H handoff; pointer/Allocation/Domain/oldowner checks unchanged. New runner disables core dumps for all subprocesses. Source/oracle/Production unchanged.",
+  "original_oracle_preserved": true,
+  "original_harness_preserved": "commit304fa31, harness-freeze-v2 and candidate-v2-FIRST/observer.h.data"
+}

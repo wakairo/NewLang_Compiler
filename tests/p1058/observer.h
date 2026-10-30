@@ -204,9 +204,9 @@ static void receive_owner(nl_live_tail p, const nl_allocation *a,
 static void handoff(const nl_node *p, void *a, size_t d,
                     const nl_allocation *old_a, const nl_domain *old_d)
 {
-    REQUIRE(calls == 2 && !active && (uintptr_t)p == allocated[1] &&
-            (uintptr_t)a == allocated[1] && d == domains[1] && !old_a->handle &&
-            !old_d->token);
+    REQUIRE(!binds && !calls && !stores && !active &&
+            (uintptr_t)p == allocated[1] && (uintptr_t)a == allocated[1] &&
+            d == domains[1] && !old_a->handle && !old_d->token);
 }
 static void receiver(const nl_node *p, void *a, size_t d)
 {

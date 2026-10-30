@@ -17,6 +17,7 @@ cli = Path(cli).resolve(); data = Path(__file__).resolve().parent; repo = data.p
 oracle = json.loads((data/'oracle-v1.json').read_bytes())
 old = json.loads((data/'old-C-identity-v1.json').read_bytes())
 sha = lambda b: hashlib.sha256(b).hexdigest()
+resource.setrlimit(resource.RLIMIT_CORE,(0,0))
 evidence = os.environ.get('P1058_EVIDENCE_DIR')
 if evidence: Path(evidence).mkdir(parents=True,exist_ok=True)
 archive = Path(tempfile.mkdtemp(prefix='P1058-',dir=evidence)) if evidence else None
