@@ -1,0 +1,10 @@
+{
+  "previous_candidate_HEAD": "a98bb9efc7a90d8588960f9ab48b0f2fe8a00c0f",
+  "first_result": "v3-gcc-target-FIRST all10negative refused and positiveA C17/nativeO0O2guest012 physical6 PASS; planned wrong-second-return calibration correctly ABRT at downstream direct-write next check, but harness required specifically actualcallerRET1 diagnostic",
+  "stderr_SHA256": "89c77e00cd053485677e329327815d6d7c9f473b14006acca42286b477e0b8ed",
+  "calibration_stderr_SHA256": "96eb41e8f160af85aa5b66fab388b6df0a391a4bf4288679eb363e5bd9986a2f",
+  "repair": "observe actual caller helper result bindings at direct-write hook before checking downstream finalfield, as well as at mainfinish; explicit guarded mismatch diagnostic namesRET1. Original strict RET1 calibration expectation kept, not relaxed to any signal. Finalphysicalvalues and all originalexpectedsource/oracle unchanged.",
+  "Production_changed": false,
+  "original_source_or_oracle_changed": false,
+  "previous_harness_preserved": "commita98bb9e, harness-freeze-v3, candidate-v3-FIRST/observer.h.data"
+}

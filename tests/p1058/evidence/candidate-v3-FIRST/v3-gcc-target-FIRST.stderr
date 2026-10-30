@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/workspace/p1058/tests/p1058/run.py", line 162, in <module>
+    assert detected.returncode==-signal.SIGABRT and b'P1058_RET1' in detected.stderr
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

@@ -101,6 +101,17 @@ static void copy_call(uint8_t *p, uint8_t old, uint8_t next)
     observed_sibling[calls] = peek(t_fields[calls][1 - helper_index[calls]]);
     ++calls;
 }
+static void actual_helper_returns(uint8_t first, uint8_t second)
+{
+    if (first != P1058_OLD0) {
+        fputs("P1058_RET0 actual caller old mismatch\n", stderr);
+        abort();
+    }
+    if (second != P1058_OLD1) {
+        fputs("P1058_RET1 actual caller old mismatch\n", stderr);
+        abort();
+    }
+}
 static void copy_store(uint8_t *p, uint8_t old, uint8_t next)
 {
     t_phase();
@@ -276,7 +287,11 @@ static void finish(void)
 }
 #define NL_MIXED_COPY_BIND(f, s, a, b) bind_copy(f, s, a, b)
 #define NL_MIXED_COPY_CALL(p, o, n) copy_call(p, o, n)
-#define NL_MIXED_COPY_STORE(p, o, n) copy_store(p, o, n)
+#define NL_MIXED_COPY_STORE(p, o, n)                                           \
+    do {                                                                       \
+        actual_helper_returns(P1058_RET0, P1058_RET1);                         \
+        copy_store(p, o, n);                                                   \
+    } while (0)
 #define NL_MIXED_OWNER_LOCAL(p) local_packet(p)
 #define NL_HEAP_TRIAL(p, n, a) trial(p, n, a)
 #define NL_HEAP_INITIALIZE(p, d) initialize(p, d)
@@ -295,8 +310,8 @@ static void finish(void)
 #define NL_HEAP_RELEASE(a, b, n) release(a, b, n)
 #define NL_HEAP_FINISH()                                                       \
     do {                                                                       \
-        REQUIRE(P1058_RET0 == P1058_OLD0);                                     \
-        REQUIRE(P1058_RET1 == P1058_OLD1);                                     \
+        actual_helper_returns(P1058_RET0, P1058_RET1);                         \
+                                                                               \
         REQUIRE(P1058_RET2 == P1058_DIRECT_OLD);                               \
         finish();                                                              \
     } while (0)
