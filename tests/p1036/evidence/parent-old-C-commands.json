@@ -1,0 +1,322 @@
+[
+  {
+    "source": "tests/p982/sources/after_true.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p982/sources/after_true.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "d40c528a95829c3f2c93c4884ae2ca668cf48ef1f0a197752b846751f35bac6b",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p982/sources/after_false.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p982/sources/after_false.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "dbab1ebd3668746f89a1eff5f23b22cebfb651ae20c6d387ea4135c7e52a7a6f",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p982/sources/second_true.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p982/sources/second_true.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "9c187d36b7a7272899a8a7d9a660f4de38cb4319413a1e5e048784b48901b12b",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p982/sources/second_false.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p982/sources/second_false.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "0427a1a5d3ff15d17e4149ada8fdaa319e41c57daf9cd6d69b2e8054bcddafb6",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p990/sources/before_direct.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p990/sources/before_direct.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "18c61d1ec8eb3e9e6544e643925b1d0355c202e21364d137a79f7361cca2ab5d",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p990/sources/after_true_direct.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p990/sources/after_true_direct.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "1473e8c3867122a2f3f50cf27cd67ef580f28e60df385cfeaa80469401100b52",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p990/sources/after_false_direct.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p990/sources/after_false_direct.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "b4da0dc8516f744e0d36a03a14db55f6f614ffcf861af8fd18974cb5621bd85f",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p990/sources/before_bound.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p990/sources/before_bound.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "1c9a85562de4a2743f30581a742b2bb9895f92390ced504e8338ef14ea388ca3",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p990/sources/after_true_bound.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p990/sources/after_true_bound.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "20606056c3fd7f7814d426bc780b1a475a5bc0826c85778b2130e5bf21c0611c",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p990/sources/after_false_bound.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p990/sources/after_false_bound.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "755f1631cd98788daf80caa5fe1319dfeacb64e32f88d116792b2b33ae26f1a9",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p990/p986/t_only_direct.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p990/p986/t_only_direct.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "fe63f66c29c24cf905bd215f7470af652fa0a35bb69bfd4671c8a811f1d45c8f",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p990/p986/t_only_bound.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p990/p986/t_only_bound.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "49983b6b5df809ae556aa3806daf1cdfb41153197415103f5fc7c6b6ff91943f",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p990/p986/t_before_allocation_direct.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p990/p986/t_before_allocation_direct.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "f40b169d753f2fbe0b6bd9aa07527de06e352dfbb72e075633047f43dd42ae41",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p990/p986/t_before_allocation_bound.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p990/p986/t_before_allocation_bound.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "4d66a0d803433d40f406895485f07779b683aa67761c16ccee70d46e2c8c5536",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p990/p986/t_before_h_read_direct.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p990/p986/t_before_h_read_direct.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "4f6e30e757f8b366eeb5c06e7fc62281d51f67d4c81993f91b9a15537c8712cf",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p990/p986/t_before_h_read_bound.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p990/p986/t_before_h_read_bound.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "dc787493b12ab9ea4c9c2457ec9ffea0433da4ad9f0aead95bcc6982c26e6229",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p990/sources/negative_duplicate_return.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p990/sources/negative_duplicate_return.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "18c61d1ec8eb3e9e6544e643925b1d0355c202e21364d137a79f7361cca2ab5d",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p990/sources/calibration_unreachable_bound_v2.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p990/sources/calibration_unreachable_bound_v2.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "1c9a85562de4a2743f30581a742b2bb9895f92390ced504e8338ef14ea388ca3",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p1013/stage0/ordinary_same.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p1013/stage0/ordinary_same.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "b1f954d064f366dc4a98bc90d4df1bc8fbdb81a173843b580fa6387dac025074",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p1013/stage0/ordinary_distinct.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p1013/stage0/ordinary_distinct.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "b90a54b7838373a2b27e61aa89008695ea2885cdbaf70aec60c0c02eb90d680a",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p1013/stage0/mixed_same.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p1013/stage0/mixed_same.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "79670a957616765528bfde8a8ccbe548b23fe1f611445a7f32e40e98a466b50f",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p1013/stage0/mixed_distinct.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p1013/stage0/mixed_distinct.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "44d2a6e412432f9a50139eefcbad94729be9a7ad3763c6a0af618be92e0992ab",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p1013/production/mixed_distinct_direct.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p1013/production/mixed_distinct_direct.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "5193732f8e2c47f23cb6a99bd791ce59166c548fb3b089ccfe838e68595b1f39",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p1020/sources/two_normal_true.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p1020/sources/two_normal_true.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "7d892a2d88104abc14152220a4eb68509bb6f4d4b0c80ef3a56fcd2650b60770",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p1020/sources/two_normal_false.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p1020/sources/two_normal_false.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "eb04263f682cd59bbac65393968cff7b88bcb6c2c21f95dc40e37c0d1c001b37",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p1020/sources/two_normal_equal.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p1020/sources/two_normal_equal.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "78d6420376f9bb3ca423b11f4cacf2e6044ff5b392c85fbe776fd6b99b610784",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p1020/sources/two_normal_index1.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p1020/sources/two_normal_index1.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "cbd0b2b473c611590e11a4c2edfa16ea36f3bfde8eabffbb8f9c26683f0d23b2",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p1020/sources/control_return_true.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p1020/sources/control_return_true.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "fbb04c87d7a8c11c31e062b272d8d93d407c459caf03c9a5207a0879ae629167",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p1020/sources/control_return_false.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p1020/sources/control_return_false.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "20335eeeec898956b771ed5758ac3236806f0fb4b2067501d3fbba57bc34cf2b",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p1030/sources/pair_before_heap.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p1030/sources/pair_before_heap.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "3be790aeea27399524438bd4694bb6915e9293b4301880d99371997346605075",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p1030/sources/heap_before_pair.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p1030/sources/heap_before_pair.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "3be790aeea27399524438bd4694bb6915e9293b4301880d99371997346605075",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "tests/p1013/production/unsupported_sibling.nl",
+    "command": [
+      "/workspace/p1036-parent-build/newlangc",
+      "/workspace/p1036/tests/p1013/production/unsupported_sibling.nl"
+    ],
+    "exit": 0,
+    "C_SHA256": "bca25658bdfe19c03ec722445eb313b45d44a8614dfa9a08df4ea413e6f49b23",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

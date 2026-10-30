@@ -1,0 +1,31 @@
+[
+  {
+    "command": [
+      "/workspace/p965-build-tools/cmake/data/bin/cmake",
+      "-S",
+      "/workspace/p1030",
+      "-B",
+      "/workspace/p1036-parent-build",
+      "-DNEWLANG_FRONTEND_ONLY=ON",
+      "-DCMAKE_BUILD_TYPE=Debug",
+      "-DCMAKE_C_COMPILER=/workspace/p1030-validation-tools/usr/bin/gcc-13",
+      "-DCMAKE_PROJECT_INCLUDE=/workspace/p1030/cmake/independent-r-tests-hook.cmake"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "cb47fb80e34a85b164a025ae2bb3ddbd3ab64723378ffd0af9fb4b1f006c3320",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "/workspace/p965-build-tools/cmake/data/bin/cmake",
+      "--build",
+      "/workspace/p1036-parent-build",
+      "--target",
+      "newlangc",
+      "-j4"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "9aa958eae4c6a8eb3d22ace004260f3668388b4d274f0801e80b3a8ca5da9b8e",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

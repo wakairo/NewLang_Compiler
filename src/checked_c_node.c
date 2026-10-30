@@ -84,7 +84,7 @@ typedef struct {
         reloans, option_bindings, link_updates;
     NLTypeId bundle;
     NLTypeId copy_type;
-    size_t copy_function, copy_second_function;
+    size_t copy_function, copy_second_function, copy_third_function;
     size_t copy_calls, copy_expected_calls, copy_roots;
     const NLCheckedFragment *origin_root;
     const NLCheckedFragment *copy_issuer;
@@ -3326,6 +3326,15 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
              "next){uint8_t old=*target;*target=next;NL_MIXED_COPY_CALL("
              "target,old,next);return old;}\n",
              e.copy_second_function)) {
+        free(e.text);
+        return e.status;
+    }
+    if (e.copy_third_function &&
+        !put(&e,
+             "static uint8_t nl_copy_state_%zu(uint8_t *target,uint8_t "
+             "next){uint8_t old=*target;*target=next;NL_MIXED_COPY_CALL("
+             "target,old,next);return old;}\n",
+             e.copy_third_function)) {
         free(e.text);
         return e.status;
     }

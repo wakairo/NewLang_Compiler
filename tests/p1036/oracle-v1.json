@@ -1,0 +1,156 @@
+{
+  "release": "C137 P1036 source/oracle/negative PRE-RUN, P-owned not BLIND/R",
+  "parent": "a56cd08c23548852504cf95e94eb6c9a56f3dd8f",
+  "parent_tree": "a2cd1c9a9c66a8686d7e4b99f545b82865ef3877",
+  "main": "438170098d5b98096f1ad1f1f200dc1f326c75c3",
+  "canonical": "CURRENT_SPEC -> Draft17.34 16.3.8/17.1/13.5c/18.1a-b",
+  "parent_reconciliation": "P1045 terminal and PR1048 DRAFT exists but PR1031 pin unchanged; this independent branch stays on exact PR1031, no silent rebase/stacking onto1048, no copying1045Production/v9",
+  "independence": "new P source from canonical; qualified M1037/F87/B1038 reports are advisory/law not reused test fixtures. No R frozen source/names/oracle/runner/probe/raw or T reconstructed bridge. O synthetic source/oracle not used",
+  "positive": {
+    "t_then_h.nl": {
+      "first_index": 1,
+      "initial": [
+        37,
+        173
+      ],
+      "indices": [
+        1,
+        0,
+        1
+      ],
+      "old": [
+        173,
+        37,
+        94
+      ],
+      "next": [
+        94,
+        173,
+        37
+      ],
+      "sibling": [
+        37,
+        94,
+        173
+      ],
+      "final": [
+        173,
+        37
+      ]
+    },
+    "h_then_t.nl": {
+      "first_index": 0,
+      "initial": [
+        37,
+        173
+      ],
+      "indices": [
+        0,
+        1,
+        0
+      ],
+      "old": [
+        37,
+        173,
+        94
+      ],
+      "next": [
+        94,
+        37,
+        173
+      ],
+      "sibling": [
+        173,
+        94,
+        37
+      ],
+      "final": [
+        173,
+        37
+      ]
+    }
+  },
+  "expected": {
+    "CHECK": 0,
+    "GET_actual_calls": 3,
+    "current_body_parameters_event": [
+      0,
+      0,
+      0
+    ],
+    "parent_C17": 4,
+    "candidate_C17": 0
+  },
+  "source": "exactly3 distinct ordinary ref<write,u8>,u8->u8 helpers, actual fresh nonescaping scoped loans before first H, same genuine T lexical original and2child incarnations; two definition RETURN spellings. First actual old feeds second incoming; second actual old feeds third incoming; third result observes most recently installed94 rather than original or incoming",
+  "hypothesis": "after CHECK and three genuine public current validations, original copy_call_proof function cap at privateheader52-54 rejects third distinct function; measure exact first original guard, do not infer from CHECK alone",
+  "H": {
+    "nominal": "DispatchLink",
+    "codes": [
+      61,
+      209
+    ],
+    "guests": [
+      0,
+      1,
+      2
+    ],
+    "trials": [
+      1,
+      2,
+      2
+    ],
+    "frees": [
+      0,
+      1,
+      2
+    ],
+    "contract": "full two-site fallible original H, link None->Some(actualtail)->None, localLiveTail return/caller+callee read/terminal independentheadcleanup; Tprefix executesallguestworlds and grantsnoHauthority"
+  },
+  "negative_sources": {
+    "negative_read_actual.nl": {
+      "CHECK": 3,
+      "C17": 3,
+      "intended": "call with incompatible read-ref function parameter rejected; record earliest actual diagnostic, not a definition-guard claim"
+    },
+    "negative_loan_escape.nl": {
+      "CHECK": 3,
+      "C17": 3,
+      "intended": "ending third scoped write reference cannot escape; earlier refusal recorded UNREACHED"
+    },
+    "negative_double_terminal.nl": {
+      "CHECK": 3,
+      "C17": 3,
+      "intended": "same original Allocation/Domain cannot be consumed twice"
+    },
+    "unsupported_fourth_helper.nl": {
+      "CHECK": 0,
+      "C17": 4,
+      "intended": "four distinct actual helpers outside bounded3 profile, not canonical illegality"
+    },
+    "unsupported_other_original.nl": {
+      "CHECK": 0,
+      "C17": 4,
+      "intended": "third genuinecall targetsanotherToriginal outside same-original3 profile; public current may be authentic, not foreign-proof safety rejection"
+    }
+  },
+  "native": "strict GCC13/curatedClang23.1.3 C17 O0/O2; actual original Tfieldaddresses/old/new/sibling and returned third scalar observed while live; existingHobserver platform NULL-only guest injection. Raw unitexit0 physically INCONCLUSIVE",
+  "negative_host": "third stale root/child facts fromfirstcall, first endedloan vs third, foreignsameIDissuer/world/source/body/actual/function/plan, suppliedold vs incoming confusion; no publishedC/exacthealthyretry; Bforeignchild leftinA presentation A destroyed then Bhealthy",
+  "OOM": "enumerate actually reached malloc/calloc/realloc in real emission; NULL/length777/summary/current/origin/owner preserved/exactC retry, finite not universal rollback proof",
+  "history": "originalv1-v8/1808keys/oldsourceoraclefirstRED immutable; own prospectivev9 rootedexactv8 fixedPR1031, no1045v9adoption, oldtrustedverifiers unchanged",
+  "stop": "no actual third source-owned current or source-law/issuer/API/ABI expansion/unsafe root-current behavior/oldhistory corruption/Rimport/pin drift/budget breach",
+  "budget": "one new P DRAFT on exactPR1031, naturalFULL5PARTIALmax2sets12jobs, no manualrerun/oldPR/main/READY/merge/GO/F/Rlaunch",
+  "VALUE_ALIGNMENT_RISK": "private bounded helper mapping and history maintenance increase maintainer audit cost; author+ordinary-safe caller UB audit/re-audit closure vs factoredC and performance/productcost UNMEASURED, ProductGOPAUSEDH1HOLD",
+  "compatibility_forward_plan": {
+    "old_source": "tests/p1013/production/unsupported_third_helper.nl",
+    "source_SHA256": "a3d1be21f47b47847aa5c360a8fcb43199058c58d16e7499bcf7e727343fc191",
+    "original_implementation_oracle": {
+      "CHECK": 0,
+      "C17": 4
+    },
+    "candidate_expected": {
+      "CHECK": 0,
+      "C17": 0
+    },
+    "contract": "same original field0 repeated3times, old41/67/109->next67/109/151,sibling173,H23/199; if eligibletransferintoactivecurrent/native/physical/OOMpositive withnewPownoracle, neverrewriteoriginalsource/oracle/firstREDorusearbitraryname/valueexclusion"
+  }
+}

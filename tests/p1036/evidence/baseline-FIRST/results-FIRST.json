@@ -1,0 +1,44 @@
+[
+  {
+    "source": "tests/p1036/sources/t_then_h.nl",
+    "source_SHA256": "49895c903da0d1f28af5c18744db9d8906355f24f141012753d093dd427fb3cc",
+    "compiler_SHA256": "26f0c0b1821c16f4329111dcbc776f5113234d84161a37d1874ccd48f7ccefdb",
+    "CHECK": 0,
+    "GET_actual": 3,
+    "body_parameters_event_current": [
+      0,
+      0,
+      0
+    ],
+    "CLI_C17": 4,
+    "no_C": true,
+    "named_bytes_dev_ino_no_temp": "preserved",
+    "first_reject_PC": "0x405b5a",
+    "first_private_reject": [
+      "copy_call_proof",
+      "/workspace/p1036/src/checked_c_copy_internal.h:54"
+    ],
+    "native": "NOT TESTED"
+  },
+  {
+    "source": "tests/p1036/sources/h_then_t.nl",
+    "source_SHA256": "6cf920aa36d72d7f78c4f972ba2260e18767f8d71c99e93423cf3b3f8e66ce90",
+    "compiler_SHA256": "26f0c0b1821c16f4329111dcbc776f5113234d84161a37d1874ccd48f7ccefdb",
+    "CHECK": 0,
+    "GET_actual": 3,
+    "body_parameters_event_current": [
+      0,
+      0,
+      0
+    ],
+    "CLI_C17": 4,
+    "no_C": true,
+    "named_bytes_dev_ino_no_temp": "preserved",
+    "first_reject_PC": "0x405b5a",
+    "first_private_reject": [
+      "copy_call_proof",
+      "/workspace/p1036/src/checked_c_copy_internal.h:54"
+    ],
+    "native": "NOT TESTED"
+  }
+]

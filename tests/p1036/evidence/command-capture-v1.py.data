@@ -1,0 +1,25 @@
+from pathlib import Path
+import datetime
+import hashlib
+import json
+import subprocess
+import sys
+
+root = Path(__file__).resolve().parent
+label, *command = sys.argv[1:]
+dest = root / (label + '.json')
+assert command and not dest.exists(), ('immutable label already used', label)
+started = datetime.datetime.now(datetime.timezone.utc).isoformat()
+result = subprocess.run(command, capture_output=True, timeout=1800)
+for stream in ['stdout', 'stderr']:
+    (root / (label + '.' + stream)).write_bytes(getattr(result, stream))
+value = dict(label=label, command=command, exit=result.returncode,
+             raw_host_UTC_start=started,
+             raw_host_UTC_finish=datetime.datetime.now(datetime.timezone.utc).isoformat(),
+             stdout_SHA256=hashlib.sha256(result.stdout).hexdigest(),
+             stderr_SHA256=hashlib.sha256(result.stderr).hexdigest())
+dest.write_text(json.dumps(value, indent=2) + '\n')
+print(json.dumps(value), flush=True)
+print(result.stdout.decode(errors='replace')[-1800:])
+print(result.stderr.decode(errors='replace')[-3000:])
+raise SystemExit(result.returncode)

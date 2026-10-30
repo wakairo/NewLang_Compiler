@@ -1,0 +1,17 @@
+[
+  {
+    "command": [
+      "/workspace/p965-build-tools/cmake/data/bin/cmake",
+      "-S",
+      "/workspace/p1030",
+      "-B",
+      "/workspace/p1036-parent-build",
+      "-DCMAKE_BUILD_TYPE=Debug",
+      "-DCMAKE_C_COMPILER=/workspace/p1030-validation-tools/usr/bin/gcc-13",
+      "-DCMAKE_PROJECT_INCLUDE=/workspace/p1030/cmake/independent-r-tests-hook.cmake"
+    ],
+    "exit": 1,
+    "stdout_SHA256": "0f46287e38dd931e406c3d1d8dd31e1758ae8584d2c1f1799ec7b76c8a39021a",
+    "stderr_SHA256": "27611344cf4c7d9e9017fd1b9661274f14cf163bcd913b0e25988177ba28a891"
+  }
+]

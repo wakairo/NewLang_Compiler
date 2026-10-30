@@ -1,0 +1,1 @@
+/workspace/p1036/tests/p1036/sources/negative_double_terminal.nl:98:48-98:64: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding
