@@ -1,0 +1,7 @@
+{"P1058":"H_origin","current":true}
+{"P1058":"current","ordinal":0,"call":21,"function":11,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1058":"event","ordinal":0,"event":0,"kind":2,"current":0}
+{"P1058":"origin","ordinal":0,"event_count":1,"returned_event":0,"binding_hops":1,"index":0,"old":37,"next":154,"returned":37,"sibling":209,"root":1,"incarnation":1,"result_binding":7,"old_forward_source":true}
+{"P1058":"current","ordinal":1,"call":28,"function":10,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1058":"event","ordinal":1,"event":0,"kind":2,"current":0}
+{"P1058":"origin","ordinal":1,"event_count":1,"returned_event":0,"binding_hops":2,"index":1,"old":209,"next":37,"returned":209,"sibling":154,"root":1,"incarnation":1,"result_binding":13,"old_forward_source":true}

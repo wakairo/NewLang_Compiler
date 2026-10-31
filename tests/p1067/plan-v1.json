@@ -1,0 +1,79 @@
+{
+  "release": "C156 P1067 PRE-RUN integration plan, no new source semantics",
+  "main": "438170098d5b98096f1ad1f1f200dc1f326c75c3",
+  "tip": "b49a5e24d9fa56d367e116ce037a067c7e1cca38",
+  "tip_tree": "5dd16c6582b9157bc7de5ffecb8818cab0b20955",
+  "common": "fbbf8a0261669ce0e8920e5b019134268a6a58c1",
+  "excluded": "9ed018db287e9e46cf17a2d570cf77de79a57f52",
+  "branch": "p1067-mainline-custody-copy-consolidation",
+  "main_authority": [
+    "docs/NewLang_Project_Compass.md",
+    "docs/NewLang_Project_Development_Process.md",
+    "docs/NewLang_Track_B_Architecture_Advisory_Charter.md",
+    "docs/NewLang_Product_Value_Strategy.md",
+    "docs/reference/CURRENT_SPEC.md",
+    "docs/reference/NewLang_v0_spec_Draft17_34.md",
+    "docs/NewLang_Design_Decision_Procedure.md",
+    "docs/NewLang_Design_Intent_Ledger.md",
+    "docs/NewLang_Backend_Execution_Policy.md"
+  ],
+  "main_authority_SHA256": {
+    "docs/NewLang_Project_Compass.md": "402a124c6fa7b7867891ac8290bc4e358efccfcedd9e1c0df95e2359c76e756c",
+    "docs/NewLang_Project_Development_Process.md": "8ebb1e2a254498056d6f9073ce3b191e5fe467c4865997d745952d8a220f100f",
+    "docs/NewLang_Track_B_Architecture_Advisory_Charter.md": "ca4f76e5da16aff2198e6db10dc99db28acf86e5c01644b2c446911b171a8787",
+    "docs/NewLang_Product_Value_Strategy.md": "f1afe4845487654d2e11a9f159bd0128149d93caf5c1cd5f9fad2ed29cc0d7ca",
+    "docs/reference/CURRENT_SPEC.md": "8b1a51b340c88a5ef79bfe12c51f8d9c759773c9d44091dc60dff7ab7dd92849",
+    "docs/reference/NewLang_v0_spec_Draft17_34.md": "6f982106dbf03cf21a623e37e6d84d17dab8b9c3743a6a7033ba27c129db4a3d",
+    "docs/NewLang_Design_Decision_Procedure.md": "c6b57c19b98abb376afbba8b27cca07d02d8b7a8e07822c6f3fdc1b5facfd13d",
+    "docs/NewLang_Design_Intent_Ledger.md": "a6c740f91ca2e7deea09017f9be5967780ea2f2a473d1f0348ae3533d8f4992c",
+    "docs/NewLang_Backend_Execution_Policy.md": "57d7908262c5b45ed0993441629f6af37f2db47f2c25b75ac3f8bc46b4eadf3f"
+  },
+  "new_document": "docs/P1067_Consolidation.md",
+  "topology": "new branch from fixed main; local two-parent merge of fixed tip, main in first-parent ancestry, stopped sibling excluded; no existing PR or main merge",
+  "inherited_inputs": "all fixed-tip tracked blobs unchanged except exact main authority overlay; old source/oracle/evidence/v1-v12 unchanged; no v13, CMake or workflow changes",
+  "compiler_oracles": "reuse unchanged published P sources and existing assertions; no new NewLang source, no R original source/oracle/raw/runner",
+  "P1062_source_freeze_SHA256": "a9e5403f67550c178c73155a742f3a51eb583b15837454d052329762342b5534",
+  "P1062_oracle_SHA256": "9847539057aee9139d55e43d15ee29b3903f35d03c0d9a578d7f826fe12e05c6",
+  "v12_SHA256": "345441eaefc246b5164bc250a6dcc0a73e9d87408d648e54dc0e689f22f71b10",
+  "new_audit_expected": "PASS actual ancestry+tip/main inventory+source22+clean/cache-free; six in-memory negative inventory/graph faults reject at exact preserved boundary",
+  "new_audit_negative_oracle": [
+    "main-authority changed: reject",
+    "Production changed: reject",
+    "P982 first RED changed: reject",
+    "v12 changed: reject",
+    "unapproved Production input: reject",
+    "stopped-sibling graph fault: reject"
+  ],
+  "source_current_expectations": "all original source/GET/current/native/negative oracles retained, including C150 historical parent_C17 versus explicit candidate predictions",
+  "local_validation_order": [
+    "clean standalone integration audit and original freeze/history",
+    "configure/build all targets, fixed GCC13 and Clang23.1.3; LLVM static C API smoke if available",
+    "semantic/public issuer/current and old P633/P817/P785/P790/callable/ownership/OOM tests before native",
+    "all existing GCC and Clang CTests, unchanged native strict C17 O0/O2 guest0/1/2",
+    "ASan/LSan and UBSan all existing CTests; only one regression lane active at a time on two CPU quota",
+    "pinned formatter; final clean checkout, unchanged source/index and archive/hash checks"
+  ],
+  "expected_CTest_inventory": {
+    "full": 592,
+    "frontend_only": 591,
+    "T_synthetic": 2,
+    "new_R_cohort": 0
+  },
+  "CI_budget": {
+    "distinct_natural_PR_sets_max": 3,
+    "runs_max": 6,
+    "jobs_max": 18,
+    "manual_rerun": false,
+    "dispatch": false,
+    "first_credible_green_stop": true
+  },
+  "STOP": [
+    "fixed main/tip/base drift",
+    "new semantic/owner/root/loan/issuer/C17/native/host-UB issue or false acceptance",
+    "old source/oracle/evidence corruption or wrong authority",
+    "stopped PR1050 inherited",
+    "unreasonable private implementation/maintenance growth or scope/budget overrun",
+    "R independence violation"
+  ],
+  "product": "DRAFT HOLD; no READY/merge/main modification/Product GO; comparative library-author and ordinary-safe caller burden/performance UNMEASURED"
+}

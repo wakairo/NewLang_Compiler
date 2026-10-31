@@ -1,0 +1,93 @@
+{
+  "stage": "Forward-only calibration V2: preserve original negative_duplicate_return first oracle RED; no rewrite of original source/oracle/digests",
+  "first_failed_candidate": "4ffb7b366f8383801984c39165bcafef77dbb202",
+  "first_failed_log_sha256": "417c5e56fb07ef9ff73c5062ad09f5a04560258818bcf0ca3ee87bba60402b0e",
+  "actual_readonly_evidence": "Original unconditional RETURN prunes later source statements: actual issued callee5nodes, one RETURN(node5), BLOCK item_count1, tail0, exactly one CHANGE, old121; actual GET/current validators OK; no native executed for that first failed oracle.",
+  "diagnostic_graph_sha256": "1079cdc30121cdd3021e2da742a3085356a2cf5c19a5dd6d3c416f0464634f5c",
+  "calibration_controls": {
+    "sources/negative_duplicate_return.nl": {
+      "T00": 83,
+      "T01": 17,
+      "T10": 121,
+      "T11": 201,
+      "CALL_ROOT": 1,
+      "I0": 0,
+      "I1": 1,
+      "NEXT": 37,
+      "HV0": 97,
+      "HV1": 173,
+      "POST": 0,
+      "H_LOCAL": 1,
+      "HEAD_READ": 0,
+      "CALLER_READ": 0,
+      "RETURN_DIRECT": 1
+    },
+    "sources/calibration_unreachable_bound_v2.nl": {
+      "T00": 83,
+      "T01": 17,
+      "T10": 121,
+      "T11": 201,
+      "CALL_ROOT": 1,
+      "I0": 0,
+      "I1": 1,
+      "NEXT": 37,
+      "HV0": 97,
+      "HV1": 173,
+      "POST": 0,
+      "H_LOCAL": 1,
+      "HEAD_READ": 0,
+      "CALLER_READ": 0,
+      "RETURN_DIRECT": 0
+    }
+  },
+  "calibration_prediction": "Bound spelling with the same unreachable source tail should already CHECK0/C17RC0 on immutable P984; both direct and bound on new candidate issue one actual old-Copy return/one Change and must physically return121 once. This does not assert a new source law.",
+  "new_negative": "Additional RETURN inside a literal IF before a final normal RETURN, with one prior Change; intended to produce two checked control-flow sites rather than an ignored linear source tail. First CHECK/issuer layer is UNKNOWN pre-run. Must fail closed under the finite mixed consumer; never execute rejected C.",
+  "negative_profiles": {
+    "negative_extra_change.nl": {
+      "CHECK": 0,
+      "C17": 4
+    },
+    "negative_wrong_return.nl": {
+      "CHECK": 0,
+      "C17": 4
+    },
+    "negative_wrong_formal.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "negative_wrong_field.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "negative_escape_ref.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "negative_bad_branch.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "negative_wrong_owner.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "negative_duplicate_owner.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "negative_ended_domain.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "negative_additional_return_v2.nl": {
+      "CHECK_prediction": "0 or precision3; first layer UNKNOWN pre-run",
+      "C17_allowed_rejection": [
+        3,
+        4
+      ]
+    }
+  },
+  "source_oracle_preservation": "All V1 source, oracle, negative-layered-v1 and current-freeze-v1/v2 bytes unchanged. New controls/oracle are separate V2 files. Original failure is never regraded PASS.",
+  "safety_boundary": "No additional source AST guard to force an invalid negative fixture, no public issuer/semantics/borrow/H change. STOP for genuine original/current/physical contradiction.",
+  "VALUE_ALIGNMENT_RISK": "Prefer the already-authenticated one-Change graph over a new private syntax exception solely to satisfy a mistaken source assumption. Added calibration and freeze maintenance burden stays distinct from source/caller obligations; C comparison UNMEASURED."
+}

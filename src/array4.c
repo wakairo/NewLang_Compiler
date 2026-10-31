@@ -422,7 +422,8 @@ static bool event_valid(const NLCheckedFragment *f,
                         const NLSemanticContext *c)
 {
     const NLSemanticContext *final = nl_checked_context(f);
-    if (v->origin != f || !v->incarnation || !v->fact || !final ||
+    if (v->origin != f || !v->incarnation || !v->fact || !final || !c ||
+        !final->functions || !c->functions ||
         final->place_count < c->place_count ||
         final->value_count < c->value_count ||
         final->binding_count < c->binding_count)
@@ -635,7 +636,8 @@ NLCheckStatus nl_checked_array4_c17(const NLCheckedFragment *entry, char **out,
         nl_checked_context(entry) != nl_checked_context(f))
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
     const NLSemanticContext *c = nl_checked_context(f);
-    if (!call->function || call->function > c->function_count)
+    if (!c || !c->functions || !call->function ||
+        call->function > c->function_count)
         return NL_CHECK_SEMANTIC_UNSUPPORTED;
     const NLFunctionEntry fn = c->functions[call->function - 1];
     if (fn.body != f->body_owner || fn.kind != NL_CHECKED_REGISTERED_CALL ||

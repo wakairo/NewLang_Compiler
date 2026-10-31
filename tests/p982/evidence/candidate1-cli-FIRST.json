@@ -1,0 +1,66 @@
+[
+  {
+    "source": "after_true.nl",
+    "mode": "check",
+    "returncode": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  {
+    "source": "after_true.nl",
+    "mode": "emit",
+    "returncode": 0,
+    "stdout_bytes": 14005,
+    "stdout_sha256": "d40c528a95829c3f2c93c4884ae2ca668cf48ef1f0a197752b846751f35bac6b",
+    "stderr": ""
+  },
+  {
+    "source": "after_false.nl",
+    "mode": "check",
+    "returncode": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  {
+    "source": "after_false.nl",
+    "mode": "emit",
+    "returncode": 0,
+    "stdout_bytes": 14006,
+    "stdout_sha256": "dbab1ebd3668746f89a1eff5f23b22cebfb651ae20c6d387ea4135c7e52a7a6f",
+    "stderr": ""
+  },
+  {
+    "source": "second_true.nl",
+    "mode": "check",
+    "returncode": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  {
+    "source": "second_true.nl",
+    "mode": "emit",
+    "returncode": 0,
+    "stdout_bytes": 14006,
+    "stdout_sha256": "9c187d36b7a7272899a8a7d9a660f4de38cb4319413a1e5e048784b48901b12b",
+    "stderr": ""
+  },
+  {
+    "source": "second_false.nl",
+    "mode": "check",
+    "returncode": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  {
+    "source": "second_false.nl",
+    "mode": "emit",
+    "returncode": 0,
+    "stdout_bytes": 14005,
+    "stdout_sha256": "0427a1a5d3ff15d17e4149ada8fdaa319e41c57daf9cd6d69b2e8054bcddafb6",
+    "stderr": ""
+  }
+]

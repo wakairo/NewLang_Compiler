@@ -1,0 +1,20 @@
+{
+  "release": "C152 prospective v12 mechanical repair, not a new Production candidate",
+  "original_HEAD": "0502751b03f927fc224a253a3f1aaffa11291be9",
+  "original_tree": "0d020e2b2bc6c3216b1f5f65d2d21fad59f0a36b",
+  "original_manifest_SHA256": "7ff8ce60009d145b170a04fa81a8f9e51ff03f5dae7dd37ba41d8d41fb126e1a",
+  "original_manifest_blob": "8e8dcc9b10ef678e86b7094ddc7be32656151c9e",
+  "original_CI": {
+    "FULL": 41045748786,
+    "PARTIAL": 41045748815,
+    "attempt": 1,
+    "jobs": 6,
+    "conclusion": "failure",
+    "raw_decoded_ZIP_SHA256": "50e8c853b77c2670d4d8af5dfe0b1841d4381f3e39d966572ab74532af580aa8"
+  },
+  "repair": "Git index selects inherited v11 inputs plus tracked P1062 files, requires staged blob equality, preserves old v12 as data and unchanged fail-closed history checker. Existing five negative oracles retained; new matching-content untracked input must be rejected and ambient files must not affect generation.",
+  "Production_bytes": "UNCHANGED",
+  "source_oracle_22": "UNCHANGED",
+  "v1_v11": "UNCHANGED",
+  "C152_ci_budget": "at most3 additional natural FULL5+PARTIAL pairs, stop on first reproducible all-green, no manual rerun/dispatch"
+}

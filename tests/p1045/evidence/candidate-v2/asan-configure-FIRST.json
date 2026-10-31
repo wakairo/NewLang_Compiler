@@ -1,0 +1,18 @@
+{
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/cmake",
+    "-S",
+    ".",
+    "-B",
+    "/workspace/p1045-build-asan",
+    "-DCMAKE_BUILD_TYPE=Debug",
+    "-DCMAKE_C_COMPILER=/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+    "-DCMAKE_C_FLAGS=-Wno-error=gcc-install-dir-libstdcxx",
+    "-DNEWLANG_SANITIZER=address",
+    "-DNEWLANG_FRONTEND_ONLY=ON",
+    "-DCMAKE_PROJECT_INCLUDE=/workspace/p1045/cmake/independent-r-tests-hook.cmake"
+  ],
+  "exit": 0,
+  "seconds": 1.1754283100017346,
+  "raw_SHA256": "b1bf06f27d60ce4ac1e67d4ce20cb1b52d866d5d6221ed06ec5135a667c4df8f"
+}

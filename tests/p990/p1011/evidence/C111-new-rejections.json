@@ -1,0 +1,140 @@
+[
+  {
+    "CLI_exit": 1,
+    "CLI_stdout": "empty",
+    "case": "coedited-current-v5",
+    "error": "original P982 first RED changed",
+    "named_bytes_dev_ino": "unchanged",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/RAW-LOG-SHA256SUMS",
+    "error": "original P982 evidence changed: tests/p982/evidence/RAW-LOG-SHA256SUMS",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/SHA256SUMS",
+    "error": "original P982 evidence changed: tests/p982/evidence/SHA256SUMS",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/baseline-FIRST.json",
+    "error": "original P982 evidence changed: tests/p982/evidence/baseline-FIRST.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/candidate1-cli-FIRST.json",
+    "error": "original P982 evidence changed: tests/p982/evidence/candidate1-cli-FIRST.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/candidate1-harness-build-FIRST.log",
+    "error": "original P982 evidence changed: tests/p982/evidence/candidate1-harness-build-FIRST.log",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/complete-reached-new-emitter-oom.json",
+    "error": "original P982 evidence changed: tests/p982/evidence/complete-reached-new-emitter-oom.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/complete-reached-old-oom.json",
+    "error": "original P982 evidence changed: tests/p982/evidence/complete-reached-old-oom.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/ctest-inventory.json",
+    "error": "original P982 evidence changed: tests/p982/evidence/ctest-inventory.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/first-full-timeouts.json",
+    "error": "original P982 evidence changed: tests/p982/evidence/first-full-timeouts.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/first-reds.json",
+    "error": "original P982 first RED changed",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/generated/after_false.nl.c.txt",
+    "error": "original P982 evidence changed: tests/p982/evidence/generated/after_false.nl.c.txt",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/generated/after_true.nl.c.txt",
+    "error": "original P982 evidence changed: tests/p982/evidence/generated/after_true.nl.c.txt",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/generated/second_false.nl.c.txt",
+    "error": "original P982 evidence changed: tests/p982/evidence/generated/second_false.nl.c.txt",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/generated/second_true.nl.c.txt",
+    "error": "original P982 evidence changed: tests/p982/evidence/generated/second_true.nl.c.txt",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/harness-v2-compound-diagnostic.log",
+    "error": "original P982 evidence changed: tests/p982/evidence/harness-v2-compound-diagnostic.log",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/harness-v2-gcc-auth-FIRST.log",
+    "error": "original P982 evidence changed: tests/p982/evidence/harness-v2-gcc-auth-FIRST.log",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/local-results.json",
+    "error": "original P982 evidence changed: tests/p982/evidence/local-results.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/private-repair.patch",
+    "error": "original P982 evidence changed: tests/p982/evidence/private-repair.patch",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/v3-asan-timeout-isolation-FIRST.log",
+    "error": "original P982 evidence changed: tests/p982/evidence/v3-asan-timeout-isolation-FIRST.log",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/v3-format-FIRST.log",
+    "error": "original P982 evidence changed: tests/p982/evidence/v3-format-FIRST.log",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/v3-native-observations.json",
+    "error": "original P982 evidence changed: tests/p982/evidence/v3-native-observations.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "coedited-future-v6:tests/p982/evidence/v3-ubsan-timeout-isolation-FIRST.log",
+    "error": "original P982 evidence changed: tests/p982/evidence/v3-ubsan-timeout-isolation-FIRST.log",
+    "status": "REJECT"
+  },
+  {
+    "case": "historical-v4-coherent-update",
+    "error": "historical freeze SHA256: tests/p990/current-freeze-v4.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "missing-first-red-key",
+    "error": "freeze coverage lost: tests/p982/evidence/first-reds.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "first-red-symlink",
+    "error": "symlink freeze path: tests/p982/evidence/first-reds.json",
+    "status": "REJECT"
+  },
+  {
+    "case": "first-red-nonregular",
+    "error": "nonregular freeze path: tests/p982/evidence/first-reds.json",
+    "status": "REJECT"
+  }
+]

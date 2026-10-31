@@ -1,0 +1,16 @@
+{
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/ctest",
+    "--test-dir",
+    "/workspace/p1045-build-gcc13",
+    "--parallel",
+    "2",
+    "--output-on-failure",
+    "--verbose",
+    "-R",
+    "^(p990_new_native|p1045_two_original_native)\\.integration$"
+  ],
+  "exit": 0,
+  "seconds": 18.31419017999724,
+  "raw_SHA256": "3cdc2c805873ffc02e41aa3ddadb743e6707d9a73f52c931b6ecf98f12e633bb"
+}

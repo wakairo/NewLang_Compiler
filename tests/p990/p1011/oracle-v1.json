@@ -1,0 +1,86 @@
+{
+  "release": "C111",
+  "stage": "PRE-RUN P1011, source/oracle frozen before parent exploit or candidate execution",
+  "fixed_parent": "ca2a21b64abec7c519ffd7423fb90186ff33e7bd",
+  "fixed_parent_tree": "d59f6547d72e8421943024b421ef15f74f2baaac",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "reviewed_generations": [
+    {
+      "generation": 1,
+      "path": "tests/p990/current-freeze-v1.json",
+      "sha256": "e1f07f8a30fe927d374c76fd802c8c10d861090d6abe25e6ef090ee65b99aab4",
+      "oid": "cd6e30902968e65c8ecf580dd404b3247035e7ec"
+    },
+    {
+      "generation": 2,
+      "path": "tests/p990/current-freeze-v2.json",
+      "sha256": "e6bf940e5b5e7ccbcc43ae269f51bfda5dc5f5638306916dd81d64df81785989",
+      "oid": "f3a79d52250879e39b5abece92343097603e6c1a"
+    },
+    {
+      "generation": 3,
+      "path": "tests/p990/current-freeze-v3.json",
+      "sha256": "d636d2772584a16256ace830ecd4e82e352d0b8d80bf63172fa1ecaedf6829b8",
+      "oid": "9f81177516e7e1f178e3cdf7e9a99aaaf19923ca"
+    },
+    {
+      "generation": 4,
+      "path": "tests/p990/current-freeze-v4.json",
+      "sha256": "2effb5d5da27f337a68147887428f0a06bdef5184dedbb8b8ceaec6d684510af",
+      "oid": "e6f0946976d550973cf69de7d539b161b08b316d"
+    }
+  ],
+  "first_red": {
+    "path": "tests/p982/evidence/first-reds.json",
+    "sha256": "f4ef793e961c3d60a3f071fa3286c95197f55ec5c554a22d1d8ca05909ae9658",
+    "oid": "8c9f97b51c04113436ddc7efc0c38480dcdecceb",
+    "independently_checked_source": "P984 c981ff742865731decb434c2382a6fb418c83de5"
+  },
+  "cohort": {
+    "tests/p982/evidence/RAW-LOG-SHA256SUMS": "bd99a1212e951e3c16de38ec5d275f6b8c72f5040638b32700df784605eaf6f8",
+    "tests/p982/evidence/SHA256SUMS": "3de3694c2ffaca7ded29d2ce717f9f0ac57b4be2b3c7fcbf0976fb85dadcbf68",
+    "tests/p982/evidence/baseline-FIRST.json": "7051d76593cf9797a29614d40c5c294d36d13008db0d21145a32b3a14688d1f1",
+    "tests/p982/evidence/candidate1-cli-FIRST.json": "184e4f63f7e182e12e9d25522c86b35d52ed3c3d6341ae87ec460afb240538de",
+    "tests/p982/evidence/candidate1-harness-build-FIRST.log": "15258b7d4422076b09617bcc7a9a2cea15f1cd136701a890d0a7e4ee26bb8f64",
+    "tests/p982/evidence/complete-reached-new-emitter-oom.json": "7a930a0449c16e3a03fa8f49a2b2a2cd76c2e162583f5cc869de90fbb79d3f2d",
+    "tests/p982/evidence/complete-reached-old-oom.json": "aa106648866d12d50b07c831b076be913081937359a85c8a094ffb39186e0d2d",
+    "tests/p982/evidence/ctest-inventory.json": "155aec0aeb7d4a56f6dc79f630ea04e257846efbc41a8be336cceac636077394",
+    "tests/p982/evidence/first-full-timeouts.json": "6bf9a3bb315818778f819d787cbe58e041943b34090f97ac349ca500a2d92170",
+    "tests/p982/evidence/first-reds.json": "f4ef793e961c3d60a3f071fa3286c95197f55ec5c554a22d1d8ca05909ae9658",
+    "tests/p982/evidence/generated/after_false.nl.c.txt": "dbab1ebd3668746f89a1eff5f23b22cebfb651ae20c6d387ea4135c7e52a7a6f",
+    "tests/p982/evidence/generated/after_true.nl.c.txt": "d40c528a95829c3f2c93c4884ae2ca668cf48ef1f0a197752b846751f35bac6b",
+    "tests/p982/evidence/generated/second_false.nl.c.txt": "0427a1a5d3ff15d17e4149ada8fdaa319e41c57daf9cd6d69b2e8054bcddafb6",
+    "tests/p982/evidence/generated/second_true.nl.c.txt": "9c187d36b7a7272899a8a7d9a660f4de38cb4319413a1e5e048784b48901b12b",
+    "tests/p982/evidence/harness-v2-compound-diagnostic.log": "e33bf393695c450bc62d8c3a7826b86076d8cfc6d7961643d6059c3e4213c149",
+    "tests/p982/evidence/harness-v2-gcc-auth-FIRST.log": "5b24374dbe30ff912acafce453971b5be425309c86b7b7c75ed1cc80b9c07791",
+    "tests/p982/evidence/local-results.json": "aae36f0cfff6ff4b0967651d6255acb2a93f4edc5ffe57438c7655720f00f47a",
+    "tests/p982/evidence/private-repair.patch": "68d83e96900d02e2f6ea9e50d45127016c7daecfdbc28b72d4be772bc44853d6",
+    "tests/p982/evidence/v3-asan-timeout-isolation-FIRST.log": "65fd335a80b0212b14b10369a72c10b8c1b0fb8db2f08fa00972290baab509ec",
+    "tests/p982/evidence/v3-format-FIRST.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/p982/evidence/v3-native-observations.json": "e3d91df2cb0f1307a0e40ce6fed2d432a8de0519570d56b75eacc5d287302226",
+    "tests/p982/evidence/v3-ubsan-timeout-isolation-FIRST.log": "f6a37f947c2f43ceb805512028e06548fdc095afb6a476a96e70bfa708678a54"
+  },
+  "cohort_property": "Exactly 22 original P982 historical evidence records from independently pinned P990 V3; no live Production/header/CMake/observer/runner freeze",
+  "parent_predictions": {
+    "original_current_v4": "ACCEPT562",
+    "honest_prospective_v5": "ACCEPT563",
+    "f82_coedited_first_red_and_v5_digest": "ACCEPT563 (known history gap, not correct original evidence)"
+  },
+  "candidate_controls": [
+    "honest-v5-original-history-and-evidence",
+    "legitimate-v6-current-header-CMake-proof-consumer-update"
+  ],
+  "candidate_negatives": {
+    "coedited_current_v5": "original P982 first RED changed",
+    "coedited_future_v6_first_red": "original P982 first RED changed",
+    "historical_v4_coherent_update": "historical freeze SHA256: tests/p990/current-freeze-v4.json",
+    "missing_first_red_key": "freeze coverage lost: tests/p982/evidence/first-reds.json",
+    "first_red_symlink": "symlink freeze path: tests/p982/evidence/first-reds.json",
+    "first_red_nonregular": "nonregular freeze path: tests/p982/evidence/first-reds.json"
+  },
+  "cohort_rejection": "First RED exact SHA/OID failure, other21 original P982 evidence changed: <exact path>; all coherently updated successor current digests still REJECT",
+  "legacy": "Original P9992+7 and3+32 preserved with old oracle immutable; extend only its harness history traversal across V4",
+  "critical_cli": "For coedited actual current-v5: exit1, empty stdout, exact first RED error, scratch sentinel bytes/device/inode unchanged. Not a compiler named-output proof.",
+  "preserve": "All original v1-v4/source/oracle/first RED/evidence/Production/T7/CMake/workflows unchanged; no T1005 integration, no R996/R1000 source/oracle access, no F/R launch",
+  "value_alignment_risk": "One finite historical evidence cohort and v5 anchor add internal trust/audit upkeep; caller obligations unchanged, human UB audit benefit versus well-factored C UNMEASURED; Product GO PAUSED/H1 HOLD"
+}

@@ -1,0 +1,11 @@
+{
+  "first_candidate_HEAD": "6dae7525480b47acdd809b7f02cad0edc490b397",
+  "first_candidate_tree": "3f3eef36e1987e9ffb87985f9308cb2c5d6ed032",
+  "first_RED": "v1-gcc-target-FIRST exit1, all10source negatives refused, firstpositive C17/rawstrictO0 passed, physical observer compilation before native failed undeclared P1058_PHASE",
+  "stderr_SHA256": "30f062c091f1ffaac1789347ef663710cf2d427787e854866e0289c90ab87592",
+  "repair": "observer send_owner now explicitly requires no T bindings/calls/stores during H, matching original frozen all-H-before-T oracle; remove old P1045 phase assumption. README preformat line count corrected84/3.",
+  "Production_changed": false,
+  "original_source_oracle_changed": false,
+  "original_harness_oracle_changed": false,
+  "original_harness_preserved": "original commit6dae752, immutable harness-freeze-v1 and evidence/candidate-v1-FIRST/observer.h.data"
+}

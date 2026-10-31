@@ -1,0 +1,23 @@
+{
+  "release": "C152 same Issue1062/PR1063",
+  "original_HEAD": "0502751b03f927fc224a253a3f1aaffa11291be9",
+  "original_tree": "0d020e2b2bc6c3216b1f5f65d2d21fad59f0a36b",
+  "old_v12_SHA256": "7ff8ce60009d145b170a04fa81a8f9e51ff03f5dae7dd37ba41d8d41fb126e1a",
+  "old_v12_blob": "8e8dcc9b10ef678e86b7094ddc7be32656151c9e",
+  "budget": {
+    "additional_sets": 3,
+    "runs": 6,
+    "jobs": 18,
+    "stop_after_first_green": true
+  },
+  "before_clone_expected": "old p982_freeze fails closed for absent pyc with original source/oracle unchanged",
+  "repair_expected": "Git-index-managed inventory excludes all untracked files; index blob agreement; v11 coverage/pins unchanged; five original historical negatives plus added untracked-input regression; fresh Git checkout with zero source caches passes original7failed CTests",
+  "changes_allowed": [
+    "tests/p990/current-freeze-v12.json",
+    "tests/p1062/history_v12.py",
+    "tests/p1062/history_tests.py",
+    "tests/p1062/RESULTS.md",
+    "tests/p1062/evidence/c152/"
+  ],
+  "Production_changes": false
+}

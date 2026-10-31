@@ -1,0 +1,326 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3b443a7..597755d 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -924,6 +924,76 @@ if(BUILD_TESTING)
+         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982")
+     add_test(NAME p982_freeze.unit COMMAND "${Python3_EXECUTABLE}"
+         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/freeze_test.py")
++    add_executable(p990_probe tests/p990/probe.c)
++    target_include_directories(p990_probe PRIVATE tests/support)
++    target_link_libraries(p990_probe PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
++    add_executable(p990_oom tests/p990/oom.c)
++    target_include_directories(p990_oom PRIVATE tests/support)
++    target_link_libraries(p990_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
++    target_link_options(p990_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
++    add_test(NAME p990_before_direct_auth.unit COMMAND p990_probe
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/before_direct.nl" "1" "1" "121")
++    add_test(NAME p990_before_direct_oom.unit COMMAND p990_oom
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/before_direct.nl")
++    add_test(NAME p990_after_true_direct_auth.unit COMMAND p990_probe
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_true_direct.nl" "1" "1" "151")
++    add_test(NAME p990_after_true_direct_oom.unit COMMAND p990_oom
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_true_direct.nl")
++    add_test(NAME p990_after_false_direct_auth.unit COMMAND p990_probe
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_false_direct.nl" "1" "1" "151")
++    add_test(NAME p990_after_false_direct_oom.unit COMMAND p990_oom
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_false_direct.nl")
++    add_test(NAME p990_before_bound_auth.unit COMMAND p990_probe
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/before_bound.nl" "0" "1" "121")
++    add_test(NAME p990_before_bound_oom.unit COMMAND p990_oom
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/before_bound.nl")
++    add_test(NAME p990_after_true_bound_auth.unit COMMAND p990_probe
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_true_bound.nl" "0" "1" "151")
++    add_test(NAME p990_after_true_bound_oom.unit COMMAND p990_oom
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_true_bound.nl")
++    add_test(NAME p990_after_false_bound_auth.unit COMMAND p990_probe
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_false_bound.nl" "0" "1" "151")
++    add_test(NAME p990_after_false_bound_oom.unit COMMAND p990_oom
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_false_bound.nl")
++    add_test(NAME p990_p986_t_only_direct_auth.unit COMMAND p990_probe
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_only_direct.nl" "1" "0" "107")
++    add_test(NAME p990_p986_t_only_bound_auth.unit COMMAND p990_probe
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_only_bound.nl" "0" "0" "107")
++    add_test(NAME p990_p986_t_before_allocation_direct_auth.unit COMMAND p990_probe
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_allocation_direct.nl" "1" "1" "107")
++    add_test(NAME p990_p986_t_before_allocation_direct_oom.unit COMMAND p990_oom
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_allocation_direct.nl")
++    add_test(NAME p990_p986_t_before_allocation_bound_auth.unit COMMAND p990_probe
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_allocation_bound.nl" "0" "1" "107")
++    add_test(NAME p990_p986_t_before_allocation_bound_oom.unit COMMAND p990_oom
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_allocation_bound.nl")
++    add_test(NAME p990_p986_t_before_h_read_direct_auth.unit COMMAND p990_probe
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_h_read_direct.nl" "1" "1" "107")
++    add_test(NAME p990_p986_t_before_h_read_direct_oom.unit COMMAND p990_oom
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_h_read_direct.nl")
++    add_test(NAME p990_p986_t_before_h_read_bound_auth.unit COMMAND p990_probe
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_h_read_bound.nl" "0" "1" "107")
++    add_test(NAME p990_p986_t_before_h_read_bound_oom.unit COMMAND p990_oom
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_h_read_bound.nl")
++    add_test(NAME p990_unreachable_direct_auth.unit COMMAND p990_probe
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/negative_duplicate_return.nl" "1" "1" "121")
++    add_test(NAME p990_unreachable_direct_oom.unit COMMAND p990_oom
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/negative_duplicate_return.nl")
++    add_test(NAME p990_unreachable_bound_auth.unit COMMAND p990_probe
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/calibration_unreachable_bound_v2.nl" "0" "1" "121")
++    add_test(NAME p990_unreachable_bound_oom.unit COMMAND p990_oom
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/calibration_unreachable_bound_v2.nl")
++    add_test(NAME p990_new_native.integration COMMAND "${Python3_EXECUTABLE}"
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
++        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "new")
++    add_test(NAME p990_p986_native.integration COMMAND "${Python3_EXECUTABLE}"
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
++        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "p986")
++    add_test(NAME p990_negative_sources.integration COMMAND "${Python3_EXECUTABLE}"
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
++        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "negative")
++    add_test(NAME p990_freeze_protocol.unit COMMAND "${Python3_EXECUTABLE}"
++        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/freeze_selftest.py")
+     add_executable(p961_oom tests/p961/oom.c)
+     target_include_directories(p961_oom PRIVATE tests/support)
+     target_link_libraries(p961_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+diff --git a/src/checked_c_copy_internal.h b/src/checked_c_copy_internal.h
+index bea4d91..4fe48ad 100644
+--- a/src/checked_c_copy_internal.h
++++ b/src/checked_c_copy_internal.h
+@@ -52,27 +52,42 @@ static bool copy_call_proof(Emit *e, const NLCheckedFragment *f,
+         (e->copy_function && e->copy_function != v.function))
+         return reject(e);
+     const NLCheckedNodeView *root = nl_checked_node_view(v.body, v.root);
++    /* These are two spellings of the same already-validated Change. The
++     * RETURN syntax supplies no authority: its initializer must be this
++     * actual call's source-owned event and returned old Copy result. */
++    const bool direct = root && root->item_count == 1;
+     const NLCheckedNodeView *binding =
+-        root ? nl_checked_node_view(v.body, root->first_item) : NULL;
++        root && !direct ? nl_checked_node_view(v.body, root->first_item) : NULL;
+     const NLCheckedNodeView *ret =
+-        binding ? nl_checked_node_view(v.body, binding->next_item) : NULL;
++        direct    ? nl_checked_node_view(v.body, root->first_item)
++        : binding ? nl_checked_node_view(v.body, binding->next_item)
++                  : NULL;
++    const NLCheckedNodeId initializer =
++        direct ? (ret ? ret->initializer : 0)
++               : (binding ? binding->initializer : 0);
+     const NLCheckedNodeView *replace =
+-        binding ? nl_checked_node_view(v.body, binding->initializer) : NULL;
++        nl_checked_node_view(v.body, initializer);
+     const NLCheckedNodeView *old =
+-        ret ? nl_checked_node_view(v.body, ret->initializer) : NULL;
++        ret && !direct ? nl_checked_node_view(v.body, ret->initializer) : NULL;
+     const NLCheckedNodeView *ref =
+         replace ? nl_checked_node_view(v.body, replace->first_argument) : NULL;
+     const NLCheckedNodeView *next =
+         ref ? nl_checked_node_view(v.body, ref->next_argument) : NULL;
+-    if (!root || root->kind != NL_CHECKED_BLOCK || root->item_count != 2 ||
+-        root->tail || !binding || binding->kind != NL_CHECKED_BINDING || !ret ||
+-        ret->kind != NL_CHECKED_RETURN || ret->next_item || !replace ||
++    if (!root || root->kind != NL_CHECKED_BLOCK ||
++        (root->item_count != 1 && root->item_count != 2) || root->tail ||
++        !ret || ret->kind != NL_CHECKED_RETURN || ret->next_item || !replace ||
+         replace->kind != NL_CHECKED_REPLACE || replace->argument_count != 2 ||
+-        event.node != binding->initializer || !old ||
+-        old->kind != NL_CHECKED_IDENTIFIER || old->symbol != binding->symbol ||
+-        old->value_use != NL_VALUE_COPIED || !ref ||
+-        ref->kind != NL_CHECKED_IDENTIFIER || ref->symbol != p->parameters[0] ||
+-        !next || next->kind != NL_CHECKED_IDENTIFIER ||
++        event.node != initializer ||
++        (!direct && (!binding || binding->kind != NL_CHECKED_BINDING || !old ||
++                     old->kind != NL_CHECKED_IDENTIFIER ||
++                     old->symbol != binding->symbol ||
++                     old->value_use != NL_VALUE_COPIED)) ||
++        (direct && (!ret->terminates || replace->result_count != 1 ||
++                    replace->results[0].type != e->u8 ||
++                    ret->returned.value != replace->results[0].value)) ||
++        !ref || ref->kind != NL_CHECKED_IDENTIFIER ||
++        ref->symbol != p->parameters[0] || !next ||
++        next->kind != NL_CHECKED_IDENTIFIER ||
+         next->symbol != p->parameters[1] || next->next_argument ||
+         replace->type != e->u8 || ret->returned.type != e->u8 ||
+         ret->returned.value != v.result.value)
+diff --git a/tests/p982/freeze_test.py b/tests/p982/freeze_test.py
+index 0b49333..243dc99 100644
+--- a/tests/p982/freeze_test.py
++++ b/tests/p982/freeze_test.py
+@@ -1,10 +1,11 @@
++"""Prospective C103 successor; original checker/manifests remain in parent history."""
+ from pathlib import Path
+-import hashlib
+-import json
++import sys
+ 
+ root = Path(__file__).resolve().parents[2]
+-for manifest in ["source-freeze-v1.json", "harness-freeze-v3.json"]:
+-    data = json.loads((root / "tests/p982" / manifest).read_text())
+-    for name, expected in data["files"].items():
+-        assert hashlib.sha256((root / name).read_bytes()).hexdigest() == expected, name
+-print("P982 frozen independent source/oracle/production/harness hashes PASS")
++sys.path.insert(0, str(root / "tests/support"))
++from versioned_freeze import verify
++
++CURRENT = "tests/p990/current-freeze-v3.json"
++count = verify(root, CURRENT)
++print("P982 original Git/source/oracle lineage and current versioned hashes PASS", count)
+diff --git a/tests/support/versioned_freeze.py b/tests/support/versioned_freeze.py
+new file mode 100644
+index 0000000..6b5ab3b
+--- /dev/null
++++ b/tests/support/versioned_freeze.py
+@@ -0,0 +1,157 @@
++"""Offline P982 historical Git provenance plus prospective current freezes.
++
++The original manifests never describe today's changed production. Their exact
++bytes and original blob paths are authenticated against the pinned parent tree.
++Unchanged protected inputs are checked both historically and currently. A new
++manifest generation changes current expectations without editing earlier ones.
++"""
++import base64
++import hashlib
++import json
++from pathlib import Path
++
++PARENT = "c981ff742865731decb434c2382a6fb418c83de5"
++TREE = "aa01141aa821f4433725aa3b533cccd268cb064f"
++SNAPSHOT = "tests/p990/lineage/parent-snapshot-v1.json"
++FIRST = "tests/p990/current-freeze-v1.json"
++SOURCE = "tests/p990/source-freeze-v1.json"
++SOURCE_SHA = "f51773f9709413ae5eb0486e88876bf4a54e51d2b691e71ab90ca70a729ac0da"
++EVOLVING = {
++    "CMakeLists.txt", "src/checked_c_copy_internal.h",
++    "src/checked_c_copy_if_internal.h", "src/checked_c_node.c",
++    "tests/p982/freeze_test.py",
++}
++MANIFESTS = [
++    "tests/p982/source-freeze-v1.json",
++    *[f"tests/p982/harness-freeze-v{i}.json" for i in [1, 2, 3]],
++]
++
++
++class FreezeError(AssertionError):
++    pass
++
++
++def require(condition, message):
++    if not condition:
++        raise FreezeError(message)
++
++
++def digest(data):
++    return hashlib.sha256(data).hexdigest()
++
++
++def git_oid(kind, data):
++    return hashlib.sha1(kind.encode() + b" " + str(len(data)).encode() + b"\0" + data).hexdigest()
++
++
++def local(root, name):
++    path = root / name
++    require(not Path(name).is_absolute() and ".." not in Path(name).parts,
++            "nonlocal freeze path: " + name)
++    require(path.resolve().is_relative_to(root.resolve()), "escaped freeze path")
++    return path
++
++
++def tree_entry(snapshot, path):
++    current = TREE
++    parts = Path(path).parts
++    for depth, part in enumerate(parts):
++        require(current in snapshot["trees_base64"], "missing retained Git tree")
++        raw = base64.b64decode(snapshot["trees_base64"][current], validate=True)
++        require(git_oid("tree", raw) == current, "retained Git tree digest")
++        entries = {}
++        offset = 0
++        while offset < len(raw):
++            space = raw.index(b" ", offset)
++            zero = raw.index(b"\0", space)
++            require(zero + 21 <= len(raw), "truncated retained Git tree")
++            mode = raw[offset:space]
++            name = raw[space + 1:zero].decode()
++            require(name not in entries, "duplicate retained tree entry")
++            entries[name] = (mode, raw[zero + 1:zero + 21].hex())
++            offset = zero + 21
++        require(part in entries, "missing original path: " + path)
++        mode, current = entries[part]
++        require(mode == (b"100644" if depth + 1 == len(parts) else b"40000"),
++                "unexpected retained Git mode")
++    return current
++
++
++def original(root, snapshot, name):
++    require(name in snapshot["blobs"], "missing original blob: " + name)
++    row = snapshot["blobs"][name]
++    if name in EVOLVING:
++        require("archive" in row, "missing original evolving-file bytes")
++        data = local(root, row["archive"]).read_bytes()
++    else:
++        require("archive" not in row, "protected input redirected to archive")
++        data = local(root, name).read_bytes()
++    require(git_oid("blob", data) == row["oid"] == tree_entry(snapshot, name),
++            "original Git blob mismatch: " + name)
++    require(digest(data) == row["sha256"], "original SHA256 mismatch: " + name)
++    return data
++
++
++def history(root):
++    snapshot = json.loads(local(root, SNAPSHOT).read_text())
++    require(snapshot["schema"] == 1 and snapshot["parent"] == PARENT and
++            snapshot["tree"] == TREE, "immutable P982 parent/tree changed")
++    commit = base64.b64decode(snapshot["commit_base64"], validate=True)
++    require(git_oid("commit", commit) == PARENT, "retained parent commit digest")
++    require(commit.splitlines()[0] == ("tree " + TREE).encode(),
++            "retained parent tree link")
++    manifests = {name: json.loads(original(root, snapshot, name)) for name in MANIFESTS}
++    protected = set(MANIFESTS)
++    for name in [MANIFESTS[0], MANIFESTS[-1]]:
++        for path, expected in manifests[name]["files"].items():
++            require(digest(original(root, snapshot, path)) == expected,
++                    "original recorded freeze mismatch: " + path)
++            protected.add(path)
++    source = local(root, SOURCE).read_bytes()
++    require(digest(source) == SOURCE_SHA, "original P990 source manifest changed")
++    for path, expected in json.loads(source)["files"].items():
++        require(digest(local(root, path).read_bytes()) == expected,
++                "original P990 source/oracle changed: " + path)
++        protected.add(path)
++    protected.update({SOURCE, SNAPSHOT, "tests/support/versioned_freeze.py",
++                      "tests/p990/freeze_selftest.py"})
++    protected.update(row["archive"] for row in snapshot["blobs"].values()
++                     if "archive" in row)
++    return protected
++
++
++def verify(root, manifest):
++    root = Path(root).resolve()
++    current_name = str(Path(manifest))
++    required = history(root)
++    current = json.loads(local(root, current_name).read_text())
++    require(current["schema"] == 1 and current["parent"] == PARENT,
++            "current freeze schema/parent")
++    generation = current["generation"]
++    require(type(generation) is int and 1 <= generation <= 64,
++            "current freeze generation")
++    cursor, cursor_name = current, current_name
++    seen = set()
++    while True:
++        require(cursor_name not in seen, "freeze chain cycle")
++        seen.add(cursor_name)
++        require(cursor["schema"] == 1 and cursor["parent"] == PARENT and
++                cursor["generation"] == generation, "freeze chain generation")
++        previous = cursor["previous"]
++        if previous is None:
++            require(generation == 1 and cursor_name == FIRST,
++                    "freeze chain must retain P990 v1")
++            break
++        require(generation > 1, "unexpected freeze predecessor")
++        previous_name = previous["path"]
++        data = local(root, previous_name).read_bytes()
++        require(digest(data) == previous["sha256"], "previous freeze digest")
++        required.add(previous_name)
++        cursor, cursor_name = json.loads(data), previous_name
++        generation -= 1
++    files = current["files"]
++    require(required <= files.keys(), "current freeze omits protected inputs")
++    for name, expected in files.items():
++        require(digest(local(root, name).read_bytes()) == expected,
++                "current freeze digest: " + name)
++    return len(files)

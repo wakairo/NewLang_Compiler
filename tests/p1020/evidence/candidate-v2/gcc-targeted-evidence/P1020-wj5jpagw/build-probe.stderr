@@ -1,0 +1,4 @@
+/workspace/p1020/tests/p1020/probe.c: In function ‘p1020_negative’:
+/workspace/p1020/tests/p1020/probe.c:148:39: error: initialization discards ‘const’ qualifier from pointer target type [-Wdiscarded-qualifiers]
+  148 |     NLSemanticContext *caller_world = x.caller->context;
+      |                                       ^

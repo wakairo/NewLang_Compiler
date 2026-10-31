@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/workspace/p1062-gate0/tests/p1062/run.py", line 149, in <module>
+    ok(invoke(name+opt+'-physical-build',[cc,*flags,opt,c,repo/'tests/integration/two_heap_platform.c',
+  File "/workspace/p1062-gate0/tests/p1062/run.py", line 41, in ok
+    assert r.returncode==0 and not r.stderr,(r.returncode,r.stdout,r.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (1, b'', b'In file included from /tmp/p1062-875cx5k7/producer_direct_result.c:31:\n/workspace/p1062-gate0/tests/p1062/observer.h:213:13: error: \xe2\x80\x98local_packet\xe2\x80\x99 defined but not used [-Werror=unused-function]\n  213 | static void local_packet(const nl_live_tail *p)\n      |             ^~~~~~~~~~~~\ncc1: all warnings being treated as errors\n')

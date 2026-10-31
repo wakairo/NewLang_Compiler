@@ -1,0 +1,223 @@
+Start testing: Oct 28 02:25 UTC
+----------------------------------------------------------
+312/534 Testing: p974_charge_entry.unit
+312/534 Test: p974_charge_entry.unit
+Command: "/workspace/p974-build-gcc/p974_entry_auth" "/workspace/p974/tests/p813/sources/charge_false.nl" "u8"
+Directory: /workspace/p974-build-gcc
+"p974_charge_entry.unit" start time: Oct 28 02:25 UTC
+Output:
+----------------------------------------------------------
+P974 scalar fault=0 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=1 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=2 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=3 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=4 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=5 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=6 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=7 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=8 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=9 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=10 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=11 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=12 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=13 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=14 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=15 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=16 historical_GET=original CURRENT=INVALID restored=OK
+P974 scalar fault=17 historical_GET=original CURRENT=INVALID restored=OK
+P974 actual shared-plan B and separate-registration F healthy
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p974_charge_entry.unit" end time: Oct 28 02:25 UTC
+"p974_charge_entry.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+313/534 Testing: p974_charge_v0.unit
+313/534 Test: p974_charge_v0.unit
+Command: "/workspace/p974-build-gcc/p974_driver" "probe" "/workspace/p974/tests/p813/sources/charge_false.nl" "u8"
+Directory: /workspace/p974-build-gcc
+"p974_charge_v0.unit" start time: Oct 28 02:25 UTC
+Output:
+----------------------------------------------------------
+P974 V0 first consumer NULL table refused; parameter/program unchanged; original table restored before cleanup
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p974_charge_v0.unit" end time: Oct 28 02:25 UTC
+"p974_charge_v0.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+314/534 Testing: p974_trim_entry.unit
+314/534 Test: p974_trim_entry.unit
+Command: "/workspace/p974-build-gcc/p974_entry_auth" "/workspace/p974/tests/p866/sources/trim_true.nl" "unit"
+Directory: /workspace/p974-build-gcc
+"p974_trim_entry.unit" start time: Oct 28 02:25 UTC
+Output:
+----------------------------------------------------------
+P974 unit fault=0 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=1 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=2 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=3 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=4 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=5 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=6 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=7 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=8 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=9 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=10 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=11 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=12 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=13 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=14 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=15 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=16 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=17 historical_GET=original CURRENT=INVALID restored=OK
+P974 actual shared-plan B and separate-registration F healthy
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p974_trim_entry.unit" end time: Oct 28 02:25 UTC
+"p974_trim_entry.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+315/534 Testing: p974_trim_v0.unit
+315/534 Test: p974_trim_v0.unit
+Command: "/workspace/p974-build-gcc/p974_driver" "probe" "/workspace/p974/tests/p866/sources/trim_true.nl" "unit"
+Directory: /workspace/p974-build-gcc
+"p974_trim_v0.unit" start time: Oct 28 02:25 UTC
+Output:
+----------------------------------------------------------
+P974 V0 first consumer NULL table refused; parameter/program unchanged; original table restored before cleanup
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p974_trim_v0.unit" end time: Oct 28 02:25 UTC
+"p974_trim_v0.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+316/534 Testing: p974_fan_entry.unit
+316/534 Test: p974_fan_entry.unit
+Command: "/workspace/p974-build-gcc/p974_entry_auth" "/workspace/p974/tests/p866/sources/fan_false.nl" "unit"
+Directory: /workspace/p974-build-gcc
+"p974_fan_entry.unit" start time: Oct 28 02:25 UTC
+Output:
+----------------------------------------------------------
+P974 unit fault=0 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=1 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=2 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=3 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=4 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=5 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=6 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=7 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=8 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=9 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=10 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=11 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=12 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=13 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=14 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=15 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=16 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=17 historical_GET=original CURRENT=INVALID restored=OK
+P974 actual shared-plan B and separate-registration F healthy
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p974_fan_entry.unit" end time: Oct 28 02:25 UTC
+"p974_fan_entry.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+317/534 Testing: p974_fan_v0.unit
+317/534 Test: p974_fan_v0.unit
+Command: "/workspace/p974-build-gcc/p974_driver" "probe" "/workspace/p974/tests/p866/sources/fan_false.nl" "unit"
+Directory: /workspace/p974-build-gcc
+"p974_fan_v0.unit" start time: Oct 28 02:25 UTC
+Output:
+----------------------------------------------------------
+P974 V0 first consumer NULL table refused; parameter/program unchanged; original table restored before cleanup
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p974_fan_v0.unit" end time: Oct 28 02:25 UTC
+"p974_fan_v0.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+318/534 Testing: p974_relay_entry.unit
+318/534 Test: p974_relay_entry.unit
+Command: "/workspace/p974-build-gcc/p974_entry_auth" "/workspace/p974/tests/p878/sources/relay_equal_binding.nl" "unit"
+Directory: /workspace/p974-build-gcc
+"p974_relay_entry.unit" start time: Oct 28 02:25 UTC
+Output:
+----------------------------------------------------------
+P974 unit fault=0 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=1 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=2 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=3 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=4 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=5 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=6 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=7 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=8 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=9 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=10 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=11 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=12 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=13 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=14 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=15 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=16 historical_GET=original CURRENT=INVALID restored=OK
+P974 unit fault=17 historical_GET=original CURRENT=INVALID restored=OK
+P974 actual shared-plan B and separate-registration F healthy
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p974_relay_entry.unit" end time: Oct 28 02:25 UTC
+"p974_relay_entry.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+319/534 Testing: p974_relay_v0.unit
+319/534 Test: p974_relay_v0.unit
+Command: "/workspace/p974-build-gcc/p974_driver" "probe" "/workspace/p974/tests/p878/sources/relay_equal_binding.nl" "unit"
+Directory: /workspace/p974-build-gcc
+"p974_relay_v0.unit" start time: Oct 28 02:25 UTC
+Output:
+----------------------------------------------------------
+P974 V0 first consumer NULL table refused; parameter/program unchanged; original table restored before cleanup
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p974_relay_v0.unit" end time: Oct 28 02:25 UTC
+"p974_relay_v0.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+320/534 Testing: p974_named_v0.integration
+320/534 Test: p974_named_v0.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p974/tests/p974/named.py" "/workspace/p974-build-gcc/p974_driver" "/workspace/p974/tests/p813/sources/charge_false.nl"
+Directory: /workspace/p974-build-gcc
+"p974_named_v0.integration" start time: Oct 28 02:25 UTC
+Output:
+----------------------------------------------------------
+Traceback (most recent call last):
+  File "/workspace/p974/tests/p974/named.py", line 20, in <module>
+    assert healthy.returncode == 0 and not healthy.stdout and not healthy.stderr, healthy.stderr
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: b'error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p974/tests/p813/sources/charge_false.nl\n'
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Failed.
+"p974_named_v0.integration" end time: Oct 28 02:25 UTC
+"p974_named_v0.integration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 28 02:25 UTC

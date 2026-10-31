@@ -1,0 +1,7 @@
+{
+  "first_failure": "Producer direct result passed CHECK/current/C17 and raw native; passive observer compile rejected unused static local_packet because direct return correctly has no local packet binding. No unsafe execution or physical mismatch.",
+  "first_RED_SHA256": "b8bbfc334e5af915117958c6f5a9d7778c72d02b20fcaf85fb86392efe864a5b",
+  "repair": "Make optional passive local packet helper static inline (strict C17); do not change assertions/oracles/generated C/Production. Preserve previous observer bytes.",
+  "Production_unchanged": true,
+  "source_oracle_unchanged": true
+}

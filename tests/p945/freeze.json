@@ -1,0 +1,228 @@
+{
+  "compiler_base": "fbbf8a0261669ce0e8920e5b019134268a6a58c1",
+  "canonical": "Draft17.34",
+  "freeze_before_new_source_execution_utc": "2026-10-26T11:05:03.708917+00:00",
+  "primary_oracle": {
+    "dispatch_journal_r1.nl": {
+      "category": "fresh complete mixed H+T user-like workload A, T transaction before allocations",
+      "T": {
+        "live": {
+          "declared": [
+            "channel",
+            "limit"
+          ],
+          "initial": [
+            39,
+            122
+          ],
+          "field": 0,
+          "old": 39,
+          "new": 166,
+          "final": [
+            166,
+            122
+          ]
+        },
+        "journal": {
+          "initial": [
+            15,
+            207
+          ],
+          "field": 1,
+          "old": 207,
+          "incoming_origin": "old live.channel=39",
+          "final": [
+            15,
+            39
+          ]
+        }
+      },
+      "condition": {
+        "operands": [
+          6,
+          14
+        ],
+        "operator": "<",
+        "bool": true,
+        "selected": 166,
+        "unexecuted": 27
+      },
+      "H_payloads": [
+        65,
+        193
+      ],
+      "T_runs": "all H allocation worlds",
+      "wanted": "CHECK0, genuine matching public Copy+owner proof, ordinary C17/native if implemented; normal unit native exit0 stdout/stderr empty",
+      "baseline_prediction": "parser admission and semantic CHECK likely; first plausible implementation boundary is public Copy prefix/parameters precision or mixed C17 expression admission of Copy-valued IF (checked_c_node expr has no IF route). UNKNOWN actual first result; do not retune source",
+      "H_contract": {
+        "fail_first": {
+          "attempts": 1,
+          "allocated": 0,
+          "freed": 0,
+          "producer_calls": 0,
+          "terminal_calls": 0
+        },
+        "fail_second": {
+          "attempts": 2,
+          "allocated": 1,
+          "freed": 1,
+          "producer_calls": 0,
+          "terminal_calls": 0
+        },
+        "success": {
+          "attempts": 2,
+          "allocated": 2,
+          "freed": 2,
+          "producer_calls": 1,
+          "terminal_calls": 1,
+          "link": "head.None -> Some(original item) -> None",
+          "cleanup_order": [
+            "returned original item",
+            "original head"
+          ]
+        }
+      },
+      "authority": "two distinct actual H heap originals/backings/Allocation/Domain; one caller LiveTail receive/destructure; two distinct lexical T roots/children/incarnations; old Copy used as other T store input; scopes closed",
+      "mode_contract": "stdout successful C nonempty; named equals stdout; any rejected named output keeps sentinel bytes and no temp artifacts; failure injection/native only if reached"
+    },
+    "thermal_recovery_r1.nl": {
+      "category": "fresh complete mixed H+T user-like workload B, T inside both-Some after returned owner before cleanup",
+      "T": {
+        "active": {
+          "declared": [
+            "threshold",
+            "fan"
+          ],
+          "initial": [
+            43,
+            184
+          ],
+          "field": 1,
+          "old": 184,
+          "new": 52,
+          "final": [
+            43,
+            52
+          ]
+        },
+        "recovery": {
+          "initial": [
+            91,
+            126
+          ],
+          "field": 0,
+          "old": 91,
+          "incoming_origin": "old active.fan=184",
+          "final": [
+            184,
+            126
+          ]
+        }
+      },
+      "condition": {
+        "operands": [
+          29,
+          11
+        ],
+        "operator": "==",
+        "bool": false,
+        "selected": 52,
+        "unexecuted": 201
+      },
+      "H_payloads": [
+        74,
+        218
+      ],
+      "T_runs": "only both allocations Some",
+      "wanted": "CHECK0, genuine matching public Copy+owner proof, ordinary C17/native if implemented; normal unit native exit0 stdout/stderr empty",
+      "baseline_prediction": "parser admission and semantic CHECK likely; first plausible implementation boundary is public Copy prefix/parameters precision or mixed C17 expression admission of Copy-valued IF (checked_c_node expr has no IF route). UNKNOWN actual first result; do not retune source",
+      "H_contract": {
+        "fail_first": {
+          "attempts": 1,
+          "allocated": 0,
+          "freed": 0,
+          "producer_calls": 0,
+          "terminal_calls": 0
+        },
+        "fail_second": {
+          "attempts": 2,
+          "allocated": 1,
+          "freed": 1,
+          "producer_calls": 0,
+          "terminal_calls": 0
+        },
+        "success": {
+          "attempts": 2,
+          "allocated": 2,
+          "freed": 2,
+          "producer_calls": 1,
+          "terminal_calls": 1,
+          "link": "head.None -> Some(original item) -> None",
+          "cleanup_order": [
+            "returned original item",
+            "original head"
+          ]
+        }
+      },
+      "authority": "two distinct actual H heap originals/backings/Allocation/Domain; one caller LiveTail receive/destructure; two distinct lexical T roots/children/incarnations; old Copy used as other T store input; scopes closed",
+      "mode_contract": "stdout successful C nonempty; named equals stdout; any rejected named output keeps sentinel bytes and no temp artifacts; failure injection/native only if reached"
+    }
+  },
+  "sha256": {
+    "dispatch_journal_r1.nl": "2f384574d7498a0e5511130a485c2aed8c2a8bfd96814034675708f8fa852e92",
+    "thermal_recovery_r1.nl": "fbac931a89424b398c962ec7b3bbf56e9c13fe7c2bb75027e90d826af411e2bc",
+    "negative_unknown_field_r1.nl": "ab9580bd20ec94fe476bc7d0298198ffedee8c60204f5f62de50b00adcc4391f",
+    "negative_owner_twice_r1.nl": "dcca2839d37c30b6c63d80db0182e57f54910ee2785f4bd1f05b35ded0ee3dbf",
+    "negative_arm_type.nl": "086e3caf9ac8f5fa3f3443e6db30fe2ebb72849d046a5a0b18501c26400cb44b",
+    "unsupported_arm_effect.nl": "c875160ed5e4548b2151d0d89b856098217f32f1d5c3b11c5c4ee35d31c74139",
+    "dispatch_journal_optional_read_control.nl": "876df8a3817c81cb41e68005ec5fc8b4e563a14e639ab3abb82fb87522f2e9f2",
+    "thermal_recovery_optional_read_control.nl": "2cb321c68037a282db1a3f9250f97eb016fc19bb4ca3775db2164a5d54bb3e54",
+    "negative_terminal_domain.nl": "910ad38275d31635ac32a490037eb76bc09c5ce9b36ad710ad54f3cc3a0ae8d7",
+    "negative_terminal_allocation.nl": "eb36286a4da3d5657f170afb54e3cdcc21bce44def9807539677ebd9600f76ab",
+    "negative_terminal_scope.nl": "6e60b3a9c1cd33a9b6b3a2a738affa12cad5a3afa11dbeb14d9a8283e4e24afb"
+  },
+  "negative_oracle": {
+    "negative_arm_type.nl": {
+      "CHECK": "semantic type mismatch exit3",
+      "C17": "reject, no stdout, named sentinel preserved; never label valid unsupported as semantic-invalid"
+    },
+    "unsupported_arm_effect.nl": {
+      "CHECK": "valid effectful branch or precision rejection, UNKNOWN first CHECK result",
+      "C17": "reject, no stdout, named sentinel preserved; never label valid unsupported as semantic-invalid"
+    },
+    "negative_unknown_field_r1.nl": {
+      "CHECK": 3,
+      "diagnostic": "FIELD-UNKNOWN-FIELD",
+      "C17": "no output"
+    },
+    "negative_owner_twice_r1.nl": {
+      "CHECK": 3,
+      "diagnostic": "P3-USE-AFTER-CONSUME",
+      "C17": "no output"
+    },
+    "negative_terminal_domain.nl": {
+      "CHECK": "reject wrong original Allocation/Domain or active Domain borrow; exact code UNKNOWN",
+      "C17": "zero output, sentinel preserved"
+    },
+    "negative_terminal_allocation.nl": {
+      "CHECK": "reject wrong original Allocation/Domain or active Domain borrow; exact code UNKNOWN",
+      "C17": "zero output, sentinel preserved"
+    },
+    "negative_terminal_scope.nl": {
+      "CHECK": "reject wrong original Allocation/Domain or active Domain borrow; exact code UNKNOWN",
+      "C17": "zero output, sentinel preserved"
+    }
+  },
+  "mutations": [
+    "wrong parent match / whole arm-entry swap / wrong context_origin",
+    "wrong parent or arm-index or source / foreign same-number arm world",
+    "wrong root incarnation / ValueFact / Domain / field on one arm",
+    "wrong literal / condition operand / stale result Unknown -> known",
+    "reject with null output then restore and identical successful C17, no semantic state mutation"
+  ],
+  "p945_freeze_before_execution": "2026-10-26T12:12:05.466854+00:00",
+  "controls": {
+    "dispatch_journal_optional_read_control.nl": "CHECK0; expected P943 complete C17 if no other barrier; TRUE/FALSE, field old/new, allocation/free 0/0,1/1,2/2 same as primary. Exactly one extra caller tail read under original owned_domain, before terminal; distinct receiver read still present. Actual output UNKNOWN before execution.",
+    "thermal_recovery_optional_read_control.nl": "CHECK0; expected P943 complete C17 if no other barrier; TRUE/FALSE, field old/new, allocation/free 0/0,1/1,2/2 same as primary. Exactly one extra caller tail read under original owned_domain, before terminal; distinct receiver read still present. Actual output UNKNOWN before execution."
+  }
+}

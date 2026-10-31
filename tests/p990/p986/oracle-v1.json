@@ -1,0 +1,100 @@
+{
+  "authority": "Issue986 Coordination C101 LOCAL GATE0; CURRENT_SPEC->Draft17.34",
+  "compiler_head": "c981ff742865731decb434c2382a6fb418c83de5",
+  "compiler_tree": "aa01141aa821f4433725aa3b533cccd268cb064f",
+  "source_origin": "Independently P-authored; names, literals and temporal prefix chosen here; no R source/oracle/fixture read or reused",
+  "constraints": {
+    "production_edits": 0,
+    "branch_ref_edits": 0,
+    "commits": 0,
+    "PR": 0,
+    "push": 0,
+    "GitHub_CI": 0,
+    "no_debugger_function_calls": true,
+    "no_inferior_source_or_graph_or_return_value_mutation": true
+  },
+  "sources": [
+    "t_only_direct.nl",
+    "t_before_allocation_direct.nl",
+    "t_only_bound.nl",
+    "t_before_allocation_bound.nl"
+  ],
+  "encoding": "UTF-8, LF, final LF; full exact sources frozen publicly before CHECK/C17 execution",
+  "semantic_oracle": {
+    "direct_helper": "one source item: return replace(cell,incoming); one actual Change returns old Copy",
+    "bound_helper": "let prior=replace(cell,incoming); return prior; one actual Change; extra ephemeral binding/AST shape is not semantic authority",
+    "T_originals": 2,
+    "T_fields": {
+      "reserve": 0,
+      "signal": 1
+    },
+    "front_initial": [
+      31,
+      107
+    ],
+    "back_initial": [
+      59,
+      219
+    ],
+    "incoming": 73,
+    "old_Copy": 107,
+    "displaced_Copy": 59,
+    "front_final": [
+      31,
+      73
+    ],
+    "back_final": [
+      107,
+      219
+    ],
+    "siblings": [
+      31,
+      219
+    ],
+    "H_payloads": [
+      81,
+      163
+    ],
+    "H_identity": "two distinct original O/R/Allocation/LifetimeDomain; original live tail producer handoff then terminal exactly once",
+    "W0": "T phase already executed, zero successful H allocations; no H cleanup",
+    "W1": "T phase already executed; head cleanup once; tail allocation fails",
+    "W2": "T phase already executed; unlink original head->tail, true original LiveTail transfer, terminal frees tail once, caller frees head once"
+  },
+  "predicted_layers": {
+    "t_only_direct": {
+      "CHECK": 0,
+      "GET": "actual Copy view/parameters true",
+      "current_VALIDATE": "NL_CHECK_OK",
+      "C17": 0,
+      "first_refusal": "none predicted on ordinary V0 temporal Copy consumer"
+    },
+    "t_only_bound": {
+      "CHECK": 0,
+      "GET": "actual Copy view/parameters true",
+      "current_VALIDATE": "NL_CHECK_OK",
+      "C17": 0,
+      "first_refusal": "none predicted"
+    },
+    "t_before_allocation_direct": {
+      "CHECK": 0,
+      "GET": "actual Copy view/parameters true",
+      "current_VALIDATE": "NL_CHECK_OK",
+      "H_origin": "true",
+      "C17": 4,
+      "first_refusal": "hypothesis: checked_c_copy_internal.h::copy_call_proof root->item_count!=2 (actual direct RETURN block item_count=1), after real GET/current validators"
+    },
+    "t_before_allocation_bound": {
+      "CHECK": 0,
+      "GET": "actual Copy view/parameters true",
+      "current_VALIDATE": "NL_CHECK_OK",
+      "H_origin": "true",
+      "C17": 4,
+      "first_refusal": "hypothesis: first copy_constructor -> copy_carrier_world rejects pre-allocation world (allocations=0, producer_calls=0, owner_calls=0), before any H runtime emission"
+    }
+  },
+  "evidence_rule": "Observe actual ordinary CLI-owned call/fragment and live original entry/handoff contexts, function/source/body seals, actual GET/current validator returns and first inner rejection; distinguish observations from current authority. No forged host data, no debugger result alteration or injected function calls.",
+  "output_oracle": "On C17 RC4: stdout empty; pre-existing named output bytes/dev/ino unchanged, no temporary leftover; native/physical guest and heap0/1/2 NOT TESTED. On genuine valid C17 only: preserve exact C and SHA; optional unmodified strict native control, never execute rejected C.",
+  "stop": "NO/STOP on invalid actual source/current authority, missing H issuer, unsafe host graph/native, immutable SHA drift, need for compiler instrumentation/repair, new toolchain/public schema or CI. Observer spelling fix may use separate V2 freeze; retain original source/oracle/results.",
+  "gate": "YES only for actual CHECK/GET/current validator/original ownership valid and demonstrated first refusal in private emitter source shape/phase; NO for invalid authority; UNKNOWN for unproven prerequisite. YES not native PASS or semantic extension.",
+  "value_risk": "User-only binding or T/H reorder would introduce hidden bookkeeping; per-case private consumers increase compiler audit graph. C-relative human audit/re-audit improvement and maintenance cost UNMEASURED; Product GO PAUSED / H1 HOLD."
+}

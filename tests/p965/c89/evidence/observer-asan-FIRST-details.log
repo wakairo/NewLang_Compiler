@@ -1,0 +1,115 @@
+Start testing: Oct 28 00:10 UTC
+----------------------------------------------------------
+306/523 Testing: p965_c89_observe_charge.unit
+306/523 Test: p965_c89_observe_charge.unit
+Command: "/workspace/p965-build-asan/p965_c89_observer" "/workspace/p965/tests/p813/sources/charge_false.nl" "u8"
+Directory: /workspace/p965-build-asan
+"p965_c89_observe_charge.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+C89 observer u8 fault=0 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=1 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=2 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=3 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=4 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=5 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=6 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=7 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=8 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=9 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=10 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=11 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer actual BODY transfers=8 pending GET=NULL; committed GET=original; detached GET=NULL; B healthy
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_observe_charge.unit" end time: Oct 28 00:10 UTC
+"p965_c89_observe_charge.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+307/523 Testing: p965_c89_observe_trim.unit
+307/523 Test: p965_c89_observe_trim.unit
+Command: "/workspace/p965-build-asan/p965_c89_observer" "/workspace/p965/tests/p866/sources/trim_true.nl" "unit"
+Directory: /workspace/p965-build-asan
+"p965_c89_observe_trim.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+C89 observer unit fault=0 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=1 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=2 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=3 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=4 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=5 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=6 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=7 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=8 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=9 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=10 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=11 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer actual BODY transfers=2 pending GET=NULL; committed GET=original; detached GET=NULL; B healthy
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_observe_trim.unit" end time: Oct 28 00:10 UTC
+"p965_c89_observe_trim.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+308/523 Testing: p965_c89_observe_fan.unit
+308/523 Test: p965_c89_observe_fan.unit
+Command: "/workspace/p965-build-asan/p965_c89_observer" "/workspace/p965/tests/p866/sources/fan_false.nl" "unit"
+Directory: /workspace/p965-build-asan
+"p965_c89_observe_fan.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+C89 observer unit fault=0 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=1 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=2 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=3 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=4 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=5 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=6 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=7 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=8 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=9 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=10 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=11 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer actual BODY transfers=2 pending GET=NULL; committed GET=original; detached GET=NULL; B healthy
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_observe_fan.unit" end time: Oct 28 00:10 UTC
+"p965_c89_observe_fan.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+309/523 Testing: p965_c89_observe_relay.unit
+309/523 Test: p965_c89_observe_relay.unit
+Command: "/workspace/p965-build-asan/p965_c89_observer" "/workspace/p965/tests/p878/sources/relay_equal_binding.nl" "unit"
+Directory: /workspace/p965-build-asan
+"p965_c89_observe_relay.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+C89 observer unit fault=0 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=1 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=2 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=3 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=4 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=5 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=6 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=7 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=8 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=9 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=10 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=11 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer actual BODY transfers=2 pending GET=NULL; committed GET=original; detached GET=NULL; B healthy
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_observe_relay.unit" end time: Oct 28 00:10 UTC
+"p965_c89_observe_relay.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 28 00:10 UTC

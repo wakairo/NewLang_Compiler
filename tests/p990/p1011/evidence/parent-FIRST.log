@@ -1,0 +1,4 @@
+{"case": "original-current-v4", "observed_first_red_sha256": "f4ef793e961c3d60a3f071fa3286c95197f55ec5c554a22d1d8ca05909ae9658", "old_v1_v4_and_verifier_unchanged": true, "parent_verifier": "ACCEPT", "protected_count": 562}
+{"case": "honest-prospective-v5", "observed_first_red_sha256": "f4ef793e961c3d60a3f071fa3286c95197f55ec5c554a22d1d8ca05909ae9658", "old_v1_v4_and_verifier_unchanged": true, "parent_verifier": "ACCEPT", "protected_count": 563}
+{"case": "f82-coedited-first-red-and-v5-digest", "observed_first_red_sha256": "17ead27f1986b17888af7375abcd9996d637351db156983f6e638a7655119311", "old_v1_v4_and_verifier_unchanged": true, "parent_verifier": "ACCEPT", "protected_count": 563}
+P1011 PARENT F82 GATE B REPRODUCED: original history bytes unchanged; coedited future digest accepted

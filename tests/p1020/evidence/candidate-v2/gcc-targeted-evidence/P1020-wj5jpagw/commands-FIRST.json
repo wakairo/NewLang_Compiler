@@ -1,0 +1,34 @@
+[
+  {
+    "label": "build-probe",
+    "command": [
+      "/usr/bin/gcc",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-g",
+      "-O0",
+      "-fno-pie",
+      "-no-pie",
+      "-I/workspace/p1020/include",
+      "/workspace/p1020/tests/p1020/probe.c",
+      "-Wl,--start-group",
+      "/workspace/p1020-build-gcc/libnewlang_semantic.a",
+      "/workspace/p1020-build-gcc/libnewlang_parser.a",
+      "/workspace/p1020-build-gcc/libnewlang_checked_c_node.a",
+      "/workspace/p1020-build-gcc/libnewlang_lexer.a",
+      "/workspace/p1020-build-gcc/libnewlang_checked.a",
+      "/workspace/p1020-build-gcc/libnewlang_syntax.a",
+      "/workspace/p1020-build-gcc/libnewlang_source.a",
+      "/workspace/p1020-build-gcc/libnewlang_diagnostic.a",
+      "-Wl,--end-group",
+      "-o",
+      "/tmp/p1020-9isplq98/probe"
+    ],
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "cc97099eec59a276dde36b35537faa9f87b21c87a8e55981b84208f73944effe"
+  }
+]

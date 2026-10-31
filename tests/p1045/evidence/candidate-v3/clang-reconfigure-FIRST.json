@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/cmake",
+    "-S",
+    ".",
+    "-B",
+    "/workspace/p1045-build-clang"
+  ],
+  "exit": 0,
+  "seconds": 1.1026017850017524,
+  "raw_SHA256": "36def9583b97468e87b7369db66c3cbc56323adf610b6b6b63cdd43aa58d7824"
+}

@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "tests/p1030/baseline.py",
+    "/workspace/p1020-build-gcc/newlangc",
+    "/usr/bin/gcc",
+    "/workspace/p1030-artifacts/baseline-representative-FIRST"
+  ],
+  "exit": 0,
+  "seconds": 1.0629860490007559
+}

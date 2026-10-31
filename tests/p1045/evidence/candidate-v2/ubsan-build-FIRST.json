@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/cmake",
+    "--build",
+    "/workspace/p1045-build-ubsan",
+    "--parallel",
+    "2",
+    "--target",
+    "newlangc"
+  ],
+  "exit": 0,
+  "seconds": 3.334553289998439,
+  "raw_SHA256": "c0ffdff1d6deb506b05368ad4a1e5bcfb83449e583c18fa7d4ddb0ba056da983"
+}

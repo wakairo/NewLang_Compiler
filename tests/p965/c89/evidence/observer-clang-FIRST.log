@@ -1,0 +1,14 @@
+Internal ctest changing into directory: /workspace/p965-build-clang
+Test project /workspace/p965-build-clang
+    Start 306: p965_c89_observe_charge.unit
+1/4 Test #306: p965_c89_observe_charge.unit .....   Passed    0.01 sec
+    Start 307: p965_c89_observe_trim.unit
+2/4 Test #307: p965_c89_observe_trim.unit .......   Passed    0.01 sec
+    Start 308: p965_c89_observe_fan.unit
+3/4 Test #308: p965_c89_observe_fan.unit ........   Passed    0.01 sec
+    Start 309: p965_c89_observe_relay.unit
+4/4 Test #309: p965_c89_observe_relay.unit ......   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 4
+
+Total Test time (real) =   0.03 sec

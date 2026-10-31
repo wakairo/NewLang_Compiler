@@ -1,0 +1,100 @@
+{
+  "release": "C118",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "parent": "c9fbdb8d3ce4c238c4e33fb710fefc20ff6654bb",
+  "independence": "New P-authored sources/values/expectations from canonical, no independently frozen R input accessed or reused",
+  "source_contract": {
+    "one_nominal": "complete two-u8 Copy+Discardable DialPad",
+    "actual_callable": "one nonrecursive two-formal write-u8/unit helper; unused same-ABI reserved declaration is a genuine wrong-function negative control",
+    "caller": "unit main, source-owned scoped loan and actual call; after call read both original field and sibling while live",
+    "IF": "two normal unit arms each exactly one Change; equality uses source-owned usize, no true/false identifiers",
+    "postcall": "sound Unknown; no chosen arm value or cross-world numeric ID used as present authority",
+    "equal_arms": "remain conservative Unknown; never infer equivalence from equal numeric IDs"
+  },
+  "positive": {
+    "two_normal_true.nl": {
+      "index": 0,
+      "old": 37,
+      "new": 83,
+      "sibling": 229,
+      "two_normal": true
+    },
+    "two_normal_false.nl": {
+      "index": 0,
+      "old": 37,
+      "new": 167,
+      "sibling": 229,
+      "two_normal": true
+    },
+    "two_normal_equal.nl": {
+      "index": 0,
+      "old": 37,
+      "new": 83,
+      "sibling": 229,
+      "two_normal": true
+    },
+    "two_normal_index1.nl": {
+      "index": 1,
+      "old": 229,
+      "new": 167,
+      "sibling": 37,
+      "two_normal": true
+    },
+    "control_return_true.nl": {
+      "index": 0,
+      "old": 37,
+      "new": 83,
+      "sibling": 229,
+      "two_normal": false,
+      "stores": 1
+    },
+    "control_return_false.nl": {
+      "index": 0,
+      "old": 37,
+      "new": 37,
+      "sibling": 229,
+      "two_normal": false,
+      "stores": 0
+    }
+  },
+  "baseline_expected": {
+    "two_normal": "parse/register/actual CHECK0; IF-field current0, unit GET=false, call parameters current3, CLI C17=4/no publication",
+    "one_normal_return": "CHECK0, unit/parameters/IF-return current0, C17=0; save original bytes for exact unchanged comparison",
+    "unsupported": "CHECK0 predicted; C17=4/no publication; earlier precision is distinct and not a safety-negative PASS",
+    "negative": "CHECK3/no C predicted; read formal uses matching loan_read actual to reach replace-through-read; any earlier obstacle is UNREACHED, never regraded"
+  },
+  "candidate_expected": {
+    "positive": "all6 CHECK0/unit+parameters current0; two-normal IF-field current0 and independent old37/229->83/167 witnesses in both arms; complete supported source graph only; C17=0",
+    "postcall": "same original field/root/incarnation and unchanged sibling, valid caller scoped loan/current handoff, Unknown for distinct/equal branches",
+    "unsupported": "zero-change or two-change arm outside this selected exact-one-Change profile fails before C17 publication",
+    "negative": "read-only replace and loan escape reject; frozen first RED retained",
+    "physical": "new two-normal original generated C unchanged; passive hooks read live original field and sibling, one store, correct old/new, same original address; only observed facts count PASS",
+    "old_controls": "one-normal+actual RETURN current proofs and generated C bytes unchanged; existing H/T/Array4/owner/history/OOM retained",
+    "faults": "foreign call/function/plan/body/source/world, stale child/sibling/postcall, one altered arm, wrong actual/formals and closed/escaping loan reject; restore then exact C retry",
+    "OOM": "record actual reached current-validator/C17-host/CHECK allocator positions; each hit must reject unpublished, retain semantic summary/owner, permit exact healthy retry",
+    "named": "source/metadata/OOM/reached write failures preserve bytes/dev/ino/no temp, exact retry"
+  },
+  "validation_order": [
+    "frozen parent baseline FIRST",
+    "separate candidate code/test commit+SHA BEFORE new execution",
+    "actual current proof and C17/negative/physical/OOM/named first",
+    "full existing CTest + all historical anchors/old records/C bytes",
+    "strict GCC/Clang O0/O2 and ASan/LSan/UBSan",
+    "one new DRAFT only after all required local gates, natural CI max2 pairs12jobs"
+  ],
+  "source_negatives": [
+    "negative_read_write.nl",
+    "negative_loan_escape.nl"
+  ],
+  "source_unsupported": [
+    "unsupported_zero_change.nl",
+    "unsupported_two_changes.nl"
+  ],
+  "limits": [
+    "baseline unit exit is not physical old/new/sibling proof",
+    "private observer hooks only observe validated original C data; do not issue semantic authority",
+    "all results finite; no general CFG/new source/ABI/owner permissions",
+    "no R input sharing or self-launch F/R"
+  ],
+  "VALUE_ALIGNMENT_RISK": "New call-current replay/prospective v7 adds maintainer audit/re-audit/maintenance closure; author+ordinary-safe caller C-relative UB audit reduction/performance/cost UNMEASURED; Product GO PAUSED/H1 HOLD"
+}

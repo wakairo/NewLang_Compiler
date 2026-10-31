@@ -1,0 +1,28 @@
+{
+  "stage": "P974 candidate3 pre-run separate source/oracle/SHA; corrected native-emitting fixture plus retained precision control",
+  "previous": "d049cc00252213e4f636c2be2f5a66e899aaf806",
+  "sha256": {
+    "src/copy_body.c": "429632a43fe4547e7af7e49e168da10e9e5a6327da0ef99fefbce21157c6e39a",
+    "src/main.c": "082645a137e10b3f88e0ed2da49330aa4ddc0d9a8027bfdc5f0f153d9f0cfc15",
+    "CMakeLists.txt": "32fab971404ede557292cd29e0cee3ed0c7106493ed73891a9b99a3edbfea122",
+    "tests/p974/support.h": "ed165eb29875a49078d469448405f1b7aebfae30a5a3641b89a5eec829c07945",
+    "tests/p974/entry.c": "c78da102f19178bc5914ee801ecf4ee58f0b9ed3c69e5b7675564e1adb73548e",
+    "tests/p974/driver.c": "c349255910b747cfcb584a14225fed55d689b710431eb3f5e7125ecafc62f925",
+    "tests/p974/named.py": "5f544e4772909f9ca7c41f63f467633e1938c62ca6b68c42a035cbd762b6293d",
+    "tests/p974/oracle.json": "70ab6722a9292e47c37113ff2c7dc839fff07df35737cc54b78790c88c6a857c",
+    "tests/p974/evidence/parent-static-findings.json": "7dee68eaa51eb6bfe2d30b256fcae540e5d491cbcaa87dae573adc10845e7c03",
+    "tests/p965/shared.h": "65a7dca6813d07db3ddfc4b694fdb44e85deb905747a6acc71c0d3e72270cb5f",
+    "tests/p965/freeze.json": "cf3231f87e3d6f1a5c13eb29e3ab017a8ee7560c52c90ceb73c916ee5e5c1a49",
+    "tests/p965/c85/freeze.json": "bf3b75236b2da72767f5fd04cc50a63ddd29da2f8d24c70b3c0ab4d5318ffa7c",
+    "tests/p965/c89/entry-source-freeze.json": "c9d457f35f1c8590c8f9648c2c4d1232ca6d315a62bffd7b321cd02cb47effef",
+    "tests/p813/sources/charge_false.nl": "5ad114e6f978c2b3cd4923a1bccff5c82ce7c51413b1ef01070d9697645acc92",
+    "tests/p866/sources/trim_true.nl": "bba22e0c427170fe0ff4ce273058e579fc455e3d99a11cd28743a51c46fbece7",
+    "tests/p866/sources/fan_false.nl": "68a517b1d4756cb0dce4cf8892641660abc51d7ffa3a2e930d29fc0e67f5cb4e",
+    "tests/p878/sources/relay_equal_binding.nl": "37f0b02c60960406ed7e641ab457a31d608da9666385aef1d7ef9e192f855d0b",
+    "src/array4.c": "5840725d707f9e9bd311c43d848ea25f933d0a4a9a53ba7f502456d1db786f9a",
+    "tests/p974/oracle-v2.json": "25762ec98e28b250d2e328d213e721d52e3ce2a6d4c47e9b9dcd6e82d30b2bad",
+    "tests/p974/named-v3.py": "733fc38242060bf1fcae8712852f96ab7edc5cacd0ed86eab5f0a87da3e3b20c",
+    "tests/p974/oracle-v3.json": "c3fe7ad14b969c1711dfb3a5bb12e370733f824c82271ee5b8518c516a1afab9",
+    "tests/p631/same_value_local.nl": "bbea3f108929785345d95502f09f68db9186107b0da65f08a7a229d4b83b2abe"
+  }
+}

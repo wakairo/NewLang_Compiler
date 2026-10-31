@@ -1,0 +1,397 @@
+[
+  {
+    "label": "build-public",
+    "command": [
+      "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-g",
+      "-O0",
+      "-fno-pie",
+      "-no-pie",
+      "-I/workspace/p1058/include",
+      "/workspace/p1058/tests/p1058/observe.c",
+      "-Wl,--start-group",
+      "/workspace/p1058-artifacts/parent/libnewlang_semantic.a",
+      "/workspace/p1058-artifacts/parent/libnewlang_parser.a",
+      "/workspace/p1058-artifacts/parent/libnewlang_lexer.a",
+      "/workspace/p1058-artifacts/parent/libnewlang_checked.a",
+      "/workspace/p1058-artifacts/parent/libnewlang_syntax.a",
+      "/workspace/p1058-artifacts/parent/libnewlang_source.a",
+      "/workspace/p1058-artifacts/parent/libnewlang_diagnostic.a",
+      "-Wl,--end-group",
+      "-o",
+      "/workspace/p1058-artifacts/parent-source-FIRST/observe"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "closed_then_two-CHECK",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--check",
+      "/workspace/p1058/tests/p1058/sources/closed_then_two.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "closed_then_two-public",
+    "command": [
+      "/workspace/p1058-artifacts/parent-source-FIRST/observe",
+      "/workspace/p1058/tests/p1058/sources/closed_then_two.nl",
+      "2"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "2aed1f8cf64a89924fb647e0feb505433ac0598883aeb79162d33a6eb85d446d",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "closed_then_two-C17",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1058-artifacts/parent-source-FIRST/sentinel.c",
+      "/workspace/p1058/tests/p1058/sources/closed_then_two.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "cb13b8ee2541c70bcc290728528a7e0350d3ce8660d3991ebdad4ccd2c70c64d"
+  },
+  {
+    "label": "reversed_worlds-CHECK",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--check",
+      "/workspace/p1058/tests/p1058/sources/reversed_worlds.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "reversed_worlds-public",
+    "command": [
+      "/workspace/p1058-artifacts/parent-source-FIRST/observe",
+      "/workspace/p1058/tests/p1058/sources/reversed_worlds.nl",
+      "2"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "3351e6bb5269a03b6bc059e5e8494c75fe177257dedaad1883313b1b6aaa8e84",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "reversed_worlds-C17",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1058-artifacts/parent-source-FIRST/sentinel.c",
+      "/workspace/p1058/tests/p1058/sources/reversed_worlds.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "5526d2d939658363ea30464a90a96900d5f954a630f13efb9d7ec6055df192c9"
+  },
+  {
+    "label": "wrong_incoming_equal-CHECK",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--check",
+      "/workspace/p1058/tests/p1058/sources/wrong_incoming_equal.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "wrong_incoming_equal-public",
+    "command": [
+      "/workspace/p1058-artifacts/parent-source-FIRST/observe",
+      "/workspace/p1058/tests/p1058/sources/wrong_incoming_equal.nl",
+      "2"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "2eb87b80d8487a88cb6a36ba4d78a6328d8edf8d8dafa9487e625788991e4cb1",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "wrong_incoming_equal-C17",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1058-artifacts/parent-source-FIRST/sentinel.c",
+      "/workspace/p1058/tests/p1058/sources/wrong_incoming_equal.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "f5f9c75a4e83b4ff37a4939f0acd4683f57100df46570069ac32213724452713"
+  },
+  {
+    "label": "wrong_constant_equal-CHECK",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--check",
+      "/workspace/p1058/tests/p1058/sources/wrong_constant_equal.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "wrong_constant_equal-public",
+    "command": [
+      "/workspace/p1058-artifacts/parent-source-FIRST/observe",
+      "/workspace/p1058/tests/p1058/sources/wrong_constant_equal.nl",
+      "2"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "71171fd06b392b2c1c12e57c05f34857242abf803682a99fcc99904ded7d2035",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "wrong_constant_equal-C17",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1058-artifacts/parent-source-FIRST/sentinel.c",
+      "/workspace/p1058/tests/p1058/sources/wrong_constant_equal.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "03b511b2ac0caacb8774132805371b171ed61c50347707c455ac0dfa846eb0de"
+  },
+  {
+    "label": "same_original_calls-CHECK",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--check",
+      "/workspace/p1058/tests/p1058/sources/same_original_calls.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "same_original_calls-public",
+    "command": [
+      "/workspace/p1058-artifacts/parent-source-FIRST/observe",
+      "/workspace/p1058/tests/p1058/sources/same_original_calls.nl",
+      "2"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "a8fb7730c4a1b870107d7cd0158788d568b72fbf0b8679a9e00c78740373f6be",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "same_original_calls-C17",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1058-artifacts/parent-source-FIRST/sentinel.c",
+      "/workspace/p1058/tests/p1058/sources/same_original_calls.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "a0a1b0ab5993465177fae3dc91a7620aed047f3cd388e158f87bd9018729bf43"
+  },
+  {
+    "label": "one_registered_call-CHECK",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--check",
+      "/workspace/p1058/tests/p1058/sources/one_registered_call.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "one_registered_call-public",
+    "command": [
+      "/workspace/p1058-artifacts/parent-source-FIRST/observe",
+      "/workspace/p1058/tests/p1058/sources/one_registered_call.nl",
+      "1"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "c11bf4f5cacf9460eb5e529a056940aed495bcc1a4e48b0a44acdf60f2b3836e",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "one_registered_call-C17",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1058-artifacts/parent-source-FIRST/sentinel.c",
+      "/workspace/p1058/tests/p1058/sources/one_registered_call.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "effa9dddde9a9ff8c60d8e2a835fcda3169afb0ce291eea0a7f8fcbf19099d21"
+  },
+  {
+    "label": "zero_registered_calls-CHECK",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--check",
+      "/workspace/p1058/tests/p1058/sources/zero_registered_calls.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "zero_registered_calls-public",
+    "command": [
+      "/workspace/p1058-artifacts/parent-source-FIRST/observe",
+      "/workspace/p1058/tests/p1058/sources/zero_registered_calls.nl",
+      "0"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "ea9e64b5ac7a1dbafff33132365103e2a0335e3f840276dc1e6875196dd157da",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "zero_registered_calls-C17",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1058-artifacts/parent-source-FIRST/sentinel.c",
+      "/workspace/p1058/tests/p1058/sources/zero_registered_calls.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "3d5b890d27af285480bea8e60631f64b885058dcea80e17604191bec3906afe9"
+  },
+  {
+    "label": "third_registered_call-CHECK",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--check",
+      "/workspace/p1058/tests/p1058/sources/third_registered_call.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "third_registered_call-public",
+    "command": [
+      "/workspace/p1058-artifacts/parent-source-FIRST/observe",
+      "/workspace/p1058/tests/p1058/sources/third_registered_call.nl",
+      "3"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "80947f63c4eabfd75ad82c878097447eb43fa6a40a48e04231830068c59352c2",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "third_registered_call-C17",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1058-artifacts/parent-source-FIRST/sentinel.c",
+      "/workspace/p1058/tests/p1058/sources/third_registered_call.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "aa56423d2c2ece3323943744d66bf2f8c7b43b82091e033f9c98127aaa3c6fe8"
+  },
+  {
+    "label": "missing_failure_arm-CHECK",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--check",
+      "/workspace/p1058/tests/p1058/sources/missing_failure_arm.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "4994972d97eed5607a740ea871571f909e22bb96ba2013505cf772e4e67b61e5"
+  },
+  {
+    "label": "missing_failure_arm-C17",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1058-artifacts/parent-source-FIRST/sentinel.c",
+      "/workspace/p1058/tests/p1058/sources/missing_failure_arm.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "4994972d97eed5607a740ea871571f909e22bb96ba2013505cf772e4e67b61e5"
+  },
+  {
+    "label": "missing_failure_cleanup-CHECK",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--check",
+      "/workspace/p1058/tests/p1058/sources/missing_failure_cleanup.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "bd24596a5c7384db17174cb07a01d04f801f984464ed5c375b26ec0e7ba1913d"
+  },
+  {
+    "label": "missing_failure_cleanup-C17",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1058-artifacts/parent-source-FIRST/sentinel.c",
+      "/workspace/p1058/tests/p1058/sources/missing_failure_cleanup.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "bd24596a5c7384db17174cb07a01d04f801f984464ed5c375b26ec0e7ba1913d"
+  },
+  {
+    "label": "success_only_name_after_join-CHECK",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--check",
+      "/workspace/p1058/tests/p1058/sources/success_only_name_after_join.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "c994087621db5b80d6eba1c4eff07f808bef9a1e49b0b87fd955b85a32454534"
+  },
+  {
+    "label": "success_only_name_after_join-C17",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1058-artifacts/parent-source-FIRST/sentinel.c",
+      "/workspace/p1058/tests/p1058/sources/success_only_name_after_join.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "c994087621db5b80d6eba1c4eff07f808bef9a1e49b0b87fd955b85a32454534"
+  },
+  {
+    "label": "wrong_H_domain-CHECK",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--check",
+      "/workspace/p1058/tests/p1058/sources/wrong_H_domain.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "7f6ab70180bad8da90921dba8e6d5f0e624217d9122d30f3496cbf6f75fca48b"
+  },
+  {
+    "label": "wrong_H_domain-C17",
+    "command": [
+      "/workspace/p1058-artifacts/parent/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1058-artifacts/parent-source-FIRST/sentinel.c",
+      "/workspace/p1058/tests/p1058/sources/wrong_H_domain.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "7f6ab70180bad8da90921dba8e6d5f0e624217d9122d30f3496cbf6f75fca48b"
+  }
+]

@@ -1,0 +1,127 @@
+[
+  {
+    "source": "tests/p982/sources/after_true.nl",
+    "C_SHA256": "d40c528a95829c3f2c93c4884ae2ca668cf48ef1f0a197752b846751f35bac6b",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p982/sources/after_false.nl",
+    "C_SHA256": "dbab1ebd3668746f89a1eff5f23b22cebfb651ae20c6d387ea4135c7e52a7a6f",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p982/sources/second_true.nl",
+    "C_SHA256": "9c187d36b7a7272899a8a7d9a660f4de38cb4319413a1e5e048784b48901b12b",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p982/sources/second_false.nl",
+    "C_SHA256": "0427a1a5d3ff15d17e4149ada8fdaa319e41c57daf9cd6d69b2e8054bcddafb6",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p990/sources/before_direct.nl",
+    "C_SHA256": "18c61d1ec8eb3e9e6544e643925b1d0355c202e21364d137a79f7361cca2ab5d",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p990/sources/after_true_direct.nl",
+    "C_SHA256": "1473e8c3867122a2f3f50cf27cd67ef580f28e60df385cfeaa80469401100b52",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p990/sources/after_false_direct.nl",
+    "C_SHA256": "b4da0dc8516f744e0d36a03a14db55f6f614ffcf861af8fd18974cb5621bd85f",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p990/sources/before_bound.nl",
+    "C_SHA256": "1c9a85562de4a2743f30581a742b2bb9895f92390ced504e8338ef14ea388ca3",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p990/sources/after_true_bound.nl",
+    "C_SHA256": "20606056c3fd7f7814d426bc780b1a475a5bc0826c85778b2130e5bf21c0611c",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p990/sources/after_false_bound.nl",
+    "C_SHA256": "755f1631cd98788daf80caa5fe1319dfeacb64e32f88d116792b2b33ae26f1a9",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p990/p986/t_only_direct.nl",
+    "C_SHA256": "fe63f66c29c24cf905bd215f7470af652fa0a35bb69bfd4671c8a811f1d45c8f",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p990/p986/t_only_bound.nl",
+    "C_SHA256": "49983b6b5df809ae556aa3806daf1cdfb41153197415103f5fc7c6b6ff91943f",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p990/p986/t_before_allocation_direct.nl",
+    "C_SHA256": "f40b169d753f2fbe0b6bd9aa07527de06e352dfbb72e075633047f43dd42ae41",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p990/p986/t_before_allocation_bound.nl",
+    "C_SHA256": "4d66a0d803433d40f406895485f07779b683aa67761c16ccee70d46e2c8c5536",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p990/p986/t_before_h_read_direct.nl",
+    "C_SHA256": "4f6e30e757f8b366eeb5c06e7fc62281d51f67d4c81993f91b9a15537c8712cf",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p990/p986/t_before_h_read_bound.nl",
+    "C_SHA256": "dc787493b12ab9ea4c9c2457ec9ffea0433da4ad9f0aead95bcc6982c26e6229",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p990/sources/negative_duplicate_return.nl",
+    "C_SHA256": "18c61d1ec8eb3e9e6544e643925b1d0355c202e21364d137a79f7361cca2ab5d",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p990/sources/calibration_unreachable_bound_v2.nl",
+    "C_SHA256": "1c9a85562de4a2743f30581a742b2bb9895f92390ced504e8338ef14ea388ca3",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p1013/stage0/ordinary_same.nl",
+    "C_SHA256": "b1f954d064f366dc4a98bc90d4df1bc8fbdb81a173843b580fa6387dac025074",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p1013/stage0/ordinary_distinct.nl",
+    "C_SHA256": "b90a54b7838373a2b27e61aa89008695ea2885cdbaf70aec60c0c02eb90d680a",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p1013/stage0/mixed_same.nl",
+    "C_SHA256": "79670a957616765528bfde8a8ccbe548b23fe1f611445a7f32e40e98a466b50f",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p1013/stage0/mixed_distinct.nl",
+    "C_SHA256": "44d2a6e412432f9a50139eefcbad94729be9a7ad3763c6a0af618be92e0992ab",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p1013/production/mixed_distinct_direct.nl",
+    "C_SHA256": "5193732f8e2c47f23cb6a99bd791ce59166c548fb3b089ccfe838e68595b1f39",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p1020/sources/control_return_true.nl",
+    "C_SHA256": "fbb04c87d7a8c11c31e062b272d8d93d407c459caf03c9a5207a0879ae629167",
+    "parent_gcc_clang_bytes_equal": true
+  },
+  {
+    "source": "tests/p1020/sources/control_return_false.nl",
+    "C_SHA256": "20335eeeec898956b771ed5758ac3236806f0fb4b2067501d3fbba57bc34cf2b",
+    "parent_gcc_clang_bytes_equal": true
+  }
+]

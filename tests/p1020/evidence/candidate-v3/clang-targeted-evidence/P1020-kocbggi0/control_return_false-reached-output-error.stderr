@@ -1,0 +1,2 @@
+error(cli)[V0-C-OUTPUT]: failed to emit Checked-C
+note: /workspace/p1020/tests/p1020/sources/control_return_false.nl

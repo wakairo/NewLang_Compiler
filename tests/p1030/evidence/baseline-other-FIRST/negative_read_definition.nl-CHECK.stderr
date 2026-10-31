@@ -1,0 +1,1 @@
+/workspace/p1030/tests/p1030/sources/negative_read_definition.nl:4:26-4:32: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter

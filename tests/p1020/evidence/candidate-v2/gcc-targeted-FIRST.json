@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "tests/p1020/run.py",
+    "/workspace/p1020-build-gcc/newlangc",
+    "/usr/bin/gcc",
+    "none"
+  ],
+  "exit": 1,
+  "seconds": 0.24344333299814025
+}

@@ -1,0 +1,24 @@
+{
+  "parent": "68934cae2d912fb2658daafcdda7414098a37fd4",
+  "stage": "C89 observer variant frozen before any execution of this variant; production same as guard candidate",
+  "sha256": {
+    "src/copy_body.c": "6e2cb11c97d1d34e6e2e7e318d8d327fe9c71df4685c8520465c3b52a69498a9",
+    "CMakeLists.txt": "865c32a25879dad53a0b741e30c9e98d48efbe58b67d2b744eb2a9d4339b11a0",
+    "tests/p965/c89/observer.c": "f25c596f849b2cb9cade9dc07df74f1c9bfc0d6f49d4691a0aaa1308f33d86f7",
+    "tests/p965/c89/observe.py": "166367e69b253876fb0f289a13780bb146b8f46f0ee8bd10376aa11597b24e35",
+    "tests/p965/c89/observer-oracle.json": "82f3f4c64b8afb610a944659de08eeb5ff555384915d09ca983a4d29c42c25aa",
+    "tests/p965/c89/guard.c": "49d1dd81c99aae761d667588a3eae2ae80727fd4c9884cc238b64d299e7fa1e4",
+    "tests/p965/c89/guard.py": "d30865662982348f961eed483a40751aab9ec450b92f21df657986c47ce44ed8",
+    "tests/p965/c89/guard-freeze.json": "47b354fbba2138bbb11a132dc4ce20b2199c61f0a37912a8cd1698e884e6ef00",
+    "tests/p965/c89/guard-oracle.json": "6545aa9eb628397b33727661aca9e5700b1efd1dc99bf15831fb512d7ebe7c1c",
+    "tests/p965/c89/observer_original.h": "df64982b10f4041e507069b9535f0a512b16d808ae747922ce4047d724df94c6",
+    "tests/p965/shared.h": "65a7dca6813d07db3ddfc4b694fdb44e85deb905747a6acc71c0d3e72270cb5f",
+    "tests/p965/c85/observer.c": "df64982b10f4041e507069b9535f0a512b16d808ae747922ce4047d724df94c6",
+    "tests/p965/c85/oracle.json": "9673d219b26c2821985fc425a094790ef068c4a719475e858490adc39cd2c55c",
+    "tests/p965/c85/freeze.json": "bf3b75236b2da72767f5fd04cc50a63ddd29da2f8d24c70b3c0ab4d5318ffa7c",
+    "tests/p813/sources/charge_false.nl": "5ad114e6f978c2b3cd4923a1bccff5c82ce7c51413b1ef01070d9697645acc92",
+    "tests/p866/sources/trim_true.nl": "bba22e0c427170fe0ff4ce273058e579fc455e3d99a11cd28743a51c46fbece7",
+    "tests/p866/sources/fan_false.nl": "68a517b1d4756cb0dce4cf8892641660abc51d7ffa3a2e930d29fc0e67f5cb4e",
+    "tests/p878/sources/relay_equal_binding.nl": "37f0b02c60960406ed7e641ab457a31d608da9666385aef1d7ef9e192f855d0b"
+  }
+}

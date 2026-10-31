@@ -1,0 +1,42 @@
+Traceback (most recent call last):
+  File "/tmp/p1062-c152-original/tests/support/versioned_freeze.py", line 114, in local
+    mode = path.lstat().st_mode
+           ^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 847, in lstat
+    return self.stat(follow_symlinks=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 840, in stat
+    return os.stat(self, follow_symlinks=follow_symlinks)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/tmp/p1062-c152-original/tests/p1062/__pycache__'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/tmp/p1062-c152-original/tests/p982/freeze_test.py", line 15, in <module>
+    count = verify_v12(root, CURRENT)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/p1062-c152-original/tests/p1062/history_v12.py", line 20, in verify
+    count = previous_verify(root, current)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/p1062-c152-original/tests/p1058/history_v11.py", line 20, in verify
+    count = previous_verify(root, current)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/p1062-c152-original/tests/p1055/history_v10.py", line 20, in verify
+    count = previous_verify(root, current)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/p1062-c152-original/tests/p1045/history_v9.py", line 15, in verify
+    count = previous_verify(root, current)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/p1062-c152-original/tests/p1030/history_v8.py", line 30, in verify
+    count = legacy_verify(root, current)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/p1062-c152-original/tests/support/versioned_freeze.py", line 325, in verify
+    return _verify(Path(root).resolve(), manifest)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/p1062-c152-original/tests/support/versioned_freeze.py", line 318, in _verify
+    require(digest(local(root, name).read_bytes()) == expected,
+                   ^^^^^^^^^^^^^^^^^
+  File "/tmp/p1062-c152-original/tests/support/versioned_freeze.py", line 116, in local
+    raise FreezeError("missing freeze input: " + name) from error
+versioned_freeze.FreezeError: missing freeze input: tests/p1062/__pycache__/history_v12.cpython-312.pyc

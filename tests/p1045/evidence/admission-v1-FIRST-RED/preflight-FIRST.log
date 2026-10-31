@@ -1,0 +1,5 @@
+Traceback (most recent call last):
+  File "/workspace/p1045/tests/p1045/preflight.py", line 64, in <module>
+    assert emitted.returncode == expected, (name, emitted.returncode, emitted.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('prefix_two_originals.nl', 4, b'error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1045/tests/p1045/sources-v2/prefix_two_originals.nl\n')

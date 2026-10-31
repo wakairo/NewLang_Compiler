@@ -1,0 +1,87 @@
+Start testing: Oct 28 00:09 UTC
+----------------------------------------------------------
+46/523 Testing: p633_local_same_value.unit
+46/523 Test: p633_local_same_value.unit
+Command: "/workspace/p965-build-gcc/p633_local_gate" "/workspace/p965/tests/p631/same_value_local.nl"
+Directory: /workspace/p965-build-gcc
+"p633_local_same_value.unit" start time: Oct 28 00:09 UTC
+Output:
+----------------------------------------------------------
+P633_PARENT_FACT original_live=0 original_fact=0 arm_fact=7 consumer_accepted=0 semantic_world_status=0
+P633 local_controls=35 paired_equal_required=REJECT
+{"branch_value_prefix":[9,9],"branch_fact_prefix":[6,6],"local_symbols":[5,5],"tail_ids":[11,11],"arm_values":[83,83],"cross_arm_context_accepted":false,"paired_context_swap_accepted":false,"original_valid":true,"replay_valid":true,"source_plan_shared":true,"worlds_distinct":true,"protected_worlds_unchanged":true}
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p633_local_same_value.unit" end time: Oct 28 00:09 UTC
+"p633_local_same_value.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+47/523 Testing: p633_local_different_values.unit
+47/523 Test: p633_local_different_values.unit
+Command: "/workspace/p965-build-gcc/p633_local_gate" "/workspace/p965/tests/p630/both_false.nl"
+Directory: /workspace/p965-build-gcc
+"p633_local_different_values.unit" start time: Oct 28 00:09 UTC
+Output:
+----------------------------------------------------------
+P633_PARENT_FACT original_live=0 original_fact=0 arm_fact=7 consumer_accepted=0 semantic_world_status=0
+P633 local_controls=35 paired_equal_required=REJECT
+{"branch_value_prefix":[9,9],"branch_fact_prefix":[6,6],"local_symbols":[5,5],"tail_ids":[11,11],"arm_values":[83,24],"cross_arm_context_accepted":false,"paired_context_swap_accepted":false,"original_valid":true,"replay_valid":true,"source_plan_shared":true,"worlds_distinct":true,"protected_worlds_unchanged":true}
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p633_local_different_values.unit" end time: Oct 28 00:09 UTC
+"p633_local_different_values.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+264/523 Testing: p817_arm_integrity.unit
+264/523 Test: p817_arm_integrity.unit
+Command: "/workspace/p965-build-gcc/p817_integrity" "/workspace/p965/tests/p813/sources/charge_false.nl"
+Directory: /workspace/p965-build-gcc
+"p817_arm_integrity.unit" start time: Oct 28 00:09 UTC
+Output:
+----------------------------------------------------------
+INTEGRITY same-number alien worlds refused; parent/sibling/index lookup refused; graph/source/variant/facts/Copy/formal mutations=72 restore=PASS
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p817_arm_integrity.unit" end time: Oct 28 00:09 UTC
+"p817_arm_integrity.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+268/523 Testing: p790_arm_integrity.unit
+268/523 Test: p790_arm_integrity.unit
+Command: "/workspace/p965-build-gcc/p785_integrity" "/workspace/p965/tests/p790/sources/meter.nl"
+Directory: /workspace/p965-build-gcc
+"p790_arm_integrity.unit" start time: Oct 28 00:09 UTC
+Output:
+----------------------------------------------------------
+INTEGRITY same-number alien worlds refused; parent/sibling/index lookup refused; graph/source/variant/facts/Copy/formal mutations=30 restore=PASS
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p790_arm_integrity.unit" end time: Oct 28 00:09 UTC
+"p790_arm_integrity.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+273/523 Testing: p785_arm_integrity.unit
+273/523 Test: p785_arm_integrity.unit
+Command: "/workspace/p965-build-gcc/p785_integrity" "/workspace/p965/tests/p785/sources/pressure_arm.nl"
+Directory: /workspace/p965-build-gcc
+"p785_arm_integrity.unit" start time: Oct 28 00:09 UTC
+Output:
+----------------------------------------------------------
+INTEGRITY same-number alien worlds refused; parent/sibling/index lookup refused; graph/source/variant/facts/Copy/formal mutations=30 restore=PASS
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p785_arm_integrity.unit" end time: Oct 28 00:09 UTC
+"p785_arm_integrity.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 28 00:09 UTC

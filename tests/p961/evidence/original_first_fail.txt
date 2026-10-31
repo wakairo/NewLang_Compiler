@@ -1,0 +1,1 @@
+whole foreign owned arm entry: status=0 bytes=14006 same_source=0 same_body=1

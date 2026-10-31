@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/ctest",
+    "--test-dir",
+    "/workspace/p1020-build-ubsan",
+    "--parallel",
+    "3",
+    "--output-on-failure"
+  ],
+  "exit": 0,
+  "seconds": 422.32382315499854
+}

@@ -1,0 +1,8 @@
+{
+  "command": [
+    "python3",
+    "tests/p982/freeze_test.py"
+  ],
+  "exit": 0,
+  "seconds": 0.943430168001214
+}

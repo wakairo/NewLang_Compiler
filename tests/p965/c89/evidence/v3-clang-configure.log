@@ -1,0 +1,4 @@
+-- Frontend-only: LLVM discovery and llvm.c_api smoke omitted
+-- Configuring done (0.1s)
+-- Generating done (0.4s)
+-- Build files have been written to: /workspace/p965-build-clang

@@ -1,0 +1,43 @@
+{
+  "HEAD": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd",
+  "tree": "9f1f9242b5ef897ca9f5b9767a3139d6c6765e51",
+  "coverage": {
+    "gcc": {
+      "tests": 577,
+      "original_passed": 577,
+      "original_other": []
+    },
+    "clang": {
+      "tests": 577,
+      "original_passed": 577,
+      "original_other": []
+    },
+    "asan": {
+      "tests": 577,
+      "original_passed": 575,
+      "original_other": [
+        {
+          "index": 101,
+          "name": "p517_r516_composition_native.integration",
+          "result": "***Timeout  90.01 sec"
+        },
+        {
+          "index": 358,
+          "name": "p990_new_native.integration",
+          "result": "***Timeout  90.01 sec"
+        }
+      ],
+      "completion": "original575 plus same-v3 selected timeout tests101/358, each PASS; original exit8 retained; not a second full-run PASS",
+      "all_unique_complete": 577
+    },
+    "ubsan": {
+      "tests": 577,
+      "original_passed": 577,
+      "original_other": []
+    }
+  },
+  "source_oracle_production_changes": 0,
+  "ASan_LSan_UBSan_reports": 0,
+  "R_cohort": 0,
+  "unnecessary_GCC_Clang_target_OOM_reruns": 0
+}

@@ -1,0 +1,17 @@
+{
+  "compiler": "GCC14.2.0 Debug",
+  "test_inventory": 577,
+  "R_cohort": 0,
+  "all_passed": true,
+  "P965_owner_trials": 494,
+  "P965_reached_OOM": 502,
+  "P982_reached_OOM": 1788,
+  "P990_original_reached_OOM": 3388,
+  "P1013_new_reached_OOM": 1209,
+  "history_receipts": [
+    "P999 C107 provenance history: 3 new controls and 32 new deliberate rejections PASS; original 2 controls/7 rejections retained",
+    "P1011 C111: 2 controls and 27 deliberate rejections PASS; old expectations retained",
+    "P1013 C112 original-v5 external-anchor counterexample REJECTED",
+    "P1020 C118 original-v6 external-anchor counterexample REJECTED"
+  ]
+}

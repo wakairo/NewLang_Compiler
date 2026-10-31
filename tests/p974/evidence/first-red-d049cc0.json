@@ -1,0 +1,26 @@
+{
+  "head": "d049cc00252213e4f636c2be2f5a66e899aaf806",
+  "tree": "b7cf88f33ee2802636c6376838d38697003db9b0",
+  "first_red": "named.py:20 healthy retry expected0, observed CLI4/V1-BACKEND-UNSUPPORTED",
+  "completed": "8 direct cases PASS; named invalid phase CLI4/output/cleanup assertions passed; healthy profile expectation failed",
+  "classification": "P-owned fixture eligibility assumption, not a measured compiler authority false acceptance; parent original healthy charge_false is CLI4 too",
+  "safe_parent_controls": {
+    "charge_false": "CLI4 / output0",
+    "p631_same_value_local": "CLI0 / C171899 bytes"
+  },
+  "source_sha256": {
+    "tests/p974/driver.c": "c349255910b747cfcb584a14225fed55d689b710431eb3f5e7125ecafc62f925",
+    "tests/p974/named.py": "5f544e4772909f9ca7c41f63f467633e1938c62ca6b68c42a035cbd762b6293d",
+    "tests/p974/oracle.json": "70ab6722a9292e47c37113ff2c7dc839fff07df35737cc54b78790c88c6a857c",
+    "tests/p974/oracle-v2.json": "25762ec98e28b250d2e328d213e721d52e3ce2a6d4c47e9b9dcd6e82d30b2bad",
+    "tests/p974/freeze.json": "6da86a01b5273b5a2004a54c10a70c83b3bfd13a3fbd4a46230fdc1a71e7ee71",
+    "tests/p974/freeze-v2.json": "c28d7f7fda09956d31347cd236c30b0129ebc2696411db8a3e4049feed5053cc",
+    "src/main.c": "082645a137e10b3f88e0ed2da49330aa4ddc0d9a8027bfdc5f0f153d9f0cfc15",
+    "src/copy_body.c": "429632a43fe4547e7af7e49e168da10e9e5a6327da0ef99fefbce21157c6e39a",
+    "src/array4.c": "5840725d707f9e9bd311c43d848ea25f933d0a4a9a53ba7f502456d1db786f9a"
+  },
+  "log_sha256": {
+    "v2-gcc-new-FIRST.log": "daeb41d823e3e37ebeb310f9b0e0dfa5474e0692bf658bcbc0c8d76ae54f6f7a",
+    "v2-gcc-new-FIRST-details.log": "7c561ff82775aad5acd2362f5f60a9e177c104a167260d355bde2384d2d4ca44"
+  }
+}

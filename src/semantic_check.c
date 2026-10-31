@@ -1,4 +1,5 @@
 #include "copy_body_internal.h"
+#include "h_origin_internal.h"
 #include "if_field_internal.h"
 #include "newlang/parser.h"
 #include "producer_local_internal.h"
@@ -21,6 +22,8 @@ typedef struct LoopControl {
 } LoopControl;
 
 typedef struct Check {
+    NLCheckedFragment *origin_root, *origin_invocation;
+    NLCheckedNodeId origin_call;
     const struct Check *caller; /* borrowed synchronous active call chain */
     NLSemanticContext *context;
     NLCheckedFragment *artifact;
@@ -3551,11 +3554,15 @@ NLCheckStatus nl_sem_check_function_block(NLSemanticContext *context,
     }
     *check.artifact =
         (NLCheckedFragment){.source = check.source, .context = context};
+    check.origin_root = check.artifact;
+    if (!host(&check, nl_h_custody_attach(NULL, check.artifact), syntax->span))
+        goto failure;
     if (!function_block(&check, syntax) ||
         !host(&check, nl_sem_validate(check.context), syntax->span) ||
         !host(&check, nl_raw_validate(check.context), syntax->span))
         goto failure;
     nl_sem_commit(context, check.context);
+    nl_h_origin_close(check.artifact);
     *out = check.artifact;
     return NL_CHECK_OK;
 failure:
@@ -3622,10 +3629,20 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
     }
     *body.artifact = (NLCheckedFragment){.source = body.source,
                                          .context = caller->artifact->context};
+    if (!host(&body, nl_h_custody_attach(caller->artifact, body.artifact),
+              call_span))
+        goto failure;
     if (!host(&body, nl_body_retain(function->body), (NLSourceSpan){0}))
         goto failure;
     body.artifact->body_owner = function->body;
     body.artifact->release_body = nl_body_release;
+    body.origin_root = caller->origin_root;
+    body.origin_invocation = caller->origin_invocation;
+    body.origin_call = caller->origin_call;
+    if (!caller->definition && caller->artifact == caller->origin_root) {
+        body.origin_invocation = body.artifact;
+        body.origin_call = call_id;
+    }
     body.capture_copy_body =
         !body.definition && function->count == 0 &&
         function->result == nl_semantic_core_type(c, NL_TYPE_U8);
@@ -3832,20 +3849,11 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
         goto failure;
     }
     const size_t count = caller->artifact->body_count;
-    NLCheckedFragment **bodies =
-        realloc(caller->artifact->bodies, (count + 1) * sizeof(*bodies));
-    if (bodies == NULL) {
-        (void)host(&body, NL_CHECK_OUT_OF_MEMORY, (NLSourceSpan){0});
+    if (!host(&body,
+              nl_h_custody_reserve(caller->artifact, body.artifact,
+                                   NL_CUSTODY_BODY, call_id, count),
+              call_span))
         goto failure;
-    }
-    caller->artifact->bodies = bodies;
-    NLCheckedNodeId *calls =
-        realloc(caller->artifact->body_calls, (count + 1) * sizeof(*calls));
-    if (calls == NULL) {
-        (void)host(&body, NL_CHECK_OUT_OF_MEMORY, (NLSourceSpan){0});
-        goto failure;
-    }
-    caller->artifact->body_calls = calls;
     const NLCheckedNodeView result = *view(&body, body.artifact->root);
     const bool no_exit =
         body.terminated && nl_control_exits_count(body.artifact->exits) == 0;
@@ -3874,9 +3882,9 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
               nl_producer_local_seal(body.artifact, caller->artifact, call_id),
               call_span))
         goto failure;
-    caller->artifact->bodies[count] = body.artifact;
-    caller->artifact->body_calls[count] = call_id;
-    ++caller->artifact->body_count;
+    nl_h_custody_commit(caller->artifact, body.artifact, NL_CUSTODY_BODY,
+                        count);
+    nl_h_origin_take_body(caller->artifact, body.artifact, call_id, count);
     return true;
 failure:
     /* Report a body diagnostic at the CALL site. The detailed definition
@@ -4188,16 +4196,13 @@ static bool save_arm(Check *check, NLCheckedNodeId match,
         (void)host(check, NL_CHECK_RESOURCE_LIMIT, span);
         return false;
     }
-    NLCheckedArm *arms =
-        realloc(check->artifact->arms,
-                (check->artifact->arm_count + 1) * sizeof(*arms));
-    if (arms == NULL) {
-        (void)host(check, NL_CHECK_OUT_OF_MEMORY, span);
+    const size_t slot = check->artifact->arm_count;
+    if (!host(check,
+              nl_h_custody_reserve(check->artifact, arm, NL_CUSTODY_ARM, match,
+                                   slot),
+              span))
         return false;
-    }
-    check->artifact->arms = arms;
-    arms[check->artifact->arm_count++] =
-        (NLCheckedArm){match, arm, arm->context};
+    nl_h_custody_commit(check->artifact, arm, NL_CUSTODY_ARM, slot);
     return true;
 }
 
@@ -4454,6 +4459,10 @@ static NLCheckedNodeId source_if(Check *check, const NLSyntaxView *syntax)
                                 .if_arm_index = i,
                                 .branch_value_prefix = c->value_count,
                                 .branch_fact_prefix = c->last_value_fact};
+        if (!host(&branch,
+                  nl_h_custody_attach(check->artifact, branch.artifact),
+                  syntax->span))
+            goto failure;
         if (!host(&branch,
                   nl_if_field_fork(check->artifact, id, i, branch.artifact),
                   syntax->span))
@@ -5148,6 +5157,9 @@ static NLCheckedNodeId source_loop(Check *check, const NLSyntaxView *syntax)
                             .context = body_context,
                             .destroy_context = nl_semantic_destroy};
     body_context = NULL; /* artifact owns it from here */
+    if (!host(check, nl_h_custody_attach(check->artifact, body_artifact),
+              syntax->span))
+        goto cleanup;
     Check body = *check;
     body.context = (NLSemanticContext *)body_artifact->context;
     body.artifact = body_artifact;
@@ -5996,6 +6008,14 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
                                    .match_binding_prefix = c->binding_count});
     if (id == 0)
         return 0;
+    if (!check->definition && !certified && check->origin_root &&
+        check->origin_invocation &&
+        !host(check,
+              nl_h_origin_site(check->origin_root, check->origin_invocation,
+                               check->origin_call, check->artifact, id, init,
+                               c),
+              syntax->span))
+        return 0;
     NLSemanticContext *closed_prefix = NULL;
     NLCheckedNodeView certificate = {0};
     NLCapturedClosure *closure = NULL;
@@ -6045,6 +6065,11 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
         branch.artifact->source = check->source;
         branch.artifact->context = branch.context;
         branch.artifact->destroy_context = nl_semantic_destroy;
+        if (!host(&branch,
+                  nl_h_custody_attach(check->artifact, branch.artifact),
+                  arms[i]->span))
+            goto failure;
+        nl_h_origin_fork(check->artifact, id, i, branch.artifact);
         if (closure != NULL &&
             !host(&branch,
                   nl_sem_clone(branch.context, &closure->branches[i].entry),
@@ -6099,8 +6124,11 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
             closure->branches[i].arm = branch.artifact;
             closure->branches[i].world = branch.context;
         }
+        nl_h_origin_arm(check->artifact, id, i, branch.artifact);
+        const size_t ownership_slot = check->artifact->arm_count;
         if (!save_arm(check, id, branch.artifact, arms[i]->span))
             goto failure;
+        nl_h_origin_take_arm(check->artifact, id, i, ownership_slot);
         continue;
     failure:
         if (branch.status != NL_CHECK_OK) {
@@ -6150,6 +6178,7 @@ static NLCheckedNodeId allocated_match(Check *check, const NLSyntaxView *syntax)
     view(check, id)->normal_arms = 2;
     view(check, id)->normal_frame_unchanged =
         !certificate.captured_frame_closed;
+    nl_h_origin_finish_site(check->artifact, id);
     return id;
 }
 
@@ -6390,6 +6419,10 @@ static NLCheckedNodeId function_match(Check *check, const NLSyntaxView *syntax)
             (NLCheckedFragment){.source = check->source,
                                 .context = branch.context,
                                 .destroy_context = nl_semantic_destroy};
+        if (!host(&branch,
+                  nl_h_custody_attach(check->artifact, branch.artifact),
+                  a->span))
+            goto failure;
         if (packet_join) {
             branch.artifact->packet_parent = check->artifact;
             branch.artifact->packet_match = id;
@@ -6768,7 +6801,6 @@ static bool custody_continue_block(Check *check, const NLSyntaxView *block,
             return host(check, NL_CHECK_OUT_OF_MEMORY, block->span);
         }
         *continuation.artifact = (NLCheckedFragment){0};
-        f->custody_continuations[i] = continuation.artifact;
         continuation.artifact->source = check->source;
         continuation.artifact->context = continuation.context;
         continuation.artifact->custody_policy_world = arm->context;
@@ -6776,6 +6808,17 @@ static bool custody_continue_block(Check *check, const NLSyntaxView *block,
             continuation.context;
         continuation.artifact->destroy_context = nl_semantic_destroy;
         continuation.artifact->destroy_custody_world = nl_semantic_destroy;
+        if (!host(check, nl_h_custody_attach(f, continuation.artifact),
+                  block->span) ||
+            !host(check,
+                  nl_h_custody_reserve(f, continuation.artifact,
+                                       NL_CUSTODY_CONTINUATION, match, i),
+                  block->span)) {
+            nl_checked_destroy(continuation.artifact);
+            return false;
+        }
+        nl_h_custody_commit(f, continuation.artifact, NL_CUSTODY_CONTINUATION,
+                            i);
         if (!host(check,
                   nl_sem_clone(arm->context,
                                &continuation.artifact->custody_entry),
@@ -7486,6 +7529,9 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
         const NLTypeId payload_type =
             c->types[type - 1].variant_types[variant - 1];
         Check branch = {.source = check->source,
+                        .origin_root = check->origin_root,
+                        .origin_invocation = check->origin_invocation,
+                        .origin_call = check->origin_call,
                         .depth = check->depth,
                         .binding_floor = c->binding_count,
                         .arm_floor = c->binding_count,
@@ -7503,6 +7549,10 @@ static NLCheckedNodeId sum_match(Check *check, const NLSyntaxView *s)
             (NLCheckedFragment){.source = check->source,
                                 .context = branch.context,
                                 .destroy_context = nl_semantic_destroy};
+        if (!host(&branch,
+                  nl_h_custody_attach(check->artifact, branch.artifact),
+                  a->span))
+            goto arm_failure;
         NLSemanticContext *b = branch.context;
         NLValueId current_sum =
             borrowed ? b->places[root - 1].current_value : scrutinee;
@@ -8521,6 +8571,9 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
     }
     *check.artifact =
         (NLCheckedFragment){.source = check.source, .context = context};
+    check.origin_root = check.artifact;
+    if (!host(&check, nl_h_custody_attach(NULL, check.artifact), root->span))
+        goto failure;
     const NLCheckStatus dependency_status =
         nl_fixed_dependencies(check.context);
     if (dependency_status != NL_CHECK_OK) {
@@ -8567,6 +8620,7 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
         goto failure;
     }
     nl_sem_commit(context, check.context);
+    nl_h_origin_close(check.artifact);
     *out = check.artifact;
     return NL_CHECK_OK;
 failure:
@@ -8756,6 +8810,10 @@ NLCheckStatus nl_semantic_check_raw_operation(NLSemanticContext *context,
     }
     *check.artifact =
         (NLCheckedFragment){.source = check.source, .context = context};
+    check.origin_root = check.artifact;
+    if (!host(&check, nl_h_custody_attach(NULL, check.artifact),
+              operation->span))
+        goto failure;
     NLSemanticContext *const c = check.context;
     for (size_t i = 0; i < c->value_count; ++i) {
         if (c->values[i].carrier != NL_CARRIER_ENDED &&
@@ -8832,6 +8890,7 @@ NLCheckStatus nl_semantic_check_raw_operation(NLSemanticContext *context,
         goto failure;
     }
     nl_sem_commit(context, c);
+    nl_h_origin_close(check.artifact);
     *out = check.artifact;
     return NL_CHECK_OK;
 failure:
@@ -9046,6 +9105,10 @@ static bool check_definition(Check *registration, size_t function_id)
     }
     *definition.artifact =
         (NLCheckedFragment){.source = definition.source, .context = c};
+    definition.origin_root = definition.artifact;
+    if (!host(&definition, nl_h_custody_attach(NULL, definition.artifact),
+              span))
+        goto failure;
     if (!function_block(&definition, nl_syntax_node_view(nl_syntax_tree_root(
                                          function.body->syntax))))
         goto failure;

@@ -1,0 +1,1 @@
+/workspace/p1055/tests/p1055/sources/negative_ended_loan.nl:33:22-35:6: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope

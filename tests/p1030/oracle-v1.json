@@ -1,0 +1,38 @@
+{
+  "release": "C127 P-authored source/negative/oracle PRE-RUN; not blind or R evidence",
+  "parent": "c7ff99cf7d9087aa67226185e736802b1cee073f",
+  "parent_tree": "0f929e775c74b4a576e2630dd86286060c59f1dd",
+  "canonical": "CURRENT_SPEC -> Draft17.34; 16.3/17.1 ordinary two-u8 Copy field, 18.1 actual nonrecursive call, 18.1a/b original H owner/LiveTail",
+  "independence": "P independently wrote new names/values/complete programs from canonical and inspected P code. No independent R1016/R996/R1000 source/oracle/runner/raw artifact accessed, copied, calibrated or reused",
+  "positive": ["pair_before_heap.nl", "heap_before_pair.nl"],
+  "minimal_profile": "one SignalPair two-u8 ordinary nominal plus one LedgerLink one-link H nominal; two distinct ref<write,u8>,u8 -> u8 helpers, each exactly one source-owned Change and old-Copy return; sequential nonescaping loans to different fields of the same original T before first H trial; change only nominal declaration order between the two programs",
+  "T": {
+    "initial": [58, 203],
+    "first_call": {"index": 1, "old": 203, "next": 97, "sibling": 58},
+    "second_call": {"index": 0, "old": 58, "next": 203, "sibling": 97},
+    "final": [203, 97],
+    "current": "both original source-issued body/parameters/event GET succeeds and independent current validators OK0, same parent/incarnation, distinct child/index/function/loan, sibling current fact/incarnation preserved at each call; second incoming comes from first actual old-Copy binding, not a host constant proof",
+    "failure": "T already constructed/changed before any H trial, so same original T facts and physical values must hold even when guest has0/1 successful allocations; H failure cannot mint T permission"
+  },
+  "H": {
+    "marks": [29, 181],
+    "guest_successes": [0, 1, 2],
+    "trials": [1, 2, 2],
+    "frees": [0, 1, 2],
+    "two_success": "two distinct original pointer/BackingRegion/Allocation/Domain/root incarnations; original head next None->Some(original tail)->None; producer returns original live tail through one local LiveTail then caller destructure/terminal; separate head release; caller+callee tail read while live; exactly once EndRoot/raw/finalize/release/free",
+    "none": "first None no H ownership/free; second None head-only ownership and one head release, no tail packet/producer/terminal"
+  },
+  "baseline_prediction": "first pair_before_heap source CHECK0 and both body/parameters/event current0; existing mixed backend likely refuses at same-field-only two-helper guard, CLI4/no C, precise first private reject must be measured. If source fails earlier, record exact earlier boundary without claiming backend finding",
+  "candidate_expected": "same public current, clean original emitted C17, strict GCC13/Clang23.1.3 O0/O2 with actual physical T/H observations and NULL-only guest0/1/2 injection. No source-law/public issuer/ABI expansion; prior generated C bytes unchanged",
+  "source_rejections": {
+    "negative_read_definition.nl": {"CHECK": 3, "C17": 3, "intended": "definition-time replace rejects read-ref; earlier actual mismatch/parser gate means UNREACHED, not intended safety PASS"},
+    "negative_double_terminal.nl": {"CHECK": 3, "C17": 3, "intended": "second receiver cannot consume original Allocation/Domain twice; observe actual earliest semantic diagnostic"},
+    "unsupported_third_call.nl": {"CHECK": 0, "C17": 4, "intended": "bounded two-helper/two-actual-call consumer rejects third call even though source CHECK is legal"}
+  },
+  "faults": "new P-owned current metadata, foreign body/caller/actual/formal/function/source/world, stale target/sibling/current, wrong H original Allocation/Domain, A-unrestored/B survives; fail closed without published C, restore exact retry",
+  "OOM": "enumerate actual reached host emitter malloc/calloc/realloc indices per positive source, each hit must refuse publication and retain sentinel length/semantic summary/owner, exact healthy retry; no universal all-state claim",
+  "named": "stdout/fresh/existing rejection no-clobber bytes/dev/ino/no-temp; reach actual output write error and exact retry on valid source",
+  "history": "original v1-v7 and v6 602/v7 1666 predecessor entries immutable; only new prospective v8/new P files/minimal Production edits. Do not co-edit trusted verifier to hide a failed check",
+  "STOP": "actual unsafe current/issuer acceptance or counterfeit original physical, new source-law/public issuer/API/ABI, predecessor corruption, R import, fixed-parent drift or budget breach",
+  "VALUE_ALIGNMENT_RISK": "selective dual-carrier proof/carrier mapping grows compiler-maintainer audit/re-audit and history cost; author plus ordinary safe caller C-relative human UB audit dependency closure benefit, performance and cost UNMEASURED. Product GO PAUSED/H1 HOLD"
+}

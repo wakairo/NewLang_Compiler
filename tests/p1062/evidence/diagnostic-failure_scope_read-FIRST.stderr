@@ -1,0 +1,3 @@
+P1062 FIRST_REJECT /workspace/p1062-artifacts/diagnostic-v1/src/checked_c_node.c:1901 allocated_expr allocations=2 producer=0 owner=0 closed=0 Hstage=4,4 reads=0 projections=0 caller_read=0 receiver_read=0
+error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof
+note: tests/p1062/sources/failure_scope_read.nl

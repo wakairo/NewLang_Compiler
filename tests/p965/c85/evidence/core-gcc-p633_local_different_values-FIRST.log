@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /workspace/p965-build-gcc
+Test project /workspace/p965-build-gcc
+    Start 47: p633_local_different_values.unit
+1/1 Test #47: p633_local_different_values.unit ...   Passed    0.01 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.02 sec

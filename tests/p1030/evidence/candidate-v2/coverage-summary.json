@@ -1,0 +1,14 @@
+{
+  "original_GCC13_run": "575/577 PASS, two failures preserved, exit8",
+  "original_candidate": "81ff62973e256dd4627ba22a3ccc8d3bc8eb2697",
+  "repaired_candidate": "95f2e04eede4f7719fd8e6db2daa72634e10e297",
+  "Production_byte_identical": true,
+  "GCC13_forward_epoch": "575 unaffected + two explicitly repaired wrappers; original run is not relabeled green",
+  "GCC13_unique_covered": 577,
+  "Clang_full": {
+    "unique": 577,
+    "exit": 0
+  },
+  "R_cohort": 0,
+  "old_frozen_files_edited": false
+}

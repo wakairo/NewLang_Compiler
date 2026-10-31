@@ -1,0 +1,9 @@
+{
+  "stage": "PRE-RUN normalization calibration/additional-control-flow return V2",
+  "previous_source_freeze_sha256": "f51773f9709413ae5eb0486e88876bf4a54e51d2b691e71ab90ca70a729ac0da",
+  "files": {
+    "tests/p990/sources/calibration_unreachable_bound_v2.nl": "6c6c603d3a3695f4e4c0f8a09355cf40c403db5bdadc0941617bada913bc3ee8",
+    "tests/p990/sources/negative_additional_return_v2.nl": "178f8bdd42e97a88be322d685e340e23396865505bb9e58a27a03a8fb2e2ad3f",
+    "tests/p990/oracle-v2.json": "556829f9716a846ec2d9b740fb803c3e2ed5c3b106726dc47eb58f9a664675c0"
+  }
+}

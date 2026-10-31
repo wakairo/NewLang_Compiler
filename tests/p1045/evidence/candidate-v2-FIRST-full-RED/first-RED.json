@@ -1,0 +1,17 @@
+{
+  "candidate": "b63d228afa29c7473aefd1da4b2e06cf06880f6a",
+  "tree": "bd8ff51c3fde9038e9f6219dd54ee76627f735d2",
+  "GCC13_full": {
+    "pass": 576,
+    "total": 577,
+    "exit": 8,
+    "seconds": 148.65936887599673,
+    "raw_SHA256": "434420c2629814d336c11c39e18e9ee464aa6b9128a1e16b74560c39ed904f7e"
+  },
+  "failed": "p990_new_native.integration",
+  "cause": "old P1030 scratch test assumes current immediate parent v7; prospective v9 immediate parent v8, so incoherent candidate previous.sha256 refuses earlier with previous freeze digest instead of intended v7 external pin",
+  "native_current_new_gates": "GCC13/Clang/ASan+LSan/UBSan all four-source P1045 targeted pass; old P1030 native/current/owner/OOM passed before historical scratch mismatch; not all local gates green",
+  "Clang_full": "NOT RUN: sequential chain stopped after GCC13 first RED",
+  "repair": "new P-owned forward copy retains all old source/oracle/native checks and all five old history fault/oracle assertions, coherently propagates adversarial changed v7 digest through v8 and v9; unchanged old verifier still rejects original-v7 literal",
+  "timing": "new native sanitizer target53.434s vs prior old umbrella57.54s; register independent new P CTest under same unchanged90s limit/CI matrix instead of serializing under old umbrella"
+}

@@ -1,0 +1,53 @@
+Start testing: Oct 27 03:21 UTC
+----------------------------------------------------------
+276/487 Testing: p961_original_foreign.unit
+276/487 Test: p961_original_foreign.unit
+Command: "/tmp/p961/build/p961_original" "/workspace/p961/tests/p953/sources/window_true.nl"
+Directory: /tmp/p961/build
+"p961_original_foreign.unit" start time: Oct 27 03:21 UTC
+Output:
+----------------------------------------------------------
+whole foreign owned arm entry: status=1 bytes=0 same_source=0 same_body=1
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p961_original_foreign.unit" end time: Oct 27 03:21 UTC
+"p961_original_foreign.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+277/487 Testing: p961_echo_origin.unit
+277/487 Test: p961_echo_origin.unit
+Command: "/tmp/p961/build/p961_origin" "/workspace/p961/tests/p953/sources/echo.nl"
+Directory: /tmp/p961/build
+"p961_echo_origin.unit" start time: Oct 27 03:21 UTC
+Output:
+----------------------------------------------------------
+P961 same-plan/source two CHECK roots; 9 origin negatives reject/C0/restore; healthy bytes=14007
+P961 tampered A canonical teardown; B healthy/destroy once
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p961_echo_origin.unit" end time: Oct 27 03:21 UTC
+"p961_echo_origin.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+278/487 Testing: p961_window_true_origin.unit
+278/487 Test: p961_window_true_origin.unit
+Command: "/tmp/p961/build/p961_origin" "/workspace/p961/tests/p953/sources/window_true.nl"
+Directory: /tmp/p961/build
+"p961_window_true_origin.unit" start time: Oct 27 03:21 UTC
+Output:
+----------------------------------------------------------
+P961 same-plan/source two CHECK roots; 9 origin negatives reject/C0/restore; healthy bytes=14006
+P961 tampered A canonical teardown; B healthy/destroy once
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p961_window_true_origin.unit" end time: Oct 27 03:21 UTC
+"p961_window_true_origin.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 27 03:21 UTC

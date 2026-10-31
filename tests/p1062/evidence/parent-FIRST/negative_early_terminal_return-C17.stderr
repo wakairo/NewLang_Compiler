@@ -1,0 +1,1 @@
+/workspace/p1062-gate0/tests/p1062/sources/negative_early_terminal_return.nl:21:50-34:2: error(semantic)[P193-DEFINITION-OBLIGATION]: normal exit retains non-Discardable responsibility

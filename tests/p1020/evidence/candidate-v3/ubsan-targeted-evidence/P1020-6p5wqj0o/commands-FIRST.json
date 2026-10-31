@@ -1,0 +1,1412 @@
+[
+  {
+    "label": "build-probe",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-g",
+      "-O0",
+      "-fno-pie",
+      "-no-pie",
+      "-I/workspace/p1020/include",
+      "/workspace/p1020/tests/p1020/probe.c",
+      "-Wl,--start-group",
+      "/workspace/p1020-build-ubsan/libnewlang_semantic.a",
+      "/workspace/p1020-build-ubsan/libnewlang_parser.a",
+      "/workspace/p1020-build-ubsan/libnewlang_checked_c_node.a",
+      "/workspace/p1020-build-ubsan/libnewlang_lexer.a",
+      "/workspace/p1020-build-ubsan/libnewlang_checked.a",
+      "/workspace/p1020-build-ubsan/libnewlang_syntax.a",
+      "/workspace/p1020-build-ubsan/libnewlang_source.a",
+      "/workspace/p1020-build-ubsan/libnewlang_diagnostic.a",
+      "-Wl,--end-group",
+      "-o",
+      "/tmp/p1020-gas7g6yg/probe"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "build-oom",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-g",
+      "-O0",
+      "-fno-pie",
+      "-no-pie",
+      "-I/workspace/p1020/include",
+      "/workspace/p1020/tests/p1020/oom.c",
+      "-Wl,--start-group",
+      "/workspace/p1020-build-ubsan/libnewlang_semantic.a",
+      "/workspace/p1020-build-ubsan/libnewlang_parser.a",
+      "/workspace/p1020-build-ubsan/libnewlang_checked_c_node.a",
+      "/workspace/p1020-build-ubsan/libnewlang_lexer.a",
+      "/workspace/p1020-build-ubsan/libnewlang_checked.a",
+      "/workspace/p1020-build-ubsan/libnewlang_syntax.a",
+      "/workspace/p1020-build-ubsan/libnewlang_source.a",
+      "/workspace/p1020-build-ubsan/libnewlang_diagnostic.a",
+      "-Wl,--end-group",
+      "-Wl,--wrap=malloc",
+      "-Wl,--wrap=calloc",
+      "-Wl,--wrap=realloc",
+      "-o",
+      "/tmp/p1020-gas7g6yg/oom"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-check",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/two_normal_true.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-public-current",
+    "command": [
+      "/tmp/p1020-gas7g6yg/probe",
+      "positive",
+      "/workspace/p1020/tests/p1020/sources/two_normal_true.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "fe93f92ff8abb81d17ceed50aa151e854a6e3add738b18de225a8e6ad3c931f8",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-emit",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "/workspace/p1020/tests/p1020/sources/two_normal_true.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "7d892a2d88104abc14152220a4eb68509bb6f4d4b0c80ef3a56fcd2650b60770",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-named",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_true.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-reached-output-error",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_true.nl"
+    ],
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "0be83817ff63547f70073ce398bbec77a7868370b6a7d1807513224a9632cbbe"
+  },
+  {
+    "label": "two_normal_true-exact-retry",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_true.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-O0-raw-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O0",
+      "/tmp/p1020-gas7g6yg/two_normal_true.c",
+      "-o",
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-O0-raw",
+    "command": [
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-O0-physical-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O0",
+      "/tmp/p1020-gas7g6yg/two_normal_true.c",
+      "-DNEWLANG_UNIT_CALL_OBSERVER=\"/workspace/p1020/tests/p1020/observer.h\"",
+      "-DP1020_INDEX=0",
+      "-DP1020_OLD=37",
+      "-DP1020_NEW=83",
+      "-DP1020_SIBLING=229",
+      "-o",
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-O0-physical",
+    "command": [
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "8b17b15cbf68a1cb7c1e446455b65b29c1291c9c8bc853dbae8e72be304b7e50",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-O2-raw-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O2",
+      "/tmp/p1020-gas7g6yg/two_normal_true.c",
+      "-o",
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-O2-raw",
+    "command": [
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-O2-physical-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O2",
+      "/tmp/p1020-gas7g6yg/two_normal_true.c",
+      "-DNEWLANG_UNIT_CALL_OBSERVER=\"/workspace/p1020/tests/p1020/observer.h\"",
+      "-DP1020_INDEX=0",
+      "-DP1020_OLD=37",
+      "-DP1020_NEW=83",
+      "-DP1020_SIBLING=229",
+      "-o",
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-O2-physical",
+    "command": [
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "affcec18f81a6a3394fe85aed4552bdc3aebbe6314923f5833c99d9a1ef1fbc2",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_true-metadata-foreign-owner",
+    "command": [
+      "/tmp/p1020-gas7g6yg/probe",
+      "negative",
+      "/workspace/p1020/tests/p1020/sources/two_normal_true.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "4f007a0e976d9aab82b5027f7d620efd352c4215e9210439f2ff6fcbb75a6af5",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-check",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/two_normal_false.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-public-current",
+    "command": [
+      "/tmp/p1020-gas7g6yg/probe",
+      "positive",
+      "/workspace/p1020/tests/p1020/sources/two_normal_false.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "fe93f92ff8abb81d17ceed50aa151e854a6e3add738b18de225a8e6ad3c931f8",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-emit",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "/workspace/p1020/tests/p1020/sources/two_normal_false.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "eb04263f682cd59bbac65393968cff7b88bcb6c2c21f95dc40e37c0d1c001b37",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-named",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_false.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-reached-output-error",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_false.nl"
+    ],
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "4c9a44c4de997b89b778da719386999741bb7f81d29baf075068cea565df4505"
+  },
+  {
+    "label": "two_normal_false-exact-retry",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_false.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-O0-raw-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O0",
+      "/tmp/p1020-gas7g6yg/two_normal_false.c",
+      "-o",
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-O0-raw",
+    "command": [
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-O0-physical-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O0",
+      "/tmp/p1020-gas7g6yg/two_normal_false.c",
+      "-DNEWLANG_UNIT_CALL_OBSERVER=\"/workspace/p1020/tests/p1020/observer.h\"",
+      "-DP1020_INDEX=0",
+      "-DP1020_OLD=37",
+      "-DP1020_NEW=167",
+      "-DP1020_SIBLING=229",
+      "-o",
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-O0-physical",
+    "command": [
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "013bf18363fea5637d481df6339e614c000ce43fb750c1c57e21bfa91af89822",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-O2-raw-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O2",
+      "/tmp/p1020-gas7g6yg/two_normal_false.c",
+      "-o",
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-O2-raw",
+    "command": [
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-O2-physical-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O2",
+      "/tmp/p1020-gas7g6yg/two_normal_false.c",
+      "-DNEWLANG_UNIT_CALL_OBSERVER=\"/workspace/p1020/tests/p1020/observer.h\"",
+      "-DP1020_INDEX=0",
+      "-DP1020_OLD=37",
+      "-DP1020_NEW=167",
+      "-DP1020_SIBLING=229",
+      "-o",
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-O2-physical",
+    "command": [
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "718ba76fc845e3eaadbcdd89e98748fda4e886a1a3c5ce709004a84e4fc51eb0",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_false-metadata-foreign-owner",
+    "command": [
+      "/tmp/p1020-gas7g6yg/probe",
+      "negative",
+      "/workspace/p1020/tests/p1020/sources/two_normal_false.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "4f007a0e976d9aab82b5027f7d620efd352c4215e9210439f2ff6fcbb75a6af5",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-check",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/two_normal_equal.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-public-current",
+    "command": [
+      "/tmp/p1020-gas7g6yg/probe",
+      "positive",
+      "/workspace/p1020/tests/p1020/sources/two_normal_equal.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "7ebfceee8e91ef30d7473bd57a90b69670da95b30804e2c48454fe140f6758a2",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-emit",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "/workspace/p1020/tests/p1020/sources/two_normal_equal.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "78d6420376f9bb3ca423b11f4cacf2e6044ff5b392c85fbe776fd6b99b610784",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-named",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_equal.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-reached-output-error",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_equal.nl"
+    ],
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "42d81dfd2450377f35b585dfce4367af61d8426373386babc05c759ec7db5053"
+  },
+  {
+    "label": "two_normal_equal-exact-retry",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_equal.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-O0-raw-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O0",
+      "/tmp/p1020-gas7g6yg/two_normal_equal.c",
+      "-o",
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-O0-raw",
+    "command": [
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-O0-physical-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O0",
+      "/tmp/p1020-gas7g6yg/two_normal_equal.c",
+      "-DNEWLANG_UNIT_CALL_OBSERVER=\"/workspace/p1020/tests/p1020/observer.h\"",
+      "-DP1020_INDEX=0",
+      "-DP1020_OLD=37",
+      "-DP1020_NEW=83",
+      "-DP1020_SIBLING=229",
+      "-o",
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-O0-physical",
+    "command": [
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "16ef40dfea50c9e29355f2fa6ec9f6e15f0631300cf0d900ca00ba0bcf187298",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-O2-raw-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O2",
+      "/tmp/p1020-gas7g6yg/two_normal_equal.c",
+      "-o",
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-O2-raw",
+    "command": [
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-O2-physical-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O2",
+      "/tmp/p1020-gas7g6yg/two_normal_equal.c",
+      "-DNEWLANG_UNIT_CALL_OBSERVER=\"/workspace/p1020/tests/p1020/observer.h\"",
+      "-DP1020_INDEX=0",
+      "-DP1020_OLD=37",
+      "-DP1020_NEW=83",
+      "-DP1020_SIBLING=229",
+      "-o",
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-O2-physical",
+    "command": [
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "68734746b64939e3bcf29320ba488ec09ceab56b601e26598d9545ebc5133897",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_equal-metadata-foreign-owner",
+    "command": [
+      "/tmp/p1020-gas7g6yg/probe",
+      "negative",
+      "/workspace/p1020/tests/p1020/sources/two_normal_equal.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "4f007a0e976d9aab82b5027f7d620efd352c4215e9210439f2ff6fcbb75a6af5",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-check",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/two_normal_index1.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-public-current",
+    "command": [
+      "/tmp/p1020-gas7g6yg/probe",
+      "positive",
+      "/workspace/p1020/tests/p1020/sources/two_normal_index1.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "ae08cad223466cf006397cc346f4f844b96fe03c2c146f46d5244ff2edb1e6c6",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-emit",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "/workspace/p1020/tests/p1020/sources/two_normal_index1.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "cbd0b2b473c611590e11a4c2edfa16ea36f3bfde8eabffbb8f9c26683f0d23b2",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-named",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_index1.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-reached-output-error",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_index1.nl"
+    ],
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "5f7b63fd19cbcbd9c6b7a3f94884abfb173d7f5745e8180d1c2abe5b4a1d7ff4"
+  },
+  {
+    "label": "two_normal_index1-exact-retry",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/two_normal_index1.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-O0-raw-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O0",
+      "/tmp/p1020-gas7g6yg/two_normal_index1.c",
+      "-o",
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-O0-raw",
+    "command": [
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-O0-physical-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O0",
+      "/tmp/p1020-gas7g6yg/two_normal_index1.c",
+      "-DNEWLANG_UNIT_CALL_OBSERVER=\"/workspace/p1020/tests/p1020/observer.h\"",
+      "-DP1020_INDEX=1",
+      "-DP1020_OLD=229",
+      "-DP1020_NEW=167",
+      "-DP1020_SIBLING=37",
+      "-o",
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-O0-physical",
+    "command": [
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "0b54972616a2ce3c52394b8c0b036f181b3d7524bee651351172b521916def73",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-O2-raw-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O2",
+      "/tmp/p1020-gas7g6yg/two_normal_index1.c",
+      "-o",
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-O2-raw",
+    "command": [
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-O2-physical-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O2",
+      "/tmp/p1020-gas7g6yg/two_normal_index1.c",
+      "-DNEWLANG_UNIT_CALL_OBSERVER=\"/workspace/p1020/tests/p1020/observer.h\"",
+      "-DP1020_INDEX=1",
+      "-DP1020_OLD=229",
+      "-DP1020_NEW=167",
+      "-DP1020_SIBLING=37",
+      "-o",
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-O2-physical",
+    "command": [
+      "/tmp/p1020-gas7g6yg/physical"
+    ],
+    "exit": 0,
+    "stdout_sha256": "398a0fc61622909959209cf16ae0768b14bd36210e6ee3833a05ea5f491258bb",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-metadata-foreign-owner",
+    "command": [
+      "/tmp/p1020-gas7g6yg/probe",
+      "negative",
+      "/workspace/p1020/tests/p1020/sources/two_normal_index1.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "4f007a0e976d9aab82b5027f7d620efd352c4215e9210439f2ff6fcbb75a6af5",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_true-check",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/control_return_true.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_true-public-current",
+    "command": [
+      "/tmp/p1020-gas7g6yg/probe",
+      "positive",
+      "/workspace/p1020/tests/p1020/sources/control_return_true.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "df92fed0bfa4104348cea7924f25093a890d88cdd43ad5e5e4cb45c8c7bc4202",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_true-emit",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "/workspace/p1020/tests/p1020/sources/control_return_true.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "fbb04c87d7a8c11c31e062b272d8d93d407c459caf03c9a5207a0879ae629167",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_true-named",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/control_return_true.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_true-reached-output-error",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/control_return_true.nl"
+    ],
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "c7285cc9425de45fdb6e33785eb4ba97868cc20565279449a8835ce3a5a60839"
+  },
+  {
+    "label": "control_return_true-exact-retry",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/control_return_true.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_true-O0-raw-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O0",
+      "/tmp/p1020-gas7g6yg/control_return_true.c",
+      "-o",
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_true-O0-raw",
+    "command": [
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_true-O2-raw-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O2",
+      "/tmp/p1020-gas7g6yg/control_return_true.c",
+      "-o",
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_true-O2-raw",
+    "command": [
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_false-check",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/control_return_false.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_false-public-current",
+    "command": [
+      "/tmp/p1020-gas7g6yg/probe",
+      "positive",
+      "/workspace/p1020/tests/p1020/sources/control_return_false.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "df92fed0bfa4104348cea7924f25093a890d88cdd43ad5e5e4cb45c8c7bc4202",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_false-emit",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "/workspace/p1020/tests/p1020/sources/control_return_false.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "20335eeeec898956b771ed5758ac3236806f0fb4b2067501d3fbba57bc34cf2b",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_false-named",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/control_return_false.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_false-reached-output-error",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/control_return_false.nl"
+    ],
+    "exit": 1,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "62e02b4fee8dc251d80e77ba80bbdbe8ac8824063f15f82f23a837b1f5a24479"
+  },
+  {
+    "label": "control_return_false-exact-retry",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/named.c",
+      "/workspace/p1020/tests/p1020/sources/control_return_false.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_false-O0-raw-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O0",
+      "/tmp/p1020-gas7g6yg/control_return_false.c",
+      "-o",
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_false-O0-raw",
+    "command": [
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_false-O2-raw-build",
+    "command": [
+      "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-fsanitize=undefined",
+      "-fno-omit-frame-pointer",
+      "-fno-sanitize-recover=all",
+      "-O2",
+      "/tmp/p1020-gas7g6yg/control_return_false.c",
+      "-o",
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_return_false-O2-raw",
+    "command": [
+      "/tmp/p1020-gas7g6yg/raw"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "unsupported_zero_change-negative-check",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/unsupported_zero_change.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "unsupported_zero_change-negative-stdout",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "/workspace/p1020/tests/p1020/sources/unsupported_zero_change.nl"
+    ],
+    "exit": 4,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "c76fe08c08b343f59047815a4c4b5145cfb3366b91729b0715b4081cfb9bcc22"
+  },
+  {
+    "label": "unsupported_zero_change-negative-fresh",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/negative-never.c",
+      "/workspace/p1020/tests/p1020/sources/unsupported_zero_change.nl"
+    ],
+    "exit": 4,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "c76fe08c08b343f59047815a4c4b5145cfb3366b91729b0715b4081cfb9bcc22"
+  },
+  {
+    "label": "unsupported_zero_change-negative-existing",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/negative-existing.c",
+      "/workspace/p1020/tests/p1020/sources/unsupported_zero_change.nl"
+    ],
+    "exit": 4,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "c76fe08c08b343f59047815a4c4b5145cfb3366b91729b0715b4081cfb9bcc22"
+  },
+  {
+    "label": "unsupported_two_changes-negative-check",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/unsupported_two_changes.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "unsupported_two_changes-negative-stdout",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "/workspace/p1020/tests/p1020/sources/unsupported_two_changes.nl"
+    ],
+    "exit": 4,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "2015ef9b0edb8574d2777ea25baaec898cc709cb45571afc6f1fe3229b58d8d1"
+  },
+  {
+    "label": "unsupported_two_changes-negative-fresh",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/negative-never.c",
+      "/workspace/p1020/tests/p1020/sources/unsupported_two_changes.nl"
+    ],
+    "exit": 4,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "2015ef9b0edb8574d2777ea25baaec898cc709cb45571afc6f1fe3229b58d8d1"
+  },
+  {
+    "label": "unsupported_two_changes-negative-existing",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/negative-existing.c",
+      "/workspace/p1020/tests/p1020/sources/unsupported_two_changes.nl"
+    ],
+    "exit": 4,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "2015ef9b0edb8574d2777ea25baaec898cc709cb45571afc6f1fe3229b58d8d1"
+  },
+  {
+    "label": "negative_loan_escape-negative-check",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/negative_loan_escape.nl"
+    ],
+    "exit": 3,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "7f3e126f0beb0b4b3e90124958a5e675af3c713399e416e884255a16cb300f67"
+  },
+  {
+    "label": "negative_loan_escape-negative-stdout",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "/workspace/p1020/tests/p1020/sources/negative_loan_escape.nl"
+    ],
+    "exit": 3,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "7f3e126f0beb0b4b3e90124958a5e675af3c713399e416e884255a16cb300f67"
+  },
+  {
+    "label": "negative_loan_escape-negative-fresh",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/negative-never.c",
+      "/workspace/p1020/tests/p1020/sources/negative_loan_escape.nl"
+    ],
+    "exit": 3,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "7f3e126f0beb0b4b3e90124958a5e675af3c713399e416e884255a16cb300f67"
+  },
+  {
+    "label": "negative_loan_escape-negative-existing",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/negative-existing.c",
+      "/workspace/p1020/tests/p1020/sources/negative_loan_escape.nl"
+    ],
+    "exit": 3,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "7f3e126f0beb0b4b3e90124958a5e675af3c713399e416e884255a16cb300f67"
+  },
+  {
+    "label": "negative_read_write-negative-check",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/sources/negative_read_write.nl"
+    ],
+    "exit": 3,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "b005343229487e293cd565d026cd20d132cb5a17fc9dacd22b648169d85e6dee"
+  },
+  {
+    "label": "negative_read_write-negative-stdout",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "/workspace/p1020/tests/p1020/sources/negative_read_write.nl"
+    ],
+    "exit": 3,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "b005343229487e293cd565d026cd20d132cb5a17fc9dacd22b648169d85e6dee"
+  },
+  {
+    "label": "negative_read_write-negative-fresh",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/negative-never.c",
+      "/workspace/p1020/tests/p1020/sources/negative_read_write.nl"
+    ],
+    "exit": 3,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "b005343229487e293cd565d026cd20d132cb5a17fc9dacd22b648169d85e6dee"
+  },
+  {
+    "label": "negative_read_write-negative-existing",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/negative-existing.c",
+      "/workspace/p1020/tests/p1020/sources/negative_read_write.nl"
+    ],
+    "exit": 3,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "b005343229487e293cd565d026cd20d132cb5a17fc9dacd22b648169d85e6dee"
+  },
+  {
+    "label": "negative_read_definition-negative-check",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/calibrated/negative_read_definition.nl"
+    ],
+    "exit": 3,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "a64259f68a2551346cb72f7fea67f7a0b466b34fc0bfb58164be61ee3cded2d3"
+  },
+  {
+    "label": "negative_read_definition-negative-stdout",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "/workspace/p1020/tests/p1020/calibrated/negative_read_definition.nl"
+    ],
+    "exit": 3,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "a64259f68a2551346cb72f7fea67f7a0b466b34fc0bfb58164be61ee3cded2d3"
+  },
+  {
+    "label": "negative_read_definition-negative-fresh",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/negative-never.c",
+      "/workspace/p1020/tests/p1020/calibrated/negative_read_definition.nl"
+    ],
+    "exit": 3,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "a64259f68a2551346cb72f7fea67f7a0b466b34fc0bfb58164be61ee3cded2d3"
+  },
+  {
+    "label": "negative_read_definition-negative-existing",
+    "command": [
+      "/workspace/p1020-build-ubsan/newlangc",
+      "--emit-c17-to",
+      "/tmp/p1020-gas7g6yg/negative-existing.c",
+      "/workspace/p1020/tests/p1020/calibrated/negative_read_definition.nl"
+    ],
+    "exit": 3,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "a64259f68a2551346cb72f7fea67f7a0b466b34fc0bfb58164be61ee3cded2d3"
+  },
+  {
+    "label": "two_normal_true-reached-OOM",
+    "command": [
+      "/tmp/p1020-gas7g6yg/oom",
+      "/workspace/p1020/tests/p1020/sources/two_normal_true.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "b28f75974cb4915444427967198fa8fbef14f9cc58bdbd4e91ba1271f3fd8c1c",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "two_normal_index1-reached-OOM",
+    "command": [
+      "/tmp/p1020-gas7g6yg/oom",
+      "/workspace/p1020/tests/p1020/sources/two_normal_index1.nl"
+    ],
+    "exit": 0,
+    "stdout_sha256": "b28f75974cb4915444427967198fa8fbef14f9cc58bdbd4e91ba1271f3fd8c1c",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

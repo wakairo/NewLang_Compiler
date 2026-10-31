@@ -1,0 +1,23 @@
+{
+  "release": "C118 source-only PRE-RUN",
+  "parent_HEAD": "c9fbdb8d3ce4c238c4e33fb710fefc20ff6654bb",
+  "baseline_CLI": "/workspace/p1019/pr1015-build/newlangc",
+  "baseline_CLI_SHA256": "c243f6009442c3901d377955b582c2d1b608854f84ff8aa6b05bd9fd2543bd46",
+  "baseline_public_probe": "/workspace/p1019/pr1015-public-probe-v2",
+  "baseline_public_probe_SHA256": "55f3e0412a4e3be5adef717f8b8a3d97a969876a06a8598875f315696ffd1d4b",
+  "source_execution_count": 0,
+  "files": {
+    "tests/p1020/baseline.py": "ace7beb480d1af002a7e611f808bca0a1ff8f21903c888ce301a44248e8f6260",
+    "tests/p1020/oracle-v1.json": "2ab5fa8f13b85bdb5b056e3e6596ed5f17d79c75e03969d1f6e4fe3027a5bac1",
+    "tests/p1020/sources/control_return_false.nl": "7312ca7242e2c3dc4b1e3b08bea51676b2ffcd2a0918ea1509d4830058963eb0",
+    "tests/p1020/sources/control_return_true.nl": "7ffe18c0260d2f9ec575975fb80ac33eff1ae22ecf09c64acf5181bcd193f8d7",
+    "tests/p1020/sources/negative_loan_escape.nl": "5d14735cfd75d65d6d3511c2e21c4b3d8b30ef8fea5b617d8f1744735921e96f",
+    "tests/p1020/sources/negative_read_write.nl": "4d25dbe770e21074cdac005209f07f804e2490592028b87de291e39807ba9625",
+    "tests/p1020/sources/two_normal_equal.nl": "eb43a5d47e9703e2521bcf7afd3eb6c72413d61a97e3be62087e22378dd23f67",
+    "tests/p1020/sources/two_normal_false.nl": "8d01eff65c7435e48298a7b7c2035623aee30f9d08ef08a16e4ebc53e44019ed",
+    "tests/p1020/sources/two_normal_index1.nl": "0259256f952c1a0213b500c7d53dc95afa53df1a9d025b0c35cf0b803b8c0e4b",
+    "tests/p1020/sources/two_normal_true.nl": "e840b106e98507f2d4cccb2d3f39522e1b2589716c1829a2b8a2a0c179869b69",
+    "tests/p1020/sources/unsupported_two_changes.nl": "19008c8e6cad42115b05422a7780fd70a586640fbb3691762afc58a68c4e1a4a",
+    "tests/p1020/sources/unsupported_zero_change.nl": "d217ab36a0ad24907fd6b06dc2dfec2b9906e50fc6e39f8b2808666f808f3564"
+  }
+}

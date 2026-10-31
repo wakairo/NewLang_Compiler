@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/p1062-gate0/tests/p1062/run.py", line 181, in <module>
+    r=invoke('old-C-'+relative.replace('/','_'),[cli,source]);ok(r);assert sha(r.stdout)==expected['C_SHA256'],relative
+                                                              ^^^^^
+  File "/workspace/p1062-gate0/tests/p1062/run.py", line 41, in ok
+    assert r.returncode==0 and not r.stderr,(r.returncode,r.stdout,r.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (4, b'', b'error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1062-gate0/tests/p990/p986/t_before_h_read_bound.nl\n')

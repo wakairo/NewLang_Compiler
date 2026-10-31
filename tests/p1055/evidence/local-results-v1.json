@@ -1,0 +1,356 @@
+{
+  "release": "C144 P1055 local candidate v1 / before publication; DRAFT HOLD",
+  "parent_HEAD": "ade11ebec808f5a95e8831a7ae6ee6f6da2b0dbe",
+  "parent_tree": "70305183f8951038d296ac9a9ecae1f8e8750e4f",
+  "tested_HEAD": "277ed621b8f171e40435b333299ad84510726dbe",
+  "tested_tree": "a2224a1e78cfe38bdfa58494f3530b1e3d0560f6",
+  "Production_only": "src/checked_c_copy_internal.h",
+  "Production_lines_added": 83,
+  "Production_lines_removed": 34,
+  "source_or_harness_changed_after_freeze": false,
+  "positive_profiles": 5,
+  "negatives": {
+    "CHECK0_current0_backend4": 7,
+    "CHECK3_backend3": 2,
+    "all_current_misuse_refused": true,
+    "all_named_no_clobber": true,
+    "equal_scalars_do_not_authorize_wrong_origin": true,
+    "after_closed_H": "unsupported boundary, not implemented"
+  },
+  "physical": {
+    "gcc": {
+      "O0_O2_guest_0_1_2": 30,
+      "raw_exit0_alone": "INCONCLUSIVE",
+      "actual_caller_returns": "YES",
+      "T_live_original_fields_old_new_sibling": "YES",
+      "H_original_R_A_D_LiveTail_terminal_exact_cleanup": "YES"
+    },
+    "clang": {
+      "O0_O2_guest_0_1_2": 30,
+      "raw_exit0_alone": "INCONCLUSIVE",
+      "actual_caller_returns": "YES",
+      "T_live_original_fields_old_new_sibling": "YES",
+      "H_original_R_A_D_LiveTail_terminal_exact_cleanup": "YES"
+    },
+    "asan": {
+      "O0_O2_guest_0_1_2": 30,
+      "raw_exit0_alone": "INCONCLUSIVE",
+      "actual_caller_returns": "YES",
+      "T_live_original_fields_old_new_sibling": "YES",
+      "H_original_R_A_D_LiveTail_terminal_exact_cleanup": "YES"
+    },
+    "ubsan": {
+      "O0_O2_guest_0_1_2": 30,
+      "raw_exit0_alone": "INCONCLUSIVE",
+      "actual_caller_returns": "YES",
+      "T_live_original_fields_old_new_sibling": "YES",
+      "H_original_R_A_D_LiveTail_terminal_exact_cleanup": "YES"
+    }
+  },
+  "reached_emitter_OOM": {
+    "gcc": {
+      "by_profile": {
+        "direct_return": 399,
+        "binding_return": 403,
+        "binding_tail": 403,
+        "binding_copy_return": 407,
+        "renamed_reverse_chain_tail": 411
+      },
+      "total": 2023,
+      "status": {
+        "2": 1923,
+        "1": 100
+      },
+      "status_names": {
+        "1": "UNSUPPORTED (conservative)",
+        "2": "OUT_OF_MEMORY"
+      },
+      "allocator": {
+        "m": 1863,
+        "c": 120,
+        "r": 40
+      },
+      "each_reached_no_publication_snapshot_current_owner_exact_retry": "PASS"
+    },
+    "clang": {
+      "by_profile": {
+        "direct_return": 399,
+        "binding_return": 403,
+        "binding_tail": 403,
+        "binding_copy_return": 407,
+        "renamed_reverse_chain_tail": 411
+      },
+      "total": 2023,
+      "status": {
+        "2": 1923,
+        "1": 100
+      },
+      "status_names": {
+        "1": "UNSUPPORTED (conservative)",
+        "2": "OUT_OF_MEMORY"
+      },
+      "allocator": {
+        "m": 1863,
+        "c": 120,
+        "r": 40
+      },
+      "each_reached_no_publication_snapshot_current_owner_exact_retry": "PASS"
+    },
+    "asan": {
+      "by_profile": {
+        "direct_return": 399,
+        "binding_return": 403,
+        "binding_tail": 403,
+        "binding_copy_return": 407,
+        "renamed_reverse_chain_tail": 411
+      },
+      "total": 2023,
+      "status": {
+        "2": 1923,
+        "1": 100
+      },
+      "status_names": {
+        "1": "UNSUPPORTED (conservative)",
+        "2": "OUT_OF_MEMORY"
+      },
+      "allocator": {
+        "m": 1863,
+        "c": 120,
+        "r": 40
+      },
+      "each_reached_no_publication_snapshot_current_owner_exact_retry": "PASS"
+    },
+    "ubsan": {
+      "by_profile": {
+        "direct_return": 399,
+        "binding_return": 403,
+        "binding_tail": 403,
+        "binding_copy_return": 407,
+        "renamed_reverse_chain_tail": 411
+      },
+      "total": 2023,
+      "status": {
+        "2": 1923,
+        "1": 100
+      },
+      "status_names": {
+        "1": "UNSUPPORTED (conservative)",
+        "2": "OUT_OF_MEMORY"
+      },
+      "allocator": {
+        "m": 1863,
+        "c": 120,
+        "r": 40
+      },
+      "each_reached_no_publication_snapshot_current_owner_exact_retry": "PASS"
+    }
+  },
+  "source_current_owner_faults_per_condition": {
+    "actual": 70,
+    "supplied_views": 30,
+    "H": 20,
+    "unrestored_A_destroy_B_survives": 5
+  },
+  "planned_defined_u8_wrong_second_return_calibration": {
+    "gcc": 5,
+    "clang": 5,
+    "oracle": "SIGABRT must name actual P1055_RESULT1; correct stores/hooks retained; no core"
+  },
+  "old_regressions": {
+    "gcc": {
+      "passed": 578,
+      "P965_ownership": 494,
+      "P965_OOM_reached": 502
+    },
+    "clang": {
+      "passed": 578,
+      "P965_ownership": 494,
+      "P965_OOM_reached": 502
+    },
+    "asan": {
+      "passed": 115,
+      "P965_ownership": 494,
+      "P965_OOM_reached": 502
+    },
+    "ubsan": {
+      "passed": 115,
+      "P965_ownership": 494,
+      "P965_OOM_reached": 502
+    }
+  },
+  "old_C_byte_identity": 38,
+  "history": {
+    "all_original_v1_v9_unchanged": true,
+    "inherited_v9_keys": 2053,
+    "new_v9_counterexamples_rejected": 5,
+    "old_v8_forwarded_counterexamples_rejected": 5,
+    "no_claim_against_arbitrary_checker_replacement": true
+  },
+  "first_unexpected_RED": {
+    "record": "v1-asan-new-FIRST",
+    "exit": 8,
+    "layer": "P invocation preparation before compiler or source execution; missing external raw directory",
+    "repair": "create only external directory, same frozen code/harness/candidate; successful retry is separate immutable record",
+    "stdout_SHA256": "ce8942be08237294dcf5f3d2d2e04505edc11b0efe0b6774d871bdc61eed6252",
+    "production_or_oracle_change": false
+  },
+  "parent_expected_RED": "parent-FIRST preserved; original P1054 RED reference b54ebcf8ec112f51afa947a4dc7632f4bcd492e2ea7d020cbaee8c1c7483fd6c unchanged; exact runtime private predicate UNKNOWN, uninstrumented",
+  "raw_archive": {
+    "path": "tests/p1055/evidence/local-v1.zip",
+    "SHA256": "80fc682e4836e0f901ec2405716f27854018849a863ae216b0b6ae3cbcb9ae3e",
+    "bytes": 1806740,
+    "members": 1771,
+    "index": "INDEX-SHA256.json inside archive, each raw member hashed"
+  },
+  "commands": {
+    "v1-gcc-target-FIRST": {
+      "command": [
+        "env",
+        "P1055_EVIDENCE_DIR=/workspace/p1055-artifacts/v1-gcc-evidence",
+        "python3",
+        "tests/p1055/run.py",
+        "/workspace/p1055-gcc-build/newlangc",
+        "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+        "none"
+      ],
+      "exit": 0,
+      "raw_host_UTC_start": "2026-10-30T05:32:47.846903+00:00",
+      "raw_host_UTC_finish": "2026-10-30T05:32:58.837747+00:00",
+      "stdout_SHA256": "7bee9e1337ddf73bef62f7fb6d1921afa84e5b52a984f8dd53982f33424e62bf",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "v1-clang-target-FIRST": {
+      "command": [
+        "env",
+        "P1055_EVIDENCE_DIR=/workspace/p1055-artifacts/v1-clang-evidence",
+        "python3",
+        "tests/p1055/run.py",
+        "/workspace/p1055-clang-build/newlangc",
+        "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+        "none"
+      ],
+      "exit": 0,
+      "raw_host_UTC_start": "2026-10-30T05:38:15.702246+00:00",
+      "raw_host_UTC_finish": "2026-10-30T05:38:38.483376+00:00",
+      "stdout_SHA256": "ce3d0d1b11a55b070df02bddca494e9c39827c54e62031fb4a78972e27c5f3ea",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "v1-asan-new-preparation-retry": {
+      "command": [
+        "env",
+        "P1055_EVIDENCE_DIR=/workspace/p1055-artifacts/v1-asan-evidence",
+        "/workspace/p965-build-tools/cmake/data/bin/ctest",
+        "--test-dir",
+        "/workspace/p1055-asan-build",
+        "--output-on-failure",
+        "--stop-on-failure",
+        "-j2",
+        "-R",
+        "^p1055_old_origin_"
+      ],
+      "exit": 0,
+      "raw_host_UTC_start": "2026-10-30T05:41:47.312185+00:00",
+      "raw_host_UTC_finish": "2026-10-30T05:43:00.412134+00:00",
+      "stdout_SHA256": "55dba3888206a3b91fa94788385439c5e18c6bdf7ba4fb7d5cdaf9296185ad22",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "v1-ubsan-new-FIRST": {
+      "command": [
+        "env",
+        "P1055_EVIDENCE_DIR=/workspace/p1055-artifacts/v1-ubsan-evidence",
+        "/workspace/p965-build-tools/cmake/data/bin/ctest",
+        "--test-dir",
+        "/workspace/p1055-ubsan-build",
+        "--output-on-failure",
+        "--stop-on-failure",
+        "-j2",
+        "-R",
+        "^p1055_old_origin_"
+      ],
+      "exit": 0,
+      "raw_host_UTC_start": "2026-10-30T05:43:26.057894+00:00",
+      "raw_host_UTC_finish": "2026-10-30T05:44:06.403458+00:00",
+      "stdout_SHA256": "edbb35d8d7dfca6f8167289373af9f0f5a175d2f7dc1bb5c21ecb73764371227",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "v1-gcc-old-all-FIRST": {
+      "command": [
+        "/workspace/p965-build-tools/cmake/data/bin/ctest",
+        "--test-dir",
+        "/workspace/p1055-gcc-build",
+        "--output-on-failure",
+        "--stop-on-failure",
+        "-j4",
+        "-E",
+        "^p1055_old_origin_"
+      ],
+      "exit": 0,
+      "raw_host_UTC_start": "2026-10-30T05:35:48.604989+00:00",
+      "raw_host_UTC_finish": "2026-10-30T05:37:38.458705+00:00",
+      "stdout_SHA256": "41bb090bc79e4c22b0b31b577077535a54ef6ebf2440d96c12cf3a9229ccbc2a",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "v1-clang-old-all-FIRST": {
+      "command": [
+        "/workspace/p965-build-tools/cmake/data/bin/ctest",
+        "--test-dir",
+        "/workspace/p1055-clang-build",
+        "--output-on-failure",
+        "--stop-on-failure",
+        "-j4",
+        "-E",
+        "^p1055_old_origin_"
+      ],
+      "exit": 0,
+      "raw_host_UTC_start": "2026-10-30T05:41:23.463364+00:00",
+      "raw_host_UTC_finish": "2026-10-30T05:44:11.830670+00:00",
+      "stdout_SHA256": "38cd27c4d493901f2a9f6ab96e7d62c2db5b0ce530897a04cb04f7328166fef5",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "v1-asan-old-safety-FIRST": {
+      "command": [
+        "/workspace/p965-build-tools/cmake/data/bin/ctest",
+        "--test-dir",
+        "/workspace/p1055-asan-build",
+        "--output-on-failure",
+        "--stop-on-failure",
+        "-j2",
+        "-R",
+        "^p(633|817|785|790|965|974|961|990|982|1045)_"
+      ],
+      "exit": 0,
+      "raw_host_UTC_start": "2026-10-30T05:43:26.167538+00:00",
+      "raw_host_UTC_finish": "2026-10-30T05:45:25.057939+00:00",
+      "stdout_SHA256": "6ec300c78b63518f123238855e43fe4478d2247db24536df537311bc25841f8d",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "v1-ubsan-old-safety-FIRST": {
+      "command": [
+        "/workspace/p965-build-tools/cmake/data/bin/ctest",
+        "--test-dir",
+        "/workspace/p1055-ubsan-build",
+        "--output-on-failure",
+        "--stop-on-failure",
+        "-j2",
+        "-R",
+        "^p(633|817|785|790|965|974|961|990|982|1045)_"
+      ],
+      "exit": 0,
+      "raw_host_UTC_start": "2026-10-30T05:45:14.909170+00:00",
+      "raw_host_UTC_finish": "2026-10-30T05:46:15.118614+00:00",
+      "stdout_SHA256": "6ac1381fa16514c968e1bb2ea274ceacc03d29c9312c3ac126c95923cd4b86f5",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "CI": "NOT YET; one natural FULL5/PARTIAL six-job group authorized, no later push/rerun on CI RED",
+  "untested": [
+    "independent R1016/R1051 originals never accessed",
+    "after-closed-H support",
+    "third helper",
+    "general nested/control-flow chains",
+    "arbitrary malicious trusted checker replacement",
+    "local LLVM c_api; natural FULL CI pending",
+    "comparative human author+ordinary-safe-caller UB audit closure/performance/product cost"
+  ],
+  "VALUE_ALIGNMENT_RISK": "bounded O(n^2) / O(1) borrowed origin consumer net49 Production lines and 36-line test-history v9 anchor increase trusted inspection/evidence maintenance; improvement vs factored C author+ordinary-safe caller UB audit/re-audit dependency closure UNMEASURED; no-change support matrix remains fallback; KEEP17.34 / REPLACE NONE / DEFER new law/issuer/API/ABI/IR; ProductGO PAUSED/H1HOLD"
+}

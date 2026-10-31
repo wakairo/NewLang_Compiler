@@ -1,0 +1,15 @@
+P1062 UNIT_BODY type=0 unit=1 terminates=1 returned_type=1 results=0 items=6 tail=0
+P1062 ITEM kind=28 type=1 terminates=0 returned_type=0 next=16 initkind=13 inittype=1
+P1062 ITEM kind=2 type=1 terminates=0 returned_type=0 next=20 initkind=13 inittype=19
+P1062 ITEM kind=2 type=1 terminates=0 returned_type=0 next=24 initkind=19 inittype=4
+P1062 ITEM kind=28 type=1 terminates=0 returned_type=0 next=28 initkind=6 inittype=1
+P1062 ITEM kind=28 type=1 terminates=0 returned_type=0 next=30 initkind=15 inittype=1
+P1062 ITEM kind=39 type=0 terminates=1 returned_type=1 next=0 initkind=43 inittype=1
+P1062 NEW_FIRST_REJECT block:559 reallocs=3 stage=4,4
+P1062 NEW_FIRST_REJECT owner_call:2841 reallocs=3 stage=4,4
+P1062 NEW_FIRST_REJECT block:578 reallocs=3 stage=4,4
+P1062 NEW_FIRST_REJECT allocated_match:1649 reallocs=3 stage=4,4
+P1062 NEW_FIRST_REJECT allocated_match:1649 reallocs=3 stage=4,4
+P1062 NEW_FIRST_REJECT block:578 reallocs=3 stage=4,4
+error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof
+note: tests/p1062/sources/terminal_explicit_return.nl

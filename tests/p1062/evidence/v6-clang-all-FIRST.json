@@ -1,0 +1,18 @@
+{
+  "command": [
+    "env",
+    "P1062_EVIDENCE_DIR=/workspace/p1062-artifacts/v6-clang-evidence",
+    "/workspace/p965-build-tools/cmake/data/bin/ctest",
+    "--test-dir",
+    "/workspace/p1062-clang-build",
+    "--output-on-failure",
+    "--stop-on-failure",
+    "-j",
+    "4"
+  ],
+  "exit": 8,
+  "raw_host_UTC_start": "2026-10-30T10:45:30.515702+00:00",
+  "raw_host_UTC_finish": "2026-10-30T10:48:03.463961+00:00",
+  "stdout_SHA256": "b890f855a76b7d7e8d3c20dbbad3b4e5e801cb3725102add95fa413fbae71e65",
+  "stderr_SHA256": "18e00877dc1071c85cd4f479d451bebeef8309022e46cf8c63b0bed5151984a4"
+}

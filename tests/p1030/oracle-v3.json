@@ -1,0 +1,14 @@
+{
+  "release": "C127 forward regression calibration PRE-RUN; old oracle-v1/v2 and source/first RED unchanged",
+  "first_failed_candidate": "81ff62973e256dd4627ba22a3ccc8d3bc8eb2697",
+  "first_full_RED_SHA256": "221ccff1eaecda36ade817561d058e750b4aabdd4c3348297ca02ea664a2b8b3",
+  "old_frozen_source": "tests/p1013/production/unsupported_sibling.nl",
+  "original_C112_expectation": "CHECK0/C17=4, unsupported finite consumer; original source/oracle/runner and original first result remain immutable",
+  "new_C127_coverage": "this canonical-legal old P-owned sibling program is exactly the new two-call/two-field admission, with field index0->1 rather than new P source1->0. New public current/body/parameters/event and native physical must succeed, not a semantic false acceptance",
+  "forward_policy": "new P-owned p1013_forward.py retains original five positive and three other negative controls. The fourth old case moves to actively asserted positive current/native/guest0-1-2/metadata/OOM/named checks in new P1030/run.py. No old file edit, disabled assertion or silent PASS of the original failing runner",
+  "forward_values": {"initial": [41,173], "first": [0,41,67,173], "second": [1,173,109,67], "H_markers": [23,199]},
+  "preserved_original_run": "GCC13 full candidate-v1 exits8 with575 pass and two failed wrappers; second failure is new sidecar preceding the existing verifier's historical diagnosis. Clang full was interrupted and is not PASS",
+  "history_fix": "call unchanged existing trusted verifier before new P fixed-v7 anchor, preserving v1-v6 diagnostics; new coherent-v7 and old-P1020 data negatives still reject",
+  "Production_changes_from_candidate1": 0,
+  "next_validation": "new harness/current/physical/forward compatibility/history then failed affected wrappers; retain unaffected575 result coverage and finish required Clang/sanitizer gates on same Production bytes. Genuine new unsafe authority or protected-history violation STOP"
+}

@@ -1,0 +1,5 @@
+P1030 CURRENT ordinal=0 function=10 call=11 body=0 parameters=0 event=0
+P1030 VALUES ordinal=0 index=1 old=203 new=97 sibling=58 parent=1 child=3 root_incarnation=1 loan=9 sibling_fact=UNCHANGED
+P1030 CURRENT ordinal=1 function=11 call=18 body=0 parameters=0 event=0
+P1030 VALUES ordinal=1 index=0 old=58 new=203 sibling=97 parent=1 child=2 root_incarnation=1 loan=16 sibling_fact=UNCHANGED
+P1030 C17 status=1 published=NO length=777

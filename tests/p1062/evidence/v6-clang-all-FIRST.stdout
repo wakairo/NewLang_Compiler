@@ -1,0 +1,982 @@
+Internal ctest changing into directory: /workspace/p1062-clang-build
+Test project /workspace/p1062-clang-build
+        Start   1: p930_live_pre_if.unit
+        Start   2: p930_order_root_negative.unit
+        Start   3: p930_prepare_oom.unit
+        Start   4: p930_ordinary_cli.integration
+  1/591 Test   #1: p930_live_pre_if.unit .................................   Passed    0.02 sec
+  2/591 Test   #2: p930_order_root_negative.unit .........................   Passed    0.01 sec
+  3/591 Test   #3: p930_prepare_oom.unit .................................   Passed    0.01 sec
+        Start   5: p718_if_return_proof_oom.unit
+        Start   6: p718_if_return_native.integration
+        Start   7: p728_unit_statement_proof.unit
+  4/591 Test   #7: p728_unit_statement_proof.unit ........................   Passed    0.17 sec
+        Start   8: p728_unit_statement_history_oom.unit
+  5/591 Test   #4: p930_ordinary_cli.integration .........................   Passed    0.26 sec
+        Start   9: p728_unit_statement_native.integration
+  6/591 Test   #5: p718_if_return_proof_oom.unit .........................   Passed    1.59 sec
+        Start  10: p722_callee_return_proof_oom.unit
+  7/591 Test   #8: p728_unit_statement_history_oom.unit ..................   Passed    6.18 sec
+        Start  11: p722_callee_return_native.integration
+  8/591 Test  #10: p722_callee_return_proof_oom.unit .....................   Passed    5.70 sec
+        Start  12: p713_if_field_proof_oom.unit
+  9/591 Test  #12: p713_if_field_proof_oom.unit ..........................   Passed    0.78 sec
+        Start  13: p713_if_field_native.integration
+ 10/591 Test   #6: p718_if_return_native.integration .....................   Passed   10.39 sec
+        Start  14: p706_proof_handoff_oom.unit
+ 11/591 Test   #9: p728_unit_statement_native.integration ................   Passed   10.42 sec
+        Start  15: p706_ref_write_native.integration
+ 12/591 Test  #14: p706_proof_handoff_oom.unit ...........................   Passed    2.06 sec
+        Start  16: p701_proof_rollback_oom.unit
+ 13/591 Test  #16: p701_proof_rollback_oom.unit ..........................   Passed    0.32 sec
+        Start  17: p701_stateful_native.integration
+ 14/591 Test  #15: p706_ref_write_native.integration .....................   Passed    3.62 sec
+        Start  18: p572_three_node_owned.unit
+ 15/591 Test  #18: p572_three_node_owned.unit ............................   Passed    0.01 sec
+        Start  19: p572_three_node_fault.unit
+ 16/591 Test  #11: p722_callee_return_native.integration .................   Passed    8.09 sec
+        Start  20: p572_source_oom.unit
+ 17/591 Test  #20: p572_source_oom.unit ..................................   Passed    0.25 sec
+        Start  21: p572_three_node_native.integration
+ 18/591 Test  #19: p572_three_node_fault.unit ............................   Passed    0.80 sec
+        Start  22: p791_one_owned.unit
+ 19/591 Test  #22: p791_one_owned.unit ...................................   Passed    0.02 sec
+        Start  23: p791_two_owned.unit
+ 20/591 Test  #23: p791_two_owned.unit ...................................   Passed    0.02 sec
+        Start  24: p791_issuer_oom.unit
+ 21/591 Test  #24: p791_issuer_oom.unit ..................................   Passed    0.06 sec
+        Start  25: p791_parser_oom.unit
+ 22/591 Test  #25: p791_parser_oom.unit ..................................   Passed    0.02 sec
+        Start  26: p791_normal_cli.integration
+ 23/591 Test  #21: p572_three_node_native.integration ....................   Passed    1.70 sec
+        Start  27: p534_source_owned.unit
+ 24/591 Test  #27: p534_source_owned.unit ................................   Passed    0.01 sec
+        Start  28: p534_oom.unit
+ 25/591 Test  #28: p534_oom.unit .........................................   Passed    0.02 sec
+        Start  29: p534_issuer_fault.unit
+ 26/591 Test  #29: p534_issuer_fault.unit ................................   Passed    0.01 sec
+        Start  30: p534_array_native.integration
+ 27/591 Test  #26: p791_normal_cli.integration ...........................   Passed    2.22 sec
+        Start  31: p541_source_owned.unit
+ 28/591 Test  #31: p541_source_owned.unit ................................   Passed    0.02 sec
+        Start  32: p541_oom.unit
+ 29/591 Test  #17: p701_stateful_native.integration ......................   Passed    4.78 sec
+        Start  33: p541_issuer_fault.unit
+ 30/591 Test  #32: p541_oom.unit .........................................   Passed    0.07 sec
+        Start  34: p541_array_native.integration
+ 31/591 Test  #33: p541_issuer_fault.unit ................................   Passed    0.04 sec
+        Start  35: p636_plain_source_indices.unit
+ 32/591 Test  #35: p636_plain_source_indices.unit ........................   Passed    0.01 sec
+        Start  36: p636_local_arm_indices.unit
+ 33/591 Test  #36: p636_local_arm_indices.unit ...........................   Passed    0.05 sec
+        Start  37: p636_equal_arm_indices.unit
+ 34/591 Test  #37: p636_equal_arm_indices.unit ...........................   Passed    0.02 sec
+        Start  38: p634_historical_hash.unit
+ 35/591 Test  #38: p634_historical_hash.unit .............................   Passed    0.23 sec
+        Start  39: p634_same_value_ended_root.unit
+ 36/591 Test  #39: p634_same_value_ended_root.unit .......................   Passed    0.06 sec
+        Start  40: p634_unequal_ended_root.unit
+ 37/591 Test  #40: p634_unequal_ended_root.unit ..........................   Passed    0.01 sec
+        Start  41: p633_equal_outer_derivation.unit
+ 38/591 Test  #41: p633_equal_outer_derivation.unit ......................   Passed    0.02 sec
+        Start  42: p633_local_cli.integration
+ 39/591 Test  #30: p534_array_native.integration .........................   Passed    2.50 sec
+        Start  43: p633_both_false_oom.unit
+ 40/591 Test  #43: p633_both_false_oom.unit ..............................   Passed    0.07 sec
+        Start  44: p633_outer_true_oom.unit
+ 41/591 Test  #44: p633_outer_true_oom.unit ..............................   Passed    0.06 sec
+        Start  45: p633_pure_true_oom.unit
+ 42/591 Test  #45: p633_pure_true_oom.unit ...............................   Passed    0.07 sec
+        Start  46: p633_local_same_value.unit
+ 43/591 Test  #46: p633_local_same_value.unit ............................   Passed    0.01 sec
+        Start  47: p633_local_different_values.unit
+ 44/591 Test  #47: p633_local_different_values.unit ......................   Passed    0.02 sec
+        Start  48: p651_cli_native.integration
+ 45/591 Test  #13: p713_if_field_native.integration ......................   Passed   12.12 sec
+        Start  49: p651_true_proof.unit
+ 46/591 Test  #49: p651_true_proof.unit ..................................   Passed    0.15 sec
+        Start  50: p651_false_proof.unit
+ 47/591 Test  #50: p651_false_proof.unit .................................   Passed    0.12 sec
+        Start  51: p651_oom.unit
+ 48/591 Test  #51: p651_oom.unit .........................................   Passed    0.18 sec
+        Start  52: p633_equal_world_origin.unit
+ 49/591 Test  #52: p633_equal_world_origin.unit ..........................   Passed    0.02 sec
+        Start  53: p633_unequal_world_origin.unit
+ 50/591 Test  #53: p633_unequal_world_origin.unit ........................   Passed    0.00 sec
+        Start  54: p628_cli_pair_if.integration
+ 51/591 Test  #34: p541_array_native.integration .........................   Passed    3.77 sec
+        Start  55: p628_true_oom.unit
+ 52/591 Test  #55: p628_true_oom.unit ....................................   Passed    0.04 sec
+        Start  56: p628_false_oom.unit
+ 53/591 Test  #56: p628_false_oom.unit ...................................   Passed    0.07 sec
+        Start  57: p628_alias_oom.unit
+ 54/591 Test  #57: p628_alias_oom.unit ...................................   Passed    0.09 sec
+        Start  58: p626_cli_copy_if.integration
+ 55/591 Test  #48: p651_cli_native.integration ...........................   Passed    2.88 sec
+        Start  59: p626_if_oom.unit
+ 56/591 Test  #59: p626_if_oom.unit ......................................   Passed    0.02 sec
+        Start  60: p605_arithmetic_comparison.integration
+ 57/591 Test  #60: p605_arithmetic_comparison.integration ................   Passed    1.75 sec
+        Start  61: p605_mutant_phase.unit
+ 58/591 Test  #61: p605_mutant_phase.unit ................................   Passed    0.54 sec
+        Start  62: p603_comparison_parser.unit
+ 59/591 Test  #62: p603_comparison_parser.unit ...........................   Passed    0.01 sec
+        Start  63: p603_comparison_values.unit
+ 60/591 Test  #63: p603_comparison_values.unit ...........................   Passed    0.00 sec
+        Start  64: p603_comparison_rollback.unit
+ 61/591 Test  #64: p603_comparison_rollback.unit .........................   Passed    0.00 sec
+        Start  65: p603_comparison_oom.unit
+ 62/591 Test  #65: p603_comparison_oom.unit ..............................   Passed    0.06 sec
+        Start  66: p603_comparison_native.integration
+ 63/591 Test  #58: p626_cli_copy_if.integration ..........................   Passed    5.80 sec
+        Start  67: p504_equality_parser.unit
+ 64/591 Test  #67: p504_equality_parser.unit .............................   Passed    0.00 sec
+        Start  68: p504_equality_values.unit
+ 65/591 Test  #68: p504_equality_values.unit .............................   Passed    0.00 sec
+        Start  69: p504_equality_rollback.unit
+ 66/591 Test  #69: p504_equality_rollback.unit ...........................   Passed    0.00 sec
+        Start  70: p504_equality_oom.unit
+ 67/591 Test  #70: p504_equality_oom.unit ................................   Passed    0.00 sec
+        Start  71: p504_equality_native.integration
+ 68/591 Test  #54: p628_cli_pair_if.integration ..........................   Passed    7.62 sec
+        Start  72: p508_poison.unit
+ 69/591 Test  #72: p508_poison.unit ......................................   Passed    0.10 sec
+        Start  73: p508_oom.unit
+ 70/591 Test  #73: p508_oom.unit .........................................   Passed    0.05 sec
+        Start  74: p508_copy_selection_native.integration
+ 71/591 Test  #42: p633_local_cli.integration ............................   Passed   11.79 sec
+        Start  75: r675_blind_source_owned_native.integration
+ 72/591 Test  #75: r675_blind_source_owned_native.integration ............   Passed    0.30 sec
+        Start  76: r675_index1_native_or_backend4.integration
+ 73/591 Test  #76: r675_index1_native_or_backend4.integration ............   Passed    0.17 sec
+        Start  77: r675_negative_unknown_semantic.integration
+ 74/591 Test  #77: r675_negative_unknown_semantic.integration ............   Passed    0.21 sec
+        Start  78: r675_negative_initializer_type_semantic.integration
+ 75/591 Test  #78: r675_negative_initializer_type_semantic.integration ...   Passed    0.09 sec
+        Start  79: r675_negative_decl_type_source_profile.integration
+ 76/591 Test  #79: r675_negative_decl_type_source_profile.integration ....   Passed    0.07 sec
+        Start  80: r675_negative_escape_semantic.integration
+ 77/591 Test  #80: r675_negative_escape_semantic.integration .............   Passed    0.11 sec
+        Start  81: r675_negative_replace_type_semantic.integration
+ 78/591 Test  #81: r675_negative_replace_type_semantic.integration .......   Passed    0.12 sec
+        Start  82: p671_other_fragment.unit
+ 79/591 Test  #82: p671_other_fragment.unit ..............................   Passed    0.00 sec
+        Start  83: p671_packet_stamp.integration
+ 80/591 Test  #71: p504_equality_native.integration ......................   Passed    3.89 sec
+        Start  84: p671_route_stamp.integration
+ 81/591 Test  #83: p671_packet_stamp.integration .........................   Passed    0.40 sec
+        Start  85: p671_pair_control.integration
+ 82/591 Test  #85: p671_pair_control.integration .........................   Passed    0.38 sec
+        Start  86: p671_packet_stamp_oom.unit
+ 83/591 Test  #86: p671_packet_stamp_oom.unit ............................   Passed    0.00 sec
+        Start  87: p671_route_stamp_oom.unit
+ 84/591 Test  #87: p671_route_stamp_oom.unit .............................   Passed    0.01 sec
+        Start  88: p671_negative.integration
+ 85/591 Test  #84: p671_route_stamp.integration ..........................   Passed    0.40 sec
+        Start  89: p694_named_output.integration
+ 86/591 Test  #66: p603_comparison_native.integration ....................   Passed    7.23 sec
+        Start  90: p688_c17_scalar_export.integration
+ 87/591 Test  #88: p671_negative.integration .............................   Passed    0.17 sec
+        Start  91: p688_selected_call_oom.unit
+ 88/591 Test  #91: p688_selected_call_oom.unit ...........................   Passed    0.06 sec
+        Start  92: p685_zero_formal_u8.integration
+ 89/591 Test  #89: p694_named_output.integration .........................   Passed    0.51 sec
+        Start  93: p685_shared_call_gate_oom.unit
+ 90/591 Test  #93: p685_shared_call_gate_oom.unit ........................   Passed    0.02 sec
+        Start  94: p679_device_settings_swap.integration
+ 91/591 Test  #92: p685_zero_formal_u8.integration .......................   Passed    0.80 sec
+        Start  95: p679_invalid_source.integration
+ 92/591 Test  #94: p679_device_settings_swap.integration .................   Passed    0.53 sec
+        Start  96: p514_poison.unit
+ 93/591 Test  #95: p679_invalid_source.integration .......................   Passed    0.07 sec
+        Start  97: p514_oom.unit
+ 94/591 Test  #97: p514_oom.unit .........................................   Passed    0.01 sec
+        Start  98: p514_composition_native.integration
+ 95/591 Test  #96: p514_poison.unit ......................................   Passed    0.12 sec
+        Start  99: p517_identity_poison.unit
+ 96/591 Test  #99: p517_identity_poison.unit .............................   Passed    0.04 sec
+        Start 100: p517_oom.unit
+ 97/591 Test #100: p517_oom.unit .........................................   Passed    0.05 sec
+        Start 101: p517_r516_composition_native.integration
+ 98/591 Test  #90: p688_c17_scalar_export.integration ....................   Passed    1.31 sec
+        Start 102: p521_call_evidence.unit
+ 99/591 Test #102: p521_call_evidence.unit ...............................   Passed    0.05 sec
+        Start 103: p521_identity_poison.unit
+100/591 Test #103: p521_identity_poison.unit .............................   Passed    0.05 sec
+        Start 104: p521_oom.unit
+101/591 Test #104: p521_oom.unit .........................................   Passed    0.06 sec
+        Start 105: p521_copy_call_composition_native.integration
+102/591 Test  #74: p508_copy_selection_native.integration ................   Passed    4.73 sec
+        Start 106: diagnostics.unit
+103/591 Test #106: diagnostics.unit ......................................   Passed    0.00 sec
+        Start 107: source.unit
+104/591 Test #107: source.unit ...........................................   Passed    0.00 sec
+        Start 108: lexer.unit
+105/591 Test #108: lexer.unit ............................................   Passed    0.00 sec
+        Start 109: source_lexer.integration
+106/591 Test #109: source_lexer.integration ..............................   Passed    0.09 sec
+        Start 110: parser_type.unit
+107/591 Test #110: parser_type.unit ......................................   Passed    0.00 sec
+        Start 111: parser_expression.unit
+108/591 Test #111: parser_expression.unit ................................   Passed    0.00 sec
+        Start 112: parser_loan.unit
+109/591 Test #112: parser_loan.unit ......................................   Passed    0.00 sec
+        Start 113: parser_ownership.unit
+110/591 Test #113: parser_ownership.unit .................................   Passed    0.00 sec
+        Start 114: parser_limits.unit
+111/591 Test #114: parser_limits.unit ....................................   Passed    0.01 sec
+        Start 115: parser_diagnostics.unit
+112/591 Test #115: parser_diagnostics.unit ...............................   Passed    0.00 sec
+        Start 116: source_parser.integration
+113/591 Test #116: source_parser.integration .............................   Passed    0.07 sec
+        Start 117: semantic_type.unit
+114/591 Test #117: semantic_type.unit ....................................   Passed    0.00 sec
+        Start 118: semantic_value_use.unit
+115/591 Test #118: semantic_value_use.unit ...............................   Passed    0.00 sec
+        Start 119: semantic_domain.unit
+116/591 Test #119: semantic_domain.unit ..................................   Passed    0.00 sec
+        Start 120: semantic_transition.unit
+117/591 Test #120: semantic_transition.unit ..............................   Passed    0.00 sec
+        Start 121: semantic_loan.unit
+118/591 Test #121: semantic_loan.unit ....................................   Passed    0.00 sec
+        Start 122: semantic_failure.unit
+119/591 Test #122: semantic_failure.unit .................................   Passed    0.11 sec
+        Start 123: source_semantic.integration
+120/591 Test #123: source_semantic.integration ...........................   Passed    0.04 sec
+        Start 124: raw_claim.unit
+121/591 Test #124: raw_claim.unit ........................................   Passed    0.00 sec
+        Start 125: raw_byte.unit
+122/591 Test #125: raw_byte.unit .........................................   Passed    0.00 sec
+        Start 126: raw_copy.unit
+123/591 Test #126: raw_copy.unit .........................................   Passed    0.05 sec
+        Start 127: raw_access.unit
+124/591 Test #127: raw_access.unit .......................................   Passed    0.03 sec
+        Start 128: raw_current.unit
+125/591 Test #128: raw_current.unit ......................................   Passed    0.00 sec
+        Start 129: raw_failure.unit
+126/591 Test #129: raw_failure.unit ......................................   Passed    0.00 sec
+        Start 130: raw_limit.unit
+127/591 Test #130: raw_limit.unit ........................................   Passed    1.53 sec
+        Start 131: raw_diagnostic.unit
+128/591 Test #131: raw_diagnostic.unit ...................................   Passed    0.00 sec
+        Start 132: raw_reborrow.unit
+129/591 Test #132: raw_reborrow.unit .....................................   Passed    0.00 sec
+        Start 133: raw_partition.unit
+130/591 Test #133: raw_partition.unit ....................................   Passed    0.00 sec
+        Start 134: raw_storage_cycle.integration
+131/591 Test #134: raw_storage_cycle.integration .........................   Passed    0.00 sec
+        Start 135: p5_parser.unit
+132/591 Test #135: p5_parser.unit ........................................   Passed    0.00 sec
+        Start 136: p5_binding.unit
+133/591 Test #136: p5_binding.unit .......................................   Passed    0.00 sec
+        Start 137: p5_receiving.unit
+134/591 Test #137: p5_receiving.unit .....................................   Passed    0.00 sec
+        Start 138: p5_aggregate.unit
+135/591 Test #138: p5_aggregate.unit .....................................   Passed    0.04 sec
+        Start 139: p5_failure.unit
+136/591 Test #139: p5_failure.unit .......................................   Passed    0.00 sec
+        Start 140: p5_diagnostic.unit
+137/591 Test #140: p5_diagnostic.unit ....................................   Passed    0.03 sec
+        Start 141: p5_source_checked.integration
+138/591 Test #141: p5_source_checked.integration .........................   Passed    0.01 sec
+        Start 142: p6_parser.unit
+139/591 Test #142: p6_parser.unit ........................................   Passed    0.00 sec
+        Start 143: p6_registry.unit
+140/591 Test #143: p6_registry.unit ......................................   Passed    0.00 sec
+        Start 144: p6_consuming.unit
+141/591 Test #144: p6_consuming.unit .....................................   Passed    0.00 sec
+        Start 145: p6_borrowed.unit
+142/591 Test #145: p6_borrowed.unit ......................................   Passed    0.00 sec
+        Start 146: p6_storage.unit
+143/591 Test #146: p6_storage.unit .......................................   Passed    0.00 sec
+        Start 147: p6_lifetime.unit
+144/591 Test #147: p6_lifetime.unit ......................................   Passed    0.00 sec
+        Start 148: p6_failure.unit
+145/591 Test #148: p6_failure.unit .......................................   Passed    0.05 sec
+        Start 149: p6_source_checked.integration
+146/591 Test #149: p6_source_checked.integration .........................   Passed    0.00 sec
+        Start 150: p7_lifecycle.unit
+147/591 Test #150: p7_lifecycle.unit .....................................   Passed    0.01 sec
+        Start 151: p7_boundary.unit
+148/591 Test #151: p7_boundary.unit ......................................   Passed    0.00 sec
+        Start 152: p7_invalid.unit
+149/591 Test #152: p7_invalid.unit .......................................   Passed    0.01 sec
+        Start 153: p7_identity.unit
+150/591 Test #153: p7_identity.unit ......................................   Passed    0.00 sec
+        Start 154: p7_failure.unit
+151/591 Test #154: p7_failure.unit .......................................   Passed    0.01 sec
+        Start 155: p7_source_checked.integration
+152/591 Test #155: p7_source_checked.integration .........................   Passed    0.01 sec
+        Start 156: p8_registration.unit
+153/591 Test #156: p8_registration.unit ..................................   Passed    0.01 sec
+        Start 157: p8_exit.unit
+154/591 Test #157: p8_exit.unit ..........................................   Passed    0.00 sec
+        Start 158: p8_ownership.unit
+155/591 Test #158: p8_ownership.unit .....................................   Passed    0.00 sec
+        Start 159: p8_failure.unit
+156/591 Test #159: p8_failure.unit .......................................   Passed    0.00 sec
+        Start 160: p8_source_checked.integration
+157/591 Test #160: p8_source_checked.integration .........................   Passed    0.04 sec
+        Start 161: p9_syntax.unit
+158/591 Test #161: p9_syntax.unit ........................................   Passed    0.00 sec
+        Start 162: p9_transfer.unit
+159/591 Test #162: p9_transfer.unit ......................................   Passed    0.00 sec
+        Start 163: p9_exit.unit
+160/591 Test #163: p9_exit.unit ..........................................   Passed    0.00 sec
+        Start 164: p9_failure.unit
+161/591 Test #164: p9_failure.unit .......................................   Passed    0.02 sec
+        Start 165: p9_effects.unit
+162/591 Test #165: p9_effects.unit .......................................   Passed    0.01 sec
+        Start 166: p9_availability.unit
+163/591 Test #166: p9_availability.unit ..................................   Passed    0.02 sec
+        Start 167: p9_decoder.integration
+164/591 Test #167: p9_decoder.integration ................................   Passed    0.04 sec
+        Start 168: p11_grammar.unit
+165/591 Test #168: p11_grammar.unit ......................................   Passed    0.00 sec
+        Start 169: p11_names.unit
+166/591 Test #169: p11_names.unit ........................................   Passed    0.00 sec
+        Start 170: p11_visibility.unit
+167/591 Test #170: p11_visibility.unit ...................................   Passed    0.00 sec
+        Start 171: p11_precision.unit
+168/591 Test #171: p11_precision.unit ....................................   Passed    0.01 sec
+        Start 172: p11_behavior.unit
+169/591 Test #172: p11_behavior.unit .....................................   Passed    0.01 sec
+        Start 173: p11_failure.unit
+170/591 Test #173: p11_failure.unit ......................................   Passed    0.01 sec
+        Start 174: p11_limits.unit
+171/591 Test #174: p11_limits.unit .......................................   Passed    0.16 sec
+        Start 175: p12_ingress.unit
+172/591 Test #175: p12_ingress.unit ......................................   Passed    0.01 sec
+        Start 176: p12_header.unit
+173/591 Test #176: p12_header.unit .......................................   Passed    0.00 sec
+        Start 177: p12_member.unit
+174/591 Test #177: p12_member.unit .......................................   Passed    0.01 sec
+        Start 178: p12_failure.unit
+175/591 Test #178: p12_failure.unit ......................................   Passed    0.01 sec
+        Start 179: p14_pre_exits.unit
+176/591 Test #179: p14_pre_exits.unit ....................................   Passed    0.00 sec
+        Start 180: p14_pre_header.unit
+177/591 Test #180: p14_pre_header.unit ...................................   Passed    0.00 sec
+        Start 181: p14_pre_origins.unit
+178/591 Test #181: p14_pre_origins.unit ..................................   Passed    0.00 sec
+        Start 182: p14_pre_failure.unit
+179/591 Test #182: p14_pre_failure.unit ..................................   Passed    0.00 sec
+        Start 183: p14_pre_integration.unit
+180/591 Test #183: p14_pre_integration.unit ..............................   Passed    0.00 sec
+        Start 184: p14_w1.unit
+181/591 Test #184: p14_w1.unit ...........................................   Passed    0.01 sec
+        Start 185: p14_w2.unit
+182/591 Test #185: p14_w2.unit ...........................................   Passed    0.00 sec
+        Start 186: p14_w3.unit
+183/591 Test #186: p14_w3.unit ...........................................   Passed    0.00 sec
+        Start 187: p14_w4.unit
+184/591 Test #187: p14_w4.unit ...........................................   Passed    0.00 sec
+        Start 188: p14_w5.unit
+185/591 Test #188: p14_w5.unit ...........................................   Passed    0.00 sec
+        Start 189: p14_w6.unit
+186/591 Test #189: p14_w6.unit ...........................................   Passed    0.00 sec
+        Start 190: p14_w7.unit
+187/591 Test #190: p14_w7.unit ...........................................   Passed    0.00 sec
+        Start 191: p14_w8.unit
+188/591 Test #191: p14_w8.unit ...........................................   Passed    0.00 sec
+        Start 192: p14_w9.unit
+189/591 Test #192: p14_w9.unit ...........................................   Passed    0.00 sec
+        Start 193: p14_w10.unit
+190/591 Test #193: p14_w10.unit ..........................................   Passed    0.00 sec
+        Start 194: p14_w11.unit
+191/591 Test #194: p14_w11.unit ..........................................   Passed    0.03 sec
+        Start 195: p14_w12.unit
+192/591 Test #195: p14_w12.unit ..........................................   Passed    0.01 sec
+        Start 196: p14_w13.unit
+193/591 Test #196: p14_w13.unit ..........................................   Passed    0.00 sec
+        Start 197: p14_w14.unit
+194/591 Test #197: p14_w14.unit ..........................................   Passed    0.00 sec
+        Start 198: p14_w15.unit
+195/591 Test #198: p14_w15.unit ..........................................   Passed    0.01 sec
+        Start 199: p14_w16.unit
+196/591 Test #199: p14_w16.unit ..........................................   Passed    0.00 sec
+        Start 200: p14_w17.unit
+197/591 Test #200: p14_w17.unit ..........................................   Passed    0.00 sec
+        Start 201: p14_w18.unit
+198/591 Test #201: p14_w18.unit ..........................................   Passed    0.00 sec
+        Start 202: p14_w19.unit
+199/591 Test #202: p14_w19.unit ..........................................   Passed    0.00 sec
+        Start 203: p14_w20.unit
+200/591 Test #203: p14_w20.unit ..........................................   Passed    0.00 sec
+        Start 204: p14_w21.unit
+201/591 Test #204: p14_w21.unit ..........................................   Passed    0.01 sec
+        Start 205: p14_w22.unit
+202/591 Test #205: p14_w22.unit ..........................................   Passed    0.00 sec
+        Start 206: p14_w23.unit
+203/591 Test #206: p14_w23.unit ..........................................   Passed    0.00 sec
+        Start 207: p14_w24.unit
+204/591 Test #207: p14_w24.unit ..........................................   Passed    0.00 sec
+        Start 208: p14_w25.unit
+205/591 Test #208: p14_w25.unit ..........................................   Passed    0.00 sec
+        Start 209: p14_w26.unit
+206/591 Test #209: p14_w26.unit ..........................................   Passed    0.00 sec
+        Start 210: p14_w27.unit
+207/591 Test #210: p14_w27.unit ..........................................   Passed    0.00 sec
+        Start 211: p14_w28.unit
+208/591 Test #211: p14_w28.unit ..........................................   Passed    0.01 sec
+        Start 212: p14_w29.unit
+209/591 Test #212: p14_w29.unit ..........................................   Passed    0.00 sec
+        Start 213: p14_w30.unit
+210/591 Test #213: p14_w30.unit ..........................................   Passed    0.04 sec
+        Start 214: p14_w31.unit
+211/591 Test #214: p14_w31.unit ..........................................   Passed    0.00 sec
+        Start 215: p14_w32.unit
+212/591 Test #215: p14_w32.unit ..........................................   Passed    0.00 sec
+        Start 216: p14_w33.unit
+213/591 Test #216: p14_w33.unit ..........................................   Passed    0.00 sec
+        Start 217: p14_w34.unit
+214/591 Test #217: p14_w34.unit ..........................................   Passed    0.00 sec
+        Start 218: p14_w35.unit
+215/591 Test #218: p14_w35.unit ..........................................   Passed    0.00 sec
+        Start 219: p14_w36.unit
+216/591 Test #219: p14_w36.unit ..........................................   Passed    0.01 sec
+        Start 220: p14_w37.unit
+217/591 Test #220: p14_w37.unit ..........................................   Passed    0.00 sec
+        Start 221: p14_w38.unit
+218/591 Test #221: p14_w38.unit ..........................................   Passed    0.00 sec
+        Start 222: p14_w39.unit
+219/591 Test #222: p14_w39.unit ..........................................   Passed    0.00 sec
+        Start 223: p14_w40.unit
+220/591 Test #223: p14_w40.unit ..........................................   Passed    0.14 sec
+        Start 224: p13_grammar.unit
+221/591 Test #224: p13_grammar.unit ......................................   Passed    0.04 sec
+        Start 225: p13_bool.unit
+222/591 Test #225: p13_bool.unit .........................................   Passed    0.01 sec
+        Start 226: p13_flow.unit
+223/591 Test #226: p13_flow.unit .........................................   Passed    0.00 sec
+        Start 227: p13_identity.unit
+224/591 Test #227: p13_identity.unit .....................................   Passed    0.01 sec
+        Start 228: p13_ref.unit
+225/591 Test #228: p13_ref.unit ..........................................   Passed    0.00 sec
+        Start 229: p13_effects.unit
+226/591 Test #229: p13_effects.unit ......................................   Passed    0.00 sec
+        Start 230: p13_nested.unit
+227/591 Test #230: p13_nested.unit .......................................   Passed    0.00 sec
+        Start 231: p13_failure.unit
+228/591 Test #231: p13_failure.unit ......................................   Passed    0.02 sec
+        Start 232: p13_limits.unit
+229/591 Test #232: p13_limits.unit .......................................   Passed    0.75 sec
+        Start 233: p10_admission.unit
+230/591 Test #233: p10_admission.unit ....................................   Passed    0.01 sec
+        Start 234: p10_builtin.unit
+231/591 Test #234: p10_builtin.unit ......................................   Passed    0.00 sec
+        Start 235: p10_failure.unit
+232/591 Test #235: p10_failure.unit ......................................   Passed    0.01 sec
+        Start 236: r4_01_argument_compatibility.unit
+233/591 Test #236: r4_01_argument_compatibility.unit .....................   Passed    0.00 sec
+        Start 237: cli.check_source
+234/591 Test #237: cli.check_source ......................................   Passed    0.21 sec
+        Start 238: frontend_build_policy.integration
+235/591 Test #105: p521_copy_call_composition_native.integration .........   Passed    4.21 sec
+        Start 239: cli.version
+236/591 Test #239: cli.version ...........................................   Passed    0.07 sec
+        Start 240: cli.help
+237/591 Test #240: cli.help ..............................................   Passed    0.05 sec
+        Start 241: cli.no_arguments
+238/591 Test #241: cli.no_arguments ......................................   Passed    0.06 sec
+        Start 242: cli.invalid_option
+239/591 Test #242: cli.invalid_option ....................................   Passed    0.02 sec
+        Start 243: cli.extra_argument
+240/591 Test #243: cli.extra_argument ....................................   Passed    0.03 sec
+        Start 244: local_root_parser.unit
+241/591 Test #244: local_root_parser.unit ................................   Passed    0.01 sec
+        Start 245: local_root_evidence.unit
+242/591 Test #245: local_root_evidence.unit ..............................   Passed    0.03 sec
+        Start 246: local_root_direct_write_root.unit
+243/591 Test #246: local_root_direct_write_root.unit .....................   Passed    0.00 sec
+        Start 247: local_root_mutation.unit
+244/591 Test #247: local_root_mutation.unit ..............................   Passed    0.00 sec
+        Start 248: local_root_negatives.unit
+245/591 Test #248: local_root_negatives.unit .............................   Passed    0.00 sec
+        Start 249: local_root_conflict.unit
+246/591 Test #249: local_root_conflict.unit ..............................   Passed    0.00 sec
+        Start 250: local_root_resource.unit
+247/591 Test #250: local_root_resource.unit ..............................   Passed    0.03 sec
+        Start 251: local_root_failures.unit
+248/591 Test #251: local_root_failures.unit ..............................   Passed    0.00 sec
+        Start 252: local_root_checked_c.integration
+249/591 Test #238: frontend_build_policy.integration .....................   Passed    0.93 sec
+        Start 253: p866_equality_public.unit
+250/591 Test #252: local_root_checked_c.integration ......................   Passed    0.51 sec
+        Start 254: p866_prefix_integrity.unit
+251/591 Test #254: p866_prefix_integrity.unit ............................   Passed    0.05 sec
+        Start 255: p866_reached_validator_oom.unit
+252/591 Test #255: p866_reached_validator_oom.unit .......................   Passed    0.01 sec
+        Start 256: p866_source_cli.integration
+253/591 Test #253: p866_equality_public.unit .............................   Passed    0.24 sec
+        Start 257: p878_unit_binding_public.unit
+254/591 Test #257: p878_unit_binding_public.unit .........................   Passed    0.20 sec
+        Start 258: p878_backend_guards.unit
+255/591 Test #258: p878_backend_guards.unit ..............................   Passed    0.02 sec
+        Start 259: p878_prefix_integrity.unit
+256/591 Test #259: p878_prefix_integrity.unit ............................   Passed    0.01 sec
+        Start 260: p878_reached_prefix_oom.unit
+257/591 Test #260: p878_reached_prefix_oom.unit ..........................   Passed    0.00 sec
+        Start 261: p878_source_cli.integration
+258/591 Test  #98: p514_composition_native.integration ...................   Passed    6.78 sec
+        Start 262: p817_pump_public.unit
+259/591 Test #262: p817_pump_public.unit .................................   Passed    0.01 sec
+        Start 263: p817_charge_public.unit
+260/591 Test #263: p817_charge_public.unit ...............................   Passed    0.01 sec
+        Start 264: p817_arm_integrity.unit
+261/591 Test #264: p817_arm_integrity.unit ...............................   Passed    0.01 sec
+        Start 265: p817_issuer_oom.unit
+262/591 Test #265: p817_issuer_oom.unit ..................................   Passed    0.07 sec
+        Start 266: p817_cli_boundaries.integration
+263/591 Test #266: p817_cli_boundaries.integration .......................   Passed    0.24 sec
+        Start 267: p790_native.integration
+264/591 Test #256: p866_source_cli.integration ...........................   Passed    2.28 sec
+        Start 268: p790_arm_integrity.unit
+265/591 Test #268: p790_arm_integrity.unit ...............................   Passed    0.03 sec
+        Start 269: p790_arm_oom.unit
+266/591 Test #269: p790_arm_oom.unit .....................................   Passed    0.02 sec
+        Start 270: p790_driver_oom.unit
+267/591 Test #270: p790_driver_oom.unit ..................................   Passed    0.10 sec
+        Start 271: p785_r_b_public.unit
+268/591 Test #271: p785_r_b_public.unit ..................................   Passed    0.04 sec
+        Start 272: p785_pressure_arm_public.unit
+269/591 Test #272: p785_pressure_arm_public.unit .........................   Passed    0.01 sec
+        Start 273: p785_arm_integrity.unit
+270/591 Test #273: p785_arm_integrity.unit ...............................   Passed    0.03 sec
+        Start 274: p785_issuer_oom.unit
+271/591 Test #274: p785_issuer_oom.unit ..................................   Passed    0.13 sec
+        Start 275: p785_cli_boundaries.integration
+272/591 Test #267: p790_native.integration ...............................   Passed    1.25 sec
+        Start 276: p965_freeze.unit
+273/591 Test #275: p785_cli_boundaries.integration .......................   Passed    0.30 sec
+        Start 277: p965_echo_ownership.unit
+274/591 Test #276: p965_freeze.unit ......................................   Passed    0.09 sec
+        Start 278: p965_echo_oom.unit
+275/591 Test #278: p965_echo_oom.unit ....................................   Passed    0.21 sec
+        Start 279: p965_echo_definition_oom.unit
+276/591 Test #279: p965_echo_definition_oom.unit .........................   Passed    0.12 sec
+        Start 280: p965_window_ownership.unit
+277/591 Test #277: p965_echo_ownership.unit ..............................   Passed    0.38 sec
+        Start 281: p965_window_oom.unit
+278/591 Test #281: p965_window_oom.unit ..................................   Passed    0.21 sec
+        Start 282: p965_window_definition_oom.unit
+279/591 Test #282: p965_window_definition_oom.unit .......................   Passed    0.09 sec
+        Start 283: p965_t_only_ownership.unit
+280/591 Test #283: p965_t_only_ownership.unit ............................   Passed    0.01 sec
+        Start 284: p965_t_only_oom.unit
+281/591 Test #284: p965_t_only_oom.unit ..................................   Passed    0.04 sec
+        Start 285: p965_t_only_definition_oom.unit
+282/591 Test #285: p965_t_only_definition_oom.unit .......................   Passed    0.01 sec
+        Start 286: p965_plain_ownership.unit
+283/591 Test #286: p965_plain_ownership.unit .............................   Passed    0.02 sec
+        Start 287: p965_plain_oom.unit
+284/591 Test #287: p965_plain_oom.unit ...................................   Passed    0.01 sec
+        Start 288: p965_plain_definition_oom.unit
+285/591 Test #288: p965_plain_definition_oom.unit ........................   Passed    0.01 sec
+        Start 289: p965_loop_ownership.unit
+286/591 Test #289: p965_loop_ownership.unit ..............................   Passed    0.00 sec
+        Start 290: p965_loop_oom.unit
+287/591 Test #280: p965_window_ownership.unit ............................   Passed    0.41 sec
+        Start 291: p965_loop_definition_oom.unit
+288/591 Test #290: p965_loop_oom.unit ....................................   Passed    0.00 sec
+        Start 292: p965_continuation_ownership.unit
+289/591 Test #291: p965_loop_definition_oom.unit .........................   Passed    0.01 sec
+        Start 293: p965_continuation_oom.unit
+290/591 Test #293: p965_continuation_oom.unit ............................   Passed    0.41 sec
+        Start 294: p965_continuation_definition_oom.unit
+291/591 Test #294: p965_continuation_definition_oom.unit .................   Passed    0.26 sec
+        Start 295: p965_four_field_ownership.unit
+292/591 Test #261: p878_source_cli.integration ...........................   Passed    4.16 sec
+        Start 296: p965_four_field_oom.unit
+293/591 Test #292: p965_continuation_ownership.unit ......................   Passed    1.11 sec
+        Start 297: p965_four_field_definition_oom.unit
+294/591 Test #297: p965_four_field_definition_oom.unit ...................   Passed    0.69 sec
+        Start 298: p965_lexical_ownership.unit
+295/591 Test #296: p965_four_field_oom.unit ..............................   Passed    1.06 sec
+        Start 299: p965_lexical_oom.unit
+296/591 Test #298: p965_lexical_ownership.unit ...........................   Passed    0.06 sec
+        Start 300: p965_lexical_definition_oom.unit
+297/591 Test #299: p965_lexical_oom.unit .................................   Passed    0.05 sec
+        Start 301: p965_named_if.integration
+298/591 Test #300: p965_lexical_definition_oom.unit ......................   Passed    0.01 sec
+        Start 302: p965_c89_guard_charge.unit
+299/591 Test #302: p965_c89_guard_charge.unit ............................   Passed    0.02 sec
+        Start 303: p965_c89_guard_trim.unit
+300/591 Test #303: p965_c89_guard_trim.unit ..............................   Passed    0.01 sec
+        Start 304: p965_c89_guard_fan.unit
+301/591 Test #304: p965_c89_guard_fan.unit ...............................   Passed    0.01 sec
+        Start 305: p965_c89_guard_relay.unit
+302/591 Test #305: p965_c89_guard_relay.unit .............................   Passed    0.01 sec
+        Start 306: p965_c89_observe_charge.unit
+303/591 Test #306: p965_c89_observe_charge.unit ..........................   Passed    0.04 sec
+        Start 307: p965_c89_observe_trim.unit
+304/591 Test #307: p965_c89_observe_trim.unit ............................   Passed    0.01 sec
+        Start 308: p965_c89_observe_fan.unit
+305/591 Test #301: p965_named_if.integration .............................   Passed    0.11 sec
+        Start 309: p965_c89_observe_relay.unit
+306/591 Test #308: p965_c89_observe_fan.unit .............................   Passed    0.02 sec
+        Start 310: p965_c89_entry_echo.unit
+307/591 Test #309: p965_c89_observe_relay.unit ...........................   Passed    0.01 sec
+        Start 311: p965_c89_entry_window.unit
+308/591 Test #310: p965_c89_entry_echo.unit ..............................   Passed    0.02 sec
+        Start 312: p974_charge_entry.unit
+309/591 Test #311: p965_c89_entry_window.unit ............................   Passed    0.02 sec
+        Start 313: p974_charge_v0.unit
+310/591 Test #313: p974_charge_v0.unit ...................................   Passed    0.01 sec
+        Start 314: p974_trim_entry.unit
+311/591 Test #312: p974_charge_entry.unit ................................   Passed    0.02 sec
+        Start 315: p974_trim_v0.unit
+312/591 Test #315: p974_trim_v0.unit .....................................   Passed    0.00 sec
+        Start 316: p974_fan_entry.unit
+313/591 Test #314: p974_trim_entry.unit ..................................   Passed    0.01 sec
+        Start 317: p974_fan_v0.unit
+314/591 Test #317: p974_fan_v0.unit ......................................   Passed    0.04 sec
+        Start 318: p974_relay_entry.unit
+315/591 Test #316: p974_fan_entry.unit ...................................   Passed    0.05 sec
+        Start 319: p974_relay_v0.unit
+316/591 Test #318: p974_relay_entry.unit .................................   Passed    0.01 sec
+        Start 320: p974_named_charge_precision.integration
+317/591 Test #319: p974_relay_v0.unit ....................................   Passed    0.00 sec
+        Start 321: p974_named_v0_valid.integration
+318/591 Test #321: p974_named_v0_valid.integration .......................   Passed    0.10 sec
+        Start 322: p982_after_true_auth.unit
+319/591 Test #320: p974_named_charge_precision.integration ...............   Passed    0.12 sec
+        Start 323: p982_after_true_oom.unit
+320/591 Test #322: p982_after_true_auth.unit .............................   Passed    0.10 sec
+        Start 324: p982_after_false_auth.unit
+321/591 Test #324: p982_after_false_auth.unit ............................   Passed    0.11 sec
+        Start 325: p982_after_false_oom.unit
+322/591 Test #295: p965_four_field_ownership.unit ........................   Passed    2.68 sec
+        Start 326: p982_second_true_auth.unit
+323/591 Test #326: p982_second_true_auth.unit ............................   Passed    0.05 sec
+        Start 327: p982_second_true_oom.unit
+324/591 Test #323: p982_after_true_oom.unit ..............................   Passed    1.53 sec
+        Start 328: p982_second_false_auth.unit
+325/591 Test #328: p982_second_false_auth.unit ...........................   Passed    0.14 sec
+        Start 329: p982_second_false_oom.unit
+326/591 Test #325: p982_after_false_oom.unit .............................   Passed    1.52 sec
+        Start 330: p982_native.integration
+327/591 Test #327: p982_second_true_oom.unit .............................   Passed    1.01 sec
+        Start 331: p982_freeze.unit
+328/591 Test #329: p982_second_false_oom.unit ............................   Passed    0.93 sec
+        Start 332: p990_before_direct_auth.unit
+329/591 Test #332: p990_before_direct_auth.unit ..........................   Passed    0.02 sec
+        Start 333: p990_before_direct_oom.unit
+330/591 Test #333: p990_before_direct_oom.unit ...........................   Passed    0.18 sec
+        Start 334: p990_after_true_direct_auth.unit
+331/591 Test #334: p990_after_true_direct_auth.unit ......................   Passed    0.08 sec
+        Start 335: p990_after_true_direct_oom.unit
+332/591 Test #335: p990_after_true_direct_oom.unit .......................   Passed    1.10 sec
+        Start 336: p990_after_false_direct_auth.unit
+333/591 Test #336: p990_after_false_direct_auth.unit .....................   Passed    0.02 sec
+        Start 337: p990_after_false_direct_oom.unit
+334/591 Test #331: p982_freeze.unit ......................................   Passed    2.35 sec
+        Start 338: p990_before_bound_auth.unit
+335/591 Test #330: p982_native.integration ...............................   Passed    2.88 sec
+        Start 339: p990_before_bound_oom.unit
+336/591 Test #338: p990_before_bound_auth.unit ...........................   Passed    0.01 sec
+        Start 340: p990_after_true_bound_auth.unit
+337/591 Test #340: p990_after_true_bound_auth.unit .......................   Passed    0.07 sec
+        Start 341: p990_after_true_bound_oom.unit
+338/591 Test #339: p990_before_bound_oom.unit ............................   Passed    0.43 sec
+        Start 342: p990_after_false_bound_auth.unit
+339/591 Test #342: p990_after_false_bound_auth.unit ......................   Passed    0.05 sec
+        Start 343: p990_after_false_bound_oom.unit
+340/591 Test #337: p990_after_false_direct_oom.unit ......................   Passed    1.19 sec
+        Start 344: p990_p986_t_only_direct_auth.unit
+341/591 Test #344: p990_p986_t_only_direct_auth.unit .....................   Passed    0.00 sec
+        Start 345: p990_p986_t_only_bound_auth.unit
+342/591 Test #345: p990_p986_t_only_bound_auth.unit ......................   Passed    0.01 sec
+        Start 346: p990_p986_t_before_allocation_direct_auth.unit
+343/591 Test #346: p990_p986_t_before_allocation_direct_auth.unit ........   Passed    0.05 sec
+        Start 347: p990_p986_t_before_allocation_direct_oom.unit
+344/591 Test #347: p990_p986_t_before_allocation_direct_oom.unit .........   Passed    0.25 sec
+        Start 348: p990_p986_t_before_allocation_bound_auth.unit
+345/591 Test #348: p990_p986_t_before_allocation_bound_auth.unit .........   Passed    0.06 sec
+        Start 349: p990_p986_t_before_allocation_bound_oom.unit
+346/591 Test #341: p990_after_true_bound_oom.unit ........................   Passed    1.10 sec
+        Start 350: p990_p986_t_before_h_read_direct_auth.unit
+347/591 Test #350: p990_p986_t_before_h_read_direct_auth.unit ............   Passed    0.03 sec
+        Start 351: p990_p986_t_before_h_read_direct_oom.unit
+348/591 Test #349: p990_p986_t_before_allocation_bound_oom.unit ..........   Passed    0.24 sec
+        Start 352: p990_p986_t_before_h_read_bound_auth.unit
+349/591 Test #352: p990_p986_t_before_h_read_bound_auth.unit .............   Passed    0.05 sec
+        Start 353: p990_p986_t_before_h_read_bound_oom.unit
+350/591 Test #351: p990_p986_t_before_h_read_direct_oom.unit .............   Passed    0.30 sec
+        Start 354: p990_unreachable_direct_auth.unit
+351/591 Test #343: p990_after_false_bound_oom.unit .......................   Passed    1.04 sec
+        Start 355: p990_unreachable_direct_oom.unit
+352/591 Test #354: p990_unreachable_direct_auth.unit .....................   Passed    0.02 sec
+        Start 356: p990_unreachable_bound_auth.unit
+353/591 Test #356: p990_unreachable_bound_auth.unit ......................   Passed    0.06 sec
+        Start 357: p990_unreachable_bound_oom.unit
+354/591 Test #353: p990_p986_t_before_h_read_bound_oom.unit ..............   Passed    0.31 sec
+        Start 358: p990_new_native.integration
+355/591 Test #355: p990_unreachable_direct_oom.unit ......................   Passed    0.20 sec
+        Start 359: p990_p986_native.integration
+356/591 Test #357: p990_unreachable_bound_oom.unit .......................   Passed    0.23 sec
+        Start 360: p990_negative_sources.integration
+357/591 Test #360: p990_negative_sources.integration .....................   Passed    0.28 sec
+        Start 361: p990_freeze_protocol.unit
+358/591 Test #101: p517_r516_composition_native.integration ..............   Passed   18.11 sec
+        Start 362: p1045_two_original_native.integration
+359/591 Test #359: p990_p986_native.integration ..........................   Passed    2.69 sec
+        Start 363: p1055_old_origin_0.integration
+360/591 Test #362: p1045_two_original_native.integration .................   Passed   23.83 sec
+        Start 364: p1055_old_origin_1.integration
+361/591 Test #363: p1055_old_origin_0.integration ........................   Passed   25.21 sec
+        Start 365: p1055_old_origin_2.integration
+362/591 Test #364: p1055_old_origin_1.integration ........................   Passed    5.16 sec
+        Start 366: p1055_old_origin_3.integration
+363/591 Test #365: p1055_old_origin_2.integration ........................   Passed    5.51 sec
+        Start 367: p1055_old_origin_4.integration
+364/591 Test #366: p1055_old_origin_3.integration ........................   Passed    5.06 sec
+        Start 368: p1058_closed_h_0.integration
+365/591 Test #367: p1055_old_origin_4.integration ........................   Passed    6.41 sec
+        Start 369: p1058_closed_h_1.integration
+366/591 Test #369: p1058_closed_h_1.integration ..........................   Passed    5.29 sec
+        Start 370: p1062_h_body_0.integration
+367/591 Test #358: p990_new_native.integration ...........................   Passed   48.29 sec
+        Start 371: p1062_h_body_1.integration
+368/591 Test #361: p990_freeze_protocol.unit .............................   Passed   52.29 sec
+        Start 372: p1062_h_body_2.integration
+369/591 Test #371: p1062_h_body_1.integration ............................   Passed    6.65 sec
+        Start 373: p1062_h_body_3.integration
+370/591 Test #372: p1062_h_body_2.integration ............................   Passed    6.22 sec
+        Start 374: p1062_h_body_4.integration
+371/591 Test #373: p1062_h_body_3.integration ............................   Passed    6.47 sec
+        Start 375: p1062_h_body_5.integration
+372/591 Test #374: p1062_h_body_4.integration ............................   Passed    6.19 sec
+        Start 376: p961_reached_oom.unit
+373/591 Test #376: p961_reached_oom.unit .................................   Passed    0.32 sec
+        Start 377: p961_named_foreign.integration
+374/591 Test #377: p961_named_foreign.integration ........................   Passed    0.31 sec
+        Start 378: p961_original_foreign.unit
+375/591 Test #378: p961_original_foreign.unit ............................   Passed    0.07 sec
+        Start 379: p961_echo_origin.unit
+376/591 Test #379: p961_echo_origin.unit .................................   Passed    0.12 sec
+        Start 380: p961_window_true_origin.unit
+377/591 Test #380: p961_window_true_origin.unit ..........................   Passed    0.16 sec
+        Start 381: p953_echo_integrity.unit
+378/591 Test #381: p953_echo_integrity.unit ..............................   Passed    0.05 sec
+        Start 382: p953_echo_oom.unit
+379/591 Test #382: p953_echo_oom.unit ....................................   Passed    0.30 sec
+        Start 383: p953_window_true_integrity.unit
+380/591 Test #383: p953_window_true_integrity.unit .......................   Passed    0.17 sec
+        Start 384: p953_window_true_oom.unit
+381/591 Test #384: p953_window_true_oom.unit .............................   Passed    0.41 sec
+        Start 385: p953_source_native.integration
+382/591 Test #375: p1062_h_body_5.integration ............................   Passed    6.01 sec
+        Start 386: p945_dispatch_journal_r1_integrity.unit
+383/591 Test #386: p945_dispatch_journal_r1_integrity.unit ...............   Passed    0.09 sec
+        Start 387: p945_dispatch_journal_r1_oom.unit
+384/591 Test #368: p1058_closed_h_0.integration ..........................   Passed   32.84 sec
+        Start 388: p945_thermal_recovery_r1_integrity.unit
+385/591 Test #387: p945_dispatch_journal_r1_oom.unit .....................   Passed    0.20 sec
+        Start 389: p945_thermal_recovery_r1_oom.unit
+386/591 Test #388: p945_thermal_recovery_r1_integrity.unit ...............   Passed    0.11 sec
+        Start 390: p945_source_native.integration
+387/591 Test #389: p945_thermal_recovery_r1_oom.unit .....................   Passed    0.41 sec
+        Start 391: p778_sensor_spare_gate.unit
+388/591 Test #391: p778_sensor_spare_gate.unit ...........................   Passed    0.18 sec
+        Start 392: p778_valve_spare_gate.unit
+389/591 Test #392: p778_valve_spare_gate.unit ............................   Passed    0.30 sec
+        Start 393: p778_r_a_gate.unit
+390/591 Test #393: p778_r_a_gate.unit ....................................   Passed    0.30 sec
+        Start 394: p778_driver_oom.unit
+391/591 Test #394: p778_driver_oom.unit ..................................   Passed    0.38 sec
+        Start 395: p778_source_native.integration
+392/591 Test #385: p953_source_native.integration ........................   Passed    3.47 sec
+        Start 396: p774_driver_oom.unit
+393/591 Test #396: p774_driver_oom.unit ..................................   Passed    0.33 sec
+        Start 397: p774_pump_reserve_gate.unit
+394/591 Test #397: p774_pump_reserve_gate.unit ...........................   Passed    0.23 sec
+        Start 398: p774_scale_reserve_gate.unit
+395/591 Test #398: p774_scale_reserve_gate.unit ..........................   Passed    0.17 sec
+        Start 399: p774_mixed_owner_copy_native.integration
+396/591 Test #390: p945_source_native.integration ........................   Passed    7.28 sec
+        Start 400: p761_limits_h_first_proof.unit
+397/591 Test #400: p761_limits_h_first_proof.unit ........................   Passed    0.01 sec
+        Start 401: p761_limits_h_first_oom.unit
+398/591 Test #395: p778_source_native.integration ........................   Passed    5.96 sec
+        Start 402: p761_tuning_t_first_proof.unit
+399/591 Test #402: p761_tuning_t_first_proof.unit ........................   Passed    0.06 sec
+        Start 403: p761_tuning_t_first_oom.unit
+400/591 Test #399: p774_mixed_owner_copy_native.integration ..............   Passed    4.61 sec
+        Start 404: p761_foreign_t_refusal.unit
+401/591 Test #404: p761_foreign_t_refusal.unit ...........................   Passed    0.08 sec
+        Start 405: p761_foreign_h_refusal.unit
+402/591 Test #405: p761_foreign_h_refusal.unit ...........................   Passed    0.08 sec
+        Start 406: p761_layout_metadata.unit
+403/591 Test #406: p761_layout_metadata.unit .............................   Passed    0.01 sec
+        Start 407: p761_cli.integration
+404/591 Test #401: p761_limits_h_first_oom.unit ..........................   Passed    1.59 sec
+        Start 408: p761_uncalled.unit
+405/591 Test #408: p761_uncalled.unit ....................................   Passed    0.01 sec
+        Start 409: p752_driver_oom.unit
+406/591 Test #407: p761_cli.integration ..................................   Passed    0.99 sec
+        Start 410: p752_cli.integration
+407/591 Test #403: p761_tuning_t_first_oom.unit ..........................   Passed    2.21 sec
+        Start 411: p752_order_h_t.unit
+408/591 Test #411: p752_order_h_t.unit ...................................   Passed    0.01 sec
+        Start 412: p752_order_h_t_oom.unit
+409/591 Test #412: p752_order_h_t_oom.unit ...............................   Passed    0.36 sec
+        Start 413: p752_order_t_h.unit
+410/591 Test #413: p752_order_t_h.unit ...................................   Passed    0.01 sec
+        Start 414: p752_order_t_h_oom.unit
+411/591 Test #414: p752_order_t_h_oom.unit ...............................   Passed    0.21 sec
+        Start 415: p752_two_original_hook.unit
+412/591 Test #415: p752_two_original_hook.unit ...........................   Passed    0.01 sec
+        Start 416: p752_two_original_hook_oom.unit
+413/591 Test #410: p752_cli.integration ..................................   Passed    1.54 sec
+        Start 417: p752_negative_duplicate_field.unit
+414/591 Test #417: p752_negative_duplicate_field.unit ....................   Passed    0.01 sec
+        Start 418: p752_negative_duplicate_fn.unit
+415/591 Test #418: p752_negative_duplicate_fn.unit .......................   Passed    0.04 sec
+        Start 419: p752_negative_fn_collision.unit
+416/591 Test #419: p752_negative_fn_collision.unit .......................   Passed    0.02 sec
+        Start 420: p752_negative_late_definition.unit
+417/591 Test #420: p752_negative_late_definition.unit ....................   Passed    0.02 sec
+        Start 421: p752_negative_unknown_type.unit
+418/591 Test #421: p752_negative_unknown_type.unit .......................   Passed    0.00 sec
+        Start 422: p752_negative_wrong_copy.unit
+419/591 Test #422: p752_negative_wrong_copy.unit .........................   Passed    0.01 sec
+        Start 423: p752_placements.unit
+420/591 Test #423: p752_placements.unit ..................................   Passed    0.00 sec
+        Start 424: p752_negative_foreign_nominal.unit
+421/591 Test #424: p752_negative_foreign_nominal.unit ....................   Passed    0.01 sec
+        Start 425: p752_negative_real_read_ref.unit
+422/591 Test #425: p752_negative_real_read_ref.unit ......................   Passed    0.04 sec
+        Start 426: p752_negative_h_fn_collision.unit
+423/591 Test #426: p752_negative_h_fn_collision.unit .....................   Passed    0.00 sec
+        Start 427: p752_negative_no_main.unit
+424/591 Test #427: p752_negative_no_main.unit ............................   Passed    0.01 sec
+        Start 428: p752_multi_input.unit
+425/591 Test #428: p752_multi_input.unit .................................   Passed    0.01 sec
+        Start 429: avs_parser.unit
+426/591 Test #429: avs_parser.unit .......................................   Passed    0.01 sec
+        Start 430: avs_evidence.unit
+427/591 Test #430: avs_evidence.unit .....................................   Passed    0.01 sec
+        Start 431: avs_rejection.unit
+428/591 Test #431: avs_rejection.unit ....................................   Passed    0.01 sec
+        Start 432: avs_ownership.unit
+429/591 Test #432: avs_ownership.unit ....................................   Passed    0.04 sec
+        Start 433: avs_failures.unit
+430/591 Test #433: avs_failures.unit .....................................   Passed    0.01 sec
+        Start 434: north_star_avs_checked_c.integration
+431/591 Test #409: p752_driver_oom.unit ..................................   Passed    2.35 sec
+        Start 435: p497_usize_parser.unit
+432/591 Test #435: p497_usize_parser.unit ................................   Passed    0.00 sec
+        Start 436: p497_usize_values.unit
+433/591 Test #436: p497_usize_values.unit ................................   Passed    0.00 sec
+        Start 437: p497_usize_body.unit
+434/591 Test #437: p497_usize_body.unit ..................................   Passed    0.00 sec
+        Start 438: p497_usize_failures.unit
+435/591 Test #438: p497_usize_failures.unit ..............................   Passed    0.01 sec
+        Start 439: p497_usize_native.integration
+436/591 Test #434: north_star_avs_checked_c.integration ..................   Passed    1.19 sec
+        Start 440: allocated_node_source.integration
+437/591 Test #416: p752_two_original_hook_oom.unit .......................   Passed    2.01 sec
+        Start 441: heap_link_source.integration
+438/591 Test #440: allocated_node_source.integration .....................   Passed    0.46 sec
+        Start 442: heap_link_failures.unit
+439/591 Test #441: heap_link_source.integration ..........................   Passed    0.58 sec
+        Start 443: heap_link_evidence.unit
+440/591 Test #443: heap_link_evidence.unit ...............................   Passed    0.05 sec
+        Start 444: heap_link_supporting_claims.unit
+441/591 Test #444: heap_link_supporting_claims.unit ......................   Passed    0.01 sec
+        Start 445: heap_link_backend.unit
+442/591 Test #445: heap_link_backend.unit ................................   Passed    0.03 sec
+        Start 446: heap_link_native.integration
+443/591 Test #442: heap_link_failures.unit ...............................   Passed    1.89 sec
+        Start 447: allocated_node_native.integration
+444/591 Test #439: p497_usize_native.integration .........................   Passed    5.23 sec
+        Start 448: allocated_backend.unit
+445/591 Test #448: allocated_backend.unit ................................   Passed    0.01 sec
+        Start 449: live_tail_handoff_backend.unit
+446/591 Test #449: live_tail_handoff_backend.unit ........................   Passed    0.10 sec
+        Start 450: live_tail_handoff_native.integration
+447/591 Test #370: p1062_h_body_0.integration ............................   Passed   41.10 sec
+        Start 451: p738_no_read_flow.unit
+448/591 Test #451: p738_no_read_flow.unit ................................   Passed    0.22 sec
+        Start 452: p738_local_return_existing_controls.unit
+449/591 Test #452: p738_local_return_existing_controls.unit ..............   Passed    0.72 sec
+        Start 453: p738_sprout_history_oom.unit
+450/591 Test #446: heap_link_native.integration ..........................   Passed    7.36 sec
+        Start 454: p738_ticket_history_oom.unit
+451/591 Test #447: allocated_node_native.integration .....................   Passed    5.90 sec
+        Start 455: p738_no_read_driver_oom.unit
+452/591 Test #453: p738_sprout_history_oom.unit ..........................   Passed    3.20 sec
+        Start 456: p738_source_rollback.unit
+453/591 Test #456: p738_source_rollback.unit .............................   Passed    0.04 sec
+        Start 457: p738_no_read_native.integration
+454/591 Test #450: live_tail_handoff_native.integration ..................   Passed    6.53 sec
+        Start 458: p733_local_owner_proof.unit
+455/591 Test #454: p738_ticket_history_oom.unit ..........................   Passed    3.06 sec
+        Start 459: p733_pending_history_oom.unit
+456/591 Test #458: p733_local_owner_proof.unit ...........................   Passed    0.90 sec
+        Start 460: p733_cargo_history_oom.unit
+457/591 Test #459: p733_pending_history_oom.unit .........................   Passed    2.70 sec
+        Start 461: p733_local_owner_driver_oom.unit
+458/591 Test #457: p738_no_read_native.integration .......................***Failed    4.94 sec
+sprout CLEANUP legacy_arm=0 regions=1 all_closed=PASS
+CLEANUP legacy_arm=1 regions=2 all_closed=PASS
+LOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS
+PUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0
+sprout-O0True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+sprout-O0True 2 OBSERVED head=55a80c80f2a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+sprout-O0True success OBSERVED head=562b7fb5a2a0 tail=562b7fb5a2c0 trials=2 free=2 roots=4 changes=2 copy=0 scopes=4 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=562b7fb5a2c0
+sprout-O2True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+sprout-O2True 2 OBSERVED head=55859c0732a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+sprout-O2True success OBSERVED head=55c3f21572a0 tail=55c3f21572c0 trials=2 free=2 roots=4 changes=2 copy=0 scopes=4 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=55c3f21572c0
+sprout no-pre-read genuine local/call/return, unchanged+passive O0/O2, original identity+cleanup PASS
+ticket CLEANUP legacy_arm=0 regions=1 all_closed=PASS
+CLEANUP legacy_arm=1 regions=2 all_closed=PASS
+LOCAL call=50 binding=27 construction=7 consume=16 return=17 package=45 Allocation=13 DomainValue=18 root=16 incarnation=19 region=2 Domain=2 validators=PASS
+PUBLIC producer=1 recipient=1 legacy_closed=1 generic_closure_views=0
+ticket-O0True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+ticket-O0True 2 OBSERVED head=5592efada2a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+ticket-O0True success OBSERVED head=55858abe82a0 tail=55858abe82c0 trials=2 free=2 roots=3 changes=2 copy=0 scopes=3 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=55858abe82c0
+ticket-O2True 1 OBSERVED head=0 tail=0 trials=1 free=0 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=0
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+ticket-O2True 2 OBSERVED head=56443e61c2a0 tail=0 trials=2 free=1 roots=0 changes=0 copy=0 scopes=0 receiver=0 receiver_free=0 donor_free=1
+LIVE_RETURN producer=0 returned=0 received=0 original_tail=0
+ticket-O2True success OBSERVED head=55cc440bd2a0 tail=55cc440bd2c0 trials=2 free=2 roots=3 changes=2 copy=0 scopes=3 receiver=1 receiver_free=1 donor_free=1
+LIVE_RETURN producer=1 returned=1 received=1 original_tail=55cc440bd2c0
+ticket no-pre-read genuine local/call/return, unchanged+passive O0/O2, original identity+cleanup PASS
+double_consume P193-DEFINITION-CONSUMED refusal unchanged; zero C/named output preserved
+wrong_backing P193-CALL-BACKING refusal unchanged; zero C/named output preserved
+wrong_domain P3-REF-CONFLICT refusal unchanged; zero C/named output preserved
+wrong_root P193-CALL-DOMAIN refusal unchanged; zero C/named output preserved
+active_loan P3-REF-CONFLICT refusal unchanged; zero C/named output preserved
+wrong_receiver P193-CALL-DOMAIN refusal unchanged; zero C/named output preserved
+reuse_donor P3-USE-AFTER-CONSUME refusal unchanged; zero C/named output preserved
+no_cleanup P5-SCOPE-OBLIGATION refusal unchanged; zero C/named output preserved
+wrong_initial_target P208-CALL-HEAD-VALUE refusal unchanged; zero C/named output preserved
+missing_initial_some P208-CALL-HEAD-VALUE refusal unchanged; zero C/named output preserved
+read_actual P3-TYPE-MISMATCH refusal unchanged; zero C/named output preserved
+Traceback (most recent call last):
+  File "/workspace/p1062-gate0/tests/p738/native.py", line 93, in <module>
+    c=run([compiler,'--check',path]);r=run([compiler,path]);assert c.returncode==0 and r.returncode==4 and not r.stdout and b'V1-BACKEND-UNSUPPORTED' in r.stderr
+                                                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+459/591 Test #455: p738_no_read_driver_oom.unit ..........................   Passed    8.27 sec
+460/591 Test #460: p733_cargo_history_oom.unit ...........................   Passed    5.03 sec
+461/591 Test #461: p733_local_owner_driver_oom.unit ......................   Passed    8.54 sec
+
+99% tests passed, 1 tests failed out of 461
+
+Total Test time (real) = 152.89 sec
+
+The following tests FAILED:
+	457 - p738_no_read_native.integration (Failed)

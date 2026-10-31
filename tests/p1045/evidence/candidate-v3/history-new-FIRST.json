@@ -1,0 +1,9 @@
+{
+  "command": [
+    "python3",
+    "tests/p1045/history_tests.py"
+  ],
+  "exit": 0,
+  "seconds": 3.348006494998117,
+  "raw_SHA256": "b07796756c33b512bb2463e309f684cda533694187af18a72869844a39f80fc5"
+}

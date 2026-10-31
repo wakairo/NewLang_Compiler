@@ -1,0 +1,6 @@
+{"P1062":"H_origin","current":true}
+{"P1062":"direct","binding":4,"root":1,"index":0,"old":37,"next":154}
+{"P1062":"direct","binding":6,"root":4,"index":1,"old":112,"next":37}
+{"P1062":"direct","binding":8,"root":4,"index":0,"old":68,"next":112}
+{"P1062":"H_producer","call":50,"entry_GET":true,"valid":true,"return_proved":true}
+{"P1062":"H_terminal","call":69,"entry_GET":true,"post_proved":true}

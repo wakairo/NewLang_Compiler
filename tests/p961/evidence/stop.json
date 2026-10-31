@@ -1,0 +1,27 @@
+{
+  "scope": "P961 C78 LOCAL STOP; no push/PR/CI",
+  "base": "2ac1c705a88a15f9b11b732744720a3655b7dd8d",
+  "branch": "p961-h-fork-origin-custody",
+  "stop": "additional ASan reached-OOM harness setup failed at oom.c:99, BEFORE injection; early CHECK exit leaked test-owned registered context",
+  "first_failure_log_sha256": "51dd0261c3457f277fd4c7972333e39f2cdafba1118333c461080259684976c2",
+  "leak_summary": "60879 bytes / 343 allocations; early harness exit, not attributed to production origin custody",
+  "original_harness_sha256": "db1b4481de8a2ce96f181e7fff96bdef18c05cecbc0f3e260af6caf5f75addf1",
+  "first_critical_gate": "GCC 3/3, ASan+LSan 7/7",
+  "not_run": [
+    "targeted root-origin OOM injection",
+    "named foreign output test (CTest stop-on-failure)",
+    "UBSan",
+    "new healthy GCC/Clang native O0/O2",
+    "full frontend regression",
+    "FULL5",
+    "PARTIAL"
+  ],
+  "binaries": {
+    "/tmp/p961/build/newlangc": "edd1715ce10db91b8588ab47f61ea27e625bed3a656718de79e7ecb06dba6b56",
+    "/tmp/p961/build/p961_original": "f8a0b5cecc0186ee3c272705a3f72eb1210806d26a279ffe8a4979070ce2ad50",
+    "/tmp/p961/build/p961_origin": "4e8b23bc8c1e91019a2cb04a5acfc6c9f3fd1f0b9d423b02b8dc1f4295e41feb",
+    "/tmp/p961/address/newlangc": "8a899eee811dbde60cf7bd6fa4cc67692b2cf6c2e15c346ba4a56e74d289e1d2",
+    "/tmp/p961/address/p961_origin": "ff92966b2662677353901dd53f1f4464522c16630e79d4a06ec0c61b18c4a5a7",
+    "/tmp/p961/address/p961_oom": "9c3591a265ce1367d4dd1ff1d0464ef62d2c67196791101abecd66dcf89d36d0"
+  }
+}

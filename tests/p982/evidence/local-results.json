@@ -1,0 +1,214 @@
+{
+  "head": "b5b4da0b95af527db9d571c193527cd1575d1156",
+  "tree": "d76a0a6a56c49d0cc27f0044e6ee39cceb71b6f8",
+  "production_code": "3a25ecce3db54ed2bb96e346494822e9b2983b7f",
+  "parent": "b9224f1aa67329e3edead4d5d6c59cc911141cd1",
+  "inventory": {
+    "gcc": {
+      "ctests": 545,
+      "conclusion": "PASS",
+      "log": "v3-gcc-full-FIRST.log",
+      "sha256": "429a92807f048cff2d5a8cbe6d4f1fff525d9757d942a6398d34d190975112f3",
+      "attempt": "initial"
+    },
+    "clang": {
+      "ctests": 545,
+      "conclusion": "PASS",
+      "log": "v3-clang-full-FIRST.log",
+      "sha256": "1dcd4d05904d82d33a95ec2cc5f871fa5bd580ae3453dddb6ca6a543cd8e2a0e",
+      "attempt": "initial"
+    },
+    "asan": {
+      "ctests": 545,
+      "conclusion": "PASS",
+      "log": "v3-asan-full-serial-SECOND.log",
+      "sha256": "ec6444cbf39c4a8bdfbd24d7f1a0b2938a9514a3b85bf57ae3b42776c0462ab8",
+      "attempt": "serial2 after preserved stock-timeout first attempt"
+    },
+    "ubsan": {
+      "ctests": 545,
+      "conclusion": "PASS",
+      "log": "v3-ubsan-full-serial-SECOND.log",
+      "sha256": "f08a12267d9ab521e0d0b2ac585f3af17e5b00c4dcf97bb1012698ac2b9f6ab3",
+      "attempt": "serial2 after preserved stock-timeout first attempt"
+    }
+  },
+  "original": {
+    "gcc": {
+      "ownership_trials": 494,
+      "reached_oom": 502,
+      "modes": {
+        "CHECK": 320,
+        "definition": 182
+      },
+      "complete_original_records_match": true
+    },
+    "clang": {
+      "ownership_trials": 494,
+      "reached_oom": 502,
+      "modes": {
+        "definition": 182,
+        "CHECK": 320
+      },
+      "complete_original_records_match": true
+    },
+    "asan": {
+      "ownership_trials": 494,
+      "reached_oom": 502,
+      "modes": {
+        "CHECK": 320,
+        "definition": 182
+      },
+      "complete_original_records_match": true
+    },
+    "ubsan": {
+      "ownership_trials": 494,
+      "reached_oom": 502,
+      "modes": {
+        "CHECK": 320,
+        "definition": 182
+      },
+      "complete_original_records_match": true
+    }
+  },
+  "new": {
+    "gcc": {
+      "positive_profiles": 4,
+      "restored_metadata_trials": 80,
+      "reached_emitter_oom": 1788,
+      "per_source": {
+        "second_true.nl": 447,
+        "after_false.nl": 447,
+        "second_false.nl": 447,
+        "after_true.nl": 447
+      },
+      "statuses": {
+        "2": 1548,
+        "1": 240
+      },
+      "raw_native_runs": 8,
+      "physical_guest_observations": 24,
+      "heap_worlds": [
+        0,
+        1,
+        2
+      ],
+      "named_reached_failures_and_retries": 4,
+      "invalid_sources": 4
+    },
+    "clang": {
+      "positive_profiles": 4,
+      "restored_metadata_trials": 80,
+      "reached_emitter_oom": 1788,
+      "per_source": {
+        "after_true.nl": 447,
+        "after_false.nl": 447,
+        "second_true.nl": 447,
+        "second_false.nl": 447
+      },
+      "statuses": {
+        "2": 1548,
+        "1": 240
+      },
+      "raw_native_runs": 8,
+      "physical_guest_observations": 24,
+      "heap_worlds": [
+        0,
+        1,
+        2
+      ],
+      "named_reached_failures_and_retries": 4,
+      "invalid_sources": 4
+    },
+    "asan": {
+      "positive_profiles": 4,
+      "restored_metadata_trials": 80,
+      "reached_emitter_oom": 1788,
+      "per_source": {
+        "after_true.nl": 447,
+        "after_false.nl": 447,
+        "second_true.nl": 447,
+        "second_false.nl": 447
+      },
+      "statuses": {
+        "2": 1548,
+        "1": 240
+      },
+      "raw_native_runs": 8,
+      "physical_guest_observations": 24,
+      "heap_worlds": [
+        0,
+        1,
+        2
+      ],
+      "named_reached_failures_and_retries": 4,
+      "invalid_sources": 4
+    },
+    "ubsan": {
+      "positive_profiles": 4,
+      "restored_metadata_trials": 80,
+      "reached_emitter_oom": 1788,
+      "per_source": {
+        "after_true.nl": 447,
+        "after_false.nl": 447,
+        "second_true.nl": 447,
+        "second_false.nl": 447
+      },
+      "statuses": {
+        "2": 1548,
+        "1": 240
+      },
+      "raw_native_runs": 8,
+      "physical_guest_observations": 24,
+      "heap_worlds": [
+        0,
+        1,
+        2
+      ],
+      "named_reached_failures_and_retries": 4,
+      "invalid_sources": 4
+    }
+  },
+  "generated_C": {
+    "after_true.nl": "d40c528a95829c3f2c93c4884ae2ca668cf48ef1f0a197752b846751f35bac6b",
+    "after_false.nl": "dbab1ebd3668746f89a1eff5f23b22cebfb651ae20c6d387ea4135c7e52a7a6f",
+    "second_true.nl": "9c187d36b7a7272899a8a7d9a660f4de38cb4319413a1e5e048784b48901b12b",
+    "second_false.nl": "0427a1a5d3ff15d17e4149ada8fdaa319e41c57daf9cd6d69b2e8054bcddafb6"
+  },
+  "total_raw_native_runs": 32,
+  "total_guest_observations": 96,
+  "first_failures_preserved": [
+    "const build RED54dd510",
+    "IF node array assumption REDcc44cdc",
+    "stock90s full-suite ASan/UBSan resource timeouts"
+  ],
+  "independent_R_source_access": 0,
+  "remote_jobs_used": 0,
+  "limitations": "Finite selected source and valid live-object/backing extents, not arbitrary forged pointer/length soundness or all H+T interleavings. No independent fixed-code F/R yet. Human audit locality benefit and validation costs UNMEASURED.",
+  "ctest_inventory": {
+    "original_count": 535,
+    "new_count": 545,
+    "original_missing": [],
+    "additions": [
+      "p982_after_false_auth.unit",
+      "p982_after_false_oom.unit",
+      "p982_after_true_auth.unit",
+      "p982_after_true_oom.unit",
+      "p982_freeze.unit",
+      "p982_native.integration",
+      "p982_second_false_auth.unit",
+      "p982_second_false_oom.unit",
+      "p982_second_true_auth.unit",
+      "p982_second_true_oom.unit"
+    ]
+  },
+  "five_added_predicate_groups": [
+    "actual traversed terminal issuer/node",
+    "present original H callable metadata/plan",
+    "both original H root/backing/domain ended with no live affine/raw responsibility",
+    "same source-issued Copy arm/producer-terminal relation and two fresh T originals",
+    "full IF prefix equality with exact two authenticated retired raw regions"
+  ],
+  "OOM_diagnostic_limit": "Each configuration1788 reached EMIT failures:1548 OUT_OF_MEMORY,240 conservative UNSUPPORTED through boolean validators; all unpublished with unchanged CHECK and exact retry. Original502 CHECK/definition failures remain specifically OUT_OF_MEMORY.",
+  "history_format": "All old535 test names/source/oracles unchanged; historical P605/P634/P965 hash gates PASS; full tracked288 C/H pinned clang-format23.1.3 PASS."
+}

@@ -1,0 +1,32 @@
+{
+  "stage": "harness v3 pre-run: use real public IF arm root/body/tail, no node-array position assumption; v2 first RED preserved",
+  "production_candidate": "3a25ecce3db54ed2bb96e346494822e9b2983b7f",
+  "oracle": "tests/p982/oracle-v1.json",
+  "protocol": "real A/B/F CHECK;20 restored metadata faults each source; separate all-reached emitter allocations; ordinary C17 strict O0/O2 and passive H0/1/2 with both T fields/old Copy",
+  "files": {
+    "CMakeLists.txt": "1cb2cb9e501c92b7e58fa03cadfe09243329fb60ae1269d15b95fa4c0e6c0ec2",
+    "src/checked_c_copy_if_internal.h": "ba09085ba514012bd7505e2d1802b03b75ade3eb68e9a6ddd599d1bf08d24663",
+    "src/checked_c_copy_internal.h": "bab10331a602a0ce24a160a6f48f475e0766c286bbba18d31e1a75390c1dba67",
+    "src/checked_c_node.c": "b2666be2ead2bd159f5cd473912507ced561eb3085d02092c34efa5d29a38064",
+    "tests/integration/two_heap_platform.c": "f184cb2eb7b459103a36421a493372f9aba0458f0699be1aa7c0cd0332c38377",
+    "tests/p965/shared.h": "65a7dca6813d07db3ddfc4b694fdb44e85deb905747a6acc71c0d3e72270cb5f",
+    "tests/p974/support.h": "ed165eb29875a49078d469448405f1b7aebfae30a5a3641b89a5eec829c07945",
+    "tests/p982/freeze_test.py": "1f59bb517d33b8792d0cec0057711dc9d426eb557a66d7fbd57448d2b9c58d9a",
+    "tests/p982/observer.h": "f604b388fa64f444f8dd08f6f9794cac85edc37e9304daf491d8b730e0356e20",
+    "tests/p982/oom.c": "27b06abdb62f7c22642b088c3f10d96b13f81ef4265d993669aaf5973cc52453",
+    "tests/p982/oracle-v1.json": "07c8dd069b534484ee7ae64e1c3f4fa45325ceea08c768326512f18fd6b0c0d2",
+    "tests/p982/probe.c": "06a42b1f3cd8f4f7fc4b5128ccca8f3ad94894cf0878287d935f09830ff9eb45",
+    "tests/p982/run.py": "e52e56373297a8d1e9c2ae131aa7dfe0f1dae0c717413632d4d5de536bf3c91c",
+    "tests/p982/source-freeze-v1.json": "007e9cc37df2e1fa342e304307d8edfef09a3cee38652b072797dcf457a602b3",
+    "tests/p982/sources/after_false.nl": "ef1d67b5f402d9343909b0e62b6d35304b4661c2ffdbe42f99654cffcf58a33e",
+    "tests/p982/sources/after_true.nl": "fe01780671fb4d2834323f2a8c0074e8296dd8ce6ca4bfd27139856592344c73",
+    "tests/p982/sources/duplicate_owner.nl": "e75b1b558883bdbc4ef4b7eb61114e4c3104cb5dc6218b9197a30a8430a5c7b1",
+    "tests/p982/sources/ended_domain.nl": "7170be99889cccef960ed8d8266297359372958e4062d26a5bf5b18fe7eaba3d",
+    "tests/p982/sources/second_false.nl": "1932b58967f400dc4ffdd928dedd9737a52d707f4ca705bc10b11308c01cb21b",
+    "tests/p982/sources/second_true.nl": "d7cf70ecc94e17ea500acf3a6273c173c3fe791b9dee43a2b45e881359fc3518",
+    "tests/p982/sources/wrong_field.nl": "d1181b723e4ffa557224f488b06fe391393bacafbcee7edb183c53f5a3f65538",
+    "tests/p982/sources/wrong_owner.nl": "51761f7f6a3d096965dbb556beff84f065f68c99b5ecbe6922e47589c0d4f4ac",
+    "tests/p982/harness-freeze-v1.json": "de35f939601ec9d52f115705a457418bb3ca7b2f1a566322bfa1c22633010a84",
+    "tests/p982/harness-freeze-v2.json": "66ae649ef499dbcb7bdb20d57bea0840b2484fc4a5419b352eb2311f54bec0ff"
+  }
+}

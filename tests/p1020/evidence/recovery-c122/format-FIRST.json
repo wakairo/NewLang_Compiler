@@ -1,0 +1,8 @@
+{
+  "command": [
+    "bash",
+    "scripts/check-format.sh"
+  ],
+  "exit": 1,
+  "seconds": 8.393865272999392
+}

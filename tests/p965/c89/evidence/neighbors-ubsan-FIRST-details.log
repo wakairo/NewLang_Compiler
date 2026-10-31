@@ -1,0 +1,448 @@
+Start testing: Oct 28 00:10 UTC
+----------------------------------------------------------
+5/523 Testing: p718_if_return_proof_oom.unit
+5/523 Test: p718_if_return_proof_oom.unit
+Command: "/workspace/p965-build-ubsan/p718_gate_test" "/workspace/p965/tests/p718/return_false.nl" "/workspace/p965/tests/p718/continue_false.nl"
+Directory: /workspace/p965-build-ubsan
+"p718_if_return_proof_oom.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+return history_worlds=11 flat_anchor_bytes=119632 graph_seal_bytes=86400 (excludes nested semantic storage)
+equal-byte different Copy origin rejects=1
+return rejects=111 validator_OOM=78 rollback=PASS
+return admission_OOM=78 explicit_resource=PASS
+return history_worlds=13 flat_anchor_bytes=163576 graph_seal_bytes=101952 (excludes nested semantic storage)
+equal-byte different Copy origin rejects=1
+return rejects=140 validator_OOM=106 rollback=PASS
+return admission_OOM=106 explicit_resource=PASS
+registration OOM positions=542 rollback=PASS
+main-call OOM positions=447 rollback=PASS artifact=NULL
+normal driver OOM positions=1157 existing_host_oom_CLI3=1051 zero_partial_C=PASS
+<end of output>
+Test time =   0.56 sec
+----------------------------------------------------------
+Test Passed.
+"p718_if_return_proof_oom.unit" end time: Oct 28 00:10 UTC
+"p718_if_return_proof_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+7/523 Testing: p728_unit_statement_proof.unit
+7/523 Test: p728_unit_statement_proof.unit
+Command: "/workspace/p965-build-ubsan/p728_gate_test" "/workspace/p965/tests/p728/brake_false.nl" "/workspace/p965/tests/p728/valve_true.nl"
+Directory: /workspace/p965-build-ubsan
+"p728_unit_statement_proof.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+wrapper structural rejects=23 plus foreign caller issuer; recovery=PASS
+wrapper structural rejects=23 plus foreign caller issuer; recovery=PASS
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"p728_unit_statement_proof.unit" end time: Oct 28 00:10 UTC
+"p728_unit_statement_proof.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/523 Testing: p728_unit_statement_history_oom.unit
+8/523 Test: p728_unit_statement_history_oom.unit
+Command: "/workspace/p965-build-ubsan/p722_gate_test" "/workspace/p965/tests/p728/brake_false.nl" "/workspace/p965/tests/p728/valve_true.nl"
+Directory: /workspace/p965-build-ubsan
+"p728_unit_statement_history_oom.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+return history_worlds=11 flat_anchor_bytes=218192 graph_seal_bytes=62208 (excludes nested semantic storage)
+same-byte old Copy id=7 differs from issued id=1 rejected
+same-byte old Copy id=20 differs from issued id=1 rejected
+same-byte old Copy id=30 differs from issued id=1 rejected
+equal-byte different Copy origin rejects=3
+same-byte foreign old Copy id=7 issued=1 rejected
+same-byte foreign old Copy id=7 issued=1 rejected
+unit call_exit_worlds=4 additional_operation_worlds=2 extra_flat_anchor_bytes=64880 (excludes nested semantic storage)
+unit-call rejects=108 validator_OOM=137 rollback=PASS
+return admission_OOM=238 explicit_resource=PASS
+return history_worlds=13 flat_anchor_bytes=276280 graph_seal_bytes=74304 (excludes nested semantic storage)
+same-byte old Copy id=7 differs from issued id=2 rejected
+same-byte old Copy id=20 differs from issued id=2 rejected
+same-byte old Copy id=30 differs from issued id=2 rejected
+equal-byte different Copy origin rejects=3
+same-byte foreign old Copy id=7 issued=2 rejected
+same-byte foreign old Copy id=7 issued=2 rejected
+same-byte foreign old Copy id=7 issued=2 rejected
+same-number foreign streams node=2 old=2 incoming=18 different_worlds=YES
+unit call_exit_worlds=4 additional_operation_worlds=2 extra_flat_anchor_bytes=64880 (excludes nested semantic storage)
+unit-call rejects=134 validator_OOM=170 rollback=PASS
+return admission_OOM=304 explicit_resource=PASS
+registration OOM positions=1239 rollback=PASS
+main-call OOM positions=823 rollback=PASS artifact=NULL
+normal driver OOM positions=2444 existing_host_oom_CLI3=2178 zero_partial_C=PASS
+<end of output>
+Test time =   3.21 sec
+----------------------------------------------------------
+Test Passed.
+"p728_unit_statement_history_oom.unit" end time: Oct 28 00:10 UTC
+"p728_unit_statement_history_oom.unit" time elapsed: 00:00:03
+----------------------------------------------------------
+
+10/523 Testing: p722_callee_return_proof_oom.unit
+10/523 Test: p722_callee_return_proof_oom.unit
+Command: "/workspace/p965-build-ubsan/p722_gate_test" "/workspace/p965/tests/p722/before_false.nl" "/workspace/p965/tests/p722/after_false.nl"
+Directory: /workspace/p965-build-ubsan
+"p722_callee_return_proof_oom.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+return history_worlds=11 flat_anchor_bytes=192112 graph_seal_bytes=62208 (excludes nested semantic storage)
+same-byte old Copy id=18 differs from issued id=2 rejected
+equal-byte different Copy origin rejects=1
+unit call_exit_worlds=4 additional_operation_worlds=2 extra_flat_anchor_bytes=57056 (excludes nested semantic storage)
+unit-call rejects=102 validator_OOM=129 rollback=PASS
+return admission_OOM=224 explicit_resource=PASS
+return history_worlds=13 flat_anchor_bytes=244984 graph_seal_bytes=74304 (excludes nested semantic storage)
+same-byte old Copy id=18 differs from issued id=1 rejected
+equal-byte different Copy origin rejects=1
+same-number foreign streams node=2 old=1 incoming=16 different_worlds=YES
+unit call_exit_worlds=4 additional_operation_worlds=2 extra_flat_anchor_bytes=57056 (excludes nested semantic storage)
+unit-call rejects=126 validator_OOM=160 rollback=PASS
+return admission_OOM=286 explicit_resource=PASS
+registration OOM positions=1177 rollback=PASS
+main-call OOM positions=773 rollback=PASS artifact=NULL
+normal driver OOM positions=2305 existing_host_oom_CLI3=2053 zero_partial_C=PASS
+<end of output>
+Test time =   2.71 sec
+----------------------------------------------------------
+Test Passed.
+"p722_callee_return_proof_oom.unit" end time: Oct 28 00:10 UTC
+"p722_callee_return_proof_oom.unit" time elapsed: 00:00:02
+----------------------------------------------------------
+
+12/523 Testing: p713_if_field_proof_oom.unit
+12/523 Test: p713_if_field_proof_oom.unit
+Command: "/workspace/p965-build-ubsan/p713_gate_test" "/workspace/p965/tests/p713/both_true.nl" "/workspace/p965/tests/p713/one_false.nl" "/workspace/p965/tests/p713/repeated_true.nl"
+Directory: /workspace/p965-build-ubsan
+"p713_if_field_proof_oom.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+receipt history_worlds=8 flat_anchor_bytes=103648 graph_seal_bytes=81216 (excludes nested semantic allocations)
+equal-byte different source Copy IDs rejected=0
+IF rejects=103 validator_OOM=79 rollback=PASS
+IF admission_OOM=79 explicit_resource=PASS
+receipt history_worlds=7 flat_anchor_bytes=83992 graph_seal_bytes=74304 (excludes nested semantic allocations)
+equal-byte different source Copy IDs rejected=3
+IF rejects=97 validator_OOM=54 rollback=PASS
+IF admission_OOM=54 explicit_resource=PASS
+receipt history_worlds=13 flat_anchor_bytes=209192 graph_seal_bytes=127872 (excludes nested semantic allocations)
+equal-byte different source Copy IDs rejected=24
+IF rejects=208 validator_OOM=134 rollback=PASS
+IF admission_OOM=134 explicit_resource=PASS
+registration OOM positions=423 rollback=PASS
+main-call OOM positions=321 rollback=PASS artifact=NULL
+normal driver OOM positions=920 existing_host_oom_CLI3=813 zero_partial_C=PASS
+<end of output>
+Test time =   0.52 sec
+----------------------------------------------------------
+Test Passed.
+"p713_if_field_proof_oom.unit" end time: Oct 28 00:10 UTC
+"p713_if_field_proof_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+14/523 Testing: p706_proof_handoff_oom.unit
+14/523 Test: p706_proof_handoff_oom.unit
+Command: "/workspace/p965-build-ubsan/p706_gate_test" "/workspace/p965/tests/p706/settings.nl" "/workspace/p965/tests/p706/window.nl"
+Directory: /workspace/p965-build-ubsan
+"p706_proof_handoff_oom.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+backend admission OOM positions=62 explicit_resource=PASS
+copy proof rejects=81 validator_OOM=31 unchanged=PASS restored=PASS
+backend admission OOM positions=62 explicit_resource=PASS
+copy proof rejects=82 validator_OOM=31 unchanged=PASS restored=PASS
+registration OOM positions=289 rollback=PASS
+main-call OOM positions=259 rollback=PASS artifact=NULL
+registration OOM positions=423 rollback=PASS
+main-call OOM positions=328 rollback=PASS artifact=NULL
+normal driver OOM positions=721 existing_host_oom_CLI3=631 zero_partial_C=PASS
+normal driver OOM positions=930 existing_host_oom_CLI3=840 zero_partial_C=PASS
+<end of output>
+Test time =   0.90 sec
+----------------------------------------------------------
+Test Passed.
+"p706_proof_handoff_oom.unit" end time: Oct 28 00:10 UTC
+"p706_proof_handoff_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+254/523 Testing: p866_prefix_integrity.unit
+254/523 Test: p866_prefix_integrity.unit
+Command: "/workspace/p965-build-ubsan/p866_integrity" "/workspace/p965/tests/p866/sources/trim_true.nl" "/workspace/p965/tests/p866/sources/fan_false.nl"
+Directory: /workspace/p965-build-ubsan
+"p866_prefix_integrity.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+P866 prefix/authority mutations=16 plus foreign views/root/formals/old Copy; recovery PASS
+P866 prefix/authority mutations=16 plus foreign views/root/formals/old Copy; recovery PASS
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"p866_prefix_integrity.unit" end time: Oct 28 00:10 UTC
+"p866_prefix_integrity.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+255/523 Testing: p866_reached_validator_oom.unit
+255/523 Test: p866_reached_validator_oom.unit
+Command: "/workspace/p965-build-ubsan/p866_oom" "/workspace/p965/tests/p866/sources/trim_false.nl" "/workspace/p965/tests/p866/sources/fan_true.nl"
+Directory: /workspace/p965-build-ubsan
+"p866_reached_validator_oom.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+P866 prefix allocation index=0 calls=2 did_fail=1 status=OOM unchanged=1 public_retry0=1
+P866 prefix allocation index=1 calls=2 did_fail=1 status=OOM unchanged=1 public_retry0=1
+P866 prefix allocation index=0 calls=2 did_fail=1 status=OOM unchanged=1 public_retry0=1
+P866 prefix allocation index=1 calls=2 did_fail=1 status=OOM unchanged=1 public_retry0=1
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p866_reached_validator_oom.unit" end time: Oct 28 00:10 UTC
+"p866_reached_validator_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+258/523 Testing: p878_backend_guards.unit
+258/523 Test: p878_backend_guards.unit
+Command: "/workspace/p965-build-ubsan/p878_guard" "/workspace/p965/tests/p878/sources/relay_equal_binding.nl" "/workspace/p965/tests/p878/sources/audio_unequal_binding.nl"
+Directory: /workspace/p965-build-ubsan
+"p878_backend_guards.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+P878 source-owned unit binding symbol=8 scope=1 zero-result; 11 backend mutations rejected/recovered
+P878 source-owned unit binding symbol=8 scope=1 zero-result; 11 backend mutations rejected/recovered
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p878_backend_guards.unit" end time: Oct 28 00:10 UTC
+"p878_backend_guards.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+259/523 Testing: p878_prefix_integrity.unit
+259/523 Test: p878_prefix_integrity.unit
+Command: "/workspace/p965-build-ubsan/p866_integrity" "/workspace/p965/tests/p878/sources/relay_equal_binding.nl" "/workspace/p965/tests/p878/sources/audio_unequal_binding.nl"
+Directory: /workspace/p965-build-ubsan
+"p878_prefix_integrity.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+P866 prefix/authority mutations=16 plus foreign views/root/formals/old Copy; recovery PASS
+P866 prefix/authority mutations=16 plus foreign views/root/formals/old Copy; recovery PASS
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p878_prefix_integrity.unit" end time: Oct 28 00:10 UTC
+"p878_prefix_integrity.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+260/523 Testing: p878_reached_prefix_oom.unit
+260/523 Test: p878_reached_prefix_oom.unit
+Command: "/workspace/p965-build-ubsan/p866_oom" "/workspace/p965/tests/p878/sources/relay_unequal_binding.nl" "/workspace/p965/tests/p878/sources/audio_equal_binding.nl"
+Directory: /workspace/p965-build-ubsan
+"p878_reached_prefix_oom.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+P866 prefix allocation index=0 calls=2 did_fail=1 status=OOM unchanged=1 public_retry0=1
+P866 prefix allocation index=1 calls=2 did_fail=1 status=OOM unchanged=1 public_retry0=1
+P866 prefix allocation index=0 calls=2 did_fail=1 status=OOM unchanged=1 public_retry0=1
+P866 prefix allocation index=1 calls=2 did_fail=1 status=OOM unchanged=1 public_retry0=1
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p878_reached_prefix_oom.unit" end time: Oct 28 00:10 UTC
+"p878_reached_prefix_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+262/523 Testing: p817_pump_public.unit
+262/523 Test: p817_pump_public.unit
+Command: "/workspace/p965-build-ubsan/p817_public" "/workspace/p965/tests/p813/sources/pump_true.nl" "/workspace/p965/tests/p813/sources/pump_false.nl" "0"
+Directory: /workspace/p965-build-ubsan
+"p817_pump_public.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+ALL depth=2 call=4 body=0 parameters=0
+ALL depth=2 call=4 body=0 parameters=0
+ALL depth=1 call=29 body=0 parameters=0
+ALL depth=1 call=39 body=0 parameters=0
+ORIGINAL arm=0 call=4 terminal=1 field=0 old=43 new=73 sibling=198 exact_snapshot=1 body=0 params=0
+ORIGINAL arm=1 call=4 terminal=0 field=0 old=43 new=126 sibling=198 exact_snapshot=1 body=0 params=0
+ALL depth=2 call=4 body=0 parameters=0
+ALL depth=2 call=4 body=0 parameters=0
+ALL depth=1 call=29 body=0 parameters=0
+ALL depth=1 call=39 body=0 parameters=0
+ORIGINAL arm=0 call=4 terminal=1 field=0 old=43 new=73 sibling=198 exact_snapshot=1 body=0 params=0
+ORIGINAL arm=1 call=4 terminal=0 field=0 old=43 new=126 sibling=198 exact_snapshot=1 body=0 params=0
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p817_pump_public.unit" end time: Oct 28 00:10 UTC
+"p817_pump_public.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+263/523 Testing: p817_charge_public.unit
+263/523 Test: p817_charge_public.unit
+Command: "/workspace/p965-build-ubsan/p817_public" "/workspace/p965/tests/p813/sources/charge_true.nl" "/workspace/p965/tests/p813/sources/charge_false.nl" "1"
+Directory: /workspace/p965-build-ubsan
+"p817_charge_public.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+ALL depth=2 call=4 body=0 parameters=0
+ALL depth=2 call=11 body=0 parameters=0
+ALL depth=2 call=4 body=0 parameters=0
+ALL depth=2 call=11 body=0 parameters=0
+ALL depth=1 call=29 body=0 parameters=0
+ALL depth=1 call=36 body=0 parameters=0
+ALL depth=1 call=51 body=0 parameters=0
+ORIGINAL arm=0 call=4 terminal=1 field=1 old=54 new=97 sibling=181 exact_snapshot=1 body=0 params=0
+ORIGINAL arm=0 call=11 terminal=1 field=0 old=26 new=54 sibling=220 exact_snapshot=1 body=0 params=0
+ORIGINAL arm=1 call=4 terminal=0 field=1 old=54 new=148 sibling=181 exact_snapshot=1 body=0 params=0
+ORIGINAL arm=1 call=11 terminal=0 field=0 old=26 new=54 sibling=220 exact_snapshot=1 body=0 params=0
+ALL depth=2 call=4 body=0 parameters=0
+ALL depth=2 call=11 body=0 parameters=0
+ALL depth=2 call=4 body=0 parameters=0
+ALL depth=2 call=11 body=0 parameters=0
+ALL depth=1 call=29 body=0 parameters=0
+ALL depth=1 call=36 body=0 parameters=0
+ALL depth=1 call=51 body=0 parameters=0
+ORIGINAL arm=0 call=4 terminal=1 field=1 old=54 new=97 sibling=181 exact_snapshot=1 body=0 params=0
+ORIGINAL arm=0 call=11 terminal=1 field=0 old=26 new=54 sibling=220 exact_snapshot=1 body=0 params=0
+ORIGINAL arm=1 call=4 terminal=0 field=1 old=54 new=148 sibling=181 exact_snapshot=1 body=0 params=0
+ORIGINAL arm=1 call=11 terminal=0 field=0 old=26 new=54 sibling=220 exact_snapshot=1 body=0 params=0
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p817_charge_public.unit" end time: Oct 28 00:10 UTC
+"p817_charge_public.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+265/523 Testing: p817_issuer_oom.unit
+265/523 Test: p817_issuer_oom.unit
+Command: "/workspace/p965-build-ubsan/p817_oom" "/workspace/p965/tests/p813/sources/pump_false.nl" "/workspace/p965/tests/p813/sources/charge_false.nl"
+Directory: /workspace/p965-build-ubsan
+"p817_issuer_oom.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+OOM actual completed-arm snapshot position=0/2 reached=1 staged_before_failure=0 arm_and_registered_worlds_unchanged=1 attachments_unpublished=1 artifact_NULL=1 retry_public0=1
+OOM actual completed-arm snapshot position=1/2 reached=1 staged_before_failure=0 arm_and_registered_worlds_unchanged=1 attachments_unpublished=1 artifact_NULL=1 retry_public0=1
+OOM actual completed-arm snapshot position=0/4 reached=1 staged_before_failure=0 arm_and_registered_worlds_unchanged=1 attachments_unpublished=1 artifact_NULL=1 retry_public0=1
+OOM actual completed-arm snapshot position=1/4 reached=1 staged_before_failure=1 arm_and_registered_worlds_unchanged=1 attachments_unpublished=1 artifact_NULL=1 retry_public0=1
+OOM actual completed-arm snapshot position=2/4 reached=1 staged_before_failure=0 arm_and_registered_worlds_unchanged=1 attachments_unpublished=1 artifact_NULL=1 retry_public0=1
+OOM actual completed-arm snapshot position=3/4 reached=1 staged_before_failure=1 arm_and_registered_worlds_unchanged=1 attachments_unpublished=1 artifact_NULL=1 retry_public0=1
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p817_issuer_oom.unit" end time: Oct 28 00:10 UTC
+"p817_issuer_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+320/523 Testing: p945_dispatch_journal_r1_integrity.unit
+320/523 Test: p945_dispatch_journal_r1_integrity.unit
+Command: "/workspace/p965-build-ubsan/p945_integrity" "/workspace/p965/tests/p945/sources/dispatch_journal_r1.nl"
+Directory: /workspace/p965-build-ubsan
+"p945_dispatch_journal_r1_integrity.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+P945 public Copy root=1 child=2 incarnation=1 index=0 old=39 incoming_known=0 body=0 parameters=0
+P945 actual IF caller Copy=1 terminal=0
+P945 source-owned IF tamper=8 reject/restore; original complete C=14585 bytes
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"p945_dispatch_journal_r1_integrity.unit" end time: Oct 28 00:10 UTC
+"p945_dispatch_journal_r1_integrity.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+322/523 Testing: p945_thermal_recovery_r1_integrity.unit
+322/523 Test: p945_thermal_recovery_r1_integrity.unit
+Command: "/workspace/p965-build-ubsan/p945_integrity" "/workspace/p965/tests/p945/sources/thermal_recovery_r1.nl"
+Directory: /workspace/p965-build-ubsan
+"p945_thermal_recovery_r1_integrity.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+P945 public Copy root=37 child=39 incarnation=37 index=1 old=184 incoming_known=0 body=0 parameters=0
+P945 actual IF caller Copy=1 terminal=1
+P945 source-owned IF tamper=12 reject/restore; original complete C=14539 bytes
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"p945_thermal_recovery_r1_integrity.unit" end time: Oct 28 00:10 UTC
+"p945_thermal_recovery_r1_integrity.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+325/523 Testing: p778_sensor_spare_gate.unit
+325/523 Test: p778_sensor_spare_gate.unit
+Command: "/workspace/p965-build-ubsan/p778_gate_test" "/workspace/p965/tests/p778/sources/sensor_spare.nl"
+Directory: /workspace/p965-build-ubsan
+"p778_sensor_spare_gate.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+GATE genuine=PASS equal_numeric_foreign_worlds=refused mutations=24 restored=PASS OOM_total_allocations=203 selected_positions=16 explicit_oom=11 legacy_bool_unsupported=5 five_worlds_unchanged=PASS output_slots=PASS retry=PASS
+P778 caller custody mutations=9 arm_world_unchanged=PASS arm_OOM_positions=3 retry=PASS source=/workspace/p965/tests/p778/sources/sensor_spare.nl
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"p778_sensor_spare_gate.unit" end time: Oct 28 00:10 UTC
+"p778_sensor_spare_gate.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+326/523 Testing: p778_valve_spare_gate.unit
+326/523 Test: p778_valve_spare_gate.unit
+Command: "/workspace/p965-build-ubsan/p778_gate_test" "/workspace/p965/tests/p778/sources/valve_spare.nl"
+Directory: /workspace/p965-build-ubsan
+"p778_valve_spare_gate.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+GATE genuine=PASS equal_numeric_foreign_worlds=refused mutations=22 restored=PASS OOM_total_allocations=399 selected_positions=16 explicit_oom=11 legacy_bool_unsupported=5 five_worlds_unchanged=PASS output_slots=PASS retry=PASS
+P778 caller custody mutations=9 arm_world_unchanged=PASS arm_OOM_positions=3 retry=PASS source=/workspace/p965/tests/p778/sources/valve_spare.nl
+<end of output>
+Test time =   0.11 sec
+----------------------------------------------------------
+Test Passed.
+"p778_valve_spare_gate.unit" end time: Oct 28 00:10 UTC
+"p778_valve_spare_gate.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+331/523 Testing: p774_pump_reserve_gate.unit
+331/523 Test: p774_pump_reserve_gate.unit
+Command: "/workspace/p965-build-ubsan/p774_gate_test" "/workspace/p965/tests/p774/sources/pump_reserve.nl"
+Directory: /workspace/p965-build-ubsan
+"p774_pump_reserve_gate.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+GATE genuine=PASS equal_numeric_foreign_worlds=refused mutations=24 restored=PASS OOM_total_allocations=199 selected_positions=16 explicit_oom=11 legacy_bool_unsupported=5 five_worlds_unchanged=PASS output_slots=PASS retry=PASS
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"p774_pump_reserve_gate.unit" end time: Oct 28 00:10 UTC
+"p774_pump_reserve_gate.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+332/523 Testing: p774_scale_reserve_gate.unit
+332/523 Test: p774_scale_reserve_gate.unit
+Command: "/workspace/p965-build-ubsan/p774_gate_test" "/workspace/p965/tests/p774/sources/scale_reserve.nl"
+Directory: /workspace/p965-build-ubsan
+"p774_scale_reserve_gate.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+GATE genuine=PASS equal_numeric_foreign_worlds=refused mutations=22 restored=PASS OOM_total_allocations=395 selected_positions=16 explicit_oom=11 legacy_bool_unsupported=5 five_worlds_unchanged=PASS output_slots=PASS retry=PASS
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"p774_scale_reserve_gate.unit" end time: Oct 28 00:10 UTC
+"p774_scale_reserve_gate.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 28 00:10 UTC

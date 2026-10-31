@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "tests/p1030/run.py",
+    "/workspace/p1030-build-gcc13/newlangc",
+    "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+    "none"
+  ],
+  "exit": 0,
+  "seconds": 5.048120491999725
+}

@@ -1,0 +1,66 @@
+[
+  {
+    "source": "heap_before_pair.nl",
+    "mode": "CHECK",
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "heap_before_pair.nl",
+    "mode": "C17",
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e6933bb870594b4fd37f06921ed5e8cf64b9071cd53ec5a0db38b8ea275aadd0",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1030/tests/p1030/sources/heap_before_pair.nl\n"
+  },
+  {
+    "source": "negative_read_definition.nl",
+    "mode": "CHECK",
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e170dd47c086075c69f278d5d27e5d93b99bfd49d7f790e8d7dc4fec91bdb0e4",
+    "diagnostic": "/workspace/p1030/tests/p1030/sources/negative_read_definition.nl:4:26-4:32: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  },
+  {
+    "source": "negative_read_definition.nl",
+    "mode": "C17",
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e170dd47c086075c69f278d5d27e5d93b99bfd49d7f790e8d7dc4fec91bdb0e4",
+    "diagnostic": "/workspace/p1030/tests/p1030/sources/negative_read_definition.nl:4:26-4:32: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter\n"
+  },
+  {
+    "source": "negative_double_terminal.nl",
+    "mode": "CHECK",
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "5f666896fb180537f7897c5d2ac016e2fd13ac593ce450794f4a36cbfb0c412f",
+    "diagnostic": "/workspace/p1030/tests/p1030/sources/negative_double_terminal.nl:90:44-90:60: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n"
+  },
+  {
+    "source": "negative_double_terminal.nl",
+    "mode": "C17",
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "5f666896fb180537f7897c5d2ac016e2fd13ac593ce450794f4a36cbfb0c412f",
+    "diagnostic": "/workspace/p1030/tests/p1030/sources/negative_double_terminal.nl:90:44-90:60: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n"
+  },
+  {
+    "source": "unsupported_third_call.nl",
+    "mode": "CHECK",
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "unsupported_third_call.nl",
+    "mode": "C17",
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "6b2650bb0a5eec9723ee90fd353bf1677e05c27866b7440c975971d2fdc30690",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1030/tests/p1030/sources/unsupported_third_call.nl\n"
+  }
+]

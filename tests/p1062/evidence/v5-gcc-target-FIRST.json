@@ -1,0 +1,16 @@
+{
+  "command": [
+    "env",
+    "P1062_EVIDENCE_DIR=/workspace/p1062-artifacts/v5-gcc-evidence",
+    "python3",
+    "tests/p1062/run.py",
+    "/workspace/p1062-gcc-build/newlangc",
+    "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+    "none"
+  ],
+  "exit": 1,
+  "raw_host_UTC_start": "2026-10-30T10:40:31.603599+00:00",
+  "raw_host_UTC_finish": "2026-10-30T10:40:41.509548+00:00",
+  "stdout_SHA256": "3a5a9163f58d3512f3221ce14ea9207d913a2b4ba8484d1c5a7ce9e0d042d93b",
+  "stderr_SHA256": "2e6ec1092856867d25f47f928a2d4a46629dca59adfb0e2e59ed1b437285bf16"
+}

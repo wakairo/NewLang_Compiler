@@ -1,0 +1,68 @@
+{
+  "purpose": "byte-exact archival packaging of raw C records, without formatting issued C or changing compiler checks",
+  "frozen_original_commit": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd",
+  "unchanged_original_source_oracle_harness_freezes": true,
+  "old_v1_v6_and602_keys_unchanged": true,
+  "entries": {
+    "tests/p1020/evidence/parent-FIRST/control_return_false-existing.c": {
+      "archive": "tests/p1020/evidence/parent-FIRST/control_return_false-existing.c.data",
+      "sha256": "20335eeeec898956b771ed5758ac3236806f0fb4b2067501d3fbba57bc34cf2b",
+      "original_commit": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd"
+    },
+    "tests/p1020/evidence/parent-FIRST/control_return_false.c": {
+      "archive": "tests/p1020/evidence/parent-FIRST/control_return_false.c.data",
+      "sha256": "20335eeeec898956b771ed5758ac3236806f0fb4b2067501d3fbba57bc34cf2b",
+      "original_commit": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd"
+    },
+    "tests/p1020/evidence/parent-FIRST/control_return_true-existing.c": {
+      "archive": "tests/p1020/evidence/parent-FIRST/control_return_true-existing.c.data",
+      "sha256": "fbb04c87d7a8c11c31e062b272d8d93d407c459caf03c9a5207a0879ae629167",
+      "original_commit": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd"
+    },
+    "tests/p1020/evidence/parent-FIRST/control_return_true.c": {
+      "archive": "tests/p1020/evidence/parent-FIRST/control_return_true.c.data",
+      "sha256": "fbb04c87d7a8c11c31e062b272d8d93d407c459caf03c9a5207a0879ae629167",
+      "original_commit": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd"
+    },
+    "tests/p1020/evidence/parent-FIRST/negative_loan_escape-existing.c": {
+      "archive": "tests/p1020/evidence/parent-FIRST/negative_loan_escape-existing.c.data",
+      "sha256": "a6c951036029a345cbea6359540ac895afaf13d3c6efafa32fbaf4682374ba79",
+      "original_commit": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd"
+    },
+    "tests/p1020/evidence/parent-FIRST/negative_read_write-existing.c": {
+      "archive": "tests/p1020/evidence/parent-FIRST/negative_read_write-existing.c.data",
+      "sha256": "a6c951036029a345cbea6359540ac895afaf13d3c6efafa32fbaf4682374ba79",
+      "original_commit": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd"
+    },
+    "tests/p1020/evidence/parent-FIRST/two_normal_equal-existing.c": {
+      "archive": "tests/p1020/evidence/parent-FIRST/two_normal_equal-existing.c.data",
+      "sha256": "a6c951036029a345cbea6359540ac895afaf13d3c6efafa32fbaf4682374ba79",
+      "original_commit": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd"
+    },
+    "tests/p1020/evidence/parent-FIRST/two_normal_false-existing.c": {
+      "archive": "tests/p1020/evidence/parent-FIRST/two_normal_false-existing.c.data",
+      "sha256": "a6c951036029a345cbea6359540ac895afaf13d3c6efafa32fbaf4682374ba79",
+      "original_commit": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd"
+    },
+    "tests/p1020/evidence/parent-FIRST/two_normal_index1-existing.c": {
+      "archive": "tests/p1020/evidence/parent-FIRST/two_normal_index1-existing.c.data",
+      "sha256": "a6c951036029a345cbea6359540ac895afaf13d3c6efafa32fbaf4682374ba79",
+      "original_commit": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd"
+    },
+    "tests/p1020/evidence/parent-FIRST/two_normal_true-existing.c": {
+      "archive": "tests/p1020/evidence/parent-FIRST/two_normal_true-existing.c.data",
+      "sha256": "a6c951036029a345cbea6359540ac895afaf13d3c6efafa32fbaf4682374ba79",
+      "original_commit": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd"
+    },
+    "tests/p1020/evidence/parent-FIRST/unsupported_two_changes-existing.c": {
+      "archive": "tests/p1020/evidence/parent-FIRST/unsupported_two_changes-existing.c.data",
+      "sha256": "a6c951036029a345cbea6359540ac895afaf13d3c6efafa32fbaf4682374ba79",
+      "original_commit": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd"
+    },
+    "tests/p1020/evidence/parent-FIRST/unsupported_zero_change-existing.c": {
+      "archive": "tests/p1020/evidence/parent-FIRST/unsupported_zero_change-existing.c.data",
+      "sha256": "a6c951036029a345cbea6359540ac895afaf13d3c6efafa32fbaf4682374ba79",
+      "original_commit": "b1b76b948455b23c9504d58abe37cbe2e9e0d4cd"
+    }
+  }
+}

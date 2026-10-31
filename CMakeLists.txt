@@ -98,7 +98,7 @@ add_library(newlang_parser STATIC src/parser.c)
 target_link_libraries(newlang_parser PUBLIC newlang_syntax newlang_lexer newlang_diagnostic)
 add_library(newlang_checked STATIC src/checked.c)
 target_link_libraries(newlang_checked PUBLIC newlang_syntax)
-add_library(newlang_semantic STATIC src/copy_body.c src/if_field.c src/array4.c src/usize_addition.c src/semantic.c src/semantic_check.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/node_join.c src/node_links.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
+add_library(newlang_semantic STATIC src/copy_body.c src/if_field.c src/array4.c src/usize_addition.c src/semantic.c src/semantic_check.c src/h_origin_internal.c src/recursive_type.c src/allocated_node.c src/allocated_join.c src/captured_closure.c src/node_join.c src/node_links.c src/packet_fork.c src/fixed_field.c src/sum.c src/raw_storage.c src/function_body.c src/typed_owner.c src/custody.c src/control.c)
 target_link_libraries(newlang_semantic PUBLIC newlang_checked newlang_diagnostic newlang_parser)
 add_library(newlang_checked_c_node STATIC src/checked_c_node.c src/checked_c_five.c)
 target_link_libraries(newlang_checked_c_node PUBLIC newlang_semantic)
@@ -814,6 +814,252 @@ if(BUILD_TESTING)
     add_test(NAME p785_cli_boundaries.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785/cli.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p785")
+    add_test(NAME p965_freeze.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/freeze_test.py")
+    add_executable(p965_ownership tests/p965/ownership.c)
+    target_include_directories(p965_ownership PRIVATE tests/support)
+    target_link_libraries(p965_ownership PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p965_ownership PRIVATE -Wl,--wrap=free)
+    add_executable(p965_oom tests/p965/oom.c)
+    target_include_directories(p965_oom PRIVATE tests/support)
+    target_link_libraries(p965_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p965_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc -Wl,--wrap=nl_h_custody_attach -Wl,--wrap=nl_h_custody_reserve)
+    foreach(source echo window t_only plain loop continuation four_field lexical)
+        set(p965_backend node)
+        if(source STREQUAL "t_only" OR source STREQUAL "plain" OR source STREQUAL "loop")
+            set(p965_backend scalar)
+        endif()
+        add_test(NAME p965_${source}_ownership.unit COMMAND p965_ownership
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/sources/${source}.nl" "${p965_backend}")
+        add_test(NAME p965_${source}_oom.unit COMMAND p965_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/sources/${source}.nl" CHECK "${p965_backend}")
+        add_test(NAME p965_${source}_definition_oom.unit COMMAND p965_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/sources/${source}.nl" definition "${p965_backend}")
+    endforeach()
+    add_executable(p965_output tests/p965/output.c)
+    target_include_directories(p965_output PRIVATE tests/support)
+    target_link_libraries(p965_output PRIVATE newlang_semantic newlang_parser newlang_checked_c_node newlang_diagnostic)
+    target_link_options(p965_output PRIVATE -Wl,--wrap=nl_checked_c_node)
+    add_test(NAME p965_named_if.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/output.py" "$<TARGET_FILE:p965_output>" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/sources/window.nl")
+    add_executable(p965_c89_guard tests/p965/c89/guard.c)
+    target_include_directories(p965_c89_guard PRIVATE tests/support)
+    target_link_libraries(p965_c89_guard PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p965_c89_guard PRIVATE -Wl,--wrap=nl_h_custody_reserve -Wl,--wrap=nl_h_custody_commit -Wl,--wrap=nl_checked_destroy)
+    add_test(NAME p965_c89_guard_charge.unit COMMAND p965_c89_guard
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/charge_false.nl" u8)
+    add_test(NAME p965_c89_guard_trim.unit COMMAND p965_c89_guard
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/trim_true.nl" unit)
+    add_test(NAME p965_c89_guard_fan.unit COMMAND p965_c89_guard
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/fan_false.nl" unit)
+    add_test(NAME p965_c89_guard_relay.unit COMMAND p965_c89_guard
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/relay_equal_binding.nl" unit)
+    add_executable(p965_c89_observer tests/p965/c89/observer.c)
+    target_include_directories(p965_c89_observer PRIVATE tests/support)
+    target_link_libraries(p965_c89_observer PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p965_c89_observer PRIVATE -Wl,--wrap=nl_h_custody_reserve -Wl,--wrap=nl_h_custody_commit -Wl,--wrap=nl_checked_destroy)
+    add_test(NAME p965_c89_observe_charge.unit COMMAND p965_c89_observer
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/charge_false.nl" u8)
+    add_test(NAME p965_c89_observe_trim.unit COMMAND p965_c89_observer
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/trim_true.nl" unit)
+    add_test(NAME p965_c89_observe_fan.unit COMMAND p965_c89_observer
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p866/sources/fan_false.nl" unit)
+    add_test(NAME p965_c89_observe_relay.unit COMMAND p965_c89_observer
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p878/sources/relay_equal_binding.nl" unit)
+    add_executable(p965_c89_entry_source tests/p965/c89/entry_source.c)
+    target_include_directories(p965_c89_entry_source PRIVATE tests/support)
+    target_link_libraries(p965_c89_entry_source PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    foreach(source echo window)
+        add_test(NAME p965_c89_entry_${source}.unit COMMAND p965_c89_entry_source
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p965/sources/${source}.nl")
+    endforeach()
+    add_executable(p974_entry_auth tests/p974/entry.c)
+    target_include_directories(p974_entry_auth PRIVATE tests/support)
+    target_link_libraries(p974_entry_auth PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    add_executable(p974_driver tests/p974/driver.c)
+    target_include_directories(p974_driver PRIVATE tests/support)
+    target_link_libraries(p974_driver PRIVATE newlang_semantic newlang_parser newlang_checked_c_node newlang_diagnostic)
+    target_link_options(p974_driver PRIVATE -Wl,--wrap=nl_semantic_check_expression -Wl,--wrap=nl_checked_destroy)
+    foreach(profile charge trim fan relay)
+        if(profile STREQUAL "charge")
+            set(p974_source "tests/p813/sources/charge_false.nl")
+            set(p974_kind u8)
+        elseif(profile STREQUAL "trim")
+            set(p974_source "tests/p866/sources/trim_true.nl")
+            set(p974_kind unit)
+        elseif(profile STREQUAL "fan")
+            set(p974_source "tests/p866/sources/fan_false.nl")
+            set(p974_kind unit)
+        else()
+            set(p974_source "tests/p878/sources/relay_equal_binding.nl")
+            set(p974_kind unit)
+        endif()
+        add_test(NAME p974_${profile}_entry.unit COMMAND p974_entry_auth
+            "${CMAKE_CURRENT_SOURCE_DIR}/${p974_source}" "${p974_kind}")
+        add_test(NAME p974_${profile}_v0.unit COMMAND p974_driver probe
+            "${CMAKE_CURRENT_SOURCE_DIR}/${p974_source}" "${p974_kind}")
+    endforeach()
+    add_test(NAME p974_named_charge_precision.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p974/named-v3.py" "$<TARGET_FILE:p974_driver>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p813/sources/charge_false.nl" 4)
+    add_test(NAME p974_named_v0_valid.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p974/named-v3.py" "$<TARGET_FILE:p974_driver>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p631/same_value_local.nl" 0)
+    add_executable(p982_probe tests/p982/probe.c)
+    target_include_directories(p982_probe PRIVATE tests/support)
+    target_link_libraries(p982_probe PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    add_executable(p982_oom tests/p982/oom.c)
+    target_include_directories(p982_oom PRIVATE tests/support)
+    target_link_libraries(p982_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p982_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    foreach(p982_source after_true after_false second_true second_false)
+        add_test(NAME p982_${p982_source}_auth.unit COMMAND p982_probe
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/sources/${p982_source}.nl")
+        add_test(NAME p982_${p982_source}_oom.unit COMMAND p982_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/sources/${p982_source}.nl")
+    endforeach()
+    add_test(NAME p982_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982")
+    add_test(NAME p982_freeze.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p982/freeze_test.py")
+    add_executable(p990_probe tests/p990/probe.c)
+    target_include_directories(p990_probe PRIVATE tests/support)
+    target_link_libraries(p990_probe PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    add_executable(p990_oom tests/p990/oom.c)
+    target_include_directories(p990_oom PRIVATE tests/support)
+    target_link_libraries(p990_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p990_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p990_before_direct_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/before_direct.nl" "1" "1" "121")
+    add_test(NAME p990_before_direct_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/before_direct.nl")
+    add_test(NAME p990_after_true_direct_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_true_direct.nl" "1" "1" "151")
+    add_test(NAME p990_after_true_direct_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_true_direct.nl")
+    add_test(NAME p990_after_false_direct_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_false_direct.nl" "1" "1" "151")
+    add_test(NAME p990_after_false_direct_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_false_direct.nl")
+    add_test(NAME p990_before_bound_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/before_bound.nl" "0" "1" "121")
+    add_test(NAME p990_before_bound_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/before_bound.nl")
+    add_test(NAME p990_after_true_bound_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_true_bound.nl" "0" "1" "151")
+    add_test(NAME p990_after_true_bound_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_true_bound.nl")
+    add_test(NAME p990_after_false_bound_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_false_bound.nl" "0" "1" "151")
+    add_test(NAME p990_after_false_bound_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/after_false_bound.nl")
+    add_test(NAME p990_p986_t_only_direct_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_only_direct.nl" "1" "0" "107")
+    add_test(NAME p990_p986_t_only_bound_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_only_bound.nl" "0" "0" "107")
+    add_test(NAME p990_p986_t_before_allocation_direct_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_allocation_direct.nl" "1" "1" "107")
+    add_test(NAME p990_p986_t_before_allocation_direct_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_allocation_direct.nl")
+    add_test(NAME p990_p986_t_before_allocation_bound_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_allocation_bound.nl" "0" "1" "107")
+    add_test(NAME p990_p986_t_before_allocation_bound_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_allocation_bound.nl")
+    add_test(NAME p990_p986_t_before_h_read_direct_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_h_read_direct.nl" "1" "1" "107")
+    add_test(NAME p990_p986_t_before_h_read_direct_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_h_read_direct.nl")
+    add_test(NAME p990_p986_t_before_h_read_bound_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_h_read_bound.nl" "0" "1" "107")
+    add_test(NAME p990_p986_t_before_h_read_bound_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/p986/t_before_h_read_bound.nl")
+    add_test(NAME p990_unreachable_direct_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/negative_duplicate_return.nl" "1" "1" "121")
+    add_test(NAME p990_unreachable_direct_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/negative_duplicate_return.nl")
+    add_test(NAME p990_unreachable_bound_auth.unit COMMAND p990_probe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/calibration_unreachable_bound_v2.nl" "0" "1" "121")
+    add_test(NAME p990_unreachable_bound_oom.unit COMMAND p990_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/sources/calibration_unreachable_bound_v2.nl")
+    add_test(NAME p990_new_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "new")
+    add_test(NAME p990_p986_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "p986")
+    add_test(NAME p990_negative_sources.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "negative")
+    add_test(NAME p990_freeze_protocol.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/freeze_selftest.py")
+    add_test(NAME p1045_two_original_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1055/p1045_forward.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
+    foreach(p1055_profile IN ITEMS 0 1 2 3 4)
+        add_test(NAME p1055_old_origin_${p1055_profile}.integration COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1055/run.py" "$<TARGET_FILE:newlangc>"
+            "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1055_profile}")
+    endforeach()
+    foreach(p1058_profile IN ITEMS 0 1)
+        add_test(NAME p1058_closed_h_${p1058_profile}.integration COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1058/run.py" "$<TARGET_FILE:newlangc>"
+            "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1058_profile}")
+    endforeach()
+    foreach(p1062_profile IN ITEMS 0 1 2 3 4 5)
+        add_test(NAME p1062_h_body_${p1062_profile}.integration COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1062/run.py" "$<TARGET_FILE:newlangc>"
+            "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1062_profile}")
+    endforeach()
+    add_executable(p961_oom tests/p961/oom.c)
+    target_include_directories(p961_oom PRIVATE tests/support)
+    target_link_libraries(p961_oom PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    target_link_options(p961_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc -Wl,--wrap=realloc)
+    add_test(NAME p961_reached_oom.unit COMMAND p961_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p953/sources/window_true.nl")
+    add_executable(p961_output tests/p961/output.c)
+    target_include_directories(p961_output PRIVATE tests/support)
+    target_link_libraries(p961_output PRIVATE newlang_semantic newlang_parser newlang_checked_c_node newlang_diagnostic)
+    target_link_options(p961_output PRIVATE -Wl,--wrap=nl_checked_c_node)
+    add_test(NAME p961_named_foreign.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p961/output.py" "$<TARGET_FILE:p961_output>" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p953/sources/window_true.nl")
+    add_executable(p961_original tests/p961/original.c)
+    target_include_directories(p961_original PRIVATE src tests/support)
+    target_link_libraries(p961_original PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    add_test(NAME p961_original_foreign.unit COMMAND p961_original
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p953/sources/window_true.nl")
+    add_executable(p961_origin tests/p961/origin.c)
+    target_include_directories(p961_origin PRIVATE tests/support)
+    target_link_libraries(p961_origin PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    foreach(source echo window_true)
+        add_test(NAME p961_${source}_origin.unit COMMAND p961_origin
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p953/sources/${source}.nl")
+    endforeach()
+    add_executable(p953_integrity tests/p953/integrity.c)
+    target_include_directories(p953_integrity PRIVATE tests/support)
+    target_link_libraries(p953_integrity PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    foreach(source echo window_true)
+        add_test(NAME p953_${source}_integrity.unit COMMAND p953_integrity
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p953/sources/${source}.nl")
+        add_test(NAME p953_${source}_oom.unit COMMAND p774_driver_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p953/sources/${source}.nl")
+    endforeach()
+    add_test(NAME p953_source_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p953/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p953")
+    add_executable(p945_integrity tests/p945/integrity.c)
+    target_link_libraries(p945_integrity PRIVATE newlang_semantic newlang_parser newlang_checked_c_node)
+    foreach(source dispatch_journal_r1 thermal_recovery_r1)
+        add_test(NAME p945_${source}_integrity.unit COMMAND p945_integrity
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p945/sources/${source}.nl")
+        add_test(NAME p945_${source}_oom.unit COMMAND p774_driver_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p945/sources/${source}.nl")
+    endforeach()
+    add_test(NAME p945_source_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p945/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p945")
     add_executable(p778_probe tests/p778/probe.c)
     add_executable(p778_gate_test tests/p778/gate_test.c)
     foreach(target p778_probe p778_gate_test)

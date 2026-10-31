@@ -1,0 +1,45 @@
+{
+  "stage": "Forward-only actual-control-flow negative; original layered-v1 and its first oracle failure retained, normalization compared by separate V2 controls",
+  "profiles": {
+    "negative_extra_change.nl": {
+      "CHECK": 0,
+      "C17": 4
+    },
+    "negative_wrong_return.nl": {
+      "CHECK": 0,
+      "C17": 4
+    },
+    "negative_wrong_formal.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "negative_wrong_field.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "negative_escape_ref.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "negative_bad_branch.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "negative_wrong_owner.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "negative_duplicate_owner.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "negative_ended_domain.nl": {
+      "CHECK": 3,
+      "C17": 3
+    },
+    "negative_additional_return_v2.nl": {
+      "CHECK": 0,
+      "C17": 4
+    }
+  }
+}

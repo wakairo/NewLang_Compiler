@@ -1,0 +1,21 @@
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_diagnostic
+[ 20%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 30%] Built target newlang_checked
+[ 40%] Built target newlang_parser
+[100%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p982_probe.dir/tests/p982/probe.c.o
+/workspace/p982/tests/p982/probe.c: In function ‘run’:
+/workspace/p982/tests/p982/probe.c:70:34: error: initialization discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
+   70 |     NLSemanticContext *current = f->context;
+      |                                  ^
+/workspace/p982/tests/p982/probe.c:83:42: error: initialization discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
+   83 |         NLSemanticContext *arm_context = arm->context;
+      |                                          ^~~
+cc1: all warnings being treated as errors
+gmake[3]: *** [CMakeFiles/p982_probe.dir/build.make:79: CMakeFiles/p982_probe.dir/tests/p982/probe.c.o] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:5942: CMakeFiles/p982_probe.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:5949: CMakeFiles/p982_probe.dir/rule] Error 2
+gmake: *** [Makefile:1993: p982_probe] Error 2

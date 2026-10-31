@@ -1,0 +1,24 @@
+[  0%] Built target newlang_diagnostic
+[ 10%] Built target newlang_source
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_syntax
+[ 20%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 30%] Building C object CMakeFiles/newlang_semantic.dir/src/h_origin_internal.c.o
+[ 30%] Linking C static library libnewlang_semantic.a
+[ 80%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[ 90%] Building C object CMakeFiles/p965_c89_entry_source.dir/tests/p965/c89/entry_source.c.o
+[100%] Linking C executable p965_c89_entry_source
+[100%] Built target p965_c89_entry_source
+[ 11%] Built target newlang_source
+[ 11%] Built target newlang_diagnostic
+[ 22%] Built target newlang_lexer
+[ 22%] Built target newlang_syntax
+[ 33%] Built target newlang_checked
+[ 33%] Built target newlang_parser
+[ 88%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/captured_closure_test.dir/tests/unit/captured_closure_test.c.o
+[100%] Linking C executable captured_closure_test
+[100%] Built target captured_closure_test

@@ -1,0 +1,29 @@
+{
+  "release": "C112",
+  "stage": "PRE-RUN Stage0 v1",
+  "parent": "32035c9b94c85afad6bf1d86b29654760a415f9f",
+  "parent_tree": "815f31d63c6de0bbdf9be571238d55611fcf6089",
+  "main": "438170098d5b98096f1ad1f1f200dc1f326c75c3",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "old566_inputs_unchanged": true,
+  "files": {
+    "tests/p1013/stage0/mixed_distinct.nl": "6eecf3906cecc25c3562d2aa1c0f641f2497774183a92ab097a5a7f233acef58",
+    "tests/p1013/stage0/mixed_same.nl": "05f59a04b08103f61667f393863879e3ef5056b3560b858962b78746e0453775",
+    "tests/p1013/stage0/negative_loan_escape.nl": "01fcd07af650771a637a81a3b07619b25bdfc50ea2719afeef07ee8174f4a6af",
+    "tests/p1013/stage0/observe-v1.py": "79f46cb2b000d535cbfeb75c060b3cd08902372c73254f42d9925dc3d5e04a34",
+    "tests/p1013/stage0/oracle-v1.json": "df68b8b3adaaf253b85e9935c0400088f46cc6c30a1c6a88885f0c84d1a8eb84",
+    "tests/p1013/stage0/ordinary_distinct.nl": "f2867462d8ca8e272675709741631bab086af20d9d9f389d226b83be3899fcfb",
+    "tests/p1013/stage0/ordinary_same.nl": "2dbb7bc6409b94ff74ab87f2349775392f22a55c2dc363aa6999f59ba1b74cdd",
+    "tests/p1013/stage0/probe.c": "1681f5305bdae15bed20f69ccebe63dcd1404888539146c5265f6cd8c772119c"
+  },
+  "unmodified_CLI_binary": "/workspace/p1011-build-gcc/newlangc",
+  "CLI_SHA256": "28db9f093c344374d6cf8c2775ab42894c0c00236e2cc4ad77a06f1378e1465a",
+  "unmodified_compiler_inputs": {
+    "src/main.c": "082645a137e10b3f88e0ed2da49330aa4ddc0d9a8027bfdc5f0f153d9f0cfc15",
+    "src/checked_c_node.c": "b2666be2ead2bd159f5cd473912507ced561eb3085d02092c34efa5d29a38064",
+    "src/checked_c_copy_internal.h": "d036087f60af2eb5a64f6e4ea47ea3cd1d6cb501ddb00ae9d7857a6cca8b3260"
+  },
+  "first_observation": "NOT RUN",
+  "GitHub_CI_jobs": 0,
+  "compiler_diagnostic_build": "unchanged checked_c_node.c, -std=c17 -g -O0 -fno-pie -finstrument-functions, external observation hooks; no Production source edit"
+}

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/p1058/tests/p1058/run.py", line 144, in <module>
+    native=invoke(name+opt+'-guest'+str(successes),[observed],env=dict(os.environ,NEWLANG_TEST_FAIL_CALL=fail,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/p1058/tests/p1058/run.py", line 34, in invoke
+    assert r.returncode>=0 or r.returncode==planned_signal,('unexpected signal STOP',label,r.returncode,r.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ('unexpected signal STOP', 'closed_then_two-O0-guest2', -6, b'P1058 physical:207: calls == 2 && !active && (uintptr_t)p == allocated[1] && (uintptr_t)a == allocated[1] && d == domains[1] && !old_a->handle && !old_d->token\n')

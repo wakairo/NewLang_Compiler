@@ -1,0 +1,132 @@
+--- a/tests/p1020/evidence/parent-FIRST/control_return_false-existing.c
++++ b/tests/p1020/evidence/parent-FIRST/control_return_false-existing.c
+@@ -3,18 +3,26 @@
+ 
+ #include <limits.h>
+ _Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+-_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
++_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255,
++               "NewLang C17 requires exact 8-bit uint8_t");
+ #include <stddef.h>
+-_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
++_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615),
++               "NewLang usize target mismatch");
+ 
+-typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
++typedef struct {
++    uint8_t f0;
++    uint8_t f1;
++} nl_type_10;
+ 
+ static void nl_fn_10(void);
+ static void nl_fn_11(uint8_t *nl_local_3, uint8_t nl_local_4);
+ 
+ static void nl_fn_10(void)
+ {
+-    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
++    nl_type_10 nl_local_1 = {
++        .f0 = 37,
++        .f1 = 229,
++    };
+     (void)nl_local_1;
+     {
+         uint8_t *const nl_local_2 = &nl_local_1.f0;
+--- a/tests/p1020/evidence/parent-FIRST/control_return_false.c
++++ b/tests/p1020/evidence/parent-FIRST/control_return_false.c
+@@ -3,18 +3,26 @@
+ 
+ #include <limits.h>
+ _Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+-_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
++_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255,
++               "NewLang C17 requires exact 8-bit uint8_t");
+ #include <stddef.h>
+-_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
++_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615),
++               "NewLang usize target mismatch");
+ 
+-typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
++typedef struct {
++    uint8_t f0;
++    uint8_t f1;
++} nl_type_10;
+ 
+ static void nl_fn_10(void);
+ static void nl_fn_11(uint8_t *nl_local_3, uint8_t nl_local_4);
+ 
+ static void nl_fn_10(void)
+ {
+-    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
++    nl_type_10 nl_local_1 = {
++        .f0 = 37,
++        .f1 = 229,
++    };
+     (void)nl_local_1;
+     {
+         uint8_t *const nl_local_2 = &nl_local_1.f0;
+--- a/tests/p1020/evidence/parent-FIRST/control_return_true-existing.c
++++ b/tests/p1020/evidence/parent-FIRST/control_return_true-existing.c
+@@ -3,18 +3,26 @@
+ 
+ #include <limits.h>
+ _Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+-_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
++_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255,
++               "NewLang C17 requires exact 8-bit uint8_t");
+ #include <stddef.h>
+-_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
++_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615),
++               "NewLang usize target mismatch");
+ 
+-typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
++typedef struct {
++    uint8_t f0;
++    uint8_t f1;
++} nl_type_10;
+ 
+ static void nl_fn_10(void);
+ static void nl_fn_11(uint8_t *nl_local_3, uint8_t nl_local_4);
+ 
+ static void nl_fn_10(void)
+ {
+-    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
++    nl_type_10 nl_local_1 = {
++        .f0 = 37,
++        .f1 = 229,
++    };
+     (void)nl_local_1;
+     {
+         uint8_t *const nl_local_2 = &nl_local_1.f0;
+--- a/tests/p1020/evidence/parent-FIRST/control_return_true.c
++++ b/tests/p1020/evidence/parent-FIRST/control_return_true.c
+@@ -3,18 +3,26 @@
+ 
+ #include <limits.h>
+ _Static_assert(CHAR_BIT == 8, "NewLang C17 requires 8-bit bytes");
+-_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255, "NewLang C17 requires exact 8-bit uint8_t");
++_Static_assert(UINT8_MAX == 255 && sizeof(uint8_t) == 1 && ((uint8_t)-1) == 255,
++               "NewLang C17 requires exact 8-bit uint8_t");
+ #include <stddef.h>
+-_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615), "NewLang usize target mismatch");
++_Static_assert(SIZE_MAX == UINTMAX_C(18446744073709551615),
++               "NewLang usize target mismatch");
+ 
+-typedef struct { uint8_t f0; uint8_t f1; } nl_type_10;
++typedef struct {
++    uint8_t f0;
++    uint8_t f1;
++} nl_type_10;
+ 
+ static void nl_fn_10(void);
+ static void nl_fn_11(uint8_t *nl_local_3, uint8_t nl_local_4);
+ 
+ static void nl_fn_10(void)
+ {
+-    nl_type_10 nl_local_1 = { .f0 = 37, .f1 = 229, };
++    nl_type_10 nl_local_1 = {
++        .f0 = 37,
++        .f1 = 229,
++    };
+     (void)nl_local_1;
+     {
+         uint8_t *const nl_local_2 = &nl_local_1.f0;

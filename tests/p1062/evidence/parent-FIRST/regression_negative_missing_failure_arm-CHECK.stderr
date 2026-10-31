@@ -1,0 +1,1 @@
+/workspace/p1062-gate0/tests/p1062/sources/regression_negative_missing_failure_arm.nl:47:13-83:14: error(semantic)[ALLOCATED-EXHAUSTIVENESS]: both allocation outcomes must be checked

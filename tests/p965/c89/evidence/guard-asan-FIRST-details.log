@@ -1,0 +1,119 @@
+Start testing: Oct 28 00:10 UTC
+----------------------------------------------------------
+302/523 Testing: p965_c89_guard_charge.unit
+302/523 Test: p965_c89_guard_charge.unit
+Command: "/workspace/p965-build-asan/p965_c89_guard" "/workspace/p965/tests/p813/sources/charge_false.nl" "u8"
+Directory: /workspace/p965-build-asan
+"p965_c89_guard_charge.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+C89 old conjuncts caller=1 world=1 source=1 root_not1=0 count_gt1=1 root=1 count=77 call=29
+C89 guard u8 fault=0 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=1 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=2 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=3 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=4 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=5 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=6 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=7 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=8 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=9 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=10 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=11 GET=true VALIDATE=INVALID restore=OK
+C89 genuine shared-plan CHECK B survives A destruction
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_guard_charge.unit" end time: Oct 28 00:10 UTC
+"p965_c89_guard_charge.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+303/523 Testing: p965_c89_guard_trim.unit
+303/523 Test: p965_c89_guard_trim.unit
+Command: "/workspace/p965-build-asan/p965_c89_guard" "/workspace/p965/tests/p866/sources/trim_true.nl" "unit"
+Directory: /workspace/p965-build-asan
+"p965_c89_guard_trim.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+C89 old conjuncts caller=1 world=1 source=1 root_not1=0 count_gt1=1 root=1 count=51 call=21
+C89 guard unit fault=0 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=1 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=2 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=3 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=4 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=5 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=6 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=7 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=8 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=9 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=10 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=11 GET=true VALIDATE=INVALID restore=OK
+C89 genuine shared-plan CHECK B survives A destruction
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_guard_trim.unit" end time: Oct 28 00:10 UTC
+"p965_c89_guard_trim.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+304/523 Testing: p965_c89_guard_fan.unit
+304/523 Test: p965_c89_guard_fan.unit
+Command: "/workspace/p965-build-asan/p965_c89_guard" "/workspace/p965/tests/p866/sources/fan_false.nl" "unit"
+Directory: /workspace/p965-build-asan
+"p965_c89_guard_fan.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+C89 old conjuncts caller=1 world=1 source=1 root_not1=0 count_gt1=1 root=1 count=51 call=21
+C89 guard unit fault=0 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=1 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=2 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=3 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=4 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=5 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=6 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=7 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=8 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=9 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=10 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=11 GET=true VALIDATE=INVALID restore=OK
+C89 genuine shared-plan CHECK B survives A destruction
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_guard_fan.unit" end time: Oct 28 00:10 UTC
+"p965_c89_guard_fan.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+305/523 Testing: p965_c89_guard_relay.unit
+305/523 Test: p965_c89_guard_relay.unit
+Command: "/workspace/p965-build-asan/p965_c89_guard" "/workspace/p965/tests/p878/sources/relay_equal_binding.nl" "unit"
+Directory: /workspace/p965-build-asan
+"p965_c89_guard_relay.unit" start time: Oct 28 00:10 UTC
+Output:
+----------------------------------------------------------
+C89 old conjuncts caller=1 world=1 source=1 root_not1=0 count_gt1=1 root=1 count=42 call=21
+C89 guard unit fault=0 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=1 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=2 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=3 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=4 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=5 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=6 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=7 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=8 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=9 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=10 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=11 GET=true VALIDATE=INVALID restore=OK
+C89 genuine shared-plan CHECK B survives A destruction
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_guard_relay.unit" end time: Oct 28 00:10 UTC
+"p965_c89_guard_relay.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 28 00:10 UTC

@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /workspace/p974-build-ubsan
+Test project /workspace/p974-build-ubsan
+    Start 331: p953_source_native.integration
+1/1 Test #331: p953_source_native.integration ...   Passed    1.31 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   1.33 sec

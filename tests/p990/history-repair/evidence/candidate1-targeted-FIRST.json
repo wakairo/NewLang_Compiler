@@ -1,0 +1,24 @@
+[
+  {
+    "label": "lineage",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "tests/p982/freeze_test.py"
+    ],
+    "exit": 0,
+    "seconds": 0.333,
+    "log": "candidate1-lineage-FIRST.log",
+    "sha256": "603d38e00ebc1a98dcec5772bc61ef9af49e61a93029328216e77c034e2f5598"
+  },
+  {
+    "label": "protocol",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "tests/p990/freeze_selftest.py"
+    ],
+    "exit": 0,
+    "seconds": 2.979,
+    "log": "candidate1-protocol-FIRST.log",
+    "sha256": "84f0941c4a17b6d8271ca909478a9eefce571bc6ef36169d12330eedb8d7176a"
+  }
+]

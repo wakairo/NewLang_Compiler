@@ -1,0 +1,1013 @@
+Start testing: Oct 27 10:26 UTC
+----------------------------------------------------------
+1/515 Testing: p930_live_pre_if.unit
+1/515 Test: p930_live_pre_if.unit
+Command: "/workspace/p965-build-gcc/p930_observe" "positive" "/workspace/p965/tests/p930/sources"
+Directory: /workspace/p965-build-gcc
+"p930_live_pre_if.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+P932 source-AST/type10/block1 session1 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+P930 session1 phase1 input=93996134343808 owner=93996134362992 actual-world=93996134369568 artifact-world=93996134369568 snapshot=93996134365440 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session1 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+P930 session1 phase2 input=93996134343808 owner=93996134528960 actual-world=93996134369568 artifact-world=93996134354112 snapshot=93996134366480 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session2 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+P930 session2 phase1 input=93996134355136 owner=93996134362992 actual-world=93996134557248 artifact-world=93996134557248 snapshot=93996134365440 main10 roots1/4 inc/fact-distinct6 values[17,232]/[64,105] order01/10 truth0 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session2 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+P930 session2 phase2 input=93996134355136 owner=93996134528960 actual-world=93996134557248 artifact-world=93996134354112 snapshot=93996134366480 main10 roots1/4 inc/fact-distinct6 values[17,232]/[64,105] order01/10 truth0 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session3 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+P930 session3 phase1 input=93996134575488 owner=93996134362992 actual-world=93996134369568 artifact-world=93996134369568 snapshot=93996134365440 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order01/01 truth1 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session3 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+P930 session3 phase2 input=93996134575488 owner=93996134373008 actual-world=93996134369568 artifact-world=93996134354960 snapshot=93996134366480 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order01/01 truth1 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session4 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+P930 session4 phase1 input=93996134369808 owner=93996134362992 actual-world=93996134557248 artifact-world=93996134557248 snapshot=93996134365440 main10 roots1/4 inc/fact-distinct6 values[72,224]/[186,9] order10/01 truth1 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session4 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+P930 session4 phase2 input=93996134369808 owner=93996134373008 actual-world=93996134557248 artifact-world=93996134354960 snapshot=93996134366480 main10 roots1/4 inc/fact-distinct6 values[72,224]/[186,9] order10/01 truth1 cut-before-arms public-view-absent
+P930 copied scalar observations only; mismatched root/field/order comparisons rejected0; no public authority or C17 admission
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p930_live_pre_if.unit" end time: Oct 27 10:26 UTC
+"p930_live_pre_if.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+2/515 Testing: p930_order_root_negative.unit
+2/515 Test: p930_order_root_negative.unit
+Command: "/workspace/p965-build-gcc/p930_observe" "negative" "/workspace/p965/tests/p930/sources"
+Directory: /workspace/p965-build-gcc
+"p930_order_root_negative.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+P932 source-AST/type10/block1 session1 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches3 rejected; history/activeBlocks UNPROVED
+P930 session1 phase1 input=94310473774208 owner=94310473793392 actual-world=94310473799968 artifact-world=94310473799968 snapshot=94310473795840 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session1 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches4 rejected; history/activeBlocks UNPROVED
+P930 session1 phase2 input=94310473774208 owner=94310473959360 actual-world=94310473799968 artifact-world=94310473784512 snapshot=94310473796880 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session2 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches3 rejected; history/activeBlocks UNPROVED
+P930 session2 phase1 input=94310473785536 owner=94310473793392 actual-world=94310473987648 artifact-world=94310473987648 snapshot=94310473795840 main10 roots1/4 inc/fact-distinct6 values[17,232]/[64,105] order01/10 truth0 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session2 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches4 rejected; history/activeBlocks UNPROVED
+P930 session2 phase2 input=94310473785536 owner=94310473959360 actual-world=94310473987648 artifact-world=94310473784512 snapshot=94310473796880 main10 roots1/4 inc/fact-distinct6 values[17,232]/[64,105] order01/10 truth0 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session3 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches4 rejected; history/activeBlocks UNPROVED
+P930 session3 phase1 input=94310474005888 owner=94310473793392 actual-world=94310473799968 artifact-world=94310473799968 snapshot=94310473795840 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order01/01 truth1 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session3 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches5 rejected; history/activeBlocks UNPROVED
+P930 session3 phase2 input=94310474005888 owner=94310473803408 actual-world=94310473799968 artifact-world=94310473785360 snapshot=94310473796880 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order01/01 truth1 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session4 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches3 rejected; history/activeBlocks UNPROVED
+P930 session4 phase1 input=94310473800208 owner=94310473793392 actual-world=94310473987648 artifact-world=94310473987648 snapshot=94310473795840 main10 roots1/4 inc/fact-distinct6 values[72,224]/[186,9] order10/01 truth1 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session4 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches4 rejected; history/activeBlocks UNPROVED
+P930 session4 phase2 input=94310473800208 owner=94310473803408 actual-world=94310473987648 artifact-world=94310473785360 snapshot=94310473796880 main10 roots1/4 inc/fact-distinct6 values[72,224]/[186,9] order10/01 truth1 cut-before-arms public-view-absent
+P930 copied scalar observations only; mismatched root/field/order comparisons rejected26; no public authority or C17 admission
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p930_order_root_negative.unit" end time: Oct 27 10:26 UTC
+"p930_order_root_negative.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/515 Testing: p930_prepare_oom.unit
+3/515 Test: p930_prepare_oom.unit
+Command: "/workspace/p965-build-gcc/p930_oom" "oom" "/workspace/p965/tests/p930/sources"
+Directory: /workspace/p965-build-gcc
+"p930_prepare_oom.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+P930 actual prepare OOM site1 hit1: zero observations, original inventory unchanged; SAME context retry
+P932 source-AST/type10/block1 session1 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+P930 session1 phase1 input=94903486170240 owner=94903486189424 actual-world=94903486196000 artifact-world=94903486196000 snapshot=94903486200912 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session1 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+P930 session1 phase2 input=94903486170240 owner=94903486357344 actual-world=94903486196000 artifact-world=94903486180544 snapshot=94903486217600 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+P930 actual prepare OOM site2 hit1: zero observations, original inventory unchanged; SAME context retry
+P932 source-AST/type10/block1 session2 phase1: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+P930 session2 phase1 input=94903486182528 owner=94903486189424 actual-world=94903486199856 artifact-world=94903486199856 snapshot=94903486200912 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+P932 source-AST/type10/block1 session2 phase2: typed source->checked->normalized entry; target-value-bits64 new mismatches0 rejected; history/activeBlocks UNPROVED
+P930 session2 phase2 input=94903486182528 owner=94903486357344 actual-world=94903486199856 artifact-world=94903486180544 snapshot=94903486217600 main10 roots1/4 inc/fact-distinct6 values[186,9]/[72,224] order10/01 truth1 cut-before-arms public-view-absent
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p930_prepare_oom.unit" end time: Oct 27 10:26 UTC
+"p930_prepare_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/515 Testing: p930_ordinary_cli.integration
+4/515 Test: p930_ordinary_cli.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p965/tests/p930/cli.py" "/workspace/p965-build-gcc/newlangc" "/workspace/p965/tests/p930"
+Directory: /workspace/p965-build-gcc
+"p930_ordinary_cli.integration" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+budget_false.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved
+budget_true.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved
+missing_field.nl CHECK 3 C17 3 P5-AGGREGATE-FIELD-COUNT sentinel/no-temp preserved
+order_only.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved
+root_values_swapped.nl CHECK 0 C17 4 V1-BACKEND-UNSUPPORTED sentinel/no-temp preserved
+wrong_condition.nl CHECK 3 C17 3 P13-IF-CONDITION sentinel/no-temp preserved
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"p930_ordinary_cli.integration" end time: Oct 27 10:26 UTC
+"p930_ordinary_cli.integration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+5/515 Testing: p718_if_return_proof_oom.unit
+5/515 Test: p718_if_return_proof_oom.unit
+Command: "/workspace/p965-build-gcc/p718_gate_test" "/workspace/p965/tests/p718/return_false.nl" "/workspace/p965/tests/p718/continue_false.nl"
+Directory: /workspace/p965-build-gcc
+"p718_if_return_proof_oom.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+return history_worlds=11 flat_anchor_bytes=119632 graph_seal_bytes=86400 (excludes nested semantic storage)
+equal-byte different Copy origin rejects=1
+return rejects=111 validator_OOM=78 rollback=PASS
+return admission_OOM=78 explicit_resource=PASS
+return history_worlds=13 flat_anchor_bytes=163576 graph_seal_bytes=101952 (excludes nested semantic storage)
+equal-byte different Copy origin rejects=1
+return rejects=140 validator_OOM=106 rollback=PASS
+return admission_OOM=106 explicit_resource=PASS
+registration OOM positions=542 rollback=PASS
+main-call OOM positions=447 rollback=PASS artifact=NULL
+normal driver OOM positions=1157 existing_host_oom_CLI3=1051 zero_partial_C=PASS
+<end of output>
+Test time =   0.25 sec
+----------------------------------------------------------
+Test Passed.
+"p718_if_return_proof_oom.unit" end time: Oct 27 10:26 UTC
+"p718_if_return_proof_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+6/515 Testing: p718_if_return_native.integration
+6/515 Test: p718_if_return_native.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p965/tests/p718/native.py" "/workspace/p965-build-gcc/newlangc" "/workspace/p965-build-gcc/p718_public_probe" "/usr/bin/gcc" "none" "/workspace/p965/tests/p718"
+Directory: /workspace/p965-build-gcc
+"p718_if_return_native.integration" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+[{"C17": 0, "C_sha256": "cc9f91cca1f1ff7f8e16511fd3da9ee37edb267122fd657d5a4c4f20532a11c1", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "removed_return": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 1, "binding": 5, "child": 3, "current": 91, "if": 18, "index": 1, "normal": 1, "old": 57, "parent_after": 8, "parent_before": 1, "reads": [{"index": 1, "symbol": 6}, {"index": 0, "symbol": 7}], "return_node": 3, "root": 1, "streams": [{"changes": 0, "events": []}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 1, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 1, "ref": 4}]}]}, "sanitizer": "none", "sha256": "f1541a3b4ee1e07eca1b78408b51e59c46a2049decf7d4eea5aa614f49debf26", "source": "/workspace/p965/tests/p718/return_true.nl"}, {"C17": 0, "C_sha256": "0d6a317d1038a76659ff079acfbe7198f65935ba6ed4b24ebaca6a97d73d36d7", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_field": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_old": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 1, "binding": 5, "child": 3, "current": 91, "if": 18, "index": 1, "normal": 1, "old": 57, "parent_after": 8, "parent_before": 1, "reads": [{"index": 1, "symbol": 6}, {"index": 0, "symbol": 7}], "return_node": 3, "root": 1, "streams": [{"changes": 0, "events": []}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 1, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 1, "ref": 4}]}]}, "sanitizer": "none", "sha256": "1045546c74d31d690fcd29ceaabdeb7b9a070e19f16cf81a95525158c228db67", "source": "/workspace/p965/tests/p718/return_false.nl"}, {"C17": 0, "C_sha256": "88c76277269368a5862938e983732448ad598861d0d1a36d00a2eea6dc62b6ba", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_field": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_old": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 3, "binding": 5, "child": 4, "current": 38, "if": 18, "index": 0, "normal": 0, "old": 23, "parent_after": 8, "parent_before": 3, "reads": [{"index": 0, "symbol": 6}, {"index": 1, "symbol": 7}], "return_node": 12, "root": 3, "streams": [{"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 4, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 4, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 4, "ref": 4}]}]}, "sanitizer": "none", "sha256": "d14d775e0c28ab1a250d8448bae0e315288ab6948356956d62588df16e81187f", "source": "/workspace/p965/tests/p718/continue_true.nl"}, {"C17": 0, "C_sha256": "b2a870a3062a5dad6659867cfa7291686318425371fc9253345bc5058410260c", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "removed_return": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_field": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_old": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 3, "binding": 5, "child": 4, "current": 38, "if": 18, "index": 0, "normal": 0, "old": 23, "parent_after": 8, "parent_before": 3, "reads": [{"index": 0, "symbol": 6}, {"index": 1, "symbol": 7}], "return_node": 12, "root": 3, "streams": [{"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 4, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 4, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 4, "ref": 4}]}]}, "sanitizer": "none", "sha256": "d368df5374c8ce23c87f0af6f1fb99bcb9b94fe3e6fe9143d588fafd5a4d19f2", "source": "/workspace/p965/tests/p718/continue_false.nl"}, {"C17": 0, "C_sha256": "4d3a60f16564b2d5a7b911ffd5862adfc1fc33c8e6425a3156376d6f93d2a2cb", "check": 0, "native": {"original": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "passive": [{"compile": 0, "native": 0}, {"compile": 0, "native": 0}], "removed_return": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}], "wrong_condition": [{"compile": 0, "native": 91}, {"compile": 0, "native": 91}]}, "public": {"base": 1, "binding": 5, "child": 3, "current": 17, "if": 18, "index": 1, "normal": 1, "old": 111, "parent_after": 8, "parent_before": 1, "reads": [{"index": 1, "symbol": 6}, {"index": 0, "symbol": 7}], "return_node": 3, "root": 1, "streams": [{"changes": 0, "events": []}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 4, "old": 1, "ref": 4}]}, {"changes": 1, "events": [{"change": true, "incoming": 11, "node": 22, "old": 1, "ref": 4}]}]}, "sanitizer": "none", "sha256": "f3bc52b1631e791351c6324a51285f20bb79472a78040f4dfa817e955364ec2b", "source": "/workspace/p965/tests/p713/sole_normal.nl"}]
+<end of output>
+Test time =   1.98 sec
+----------------------------------------------------------
+Test Passed.
+"p718_if_return_native.integration" end time: Oct 27 10:26 UTC
+"p718_if_return_native.integration" time elapsed: 00:00:01
+----------------------------------------------------------
+
+7/515 Testing: p728_unit_statement_proof.unit
+7/515 Test: p728_unit_statement_proof.unit
+Command: "/workspace/p965-build-gcc/p728_gate_test" "/workspace/p965/tests/p728/brake_false.nl" "/workspace/p965/tests/p728/valve_true.nl"
+Directory: /workspace/p965-build-gcc
+"p728_unit_statement_proof.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+wrapper structural rejects=23 plus foreign caller issuer; recovery=PASS
+wrapper structural rejects=23 plus foreign caller issuer; recovery=PASS
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p728_unit_statement_proof.unit" end time: Oct 27 10:26 UTC
+"p728_unit_statement_proof.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+8/515 Testing: p728_unit_statement_history_oom.unit
+8/515 Test: p728_unit_statement_history_oom.unit
+Command: "/workspace/p965-build-gcc/p722_gate_test" "/workspace/p965/tests/p728/brake_false.nl" "/workspace/p965/tests/p728/valve_true.nl"
+Directory: /workspace/p965-build-gcc
+"p728_unit_statement_history_oom.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+return history_worlds=11 flat_anchor_bytes=218192 graph_seal_bytes=62208 (excludes nested semantic storage)
+same-byte old Copy id=7 differs from issued id=1 rejected
+same-byte old Copy id=20 differs from issued id=1 rejected
+same-byte old Copy id=30 differs from issued id=1 rejected
+equal-byte different Copy origin rejects=3
+same-byte foreign old Copy id=7 issued=1 rejected
+same-byte foreign old Copy id=7 issued=1 rejected
+unit call_exit_worlds=4 additional_operation_worlds=2 extra_flat_anchor_bytes=64880 (excludes nested semantic storage)
+unit-call rejects=108 validator_OOM=137 rollback=PASS
+return admission_OOM=238 explicit_resource=PASS
+return history_worlds=13 flat_anchor_bytes=276280 graph_seal_bytes=74304 (excludes nested semantic storage)
+same-byte old Copy id=7 differs from issued id=2 rejected
+same-byte old Copy id=20 differs from issued id=2 rejected
+same-byte old Copy id=30 differs from issued id=2 rejected
+equal-byte different Copy origin rejects=3
+same-byte foreign old Copy id=7 issued=2 rejected
+same-byte foreign old Copy id=7 issued=2 rejected
+same-byte foreign old Copy id=7 issued=2 rejected
+same-number foreign streams node=2 old=2 incoming=18 different_worlds=YES
+unit call_exit_worlds=4 additional_operation_worlds=2 extra_flat_anchor_bytes=64880 (excludes nested semantic storage)
+unit-call rejects=134 validator_OOM=170 rollback=PASS
+return admission_OOM=304 explicit_resource=PASS
+registration OOM positions=1239 rollback=PASS
+main-call OOM positions=823 rollback=PASS artifact=NULL
+normal driver OOM positions=2444 existing_host_oom_CLI3=2178 zero_partial_C=PASS
+<end of output>
+Test time =   1.24 sec
+----------------------------------------------------------
+Test Passed.
+"p728_unit_statement_history_oom.unit" end time: Oct 27 10:26 UTC
+"p728_unit_statement_history_oom.unit" time elapsed: 00:00:01
+----------------------------------------------------------
+
+9/515 Testing: p728_unit_statement_native.integration
+9/515 Test: p728_unit_statement_native.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p965/tests/p728/native.py" "/workspace/p965-build-gcc/newlangc" "/workspace/p965-build-gcc/p728_public_probe" "/usr/bin/gcc" "none" "/workspace/p965/tests/p728"
+Directory: /workspace/p965-build-gcc
+"p728_unit_statement_native.integration" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+brake_true -O2 caller-skipped strict compile refusal; native NOT RUN
+brake_true CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+brake_false -O2 caller-skipped strict compile refusal; native NOT RUN
+brake_false CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+valve_true -O2 caller-skipped strict compile refusal; native NOT RUN
+valve_true CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+valve_false -O2 caller-skipped strict compile refusal; native NOT RUN
+valve_false CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+inherited/A0v2-usize-terminal -O2 caller-skipped strict compile refusal; native NOT RUN
+inherited/A0v2-usize-terminal CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+read_ref.nl unsupported loan_read field source profile, not a semantic read-ref verdict CHECK3 CLI3 zero C preserved output LOCAL-LOAN-PROFILE
+escape.nl semantic rejection CHECK3 CLI3 zero C preserved output P8-EXIT-DEPENDENCY
+wrong_return.nl semantic rejection CHECK3 CLI3 zero C preserved output P9-RETURN-TYPE
+wrong_argument.nl semantic rejection CHECK3 CLI3 zero C preserved output P3-TYPE-MISMATCH
+explicit_unit_tail.nl finite wrapper profile precision refusal CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
+extra_statement.nl finite wrapper profile precision refusal CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
+extra_after.nl finite wrapper profile precision refusal CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
+two_calls.nl finite wrapper profile precision refusal CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
+binding_wrapper.nl finite wrapper profile precision refusal CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
+nested_call.nl post-candidate review: nested call excluded by public wrapper leaf-argument profile CHECK0 CLI4 zero C preserved output V1-BACKEND-UNSUPPORTED
+<end of output>
+Test time =   1.83 sec
+----------------------------------------------------------
+Test Passed.
+"p728_unit_statement_native.integration" end time: Oct 27 10:26 UTC
+"p728_unit_statement_native.integration" time elapsed: 00:00:01
+----------------------------------------------------------
+
+10/515 Testing: p722_callee_return_proof_oom.unit
+10/515 Test: p722_callee_return_proof_oom.unit
+Command: "/workspace/p965-build-gcc/p722_gate_test" "/workspace/p965/tests/p722/before_false.nl" "/workspace/p965/tests/p722/after_false.nl"
+Directory: /workspace/p965-build-gcc
+"p722_callee_return_proof_oom.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+return history_worlds=11 flat_anchor_bytes=192112 graph_seal_bytes=62208 (excludes nested semantic storage)
+same-byte old Copy id=18 differs from issued id=2 rejected
+equal-byte different Copy origin rejects=1
+unit call_exit_worlds=4 additional_operation_worlds=2 extra_flat_anchor_bytes=57056 (excludes nested semantic storage)
+unit-call rejects=102 validator_OOM=129 rollback=PASS
+return admission_OOM=224 explicit_resource=PASS
+return history_worlds=13 flat_anchor_bytes=244984 graph_seal_bytes=74304 (excludes nested semantic storage)
+same-byte old Copy id=18 differs from issued id=1 rejected
+equal-byte different Copy origin rejects=1
+same-number foreign streams node=2 old=1 incoming=16 different_worlds=YES
+unit call_exit_worlds=4 additional_operation_worlds=2 extra_flat_anchor_bytes=57056 (excludes nested semantic storage)
+unit-call rejects=126 validator_OOM=160 rollback=PASS
+return admission_OOM=286 explicit_resource=PASS
+registration OOM positions=1177 rollback=PASS
+main-call OOM positions=773 rollback=PASS artifact=NULL
+normal driver OOM positions=2305 existing_host_oom_CLI3=2053 zero_partial_C=PASS
+<end of output>
+Test time =   1.12 sec
+----------------------------------------------------------
+Test Passed.
+"p722_callee_return_proof_oom.unit" end time: Oct 27 10:26 UTC
+"p722_callee_return_proof_oom.unit" time elapsed: 00:00:01
+----------------------------------------------------------
+
+11/515 Testing: p722_callee_return_native.integration
+11/515 Test: p722_callee_return_native.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p965/tests/p722/native.py" "/workspace/p965-build-gcc/newlangc" "/workspace/p965-build-gcc/p722_public_probe" "/usr/bin/gcc" "none" "/workspace/p965/tests/p722"
+Directory: /workspace/p965-build-gcc
+"p722_callee_return_native.integration" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+before_true -O2 caller-skipped strict compile refusal; native NOT RUN
+before_true CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+before_false -O2 caller-skipped strict compile refusal; native NOT RUN
+before_false CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+after_true -O2 caller-skipped strict compile refusal; native NOT RUN
+after_true CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+after_false -O2 caller-skipped strict compile refusal; native NOT RUN
+after_false CHECK=0 public=0 C17=0 native O0/O2 unchanged/passive=0 caller continuation=PASS
+bad_return_type.nl semantic CLI3 zero C preserved output P9-RETURN-TYPE
+bad_store_type.nl semantic CLI3 zero C preserved output P3-TYPE-MISMATCH
+bad_read_actual.nl unsupported source loan_read(field), not a semantic read-only authority verdict CLI3 zero C preserved output LOCAL-LOAN-PROFILE
+bad_escape.nl semantic CLI3 zero C preserved output P8-EXIT-DEPENDENCY
+bad_scope.nl semantic CLI3 zero C preserved output P3-UNKNOWN-BINDING
+bad_read_formal.nl semantic read ref cannot supply replace write operand CLI3 zero C preserved output P3-TYPE-MISMATCH
+<end of output>
+Test time =   1.52 sec
+----------------------------------------------------------
+Test Passed.
+"p722_callee_return_native.integration" end time: Oct 27 10:26 UTC
+"p722_callee_return_native.integration" time elapsed: 00:00:01
+----------------------------------------------------------
+
+12/515 Testing: p713_if_field_proof_oom.unit
+12/515 Test: p713_if_field_proof_oom.unit
+Command: "/workspace/p965-build-gcc/p713_gate_test" "/workspace/p965/tests/p713/both_true.nl" "/workspace/p965/tests/p713/one_false.nl" "/workspace/p965/tests/p713/repeated_true.nl"
+Directory: /workspace/p965-build-gcc
+"p713_if_field_proof_oom.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+receipt history_worlds=8 flat_anchor_bytes=103648 graph_seal_bytes=81216 (excludes nested semantic allocations)
+equal-byte different source Copy IDs rejected=0
+IF rejects=103 validator_OOM=79 rollback=PASS
+IF admission_OOM=79 explicit_resource=PASS
+receipt history_worlds=7 flat_anchor_bytes=83992 graph_seal_bytes=74304 (excludes nested semantic allocations)
+equal-byte different source Copy IDs rejected=3
+IF rejects=97 validator_OOM=54 rollback=PASS
+IF admission_OOM=54 explicit_resource=PASS
+receipt history_worlds=13 flat_anchor_bytes=209192 graph_seal_bytes=127872 (excludes nested semantic allocations)
+equal-byte different source Copy IDs rejected=24
+IF rejects=208 validator_OOM=134 rollback=PASS
+IF admission_OOM=134 explicit_resource=PASS
+registration OOM positions=423 rollback=PASS
+main-call OOM positions=321 rollback=PASS artifact=NULL
+normal driver OOM positions=920 existing_host_oom_CLI3=813 zero_partial_C=PASS
+<end of output>
+Test time =   0.19 sec
+----------------------------------------------------------
+Test Passed.
+"p713_if_field_proof_oom.unit" end time: Oct 27 10:26 UTC
+"p713_if_field_proof_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+13/515 Testing: p713_if_field_native.integration
+13/515 Test: p713_if_field_native.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p965/tests/p713/native.py" "/workspace/p965-build-gcc/newlangc" "/workspace/p965-build-gcc/p713_public_probe" "/usr/bin/gcc" "none" "/workspace/p965/tests/p713"
+Directory: /workspace/p965-build-gcc
+"p713_if_field_native.integration" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+{"both_false": {"C17": 0, "C17_sha256": "3f6884f500a1fada34c4e421f536069b41613f4e38504bd16b1005e5b708f16e", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"arms": [{"changes": 1, "child_fact": 7, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}], "parent_fact": 8}, {"changes": 1, "child_fact": 7, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}], "parent_fact": 8}], "base": 1, "child": 3, "child_after": 6, "condition": 17, "condition_value": 8, "if": 18, "incarnation": 1, "index": 1, "parent_after": 7, "parent_before": 1, "reads": [{"index": 1, "symbol": 5}, {"index": 0, "symbol": 6}], "result_binding": 4, "result_id": 11, "root": 1}, "synthetic_C_negative": ["wrong_condition", "wrong_field", "wrong_old"], "validator": 0}, "both_true": {"C17": 0, "C17_sha256": "c465d80b78612336c147c05e168f28c50db3bd9d116301120ab621a074548ce8", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"arms": [{"changes": 1, "child_fact": 7, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}], "parent_fact": 8}, {"changes": 1, "child_fact": 7, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}], "parent_fact": 8}], "base": 1, "child": 3, "child_after": 6, "condition": 17, "condition_value": 8, "if": 18, "incarnation": 1, "index": 1, "parent_after": 7, "parent_before": 1, "reads": [{"index": 1, "symbol": 5}, {"index": 0, "symbol": 6}], "result_binding": 4, "result_id": 11, "root": 1}, "synthetic_C_negative": ["wrong_condition", "wrong_field", "wrong_old"], "validator": 0}, "one_false": {"C17": 0, "C17_sha256": "af71cab7be967fa2a03fdf85217f99c17e9462a9b9f1dd6d2bf2762ee8214cf0", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"arms": [{"changes": 1, "child_fact": 7, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 2, "ref": 4, "result_id": 2}], "parent_fact": 8}, {"changes": 0, "child_fact": 2, "events": [{"change": false, "incoming_symbol": 0, "new_id": 0, "node": 2, "old_id": 2, "ref": 0, "result_id": 9}], "parent_fact": 1}], "base": 1, "child": 2, "child_after": 6, "condition": 17, "condition_value": 8, "if": 18, "incarnation": 1, "index": 0, "parent_after": 7, "parent_before": 1, "reads": [{"index": 0, "symbol": 5}, {"index": 1, "symbol": 6}], "result_binding": 4, "result_id": 11, "root": 1}, "synthetic_C_negative": ["wrong_condition"], "validator": 0}, "one_true": {"C17": 0, "C17_sha256": "4cb05c6399ac7836c60f3396092d5f1f422dd926f8385b0bc8cd3a07e99b7d63", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"arms": [{"changes": 1, "child_fact": 7, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 2, "ref": 4, "result_id": 2}], "parent_fact": 8}, {"changes": 0, "child_fact": 2, "events": [{"change": false, "incoming_symbol": 0, "new_id": 0, "node": 2, "old_id": 2, "ref": 0, "result_id": 9}], "parent_fact": 1}], "base": 1, "child": 2, "child_after": 6, "condition": 17, "condition_value": 8, "if": 18, "incarnation": 1, "index": 0, "parent_after": 7, "parent_before": 1, "reads": [{"index": 0, "symbol": 5}, {"index": 1, "symbol": 6}], "result_binding": 4, "result_id": 11, "root": 1}, "synthetic_C_negative": ["wrong_condition", "wrong_field", "wrong_old"], "validator": 0}, "repeated_false": {"C17": 0, "C17_sha256": "9fd64ee79576cb3e5724d2b127f4849940c0f0d4751166f447bb1b7ec425ddd3", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"arms": [{"changes": 2, "child_fact": 12, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}, {"change": false, "incoming_symbol": 0, "new_id": 0, "node": 9, "old_id": 11, "ref": 0, "result_id": 13}, {"change": true, "incoming_symbol": 5, "new_id": 16, "node": 14, "old_id": 11, "ref": 7, "result_id": 11}], "parent_fact": 13}, {"changes": 2, "child_fact": 11, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}, {"change": true, "incoming_symbol": 0, "new_id": 15, "node": 11, "old_id": 11, "ref": 6, "result_id": 11}], "parent_fact": 12}], "base": 1, "child": 3, "child_after": 6, "condition": 17, "condition_value": 8, "if": 18, "incarnation": 1, "index": 1, "parent_after": 7, "parent_before": 1, "reads": [{"index": 1, "symbol": 5}, {"index": 0, "symbol": 6}], "result_binding": 4, "result_id": 11, "root": 1}, "synthetic_C_negative": ["wrong_condition", "wrong_field", "wrong_old"], "validator": 0}, "repeated_true": {"C17": 0, "C17_sha256": "1dae2b45f78991d43edaed79f0eb90ca0b1bd4cca35009196754c7a23f06025d", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"arms": [{"changes": 2, "child_fact": 12, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}, {"change": false, "incoming_symbol": 0, "new_id": 0, "node": 9, "old_id": 11, "ref": 0, "result_id": 13}, {"change": true, "incoming_symbol": 5, "new_id": 16, "node": 14, "old_id": 11, "ref": 7, "result_id": 11}], "parent_fact": 13}, {"changes": 2, "child_fact": 11, "events": [{"change": true, "incoming_symbol": 0, "new_id": 11, "node": 4, "old_id": 1, "ref": 4, "result_id": 1}, {"change": true, "incoming_symbol": 0, "new_id": 15, "node": 11, "old_id": 11, "ref": 6, "result_id": 11}], "parent_fact": 12}], "base": 1, "child": 3, "child_after": 6, "condition": 17, "condition_value": 8, "if": 18, "incarnation": 1, "index": 1, "parent_after": 7, "parent_before": 1, "reads": [{"index": 1, "symbol": 5}, {"index": 0, "symbol": 6}], "result_binding": 4, "result_id": 11, "root": 1}, "synthetic_C_negative": ["wrong_condition", "wrong_field", "wrong_old"], "validator": 0}}
+<end of output>
+Test time =   2.36 sec
+----------------------------------------------------------
+Test Passed.
+"p713_if_field_native.integration" end time: Oct 27 10:26 UTC
+"p713_if_field_native.integration" time elapsed: 00:00:02
+----------------------------------------------------------
+
+14/515 Testing: p706_proof_handoff_oom.unit
+14/515 Test: p706_proof_handoff_oom.unit
+Command: "/workspace/p965-build-gcc/p706_gate_test" "/workspace/p965/tests/p706/settings.nl" "/workspace/p965/tests/p706/window.nl"
+Directory: /workspace/p965-build-gcc
+"p706_proof_handoff_oom.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+backend admission OOM positions=62 explicit_resource=PASS
+copy proof rejects=81 validator_OOM=31 unchanged=PASS restored=PASS
+backend admission OOM positions=62 explicit_resource=PASS
+copy proof rejects=82 validator_OOM=31 unchanged=PASS restored=PASS
+registration OOM positions=289 rollback=PASS
+main-call OOM positions=259 rollback=PASS artifact=NULL
+registration OOM positions=423 rollback=PASS
+main-call OOM positions=328 rollback=PASS artifact=NULL
+normal driver OOM positions=721 existing_host_oom_CLI3=631 zero_partial_C=PASS
+normal driver OOM positions=930 existing_host_oom_CLI3=840 zero_partial_C=PASS
+<end of output>
+Test time =   0.30 sec
+----------------------------------------------------------
+Test Passed.
+"p706_proof_handoff_oom.unit" end time: Oct 27 10:26 UTC
+"p706_proof_handoff_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+15/515 Testing: p706_ref_write_native.integration
+15/515 Test: p706_ref_write_native.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p965/tests/p706/native.py" "/workspace/p965-build-gcc/newlangc" "/workspace/p965-build-gcc/p706_public_probe" "/usr/bin/gcc" "none" "/workspace/p965/tests/p706"
+Directory: /workspace/p965-build-gcc
+"p706_ref_write_native.integration" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+{"relay": {"C17": 0, "C17_sha256": "ce4c697c7bdb451cb54c903d0dba1e975e18704f00140d48ced51d7e10e79368", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"calls": [{"call": 18, "caller_ref": 3, "changes": [{"incoming_id": 11, "node": 2, "old_id": 1}], "child_fact": 3, "child_post": 10, "function": 10, "incoming_symbol": 0, "index": 1, "loan": 16, "parent_fact": 1, "parent_post": 11, "ref_formal": 4, "returned_id": 13, "scope": 1, "source_root": 1, "source_symbol": 1, "value_formal": 5}, {"call": 25, "caller_ref": 8, "changes": [{"incoming_id": 18, "node": 2, "old_id": 4}], "child_fact": 5, "child_post": 17, "function": 10, "incoming_symbol": 7, "index": 0, "loan": 23, "parent_fact": 4, "parent_post": 18, "ref_formal": 9, "returned_id": 20, "scope": 2, "source_root": 4, "source_symbol": 2, "value_formal": 10}], "direct": [{"incoming_symbol": 12, "index": 0, "node": 32, "ref": 13, "root": 1, "symbol": 1}]}, "validator": 0}, "settings": {"C17": 0, "C17_sha256": "caa017dded20ae1c04762f02403e669303e64bdcd8a3deadb4a3262f93b4f345", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"calls": [{"call": 18, "caller_ref": 3, "changes": [{"incoming_id": 11, "node": 2, "old_id": 1}], "child_fact": 2, "child_post": 10, "function": 11, "incoming_symbol": 0, "index": 0, "loan": 16, "parent_fact": 1, "parent_post": 11, "ref_formal": 4, "returned_id": 1, "scope": 1, "source_root": 1, "source_symbol": 1, "value_formal": 5}], "direct": [{"incoming_symbol": 6, "index": 1, "node": 25, "ref": 7, "root": 4, "symbol": 2}]}, "validator": 0}, "window": {"C17": 0, "C17_sha256": "0c8dc54517b036bf937b6fd3de5d05ae675ebe6a894409783536f2e09337f98c", "check": 0, "native": "original+passive O0/O2 PASS", "owned": {"calls": [{"call": 18, "caller_ref": 3, "changes": [{"incoming_id": 11, "node": 2, "old_id": 1}], "child_fact": 3, "child_post": 10, "function": 10, "incoming_symbol": 0, "index": 1, "loan": 16, "parent_fact": 1, "parent_post": 11, "ref_formal": 4, "returned_id": 13, "scope": 1, "source_root": 1, "source_symbol": 1, "value_formal": 5}], "direct": [{"incoming_symbol": 7, "index": 0, "node": 25, "ref": 8, "root": 4, "symbol": 2}]}, "validator": 0}}
+<end of output>
+Test time =   0.60 sec
+----------------------------------------------------------
+Test Passed.
+"p706_ref_write_native.integration" end time: Oct 27 10:26 UTC
+"p706_ref_write_native.integration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+16/515 Testing: p701_proof_rollback_oom.unit
+16/515 Test: p701_proof_rollback_oom.unit
+Command: "/workspace/p965-build-gcc/p701_gate_test" "/workspace/p965/tests/p701/internal_one.nl" "/workspace/p965/tests/p701/internal_two.nl"
+Directory: /workspace/p965-build-gcc
+"p701_proof_rollback_oom.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+copy proof rejects=91 validator_OOM=27 unchanged=PASS restored=PASS
+copy proof rejects=122 validator_OOM=53 unchanged=PASS restored=PASS
+registration OOM positions=273 rollback=PASS
+main-call OOM positions=219 rollback=PASS artifact=NULL
+registration OOM positions=442 rollback=PASS
+main-call OOM positions=354 rollback=PASS artifact=NULL
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"p701_proof_rollback_oom.unit" end time: Oct 27 10:26 UTC
+"p701_proof_rollback_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+17/515 Testing: p701_stateful_native.integration
+17/515 Test: p701_stateful_native.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p965/tests/p701/native.py" "/workspace/p965-build-gcc/newlangc" "/workspace/p965-build-gcc/p701_public_probe" "/usr/bin/gcc" "none" "/workspace/p965/tests/p701"
+Directory: /workspace/p965-build-gcc
+"p701_stateful_native.integration" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+{"internal_one": {"C17_sha256": "d2afcba01ac3849a5f1b40b4d2966c14a9231c4e38466f509f39cef92e1b5d46", "checked": 0, "emit": 0, "evidence": {"call": 2, "callee_root": 1, "callee_symbol": 1, "caller_change": 14, "caller_incoming": 4, "caller_index": 0, "caller_ref": 6, "caller_root": 7, "caller_symbol": 5, "changes": [{"child_fact": 3, "child_post": 5, "incoming_symbol": 0, "index": 1, "node": 11, "parent_fact": 1, "parent_post": 6, "ref": 2}], "function": 11, "result": 86}, "native": "original+passive O0/O2 PASS", "owned_validator": 0}, "internal_two": {"C17_sha256": "127385e1f073a009640473757da33b99af596809716466b5ee2bdce6b037ba60", "checked": 0, "emit": 0, "evidence": {"call": 2, "callee_root": 1, "callee_symbol": 1, "caller_change": 14, "caller_incoming": 7, "caller_index": 0, "caller_ref": 9, "caller_root": 10, "caller_symbol": 8, "changes": [{"child_fact": 2, "child_post": 5, "incoming_symbol": 0, "index": 0, "node": 11, "parent_fact": 1, "parent_post": 6, "ref": 2}, {"child_fact": 3, "child_post": 9, "incoming_symbol": 3, "index": 1, "node": 18, "parent_fact": 6, "parent_post": 10, "ref": 4}], "function": 11, "result": 137}, "native": "original+passive O0/O2 PASS", "owned_validator": 0}, "signal": {"C17_sha256": "78c91a70e8385fc48d680180320805e7898ba0c36c211f61bb7cb67810a4efd8", "checked": 0, "emit": 0, "evidence": {"call": 2, "callee_root": 1, "callee_symbol": 1, "caller_change": 14, "caller_incoming": 6, "caller_index": 1, "caller_ref": 8, "caller_root": 9, "caller_symbol": 7, "changes": [{"child_fact": 3, "child_post": 5, "incoming_symbol": 0, "index": 1, "node": 11, "parent_fact": 1, "parent_post": 6, "ref": 2}, {"child_fact": 2, "child_post": 9, "incoming_symbol": 3, "index": 0, "node": 18, "parent_fact": 6, "parent_post": 10, "ref": 4}], "function": 11, "result": 207}, "native": "original+passive O0/O2 PASS", "owned_validator": 0}, "three_changes": {"C17_sha256": "b7fbda786b74ac4c517a7e6dd90178c732609ed117f98fa54773286455c3b9eb", "checked": 0, "emit": 0, "evidence": {"call": 2, "callee_root": 1, "callee_symbol": 1, "caller_change": 14, "caller_incoming": 8, "caller_index": 0, "caller_ref": 10, "caller_root": 11, "caller_symbol": 9, "changes": [{"child_fact": 2, "child_post": 5, "incoming_symbol": 0, "index": 0, "node": 11, "parent_fact": 1, "parent_post": 6, "ref": 2}, {"child_fact": 3, "child_post": 9, "incoming_symbol": 3, "index": 1, "node": 18, "parent_fact": 6, "parent_post": 10, "ref": 4}, {"child_fact": 5, "child_post": 13, "incoming_symbol": 5, "index": 0, "node": 25, "parent_fact": 10, "parent_post": 14, "ref": 6}], "function": 11, "result": 38}, "native": "original+passive O0/O2 PASS", "owned_validator": 0}, "valve": {"C17_sha256": "a45421917232b31efcf727b48dfd85110169c19d30a9506c4bf01f01049c9452", "checked": 0, "emit": 0, "evidence": {"call": 9, "callee_root": 4, "callee_symbol": 2, "caller_change": 14, "caller_incoming": 5, "caller_index": 1, "caller_ref": 6, "caller_root": 1, "caller_symbol": 1, "changes": [{"child_fact": 5, "child_post": 8, "incoming_symbol": 0, "index": 0, "node": 11, "parent_fact": 4, "parent_post": 9, "ref": 3}], "function": 11, "result": 55}, "native": "original+passive O0/O2 PASS", "owned_validator": 0}}
+<end of output>
+Test time =   0.96 sec
+----------------------------------------------------------
+Test Passed.
+"p701_stateful_native.integration" end time: Oct 27 10:26 UTC
+"p701_stateful_native.integration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+18/515 Testing: p572_three_node_owned.unit
+18/515 Test: p572_three_node_owned.unit
+Command: "/workspace/p965-build-gcc/p572_public_probe" "/workspace/p965/tests/p572/three_originals.nl"
+Directory: /workspace/p965-build-gcc
+"p572_three_node_owned.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+CHANGE step=0 parent=6 child=7 RF=6->19 F=7->18 occurrence=1->2 target=12
+CHANGE step=1 parent=12 child=13 RF=12->25 F=13->24 occurrence=0->4 target=6
+B middle 1
+B p_middle 3
+B left 4
+B p_left 6
+B right 7
+B p_right 9
+B old_left 11
+B old_right 13
+B final_left 14
+B final_right 15
+B untouched_middle 16
+ROOT index=0 place=1 incarnation=1 final_ended=1
+ROOT index=1 place=6 incarnation=6 final_ended=1
+ROOT index=2 place=12 incarnation=12 final_ended=1
+PUBLIC NODE_LINKS VALID roots=3 changes=2 copied_view_refusals=17 input_AST_destroyed=1
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p572_three_node_owned.unit" end time: Oct 27 10:26 UTC
+"p572_three_node_owned.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+19/515 Testing: p572_three_node_fault.unit
+19/515 Test: p572_three_node_fault.unit
+Command: "/workspace/p965-build-gcc/p572_fault_test" "/workspace/p965/tests/p572/three_originals.nl"
+Directory: /workspace/p965-build-gcc
+"p572_three_node_fault.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+FAULT refusals=18 coupled_isolated_replay=PASS bridge=REJECT validator_OOM=74 rollback=PASS emit_OOM=75 worlds=UNCHANGED
+<end of output>
+Test time =   0.08 sec
+----------------------------------------------------------
+Test Passed.
+"p572_three_node_fault.unit" end time: Oct 27 10:26 UTC
+"p572_three_node_fault.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+20/515 Testing: p572_source_oom.unit
+20/515 Test: p572_source_oom.unit
+Command: "/workspace/p965-build-gcc/p534_semantic_gate" "oom" "/workspace/p965/tests/p572/three_originals.nl"
+Directory: /workspace/p965-build-gcc
+"p572_source_oom.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+P514_OOM registration=437 rollback=PASS
+P514_OOM main=293 rollback=PASS output=NULL
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"p572_source_oom.unit" end time: Oct 27 10:26 UTC
+"p572_source_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+21/515 Testing: p572_three_node_native.integration
+21/515 Test: p572_three_node_native.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p965/tests/p572/native_test.py" "/workspace/p965-build-gcc/newlangc" "/workspace/p965-build-gcc/p572_public_probe" "/workspace/p965-build-gcc/p534_semantic_gate" "/usr/bin/gcc" "/workspace/p965/tests/p572" "none"
+Directory: /workspace/p965-build-gcc
+"p572_three_node_native.integration" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+{
+  "compiler_host": "/usr/bin/gcc",
+  "sanitizer": "none",
+  "check": 0,
+  "public_owned": "CHANGE step=0 parent=6 child=7 RF=6->19 F=7->18 occurrence=1->2 target=12\nCHANGE step=1 parent=12 child=13 RF=12->25 F=13->24 occurrence=0->4 target=6\nB middle 1\nB p_middle 3\nB left 4\nB p_left 6\nB right 7\nB p_right 9\nB old_left 11\nB old_right 13\nB final_left 14\nB final_right 15\nB untouched_middle 16\nROOT index=0 place=1 incarnation=1 final_ended=1\nROOT index=1 place=6 incarnation=6 final_ended=1\nROOT index=2 place=12 incarnation=12 final_ended=1\nPUBLIC NODE_LINKS VALID roots=3 changes=2 copied_view_refusals=17 input_AST_destroyed=1\n",
+  "C17": 0,
+  "C_sha256": "1dcd7cb2741b149c1d99e5bbd0fa4a9d5d8ae5929e540f5e46ff12fb37af1639",
+  "runs": [
+    {
+      "opt": "-O0",
+      "observed": false,
+      "exit": 0,
+      "stdout": ""
+    },
+    {
+      "opt": "-O0",
+      "observed": true,
+      "exit": 0,
+      "stdout": "ROOT role=0 address=0x7ffc3ffc1190 next_address=0x7ffc3ffc1190 payload=22\nROOT role=1 address=0x7ffc3ffc1130 next_address=0x7ffc3ffc1130 payload=11\nROOT role=2 address=0x7ffc3ffc10d0 next_address=0x7ffc3ffc10d0 payload=33\nCHANGE step=0 original=0x7ffc3ffc1130 old=1/0x7ffc3ffc1190 new=1/0x7ffc3ffc10d0\nCOPY role=6 address=0x7ffc3ffc1090 target=0x7ffc3ffc1190 tag=1\nCHANGE step=1 original=0x7ffc3ffc10d0 old=0/(nil) new=1/0x7ffc3ffc1130\nCOPY role=7 address=0x7ffc3ffc1060 target=(nil) tag=0\nCOPY role=8 address=0x7ffc3ffc1040 target=0x7ffc3ffc10d0 tag=1\nCOPY role=9 address=0x7ffc3ffc1020 target=0x7ffc3ffc1130 tag=1\nCOPY role=10 address=0x7ffc3ffc1000 target=(nil) tag=0\np572 physical originals/oldCopy/reciprocal links PASS\n"
+    },
+    {
+      "opt": "-O2",
+      "observed": false,
+      "exit": 0,
+      "stdout": ""
+    },
+    {
+      "opt": "-O2",
+      "observed": true,
+      "exit": 0,
+      "stdout": "ROOT role=0 address=0x7fff218a9600 next_address=0x7fff218a9600 payload=22\nROOT role=1 address=0x7fff218a9620 next_address=0x7fff218a9620 payload=11\nROOT role=2 address=0x7fff218a9640 next_address=0x7fff218a9640 payload=33\nCHANGE step=0 original=0x7fff218a9620 old=1/0x7fff218a9600 new=1/0x7fff218a9640\nCOPY role=6 address=0x7fff218a95b0 target=0x7fff218a9600 tag=1\nCHANGE step=1 original=0x7fff218a9640 old=0/(nil) new=1/0x7fff218a9620\nCOPY role=7 address=0x7fff218a95c0 target=(nil) tag=0\nCOPY role=8 address=0x7fff218a95d0 target=0x7fff218a9640 tag=1\nCOPY role=9 address=0x7fff218a95e0 target=0x7fff218a9620 tag=1\nCOPY role=10 address=0x7fff218a95f0 target=(nil) tag=0\np572 physical originals/oldCopy/reciprocal links PASS\n"
+    }
+  ],
+  "negatives": {
+    "read_authority": [
+      "LOCAL-LOAN-PROFILE",
+      "parser"
+    ],
+    "wrong_field_type": [
+      "NODE-LINK-FIELD-PROFILE",
+      "registration"
+    ],
+    "scope_escape": [
+      "P8-EXIT-DEPENDENCY",
+      "registration"
+    ],
+    "ptr_is_not_ref": [
+      "P3-WRITE-REF-REQUIRED",
+      "registration"
+    ]
+  }
+}
+P572 FINITE THREE ORIGINAL LEXICAL NODE LINK RUNG PASS; no heap owner/library/product claim
+<end of output>
+Test time =   0.29 sec
+----------------------------------------------------------
+Test Passed.
+"p572_three_node_native.integration" end time: Oct 27 10:26 UTC
+"p572_three_node_native.integration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+22/515 Testing: p791_one_owned.unit
+22/515 Test: p791_one_owned.unit
+Command: "/workspace/p965-build-gcc/p791_one_probe" "/workspace/p965/tests/p791/sources/one.nl"
+Directory: /workspace/p965-build-gcc
+"p791_one_owned.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+{"array_type":11,"element_type":10,"symbol":1,"root":1,"incarnation":1,"fact":1,"value":5,"live_checkpoint_places":5,"independent_roots":1,"elements":[{"index":0,"place":2,"incarnation":2,"fact":2,"value":1,"source_node":3,"variant":1},{"index":1,"place":3,"incarnation":3,"fact":3,"value":2,"source_node":4,"variant":1},{"index":2,"place":4,"incarnation":4,"fact":4,"value":3,"source_node":5,"variant":1},{"index":3,"place":5,"incarnation":5,"fact":5,"value":4,"source_node":6,"variant":1}],"separate_view_mutants_rejected":40,"final_root_ended":true,"public_validator":true}
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p791_one_owned.unit" end time: Oct 27 10:26 UTC
+"p791_one_owned.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+23/515 Testing: p791_two_owned.unit
+23/515 Test: p791_two_owned.unit
+Command: "/workspace/p965-build-gcc/p791_two_probe" "/workspace/p965/tests/p791/sources/two.nl"
+Directory: /workspace/p965-build-gcc
+"p791_two_owned.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+{"record_count":2,"source_function":10,"public_validator":true,"legacy_singleton_refused":true,"worlds_distinct":true,"final_roots_ended":true,"view_mutants_rejected":100,"records":[{"index":0,"array_type":11,"element_type":10,"symbol":1,"binding":7,"constructor":2,"root":1,"incarnation":1,"fact":1,"value":5,"checkpoint_places":5,"checkpoint_roots":1,"elements":[{"index":0,"place":2,"incarnation":2,"fact":2,"value":1,"source_node":3},{"index":1,"place":3,"incarnation":3,"fact":3,"value":2,"source_node":4},{"index":2,"place":4,"incarnation":4,"fact":4,"value":3,"source_node":5},{"index":3,"place":5,"incarnation":5,"fact":5,"value":4,"source_node":6}]},{"index":1,"array_type":11,"element_type":10,"symbol":2,"binding":14,"constructor":9,"root":6,"incarnation":6,"fact":6,"value":10,"checkpoint_places":10,"checkpoint_roots":2,"elements":[{"index":0,"place":7,"incarnation":7,"fact":7,"value":6,"source_node":10},{"index":1,"place":8,"incarnation":8,"fact":8,"value":7,"source_node":11},{"index":2,"place":9,"incarnation":9,"fact":9,"value":8,"source_node":12},{"index":3,"place":10,"incarnation":10,"fact":10,"value":9,"source_node":13}]}]}
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p791_two_owned.unit" end time: Oct 27 10:26 UTC
+"p791_two_owned.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+24/515 Testing: p791_issuer_oom.unit
+24/515 Test: p791_issuer_oom.unit
+Command: "/workspace/p965-build-gcc/p791_issuer_oom" "oom" "/workspace/p965/tests/p791/sources/two.nl"
+Directory: /workspace/p965-build-gcc
+"p791_issuer_oom.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+P514_OOM registration=172 rollback=PASS
+P514_OOM main=108 rollback=PASS output=NULL
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p791_issuer_oom.unit" end time: Oct 27 10:26 UTC
+"p791_issuer_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+25/515 Testing: p791_parser_oom.unit
+25/515 Test: p791_parser_oom.unit
+Command: "/workspace/p965-build-gcc/p791_parser_oom" "/workspace/p965/tests/p791/sources/two.nl"
+Directory: /workspace/p965-build-gcc
+"p791_parser_oom.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+P791 parser reached OOM positions=40 clean/reuse=PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p791_parser_oom.unit" end time: Oct 27 10:26 UTC
+"p791_parser_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+26/515 Testing: p791_normal_cli.integration
+26/515 Test: p791_normal_cli.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p965/tests/p791/native.py" "/workspace/p965-build-gcc/newlangc" "/workspace/p965-build-gcc/p791_one_probe" "/workspace/p965-build-gcc/p791_two_probe" "/workspace/p965-build-gcc/p694_fault_test" "/usr/bin/gcc" "none" "/workspace/p965/tests/p791"
+Directory: /workspace/p965-build-gcc
+"p791_normal_cli.integration" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+{"source": "one.nl", "sha256": "4b026d0732f897efd647a110ff295659e1efbcb283a89c3c1e8f495401e3bf98", "check": 0, "public": {"array_type": 11, "element_type": 10, "symbol": 1, "root": 1, "incarnation": 1, "fact": 1, "value": 5, "live_checkpoint_places": 5, "independent_roots": 1, "elements": [{"index": 0, "place": 2, "incarnation": 2, "fact": 2, "value": 1, "source_node": 3, "variant": 1}, {"index": 1, "place": 3, "incarnation": 3, "fact": 3, "value": 2, "source_node": 4, "variant": 1}, {"index": 2, "place": 4, "incarnation": 4, "fact": 4, "value": 3, "source_node": 5, "variant": 1}, {"index": 3, "place": 5, "incarnation": 5, "fact": 5, "value": 4, "source_node": 6, "variant": 1}], "separate_view_mutants_rejected": 40, "final_root_ended": true, "public_validator": true}, "C17_sha256": "9ab362d269a9cb1a3cb32cd842174ceb06ed55ae456e42ec9ddabda47eeda77f", "plain": [{"opt": "-O0", "exit": 0, "stdout": "", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "", "stderr": ""}], "physical": [{"opt": "-O0", "exit": 0, "stdout": "element=0 address=140720920969144 stride=2 tag=37\nelement=1 address=140720920969146 stride=2 tag=37\nelement=2 address=140720920969148 stride=2 tag=37\nelement=3 address=140720920969150 stride=2 tag=37\n", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "element=0 address=140729141722536 stride=2 tag=37\nelement=1 address=140729141722538 stride=2 tag=37\nelement=2 address=140729141722540 stride=2 tag=37\nelement=3 address=140729141722542 stride=2 tag=37\n", "stderr": ""}]}
+{"source": "two.nl", "sha256": "03f775fa08e584fcbad18aec58bea43346d0419a77092118889018ee1960bad6", "check": 0, "public": {"record_count": 2, "source_function": 10, "public_validator": true, "legacy_singleton_refused": true, "worlds_distinct": true, "final_roots_ended": true, "view_mutants_rejected": 100, "records": [{"index": 0, "array_type": 11, "element_type": 10, "symbol": 1, "binding": 7, "constructor": 2, "root": 1, "incarnation": 1, "fact": 1, "value": 5, "checkpoint_places": 5, "checkpoint_roots": 1, "elements": [{"index": 0, "place": 2, "incarnation": 2, "fact": 2, "value": 1, "source_node": 3}, {"index": 1, "place": 3, "incarnation": 3, "fact": 3, "value": 2, "source_node": 4}, {"index": 2, "place": 4, "incarnation": 4, "fact": 4, "value": 3, "source_node": 5}, {"index": 3, "place": 5, "incarnation": 5, "fact": 5, "value": 4, "source_node": 6}]}, {"index": 1, "array_type": 11, "element_type": 10, "symbol": 2, "binding": 14, "constructor": 9, "root": 6, "incarnation": 6, "fact": 6, "value": 10, "checkpoint_places": 10, "checkpoint_roots": 2, "elements": [{"index": 0, "place": 7, "incarnation": 7, "fact": 7, "value": 6, "source_node": 10}, {"index": 1, "place": 8, "incarnation": 8, "fact": 8, "value": 7, "source_node": 11}, {"index": 2, "place": 9, "incarnation": 9, "fact": 9, "value": 8, "source_node": 12}, {"index": 3, "place": 10, "incarnation": 10, "fact": 10, "value": 9, "source_node": 13}]}]}, "C17_sha256": "57a3c3711159f682cd1913120cfaa3a9a1893b98ddda7a54efd89238783b9574", "plain": [{"opt": "-O0", "exit": 0, "stdout": "", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "", "stderr": ""}], "physical": [{"opt": "-O0", "exit": 0, "stdout": "array=0 element=0 base=140725395870728 address=140725395870728 stride=2 tag=37\narray=0 element=1 base=140725395870728 address=140725395870730 stride=2 tag=37\narray=0 element=2 base=140725395870728 address=140725395870732 stride=2 tag=37\narray=0 element=3 base=140725395870728 address=140725395870734 stride=2 tag=37\narray=1 element=0 base=140725395870720 address=140725395870720 stride=2 tag=37\narray=1 element=1 base=140725395870720 address=140725395870722 stride=2 tag=37\narray=1 element=2 base=140725395870720 address=140725395870724 stride=2 tag=37\narray=1 element=3 base=140725395870720 address=140725395870726 stride=2 tag=37\n", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "array=0 element=0 base=140722242060880 address=140722242060880 stride=2 tag=37\narray=0 element=1 base=140722242060880 address=140722242060882 stride=2 tag=37\narray=0 element=2 base=140722242060880 address=140722242060884 stride=2 tag=37\narray=0 element=3 base=140722242060880 address=140722242060886 stride=2 tag=37\narray=1 element=0 base=140722242060888 address=140722242060888 stride=2 tag=37\narray=1 element=1 base=140722242060888 address=140722242060890 stride=2 tag=37\narray=1 element=2 base=140722242060888 address=140722242060892 stride=2 tag=37\narray=1 element=3 base=140722242060888 address=140722242060894 stride=2 tag=37\n", "stderr": ""}]}
+arity3.nl /workspace/p965/tests/p791/sources/arity3.nl:2:25-2:96: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers
+arity5.nl /workspace/p965/tests/p791/sources/arity5.nl:2:25-2:130: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers
+wrong_type.nl /workspace/p965/tests/p791/sources/wrong_type.nl:2:45-2:50: error(semantic)[ARRAY4-ELEMENT-TYPE]: initializer must have exact Option<u8> type
+copy_array.nl /workspace/p965/tests/p791/sources/copy_array.nl:1:1-6:1: error(unsupported)[ARRAY4-FORM-UNSUPPORTED]: normal Array4 implementation supports only one or two direct local constructors followed by unit; other source forms are not implemented
+standalone_option.nl /workspace/p965/tests/p791/sources/standalone_option.nl:1:27-1:33: error(unsupported)[ARRAY4-FORM-UNSUPPORTED]: standalone Option<u8> source support is not implemented
+option_function.nl /workspace/p965/tests/p791/sources/option_function.nl:1:13-1:19: error(unsupported)[ARRAY4-FORM-UNSUPPORTED]: standalone Option<u8> source support is not implemented
+indirect.nl /workspace/p965/tests/p791/sources/indirect.nl:1:27-1:33: error(unsupported)[ARRAY4-FORM-UNSUPPORTED]: standalone Option<u8> source support is not implemented
+fault=1 old artifact preserved; temporary removed
+fault=2 old artifact preserved; temporary removed
+fault=3 old artifact preserved; temporary removed
+wrapped allocation failures=353 preserved/cleanup; recovery=PASS
+<end of output>
+Test time =   0.41 sec
+----------------------------------------------------------
+Test Passed.
+"p791_normal_cli.integration" end time: Oct 27 10:26 UTC
+"p791_normal_cli.integration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+27/515 Testing: p534_source_owned.unit
+27/515 Test: p534_source_owned.unit
+Command: "/workspace/p965-build-gcc/p534_public_probe" "/workspace/p965/tests/p534/original.nl"
+Directory: /workspace/p965-build-gcc
+"p534_source_owned.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+{"array_type":11,"element_type":10,"symbol":1,"root":1,"incarnation":1,"fact":1,"value":5,"live_checkpoint_places":5,"independent_roots":1,"elements":[{"index":0,"place":2,"incarnation":2,"fact":2,"value":1,"source_node":3,"variant":1},{"index":1,"place":3,"incarnation":3,"fact":3,"value":2,"source_node":4,"variant":1},{"index":2,"place":4,"incarnation":4,"fact":4,"value":3,"source_node":5,"variant":1},{"index":3,"place":5,"incarnation":5,"fact":5,"value":4,"source_node":6,"variant":1}],"separate_view_mutants_rejected":40,"final_root_ended":true,"public_validator":true}
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p534_source_owned.unit" end time: Oct 27 10:26 UTC
+"p534_source_owned.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+28/515 Testing: p534_oom.unit
+28/515 Test: p534_oom.unit
+Command: "/workspace/p965-build-gcc/p534_semantic_gate" "oom" "/workspace/p965/tests/p534/original.nl"
+Directory: /workspace/p965-build-gcc
+"p534_oom.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+P514_OOM registration=116 rollback=PASS
+P514_OOM main=69 rollback=PASS output=NULL
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p534_oom.unit" end time: Oct 27 10:26 UTC
+"p534_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+29/515 Testing: p534_issuer_fault.unit
+29/515 Test: p534_issuer_fault.unit
+Command: "/workspace/p965-build-gcc/p534_fault_test" "/workspace/p965/tests/p534/original.nl"
+Directory: /workspace/p965-build-gcc
+"p534_issuer_fault.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+P534_FAULT corrupted_worlds=12 source_issued_record_missing=REJECT foreign_source_plan=REJECT public_validator_allocations=0 emit_OOM=1 output_UNCHANGED semantic_world=UNCHANGED restored=PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p534_issuer_fault.unit" end time: Oct 27 10:26 UTC
+"p534_issuer_fault.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+30/515 Testing: p534_array_native.integration
+30/515 Test: p534_array_native.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p965/tests/p534/native_test.py" "/workspace/p965-build-gcc/newlangc_p534" "/workspace/p965-build-gcc/newlangc" "/workspace/p965-build-gcc/p534_public_probe" "/workspace/p965-build-gcc/p534_semantic_gate" "/usr/bin/gcc" "/workspace/p965/tests/p534" "none"
+Directory: /workspace/p965-build-gcc
+"p534_array_native.integration" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+{"case": "original", "check": 0, "c17": 0, "public_owned": {"array_type": 11, "element_type": 10, "symbol": 1, "root": 1, "incarnation": 1, "fact": 1, "value": 5, "live_checkpoint_places": 5, "independent_roots": 1, "elements": [{"index": 0, "place": 2, "incarnation": 2, "fact": 2, "value": 1, "source_node": 3, "variant": 1}, {"index": 1, "place": 3, "incarnation": 3, "fact": 3, "value": 2, "source_node": 4, "variant": 1}, {"index": 2, "place": 4, "incarnation": 4, "fact": 4, "value": 3, "source_node": 5, "variant": 1}, {"index": 3, "place": 5, "incarnation": 5, "fact": 5, "value": 4, "source_node": 6, "variant": 1}], "separate_view_mutants_rejected": 40, "final_root_ended": true, "public_validator": true}, "plain_native": [{"opt": "-O0", "exit": 0, "stdout": "", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "", "stderr": ""}], "physical_observed_native": [{"opt": "-O0", "exit": 0, "stdout": "element=0 address=140734672256472 stride=2 tag=37\nelement=1 address=140734672256474 stride=2 tag=37\nelement=2 address=140734672256476 stride=2 tag=37\nelement=3 address=140734672256478 stride=2 tag=37\n", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "element=0 address=140724889484120 stride=2 tag=37\nelement=1 address=140724889484122 stride=2 tag=37\nelement=2 address=140724889484124 stride=2 tag=37\nelement=3 address=140724889484126 stride=2 tag=37\n", "stderr": ""}], "bad_C_refused": {"wrong_None_tag": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}], "missing_typed_initializer": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}], "wrong_extent": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer refusal"}]}}
+{"case": "arity3", "sha256": "7344e531c81bf1b88adfa49f4f7042db8fb1443d73534ee4f8f9cdb78c77f4a0", "parser": 0, "check": 3, "diagnostic": "/workspace/p965/tests/p534/arity3.nl:2:17-6:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-INITIALIZER-ARITY rollback=PASS artifact=NULL"}
+{"case": "arity5", "sha256": "219ce408e53d930e68954ecb2443c205d73a73ff73dab4f36a8b8f1bee4469e4", "parser": 0, "check": 3, "diagnostic": "/workspace/p965/tests/p534/arity5.nl:2:17-8:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-INITIALIZER-ARITY rollback=PASS artifact=NULL"}
+{"case": "wrong_type", "sha256": "f8536e75f847c69aa5cf1cc7ee9e8ad2f1ca1f19dad308bf5ff3967dd9531766", "parser": 0, "check": 3, "diagnostic": "/workspace/p965/tests/p534/wrong_type.nl:3:9-3:14: error(semantic)[ARRAY4-ELEMENT-TYPE]: initializer must have exact Option<u8> type\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-ELEMENT-TYPE rollback=PASS artifact=NULL"}
+{"case": "payloadless_some", "sha256": "2d9b57b89d80a5a61fcedc07d223b8205f2b53830645d5181cdad69d11ec7a27", "parser": 0, "check": 3, "diagnostic": "/workspace/p965/tests/p534/payloadless_some.nl:3:21-3:25: error(semantic)[P6-CONSTRUCTOR-SHAPE]: constructor payload shape/arity does not match variant\n", "rollback": "P514_REJECT phase=registration code=P6-CONSTRUCTOR-SHAPE rollback=PASS artifact=NULL"}
+{"case": "wrong_variant", "sha256": "a2380941134cee467b1f97dba66b3f17ee84d0f046a96deef7f81dd4bc45366f", "parser": 0, "check": 3, "diagnostic": "/workspace/p965/tests/p534/wrong_variant.nl:3:9-3:32: error(unsupported)[ARRAY4-OPTION-VARIANT]: speculative Option<u8> construction permits only None\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-OPTION-VARIANT rollback=PASS artifact=NULL"}
+P534 SPECULATIVE SOURCE/OWNED/C17/NATIVE original Option Array4 PASS; no indexing/Ring/product claim
+<end of output>
+Test time =   0.54 sec
+----------------------------------------------------------
+Test Passed.
+"p534_array_native.integration" end time: Oct 27 10:26 UTC
+"p534_array_native.integration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+31/515 Testing: p541_source_owned.unit
+31/515 Test: p541_source_owned.unit
+Command: "/workspace/p965-build-gcc/p541_public_probe" "/workspace/p965/tests/p541/two_roots.nl"
+Directory: /workspace/p965-build-gcc
+"p541_source_owned.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+{"record_count":2,"source_function":10,"public_validator":true,"legacy_singleton_refused":true,"worlds_distinct":true,"final_roots_ended":true,"view_mutants_rejected":100,"records":[{"index":0,"array_type":11,"element_type":10,"symbol":1,"binding":7,"constructor":2,"root":1,"incarnation":1,"fact":1,"value":5,"checkpoint_places":5,"checkpoint_roots":1,"elements":[{"index":0,"place":2,"incarnation":2,"fact":2,"value":1,"source_node":3},{"index":1,"place":3,"incarnation":3,"fact":3,"value":2,"source_node":4},{"index":2,"place":4,"incarnation":4,"fact":4,"value":3,"source_node":5},{"index":3,"place":5,"incarnation":5,"fact":5,"value":4,"source_node":6}]},{"index":1,"array_type":11,"element_type":10,"symbol":2,"binding":14,"constructor":9,"root":6,"incarnation":6,"fact":6,"value":10,"checkpoint_places":10,"checkpoint_roots":2,"elements":[{"index":0,"place":7,"incarnation":7,"fact":7,"value":6,"source_node":10},{"index":1,"place":8,"incarnation":8,"fact":8,"value":7,"source_node":11},{"index":2,"place":9,"incarnation":9,"fact":9,"value":8,"source_node":12},{"index":3,"place":10,"incarnation":10,"fact":10,"value":9,"source_node":13}]}]}
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p541_source_owned.unit" end time: Oct 27 10:26 UTC
+"p541_source_owned.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+32/515 Testing: p541_oom.unit
+32/515 Test: p541_oom.unit
+Command: "/workspace/p965-build-gcc/p534_semantic_gate" "oom" "/workspace/p965/tests/p541/two_roots.nl"
+Directory: /workspace/p965-build-gcc
+"p541_oom.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+P514_OOM registration=172 rollback=PASS
+P514_OOM main=108 rollback=PASS output=NULL
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p541_oom.unit" end time: Oct 27 10:26 UTC
+"p541_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+33/515 Testing: p541_issuer_fault.unit
+33/515 Test: p541_issuer_fault.unit
+Command: "/workspace/p965-build-gcc/p541_fault_test" "/workspace/p965/tests/p541/two_roots.nl"
+Directory: /workspace/p965-build-gcc
+"p541_issuer_fault.unit" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+P541_FAULT checkpoint_mutants=42 graph_mutants=11 coupled_raw_kernel_valid_but_not_issued=2 validator_allocations=0 emit_OOM=1 rollback=PASS restored=PASS
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p541_issuer_fault.unit" end time: Oct 27 10:26 UTC
+"p541_issuer_fault.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+34/515 Testing: p541_array_native.integration
+34/515 Test: p541_array_native.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p965/tests/p541/native_test.py" "/workspace/p965-build-gcc/newlangc_p534" "/workspace/p965-build-gcc/newlangc" "/workspace/p965-build-gcc/p541_public_probe" "/workspace/p965-build-gcc/p534_semantic_gate" "/usr/bin/gcc" "/workspace/p965/tests/p541" "none"
+Directory: /workspace/p965-build-gcc
+"p541_array_native.integration" start time: Oct 27 10:26 UTC
+Output:
+----------------------------------------------------------
+{"case": "two_roots", "source_sha256": "829f8d7b9a0aea422f4349d3fd0dc2b389d995b0ab13119b3f490cefc4cb30d1", "check": 0, "c17": 0, "public_owned": {"record_count": 2, "source_function": 10, "public_validator": true, "legacy_singleton_refused": true, "worlds_distinct": true, "final_roots_ended": true, "view_mutants_rejected": 100, "records": [{"index": 0, "array_type": 11, "element_type": 10, "symbol": 1, "binding": 7, "constructor": 2, "root": 1, "incarnation": 1, "fact": 1, "value": 5, "checkpoint_places": 5, "checkpoint_roots": 1, "elements": [{"index": 0, "place": 2, "incarnation": 2, "fact": 2, "value": 1, "source_node": 3}, {"index": 1, "place": 3, "incarnation": 3, "fact": 3, "value": 2, "source_node": 4}, {"index": 2, "place": 4, "incarnation": 4, "fact": 4, "value": 3, "source_node": 5}, {"index": 3, "place": 5, "incarnation": 5, "fact": 5, "value": 4, "source_node": 6}]}, {"index": 1, "array_type": 11, "element_type": 10, "symbol": 2, "binding": 14, "constructor": 9, "root": 6, "incarnation": 6, "fact": 6, "value": 10, "checkpoint_places": 10, "checkpoint_roots": 2, "elements": [{"index": 0, "place": 7, "incarnation": 7, "fact": 7, "value": 6, "source_node": 10}, {"index": 1, "place": 8, "incarnation": 8, "fact": 8, "value": 7, "source_node": 11}, {"index": 2, "place": 9, "incarnation": 9, "fact": 9, "value": 8, "source_node": 12}, {"index": 3, "place": 10, "incarnation": 10, "fact": 10, "value": 9, "source_node": 13}]}]}, "c17_sha256": "57a3c3711159f682cd1913120cfaa3a9a1893b98ddda7a54efd89238783b9574", "observed_C_sha256": "5ce7a5817b24ea29e8df41f77701ce166d097b1312fb4c6ce6dd77c31130a864", "plain_native": [{"opt": "-O0", "exit": 0, "stdout": "", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "", "stderr": ""}], "physical_observed_native": [{"opt": "-O0", "exit": 0, "stdout": "array=0 element=0 base=140733879508184 address=140733879508184 stride=2 tag=37\narray=0 element=1 base=140733879508184 address=140733879508186 stride=2 tag=37\narray=0 element=2 base=140733879508184 address=140733879508188 stride=2 tag=37\narray=0 element=3 base=140733879508184 address=140733879508190 stride=2 tag=37\narray=1 element=0 base=140733879508176 address=140733879508176 stride=2 tag=37\narray=1 element=1 base=140733879508176 address=140733879508178 stride=2 tag=37\narray=1 element=2 base=140733879508176 address=140733879508180 stride=2 tag=37\narray=1 element=3 base=140733879508176 address=140733879508182 stride=2 tag=37\n", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "array=0 element=0 base=140728816404544 address=140728816404544 stride=2 tag=37\narray=0 element=1 base=140728816404544 address=140728816404546 stride=2 tag=37\narray=0 element=2 base=140728816404544 address=140728816404548 stride=2 tag=37\narray=0 element=3 base=140728816404544 address=140728816404550 stride=2 tag=37\narray=1 element=0 base=140728816404552 address=140728816404552 stride=2 tag=37\narray=1 element=1 base=140728816404552 address=140728816404554 stride=2 tag=37\narray=1 element=2 base=140728816404552 address=140728816404556 stride=2 tag=37\narray=1 element=3 base=140728816404552 address=140728816404558 stride=2 tag=37\n", "stderr": ""}], "bad_C_refused": {"aliased_second_carrier": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}], "wrong_second_None": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}], "wrong_extent": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}]}}
+{"case": "r540_two_roots", "source_sha256": "3d01ff12734a194ccc8357625e16de5d1740019a59873ba467467f2152760f9f", "check": 0, "c17": 0, "public_owned": {"record_count": 2, "source_function": 10, "public_validator": true, "legacy_singleton_refused": true, "worlds_distinct": true, "final_roots_ended": true, "view_mutants_rejected": 100, "records": [{"index": 0, "array_type": 11, "element_type": 10, "symbol": 1, "binding": 7, "constructor": 2, "root": 1, "incarnation": 1, "fact": 1, "value": 5, "checkpoint_places": 5, "checkpoint_roots": 1, "elements": [{"index": 0, "place": 2, "incarnation": 2, "fact": 2, "value": 1, "source_node": 3}, {"index": 1, "place": 3, "incarnation": 3, "fact": 3, "value": 2, "source_node": 4}, {"index": 2, "place": 4, "incarnation": 4, "fact": 4, "value": 3, "source_node": 5}, {"index": 3, "place": 5, "incarnation": 5, "fact": 5, "value": 4, "source_node": 6}]}, {"index": 1, "array_type": 11, "element_type": 10, "symbol": 2, "binding": 14, "constructor": 9, "root": 6, "incarnation": 6, "fact": 6, "value": 10, "checkpoint_places": 10, "checkpoint_roots": 2, "elements": [{"index": 0, "place": 7, "incarnation": 7, "fact": 7, "value": 6, "source_node": 10}, {"index": 1, "place": 8, "incarnation": 8, "fact": 8, "value": 7, "source_node": 11}, {"index": 2, "place": 9, "incarnation": 9, "fact": 9, "value": 8, "source_node": 12}, {"index": 3, "place": 10, "incarnation": 10, "fact": 10, "value": 9, "source_node": 13}]}]}, "c17_sha256": "57a3c3711159f682cd1913120cfaa3a9a1893b98ddda7a54efd89238783b9574", "observed_C_sha256": "5ce7a5817b24ea29e8df41f77701ce166d097b1312fb4c6ce6dd77c31130a864", "plain_native": [{"opt": "-O0", "exit": 0, "stdout": "", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "", "stderr": ""}], "physical_observed_native": [{"opt": "-O0", "exit": 0, "stdout": "array=0 element=0 base=140727041505544 address=140727041505544 stride=2 tag=37\narray=0 element=1 base=140727041505544 address=140727041505546 stride=2 tag=37\narray=0 element=2 base=140727041505544 address=140727041505548 stride=2 tag=37\narray=0 element=3 base=140727041505544 address=140727041505550 stride=2 tag=37\narray=1 element=0 base=140727041505536 address=140727041505536 stride=2 tag=37\narray=1 element=1 base=140727041505536 address=140727041505538 stride=2 tag=37\narray=1 element=2 base=140727041505536 address=140727041505540 stride=2 tag=37\narray=1 element=3 base=140727041505536 address=140727041505542 stride=2 tag=37\n", "stderr": ""}, {"opt": "-O2", "exit": 0, "stdout": "array=0 element=0 base=140734620273648 address=140734620273648 stride=2 tag=37\narray=0 element=1 base=140734620273648 address=140734620273650 stride=2 tag=37\narray=0 element=2 base=140734620273648 address=140734620273652 stride=2 tag=37\narray=0 element=3 base=140734620273648 address=140734620273654 stride=2 tag=37\narray=1 element=0 base=140734620273656 address=140734620273656 stride=2 tag=37\narray=1 element=1 base=140734620273656 address=140734620273658 stride=2 tag=37\narray=1 element=2 base=140734620273656 address=140734620273660 stride=2 tag=37\narray=1 element=3 base=140734620273656 address=140734620273662 stride=2 tag=37\n", "stderr": ""}], "bad_C_refused": {"aliased_second_carrier": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}], "wrong_second_None": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}], "wrong_extent": [{"opt": "-O0", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}, {"opt": "-O2", "exit": -6, "stdout": "", "stderr": "expected observer SIGABRT"}]}}
+{"case": "second_arity3", "parser": 0, "check": 3, "diagnostic": "/workspace/p965/tests/p541/second_arity3.nl:8:20-12:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-INITIALIZER-ARITY rollback=PASS artifact=NULL"}
+{"case": "second_arity5", "parser": 0, "check": 3, "diagnostic": "/workspace/p965/tests/p541/second_arity5.nl:8:20-14:6: error(semantic)[ARRAY4-INITIALIZER-ARITY]: Array4 requires exactly four initializers\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-INITIALIZER-ARITY rollback=PASS artifact=NULL"}
+{"case": "second_wrong_type", "parser": 0, "check": 3, "diagnostic": "/workspace/p965/tests/p541/second_wrong_type.nl:9:9-9:14: error(semantic)[ARRAY4-ELEMENT-TYPE]: initializer must have exact Option<u8> type\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-ELEMENT-TYPE rollback=PASS artifact=NULL"}
+{"case": "second_nonleaf", "parser": 0, "check": 3, "diagnostic": "/workspace/p965/tests/p541/second_nonleaf.nl:9:9-9:29: error(semantic)[ARRAY4-ELEMENT-CONSTRUCTOR]: each initializer must construct typed None\n", "rollback": "P514_REJECT phase=registration code=ARRAY4-ELEMENT-CONSTRUCTOR rollback=PASS artifact=NULL"}
+P541 CALIBRATED TWO ORIGINAL ARRAY SOURCE/OWNED/C17/NATIVE PASS; no Ring/product claim
+<end of output>
+Test time =   1.06 sec
+----------------------------------------------------------
+Test Passed.
+"p541_array_native.integration" end time: Oct 27 10:27 UTC
+"p541_array_native.integration" time elapsed: 00:00:01
+----------------------------------------------------------
+
+35/515 Testing: p636_plain_source_indices.unit
+35/515 Test: p636_plain_source_indices.unit
+Command: "/workspace/p965-build-gcc/p636_index_gate"
+Directory: /workspace/p965-build-gcc
+"p636_plain_source_indices.unit" start time: Oct 27 10:27 UTC
+Output:
+----------------------------------------------------------
+P636 source_world root=1 direct_rejects=17 status=NL_CHECK_INTERNAL_ERROR original=PASS restored=UNCHANGED readonly=PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p636_plain_source_indices.unit" end time: Oct 27 10:27 UTC
+"p636_plain_source_indices.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+36/515 Testing: p636_local_arm_indices.unit
+36/515 Test: p636_local_arm_indices.unit
+Command: "/workspace/p965-build-gcc/p636_index_gate" "/workspace/p965/tests/p630/then_true.nl"
+Directory: /workspace/p965-build-gcc
+"p636_local_arm_indices.unit" start time: Oct 27 10:27 UTC
+Output:
+----------------------------------------------------------
+zero_parent_sentinel=private_relation_REJECT
+P636 source_world root=3 direct_rejects=17 status=NL_CHECK_INTERNAL_ERROR original=PASS restored=UNCHANGED readonly=PASS
+zero_parent_sentinel=private_relation_REJECT
+P636 source_world root=3 direct_rejects=17 status=NL_CHECK_INTERNAL_ERROR original=PASS restored=UNCHANGED readonly=PASS
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p636_local_arm_indices.unit" end time: Oct 27 10:27 UTC
+"p636_local_arm_indices.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+37/515 Testing: p636_equal_arm_indices.unit
+37/515 Test: p636_equal_arm_indices.unit
+Command: "/workspace/p965-build-gcc/p636_index_gate" "/workspace/p965/tests/p631/same_value_local.nl"
+Directory: /workspace/p965-build-gcc
+"p636_equal_arm_indices.unit" start time: Oct 27 10:27 UTC
+Output:
+----------------------------------------------------------
+zero_parent_sentinel=private_relation_REJECT
+P636 source_world root=3 direct_rejects=17 status=NL_CHECK_INTERNAL_ERROR original=PASS restored=UNCHANGED readonly=PASS
+zero_parent_sentinel=private_relation_REJECT
+P636 source_world root=3 direct_rejects=17 status=NL_CHECK_INTERNAL_ERROR original=PASS restored=UNCHANGED readonly=PASS
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p636_equal_arm_indices.unit" end time: Oct 27 10:27 UTC
+"p636_equal_arm_indices.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+38/515 Testing: p634_historical_hash.unit
+38/515 Test: p634_historical_hash.unit
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p965/tests/p634/hash_gate_test.py" "/workspace/p965"
+Directory: /workspace/p965-build-gcc
+"p634_historical_hash.unit" start time: Oct 27 10:27 UTC
+Output:
+----------------------------------------------------------
+{"genuine": "PASS", "provenance": {"header": "src/semantic_internal.h", "candidate_sha256": "c25d48d2d39f218338606f079e0e64369cb2cbe23360b352c092d1017dddc5aa", "historical_sha256": "15e89aefc0f1574afdc77e6826e79f51902897b8b7ed57650f7a2b82ead1bed2", "exact_private_block_removed": 1}, "rejected": ["missing_h_block", "duplicate_h_block", "misplaced_h_block", "changed_h_type", "missing_owner_block", "duplicate_owner_block", "misplaced_owner_block", "wrong_owner_type", "missing_if_block", "duplicate_if_block", "misplaced_if_block", "wrong_if_type", "missing_block", "duplicate_block", "misplaced_block", "changed_pointer", "unrelated_header_change", "missing_p701_field", "duplicate_p701_field", "changed_p701_field", "src/usize_addition.c", "include/newlang/usize_addition.h", "include/newlang/usize_subtraction.h"], "historical_manifest": "UNCHANGED"}
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"p634_historical_hash.unit" end time: Oct 27 10:27 UTC
+"p634_historical_hash.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+39/515 Testing: p634_same_value_ended_root.unit
+39/515 Test: p634_same_value_ended_root.unit
+Command: "/workspace/p965-build-gcc/p634_ended_root_gate" "/workspace/p965/tests/p631/same_value_local.nl"
+Directory: /workspace/p965-build-gcc
+"p634_same_value_ended_root.unit" start time: Oct 27 10:27 UTC
+Output:
+----------------------------------------------------------
+P634 ended_original_root=3 fact=0 value=0 live=0 rejects=3 genuine=PASS restored=UNCHANGED
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p634_same_value_ended_root.unit" end time: Oct 27 10:27 UTC
+"p634_same_value_ended_root.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+40/515 Testing: p634_unequal_ended_root.unit
+40/515 Test: p634_unequal_ended_root.unit
+Command: "/workspace/p965-build-gcc/p634_ended_root_gate" "/workspace/p965/tests/p630/both_false.nl"
+Directory: /workspace/p965-build-gcc
+"p634_unequal_ended_root.unit" start time: Oct 27 10:27 UTC
+Output:
+----------------------------------------------------------
+P634 ended_original_root=3 fact=0 value=0 live=0 rejects=3 genuine=PASS restored=UNCHANGED
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p634_unequal_ended_root.unit" end time: Oct 27 10:27 UTC
+"p634_unequal_ended_root.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+41/515 Testing: p633_equal_outer_derivation.unit
+41/515 Test: p633_equal_outer_derivation.unit
+Command: "/workspace/p965-build-gcc/p633_derivation_gate" "/workspace/p965/tests/p631/duplicate_outer.nl"
+Directory: /workspace/p965-build-gcc
+"p633_equal_outer_derivation.unit" start time: Oct 27 10:27 UTC
+Output:
+----------------------------------------------------------
+P633 equal_scalar_different_outer_derivation=REJECT symbol_and_span_controls=2 original=PASS
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p633_equal_outer_derivation.unit" end time: Oct 27 10:27 UTC
+"p633_equal_outer_derivation.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+42/515 Testing: p633_local_cli.integration
+42/515 Test: p633_local_cli.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p965/tests/p633/native_test.py" "/workspace/p965-build-gcc/newlangc" "/workspace/p965-build-gcc/p628_public_probe" "/workspace/p965-build-gcc/p633_public_probe" "/workspace/p965-build-gcc/p517_gate_test" "/workspace/p965-build-gcc/p514_gate_test" "/usr/bin/gcc" "/workspace/p965/tests/p633" "none"
+Directory: /workspace/p965-build-gcc
+"p633_local_cli.integration" start time: Oct 27 10:27 UTC
+Output:
+----------------------------------------------------------
+{"source": "/workspace/p965/tests/p630/then_true.nl", "source_sha256": "1816dc3c68fdeaddf0141c5a1c75dd935722b06f91e7d934c9ca17bd51bf9031", "check": 0, "c17": 0, "c17_sha256": "687a27bb13e255895117851136f29cca2d75cbc451f8d3c4a5e46776b669b42d", "public": {"if": 21, "condition_symbol": 4, "bool": 1, "selected_symbol": 5, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 1, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [5, 0], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p965/tests/p630/then_false.nl", "source_sha256": "5186078d29654f1550fa759f049b0ade6ca2c3c6299339c08985e5fc7743f17a", "check": 0, "c17": 0, "c17_sha256": "ed69cf9a473270b5ec50d60be483f00a330edc234addf9787492c00500af8ea3", "public": {"if": 21, "condition_symbol": 4, "bool": 0, "selected_symbol": 5, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 0, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [5, 0], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p965/tests/p630/else_false.nl", "source_sha256": "ac1249ed02d68a718f8635ff563696406ca608344a03000805dfe2a52d60de6c", "check": 0, "c17": 0, "c17_sha256": "cefdb7e215af0f2045853d5ca1876d0be1d85b39845f873d088a7cfcba52e771", "public": {"if": 21, "condition_symbol": 4, "bool": 0, "selected_symbol": 5, "arms": [83, 24], "arm_locals": [0, 1], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 0, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [0, 5], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p965/tests/p630/wrong_type.nl", "check": 3, "c17": 3, "c_bytes": 0, "diagnostic": "/workspace/p965/tests/p630/wrong_type.nl:5:26-5:27: error(semantic)[USIZE-LESS-THAN-TYPE]: < requires two exact core usize operands", "rollback": "P514_REJECT phase=registration code=USIZE-LESS-THAN-TYPE rollback=PASS artifact=NULL"}
+{"source": "/workspace/p965/tests/p630/range_arm.nl", "check": 3, "c17": 3, "c_bytes": 0, "diagnostic": "/workspace/p965/tests/p630/range_arm.nl:6:41-6:48: error(semantic)[V1-U8-LITERAL-RANGE]: u8 literal is outside 0..255", "rollback": "P514_REJECT phase=registration code=V1-U8-LITERAL-RANGE rollback=PASS artifact=NULL"}
+{"source": "/workspace/p965/tests/p630/two_locals.nl", "check": 0, "c17": 4, "c_bytes": 0, "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p965/tests/p630/two_locals.nl"}
+{"source": "/workspace/p965/tests/p630/nested_arm.nl", "check": 0, "c17": 4, "c_bytes": 0, "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /workspace/p965/tests/p630/nested_arm.nl"}
+{"source": "/workspace/p965/tests/p630/pure_true.nl", "source_sha256": "380926380dff1682ac638ec08035b0b498632ec2af32189e2685271b9476053a", "check": 0, "c17": 0, "c17_sha256": "3c829da467aab49de6b97d4f98a10dd1a3ec45ffcee617a8a25c9e326e09ecd9", "public": {"if": 14, "condition_symbol": 3, "bool": 1, "selected_symbol": 4, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": null, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91]}, "sanitizer": "none"}
+{"source": "/workspace/p965/tests/p630/pure_false.nl", "source_sha256": "c452b259b7679fd7f269387af2995e06a7b28c71426645b87712ec11b761699b", "check": 0, "c17": 0, "c17_sha256": "f9d5570f2fae03f3209d2bdeeb910765fb8eb2d2e1580cd1ce52fd3ea6d6264b", "public": {"if": 14, "condition_symbol": 3, "bool": 0, "selected_symbol": 4, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": null, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91]}, "sanitizer": "none"}
+{"source": "/workspace/p965/tests/p630/both_false.nl", "source_sha256": "9eb66c3f15469ac534f4806ecff8c309f6e20248120d65463590594ec9926281", "check": 0, "c17": 0, "c17_sha256": "865cb931dcc6b2d837d3653d59d83bb707b8f209327b5d195d19a92322f815a0", "public": {"if": 21, "condition_symbol": 4, "bool": 0, "selected_symbol": 5, "arms": [83, 24], "arm_locals": [1, 1], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 0, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [5, 5], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p965/tests/p630/outer_true.nl", "source_sha256": "c04722d1fecc035660307f15422cf46df255ac5e422575e08a1c5b7fe61fdc58", "check": 0, "c17": 0, "c17_sha256": "c641ea5e8c4da7be6e917d9ad12fb10e9e5f3e207292154076f98f55caa3ba23", "public": {"if": 24, "condition_symbol": 5, "bool": 1, "selected_symbol": 6, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 24, "bool": 1, "condition_symbol": 5, "equal_symbol": 5, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [6, 0], "selected_symbol": 6, "input_symbol": 6, "original_symbol": 3, "old_symbol": 8, "after_symbol": 9, "sibling_symbol": 10, "ref_symbol": 7, "replace_node": 29, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 11], "left_facts": [4, 10], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none", "existing_gate": "P517_GATE rejects=71 original=PASS worlds=UNCHANGED driver_allocations=0"}
+{"source": "/workspace/p965/tests/p631/same_value_local.nl", "source_sha256": "bbea3f108929785345d95502f09f68db9186107b0da65f08a7a229d4b83b2abe", "check": 0, "c17": 0, "c17_sha256": "f872b7be9875a0c26e44efeb795419c2274301e68711b689ae5083149bf2dc2b", "public": {"if": 21, "condition_symbol": 4, "bool": 0, "selected_symbol": 5, "arms": [83, 83], "arm_locals": [1, 1], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 21, "bool": 0, "condition_symbol": 4, "equal_symbol": 4, "operand_symbols": [1, 2], "arms": [83, 83], "arm_symbols": [5, 5], "selected_symbol": 5, "input_symbol": 5, "original_symbol": 3, "old_symbol": 7, "after_symbol": 8, "sibling_symbol": 9, "ref_symbol": 6, "replace_node": 26, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 10], "left_facts": [4, 9], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none"}
+{"source": "/workspace/p965/tests/p631/duplicate_outer.nl", "source_sha256": "9d45e58c10609644169c09136346c0498afd53bef81d76e23e725398fb5a316e", "check": 0, "c17": 0, "c17_sha256": "c6e44f899f17e5e654a2ca35d9e6ad880a9375600b8046bf6795f483d03471d0", "public": {"if": 27, "condition_symbol": 6, "bool": 1, "selected_symbol": 7, "arms": [83, 24], "arm_locals": [1, 0], "authority": 0, "joined_unknown": true, "arm_locals_ended": true, "worlds_distinct": true}, "pair_owned": {"if": 27, "bool": 1, "condition_symbol": 6, "equal_symbol": 6, "operand_symbols": [1, 2], "arms": [83, 24], "arm_symbols": [7, 0], "selected_symbol": 7, "input_symbol": 7, "original_symbol": 3, "old_symbol": 9, "after_symbol": 10, "sibling_symbol": 11, "ref_symbol": 8, "replace_node": 32, "scope": 1, "root": 3, "child": 4, "incarnations": [3, 4, 5], "root_facts": [3, 12], "left_facts": [4, 11], "right_fact": 5, "old": 18, "sibling": 209, "joined_unknown": true, "scope_ended": true}, "native": {"plain": [0, 0], "passive": [0, 0]}, "synthetic_native": {"wrong_compare": [91, 91], "wrong_field": [91, 91], "wrong_old": [91, 91]}, "sanitizer": "none"}
+{"source": "/workspace/p965/tests/p514/branch_effect.nl", "P713_frontier": "CHECK/owned/C17/native PASS", "owned": {"if": 21, "condition": 20, "condition_value": 9, "base": 1, "root": 1, "child": 2, "index": 0, "incarnation": 1, "parent_before": 1, "parent_after": 8, "child_after": 7, "result_id": 12, "arms": [{"changes": 1, "parent_fact": 9, "child_fact": 8, "events": [{"node": 4, "change": true, "old_id": 1, "new_id": 12, "result_id": 1, "ref": 5, "incoming_symbol": 0}]}, {"changes": 0, "parent_fact": 1, "child_fact": 2, "events": []}], "result_binding": 5, "reads": [{"symbol": 8, "index": 0}, {"symbol": 9, "index": 1}]}}
+<end of output>
+Test time =   4.15 sec
+----------------------------------------------------------
+Test Passed.
+"p633_local_cli.integration" end time: Oct 27 10:27 UTC
+"p633_local_cli.integration" time elapsed: 00:00:04
+----------------------------------------------------------
+
+43/515 Testing: p633_both_false_oom.unit
+43/515 Test: p633_both_false_oom.unit
+Command: "/workspace/p965-build-gcc/p514_gate_test" "oom" "/workspace/p965/tests/p630/both_false.nl"
+Directory: /workspace/p965-build-gcc
+"p633_both_false_oom.unit" start time: Oct 27 10:27 UTC
+Output:
+----------------------------------------------------------
+P514_OOM registration=292 rollback=PASS
+P514_OOM main=183 rollback=PASS output=NULL
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p633_both_false_oom.unit" end time: Oct 27 10:27 UTC
+"p633_both_false_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+44/515 Testing: p633_outer_true_oom.unit
+44/515 Test: p633_outer_true_oom.unit
+Command: "/workspace/p965-build-gcc/p514_gate_test" "oom" "/workspace/p965/tests/p630/outer_true.nl"
+Directory: /workspace/p965-build-gcc
+"p633_outer_true_oom.unit" start time: Oct 27 10:27 UTC
+Output:
+----------------------------------------------------------
+P514_OOM registration=295 rollback=PASS
+P514_OOM main=186 rollback=PASS output=NULL
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"p633_outer_true_oom.unit" end time: Oct 27 10:27 UTC
+"p633_outer_true_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+45/515 Testing: p633_pure_true_oom.unit
+45/515 Test: p633_pure_true_oom.unit
+Command: "/workspace/p965-build-gcc/p514_gate_test" "oom" "/workspace/p965/tests/p630/pure_true.nl"
+Directory: /workspace/p965-build-gcc
+"p633_pure_true_oom.unit" start time: Oct 27 10:27 UTC
+Output:
+----------------------------------------------------------
+P514_OOM registration=158 rollback=PASS
+P514_OOM main=104 rollback=PASS output=NULL
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p633_pure_true_oom.unit" end time: Oct 27 10:27 UTC
+"p633_pure_true_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+46/515 Testing: p633_local_same_value.unit
+46/515 Test: p633_local_same_value.unit
+Command: "/workspace/p965-build-gcc/p633_local_gate" "/workspace/p965/tests/p631/same_value_local.nl"
+Directory: /workspace/p965-build-gcc
+"p633_local_same_value.unit" start time: Oct 27 10:27 UTC
+Output:
+----------------------------------------------------------
+/workspace/p965/tests/p633/local_gate.c:154: validates(replay.artifact)
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Failed.
+"p633_local_same_value.unit" end time: Oct 27 10:27 UTC
+"p633_local_same_value.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 27 10:27 UTC

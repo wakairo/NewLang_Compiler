@@ -1,0 +1,21 @@
+{
+  "release": "C148 P1058 independently P-authored complete source/oracle/public observer/baseline PRE-RUN",
+  "parent": "469852922f2780370a79440fa427b4fc93ae1def",
+  "files": {
+    "tests/p1058/baseline.py": "ba981e97302fa855707944a04a12ebd4d78ce277539285ecb7a879c65b10fde0",
+    "tests/p1058/observe.c": "5db53d026d21b53190b34874e13edd33de6c6a84871c7a304605cf451d852977",
+    "tests/p1058/oracle-v1.json": "7d0a32d65f19fb7ac79936d79ee7a2e97f7e8462a61d9fdbf744a9bfab244516",
+    "tests/p1058/sources/closed_then_two.nl": "234c331fde90dcb38d181418e47ba59ad0bd6635f0d19dde04f59087ef680952",
+    "tests/p1058/sources/missing_failure_arm.nl": "17f5681f7b492e0717e3bd0cfe434f832b706f641875c484911ae5f5cf8ff209",
+    "tests/p1058/sources/missing_failure_cleanup.nl": "1f55d57710929ac54f088d6531a95f31e201eaea42a5ae453759e61d53e131c2",
+    "tests/p1058/sources/one_registered_call.nl": "54d76ff96a69f381fe28837c56e3ef0d310ec1b5248a05e1286f57196743b638",
+    "tests/p1058/sources/reversed_worlds.nl": "0b7e6fc9eba9d3a30e08af8e812e018b957c165a7f3f627b4c7637d5ccad40b2",
+    "tests/p1058/sources/same_original_calls.nl": "352497a60e86689f9294c569052aaf0987bc8de56c2a2198efaacc891a649e3f",
+    "tests/p1058/sources/success_only_name_after_join.nl": "5cffce40967eefdf051e643438a04abd56536b5d19238e51f3a1365871ea5bbc",
+    "tests/p1058/sources/third_registered_call.nl": "ba529ab2b66f70f9b2704aed3b6cd857765f4fcff4529e0376d710c87c52a86e",
+    "tests/p1058/sources/wrong_H_domain.nl": "ce862108c8b018345773a043efb2b8bf85a7ac7595edc7eca3001b1275843e31",
+    "tests/p1058/sources/wrong_constant_equal.nl": "bcd87e3d3ace50abe9479770b3b92bb08bc94e383d4932ce57d7224b5931e144",
+    "tests/p1058/sources/wrong_incoming_equal.nl": "3d17013e65f31e6165fb3dcb93678d8efc6bd92e93cec76889d428a00db30b87",
+    "tests/p1058/sources/zero_registered_calls.nl": "e2d30f70840b87b2687747e3eabda13e84c204fe3b870aa7644f74e442620d1d"
+  }
+}

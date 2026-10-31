@@ -1,0 +1,14 @@
+{"stage":"parse","status":0,"code":""}
+{"stage":"register","status":0,"code":""}
+{"stage":"CHECK","status":0,"code":""}
+{"stage":"public","ordinal":0,"call":11,"function":11,"body_get":true,"parameters_get":true,"body_validate":0,"parameters_validate":0,"event_validate":0}
+{"stage":"values","ordinal":0,"old":41,"before":41,"new":67,"sibling":173,"parent":1,"child":2,"incarnation":1,"loan":9,"sibling_fact_unchanged":true}
+{"stage":"public","ordinal":1,"call":18,"function":12,"body_get":true,"parameters_get":true,"body_validate":0,"parameters_validate":0,"event_validate":0}
+{"stage":"values","ordinal":1,"old":67,"before":67,"new":109,"sibling":173,"parent":1,"child":2,"incarnation":1,"loan":16,"sibling_fact_unchanged":true}
+{"stage":"count","actual_current_calls":2}
+{"stage":"parse","status":0,"code":""}
+{"stage":"register","status":0,"code":""}
+{"stage":"CHECK","status":0,"code":""}
+{"stage":"negative","ordinal":0,"foreign_body":3,"foreign_parameters":3,"other_actual_call_body":3,"wrong_field":3}
+{"stage":"negative","ordinal":1,"foreign_body":3,"foreign_parameters":3,"other_actual_call_body":3,"wrong_field":3}
+{"stage":"foreign_owner_after_A_destroy","B_healthy":true}

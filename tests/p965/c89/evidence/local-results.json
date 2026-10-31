@@ -1,0 +1,130 @@
+{
+  "authority": "Issue965 C89 https://github.com/wakairo/NewLang_Compiler/issues/965#issuecomment-6456726021",
+  "status": "Pre-PR local gates PASS; no independent F/R or Product GO",
+  "main": "d579c761a78e3c84765e35061f77936789788d82",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "base": "24dac612697fcfcfdfcfabc35418c5e6f0a7b0b3",
+  "base_branch": "p961-h-fork-origin-custody",
+  "branch": "p965-canonical-custody-children",
+  "tested_head": "58152edfb1877570b1463c074e353c408567396a",
+  "tested_tree": "bae772e73948136e2f8228c1c43fc86c9d73417d",
+  "first_c89_runtime_red": {
+    "candidate": "f5cee64347ac0ee504d2661dc742c6da02f9180c",
+    "tree": "19fe9d04334b042f5191adf95c5aa9dbb8174792",
+    "stage": "full GCC frontend FIRST",
+    "first_failed_test": "captured_closure_2_worlds.unit",
+    "line": "tests/unit/captured_closure_test.c:236",
+    "progress": "428 PASS, first RED #429; remaining94 not run",
+    "first_failed_assertion": "f != NULL && nl_checked_captured_closure_view(f, match(f), &view)",
+    "source_sha256": {
+      "tests/unit/captured_closure_test.c": "108dd2ef015b6cf7fd71e97d02289b53537324499631c1330284fa5c1c5ec6cf",
+      "src/h_origin_internal.c": "3bf157da8bc4dd97191c2af1245fe289439530d2eb5db4909f2b7a98c33457d8",
+      "src/checked.c": "d9b9fc79521ea12a296c21d1f21c7b478e5f7f791c54509c3397b07f684202e5",
+      "src/semantic_check.c": "e155bfbd673cf62ff1532ea1fc1f2c9837070d4a20a4f6a80f06777cf393eecc",
+      "src/copy_body.c": "6e2cb11c97d1d34e6e2e7e318d8d327fe9c71df4685c8520465c3b52a69498a9"
+    },
+    "logs": {
+      "gcc-full-FIRST.log": "df1c48ad299ff661f0087f28bdcd944575bea16c687824faef0699a7a18fc66c",
+      "gcc-full-FIRST-details.log": "92e69346d421a62fef3dba4689eaf2e6fcebde2da2b3f216a34dbcb3285db520",
+      "gcc-full-FIRST-failed-tests.log": "6a04c7d05207505dededaff91ca6b2b221812eb8040dda113208e17f494ece92"
+    },
+    "diagnosis": "Existing probe and public source test wrapper clear the owned root entry spelling after CHECK and take context destruction responsibility. New custody source equality rejects that legacy detached spelling state, so body getter returns NULL. Original CHECK-issued body source and plan remain retained. No old oracle changed."
+  },
+  "original_frontend": 515,
+  "additive_tests": 10,
+  "actual_inventory": 525,
+  "gcc_result": "525/525 PASS",
+  "other_configurations": "Clang23.1.3 / ASan+LSan / UBSan: core5, neighbors20, supplement10, original custody33, native1; captured/root compatibility+poison/OOM12 also PASS each",
+  "ownership_oom": {
+    "clang": {
+      "ownership_trials": 494,
+      "actual_reached_oom": 502,
+      "modes": {
+        "CHECK": 320,
+        "definition": 182
+      },
+      "original_frozen_full_records_identical": true
+    },
+    "asan": {
+      "ownership_trials": 494,
+      "actual_reached_oom": 502,
+      "modes": {
+        "CHECK": 320,
+        "definition": 182
+      },
+      "original_frozen_full_records_identical": true
+    },
+    "ubsan": {
+      "ownership_trials": 494,
+      "actual_reached_oom": 502,
+      "modes": {
+        "CHECK": 320,
+        "definition": 182
+      },
+      "original_frozen_full_records_identical": true
+    },
+    "gcc": {
+      "ownership_trials": 494,
+      "actual_reached_oom": 502,
+      "modes": {
+        "CHECK": 320,
+        "definition": 182
+      },
+      "original_frozen_full_records_identical": true
+    }
+  },
+  "native": {
+    "sources": [
+      "echo.nl",
+      "window_true.nl"
+    ],
+    "strict": "GCC14.2 and curated Clang23.1.3 C17 -Wall -Wextra -Wpedantic -Werror O0/O2",
+    "raw_runs": 16,
+    "observed_guest_runs": 48,
+    "heap_successes": [
+      0,
+      1,
+      2
+    ],
+    "sanitizers": [
+      "none",
+      "address+leaks",
+      "undefined"
+    ],
+    "C_sha256": {
+      "echo.nl": "3131c98cf5b21cf64b99164ff80ef4d91cb2736d9da011939abc004fbf59043a",
+      "window_true.nl": "ce0f3171dc9f0499036d2245d4deaf55627b2f61e399e55d78a8c90d58254f5c"
+    },
+    "named_output": "old bytes/dev/ino preserved on rejection/reached file-write failure; healthy retry PASS"
+  },
+  "formatter": "pinned clang-format23.1.3 full tracked C/H PASS",
+  "history": "P605/P634 and original P965 full SHA gates PASS; all old tests/oracles/manifests/REDs unchanged",
+  "scope_limit": "World/node/function-table faults restore before teardown. Original child/count/base trials include unrestored A destruction/B survival. No arbitrary dangling C heap/opaque-owner/forged-allocation-length safety or exhaustive OOM claim.",
+  "prepublication_remote_budget": {
+    "consumed_cycles": 0,
+    "consumed_jobs": 0,
+    "max_natural_cycles": 2,
+    "max_jobs": 12,
+    "manual_retry": 0
+  },
+  "prohibitions": "old PR962/954/946 edits0, READY0, merge0, new F/R0; independent R963/R968 inputs unread/unmodified",
+  "environment": "Original workspace briefly unavailable after gates, reconnected without reconstruction; exact HEAD/tree/frozen source/pass log intact",
+  "value_alignment_risk": "Finite passes, not a safety proof. Custody+historical observation+current validation+source-lifetime states add compiler audit surface/global validation cost. C-relative library-author and ordinary-safe-caller human UB audit/re-audit burden UNMEASURED; KEEP Draft17.34/REPLACE NONE, Product GO PAUSED/H1 HOLD.",
+  "source_sha256": {
+    "src/checked.c": "d9b9fc79521ea12a296c21d1f21c7b478e5f7f791c54509c3397b07f684202e5",
+    "src/checked_c_node.c": "f70b4b7400138e16557f84fb4c2c04b90bf357111a2812a26e66464ec0e7006c",
+    "src/copy_body.c": "6e2cb11c97d1d34e6e2e7e318d8d327fe9c71df4685c8520465c3b52a69498a9",
+    "src/h_origin_internal.c": "4e902602f0b474655bbcb3b50980d7f27fd371dca37bd7ef17e375599eb4957a",
+    "src/h_origin_internal.h": "07091dd7fca811361db83577b8a8e1a984fb27281dd8cf77be32a6ef9cfafd27",
+    "src/semantic_check.c": "e155bfbd673cf62ff1532ea1fc1f2c9837070d4a20a4f6a80f06777cf393eecc",
+    "CMakeLists.txt": "3301cb737a7b7159dab3b427c3b0e4c731850e7108f4e8f08530c7afdcbb409c",
+    "tests/p965/freeze.json": "cf3231f87e3d6f1a5c13eb29e3ab017a8ee7560c52c90ceb73c916ee5e5c1a49",
+    "tests/p965/c85/freeze.json": "bf3b75236b2da72767f5fd04cc50a63ddd29da2f8d24c70b3c0ab4d5318ffa7c",
+    "tests/p965/c85/observer.c": "df64982b10f4041e507069b9535f0a512b16d808ae747922ce4047d724df94c6",
+    "tests/p965/c85/oracle.json": "9673d219b26c2821985fc425a094790ef068c4a719475e858490adc39cd2c55c",
+    "tests/p965/c85/evidence/observer-gcc-FIRST.log": "0748471e6e035252fa17317889cc88b7b63967e73328e5abe041a8ec50d37a70",
+    "tests/p965/c89/guard-freeze.json": "47b354fbba2138bbb11a132dc4ce20b2199c61f0a37912a8cd1698e884e6ef00",
+    "tests/p965/c89/observer-freeze.json": "44889c17f05c1de81f1bf88347eae0d73e6afe16346276bf919273e6b53cfdbe",
+    "tests/p965/c89/entry-source-freeze.json": "c9d457f35f1c8590c8f9648c2c4d1232ca6d315a62bffd7b321cd02cb47effef"
+  }
+}

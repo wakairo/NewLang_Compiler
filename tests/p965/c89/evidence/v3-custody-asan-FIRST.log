@@ -1,0 +1,72 @@
+Internal ctest changing into directory: /workspace/p965-build-asan
+Test project /workspace/p965-build-asan
+      Start 276: p965_freeze.unit
+ 1/33 Test #276: p965_freeze.unit ........................   Passed    0.03 sec
+      Start 277: p965_echo_ownership.unit
+ 2/33 Test #277: p965_echo_ownership.unit ................   Passed    1.47 sec
+      Start 278: p965_echo_oom.unit
+ 3/33 Test #278: p965_echo_oom.unit ......................   Passed    1.20 sec
+      Start 279: p965_echo_definition_oom.unit
+ 4/33 Test #279: p965_echo_definition_oom.unit ...........   Passed    0.69 sec
+      Start 280: p965_window_ownership.unit
+ 5/33 Test #280: p965_window_ownership.unit ..............   Passed    1.38 sec
+      Start 281: p965_window_oom.unit
+ 6/33 Test #281: p965_window_oom.unit ....................   Passed    1.06 sec
+      Start 282: p965_window_definition_oom.unit
+ 7/33 Test #282: p965_window_definition_oom.unit .........   Passed    0.51 sec
+      Start 283: p965_t_only_ownership.unit
+ 8/33 Test #283: p965_t_only_ownership.unit ..............   Passed    0.13 sec
+      Start 284: p965_t_only_oom.unit
+ 9/33 Test #284: p965_t_only_oom.unit ....................   Passed    0.07 sec
+      Start 285: p965_t_only_definition_oom.unit
+10/33 Test #285: p965_t_only_definition_oom.unit .........   Passed    0.05 sec
+      Start 286: p965_plain_ownership.unit
+11/33 Test #286: p965_plain_ownership.unit ...............   Passed    0.08 sec
+      Start 287: p965_plain_oom.unit
+12/33 Test #287: p965_plain_oom.unit .....................   Passed    0.04 sec
+      Start 288: p965_plain_definition_oom.unit
+13/33 Test #288: p965_plain_definition_oom.unit ..........   Passed    0.04 sec
+      Start 289: p965_loop_ownership.unit
+14/33 Test #289: p965_loop_ownership.unit ................   Passed    0.03 sec
+      Start 290: p965_loop_oom.unit
+15/33 Test #290: p965_loop_oom.unit ......................   Passed    0.02 sec
+      Start 291: p965_loop_definition_oom.unit
+16/33 Test #291: p965_loop_definition_oom.unit ...........   Passed    0.03 sec
+      Start 292: p965_continuation_ownership.unit
+17/33 Test #292: p965_continuation_ownership.unit ........   Passed    3.87 sec
+      Start 293: p965_continuation_oom.unit
+18/33 Test #293: p965_continuation_oom.unit ..............   Passed    1.81 sec
+      Start 294: p965_continuation_definition_oom.unit
+19/33 Test #294: p965_continuation_definition_oom.unit ...   Passed    0.94 sec
+      Start 295: p965_four_field_ownership.unit
+20/33 Test #295: p965_four_field_ownership.unit ..........   Passed   10.46 sec
+      Start 296: p965_four_field_oom.unit
+21/33 Test #296: p965_four_field_oom.unit ................   Passed    4.34 sec
+      Start 297: p965_four_field_definition_oom.unit
+22/33 Test #297: p965_four_field_definition_oom.unit .....   Passed    2.07 sec
+      Start 298: p965_lexical_ownership.unit
+23/33 Test #298: p965_lexical_ownership.unit .............   Passed    0.22 sec
+      Start 299: p965_lexical_oom.unit
+24/33 Test #299: p965_lexical_oom.unit ...................   Passed    0.25 sec
+      Start 300: p965_lexical_definition_oom.unit
+25/33 Test #300: p965_lexical_definition_oom.unit ........   Passed    0.06 sec
+      Start 301: p965_named_if.integration
+26/33 Test #301: p965_named_if.integration ...............   Passed    0.19 sec
+      Start 312: p961_reached_oom.unit
+27/33 Test #312: p961_reached_oom.unit ...................   Passed    0.38 sec
+      Start 313: p961_named_foreign.integration
+28/33 Test #313: p961_named_foreign.integration ..........   Passed    0.18 sec
+      Start 314: p961_original_foreign.unit
+29/33 Test #314: p961_original_foreign.unit ..............   Passed    0.06 sec
+      Start 315: p961_echo_origin.unit
+30/33 Test #315: p961_echo_origin.unit ...................   Passed    0.08 sec
+      Start 316: p961_window_true_origin.unit
+31/33 Test #316: p961_window_true_origin.unit ............   Passed    0.10 sec
+      Start 317: p953_echo_integrity.unit
+32/33 Test #317: p953_echo_integrity.unit ................   Passed    0.08 sec
+      Start 319: p953_window_true_integrity.unit
+33/33 Test #319: p953_window_true_integrity.unit .........   Passed    0.07 sec
+
+100% tests passed, 0 tests failed out of 33
+
+Total Test time (real) =  32.02 sec

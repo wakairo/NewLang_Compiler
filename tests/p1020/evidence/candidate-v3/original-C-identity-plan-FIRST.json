@@ -1,0 +1,37 @@
+{
+  "expected": "all unchanged original C bytes, compare actual fixed parent and both compilers",
+  "source_count": 25,
+  "old_cohort_count": 18,
+  "inputs": {
+    "tests/p982/sources/after_true.nl": "fe01780671fb4d2834323f2a8c0074e8296dd8ce6ca4bfd27139856592344c73",
+    "tests/p982/sources/after_false.nl": "ef1d67b5f402d9343909b0e62b6d35304b4661c2ffdbe42f99654cffcf58a33e",
+    "tests/p982/sources/second_true.nl": "d7cf70ecc94e17ea500acf3a6273c173c3fe791b9dee43a2b45e881359fc3518",
+    "tests/p982/sources/second_false.nl": "1932b58967f400dc4ffdd928dedd9737a52d707f4ca705bc10b11308c01cb21b",
+    "tests/p990/sources/before_direct.nl": "312291544d6b013c2c4bd37a8cb7d5899d9f00e77cc0e2e904cb454830bfdd7f",
+    "tests/p990/sources/after_true_direct.nl": "1320bf0ba4e30a219671ff89927bae277f2fad524e45317f57c1f6876bbce3bb",
+    "tests/p990/sources/after_false_direct.nl": "4b01fa2e75ee0a9bd574b8bd7629cf5f516ac2cc5d798e22fbb0a262e5e8e7e7",
+    "tests/p990/sources/before_bound.nl": "f3d24ccd3ad7905e003ff2c561d3efbb64d5d5e05fa1477598efca59c035a43f",
+    "tests/p990/sources/after_true_bound.nl": "4514ba19bef127414e5545930ecc4aad2ade14bbc5d886cdd3d830963b937e8d",
+    "tests/p990/sources/after_false_bound.nl": "4b3894aa099ddf39366c460f1880207805c6ada2e60102902c76a7f148aeb10d",
+    "tests/p990/p986/t_only_direct.nl": "37dfec293a692f02e851d11fce8a9a491ad1a0f9551c58df32b7acdf9a50165a",
+    "tests/p990/p986/t_only_bound.nl": "cbc8fac90352febc6925a39a76bd747fdaf7f2ca03fc978300c4d32df0535cd3",
+    "tests/p990/p986/t_before_allocation_direct.nl": "11dae439e1ec017bcc705ee63d3b2c328a9b83624e29d8c2c0619274d3523055",
+    "tests/p990/p986/t_before_allocation_bound.nl": "1de0c43fcf9696bb70adaac18cd2f509866d4b030d68fca54a1f25b8b750bfb0",
+    "tests/p990/p986/t_before_h_read_direct.nl": "3bc744886de50f6456e6e59c4c964091928f02a4f3e3d54cd9df5efb9af7a7f3",
+    "tests/p990/p986/t_before_h_read_bound.nl": "9ec7a58582de6d47dd519b999232a8265ff4fd1887aa30827775c5e170d78d98",
+    "tests/p990/sources/negative_duplicate_return.nl": "bd908c83f7074939cddadab9c8adec79098142ca50c70dec5c7e16297334145f",
+    "tests/p990/sources/calibration_unreachable_bound_v2.nl": "6c6c603d3a3695f4e4c0f8a09355cf40c403db5bdadc0941617bada913bc3ee8",
+    "tests/p1013/stage0/ordinary_same.nl": "2dbb7bc6409b94ff74ab87f2349775392f22a55c2dc363aa6999f59ba1b74cdd",
+    "tests/p1013/stage0/ordinary_distinct.nl": "f2867462d8ca8e272675709741631bab086af20d9d9f389d226b83be3899fcfb",
+    "tests/p1013/stage0/mixed_same.nl": "05f59a04b08103f61667f393863879e3ef5056b3560b858962b78746e0453775",
+    "tests/p1013/stage0/mixed_distinct.nl": "6eecf3906cecc25c3562d2aa1c0f641f2497774183a92ab097a5a7f233acef58",
+    "tests/p1013/production/mixed_distinct_direct.nl": "56f976789b7fe3cd320ad81787367523ae3ad6645513c145a9e9ed44cd515665",
+    "tests/p1020/sources/control_return_true.nl": "7ffe18c0260d2f9ec575975fb80ac33eff1ae22ecf09c64acf5181bcd193f8d7",
+    "tests/p1020/sources/control_return_false.nl": "7312ca7242e2c3dc4b1e3b08bea51676b2ffcd2a0918ea1509d4830058963eb0"
+  },
+  "binaries": {
+    "/workspace/p1019/pr1015-build/newlangc": "c243f6009442c3901d377955b582c2d1b608854f84ff8aa6b05bd9fd2543bd46",
+    "/workspace/p1020-build-gcc/newlangc": "221cecfd3e127fb1738cb73b8b15e1324bbed2ef66dd668f6d2c5f79d2cd74c2",
+    "/workspace/p1020-build-clang/newlangc": "f203aa33e1bf511d2817d071b1c42cddb7269bfb3c1f4097bbab4c7102abbf8c"
+  }
+}

@@ -1,0 +1,138 @@
+P982 original Git/source/oracle lineage and current versioned hashes PASS 602
+P990 freeze current-generation control PASS
+P990 freeze counterexample REJECTED original Git blob mismatch
+P990 freeze counterexample REJECTED current freeze digest: src/checked_c_copy_internal.h
+P990 freeze counterexample REJECTED original Git blob mismatch
+P990 freeze counterexample REJECTED current freeze digest: src/checked_c_node.c
+P990 freeze forward-generation production-change control PASS
+P990 freeze counterexample REJECTED current freeze digest: src/checked_c_node.c
+P990 freeze counterexample REJECTED previous freeze digest
+P990 freeze counterexample REJECTED original Git blob mismatch
+P990 versioned freeze: two controls and seven deliberate failures PASS
+P999 CONTROL reviewed-original-v1-v2-v3 PASS
+P999 CONTROL v5-new-production-and-CMake-original-history-retained PASS
+P999 CONTROL intermediate-generation-coverage-retained PASS
+P990 freeze counterexample REJECTED historical freeze SHA256: tests/p990/current-freeze-v1.json
+P999 CASE {"CLI_exit": 1, "CLI_stdout": "empty", "case": "f81-coherent-v1-v2-v3", "error": "historical freeze SHA256: tests/p990/current-freeze-v1.json", "named_bytes_dev_ino": "unchanged", "status": "REJECT"}
+P990 freeze counterexample REJECTED historical freeze SHA256: tests/p990/current-freeze-v2.json
+P999 CASE {"case": "past-v2-coherent-successors", "error": "historical freeze SHA256: tests/p990/current-freeze-v2.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED historical freeze SHA256: tests/p990/current-freeze-v3.json
+P999 CASE {"case": "past-v3-coherent-successor", "error": "historical freeze SHA256: tests/p990/current-freeze-v3.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED historical freeze SHA256: tests/p990/current-freeze-v1.json
+P999 CASE {"case": "mutable-anchor-claim", "error": "historical freeze SHA256: tests/p990/current-freeze-v1.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED historical freeze SHA256: tests/p990/current-freeze-v2.json
+P999 CASE {"case": "coherent-first-path-swap", "error": "historical freeze SHA256: tests/p990/current-freeze-v2.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED historical freeze path
+P999 CASE {"case": "first-generation-path-alias", "error": "historical freeze path", "status": "REJECT"}
+P990 freeze counterexample REJECTED freeze manifest fields
+P999 CASE {"case": "mutable-anchor-field", "error": "freeze manifest fields", "status": "REJECT"}
+P990 freeze counterexample REJECTED freeze coverage lost: tests/p990/observer.h
+P999 CASE {"case": "drop-P990-observer", "error": "freeze coverage lost: tests/p990/observer.h", "status": "REJECT"}
+P990 freeze counterexample REJECTED freeze coverage lost: tests/p990/run.py
+P999 CASE {"case": "drop-P990-runner", "error": "freeze coverage lost: tests/p990/run.py", "status": "REJECT"}
+P990 freeze counterexample REJECTED freeze coverage lost: tests/p990/source-freeze-v2.json
+P999 CASE {"case": "drop-P990-v2-source-manifest", "error": "freeze coverage lost: tests/p990/source-freeze-v2.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED freeze coverage lost: tests/p990/oracle-v2.json
+P999 CASE {"case": "drop-P990-v2-oracle", "error": "freeze coverage lost: tests/p990/oracle-v2.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED freeze coverage lost: tests/p982/sources/after_true.nl
+P999 CASE {"case": "drop-original-P982-source", "error": "freeze coverage lost: tests/p982/sources/after_true.nl", "status": "REJECT"}
+P990 freeze counterexample REJECTED freeze coverage lost: tests/p990/oracle-v1.json
+P999 CASE {"case": "drop-original-P990-oracle", "error": "freeze coverage lost: tests/p990/oracle-v1.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED freeze coverage lost: cmake/independent-r-manifest.py
+P999 CASE {"case": "drop-T997-runner", "error": "freeze coverage lost: cmake/independent-r-manifest.py", "status": "REJECT"}
+P990 freeze counterexample REJECTED freeze coverage lost: tests/p990/observer.h
+P999 CASE {"case": "intermediate-drop-restored-only-in-current", "error": "freeze coverage lost: tests/p990/observer.h", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P990 frozen input changed: tests/p990/sources/negative_additional_return_v2.nl
+P999 CASE {"case": "changed-v2-source-with-current-digest", "error": "original P990 frozen input changed: tests/p990/sources/negative_additional_return_v2.nl", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P990 frozen input changed: tests/p990/oracle-v2.json
+P999 CASE {"case": "changed-v2-oracle-with-current-digest", "error": "original P990 frozen input changed: tests/p990/oracle-v2.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P990 evidence changed: tests/p990/evidence/candidate1-lineage-FIRST.stderr
+P999 CASE {"case": "changed-original-first-RED-with-current-digest", "error": "original P990 evidence changed: tests/p990/evidence/candidate1-lineage-FIRST.stderr", "status": "REJECT"}
+P990 freeze counterexample REJECTED immutable T997 blob mismatch: cmake/independent-r-manifest.py
+P999 CASE {"case": "changed-T997-runner-with-current-digest", "error": "immutable T997 blob mismatch: cmake/independent-r-manifest.py", "status": "REJECT"}
+P990 freeze counterexample REJECTED missing freeze input: tests/p990/lineage/original/CMakeLists.txt.data
+P999 CASE {"case": "missing-old-support", "error": "missing freeze input: tests/p990/lineage/original/CMakeLists.txt.data", "status": "REJECT"}
+P990 freeze counterexample REJECTED immutable P982 parent/tree changed
+P999 CASE {"case": "unmatched-P982-parent-OID", "error": "immutable P982 parent/tree changed", "status": "REJECT"}
+P990 freeze counterexample REJECTED retained parent commit digest
+P999 CASE {"case": "unmatched-retained-parent-commit", "error": "retained parent commit digest", "status": "REJECT"}
+P990 freeze counterexample REJECTED symlink freeze path: tests/p990/current-freeze-v1.json
+P999 CASE {"case": "symlink-original-generation", "error": "symlink freeze path: tests/p990/current-freeze-v1.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED symlink freeze path: tests/p990/lineage/parent-snapshot-v1.json
+P999 CASE {"case": "symlink-intermediate-directory", "error": "symlink freeze path: tests/p990/lineage/parent-snapshot-v1.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED nonregular freeze path: tests/p990/observer.h
+P999 CASE {"case": "nonregular-current-input", "error": "nonregular freeze path: tests/p990/observer.h", "status": "REJECT"}
+P990 freeze counterexample REJECTED invalid freeze JSON
+P999 CASE {"case": "invalid-current-JSON", "error": "invalid freeze JSON", "status": "REJECT"}
+P990 freeze counterexample REJECTED duplicate freeze JSON key: schema
+P999 CASE {"case": "duplicate-current-JSON-key", "error": "duplicate freeze JSON key: schema", "status": "REJECT"}
+P990 freeze counterexample REJECTED nonlocal freeze path
+P999 CASE {"case": "absolute-manifest-path", "error": "nonlocal freeze path: /tmp/c107-do-not-read", "status": "REJECT"}
+P990 freeze counterexample REJECTED nonlocal freeze path
+P999 CASE {"case": "traversal-manifest-path", "error": "nonlocal freeze path: ../c107-do-not-read", "status": "REJECT"}
+P990 freeze counterexample REJECTED invalid freeze path
+P999 CASE {"case": "backslash-manifest-path", "error": "invalid freeze path", "status": "REJECT"}
+P990 freeze counterexample REJECTED nonlocal freeze path
+P999 CASE {"case": "noncanonical-manifest-path", "error": "nonlocal freeze path: tests/p990/./observer.h", "status": "REJECT"}
+P990 freeze counterexample REJECTED freeze SHA256 format: src/checked_c_copy_internal.h
+P999 CASE {"case": "invalid-current-digest-format", "error": "freeze SHA256 format: src/checked_c_copy_internal.h", "status": "REJECT"}
+P999 C107 provenance history: 3 new controls and 32 new deliberate rejections PASS; original 2 controls/7 rejections retained
+P1011 CONTROL honest-v5-original-history-and-evidence PASS
+P1011 CONTROL legitimate-v6-current-header-CMake-proof-consumer-update PASS
+P990 freeze counterexample REJECTED original P982 first RED changed
+P1011 CASE {"CLI_exit": 1, "CLI_stdout": "empty", "case": "coedited-current-v5", "error": "original P982 first RED changed", "named_bytes_dev_ino": "unchanged", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/RAW-LOG-SHA256SUMS
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/RAW-LOG-SHA256SUMS", "error": "original P982 evidence changed: tests/p982/evidence/RAW-LOG-SHA256SUMS", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/SHA256SUMS
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/SHA256SUMS", "error": "original P982 evidence changed: tests/p982/evidence/SHA256SUMS", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/baseline-FIRST.json
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/baseline-FIRST.json", "error": "original P982 evidence changed: tests/p982/evidence/baseline-FIRST.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/candidate1-cli-FIRST.json
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/candidate1-cli-FIRST.json", "error": "original P982 evidence changed: tests/p982/evidence/candidate1-cli-FIRST.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/candidate1-harness-build-FIRST.log
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/candidate1-harness-build-FIRST.log", "error": "original P982 evidence changed: tests/p982/evidence/candidate1-harness-build-FIRST.log", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/complete-reached-new-emitter-oom.json
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/complete-reached-new-emitter-oom.json", "error": "original P982 evidence changed: tests/p982/evidence/complete-reached-new-emitter-oom.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/complete-reached-old-oom.json
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/complete-reached-old-oom.json", "error": "original P982 evidence changed: tests/p982/evidence/complete-reached-old-oom.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/ctest-inventory.json
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/ctest-inventory.json", "error": "original P982 evidence changed: tests/p982/evidence/ctest-inventory.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/first-full-timeouts.json
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/first-full-timeouts.json", "error": "original P982 evidence changed: tests/p982/evidence/first-full-timeouts.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 first RED changed
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/first-reds.json", "error": "original P982 first RED changed", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/generated/after_false.nl.c.txt
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/generated/after_false.nl.c.txt", "error": "original P982 evidence changed: tests/p982/evidence/generated/after_false.nl.c.txt", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/generated/after_true.nl.c.txt
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/generated/after_true.nl.c.txt", "error": "original P982 evidence changed: tests/p982/evidence/generated/after_true.nl.c.txt", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/generated/second_false.nl.c.txt
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/generated/second_false.nl.c.txt", "error": "original P982 evidence changed: tests/p982/evidence/generated/second_false.nl.c.txt", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/generated/second_true.nl.c.txt
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/generated/second_true.nl.c.txt", "error": "original P982 evidence changed: tests/p982/evidence/generated/second_true.nl.c.txt", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/harness-v2-compound-diagnostic.log
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/harness-v2-compound-diagnostic.log", "error": "original P982 evidence changed: tests/p982/evidence/harness-v2-compound-diagnostic.log", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/harness-v2-gcc-auth-FIRST.log
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/harness-v2-gcc-auth-FIRST.log", "error": "original P982 evidence changed: tests/p982/evidence/harness-v2-gcc-auth-FIRST.log", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/local-results.json
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/local-results.json", "error": "original P982 evidence changed: tests/p982/evidence/local-results.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/private-repair.patch
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/private-repair.patch", "error": "original P982 evidence changed: tests/p982/evidence/private-repair.patch", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/v3-asan-timeout-isolation-FIRST.log
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/v3-asan-timeout-isolation-FIRST.log", "error": "original P982 evidence changed: tests/p982/evidence/v3-asan-timeout-isolation-FIRST.log", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/v3-format-FIRST.log
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/v3-format-FIRST.log", "error": "original P982 evidence changed: tests/p982/evidence/v3-format-FIRST.log", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/v3-native-observations.json
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/v3-native-observations.json", "error": "original P982 evidence changed: tests/p982/evidence/v3-native-observations.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED original P982 evidence changed: tests/p982/evidence/v3-ubsan-timeout-isolation-FIRST.log
+P1011 CASE {"case": "coedited-future-v6:tests/p982/evidence/v3-ubsan-timeout-isolation-FIRST.log", "error": "original P982 evidence changed: tests/p982/evidence/v3-ubsan-timeout-isolation-FIRST.log", "status": "REJECT"}
+P990 freeze counterexample REJECTED historical freeze SHA256: tests/p990/current-freeze-v4.json
+P1011 CASE {"case": "historical-v4-coherent-update", "error": "historical freeze SHA256: tests/p990/current-freeze-v4.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED freeze coverage lost: tests/p982/evidence/first-reds.json
+P1011 CASE {"case": "missing-first-red-key", "error": "freeze coverage lost: tests/p982/evidence/first-reds.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED symlink freeze path: tests/p982/evidence/first-reds.json
+P1011 CASE {"case": "first-red-symlink", "error": "symlink freeze path: tests/p982/evidence/first-reds.json", "status": "REJECT"}
+P990 freeze counterexample REJECTED nonregular freeze path: tests/p982/evidence/first-reds.json
+P1011 CASE {"case": "first-red-nonregular", "error": "nonregular freeze path: tests/p982/evidence/first-reds.json", "status": "REJECT"}
+P1011 C111: 2 controls and 27 deliberate rejections PASS; old expectations retained
+P990 freeze counterexample REJECTED historical freeze SHA256: tests/p990/current-freeze-v5.json
+P1013 C112 original-v5 external-anchor counterexample REJECTED

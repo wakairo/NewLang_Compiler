@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/p1045/tests/p1045/baseline.py", line 64, in <module>
+    checked = invoke(label + "-CHECK", [cli, "--check", source]); ok(checked)
+                                                                  ^^^^^^^^^^^
+  File "/workspace/p1045/tests/p1045/baseline.py", line 34, in ok
+    assert r.returncode == 0 and not r.stderr, (r.returncode, r.stdout, r.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (3, b'', b'/workspace/p1045/tests/p1045/sources/prefix_two_originals.nl:96:25-96:28: error(semantic)[P5-DUPLICATE-BINDING]: binding name already exists in current lexical scope\n')

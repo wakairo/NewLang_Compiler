@@ -1,0 +1,146 @@
+[
+  {
+    "label": "build-public",
+    "command": [
+      "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-g",
+      "-O0",
+      "-fno-pie",
+      "-no-pie",
+      "-I/workspace/p1045/include",
+      "/workspace/p1045/tests/p1045/probe.c",
+      "-Wl,--start-group",
+      "/workspace/p1045-build-gcc13/libnewlang_semantic.a",
+      "/workspace/p1045-build-gcc13/libnewlang_parser.a",
+      "/workspace/p1045-build-gcc13/libnewlang_checked_c_node.a",
+      "/workspace/p1045-build-gcc13/libnewlang_lexer.a",
+      "/workspace/p1045-build-gcc13/libnewlang_checked.a",
+      "/workspace/p1045-build-gcc13/libnewlang_syntax.a",
+      "/workspace/p1045-build-gcc13/libnewlang_source.a",
+      "/workspace/p1045-build-gcc13/libnewlang_diagnostic.a",
+      "-Wl,--end-group",
+      "-o",
+      "/workspace/p1045-artifacts/admission-v1/preflight-FIRST/public"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "build-original-instrumented-emitter",
+    "command": [
+      "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-g",
+      "-O0",
+      "-fno-pie",
+      "-no-pie",
+      "-I/workspace/p1045/include",
+      "-finstrument-functions",
+      "-c",
+      "/workspace/p1045/src/checked_c_node.c",
+      "-o",
+      "/workspace/p1045-artifacts/admission-v1/preflight-FIRST/node.o"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "build-instrumented",
+    "command": [
+      "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-g",
+      "-O0",
+      "-fno-pie",
+      "-no-pie",
+      "-I/workspace/p1045/include",
+      "/workspace/p1045/tests/p1045/probe.c",
+      "/workspace/p1045-artifacts/admission-v1/preflight-FIRST/node.o",
+      "-Wl,--start-group",
+      "/workspace/p1045-build-gcc13/libnewlang_semantic.a",
+      "/workspace/p1045-build-gcc13/libnewlang_parser.a",
+      "/workspace/p1045-build-gcc13/libnewlang_checked_c_node.a",
+      "/workspace/p1045-build-gcc13/libnewlang_lexer.a",
+      "/workspace/p1045-build-gcc13/libnewlang_checked.a",
+      "/workspace/p1045-build-gcc13/libnewlang_syntax.a",
+      "/workspace/p1045-build-gcc13/libnewlang_source.a",
+      "/workspace/p1045-build-gcc13/libnewlang_diagnostic.a",
+      "-Wl,--end-group",
+      "-o",
+      "/workspace/p1045-artifacts/admission-v1/preflight-FIRST/instrumented"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "symbols",
+    "command": [
+      "nm",
+      "-n",
+      "/workspace/p1045-artifacts/admission-v1/preflight-FIRST/instrumented"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "5c79468f42fd6af8d09a774e7132348774d56363ee6208a1fa42b142a0cdd38e",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "reject-symbol-000000000040254f",
+    "command": [
+      "addr2line",
+      "-f",
+      "-e",
+      "/workspace/p1045-artifacts/admission-v1/preflight-FIRST/instrumented",
+      "000000000040254f"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "824402de8d729a614ee9a0b8cd8e86bb17e501eb6cf9ef730bdc8cdfb095c157",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "prefix_two_originals-CHECK",
+    "command": [
+      "/workspace/p1045-build-gcc13/newlangc",
+      "--check",
+      "/workspace/p1045/tests/p1045/sources-v2/prefix_two_originals.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "prefix_two_originals-current",
+    "command": [
+      "/workspace/p1045-artifacts/admission-v1/preflight-FIRST/public",
+      "/workspace/p1045/tests/p1045/sources-v2/prefix_two_originals.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "39f3ef51a613bca8e546502605957011f939d149c8a8681f652dc8e1efecc487",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "prefix_two_originals-C17",
+    "command": [
+      "/workspace/p1045-build-gcc13/newlangc",
+      "/workspace/p1045/tests/p1045/sources-v2/prefix_two_originals.nl"
+    ],
+    "exit": 4,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "115faa5ad1157d5b4e72cd252d103f99e4358a8ebe767fdd4d86ae9921f54518"
+  }
+]

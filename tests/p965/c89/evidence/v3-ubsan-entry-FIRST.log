@@ -1,0 +1,30 @@
+Internal ctest changing into directory: /workspace/p965-build-ubsan
+Test project /workspace/p965-build-ubsan
+      Start 310: p965_c89_entry_echo.unit
+ 1/12 Test #310: p965_c89_entry_echo.unit ............   Passed    0.02 sec
+      Start 311: p965_c89_entry_window.unit
+ 2/12 Test #311: p965_c89_entry_window.unit ..........   Passed    0.02 sec
+      Start 431: captured_closure_2_worlds.unit
+ 3/12 Test #431: captured_closure_2_worlds.unit ......   Passed    0.01 sec
+      Start 432: captured_closure_3_worlds.unit
+ 4/12 Test #432: captured_closure_3_worlds.unit ......   Passed    0.01 sec
+      Start 433: captured_closure_5_worlds.unit
+ 5/12 Test #433: captured_closure_5_worlds.unit ......   Passed    0.02 sec
+      Start 434: captured_closure_poison.unit
+ 6/12 Test #434: captured_closure_poison.unit ........   Passed    0.03 sec
+      Start 435: captured_closure_oom.unit
+ 7/12 Test #435: captured_closure_oom.unit ...........   Passed    0.27 sec
+      Start 436: captured_closure_checker-oom.unit
+ 8/12 Test #436: captured_closure_checker-oom.unit ...   Passed    3.14 sec
+      Start 438: five_root_evidence.unit
+ 9/12 Test #438: five_root_evidence.unit .............   Passed    0.04 sec
+      Start 439: five_root_poison.unit
+10/12 Test #439: five_root_poison.unit ...............   Passed    0.20 sec
+      Start 440: five_root_oom.unit
+11/12 Test #440: five_root_oom.unit ..................   Passed    2.58 sec
+      Start 441: five_root_checker-oom.unit
+12/12 Test #441: five_root_checker-oom.unit ..........   Passed   10.92 sec
+
+100% tests passed, 0 tests failed out of 12
+
+Total Test time (real) =  17.26 sec

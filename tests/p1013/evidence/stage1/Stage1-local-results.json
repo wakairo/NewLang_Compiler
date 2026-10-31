@@ -1,0 +1,275 @@
+{
+  "release": "C112/C113",
+  "tested_head": "544614d1081400bd16e8697b0d2028257fdb1cee",
+  "tested_tree": "dfa0ed470112c660905a8ffc0fa74e73096743f2",
+  "parent": "32035c9b94c85afad6bf1d86b29654760a415f9f",
+  "parent_tree": "815f31d63c6de0bbdf9be571238d55611fcf6089",
+  "main": "438170098d5b98096f1ad1f1f200dc1f326c75c3",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "Stage0_gate": "YES, all actual source-issued GET/current validators OK, original mixed distinct private identity fence first",
+  "Stage1_local_bounded_gate": "YES",
+  "v6_inputs": 602,
+  "v6_sha256": "eaea7e801db863f1e4d4b5d70451227aaa03048785bfcd2f7f3715786d06c267",
+  "original_v1_v5": {
+    "tests/p990/current-freeze-v1.json": {
+      "sha256": "e1f07f8a30fe927d374c76fd802c8c10d861090d6abe25e6ef090ee65b99aab4",
+      "oid": "cd6e30902968e65c8ecf580dd404b3247035e7ec"
+    },
+    "tests/p990/current-freeze-v2.json": {
+      "sha256": "e6bf940e5b5e7ccbcc43ae269f51bfda5dc5f5638306916dd81d64df81785989",
+      "oid": "f3a79d52250879e39b5abece92343097603e6c1a"
+    },
+    "tests/p990/current-freeze-v3.json": {
+      "sha256": "d636d2772584a16256ace830ecd4e82e352d0b8d80bf63172fa1ecaedf6829b8",
+      "oid": "9f81177516e7e1f178e3cdf7e9a99aaaf19923ca"
+    },
+    "tests/p990/current-freeze-v4.json": {
+      "sha256": "2effb5d5da27f337a68147887428f0a06bdef5184dedbb8b8ceaec6d684510af",
+      "oid": "e6f0946976d550973cf69de7d539b161b08b316d"
+    },
+    "tests/p990/current-freeze-v5.json": {
+      "sha256": "c5793be5673438ccc6e6eb3145fd13de63e19ad13b4547a5a862e0483d6b010d",
+      "oid": "f2855aacc4d4fe62a181ea9be28c08be6247b721"
+    }
+  },
+  "new_target_matrix": [
+    {
+      "mode": "GCC",
+      "passed": true,
+      "public_positive_sources": 5,
+      "metadata_rejections": 54,
+      "H_rejections": 12,
+      "unrestored_foreign_child_B_survival": 3,
+      "physical_profiles": 18,
+      "raw_native": 10,
+      "negative_sources": 4,
+      "named_error_exact_retry": 5,
+      "new_reached_OOM": {
+        "mixed_same.nl": 403,
+        "mixed_distinct.nl": 403,
+        "mixed_distinct_direct.nl": 403
+      },
+      "new_OOM_statuses": {
+        "2": 1149,
+        "1": 60
+      },
+      "log_sha256": "e9780ac395b8b1efbdd2b94750522861806dd8a107f4ac1bcc3b30be4b4d5ee7"
+    },
+    {
+      "mode": "Clang",
+      "passed": true,
+      "public_positive_sources": 5,
+      "metadata_rejections": 54,
+      "H_rejections": 12,
+      "unrestored_foreign_child_B_survival": 3,
+      "physical_profiles": 18,
+      "raw_native": 10,
+      "negative_sources": 4,
+      "named_error_exact_retry": 5,
+      "new_reached_OOM": {
+        "mixed_same.nl": 403,
+        "mixed_distinct.nl": 403,
+        "mixed_distinct_direct.nl": 403
+      },
+      "new_OOM_statuses": {
+        "2": 1149,
+        "1": 60
+      },
+      "log_sha256": "3601265e0dcc2b8201c74c90f125604e9aead9388c2f2d075e6ad150f6c4ee30"
+    },
+    {
+      "mode": "ASan-LSan",
+      "passed": true,
+      "public_positive_sources": 5,
+      "metadata_rejections": 54,
+      "H_rejections": 12,
+      "unrestored_foreign_child_B_survival": 3,
+      "physical_profiles": 18,
+      "raw_native": 10,
+      "negative_sources": 4,
+      "named_error_exact_retry": 5,
+      "new_reached_OOM": {
+        "mixed_same.nl": 403,
+        "mixed_distinct.nl": 403,
+        "mixed_distinct_direct.nl": 403
+      },
+      "new_OOM_statuses": {
+        "2": 1149,
+        "1": 60
+      },
+      "log_sha256": "7c431272e89bcaccf2b6355d358d345a7f711953bf8026a80dbd3eb66fd4a0f0"
+    },
+    {
+      "mode": "UBSan",
+      "passed": true,
+      "public_positive_sources": 5,
+      "metadata_rejections": 54,
+      "H_rejections": 12,
+      "unrestored_foreign_child_B_survival": 3,
+      "physical_profiles": 18,
+      "raw_native": 10,
+      "negative_sources": 4,
+      "named_error_exact_retry": 5,
+      "new_reached_OOM": {
+        "mixed_same.nl": 403,
+        "mixed_distinct.nl": 403,
+        "mixed_distinct_direct.nl": 403
+      },
+      "new_OOM_statuses": {
+        "2": 1149,
+        "1": 60
+      },
+      "log_sha256": "8b05c268a75cf19d801cf86e176850831af0b80f3ca3bb5e5c2f751e8bb3f3c7"
+    }
+  ],
+  "new_C_SHA256": {
+    "tests/p1013/stage0/ordinary_same.nl": "b1f954d064f366dc4a98bc90d4df1bc8fbdb81a173843b580fa6387dac025074",
+    "tests/p1013/stage0/ordinary_distinct.nl": "b90a54b7838373a2b27e61aa89008695ea2885cdbaf70aec60c0c02eb90d680a",
+    "tests/p1013/stage0/mixed_same.nl": "79670a957616765528bfde8a8ccbe548b23fe1f611445a7f32e40e98a466b50f",
+    "tests/p1013/stage0/mixed_distinct.nl": "44d2a6e412432f9a50139eefcbad94729be9a7ad3763c6a0af618be92e0992ab",
+    "tests/p1013/production/mixed_distinct_direct.nl": "5193732f8e2c47f23cb6a99bd791ce59166c548fb3b089ccfe838e68595b1f39"
+  },
+  "full_frontend": [
+    {
+      "mode": "GCC",
+      "ctests": 577,
+      "seconds": 109.308,
+      "log_sha256": "821e9511b7ee1cbdab84be5ad986f3d2e91998a2056662469cdf7127890a77b2"
+    },
+    {
+      "mode": "Clang",
+      "ctests": 577,
+      "seconds": 91.61,
+      "log_sha256": "78cc990138944dd9aaec828fcbf2e491488422c6af3f51bf30027b8103def711"
+    }
+  ],
+  "legacy_replay": {
+    "postprocessor": "P1013 read-only original-data aggregation, inherited corrected16 physical plus2 raw-only model",
+    "release": "C112",
+    "tested_head": "544614d1081400bd16e8697b0d2028257fdb1cee",
+    "tested_tree": "dfa0ed470112c660905a8ffc0fa74e73096743f2",
+    "parent": "32035c9b94c85afad6bf1d86b29654760a415f9f",
+    "production": "C112 two-helper private consumer; legacy output byte-identical",
+    "current_manifest": "tests/p990/current-freeze-v6.json",
+    "inputs": 602,
+    "local_configuration": "GCC14.2 Debug frontend-only + T998 hook",
+    "ctests": 577,
+    "ctest_exit": 0,
+    "ctest_log_sha256": "821e9511b7ee1cbdab84be5ad986f3d2e91998a2056662469cdf7127890a77b2",
+    "inventory": {
+      "old_P990": 575,
+      "parent_P1012": 577,
+      "current": 577,
+      "missing_old": [],
+      "R_cohort": 0
+    },
+    "retained_P999_controls": 3,
+    "retained_P999_rejections": 32,
+    "new_P1011_controls": 2,
+    "new_P1011_rejections": 27,
+    "F82_actual": {
+      "CLI_exit": 1,
+      "CLI_stdout": "empty",
+      "case": "coedited-current-v5",
+      "error": "original P982 first RED changed",
+      "named_bytes_dev_ino": "unchanged",
+      "status": "REJECT"
+    },
+    "old_provenance_controls": 2,
+    "old_provenance_rejections": 7,
+    "F81_actual": {
+      "CLI_exit": 1,
+      "CLI_stdout": "empty",
+      "case": "f81-coherent-v1-v2-v3",
+      "error": "historical freeze SHA256: tests/p990/current-freeze-v1.json",
+      "named_bytes_dev_ino": "unchanged",
+      "status": "REJECT"
+    },
+    "old_owner_trials": 494,
+    "old_check_definition_oom": 502,
+    "old_oom_complete_records_match": true,
+    "P982_emitter_oom": 1788,
+    "P982_emitter_complete_records_match": true,
+    "P990_emitter_oom": 3388,
+    "P990_emitter_complete_records_match": true,
+    "P990_emitter_by_source": {
+      "before_direct.nl": 203,
+      "after_true_direct.nl": 447,
+      "after_false_direct.nl": 447,
+      "before_bound.nl": 203,
+      "after_true_bound.nl": 447,
+      "after_false_bound.nl": 447,
+      "t_before_allocation_direct.nl": 203,
+      "t_before_allocation_bound.nl": 203,
+      "t_before_h_read_direct.nl": 191,
+      "t_before_h_read_bound.nl": 191,
+      "negative_duplicate_return.nl": 203,
+      "calibration_unreachable_bound_v2.nl": 203
+    },
+    "P990_emitter_statuses": {
+      "2": 2980,
+      "1": 408
+    },
+    "P990_metadata_faults": 364,
+    "foreign_candidates": 56,
+    "P990_raw_native": 28,
+    "P990_physical_guest": 72,
+    "P982_raw_native": 8,
+    "P982_physical_guest": 24,
+    "named_source_negatives": 10,
+    "named_reached_error_retry_sources": 14,
+    "generated_C_physical16": {
+      "after_true.nl": "d40c528a95829c3f2c93c4884ae2ca668cf48ef1f0a197752b846751f35bac6b",
+      "after_false.nl": "dbab1ebd3668746f89a1eff5f23b22cebfb651ae20c6d387ea4135c7e52a7a6f",
+      "second_true.nl": "9c187d36b7a7272899a8a7d9a660f4de38cb4319413a1e5e048784b48901b12b",
+      "second_false.nl": "0427a1a5d3ff15d17e4149ada8fdaa319e41c57daf9cd6d69b2e8054bcddafb6",
+      "before_direct.nl": "18c61d1ec8eb3e9e6544e643925b1d0355c202e21364d137a79f7361cca2ab5d",
+      "t_before_allocation_direct.nl": "f40b169d753f2fbe0b6bd9aa07527de06e352dfbb72e075633047f43dd42ae41",
+      "after_true_direct.nl": "1473e8c3867122a2f3f50cf27cd67ef580f28e60df385cfeaa80469401100b52",
+      "t_before_allocation_bound.nl": "4d66a0d803433d40f406895485f07779b683aa67761c16ccee70d46e2c8c5536",
+      "after_false_direct.nl": "b4da0dc8516f744e0d36a03a14db55f6f614ffcf861af8fd18974cb5621bd85f",
+      "t_before_h_read_direct.nl": "4f6e30e757f8b366eeb5c06e7fc62281d51f67d4c81993f91b9a15537c8712cf",
+      "before_bound.nl": "1c9a85562de4a2743f30581a742b2bb9895f92390ced504e8338ef14ea388ca3",
+      "t_before_h_read_bound.nl": "dc787493b12ab9ea4c9c2457ec9ffea0433da4ad9f0aead95bcc6982c26e6229",
+      "after_true_bound.nl": "20606056c3fd7f7814d426bc780b1a475a5bc0826c85778b2130e5bf21c0611c",
+      "after_false_bound.nl": "755f1631cd98788daf80caa5fe1319dfeacb64e32f88d116792b2b33ae26f1a9",
+      "negative_duplicate_return.nl": "18c61d1ec8eb3e9e6544e643925b1d0355c202e21364d137a79f7361cca2ab5d",
+      "calibration_unreachable_bound_v2.nl": "1c9a85562de4a2743f30581a742b2bb9895f92390ced504e8338ef14ea388ca3"
+    },
+    "generated_C_all18": {
+      "after_true.nl": "d40c528a95829c3f2c93c4884ae2ca668cf48ef1f0a197752b846751f35bac6b",
+      "after_false.nl": "dbab1ebd3668746f89a1eff5f23b22cebfb651ae20c6d387ea4135c7e52a7a6f",
+      "second_true.nl": "9c187d36b7a7272899a8a7d9a660f4de38cb4319413a1e5e048784b48901b12b",
+      "second_false.nl": "0427a1a5d3ff15d17e4149ada8fdaa319e41c57daf9cd6d69b2e8054bcddafb6",
+      "before_direct.nl": "18c61d1ec8eb3e9e6544e643925b1d0355c202e21364d137a79f7361cca2ab5d",
+      "t_before_allocation_direct.nl": "f40b169d753f2fbe0b6bd9aa07527de06e352dfbb72e075633047f43dd42ae41",
+      "after_true_direct.nl": "1473e8c3867122a2f3f50cf27cd67ef580f28e60df385cfeaa80469401100b52",
+      "t_before_allocation_bound.nl": "4d66a0d803433d40f406895485f07779b683aa67761c16ccee70d46e2c8c5536",
+      "after_false_direct.nl": "b4da0dc8516f744e0d36a03a14db55f6f614ffcf861af8fd18974cb5621bd85f",
+      "t_before_h_read_direct.nl": "4f6e30e757f8b366eeb5c06e7fc62281d51f67d4c81993f91b9a15537c8712cf",
+      "before_bound.nl": "1c9a85562de4a2743f30581a742b2bb9895f92390ced504e8338ef14ea388ca3",
+      "t_before_h_read_bound.nl": "dc787493b12ab9ea4c9c2457ec9ffea0433da4ad9f0aead95bcc6982c26e6229",
+      "after_true_bound.nl": "20606056c3fd7f7814d426bc780b1a475a5bc0826c85778b2130e5bf21c0611c",
+      "after_false_bound.nl": "755f1631cd98788daf80caa5fe1319dfeacb64e32f88d116792b2b33ae26f1a9",
+      "negative_duplicate_return.nl": "18c61d1ec8eb3e9e6544e643925b1d0355c202e21364d137a79f7361cca2ab5d",
+      "calibration_unreachable_bound_v2.nl": "1c9a85562de4a2743f30581a742b2bb9895f92390ced504e8338ef14ea388ca3",
+      "t_only_direct.nl": "fe63f66c29c24cf905bd215f7470af652fa0a35bb69bfd4671c8a811f1d45c8f",
+      "t_only_bound.nl": "49983b6b5df809ae556aa3806daf1cdfb41153197415103f5fc7c6b6ff91943f"
+    },
+    "all18_C_SHA_match_original_P995_saved_C_bytes": true,
+    "GitHub_jobs_used_at_local_collection": 0,
+    "limits": "GCC and Clang local full577 pass; complete legacy aggregation from verbose GCC log. Finite P sources/summary rollback, not universal OOM/all state bytes or independent F/R proof.",
+    "VALUE_ALIGNMENT_RISK": "Tooling audit/maintenance grows, no source/caller duty added. Human UB audit closure versus well-factored C and performance/cost UNMEASURED; Product GO PAUSED/H1 HOLD."
+  },
+  "new_OOM_complete_serialized_SHA256": "04f29defda984942f844a0fe8f80af2027139185968a2696e5b62c307f00ab73",
+  "physical_total_target_matrix": 72,
+  "CI_jobs_used": 0,
+  "unexpected_Stage1_candidate_test_failures": [],
+  "first_preparation_RED": "link-v1 exit1 undefined nl_checked_c_five, preserved; forward link-only correction",
+  "first_source_RED": "original mixed_distinct CLI4, no C, first private copy_call_proof line53, preserved",
+  "original_F81_F82_B": "PRESERVED, not regraded",
+  "independent_F_new_candidate": "NOT RELEASED/PENDING",
+  "independent_R": "NOT EXECUTED/NOT RELEASED",
+  "limits": "P-owned finite cases, original mixed physical worlds 0/1/2; ordinary-T native physical remains INCONCLUSIVE(unit exit). Local GCC/Clang full577; sanitizer new-suite tests pass; full sanitizer old-suite and GCC Release require natural CI. Summary/current-proof/exact-C retry, not all state bytes/universal OOM/TOCTOU proof.",
+  "VALUE_ALIGNMENT_RISK": "Extra private mapping/profile/proof replay and one reviewed historical predecessor anchor increase maintainer audit/maintenance closure. No caller proof duties/new public issuer/core rules. Human author+ordinary-safe caller C-relative UB audit closure benefit/performance/cost UNMEASURED; Product GO PAUSED/H1 HOLD."
+}

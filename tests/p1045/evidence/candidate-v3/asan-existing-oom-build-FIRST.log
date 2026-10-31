@@ -1,0 +1,11 @@
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_diagnostic
+[ 10%] Built target newlang_lexer
+[ 20%] Built target newlang_syntax
+[ 20%] Built target newlang_checked
+[ 30%] Built target newlang_parser
+[ 90%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p990_oom.dir/tests/p990/oom.c.o
+[100%] Linking C executable p990_oom
+[100%] Built target p990_oom

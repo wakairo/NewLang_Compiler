@@ -1,0 +1,12 @@
+{
+  "command": [
+    "python3",
+    "tests/p1045/preflight-v2.py",
+    "/workspace/p1045-build-gcc13/newlangc",
+    "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+    "/workspace/p1045-artifacts/candidate-v2/preflight-FIRST"
+  ],
+  "exit": 0,
+  "seconds": 1.6961977580067469,
+  "raw_SHA256": "b0d1cb2203ee762c8e13b928466ae6e0e1217ec784d0071d6cba3ef30a87273c"
+}

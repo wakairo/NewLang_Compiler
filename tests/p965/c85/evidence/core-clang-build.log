@@ -1,0 +1,40 @@
+[  0%] Built target newlang_source
+[  9%] Built target newlang_syntax
+[ 18%] Built target newlang_lexer
+[ 18%] Built target newlang_diagnostic
+[ 27%] Built target newlang_parser
+[ 27%] Building C object CMakeFiles/newlang_checked.dir/src/checked.c.o
+[ 27%] Linking C static library libnewlang_checked.a
+[ 27%] Built target newlang_checked
+[ 27%] Building C object CMakeFiles/newlang_semantic.dir/src/copy_body.c.o
+[ 36%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o
+[ 36%] Building C object CMakeFiles/newlang_semantic.dir/src/h_origin_internal.c.o
+[ 45%] Linking C static library libnewlang_semantic.a
+[ 81%] Built target newlang_semantic
+[ 81%] Building C object CMakeFiles/newlang_checked_c_node.dir/src/checked_c_node.c.o
+[ 81%] Linking C static library libnewlang_checked_c_node.a
+[ 90%] Built target newlang_checked_c_node
+[100%] Linking C executable p633_local_gate
+[100%] Built target p633_local_gate
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_diagnostic
+[ 30%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p817_integrity.dir/tests/p817/integrity.c.o
+[100%] Linking C executable p817_integrity
+[100%] Built target p817_integrity
+[  0%] Built target newlang_source
+[  9%] Built target newlang_syntax
+[ 18%] Built target newlang_lexer
+[ 18%] Built target newlang_diagnostic
+[ 27%] Built target newlang_parser
+[ 27%] Built target newlang_checked
+[ 81%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[ 90%] Building C object CMakeFiles/p785_integrity.dir/tests/p785/integrity.c.o
+[100%] Linking C executable p785_integrity
+[100%] Built target p785_integrity

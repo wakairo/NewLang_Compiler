@@ -1,0 +1,30 @@
+[
+  {
+    "config": "asan",
+    "test": "p633_local_cli.integration",
+    "initial_log_sha256": "a13ec1a6680592d80654699a2fd1d579a46092c9ea63979db5602e1f22717c88",
+    "first_timeout_lines": [
+      " 58/545 Test  #42: p633_local_cli.integration ............................***Timeout  90.03 sec"
+    ],
+    "isolation_log_sha256": "65fd335a80b0212b14b10369a72c10b8c1b0fb8db2f08fa00972290baab509ec",
+    "same_SHA_stock90s_isolation_PASS": true,
+    "isolation_timing": [
+      " 14.31 sec"
+    ],
+    "serial_full": "545/545 PASS, original first result retained"
+  },
+  {
+    "config": "ubsan",
+    "test": "p517_r516_composition_native.integration",
+    "initial_log_sha256": "4d01ec5b0f1bd7ab9ef30dc98343b834e88346a8b673633f89bfb8c2301213d4",
+    "first_timeout_lines": [
+      "265/545 Test #101: p517_r516_composition_native.integration ..............***Timeout  90.01 sec"
+    ],
+    "isolation_log_sha256": "f6a37f947c2f43ceb805512028e06548fdc095afb6a476a96e70bfa708678a54",
+    "same_SHA_stock90s_isolation_PASS": true,
+    "isolation_timing": [
+      " 19.53 sec"
+    ],
+    "serial_full": "545/545 PASS, original first result retained"
+  }
+]

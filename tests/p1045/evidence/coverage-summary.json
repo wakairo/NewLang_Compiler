@@ -1,0 +1,16 @@
+{
+  "old_GCC13_full": "576/577 exit8; original RED retained",
+  "repaired_GCC13_registered": {
+    "p1045_two_original_native.integration": "Passed",
+    "p990_new_native.integration": "Passed"
+  },
+  "GCC13_final_unique": 578,
+  "Clang_full": "578/578 exit0",
+  "Clang_raw_SHA256": "348151011f7e5bf371d0b540ac1006747b6b91cc0689a70241d757710470ed6e",
+  "ASan_registered_new": "PASS42.72s",
+  "ASan_registered_old_first": "dependency p990_oom missing, preparation RED retained",
+  "ASan_registered_old_after_build": "PASS62.702s",
+  "Production_byte_identical_to": "b63d228afa29c7473aefd1da4b2e06cf06880f6a",
+  "independent_R_cohort": 0,
+  "old_577_names_retained": true
+}

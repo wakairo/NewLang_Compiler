@@ -1,0 +1,35 @@
+[
+  {
+    "label": "check",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--check",
+      "/workspace/p1020/tests/p1020/calibrated/negative_read_definition.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "a64259f68a2551346cb72f7fea67f7a0b466b34fc0bfb58164be61ee3cded2d3"
+  },
+  {
+    "label": "emit",
+    "command": [
+      "/workspace/p1019/pr1015-build/newlangc",
+      "--emit-c17-to",
+      "/workspace/p1020-artifacts/calibrated-negative-FIRST/rejected.c",
+      "/workspace/p1020/tests/p1020/calibrated/negative_read_definition.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "a64259f68a2551346cb72f7fea67f7a0b466b34fc0bfb58164be61ee3cded2d3"
+  },
+  {
+    "label": "public",
+    "command": [
+      "/workspace/p1019/pr1015-public-probe-v2",
+      "/workspace/p1020/tests/p1020/calibrated/negative_read_definition.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "fe898a72b679f4ce3ee69006882d3908373db4826aec04a89471ad124e91e531",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

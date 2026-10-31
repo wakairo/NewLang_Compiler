@@ -1,0 +1,38 @@
+[
+  {
+    "source": "calibration_unreachable_bound_v2.nl",
+    "mode": "check",
+    "rc": 0,
+    "bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "calibration_unreachable_bound_v2.nl",
+    "mode": "emit",
+    "rc": 0,
+    "bytes": 13722,
+    "stdout_sha256": "1c9a85562de4a2743f30581a742b2bb9895f92390ced504e8338ef14ea388ca3",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "negative_additional_return_v2.nl",
+    "mode": "check",
+    "rc": 0,
+    "bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "diagnostic": ""
+  },
+  {
+    "source": "negative_additional_return_v2.nl",
+    "mode": "emit",
+    "rc": 4,
+    "bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "57598452a32bec05372da07000155663db08066c1d30a3bb12f7f2227a5db682",
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p990/tests/p990/sources/negative_additional_return_v2.nl\n"
+  }
+]

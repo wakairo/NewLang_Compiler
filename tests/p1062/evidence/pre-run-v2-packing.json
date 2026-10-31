@@ -1,0 +1,6 @@
+{
+  "reason": "Before any candidate test: pack full diagnostic/first harness input snapshot to avoid duplicate living Production code and unrelated formatter burden. No source/oracle/firstRED bytes changed; original v1 manifest retained and every recorded input authenticated in archive.",
+  "archive": "tests/p1062/evidence/pre-run-v1-inputs.zip",
+  "SHA256": "5a08b7cc49246bd31524f416326f43a40eb8c7b64ff2eaf561901d1d1d729c37",
+  "v1_input_count": 200
+}

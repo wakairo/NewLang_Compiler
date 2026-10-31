@@ -1,0 +1,10 @@
+{"P1062":"H_origin","current":true}
+{"P1062":"current","ordinal":0,"call":21,"function":13,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1062":"event","ordinal":0,"event":0,"kind":2,"current":0}
+{"P1062":"origin","ordinal":0,"event_count":1,"returned_event":0,"binding_hops":1,"index":0,"old":58,"next":167,"returned":58,"sibling":141,"root":1,"incarnation":1,"result_binding":7,"old_forward_source":true}
+{"P1062":"current","ordinal":1,"call":28,"function":10,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1062":"event","ordinal":1,"event":0,"kind":2,"current":0}
+{"P1062":"origin","ordinal":1,"event_count":1,"returned_event":0,"binding_hops":2,"index":1,"old":94,"next":58,"returned":94,"sibling":220,"root":4,"incarnation":4,"result_binding":13,"old_forward_source":true}
+{"P1062":"direct","binding":15,"root":4,"index":0,"old":220,"next":94}
+{"P1062":"H_producer","call":50,"entry_GET":true,"valid":true,"return_proved":true}
+{"P1062":"H_terminal","call":69,"entry_GET":true,"post_proved":true}

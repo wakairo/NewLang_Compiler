@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/p1062-gate0/tests/p1062/run.py", line 183, in <module>
+    r=invoke('history-v10',[sys.executable,data/'history_tests.py']);ok(r)
+                                                                     ^^^^^
+  File "/workspace/p1062-gate0/tests/p1062/run.py", line 41, in ok
+    assert r.returncode==0 and not r.stderr,(r.returncode,r.stdout,r.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (1, b'P982 original Git/source/oracle lineage and current versioned hashes PASS 2485\nP1062 HISTORY REJECT coedit-v11-v12 P1062 fixed original-v11 SHA256\nP1062 HISTORY REJECT drop-original-key freeze coverage lost: tests/p1058/oracle-v1.json\nP1062 HISTORY REJECT old-source P1062 preserved original-v11 data: tests/p1058/sources/closed_then_two.nl\nP1062 HISTORY REJECT old-oracle P1062 preserved original-v11 data: tests/p1058/oracle-v1.json\n', b'Traceback (most recent call last):\n  File "/workspace/p1062-gate0/tests/p1062/history_tests.py", line 61, in <module>\n    (work / name).write_bytes((work / name).read_bytes() + b"\\n")\n                              ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1019, in read_bytes\n    with self.open(mode=\'rb\') as f:\n         ^^^^^^^^^^^^^^^^^^^^\n  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1013, in open\n    return io.open(self, mode, buffering, encoding, errors, newline)\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nFileNotFoundError: [Errno 2] No such file or directory: \'/tmp/p1045-history-i75_87co/tests/p1058/evidence/parent-FIRST/binding_tail-C17.stderr\'\n')
