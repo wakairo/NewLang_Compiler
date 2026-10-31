@@ -1,0 +1,13 @@
+{
+  "release": "C161 P1071 PRE-RUN harness v1; all assertions source-frozen before exercise",
+  "files": {
+    "tests/p1071/run.py": "2bfbbe0dbba753c6eb42680135bc83a39427d86d68de3e89cebeb4eb401761af",
+    "tests/p1062/observe.c": "1f1d6cc1e4b7b77fe596411a71263c54f0b8407c1af03eef0dbf4662a450c13a",
+    "tests/p1062/consumer.c": "7379c8138ff319d5aaff5613aa2a9807e31b5ffa5e00609fe0cf7e9b2bc72284",
+    "tests/p1062/oom.c": "15fd3d794427a2bf31aabf41a44d25f81d9f0df7635142b95fba34a0a56ad107",
+    "tests/p1062/support.h": "40e13da0348f4ba4660b7c3634938976367f005c385dbf8d98f65befe964644d",
+    "tests/p1062/observer.h": "ea3ad4705c31c067aee28d36e6266fd4a92ddaddccb97913dd4d4a91d46cc134",
+    "tests/p1062/oracle-v1.json": "9847539057aee9139d55e43d15ee29b3903f35d03c0d9a578d7f826fe12e05c6",
+    "tests/p1062/harness-oracle-v1.json": "0deaaff20878d65df820da7cab01736bdf482cdf171cb541b13cda79042bbbab"
+  }
+}

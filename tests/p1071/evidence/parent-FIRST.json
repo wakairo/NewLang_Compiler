@@ -1,0 +1,380 @@
+{
+  "main": "2cf49e44aebc20c62469f9ea113bbaf01f4e752f",
+  "source_freeze_commit": "e4790f4c87ac808fb7468f9664123b98e2f2c8ce",
+  "baseline_binary": "/tmp/p1067-gcc/newlangc",
+  "baseline_build_commit": "4dcd417a7edba5fc5d2cd461955c5530646c62bd",
+  "source_equivalence": "src/include/CMakeLists byte-identical to main; git diff --exit-code verified; historical binary not rebuilt from main",
+  "results": [
+    {
+      "source": "terminal_without_probe",
+      "CHECK": 0,
+      "public_current": "PASS",
+      "C17": 4,
+      "named_no_clobber": true,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/p1071/tests/p1071/sources/terminal_without_probe.nl\n"
+    },
+    {
+      "source": "regression_reversed",
+      "CHECK": 0,
+      "public_current": "PASS",
+      "C17": 4,
+      "named_no_clobber": true,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/p1071/tests/p1071/sources/regression_reversed.nl\n"
+    },
+    {
+      "source": "producer_direct_result",
+      "CHECK": 0,
+      "public_current": "PASS",
+      "C17": 4,
+      "named_no_clobber": true,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/p1071/tests/p1071/sources/producer_direct_result.nl\n"
+    },
+    {
+      "source": "nonunit_return",
+      "CHECK": 3,
+      "public_current": "not measured",
+      "C17": 3,
+      "named_no_clobber": true,
+      "diagnostic": "/tmp/p1071/tests/p1071/sources/nonunit_return.nl:106:5-106:18: error(semantic)[P9-RETURN-TYPE]: return expression must exactly match the function result\n"
+    },
+    {
+      "source": "early_failure_return",
+      "CHECK": 3,
+      "public_current": "not measured",
+      "C17": 3,
+      "named_no_clobber": true,
+      "diagnostic": "/tmp/p1071/tests/p1071/sources/early_failure_return.nl:30:9-30:33: error(precision)[ALLOCATED-CLOSED-WORLD-PRECISION]: each allocation world must close its own responsibilities and prove the exact captured-prefix post-state\n"
+    },
+    {
+      "source": "block_unit_return",
+      "CHECK": 0,
+      "public_current": "not measured",
+      "C17": 4,
+      "named_no_clobber": true,
+      "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/p1071/tests/p1071/sources/block_unit_return.nl\n"
+    }
+  ],
+  "commands": [
+    {
+      "label": "build-observe",
+      "command": [
+        "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Werror",
+        "-pedantic-errors",
+        "-O0",
+        "-g",
+        "-fno-pie",
+        "-no-pie",
+        "-I/tmp/p1071/include",
+        "/tmp/p1071/tests/p1062/observe.c",
+        "-Wl,--start-group",
+        "/tmp/p1067-gcc/libnewlang_semantic.a",
+        "/tmp/p1067-gcc/libnewlang_parser.a",
+        "/tmp/p1067-gcc/libnewlang_checked_c_node.a",
+        "/tmp/p1067-gcc/libnewlang_lexer.a",
+        "/tmp/p1067-gcc/libnewlang_checked.a",
+        "/tmp/p1067-gcc/libnewlang_syntax.a",
+        "/tmp/p1067-gcc/libnewlang_source.a",
+        "/tmp/p1067-gcc/libnewlang_diagnostic.a",
+        "-Wl,--end-group",
+        "-o",
+        "/workspace/p1071-artifacts/parent-FIRST/observe"
+      ],
+      "exit": 0,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "terminal_without_probe-CHECK",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "--check",
+        "/tmp/p1071/tests/p1071/sources/terminal_without_probe.nl"
+      ],
+      "exit": 0,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "terminal_without_probe-public-current",
+      "command": [
+        "/workspace/p1071-artifacts/parent-FIRST/observe",
+        "/tmp/p1071/tests/p1071/sources/terminal_without_probe.nl",
+        "2"
+      ],
+      "exit": 0,
+      "stdout_SHA256": "c75e68828a53552dc1a8909045d5d9fbee6e98798cf9d82eaff72e68918ec5ea",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "{\"P1062\":\"H_origin\",\"current\":true}\n{\"P1062\":\"current\",\"ordinal\":0,\"call\":21,\"function\":13,\"GET_body\":true,\"GET_parameters\":true,\"body\":0,\"parameters\":0}\n{\"P1062\":\"event\",\"ordinal\":0,\"event\":0,\"kind\":2,\"current\":0}\n{\"P1062\":\"origin\",\"ordinal\":0,\"event_count\":1,\"returned_event\":0,\"binding_hops\":0,\"index\":0,\"old\":58,\"next\":167,\"returned\":58,\"sibling\":141,\"root\":1,\"incarnation\":1,\"result_binding\":6,\"old_forward_source\":true}\n{\"P1062\":\"current\",\"ordinal\":1,\"call\":28,\"function\":10,\"GET_body\":true,\"GET_parameters\":true,\"body\":0,\"parameters\":0}\n{\"P1062\":\"event\",\"ordinal\":1,\"event\":0,\"kind\":2,\"current\":0}\n{\"P1062\":\"origin\",\"ordinal\":1,\"event_count\":1,\"returned_event\":0,\"binding_hops\":1,\"index\":1,\"old\":94,\"next\":58,\"returned\":94,\"sibling\":220,\"root\":4,\"incarnation\":4,\"result_binding\":11,\"old_forward_source\":true}\n{\"P1062\":\"direct\",\"binding\":13,\"root\":4,\"index\":0,\"old\":220,\"next\":94}\n{\"P1062\":\"H_producer\",\"call\":50,\"entry_GET\":true,\"valid\":true,\"return_proved\":true}\n{\"P1062\":\"H_terminal\",\"call\":69,\"entry_GET\":true,\"post_proved\":true}\n",
+      "stderr": ""
+    },
+    {
+      "label": "terminal_without_probe-C17-FIRST",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "/tmp/p1071/tests/p1071/sources/terminal_without_probe.nl"
+      ],
+      "exit": 4,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "749f2cb43a4a60fb0323f5531ed7a50dfcf56e73c49f4cd35af5f7dbe53411b6",
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/p1071/tests/p1071/sources/terminal_without_probe.nl\n"
+    },
+    {
+      "label": "terminal_without_probe-named-no-clobber",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "--emit-c17-to",
+        "/workspace/p1071-artifacts/parent-FIRST/terminal_without_probe.sentinel.c",
+        "/tmp/p1071/tests/p1071/sources/terminal_without_probe.nl"
+      ],
+      "exit": 4,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "749f2cb43a4a60fb0323f5531ed7a50dfcf56e73c49f4cd35af5f7dbe53411b6",
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/p1071/tests/p1071/sources/terminal_without_probe.nl\n"
+    },
+    {
+      "label": "regression_reversed-CHECK",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "--check",
+        "/tmp/p1071/tests/p1071/sources/regression_reversed.nl"
+      ],
+      "exit": 0,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "regression_reversed-public-current",
+      "command": [
+        "/workspace/p1071-artifacts/parent-FIRST/observe",
+        "/tmp/p1071/tests/p1071/sources/regression_reversed.nl",
+        "2"
+      ],
+      "exit": 0,
+      "stdout_SHA256": "faeb1760bd74d6ce7ff518c8e08d9ebbcc2bbd00fa4f07a4ef04bf2493918ad6",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "{\"P1062\":\"H_origin\",\"current\":true}\n{\"P1062\":\"current\",\"ordinal\":0,\"call\":21,\"function\":13,\"GET_body\":true,\"GET_parameters\":true,\"body\":0,\"parameters\":0}\n{\"P1062\":\"event\",\"ordinal\":0,\"event\":0,\"kind\":2,\"current\":0}\n{\"P1062\":\"origin\",\"ordinal\":0,\"event_count\":1,\"returned_event\":0,\"binding_hops\":1,\"index\":1,\"old\":16,\"next\":77,\"returned\":16,\"sibling\":250,\"root\":1,\"incarnation\":1,\"result_binding\":7,\"old_forward_source\":true}\n{\"P1062\":\"current\",\"ordinal\":1,\"call\":28,\"function\":12,\"GET_body\":true,\"GET_parameters\":true,\"body\":0,\"parameters\":0}\n{\"P1062\":\"event\",\"ordinal\":1,\"event\":0,\"kind\":2,\"current\":0}\n{\"P1062\":\"origin\",\"ordinal\":1,\"event_count\":1,\"returned_event\":0,\"binding_hops\":2,\"index\":0,\"old\":9,\"next\":16,\"returned\":9,\"sibling\":193,\"root\":4,\"incarnation\":4,\"result_binding\":13,\"old_forward_source\":true}\n{\"P1062\":\"direct\",\"binding\":15,\"root\":4,\"index\":1,\"old\":193,\"next\":9}\n{\"P1062\":\"H_producer\",\"call\":50,\"entry_GET\":true,\"valid\":true,\"return_proved\":true}\n{\"P1062\":\"H_terminal\",\"call\":69,\"entry_GET\":true,\"post_proved\":true}\n",
+      "stderr": ""
+    },
+    {
+      "label": "regression_reversed-C17-FIRST",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "/tmp/p1071/tests/p1071/sources/regression_reversed.nl"
+      ],
+      "exit": 4,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "5cda3ca739190c43f570c209d3d1f14f5a5967767a8d6b645986c520cac5ca74",
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/p1071/tests/p1071/sources/regression_reversed.nl\n"
+    },
+    {
+      "label": "regression_reversed-named-no-clobber",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "--emit-c17-to",
+        "/workspace/p1071-artifacts/parent-FIRST/regression_reversed.sentinel.c",
+        "/tmp/p1071/tests/p1071/sources/regression_reversed.nl"
+      ],
+      "exit": 4,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "5cda3ca739190c43f570c209d3d1f14f5a5967767a8d6b645986c520cac5ca74",
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/p1071/tests/p1071/sources/regression_reversed.nl\n"
+    },
+    {
+      "label": "producer_direct_result-CHECK",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "--check",
+        "/tmp/p1071/tests/p1071/sources/producer_direct_result.nl"
+      ],
+      "exit": 0,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "producer_direct_result-public-current",
+      "command": [
+        "/workspace/p1071-artifacts/parent-FIRST/observe",
+        "/tmp/p1071/tests/p1071/sources/producer_direct_result.nl",
+        "2"
+      ],
+      "exit": 0,
+      "stdout_SHA256": "94446dd49b70624934b001f0b2e00d4c02399cea8fcdb8a43d58a9e43691473e",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "{\"P1062\":\"H_origin\",\"current\":true}\n{\"P1062\":\"current\",\"ordinal\":0,\"call\":21,\"function\":13,\"GET_body\":true,\"GET_parameters\":true,\"body\":0,\"parameters\":0}\n{\"P1062\":\"event\",\"ordinal\":0,\"event\":0,\"kind\":2,\"current\":0}\n{\"P1062\":\"origin\",\"ordinal\":0,\"event_count\":1,\"returned_event\":0,\"binding_hops\":1,\"index\":0,\"old\":58,\"next\":167,\"returned\":58,\"sibling\":141,\"root\":1,\"incarnation\":1,\"result_binding\":7,\"old_forward_source\":true}\n{\"P1062\":\"current\",\"ordinal\":1,\"call\":28,\"function\":10,\"GET_body\":true,\"GET_parameters\":true,\"body\":0,\"parameters\":0}\n{\"P1062\":\"event\",\"ordinal\":1,\"event\":0,\"kind\":2,\"current\":0}\n{\"P1062\":\"origin\",\"ordinal\":1,\"event_count\":1,\"returned_event\":0,\"binding_hops\":2,\"index\":1,\"old\":94,\"next\":58,\"returned\":94,\"sibling\":220,\"root\":4,\"incarnation\":4,\"result_binding\":13,\"old_forward_source\":true}\n{\"P1062\":\"direct\",\"binding\":15,\"root\":4,\"index\":0,\"old\":220,\"next\":94}\n{\"P1062\":\"H_producer\",\"call\":50,\"entry_GET\":true,\"valid\":true,\"return_proved\":true}\n{\"P1062\":\"H_terminal\",\"call\":69,\"entry_GET\":true,\"post_proved\":true}\n",
+      "stderr": ""
+    },
+    {
+      "label": "producer_direct_result-C17-FIRST",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "/tmp/p1071/tests/p1071/sources/producer_direct_result.nl"
+      ],
+      "exit": 4,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "144d6a866c653fbe5451c378590fd36a5e23343d7aa2533e1f049e742f909ba6",
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/p1071/tests/p1071/sources/producer_direct_result.nl\n"
+    },
+    {
+      "label": "producer_direct_result-named-no-clobber",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "--emit-c17-to",
+        "/workspace/p1071-artifacts/parent-FIRST/producer_direct_result.sentinel.c",
+        "/tmp/p1071/tests/p1071/sources/producer_direct_result.nl"
+      ],
+      "exit": 4,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "144d6a866c653fbe5451c378590fd36a5e23343d7aa2533e1f049e742f909ba6",
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/p1071/tests/p1071/sources/producer_direct_result.nl\n"
+    },
+    {
+      "label": "nonunit_return-CHECK",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "--check",
+        "/tmp/p1071/tests/p1071/sources/nonunit_return.nl"
+      ],
+      "exit": 3,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "9f36947d0e77c1637e0108c185800bbe29a0578c7945b7cc87a37d91e28c14fa",
+      "stdout": "",
+      "stderr": "/tmp/p1071/tests/p1071/sources/nonunit_return.nl:106:5-106:18: error(semantic)[P9-RETURN-TYPE]: return expression must exactly match the function result\n"
+    },
+    {
+      "label": "nonunit_return-C17-FIRST",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "/tmp/p1071/tests/p1071/sources/nonunit_return.nl"
+      ],
+      "exit": 3,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "9f36947d0e77c1637e0108c185800bbe29a0578c7945b7cc87a37d91e28c14fa",
+      "stdout": "",
+      "stderr": "/tmp/p1071/tests/p1071/sources/nonunit_return.nl:106:5-106:18: error(semantic)[P9-RETURN-TYPE]: return expression must exactly match the function result\n"
+    },
+    {
+      "label": "nonunit_return-named-no-clobber",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "--emit-c17-to",
+        "/workspace/p1071-artifacts/parent-FIRST/nonunit_return.sentinel.c",
+        "/tmp/p1071/tests/p1071/sources/nonunit_return.nl"
+      ],
+      "exit": 3,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "9f36947d0e77c1637e0108c185800bbe29a0578c7945b7cc87a37d91e28c14fa",
+      "stdout": "",
+      "stderr": "/tmp/p1071/tests/p1071/sources/nonunit_return.nl:106:5-106:18: error(semantic)[P9-RETURN-TYPE]: return expression must exactly match the function result\n"
+    },
+    {
+      "label": "early_failure_return-CHECK",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "--check",
+        "/tmp/p1071/tests/p1071/sources/early_failure_return.nl"
+      ],
+      "exit": 3,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "65e3181c53b529f3d7c76dd56e4a2048a57e63fc07c6efe60cf199a15c7b423d",
+      "stdout": "",
+      "stderr": "/tmp/p1071/tests/p1071/sources/early_failure_return.nl:30:9-30:33: error(precision)[ALLOCATED-CLOSED-WORLD-PRECISION]: each allocation world must close its own responsibilities and prove the exact captured-prefix post-state\n"
+    },
+    {
+      "label": "early_failure_return-C17-FIRST",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "/tmp/p1071/tests/p1071/sources/early_failure_return.nl"
+      ],
+      "exit": 3,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "65e3181c53b529f3d7c76dd56e4a2048a57e63fc07c6efe60cf199a15c7b423d",
+      "stdout": "",
+      "stderr": "/tmp/p1071/tests/p1071/sources/early_failure_return.nl:30:9-30:33: error(precision)[ALLOCATED-CLOSED-WORLD-PRECISION]: each allocation world must close its own responsibilities and prove the exact captured-prefix post-state\n"
+    },
+    {
+      "label": "early_failure_return-named-no-clobber",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "--emit-c17-to",
+        "/workspace/p1071-artifacts/parent-FIRST/early_failure_return.sentinel.c",
+        "/tmp/p1071/tests/p1071/sources/early_failure_return.nl"
+      ],
+      "exit": 3,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "65e3181c53b529f3d7c76dd56e4a2048a57e63fc07c6efe60cf199a15c7b423d",
+      "stdout": "",
+      "stderr": "/tmp/p1071/tests/p1071/sources/early_failure_return.nl:30:9-30:33: error(precision)[ALLOCATED-CLOSED-WORLD-PRECISION]: each allocation world must close its own responsibilities and prove the exact captured-prefix post-state\n"
+    },
+    {
+      "label": "block_unit_return-CHECK",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "--check",
+        "/tmp/p1071/tests/p1071/sources/block_unit_return.nl"
+      ],
+      "exit": 0,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "label": "block_unit_return-C17-FIRST",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "/tmp/p1071/tests/p1071/sources/block_unit_return.nl"
+      ],
+      "exit": 4,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "baaf08592c61ea3462cadbdf6974e0b5d5e4baa96c9de53908aa9343497b8100",
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/p1071/tests/p1071/sources/block_unit_return.nl\n"
+    },
+    {
+      "label": "block_unit_return-named-no-clobber",
+      "command": [
+        "/tmp/p1067-gcc/newlangc",
+        "--emit-c17-to",
+        "/workspace/p1071-artifacts/parent-FIRST/block_unit_return.sentinel.c",
+        "/tmp/p1071/tests/p1071/sources/block_unit_return.nl"
+      ],
+      "exit": 4,
+      "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_SHA256": "baaf08592c61ea3462cadbdf6974e0b5d5e4baa96c9de53908aa9343497b8100",
+      "stdout": "",
+      "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/p1071/tests/p1071/sources/block_unit_return.nl\n"
+    }
+  ],
+  "controls": {
+    "terminal_without_probe": {
+      "source": "tests/p1062/sources/terminal_without_probe.nl",
+      "C_SHA256": "f8c5647ee7b8d57127cb2a2832eaac90df49eb77e5812369bcb8f7717b23cd66"
+    },
+    "regression_reversed": {
+      "source": "tests/p1062/sources/regression_reversed.nl",
+      "C_SHA256": "9ec3305e33723c41a8d276366555f79fd4153714b4a70627be935333aaf74720"
+    },
+    "producer_direct_result": {
+      "source": "tests/p1062/sources/producer_direct_result.nl",
+      "C_SHA256": "a3024c5674ffaa3e51d8fa8c0c5810ae3a3e78fa79b895e99af4019f66f65143"
+    }
+  }
+}
