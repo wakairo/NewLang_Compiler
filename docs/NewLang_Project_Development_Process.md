@@ -251,6 +251,30 @@ VはProduct Validation、Qは品質観察・助言、Bは非執行の助言を�
 責務と認可scopeの内側で進める。いずれも他Trackの権限、
 固定対象、source issuer、CIのtrust boundaryを自律的には変更しない。
 
+**P機長の有限source能力と統合単位：** Pは既存のcanonicalと認可scopeの内側で、
+v0のcritical pathと再利用性に寄与する**意味のある一まとまりのsource能力**を
+主体的に選び、実装前に**今回サポートする合法source familyと非対応の合法source、
+最初の拒否層、ownership／失敗・cleanup契約、負例・実source/native証拠**を
+区別して示す。すべての合法source／将来のbackend profileを一度に受理することは
+各実装incrementの完了条件ではない。宣言した対応範囲**外**を安全に
+fail-closedで拒否する精度・coverage不足は将来の実装課題として記録できる。
+ただし**約束した対応範囲の不達**、不正な`CHECK=0`誤受理、issuer／
+current／loan／owner／provenanceの権限偽造、C17/nativeのUB、OOM・rollbackの
+安全性欠陥はcoverage debtに言い換えず、§7等のSTOPと必要な修復・裁定を優先する。
+
+Pは§4.1.2の裁量で自分のprivate実装・test・局所修復・再検証を自律的に進め、
+初回RED、元source／oracle／SHA／rawと後続修復の証拠を分離する。
+有限の対応範囲について必要なlocal検査と**同じ最終HEADのCI**が成立したら、
+Review Guidelinesの**実質リスクに比例するレビュー**へ送り、重要な
+ownership／failure／source-issued authority変更では適切な独立R/Fと
+固定されたBLIND証拠を維持する。全Trackの形式的承認や旧Rの再実行を
+あらゆる小変更の一律gateにせず、**レビュー上の実質PASS後は
+ユーザーのmerge判断へ速やかにつなぐ**。将来の一般coverage完成だけを理由に
+安全な先行incrementのmain統合を何段も保留しない。
+これは**自動merge／READYの許可ではなく**、Review Guidelines §27の
+ユーザーmerge権限と、§4.2のsource／issuer変更審査、§4.3の投資裁定、
+§7のR独立性・既存STOPを一切緩めない。
+
 **Coordinationへ戻す境界：** canonical／公開source・API・ABI・意味論・権限の
 変更が必要な場合、認可scope・固定SHA・実行環境・CI／費用上限を超える場合、
 証拠やBLIND独立性が損なわれた場合、根本的な所有権・provenance・

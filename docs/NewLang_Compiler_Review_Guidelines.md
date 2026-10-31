@@ -64,6 +64,13 @@ Before line review confirm:
 - normative basis,
 - which modules/contracts are being introduced.
 
+For a bounded v0 increment, assess the **declared supported legal-source family** and its
+first unsupported/rejected layer separately from the larger canonical legal-source space.
+P may choose a coherent useful supported subset inside its authorized scope; safe
+fail-closed refusal **outside** that subset is recorded coverage debt, not by itself
+a merge blocker or proof of a language-law defect. A promised supported case that fails,
+or unsafe false acceptance inside or outside the subset, is **not** excused by that boundary.
+
 A correct implementation can still be rejected for prematurely implementing deferred semantics
 or creating a framework outside the milestone.
 
@@ -201,6 +208,14 @@ Examples:
 - material milestone scope violation,
 - current-head required CI not green,
 - weakened closed M7 backend constraint.
+
+Treat **unsafe `CHECK=0` false admission, forged issuer/current/loan/owner/provenance,
+credible C17/native UB, broken failure rollback/no-clobber, violation of the declared
+supported profile, and lost original FIRST/RED evidence** as material BLOCKER/STOP
+findings when supported by evidence; distinguish them from conservative fail-closed
+**unsupported-profile coverage gaps**. Preserve the exact first failure and source/oracle
+SHA rather than silently regrading it. Request relevant independent R/F evidence for
+material risk, not a blanket sign-off from every Track.
 
 ### REQUESTED CHANGE
 Substantial improvement expected before merge but not necessarily semantic incorrectness.
@@ -387,6 +402,18 @@ feature branch
 
 Review outcome is `PASS`, `CONDITIONAL PASS`, or `CHANGES REQUIRED`.
 
+**Default after substantive PASS:** once a coherent, authorized bounded increment has
+its required local evidence, exact-current-head CI, and risk-proportionate review,
+the normal next decision is a **timely user merge into main** under the flow above;
+do not keep piling draft ancestors solely until all future legal sources/backend
+coverage are supported. For a dependent PR, first integrate an independently safe
+predecessor where possible; hold the dependent change for a documented **material**
+semantic/authority, FIRST-evidence, ownership, cleanup or CI blocker—not merely
+unrelated coverage debt, lack of Product GO, or preference for a larger batch.
+This is **neither self-merge authorization nor a calendar/commit-count cadence**.
+Only the user merges after the applicable PASS and adjudication; scope or issuer
+changes still require their existing review and Coordination release.
+
 ## 28. Definition of review-ready
 
 A PR is review-ready when scope is evaluable, failures are not hidden, new stateful modules have
@@ -408,6 +435,13 @@ Useful development sequence:
 8. document non-obvious decisions
 9. open/update PR
 ```
+
+Review effort is proportional to actual risks in the PR's source envelope,
+ownership/failure paths and issuer/backend seams. Preserve independent R/F
+evidence and original BLIND FIRST/RED when relevant; do not require F/R/Q/V sign-off,
+replaying old R inputs, or another approval queue for every small private fix.
+Keep the existing concise PR packet (§4) and severity categories (§10);
+record an actual BLOCKER separately from a suggested enhancement or question.
 
 Testability and ownership are design inputs, not cleanup after coding.
 
