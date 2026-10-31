@@ -994,6 +994,7 @@ if(BUILD_TESTING)
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "negative")
     add_test(NAME p990_freeze_protocol.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/freeze_selftest.py")
+    set_tests_properties(p990_freeze_protocol.unit PROPERTIES RUN_SERIAL TRUE)
     add_test(NAME p1045_two_original_native.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1055/p1045_forward.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
