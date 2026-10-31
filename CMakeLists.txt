@@ -108,6 +108,17 @@ target_link_libraries(newlangc PRIVATE newlang_checked_c_node newlang_semantic n
 include(CTest)
 if(BUILD_TESTING)
     find_package(Python3 3.12 REQUIRED COMPONENTS Interpreter)
+    # R979 independent first-pass BLIND (test-only, frozen sources/oracles).
+    add_test(NAME r979_independent_positive.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r979/verify.py" positive
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r979")
+    add_test(NAME r979_independent_negative.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r979/verify.py" negative
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r979")
     # P930 diagnostic-only wrappers: production libraries/CLI remain unchanged.
     add_executable(p930_observe tests/p930/observe.c)
     add_executable(p930_oom tests/p930/observe.c)
