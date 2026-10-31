@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "base": "10c11e2031296aad73d6d11a06db596e642ddb14",
+  "files": {
+    "tests/p1077/oracle-v1.json": "cd5cefb547f842a85e09f5e97b3f9ff338689724bd1f758f4d8a845a1683a3f2",
+    "tests/p1077/sources/batch_cold.nl": "8311355d0d45d811169e108e0884a4d58bc4e10782ac1ecedab743bcfb0c68fa",
+    "tests/p1077/sources/batch_hot.nl": "33bb5db7f68880160e28b504385cbee7027ee1c4c8ca0fa4782019ac4d97713f",
+    "tests/p1077/sources/negative_call_in_batch.nl": "d7cc1a1c8995bf5a588730aa85ce54e262d7e0a4392ebb2acaf31f925ff4c897",
+    "tests/p1077/sources/negative_escaped_ref.nl": "4bbf9237adbc8e80e96028254aabbe026c5c109f201d6dc059cc3902986f19fc",
+    "tests/p1077/sources/negative_wrong_domain.nl": "13ee1328cac4786bc777f0620a0beea7b4ce517a9fa718ef6ab99ddb398adfb3",
+    "tests/p1077/sources/negative_wrong_old_result.nl": "50682864ff6db91fcf6de0422da45b06edd190d3fa08b3176e725c50fec3c969",
+    "tests/p1077/sources/split_cold.nl": "e3190d99fdde76c59a865034b7add20426f2be7e34e8589fb9131fc4e69db794",
+    "tests/p1077/sources/split_hot.nl": "ca797f1fe23ff466160f909ae91013f48b3f25cb24bd947ac99dcd4ceb0db156"
+  },
+  "policy": "Immutable original source/oracle before first execution; revisions require new version and preserve FIRST."
+}
