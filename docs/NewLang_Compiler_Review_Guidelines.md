@@ -64,6 +64,17 @@ Before line review confirm:
 - normative basis,
 - which modules/contracts are being introduced.
 
+For a bounded v0 increment, distinguish the **provisional** goal, tests, expected first
+rejection layer and supported/unsupported source families from the **final observed**
+implementation, source/native tests and PR boundary. P may revise that plan within
+its authorized scope when implementation reveals facts, recording why and preserving
+earlier failures; review the **reconciled final supported envelope**, not the initial
+hypothesis as if immutable. Safe fail-closed refusal **outside** that final subset is
+coverage debt, not by itself a merge blocker or proof of a language-law defect.
+A final promised supported case that fails, or unsafe false acceptance **inside or
+outside** the subset, is not excused by a retrospective boundary change. Independent
+R may probe both the promised profile and unsafe acceptance beyond it.
+
 A correct implementation can still be rejected for prematurely implementing deferred semantics
 or creating a framework outside the milestone.
 
@@ -201,6 +212,14 @@ Examples:
 - material milestone scope violation,
 - current-head required CI not green,
 - weakened closed M7 backend constraint.
+
+Treat **unsafe `CHECK=0` false admission, forged issuer/current/loan/owner/provenance,
+credible C17/native UB, broken failure rollback/no-clobber, violation of the declared
+supported profile, and lost original FIRST/RED evidence** as material BLOCKER/STOP
+findings when supported by evidence; distinguish them from conservative fail-closed
+**unsupported-profile coverage gaps**. Preserve the exact first failure and source/oracle
+SHA rather than silently regrading it. Request relevant independent R/F evidence for
+material risk, not a blanket sign-off from every Track.
 
 ### REQUESTED CHANGE
 Substantial improvement expected before merge but not necessarily semantic incorrectness.
@@ -387,6 +406,19 @@ feature branch
 
 Review outcome is `PASS`, `CONDITIONAL PASS`, or `CHANGES REQUIRED`.
 
+**Default after substantive PASS:** once a coherent, authorized bounded increment has
+reconciled its final implementation, tests and PR support/limitations with actual
+evidence, and has required local checks, exact-current-head CI and risk-proportionate review,
+the normal next decision is a **timely user merge into main** under the flow above;
+do not keep piling draft ancestors solely until all future legal sources/backend
+coverage are supported. For a dependent PR, first integrate an independently safe
+predecessor where possible; hold the dependent change for a documented **material**
+semantic/authority, FIRST-evidence, ownership, cleanup or CI blocker—not merely
+unrelated coverage debt, lack of Product GO, or preference for a larger batch.
+This is **neither self-merge authorization nor a calendar/commit-count cadence**.
+Only the user merges after the applicable PASS and adjudication; scope or issuer
+changes still require their existing review and Coordination release.
+
 ## 28. Definition of review-ready
 
 A PR is review-ready when scope is evaluable, failures are not hidden, new stateful modules have
@@ -395,7 +427,7 @@ decisions are explained, COMPILER-* issues are surfaced, and current-head CI has
 
 ## 29. Avoiding review churn
 
-Useful development sequence:
+Useful development sequence (**illustrative, iterative—not a nine-step approval gate**):
 
 ```text
 1. define module responsibility
@@ -408,6 +440,19 @@ Useful development sequence:
 8. document non-obvious decisions
 9. open/update PR
 ```
+
+P may begin with a suitably broad provisional goal and draft tests/support boundaries,
+then revisit them as private implementation and tests expose new facts. Record material
+reasons for adjustments and keep original RED and independent oracle/raw evidence intact.
+Before requesting review, converge the implemented scope, tests, actual failure/acceptance
+layers, and PR description; do not redefine a safety defect away.
+
+Review effort is proportional to actual risks in the PR's source envelope,
+ownership/failure paths and issuer/backend seams. Preserve independent R/F
+evidence and original BLIND FIRST/RED when relevant; do not require F/R/Q/V sign-off,
+replaying old R inputs, or another approval queue for every small private fix.
+Keep the existing concise PR packet (§4) and severity categories (§10);
+record an actual BLOCKER separately from a suggested enhancement or question.
 
 Testability and ownership are design inputs, not cleanup after coding.
 
