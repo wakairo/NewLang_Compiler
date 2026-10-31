@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "scope": "parent diagnosis adapter only, frozen before first build/execution",
+  "files": {
+    "tests/p1077/observe.c": "ce89a1d2ab8e8f15484925644fda6d5319985913e35547b19c39f0883018858d",
+    "tests/p1077/parent.py": "eb6d9a090df5e83052a50d7e25e6a4135fa226a0dab32214f6a24c11c4f5ef07",
+    "tests/p1062/support.h": "40e13da0348f4ba4660b7c3634938976367f005c385dbf8d98f65befe964644d",
+    "tests/p965/shared.h": "65a7dca6813d07db3ddfc4b694fdb44e85deb905747a6acc71c0d3e72270cb5f"
+  }
+}
