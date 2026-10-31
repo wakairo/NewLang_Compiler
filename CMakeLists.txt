@@ -1634,3 +1634,34 @@ if(BUILD_TESTING)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
 endif()
+
+# R985 independent BLIND source cohort, frozen in Issue #985 before branch creation.
+# No P fixture, oracle, compiler implementation or workflow is modified.
+if(BUILD_TESTING)
+    set(r985_sources "${CMAKE_CURRENT_SOURCE_DIR}/tests/r985/sources")
+    foreach(r985_positive P1_beacon_postterminal P2_harbor_interposed_postterminal)
+        add_test(NAME r985_${r985_positive}.integration
+            COMMAND "${Python3_EXECUTABLE}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/r985/runner.py"
+                positive "$<TARGET_FILE:newlangc>"
+                "${r985_sources}/${r985_positive}.nl"
+                "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
+    endforeach()
+    foreach(r985_negative N1_unknown_T_field N2_read_to_write_H_edge N3_double_noncopy_tail_consume N4_scoped_loan_escape)
+        add_test(NAME r985_${r985_negative}.integration
+            COMMAND "${Python3_EXECUTABLE}"
+                "${CMAKE_CURRENT_SOURCE_DIR}/tests/r985/runner.py"
+                negative "$<TARGET_FILE:newlangc>"
+                "${r985_sources}/${r985_negative}.nl"
+                "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
+    endforeach()
+    set_tests_properties(
+        r985_P1_beacon_postterminal.integration
+        r985_P2_harbor_interposed_postterminal.integration
+        r985_N1_unknown_T_field.integration
+        r985_N2_read_to_write_H_edge.integration
+        r985_N3_double_noncopy_tail_consume.integration
+        r985_N4_scoped_loan_escape.integration
+        PROPERTIES TIMEOUT 90
+          ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+endif()
