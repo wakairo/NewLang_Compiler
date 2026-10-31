@@ -252,15 +252,24 @@ VはProduct Validation、Qは品質観察・助言、Bは非執行の助言を�
 固定対象、source issuer、CIのtrust boundaryを自律的には変更しない。
 
 **P機長の有限source能力と統合単位：** Pは既存のcanonicalと認可scopeの内側で、
-v0のcritical pathと再利用性に寄与する**意味のある一まとまりのsource能力**を
-主体的に選び、実装前に**今回サポートする合法source familyと非対応の合法source、
-最初の拒否層、ownership／失敗・cleanup契約、負例・実source/native証拠**を
-区別して示す。すべての合法source／将来のbackend profileを一度に受理することは
-各実装incrementの完了条件ではない。宣言した対応範囲**外**を安全に
-fail-closedで拒否する精度・coverage不足は将来の実装課題として記録できる。
-ただし**約束した対応範囲の不達**、不正な`CHECK=0`誤受理、issuer／
+v0のcritical pathと再利用性に寄与する**意味のある一まとまりの暫定目標**を
+主体的に選ぶ。内部実装を調べ、まず**暫定的なテスト・期待する最初の拒否層・
+対応／非対応の合法source family・ownership／失敗・cleanup契約**を
+IssueやPRのdraftに示す。この初期計画は観測済み実装能力の宣言ではない。
+Pは実装中に発見した事実を踏まえ、認可scope内で目標の具体化、テスト、
+対応境界を**理由と旧版を追跡できる形で調整**してよい。最後に実装、
+実際のsource／CHECK／真正owned／C17/native・負例の到達結果、テスト、
+PRの対応／非対応記述を**相互に一致させて**提示する。実測証拠を
+実装前から要求せず、暫定目標・テストを固定不変の合格条件にもしない。
+すべての合法source／将来のbackend profileを一度に受理することは
+各実装incrementの完了条件ではない。**最終的に宣言した対応範囲の外**を
+安全にfail-closedで拒否する精度・coverage不足は将来の実装課題として記録できる。
+ただし**最終的に約束した対応範囲の不達**、不正な`CHECK=0`誤受理、issuer／
 current／loan／owner／provenanceの権限偽造、C17/nativeのUB、OOM・rollbackの
 安全性欠陥はcoverage debtに言い換えず、§7等のSTOPと必要な修復・裁定を優先する。
+対応範囲や期待値を後から変更しても、**元の失敗・初回RED・source／oracle／
+SHA／rawを上書きせず**、不正受理や独立R findingを隠すための縮小は認めない。
+RはPの最終宣言範囲内だけでなく、範囲外の危険な誤受理も独立に検証できる。
 
 Pは§4.1.2の裁量で自分のprivate実装・test・局所修復・再検証を自律的に進め、
 初回RED、元source／oracle／SHA／rawと後続修復の証拠を分離する。
