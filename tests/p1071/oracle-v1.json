@@ -1,0 +1,96 @@
+{
+  "release": "C161 P1071 PRE-RUN v1",
+  "main": "2cf49e44aebc20c62469f9ea113bbaf01f4e752f",
+  "goal": "closed-H common main continuation final literal unit RETURN, no source/issuer/current/owner changes",
+  "profiles": [
+    {
+      "name": "terminal_without_probe",
+      "source": "tests/p1071/sources/terminal_without_probe.nl",
+      "control": "tests/p1062/sources/terminal_without_probe.nl",
+      "CHECK": 0,
+      "GET_current": 0,
+      "parent_C17": 4,
+      "candidate_C17": 0,
+      "C_bytes": "exactly identical to original tail-unit control",
+      "physical": "unchanged original H/T, old returns/fields/siblings; strict O0/O2 guest0/1/2",
+      "newlaw": false
+    },
+    {
+      "name": "regression_reversed",
+      "source": "tests/p1071/sources/regression_reversed.nl",
+      "control": "tests/p1062/sources/regression_reversed.nl",
+      "CHECK": 0,
+      "GET_current": 0,
+      "parent_C17": 4,
+      "candidate_C17": 0,
+      "C_bytes": "exactly identical to original tail-unit control",
+      "physical": "unchanged original H/T, old returns/fields/siblings; strict O0/O2 guest0/1/2",
+      "newlaw": false
+    },
+    {
+      "name": "producer_direct_result",
+      "source": "tests/p1071/sources/producer_direct_result.nl",
+      "control": "tests/p1062/sources/producer_direct_result.nl",
+      "CHECK": 0,
+      "GET_current": 0,
+      "parent_C17": 4,
+      "candidate_C17": 0,
+      "C_bytes": "exactly identical to original tail-unit control",
+      "physical": "unchanged original H/T, old returns/fields/siblings; strict O0/O2 guest0/1/2",
+      "newlaw": false
+    },
+    {
+      "name": "nonunit_return",
+      "source": "tests/p1071/sources/nonunit_return.nl",
+      "negative": {
+        "CHECK": 3,
+        "C17": 3
+      },
+      "output": "unpublished, preserve named file/inode"
+    },
+    {
+      "name": "early_failure_return",
+      "source": "tests/p1071/sources/early_failure_return.nl",
+      "negative": {
+        "CHECK_allowed": [
+          0,
+          3
+        ],
+        "C17_if_CHECK0": 4,
+        "kind": "legal out-of-selected-family; CHECK eligibility unknown"
+      },
+      "output": "unpublished, preserve named file/inode"
+    },
+    {
+      "name": "block_unit_return",
+      "source": "tests/p1071/sources/block_unit_return.nl",
+      "negative": {
+        "CHECK_allowed": [
+          0,
+          3
+        ],
+        "C17_if_CHECK0": 4,
+        "kind": "legal nonliteral return remains unsupported"
+      },
+      "output": "unpublished, preserve named file/inode"
+    }
+  ],
+  "invariants": [
+    "all H success/failure cleanup before two T originals",
+    "genuine CHECK/public GET/current and same Change old result",
+    "same generated C bytes as tail-unit control",
+    "all H/T/loan/affine and OOM no-clobber postchecks unchanged"
+  ],
+  "implementation_scope": "private existing checked_c_node block classification and copy closed plan only; entry body marker limited to existing closed-main consumer; no early/arbitrary CFG",
+  "tests": "reuse unchanged P1062 observer/consumer/oom/passive H/T observer and original assertions; compact new Python adapter; no R fixtures",
+  "history": "original v1-v12 unchanged; existing prospective protocol v13 only if hashes require, same old coverage+predecessor+minimal new source/oracle; no new global checker/CI framework",
+  "budget": {
+    "PR": 1,
+    "natural_pairs": 2,
+    "runs": 4,
+    "jobs": 12,
+    "manual_rerun": false,
+    "first_green_stop": true
+  },
+  "value_risk": "audit locality, author+safe caller benefit, performance unmeasured; bounded reuse supports v0 return critical path"
+}

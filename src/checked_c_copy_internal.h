@@ -204,8 +204,10 @@ static bool copy_closed_plan(Emit *e, const NLCheckedFragment *body)
         body != nl_checked_call_body(e->origin_root,
                                      nl_checked_root(e->origin_root)) ||
         e->copy_expected_roots != 2 || e->copy_expected_calls != 2 || !root ||
-        root->kind != NL_CHECKED_BLOCK || root->terminates || !statement ||
-        statement->kind != NL_CHECKED_STATEMENT || !match ||
+        root->kind != NL_CHECKED_BLOCK ||
+        (root->terminates &&
+         !final_unit_return(body, nl_checked_root(body), e->unit)) ||
+        !statement || statement->kind != NL_CHECKED_STATEMENT || !match ||
         match->kind != NL_CHECKED_MATCH || !match->normal_frame_unchanged ||
         match->captured_frame_closed || match->normal_arms != 2 ||
         match->item_count != 2 || match->terminates || match->type != e->unit)

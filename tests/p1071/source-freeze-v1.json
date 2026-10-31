@@ -1,0 +1,11 @@
+{
+  "files": {
+    "tests/p1071/oracle-v1.json": "bdd65800261c649651d3f2bf5e99996f79e947b99decff8e5ca94974e3ac41e3",
+    "tests/p1071/sources/terminal_without_probe.nl": "355797f348e4b24a6c85cdafed9f6097e4b3918bb392eedcb134c08baf146ae2",
+    "tests/p1071/sources/regression_reversed.nl": "1afa254a33ebc64d9bf29951e23880bb23e5d9cc3808c9696ff9d45c33e2155b",
+    "tests/p1071/sources/producer_direct_result.nl": "11db6e62731d6456030cf3f7435d01e9c5dd3b79c2e8d551740277fb93e9b993",
+    "tests/p1071/sources/nonunit_return.nl": "e6408c040fb07fb02e76f1c39cfc017a35f897aebc1adbfe2d5833e75d9814be",
+    "tests/p1071/sources/early_failure_return.nl": "a038989d50336f4c13b8e9d3baacb9664ba0fbc8c4f50e3b03e5ba4bf89c573e",
+    "tests/p1071/sources/block_unit_return.nl": "fff4bb4d54a19d8627d8fd9cce8fd94cf1ef52b7059df421df9d58797300db11"
+  }
+}

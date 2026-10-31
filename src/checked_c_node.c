@@ -348,6 +348,38 @@ static bool field(Emit *e, const Env *env, const NLCheckedField *f,
 static bool expr(Emit *, Env *, NLCheckedNodeId, Value *);
 static bool same_reference(NLReferenceFacts, NLReferenceFacts);
 static bool copy_post_world(Emit *, const Env *);
+/* A function's final literal unit result has no runtime effect. This only
+ * classifies the spelling: block still emits every preceding operation, and
+ * the owning consumer must independently check all completion obligations. */
+static bool final_unit_return(const NLCheckedFragment *body, NLCheckedNodeId id,
+                              NLTypeId unit)
+{
+    const NLCheckedNodeView *block = nl_checked_node_view(body, id);
+    if (!block || block->kind != NL_CHECKED_BLOCK || !block->terminates ||
+        block->type != 0 || block->returned.type != unit ||
+        block->result_count != 0 || block->tail || !block->item_count ||
+        block->item_count > nl_checked_node_count(body))
+        return false;
+    NLCheckedNodeId item = block->first_item;
+    for (size_t i = 0; i < block->item_count; ++i) {
+        const NLCheckedNodeView *n = nl_checked_node_view(body, item);
+        if (!n)
+            return false;
+        if (i + 1 == block->item_count) {
+            const NLCheckedNodeView *value =
+                nl_checked_node_view(body, n->initializer);
+            return n->kind == NL_CHECKED_RETURN && n->terminates &&
+                   !n->next_item && n->returned.type == unit &&
+                   n->result_count == 0 && value &&
+                   value->kind == NL_CHECKED_UNIT && value->type == unit &&
+                   value->result_count == 0 && !value->terminates;
+        }
+        if (n->terminates)
+            return false;
+        item = n->next_item;
+    }
+    return false;
+}
 #include "checked_c_copy_if_internal.h"
 #include "checked_c_copy_internal.h"
 static bool producer_call(Emit *, Env *, NLCheckedNodeId,
@@ -537,9 +569,8 @@ static bool initial_some(Emit *e, const Env *env, const NLCheckedNodeView *some)
 static bool block(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
 {
     const NLCheckedNodeView *v = get(env, id);
-    const bool unit_return =
-        v && v == env->unit_function_body && v->terminates && v->type == 0 &&
-        v->returned.type == e->unit && v->item_count && !v->tail;
+    const bool unit_return = v && v == env->unit_function_body &&
+                             final_unit_return(env->artifact, id, e->unit);
     if (v == NULL || v->kind != NL_CHECKED_BLOCK ||
         (!unit_return && (v->terminates || v->type != e->unit)) ||
         v->result_count != 0 || env->depth >= C_DEPTH)
@@ -551,15 +582,10 @@ static bool block(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
         const NLCheckedNodeView *n = get(env, item);
         Value ignored = {0};
         if (unit_return && i + 1 == v->item_count) {
-            const NLCheckedNodeView *value =
-                n ? get(env, n->initializer) : NULL;
-            /* Only the owning function's final, literal unit result. All
-             * preceding cleanup is traversed and owner_call checks its post. */
+            /* The final literal result was classified above. Every earlier
+             * operation was emitted; completion checks remain with callers. */
             --env->depth;
-            return n && n->kind == NL_CHECKED_RETURN && n->terminates &&
-                   !n->next_item && n->returned.type == e->unit && value &&
-                   value->kind == NL_CHECKED_UNIT && value->type == e->unit &&
-                   !value->terminates && expr(e, env, n->initializer, out);
+            return expr(e, env, n->initializer, out);
         }
         if (n == NULL || !expr(e, env, item, &ignored))
             return reject(e);
@@ -3295,6 +3321,8 @@ NLNodeCStatus nl_checked_c_node(const NLCheckedFragment *entry, char **out,
         free(e.text);
         return e.status;
     }
+    if (e.copy_after_match)
+        env.unit_function_body = get(&env, nl_checked_root(body));
     if (e.copy_type && (!e.allocated || !e.two_heap || !e.live_tail)) {
         free(e.text);
         return NL_NODE_C_UNSUPPORTED;
