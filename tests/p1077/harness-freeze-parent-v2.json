@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "reason": "Adapter selects independent source-v2 only; original adapter and source retained",
+  "files": {
+    "tests/p1077/observe.c": "ce89a1d2ab8e8f15484925644fda6d5319985913e35547b19c39f0883018858d",
+    "tests/p1077/parent-v2.py": "774c888621e0ef15389307da1d5696b6644b39e229b76b221e1ef3a0fb90facb",
+    "tests/p1062/support.h": "40e13da0348f4ba4660b7c3634938976367f005c385dbf8d98f65befe964644d",
+    "tests/p965/shared.h": "65a7dca6813d07db3ddfc4b694fdb44e85deb905747a6acc71c0d3e72270cb5f"
+  }
+}
