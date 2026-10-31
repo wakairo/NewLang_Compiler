@@ -1,0 +1,13 @@
+{
+  "kind": "non-semantic git whitespace diagnostic; not compiler/CI or safety evidence",
+  "first_command": "git diff --cached --check during local merge",
+  "first_output": "tool output truncated; not represented as an exact full archived FIRST",
+  "reproduction": "git diff --check fixed main / fixed tip to same immutable candidate; no bytes normalized",
+  "exit": 2,
+  "stdout_SHA256": "80ffed7865ca5422b4c7365c2fc7c98de2a0e98df6c1cd69f1419d89e4262470",
+  "lines": 10556,
+  "tip_delta_exit": 2,
+  "tip_delta_stdout_SHA256": "c6e91e6dccb7703855c35a88df187b96e77599c4d6910f21de2e59ff23eb18c4",
+  "tip_delta_diagnostic": "docs/P1067_Consolidation.md:140: new blank line at EOF.\ntests/p1067/check_integration.py:132: new blank line at EOF.\n",
+  "decision": "preserve inherited raw/oracles and pre-run-v1 exact bytes; final blank lines in two new non-C inputs are harmless; strict C formatter separately required"
+}
