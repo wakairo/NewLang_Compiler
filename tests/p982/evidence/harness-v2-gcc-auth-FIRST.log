@@ -1,0 +1,36 @@
+Internal ctest changing into directory: /workspace/p982-build-gcc
+UpdateCTestConfiguration  from :/workspace/p982-build-gcc/DartConfiguration.tcl
+Parse Config file:/workspace/p982-build-gcc/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/workspace/p982-build-gcc/DartConfiguration.tcl
+Parse Config file:/workspace/p982-build-gcc/DartConfiguration.tcl
+Test project /workspace/p982-build-gcc
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 322
+    Start 322: p982_after_true_auth.unit
+
+322: Test command: /workspace/p982-build-gcc/p982_probe "/workspace/p982/tests/p982/sources/after_true.nl"
+322: Working Directory: /workspace/p982-build-gcc
+322: Environment variables: 
+322:  PYTHONDONTWRITEBYTECODE=1
+322:  PYTHONHASHSEED=0
+322:  LC_ALL=C
+322:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+322:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+322: Test timeout computed to be: 90
+322: /workspace/p982/tests/p982/probe.c:67: edge != SIZE_MAX && arm->count == 3 && arm->nodes[0].kind == NL_CHECKED_U8_LITERAL && arm->context->place_count >= originals[1]
+1/5 Test #322: p982_after_true_auth.unit ........***Failed    0.02 sec
+/workspace/p982/tests/p982/probe.c:67: edge != SIZE_MAX && arm->count == 3 && arm->nodes[0].kind == NL_CHECKED_U8_LITERAL && arm->context->place_count >= originals[1]
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.04 sec
+
+The following tests FAILED:
+	322 - p982_after_true_auth.unit (Failed)
+Errors while running CTest

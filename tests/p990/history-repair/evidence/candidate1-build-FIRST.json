@@ -1,0 +1,36 @@
+[
+  {
+    "label": "configure",
+    "command": [
+      "/workspace/p965-build-tools/cmake/data/bin/cmake",
+      "-S",
+      "/workspace/p999",
+      "-B",
+      "/workspace/p999-build-gcc",
+      "-DCMAKE_C_COMPILER=/usr/bin/gcc",
+      "-DCMAKE_BUILD_TYPE=Debug",
+      "-DNEWLANG_FRONTEND_ONLY=ON",
+      "-DBUILD_TESTING=ON",
+      "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+      "-DCMAKE_PROJECT_INCLUDE=/workspace/p999/cmake/independent-r-tests-hook.cmake"
+    ],
+    "exit": 0,
+    "seconds": 1.022,
+    "log": "candidate1-gcc-configure-FIRST.log",
+    "sha256": "23ea54fef693ebb0c9f76efa3e3dfd5ce28eb19e56048ba911a2f61ec824fe40"
+  },
+  {
+    "label": "build",
+    "command": [
+      "/workspace/p965-build-tools/cmake/data/bin/cmake",
+      "--build",
+      "/workspace/p999-build-gcc",
+      "--parallel",
+      "3"
+    ],
+    "exit": 0,
+    "seconds": 29.335,
+    "log": "candidate1-gcc-build-FIRST.log",
+    "sha256": "8db7c9eaee362db8730883fb0209425d4cdf5868049fe7ba25b1b929ae1cb454"
+  }
+]

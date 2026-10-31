@@ -1,0 +1,624 @@
+[
+  {
+    "source": "closed_then_two",
+    "source_SHA256": "234c331fde90dcb38d181418e47ba59ad0bd6635f0d19dde04f59087ef680952",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1058": "H_origin",
+        "current": true
+      },
+      {
+        "P1058": "current",
+        "ordinal": 0,
+        "call": 21,
+        "function": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1058": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1058": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 1,
+        "index": 0,
+        "old": 37,
+        "next": 154,
+        "returned": 37,
+        "sibling": 209,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 7,
+        "old_forward_source": true
+      },
+      {
+        "P1058": "current",
+        "ordinal": 1,
+        "call": 28,
+        "function": 10,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1058": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1058": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 2,
+        "index": 1,
+        "old": 112,
+        "next": 37,
+        "returned": 112,
+        "sibling": 68,
+        "root": 4,
+        "incarnation": 4,
+        "result_binding": 13,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1058/tests/p1058/sources/closed_then_two.nl\n",
+    "native": "NOT EXECUTED",
+    "first_private_runtime_predicate": "UNKNOWN in uninstrumented fixed parent"
+  },
+  {
+    "source": "reversed_worlds",
+    "source_SHA256": "0b7e6fc9eba9d3a30e08af8e812e018b957c165a7f3f627b4c7637d5ccad40b2",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1058": "H_origin",
+        "current": true
+      },
+      {
+        "P1058": "current",
+        "ordinal": 0,
+        "call": 21,
+        "function": 13,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1058": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1058": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 1,
+        "index": 1,
+        "old": 16,
+        "next": 77,
+        "returned": 16,
+        "sibling": 250,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 7,
+        "old_forward_source": true
+      },
+      {
+        "P1058": "current",
+        "ordinal": 1,
+        "call": 28,
+        "function": 12,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1058": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1058": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 2,
+        "index": 0,
+        "old": 9,
+        "next": 16,
+        "returned": 9,
+        "sibling": 193,
+        "root": 4,
+        "incarnation": 4,
+        "result_binding": 13,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1058/tests/p1058/sources/reversed_worlds.nl\n",
+    "native": "NOT EXECUTED",
+    "first_private_runtime_predicate": "UNKNOWN in uninstrumented fixed parent"
+  },
+  {
+    "source": "wrong_incoming_equal",
+    "source_SHA256": "3d17013e65f31e6165fb3dcb93678d8efc6bd92e93cec76889d428a00db30b87",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1058": "H_origin",
+        "current": true
+      },
+      {
+        "P1058": "current",
+        "ordinal": 0,
+        "call": 21,
+        "function": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1058": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1058": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 1,
+        "index": 0,
+        "old": 37,
+        "next": 154,
+        "returned": 37,
+        "sibling": 209,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 7,
+        "old_forward_source": true
+      },
+      {
+        "P1058": "current",
+        "ordinal": 1,
+        "call": 28,
+        "function": 10,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1058": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1058": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": -1,
+        "binding_hops": 0,
+        "index": 1,
+        "old": 37,
+        "next": 37,
+        "returned": 37,
+        "sibling": 68,
+        "root": 4,
+        "incarnation": 4,
+        "result_binding": 13,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1058/tests/p1058/sources/wrong_incoming_equal.nl\n",
+    "native": "NOT EXECUTED",
+    "first_private_runtime_predicate": "UNKNOWN in uninstrumented fixed parent"
+  },
+  {
+    "source": "wrong_constant_equal",
+    "source_SHA256": "bcd87e3d3ace50abe9479770b3b92bb08bc94e383d4932ce57d7224b5931e144",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1058": "H_origin",
+        "current": true
+      },
+      {
+        "P1058": "current",
+        "ordinal": 0,
+        "call": 21,
+        "function": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1058": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1058": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": -1,
+        "binding_hops": 0,
+        "index": 0,
+        "old": 37,
+        "next": 154,
+        "returned": 37,
+        "sibling": 209,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 7,
+        "old_forward_source": true
+      },
+      {
+        "P1058": "current",
+        "ordinal": 1,
+        "call": 28,
+        "function": 10,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1058": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1058": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 2,
+        "index": 1,
+        "old": 112,
+        "next": 37,
+        "returned": 112,
+        "sibling": 68,
+        "root": 4,
+        "incarnation": 4,
+        "result_binding": 13,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1058/tests/p1058/sources/wrong_constant_equal.nl\n",
+    "native": "NOT EXECUTED",
+    "first_private_runtime_predicate": "UNKNOWN in uninstrumented fixed parent"
+  },
+  {
+    "source": "same_original_calls",
+    "source_SHA256": "352497a60e86689f9294c569052aaf0987bc8de56c2a2198efaacc891a649e3f",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1058": "H_origin",
+        "current": true
+      },
+      {
+        "P1058": "current",
+        "ordinal": 0,
+        "call": 21,
+        "function": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1058": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1058": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 1,
+        "index": 0,
+        "old": 37,
+        "next": 154,
+        "returned": 37,
+        "sibling": 209,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 7,
+        "old_forward_source": true
+      },
+      {
+        "P1058": "current",
+        "ordinal": 1,
+        "call": 28,
+        "function": 10,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1058": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1058": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 2,
+        "index": 1,
+        "old": 209,
+        "next": 37,
+        "returned": 209,
+        "sibling": 154,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 13,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1058/tests/p1058/sources/same_original_calls.nl\n",
+    "native": "NOT EXECUTED",
+    "first_private_runtime_predicate": "UNKNOWN in uninstrumented fixed parent"
+  },
+  {
+    "source": "one_registered_call",
+    "source_SHA256": "54d76ff96a69f381fe28837c56e3ef0d310ec1b5248a05e1286f57196743b638",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1058": "H_origin",
+        "current": true
+      },
+      {
+        "P1058": "current",
+        "ordinal": 0,
+        "call": 21,
+        "function": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1058": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1058": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 1,
+        "index": 0,
+        "old": 37,
+        "next": 154,
+        "returned": 37,
+        "sibling": 209,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 7,
+        "old_forward_source": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1058/tests/p1058/sources/one_registered_call.nl\n",
+    "native": "NOT EXECUTED",
+    "first_private_runtime_predicate": "UNKNOWN in uninstrumented fixed parent"
+  },
+  {
+    "source": "zero_registered_calls",
+    "source_SHA256": "e2d30f70840b87b2687747e3eabda13e84c204fe3b870aa7644f74e442620d1d",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1058": "H_origin",
+        "current": true
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1058/tests/p1058/sources/zero_registered_calls.nl\n",
+    "native": "NOT EXECUTED",
+    "first_private_runtime_predicate": "UNKNOWN in uninstrumented fixed parent"
+  },
+  {
+    "source": "third_registered_call",
+    "source_SHA256": "ba529ab2b66f70f9b2704aed3b6cd857765f4fcff4529e0376d710c87c52a86e",
+    "CHECK": 0,
+    "public": [
+      {
+        "P1058": "H_origin",
+        "current": true
+      },
+      {
+        "P1058": "current",
+        "ordinal": 0,
+        "call": 21,
+        "function": 12,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1058": "event",
+        "ordinal": 0,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1058": "origin",
+        "ordinal": 0,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 1,
+        "index": 0,
+        "old": 37,
+        "next": 154,
+        "returned": 37,
+        "sibling": 209,
+        "root": 1,
+        "incarnation": 1,
+        "result_binding": 7,
+        "old_forward_source": true
+      },
+      {
+        "P1058": "current",
+        "ordinal": 1,
+        "call": 28,
+        "function": 10,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1058": "event",
+        "ordinal": 1,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1058": "origin",
+        "ordinal": 1,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 2,
+        "index": 1,
+        "old": 112,
+        "next": 37,
+        "returned": 112,
+        "sibling": 68,
+        "root": 4,
+        "incarnation": 4,
+        "result_binding": 13,
+        "old_forward_source": true
+      },
+      {
+        "P1058": "current",
+        "ordinal": 2,
+        "call": 35,
+        "function": 11,
+        "GET_body": true,
+        "GET_parameters": true,
+        "body": 0,
+        "parameters": 0
+      },
+      {
+        "P1058": "event",
+        "ordinal": 2,
+        "event": 0,
+        "kind": 2,
+        "current": 0
+      },
+      {
+        "P1058": "origin",
+        "ordinal": 2,
+        "event_count": 1,
+        "returned_event": 0,
+        "binding_hops": 0,
+        "index": 0,
+        "old": 68,
+        "next": 112,
+        "returned": 68,
+        "sibling": 37,
+        "root": 4,
+        "incarnation": 4,
+        "result_binding": 17,
+        "old_forward_source": false
+      }
+    ],
+    "C17": 4,
+    "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1058/tests/p1058/sources/third_registered_call.nl\n",
+    "native": "NOT EXECUTED",
+    "first_private_runtime_predicate": "UNKNOWN in uninstrumented fixed parent"
+  },
+  {
+    "source": "missing_failure_arm",
+    "source_SHA256": "17f5681f7b492e0717e3bd0cfe434f832b706f641875c484911ae5f5cf8ff209",
+    "CHECK": 3,
+    "public": null,
+    "C17": 3,
+    "diagnostic": "/workspace/p1058/tests/p1058/sources/missing_failure_arm.nl:47:13-83:14: error(semantic)[ALLOCATED-EXHAUSTIVENESS]: both allocation outcomes must be checked\n",
+    "native": "NOT EXECUTED",
+    "first_private_runtime_predicate": "UNKNOWN in uninstrumented fixed parent"
+  },
+  {
+    "source": "missing_failure_cleanup",
+    "source_SHA256": "1f55d57710929ac54f088d6531a95f31e201eaea42a5ae453759e61d53e131c2",
+    "CHECK": 3,
+    "public": null,
+    "C17": 3,
+    "diagnostic": "/workspace/p1058/tests/p1058/sources/missing_failure_cleanup.nl:48:25-56:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n",
+    "native": "NOT EXECUTED",
+    "first_private_runtime_predicate": "UNKNOWN in uninstrumented fixed parent"
+  },
+  {
+    "source": "success_only_name_after_join",
+    "source_SHA256": "5cffce40967eefdf051e643438a04abd56536b5d19238e51f3a1365871ea5bbc",
+    "CHECK": 3,
+    "public": null,
+    "C17": 3,
+    "diagnostic": "/workspace/p1058/tests/p1058/sources/success_only_name_after_join.nl:94:19-94:27: error(semantic)[P3-UNKNOWN-BINDING]: unknown semantic binding\n",
+    "native": "NOT EXECUTED",
+    "first_private_runtime_predicate": "UNKNOWN in uninstrumented fixed parent"
+  },
+  {
+    "source": "wrong_H_domain",
+    "source_SHA256": "ce862108c8b018345773a043efb2b8bf85a7ac7595edc7eca3001b1275843e31",
+    "CHECK": 3,
+    "public": null,
+    "C17": 3,
+    "diagnostic": "/workspace/p1058/tests/p1058/sources/wrong_H_domain.nl:82:21-82:79: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root\n",
+    "native": "NOT EXECUTED",
+    "first_private_runtime_predicate": "UNKNOWN in uninstrumented fixed parent"
+  }
+]

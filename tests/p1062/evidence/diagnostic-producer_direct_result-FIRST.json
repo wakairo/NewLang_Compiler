@@ -1,0 +1,11 @@
+{
+  "command": [
+    "/workspace/p1062-artifacts/diagnostic-v1/newlangc",
+    "tests/p1062/sources/producer_direct_result.nl"
+  ],
+  "exit": 4,
+  "raw_host_UTC_start": "2026-10-30T10:26:35.901533+00:00",
+  "raw_host_UTC_finish": "2026-10-30T10:26:35.908667+00:00",
+  "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_SHA256": "4347e13126ad5a33272f3cb449d37fcaf4518eef0f62ce6e283c2e7a120d7dbc"
+}

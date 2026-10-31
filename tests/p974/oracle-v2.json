@@ -1,0 +1,7 @@
+{
+  "previous_candidate": "292a91a9f256002a846f4509b5dc001bca061bc7",
+  "first_red": "named_v0 return-11 after8/9 PASS; preserved original source/oracle/logs and no unsafe rerun",
+  "diagnosis": "After guarded V0 rejects NULL functions, compile_v0_to tries Array4 fallback. array4.c nl_checked_array4_c17 indexes the same current NULL table before discovering there is no Array4 carrier. Source-rooted unsafe fallback at this candidate; no post-failure crash rerun to obtain a sanitizer trace.",
+  "fix_scope": "Minimal NULL table checks in directly implicated Array4 fallback and its event table walk; original Array4/source eligibility/issuer/oracles unchanged",
+  "additive_expected": "Direct Array4 fallback on genuine root with same positive function count and NULL table returns SEMANTIC_UNSUPPORTED and preserves NULL output/length777. Full CLI named negative still must return4, preserve bytes/dev/ino and restore before cleanup; healthy retry0. All original18 metadata faults, history GET/current INVALID and V0 sentinels remain as prior oracle, not weakened."
+}

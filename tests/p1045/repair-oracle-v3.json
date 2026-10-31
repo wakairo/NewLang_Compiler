@@ -1,0 +1,14 @@
+{
+  "release": "C137 candidate-v3 PRE-RUN: test composition and forward coherent history only",
+  "tested_Production_candidate": "b63d228afa29c7473aefd1da4b2e06cf06880f6a",
+  "Production_changes_from_v2": false,
+  "source_oracle_changes": "none: original source-v1/v2, native/current/negative/OOM contracts and old v1-v8 immutable",
+  "first_full_RED": {"candidate":"b63d228afa29c7473aefd1da4b2e06cf06880f6a","GCC13_pass":576,"total":577,"exit":8,"raw_SHA256":"434420c2629814d336c11c39e18e9ee464aa6b9128a1e16b74560c39ed904f7e","reason":"legacy P1030 coherent-v7 attack fixture assumed CURRENT immediate predecessor v7; v9 has v8 so malformed previous digest refused before intended fixed-v7 guard"},
+  "forward_history": "new P-owned copies retain all old P1030 source/oracle/native/negative/OOM assertions and five old rejection oracles. Changed v7 SHA is propagated coherently through every intervening mutable manifest and CURRENT; unchanged old trusted v1-v8 verifier must reject literal original-v7. New v9's five original-v8 counterexamples also remain active",
+  "test_composition": "existing new-suite umbrella retains all predecessor P suites with new P-owned forward P1030 driver. New P1045 suite moves to its own ordinary CTest, same unchanged root90s/environment/CI matrix; no deleted assertions or skipped cases, no T/R/CI trust-boundary change",
+  "registered": {"frontend":578,"full_with_LLVM_smoke":579,"new":"p1045_two_original_native.integration","old_577_names_retained":true,"independent_R":0,"unchanged_T_synthetic":2},
+  "necessary_local_checks": "only affected GCC13 registered umbrella/new test, unexecuted Clang full578, targeted ASan registered umbrella+new test to verify90s composition and old pre-world regression. Already green Production/native/OOM/UBSan results retained at identical code; do not rerun broad oldGCC576 or whole local sanitizer cohorts",
+  "expected": "all required local checks success with every first RED preserved; no PR/CI until complete",
+  "STOP": "actual unsafe/current/issuer/source-law/API/ABI/oldhistory/Rindependence/fixedparent/scope/budget issue",
+  "VALUE_ALIGNMENT_RISK": "forward harness duplicate and private profile increase maintainer audit cost; human author+ordinary-safe caller UB audit closure vs factoredC and performance/cost UNMEASURED; ProductGO PAUSED/H1HOLD"
+}

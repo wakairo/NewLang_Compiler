@@ -1,0 +1,46 @@
+Internal ctest changing into directory: /workspace/p965-build-gcc
+Test project /workspace/p965-build-gcc
+      Start   5: p718_if_return_proof_oom.unit
+ 1/20 Test   #5: p718_if_return_proof_oom.unit .............   Passed    0.25 sec
+      Start   7: p728_unit_statement_proof.unit
+ 2/20 Test   #7: p728_unit_statement_proof.unit ............   Passed    0.02 sec
+      Start   8: p728_unit_statement_history_oom.unit
+ 3/20 Test   #8: p728_unit_statement_history_oom.unit ......   Passed    1.24 sec
+      Start  10: p722_callee_return_proof_oom.unit
+ 4/20 Test  #10: p722_callee_return_proof_oom.unit .........   Passed    0.94 sec
+      Start  12: p713_if_field_proof_oom.unit
+ 5/20 Test  #12: p713_if_field_proof_oom.unit ..............   Passed    0.19 sec
+      Start  14: p706_proof_handoff_oom.unit
+ 6/20 Test  #14: p706_proof_handoff_oom.unit ...............   Passed    0.30 sec
+      Start 254: p866_prefix_integrity.unit
+ 7/20 Test #254: p866_prefix_integrity.unit ................   Passed    0.01 sec
+      Start 255: p866_reached_validator_oom.unit
+ 8/20 Test #255: p866_reached_validator_oom.unit ...........   Passed    0.00 sec
+      Start 258: p878_backend_guards.unit
+ 9/20 Test #258: p878_backend_guards.unit ..................   Passed    0.01 sec
+      Start 259: p878_prefix_integrity.unit
+10/20 Test #259: p878_prefix_integrity.unit ................   Passed    0.01 sec
+      Start 260: p878_reached_prefix_oom.unit
+11/20 Test #260: p878_reached_prefix_oom.unit ..............   Passed    0.00 sec
+      Start 262: p817_pump_public.unit
+12/20 Test #262: p817_pump_public.unit .....................   Passed    0.00 sec
+      Start 263: p817_charge_public.unit
+13/20 Test #263: p817_charge_public.unit ...................   Passed    0.01 sec
+      Start 265: p817_issuer_oom.unit
+14/20 Test #265: p817_issuer_oom.unit ......................   Passed    0.01 sec
+      Start 320: p945_dispatch_journal_r1_integrity.unit
+15/20 Test #320: p945_dispatch_journal_r1_integrity.unit ...   Passed    0.01 sec
+      Start 322: p945_thermal_recovery_r1_integrity.unit
+16/20 Test #322: p945_thermal_recovery_r1_integrity.unit ...   Passed    0.02 sec
+      Start 325: p778_sensor_spare_gate.unit
+17/20 Test #325: p778_sensor_spare_gate.unit ...............   Passed    0.04 sec
+      Start 326: p778_valve_spare_gate.unit
+18/20 Test #326: p778_valve_spare_gate.unit ................   Passed    0.05 sec
+      Start 331: p774_pump_reserve_gate.unit
+19/20 Test #331: p774_pump_reserve_gate.unit ...............   Passed    0.03 sec
+      Start 332: p774_scale_reserve_gate.unit
+20/20 Test #332: p774_scale_reserve_gate.unit ..............   Passed    0.04 sec
+
+100% tests passed, 0 tests failed out of 20
+
+Total Test time (real) =   3.20 sec

@@ -1,0 +1,16 @@
+{
+  "head": "2d4b3fe2500a8a472940294807731f7922254561",
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/ctest",
+    "--test-dir",
+    "/workspace/p1011-build-gcc",
+    "--parallel",
+    "2",
+    "--verbose",
+    "--stop-on-failure"
+  ],
+  "exit": 0,
+  "seconds": 130.951,
+  "log": "candidate1-gcc-full-FIRST.log",
+  "SHA256": "8364bef3276a4d46ee538e54151e14ec4c5ad847715c6ed244a789c32d6d27b0"
+}

@@ -1,0 +1,16 @@
+{
+  "test": "p990_new_native.integration",
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/ctest",
+    "--test-dir",
+    "/workspace/p1020-build-asan",
+    "--parallel",
+    "3",
+    "--output-on-failure",
+    "-R",
+    "^p990_new_native\\.integration$"
+  ],
+  "exit": 0,
+  "seconds": 34.426502774000255,
+  "log_SHA256": "c164b99bf0fe0c7c2c4cfe19ced7c36a9d006162d8e40c8ed2c461684f0d93e5"
+}

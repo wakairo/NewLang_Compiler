@@ -1,0 +1,83 @@
+diff --git a/src/array4.c b/src/array4.c
+index 52c6235..ee0040a 100644
+--- a/src/array4.c
++++ b/src/array4.c
+@@ -422,7 +422,8 @@ static bool event_valid(const NLCheckedFragment *f,
+                         const NLSemanticContext *c)
+ {
+     const NLSemanticContext *final = nl_checked_context(f);
+-    if (v->origin != f || !v->incarnation || !v->fact || !final ||
++    if (v->origin != f || !v->incarnation || !v->fact || !final || !c ||
++        !final->functions || !c->functions ||
+         final->place_count < c->place_count ||
+         final->value_count < c->value_count ||
+         final->binding_count < c->binding_count)
+@@ -635,7 +636,8 @@ NLCheckStatus nl_checked_array4_c17(const NLCheckedFragment *entry, char **out,
+         nl_checked_context(entry) != nl_checked_context(f))
+         return NL_CHECK_SEMANTIC_UNSUPPORTED;
+     const NLSemanticContext *c = nl_checked_context(f);
+-    if (!call->function || call->function > c->function_count)
++    if (!c || !c->functions || !call->function ||
++        call->function > c->function_count)
+         return NL_CHECK_SEMANTIC_UNSUPPORTED;
+     const NLFunctionEntry fn = c->functions[call->function - 1];
+     if (fn.body != f->body_owner || fn.kind != NL_CHECKED_REGISTERED_CALL ||
+diff --git a/src/copy_body.c b/src/copy_body.c
+index 14bf4d6..daa4d41 100644
+--- a/src/copy_body.c
++++ b/src/copy_body.c
+@@ -1031,7 +1031,20 @@ static bool parameter_entry(const NLCopyBodyProof *p,
+         call->first_argument != p->parameters.arguments[0] ||
+         fn->parameters[1] != nl_semantic_core_type(entry, NL_TYPE_U8))
+         return false;
+-    if (now->count != 2 || !now->parameters ||
++    /* The current registry entry, not only its address/signature, must still
++     * select the original CHECK-issued callable. History supplies no right to
++     * a replacement plan or a different result/effect/owner category. */
++    if (fn->body != p->body || now->body != p->body ||
++        fn->kind != NL_CHECKED_REGISTERED_CALL || now->kind != fn->kind ||
++        fn->result != call->type || now->result != fn->result ||
++        now->caller_effects != fn->caller_effects ||
++        now->hidden_dependencies != fn->hidden_dependencies ||
++        now->owner_receiver != fn->owner_receiver ||
++        now->owner_producer != fn->owner_producer ||
++        now->custody_recipient != fn->custody_recipient ||
++        nl_checked_context(p->owner) != current ||
++        p->owner->body_owner != p->body || p->owner->source != p->source ||
++        p->body->source != p->source || now->count != 2 || !now->parameters ||
+         memcmp(now->parameters, p->parameter_types, sizeof(p->parameter_types)))
+         return false;
+     const NLSemanticTypeView t = entry->types[fn->parameters[0] - 1].view;
+diff --git a/src/main.c b/src/main.c
+index 2554972..f4e2cd9 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -1981,14 +1981,16 @@ static bool v1_call_parameter(const NLCheckedFragment *f, NLCheckedNodeId id,
+     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
+     const NLSemanticContext *c = nl_checked_context(f);
+     const NLCheckedFragment *body = nl_checked_call_body(f, id);
+-    if (call == NULL || c == NULL || body == NULL || call->function == 0 ||
+-        call->function > c->function_count || nl_checked_context(body) != c)
++    if (call == NULL || c == NULL || c->functions == NULL || body == NULL ||
++        call->function == 0 || call->function > c->function_count ||
++        nl_checked_context(body) != c)
+         return false;
+     const NLFunctionEntry *fn = &c->functions[call->function - 1];
+     if (fn->kind != NL_CHECKED_REGISTERED_CALL || fn->body == NULL ||
+         body->body_owner != fn->body || body->source != fn->body->source ||
+         fn->result != call->type || fn->count != call->argument_count ||
+-        fn->body->count != fn->count || fn->count > 2 || fn->caller_effects ||
++        fn->body->count != fn->count || fn->count > 2 ||
++        (fn->count && !fn->parameters) || fn->caller_effects ||
+         fn->hidden_dependencies || fn->owner_receiver || fn->owner_producer ||
+         fn->custody_recipient)
+         return false;
+@@ -3080,7 +3082,7 @@ static int render_check_failure(const NLSource *source,
+ static size_t v0_export_function(const NLSemanticContext *c, const char *name)
+ {
+     size_t selected = 0;
+-    if (strcmp(name, "main") == 0)
++    if (c == NULL || c->functions == NULL || strcmp(name, "main") == 0)
+         return 0;
+     for (size_t i = 0; i < c->function_count; ++i) {
+         const NLFunctionEntry *fn = &c->functions[i];

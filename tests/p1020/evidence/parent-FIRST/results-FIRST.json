@@ -1,0 +1,1055 @@
+[
+  {
+    "source": "control_return_false.nl",
+    "CHECK": 0,
+    "C17": 0,
+    "C_SHA256": "20335eeeec898956b771ed5758ac3236806f0fb4b2067501d3fbba57bc34cf2b",
+    "named_failure_preserved": false,
+    "public": [
+      {
+        "stage": "parse",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "register_definition_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_artifact",
+        "issued": 1
+      },
+      {
+        "stage": "public_call",
+        "depth": 0,
+        "call": 1,
+        "function": 10,
+        "start": 0,
+        "end": 6,
+        "source_owned_body": 1,
+        "unit_get": 0,
+        "unit_current_validate": -1,
+        "body_get": 0,
+        "body_current_validate": -1,
+        "parameters_get": 0,
+        "parameters_current_validate": -1
+      },
+      {
+        "stage": "public_call",
+        "depth": 1,
+        "call": 11,
+        "function": 11,
+        "start": 109,
+        "end": 136,
+        "source_owned_body": 1,
+        "unit_get": 1,
+        "unit_current_validate": 0,
+        "body_get": 1,
+        "body_current_validate": 3,
+        "parameters_get": 1,
+        "parameters_current_validate": 0
+      },
+      {
+        "stage": "world",
+        "label": "parameters_entry",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 2,
+        "known": 1,
+        "value": 37,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "world",
+        "label": "parameters_handoff",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 10,
+        "known": 0,
+        "value": null,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "world",
+        "label": "entry",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 2,
+        "known": 1,
+        "value": 37,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "world",
+        "label": "normal_end",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 7,
+        "known": 1,
+        "value": 83,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "world",
+        "label": "postcall",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 10,
+        "known": 0,
+        "value": null,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "public_IF",
+        "depth": 2,
+        "node": 5,
+        "field_get": 0,
+        "field_validate": -1,
+        "return_get": 1,
+        "return_validate": 0,
+        "then_changes": 0,
+        "else_changes": 0
+      },
+      {
+        "stage": "entry_result",
+        "scalar_known": 0,
+        "value": null
+      }
+    ]
+  },
+  {
+    "source": "control_return_true.nl",
+    "CHECK": 0,
+    "C17": 0,
+    "C_SHA256": "fbb04c87d7a8c11c31e062b272d8d93d407c459caf03c9a5207a0879ae629167",
+    "named_failure_preserved": false,
+    "public": [
+      {
+        "stage": "parse",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "register_definition_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_artifact",
+        "issued": 1
+      },
+      {
+        "stage": "public_call",
+        "depth": 0,
+        "call": 1,
+        "function": 10,
+        "start": 0,
+        "end": 6,
+        "source_owned_body": 1,
+        "unit_get": 0,
+        "unit_current_validate": -1,
+        "body_get": 0,
+        "body_current_validate": -1,
+        "parameters_get": 0,
+        "parameters_current_validate": -1
+      },
+      {
+        "stage": "public_call",
+        "depth": 1,
+        "call": 11,
+        "function": 11,
+        "start": 109,
+        "end": 136,
+        "source_owned_body": 1,
+        "unit_get": 1,
+        "unit_current_validate": 0,
+        "body_get": 1,
+        "body_current_validate": 3,
+        "parameters_get": 1,
+        "parameters_current_validate": 0
+      },
+      {
+        "stage": "world",
+        "label": "parameters_entry",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 2,
+        "known": 1,
+        "value": 37,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "world",
+        "label": "parameters_handoff",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 10,
+        "known": 0,
+        "value": null,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "world",
+        "label": "entry",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 2,
+        "known": 1,
+        "value": 37,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "world",
+        "label": "normal_end",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 7,
+        "known": 1,
+        "value": 83,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "world",
+        "label": "postcall",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 10,
+        "known": 0,
+        "value": null,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "public_IF",
+        "depth": 2,
+        "node": 5,
+        "field_get": 0,
+        "field_validate": -1,
+        "return_get": 1,
+        "return_validate": 0,
+        "then_changes": 0,
+        "else_changes": 0
+      },
+      {
+        "stage": "entry_result",
+        "scalar_known": 0,
+        "value": null
+      }
+    ]
+  },
+  {
+    "source": "negative_loan_escape.nl",
+    "CHECK": 3,
+    "C17": 3,
+    "C_SHA256": null,
+    "named_failure_preserved": true,
+    "public": [
+      {
+        "stage": "parse",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "register_definition_CHECK",
+        "status": 1,
+        "code": "P8-EXIT-DEPENDENCY",
+        "start": 536,
+        "end": 630
+      }
+    ]
+  },
+  {
+    "source": "negative_read_write.nl",
+    "CHECK": 3,
+    "C17": 3,
+    "C_SHA256": null,
+    "named_failure_preserved": true,
+    "public": [
+      {
+        "stage": "parse",
+        "status": 2,
+        "code": "LOCAL-LOAN-PROFILE",
+        "start": 534,
+        "end": 535
+      }
+    ]
+  },
+  {
+    "source": "two_normal_equal.nl",
+    "CHECK": 0,
+    "C17": 4,
+    "C_SHA256": null,
+    "named_failure_preserved": true,
+    "public": [
+      {
+        "stage": "parse",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "register_definition_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_artifact",
+        "issued": 1
+      },
+      {
+        "stage": "public_call",
+        "depth": 0,
+        "call": 1,
+        "function": 10,
+        "start": 0,
+        "end": 6,
+        "source_owned_body": 1,
+        "unit_get": 0,
+        "unit_current_validate": -1,
+        "body_get": 0,
+        "body_current_validate": -1,
+        "parameters_get": 0,
+        "parameters_current_validate": -1
+      },
+      {
+        "stage": "public_call",
+        "depth": 1,
+        "call": 11,
+        "function": 11,
+        "start": 109,
+        "end": 136,
+        "source_owned_body": 1,
+        "unit_get": 0,
+        "unit_current_validate": -1,
+        "body_get": 1,
+        "body_current_validate": 3,
+        "parameters_get": 1,
+        "parameters_current_validate": 3
+      },
+      {
+        "stage": "world",
+        "label": "parameters_entry",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 2,
+        "known": 1,
+        "value": 37,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "world",
+        "label": "parameters_handoff",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 7,
+        "known": 0,
+        "value": null,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "public_IF",
+        "depth": 2,
+        "node": 5,
+        "field_get": 1,
+        "field_validate": 0,
+        "return_get": 0,
+        "return_validate": -1,
+        "then_changes": 1,
+        "else_changes": 1
+      },
+      {
+        "stage": "entry_result",
+        "scalar_known": 0,
+        "value": null
+      }
+    ]
+  },
+  {
+    "source": "two_normal_false.nl",
+    "CHECK": 0,
+    "C17": 4,
+    "C_SHA256": null,
+    "named_failure_preserved": true,
+    "public": [
+      {
+        "stage": "parse",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "register_definition_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_artifact",
+        "issued": 1
+      },
+      {
+        "stage": "public_call",
+        "depth": 0,
+        "call": 1,
+        "function": 10,
+        "start": 0,
+        "end": 6,
+        "source_owned_body": 1,
+        "unit_get": 0,
+        "unit_current_validate": -1,
+        "body_get": 0,
+        "body_current_validate": -1,
+        "parameters_get": 0,
+        "parameters_current_validate": -1
+      },
+      {
+        "stage": "public_call",
+        "depth": 1,
+        "call": 11,
+        "function": 11,
+        "start": 109,
+        "end": 136,
+        "source_owned_body": 1,
+        "unit_get": 0,
+        "unit_current_validate": -1,
+        "body_get": 1,
+        "body_current_validate": 3,
+        "parameters_get": 1,
+        "parameters_current_validate": 3
+      },
+      {
+        "stage": "world",
+        "label": "parameters_entry",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 2,
+        "known": 1,
+        "value": 37,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "world",
+        "label": "parameters_handoff",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 7,
+        "known": 0,
+        "value": null,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "public_IF",
+        "depth": 2,
+        "node": 5,
+        "field_get": 1,
+        "field_validate": 0,
+        "return_get": 0,
+        "return_validate": -1,
+        "then_changes": 1,
+        "else_changes": 1
+      },
+      {
+        "stage": "entry_result",
+        "scalar_known": 0,
+        "value": null
+      }
+    ]
+  },
+  {
+    "source": "two_normal_index1.nl",
+    "CHECK": 0,
+    "C17": 4,
+    "C_SHA256": null,
+    "named_failure_preserved": true,
+    "public": [
+      {
+        "stage": "parse",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "register_definition_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_artifact",
+        "issued": 1
+      },
+      {
+        "stage": "public_call",
+        "depth": 0,
+        "call": 1,
+        "function": 10,
+        "start": 0,
+        "end": 6,
+        "source_owned_body": 1,
+        "unit_get": 0,
+        "unit_current_validate": -1,
+        "body_get": 0,
+        "body_current_validate": -1,
+        "parameters_get": 0,
+        "parameters_current_validate": -1
+      },
+      {
+        "stage": "public_call",
+        "depth": 1,
+        "call": 11,
+        "function": 11,
+        "start": 105,
+        "end": 132,
+        "source_owned_body": 1,
+        "unit_get": 0,
+        "unit_current_validate": -1,
+        "body_get": 1,
+        "body_current_validate": 3,
+        "parameters_get": 1,
+        "parameters_current_validate": 3
+      },
+      {
+        "stage": "world",
+        "label": "parameters_entry",
+        "observable": true,
+        "parent": 1,
+        "child": 3,
+        "index": 1,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 3,
+        "current_fact": 3,
+        "known": 1,
+        "value": 229,
+        "sibling_fact": 2,
+        "sibling_known": 1,
+        "sibling": 37
+      },
+      {
+        "stage": "world",
+        "label": "parameters_handoff",
+        "observable": true,
+        "parent": 1,
+        "child": 3,
+        "index": 1,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 3,
+        "current_fact": 7,
+        "known": 0,
+        "value": null,
+        "sibling_fact": 2,
+        "sibling_known": 1,
+        "sibling": 37
+      },
+      {
+        "stage": "public_IF",
+        "depth": 2,
+        "node": 5,
+        "field_get": 1,
+        "field_validate": 0,
+        "return_get": 0,
+        "return_validate": -1,
+        "then_changes": 1,
+        "else_changes": 1
+      },
+      {
+        "stage": "entry_result",
+        "scalar_known": 0,
+        "value": null
+      }
+    ]
+  },
+  {
+    "source": "two_normal_true.nl",
+    "CHECK": 0,
+    "C17": 4,
+    "C_SHA256": null,
+    "named_failure_preserved": true,
+    "public": [
+      {
+        "stage": "parse",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "register_definition_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_artifact",
+        "issued": 1
+      },
+      {
+        "stage": "public_call",
+        "depth": 0,
+        "call": 1,
+        "function": 10,
+        "start": 0,
+        "end": 6,
+        "source_owned_body": 1,
+        "unit_get": 0,
+        "unit_current_validate": -1,
+        "body_get": 0,
+        "body_current_validate": -1,
+        "parameters_get": 0,
+        "parameters_current_validate": -1
+      },
+      {
+        "stage": "public_call",
+        "depth": 1,
+        "call": 11,
+        "function": 11,
+        "start": 109,
+        "end": 136,
+        "source_owned_body": 1,
+        "unit_get": 0,
+        "unit_current_validate": -1,
+        "body_get": 1,
+        "body_current_validate": 3,
+        "parameters_get": 1,
+        "parameters_current_validate": 3
+      },
+      {
+        "stage": "world",
+        "label": "parameters_entry",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 2,
+        "known": 1,
+        "value": 37,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "world",
+        "label": "parameters_handoff",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 7,
+        "known": 0,
+        "value": null,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "public_IF",
+        "depth": 2,
+        "node": 5,
+        "field_get": 1,
+        "field_validate": 0,
+        "return_get": 0,
+        "return_validate": -1,
+        "then_changes": 1,
+        "else_changes": 1
+      },
+      {
+        "stage": "entry_result",
+        "scalar_known": 0,
+        "value": null
+      }
+    ]
+  },
+  {
+    "source": "unsupported_two_changes.nl",
+    "CHECK": 0,
+    "C17": 4,
+    "C_SHA256": null,
+    "named_failure_preserved": true,
+    "public": [
+      {
+        "stage": "parse",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "register_definition_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_artifact",
+        "issued": 1
+      },
+      {
+        "stage": "public_call",
+        "depth": 0,
+        "call": 1,
+        "function": 10,
+        "start": 0,
+        "end": 6,
+        "source_owned_body": 1,
+        "unit_get": 0,
+        "unit_current_validate": -1,
+        "body_get": 0,
+        "body_current_validate": -1,
+        "parameters_get": 0,
+        "parameters_current_validate": -1
+      },
+      {
+        "stage": "public_call",
+        "depth": 1,
+        "call": 11,
+        "function": 11,
+        "start": 109,
+        "end": 136,
+        "source_owned_body": 1,
+        "unit_get": 0,
+        "unit_current_validate": -1,
+        "body_get": 1,
+        "body_current_validate": 3,
+        "parameters_get": 1,
+        "parameters_current_validate": 3
+      },
+      {
+        "stage": "world",
+        "label": "parameters_entry",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 2,
+        "known": 1,
+        "value": 37,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "world",
+        "label": "parameters_handoff",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 7,
+        "known": 0,
+        "value": null,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "public_IF",
+        "depth": 2,
+        "node": 5,
+        "field_get": 1,
+        "field_validate": 0,
+        "return_get": 0,
+        "return_validate": -1,
+        "then_changes": 2,
+        "else_changes": 1
+      },
+      {
+        "stage": "entry_result",
+        "scalar_known": 0,
+        "value": null
+      }
+    ]
+  },
+  {
+    "source": "unsupported_zero_change.nl",
+    "CHECK": 0,
+    "C17": 4,
+    "C_SHA256": null,
+    "named_failure_preserved": true,
+    "public": [
+      {
+        "stage": "parse",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "register_definition_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_CHECK",
+        "status": 0,
+        "code": "",
+        "start": 0,
+        "end": 0
+      },
+      {
+        "stage": "entry_artifact",
+        "issued": 1
+      },
+      {
+        "stage": "public_call",
+        "depth": 0,
+        "call": 1,
+        "function": 10,
+        "start": 0,
+        "end": 6,
+        "source_owned_body": 1,
+        "unit_get": 0,
+        "unit_current_validate": -1,
+        "body_get": 0,
+        "body_current_validate": -1,
+        "parameters_get": 0,
+        "parameters_current_validate": -1
+      },
+      {
+        "stage": "public_call",
+        "depth": 1,
+        "call": 11,
+        "function": 11,
+        "start": 109,
+        "end": 136,
+        "source_owned_body": 1,
+        "unit_get": 0,
+        "unit_current_validate": -1,
+        "body_get": 1,
+        "body_current_validate": 3,
+        "parameters_get": 1,
+        "parameters_current_validate": 3
+      },
+      {
+        "stage": "world",
+        "label": "parameters_entry",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 2,
+        "known": 1,
+        "value": 37,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "world",
+        "label": "parameters_handoff",
+        "observable": true,
+        "parent": 1,
+        "child": 2,
+        "index": 0,
+        "parent_live": 1,
+        "child_live": 1,
+        "incarnation": 2,
+        "current_fact": 7,
+        "known": 0,
+        "value": null,
+        "sibling_fact": 3,
+        "sibling_known": 1,
+        "sibling": 229
+      },
+      {
+        "stage": "public_IF",
+        "depth": 2,
+        "node": 5,
+        "field_get": 1,
+        "field_validate": 0,
+        "return_get": 0,
+        "return_validate": -1,
+        "then_changes": 1,
+        "else_changes": 0
+      },
+      {
+        "stage": "entry_result",
+        "scalar_known": 0,
+        "value": null
+      }
+    ]
+  }
+]

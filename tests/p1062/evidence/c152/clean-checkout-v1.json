@@ -1,0 +1,62 @@
+{
+  "release": "C152",
+  "clean_detached_HEAD": "71afa788a7a9dfdca608eb723db291b814e1731e",
+  "clean_tree": "2d2e12fbd59178a682af46fea08e7bdc2b4fea7d",
+  "first_repair_v12_SHA256": "6567f69ac979dc99b1c85842656ecd83a7c71ce8e8c690f8a141b4f1fd97622f",
+  "Git_status_before_after": "clean",
+  "source_cache_directories_before_after": 0,
+  "git_inventory_inputs": 2516,
+  "v11_inherited_keys": 2307,
+  "unchanged_frozen_source_inputs": 22,
+  "original_5_history_negatives": "REJECT",
+  "new_ambient_input_and_deterministic_generation": "PASS",
+  "configure": "GCC13.3 Debug frontend-only, T synthetic2/approvedR0",
+  "required_CMake_targets": [
+    "newlangc",
+    "p990_oom"
+  ],
+  "original_seven_failed_CTests_final_results": {
+    "p1045_two_original_native.integration": {
+      "conclusion": "PASS",
+      "seconds": 9.23
+    },
+    "p1055_old_origin_0.integration": {
+      "conclusion": "PASS",
+      "seconds": 8.73
+    },
+    "p1058_closed_h_0.integration": {
+      "conclusion": "PASS",
+      "seconds": 6.08
+    },
+    "p1062_h_body_0.integration": {
+      "conclusion": "PASS",
+      "seconds": 8.1
+    },
+    "p982_freeze.unit": {
+      "conclusion": "PASS",
+      "seconds": 0.98
+    },
+    "p990_freeze_protocol.unit": {
+      "conclusion": "PASS",
+      "seconds": 15.41
+    },
+    "p990_new_native.integration": {
+      "conclusion": "PASS",
+      "seconds": 12.83
+    }
+  },
+  "local_build_preparation_FIRST_RED": {
+    "exit": 8,
+    "failed_test": "p990_new_native.integration",
+    "error": "missing unbuilt p990_oom executable",
+    "preserved": true,
+    "test_oracle_or_Production_changes": false,
+    "same_candidate_after_required_target_build": "PASS",
+    "already_passed_tests_not_repeated": [
+      "p982_freeze.unit",
+      "p990_freeze_protocol.unit"
+    ]
+  },
+  "original_six_CI_RED": "UNCHANGED FAIL; not rerun/regraded",
+  "new_Actions_so_far": 0
+}

@@ -1,0 +1,152 @@
+[
+  {
+    "source": "second_true.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p974-build-gcc/newlangc",
+      "--check",
+      "/workspace/p982/tests/p982/sources/second_true.nl"
+    ],
+    "returncode": 0,
+    "stdout_bytes": 0,
+    "stderr": "",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "second_true.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p974-build-gcc/newlangc",
+      "/workspace/p982/tests/p982/sources/second_true.nl"
+    ],
+    "returncode": 4,
+    "stdout_bytes": 0,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p982/tests/p982/sources/second_true.nl\n",
+    "stderr_sha256": "d940f489857b5803e4135a13ac2c91aec7459dad49db307aefcba93c0a8bfeaf"
+  },
+  {
+    "source": "second_false.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p974-build-gcc/newlangc",
+      "--check",
+      "/workspace/p982/tests/p982/sources/second_false.nl"
+    ],
+    "returncode": 0,
+    "stdout_bytes": 0,
+    "stderr": "",
+    "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "source": "second_false.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p974-build-gcc/newlangc",
+      "/workspace/p982/tests/p982/sources/second_false.nl"
+    ],
+    "returncode": 4,
+    "stdout_bytes": 0,
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p982/tests/p982/sources/second_false.nl\n",
+    "stderr_sha256": "db1c0d2a5f775a5de28753a95fc35f4c7a64d23f579884c6b676161ca1cfc1e5"
+  },
+  {
+    "source": "wrong_field.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p974-build-gcc/newlangc",
+      "--check",
+      "/workspace/p982/tests/p982/sources/wrong_field.nl"
+    ],
+    "returncode": 3,
+    "stdout_bytes": 0,
+    "stderr": "/workspace/p982/tests/p982/sources/wrong_field.nl:90:42-90:56: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal\n",
+    "stderr_sha256": "c2de81ed160cf4d3eb30b871e3c5da3caf6c917bda420c010b0e2f89fc0f8aec"
+  },
+  {
+    "source": "wrong_field.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p974-build-gcc/newlangc",
+      "/workspace/p982/tests/p982/sources/wrong_field.nl"
+    ],
+    "returncode": 3,
+    "stdout_bytes": 0,
+    "stderr": "/workspace/p982/tests/p982/sources/wrong_field.nl:90:42-90:56: error(semantic)[FIELD-UNKNOWN-FIELD]: field is not declared by the selected nominal\n",
+    "stderr_sha256": "c2de81ed160cf4d3eb30b871e3c5da3caf6c917bda420c010b0e2f89fc0f8aec"
+  },
+  {
+    "source": "wrong_owner.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p974-build-gcc/newlangc",
+      "--check",
+      "/workspace/p982/tests/p982/sources/wrong_owner.nl"
+    ],
+    "returncode": 3,
+    "stdout_bytes": 0,
+    "stderr": "/workspace/p982/tests/p982/sources/wrong_owner.nl:80:21-80:75: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n",
+    "stderr_sha256": "cf38cb40b87e05564cf8bfca72c49bf45767b982bc9e85192a7db961ef6d9829"
+  },
+  {
+    "source": "wrong_owner.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p974-build-gcc/newlangc",
+      "/workspace/p982/tests/p982/sources/wrong_owner.nl"
+    ],
+    "returncode": 3,
+    "stdout_bytes": 0,
+    "stderr": "/workspace/p982/tests/p982/sources/wrong_owner.nl:80:21-80:75: error(semantic)[P193-CALL-BACKING]: input Allocation does not own the root's BackingRegion\n",
+    "stderr_sha256": "cf38cb40b87e05564cf8bfca72c49bf45767b982bc9e85192a7db961ef6d9829"
+  },
+  {
+    "source": "duplicate_owner.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p974-build-gcc/newlangc",
+      "--check",
+      "/workspace/p982/tests/p982/sources/duplicate_owner.nl"
+    ],
+    "returncode": 3,
+    "stdout_bytes": 0,
+    "stderr": "/workspace/p982/tests/p982/sources/duplicate_owner.nl:81:45-81:61: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+    "stderr_sha256": "9cee9edf0500380d0f6b521fa3117f8e4210ebd1063580b2c886d67c091f7a40"
+  },
+  {
+    "source": "duplicate_owner.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p974-build-gcc/newlangc",
+      "/workspace/p982/tests/p982/sources/duplicate_owner.nl"
+    ],
+    "returncode": 3,
+    "stdout_bytes": 0,
+    "stderr": "/workspace/p982/tests/p982/sources/duplicate_owner.nl:81:45-81:61: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+    "stderr_sha256": "9cee9edf0500380d0f6b521fa3117f8e4210ebd1063580b2c886d67c091f7a40"
+  },
+  {
+    "source": "ended_domain.nl",
+    "mode": "check",
+    "command": [
+      "/workspace/p974-build-gcc/newlangc",
+      "--check",
+      "/workspace/p982/tests/p982/sources/ended_domain.nl"
+    ],
+    "returncode": 3,
+    "stdout_bytes": 0,
+    "stderr": "/workspace/p982/tests/p982/sources/ended_domain.nl:87:31-87:42: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+    "stderr_sha256": "ef301fb6c2618c40b667905869d65775bb3c3e3123ba797f117ceb1dd33180b2"
+  },
+  {
+    "source": "ended_domain.nl",
+    "mode": "emit",
+    "command": [
+      "/workspace/p974-build-gcc/newlangc",
+      "/workspace/p982/tests/p982/sources/ended_domain.nl"
+    ],
+    "returncode": 3,
+    "stdout_bytes": 0,
+    "stderr": "/workspace/p982/tests/p982/sources/ended_domain.nl:87:31-87:42: error(semantic)[P3-USE-AFTER-CONSUME]: use of consumed semantic binding\n",
+    "stderr_sha256": "ef301fb6c2618c40b667905869d65775bb3c3e3123ba797f117ceb1dd33180b2"
+  }
+]

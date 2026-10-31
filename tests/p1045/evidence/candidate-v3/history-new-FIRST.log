@@ -1,0 +1,7 @@
+P982 original Git/source/oracle lineage and current versioned hashes PASS 1982
+P1045 HISTORY REJECT coedit-v8-v9 P1045 fixed original-v8 SHA256
+P1045 HISTORY REJECT drop-original-key freeze coverage lost: tests/p1030/oracle-v1.json
+P1045 HISTORY REJECT old-source P1045 preserved original-v8 data: tests/p1030/sources/pair_before_heap.nl
+P1045 HISTORY REJECT old-oracle P1045 preserved original-v8 data: tests/p1030/oracle-v1.json
+P1045 HISTORY REJECT old-first-RED P1045 preserved original-v8 data: tests/p1030/evidence/candidate-v1-FIRST-full-RED/gcc13-full-FIRST.log
+P1045 history original-v8 external anchor/data/coverage PASS

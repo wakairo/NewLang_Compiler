@@ -1,0 +1,14 @@
+[
+  {
+    "candidate": "54dd510aa4112fdb4d0687ea6ca0307ff17c7b26",
+    "kind": "strict build implicit const conversions",
+    "raw": "candidate1-harness-build-FIRST.log",
+    "sha256": "15258b7d4422076b09617bcc7a9a2cea15f1cd136701a890d0a7e4ee26bb8f64"
+  },
+  {
+    "candidate": "cc44cdc930524f079fcda151264ff6c561db1d74",
+    "kind": "harness node-array position assumption; before mutation",
+    "raw": "harness-v2-gcc-auth-FIRST.log",
+    "sha256": "5b24374dbe30ff912acafce453971b5be425309c86b7b7c75ed1cc80b9c07791"
+  }
+]

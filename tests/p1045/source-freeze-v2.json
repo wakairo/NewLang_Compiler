@@ -1,0 +1,18 @@
+{
+  "release": "C137 fixture-v2 PRE-RUN, no execution yet",
+  "parent": "a56cd08c23548852504cf95e94eb6c9a56f3dd8f",
+  "previous_source_commit": "8b59c8e1e7a80d843c74adbc82213dddab9e64cd",
+  "original_fixture_red_SHA256": "29f6e7dfdfbac82babca05930ffe1c571d9e263b817e4c46431fbe6d05a5be10",
+  "files": {
+    "tests/p1045/sources-v2/after_producer.nl": "5159242cd9b13f70659517f66670e2d907e087a9f3ced9f1d56cec8283402d67",
+    "tests/p1045/sources-v2/before_link.nl": "11147d0fde926200563742fdc2013f72392acc5c4dff61bff182497574ecbbf9",
+    "tests/p1045/sources-v2/declaration_order.nl": "8873e0223b4be0a5fb05b43bc87792e5d51773fb70b0906e36ffb78229bdbad8",
+    "tests/p1045/sources-v2/negative_double_close.nl": "92f60e5fec19afeb2d51df70791c4a2dbfe2ba6f3101d45747dfefe30deaa558",
+    "tests/p1045/sources-v2/negative_read_helper.nl": "e80afa5a8c8ab0915843810d417ebb7e5d4f6379b8af68f826c1e9c1eab64734",
+    "tests/p1045/sources-v2/prefix_two_originals.nl": "468b812184e3c05723ae94d6fcd08bd8538044828ec8bf892297c185376f2eda",
+    "tests/p1045/sources-v2/unsupported_third_actual.nl": "3805075de4d383c4ff6bdbe4c5ec850e2909d0bfa88acb0ffb4bb623b116d3f4",
+    "tests/p1045/oracle-v2.json": "bc6ff7b00bb0a3626ea3cbecf8c08e140205932a339eb144244c3dccc4b93b3c",
+    "tests/p1045/baseline-v2.py": "f26ab95b5a2e20b440da753753b7967c7ea9a637db4c425d685f7d9f2dac13c2",
+    "tests/p1045/probe.c": "74cf6d808c165a1ca6c15ef1cad85bb15d5c06f8f6f7284a730e6a18a4b0ee7c"
+  }
+}

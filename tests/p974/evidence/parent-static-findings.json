@@ -1,0 +1,12 @@
+{
+  "parent": "fce069982e4b4ac8aa1b0488166490e54b66ae9f",
+  "parent_tree": "7703b0c64235308394c19a118a43118ecb38d3d8",
+  "finding": "F78 independent STATIC GATE B, https://github.com/wakairo/NewLang_FormalProof/issues/78#issuecomment-6457859806",
+  "baseline_execution": "NOT RUN; known unsafe NULL table and unsound UNIT current-entry paths not executed on the unpatched parent",
+  "A": "Current UNIT entry body/result/kind/effect/owner not authenticated against issued callable despite current parameter types matching",
+  "B": "main.c v1_call_parameter indexes positive current function_count with functions=NULL before Copy guards",
+  "sha256": {
+    "src/copy_body.c": "6e2cb11c97d1d34e6e2e7e318d8d327fe9c71df4685c8520465c3b52a69498a9",
+    "src/main.c": "ea806234ffaa6b595d911788c968a33db24ffd96790c3988feb7e38fd090275c"
+  }
+}

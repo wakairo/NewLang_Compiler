@@ -1,0 +1,53 @@
+"""P1011 focused raw CLI capture; same pre-frozen coedited-current-v5 oracle."""
+from pathlib import Path
+import hashlib
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+
+root = Path(sys.argv[1]).resolve()
+out = Path(sys.argv[2]).resolve()
+current_name = "tests/p990/current-freeze-v5.json"
+current_bytes = (root / current_name).read_bytes()
+assert hashlib.sha256(current_bytes).hexdigest() == "c5793be5673438ccc6e6eb3145fd13de63e19ad13b4547a5a862e0483d6b010d"
+current = json.loads(current_bytes)
+target = "tests/p982/evidence/first-reds.json"
+with tempfile.TemporaryDirectory(prefix="p1011-raw-cli-") as temp:
+    work = Path(temp)
+    for name in set(current["files"]) | {current_name}:
+        dest = work / name
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(root / name, dest)
+    records = json.loads((work / target).read_bytes())
+    records[0]["kind"] = "P1011 SIMULATED COHERENT HISTORY REWRITE"
+    changed = (json.dumps(records, indent=2) + "\n").encode()
+    (work / target).write_bytes(changed)
+    current["files"][target] = hashlib.sha256(changed).hexdigest()
+    (work / current_name).write_text(json.dumps(current, indent=2) + "\n")
+    sentinel = work / "p1011-existing-output.bin"
+    sentinel.write_bytes(b"P1011 KEEP EXISTING OUTPUT\n")
+    before = sentinel.stat()
+    run = subprocess.run([sys.executable, str(work / "tests/p982/freeze_test.py")],
+                         cwd=work, capture_output=True,
+                         env={**os.environ, "PYTHONDONTWRITEBYTECODE": "1"}, timeout=15)
+    (out / "critical-cli-FIRST.stdout").write_bytes(run.stdout)
+    (out / "critical-cli-FIRST.stderr").write_bytes(run.stderr)
+    after = sentinel.stat()
+    result = {"case": "coedited-current-v5", "exit": run.returncode,
+              "stdout_sha256": hashlib.sha256(run.stdout).hexdigest(),
+              "stderr_sha256": hashlib.sha256(run.stderr).hexdigest(),
+              "changed_first_red_sha256": hashlib.sha256(changed).hexdigest(),
+              "no_clobber": sentinel.read_bytes() == b"P1011 KEEP EXISTING OUTPUT\n" and
+              (before.st_dev, before.st_ino) == (after.st_dev, after.st_ino),
+              "old_v1_v4_unchanged": all(
+                  (work / f"tests/p990/current-freeze-v{i}.json").read_bytes() ==
+                  (root / f"tests/p990/current-freeze-v{i}.json").read_bytes()
+                  for i in (1, 2, 3, 4))}
+    (out / "critical-cli-FIRST.json").write_text(json.dumps(result, indent=2) + "\n")
+    assert run.returncode == 1 and not run.stdout
+    assert b"original P982 first RED changed" in run.stderr
+    assert result["no_clobber"] and result["old_v1_v4_unchanged"]
+    print(json.dumps(result))

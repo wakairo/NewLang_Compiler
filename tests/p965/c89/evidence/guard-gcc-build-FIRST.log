@@ -1,0 +1,20 @@
+[  0%] Linking C static library libnewlang_source.a
+[  0%] Linking C static library libnewlang_diagnostic.a
+[  0%] Built target newlang_diagnostic
+[  0%] Built target newlang_source
+[  0%] Linking C static library libnewlang_lexer.a
+[ 10%] Linking C static library libnewlang_syntax.a
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_syntax
+[ 20%] Linking C static library libnewlang_parser.a
+[ 20%] Linking C static library libnewlang_checked.a
+[ 20%] Built target newlang_parser
+[ 20%] Built target newlang_checked
+[ 20%] Building C object CMakeFiles/newlang_semantic.dir/src/copy_body.c.o
+[ 30%] Linking C static library libnewlang_semantic.a
+[ 80%] Built target newlang_semantic
+[ 80%] Linking C static library libnewlang_checked_c_node.a
+[ 90%] Built target newlang_checked_c_node
+[ 90%] Building C object CMakeFiles/p965_c89_guard.dir/tests/p965/c89/guard.c.o
+[100%] Linking C executable p965_c89_guard
+[100%] Built target p965_c89_guard

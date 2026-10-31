@@ -1,0 +1,146 @@
+Internal ctest changing into directory: /workspace/p1030-build-clang
+Test project /workspace/p1030-build-clang
+        Start   1: p930_live_pre_if.unit
+        Start   2: p930_order_root_negative.unit
+        Start   3: p930_prepare_oom.unit
+        Start   4: p930_ordinary_cli.integration
+  1/577 Test   #1: p930_live_pre_if.unit .................................   Passed    0.00 sec
+        Start   5: p718_if_return_proof_oom.unit
+  2/577 Test   #2: p930_order_root_negative.unit .........................   Passed    0.00 sec
+  3/577 Test   #3: p930_prepare_oom.unit .................................   Passed    0.00 sec
+        Start   6: p718_if_return_native.integration
+        Start   7: p728_unit_statement_proof.unit
+  4/577 Test   #7: p728_unit_statement_proof.unit ........................   Passed    0.05 sec
+        Start   8: p728_unit_statement_history_oom.unit
+  5/577 Test   #4: p930_ordinary_cli.integration .........................   Passed    0.20 sec
+        Start   9: p728_unit_statement_native.integration
+  6/577 Test   #5: p718_if_return_proof_oom.unit .........................   Passed    0.47 sec
+        Start  10: p722_callee_return_proof_oom.unit
+  7/577 Test   #8: p728_unit_statement_history_oom.unit ..................   Passed    2.46 sec
+        Start  11: p722_callee_return_native.integration
+  8/577 Test  #10: p722_callee_return_proof_oom.unit .....................   Passed    2.30 sec
+        Start  12: p713_if_field_proof_oom.unit
+  9/577 Test  #12: p713_if_field_proof_oom.unit ..........................   Passed    0.35 sec
+        Start  13: p713_if_field_native.integration
+ 10/577 Test   #9: p728_unit_statement_native.integration ................   Passed    5.10 sec
+        Start  14: p706_proof_handoff_oom.unit
+ 11/577 Test   #6: p718_if_return_native.integration .....................   Passed    5.52 sec
+        Start  15: p706_ref_write_native.integration
+ 12/577 Test  #14: p706_proof_handoff_oom.unit ...........................   Passed    0.63 sec
+        Start  16: p701_proof_rollback_oom.unit
+ 13/577 Test  #16: p701_proof_rollback_oom.unit ..........................   Passed    0.11 sec
+        Start  17: p701_stateful_native.integration
+ 14/577 Test  #11: p722_callee_return_native.integration .................   Passed    3.76 sec
+        Start  18: p572_three_node_owned.unit
+ 15/577 Test  #18: p572_three_node_owned.unit ............................   Passed    0.00 sec
+        Start  19: p572_three_node_fault.unit
+ 16/577 Test  #19: p572_three_node_fault.unit ............................   Passed    0.41 sec
+        Start  20: p572_source_oom.unit
+ 17/577 Test  #20: p572_source_oom.unit ..................................   Passed    0.17 sec
+        Start  21: p572_three_node_native.integration
+ 18/577 Test  #15: p706_ref_write_native.integration .....................   Passed    1.39 sec
+        Start  22: p791_one_owned.unit
+ 19/577 Test  #22: p791_one_owned.unit ...................................   Passed    0.00 sec
+        Start  23: p791_two_owned.unit
+ 20/577 Test  #23: p791_two_owned.unit ...................................   Passed    0.01 sec
+        Start  24: p791_issuer_oom.unit
+ 21/577 Test  #24: p791_issuer_oom.unit ..................................   Passed    0.01 sec
+        Start  25: p791_parser_oom.unit
+ 22/577 Test  #25: p791_parser_oom.unit ..................................   Passed    0.04 sec
+        Start  26: p791_normal_cli.integration
+ 23/577 Test  #21: p572_three_node_native.integration ....................   Passed    0.66 sec
+        Start  27: p534_source_owned.unit
+ 24/577 Test  #27: p534_source_owned.unit ................................   Passed    0.00 sec
+        Start  28: p534_oom.unit
+ 25/577 Test  #28: p534_oom.unit .........................................   Passed    0.05 sec
+        Start  29: p534_issuer_fault.unit
+ 26/577 Test  #29: p534_issuer_fault.unit ................................   Passed    0.01 sec
+        Start  30: p534_array_native.integration
+ 27/577 Test  #26: p791_normal_cli.integration ...........................   Passed    0.90 sec
+        Start  31: p541_source_owned.unit
+ 28/577 Test  #31: p541_source_owned.unit ................................   Passed    0.01 sec
+        Start  32: p541_oom.unit
+ 29/577 Test  #32: p541_oom.unit .........................................   Passed    0.02 sec
+        Start  33: p541_issuer_fault.unit
+ 30/577 Test  #33: p541_issuer_fault.unit ................................   Passed    0.02 sec
+        Start  34: p541_array_native.integration
+ 31/577 Test  #17: p701_stateful_native.integration ......................   Passed    1.96 sec
+        Start  35: p636_plain_source_indices.unit
+ 32/577 Test  #35: p636_plain_source_indices.unit ........................   Passed    0.00 sec
+        Start  36: p636_local_arm_indices.unit
+ 33/577 Test  #36: p636_local_arm_indices.unit ...........................   Passed    0.01 sec
+        Start  37: p636_equal_arm_indices.unit
+ 34/577 Test  #37: p636_equal_arm_indices.unit ...........................   Passed    0.01 sec
+        Start  38: p634_historical_hash.unit
+ 35/577 Test  #38: p634_historical_hash.unit .............................   Passed    0.16 sec
+        Start  39: p634_same_value_ended_root.unit
+ 36/577 Test  #39: p634_same_value_ended_root.unit .......................   Passed    0.01 sec
+        Start  40: p634_unequal_ended_root.unit
+ 37/577 Test  #40: p634_unequal_ended_root.unit ..........................   Passed    0.00 sec
+        Start  41: p633_equal_outer_derivation.unit
+ 38/577 Test  #41: p633_equal_outer_derivation.unit ......................   Passed    0.01 sec
+        Start  42: p633_local_cli.integration
+ 39/577 Test  #30: p534_array_native.integration .........................   Passed    1.12 sec
+        Start  43: p633_both_false_oom.unit
+ 40/577 Test  #43: p633_both_false_oom.unit ..............................   Passed    0.07 sec
+        Start  44: p633_outer_true_oom.unit
+ 41/577 Test  #44: p633_outer_true_oom.unit ..............................   Passed    0.04 sec
+        Start  45: p633_pure_true_oom.unit
+ 42/577 Test  #45: p633_pure_true_oom.unit ...............................   Passed    0.01 sec
+        Start  46: p633_local_same_value.unit
+ 43/577 Test  #46: p633_local_same_value.unit ............................   Passed    0.01 sec
+        Start  47: p633_local_different_values.unit
+ 44/577 Test  #47: p633_local_different_values.unit ......................   Passed    0.03 sec
+        Start  48: p651_cli_native.integration
+ 45/577 Test  #13: p713_if_field_native.integration ......................   Passed    6.17 sec
+        Start  49: p651_true_proof.unit
+ 46/577 Test  #49: p651_true_proof.unit ..................................   Passed    0.04 sec
+        Start  50: p651_false_proof.unit
+ 47/577 Test  #50: p651_false_proof.unit .................................   Passed    0.16 sec
+        Start  51: p651_oom.unit
+ 48/577 Test  #51: p651_oom.unit .........................................   Passed    0.12 sec
+        Start  52: p633_equal_world_origin.unit
+ 49/577 Test  #52: p633_equal_world_origin.unit ..........................   Passed    0.01 sec
+        Start  53: p633_unequal_world_origin.unit
+ 50/577 Test  #53: p633_unequal_world_origin.unit ........................   Passed    0.00 sec
+        Start  54: p628_cli_pair_if.integration
+ 51/577 Test  #34: p541_array_native.integration .........................   Passed    2.39 sec
+        Start  55: p628_true_oom.unit
+ 52/577 Test  #55: p628_true_oom.unit ....................................   Passed    0.02 sec
+        Start  56: p628_false_oom.unit
+ 53/577 Test  #56: p628_false_oom.unit ...................................   Passed    0.05 sec
+        Start  57: p628_alias_oom.unit
+ 54/577 Test  #57: p628_alias_oom.unit ...................................   Passed    0.02 sec
+        Start  58: p626_cli_copy_if.integration
+ 55/577 Test  #48: p651_cli_native.integration ...........................   Passed    1.80 sec
+        Start  59: p626_if_oom.unit
+ 56/577 Test  #59: p626_if_oom.unit ......................................   Passed    0.02 sec
+        Start  60: p605_arithmetic_comparison.integration
+ 57/577 Test  #60: p605_arithmetic_comparison.integration ................   Passed    1.05 sec
+        Start  61: p605_mutant_phase.unit
+ 58/577 Test  #61: p605_mutant_phase.unit ................................   Passed    0.38 sec
+        Start  62: p603_comparison_parser.unit
+ 59/577 Test  #62: p603_comparison_parser.unit ...........................   Passed    0.00 sec
+        Start  63: p603_comparison_values.unit
+ 60/577 Test  #63: p603_comparison_values.unit ...........................   Passed    0.00 sec
+        Start  64: p603_comparison_rollback.unit
+ 61/577 Test  #64: p603_comparison_rollback.unit .........................   Passed    0.01 sec
+        Start  65: p603_comparison_oom.unit
+ 62/577 Test  #65: p603_comparison_oom.unit ..............................   Passed    0.04 sec
+        Start  66: p603_comparison_native.integration
+ 63/577 Test  #58: p626_cli_copy_if.integration ..........................   Passed    4.50 sec
+        Start  67: p504_equality_parser.unit
+ 64/577 Test  #67: p504_equality_parser.unit .............................   Passed    0.00 sec
+        Start  68: p504_equality_values.unit
+ 65/577 Test  #68: p504_equality_values.unit .............................   Passed    0.00 sec
+        Start  69: p504_equality_rollback.unit
+ 66/577 Test  #69: p504_equality_rollback.unit ...........................   Passed    0.00 sec
+        Start  70: p504_equality_oom.unit
+ 67/577 Test  #70: p504_equality_oom.unit ................................   Passed    0.00 sec
+        Start  71: p504_equality_native.integration
+ 68/577 Test  #54: p628_cli_pair_if.integration ..........................   Passed    6.36 sec
+        Start  72: p508_poison.unit
+ 69/577 Test  #72: p508_poison.unit ......................................   Passed    0.04 sec
+        Start  73: p508_oom.unit
+ 70/577 Test  #73: p508_oom.unit .........................................   Passed    0.04 sec
+        Start  74: p508_copy_selection_native.integration

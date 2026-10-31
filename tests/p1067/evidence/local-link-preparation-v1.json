@@ -1,0 +1,11 @@
+{
+  "layer": "local host LLVM C API link preparation",
+  "first_build_exit": 2,
+  "first_error": "cannot find -lxml2",
+  "Production_or_CMake_changed": false,
+  "repair": "task-local unversioned linker symlink to the already installed libxml2 SONAME2 runtime; use LIBRARY_PATH only for build commands",
+  "runtime": "/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.14",
+  "runtime_SHA256": "8f2643af68a9eba917929046806dabd1848867068d0eee0f6799288a8e886963",
+  "package": "libxml2:amd64\t2.12.7+dfsg+really2.9.14-2.1+deb13u3",
+  "new_oracle_or_candidate_change": false
+}

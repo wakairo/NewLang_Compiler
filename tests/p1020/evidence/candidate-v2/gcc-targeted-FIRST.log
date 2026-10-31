@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/workspace/p1020/tests/p1020/run.py", line 65, in <module>
+    ok(invoke("build-" + name, [cc, *flags, "-g", "-O0", "-fno-pie", "-no-pie",
+  File "/workspace/p1020/tests/p1020/run.py", line 38, in ok
+    assert result.returncode == 0 and not result.stderr, (
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (1, b'', b'/workspace/p1020/tests/p1020/probe.c: In function \xe2\x80\x98p1020_negative\xe2\x80\x99:\n/workspace/p1020/tests/p1020/probe.c:148:39: error: initialization discards \xe2\x80\x98const\xe2\x80\x99 qualifier from pointer target type [-Wdiscarded-qualifiers]\n  148 |     NLSemanticContext *caller_world = x.caller->context;\n      |                                       ^\n')

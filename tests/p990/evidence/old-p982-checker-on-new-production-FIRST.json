@@ -1,0 +1,7 @@
+{
+  "expected": "FAIL: original whole-file manifest detects legitimate new production before prospective migration",
+  "returncode": 1,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_sha256": "41d4d64fa9980d91856de569fdea7b7378953eeef2588cfcf2c2ec587aac8542",
+  "stderr": "Traceback (most recent call last):\n  File \"/workspace/p990/tests/p982/freeze_test.py\", line 9, in <module>\n    assert hashlib.sha256((root / name).read_bytes()).hexdigest() == expected, name\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: src/checked_c_copy_internal.h\n"
+}

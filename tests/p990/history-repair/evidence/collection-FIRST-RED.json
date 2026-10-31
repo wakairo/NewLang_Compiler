@@ -1,0 +1,13 @@
+{
+  "release": "C107",
+  "kind": "postprocessing-only",
+  "first_script": "collect-local-v1.py",
+  "script_sha256": "be655f2f4579a3a17b0bd8fc8c27dad1c5c5f19c994d1104446639749159c838",
+  "first_log": "collection-FIRST.log",
+  "log_sha256": "d64e7462a40acc920e1897c1638255bd2e213c5225fe278f4bbb3c81ad36a470",
+  "line": 79,
+  "first_expectation": "18 distinct source hashes in physical guest JSON",
+  "observed": "16 physical profiles, all16 hashes exactly match original P995; additional two T-only profiles are raw-native only",
+  "cause": "Aggregation assumption incorrectly mixed physical guest versus raw-native source sets",
+  "preserve": "Candidate and all frozen inputs/test oracles unchanged. Original collector/first RED preserved, separate V2 collector reconciles16 physical plus2 T-only raw profiles and authenticates all18 against original saved C texts. No test rerun."
+}

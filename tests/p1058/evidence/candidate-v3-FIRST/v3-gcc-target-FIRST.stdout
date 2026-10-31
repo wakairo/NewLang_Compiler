@@ -1,0 +1,70 @@
+P1058 NEGATIVE GENUINE CURRENT wrong_incoming_equal {"P1058":"H_origin","current":true}
+{"P1058":"current","ordinal":0,"call":21,"function":11,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1058":"event","ordinal":0,"event":0,"kind":2,"current":0}
+{"P1058":"origin","ordinal":0,"event_count":1,"returned_event":0,"binding_hops":1,"index":0,"old":37,"next":154,"returned":37,"sibling":209,"root":1,"incarnation":1,"result_binding":7,"old_forward_source":true}
+{"P1058":"current","ordinal":1,"call":28,"function":10,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1058":"event","ordinal":1,"event":0,"kind":2,"current":0}
+{"P1058":"origin","ordinal":1,"event_count":1,"returned_event":-1,"binding_hops":0,"index":1,"old":37,"next":37,"returned":37,"sibling":68,"root":4,"incarnation":4,"result_binding":13,"old_forward_source":true}
+{"P1058":"direct","binding":15,"root":4,"index":0,"old":68,"next":37}
+P1058 SOURCE REJECT wrong_incoming_equal {'CHECK_allowed': [0], 'C17': 4, 'calls': 2, 'meaning': 'lawful source, unsupported old-origin/call-cardinality/original scope; current must authenticate existing evidence, not authorize lowering'} no_clobber=YES
+P1058 NEGATIVE GENUINE CURRENT wrong_constant_equal {"P1058":"H_origin","current":true}
+{"P1058":"current","ordinal":0,"call":21,"function":11,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1058":"event","ordinal":0,"event":0,"kind":2,"current":0}
+{"P1058":"origin","ordinal":0,"event_count":1,"returned_event":-1,"binding_hops":0,"index":0,"old":37,"next":154,"returned":37,"sibling":209,"root":1,"incarnation":1,"result_binding":7,"old_forward_source":true}
+{"P1058":"current","ordinal":1,"call":28,"function":10,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1058":"event","ordinal":1,"event":0,"kind":2,"current":0}
+{"P1058":"origin","ordinal":1,"event_count":1,"returned_event":0,"binding_hops":2,"index":1,"old":112,"next":37,"returned":112,"sibling":68,"root":4,"incarnation":4,"result_binding":13,"old_forward_source":true}
+{"P1058":"direct","binding":15,"root":4,"index":0,"old":68,"next":112}
+P1058 SOURCE REJECT wrong_constant_equal {'CHECK_allowed': [0], 'C17': 4, 'calls': 2, 'meaning': 'lawful source, unsupported old-origin/call-cardinality/original scope; current must authenticate existing evidence, not authorize lowering'} no_clobber=YES
+P1058 NEGATIVE GENUINE CURRENT same_original_calls {"P1058":"H_origin","current":true}
+{"P1058":"current","ordinal":0,"call":21,"function":11,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1058":"event","ordinal":0,"event":0,"kind":2,"current":0}
+{"P1058":"origin","ordinal":0,"event_count":1,"returned_event":0,"binding_hops":1,"index":0,"old":37,"next":154,"returned":37,"sibling":209,"root":1,"incarnation":1,"result_binding":7,"old_forward_source":true}
+{"P1058":"current","ordinal":1,"call":28,"function":10,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1058":"event","ordinal":1,"event":0,"kind":2,"current":0}
+{"P1058":"origin","ordinal":1,"event_count":1,"returned_event":0,"binding_hops":2,"index":1,"old":209,"next":37,"returned":209,"sibling":154,"root":1,"incarnation":1,"result_binding":13,"old_forward_source":true}
+{"P1058":"direct","binding":15,"root":4,"index":0,"old":68,"next":209}
+P1058 SOURCE REJECT same_original_calls {'CHECK_allowed': [0], 'C17': 4, 'calls': 2, 'meaning': 'lawful source, unsupported old-origin/call-cardinality/original scope; current must authenticate existing evidence, not authorize lowering'} no_clobber=YES
+P1058 NEGATIVE GENUINE CURRENT one_registered_call {"P1058":"H_origin","current":true}
+{"P1058":"current","ordinal":0,"call":21,"function":11,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1058":"event","ordinal":0,"event":0,"kind":2,"current":0}
+{"P1058":"origin","ordinal":0,"event_count":1,"returned_event":0,"binding_hops":1,"index":0,"old":37,"next":154,"returned":37,"sibling":209,"root":1,"incarnation":1,"result_binding":7,"old_forward_source":true}
+{"P1058":"direct","binding":9,"root":4,"index":1,"old":112,"next":37}
+{"P1058":"direct","binding":11,"root":4,"index":0,"old":68,"next":112}
+P1058 SOURCE REJECT one_registered_call {'CHECK_allowed': [0], 'C17': 4, 'calls': 1, 'meaning': 'lawful source, unsupported old-origin/call-cardinality/original scope; current must authenticate existing evidence, not authorize lowering'} no_clobber=YES
+P1058 NEGATIVE GENUINE CURRENT zero_registered_calls {"P1058":"H_origin","current":true}
+{"P1058":"direct","binding":4,"root":1,"index":0,"old":37,"next":154}
+{"P1058":"direct","binding":6,"root":4,"index":1,"old":112,"next":37}
+{"P1058":"direct","binding":8,"root":4,"index":0,"old":68,"next":112}
+P1058 SOURCE REJECT zero_registered_calls {'CHECK_allowed': [0], 'C17': 4, 'calls': 0, 'meaning': 'lawful source, unsupported old-origin/call-cardinality/original scope; current must authenticate existing evidence, not authorize lowering'} no_clobber=YES
+P1058 NEGATIVE GENUINE CURRENT third_registered_call {"P1058":"H_origin","current":true}
+{"P1058":"current","ordinal":0,"call":21,"function":12,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1058":"event","ordinal":0,"event":0,"kind":2,"current":0}
+{"P1058":"origin","ordinal":0,"event_count":1,"returned_event":0,"binding_hops":1,"index":0,"old":37,"next":154,"returned":37,"sibling":209,"root":1,"incarnation":1,"result_binding":7,"old_forward_source":true}
+{"P1058":"current","ordinal":1,"call":28,"function":10,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1058":"event","ordinal":1,"event":0,"kind":2,"current":0}
+{"P1058":"origin","ordinal":1,"event_count":1,"returned_event":0,"binding_hops":2,"index":1,"old":112,"next":37,"returned":112,"sibling":68,"root":4,"incarnation":4,"result_binding":13,"old_forward_source":true}
+{"P1058":"current","ordinal":2,"call":35,"function":11,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1058":"event","ordinal":2,"event":0,"kind":2,"current":0}
+{"P1058":"origin","ordinal":2,"event_count":1,"returned_event":0,"binding_hops":0,"index":0,"old":68,"next":112,"returned":68,"sibling":37,"root":4,"incarnation":4,"result_binding":17,"old_forward_source":false}
+P1058 SOURCE REJECT third_registered_call {'CHECK_allowed': [0], 'C17': 4, 'calls': 3, 'meaning': 'lawful source, unsupported old-origin/call-cardinality/original scope; current must authenticate existing evidence, not authorize lowering'} no_clobber=YES
+P1058 SOURCE REJECT missing_failure_arm {'CHECK_allowed': [2, 3], 'C17': 'same-as-CHECK', 'calls': 2, 'meaning': 'semantic-invalid source; parser eligibility may reject before semantic, record actual layer; never backend proof'} no_clobber=YES
+P1058 SOURCE REJECT missing_failure_cleanup {'CHECK_allowed': [2, 3], 'C17': 'same-as-CHECK', 'calls': 2, 'meaning': 'semantic-invalid source; parser eligibility may reject before semantic, record actual layer; never backend proof'} no_clobber=YES
+P1058 SOURCE REJECT success_only_name_after_join {'CHECK_allowed': [2, 3], 'C17': 'same-as-CHECK', 'calls': 2, 'meaning': 'semantic-invalid source; parser eligibility may reject before semantic, record actual layer; never backend proof'} no_clobber=YES
+P1058 SOURCE REJECT wrong_H_domain {'CHECK_allowed': [2, 3], 'C17': 'same-as-CHECK', 'calls': 2, 'meaning': 'semantic-invalid source; parser eligibility may reject before semantic, record actual layer; never backend proof'} no_clobber=YES
+{"P1058":"H_origin","current":true}
+{"P1058":"current","ordinal":0,"call":21,"function":11,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1058":"event","ordinal":0,"event":0,"kind":2,"current":0}
+{"P1058":"origin","ordinal":0,"event_count":1,"returned_event":0,"binding_hops":1,"index":0,"old":37,"next":154,"returned":37,"sibling":209,"root":1,"incarnation":1,"result_binding":7,"old_forward_source":true}
+{"P1058":"current","ordinal":1,"call":28,"function":10,"GET_body":true,"GET_parameters":true,"body":0,"parameters":0}
+{"P1058":"event","ordinal":1,"event":0,"kind":2,"current":0}
+{"P1058":"origin","ordinal":1,"event_count":1,"returned_event":0,"binding_hops":2,"index":1,"old":112,"next":37,"returned":112,"sibling":68,"root":4,"incarnation":4,"result_binding":13,"old_forward_source":true}
+{"P1058":"direct","binding":15,"root":4,"index":0,"old":68,"next":112}
+P1058 RAW closed_then_two -O0 none physical=INCONCLUSIVE(unit exit alone)
+{"P1058": "physical", "source": "closed_then_two", "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13", "opt": "-O0", "sanitizer": "none", "guest_successes": 0, "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da", "observations": "P1058 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffedc5629f0,7ffedc5629f1 T1=7ffedc562a30,7ffedc562a31 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"}
+{"P1058": "physical", "source": "closed_then_two", "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13", "opt": "-O0", "sanitizer": "none", "guest_successes": 1, "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da", "observations": "P1058 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffc890d2960,7ffc890d2961 T1=7ffc890d29a0,7ffc890d29a1 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"}
+{"P1058": "physical", "source": "closed_then_two", "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13", "opt": "-O0", "sanitizer": "none", "guest_successes": 2, "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da", "observations": "P1058 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffc211e9560,7ffc211e9561 T1=7ffc211e95a0,7ffc211e95a1 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"}
+P1058 RAW closed_then_two -O2 none physical=INCONCLUSIVE(unit exit alone)
+{"P1058": "physical", "source": "closed_then_two", "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13", "opt": "-O2", "sanitizer": "none", "guest_successes": 0, "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da", "observations": "P1058 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffc9ab379de,7ffc9ab379df T1=7ffc9ab37a00,7ffc9ab37a01 allocations=0 frees=0 trials=1 live_tail=0 original_H=YES teardown=YES"}
+{"P1058": "physical", "source": "closed_then_two", "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13", "opt": "-O2", "sanitizer": "none", "guest_successes": 1, "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da", "observations": "P1058 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7fff78bacdfe,7fff78bacdff T1=7fff78bace20,7fff78bace21 allocations=1 frees=1 trials=2 live_tail=0 original_H=YES teardown=YES"}
+{"P1058": "physical", "source": "closed_then_two", "cc": "/workspace/p1030-validation-tools/usr/bin/gcc-13", "opt": "-O2", "sanitizer": "none", "guest_successes": 2, "C_SHA256": "10f5d7745ffff3c08ab91935898e9039dac7e639b370e1f378d40ebf66bdc3da", "observations": "P1058 physical all_H_closed_before_T=YES actual_caller_returns=YES T_originals=2 typed_live_fields=YES no_alias=YES calls=2 direct_writes=1 old=37,112 direct_old=68 final=154,209;112,37 T0=7ffca410070e,7ffca410070f T1=7ffca4100730,7ffca4100731 allocations=2 frees=2 trials=2 live_tail=1 original_H=YES teardown=YES"}

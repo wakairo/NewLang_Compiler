@@ -1,0 +1,35 @@
+{
+  "compiler_source_HEAD": "469852922f2780370a79440fa427b4fc93ae1def",
+  "built_implementation_HEAD": "277ed621b8f171e40435b333299ad84510726dbe",
+  "exact_src_include_CMake_bytes_equal": true,
+  "compiler_libraries_SHA256": {
+    "libnewlang_checked.a": "e5896420b86f35ca72a574f47f71e5b77d4ecd632468942ab6a991e687c6a73d",
+    "libnewlang_checked_c_node.a": "8c234eae232278ea690229767490d1d3ff335e87e486f2d18de89eb71abb715b",
+    "libnewlang_diagnostic.a": "453e4109c9d04138a902bcebf2b786fd3a114a29b388cd5327e5acb8715bac55",
+    "libnewlang_lexer.a": "345af8a3a92dad6b643fe8ba0922e199c2e66cbfec43d70c2f83a6fcdfb8e174",
+    "libnewlang_parser.a": "beb09fae32ddf4ac96b1b3c23d1e49935df1140eb7fd7e933f7a99d2f2fb5d44",
+    "libnewlang_parser_p534.a": "78cfee7f7f9b622129273f09d7f72fe75e625037d1b504dff7cc3bcf1d08a10f",
+    "libnewlang_semantic.a": "79f9c53cd0bc91b028f5b27fbfe9ddbe1742b9fa25ad607d5417d8f2613c954e",
+    "libnewlang_source.a": "819d910bdad00b74fba6b4ced7591458cc51e3d1b2589f5047efeb354fc14d4f",
+    "libnewlang_syntax.a": "1a953f6d425c66b15b7f6e67f007be5f6b9759fdcf168317833321478be98884",
+    "newlangc": "cbca93893ed5de7d683da54d8dec30edad185fc16a3ba2382b8ad7cd3a4ff163"
+  },
+  "configuration": {
+    "command": [
+      "/workspace/p965-build-tools/cmake/data/bin/cmake",
+      "-S",
+      "/workspace/p1055",
+      "-B",
+      "/workspace/p1055-gcc-build",
+      "-DNEWLANG_FRONTEND_ONLY=ON",
+      "-DCMAKE_BUILD_TYPE=Debug",
+      "-DCMAKE_C_COMPILER=/workspace/p1030-validation-tools/usr/bin/gcc-13",
+      "-DCMAKE_PROJECT_INCLUDE=/workspace/p1055/cmake/independent-r-tests-hook.cmake"
+    ],
+    "exit": 0,
+    "raw_host_UTC_start": "2026-10-30T05:29:47.838012+00:00",
+    "raw_host_UTC_finish": "2026-10-30T05:29:48.709148+00:00",
+    "stdout_SHA256": "ff6169e2aa4b938787b835eff58762bed0b2304c8c945a54fc23026dcf34f2b4",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

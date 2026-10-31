@@ -1,0 +1,15 @@
+{
+  "track": "P",
+  "release": "C107",
+  "stage": "PRE-RUN static preparation, before candidate source/oracle freeze",
+  "command": "git diff --cached --check",
+  "exit_code": 2,
+  "stdout": "tests/p990/history-repair/README.md:85: new blank line at EOF.\ntests/p990/history-repair/parent-repro-oracle-v1.json:22: new blank line at EOF.\ntests/p990/history-repair/parent-repro-v1.py.txt:85: new blank line at EOF.\n",
+  "candidate_committed_after_unchecked_exit": "1d341ed127348f44cad9a45498b81c3065e5e159",
+  "tree": "dfe0768ee1ae48bbaccc0b3ed0fba3b35830e285",
+  "candidate_execution": "NONE",
+  "push_CI": "NONE",
+  "cause": "Source/oracle archives intentionally copied exact frozen bytes including trailing blank line; new README also had trailing blank. Commit orchestration failed to stop on the static check's nonzero exit.",
+  "forward_fix": "Preserve original external frozen bytes and original commit. Archive the two exact source/oracle byte sequences in base64 envelopes; trim only the new unfrozen README blank. Regenerate new not-yet-executed/frozen v4 inputs; no change to P990 v1/v2/v3 or old fixtures/source/oracle/first RED.",
+  "safety": "No compiler/test candidate executed; Production/T7/current historical anchors unchanged."
+}

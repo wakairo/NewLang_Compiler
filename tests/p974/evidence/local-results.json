@@ -1,0 +1,159 @@
+{
+  "authority": "Issue974 C93/C94, Process4.1.2, current main438170098d5b98096f1ad1f1f200dc1f326c75c3; implementation baseline d579c761a78e3c84765e35061f77936789788d82; CURRENT_SPEC Draft17.34",
+  "status": "Pre-PR local gates PASS, no independent fixed-code F/R review or merge approval",
+  "base": "fce069982e4b4ac8aa1b0488166490e54b66ae9f",
+  "base_tree": "7703b0c64235308394c19a118a43118ecb38d3d8",
+  "branch": "p974-current-unit-entry-authenticity",
+  "tested_head": "d238528c414bb8fa71465f8aee27bdba9856dad9",
+  "tested_tree": "57b06d065defccd8f7da663faaab5053424db66b",
+  "baseline_findings": "F78 source-rooted STATIC GATE B, not executed on unpatched parent; immutable source hashes in parent-static-findings.json",
+  "first_runtime_red": {
+    "head": "292a91a9f256002a846f4509b5dc001bca061bc7",
+    "tree": "2d3554716ff7bc429f44001f658ab7957d5f69e8",
+    "stage": "First GCC new9 CTests",
+    "first_red": "p974_named_v0.integration #320 / named.py line13, subprocess return -11 with empty stderr",
+    "completed": "8/9 new tests PASS (72 current-entry faults plus4 V0 direct cases); named test FAILED",
+    "known_unsafe_rerun": "NONE; stop this candidate and diagnose statically before new fixed source",
+    "source_sha256": {
+      "src/main.c": "082645a137e10b3f88e0ed2da49330aa4ddc0d9a8027bfdc5f0f153d9f0cfc15",
+      "src/copy_body.c": "429632a43fe4547e7af7e49e168da10e9e5a6327da0ef99fefbce21157c6e39a",
+      "tests/p974/driver.c": "c619eddccbab66f6e97fb6a90d661f523c297061ae2eb03a5236206602b69040",
+      "tests/p974/support.h": "ed165eb29875a49078d469448405f1b7aebfae30a5a3641b89a5eec829c07945",
+      "tests/p974/entry.c": "c78da102f19178bc5914ee801ecf4ee58f0b9ed3c69e5b7675564e1adb73548e",
+      "tests/p974/named.py": "5f544e4772909f9ca7c41f63f467633e1938c62ca6b68c42a035cbd762b6293d",
+      "tests/p974/oracle.json": "70ab6722a9292e47c37113ff2c7dc839fff07df35737cc54b78790c88c6a857c",
+      "tests/p974/freeze.json": "6da86a01b5273b5a2004a54c10a70c83b3bfd13a3fbd4a46230fdc1a71e7ee71"
+    },
+    "logs": {
+      "gcc-new-FIRST.log": "8bcc89b6de247e36aab78a08cebba4f8d80bb93a1ef0f2ce210d2bdfce6ee70d",
+      "gcc-new-FIRST-details.log": "001139f3afe6391b72e2ade69622f0e5b6217f18c75af5a21cb2a89bb70447d3",
+      "gcc-new-build-FIRST.log": "0cab963208fb8d98c9a420cbf8b303e2d8fc1ce0cc3d9719611cb52cbffc3d2b"
+    }
+  },
+  "second_candidate_fixture_red": {
+    "head": "d049cc00252213e4f636c2be2f5a66e899aaf806",
+    "tree": "b7cf88f33ee2802636c6376838d38697003db9b0",
+    "first_red": "named.py:20 healthy retry expected0, observed CLI4/V1-BACKEND-UNSUPPORTED",
+    "completed": "8 direct cases PASS; named invalid phase CLI4/output/cleanup assertions passed; healthy profile expectation failed",
+    "classification": "P-owned fixture eligibility assumption, not a measured compiler authority false acceptance; parent original healthy charge_false is CLI4 too",
+    "safe_parent_controls": {
+      "charge_false": "CLI4 / output0",
+      "p631_same_value_local": "CLI0 / C171899 bytes"
+    },
+    "source_sha256": {
+      "tests/p974/driver.c": "c349255910b747cfcb584a14225fed55d689b710431eb3f5e7125ecafc62f925",
+      "tests/p974/named.py": "5f544e4772909f9ca7c41f63f467633e1938c62ca6b68c42a035cbd762b6293d",
+      "tests/p974/oracle.json": "70ab6722a9292e47c37113ff2c7dc839fff07df35737cc54b78790c88c6a857c",
+      "tests/p974/oracle-v2.json": "25762ec98e28b250d2e328d213e721d52e3ce2a6d4c47e9b9dcd6e82d30b2bad",
+      "tests/p974/freeze.json": "6da86a01b5273b5a2004a54c10a70c83b3bfd13a3fbd4a46230fdc1a71e7ee71",
+      "tests/p974/freeze-v2.json": "c28d7f7fda09956d31347cd236c30b0129ebc2696411db8a3e4049feed5053cc",
+      "src/main.c": "082645a137e10b3f88e0ed2da49330aa4ddc0d9a8027bfdc5f0f153d9f0cfc15",
+      "src/copy_body.c": "429632a43fe4547e7af7e49e168da10e9e5a6327da0ef99fefbce21157c6e39a",
+      "src/array4.c": "5840725d707f9e9bd311c43d848ea25f933d0a4a9a53ba7f502456d1db786f9a"
+    },
+    "log_sha256": {
+      "v2-gcc-new-FIRST.log": "daeb41d823e3e37ebeb310f9b0e0dfa5474e0692bf658bcbc0c8d76ae54f6f7a",
+      "v2-gcc-new-FIRST-details.log": "7c561ff82775aad5acd2362f5f60a9e177c104a167260d355bde2384d2d4ca44"
+    }
+  },
+  "implementation": {
+    "src/copy_body.c": "shared formal parameter-entry authenticity compares present retained plan/result/category/effect/owner/signature with original proof and actual callee source/world",
+    "src/main.c": "V0 first function entry lookup and export prefilter guard NULL table; parameter-array presence before signature reads",
+    "src/array4.c": "actual CLI fallback and related event function-table walk guard missing tables before member access"
+  },
+  "new_probes": "4 real-CHECK metadata sources x18 single faults=72 iterations/config; equal-signature positive control; genuine shared-plan B and independent-registration F remain healthy.4 V0/Array4 direct null-table sentinels and2 actual CLI named-output profiles (valid retry0, pre-existing precision4).",
+  "gcc_full": {
+    "original_parent_tests": 525,
+    "new_tests": 10,
+    "actual_ctest_inventory": 535,
+    "result": "535/535 PASS"
+  },
+  "clang_asan_ubsan": "Each: new10, old core5, selected unit neighbors20, owner/custody43 including prior C89 tests, captured/five-root compatibility10, native1 PASS",
+  "ownership_oom": {
+    "gcc": {
+      "ownership_trials": 494,
+      "reached_oom": 502,
+      "modes": {
+        "CHECK": 320,
+        "definition": 182
+      },
+      "original_complete_records_match": true
+    },
+    "clang": {
+      "ownership_trials": 494,
+      "reached_oom": 502,
+      "modes": {
+        "CHECK": 320,
+        "definition": 182
+      },
+      "original_complete_records_match": true
+    },
+    "asan": {
+      "ownership_trials": 494,
+      "reached_oom": 502,
+      "modes": {
+        "CHECK": 320,
+        "definition": 182
+      },
+      "original_complete_records_match": true
+    },
+    "ubsan": {
+      "ownership_trials": 494,
+      "reached_oom": 502,
+      "modes": {
+        "CHECK": 320,
+        "definition": 182
+      },
+      "original_complete_records_match": true
+    }
+  },
+  "native": {
+    "sources": [
+      "echo.nl",
+      "window_true.nl"
+    ],
+    "strict": "GCC14.2 and curated Clang23.1.3 C17 O0/O2 -Wall -Wextra -Wpedantic -Werror",
+    "raw_runs": 16,
+    "observed_guest_runs": 48,
+    "guest_heap_successes": [
+      0,
+      1,
+      2
+    ],
+    "sanitizers": [
+      "none",
+      "address+leaks",
+      "undefined"
+    ],
+    "generated_C_sha256": {
+      "echo.nl": "3131c98cf5b21cf64b99164ff80ef4d91cb2736d9da011939abc004fbf59043a",
+      "window_true.nl": "ce0f3171dc9f0499036d2245d4deaf55627b2f61e399e55d78a8c90d58254f5c"
+    },
+    "named": "old bytes/dev/ino on current-proof rejection/reached write failure preserved; healthy retry succeeds"
+  },
+  "history_format": "P605/P634 and original P965 historical source/hash gates PASS; full pinned clang-format23.1.3 PASS; all original source/oracle/failure records unchanged",
+  "bounds": "Genuine live objects/backing extents. All temporary world/table/function entry faults restored before teardown; original child/count/base ownership trials deliberately unrestored. No arbitrary forged opaque owner/pointer/length safety claim.",
+  "remote_prepublication": {
+    "cycles_used": 0,
+    "cycles_limit": 2,
+    "jobs_used": 0,
+    "jobs_limit": 12,
+    "manual_reruns": 0
+  },
+  "protected": "Parent PR969/962/954/946 unchanged DRAFT HOLD; source/public API/ABI/issuer/canonical/workflow/toolchain unchanged; independent R963/R970 source/oracle/fixtures unread/unmodified; no F/R launch",
+  "value_alignment_risk": "Finite original-CHECK authenticity and first-consumer safety evidence, not soundness proof or Product GO. Copy/V0/fallback dependency graph adds compiler audit obligations and unmeasured validation costs. Library-author + ordinary-safe caller human UB audit/re-audit burden versus C UNMEASURED. KEEP Draft17.34/REPLACE NONE, Product GO PAUSED/H1 HOLD.",
+  "sha256": {
+    "src/copy_body.c": "429632a43fe4547e7af7e49e168da10e9e5a6327da0ef99fefbce21157c6e39a",
+    "src/main.c": "082645a137e10b3f88e0ed2da49330aa4ddc0d9a8027bfdc5f0f153d9f0cfc15",
+    "src/array4.c": "5840725d707f9e9bd311c43d848ea25f933d0a4a9a53ba7f502456d1db786f9a",
+    "CMakeLists.txt": "32fab971404ede557292cd29e0cee3ed0c7106493ed73891a9b99a3edbfea122",
+    "tests/p974/freeze.json": "6da86a01b5273b5a2004a54c10a70c83b3bfd13a3fbd4a46230fdc1a71e7ee71",
+    "tests/p974/freeze-v2.json": "c28d7f7fda09956d31347cd236c30b0129ebc2696411db8a3e4049feed5053cc",
+    "tests/p974/freeze-v3.json": "664adf685ca5bc1ee1e652ce7cf39243dfba8353cbe163df68ef661196c86307",
+    "tests/p974/oracle.json": "70ab6722a9292e47c37113ff2c7dc839fff07df35737cc54b78790c88c6a857c",
+    "tests/p974/oracle-v2.json": "25762ec98e28b250d2e328d213e721d52e3ce2a6d4c47e9b9dcd6e82d30b2bad",
+    "tests/p974/oracle-v3.json": "c3fe7ad14b969c1711dfb3a5bb12e370733f824c82271ee5b8518c516a1afab9",
+    "tests/p965/freeze.json": "cf3231f87e3d6f1a5c13eb29e3ab017a8ee7560c52c90ceb73c916ee5e5c1a49",
+    "tests/p965/c85/freeze.json": "bf3b75236b2da72767f5fd04cc50a63ddd29da2f8d24c70b3c0ab4d5318ffa7c"
+  }
+}

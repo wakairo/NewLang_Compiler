@@ -1,0 +1,209 @@
+{
+  "release": "C144 P1055 independent P source/oracle PRE-RUN v1",
+  "parent": "ade11ebec808f5a95e8831a7ae6ee6f6da2b0dbe",
+  "parent_tree": "70305183f8951038d296ac9a9ecae1f8e8750e4f",
+  "parent_compiler_SHA256": "f135d69846c1fce478819ed2b890ed0424d5cc5e8ca07a93efff49f89bc1d168",
+  "main": "438170098d5b98096f1ad1f1f200dc1f326c75c3",
+  "canonical": "CURRENT_SPEC->Draft17.34",
+  "provenance": "four unchanged P1054 positive sources and two caller negatives permitted byC144; new P alpha/order/chain variation and meaning-distinguishing negatives, no R original source/oracle/raw and no P1036/P1050 baseline",
+  "positive": {
+    "direct_return": {
+      "initial": [
+        83,
+        211
+      ],
+      "first_index": 0,
+      "old": [
+        83,
+        211
+      ],
+      "next": [
+        146,
+        83
+      ],
+      "sibling": [
+        211,
+        146
+      ],
+      "final": [
+        146,
+        83
+      ],
+      "H": [
+        71,
+        193
+      ],
+      "parent_C17": 0,
+      "candidate_C17": 0
+    },
+    "binding_return": {
+      "initial": [
+        83,
+        211
+      ],
+      "first_index": 0,
+      "old": [
+        83,
+        211
+      ],
+      "next": [
+        146,
+        83
+      ],
+      "sibling": [
+        211,
+        146
+      ],
+      "final": [
+        146,
+        83
+      ],
+      "H": [
+        71,
+        193
+      ],
+      "parent_C17": 0,
+      "candidate_C17": 0
+    },
+    "binding_tail": {
+      "initial": [
+        83,
+        211
+      ],
+      "first_index": 0,
+      "old": [
+        83,
+        211
+      ],
+      "next": [
+        146,
+        83
+      ],
+      "sibling": [
+        211,
+        146
+      ],
+      "final": [
+        146,
+        83
+      ],
+      "H": [
+        71,
+        193
+      ],
+      "parent_C17": 4,
+      "candidate_C17": 0
+    },
+    "binding_copy_return": {
+      "initial": [
+        83,
+        211
+      ],
+      "first_index": 0,
+      "old": [
+        83,
+        211
+      ],
+      "next": [
+        146,
+        83
+      ],
+      "sibling": [
+        211,
+        146
+      ],
+      "final": [
+        146,
+        83
+      ],
+      "H": [
+        71,
+        193
+      ],
+      "parent_C17": 4,
+      "candidate_C17": 0
+    },
+    "renamed_reverse_chain_tail": {
+      "initial": [
+        188,
+        43
+      ],
+      "first_index": 1,
+      "old": [
+        43,
+        188
+      ],
+      "next": [
+        107,
+        43
+      ],
+      "sibling": [
+        188,
+        107
+      ],
+      "final": [
+        43,
+        107
+      ],
+      "H": [
+        59,
+        181
+      ],
+      "parent_C17": 4,
+      "candidate_C17": 0
+    }
+  },
+  "negative": {
+    "negative_incoming_different": {
+      "CHECK": 0,
+      "C17": 4,
+      "claim": "genuine semantic source; public current/event observation required before claiming backend origin coverage"
+    },
+    "negative_incoming_equal": {
+      "CHECK": 0,
+      "C17": 4,
+      "claim": "genuine semantic source; public current/event observation required before claiming backend origin coverage"
+    },
+    "negative_constant_equal": {
+      "CHECK": 0,
+      "C17": 4,
+      "claim": "genuine semantic source; public current/event observation required before claiming backend origin coverage"
+    },
+    "negative_alias_incoming_equal": {
+      "CHECK": 0,
+      "C17": 4,
+      "claim": "genuine semantic source; public current/event observation required before claiming backend origin coverage"
+    },
+    "negative_double_change": {
+      "CHECK": 0,
+      "C17": 4,
+      "claim": "genuine semantic source; public current/event observation required before claiming backend origin coverage"
+    },
+    "negative_other_change_equal": {
+      "CHECK": 0,
+      "C17": 4,
+      "claim": "genuine semantic source; public current/event observation required before claiming backend origin coverage"
+    },
+    "unsupported_after_closed_h": {
+      "CHECK": 0,
+      "C17": 4,
+      "claim": "genuine semantic source; public current/event observation required before claiming backend origin coverage"
+    },
+    "negative_scalar_as_borrow": {
+      "CHECK": 3,
+      "C17": 3,
+      "diagnostic": "P3-TYPE-MISMATCH"
+    },
+    "negative_ended_loan": {
+      "CHECK": 3,
+      "C17": 3,
+      "diagnostic": "P8-EXIT-DEPENDENCY"
+    }
+  },
+  "negative_origin_focus": "incoming!=old, incoming numerically==old, constant numerically==old, pure alias of incoming==old, old from other field/actualCHANGE via incoming==old, doubleCHANGE, unchanged after-closed-H restriction; earliest lack of public evidence in a negative is recorded rather than claimed backend coverage",
+  "baseline": "sourceCHECK then real CHECK/public GET/current/events/source def-use, exact pinned-parent C17/no-clobber and original C byte map before Production change; original RED never reclassified",
+  "validation": "all5 profiles strict GCC13/Clang23 C17 O0/O2 and ASan/LSan/UBSan; passive originalT live fields/old/new/sibling + both actualcaller result bindings, original H pointer/A/D/packet/terminal/cleanup guest0/1/2; reached emitterOOM each NULL/no publication/length777/snapshot/current/owner/exactretry; no H/newsource/newissuer feature",
+  "scope": "private checked_c_copy_internal.h consumer only, checked_c_node.c onlyif essential; no parser/semantic/copy_body/API/ABI/IR/slot/ledger changes; one newPbranch/one DRAFT exactPR1048; firstnaturalFULL5PARTIAL6jobs only, CIREDSTOPno rerun/push",
+  "STOP": "positivegenuinecurrentmissing, wrongold/field/loan/world, falseadmission, extraeffects accepted, newissuer/law/API/ABI/Hworldneeded, fixedparentdrift or disproportional private verifier sprawl; preserve firstred andreturnC",
+  "VALUE_ALIGNMENT_RISK": "B small borrowed old-origin normalizer vs A nochange; no human library-author+ordinary-safe-caller dependencyclosure/factoredC/perf/productcost measured;ProductGOPAUSED/H1HOLD;P1036STOPPR1048/1050HOLD"
+}

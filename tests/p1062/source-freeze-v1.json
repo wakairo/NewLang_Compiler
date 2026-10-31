@@ -1,0 +1,29 @@
+{
+  "release": "C150 P1062 PRE-RUN complete independent canonical/P1058 source/oracle/observer/baseline",
+  "parent": "4c039095455e0df32eebf538b0f9db1db1e089cc",
+  "B1061_or_R_original_material_accessed": false,
+  "files": {
+    "tests/p1062/baseline.py": "ac0559dbb11265ec5592a6072a5553d636057c4272ed6e231f7320371e5cae78",
+    "tests/p1062/observe.c": "1f1d6cc1e4b7b77fe596411a71263c54f0b8407c1af03eef0dbf4662a450c13a",
+    "tests/p1062/oracle-v1.json": "9847539057aee9139d55e43d15ee29b3903f35d03c0d9a578d7f826fe12e05c6",
+    "tests/p1062/sources/failure_scope_read.nl": "b913179ad465d357c0703b4b469111836fa4a22fbeac50cb622d05d1fdf5e3a2",
+    "tests/p1062/sources/negative_early_terminal_return.nl": "c92a10c9e9c3a2ee75838e0419ea9ddb083ec92b8c28854b7d0af507b2d8137f",
+    "tests/p1062/sources/negative_extra_Change.nl": "fe6e06e48cb9a462251e4392a558bcd79487779b3bbf0e0a624cfeb1428b7d55",
+    "tests/p1062/sources/negative_failure_foreign_domain.nl": "ff709de19ca82b4cc340e3e80dd696addba1ba7ce38e4ca054bf53c11aeec1b0",
+    "tests/p1062/sources/producer_direct_result.nl": "097ef9b5ca4cebdae378d9a7800de0f6bff29aa57a196e93b621b2a138284731",
+    "tests/p1062/sources/regression_closed.nl": "234c331fde90dcb38d181418e47ba59ad0bd6635f0d19dde04f59087ef680952",
+    "tests/p1062/sources/regression_negative_missing_failure_arm.nl": "17f5681f7b492e0717e3bd0cfe434f832b706f641875c484911ae5f5cf8ff209",
+    "tests/p1062/sources/regression_negative_missing_failure_cleanup.nl": "1f55d57710929ac54f088d6531a95f31e201eaea42a5ae453759e61d53e131c2",
+    "tests/p1062/sources/regression_negative_one_registered_call.nl": "54d76ff96a69f381fe28837c56e3ef0d310ec1b5248a05e1286f57196743b638",
+    "tests/p1062/sources/regression_negative_same_original_calls.nl": "352497a60e86689f9294c569052aaf0987bc8de56c2a2198efaacc891a649e3f",
+    "tests/p1062/sources/regression_negative_success_only_name_after_join.nl": "5cffce40967eefdf051e643438a04abd56536b5d19238e51f3a1365871ea5bbc",
+    "tests/p1062/sources/regression_negative_third_registered_call.nl": "ba529ab2b66f70f9b2704aed3b6cd857765f4fcff4529e0376d710c87c52a86e",
+    "tests/p1062/sources/regression_negative_wrong_H_domain.nl": "ce862108c8b018345773a043efb2b8bf85a7ac7595edc7eca3001b1275843e31",
+    "tests/p1062/sources/regression_negative_wrong_constant_equal.nl": "bcd87e3d3ace50abe9479770b3b92bb08bc94e383d4932ce57d7224b5931e144",
+    "tests/p1062/sources/regression_negative_wrong_incoming_equal.nl": "3d17013e65f31e6165fb3dcb93678d8efc6bd92e93cec76889d428a00db30b87",
+    "tests/p1062/sources/regression_negative_zero_registered_calls.nl": "e2d30f70840b87b2687747e3eabda13e84c204fe3b870aa7644f74e442620d1d",
+    "tests/p1062/sources/regression_reversed.nl": "0b7e6fc9eba9d3a30e08af8e812e018b957c165a7f3f627b4c7637d5ccad40b2",
+    "tests/p1062/sources/terminal_explicit_return.nl": "f38d6f437ba6589acac3e053dc05b1e728d32e1ae34603388983d338ffb579b5",
+    "tests/p1062/sources/terminal_without_probe.nl": "36ffb08cc272764347252d1af90142db327be42209577270b758788b9af55437"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "release": "C144 P1055 candidate v1 runtime/source-negative/physical/owner/OOM/history PRE-RUN",
+  "parent": "ade11ebec808f5a95e8831a7ae6ee6f6da2b0dbe",
+  "profiles": 5,
+  "guest_successes": [
+    0,
+    1,
+    2
+  ],
+  "opt": [
+    "O0",
+    "O2"
+  ],
+  "compilers": [
+    "GCC13",
+    "curatedClang23.1.3"
+  ],
+  "sanitizers": [
+    "ASan/LSan",
+    "UBSan"
+  ],
+  "original_C_byte_samples": 38,
+  "source_negatives": 9,
+  "genuine_CHECK0_negative_profiles": 7,
+  "negative_before_native": true,
+  "actual_metadata_faults_per_profile": 14,
+  "supplied_view_mismatches_per_profile": 6,
+  "original_H_faults_per_profile": 4,
+  "unrestored_A_destroy_B_survive_per_profile": 1,
+  "OOM": "enumerate actual reached malloc/calloc/realloc, NULL one-at-a-time, no text/length777/snapshot/current/Horigin/owner and exact healthy C retry; conservative Unsupported recorded separately",
+  "physical": "live original T old/new/sibling/addresses and both actual caller result bindings; original H pointers/Allocation/Domain/LiveTail/terminal/cleanup withguest0/1/2; rawexit0 alone INCONCLUSIVE",
+  "calibration": "only second generated C helper return old->next in scalar mutant, preserve stores/hooks; planned SIGABRT from actual P1055_RESULT1 at first NULL Htrial; no core; no arbitrary unexpected signal allowed",
+  "history": "old2053keys/source/oracle/firstRED/v1-v9 unchanged; prospectivev10 externalfixedv9SHA/blob/data, five new andfive oldv8 coherent-rewrite oracles, old trusted code unchanged",
+  "budget": "one branch/newDRAFT exactPR1048, firstnaturalFULL5PARTIAL6jobs only, CIREDSTOP; no dispatch/rerun/CI-onlypush",
+  "VALUE_ALIGNMENT_RISK": "README; boundedO(n^2) andO(1) aux no allocation/privateledger, testhistorymaintenance grows; author/caller vs factoredC closure/perf/productcostUNMEASURED"
+}

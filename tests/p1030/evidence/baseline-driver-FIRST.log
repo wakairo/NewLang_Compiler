@@ -1,0 +1,22 @@
+{
+  "source": "tests/p1030/sources/pair_before_heap.nl",
+  "source_SHA256": "ee8ad83a1796eb688ef0de02d0b166c3f7131791080c868e4f72e14f0219877a",
+  "compiler_SHA256": "221cecfd3e127fb1738cb73b8b15e1324bbed2ef66dd668f6d2c5f79d2cd74c2",
+  "CHECK": 0,
+  "public_body_parameters_event_current": [
+    0,
+    0
+  ],
+  "CLI_C17": 4,
+  "C_published": false,
+  "named_bytes_dev_ino_no_temp": "preserved",
+  "first_original_reject_return_PC": "0x405c18",
+  "first_original_reject_location": [
+    "copy_two_helpers_before_h",
+    "/workspace/p1030/src/checked_c_copy_internal.h:173",
+    "copy_two_helpers_before_h",
+    "/workspace/p1030/src/checked_c_copy_internal.h:173"
+  ],
+  "no_production_edit": true,
+  "R_input_access": false
+}

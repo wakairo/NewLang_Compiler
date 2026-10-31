@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/ctest",
+    "--test-dir",
+    "/workspace/p1030-build-gcc13",
+    "--parallel",
+    "4",
+    "--output-on-failure"
+  ],
+  "exit": 8,
+  "seconds": 113.10046497500298
+}

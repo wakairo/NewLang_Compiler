@@ -1,0 +1,9 @@
+{
+  "release": "C156 P1067 PRE-RUN v1; prepared before integration/first execution",
+  "files": {
+    "tests/p1067/check_integration.py": "c097879da83abcb4d273e205487203d564c1c71764e18665039245fb91d11134",
+    "tests/p1067/plan-v1.json": "0767407a4c678b8b5fe035dc052b5a655f77d92dacd2eada1dc3eb313708c944",
+    "tests/p1067/chain-v1.json": "24a48e333750b798ab4c909935a89d924f43d1d21700470d96f565dadcfadcb4",
+    "docs/P1067_Consolidation.md": "3e94696a8b9bbe2ee3028a5f12f0a1266c7c9d0bb96f5774b60893aeb40a6787"
+  }
+}

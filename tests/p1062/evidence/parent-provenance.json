@@ -1,0 +1,17 @@
+{
+  "parent_HEAD": "4c039095455e0df32eebf538b0f9db1db1e089cc",
+  "built_implementation_HEAD": "6dae7525480b47acdd809b7f02cad0edc490b397",
+  "all_compiled_src_include_byte_equal": true,
+  "compiler_and_libraries": {
+    "libnewlang_checked.a": "5a5bf23a9ace5896648b9f569d76cff1c12123354f10eae91b17db72481ab852",
+    "libnewlang_checked_c_node.a": "1206ea1c866d3e649f5acadc21e881efc89d5a7e17d26946e19c957b505dc6cc",
+    "libnewlang_diagnostic.a": "11232151cc63b800bed55628f01a65c99b7925e637f205815b1b5030df452445",
+    "libnewlang_lexer.a": "acefaae324df9c6f4ac191a82e71ab7800b8081874d02c0b3cddaec573dee833",
+    "libnewlang_parser.a": "9d86d5608de122b7030daa9ea70ed9d255b3247c71d838e9fab06b4b846c4f2b",
+    "libnewlang_parser_p534.a": "a52115867703167e8f60783b42e62771933ec48d3b9a56d0b39cc793c1e57d44",
+    "libnewlang_semantic.a": "7967be0938535d40deef2b2b080ba5b3e3f502494bc1ca108c927746d3864d40",
+    "libnewlang_source.a": "5de20ce94608e17ed74dff92234894a620504b502409f8958bfb246b6e57076c",
+    "libnewlang_syntax.a": "c31c2ccbe6676a58a271c6701038e445ccfdfb665c505a80b2b89a17810d6f0b",
+    "newlangc": "fd5baf7286d858ebc0c4dd7a28579de5b976642f343a927d10e75cf70c54f5b2"
+  }
+}

@@ -1,0 +1,1839 @@
+Start testing: Oct 28 02:34 UTC
+----------------------------------------------------------
+276/535 Testing: p965_freeze.unit
+276/535 Test: p965_freeze.unit
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p974/tests/p965/freeze_test.py"
+Directory: /workspace/p974-build-ubsan
+"p965_freeze.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 preregistered full source/harness/oracle SHA256 and protected historical files unchanged
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"p965_freeze.unit" end time: Oct 28 02:34 UTC
+"p965_freeze.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+277/535 Testing: p965_echo_ownership.unit
+277/535 Test: p965_echo_ownership.unit
+Command: "/workspace/p974-build-ubsan/p965_ownership" "/workspace/p974/tests/p965/sources/echo.nl" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_echo_ownership.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 parent=5 kind=36 fault=0 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=0 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=1 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=1 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=2 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=2 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=3 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=3 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=4 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=4 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=5 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=5 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=6 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=6 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=7 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=7 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=8 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=8 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=9 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=9 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=10 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=10 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=11 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=11 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=12 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=12 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=13 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=13 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=8 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=8 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=0 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=0 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=1 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=1 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=2 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=2 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=3 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=3 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=4 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=4 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=5 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=5 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=6 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=6 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=7 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=7 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=0 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=0 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=1 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=1 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=2 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=2 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=3 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=3 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=4 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=4 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=5 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=5 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=6 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=6 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=7 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=7 restore=0 A-originals=18 B-live exactly-once PASS
+P965 source=/workspace/p974/tests/p965/sources/echo.nl canonical fragments=11; completed all eligible whole-entry/count/buffer cases
+<end of output>
+Test time =   0.50 sec
+----------------------------------------------------------
+Test Passed.
+"p965_echo_ownership.unit" end time: Oct 28 02:34 UTC
+"p965_echo_ownership.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+278/535 Testing: p965_echo_oom.unit
+278/535 Test: p965_echo_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/echo.nl" "CHECK" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_echo_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=32 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=33 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=36 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=85 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=88 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=89 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=128 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=347 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=372 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=373 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=427 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=637 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=640 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=641 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=706 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=709 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=710 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=725 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1161 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1162 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1163 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1376 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1661 scope=3 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1662 scope=3 phase=1 slot=1 prior-committed=1 kind=r bytes=16 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1663 scope=3 phase=2 slot=1 prior-committed=1 kind=r bytes=16 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1772 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1820 scope=3 phase=0 slot=2 prior-committed=2 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1821 scope=3 phase=1 slot=2 prior-committed=2 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1822 scope=3 phase=2 slot=2 prior-committed=2 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1844 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1845 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1897 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1898 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1899 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1900 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1901 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=31 scope=0 phase=31 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=35 scope=0 phase=3 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=84 scope=0 phase=48 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=47 scope=0 phase=11 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=127 scope=0 phase=39 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=90 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=346 scope=0 phase=218 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=294 scope=0 phase=166 slot=1 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=426 scope=0 phase=54 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=374 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=636 scope=0 phase=209 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=573 scope=0 phase=146 slot=1 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=705 scope=0 phase=65 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=642 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=724 scope=0 phase=15 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1375 scope=0 phase=214 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=CHECK position=1771 scope=0 phase=110 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=53; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.23 sec
+----------------------------------------------------------
+Test Passed.
+"p965_echo_oom.unit" end time: Oct 28 02:34 UTC
+"p965_echo_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+279/535 Testing: p965_echo_definition_oom.unit
+279/535 Test: p965_echo_definition_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/echo.nl" "definition" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_echo_definition_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=527 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=528 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=577 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=580 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=581 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=620 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=839 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=864 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=865 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=919 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1129 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1132 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1133 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1198 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1201 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1202 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1217 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1375 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1376 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1377 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1517 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1802 scope=3 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1803 scope=3 phase=1 slot=1 prior-committed=1 kind=r bytes=16 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1804 scope=3 phase=2 slot=1 prior-committed=1 kind=r bytes=16 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1913 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1961 scope=3 phase=0 slot=2 prior-committed=2 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1962 scope=3 phase=1 slot=2 prior-committed=2 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1963 scope=3 phase=2 slot=2 prior-committed=2 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1984 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=1985 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=2037 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=2038 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=2082 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/echo.nl mode=definition position=2083 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=34; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"p965_echo_definition_oom.unit" end time: Oct 28 02:34 UTC
+"p965_echo_definition_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+280/535 Testing: p965_window_ownership.unit
+280/535 Test: p965_window_ownership.unit
+Command: "/workspace/p974-build-ubsan/p965_ownership" "/workspace/p974/tests/p965/sources/window.nl" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_window_ownership.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 parent=5 kind=36 fault=0 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=0 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=1 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=1 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=2 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=2 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=3 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=3 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=4 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=4 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=5 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=5 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=6 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=6 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=7 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=7 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=8 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=8 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=9 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=9 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=10 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=10 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=11 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=11 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=12 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=12 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=13 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=5 kind=36 fault=13 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=8 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=8 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=0 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=0 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=1 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=1 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=2 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=2 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=3 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=3 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=4 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=4 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=5 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=5 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=6 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=6 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=7 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=7 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=0 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=0 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=1 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=1 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=2 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=2 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=3 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=3 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=4 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=4 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=5 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=5 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=6 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=6 restore=0 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=7 restore=1 A-originals=18 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=7 restore=0 A-originals=18 B-live exactly-once PASS
+P965 source=/workspace/p974/tests/p965/sources/window.nl canonical fragments=11; completed all eligible whole-entry/count/buffer cases
+<end of output>
+Test time =   0.49 sec
+----------------------------------------------------------
+Test Passed.
+"p965_window_ownership.unit" end time: Oct 28 02:34 UTC
+"p965_window_ownership.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+281/535 Testing: p965_window_oom.unit
+281/535 Test: p965_window_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/window.nl" "CHECK" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_window_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=32 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=33 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=36 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=85 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=88 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=89 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=128 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=347 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=372 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=373 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=427 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=637 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=640 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=641 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=706 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=709 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=710 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=725 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1161 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1162 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1163 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1376 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1661 scope=3 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1662 scope=3 phase=1 slot=1 prior-committed=1 kind=r bytes=16 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1663 scope=3 phase=2 slot=1 prior-committed=1 kind=r bytes=16 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1772 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1820 scope=3 phase=0 slot=2 prior-committed=2 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1821 scope=3 phase=1 slot=2 prior-committed=2 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1822 scope=3 phase=2 slot=2 prior-committed=2 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1844 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1845 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1897 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1898 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1899 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1900 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1901 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=31 scope=0 phase=31 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=35 scope=0 phase=3 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=84 scope=0 phase=48 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=47 scope=0 phase=11 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=127 scope=0 phase=39 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=90 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=346 scope=0 phase=218 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=294 scope=0 phase=166 slot=1 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=426 scope=0 phase=54 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=374 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=636 scope=0 phase=209 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=573 scope=0 phase=146 slot=1 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=705 scope=0 phase=65 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=642 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=724 scope=0 phase=15 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1375 scope=0 phase=214 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=CHECK position=1771 scope=0 phase=110 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=53; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.24 sec
+----------------------------------------------------------
+Test Passed.
+"p965_window_oom.unit" end time: Oct 28 02:34 UTC
+"p965_window_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+282/535 Testing: p965_window_definition_oom.unit
+282/535 Test: p965_window_definition_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/window.nl" "definition" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_window_definition_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=532 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=533 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=656 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=657 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=706 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=709 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=710 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=749 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=968 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=993 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=994 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1048 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1258 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1261 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1262 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1327 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1330 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1331 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1346 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1504 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1505 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1506 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1646 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1931 scope=3 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1932 scope=3 phase=1 slot=1 prior-committed=1 kind=r bytes=16 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=1933 scope=3 phase=2 slot=1 prior-committed=1 kind=r bytes=16 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=2042 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=2090 scope=3 phase=0 slot=2 prior-committed=2 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=2091 scope=3 phase=1 slot=2 prior-committed=2 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=2092 scope=3 phase=2 slot=2 prior-committed=2 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=2113 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=2114 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=2166 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/window.nl mode=definition position=2167 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=34; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"p965_window_definition_oom.unit" end time: Oct 28 02:34 UTC
+"p965_window_definition_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+283/535 Testing: p965_t_only_ownership.unit
+283/535 Test: p965_t_only_ownership.unit
+Command: "/workspace/p974-build-ubsan/p965_ownership" "/workspace/p974/tests/p965/sources/t_only.nl" "scalar"
+Directory: /workspace/p974-build-ubsan
+"p965_t_only_ownership.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 parent=1 kind=36 fault=0 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=0 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=1 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=1 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=2 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=2 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=3 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=3 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=4 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=4 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=5 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=5 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=6 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=6 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=7 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=7 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=8 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=8 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=0 A-originals=7 B-live exactly-once PASS
+P965 source=/workspace/p974/tests/p965/sources/t_only.nl canonical fragments=4; completed all eligible whole-entry/count/buffer cases
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p965_t_only_ownership.unit" end time: Oct 28 02:34 UTC
+"p965_t_only_ownership.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+284/535 Testing: p965_t_only_oom.unit
+284/535 Test: p965_t_only_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/t_only.nl" "CHECK" "scalar"
+Directory: /workspace/p974-build-ubsan
+"p965_t_only_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=17 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=18 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=21 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=115 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=123 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=124 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=150 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=153 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=154 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=236 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=237 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=238 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=16 scope=0 phase=16 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=20 scope=0 phase=3 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=114 scope=0 phase=93 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=90 scope=0 phase=69 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=149 scope=0 phase=26 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=CHECK position=125 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=18; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_t_only_oom.unit" end time: Oct 28 02:34 UTC
+"p965_t_only_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+285/535 Testing: p965_t_only_definition_oom.unit
+285/535 Test: p965_t_only_definition_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/t_only.nl" "definition" "scalar"
+Directory: /workspace/p974-build-ubsan
+"p965_t_only_definition_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=definition position=175 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=definition position=176 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=definition position=270 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=definition position=278 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=definition position=279 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=definition position=305 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=definition position=308 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/t_only.nl mode=definition position=309 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=8; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_t_only_definition_oom.unit" end time: Oct 28 02:34 UTC
+"p965_t_only_definition_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+286/535 Testing: p965_plain_ownership.unit
+286/535 Test: p965_plain_ownership.unit
+Command: "/workspace/p974-build-ubsan/p965_ownership" "/workspace/p974/tests/p965/sources/plain.nl" "scalar"
+Directory: /workspace/p974-build-ubsan
+"p965_plain_ownership.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 parent=1 kind=36 fault=0 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=0 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=1 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=1 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=2 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=2 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=3 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=3 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=4 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=4 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=5 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=5 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=6 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=6 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=7 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=1 kind=36 fault=7 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=8 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=8 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=2 kind=0 fault=8 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=2 kind=0 fault=8 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=2 kind=0 fault=9 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=2 kind=0 fault=9 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=2 kind=0 fault=10 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=2 kind=0 fault=10 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=2 kind=0 fault=11 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=2 kind=0 fault=11 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=2 kind=0 fault=12 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=2 kind=0 fault=12 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=2 kind=0 fault=13 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=2 kind=0 fault=13 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=4 kind=0 fault=8 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=4 kind=0 fault=8 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=4 kind=0 fault=9 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=4 kind=0 fault=9 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=4 kind=0 fault=10 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=4 kind=0 fault=10 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=4 kind=0 fault=11 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=4 kind=0 fault=11 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=4 kind=0 fault=12 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=4 kind=0 fault=12 restore=0 A-originals=13 B-live exactly-once PASS
+P965 parent=4 kind=0 fault=13 restore=1 A-originals=13 B-live exactly-once PASS
+P965 parent=4 kind=0 fault=13 restore=0 A-originals=13 B-live exactly-once PASS
+P965 source=/workspace/p974/tests/p965/sources/plain.nl canonical fragments=6; completed all eligible whole-entry/count/buffer cases
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_plain_ownership.unit" end time: Oct 28 02:34 UTC
+"p965_plain_ownership.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+287/535 Testing: p965_plain_oom.unit
+287/535 Test: p965_plain_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/plain.nl" "CHECK" "scalar"
+Directory: /workspace/p974-build-ubsan
+"p965_plain_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=16 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=17 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=20 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=64 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=68 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=75 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=76 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=77 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=78 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=79 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=102 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=106 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=113 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=114 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=115 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=116 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=117 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=124 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=125 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=126 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=15 scope=0 phase=15 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=19 scope=0 phase=3 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=63 scope=0 phase=43 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=42 scope=0 phase=22 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=67 scope=0 phase=3 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=101 scope=0 phase=23 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=80 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=CHECK position=105 scope=0 phase=3 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=28; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_plain_oom.unit" end time: Oct 28 02:34 UTC
+"p965_plain_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+288/535 Testing: p965_plain_definition_oom.unit
+288/535 Test: p965_plain_definition_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/plain.nl" "definition" "scalar"
+Directory: /workspace/p974-build-ubsan
+"p965_plain_definition_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=108 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=109 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=129 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=130 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=174 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=178 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=185 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=186 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=187 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=188 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=189 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=212 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=216 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=223 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=224 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=225 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=226 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/plain.nl mode=definition position=227 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=18; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_plain_definition_oom.unit" end time: Oct 28 02:34 UTC
+"p965_plain_definition_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+289/535 Testing: p965_loop_ownership.unit
+289/535 Test: p965_loop_ownership.unit
+Command: "/workspace/p974-build-ubsan/p965_ownership" "/workspace/p974/tests/p965/sources/loop.nl" "scalar"
+Directory: /workspace/p974-build-ubsan
+"p965_loop_ownership.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 parent=0 kind=0 fault=8 restore=1 A-originals=6 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=8 restore=0 A-originals=6 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=1 A-originals=6 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=0 A-originals=6 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=1 A-originals=6 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=0 A-originals=6 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=1 A-originals=6 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=0 A-originals=6 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=1 A-originals=6 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=0 A-originals=6 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=1 A-originals=6 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=0 A-originals=6 B-live exactly-once PASS
+P965 parent=1 kind=40 fault=0 restore=1 A-originals=6 B-live exactly-once PASS
+P965 parent=1 kind=40 fault=0 restore=0 A-originals=6 B-live exactly-once PASS
+P965 parent=1 kind=40 fault=1 restore=1 A-originals=6 B-live exactly-once PASS
+P965 parent=1 kind=40 fault=1 restore=0 A-originals=6 B-live exactly-once PASS
+P965 parent=1 kind=40 fault=3 restore=1 A-originals=6 B-live exactly-once PASS
+P965 parent=1 kind=40 fault=3 restore=0 A-originals=6 B-live exactly-once PASS
+P965 parent=1 kind=40 fault=4 restore=1 A-originals=6 B-live exactly-once PASS
+P965 parent=1 kind=40 fault=4 restore=0 A-originals=6 B-live exactly-once PASS
+P965 parent=1 kind=40 fault=5 restore=1 A-originals=6 B-live exactly-once PASS
+P965 parent=1 kind=40 fault=5 restore=0 A-originals=6 B-live exactly-once PASS
+P965 parent=1 kind=40 fault=6 restore=1 A-originals=6 B-live exactly-once PASS
+P965 parent=1 kind=40 fault=6 restore=0 A-originals=6 B-live exactly-once PASS
+P965 parent=1 kind=40 fault=7 restore=1 A-originals=6 B-live exactly-once PASS
+P965 parent=1 kind=40 fault=7 restore=0 A-originals=6 B-live exactly-once PASS
+P965 source=/workspace/p974/tests/p965/sources/loop.nl canonical fragments=3; completed all eligible whole-entry/count/buffer cases
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_loop_ownership.unit" end time: Oct 28 02:34 UTC
+"p965_loop_ownership.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+290/535 Testing: p965_loop_oom.unit
+290/535 Test: p965_loop_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/loop.nl" "CHECK" "scalar"
+Directory: /workspace/p974-build-ubsan
+"p965_loop_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=CHECK position=14 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=CHECK position=15 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=CHECK position=18 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=CHECK position=66 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=CHECK position=98 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=CHECK position=99 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=CHECK position=100 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=CHECK position=101 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=CHECK position=102 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=CHECK position=13 scope=0 phase=13 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=CHECK position=17 scope=0 phase=3 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=CHECK position=65 scope=0 phase=47 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=CHECK position=52 scope=0 phase=34 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=13; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p965_loop_oom.unit" end time: Oct 28 02:34 UTC
+"p965_loop_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+291/535 Testing: p965_loop_definition_oom.unit
+291/535 Test: p965_loop_definition_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/loop.nl" "definition" "scalar"
+Directory: /workspace/p974-build-ubsan
+"p965_loop_definition_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=definition position=55 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=definition position=56 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=definition position=104 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=definition position=136 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/loop.nl mode=definition position=137 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=5; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p965_loop_definition_oom.unit" end time: Oct 28 02:34 UTC
+"p965_loop_definition_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+292/535 Testing: p965_continuation_ownership.unit
+292/535 Test: p965_continuation_ownership.unit
+Command: "/workspace/p974-build-ubsan/p965_ownership" "/workspace/p974/tests/p965/sources/continuation.nl" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_continuation_ownership.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 parent=0 kind=0 fault=8 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=8 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=0 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=0 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=1 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=1 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=2 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=2 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=3 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=3 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=4 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=4 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=5 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=5 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=6 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=6 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=7 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=7 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=0 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=0 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=1 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=1 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=2 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=2 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=3 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=3 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=4 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=4 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=5 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=5 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=6 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=6 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=7 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=7 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=0 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=0 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=1 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=1 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=2 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=2 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=3 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=3 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=4 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=4 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=5 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=5 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=6 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=6 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=7 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=7 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=8 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=8 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=9 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=9 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=10 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=10 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=11 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=11 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=12 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=12 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=13 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=13 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=14 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=14 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=6 kind=0 fault=8 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=6 kind=0 fault=8 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=6 kind=0 fault=9 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=6 kind=0 fault=9 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=6 kind=0 fault=10 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=6 kind=0 fault=10 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=6 kind=0 fault=11 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=6 kind=0 fault=11 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=6 kind=0 fault=12 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=6 kind=0 fault=12 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=6 kind=0 fault=13 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=6 kind=0 fault=13 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=0 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=0 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=1 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=1 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=3 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=3 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=4 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=4 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=5 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=5 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=6 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=6 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=7 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=7 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=9 kind=0 fault=8 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=9 kind=0 fault=8 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=9 kind=0 fault=9 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=9 kind=0 fault=9 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=9 kind=0 fault=10 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=9 kind=0 fault=10 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=9 kind=0 fault=11 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=9 kind=0 fault=11 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=9 kind=0 fault=12 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=9 kind=0 fault=12 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=9 kind=0 fault=13 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=9 kind=0 fault=13 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=12 kind=0 fault=8 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=12 kind=0 fault=8 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=12 kind=0 fault=9 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=12 kind=0 fault=9 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=12 kind=0 fault=10 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=12 kind=0 fault=10 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=12 kind=0 fault=11 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=12 kind=0 fault=11 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=12 kind=0 fault=12 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=12 kind=0 fault=12 restore=0 A-originals=29 B-live exactly-once PASS
+P965 parent=12 kind=0 fault=13 restore=1 A-originals=29 B-live exactly-once PASS
+P965 parent=12 kind=0 fault=13 restore=0 A-originals=29 B-live exactly-once PASS
+P965 source=/workspace/p974/tests/p965/sources/continuation.nl canonical fragments=15; completed all eligible whole-entry/count/buffer cases
+<end of output>
+Test time =   1.71 sec
+----------------------------------------------------------
+Test Passed.
+"p965_continuation_ownership.unit" end time: Oct 28 02:34 UTC
+"p965_continuation_ownership.unit" time elapsed: 00:00:01
+----------------------------------------------------------
+
+293/535 Testing: p965_continuation_oom.unit
+293/535 Test: p965_continuation_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/continuation.nl" "CHECK" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_continuation_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=32 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=33 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=36 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=85 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=88 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=89 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=128 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=347 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=372 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=373 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=427 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=595 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=842 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=843 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=844 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1171 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1334 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1431 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1433 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1434 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1514 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1515 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1516 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1517 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1518 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1595 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1773 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1821 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1822 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1823 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1824 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1825 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2063 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2064 scope=4 phase=0 slot=0 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2340 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2388 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2389 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2390 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2593 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2594 scope=4 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2954 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2955 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=3007 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=3008 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=3009 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=3010 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=3011 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=31 scope=0 phase=31 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=35 scope=0 phase=3 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=84 scope=0 phase=48 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=47 scope=0 phase=11 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=127 scope=0 phase=39 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=90 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=346 scope=0 phase=218 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=294 scope=0 phase=166 slot=1 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=426 scope=0 phase=54 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=374 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=866 scope=0 phase=24 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1170 scope=0 phase=328 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1095 scope=0 phase=253 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1256 scope=0 phase=85 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1172 scope=0 phase=1 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1333 scope=0 phase=162 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1430 scope=0 phase=96 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1351 scope=0 phase=17 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1594 scope=0 phase=77 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1519 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1596 scope=0 phase=1 slot=1 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1772 scope=0 phase=177 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=594 scope=0 phase=167 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2062 scope=0 phase=238 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=1983 scope=0 phase=159 slot=1 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2065 scope=0 phase=1 slot=0 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2144 scope=0 phase=80 slot=0 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2339 scope=0 phase=275 slot=0 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2592 scope=0 phase=204 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2506 scope=0 phase=118 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2595 scope=0 phase=1 slot=1 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=CHECK position=2681 scope=0 phase=87 slot=1 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=79; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.52 sec
+----------------------------------------------------------
+Test Passed.
+"p965_continuation_oom.unit" end time: Oct 28 02:34 UTC
+"p965_continuation_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+294/535 Testing: p965_continuation_definition_oom.unit
+294/535 Test: p965_continuation_definition_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/continuation.nl" "definition" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_continuation_definition_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=534 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=535 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=584 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=587 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=588 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=627 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=846 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=871 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=872 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=926 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=1094 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=1341 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=1342 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=1343 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=1670 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=1833 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=1930 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=1932 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=1933 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2013 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2014 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2015 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2016 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2017 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2094 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2272 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2320 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2321 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2322 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2323 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2324 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2562 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2563 scope=4 phase=0 slot=0 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2839 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2887 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2888 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=2889 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=3092 scope=1 phase=0 slot=2 prior-committed=2 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=3093 scope=4 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=3453 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=3454 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=3506 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/continuation.nl mode=definition position=3507 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=43; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.26 sec
+----------------------------------------------------------
+Test Passed.
+"p965_continuation_definition_oom.unit" end time: Oct 28 02:34 UTC
+"p965_continuation_definition_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+295/535 Testing: p965_four_field_ownership.unit
+295/535 Test: p965_four_field_ownership.unit
+Command: "/workspace/p974-build-ubsan/p965_ownership" "/workspace/p974/tests/p965/sources/four_field.nl" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_four_field_ownership.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 parent=0 kind=0 fault=8 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=8 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=0 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=0 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=1 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=1 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=2 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=2 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=3 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=3 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=4 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=4 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=5 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=5 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=6 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=6 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=7 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=7 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=0 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=0 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=1 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=1 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=2 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=2 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=3 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=3 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=4 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=4 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=5 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=5 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=6 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=6 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=7 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=3 kind=35 fault=7 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=0 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=0 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=1 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=1 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=2 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=2 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=3 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=3 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=4 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=4 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=5 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=5 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=6 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=6 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=7 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=5 kind=35 fault=7 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=0 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=0 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=1 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=1 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=2 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=2 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=3 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=3 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=4 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=4 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=5 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=5 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=6 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=6 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=7 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=7 kind=35 fault=7 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=0 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=0 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=1 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=1 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=2 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=2 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=3 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=3 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=4 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=4 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=5 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=5 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=6 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=6 restore=0 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=7 restore=1 A-originals=19 B-live exactly-once PASS
+P965 parent=9 kind=35 fault=7 restore=0 A-originals=19 B-live exactly-once PASS
+P965 source=/workspace/p974/tests/p965/sources/four_field.nl canonical fragments=12; completed all eligible whole-entry/count/buffer cases
+<end of output>
+Test time =   3.03 sec
+----------------------------------------------------------
+Test Passed.
+"p965_four_field_ownership.unit" end time: Oct 28 02:34 UTC
+"p965_four_field_ownership.unit" time elapsed: 00:00:03
+----------------------------------------------------------
+
+296/535 Testing: p965_four_field_oom.unit
+296/535 Test: p965_four_field_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/four_field.nl" "CHECK" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_four_field_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=21 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=22 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=25 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=116 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=145 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=146 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=174 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=391 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=457 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=458 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=501 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=758 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=854 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=855 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=907 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1200 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1325 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1326 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1387 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1716 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1871 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1872 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1942 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=3374 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=3375 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=4082 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=4083 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=4849 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=4850 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=5666 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=5667 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=6524 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=6525 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=7370 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=7371 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=7372 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=20 scope=0 phase=20 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=24 scope=0 phase=3 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=115 scope=0 phase=90 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=89 scope=0 phase=64 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=173 scope=0 phase=28 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=147 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=390 scope=0 phase=216 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=349 scope=0 phase=175 slot=1 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=500 scope=0 phase=43 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=459 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=757 scope=0 phase=256 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=707 scope=0 phase=206 slot=1 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=906 scope=0 phase=52 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=856 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1199 scope=0 phase=292 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1140 scope=0 phase=233 slot=1 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1386 scope=0 phase=61 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1327 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1715 scope=0 phase=328 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1647 scope=0 phase=260 slot=1 prior-committed=1 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1941 scope=0 phase=70 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=CHECK position=1873 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=58; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   1.25 sec
+----------------------------------------------------------
+Test Passed.
+"p965_four_field_oom.unit" end time: Oct 28 02:34 UTC
+"p965_four_field_oom.unit" time elapsed: 00:00:01
+----------------------------------------------------------
+
+297/535 Testing: p965_four_field_definition_oom.unit
+297/535 Test: p965_four_field_definition_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/four_field.nl" "definition" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_four_field_definition_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=769 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=770 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=861 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=890 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=891 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=919 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=1136 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=1202 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=1203 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=1246 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=1503 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=1599 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=1600 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=1652 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=1945 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=2070 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=2071 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=2132 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=2461 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=2616 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=2617 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=2687 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=4119 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=4120 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=4827 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=4828 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=5594 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=5595 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=6411 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=6412 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=7269 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/four_field.nl mode=definition position=7270 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=32; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.66 sec
+----------------------------------------------------------
+Test Passed.
+"p965_four_field_definition_oom.unit" end time: Oct 28 02:34 UTC
+"p965_four_field_definition_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+298/535 Testing: p965_lexical_ownership.unit
+298/535 Test: p965_lexical_ownership.unit
+Command: "/workspace/p974-build-ubsan/p965_ownership" "/workspace/p974/tests/p965/sources/lexical.nl" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_lexical_ownership.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 parent=0 kind=0 fault=8 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=8 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=9 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=10 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=11 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=12 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=0 kind=0 fault=13 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=0 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=0 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=1 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=1 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=2 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=2 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=3 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=3 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=4 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=4 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=5 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=5 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=6 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=6 restore=0 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=7 restore=1 A-originals=7 B-live exactly-once PASS
+P965 parent=1 kind=35 fault=7 restore=0 A-originals=7 B-live exactly-once PASS
+P965 source=/workspace/p974/tests/p965/sources/lexical.nl canonical fragments=4; completed all eligible whole-entry/count/buffer cases
+<end of output>
+Test time =   0.06 sec
+----------------------------------------------------------
+Test Passed.
+"p965_lexical_ownership.unit" end time: Oct 28 02:34 UTC
+"p965_lexical_ownership.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+299/535 Testing: p965_lexical_oom.unit
+299/535 Test: p965_lexical_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/lexical.nl" "CHECK" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_lexical_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=19 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=20 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=23 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=148 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=258 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=259 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=291 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=409 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=410 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=535 scope=3 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=536 scope=3 phase=1 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=537 scope=3 phase=2 slot=0 prior-committed=0 kind=r bytes=8 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=18 scope=0 phase=18 slot=1 prior-committed=1 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=22 scope=0 phase=3 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=147 scope=0 phase=124 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=117 scope=0 phase=94 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=290 scope=0 phase=32 slot=0 prior-committed=0 kind=m bytes=608 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=CHECK position=260 scope=0 phase=2 slot=0 prior-committed=0 kind=m bytes=168 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=18; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p965_lexical_oom.unit" end time: Oct 28 02:34 UTC
+"p965_lexical_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+300/535 Testing: p965_lexical_definition_oom.unit
+300/535 Test: p965_lexical_definition_oom.unit
+Command: "/workspace/p974-build-ubsan/p965_oom" "/workspace/p974/tests/p965/sources/lexical.nl" "definition" "node"
+Directory: /workspace/p974-build-ubsan
+"p965_lexical_definition_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=definition position=188 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=22992 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=definition position=189 scope=1 phase=1 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=definition position=314 scope=1 phase=0 slot=0 prior-committed=0 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=definition position=424 scope=2 phase=0 slot=0 prior-committed=0 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=definition position=425 scope=2 phase=1 slot=0 prior-committed=0 kind=r bytes=24 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=definition position=457 scope=1 phase=0 slot=1 prior-committed=1 kind=c bytes=104 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=definition position=575 scope=2 phase=0 slot=1 prior-committed=1 kind=c bytes=56 reached/unpublished/rollback/retry PASS
+P965 OOM source=/workspace/p974/tests/p965/sources/lexical.nl mode=definition position=576 scope=2 phase=1 slot=1 prior-committed=1 kind=r bytes=48 reached/unpublished/rollback/retry PASS
+P965 reached OOM positions=8; final publication/close has no allocator; finite selected coverage
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_lexical_definition_oom.unit" end time: Oct 28 02:34 UTC
+"p965_lexical_definition_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+301/535 Testing: p965_named_if.integration
+301/535 Test: p965_named_if.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p974/tests/p965/output.py" "/workspace/p974-build-ubsan/p965_output" "/workspace/p974-build-ubsan/newlangc" "/workspace/p974/tests/p965/sources/window.nl"
+Directory: /workspace/p974-build-ubsan
+"p965_named_if.integration" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P965 whole T IF arm CLI4/C0; unrestored A teardown/B lives; named bytes/dev/ino preserved; healthy retry exact C
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"p965_named_if.integration" end time: Oct 28 02:34 UTC
+"p965_named_if.integration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+302/535 Testing: p965_c89_guard_charge.unit
+302/535 Test: p965_c89_guard_charge.unit
+Command: "/workspace/p974-build-ubsan/p965_c89_guard" "/workspace/p974/tests/p813/sources/charge_false.nl" "u8"
+Directory: /workspace/p974-build-ubsan
+"p965_c89_guard_charge.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+C89 old conjuncts caller=1 world=1 source=1 root_not1=0 count_gt1=1 root=1 count=77 call=29
+C89 guard u8 fault=0 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=1 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=2 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=3 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=4 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=5 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=6 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=7 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=8 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=9 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=10 GET=true VALIDATE=INVALID restore=OK
+C89 guard u8 fault=11 GET=true VALIDATE=INVALID restore=OK
+C89 genuine shared-plan CHECK B survives A destruction
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_guard_charge.unit" end time: Oct 28 02:34 UTC
+"p965_c89_guard_charge.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+303/535 Testing: p965_c89_guard_trim.unit
+303/535 Test: p965_c89_guard_trim.unit
+Command: "/workspace/p974-build-ubsan/p965_c89_guard" "/workspace/p974/tests/p866/sources/trim_true.nl" "unit"
+Directory: /workspace/p974-build-ubsan
+"p965_c89_guard_trim.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+C89 old conjuncts caller=1 world=1 source=1 root_not1=0 count_gt1=1 root=1 count=51 call=21
+C89 guard unit fault=0 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=1 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=2 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=3 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=4 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=5 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=6 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=7 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=8 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=9 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=10 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=11 GET=true VALIDATE=INVALID restore=OK
+C89 genuine shared-plan CHECK B survives A destruction
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_guard_trim.unit" end time: Oct 28 02:34 UTC
+"p965_c89_guard_trim.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+304/535 Testing: p965_c89_guard_fan.unit
+304/535 Test: p965_c89_guard_fan.unit
+Command: "/workspace/p974-build-ubsan/p965_c89_guard" "/workspace/p974/tests/p866/sources/fan_false.nl" "unit"
+Directory: /workspace/p974-build-ubsan
+"p965_c89_guard_fan.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+C89 old conjuncts caller=1 world=1 source=1 root_not1=0 count_gt1=1 root=1 count=51 call=21
+C89 guard unit fault=0 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=1 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=2 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=3 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=4 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=5 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=6 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=7 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=8 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=9 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=10 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=11 GET=true VALIDATE=INVALID restore=OK
+C89 genuine shared-plan CHECK B survives A destruction
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_guard_fan.unit" end time: Oct 28 02:34 UTC
+"p965_c89_guard_fan.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+305/535 Testing: p965_c89_guard_relay.unit
+305/535 Test: p965_c89_guard_relay.unit
+Command: "/workspace/p974-build-ubsan/p965_c89_guard" "/workspace/p974/tests/p878/sources/relay_equal_binding.nl" "unit"
+Directory: /workspace/p974-build-ubsan
+"p965_c89_guard_relay.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+C89 old conjuncts caller=1 world=1 source=1 root_not1=0 count_gt1=1 root=1 count=42 call=21
+C89 guard unit fault=0 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=1 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=2 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=3 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=4 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=5 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=6 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=7 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=8 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=9 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=10 GET=true VALIDATE=INVALID restore=OK
+C89 guard unit fault=11 GET=true VALIDATE=INVALID restore=OK
+C89 genuine shared-plan CHECK B survives A destruction
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_guard_relay.unit" end time: Oct 28 02:34 UTC
+"p965_c89_guard_relay.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+306/535 Testing: p965_c89_observe_charge.unit
+306/535 Test: p965_c89_observe_charge.unit
+Command: "/workspace/p974-build-ubsan/p965_c89_observer" "/workspace/p974/tests/p813/sources/charge_false.nl" "u8"
+Directory: /workspace/p974-build-ubsan
+"p965_c89_observe_charge.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+C89 observer u8 fault=0 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=1 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=2 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=3 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=4 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=5 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=6 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=7 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=8 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=9 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=10 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer u8 fault=11 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer actual BODY transfers=8 pending GET=NULL; committed GET=original; detached GET=NULL; B healthy
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_observe_charge.unit" end time: Oct 28 02:34 UTC
+"p965_c89_observe_charge.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+307/535 Testing: p965_c89_observe_trim.unit
+307/535 Test: p965_c89_observe_trim.unit
+Command: "/workspace/p974-build-ubsan/p965_c89_observer" "/workspace/p974/tests/p866/sources/trim_true.nl" "unit"
+Directory: /workspace/p974-build-ubsan
+"p965_c89_observe_trim.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+C89 observer unit fault=0 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=1 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=2 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=3 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=4 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=5 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=6 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=7 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=8 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=9 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=10 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=11 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer actual BODY transfers=2 pending GET=NULL; committed GET=original; detached GET=NULL; B healthy
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_observe_trim.unit" end time: Oct 28 02:34 UTC
+"p965_c89_observe_trim.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+308/535 Testing: p965_c89_observe_fan.unit
+308/535 Test: p965_c89_observe_fan.unit
+Command: "/workspace/p974-build-ubsan/p965_c89_observer" "/workspace/p974/tests/p866/sources/fan_false.nl" "unit"
+Directory: /workspace/p974-build-ubsan
+"p965_c89_observe_fan.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+C89 observer unit fault=0 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=1 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=2 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=3 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=4 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=5 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=6 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=7 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=8 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=9 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=10 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=11 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer actual BODY transfers=2 pending GET=NULL; committed GET=original; detached GET=NULL; B healthy
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_observe_fan.unit" end time: Oct 28 02:34 UTC
+"p965_c89_observe_fan.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+309/535 Testing: p965_c89_observe_relay.unit
+309/535 Test: p965_c89_observe_relay.unit
+Command: "/workspace/p974-build-ubsan/p965_c89_observer" "/workspace/p974/tests/p878/sources/relay_equal_binding.nl" "unit"
+Directory: /workspace/p974-build-ubsan
+"p965_c89_observe_relay.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+C89 observer unit fault=0 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=1 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=2 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=3 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=4 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=5 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=6 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=7 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=8 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=9 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=10 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer unit fault=11 historical GET=true current VALIDATE=INVALID restore=OK
+C89 observer actual BODY transfers=2 pending GET=NULL; committed GET=original; detached GET=NULL; B healthy
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_observe_relay.unit" end time: Oct 28 02:34 UTC
+"p965_c89_observe_relay.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+310/535 Testing: p965_c89_entry_echo.unit
+310/535 Test: p965_c89_entry_echo.unit
+Command: "/workspace/p974-build-ubsan/p965_c89_entry_source" "/workspace/p974/tests/p965/sources/echo.nl"
+Directory: /workspace/p974-build-ubsan
+"p965_c89_entry_echo.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+C89 owned root entry spelling released; foreign root/body source refused; canonical A cleanup and genuine B healthy
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_entry_echo.unit" end time: Oct 28 02:34 UTC
+"p965_c89_entry_echo.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+311/535 Testing: p965_c89_entry_window.unit
+311/535 Test: p965_c89_entry_window.unit
+Command: "/workspace/p974-build-ubsan/p965_c89_entry_source" "/workspace/p974/tests/p965/sources/window.nl"
+Directory: /workspace/p974-build-ubsan
+"p965_c89_entry_window.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+C89 owned root entry spelling released; foreign root/body source refused; canonical A cleanup and genuine B healthy
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_entry_window.unit" end time: Oct 28 02:34 UTC
+"p965_c89_entry_window.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+322/535 Testing: p961_reached_oom.unit
+322/535 Test: p961_reached_oom.unit
+Command: "/workspace/p974-build-ubsan/p961_oom" "/workspace/p974/tests/p953/sources/window_true.nl"
+Directory: /workspace/p974-build-ubsan
+"p961_reached_oom.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P961 actual CHECK allocation root-origin-calloc position=32 kind=c bytes=22992
+P961 actual CHECK allocation fragment position=31 kind=m bytes=608
+P961 actual CHECK allocation body-save position=1900 kind=r bytes=8
+P961 actual CHECK allocation call-save position=1901 kind=r bytes=8
+P961 actual CHECK allocation fragment position=35 kind=m bytes=608
+P961 actual CHECK allocation arm-save position=1898 kind=r bytes=48
+P961 actual CHECK allocation fragment position=84 kind=m bytes=608
+P961 actual CHECK allocation owned-world position=47 kind=m bytes=168
+P961 actual CHECK allocation fragment position=127 kind=m bytes=608
+P961 actual CHECK allocation owned-world position=90 kind=m bytes=168
+P961 actual CHECK allocation arm-save position=1845 kind=r bytes=48
+P961 actual CHECK allocation fragment position=346 kind=m bytes=608
+P961 actual CHECK allocation owned-world position=294 kind=m bytes=168
+P961 actual CHECK allocation fragment position=426 kind=m bytes=608
+P961 actual CHECK allocation owned-world position=374 kind=m bytes=168
+P961 actual CHECK allocation arm-save position=710 kind=r bytes=48
+P961 actual CHECK allocation body-save position=1821 kind=r bytes=24
+P961 actual CHECK allocation call-save position=1822 kind=r bytes=24
+P961 actual CHECK allocation fragment position=636 kind=m bytes=608
+P961 actual CHECK allocation owned-world position=573 kind=m bytes=168
+P961 actual CHECK allocation fragment position=705 kind=m bytes=608
+P961 actual CHECK allocation owned-world position=642 kind=m bytes=168
+P961 actual CHECK allocation fragment position=724 kind=m bytes=608
+P961 actual CHECK allocation fragment position=1375 kind=m bytes=608
+P961 actual CHECK allocation fragment position=1771 kind=m bytes=608
+P961 OOM position=32 unpublished/rollback/retry PASS
+P961 OOM position=31 unpublished/rollback/retry PASS
+P961 OOM position=1900 unpublished/rollback/retry PASS
+P961 OOM position=1901 unpublished/rollback/retry PASS
+P961 OOM position=35 unpublished/rollback/retry PASS
+P961 OOM position=1898 unpublished/rollback/retry PASS
+P961 OOM position=84 unpublished/rollback/retry PASS
+P961 OOM position=47 unpublished/rollback/retry PASS
+P961 OOM position=127 unpublished/rollback/retry PASS
+P961 OOM position=90 unpublished/rollback/retry PASS
+P961 OOM position=1845 unpublished/rollback/retry PASS
+P961 OOM position=346 unpublished/rollback/retry PASS
+P961 OOM position=294 unpublished/rollback/retry PASS
+P961 OOM position=426 unpublished/rollback/retry PASS
+P961 OOM position=374 unpublished/rollback/retry PASS
+P961 OOM position=710 unpublished/rollback/retry PASS
+P961 OOM position=1821 unpublished/rollback/retry PASS
+P961 OOM position=1822 unpublished/rollback/retry PASS
+P961 OOM position=636 unpublished/rollback/retry PASS
+P961 OOM position=573 unpublished/rollback/retry PASS
+P961 OOM position=705 unpublished/rollback/retry PASS
+P961 OOM position=642 unpublished/rollback/retry PASS
+P961 OOM position=724 unpublished/rollback/retry PASS
+P961 OOM position=1375 unpublished/rollback/retry PASS
+P961 OOM position=1771 unpublished/rollback/retry PASS
+P961 reached CHECK OOM positions=25 (close is infallible)
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"p961_reached_oom.unit" end time: Oct 28 02:34 UTC
+"p961_reached_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+323/535 Testing: p961_named_foreign.integration
+323/535 Test: p961_named_foreign.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/workspace/p974/tests/p961/output.py" "/workspace/p974-build-ubsan/p961_output" "/workspace/p974-build-ubsan/newlangc" "/workspace/p974/tests/p953/sources/window_true.nl"
+Directory: /workspace/p974-build-ubsan
+"p961_named_foreign.integration" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P961 foreign proof CLI4/C0, named bytes/dev/ino preserved; healthy retry exact C
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"p961_named_foreign.integration" end time: Oct 28 02:34 UTC
+"p961_named_foreign.integration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+324/535 Testing: p961_original_foreign.unit
+324/535 Test: p961_original_foreign.unit
+Command: "/workspace/p974-build-ubsan/p961_original" "/workspace/p974/tests/p953/sources/window_true.nl"
+Directory: /workspace/p974-build-ubsan
+"p961_original_foreign.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+whole foreign owned arm entry: status=1 bytes=0 same_source=0 same_body=1
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p961_original_foreign.unit" end time: Oct 28 02:34 UTC
+"p961_original_foreign.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+325/535 Testing: p961_echo_origin.unit
+325/535 Test: p961_echo_origin.unit
+Command: "/workspace/p974-build-ubsan/p961_origin" "/workspace/p974/tests/p953/sources/echo.nl"
+Directory: /workspace/p974-build-ubsan
+"p961_echo_origin.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P961 same-plan/source two CHECK roots; 9 origin negatives reject/C0/restore; healthy bytes=14007
+P961 tampered A canonical teardown; B healthy/destroy once
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"p961_echo_origin.unit" end time: Oct 28 02:34 UTC
+"p961_echo_origin.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+326/535 Testing: p961_window_true_origin.unit
+326/535 Test: p961_window_true_origin.unit
+Command: "/workspace/p974-build-ubsan/p961_origin" "/workspace/p974/tests/p953/sources/window_true.nl"
+Directory: /workspace/p974-build-ubsan
+"p961_window_true_origin.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P961 same-plan/source two CHECK roots; 9 origin negatives reject/C0/restore; healthy bytes=14006
+P961 tampered A canonical teardown; B healthy/destroy once
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"p961_window_true_origin.unit" end time: Oct 28 02:34 UTC
+"p961_window_true_origin.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+327/535 Testing: p953_echo_integrity.unit
+327/535 Test: p953_echo_integrity.unit
+Command: "/workspace/p974-build-ubsan/p953_integrity" "/workspace/p974/tests/p953/sources/echo.nl"
+Directory: /workspace/p974-build-ubsan
+"p953_echo_integrity.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P953 actual public Copy OK; 10 tamper reject/restore; C=14007
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"p953_echo_integrity.unit" end time: Oct 28 02:34 UTC
+"p953_echo_integrity.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+329/535 Testing: p953_window_true_integrity.unit
+329/535 Test: p953_window_true_integrity.unit
+Command: "/workspace/p974-build-ubsan/p953_integrity" "/workspace/p974/tests/p953/sources/window_true.nl"
+Directory: /workspace/p974-build-ubsan
+"p953_window_true_integrity.unit" start time: Oct 28 02:34 UTC
+Output:
+----------------------------------------------------------
+P953 actual public Copy OK; 10 tamper reject/restore; C=14006
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"p953_window_true_integrity.unit" end time: Oct 28 02:34 UTC
+"p953_window_true_integrity.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 28 02:34 UTC

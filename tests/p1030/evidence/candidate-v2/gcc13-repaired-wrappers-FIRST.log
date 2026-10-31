@@ -1,0 +1,10 @@
+Internal ctest changing into directory: /workspace/p1030-build-gcc13
+Test project /workspace/p1030-build-gcc13
+    Start 358: p990_new_native.integration
+    Start 361: p990_freeze_protocol.unit
+1/2 Test #361: p990_freeze_protocol.unit ........   Passed   18.36 sec
+2/2 Test #358: p990_new_native.integration ......   Passed   20.76 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =  20.78 sec

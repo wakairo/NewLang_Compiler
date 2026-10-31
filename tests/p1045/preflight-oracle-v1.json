@@ -1,0 +1,19 @@
+{
+  "release": "C137 bounded private admission-v1 PRE-RUN, no native claims",
+  "parent": "a56cd08c23548852504cf95e94eb6c9a56f3dd8f",
+  "source_freeze": "06753085e3b546727112ae476e69e431c5cfe6fa9e8cb6da514b10ca085d5dbd",
+  "source_changes": "none; source-v1 first RED and corrected source-v2 unchanged",
+  "CHECK": 0,
+  "GET": 2,
+  "current_body_parameters_event": [0, 0],
+  "C17": {
+    "prefix_two_originals.nl": 0,
+    "declaration_order.nl": 0,
+    "after_producer.nl": 0,
+    "before_link.nl": 4
+  },
+  "before_link_prediction": "two authentic nested calls now pass admission, but the existing pre-link carrier-world helper is restricted to an IF/one-call profile; measure actual next private refusal without bypassing it",
+  "physical_native": "NOT TESTED by this intermediate stage; all mandatory native/negative/OOM/history/sanitizers still required",
+  "implementation": "private copy_two_helpers selects actual prepared caller issuer, authenticates both distinct original roots/children in that actual entry, retains public current, old same-original checks, main prefix and serializer Local/H world validation",
+  "STOP": "actual unsafe/source-law/issuer/API/ABI/history/independence/pin/budget problem"
+}

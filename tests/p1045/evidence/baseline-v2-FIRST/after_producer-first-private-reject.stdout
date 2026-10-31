@@ -1,0 +1,6 @@
+P1045 CURRENT ordinal=0 depth=2 function=13 call=76 body=0 parameters=0 event=0 GET=YES
+P1045 VALUES ordinal=0 root=39 child=40 incarnation=39 loan=74 index=0 old=19 next=88 sibling=149 separate_originals=YES sibling_current=UNCHANGED
+P1045 CURRENT ordinal=1 depth=2 function=12 call=83 body=0 parameters=0 event=0 GET=YES
+P1045 VALUES ordinal=1 root=42 child=44 incarnation=42 loan=81 index=1 old=67 next=19 sibling=222 separate_originals=YES sibling_current=UNCHANGED
+P1045 FIRST_PRIVATE_REJECT return_address=0x40630e
+P1045 C17 status=1 published=NO length=777

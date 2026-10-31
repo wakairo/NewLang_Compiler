@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /workspace/p965-build-asan
+Test project /workspace/p965-build-asan
+    Start 319: p953_source_native.integration
+1/1 Test #319: p953_source_native.integration ...   Passed    2.77 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   2.79 sec

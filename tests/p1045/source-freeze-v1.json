@@ -1,0 +1,19 @@
+{
+  "release": "C137 source-only PRE-RUN v1",
+  "parent": "a56cd08c23548852504cf95e94eb6c9a56f3dd8f",
+  "parent_tree": "a2cd1c9a9c66a8686d7e4b99f545b82865ef3877",
+  "main": "438170098d5b98096f1ad1f1f200dc1f326c75c3",
+  "files": {
+    "tests/p1045/README.md": "a91bb3dd09a343c5837b858d54c5683c98558fe9b8ff5da5d58d938967421cd6",
+    "tests/p1045/baseline.py": "387449303e44ba554e0b7f1ad72034908862cae3ebabae5aaf28fc7346cc9756",
+    "tests/p1045/oracle-v1.json": "9db28b550249ae82079213b05c8ecfee21818a454b5aeec444038c5bac64fe61",
+    "tests/p1045/probe.c": "74cf6d808c165a1ca6c15ef1cad85bb15d5c06f8f6f7284a730e6a18a4b0ee7c",
+    "tests/p1045/sources/after_producer.nl": "9043452529ec3e95f241ea503d2b8e237413352a210f47689415aaf98cdfdc24",
+    "tests/p1045/sources/before_link.nl": "642ed2579b36339efe88a447fc4dd5ab610b0457b1c805447db0dd1907ea15c7",
+    "tests/p1045/sources/declaration_order.nl": "bec78878cbe7e97cd7a329bb7fa4ca30c97e53f9e17158ccff3c3483f9c529e6",
+    "tests/p1045/sources/negative_double_close.nl": "ca0c7c4b2eece363f0e87f510c5ac10a23cfd86a76edb0ad95bb548ed8f99c5e",
+    "tests/p1045/sources/negative_read_helper.nl": "dc8cd8a2e8d047dbb53b2a2d14e4f99d1ed8b4777b69365278fd194a9a2226f2",
+    "tests/p1045/sources/prefix_two_originals.nl": "c2ef1867fb054a724f41b1ed986e68e9fa0e49ebdc43f9e9d3a2ea3d80b5f34e",
+    "tests/p1045/sources/unsupported_third_actual.nl": "0b2484fa8e0e656fb48b3703dca9215b88caee0951cc2816ebccfa04df1d528a"
+  }
+}

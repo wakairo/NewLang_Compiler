@@ -1,0 +1,22 @@
+{
+  "release": "C118 candidate harness PRE-RUN, original v1 preserved",
+  "unchanged_parent_C": {
+    "control_return_false.nl": "20335eeeec898956b771ed5758ac3236806f0fb4b2067501d3fbba57bc34cf2b",
+    "control_return_true.nl": "fbb04c87d7a8c11c31e062b272d8d93d407c459caf03c9a5207a0879ae629167"
+  },
+  "source_rejections": {
+    "sources/unsupported_zero_change.nl": {"CHECK": 0, "C17": 4, "diagnostic": "", "condition": "exact-one-Change-per-arm profile unsupported"},
+    "sources/unsupported_two_changes.nl": {"CHECK": 0, "C17": 4, "diagnostic": "", "condition": "exact-one-Change-per-arm profile unsupported"},
+    "sources/negative_loan_escape.nl": {"CHECK": 3, "C17": 3, "diagnostic": "P8-EXIT-DEPENDENCY", "condition": "source loan escape"},
+    "sources/negative_read_write.nl": {"CHECK": 3, "C17": 3, "diagnostic": "LOCAL-LOAN-PROFILE", "condition": "UNREACHED intended write condition, original earlier parser boundary retained"},
+    "calibrated/negative_read_definition.nl": {"CHECK": 3, "C17": 3, "diagnostic": "P3-TYPE-MISMATCH", "condition": "separately calibrated original read-ref cannot supply replace's write-ref, line3 destination"}
+  },
+  "metadata": "4 two-normal sources x (15 restored actual faults + 1 unrestored foreign child A-destroy/B-survive + 5 supplied-view faults); actual invalid state rejects unit/parameters and C17, candidate-only invalid view rejects that candidate while actual call remains healthy",
+  "OOM_sources": ["two_normal_true.nl", "two_normal_index1.nl"],
+  "OOM": "record successful UNIT-current, original CLI C17 admission and actual CHECK allocation sequences; inject every reached position, require failure/no publication/snapshot/owner preservation and exact healthy retry. Not a claim about untested sites or output libc buffering",
+  "physical": "4 two-normal sources x O0/O2 x selected compiler. Emit original C once; compile unchanged bytes with passive macro header. Volatile reads of actual original live field/sibling and source's copied values, actual displaced old, changed pointer identity; at exit inspect only saved integers and counters. Old control raw unit exit is physically INCONCLUSIVE",
+  "named": "all6 successful sources: reached RLIMIT_FSIZE write failure preserves bytes/dev/ino/no-temp, then exact retry; all5 rejected sources stdout/fresh/existing preserve named output",
+  "old_evidence": "all source/oracle/first RED/manifests v1-v6 immutable; parent C byte identity for 2 new controls and existing old suite; all602 v6 protected keys inherited by prospective v7",
+  "STOP": "false semantic acceptance, forged authority accepted, protected history rewrite, source/API/ABI/issuer semantics expansion, generic bridge need or fixed parent drift",
+  "VALUE_ALIGNMENT_RISK": "Finite bounded capability; maintainer current-replay/history audit cost grows. Author plus ordinary safe caller C-relative UB audit closure reduction, performance/cost UNMEASURED"
+}

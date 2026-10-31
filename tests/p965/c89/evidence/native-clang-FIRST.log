@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /workspace/p965-build-clang
+Test project /workspace/p965-build-clang
+    Start 319: p953_source_native.integration
+1/1 Test #319: p953_source_native.integration ...   Passed    1.36 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   1.39 sec

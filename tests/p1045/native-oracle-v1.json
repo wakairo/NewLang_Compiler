@@ -1,0 +1,50 @@
+{
+  "release": "C137 candidate-v2 native/negative/OOM/history harness PRE-RUN; original v1/v2 and first REDs immutable",
+  "parent": "a56cd08c23548852504cf95e94eb6c9a56f3dd8f",
+  "source_directory": "sources-v2",
+  "profiles": {
+    "prefix_two_originals.nl": 0,
+    "declaration_order.nl": 0,
+    "after_producer.nl": 1,
+    "before_link.nl": 2
+  },
+  "profile_phase": {
+    "0": "two T originals and both genuine ordinary helper calls precede every H trial; all guests execute T",
+    "1": "two T originals/calls follow actual local LiveTail producer and precede terminal; only guest2 reaches T",
+    "2": "two authenticated immediate literal originals and adjacent calls follow both real H initializations before any link/owner effect; only guest2 reaches T"
+  },
+  "T": {
+    "initial": [[19,149],[222,67]],
+    "old": [19,67],
+    "new": [88,19],
+    "sibling": [149,222],
+    "final": [[88,149],[222,19]],
+    "identity": "two distinct actual live typed objects, frame/symbol and four physical field addresses; target pointer0.field0 then1.field1; passive volatile reads before lifetime ends; actual old19 used as next incoming; never infer root authority from equal values",
+    "not_reached": "nested guest0/1 must have no T constructor/call; reported separately, not physical T PASS"
+  },
+  "H": {
+    "stamps": [53,197],
+    "guest_successes": [0,1,2],
+    "trials": [1,2,2],
+    "frees": [0,1,2],
+    "contract": "unchanged actual issued C, original pointer/Allocation/Domain/Backing and Some tail; local LiveTail RETURN/caller receive/read and callee read; independent single terminal+head teardown; no cleanup dereference of expired T/H"
+  },
+  "CHECK": 0,
+  "GET": 2,
+  "current_body_parameters_event": [0,0],
+  "CLI_C17": 0,
+  "native": "strict GCC13/curatedClang23.1.3 C17 Wall/Wextra/Werror/pedantic-errors O0/O2; raw unit exit0 physically INCONCLUSIVE; passive observer + existing NULL-only guest allocator; 24 H guest cases/group, 16 reached T cases/group and8 T-not-reached nested failure worlds",
+  "source_rejections": {
+    "negative_read_helper.nl": {"CHECK":3,"C17":3,"diagnostic":"P3-TYPE-MISMATCH","layer":"earliest actual call argument mismatch; intended definition read-ref replace guard UNREACHED"},
+    "negative_double_close.nl": {"CHECK":3,"C17":3,"diagnostic":"P3-USE-AFTER-CONSUME","layer":"second actual terminal input already consumed, intended guard REACHED"},
+    "unsupported_third_actual.nl": {"CHECK":0,"C17":4,"diagnostic":"V1-BACKEND-UNSUPPORTED","layer":"three actual calls outside bounded two-call release, not source illegality"}
+  },
+  "current_negatives": "2actuals x10 faults: wrong same-ABI function/plan, foreign current world/source, nonescape false, wrong actual argument, wrong field index, other genuine original field, parent incarnation, other child fact; each restored exact retry and no output. 2x3 supplied wrong historical views reject while actual current healthy. Earlier seal rejection not claimed as independent reach of every deeper guard.",
+  "H_owner_negatives": "4 original H producer/root/domain/allocation/return faults; foreign B canonical child left unrestored in A presentation, A destruction then B genuine current/exact C/destruction healthy",
+  "OOM": "record actual emitted allocation positions/kind/bytes; NULL-only host faults one reached position at a time, no published text/length777 unchanged/semantic summary/current/owner retained/exact retry. Counts measured, not pre-invented, no universal bytewise rollback claim",
+  "named": "source negatives stdout/fresh/existing preserve bytes/dev/ino/no-temp; actual RLIMIT_FSIZE reached output error with exact retry; no partial published C",
+  "old_C_identity": "32 fixed-parent accepted P-owned sources: original29 plus P1030 two new and transferred P1013 eligible case; all source+generated C SHA measured on exact fresh parent before candidate tests",
+  "history": "prospective v9 inherits all original v8 1808 keys, externally pins originalv8 SHA/blob from fixedPR1031, calls unchanged v1-v8 verifiers first and protects data. Coherent v8/v9 rewrite, coverage drop, old P1030 source/oracle/FIRST RED coedit must reject. No old verifier/source/oracle/first RED edits",
+  "budget": "one new DRAFT HOLD, naturalFULL5+PARTIAL max2groups12jobs, no manual rerun/oldPR/main/READY/merge/GO/F/R launch",
+  "VALUE_ALIGNMENT_RISK": "private profile and prospective evidence maintenance grow compiler maintainer audit cost; author+ordinary-safe caller human UB audit closure vs factored C/performance/cost UNMEASURED; Product GO PAUSED/H1 HOLD"
+}

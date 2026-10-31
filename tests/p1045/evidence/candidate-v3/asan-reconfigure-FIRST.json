@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/cmake",
+    "-S",
+    ".",
+    "-B",
+    "/workspace/p1045-build-asan"
+  ],
+  "exit": 0,
+  "seconds": 1.1865255660013645,
+  "raw_SHA256": "0b2a31272672fd4720c9da50dd7643e21c361c2ecb2a8e6e638adcc9b7d824a7"
+}

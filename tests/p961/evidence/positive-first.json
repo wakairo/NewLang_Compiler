@@ -1,0 +1,26 @@
+[
+  {
+    "case": "echo-check",
+    "status": 0,
+    "bytes": 0,
+    "stderr": ""
+  },
+  {
+    "case": "echo-emit",
+    "status": 0,
+    "bytes": 14007,
+    "stderr": ""
+  },
+  {
+    "case": "window_true-check",
+    "status": 0,
+    "bytes": 0,
+    "stderr": ""
+  },
+  {
+    "case": "window_true-emit",
+    "status": 0,
+    "bytes": 14006,
+    "stderr": ""
+  }
+]

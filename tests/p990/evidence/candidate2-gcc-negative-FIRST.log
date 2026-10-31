@@ -1,0 +1,10 @@
+P990 NEGATIVE SOURCE/NAMED negative_extra_change.nl 0 4
+P990 NEGATIVE SOURCE/NAMED negative_wrong_return.nl 0 4
+P990 NEGATIVE SOURCE/NAMED negative_wrong_formal.nl 3 3
+P990 NEGATIVE SOURCE/NAMED negative_wrong_field.nl 3 3
+P990 NEGATIVE SOURCE/NAMED negative_escape_ref.nl 3 3
+Traceback (most recent call last):
+  File "/workspace/p990/tests/p990/run.py", line 51, in <module>
+    assert result.returncode == expected["CHECK" if mode == "check" else "C17"]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError

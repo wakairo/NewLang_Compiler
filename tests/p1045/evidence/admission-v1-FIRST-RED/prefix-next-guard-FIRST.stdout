@@ -1,0 +1,5 @@
+P1045 CURRENT ordinal=0 depth=0 function=13 call=18 body=0 parameters=0 event=0 GET=YES
+P1045 VALUES ordinal=0 root=1 child=2 incarnation=1 loan=16 index=0 old=19 next=88 sibling=149 separate_originals=YES sibling_current=UNCHANGED
+P1045 CURRENT ordinal=1 depth=0 function=12 call=25 body=0 parameters=0 event=0 GET=YES
+P1045 VALUES ordinal=1 root=4 child=6 incarnation=4 loan=23 index=1 old=67 next=19 sibling=222 separate_originals=YES sibling_current=UNCHANGED
+P1045 C17 status=1 published=NO length=777

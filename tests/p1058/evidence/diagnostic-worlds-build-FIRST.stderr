@@ -1,0 +1,7 @@
+/workspace/p1058-artifacts/diagnostic-v1/worlds.c: In function ‘run’:
+/workspace/p1058-artifacts/diagnostic-v1/worlds.c:99:27: error: ‘NLSemanticContext’ has no member named ‘source’
+   99 |                    p.entry->source == nl_checked_context(caller)->source);
+      |                           ^~
+/workspace/p1058-artifacts/diagnostic-v1/worlds.c:99:65: error: ‘NLSemanticContext’ has no member named ‘source’
+   99 |                    p.entry->source == nl_checked_context(caller)->source);
+      |                                                                 ^~

@@ -1,0 +1,100 @@
+{
+  "release": "C112",
+  "stage": "PRE-RUN P1013 Stage0 v1",
+  "parent": "32035c9b94c85afad6bf1d86b29654760a415f9f",
+  "parent_tree": "815f31d63c6de0bbdf9be571238d55611fcf6089",
+  "main": "438170098d5b98096f1ad1f1f200dc1f326c75c3",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "authority": "Draft17.34 16.3.8/17.1/18.1b; independently checked ordinary one-CHANGE ref<write,u8> helpers. B1007 is a static hypothesis, not the oracle. No R source/oracle inspected.",
+  "entry": "main() -> unit, ordinary CLI --check and --emit-c17-to",
+  "cases": [
+    "ordinary_same.nl",
+    "ordinary_distinct.nl",
+    "mixed_same.nl",
+    "mixed_distinct.nl"
+  ],
+  "source_control": "Same vs distinct differs only in second actual helper name. Both helper definitions exist in all four units. Two actual calls on one Gauge original, same amber field, distinct sequential scoped loans, both before any H allocation. No Copy IF/arm/interleave/post-H join.",
+  "semantic_expected": {
+    "CHECK": 0,
+    "actual_Copy_calls": 2,
+    "body_GET": [
+      true,
+      true
+    ],
+    "parameters_GET": [
+      true,
+      true
+    ],
+    "current_body_VALIDATE": [
+      0,
+      0
+    ],
+    "current_parameters_VALIDATE": [
+      0,
+      0
+    ],
+    "current_event_VALIDATE": [
+      0,
+      0
+    ],
+    "first_old": 41,
+    "first_new": 67,
+    "second_old": 67,
+    "second_new": 109,
+    "sibling": 173,
+    "sibling_fact_and_incarnation": "unchanged",
+    "root_and_field": "same original parent/child/incarnation for both calls",
+    "function_identity": {
+      "same": "equal",
+      "distinct": "different"
+    },
+    "no_phantom_ownership": true
+  },
+  "H_expected": {
+    "nominal": "LinkCell",
+    "payloads": [
+      23,
+      199
+    ],
+    "allocation_sites": 2,
+    "fail0": {
+      "trials": 1,
+      "allocations": 0,
+      "frees": 0,
+      "live_tail_transfers": 0
+    },
+    "fail1": {
+      "trials": 2,
+      "allocations": 1,
+      "frees": 1,
+      "live_tail_transfers": 0
+    },
+    "success2": {
+      "trials": 2,
+      "allocations": 2,
+      "frees": 2,
+      "producer": 1,
+      "tail_return": 1,
+      "terminal": 1,
+      "head_free": 1,
+      "tail_free": 1
+    },
+    "identity": "original head and original tail, distinct BackingRegion/Allocation/Domain; head link None->Some(original tail)->None; exact same tail ptr/Allocation/Domain returned then consumed once; all loans closed before destruction"
+  },
+  "backend_predictions": {
+    "ordinary_same": "expected existing C17 acceptance; diagnose if not",
+    "ordinary_distinct": "expected existing C17 acceptance; diagnose if not",
+    "mixed_same": "UNKNOWN: measure whether same-helper second call hits another private emission fence",
+    "mixed_distinct": "if source/public current proofs are valid, hypothesize first mixed copy_call_proof function identity guard then CLI4/no C; must measure rather than assume",
+    "unsafe_acceptance": "STOP if illegal/current-invalid proof yields C; never run unsafe generated C"
+  },
+  "negative_expected": {
+    "source": "negative_loan_escape.nl --check rejects nonzero; no C file creation or named output clobber",
+    "public_candidates": "each actual call rejects other CHECK instance's body/parameters, other actual call body, and wrong field index; original B healthy after A destroy"
+  },
+  "native_expected": "Only compile/run actually emitted original C with strict C17 GCC/Clang O0/O2; process unit exit0 alone does not observe guest T values/H physical identity. Label those INCONCLUSIVE until actual physical hooks observe them.",
+  "diagnostic": "Original compiler source unchanged. Compile original checked_c_node.c with -g -O0 -fno-pie -finstrument-functions and external no-op hooks except first reject return PC; addr2line maps exact first private reject. Uninstrumented ordinary CLI results kept separately.",
+  "stage1_condition": "Only actual both source-issued GET and both independent current public validators OK, same original root/field and real Changes, and first refusal private mixed function identity/emission fence; no new public source/issuer/ABI/ownership contract.",
+  "preservation": "Do not rewrite original v1-v5, P982/P990 old evidence/first RED, PR1012/PR1003/old fixtures or R. Future implementation needs separate prospective v6, inherited566+ and old external anchors; F83 remains separate.",
+  "VALUE_ALIGNMENT_RISK": "More private mapping/replay may increase compiler trusted audit/maintenance closure. Reuse can avoid artificial source factoring. Author+ordinary-safe caller human UB audit closure benefit versus well-factored C/performance/cost UNMEASURED; Product GO PAUSED/H1 HOLD."
+}

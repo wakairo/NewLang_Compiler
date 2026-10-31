@@ -1,0 +1,1 @@
+/workspace/p1062-gate0/tests/p1062/sources/regression_negative_wrong_H_domain.nl:82:21-82:79: error(semantic)[P193-CALL-DOMAIN]: input LifetimeDomain does not govern the pointer's root

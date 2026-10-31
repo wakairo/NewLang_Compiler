@@ -1271,3 +1271,85 @@ NLCheckStatus nl_if_call_join(NLCheckedFragment *f, NLSemanticContext *c)
     return s == NL_CHECK_OK ? structural_join(c, cp->parameters.field.child)
                             : s;
 }
+
+/* The normal/RETURN bridge above keeps its original transfer. A two-normal
+ * call already has a source-checked common Unknown from the ordinary IF
+ * join. Select only its complete, one-Change-per-arm unit profile; neither
+ * branch snapshot is a caller handoff and no second join is invented. */
+bool nl_if_call_two_normal_view(const NLCheckedFragment *f, NLIfFieldView *out)
+{
+    const NLCopyBodyProof *cp = f ? f->copy_body : NULL;
+    const NLIfFieldProof *p = f ? f->if_fields : NULL;
+    if (!cp || !cp->unit_call || !cp->formal_write || !p || p->next ||
+        p->one_normal || !p->sealed || !p->ready || !p->complete || !out ||
+        p->owner != f || p->source != cp->source || p->body != cp->body ||
+        p->view.root != cp->parameters.field.parent ||
+        p->view.child != cp->parameters.field.child ||
+        p->view.index != cp->parameters.field.index ||
+        p->view.nominal != cp->parameters.field.nominal ||
+        p->view.base != cp->parameters.field.base ||
+        p->view.incarnation != cp->parameters.field.parent_incarnation ||
+        p->view.child_incarnation != cp->parameters.field.child_incarnation)
+        return false;
+    const NLCheckedNodeView *choice =
+        nl_checked_node_view(f, p->view.conditional);
+    if (!choice || choice->kind != NL_CHECKED_IF || choice->normal_arms != 2 ||
+        choice->terminates || choice->type != 1 || choice->result_count)
+        return false;
+    for (size_t a = 0; a < 2; ++a) {
+        const NLCheckedFragment *arm = p->arms[a];
+        const NLCheckedNodeView *root =
+            arm ? nl_checked_node_view(arm, nl_checked_root(arm)) : NULL;
+        const NLCheckedNodeView *block =
+            root ? nl_checked_node_view(arm, root->initializer) : NULL;
+        const NLCheckedNodeView *item =
+            block ? nl_checked_node_view(arm, block->first_item) : NULL;
+        const NLCheckedNodeView *tail =
+            block && block->tail ? nl_checked_node_view(arm, block->tail)
+                                 : NULL;
+        const NLIfFieldTrace *event = p->first[a];
+        if (p->view.arms[a].change_count != 1 ||
+            p->view.arms[a].event_count != 1 || !event || event->next ||
+            !event->issued.change || !root || root->kind != NL_CHECKED_IF_ARM ||
+            root->terminates || root->type != 1 || root->result_count ||
+            !block || block->kind != NL_CHECKED_BLOCK || block->terminates ||
+            block->type != 1 || block->result_count || block->item_count != 1 ||
+            !item || item->next_item ||
+            (item->kind != NL_CHECKED_BINDING &&
+             item->kind != NL_CHECKED_STATEMENT) ||
+            item->initializer != event->issued.node ||
+            (block->tail && (!tail || tail->kind != NL_CHECKED_UNIT ||
+                             tail->type != 1 || tail->result_count)))
+            return false;
+    }
+    *out = p->view;
+    return true;
+}
+
+/* Capture the actual cleanup-normalized common end only. The public current
+ * validator must independently replay both original IF arms, authenticate
+ * actual/formal substitution and reproduce that cleanup before trusting it.
+ * Incomplete/out-of-profile history remains observable but unsupported. */
+NLCheckStatus nl_if_call_seal_two_normal(NLCheckedFragment *f,
+                                         const NLSemanticContext *c)
+{
+    NLCopyBodyProof *cp = f ? f->copy_body : NULL;
+    NLIfFieldView view;
+    if (!cp || cp->normal_end || !cp->exit ||
+        !nl_if_call_two_normal_view(f, &view))
+        return NL_CHECK_OK;
+    const NLIfFieldProof *p = f->if_fields;
+    NLSemanticPlaceView child;
+    NLSemanticValueView value;
+    if (!nl_copy_state_matches(cp->exit, &p->post_anchor) ||
+        !nl_semantic_place_view(view.post, view.child, &child) ||
+        !nl_semantic_value_view(view.post, child.current_value, &value) ||
+        value.type != nl_semantic_core_type(view.post, NL_TYPE_U8) ||
+        value.scalar_known)
+        return NL_CHECK_OK;
+    cp->conditional = view.conditional;
+    NLCheckStatus s = nl_sem_clone(c, &cp->normal_end);
+    if (s == NL_CHECK_OK)
+        s = nl_copy_state_anchor(c, &cp->normal_end_anchor);
+    return s;
+}

@@ -1,0 +1,5 @@
+{"source": "prefix_two_originals.nl", "CHECK": 0, "current": [0, 0], "CLI_C17": 0, "C_SHA256": "c33339567a9e00a2ad59553d1f3f94e1e59a93ac7f6eda80492ab552a0add415", "physical": "NOT TESTED"}
+{"source": "declaration_order.nl", "CHECK": 0, "current": [0, 0], "CLI_C17": 0, "C_SHA256": "c33339567a9e00a2ad59553d1f3f94e1e59a93ac7f6eda80492ab552a0add415", "physical": "NOT TESTED"}
+{"source": "after_producer.nl", "CHECK": 0, "current": [0, 0], "CLI_C17": 0, "C_SHA256": "af5a50b1913cd0879f7724d44b589a595151d2b48258a97634b35903ed978235", "physical": "NOT TESTED"}
+{"source": "before_link.nl", "CHECK": 0, "current": [0, 0], "CLI_C17": 0, "C_SHA256": "980679c5c96ff554262fb25bb7e17ef1114a04e1f877f1a49c59a523cd58ab1a", "physical": "NOT TESTED"}
+P1045 intermediate authentic-current/C17 preflight DONE; native NOT TESTED

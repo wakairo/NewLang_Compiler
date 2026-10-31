@@ -1,0 +1,91 @@
+{
+  "status": "C83 STOP; second local frontend regression gate RED; no additional repair/retry after failure",
+  "original_base": "24dac612697fcfcfdfcfabc35418c5e6f0a7b0b3",
+  "original_pre_run_candidate": "cf0b6dc66e50ba2d59c80e43871a8fa47e78aa10",
+  "resume_checkpoint": "b8729f46c61d891a76db7ecbd2484ffdeb6a65cc",
+  "C83_intermediate_candidate": "c852db9852ec3c54ed784b35dfe6fa77f3eb338a",
+  "tested_C83_candidate": "4ca365c9107e875dac20051fdbf1afb3f104e3ff",
+  "tested_C83_tree": "598ddc0a9e7ebc13e68bcee3d01dc8de56a2a794",
+  "C83_production_paths": [
+    "src/checked.c",
+    "src/h_origin_internal.c",
+    "src/h_origin_internal.h"
+  ],
+  "patch_sha256": "d21ce76a238c4da9854ce45bd7c0181490eb01dd67e6fe33342a964b0bb4d4c3",
+  "original_freeze_sha256": "cf3231f87e3d6f1a5c13eb29e3ab017a8ee7560c52c90ceb73c916ee5e5c1a49",
+  "original_P633_first_FAIL_log_sha256": "6448509eb5a2904af8a861a90cff9a00d3851130841ec683cdb780f50460f093",
+  "P633_FIRST": {
+    "GCC14.2": "PASS; final and intermediate logs retained",
+    "Clang23.1.3": "PASS",
+    "ASan_LSan": "PASS",
+    "UBSan": "PASS",
+    "controls": 35,
+    "unchanged_harness_sha256": "b4629bda43da36d38d25596ed09e50270229026881b29ee0de9d8a9cd0ecc8ac",
+    "unchanged_input_sha256": "bbea3f108929785345d95502f09f68db9186107b0da65f08a7a229d4b83b2abe"
+  },
+  "custody_retest": {
+    "asan": {
+      "tests_passed": 33,
+      "ownership_trials": 494,
+      "selected_oom_hits": 502,
+      "same_C82_source_mode_indices": true,
+      "P961_selected_oom": [
+        "25"
+      ]
+    },
+    "ubsan": {
+      "tests_passed": 33,
+      "ownership_trials": 494,
+      "selected_oom_hits": 502,
+      "same_C82_source_mode_indices": true,
+      "P961_selected_oom": [
+        "25"
+      ]
+    }
+  },
+  "first_new_failure": {
+    "test": "p817_arm_integrity.unit",
+    "ctest_number": 264,
+    "assertion": "tests/p817/integrity.c:62: rejected(a)",
+    "mutation": "a.caller->context = f.caller->context",
+    "input": "tests/p813/sources/charge_false.nl",
+    "input_sha256": "5ad114e6f978c2b3cd4923a1bccff5c82ce7c51413b1ef01070d9697645acc92",
+    "unchanged_harness_sha256": "fe5516fbb289eca2b4878da8d611677c7525334aa35a6a4061f38d1129b7557e",
+    "command": "ctest --test-dir /workspace/p965-build-gcc --parallel 1 --stop-on-failure --output-on-failure",
+    "exit": 8,
+    "planned": 515,
+    "passed": 263,
+    "failed": 1,
+    "not_reached": 251,
+    "log_sha256": "9bf14a65a336b272a654192a14fa85d6659d9a39c855aa08ea340b3b47d9aea5",
+    "classification": "composite proof-query/reject oracle failed; NOT direct evidence of invalid proof acceptance or emitted C",
+    "static_path": "wrong caller world violates validate_custody canonical-world guard; nl_h_custody_borrow_valid -> NULL nl_checked_call_body -> copy_body.c proof() NULL -> nl_checked_copy_body_view false. rejected(a) requires proof queries succeed AND both validators reject, so an early false query also fails it. No rerun/instrumentation to obtain individual runtime statuses."
+  },
+  "completed_before_stop": [
+    "GCC frontend build all targets",
+    "original P633 full 35-control probe in GCC/Clang/ASan/UBSan",
+    "ASan/LSan and UBSan P965/P961/P953 gates each33/33",
+    "p633_local_different_values.unit",
+    "p633_local_cli.integration",
+    "p634_historical_hash.unit",
+    "p605_arithmetic_comparison.integration"
+  ],
+  "not_completed": [
+    "all515 frontend suite; 251 cases not reached",
+    "original Echo/Window strict GCC/Clang O0/O2 native0/1/2 heap observer under C83 candidate",
+    "stage3 extra guest ASan/UBSan native run",
+    "C83 final full pinned formatter gate",
+    "new PR, FULL5, PARTIAL, independent R/F"
+  ],
+  "preserved": "No original source/test/oracle/freeze/SHA/first FAIL log changed; main.c, semantic_internal.h, public headers, CHECK publishers, canonical ledger/destructor/H issuers unchanged from stopped checkpoint. R963 materials not inspected.",
+  "remote": {
+    "push": 0,
+    "PR": 0,
+    "Actions": 0,
+    "FULL5": 0,
+    "PARTIAL": 0,
+    "R_launch": 0,
+    "F_launch": 0
+  },
+  "VALUE_ALIGNMENT_RISK": "Owned-vs-borrowed separation restores legacy P633 precision but eager getter authenticity checking also changes proof-observation availability under a deliberately wrong world. Maintainer contract/audit cost is unresolved. No measured reduction in library-author plus ordinary-safe-caller UB audit closure versus well-factored C. Technical continuation only; Product GO PAUSED/H1 HOLD."
+}

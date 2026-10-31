@@ -1,0 +1,8 @@
+{
+  "command": [
+    "python3",
+    "tests/p990/freeze_selftest.py"
+  ],
+  "exit": 0,
+  "seconds": 11.663973160997557
+}

@@ -1,0 +1,4 @@
+-- Frontend-only: LLVM discovery and llvm.c_api smoke omitted
+-- Configuring done (0.2s)
+-- Generating done (0.7s)
+-- Build files have been written to: /workspace/p974-build-gcc

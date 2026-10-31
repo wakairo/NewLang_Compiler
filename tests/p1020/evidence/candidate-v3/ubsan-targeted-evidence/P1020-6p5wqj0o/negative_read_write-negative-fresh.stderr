@@ -1,0 +1,1 @@
+/workspace/p1020/tests/p1020/sources/negative_read_write.nl:18:18-18:19: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field

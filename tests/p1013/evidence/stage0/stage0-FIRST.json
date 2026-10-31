@@ -1,0 +1,656 @@
+{
+  "oracle_sha256": "df68b8b3adaaf253b85e9935c0400088f46cc6c30a1c6a88885f0c84d1a8eb84",
+  "CLI_binary_sha256": "28db9f093c344374d6cf8c2775ab42894c0c00236e2cc4ad77a06f1378e1465a",
+  "probe_binary_sha256": "816d83bc195e1d4816af2f0d2641d516ca4100f3723cf927ccc1d551261812c9",
+  "cases": [
+    {
+      "case": "ordinary_same",
+      "source_sha256": "2dbb7bc6409b94ff74ab87f2349775392f22a55c2dc363aa6999f59ba1b74cdd",
+      "CLI_check": 0,
+      "public_receipts": [
+        {
+          "stage": "parse",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "register",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "CHECK",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "public",
+          "ordinal": 0,
+          "call": 11,
+          "function": 10,
+          "body_get": true,
+          "parameters_get": true,
+          "body_validate": 0,
+          "parameters_validate": 0,
+          "event_validate": 0
+        },
+        {
+          "stage": "values",
+          "ordinal": 0,
+          "old": 41,
+          "before": 41,
+          "new": 67,
+          "sibling": 173,
+          "parent": 1,
+          "child": 2,
+          "incarnation": 1,
+          "loan": 9,
+          "sibling_fact_unchanged": true
+        },
+        {
+          "stage": "public",
+          "ordinal": 1,
+          "call": 18,
+          "function": 10,
+          "body_get": true,
+          "parameters_get": true,
+          "body_validate": 0,
+          "parameters_validate": 0,
+          "event_validate": 0
+        },
+        {
+          "stage": "values",
+          "ordinal": 1,
+          "old": 67,
+          "before": 67,
+          "new": 109,
+          "sibling": 173,
+          "parent": 1,
+          "child": 2,
+          "incarnation": 1,
+          "loan": 16,
+          "sibling_fact_unchanged": true
+        },
+        {
+          "stage": "count",
+          "actual_current_calls": 2
+        },
+        {
+          "stage": "parse",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "register",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "CHECK",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "negative",
+          "ordinal": 0,
+          "foreign_body": 3,
+          "foreign_parameters": 3,
+          "other_actual_call_body": 3,
+          "wrong_field": 3
+        },
+        {
+          "stage": "negative",
+          "ordinal": 1,
+          "foreign_body": 3,
+          "foreign_parameters": 3,
+          "other_actual_call_body": 3,
+          "wrong_field": 3
+        },
+        {
+          "stage": "foreign_owner_after_A_destroy",
+          "B_healthy": true
+        }
+      ],
+      "public_exit": 0,
+      "CLI_emit": 0,
+      "C_published": true,
+      "C_sha256": "b1f954d064f366dc4a98bc90d4df1bc8fbdb81a173843b580fa6387dac025074",
+      "strict_native": [
+        {
+          "compiler": "/usr/bin/gcc",
+          "optimization": "-O0",
+          "unit_exit": 0
+        },
+        {
+          "compiler": "/usr/bin/gcc",
+          "optimization": "-O2",
+          "unit_exit": 0
+        },
+        {
+          "compiler": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "optimization": "-O0",
+          "unit_exit": 0
+        },
+        {
+          "compiler": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "optimization": "-O2",
+          "unit_exit": 0
+        }
+      ],
+      "native_T_and_H_physical": "INCONCLUSIVE: process unit exit is observed; no physical hook observation in this Stage0",
+      "named_failure_no_clobber": false
+    },
+    {
+      "case": "ordinary_distinct",
+      "source_sha256": "f2867462d8ca8e272675709741631bab086af20d9d9f389d226b83be3899fcfb",
+      "CLI_check": 0,
+      "public_receipts": [
+        {
+          "stage": "parse",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "register",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "CHECK",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "public",
+          "ordinal": 0,
+          "call": 11,
+          "function": 10,
+          "body_get": true,
+          "parameters_get": true,
+          "body_validate": 0,
+          "parameters_validate": 0,
+          "event_validate": 0
+        },
+        {
+          "stage": "values",
+          "ordinal": 0,
+          "old": 41,
+          "before": 41,
+          "new": 67,
+          "sibling": 173,
+          "parent": 1,
+          "child": 2,
+          "incarnation": 1,
+          "loan": 9,
+          "sibling_fact_unchanged": true
+        },
+        {
+          "stage": "public",
+          "ordinal": 1,
+          "call": 18,
+          "function": 11,
+          "body_get": true,
+          "parameters_get": true,
+          "body_validate": 0,
+          "parameters_validate": 0,
+          "event_validate": 0
+        },
+        {
+          "stage": "values",
+          "ordinal": 1,
+          "old": 67,
+          "before": 67,
+          "new": 109,
+          "sibling": 173,
+          "parent": 1,
+          "child": 2,
+          "incarnation": 1,
+          "loan": 16,
+          "sibling_fact_unchanged": true
+        },
+        {
+          "stage": "count",
+          "actual_current_calls": 2
+        },
+        {
+          "stage": "parse",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "register",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "CHECK",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "negative",
+          "ordinal": 0,
+          "foreign_body": 3,
+          "foreign_parameters": 3,
+          "other_actual_call_body": 3,
+          "wrong_field": 3
+        },
+        {
+          "stage": "negative",
+          "ordinal": 1,
+          "foreign_body": 3,
+          "foreign_parameters": 3,
+          "other_actual_call_body": 3,
+          "wrong_field": 3
+        },
+        {
+          "stage": "foreign_owner_after_A_destroy",
+          "B_healthy": true
+        }
+      ],
+      "public_exit": 0,
+      "CLI_emit": 0,
+      "C_published": true,
+      "C_sha256": "b90a54b7838373a2b27e61aa89008695ea2885cdbaf70aec60c0c02eb90d680a",
+      "strict_native": [
+        {
+          "compiler": "/usr/bin/gcc",
+          "optimization": "-O0",
+          "unit_exit": 0
+        },
+        {
+          "compiler": "/usr/bin/gcc",
+          "optimization": "-O2",
+          "unit_exit": 0
+        },
+        {
+          "compiler": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "optimization": "-O0",
+          "unit_exit": 0
+        },
+        {
+          "compiler": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "optimization": "-O2",
+          "unit_exit": 0
+        }
+      ],
+      "native_T_and_H_physical": "INCONCLUSIVE: process unit exit is observed; no physical hook observation in this Stage0",
+      "named_failure_no_clobber": false
+    },
+    {
+      "case": "mixed_same",
+      "source_sha256": "05f59a04b08103f61667f393863879e3ef5056b3560b858962b78746e0453775",
+      "CLI_check": 0,
+      "public_receipts": [
+        {
+          "stage": "parse",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "register",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "CHECK",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "public",
+          "ordinal": 0,
+          "call": 11,
+          "function": 11,
+          "body_get": true,
+          "parameters_get": true,
+          "body_validate": 0,
+          "parameters_validate": 0,
+          "event_validate": 0
+        },
+        {
+          "stage": "values",
+          "ordinal": 0,
+          "old": 41,
+          "before": 41,
+          "new": 67,
+          "sibling": 173,
+          "parent": 1,
+          "child": 2,
+          "incarnation": 1,
+          "loan": 9,
+          "sibling_fact_unchanged": true
+        },
+        {
+          "stage": "public",
+          "ordinal": 1,
+          "call": 18,
+          "function": 11,
+          "body_get": true,
+          "parameters_get": true,
+          "body_validate": 0,
+          "parameters_validate": 0,
+          "event_validate": 0
+        },
+        {
+          "stage": "values",
+          "ordinal": 1,
+          "old": 67,
+          "before": 67,
+          "new": 109,
+          "sibling": 173,
+          "parent": 1,
+          "child": 2,
+          "incarnation": 1,
+          "loan": 16,
+          "sibling_fact_unchanged": true
+        },
+        {
+          "stage": "count",
+          "actual_current_calls": 2
+        },
+        {
+          "stage": "parse",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "register",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "CHECK",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "negative",
+          "ordinal": 0,
+          "foreign_body": 3,
+          "foreign_parameters": 3,
+          "other_actual_call_body": 3,
+          "wrong_field": 3
+        },
+        {
+          "stage": "negative",
+          "ordinal": 1,
+          "foreign_body": 3,
+          "foreign_parameters": 3,
+          "other_actual_call_body": 3,
+          "wrong_field": 3
+        },
+        {
+          "stage": "foreign_owner_after_A_destroy",
+          "B_healthy": true
+        }
+      ],
+      "public_exit": 0,
+      "CLI_emit": 0,
+      "C_published": true,
+      "C_sha256": "79670a957616765528bfde8a8ccbe548b23fe1f611445a7f32e40e98a466b50f",
+      "strict_native": [
+        {
+          "compiler": "/usr/bin/gcc",
+          "optimization": "-O0",
+          "unit_exit": 0
+        },
+        {
+          "compiler": "/usr/bin/gcc",
+          "optimization": "-O2",
+          "unit_exit": 0
+        },
+        {
+          "compiler": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "optimization": "-O0",
+          "unit_exit": 0
+        },
+        {
+          "compiler": "/workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+          "optimization": "-O2",
+          "unit_exit": 0
+        }
+      ],
+      "native_T_and_H_physical": "INCONCLUSIVE: process unit exit is observed; no physical hook observation in this Stage0",
+      "named_failure_no_clobber": false
+    },
+    {
+      "case": "mixed_distinct",
+      "source_sha256": "6eecf3906cecc25c3562d2aa1c0f641f2497774183a92ab097a5a7f233acef58",
+      "CLI_check": 0,
+      "public_receipts": [
+        {
+          "stage": "parse",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "register",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "CHECK",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "public",
+          "ordinal": 0,
+          "call": 11,
+          "function": 11,
+          "body_get": true,
+          "parameters_get": true,
+          "body_validate": 0,
+          "parameters_validate": 0,
+          "event_validate": 0
+        },
+        {
+          "stage": "values",
+          "ordinal": 0,
+          "old": 41,
+          "before": 41,
+          "new": 67,
+          "sibling": 173,
+          "parent": 1,
+          "child": 2,
+          "incarnation": 1,
+          "loan": 9,
+          "sibling_fact_unchanged": true
+        },
+        {
+          "stage": "public",
+          "ordinal": 1,
+          "call": 18,
+          "function": 12,
+          "body_get": true,
+          "parameters_get": true,
+          "body_validate": 0,
+          "parameters_validate": 0,
+          "event_validate": 0
+        },
+        {
+          "stage": "values",
+          "ordinal": 1,
+          "old": 67,
+          "before": 67,
+          "new": 109,
+          "sibling": 173,
+          "parent": 1,
+          "child": 2,
+          "incarnation": 1,
+          "loan": 16,
+          "sibling_fact_unchanged": true
+        },
+        {
+          "stage": "count",
+          "actual_current_calls": 2
+        },
+        {
+          "stage": "parse",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "register",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "CHECK",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "negative",
+          "ordinal": 0,
+          "foreign_body": 3,
+          "foreign_parameters": 3,
+          "other_actual_call_body": 3,
+          "wrong_field": 3
+        },
+        {
+          "stage": "negative",
+          "ordinal": 1,
+          "foreign_body": 3,
+          "foreign_parameters": 3,
+          "other_actual_call_body": 3,
+          "wrong_field": 3
+        },
+        {
+          "stage": "foreign_owner_after_A_destroy",
+          "B_healthy": true
+        }
+      ],
+      "public_exit": 0,
+      "CLI_emit": 4,
+      "C_published": false,
+      "native_T_and_H_physical": "INCONCLUSIVE: no C published",
+      "first_layer": "backend unsupported/resource; exact raw diagnostic retained",
+      "trace_exit": 0,
+      "trace_receipts": [
+        {
+          "stage": "parse",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "register",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "CHECK",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "public",
+          "ordinal": 0,
+          "call": 11,
+          "function": 11,
+          "body_get": true,
+          "parameters_get": true,
+          "body_validate": 0,
+          "parameters_validate": 0,
+          "event_validate": 0
+        },
+        {
+          "stage": "values",
+          "ordinal": 0,
+          "old": 41,
+          "before": 41,
+          "new": 67,
+          "sibling": 173,
+          "parent": 1,
+          "child": 2,
+          "incarnation": 1,
+          "loan": 9,
+          "sibling_fact_unchanged": true
+        },
+        {
+          "stage": "public",
+          "ordinal": 1,
+          "call": 18,
+          "function": 12,
+          "body_get": true,
+          "parameters_get": true,
+          "body_validate": 0,
+          "parameters_validate": 0,
+          "event_validate": 0
+        },
+        {
+          "stage": "values",
+          "ordinal": 1,
+          "old": 67,
+          "before": 67,
+          "new": 109,
+          "sibling": 173,
+          "parent": 1,
+          "child": 2,
+          "incarnation": 1,
+          "loan": 16,
+          "sibling_fact_unchanged": true
+        },
+        {
+          "stage": "count",
+          "actual_current_calls": 2
+        },
+        {
+          "stage": "parse",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "register",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "CHECK",
+          "status": 0,
+          "code": ""
+        },
+        {
+          "stage": "negative",
+          "ordinal": 0,
+          "foreign_body": 3,
+          "foreign_parameters": 3,
+          "other_actual_call_body": 3,
+          "wrong_field": 3
+        },
+        {
+          "stage": "negative",
+          "ordinal": 1,
+          "foreign_body": 3,
+          "foreign_parameters": 3,
+          "other_actual_call_body": 3,
+          "wrong_field": 3
+        },
+        {
+          "stage": "first_private_reject",
+          "return_address": "0x40545a"
+        },
+        {
+          "stage": "node-C17",
+          "status": 1,
+          "bytes": 0,
+          "published": false
+        },
+        {
+          "stage": "foreign_owner_after_A_destroy",
+          "B_healthy": true
+        }
+      ],
+      "first_reject_location": [
+        "copy_call_proof",
+        "/workspace/p1013/src/checked_c_copy_internal.h:53"
+      ],
+      "named_failure_no_clobber": true
+    }
+  ],
+  "source_negative_check": 3,
+  "source_negative_C": 3,
+  "GitHub_CI_jobs": 0,
+  "implementation_gate": "NOT AUTOMATIC: evaluate actual source/public receipts and first refusal"
+}

@@ -1,0 +1,36 @@
+{
+  "base": "2ac1c705a88a15f9b11b732744720a3655b7dd8d",
+  "immutable": {
+    "tests/p953/sources/echo.nl": "005a09a8fa2d16aa0de012faea2b2b1cef1ed91a9ed50f0c1f326d39a2f2d1f9",
+    "tests/p953/sources/window_true.nl": "02c2f4f2fa2fc9060b93bb71fdf1f20279aad233cbb50f5df9a275ebb77a4939",
+    "tests/p953/sources/wrong_domain.nl": "dac5d348f15bd6a10e5d48e2568977cee2a4120ff63a7d14b01dc0527d345267",
+    "tests/p953/sources/third_original.nl": "e68cd54ddb8b84fcf30962e831cf2a707e1a786532d5bf0ed1aa2cc0b58f29af",
+    "tests/p605/frozen.json": "406285052ff13ea9e816f798ca494f2f915a22d8fd080d9deb319974691b561d",
+    "tests/p634/freeze.json": "3fa1df135e75c6245554d2cd1f05258839fe30e9b4c7a056376889a0ca315653"
+  },
+  "original_harness_sha256": "db1b4481de8a2ce96f181e7fff96bdef18c05cecbc0f3e260af6caf5f75addf1",
+  "oracles": {
+    "base_foreign": "historical status0 bytes14006; remains original safety FAIL",
+    "candidate_foreign": "reject status!=0 NULL C bytes0; restore healthy byte-identical",
+    "same_plan": "clone one registered-only context twice, real CHECK; shared plan/source but distinct owned roots; cross-arm and whole parent reject",
+    "custody": "destroy A while whole B arm is substituted, B remains healthy, both destroy once, sanitizer clean",
+    "healthy": "unchanged P953 source and native oracle including 0/1/2 guest allocations/frees",
+    "oom": "actually reached private issuance/save/body publication fail; no artifact on error, original context unchanged, healthy retry",
+    "scope": "private origin only; no source or public rights change"
+  },
+  "first_test_harnesses": {
+    "origin.c": "c4866ebf13e1b6c8c9e5ff0286f46420d8cff0bcdfe0d804c3fa15e7508e7ddb",
+    "original.c": "96780f5c61fbef1415e85c365ecea4ee66807951a786dd55aa774919492e16ee"
+  },
+  "formatted_harnesses_before_additional_first_run": {
+    "origin.c": "cfb04710b037fc3ae8a75483a8cc37a34270b939b31764406c1eed89adfb4e9e",
+    "original.c": "96780f5c61fbef1415e85c365ecea4ee66807951a786dd55aa774919492e16ee",
+    "oom.c": "1d5f3f6528c3be0ed4a9713a6caba437f59953dc735e76681365889aaf7451e0",
+    "output.c": "97618c623d951ebe3284db5ecb88efd10aa2c818cd3c25d2d1d63300eb5bfd7d",
+    "output.py": "498db1203ba451bb4937a5d2c43ed34e54f82037a5a53fa0063505ecda5288f7"
+  },
+  "additional_oracles": {
+    "oom": "baseline allocation trace locates actual h_origin calloc, owned fork contexts and arm/body saves; every selected fail is OOM with no artifact and unchanged registry clone; same-context healthy retry",
+    "named_output": "actual driver backend interposition with genuine independent B entry, expected CLI4 zero C, sentinel bytes/dev/ino and no temp preserved, healthy same-source retry equals raw C"
+  }
+}

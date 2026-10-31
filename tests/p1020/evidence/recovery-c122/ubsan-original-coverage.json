@@ -1,0 +1,2887 @@
+[
+  {
+    "index": 1,
+    "name": "p930_live_pre_if.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 2,
+    "name": "p930_order_root_negative.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 3,
+    "name": "p930_prepare_oom.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 4,
+    "name": "p930_ordinary_cli.integration",
+    "result": "Passed    0.32 sec"
+  },
+  {
+    "index": 7,
+    "name": "p728_unit_statement_proof.unit",
+    "result": "Passed    0.28 sec"
+  },
+  {
+    "index": 5,
+    "name": "p718_if_return_proof_oom.unit",
+    "result": "Passed    2.00 sec"
+  },
+  {
+    "index": 8,
+    "name": "p728_unit_statement_history_oom.unit",
+    "result": "Passed    9.40 sec"
+  },
+  {
+    "index": 6,
+    "name": "p718_if_return_native.integration",
+    "result": "Passed   15.54 sec"
+  },
+  {
+    "index": 9,
+    "name": "p728_unit_statement_native.integration",
+    "result": "Passed   15.81 sec"
+  },
+  {
+    "index": 10,
+    "name": "p722_callee_return_proof_oom.unit",
+    "result": "Passed    8.18 sec"
+  },
+  {
+    "index": 12,
+    "name": "p713_if_field_proof_oom.unit",
+    "result": "Passed    1.71 sec"
+  },
+  {
+    "index": 14,
+    "name": "p706_proof_handoff_oom.unit",
+    "result": "Passed    2.99 sec"
+  },
+  {
+    "index": 15,
+    "name": "p706_ref_write_native.integration",
+    "result": "Passed    5.09 sec"
+  },
+  {
+    "index": 16,
+    "name": "p701_proof_rollback_oom.unit",
+    "result": "Passed    0.46 sec"
+  },
+  {
+    "index": 11,
+    "name": "p722_callee_return_native.integration",
+    "result": "Passed   12.57 sec"
+  },
+  {
+    "index": 18,
+    "name": "p572_three_node_owned.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 19,
+    "name": "p572_three_node_fault.unit",
+    "result": "Passed    0.61 sec"
+  },
+  {
+    "index": 20,
+    "name": "p572_source_oom.unit",
+    "result": "Passed    0.42 sec"
+  },
+  {
+    "index": 21,
+    "name": "p572_three_node_native.integration",
+    "result": "Passed    1.31 sec"
+  },
+  {
+    "index": 22,
+    "name": "p791_one_owned.unit",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 23,
+    "name": "p791_two_owned.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 24,
+    "name": "p791_issuer_oom.unit",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 25,
+    "name": "p791_parser_oom.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 26,
+    "name": "p791_normal_cli.integration",
+    "result": "Passed    3.08 sec"
+  },
+  {
+    "index": 27,
+    "name": "p534_source_owned.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 28,
+    "name": "p534_oom.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 29,
+    "name": "p534_issuer_fault.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 17,
+    "name": "p701_stateful_native.integration",
+    "result": "Passed    6.18 sec"
+  },
+  {
+    "index": 31,
+    "name": "p541_source_owned.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 32,
+    "name": "p541_oom.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 33,
+    "name": "p541_issuer_fault.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 13,
+    "name": "p713_if_field_native.integration",
+    "result": "Passed   18.35 sec"
+  },
+  {
+    "index": 35,
+    "name": "p636_plain_source_indices.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 36,
+    "name": "p636_local_arm_indices.unit",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 37,
+    "name": "p636_equal_arm_indices.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 38,
+    "name": "p634_historical_hash.unit",
+    "result": "Passed    0.21 sec"
+  },
+  {
+    "index": 39,
+    "name": "p634_same_value_ended_root.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 40,
+    "name": "p634_unequal_ended_root.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 41,
+    "name": "p633_equal_outer_derivation.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 30,
+    "name": "p534_array_native.integration",
+    "result": "Passed    3.46 sec"
+  },
+  {
+    "index": 43,
+    "name": "p633_both_false_oom.unit",
+    "result": "Passed    0.11 sec"
+  },
+  {
+    "index": 44,
+    "name": "p633_outer_true_oom.unit",
+    "result": "Passed    0.21 sec"
+  },
+  {
+    "index": 45,
+    "name": "p633_pure_true_oom.unit",
+    "result": "Passed    0.03 sec"
+  },
+  {
+    "index": 46,
+    "name": "p633_local_same_value.unit",
+    "result": "Passed    0.06 sec"
+  },
+  {
+    "index": 47,
+    "name": "p633_local_different_values.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 34,
+    "name": "p541_array_native.integration",
+    "result": "Passed    7.49 sec"
+  },
+  {
+    "index": 48,
+    "name": "p651_cli_native.integration",
+    "result": "Passed    4.27 sec"
+  },
+  {
+    "index": 49,
+    "name": "p651_true_proof.unit",
+    "result": "Passed    0.22 sec"
+  },
+  {
+    "index": 50,
+    "name": "p651_false_proof.unit",
+    "result": "Passed    0.24 sec"
+  },
+  {
+    "index": 52,
+    "name": "p633_equal_world_origin.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 53,
+    "name": "p633_unequal_world_origin.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 51,
+    "name": "p651_oom.unit",
+    "result": "Passed    0.33 sec"
+  },
+  {
+    "index": 55,
+    "name": "p628_true_oom.unit",
+    "result": "Passed    0.10 sec"
+  },
+  {
+    "index": 56,
+    "name": "p628_false_oom.unit",
+    "result": "Passed    0.15 sec"
+  },
+  {
+    "index": 57,
+    "name": "p628_alias_oom.unit",
+    "result": "Passed    0.13 sec"
+  },
+  {
+    "index": 58,
+    "name": "p626_cli_copy_if.integration",
+    "result": "Passed   14.38 sec"
+  },
+  {
+    "index": 59,
+    "name": "p626_if_oom.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 60,
+    "name": "p605_arithmetic_comparison.integration",
+    "result": "Passed    2.50 sec"
+  },
+  {
+    "index": 61,
+    "name": "p605_mutant_phase.unit",
+    "result": "Passed    0.64 sec"
+  },
+  {
+    "index": 62,
+    "name": "p603_comparison_parser.unit",
+    "result": "Passed    0.00 sec"
+  },
+  {
+    "index": 63,
+    "name": "p603_comparison_values.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 64,
+    "name": "p603_comparison_rollback.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 65,
+    "name": "p603_comparison_oom.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 54,
+    "name": "p628_cli_pair_if.integration",
+    "result": "Passed   18.43 sec"
+  },
+  {
+    "index": 67,
+    "name": "p504_equality_parser.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 68,
+    "name": "p504_equality_values.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 69,
+    "name": "p504_equality_rollback.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 70,
+    "name": "p504_equality_oom.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 42,
+    "name": "p633_local_cli.integration",
+    "result": "Passed   27.90 sec"
+  },
+  {
+    "index": 72,
+    "name": "p508_poison.unit",
+    "result": "Passed    0.43 sec"
+  },
+  {
+    "index": 73,
+    "name": "p508_oom.unit",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 71,
+    "name": "p504_equality_native.integration",
+    "result": "Passed   13.80 sec"
+  },
+  {
+    "index": 75,
+    "name": "r675_blind_source_owned_native.integration",
+    "result": "Passed    1.00 sec"
+  },
+  {
+    "index": 76,
+    "name": "r675_index1_native_or_backend4.integration",
+    "result": "Passed    0.41 sec"
+  },
+  {
+    "index": 77,
+    "name": "r675_negative_unknown_semantic.integration",
+    "result": "Passed    0.20 sec"
+  },
+  {
+    "index": 78,
+    "name": "r675_negative_initializer_type_semantic.integration",
+    "result": "Passed    0.18 sec"
+  },
+  {
+    "index": 79,
+    "name": "r675_negative_decl_type_source_profile.integration",
+    "result": "Passed    0.14 sec"
+  },
+  {
+    "index": 80,
+    "name": "r675_negative_escape_semantic.integration",
+    "result": "Passed    0.17 sec"
+  },
+  {
+    "index": 81,
+    "name": "r675_negative_replace_type_semantic.integration",
+    "result": "Passed    0.23 sec"
+  },
+  {
+    "index": 82,
+    "name": "p671_other_fragment.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 83,
+    "name": "p671_packet_stamp.integration",
+    "result": "Passed    1.14 sec"
+  },
+  {
+    "index": 84,
+    "name": "p671_route_stamp.integration",
+    "result": "Passed    1.41 sec"
+  },
+  {
+    "index": 74,
+    "name": "p508_copy_selection_native.integration",
+    "result": "Passed   14.58 sec"
+  },
+  {
+    "index": 86,
+    "name": "p671_packet_stamp_oom.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 87,
+    "name": "p671_route_stamp_oom.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 88,
+    "name": "p671_negative.integration",
+    "result": "Passed    0.27 sec"
+  },
+  {
+    "index": 85,
+    "name": "p671_pair_control.integration",
+    "result": "Passed    1.36 sec"
+  },
+  {
+    "index": 89,
+    "name": "p694_named_output.integration",
+    "result": "Passed    2.18 sec"
+  },
+  {
+    "index": 91,
+    "name": "p688_selected_call_oom.unit",
+    "result": "Passed    0.14 sec"
+  },
+  {
+    "index": 66,
+    "name": "p603_comparison_native.integration",
+    "result": "Passed   24.77 sec"
+  },
+  {
+    "index": 93,
+    "name": "p685_shared_call_gate_oom.unit",
+    "result": "Passed    0.20 sec"
+  },
+  {
+    "index": 92,
+    "name": "p685_zero_formal_u8.integration",
+    "result": "Passed    2.80 sec"
+  },
+  {
+    "index": 90,
+    "name": "p688_c17_scalar_export.integration",
+    "result": "Passed    4.65 sec"
+  },
+  {
+    "index": 95,
+    "name": "p679_invalid_source.integration",
+    "result": "Passed    0.19 sec"
+  },
+  {
+    "index": 97,
+    "name": "p514_oom.unit",
+    "result": "Passed    0.09 sec"
+  },
+  {
+    "index": 96,
+    "name": "p514_poison.unit",
+    "result": "Passed    1.15 sec"
+  },
+  {
+    "index": 99,
+    "name": "p517_identity_poison.unit",
+    "result": "Passed    0.54 sec"
+  },
+  {
+    "index": 100,
+    "name": "p517_oom.unit",
+    "result": "Passed    0.27 sec"
+  },
+  {
+    "index": 94,
+    "name": "p679_device_settings_swap.integration",
+    "result": "Passed    2.15 sec"
+  },
+  {
+    "index": 102,
+    "name": "p521_call_evidence.unit",
+    "result": "Passed    0.15 sec"
+  },
+  {
+    "index": 103,
+    "name": "p521_identity_poison.unit",
+    "result": "Passed    0.70 sec"
+  },
+  {
+    "index": 104,
+    "name": "p521_oom.unit",
+    "result": "Passed    0.14 sec"
+  },
+  {
+    "index": 105,
+    "name": "p521_copy_call_composition_native.integration",
+    "result": "Passed   17.45 sec"
+  },
+  {
+    "index": 106,
+    "name": "diagnostics.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 107,
+    "name": "source.unit",
+    "result": "Passed    0.00 sec"
+  },
+  {
+    "index": 108,
+    "name": "lexer.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 109,
+    "name": "source_lexer.integration",
+    "result": "Passed    0.12 sec"
+  },
+  {
+    "index": 110,
+    "name": "parser_type.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 111,
+    "name": "parser_expression.unit",
+    "result": "Passed    0.00 sec"
+  },
+  {
+    "index": 112,
+    "name": "parser_loan.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 113,
+    "name": "parser_ownership.unit",
+    "result": "Passed    0.00 sec"
+  },
+  {
+    "index": 114,
+    "name": "parser_limits.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 115,
+    "name": "parser_diagnostics.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 116,
+    "name": "source_parser.integration",
+    "result": "Passed    0.12 sec"
+  },
+  {
+    "index": 117,
+    "name": "semantic_type.unit",
+    "result": "Passed    0.06 sec"
+  },
+  {
+    "index": 118,
+    "name": "semantic_value_use.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 119,
+    "name": "semantic_domain.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 120,
+    "name": "semantic_transition.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 121,
+    "name": "semantic_loan.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 122,
+    "name": "semantic_failure.unit",
+    "result": "Passed    0.41 sec"
+  },
+  {
+    "index": 123,
+    "name": "source_semantic.integration",
+    "result": "Passed    0.06 sec"
+  },
+  {
+    "index": 124,
+    "name": "raw_claim.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 125,
+    "name": "raw_byte.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 126,
+    "name": "raw_copy.unit",
+    "result": "Passed    0.12 sec"
+  },
+  {
+    "index": 127,
+    "name": "raw_access.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 128,
+    "name": "raw_current.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 129,
+    "name": "raw_failure.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 130,
+    "name": "raw_limit.unit",
+    "result": "Passed    4.29 sec"
+  },
+  {
+    "index": 131,
+    "name": "raw_diagnostic.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 132,
+    "name": "raw_reborrow.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 133,
+    "name": "raw_partition.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 134,
+    "name": "raw_storage_cycle.integration",
+    "result": "Passed    0.03 sec"
+  },
+  {
+    "index": 135,
+    "name": "p5_parser.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 136,
+    "name": "p5_binding.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 137,
+    "name": "p5_receiving.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 138,
+    "name": "p5_aggregate.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 139,
+    "name": "p5_failure.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 140,
+    "name": "p5_diagnostic.unit",
+    "result": "Passed    0.09 sec"
+  },
+  {
+    "index": 141,
+    "name": "p5_source_checked.integration",
+    "result": "Passed    0.03 sec"
+  },
+  {
+    "index": 142,
+    "name": "p6_parser.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 143,
+    "name": "p6_registry.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 144,
+    "name": "p6_consuming.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 145,
+    "name": "p6_borrowed.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 146,
+    "name": "p6_storage.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 147,
+    "name": "p6_lifetime.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 148,
+    "name": "p6_failure.unit",
+    "result": "Passed    0.10 sec"
+  },
+  {
+    "index": 149,
+    "name": "p6_source_checked.integration",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 150,
+    "name": "p7_lifecycle.unit",
+    "result": "Passed    0.03 sec"
+  },
+  {
+    "index": 151,
+    "name": "p7_boundary.unit",
+    "result": "Passed    0.00 sec"
+  },
+  {
+    "index": 152,
+    "name": "p7_invalid.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 153,
+    "name": "p7_identity.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 154,
+    "name": "p7_failure.unit",
+    "result": "Passed    0.06 sec"
+  },
+  {
+    "index": 155,
+    "name": "p7_source_checked.integration",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 156,
+    "name": "p8_registration.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 157,
+    "name": "p8_exit.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 158,
+    "name": "p8_ownership.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 159,
+    "name": "p8_failure.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 160,
+    "name": "p8_source_checked.integration",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 161,
+    "name": "p9_syntax.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 162,
+    "name": "p9_transfer.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 163,
+    "name": "p9_exit.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 164,
+    "name": "p9_failure.unit",
+    "result": "Passed    0.10 sec"
+  },
+  {
+    "index": 165,
+    "name": "p9_effects.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 166,
+    "name": "p9_availability.unit",
+    "result": "Passed    0.03 sec"
+  },
+  {
+    "index": 167,
+    "name": "p9_decoder.integration",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 168,
+    "name": "p11_grammar.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 169,
+    "name": "p11_names.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 170,
+    "name": "p11_visibility.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 171,
+    "name": "p11_precision.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 172,
+    "name": "p11_behavior.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 173,
+    "name": "p11_failure.unit",
+    "result": "Passed    0.09 sec"
+  },
+  {
+    "index": 174,
+    "name": "p11_limits.unit",
+    "result": "Passed    0.22 sec"
+  },
+  {
+    "index": 175,
+    "name": "p12_ingress.unit",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 176,
+    "name": "p12_header.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 177,
+    "name": "p12_member.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 178,
+    "name": "p12_failure.unit",
+    "result": "Passed    0.06 sec"
+  },
+  {
+    "index": 179,
+    "name": "p14_pre_exits.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 180,
+    "name": "p14_pre_header.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 181,
+    "name": "p14_pre_origins.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 182,
+    "name": "p14_pre_failure.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 183,
+    "name": "p14_pre_integration.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 184,
+    "name": "p14_w1.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 185,
+    "name": "p14_w2.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 186,
+    "name": "p14_w3.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 187,
+    "name": "p14_w4.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 188,
+    "name": "p14_w5.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 189,
+    "name": "p14_w6.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 190,
+    "name": "p14_w7.unit",
+    "result": "Passed    0.00 sec"
+  },
+  {
+    "index": 191,
+    "name": "p14_w8.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 192,
+    "name": "p14_w9.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 193,
+    "name": "p14_w10.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 194,
+    "name": "p14_w11.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 195,
+    "name": "p14_w12.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 196,
+    "name": "p14_w13.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 197,
+    "name": "p14_w14.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 198,
+    "name": "p14_w15.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 199,
+    "name": "p14_w16.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 200,
+    "name": "p14_w17.unit",
+    "result": "Passed    0.00 sec"
+  },
+  {
+    "index": 201,
+    "name": "p14_w18.unit",
+    "result": "Passed    0.00 sec"
+  },
+  {
+    "index": 202,
+    "name": "p14_w19.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 203,
+    "name": "p14_w20.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 204,
+    "name": "p14_w21.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 205,
+    "name": "p14_w22.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 206,
+    "name": "p14_w23.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 207,
+    "name": "p14_w24.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 208,
+    "name": "p14_w25.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 209,
+    "name": "p14_w26.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 210,
+    "name": "p14_w27.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 211,
+    "name": "p14_w28.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 212,
+    "name": "p14_w29.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 213,
+    "name": "p14_w30.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 214,
+    "name": "p14_w31.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 215,
+    "name": "p14_w32.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 216,
+    "name": "p14_w33.unit",
+    "result": "Passed    0.00 sec"
+  },
+  {
+    "index": 217,
+    "name": "p14_w34.unit",
+    "result": "Passed    0.00 sec"
+  },
+  {
+    "index": 218,
+    "name": "p14_w35.unit",
+    "result": "Passed    0.00 sec"
+  },
+  {
+    "index": 219,
+    "name": "p14_w36.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 220,
+    "name": "p14_w37.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 221,
+    "name": "p14_w38.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 222,
+    "name": "p14_w39.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 223,
+    "name": "p14_w40.unit",
+    "result": "Passed    0.59 sec"
+  },
+  {
+    "index": 224,
+    "name": "p13_grammar.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 225,
+    "name": "p13_bool.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 226,
+    "name": "p13_flow.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 227,
+    "name": "p13_identity.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 228,
+    "name": "p13_ref.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 229,
+    "name": "p13_effects.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 230,
+    "name": "p13_nested.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 231,
+    "name": "p13_failure.unit",
+    "result": "Passed    0.12 sec"
+  },
+  {
+    "index": 98,
+    "name": "p514_composition_native.integration",
+    "result": "Passed   31.61 sec"
+  },
+  {
+    "index": 233,
+    "name": "p10_admission.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 234,
+    "name": "p10_builtin.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 235,
+    "name": "p10_failure.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 236,
+    "name": "r4_01_argument_compatibility.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 232,
+    "name": "p13_limits.unit",
+    "result": "Passed    3.44 sec"
+  },
+  {
+    "index": 237,
+    "name": "cli.check_source",
+    "result": "Passed    0.68 sec"
+  },
+  {
+    "index": 239,
+    "name": "cli.version",
+    "result": "Passed    0.12 sec"
+  },
+  {
+    "index": 240,
+    "name": "cli.help",
+    "result": "Passed    0.18 sec"
+  },
+  {
+    "index": 241,
+    "name": "cli.no_arguments",
+    "result": "Passed    0.11 sec"
+  },
+  {
+    "index": 242,
+    "name": "cli.invalid_option",
+    "result": "Passed    0.15 sec"
+  },
+  {
+    "index": 243,
+    "name": "cli.extra_argument",
+    "result": "Passed    0.14 sec"
+  },
+  {
+    "index": 244,
+    "name": "local_root_parser.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 245,
+    "name": "local_root_evidence.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 246,
+    "name": "local_root_direct_write_root.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 247,
+    "name": "local_root_mutation.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 248,
+    "name": "local_root_negatives.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 249,
+    "name": "local_root_conflict.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 250,
+    "name": "local_root_resource.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 251,
+    "name": "local_root_failures.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 238,
+    "name": "frontend_build_policy.integration",
+    "result": "Passed    1.84 sec"
+  },
+  {
+    "index": 253,
+    "name": "p866_equality_public.unit",
+    "result": "Passed    0.39 sec"
+  },
+  {
+    "index": 254,
+    "name": "p866_prefix_integrity.unit",
+    "result": "Passed    0.11 sec"
+  },
+  {
+    "index": 255,
+    "name": "p866_reached_validator_oom.unit",
+    "result": "Passed    0.06 sec"
+  },
+  {
+    "index": 252,
+    "name": "local_root_checked_c.integration",
+    "result": "Passed    1.31 sec"
+  },
+  {
+    "index": 257,
+    "name": "p878_unit_binding_public.unit",
+    "result": "Passed    0.72 sec"
+  },
+  {
+    "index": 258,
+    "name": "p878_backend_guards.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 259,
+    "name": "p878_prefix_integrity.unit",
+    "result": "Passed    0.22 sec"
+  },
+  {
+    "index": 260,
+    "name": "p878_reached_prefix_oom.unit",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 256,
+    "name": "p866_source_cli.integration",
+    "result": "Passed    7.51 sec"
+  },
+  {
+    "index": 262,
+    "name": "p817_pump_public.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 263,
+    "name": "p817_charge_public.unit",
+    "result": "Passed    0.06 sec"
+  },
+  {
+    "index": 264,
+    "name": "p817_arm_integrity.unit",
+    "result": "Passed    0.09 sec"
+  },
+  {
+    "index": 265,
+    "name": "p817_issuer_oom.unit",
+    "result": "Passed    0.14 sec"
+  },
+  {
+    "index": 266,
+    "name": "p817_cli_boundaries.integration",
+    "result": "Passed    0.59 sec"
+  },
+  {
+    "index": 267,
+    "name": "p790_native.integration",
+    "result": "Passed    4.10 sec"
+  },
+  {
+    "index": 268,
+    "name": "p790_arm_integrity.unit",
+    "result": "Passed    0.12 sec"
+  },
+  {
+    "index": 269,
+    "name": "p790_arm_oom.unit",
+    "result": "Passed    0.18 sec"
+  },
+  {
+    "index": 270,
+    "name": "p790_driver_oom.unit",
+    "result": "Passed    0.82 sec"
+  },
+  {
+    "index": 271,
+    "name": "p785_r_b_public.unit",
+    "result": "Passed    0.06 sec"
+  },
+  {
+    "index": 272,
+    "name": "p785_pressure_arm_public.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 273,
+    "name": "p785_arm_integrity.unit",
+    "result": "Passed    0.12 sec"
+  },
+  {
+    "index": 274,
+    "name": "p785_issuer_oom.unit",
+    "result": "Passed    0.16 sec"
+  },
+  {
+    "index": 275,
+    "name": "p785_cli_boundaries.integration",
+    "result": "Passed    1.03 sec"
+  },
+  {
+    "index": 276,
+    "name": "p965_freeze.unit",
+    "result": "Passed    0.15 sec"
+  },
+  {
+    "index": 277,
+    "name": "p965_echo_ownership.unit",
+    "result": "Passed    1.54 sec"
+  },
+  {
+    "index": 261,
+    "name": "p878_source_cli.integration",
+    "result": "Passed   15.83 sec"
+  },
+  {
+    "index": 279,
+    "name": "p965_echo_definition_oom.unit",
+    "result": "Passed    0.47 sec"
+  },
+  {
+    "index": 278,
+    "name": "p965_echo_oom.unit",
+    "result": "Passed    1.26 sec"
+  },
+  {
+    "index": 281,
+    "name": "p965_window_oom.unit",
+    "result": "Passed    1.04 sec"
+  },
+  {
+    "index": 282,
+    "name": "p965_window_definition_oom.unit",
+    "result": "Passed    0.49 sec"
+  },
+  {
+    "index": 283,
+    "name": "p965_t_only_ownership.unit",
+    "result": "Passed    0.09 sec"
+  },
+  {
+    "index": 284,
+    "name": "p965_t_only_oom.unit",
+    "result": "Passed    0.03 sec"
+  },
+  {
+    "index": 280,
+    "name": "p965_window_ownership.unit",
+    "result": "Passed    2.28 sec"
+  },
+  {
+    "index": 285,
+    "name": "p965_t_only_definition_oom.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 287,
+    "name": "p965_plain_oom.unit",
+    "result": "Passed    0.03 sec"
+  },
+  {
+    "index": 286,
+    "name": "p965_plain_ownership.unit",
+    "result": "Passed    0.06 sec"
+  },
+  {
+    "index": 288,
+    "name": "p965_plain_definition_oom.unit",
+    "result": "Passed    0.17 sec"
+  },
+  {
+    "index": 289,
+    "name": "p965_loop_ownership.unit",
+    "result": "Passed    0.16 sec"
+  },
+  {
+    "index": 290,
+    "name": "p965_loop_oom.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 291,
+    "name": "p965_loop_definition_oom.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 293,
+    "name": "p965_continuation_oom.unit",
+    "result": "Passed    2.61 sec"
+  },
+  {
+    "index": 294,
+    "name": "p965_continuation_definition_oom.unit",
+    "result": "Passed    0.96 sec"
+  },
+  {
+    "index": 292,
+    "name": "p965_continuation_ownership.unit",
+    "result": "Passed    6.52 sec"
+  },
+  {
+    "index": 296,
+    "name": "p965_four_field_oom.unit",
+    "result": "Passed    5.15 sec"
+  },
+  {
+    "index": 297,
+    "name": "p965_four_field_definition_oom.unit",
+    "result": "Passed    2.51 sec"
+  },
+  {
+    "index": 298,
+    "name": "p965_lexical_ownership.unit",
+    "result": "Passed    0.19 sec"
+  },
+  {
+    "index": 299,
+    "name": "p965_lexical_oom.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 300,
+    "name": "p965_lexical_definition_oom.unit",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 301,
+    "name": "p965_named_if.integration",
+    "result": "Passed    0.58 sec"
+  },
+  {
+    "index": 302,
+    "name": "p965_c89_guard_charge.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 303,
+    "name": "p965_c89_guard_trim.unit",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 304,
+    "name": "p965_c89_guard_fan.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 305,
+    "name": "p965_c89_guard_relay.unit",
+    "result": "Passed    0.03 sec"
+  },
+  {
+    "index": 306,
+    "name": "p965_c89_observe_charge.unit",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 307,
+    "name": "p965_c89_observe_trim.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 308,
+    "name": "p965_c89_observe_fan.unit",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 309,
+    "name": "p965_c89_observe_relay.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 310,
+    "name": "p965_c89_entry_echo.unit",
+    "result": "Passed    0.11 sec"
+  },
+  {
+    "index": 311,
+    "name": "p965_c89_entry_window.unit",
+    "result": "Passed    0.10 sec"
+  },
+  {
+    "index": 312,
+    "name": "p974_charge_entry.unit",
+    "result": "Passed    0.10 sec"
+  },
+  {
+    "index": 313,
+    "name": "p974_charge_v0.unit",
+    "result": "Passed    0.11 sec"
+  },
+  {
+    "index": 314,
+    "name": "p974_trim_entry.unit",
+    "result": "Passed    0.10 sec"
+  },
+  {
+    "index": 315,
+    "name": "p974_trim_v0.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 316,
+    "name": "p974_fan_entry.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 295,
+    "name": "p965_four_field_ownership.unit",
+    "result": "Passed   12.64 sec"
+  },
+  {
+    "index": 317,
+    "name": "p974_fan_v0.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 319,
+    "name": "p974_relay_v0.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 318,
+    "name": "p974_relay_entry.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 321,
+    "name": "p974_named_v0_valid.integration",
+    "result": "Passed    0.19 sec"
+  },
+  {
+    "index": 320,
+    "name": "p974_named_charge_precision.integration",
+    "result": "Passed    0.24 sec"
+  },
+  {
+    "index": 322,
+    "name": "p982_after_true_auth.unit",
+    "result": "Passed    0.42 sec"
+  },
+  {
+    "index": 324,
+    "name": "p982_after_false_auth.unit",
+    "result": "Passed    0.58 sec"
+  },
+  {
+    "index": 101,
+    "name": "p517_r516_composition_native.integration",
+    "result": "Passed   75.79 sec"
+  },
+  {
+    "index": 326,
+    "name": "p982_second_true_auth.unit",
+    "result": "Passed    0.30 sec"
+  },
+  {
+    "index": 323,
+    "name": "p982_after_true_oom.unit",
+    "result": "Passed    8.28 sec"
+  },
+  {
+    "index": 328,
+    "name": "p982_second_false_auth.unit",
+    "result": "Passed    0.38 sec"
+  },
+  {
+    "index": 325,
+    "name": "p982_after_false_oom.unit",
+    "result": "Passed    7.89 sec"
+  },
+  {
+    "index": 327,
+    "name": "p982_second_true_oom.unit",
+    "result": "Passed    6.20 sec"
+  },
+  {
+    "index": 331,
+    "name": "p982_freeze.unit",
+    "result": "Passed    0.42 sec"
+  },
+  {
+    "index": 332,
+    "name": "p990_before_direct_auth.unit",
+    "result": "Passed    0.15 sec"
+  },
+  {
+    "index": 329,
+    "name": "p982_second_false_oom.unit",
+    "result": "Passed    5.61 sec"
+  },
+  {
+    "index": 334,
+    "name": "p990_after_true_direct_auth.unit",
+    "result": "Passed    0.17 sec"
+  },
+  {
+    "index": 333,
+    "name": "p990_before_direct_oom.unit",
+    "result": "Passed    1.64 sec"
+  },
+  {
+    "index": 336,
+    "name": "p990_after_false_direct_auth.unit",
+    "result": "Passed    0.12 sec"
+  },
+  {
+    "index": 330,
+    "name": "p982_native.integration",
+    "result": "Passed    8.74 sec"
+  },
+  {
+    "index": 338,
+    "name": "p990_before_bound_auth.unit",
+    "result": "Passed    0.15 sec"
+  },
+  {
+    "index": 339,
+    "name": "p990_before_bound_oom.unit",
+    "result": "Passed    1.64 sec"
+  },
+  {
+    "index": 340,
+    "name": "p990_after_true_bound_auth.unit",
+    "result": "Passed    0.19 sec"
+  },
+  {
+    "index": 335,
+    "name": "p990_after_true_direct_oom.unit",
+    "result": "Passed    6.23 sec"
+  },
+  {
+    "index": 342,
+    "name": "p990_after_false_bound_auth.unit",
+    "result": "Passed    0.12 sec"
+  },
+  {
+    "index": 337,
+    "name": "p990_after_false_direct_oom.unit",
+    "result": "Passed    6.02 sec"
+  },
+  {
+    "index": 344,
+    "name": "p990_p986_t_only_direct_auth.unit",
+    "result": "Passed    0.06 sec"
+  },
+  {
+    "index": 345,
+    "name": "p990_p986_t_only_bound_auth.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 346,
+    "name": "p990_p986_t_before_allocation_direct_auth.unit",
+    "result": "Passed    0.10 sec"
+  },
+  {
+    "index": 347,
+    "name": "p990_p986_t_before_allocation_direct_oom.unit",
+    "result": "Passed    1.19 sec"
+  },
+  {
+    "index": 348,
+    "name": "p990_p986_t_before_allocation_bound_auth.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 349,
+    "name": "p990_p986_t_before_allocation_bound_oom.unit",
+    "result": "Passed    1.20 sec"
+  },
+  {
+    "index": 350,
+    "name": "p990_p986_t_before_h_read_direct_auth.unit",
+    "result": "Passed    0.06 sec"
+  },
+  {
+    "index": 351,
+    "name": "p990_p986_t_before_h_read_direct_oom.unit",
+    "result": "Passed    0.89 sec"
+  },
+  {
+    "index": 352,
+    "name": "p990_p986_t_before_h_read_bound_auth.unit",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 341,
+    "name": "p990_after_true_bound_oom.unit",
+    "result": "Passed    6.30 sec"
+  },
+  {
+    "index": 354,
+    "name": "p990_unreachable_direct_auth.unit",
+    "result": "Passed    0.11 sec"
+  },
+  {
+    "index": 353,
+    "name": "p990_p986_t_before_h_read_bound_oom.unit",
+    "result": "Passed    1.42 sec"
+  },
+  {
+    "index": 356,
+    "name": "p990_unreachable_bound_auth.unit",
+    "result": "Passed    0.47 sec"
+  },
+  {
+    "index": 343,
+    "name": "p990_after_false_bound_oom.unit",
+    "result": "Passed    6.44 sec"
+  },
+  {
+    "index": 355,
+    "name": "p990_unreachable_direct_oom.unit",
+    "result": "Passed    1.70 sec"
+  },
+  {
+    "index": 357,
+    "name": "p990_unreachable_bound_oom.unit",
+    "result": "Passed    1.28 sec"
+  },
+  {
+    "index": 360,
+    "name": "p990_negative_sources.integration",
+    "result": "Passed    1.26 sec"
+  },
+  {
+    "index": 359,
+    "name": "p990_p986_native.integration",
+    "result": "Passed   10.31 sec"
+  },
+  {
+    "index": 362,
+    "name": "p961_reached_oom.unit",
+    "result": "Passed    0.55 sec"
+  },
+  {
+    "index": 363,
+    "name": "p961_named_foreign.integration",
+    "result": "Passed    0.32 sec"
+  },
+  {
+    "index": 364,
+    "name": "p961_original_foreign.unit",
+    "result": "Passed    0.09 sec"
+  },
+  {
+    "index": 365,
+    "name": "p961_echo_origin.unit",
+    "result": "Passed    0.12 sec"
+  },
+  {
+    "index": 366,
+    "name": "p961_window_true_origin.unit",
+    "result": "Passed    0.18 sec"
+  },
+  {
+    "index": 367,
+    "name": "p953_echo_integrity.unit",
+    "result": "Passed    0.19 sec"
+  },
+  {
+    "index": 368,
+    "name": "p953_echo_oom.unit",
+    "result": "Passed    0.70 sec"
+  },
+  {
+    "index": 369,
+    "name": "p953_window_true_integrity.unit",
+    "result": "Passed    0.13 sec"
+  },
+  {
+    "index": 370,
+    "name": "p953_window_true_oom.unit",
+    "result": "Passed    0.57 sec"
+  },
+  {
+    "index": 371,
+    "name": "p953_source_native.integration",
+    "result": "Passed    4.25 sec"
+  },
+  {
+    "index": 372,
+    "name": "p945_dispatch_journal_r1_integrity.unit",
+    "result": "Passed    0.16 sec"
+  },
+  {
+    "index": 373,
+    "name": "p945_dispatch_journal_r1_oom.unit",
+    "result": "Passed    0.50 sec"
+  },
+  {
+    "index": 374,
+    "name": "p945_thermal_recovery_r1_integrity.unit",
+    "result": "Passed    0.15 sec"
+  },
+  {
+    "index": 375,
+    "name": "p945_thermal_recovery_r1_oom.unit",
+    "result": "Passed    0.58 sec"
+  },
+  {
+    "index": 361,
+    "name": "p990_freeze_protocol.unit",
+    "result": "Passed   17.76 sec"
+  },
+  {
+    "index": 377,
+    "name": "p778_sensor_spare_gate.unit",
+    "result": "Passed    0.32 sec"
+  },
+  {
+    "index": 378,
+    "name": "p778_valve_spare_gate.unit",
+    "result": "Passed    0.57 sec"
+  },
+  {
+    "index": 379,
+    "name": "p778_r_a_gate.unit",
+    "result": "Passed    0.48 sec"
+  },
+  {
+    "index": 380,
+    "name": "p778_driver_oom.unit",
+    "result": "Passed    0.45 sec"
+  },
+  {
+    "index": 376,
+    "name": "p945_source_native.integration",
+    "result": "Passed    8.49 sec"
+  },
+  {
+    "index": 382,
+    "name": "p774_driver_oom.unit",
+    "result": "Passed    0.47 sec"
+  },
+  {
+    "index": 383,
+    "name": "p774_pump_reserve_gate.unit",
+    "result": "Passed    0.42 sec"
+  },
+  {
+    "index": 384,
+    "name": "p774_scale_reserve_gate.unit",
+    "result": "Passed    0.33 sec"
+  },
+  {
+    "index": 381,
+    "name": "p778_source_native.integration",
+    "result": "Passed    7.46 sec"
+  },
+  {
+    "index": 386,
+    "name": "p761_limits_h_first_proof.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 387,
+    "name": "p761_limits_h_first_oom.unit",
+    "result": "Passed    2.20 sec"
+  },
+  {
+    "index": 388,
+    "name": "p761_tuning_t_first_proof.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 385,
+    "name": "p774_mixed_owner_copy_native.integration",
+    "result": "Passed    5.20 sec"
+  },
+  {
+    "index": 390,
+    "name": "p761_foreign_t_refusal.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 391,
+    "name": "p761_foreign_h_refusal.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 392,
+    "name": "p761_layout_metadata.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 389,
+    "name": "p761_tuning_t_first_oom.unit",
+    "result": "Passed    2.86 sec"
+  },
+  {
+    "index": 394,
+    "name": "p761_uncalled.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 393,
+    "name": "p761_cli.integration",
+    "result": "Passed    1.10 sec"
+  },
+  {
+    "index": 396,
+    "name": "p752_cli.integration",
+    "result": "Passed    1.53 sec"
+  },
+  {
+    "index": 397,
+    "name": "p752_order_h_t.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 398,
+    "name": "p752_order_h_t_oom.unit",
+    "result": "Passed    0.50 sec"
+  },
+  {
+    "index": 399,
+    "name": "p752_order_t_h.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 400,
+    "name": "p752_order_t_h_oom.unit",
+    "result": "Passed    0.29 sec"
+  },
+  {
+    "index": 401,
+    "name": "p752_two_original_hook.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 395,
+    "name": "p752_driver_oom.unit",
+    "result": "Passed    3.83 sec"
+  },
+  {
+    "index": 403,
+    "name": "p752_negative_duplicate_field.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 404,
+    "name": "p752_negative_duplicate_fn.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 405,
+    "name": "p752_negative_fn_collision.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 406,
+    "name": "p752_negative_late_definition.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 407,
+    "name": "p752_negative_unknown_type.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 408,
+    "name": "p752_negative_wrong_copy.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 409,
+    "name": "p752_placements.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 410,
+    "name": "p752_negative_foreign_nominal.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 411,
+    "name": "p752_negative_real_read_ref.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 412,
+    "name": "p752_negative_h_fn_collision.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 413,
+    "name": "p752_negative_no_main.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 414,
+    "name": "p752_multi_input.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 415,
+    "name": "avs_parser.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 416,
+    "name": "avs_evidence.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 417,
+    "name": "avs_rejection.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 418,
+    "name": "avs_ownership.unit",
+    "result": "Passed    0.00 sec"
+  },
+  {
+    "index": 419,
+    "name": "avs_failures.unit",
+    "result": "Passed    0.06 sec"
+  },
+  {
+    "index": 420,
+    "name": "north_star_avs_checked_c.integration",
+    "result": "Passed    1.40 sec"
+  },
+  {
+    "index": 421,
+    "name": "p497_usize_parser.unit",
+    "result": "Passed    0.00 sec"
+  },
+  {
+    "index": 422,
+    "name": "p497_usize_values.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 423,
+    "name": "p497_usize_body.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 424,
+    "name": "p497_usize_failures.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 402,
+    "name": "p752_two_original_hook_oom.unit",
+    "result": "Passed    2.73 sec"
+  },
+  {
+    "index": 426,
+    "name": "allocated_node_source.integration",
+    "result": "Passed    0.65 sec"
+  },
+  {
+    "index": 427,
+    "name": "heap_link_source.integration",
+    "result": "Passed    0.93 sec"
+  },
+  {
+    "index": 425,
+    "name": "p497_usize_native.integration",
+    "result": "Passed    4.29 sec"
+  },
+  {
+    "index": 429,
+    "name": "heap_link_evidence.unit",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 430,
+    "name": "heap_link_supporting_claims.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 431,
+    "name": "heap_link_backend.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 428,
+    "name": "heap_link_failures.unit",
+    "result": "Passed    2.87 sec"
+  },
+  {
+    "index": 432,
+    "name": "heap_link_native.integration",
+    "result": "Passed    7.61 sec"
+  },
+  {
+    "index": 434,
+    "name": "allocated_backend.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 435,
+    "name": "live_tail_handoff_backend.unit",
+    "result": "Passed    0.16 sec"
+  },
+  {
+    "index": 433,
+    "name": "allocated_node_native.integration",
+    "result": "Passed    7.62 sec"
+  },
+  {
+    "index": 437,
+    "name": "p738_no_read_flow.unit",
+    "result": "Passed    0.41 sec"
+  },
+  {
+    "index": 438,
+    "name": "p738_local_return_existing_controls.unit",
+    "result": "Passed    1.07 sec"
+  },
+  {
+    "index": 358,
+    "name": "p990_new_native.integration",
+    "result": "Passed   54.25 sec"
+  },
+  {
+    "index": 440,
+    "name": "p738_ticket_history_oom.unit",
+    "result": "Passed    4.08 sec"
+  },
+  {
+    "index": 439,
+    "name": "p738_sprout_history_oom.unit",
+    "result": "Passed    4.34 sec"
+  },
+  {
+    "index": 442,
+    "name": "p738_source_rollback.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 436,
+    "name": "live_tail_handoff_native.integration",
+    "result": "Passed    8.21 sec"
+  },
+  {
+    "index": 444,
+    "name": "p733_local_owner_proof.unit",
+    "result": "Passed    1.50 sec"
+  },
+  {
+    "index": 443,
+    "name": "p738_no_read_native.integration",
+    "result": "Passed    5.96 sec"
+  },
+  {
+    "index": 445,
+    "name": "p733_pending_history_oom.unit",
+    "result": "Passed    6.68 sec"
+  },
+  {
+    "index": 441,
+    "name": "p738_no_read_driver_oom.unit",
+    "result": "Passed   13.09 sec"
+  },
+  {
+    "index": 448,
+    "name": "p733_local_owner_source_rollback.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 446,
+    "name": "p733_cargo_history_oom.unit",
+    "result": "Passed    7.02 sec"
+  },
+  {
+    "index": 450,
+    "name": "live_tail_return_backend.unit",
+    "result": "Passed    0.18 sec"
+  },
+  {
+    "index": 449,
+    "name": "p733_local_owner_native.integration",
+    "result": "Passed    6.47 sec"
+  },
+  {
+    "index": 452,
+    "name": "live_tail_return_evidence.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 453,
+    "name": "live_tail_return_oom.unit",
+    "result": "Passed    6.66 sec"
+  },
+  {
+    "index": 447,
+    "name": "p733_local_owner_driver_oom.unit",
+    "result": "Passed   17.51 sec"
+  },
+  {
+    "index": 455,
+    "name": "packet_fork_evidence.unit",
+    "result": "Passed    0.12 sec"
+  },
+  {
+    "index": 454,
+    "name": "live_tail_return_source.integration",
+    "result": "Passed    1.76 sec"
+  },
+  {
+    "index": 451,
+    "name": "live_tail_return_native.integration",
+    "result": "Passed   15.05 sec"
+  },
+  {
+    "index": 458,
+    "name": "packet_retention_evidence.unit",
+    "result": "Passed    0.10 sec"
+  },
+  {
+    "index": 457,
+    "name": "packet_fork_source.integration",
+    "result": "Passed   10.08 sec"
+  },
+  {
+    "index": 459,
+    "name": "packet_retention_oom.unit",
+    "result": "Passed   16.25 sec"
+  },
+  {
+    "index": 460,
+    "name": "packet_retention_source.integration",
+    "result": "Passed    7.13 sec"
+  },
+  {
+    "index": 461,
+    "name": "custody_source_evidence.unit",
+    "result": "Passed    0.64 sec"
+  },
+  {
+    "index": 456,
+    "name": "packet_fork_oom.unit",
+    "result": "Passed   18.97 sec"
+  },
+  {
+    "index": 464,
+    "name": "custody_codegen_oom.unit",
+    "result": "Passed   11.81 sec"
+  },
+  {
+    "index": 463,
+    "name": "custody_source.integration",
+    "result": "Passed   17.87 sec"
+  },
+  {
+    "index": 466,
+    "name": "custody_definition_evidence.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 465,
+    "name": "custody_native.integration",
+    "result": "Passed   21.64 sec"
+  },
+  {
+    "index": 468,
+    "name": "custody_source_hold.integration",
+    "result": "Passed    2.47 sec"
+  },
+  {
+    "index": 469,
+    "name": "typed_owner_definition.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 470,
+    "name": "typed_owner_evidence.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 471,
+    "name": "typed_owner_precision.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 462,
+    "name": "custody_source_oom.unit",
+    "result": "Passed   38.82 sec"
+  },
+  {
+    "index": 473,
+    "name": "typed_owner_source.integration",
+    "result": "Passed    1.80 sec"
+  },
+  {
+    "index": 474,
+    "name": "two_heap_backend_lifecycle.unit",
+    "result": "Passed    0.16 sec"
+  },
+  {
+    "index": 475,
+    "name": "two_heap_backend.unit",
+    "result": "Passed    0.11 sec"
+  },
+  {
+    "index": 467,
+    "name": "custody_definition_oom.unit",
+    "result": "Passed   24.19 sec"
+  },
+  {
+    "index": 477,
+    "name": "two_heap_fields.unit",
+    "result": "Passed    0.11 sec"
+  },
+  {
+    "index": 478,
+    "name": "two_heap_lifecycle.unit",
+    "result": "Passed    0.08 sec"
+  },
+  {
+    "index": 479,
+    "name": "two_heap_failures.unit",
+    "result": "Passed    6.81 sec"
+  },
+  {
+    "index": 472,
+    "name": "typed_owner_faults.unit",
+    "result": "Passed   11.80 sec"
+  },
+  {
+    "index": 481,
+    "name": "captured_closure_2_worlds.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 482,
+    "name": "captured_closure_3_worlds.unit",
+    "result": "Passed    0.03 sec"
+  },
+  {
+    "index": 483,
+    "name": "captured_closure_5_worlds.unit",
+    "result": "Passed    0.09 sec"
+  },
+  {
+    "index": 484,
+    "name": "captured_closure_poison.unit",
+    "result": "Passed    0.16 sec"
+  },
+  {
+    "index": 485,
+    "name": "captured_closure_oom.unit",
+    "result": "Passed    1.12 sec"
+  },
+  {
+    "index": 480,
+    "name": "two_heap_source.integration",
+    "result": "Passed    2.04 sec"
+  },
+  {
+    "index": 487,
+    "name": "captured_closure_source.integration",
+    "result": "Passed    1.29 sec"
+  },
+  {
+    "index": 488,
+    "name": "five_root_evidence.unit",
+    "result": "Passed    0.15 sec"
+  },
+  {
+    "index": 489,
+    "name": "five_root_poison.unit",
+    "result": "Passed    0.50 sec"
+  },
+  {
+    "index": 476,
+    "name": "two_heap_native.integration",
+    "result": "Passed   13.47 sec"
+  },
+  {
+    "index": 490,
+    "name": "five_root_oom.unit",
+    "result": "Passed   11.33 sec"
+  },
+  {
+    "index": 486,
+    "name": "captured_closure_checker-oom.unit",
+    "result": "Passed   15.11 sec"
+  },
+  {
+    "index": 492,
+    "name": "five_root_source.integration",
+    "result": "Passed    4.98 sec"
+  },
+  {
+    "index": 493,
+    "name": "five_root_backend.unit",
+    "result": "Passed   14.65 sec"
+  },
+  {
+    "index": 495,
+    "name": "allocated_join_evidence.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 496,
+    "name": "allocated_join_failures.unit",
+    "result": "Passed    2.74 sec"
+  },
+  {
+    "index": 494,
+    "name": "five_root_native.integration",
+    "result": "Passed   14.04 sec"
+  },
+  {
+    "index": 498,
+    "name": "allocated_node_evidence.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 499,
+    "name": "allocated_node_operands.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 497,
+    "name": "allocated_join_source.integration",
+    "result": "Passed    0.96 sec"
+  },
+  {
+    "index": 500,
+    "name": "allocated_node_failures.unit",
+    "result": "Passed    1.82 sec"
+  },
+  {
+    "index": 501,
+    "name": "p466_composition.integration",
+    "result": "Passed    3.11 sec"
+  },
+  {
+    "index": 502,
+    "name": "p471_crossroot_frontier.integration",
+    "result": "Passed    4.80 sec"
+  },
+  {
+    "index": 504,
+    "name": "node_initial_some_controls.unit",
+    "result": "Passed    0.03 sec"
+  },
+  {
+    "index": 505,
+    "name": "node_initial_some_oom.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 503,
+    "name": "p490_postjoin_frontier.integration",
+    "result": "Passed    2.97 sec"
+  },
+  {
+    "index": 507,
+    "name": "node_join_native_carrier.unit",
+    "result": "Passed    0.03 sec"
+  },
+  {
+    "index": 508,
+    "name": "node_join_native_oom.unit",
+    "result": "Passed    0.17 sec"
+  },
+  {
+    "index": 491,
+    "name": "five_root_checker-oom.unit",
+    "result": "Passed   38.82 sec"
+  },
+  {
+    "index": 510,
+    "name": "checked_c_node.unit",
+    "result": "Passed    0.09 sec"
+  },
+  {
+    "index": 511,
+    "name": "node_two_normal_join_public_proof.unit",
+    "result": "Passed    0.03 sec"
+  },
+  {
+    "index": 512,
+    "name": "node_join_both_arms_public_proof.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 513,
+    "name": "node_join_same_locator_public_proof.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 514,
+    "name": "node_join_post_write_public_proof.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 515,
+    "name": "node_join_public_negative.unit",
+    "result": "Passed    0.03 sec"
+  },
+  {
+    "index": 516,
+    "name": "node_join_public_oom.unit",
+    "result": "Passed    0.11 sec"
+  },
+  {
+    "index": 517,
+    "name": "node_two_normal_join.unit",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 518,
+    "name": "node_join_actual_none.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 519,
+    "name": "node_join_other_original.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 520,
+    "name": "node_join_both_arms.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 521,
+    "name": "node_join_clear_occurrence.unit",
+    "result": "Passed    0.03 sec"
+  },
+  {
+    "index": 522,
+    "name": "node_join_saved_copy.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 523,
+    "name": "node_join_same_locator.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 524,
+    "name": "node_join_post_write.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 525,
+    "name": "node_join_negatives.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 526,
+    "name": "node_join_owner.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 527,
+    "name": "node_join_private-ids.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 528,
+    "name": "node_join_dependencies.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 506,
+    "name": "node_initial_native.integration",
+    "result": "Passed    4.83 sec"
+  },
+  {
+    "index": 530,
+    "name": "node_join_both_public_oom.unit",
+    "result": "Passed    0.18 sec"
+  },
+  {
+    "index": 529,
+    "name": "node_join_oom.unit",
+    "result": "Passed    1.52 sec"
+  },
+  {
+    "index": 532,
+    "name": "node_join_owned_poison.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 533,
+    "name": "node_join_source.integration",
+    "result": "Passed    0.57 sec"
+  },
+  {
+    "index": 534,
+    "name": "node_link_evidence.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 535,
+    "name": "node_link_transitions.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 536,
+    "name": "node_link_dependencies.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 537,
+    "name": "node_link_negatives.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 538,
+    "name": "node_link_liveness.unit",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 539,
+    "name": "node_link_resource.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 509,
+    "name": "node_join_native.integration",
+    "result": "Passed    6.24 sec"
+  },
+  {
+    "index": 531,
+    "name": "node_join_both_issuer_oom.unit",
+    "result": "Passed    1.86 sec"
+  },
+  {
+    "index": 540,
+    "name": "node_link_failures.unit",
+    "result": "Passed    1.08 sec"
+  },
+  {
+    "index": 543,
+    "name": "recursive_type_parser.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 544,
+    "name": "recursive_type_identity.unit",
+    "result": "Passed    0.04 sec"
+  },
+  {
+    "index": 545,
+    "name": "recursive_type_source.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 546,
+    "name": "recursive_type_cycle.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 547,
+    "name": "recursive_type_negatives.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 548,
+    "name": "recursive_type_failures.unit",
+    "result": "Passed    0.06 sec"
+  },
+  {
+    "index": 542,
+    "name": "node_link_source.integration",
+    "result": "Passed    0.59 sec"
+  },
+  {
+    "index": 549,
+    "name": "recursive_declaration.integration",
+    "result": "Passed    0.30 sec"
+  },
+  {
+    "index": 550,
+    "name": "fixed_field_parser.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 551,
+    "name": "fixed_field_state.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 552,
+    "name": "fixed_field_evidence.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 553,
+    "name": "fixed_field_dependencies.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 554,
+    "name": "fixed_field_negatives.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 556,
+    "name": "fixed_field_resource.unit",
+    "result": "Passed    0.02 sec"
+  },
+  {
+    "index": 555,
+    "name": "fixed_field_failures.unit",
+    "result": "Passed    0.14 sec"
+  },
+  {
+    "index": 558,
+    "name": "u8_parser.unit",
+    "result": "Passed    0.05 sec"
+  },
+  {
+    "index": 559,
+    "name": "u8_values.unit",
+    "result": "Passed    0.00 sec"
+  },
+  {
+    "index": 560,
+    "name": "u8_body.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 561,
+    "name": "u8_failures.unit",
+    "result": "Passed    0.01 sec"
+  },
+  {
+    "index": 557,
+    "name": "fixed_field_checked_c.integration",
+    "result": "Passed    1.59 sec"
+  },
+  {
+    "index": 562,
+    "name": "nested_u8_checked_c.integration",
+    "result": "Passed    5.70 sec"
+  },
+  {
+    "index": 564,
+    "name": "north_star_v1_checked_c.integration",
+    "result": "Passed    1.52 sec"
+  },
+  {
+    "index": 563,
+    "name": "u8_call_checked_c.integration",
+    "result": "Passed    7.01 sec"
+  },
+  {
+    "index": 566,
+    "name": "p589_parser_oom.unit",
+    "result": "Passed    0.15 sec"
+  },
+  {
+    "index": 565,
+    "name": "north_star_v0_checked_c.integration",
+    "result": "Passed    1.60 sec"
+  },
+  {
+    "index": 568,
+    "name": "p596_shared_proof.unit",
+    "result": "Passed    0.13 sec"
+  },
+  {
+    "index": 569,
+    "name": "p596_parser_oom.unit",
+    "result": "Passed    0.06 sec"
+  },
+  {
+    "index": 541,
+    "name": "node_topology.integration",
+    "result": "Passed   13.67 sec"
+  },
+  {
+    "index": 571,
+    "name": "c17_target_model.integration",
+    "result": "Passed    9.03 sec"
+  },
+  {
+    "index": 572,
+    "name": "bootstrap_retry.offline",
+    "result": "Passed    1.22 sec"
+  },
+  {
+    "index": 573,
+    "name": "artifacts.integrity",
+    "result": "Passed    0.49 sec"
+  },
+  {
+    "index": 574,
+    "name": "oracle.adapter",
+    "result": "Passed    0.64 sec"
+  },
+  {
+    "index": 567,
+    "name": "p589_usize_addition.integration",
+    "result": "Passed   19.35 sec"
+  },
+  {
+    "index": 576,
+    "name": "t991_contract_accept.integration",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 577,
+    "name": "t991_contract_reject.integration",
+    "result": "Passed    0.07 sec"
+  },
+  {
+    "index": 575,
+    "name": "oracle.smoke",
+    "result": "Passed    5.40 sec"
+  },
+  {
+    "index": 570,
+    "name": "p596_usize_subtraction.integration",
+    "result": "Passed   27.52 sec"
+  }
+]

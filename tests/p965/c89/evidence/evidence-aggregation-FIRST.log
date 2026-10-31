@@ -1,0 +1,1 @@
+Derived-summary aggregation first used echo_false.nl instead of the unchanged original native fixture echo.nl and counted24/48. Raw compiler/test results unaffected. Correct aggregation uses original source names echo.nl and window_true.nl; no source, harness or oracle changed.

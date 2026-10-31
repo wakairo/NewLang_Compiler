@@ -1,0 +1,23 @@
+[ 11%] Built target newlang_source
+[ 22%] Built target newlang_diagnostic
+[ 22%] Built target newlang_syntax
+[ 22%] Built target newlang_lexer
+[ 33%] Built target newlang_checked
+[ 44%] Built target newlang_parser
+[ 44%] Building C object CMakeFiles/newlang_semantic.dir/src/array4.c.o
+[ 44%] Linking C static library libnewlang_semantic.a
+[100%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Linking C executable p974_entry_auth
+[100%] Built target p974_entry_auth
+[ 10%] Built target newlang_diagnostic
+[ 20%] Built target newlang_source
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_syntax
+[ 40%] Built target newlang_parser
+[ 40%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p974_driver.dir/tests/p974/driver.c.o
+[100%] Linking C executable p974_driver
+[100%] Built target p974_driver

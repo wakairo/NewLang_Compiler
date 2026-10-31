@@ -1,0 +1,24 @@
+{
+  "authority": "Issue965 C89 https://github.com/wakairo/NewLang_Compiler/issues/965#issuecomment-6456726021",
+  "purpose": "Private Copy function-table bounds; read-only old conjunct diagnosis; no source/public rights changes",
+  "genuine": "Three independently executed CHECKs: A/B share one registered plan/source but have distinct semantic worlds and owners; F has an independent registration for the original C85 comparison. No host-forged issuer.",
+  "diagnosis": "Record individual original C85 conjunct values and root/count on healthy original A/F before editing the old probe. An incidental root==1 is not an authority failure. No old oracle is reinterpreted.",
+  "cases": "charge_false:u8, trim_true:unit, fan_false:unit, relay_equal_binding:unit; existing source bytes frozen",
+  "negative_cases": {
+    "0": "same current functions=NULL/count0",
+    "1": "same current functions=NULL/original positive count",
+    "2": "same current count0/table intact",
+    "3": "same current count below original call function",
+    "4": "caller.context=NULL",
+    "5": "caller.context=real shared-plan CHECK B world",
+    "6": "call.function0",
+    "7": "call.function above genuine current count",
+    "8": "original entry functions=NULL/count0",
+    "9": "entry functions=NULL/original positive count",
+    "10": "entry count0/table intact",
+    "11": "call.function=SIZE_MAX"
+  },
+  "expected": "Each temporary fault: original historical body/parameters/event/unit observations keep original identity; current body-or-unit/parameters/event validators return ANALYSIS_PRECISION_LIMIT. Unit direct entry validator also rejects. Restore before asserting or tearing down; restore yields CHECK_OK. B candidates rejected at A; unknown call0 GET false with output sentinel intact. B remains valid after A destruction.",
+  "safety": "New function_entry guards table presence, nonzero index and each respective world bound before indexing in parameters issuer, parameter_entry and both scalar/unit validators. Null table/positive count negative is not executed on an old unsafe source. No altered opaque owner or forged allocation lengths; no malformed output native.",
+  "iteration": "C89 permits local candidate self-heal; every failed source/oracle/log/SHA remains immutable; new variants get separate pre-run freeze. No failed old tests removed or oracle weakened."
+}

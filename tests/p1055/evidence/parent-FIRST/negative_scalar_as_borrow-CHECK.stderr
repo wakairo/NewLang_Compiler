@@ -1,0 +1,1 @@
+/workspace/p1055/tests/p1055/sources/negative_scalar_as_borrow.nl:33:35-33:41: error(semantic)[P3-TYPE-MISMATCH]: argument semantic type does not match selected parameter

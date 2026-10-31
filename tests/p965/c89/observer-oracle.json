@@ -1,0 +1,8 @@
+{
+  "authority": "Issue965 C89",
+  "original": "C85 source/oracle/first RED unchanged; full snapshot in observer_original.h",
+  "diagnosis": "First new GCC guard trial68934ca observed root_not1=0 with caller/world/source/count_gt1 all1 on all four sources; original source root1 is valid",
+  "change": "Remove only unnecessary root!=1 setup condition. Change root mutation from hardcoded1 to0, so the original nonzero root is actually challenged. Preserve four other setup conditions, all12 negatives and exact GET/VALIDATE/restore/teardown requirements.",
+  "expected": "Every12 faults for each4 source: original historical GET true, current body-or-unit/parameters/event validators INVALID, restore OK; unknown and shallow-parent GET false/output sentinel unchanged; actual CHECK BODY publication PENDING NULL, COMMITTED original, DETACHED NULL, all actual transfers observed; canonical A destruction then genuine independent B healthy and separately destroyed. Original old C85 oracle.json unchanged.",
+  "iteration": "C89 candidate self-heal only with preserved first RED, no deletion/narrowing of original semantic cases."
+}

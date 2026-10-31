@@ -1,0 +1,27 @@
+{
+  "release": "C137 admission-v2 PRE-RUN, root-count closure plus authenticated pre-link literal prefix",
+  "parent": "a56cd08c23548852504cf95e94eb6c9a56f3dd8f",
+  "source_freeze": "06753085e3b546727112ae476e69e431c5cfe6fa9e8cb6da514b10ca085d5dbd",
+  "source_changes": "none; source-v1 first RED and corrected source-v2 unchanged",
+  "CHECK": 0,
+  "GET": 2,
+  "current_body_parameters_event": [
+    0,
+    0
+  ],
+  "C17": {
+    "prefix_two_originals.nl": 0,
+    "declaration_order.nl": 0,
+    "after_producer.nl": 0,
+    "before_link.nl": 0
+  },
+  "before_link_prediction": "existing original H snapshot plus exact immediate two literal T constructors and two genuine scoped calls, no H effect/IF between constructor and calls; public source-issued current/H origin/lifecycle remain mandatory",
+  "physical_native": "NOT TESTED by this intermediate stage; all mandatory native/negative/OOM/history/sanitizers still required",
+  "implementation": "private copy_two_helpers selects actual prepared caller issuer, authenticates both distinct original roots/children in that actual entry, retains public current, old same-original checks, main prefix and serializer Local/H world validation",
+  "STOP": "actual unsafe/source-law/issuer/API/ABI/history/independence/pin/budget problem",
+  "first_candidate_RED": {
+    "head": "970ba21ac109b950efcd1c9a2e0687b4bf722c7e",
+    "raw_SHA256": "6eec1632b8ab750f9b80bb0396f4fd99edd34e50b54c650dd5678173d716a94d",
+    "result": "prefix remains CLI4 after admission; no reject() helper reached, final copy_roots!=1 private condition remains; before-link actual next helper reject copy_constructor:688"
+  }
+}

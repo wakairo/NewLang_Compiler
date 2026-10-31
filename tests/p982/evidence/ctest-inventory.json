@@ -1,0 +1,17 @@
+{
+  "original_count": 535,
+  "new_count": 545,
+  "original_missing": [],
+  "additions": [
+    "p982_after_false_auth.unit",
+    "p982_after_false_oom.unit",
+    "p982_after_true_auth.unit",
+    "p982_after_true_oom.unit",
+    "p982_freeze.unit",
+    "p982_native.integration",
+    "p982_second_false_auth.unit",
+    "p982_second_false_oom.unit",
+    "p982_second_true_auth.unit",
+    "p982_second_true_oom.unit"
+  ]
+}

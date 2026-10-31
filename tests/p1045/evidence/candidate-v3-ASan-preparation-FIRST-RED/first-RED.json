@@ -1,0 +1,10 @@
+{
+  "candidate": "accbc55b0cfd8bea12496ab5899ed99f2c144088",
+  "first_exit": 8,
+  "raw_SHA256": "3dafa94408e11ae891c474ee3c8ec9c07930d235e44db968564559951d3a0b47",
+  "cause": "local ASan build originally targeted newlangc only; old P1013 forward wrapper requires existing p990_oom executable not built",
+  "actual_sanitizer_error": false,
+  "new_P1045_registered": "PASS42.72s, no repetition needed",
+  "GCC13_affected_registered": "bothPASS18.314s",
+  "repair": "build only missing existing p990_oom target with same candidate/sanitizer, run only incomplete p990 wrapper then unrun Clang full; no source/oracle/Production edit"
+}

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/workspace/p1062-gate0/tests/p1062/run.py", line 109, in <module>
+    emitted=invoke(name+'-C17',[cli,source]);ok(emitted);assert emitted.stdout
+                                             ^^^^^^^^^^^
+  File "/workspace/p1062-gate0/tests/p1062/run.py", line 41, in ok
+    assert r.returncode==0 and not r.stderr,(r.returncode,r.stdout,r.stderr)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: (4, b'', b'error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /workspace/p1062-gate0/tests/p1062/sources/terminal_explicit_return.nl\n')

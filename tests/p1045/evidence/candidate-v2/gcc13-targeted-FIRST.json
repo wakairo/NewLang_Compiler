@@ -1,0 +1,12 @@
+{
+  "command": [
+    "python3",
+    "tests/p1045/run.py",
+    "/workspace/p1045-build-gcc13/newlangc",
+    "/workspace/p1030-validation-tools/usr/bin/gcc-13",
+    "none"
+  ],
+  "exit": 0,
+  "seconds": 10.509322163001343,
+  "raw_SHA256": "c03b1ef2498c2ee11cd17daeb4d0ca8a7492dc230c38010d49434308b388fc0f"
+}

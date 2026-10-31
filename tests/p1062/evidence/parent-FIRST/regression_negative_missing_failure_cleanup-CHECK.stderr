@@ -1,0 +1,1 @@
+/workspace/p1062-gate0/tests/p1062/sources/regression_negative_missing_failure_cleanup.nl:48:25-56:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit

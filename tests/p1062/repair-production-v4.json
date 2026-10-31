@@ -1,0 +1,9 @@
+{
+  "first_RED_SHA256": "18e00877dc1071c85cd4f479d451bebeef8309022e46cf8c63b0bed5151984a4",
+  "first_RED_stdout_SHA256": "b890f855a76b7d7e8d3c20dbbad3b4e5e801cb3725102add95fa413fbae71e65",
+  "candidate_v3": "4ef67098dd129b118302660e521143a782d0a12c",
+  "first_failure": "Existing P738 profile_direct_no_local finite CHECK0/backend4 boundary became accepted after generic producer_valid replaced local-return-only guard outside the target closed-main lane. No wrong-owner/root/current or native mismatch; old legal coverage boundary must stay unchanged.",
+  "repair": "Production v4 scopes producer direct-result and owning final unit-return normalization to preexisting authenticated closed-main Copy plan; original local-return view/validator/guard remain byte-equivalent API paths for all legacy consumers. Unit unused read already scoped the same way. Existing proof/operand/lifecycle/owner/cleanup guards retained, no source-spelling exception/new issuer.",
+  "previous_results": "Before this failure own6 GNU native36+44oldC+2750OOM passed; own6ASan/LSan andUBSan each36physical/2750OOM/13neg/history passed. Clang461 tests with one finite-profile regression; GCC361 PASS before explicit cancellation on other-regression discovery. Never report interrupted full run PASS.",
+  "source_oracle_unchanged": true
+}

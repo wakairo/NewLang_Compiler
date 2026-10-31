@@ -1,0 +1,2 @@
+warning: opening /proc/self/mem file failed: Read-only file system (30)
+warning: opening /proc/PID/mem file for lwp 156880.156880 failed: Read-only file system (30)

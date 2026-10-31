@@ -1,0 +1,155 @@
+{
+  "release": "C137 source-v2 PRE-RUN: only duplicate cleanup local raw renamed; original-v1 fixture RED remains immutable",
+  "parent": "a56cd08c23548852504cf95e94eb6c9a56f3dd8f",
+  "parent_tree": "a2cd1c9a9c66a8686d7e4b99f545b82865ef3877",
+  "main": "438170098d5b98096f1ad1f1f200dc1f326c75c3",
+  "canonical": "CURRENT_SPEC -> Draft17.34 16.3.8,17.1,18.1a/b",
+  "authority": "no R originals/names/values/oracle/runner/raw or T reconstructed bridge consulted. Canonical16.3.8 explicitly distinguishes two lexical T originals from one T nominal; each actual call uses its own root/child current and actual old Copy",
+  "profiles": {
+    "prefix_two_originals.nl": {
+      "CHECK": 0,
+      "GET": 2,
+      "current_body_parameters_event": [
+        0,
+        0
+      ],
+      "baseline_C17": 4,
+      "baseline_prediction": "copy_two_helpers_before_h rejects different original parents",
+      "candidate_C17": 0,
+      "native": "T calls in guest0/1/2"
+    },
+    "declaration_order.nl": {
+      "CHECK": 0,
+      "GET": 2,
+      "current_body_parameters_event": [
+        0,
+        0
+      ],
+      "baseline_C17": 4,
+      "baseline_prediction": "copy_two_helpers_before_h rejects different original parents",
+      "candidate_C17": 0,
+      "native": "T calls in guest0/1/2"
+    },
+    "after_producer.nl": {
+      "CHECK": 0,
+      "GET": 2,
+      "current_body_parameters_event": [
+        0,
+        0
+      ],
+      "baseline_C17": 4,
+      "baseline_prediction": "copy_two_helpers_before_h rejects nested actual caller issuer != main; measure actual first guard",
+      "candidate_C17": 0,
+      "native": "T calls only guest2; guests0/1 no T constructed or called"
+    },
+    "before_link.nl": {
+      "CHECK": 0,
+      "GET": 2,
+      "current_body_parameters_event": [
+        0,
+        0
+      ],
+      "baseline_C17": 4,
+      "baseline_prediction": "copy_two_helpers_before_h rejects nested actual caller issuer != main; measure actual first guard",
+      "candidate_C17": "UNKNOWN; diagnostic phase before H link, may remain unsupported without honest existing carrier-world path",
+      "native": "T calls only guest2; guests0/1 no T constructed or called"
+    }
+  },
+  "T": {
+    "nominal": "GaugeSample",
+    "originals": 2,
+    "initial": [
+      [
+        19,
+        149
+      ],
+      [
+        222,
+        67
+      ]
+    ],
+    "calls": [
+      {
+        "root": 0,
+        "index": 0,
+        "old": 19,
+        "next": 88,
+        "sibling": 149
+      },
+      {
+        "root": 1,
+        "index": 1,
+        "old": 67,
+        "next": 19,
+        "sibling": 222
+      }
+    ],
+    "final": [
+      [
+        88,
+        149
+      ],
+      [
+        222,
+        19
+      ]
+    ],
+    "distinct": "root,child,incarnation-qualified original and source callable/loan identities; first actual old19 feeds second actual incoming; no cross-root authority copied"
+  },
+  "H": {
+    "nominal": "RelayLink",
+    "stamps": [
+      53,
+      197
+    ],
+    "successes": [
+      0,
+      1,
+      2
+    ],
+    "trials": [
+      1,
+      2,
+      2
+    ],
+    "frees": [
+      0,
+      1,
+      2
+    ],
+    "contract": "actual original H pointer/Allocation/Domain/Backing, None/Some->None, local LiveTail return, caller+callee read, terminal single-consume and independent head cleanup; T state cannot mint H"
+  },
+  "negatives": {
+    "negative_read_helper.nl": {
+      "CHECK": 3,
+      "C17": 3,
+      "intended": "replace read-ref rejected in function definition; earlier refusal UNREACHED"
+    },
+    "negative_double_close.nl": {
+      "CHECK": 3,
+      "C17": 3,
+      "intended": "same nonCopy Allocation/Domain cannot be consumed twice; preserve earliest actual diagnostic"
+    },
+    "unsupported_third_actual.nl": {
+      "CHECK": 0,
+      "C17": 4,
+      "intended": "two helpers but three actual calls outside bounded two-call release; not canonical illegality"
+    }
+  },
+  "observation": "baseline real source register/CHECK main; public historical GET separated from all three current validators; no proof/node/world repair; direct original emitter debug instrumentation only",
+  "native": "strict GCC13 / curated Clang23.1.3 C17 O0/O2; passive live original T/H observers; guest NULL-only malloc injector; raw unit exit0 physically inconclusive",
+  "negatives_host": "current wrong caller/body/function/plan/actual/formal/loan/root/field/source, supplied historical mismatch, H original, canonical owner A destroyed with B foreign presentation survives; fail closed before C publication/exact retry",
+  "OOM": "finite enumerate actually reached malloc/calloc/realloc, NULL and out-length sentinel unchanged, summary/current/owner retained, healthy exact byte retry; no universal rollback theorem",
+  "history": "old v1-v8/first RED immutable; v8 1808keys SHA40e0d8dae49d66f05d87d80aa95b7b5387dd7088f9df1bf021d779ea575ee934 anchored in prospective v9 if needed, keep trusted historical verifiers unchanged",
+  "budget": "one new P branch/DRAFT HOLD on fixedPR1031; natural FULL5+PARTIAL max2groups12jobs; no manualrerun/oldPR edits/READY/merge/GO/F/R launch",
+  "STOP": "actual source-law/publicissuer/API/ABI expansion, genuine unsafe original/current acceptance, absent honest source-issued path, protected predecessor corruption/R import/fixedparent drift/budget",
+  "VALUE_ALIGNMENT_RISK": "more private profile and historical-audit maintenance; library author + ordinary-safe caller comparative human UB audit/re-audit closure vs well-factored C, performance and cost UNMEASURED; Product GO PAUSED/H1 HOLD; no new Product decision",
+  "first_RED": {
+    "layer": "semantic CHECK fixture",
+    "code": "P5-DUPLICATE-BINDING",
+    "original": "sources/prefix_two_originals.nl:96",
+    "raw_SHA256": "29f6e7dfdfbac82babca05930ffe1c571d9e263b817e4c46431fbe6d05a5be10",
+    "correction": "cleanup raw -> freed_storage, no source law or Production change"
+  },
+  "source_directory": "sources-v2"
+}

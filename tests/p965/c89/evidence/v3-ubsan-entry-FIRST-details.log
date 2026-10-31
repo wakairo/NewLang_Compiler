@@ -1,0 +1,197 @@
+Start testing: Oct 28 00:20 UTC
+----------------------------------------------------------
+310/525 Testing: p965_c89_entry_echo.unit
+310/525 Test: p965_c89_entry_echo.unit
+Command: "/workspace/p965-build-ubsan/p965_c89_entry_source" "/workspace/p965/tests/p965/sources/echo.nl"
+Directory: /workspace/p965-build-ubsan
+"p965_c89_entry_echo.unit" start time: Oct 28 00:20 UTC
+Output:
+----------------------------------------------------------
+C89 owned root entry spelling released; foreign root/body source refused; canonical A cleanup and genuine B healthy
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_entry_echo.unit" end time: Oct 28 00:20 UTC
+"p965_c89_entry_echo.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+311/525 Testing: p965_c89_entry_window.unit
+311/525 Test: p965_c89_entry_window.unit
+Command: "/workspace/p965-build-ubsan/p965_c89_entry_source" "/workspace/p965/tests/p965/sources/window.nl"
+Directory: /workspace/p965-build-ubsan
+"p965_c89_entry_window.unit" start time: Oct 28 00:20 UTC
+Output:
+----------------------------------------------------------
+C89 owned root entry spelling released; foreign root/body source refused; canonical A cleanup and genuine B healthy
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"p965_c89_entry_window.unit" end time: Oct 28 00:20 UTC
+"p965_c89_entry_window.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+431/525 Testing: captured_closure_2_worlds.unit
+431/525 Test: captured_closure_2_worlds.unit
+Command: "/workspace/p965-build-ubsan/captured_closure_test" "evidence" "/workspace/p965/tests/fixtures/two_allocation_no_links.nl" "2"
+Directory: /workspace/p965-build-ubsan
+"captured_closure_2_worlds.unit" start time: Oct 28 00:20 UTC
+Output:
+----------------------------------------------------------
+owned certificate: sites=2, release worlds=0..2
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"captured_closure_2_worlds.unit" end time: Oct 28 00:20 UTC
+"captured_closure_2_worlds.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+432/525 Testing: captured_closure_3_worlds.unit
+432/525 Test: captured_closure_3_worlds.unit
+Command: "/workspace/p965-build-ubsan/captured_closure_test" "evidence" "/workspace/p965/tests/fixtures/three_allocation_no_links.nl" "3"
+Directory: /workspace/p965-build-ubsan
+"captured_closure_3_worlds.unit" start time: Oct 28 00:20 UTC
+Output:
+----------------------------------------------------------
+owned certificate: sites=3, release worlds=0..3
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"captured_closure_3_worlds.unit" end time: Oct 28 00:20 UTC
+"captured_closure_3_worlds.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+433/525 Testing: captured_closure_5_worlds.unit
+433/525 Test: captured_closure_5_worlds.unit
+Command: "/workspace/p965-build-ubsan/captured_closure_test" "evidence" "/workspace/p965/tests/fixtures/five_allocation_closure_probe.nl" "5"
+Directory: /workspace/p965-build-ubsan
+"captured_closure_5_worlds.unit" start time: Oct 28 00:20 UTC
+Output:
+----------------------------------------------------------
+owned certificate: sites=5, release worlds=0..5
+<end of output>
+Test time =   0.02 sec
+----------------------------------------------------------
+Test Passed.
+"captured_closure_5_worlds.unit" end time: Oct 28 00:20 UTC
+"captured_closure_5_worlds.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+434/525 Testing: captured_closure_poison.unit
+434/525 Test: captured_closure_poison.unit
+Command: "/workspace/p965-build-ubsan/captured_closure_test" "poison" "/workspace/p965/tests/fixtures/five_allocation_closure_probe.nl"
+Directory: /workspace/p965-build-ubsan
+"captured_closure_poison.unit" start time: Oct 28 00:20 UTC
+Output:
+----------------------------------------------------------
+tuple/order/world/post/trace/dependency/scope poison rejected; backend refusals=0
+<end of output>
+Test time =   0.03 sec
+----------------------------------------------------------
+Test Passed.
+"captured_closure_poison.unit" end time: Oct 28 00:20 UTC
+"captured_closure_poison.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+435/525 Testing: captured_closure_oom.unit
+435/525 Test: captured_closure_oom.unit
+Command: "/workspace/p965-build-ubsan/captured_closure_test" "oom" "/workspace/p965/tests/fixtures/five_allocation_closure_probe.nl"
+Directory: /workspace/p965-build-ubsan
+"captured_closure_oom.unit" start time: Oct 28 00:20 UTC
+Output:
+----------------------------------------------------------
+exhaustive OOM: constructor=137 validator=268; snapshots and retries preserved
+<end of output>
+Test time =   0.27 sec
+----------------------------------------------------------
+Test Passed.
+"captured_closure_oom.unit" end time: Oct 28 00:20 UTC
+"captured_closure_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+436/525 Testing: captured_closure_checker-oom.unit
+436/525 Test: captured_closure_checker-oom.unit
+Command: "/workspace/p965-build-ubsan/captured_closure_test" "checker-oom" "/workspace/p965/tests/fixtures/five_allocation_closure_probe.nl"
+Directory: /workspace/p965-build-ubsan
+"captured_closure_checker-oom.unit" start time: Oct 28 00:20 UTC
+Output:
+----------------------------------------------------------
+checker OOM: 184 distributed failures / 7300 allocation opportunities; no publication and clean retry
+<end of output>
+Test time =   3.14 sec
+----------------------------------------------------------
+Test Passed.
+"captured_closure_checker-oom.unit" end time: Oct 28 00:20 UTC
+"captured_closure_checker-oom.unit" time elapsed: 00:00:03
+----------------------------------------------------------
+
+438/525 Testing: five_root_evidence.unit
+438/525 Test: five_root_evidence.unit
+Command: "/workspace/p965-build-ubsan/captured_closure_test" "full-evidence" "/workspace/p965/tests/fixtures/five_root_three_field.nl" "5"
+Directory: /workspace/p965-build-ubsan
+"five_root_evidence.unit" start time: Oct 28 00:20 UTC
+Output:
+----------------------------------------------------------
+public full source: five original live R/O/D; six changes; seven actual field facts; sibling preservation
+owned certificate: sites=5, release worlds=0..5
+<end of output>
+Test time =   0.04 sec
+----------------------------------------------------------
+Test Passed.
+"five_root_evidence.unit" end time: Oct 28 00:20 UTC
+"five_root_evidence.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+439/525 Testing: five_root_poison.unit
+439/525 Test: five_root_poison.unit
+Command: "/workspace/p965-build-ubsan/captured_closure_test" "full-poison" "/workspace/p965/tests/fixtures/five_root_three_field.nl"
+Directory: /workspace/p965-build-ubsan
+"five_root_poison.unit" start time: Oct 28 00:20 UTC
+Output:
+----------------------------------------------------------
+public full source: five original live R/O/D; six changes; seven actual field facts; sibling preservation
+tuple/order/world/post/trace/dependency/scope poison rejected; backend refusals=57
+<end of output>
+Test time =   0.20 sec
+----------------------------------------------------------
+Test Passed.
+"five_root_poison.unit" end time: Oct 28 00:20 UTC
+"five_root_poison.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+440/525 Testing: five_root_oom.unit
+440/525 Test: five_root_oom.unit
+Command: "/workspace/p965-build-ubsan/captured_closure_test" "full-oom" "/workspace/p965/tests/fixtures/five_root_three_field.nl"
+Directory: /workspace/p965-build-ubsan
+"five_root_oom.unit" start time: Oct 28 00:20 UTC
+Output:
+----------------------------------------------------------
+exhaustive OOM: constructor=141 validator=844; snapshots and retries preserved
+<end of output>
+Test time =   2.58 sec
+----------------------------------------------------------
+Test Passed.
+"five_root_oom.unit" end time: Oct 28 00:20 UTC
+"five_root_oom.unit" time elapsed: 00:00:02
+----------------------------------------------------------
+
+441/525 Testing: five_root_checker-oom.unit
+441/525 Test: five_root_checker-oom.unit
+Command: "/workspace/p965-build-ubsan/captured_closure_test" "full-checker-oom" "/workspace/p965/tests/fixtures/five_root_three_field.nl"
+Directory: /workspace/p965-build-ubsan
+"five_root_checker-oom.unit" start time: Oct 28 00:20 UTC
+Output:
+----------------------------------------------------------
+checker OOM: 248 distributed failures / 15514 allocation opportunities; no publication and clean retry
+<end of output>
+Test time =  10.92 sec
+----------------------------------------------------------
+Test Passed.
+"five_root_checker-oom.unit" end time: Oct 28 00:21 UTC
+"five_root_checker-oom.unit" time elapsed: 00:00:10
+----------------------------------------------------------
+
+End testing: Oct 28 00:21 UTC

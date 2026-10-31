@@ -1,0 +1,11 @@
+{
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/cmake",
+    "--build",
+    "/workspace/p1030-build-clang",
+    "--parallel",
+    "4"
+  ],
+  "exit": 0,
+  "seconds": 34.67708431099891
+}

@@ -1,0 +1,24 @@
+[
+  {
+    "name": "lineage",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "tests/p982/freeze_test.py"
+    ],
+    "exit": 0,
+    "seconds": 0.29,
+    "log": "Stage1-candidate1-lineage-FIRST.log",
+    "SHA256": "79186ae0c20783cae670bc7cc9daecb5f13de6b2aec9e1b5106551d6be60a097"
+  },
+  {
+    "name": "protocol",
+    "command": [
+      "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+      "tests/p990/freeze_selftest.py"
+    ],
+    "exit": 0,
+    "seconds": 7.357,
+    "log": "Stage1-candidate1-protocol-FIRST.log",
+    "SHA256": "08bbaa6aec4970e29af7fcfd3e349f75dcb4b2fc88e47291f67c35d5532f3c57"
+  }
+]

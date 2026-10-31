@@ -1,0 +1,17 @@
+{
+  "candidate": "81ff62973e256dd4627ba22a3ccc8d3bc8eb2697",
+  "tree": "b9129449ffb5e6942c291fbff0647d4bab4f9d41",
+  "GCC13_full_exit": 8,
+  "GCC13_full_log_SHA256": "221ccff1eaecda36ade817561d058e750b4aabdd4c3348297ca02ea664a2b8b3",
+  "failed": [
+    "p990_new_native.integration",
+    "p990_freeze_protocol.unit"
+  ],
+  "classification": [
+    "old P1013 unsupported_sibling CHECK-legal profile now emits C under new dual-field coverage; old immutable oracle C17=4 remains a historical RED; new P forward classification will test it as positive",
+    "new P sidecar evaluated original-v7 hash before existing verifier could diagnose old v1-v6 corruption; restore original diagnostic precedence without changing trusted verifier"
+  ],
+  "ordinary_bounded_repair": true,
+  "no_false_semantic_acceptance_identified": true,
+  "old_tests_sources_oracles_unchanged": true
+}

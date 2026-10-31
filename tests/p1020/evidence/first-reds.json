@@ -1,0 +1,22 @@
+[
+  {
+    "candidate": "586b4f5fbf2d3a3d06e0828513c80750017f3214",
+    "tree": "6ff098e8d6f64151e7623ed94d8481b17946c1f9",
+    "phase": "first GCC build",
+    "exit": 2,
+    "seconds": 10.863552611001069,
+    "first_red_log_SHA256": "2874c8b1b3ec2ec59c32a3e0ae4e65226320b4cd06bfd16fb06f91cb90783205",
+    "reason": "P866 direct private unit_prefix_validate caller expected NLIfReturnView; bounded adapter preserves old signature without test change",
+    "source_oracle_changed": false
+  },
+  {
+    "candidate": "e2bb312001ee5ca91eb38787d43648e5a8c6ae19",
+    "tree": "a66ef996c6f13d7068a9f1cc35daeb83009d010c",
+    "phase": "first targeted probe build",
+    "exit": 1,
+    "first_red_log_SHA256": "a573febf2bb81b27bba2b92b24aa71c4cf230a1a36a2f0f0571e2acc7faf4b74",
+    "reason": "new P probe saved const semantic context pointer in nonconst variable; retain qualifier",
+    "production_changed": false,
+    "oracle_changed": false
+  }
+]

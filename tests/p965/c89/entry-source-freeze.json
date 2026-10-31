@@ -1,0 +1,28 @@
+{
+  "parent": "f5cee64347ac0ee504d2661dc742c6da02f9180c",
+  "stage": "C89 owned entry spelling compatibility candidate; source+oracle frozen before first new build/test",
+  "sha256": {
+    "src/h_origin_internal.c": "4e902602f0b474655bbcb3b50980d7f27fd371dca37bd7ef17e375599eb4957a",
+    "src/h_origin_internal.h": "07091dd7fca811361db83577b8a8e1a984fb27281dd8cf77be32a6ef9cfafd27",
+    "src/checked.c": "d9b9fc79521ea12a296c21d1f21c7b478e5f7f791c54509c3397b07f684202e5",
+    "src/semantic_check.c": "e155bfbd673cf62ff1532ea1fc1f2c9837070d4a20a4f6a80f06777cf393eecc",
+    "src/copy_body.c": "6e2cb11c97d1d34e6e2e7e318d8d327fe9c71df4685c8520465c3b52a69498a9",
+    "CMakeLists.txt": "3301cb737a7b7159dab3b427c3b0e4c731850e7108f4e8f08530c7afdcbb409c",
+    "tests/p965/c89/entry_source.c": "acc34a3aafb5f4f03fa0b5ab937fd62f4f84967d4cdf8bd521aabbb1ad6e20d6",
+    "tests/p965/c89/entry-source-oracle.json": "04c06e0ef14b9e85dde25ef5cfd7a781dd3f6129206f196894b67e015551886b",
+    "tests/p965/c89/guard.c": "49d1dd81c99aae761d667588a3eae2ae80727fd4c9884cc238b64d299e7fa1e4",
+    "tests/p965/c89/guard-oracle.json": "6545aa9eb628397b33727661aca9e5700b1efd1dc99bf15831fb512d7ebe7c1c",
+    "tests/p965/c89/guard-freeze.json": "47b354fbba2138bbb11a132dc4ce20b2199c61f0a37912a8cd1698e884e6ef00",
+    "tests/p965/c89/observer.c": "f25c596f849b2cb9cade9dc07df74f1c9bfc0d6f49d4691a0aaa1308f33d86f7",
+    "tests/p965/c89/observer-oracle.json": "82f3f4c64b8afb610a944659de08eeb5ff555384915d09ca983a4d29c42c25aa",
+    "tests/p965/c89/observer-freeze.json": "44889c17f05c1de81f1bf88347eae0d73e6afe16346276bf919273e6b53cfdbe",
+    "tests/p965/c89/observer_original.h": "df64982b10f4041e507069b9535f0a512b16d808ae747922ce4047d724df94c6",
+    "tests/p965/c85/observer.c": "df64982b10f4041e507069b9535f0a512b16d808ae747922ce4047d724df94c6",
+    "tests/p965/c85/oracle.json": "9673d219b26c2821985fc425a094790ef068c4a719475e858490adc39cd2c55c",
+    "tests/p965/c85/freeze.json": "bf3b75236b2da72767f5fd04cc50a63ddd29da2f8d24c70b3c0ab4d5318ffa7c",
+    "tests/unit/captured_closure_test.c": "108dd2ef015b6cf7fd71e97d02289b53537324499631c1330284fa5c1c5ec6cf",
+    "tests/fixtures/two_allocation_no_links.nl": "5ea7ab31ba5fd7f4a38ab35f38f35ee106781a2e6d97efffdc9043ec4e0f8a06",
+    "tests/p965/sources/echo.nl": "005a09a8fa2d16aa0de012faea2b2b1cef1ed91a9ed50f0c1f326d39a2f2d1f9",
+    "tests/p965/sources/window.nl": "02c2f4f2fa2fc9060b93bb71fdf1f20279aad233cbb50f5df9a275ebb77a4939"
+  }
+}

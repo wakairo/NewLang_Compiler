@@ -1,0 +1,22 @@
+P1020 METADATA REJECT wrong-genuine-function unit=3 parameters=3 unpublished=YES
+P1020 METADATA REJECT foreign-same-ABI-current-plan unit=3 parameters=3 unpublished=YES
+P1020 METADATA REJECT current-result unit=3 parameters=3 unpublished=YES
+P1020 METADATA REJECT current-owner-kind unit=3 parameters=3 unpublished=YES
+P1020 METADATA REJECT foreign-current-caller-world unit=3 parameters=3 unpublished=YES
+P1020 METADATA REJECT foreign-callee-source unit=3 parameters=3 unpublished=YES
+P1020 METADATA REJECT foreign-callee-plan unit=3 parameters=3 unpublished=YES
+P1020 METADATA REJECT wrong-actual-order unit=3 parameters=3 unpublished=YES
+P1020 METADATA REJECT loan-escape unit=3 parameters=3 unpublished=YES
+P1020 METADATA REJECT closed-loan unit=3 parameters=3 unpublished=YES
+P1020 METADATA REJECT one-normal-arm-graph-altered unit=3 parameters=3 unpublished=YES
+P1020 METADATA REJECT one-arm-world-stale unit=3 parameters=3 unpublished=YES
+P1020 METADATA REJECT stale-postcall-child unit=3 parameters=3 unpublished=YES
+P1020 METADATA REJECT stale-postcall-sibling unit=3 parameters=3 unpublished=YES
+P1020 METADATA REJECT stale-normal-end unit=3 parameters=3 unpublished=YES
+P1020 VIEW REJECT index=0 actual_current=0 exact_C=YES
+P1020 VIEW REJECT index=1 actual_current=0 exact_C=YES
+P1020 VIEW REJECT index=2 actual_current=0 exact_C=YES
+P1020 VIEW REJECT index=3 actual_current=0 exact_C=YES
+P1020 VIEW REJECT index=4 actual_current=0 exact_C=YES
+P1020 METADATA REJECT foreign-child-unrestored unit=3 parameters=3 unpublished=YES
+P1020 OWNER A_destroyed_unrestored=YES B_current_and_destroy=YES

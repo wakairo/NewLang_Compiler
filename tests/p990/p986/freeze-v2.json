@@ -1,0 +1,11 @@
+{
+  "compiler_head": "c981ff742865731decb434c2382a6fb418c83de5",
+  "new_sources_oracle": {
+    "t_before_h_read_direct.nl": "3bc744886de50f6456e6e59c4c964091928f02a4f3e3d54cd9df5efb9af7a7f3",
+    "t_before_h_read_bound.nl": "9ec7a58582de6d47dd519b999232a8265ff4fd1887aa30827775c5e170d78d98",
+    "oracle-v2.json": "35f878388cba1f786592c5ad728cc4eaa14f46e654401373654ca54a89ccf495"
+  },
+  "base_freeze_v1_sha256": "27e573cb47d2158a2629a58bc663fe2858749b2aefe5d069a24686b4dc477384",
+  "observer_v1_sha256": "3123e952313c760e1d2c2927ca1cb2c904d11366c1faaddd07529fab0002b3e7",
+  "pre_run": true
+}

@@ -1,0 +1,10 @@
+{
+  "release": "C156 P1067 local raw v1",
+  "archive": "tests/p1067/evidence/local-raw-v1.zip",
+  "bytes": 1090463,
+  "entries": 95,
+  "SHA256": "d4689a2ad3b9ae96025ef50aa32a77ab98d2c21c12a19944c097c46d741e016c",
+  "summary_SHA256": "e4381fa366f4f7c7b7ef625e7a7c1b1d5d974ca70754ebb6c2bbcd3f9704d0f1",
+  "scope": "explicit owned raw list; all original failure logs retained, no ambient cache inputs",
+  "first_console_whitespace": "truncated; separate full immutable-tree reproduction is labelled REPRODUCED"
+}

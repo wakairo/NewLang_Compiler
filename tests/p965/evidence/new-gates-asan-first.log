@@ -1,0 +1,54 @@
+Internal ctest changing into directory: /workspace/p965-build-asan
+Test project /workspace/p965-build-asan
+      Start 276: p965_freeze.unit
+ 1/24 Test #276: p965_freeze.unit ........................   Passed    0.06 sec
+      Start 277: p965_echo_ownership.unit
+ 2/24 Test #277: p965_echo_ownership.unit ................   Passed    2.03 sec
+      Start 278: p965_echo_oom.unit
+ 3/24 Test #278: p965_echo_oom.unit ......................   Passed    0.81 sec
+      Start 279: p965_echo_definition_oom.unit
+ 4/24 Test #279: p965_echo_definition_oom.unit ...........   Passed    0.41 sec
+      Start 282: p965_window_definition_oom.unit
+ 5/24 Test #282: p965_window_definition_oom.unit .........   Passed    0.40 sec
+      Start 283: p965_t_only_ownership.unit
+ 6/24 Test #283: p965_t_only_ownership.unit ..............   Passed    0.11 sec
+      Start 284: p965_t_only_oom.unit
+ 7/24 Test #284: p965_t_only_oom.unit ....................   Passed    0.06 sec
+      Start 285: p965_t_only_definition_oom.unit
+ 8/24 Test #285: p965_t_only_definition_oom.unit .........   Passed    0.04 sec
+      Start 286: p965_plain_ownership.unit
+ 9/24 Test #286: p965_plain_ownership.unit ...............   Passed    0.06 sec
+      Start 287: p965_plain_oom.unit
+10/24 Test #287: p965_plain_oom.unit .....................   Passed    0.04 sec
+      Start 288: p965_plain_definition_oom.unit
+11/24 Test #288: p965_plain_definition_oom.unit ..........   Passed    0.04 sec
+      Start 289: p965_loop_ownership.unit
+12/24 Test #289: p965_loop_ownership.unit ................   Passed    0.02 sec
+      Start 290: p965_loop_oom.unit
+13/24 Test #290: p965_loop_oom.unit ......................   Passed    0.02 sec
+      Start 291: p965_loop_definition_oom.unit
+14/24 Test #291: p965_loop_definition_oom.unit ...........   Passed    0.08 sec
+      Start 292: p965_continuation_ownership.unit
+15/24 Test #292: p965_continuation_ownership.unit ........   Passed    3.88 sec
+      Start 293: p965_continuation_oom.unit
+16/24 Test #293: p965_continuation_oom.unit ..............   Passed    1.83 sec
+      Start 294: p965_continuation_definition_oom.unit
+17/24 Test #294: p965_continuation_definition_oom.unit ...   Passed    0.90 sec
+      Start 295: p965_four_field_ownership.unit
+18/24 Test #295: p965_four_field_ownership.unit ..........   Passed    8.42 sec
+      Start 296: p965_four_field_oom.unit
+19/24 Test #296: p965_four_field_oom.unit ................   Passed    3.36 sec
+      Start 297: p965_four_field_definition_oom.unit
+20/24 Test #297: p965_four_field_definition_oom.unit .....   Passed    1.89 sec
+      Start 298: p965_lexical_ownership.unit
+21/24 Test #298: p965_lexical_ownership.unit .............   Passed    0.15 sec
+      Start 299: p965_lexical_oom.unit
+22/24 Test #299: p965_lexical_oom.unit ...................   Passed    0.09 sec
+      Start 300: p965_lexical_definition_oom.unit
+23/24 Test #300: p965_lexical_definition_oom.unit ........   Passed    0.05 sec
+      Start 301: p965_named_if.integration
+24/24 Test #301: p965_named_if.integration ...............   Passed    0.20 sec
+
+100% tests passed, 0 tests failed out of 24
+
+Total Test time (real) =  24.97 sec

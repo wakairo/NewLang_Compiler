@@ -1,0 +1,7 @@
+{
+  "archive": "tests/p1062/evidence/local-raw-v7.zip",
+  "SHA256": "ad1eee30e4597788e3d96a0df25942d87f7891c8957bf5fb70d35ab752f741e1",
+  "bytes": 5063095,
+  "entries": 4991,
+  "meaning": "Exact UTF8 stdout/stderr/command JSON and original generated C data, no executable binaries; each entry SHA recorded inside. Original first RED preserved, missing v1 per-command archive never invented."
+}

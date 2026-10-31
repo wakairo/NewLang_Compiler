@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/workspace/p965-build-tools/cmake/data/bin/cmake",
+    "--build",
+    "/workspace/p1045-build-gcc13",
+    "--target",
+    "newlangc",
+    "--parallel",
+    "2"
+  ],
+  "exit": 0,
+  "seconds": 1.8727453440005775,
+  "raw_SHA256": "1317a145818ca4ad81fdfdf66aa877c99b79a5d1e53cf30ce0a07e471f4ebb40"
+}

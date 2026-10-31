@@ -1,0 +1,78 @@
+[
+  {
+    "gate": "gcc13",
+    "exit": 0,
+    "seconds": 5.090369587996975,
+    "raw_SHA256": "c3a60dfa44677b797b07c4fe6e1cefd05c355f2a97b2949dc06cde643cf462cb",
+    "physical_cases": 18,
+    "new_source_OOM": 806,
+    "forward_legacy_OOM": 403,
+    "total_OOM": 1209,
+    "same_C_hashes": [
+      "3be790aeea27399524438bd4694bb6915e9293b4301880d99371997346605075",
+      "bca25658bdfe19c03ec722445eb313b45d44a8614dfa9a08df4ea413e6f49b23"
+    ],
+    "guest_successes": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "gate": "clang",
+    "exit": 0,
+    "seconds": 8.10722955300298,
+    "raw_SHA256": "5333a7f701a79c94122863a0547f6a60e5a789ed54203128cdfb612386bb6e83",
+    "physical_cases": 18,
+    "new_source_OOM": 806,
+    "forward_legacy_OOM": 403,
+    "total_OOM": 1209,
+    "same_C_hashes": [
+      "3be790aeea27399524438bd4694bb6915e9293b4301880d99371997346605075",
+      "bca25658bdfe19c03ec722445eb313b45d44a8614dfa9a08df4ea413e6f49b23"
+    ],
+    "guest_successes": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "gate": "asan",
+    "exit": 0,
+    "seconds": 18.02560087600432,
+    "raw_SHA256": "f42b9b9821151930aea7a83ec2a3097cb3bc4db60f1387c8ee8aba0e7f7a4f7f",
+    "physical_cases": 18,
+    "new_source_OOM": 806,
+    "forward_legacy_OOM": 403,
+    "total_OOM": 1209,
+    "same_C_hashes": [
+      "3be790aeea27399524438bd4694bb6915e9293b4301880d99371997346605075",
+      "bca25658bdfe19c03ec722445eb313b45d44a8614dfa9a08df4ea413e6f49b23"
+    ],
+    "guest_successes": [
+      0,
+      1,
+      2
+    ]
+  },
+  {
+    "gate": "ubsan",
+    "exit": 0,
+    "seconds": 8.857968643002096,
+    "raw_SHA256": "f2958137d16b7af427367df35fd2b275088efaf80f5795fe979ea2a74aec85d8",
+    "physical_cases": 18,
+    "new_source_OOM": 806,
+    "forward_legacy_OOM": 403,
+    "total_OOM": 1209,
+    "same_C_hashes": [
+      "3be790aeea27399524438bd4694bb6915e9293b4301880d99371997346605075",
+      "bca25658bdfe19c03ec722445eb313b45d44a8614dfa9a08df4ea413e6f49b23"
+    ],
+    "guest_successes": [
+      0,
+      1,
+      2
+    ]
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "stage": "PRE-RUN candidate1 source/oracle/patch freeze; no candidate execution yet",
+  "head": "d0f5298dad272c3b025029dd2cf1b2ba3624d431",
+  "tree": "20a2ec3c89ef6e4831525be4ff90b287a1c3c648",
+  "parent": "4c3ed993fa8a94c7a2850ff98677127d96c31a6b",
+  "current_v4_count": 562,
+  "files": {
+    "tests/p982/freeze_test.py": "f62e0e91ff674ca51e70ce6f21b9a4a4b9a2b28d68ea6b03afc6033f9274a657",
+    "tests/p990/current-freeze-v4.json": "2effb5d5da27f337a68147887428f0a06bdef5184dedbb8b8ceaec6d684510af",
+    "tests/p990/freeze_selftest.py": "ebbac56aed532835709cb0e7d71760cce1c22c67eaa5e32e14c3f7a26ece61ca",
+    "tests/p990/history-repair/README.md": "7f21ed205592400d214266a2e817ce07eb866600acad293dec308183254e85e6",
+    "tests/p990/history-repair/oracle-v1.json": "5376cfd29a50df2d924e7979eb4c5f477346a5192c008a8933ef0b7b7f5d3d00",
+    "tests/p990/history-repair/parent-repro-FIRST.log": "0a2bd4073d8ca4c9d766197347f0dd8d1508bea20962de023415c52149ad730e",
+    "tests/p990/history-repair/parent-repro-oracle-v1.json.base64": "d6c2a9b4cf009171655572a5c920a34d3820f7b4287a112952532b78f9001311",
+    "tests/p990/history-repair/parent-repro-v1.py.base64": "14754ae8e09f01a0e65c1005266d0cc6e6d4e1d44a1d86a209c8e87e5b527588",
+    "tests/p990/history-repair/preparation-FIRST-RED.json": "4dda07a67917a8bc5fd6e8ef831ba7cd6df8383c4fe20654c7738c9b9c6dfef5",
+    "tests/support/versioned_freeze.py": "482272ad0f3fe6cf57dc097120d646a08e40e8e488b4fff9f16ae5c696238e16"
+  },
+  "patches": {
+    "candidate1-full.patch": "d8d9946c0baa80d8ce32a8b5e4c61fdb77a56015a945468276e45e509921d4a1",
+    "candidate1-code.patch": "c17c118dff6a4a28c42ca995834e8fdce7597a2d12b74453c26fed6daa8acb40"
+  },
+  "unchanged": "Production/public/CMake/T7/workflows/P990-v1-v2-v3/P982/source-oracles-first-RED"
+}
