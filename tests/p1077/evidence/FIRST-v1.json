@@ -1,0 +1,31 @@
+{
+  "base": "10c11e2031296aad73d6d11a06db596e642ddb14",
+  "first_source_commit": "9ca88f3260cee1e9b2a206f29ace6394a8f19b78",
+  "source_v2_commit": "516700a1ff05c09093b90807e90e34cf78a7d820",
+  "epochs": [
+    {
+      "name": "environment-FIRST",
+      "result": "cmake PATH127 before build, no source execution"
+    },
+    {
+      "name": "source-v1-FIRST",
+      "result": "CHECK3 P5-DUPLICATE-BINDING, original expectations preserved"
+    },
+    {
+      "name": "observer-v2-FIRST",
+      "result": "Public body/parameters validators succeeded; probe wrongly equated Copy ValueIds; data/old adapter preserved"
+    },
+    {
+      "name": "actual-base-v2-source",
+      "result": "Batch CHECK0/public current0/C17=4, split CHECK0/current0/C17=0"
+    },
+    {
+      "name": "production-v1-build-FIRST",
+      "result": "Compile failure stale body variable after helper split, no candidate execution"
+    }
+  ],
+  "archive": "tests/p1077/evidence/first-epochs-v1.zip",
+  "SHA256": "834cf42a681ed8f7bd41c3aae40f3a758de90fff69d792faa0965ae0c4fda11d",
+  "files": 98,
+  "parent_complete_result_SHA256": "8469d5285d5005bf0301f8de7a70979c7b945118add9053c175650cebee44cd1"
+}

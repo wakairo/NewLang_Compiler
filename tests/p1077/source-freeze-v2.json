@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "preserved_first": "tests/p1077/source-freeze-v1.json",
+  "files": {
+    "tests/p1077/sources-v2/batch_cold.nl": "9aa581dba84265a3a1396a7a8daabe538d0a4906eafb52b028662af28503a6d3",
+    "tests/p1077/sources-v2/batch_hot.nl": "8a8a3cb4235be0bef8def923747008e26a3fcf57ea20bc38da106b04bb4811bd",
+    "tests/p1077/sources-v2/negative_call_in_batch.nl": "036a508f4a86fd28f6f647817fad2f0c391e630ab28db87ccfae8aeac8e5fc07",
+    "tests/p1077/sources-v2/negative_escaped_ref.nl": "17c4a69fe4ca899f2f7ea7ca7eb14d88f2e03fcfe323240a0fcddbf35db4de26",
+    "tests/p1077/sources-v2/negative_wrong_domain.nl": "5259d446e801ca94a309831606a529d73526da633feb8c71ccaeb148a5ee1ff8",
+    "tests/p1077/sources-v2/negative_wrong_old_result.nl": "6f1701fbb090f5260a4b5261ef3b997e34cd28800a24edba4a3cac2444185442",
+    "tests/p1077/sources-v2/split_cold.nl": "3150f85e435108f815b5fb70d4650e12f0ca02797c645c798088b5cf27d2544f",
+    "tests/p1077/sources-v2/split_hot.nl": "65a5a4c9ca2923e3b8cf0bd628ca28a557a1aa2d8bbec40a90aea13bd76bc520",
+    "tests/p1077/oracle-v2.json": "1c505c3bb1900e82a5962e49e7781f64b05258adfe7e26a46e699ff1c13b38fb"
+  }
+}

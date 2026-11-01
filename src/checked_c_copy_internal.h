@@ -855,39 +855,50 @@ static bool copy_constructor(Emit *e, Env *env, const NLCheckedNodeView *v,
     return put(e, "nl_copy_record nl_v_%zu = {nl_v_%zu,nl_v_%zu};\n", out->temp,
                values[0].temp, values[1].temp);
 }
-static bool copy_loan(Emit *e, Env *env, const NLCheckedNodeView *v, Value *out)
+/* Execute one existing issued Change against the current physical ledger.
+ * Batch operations stay on the original loan child; no new ref is issued. */
+static bool copy_loan_step(Emit *e, Env *env, const NLCheckedNodeView *v,
+                           NLCheckedNodeId id, bool direct_only, Value *out)
 {
-    Local *l = copy_field(e, env, &v->field);
-    const NLCheckedNodeView *body = get(env, v->initializer),
-                            *tail = body ? get(env, body->tail) : NULL;
+    const NLCheckedNodeView *tail = get(env, id);
+    if (!tail)
+        return reject(e);
     const NLCheckedLoanPlan *loan = &v->loan;
-    if (!l || !loan->implicit_local || loan->from_ptr || loan->is_exclusive ||
-        loan->access != NL_ACCESS_WRITE || v->field.access != NL_ACCESS_WRITE ||
-        !loan->body_nonescape_proved || !loan->normal_result_forwarded ||
-        !loan->scope || loan->source != l->symbol ||
-        loan->place != v->field.child ||
-        loan->incarnation != v->field.child_incarnation || !body ||
-        body->kind != NL_CHECKED_BLOCK || body->item_count || !tail ||
-        body->terminates || v->type != e->u8 || v->result_count != 1 ||
-        tail->result_count != 1 ||
-        tail->results[0].value != v->results[0].value)
+    const bool call = tail->kind == NL_CHECKED_REGISTERED_CALL;
+    Local *l = copy_field(e, env, call ? &v->field : &tail->field);
+    if (!l || tail->type != e->u8 || tail->result_count != 1 ||
+        tail->argument_count != 2 || tail->terminates ||
+        (direct_only && call) ||
+        (!call && (tail->field.base != v->field.base ||
+                   tail->field.index != v->field.index ||
+                   tail->field.child != loan->place ||
+                   tail->field.child_incarnation != loan->incarnation)))
         return reject(e);
     const NLCheckedNodeView *ref = get(env, tail->first_argument),
                             *next = ref ? get(env, ref->next_argument) : NULL;
     NLSemanticTypeView reference;
     if (!ref || ref->kind != NL_CHECKED_IDENTIFIER ||
-        ref->symbol != loan->ref_symbol || !next || next->next_argument ||
+        ref->symbol != loan->ref_symbol || ref->result_count != 1 || !next ||
+        next->next_argument ||
         !nl_semantic_type_view(nl_checked_context(env->artifact), ref->type,
                                &reference) ||
         reference.kind != NL_TYPE_REF || reference.target != e->u8 ||
         reference.access != NL_ACCESS_WRITE || reference.is_exclusive)
         return reject(e);
+    if (direct_only) {
+        NLSemanticValueView incoming;
+        if ((next->kind != NL_CHECKED_IDENTIFIER &&
+             next->kind != NL_CHECKED_U8_LITERAL) ||
+            next->type != e->u8 || next->result_count != 1 ||
+            !copy_plain(nl_checked_context(env->artifact),
+                        next->results[0].value, e->u8, &incoming))
+            return reject(e);
+    }
     const size_t index = v->field.index;
     NLCopyBodyParameters p;
     NLSemanticPlaceView after, parent, sibling;
-    bool call = tail->kind == NL_CHECKED_REGISTERED_CALL;
     if (call) {
-        if (!copy_call_proof(e, env->artifact, body->tail, &p) ||
+        if (!copy_call_proof(e, env->artifact, id, &p) ||
             get(env, p.loan) != v || p.arguments[0] != tail->first_argument ||
             p.arguments[1] != ref->next_argument ||
             !copy_field(e, env, &p.field) ||
@@ -949,6 +960,95 @@ static bool copy_loan(Emit *e, Env *env, const NLCheckedNodeView *v, Value *out)
         l->copy_fact_child[index] = tail->field.child_post_fact;
         l->copy_value[index] = tail->field.new_value;
     }
+    return true;
+}
+/* A finite straight-line loan body uses the same scalar carriers as main.
+ * Keep its locals lexical while preserving the existing original's evolving
+ * facts. The checked graph and its actual calls remain source-authenticated.
+ * No nested loan, owner, call, branch or additional root is accepted here. */
+static bool copy_loan_scalar(Emit *e, Env *env, const NLCheckedNodeView *loan,
+                             NLCheckedNodeId id, Value *out)
+{
+    const NLCheckedNodeView *v = get(env, id);
+    NLSemanticValueView value;
+    if (!v || v->type != e->u8 || v->result_count != 1 || v->terminates ||
+        !copy_plain(nl_checked_context(env->artifact), v->results[0].value,
+                    e->u8, &value))
+        return reject(e);
+    if (v->kind == NL_CHECKED_REPLACE) {
+        if (++e->steps > C_STEPS) {
+            e->status = NL_NODE_C_RESOURCE_LIMIT;
+            return false;
+        }
+        return copy_loan_step(e, env, loan, id, true, out);
+    }
+    if (v->kind != NL_CHECKED_IDENTIFIER && v->kind != NL_CHECKED_U8_LITERAL)
+        return reject(e);
+    return expr(e, env, id, out);
+}
+static bool copy_loan(Emit *e, Env *env, const NLCheckedNodeView *v, Value *out)
+{
+    Local *l = copy_field(e, env, &v->field);
+    const NLCheckedNodeView *body = get(env, v->initializer),
+                            *tail = body ? get(env, body->tail) : NULL;
+    const NLCheckedLoanPlan *loan = &v->loan;
+    if (!l || !loan->implicit_local || loan->from_ptr || loan->is_exclusive ||
+        loan->access != NL_ACCESS_WRITE || v->field.access != NL_ACCESS_WRITE ||
+        !loan->body_nonescape_proved || !loan->normal_result_forwarded ||
+        !loan->scope || loan->source != l->symbol ||
+        loan->place != v->field.child ||
+        loan->incarnation != v->field.child_incarnation || !body ||
+        body->kind != NL_CHECKED_BLOCK || !tail || body->terminates ||
+        body->type != e->u8 || body->result_count != 1 ||
+        body->item_count > nl_checked_node_count(env->artifact) ||
+        v->type != e->u8 || v->result_count != 1 || tail->result_count != 1 ||
+        tail->results[0].value != v->results[0].value ||
+        body->results[0].value != v->results[0].value)
+        return reject(e);
+    if (!body->item_count)
+        return copy_loan_step(e, env, v, body->tail, false, out);
+    if (!copy_closed_world(e, env))
+        return reject(e);
+    const size_t count = env->count, frame = env->frame, depth = env->depth;
+    const size_t result = ++e->temp;
+    bool ok =
+        env->depth + 1 < C_DEPTH && put(e, "uint8_t nl_v_%zu;\n{\n", result);
+    env->frame = ++e->frames;
+    ++env->depth;
+    NLCheckedNodeId item = body->first_item;
+    for (size_t i = 0; ok && i < body->item_count; ++i) {
+        const NLCheckedNodeView *binding = get(env, item),
+                                *receiver =
+                                    binding ? get(env, binding->first_argument)
+                                            : NULL;
+        Value value = {0};
+        ok = binding && binding->kind == NL_CHECKED_BINDING &&
+             binding->type == e->unit && !binding->result_count &&
+             !binding->terminates && binding->argument_count == 1 && receiver &&
+             receiver->kind == NL_CHECKED_RECEIVER &&
+             receiver->symbol == binding->symbol && receiver->type == e->u8 &&
+             !receiver->next_argument &&
+             copy_loan_scalar(e, env, v, binding->initializer, &value) &&
+             value.type == e->u8 &&
+             add_local(e, env, receiver->symbol, e->u8, false) &&
+             put(e,
+                 "uint8_t nl_b_%zu_%zu = nl_v_%zu;\n"
+                 "(void)nl_b_%zu_%zu;\n",
+                 env->frame, receiver->symbol, value.temp, env->frame,
+                 receiver->symbol);
+        if (binding)
+            item = binding->next_item;
+    }
+    Value value = {0};
+    ok = ok && !item && copy_loan_scalar(e, env, v, body->tail, &value) &&
+         put(e, "nl_v_%zu = nl_v_%zu;\n}\n", result, value.temp);
+    env->count = count;
+    env->frame = frame;
+    env->depth = depth;
+    if (!ok)
+        return reject(e);
+    out->type = e->u8;
+    out->temp = result;
     return true;
 }
 #endif

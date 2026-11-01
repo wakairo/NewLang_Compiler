@@ -1,0 +1,8 @@
+{
+  "result": "Full local build stopped at LLVM smoke link: cannot find -lxml2; no CTest execution",
+  "scope": "Environment/link setup only; real installed libxml2 runtime will be selected through task-local development symlink; active curated LLVM23 and compiler sources unchanged",
+  "files": {
+    "tests/p1077/evidence/gcc-build-FIRST.log.data": "51bca3b178310fe4c5db063589c6f53fd586cf01383b497d24b40ccb3fc1f49a",
+    "tests/p1077/evidence/gcc-configure-FIRST.log.data": "f9df14aaae9c9d14a114b53a0112f9531dc3623f0f917cf03be573e80a41f96c"
+  }
+}

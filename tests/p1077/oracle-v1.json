@@ -1,0 +1,218 @@
+{
+  "authority_main": "10c11e2031296aad73d6d11a06db596e642ddb14",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "version": 1,
+  "goal": "Sequential direct u8 replacements and Copy result forwarding within an ordinary nonescaping T field write loan after all H worlds are closed.",
+  "pre_run": true,
+  "profiles": [
+    {
+      "name": "hot",
+      "source": "tests/p1077/sources/batch_hot.nl",
+      "control": "tests/p1077/sources/split_hot.nl",
+      "expected_CHECK": 0,
+      "predicted_parent_C17": 4,
+      "expected_candidate_C17": 0,
+      "helper_old": [
+        31,
+        72
+      ],
+      "helper_next": [
+        88,
+        31
+      ],
+      "helper_sibling": [
+        149,
+        203
+      ],
+      "helper_index": [
+        0,
+        1
+      ],
+      "initial_fields": [
+        [
+          31,
+          149
+        ],
+        [
+          203,
+          72
+        ]
+      ],
+      "final_fields": [
+        [
+          88,
+          72
+        ],
+        [
+          31,
+          31
+        ]
+      ],
+      "copy_results": [
+        31,
+        72,
+        72,
+        149
+      ],
+      "direct_changes": [
+        {
+          "root": 1,
+          "index": 0,
+          "old": 203,
+          "next": 72
+        },
+        {
+          "root": 1,
+          "index": 0,
+          "old": 72,
+          "next": 31
+        },
+        {
+          "root": 0,
+          "index": 1,
+          "old": 149,
+          "next": 72
+        }
+      ],
+      "H_payload": [
+        41,
+        199
+      ],
+      "guest_worlds": [
+        0,
+        1,
+        2
+      ],
+      "native_optimizations": [
+        "O0",
+        "O2"
+      ],
+      "contract": "Two distinct original T roots; one direct-u8 write loan contains two Changes and pure Copy bindings. Returned intermediate old Copy drives a later write to the other original. Both ordinary helper calls retain their existing direct-tail public contract."
+    },
+    {
+      "name": "cold",
+      "source": "tests/p1077/sources/batch_cold.nl",
+      "control": "tests/p1077/sources/split_cold.nl",
+      "expected_CHECK": 0,
+      "predicted_parent_C17": 4,
+      "expected_candidate_C17": 0,
+      "helper_old": [
+        29,
+        67
+      ],
+      "helper_next": [
+        5,
+        29
+      ],
+      "helper_sibling": [
+        211,
+        145
+      ],
+      "helper_index": [
+        0,
+        1
+      ],
+      "initial_fields": [
+        [
+          29,
+          211
+        ],
+        [
+          145,
+          67
+        ]
+      ],
+      "final_fields": [
+        [
+          5,
+          67
+        ],
+        [
+          29,
+          29
+        ]
+      ],
+      "copy_results": [
+        29,
+        67,
+        67,
+        211
+      ],
+      "direct_changes": [
+        {
+          "root": 1,
+          "index": 0,
+          "old": 145,
+          "next": 67
+        },
+        {
+          "root": 1,
+          "index": 0,
+          "old": 67,
+          "next": 29
+        },
+        {
+          "root": 0,
+          "index": 1,
+          "old": 211,
+          "next": 67
+        }
+      ],
+      "H_payload": [
+        7,
+        252
+      ],
+      "guest_worlds": [
+        0,
+        1,
+        2
+      ],
+      "native_optimizations": [
+        "O0",
+        "O2"
+      ],
+      "contract": "Two distinct original T roots; one direct-u8 write loan contains two Changes and pure Copy bindings. Returned intermediate old Copy drives a later write to the other original. Both ordinary helper calls retain their existing direct-tail public contract."
+    }
+  ],
+  "negative": {
+    "wrong_domain": {
+      "source": "tests/p1077/sources/negative_wrong_domain.nl",
+      "CHECK": 3,
+      "C17": 3,
+      "expected_layer": "semantic"
+    },
+    "escaped_ref": {
+      "source": "tests/p1077/sources/negative_escaped_ref.nl",
+      "CHECK": 3,
+      "C17": 3,
+      "expected_layer": "semantic"
+    },
+    "wrong_old_result": {
+      "source": "tests/p1077/sources/negative_wrong_old_result.nl",
+      "CHECK": 0,
+      "C17": 4,
+      "expected_layer": "backend4"
+    },
+    "call_in_batch": {
+      "source": "tests/p1077/sources/negative_call_in_batch.nl",
+      "CHECK": 0,
+      "C17": 4,
+      "expected_layer": "conservative backend/current rejection"
+    }
+  },
+  "unchanged": [
+    "Public issuer/current validator contract",
+    "H original Allocation/Domain/owner/cleanup",
+    "all prior frozen evidence/v1-v14",
+    "RUN_SERIAL/TIMEOUT90/workflows"
+  ],
+  "stop": [
+    "unsafe CHECK0 admission or C17 UB",
+    "forged issuer/root/current/loan/owner",
+    "OOM clobber/rollback",
+    "new canonical/public issuer/API/ABI required",
+    "main drift or CI budget exceeded"
+  ],
+  "native_contract": "Unmodified C17 must compile and run strict GCC/Clang C17 at O0/O2 in guest0/1/2. Passive observation must not replace generated operations. Original physical T pointers/fields, all H allocations/releases, and returned Copy driving later writes are checked.",
+  "parent_predictions": "New batch: CHECK0/genuine public Copy current, then first C17 copy_loan body-item guard rejection. Equivalent split-loan controls: CHECK0/current/C17/native0. These are provisional predictions, not measured PASS."
+}

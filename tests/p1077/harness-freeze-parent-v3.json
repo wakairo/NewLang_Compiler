@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "reason": "Parent v2 public body/parameters validators succeeded; observer incorrectly equated a forwarded Copy ValueId with Change result ID. New adapter traces actual pure-binding def-use as existing P1062 does; source/oracle-v2 unchanged, old failed observer preserved.",
+  "files": {
+    "tests/p1077/observe-v2.c": "948517d9d32f0a7c5f186febfb2e20552469f1afc749286450742eec7a93ad3f",
+    "tests/p1077/parent-v3.py": "115516181c4e3a70aca65395d8cd795d120ea84408bb751c35ddbb7ec3e64726",
+    "tests/p1062/support.h": "40e13da0348f4ba4660b7c3634938976367f005c385dbf8d98f65befe964644d",
+    "tests/p965/shared.h": "65a7dca6813d07db3ddfc4b694fdb44e85deb905747a6acc71c0d3e72270cb5f"
+  }
+}

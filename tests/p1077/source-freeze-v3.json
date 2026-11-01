@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "pre_run": true,
+  "reason": "Add an independently frozen field-index1 batch case, without modifying any earlier source/oracle or Production capability.",
+  "files": {
+    "tests/p1077/sources-v3/batch_index1.nl": "5290215740921e427351fa8794179208323767ed9725a0e36241f32c7da995ef",
+    "tests/p1077/sources-v3/split_index1.nl": "fb8e06b9fd4635ff32f96dbf79ea38de39bf320bd24af04a6c6a866455f054f0",
+    "tests/p1077/oracle-v3.json": "74b777af016c1650fb1f916c8bee9514ce23857c80f3182ce9251b7a1d25e192"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "reason": "Exact original bytes remain in Git first-observation commits and data below; these diagnostic source versions are historical, not current formatter/build inputs. Original maps are unchanged.",
+  "files": [
+    {
+      "original_path": "tests/p1077/observe.c",
+      "preserved_path": "tests/p1077/evidence/parent-adapters/observe.c.data",
+      "sha256": "ce89a1d2ab8e8f15484925644fda6d5319985913e35547b19c39f0883018858d",
+      "original_commits": [
+        "503a1674125e649d27b37575ad904a21a8e4a877",
+        "5435c9b1389efcee82d38aacae2688dee00ff3cd"
+      ]
+    },
+    {
+      "original_path": "tests/p1077/observe-v2.c",
+      "preserved_path": "tests/p1077/evidence/parent-adapters/observe-v2.c.data",
+      "sha256": "948517d9d32f0a7c5f186febfb2e20552469f1afc749286450742eec7a93ad3f",
+      "original_commits": [
+        "503a1674125e649d27b37575ad904a21a8e4a877",
+        "5435c9b1389efcee82d38aacae2688dee00ff3cd"
+      ]
+    }
+  ]
+}
