@@ -1,0 +1,8 @@
+{
+  "pre_run": true,
+  "reason": "Keep original two-element/three-initializer observer compile RED and v1 harness immutable. Remove leftover third initializer only; same two actual writes and oracle. Production unchanged.",
+  "files": {
+    "tests/p1079/observer-v2.h": "ecda947387ae4d0a7dfa69ae49e2aca5cc39133fbe960b594e2a8fdd294253bc",
+    "tests/p1079/run-v2.py": "f139a8cb828edda869853057dc437949e11fa992a8b1b207f94edec609e4d500"
+  }
+}
