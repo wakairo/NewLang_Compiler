@@ -1,0 +1,222 @@
+[
+  {
+    "label": "build-observer",
+    "command": [
+      "gcc",
+      "-std=c17",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "-pedantic-errors",
+      "-g",
+      "-O0",
+      "-fno-pie",
+      "-no-pie",
+      "-I/tmp/p1079/include",
+      "/tmp/p1079/tests/p1079/observe.c",
+      "-Wl,--start-group",
+      "/tmp/p1079-parent/libnewlang_semantic.a",
+      "/tmp/p1079-parent/libnewlang_parser.a",
+      "/tmp/p1079-parent/libnewlang_checked_c_node.a",
+      "/tmp/p1079-parent/libnewlang_lexer.a",
+      "/tmp/p1079-parent/libnewlang_checked.a",
+      "/tmp/p1079-parent/libnewlang_syntax.a",
+      "/tmp/p1079-parent/libnewlang_source.a",
+      "/tmp/p1079-parent/libnewlang_diagnostic.a",
+      "-Wl,--end-group",
+      "-o",
+      "/workspace/p1079-artifacts/parent-observation-FIRST/observe"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "alternative_loop-CHECK",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "--check",
+      "/tmp/p1079/tests/p1079/sources/alternative_loop.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "1c05f65dcfb89e59a49922c5eb0d5ea5098930a8f879f00e01e260ec9f9f618d"
+  },
+  {
+    "label": "alternative_loop-C17",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "/tmp/p1079/tests/p1079/sources/alternative_loop.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "1c05f65dcfb89e59a49922c5eb0d5ea5098930a8f879f00e01e260ec9f9f618d"
+  },
+  {
+    "label": "control_false-CHECK",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "--check",
+      "/tmp/p1079/tests/p1079/sources/control_false.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_false-C17",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "/tmp/p1079/tests/p1079/sources/control_false.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "f10e3444067c9af500982278d834ae495d8fc2fc3885d0edc6320fb41dbf93ff",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_false-current",
+    "command": [
+      "/workspace/p1079-artifacts/parent-observation-FIRST/observe",
+      "/tmp/p1079/tests/p1079/sources/control_false.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "d319ab5adfa58e312fcfb611b4474af4c3f3baa31114d2b43dea602796788fb4",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_true-CHECK",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "--check",
+      "/tmp/p1079/tests/p1079/sources/control_true.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_true-C17",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "/tmp/p1079/tests/p1079/sources/control_true.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "67cc7abeb6434bc8cd23cb6b375501e6bbf91d01bddf89bfb6ee3ae5c711fdd0",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "control_true-current",
+    "command": [
+      "/workspace/p1079-artifacts/parent-observation-FIRST/observe",
+      "/tmp/p1079/tests/p1079/sources/control_true.nl"
+    ],
+    "exit": 0,
+    "stdout_SHA256": "d319ab5adfa58e312fcfb611b4474af4c3f3baa31114d2b43dea602796788fb4",
+    "stderr_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "label": "if_false-CHECK",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "--check",
+      "/tmp/p1079/tests/p1079/sources/if_false.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "d58e075993302f180f38433df3b26caf9ac5c7a43d67681000adf2a31e2c7650"
+  },
+  {
+    "label": "if_false-C17",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "/tmp/p1079/tests/p1079/sources/if_false.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "d58e075993302f180f38433df3b26caf9ac5c7a43d67681000adf2a31e2c7650"
+  },
+  {
+    "label": "if_true-CHECK",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "--check",
+      "/tmp/p1079/tests/p1079/sources/if_true.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "02b8ca4d8865acf85bc2a734123f6fdb16577d7df14990fbb910c18f9f265eed"
+  },
+  {
+    "label": "if_true-C17",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "/tmp/p1079/tests/p1079/sources/if_true.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "02b8ca4d8865acf85bc2a734123f6fdb16577d7df14990fbb910c18f9f265eed"
+  },
+  {
+    "label": "negative_different_IF_roots-CHECK",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "--check",
+      "/tmp/p1079/tests/p1079/sources/negative_different_IF_roots.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "774b485001f00e3ade0c2ce59f68d87de2b25e8fde8330e2f19674acf106f673"
+  },
+  {
+    "label": "negative_different_IF_roots-C17",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "/tmp/p1079/tests/p1079/sources/negative_different_IF_roots.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "774b485001f00e3ade0c2ce59f68d87de2b25e8fde8330e2f19674acf106f673"
+  },
+  {
+    "label": "negative_escaped_ref-CHECK",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "--check",
+      "/tmp/p1079/tests/p1079/sources/negative_escaped_ref.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "88e6855af956761c3f80b0a9f522d41b11313f4b4d203f9e16563af34ec59fb5"
+  },
+  {
+    "label": "negative_escaped_ref-C17",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "/tmp/p1079/tests/p1079/sources/negative_escaped_ref.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "88e6855af956761c3f80b0a9f522d41b11313f4b4d203f9e16563af34ec59fb5"
+  },
+  {
+    "label": "negative_missing_failure_cleanup-CHECK",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "--check",
+      "/tmp/p1079/tests/p1079/sources/negative_missing_failure_cleanup.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "6a690a2a42f7d08cfde79ebbf79eafb7c843597a28a301a6f20199fd923d7f17"
+  },
+  {
+    "label": "negative_missing_failure_cleanup-C17",
+    "command": [
+      "/tmp/p1079-parent/newlangc",
+      "/tmp/p1079/tests/p1079/sources/negative_missing_failure_cleanup.nl"
+    ],
+    "exit": 3,
+    "stdout_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_SHA256": "6a690a2a42f7d08cfde79ebbf79eafb7c843597a28a301a6f20199fd923d7f17"
+  }
+]

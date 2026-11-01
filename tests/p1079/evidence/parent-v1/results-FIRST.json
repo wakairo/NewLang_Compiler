@@ -1,0 +1,136 @@
+[
+  {
+    "source": "alternative_loop",
+    "CHECK": 3,
+    "CHECK_stderr": "/tmp/p1079/tests/p1079/sources/alternative_loop.nl:78:24-81:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+    "C17": 3,
+    "C17_bytes": 0,
+    "C17_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C17_stderr": "/tmp/p1079/tests/p1079/sources/alternative_loop.nl:78:24-81:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+    "observer_exit": null,
+    "observations": []
+  },
+  {
+    "source": "control_false",
+    "CHECK": 0,
+    "CHECK_stderr": "",
+    "C17": 0,
+    "C17_bytes": 14916,
+    "C17_SHA256": "f10e3444067c9af500982278d834ae495d8fc2fc3885d0edc6320fb41dbf93ff",
+    "C17_stderr": "",
+    "observer_exit": 0,
+    "observations": [
+      {
+        "kind": "origin",
+        "valid": 1
+      },
+      {
+        "kind": "Copy",
+        "call": 21,
+        "GET_body": 1,
+        "GET_parameters": 1,
+        "body_current": 0,
+        "parameters_current": 0,
+        "events": 1
+      },
+      {
+        "kind": "Copy",
+        "call": 28,
+        "GET_body": 1,
+        "GET_parameters": 1,
+        "body_current": 0,
+        "parameters_current": 0,
+        "events": 1
+      }
+    ]
+  },
+  {
+    "source": "control_true",
+    "CHECK": 0,
+    "CHECK_stderr": "",
+    "C17": 0,
+    "C17_bytes": 14915,
+    "C17_SHA256": "67cc7abeb6434bc8cd23cb6b375501e6bbf91d01bddf89bfb6ee3ae5c711fdd0",
+    "C17_stderr": "",
+    "observer_exit": 0,
+    "observations": [
+      {
+        "kind": "origin",
+        "valid": 1
+      },
+      {
+        "kind": "Copy",
+        "call": 21,
+        "GET_body": 1,
+        "GET_parameters": 1,
+        "body_current": 0,
+        "parameters_current": 0,
+        "events": 1
+      },
+      {
+        "kind": "Copy",
+        "call": 28,
+        "GET_body": 1,
+        "GET_parameters": 1,
+        "body_current": 0,
+        "parameters_current": 0,
+        "events": 1
+      }
+    ]
+  },
+  {
+    "source": "if_false",
+    "CHECK": 3,
+    "CHECK_stderr": "/tmp/p1079/tests/p1079/sources/if_false.nl:79:12-79:17: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+    "C17": 3,
+    "C17_bytes": 0,
+    "C17_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C17_stderr": "/tmp/p1079/tests/p1079/sources/if_false.nl:79:12-79:17: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+    "observer_exit": null,
+    "observations": []
+  },
+  {
+    "source": "if_true",
+    "CHECK": 3,
+    "CHECK_stderr": "/tmp/p1079/tests/p1079/sources/if_true.nl:79:12-79:17: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+    "C17": 3,
+    "C17_bytes": 0,
+    "C17_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C17_stderr": "/tmp/p1079/tests/p1079/sources/if_true.nl:79:12-79:17: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+    "observer_exit": null,
+    "observations": []
+  },
+  {
+    "source": "negative_different_IF_roots",
+    "CHECK": 3,
+    "CHECK_stderr": "/tmp/p1079/tests/p1079/sources/negative_different_IF_roots.nl:79:12-79:17: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+    "C17": 3,
+    "C17_bytes": 0,
+    "C17_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C17_stderr": "/tmp/p1079/tests/p1079/sources/negative_different_IF_roots.nl:79:12-79:17: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+    "observer_exit": null,
+    "observations": []
+  },
+  {
+    "source": "negative_escaped_ref",
+    "CHECK": 3,
+    "CHECK_stderr": "/tmp/p1079/tests/p1079/sources/negative_escaped_ref.nl:79:12-79:17: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+    "C17": 3,
+    "C17_bytes": 0,
+    "C17_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C17_stderr": "/tmp/p1079/tests/p1079/sources/negative_escaped_ref.nl:79:12-79:17: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+    "observer_exit": null,
+    "observations": []
+  },
+  {
+    "source": "negative_missing_failure_cleanup",
+    "CHECK": 3,
+    "CHECK_stderr": "/tmp/p1079/tests/p1079/sources/negative_missing_failure_cleanup.nl:79:12-79:17: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+    "C17": 3,
+    "C17_bytes": 0,
+    "C17_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C17_stderr": "/tmp/p1079/tests/p1079/sources/negative_missing_failure_cleanup.nl:79:12-79:17: error(syntax)[P13-IF-OPEN]: if requires (condition)\n",
+    "observer_exit": null,
+    "observations": []
+  }
+]

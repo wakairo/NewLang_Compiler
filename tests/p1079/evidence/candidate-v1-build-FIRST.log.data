@@ -1,0 +1,84 @@
+[  1%] Built target newlang_source
+[  1%] Built target newlang_diagnostic
+[  1%] Built target newlang_lexer
+[  2%] Built target newlang_syntax
+[  3%] Building C object CMakeFiles/diagnostic_test.dir/tests/unit/diagnostic_test.c.o
+[  3%] Building C object CMakeFiles/source_test.dir/tests/unit/source_test.c.o
+[  4%] Building C object CMakeFiles/lexer_test.dir/tests/unit/lexer_test.c.o
+[  4%] Building C object CMakeFiles/lexical_frontend_test.dir/tests/integration/lexical_frontend_test.c.o
+[  4%] Linking C executable source_test
+[  4%] Linking C executable diagnostic_test
+[  4%] Linking C executable lexical_frontend_test
+[  4%] Built target source_test
+[  4%] Built target diagnostic_test
+[  5%] Built target newlang_parser
+[  5%] Linking C executable lexer_test
+[  5%] Built target newlang_checked
+[  5%] Built target lexical_frontend_test
+[  5%] Building C object CMakeFiles/parser_test.dir/tests/unit/parser_test.c.o
+[  5%] Building C object CMakeFiles/newlang_parser_p534.dir/src/parser.c.o
+[  5%] Building C object CMakeFiles/syntax_frontend_test.dir/tests/integration/syntax_frontend_test.c.o
+[  5%] Built target lexer_test
+[ 11%] Built target newlang_semantic
+[ 11%] Linking C executable syntax_frontend_test
+[ 12%] Building C object CMakeFiles/newlang_checked_c_node.dir/src/checked_c_node.c.o
+[ 12%] Built target syntax_frontend_test
+In file included from /tmp/p1079/src/checked_c_node.c:384:
+/tmp/p1079/src/checked_c_copy_field_if_internal.h: In function ‘copy_if_input’:
+/tmp/p1079/src/checked_c_copy_field_if_internal.h:32:16: error: implicit declaration of function ‘copy_if_literal’ [-Wimplicit-function-declaration]
+   32 |         return copy_if_literal(arm, n, e->u8, 255, &out->literal);
+      |                ^~~~~~~~~~~~~~~
+/tmp/p1079/src/checked_c_copy_field_if_internal.h:43:10: error: implicit declaration of function ‘copy_plain’ [-Wimplicit-function-declaration]
+   43 |         !copy_plain(view->entry, binding.value, e->u8, &value) ||
+      |          ^~~~~~~~~~
+/tmp/p1079/src/checked_c_copy_field_if_internal.h: In function ‘copy_field_if’:
+/tmp/p1079/src/checked_c_copy_field_if_internal.h:55:10: error: implicit declaration of function ‘copy_closed_world’; did you mean ‘copy_post_world’? [-Wimplicit-function-declaration]
+   55 |     if (!copy_closed_world(e, env))
+      |          ^~~~~~~~~~~~~~~~~
+      |          copy_post_world
+/tmp/p1079/src/checked_c_copy_field_if_internal.h:132:20: error: implicit declaration of function ‘copy_field’; did you mean ‘copy_field_if’? [-Wimplicit-function-declaration]
+  132 |         Local *l = copy_field(e, env, &event.field);
+      |                    ^~~~~~~~~~
+      |                    copy_field_if
+/tmp/p1079/src/checked_c_copy_field_if_internal.h:132:20: error: initialization of ‘Local *’ from ‘int’ makes pointer from integer without a cast [-Wint-conversion]
+In file included from /tmp/p1079/src/checked_c_node.c:385:
+/tmp/p1079/src/checked_c_copy_if_internal.h: At top level:
+/tmp/p1079/src/checked_c_copy_if_internal.h:62:13: error: conflicting types for ‘copy_if_literal’; have ‘_Bool(const NLCheckedFragment *, const NLCheckedNodeView *, NLTypeId,  size_t,  size_t *)’ {aka ‘_Bool(const NLCheckedFragment *, const NLCheckedNodeView *, long unsigned int,  long unsigned int,  long unsigned int *)’}
+   62 | static bool copy_if_literal(const NLCheckedFragment *f,
+      |             ^~~~~~~~~~~~~~~
+/tmp/p1079/src/checked_c_copy_field_if_internal.h:32:16: note: previous implicit declaration of ‘copy_if_literal’ with type ‘int()’
+   32 |         return copy_if_literal(arm, n, e->u8, 255, &out->literal);
+      |                ^~~~~~~~~~~~~~~
+In file included from /tmp/p1079/src/checked_c_node.c:386:
+/tmp/p1079/src/checked_c_copy_internal.h:5:13: error: conflicting types for ‘copy_plain’; have ‘_Bool(const NLSemanticContext *, NLValueId,  NLTypeId,  NLSemanticValueView *)’ {aka ‘_Bool(const NLSemanticContext *, long unsigned int,  long unsigned int,  NLSemanticValueView *)’}
+    5 | static bool copy_plain(const NLSemanticContext *c, NLValueId id, NLTypeId u8,
+      |             ^~~~~~~~~~
+/tmp/p1079/src/checked_c_copy_field_if_internal.h:43:10: note: previous implicit declaration of ‘copy_plain’ with type ‘int()’
+   43 |         !copy_plain(view->entry, binding.value, e->u8, &value) ||
+      |          ^~~~~~~~~~
+[ 12%] Linking C executable parser_test
+/tmp/p1079/src/checked_c_copy_internal.h:729:13: error: conflicting types for ‘copy_closed_world’; have ‘_Bool(const Emit *, const Env *)’
+  729 | static bool copy_closed_world(const Emit *e, const Env *env)
+      |             ^~~~~~~~~~~~~~~~~
+/tmp/p1079/src/checked_c_copy_field_if_internal.h:55:10: note: previous implicit declaration of ‘copy_closed_world’ with type ‘int()’
+   55 |     if (!copy_closed_world(e, env))
+      |          ^~~~~~~~~~~~~~~~~
+/tmp/p1079/src/checked_c_copy_internal.h:805:15: error: conflicting types for ‘copy_field’; have ‘Local *(Emit *, Env *, const NLCheckedField *)’
+  805 | static Local *copy_field(Emit *e, Env *env, const NLCheckedField *f)
+      |               ^~~~~~~~~~
+/tmp/p1079/src/checked_c_copy_field_if_internal.h:132:20: note: previous implicit declaration of ‘copy_field’ with type ‘int()’
+  132 |         Local *l = copy_field(e, env, &event.field);
+      |                    ^~~~~~~~~~
+[ 12%] Building C object CMakeFiles/p930_observe.dir/tests/p930/observe.c.o
+[ 12%] Built target parser_test
+[ 12%] Building C object CMakeFiles/p930_oom.dir/tests/p930/observe.c.o
+gmake[2]: *** [CMakeFiles/newlang_checked_c_node.dir/build.make:79: CMakeFiles/newlang_checked_c_node.dir/src/checked_c_node.c.o] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:924: CMakeFiles/newlang_checked_c_node.dir/all] Error 2
+gmake[1]: *** Waiting for unfinished jobs....
+[ 12%] Linking C static library libnewlang_parser_p534.a
+[ 12%] Linking C executable p930_observe
+[ 12%] Built target newlang_parser_p534
+[ 12%] Built target p930_observe
+[ 13%] Linking C executable p930_oom
+[ 13%] Built target p930_oom
+gmake: *** [Makefile:101: all] Error 2

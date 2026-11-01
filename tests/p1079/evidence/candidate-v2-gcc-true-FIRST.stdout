@@ -1,0 +1,8 @@
+{"kind":"binding","name":"old_primary","symbol":6,"known":true,"value":47}
+{"kind":"binding","name":"old_secondary","symbol":12,"known":true,"value":83}
+{"kind":"IF","node":36,"current":0,"root":4,"child":5,"index":0,"common_result_known":false,"common_child_value":24,"post_fact":21}
+{"kind":"event","arm":0,"old":211,"next":47,"current":0}
+{"kind":"event","arm":1,"old":211,"next":83,"current":0}
+{"kind":"binding","name":"selected_old","symbol":13,"known":false,"value":0}
+{"kind":"binding","name":"last_old","symbol":15,"known":true,"value":129}
+{"kind":"ownership","origin":true,"custody":true,"Copy_current":0}

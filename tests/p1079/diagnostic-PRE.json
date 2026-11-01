@@ -1,0 +1,9 @@
+{
+  "pre_run": true,
+  "oracle": "Instrument only rejection reporting in a separate backend translation unit, execute same checked graph, expect UNSUPPORTED and exact first rejection location; no Production edit or native.",
+  "files": {
+    "tests/p1079/diagnose.py": "d7c4efbd382bfec65c79d48faff9ce1afd18ab60711bfb056ed72465df57222f",
+    "src/checked_c_node.c": "ae25b411e00fa11df5da7ae6116e2c3e73ce2a90e2c71ca3693e457e836aa634",
+    "src/checked_c_copy_field_if_internal.h": "9eecf5dea88519ee2a2094ca884fd3cad919b7c8940166d5445b3124c1766d1c"
+  }
+}

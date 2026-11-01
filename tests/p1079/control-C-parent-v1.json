@@ -1,0 +1,10 @@
+{
+  "control_true": {
+    "bytes": 14915,
+    "SHA256": "67cc7abeb6434bc8cd23cb6b375501e6bbf91d01bddf89bfb6ee3ae5c711fdd0"
+  },
+  "control_false": {
+    "bytes": 14916,
+    "SHA256": "f10e3444067c9af500982278d834ae495d8fc2fc3885d0edc6320fb41dbf93ff"
+  }
+}

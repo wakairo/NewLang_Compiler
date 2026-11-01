@@ -1,0 +1,5 @@
+{
+  "pre_run": true,
+  "purpose": "Read-only actual semantic binding availability at entry vs completed caller, and scalar predicate; no native",
+  "SHA256": "37e26cc335de6dc011a2ead534965a364b85d25cbec119f49e2cfec5bf756047"
+}

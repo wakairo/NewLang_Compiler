@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "pre_run": true,
+  "purpose": "Read-only actual CHECK/current observation, never issuer or replacement proof",
+  "files": {
+    "tests/p1079/observe.c": "03e2e8b663cc69832c57f7669ea1d75a39433f1f8f18c0369c879510880e9f13",
+    "tests/p1079/parent.py": "84468448a638a166344b6fa5c9c2aaddafd8e4068237da6ab7d2fe614ae51023",
+    "tests/p965/shared.h": "65a7dca6813d07db3ddfc4b694fdb44e85deb905747a6acc71c0d3e72270cb5f",
+    "tests/support/node_checked.h": "bbb6a5ffc73336bff211bd3f1296a9fb0516683e2772f9b426cba139ea927a5b"
+  }
+}

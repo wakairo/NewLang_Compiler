@@ -3,6 +3,7 @@
 #include "checked_c_target.h"
 #include "h_origin_internal.h"
 #include "newlang/copy_body.h"
+#include "newlang/if_field.h"
 #include "newlang/node_join.h"
 #include "newlang/node_links.h"
 #include "newlang/raw_storage.h"
@@ -382,6 +383,8 @@ static bool final_unit_return(const NLCheckedFragment *body, NLCheckedNodeId id,
 }
 #include "checked_c_copy_if_internal.h"
 #include "checked_c_copy_internal.h"
+/* Uses the Copy carrier helpers above. */
+#include "checked_c_copy_field_if_internal.h"
 static bool producer_call(Emit *, Env *, NLCheckedNodeId,
                           const NLCheckedNodeView *, Value *);
 static bool live_destructure(Emit *, Env *, const NLCheckedNodeView *, Value *);
@@ -949,8 +952,12 @@ static bool expr(Emit *e, Env *env, NLCheckedNodeId id, Value *out)
     if (v == NULL || v->terminates || v->result_count > 1)
         return reject(e);
     *out = (Value){.type = v->type};
-    if (e->copy_type && v->kind == NL_CHECKED_IF)
+    if (e->copy_type && v->kind == NL_CHECKED_IF) {
+        NLIfFieldView field;
+        if (nl_checked_if_field_view(env->artifact, id, &field))
+            return copy_field_if(e, env, id, v, &field, out);
         return copy_value_if(e, env, id, v, out);
+    }
     if (e->custody &&
         (v->custody_call.entry_proved || v->custody_extraction.present ||
          (v->kind == NL_CHECKED_REPLACE && v->type == e->custody_type) ||

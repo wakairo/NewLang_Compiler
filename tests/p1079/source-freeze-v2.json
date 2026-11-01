@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "previous_frozen": "tests/p1079/source-freeze-v1.json",
+  "pre_run": true,
+  "files": {
+    "tests/p1079/sources-v2/if_false.nl": "625782827df84c87dca92a196e59519c4002259060d5274643c5693ec6c40a1d",
+    "tests/p1079/sources-v2/if_true.nl": "a79c11a54b6b72fcbb947bebdcab3210bea9e72bd6e8b30077d466ca50e63379",
+    "tests/p1079/sources-v2/negative_different_IF_roots.nl": "c37fc85fa5d91bc1294b8515ca44d67011fd4ba1a0a769149b4340cb5d143939",
+    "tests/p1079/sources-v2/negative_escaped_ref.nl": "57559d29889634e1faff2fde79ddc5cbe1a0af35da6a873bd00026a726c2b424",
+    "tests/p1079/sources-v2/negative_missing_failure_cleanup.nl": "30d5eae6b7c7389bc0c5785607be3db60cf85cca05c45cdc0b3fc56ee10ff28d",
+    "tests/p1079/oracle-v2.json": "39920fc00d464c5dfbbf03ccd62807d9f1dca080656c3e095606ee8f0f1c58ef"
+  }
+}

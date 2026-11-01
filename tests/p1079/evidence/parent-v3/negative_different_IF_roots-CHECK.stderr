@@ -1,0 +1,1 @@
+/tmp/p1079/tests/p1079/sources-v3/negative_different_IF_roots.nl:78:24-82:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports

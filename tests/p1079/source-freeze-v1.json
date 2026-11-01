@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "base": "626829e22cc3649a99bcbce998dda4aa0cfab22f",
+  "pre_run": true,
+  "files": {
+    "tests/p1079/oracle-v1.json": "da2ef25d52ad43451df012a48c81fe23ac6957038e73b73a91533fda678e9681",
+    "tests/p1079/sources/alternative_loop.nl": "cbf570725df388a06560c638e764e56e68f629782e52b051b5b20ed935b025ce",
+    "tests/p1079/sources/control_false.nl": "6cd9079f579d3bd4b1fe847d8e7ca1f454e7f59374b18688103699ec27a7ed28",
+    "tests/p1079/sources/control_true.nl": "91015515db17c3c7d04cdd2ab9a78a0334ac57fb56177dc1b3d268fd01d92800",
+    "tests/p1079/sources/if_false.nl": "988b9f1d557cdc4cd1951b6517258c6e87429f075635125c27c9ba02d2dc6494",
+    "tests/p1079/sources/if_true.nl": "40796992dea17063cabfecc9bf61476bad09e56328f364584b2893c9e0206259",
+    "tests/p1079/sources/negative_different_IF_roots.nl": "291cd7abc0e6af8e0aecc56fa5a84798aabaab4b9363d3292816487b4a7f672f",
+    "tests/p1079/sources/negative_escaped_ref.nl": "35a3eab8cfeeb856effe553c34d8ea118b8d86c628b98463c9a1b8c99609b8b4",
+    "tests/p1079/sources/negative_missing_failure_cleanup.nl": "b68d475db0ff2fe7d465452c9714e06d273d70fde5189777c146dcaac0612685"
+  }
+}

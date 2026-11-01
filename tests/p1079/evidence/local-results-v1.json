@@ -1,0 +1,315 @@
+{
+  "Issue": 1079,
+  "release": "C173",
+  "base": "626829e22cc3649a99bcbce998dda4aa0cfab22f",
+  "tested_HEAD": "fc76bff14519b5ec322946bc0b8566faee96c056",
+  "tested_tree": "5fb6388a81ebac1d3374308b8eb1aca0d7ac70e6",
+  "Production_cohort": "b923449",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "local_lanes": {
+    "gcc": {
+      "named_PASS": 601,
+      "eligible_inventory": 601,
+      "wall_seconds": 383.35,
+      "p990_seconds": "28.62",
+      "new_seconds": {
+        "p1079_field_if_0.integration": "8.68",
+        "p1079_field_if_1.integration": "7.74",
+        "p1079_field_if_2.integration": "7.63"
+      },
+      "original_owner_trials": 494,
+      "original_ledger_OOM": 502,
+      "profiles": [
+        {
+          "name": "if_index1",
+          "C17_bytes": 15257,
+          "C17_SHA256": "c796d8c0b0edd8f18bfa29b5ec4e641a01d15db27c7e9638f310282621e73422",
+          "physical_guest_runs": 6,
+          "backend_allocation_positions": 631,
+          "status_counts": {
+            "2": 611,
+            "1": 20
+          },
+          "IF_graph_rejects": 25,
+          "foreign_B_IF_arms_after_A_destroy": "current/exact_C/destroy PASS",
+          "Copy_rejects": 14,
+          "H_rejects": 4,
+          "world_rejects": 7,
+          "named_output_no_clobber_exact_retry": true
+        },
+        {
+          "name": "if_false",
+          "C17_bytes": 15257,
+          "C17_SHA256": "b87e8bcaa72c2ad33a18a6dda5f73306a20d6783b0efe0c90793577e1b0dd440",
+          "physical_guest_runs": 6,
+          "backend_allocation_positions": 631,
+          "status_counts": {
+            "2": 611,
+            "1": 20
+          },
+          "IF_graph_rejects": 25,
+          "foreign_B_IF_arms_after_A_destroy": "current/exact_C/destroy PASS",
+          "Copy_rejects": 14,
+          "H_rejects": 4,
+          "world_rejects": 7,
+          "named_output_no_clobber_exact_retry": true
+        },
+        {
+          "name": "if_true",
+          "C17_bytes": 15257,
+          "C17_SHA256": "ec3f8af9bd5105aa757f3e0ee51a9988435d9deb6664c15be52fe5a6799b9808",
+          "physical_guest_runs": 6,
+          "backend_allocation_positions": 631,
+          "status_counts": {
+            "2": 611,
+            "1": 20
+          },
+          "IF_graph_rejects": 25,
+          "foreign_B_IF_arms_after_A_destroy": "current/exact_C/destroy PASS",
+          "Copy_rejects": 14,
+          "H_rejects": 4,
+          "world_rejects": 7,
+          "named_output_no_clobber_exact_retry": true
+        }
+      ],
+      "compiler_SHA256": "b72d9710ee8200816817f9483921997e4565f426e30e88449824d30b1334f87a"
+    },
+    "clang": {
+      "named_PASS": 601,
+      "eligible_inventory": 601,
+      "wall_seconds": 375.03,
+      "p990_seconds": "28.25",
+      "new_seconds": {
+        "p1079_field_if_1.integration": "5.63",
+        "p1079_field_if_0.integration": "6.59",
+        "p1079_field_if_2.integration": "7.08"
+      },
+      "original_owner_trials": 494,
+      "original_ledger_OOM": 502,
+      "profiles": [
+        {
+          "name": "if_index1",
+          "C17_bytes": 15257,
+          "C17_SHA256": "c796d8c0b0edd8f18bfa29b5ec4e641a01d15db27c7e9638f310282621e73422",
+          "physical_guest_runs": 6,
+          "backend_allocation_positions": 631,
+          "status_counts": {
+            "2": 611,
+            "1": 20
+          },
+          "IF_graph_rejects": 25,
+          "foreign_B_IF_arms_after_A_destroy": "current/exact_C/destroy PASS",
+          "Copy_rejects": 14,
+          "H_rejects": 4,
+          "world_rejects": 7,
+          "named_output_no_clobber_exact_retry": true
+        },
+        {
+          "name": "if_false",
+          "C17_bytes": 15257,
+          "C17_SHA256": "b87e8bcaa72c2ad33a18a6dda5f73306a20d6783b0efe0c90793577e1b0dd440",
+          "physical_guest_runs": 6,
+          "backend_allocation_positions": 631,
+          "status_counts": {
+            "2": 611,
+            "1": 20
+          },
+          "IF_graph_rejects": 25,
+          "foreign_B_IF_arms_after_A_destroy": "current/exact_C/destroy PASS",
+          "Copy_rejects": 14,
+          "H_rejects": 4,
+          "world_rejects": 7,
+          "named_output_no_clobber_exact_retry": true
+        },
+        {
+          "name": "if_true",
+          "C17_bytes": 15257,
+          "C17_SHA256": "ec3f8af9bd5105aa757f3e0ee51a9988435d9deb6664c15be52fe5a6799b9808",
+          "physical_guest_runs": 6,
+          "backend_allocation_positions": 631,
+          "status_counts": {
+            "2": 611,
+            "1": 20
+          },
+          "IF_graph_rejects": 25,
+          "foreign_B_IF_arms_after_A_destroy": "current/exact_C/destroy PASS",
+          "Copy_rejects": 14,
+          "H_rejects": 4,
+          "world_rejects": 7,
+          "named_output_no_clobber_exact_retry": true
+        }
+      ],
+      "compiler_SHA256": "a103db86dc3b7e5d8db2b83de610df30db22dfb0dbca07aa66d7178faab2f188"
+    },
+    "asan": {
+      "named_PASS": 151,
+      "eligible_inventory": 600,
+      "wall_seconds": 257.13,
+      "p990_seconds": "12.64",
+      "new_seconds": {
+        "p1079_field_if_0.integration": "4.46",
+        "p1079_field_if_1.integration": "3.73",
+        "p1079_field_if_2.integration": "3.55"
+      },
+      "original_owner_trials": 494,
+      "original_ledger_OOM": 502,
+      "profiles": [
+        {
+          "name": "if_index1",
+          "C17_bytes": 15257,
+          "C17_SHA256": "c796d8c0b0edd8f18bfa29b5ec4e641a01d15db27c7e9638f310282621e73422",
+          "physical_guest_runs": 6,
+          "backend_allocation_positions": 631,
+          "status_counts": {
+            "2": 611,
+            "1": 20
+          },
+          "IF_graph_rejects": 25,
+          "foreign_B_IF_arms_after_A_destroy": "current/exact_C/destroy PASS",
+          "Copy_rejects": 14,
+          "H_rejects": 4,
+          "world_rejects": 7,
+          "named_output_no_clobber_exact_retry": true
+        },
+        {
+          "name": "if_false",
+          "C17_bytes": 15257,
+          "C17_SHA256": "b87e8bcaa72c2ad33a18a6dda5f73306a20d6783b0efe0c90793577e1b0dd440",
+          "physical_guest_runs": 6,
+          "backend_allocation_positions": 631,
+          "status_counts": {
+            "2": 611,
+            "1": 20
+          },
+          "IF_graph_rejects": 25,
+          "foreign_B_IF_arms_after_A_destroy": "current/exact_C/destroy PASS",
+          "Copy_rejects": 14,
+          "H_rejects": 4,
+          "world_rejects": 7,
+          "named_output_no_clobber_exact_retry": true
+        },
+        {
+          "name": "if_true",
+          "C17_bytes": 15257,
+          "C17_SHA256": "ec3f8af9bd5105aa757f3e0ee51a9988435d9deb6664c15be52fe5a6799b9808",
+          "physical_guest_runs": 6,
+          "backend_allocation_positions": 631,
+          "status_counts": {
+            "2": 611,
+            "1": 20
+          },
+          "IF_graph_rejects": 25,
+          "foreign_B_IF_arms_after_A_destroy": "current/exact_C/destroy PASS",
+          "Copy_rejects": 14,
+          "H_rejects": 4,
+          "world_rejects": 7,
+          "named_output_no_clobber_exact_retry": true
+        }
+      ],
+      "compiler_SHA256": "55a72529a50b1deab77c3c5cfef092a419cb71f078ac283769d222445077658a"
+    },
+    "ubsan": {
+      "named_PASS_union": 151,
+      "eligible_inventory": 600,
+      "original_epoch": {
+        "named_PASS": 113,
+        "TIMEOUT": {
+          "test": "p990_new_native.integration",
+          "seconds": 90.01
+        },
+        "wall_seconds": 180.44
+      },
+      "recovery": {
+        "only_failed_unreached": 38,
+        "parallelism": 1,
+        "unchanged_timeout": 90,
+        "wall_seconds": 85.99,
+        "p990_new_native_seconds": "17.78"
+      },
+      "p990_seconds": "12.50",
+      "new_seconds": {
+        "p1079_field_if_0.integration": "2.75",
+        "p1079_field_if_1.integration": "2.48",
+        "p1079_field_if_2.integration": "2.35"
+      },
+      "original_owner_trials": 494,
+      "original_ledger_OOM": 502,
+      "profiles": [
+        {
+          "name": "if_index1",
+          "C17_bytes": 15257,
+          "C17_SHA256": "c796d8c0b0edd8f18bfa29b5ec4e641a01d15db27c7e9638f310282621e73422",
+          "physical_guest_runs": 6,
+          "backend_allocation_positions": 631,
+          "status_counts": {
+            "2": 611,
+            "1": 20
+          },
+          "IF_graph_rejects": 25,
+          "foreign_B_IF_arms_after_A_destroy": "current/exact_C/destroy PASS",
+          "Copy_rejects": 14,
+          "H_rejects": 4,
+          "world_rejects": 7,
+          "named_output_no_clobber_exact_retry": true
+        },
+        {
+          "name": "if_false",
+          "C17_bytes": 15257,
+          "C17_SHA256": "b87e8bcaa72c2ad33a18a6dda5f73306a20d6783b0efe0c90793577e1b0dd440",
+          "physical_guest_runs": 6,
+          "backend_allocation_positions": 631,
+          "status_counts": {
+            "2": 611,
+            "1": 20
+          },
+          "IF_graph_rejects": 25,
+          "foreign_B_IF_arms_after_A_destroy": "current/exact_C/destroy PASS",
+          "Copy_rejects": 14,
+          "H_rejects": 4,
+          "world_rejects": 7,
+          "named_output_no_clobber_exact_retry": true
+        },
+        {
+          "name": "if_true",
+          "C17_bytes": 15257,
+          "C17_SHA256": "ec3f8af9bd5105aa757f3e0ee51a9988435d9deb6664c15be52fe5a6799b9808",
+          "physical_guest_runs": 6,
+          "backend_allocation_positions": 631,
+          "status_counts": {
+            "2": 611,
+            "1": 20
+          },
+          "IF_graph_rejects": 25,
+          "foreign_B_IF_arms_after_A_destroy": "current/exact_C/destroy PASS",
+          "Copy_rejects": 14,
+          "H_rejects": 4,
+          "world_rejects": 7,
+          "named_output_no_clobber_exact_retry": true
+        }
+      ],
+      "compiler_SHA256": "5ef0fdb6578896b6dd57e77f1c8a89b05866e9228d99bb5cc00a302dcb0886c3"
+    }
+  },
+  "new_physical_runs": 72,
+  "backend_fault_trials_across_12_profiles": 7572,
+  "all_15_predecessors_unchanged": true,
+  "prospective_v16": {
+    "inputs": 2752,
+    "SHA256": "28abd3405854ae26cd7de5ff841f00e1df080cf8f3b363d26d36befed66c0bf5"
+  },
+  "archive": {
+    "path": "tests/p1079/evidence/local-raw-v1.zip",
+    "members": 861,
+    "bytes": 1395931,
+    "SHA256": "a10825acd109b5bf6d7dcc2d264cc1916b386f778c7ae0db7222f890142c5d92",
+    "all_CRC_and_member_SHA_checked": true
+  },
+  "limitations": [
+    "local sanitizer risk-selected151 of600; exact-head FULL CI pending",
+    "outer-loan IF historical GET without current stays unsupported",
+    "loop/break first CHECK P6-JOIN-PRECISION",
+    "general CFG/predicates/multiple arm changes/callers/issuer extensions not established",
+    "No general soundness or audit-locality Product PASS"
+  ],
+  "self_review": "PASS for bounded private consumer; DRAFT HOLD for Coordination adjudication; not READY/merge/Product GO"
+}

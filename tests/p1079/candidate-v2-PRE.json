@@ -1,0 +1,8 @@
+{
+  "pre_run": true,
+  "reason": "Pinned formatter sorted a dependency-sensitive include before its helpers. Keep the original build RED and add an explicit separate dependency group. No source/oracle changes.",
+  "files": {
+    "src/checked_c_node.c": "ae25b411e00fa11df5da7ae6116e2c3e73ce2a90e2c71ca3693e457e836aa634",
+    "src/checked_c_copy_field_if_internal.h": "9eecf5dea88519ee2a2094ca884fd3cad919b7c8940166d5445b3124c1766d1c"
+  }
+}

@@ -1,0 +1,207 @@
+[
+  {
+    "source": "if_false",
+    "CHECK": 0,
+    "CHECK_stderr": "",
+    "C17": 4,
+    "C17_bytes": 0,
+    "C17_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C17_stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/p1079/tests/p1079/sources-v2/if_false.nl\n",
+    "observer_exit": 0,
+    "observations": [
+      {
+        "kind": "origin",
+        "valid": 1
+      },
+      {
+        "kind": "Copy",
+        "call": 21,
+        "GET_body": 1,
+        "GET_parameters": 1,
+        "body_current": 0,
+        "parameters_current": 0,
+        "events": 1
+      },
+      {
+        "kind": "Copy",
+        "call": 28,
+        "GET_body": 1,
+        "GET_parameters": 1,
+        "body_current": 0,
+        "parameters_current": 0,
+        "events": 1
+      },
+      {
+        "kind": "IF",
+        "node": 38,
+        "normal_arms": 2,
+        "GET": 1,
+        "current": 3,
+        "root": 4,
+        "child": 5,
+        "index": 0,
+        "result_type": 6,
+        "result_value": 27,
+        "result_seen": 1,
+        "result_known": 0,
+        "before_fact": 5,
+        "post_fact": 22
+      },
+      {
+        "kind": "arm",
+        "node": 38,
+        "arm": 0,
+        "events": 1,
+        "changes": 1
+      },
+      {
+        "kind": "event",
+        "node": 38,
+        "arm": 0,
+        "ordinal": 0,
+        "GET": 1,
+        "current": 3,
+        "change": 1,
+        "event_node": 2,
+        "field_child": 5
+      },
+      {
+        "kind": "arm",
+        "node": 38,
+        "arm": 1,
+        "events": 1,
+        "changes": 1
+      },
+      {
+        "kind": "event",
+        "node": 38,
+        "arm": 1,
+        "ordinal": 0,
+        "GET": 1,
+        "current": 3,
+        "change": 1,
+        "event_node": 2,
+        "field_child": 5
+      }
+    ]
+  },
+  {
+    "source": "if_true",
+    "CHECK": 0,
+    "CHECK_stderr": "",
+    "C17": 4,
+    "C17_bytes": 0,
+    "C17_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C17_stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: mixed H plus T has no dual-carrier C17 proof\nnote: /tmp/p1079/tests/p1079/sources-v2/if_true.nl\n",
+    "observer_exit": 0,
+    "observations": [
+      {
+        "kind": "origin",
+        "valid": 1
+      },
+      {
+        "kind": "Copy",
+        "call": 21,
+        "GET_body": 1,
+        "GET_parameters": 1,
+        "body_current": 0,
+        "parameters_current": 0,
+        "events": 1
+      },
+      {
+        "kind": "Copy",
+        "call": 28,
+        "GET_body": 1,
+        "GET_parameters": 1,
+        "body_current": 0,
+        "parameters_current": 0,
+        "events": 1
+      },
+      {
+        "kind": "IF",
+        "node": 38,
+        "normal_arms": 2,
+        "GET": 1,
+        "current": 3,
+        "root": 4,
+        "child": 5,
+        "index": 0,
+        "result_type": 6,
+        "result_value": 27,
+        "result_seen": 1,
+        "result_known": 0,
+        "before_fact": 5,
+        "post_fact": 22
+      },
+      {
+        "kind": "arm",
+        "node": 38,
+        "arm": 0,
+        "events": 1,
+        "changes": 1
+      },
+      {
+        "kind": "event",
+        "node": 38,
+        "arm": 0,
+        "ordinal": 0,
+        "GET": 1,
+        "current": 3,
+        "change": 1,
+        "event_node": 2,
+        "field_child": 5
+      },
+      {
+        "kind": "arm",
+        "node": 38,
+        "arm": 1,
+        "events": 1,
+        "changes": 1
+      },
+      {
+        "kind": "event",
+        "node": 38,
+        "arm": 1,
+        "ordinal": 0,
+        "GET": 1,
+        "current": 3,
+        "change": 1,
+        "event_node": 2,
+        "field_child": 5
+      }
+    ]
+  },
+  {
+    "source": "negative_different_IF_roots",
+    "CHECK": 3,
+    "CHECK_stderr": "/tmp/p1079/tests/p1079/sources-v2/negative_different_IF_roots.nl:79:9-83:10: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+    "C17": 3,
+    "C17_bytes": 0,
+    "C17_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C17_stderr": "/tmp/p1079/tests/p1079/sources-v2/negative_different_IF_roots.nl:79:9-83:10: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n",
+    "observer_exit": null,
+    "observations": []
+  },
+  {
+    "source": "negative_escaped_ref",
+    "CHECK": 3,
+    "CHECK_stderr": "/tmp/p1079/tests/p1079/sources-v2/negative_escaped_ref.nl:86:19-86:25: error(semantic)[P3-UNKNOWN-BINDING]: unknown semantic binding\n",
+    "C17": 3,
+    "C17_bytes": 0,
+    "C17_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C17_stderr": "/tmp/p1079/tests/p1079/sources-v2/negative_escaped_ref.nl:86:19-86:25: error(semantic)[P3-UNKNOWN-BINDING]: unknown semantic binding\n",
+    "observer_exit": null,
+    "observations": []
+  },
+  {
+    "source": "negative_missing_failure_cleanup",
+    "CHECK": 3,
+    "CHECK_stderr": "/tmp/p1079/tests/p1079/sources-v2/negative_missing_failure_cleanup.nl:36:25-42:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n",
+    "C17": 3,
+    "C17_bytes": 0,
+    "C17_SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "C17_stderr": "/tmp/p1079/tests/p1079/sources-v2/negative_missing_failure_cleanup.nl:36:25-42:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit\n",
+    "observer_exit": null,
+    "observations": []
+  }
+]

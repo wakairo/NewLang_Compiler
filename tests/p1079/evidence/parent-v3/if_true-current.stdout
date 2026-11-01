@@ -1,0 +1,8 @@
+{"kind":"origin","valid":1}
+{"kind":"Copy","call":21,"GET_body":1,"GET_parameters":1,"body_current":0,"parameters_current":0,"events":1}
+{"kind":"Copy","call":28,"GET_body":1,"GET_parameters":1,"body_current":0,"parameters_current":0,"events":1}
+{"kind":"IF","node":36,"normal_arms":2,"GET":1,"current":0,"root":4,"child":5,"index":0,"result_type":6,"result_value":26,"result_seen":1,"result_known":0,"before_fact":5,"post_fact":21}
+{"kind":"arm","node":36,"arm":0,"events":1,"changes":1}
+{"kind":"event","node":36,"arm":0,"ordinal":0,"GET":1,"current":0,"change":1,"event_node":4,"field_child":5}
+{"kind":"arm","node":36,"arm":1,"events":1,"changes":1}
+{"kind":"event","node":36,"arm":1,"ordinal":0,"GET":1,"current":0,"change":1,"event_node":4,"field_child":5}
