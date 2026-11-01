@@ -381,9 +381,10 @@ static bool final_unit_return(const NLCheckedFragment *body, NLCheckedNodeId id,
     }
     return false;
 }
-#include "checked_c_copy_field_if_internal.h"
 #include "checked_c_copy_if_internal.h"
 #include "checked_c_copy_internal.h"
+/* Uses the Copy carrier helpers above. */
+#include "checked_c_copy_field_if_internal.h"
 static bool producer_call(Emit *, Env *, NLCheckedNodeId,
                           const NLCheckedNodeView *, Value *);
 static bool live_destructure(Emit *, Env *, const NLCheckedNodeView *, Value *);
