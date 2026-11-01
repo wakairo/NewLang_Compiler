@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "pre_run": true,
+  "oracle": "tests/p1079/oracle-v3.json",
+  "IF_host_oracle": {
+    "parent": 5,
+    "arm": 14,
+    "candidate_view": 4,
+    "cardinality": 2,
+    "foreign_A_destroy_unrestored": "B remains current/exact C/destructible"
+  },
+  "OOM": "Every reached backend allocation rejected unpublished, length sentinel, same context snapshot, authentic owner, exact retry; OOM vs conservative unsupported counted separately.",
+  "files": {
+    "tests/p1079/run.py": "acfbdf7341274b01cd3bff48e144dea764746257faf09b812c6c7dab7484bd79",
+    "tests/p1079/observe-current.c": "0d4ce66b52d82d08abf1c3611ad004431dcf964de0b88ed1cadabf477ae92c3d",
+    "tests/p1079/if_mutants.c": "b5d89d0e9d592b09ad1919c3b9d97a645b24c4786ae1f0556ebb00aa7b3bba78",
+    "tests/p1079/observer.h": "8da236a1095602684982194e642e4c8b7036b1b7c3b37205f0ce9de6dcc90014",
+    "tests/p1079/control-C-parent-v1.json": "44fe7bd90238d638d9c415c819765747c8240ce9af17303019a0463f344d3847",
+    "tests/p1062/support.h": "40e13da0348f4ba4660b7c3634938976367f005c385dbf8d98f65befe964644d",
+    "tests/p1062/consumer.c": "7379c8138ff319d5aaff5613aa2a9807e31b5ffa5e00609fe0cf7e9b2bc72284",
+    "tests/p1062/oom.c": "15fd3d794427a2bf31aabf41a44d25f81d9f0df7635142b95fba34a0a56ad107",
+    "tests/integration/two_heap_platform.c": "f184cb2eb7b459103a36421a493372f9aba0458f0699be1aa7c0cd0332c38377",
+    "tests/p965/shared.h": "65a7dca6813d07db3ddfc4b694fdb44e85deb905747a6acc71c0d3e72270cb5f",
+    "tests/support/node_checked.h": "bbb6a5ffc73336bff211bd3f1296a9fb0516683e2772f9b426cba139ea927a5b"
+  }
+}
