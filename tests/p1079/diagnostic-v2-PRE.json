@@ -1,0 +1,5 @@
+{
+  "pre_run": true,
+  "purpose": "Read-only arm-result forwarding and binding origin dump for first private rejection; expected same checked ownership and UNSUPPORTED, no native",
+  "SHA256": "e971ae4197df25cbcf11af6be78a3b75c1abe2b1086201dfd23eb5d124bc0e35"
+}

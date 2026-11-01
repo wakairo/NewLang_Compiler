@@ -38,13 +38,15 @@ static bool copy_if_input(Emit *e, const Env *env, const NLIfFieldView *view,
         !nl_semantic_binding_view(nl_checked_context(env->artifact), n->symbol,
                                   &caller) ||
         binding.type != e->u8 || caller.type != e->u8 ||
-        binding.availability != NL_AVAILABLE ||
-        caller.availability != NL_AVAILABLE || binding.value != caller.value ||
+        binding.availability != NL_AVAILABLE || binding.value != caller.value ||
         !copy_plain(view->entry, binding.value, e->u8, &value) ||
         !copy_plain(nl_checked_context(arm), n->results[0].value, e->u8,
                     &actual) ||
         value.scalar_value != actual.scalar_value)
         return false;
+    /* Entry is the authenticated use point. The completed function context
+     * has already retired lexical bindings; it supplies identity, not a new
+     * availability claim for that earlier operation. */
     return true;
 }
 

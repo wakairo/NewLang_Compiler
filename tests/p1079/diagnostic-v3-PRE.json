@@ -1,0 +1,5 @@
+{
+  "pre_run": true,
+  "purpose": "Same read-only rejection trace, actual arm event vs common-view field comparison and existing scalar input predicate; no native",
+  "SHA256": "28d3f64c51800c918bc1c376c05ad33a2e1ee9994f9eab0606ccbec7ec0bb31d"
+}

@@ -1,0 +1,8 @@
+{
+  "pre_run": true,
+  "reason": "First private rejection was completed caller availability, not origin/type/scalar identity. Only require availability in the validated actual IF entry checkpoint; completed caller retains identical binding identity after lexical retirement. No validator/issuer change.",
+  "files": {
+    "src/checked_c_node.c": "ae25b411e00fa11df5da7ae6116e2c3e73ce2a90e2c71ca3693e457e836aa634",
+    "src/checked_c_copy_field_if_internal.h": "5747daa781c63b29aa86cb8735921e55a6710931e6370b25510202279c91e49f"
+  }
+}
