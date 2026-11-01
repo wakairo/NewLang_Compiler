@@ -1,0 +1,321 @@
+{
+  "version": 4,
+  "base": "626829e22cc3649a99bcbce998dda4aa0cfab22f",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "goal": "Two-normal-arm IF with each branch opening and ending its own ordinary T field loan; existing public IF-field validator must authenticate both arms before a private backend consumer may lower it.",
+  "alternatives": [
+    {
+      "name": "IF structural join",
+      "priority": "selected first: reusable finite fork/join and typed result control for ordinary v0 source"
+    },
+    {
+      "name": "loop/break returned Copy",
+      "priority": "meaningful required control but general loops add inductive header/backedge/exit mapping; measure bounded no-backedge alternative without claiming it implements iteration"
+    }
+  ],
+  "positive": [
+    {
+      "name": "if_true",
+      "source": "tests/p1079/sources-v3/if_true.nl",
+      "control": "tests/p1079/sources/control_true.nl",
+      "CHECK_predicted": 0,
+      "Copy_GET_current_predicted": 0,
+      "IF_field_GET_current_predicted": "GET1/current0 from existing arm-local loan receipt; measure before implementation",
+      "C17_parent_predicted": 4,
+      "C17_candidate_goal": 0,
+      "condition": [
+        4,
+        "<",
+        11
+      ],
+      "chosen_arm": 0,
+      "initial_fields": [
+        [
+          47,
+          129
+        ],
+        [
+          211,
+          83
+        ]
+      ],
+      "final_fields": [
+        [
+          155,
+          211
+        ],
+        [
+          47,
+          47
+        ]
+      ],
+      "helper_old": [
+        47,
+        83
+      ],
+      "helper_next": [
+        155,
+        47
+      ],
+      "helper_sibling": [
+        129,
+        211
+      ],
+      "helper_index": [
+        0,
+        1
+      ],
+      "copy_results": [
+        47,
+        83,
+        211,
+        129
+      ],
+      "IF_changes_by_arm": [
+        {
+          "root": 1,
+          "index": 0,
+          "old": 211,
+          "next": 47
+        },
+        {
+          "root": 1,
+          "index": 0,
+          "old": 211,
+          "next": 83
+        }
+      ],
+      "post_IF_last_change": {
+        "root": 0,
+        "index": 1,
+        "old": 129,
+        "next": 211
+      },
+      "guest_worlds": [
+        0,
+        1,
+        2
+      ],
+      "H_payload": [
+        17,
+        229
+      ]
+    },
+    {
+      "name": "if_false",
+      "source": "tests/p1079/sources-v3/if_false.nl",
+      "control": "tests/p1079/sources/control_false.nl",
+      "CHECK_predicted": 0,
+      "Copy_GET_current_predicted": 0,
+      "IF_field_GET_current_predicted": "GET1/current0 from existing arm-local loan receipt; measure before implementation",
+      "C17_parent_predicted": 4,
+      "C17_candidate_goal": 0,
+      "condition": [
+        11,
+        "<",
+        4
+      ],
+      "chosen_arm": 1,
+      "initial_fields": [
+        [
+          47,
+          129
+        ],
+        [
+          211,
+          83
+        ]
+      ],
+      "final_fields": [
+        [
+          155,
+          211
+        ],
+        [
+          83,
+          47
+        ]
+      ],
+      "helper_old": [
+        47,
+        83
+      ],
+      "helper_next": [
+        155,
+        47
+      ],
+      "helper_sibling": [
+        129,
+        211
+      ],
+      "helper_index": [
+        0,
+        1
+      ],
+      "copy_results": [
+        47,
+        83,
+        211,
+        129
+      ],
+      "IF_changes_by_arm": [
+        {
+          "root": 1,
+          "index": 0,
+          "old": 211,
+          "next": 47
+        },
+        {
+          "root": 1,
+          "index": 0,
+          "old": 211,
+          "next": 83
+        }
+      ],
+      "post_IF_last_change": {
+        "root": 0,
+        "index": 1,
+        "old": 129,
+        "next": 211
+      },
+      "guest_worlds": [
+        0,
+        1,
+        2
+      ],
+      "H_payload": [
+        17,
+        229
+      ]
+    },
+    {
+      "name": "if_index1",
+      "source": "tests/p1079/sources-v4/if_index1.nl",
+      "control": null,
+      "CHECK_predicted": 0,
+      "Copy_GET_current_predicted": 0,
+      "IF_field_GET_current_predicted": "GET1/current0 from existing arm-local loan receipt; measure before implementation",
+      "C17_parent_predicted": 4,
+      "C17_candidate_goal": 0,
+      "condition": [
+        6,
+        "==",
+        6
+      ],
+      "chosen_arm": 0,
+      "initial_fields": [
+        [
+          47,
+          129
+        ],
+        [
+          211,
+          83
+        ]
+      ],
+      "final_fields": [
+        [
+          83,
+          155
+        ],
+        [
+          129,
+          129
+        ]
+      ],
+      "helper_old": [
+        129,
+        211
+      ],
+      "helper_next": [
+        155,
+        129
+      ],
+      "helper_sibling": [
+        47,
+        83
+      ],
+      "helper_index": [
+        1,
+        0
+      ],
+      "copy_results": [
+        129,
+        211,
+        83,
+        47
+      ],
+      "IF_changes_by_arm": [
+        {
+          "root": 1,
+          "index": 1,
+          "old": 83,
+          "next": 129
+        },
+        {
+          "root": 1,
+          "index": 1,
+          "old": 83,
+          "next": 211
+        }
+      ],
+      "post_IF_last_change": {
+        "root": 0,
+        "index": 0,
+        "old": 47,
+        "next": 83
+      },
+      "guest_worlds": [
+        0,
+        1,
+        2
+      ],
+      "H_payload": [
+        17,
+        229
+      ]
+    }
+  ],
+  "alternative": {
+    "source": "tests/p1079/sources/alternative_loop.nl",
+    "CHECK_allowed_observation": [
+      0,
+      3
+    ],
+    "C17_parent_predicted": 4,
+    "first_layer": "UNKNOWN loop precision/header/evidence versus C17; record actual",
+    "expected_if_native": "same values as control_true; original T identity and H cleanup"
+  },
+  "negative": {
+    "escaped_ref": {
+      "source": "tests/p1079/sources-v3/negative_escaped_ref.nl",
+      "CHECK_allowed": [
+        3
+      ],
+      "C17_if_CHECK0": 4,
+      "reason": "source scope error"
+    },
+    "missing_failure_cleanup": {
+      "source": "tests/p1079/sources-v3/negative_missing_failure_cleanup.nl",
+      "CHECK_allowed": [
+        3
+      ],
+      "C17_if_CHECK0": 4,
+      "reason": "missing H allocation responsibility/cleanup"
+    },
+    "different_IF_roots": {
+      "source": "tests/p1079/sources-v3/negative_different_IF_roots.nl",
+      "CHECK_allowed": [
+        0,
+        3
+      ],
+      "C17_if_CHECK0": 4,
+      "reason": "legitimate broader field/root composition, outside proposed single-child IF slice; first CHECK precision vs missing receipt unknown"
+    }
+  },
+  "contract": "Known-direct old Copy helper GET/current remains unchanged. Both IF arms use the same original scoped write ref/child; root and untouched sibling facts are world-qualified. No success-world H right is promoted to common/failure worlds.",
+  "native_goal": "Unmodified strict C17/native GCC/Clang O0/O2, guest0/1/2; passive observation compares original pointers/field/sibling, distinct branch writes, actual returned Copy used by another original; failures no-clobber/exact retry/OOM counts by actual status.",
+  "stop": "If actual missing frontier requires new source law, public issuer, authority or ABI, stop expanded implementation and return finite Gate0 information. No unsafe graph/native execution. Preserve all earlier versions/RED; no old P/R source/oracle/data changes.",
+  "pre_run": true,
+  "revision_reason": "Add complementary child-index1/equality true control for reusable field consumer, while retaining every v1-v3 source and oracle."
+}

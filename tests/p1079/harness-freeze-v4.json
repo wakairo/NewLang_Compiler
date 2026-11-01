@@ -1,0 +1,8 @@
+{
+  "pre_run": true,
+  "oracle": "tests/p1079/oracle-v4.json",
+  "reason": "Use the same actual-current, negative, native and ownership contract for complementary child/equality profile; replace only value expectations with the profile oracle. No old source/oracle change.",
+  "files": {
+    "tests/p1079/run-v4.py": "9de115cb9e6447159f4f9ccae85569d6d4b91973414debb4fbfc1c9ac96739b3"
+  }
+}
