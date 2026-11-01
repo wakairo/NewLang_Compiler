@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "source_oracle_version": 2,
+  "pre_run": true,
+  "files": {
+    "tests/p1077/run.py": "9d19a2357c66a444e951ab57c701889f324e97670f3b8dcc00e0022428006018",
+    "tests/p1077/observer.h": "1e943e187f7aa812325bad968ae33f3ff4a5c27d71db04d420ec05836895dcc4",
+    "tests/p1077/batch_mutants.c": "cceb90dd6952656c0be340a2116ff140cea97552b0e4f20fc892a816eb013b22",
+    "tests/p1077/observe-current.c": "cc2e3fd8cac39dbd44c2938ce596477ed20298576f72d74fe5d8af86bb3d9149",
+    "tests/p1077/control-C-parent-v1.json": "05ce8a0e71cab3f66f5cf396fca6c376439e8ea5cb8ad486a88350403d8aaeee",
+    "tests/p1077/evidence/parent-adapters/relocations-v1.json": "fd3668188f0ef6bd61415333a180ac64817a0e0551c334d406a86561f9193891",
+    "tests/p1062/consumer.c": "7379c8138ff319d5aaff5613aa2a9807e31b5ffa5e00609fe0cf7e9b2bc72284",
+    "tests/p1062/oom.c": "15fd3d794427a2bf31aabf41a44d25f81d9f0df7635142b95fba34a0a56ad107",
+    "tests/p1062/support.h": "40e13da0348f4ba4660b7c3634938976367f005c385dbf8d98f65befe964644d",
+    "tests/p965/shared.h": "65a7dca6813d07db3ddfc4b694fdb44e85deb905747a6acc71c0d3e72270cb5f",
+    "tests/integration/two_heap_platform.c": "f184cb2eb7b459103a36421a493372f9aba0458f0699be1aa7c0cd0332c38377"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "split_hot": {
+    "SHA256": "84666a4f190caf1560e1083dec726325ea10b694bb7f05a04d7a03ce36c1c068",
+    "bytes": 15132
+  },
+  "split_cold": {
+    "SHA256": "13762932a7d3dbbfc866e1f7ef2fefa64e3ecdbcdc93a1000199d654fa1873b2",
+    "bytes": 15130
+  },
+  "split_index1": {
+    "SHA256": "c6f8ad334101db6c2e7a247bd156ea889556750550dd342bc6108ecf8a3f0901",
+    "bytes": 15132
+  }
+}

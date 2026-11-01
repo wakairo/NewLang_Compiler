@@ -1,0 +1,32 @@
+[  0%] Building C object CMakeFiles/newlang_diagnostic.dir/src/diagnostic.c.o
+[  0%] Building C object CMakeFiles/newlang_source.dir/src/source.c.o
+[  0%] Linking C static library libnewlang_diagnostic.a
+[  0%] Linking C static library libnewlang_source.a
+[  0%] Built target newlang_diagnostic
+[  0%] Built target newlang_source
+[  1%] Building C object CMakeFiles/llvm_smoke.dir/tests/integration/llvm_smoke.c.o
+[  2%] Building C object CMakeFiles/diagnostic_test.dir/tests/unit/diagnostic_test.c.o
+[  2%] Linking C executable diagnostic_test
+[  2%] Linking CXX executable llvm_smoke
+[  2%] Built target diagnostic_test
+[  2%] Building C object CMakeFiles/source_test.dir/tests/unit/source_test.c.o
+[  2%] Linking C executable source_test
+[  2%] Built target source_test
+[  2%] Building C object CMakeFiles/newlang_lexer.dir/src/lexer.c.o
+[  3%] Linking C static library libnewlang_lexer.a
+[  3%] Built target newlang_lexer
+[  4%] Building C object CMakeFiles/newlang_syntax.dir/src/syntax.c.o
+[  4%] Linking C static library libnewlang_syntax.a
+[  4%] Built target newlang_syntax
+[  5%] Building C object CMakeFiles/lexer_test.dir/tests/unit/lexer_test.c.o
+/usr/bin/ld: cannot find -lxml2: No such file or directory
+[  5%] Linking C executable lexer_test
+[  5%] Built target lexer_test
+[  5%] Building C object CMakeFiles/lexical_frontend_test.dir/tests/integration/lexical_frontend_test.c.o
+collect2: error: ld returned 1 exit status
+gmake[2]: *** [CMakeFiles/llvm_smoke.dir/build.make:102: llvm_smoke] Error 1
+gmake[1]: *** [CMakeFiles/Makefile2:5207: CMakeFiles/llvm_smoke.dir/all] Error 2
+gmake[1]: *** Waiting for unfinished jobs....
+[  5%] Linking C executable lexical_frontend_test
+[  5%] Built target lexical_frontend_test
+gmake: *** [Makefile:101: all] Error 2

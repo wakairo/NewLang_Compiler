@@ -1013,6 +1013,11 @@ if(BUILD_TESTING)
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1062/run.py" "$<TARGET_FILE:newlangc>"
             "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1062_profile}")
     endforeach()
+    foreach(p1077_profile IN ITEMS 0 1 2)
+        add_test(NAME p1077_scoped_writes_${p1077_profile}.integration COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1077/run-v2.py"
+            "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1077_profile}")
+    endforeach()
     foreach(p1071_profile IN ITEMS 0 1 2)
         add_test(NAME p1071_final_unit_return_${p1071_profile}.integration COMMAND "${Python3_EXECUTABLE}"
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1071/run.py" "$<TARGET_FILE:newlangc>"
