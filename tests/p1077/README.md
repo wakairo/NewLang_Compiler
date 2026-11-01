@@ -6,8 +6,8 @@ accepted the new programs, but the private C17 `copy_loan` required an empty
 body ending directly in a call/replace. Equivalent split-loan controls emitted C17.
 
 Within the existing authenticated closed-H main continuation, a T field
-write loan now accepts straight-line u8 bindings initialized by direct
-replacements, pure u8 literals or Copy identifiers, and a corresponding u8 tail.
+write loan now accepts straight-line known-u8 bindings initialized by direct
+replacements, pure u8 literals or known Copy identifiers, and a tail of those forms.
 Replacements use the original scoped reference and the same child. Each step
 must match the evolving original root/child incarnation and current facts.
 Incoming batch operands are pure u8 identifiers/literals. The consumer creates
@@ -16,7 +16,7 @@ at exit while the original's updated ledger remains. The old empty-body route
 retains its C bytes. Existing local/step/depth/resource limits remain.
 
 The new region excludes nested loans/calls, extra roots, branches, reference
-escape, arbitrary arithmetic and RETURN within the loan. Existing mixed-main
+escape, unknown-scalar precision, arbitrary arithmetic and RETURN within the loan. Existing mixed-main
 admission, two old-Copy helpers, H all-world completion, custody and final
 cleanup remain mandatory. General CFG, third helpers, H-success rights in
 failure worlds and new issuer/API/ABI are outside it.

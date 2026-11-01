@@ -32,9 +32,31 @@ link failure from a missing local libxml2 development symlink; no CTests ran in
 that failed build. Runtime-library selection fixes build setup without changing
 the active curated LLVM23/compiler or old evidence.
 
-The final candidate HEAD/tree, fresh complete GCC/Clang cohort, targeted
-ASan/LSan/UBSan, original owner/OOM/history checks, actual reached failures,
-remaining legal-source limits and same-HEAD CI results are reported to
+The final code/test cohort at `8cb8c1f12cc013730a6dc29a55765fbe9c4c08e0`
+completed clean local verification:
+
+| Lane | Actual named tests | Suite seconds | p990 seconds |
+| --- | ---: | ---: | ---: |
+| GCC13 full | 598/598 | 114.45 | 12.43 |
+| Clang23 full | 598/598 | 109.53 | 14.12 |
+| ASan/LSan selected | 126/126 | 73.49 | 12.17 |
+| UBSan selected | 126/126 | 50.29 | 12.35 |
+
+Across these four lanes, the three new profiles contributed 72 physical traces.
+Each profile/lane reached 455 failure positions (435 dedicated OOM and 20
+conservative unsupported), preserving snapshot/current/output and exact retry.
+Each lane also exercised original ownership494/ledger OOM502, P1062 six-profile
+emitter2750 and P1071 three-profile emitter1369. Full local sanitizer598 was
+not run; selected126 and later full CI are distinct evidence.
+
+The final documentation-only support clarification/result receipt leaves all
+2579 runtime/provenance inputs byte-identical to that tested cohort. Canonical
+v1-v14, original P1071 files, source/oracle versions and FIRST remain intact.
+Prospective v15 SHA256 is
+`ff9e1502d995892e689c8011b04b315a334de422c24503ab68aa438fe9199e63`,
+with exact canonical v14 predecessor. No old table was rewritten.
+
+Final HEAD/tree, remaining legal-source limits and same-HEAD CI results go to
 [Issue1077](https://github.com/wakairo/NewLang_Compiler/issues/1077) and the
 single DRAFT/HOLD PR after those runs finish. Unexecuted gates are not PASS.
 No READY, merge or Product GO is performed by P.
