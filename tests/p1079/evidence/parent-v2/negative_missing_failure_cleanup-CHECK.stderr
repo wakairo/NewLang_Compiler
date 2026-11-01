@@ -1,0 +1,1 @@
+/tmp/p1079/tests/p1079/sources-v2/negative_missing_failure_cleanup.nl:36:25-42:18: error(semantic)[P5-SCOPE-OBLIGATION]: non-Discardable local remains available at block exit

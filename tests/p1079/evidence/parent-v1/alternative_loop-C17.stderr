@@ -1,0 +1,1 @@
+/tmp/p1079/tests/p1079/sources/alternative_loop.nl:78:24-81:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports
