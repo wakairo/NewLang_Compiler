@@ -1,0 +1,8 @@
+{
+  "pre_run": true,
+  "reason": "Original P1062 foreign H-arm test assumes main has exactly two arms. New source adds IF arms. Preserve original test/first RED; new P-owned adapter selects actual H MATCH edges by source checked node, retains all 14 Copy/4 H/7 world rejections, unrestored foreign B arm destruction and exact retry. No Production/source/oracle change.",
+  "files": {
+    "tests/p1079/consumer-v2.c": "331613ff54ff96878498923987340934c5fca253b7d9b574b3e7ce8cc29de296",
+    "tests/p1079/run-v3.py": "793b43305df9c787cbfc3834c97350e876c3971606e7fe246b317db659a41e3c"
+  }
+}
