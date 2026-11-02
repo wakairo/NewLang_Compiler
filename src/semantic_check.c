@@ -5434,7 +5434,10 @@ typedef struct NLLinearBreakProof {
     size_t function;
     NLControlState *entry;
     NLSemanticContext *post, *final;
-    NLCopyCallAnchor post_anchor, final_anchor;
+    NLCopyCallAnchor post_anchor, final_anchor, exit_anchor;
+    const NLControlState *exit_state; /* canonical body owns this handle */
+    const NLSemanticContext *exit_world;
+    NLSemanticContext exit_storage; /* nonowning origin bases/counts */
     NLCheckedResult result;
     const NLControlTarget *target; /* owned by the canonical body exit */
     NLCheckedNodeView *parent_nodes, *body_nodes, *root_nodes;
@@ -5454,6 +5457,7 @@ static void destroy_linear_breaks(NLCheckedFragment *f)
         nl_semantic_destroy(p->final);
         nl_copy_state_destroy(&p->post_anchor);
         nl_copy_state_destroy(&p->final_anchor);
+        nl_copy_state_destroy(&p->exit_anchor);
         free(p->parent_nodes);
         free(p->body_nodes);
         free(p->root_nodes);
@@ -5473,8 +5477,12 @@ static bool linear_callable(const NLLinearBreakProof *p,
            fn->count == 0 && !fn->parameters && fn->result == 1 &&
            !fn->caller_effects && !fn->hidden_dependencies &&
            !fn->owner_receiver && !fn->owner_producer &&
-           !fn->custody_recipient && p->plan->syntax == p->syntax &&
-           p->plan->source == p->source && p->plan->count == 0;
+           !fn->custody_recipient &&
+           (!p->post ||
+            (fn->name && p->post->functions[p->function - 1].name &&
+             !strcmp(fn->name, p->post->functions[p->function - 1].name))) &&
+           p->plan->syntax == p->syntax && p->plan->source == p->source &&
+           p->plan->count == 0;
 }
 
 static NLCheckStatus retain_linear_break(Check *check, LoopControl *loop,
@@ -5525,6 +5533,13 @@ static NLCheckStatus retain_linear_break(Check *check, LoopControl *loop,
     NLCheckStatus status = nl_sem_clone(check->context, &p->post);
     if (status == NL_CHECK_OK)
         status = nl_copy_state_anchor(p->post, &p->post_anchor);
+    if (status == NL_CHECK_OK) {
+        const NLControlExitView *e = nl_control_exit_view(body->exits, 0);
+        p->exit_state = e->state;
+        p->exit_world = nl_control_state_context((NLControlState *)e->state);
+        p->exit_storage = *p->exit_world;
+        status = nl_copy_state_anchor(p->exit_world, &p->exit_anchor);
+    }
     return status;
 }
 
@@ -5670,6 +5685,13 @@ NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *f,
         nl_checked_call_body(p->root, p->call) != f || !n ||
         n->result_count != 1 || n->results[0].type != p->result.type ||
         n->results[0].value != p->result.value)
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    const NLControlExitView *exit = nl_control_exit_view(p->body->exits, 0);
+    if (!exit || exit->state != p->exit_state ||
+        nl_control_state_context((NLControlState *)exit->state) !=
+            p->exit_world ||
+        !linear_world_matches(p->exit_world, &p->exit_storage, p->post,
+                              &p->exit_anchor))
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     Check body = {.artifact = (NLCheckedFragment *)p->body,
                   .context = p->post,

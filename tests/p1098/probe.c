@@ -177,6 +177,31 @@ static bool observe(const char *path, size_t index, size_t old, size_t next)
     MUTATE(NLSyntaxTree *, fn->body, syntax, b.tree);
     MUTATE(NLSource *, fn->body, source, b.spelling);
     MUTATE(size_t, fn->body, count, 1);
+    MUTATE(const char *, fn, name, "changed-current-registration");
+    NLControlExitView *edge =
+        (NLControlExitView *)nl_control_exit_view(a.body->exits, 0);
+    const NLControlExitView *foreign = nl_control_exit_view(b.body->exits, 0);
+    REQUIRE(edge && foreign && edge->state != foreign->state &&
+            edge->target != foreign->target);
+    REQUIRE(edge->values[0].value == foreign->values[0].value);
+    MUTATE(const NLControlState *, edge, state, foreign->state);
+    MUTATE(const NLControlTarget *, edge, target, foreign->target);
+    MUTATE(const NLControlTarget *, edge, source_target,
+           foreign->source_target);
+    MUTATE(const NLCheckedFragment *, edge, source_owner, b.body);
+    MUTATE(size_t, edge, values[0].value, incoming->results[0].value);
+    MUTATE(size_t, edge, source_node, edge->source_node - 1);
+    NLSemanticContext *exit_context =
+        nl_control_state_context((NLControlState *)edge->state);
+    MUTATE(NLSemanticValueView *, exit_context, values, NULL);
+    MUTATE(NLSemanticPlaceView *, exit_context, places, NULL);
+    MUTATE(NLSemanticScopeView *, exit_context, scopes, NULL);
+    MUTATE(NLTypeEntry *, exit_context, types, NULL);
+    MUTATE(size_t, exit_context, last_value_fact,
+           exit_context->last_value_fact + 1);
+    NLSemanticValueView *exit_value =
+        &exit_context->values[edge->values[0].value - 1];
+    MUTATE(size_t, exit_value, scalar_value, old ^ 1);
     MUTATE(NLFunctionEntry *, a.context, functions, NULL);
     MUTATE(size_t, a.context, function_count, 0);
     MUTATE(NLSemanticValueView *, a.context, values, NULL);
