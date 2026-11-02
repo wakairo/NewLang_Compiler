@@ -179,7 +179,9 @@ static bool observe(const char *path, size_t index, size_t old, size_t next)
     MUTATE(NLSyntaxTree *, fn->body, syntax, b.tree);
     MUTATE(NLSource *, fn->body, source, b.spelling);
     MUTATE(size_t, fn->body, count, 1);
-    MUTATE(const char *, fn, name, "changed-current-registration");
+    const char changed_name[] = "changed-current-registration";
+    REQUIRE(strcmp(fn->name, changed_name));
+    MUTATE(const char *, fn, name, changed_name);
     NLControlExitView *edge =
         (NLControlExitView *)nl_control_exit_view(a.body->exits, 0);
     const NLControlExitView *foreign = nl_control_exit_view(b.body->exits, 0);
