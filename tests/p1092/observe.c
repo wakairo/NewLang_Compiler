@@ -13,6 +13,7 @@ static NLSemanticContext *actual_world;
 static int fault;
 static const NLControlExitView *foreign_edge;
 static const NLCheckedFragment *foreign_body;
+static const NLCheckedFragment *foreign_parent;
 static NLSymbolId ambient_owner, ambient_domain, ambient_allocation,
     ambient_storage;
 static NLDomainId ambient_domain_id;
@@ -85,7 +86,8 @@ NLCheckStatus __wrap_nl_control_source_break_append(
     const NLCheckedFragment *parent)
 {
     NLCheckStatus status = __real_nl_control_source_break_append(
-        out, target, state, value, owner, node, parent);
+        out, target, state, value, owner, node,
+        watch && fault == 21 ? foreign_parent : parent);
     if (status != NL_CHECK_OK || !watch || !fault)
         return status;
     NLControlExitView *e = (NLControlExitView *)nl_control_exit_view(*out, 0);
@@ -163,6 +165,12 @@ NLCheckStatus __wrap_nl_control_source_break_append(
             ->values[actual_world->bindings[ambient_owner - 1].view.value - 1]
             .dependencies = NL_DEPENDENCIES_UNKNOWN;
         break;
+    case 22: {
+        NLSemanticContext *post =
+            nl_control_state_context((NLControlState *)e->state);
+        post->bindings[ambient_owner - 1].view.availability = NL_CONSUMED;
+        break;
+    }
     }
     return status;
 }
@@ -244,9 +252,10 @@ static bool observe(const char *path)
     const NLCheckedFragment *parent = NULL;
     NLCheckedNodeId loop = 0;
     foreign_body = find_loop(foreign, &parent, &loop);
+    foreign_parent = parent;
     CHECK(foreign_body && nl_checked_loop_break_provenance_valid(parent, loop));
     foreign_edge = nl_control_exit_view(foreign_body->exits, 0);
-    for (fault = 0; fault <= 20; ++fault) {
+    for (fault = 0; fault <= 22; ++fault) {
         NLSemanticContext *c = NULL;
         CHECK(nl_sem_clone(a.context, &c) == NL_CHECK_OK);
         TestState before;
