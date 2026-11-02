@@ -4,6 +4,7 @@
 #include "../../src/copy_body_internal.h"
 #include "../../src/h_origin_internal.h"
 #include <assert.h>
+#include <dirent.h>
 
 #define REQUIRE(c)                                                             \
     do {                                                                       \
@@ -274,6 +275,63 @@ void *__wrap_calloc(size_t n, size_t z)
     return denied('c', __builtin_return_address(0)) ? NULL
                                                     : __real_calloc(n, z);
 }
+static bool named_bytes(const char *path, ino_t inode)
+{
+    static const char sentinel[] = "P1098 OOM named output must survive\n";
+    struct stat st;
+    REQUIRE(stat(path, &st) == 0 && st.st_ino == inode);
+    FILE *f = fopen(path, "rb");
+    REQUIRE(f);
+    char bytes[sizeof(sentinel)];
+    size_t n = fread(bytes, 1, sizeof(bytes), f);
+    const bool ok = n == sizeof(sentinel) - 1 &&
+                    !memcmp(bytes, sentinel, sizeof(sentinel) - 1) &&
+                    !ferror(f);
+    REQUIRE(fclose(f) == 0 && ok);
+    return true;
+}
+static bool named_oom(const char *source)
+{
+    char dir[] = "/tmp/p1098-named-XXXXXX", path[128];
+    REQUIRE(mkdtemp(dir));
+    REQUIRE(snprintf(path, sizeof(path), "%s/out.c", dir) > 0);
+    char *args[] = {"newlangc", "--emit-c17-to", path, (char *)source, NULL};
+    for (fail_at = 0; fail_at < 20000; ++fail_at) {
+        FILE *f = fopen(path, "wb");
+        REQUIRE(f && fputs("P1098 OOM named output must survive\n", f) >= 0);
+        REQUIRE(fclose(f) == 0);
+        struct stat before;
+        REQUIRE(stat(path, &before) == 0);
+        allocation = 0;
+        reached = 0;
+        pc = NULL;
+        injecting = true;
+        int status = p1098_driver_main(4, args);
+        injecting = false;
+        if (!reached) {
+            REQUIRE(status == 0);
+            REQUIRE(unlink(path) == 0 && rmdir(dir) == 0);
+            printf("P1098 NAMED OOM COMPLETE reached=%zu byte/inode/no-temp + "
+                   "retry PASS\n",
+                   fail_at);
+            return true;
+        }
+        printf("P1098 NAMED OOM n=%zu kind=%c pc=%p status=%d\n", fail_at,
+               reached, pc, status);
+        REQUIRE(status == 1 && named_bytes(path, before.st_ino));
+        DIR *d = opendir(dir);
+        REQUIRE(d);
+        size_t count = 0;
+        for (struct dirent *e = readdir(d); e; e = readdir(d))
+            if (strcmp(e->d_name, ".") && strcmp(e->d_name, "..")) {
+                REQUIRE(!strcmp(e->d_name, "out.c"));
+                ++count;
+            }
+        REQUIRE(closedir(d) == 0 && count == 1);
+        REQUIRE(p1098_driver_main(4, args) == 0);
+    }
+    return false;
+}
 static bool observe(const char *path, size_t index, size_t old, size_t next)
 {
     Input input = {0};
@@ -307,7 +365,7 @@ static bool observe(const char *path, size_t index, size_t old, size_t next)
             printf("P1098 OOM COMPLETE reached=%zu rollback+no-publish+retry "
                    "PASS\n",
                    fail_at);
-            return true;
+            return named_oom(path);
         }
         printf("P1098 OOM n=%zu kind=%c pc=%p status=%d rollback=%d "
                "no-publish=%d\n",
