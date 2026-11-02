@@ -14,7 +14,8 @@ root = Path(__file__).resolve().parents[2]
 data = root / "tests/p1088"
 for name in ["freeze-v1.json", "freeze-v2.json", "freeze-negative-v1.json",
              "freeze-v3.json", "freeze-v4.json", "freeze-v5.json", "freeze-v6.json",
-             "freeze-v7.json", "freeze-v8.json", "freeze-v9.json"]:
+             "freeze-v7.json", "freeze-v8.json", "freeze-v9.json",
+             "freeze-v10.json", "freeze-v11.json"]:
     frozen = json.loads((data / name).read_bytes())["files"]
     with zipfile.ZipFile(data / "evidence" / name.replace(".json", "-inputs.zip")) as archive:
         assert set(archive.namelist()) == set(frozen), name

@@ -1,0 +1,8 @@
+{
+  "phase": "C180 exact Break-add OOM source before first execution; correct old shape assumption without altering old oracle",
+  "production_head": "54204f17cd4747f700787d0b98ec177f1bb9d4af",
+  "files": {
+    "tests/p1088/break_add_oom.c": "ca02d80624e0d61d07a3375afdc19db618a8a87bcc3a3d2d5271b09d0284b7a6",
+    "tests/p1088/oracle-v4.json": "c393eb781bb7721c781897e20a8dcc2283d0f3365206cdff281cc12d5fbe9bd6"
+  }
+}

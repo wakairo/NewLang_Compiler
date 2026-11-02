@@ -678,7 +678,7 @@ if(BUILD_TESTING)
     endforeach()
     add_test(NAME m1085_source_break_provenance.unit COMMAND loop_test 41)
 
-    foreach(probe provenance_test oom_probe)
+    foreach(probe provenance_test oom_probe break_add_oom)
         add_executable(p1088_${probe} tests/p1088/${probe}.c)
         target_link_libraries(p1088_${probe} PRIVATE newlang_semantic newlang_parser)
         target_link_options(p1088_${probe} PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)

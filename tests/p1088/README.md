@@ -30,9 +30,17 @@ destroyed with B's whole observed edge installed; B must remain usable.
 
 The extended OOM sweep requires exact OOM=4, NULL artifact, diagnostic,
 original TestState no-clobber, cleanup and successful same-context retry at
-each reached failure. Its eighth source forces Break node17 to grow the
-checked-node array from16 to32. Actual reached allocation sites and per-source
-counts are recorded in evidence/oom-reached-summary.json. The old strict test
+each reached failure. Its eighth source grows the checked-node array from16 to32.
+Actual reached allocation sites and per-source counts are recorded in evidence/oom-reached-summary.json. Correction: that
+eighth source grows at identifier17; its actual Break is24. The original
+prediction and mistaken node17 observer RED are retained, including its
+early-return LSan report; a cleanup-preserving observer confirms actual24
+and genuine provenance TRUE without leaks. The ninth source (four bindings,
+one unit statement, then Break) actually has Break17 and forces its own
+realloc. It adds221 reached OOMs, including Break add itself, validates real
+provenance on every retry, and keeps every prior source/oracle unchanged.
+Its first C harness-generation compile RED is also retained. See the separate
+actual-break-add-oom.json for exact sites. The old strict test
 and rollback checks are unchanged.
 
 The first P diagnostic v1 incorrectly annotated numeric OOM as2; the named
@@ -73,7 +81,7 @@ cyclic state, C17 loop lowering, public current issuer, owner/ABI or source law
 is added. Original P1081 effectful source still CHECK3/P6. Existing native,
 owner, H/T, history and sanitizer regression gates must pass before any push.
 Private seal storage replaces the former borrowed-view seals; bounded exit
-records add owner/state/identity fields and two small tests plus evidence check.
+records add owner/state/identity fields and three small tests plus evidence check.
 There is no new IR or source-shape backend workaround.
 
 VALUE-ALIGNMENT-RISK: this is a reusable v0 prerequisite, not an end-to-end loop
