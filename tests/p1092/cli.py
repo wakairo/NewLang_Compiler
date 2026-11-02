@@ -20,7 +20,7 @@ for source in sorted((data / "sources").glob("*.nl")):
         target = Path(tmp) / "out.c"
         sentinel = b"P1092 named output must survive rejection\n"
         target.write_bytes(sentinel)
-        emit = subprocess.run([str(compiler), str(source), "-o", str(target)], capture_output=True)
+        emit = subprocess.run([str(compiler), "--emit-c17-to", str(target), str(source)], capture_output=True)
         expected = 0 if number == 0 else 4 if number in positive else 3
         assert emit.returncode == expected, (source, emit.returncode, emit.stderr)
         if expected:

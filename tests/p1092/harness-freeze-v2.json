@@ -1,0 +1,17 @@
+{
+  "phase": "A2 harness v2 before first successful build/run; v1 archive kept; CLI option corrected from documentation before execution; CMake regenerated for new target",
+  "compiler_A1": "96ce87f",
+  "oracle": {
+    "observe": "6 source profiles: actual first Change entry/old/new/root child incarnation/sibling, same working context at second Change, copied old delivered; separate genuine live B. 16 live-object mutations after authentic append must fail and leave caller unchanged; destroy A then B survives. No unsafe dangling pointers.",
+    "oom": "Every reached malloc/realloc/calloc failure: exact OOM=4, unpublished NULL output, diagnostic, semantic TestState unchanged, old authentic A survives, cleanup and same-context retry success. Stop on first RED.",
+    "cli": "18 frozen full sources: selected CHECK success; unsupported and invalid source keep refusal; C17 LOOP unsupported and named output unchanged."
+  },
+  "files": {
+    "tests/p1092/observe.c": "e49a89ff8bfb9860a045f47da61966452b43b4073b803d51d4a41e4374e20f10",
+    "tests/p1092/cli.py": "febf3c55dbf97c6b743fc49ecc43b3e4bd1e775e109ea6287336419d937bf1f0",
+    "src/semantic_check.c": "3be0acb92c9b7de1d8cf5485a26ff3cdee5ed2742f89151eda633098c131b5f4",
+    "CMakeLists.txt": "f572ac2457bdf9657ff6651595b9c5086a2eb3e5c5c852997542b9da9577877d",
+    "tests/p1092/source-freeze-v2.json": "ac969fd1c9eccf52db8900086df2c95c4b5e1a21c21b75621ee2483fc1a5c0f4",
+    "tests/p1092/oracle-v2.json": "f2b793605441cac403c979b630618395c22502394feff88f73bbd25d413d1e9c"
+  }
+}
