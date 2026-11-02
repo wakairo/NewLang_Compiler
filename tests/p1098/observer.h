@@ -14,7 +14,8 @@ static void p1098_finish(void)
     for (size_t r = 0; r < EXPECT_ROOTS; ++r)
         for (size_t i = 0; i < 2; ++i)
             assert(p1098_seen[r][i] == 1);
-    puts("P1098 native same-original, old/current/sibling/frame, one Change pair: PASS");
+    puts("P1098 native same-original, old/current/sibling/frame, one Change "
+         "pair: PASS");
 }
 static void p1098_bind(const uint8_t *a, const uint8_t *b)
 {
@@ -36,7 +37,7 @@ static void p1098_before(const uint8_t *a, const uint8_t *b, size_t index)
     assert((index ? *a : *b) == EXPECT_SIBLING);
 }
 static void p1098_after(const uint8_t *a, const uint8_t *b, size_t index,
-                         uint8_t old)
+                        uint8_t old)
 {
     assert(p1098_before_count == 1 && p1098_after_count++ == 0);
     assert(index == EXPECT_INDEX && old == EXPECT_OLD);
@@ -62,7 +63,7 @@ static void p1098_read(const uint8_t *p, uint8_t value)
     assert(found);
     ++p1098_read_count;
 }
-#define NL_LOOP_BIND(a,b) p1098_bind(a,b)
-#define NL_LOOP_BEFORE(a,b,i) p1098_before(a,b,i)
-#define NL_LOOP_AFTER(a,b,i,old) p1098_after(a,b,i,old)
-#define NL_LOOP_READ(p,v) p1098_read(p,v)
+#define NL_LOOP_BIND(a, b) p1098_bind(a, b)
+#define NL_LOOP_BEFORE(a, b, i) p1098_before(a, b, i)
+#define NL_LOOP_AFTER(a, b, i, old) p1098_after(a, b, i, old)
+#define NL_LOOP_READ(p, v) p1098_read(p, v)

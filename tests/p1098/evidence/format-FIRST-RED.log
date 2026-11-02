@@ -1,0 +1,89 @@
+tests/p1098/observer.h:17:77: error: code should be clang-formatted [-Wclang-format-violations]
+    puts("P1098 native same-original, old/current/sibling/frame, one Change pair: PASS");
+                                                                            ^
+tests/p1098/observer.h:38:74: error: code should be clang-formatted [-Wclang-format-violations]
+static void p1098_after(const uint8_t *a, const uint8_t *b, size_t index,
+                                                                         ^
+tests/p1098/observer.h:65:24: error: code should be clang-formatted [-Wclang-format-violations]
+#define NL_LOOP_BIND(a,b) p1098_bind(a,b)
+                       ^
+tests/p1098/observer.h:65:40: error: code should be clang-formatted [-Wclang-format-violations]
+#define NL_LOOP_BIND(a,b) p1098_bind(a,b)
+                                       ^
+tests/p1098/observer.h:66:26: error: code should be clang-formatted [-Wclang-format-violations]
+#define NL_LOOP_BEFORE(a,b,i) p1098_before(a,b,i)
+                         ^
+tests/p1098/observer.h:66:28: error: code should be clang-formatted [-Wclang-format-violations]
+#define NL_LOOP_BEFORE(a,b,i) p1098_before(a,b,i)
+                           ^
+tests/p1098/observer.h:66:46: error: code should be clang-formatted [-Wclang-format-violations]
+#define NL_LOOP_BEFORE(a,b,i) p1098_before(a,b,i)
+                                             ^
+tests/p1098/observer.h:66:48: error: code should be clang-formatted [-Wclang-format-violations]
+#define NL_LOOP_BEFORE(a,b,i) p1098_before(a,b,i)
+                                               ^
+tests/p1098/observer.h:67:25: error: code should be clang-formatted [-Wclang-format-violations]
+#define NL_LOOP_AFTER(a,b,i,old) p1098_after(a,b,i,old)
+                        ^
+tests/p1098/observer.h:67:27: error: code should be clang-formatted [-Wclang-format-violations]
+#define NL_LOOP_AFTER(a,b,i,old) p1098_after(a,b,i,old)
+                          ^
+tests/p1098/observer.h:67:29: error: code should be clang-formatted [-Wclang-format-violations]
+#define NL_LOOP_AFTER(a,b,i,old) p1098_after(a,b,i,old)
+                            ^
+tests/p1098/observer.h:67:48: error: code should be clang-formatted [-Wclang-format-violations]
+#define NL_LOOP_AFTER(a,b,i,old) p1098_after(a,b,i,old)
+                                               ^
+tests/p1098/observer.h:67:50: error: code should be clang-formatted [-Wclang-format-violations]
+#define NL_LOOP_AFTER(a,b,i,old) p1098_after(a,b,i,old)
+                                                 ^
+tests/p1098/observer.h:67:52: error: code should be clang-formatted [-Wclang-format-violations]
+#define NL_LOOP_AFTER(a,b,i,old) p1098_after(a,b,i,old)
+                                                   ^
+tests/p1098/observer.h:68:24: error: code should be clang-formatted [-Wclang-format-violations]
+#define NL_LOOP_READ(p,v) p1098_read(p,v)
+                       ^
+tests/p1098/observer.h:68:40: error: code should be clang-formatted [-Wclang-format-violations]
+#define NL_LOOP_READ(p,v) p1098_read(p,v)
+                                       ^
+clang-format failed (exit 1); generating exact suggestions with /workspace/p965/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-format-23
+Checked checkout: c8581f47edf43b1015a80899086d58fe7244e791
+clang-format version: clang-format version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)
+Suggested patch for 1 C/H file(s): /tmp/p1098-artifacts/format-FIRST.patch
+Review the complete patch, then: git apply --check '/tmp/p1098-artifacts/format-FIRST.patch' && git apply '/tmp/p1098-artifacts/format-FIRST.patch'
+Alternative after review: bash scripts/format.sh
+----- BEGIN EXACT clang-format SUGGESTIONS -----
+--- a/tests/p1098/observer.h
++++ b/tests/p1098/observer.h
+@@ -14,7 +14,8 @@
+     for (size_t r = 0; r < EXPECT_ROOTS; ++r)
+         for (size_t i = 0; i < 2; ++i)
+             assert(p1098_seen[r][i] == 1);
+-    puts("P1098 native same-original, old/current/sibling/frame, one Change pair: PASS");
++    puts("P1098 native same-original, old/current/sibling/frame, one Change "
++         "pair: PASS");
+ }
+ static void p1098_bind(const uint8_t *a, const uint8_t *b)
+ {
+@@ -36,7 +37,7 @@
+     assert((index ? *a : *b) == EXPECT_SIBLING);
+ }
+ static void p1098_after(const uint8_t *a, const uint8_t *b, size_t index,
+-                         uint8_t old)
++                        uint8_t old)
+ {
+     assert(p1098_before_count == 1 && p1098_after_count++ == 0);
+     assert(index == EXPECT_INDEX && old == EXPECT_OLD);
+@@ -62,7 +63,7 @@
+     assert(found);
+     ++p1098_read_count;
+ }
+-#define NL_LOOP_BIND(a,b) p1098_bind(a,b)
+-#define NL_LOOP_BEFORE(a,b,i) p1098_before(a,b,i)
+-#define NL_LOOP_AFTER(a,b,i,old) p1098_after(a,b,i,old)
+-#define NL_LOOP_READ(p,v) p1098_read(p,v)
++#define NL_LOOP_BIND(a, b) p1098_bind(a, b)
++#define NL_LOOP_BEFORE(a, b, i) p1098_before(a, b, i)
++#define NL_LOOP_AFTER(a, b, i, old) p1098_after(a, b, i, old)
++#define NL_LOOP_READ(p, v) p1098_read(p, v)
+----- END EXACT clang-format SUGGESTIONS -----
