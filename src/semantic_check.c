@@ -5189,7 +5189,8 @@ static bool linear_break_frame(const NLSemanticContext *a,
         r.parent_sum || r.fixed_field_count != 2 || !r.type ||
         r.type > a->type_count || p.parent_aggregate != root ||
         p.parent_field_index != field->index || field->index >= 2 ||
-        r.fixed_fields[field->index] != child ||
+        r.fixed_fields[field->index] != child || r.type != field->nominal ||
+        p.type != field->type || field->access != NL_ACCESS_WRITE ||
         r.incarnation != field->parent_incarnation ||
         p.incarnation != field->child_incarnation ||
         r.current_fact != field->parent_fact ||
@@ -5349,7 +5350,8 @@ static bool linear_break_graph(Check *body, const LoopControl *loop)
         op->results[0].value != op->field.old_value ||
         e->values[0].value != loop->normal_result.value ||
         e->values[0].type != loop->normal_result.type ||
-        !linear_break_frame(entry, c, &op->field))
+        !linear_break_frame(entry, c, &op->field) ||
+        !linear_break_frame(entry, post, &op->field))
         return false;
     size_t loans = 0, changes = 0, breaks = 0;
     for (size_t i = 1; i <= f->count; ++i) {
@@ -5473,6 +5475,11 @@ static NLCheckedNodeId source_linear_break(Check *check,
     if (!id || !save_arm(check, id, fragment, syntax->span))
         goto cleanup;
     fragment = NULL;
+    /* Custody now owns the body. Recheck the existing source-parent binding
+     * before this enclosing CHECK can publish either the result or current.
+     * Failure is still an all-or-nothing outer transaction rollback. */
+    if (!nl_checked_loop_break_provenance_valid(check->artifact, id))
+        loop_precision(check, syntax->span);
 cleanup:
     nl_checked_destroy(fragment);
     nl_semantic_destroy(shadow);
