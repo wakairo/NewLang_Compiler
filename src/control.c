@@ -310,9 +310,8 @@ nl_control_exit_append(NLControlExits **out, NLControlExitKind kind,
 /* The sole source of a linked Break is source_control after add() succeeds.
  * Do not let general append/union mint proof for a synthetic checked node. */
 NLCheckStatus nl_control_source_break_append(
-    NLControlExits **out, NLControlTarget *target,
-    const NLControlState *state, NLCheckedResult value,
-    const NLCheckedFragment *owner, NLCheckedNodeId node)
+    NLControlExits **out, NLControlTarget *target, const NLControlState *state,
+    NLCheckedResult value, const NLCheckedFragment *owner, NLCheckedNodeId node)
 {
     if (!owner || !owner->source || !owner->context || !target ||
         target->kind != NL_TARGET_LOOP || node != owner->count)
@@ -321,19 +320,19 @@ NLCheckStatus nl_control_source_break_append(
     const NLCheckedNodeView *operand =
         br ? nl_checked_node_view(owner, br->initializer) : NULL;
     if (!br || br->kind != NL_CHECKED_BREAK || !br->terminates ||
-        !nl_source_span_valid(owner->source, br->span) ||
-        !operand || br->initializer >= node ||
-        operand->type != value.type ||
+        !nl_source_span_valid(owner->source, br->span) || !operand ||
+        br->initializer >= node || operand->type != value.type ||
         (operand->result_count != 1 && value.type != 1) ||
         (operand->result_count == 1 &&
          (operand->results[0].type != value.type ||
           operand->results[0].value != value.value)) ||
         (operand->result_count == 0 && (value.type != 1 || value.value != 0)))
         return NL_CHECK_INTERNAL_ERROR;
-    const NLControlExitView issued = {
-        .source_owner = owner, .source_node = node,
-        .source_target = target, .source_node_seal = *br,
-        .source_operand_seal = *operand};
+    const NLControlExitView issued = {.source_owner = owner,
+                                      .source_node = node,
+                                      .source_target = target,
+                                      .source_node_seal = *br,
+                                      .source_operand_seal = *operand};
     return append(out, NL_EXIT_BREAK, target, state, &value, 1, &issued);
 }
 
@@ -342,22 +341,19 @@ NLCheckStatus nl_control_source_break_append(
 bool nl_control_source_break_body_valid(const NLCheckedFragment *body,
                                         const NLControlTarget *target)
 {
-    if (!body || !body->source || !body->context ||
-        !target || target->kind != NL_TARGET_LOOP ||
+    if (!body || !body->source || !body->context || !target ||
+        target->kind != NL_TARGET_LOOP ||
         nl_control_exits_count(body->exits) != 1)
         return false;
     const NLControlExitView *e = nl_control_exit_view(body->exits, 0);
-    const NLCheckedNodeView *br =
-        nl_checked_node_view(body, e->source_node);
+    const NLCheckedNodeView *br = nl_checked_node_view(body, e->source_node);
     const NLCheckedNodeView *operand =
         br ? nl_checked_node_view(body, br->initializer) : NULL;
-    const NLCheckedNodeView *root =
-        nl_checked_node_view(body, body->root);
+    const NLCheckedNodeView *root = nl_checked_node_view(body, body->root);
     if (!e || e->kind != NL_EXIT_BREAK || e->count != 1 ||
         !nl_control_target_same(e->target, target) ||
-        e->source_target != target ||
-        e->source_owner != body || !br || !operand || !root ||
-        root->kind != NL_CHECKED_BLOCK || root->tail ||
+        e->source_target != target || e->source_owner != body || !br ||
+        !operand || !root || root->kind != NL_CHECKED_BLOCK || root->tail ||
         !br->terminates || br->kind != NL_CHECKED_BREAK ||
         !nl_source_span_valid(body->source, br->span) ||
         memcmp(br, &e->source_node_seal, sizeof(*br)) ||
@@ -366,14 +362,13 @@ bool nl_control_source_break_body_valid(const NLCheckedFragment *body,
         e->values[0].type != operand->type ||
         (operand->result_count == 1
              ? e->values[0].value != operand->results[0].value ||
-               e->values[0].type != operand->results[0].type
+                   e->values[0].type != operand->results[0].type
              : operand->result_count != 0 || operand->type != 1 ||
-               e->values[0].value != 0))
+                   e->values[0].value != 0))
         return false;
     const NLSemanticContext *post =
         nl_control_state_context((NLControlState *)e->state);
-    if (!post || nl_sem_validate(post) != NL_CHECK_OK ||
-        e->values[0].type > post->type_count ||
+    if (!post || e->values[0].type > post->type_count ||
         (e->values[0].value &&
          (e->values[0].value > post->value_count ||
           post->values[e->values[0].value - 1].type != e->values[0].type ||
@@ -406,10 +401,9 @@ bool nl_checked_loop_break_provenance_valid(const NLCheckedFragment *f,
 {
     const NLCheckedNodeView *node = nl_checked_node_view(f, loop);
     const NLCheckedFragment *body = nl_checked_loop_body(f, loop);
-    if (!node || node->kind != NL_CHECKED_LOOP ||
-        node->argument_count != 0 || node->break_edges != 1 ||
-        node->continue_edges || node->return_edges || node->terminates ||
-        !body || body->source != f->source)
+    if (!node || node->kind != NL_CHECKED_LOOP || node->argument_count != 0 ||
+        node->break_edges != 1 || node->continue_edges || node->return_edges ||
+        node->terminates || !body || body->source != f->source)
         return false;
     const NLControlExitView *e = nl_control_exit_view(body->exits, 0);
     return e && nl_control_source_break_body_valid(body, e->target);

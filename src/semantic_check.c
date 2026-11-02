@@ -5041,22 +5041,21 @@ static NLCheckedNodeId source_control(Check *check, const NLSyntaxView *syntax)
      * On add/append failure the enclosing CHECK clone is destroyed intact. */
     NLCheckedNodeId control_node = 0;
     if (!continuing) {
-        control_node =
-            add(check, (NLCheckedNodeView){.kind = NL_CHECKED_BREAK,
-                                            .span = syntax->span,
-                                            .initializer = first,
-                                            .terminates = true});
+        control_node = add(check, (NLCheckedNodeView){.kind = NL_CHECKED_BREAK,
+                                                      .span = syntax->span,
+                                                      .initializer = first,
+                                                      .terminates = true});
         if (control_node == 0) {
             nl_control_state_destroy(post);
             return 0;
         }
-        status = nl_control_source_break_append(
-            &check->artifact->exits, loop->target, post, results[0],
-            check->artifact, control_node);
+        status = nl_control_source_break_append(&check->artifact->exits,
+                                                loop->target, post, results[0],
+                                                check->artifact, control_node);
     } else {
-        status = nl_control_exit_append(&check->artifact->exits,
-                                        NL_EXIT_CONTINUE, loop->target,
-                                        post, results, count);
+        status =
+            nl_control_exit_append(&check->artifact->exits, NL_EXIT_CONTINUE,
+                                   loop->target, post, results, count);
     }
     nl_control_state_destroy(post);
     if (!host(check, status, syntax->span))

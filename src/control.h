@@ -69,9 +69,10 @@ NLCheckStatus nl_control_exit_append(NLControlExits **, NLControlExitKind,
                                      NLControlTarget *, const NLControlState *,
                                      const NLCheckedResult *, size_t);
 /* C178: source-checker-only producer, never an external edge issuer. */
-NLCheckStatus nl_control_source_break_append(
-    NLControlExits **, NLControlTarget *, const NLControlState *,
-    NLCheckedResult, const NLCheckedFragment *, NLCheckedNodeId);
+NLCheckStatus
+nl_control_source_break_append(NLControlExits **, NLControlTarget *,
+                               const NLControlState *, NLCheckedResult,
+                               const NLCheckedFragment *, NLCheckedNodeId);
 /* Verifies one actual body-root block / one source-issued Break / one edge.
  * This is solely a provenance test; it does NOT validate memory-current or
  * grant an original/owner/result transfer to another semantic world. */

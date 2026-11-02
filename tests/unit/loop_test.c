@@ -1,5 +1,5 @@
-#include "../../src/semantic_internal.h"
 #include "../../src/control.h"
+#include "../../src/semantic_internal.h"
 #include "../support/function_body.h"
 #include <stdlib.h>
 
@@ -452,16 +452,14 @@ static bool provenance(void)
 {
     Fixture f = {0};
     CHECK(setup(&f));
-    const char *source[] = {
-        "loop(){break x;}",
-        "loop(){let prior=y;break prior;}"};
+    const char *source[] = {"loop(){break x;}",
+                            "loop(){let prior=y;break prior;}"};
     for (size_t i = 0; i < 2; ++i) {
         TestChecked a = {0};
         CHECK(test_run(f.c, source[i], TEST_SOURCE, NL_CHECK_OK, NULL, &a));
         NLCheckedNodeId id = nl_checked_root(a.artifact);
         CHECK(nl_checked_loop_break_provenance_valid(a.artifact, id));
-        const NLCheckedFragment *body =
-            nl_checked_loop_body(a.artifact, id);
+        const NLCheckedFragment *body = nl_checked_loop_body(a.artifact, id);
         CHECK(body != NULL);
         const NLControlExitView *e =
             nl_control_exit_view(nl_checked_control_exits(body), 0);
@@ -497,9 +495,8 @@ static bool provenance(void)
         CHECK(nl_checked_loop_break_provenance_valid(a.artifact, id));
         test_checked_destroy(&a);
     }
-    const char *excluded[] = {
-        "loop(){continue();}",
-        "loop(){if(cond){break x;}else{break y;}}"};
+    const char *excluded[] = {"loop(){continue();}",
+                              "loop(){if(cond){break x;}else{break y;}}"};
     for (size_t i = 0; i < 2; ++i) {
         TestChecked a = {0};
         CHECK(test_run(f.c, excluded[i], TEST_SOURCE, NL_CHECK_OK, NULL, &a));
