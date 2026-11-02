@@ -209,6 +209,14 @@ static bool observe(const char *path, size_t index, size_t old, size_t next)
     NLSemanticValueView *exit_value =
         &exit_context->values[edge->values[0].value - 1];
     MUTATE(size_t, exit_value, scalar_value, old ^ 1);
+    NLTypeEntry *nominal = &a.context->types[op->field.nominal - 1];
+    REQUIRE(nominal->name);
+    MUTATE(char *, nominal, name, NULL);
+    MUTATE(size_t, nominal, allocated_target, nominal->allocated_target + 1);
+    MUTATE(size_t, nominal, one_backing_target,
+           nominal->one_backing_target + 1);
+    MUTATE(size_t, nominal, live_tail_target, nominal->live_tail_target + 1);
+    MUTATE(size_t, nominal, option_target, nominal->option_target + 1);
     MUTATE(NLFunctionEntry *, a.context, functions, NULL);
     MUTATE(size_t, a.context, function_count, 0);
     MUTATE(NLSemanticValueView *, a.context, values, NULL);

@@ -5311,14 +5311,15 @@ static bool linear_break_frame(const NLSemanticContext *a,
     return true;
 }
 
-static bool linear_break_graph(Check *body, const LoopControl *loop)
+static bool linear_break_relation(const NLCheckedFragment *f,
+                                  const NLSemanticContext *c,
+                                  const NLControlState *entry_state,
+                                  const NLControlTarget *target,
+                                  NLCheckedResult result)
 {
-    const NLCheckedFragment *f = body->artifact;
-    const NLSemanticContext *c = body->context;
-    const NLSemanticContext *entry = nl_control_state_context(loop->entry);
-    if (!body->terminated || body->status != NL_CHECK_OK ||
-        loop->normal_context != c ||
-        !nl_control_source_break_body_valid(f, loop->target))
+    const NLSemanticContext *entry =
+        nl_control_state_context((NLControlState *)entry_state);
+    if (!nl_control_source_break_body_valid(f, target))
         return false;
     const NLControlExitView *e = nl_control_exit_view(f->exits, 0);
     const NLSemanticContext *post =
@@ -5361,8 +5362,8 @@ static bool linear_break_graph(Check *body, const LoopControl *loop)
         loan->field.parent_fact != op->field.parent_fact ||
         loan->field.child_fact != op->field.child_fact ||
         op->results[0].value != op->field.old_value ||
-        e->values[0].value != loop->normal_result.value ||
-        e->values[0].type != loop->normal_result.type ||
+        e->values[0].value != result.value ||
+        e->values[0].type != result.type ||
         !linear_break_frame(entry, c, &op->field) ||
         !linear_break_frame(entry, post, &op->field))
         return false;
@@ -5388,7 +5389,6 @@ static bool linear_break_graph(Check *body, const LoopControl *loop)
             return false;
         }
     }
-    NLCheckedResult result = loop->normal_result;
     if (loans != 1 || changes != 1 || breaks != 1 ||
         result.type != nl_semantic_core_type(c, NL_TYPE_U8) || !result.value ||
         result.value > c->value_count || !op->field.old_value ||
@@ -5417,6 +5417,16 @@ static bool linear_break_graph(Check *body, const LoopControl *loop)
             post->places[i].current_fact != c->places[i].current_fact)
             return false;
     return true;
+}
+
+/* Constructor obligations stay at the real source-check boundary. The
+ * consumer calls the same relation directly, never fabricating Check flags. */
+static bool linear_break_graph(Check *body, const LoopControl *loop)
+{
+    return body->terminated && body->status == NL_CHECK_OK &&
+           loop->normal_context == body->context &&
+           linear_break_relation(body->artifact, body->context, loop->entry,
+                                 loop->target, loop->normal_result);
 }
 
 /* Retain only evidence of the actual source CHECK transaction. These records
@@ -5639,6 +5649,16 @@ static bool linear_world_matches(const NLSemanticContext *c,
 #undef SAME
     if (!nl_copy_state_matches(c, anchor) || !nl_copy_same_types(c, reference))
         return false;
+    for (size_t i = 0; i < c->type_count; ++i) {
+        const NLTypeEntry *a = &c->types[i], *b = &reference->types[i];
+        if (a->allocated_target != b->allocated_target ||
+            a->one_backing_target != b->one_backing_target ||
+            a->live_tail_target != b->live_tail_target ||
+            a->option_target != b->option_target ||
+            ((a->name == NULL) != (b->name == NULL)) ||
+            (a->name && strcmp(a->name, b->name)))
+            return false;
+    }
     for (size_t i = 0; i < c->binding_count; ++i)
         if (c->bindings[i].hidden != reference->bindings[i].hidden ||
             !c->bindings[i].name || !reference->bindings[i].name ||
@@ -5693,15 +5713,8 @@ NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *f,
                               &p->exit_anchor) ||
         !nl_checked_loop_break_provenance_valid(f, id))
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
-    Check body = {.artifact = (NLCheckedFragment *)p->body,
-                  .context = p->post,
-                  .terminated = true,
-                  .status = NL_CHECK_OK};
-    LoopControl loop = {.entry = p->entry,
-                        .target = (NLControlTarget *)p->target,
-                        .normal_context = p->post,
-                        .normal_result = p->result};
-    if (!linear_break_graph(&body, &loop))
+    if (!linear_break_relation(p->body, p->post, p->entry, p->target,
+                               p->result))
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLCheckedNodeView *op = NULL;
     for (size_t i = 0; i < p->body_count; ++i)
