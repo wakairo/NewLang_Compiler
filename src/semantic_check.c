@@ -5282,11 +5282,23 @@ static bool linear_break_frame(const NLSemanticContext *a,
             return false;
     for (size_t i = 0; i < a->region_count; ++i) {
         const NLRawRegionEntry *x = &a->regions[i], *y = &b->regions[i];
-        if (memcmp(&x->view, &y->view, sizeof(x->view)) ||
-            x->count != y->count ||
-            (x->count && memcmp(x->intervals, y->intervals,
-                                x->count * sizeof(*x->intervals))))
+        /* Compare semantic members, not C struct padding copied by value. */
+        if (x->view.live != y->view.live || x->view.size != y->view.size ||
+            x->view.alignment != y->view.alignment ||
+            x->view.ordinary_read != y->view.ordinary_read ||
+            x->view.ordinary_write != y->view.ordinary_write ||
+            x->view.address_known != y->view.address_known ||
+            x->view.address != y->view.address || x->count != y->count)
             return false;
+        for (size_t j = 0; j < x->count; ++j)
+            if (x->intervals[j].start != y->intervals[j].start ||
+                x->intervals[j].length != y->intervals[j].length ||
+                x->intervals[j].state.validity !=
+                    y->intervals[j].state.validity ||
+                x->intervals[j].state.value_known !=
+                    y->intervals[j].state.value_known ||
+                x->intervals[j].state.value != y->intervals[j].state.value)
+                return false;
     }
     for (size_t i = a->binding_count; i < b->binding_count; ++i)
         if (!b->bindings[i].hidden ||
