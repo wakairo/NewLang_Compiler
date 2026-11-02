@@ -63,7 +63,8 @@ named-output option was corrected before its first execution.
 Six real-source observers interpose the existing real Change operation to
 check actual old/new values, root/child identity, sibling and the same working
 world at the caller's separate second Change. Twenty-five live-object
-negative challenges cover foreign same-ID world/target/owner/whole edge,
+negative challenges in each of two B setups (separate registered plans and a
+shared immutable source plan, with distinct genuine CHECK worlds) cover foreign same-ID world/target/owner/whole edge,
 root/field/old/new/node/current/loan/dependency, ambient frame, foreign parent,
 projected availability, duplicate/absent Break and wrong def-use. Rejection
 must leave the public caller unchanged; a genuine independent live B remains
@@ -104,3 +105,13 @@ A prospective P1092 runner inherits every old native/current/negative/OOM
 assertion; its sole expectation change is that old legal alternative now has
 CHECK0 and C17 exit4. This is an explicitly versioned capability expectation,
 not disabled protection or a claim that the earlier RED passed.
+
+The fixed-main original v18 is independently pinned by SHA256, Git blob and
+2812-key coverage in the new evidence test. Successor data cannot redefine
+that anchor. Clang's first strict build exposed an OOM-harness variable set
+but not read; the original RED is retained, and an added invariant assertion
+fixes the warning without suppression or changing Production. UBSan's first
+legacy native run stopped at linker ENOSPC; original RED is retained. After
+archiving completed ASan metadata/raw and generated-binary hashes, only
+reproducible completed ASan test executables were removed. The identical
+UBSan binaries retained104 passing tests and passed the remaining512.

@@ -256,13 +256,19 @@ static const NLCheckedFragment *find_loop(const NLCheckedFragment *f,
 }
 
 #ifndef P1092_OOM
-static bool observe(const char *path)
+static bool observe(const char *path, bool shared_source)
 {
     Input a = {0}, b = {0};
-    CHECK(input_create(path, &a) && input_create(path, &b));
+    CHECK(input_create(path, &a));
+    if (shared_source) {
+        CHECK(nl_sem_clone(a.context, &b.context) == NL_CHECK_OK);
+    } else {
+        CHECK(input_create(path, &b));
+    }
     NLCheckedFragment *foreign = NULL;
-    CHECK(nl_semantic_check_expression(b.context, b.entry, &foreign, NULL) ==
-          NL_CHECK_OK);
+    CHECK(nl_semantic_check_expression(b.context,
+                                       shared_source ? a.entry : b.entry,
+                                       &foreign, NULL) == NL_CHECK_OK);
     const NLCheckedFragment *parent = NULL;
     NLCheckedNodeId loop = 0;
     foreign_body = find_loop(foreign, &parent, &loop);
@@ -293,6 +299,7 @@ static bool observe(const char *path)
                 checked ? find_loop(checked, &own_parent, &own_loop) : NULL;
             ok &= status == NL_CHECK_OK && events == 2 && body &&
                   body->context != c &&
+                  ((body->source == foreign_body->source) == shared_source) &&
                   nl_checked_loop_break_provenance_valid(own_parent, own_loop);
         }
         /* Destruction also uses the original private handles when a foreign
@@ -301,8 +308,9 @@ static bool observe(const char *path)
         nl_checked_destroy(checked);
         nl_semantic_destroy(c);
         ok &= nl_checked_loop_break_provenance_valid(parent, loop);
-        printf("P1092 observe fault=%d status=%d changes=%zu pair/frame/B=%d\n",
-               fault, status, events, ok);
+        printf("P1092 observe fault=%d status=%d changes=%zu pair/frame/B=%d "
+               "shared_source=%d\n",
+               fault, status, events, ok, shared_source);
         if (!ok) {
             nl_checked_destroy(foreign);
             input_destroy(&a);
@@ -428,6 +436,6 @@ int main(int argc, char **argv)
 #ifdef P1092_OOM
     return oom(argv[1]) ? 0 : 1;
 #else
-    return observe(argv[1]) ? 0 : 1;
+    return observe(argv[1], false) && observe(argv[1], true) ? 0 : 1;
 #endif
 }
