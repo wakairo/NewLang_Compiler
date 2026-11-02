@@ -1,0 +1,14 @@
+{
+  "phase": "C180 mechanical candidate2 pre-run: explicit C parentheses preserve identical NewLang source bytes under Clang23 -Werror",
+  "parent": "bab16a63429042234e82b422283f243df3781f8f",
+  "files": {
+    "CMakeLists.txt": "5858da9c1e84a3e3ba4ec9fc2ae894f717d789da35437d7da0ab88fc93bb8321",
+    "src/control.c": "0578661ae3745959bef6cfe797d02f061672f487c1ab84e19656c8bd9a82e736",
+    "src/control.h": "c1d2b8a0aa65cf73273afc11a02cb8ee8565f39536f84ca863fcc0932d3eae05",
+    "src/semantic_check.c": "594c7e3fe23bda6ed579a9bee09297d0e9fb0826161e4727860acc32843245e4",
+    "tests/p1088/oom_probe.c": "b3a9b9207548fc0be1b6c339d268a80c861750e1046d50e640c27adab7efb9f1",
+    "tests/p1088/provenance_test.c": "90931c97894b6971780573b69957b221eb7f3494983313cafa233a4f7ce2e139",
+    "tests/p1088/evidence_test.py": "d08d638a5b028bc238e0afb90eadac1ef5453770f2d8fa524a13fef45ffb2283",
+    "tests/p1088/oracle-v3.json": "2ecbc8c9e5e2a67fc31880d995c3e0bb23ccdf30eac201644f3ddb6815c8fc9a"
+  }
+}

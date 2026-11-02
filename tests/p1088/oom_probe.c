@@ -41,8 +41,8 @@ static bool probe(void)
         "return_path(cond,x)",
         "mixed_zero(cond,x)",
         "loop(){break x;}",
-        "loop(){let a0=x;let a1=y;let a2=x;let a3=y;let a4=x;let a5=y;let "
-        "a6=x;break y;}"};
+        ("loop(){let a0=x;let a1=y;let a2=x;let a3=y;let a4=x;let a5=y;let "
+         "a6=x;break y;}")};
     for (size_t t = 0; t < sizeof(texts) / sizeof(*texts); ++t) {
         Fixture f = {0};
         CHECK(setup(&f));

@@ -41,6 +41,11 @@ RED and later status-first diagnostic are archived with their pre-run freezes.
 Candidate1's wrong-scope negative used a bare top-level Break item and failed
 in the parser. Its source and RED remain archived; candidate2 uses the required
 lexical block and still requires semantic wrong-context rejection.
+Clang23's strict build flagged the deliberately concatenated eighth C string
+in the array. Its first build RED and pre-fix inputs are retained; explicit
+parentheses preserve the complete NewLang source bytes and all OOM oracles.
+The first local prospective-v18 candidate is archived before its forward
+mechanical update; failed commits and evidence are never overwritten.
 
 ## Forward history and evidence
 
