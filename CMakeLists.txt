@@ -1061,7 +1061,7 @@ if(BUILD_TESTING)
     endforeach()
     foreach(p1079_profile IN ITEMS 0 1 2)
         add_test(NAME p1079_field_if_${p1079_profile}.integration COMMAND "${Python3_EXECUTABLE}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1079/run-v4.py"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/p1079_forward.py"
             "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1079_profile}")
     endforeach()
     foreach(p1077_profile IN ITEMS 0 1 2)

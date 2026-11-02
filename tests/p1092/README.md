@@ -93,3 +93,14 @@ Equivalent outside-loop source is the present controlled alternative. Library
 author plus ordinary-safe caller UB audit/re-audit dependency closure versus
 well-factored C remains UNMEASURED. Capability evidence is not audit-locality
 Product PASS; Product GO624 PAUSED and H1 HOLD remain.
+
+## Prospective regression compatibility
+
+Clean GCC regression first stopped at unchanged P1079 v4's old expectation
+that its legal alternative_loop source must fail CHECK. A now checks that
+single direct field Break, while mixed C17 still rejects it with exit4. The
+original source/oracle/runner and full first regression RED remain immutable.
+A prospective P1092 runner inherits every old native/current/negative/OOM
+assertion; its sole expectation change is that old legal alternative now has
+CHECK0 and C17 exit4. This is an explicitly versioned capability expectation,
+not disabled protection or a claim that the earlier RED passed.
