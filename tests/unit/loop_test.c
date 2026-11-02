@@ -1,4 +1,5 @@
 #include "../../src/semantic_internal.h"
+#include "../../src/control.h"
 #include "../support/function_body.h"
 #include <stdlib.h>
 
@@ -446,6 +447,69 @@ static bool workload(size_t w)
     nl_semantic_destroy(f.c);
     return ok;
 }
+/* M1085: observe a real checked body, never seed a synthetic target/edge. */
+static bool provenance(void)
+{
+    Fixture f = {0};
+    CHECK(setup(&f));
+    const char *source[] = {
+        "loop(){break x;}",
+        "loop(){let prior=y;break prior;}"};
+    for (size_t i = 0; i < 2; ++i) {
+        TestChecked a = {0};
+        CHECK(test_run(f.c, source[i], TEST_SOURCE, NL_CHECK_OK, NULL, &a));
+        NLCheckedNodeId id = nl_checked_root(a.artifact);
+        CHECK(nl_checked_loop_break_provenance_valid(a.artifact, id));
+        const NLCheckedFragment *body =
+            nl_checked_loop_body(a.artifact, id);
+        CHECK(body != NULL);
+        const NLControlExitView *e =
+            nl_control_exit_view(nl_checked_control_exits(body), 0);
+        CHECK(e && e->source_owner == body && e->source_node &&
+              e->kind == NL_EXIT_BREAK && e->source_target == e->target);
+        CHECK(nl_checked_node_view(body, e->source_node)->kind ==
+              NL_CHECKED_BREAK);
+        /* Mutable faults are tests only. Issuer stores the original node
+         * observations; never use forged numeric IDs to grant current. */
+        NLControlExitView *fault = (NLControlExitView *)e;
+        NLControlExitView saved = *fault;
+        fault->source_node = 0;
+        CHECK(!nl_checked_loop_break_provenance_valid(a.artifact, id));
+        *fault = saved;
+        fault->source_owner = a.artifact;
+        CHECK(!nl_checked_loop_break_provenance_valid(a.artifact, id));
+        *fault = saved;
+        fault->source_target = NULL;
+        CHECK(!nl_checked_loop_break_provenance_valid(a.artifact, id));
+        *fault = saved;
+        fault->values[0].value = 0;
+        CHECK(!nl_checked_loop_break_provenance_valid(a.artifact, id));
+        *fault = saved;
+        NLCheckedNodeView *alter =
+            (NLCheckedNodeView *)nl_checked_node_view(body, e->source_node);
+        NLCheckedNodeView original = *alter;
+        alter->initializer = 0;
+        CHECK(!nl_checked_loop_break_provenance_valid(a.artifact, id));
+        *alter = original;
+        alter->kind = NL_CHECKED_CONTINUE;
+        CHECK(!nl_checked_loop_break_provenance_valid(a.artifact, id));
+        *alter = original;
+        CHECK(nl_checked_loop_break_provenance_valid(a.artifact, id));
+        test_checked_destroy(&a);
+    }
+    const char *excluded[] = {
+        "loop(){continue();}",
+        "loop(){if(cond){break x;}else{break y;}}"};
+    for (size_t i = 0; i < 2; ++i) {
+        TestChecked a = {0};
+        CHECK(test_run(f.c, excluded[i], TEST_SOURCE, NL_CHECK_OK, NULL, &a));
+        CHECK(!nl_checked_loop_break_provenance_valid(
+            a.artifact, nl_checked_root(a.artifact)));
+        test_checked_destroy(&a);
+    }
+    nl_semantic_destroy(f.c);
+    return true;
+}
 static bool failure(void)
 {
     const char *texts[] = {
@@ -454,7 +518,8 @@ static bool failure(void)
         "loop(){loop(){break unit;};break x;}",
         "loop(){if(cond){break a;}else{break b;}}",
         "return_path(cond,x)",
-        "mixed_zero(cond,x)"};
+        "mixed_zero(cond,x)",
+        "loop(){break x;}"};
     for (size_t t = 0; t < sizeof(texts) / sizeof(texts[0]); ++t) {
         Fixture f = {0};
         CHECK(setup(&f));
@@ -563,5 +628,5 @@ int main(int argc, char **argv)
     if (argc != 2)
         return 2;
     size_t w = (size_t)strtoul(argv[1], NULL, 10);
-    return (w == 40 ? failure() : workload(w)) ? 0 : 1;
+    return (w == 40 ? failure() : w == 41 ? provenance() : workload(w)) ? 0 : 1;
 }

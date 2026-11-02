@@ -321,6 +321,11 @@ const NLCheckedFragment *nl_checked_if_arm(const NLCheckedFragment *,
  * header_inductive is published only after complete source transfer/closure. */
 const NLCheckedFragment *nl_checked_loop_body(const NLCheckedFragment *,
                                               NLCheckedNodeId loop);
+/* C178 single direct Break: verifies the source-owned checked-node → actual
+ * target-qualified owned edge association. NOT an issuer/validator of
+ * post-Break current, original lifetime or caller result authority. */
+bool nl_checked_loop_break_provenance_valid(const NLCheckedFragment *,
+                                            NLCheckedNodeId loop);
 
 /* Owned body evidence retains its plan source. Semantic IDs use the SAME
  * public context as the call, never a hypothetical formal context. Namespace

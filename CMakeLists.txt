@@ -676,6 +676,7 @@ if(BUILD_TESTING)
     foreach(workload RANGE 1 40)
         add_test(NAME p14_w${workload}.unit COMMAND loop_test ${workload})
     endforeach()
+    add_test(NAME m1085_source_break_provenance.unit COMMAND loop_test 41)
 
     add_executable(if_test tests/unit/if_test.c)
     target_link_libraries(if_test PRIVATE newlang_semantic newlang_parser)

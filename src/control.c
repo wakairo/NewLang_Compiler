@@ -195,7 +195,8 @@ void nl_control_exits_destroy(NLControlExits *s)
 static NLCheckStatus append(NLControlExits **out, NLControlExitKind kind,
                             NLControlTarget *target,
                             const NLControlState *state,
-                            const NLCheckedResult *values, size_t count)
+                            const NLCheckedResult *values, size_t count,
+                            const NLControlExitView *source)
 {
     if (count > NL_CONTROL_MAX_SLOTS)
         return NL_CHECK_RESOURCE_LIMIT;
@@ -262,6 +263,13 @@ static NLCheckStatus append(NLControlExits **out, NLControlExitKind kind,
         .kind = kind, .target = target, .state = copy, .count = count};
     if (count != 0)
         memcpy(edge.values, values, count * sizeof(*values));
+    if (source != NULL) {
+        edge.source_owner = source->source_owner;
+        edge.source_node = source->source_node;
+        edge.source_target = source->source_target;
+        edge.source_node_seal = source->source_node_seal;
+        edge.source_operand_seal = source->source_operand_seal;
+    }
     set->edges[set->count++] = edge;
     *out = set;
     return NL_CHECK_OK;
@@ -282,7 +290,7 @@ NLCheckStatus nl_control_exits_union(NLControlExits **out,
             const NLControlExitView *e = &sets[s]->edges[i];
             NLCheckStatus status =
                 append(&candidate, e->kind, (NLControlTarget *)e->target,
-                       e->state, e->values, e->count);
+                       e->state, e->values, e->count, e);
             if (status != NL_CHECK_OK) {
                 nl_control_exits_destroy(candidate);
                 return status;
@@ -297,7 +305,114 @@ nl_control_exit_append(NLControlExits **out, NLControlExitKind kind,
                        NLControlTarget *target, const NLControlState *state,
                        const NLCheckedResult *values, size_t count)
 {
-    return append(out, kind, target, state, values, count);
+    return append(out, kind, target, state, values, count, NULL);
+}
+/* The sole source of a linked Break is source_control after add() succeeds.
+ * Do not let general append/union mint proof for a synthetic checked node. */
+NLCheckStatus nl_control_source_break_append(
+    NLControlExits **out, NLControlTarget *target,
+    const NLControlState *state, NLCheckedResult value,
+    const NLCheckedFragment *owner, NLCheckedNodeId node)
+{
+    if (!owner || !owner->source || !owner->context || !target ||
+        target->kind != NL_TARGET_LOOP || node != owner->count)
+        return NL_CHECK_INTERNAL_ERROR;
+    const NLCheckedNodeView *br = nl_checked_node_view(owner, node);
+    const NLCheckedNodeView *operand =
+        br ? nl_checked_node_view(owner, br->initializer) : NULL;
+    if (!br || br->kind != NL_CHECKED_BREAK || !br->terminates ||
+        !nl_source_span_valid(owner->source, br->span) ||
+        !operand || br->initializer >= node ||
+        operand->type != value.type ||
+        (operand->result_count != 1 && value.type != 1) ||
+        (operand->result_count == 1 &&
+         (operand->results[0].type != value.type ||
+          operand->results[0].value != value.value)) ||
+        (operand->result_count == 0 && (value.type != 1 || value.value != 0)))
+        return NL_CHECK_INTERNAL_ERROR;
+    const NLControlExitView issued = {
+        .source_owner = owner, .source_node = node,
+        .source_target = target, .source_node_seal = *br,
+        .source_operand_seal = *operand};
+    return append(out, NL_EXIT_BREAK, target, state, &value, 1, &issued);
+}
+
+/* C178: exact one Break as a direct terminating lexical block item.
+ * No heap or scalar/current/owner certificate is produced by this check. */
+bool nl_control_source_break_body_valid(const NLCheckedFragment *body,
+                                        const NLControlTarget *target)
+{
+    if (!body || !body->source || !body->context ||
+        !target || target->kind != NL_TARGET_LOOP ||
+        nl_control_exits_count(body->exits) != 1)
+        return false;
+    const NLControlExitView *e = nl_control_exit_view(body->exits, 0);
+    const NLCheckedNodeView *br =
+        nl_checked_node_view(body, e->source_node);
+    const NLCheckedNodeView *operand =
+        br ? nl_checked_node_view(body, br->initializer) : NULL;
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(body, body->root);
+    if (!e || e->kind != NL_EXIT_BREAK || e->count != 1 ||
+        !nl_control_target_same(e->target, target) ||
+        e->source_target != target ||
+        e->source_owner != body || !br || !operand || !root ||
+        root->kind != NL_CHECKED_BLOCK || root->tail ||
+        !br->terminates || br->kind != NL_CHECKED_BREAK ||
+        !nl_source_span_valid(body->source, br->span) ||
+        memcmp(br, &e->source_node_seal, sizeof(*br)) ||
+        memcmp(operand, &e->source_operand_seal, sizeof(*operand)) ||
+        br->initializer >= e->source_node ||
+        e->values[0].type != operand->type ||
+        (operand->result_count == 1
+             ? e->values[0].value != operand->results[0].value ||
+               e->values[0].type != operand->results[0].type
+             : operand->result_count != 0 || operand->type != 1 ||
+               e->values[0].value != 0))
+        return false;
+    const NLSemanticContext *post =
+        nl_control_state_context((NLControlState *)e->state);
+    if (!post || nl_sem_validate(post) != NL_CHECK_OK ||
+        e->values[0].type > post->type_count ||
+        (e->values[0].value &&
+         (e->values[0].value > post->value_count ||
+          post->values[e->values[0].value - 1].type != e->values[0].type ||
+          post->values[e->values[0].value - 1].carrier == NL_CARRIER_ENDED)))
+        return false;
+    size_t found = 0, visited = 0;
+    for (NLCheckedNodeId item = root->first_item; item;) {
+        const NLCheckedNodeView *n = nl_checked_node_view(body, item);
+        if (!n || ++visited > root->item_count)
+            return false;
+        if (n->kind == NL_CHECKED_BREAK) {
+            if (item != e->source_node || ++found != 1)
+                return false;
+        }
+        item = n->next_item;
+    }
+    if (visited != root->item_count || found != 1)
+        return false;
+    for (NLCheckedNodeId i = 1; i <= body->count; ++i) {
+        const NLCheckedNodeView *n = nl_checked_node_view(body, i);
+        if ((n->kind == NL_CHECKED_BREAK && i != e->source_node) ||
+            n->kind == NL_CHECKED_CONTINUE || n->kind == NL_CHECKED_RETURN ||
+            n->kind == NL_CHECKED_LOOP)
+            return false;
+    }
+    return true;
+}
+bool nl_checked_loop_break_provenance_valid(const NLCheckedFragment *f,
+                                            NLCheckedNodeId loop)
+{
+    const NLCheckedNodeView *node = nl_checked_node_view(f, loop);
+    const NLCheckedFragment *body = nl_checked_loop_body(f, loop);
+    if (!node || node->kind != NL_CHECKED_LOOP ||
+        node->argument_count != 0 || node->break_edges != 1 ||
+        node->continue_edges || node->return_edges || node->terminates ||
+        !body || body->source != f->source)
+        return false;
+    const NLControlExitView *e = nl_control_exit_view(body->exits, 0);
+    return e && nl_control_source_break_body_valid(body, e->target);
 }
 static NLCheckStatus outcome(const NLControlOutcome *a,
                              const NLControlOutcome *b, bool sequence,
