@@ -1,0 +1,14 @@
+{
+  "phase": "P1088 candidate1 full sources/oracle before first new/extended test execution",
+  "parent": "75d9f7cb99349db5f52b9a9b4d13995543ffdc38",
+  "files": {
+    "CMakeLists.txt": "2d75d8153a83ea623cf4f92fe87940177b2c190d1f414e11775255161e8b336f",
+    "src/control.c": "3376fc1c6e732a13bf8e5d806711f7b962d1b852ff15a2087923f2330e124800",
+    "src/control.h": "c1d2b8a0aa65cf73273afc11a02cb8ee8565f39536f84ca863fcc0932d3eae05",
+    "src/semantic_check.c": "594c7e3fe23bda6ed579a9bee09297d0e9fb0826161e4727860acc32843245e4",
+    "tests/unit/loop_test.c": "33e25995b0591d447fc7125e2f1966bbca6680d8a3b693d4099d0f6a78f86132",
+    "tests/p1088/oom_probe.c": "2e0c3d48a51be857854b2ff7fa268c3ae12a1651d1a7b299b3396dbc0ed0a661",
+    "tests/p1088/provenance_test.c": "8b2a060d098263e012ade8f5c85a3e4bd6a5c6e4a17937bba9807dcb49ed635c",
+    "tests/p1088/oracle-v3.json": "2ecbc8c9e5e2a67fc31880d995c3e0bb23ccdf30eac201644f3ddb6815c8fc9a"
+  }
+}

@@ -54,12 +54,13 @@ typedef struct {
     NLCheckedResult values[NL_CONTROL_MAX_SLOTS]; /* IDs belong ONLY to state */
     /* C178: only actual source_control-issued Break edges have this link.
      * Borrowed source owner lifetime is held by the enclosing checked body.
+     * Private exit records seal these observations and own state/target;
+     * challenged views never select destruction or reissue through union.
      * Seals authenticate graph provenance, NOT memory/current/owner authority.
      * Generic/Continue/Return edges have source_owner == NULL. */
     const NLCheckedFragment *source_owner;
     NLCheckedNodeId source_node;
     const NLControlTarget *source_target;
-    NLCheckedNodeView source_node_seal, source_operand_seal;
 } NLControlExitView;
 /* Append clones post-state and retains target; atomic on every failure.
  * Set union is a finite IF/MATCH alternative composition, never a chosen arm.

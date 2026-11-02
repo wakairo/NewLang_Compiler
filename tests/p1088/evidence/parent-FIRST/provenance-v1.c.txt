@@ -1,0 +1,38 @@
+#define main p1088_inherited_main
+#include "../unit/loop_test.c"
+#undef main
+
+static bool authentic(void)
+{
+    Fixture f = {0}, foreign = {0};
+    CHECK(setup(&f) && setup(&foreign));
+    TestChecked a = {0}, b = {0};
+    const char *text = "loop(){let prior=x;let sibling=y;break prior;}";
+    CHECK(test_run(f.c, text, TEST_SOURCE, NL_CHECK_OK, NULL, &a));
+    CHECK(test_run(foreign.c, text, TEST_SOURCE, NL_CHECK_OK, NULL, &b));
+    NLCheckedNodeId id = nl_checked_root(a.artifact);
+    const NLCheckedFragment *body = nl_checked_loop_body(a.artifact, id);
+    const NLCheckedFragment *other = nl_checked_loop_body(b.artifact, nl_checked_root(b.artifact));
+    CHECK(body && other && body != other && body->context != other->context);
+    NLControlExitView *edge = (NLControlExitView *)nl_control_exit_view(body->exits, 0);
+    const NLControlExitView *foreign_edge = nl_control_exit_view(other->exits, 0);
+    CHECK(edge && foreign_edge && edge->source_node == foreign_edge->source_node);
+    CHECK(nl_checked_loop_break_provenance_valid(a.artifact, id));
+    NLControlExitView saved = *edge;
+    edge->state = foreign_edge->state;
+    bool rejected = !nl_checked_loop_break_provenance_valid(a.artifact, id);
+    printf("P1088 foreign-same-layout-state rejected=%d same_node_id=%d\n", rejected,
+           edge->source_node == foreign_edge->source_node);
+    *edge = saved;
+    test_checked_destroy(&a);
+    CHECK(nl_checked_loop_break_provenance_valid(b.artifact, nl_checked_root(b.artifact)));
+    test_checked_destroy(&b);
+    nl_semantic_destroy(f.c);
+    nl_semantic_destroy(foreign.c);
+    CHECK(rejected);
+    return true;
+}
+int main(void)
+{
+    return authentic() ? 0 : 1;
+}

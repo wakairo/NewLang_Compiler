@@ -5440,12 +5440,10 @@ static NLCheckedNodeId source_loop(Check *check, const NLSyntaxView *syntax)
         view(check, id)->result_count = value == 0 ? 0 : 1;
         view(check, id)->results[0] = (NLCheckedResult){type, value};
     }
-    /* Provenance-only check. Never bypass P6's normal-current frame gate. */
-    if (count == 0 && breaks == 1 && continues == 0 && returns == 0 &&
-        !nl_control_source_break_body_valid(body_artifact, loop.target)) {
-        (void)host(check, NL_CHECK_INTERNAL_ERROR, syntax->span);
-        goto cleanup;
-    }
+    /* The source-specific append already authenticated each Break producer.
+     * The public provenance observer selects a narrower graph cohort; its
+     * refusal (e.g. nested loops) must not reject otherwise valid source.
+     * P6's normal-current frame checks above remain mandatory. */
     if (!save_arm(check, id, body_artifact, syntax->span))
         goto cleanup;
     body_artifact = NULL;

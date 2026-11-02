@@ -1,0 +1,2 @@
+tests/p1088/provenance_test.c:32: rejected
+P1088 foreign-same-layout-state rejected=0 same_node_id=1

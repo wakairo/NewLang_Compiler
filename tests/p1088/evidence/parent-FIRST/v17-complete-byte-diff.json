@@ -1,0 +1,15 @@
+{
+  "original_bytes": 401990,
+  "rendered_bytes": 401993,
+  "original_sha256": "3fc39dc0cae85a051e77e814d4d54c3d5c33d2bea955ea5d9db1c2d900b9a0b6",
+  "rendered_sha256": "4229826ef4017b721ff2037d4222f7b0f0361cb767f6941e596fe7ec58df8085",
+  "all_parsed_fields_equal": true,
+  "files_order_equal": false,
+  "first_order_difference": {
+    "index": 2,
+    "old": "cmake/independent-r-cohort-runner.py",
+    "rendered": "CMakeLists.txt"
+  },
+  "unicode_escape_only_with_original_order": true,
+  "sorted_files_and_unicode_escape_exactly_reconstruct_rendered": true
+}

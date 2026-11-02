@@ -1,0 +1,9 @@
+{
+  "phase": "C180 diagnostic v2: preserve first original status failure, retry only on that failure; full per-failpoint retry still required in v1 acceptance",
+  "parent": "75d9f7cb99349db5f52b9a9b4d13995543ffdc38",
+  "files": {
+    "tests/p1088/oom_status_probe.c": "0913910020bdc27d81c249139122f2628e23502a0b24472cd3357ee34db493eb",
+    "tests/p1088/oracle-v2.json": "4213ea7f2f49c7be18b29cb3ca00399cbca69f156dcde03ba5912f6a89ed0ce7",
+    "tests/unit/loop_test.c": "33e25995b0591d447fc7125e2f1966bbca6680d8a3b693d4099d0f6a78f86132"
+  }
+}
