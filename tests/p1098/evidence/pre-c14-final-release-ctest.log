@@ -1,0 +1,54 @@
+Internal ctest changing into directory: /tmp/p1098-local/release
+Test project /tmp/p1098-local/release
+        Start 386: p990_freeze_protocol.unit
+  1/625 Test #386: p990_freeze_protocol.unit .............................   Passed   16.97 sec
+        Start 364: p990_new_native.integration
+        Start 388: p1055_old_origin_0.integration
+  2/625 Test #388: p1055_old_origin_0.integration ........................   Passed   10.74 sec
+        Start 395: p1062_h_body_0.integration
+  3/625 Test #364: p990_new_native.integration ...........................   Passed   13.31 sec
+        Start 387: p1045_two_original_native.integration
+  4/625 Test #395: p1062_h_body_0.integration ............................   Passed    8.00 sec
+        Start 101: p517_r516_composition_native.integration
+  5/625 Test #387: p1045_two_original_native.integration .................   Passed    8.28 sec
+        Start 393: p1058_closed_h_0.integration
+  6/625 Test #101: p517_r516_composition_native.integration ..............   Passed    8.45 sec
+        Start 513: custody_native.integration
+  7/625 Test #393: p1058_closed_h_0.integration ..........................   Passed    6.43 sec
+        Start 539: five_root_checker-oom.unit
+  8/625 Test #513: custody_native.integration ............................   Passed    4.32 sec
+        Start  66: p603_comparison_native.integration
+  9/625 Test #539: five_root_checker-oom.unit ............................   Passed    3.87 sec
+        Start 510: custody_source_oom.unit
+ 10/625 Test  #66: p603_comparison_native.integration ....................   Passed    3.13 sec
+        Start 499: live_tail_return_native.integration
+ 11/625 Test #510: custody_source_oom.unit ...............................   Passed    3.30 sec
+        Start  98: p514_composition_native.integration
+ 12/625 Test #499: live_tail_return_native.integration ...................   Passed    3.57 sec
+        Start  42: p633_local_cli.integration
+ 13/625 Test  #98: p514_composition_native.integration ...................   Passed    3.35 sec
+        Start 618: p596_usize_subtraction.integration
+ 14/625 Test #618: p596_usize_subtraction.integration ....................   Passed    2.87 sec
+        Start 542: five_root_native.integration
+ 15/625 Test  #42: p633_local_cli.integration ............................   Passed    3.52 sec
+        Start 524: two_heap_native.integration
+ 16/625 Test #542: five_root_native.integration ..........................   Passed    2.46 sec
+        Start  13: p713_if_field_native.integration
+ 17/625 Test #524: two_heap_native.integration ...........................   Passed    2.63 sec
+        Start  54: p628_cli_pair_if.integration
+ 18/625 Test  #13: p713_if_field_native.integration ......................   Passed    2.09 sec
+        Start 105: p521_copy_call_composition_native.integration
+ 19/625 Test  #54: p628_cli_pair_if.integration ..........................   Passed    2.21 sec
+        Start  71: p504_equality_native.integration
+ 20/625 Test #105: p521_copy_call_composition_native.integration .........   Passed    2.13 sec
+        Start   6: p718_if_return_native.integration
+ 21/625 Test  #71: p504_equality_native.integration ......................   Passed    1.93 sec
+        Start 267: p878_source_cli.integration
+ 22/625 Test   #6: p718_if_return_native.integration .....................   Passed    1.88 sec
+        Start  74: p508_copy_selection_native.integration
+ 23/625 Test #267: p878_source_cli.integration ...........................   Passed    1.95 sec
+        Start   9: p728_unit_statement_native.integration
+ 24/625 Test  #74: p508_copy_selection_native.integration ................   Passed    1.85 sec
+        Start 511: custody_source.integration
+ 25/625 Test   #9: p728_unit_statement_native.integration ................   Passed    1.72 sec
+        Start 365: p990_p986_native.integration

@@ -2635,6 +2635,11 @@ static bool gate_symbol_written(const NLCheckedFragment *f, NLSymbolId symbol)
 {
     for (size_t i = 1; i <= nl_checked_node_count(f); ++i) {
         const NLCheckedNodeView *n = nl_checked_node_view(f, i);
+        NLLinearBreakView changed;
+        if (n && n->kind == NL_CHECKED_LOOP &&
+            nl_linear_break_validate(f, i, &changed) == NL_CHECK_OK &&
+            changed.base == symbol)
+            return true;
         NLIfReturnView returned;
         if (n && n->kind == NL_CHECKED_IF &&
             nl_checked_if_return_view(f, i, &returned) &&

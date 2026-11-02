@@ -1014,11 +1014,16 @@ if(BUILD_TESTING)
     target_link_options(p1098_oom PRIVATE
         -Wl,--wrap=nl_parser_parse_function_unit -Wl,--wrap=nl_parser_parse_expression_fragment
         -Wl,--wrap=nl_semantic_register_function_unit -Wl,--wrap=nl_semantic_check_expression)
-    foreach(profile 01-bound 02-inline 03-equal-bits 04-prefix 05-two-originals)
+    foreach(profile 01-bound 02-inline 03-equal-bits 04-prefix 05-two-originals
+                    11-no-caller-write 12-two-roots-no-caller-write)
         if(profile STREQUAL "02-inline")
             set(p1098_args 0 194 112)
         elseif(profile STREQUAL "05-two-originals")
             set(p1098_args 0 251 36)
+        elseif(profile STREQUAL "11-no-caller-write")
+            set(p1098_args 1 158 237)
+        elseif(profile STREQUAL "12-two-roots-no-caller-write")
+            set(p1098_args 0 189 28)
         elseif(profile STREQUAL "04-prefix")
             set(p1098_args 1 176 244)
         elseif(profile STREQUAL "03-equal-bits")
@@ -1034,7 +1039,7 @@ if(BUILD_TESTING)
     add_test(NAME p1098_inline_oom.unit COMMAND p1098_oom
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/sources/02-inline.nl" 0 194 112)
     add_test(NAME p1098_native.integration COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/run-v2.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098")
     add_test(NAME p1098_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/evidence_test.py")

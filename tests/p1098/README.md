@@ -9,8 +9,11 @@ The finite native cohort is a real direct zero-argument unit invocation with
 ordinary two-u8 T locals, one non-recurrent source-linear normal BREAK after
 one scoped fixed-field replace with literal incoming. Bound old-result Copy
 and inline BREAK, either declaration field, equal bits/fresh facts, prior
-source Change and a second distinct original are covered. The caller's later
-other-field Change acts on that same original. Scope/hidden-dependency/frame
+source Change and a second distinct original are covered. When present, the caller's later
+other-field Change acts on that same original. Two additional fresh sources
+omit caller writes: an authenticated loop effect alone must make its existing
+C original mutable, while an untouched second original remains unchanged.
+Their pre-repair strict-C17 refusal and full pre-run freeze are preserved. Scope/hidden-dependency/frame
 obligations use the existing CHECK A kernel; no public receipt or issuer.
 
 The private record retains actual E and actual enclosing C post checkpoints,

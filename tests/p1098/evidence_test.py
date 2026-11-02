@@ -7,8 +7,9 @@ import zipfile
 root = Path(__file__).resolve().parents[2]
 data = root / 'tests/p1098'
 sha = lambda b: hashlib.sha256(b).hexdigest()
-for name, expected in json.loads((data / 'source-freeze-v1.json').read_bytes())['files'].items():
-    assert sha((root / name).read_bytes()) == expected, name
+for source_freeze in sorted(data.glob('source-freeze-v*.json')):
+    for name, expected in json.loads(source_freeze.read_bytes())['files'].items():
+        assert sha((root / name).read_bytes()) == expected, name
 for freeze in sorted(data.glob('harness-freeze-v*.json')):
     doc = json.loads(freeze.read_bytes())
     with zipfile.ZipFile(data / 'evidence' / (freeze.stem.replace('harness-freeze', 'harness') + '-inputs.zip')) as z:
