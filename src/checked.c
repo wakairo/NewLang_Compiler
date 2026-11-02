@@ -32,6 +32,8 @@ void nl_checked_destroy(NLCheckedFragment *fragment)
             fragment->destroy_producer_local(fragment);
         if (fragment->destroy_if_fields != NULL)
             fragment->destroy_if_fields(fragment);
+        if (fragment->destroy_linear_breaks != NULL)
+            fragment->destroy_linear_breaks(fragment);
         if (fragment->destroy_copy_body != NULL)
             fragment->destroy_copy_body(fragment);
         if (fragment->destroy_usize_additions != NULL)

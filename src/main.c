@@ -3,6 +3,7 @@
 #endif
 #include "checked_c_target.h"
 #include "if_field_internal.h"
+#include "linear_break_internal.h"
 #include "newlang/array4.h"
 #include "newlang/checked.h"
 #include "newlang/checked_c_node.h"
@@ -69,6 +70,7 @@ typedef struct {
     NLTypeId unit, u8, aggregate;
     bool uses_usize;
     bool u8_export;       /* opt-in target wrapper, never source authority */
+    bool linear_break;    /* independently validated private CHECK consumer */
     bool two_normal_unit; /* validated new profile; passive C hooks only */
     const NLCopyBodyParameters *unit_parameters;
     const NLCheckedFragment *formal_body; /* current validation only */
@@ -2311,6 +2313,21 @@ static bool v0_unit_loan_binding(const NLCheckedFragment *fragment,
            initializer->type == unit && initializer->result_count == 0;
 }
 
+static bool linear_break_selection(const NLCheckedFragment *f,
+                                   NLCheckedNodeId id, V0Program *p)
+{
+    NLLinearBreakView v;
+    if (p->u8_export || p->scalar_depth || p->formal_body)
+        return false;
+    const NLCheckStatus status = nl_linear_break_validate(f, id, &v);
+    if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
+        p->copy_body_status = status;
+    if (status != NL_CHECK_OK || !avs_shape(f, v.nominal, p))
+        return false;
+    p->linear_break = true;
+    return true;
+}
+
 static bool v0_validate_node(const NLCheckedFragment *fragment,
                              NLCheckedNodeId id, V0Program *program)
 {
@@ -2362,6 +2379,9 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                 (receiver->type == program->u8 &&
                  ((initializer->kind == NL_CHECKED_IF &&
                    copy_or_field_if(fragment, view->initializer, program)) ||
+                  (initializer->kind == NL_CHECKED_LOOP &&
+                   linear_break_selection(fragment, view->initializer,
+                                          program)) ||
                   v1_scalar(fragment, view->initializer, program) ||
                   (initializer->kind == NL_CHECKED_REGISTERED_CALL &&
                    initializer->type == program->u8 &&
@@ -2429,6 +2449,23 @@ static bool v0_emit_items(FILE *stream, const NLCheckedFragment *fragment,
                  fprintf(stream,
                          "NL_UNIT_CALL_READ(&nl_local_%zu.f%zu, "
                          "nl_local_%zu);\n",
+                         value->field.base, value->field.index,
+                         view->symbol) < 0))
+                return false;
+        }
+        if (fragment->linear_breaks && view->kind == NL_CHECKED_BINDING) {
+            const NLCheckedNodeView *value =
+                nl_checked_node_view(fragment, view->initializer);
+            if (value->kind == NL_CHECKED_AGGREGATE &&
+                (!v0_indent(stream, depth) ||
+                 fprintf(stream,
+                         "NL_LOOP_BIND(&nl_local_%zu.f0, &nl_local_%zu.f1);\n",
+                         view->symbol, view->symbol) < 0))
+                return false;
+            if (value->kind == NL_CHECKED_FIELD_READ &&
+                (!v0_indent(stream, depth) ||
+                 fprintf(stream,
+                         "NL_LOOP_READ(&nl_local_%zu.f%zu, nl_local_%zu);\n",
                          value->field.base, value->field.index,
                          view->symbol) < 0))
                 return false;
@@ -2801,6 +2838,35 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
             gate_symbol_written(fragment, view->symbol) ? "" : "const ";
         if (initializer == NULL)
             return false;
+        if (initializer->kind == NL_CHECKED_LOOP) {
+            NLLinearBreakView proof;
+            if (nl_linear_break_validate(fragment, view->initializer, &proof) !=
+                NL_CHECK_OK)
+                return false;
+            /* The old load and sole store use the SAME already declared
+             * parent original. No body-world ID names a C storage object. */
+            return v0_indent(stream, depth) &&
+                   fprintf(stream,
+                           "NL_LOOP_BEFORE(&nl_local_%zu.f0, &nl_local_%zu.f1, "
+                           "%zu);\n",
+                           proof.base, proof.base, proof.index) >= 0 &&
+                   v0_indent(stream, depth) &&
+                   fprintf(stream,
+                           "%suint8_t nl_local_%zu = nl_local_%zu.f%zu;\n",
+                           scalar_qualifier, view->symbol, proof.base,
+                           proof.index) >= 0 &&
+                   v0_indent(stream, depth) &&
+                   fprintf(stream, "nl_local_%zu.f%zu = %zu;\n", proof.base,
+                           proof.index, proof.incoming) >= 0 &&
+                   v0_indent(stream, depth) &&
+                   fprintf(stream,
+                           "NL_LOOP_AFTER(&nl_local_%zu.f0, &nl_local_%zu.f1, "
+                           "%zu, nl_local_%zu);\n",
+                           proof.base, proof.base, proof.index,
+                           view->symbol) >= 0 &&
+                   v0_indent(stream, depth) &&
+                   fprintf(stream, "(void)nl_local_%zu;\n", view->symbol) >= 0;
+        }
         /* Evaluate the authentic loan once at the binding's source position.
          * A zero-result unit loan neither declares nor reads a u8 result. */
         if (v0_unit_loan_binding(fragment, view))
@@ -3068,6 +3134,20 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
         fprintf(stream,
                 "typedef struct { uint8_t f0; uint8_t f1; } nl_type_%zu;\n\n",
                 program->aggregate) < 0)
+        return false;
+
+    if (program->linear_break &&
+        fputs("#ifdef NEWLANG_LOOP_OBSERVER\n"
+              "#include NEWLANG_LOOP_OBSERVER\n#endif\n"
+              "#ifndef NL_LOOP_BIND\n#define NL_LOOP_BIND(...) "
+              "((void)0)\n#endif\n"
+              "#ifndef NL_LOOP_READ\n#define NL_LOOP_READ(...) "
+              "((void)0)\n#endif\n"
+              "#ifndef NL_LOOP_BEFORE\n#define NL_LOOP_BEFORE(...) "
+              "((void)0)\n#endif\n"
+              "#ifndef NL_LOOP_AFTER\n#define NL_LOOP_AFTER(...) "
+              "((void)0)\n#endif\n\n",
+              stream) < 0)
         return false;
 
     if (program->two_normal_unit &&
