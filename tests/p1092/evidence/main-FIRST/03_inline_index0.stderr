@@ -1,0 +1,1 @@
+/tmp/p1092/tests/p1092/sources/03_inline_index0.nl:5:20-7:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports

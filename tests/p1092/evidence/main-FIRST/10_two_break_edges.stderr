@@ -1,0 +1,1 @@
+/tmp/p1092/tests/p1092/sources/10_two_break_edges.nl:5:21-8:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports
