@@ -1011,7 +1011,8 @@ if(BUILD_TESTING)
             -Wl,--wrap=nl_control_source_break_append)
     endforeach()
     target_link_options(p1092_oom PRIVATE -Wl,--wrap=malloc
-        -Wl,--wrap=realloc -Wl,--wrap=calloc)
+        -Wl,--wrap=realloc -Wl,--wrap=calloc -no-pie)
+    target_compile_options(p1092_oom PRIVATE -fno-pie)
     foreach(profile 02_bound_index1 04_named_new_value 06_unreachable_continue
                     16_same_nominal_other_original 17_equal_bits_new_fact)
         if(profile STREQUAL "17_equal_bits_new_fact")

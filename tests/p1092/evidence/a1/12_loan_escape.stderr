@@ -1,0 +1,1 @@
+tests/p1092/sources/12_loan_escape.nl:6:15-6:55: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope

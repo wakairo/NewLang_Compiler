@@ -1,0 +1,1 @@
+tests/p1092/sources/14_wrong_type.nl:6:69-6:73: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type

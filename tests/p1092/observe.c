@@ -1,5 +1,5 @@
 #include "../../src/semantic_internal.h"
-#include "../support/semantic_check.h"
+#include "../support/raw_storage_check.h"
 #include <stdlib.h>
 
 /* P-owned observation of real source execution. Interposition records actual
@@ -13,6 +13,10 @@ static NLSemanticContext *actual_world;
 static int fault;
 static const NLControlExitView *foreign_edge;
 static const NLCheckedFragment *foreign_body;
+static NLSymbolId ambient_owner, ambient_domain, ambient_allocation,
+    ambient_storage;
+static NLDomainId ambient_domain_id;
+static NLBackingRegionId ambient_region;
 
 NLCheckStatus __real_nl_fixed_change(NLSemanticContext *, NLPlaceId, NLValueId,
                                      bool);
@@ -143,6 +147,22 @@ NLCheckStatus __wrap_nl_control_source_break_append(
     case 16:
         op->field.dependency_compatible = false;
         break;
+    case 17:
+        actual_world
+            ->values[actual_world->bindings[ambient_owner - 1].view.value - 1]
+            .carrier = NL_CARRIER_ENDED;
+        break;
+    case 18:
+        actual_world->domains[ambient_domain_id - 1].live = false;
+        break;
+    case 19:
+        actual_world->regions[ambient_region - 1].view.ordinary_write = false;
+        break;
+    case 20:
+        actual_world
+            ->values[actual_world->bindings[ambient_owner - 1].view.value - 1]
+            .dependencies = NL_DEPENDENCIES_UNKNOWN;
+        break;
     }
     return status;
 }
@@ -168,6 +188,20 @@ static bool input_create(const char *path, Input *p)
     CHECK(nl_parser_parse_function_unit(parser, &p->unit, NULL) == NL_PARSE_OK);
     nl_parser_destroy(parser);
     CHECK(nl_semantic_create(&p->context) == NL_CHECK_OK);
+    /* Trusted host ambient frame, explicitly distinct from the source-issued
+     * Panel/Thermal original and source Break. No ambient fixture is used to
+     * issue current/loan authority for the tested source. */
+    NLTypeId owner = 0;
+    CHECK(nl_semantic_nominal(p->context, "P1092Ambient", false, false,
+                              &owner) == NL_CHECK_OK);
+    CHECK(nl_semantic_seed_value(p->context, "ambient_owner", owner,
+                                 NL_DEPENDENCY_FREE,
+                                 &ambient_owner) == NL_CHECK_OK);
+    CHECK(nl_semantic_seed_domain(p->context, "ambient_domain", &ambient_domain,
+                                  &ambient_domain_id) == NL_CHECK_OK);
+    CHECK(raw_allocate(p->context, 8, 8, true, true, "ambient_allocation",
+                       "ambient_storage", &ambient_allocation, &ambient_storage,
+                       &ambient_region));
     const NLSyntaxTree *units[] = {p->unit};
     CHECK(nl_semantic_register_function_unit(p->context, units, 1, NULL) ==
           NL_CHECK_OK);
@@ -212,7 +246,7 @@ static bool observe(const char *path)
     foreign_body = find_loop(foreign, &parent, &loop);
     CHECK(foreign_body && nl_checked_loop_break_provenance_valid(parent, loop));
     foreign_edge = nl_control_exit_view(foreign_body->exits, 0);
-    for (fault = 0; fault <= 16; ++fault) {
+    for (fault = 0; fault <= 20; ++fault) {
         NLSemanticContext *c = NULL;
         CHECK(nl_sem_clone(a.context, &c) == NL_CHECK_OK);
         TestState before;
