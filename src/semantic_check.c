@@ -18,6 +18,10 @@ typedef struct LoopControl {
     NLControlTarget *target;
     NLControlState *entry;
     NLLoopHeader *header;
+    /* Non-recurrent source execution only. This is the actual working world,
+     * never the separate owned Break snapshot's numeric namespace. */
+    NLSemanticContext *normal_context;
+    NLCheckedResult normal_result;
     NLTypeId types[NL_CONTROL_MAX_SLOTS];
     size_t count, bindings, places, scopes;
 } LoopControl;
@@ -5061,6 +5065,14 @@ static NLCheckedNodeId source_control(Check *check, const NLSyntaxView *syntax)
     nl_control_state_destroy(post);
     if (!host(check, status, syntax->span))
         return 0;
+    if (loop->normal_context != NULL) {
+        if (continuing || loop->normal_context != check->context ||
+            loop->normal_result.type != 0) {
+            (void)host(check, NL_CHECK_INTERNAL_ERROR, syntax->span);
+            return 0;
+        }
+        loop->normal_result = results[0];
+    }
     check->terminated = true;
     check->returned = (NLCheckedResult){0};
     return continuing
@@ -5099,8 +5111,381 @@ precision:
     return false;
 }
 
+/* A single lexical Break has no backedge and needs no cross-world phi. Check
+ * this narrow source path ONCE in the enclosing transaction's working world.
+ * Its owned inspection body is a snapshot of that execution, not a source of
+ * caller IDs. Anything outside this cohort retains the existing P6/P14 path. */
+static bool linear_break_source(Check *check, const NLSyntaxView *s)
+{
+    if (s->data.loop.count || check->loop || check->in_source_loan ||
+        check->in_match_arm || check->capture_copy_body ||
+        check->allocated_slice || check->artifact->if_parent ||
+        check->artifact->node_join_parent)
+        return false;
+    const NLSyntaxView *block = nl_syntax_node_view(s->data.loop.body);
+    if (!block || block->kind != NL_SYNTAX_BLOCK)
+        return false;
+    const NLSyntaxNode *item = block->data.block.items;
+    const NLSyntaxView *first = nl_syntax_node_view(item);
+    if (!first)
+        return false;
+    const NLSyntaxView *loan = NULL;
+    if (first->kind == NL_SYNTAX_BINDING) {
+        loan = nl_syntax_node_view(first->data.binding.initializer);
+        item = nl_syntax_next_argument(item);
+        first = nl_syntax_node_view(item);
+        if (!first || first->kind != NL_SYNTAX_BREAK)
+            return false;
+        const NLSyntaxView *operand =
+            nl_syntax_node_view(first->data.statement.expression);
+        if (!operand || operand->kind != NL_SYNTAX_EXPR_NAME)
+            return false;
+    } else if (first->kind == NL_SYNTAX_BREAK) {
+        loan = nl_syntax_node_view(first->data.statement.expression);
+    } else {
+        return false;
+    }
+    /* Items after this direct terminator are unreachable, including Continue.
+     * The actual graph below must contain exactly this one normal exit. */
+    if (!loan || loan->kind != NL_SYNTAX_LOCAL_WRITE_LOAN ||
+        loan->data.loan.from_ptr || loan->data.loan.is_exclusive ||
+        loan->data.loan.access != NL_ACCESS_WRITE)
+        return false;
+    const NLSyntaxView *field = nl_syntax_node_view(loan->data.loan.source);
+    const NLSyntaxView *inner = nl_syntax_node_view(loan->data.loan.body);
+    if (!field || field->kind != NL_SYNTAX_FIELD_DESIGNATOR || !inner ||
+        inner->kind != NL_SYNTAX_BLOCK || inner->data.block.items)
+        return false;
+    const NLSyntaxView *call = nl_syntax_node_view(inner->data.block.tail);
+    if (!call || call->kind != NL_SYNTAX_EXPR_CALL ||
+        call->data.call.argument_count != 2)
+        return false;
+    const NLSyntaxNode *arg = call->data.call.arguments;
+    const NLSyntaxView *ref = nl_syntax_node_view(arg);
+    const NLSyntaxView *value =
+        nl_syntax_node_view(nl_syntax_next_argument(arg));
+    return ref && ref->kind == NL_SYNTAX_EXPR_NAME && value &&
+           (value->kind == NL_SYNTAX_U8_LITERAL ||
+            value->kind == NL_SYNTAX_EXPR_NAME);
+}
+
+static bool linear_break_frame(const NLSemanticContext *a,
+                               const NLSemanticContext *b,
+                               const NLCheckedField *field)
+{
+    const NLPlaceId root = field->parent, child = field->child;
+    if (!root || root > a->place_count || !child || child > a->place_count ||
+        a->binding_count > b->binding_count ||
+        a->place_count > b->place_count || a->value_count > b->value_count ||
+        a->scope_count > b->scope_count || a->type_count > b->type_count ||
+        a->domain_count != b->domain_count ||
+        a->region_count != b->region_count ||
+        a->occurrence_count != b->occurrence_count ||
+        a->function_count != b->function_count)
+        return false;
+    const NLSemanticPlaceView r = a->places[root - 1], p = a->places[child - 1];
+    if (!r.live || !r.implicit_local || !r.independent_root ||
+        r.governing_domain || r.placement.region || r.parent_aggregate ||
+        r.parent_sum || r.fixed_field_count != 2 || !r.type ||
+        r.type > a->type_count || p.parent_aggregate != root ||
+        p.parent_field_index != field->index || field->index >= 2 ||
+        r.fixed_fields[field->index] != child ||
+        r.incarnation != field->parent_incarnation ||
+        p.incarnation != field->child_incarnation ||
+        r.current_fact != field->parent_fact ||
+        p.current_fact != field->child_fact ||
+        p.current_value != field->old_value)
+        return false;
+    const NLSemanticTypeView type = a->types[r.type - 1].view;
+    if (type.kind != NL_TYPE_NOMINAL || !type.is_copy || !type.is_discardable ||
+        type.field_count != 2 || a->types[r.type - 1].recursive_header)
+        return false;
+    const NLTypeId u8 = nl_semantic_core_type(a, NL_TYPE_U8);
+    if (a->types[r.type - 1].field_types[0] != u8 ||
+        a->types[r.type - 1].field_types[1] != u8 || p.type != u8)
+        return false;
+    const NLSemanticPlaceView post = b->places[root - 1],
+                              changed = b->places[child - 1];
+    if (post.current_fact != field->parent_post_fact ||
+        changed.current_fact != field->child_post_fact ||
+        post.current_fact <= a->last_value_fact ||
+        changed.current_fact <= a->last_value_fact ||
+        changed.current_value != field->new_value)
+        return false;
+    for (size_t i = 0; i < a->place_count; ++i) {
+        const NLSemanticPlaceView x = a->places[i], y = b->places[i];
+        if (!same_place_frame(x, y) ||
+            x.payload_occurrence != y.payload_occurrence ||
+            ((i + 1 != root && i + 1 != child) &&
+             (x.current_value != y.current_value ||
+              x.current_fact != y.current_fact)))
+            return false;
+    }
+    for (size_t i = 0; i < a->binding_count; ++i) {
+        const NLBindingEntry x = a->bindings[i], y = b->bindings[i];
+        if (x.hidden != y.hidden || strcmp(x.name, y.name) ||
+            x.view.availability != y.view.availability ||
+            x.view.type != y.view.type || x.view.place != y.view.place ||
+            y.view.value !=
+                (x.view.place == root ? post.current_value : x.view.value))
+            return false;
+    }
+    const NLValueId aggregate = r.current_value;
+    if (!aggregate || aggregate > a->value_count)
+        return false;
+    const NLValueId next = post.current_value;
+    if (!next || next > b->value_count ||
+        b->values[next - 1].carrier != NL_CARRIER_PLACE ||
+        b->values[next - 1].owner_place != root ||
+        b->values[next - 1].field_count != 2 ||
+        b->values[aggregate - 1].carrier != NL_CARRIER_ENDED)
+        return false;
+    for (size_t i = 0; i < 2; ++i) {
+        const NLPlaceId member = r.fixed_fields[i];
+        if (!member || member > a->place_count)
+            return false;
+        const NLValueId old = a->places[member - 1].current_value,
+                        now = b->places[member - 1].current_value;
+        if (!old || old > a->value_count || !now || now > b->value_count ||
+            b->values[next - 1].fields[i] != now ||
+            b->values[now - 1].aggregate_owner != next ||
+            b->values[now - 1].carrier != NL_CARRIER_AGGREGATE)
+            return false;
+        if (member != child) {
+            NLSemanticValueView sibling = b->values[now - 1];
+            sibling.aggregate_owner = aggregate;
+            if (now != old || !nl_node_value_same(a->values[old - 1], sibling))
+                return false;
+        }
+    }
+    for (size_t i = 0; i < a->value_count; ++i) {
+        NLSemanticValueView x = a->values[i], y = b->values[i];
+        /* Only the original aggregate and its two owned scalar packages are
+         * transferred by the actual Change. Every ambient package, including
+         * affine A/D/Backing and Unknown dependencies, must remain exact. */
+        if (i + 1 == aggregate || i + 1 == a->values[aggregate - 1].fields[0] ||
+            i + 1 == a->values[aggregate - 1].fields[1])
+            continue;
+        if (!nl_node_value_same(x, y))
+            return false;
+    }
+    for (size_t i = 0; i < a->scope_count; ++i)
+        if (!same_scope(a->scopes[i], b->scopes[i]))
+            return false;
+    for (size_t i = a->scope_count; i < b->scope_count; ++i)
+        if (b->scopes[i].active)
+            return false;
+    for (size_t i = 0; i < a->domain_count; ++i)
+        if (a->domains[i].live != b->domains[i].live ||
+            a->domains[i].value != b->domains[i].value)
+            return false;
+    for (size_t i = 0; i < a->region_count; ++i) {
+        const NLRawRegionEntry *x = &a->regions[i], *y = &b->regions[i];
+        if (memcmp(&x->view, &y->view, sizeof(x->view)) ||
+            x->count != y->count ||
+            (x->count && memcmp(x->intervals, y->intervals,
+                                x->count * sizeof(*x->intervals))))
+            return false;
+    }
+    for (size_t i = a->binding_count; i < b->binding_count; ++i)
+        if (!b->bindings[i].hidden ||
+            b->bindings[i].view.availability != NL_CONSUMED)
+            return false;
+    for (size_t i = a->place_count; i < b->place_count; ++i)
+        if (b->places[i].live)
+            return false;
+    return true;
+}
+
+static bool linear_break_graph(Check *body, const LoopControl *loop)
+{
+    const NLCheckedFragment *f = body->artifact;
+    const NLSemanticContext *c = body->context;
+    const NLSemanticContext *entry = nl_control_state_context(loop->entry);
+    if (!body->terminated || body->status != NL_CHECK_OK ||
+        loop->normal_context != c ||
+        !nl_control_source_break_body_valid(f, loop->target))
+        return false;
+    const NLControlExitView *e = nl_control_exit_view(f->exits, 0);
+    const NLSemanticContext *post =
+        nl_control_state_context((NLControlState *)e->state);
+    const NLCheckedNodeView *root = nl_checked_node_view(f, f->root),
+                            *br = nl_checked_node_view(f, e->source_node),
+                            *operand = nl_checked_node_view(f, br->initializer);
+    const NLCheckedNodeView *first = nl_checked_node_view(f, root->first_item);
+    const NLCheckedNodeView *loan = NULL;
+    if (root->item_count == 2 && first->kind == NL_CHECKED_BINDING &&
+        first->next_item == e->source_node &&
+        operand->kind == NL_CHECKED_IDENTIFIER &&
+        operand->symbol == first->symbol &&
+        operand->value_use == NL_VALUE_COPIED) {
+        loan = nl_checked_node_view(f, first->initializer);
+    } else if (root->item_count == 1 && root->first_item == e->source_node) {
+        loan = operand;
+    }
+    if (!loan || loan->kind != NL_CHECKED_LOAN_HEADER ||
+        !loan->loan.implicit_local || loan->loan.from_ptr ||
+        loan->loan.access != NL_ACCESS_WRITE ||
+        !loan->loan.body_nonescape_proved ||
+        !loan->loan.normal_result_forwarded || !loan->loan.scope ||
+        loan->loan.scope > c->scope_count ||
+        c->scopes[loan->loan.scope - 1].active)
+        return false;
+    const NLCheckedNodeView *inner = nl_checked_node_view(f, loan->initializer);
+    if (!inner || inner->kind != NL_CHECKED_BLOCK || inner->item_count)
+        return false;
+    const NLCheckedNodeView *op = nl_checked_node_view(f, inner->tail);
+    const NLCheckedNodeView *ref =
+        op ? nl_checked_node_view(f, op->first_argument) : NULL;
+    if (!op || op->kind != NL_CHECKED_REPLACE || op->argument_count != 2 ||
+        !op->field.present || !op->field.dependency_compatible ||
+        op->result_count != 1 || !ref || ref->kind != NL_CHECKED_IDENTIFIER ||
+        ref->symbol != loan->loan.ref_symbol ||
+        loan->loan.place != op->field.child ||
+        loan->field.parent != op->field.parent ||
+        loan->field.child != op->field.child ||
+        loan->field.parent_fact != op->field.parent_fact ||
+        loan->field.child_fact != op->field.child_fact ||
+        op->results[0].value != op->field.old_value ||
+        e->values[0].value != loop->normal_result.value ||
+        e->values[0].type != loop->normal_result.type ||
+        !linear_break_frame(entry, c, &op->field))
+        return false;
+    size_t loans = 0, changes = 0, breaks = 0;
+    for (size_t i = 1; i <= f->count; ++i) {
+        switch (nl_checked_node_view(f, i)->kind) {
+        case NL_CHECKED_LOAN_HEADER:
+            ++loans;
+            break;
+        case NL_CHECKED_REPLACE:
+            ++changes;
+            break;
+        case NL_CHECKED_BREAK:
+            ++breaks;
+            break;
+        case NL_CHECKED_BLOCK:
+        case NL_CHECKED_IDENTIFIER:
+        case NL_CHECKED_BINDING:
+        case NL_CHECKED_RECEIVER:
+        case NL_CHECKED_U8_LITERAL:
+            break;
+        default:
+            return false;
+        }
+    }
+    NLCheckedResult result = loop->normal_result;
+    if (loans != 1 || changes != 1 || breaks != 1 ||
+        result.type != nl_semantic_core_type(c, NL_TYPE_U8) || !result.value ||
+        result.value > c->value_count || !op->field.old_value ||
+        op->field.old_value > entry->value_count)
+        return false;
+    const NLSemanticValueView r = c->values[result.value - 1],
+                              old = entry->values[op->field.old_value - 1];
+    if (r.type != result.type || r.carrier != NL_CARRIER_LOOSE ||
+        r.dependencies != NL_DEPENDENCY_FREE || r.value_dependency_count ||
+        old.dependencies != NL_DEPENDENCY_FREE || old.value_dependency_count ||
+        r.scalar_known != old.scalar_known ||
+        (r.scalar_known && r.scalar_value != old.scalar_value) ||
+        post->binding_count != entry->binding_count ||
+        post->place_count != entry->place_count ||
+        post->scope_count != entry->scope_count ||
+        post->value_count != c->value_count)
+        return false;
+    /* rho is the constructor-known prefix projection of this very execution.
+     * It is checked as a relation; no caller state/result is read from post. */
+    for (size_t i = 0; i < post->value_count; ++i)
+        if (!nl_node_value_same(post->values[i], c->values[i]))
+            return false;
+    for (size_t i = 0; i < post->place_count; ++i)
+        if (!same_place_frame(post->places[i], c->places[i]) ||
+            post->places[i].current_value != c->places[i].current_value ||
+            post->places[i].current_fact != c->places[i].current_fact)
+            return false;
+    return true;
+}
+
+static NLCheckedNodeId source_linear_break(Check *check,
+                                           const NLSyntaxView *syntax)
+{
+    LoopControl loop = {.source_parent = check->artifact,
+                        .normal_context = check->context,
+                        .bindings = check->context->binding_count,
+                        .places = check->context->place_count,
+                        .scopes = check->context->scope_count};
+    NLCheckedFragment *fragment = NULL;
+    NLSemanticContext *shadow = NULL, *completed = NULL;
+    NLCheckedNodeId id = 0;
+    if (!host(check, nl_control_target_create(NL_TARGET_LOOP, &loop.target),
+              syntax->span) ||
+        !host(check, nl_control_state_create(check->context, &loop.entry),
+              syntax->span) ||
+        !host(check, nl_sem_clone(check->context, &shadow), syntax->span))
+        goto cleanup;
+    fragment = malloc(sizeof(*fragment));
+    if (!fragment) {
+        (void)host(check, NL_CHECK_OUT_OF_MEMORY, syntax->span);
+        goto cleanup;
+    }
+    *fragment = (NLCheckedFragment){.source = check->source,
+                                    .context = shadow,
+                                    .destroy_context = nl_semantic_destroy};
+    shadow = NULL;
+    if (!host(check, nl_h_custody_attach(check->artifact, fragment),
+              syntax->span))
+        goto cleanup;
+    Check body = *check;
+    body.artifact = fragment;
+    body.loop = &loop;
+    body.binding_floor = body.arm_floor = loop.bindings;
+    body.has_arm_floor = true;
+    /* This is actual source execution in the outer CHECK's isolated clone.
+     * A failure must abort that whole graph/semantic transaction, never fall
+     * back to the abstract checker after partially executing the body. */
+    fragment->root = expression(&body, syntax->data.loop.body);
+    if (!fragment->root || body.status != NL_CHECK_OK) {
+        check->status = body.status;
+        check->diagnostic = body.diagnostic;
+        if (check->status == NL_CHECK_OK)
+            (void)host(check, NL_CHECK_INTERNAL_ERROR, syntax->span);
+        goto cleanup;
+    }
+    if (!linear_break_graph(&body, &loop)) {
+        loop_precision(check, syntax->span);
+        goto cleanup;
+    }
+    if (!host(check, nl_sem_validate(check->context), syntax->span) ||
+        !host(check, nl_fixed_dependencies(check->context), syntax->span) ||
+        !host(check, nl_raw_validate(check->context), syntax->span) ||
+        !host(check, nl_sem_clone(check->context, &completed), syntax->span))
+        goto cleanup;
+    /* Preserve the public LOOP body's separate owned context and the stable
+     * issuance-time custody/SourceBreak context pointer. Only its contents
+     * become the completed actual execution snapshot. */
+    nl_sem_commit((NLSemanticContext *)fragment->context, completed);
+    completed = NULL;
+    id = add(check, (NLCheckedNodeView){.kind = NL_CHECKED_LOOP,
+                                        .span = syntax->span,
+                                        .type = loop.normal_result.type,
+                                        .result_count = 1,
+                                        .results = {loop.normal_result},
+                                        .header_inductive = true,
+                                        .break_edges = 1});
+    if (!id || !save_arm(check, id, fragment, syntax->span))
+        goto cleanup;
+    fragment = NULL;
+cleanup:
+    nl_checked_destroy(fragment);
+    nl_semantic_destroy(shadow);
+    nl_semantic_destroy(completed);
+    nl_control_state_destroy(loop.entry);
+    nl_control_target_destroy(loop.target);
+    return check->status == NL_CHECK_OK ? id : 0;
+}
+
 static NLCheckedNodeId source_loop(Check *check, const NLSyntaxView *syntax)
 {
+    if (linear_break_source(check, syntax))
+        return source_linear_break(check, syntax);
     const size_t count = syntax->data.loop.count;
     if (count > NL_CONTROL_MAX_SLOTS) {
         (void)host(check, NL_CHECK_RESOURCE_LIMIT, syntax->span);
