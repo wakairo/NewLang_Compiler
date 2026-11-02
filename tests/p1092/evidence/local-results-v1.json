@@ -1,0 +1,281 @@
+{
+  "authority_main": "60fc767408c2dd25a116cd188682fae0c6e96090",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "production_file": "src/semantic_check.c",
+  "production_sha256": "20f814f553cc7fd38217ea4ef601092ca3ae0db03d25428a23837223564be685",
+  "full_regression_code_heads": [
+    "92d456a251ab3fe906869535ccb403b32da3504b",
+    "13d53aaffe92299825205b529ebc5c7d58784b68"
+  ],
+  "final_harness_head": "7c7ca52b29bb31a5582a29a709d0c6c17a3000b0",
+  "final_harness": "v11, unchanged source/old oracle, adds same immutable source-plan B",
+  "full_regression": {
+    "gcc": {
+      "full_tests_passed": 616,
+      "log": "gcc-a4-ctest.log",
+      "log_sha256": "9b87310077b41329b3f1f742f29a2006dbfe20412c9c247be233349de8bb49c5"
+    },
+    "clang": {
+      "full_tests_passed": 616,
+      "log": "clang-ctest-v2.log",
+      "log_sha256": "53429ed7a1eafb04bcd2472235628fa5b53b784df4eb735cb1ae00c000e2119e"
+    },
+    "release": {
+      "full_tests_passed": 616,
+      "log": "release-ctest-v2.log",
+      "log_sha256": "834c62e3c6bd15795c3cba6e5710742c11c3cea5647f29ad1070524585073db0"
+    },
+    "asan": {
+      "full_tests_passed": 616,
+      "log": "asan-ctest-v2.log",
+      "log_sha256": "8df11f498418b203ce7b03ac586878557e8fe7ffea1a28610d09d05c5c5e8284"
+    },
+    "ubsan": {
+      "full_tests_passed_combined": 616,
+      "initial_passed": 104,
+      "recovery_passed": 512,
+      "first_RED": "native linker ENOSPC, no Production change",
+      "first_log_sha256": "bd395d4f75a7a2bf5b8c586e620224ee479c89811695bba207eaab1853dbc28a",
+      "recovery_log_sha256": "e9f86eb6894bcf1771401c8ca2c11e4d19ddd7c898b0bc1b9ab0d6f5ae21bce9"
+    }
+  },
+  "final_harness_all_five_lanes": [
+    {
+      "lane": "gcc",
+      "kind": "build",
+      "returncode": 0,
+      "seconds": 0.36695218086242676,
+      "sha256": "f030e9d0827d76882441537403881b295750827a85fd9c0a504f7bbe5a374bfa"
+    },
+    {
+      "lane": "gcc",
+      "kind": "test",
+      "returncode": 0,
+      "seconds": 0.2205064296722412,
+      "sha256": "dff315d4f1de6530b1f35da9034b37beac9dd524268ac1e2b55d52510fa0b0a9"
+    },
+    {
+      "lane": "clang",
+      "kind": "build",
+      "returncode": 0,
+      "seconds": 0.32329845428466797,
+      "sha256": "454260dd12b2c27830f071c831781054eb70f6b90e257352308853bcc71c2274"
+    },
+    {
+      "lane": "clang",
+      "kind": "test",
+      "returncode": 0,
+      "seconds": 0.23450350761413574,
+      "sha256": "ac2d8193db1a95ec31ee79adbaec2d84da787d28765e3e21a5541d6e038f3044"
+    },
+    {
+      "lane": "release",
+      "kind": "build",
+      "returncode": 0,
+      "seconds": 0.7193644046783447,
+      "sha256": "07569fb487fb9db6fda665121b66185d58ee96bbdeb547b491f863be8eeb31c8"
+    },
+    {
+      "lane": "release",
+      "kind": "test",
+      "returncode": 0,
+      "seconds": 0.2005000114440918,
+      "sha256": "0b685eb8d810585558ea523470e37e511a79ca0e813a99cb0fc4a78dbdbebd74"
+    },
+    {
+      "lane": "asan",
+      "kind": "build",
+      "returncode": 0,
+      "seconds": 0.5941100120544434,
+      "sha256": "ccdbc0559197327db2357cba8eda2e33ebf077deebbebf48b3c2025ca0dcfea2"
+    },
+    {
+      "lane": "asan",
+      "kind": "test",
+      "returncode": 0,
+      "seconds": 1.3153488636016846,
+      "sha256": "d06d7b1fee8f11e79da1eb2c02ecf6542893c2a86706cae14f3359e8f8d29281"
+    },
+    {
+      "lane": "ubsan",
+      "kind": "build",
+      "returncode": 0,
+      "seconds": 0.43504881858825684,
+      "sha256": "2659b5562e1d3ad88b6cf582ccd21ca8f322ceb0387f2102119367501a3fa21c"
+    },
+    {
+      "lane": "ubsan",
+      "kind": "test",
+      "returncode": 0,
+      "seconds": 0.37364745140075684,
+      "sha256": "2ade2e12e88be632420281ef8621e40d48c37bf29dce88ed09cc0d0fc49a5c8e"
+    }
+  ],
+  "negative_challenges_per_lane": 300,
+  "positive_actual_pair_runs_per_lane": 12,
+  "new_reached_OOM": {
+    "production_sha256": "20f814f553cc7fd38217ea4ef601092ca3ae0db03d25428a23837223564be685",
+    "harness": "v9",
+    "trials": 775,
+    "completed": [
+      [
+        "396",
+        "0",
+        "1"
+      ],
+      [
+        "379",
+        "0",
+        "1"
+      ]
+    ],
+    "kinds": {
+      "m": 680,
+      "r": 83,
+      "c": 12
+    },
+    "unique_allocation_callers": 29,
+    "locations": {
+      "0x40521f": [
+        "append_storage",
+        "/tmp/p1092-clean/src/semantic.c:13"
+      ],
+      "0x40528a": [
+        "copy_name",
+        "/tmp/p1092-clean/src/semantic.c:27"
+      ],
+      "0x40530b": [
+        "copy_array",
+        "/tmp/p1092-clean/src/semantic.c:44"
+      ],
+      "0x405627": [
+        "nl_sem_clone",
+        "/tmp/p1092-clean/src/semantic.c:91"
+      ],
+      "0x4056c8": [
+        "nl_sem_clone",
+        "/tmp/p1092-clean/src/semantic.c:100"
+      ],
+      "0x405b4b": [
+        "nl_sem_clone",
+        "/tmp/p1092-clean/src/semantic.c:140"
+      ],
+      "0x405e55": [
+        "nl_sem_clone",
+        "/tmp/p1092-clean/src/semantic.c:183"
+      ],
+      "0x4195a1": [
+        "source_name_copy",
+        "/tmp/p1092-clean/src/semantic_check.c:2787"
+      ],
+      "0x41d499": [
+        "run_body",
+        "/tmp/p1092-clean/src/semantic_check.c:3630 (discriminator 1)"
+      ],
+      "0x42b323": [
+        "source_linear_break",
+        "/tmp/p1092-clean/src/semantic_check.c:5438"
+      ],
+      "0x44157f": [
+        "check_fragment",
+        "/tmp/p1092-clean/src/semantic_check.c:8996 (discriminator 1)"
+      ],
+      "0x446c09": [
+        "nl_h_custody_attach",
+        "/tmp/p1092-clean/src/h_origin_internal.c:100"
+      ],
+      "0x446c51": [
+        "nl_h_custody_attach",
+        "/tmp/p1092-clean/src/h_origin_internal.c:106"
+      ],
+      "0x446e36": [
+        "nl_h_custody_reserve",
+        "/tmp/p1092-clean/src/h_origin_internal.c:134"
+      ],
+      "0x446ef2": [
+        "nl_h_custody_reserve",
+        "/tmp/p1092-clean/src/h_origin_internal.c:149"
+      ],
+      "0x446f74": [
+        "nl_h_custody_reserve",
+        "/tmp/p1092-clean/src/h_origin_internal.c:156"
+      ],
+      "0x446fe4": [
+        "nl_h_custody_reserve",
+        "/tmp/p1092-clean/src/h_origin_internal.c:161"
+      ],
+      "0x45cd9a": [
+        "nl_raw_clone",
+        "/tmp/p1092-clean/src/raw_storage.c:23"
+      ],
+      "0x45cefa": [
+        "nl_raw_clone",
+        "/tmp/p1092-clean/src/raw_storage.c:32"
+      ],
+      "0x45d368": [
+        "nl_raw_validate",
+        "/tmp/p1092-clean/src/raw_storage.c:102 (discriminator 4)"
+      ],
+      "0x45d386": [
+        "nl_raw_validate",
+        "/tmp/p1092-clean/src/raw_storage.c:103"
+      ],
+      "0x46936f": [
+        "nl_control_target_create",
+        "/tmp/p1092-clean/src/control.c:58"
+      ],
+      "0x4694a2": [
+        "nl_control_state_create",
+        "/tmp/p1092-clean/src/control.c:89"
+      ],
+      "0x4694d4": [
+        "nl_control_state_create",
+        "/tmp/p1092-clean/src/control.c:93"
+      ],
+      "0x4695c6": [
+        "nl_control_state_fork",
+        "/tmp/p1092-clean/src/control.c:115"
+      ],
+      "0x4696d1": [
+        "nl_control_state_capture",
+        "/tmp/p1092-clean/src/control.c:138"
+      ],
+      "0x46a04d": [
+        "append",
+        "/tmp/p1092-clean/src/control.c:281"
+      ],
+      "0x46a097": [
+        "append",
+        "/tmp/p1092-clean/src/control.c:287 (discriminator 1)"
+      ],
+      "0x48e4e0": [
+        "nl_checked_add",
+        "/tmp/p1092-clean/src/checked.c:16"
+      ]
+    },
+    "all_exact_oom_and_full_invariant": true
+  },
+  "legacy_P965": {
+    "ownership_trials": 494,
+    "reached_OOM_trials": 502,
+    "source": "Clang full detailed raw, inherited sources/oracles/tests unchanged"
+  },
+  "local_raw_archive_sha256": "752dbd8827e7706e572f762b7adf315746eff9811f5bfa441fa0bbe1a7dd75f2",
+  "local_raw_archive_bytes": 129892,
+  "unmet_initial_prediction": {
+    "source": "05_other_original.nl",
+    "v1_after_A_CHECK_prediction": 0,
+    "actual_CHECK": 3,
+    "actual_first_layer": "AVS-DECL-PROFILE before LOOP, two ordinary nominal declarations unsupported",
+    "disposition": "original source/oracle/FIRST retained; prospective v2 delta and source16 exercise supported same-nominal independent original, no grammar/semantics change"
+  },
+  "unverified": [
+    "independent F exact final HEAD code review",
+    "general soundness and all legal source shapes",
+    "public LOOP current/result issuer B",
+    "LOOP C17/native and runtime loop physical identity",
+    "UB audit/re-audit locality Product PASS"
+  ],
+  "natural_CI_pairs_used": 0,
+  "phase": "Pre-publication local evidence snapshot; CI counters are not later submission results"
+}

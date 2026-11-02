@@ -1,0 +1,1 @@
+/tmp/p1092/tests/p1092/sources/13_wrong_scope.nl:5:5-5:18: error(semantic)[P14-CONTROL-CONTEXT]: continue/break requires an active lexical loop target

@@ -1,0 +1,185 @@
+{
+  "authority": "C186 / Draft17.34, contract-aware P-owned sources; not R BLIND or F Meter calibration",
+  "main": "60fc767408c2dd25a116cd188682fae0c6e96090",
+  "phase": "before any compiler/test execution or Production edit",
+  "cases": {
+    "00_outside_control.nl": {
+      "source_law": "legal",
+      "expected_baseline_CHECK": 0,
+      "expected_baseline_layer": "CHECK pass; outside-loop C17 control separately observed",
+      "after_A": "unchanged"
+    },
+    "01_scalar_control.nl": {
+      "source_law": "legal",
+      "expected_baseline_CHECK": 0,
+      "expected_baseline_layer": "CHECK pass; C17 unsupported4",
+      "after_A": "unchanged scalar control; no effectful-current evidence"
+    },
+    "02_bound_index1.nl": {
+      "source_law": "legal",
+      "expected_baseline_CHECK": 3,
+      "expected_baseline_layer": "P6 precision (P14 permitted for explicit reachable recurrence)",
+      "after_A_CHECK": 0,
+      "after_A": "one same source effect and old Copy in actual caller working world; result/current paired; C17 loop unsupported, no native claimed",
+      "numeric_law": {
+        "entry_decl_order": [
+          181,
+          46
+        ],
+        "break_current_decl_order": [
+          181,
+          229
+        ],
+        "old": 46,
+        "final_decl_order": [
+          46,
+          229
+        ]
+      }
+    },
+    "03_inline_index0.nl": {
+      "source_law": "legal",
+      "expected_baseline_CHECK": 3,
+      "expected_baseline_layer": "P6 precision (P14 permitted for explicit reachable recurrence)",
+      "after_A_CHECK": 0,
+      "after_A": "one same source effect and old Copy in actual caller working world; result/current paired; C17 loop unsupported, no native claimed",
+      "numeric_law": {
+        "entry": [
+          93,
+          167
+        ],
+        "break_current": [
+          12,
+          167
+        ],
+        "old": 93,
+        "final": [
+          12,
+          93
+        ]
+      }
+    },
+    "04_named_new_value.nl": {
+      "source_law": "legal",
+      "expected_baseline_CHECK": 3,
+      "expected_baseline_layer": "P6 precision (P14 permitted for explicit reachable recurrence)",
+      "after_A_CHECK": 0,
+      "after_A": "one same source effect and old Copy in actual caller working world; result/current paired; C17 loop unsupported, no native claimed",
+      "numeric_law": {
+        "entry_decl_order": [
+          181,
+          46
+        ],
+        "break_current_decl_order": [
+          181,
+          229
+        ],
+        "old": 46,
+        "final_decl_order": [
+          46,
+          229
+        ]
+      }
+    },
+    "05_other_original.nl": {
+      "source_law": "legal",
+      "expected_baseline_CHECK": 3,
+      "expected_baseline_layer": "P6 precision (P14 permitted for explicit reachable recurrence)",
+      "after_A_CHECK": 0,
+      "after_A": "one same source effect and old Copy in actual caller working world; result/current paired; C17 loop unsupported, no native claimed",
+      "numeric_law": {
+        "entry_decl_order": [
+          181,
+          46
+        ],
+        "break_current_decl_order": [
+          181,
+          229
+        ],
+        "old": 46,
+        "final_decl_order": [
+          46,
+          229
+        ]
+      }
+    },
+    "06_unreachable_continue.nl": {
+      "source_law": "legal",
+      "expected_baseline_CHECK": 3,
+      "expected_baseline_layer": "P6 precision (P14 permitted for explicit reachable recurrence)",
+      "after_A_CHECK": 0,
+      "after_A": "one same source effect and old Copy in actual caller working world; result/current paired; C17 loop unsupported, no native claimed",
+      "numeric_law": {
+        "entry_decl_order": [
+          181,
+          46
+        ],
+        "break_current_decl_order": [
+          181,
+          229
+        ],
+        "old": 46,
+        "final_decl_order": [
+          46,
+          229
+        ]
+      }
+    },
+    "07_unsupported_constant_break.nl": {
+      "source_law": "legal",
+      "expected_baseline_CHECK": 3,
+      "expected_baseline_layer": "P6 precision (P14 permitted for explicit reachable recurrence)",
+      "after_A": "conservative P6/P14 precision refusal; never silently drop effect/edge or transfer unrelated result"
+    },
+    "08_unsupported_two_changes.nl": {
+      "source_law": "legal",
+      "expected_baseline_CHECK": 3,
+      "expected_baseline_layer": "P6 precision (P14 permitted for explicit reachable recurrence)",
+      "after_A": "conservative P6/P14 precision refusal; never silently drop effect/edge or transfer unrelated result"
+    },
+    "09_reachable_continue.nl": {
+      "source_law": "legal",
+      "expected_baseline_CHECK": 3,
+      "expected_baseline_layer": "P6 precision (P14 permitted for explicit reachable recurrence)",
+      "after_A": "conservative P6/P14 precision refusal; never silently drop effect/edge or transfer unrelated result"
+    },
+    "10_two_break_edges.nl": {
+      "source_law": "legal",
+      "expected_baseline_CHECK": 3,
+      "expected_baseline_layer": "P6 precision (P14 permitted for explicit reachable recurrence)",
+      "after_A": "conservative P6/P14 precision refusal; never silently drop effect/edge or transfer unrelated result"
+    },
+    "11_nested_control.nl": {
+      "source_law": "legal",
+      "expected_baseline_CHECK": 3,
+      "expected_baseline_layer": "P6 precision (P14 permitted for explicit reachable recurrence)",
+      "after_A": "conservative P6/P14 precision refusal; never silently drop effect/edge or transfer unrelated result"
+    },
+    "12_loan_escape.nl": {
+      "source_law": "invalid",
+      "expected_baseline_CHECK": 3,
+      "expected_baseline_layer": "semantic rejection: loan escape / missing loop target / replace type mismatch, record exact reached condition",
+      "after_A_CHECK": 3
+    },
+    "13_wrong_scope.nl": {
+      "source_law": "invalid",
+      "expected_baseline_CHECK": 3,
+      "expected_baseline_layer": "semantic rejection: loan escape / missing loop target / replace type mismatch, record exact reached condition",
+      "after_A_CHECK": 3
+    },
+    "14_wrong_type.nl": {
+      "source_law": "invalid",
+      "expected_baseline_CHECK": 3,
+      "expected_baseline_layer": "semantic rejection: loan escape / missing loop target / replace type mismatch, record exact reached condition",
+      "after_A_CHECK": 3
+    },
+    "15_return_control.nl": {
+      "source_law": "legal",
+      "expected_baseline_CHECK": 0,
+      "expected_baseline_layer": "Return is function exit, not normal BREAK; if prior precision blocks it record original RED",
+      "after_A": "preserve baseline; no normal loop result/current issued"
+    }
+  },
+  "memory_and_ownership": "Exact original root/declared field/child/incarnation, sibling/other root, all ambient nonCopy/A/D/Backing frame; no hidden-dependency erasure, no dead loan, no old Copy as new current.",
+  "negative_and_OOM": "Private negative interception only after guards; real source/parent/body/target/private-edge/context, same-ID foreign instance, def-use and current faults reject. Every reached allocation family must give real status/unpublished output + full semantic/graph/custody/owner no-clobber, cleanup and injection-OFF same-context retry. Never execute known unsafe state."
+}

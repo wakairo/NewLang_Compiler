@@ -1,0 +1,1059 @@
+Start testing: Nov 02 06:33 UTC
+----------------------------------------------------------
+366/612 Testing: p1092_02_bound_index1.unit
+366/612 Test: p1092_02_bound_index1.unit
+Command: "/tmp/p1092-a1/p1092_observe" "/tmp/p1092/tests/p1092/sources/02_bound_index1.nl" "1" "181" "46" "229"
+Directory: /tmp/p1092-a1
+"p1092_02_bound_index1.unit" start time: Nov 02 06:33 UTC
+Output:
+----------------------------------------------------------
+P1092 observe fault=0 status=0 changes=2 pair/frame/B=1
+P1092 observe fault=1 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=2 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=3 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=4 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=5 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=6 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=7 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=8 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=9 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=10 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=11 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=12 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=13 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=14 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=15 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=16 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=17 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=18 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=19 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=20 status=3 changes=1 pair/frame/B=1
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p1092_02_bound_index1.unit" end time: Nov 02 06:33 UTC
+"p1092_02_bound_index1.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+367/612 Testing: p1092_04_named_new_value.unit
+367/612 Test: p1092_04_named_new_value.unit
+Command: "/tmp/p1092-a1/p1092_observe" "/tmp/p1092/tests/p1092/sources/04_named_new_value.nl" "1" "181" "46" "229"
+Directory: /tmp/p1092-a1
+"p1092_04_named_new_value.unit" start time: Nov 02 06:33 UTC
+Output:
+----------------------------------------------------------
+P1092 observe fault=0 status=0 changes=2 pair/frame/B=1
+P1092 observe fault=1 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=2 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=3 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=4 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=5 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=6 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=7 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=8 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=9 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=10 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=11 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=12 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=13 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=14 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=15 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=16 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=17 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=18 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=19 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=20 status=3 changes=1 pair/frame/B=1
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p1092_04_named_new_value.unit" end time: Nov 02 06:33 UTC
+"p1092_04_named_new_value.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+368/612 Testing: p1092_06_unreachable_continue.unit
+368/612 Test: p1092_06_unreachable_continue.unit
+Command: "/tmp/p1092-a1/p1092_observe" "/tmp/p1092/tests/p1092/sources/06_unreachable_continue.nl" "1" "181" "46" "229"
+Directory: /tmp/p1092-a1
+"p1092_06_unreachable_continue.unit" start time: Nov 02 06:33 UTC
+Output:
+----------------------------------------------------------
+P1092 observe fault=0 status=0 changes=2 pair/frame/B=1
+P1092 observe fault=1 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=2 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=3 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=4 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=5 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=6 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=7 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=8 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=9 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=10 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=11 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=12 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=13 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=14 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=15 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=16 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=17 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=18 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=19 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=20 status=3 changes=1 pair/frame/B=1
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p1092_06_unreachable_continue.unit" end time: Nov 02 06:33 UTC
+"p1092_06_unreachable_continue.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+369/612 Testing: p1092_16_same_nominal_other_original.unit
+369/612 Test: p1092_16_same_nominal_other_original.unit
+Command: "/tmp/p1092-a1/p1092_observe" "/tmp/p1092/tests/p1092/sources/16_same_nominal_other_original.nl" "1" "181" "46" "229"
+Directory: /tmp/p1092-a1
+"p1092_16_same_nominal_other_original.unit" start time: Nov 02 06:33 UTC
+Output:
+----------------------------------------------------------
+P1092 observe fault=0 status=0 changes=2 pair/frame/B=1
+P1092 observe fault=1 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=2 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=3 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=4 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=5 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=6 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=7 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=8 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=9 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=10 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=11 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=12 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=13 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=14 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=15 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=16 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=17 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=18 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=19 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=20 status=3 changes=1 pair/frame/B=1
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p1092_16_same_nominal_other_original.unit" end time: Nov 02 06:33 UTC
+"p1092_16_same_nominal_other_original.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+370/612 Testing: p1092_17_equal_bits_new_fact.unit
+370/612 Test: p1092_17_equal_bits_new_fact.unit
+Command: "/tmp/p1092-a1/p1092_observe" "/tmp/p1092/tests/p1092/sources/17_equal_bits_new_fact.nl" "1" "181" "46" "46"
+Directory: /tmp/p1092-a1
+"p1092_17_equal_bits_new_fact.unit" start time: Nov 02 06:33 UTC
+Output:
+----------------------------------------------------------
+P1092 observe fault=0 status=0 changes=2 pair/frame/B=1
+P1092 observe fault=1 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=2 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=3 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=4 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=5 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=6 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=7 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=8 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=9 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=10 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=11 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=12 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=13 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=14 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=15 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=16 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=17 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=18 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=19 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=20 status=3 changes=1 pair/frame/B=1
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p1092_17_equal_bits_new_fact.unit" end time: Nov 02 06:33 UTC
+"p1092_17_equal_bits_new_fact.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+371/612 Testing: p1092_inline_index0.unit
+371/612 Test: p1092_inline_index0.unit
+Command: "/tmp/p1092-a1/p1092_observe" "/tmp/p1092/tests/p1092/sources/03_inline_index0.nl" "0" "93" "167" "12"
+Directory: /tmp/p1092-a1
+"p1092_inline_index0.unit" start time: Nov 02 06:33 UTC
+Output:
+----------------------------------------------------------
+P1092 observe fault=0 status=0 changes=2 pair/frame/B=1
+P1092 observe fault=1 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=2 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=3 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=4 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=5 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=6 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=7 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=8 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=9 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=10 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=11 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=12 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=13 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=14 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=15 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=16 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=17 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=18 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=19 status=3 changes=1 pair/frame/B=1
+P1092 observe fault=20 status=3 changes=1 pair/frame/B=1
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"p1092_inline_index0.unit" end time: Nov 02 06:33 UTC
+"p1092_inline_index0.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+372/612 Testing: p1092_bound_oom.unit
+372/612 Test: p1092_bound_oom.unit
+Command: "/tmp/p1092-a1/p1092_oom" "/tmp/p1092/tests/p1092/sources/02_bound_index1.nl" "1" "181" "46" "229"
+Directory: /tmp/p1092-a1
+"p1092_bound_oom.unit" start time: Nov 02 06:33 UTC
+Output:
+----------------------------------------------------------
+P1092 OOM n=0 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=1 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=2 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=3 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=4 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=5 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=6 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=7 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=8 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=9 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=10 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=11 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=12 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=13 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=14 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=15 kind=m bytes=576 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=16 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=17 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=18 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=19 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=20 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=21 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=22 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=23 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=24 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=25 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=26 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=27 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=28 kind=m bytes=18432 pc=0x4051df status=4 rollback=1
+P1092 OOM n=29 kind=m bytes=3472 pc=0x4051df status=4 rollback=1
+P1092 OOM n=30 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=31 kind=m bytes=48 pc=0x4051df status=4 rollback=1
+P1092 OOM n=32 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=33 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=34 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=35 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=36 kind=m bytes=608 pc=0x44117b status=4 rollback=1
+P1092 OOM n=37 kind=c bytes=22992 pc=0x446805 status=4 rollback=1
+P1092 OOM n=38 kind=c bytes=104 pc=0x44684d status=4 rollback=1
+P1092 OOM n=39 kind=r bytes=27648 pc=0x48e0dc status=4 rollback=1
+P1092 OOM n=40 kind=m bytes=608 pc=0x41d36d status=4 rollback=1
+P1092 OOM n=41 kind=c bytes=104 pc=0x44684d status=4 rollback=1
+P1092 OOM n=42 kind=m bytes=16 pc=0x468f6b status=4 rollback=1
+P1092 OOM n=43 kind=r bytes=27648 pc=0x48e0dc status=4 rollback=1
+P1092 OOM n=44 kind=m bytes=6 pc=0x419475 status=4 rollback=1
+P1092 OOM n=45 kind=r bytes=19456 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=46 kind=r bytes=20480 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=47 kind=r bytes=21504 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=48 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=49 kind=r bytes=3720 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=50 kind=r bytes=3968 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=51 kind=r bytes=4216 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=52 kind=r bytes=624 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=53 kind=m bytes=10 pc=0x419475 status=4 rollback=1
+P1092 OOM n=54 kind=m bytes=16 pc=0x468f6b status=4 rollback=1
+P1092 OOM n=55 kind=m bytes=16 pc=0x46909e status=4 rollback=1
+P1092 OOM n=56 kind=m bytes=24 pc=0x4690d0 status=4 rollback=1
+P1092 OOM n=57 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=58 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=59 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=60 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=61 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=62 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=63 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=64 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=65 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=66 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=67 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=68 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=69 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=70 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=71 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=72 kind=m bytes=624 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=73 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=74 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=75 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=76 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=77 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=78 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=79 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=80 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=81 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=82 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=83 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=84 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=85 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=86 kind=m bytes=21504 pc=0x4051df status=4 rollback=1
+P1092 OOM n=87 kind=m bytes=4216 pc=0x4051df status=4 rollback=1
+P1092 OOM n=88 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=89 kind=m bytes=48 pc=0x4051df status=4 rollback=1
+P1092 OOM n=90 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=91 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=92 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=93 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=94 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=95 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=96 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=97 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=98 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=99 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=100 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=101 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=102 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=103 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=104 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=105 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=106 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=107 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=108 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=109 kind=m bytes=624 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=110 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=111 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=112 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=113 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=114 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=115 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=116 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=117 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=118 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=119 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=120 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=121 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=122 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=123 kind=m bytes=21504 pc=0x4051df status=4 rollback=1
+P1092 OOM n=124 kind=m bytes=4216 pc=0x4051df status=4 rollback=1
+P1092 OOM n=125 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=126 kind=m bytes=48 pc=0x4051df status=4 rollback=1
+P1092 OOM n=127 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=128 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=129 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=130 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=131 kind=m bytes=608 pc=0x42af68 status=4 rollback=1
+P1092 OOM n=132 kind=c bytes=104 pc=0x44684d status=4 rollback=1
+P1092 OOM n=133 kind=r bytes=27648 pc=0x48e0dc status=4 rollback=1
+P1092 OOM n=134 kind=m bytes=6 pc=0x419475 status=4 rollback=1
+P1092 OOM n=135 kind=m bytes=5 pc=0x419475 status=4 rollback=1
+P1092 OOM n=136 kind=r bytes=72 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=137 kind=r bytes=22528 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=138 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=139 kind=r bytes=4464 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=140 kind=r bytes=672 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=141 kind=r bytes=23552 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=142 kind=r bytes=24576 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=143 kind=r bytes=25600 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=144 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=145 kind=r bytes=4712 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=146 kind=r bytes=720 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=147 kind=r bytes=26624 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=148 kind=m bytes=16 pc=0x4692cd status=4 rollback=1
+P1092 OOM n=149 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=150 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=151 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=152 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=153 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=154 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=155 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=156 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=157 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=158 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=159 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=160 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=161 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=162 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=163 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=164 kind=m bytes=720 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=165 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=166 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=167 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=168 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=169 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=170 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=171 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=172 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=173 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=174 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=175 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=176 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=177 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=178 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=179 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=180 kind=m bytes=26624 pc=0x4051df status=4 rollback=1
+P1092 OOM n=181 kind=m bytes=4712 pc=0x4051df status=4 rollback=1
+P1092 OOM n=182 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=183 kind=m bytes=72 pc=0x4051df status=4 rollback=1
+P1092 OOM n=184 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=185 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=186 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=187 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=188 kind=m bytes=16 pc=0x4691c2 status=4 rollback=1
+P1092 OOM n=189 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=190 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=191 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=192 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=193 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=194 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=195 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=196 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=197 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=198 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=199 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=200 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=201 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=202 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=203 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=204 kind=m bytes=624 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=205 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=206 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=207 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=208 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=209 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=210 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=211 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=212 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=213 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=214 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=215 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=216 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=217 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=218 kind=m bytes=26624 pc=0x4051df status=4 rollback=1
+P1092 OOM n=219 kind=m bytes=4216 pc=0x4051df status=4 rollback=1
+P1092 OOM n=220 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=221 kind=m bytes=48 pc=0x4051df status=4 rollback=1
+P1092 OOM n=222 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=223 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=224 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=225 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=226 kind=m bytes=16 pc=0x469c49 status=4 rollback=1
+P1092 OOM n=227 kind=r bytes=3848 pc=0x469c93 status=4 rollback=1
+P1092 OOM n=228 kind=m bytes=1080 pc=0x45cf64 status=4 rollback=1
+P1092 OOM n=229 kind=m bytes=16 pc=0x45cf82 status=4 rollback=1
+P1092 OOM n=230 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=231 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=232 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=233 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=234 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=235 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=236 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=237 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=238 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=239 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=240 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=241 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=242 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=243 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=244 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=245 kind=m bytes=720 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=246 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=247 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=248 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=249 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=250 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=251 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=252 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=253 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=254 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=255 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=256 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=257 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=258 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=259 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=260 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=261 kind=m bytes=26624 pc=0x4051df status=4 rollback=1
+P1092 OOM n=262 kind=m bytes=4712 pc=0x4051df status=4 rollback=1
+P1092 OOM n=263 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=264 kind=m bytes=72 pc=0x4051df status=4 rollback=1
+P1092 OOM n=265 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=266 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=267 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=268 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=269 kind=c bytes=56 pc=0x446a32 status=4 rollback=1
+P1092 OOM n=270 kind=r bytes=24 pc=0x446aee status=4 rollback=1
+P1092 OOM n=271 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=272 kind=r bytes=4960 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=273 kind=r bytes=768 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=274 kind=m bytes=10 pc=0x419475 status=4 rollback=1
+P1092 OOM n=275 kind=m bytes=5 pc=0x419475 status=4 rollback=1
+P1092 OOM n=276 kind=r bytes=96 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=277 kind=r bytes=27648 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=278 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=279 kind=r bytes=5208 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=280 kind=r bytes=816 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=281 kind=r bytes=28672 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=282 kind=r bytes=29696 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=283 kind=r bytes=30720 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=284 kind=r bytes=55296 pc=0x48e0dc status=4 rollback=1
+P1092 OOM n=285 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=286 kind=r bytes=5456 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=287 kind=r bytes=864 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=288 kind=m bytes=13 pc=0x419475 status=4 rollback=1
+P1092 OOM n=289 kind=r bytes=31744 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=290 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=291 kind=r bytes=5704 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=292 kind=r bytes=912 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=293 kind=m bytes=14 pc=0x419475 status=4 rollback=1
+P1092 OOM n=294 kind=r bytes=32768 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=295 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=296 kind=r bytes=5952 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=297 kind=r bytes=960 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=298 kind=m bytes=16 pc=0x46909e status=4 rollback=1
+P1092 OOM n=299 kind=m bytes=24 pc=0x4690d0 status=4 rollback=1
+P1092 OOM n=300 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=301 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=302 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=303 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=304 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=305 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=306 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=307 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=308 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=309 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=310 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=311 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=312 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=313 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=314 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=315 kind=m bytes=960 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=316 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=317 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=318 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=319 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=320 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=321 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=322 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=323 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=324 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=325 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=326 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=327 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=328 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=329 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=330 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=331 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=332 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=333 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=334 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=335 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=336 kind=m bytes=32768 pc=0x4051df status=4 rollback=1
+P1092 OOM n=337 kind=m bytes=5952 pc=0x4051df status=4 rollback=1
+P1092 OOM n=338 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=339 kind=m bytes=96 pc=0x4051df status=4 rollback=1
+P1092 OOM n=340 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=341 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=342 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=343 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=344 kind=m bytes=16 pc=0x4691c2 status=4 rollback=1
+P1092 OOM n=345 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=346 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=347 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=348 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=349 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=350 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=351 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=352 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=353 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=354 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=355 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=356 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=357 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=358 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=359 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=360 kind=m bytes=960 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=361 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=362 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=363 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=364 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=365 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=366 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=367 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=368 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=369 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=370 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=371 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=372 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=373 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=374 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=375 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=376 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=377 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=378 kind=m bytes=10 pc=0x40515e status=4 rollback=1
+P1092 OOM n=379 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=380 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=381 kind=m bytes=32768 pc=0x4051df status=4 rollback=1
+P1092 OOM n=382 kind=m bytes=5952 pc=0x4051df status=4 rollback=1
+P1092 OOM n=383 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=384 kind=m bytes=96 pc=0x4051df status=4 rollback=1
+P1092 OOM n=385 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=386 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=387 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=388 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=389 kind=m bytes=16 pc=0x469c49 status=4 rollback=1
+P1092 OOM n=390 kind=r bytes=3848 pc=0x469c93 status=4 rollback=1
+P1092 OOM n=391 kind=c bytes=56 pc=0x446a32 status=4 rollback=1
+P1092 OOM n=392 kind=r bytes=8 pc=0x446b70 status=4 rollback=1
+P1092 OOM n=393 kind=r bytes=8 pc=0x446be0 status=4 rollback=1
+P1092 OOM n=394 kind=m bytes=1344 pc=0x45cf64 status=4 rollback=1
+P1092 OOM n=395 kind=m bytes=16 pc=0x45cf82 status=4 rollback=1
+P1092 COMPLETE reached=396 status=0 ok=1
+<end of output>
+Test time =   0.14 sec
+----------------------------------------------------------
+Test Passed.
+"p1092_bound_oom.unit" end time: Nov 02 06:33 UTC
+"p1092_bound_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+373/612 Testing: p1092_inline_oom.unit
+373/612 Test: p1092_inline_oom.unit
+Command: "/tmp/p1092-a1/p1092_oom" "/tmp/p1092/tests/p1092/sources/03_inline_index0.nl" "0" "93" "167" "12"
+Directory: /tmp/p1092-a1
+"p1092_inline_oom.unit" start time: Nov 02 06:33 UTC
+Output:
+----------------------------------------------------------
+P1092 OOM n=0 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=1 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=2 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=3 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=4 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=5 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=6 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=7 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=8 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=9 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=10 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=11 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=12 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=13 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=14 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=15 kind=m bytes=528 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=16 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=17 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=18 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=19 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=20 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=21 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=22 kind=m bytes=9 pc=0x40515e status=4 rollback=1
+P1092 OOM n=23 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=24 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=25 kind=m bytes=12 pc=0x40515e status=4 rollback=1
+P1092 OOM n=26 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=27 kind=m bytes=17408 pc=0x4051df status=4 rollback=1
+P1092 OOM n=28 kind=m bytes=3224 pc=0x4051df status=4 rollback=1
+P1092 OOM n=29 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=30 kind=m bytes=48 pc=0x4051df status=4 rollback=1
+P1092 OOM n=31 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=32 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=33 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=34 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=35 kind=m bytes=608 pc=0x44117b status=4 rollback=1
+P1092 OOM n=36 kind=c bytes=22992 pc=0x446805 status=4 rollback=1
+P1092 OOM n=37 kind=c bytes=104 pc=0x44684d status=4 rollback=1
+P1092 OOM n=38 kind=r bytes=27648 pc=0x48e0dc status=4 rollback=1
+P1092 OOM n=39 kind=m bytes=608 pc=0x41d36d status=4 rollback=1
+P1092 OOM n=40 kind=c bytes=104 pc=0x44684d status=4 rollback=1
+P1092 OOM n=41 kind=m bytes=16 pc=0x468f6b status=4 rollback=1
+P1092 OOM n=42 kind=r bytes=27648 pc=0x48e0dc status=4 rollback=1
+P1092 OOM n=43 kind=m bytes=7 pc=0x419475 status=4 rollback=1
+P1092 OOM n=44 kind=r bytes=18432 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=45 kind=r bytes=19456 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=46 kind=r bytes=20480 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=47 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=48 kind=r bytes=3472 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=49 kind=r bytes=3720 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=50 kind=r bytes=3968 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=51 kind=r bytes=576 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=52 kind=m bytes=9 pc=0x419475 status=4 rollback=1
+P1092 OOM n=53 kind=m bytes=16 pc=0x468f6b status=4 rollback=1
+P1092 OOM n=54 kind=m bytes=16 pc=0x46909e status=4 rollback=1
+P1092 OOM n=55 kind=m bytes=24 pc=0x4690d0 status=4 rollback=1
+P1092 OOM n=56 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=57 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=58 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=59 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=60 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=61 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=62 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=63 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=64 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=65 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=66 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=67 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=68 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=69 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=70 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=71 kind=m bytes=576 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=72 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=73 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=74 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=75 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=76 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=77 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=78 kind=m bytes=9 pc=0x40515e status=4 rollback=1
+P1092 OOM n=79 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=80 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=81 kind=m bytes=12 pc=0x40515e status=4 rollback=1
+P1092 OOM n=82 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=83 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=84 kind=m bytes=20480 pc=0x4051df status=4 rollback=1
+P1092 OOM n=85 kind=m bytes=3968 pc=0x4051df status=4 rollback=1
+P1092 OOM n=86 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=87 kind=m bytes=48 pc=0x4051df status=4 rollback=1
+P1092 OOM n=88 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=89 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=90 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=91 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=92 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=93 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=94 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=95 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=96 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=97 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=98 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=99 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=100 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=101 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=102 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=103 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=104 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=105 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=106 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=107 kind=m bytes=576 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=108 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=109 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=110 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=111 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=112 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=113 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=114 kind=m bytes=9 pc=0x40515e status=4 rollback=1
+P1092 OOM n=115 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=116 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=117 kind=m bytes=12 pc=0x40515e status=4 rollback=1
+P1092 OOM n=118 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=119 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=120 kind=m bytes=20480 pc=0x4051df status=4 rollback=1
+P1092 OOM n=121 kind=m bytes=3968 pc=0x4051df status=4 rollback=1
+P1092 OOM n=122 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=123 kind=m bytes=48 pc=0x4051df status=4 rollback=1
+P1092 OOM n=124 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=125 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=126 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=127 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=128 kind=m bytes=608 pc=0x42af68 status=4 rollback=1
+P1092 OOM n=129 kind=c bytes=104 pc=0x44684d status=4 rollback=1
+P1092 OOM n=130 kind=r bytes=27648 pc=0x48e0dc status=4 rollback=1
+P1092 OOM n=131 kind=m bytes=7 pc=0x419475 status=4 rollback=1
+P1092 OOM n=132 kind=r bytes=72 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=133 kind=r bytes=21504 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=134 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=135 kind=r bytes=4216 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=136 kind=r bytes=624 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=137 kind=r bytes=22528 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=138 kind=r bytes=23552 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=139 kind=r bytes=24576 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=140 kind=m bytes=16 pc=0x4692cd status=4 rollback=1
+P1092 OOM n=141 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=142 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=143 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=144 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=145 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=146 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=147 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=148 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=149 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=150 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=151 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=152 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=153 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=154 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=155 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=156 kind=m bytes=624 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=157 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=158 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=159 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=160 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=161 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=162 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=163 kind=m bytes=9 pc=0x40515e status=4 rollback=1
+P1092 OOM n=164 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=165 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=166 kind=m bytes=12 pc=0x40515e status=4 rollback=1
+P1092 OOM n=167 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=168 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=169 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=170 kind=m bytes=24576 pc=0x4051df status=4 rollback=1
+P1092 OOM n=171 kind=m bytes=4216 pc=0x4051df status=4 rollback=1
+P1092 OOM n=172 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=173 kind=m bytes=72 pc=0x4051df status=4 rollback=1
+P1092 OOM n=174 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=175 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=176 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=177 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=178 kind=m bytes=16 pc=0x4691c2 status=4 rollback=1
+P1092 OOM n=179 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=180 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=181 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=182 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=183 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=184 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=185 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=186 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=187 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=188 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=189 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=190 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=191 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=192 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=193 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=194 kind=m bytes=576 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=195 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=196 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=197 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=198 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=199 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=200 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=201 kind=m bytes=9 pc=0x40515e status=4 rollback=1
+P1092 OOM n=202 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=203 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=204 kind=m bytes=12 pc=0x40515e status=4 rollback=1
+P1092 OOM n=205 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=206 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=207 kind=m bytes=24576 pc=0x4051df status=4 rollback=1
+P1092 OOM n=208 kind=m bytes=3968 pc=0x4051df status=4 rollback=1
+P1092 OOM n=209 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=210 kind=m bytes=48 pc=0x4051df status=4 rollback=1
+P1092 OOM n=211 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=212 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=213 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=214 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=215 kind=m bytes=16 pc=0x469c49 status=4 rollback=1
+P1092 OOM n=216 kind=r bytes=3848 pc=0x469c93 status=4 rollback=1
+P1092 OOM n=217 kind=m bytes=984 pc=0x45cf64 status=4 rollback=1
+P1092 OOM n=218 kind=m bytes=16 pc=0x45cf82 status=4 rollback=1
+P1092 OOM n=219 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=220 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=221 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=222 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=223 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=224 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=225 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=226 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=227 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=228 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=229 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=230 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=231 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=232 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=233 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=234 kind=m bytes=624 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=235 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=236 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=237 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=238 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=239 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=240 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=241 kind=m bytes=9 pc=0x40515e status=4 rollback=1
+P1092 OOM n=242 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=243 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=244 kind=m bytes=12 pc=0x40515e status=4 rollback=1
+P1092 OOM n=245 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=246 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=247 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=248 kind=m bytes=24576 pc=0x4051df status=4 rollback=1
+P1092 OOM n=249 kind=m bytes=4216 pc=0x4051df status=4 rollback=1
+P1092 OOM n=250 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=251 kind=m bytes=72 pc=0x4051df status=4 rollback=1
+P1092 OOM n=252 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=253 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=254 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=255 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=256 kind=c bytes=56 pc=0x446a32 status=4 rollback=1
+P1092 OOM n=257 kind=r bytes=24 pc=0x446aee status=4 rollback=1
+P1092 OOM n=258 kind=m bytes=9 pc=0x40515e status=4 rollback=1
+P1092 OOM n=259 kind=r bytes=4464 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=260 kind=r bytes=672 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=261 kind=m bytes=11 pc=0x419475 status=4 rollback=1
+P1092 OOM n=262 kind=m bytes=7 pc=0x419475 status=4 rollback=1
+P1092 OOM n=263 kind=r bytes=96 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=264 kind=r bytes=25600 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=265 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=266 kind=r bytes=4712 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=267 kind=r bytes=720 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=268 kind=r bytes=26624 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=269 kind=r bytes=27648 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=270 kind=r bytes=28672 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=271 kind=r bytes=55296 pc=0x48e0dc status=4 rollback=1
+P1092 OOM n=272 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=273 kind=r bytes=4960 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=274 kind=r bytes=768 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=275 kind=m bytes=12 pc=0x419475 status=4 rollback=1
+P1092 OOM n=276 kind=r bytes=29696 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=277 kind=m bytes=12 pc=0x40515e status=4 rollback=1
+P1092 OOM n=278 kind=r bytes=5208 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=279 kind=r bytes=816 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=280 kind=m bytes=13 pc=0x419475 status=4 rollback=1
+P1092 OOM n=281 kind=r bytes=30720 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=282 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=283 kind=r bytes=5456 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=284 kind=r bytes=864 pc=0x4050f3 status=4 rollback=1
+P1092 OOM n=285 kind=m bytes=16 pc=0x46909e status=4 rollback=1
+P1092 OOM n=286 kind=m bytes=24 pc=0x4690d0 status=4 rollback=1
+P1092 OOM n=287 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=288 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=289 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=290 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=291 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=292 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=293 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=294 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=295 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=296 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=297 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=298 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=299 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=300 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=301 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=302 kind=m bytes=864 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=303 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=304 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=305 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=306 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=307 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=308 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=309 kind=m bytes=9 pc=0x40515e status=4 rollback=1
+P1092 OOM n=310 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=311 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=312 kind=m bytes=12 pc=0x40515e status=4 rollback=1
+P1092 OOM n=313 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=314 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=315 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=316 kind=m bytes=9 pc=0x40515e status=4 rollback=1
+P1092 OOM n=317 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=318 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=319 kind=m bytes=12 pc=0x40515e status=4 rollback=1
+P1092 OOM n=320 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=321 kind=m bytes=30720 pc=0x4051df status=4 rollback=1
+P1092 OOM n=322 kind=m bytes=5456 pc=0x4051df status=4 rollback=1
+P1092 OOM n=323 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=324 kind=m bytes=96 pc=0x4051df status=4 rollback=1
+P1092 OOM n=325 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=326 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=327 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=328 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=329 kind=m bytes=16 pc=0x4691c2 status=4 rollback=1
+P1092 OOM n=330 kind=m bytes=168 pc=0x4054fb status=4 rollback=1
+P1092 OOM n=331 kind=m bytes=7488 pc=0x40559c status=4 rollback=1
+P1092 OOM n=332 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=333 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=334 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=335 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=336 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=337 kind=m bytes=3 pc=0x40515e status=4 rollback=1
+P1092 OOM n=338 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=339 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=340 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=341 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=342 kind=m bytes=6 pc=0x40515e status=4 rollback=1
+P1092 OOM n=343 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=344 kind=m bytes=8 pc=0x40515e status=4 rollback=1
+P1092 OOM n=345 kind=m bytes=864 pc=0x405a1f status=4 rollback=1
+P1092 OOM n=346 kind=m bytes=14 pc=0x40515e status=4 rollback=1
+P1092 OOM n=347 kind=m bytes=15 pc=0x40515e status=4 rollback=1
+P1092 OOM n=348 kind=m bytes=19 pc=0x40515e status=4 rollback=1
+P1092 OOM n=349 kind=m bytes=16 pc=0x40515e status=4 rollback=1
+P1092 OOM n=350 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=351 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=352 kind=m bytes=9 pc=0x40515e status=4 rollback=1
+P1092 OOM n=353 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=354 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=355 kind=m bytes=12 pc=0x40515e status=4 rollback=1
+P1092 OOM n=356 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=357 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=358 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=359 kind=m bytes=9 pc=0x40515e status=4 rollback=1
+P1092 OOM n=360 kind=m bytes=7 pc=0x40515e status=4 rollback=1
+P1092 OOM n=361 kind=m bytes=11 pc=0x40515e status=4 rollback=1
+P1092 OOM n=362 kind=m bytes=12 pc=0x40515e status=4 rollback=1
+P1092 OOM n=363 kind=m bytes=13 pc=0x40515e status=4 rollback=1
+P1092 OOM n=364 kind=m bytes=30720 pc=0x4051df status=4 rollback=1
+P1092 OOM n=365 kind=m bytes=5456 pc=0x4051df status=4 rollback=1
+P1092 OOM n=366 kind=m bytes=16 pc=0x4051df status=4 rollback=1
+P1092 OOM n=367 kind=m bytes=96 pc=0x4051df status=4 rollback=1
+P1092 OOM n=368 kind=m bytes=560 pc=0x405d29 status=4 rollback=1
+P1092 OOM n=369 kind=m bytes=5 pc=0x40515e status=4 rollback=1
+P1092 OOM n=370 kind=m bytes=56 pc=0x45c996 status=4 rollback=1
+P1092 OOM n=371 kind=m bytes=24 pc=0x45caf6 status=4 rollback=1
+P1092 OOM n=372 kind=m bytes=16 pc=0x469c49 status=4 rollback=1
+P1092 OOM n=373 kind=r bytes=3848 pc=0x469c93 status=4 rollback=1
+P1092 OOM n=374 kind=c bytes=56 pc=0x446a32 status=4 rollback=1
+P1092 OOM n=375 kind=r bytes=8 pc=0x446b70 status=4 rollback=1
+P1092 OOM n=376 kind=r bytes=8 pc=0x446be0 status=4 rollback=1
+P1092 OOM n=377 kind=m bytes=1248 pc=0x45cf64 status=4 rollback=1
+P1092 OOM n=378 kind=m bytes=16 pc=0x45cf82 status=4 rollback=1
+P1092 COMPLETE reached=379 status=0 ok=1
+<end of output>
+Test time =   0.12 sec
+----------------------------------------------------------
+Test Passed.
+"p1092_inline_oom.unit" end time: Nov 02 06:33 UTC
+"p1092_inline_oom.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+374/612 Testing: p1092_source_boundaries.integration
+374/612 Test: p1092_source_boundaries.integration
+Command: "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12" "/tmp/p1092/tests/p1092/cli.py" "/tmp/p1092-a1/newlangc" "/tmp/p1092"
+Directory: /tmp/p1092-a1
+"p1092_source_boundaries.integration" start time: Nov 02 06:33 UTC
+Output:
+----------------------------------------------------------
+P1092 CLI 00_outside_control.nl 0 0 no-clobber
+P1092 CLI 01_scalar_control.nl 0 4 no-clobber
+P1092 CLI 02_bound_index1.nl 0 4 no-clobber
+P1092 CLI 03_inline_index0.nl 0 4 no-clobber
+P1092 CLI 04_named_new_value.nl 0 4 no-clobber
+P1092 CLI 05_other_original.nl 3 3 no-clobber
+P1092 CLI 06_unreachable_continue.nl 0 4 no-clobber
+P1092 CLI 07_unsupported_constant_break.nl 3 3 no-clobber
+P1092 CLI 08_unsupported_two_changes.nl 3 3 no-clobber
+P1092 CLI 09_reachable_continue.nl 3 3 no-clobber
+P1092 CLI 10_two_break_edges.nl 3 3 no-clobber
+P1092 CLI 11_nested_control.nl 3 3 no-clobber
+P1092 CLI 12_loan_escape.nl 3 3 no-clobber
+P1092 CLI 13_wrong_scope.nl 3 3 no-clobber
+P1092 CLI 14_wrong_type.nl 3 3 no-clobber
+P1092 CLI 15_return_control.nl 0 4 no-clobber
+P1092 CLI 16_same_nominal_other_original.nl 0 4 no-clobber
+P1092 CLI 17_equal_bits_new_fact.nl 0 4 no-clobber
+<end of output>
+Test time =   0.10 sec
+----------------------------------------------------------
+Test Passed.
+"p1092_source_boundaries.integration" end time: Nov 02 06:33 UTC
+"p1092_source_boundaries.integration" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Nov 02 06:33 UTC

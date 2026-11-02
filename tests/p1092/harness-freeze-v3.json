@@ -1,0 +1,17 @@
+{
+  "phase": "A2 harness v3 before first execution: add explicit host ambient owner/domain/raw Allocation+Storage frame, four additional negative mutations. Source T/Break remain actual CHECK issued; no physical native claim for ambient fixture. NONPIE OOM diagnostic for exact callsites.",
+  "compiler_A1": "96ce87f",
+  "oracle": {
+    "observe": "All original 16 negatives and actual pair/frame/B survive oracle unchanged; add four live ambient frame corruptions (owner carrier, domain lifetime, Backing access, unknown dependencies), all must reject and preserve original context and live foreign B. Six source profiles remain unchanged.",
+    "oom": "Every reached malloc/realloc/calloc failure: exact OOM=4, unpublished NULL output, diagnostic, semantic TestState unchanged, old authentic A survives, cleanup and same-context retry success. Stop on first RED.",
+    "cli": "18 frozen full sources: selected CHECK success; unsupported and invalid source keep refusal; C17 LOOP unsupported and named output unchanged."
+  },
+  "files": {
+    "tests/p1092/observe.c": "b7f8a0ffbadafb8f120170bec8a0fd380ab05275fcbea0238dffd52890267737",
+    "tests/p1092/cli.py": "febf3c55dbf97c6b743fc49ecc43b3e4bd1e775e109ea6287336419d937bf1f0",
+    "src/semantic_check.c": "3be0acb92c9b7de1d8cf5485a26ff3cdee5ed2742f89151eda633098c131b5f4",
+    "CMakeLists.txt": "65abb42e36e29c74ed5e75c85949f12dfa6593ce0a09e1283d9b63732b408c86",
+    "tests/p1092/source-freeze-v2.json": "ac969fd1c9eccf52db8900086df2c95c4b5e1a21c21b75621ee2483fc1a5c0f4",
+    "tests/p1092/oracle-v2.json": "f2b793605441cac403c979b630618395c22502394feff88f73bbd25d413d1e9c"
+  }
+}

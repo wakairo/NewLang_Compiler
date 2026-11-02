@@ -1,0 +1,102 @@
+{
+  "compiler_source": "60fc767408c2dd25a116cd188682fae0c6e96090",
+  "compiler": "/tmp/p1092-base/newlangc",
+  "observations": [
+    {
+      "source": "00_outside_control.nl",
+      "source_sha256": "523e727493e301d286e193c4861eca6726ed4b6471e6a4ba69fffb56a95eb3e6",
+      "CHECK": 0,
+      "stderr": ""
+    },
+    {
+      "source": "01_scalar_control.nl",
+      "source_sha256": "32935842b7c28017c6e75003d2aa930657526fac307fef0f6d2f36e8b1ac5db4",
+      "CHECK": 0,
+      "stderr": ""
+    },
+    {
+      "source": "02_bound_index1.nl",
+      "source_sha256": "8c1231c5a52d6a46767fce7e41c70f07e8514eb64620fc6b55fa678a4069e4e6",
+      "CHECK": 3,
+      "stderr": "/tmp/p1092/tests/p1092/sources/02_bound_index1.nl:5:21-8:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+    },
+    {
+      "source": "03_inline_index0.nl",
+      "source_sha256": "9fcec6f2c01dbc43b513661aa7ddddd3ed064a59be048d1650e21e3a23f503b1",
+      "CHECK": 3,
+      "stderr": "/tmp/p1092/tests/p1092/sources/03_inline_index0.nl:5:20-7:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+    },
+    {
+      "source": "04_named_new_value.nl",
+      "source_sha256": "0cfc884bdda9e25e04eb872c9de4436ba396da8aa3efbeb693e5e61271fad2ce",
+      "CHECK": 3,
+      "stderr": "/tmp/p1092/tests/p1092/sources/04_named_new_value.nl:6:21-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+    },
+    {
+      "source": "05_other_original.nl",
+      "source_sha256": "bc6b310ba944e742141f207d2a98ef48a055fd093f402f38f6646ce8c2f4830a",
+      "CHECK": 3,
+      "stderr": "/tmp/p1092/tests/p1092/sources/05_other_original.nl:2:1-2:41: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+    },
+    {
+      "source": "06_unreachable_continue.nl",
+      "source_sha256": "ead75ff89ba3d23ce1b8257d0ac425b5a2f0b130f579f08a41667865524925ff",
+      "CHECK": 3,
+      "stderr": "/tmp/p1092/tests/p1092/sources/06_unreachable_continue.nl:5:21-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+    },
+    {
+      "source": "07_unsupported_constant_break.nl",
+      "source_sha256": "b6c0554defbf0c0d554c1376b0489cc4885b511b318f7ddb7aaa5a91c0b654bf",
+      "CHECK": 3,
+      "stderr": "/tmp/p1092/tests/p1092/sources/07_unsupported_constant_break.nl:5:21-8:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+    },
+    {
+      "source": "08_unsupported_two_changes.nl",
+      "source_sha256": "c0fb85604ed91a40c0b32da8ca7c6c6b77acdf7140d131f09b4b5d7250a9acb5",
+      "CHECK": 3,
+      "stderr": "/tmp/p1092/tests/p1092/sources/08_unsupported_two_changes.nl:5:21-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+    },
+    {
+      "source": "09_reachable_continue.nl",
+      "source_sha256": "d9c446c998efb7ac34ee777ff214055551c73debed8bfaa6f69e880cfd3c3398",
+      "CHECK": 3,
+      "stderr": "/tmp/p1092/tests/p1092/sources/09_reachable_continue.nl:5:21-10:6: error(precision)[P14-LOOP-PRECISION]: cyclic identity/dependency or memory correlation is not representable\n"
+    },
+    {
+      "source": "10_two_break_edges.nl",
+      "source_sha256": "ac715f644ee125a5db7bd04a05513501d8b8a2f51520ec220d5bdde8eb95b12f",
+      "CHECK": 3,
+      "stderr": "/tmp/p1092/tests/p1092/sources/10_two_break_edges.nl:5:21-8:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+    },
+    {
+      "source": "11_nested_control.nl",
+      "source_sha256": "f7774c4bc0f0201197f6761ee4e3732176d6757fba76c2265616ed738aa2224b",
+      "CHECK": 3,
+      "stderr": "/tmp/p1092/tests/p1092/sources/11_nested_control.nl:5:21-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+    },
+    {
+      "source": "12_loan_escape.nl",
+      "source_sha256": "8b07ec45984d7f6cf404354518f8df86738deba54d75aeab1064f60b4d2db006",
+      "CHECK": 3,
+      "stderr": "/tmp/p1092/tests/p1092/sources/12_loan_escape.nl:6:15-6:55: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+    },
+    {
+      "source": "13_wrong_scope.nl",
+      "source_sha256": "7224f8af0b63d1687a71531565377075ffbe852b35d3375e90c5d63b51df6fc9",
+      "CHECK": 3,
+      "stderr": "/tmp/p1092/tests/p1092/sources/13_wrong_scope.nl:5:5-5:18: error(semantic)[P14-CONTROL-CONTEXT]: continue/break requires an active lexical loop target\n"
+    },
+    {
+      "source": "14_wrong_type.nl",
+      "source_sha256": "e8abb3c4d6b54d16af4d2db306af9a82abaa070c3ed83ffe1b2868bf9414d4b9",
+      "CHECK": 3,
+      "stderr": "/tmp/p1092/tests/p1092/sources/14_wrong_type.nl:6:69-6:73: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+    },
+    {
+      "source": "15_return_control.nl",
+      "source_sha256": "faba9aadbdf9a366c6f72252b4bf606290a4a8d8a0d9d04751b2bb5f7c623148",
+      "CHECK": 0,
+      "stderr": ""
+    }
+  ]
+}

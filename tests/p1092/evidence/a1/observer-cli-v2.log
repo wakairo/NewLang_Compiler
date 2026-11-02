@@ -1,0 +1,20 @@
+Internal ctest changing into directory: /tmp/p1092-a1
+Test project /tmp/p1092-a1
+    Start 366: p1092_02_bound_index1.unit
+1/7 Test #366: p1092_02_bound_index1.unit ..................   Passed    0.00 sec
+    Start 367: p1092_04_named_new_value.unit
+2/7 Test #367: p1092_04_named_new_value.unit ...............   Passed    0.00 sec
+    Start 368: p1092_06_unreachable_continue.unit
+3/7 Test #368: p1092_06_unreachable_continue.unit ..........   Passed    0.00 sec
+    Start 369: p1092_16_same_nominal_other_original.unit
+4/7 Test #369: p1092_16_same_nominal_other_original.unit ...   Passed    0.00 sec
+    Start 370: p1092_17_equal_bits_new_fact.unit
+5/7 Test #370: p1092_17_equal_bits_new_fact.unit ...........   Passed    0.00 sec
+    Start 371: p1092_inline_index0.unit
+6/7 Test #371: p1092_inline_index0.unit ....................   Passed    0.00 sec
+    Start 374: p1092_source_boundaries.integration
+7/7 Test #374: p1092_source_boundaries.integration .........   Passed    0.08 sec
+
+100% tests passed, 0 tests failed out of 7
+
+Total Test time (real) =   0.11 sec

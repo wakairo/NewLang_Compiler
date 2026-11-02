@@ -1,0 +1,1 @@
+tests/p1092/sources/05_other_original.nl:2:1-2:41: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate

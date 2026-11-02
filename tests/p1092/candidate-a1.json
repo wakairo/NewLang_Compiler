@@ -1,0 +1,12 @@
+{
+  "phase": "A1 before first build/execution",
+  "parent": "da104120a93d45376737e6718337dab24c0eaf24",
+  "source_files": {
+    "src/semantic_check.c": "3be0acb92c9b7de1d8cf5485a26ff3cdee5ed2742f89151eda633098c131b5f4",
+    "tests/p1092/source-freeze-v1.json": "ae98da722c2615580d19d41ed7589955b4c58337348a6536d3d613c1103ff72c",
+    "tests/p1092/source-freeze-v2.json": "ac969fd1c9eccf52db8900086df2c95c4b5e1a21c21b75621ee2483fc1a5c0f4",
+    "tests/p1092/oracle-v1.json": "7f6238151965b30fcd3f7c7677f7f9799165bc029cdf2f42545dd905273a910c",
+    "tests/p1092/oracle-v2.json": "f2b793605441cac403c979b630618395c22502394feff88f73bbd25d413d1e9c"
+  },
+  "oracle": "v1 and prospective v2 unchanged; selected CHECK positives 02,03,04,06,16,17; others retain frozen baseline status; C17 LOOP remains unsupported; no native LOOP claim"
+}

@@ -1,0 +1,18 @@
+{
+  "phase": "A3 harness v6 before execution: preserve prior source/oracles; add duplicate/absent Break and def-use mutations",
+  "compiler_A1": "96ce87f",
+  "oracle": {
+    "observe": "All original 16 negatives and actual pair/frame/B survive oracle unchanged; add four live ambient frame corruptions (owner carrier, domain lifetime, Backing access, unknown dependencies), all must reject and preserve original context and live foreign B. Six source profiles remain unchanged.; two further negatives: actual producer handed foreign live parent before issuance, and authentic owned projected exit binding availability corruption. Both must reject before publication, with same rollback and live B oracle.; append duplicate unlinked edge, remove sole Break set, and alter old-result def-use must also reject. All25 negative challenges keep the same failure/no-clobber/B oracle.",
+    "oom": "Every reached malloc/realloc/calloc failure: exact OOM=4, unpublished NULL output, diagnostic, semantic TestState unchanged, old authentic A survives, cleanup and same-context retry success. Stop on first RED.",
+    "cli": "18 frozen full sources: selected CHECK success; unsupported and invalid source keep refusal; C17 LOOP unsupported and named output unchanged."
+  },
+  "files": {
+    "tests/p1092/observe.c": "d0f290a4f5b35b105480280a225c6ad91b86a97be298dd4b2d045572691bec53",
+    "tests/p1092/cli.py": "febf3c55dbf97c6b743fc49ecc43b3e4bd1e775e109ea6287336419d937bf1f0",
+    "tests/p1092/evidence_test.py": "73da54e2d97430da9475ce3f9e29055a50820d555a8f47d3f6004d89d5434498",
+    "src/semantic_check.c": "d39b4f1708d9b26a71bb2772a2887ab766e30ff13f01ced890ff500410931e80",
+    "CMakeLists.txt": "c038dfe40bb9f0dfaa57c06f771fa7a5bdabf3fb50e16aa15ffc81c23d26d070",
+    "tests/p1092/source-freeze-v2.json": "ac969fd1c9eccf52db8900086df2c95c4b5e1a21c21b75621ee2483fc1a5c0f4",
+    "tests/p1092/oracle-v2.json": "f2b793605441cac403c979b630618395c22502394feff88f73bbd25d413d1e9c"
+  }
+}

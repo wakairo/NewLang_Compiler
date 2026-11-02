@@ -1002,6 +1002,42 @@ if(BUILD_TESTING)
     add_test(NAME p990_negative_sources.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "negative")
+    add_executable(p1092_observe tests/p1092/observe.c)
+    add_executable(p1092_oom tests/p1092/observe.c)
+    target_compile_definitions(p1092_oom PRIVATE P1092_OOM)
+    foreach(target p1092_observe p1092_oom)
+        target_link_libraries(${target} PRIVATE newlang_semantic newlang_parser)
+        target_link_options(${target} PRIVATE -Wl,--wrap=nl_fixed_change
+            -Wl,--wrap=nl_control_source_break_append)
+    endforeach()
+    target_link_options(p1092_oom PRIVATE -Wl,--wrap=malloc
+        -Wl,--wrap=realloc -Wl,--wrap=calloc -no-pie)
+    target_compile_options(p1092_oom PRIVATE -fno-pie)
+    foreach(profile 02_bound_index1 04_named_new_value 06_unreachable_continue
+                    16_same_nominal_other_original 17_equal_bits_new_fact)
+        if(profile STREQUAL "17_equal_bits_new_fact")
+            set(p1092_new 46)
+        else()
+            set(p1092_new 229)
+        endif()
+        add_test(NAME p1092_${profile}.unit COMMAND p1092_observe
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/sources/${profile}.nl"
+            1 181 46 ${p1092_new})
+    endforeach()
+    add_test(NAME p1092_inline_index0.unit COMMAND p1092_observe
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/sources/03_inline_index0.nl"
+        0 93 167 12)
+    add_test(NAME p1092_bound_oom.unit COMMAND p1092_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/sources/02_bound_index1.nl"
+        1 181 46 229)
+    add_test(NAME p1092_inline_oom.unit COMMAND p1092_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/sources/03_inline_index0.nl"
+        0 93 167 12)
+    add_test(NAME p1092_source_boundaries.integration
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/cli.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}")
+    add_test(NAME p1092_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/evidence_test.py")
     add_test(NAME p990_freeze_protocol.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/freeze_selftest.py")
     set_tests_properties(p990_freeze_protocol.unit PROPERTIES RUN_SERIAL TRUE)
@@ -1025,7 +1061,7 @@ if(BUILD_TESTING)
     endforeach()
     foreach(p1079_profile IN ITEMS 0 1 2)
         add_test(NAME p1079_field_if_${p1079_profile}.integration COMMAND "${Python3_EXECUTABLE}"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1079/run-v4.py"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/p1079_forward.py"
             "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${p1079_profile}")
     endforeach()
     foreach(p1077_profile IN ITEMS 0 1 2)

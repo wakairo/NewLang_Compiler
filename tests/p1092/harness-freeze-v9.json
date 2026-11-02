@@ -1,0 +1,21 @@
+{
+  "phase": "A4 harness v9 before build/run: retain Clang unused-but-set-global RED; read/assert existing observer invariant in OOM mode. Production and old oracle unchanged, added assertion only.",
+  "compiler_A1": "96ce87f",
+  "oracle": {
+    "observe": "All original 16 negatives and actual pair/frame/B survive oracle unchanged; add four live ambient frame corruptions (owner carrier, domain lifetime, Backing access, unknown dependencies), all must reject and preserve original context and live foreign B. Six source profiles remain unchanged.; two further negatives: actual producer handed foreign live parent before issuance, and authentic owned projected exit binding availability corruption. Both must reject before publication, with same rollback and live B oracle.; append duplicate unlinked edge, remove sole Break set, and alter old-result def-use must also reject. All25 negative challenges keep the same failure/no-clobber/B oracle.",
+    "oom": "Every reached malloc/realloc/calloc failure: exact OOM=4, unpublished NULL output, diagnostic, semantic TestState unchanged, old authentic A survives, cleanup and same-context retry success. Stop on first RED.",
+    "cli": "18 frozen full sources: selected CHECK success; unsupported and invalid source keep refusal; C17 LOOP unsupported and named output unchanged.",
+    "P1079_forward": "Keep all original v4 assertions except alternative_loop: CHECK0, C17 exit4 with fresh/existing/stdout no-clobber. Original source/oracles remain unchanged."
+  },
+  "files": {
+    "tests/p1092/observe.c": "e33d0079e1b14cd61ec2710757d62289309e7d8b96f3caba6feb4c08bbaf9536",
+    "tests/p1092/cli.py": "febf3c55dbf97c6b743fc49ecc43b3e4bd1e775e109ea6287336419d937bf1f0",
+    "tests/p1092/evidence_test.py": "b2d064e61df3b1a93495c28d7f1d31d620a749695928e817a92f02f0bde1e524",
+    "tests/p1092/p1079_forward.py": "56943be5ade76f97c1a0a151150ed611b79bf6302b9cd9e167d0a1d4d82bf735",
+    "tests/p1079/run-v4.py": "9de115cb9e6447159f4f9ccae85569d6d4b91973414debb4fbfc1c9ac96739b3",
+    "src/semantic_check.c": "20f814f553cc7fd38217ea4ef601092ca3ae0db03d25428a23837223564be685",
+    "CMakeLists.txt": "ec92602300abba48c239c912abcd15ee4981b22491d91dc15c574629250be5ff",
+    "tests/p1092/source-freeze-v2.json": "ac969fd1c9eccf52db8900086df2c95c4b5e1a21c21b75621ee2483fc1a5c0f4",
+    "tests/p1092/oracle-v2.json": "f2b793605441cac403c979b630618395c22502394feff88f73bbd25d413d1e9c"
+  }
+}

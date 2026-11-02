@@ -1,0 +1,92 @@
+[
+  {
+    "source": "00_outside_control.nl",
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "source": "01_scalar_control.nl",
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "source": "02_bound_index1.nl",
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "source": "03_inline_index0.nl",
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "source": "04_named_new_value.nl",
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "source": "05_other_original.nl",
+    "rc": 3,
+    "stderr": "tests/p1092/sources/05_other_original.nl:2:1-2:41: error(unsupported)[AVS-DECL-PROFILE]: AVS remains one leading struct; recursive category is separate\n"
+  },
+  {
+    "source": "06_unreachable_continue.nl",
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "source": "07_unsupported_constant_break.nl",
+    "rc": 3,
+    "stderr": "tests/p1092/sources/07_unsupported_constant_break.nl:5:21-8:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "08_unsupported_two_changes.nl",
+    "rc": 3,
+    "stderr": "tests/p1092/sources/08_unsupported_two_changes.nl:5:21-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "09_reachable_continue.nl",
+    "rc": 3,
+    "stderr": "tests/p1092/sources/09_reachable_continue.nl:5:21-10:6: error(precision)[P14-LOOP-PRECISION]: cyclic identity/dependency or memory correlation is not representable\n"
+  },
+  {
+    "source": "10_two_break_edges.nl",
+    "rc": 3,
+    "stderr": "tests/p1092/sources/10_two_break_edges.nl:5:21-8:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "11_nested_control.nl",
+    "rc": 3,
+    "stderr": "tests/p1092/sources/11_nested_control.nl:5:21-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports\n"
+  },
+  {
+    "source": "12_loan_escape.nl",
+    "rc": 3,
+    "stderr": "tests/p1092/sources/12_loan_escape.nl:6:15-6:55: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope\n"
+  },
+  {
+    "source": "13_wrong_scope.nl",
+    "rc": 3,
+    "stderr": "tests/p1092/sources/13_wrong_scope.nl:5:5-5:18: error(semantic)[P14-CONTROL-CONTEXT]: continue/break requires an active lexical loop target\n"
+  },
+  {
+    "source": "14_wrong_type.nl",
+    "rc": 3,
+    "stderr": "tests/p1092/sources/14_wrong_type.nl:6:69-6:73: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type\n"
+  },
+  {
+    "source": "15_return_control.nl",
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "source": "16_same_nominal_other_original.nl",
+    "rc": 0,
+    "stderr": ""
+  },
+  {
+    "source": "17_equal_bits_new_fact.nl",
+    "rc": 0,
+    "stderr": ""
+  }
+]

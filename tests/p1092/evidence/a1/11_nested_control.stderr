@@ -1,0 +1,1 @@
+tests/p1092/sources/11_nested_control.nl:5:21-9:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports

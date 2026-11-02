@@ -1,0 +1,142 @@
+{
+  "candidate": "2cac6c0",
+  "status": "All nine new tests passed; no candidate semantic RED",
+  "reached": 775,
+  "profiles": [
+    [
+      "396",
+      "0",
+      "1"
+    ],
+    [
+      "379",
+      "0",
+      "1"
+    ]
+  ],
+  "unique_callers": 29,
+  "locations": {
+    "0x4050f3": [
+      "append_storage",
+      "/tmp/p1092/src/semantic.c:13"
+    ],
+    "0x40515e": [
+      "copy_name",
+      "/tmp/p1092/src/semantic.c:27"
+    ],
+    "0x4051df": [
+      "copy_array",
+      "/tmp/p1092/src/semantic.c:44"
+    ],
+    "0x4054fb": [
+      "nl_sem_clone",
+      "/tmp/p1092/src/semantic.c:91"
+    ],
+    "0x40559c": [
+      "nl_sem_clone",
+      "/tmp/p1092/src/semantic.c:100"
+    ],
+    "0x405a1f": [
+      "nl_sem_clone",
+      "/tmp/p1092/src/semantic.c:140"
+    ],
+    "0x405d29": [
+      "nl_sem_clone",
+      "/tmp/p1092/src/semantic.c:183"
+    ],
+    "0x419475": [
+      "source_name_copy",
+      "/tmp/p1092/src/semantic_check.c:2787"
+    ],
+    "0x41d36d": [
+      "run_body",
+      "/tmp/p1092/src/semantic_check.c:3630 (discriminator 1)"
+    ],
+    "0x42af68": [
+      "source_linear_break",
+      "/tmp/p1092/src/semantic_check.c:5424"
+    ],
+    "0x44117b": [
+      "check_fragment",
+      "/tmp/p1092/src/semantic_check.c:8977 (discriminator 1)"
+    ],
+    "0x446805": [
+      "nl_h_custody_attach",
+      "/tmp/p1092/src/h_origin_internal.c:100"
+    ],
+    "0x44684d": [
+      "nl_h_custody_attach",
+      "/tmp/p1092/src/h_origin_internal.c:106"
+    ],
+    "0x446a32": [
+      "nl_h_custody_reserve",
+      "/tmp/p1092/src/h_origin_internal.c:134"
+    ],
+    "0x446aee": [
+      "nl_h_custody_reserve",
+      "/tmp/p1092/src/h_origin_internal.c:149"
+    ],
+    "0x446b70": [
+      "nl_h_custody_reserve",
+      "/tmp/p1092/src/h_origin_internal.c:156"
+    ],
+    "0x446be0": [
+      "nl_h_custody_reserve",
+      "/tmp/p1092/src/h_origin_internal.c:161"
+    ],
+    "0x45c996": [
+      "nl_raw_clone",
+      "/tmp/p1092/src/raw_storage.c:23"
+    ],
+    "0x45caf6": [
+      "nl_raw_clone",
+      "/tmp/p1092/src/raw_storage.c:32"
+    ],
+    "0x45cf64": [
+      "nl_raw_validate",
+      "/tmp/p1092/src/raw_storage.c:102 (discriminator 4)"
+    ],
+    "0x45cf82": [
+      "nl_raw_validate",
+      "/tmp/p1092/src/raw_storage.c:103"
+    ],
+    "0x468f6b": [
+      "nl_control_target_create",
+      "/tmp/p1092/src/control.c:58"
+    ],
+    "0x46909e": [
+      "nl_control_state_create",
+      "/tmp/p1092/src/control.c:89"
+    ],
+    "0x4690d0": [
+      "nl_control_state_create",
+      "/tmp/p1092/src/control.c:93"
+    ],
+    "0x4691c2": [
+      "nl_control_state_fork",
+      "/tmp/p1092/src/control.c:115"
+    ],
+    "0x4692cd": [
+      "nl_control_state_capture",
+      "/tmp/p1092/src/control.c:138"
+    ],
+    "0x469c49": [
+      "append",
+      "/tmp/p1092/src/control.c:281"
+    ],
+    "0x469c93": [
+      "append",
+      "/tmp/p1092/src/control.c:287 (discriminator 1)"
+    ],
+    "0x48e0dc": [
+      "nl_checked_add",
+      "/tmp/p1092/src/checked.c:16"
+    ]
+  },
+  "kinds": {
+    "m": 680,
+    "r": 83,
+    "c": 12
+  },
+  "all_exact_oom_null_rollback_retry": true
+}

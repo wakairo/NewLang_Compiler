@@ -1,0 +1,1 @@
+tests/p1092/sources/09_reachable_continue.nl:5:21-10:6: error(precision)[P14-LOOP-PRECISION]: cyclic identity/dependency or memory correlation is not representable
