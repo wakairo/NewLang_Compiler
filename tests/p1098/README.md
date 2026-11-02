@@ -43,3 +43,32 @@ Finite technical results do not establish general soundness or Product GO.
 The extra checkpoint/verifier memory, OOM paths and maintenance are costs.
 Author+ordinary-safe caller audit-locality relative to factored C is unmeasured.
 Independent exact-HEAD F/R adoption remains Coordination's decision.
+
+Local convergence: see evidence/local-validation-v1.json and its full raw ZIP.
+The code/test candidate 0665801 passed 627 tests in each of GCC14.2 Debug,
+Clang23.1.3 Debug, GCC Release, Clang ASan/LSan and Clang UBSan. Seven sources
+each challenge 68 live mutations plus a shallow replay; genuine same-plan B
+survives A destruction. New CHECK OOM:324+313; named CLI OOM:768+742.
+All original P965 ownership494/OOM502 and P1092 OOM396+379 remain verified.
+An additional pre-frozen passive native trace records actual live field
+addresses and old/current/sibling/other-root bits in 28 GCC/Clang O0/O2 runs.
+Thirty old P-owned profiles keep CLI status/target bytes; twelve emit C.
+The receipt commit changes documentation/evidence/prospective hashes only.
+No local pass is attributed to an incomplete earlier sanitizer run.
+
+First actual private-validator RED: candidate74588a4 read projected EXIT
+values through the old provenance helper before the new origin guard. The
+guard now precedes that helper; source/oracle/first log remain archived.
+Self-review's no-caller-write sources exposed an independent C17 const-target
+compile refusal on candidate d591c25; they were frozen before execution and
+never run as invalid native C. The common qualifier now uses authenticated
+LOOP field writes, without requiring an irrelevant caller write or source
+spelling exception. Original P605/P634 scripts/oracles stay SHA-pinned; the
+prospective exact two-field header projection retains every older corruption
+check and adds five malformed-attachment counterexamples.
+
+Cost: each eligible relation retains full entry/post/final semantic state,
+state anchors and graph seals; validation repeats bounded graph/state scans.
+No peak-memory/performance or author+ordinary-caller audit-cost benefit is
+claimed. General control flow, mixed H/T loops and parameter handoff remain
+review/implementation work. This is a finite capability, not Product GO.
