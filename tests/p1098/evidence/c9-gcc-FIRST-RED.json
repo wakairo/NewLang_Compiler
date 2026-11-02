@@ -1,0 +1,10 @@
+{
+  "head": "a37c30ec94b003822c3b9fd96d96244cbc775d76",
+  "tree": "f2c1b588106a05e9899f6b2ab96a9e3004b842ce",
+  "log_sha256": "0b520771c43eaa6e834256ef1a776f8a723b5afdf1635d26c39bc64ffa3bcc1f",
+  "clean_checkout": "/tmp/p1098-clean",
+  "first_failure": "p634_historical_hash.unit: original P605 historical whole-header projection has no permitted new LOOP attachment",
+  "result": "stopped at 38/625, 37 PASS 1 historical-header FAIL; no semantic or safety gate waived",
+  "repair": "new P-owned exact projection of ONLY two private fields in their exact record position, with malformed-attachment counterexamples; run original P605/P634 unchanged including all original corrupt-header attacks/native arithmetic; original tests/oracle remain SHA-pinned",
+  "production_change": "none; original private CHECK/current consumer unchanged"
+}

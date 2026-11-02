@@ -275,7 +275,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p631/same_value_local.nl")
 
     add_test(NAME p634_historical_hash.unit
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p634/hash_gate_test.py"
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/historical_forward.py" p634
         "${CMAKE_CURRENT_SOURCE_DIR}")
     add_executable(p634_ended_root_gate tests/p634/ended_root_gate.c)
     target_link_libraries(p634_ended_root_gate PRIVATE newlang_checked_c_node newlang_semantic)
@@ -351,7 +351,7 @@ if(BUILD_TESTING)
     add_executable(p605_public_probe tests/p605/public_probe.c)
     target_link_libraries(p605_public_probe PRIVATE newlang_semantic)
     add_test(NAME p605_arithmetic_comparison.integration
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p605/integration_test.py"
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/historical_forward.py" p605
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p605_public_probe>"
         "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p605" "${NEWLANG_SANITIZER}")
     add_test(NAME p605_mutant_phase.unit
