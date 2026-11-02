@@ -158,6 +158,11 @@ static bool observe(const char *path, size_t index, size_t old, size_t next)
     MUTATE(const NLSource *, a.owner, source, b.spelling);
     MUTATE(const NLSemanticContext *, a.owner, context, b.context);
     MUTATE(const NLSemanticContext *, a.body, context, b.body->context);
+    MUTATE(NLCheckedNodeView *, a.root, nodes, NULL);
+    MUTATE(NLCheckedNodeView *, a.root, nodes, b.root->nodes);
+    MUTATE(size_t, a.root, count, a.root->count + 1);
+    MUTATE(size_t, a.root, root, a.root->root + 1);
+    MUTATE(const NLSource *, a.root, source, b.spelling);
     MUTATE(NLCheckedNodeView *, a.owner, nodes, NULL);
     MUTATE(NLCheckedNodeView *, a.body, nodes, NULL);
     MUTATE(size_t, a.owner, count, a.owner->count + 1);

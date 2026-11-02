@@ -2099,14 +2099,16 @@ static bool v1_copy_body(const NLCheckedFragment *f, V0Program *p,
 static bool v0_validate_call(const NLCheckedFragment *fragment,
                              NLCheckedNodeId id, V0Program *program)
 {
+    /* Authenticate retained root/body allocation bases before any call-node
+     * view access. The getter itself borrows canonical historical custody. */
+    const NLCheckedFragment *retained = nl_checked_call_body(fragment, id);
+    if (retained && retained->linear_breaks &&
+        nl_linear_break_owner_validate(retained) != NL_CHECK_OK)
+        return false;
     const NLCheckedNodeView *call = nl_checked_node_view(fragment, id);
     if (call == NULL || call->kind != NL_CHECKED_REGISTERED_CALL ||
         !call->body_backed || call->owner_call.definition.definition_checked ||
         call->terminates)
-        return false;
-    const NLCheckedFragment *retained = nl_checked_call_body(fragment, id);
-    if (retained && retained->linear_breaks &&
-        nl_linear_break_owner_validate(retained) != NL_CHECK_OK)
         return false;
     NLSymbolId parameter = 0;
     if (!v1_call_parameter(fragment, id, program, &parameter))
