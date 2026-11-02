@@ -1,0 +1,11 @@
+tests/p1088/provenance_test.c:148: !nl_checked_loop_break_provenance_valid(&shallow, id)
+P1088 REJECT foreign-state; union no-clobber
+P1088 REJECT null-state; union no-clobber
+P1088 REJECT foreign-target; union no-clobber
+P1088 REJECT coedited-target; union no-clobber
+P1088 REJECT foreign-owner; union no-clobber
+P1088 REJECT zero-node; union no-clobber
+P1088 REJECT wrong-kind; union no-clobber
+P1088 REJECT wrong-count; union no-clobber
+P1088 REJECT wrong-result; union no-clobber
+P1088 REJECT foreign-edge; union no-clobber

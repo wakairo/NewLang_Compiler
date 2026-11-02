@@ -22,6 +22,7 @@ struct NLControlState {
  * None of these identities authorizes caller-world result/current transfer. */
 typedef struct {
     const NLCheckedFragment *owner;
+    const NLCheckedFragment *parent;
     const NLSource *source;
     const NLSemanticContext *context;
     const NLCheckedNodeView *nodes;
@@ -352,9 +353,10 @@ nl_control_exit_append(NLControlExits **out, NLControlExitKind kind,
  * Do not let general append/union mint proof for a synthetic checked node. */
 NLCheckStatus nl_control_source_break_append(
     NLControlExits **out, NLControlTarget *target, const NLControlState *state,
-    NLCheckedResult value, const NLCheckedFragment *owner, NLCheckedNodeId node)
+    NLCheckedResult value, const NLCheckedFragment *owner, NLCheckedNodeId node,
+    const NLCheckedFragment *parent)
 {
-    if (!owner || !owner->source || !owner->context || !target ||
+    if (!owner || !parent || !owner->source || !owner->context || !target ||
         target->kind != NL_TARGET_LOOP || node != owner->count)
         return NL_CHECK_INTERNAL_ERROR;
     const NLCheckedNodeView *br = nl_checked_node_view(owner, node);
@@ -370,6 +372,7 @@ NLCheckStatus nl_control_source_break_append(
         (operand->result_count == 0 && (value.type != 1 || value.value != 0)))
         return NL_CHECK_INTERNAL_ERROR;
     SourceBreak issued = {.owner = owner,
+                          .parent = parent,
                           .source = owner->source,
                           .context = owner->context,
                           .nodes = owner->nodes,
@@ -455,6 +458,8 @@ bool nl_control_source_break_body_valid(const NLCheckedFragment *body,
 bool nl_checked_loop_break_provenance_valid(const NLCheckedFragment *f,
                                             NLCheckedNodeId loop)
 {
+    if (!f || !f->h_origin)
+        return false;
     const NLCheckedNodeView *node = nl_checked_node_view(f, loop);
     const NLCheckedFragment *body = nl_checked_loop_body(f, loop);
     if (!node || node->kind != NL_CHECKED_LOOP || node->argument_count != 0 ||
@@ -462,7 +467,8 @@ bool nl_checked_loop_break_provenance_valid(const NLCheckedFragment *f,
         node->terminates || !body || body->source != f->source)
         return false;
     const NLControlExitView *e = nl_control_exit_view(body->exits, 0);
-    return e && nl_control_source_break_body_valid(body, e->target);
+    return e && body->exits->edges[0].source.parent == f &&
+           nl_control_source_break_body_valid(body, e->target);
 }
 static NLCheckStatus outcome(const NLControlOutcome *a,
                              const NLControlOutcome *b, bool sequence,

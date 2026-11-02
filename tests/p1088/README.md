@@ -16,7 +16,7 @@ checked node and operand before issuing each owned edge. P6 remains mandatory.
 
 A separately frozen P negative also showed foreign same-layout exit-state
 substitution passing the old boolean. Private exit records now bind original
-source/body/context/node storage, operand/node seals, target, result and owned
+source/body/parent/context/node storage, operand/node seals, target, result and owned
 state. Union preserves this binding and rejects modified observations without
 publication. Destruction follows private state/target handles. The validator
 checks those identities before dereferencing challenged state/target pointers.
@@ -46,6 +46,9 @@ in the array. Its first build RED and pre-fix inputs are retained; explicit
 parentheses preserve the complete NewLang source bytes and all OOM oracles.
 The first local prospective-v18 candidate is archived before its forward
 mechanical update; failed commits and evidence are never overwritten.
+Self-review's unowned shallow-parent false acceptance is retained separately.
+The actual source-checking parent address is now a private issuance identity,
+including for nested loops; an observation cannot supply a new parent namespace.
 
 ## Forward history and evidence
 

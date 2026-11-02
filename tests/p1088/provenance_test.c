@@ -144,6 +144,8 @@ static bool authentic(void)
     CHECK(!nl_control_source_break_body_valid(&shallow, saved.target));
     shallow = *a.artifact;
     CHECK(!nl_checked_loop_break_provenance_valid(&shallow, id));
+    shallow.h_origin = NULL;
+    CHECK(!nl_checked_loop_break_provenance_valid(&shallow, id));
     NLCheckedArm arm_saved = a.artifact->arms[0];
     a.artifact->arms[0].artifact = (NLCheckedFragment *)other;
     CHECK(!nl_checked_loop_break_provenance_valid(a.artifact, id));

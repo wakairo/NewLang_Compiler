@@ -73,7 +73,8 @@ NLCheckStatus nl_control_exit_append(NLControlExits **, NLControlExitKind,
 NLCheckStatus
 nl_control_source_break_append(NLControlExits **, NLControlTarget *,
                                const NLControlState *, NLCheckedResult,
-                               const NLCheckedFragment *, NLCheckedNodeId);
+                               const NLCheckedFragment *, NLCheckedNodeId,
+                               const NLCheckedFragment *parent);
 /* Verifies one actual body-root block / one source-issued Break / one edge.
  * This is solely a provenance test; it does NOT validate memory-current or
  * grant an original/owner/result transfer to another semantic world. */

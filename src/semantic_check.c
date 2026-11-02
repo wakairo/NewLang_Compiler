@@ -13,7 +13,8 @@
 NLCheckStatus nl_allocated_prepare_layout(NLSemanticContext *, NLTypeId);
 
 typedef struct LoopControl {
-    struct LoopControl *parent; /* borrowed lexical target stack */
+    struct LoopControl *parent;             /* borrowed lexical target stack */
+    const NLCheckedFragment *source_parent; /* actual owning CHECK graph */
     NLControlTarget *target;
     NLControlState *entry;
     NLLoopHeader *header;
@@ -5049,9 +5050,9 @@ static NLCheckedNodeId source_control(Check *check, const NLSyntaxView *syntax)
             nl_control_state_destroy(post);
             return 0;
         }
-        status = nl_control_source_break_append(&check->artifact->exits,
-                                                loop->target, post, results[0],
-                                                check->artifact, control_node);
+        status = nl_control_source_break_append(
+            &check->artifact->exits, loop->target, post, results[0],
+            check->artifact, control_node, loop->source_parent);
     } else {
         status =
             nl_control_exit_append(&check->artifact->exits, NL_EXIT_CONTINUE,
@@ -5105,7 +5106,9 @@ static NLCheckedNodeId source_loop(Check *check, const NLSyntaxView *syntax)
         (void)host(check, NL_CHECK_RESOURCE_LIMIT, syntax->span);
         return 0;
     }
-    LoopControl loop = {.parent = check->loop, .count = count};
+    LoopControl loop = {.parent = check->loop,
+                        .source_parent = check->artifact,
+                        .count = count};
     char *names[NL_CONTROL_MAX_SLOTS] = {NULL};
     NLValueId slots[NL_CONTROL_MAX_SLOTS] = {0};
     NLCheckedFragment *body_artifact = NULL;
