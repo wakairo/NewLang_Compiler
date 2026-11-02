@@ -115,3 +115,29 @@ legacy native run stopped at linker ENOSPC; original RED is retained. After
 archiving completed ASan metadata/raw and generated-binary hashes, only
 reproducible completed ASan test executables were removed. The identical
 UBSan binaries retained104 passing tests and passed the remaining512.
+
+## Local receipt before publication
+
+Production semantic_check.c SHA256 is
+20f814f553cc7fd38217ea4ef601092ca3ae0db03d25428a23837223564be685.
+GCC Debug, Clang Debug, GCC Release and ASan/LSan each passed616/616.
+UBSan passed the same616 tests across the preserved104 original passes and
+512 resumed tests after resource repair. Final v11 new tests passed10/10 in
+each lane:12 actual pair positives and300 challenged rejections per lane,
+plus775 reached source-by-allocation-index OOM trials (396 bound,379 inline;
+malloc680/realloc83/calloc12,29 resolved allocation callers). Legacy P965
+494 ownership and502 reached OOM trials are separate unchanged regressions.
+
+The original05 after-A CHECK0 prediction remains unmet: its two ordinary
+struct declarations are rejected by the frontend before the loop. The initial
+source/oracle/FIRST remain unchanged; v2's explicit delta and new16 test the
+supported same-nominal second-original case. Do not call the original prediction
+PASS. Other unsupported legal source shapes remain listed in the frozen matrix.
+
+The outside-loop control's1393 generated-C bytes match main exactly
+(SHA256 ac1c289ed25b29254a07cf5eff7ed782403727d456debeb3a6bef00024c54fc0),
+and strict GCC/Clang O0/O2 native smoke exits0. This is not native LOOP or a
+new runtime identity proof. The inherited native/physical guest0/1/2 suite
+passed without emitter changes. See evidence/local-results-v1.json and the
+SHA-pinned compact local-validation-v1.zip for commands/configuration, full
+CTest receipts and detailed P1092 old/current/B/OOM observations.
