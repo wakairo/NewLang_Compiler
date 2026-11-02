@@ -676,6 +676,16 @@ if(BUILD_TESTING)
     foreach(workload RANGE 1 40)
         add_test(NAME p14_w${workload}.unit COMMAND loop_test ${workload})
     endforeach()
+    add_test(NAME m1085_source_break_provenance.unit COMMAND loop_test 41)
+
+    foreach(probe provenance_test oom_probe break_add_oom)
+        add_executable(p1088_${probe} tests/p1088/${probe}.c)
+        target_link_libraries(p1088_${probe} PRIVATE newlang_semantic newlang_parser)
+        target_link_options(p1088_${probe} PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
+        add_test(NAME p1088_${probe}.unit COMMAND p1088_${probe})
+    endforeach()
+    add_test(NAME p1088_evidence.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1088/evidence_test.py")
 
     add_executable(if_test tests/unit/if_test.c)
     target_link_libraries(if_test PRIVATE newlang_semantic newlang_parser)

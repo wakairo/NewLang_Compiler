@@ -1,0 +1,15 @@
+{
+  "authority": "C180 Issue1088; canonical Draft17.34 unchanged",
+  "parent": "75d9f7cb99349db5f52b9a9b4d13995543ffdc38",
+  "oom": "Every reached malloc/realloc failure in unchanged inherited seven-source p14_w40 corpus must return NL_CHECK_OUT_OF_MEMORY (4), null artifact, diagnostic, exact TestState no-clobber; injection-disabled same-context retry succeeds. Unexpected status remains RED after cleanup.",
+  "provenance": "Real source-owned direct single Break accepts; foreign source/body/target/graph, same numeric node in another body, modified kind/operand/result/span, duplicate edge/item, wrong lexical target, RETURN/CONTINUE or wrong scope reject without current/result/owner issuance.",
+  "effectful_P1081": "Original P1081 source 04_field_change_break.nl remains CHECK3/P6-JOIN-PRECISION.",
+  "history": "Original v1-v17 unchanged; v17 all2754 keys inherited by ASCII-stage v18. Unchanged P1062 render and Git-only/tamper/ambient tests must pass exactly.",
+  "scope": "No C17 loop, normal-exit current projection, new source law or public current/owner authority. Keep P6 and original strict OOM assertions.",
+  "diagnostic_parent": "The parent fails original w40. The diagnostic records actual first status/rollback and stops after cleanup/retry; a retry may itself reveal a deterministic parent provenance regression. All such outcomes remain RED.",
+  "parent_diagnosis": "Preserve parent unexpected INTERNAL=6 at t2,n357 where no allocation failed; retry INTERNAL=6. Preserve earlier v1 retry RED and foreign-state false acceptance.",
+  "oom_extra_source": "loop(){let a0=x;let a1=y;let a2=x;let a3=y;let a4=x;let a5=y;let a6=x;break y;}",
+  "oom_extra_purpose": "Old t7 grows at identifier17; its real Break is24, confirmed with a genuine published view. Original mistaken annotation stays historical.",
+  "break_add_source": "loop(){let a0=x;let a1=y;let a2=x;let a3=y;unit;break y;}",
+  "break_add_expected": "Actual source-issued body and Break node17; public provenance TRUE. Node-add realloc32-capacity and edge append OOM, strict status4/null artifact/no-clobber/diagnostic and genuine-provenance same-context retry, all under original acceptance rules."
+}

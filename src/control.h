@@ -52,6 +52,15 @@ typedef struct {
     const NLControlState *state;   /* borrowed owned post-state */
     size_t count;
     NLCheckedResult values[NL_CONTROL_MAX_SLOTS]; /* IDs belong ONLY to state */
+    /* C178: only actual source_control-issued Break edges have this link.
+     * Borrowed source owner lifetime is held by the enclosing checked body.
+     * Private exit records seal these observations and own state/target;
+     * challenged views never select destruction or reissue through union.
+     * Seals authenticate graph provenance, NOT memory/current/owner authority.
+     * Generic/Continue/Return edges have source_owner == NULL. */
+    const NLCheckedFragment *source_owner;
+    NLCheckedNodeId source_node;
+    const NLControlTarget *source_target;
 } NLControlExitView;
 /* Append clones post-state and retains target; atomic on every failure.
  * Set union is a finite IF/MATCH alternative composition, never a chosen arm.
@@ -60,6 +69,17 @@ typedef struct {
 NLCheckStatus nl_control_exit_append(NLControlExits **, NLControlExitKind,
                                      NLControlTarget *, const NLControlState *,
                                      const NLCheckedResult *, size_t);
+/* C178: source-checker-only producer, never an external edge issuer. */
+NLCheckStatus
+nl_control_source_break_append(NLControlExits **, NLControlTarget *,
+                               const NLControlState *, NLCheckedResult,
+                               const NLCheckedFragment *, NLCheckedNodeId,
+                               const NLCheckedFragment *parent);
+/* Verifies one actual body-root block / one source-issued Break / one edge.
+ * This is solely a provenance test; it does NOT validate memory-current or
+ * grant an original/owner/result transfer to another semantic world. */
+bool nl_control_source_break_body_valid(const NLCheckedFragment *,
+                                        const NLControlTarget *);
 NLCheckStatus nl_control_exits_union(NLControlExits **, const NLControlExits *);
 size_t nl_control_exits_count(const NLControlExits *);
 const NLControlExitView *nl_control_exit_view(const NLControlExits *, size_t);

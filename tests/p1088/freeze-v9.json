@@ -1,0 +1,14 @@
+{
+  "phase": "C180 candidate3 before execution: source-check parent identity, reject unowned/shallow parent; all prior REDs retained",
+  "parent": "67d832eca376d0934da36a95464987cbe45d3580",
+  "files": {
+    "CMakeLists.txt": "5858da9c1e84a3e3ba4ec9fc2ae894f717d789da35437d7da0ab88fc93bb8321",
+    "src/control.c": "8388907a27e4dbe754c2c51b3fc2e4ab0c663540127fde201d4626518bdce5a0",
+    "src/control.h": "b2b8963744fd8eb029ebc12d5eb51785a14eb4ae68c219d78f0c1fb61d8673d2",
+    "src/semantic_check.c": "c19abf62d3b92c9c7441d5dfac48ea98491147f0d9ea3371704a362e60c4664d",
+    "tests/p1088/oom_probe.c": "b3a9b9207548fc0be1b6c339d268a80c861750e1046d50e640c27adab7efb9f1",
+    "tests/p1088/provenance_test.c": "2628054878134070d98fcf32cfdac521cf1443c4e54f144a9d0fb136a902a06f",
+    "tests/p1088/evidence_test.py": "79b01cc9e6c7c7606bc52fd0c0345cf3999453a1010f092d9e4844b083497b3f",
+    "tests/p1088/oracle-v3.json": "2ecbc8c9e5e2a67fc31880d995c3e0bb23ccdf30eac201644f3ddb6815c8fc9a"
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "note": "Exact decoded tool response bytes. Earlier saved original-m-ci.zip has one transport-added EOF newline per log and remains preserved by its reported SHA. GitHub originals unchanged.",
+  "files": {
+    "125035775563": {
+      "sha256": "a7eba9642e7f9a4928b71d6174693aba400e5ce8b0bab786565378aefb6c7ba8",
+      "bytes": 1557974,
+      "decoded_characters": 1557972
+    },
+    "125035775819": {
+      "sha256": "07c993544eec858786da80554153f1198de6007b6492d1a333fba2af177acf2b",
+      "bytes": 1537810,
+      "decoded_characters": 1537808
+    },
+    "125035775860": {
+      "sha256": "95e5f344b954a3fcf57e568306df3565e8a14ff05b0a53d603bbc0bbc9b8c9b3",
+      "bytes": 1537836,
+      "decoded_characters": 1537834
+    },
+    "125035775894": {
+      "sha256": "cbaa4bb88515a2d7ab08cd234fe3ce69a1c5690b8022a521124c0333bde17e5f",
+      "bytes": 54431,
+      "decoded_characters": 54429
+    },
+    "125035775989": {
+      "sha256": "109f1f568593943c63ebb477f44583464a76209f10d602e0211327e4f64c05a3",
+      "bytes": 1620000,
+      "decoded_characters": 1619998
+    },
+    "125035775384": {
+      "sha256": "b348a50e707cf12b70e79cf3303597fe2253c13c309db494a222879553be5d46",
+      "bytes": 1572258,
+      "decoded_characters": 1572256
+    },
+    "125038677922": {
+      "sha256": "8409a8b440621ec96e8acf85a2e9c1dddf81a8d6a028cef1c44689e71a4eb772",
+      "bytes": 286306,
+      "decoded_characters": 286304
+    },
+    "125038678208": {
+      "sha256": "6ff6de153c19b30851aed6b4b3e31c4266d929c3bdb7a4be3e57462ff31ffdac",
+      "bytes": 348701,
+      "decoded_characters": 348699
+    },
+    "125038678225": {
+      "sha256": "f4812d4eb8e4a2b867518b2fe9c4220f1193df485d619a99d64dc96920b40141",
+      "bytes": 285336,
+      "decoded_characters": 285334
+    },
+    "125038678493": {
+      "sha256": "02690a6511cc3e96acc42ff6433f27259460ee6ac835148710bb40223a79fbb5",
+      "bytes": 285454,
+      "decoded_characters": 285452
+    },
+    "125038678503": {
+      "sha256": "5aaf7694d322587c31f57907c49286080740b76b073af42f8f94f1e6309cde6b",
+      "bytes": 288301,
+      "decoded_characters": 288299
+    },
+    "125038678054": {
+      "sha256": "e0a9f3edeaa3847798cf376db05165ffb7a6ac562e523d652a5befa6effe6c03",
+      "bytes": 320288,
+      "decoded_characters": 320286
+    }
+  }
+}

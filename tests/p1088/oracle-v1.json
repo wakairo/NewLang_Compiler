@@ -1,0 +1,9 @@
+{
+  "authority": "C180 Issue1088; canonical Draft17.34 unchanged",
+  "parent": "75d9f7cb99349db5f52b9a9b4d13995543ffdc38",
+  "oom": "Every reached malloc/realloc failure in unchanged inherited seven-source p14_w40 corpus must return NL_CHECK_OUT_OF_MEMORY (2), null artifact, diagnostic, exact TestState no-clobber; injection-disabled same-context retry succeeds. Unexpected status remains RED after cleanup.",
+  "provenance": "Real source-owned direct single Break accepts; foreign source/body/target/graph, same numeric node in another body, modified kind/operand/result/span, duplicate edge/item, wrong lexical target, RETURN/CONTINUE or wrong scope reject without current/result/owner issuance.",
+  "effectful_P1081": "Original P1081 source 04_field_change_break.nl remains CHECK3/P6-JOIN-PRECISION.",
+  "history": "Original v1-v17 unchanged; v17 all2754 keys inherited by ASCII-stage v18. Unchanged P1062 render and Git-only/tamper/ambient tests must pass exactly.",
+  "scope": "No C17 loop, normal-exit current projection, new source law or public current/owner authority. Keep P6 and original strict OOM assertions."
+}

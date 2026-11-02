@@ -1,0 +1,8 @@
+{
+  "phase": "C180 exact Break-add probe v11 before execution; fix C harness array slicing, no NewLang source/oracle change",
+  "production_head": "54204f17cd4747f700787d0b98ec177f1bb9d4af",
+  "files": {
+    "tests/p1088/break_add_oom.c": "40946439881e8e22ac9e6452568d56a8d205b2cfca3191ebf576a0208589a042",
+    "tests/p1088/oracle-v4.json": "c393eb781bb7721c781897e20a8dcc2283d0f3365206cdff281cc12d5fbe9bd6"
+  }
+}

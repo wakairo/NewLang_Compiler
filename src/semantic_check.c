@@ -13,7 +13,8 @@
 NLCheckStatus nl_allocated_prepare_layout(NLSemanticContext *, NLTypeId);
 
 typedef struct LoopControl {
-    struct LoopControl *parent; /* borrowed lexical target stack */
+    struct LoopControl *parent;             /* borrowed lexical target stack */
+    const NLCheckedFragment *source_parent; /* actual owning CHECK graph */
     NLControlTarget *target;
     NLControlState *entry;
     NLLoopHeader *header;
@@ -5037,20 +5038,37 @@ static NLCheckedNodeId source_control(Check *check, const NLSyntaxView *syntax)
              "edge");
         return 0;
     }
-    status = nl_control_exit_append(
-        &check->artifact->exits, continuing ? NL_EXIT_CONTINUE : NL_EXIT_BREAK,
-        loop->target, post, results, count);
+    /* Bind the real Break node before the owned exit is published.
+     * On add/append failure the enclosing CHECK clone is destroyed intact. */
+    NLCheckedNodeId control_node = 0;
+    if (!continuing) {
+        control_node = add(check, (NLCheckedNodeView){.kind = NL_CHECKED_BREAK,
+                                                      .span = syntax->span,
+                                                      .initializer = first,
+                                                      .terminates = true});
+        if (control_node == 0) {
+            nl_control_state_destroy(post);
+            return 0;
+        }
+        status = nl_control_source_break_append(
+            &check->artifact->exits, loop->target, post, results[0],
+            check->artifact, control_node, loop->source_parent);
+    } else {
+        status =
+            nl_control_exit_append(&check->artifact->exits, NL_EXIT_CONTINUE,
+                                   loop->target, post, results, count);
+    }
     nl_control_state_destroy(post);
     if (!host(check, status, syntax->span))
         return 0;
     check->terminated = true;
     check->returned = (NLCheckedResult){0};
-    return add(check,
-               (NLCheckedNodeView){.kind = continuing ? NL_CHECKED_CONTINUE
-                                                      : NL_CHECKED_BREAK,
-                                   .span = syntax->span,
-                                   .initializer = first,
-                                   .terminates = true});
+    return continuing
+               ? add(check, (NLCheckedNodeView){.kind = NL_CHECKED_CONTINUE,
+                                                .span = syntax->span,
+                                                .initializer = first,
+                                                .terminates = true})
+               : control_node;
 }
 
 static bool loop_return_frame(Check *check, const LoopControl *loop,
@@ -5088,7 +5106,9 @@ static NLCheckedNodeId source_loop(Check *check, const NLSyntaxView *syntax)
         (void)host(check, NL_CHECK_RESOURCE_LIMIT, syntax->span);
         return 0;
     }
-    LoopControl loop = {.parent = check->loop, .count = count};
+    LoopControl loop = {.parent = check->loop,
+                        .source_parent = check->artifact,
+                        .count = count};
     char *names[NL_CONTROL_MAX_SLOTS] = {NULL};
     NLValueId slots[NL_CONTROL_MAX_SLOTS] = {0};
     NLCheckedFragment *body_artifact = NULL;
@@ -5250,7 +5270,8 @@ static NLCheckedNodeId source_loop(Check *check, const NLSyntaxView *syntax)
                                         .header_inductive = true,
                                         .continue_edges = continues,
                                         .break_edges = breaks,
-                                        .return_edges = returns});
+                                        .return_edges = returns,
+                                        .argument_count = count});
     if (id == 0)
         goto cleanup;
     if (breaks == 0) {
@@ -5422,6 +5443,10 @@ static NLCheckedNodeId source_loop(Check *check, const NLSyntaxView *syntax)
         view(check, id)->result_count = value == 0 ? 0 : 1;
         view(check, id)->results[0] = (NLCheckedResult){type, value};
     }
+    /* The source-specific append already authenticated each Break producer.
+     * The public provenance observer selects a narrower graph cohort; its
+     * refusal (e.g. nested loops) must not reject otherwise valid source.
+     * P6's normal-current frame checks above remain mandatory. */
     if (!save_arm(check, id, body_artifact, syntax->span))
         goto cleanup;
     body_artifact = NULL;

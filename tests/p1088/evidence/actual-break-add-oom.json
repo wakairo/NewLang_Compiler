@@ -1,0 +1,54 @@
+{
+  "production": "54204f17cd4747f700787d0b98ec177f1bb9d4af",
+  "graph_actual_body_and_break_node": 17,
+  "public_provenance_each_retry": true,
+  "reached": 221,
+  "OOM_status4_null_artifact_no_clobber_retry": true,
+  "sites": [
+    {
+      "t": "0",
+      "n": "127",
+      "kind": "r",
+      "bytes": "27648",
+      "pc": "0x48e324",
+      "status": "4",
+      "site": "nl_checked_add\n/tmp/p1088-clean/src/checked.c:16"
+    },
+    {
+      "t": "0",
+      "n": "184",
+      "kind": "r",
+      "bytes": "55296",
+      "pc": "0x48e324",
+      "status": "4",
+      "site": "nl_checked_add\n/tmp/p1088-clean/src/checked.c:16"
+    },
+    {
+      "t": "0",
+      "n": "216",
+      "kind": "m",
+      "bytes": "16",
+      "pc": "0x469e91",
+      "status": "4",
+      "site": "append\n/tmp/p1088-clean/src/control.c:281"
+    },
+    {
+      "t": "0",
+      "n": "217",
+      "kind": "r",
+      "bytes": "3848",
+      "pc": "0x469edb",
+      "status": "4",
+      "site": "append\n/tmp/p1088-clean/src/control.c:287 (discriminator 1)"
+    },
+    {
+      "t": "0",
+      "n": "218",
+      "kind": "r",
+      "bytes": "27648",
+      "pc": "0x48e324",
+      "status": "4",
+      "site": "nl_checked_add\n/tmp/p1088-clean/src/checked.c:16"
+    }
+  ]
+}

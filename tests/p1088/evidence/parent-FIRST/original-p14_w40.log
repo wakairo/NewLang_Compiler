@@ -1,0 +1,14 @@
+Internal ctest changing into directory: /tmp/p1088-gcc
+Test project /tmp/p1088-gcc
+    Start 223: p14_w40.unit
+1/1 Test #223: p14_w40.unit .....................***Failed    0.03 sec
+/tmp/p1088/tests/unit/loop_test.c:573: status == NL_CHECK_OUT_OF_MEMORY && a == NULL
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.04 sec
+
+The following tests FAILED:
+	223 - p14_w40.unit (Failed)
+Errors while running CTest

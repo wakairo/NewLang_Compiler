@@ -1,0 +1,9 @@
+{
+  "phase": "C180 diagnostic v1 before first probe execution",
+  "parent": "75d9f7cb99349db5f52b9a9b4d13995543ffdc38",
+  "files": {
+    "tests/p1088/oom_probe.c": "434453c71d78b1a2f7d6277c4a136f6a2fcc0403be655207a38db435e28a6efc",
+    "tests/p1088/oracle-v1.json": "e51ee21996224107161a8fd5b410504d369d5eaa0e7414b24c37592c2ce69e0e",
+    "tests/unit/loop_test.c": "33e25995b0591d447fc7125e2f1966bbca6680d8a3b693d4099d0f6a78f86132"
+  }
+}

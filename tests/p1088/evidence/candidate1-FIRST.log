@@ -1,0 +1,119 @@
+Internal ctest changing into directory: /tmp/p1088-gcc
+Test project /tmp/p1088-gcc
+      Start 179: p14_pre_exits.unit
+ 1/48 Test #179: p14_pre_exits.unit ...................   Passed    0.00 sec
+      Start 180: p14_pre_header.unit
+ 2/48 Test #180: p14_pre_header.unit ..................   Passed    0.00 sec
+      Start 181: p14_pre_origins.unit
+ 3/48 Test #181: p14_pre_origins.unit .................   Passed    0.00 sec
+      Start 182: p14_pre_failure.unit
+ 4/48 Test #182: p14_pre_failure.unit .................   Passed    0.00 sec
+      Start 183: p14_pre_integration.unit
+ 5/48 Test #183: p14_pre_integration.unit .............   Passed    0.00 sec
+      Start 184: p14_w1.unit
+ 6/48 Test #184: p14_w1.unit ..........................   Passed    0.00 sec
+      Start 185: p14_w2.unit
+ 7/48 Test #185: p14_w2.unit ..........................   Passed    0.00 sec
+      Start 186: p14_w3.unit
+ 8/48 Test #186: p14_w3.unit ..........................   Passed    0.00 sec
+      Start 187: p14_w4.unit
+ 9/48 Test #187: p14_w4.unit ..........................   Passed    0.00 sec
+      Start 188: p14_w5.unit
+10/48 Test #188: p14_w5.unit ..........................   Passed    0.00 sec
+      Start 189: p14_w6.unit
+11/48 Test #189: p14_w6.unit ..........................   Passed    0.00 sec
+      Start 190: p14_w7.unit
+12/48 Test #190: p14_w7.unit ..........................   Passed    0.00 sec
+      Start 191: p14_w8.unit
+13/48 Test #191: p14_w8.unit ..........................   Passed    0.00 sec
+      Start 192: p14_w9.unit
+14/48 Test #192: p14_w9.unit ..........................   Passed    0.00 sec
+      Start 193: p14_w10.unit
+15/48 Test #193: p14_w10.unit .........................   Passed    0.00 sec
+      Start 194: p14_w11.unit
+16/48 Test #194: p14_w11.unit .........................   Passed    0.00 sec
+      Start 195: p14_w12.unit
+17/48 Test #195: p14_w12.unit .........................   Passed    0.00 sec
+      Start 196: p14_w13.unit
+18/48 Test #196: p14_w13.unit .........................   Passed    0.00 sec
+      Start 197: p14_w14.unit
+19/48 Test #197: p14_w14.unit .........................   Passed    0.00 sec
+      Start 198: p14_w15.unit
+20/48 Test #198: p14_w15.unit .........................   Passed    0.00 sec
+      Start 199: p14_w16.unit
+21/48 Test #199: p14_w16.unit .........................   Passed    0.00 sec
+      Start 200: p14_w17.unit
+22/48 Test #200: p14_w17.unit .........................   Passed    0.00 sec
+      Start 201: p14_w18.unit
+23/48 Test #201: p14_w18.unit .........................   Passed    0.00 sec
+      Start 202: p14_w19.unit
+24/48 Test #202: p14_w19.unit .........................   Passed    0.00 sec
+      Start 203: p14_w20.unit
+25/48 Test #203: p14_w20.unit .........................   Passed    0.00 sec
+      Start 204: p14_w21.unit
+26/48 Test #204: p14_w21.unit .........................   Passed    0.00 sec
+      Start 205: p14_w22.unit
+27/48 Test #205: p14_w22.unit .........................   Passed    0.00 sec
+      Start 206: p14_w23.unit
+28/48 Test #206: p14_w23.unit .........................   Passed    0.00 sec
+      Start 207: p14_w24.unit
+29/48 Test #207: p14_w24.unit .........................   Passed    0.01 sec
+      Start 208: p14_w25.unit
+30/48 Test #208: p14_w25.unit .........................   Passed    0.00 sec
+      Start 209: p14_w26.unit
+31/48 Test #209: p14_w26.unit .........................   Passed    0.00 sec
+      Start 210: p14_w27.unit
+32/48 Test #210: p14_w27.unit .........................   Passed    0.00 sec
+      Start 211: p14_w28.unit
+33/48 Test #211: p14_w28.unit .........................   Passed    0.00 sec
+      Start 212: p14_w29.unit
+34/48 Test #212: p14_w29.unit .........................   Passed    0.00 sec
+      Start 213: p14_w30.unit
+35/48 Test #213: p14_w30.unit .........................   Passed    0.00 sec
+      Start 214: p14_w31.unit
+36/48 Test #214: p14_w31.unit .........................   Passed    0.00 sec
+      Start 215: p14_w32.unit
+37/48 Test #215: p14_w32.unit .........................   Passed    0.00 sec
+      Start 216: p14_w33.unit
+38/48 Test #216: p14_w33.unit .........................   Passed    0.00 sec
+      Start 217: p14_w34.unit
+39/48 Test #217: p14_w34.unit .........................   Passed    0.00 sec
+      Start 218: p14_w35.unit
+40/48 Test #218: p14_w35.unit .........................   Passed    0.00 sec
+      Start 219: p14_w36.unit
+41/48 Test #219: p14_w36.unit .........................   Passed    0.00 sec
+      Start 220: p14_w37.unit
+42/48 Test #220: p14_w37.unit .........................   Passed    0.00 sec
+      Start 221: p14_w38.unit
+43/48 Test #221: p14_w38.unit .........................   Passed    0.00 sec
+      Start 222: p14_w39.unit
+44/48 Test #222: p14_w39.unit .........................   Passed    0.00 sec
+      Start 223: p14_w40.unit
+45/48 Test #223: p14_w40.unit .........................   Passed    0.08 sec
+      Start 224: m1085_source_break_provenance.unit
+46/48 Test #224: m1085_source_break_provenance.unit ...   Passed    0.00 sec
+      Start 225: p1088_provenance_test.unit
+47/48 Test #225: p1088_provenance_test.unit ...........***Failed    0.00 sec
+/tmp/p1088/tests/p1088/../unit/../support/semantic_check.h:64: test_parse(entry)(parser, &syntax, NULL) == NL_PARSE_OK
+/tmp/p1088/tests/p1088/../unit/../support/semantic_check.h:337: test_run(context, text, entry, status, code, &checked)
+/tmp/p1088/tests/p1088/provenance_test.c:207: rejected(&cases, "break x;", NL_CHECK_SEMANTIC_ERROR, "P14-CONTROL-CONTEXT")
+P1088 REJECT foreign-state; union no-clobber
+P1088 REJECT null-state; union no-clobber
+P1088 REJECT foreign-target; union no-clobber
+P1088 REJECT coedited-target; union no-clobber
+P1088 REJECT foreign-owner; union no-clobber
+P1088 REJECT zero-node; union no-clobber
+P1088 REJECT wrong-kind; union no-clobber
+P1088 REJECT wrong-count; union no-clobber
+P1088 REJECT wrong-result; union no-clobber
+P1088 REJECT foreign-edge; union no-clobber
+P1088 A destroyed with foreign view; genuine B alive
+
+
+98% tests passed, 1 tests failed out of 47
+
+Total Test time (real) =   0.17 sec
+
+The following tests FAILED:
+	225 - p1088_provenance_test.unit (Failed)
+Errors while running CTest

@@ -1,0 +1,14 @@
+{
+  "phase": "C180 final candidate pre-run: private byte-array seals explicitly preserve padding across copy/union",
+  "parent": "75d9f7cb99349db5f52b9a9b4d13995543ffdc38",
+  "files": {
+    "CMakeLists.txt": "5858da9c1e84a3e3ba4ec9fc2ae894f717d789da35437d7da0ab88fc93bb8321",
+    "src/control.c": "0578661ae3745959bef6cfe797d02f061672f487c1ab84e19656c8bd9a82e736",
+    "src/control.h": "c1d2b8a0aa65cf73273afc11a02cb8ee8565f39536f84ca863fcc0932d3eae05",
+    "src/semantic_check.c": "594c7e3fe23bda6ed579a9bee09297d0e9fb0826161e4727860acc32843245e4",
+    "tests/p1088/oom_probe.c": "2e0c3d48a51be857854b2ff7fa268c3ae12a1651d1a7b299b3396dbc0ed0a661",
+    "tests/p1088/provenance_test.c": "90931c97894b6971780573b69957b221eb7f3494983313cafa233a4f7ce2e139",
+    "tests/p1088/evidence_test.py": "8faba3455398477d9939307ded07ed226461ee31a338cee65f8797888c5652f4",
+    "tests/p1088/oracle-v3.json": "2ecbc8c9e5e2a67fc31880d995c3e0bb23ccdf30eac201644f3ddb6815c8fc9a"
+  }
+}
