@@ -171,6 +171,20 @@ NLCheckStatus __wrap_nl_control_source_break_append(
         post->bindings[ambient_owner - 1].view.availability = NL_CONSUMED;
         break;
     }
+    case 23:
+        if (nl_control_exit_append(out, NL_EXIT_BREAK, target, state, &value,
+                                   1) != NL_CHECK_OK)
+            observed_ok = false;
+        break;
+    case 24:
+        nl_control_exits_destroy(*out);
+        *out = NULL;
+        break;
+    case 25:
+        ((NLCheckedNodeView *)nl_checked_node_view(
+             owner, owner->nodes[node - 1].initializer))
+            ->symbol = op->field.base;
+        break;
     }
     return status;
 }
@@ -255,7 +269,7 @@ static bool observe(const char *path)
     foreign_parent = parent;
     CHECK(foreign_body && nl_checked_loop_break_provenance_valid(parent, loop));
     foreign_edge = nl_control_exit_view(foreign_body->exits, 0);
-    for (fault = 0; fault <= 22; ++fault) {
+    for (fault = 0; fault <= 25; ++fault) {
         NLSemanticContext *c = NULL;
         CHECK(nl_sem_clone(a.context, &c) == NL_CHECK_OK);
         TestState before;
