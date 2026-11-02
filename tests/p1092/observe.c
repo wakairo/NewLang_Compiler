@@ -352,6 +352,7 @@ void *__wrap_realloc(void *p, size_t n)
 }
 static bool oom(const char *path)
 {
+    observed_ok = true;
     Input input = {0};
     CHECK(input_create(path, &input));
     for (fail_at = 0; fail_at < 20000; ++fail_at) {
@@ -375,7 +376,7 @@ static bool oom(const char *path)
             nl_semantic_check_expression(c, input.entry, &candidate, &d);
         injecting = false;
         if (!kind) {
-            bool ok = status == NL_CHECK_OK && candidate &&
+            bool ok = observed_ok && status == NL_CHECK_OK && candidate &&
                       nl_checked_loop_break_provenance_valid(parent, loop);
             nl_checked_destroy(candidate);
             nl_checked_destroy(prior);
@@ -385,8 +386,9 @@ static bool oom(const char *path)
                    status, ok);
             return ok;
         }
-        bool ok = status == NL_CHECK_OUT_OF_MEMORY && !candidate &&
-                  d.diagnostic.code && test_unchanged(c, &before) &&
+        bool ok = observed_ok && status == NL_CHECK_OUT_OF_MEMORY &&
+                  !candidate && d.diagnostic.code &&
+                  test_unchanged(c, &before) &&
                   nl_checked_loop_break_provenance_valid(parent, loop);
         printf(
             "P1092 OOM n=%zu kind=%c bytes=%zu pc=%p status=%d rollback=%d\n",

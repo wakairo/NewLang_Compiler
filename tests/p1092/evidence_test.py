@@ -6,7 +6,7 @@ import zipfile
 
 root = Path(__file__).resolve().parents[2]
 data = root / "tests/p1092"
-for version in range(1, 9):
+for version in range(1, 10):
     frozen = json.loads((data / f"harness-freeze-v{version}.json").read_bytes())["files"]
     with zipfile.ZipFile(data / f"evidence/harness-v{version}-inputs.zip") as archive:
         assert set(archive.namelist()) == set(frozen)
