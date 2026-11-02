@@ -113,144 +113,137 @@ static bool rejected(Input *i, const char *name)
 }
 #define MUTATE(type, object, member, value)                                    \
     do {                                                                       \
-        type saved = (object)->member;
-REQUIRE(saved != (value));
-(object)->member = (value);
-bool refused = rejected(&a, #object "." #member);
-(object)->member = saved;
-REQUIRE(refused);
-}
-while (0)
-    /* All mutations stay inside live allocations; the consumer authenticates
-     * bases/counts before dereferencing any challenged view. */
-    static bool observe(const char *path, size_t index, size_t old, size_t next)
-    {
-        Input a = {0}, b = {0};
-        REQUIRE(prepare(path, &a));
-        REQUIRE(nl_sem_clone(a.context, &b.context) == NL_CHECK_OK &&
-                entry(&b));
-        REQUIRE(checked(&a) && checked(&b));
-        REQUIRE(positive(&a, index, old, next) &&
-                positive(&b, index, old, next));
-        REQUIRE(a.owner->source == b.owner->source &&
-                a.owner->body_owner == b.owner->body_owner);
-        NLCheckedNodeView *loop = &a.owner->nodes[a.loop - 1], *op = NULL;
-        for (size_t n = 0; n < a.body->count; ++n)
-            if (a.body->nodes[n].kind == NL_CHECKED_REPLACE)
-                op = &a.body->nodes[n];
-        REQUIRE(op);
-        const NLCheckedNodeView *ref =
-            nl_checked_node_view(a.body, op->first_argument);
-        const NLCheckedNodeView *incoming =
-            nl_checked_node_view(a.body, ref->next_argument);
-        MUTATE(size_t, loop, results[0].value, incoming->results[0].value);
-        MUTATE(size_t, loop, results[0].type, 1);
-        MUTATE(size_t, loop, break_edges, 2);
-        MUTATE(size_t, loop, continue_edges, 1);
-        MUTATE(bool, loop, header_inductive, false);
-        MUTATE(size_t, op, field.parent_post_fact, op->field.parent_fact);
-        MUTATE(size_t, op, field.child_post_fact, op->field.child_fact);
-        MUTATE(size_t, op, field.new_value, op->field.old_value);
-        MUTATE(size_t, op, field.index, 1 - index);
-        MUTATE(size_t, op, field.parent_incarnation,
-               op->field.parent_incarnation + 1);
-        MUTATE(size_t, op, field.child_incarnation,
-               op->field.child_incarnation + 1);
-        MUTATE(bool, op, field.dependency_compatible, false);
-        MUTATE(const NLSource *, a.owner, source, b.spelling);
-        MUTATE(const NLSemanticContext *, a.owner, context, b.context);
-        MUTATE(const NLSemanticContext *, a.body, context, b.body->context);
-        MUTATE(NLCheckedNodeView *, a.owner, nodes, NULL);
-        MUTATE(NLCheckedNodeView *, a.body, nodes, NULL);
-        MUTATE(size_t, a.owner, count, a.owner->count + 1);
-        MUTATE(size_t, a.body, count, a.body->count + 1);
-        MUTATE(size_t, a.owner, arm_count, 0);
-        MUTATE(size_t, a.owner, arm_count, a.owner->arm_count + 1);
-        MUTATE(size_t, a.root, body_count, 0);
-        MUTATE(size_t, a.root, body_count, a.root->body_count + 1);
-        const size_t function = a.root->nodes[a.root->root - 1].function;
-        NLFunctionEntry *fn = &a.context->functions[function - 1];
-        MUTATE(size_t, fn, result,
-               nl_semantic_core_type(a.context, NL_TYPE_U8));
-        MUTATE(NLCheckedKind, fn, kind, NL_CHECKED_REPLACE);
-        MUTATE(bool, fn, caller_effects, true);
-        MUTATE(bool, fn, hidden_dependencies, true);
-        MUTATE(bool, fn, owner_receiver, true);
-        MUTATE(bool, fn, owner_producer, true);
-        MUTATE(bool, fn, custody_recipient, true);
-        MUTATE(size_t, fn, count, 1);
-        MUTATE(NLSyntaxTree *, fn->body, syntax, b.tree);
-        MUTATE(NLSource *, fn->body, source, b.spelling);
-        MUTATE(size_t, fn->body, count, 1);
-        MUTATE(const char *, fn, name, "changed-current-registration");
-        NLControlExitView *edge =
-            (NLControlExitView *)nl_control_exit_view(a.body->exits, 0);
-        const NLControlExitView *foreign =
-            nl_control_exit_view(b.body->exits, 0);
-        REQUIRE(edge && foreign && edge->state != foreign->state &&
-                edge->target != foreign->target);
-        REQUIRE(edge->values[0].value == foreign->values[0].value);
-        MUTATE(const NLControlState *, edge, state, foreign->state);
-        MUTATE(const NLControlTarget *, edge, target, foreign->target);
-        MUTATE(const NLControlTarget *, edge, source_target,
-               foreign->source_target);
-        MUTATE(const NLCheckedFragment *, edge, source_owner, b.body);
-        MUTATE(size_t, edge, values[0].value, incoming->results[0].value);
-        MUTATE(size_t, edge, source_node, edge->source_node - 1);
-        NLSemanticContext *exit_context =
-            nl_control_state_context((NLControlState *)edge->state);
-        MUTATE(NLSemanticValueView *, exit_context, values, NULL);
-        MUTATE(NLSemanticPlaceView *, exit_context, places, NULL);
-        if (exit_context->scope_count) {
-            MUTATE(NLSemanticScopeView *, exit_context, scopes, NULL);
-        } else {
-            REQUIRE(!exit_context->scopes);
-            MUTATE(size_t, exit_context, scope_count, 1);
-        }
-        MUTATE(NLTypeEntry *, exit_context, types, NULL);
-        MUTATE(size_t, exit_context, last_value_fact,
-               exit_context->last_value_fact + 1);
-        NLSemanticValueView *exit_value =
-            &exit_context->values[edge->values[0].value - 1];
-        MUTATE(size_t, exit_value, scalar_value, old ^ 1);
-        MUTATE(NLFunctionEntry *, a.context, functions, NULL);
-        MUTATE(size_t, a.context, function_count, 0);
-        MUTATE(NLSemanticValueView *, a.context, values, NULL);
-        MUTATE(NLSemanticPlaceView *, a.context, places, NULL);
-        MUTATE(NLSemanticScopeView *, a.context, scopes, NULL);
-        MUTATE(NLTypeEntry *, a.context, types, NULL);
-        MUTATE(size_t, a.context, last_value_fact,
-               a.context->last_value_fact + 1);
-        MUTATE(size_t, a.context, last_incarnation,
-               a.context->last_incarnation + 1);
-        NLSemanticContext *body_context = (NLSemanticContext *)a.body->context;
-        MUTATE(NLSemanticValueView *, body_context, values, NULL);
-        MUTATE(size_t, body_context, last_value_fact,
-               body_context->last_value_fact + 1);
-        NLCheckedFragment shallow = *a.owner;
-        NLLinearBreakView view = {0};
-        REQUIRE(nl_linear_break_validate(&shallow, a.loop, &view) ==
-                NL_CHECK_ANALYSIS_PRECISION_LIMIT);
-        puts("P1098 shallow same-source/world borrowed replay refused as "
-             "authority");
-        REQUIRE(positive(&a, index, old, next));
-        size_t slot = 0;
-        while (slot < a.owner->arm_count && a.owner->arms[slot].match != a.loop)
-            ++slot;
-        REQUIRE(slot < a.owner->arm_count);
-        a.owner->arms[slot].artifact = b.body; /* genuine B, never restored */
-        REQUIRE(rejected(&a, "genuine A/B whole body exchange"));
-        a.owner->arm_count = 0; /* canonical count still owns original A body */
-        a.root->body_count +=
-            1; /* no display-array bound controls destruction */
-        destroy(&a);
-        REQUIRE(positive(&b, index, old, next));
-        destroy(&b);
-        printf("P1098 COMPLETE negatives=%zu foreign B survived un-restored A "
-               "destruction\n",
-               negatives);
-        return true;
+        type saved = (object)->member;                                         \
+        REQUIRE(saved != (value));                                             \
+        (object)->member = (value);                                            \
+        bool refused = rejected(&a, #object "." #member);                      \
+        (object)->member = saved;                                              \
+        REQUIRE(refused);                                                      \
+    } while (0)
+/* All mutations stay inside live allocations; the consumer authenticates
+ * bases/counts before dereferencing any challenged view. */
+static bool observe(const char *path, size_t index, size_t old, size_t next)
+{
+    Input a = {0}, b = {0};
+    REQUIRE(prepare(path, &a));
+    REQUIRE(nl_sem_clone(a.context, &b.context) == NL_CHECK_OK && entry(&b));
+    REQUIRE(checked(&a) && checked(&b));
+    REQUIRE(positive(&a, index, old, next) && positive(&b, index, old, next));
+    REQUIRE(a.owner->source == b.owner->source &&
+            a.owner->body_owner == b.owner->body_owner);
+    NLCheckedNodeView *loop = &a.owner->nodes[a.loop - 1], *op = NULL;
+    for (size_t n = 0; n < a.body->count; ++n)
+        if (a.body->nodes[n].kind == NL_CHECKED_REPLACE)
+            op = &a.body->nodes[n];
+    REQUIRE(op);
+    const NLCheckedNodeView *ref =
+        nl_checked_node_view(a.body, op->first_argument);
+    const NLCheckedNodeView *incoming =
+        nl_checked_node_view(a.body, ref->next_argument);
+    MUTATE(size_t, loop, results[0].value, incoming->results[0].value);
+    MUTATE(size_t, loop, results[0].type, 1);
+    MUTATE(size_t, loop, break_edges, 2);
+    MUTATE(size_t, loop, continue_edges, 1);
+    MUTATE(bool, loop, header_inductive, false);
+    MUTATE(size_t, op, field.parent_post_fact, op->field.parent_fact);
+    MUTATE(size_t, op, field.child_post_fact, op->field.child_fact);
+    MUTATE(size_t, op, field.new_value, op->field.old_value);
+    MUTATE(size_t, op, field.index, 1 - index);
+    MUTATE(size_t, op, field.parent_incarnation,
+           op->field.parent_incarnation + 1);
+    MUTATE(size_t, op, field.child_incarnation,
+           op->field.child_incarnation + 1);
+    MUTATE(bool, op, field.dependency_compatible, false);
+    MUTATE(const NLSource *, a.owner, source, b.spelling);
+    MUTATE(const NLSemanticContext *, a.owner, context, b.context);
+    MUTATE(const NLSemanticContext *, a.body, context, b.body->context);
+    MUTATE(NLCheckedNodeView *, a.owner, nodes, NULL);
+    MUTATE(NLCheckedNodeView *, a.body, nodes, NULL);
+    MUTATE(size_t, a.owner, count, a.owner->count + 1);
+    MUTATE(size_t, a.body, count, a.body->count + 1);
+    MUTATE(size_t, a.owner, arm_count, 0);
+    MUTATE(size_t, a.owner, arm_count, a.owner->arm_count + 1);
+    MUTATE(size_t, a.root, body_count, 0);
+    MUTATE(size_t, a.root, body_count, a.root->body_count + 1);
+    const size_t function = a.root->nodes[a.root->root - 1].function;
+    NLFunctionEntry *fn = &a.context->functions[function - 1];
+    MUTATE(size_t, fn, result, nl_semantic_core_type(a.context, NL_TYPE_U8));
+    MUTATE(NLCheckedKind, fn, kind, NL_CHECKED_REPLACE);
+    MUTATE(bool, fn, caller_effects, true);
+    MUTATE(bool, fn, hidden_dependencies, true);
+    MUTATE(bool, fn, owner_receiver, true);
+    MUTATE(bool, fn, owner_producer, true);
+    MUTATE(bool, fn, custody_recipient, true);
+    MUTATE(size_t, fn, count, 1);
+    MUTATE(NLSyntaxTree *, fn->body, syntax, b.tree);
+    MUTATE(NLSource *, fn->body, source, b.spelling);
+    MUTATE(size_t, fn->body, count, 1);
+    MUTATE(const char *, fn, name, "changed-current-registration");
+    NLControlExitView *edge =
+        (NLControlExitView *)nl_control_exit_view(a.body->exits, 0);
+    const NLControlExitView *foreign = nl_control_exit_view(b.body->exits, 0);
+    REQUIRE(edge && foreign && edge->state != foreign->state &&
+            edge->target != foreign->target);
+    REQUIRE(edge->values[0].value == foreign->values[0].value);
+    MUTATE(const NLControlState *, edge, state, foreign->state);
+    MUTATE(const NLControlTarget *, edge, target, foreign->target);
+    MUTATE(const NLControlTarget *, edge, source_target,
+           foreign->source_target);
+    MUTATE(const NLCheckedFragment *, edge, source_owner, b.body);
+    MUTATE(size_t, edge, values[0].value, incoming->results[0].value);
+    MUTATE(size_t, edge, source_node, edge->source_node - 1);
+    NLSemanticContext *exit_context =
+        nl_control_state_context((NLControlState *)edge->state);
+    MUTATE(NLSemanticValueView *, exit_context, values, NULL);
+    MUTATE(NLSemanticPlaceView *, exit_context, places, NULL);
+    if (exit_context->scope_count) {
+        MUTATE(NLSemanticScopeView *, exit_context, scopes, NULL);
+    } else {
+        REQUIRE(!exit_context->scopes);
+        MUTATE(size_t, exit_context, scope_count, 1);
     }
+    MUTATE(NLTypeEntry *, exit_context, types, NULL);
+    MUTATE(size_t, exit_context, last_value_fact,
+           exit_context->last_value_fact + 1);
+    NLSemanticValueView *exit_value =
+        &exit_context->values[edge->values[0].value - 1];
+    MUTATE(size_t, exit_value, scalar_value, old ^ 1);
+    MUTATE(NLFunctionEntry *, a.context, functions, NULL);
+    MUTATE(size_t, a.context, function_count, 0);
+    MUTATE(NLSemanticValueView *, a.context, values, NULL);
+    MUTATE(NLSemanticPlaceView *, a.context, places, NULL);
+    MUTATE(NLSemanticScopeView *, a.context, scopes, NULL);
+    MUTATE(NLTypeEntry *, a.context, types, NULL);
+    MUTATE(size_t, a.context, last_value_fact, a.context->last_value_fact + 1);
+    MUTATE(size_t, a.context, last_incarnation,
+           a.context->last_incarnation + 1);
+    NLSemanticContext *body_context = (NLSemanticContext *)a.body->context;
+    MUTATE(NLSemanticValueView *, body_context, values, NULL);
+    MUTATE(size_t, body_context, last_value_fact,
+           body_context->last_value_fact + 1);
+    NLCheckedFragment shallow = *a.owner;
+    NLLinearBreakView view = {0};
+    REQUIRE(nl_linear_break_validate(&shallow, a.loop, &view) ==
+            NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    puts("P1098 shallow same-source/world borrowed replay refused as "
+         "authority");
+    REQUIRE(positive(&a, index, old, next));
+    size_t slot = 0;
+    while (slot < a.owner->arm_count && a.owner->arms[slot].match != a.loop)
+        ++slot;
+    REQUIRE(slot < a.owner->arm_count);
+    a.owner->arms[slot].artifact = b.body; /* genuine B, never restored */
+    REQUIRE(rejected(&a, "genuine A/B whole body exchange"));
+    a.owner->arm_count = 0;  /* canonical count still owns original A body */
+    a.root->body_count += 1; /* no display-array bound controls destruction */
+    destroy(&a);
+    REQUIRE(positive(&b, index, old, next));
+    destroy(&b);
+    printf("P1098 COMPLETE negatives=%zu foreign B survived un-restored A "
+           "destruction\n",
+           negatives);
+    return true;
+}
 #else
 static bool injecting;
 static size_t allocation, fail_at;
