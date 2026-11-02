@@ -1,0 +1,147 @@
+{
+  "authority": "1de346f545afd638cacbe7589909cbeda3bf4e71",
+  "spec": "Draft17.34",
+  "cases": {
+    "01-bound": {
+      "check": 0,
+      "parent_c17": 4,
+      "candidate_c17": 0,
+      "expected": {
+        "root": 1,
+        "index": 1,
+        "old": 146,
+        "new": 229,
+        "sibling": 83,
+        "after": [
+          146,
+          229
+        ]
+      }
+    },
+    "02-inline": {
+      "check": 0,
+      "parent_c17": 4,
+      "candidate_c17": 0,
+      "expected": {
+        "root": 1,
+        "index": 0,
+        "old": 194,
+        "new": 112,
+        "sibling": 57,
+        "after": [
+          112,
+          194
+        ]
+      }
+    },
+    "03-equal-bits": {
+      "check": 0,
+      "parent_c17": 4,
+      "candidate_c17": 0,
+      "expected": {
+        "root": 1,
+        "index": 1,
+        "old": 146,
+        "new": 146,
+        "sibling": 83,
+        "after": [
+          146,
+          146
+        ]
+      }
+    },
+    "04-prefix": {
+      "check": 0,
+      "parent_c17": 4,
+      "candidate_c17": 0,
+      "expected": {
+        "root": 1,
+        "index": 1,
+        "old": 176,
+        "new": 244,
+        "sibling": 88,
+        "after": [
+          176,
+          244
+        ]
+      }
+    },
+    "05-two-originals": {
+      "check": 0,
+      "parent_c17": 4,
+      "candidate_c17": 0,
+      "expected": {
+        "root": 2,
+        "index": 0,
+        "old": 251,
+        "new": 36,
+        "sibling": 129,
+        "after": [
+          36,
+          251
+        ],
+        "other": [
+          17,
+          208
+        ]
+      }
+    },
+    "06-outside-control": {
+      "check": 0,
+      "parent_c17": 0,
+      "candidate_c17": 0,
+      "expected": {
+        "root": 1,
+        "index": 1,
+        "old": 146,
+        "new": 229,
+        "sibling": 83,
+        "after": [
+          146,
+          229
+        ]
+      }
+    },
+    "07-unsupported-incoming-binding": {
+      "check": 0,
+      "parent_c17": 4,
+      "candidate_c17": 4,
+      "expected": {
+        "root": 1,
+        "index": 1,
+        "old": 146,
+        "new": 229,
+        "sibling": 83,
+        "after": [
+          146,
+          229
+        ]
+      }
+    },
+    "08-unsupported-literal-break": {
+      "check": 0,
+      "parent_c17": 4,
+      "candidate_c17": 4,
+      "expected": null
+    },
+    "09-invalid-name": {
+      "check": 3,
+      "parent_c17": 3,
+      "candidate_c17": 3,
+      "expected": null
+    },
+    "10-invalid-write": {
+      "check": 3,
+      "parent_c17": 3,
+      "candidate_c17": 3,
+      "expected": null
+    }
+  },
+  "laws": [
+    "actual old result, not incoming; fresh current fact even equal bits",
+    "one source Change then distinct caller Change; same declared original storage",
+    "unchanged sibling until caller Change; other root unchanged",
+    "genuine same source owner/target/world/current registry; invalid/refused/OOM no output",
+    "no public issuer/API; no R source/oracle/runner reused"
+  ]
+}

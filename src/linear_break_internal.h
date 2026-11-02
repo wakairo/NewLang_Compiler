@@ -15,4 +15,6 @@ typedef struct {
 } NLLinearBreakView;
 NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *,
                                        NLCheckedNodeId, NLLinearBreakView *);
+/* Authenticate retained relation before the driver walks mutable views. */
+NLCheckStatus nl_linear_break_owner_validate(const NLCheckedFragment *);
 #endif

@@ -1,0 +1,252 @@
+[
+  {
+    "case": "01-bound",
+    "mode": "check",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "--check",
+      "/tmp/p1098-artifacts/inputs-v2/01-bound.nl"
+    ],
+    "returncode": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  {
+    "case": "01-bound",
+    "mode": "c17",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "/tmp/p1098-artifacts/inputs-v2/01-bound.nl"
+    ],
+    "returncode": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p1098-artifacts/inputs-v2/01-bound.nl\n"
+  },
+  {
+    "case": "02-inline",
+    "mode": "check",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "--check",
+      "/tmp/p1098-artifacts/inputs-v2/02-inline.nl"
+    ],
+    "returncode": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  {
+    "case": "02-inline",
+    "mode": "c17",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "/tmp/p1098-artifacts/inputs-v2/02-inline.nl"
+    ],
+    "returncode": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p1098-artifacts/inputs-v2/02-inline.nl\n"
+  },
+  {
+    "case": "03-equal-bits",
+    "mode": "check",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "--check",
+      "/tmp/p1098-artifacts/inputs-v2/03-equal-bits.nl"
+    ],
+    "returncode": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  {
+    "case": "03-equal-bits",
+    "mode": "c17",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "/tmp/p1098-artifacts/inputs-v2/03-equal-bits.nl"
+    ],
+    "returncode": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p1098-artifacts/inputs-v2/03-equal-bits.nl\n"
+  },
+  {
+    "case": "04-prefix",
+    "mode": "check",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "--check",
+      "/tmp/p1098-artifacts/inputs-v2/04-prefix.nl"
+    ],
+    "returncode": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  {
+    "case": "04-prefix",
+    "mode": "c17",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "/tmp/p1098-artifacts/inputs-v2/04-prefix.nl"
+    ],
+    "returncode": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p1098-artifacts/inputs-v2/04-prefix.nl\n"
+  },
+  {
+    "case": "05-two-originals",
+    "mode": "check",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "--check",
+      "/tmp/p1098-artifacts/inputs-v2/05-two-originals.nl"
+    ],
+    "returncode": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  {
+    "case": "05-two-originals",
+    "mode": "c17",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "/tmp/p1098-artifacts/inputs-v2/05-two-originals.nl"
+    ],
+    "returncode": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p1098-artifacts/inputs-v2/05-two-originals.nl\n"
+  },
+  {
+    "case": "06-outside-control",
+    "mode": "check",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "--check",
+      "/tmp/p1098-artifacts/inputs-v2/06-outside-control.nl"
+    ],
+    "returncode": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  {
+    "case": "06-outside-control",
+    "mode": "c17",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "/tmp/p1098-artifacts/inputs-v2/06-outside-control.nl"
+    ],
+    "returncode": 0,
+    "stdout_bytes": 1393,
+    "stdout_sha256": "cb60aae7809c69f6687410e9e14f774d4f5c6e0843f18663ffcda767cb9d8935",
+    "stderr": ""
+  },
+  {
+    "case": "07-unsupported-incoming-binding",
+    "mode": "check",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "--check",
+      "/tmp/p1098-artifacts/inputs-v2/07-unsupported-incoming-binding.nl"
+    ],
+    "returncode": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  {
+    "case": "07-unsupported-incoming-binding",
+    "mode": "c17",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "/tmp/p1098-artifacts/inputs-v2/07-unsupported-incoming-binding.nl"
+    ],
+    "returncode": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p1098-artifacts/inputs-v2/07-unsupported-incoming-binding.nl\n"
+  },
+  {
+    "case": "08-unsupported-literal-break",
+    "mode": "check",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "--check",
+      "/tmp/p1098-artifacts/inputs-v2/08-unsupported-literal-break.nl"
+    ],
+    "returncode": 0,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": ""
+  },
+  {
+    "case": "08-unsupported-literal-break",
+    "mode": "c17",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "/tmp/p1098-artifacts/inputs-v2/08-unsupported-literal-break.nl"
+    ],
+    "returncode": 4,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine\nnote: /tmp/p1098-artifacts/inputs-v2/08-unsupported-literal-break.nl\n"
+  },
+  {
+    "case": "09-invalid-name",
+    "mode": "check",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "--check",
+      "/tmp/p1098-artifacts/inputs-v2/09-invalid-name.nl"
+    ],
+    "returncode": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "/tmp/p1098-artifacts/inputs-v2/09-invalid-name.nl:6:15-6:21: error(semantic)[P3-UNKNOWN-BINDING]: unknown semantic binding\n"
+  },
+  {
+    "case": "09-invalid-name",
+    "mode": "c17",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "/tmp/p1098-artifacts/inputs-v2/09-invalid-name.nl"
+    ],
+    "returncode": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "/tmp/p1098-artifacts/inputs-v2/09-invalid-name.nl:6:15-6:21: error(semantic)[P3-UNKNOWN-BINDING]: unknown semantic binding\n"
+  },
+  {
+    "case": "10-invalid-write",
+    "mode": "check",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "--check",
+      "/tmp/p1098-artifacts/inputs-v2/10-invalid-write.nl"
+    ],
+    "returncode": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "/tmp/p1098-artifacts/inputs-v2/10-invalid-write.nl:5:39-5:40: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n"
+  },
+  {
+    "case": "10-invalid-write",
+    "mode": "c17",
+    "command": [
+      "/tmp/p1095-build/newlangc",
+      "/tmp/p1098-artifacts/inputs-v2/10-invalid-write.nl"
+    ],
+    "returncode": 3,
+    "stdout_bytes": 0,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr": "/tmp/p1098-artifacts/inputs-v2/10-invalid-write.nl:5:39-5:40: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field\n"
+  }
+]

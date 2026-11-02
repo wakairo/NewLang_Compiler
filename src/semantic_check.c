@@ -5440,7 +5440,7 @@ typedef struct NLLinearBreakProof {
     NLCheckedNodeView *parent_nodes, *body_nodes, *root_nodes;
     const NLCheckedNodeView *parent_origin, *body_origin, *root_origin;
     size_t parent_count, body_count, root_count;
-    NLLinearBreakView carrier;
+    NLSemanticContext final_storage, body_storage; /* nonowning bases/counts */
     bool sealed;
 } NLLinearBreakProof;
 
@@ -5490,6 +5490,15 @@ static NLCheckStatus retain_linear_break(Check *check, LoopControl *loop,
         check->artifact != check->origin_invocation ||
         check->context->region_count || check->context->domain_count ||
         check->context->occurrence_count || check->function_result != 1)
+        return NL_CHECK_OK;
+    if (!check->context->functions || !check->body_function ||
+        check->body_function > check->context->function_count)
+        return NL_CHECK_OK;
+    const NLFunctionEntry *fn =
+        &check->context->functions[check->body_function - 1];
+    if (fn->count || fn->parameters || fn->caller_effects ||
+        fn->hidden_dependencies || fn->owner_receiver || fn->owner_producer ||
+        fn->custody_recipient)
         return NL_CHECK_OK;
     NLLinearBreakProof *p = calloc(1, sizeof(*p));
     if (!p)
@@ -5541,6 +5550,8 @@ static NLCheckStatus seal_linear_breaks(NLCheckedFragment *root,
     for (size_t i = 0; i < root->body_count; ++i) {
         NLCheckedFragment *f = root->bodies[i];
         for (NLLinearBreakProof *p = f->linear_breaks; p; p = p->next) {
+            p->final_storage = *final;
+            p->body_storage = *p->body->context;
             p->parent_origin = f->nodes;
             p->body_origin = p->body->nodes;
             p->root_origin = root->nodes;
@@ -5577,6 +5588,50 @@ static bool linear_graph_matches(const NLCheckedFragment *f,
            !memcmp(f->nodes, nodes, count * sizeof(*nodes));
 }
 
+/* Addresses/counts are anchors of live owner allocations, never authority
+ * from numerical IDs. Reject a changed array BEFORE comparing its contents. */
+static bool linear_world_matches(const NLSemanticContext *c,
+                                 const NLSemanticContext *storage,
+                                 const NLSemanticContext *reference,
+                                 const NLCopyCallAnchor *anchor)
+{
+    if (!c || !reference)
+        return false;
+#define SAME(member)                                                           \
+    if (c->member != storage->member)                                          \
+    return false
+    SAME(occurrences);
+    SAME(occurrence_count);
+    SAME(types);
+    SAME(type_count);
+    SAME(bindings);
+    SAME(binding_count);
+    SAME(values);
+    SAME(value_count);
+    SAME(places);
+    SAME(place_count);
+    SAME(domains);
+    SAME(domain_count);
+    SAME(scopes);
+    SAME(scope_count);
+    SAME(functions);
+    SAME(function_count);
+    SAME(last_incarnation);
+    SAME(last_value_fact);
+    SAME(regions);
+    SAME(region_count);
+    SAME(raw_interval_count);
+#undef SAME
+    if (!nl_copy_state_matches(c, anchor) || !nl_copy_same_types(c, reference))
+        return false;
+    for (size_t i = 0; i < c->binding_count; ++i)
+        if (c->bindings[i].hidden != reference->bindings[i].hidden ||
+            !c->bindings[i].name || !reference->bindings[i].name ||
+            strcmp(c->bindings[i].name, reference->bindings[i].name))
+            return false;
+    return true;
+}
+
 NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *f,
                                        NLCheckedNodeId id,
                                        NLLinearBreakView *out)
@@ -5598,12 +5653,11 @@ NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *f,
         p->body->source != p->source ||
         nl_checked_loop_body(f, id) != p->body ||
         !nl_checked_loop_break_provenance_valid(f, id) ||
+        !linear_world_matches(f->context, &p->final_storage, p->final,
+                              &p->final_anchor) ||
+        !linear_world_matches(p->body->context, &p->body_storage, p->post,
+                              &p->post_anchor) ||
         !linear_callable(p, f->context) || !linear_callable(p, p->post) ||
-        !nl_copy_state_matches(f->context, &p->final_anchor) ||
-        !nl_copy_state_matches(p->body->context, &p->post_anchor) ||
-        f->context->type_count != p->final->type_count ||
-        !nl_copy_same_types(f->context, p->final) ||
-        !nl_copy_same_types(p->body->context, p->post) ||
         f->context->region_count || f->context->domain_count ||
         f->context->occurrence_count ||
         f->context->function_count != p->final->function_count)
@@ -5685,6 +5739,19 @@ NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *f,
                                .index = field.index,
                                .incoming = incoming->scalar_result.value,
                                .result = p->result};
+    return NL_CHECK_OK;
+}
+
+NLCheckStatus nl_linear_break_owner_validate(const NLCheckedFragment *f)
+{
+    if (!f || !f->linear_breaks)
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    NLLinearBreakView v;
+    for (const NLLinearBreakProof *p = f->linear_breaks; p; p = p->next) {
+        NLCheckStatus s = nl_linear_break_validate(f, p->loop, &v);
+        if (s != NL_CHECK_OK)
+            return s;
+    }
     return NL_CHECK_OK;
 }
 

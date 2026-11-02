@@ -2104,6 +2104,10 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
         !call->body_backed || call->owner_call.definition.definition_checked ||
         call->terminates)
         return false;
+    const NLCheckedFragment *retained = nl_checked_call_body(fragment, id);
+    if (retained && retained->linear_breaks &&
+        nl_linear_break_owner_validate(retained) != NL_CHECK_OK)
+        return false;
     NLSymbolId parameter = 0;
     if (!v1_call_parameter(fragment, id, program, &parameter))
         return false;
