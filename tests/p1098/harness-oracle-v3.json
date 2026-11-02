@@ -1,0 +1,8 @@
+{
+  "previous": [
+    "harness-oracle-v1.json",
+    "harness-oracle-v2.json"
+  ],
+  "named_oom": "Exact existing CLI policy from main renderers: reached parser/register/CHECK OOM returns exit3 with underlying real API OUT_OF_MEMORY; reached source/entry/output setup OOM returns exit1. Instrumented wrappers observe the genuine API once; no status replacement. Preserve sentinel bytes/inode/no-temp and same-input disabled-fault retry at EVERY reached failure; end only at first unreached successful named CLI.",
+  "preserved": "v2 universal exit1 prediction and first mismatch remain immutable historical evidence, not relabeled PASS"
+}

@@ -253,11 +253,78 @@ static void *pc;
 void *__real_malloc(size_t);
 void *__real_realloc(void *, size_t);
 void *__real_calloc(size_t, size_t);
+/* Observe actual API boundary/status, without replacing or replaying it. The
+ * existing CLI intentionally renders parser/register/CHECK errors as exit3. */
+static int phase, fault_phase, fault_status;
+NLParseStatus __real_nl_parser_parse_function_unit(NLParser *, NLSyntaxTree **,
+                                                   NLParseDiagnostic *);
+NLParseStatus __real_nl_parser_parse_expression_fragment(NLParser *,
+                                                         NLSyntaxTree **,
+                                                         NLParseDiagnostic *);
+NLCheckStatus
+__real_nl_semantic_register_function_unit(NLSemanticContext *,
+                                          const NLSyntaxTree *const *, size_t,
+                                          NLFunctionUnitDiagnostic *);
+NLCheckStatus __real_nl_semantic_check_expression(NLSemanticContext *,
+                                                  const NLSyntaxTree *,
+                                                  NLCheckedFragment **,
+                                                  NLCheckDiagnostic *);
+NLParseStatus __wrap_nl_parser_parse_function_unit(NLParser *p,
+                                                   NLSyntaxTree **t,
+                                                   NLParseDiagnostic *d)
+{
+    int saved = phase;
+    phase = 1;
+    NLParseStatus status = __real_nl_parser_parse_function_unit(p, t, d);
+    if (reached && fault_phase == 1)
+        fault_status = (int)status;
+    phase = saved;
+    return status;
+}
+NLParseStatus __wrap_nl_parser_parse_expression_fragment(NLParser *p,
+                                                         NLSyntaxTree **t,
+                                                         NLParseDiagnostic *d)
+{
+    int saved = phase;
+    phase = 1;
+    NLParseStatus status = __real_nl_parser_parse_expression_fragment(p, t, d);
+    if (reached && fault_phase == 1)
+        fault_status = (int)status;
+    phase = saved;
+    return status;
+}
+NLCheckStatus __wrap_nl_semantic_register_function_unit(
+    NLSemanticContext *c, const NLSyntaxTree *const *inputs, size_t count,
+    NLFunctionUnitDiagnostic *d)
+{
+    int saved = phase;
+    phase = 2;
+    NLCheckStatus status =
+        __real_nl_semantic_register_function_unit(c, inputs, count, d);
+    if (reached && fault_phase == 2)
+        fault_status = (int)status;
+    phase = saved;
+    return status;
+}
+NLCheckStatus __wrap_nl_semantic_check_expression(NLSemanticContext *c,
+                                                  const NLSyntaxTree *t,
+                                                  NLCheckedFragment **f,
+                                                  NLCheckDiagnostic *d)
+{
+    int saved = phase;
+    phase = 3;
+    NLCheckStatus status = __real_nl_semantic_check_expression(c, t, f, d);
+    if (reached && fault_phase == 3)
+        fault_status = (int)status;
+    phase = saved;
+    return status;
+}
 static bool denied(char kind, void *caller)
 {
     if (!injecting || allocation++ != fail_at)
         return false;
     reached = kind;
+    fault_phase = phase;
     pc = caller;
     return true;
 }
@@ -305,6 +372,9 @@ static bool named_oom(const char *source)
         allocation = 0;
         reached = 0;
         pc = NULL;
+        phase = 0;
+        fault_phase = 0;
+        fault_status = -1;
         injecting = true;
         int status = p1098_driver_main(4, args);
         injecting = false;
@@ -318,7 +388,14 @@ static bool named_oom(const char *source)
         }
         printf("P1098 NAMED OOM n=%zu kind=%c pc=%p status=%d\n", fail_at,
                reached, pc, status);
-        REQUIRE(status == 1 && named_bytes(path, before.st_ino));
+        const int expected = fault_phase ? 3 : 1;
+        printf("P1098 NAMED phase=%d api_status=%d expected_cli=%d\n",
+               fault_phase, fault_status, expected);
+        REQUIRE(status == expected && named_bytes(path, before.st_ino));
+        REQUIRE(!fault_phase ||
+                fault_status == (fault_phase == 1
+                                     ? (int)NL_PARSE_OUT_OF_MEMORY
+                                     : (int)NL_CHECK_OUT_OF_MEMORY));
         DIR *d = opendir(dir);
         REQUIRE(d);
         size_t count = 0;

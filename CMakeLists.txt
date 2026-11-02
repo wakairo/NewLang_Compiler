@@ -1011,6 +1011,9 @@ if(BUILD_TESTING)
     target_link_options(p1098_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc
         -Wl,--wrap=calloc -no-pie)
     target_compile_options(p1098_oom PRIVATE -fno-pie)
+    target_link_options(p1098_oom PRIVATE
+        -Wl,--wrap=nl_parser_parse_function_unit -Wl,--wrap=nl_parser_parse_expression_fragment
+        -Wl,--wrap=nl_semantic_register_function_unit -Wl,--wrap=nl_semantic_check_expression)
     foreach(profile 01-bound 02-inline 03-equal-bits 04-prefix 05-two-originals)
         if(profile STREQUAL "02-inline")
             set(p1098_args 0 194 112)
