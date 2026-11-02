@@ -5667,7 +5667,6 @@ NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *f,
                               p->body_count, p->body_root) ||
         p->body->source != p->source ||
         nl_checked_loop_body(f, id) != p->body ||
-        !nl_checked_loop_break_provenance_valid(f, id) ||
         !linear_world_matches(f->context, &p->final_storage, p->final,
                               &p->final_anchor) ||
         !linear_world_matches(p->body->context, &p->body_storage, p->post,
@@ -5691,7 +5690,8 @@ NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *f,
         nl_control_state_context((NLControlState *)exit->state) !=
             p->exit_world ||
         !linear_world_matches(p->exit_world, &p->exit_storage, p->post,
-                              &p->exit_anchor))
+                              &p->exit_anchor) ||
+        !nl_checked_loop_break_provenance_valid(f, id))
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     Check body = {.artifact = (NLCheckedFragment *)p->body,
                   .context = p->post,
