@@ -2102,9 +2102,15 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
     /* Authenticate retained root/body allocation bases before any call-node
      * view access. The getter itself borrows canonical historical custody. */
     const NLCheckedFragment *retained = nl_checked_call_body(fragment, id);
-    if (retained && retained->linear_breaks &&
-        nl_linear_break_owner_validate(retained) != NL_CHECK_OK)
-        return false;
+    if (retained && retained->linear_breaks) {
+        const NLCheckStatus status = nl_linear_break_owner_validate(retained);
+        if (status != NL_CHECK_OK) {
+            if (status == NL_CHECK_OUT_OF_MEMORY ||
+                status == NL_CHECK_RESOURCE_LIMIT)
+                program->copy_body_status = status;
+            return false;
+        }
+    }
     const NLCheckedNodeView *call = nl_checked_node_view(fragment, id);
     if (call == NULL || call->kind != NL_CHECKED_REGISTERED_CALL ||
         !call->body_backed || call->owner_call.definition.definition_checked ||
@@ -2633,30 +2639,46 @@ static bool gate_emit_loan(FILE *stream, const NLCheckedFragment *f,
            (v0_indent(stream, depth) &&
             fprintf(stream, "(void)nl_loan_result_%zu;\n", v->loan.scope) >= 0);
 }
-static bool gate_symbol_written(const NLCheckedFragment *f, NLSymbolId symbol)
+static NLCheckStatus gate_symbol_written(const NLCheckedFragment *f,
+                                         NLSymbolId symbol, bool *out)
 {
+    *out = false;
     for (size_t i = 1; i <= nl_checked_node_count(f); ++i) {
         const NLCheckedNodeView *n = nl_checked_node_view(f, i);
         NLLinearBreakView changed;
-        if (n && n->kind == NL_CHECKED_LOOP &&
-            nl_linear_break_validate(f, i, &changed) == NL_CHECK_OK &&
-            changed.base == symbol)
-            return true;
+        if (n && n->kind == NL_CHECKED_LOOP) {
+            const NLCheckStatus status =
+                nl_linear_break_validate(f, i, &changed);
+            /* OOM must never look like "not written" and select const
+             * storage for an original that a later real call mutates. */
+            if (status != NL_CHECK_OK)
+                return status;
+            if (changed.base == symbol) {
+                *out = true;
+                return NL_CHECK_OK;
+            }
+        }
         NLIfReturnView returned;
         if (n && n->kind == NL_CHECKED_IF &&
             nl_checked_if_return_view(f, i, &returned) &&
-            returned.field.base == symbol)
-            return true;
+            returned.field.base == symbol) {
+            *out = true;
+            return NL_CHECK_OK;
+        }
         NLIfFieldView joined;
         if (n && n->kind == NL_CHECKED_IF &&
-            nl_checked_if_field_view(f, i, &joined) && joined.base == symbol)
-            return true;
+            nl_checked_if_field_view(f, i, &joined) && joined.base == symbol) {
+            *out = true;
+            return NL_CHECK_OK;
+        }
         if (n != NULL && n->kind == NL_CHECKED_LOAN_HEADER &&
             n->loan.implicit_local && !n->loan.from_ptr &&
-            n->loan.access == NL_ACCESS_WRITE && n->loan.source == symbol)
-            return true;
+            n->loan.access == NL_ACCESS_WRITE && n->loan.source == symbol) {
+            *out = true;
+            return NL_CHECK_OK;
+        }
     }
-    return false;
+    return NL_CHECK_OK;
 }
 
 static bool v1_emit_call(FILE *stream, const NLCheckedFragment *f,
@@ -2847,8 +2869,11 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     case NL_CHECKED_BINDING: {
         const NLCheckedNodeView *initializer =
             nl_checked_node_view(fragment, view->initializer);
-        const char *const scalar_qualifier =
-            gate_symbol_written(fragment, view->symbol) ? "" : "const ";
+        bool written;
+        if (gate_symbol_written(fragment, view->symbol, &written) !=
+            NL_CHECK_OK)
+            return false;
+        const char *const scalar_qualifier = written ? "" : "const ";
         if (initializer == NULL)
             return false;
         if (initializer->kind == NL_CHECKED_LOOP) {
