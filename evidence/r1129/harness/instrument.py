@@ -326,6 +326,19 @@ def instrument(code, ast, mode, source_path):
                 dynamic = [x for x in operands
                            if any(y.get("kind") == "DeclRefExpr" for y in children(x))]
                 require(len(dynamic) == 1, "comparison has no unique carried operand")
+                literal = next(x for x in operands if x is not dynamic[0])
+                while literal.get("kind") in (
+                    "CStyleCastExpr", "ImplicitCastExpr", "ParenExpr",
+                    "ConstantExpr",
+                ):
+                    require(len(literal.get("inner", [])) == 1,
+                            "unsupported integer-literal wrapper")
+                    if literal.get("kind") in ("CStyleCastExpr", "ImplicitCastExpr"):
+                        require(literal.get("castKind") in ("NoOp", "IntegralCast"),
+                                "comparison literal cast is not a pure integer cast")
+                    literal = literal["inner"][0]
+                require(literal.get("kind") == "IntegerLiteral",
+                        "non-phase operand is not a pure integer literal/cast")
                 require(all(y.get("kind") not in ("CallExpr", "BinaryOperator",
                                                 "CompoundAssignOperator")
                             for y in children(dynamic[0])),
@@ -357,7 +370,8 @@ def instrument(code, ast, mode, source_path):
                 require(sa <= ca < cb <= sb
                         and offset(declaration["loc"]) < ca,
                         "phase not live at observation point")
-                comparison_at = bounds(node, code)[0]
+                # Ordering needs only a direct begin, never a macro-end slice.
+                comparison_at = offset(node["range"]["begin"])
                 for use in children(body):
                     if use.get("kind") == "UnaryOperator" and use.get("opcode") == "&":
                         target = strip(use.get("inner", [{}])[0])
@@ -365,7 +379,8 @@ def instrument(code, ast, mode, source_path):
                                 "phase scalar address escapes")
                     if use.get("kind") in ("BinaryOperator", "CompoundAssignOperator",
                                             "UnaryOperator", "CallExpr"):
-                        ua = bounds(use, code)[0]
+                        # Preserve strict direct locations at insertion/slice sites.
+                        ua = offset(use["range"]["begin"])
                         if comparison_at <= ua < ca:
                             require(use is node or use.get("kind") == "BinaryOperator"
                                     and use.get("opcode") in ("==", "!="),
