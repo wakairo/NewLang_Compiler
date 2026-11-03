@@ -2461,9 +2461,9 @@ static NLCheckedNodeId typed_literal(Check *check, const NLSyntaxView *syntax)
                                    .scalar_result = {type, true, value}});
 }
 
-/* The finite source gate proves a value comparison, never root identity or
- * memory access. Unknown/dependent quantities need a richer proof, not a
- * guessed bool or a dependency-erasing shortcut. */
+/* Numeric comparison never proves root identity or memory access. Unknown
+ * dependency-free operands produce an ordinary unknown Bool; dependent
+ * operands still require a richer dependency representation. */
 static NLCheckedNodeId usize_comparison(Check *check,
                                         const NLSyntaxView *syntax)
 {
@@ -2490,27 +2490,27 @@ static NLCheckedNodeId usize_comparison(Check *check,
     }
     const NLSemanticValueView a = c->values[lhs.results[0].value - 1];
     const NLSemanticValueView b = c->values[rhs.results[0].value - 1];
-    if (!a.scalar_known || !b.scalar_known ||
-        a.dependencies != NL_DEPENDENCY_FREE ||
+    if (a.dependencies != NL_DEPENDENCY_FREE ||
         b.dependencies != NL_DEPENDENCY_FREE || a.value_dependency_count != 0 ||
         b.value_dependency_count != 0) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT,
              syntax->data.equality.operator_span,
              less ? "USIZE-LESS-THAN-PRECISION" : "USIZE-EQUALITY-PRECISION",
-             less
-                 ? "less-than needs known dependency-free quantity operands in "
-                   "this profile"
-                 : "equality needs known dependency-free quantity operands in "
-                   "this profile");
+             less ? "less-than needs dependency-free quantity operands in "
+                    "this profile"
+                  : "equality needs dependency-free quantity operands in "
+                    "this profile");
         return 0;
     }
     const NLTypeId type = nl_semantic_core_type(c, NL_TYPE_BOOL);
-    const size_t truth = less ? a.scalar_value < b.scalar_value
-                              : a.scalar_value == b.scalar_value;
+    const bool known = a.scalar_known && b.scalar_known;
+    const size_t truth = known ? (less ? a.scalar_value < b.scalar_value
+                                       : a.scalar_value == b.scalar_value)
+                               : 0;
     const NLValueId value = new_value(
         check,
         (NLSemanticValueView){
-            .type = type, .scalar_known = true, .scalar_value = truth},
+            .type = type, .scalar_known = known, .scalar_value = truth},
         syntax->span);
     if (value == 0)
         return 0;
@@ -2528,7 +2528,7 @@ static NLCheckedNodeId usize_comparison(Check *check,
                                    .result_count = 1,
                                    .results = {{type, value}},
                                    .has_scalar_result = true,
-                                   .scalar_result = {type, true, truth}});
+                                   .scalar_result = {type, known, truth}});
 }
 
 static NLCheckedNodeId usize_arithmetic(Check *check,
