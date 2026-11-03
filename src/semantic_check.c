@@ -5405,8 +5405,9 @@ static NLCheckStatus linear_break_effect(const NLCheckedFragment *f,
     if (definition) {
         const NLSymbolId symbols[2] = {formal->symbol, fresh->symbol};
         const NLCheckedNodeView *args[2] = {ref, incoming};
-        if (fn->body->count != 2 || !fn->body->parameter_names ||
-            !fn->parameters[0] || fn->parameters[0] > c->type_count ||
+        if (fn->body->count != 2 || !fn->body->parameter_names[0] ||
+            !fn->body->parameter_names[1] || !fn->parameters[0] ||
+            fn->parameters[0] > c->type_count ||
             fn->parameters[1] != op->type || symbols[0] == symbols[1])
             return invalid;
         NLSemanticTypeView type = c->types[fn->parameters[0] - 1].view;
