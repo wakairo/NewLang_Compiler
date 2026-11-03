@@ -1,0 +1,1076 @@
+{
+  "format": "R1101 earlier native original GitHub Actions artifact ZIP receipt v1",
+  "issue": "https://github.com/wakairo/NewLang_Compiler/issues/1103",
+  "scope": "Priority 2 original artifact ZIP custody only. No compiler/native/Lean/test/Actions/CI execution.",
+  "branch": "r-archive/r1101-native-raw",
+  "parent_archive_commit": "ec9ca8dd019bb3e53f69af9a655b360a29178e0b",
+  "parent_archive_tree": "b946c3883bc8dd4defd0727f4f93817d2c22643a",
+  "canonical_main": "c6fe0b3493fb4012b07bfd8c2c17f79566b67ad4",
+  "canonical": "Draft17.34",
+  "provenance": "Earlier native run 41556384720, event push, attempt 1, completed/success, immutable head f457c0d5a4861adc67ee11252d765ab351bba898. Separate from final-native run 41557456384.",
+  "transport": "Same byte-preserving path as final artifacts: GitHub artifact API connector download; binary staging URL to file bytes; mechanically generated base64 JSON with strict round-trip equality; authenticated gh api POST input file; independent raw blob GET and bytewise comparison. No text transcription, repack or recompression.",
+  "artifacts": [
+    {
+      "matrix": "GCC",
+      "artifact_id": 13194832012,
+      "artifact_name": "r1101-native-GCC-f457c0d5a4861adc67ee11252d765ab351bba898-attempt1",
+      "original_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/artifacts/13194832012/zip",
+      "run_id": 41556384720,
+      "run_attempt": 1,
+      "head_sha": "f457c0d5a4861adc67ee11252d765ab351bba898",
+      "job_id": 125656174613,
+      "size": 12123,
+      "sha256": "01ec3734aa3c5d9679d103bbe1e1d65b7becccda3ed97f5f3d5521e289420341",
+      "git_blob_sha": "5d54b8a1a5d4a83f2e5ac13b51742087eda39b67",
+      "path": "docs/evidence/r1101-native-raw/run-41556384720/artifact-13194832012-GCC.zip",
+      "zip_entries": [
+        {
+          "name": "negative-runner.log",
+          "uncompressed_bytes": 7559,
+          "compressed_bytes": 1553,
+          "crc32": "f9f9b888",
+          "compression": 8
+        },
+        {
+          "name": "p01-runner.log",
+          "uncompressed_bytes": 4964,
+          "compressed_bytes": 1339,
+          "crc32": "3f8c92f1",
+          "compression": 8
+        },
+        {
+          "name": "p02-runner.log",
+          "uncompressed_bytes": 1964,
+          "compressed_bytes": 944,
+          "crc32": "3ddd48a5",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.C17.stderr",
+          "uncompressed_bytes": 172,
+          "compressed_bytes": 137,
+          "crc32": "96140d68",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.CHECK.stderr",
+          "uncompressed_bytes": 172,
+          "compressed_bytes": 137,
+          "crc32": "96140d68",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.C17.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 160,
+          "crc32": "6af229e4",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.CHECK.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 160,
+          "crc32": "6af229e4",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.C17.stderr",
+          "uncompressed_bytes": 200,
+          "compressed_bytes": 156,
+          "crc32": "3e1de3cd",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.CHECK.stderr",
+          "uncompressed_bytes": 200,
+          "compressed_bytes": 156,
+          "crc32": "3e1de3cd",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.C17.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 159,
+          "crc32": "efc7d729",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.CHECK.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 159,
+          "crc32": "efc7d729",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.C17_BUILD.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.C17_BUILD.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.NATIVE.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.NATIVE.stdout",
+          "uncompressed_bytes": 150,
+          "compressed_bytes": 116,
+          "crc32": "8d68e8fd",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.C17_BUILD.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.C17_BUILD.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.NATIVE.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.NATIVE.stdout",
+          "uncompressed_bytes": 150,
+          "compressed_bytes": 117,
+          "crc32": "4c44327d",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.C17.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.C17.stdout",
+          "uncompressed_bytes": 2090,
+          "compressed_bytes": 632,
+          "crc32": "148186a9",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.CHECK.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.NAMED.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.NAMED.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p02_break_old_known_call_index1.CHECK.stderr",
+          "uncompressed_bytes": 233,
+          "compressed_bytes": 178,
+          "crc32": "1476509d",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p02_break_old_known_call_index1.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        }
+      ],
+      "full_entry_crc": "OK",
+      "jsonl_count": 0
+    },
+    {
+      "matrix": "Clang",
+      "artifact_id": 13194752130,
+      "artifact_name": "r1101-native-Clang-f457c0d5a4861adc67ee11252d765ab351bba898-attempt1",
+      "original_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/artifacts/13194752130/zip",
+      "run_id": 41556384720,
+      "run_attempt": 1,
+      "head_sha": "f457c0d5a4861adc67ee11252d765ab351bba898",
+      "job_id": 125656174313,
+      "size": 12150,
+      "sha256": "45aad8f6384183982087492030983fb6b0cd154add6366fcc06b1deebb8628c9",
+      "git_blob_sha": "cd532c64c46d969ed01b487a20645fc3316abc8d",
+      "path": "docs/evidence/r1101-native-raw/run-41556384720/artifact-13194752130-Clang.zip",
+      "zip_entries": [
+        {
+          "name": "negative-runner.log",
+          "uncompressed_bytes": 7559,
+          "compressed_bytes": 1553,
+          "crc32": "f9f9b888",
+          "compression": 8
+        },
+        {
+          "name": "p01-runner.log",
+          "uncompressed_bytes": 5052,
+          "compressed_bytes": 1367,
+          "crc32": "c4e15bc0",
+          "compression": 8
+        },
+        {
+          "name": "p02-runner.log",
+          "uncompressed_bytes": 1964,
+          "compressed_bytes": 944,
+          "crc32": "3ddd48a5",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.C17.stderr",
+          "uncompressed_bytes": 172,
+          "compressed_bytes": 137,
+          "crc32": "96140d68",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.CHECK.stderr",
+          "uncompressed_bytes": 172,
+          "compressed_bytes": 137,
+          "crc32": "96140d68",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.C17.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 160,
+          "crc32": "6af229e4",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.CHECK.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 160,
+          "crc32": "6af229e4",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.C17.stderr",
+          "uncompressed_bytes": 200,
+          "compressed_bytes": 156,
+          "crc32": "3e1de3cd",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.CHECK.stderr",
+          "uncompressed_bytes": 200,
+          "compressed_bytes": 156,
+          "crc32": "3e1de3cd",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.C17.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 159,
+          "crc32": "efc7d729",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.CHECK.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 159,
+          "crc32": "efc7d729",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.C17_BUILD.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.C17_BUILD.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.NATIVE.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.NATIVE.stdout",
+          "uncompressed_bytes": 150,
+          "compressed_bytes": 116,
+          "crc32": "c9095bf5",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.C17_BUILD.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.C17_BUILD.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.NATIVE.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.NATIVE.stdout",
+          "uncompressed_bytes": 150,
+          "compressed_bytes": 116,
+          "crc32": "99f7008f",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.C17.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.C17.stdout",
+          "uncompressed_bytes": 2090,
+          "compressed_bytes": 632,
+          "crc32": "148186a9",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.CHECK.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.NAMED.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.NAMED.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p02_break_old_known_call_index1.CHECK.stderr",
+          "uncompressed_bytes": 233,
+          "compressed_bytes": 178,
+          "crc32": "1476509d",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p02_break_old_known_call_index1.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        }
+      ],
+      "full_entry_crc": "OK",
+      "jsonl_count": 0
+    },
+    {
+      "matrix": "ASan",
+      "artifact_id": 13194866999,
+      "artifact_name": "r1101-native-ASan-f457c0d5a4861adc67ee11252d765ab351bba898-attempt1",
+      "original_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/artifacts/13194866999/zip",
+      "run_id": 41556384720,
+      "run_attempt": 1,
+      "head_sha": "f457c0d5a4861adc67ee11252d765ab351bba898",
+      "job_id": 125656174992,
+      "size": 12195,
+      "sha256": "8016b7b603d2a33353071b2b93a09eb8b50880129deab82250b8a3a56844db66",
+      "git_blob_sha": "8b129bdc926688fbc94b1dea833074644ac77b6b",
+      "path": "docs/evidence/r1101-native-raw/run-41556384720/artifact-13194866999-ASan.zip",
+      "zip_entries": [
+        {
+          "name": "negative-runner.log",
+          "uncompressed_bytes": 7559,
+          "compressed_bytes": 1553,
+          "crc32": "f9f9b888",
+          "compression": 8
+        },
+        {
+          "name": "p02-runner.log",
+          "uncompressed_bytes": 1964,
+          "compressed_bytes": 944,
+          "crc32": "3ddd48a5",
+          "compression": 8
+        },
+        {
+          "name": "p01-runner.log",
+          "uncompressed_bytes": 5202,
+          "compressed_bytes": 1410,
+          "crc32": "1c4cfd0b",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.C17.stderr",
+          "uncompressed_bytes": 172,
+          "compressed_bytes": 137,
+          "crc32": "96140d68",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.CHECK.stderr",
+          "uncompressed_bytes": 172,
+          "compressed_bytes": 137,
+          "crc32": "96140d68",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.C17.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 160,
+          "crc32": "6af229e4",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.CHECK.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 160,
+          "crc32": "6af229e4",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.C17.stderr",
+          "uncompressed_bytes": 200,
+          "compressed_bytes": 156,
+          "crc32": "3e1de3cd",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.CHECK.stderr",
+          "uncompressed_bytes": 200,
+          "compressed_bytes": 156,
+          "crc32": "3e1de3cd",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.C17.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 159,
+          "crc32": "efc7d729",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.CHECK.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 159,
+          "crc32": "efc7d729",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.C17_BUILD.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.C17_BUILD.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.NATIVE.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.NATIVE.stdout",
+          "uncompressed_bytes": 150,
+          "compressed_bytes": 117,
+          "crc32": "d4f98296",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.C17_BUILD.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.C17_BUILD.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.NATIVE.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.NATIVE.stdout",
+          "uncompressed_bytes": 150,
+          "compressed_bytes": 117,
+          "crc32": "7d02a17b",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.C17.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.C17.stdout",
+          "uncompressed_bytes": 2090,
+          "compressed_bytes": 632,
+          "crc32": "148186a9",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.CHECK.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.NAMED.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.NAMED.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p02_break_old_known_call_index1.CHECK.stderr",
+          "uncompressed_bytes": 233,
+          "compressed_bytes": 178,
+          "crc32": "1476509d",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p02_break_old_known_call_index1.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        }
+      ],
+      "full_entry_crc": "OK",
+      "jsonl_count": 0
+    },
+    {
+      "matrix": "UBSan",
+      "artifact_id": 13194677078,
+      "artifact_name": "r1101-native-UBSan-f457c0d5a4861adc67ee11252d765ab351bba898-attempt1",
+      "original_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/artifacts/13194677078/zip",
+      "run_id": 41556384720,
+      "run_attempt": 1,
+      "head_sha": "f457c0d5a4861adc67ee11252d765ab351bba898",
+      "job_id": 125656174515,
+      "size": 12195,
+      "sha256": "0a255a804bbed5c45afcb8b7c0f5a5918f5c2ca926195737136d507605881618",
+      "git_blob_sha": "062e471e8d8fb1dbeb737ab368ea380a52c71c0b",
+      "path": "docs/evidence/r1101-native-raw/run-41556384720/artifact-13194677078-UBSan.zip",
+      "zip_entries": [
+        {
+          "name": "negative-runner.log",
+          "uncompressed_bytes": 7559,
+          "compressed_bytes": 1553,
+          "crc32": "f9f9b888",
+          "compression": 8
+        },
+        {
+          "name": "p01-runner.log",
+          "uncompressed_bytes": 5210,
+          "compressed_bytes": 1413,
+          "crc32": "0a381c38",
+          "compression": 8
+        },
+        {
+          "name": "p02-runner.log",
+          "uncompressed_bytes": 1964,
+          "compressed_bytes": 944,
+          "crc32": "3ddd48a5",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.C17.stderr",
+          "uncompressed_bytes": 172,
+          "compressed_bytes": 137,
+          "crc32": "96140d68",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.CHECK.stderr",
+          "uncompressed_bytes": 172,
+          "compressed_bytes": 137,
+          "crc32": "96140d68",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n01_bare_break.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.C17.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 160,
+          "crc32": "6af229e4",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.CHECK.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 160,
+          "crc32": "6af229e4",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n02_loan_ref_escape_break.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.C17.stderr",
+          "uncompressed_bytes": 200,
+          "compressed_bytes": 156,
+          "crc32": "3e1de3cd",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.CHECK.stderr",
+          "uncompressed_bytes": 200,
+          "compressed_bytes": 156,
+          "crc32": "3e1de3cd",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n03_unknown_field_break.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.C17.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 159,
+          "crc32": "efc7d729",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.C17.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.CHECK.stderr",
+          "uncompressed_bytes": 204,
+          "compressed_bytes": 159,
+          "crc32": "efc7d729",
+          "compression": 8
+        },
+        {
+          "name": "r1101_n04_break_type_mismatch.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.C17_BUILD.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.C17_BUILD.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.NATIVE.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O0.NATIVE.stdout",
+          "uncompressed_bytes": 150,
+          "compressed_bytes": 115,
+          "crc32": "4bfb2749",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.C17_BUILD.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.C17_BUILD.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.NATIVE.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.-O2.NATIVE.stdout",
+          "uncompressed_bytes": 150,
+          "compressed_bytes": 116,
+          "crc32": "ef8a0080",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.C17.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.C17.stdout",
+          "uncompressed_bytes": 2090,
+          "compressed_bytes": 632,
+          "crc32": "148186a9",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.CHECK.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.NAMED.stderr",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p01_break_old_index0.NAMED.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p02_break_old_known_call_index1.CHECK.stderr",
+          "uncompressed_bytes": 233,
+          "compressed_bytes": 178,
+          "crc32": "1476509d",
+          "compression": 8
+        },
+        {
+          "name": "r1101_p02_break_old_known_call_index1.CHECK.stdout",
+          "uncompressed_bytes": 0,
+          "compressed_bytes": 2,
+          "crc32": "00000000",
+          "compression": 8
+        }
+      ],
+      "full_entry_crc": "OK",
+      "jsonl_count": 0
+    }
+  ],
+  "historical_first_red_runs": [
+    41553194373,
+    41553194008
+  ],
+  "second_red_runs": [
+    41556392239,
+    41556392219
+  ],
+  "coverage_limit": "These are original job-upload artifact ZIPs, not whole-run log archive ZIPs. No original whole-run log ZIP is included; historical first RED/raw/V1/V2 are preserved without rewriting. Post-save custody report is in Issue #1103.",
+  "value_alignment_risk": "Custody preserves auditability; no new compiler claim or Product GO, no universal soundness or measured UB-prevention audit-locality benefit. Product GO #624 PAUSED, H1 #268 HOLD."
+}
