@@ -139,17 +139,23 @@ static bool stutter_source_shape(Check *c, const NLSyntaxView *s)
 /* Exact persistent semantic frame, not just bytes/scalar bits. The entry was
  * captured from this source transaction, and the projection retains that
  * origin. Extra iteration values must be flat free temporaries; no nonflat
- * package, loan or hidden dependency may be introduced on C. */
+ * package, loan or hidden dependency may be introduced on C. A fresh scalar
+ * binding installs one lexical place and consumes one incarnation/fact ID;
+ * projection ends that place but must not rewind either allocator. Require
+ * exactly that finite delta, while every persistent place/fact stays exact. */
 static bool stutter_frame(const NLSemanticContext *a,
-                          const NLSemanticContext *b)
+                          const NLSemanticContext *b, size_t fresh_bindings)
 {
     if (!a || !b || a->binding_count != b->binding_count ||
         a->place_count != b->place_count || a->scope_count != b->scope_count ||
         a->value_count > b->value_count || a->domain_count || b->domain_count ||
         a->region_count || b->region_count || a->occurrence_count ||
         b->occurrence_count || a->function_count != b->function_count ||
-        a->last_incarnation != b->last_incarnation ||
-        a->last_value_fact != b->last_value_fact || !nl_copy_same_types(a, b))
+        a->last_incarnation > b->last_incarnation ||
+        b->last_incarnation - a->last_incarnation != fresh_bindings ||
+        a->last_value_fact > b->last_value_fact ||
+        b->last_value_fact - a->last_value_fact != fresh_bindings ||
+        !nl_copy_same_types(a, b))
         return false;
     for (size_t i = 0; i < a->binding_count; ++i) {
         const NLBindingEntry *x = &a->bindings[i], *y = &b->bindings[i];
@@ -282,9 +288,10 @@ static NLCheckStatus stutter_relation(const NLStutterProof *s,
                 nl_checked_node_view(a, n->initializer);
             if (!stutter_literal(v, usize, s->next) ||
                 !stutter_frame(
-                    e, nl_control_state_context((NLControlState *)x->state)) ||
+                    e, nl_control_state_context((NLControlState *)x->state),
+                    1) ||
                 !stutter_frame(
-                    e, nl_control_state_context((NLControlState *)u->state)))
+                    e, nl_control_state_context((NLControlState *)u->state), 1))
                 return bad;
             size_t nc = 0, nl = 0, nb = 0, na = 0;
             for (size_t j = 1; j <= a->count; ++j)
@@ -379,7 +386,7 @@ static NLCheckStatus validate_stutter_cycle(const NLLinearBreakProof *p,
                          nl_semantic_core_type(p->world, NL_TYPE_USIZE),
                          s->initial) ||
         !stutter_frame(nl_control_state_context(s->entry),
-                       nl_control_state_context(p->entry)))
+                       nl_control_state_context(p->entry), 0))
         return bad;
     for (size_t i = 0; i < 3; ++i) {
         const StutterGraph *a = &s->graphs[i];
