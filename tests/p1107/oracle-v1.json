@@ -1,0 +1,130 @@
+{
+  "authority": "c6fe0b3493fb4012b07bfd8c2c17f79566b67ad4",
+  "canonical": "Draft17.34",
+  "cases": {
+    "01-bound": {
+      "baseline": 3,
+      "candidate": 0,
+      "expected": {
+        "root": 1,
+        "index": 1,
+        "old": 185,
+        "new": 226,
+        "sibling": 64,
+        "after": [
+          185,
+          226
+        ]
+      },
+      "helper": true
+    },
+    "02-inline": {
+      "baseline": 3,
+      "candidate": 0,
+      "expected": {
+        "root": 1,
+        "index": 0,
+        "old": 153,
+        "new": 203,
+        "sibling": 78,
+        "after": [
+          203,
+          153
+        ]
+      },
+      "helper": true
+    },
+    "03-no-caller-write": {
+      "baseline": 3,
+      "candidate": 0,
+      "expected": {
+        "root": 1,
+        "index": 1,
+        "old": 214,
+        "new": 91,
+        "sibling": 67,
+        "after": [
+          67,
+          91
+        ]
+      },
+      "helper": true
+    },
+    "04-two-originals": {
+      "baseline": 3,
+      "candidate": 0,
+      "expected": {
+        "root": 2,
+        "index": 0,
+        "old": 205,
+        "new": 139,
+        "sibling": 84,
+        "after": [
+          139,
+          205
+        ],
+        "other": [
+          32,
+          111
+        ]
+      },
+      "helper": true
+    },
+    "05-equal-bits-old": {
+      "baseline": 3,
+      "candidate": 0,
+      "expected": {
+        "root": 1,
+        "index": 1,
+        "old": 185,
+        "new": 185,
+        "sibling": 64,
+        "after": [
+          185,
+          185
+        ]
+      },
+      "helper": true
+    },
+    "06-outside-control": {
+      "baseline": 0,
+      "candidate": 0,
+      "expected": null,
+      "helper": false
+    },
+    "07-primitive-control": {
+      "baseline": 0,
+      "candidate": 0,
+      "expected": {
+        "root": 1,
+        "index": 1,
+        "old": 185,
+        "new": 226,
+        "sibling": 64,
+        "after": [
+          185,
+          226
+        ]
+      },
+      "helper": false
+    },
+    "08-equal-bits-wrong-return": {
+      "baseline": 3,
+      "candidate": 3,
+      "expected": null,
+      "helper": false
+    },
+    "09-read-loan-write": {
+      "baseline": 3,
+      "candidate": 3,
+      "expected": null,
+      "helper": false
+    },
+    "10-multiple-changes": {
+      "baseline": 3,
+      "candidate": 3,
+      "expected": null,
+      "helper": false
+    }
+  }
+}
