@@ -3125,6 +3125,32 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     }
 }
 
+/* The pure predicate consumer validated both literal arms and the real Bool
+ * producer. Emit that guest condition exactly once, including direct IF
+ * RETURN/tail forms; never emit the checker's cached truth. */
+static bool predicate_emit_return(FILE *stream, const NLCheckedFragment *f,
+                                  const NLCheckedNodeView *value)
+{
+    const NLCheckedNodeView *condition =
+        nl_checked_node_view(f, value->initializer);
+    if (!emit_less_operands(stream, f, condition, 1) ||
+        fputs("    return (", stream) < 0 ||
+        !emit_quantity_bool(stream, f, condition) || fputs(" ? ", stream) < 0)
+        return false;
+    for (size_t a = 0; a < 2; ++a) {
+        const NLCheckedNodeId id = (NLCheckedNodeId)(value - f->nodes) + 1;
+        const NLCheckedFragment *arm = nl_checked_if_arm(f, id, a);
+        const NLCheckedNodeView *root =
+            nl_checked_node_view(arm, nl_checked_root(arm));
+        const NLCheckedNodeView *block =
+            nl_checked_node_view(arm, root->initializer);
+        if (!v1_emit_scalar(stream, nl_checked_node_view(arm, block->tail)) ||
+            (a == 0 && fputs(" : ", stream) < 0))
+            return false;
+    }
+    return fputs(");\n", stream) >= 0;
+}
+
 static bool v1_emit_body(FILE *stream, const V0Function *fn)
 {
     const NLCheckedFragment *f = fn->body;
@@ -3141,6 +3167,12 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
         if (v->kind == NL_CHECKED_RETURN) {
             const NLCheckedNodeView *returned =
                 nl_checked_node_view(f, v->initializer);
+            if (fn->quantity_parameter && returned->kind == NL_CHECKED_IF) {
+                if (!predicate_emit_return(stream, f, returned))
+                    return false;
+                i = v->next_item;
+                continue;
+            }
             if (returned->kind == NL_CHECKED_REPLACE) {
                 if (!gate_emit_replace(stream, f, v->initializer, 1, false) ||
                     fprintf(stream, "    return nl_replace_old_%zu;\n",
@@ -3169,7 +3201,10 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
     }
     if (root->tail != 0) {
         const NLCheckedNodeView *tail = nl_checked_node_view(f, root->tail);
-        if (tail->kind == NL_CHECKED_REPLACE) {
+        if (fn->quantity_parameter && tail->kind == NL_CHECKED_IF) {
+            if (!predicate_emit_return(stream, f, tail))
+                return false;
+        } else if (tail->kind == NL_CHECKED_REPLACE) {
             if (!gate_emit_replace(stream, f, root->tail, 1, false) ||
                 fprintf(stream, "    return nl_replace_old_%zu;\n",
                         root->tail) < 0)

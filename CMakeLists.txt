@@ -1046,14 +1046,17 @@ if(BUILD_TESTING)
     add_test(NAME p1107_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1107)
     add_executable(p1117_probe tests/p1117/probe.c)
+    add_executable(p1117_lineage tests/p1117/lineage.c)
     add_executable(p1117_safety tests/p1117/safety_v3.c)
     add_executable(p1117_oom tests/p1117/safety_oom_v2.c)
-    foreach(target p1117_probe p1117_safety p1117_oom)
+    foreach(target p1117_probe p1117_lineage p1117_safety p1117_oom)
         target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
         target_link_libraries(${target} PRIVATE newlang_checked_c_node newlang_semantic)
         target_compile_options(${target} PRIVATE -UNDEBUG)
     endforeach()
     target_link_options(p1117_probe PRIVATE -Wl,--wrap=nl_if_field_prepare)
+    add_test(NAME p1117_actual_return_lineage.unit COMMAND p1117_lineage
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/sources/01-equality.nl")
     target_compile_definitions(p1117_oom PRIVATE P1117_OOM)
     target_link_options(p1117_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc
         -Wl,--wrap=realloc -no-pie)
@@ -1072,7 +1075,7 @@ if(BUILD_TESTING)
         set_tests_properties(p1117_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE)
     endforeach()
     add_test(NAME p1117_native.integration COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/run.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/run_v2.py"
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1117_probe>"
         "${CMAKE_CURRENT_BINARY_DIR}/p1117-native" candidate
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")

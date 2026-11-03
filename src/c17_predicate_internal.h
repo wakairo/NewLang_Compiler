@@ -66,6 +66,7 @@ static bool predicate_arm(PredicateWalk *w, NLCheckedNodeId id, size_t index)
            !block->terminates && !block->first_item && !block->item_count &&
            root->type == w->u8 && block->type == w->u8 &&
            root->result_count == 1 && block->result_count == 1 &&
+           root->results[0].type == w->u8 && block->results[0].type == w->u8 &&
            root->results[0].value == tail->results[0].value &&
            block->results[0].value == tail->results[0].value &&
            tail->type == w->u8 && copy_if_literal(arm, tail) &&
@@ -256,11 +257,14 @@ static bool predicate_body(const NLCheckedFragment *f, NLSymbolId formal,
             return false;
         id = n->next_item;
     }
-    if (items != root->item_count || w.selections != 1)
+    if (items != root->item_count)
         return false;
     const NLControlExits *exits = nl_checked_control_exits(f);
     if (returned) {
-        if (!root->terminates || root->tail ||
+        const NLCheckedNodeView *value = nl_checked_node_view(f, returned);
+        if (!value || !root->terminates || root->tail ||
+            root->returned.type != p->u8 ||
+            root->returned.value != value->results[0].value ||
             nl_control_exits_count(exits) != 1 ||
             !nl_control_exits_only_return(exits, f->function_target))
             return false;
@@ -272,6 +276,8 @@ static bool predicate_body(const NLCheckedFragment *f, NLSymbolId formal,
             nl_control_exits_count(exits) || !predicate_scalar(&w, root->tail))
             return false;
     }
+    if (w.selections != 1)
+        return false;
     for (size_t i = 0; i < nl_checked_node_count(f); ++i)
         if (!w.seen[i])
             return false;
@@ -300,6 +306,13 @@ static bool predicate_call(const NLCheckedFragment *f, NLCheckedNodeId id,
         !predicate_name(f, call->name, fn->name) ||
         !v1_call_parameter_kind(f, id, p, &formal, true) ||
         !predicate_body(body, formal, p))
+        return false;
+    const NLCheckedNodeView *root =
+        nl_checked_node_view(body, nl_checked_root(body));
+    const NLCheckedResult result =
+        root->terminates ? root->returned : root->results[0];
+    if (call->results[0].type != result.type ||
+        call->results[0].value != result.value)
         return false;
     V0Function *prior = v0_find_function(p, call->function);
     if (prior)
