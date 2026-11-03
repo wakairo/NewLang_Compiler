@@ -362,7 +362,7 @@ if(BUILD_TESTING)
     add_executable(p603_gate_probe tests/p603/gate_probe.c)
     target_link_libraries(p603_gate_probe PRIVATE newlang_checked_c_node newlang_semantic)
     execute_process(COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/legacy_current.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/legacy_current_v2.py"
         "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/p1117-current"
         COMMAND_ERROR_IS_FATAL ANY)
     add_executable(p603_comparison_test "${CMAKE_CURRENT_BINARY_DIR}/p1117-current/p603_current.c")
@@ -1044,7 +1044,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" candidate)
     add_test(NAME p1107_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_forward.py" p1107)
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_current.py" p1107)
     add_executable(p1117_probe tests/p1117/probe.c)
     add_executable(p1117_safety tests/p1117/safety.c)
     add_executable(p1117_oom tests/p1117/safety.c)
@@ -1073,7 +1073,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_BINARY_DIR}/p1117-native" candidate
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
     add_test(NAME p1117_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/evidence_test.py")
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_current.py" p1117)
     add_executable(p1098_probe tests/p1098/probe.c)
     add_executable(p1098_oom tests/p1098/probe.c)
     target_compile_definitions(p1098_oom PRIVATE P1098_OOM)
@@ -1114,7 +1114,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/run-v2.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098")
     add_test(NAME p1098_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_forward.py" p1098)
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_current.py" p1098)
     add_executable(p1092_observe tests/p1092/observe.c)
     add_executable(p1092_oom tests/p1092/observe.c)
     target_compile_definitions(p1092_oom PRIVATE P1092_OOM)
