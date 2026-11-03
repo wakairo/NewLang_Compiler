@@ -75,12 +75,13 @@ static void p1107_helper_enter(const uint8_t *p, uint8_t incoming)
 {
     assert(p1107_before_count == 1 && p1107_after_count == 0);
     assert(p1107_calls++ == 0 && p1107_changes == 0);
-    assert(p == p1107_roots[EXPECT_SELECTED-1][EXPECT_INDEX]);
+    assert(p == p1107_roots[EXPECT_SELECTED - 1][EXPECT_INDEX]);
     assert(*p == EXPECT_OLD && incoming == EXPECT_NEW);
 }
 static void p1107_helper_changed(const uint8_t *p)
 {
     assert(p1107_calls == 1 && p1107_changes++ == 0 && p1107_after_count == 0);
-    assert(p == p1107_roots[EXPECT_SELECTED-1][EXPECT_INDEX] && *p == EXPECT_NEW);
+    assert(p == p1107_roots[EXPECT_SELECTED - 1][EXPECT_INDEX] &&
+           *p == EXPECT_NEW);
 }
 #endif

@@ -51,7 +51,8 @@ static bool prepare(const char *path, Input *i)
             NL_PARSE_OK);
     REQUIRE(nl_semantic_create(&i->context) == NL_CHECK_OK);
     const NLSyntaxTree *units[] = {i->unit};
-    NLCheckStatus registered = nl_semantic_register_function_unit(i->context, units, 1, NULL);
+    NLCheckStatus registered =
+        nl_semantic_register_function_unit(i->context, units, 1, NULL);
     printf("P1107 actual registration status=%d\n", (int)registered);
     REQUIRE(registered == NL_CHECK_OK);
     return entry(i);
@@ -78,7 +79,8 @@ static NLCheckedNodeId copy_call(const NLCheckedFragment *f)
     NLCheckedNodeId call = 0;
     for (size_t n = 0; n < f->count; ++n)
         if (f->nodes[n].kind == NL_CHECKED_REGISTERED_CALL) {
-            if (call) return 0;
+            if (call)
+                return 0;
             call = n + 1;
         }
     return call;
@@ -91,20 +93,28 @@ static bool public_copy(const NLCheckedFragment *f, NLCheckedNodeId call)
     REQUIRE(call && nl_checked_copy_body_view(f, call, &v));
     REQUIRE(nl_checked_copy_body_parameters(f, call, &a));
     REQUIRE(nl_checked_copy_body_validate(f, call, &v) == NL_CHECK_OK);
-    REQUIRE(nl_checked_copy_body_parameters_validate(f, call, &a) == NL_CHECK_OK);
-    REQUIRE(v.event_count == 1 && nl_checked_copy_body_event(f, call, 0, &event));
+    REQUIRE(nl_checked_copy_body_parameters_validate(f, call, &a) ==
+            NL_CHECK_OK);
+    REQUIRE(v.event_count == 1 &&
+            nl_checked_copy_body_event(f, call, 0, &event));
     REQUIRE(event.kind == NL_COPY_BODY_CHANGE);
-    REQUIRE(nl_checked_copy_body_event_validate(f, call, 0, &event) == NL_CHECK_OK);
-    REQUIRE(event.field.parent == a.field.parent && event.field.child == a.field.child);
-    printf("P1107 genuine public GET/current call=%zu root=%zu child=%zu event=%zu\n", call, a.field.parent, a.field.child, event.node);
+    REQUIRE(nl_checked_copy_body_event_validate(f, call, 0, &event) ==
+            NL_CHECK_OK);
+    REQUIRE(event.field.parent == a.field.parent &&
+            event.field.child == a.field.child);
+    printf("P1107 genuine public GET/current call=%zu root=%zu child=%zu "
+           "event=%zu\n",
+           call, a.field.parent, a.field.child, event.node);
     return true;
 }
 static bool outside(const char *path)
 {
     Input i = {0};
     REQUIRE(prepare(path, &i));
-    REQUIRE(nl_semantic_check_expression(i.context, i.tree, &i.root, NULL) == NL_CHECK_OK);
-    const NLCheckedFragment *owner = nl_checked_call_body(i.root, nl_checked_root(i.root));
+    REQUIRE(nl_semantic_check_expression(i.context, i.tree, &i.root, NULL) ==
+            NL_CHECK_OK);
+    const NLCheckedFragment *owner =
+        nl_checked_call_body(i.root, nl_checked_root(i.root));
     REQUIRE(owner && public_copy(owner, copy_call(owner)));
     destroy(&i);
     return true;
@@ -142,21 +152,22 @@ static size_t negatives;
 static bool rejected(Input *i, const char *name)
 {
     NLLinearBreakView v = {.base = 987654};
-    REQUIRE(nl_linear_break_validate(i->owner, i->loop, &v) == NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    REQUIRE(nl_linear_break_validate(i->owner, i->loop, &v) ==
+            NL_CHECK_ANALYSIS_PRECISION_LIMIT);
     REQUIRE(v.base == 987654);
     V0Program p = program(i);
     REQUIRE(!v0_validate_call(i->root, nl_checked_root(i->root), &p));
     printf("P1107 refusal %zu %s\n", ++negatives, name);
     return true;
 }
-#define MUTATE(type, object, member, value) \
-    do { \
-        type saved = (object)->member; \
-        REQUIRE(saved != (value)); \
-        (object)->member = (value); \
-        bool refused = rejected(&a, #object "." #member); \
-        (object)->member = saved; \
-        REQUIRE(refused); \
+#define MUTATE(type, object, member, value)                                    \
+    do {                                                                       \
+        type saved = (object)->member;                                         \
+        REQUIRE(saved != (value));                                             \
+        (object)->member = (value);                                            \
+        bool refused = rejected(&a, #object "." #member);                      \
+        (object)->member = saved;                                              \
+        REQUIRE(refused);                                                      \
     } while (0)
 static bool observe(const char *path, size_t index, size_t old, size_t next)
 {
@@ -164,41 +175,45 @@ static bool observe(const char *path, size_t index, size_t old, size_t next)
     REQUIRE(prepare(path, &a));
     REQUIRE(nl_sem_clone(a.context, &b.context) == NL_CHECK_OK && entry(&b));
     REQUIRE(checked(&a) && checked(&b));
-    REQUIRE(positive(&a,index,old,next) && positive(&b,index,old,next));
+    REQUIRE(positive(&a, index, old, next) && positive(&b, index, old, next));
     NLCheckedNodeId call = copy_call(a.body), foreign_call = copy_call(b.body);
     REQUIRE(call && foreign_call);
-    NLCheckedNodeView *node = &a.body->nodes[call-1];
+    NLCheckedNodeView *node = &a.body->nodes[call - 1];
     NLCopyBodyView view;
     NLCopyBodyParameters params;
-    REQUIRE(nl_checked_copy_body_view(a.body,call,&view));
-    REQUIRE(nl_checked_copy_body_parameters(a.body,call,&params));
+    REQUIRE(nl_checked_copy_body_view(a.body, call, &view));
+    REQUIRE(nl_checked_copy_body_parameters(a.body, call, &params));
     NLCopyBodyParameters wrong = params;
-    wrong.field.index = 1-index;
-    REQUIRE(nl_checked_copy_body_parameters_validate(a.body,call,&wrong) == NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    wrong.field.index = 1 - index;
+    REQUIRE(nl_checked_copy_body_parameters_validate(a.body, call, &wrong) ==
+            NL_CHECK_ANALYSIS_PRECISION_LIMIT);
     wrong = params;
     wrong.field.parent_incarnation++;
-    REQUIRE(nl_checked_copy_body_parameters_validate(a.body,call,&wrong) == NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    REQUIRE(nl_checked_copy_body_parameters_validate(a.body, call, &wrong) ==
+            NL_CHECK_ANALYSIS_PRECISION_LIMIT);
     NLCopyBodyView wrong_view = view;
-    wrong_view.body = nl_checked_call_body(b.body,foreign_call);
-    REQUIRE(nl_checked_copy_body_validate(a.body,call,&wrong_view) == NL_CHECK_ANALYSIS_PRECISION_LIMIT);
-    NLCheckedNodeView *loop = &a.owner->nodes[a.loop-1];
+    wrong_view.body = nl_checked_call_body(b.body, foreign_call);
+    REQUIRE(nl_checked_copy_body_validate(a.body, call, &wrong_view) ==
+            NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    NLCheckedNodeView *loop = &a.owner->nodes[a.loop - 1];
     MUTATE(size_t, node, function, 0);
-    MUTATE(size_t, node, function, a.context->function_count+1);
+    MUTATE(size_t, node, function, a.context->function_count + 1);
     MUTATE(size_t, node, results[0].value, 0);
     MUTATE(bool, node, body_backed, false);
     MUTATE(size_t, loop, break_edges, 2);
     MUTATE(size_t, loop, continue_edges, 1);
     MUTATE(bool, loop, header_inductive, false);
-    MUTATE(size_t, a.body, count, a.body->count+1);
+    MUTATE(size_t, a.body, count, a.body->count + 1);
     MUTATE(size_t, a.body, body_count, 0);
-    MUTATE(size_t, a.body, body_count, a.body->body_count+1);
+    MUTATE(size_t, a.body, body_count, a.body->body_count + 1);
     MUTATE(size_t, a.owner, arm_count, 0);
-    MUTATE(size_t, a.owner, arm_count, a.owner->arm_count+1);
+    MUTATE(size_t, a.owner, arm_count, a.owner->arm_count + 1);
     MUTATE(const NLSource *, a.body, source, b.spelling);
     MUTATE(const NLSemanticContext *, a.body, context, b.body->context);
     NLSemanticContext *world = (NLSemanticContext *)a.body->context;
-    REQUIRE(world->functions && node->function && node->function<=world->function_count);
-    NLFunctionEntry *fn = &world->functions[node->function-1];
+    REQUIRE(world->functions && node->function &&
+            node->function <= world->function_count);
+    NLFunctionEntry *fn = &world->functions[node->function - 1];
     MUTATE(size_t, fn, result, 1);
     MUTATE(NLCheckedKind, fn, kind, NL_CHECKED_REPLACE);
     MUTATE(bool, fn, caller_effects, true);
@@ -209,36 +224,46 @@ static bool observe(const char *path, size_t index, size_t old, size_t next)
     MUTATE(size_t, fn, count, 0);
     NLFunctionBody *saved_body = fn->body;
     fn->body = a.owner->body_owner;
-    REQUIRE(nl_checked_copy_body_view(a.body,call,&wrong_view)); /* historical GET */
-    bool refused = rejected(&a,"changed current callable; historical GET remains");
-    REQUIRE(nl_checked_copy_body_validate(a.body,call,&view) == NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    REQUIRE(nl_checked_copy_body_view(a.body, call,
+                                      &wrong_view)); /* historical GET */
+    bool refused =
+        rejected(&a, "changed current callable; historical GET remains");
+    REQUIRE(nl_checked_copy_body_validate(a.body, call, &view) ==
+            NL_CHECK_ANALYSIS_PRECISION_LIMIT);
     fn->body = saved_body;
     REQUIRE(refused);
     MUTATE(NLFunctionEntry *, world, functions, NULL);
     MUTATE(size_t, world, function_count, 0);
-    NLControlExitView *edge = (NLControlExitView *)nl_control_exit_view(a.body->exits,0);
-    const NLControlExitView *other = nl_control_exit_view(b.body->exits,0);
-    REQUIRE(edge && other && edge->state!=other->state);
+    NLControlExitView *edge =
+        (NLControlExitView *)nl_control_exit_view(a.body->exits, 0);
+    const NLControlExitView *other = nl_control_exit_view(b.body->exits, 0);
+    REQUIRE(edge && other && edge->state != other->state);
     MUTATE(const NLControlState *, edge, state, other->state);
     MUTATE(const NLControlTarget *, edge, target, other->target);
     MUTATE(const NLCheckedFragment *, edge, source_owner, b.body);
     NLCheckedFragment shallow = *a.owner;
     NLLinearBreakView v;
-    REQUIRE(nl_linear_break_validate(&shallow,a.loop,&v)==NL_CHECK_ANALYSIS_PRECISION_LIMIT);
-    REQUIRE(positive(&a,index,old,next));
-    size_t slot=0;
-    while (slot<a.owner->arm_count && a.owner->arms[slot].match!=a.loop) ++slot;
-    REQUIRE(slot<a.owner->arm_count && a.body->body_count==1 && b.body->body_count==1);
-    a.body->bodies[0] = b.body->bodies[0]; /* genuine foreign child, never restored */
+    REQUIRE(nl_linear_break_validate(&shallow, a.loop, &v) ==
+            NL_CHECK_ANALYSIS_PRECISION_LIMIT);
+    REQUIRE(positive(&a, index, old, next));
+    size_t slot = 0;
+    while (slot < a.owner->arm_count && a.owner->arms[slot].match != a.loop)
+        ++slot;
+    REQUIRE(slot < a.owner->arm_count && a.body->body_count == 1 &&
+            b.body->body_count == 1);
+    a.body->bodies[0] =
+        b.body->bodies[0]; /* genuine foreign child, never restored */
     a.owner->arms[slot].artifact = b.body;
-    REQUIRE(rejected(&a,"genuine foreign callee and entire LOOP body"));
+    REQUIRE(rejected(&a, "genuine foreign callee and entire LOOP body"));
     a.body->body_count = 0;
     a.owner->arm_count = 0;
     a.root->body_count++;
     destroy(&a);
-    REQUIRE(positive(&b,index,old,next));
+    REQUIRE(positive(&b, index, old, next));
     destroy(&b);
-    printf("P1107 COMPLETE negatives=%zu foreign B survived canonical A destruction\n",negatives);
+    printf("P1107 COMPLETE negatives=%zu foreign B survived canonical A "
+           "destruction\n",
+           negatives);
     return true;
 }
 
