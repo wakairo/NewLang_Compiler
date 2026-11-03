@@ -1,0 +1,903 @@
+{
+  "version": "C219_V3_REPAIR_FINAL_RAW_ARCHIVE",
+  "archive_policy": "Evidence-only unreferenced Git commit object, not an execution ref. No ref/push/CI for preservation. Tested R HEAD remains baf7c90a1b84de08adfcbe3407361efdcb32013a.",
+  "independence": "NON_BLIND_CALIBRATED",
+  "R_head": "baf7c90a1b84de08adfcbe3407361efdcb32013a",
+  "R_tree": "d2def57c8549a7791787a09affdb41f4fcc9d277",
+  "actual_checkout": "8a8d0513283c60f4ca65c94826bafbf8221e516b",
+  "fixed_P": "a1091b2672b0a4b1d37e2571ef97bf100882b60b",
+  "main": "65055be55934416c911453463b5f26fa461e8d6a",
+  "PR": 1128,
+  "PR_policy": "DRAFT / NEVER MERGE",
+  "source_oracle_sha256": "77219031e4a02354079d300a60507df4a2a1245bdddc314ec845a6bf155be791",
+  "source_freeze": "https://github.com/wakairo/NewLang_Compiler/issues/1120#issuecomment-6604296170",
+  "first": "https://github.com/wakairo/NewLang_Compiler/issues/1120#issuecomment-6604707684",
+  "repair_freeze": "https://github.com/wakairo/NewLang_Compiler/issues/1120#issuecomment-6604857005",
+  "initial_first_preservation": "evidence/r1120/c219/v3-first (reachable from tested R HEAD); original FIRST unchanged",
+  "verdict": "C219_V3_NON_BLIND_FINITE_RESULTS_WITH_EXPLICIT_COVERAGE_LIMITS",
+  "budget": {
+    "FAST_used": 2,
+    "FAST_maximum": 6,
+    "natural_pair_used": 2,
+    "natural_pair_maximum": 2,
+    "manual_runs": 0,
+    "reruns": 0,
+    "additional_preservation_CI": 0,
+    "further_ref_push_allowed_under_C219": false
+  },
+  "github_native_artifacts": {
+    "FAST": 0,
+    "FULL5": 0,
+    "PARTIAL": 0
+  },
+  "interpretation": {
+    "native_sources": 6,
+    "independent_frozen_calls": 33,
+    "per_job": {
+      "original_guest_executions": 12,
+      "observed_guest_executions": 12,
+      "observed_call_rows": 66,
+      "bool_rows": 48,
+      "selected_arm_rows": 66
+    },
+    "six_jobs": {
+      "guest_executions": 144,
+      "observed_call_rows": 396,
+      "bool_rows": 288,
+      "selected_arm_rows": 396
+    },
+    "original_guest": "Unmodified emitted C compiled and exited successfully with no stdout/stderr at O0/O2. Return values and selected-arm behavior were measured in the separately instrumented copy only.",
+    "observed_guest": "Passive argument/result/Bool/arm logs matched frozen expectations at O0/O2. One observed selected arm per call; not a direct branch observation of the unmodified original.",
+    "public_view": "Genuine registered main and retained immutable known-call views; definition_time_unknown_observed=false; public_pure_predicate_validator_used=false. Traversal completion does not establish general unknown-value proof.",
+    "coverage": "C07 explicit RETURN/alias, C08 IF-result/tail alias and W3: CHECK0 and public traversal, emit4 V1-BACKEND-UNSUPPORTED, stdout0, named sentinel preserved; native NOT_REACHED.",
+    "negative": "Nine cases in each job rejected with their prospectively predicted first diagnostics at CHECK/emit3; stdout0 and sentinel preserved. Rejected cases never native.",
+    "sanitizers": "ASan/UBSan jobs explicitly compile and run original and observed C01-C06 guests at O0/O2 with the respective sanitizer; 24 guest executions per sanitizer job, no diagnostics in these finite executions. Host newlangc/public observer also sanitized. Other four jobs do not provide guest sanitizer evidence.",
+    "limits": [
+      "64-bit measured target only; no 32-bit claim",
+      "No new LOOP/Continue, foreign graph/owner mutation or OOM campaign",
+      "C07/C08 forecast emitter0 remains recorded; actual backend4 is coverage limitation, not native PASS",
+      "Original V1 BLIND-INCONCLUSIVE and V2 unexecuted unchanged",
+      "No READY/merge/Product GO; audit locality UNMEASURED; GO624 PAUSED/H1 HOLD"
+    ]
+  },
+  "jobs": [
+    {
+      "run_id": 41643129722,
+      "job_id": 125941429378,
+      "name": "GCC",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "ctests": "653/653",
+      "negative_cases": 9,
+      "coverage_refusals": 5,
+      "native_cases": 6,
+      "guest_runs": 24,
+      "observed_call_rows": 66,
+      "bool_rows": 48,
+      "arm_rows": 66,
+      "sanitizer": "none",
+      "commands": 123,
+      "cc": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "native_flags": [
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror"
+      ],
+      "compiler_binary_sha256": "eda948c240284d556d45bbd5c50a3b3ec3748a9951ad994cddb03393c8d2f07a",
+      "actual_checkout": "8a8d0513283c60f4ca65c94826bafbf8221e516b",
+      "actual_tree": "d2def57c8549a7791787a09affdb41f4fcc9d277",
+      "receipt_sha256": "4b6431472df2ca90f45aa634d21b537a98d50bbfdf48e6c145f239df1ff060b3",
+      "raw_zip": {
+        "bytes": 113164,
+        "entries": 290,
+        "sha256": "0541573b927952b6cde96926600b820a42d7aac91664a2c7a218b8a9ee03b41e",
+        "uncompressed_file_bytes": 769487
+      },
+      "all_entry_CRC32_and_manifest_SHA256_verified": true
+    },
+    {
+      "run_id": 41643129722,
+      "job_id": 125941429499,
+      "name": "GCC Release",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "ctests": "653/653",
+      "negative_cases": 9,
+      "coverage_refusals": 5,
+      "native_cases": 6,
+      "guest_runs": 24,
+      "observed_call_rows": 66,
+      "bool_rows": 48,
+      "arm_rows": 66,
+      "sanitizer": "none",
+      "commands": 123,
+      "cc": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "native_flags": [
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror"
+      ],
+      "compiler_binary_sha256": "bd5f86d85c88a2b7c4a1306dcd9303888a8537bf8f6a5b1f3ff95f7ba85fc587",
+      "actual_checkout": "8a8d0513283c60f4ca65c94826bafbf8221e516b",
+      "actual_tree": "d2def57c8549a7791787a09affdb41f4fcc9d277",
+      "receipt_sha256": "4b6431472df2ca90f45aa634d21b537a98d50bbfdf48e6c145f239df1ff060b3",
+      "raw_zip": {
+        "bytes": 113169,
+        "entries": 290,
+        "sha256": "c3daa47272498b5252965fdb29e0d62c47391aeb15afdb634debca7eb04be653",
+        "uncompressed_file_bytes": 769486
+      },
+      "all_entry_CRC32_and_manifest_SHA256_verified": true
+    },
+    {
+      "run_id": 41643129722,
+      "job_id": 125941429357,
+      "name": "Clang",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "ctests": "653/653",
+      "negative_cases": 9,
+      "coverage_refusals": 5,
+      "native_cases": 6,
+      "guest_runs": 24,
+      "observed_call_rows": 66,
+      "bool_rows": 48,
+      "arm_rows": 66,
+      "sanitizer": "none",
+      "commands": 123,
+      "cc": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)",
+      "native_flags": [
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-Wno-error=gcc-install-dir-libstdcxx"
+      ],
+      "compiler_binary_sha256": "926e9d6dba76dc480837548a02a97ab21a9d2eee3b6f95ec008c158e1aa25ade",
+      "actual_checkout": "8a8d0513283c60f4ca65c94826bafbf8221e516b",
+      "actual_tree": "d2def57c8549a7791787a09affdb41f4fcc9d277",
+      "receipt_sha256": "4b6431472df2ca90f45aa634d21b537a98d50bbfdf48e6c145f239df1ff060b3",
+      "raw_zip": {
+        "bytes": 113622,
+        "entries": 290,
+        "sha256": "dc7cd158318f5bf43b0021c7201c1346b7299c0f97cc6cc520ac3b8fa5790a45",
+        "uncompressed_file_bytes": 779258
+      },
+      "all_entry_CRC32_and_manifest_SHA256_verified": true
+    },
+    {
+      "run_id": 41643129722,
+      "job_id": 125941429312,
+      "name": "ASan",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "ctests": "653/653",
+      "negative_cases": 9,
+      "coverage_refusals": 5,
+      "native_cases": 6,
+      "guest_runs": 24,
+      "observed_call_rows": 66,
+      "bool_rows": 48,
+      "arm_rows": 66,
+      "sanitizer": "address",
+      "commands": 123,
+      "cc": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)",
+      "native_flags": [
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-Wno-error=gcc-install-dir-libstdcxx",
+        "-fsanitize=address",
+        "-fno-omit-frame-pointer",
+        "-fno-sanitize-recover=all"
+      ],
+      "compiler_binary_sha256": "8e41800da1cb13064f570922cdc4df79d39428235a41c73c319ce170aaf9dc46",
+      "actual_checkout": "8a8d0513283c60f4ca65c94826bafbf8221e516b",
+      "actual_tree": "d2def57c8549a7791787a09affdb41f4fcc9d277",
+      "receipt_sha256": "4b6431472df2ca90f45aa634d21b537a98d50bbfdf48e6c145f239df1ff060b3",
+      "raw_zip": {
+        "bytes": 113864,
+        "entries": 290,
+        "sha256": "de69a738728f9f05211c2b2dbd0c3f3f13af3c3c90dc14f65b91951ca5bae0fb",
+        "uncompressed_file_bytes": 784556
+      },
+      "all_entry_CRC32_and_manifest_SHA256_verified": true
+    },
+    {
+      "run_id": 41643129722,
+      "job_id": 125941428747,
+      "name": "UBSan",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "ctests": "653/653",
+      "negative_cases": 9,
+      "coverage_refusals": 5,
+      "native_cases": 6,
+      "guest_runs": 24,
+      "observed_call_rows": 66,
+      "bool_rows": 48,
+      "arm_rows": 66,
+      "sanitizer": "undefined",
+      "commands": 123,
+      "cc": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)",
+      "native_flags": [
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-Wno-error=gcc-install-dir-libstdcxx",
+        "-fsanitize=undefined",
+        "-fno-omit-frame-pointer",
+        "-fno-sanitize-recover=all"
+      ],
+      "compiler_binary_sha256": "747be8dce1012625ba8595aed447892e24e5daf21f5fe84c2308523f04761f53",
+      "actual_checkout": "8a8d0513283c60f4ca65c94826bafbf8221e516b",
+      "actual_tree": "d2def57c8549a7791787a09affdb41f4fcc9d277",
+      "receipt_sha256": "4b6431472df2ca90f45aa634d21b537a98d50bbfdf48e6c145f239df1ff060b3",
+      "raw_zip": {
+        "bytes": 113839,
+        "entries": 290,
+        "sha256": "20a495d2d3be2dd5818c48e708fce0aade784ed605529b161590bfc2b2c0842e",
+        "uncompressed_file_bytes": 784640
+      },
+      "all_entry_CRC32_and_manifest_SHA256_verified": true
+    },
+    {
+      "run_id": 41643129684,
+      "job_id": 125941428182,
+      "name": "PARTIAL",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "ctests": "652/652",
+      "negative_cases": 9,
+      "coverage_refusals": 5,
+      "native_cases": 6,
+      "guest_runs": 24,
+      "observed_call_rows": 66,
+      "bool_rows": 48,
+      "arm_rows": 66,
+      "sanitizer": "none",
+      "commands": 123,
+      "cc": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "native_flags": [
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror"
+      ],
+      "compiler_binary_sha256": "8db2e3150105e14feb61d81a57c30d62221996f3df7cb234f5c78e528f45b49a",
+      "actual_checkout": "8a8d0513283c60f4ca65c94826bafbf8221e516b",
+      "actual_tree": "d2def57c8549a7791787a09affdb41f4fcc9d277",
+      "receipt_sha256": "4b6431472df2ca90f45aa634d21b537a98d50bbfdf48e6c145f239df1ff060b3",
+      "raw_zip": {
+        "bytes": 113193,
+        "entries": 290,
+        "sha256": "6467e07b06152a0302ce2e99cb85ce40b8129cb3e1f5669bea2cd889c87aae40",
+        "uncompressed_file_bytes": 772466
+      },
+      "all_entry_CRC32_and_manifest_SHA256_verified": true
+    }
+  ],
+  "files": [
+    {
+      "path": "evidence/r1120/c219/v3-repair/41643129722_125941429357_attempt1_Clang_R-raw.zip",
+      "bytes": 113622,
+      "sha256": "dc7cd158318f5bf43b0021c7201c1346b7299c0f97cc6cc520ac3b8fa5790a45",
+      "run_id": 41643129722,
+      "job_id": 125941429357,
+      "job_name": "Clang",
+      "run_attempt": 1,
+      "kind": "R-owned original repair raw ZIP; not GitHub-native artifact",
+      "sha": "de9218633688008735a0a490268a205ebb00c97d",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "evidence/r1120/c219/v3-repair/41643129722_125941429357_attempt1_Clang_job.log",
+      "bytes": 371330,
+      "sha256": "9939ffa693a501d157835f2fd65e1d319bf9852b45425503f787aa5695212a8d",
+      "run_id": 41643129722,
+      "job_id": 125941429357,
+      "job_name": "Clang",
+      "run_attempt": 1,
+      "kind": "full decoded GitHub job log",
+      "sha": "b1db3cfa4ee6073fb2aca92503ffe505484e2286",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "evidence/r1120/c219/v3-repair/41643129722_125941429499_attempt1_GCC_Release_R-raw.zip",
+      "bytes": 113169,
+      "sha256": "c3daa47272498b5252965fdb29e0d62c47391aeb15afdb634debca7eb04be653",
+      "run_id": 41643129722,
+      "job_id": 125941429499,
+      "job_name": "GCC_Release",
+      "run_attempt": 1,
+      "kind": "R-owned original repair raw ZIP; not GitHub-native artifact",
+      "sha": "41838ebf89827740bd276af387203c90cf2785ba",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "evidence/r1120/c219/v3-repair/41643129722_125941429499_attempt1_GCC_Release_job.log",
+      "bytes": 368699,
+      "sha256": "8ad74ecdb996114b5355435086cd3faba6b1df2493acd7915e0ded07b808d4ef",
+      "run_id": 41643129722,
+      "job_id": 125941429499,
+      "job_name": "GCC_Release",
+      "run_attempt": 1,
+      "kind": "full decoded GitHub job log",
+      "sha": "99a1c7a2e5d7c57fd485863c57d92279fbe4d9fc",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "evidence/r1120/c219/v3-repair/41643118343_125941391867_attempt1_FAST_job.log",
+      "bytes": 82911,
+      "sha256": "44afc5fefefc91588175ef02c0855f467f339a75c572b6704d21a83a0403ae70",
+      "run_id": 41643118343,
+      "job_id": 125941391867,
+      "job_name": "FAST",
+      "run_attempt": 1,
+      "kind": "full decoded GitHub FAST job log; registration only",
+      "sha": "056b4c70f1acd8ab737eabba166e56203b244459",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "evidence/r1120/c219/v3-repair/41643129722_125941428747_attempt1_UBSan_R-raw.zip",
+      "bytes": 113839,
+      "sha256": "20a495d2d3be2dd5818c48e708fce0aade784ed605529b161590bfc2b2c0842e",
+      "kind": "R-owned original repair raw ZIP; not GitHub-native artifact",
+      "run_id": 41643129722,
+      "job_id": 125941428747,
+      "job_name": "UBSan",
+      "run_attempt": 1,
+      "sha": "9ab35b308fe1aa0ff99b137b6d6dec41a0913bc3",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "evidence/r1120/c219/v3-repair/41643129722_125941428747_attempt1_UBSan_job.log",
+      "bytes": 369807,
+      "sha256": "373511ecd2e8be595d377e57b180cc0763eb9f7300ae62d71f66162415e3adc0",
+      "kind": "full decoded GitHub job log",
+      "run_id": 41643129722,
+      "job_id": 125941428747,
+      "job_name": "UBSan",
+      "run_attempt": 1,
+      "sha": "65d0aea414175260b14862ebd364978001604319",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "evidence/r1120/c219/v3-repair/41643129722_125941429378_attempt1_GCC_R-raw.zip",
+      "bytes": 113164,
+      "sha256": "0541573b927952b6cde96926600b820a42d7aac91664a2c7a218b8a9ee03b41e",
+      "kind": "R-owned original repair raw ZIP; not GitHub-native artifact",
+      "run_id": 41643129722,
+      "job_id": 125941429378,
+      "job_name": "GCC",
+      "run_attempt": 1,
+      "sha": "ec828ffb1e14ea5dc076a02b73cbdb67bc32f5a8",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "evidence/r1120/c219/v3-repair/41643129722_125941429378_attempt1_GCC_job.log",
+      "bytes": 368664,
+      "sha256": "4bfd54666e48e416241ccfaa6909841d04c5c71e45e50892fb0d3d948134461d",
+      "kind": "full decoded GitHub job log",
+      "run_id": 41643129722,
+      "job_id": 125941429378,
+      "job_name": "GCC",
+      "run_attempt": 1,
+      "sha": "e92d1d5d000f0f821b41b56bac92f33a6e4d5a15",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "evidence/r1120/c219/v3-repair/41643129684_125941428182_attempt1_PARTIAL_R-raw.zip",
+      "bytes": 113193,
+      "sha256": "6467e07b06152a0302ce2e99cb85ce40b8129cb3e1f5669bea2cd889c87aae40",
+      "kind": "R-owned original repair raw ZIP; not GitHub-native artifact",
+      "run_id": 41643129684,
+      "job_id": 125941428182,
+      "job_name": "PARTIAL",
+      "run_attempt": 1,
+      "sha": "8db56ac636696c7bdce457dadc2528d7f1dcb8d2",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "evidence/r1120/c219/v3-repair/41643129684_125941428182_attempt1_PARTIAL_job.log",
+      "bytes": 407864,
+      "sha256": "8b08e9fad095f29c5f1ca709101f306c5aa59337266701c8a90d938ffa60935b",
+      "kind": "full decoded GitHub job log",
+      "run_id": 41643129684,
+      "job_id": 125941428182,
+      "job_name": "PARTIAL",
+      "run_attempt": 1,
+      "sha": "4429648c1176d64d454e7204ca1675414bc3ecf2",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "evidence/r1120/c219/v3-repair/41643129722_125941429312_attempt1_ASan_R-raw.zip",
+      "bytes": 113864,
+      "sha256": "de69a738728f9f05211c2b2dbd0c3f3f13af3c3c90dc14f65b91951ca5bae0fb",
+      "kind": "R-owned original repair raw ZIP; not GitHub-native artifact",
+      "run_id": 41643129722,
+      "job_id": 125941429312,
+      "job_name": "ASan",
+      "run_attempt": 1,
+      "sha": "a26baf50140925d9b66c5408f0d1f9784821f19e",
+      "mode": "100644",
+      "type": "blob"
+    },
+    {
+      "path": "evidence/r1120/c219/v3-repair/41643129722_125941429312_attempt1_ASan_job.log",
+      "bytes": 368976,
+      "sha256": "5c3a5c6d031bb0683f6e435d7d44a9e052e5d2265cb3f7ef2f7fd26c372220d0",
+      "kind": "full decoded GitHub job log",
+      "run_id": 41643129722,
+      "job_id": 125941429312,
+      "job_name": "ASan",
+      "run_attempt": 1,
+      "sha": "e3fd2ee280f5d4ab9ea75d1dba9951a58be97d34",
+      "mode": "100644",
+      "type": "blob"
+    }
+  ],
+  "case_matrix": [
+    {
+      "file": "N01_mixed_compare.nl",
+      "source_sha256": "cd57af1c0be201d1e3bfaaedfd7dc8f76fe4b0f6d638287ba6cb59f48275f10e",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostics": [
+        "USIZE-EQUALITY-TYPE"
+      ],
+      "emit_diagnostics": [
+        "USIZE-EQUALITY-TYPE"
+      ],
+      "disposition": "FRONTEND_REJECT_OBSERVED_NATIVE_NOT_REACHED",
+      "diagnostic_matches_prediction": true
+    },
+    {
+      "file": "N02_wrong_actual.nl",
+      "source_sha256": "6a75cf3f73cd71e218e246e7b6299bfadc5383f79cb8198ee7ee9214cd04eb34",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostics": [
+        "P3-TYPE-MISMATCH"
+      ],
+      "emit_diagnostics": [
+        "P3-TYPE-MISMATCH"
+      ],
+      "disposition": "FRONTEND_REJECT_OBSERVED_NATIVE_NOT_REACHED",
+      "diagnostic_matches_prediction": true
+    },
+    {
+      "file": "N03_wrong_arm_type.nl",
+      "source_sha256": "f39ec0d1233ed88a11b1c4ad797e48eb16d4cf8b3192e748ab62728a2898c166",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostics": [
+        "P13-IF-RESULT"
+      ],
+      "emit_diagnostics": [
+        "P13-IF-RESULT"
+      ],
+      "disposition": "FRONTEND_REJECT_OBSERVED_NATIVE_NOT_REACHED",
+      "diagnostic_matches_prediction": true
+    },
+    {
+      "file": "N04_nonbool_condition.nl",
+      "source_sha256": "3a52a76d902c6ed71d709d26dbbbc7c69e4537e753135c6251e3f3ee3b678736",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostics": [
+        "P13-IF-CONDITION"
+      ],
+      "emit_diagnostics": [
+        "P13-IF-CONDITION"
+      ],
+      "disposition": "FRONTEND_REJECT_OBSERVED_NATIVE_NOT_REACHED",
+      "diagnostic_matches_prediction": true
+    },
+    {
+      "file": "N05_no_else.nl",
+      "source_sha256": "d504f73e54d926213806131f1dd914beef099a251e4b8491d911c73ba98b56e3",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostics": [
+        "P13-IF-ELSE"
+      ],
+      "emit_diagnostics": [
+        "P13-IF-ELSE"
+      ],
+      "disposition": "FRONTEND_REJECT_OBSERVED_NATIVE_NOT_REACHED",
+      "diagnostic_matches_prediction": true
+    },
+    {
+      "file": "N06_unproved_arithmetic.nl",
+      "source_sha256": "74db2d6d28691a429219586b2d28480530c69069917144cb132a3a872955c826",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostics": [
+        "USIZE-ADDITION-PRECISION"
+      ],
+      "emit_diagnostics": [
+        "USIZE-ADDITION-PRECISION"
+      ],
+      "disposition": "FRONTEND_REJECT_OBSERVED_NATIVE_NOT_REACHED",
+      "diagnostic_matches_prediction": true
+    },
+    {
+      "file": "N07_read_to_write.nl",
+      "source_sha256": "de67b713b3a58ba53533436af2623bf70bf238ad18bc4ac7d09ca0ca8608ff8b",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostics": [
+        "P3-TYPE-MISMATCH"
+      ],
+      "emit_diagnostics": [
+        "P3-TYPE-MISMATCH"
+      ],
+      "disposition": "FRONTEND_REJECT_OBSERVED_NATIVE_NOT_REACHED",
+      "diagnostic_matches_prediction": true
+    },
+    {
+      "file": "N08_ref_escape.nl",
+      "source_sha256": "f2928c3d22c5ab956802040877be1b7c29a7d586fe87d1512aaf791efd45a2f3",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostics": [
+        "P8-SIGNATURE-PRECISION"
+      ],
+      "emit_diagnostics": [
+        "P8-SIGNATURE-PRECISION"
+      ],
+      "disposition": "FRONTEND_REJECT_OBSERVED_NATIVE_NOT_REACHED",
+      "diagnostic_matches_prediction": true
+    },
+    {
+      "file": "N09_implicit_borrow.nl",
+      "source_sha256": "adae928414b38c2103c0bcc0275b73377a3b6b0736f382262597caef2ac94ea2",
+      "check_rc": 3,
+      "emit_rc": 3,
+      "diagnostics": [
+        "P3-TYPE-MISMATCH"
+      ],
+      "emit_diagnostics": [
+        "P3-TYPE-MISMATCH"
+      ],
+      "disposition": "FRONTEND_REJECT_OBSERVED_NATIVE_NOT_REACHED",
+      "diagnostic_matches_prediction": true
+    },
+    {
+      "file": "C01_equal_913.nl",
+      "source_sha256": "65410fd4cfdead8aad4093f4f37938c0a1f23b5e9503fceeaff7585044fa0bbc",
+      "check_rc": 0,
+      "emit_rc": 0,
+      "diagnostics": [],
+      "emit_diagnostics": [],
+      "disposition": "FINITE_NATIVE_OBSERVED_PASS",
+      "public_summary": {
+        "calls_with_bodies": 9,
+        "complete_observation": true,
+        "definition_time_unknown_observed": false,
+        "event": "summary",
+        "frames": 26,
+        "if_nodes": 8,
+        "known_bool_results": 16,
+        "public_pure_predicate_validator_used": false,
+        "unknown_bool_results": 0,
+        "usize_comparison_nodes": 8
+      },
+      "original_c_sha256": "ee4aaa4b41fc784e79c023754bb84ede8004fd3b137d7147d95c483579f452d3",
+      "observed_c_sha256": "fe6d936523e80fb7e06c649295fb6460d86aceb9c19935b8a5baeba68c3ed4b4"
+    },
+    {
+      "file": "C02_less_613.nl",
+      "source_sha256": "bf32f87d6513e97db705ef5b534a9db91729f4ccf322142aface25a1069d582c",
+      "check_rc": 0,
+      "emit_rc": 0,
+      "diagnostics": [],
+      "emit_diagnostics": [],
+      "disposition": "FINITE_NATIVE_OBSERVED_PASS",
+      "public_summary": {
+        "calls_with_bodies": 9,
+        "complete_observation": true,
+        "definition_time_unknown_observed": false,
+        "event": "summary",
+        "frames": 26,
+        "if_nodes": 8,
+        "known_bool_results": 8,
+        "public_pure_predicate_validator_used": false,
+        "unknown_bool_results": 0,
+        "usize_comparison_nodes": 8
+      },
+      "original_c_sha256": "c11f6f698cf0e5c16fea12016d7b50a6f917f6462a4942f40df3de3763e3f5ce",
+      "observed_c_sha256": "3697dea8fc2419c78b88e260b40f832611b1cb53bef23b50caf051712841cfee"
+    },
+    {
+      "file": "C03_bool_equal_1253.nl",
+      "source_sha256": "290e8b23766268ef3e071bbb29c027797e2b4b159a77d5cbf913bfeb4406af13",
+      "check_rc": 0,
+      "emit_rc": 0,
+      "diagnostics": [],
+      "emit_diagnostics": [],
+      "disposition": "FINITE_NATIVE_OBSERVED_PASS",
+      "public_summary": {
+        "calls_with_bodies": 6,
+        "complete_observation": true,
+        "definition_time_unknown_observed": false,
+        "event": "summary",
+        "frames": 17,
+        "if_nodes": 5,
+        "known_bool_results": 10,
+        "public_pure_predicate_validator_used": false,
+        "unknown_bool_results": 0,
+        "usize_comparison_nodes": 5
+      },
+      "original_c_sha256": "6cba5ab481ba23098996895b5b74a855f0464099984bc5aa1028f533487ae84f",
+      "observed_c_sha256": "646780e5abd03ec78a8420e1d395f00754e0a1b558a9e1061767a15ca9096ad1"
+    },
+    {
+      "file": "C04_bool_less_1253.nl",
+      "source_sha256": "6f1fce2d40a78b20f85c18ac502987082af48341655d9738ca0df1c2c23ca79a",
+      "check_rc": 0,
+      "emit_rc": 0,
+      "diagnostics": [],
+      "emit_diagnostics": [],
+      "disposition": "FINITE_NATIVE_OBSERVED_PASS",
+      "public_summary": {
+        "calls_with_bodies": 6,
+        "complete_observation": true,
+        "definition_time_unknown_observed": false,
+        "event": "summary",
+        "frames": 17,
+        "if_nodes": 5,
+        "known_bool_results": 10,
+        "public_pure_predicate_validator_used": false,
+        "unknown_bool_results": 0,
+        "usize_comparison_nodes": 5
+      },
+      "original_c_sha256": "24a67ac6abb89cf1b6ca261669ddcef16b9d3045b605fe75cece9a47030b4e13",
+      "observed_c_sha256": "f163ce7d986e2a65b8821bfd5206f225b95d5973716ad8c71cf261f2b4dee325"
+    },
+    {
+      "file": "C05_width_64.nl",
+      "source_sha256": "ba5e8b31027d5834c0e72b2c0ba8452670f7fa38f372ffc2d56b27173855ec33",
+      "check_rc": 0,
+      "emit_rc": 0,
+      "diagnostics": [],
+      "emit_diagnostics": [],
+      "disposition": "FINITE_NATIVE_OBSERVED_PASS",
+      "public_summary": {
+        "calls_with_bodies": 4,
+        "complete_observation": true,
+        "definition_time_unknown_observed": false,
+        "event": "summary",
+        "frames": 11,
+        "if_nodes": 3,
+        "known_bool_results": 6,
+        "public_pure_predicate_validator_used": false,
+        "unknown_bool_results": 0,
+        "usize_comparison_nodes": 3
+      },
+      "original_c_sha256": "9c93b9057a8051b61c0a5e803e010b4ad65b1152165d4a9aa1c0cffd40585998",
+      "observed_c_sha256": "7c3b556f04f32b4647d6805b69c6ed3f0898120ade29a5480de63121ff8497be"
+    },
+    {
+      "file": "C06_maximum_64.nl",
+      "source_sha256": "18b89bed0ee9c701bc1cbd579a58c27d3e444c540b10765c1aa09cfed34a18bd",
+      "check_rc": 0,
+      "emit_rc": 0,
+      "diagnostics": [],
+      "emit_diagnostics": [],
+      "disposition": "FINITE_NATIVE_OBSERVED_PASS",
+      "public_summary": {
+        "calls_with_bodies": 5,
+        "complete_observation": true,
+        "definition_time_unknown_observed": false,
+        "event": "summary",
+        "frames": 14,
+        "if_nodes": 4,
+        "known_bool_results": 7,
+        "public_pure_predicate_validator_used": false,
+        "unknown_bool_results": 0,
+        "usize_comparison_nodes": 4
+      },
+      "original_c_sha256": "39eccbfaee75e29503f5d0ed4de414e00c9ac71577eb61491f32237c6f1b4f0e",
+      "observed_c_sha256": "c2f898d5644909fdd385191f02e4b4c34af7e228afe5cd46076923b31312362a"
+    },
+    {
+      "file": "C07_explicit_return_alias.nl",
+      "source_sha256": "425922ae3662c7764540eb4dff07f8ec15c49fbe22fdff7b34e6e86bd7598535",
+      "check_rc": 0,
+      "emit_rc": 4,
+      "diagnostics": [],
+      "emit_diagnostics": [
+        "V1-BACKEND-UNSUPPORTED"
+      ],
+      "disposition": "CHECK_PASS_NATIVE_COVERAGE_REFUSAL",
+      "forecast_emitter_rc": 0,
+      "public_summary": {
+        "calls_with_bodies": 4,
+        "complete_observation": true,
+        "definition_time_unknown_observed": false,
+        "event": "summary",
+        "frames": 11,
+        "if_nodes": 3,
+        "known_bool_results": 9,
+        "public_pure_predicate_validator_used": false,
+        "unknown_bool_results": 0,
+        "usize_comparison_nodes": 3
+      }
+    },
+    {
+      "file": "C08_if_result_tail_alias.nl",
+      "source_sha256": "90a793506e4874830a272b5fa20d50547d4a7a04324bb32963aeb35a86ea71b8",
+      "check_rc": 0,
+      "emit_rc": 4,
+      "diagnostics": [],
+      "emit_diagnostics": [
+        "V1-BACKEND-UNSUPPORTED"
+      ],
+      "disposition": "CHECK_PASS_NATIVE_COVERAGE_REFUSAL",
+      "forecast_emitter_rc": 0,
+      "public_summary": {
+        "calls_with_bodies": 5,
+        "complete_observation": true,
+        "definition_time_unknown_observed": false,
+        "event": "summary",
+        "frames": 14,
+        "if_nodes": 4,
+        "known_bool_results": 4,
+        "public_pure_predicate_validator_used": false,
+        "unknown_bool_results": 0,
+        "usize_comparison_nodes": 4
+      }
+    },
+    {
+      "file": "W_P01_entry_adapter.nl",
+      "source_sha256": "8200a89144899d35a9262c96924e500022479271eb875d9d2a1532cca6839d17",
+      "check_rc": 0,
+      "emit_rc": 4,
+      "diagnostics": [],
+      "emit_diagnostics": [
+        "V1-BACKEND-UNSUPPORTED"
+      ],
+      "disposition": "CHECK_PASS_NATIVE_COVERAGE_REFUSAL",
+      "forecast_emitter_rc": 4,
+      "public_summary": {
+        "calls_with_bodies": 17,
+        "complete_observation": true,
+        "definition_time_unknown_observed": false,
+        "event": "summary",
+        "frames": 50,
+        "if_nodes": 16,
+        "known_bool_results": 32,
+        "public_pure_predicate_validator_used": false,
+        "unknown_bool_results": 0,
+        "usize_comparison_nodes": 16
+      }
+    },
+    {
+      "file": "W_P02_entry_adapter.nl",
+      "source_sha256": "586f3a1b3f5932f72d89a55e882aa0f215bb349f1c84d1472ed96eef6a42aa9b",
+      "check_rc": 0,
+      "emit_rc": 4,
+      "diagnostics": [],
+      "emit_diagnostics": [
+        "V1-BACKEND-UNSUPPORTED"
+      ],
+      "disposition": "CHECK_PASS_NATIVE_COVERAGE_REFUSAL",
+      "forecast_emitter_rc": 4,
+      "public_summary": {
+        "calls_with_bodies": 11,
+        "complete_observation": true,
+        "definition_time_unknown_observed": false,
+        "event": "summary",
+        "frames": 12,
+        "if_nodes": 0,
+        "known_bool_results": 30,
+        "public_pure_predicate_validator_used": false,
+        "unknown_bool_results": 0,
+        "usize_comparison_nodes": 10
+      }
+    },
+    {
+      "file": "W_W01_entry_adapter_64.nl",
+      "source_sha256": "f254af16d8f717b97595644a6b3995598fa023061d7b7b3f80ed87d9d917fe9a",
+      "check_rc": 0,
+      "emit_rc": 4,
+      "diagnostics": [],
+      "emit_diagnostics": [
+        "V1-BACKEND-UNSUPPORTED"
+      ],
+      "disposition": "CHECK_PASS_NATIVE_COVERAGE_REFUSAL",
+      "forecast_emitter_rc": 4,
+      "public_summary": {
+        "calls_with_bodies": 4,
+        "complete_observation": true,
+        "definition_time_unknown_observed": false,
+        "event": "summary",
+        "frames": 5,
+        "if_nodes": 0,
+        "known_bool_results": 9,
+        "public_pure_predicate_validator_used": false,
+        "unknown_bool_results": 0,
+        "usize_comparison_nodes": 3
+      }
+    }
+  ],
+  "runs": [
+    {
+      "id": 41643118343,
+      "event": "push",
+      "head": "baf7c90a1b84de08adfcbe3407361efdcb32013a",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 41640593167,
+      "event": "push",
+      "head": "3ceebd8ccebc0b838e9895d941f65a5120580ea0",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 41643129684,
+      "event": "pull_request",
+      "head": "baf7c90a1b84de08adfcbe3407361efdcb32013a",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 41643129722,
+      "event": "pull_request",
+      "head": "baf7c90a1b84de08adfcbe3407361efdcb32013a",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 41640919380,
+      "event": "pull_request",
+      "head": "3ceebd8ccebc0b838e9895d941f65a5120580ea0",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 41640919465,
+      "event": "pull_request",
+      "head": "3ceebd8ccebc0b838e9895d941f65a5120580ea0",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure"
+    }
+  ]
+}
