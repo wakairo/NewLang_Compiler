@@ -373,7 +373,7 @@ if(BUILD_TESTING)
         add_test(NAME p603_comparison_${group}.unit COMMAND p603_comparison_test ${group})
     endforeach()
     add_test(NAME p603_comparison_native.integration
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/legacy_native_current.py" p603
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/legacy_native_current_v2.py" p603
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p603_public_probe>"
         "$<TARGET_FILE:p603_gate_probe>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p603" "${NEWLANG_SANITIZER}")
@@ -389,7 +389,7 @@ if(BUILD_TESTING)
         add_test(NAME p504_equality_${group}.unit COMMAND p504_equality_test ${group})
     endforeach()
     add_test(NAME p504_equality_native.integration
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/legacy_native_current.py" p504
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/legacy_native_current_v2.py" p504
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p504_public_probe>"
         "$<TARGET_FILE:p504_gate_probe>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p504" "${NEWLANG_SANITIZER}")
