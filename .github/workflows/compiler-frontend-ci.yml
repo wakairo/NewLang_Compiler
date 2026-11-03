@@ -138,3 +138,16 @@ jobs:
           test ! -s "$RUNNER_TEMP/newlang-check-stdout"
           test ! -s "$RUNNER_TEMP/newlang-check-stderr"
           echo "NO LLVM / PARTIAL: Production source/checker exit 0, zero stdout/stderr"
+
+      - name: Preserve R1120 first raw observations and CTest logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r1120-v1-raw-partial-${{ github.run_id }}-attempt${{ github.run_attempt }}
+          path: |
+            build-frontend/r1120-raw/**
+            build-frontend/Testing/Temporary/LastTest.log
+            build-frontend/Testing/Temporary/LastTestsFailed.log
+            build-frontend/CMakeCache.txt
+          if-no-files-found: warn
+          retention-days: 90

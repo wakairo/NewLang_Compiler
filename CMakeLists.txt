@@ -1816,3 +1816,8 @@ if(BUILD_TESTING)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
 endif()
+
+# R1120 C216: dedicated R-branch registration; Production targets stay unchanged.
+if(BUILD_TESTING)
+    include("${CMAKE_CURRENT_SOURCE_DIR}/tests/redteam/r1120/registration.cmake")
+endif()

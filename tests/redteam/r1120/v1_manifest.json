@@ -1,0 +1,67 @@
+[
+  {
+    "path": "P01_runtime_usize_gate.nl",
+    "sha256": "d305b5f99be1a206deb682174854795bb1aefe45b0686271c54b083a765d8c31",
+    "size": 339
+  },
+  {
+    "path": "P02_bool_only.nl",
+    "sha256": "44dbfb2ab77a68cd8c1eaf42726b7fbc327f58428a41777a944cf68fd05a4df5",
+    "size": 153
+  },
+  {
+    "path": "W01_target_width.nl",
+    "sha256": "0a64719208c8b0ba8cd356faff93aa3079af8871b80a13b4b67e98652415681f",
+    "size": 82
+  },
+  {
+    "path": "N01_mixed_compare.nl",
+    "sha256": "b521a03ffb973862c36d8ed9402044e577835223a57622c090ae1d137257e1da",
+    "size": 78
+  },
+  {
+    "path": "N02_wrong_actual.nl",
+    "sha256": "c6020cc26d189ce19d1e8480096449a7b24c43d6c6a6003de1f3cf6dff88ada8",
+    "size": 126
+  },
+  {
+    "path": "N03_wrong_arm_type.nl",
+    "sha256": "1c75bc9f33b5429b523360524f790c9ac5bf027e7f5929ea33fc0cef4eb8f8f0",
+    "size": 131
+  },
+  {
+    "path": "N04_nonbool_condition.nl",
+    "sha256": "7b6ae09d6d45d24762d3a0678e6ed2002807454ebfa6904984e2e8ff568f5a6b",
+    "size": 123
+  },
+  {
+    "path": "N05_no_else.nl",
+    "sha256": "2c554cfa37da7932293874277a5bae8be6053698e7243ced39396badcf36bd18",
+    "size": 104
+  },
+  {
+    "path": "N06_unproved_arithmetic.nl",
+    "sha256": "cb3faca1eba10c23a11db733dc7725cf138bb5ea31e301836becfb6acdbf28fb",
+    "size": 155
+  },
+  {
+    "path": "N07_read_to_write.nl",
+    "sha256": "53ff6218bd76f9fe3945f9eff41a9394e01b4c7ecbf6dc8a66ebe0af1eb72c11",
+    "size": 186
+  },
+  {
+    "path": "N08_ref_escape.nl",
+    "sha256": "a7bfdf93a2cd88a9b0126d4e2dac51798ef192517faee9b91135f6fbebcf4075",
+    "size": 90
+  },
+  {
+    "path": "N09_implicit_borrow.nl",
+    "sha256": "c5eaf86d035be5cff489a7912aeb3bd67774cb6f4b31f71e89d516d9efd5abdd",
+    "size": 166
+  },
+  {
+    "path": "R1120_C214_EXPECTED.tsv",
+    "sha256": "48a6ad1a887693c542f908a6975fcd78271e5543cfea22ba3f025d7af032addf",
+    "size": 1734
+  }
+]
