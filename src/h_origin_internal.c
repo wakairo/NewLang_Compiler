@@ -1,4 +1,5 @@
 #include "h_origin_internal.h"
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -38,6 +39,8 @@ typedef struct CustodyEdge {
     NLCheckedNodeId site;
     size_t slot;
     CustodyState state;
+    NLCheckedNodeView call_view;
+    bool result_sealed;
 } CustodyEdge;
 typedef struct CustodyParent {
     struct CustodyParent *next;
@@ -49,6 +52,12 @@ typedef struct CustodyParent {
     NLCheckedFragment **bodies;
     NLCheckedNodeId *calls;
     size_t arm_count, body_count, arm_capacity, body_capacity, call_capacity;
+    NLCheckedNodeView *issued_nodes;
+    const NLCheckedNodeView *issued_node_base;
+    const NLFunctionBody *issued_body_owner;
+    size_t issued_node_count, issued_node_capacity;
+    NLCheckedNodeId issued_root;
+    bool nodes_sealed;
 } CustodyParent;
 struct NLHOriginOwner {
     NLCheckedFragment *root, *invocation;
@@ -72,6 +81,8 @@ static CustodyParent *custody_parent(const struct NLHOriginOwner *o,
                 return p;
     return NULL;
 }
+static bool same_node(const NLCheckedFragment *f, NLCheckedNodeId id,
+                      const NLCheckedNodeView *saved);
 const NLCheckedFragment *
 nl_h_custody_observe_body(const NLCheckedFragment *parent, NLCheckedNodeId call)
 {
@@ -186,6 +197,107 @@ void nl_h_custody_commit(NLCheckedFragment *parent, NLCheckedFragment *child,
             e->state = COMMITTED;
             return;
         }
+}
+static bool issued_nodes_valid(const CustodyParent *p)
+{
+    const NLCheckedFragment *f = p ? p->fragment : NULL;
+    return p && p->nodes_sealed && f && f->context == p->world &&
+           f->source == p->source && f->nodes == p->issued_node_base &&
+           f->count == p->issued_node_count &&
+           f->capacity == p->issued_node_capacity &&
+           f->root == p->issued_root && f->body_owner == p->issued_body_owner &&
+           (!p->issued_node_count ||
+            (f->nodes && p->issued_nodes &&
+             !memcmp(f->nodes, p->issued_nodes,
+                     p->issued_node_count * sizeof(*p->issued_nodes))));
+}
+static NLCheckStatus seal_nodes(struct NLHOriginOwner *o, NLCheckedFragment *f)
+{
+    CustodyParent *p = custody_parent(o, f);
+    if (!p)
+        return NL_CHECK_INTERNAL_ERROR;
+    if (p->nodes_sealed) {
+        if (!issued_nodes_valid(p))
+            return NL_CHECK_INTERNAL_ERROR;
+    } else {
+        if ((f->count && !f->nodes) ||
+            f->count > SIZE_MAX / sizeof(*p->issued_nodes))
+            return NL_CHECK_INTERNAL_ERROR;
+        NLCheckedNodeView *nodes = NULL;
+        if (f->count) {
+            nodes = malloc(f->count * sizeof(*nodes));
+            if (!nodes)
+                return NL_CHECK_OUT_OF_MEMORY;
+            memcpy(nodes, f->nodes, f->count * sizeof(*nodes));
+        }
+        p->issued_nodes = nodes;
+        p->issued_node_base = f->nodes;
+        p->issued_body_owner = f->body_owner;
+        p->issued_node_count = f->count;
+        p->issued_node_capacity = f->capacity;
+        p->issued_root = f->root;
+        p->nodes_sealed = true;
+    }
+    for (CustodyEdge *e = p->edges; e; e = e->next) {
+        if (e->state != COMMITTED)
+            return NL_CHECK_INTERNAL_ERROR;
+        const NLCheckStatus status = seal_nodes(o, e->child);
+        if (status != NL_CHECK_OK)
+            return status;
+    }
+    return NL_CHECK_OK;
+}
+NLCheckStatus nl_h_custody_seal_result(NLCheckedFragment *parent,
+                                       NLCheckedFragment *child,
+                                       NLCheckedNodeId call)
+{
+    if (!parent || !child || !call || !parent->h_origin ||
+        child->h_origin != parent->h_origin)
+        return NL_CHECK_INTERNAL_ERROR;
+    CustodyParent *p = custody_parent(parent->h_origin, parent);
+    const NLCheckedNodeView *call_view = nl_checked_node_view(parent, call);
+    if (!p || !call_view)
+        return NL_CHECK_INTERNAL_ERROR;
+    for (CustodyEdge *e = p->edges; e; e = e->next) {
+        if (e->state != PENDING || e->role != NL_CUSTODY_BODY ||
+            e->child != child || e->site != call || e->result_sealed)
+            continue;
+        const NLCheckStatus status = seal_nodes(parent->h_origin, child);
+        if (status != NL_CHECK_OK)
+            return status;
+        e->call_view = *call_view;
+        e->result_sealed = true;
+        return NL_CHECK_OK;
+    }
+    return NL_CHECK_INTERNAL_ERROR;
+}
+static bool sealed_tree_valid(const struct NLHOriginOwner *o,
+                              const NLCheckedFragment *f)
+{
+    const CustodyParent *p = custody_parent(o, f);
+    if (!issued_nodes_valid(p))
+        return false;
+    for (const CustodyEdge *e = p->edges; e; e = e->next)
+        if (e->state != COMMITTED || !sealed_tree_valid(o, e->child))
+            return false;
+    return true;
+}
+bool nl_h_custody_result_valid(const NLCheckedFragment *parent,
+                               NLCheckedNodeId call)
+{
+    if (!parent || !call || !parent->h_origin ||
+        !nl_h_custody_borrow_valid(parent))
+        return false;
+    const struct NLHOriginOwner *o = parent->h_origin;
+    const CustodyParent *p = custody_parent(o, parent);
+    if (!p)
+        return false;
+    for (const CustodyEdge *e = p->edges; e; e = e->next)
+        if (e->state == COMMITTED && e->role == NL_CUSTODY_BODY &&
+            e->site == call && e->result_sealed &&
+            same_node(parent, call, &e->call_view))
+            return sealed_tree_valid(o, e->child);
+    return false;
 }
 static bool observed_arm(const struct NLHOriginOwner *o, const CustodyEdge *e,
                          const NLCheckedFragment *view)
@@ -540,6 +652,7 @@ void nl_h_origin_release_fragment(NLCheckedFragment *f)
             p->edges = e->next;
             free(e);
         }
+        free(p->issued_nodes);
         free(p);
     }
     /* No dereferences of child/world/parent endpoints during bookkeeping:

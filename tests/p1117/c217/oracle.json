@@ -1,0 +1,51 @@
+{
+  "authority": {
+    "main": "65055be55934416c911453463b5f26fa461e8d6a",
+    "parent": "5346a7e2ca2aacb4ed6ab50f3b09bb258b1e607c",
+    "parent_tree": "ed3cc9183a133067cefaf910eb75a8066ec76bdb",
+    "canonical": "CURRENT_SPEC -> Draft17.34"
+  },
+  "baseline_contract": {
+    "ordinary_check": 0,
+    "ordinary_emit": 0,
+    "genuine_private_call_outer": [1, 1, 1],
+    "call_only_private_call_outer": [0, 0, 0],
+    "endpoints_only_private_call_outer": [0, 0, 0],
+    "coherent_private_call_outer": [1, 1, 1],
+    "restored_private_call_outer": [1, 1, 1]
+  },
+  "repair_contract": {
+    "ordinary_check": 0,
+    "ordinary_emit": 0,
+    "genuine_private_call_outer": [1, 1, 1],
+    "call_only_private_call_outer": [0, 0, 0],
+    "endpoints_only_private_call_outer": [0, 0, 0],
+    "coherent_private_call_outer": [0, 0, 0],
+    "restored_private_call_outer": [1, 1, 1]
+  },
+  "cases": {
+    "01-return-alias": {
+      "shape": "return-alias",
+      "runtime": [[400, 157], [401, 232], [403, 232]]
+    },
+    "02-tail-alias": {
+      "shape": "tail-alias",
+      "runtime": [[1, 218], [769, 143], [770, 218]]
+    },
+    "03-return-if": {
+      "shape": "return-if",
+      "runtime": [[608, 161], [609, 227], [610, 227]]
+    },
+    "04-tail-if": {
+      "shape": "tail-if",
+      "runtime": [[1, 223], [1027, 146], [1028, 223]]
+    }
+  },
+  "safety": [
+    "Every foreign result is a live CHECK-issued Unknown u8 in the same semantic context.",
+    "Copy ValueIds must remain fresh; the positive probe counts fresh aliases.",
+    "Every mutation is restored before destruction.",
+    "No altered checked graph is passed to C emission or native execution.",
+    "Native execution uses only a separate ordinary unmodified CLI process."
+  ]
+}

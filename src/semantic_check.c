@@ -3889,6 +3889,19 @@ static bool run_body(Check *caller, NLCheckedNodeId call_id,
               nl_producer_local_seal(body.artifact, caller->artifact, call_id),
               call_span))
         goto failure;
+    const bool predicate_result =
+        !body.definition && function->kind == NL_CHECKED_REGISTERED_CALL &&
+        function->count == 1 && function->parameters &&
+        function->parameters[0] == nl_semantic_core_type(c, NL_TYPE_USIZE) &&
+        function->result == nl_semantic_core_type(c, NL_TYPE_U8) &&
+        !function->caller_effects && !function->hidden_dependencies &&
+        !function->owner_receiver && !function->owner_producer &&
+        !function->custody_recipient;
+    if (predicate_result && !host(&body,
+                                  nl_h_custody_seal_result(
+                                      caller->artifact, body.artifact, call_id),
+                                  call_span))
+        goto failure;
     nl_h_custody_commit(caller->artifact, body.artifact, NL_CUSTODY_BODY,
                         count);
     nl_h_origin_take_body(caller->artifact, body.artifact, call_id, count);

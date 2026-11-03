@@ -1,6 +1,8 @@
 #ifndef NEWLANG_C17_PREDICATE_INTERNAL_H
 #define NEWLANG_C17_PREDICATE_INTERNAL_H
 
+#include "h_origin_internal.h"
+
 /* Driver-private numeric consumer. The existing source checker establishes
  * both IF arms; this walk admits only pure scalar syntax in the actual owned
  * callable. It imports no arm value/current/owner into the caller. */
@@ -287,6 +289,8 @@ static bool predicate_body(const NLCheckedFragment *f, NLSymbolId formal,
 static bool predicate_call(const NLCheckedFragment *f, NLCheckedNodeId id,
                            V0Program *p)
 {
+    if (!nl_h_custody_result_valid(f, id))
+        return false;
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLSemanticContext *c = nl_checked_context(f);
     const NLCheckedFragment *body = nl_checked_call_body(f, id);

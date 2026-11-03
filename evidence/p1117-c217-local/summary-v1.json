@@ -1,0 +1,69 @@
+{
+  "authority": {
+    "main": "65055be55934416c911453463b5f26fa461e8d6a",
+    "fixed_parent": "5346a7e2ca2aacb4ed6ab50f3b09bb258b1e607c",
+    "fixed_parent_tree": "ed3cc9183a133067cefaf910eb75a8066ec76bdb",
+    "canonical": "CURRENT_SPEC -> Draft17.34",
+    "original_pr1121_modified": false
+  },
+  "independence": {
+    "author": "Track P",
+    "r_source_oracle_raw_read_or_reused": false,
+    "p1123_frozen_inputs_executed": false
+  },
+  "freezes": {
+    "v1_sha256": "3aca7ad722ea2c494015e4d8aefc29013d59d5dafd497dd835d90c36791f20fa",
+    "v1_archive_sha256": "80a94cbe9b8b899377dce3623a798a132a998daceb6431394febc946b2fef27a",
+    "v2_sha256": "d7ba125b91ce82df04223668788906269ea10d430c8a637be6c61ef60b5b6eda",
+    "v2_archive_sha256": "0343002dd81717ef8c79be0542d58d692f9087371db512f00864eff4adb028e3",
+    "v3_sha256": "0fcaf2a3a78def5b3c4cdd400e44623ae5fa1e2adfee8b891587cf46696a39ab",
+    "v3_archive_sha256": "e5f99079597f727216b10be0c18a8b4afb7cd59b32811b5c782703f4196072e1",
+    "tracked_raw_archive_sha256": "c63c6ba1fb574aabae1b239e6c1ea36008c62d3ea32ebeac922f2ae1825473f9"
+  },
+  "first_observations": {
+    "v1_harness_stop": "The P-owned runner incorrectly required a successful atomic named-output replacement to preserve the destination inode; no lineage challenge was reached.",
+    "v2_actual_baseline": "A coherent substitution of a second live CHECK-issued Unknown u8 call result and its corresponding callee root was accepted by the private predicate consumer, direct call validator, and outer validator: 1/1/1.",
+    "v2_raw_sha256": "5cebf715bce3c6e218a03a1f4c524139b484a5661514d6820ceca192eca46e42",
+    "baseline_v3_observations_sha256": "a92130f762fd3fdb3b88c18d0cc7af3d6b72e805f75d588730df26520bc5e90c"
+  },
+  "repair": {
+    "scope": [
+      "src/h_origin_internal.c",
+      "src/h_origin_internal.h",
+      "src/semantic_check.c",
+      "src/c17_predicate_internal.h"
+    ],
+    "contract": "CHECK privately seals the issued call view and complete canonical callee subtree before publication. The bounded predicate consumer validates those immutable bytes before reading the live call/body graph.",
+    "public_api_abi_issuer_or_source_law_changed": false,
+    "copy_value_ids_remain_fresh": true,
+    "repair_v3_observations_sha256": "a397b0c1fdf0ed1897831a8619fcc5a6fad1600b8fd04673bd888af4593f4bf9",
+    "repaired_tuple": "coherent substitution 0/0/0; genuine and restored 1/1/1; partial substitutions 0/0/0"
+  },
+  "oom": {
+    "return_alias_baseline": {"registration": 847, "invocation": 604, "named": 1528},
+    "return_alias_repair": {"registration": 847, "invocation": 613, "named": 1537},
+    "tail_alias_baseline": {"registration": 615, "invocation": 421, "named": 1112},
+    "tail_alias_repair": {"registration": 615, "invocation": 430, "named": 1121},
+    "new_reached_points": 9,
+    "new_points_explanation": "Three actual calls each seal one body and two canonical IF-arm node arrays.",
+    "all_reached_points": "OUT_OF_MEMORY with no publication; named bytes/inode/mtime/temp no-clobber; fault-off retry exact"
+  },
+  "local_targeted_validation": {
+    "old_p1117": "6/6 PASS",
+    "c217": "7/7 PASS",
+    "clang23_asan_lsan": "10/10 PASS",
+    "clang23_ubsan": "10/10 PASS",
+    "gcc13_and_clang23_strict_c17_native": "all four sources, raw and passive, O0/O2 PASS with exact values",
+    "gcc13_static_asan_environment_stop": {
+      "executed_tests": 0,
+      "reason": "libasan.a link closure lacks -lm and reports undefined signgam",
+      "log_sha256": "d817fc9c42511f0377e01292dea1a1cadb6dc901ad7c64b585878ac66c365d18"
+    }
+  },
+  "limits": [
+    "The repair authenticates only the existing finite pure one-usize-formal/u8-result predicate profile.",
+    "It does not establish general compiler soundness or a cyclic LOOP/CONTINUE invariant.",
+    "Full local regression and hosted CI results are reported separately because they occur after this evidence artifact is sealed."
+  ],
+  "value_alignment_risk": "The extra private node snapshots increase trusted-code surface, retained memory, OOM sites, and future re-audit cost. The requested UB-prevention audit-locality comparison remains UNMEASURED; Product GO remains outside this result."
+}

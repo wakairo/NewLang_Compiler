@@ -1081,6 +1081,31 @@ if(BUILD_TESTING)
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
     add_test(NAME p1117_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1117)
+    add_executable(p1117_c217_lineage tests/p1117/c217/probe.c)
+    target_include_directories(p1117_c217_lineage PRIVATE
+        "${CMAKE_CURRENT_SOURCE_DIR}/src")
+    target_link_libraries(p1117_c217_lineage PRIVATE
+        newlang_checked_c_node newlang_semantic)
+    target_compile_options(p1117_c217_lineage PRIVATE -UNDEBUG)
+    foreach(profile 01-return-alias 02-tail-alias 03-return-if 04-tail-if)
+        string(REGEX REPLACE "^[0-9]+-" "" p1117_c217_shape "${profile}")
+        add_test(NAME p1117_c217_${profile}_lineage.unit
+            COMMAND p1117_c217_lineage repair
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/c217/sources/${profile}.nl"
+            "${p1117_c217_shape}")
+    endforeach()
+    foreach(profile 01-return-alias 02-tail-alias)
+        add_test(NAME p1117_c217_${profile}_oom.unit COMMAND p1117_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/c217/sources/${profile}.nl")
+        set_tests_properties(p1117_c217_${profile}_oom.unit PROPERTIES
+            RUN_SERIAL TRUE)
+    endforeach()
+    add_test(NAME p1117_c217_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/c217/run.py" repair
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1117_c217_lineage>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/c217"
+        "${CMAKE_CURRENT_BINARY_DIR}/p1117-c217-native"
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}")
     add_executable(p1098_probe tests/p1098/probe.c)
     add_executable(p1098_oom tests/p1098/probe.c)
     target_compile_definitions(p1098_oom PRIVATE P1098_OOM)
