@@ -1,0 +1,3 @@
+P1107 actual registration status=0
+P1107 FIRST RED 138: nl_linear_break_validate(i->owner, i->loop, &v) == NL_CHECK_OK
+P1107 FIRST RED 182: positive(&a, index, old, next) && positive(&b, index, old, next)

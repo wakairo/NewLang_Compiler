@@ -5835,9 +5835,10 @@ static bool linear_world_matches(const NLSemanticContext *c,
             a->custody_recipient != b->custody_recipient ||
             ((a->name == NULL) != (b->name == NULL)) ||
             (a->name && strcmp(a->name, b->name)) ||
-            (a->count && (!a->parameters || !b->parameters ||
-                          memcmp(a->parameters, b->parameters,
-                                 a->count * sizeof(*a->parameters)))))
+            (a->count &&
+             (((a->parameters == NULL) != (b->parameters == NULL)) ||
+              (a->parameters && memcmp(a->parameters, b->parameters,
+                                       a->count * sizeof(*a->parameters))))))
             return false;
     }
     return true;
