@@ -361,7 +361,12 @@ if(BUILD_TESTING)
     target_link_libraries(p603_public_probe PRIVATE newlang_semantic)
     add_executable(p603_gate_probe tests/p603/gate_probe.c)
     target_link_libraries(p603_gate_probe PRIVATE newlang_checked_c_node newlang_semantic)
-    add_executable(p603_comparison_test tests/p603/comparison_test.c)
+    execute_process(COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/legacy_current.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/p1117-current"
+        COMMAND_ERROR_IS_FATAL ANY)
+    add_executable(p603_comparison_test "${CMAKE_CURRENT_BINARY_DIR}/p1117-current/p603_current.c")
+    target_include_directories(p603_comparison_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/tests/p603")
     target_link_libraries(p603_comparison_test PRIVATE newlang_semantic)
     target_link_options(p603_comparison_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
     foreach(group parser values rollback oom)
@@ -376,7 +381,8 @@ if(BUILD_TESTING)
     target_link_libraries(p504_public_probe PRIVATE newlang_semantic)
     add_executable(p504_gate_probe tests/p504/gate_probe.c)
     target_link_libraries(p504_gate_probe PRIVATE newlang_checked_c_node newlang_semantic)
-    add_executable(p504_equality_test tests/p504/equality_test.c)
+    add_executable(p504_equality_test "${CMAKE_CURRENT_BINARY_DIR}/p1117-current/p504_current.c")
+    target_include_directories(p504_equality_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/tests/p504")
     target_link_libraries(p504_equality_test PRIVATE newlang_semantic)
     target_link_options(p504_equality_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
     foreach(group parser values rollback oom)
@@ -1038,7 +1044,36 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" candidate)
     add_test(NAME p1107_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/evidence_test.py")
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_forward.py" p1107)
+    add_executable(p1117_probe tests/p1117/probe.c)
+    add_executable(p1117_safety tests/p1117/safety.c)
+    add_executable(p1117_oom tests/p1117/safety.c)
+    foreach(target p1117_probe p1117_safety p1117_oom)
+        target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+        target_link_libraries(${target} PRIVATE newlang_checked_c_node newlang_semantic)
+        target_compile_options(${target} PRIVATE -UNDEBUG)
+    endforeach()
+    target_link_options(p1117_probe PRIVATE -Wl,--wrap=nl_if_field_prepare)
+    target_compile_definitions(p1117_oom PRIVATE P1117_OOM)
+    target_link_options(p1117_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc
+        -Wl,--wrap=realloc -no-pie)
+    target_compile_options(p1117_oom PRIVATE -fno-pie)
+    foreach(profile 01-equality 02-less-than 09-wide-equality)
+        add_test(NAME p1117_${profile}_current.unit COMMAND p1117_safety
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/sources/${profile}.nl")
+    endforeach()
+    foreach(profile 01-equality 02-less-than)
+        add_test(NAME p1117_${profile}_oom.unit COMMAND p1117_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/sources/${profile}.nl")
+        set_tests_properties(p1117_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE)
+    endforeach()
+    add_test(NAME p1117_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1117_probe>"
+        "${CMAKE_CURRENT_BINARY_DIR}/p1117-native" candidate
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
+    add_test(NAME p1117_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/evidence_test.py")
     add_executable(p1098_probe tests/p1098/probe.c)
     add_executable(p1098_oom tests/p1098/probe.c)
     target_compile_definitions(p1098_oom PRIVATE P1098_OOM)
@@ -1079,7 +1114,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/run-v2.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098")
     add_test(NAME p1098_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/p1098_forward.py")
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_forward.py" p1098)
     add_executable(p1092_observe tests/p1092/observe.c)
     add_executable(p1092_oom tests/p1092/observe.c)
     target_compile_definitions(p1092_oom PRIVATE P1092_OOM)

@@ -106,6 +106,8 @@ static bool predicate_scalar(PredicateWalk *w, NLCheckedNodeId id)
         if (!n->symbol || n->symbol > c->binding_count ||
             n->symbol > NL_SEMANTIC_MAX_ENTRIES ||
             n->value_use != NL_VALUE_COPIED ||
+            n->span.start_byte != n->name.start_byte ||
+            n->span.end_byte != n->name.end_byte ||
             !predicate_name(w->body, n->name, c->bindings[n->symbol - 1].name))
             break;
         NLValueId origin;
@@ -141,6 +143,12 @@ static bool predicate_scalar(PredicateWalk *w, NLCheckedNodeId id)
         if (n->type != w->boolean || n->argument_count != 2 || !left ||
             !right || left->type != w->quantity || right->type != w->quantity ||
             right->next_argument || !n->has_scalar_result ||
+            n->first_argument >= left->next_argument ||
+            left->next_argument >= id ||
+            n->span.start_byte != left->span.start_byte ||
+            n->span.end_byte != right->span.end_byte ||
+            left->span.end_byte > n->name.start_byte ||
+            n->name.end_byte > right->span.start_byte ||
             !copy_if_gap(nl_checked_source(w->body), n->name.start_byte,
                          n->name.end_byte, less ? "<" : "==") ||
             !predicate_scalar(w, n->first_argument) ||
@@ -165,6 +173,21 @@ static bool predicate_scalar(PredicateWalk *w, NLCheckedNodeId id)
                 !n->has_scalar_result && cond && cond->type == w->boolean &&
                 predicate_scalar(w, n->initializer) &&
                 predicate_arm(w, id, 0) && predicate_arm(w, id, 1);
+        if (valid) {
+            const NLCheckedFragment *a = nl_checked_if_arm(w->body, id, 0);
+            const NLCheckedFragment *b = nl_checked_if_arm(w->body, id, 1);
+            const NLCheckedNodeView *x =
+                nl_checked_node_view(a, nl_checked_root(a));
+            const NLCheckedNodeView *y =
+                nl_checked_node_view(b, nl_checked_root(b));
+            valid = copy_if_gap(nl_checked_source(w->body), n->span.start_byte,
+                                cond->span.start_byte, "if(") &&
+                    copy_if_gap(nl_checked_source(w->body), cond->span.end_byte,
+                                x->span.start_byte, ")") &&
+                    copy_if_gap(nl_checked_source(w->body), x->span.end_byte,
+                                y->span.start_byte, "else") &&
+                    y->span.end_byte == n->span.end_byte;
+        }
         break;
     }
     default:
@@ -204,10 +227,17 @@ static bool predicate_body(const NLCheckedFragment *f, NLSymbolId formal,
                 !n->symbol || n->symbol > c->binding_count ||
                 n->symbol > NL_SEMANTIC_MAX_ENTRIES || n->symbol == formal ||
                 receiver->symbol != n->symbol || n->result_count ||
-                n->terminates || receiver->type != init->type ||
-                w.bindings[n->symbol - 1] ||
+                n->type != p->unit || n->terminates ||
+                receiver->type != init->type || w.bindings[n->symbol - 1] ||
                 !predicate_name(f, receiver->name,
                                 c->bindings[n->symbol - 1].name) ||
+                c->bindings[n->symbol - 1].view.value !=
+                    init->results[0].value ||
+                !copy_if_gap(nl_checked_source(f), n->span.start_byte,
+                             receiver->name.start_byte, "let") ||
+                !copy_if_gap(nl_checked_source(f), receiver->name.end_byte,
+                             init->span.start_byte, "=") ||
+                n->span.end_byte != init->span.end_byte ||
                 !predicate_scalar(&w, n->initializer))
                 return false;
             w.bindings[n->symbol - 1] = id;
@@ -217,6 +247,8 @@ static bool predicate_body(const NLCheckedFragment *f, NLSymbolId formal,
             if (n->next_item || !n->terminates || !value ||
                 value->type != p->u8 || n->returned.type != p->u8 ||
                 n->returned.value != value->results[0].value ||
+                !copy_if_gap(nl_checked_source(f), n->span.start_byte,
+                             value->span.start_byte, "return") ||
                 !predicate_scalar(&w, n->initializer))
                 return false;
             returned = n->initializer;
@@ -263,6 +295,9 @@ static bool predicate_call(const NLCheckedFragment *f, NLCheckedNodeId id,
     const NLFunctionEntry *fn = &c->functions[call->function - 1];
     NLSymbolId formal;
     if (fn->count != 1 || !fn->parameters || fn->parameters[0] != quantity ||
+        !fn->body || !fn->body->syntax ||
+        nl_syntax_tree_source(fn->body->syntax) != fn->body->source ||
+        !predicate_name(f, call->name, fn->name) ||
         !v1_call_parameter_kind(f, id, p, &formal, true) ||
         !predicate_body(body, formal, p))
         return false;
