@@ -1,0 +1,86 @@
+{
+  "schema": "r1109-c205-v2-physical-oracle-v1",
+  "canonical": "Draft17.34",
+  "compiler_p_head": "9fddff29074b07201165b113a581f7dda780598f",
+  "classification": "R independently authored NON-BLIND V2 (post V1 freeze R viewed P src/main.c implementation for harness integration; no P fixture/oracle imported)",
+  "principle": "all scalar constants/root pairs independently chosen in R V1; changed incidental nested comparisons and function placement; no oracle fitted to candidate response",
+  "sources": {
+    "v2_positive_distinct.nl": {
+      "semantic": "canonical-legal, source CHECK may fail closed for bounded implementation precision, not native PASS",
+      "root_order": [
+        "original",
+        "bystander"
+      ],
+      "target_root_index": 0,
+      "target_field_index": 0,
+      "before": [
+        [
+          19,
+          7
+        ],
+        [
+          91,
+          23
+        ]
+      ],
+      "after": [
+        [
+          61,
+          7
+        ],
+        [
+          91,
+          23
+        ]
+      ],
+      "copy_before": 19,
+      "break_old_copy": 19,
+      "post_break_copy": 61,
+      "sibling_current": 7,
+      "other_original_current": 91,
+      "helper_invocations": 1,
+      "change_operations": 1
+    },
+    "v2_positive_equal_bits.nl": {
+      "semantic": "canonical-legal, source CHECK may fail closed for bounded implementation precision, not native PASS",
+      "root_order": [
+        "untouched",
+        "altered"
+      ],
+      "target_root_index": 1,
+      "target_field_index": 0,
+      "before": [
+        [
+          31,
+          13
+        ],
+        [
+          31,
+          13
+        ]
+      ],
+      "after": [
+        [
+          31,
+          13
+        ],
+        [
+          55,
+          13
+        ]
+      ],
+      "copy_before": 31,
+      "break_old_copy": 31,
+      "post_break_copy": 55,
+      "sibling_current": 13,
+      "other_original_current": 31,
+      "helper_invocations": 1,
+      "change_operations": 1
+    }
+  },
+  "physical_oracle": "actual source-issued original-field addresses read from emitted C17; each original child address same before/after; original roots distinct even if same bits; one NL_LOOP_BEFORE/AFTER; result old Copy 19/31, current changed 61/55; sibling and second original untouched",
+  "negatives": "four exactly frozen V1 invalid sources; structured refusal and no C17",
+  "layers": "real CLI CHECK, public checked-owned independently NOT TESTED unless validator actually called, strict C17 GCC+Clang O0/O2 and native original observation, sanitizer safety only if actually executed",
+  "stop": "unexpected wrong acceptance/old/current/owner/field address/C17/native/sanitizer/OOM is STOP, do not re-oracle, preserve first V1 RED",
+  "value_alignment_risk": "finite tests do not prove lower human UB prevention audit closure versus matched well-factored C"
+}

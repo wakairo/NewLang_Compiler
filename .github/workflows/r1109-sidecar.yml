@@ -1,0 +1,131 @@
+# C205 independent R-only sidecar. Entire workflow is PR-only, no dispatch.
+# Root compiler/CMake/freeze and P candidate are unchanged; no user secrets.
+name: R1109 C205 independent sidecar source and live native (HOLD)
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [p1107-loop-known-copy-call-c17]
+
+permissions:
+  contents: read
+
+jobs:
+  r1109-c205-sidecar:
+    name: R1109 NON-BLIND V2 genuine source/C17/native evidence
+    if: ${{ github.event.pull_request.number == 1111 && github.event.pull_request.head.ref == 'r-fast/r1109-loop-call-native' && github.event.pull_request.base.sha == '9fddff29074b07201165b113a581f7dda780598f' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout exact immutable R SHA (no persisted credentials)
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 5
+          persist-credentials: false
+
+      - name: Verify true immutable lineage, frozen root, R-only changes and source hashes
+        shell: bash
+        run: |
+          set -euo pipefail
+          expected_p=9fddff29074b07201165b113a581f7dda780598f
+          test "$(git rev-parse HEAD)" = "${{ github.event.pull_request.head.sha }}"
+          git cat-file -e "$expected_p^{commit}"
+          git merge-base --is-ancestor "$expected_p" HEAD
+          test "$(git rev-parse "$expected_p:CMakeLists.txt")" = "$(git rev-parse HEAD:CMakeLists.txt)"
+          python3 - "$expected_p" <<'PY'
+          import subprocess
+          import sys
+          base = sys.argv[1]
+          paths = subprocess.check_output(
+              ["git", "diff", "--name-only", base, "HEAD"], text=True).splitlines()
+          unexpected = [p for p in paths if
+                        not (p.startswith("tests/r1109/") or
+                             p == ".github/workflows/r1109-sidecar.yml")]
+          if unexpected:
+              raise SystemExit("STOP: existing frozen paths changed: " + repr(unexpected))
+          print("R1109 ROOT HISTORICAL FROZEN BYTES UNCHANGED; R-only diff:", paths)
+          PY
+          echo "d69d45adc62e2ea57bb7ed2220d51d37e1bda5c571a359225cec31a617ff9bfe  tests/r1109/sources/v1_positive_old_break.nl" > "$RUNNER_TEMP/r1109-v1-frozen.sha256"
+          echo "38f50db877a26044684af6e9a9f1e9bcfdcbd00ff4f5462c39b1ae06303fef36  tests/r1109/sources/v1_positive_same_bits.nl" >> "$RUNNER_TEMP/r1109-v1-frozen.sha256"
+          echo "bf0e3b16656ea677e5319aaecd073fb11295081df57b74d7edb1de69b699e850  tests/r1109/sources/v1_negative_unknown_field.nl" >> "$RUNNER_TEMP/r1109-v1-frozen.sha256"
+          echo "0e3c610baf59f4e94d76f0f26fc9c95a423972d183ba2abc02fcb121512b44e3  tests/r1109/sources/v1_negative_loan_escape.nl" >> "$RUNNER_TEMP/r1109-v1-frozen.sha256"
+          echo "4eb77187c62d89f0ba5fe2c03d24aa0277f098713a48442a9b2ebd880f0ba2ce  tests/r1109/sources/v1_negative_nonlocal_break.nl" >> "$RUNNER_TEMP/r1109-v1-frozen.sha256"
+          echo "b04b610d171b8b3a243e8e99634cea9b5171041855d62f06c0c4fcf7d4a962e0  tests/r1109/sources/v1_negative_wrong_argument.nl" >> "$RUNNER_TEMP/r1109-v1-frozen.sha256"
+          echo "8375277bc005b5f7abfe522dcfcac5538eaeb525884a9f0f756bb7c857d35c63  tests/r1109/v1_oracle.json" >> "$RUNNER_TEMP/r1109-v1-frozen.sha256"
+          echo "adfc613043ab9bac78f6edc93c21ae6e68a1b1c5d8aa879ace367748a2adc932  tests/r1109/v1_harness.py" >> "$RUNNER_TEMP/r1109-v1-frozen.sha256"
+          echo "7efdcb1179b2241ebe5c4990050a6a87321d04974fa34f68b8ad70ee74647707  tests/r1109/sources/v2_positive_distinct.nl" > "$RUNNER_TEMP/r1109-v2-frozen.sha256"
+          echo "34a1a5ae3ae37fa9af57db95c6d68d9c2e68ea4369d65466255951bc2fcba691  tests/r1109/sources/v2_positive_equal_bits.nl" >> "$RUNNER_TEMP/r1109-v2-frozen.sha256"
+          echo "02bea0c2fb36cbece2832586d9d85ba12aac0da4a3c5078109ac0e0c986c0a45  tests/r1109/v2_oracle.json" >> "$RUNNER_TEMP/r1109-v2-frozen.sha256"
+          sha256sum --check "$RUNNER_TEMP/r1109-v1-frozen.sha256"
+          sha256sum --check "$RUNNER_TEMP/r1109-v2-frozen.sha256"
+          echo "R1109 C205 SHA256 V1 + V2 FREEZE OK; event=${{ github.event_name }} attempt=${{ github.run_attempt }} immutable_head=${{ github.event.pull_request.head.sha }}"
+
+      - name: Signed Ubuntu host prerequisites
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y             gcc-13 g++-13 make python3 zstd             libstdc++6 zlib1g-dev libzstd-dev libtinfo-dev libxml2-dev
+
+      - name: Restore fixed SHA-verified LLVM 23.1.3 SDK cache (untrusted cache bytes)
+        uses: actions/cache/restore@3edfce9056124e459a23f683a21433670d47daca
+        with:
+          path: .deps/downloads/newlang-llvm-23.1.3-linux-x64-final.tar.zst
+          key: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+
+      - name: Verify pinned Clang23.1.3 and build exact R-head Production frontend
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/bootstrap.py
+          . .deps/activate.sh
+          clang-23 --version | head -n 1
+          clang-format-23 --version | grep -F '23.1.3'
+          CC=gcc-13 cmake -S . -B build-r1109-frontend             -DNEWLANG_FRONTEND_ONLY=ON -DCMAKE_BUILD_TYPE=Debug
+          cmake --build build-r1109-frontend --target newlangc --parallel 4
+          ./build-r1109-frontend/newlangc --version
+          echo "R1109 C205 source compiler SHA=${{ github.event.pull_request.head.sha }}"
+
+      - name: Configure separate read-only R sidecar and verify six unique registrations
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .deps/activate.sh
+          mkdir -p "$RUNNER_TEMP/r1109-raw"
+          cmake -S tests/r1109/sidecar -B build-r1109-sidecar             -DR1109_CLI="$GITHUB_WORKSPACE/build-r1109-frontend/newlangc"             -DR1109_GCC="$(command -v gcc-13)"             -DR1109_CLANG="$(command -v clang-23)"             -DR1109_RAW_BASE="$RUNNER_TEMP/r1109-raw"
+          ctest --test-dir build-r1109-sidecar -N | tee "$RUNNER_TEMP/r1109-ctest-register.txt"
+          grep -Fx 'Total Tests: 6' "$RUNNER_TEMP/r1109-ctest-register.txt"
+          python3 - "$RUNNER_TEMP/r1109-ctest-register.txt" <<'PY'
+          import pathlib
+          import re
+          import sys
+          body = pathlib.Path(sys.argv[1]).read_text()
+          names = re.findall(r"(?m)^\s*Test\s+#\d+:\s*(\S+)\s*$", body)
+          assert len(names) == 6 and len(set(names)) == 6, names
+          assert all(x.startswith("r1109_c205_") and
+                     x.endswith(".integration") for x in names), names
+          print("R1109 C205 INDEPENDENT SIDECAR REGISTRATION PASS", names)
+          PY
+
+      - name: Execute real R source CHECK, strict C17/native O0/O2 GCC+Clang, sanitizers and negatives
+        shell: bash
+        run: |
+          set -euo pipefail
+          . .deps/activate.sh
+          ctest --test-dir build-r1109-sidecar -V --output-on-failure             | tee "$RUNNER_TEMP/r1109-c205-full-raw-ctest.log"
+          echo "R1109 C205 sidecar tests executed, public checked-owned NOT TESTED"
+
+      - name: Upload original real source/C17/native/negative raw evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r1109-c205-v2-raw-${{ github.event.pull_request.head.sha }}-attempt${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/r1109-raw/
+            ${{ runner.temp }}/r1109-c205-full-raw-ctest.log
+            ${{ runner.temp }}/r1109-ctest-register.txt
+            ${{ runner.temp }}/r1109-v1-frozen.sha256
+            ${{ runner.temp }}/r1109-v2-frozen.sha256
+          if-no-files-found: warn
+          retention-days: 30
