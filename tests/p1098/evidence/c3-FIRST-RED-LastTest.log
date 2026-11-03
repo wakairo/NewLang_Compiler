@@ -1,0 +1,59 @@
+Start testing: Nov 02 11:54 UTC
+----------------------------------------------------------
+366/622 Testing: p1098_01-bound.unit
+366/622 Test: p1098_01-bound.unit
+Command: "/tmp/p1098-build/p1098_probe" "/tmp/p1098/tests/p1098/sources/01-bound.nl" "1" "146" "229"
+Directory: /tmp/p1098-build
+"p1098_01-bound.unit" start time: Nov 02 11:54 UTC
+Output:
+----------------------------------------------------------
+P1098 refusal 1 loop.results[0].value
+P1098 refusal 2 loop.results[0].type
+P1098 refusal 3 loop.break_edges
+P1098 refusal 4 loop.continue_edges
+P1098 refusal 5 loop.header_inductive
+P1098 refusal 6 op.field.parent_post_fact
+P1098 refusal 7 op.field.child_post_fact
+P1098 refusal 8 op.field.new_value
+P1098 refusal 9 op.field.index
+P1098 refusal 10 op.field.parent_incarnation
+P1098 refusal 11 op.field.child_incarnation
+P1098 refusal 12 op.field.dependency_compatible
+P1098 refusal 13 a.owner.source
+P1098 refusal 14 a.owner.context
+P1098 refusal 15 a.body.context
+P1098 refusal 16 a.owner.nodes
+P1098 refusal 17 a.body.nodes
+P1098 refusal 18 a.owner.count
+P1098 refusal 19 a.body.count
+P1098 refusal 20 a.owner.arm_count
+P1098 refusal 21 a.owner.arm_count
+P1098 refusal 22 a.root.body_count
+P1098 refusal 23 a.root.body_count
+P1098 refusal 24 fn.result
+P1098 refusal 25 fn.kind
+P1098 refusal 26 fn.caller_effects
+P1098 refusal 27 fn.hidden_dependencies
+P1098 refusal 28 fn.owner_receiver
+P1098 refusal 29 fn.owner_producer
+P1098 refusal 30 fn.custody_recipient
+P1098 refusal 31 fn.count
+P1098 refusal 32 fn->body.syntax
+P1098 refusal 33 fn->body.source
+P1098 refusal 34 fn->body.count
+P1098 refusal 35 fn.name
+P1098 refusal 36 edge.state
+P1098 refusal 37 edge.target
+P1098 refusal 38 edge.source_target
+P1098 refusal 39 edge.source_owner
+P1098 refusal 40 edge.values[0].value
+P1098 refusal 41 edge.source_node
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Failed.
+"p1098_01-bound.unit" end time: Nov 02 11:54 UTC
+"p1098_01-bound.unit" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Nov 02 11:54 UTC

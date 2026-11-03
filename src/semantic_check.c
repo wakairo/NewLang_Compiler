@@ -1,6 +1,7 @@
 #include "copy_body_internal.h"
 #include "h_origin_internal.h"
 #include "if_field_internal.h"
+#include "linear_break_internal.h"
 #include "newlang/parser.h"
 #include "producer_local_internal.h"
 #include "semantic_internal.h"
@@ -5310,14 +5311,15 @@ static bool linear_break_frame(const NLSemanticContext *a,
     return true;
 }
 
-static bool linear_break_graph(Check *body, const LoopControl *loop)
+static bool linear_break_relation(const NLCheckedFragment *f,
+                                  const NLSemanticContext *c,
+                                  const NLControlState *entry_state,
+                                  const NLControlTarget *target,
+                                  NLCheckedResult result)
 {
-    const NLCheckedFragment *f = body->artifact;
-    const NLSemanticContext *c = body->context;
-    const NLSemanticContext *entry = nl_control_state_context(loop->entry);
-    if (!body->terminated || body->status != NL_CHECK_OK ||
-        loop->normal_context != c ||
-        !nl_control_source_break_body_valid(f, loop->target))
+    const NLSemanticContext *entry =
+        nl_control_state_context((NLControlState *)entry_state);
+    if (!nl_control_source_break_body_valid(f, target))
         return false;
     const NLControlExitView *e = nl_control_exit_view(f->exits, 0);
     const NLSemanticContext *post =
@@ -5360,8 +5362,8 @@ static bool linear_break_graph(Check *body, const LoopControl *loop)
         loan->field.parent_fact != op->field.parent_fact ||
         loan->field.child_fact != op->field.child_fact ||
         op->results[0].value != op->field.old_value ||
-        e->values[0].value != loop->normal_result.value ||
-        e->values[0].type != loop->normal_result.type ||
+        e->values[0].value != result.value ||
+        e->values[0].type != result.type ||
         !linear_break_frame(entry, c, &op->field) ||
         !linear_break_frame(entry, post, &op->field))
         return false;
@@ -5387,7 +5389,6 @@ static bool linear_break_graph(Check *body, const LoopControl *loop)
             return false;
         }
     }
-    NLCheckedResult result = loop->normal_result;
     if (loans != 1 || changes != 1 || breaks != 1 ||
         result.type != nl_semantic_core_type(c, NL_TYPE_U8) || !result.value ||
         result.value > c->value_count || !op->field.old_value ||
@@ -5416,6 +5417,377 @@ static bool linear_break_graph(Check *body, const LoopControl *loop)
             post->places[i].current_fact != c->places[i].current_fact)
             return false;
     return true;
+}
+
+/* Constructor obligations stay at the real source-check boundary. The
+ * consumer calls the same relation directly, never fabricating Check flags. */
+static bool linear_break_graph(Check *body, const LoopControl *loop)
+{
+    return body->terminated && body->status == NL_CHECK_OK &&
+           loop->normal_context == body->context &&
+           linear_break_relation(body->artifact, body->context, loop->entry,
+                                 loop->target, loop->normal_result);
+}
+
+/* Retain only evidence of the actual source CHECK transaction. These records
+ * are private, owner-bound, and never reconstructed from challenged S/X IDs.
+ * The existing A relation remains the single semantic kernel at issuance and
+ * at consumption. Its ghost recheck emits no source operation. */
+typedef struct NLLinearBreakProof {
+    struct NLLinearBreakProof *next;
+    const NLCheckedFragment *owner, *root, *body;
+    const NLSemanticContext *world;
+    const NLSource *source;
+    NLFunctionBody *plan;
+    NLSyntaxTree *syntax;
+    NLCheckedNodeId loop, call, parent_root, body_root, root_root;
+    size_t function;
+    NLControlState *entry;
+    NLSemanticContext *post, *final;
+    NLCopyCallAnchor post_anchor, final_anchor, exit_anchor;
+    const NLControlState *exit_state; /* canonical body owns this handle */
+    const NLSemanticContext *exit_world;
+    NLSemanticContext exit_storage; /* nonowning origin bases/counts */
+    NLCheckedResult result;
+    const NLControlTarget *target; /* owned by the canonical body exit */
+    NLCheckedNodeView *parent_nodes, *body_nodes, *root_nodes;
+    const NLCheckedNodeView *parent_origin, *body_origin, *root_origin;
+    size_t parent_count, body_count, root_count;
+    NLSemanticContext final_storage, body_storage; /* nonowning bases/counts */
+    bool sealed;
+} NLLinearBreakProof;
+
+static void destroy_linear_breaks(NLCheckedFragment *f)
+{
+    NLLinearBreakProof *p = f->linear_breaks;
+    while (p) {
+        NLLinearBreakProof *next = p->next;
+        nl_control_state_destroy(p->entry);
+        nl_semantic_destroy(p->post);
+        nl_semantic_destroy(p->final);
+        nl_copy_state_destroy(&p->post_anchor);
+        nl_copy_state_destroy(&p->final_anchor);
+        nl_copy_state_destroy(&p->exit_anchor);
+        free(p->parent_nodes);
+        free(p->body_nodes);
+        free(p->root_nodes);
+        free(p);
+        p = next;
+    }
+    f->linear_breaks = NULL;
+}
+
+static bool linear_callable(const NLLinearBreakProof *p,
+                            const NLSemanticContext *c)
+{
+    if (!c || !c->functions || !p->function || p->function > c->function_count)
+        return false;
+    const NLFunctionEntry *fn = &c->functions[p->function - 1];
+    return fn->kind == NL_CHECKED_REGISTERED_CALL && fn->body == p->plan &&
+           fn->count == 0 && !fn->parameters && fn->result == 1 &&
+           !fn->caller_effects && !fn->hidden_dependencies &&
+           !fn->owner_receiver && !fn->owner_producer &&
+           !fn->custody_recipient &&
+           (!p->post ||
+            (fn->name && p->post->functions[p->function - 1].name &&
+             !strcmp(fn->name, p->post->functions[p->function - 1].name))) &&
+           p->plan->syntax == p->syntax && p->plan->source == p->source &&
+           p->plan->count == 0;
+}
+
+static NLCheckStatus retain_linear_break(Check *check, LoopControl *loop,
+                                         NLCheckedNodeId id,
+                                         const NLCheckedFragment *body)
+{
+    /* First native cohort: an actual direct zero-argument unit invocation,
+     * ordinary local T storage. Definitions/arms/nested calls and H worlds
+     * keep their existing CHECK behavior without acquiring this consumer. */
+    if (check->definition || !check->caller ||
+        check->origin_root->function_target ||
+        check->caller->artifact != check->origin_root ||
+        check->artifact != check->origin_invocation ||
+        check->context->region_count || check->context->domain_count ||
+        check->context->occurrence_count || check->function_result != 1)
+        return NL_CHECK_OK;
+    if (!check->context->functions || !check->body_function ||
+        check->body_function > check->context->function_count)
+        return NL_CHECK_OK;
+    const NLFunctionEntry *fn =
+        &check->context->functions[check->body_function - 1];
+    if (fn->count || fn->parameters || fn->caller_effects ||
+        fn->hidden_dependencies || fn->owner_receiver || fn->owner_producer ||
+        fn->custody_recipient)
+        return NL_CHECK_OK;
+    NLLinearBreakProof *p = calloc(1, sizeof(*p));
+    if (!p)
+        return NL_CHECK_OUT_OF_MEMORY;
+    p->next = check->artifact->linear_breaks;
+    check->artifact->linear_breaks = p;
+    check->artifact->destroy_linear_breaks = destroy_linear_breaks;
+    p->owner = check->artifact;
+    p->root = check->origin_root;
+    p->body = body;
+    p->world = check->artifact->context;
+    p->source = check->source;
+    p->plan = check->artifact->body_owner;
+    p->syntax = p->plan ? p->plan->syntax : NULL;
+    p->function = check->body_function;
+    p->call = check->origin_call;
+    p->loop = id;
+    p->result = loop->normal_result;
+    p->target = loop->target;
+    p->entry = loop->entry;
+    loop->entry = NULL; /* private record now owns the genuine E checkpoint */
+    if (!p->plan || !linear_callable(p, check->context))
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    NLCheckStatus status = nl_sem_clone(check->context, &p->post);
+    if (status == NL_CHECK_OK)
+        status = nl_copy_state_anchor(p->post, &p->post_anchor);
+    if (status == NL_CHECK_OK) {
+        const NLControlExitView *e = nl_control_exit_view(body->exits, 0);
+        p->exit_state = e->state;
+        p->exit_world = nl_control_state_context((NLControlState *)e->state);
+        p->exit_storage = *p->exit_world;
+        status = nl_copy_state_anchor(p->exit_world, &p->exit_anchor);
+    }
+    return status;
+}
+
+static NLCheckStatus linear_seal_graph(const NLCheckedFragment *f,
+                                       NLCheckedNodeView **out)
+{
+    if (!f->count || f->count > NL_SEMANTIC_MAX_ENTRIES || !f->nodes)
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    *out = malloc(f->count * sizeof(**out));
+    if (!*out)
+        return NL_CHECK_OUT_OF_MEMORY;
+    memcpy(*out, f->nodes, f->count * sizeof(**out));
+    return NL_CHECK_OK;
+}
+
+/* All allocations are before the enclosing semantic commit. Canonical
+ * membership/count checks precede any display-array traversal. */
+static NLCheckStatus seal_linear_breaks(NLCheckedFragment *root,
+                                        const NLSemanticContext *final)
+{
+    if (!nl_h_custody_validate(root))
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    for (size_t i = 0; i < root->body_count; ++i) {
+        NLCheckedFragment *f = root->bodies[i];
+        for (NLLinearBreakProof *p = f->linear_breaks; p; p = p->next) {
+            p->final_storage = *final;
+            p->body_storage = *p->body->context;
+            p->parent_origin = f->nodes;
+            p->body_origin = p->body->nodes;
+            p->root_origin = root->nodes;
+            p->parent_count = f->count;
+            p->body_count = p->body->count;
+            p->root_count = root->count;
+            p->parent_root = f->root;
+            p->body_root = p->body->root;
+            p->root_root = root->root;
+            NLCheckStatus s = linear_seal_graph(f, &p->parent_nodes);
+            if (s == NL_CHECK_OK)
+                s = linear_seal_graph(p->body, &p->body_nodes);
+            if (s == NL_CHECK_OK)
+                s = linear_seal_graph(root, &p->root_nodes);
+            if (s == NL_CHECK_OK)
+                s = nl_sem_clone(final, &p->final);
+            if (s == NL_CHECK_OK)
+                s = nl_copy_state_anchor(final, &p->final_anchor);
+            if (s != NL_CHECK_OK)
+                return s;
+            p->sealed = true;
+        }
+    }
+    return NL_CHECK_OK;
+}
+
+static bool linear_graph_matches(const NLCheckedFragment *f,
+                                 const NLCheckedNodeView *origin,
+                                 const NLCheckedNodeView *nodes, size_t count,
+                                 NLCheckedNodeId root)
+{
+    return f && f->nodes == origin && f->count == count && f->root == root &&
+           f->nodes && nodes && count &&
+           !memcmp(f->nodes, nodes, count * sizeof(*nodes));
+}
+
+/* Addresses/counts are anchors of live owner allocations, never authority
+ * from numerical IDs. Reject a changed array BEFORE comparing its contents. */
+static bool linear_world_matches(const NLSemanticContext *c,
+                                 const NLSemanticContext *storage,
+                                 const NLSemanticContext *reference,
+                                 const NLCopyCallAnchor *anchor)
+{
+    if (!c || !reference)
+        return false;
+#define SAME(member)                                                           \
+    if (c->member != storage->member)                                          \
+    return false
+    SAME(occurrences);
+    SAME(occurrence_count);
+    SAME(types);
+    SAME(type_count);
+    SAME(bindings);
+    SAME(binding_count);
+    SAME(values);
+    SAME(value_count);
+    SAME(places);
+    SAME(place_count);
+    SAME(domains);
+    SAME(domain_count);
+    SAME(scopes);
+    SAME(scope_count);
+    SAME(functions);
+    SAME(function_count);
+    SAME(last_incarnation);
+    SAME(last_value_fact);
+    SAME(regions);
+    SAME(region_count);
+    SAME(raw_interval_count);
+#undef SAME
+    if (!nl_copy_state_matches(c, anchor) || !nl_copy_same_types(c, reference))
+        return false;
+    for (size_t i = 0; i < c->type_count; ++i) {
+        const NLTypeEntry *a = &c->types[i], *b = &reference->types[i];
+        if (a->allocated_target != b->allocated_target ||
+            a->one_backing_target != b->one_backing_target ||
+            a->live_tail_target != b->live_tail_target ||
+            a->option_target != b->option_target ||
+            ((a->name == NULL) != (b->name == NULL)) ||
+            (a->name && strcmp(a->name, b->name)))
+            return false;
+    }
+    for (size_t i = 0; i < c->binding_count; ++i)
+        if (c->bindings[i].hidden != reference->bindings[i].hidden ||
+            !c->bindings[i].name || !reference->bindings[i].name ||
+            strcmp(c->bindings[i].name, reference->bindings[i].name))
+            return false;
+    return true;
+}
+
+NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *f,
+                                       NLCheckedNodeId id,
+                                       NLLinearBreakView *out)
+{
+    if (!f || !out)
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    const NLLinearBreakProof *p = f->linear_breaks;
+    while (p && p->loop != id)
+        p = p->next;
+    if (!p || p->owner != f || !p->sealed || f->context != p->world ||
+        f->source != p->source || f->body_owner != p->plan ||
+        !nl_h_custody_validate(p->root) ||
+        !linear_graph_matches(p->root, p->root_origin, p->root_nodes,
+                              p->root_count, p->root_root) ||
+        !linear_graph_matches(f, p->parent_origin, p->parent_nodes,
+                              p->parent_count, p->parent_root) ||
+        !linear_graph_matches(p->body, p->body_origin, p->body_nodes,
+                              p->body_count, p->body_root) ||
+        p->body->source != p->source ||
+        nl_checked_loop_body(f, id) != p->body ||
+        !linear_world_matches(f->context, &p->final_storage, p->final,
+                              &p->final_anchor) ||
+        !linear_world_matches(p->body->context, &p->body_storage, p->post,
+                              &p->post_anchor) ||
+        !linear_callable(p, f->context) || !linear_callable(p, p->post) ||
+        f->context->region_count || f->context->domain_count ||
+        f->context->occurrence_count ||
+        f->context->function_count != p->final->function_count)
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    const NLCheckedNodeView *call = nl_checked_node_view(p->root, p->call),
+                            *n = nl_checked_node_view(f, id);
+    if (!call || p->call != p->root_root || !call->body_backed ||
+        call->function != p->function || call->argument_count ||
+        call->type != 1 || call->result_count ||
+        nl_checked_call_body(p->root, p->call) != f || !n ||
+        n->result_count != 1 || n->results[0].type != p->result.type ||
+        n->results[0].value != p->result.value)
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    const NLControlExitView *exit = nl_control_exit_view(p->body->exits, 0);
+    if (!exit || exit->state != p->exit_state ||
+        nl_control_state_context((NLControlState *)exit->state) !=
+            p->exit_world ||
+        !linear_world_matches(p->exit_world, &p->exit_storage, p->post,
+                              &p->exit_anchor) ||
+        !nl_checked_loop_break_provenance_valid(f, id))
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    if (!linear_break_relation(p->body, p->post, p->entry, p->target,
+                               p->result))
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    const NLCheckedNodeView *op = NULL;
+    for (size_t i = 0; i < p->body_count; ++i)
+        if (p->body->nodes[i].kind == NL_CHECKED_REPLACE)
+            op = &p->body->nodes[i];
+    const NLCheckedNodeView *ref =
+        op ? nl_checked_node_view(p->body, op->first_argument) : NULL;
+    const NLCheckedNodeView *incoming =
+        ref ? nl_checked_node_view(p->body, ref->next_argument) : NULL;
+    if (!incoming || incoming->kind != NL_CHECKED_U8_LITERAL ||
+        !incoming->has_scalar_result || !incoming->scalar_result.known ||
+        incoming->scalar_result.type != p->result.type ||
+        incoming->scalar_result.value > 255 || incoming->result_count != 1 ||
+        incoming->results[0].value != op->field.new_value)
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    const NLSemanticContext *entry = nl_control_state_context(p->entry);
+    const NLCheckedField field = op->field;
+    NLSymbolId base = 0;
+    for (size_t i = 0; i < entry->binding_count; ++i) {
+        const NLBindingEntry b = entry->bindings[i];
+        if (b.view.place == field.parent && !b.hidden &&
+            b.view.availability == NL_AVAILABLE) {
+            if (base)
+                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+            base = i + 1;
+        }
+    }
+    /* Parent-qualified source declaration, not the body's numerical base.
+     * The backend independently checks its real aggregate constructor/layout.
+     */
+    const NLCheckedNodeView *decl = NULL;
+    for (size_t i = 0; i < f->count; ++i)
+        if (f->nodes[i].kind == NL_CHECKED_BINDING &&
+            f->nodes[i].symbol == base) {
+            if (decl)
+                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+            decl = &f->nodes[i];
+        }
+    const NLCheckedNodeView *receiver =
+        decl ? nl_checked_node_view(f, decl->first_argument) : NULL;
+    const NLCheckedNodeView *constructor =
+        decl ? nl_checked_node_view(f, decl->initializer) : NULL;
+    if (!base || !decl || !receiver || !constructor ||
+        receiver->kind != NL_CHECKED_RECEIVER || receiver->symbol != base ||
+        receiver->type != field.nominal ||
+        constructor->kind != NL_CHECKED_AGGREGATE ||
+        constructor->type != field.nominal ||
+        decl->span.end_byte > n->span.start_byte ||
+        entry->bindings[base - 1].view.type != field.nominal)
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    *out = (NLLinearBreakView){.base = base,
+                               .nominal = field.nominal,
+                               .root = field.parent,
+                               .child = field.child,
+                               .incarnation = field.parent_incarnation,
+                               .child_incarnation = field.child_incarnation,
+                               .index = field.index,
+                               .incoming = incoming->scalar_result.value,
+                               .result = p->result};
+    return NL_CHECK_OK;
+}
+
+NLCheckStatus nl_linear_break_owner_validate(const NLCheckedFragment *f)
+{
+    if (!f || !f->linear_breaks)
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    NLLinearBreakView v;
+    for (const NLLinearBreakProof *p = f->linear_breaks; p; p = p->next) {
+        NLCheckStatus s = nl_linear_break_validate(f, p->loop, &v);
+        if (s != NL_CHECK_OK)
+            return s;
+    }
+    return NL_CHECK_OK;
 }
 
 static NLCheckedNodeId source_linear_break(Check *check,
@@ -5486,7 +5858,11 @@ static NLCheckedNodeId source_linear_break(Check *check,
                                         .break_edges = 1});
     if (!id || !save_arm(check, id, fragment, syntax->span))
         goto cleanup;
+    const NLCheckedFragment *owned_body = fragment;
     fragment = NULL;
+    if (!host(check, retain_linear_break(check, &loop, id, owned_body),
+              syntax->span))
+        goto cleanup;
     /* Custody now owns the body. Recheck the existing source-parent binding
      * before this enclosing CHECK can publish either the result or current.
      * Failure is still an all-or-nothing outer transaction rollback. */
@@ -9048,6 +9424,9 @@ static NLCheckStatus check_fragment(NLSemanticContext *context,
         !host(&check, nl_raw_validate(check.context), root->span)) {
         goto failure;
     }
+    if (!host(&check, seal_linear_breaks(check.artifact, check.context),
+              root->span))
+        goto failure;
     nl_sem_commit(context, check.context);
     nl_h_origin_close(check.artifact);
     *out = check.artifact;

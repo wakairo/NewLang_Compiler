@@ -1,0 +1,99 @@
+Internal ctest changing into directory: /tmp/p1098-local/gcc
+Test project /tmp/p1098-local/gcc
+        Start   1: p930_live_pre_if.unit
+        Start   2: p930_order_root_negative.unit
+  1/625 Test   #1: p930_live_pre_if.unit .................................   Passed    0.00 sec
+        Start   3: p930_prepare_oom.unit
+  2/625 Test   #2: p930_order_root_negative.unit .........................   Passed    0.00 sec
+        Start   4: p930_ordinary_cli.integration
+  3/625 Test   #3: p930_prepare_oom.unit .................................   Passed    0.00 sec
+        Start   5: p718_if_return_proof_oom.unit
+  4/625 Test   #4: p930_ordinary_cli.integration .........................   Passed    0.07 sec
+        Start   6: p718_if_return_native.integration
+  5/625 Test   #5: p718_if_return_proof_oom.unit .........................   Passed    0.24 sec
+        Start   7: p728_unit_statement_proof.unit
+  6/625 Test   #7: p728_unit_statement_proof.unit ........................   Passed    0.02 sec
+        Start   8: p728_unit_statement_history_oom.unit
+  7/625 Test   #8: p728_unit_statement_history_oom.unit ..................   Passed    1.22 sec
+        Start   9: p728_unit_statement_native.integration
+  8/625 Test   #6: p718_if_return_native.integration .....................   Passed    2.04 sec
+        Start  10: p722_callee_return_proof_oom.unit
+  9/625 Test  #10: p722_callee_return_proof_oom.unit .....................   Passed    0.99 sec
+        Start  11: p722_callee_return_native.integration
+ 10/625 Test   #9: p728_unit_statement_native.integration ................   Passed    1.76 sec
+        Start  12: p713_if_field_proof_oom.unit
+ 11/625 Test  #12: p713_if_field_proof_oom.unit ..........................   Passed    0.18 sec
+        Start  13: p713_if_field_native.integration
+ 12/625 Test  #11: p722_callee_return_native.integration .................   Passed    1.25 sec
+        Start  14: p706_proof_handoff_oom.unit
+ 13/625 Test  #14: p706_proof_handoff_oom.unit ...........................   Passed    0.30 sec
+        Start  15: p706_ref_write_native.integration
+ 14/625 Test  #15: p706_ref_write_native.integration .....................   Passed    0.53 sec
+        Start  16: p701_proof_rollback_oom.unit
+ 15/625 Test  #16: p701_proof_rollback_oom.unit ..........................   Passed    0.05 sec
+        Start  17: p701_stateful_native.integration
+ 16/625 Test  #13: p713_if_field_native.integration ......................   Passed    2.10 sec
+        Start  18: p572_three_node_owned.unit
+ 17/625 Test  #18: p572_three_node_owned.unit ............................   Passed    0.00 sec
+        Start  19: p572_three_node_fault.unit
+ 18/625 Test  #19: p572_three_node_fault.unit ............................   Passed    0.06 sec
+        Start  20: p572_source_oom.unit
+ 19/625 Test  #20: p572_source_oom.unit ..................................   Passed    0.04 sec
+        Start  21: p572_three_node_native.integration
+ 20/625 Test  #21: p572_three_node_native.integration ....................   Passed    0.33 sec
+        Start  22: p791_one_owned.unit
+ 21/625 Test  #22: p791_one_owned.unit ...................................   Passed    0.01 sec
+        Start  23: p791_two_owned.unit
+ 22/625 Test  #23: p791_two_owned.unit ...................................   Passed    0.00 sec
+        Start  24: p791_issuer_oom.unit
+ 23/625 Test  #24: p791_issuer_oom.unit ..................................   Passed    0.01 sec
+        Start  25: p791_parser_oom.unit
+ 24/625 Test  #25: p791_parser_oom.unit ..................................   Passed    0.00 sec
+        Start  26: p791_normal_cli.integration
+ 25/625 Test  #17: p701_stateful_native.integration ......................   Passed    0.97 sec
+        Start  27: p534_source_owned.unit
+ 26/625 Test  #27: p534_source_owned.unit ................................   Passed    0.00 sec
+        Start  28: p534_oom.unit
+ 27/625 Test  #28: p534_oom.unit .........................................   Passed    0.00 sec
+        Start  29: p534_issuer_fault.unit
+ 28/625 Test  #29: p534_issuer_fault.unit ................................   Passed    0.00 sec
+        Start  30: p534_array_native.integration
+ 29/625 Test  #26: p791_normal_cli.integration ...........................   Passed    0.54 sec
+        Start  31: p541_source_owned.unit
+ 30/625 Test  #31: p541_source_owned.unit ................................   Passed    0.00 sec
+        Start  32: p541_oom.unit
+ 31/625 Test  #32: p541_oom.unit .........................................   Passed    0.01 sec
+        Start  33: p541_issuer_fault.unit
+ 32/625 Test  #33: p541_issuer_fault.unit ................................   Passed    0.02 sec
+        Start  34: p541_array_native.integration
+ 33/625 Test  #30: p534_array_native.integration .........................   Passed    0.56 sec
+        Start  35: p636_plain_source_indices.unit
+ 34/625 Test  #35: p636_plain_source_indices.unit ........................   Passed    0.00 sec
+        Start  36: p636_local_arm_indices.unit
+ 35/625 Test  #36: p636_local_arm_indices.unit ...........................   Passed    0.01 sec
+        Start  37: p636_equal_arm_indices.unit
+ 36/625 Test  #37: p636_equal_arm_indices.unit ...........................   Passed    0.01 sec
+        Start  38: p634_historical_hash.unit
+ 37/625 Test  #38: p634_historical_hash.unit .............................***Failed    0.04 sec
+Traceback (most recent call last):
+  File "/tmp/p1098-clean/tests/p634/hash_gate_test.py", line 110, in <module>
+    main()
+  File "/tmp/p1098-clean/tests/p634/hash_gate_test.py", line 44, in main
+    provenance = check()
+                 ^^^^^^^
+  File "/tmp/p1098-clean/tests/p634/hash_gate_test.py", line 42, in check
+    exec(code,{'root':root,'hashlib':hashlib,'json':json})
+  File "/tmp/p1098-clean/tests/p605/integration_test.py", line 49, in <module>
+    assert data.count(copy_fields) == data.count(copy_record) == 1
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
+
+ 38/625 Test  #34: p541_array_native.integration .........................   Passed    0.94 sec
+
+97% tests passed, 1 tests failed out of 38
+
+Total Test time (real) =   7.53 sec
+
+The following tests FAILED:
+	 38 - p634_historical_hash.unit (Failed)
+Errors while running CTest

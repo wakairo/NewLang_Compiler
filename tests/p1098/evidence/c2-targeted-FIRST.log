@@ -1,0 +1,372 @@
+Internal ctest changing into directory: /tmp/p1098-build
+UpdateCTestConfiguration  from :/tmp/p1098-build/DartConfiguration.tcl
+Parse Config file:/tmp/p1098-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p1098-build/DartConfiguration.tcl
+Parse Config file:/tmp/p1098-build/DartConfiguration.tcl
+Test project /tmp/p1098-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 366
+    Start 366: p1098_01-bound.unit
+
+366: Test command: /tmp/p1098-build/p1098_probe "/tmp/p1098/tests/p1098/sources/01-bound.nl" "1" "146" "229"
+366: Working Directory: /tmp/p1098-build
+366: Environment variables: 
+366:  PYTHONDONTWRITEBYTECODE=1
+366:  PYTHONHASHSEED=0
+366:  LC_ALL=C
+366:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+366:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+366: Test timeout computed to be: 90
+366: P1098 refusal 1 loop.results[0].value
+366: P1098 refusal 2 loop.results[0].type
+366: P1098 refusal 3 loop.break_edges
+366: P1098 refusal 4 loop.continue_edges
+366: P1098 refusal 5 loop.header_inductive
+366: P1098 refusal 6 op.field.parent_post_fact
+366: P1098 refusal 7 op.field.child_post_fact
+366: P1098 refusal 8 op.field.new_value
+366: P1098 refusal 9 op.field.index
+366: P1098 refusal 10 op.field.parent_incarnation
+366: P1098 refusal 11 op.field.child_incarnation
+366: P1098 refusal 12 op.field.dependency_compatible
+366: P1098 refusal 13 a.owner.source
+366: P1098 refusal 14 a.owner.context
+366: P1098 refusal 15 a.body.context
+366: P1098 refusal 16 a.owner.nodes
+366: P1098 refusal 17 a.body.nodes
+366: P1098 refusal 18 a.owner.count
+366: P1098 refusal 19 a.body.count
+366: P1098 refusal 20 a.owner.arm_count
+366: P1098 refusal 21 a.owner.arm_count
+366: P1098 refusal 22 a.root.body_count
+366: P1098 refusal 23 a.root.body_count
+366: P1098 refusal 24 fn.result
+366: P1098 refusal 25 fn.kind
+366: P1098 refusal 26 fn.caller_effects
+366: P1098 refusal 27 fn.hidden_dependencies
+366: P1098 refusal 28 fn.owner_receiver
+366: P1098 refusal 29 fn.owner_producer
+366: P1098 refusal 30 fn.custody_recipient
+366: P1098 refusal 31 fn.count
+366: P1098 refusal 32 fn->body.syntax
+366: P1098 refusal 33 fn->body.source
+366: P1098 refusal 34 fn->body.count
+366: P1098 refusal 35 a.context.functions
+366: P1098 refusal 36 a.context.function_count
+366: P1098 refusal 37 a.context.values
+366: P1098 refusal 38 a.context.places
+366: P1098 refusal 39 a.context.scopes
+366: P1098 refusal 40 a.context.types
+366: P1098 refusal 41 a.context.last_value_fact
+366: P1098 refusal 42 a.context.last_incarnation
+366: P1098 refusal 43 body_context.values
+366: P1098 refusal 44 body_context.last_value_fact
+366: P1098 shallow same-source/world borrowed replay refused as authority
+366: P1098 refusal 45 genuine A/B whole body exchange
+366: P1098 COMPLETE negatives=45 foreign B survived un-restored A destruction
+1/7 Test #366: p1098_01-bound.unit ..............   Passed    0.00 sec
+test 367
+    Start 367: p1098_02-inline.unit
+
+367: Test command: /tmp/p1098-build/p1098_probe "/tmp/p1098/tests/p1098/sources/02-inline.nl" "0" "194" "112"
+367: Working Directory: /tmp/p1098-build
+367: Environment variables: 
+367:  PYTHONDONTWRITEBYTECODE=1
+367:  PYTHONHASHSEED=0
+367:  LC_ALL=C
+367:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+367:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+367: Test timeout computed to be: 90
+367: P1098 refusal 1 loop.results[0].value
+367: P1098 refusal 2 loop.results[0].type
+367: P1098 refusal 3 loop.break_edges
+367: P1098 refusal 4 loop.continue_edges
+367: P1098 refusal 5 loop.header_inductive
+367: P1098 refusal 6 op.field.parent_post_fact
+367: P1098 refusal 7 op.field.child_post_fact
+367: P1098 refusal 8 op.field.new_value
+367: P1098 refusal 9 op.field.index
+367: P1098 refusal 10 op.field.parent_incarnation
+367: P1098 refusal 11 op.field.child_incarnation
+367: P1098 refusal 12 op.field.dependency_compatible
+367: P1098 refusal 13 a.owner.source
+367: P1098 refusal 14 a.owner.context
+367: P1098 refusal 15 a.body.context
+367: P1098 refusal 16 a.owner.nodes
+367: P1098 refusal 17 a.body.nodes
+367: P1098 refusal 18 a.owner.count
+367: P1098 refusal 19 a.body.count
+367: P1098 refusal 20 a.owner.arm_count
+367: P1098 refusal 21 a.owner.arm_count
+367: P1098 refusal 22 a.root.body_count
+367: P1098 refusal 23 a.root.body_count
+367: P1098 refusal 24 fn.result
+367: P1098 refusal 25 fn.kind
+367: P1098 refusal 26 fn.caller_effects
+367: P1098 refusal 27 fn.hidden_dependencies
+367: P1098 refusal 28 fn.owner_receiver
+367: P1098 refusal 29 fn.owner_producer
+367: P1098 refusal 30 fn.custody_recipient
+367: P1098 refusal 31 fn.count
+367: P1098 refusal 32 fn->body.syntax
+367: P1098 refusal 33 fn->body.source
+367: P1098 refusal 34 fn->body.count
+367: P1098 refusal 35 a.context.functions
+367: P1098 refusal 36 a.context.function_count
+367: P1098 refusal 37 a.context.values
+367: P1098 refusal 38 a.context.places
+367: P1098 refusal 39 a.context.scopes
+367: P1098 refusal 40 a.context.types
+367: P1098 refusal 41 a.context.last_value_fact
+367: P1098 refusal 42 a.context.last_incarnation
+367: P1098 refusal 43 body_context.values
+367: P1098 refusal 44 body_context.last_value_fact
+367: P1098 shallow same-source/world borrowed replay refused as authority
+367: P1098 refusal 45 genuine A/B whole body exchange
+367: P1098 COMPLETE negatives=45 foreign B survived un-restored A destruction
+2/7 Test #367: p1098_02-inline.unit .............   Passed    0.00 sec
+test 368
+    Start 368: p1098_03-equal-bits.unit
+
+368: Test command: /tmp/p1098-build/p1098_probe "/tmp/p1098/tests/p1098/sources/03-equal-bits.nl" "1" "146" "146"
+368: Working Directory: /tmp/p1098-build
+368: Environment variables: 
+368:  PYTHONDONTWRITEBYTECODE=1
+368:  PYTHONHASHSEED=0
+368:  LC_ALL=C
+368:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+368:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+368: Test timeout computed to be: 90
+368: P1098 refusal 1 loop.results[0].value
+368: P1098 refusal 2 loop.results[0].type
+368: P1098 refusal 3 loop.break_edges
+368: P1098 refusal 4 loop.continue_edges
+368: P1098 refusal 5 loop.header_inductive
+368: P1098 refusal 6 op.field.parent_post_fact
+368: P1098 refusal 7 op.field.child_post_fact
+368: P1098 refusal 8 op.field.new_value
+368: P1098 refusal 9 op.field.index
+368: P1098 refusal 10 op.field.parent_incarnation
+368: P1098 refusal 11 op.field.child_incarnation
+368: P1098 refusal 12 op.field.dependency_compatible
+368: P1098 refusal 13 a.owner.source
+368: P1098 refusal 14 a.owner.context
+368: P1098 refusal 15 a.body.context
+368: P1098 refusal 16 a.owner.nodes
+368: P1098 refusal 17 a.body.nodes
+368: P1098 refusal 18 a.owner.count
+368: P1098 refusal 19 a.body.count
+368: P1098 refusal 20 a.owner.arm_count
+368: P1098 refusal 21 a.owner.arm_count
+368: P1098 refusal 22 a.root.body_count
+368: P1098 refusal 23 a.root.body_count
+368: P1098 refusal 24 fn.result
+368: P1098 refusal 25 fn.kind
+368: P1098 refusal 26 fn.caller_effects
+368: P1098 refusal 27 fn.hidden_dependencies
+368: P1098 refusal 28 fn.owner_receiver
+368: P1098 refusal 29 fn.owner_producer
+368: P1098 refusal 30 fn.custody_recipient
+368: P1098 refusal 31 fn.count
+368: P1098 refusal 32 fn->body.syntax
+368: P1098 refusal 33 fn->body.source
+368: P1098 refusal 34 fn->body.count
+368: P1098 refusal 35 a.context.functions
+368: P1098 refusal 36 a.context.function_count
+368: P1098 refusal 37 a.context.values
+368: P1098 refusal 38 a.context.places
+368: P1098 refusal 39 a.context.scopes
+368: P1098 refusal 40 a.context.types
+368: P1098 refusal 41 a.context.last_value_fact
+368: P1098 refusal 42 a.context.last_incarnation
+368: P1098 refusal 43 body_context.values
+368: P1098 refusal 44 body_context.last_value_fact
+368: P1098 shallow same-source/world borrowed replay refused as authority
+368: P1098 refusal 45 genuine A/B whole body exchange
+368: P1098 COMPLETE negatives=45 foreign B survived un-restored A destruction
+3/7 Test #368: p1098_03-equal-bits.unit .........   Passed    0.00 sec
+test 369
+    Start 369: p1098_04-prefix.unit
+
+369: Test command: /tmp/p1098-build/p1098_probe "/tmp/p1098/tests/p1098/sources/04-prefix.nl" "1" "176" "244"
+369: Working Directory: /tmp/p1098-build
+369: Environment variables: 
+369:  PYTHONDONTWRITEBYTECODE=1
+369:  PYTHONHASHSEED=0
+369:  LC_ALL=C
+369:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+369:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+369: Test timeout computed to be: 90
+369: P1098 refusal 1 loop.results[0].value
+369: P1098 refusal 2 loop.results[0].type
+369: P1098 refusal 3 loop.break_edges
+369: P1098 refusal 4 loop.continue_edges
+369: P1098 refusal 5 loop.header_inductive
+369: P1098 refusal 6 op.field.parent_post_fact
+369: P1098 refusal 7 op.field.child_post_fact
+369: P1098 refusal 8 op.field.new_value
+369: P1098 refusal 9 op.field.index
+369: P1098 refusal 10 op.field.parent_incarnation
+369: P1098 refusal 11 op.field.child_incarnation
+369: P1098 refusal 12 op.field.dependency_compatible
+369: P1098 refusal 13 a.owner.source
+369: P1098 refusal 14 a.owner.context
+369: P1098 refusal 15 a.body.context
+369: P1098 refusal 16 a.owner.nodes
+369: P1098 refusal 17 a.body.nodes
+369: P1098 refusal 18 a.owner.count
+369: P1098 refusal 19 a.body.count
+369: P1098 refusal 20 a.owner.arm_count
+369: P1098 refusal 21 a.owner.arm_count
+369: P1098 refusal 22 a.root.body_count
+369: P1098 refusal 23 a.root.body_count
+369: P1098 refusal 24 fn.result
+369: P1098 refusal 25 fn.kind
+369: P1098 refusal 26 fn.caller_effects
+369: P1098 refusal 27 fn.hidden_dependencies
+369: P1098 refusal 28 fn.owner_receiver
+369: P1098 refusal 29 fn.owner_producer
+369: P1098 refusal 30 fn.custody_recipient
+369: P1098 refusal 31 fn.count
+369: P1098 refusal 32 fn->body.syntax
+369: P1098 refusal 33 fn->body.source
+369: P1098 refusal 34 fn->body.count
+369: P1098 refusal 35 a.context.functions
+369: P1098 refusal 36 a.context.function_count
+369: P1098 refusal 37 a.context.values
+369: P1098 refusal 38 a.context.places
+369: P1098 refusal 39 a.context.scopes
+369: P1098 refusal 40 a.context.types
+369: P1098 refusal 41 a.context.last_value_fact
+369: P1098 refusal 42 a.context.last_incarnation
+369: P1098 refusal 43 body_context.values
+369: P1098 refusal 44 body_context.last_value_fact
+369: P1098 shallow same-source/world borrowed replay refused as authority
+369: P1098 refusal 45 genuine A/B whole body exchange
+369: P1098 COMPLETE negatives=45 foreign B survived un-restored A destruction
+4/7 Test #369: p1098_04-prefix.unit .............   Passed    0.00 sec
+test 370
+    Start 370: p1098_05-two-originals.unit
+
+370: Test command: /tmp/p1098-build/p1098_probe "/tmp/p1098/tests/p1098/sources/05-two-originals.nl" "0" "251" "36"
+370: Working Directory: /tmp/p1098-build
+370: Environment variables: 
+370:  PYTHONDONTWRITEBYTECODE=1
+370:  PYTHONHASHSEED=0
+370:  LC_ALL=C
+370:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+370:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+370: Test timeout computed to be: 90
+370: P1098 refusal 1 loop.results[0].value
+370: P1098 refusal 2 loop.results[0].type
+370: P1098 refusal 3 loop.break_edges
+370: P1098 refusal 4 loop.continue_edges
+370: P1098 refusal 5 loop.header_inductive
+370: P1098 refusal 6 op.field.parent_post_fact
+370: P1098 refusal 7 op.field.child_post_fact
+370: P1098 refusal 8 op.field.new_value
+370: P1098 refusal 9 op.field.index
+370: P1098 refusal 10 op.field.parent_incarnation
+370: P1098 refusal 11 op.field.child_incarnation
+370: P1098 refusal 12 op.field.dependency_compatible
+370: P1098 refusal 13 a.owner.source
+370: P1098 refusal 14 a.owner.context
+370: P1098 refusal 15 a.body.context
+370: P1098 refusal 16 a.owner.nodes
+370: P1098 refusal 17 a.body.nodes
+370: P1098 refusal 18 a.owner.count
+370: P1098 refusal 19 a.body.count
+370: P1098 refusal 20 a.owner.arm_count
+370: P1098 refusal 21 a.owner.arm_count
+370: P1098 refusal 22 a.root.body_count
+370: P1098 refusal 23 a.root.body_count
+370: P1098 refusal 24 fn.result
+370: P1098 refusal 25 fn.kind
+370: P1098 refusal 26 fn.caller_effects
+370: P1098 refusal 27 fn.hidden_dependencies
+370: P1098 refusal 28 fn.owner_receiver
+370: P1098 refusal 29 fn.owner_producer
+370: P1098 refusal 30 fn.custody_recipient
+370: P1098 refusal 31 fn.count
+370: P1098 refusal 32 fn->body.syntax
+370: P1098 refusal 33 fn->body.source
+370: P1098 refusal 34 fn->body.count
+370: P1098 refusal 35 a.context.functions
+370: P1098 refusal 36 a.context.function_count
+370: P1098 refusal 37 a.context.values
+370: P1098 refusal 38 a.context.places
+370: P1098 refusal 39 a.context.scopes
+370: P1098 refusal 40 a.context.types
+370: P1098 refusal 41 a.context.last_value_fact
+370: P1098 refusal 42 a.context.last_incarnation
+370: P1098 refusal 43 body_context.values
+370: P1098 refusal 44 body_context.last_value_fact
+370: P1098 shallow same-source/world borrowed replay refused as authority
+370: P1098 refusal 45 genuine A/B whole body exchange
+370: P1098 COMPLETE negatives=45 foreign B survived un-restored A destruction
+5/7 Test #370: p1098_05-two-originals.unit ......   Passed    0.00 sec
+test 373
+    Start 373: p1098_native.integration
+
+373: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12 "/tmp/p1098/tests/p1098/run.py" "/tmp/p1098-build/newlangc" "/usr/bin/cc" "none" "/tmp/p1098/tests/p1098"
+373: Working Directory: /tmp/p1098-build
+373: Environment variables: 
+373:  PYTHONDONTWRITEBYTECODE=1
+373:  PYTHONHASHSEED=0
+373:  LC_ALL=C
+373:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+373:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+373: Test timeout computed to be: 90
+373: P1098 native 01-bound /usr/bin/cc -O0 none P1098 native same-original, old/current/sibling/frame, one Change pair: PASS
+373: P1098 native 01-bound /usr/bin/cc -O2 none P1098 native same-original, old/current/sibling/frame, one Change pair: PASS
+373: P1098 CLI 01-bound CHECK 0 C17 0 named no-clobber, no-temp, outside-control bytes
+373: P1098 native 02-inline /usr/bin/cc -O0 none P1098 native same-original, old/current/sibling/frame, one Change pair: PASS
+373: P1098 native 02-inline /usr/bin/cc -O2 none P1098 native same-original, old/current/sibling/frame, one Change pair: PASS
+373: P1098 CLI 02-inline CHECK 0 C17 0 named no-clobber, no-temp, outside-control bytes
+373: P1098 native 03-equal-bits /usr/bin/cc -O0 none P1098 native same-original, old/current/sibling/frame, one Change pair: PASS
+373: P1098 native 03-equal-bits /usr/bin/cc -O2 none P1098 native same-original, old/current/sibling/frame, one Change pair: PASS
+373: P1098 CLI 03-equal-bits CHECK 0 C17 0 named no-clobber, no-temp, outside-control bytes
+373: P1098 native 04-prefix /usr/bin/cc -O0 none P1098 native same-original, old/current/sibling/frame, one Change pair: PASS
+373: P1098 native 04-prefix /usr/bin/cc -O2 none P1098 native same-original, old/current/sibling/frame, one Change pair: PASS
+373: P1098 CLI 04-prefix CHECK 0 C17 0 named no-clobber, no-temp, outside-control bytes
+373: P1098 native 05-two-originals /usr/bin/cc -O0 none P1098 native same-original, old/current/sibling/frame, one Change pair: PASS
+373: P1098 native 05-two-originals /usr/bin/cc -O2 none P1098 native same-original, old/current/sibling/frame, one Change pair: PASS
+373: P1098 CLI 05-two-originals CHECK 0 C17 0 named no-clobber, no-temp, outside-control bytes
+373: P1098 CLI 06-outside-control CHECK 0 C17 0 named no-clobber, no-temp, outside-control bytes
+373: P1098 CLI 07-unsupported-incoming-binding CHECK 0 C17 4 named no-clobber, no-temp, outside-control bytes
+373: P1098 CLI 08-unsupported-literal-break CHECK 0 C17 4 named no-clobber, no-temp, outside-control bytes
+373: P1098 CLI 09-invalid-name CHECK 3 C17 3 named no-clobber, no-temp, outside-control bytes
+373: P1098 CLI 10-invalid-write CHECK 3 C17 3 named no-clobber, no-temp, outside-control bytes
+6/7 Test #373: p1098_native.integration .........   Passed    0.58 sec
+test 374
+    Start 374: p1098_evidence_history.unit
+
+374: Test command: /opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3.12 "/tmp/p1098/tests/p1098/evidence_test.py"
+374: Working Directory: /tmp/p1098-build
+374: Environment variables: 
+374:  PYTHONDONTWRITEBYTECODE=1
+374:  PYTHONHASHSEED=0
+374:  LC_ALL=C
+374:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+374:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+374: Test timeout computed to be: 90
+374: P1098 full pre-run inputs, original FIRST, fixed adopted-v19, inherited history: PASS
+7/7 Test #374: p1098_evidence_history.unit ......   Passed    1.17 sec
+
+The following tests passed:
+	p1098_01-bound.unit
+	p1098_02-inline.unit
+	p1098_03-equal-bits.unit
+	p1098_04-prefix.unit
+	p1098_05-two-originals.unit
+	p1098_native.integration
+	p1098_evidence_history.unit
+
+100% tests passed, 0 tests failed out of 7
+
+Total Test time (real) =   1.77 sec

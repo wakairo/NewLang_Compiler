@@ -1,0 +1,80 @@
+Internal ctest changing into directory: /tmp/p1098-build
+UpdateCTestConfiguration  from :/tmp/p1098-build/DartConfiguration.tcl
+Parse Config file:/tmp/p1098-build/DartConfiguration.tcl
+UpdateCTestConfiguration  from :/tmp/p1098-build/DartConfiguration.tcl
+Parse Config file:/tmp/p1098-build/DartConfiguration.tcl
+Test project /tmp/p1098-build
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 366
+    Start 366: p1098_01-bound.unit
+
+366: Test command: /tmp/p1098-build/p1098_probe "/tmp/p1098/tests/p1098/sources/01-bound.nl" "1" "146" "229"
+366: Working Directory: /tmp/p1098-build
+366: Environment variables: 
+366:  PYTHONDONTWRITEBYTECODE=1
+366:  PYTHONHASHSEED=0
+366:  LC_ALL=C
+366:  ASAN_OPTIONS=detect_leaks=1:halt_on_error=1
+366:  UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1
+366: Test timeout computed to be: 90
+366: P1098 refusal 1 loop.results[0].value
+366: P1098 refusal 2 loop.results[0].type
+366: P1098 refusal 3 loop.break_edges
+366: P1098 refusal 4 loop.continue_edges
+366: P1098 refusal 5 loop.header_inductive
+366: P1098 refusal 6 op.field.parent_post_fact
+366: P1098 refusal 7 op.field.child_post_fact
+366: P1098 refusal 8 op.field.new_value
+366: P1098 refusal 9 op.field.index
+366: P1098 refusal 10 op.field.parent_incarnation
+366: P1098 refusal 11 op.field.child_incarnation
+366: P1098 refusal 12 op.field.dependency_compatible
+366: P1098 refusal 13 a.owner.source
+366: P1098 refusal 14 a.owner.context
+366: P1098 refusal 15 a.body.context
+366: P1098 refusal 16 a.owner.nodes
+366: P1098 refusal 17 a.body.nodes
+366: P1098 refusal 18 a.owner.count
+366: P1098 refusal 19 a.body.count
+366: P1098 refusal 20 a.owner.arm_count
+366: P1098 refusal 21 a.owner.arm_count
+366: P1098 refusal 22 a.root.body_count
+366: P1098 refusal 23 a.root.body_count
+366: P1098 refusal 24 fn.result
+366: P1098 refusal 25 fn.kind
+366: P1098 refusal 26 fn.caller_effects
+366: P1098 refusal 27 fn.hidden_dependencies
+366: P1098 refusal 28 fn.owner_receiver
+366: P1098 refusal 29 fn.owner_producer
+366: P1098 refusal 30 fn.custody_recipient
+366: P1098 refusal 31 fn.count
+366: P1098 refusal 32 fn->body.syntax
+366: P1098 refusal 33 fn->body.source
+366: P1098 refusal 34 fn->body.count
+366: P1098 refusal 35 fn.name
+366: P1098 refusal 36 edge.state
+366: P1098 refusal 37 edge.target
+366: P1098 refusal 38 edge.source_target
+366: P1098 refusal 39 edge.source_owner
+366: P1098 refusal 40 edge.values[0].value
+366: P1098 refusal 41 edge.source_node
+366: P1098 refusal 42 exit_context.values
+366: P1098 refusal 43 exit_context.places
+366: P1098 FIRST RED 106: nl_linear_break_validate(i->owner, i->loop, &v) == NL_CHECK_ANALYSIS_PRECISION_LIMIT
+366: P1098 FIRST RED 198: refused
+1/9 Test #366: p1098_01-bound.unit ..............***Failed    0.00 sec
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.02 sec
+
+The following tests FAILED:
+	366 - p1098_01-bound.unit (Failed)
+Errors while running CTest
+Output from these tests are in: /tmp/p1098-build/Testing/Temporary/LastTest.log
+Use "--rerun-failed --output-on-failure" to re-run the failed cases verbosely.

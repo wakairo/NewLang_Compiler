@@ -1,0 +1,87 @@
+[  0%] Built target newlang_source
+[  0%] Built target newlang_diagnostic
+[  0%] Built target newlang_lexer
+[ 10%] Built target newlang_syntax
+[ 20%] Built target newlang_parser
+[ 30%] Built target newlang_checked
+[ 90%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Built target newlangc
+[  0%] Built target newlang_source
+[  0%] Built target newlang_diagnostic
+[  0%] Built target newlang_lexer
+[ 10%] Built target newlang_syntax
+[ 20%] Built target newlang_checked
+[ 30%] Built target newlang_parser
+[ 90%] Built target newlang_semantic
+[100%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p1098_probe.dir/tests/p1098/probe.c.o
+/tmp/p1098/tests/p1098/probe.c:9:5: error: expected identifier or ‘(’ before ‘do’
+    9 |     do {                                                                       \
+      |     ^~
+/tmp/p1098/tests/p1098/probe.c:117:1: note: in expansion of macro ‘REQUIRE’
+  117 | REQUIRE(saved != (value));
+      | ^~~~~~~
+/tmp/p1098/tests/p1098/probe.c:14:7: error: expected identifier or ‘(’ before ‘while’
+   14 |     } while (0)
+      |       ^~~~~
+/tmp/p1098/tests/p1098/probe.c:117:1: note: in expansion of macro ‘REQUIRE’
+  117 | REQUIRE(saved != (value));
+      | ^~~~~~~
+/tmp/p1098/tests/p1098/probe.c:118:9: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘->’ token
+  118 | (object)->member = (value);
+      |         ^~
+/tmp/p1098/tests/p1098/probe.c:119:26: error: ‘a’ undeclared here (not in a function)
+  119 | bool refused = rejected(&a, #object "." #member);
+      |                          ^
+/tmp/p1098/tests/p1098/probe.c:119:29: error: stray ‘#’ in program
+  119 | bool refused = rejected(&a, #object "." #member);
+      |                             ^
+/tmp/p1098/tests/p1098/probe.c:119:30: error: ‘object’ undeclared here (not in a function)
+  119 | bool refused = rejected(&a, #object "." #member);
+      |                              ^~~~~~
+/tmp/p1098/tests/p1098/probe.c:119:36: error: expected ‘)’ before string constant
+  119 | bool refused = rejected(&a, #object "." #member);
+      |                        ~           ^~~~
+      |                                    )
+/tmp/p1098/tests/p1098/probe.c:119:41: error: stray ‘#’ in program
+  119 | bool refused = rejected(&a, #object "." #member);
+      |                                         ^
+/tmp/p1098/tests/p1098/probe.c:120:9: error: expected ‘=’, ‘,’, ‘;’, ‘asm’ or ‘__attribute__’ before ‘->’ token
+  120 | (object)->member = saved;
+      |         ^~
+/tmp/p1098/tests/p1098/probe.c:9:5: error: expected identifier or ‘(’ before ‘do’
+    9 |     do {                                                                       \
+      |     ^~
+/tmp/p1098/tests/p1098/probe.c:121:1: note: in expansion of macro ‘REQUIRE’
+  121 | REQUIRE(refused);
+      | ^~~~~~~
+/tmp/p1098/tests/p1098/probe.c:14:7: error: expected identifier or ‘(’ before ‘while’
+   14 |     } while (0)
+      |       ^~~~~
+/tmp/p1098/tests/p1098/probe.c:121:1: note: in expansion of macro ‘REQUIRE’
+  121 | REQUIRE(refused);
+      | ^~~~~~~
+/tmp/p1098/tests/p1098/probe.c:122:1: error: expected identifier or ‘(’ before ‘}’ token
+  122 | }
+      | ^
+/tmp/p1098/tests/p1098/probe.c:123:1: error: expected identifier or ‘(’ before ‘while’
+  123 | while (0)
+      | ^~~~~
+/tmp/p1098/tests/p1098/probe.c:80:13: error: ‘positive’ defined but not used [-Werror=unused-function]
+   80 | static bool positive(Input *i, size_t index, size_t old, size_t next)
+      |             ^~~~~~~~
+/tmp/p1098/tests/p1098/probe.c:57:13: error: ‘checked’ defined but not used [-Werror=unused-function]
+   57 | static bool checked(Input *i)
+      |             ^~~~~~~
+/tmp/p1098/tests/p1098/probe.c:45:13: error: ‘prepare’ defined but not used [-Werror=unused-function]
+   45 | static bool prepare(const char *path, Input *i)
+      |             ^~~~~~~
+/tmp/p1098/tests/p1098/probe.c:24:13: error: ‘destroy’ defined but not used [-Werror=unused-function]
+   24 | static void destroy(Input *i)
+      |             ^~~~~~~
+cc1: all warnings being treated as errors
+gmake[3]: *** [CMakeFiles/p1098_probe.dir/build.make:79: CMakeFiles/p1098_probe.dir/tests/p1098/probe.c.o] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:6239: CMakeFiles/p1098_probe.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:6246: CMakeFiles/p1098_probe.dir/rule] Error 2
+gmake: *** [Makefile:2084: p1098_probe] Error 2

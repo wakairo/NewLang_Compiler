@@ -1,0 +1,10 @@
+{
+  "head": "74588a4bba42016055accb3a66398189a9ea5dfe",
+  "tree": "a51228fd0b74b80e2bd3051c35267a5e0f2bceea",
+  "log_sha256": "ff15f7b1f9a4c7c031a258b8d44871adb2c62385b8eef8a4dbb07dbcd6bf1094",
+  "test": "p1098_01-bound.unit",
+  "result": "SEGFAULT after refusal41; new EXIT values=NULL probe",
+  "static_cause": "private validator called existing provenance bool, which reads actual EXIT values, before private EXIT allocation-base guard",
+  "repair": "guard canonical EXIT state/world bases and contents before calling provenance validator; no public API/control.c change",
+  "unsafe_candidate": "stopped; not rerun"
+}

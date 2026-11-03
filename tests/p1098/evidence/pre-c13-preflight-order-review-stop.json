@@ -1,0 +1,5 @@
+{
+  "pid": 316497,
+  "pgid": 316496,
+  "reason": "Pause own remaining-lanes job before changing source: review root-node preflight order; preserve completed results and partial logs, no PASS for incomplete lanes"
+}

@@ -1,0 +1,7 @@
+{
+  "positive": "real CHECK/private validation and driver validation OK; old value from actual event; original carrier fields observed at O0/O2",
+  "negative": "each live mutation rejected by private validator with unchanged out-view and by driver before mutable node walk; restoration retries succeed",
+  "foreign": "genuine same-plan B survives A whole-body swap and count tamper, followed by un-restored A destruction",
+  "OOM": "each actually reached malloc/realloc/calloc CHECK fault returns OUT_OF_MEMORY, no artifact publish, original caller unchanged, same-input retry succeeds; unreached index terminates sweep",
+  "history": "fixed adopted v19 SHA256/blob/coverage and protected evidence unchanged; v20 only prospective"
+}

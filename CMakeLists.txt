@@ -275,7 +275,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p631/same_value_local.nl")
 
     add_test(NAME p634_historical_hash.unit
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p634/hash_gate_test.py"
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/historical_forward.py" p634
         "${CMAKE_CURRENT_SOURCE_DIR}")
     add_executable(p634_ended_root_gate tests/p634/ended_root_gate.c)
     target_link_libraries(p634_ended_root_gate PRIVATE newlang_checked_c_node newlang_semantic)
@@ -351,7 +351,7 @@ if(BUILD_TESTING)
     add_executable(p605_public_probe tests/p605/public_probe.c)
     target_link_libraries(p605_public_probe PRIVATE newlang_semantic)
     add_test(NAME p605_arithmetic_comparison.integration
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p605/integration_test.py"
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/historical_forward.py" p605
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p605_public_probe>"
         "${CMAKE_C_COMPILER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p605" "${NEWLANG_SANITIZER}")
     add_test(NAME p605_mutant_phase.unit
@@ -1002,6 +1002,47 @@ if(BUILD_TESTING)
     add_test(NAME p990_negative_sources.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "negative")
+    add_executable(p1098_probe tests/p1098/probe.c)
+    add_executable(p1098_oom tests/p1098/probe.c)
+    target_compile_definitions(p1098_oom PRIVATE P1098_OOM)
+    foreach(target p1098_probe p1098_oom)
+        target_link_libraries(${target} PRIVATE newlang_checked_c_node newlang_semantic newlang_parser)
+    endforeach()
+    target_link_options(p1098_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc
+        -Wl,--wrap=calloc -no-pie)
+    target_compile_options(p1098_oom PRIVATE -fno-pie)
+    target_link_options(p1098_oom PRIVATE
+        -Wl,--wrap=nl_parser_parse_function_unit -Wl,--wrap=nl_parser_parse_expression_fragment
+        -Wl,--wrap=nl_semantic_register_function_unit -Wl,--wrap=nl_semantic_check_expression)
+    foreach(profile 01-bound 02-inline 03-equal-bits 04-prefix 05-two-originals
+                    11-no-caller-write 12-two-roots-no-caller-write)
+        if(profile STREQUAL "02-inline")
+            set(p1098_args 0 194 112)
+        elseif(profile STREQUAL "05-two-originals")
+            set(p1098_args 0 251 36)
+        elseif(profile STREQUAL "11-no-caller-write")
+            set(p1098_args 1 158 237)
+        elseif(profile STREQUAL "12-two-roots-no-caller-write")
+            set(p1098_args 0 189 28)
+        elseif(profile STREQUAL "04-prefix")
+            set(p1098_args 1 176 244)
+        elseif(profile STREQUAL "03-equal-bits")
+            set(p1098_args 1 146 146)
+        else()
+            set(p1098_args 1 146 229)
+        endif()
+        add_test(NAME p1098_${profile}.unit COMMAND p1098_probe
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/sources/${profile}.nl" ${p1098_args})
+    endforeach()
+    add_test(NAME p1098_bound_oom.unit COMMAND p1098_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/sources/01-bound.nl" 1 146 229)
+    add_test(NAME p1098_inline_oom.unit COMMAND p1098_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/sources/02-inline.nl" 0 194 112)
+    add_test(NAME p1098_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/run-v2.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098")
+    add_test(NAME p1098_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/evidence_test.py")
     add_executable(p1092_observe tests/p1092/observe.c)
     add_executable(p1092_oom tests/p1092/observe.c)
     target_compile_definitions(p1092_oom PRIVATE P1092_OOM)
@@ -1034,7 +1075,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/sources/03_inline_index0.nl"
         0 93 167 12)
     add_test(NAME p1092_source_boundaries.integration
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/cli.py"
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/p1092_forward.py"
         "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}")
     add_test(NAME p1092_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1092/evidence_test.py")

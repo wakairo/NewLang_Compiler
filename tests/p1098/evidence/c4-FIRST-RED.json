@@ -1,0 +1,8 @@
+{
+  "head": "143c3f0",
+  "result": "probe expected rejection of unchanged NULL EXIT scopes allocation",
+  "log_sha256": "307b464a532dd694be59b8ae11b8faa914580e09063368c648c882cfd115f996",
+  "cause": "projected EXIT has scope_count=0 and scopes already NULL; setting NULL did not modify caller state, so validator correctly returned OK",
+  "repair": "new P harness challenges scope_count 0->1 when there is no scopes allocation; additionally require every MUTATE changes its member; old harness/oracle/FIRST remain archived unchanged",
+  "production_change": "none for this repair"
+}

@@ -138,6 +138,8 @@ struct NLCheckedFragment {
     void (*destroy_producer_local)(NLCheckedFragment *);
     struct NLIfFieldProof *if_fields;
     void (*destroy_if_fields)(NLCheckedFragment *);
+    struct NLLinearBreakProof *linear_breaks;
+    void (*destroy_linear_breaks)(NLCheckedFragment *);
     struct NLCopyBodyProof *copy_body;
     void (*destroy_copy_body)(NLCheckedFragment *);
     struct NLUsizeAdditionProof *usize_additions;

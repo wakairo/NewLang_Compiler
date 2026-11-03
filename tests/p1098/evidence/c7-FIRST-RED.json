@@ -1,0 +1,9 @@
+{
+  "head": "2379d111ae5020fc6c1d2a0b647e1eecc3097032",
+  "tree": "a6fe5de7273f0290dad517c503486afbea25bb01",
+  "log_sha256": "0d23aa327626bc6c0527effa13a465fbdf667289c0c8be26efa19ff6e861df0c",
+  "result": "named CLI fault6 returned exit3/P2-OUT-OF-MEMORY, not predicted universal host exit1",
+  "static_cause": "unchanged render_parse_failure/render_check_failure deliberately return3 for rendered frontend errors; old harness-oracle-v2 prediction was too broad",
+  "repair": "new prospective oracle records exact phase and underlying API OOM status, with existing CLI exit3 in parser/register/CHECK; all bytes/inode/no-temp/retry assertions retained",
+  "production_change": "none; no reclassification of compiler behavior"
+}
