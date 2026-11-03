@@ -26,9 +26,9 @@ was read-only and restored; that partial output was never executed. Candidate
 `7b7881a` ties the result to the actual callee producer and completes the same
 pure IF emission. Final current/lineage negatives reject these substitutions.
 
-Active harnesses are `run_v2.py`, `safety_v3.c`, `safety_oom_v2.c`, `lineage.c`,
+Active harnesses are `run_v2.py`, `safety_v3.c`, `safety_oom_v2.c`, `lineage_v2.c`,
 and `history_latest.py`. The latter verifies all immutable input archives and
-current history v29. Original P504/P603 C/Python/source/oracle/baseline files
+current history v30. Original P504/P603 C/Python/source/oracle/baseline files
 are unchanged: SHA-pinned prospective generators/wrappers explicitly version
 only the superseded unknown-comparison precision expectations. Other original
 type, reference, rollback, mutation, native, and C-byte checks still execute.
@@ -69,3 +69,22 @@ GO #624 stays PAUSED, H1 #268 stays HOLD; P1036/PR1050 STOP persists.
 Independent R sources/oracles/raw/values and M1118 conclusions were not inputs.
 Coordination and proportionate independent review remain pending. DRAFT/HOLD;
 no READY, merge, or Product GO decision is made.
+
+## Mechanical CI follow-up
+
+The initial FULL5 Clang job stopped before compilation on the formatting of
+the frozen `lineage.c`. The original file and original CI RED are retained.
+`lineage_v2.c` is exactly the pinned formatter's output and has the same genuine
+acceptance and foreign/coherently changed result refusal assertions. Only the
+noncompiled historical original is listed in `.clang-format-ignore`; every
+live test and Production source remains subject to the unchanged formatter
+script. This explicit historical exception adds maintenance bookkeeping.
+No workflow, functional gate, Production byte, or old frozen input changed.
+Freeze v11 preceded execution; history v30 anchors v29 SHA256/Git blob and
+inherits all protected files. The unchanged all-tracked-C formatter succeeds,
+and the clean checkout's lineage/current/OOM/native/history checks pass 10/10.
+The [exact first Clang log](../evidence/p1117-c212-ci-first/clang-format-exact.log)
+is the decoded GitHub response byte-for-byte. The separately retained initial
+mirror `clang-format.log` has one additional trailing newline; neither copy
+changes the actual CI result. The final natural CI pair and disposition are
+recorded in Issue #1117, with no rerun/dispatch or further CI after all-green.
