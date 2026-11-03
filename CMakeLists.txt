@@ -1047,7 +1047,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1107)
     add_executable(p1117_probe tests/p1117/probe.c)
     add_executable(p1117_safety tests/p1117/safety_v3.c)
-    add_executable(p1117_oom tests/p1117/safety.c)
+    add_executable(p1117_oom tests/p1117/safety_oom_v2.c)
     foreach(target p1117_probe p1117_safety p1117_oom)
         target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
         target_link_libraries(${target} PRIVATE newlang_checked_c_node newlang_semantic)
@@ -1058,6 +1058,10 @@ if(BUILD_TESTING)
     target_link_options(p1117_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc
         -Wl,--wrap=realloc -no-pie)
     target_compile_options(p1117_oom PRIVATE -fno-pie)
+    target_link_options(p1117_oom PRIVATE -Wl,--wrap=nl_parser_parse_function_unit
+        -Wl,--wrap=nl_parser_parse_expression_fragment
+        -Wl,--wrap=nl_semantic_register_function_unit
+        -Wl,--wrap=nl_semantic_check_expression)
     foreach(profile 01-equality 02-less-than 09-wide-equality)
         add_test(NAME p1117_${profile}_current.unit COMMAND p1117_safety
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/sources/${profile}.nl")
