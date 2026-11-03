@@ -1,0 +1,18 @@
+{
+  "source": "tests/p603/unknown.nl",
+  "source_sha256": "ebd2c87d934f55a291d099e69e4d45844c248fc15b342aad1023ddabbd644a25",
+  "source_text": "fn compare(a:usize,b:usize)->bool{a < b}fn main()->unit{unit}\n",
+  "expected": {
+    "check": 0,
+    "emit": 0,
+    "native": 0,
+    "optimization": [
+      "O0",
+      "O2"
+    ],
+    "check_stdout": "empty",
+    "stderr": "empty",
+    "meaning": "Unused ordinary function definition is CHECKed truthfully; emitted main is unit; no new Bool ABI or invocation is claimed."
+  },
+  "retained": "Frozen v9 equality-source expectations, original P603 source/script/oracle/candidate/baseline JSON and all assertions for other cases remain unchanged."
+}

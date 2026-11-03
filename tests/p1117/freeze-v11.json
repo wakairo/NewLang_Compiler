@@ -1,0 +1,10 @@
+{
+  "version": 11,
+  "previous_manifest_sha256": "d073ae11931bc60cbadcdb6fd8e8aa220690ad1f49a2041e31949137882563c4",
+  "archive_sha256": "16de9db4a2bf63ffde86bdaf712e258f0e61d07f2bfeee3c0f4d2aa1bf34186a",
+  "files": {
+    "FORMATTING-v11.md": "f3551ba7a355e28d3a3b5611568248c1c2c256a5a8f646ce2bef968eac808543",
+    "lineage_v2.c": "5af0b0c5c7ca37b5a02f7e7a532f83db0f8b52b7a15ed967b657086c13137c07",
+    "oracle-format-v11.json": "b6b15433bc7b0a0b49bcb624ffa08623288ac719372173377901e78fbe46f533"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "source": "tests/p504/unknown.nl",
+  "source_sha256": "8aa9d69fccce82a5063bb514b81d6be8bce77ff029297d2b3f53b9a3ce3dc278",
+  "source_text": "fn same(a:usize,b:usize)->bool{a==b}\nfn main()->unit{same(usize(2),usize(2));unit}\n",
+  "scripts": {
+    "p603": {"path": "tests/p603/integration_test.py", "sha256": "bcf5b4604c0a8150d60ec5bdb588cb2d880f8981769663875b86baa4152a91d0"},
+    "p504": {"path": "tests/p504/frontier_test.py", "sha256": "968b65e2d93de4287ae08e92a25d1f67050adf63ed546aa6c64fde7e28438b3a"}
+  },
+  "current": {
+    "check": {"exit": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "diagnostic": ""},
+    "c17": {"exit": 4, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "diagnostic": "error(cli)[V1-BACKEND-UNSUPPORTED]"}
+  },
+  "retained": "Original source, scripts and baseline JSON stay unchanged. Two-parameter Bool-result C17 remains unsupported; no evidence or subprocess result is forged. All other original assertions execute verbatim."
+}

@@ -361,14 +361,19 @@ if(BUILD_TESTING)
     target_link_libraries(p603_public_probe PRIVATE newlang_semantic)
     add_executable(p603_gate_probe tests/p603/gate_probe.c)
     target_link_libraries(p603_gate_probe PRIVATE newlang_checked_c_node newlang_semantic)
-    add_executable(p603_comparison_test tests/p603/comparison_test.c)
+    execute_process(COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/legacy_current_v2.py"
+        "${CMAKE_CURRENT_SOURCE_DIR}" "${CMAKE_CURRENT_BINARY_DIR}/p1117-current"
+        COMMAND_ERROR_IS_FATAL ANY)
+    add_executable(p603_comparison_test "${CMAKE_CURRENT_BINARY_DIR}/p1117-current/p603_current.c")
+    target_include_directories(p603_comparison_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/tests/p603")
     target_link_libraries(p603_comparison_test PRIVATE newlang_semantic)
     target_link_options(p603_comparison_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
     foreach(group parser values rollback oom)
         add_test(NAME p603_comparison_${group}.unit COMMAND p603_comparison_test ${group})
     endforeach()
     add_test(NAME p603_comparison_native.integration
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p603/integration_test.py"
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/legacy_native_current_v2.py" p603
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p603_public_probe>"
         "$<TARGET_FILE:p603_gate_probe>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p603" "${NEWLANG_SANITIZER}")
@@ -376,14 +381,15 @@ if(BUILD_TESTING)
     target_link_libraries(p504_public_probe PRIVATE newlang_semantic)
     add_executable(p504_gate_probe tests/p504/gate_probe.c)
     target_link_libraries(p504_gate_probe PRIVATE newlang_checked_c_node newlang_semantic)
-    add_executable(p504_equality_test tests/p504/equality_test.c)
+    add_executable(p504_equality_test "${CMAKE_CURRENT_BINARY_DIR}/p1117-current/p504_current.c")
+    target_include_directories(p504_equality_test PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/tests/p504")
     target_link_libraries(p504_equality_test PRIVATE newlang_semantic)
     target_link_options(p504_equality_test PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc)
     foreach(group parser values rollback oom)
         add_test(NAME p504_equality_${group}.unit COMMAND p504_equality_test ${group})
     endforeach()
     add_test(NAME p504_equality_native.integration
-        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p504/frontier_test.py"
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/legacy_native_current_v2.py" p504
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p504_public_probe>"
         "$<TARGET_FILE:p504_gate_probe>" "${CMAKE_C_COMPILER}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p504" "${NEWLANG_SANITIZER}")
@@ -1038,7 +1044,68 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" candidate)
     add_test(NAME p1107_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/evidence_test.py")
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1107)
+    add_executable(p1117_probe tests/p1117/probe.c)
+    add_executable(p1117_lineage tests/p1117/lineage_v2.c)
+    add_executable(p1117_safety tests/p1117/safety_v3.c)
+    add_executable(p1117_oom tests/p1117/safety_oom_v2.c)
+    foreach(target p1117_probe p1117_lineage p1117_safety p1117_oom)
+        target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+        target_link_libraries(${target} PRIVATE newlang_checked_c_node newlang_semantic)
+        target_compile_options(${target} PRIVATE -UNDEBUG)
+    endforeach()
+    target_link_options(p1117_probe PRIVATE -Wl,--wrap=nl_if_field_prepare)
+    add_test(NAME p1117_actual_return_lineage.unit COMMAND p1117_lineage
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/sources/01-equality.nl")
+    target_compile_definitions(p1117_oom PRIVATE P1117_OOM)
+    target_link_options(p1117_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=calloc
+        -Wl,--wrap=realloc -no-pie)
+    target_compile_options(p1117_oom PRIVATE -fno-pie)
+    target_link_options(p1117_oom PRIVATE -Wl,--wrap=nl_parser_parse_function_unit
+        -Wl,--wrap=nl_parser_parse_expression_fragment
+        -Wl,--wrap=nl_semantic_register_function_unit
+        -Wl,--wrap=nl_semantic_check_expression)
+    foreach(profile 01-equality 02-less-than 09-wide-equality)
+        add_test(NAME p1117_${profile}_current.unit COMMAND p1117_safety
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/sources/${profile}.nl")
+    endforeach()
+    foreach(profile 01-equality 02-less-than)
+        add_test(NAME p1117_${profile}_oom.unit COMMAND p1117_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/sources/${profile}.nl")
+        set_tests_properties(p1117_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE)
+    endforeach()
+    add_test(NAME p1117_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/run_v2.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1117_probe>"
+        "${CMAKE_CURRENT_BINARY_DIR}/p1117-native" candidate
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
+    add_test(NAME p1117_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1117)
+    add_executable(p1117_c217_lineage tests/p1117/c217/probe.c)
+    target_include_directories(p1117_c217_lineage PRIVATE
+        "${CMAKE_CURRENT_SOURCE_DIR}/src")
+    target_link_libraries(p1117_c217_lineage PRIVATE
+        newlang_checked_c_node newlang_semantic)
+    target_compile_options(p1117_c217_lineage PRIVATE -UNDEBUG)
+    foreach(profile 01-return-alias 02-tail-alias 03-return-if 04-tail-if)
+        string(REGEX REPLACE "^[0-9]+-" "" p1117_c217_shape "${profile}")
+        add_test(NAME p1117_c217_${profile}_lineage.unit
+            COMMAND p1117_c217_lineage repair
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/c217/sources/${profile}.nl"
+            "${p1117_c217_shape}")
+    endforeach()
+    foreach(profile 01-return-alias 02-tail-alias)
+        add_test(NAME p1117_c217_${profile}_oom.unit COMMAND p1117_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/c217/sources/${profile}.nl")
+        set_tests_properties(p1117_c217_${profile}_oom.unit PROPERTIES
+            RUN_SERIAL TRUE)
+    endforeach()
+    add_test(NAME p1117_c217_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/c217/run.py" repair
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1117_c217_lineage>"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/c217"
+        "${CMAKE_CURRENT_BINARY_DIR}/p1117-c217-native"
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}")
     add_executable(p1098_probe tests/p1098/probe.c)
     add_executable(p1098_oom tests/p1098/probe.c)
     target_compile_definitions(p1098_oom PRIVATE P1098_OOM)
@@ -1079,7 +1146,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/run-v2.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098")
     add_test(NAME p1098_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/p1098_forward.py")
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1098)
     add_executable(p1092_observe tests/p1092/observe.c)
     add_executable(p1092_oom tests/p1092/observe.c)
     target_compile_definitions(p1092_oom PRIVATE P1092_OOM)

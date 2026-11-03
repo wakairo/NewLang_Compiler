@@ -17,6 +17,14 @@ NLCheckStatus nl_h_custody_reserve(NLCheckedFragment *parent,
                                    NLCheckedNodeId site, size_t slot);
 void nl_h_custody_commit(NLCheckedFragment *parent, NLCheckedFragment *child,
                          NLCustodyRole role, size_t slot);
+/* CHECK-only result lineage. Seal records the actual call plus its complete
+ * owned callee subtree before publication. Validation authenticates those
+ * issued bytes; it never mints a value, owner, or source permission. */
+NLCheckStatus nl_h_custody_seal_result(NLCheckedFragment *parent,
+                                       NLCheckedFragment *child,
+                                       NLCheckedNodeId call);
+bool nl_h_custody_result_valid(const NLCheckedFragment *parent,
+                               NLCheckedNodeId call);
 /* Historical observation only. The actual parent and recorded call select a
  * live COMMITTED BODY; current world/view integrity is not authenticated. */
 const NLCheckedFragment *nl_h_custody_observe_body(const NLCheckedFragment *,

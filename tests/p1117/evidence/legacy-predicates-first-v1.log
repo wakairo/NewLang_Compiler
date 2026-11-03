@@ -1,0 +1,18 @@
+Internal ctest changing into directory: /tmp/p1117-build
+Test project /tmp/p1117-build
+    Start 62: p603_comparison_parser.unit
+1/8 Test #62: p603_comparison_parser.unit ......   Passed    0.00 sec
+    Start 63: p603_comparison_values.unit
+2/8 Test #63: p603_comparison_values.unit ......   Passed    0.00 sec
+    Start 64: p603_comparison_rollback.unit
+3/8 Test #64: p603_comparison_rollback.unit ....***Failed    0.00 sec
+/tmp/p1117/tests/p603/comparison_test.c:148: nl_semantic_register_function_unit(c, inputs, 1, &d) == NL_CHECK_ANALYSIS_PRECISION_LIMIT
+
+
+67% tests passed, 1 tests failed out of 3
+
+Total Test time (real) =   0.02 sec
+
+The following tests FAILED:
+	 64 - p603_comparison_rollback.unit (Failed)
+Errors while running CTest

@@ -1,0 +1,11 @@
+{
+  "version": 9,
+  "previous_manifest_sha256": "69441c3c20fd5ed3cd8ec2d973813d9b071581ee0b1355df56c721f50e8ca29a",
+  "archive_sha256": "e1a26901304a61865d9b1f18a9893b8edc22e9b13622e2e8b45fa1c5635957fe",
+  "files": {
+    "CURRENT-v9.md": "a91760fe1f7edf889af89a16d17bcda9ba8c8c294ebd33c1e38bc937aca6f796",
+    "legacy_native_current.py": "543fb69bcf85c317627f2b1f551f57bc6f0f3fb0be95ac62b1fd336ae087a5b8",
+    "legacy-native-oracle-v9.json": "9798fe2793bf9e622791b69ea13336f179ade7a908c3a97b3b341890e3d5755e",
+    "evidence/full-gcc-v7-first-RED.log": "f237ee4b2fa02bc5981fc8ee1604bdc814abb6a3e151240c181df56d829f6d6d"
+  }
+}

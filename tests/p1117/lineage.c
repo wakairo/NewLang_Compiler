@@ -1,0 +1,70 @@
+#define main p1117_driver_main
+#include "main.c"
+#undef main
+#include <assert.h>
+static bool accepts(const NLCheckedFragment *f, NLCheckedNodeId call,
+                    const NLSemanticContext *c) {
+  V0Program p = {.unit = nl_semantic_unit_type(c),
+                 .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
+  return predicate_call(f, call, &p);
+}
+int main(int argc, char **argv) {
+  assert(argc == 2);
+  NLSource *source = NULL, *entry_source = NULL;
+  NLParser *parser = NULL, *entry_parser = NULL;
+  NLSyntaxTree *unit = NULL, *tree = NULL;
+  NLSemanticContext *c = NULL;
+  NLCheckedFragment *owned = NULL;
+  assert(nl_source_load(argv[1], &source) == NL_SOURCE_OK);
+  assert(nl_parser_create(source, &parser) == NL_PARSE_OK);
+  assert(nl_parser_parse_function_unit(parser, &unit, NULL) == NL_PARSE_OK);
+  assert(nl_semantic_create(&c) == NL_CHECK_OK);
+  const NLSyntaxTree *units[] = {unit};
+  assert(nl_semantic_register_function_unit(c, units, 1, NULL) == NL_CHECK_OK);
+  assert(nl_source_create("main()", 6, "<P1117-lineage>", &entry_source) ==
+         NL_SOURCE_OK);
+  assert(nl_parser_create(entry_source, &entry_parser) == NL_PARSE_OK);
+  assert(nl_parser_parse_expression_fragment(entry_parser, &tree, NULL) ==
+         NL_PARSE_OK);
+  assert(nl_semantic_check_expression(c, tree, &owned, NULL) == NL_CHECK_OK);
+  NLCheckedFragment *body =
+      (NLCheckedFragment *)nl_checked_call_body(owned, nl_checked_root(owned));
+  assert(body);
+  NLCheckedNodeId calls[2] = {0};
+  size_t count = 0;
+  for (size_t n = 1; n <= body->count && count < 2; ++n)
+    if (body->nodes[n - 1].kind == NL_CHECKED_REGISTERED_CALL)
+      calls[count++] = n;
+  assert(count == 2 && accepts(body, calls[0], c));
+  NLCheckedNodeView *call = &body->nodes[calls[0] - 1];
+  const NLCheckedNodeView *other = &body->nodes[calls[1] - 1];
+  NLCheckedFragment *callee =
+      (NLCheckedFragment *)nl_checked_call_body(body, calls[0]);
+  assert(callee && call->results[0].value != other->results[0].value);
+  NLCheckedNodeView *root = &callee->nodes[callee->root - 1];
+  printf("P1117 actual result call=%zu body_returned=%zu body_normal=%zu "
+         "other=%zu\n",
+         call->results[0].value, root->returned.value, root->results[0].value,
+         other->results[0].value);
+  const NLCheckedNodeView saved_call = *call, saved_root = *root;
+  call->results[0] = other->results[0];
+  const bool foreign = accepts(body, calls[0], c);
+  root->returned = other->results[0];
+  const bool coherent_foreign = accepts(body, calls[0], c);
+  *call = saved_call;
+  *root = saved_root;
+  assert(accepts(body, calls[0], c));
+  printf(
+      "P1117 foreign result accepted=%d coherent_foreign_return accepted=%d\n",
+      foreign, coherent_foreign);
+  /* No emission or execution of either altered artifact. */
+  nl_checked_destroy(owned);
+  nl_semantic_destroy(c);
+  nl_syntax_tree_destroy(tree);
+  nl_parser_destroy(entry_parser);
+  nl_source_destroy(entry_source);
+  nl_syntax_tree_destroy(unit);
+  nl_parser_destroy(parser);
+  nl_source_destroy(source);
+  return foreign || coherent_foreign ? 1 : 0;
+}

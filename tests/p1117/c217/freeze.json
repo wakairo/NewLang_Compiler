@@ -1,0 +1,27 @@
+{
+  "version": "p1117-c217-input-v3",
+  "frozen_before_execution_or_production_edit": true,
+  "predecessor_freeze_sha256": "d7ba125b91ce82df04223668788906269ea10d430c8a637be6c61ef60b5b6eda",
+  "repair": "measured baseline outer acceptance recorded; probe stdout unbuffered; repair requirement remains three-layer rejection",
+  "authority": {
+    "main": "65055be55934416c911453463b5f26fa461e8d6a",
+    "parent": "5346a7e2ca2aacb4ed6ab50f3b09bb258b1e607c",
+    "parent_tree": "ed3cc9183a133067cefaf910eb75a8066ec76bdb",
+    "baseline_compiler_sha256": "804b069c2daceef8e0060deb6f621871d8d426d3e7883749a8a9d44191daf45d"
+  },
+  "files": {
+    "README.md": "29a7052d0c0e69075d19a078b178017d73cfe23cc214c2ebf008021dcbe04fe3",
+    "oracle.json": "f604fb9885971b3624e092dd29d72b5d9a62875e8db6467861ce2839841ed197",
+    "probe.c": "b9765dcdff4a87f7eb7e68074c4728787585003b88fb77dc6d85c3a40e455cfb",
+    "run.py": "2e20a1985f7ba83605551cc93d723a1ec831e6d7cc48bbc290861e217a148bd7",
+    "sources/01-return-alias.nl": "8a697f214c076df2e86dedfc7d437296cf421dfa320e37cd3ceab1eb1ee49510",
+    "sources/02-tail-alias.nl": "f717e33ee06b2e688fe939e13f8c78fc989acfa73bd6bc7eb7abf72156b63371",
+    "sources/03-return-if.nl": "d873dbe9acba9a53b57f0e3e595d49a1e682666c502786fc992b9bf0ba8889f9",
+    "sources/04-tail-if.nl": "c66d383de060e603d2080de6367f0f163123e661c2bb8e16c35a53082deac172"
+  },
+  "independence": {
+    "author": "Track P",
+    "r_inputs_read_or_reused": false,
+    "p1123_inputs_executed": false
+  }
+}
