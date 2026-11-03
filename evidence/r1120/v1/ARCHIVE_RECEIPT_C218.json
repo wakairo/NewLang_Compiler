@@ -1,0 +1,183 @@
+{
+  "schema": "newlang.r1120.c218.archive-custody.v1",
+  "issue": "https://github.com/wakairo/NewLang_Compiler/issues/1125",
+  "original_r_issue": "https://github.com/wakairo/NewLang_Compiler/issues/1120",
+  "original_r_receipt": "https://github.com/wakairo/NewLang_Compiler/issues/1120#issuecomment-6602920629",
+  "purpose": "Preserve original FIRST RED artifact ZIP bytes under a dedicated non-triggering Git reference; no new validation.",
+  "authority": {
+    "compiler_main": "65055be55934416c911453463b5f26fa461e8d6a",
+    "base_tree": "468bcea0ab46ad530c08bcdbb17e3e6ec05e4c13",
+    "current_spec": "Draft17.34",
+    "original_production_head": "5346a7e2ca2aacb4ed6ab50f3b09bb258b1e607c",
+    "original_r_head": "86e7fdc45e8de980a61a28741bac99650cf106fd"
+  },
+  "archive": {
+    "branch": "r-archive/r1120-v1-first",
+    "parent": "65055be55934416c911453463b5f26fa461e8d6a",
+    "original_copy_commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+    "original_copy_commit_is_parent": false,
+    "original_v2_tree_promoted": false,
+    "content": "Seven existing original ZIP blobs, unchanged original manifest, this receipt; no other addition or modification."
+  },
+  "artifacts": [
+    {
+      "artifact_id": 13225379795,
+      "lane": "GCC",
+      "run_id": 41625722679,
+      "job_id": 125882437191,
+      "attempt": 1,
+      "path": "evidence/r1120/v1/r1120_v1_13225379795.zip",
+      "git_blob_sha1": "d5a175ecdd8c12f4afb523536e5b4a4caf05c682",
+      "size_bytes": 425961,
+      "sha256": "6c244b91b63175939582474892220c2dcf0daefcf06757b9323c71f95ffa06a4",
+      "github_artifact_digest": "sha256:6c244b91b63175939582474892220c2dcf0daefcf06757b9323c71f95ffa06a4",
+      "expires_at": "2027-02-01T11:13:16Z",
+      "zip_entries": 91
+    },
+    {
+      "artifact_id": 13226160749,
+      "lane": "GCC Release",
+      "run_id": 41625722679,
+      "job_id": 125882437425,
+      "attempt": 1,
+      "path": "evidence/r1120/v1/r1120_v1_13226160749.zip",
+      "git_blob_sha1": "00c4d0c7ec877d83355b3fb00401f5af76c45adf",
+      "size_bytes": 432154,
+      "sha256": "d60902eb13339c4f7f5ffa033f69316b2de803f327b0c1d73f420afa1ab5e078",
+      "github_artifact_digest": "sha256:d60902eb13339c4f7f5ffa033f69316b2de803f327b0c1d73f420afa1ab5e078",
+      "expires_at": "2027-02-01T11:13:16Z",
+      "zip_entries": 91
+    },
+    {
+      "artifact_id": 13226466503,
+      "lane": "ASan",
+      "run_id": 41625722679,
+      "job_id": 125882437381,
+      "attempt": 1,
+      "path": "evidence/r1120/v1/r1120_v1_13226466503.zip",
+      "git_blob_sha1": "3c20713199a18830a815a0dcd94db42358cae7db",
+      "size_bytes": 425766,
+      "sha256": "eb90e09b66186305017ea29762de7a53d199ea7f23db9b58b5ce815c2348aea9",
+      "github_artifact_digest": "sha256:eb90e09b66186305017ea29762de7a53d199ea7f23db9b58b5ce815c2348aea9",
+      "expires_at": "2027-02-01T11:13:16Z",
+      "zip_entries": 91
+    },
+    {
+      "artifact_id": 13226500460,
+      "lane": "Clang",
+      "run_id": 41625722679,
+      "job_id": 125882437395,
+      "attempt": 1,
+      "path": "evidence/r1120/v1/r1120_v1_13226500460.zip",
+      "git_blob_sha1": "e5af757d75f66b65cf19ce553a39ed552dee083c",
+      "size_bytes": 431606,
+      "sha256": "7f88a12a4d06d15bc6189eec09580302f8ae21ba9a442eeb35f001e0168640dc",
+      "github_artifact_digest": "sha256:7f88a12a4d06d15bc6189eec09580302f8ae21ba9a442eeb35f001e0168640dc",
+      "expires_at": "2027-02-01T11:13:16Z",
+      "zip_entries": 91
+    },
+    {
+      "artifact_id": 13226640343,
+      "lane": "NO-LLVM PARTIAL",
+      "run_id": 41625722719,
+      "job_id": 125882436617,
+      "attempt": 1,
+      "path": "evidence/r1120/v1/r1120_v1_13226640343.zip",
+      "git_blob_sha1": "a09c841ba2de16e1dc0e1ee8964e46f186bb9661",
+      "size_bytes": 426785,
+      "sha256": "1d1885c99fe21a68c4fb7a3a16b61cbe6d005030abef6ea9d8fea3ba9f5b95bc",
+      "github_artifact_digest": "sha256:1d1885c99fe21a68c4fb7a3a16b61cbe6d005030abef6ea9d8fea3ba9f5b95bc",
+      "expires_at": "2027-02-01T11:13:16Z",
+      "zip_entries": 91
+    },
+    {
+      "artifact_id": 13226670116,
+      "lane": "UBSan",
+      "run_id": 41625722679,
+      "job_id": 125882437464,
+      "attempt": 1,
+      "path": "evidence/r1120/v1/r1120_v1_13226670116.zip",
+      "git_blob_sha1": "97a86f2b49950db9bea6dcdf0805489d6c86c4e6",
+      "size_bytes": 427710,
+      "sha256": "e67ce2e1bea95304b90e63a21e4610add7a73bf8c59cc62b2e1c83bbf073fd04",
+      "github_artifact_digest": "sha256:e67ce2e1bea95304b90e63a21e4610add7a73bf8c59cc62b2e1c83bbf073fd04",
+      "expires_at": "2027-02-01T11:13:16Z",
+      "zip_entries": 91
+    },
+    {
+      "artifact_id": 13224954664,
+      "lane": "FAST inventory",
+      "run_id": 41625518283,
+      "job_id": 125881752609,
+      "attempt": 1,
+      "path": "evidence/r1120/v1/r1120_fast1_original.zip",
+      "git_blob_sha1": "ff2c5717f2cb2a325798db4a5585fbe62e8634a7",
+      "size_bytes": 10007,
+      "sha256": "028f87b370f8cd878310f76b0a9d9e331e7bd9ba06342f9cb7c436c453b76b2d",
+      "github_artifact_digest": "sha256:028f87b370f8cd878310f76b0a9d9e331e7bd9ba06342f9cb7c436c453b76b2d",
+      "expires_at": "2027-02-01T11:11:48Z",
+      "zip_entries": 3
+    }
+  ],
+  "original_manifest": {
+    "path": "evidence/r1120/v1/ORIGINAL_ZIPS.json",
+    "git_blob_sha1": "7c0ca6f22fc6f2f91ed4a68c295ea4a126f6b762",
+    "size_bytes": 1633
+  },
+  "verification": {
+    "prepublication_utc": "2026-11-03 12:04:41 UTC",
+    "fetched_actual_git_file_bytes": true,
+    "byte_encoding": "base64 decoded in pure JavaScript",
+    "sha256_implementation_selfchecks": [
+      "empty input",
+      "abc",
+      "one million ASCII a"
+    ],
+    "all_seven_sha256_size_match_original_artifact_metadata_and_r_receipt": true,
+    "all_seven_git_blob_ids_match_original_manifest": true,
+    "zip_checks": [
+      "EOCD and central-directory bounds",
+      "expected entry counts (91 for each raw ZIP, 3 for FAST)",
+      "non-split and non-encrypted entries",
+      "no duplicate or unsafe absolute/traversal/backslash names",
+      "local and central file names match",
+      "compressed-data extents remain before the central directory"
+    ],
+    "zip_crc_recomputed": false,
+    "compressed_payloads_inflated": false,
+    "reliance": "Original R receipt reports ZIP CRC and all 432 stdout/stderr stream hashes checked. This archive operation relies on complete compressed-byte SHA256 identity for those prior content checks; it does not repeat or relabel them.",
+    "postpublication_receipt_location": "Issue #1125 will record the actual archive commit/tree and independent post-ref retrieval/hash checks; no self-referential commit hash is embedded here."
+  },
+  "evidence_classification": {
+    "original_v1": "BLIND-INCONCLUSIVE",
+    "native": "NOT_REACHED",
+    "first_full_partial": "All six original jobs RED; twelve failures per lane, including eleven workflow/history integration failures.",
+    "fast": "Preparation and registration only; 643 unique CTest registrations, zero CTests executed.",
+    "v2": "NON-BLIND preparation only, not executed or adopted; original unreferenced objects and existing R ref unchanged.",
+    "whole_run_logs": "These seven files are original GitHub artifact ZIPs, not complete workflow-log ZIPs. Original run logs remain on their original runs."
+  },
+  "execution_environment": "GitHub connector archive operations only; no P-equivalent runtime.",
+  "zero_execution": [
+    "GitHub Actions",
+    "CI",
+    "compiler",
+    "native",
+    "build",
+    "NewLang tests",
+    "Lean"
+  ],
+  "ref_policy": {
+    "one_new_ref_only": true,
+    "existing_ref_updates": false,
+    "pr_creation": false,
+    "manual_dispatch_or_rerun": false,
+    "workflow_modifications": false
+  },
+  "triggers_verified_at_fixed_main": {
+    "compiler-ci.yml": "pull_request; push/main only",
+    "compiler-frontend-ci.yml": "pull_request; push/main only",
+    "r-preflight.yml": "push/r-fast/** only",
+    "archive_branch_matches_push_filters": false
+  },
+  "value_alignment_risk": "Custody improves traceability, not proven UB-prevention audit locality. Compiler capability, soundness, or Product GO are not inferred. Product GO #624 PAUSED; H1 #268 HOLD."
+}
