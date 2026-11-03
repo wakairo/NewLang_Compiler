@@ -1,0 +1,854 @@
+{
+  "version": "R1120_C219_V3_PROSPECTIVE",
+  "independence": "NON_BLIND_CALIBRATED; inherited R V2 authored after old P exposure",
+  "canonical": "Draft17.34",
+  "main": "65055be55934416c911453463b5f26fa461e8d6a",
+  "production_head": "a1091b2672b0a4b1d37e2571ef97bf100882b60b",
+  "production_tree": "0e7949f8b6133e17046d2e656a1d2e0543596b3d",
+  "old_v2_oracle_sha256": "94272ef4a56917135bc73f5ce7bbfffb339bced789a823b169ee823be1eb40b5",
+  "input_encoding": "Every numeric input is a lossless decimal string; expectations are independent arithmetic, not observed values.",
+  "target_policy": "portable inputs valid on 32/64 bit; *_64 only with measured 64-bit size_t and matching emitted target guard; no 32-bit execution claimed.",
+  "execution_plan": {
+    "only": "GitHub dedicated branch and naturally triggered Actions; no local execution",
+    "fast_budget": 6,
+    "natural_pairs": "first 1 plus at most 1 for scoped mechanical repairs",
+    "registration": "additive CTestConfig/deferred R-owned registration; no root CMake/workflow/guard mutation",
+    "check_then": "ordinary CLI CHECK, genuine retained public views, ordinary C17 output and named-output equality, unmodified C plus separate passive observation C at strict GCC/Clang O0/O2",
+    "observer": "read actual formal/call-result/Bool locals and instrument branch-entry logging in separate copy; do not reevaluate guest expressions or change state/conditions. Original C retained and compiled unchanged.",
+    "nonexecution": "branch-entry trace must contain one selected arm per actual call; instrumented-only observation distinguished from original native runs",
+    "negative": "all negative check/emission refusal stdout empty; named sentinel preserved; no negative or tampered graph to native",
+    "sanitizers": "host inherited workflow instrumentation and generated guest explicit ASan/UBSan only where selected by the job; separately recorded",
+    "stop": "incorrect CHECK/authority/native/UB/OOM partial publication, drift, independent evidence corruption, frozen-file change, budget; preserve FIRST/raw",
+    "limitations": [
+      "No general LOOP/Continue",
+      "No definition-time unknown public observation; runtime calls carry source constants",
+      "No foreign public graph/owner mutation validation in this source-focused batch",
+      "No Product GO or C-relative audit-locality measurement"
+    ]
+  },
+  "contact_history": [
+    "C219 release only",
+    "Pinned main Compass, Value Strategy 1.1, Process 4.1.2 and 7, CURRENT_SPEC and relevant Draft17.34",
+    "R V1 freeze 6600047813 and V2 freeze 6602778327",
+    "R-owned source/oracle/observer/runner/registration from unreferenced old V2 b7c78d4a",
+    "No new P1126 implementation, fixture, oracle, rationale, or F review read before this freeze"
+  ],
+  "cases": [
+    {
+      "bytes": 777,
+      "calls": [
+        {
+          "entry": "r1120_dispatch_one",
+          "expected": 152,
+          "input": "0",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_dispatch_one",
+          "expected": 152,
+          "input": "612",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_dispatch_one",
+          "expected": 219,
+          "input": "613",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_dispatch_one",
+          "expected": 219,
+          "input": "657",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_dispatch_one",
+          "expected": 219,
+          "input": "768",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_dispatch_one",
+          "expected": 219,
+          "input": "912",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_dispatch_one",
+          "expected": 47,
+          "input": "913",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_dispatch_one",
+          "expected": 219,
+          "input": "914",
+          "expected_arm": 1
+        }
+      ],
+      "expected_check_rc": 0,
+      "expected_emitter_diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "expected_emitter_rc": 4,
+      "file": "W_P01_entry_adapter.nl",
+      "kind": "ORIGINAL_PREFIX_ENTRY_ADAPTER",
+      "native_status": "NOT_CLAIMED_UNLESS_ACTUALLY_REACHED",
+      "original_file": "P01_runtime_usize_gate.nl",
+      "original_prefix_sha256": "d305b5f99be1a206deb682174854795bb1aefe45b0686271c54b083a765d8c31",
+      "sha256": "8200a89144899d35a9262c96924e500022479271eb875d9d2a1532cca6839d17",
+      "target": "portable_32_or_64",
+      "origin": {
+        "version": "V2",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v2/W_P01_entry_adapter.nl",
+        "unchanged_bytes": true
+      },
+      "prediction_layer": "CHECK_0 -> finite_backend_refusal_4; native_NOT_REACHED",
+      "expected_bool_values": []
+    },
+    {
+      "bytes": 672,
+      "calls": [
+        {
+          "entry": "r1120_bool_equal",
+          "expected": false,
+          "input": "0",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_bool_less",
+          "expected": true,
+          "input": "0",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_bool_equal",
+          "expected": false,
+          "input": "997",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_bool_less",
+          "expected": true,
+          "input": "997",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_bool_equal",
+          "expected": false,
+          "input": "1252",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_bool_less",
+          "expected": true,
+          "input": "1252",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_bool_equal",
+          "expected": true,
+          "input": "1253",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_bool_less",
+          "expected": false,
+          "input": "1253",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_bool_equal",
+          "expected": false,
+          "input": "1254",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_bool_less",
+          "expected": false,
+          "input": "1254",
+          "expected_arm": 0
+        }
+      ],
+      "expected_check_rc": 0,
+      "expected_emitter_diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "expected_emitter_rc": 4,
+      "file": "W_P02_entry_adapter.nl",
+      "kind": "ORIGINAL_PREFIX_ENTRY_ADAPTER",
+      "native_status": "NOT_CLAIMED_UNLESS_ACTUALLY_REACHED",
+      "original_file": "P02_bool_only.nl",
+      "original_prefix_sha256": "44dbfb2ab77a68cd8c1eaf42726b7fbc327f58428a41777a944cf68fd05a4df5",
+      "sha256": "586f3a1b3f5932f72d89a55e882aa0f215bb349f1c84d1472ed96eef6a42aa9b",
+      "target": "portable_32_or_64",
+      "origin": {
+        "version": "V2",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v2/W_P02_entry_adapter.nl",
+        "unchanged_bytes": true
+      },
+      "prediction_layer": "CHECK_0 -> finite_backend_refusal_4; native_NOT_REACHED",
+      "expected_bool_values": []
+    },
+    {
+      "bytes": 292,
+      "calls": [
+        {
+          "entry": "r1120_width_gate",
+          "expected": true,
+          "input": "4294967295",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_width_gate",
+          "expected": false,
+          "input": "4294967296",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_width_gate",
+          "expected": false,
+          "input": "18446744073709551615",
+          "expected_arm": 0
+        }
+      ],
+      "expected_check_rc": 0,
+      "expected_emitter_diagnostic": "V1-BACKEND-UNSUPPORTED",
+      "expected_emitter_rc": 4,
+      "file": "W_W01_entry_adapter_64.nl",
+      "kind": "ORIGINAL_PREFIX_ENTRY_ADAPTER",
+      "native_status": "NOT_CLAIMED_UNLESS_ACTUALLY_REACHED",
+      "original_file": "W01_target_width.nl",
+      "original_prefix_sha256": "0a64719208c8b0ba8cd356faff93aa3079af8871b80a13b4b67e98652415681f",
+      "sha256": "f254af16d8f717b97595644a6b3995598fa023061d7b7b3f80ed87d9d917fe9a",
+      "target": "native_64_only",
+      "origin": {
+        "version": "V2",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v2/W_W01_entry_adapter_64.nl",
+        "unchanged_bytes": true
+      },
+      "prediction_layer": "CHECK_0 -> finite_backend_refusal_4; native_NOT_REACHED",
+      "expected_bool_values": []
+    },
+    {
+      "bytes": 598,
+      "calls": [
+        {
+          "entry": "r1120_v2_equal_913",
+          "expected": 219,
+          "input": "0",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_equal_913",
+          "expected": 219,
+          "input": "612",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_equal_913",
+          "expected": 219,
+          "input": "613",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_equal_913",
+          "expected": 219,
+          "input": "657",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_equal_913",
+          "expected": 219,
+          "input": "768",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_equal_913",
+          "expected": 219,
+          "input": "912",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_equal_913",
+          "expected": 47,
+          "input": "913",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_v2_equal_913",
+          "expected": 219,
+          "input": "914",
+          "expected_arm": 1
+        }
+      ],
+      "expected_check_rc": 0,
+      "expected_emitter_rc": 0,
+      "file": "C01_equal_913.nl",
+      "kind": "FLAT_NATIVE_CALIBRATION",
+      "sha256": "65410fd4cfdead8aad4093f4f37938c0a1f23b5e9503fceeaff7585044fa0bbc",
+      "target": "portable_32_or_64",
+      "origin": {
+        "version": "V2",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v2/C01_equal_913.nl",
+        "unchanged_bytes": true
+      },
+      "prediction_layer": "CHECK_0 -> genuine_owned_C17 -> strict_native_oracle",
+      "native_status": "HYPOTHESIS_NOT_EXECUTED",
+      "expected_bool_values": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "bytes": 562,
+      "calls": [
+        {
+          "entry": "r1120_v2_less_613",
+          "expected": 152,
+          "input": "0",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_v2_less_613",
+          "expected": 152,
+          "input": "612",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_v2_less_613",
+          "expected": 219,
+          "input": "613",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_less_613",
+          "expected": 219,
+          "input": "657",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_less_613",
+          "expected": 219,
+          "input": "768",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_less_613",
+          "expected": 219,
+          "input": "912",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_less_613",
+          "expected": 219,
+          "input": "913",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_less_613",
+          "expected": 219,
+          "input": "914",
+          "expected_arm": 1
+        }
+      ],
+      "expected_check_rc": 0,
+      "expected_emitter_rc": 0,
+      "file": "C02_less_613.nl",
+      "kind": "FLAT_NATIVE_CALIBRATION",
+      "sha256": "bf32f87d6513e97db705ef5b534a9db91729f4ccf322142aface25a1069d582c",
+      "target": "portable_32_or_64",
+      "origin": {
+        "version": "V2",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v2/C02_less_613.nl",
+        "unchanged_bytes": true
+      },
+      "prediction_layer": "CHECK_0 -> genuine_owned_C17 -> strict_native_oracle",
+      "native_status": "HYPOTHESIS_NOT_EXECUTED",
+      "expected_bool_values": []
+    },
+    {
+      "bytes": 487,
+      "calls": [
+        {
+          "entry": "r1120_v2_bool_equal_1253",
+          "expected": 219,
+          "input": "0",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_bool_equal_1253",
+          "expected": 219,
+          "input": "997",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_bool_equal_1253",
+          "expected": 219,
+          "input": "1252",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_bool_equal_1253",
+          "expected": 47,
+          "input": "1253",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_v2_bool_equal_1253",
+          "expected": 219,
+          "input": "1254",
+          "expected_arm": 1
+        }
+      ],
+      "expected_check_rc": 0,
+      "expected_emitter_rc": 0,
+      "file": "C03_bool_equal_1253.nl",
+      "kind": "FLAT_NATIVE_CALIBRATION",
+      "sha256": "290e8b23766268ef3e071bbb29c027797e2b4b159a77d5cbf913bfeb4406af13",
+      "target": "portable_32_or_64",
+      "origin": {
+        "version": "V2",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v2/C03_bool_equal_1253.nl",
+        "unchanged_bytes": true
+      },
+      "prediction_layer": "CHECK_0 -> genuine_owned_C17 -> strict_native_oracle",
+      "native_status": "HYPOTHESIS_NOT_EXECUTED",
+      "expected_bool_values": [
+        0,
+        0,
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "bytes": 531,
+      "calls": [
+        {
+          "entry": "r1120_v2_bool_less_1253",
+          "expected": 152,
+          "input": "0",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_v2_bool_less_1253",
+          "expected": 152,
+          "input": "997",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_v2_bool_less_1253",
+          "expected": 152,
+          "input": "1252",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_v2_bool_less_1253",
+          "expected": 219,
+          "input": "1253",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_bool_less_1253",
+          "expected": 219,
+          "input": "1254",
+          "expected_arm": 1
+        }
+      ],
+      "expected_check_rc": 0,
+      "expected_emitter_rc": 0,
+      "file": "C04_bool_less_1253.nl",
+      "kind": "FLAT_NATIVE_CALIBRATION",
+      "sha256": "6f1fce2d40a78b20f85c18ac502987082af48341655d9738ca0df1c2c23ca79a",
+      "target": "portable_32_or_64",
+      "origin": {
+        "version": "V2",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v2/C04_bool_less_1253.nl",
+        "unchanged_bytes": true
+      },
+      "prediction_layer": "CHECK_0 -> genuine_owned_C17 -> strict_native_oracle",
+      "native_status": "HYPOTHESIS_NOT_EXECUTED",
+      "expected_bool_values": [
+        1,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "bytes": 375,
+      "calls": [
+        {
+          "entry": "r1120_v2_width_64",
+          "expected": 152,
+          "input": "4294967295",
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_v2_width_64",
+          "expected": 219,
+          "input": "4294967296",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_width_64",
+          "expected": 219,
+          "input": "18446744073709551615",
+          "expected_arm": 1
+        }
+      ],
+      "expected_check_rc": 0,
+      "expected_emitter_rc": 0,
+      "file": "C05_width_64.nl",
+      "kind": "FLAT_NATIVE_CALIBRATION",
+      "sha256": "ba5e8b31027d5834c0e72b2c0ba8452670f7fa38f372ffc2d56b27173855ec33",
+      "target": "native_64_only",
+      "origin": {
+        "version": "V2",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v2/C05_width_64.nl",
+        "unchanged_bytes": true
+      },
+      "prediction_layer": "CHECK_0 -> genuine_owned_C17 -> strict_native_oracle",
+      "native_status": "HYPOTHESIS_NOT_EXECUTED",
+      "expected_bool_values": [
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "bytes": 1044,
+      "calls": [
+        {
+          "entry": "r1120_v2_equal_913_max64",
+          "expected": 219,
+          "input": "18446744073709551615",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_less_613_max64",
+          "expected": 219,
+          "input": "18446744073709551615",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_bool_equal_1253_max64",
+          "expected": 219,
+          "input": "18446744073709551615",
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v2_bool_less_1253_max64",
+          "expected": 219,
+          "input": "18446744073709551615",
+          "expected_arm": 1
+        }
+      ],
+      "expected_check_rc": 0,
+      "expected_emitter_rc": 0,
+      "file": "C06_maximum_64.nl",
+      "kind": "FLAT_NATIVE_CALIBRATION",
+      "sha256": "18b89bed0ee9c701bc1cbd579a58c27d3e444c540b10765c1aa09cfed34a18bd",
+      "target": "native_64_only",
+      "origin": {
+        "version": "V2",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v2/C06_maximum_64.nl",
+        "unchanged_bytes": true
+      },
+      "prediction_layer": "CHECK_0 -> genuine_owned_C17 -> strict_native_oracle",
+      "native_status": "HYPOTHESIS_NOT_EXECUTED",
+      "expected_bool_values": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "C07_explicit_return_alias.nl",
+      "sha256": "425922ae3662c7764540eb4dff07f8ec15c49fbe22fdff7b34e6e86bd7598535",
+      "bytes": 489,
+      "kind": "RETURN_ALIAS_NATIVE_HYPOTHESIS",
+      "origin": {
+        "version": "NEW_V3",
+        "basis": "R original constants and canonical RETURN/Copy/IF semantics; no P/F source"
+      },
+      "target": "portable_32_or_64",
+      "expected_check_rc": 0,
+      "expected_emitter_rc": 0,
+      "backend_fallback_policy": "rc4 V1-BACKEND-UNSUPPORTED is finite coverage refusal, not source invalidity or safety PASS; retain forecast mismatch and do not run native",
+      "prediction_layer": "CHECK_0 -> genuine_owned_C17 -> strict_native_oracle (profile acceptance unmeasured)",
+      "calls": [
+        {
+          "entry": "r1120_v3_return_alias",
+          "input": "657",
+          "expected": 219,
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v3_return_alias",
+          "input": "913",
+          "expected": 47,
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_v3_return_alias",
+          "input": "914",
+          "expected": 219,
+          "expected_arm": 1
+        }
+      ],
+      "expected_bool_values": [
+        0,
+        0,
+        1,
+        1,
+        0,
+        0
+      ]
+    },
+    {
+      "file": "C08_if_result_tail_alias.nl",
+      "sha256": "90a793506e4874830a272b5fa20d50547d4a7a04324bb32963aeb35a86ea71b8",
+      "bytes": 494,
+      "kind": "TAIL_ALIAS_NATIVE_HYPOTHESIS",
+      "origin": {
+        "version": "NEW_V3",
+        "basis": "R original constants and canonical RETURN/Copy/IF semantics; no P/F source"
+      },
+      "target": "portable_32_or_64",
+      "expected_check_rc": 0,
+      "expected_emitter_rc": 0,
+      "backend_fallback_policy": "rc4 V1-BACKEND-UNSUPPORTED is finite coverage refusal, not source invalidity or safety PASS; retain forecast mismatch and do not run native",
+      "prediction_layer": "CHECK_0 -> genuine_owned_C17 -> strict_native_oracle (profile acceptance unmeasured)",
+      "calls": [
+        {
+          "entry": "r1120_v3_tail_alias",
+          "input": "612",
+          "expected": 152,
+          "expected_arm": 0
+        },
+        {
+          "entry": "r1120_v3_tail_alias",
+          "input": "613",
+          "expected": 219,
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v3_tail_alias",
+          "input": "768",
+          "expected": 219,
+          "expected_arm": 1
+        },
+        {
+          "entry": "r1120_v3_tail_alias",
+          "input": "913",
+          "expected": 219,
+          "expected_arm": 1
+        }
+      ],
+      "expected_bool_values": []
+    },
+    {
+      "file": "N01_mixed_compare.nl",
+      "sha256": "cd57af1c0be201d1e3bfaaedfd7dc8f76fe4b0f6d638287ba6cb59f48275f10e",
+      "bytes": 110,
+      "kind": "NEGATIVE_ENTRY_ADAPTER",
+      "origin": {
+        "version": "V1_PREFIX",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v1/N01_mixed_compare.nl",
+        "original_prefix_sha256": "b521a03ffb973862c36d8ed9402044e577835223a57622c090ae1d137257e1da",
+        "change": "append main()->unit; exact old source prefix unchanged"
+      },
+      "target": "portable_32_or_64",
+      "expected_check_rc": 3,
+      "expected_emitter_rc": 3,
+      "expected_diagnostic": "USIZE-EQUALITY-TYPE",
+      "normative_prediction": "REJECT_TYPE: usize versus u8",
+      "prediction_layer": "definition_registration_or_semantic_CHECK; record actual first layer",
+      "native_status": "MUST_NOT_REACH_NATIVE",
+      "calls": []
+    },
+    {
+      "file": "N02_wrong_actual.nl",
+      "sha256": "6a75cf3f73cd71e218e246e7b6299bfadc5383f79cb8198ee7ee9214cd04eb34",
+      "bytes": 158,
+      "kind": "NEGATIVE_ENTRY_ADAPTER",
+      "origin": {
+        "version": "V1_PREFIX",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v1/N02_wrong_actual.nl",
+        "original_prefix_sha256": "c6020cc26d189ce19d1e8480096449a7b24c43d6c6a6003de1f3cf6dff88ada8",
+        "change": "append main()->unit; exact old source prefix unchanged"
+      },
+      "target": "portable_32_or_64",
+      "expected_check_rc": 3,
+      "expected_emitter_rc": 3,
+      "expected_diagnostic": "P3-TYPE-MISMATCH",
+      "normative_prediction": "REJECT_CALL_TYPE: u8 actual versus usize formal",
+      "prediction_layer": "definition_registration_or_semantic_CHECK; record actual first layer",
+      "native_status": "MUST_NOT_REACH_NATIVE",
+      "calls": []
+    },
+    {
+      "file": "N03_wrong_arm_type.nl",
+      "sha256": "f39ec0d1233ed88a11b1c4ad797e48eb16d4cf8b3192e748ab62728a2898c166",
+      "bytes": 163,
+      "kind": "NEGATIVE_ENTRY_ADAPTER",
+      "origin": {
+        "version": "V1_PREFIX",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v1/N03_wrong_arm_type.nl",
+        "original_prefix_sha256": "1c75bc9f33b5429b523360524f790c9ac5bf027e7f5929ea33fc0cef4eb8f8f0",
+        "change": "append main()->unit; exact old source prefix unchanged"
+      },
+      "target": "portable_32_or_64",
+      "expected_check_rc": 3,
+      "expected_emitter_rc": 3,
+      "expected_diagnostic": "P13-IF-RESULT",
+      "normative_prediction": "REJECT_IF_JOIN: u8 versus usize",
+      "prediction_layer": "definition_registration_or_semantic_CHECK; record actual first layer",
+      "native_status": "MUST_NOT_REACH_NATIVE",
+      "calls": []
+    },
+    {
+      "file": "N04_nonbool_condition.nl",
+      "sha256": "3a52a76d902c6ed71d709d26dbbbc7c69e4537e753135c6251e3f3ee3b678736",
+      "bytes": 155,
+      "kind": "NEGATIVE_ENTRY_ADAPTER",
+      "origin": {
+        "version": "V1_PREFIX",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v1/N04_nonbool_condition.nl",
+        "original_prefix_sha256": "7b6ae09d6d45d24762d3a0678e6ed2002807454ebfa6904984e2e8ff568f5a6b",
+        "change": "append main()->unit; exact old source prefix unchanged"
+      },
+      "target": "portable_32_or_64",
+      "expected_check_rc": 3,
+      "expected_emitter_rc": 3,
+      "expected_diagnostic": "P13-IF-CONDITION",
+      "normative_prediction": "REJECT_IF_CONDITION: usize is not Bool",
+      "prediction_layer": "definition_registration_or_semantic_CHECK; record actual first layer",
+      "native_status": "MUST_NOT_REACH_NATIVE",
+      "calls": []
+    },
+    {
+      "file": "N05_no_else.nl",
+      "sha256": "d504f73e54d926213806131f1dd914beef099a251e4b8491d911c73ba98b56e3",
+      "bytes": 136,
+      "kind": "NEGATIVE_ENTRY_ADAPTER",
+      "origin": {
+        "version": "V1_PREFIX",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v1/N05_no_else.nl",
+        "original_prefix_sha256": "2c554cfa37da7932293874277a5bae8be6053698e7243ced39396badcf36bd18",
+        "change": "append main()->unit; exact old source prefix unchanged"
+      },
+      "target": "portable_32_or_64",
+      "expected_check_rc": 3,
+      "expected_emitter_rc": 3,
+      "expected_diagnostic": "P13-IF-ELSE",
+      "normative_prediction": "REJECT_SOURCE_GRAMMAR: mandatory else missing",
+      "prediction_layer": "parser",
+      "native_status": "MUST_NOT_REACH_NATIVE",
+      "calls": []
+    },
+    {
+      "file": "N06_unproved_arithmetic.nl",
+      "sha256": "74db2d6d28691a429219586b2d28480530c69069917144cb132a3a872955c826",
+      "bytes": 187,
+      "kind": "NEGATIVE_ENTRY_ADAPTER",
+      "origin": {
+        "version": "V1_PREFIX",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v1/N06_unproved_arithmetic.nl",
+        "original_prefix_sha256": "cb3faca1eba10c23a11db733dc7725cf138bb5ea31e301836becfb6acdbf28fb",
+        "change": "append main()->unit; exact old source prefix unchanged"
+      },
+      "target": "portable_32_or_64",
+      "expected_check_rc": 3,
+      "expected_emitter_rc": 3,
+      "expected_diagnostic": "USIZE-ADDITION-PRECISION",
+      "normative_prediction": "REJECT_PRECONDITION: possible usize overflow, no unchecked",
+      "prediction_layer": "definition_registration_or_semantic_CHECK; record actual first layer",
+      "native_status": "MUST_NOT_REACH_NATIVE",
+      "calls": []
+    },
+    {
+      "file": "N07_read_to_write.nl",
+      "sha256": "de67b713b3a58ba53533436af2623bf70bf238ad18bc4ac7d09ca0ca8608ff8b",
+      "bytes": 218,
+      "kind": "NEGATIVE_ENTRY_ADAPTER",
+      "origin": {
+        "version": "V1_PREFIX",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v1/N07_read_to_write.nl",
+        "original_prefix_sha256": "53ff6218bd76f9fe3945f9eff41a9394e01b4c7ecbf6dc8a66ebe0af1eb72c11",
+        "change": "append main()->unit; exact old source prefix unchanged"
+      },
+      "target": "portable_32_or_64",
+      "expected_check_rc": 3,
+      "expected_emitter_rc": 3,
+      "expected_diagnostic": "P3-TYPE-MISMATCH",
+      "normative_prediction": "REJECT_AUTHORITY: read ref cannot become write ref",
+      "prediction_layer": "definition_registration_or_semantic_CHECK; record actual first layer",
+      "native_status": "MUST_NOT_REACH_NATIVE",
+      "calls": []
+    },
+    {
+      "file": "N08_ref_escape.nl",
+      "sha256": "f2928c3d22c5ab956802040877be1b7c29a7d586fe87d1512aaf791efd45a2f3",
+      "bytes": 122,
+      "kind": "NEGATIVE_ENTRY_ADAPTER",
+      "origin": {
+        "version": "V1_PREFIX",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v1/N08_ref_escape.nl",
+        "original_prefix_sha256": "a7bfdf93a2cd88a9b0126d4e2dac51798ef192517faee9b91135f6fbebcf4075",
+        "change": "append main()->unit; exact old source prefix unchanged"
+      },
+      "target": "portable_32_or_64",
+      "expected_check_rc": 3,
+      "expected_emitter_rc": 3,
+      "expected_diagnostic": "P8-SIGNATURE-PRECISION",
+      "normative_prediction": "REJECT_SCOPE_DEPENDENCY: ordinary ref result escape",
+      "prediction_layer": "signature_precision",
+      "native_status": "MUST_NOT_REACH_NATIVE",
+      "calls": []
+    },
+    {
+      "file": "N09_implicit_borrow.nl",
+      "sha256": "adae928414b38c2103c0bcc0275b73377a3b6b0736f382262597caef2ac94ea2",
+      "bytes": 198,
+      "kind": "NEGATIVE_ENTRY_ADAPTER",
+      "origin": {
+        "version": "V1_PREFIX",
+        "commit": "b7c78d4a06f2fd1a5ce15116b1b8d6f436dfef7a",
+        "path": "tests/redteam/r1120/v1/N09_implicit_borrow.nl",
+        "original_prefix_sha256": "c5eaf86d035be5cff489a7912aeb3bd67774cb6f4b31f71e89d516d9efd5abdd",
+        "change": "append main()->unit; exact old source prefix unchanged"
+      },
+      "target": "portable_32_or_64",
+      "expected_check_rc": 3,
+      "expected_emitter_rc": 3,
+      "expected_diagnostic": "P3-TYPE-MISMATCH",
+      "normative_prediction": "REJECT_CALLER_CONTRACT: no implicit borrow",
+      "prediction_layer": "definition_registration_or_semantic_CHECK; record actual first layer",
+      "native_status": "MUST_NOT_REACH_NATIVE",
+      "calls": []
+    }
+  ]
+}
