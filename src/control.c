@@ -1,5 +1,6 @@
 #include "control.h"
 #include "semantic_internal.h"
+#include "stutter_control_internal.h"
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -21,6 +22,7 @@ struct NLControlState {
  * Union carries this source binding forward, while cloning its owned state.
  * None of these identities authorizes caller-world result/current transfer. */
 typedef struct {
+    NLControlExitKind kind;
     const NLCheckedFragment *owner;
     const NLCheckedFragment *parent;
     const NLSource *source;
@@ -205,9 +207,8 @@ static bool exit_binding_valid(const Exit *record)
         return false;
     if (!s->owner)
         return !e->source_owner && !e->source_node && !e->source_target;
-    return e->kind == NL_EXIT_BREAK && e->count == 1 &&
-           e->source_owner == s->owner && e->source_node == s->node &&
-           e->source_target == record->target &&
+    return e->kind == s->kind && e->count == 1 && e->source_owner == s->owner &&
+           e->source_node == s->node && e->source_target == record->target &&
            e->values[0].type == s->value.type &&
            e->values[0].value == s->value.value;
 }
@@ -371,7 +372,8 @@ NLCheckStatus nl_control_source_break_append(
           operand->results[0].value != value.value)) ||
         (operand->result_count == 0 && (value.type != 1 || value.value != 0)))
         return NL_CHECK_INTERNAL_ERROR;
-    SourceBreak issued = {.owner = owner,
+    SourceBreak issued = {.kind = NL_EXIT_BREAK,
+                          .owner = owner,
                           .parent = parent,
                           .source = owner->source,
                           .context = owner->context,
@@ -383,6 +385,81 @@ NLCheckStatus nl_control_source_break_append(
     memcpy(issued.node_seal, br, sizeof(*br));
     memcpy(issued.operand_seal, operand, sizeof(*operand));
     return append(out, NL_EXIT_BREAK, target, state, &value, 1, &issued);
+}
+
+NLCheckStatus nl_control_source_continue_append(
+    NLControlExits **out, NLControlTarget *target, const NLControlState *state,
+    NLCheckedResult value, const NLCheckedFragment *owner, NLCheckedNodeId node,
+    const NLCheckedFragment *parent)
+{
+    const NLCheckedNodeView *n = nl_checked_node_view(owner, node);
+    const NLCheckedNodeView *operand =
+        n ? nl_checked_node_view(owner, n->initializer) : NULL;
+    if (!owner || !parent || !owner->source || !owner->context || !target ||
+        target->kind != NL_TARGET_LOOP || node != owner->count || !n ||
+        n->kind != NL_CHECKED_CONTINUE || !n->terminates || !operand ||
+        n->initializer >= node || operand->result_count != 1 ||
+        operand->results[0].type != value.type ||
+        operand->results[0].value != value.value ||
+        value.type != nl_semantic_core_type(owner->context, NL_TYPE_USIZE))
+        return NL_CHECK_INTERNAL_ERROR;
+    SourceBreak issued = {.kind = NL_EXIT_CONTINUE,
+                          .owner = owner,
+                          .parent = parent,
+                          .source = owner->source,
+                          .context = owner->context,
+                          .nodes = owner->nodes,
+                          .node = node,
+                          .value = value};
+    memcpy(issued.node_seal, n, sizeof(*n));
+    memcpy(issued.operand_seal, operand, sizeof(*operand));
+    return append(out, NL_EXIT_CONTINUE, target, state, &value, 1, &issued);
+}
+
+/* The bounded cyclic relation uses one IF-arm terminal. Canonical custody
+ * and the enclosing relation authenticate the live node-array base before
+ * this check. Adding the IF_ARM wrapper may have relocated that array. */
+bool nl_control_source_terminal_valid(const NLCheckedFragment *body,
+                                      const NLControlTarget *target,
+                                      NLControlExitKind kind,
+                                      const NLCheckedFragment *parent)
+{
+    if (!body || !target || !parent || nl_control_exits_count(body->exits) != 1)
+        return false;
+    const Exit *r = &body->exits->edges[0];
+    const SourceBreak *s = &r->source;
+    const NLControlExitView *e = &r->view;
+    const NLCheckedNodeView *arm = nl_checked_node_view(body, body->root);
+    const NLCheckedNodeView *block =
+        arm ? nl_checked_node_view(body, arm->initializer) : NULL;
+    const NLCheckedNodeView *n = nl_checked_node_view(body, s->node);
+    const NLCheckedNodeView *v =
+        n ? nl_checked_node_view(body, n->initializer) : NULL;
+    if (!exit_binding_valid(r) || e->kind != kind || r->target != target ||
+        s->owner != body || s->parent != parent || s->source != body->source ||
+        s->context != body->context || !arm || arm->kind != NL_CHECKED_IF_ARM ||
+        !arm->terminates || !block || block->kind != NL_CHECKED_BLOCK ||
+        block->tail || !n || !v || !n->terminates ||
+        n->initializer >= s->node ||
+        n->kind != (kind == NL_EXIT_CONTINUE ? NL_CHECKED_CONTINUE
+                                             : NL_CHECKED_BREAK) ||
+        v->result_count != 1 || v->results[0].type != s->value.type ||
+        v->results[0].value != s->value.value ||
+        memcmp(n, s->node_seal, sizeof(*n)) ||
+        memcmp(v, s->operand_seal, sizeof(*v)))
+        return false;
+    size_t visited = 0, terminals = 0;
+    for (NLCheckedNodeId id = block->first_item; id;) {
+        const NLCheckedNodeView *item = nl_checked_node_view(body, id);
+        if (!item || ++visited > block->item_count)
+            return false;
+        if (item->terminates) {
+            if (id != s->node || ++terminals != 1 || item->next_item)
+                return false;
+        }
+        id = item->next_item;
+    }
+    return visited == block->item_count && terminals == 1;
 }
 
 /* C178: exact one Break as a direct terminating lexical block item.

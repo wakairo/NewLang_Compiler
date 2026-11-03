@@ -6,6 +6,7 @@
 #include "newlang/parser.h"
 #include "producer_local_internal.h"
 #include "semantic_internal.h"
+#include "stutter_control_internal.h"
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -20,6 +21,7 @@ typedef struct LoopControl {
     NLControlTarget *target;
     NLControlState *entry;
     NLLoopHeader *header;
+    bool stuttering; /* private whole-source relation, not generic closure */
     /* Non-recurrent source execution only. This is the actual working world,
      * never the separate owned Break snapshot's numeric namespace. */
     NLSemanticContext *normal_context;
@@ -5072,6 +5074,17 @@ static NLCheckedNodeId source_control(Check *check, const NLSyntaxView *syntax)
         status = nl_control_source_break_append(
             &check->artifact->exits, loop->target, post, results[0],
             check->artifact, control_node, loop->source_parent);
+    } else if (loop->stuttering) {
+        control_node =
+            add(check, (NLCheckedNodeView){.kind = NL_CHECKED_CONTINUE,
+                                           .span = syntax->span,
+                                           .initializer = first,
+                                           .terminates = true});
+        status = control_node ? nl_control_source_continue_append(
+                                    &check->artifact->exits, loop->target, post,
+                                    results[0], check->artifact, control_node,
+                                    loop->source_parent)
+                              : check->status;
     } else {
         status =
             nl_control_exit_append(&check->artifact->exits, NL_EXIT_CONTINUE,
@@ -5090,7 +5103,7 @@ static NLCheckedNodeId source_control(Check *check, const NLSyntaxView *syntax)
     }
     check->terminated = true;
     check->returned = (NLCheckedResult){0};
-    return continuing
+    return continuing && !control_node
                ? add(check, (NLCheckedNodeView){.kind = NL_CHECKED_CONTINUE,
                                                 .span = syntax->span,
                                                 .initializer = first,
@@ -5452,11 +5465,14 @@ static NLCheckStatus
 linear_break_relation(const NLCheckedFragment *f, const NLSemanticContext *c,
                       const NLControlState *entry_state,
                       const NLControlTarget *target, NLCheckedResult result,
-                      bool definition, LinearBreakEffect *effect)
+                      bool definition, LinearBreakEffect *effect,
+                      const NLCheckedFragment *cyclic_parent)
 {
     const NLSemanticContext *entry =
         nl_control_state_context((NLControlState *)entry_state);
-    if (!nl_control_source_break_body_valid(f, target))
+    if (!(cyclic_parent ? nl_control_source_terminal_valid(
+                              f, target, NL_EXIT_BREAK, cyclic_parent)
+                        : nl_control_source_break_body_valid(f, target)))
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLControlExitView *e = nl_control_exit_view(f->exits, 0);
     const NLSemanticContext *post =
@@ -5464,6 +5480,8 @@ linear_break_relation(const NLCheckedFragment *f, const NLSemanticContext *c,
     const NLCheckedNodeView *root = nl_checked_node_view(f, f->root),
                             *br = nl_checked_node_view(f, e->source_node),
                             *operand = nl_checked_node_view(f, br->initializer);
+    if (cyclic_parent)
+        root = nl_checked_node_view(f, root->initializer);
     const NLCheckedNodeView *first = nl_checked_node_view(f, root->first_item);
     const NLCheckedNodeView *loan = NULL;
     if (root->item_count == 2 && first->kind == NL_CHECKED_BINDING &&
@@ -5529,6 +5547,10 @@ linear_break_relation(const NLCheckedFragment *f, const NLSemanticContext *c,
         case NL_CHECKED_RECEIVER:
         case NL_CHECKED_U8_LITERAL:
             break;
+        case NL_CHECKED_IF_ARM:
+            if (!cyclic_parent || i != f->root)
+                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+            break;
         default:
             return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
         }
@@ -5574,13 +5596,15 @@ static NLCheckStatus linear_break_graph(Check *body, const LoopControl *loop)
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     return linear_break_relation(body->artifact, body->context, loop->entry,
                                  loop->target, loop->normal_result,
-                                 body->definition, NULL);
+                                 body->definition, NULL, NULL);
 }
 
 /* Retain only evidence of the actual source CHECK transaction. These records
  * are private, owner-bound, and never reconstructed from challenged S/X IDs.
  * The existing A relation remains the single semantic kernel at issuance and
  * at consumption. Its ghost recheck emits no source operation. */
+struct NLStutterProof;
+static void destroy_stutter_cycle(struct NLStutterProof *);
 typedef struct NLLinearBreakProof {
     struct NLLinearBreakProof *next;
     const NLCheckedFragment *owner, *root, *body;
@@ -5608,13 +5632,21 @@ typedef struct NLLinearBreakProof {
     size_t parent_count, body_count, root_count;
     NLSemanticContext final_storage, body_storage; /* nonowning bases/counts */
     bool sealed;
+    struct NLStutterProof *cycle;
 } NLLinearBreakProof;
+static const NLCheckedFragment *stutter_graph(const NLLinearBreakProof *);
+static bool save_stutter_graph(Check *, NLCheckedNodeId,
+                               struct NLStutterProof *, NLSourceSpan);
+static NLCheckStatus seal_stutter_cycle(NLLinearBreakProof *);
+static NLCheckStatus validate_stutter_cycle(const NLLinearBreakProof *,
+                                            NLLinearBreakView *);
 
 static void destroy_linear_breaks(NLCheckedFragment *f)
 {
     NLLinearBreakProof *p = f->linear_breaks;
     while (p) {
         NLLinearBreakProof *next = p->next;
+        destroy_stutter_cycle(p->cycle);
         nl_control_state_destroy(p->entry);
         nl_semantic_destroy(p->post);
         nl_semantic_destroy(p->final);
@@ -5650,7 +5682,8 @@ static bool linear_callable(const NLLinearBreakProof *p,
 
 static NLCheckStatus retain_linear_break(Check *check, LoopControl *loop,
                                          NLCheckedNodeId id,
-                                         const NLCheckedFragment *body)
+                                         const NLCheckedFragment *body,
+                                         struct NLStutterProof *cycle)
 {
     /* First native cohort: an actual direct zero-argument unit invocation,
      * ordinary local T storage. Definitions/arms/nested calls and H worlds
@@ -5675,6 +5708,7 @@ static NLCheckStatus retain_linear_break(Check *check, LoopControl *loop,
     if (!p)
         return NL_CHECK_OUT_OF_MEMORY;
     p->next = check->artifact->linear_breaks;
+    p->cycle = cycle;
     check->artifact->linear_breaks = p;
     check->artifact->destroy_linear_breaks = destroy_linear_breaks;
     p->owner = check->artifact;
@@ -5765,6 +5799,8 @@ static NLCheckStatus seal_linear_breaks(NLCheckedFragment *root,
                 s = nl_sem_clone(final, &p->final);
             if (s == NL_CHECK_OK)
                 s = nl_copy_state_anchor(final, &p->final_anchor);
+            if (s == NL_CHECK_OK && p->cycle)
+                s = seal_stutter_cycle(p);
             if (s != NL_CHECK_OK)
                 return s;
             p->sealed = true;
@@ -5876,7 +5912,8 @@ NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *f,
         !linear_graph_matches(p->body, p->body_origin, p->body_nodes,
                               p->body_count, p->body_root) ||
         p->body->source != p->source ||
-        nl_checked_loop_body(f, id) != p->body ||
+        nl_checked_loop_body(f, id) !=
+            (p->cycle ? stutter_graph(p) : p->body) ||
         !linear_world_matches(f->context, &p->final_storage, p->final,
                               &p->final_anchor) ||
         !linear_world_matches(p->body->context, &p->body_storage, p->post,
@@ -5908,11 +5945,12 @@ NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *f,
             p->exit_world ||
         !linear_world_matches(p->exit_world, &p->exit_storage, p->post,
                               &p->exit_anchor) ||
-        !nl_checked_loop_break_provenance_valid(f, id))
+        !(p->cycle ? nl_control_source_break_body_valid(p->body, p->target)
+                   : nl_checked_loop_break_provenance_valid(f, id)))
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     LinearBreakEffect effect;
     NLCheckStatus relation = linear_break_relation(
-        p->body, p->post, p->entry, p->target, p->result, false, &effect);
+        p->body, p->post, p->entry, p->target, p->result, false, &effect, NULL);
     if (relation != NL_CHECK_OK)
         return relation;
     const NLCheckedNodeView *incoming = effect.incoming;
@@ -5968,7 +6006,7 @@ NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *f,
                                .result = p->result,
                                .caller = effect.call ? p->body : NULL,
                                .call = effect.call};
-    return NL_CHECK_OK;
+    return p->cycle ? validate_stutter_cycle(p, out) : NL_CHECK_OK;
 }
 
 NLCheckStatus nl_linear_break_owner_validate(const NLCheckedFragment *f)
@@ -5985,7 +6023,9 @@ NLCheckStatus nl_linear_break_owner_validate(const NLCheckedFragment *f)
 }
 
 static NLCheckedNodeId source_linear_break(Check *check,
-                                           const NLSyntaxView *syntax)
+                                           const NLSyntaxView *syntax,
+                                           struct NLStutterProof *cycle,
+                                           NLControlTarget *cyclic_target)
 {
     LoopControl loop = {.source_parent = check->artifact,
                         .normal_context = check->context,
@@ -5995,8 +6035,10 @@ static NLCheckedNodeId source_linear_break(Check *check,
     NLCheckedFragment *fragment = NULL;
     NLSemanticContext *shadow = NULL, *completed = NULL;
     NLCheckedNodeId id = 0;
-    if (!host(check, nl_control_target_create(NL_TARGET_LOOP, &loop.target),
-              syntax->span) ||
+    loop.target = cyclic_target;
+    if ((!loop.target &&
+         !host(check, nl_control_target_create(NL_TARGET_LOOP, &loop.target),
+               syntax->span)) ||
         !host(check, nl_control_state_create(check->context, &loop.entry),
               syntax->span) ||
         !host(check, nl_sem_clone(check->context, &shadow), syntax->span))
@@ -6057,31 +6099,38 @@ static NLCheckedNodeId source_linear_break(Check *check,
                                         .results = {loop.normal_result},
                                         .header_inductive = true,
                                         .break_edges = 1});
+    if (cycle && id && !save_stutter_graph(check, id, cycle, syntax->span))
+        goto cleanup;
     if (!id || !save_arm(check, id, fragment, syntax->span))
         goto cleanup;
     const NLCheckedFragment *owned_body = fragment;
     fragment = NULL;
-    if (!host(check, retain_linear_break(check, &loop, id, owned_body),
+    if (!host(check, retain_linear_break(check, &loop, id, owned_body, cycle),
               syntax->span))
         goto cleanup;
     /* Custody now owns the body. Recheck the existing source-parent binding
      * before this enclosing CHECK can publish either the result or current.
      * Failure is still an all-or-nothing outer transaction rollback. */
-    if (!nl_checked_loop_break_provenance_valid(check->artifact, id))
+    if (!cycle && !nl_checked_loop_break_provenance_valid(check->artifact, id))
         loop_precision(check, syntax->span);
 cleanup:
     nl_checked_destroy(fragment);
     nl_semantic_destroy(shadow);
     nl_semantic_destroy(completed);
     nl_control_state_destroy(loop.entry);
-    nl_control_target_destroy(loop.target);
+    if (!cyclic_target)
+        nl_control_target_destroy(loop.target);
     return check->status == NL_CHECK_OK ? id : 0;
 }
 
+#include "stutter_loop_check_internal.h"
+
 static NLCheckedNodeId source_loop(Check *check, const NLSyntaxView *syntax)
 {
+    if (stutter_source_shape(check, syntax))
+        return source_stutter_loop(check, syntax);
     if (linear_break_source(check, syntax))
-        return source_linear_break(check, syntax);
+        return source_linear_break(check, syntax, NULL, NULL);
     const size_t count = syntax->data.loop.count;
     if (count > NL_CONTROL_MAX_SLOTS) {
         (void)host(check, NL_CHECK_RESOURCE_LIMIT, syntax->span);
