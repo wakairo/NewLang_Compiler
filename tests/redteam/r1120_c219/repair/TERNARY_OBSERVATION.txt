@@ -1,0 +1,11 @@
+C219 mechanical-only repair after FIRST 6604707684.
+
+Observed original C01 line (full original C retained in initial raw ZIP):
+    return (nl_local_2 ? 47 : 219);
+
+Planned separate observed-copy line:
+    return (nl_local_2 ? (printf("R1120_C219_ARM nl_fn_11 0\n"), (47)) : (printf("R1120_C219_ARM nl_fn_11 1\n"), (219)));
+
+The condition and original operands are copied once, with unchanged parenthesization of each operand. C conditional evaluation selects exactly one comma-expression operand. Its logging call precedes only its original value expression; the comma result retains that value and type. The original emitted C remains byte-identical and is compiled/executed separately. Function recognition now excludes prototypes and resets at other function definitions/main. This is a static text illustration, not compilation or native validation.
+
+All 20 source and oracle bytes remain exactly as frozen in comment6604296170. No expected value is changed. The initial failed observer and logs remain in the parent commit and evidence archive. New observer acceptance still requires exactly one two-arm site per native helper and actual argument/result/Bool/selected-arm sequence equal to the original prospective oracle. Native and sanitizer outcomes remain NOT VERIFIED until the authorized natural repair pair.

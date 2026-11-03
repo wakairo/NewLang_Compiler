@@ -135,8 +135,8 @@
     },
     {
       "path": "verify.py",
-      "bytes": 22323,
-      "sha256": "501e969a65f86f264845484225d745132ace16852cccef7b540c9e9d0c8007f5"
+      "bytes": 24589,
+      "sha256": "da2edb30b754af593394a582b3ead20f55b94ea39fc51accacbc67e0b4babdec"
     },
     {
       "path": "public_observer.c.txt",
@@ -167,11 +167,26 @@
       "path": "README.md",
       "bytes": 2715,
       "sha256": "0c0cf36f987f617d734d0e2b1887d863428bbcd37288bcbe0d4da73cf8870455"
+    },
+    {
+      "path": "repair/TERNARY_OBSERVATION.txt",
+      "bytes": 1320,
+      "sha256": "d72eca7a11abbe6b8abe1cac78eed65ece6dc1b1ea089f8a28e7bfe535404edb"
     }
   ],
   "additive_root_configuration": {
     "path": "CTestConfig.cmake",
     "bytes": 363,
     "sha256": "abdb5e22fed1e52c6a8dd487cc6aac5cbbe38354ac3ac537b1ec96a27f0d4c89"
+  },
+  "mechanical_repair": {
+    "first_comment": "https://github.com/wakairo/NewLang_Compiler/issues/1120#issuecomment-6604707684",
+    "first_head": "3ceebd8ccebc0b838e9895d941f65a5120580ea0",
+    "original_runner_sha256": "501e969a65f86f264845484225d745132ace16852cccef7b540c9e9d0c8007f5",
+    "new_runner_sha256": "da2edb30b754af593394a582b3ead20f55b94ea39fc51accacbc67e0b4babdec",
+    "change": "Support original C conditional expression arm logging in separate observed C; reset function boundary; no guest condition/value reevaluation",
+    "sources_and_oracle": "all byte-identical to initial V3 freeze",
+    "prospective_native_expectations": "unchanged",
+    "first_log_size_correction": "Earlier FIRST/FAST comments used UTF-16 string length, not exact UTF-8 byte length. Exact bytes: full GCC job log306320; FAST job log83688. Their SHA256 values remain unchanged."
   }
 }

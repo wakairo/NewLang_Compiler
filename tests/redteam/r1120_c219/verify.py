@@ -114,9 +114,52 @@ def instrument(raw):
     current_function, waiting_arm = None, None
     arm_sites = {}
     for line in lines:
+        if re.match(r"^(?:static )?(?:void|int|_Bool|size_t|uint8_t) "
+                    r"(?:nl_fn_\d+|main)\(", line):
+            current_function = None
         function = re.match(r"static uint8_t (nl_fn_\d+)\(size_t ", line)
-        if function:
+        if function and not line.rstrip().endswith(";"):
             current_function = function.group(1)
+        # The finite emitter may spell lazy IF as C ?:, which is equally lazy.
+        # Log within each operand using C's comma operator. The original
+        # condition and each value expression still execute exactly once.
+        if current_function and "?" in line:
+            require(line.count("?") == 1 and line.count(":") == 1,
+                    "ambiguous nested C conditional expression")
+            question, colon = line.index("?"), line.index(":")
+            require(question < colon, "malformed C conditional expression")
+            depth = 0
+            for token in line[:question]:
+                if token == "(":
+                    depth += 1
+                elif token == ")":
+                    depth -= 1
+                    require(depth >= 0, "unbalanced C expression prefix")
+            require(depth >= 0, "malformed C expression parentheses")
+            level, end = depth, None
+            for index in range(colon + 1, len(line)):
+                token = line[index]
+                if token == "(":
+                    level += 1
+                elif token == ")":
+                    if level == depth:
+                        end = index
+                        break
+                    level -= 1
+                elif token in ";," and level == depth:
+                    end = index
+                    break
+            require(end is not None, "conditional expression end not found")
+            left, right = line[question + 1:colon], line[colon + 1:end]
+            require(left.strip() and right.strip(), "empty conditional operand")
+            def traced_operand(arm, operand):
+                return (' (printf("R1120_C219_ARM ' + current_function + " " +
+                        str(arm) + '\\n"), (' + operand.strip() + ')) ')
+            line = (line[:question + 1] + traced_operand(0, left) + ":" +
+                    traced_operand(1, right) + line[end:])
+            for arm in (0, 1):
+                key = current_function + ":" + str(arm)
+                arm_sites[key] = arm_sites.get(key, 0) + 1
         branch = None
         if current_function and re.match(r"^\s*if\s*\(", line):
             branch = 0
@@ -139,7 +182,7 @@ def instrument(raw):
     require(all(value == 1 for value in arm_sites.values()),
             "ambiguous repeated emitted arm site")
     require(len(arm_sites) == 2 * edits["formals"],
-            "one genuine if/else per frozen native function not observed")
+            "one genuine lazy conditional per frozen native function not observed")
     edits["arm_sites"] = arm_sites
     observed = "".join(branch_lines)
     observed = "#include <stdio.h>\n#include <limits.h>\n" + observed
