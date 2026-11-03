@@ -1,0 +1,56 @@
+{
+  "scope": "P1117 C212 local observations; CI separately recorded in Issue1117",
+  "production_commit": "7b7881a2922738522c119a93e164506d385f7352",
+  "integration_commit": "6f392d77bcbcaa30b9ffc47dd6a9e8a5932004aa",
+  "integration_tree": "dec6d7fba22d4f90067c0bed2dd2f7dfb3eca0f2",
+  "base": "65055be55934416c911453463b5f26fa461e8d6a",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "archive_sha256": "b36391db22d1e65e9c565d036dd30112f0872b3ca27f2e733b3f92d92114b87f",
+  "archive_entries": 1249,
+  "production": {
+    "src/main.c": "05907065de322eb98241d3d4b5d1b1db2526f44043e7b4bebfebf5d9ff78fb4d",
+    "src/semantic_check.c": "0977b20ecd22237055359df81808ed2f2226f04b9fa7db40d12468c7cba47672",
+    "src/c17_predicate_internal.h": "fdb67360edb312824813abbe16894040d6e697b78e77f24b0fa326cbad07f96c"
+  },
+  "gcc_frontend": {
+    "candidate": "6f392d77bcbcaa30b9ffc47dd6a9e8a5932004aa",
+    "configured": 642,
+    "passed_unique": 642,
+    "unverified": [],
+    "logs": [
+      "full-gcc-v7.log",
+      "full-gcc-remaining-v8.log",
+      "full-gcc-remaining-v9.log",
+      "full-gcc-remaining-v9c.log"
+    ],
+    "completed_in_segments": "Same production7b7881a; only precise prospective old-oracle wrappers/historical metadata changed. First failed attempts retained. Disk failure retried serial without changing checks."
+  },
+  "focused": {
+    "clang": "16/16",
+    "ubsan": "16/16; native included",
+    "asan_lsan_host": "15/15; native separate with exact GCC13 libm link closure",
+    "asan_lsan_native": "44 actual native runs, GCC13/Clang23 O0/O2 raw/passive, all0",
+    "clean_checkout": "8/8; fresh detached worktree at integration_commit and fresh GCC Debug build"
+  },
+  "actual_oom": {
+    "01-equality": {
+      "registration": 745,
+      "invocation": 523,
+      "named_cli": 1339
+    },
+    "02-less-than": {
+      "registration": 490,
+      "invocation": 325,
+      "named_cli": 882
+    }
+  },
+  "first_reds": "Original Gate0, b6 readonly foreign-result acceptance and direct-RETURN partial stdout; unit/integration stale precision oracles and fixture/environment REDs retained, never overwritten. See tests/p1117/evidence and this archive.",
+  "not_verified": [
+    "true LOOP/H_loop/actual Continue/backedge",
+    "general effect/dependency Bool or multiarg Bool native ABI",
+    "general compiler soundness/arbitrary host graph corruption",
+    "NewLang vs matched well-factored C human UB audit locality"
+  ],
+  "CI_jobs_so_far": 0,
+  "disposition": "Local predicate capability YES; DRAFT HOLD; Product GO624 PAUSED/H1 HOLD; P1036/PR1050 STOP retained"
+}
