@@ -12,6 +12,8 @@ typedef struct {
     NLIncarnationId incarnation, child_incarnation;
     size_t index, incoming;
     NLCheckedResult result;
+    const NLCheckedFragment *caller; /* actual owned helper caller, or NULL */
+    NLCheckedNodeId call;
 } NLLinearBreakView;
 NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *,
                                        NLCheckedNodeId, NLLinearBreakView *);

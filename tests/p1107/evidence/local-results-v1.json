@@ -1,0 +1,105 @@
+{
+  "frozen_main": "c6fe0b3493fb4012b07bfd8c2c17f79566b67ad4",
+  "tested_head": "7bf21506d666e6dbc1d54b12fd3db59ba062a3d7",
+  "tested_tree": "90738749323c017f2df2180a4cf757da2d775633",
+  "canonical": "Draft17.34",
+  "C202_docs_only_main": "26163bfa12a1adc56dd66f051749c823a0fb71bf",
+  "C202_parent": "c6fe0b3493fb4012b07bfd8c2c17f79566b67ad4",
+  "C202_only_change": "docs/NewLang_Development_Roadmap.md +16/-0; no rebase/refreeze; all tested Production/source/tests/CMake/workflows unchanged",
+  "matrix": {
+    "gcc": {
+      "ctest_returncode": 0,
+      "tests": 637,
+      "console_sha256": "67185df95e3d4982a25b166521fdc96fb0c6497a8347a76860936f321b2ab51d",
+      "complete_raw_sha256": "ebfd0fdb2dc9e5b5d8a0a36b47525e1e3a16d4b7207b545c848bcdd65770a169",
+      "oom_complete": [
+        "P1107 OOM COMPLETE reached=591 rollback+no-publish+retry PASS",
+        "P1107 NAMED OOM COMPLETE reached=1524 byte/inode/no-temp + retry PASS",
+        "P1107 OOM COMPLETE reached=632 rollback+no-publish+retry PASS",
+        "P1107 NAMED OOM COMPLETE reached=1628 byte/inode/no-temp + retry PASS"
+      ],
+      "source_commit": "7bf21506d666e6dbc1d54b12fd3db59ba062a3d7"
+    },
+    "release": {
+      "ctest_returncode": 0,
+      "tests": 637,
+      "console_sha256": "4530aadf318ecc87146088fe57cc0389e4530364d1c121c3ea3a90c8a29eccbf",
+      "complete_raw_sha256": "8eda9a3970f0caecf82438a58bd91b397204f6f2140648670e9eb47d879e313c",
+      "oom_complete": [
+        "P1107 OOM COMPLETE reached=632 rollback+no-publish+retry PASS",
+        "P1107 NAMED OOM COMPLETE reached=1628 byte/inode/no-temp + retry PASS",
+        "P1107 OOM COMPLETE reached=591 rollback+no-publish+retry PASS",
+        "P1107 NAMED OOM COMPLETE reached=1524 byte/inode/no-temp + retry PASS"
+      ],
+      "source_commit": "7bf21506d666e6dbc1d54b12fd3db59ba062a3d7"
+    },
+    "clang": {
+      "ctest_returncode": 0,
+      "tests": 637,
+      "console_sha256": "8ba40d3a654cbe8785fd2ee5ce3de52f7e8a16459d1b4a57c26400fd2c5e2f0d",
+      "complete_raw_sha256": "075c3b54bd5ac529a27d0bb8bf79f55f65ab273ca0f878df2e9d93c44076bcdc",
+      "oom_complete": [
+        "P1107 OOM COMPLETE reached=632 rollback+no-publish+retry PASS",
+        "P1107 NAMED OOM COMPLETE reached=1628 byte/inode/no-temp + retry PASS",
+        "P1107 OOM COMPLETE reached=591 rollback+no-publish+retry PASS",
+        "P1107 NAMED OOM COMPLETE reached=1524 byte/inode/no-temp + retry PASS"
+      ],
+      "source_commit": "7bf21506d666e6dbc1d54b12fd3db59ba062a3d7"
+    },
+    "asan": {
+      "ctest_returncode": 0,
+      "tests": 637,
+      "console_sha256": "0a78178658b1cab1ad0f0bff616c912d1809cb29e521d50f09ffaa109206f04d",
+      "complete_raw_sha256": "2437027bfeb61bffc5c3eca327e304d5b76f60bbb0c5029566f9e56bf5d6561f",
+      "oom_complete": [
+        "P1107 OOM COMPLETE reached=632 rollback+no-publish+retry PASS",
+        "P1107 NAMED OOM COMPLETE reached=1628 byte/inode/no-temp + retry PASS",
+        "P1107 OOM COMPLETE reached=591 rollback+no-publish+retry PASS",
+        "P1107 NAMED OOM COMPLETE reached=1524 byte/inode/no-temp + retry PASS"
+      ],
+      "source_commit": "7bf21506d666e6dbc1d54b12fd3db59ba062a3d7"
+    },
+    "ubsan": {
+      "ctest_returncode": 0,
+      "tests": 637,
+      "console_sha256": "675a5becc687ac9f019cf6715a9b58e0d774f47749ef23e04feb118a00b0d830",
+      "complete_raw_sha256": "aa26d7bd7fb71aed879427a8eebb881aaef1e58344e4fbd526de1780adb5aa7a",
+      "oom_complete": [
+        "P1107 OOM COMPLETE reached=632 rollback+no-publish+retry PASS",
+        "P1107 NAMED OOM COMPLETE reached=1628 byte/inode/no-temp + retry PASS",
+        "P1107 OOM COMPLETE reached=591 rollback+no-publish+retry PASS",
+        "P1107 NAMED OOM COMPLETE reached=1524 byte/inode/no-temp + retry PASS"
+      ],
+      "source_commit": "7bf21506d666e6dbc1d54b12fd3db59ba062a3d7"
+    }
+  },
+  "production_sha256": {
+    "src/semantic_check.c": "f5298b540c6ac84e9981ee75c4fe364fe3b4801b1d6e547950eb47187dec646b",
+    "src/main.c": "7960499d9012e4dcadc8d6e3e21ce69982a29416f617b11d7b2471ff01b613b0",
+    "src/linear_break_internal.h": "46ece643ef0a81b91fabf210f256e04a715a6458fe8d78239caebe13f444698b",
+    "src/checked_c_copy_internal.h": "014bf1cca00caf7099e560db547a5b82987e94d3dc5c6c5a15322beadb37ce74",
+    "src/copy_old_result_internal.h": "f725fe157f345ff191ca1723523f45b6b90616247063dc8a4d773409ec6f5d3a"
+  },
+  "archive_sha256": "371cbb6f0074466e00585bff5ce9d71a2d29926c42464af118ffeb770ce63f68",
+  "ownership": "5 genuine source profiles, 46 logged mutations each plus copied-view negatives; genuine foreign B survives canonical A destruction",
+  "native": "raw and passive GCC13/Clang23 O0/O2; no-clobber; actual live original/field addresses and old/current/sibling/other root; one helper and Change",
+  "oom": {
+    "bound_CHECK": 632,
+    "bound_named": 1628,
+    "inline_CHECK": 591,
+    "inline_named": 1524,
+    "every_reached_failure": "OUT_OF_MEMORY/API and exact CLI status; rollback, no publication, bytes/inode/no-temp and retry"
+  },
+  "memory_components": {
+    "node_view_bytes": 1728,
+    "primary_caller_nodes": 10,
+    "primary_extra_caller_seal_bytes": 17280,
+    "private_result_view_bytes": 96,
+    "private_result_view_growth_bytes": 16,
+    "retained_borrowed_callee_anchor_growth_bytes": 40,
+    "total_peak_heap": "UNMEASURED"
+  },
+  "CI_used_before_PR": 0,
+  "R_originals": "NOT READ/USED",
+  "Product_GO": "PAUSED; H1 HOLD; audit-locality benefit UNMEASURED"
+}

@@ -1002,6 +1002,43 @@ if(BUILD_TESTING)
     add_test(NAME p990_negative_sources.integration COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990/run.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p990" "negative")
+    add_executable(p1107_probe tests/p1107/probe.c)
+    add_executable(p1107_oom tests/p1107/probe.c)
+    target_compile_definitions(p1107_oom PRIVATE P1107_OOM)
+    foreach(target p1107_probe p1107_oom)
+        target_link_libraries(${target} PRIVATE newlang_checked_c_node newlang_semantic newlang_parser)
+    endforeach()
+    target_link_options(p1107_oom PRIVATE -Wl,--wrap=malloc -Wl,--wrap=realloc
+        -Wl,--wrap=calloc -no-pie
+        -Wl,--wrap=nl_parser_parse_function_unit -Wl,--wrap=nl_parser_parse_expression_fragment
+        -Wl,--wrap=nl_semantic_register_function_unit -Wl,--wrap=nl_semantic_check_expression)
+    target_compile_options(p1107_oom PRIVATE -fno-pie)
+    foreach(profile 01-bound 02-inline 03-no-caller-write 04-two-originals 05-equal-bits-old)
+        if(profile STREQUAL "02-inline")
+            set(p1107_args 0 153 203)
+        elseif(profile STREQUAL "03-no-caller-write")
+            set(p1107_args 1 214 91)
+        elseif(profile STREQUAL "04-two-originals")
+            set(p1107_args 0 205 139)
+        elseif(profile STREQUAL "05-equal-bits-old")
+            set(p1107_args 1 185 185)
+        else()
+            set(p1107_args 1 185 226)
+        endif()
+        add_test(NAME p1107_${profile}.unit COMMAND p1107_probe
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/sources/${profile}.nl" ${p1107_args})
+    endforeach()
+    add_test(NAME p1107_outside_current.unit COMMAND p1107_probe --outside
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/sources/06-outside-control.nl")
+    add_test(NAME p1107_bound_oom.unit COMMAND p1107_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/sources/01-bound.nl" 1 185 226)
+    add_test(NAME p1107_inline_oom.unit COMMAND p1107_oom
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/sources/02-inline.nl" 0 153 203)
+    add_test(NAME p1107_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/run.py" "$<TARGET_FILE:newlangc>"
+        "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" candidate)
+    add_test(NAME p1107_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/evidence_test.py")
     add_executable(p1098_probe tests/p1098/probe.c)
     add_executable(p1098_oom tests/p1098/probe.c)
     target_compile_definitions(p1098_oom PRIVATE P1098_OOM)
@@ -1042,7 +1079,7 @@ if(BUILD_TESTING)
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/run-v2.py" "$<TARGET_FILE:newlangc>"
         "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098")
     add_test(NAME p1098_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1098/evidence_test.py")
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1107/p1098_forward.py")
     add_executable(p1092_observe tests/p1092/observe.c)
     add_executable(p1092_oom tests/p1092/observe.c)
     target_compile_definitions(p1092_oom PRIVATE P1092_OOM)

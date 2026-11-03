@@ -1,0 +1,8 @@
+{
+  "11-read-formal-write": {
+    "baseline": 3,
+    "candidate": 3,
+    "expected": null,
+    "helper": false
+  }
+}

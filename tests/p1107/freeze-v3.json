@@ -1,0 +1,22 @@
+{
+  "previous": "freeze-v2.json",
+  "reason": "Passive instrumentation must count the one store inside the actual helper definition, separately from the intended later caller field store. Source/oracle/Production unchanged; v2 first harness RED preserved.",
+  "files": {
+    "tests/p1107/generate_sources_v1.py": "2936a0497477ed4a773974a0d413e91e9b69e336c148d052bbf06bbc7d5ceeeb",
+    "tests/p1107/observer.h": "8493d7e9849b47f94ec70042588b91e9554dc7d9e241f34109eb2a1b3df704d8",
+    "tests/p1107/oracle-v1.json": "b327ee2fb651772bf73a4ae40a776fb7e51eefe54d765bfc0d5077ddcda64eff",
+    "tests/p1107/probe.c": "9668bd36ecae522acad349d92cc9a904d650d1976ddbd227833665dd41dfcb1f",
+    "tests/p1107/run.py": "bae823c79d7b96899a22ba849bbd293205ea65393657aa04161efa185c748acb",
+    "tests/p1107/sources/01-bound.nl": "cccdc1b51e7fddb230f2a1ee268f69750559cdf7310074b0a63b49ea7f637fa1",
+    "tests/p1107/sources/02-inline.nl": "22cefa7da820369189d6caa42b6c3aea3bc9d634d83451e9fc05174319a77a7e",
+    "tests/p1107/sources/03-no-caller-write.nl": "5357496b348356b5bfe9a66497d27922b8231f2c5017cec8f2f98a1b273b0ecd",
+    "tests/p1107/sources/04-two-originals.nl": "4a325cf682b4b18a0f485aa9b639147d865c80f0c213a6c720db317dd3a3a412",
+    "tests/p1107/sources/05-equal-bits-old.nl": "c7249631f1918cc3c7ab3b4f45e576df7062d5099d870aaa7c6503eee7f59d41",
+    "tests/p1107/sources/06-outside-control.nl": "9f0625b2712f630bf7eb1ec51d7bd406c415c56fc2a34d9d6387c592f69c6e5c",
+    "tests/p1107/sources/07-primitive-control.nl": "21845f0e5e7d99729054d3109bf7deadc7e6f19094327a701659bc997f2e9a47",
+    "tests/p1107/sources/08-equal-bits-wrong-return.nl": "1099d5cd5ae589f52d571f683390bd83b32c27a1723c0225555b429231e3208c",
+    "tests/p1107/sources/09-read-loan-write.nl": "494d6472a9d16e71162b41b4d2e298991bf18c2f1da784c94c5add93aec6ef53",
+    "tests/p1107/sources/10-multiple-changes.nl": "2e648ed4b70fe8bb1efcb6354710c229585392125ed686d09271fdd626f418e0"
+  },
+  "archive_sha256": "1a9f32ddfa60a9d58a79b5411510e73c6c630cf018cf4fc60b932b0ad1d82762"
+}
