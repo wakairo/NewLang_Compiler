@@ -1872,4 +1872,10 @@ if(BUILD_TESTING)
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
+    # Full registration/invocation/named-output fault enumeration with host
+    # ASan checks thousands of independent retries. Keep every location and
+    # assertion; give only this finite cohort its measured sanitizer budget.
+    foreach(profile 01-stutter-less 02-stutter-equality 11-prefix-current)
+        set_tests_properties(p1123_${profile}_oom.unit PROPERTIES TIMEOUT 300)
+    endforeach()
 endif()
