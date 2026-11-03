@@ -1,0 +1,4 @@
+# Raw transport only; the publisher is a no-op when R raw is absent.
+# Success cannot change test verdicts; transport errors remain visible.
+list(APPEND CTEST_CUSTOM_POST_TEST
+    "\"@Python3_EXECUTABLE@\" \"@CMAKE_SOURCE_DIR@/tests/redteam/r1120_c219/publish_raw.py\" --output-dir \"@CMAKE_BINARY_DIR@/r1120-c219-raw\"")

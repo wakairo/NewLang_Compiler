@@ -1,0 +1,192 @@
+{
+  "version": "R1120_C219_V3_EXECUTION_MATERIAL",
+  "source_freeze": "https://github.com/wakairo/NewLang_Compiler/issues/1120#issuecomment-6604296170",
+  "source_oracle_sha256": "77219031e4a02354079d300a60507df4a2a1245bdddc314ec845a6bf155be791",
+  "only_execution": "Authorized GitHub Actions; locally text/hash/API only",
+  "fixed_target": "a1091b2672b0a4b1d37e2571ef97bf100882b60b",
+  "fixed_tree": "0e7949f8b6133e17046d2e656a1d2e0543596b3d",
+  "required_unchanged_files": [
+    {
+      "path": ".github/workflows/compiler-ci.yml",
+      "git_blob": "23655288e60f0d3d08a12c9a542346bf31829a08"
+    },
+    {
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "git_blob": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5"
+    },
+    {
+      "path": ".github/workflows/r-preflight.yml",
+      "git_blob": "9fea1afeeef948127c73e9ca86c476091036116e"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "git_blob": "90819a0e360a4fd1c5b4121e221c3f75c111a950"
+    },
+    {
+      "path": "cmake/independent-r-tests-hook.cmake",
+      "git_blob": "a1063d203068bd02bee807cb141cbe74b37fad83"
+    }
+  ],
+  "files": [
+    {
+      "path": "v3/W_P01_entry_adapter.nl",
+      "bytes": 777,
+      "sha256": "8200a89144899d35a9262c96924e500022479271eb875d9d2a1532cca6839d17"
+    },
+    {
+      "path": "v3/W_P02_entry_adapter.nl",
+      "bytes": 672,
+      "sha256": "586f3a1b3f5932f72d89a55e882aa0f215bb349f1c84d1472ed96eef6a42aa9b"
+    },
+    {
+      "path": "v3/W_W01_entry_adapter_64.nl",
+      "bytes": 292,
+      "sha256": "f254af16d8f717b97595644a6b3995598fa023061d7b7b3f80ed87d9d917fe9a"
+    },
+    {
+      "path": "v3/C01_equal_913.nl",
+      "bytes": 598,
+      "sha256": "65410fd4cfdead8aad4093f4f37938c0a1f23b5e9503fceeaff7585044fa0bbc"
+    },
+    {
+      "path": "v3/C02_less_613.nl",
+      "bytes": 562,
+      "sha256": "bf32f87d6513e97db705ef5b534a9db91729f4ccf322142aface25a1069d582c"
+    },
+    {
+      "path": "v3/C03_bool_equal_1253.nl",
+      "bytes": 487,
+      "sha256": "290e8b23766268ef3e071bbb29c027797e2b4b159a77d5cbf913bfeb4406af13"
+    },
+    {
+      "path": "v3/C04_bool_less_1253.nl",
+      "bytes": 531,
+      "sha256": "6f1fce2d40a78b20f85c18ac502987082af48341655d9738ca0df1c2c23ca79a"
+    },
+    {
+      "path": "v3/C05_width_64.nl",
+      "bytes": 375,
+      "sha256": "ba5e8b31027d5834c0e72b2c0ba8452670f7fa38f372ffc2d56b27173855ec33"
+    },
+    {
+      "path": "v3/C06_maximum_64.nl",
+      "bytes": 1044,
+      "sha256": "18b89bed0ee9c701bc1cbd579a58c27d3e444c540b10765c1aa09cfed34a18bd"
+    },
+    {
+      "path": "v3/C07_explicit_return_alias.nl",
+      "bytes": 489,
+      "sha256": "425922ae3662c7764540eb4dff07f8ec15c49fbe22fdff7b34e6e86bd7598535"
+    },
+    {
+      "path": "v3/C08_if_result_tail_alias.nl",
+      "bytes": 494,
+      "sha256": "90a793506e4874830a272b5fa20d50547d4a7a04324bb32963aeb35a86ea71b8"
+    },
+    {
+      "path": "v3/N01_mixed_compare.nl",
+      "bytes": 110,
+      "sha256": "cd57af1c0be201d1e3bfaaedfd7dc8f76fe4b0f6d638287ba6cb59f48275f10e"
+    },
+    {
+      "path": "v3/N02_wrong_actual.nl",
+      "bytes": 158,
+      "sha256": "6a75cf3f73cd71e218e246e7b6299bfadc5383f79cb8198ee7ee9214cd04eb34"
+    },
+    {
+      "path": "v3/N03_wrong_arm_type.nl",
+      "bytes": 163,
+      "sha256": "f39ec0d1233ed88a11b1c4ad797e48eb16d4cf8b3192e748ab62728a2898c166"
+    },
+    {
+      "path": "v3/N04_nonbool_condition.nl",
+      "bytes": 155,
+      "sha256": "3a52a76d902c6ed71d709d26dbbbc7c69e4537e753135c6251e3f3ee3b678736"
+    },
+    {
+      "path": "v3/N05_no_else.nl",
+      "bytes": 136,
+      "sha256": "d504f73e54d926213806131f1dd914beef099a251e4b8491d911c73ba98b56e3"
+    },
+    {
+      "path": "v3/N06_unproved_arithmetic.nl",
+      "bytes": 187,
+      "sha256": "74db2d6d28691a429219586b2d28480530c69069917144cb132a3a872955c826"
+    },
+    {
+      "path": "v3/N07_read_to_write.nl",
+      "bytes": 218,
+      "sha256": "de67b713b3a58ba53533436af2623bf70bf238ad18bc4ac7d09ca0ca8608ff8b"
+    },
+    {
+      "path": "v3/N08_ref_escape.nl",
+      "bytes": 122,
+      "sha256": "f2928c3d22c5ab956802040877be1b7c29a7d586fe87d1512aaf791efd45a2f3"
+    },
+    {
+      "path": "v3/N09_implicit_borrow.nl",
+      "bytes": 198,
+      "sha256": "adae928414b38c2103c0bcc0275b73377a3b6b0736f382262597caef2ac94ea2"
+    },
+    {
+      "path": "v3/R1120_C219_V3_EXPECTED.json",
+      "bytes": 29060,
+      "sha256": "77219031e4a02354079d300a60507df4a2a1245bdddc314ec845a6bf155be791"
+    },
+    {
+      "path": "verify.py",
+      "bytes": 24589,
+      "sha256": "da2edb30b754af593394a582b3ead20f55b94ea39fc51accacbc67e0b4babdec"
+    },
+    {
+      "path": "public_observer.c.txt",
+      "bytes": 9102,
+      "sha256": "a72754ef7d33b67aa8166ddfe15174f63412ccc602078b78f0c87d17f9bb6d45"
+    },
+    {
+      "path": "publish_raw.py",
+      "bytes": 3143,
+      "sha256": "7626ccb3a0e6c83a3dcc88e30ed0517a34424acbf917789a7e5b8c8435c10516"
+    },
+    {
+      "path": "inventory.py",
+      "bytes": 825,
+      "sha256": "3f0b642308f4ff42855ee11c8d0d75a34f4087cad8c243bd84ce20571d44f813"
+    },
+    {
+      "path": "registration.cmake",
+      "bytes": 1825,
+      "sha256": "fc0972da7127713075fa3756056a6bd63dfd56f13be33ae54f98cf04fa4806b0"
+    },
+    {
+      "path": "CTestCustom.cmake.in",
+      "bytes": 322,
+      "sha256": "6ae20a6f1f67977e98df8f9b4fb035b7c9499a406d74a89f81d536d927de4278"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2715,
+      "sha256": "0c0cf36f987f617d734d0e2b1887d863428bbcd37288bcbe0d4da73cf8870455"
+    },
+    {
+      "path": "repair/TERNARY_OBSERVATION.txt",
+      "bytes": 1320,
+      "sha256": "d72eca7a11abbe6b8abe1cac78eed65ece6dc1b1ea089f8a28e7bfe535404edb"
+    }
+  ],
+  "additive_root_configuration": {
+    "path": "CTestConfig.cmake",
+    "bytes": 363,
+    "sha256": "abdb5e22fed1e52c6a8dd487cc6aac5cbbe38354ac3ac537b1ec96a27f0d4c89"
+  },
+  "mechanical_repair": {
+    "first_comment": "https://github.com/wakairo/NewLang_Compiler/issues/1120#issuecomment-6604707684",
+    "first_head": "3ceebd8ccebc0b838e9895d941f65a5120580ea0",
+    "original_runner_sha256": "501e969a65f86f264845484225d745132ace16852cccef7b540c9e9d0c8007f5",
+    "new_runner_sha256": "da2edb30b754af593394a582b3ead20f55b94ea39fc51accacbc67e0b4babdec",
+    "change": "Support original C conditional expression arm logging in separate observed C; reset function boundary; no guest condition/value reevaluation",
+    "sources_and_oracle": "all byte-identical to initial V3 freeze",
+    "prospective_native_expectations": "unchanged",
+    "first_log_size_correction": "Earlier FIRST/FAST comments used UTF-16 string length, not exact UTF-8 byte length. Exact bytes: full GCC job log306320; FAST job log83688. Their SHA256 values remain unchanged."
+  }
+}

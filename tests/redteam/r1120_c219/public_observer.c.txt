@@ -1,0 +1,204 @@
+/* R1120 observation-only companion. Compile/run only in authorized Actions.
+ * Uses the same public source -> function-unit registration -> main() CHECK
+ * entry path as the production CLI. It creates no seeded guest values, proof
+ * IDs, synthetic function bodies, or replacement authority. All observed IDs
+ * are qualified by the frame emitted below. Retained call bodies describe
+ * actual calls: their known values do not establish definition-time unknowns.
+ */
+#include "newlang/checked.h"
+#include "newlang/parser.h"
+#include "newlang/semantic.h"
+#include "newlang/source.h"
+
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+
+typedef struct {
+    size_t frames, calls, conditionals, comparisons;
+    size_t known_bools, unknown_bools;
+} R1120C219Observations;
+
+static const char *boolean(bool value)
+{
+    return value ? "true" : "false";
+}
+
+static void observe_result(const NLSemanticContext *context,
+                           NLCheckedResult result,
+                           R1120C219Observations *observations)
+{
+    NLSemanticValueView value = {0};
+    NLSemanticTypeView type = {0};
+    const bool have_value =
+        nl_semantic_value_view(context, result.value, &value);
+    const bool have_type = nl_semantic_type_view(context, result.type, &type);
+    printf("{\"type\":%zu,\"value_id\":%zu,\"value_accessible\":%s,"
+           "\"type_accessible\":%s,\"scalar_known\":%s,\"scalar_value\":",
+           result.type, result.value, boolean(have_value), boolean(have_type),
+           boolean(have_value && value.scalar_known));
+    if (have_value && value.scalar_known)
+        printf("%zu", value.scalar_value);
+    else
+        fputs("null", stdout);
+    if (have_type)
+        printf(",\"type_kind\":%d", (int)type.kind);
+    if (have_value)
+        printf(",\"dependencies\":%d,\"value_type\":%zu",
+               (int)value.dependencies, value.type);
+    fputc('}', stdout);
+    if (have_value && have_type && type.kind == NL_TYPE_BOOL) {
+        if (value.scalar_known)
+            ++observations->known_bools;
+        else
+            ++observations->unknown_bools;
+    }
+}
+
+static bool observe_fragment(const NLCheckedFragment *fragment,
+                             const NLSemanticContext *parent_context,
+                             size_t parent_frame, NLCheckedNodeId edge_node,
+                             const char *edge_kind, size_t edge_index,
+                             size_t depth, R1120C219Observations *observations)
+{
+    if (fragment == NULL || depth > 64)
+        return false;
+    const NLSemanticContext *context = nl_checked_context(fragment);
+    if (context == NULL)
+        return false;
+    const size_t frame = ++observations->frames;
+    const size_t count = nl_checked_node_count(fragment);
+    printf("{\"event\":\"frame\",\"frame\":%zu,\"parent_frame\":%zu,"
+           "\"edge_kind\":\"%s\",\"edge_node\":%zu,\"edge_index\":%zu,"
+           "\"same_world_as_parent\":%s,\"root\":%zu,\"node_count\":%zu}\n",
+           frame, parent_frame, edge_kind, edge_node, edge_index,
+           boolean(parent_context != NULL && context == parent_context),
+           nl_checked_root(fragment), count);
+    for (size_t index = 0; index < count; ++index) {
+        const NLCheckedNodeId id = index + 1;
+        const NLCheckedNodeView *node = nl_checked_node_view(fragment, id);
+        if (node == NULL || node->result_count > 2)
+            return false;
+        printf("{\"event\":\"node\",\"frame\":%zu,\"node\":%zu,"
+               "\"kind\":%d,\"type\":%zu,\"symbol\":%zu,\"function\":%zu,"
+               "\"argument_count\":%zu,\"parameter_type\":%zu,"
+               "\"initializer\":%zu,\"first_argument\":%zu,"
+               "\"next_argument\":%zu,\"normal_arms\":%zu,"
+               "\"body_backed\":%s,\"terminates\":%s,\"results\":[",
+               frame, id, (int)node->kind, node->type, node->symbol,
+               node->function, node->argument_count, node->parameter_type,
+               node->initializer, node->first_argument, node->next_argument,
+               node->normal_arms, boolean(node->body_backed),
+               boolean(node->terminates));
+        for (size_t result = 0; result < node->result_count; ++result) {
+            if (result != 0)
+                fputc(',', stdout);
+            observe_result(context, node->results[result], observations);
+        }
+        fputs("]}\n", stdout);
+        if (node->kind == NL_CHECKED_USIZE_EQUALITY ||
+            node->kind == NL_CHECKED_USIZE_LESS_THAN)
+            ++observations->comparisons;
+        if (node->kind == NL_CHECKED_REGISTERED_CALL && node->body_backed) {
+            const NLCheckedFragment *body = nl_checked_call_body(fragment, id);
+            if (body == NULL)
+                return false;
+            ++observations->calls;
+            if (!observe_fragment(body, context, frame, id, "call_body", 0,
+                                  depth + 1, observations))
+                return false;
+        }
+        if (node->kind == NL_CHECKED_IF) {
+            ++observations->conditionals;
+            for (size_t arm = 0; arm < 2; ++arm) {
+                const NLCheckedFragment *body =
+                    nl_checked_if_arm(fragment, id, arm);
+                if (body == NULL ||
+                    !observe_fragment(body, context, frame, id, "if_arm", arm,
+                                      depth + 1, observations))
+                    return false;
+            }
+        }
+    }
+    return !ferror(stdout);
+}
+
+int main(int argc, char **argv)
+{
+    NLSource *source = NULL, *entry_source = NULL;
+    NLParser *parser = NULL, *entry_parser = NULL;
+    NLSyntaxTree *unit = NULL, *entry_tree = NULL;
+    NLSemanticContext *context = NULL;
+    NLCheckedFragment *entry = NULL;
+    NLParseDiagnostic parse_diagnostic = {0};
+    NLFunctionUnitDiagnostic unit_diagnostic = {0};
+    NLCheckDiagnostic check_diagnostic = {0};
+    R1120C219Observations observations = {0};
+    int result = 1;
+    if (argc != 2) {
+        fputs("usage: r1120_c219_public_observer SOURCE\n", stderr);
+        return 2;
+    }
+    if (nl_source_load(argv[1], &source) != NL_SOURCE_OK ||
+        nl_parser_create(source, &parser) != NL_PARSE_OK)
+        goto cleanup;
+    const NLParseStatus parsed =
+        nl_parser_parse_function_unit(parser, &unit, &parse_diagnostic);
+    printf("{\"event\":\"parse_unit\",\"status\":%d}\n", (int)parsed);
+    if (parsed != NL_PARSE_OK) {
+        nl_parse_diagnostic_render(stderr, source, &parse_diagnostic);
+        goto cleanup;
+    }
+    if (nl_semantic_create(&context) != NL_CHECK_OK)
+        goto cleanup;
+    const NLSyntaxTree *inputs[] = {unit};
+    const NLCheckStatus registered = nl_semantic_register_function_unit(
+        context, inputs, 1, &unit_diagnostic);
+    printf("{\"event\":\"register_unit\",\"status\":%d}\n", (int)registered);
+    if (registered != NL_CHECK_OK) {
+        nl_check_diagnostic_render(stderr, source, &unit_diagnostic.diagnostic);
+        goto cleanup;
+    }
+    /* The production CLI also parses this exact host entry call. All guest
+     * actual arguments remain in the unmodified registered SOURCE. */
+    static const char entry_text[] = "main()";
+    if (nl_source_create(entry_text, strlen(entry_text), "<v0-entry>",
+                         &entry_source) != NL_SOURCE_OK ||
+        nl_parser_create(entry_source, &entry_parser) != NL_PARSE_OK)
+        goto cleanup;
+    parse_diagnostic = (NLParseDiagnostic){0};
+    if (nl_parser_parse_expression_fragment(entry_parser, &entry_tree,
+                                            &parse_diagnostic) != NL_PARSE_OK) {
+        nl_parse_diagnostic_render(stderr, entry_source, &parse_diagnostic);
+        goto cleanup;
+    }
+    const NLCheckStatus checked = nl_semantic_check_expression(
+        context, entry_tree, &entry, &check_diagnostic);
+    printf("{\"event\":\"check_entry\",\"status\":%d}\n", (int)checked);
+    if (checked != NL_CHECK_OK) {
+        nl_check_diagnostic_render(stderr, entry_source, &check_diagnostic);
+        goto cleanup;
+    }
+    const bool complete = observe_fragment(entry, NULL, 0, 0, "entry", 0, 0,
+                                           &observations);
+    printf("{\"event\":\"summary\",\"complete_observation\":%s,"
+           "\"frames\":%zu,\"calls_with_bodies\":%zu,\"if_nodes\":%zu,"
+           "\"usize_comparison_nodes\":%zu,\"known_bool_results\":%zu,"
+           "\"unknown_bool_results\":%zu,"
+           "\"definition_time_unknown_observed\":false,"
+           "\"public_pure_predicate_validator_used\":false}\n",
+           boolean(complete), observations.frames, observations.calls,
+           observations.conditionals, observations.comparisons,
+           observations.known_bools, observations.unknown_bools);
+    result = complete && !ferror(stdout) ? 0 : 1;
+cleanup:
+    nl_checked_destroy(entry);
+    nl_syntax_tree_destroy(entry_tree);
+    nl_parser_destroy(entry_parser);
+    nl_source_destroy(entry_source);
+    nl_semantic_destroy(context);
+    nl_syntax_tree_destroy(unit);
+    nl_parser_destroy(parser);
+    nl_source_destroy(source);
+    return result;
+}
