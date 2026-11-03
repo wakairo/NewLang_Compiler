@@ -1,0 +1,130 @@
+{
+  "first_cli": {
+    "label": "01-equality-check",
+    "command": [
+      "/tmp/p1115-build/newlangc",
+      "--check",
+      "/tmp/p1117-artifacts/inputs-v1/sources/01-equality.nl"
+    ],
+    "returncode": 3,
+    "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderr_sha256": "6c0b19475a69be3123d0708005a29c6697d7085254dc0bad8edad057c9a86c21"
+  },
+  "first_cli_stderr": "/tmp/p1117-artifacts/inputs-v1/sources/01-equality.nl:2:29-2:31: error(precision)[USIZE-EQUALITY-PRECISION]: equality needs known dependency-free quantity operands in this profile\n",
+  "first_harness_red": {
+    "command": "python3 inputs-v1/run.py /tmp/p1115-build/newlangc probe-baseline-v1 raw-baseline-v1 baseline GCC13 CLANG23",
+    "status": 1,
+    "reason": "03 known-control CHECK0 but C17 exit4; v1 baseline expected both0",
+    "log_sha256": "59affc10419c37dd03b21823b0591a7620f3eba30ec846e1d048c3ff740a3981"
+  },
+  "unchanged_sources_oracle": true,
+  "observations": [
+    {
+      "label": "01-equality-check",
+      "command": [
+        "/tmp/p1115-build/newlangc",
+        "--check",
+        "/tmp/p1117-artifacts/inputs-v1/sources/01-equality.nl"
+      ],
+      "returncode": 3,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "6c0b19475a69be3123d0708005a29c6697d7085254dc0bad8edad057c9a86c21"
+    },
+    {
+      "label": "01-equality-c17",
+      "command": [
+        "/tmp/p1115-build/newlangc",
+        "/tmp/p1117-artifacts/inputs-v1/sources/01-equality.nl"
+      ],
+      "returncode": 3,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "6c0b19475a69be3123d0708005a29c6697d7085254dc0bad8edad057c9a86c21"
+    },
+    {
+      "label": "01-equality-named",
+      "command": [
+        "/tmp/p1115-build/newlangc",
+        "--emit-c17-to",
+        "/tmp/p1117-artifacts/raw-baseline-v1/01-equality-named.c",
+        "/tmp/p1117-artifacts/inputs-v1/sources/01-equality.nl"
+      ],
+      "returncode": 3,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "6c0b19475a69be3123d0708005a29c6697d7085254dc0bad8edad057c9a86c21"
+    },
+    {
+      "label": "01-equality-owned",
+      "command": [
+        "/tmp/p1117-artifacts/probe-baseline-v1",
+        "/tmp/p1117-artifacts/inputs-v1/sources/01-equality.nl"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "0958b39b2c979880d032082ea913a86d40967360c1b4d823a8f4039552e74921",
+      "stderr_sha256": "6c0b19475a69be3123d0708005a29c6697d7085254dc0bad8edad057c9a86c21"
+    },
+    {
+      "label": "02-less-than-check",
+      "command": [
+        "/tmp/p1115-build/newlangc",
+        "--check",
+        "/tmp/p1117-artifacts/inputs-v1/sources/02-less-than.nl"
+      ],
+      "returncode": 3,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "4d460b0cd31b2ef694b1377e1f8eef09c371354bbd11e45405ce161c6a58d0c0"
+    },
+    {
+      "label": "02-less-than-c17",
+      "command": [
+        "/tmp/p1115-build/newlangc",
+        "/tmp/p1117-artifacts/inputs-v1/sources/02-less-than.nl"
+      ],
+      "returncode": 3,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "4d460b0cd31b2ef694b1377e1f8eef09c371354bbd11e45405ce161c6a58d0c0"
+    },
+    {
+      "label": "02-less-than-named",
+      "command": [
+        "/tmp/p1115-build/newlangc",
+        "--emit-c17-to",
+        "/tmp/p1117-artifacts/raw-baseline-v1/02-less-than-named.c",
+        "/tmp/p1117-artifacts/inputs-v1/sources/02-less-than.nl"
+      ],
+      "returncode": 3,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "4d460b0cd31b2ef694b1377e1f8eef09c371354bbd11e45405ce161c6a58d0c0"
+    },
+    {
+      "label": "02-less-than-owned",
+      "command": [
+        "/tmp/p1117-artifacts/probe-baseline-v1",
+        "/tmp/p1117-artifacts/inputs-v1/sources/02-less-than.nl"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "56ab27caf84ec72ecc40b054767c6bdd5b5c7eb1133663e4036c900f01df8154",
+      "stderr_sha256": "4d460b0cd31b2ef694b1377e1f8eef09c371354bbd11e45405ce161c6a58d0c0"
+    },
+    {
+      "label": "03-known-control-check",
+      "command": [
+        "/tmp/p1115-build/newlangc",
+        "--check",
+        "/tmp/p1117-artifacts/inputs-v1/sources/03-known-control.nl"
+      ],
+      "returncode": 0,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "03-known-control-c17",
+      "command": [
+        "/tmp/p1115-build/newlangc",
+        "/tmp/p1117-artifacts/inputs-v1/sources/03-known-control.nl"
+      ],
+      "returncode": 4,
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_sha256": "e5f2b43875c983a342eb9607d5f69b72871f1cda96a76102dafd3b3bb908c301"
+    }
+  ]
+}

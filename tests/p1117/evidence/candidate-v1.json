@@ -1,0 +1,13 @@
+{
+  "version": "production-v1",
+  "head": "4efde1869d7d570de7f18deabc069a6b4a0c4f46",
+  "tree": "3fe215af5da4790b9a80cec32bc106bd0b37bea2",
+  "parent": "65055be55934416c911453463b5f26fa461e8d6a",
+  "input_freeze_v2": "d546f684e6173e465beedbb9b4501ce496ff830f972b5f3b48d6492ae1089a30",
+  "files": {
+    "src/main.c": "2784515e7a7fc20c3e8a5efb499b50fdf8a3c63c4aff9f7d20455ceaedf59452",
+    "src/semantic_check.c": "0977b20ecd22237055359df81808ed2f2226f04b9fa7db40d12468c7cba47672",
+    "src/c17_predicate_internal.h": "2e8c31c28708a54d3b5aded1fee6697ff494c820bce59793ce02a9af54e3ccd9"
+  },
+  "not_executed_before_snapshot": true
+}

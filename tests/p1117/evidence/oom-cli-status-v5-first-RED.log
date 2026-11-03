@@ -1,0 +1,27 @@
+Internal ctest changing into directory: /tmp/p1117-build
+Test project /tmp/p1117-build
+    Start 379: p1117_01-equality_oom.unit
+1/2 Test #379: p1117_01-equality_oom.unit .......Subprocess aborted***Exception:   0.54 sec
+error(cli)[V0-C-FILE]: cannot safely write named C17 output
+note: /tmp/p1117-named-9OjwYh/out.c
+error(cli)[V0-C-FILE]: cannot safely write named C17 output
+note: /tmp/p1117-named-9OjwYh/out.c
+error(cli)[V0-SOURCE-IO]: cannot read source
+note: /tmp/p1117/tests/p1117/sources/01-equality.nl
+error(cli)[V0-SOURCE-IO]: cannot read source
+note: /tmp/p1117/tests/p1117/sources/01-equality.nl
+error(cli)[V0-SOURCE-IO]: cannot read source
+note: /tmp/p1117/tests/p1117/sources/01-equality.nl
+error(cli)[V0-PARSER]: cannot create parser
+note: /tmp/p1117/tests/p1117/sources/01-equality.nl
+/tmp/p1117/tests/p1117/sources/01-equality.nl:1:1-1:1: error(host)[P2-OUT-OF-MEMORY]: host allocation failed while creating syntax owner
+p1117_oom: /tmp/p1117/tests/p1117/safety.c:322: cli_oom: Assertion `s == 1 && allocation > fail && !stat(output, &after)' failed.
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.56 sec
+
+The following tests FAILED:
+	379 - p1117_01-equality_oom.unit (Subprocess aborted)
+Errors while running CTest

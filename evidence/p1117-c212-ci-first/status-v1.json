@@ -1,0 +1,67 @@
+{
+  "head": "83d114ea40a3bff452e1660d4c255f4262348bd0",
+  "merge": "9f1d1375079eccc34a9cd0eae7853bdc24b04a50",
+  "base": "65055be55934416c911453463b5f26fa461e8d6a",
+  "attempt": 1,
+  "full5": 41619166518,
+  "partial": 41619166759,
+  "jobs": [
+    {
+      "id": 125860151562,
+      "name": "GCC Release",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 125860151895,
+      "name": "Clang",
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 125860151966,
+      "name": "ASan",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 125860152059,
+      "name": "GCC",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 125860152439,
+      "name": "UBSan",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 125860152001,
+      "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "test_counts": {
+    "GCC": 645,
+    "GCC Release": 645,
+    "ASan": 645,
+    "UBSan": 645,
+    "Clang": "format refusal before compile/tests",
+    "PARTIAL": 644
+  },
+  "first_red": {
+    "job": 125860151895,
+    "layer": "clang-format only: original frozen tests/p1117/lineage.c",
+    "exact_decoded_log_sha256": "6bb68c1d3468a93d8ff766e1fac5915530b47af3e7041e49c5f3bed62509b7d0"
+  },
+  "repair": "Frozen original unchanged; curated formatted lineage_v2.c now compiled, with same refusal assertions. Only noncompiled immutable original has standard formatter exception. Production/workflows/check-format.sh unchanged. New source+oracle frozen Issue1117#6601185574 before execution.",
+  "local_followup": {
+    "head": "e42235faa87df0128ec3fa4695bccfef1aae4ab6",
+    "all_tracked_C_formatter": "unchanged check-format.sh exit0",
+    "clean_checkout_tests": "10/10 current,lineage,OOM,native,history",
+    "production_diff": "none from83d114e/7b7881a"
+  },
+  "budget": "Natural initial6 jobs; final mechanical pair6 remaining; no rerun or dispatch."
+}

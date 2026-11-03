@@ -1,0 +1,46 @@
+{
+  "12-direct-return": {
+    "legal": true,
+    "candidate": {
+      "check": 0,
+      "emit": 0
+    },
+    "runtime": [
+      [
+        259,
+        154
+      ],
+      [
+        260,
+        219
+      ],
+      [
+        261,
+        219
+      ]
+    ],
+    "oracle": "pure direct IF result; genuine source condition/actual return package, no host unroll or cached-truth substitution"
+  },
+  "13-direct-tail": {
+    "legal": true,
+    "candidate": {
+      "check": 0,
+      "emit": 0
+    },
+    "runtime": [
+      [
+        1,
+        217
+      ],
+      [
+        1025,
+        136
+      ],
+      [
+        1026,
+        217
+      ]
+    ],
+    "oracle": "pure direct IF result; genuine source condition/actual return package, no host unroll or cached-truth substitution"
+  }
+}

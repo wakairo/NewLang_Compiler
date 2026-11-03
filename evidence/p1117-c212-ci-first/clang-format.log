@@ -1,0 +1,639 @@
+﻿2026-11-03T10:25:43.4485082Z Current runner version: '2.338.2'
+2026-11-03T10:25:43.4519821Z ##[group]Runner Image Provisioner
+2026-11-03T10:25:43.4521097Z Hosted Compute Agent
+2026-11-03T10:25:43.4522209Z Version: 20261021.618
+2026-11-03T10:25:43.4523461Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-03T10:25:43.4524579Z Build Date: 2026-10-21T00:45:21Z
+2026-11-03T10:25:43.4525778Z Worker ID: {59ccce2a-85d1-48e3-8e05-c2344bd54579}
+2026-11-03T10:25:43.4526911Z Region: northcentralus
+2026-11-03T10:25:43.4527924Z Cloud: Azure
+2026-11-03T10:25:43.4528855Z ##[endgroup]
+2026-11-03T10:25:43.4530989Z ##[group]Operating System
+2026-11-03T10:25:43.4532105Z Ubuntu
+2026-11-03T10:25:43.4533206Z 24.04.5
+2026-11-03T10:25:43.4534183Z LTS
+2026-11-03T10:25:43.4535073Z ##[endgroup]
+2026-11-03T10:25:43.4535939Z ##[group]Runner Image
+2026-11-03T10:25:43.4536988Z Image: ubuntu-24.04
+2026-11-03T10:25:43.4537876Z Version: 20261025.353.1
+2026-11-03T10:25:43.4540175Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-03T10:25:43.4542720Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-11-03T10:25:43.4544750Z ##[endgroup]
+2026-11-03T10:25:43.4546477Z ##[group]GITHUB_TOKEN Permissions
+2026-11-03T10:25:43.4549218Z Contents: read
+2026-11-03T10:25:43.4550131Z Metadata: read
+2026-11-03T10:25:43.4550977Z ##[endgroup]
+2026-11-03T10:25:43.4554399Z Secret source: Actions
+2026-11-03T10:25:43.4555844Z Cache mode: write
+2026-11-03T10:25:43.4557154Z Prepare workflow directory
+2026-11-03T10:25:43.5035995Z Prepare all required actions
+2026-11-03T10:25:43.5104806Z Getting action download info
+2026-11-03T10:25:43.7906403Z Download action repository 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' (SHA:11bd71901bbe5b1630ceea73d27597364c9af683)
+2026-11-03T10:25:43.9243114Z Download action repository 'actions/cache@3edfce9056124e459a23f683a21433670d47daca' (SHA:3edfce9056124e459a23f683a21433670d47daca)
+2026-11-03T10:25:44.2095227Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-03T10:25:44.4190208Z Complete job name: Clang
+2026-11-03T10:25:44.5092263Z ##[group]Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+2026-11-03T10:25:44.5093613Z with:
+2026-11-03T10:25:44.5094138Z   persist-credentials: false
+2026-11-03T10:25:44.5094742Z   repository: wakairo/NewLang_Compiler
+2026-11-03T10:25:44.5099282Z   token: ***
+2026-11-03T10:25:44.5099809Z   ssh-strict: true
+2026-11-03T10:25:44.5100311Z   ssh-user: git
+2026-11-03T10:25:44.5100788Z   clean: true
+2026-11-03T10:25:44.5101300Z   sparse-checkout-cone-mode: true
+2026-11-03T10:25:44.5101906Z   fetch-depth: 1
+2026-11-03T10:25:44.5102394Z   fetch-tags: false
+2026-11-03T10:25:44.5103119Z   show-progress: true
+2026-11-03T10:25:44.5103688Z   lfs: false
+2026-11-03T10:25:44.5104165Z   submodules: false
+2026-11-03T10:25:44.5104668Z   set-safe-directory: true
+2026-11-03T10:25:44.5105533Z ##[endgroup]
+2026-11-03T10:25:44.7746074Z Syncing repository: wakairo/NewLang_Compiler
+2026-11-03T10:25:44.7749978Z ##[group]Getting Git version info
+2026-11-03T10:25:44.7751277Z Working directory is '/home/runner/work/NewLang_Compiler/NewLang_Compiler'
+2026-11-03T10:25:44.7753465Z [command]/usr/bin/git version
+2026-11-03T10:25:44.7816401Z git version 2.56.0
+2026-11-03T10:25:44.7836938Z ##[endgroup]
+2026-11-03T10:25:44.7853763Z Temporarily overriding HOME='/home/runner/work/_temp/52ac9164-f144-42f5-8636-1e7796625ce1' before making global git config changes
+2026-11-03T10:25:44.7857350Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-03T10:25:44.7860722Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-03T10:25:44.7916728Z Deleting the contents of '/home/runner/work/NewLang_Compiler/NewLang_Compiler'
+2026-11-03T10:25:44.7921145Z ##[group]Initializing the repository
+2026-11-03T10:25:44.7925534Z [command]/usr/bin/git init /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-03T10:25:44.8034575Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-03T10:25:44.8037966Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-03T10:25:44.8041062Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-03T10:25:44.8043789Z hint: call:
+2026-11-03T10:25:44.8045273Z hint:
+2026-11-03T10:25:44.8047104Z hint: 	git config --global init.defaultBranch <name>
+2026-11-03T10:25:44.8049341Z hint:
+2026-11-03T10:25:44.8051602Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-03T10:25:44.8055412Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-03T10:25:44.8058252Z hint:
+2026-11-03T10:25:44.8059801Z hint: 	git branch -m <name>
+2026-11-03T10:25:44.8061282Z hint:
+2026-11-03T10:25:44.8063403Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-03T10:25:44.8067681Z Initialized empty Git repository in /home/runner/work/NewLang_Compiler/NewLang_Compiler/.git/
+2026-11-03T10:25:44.8074445Z [command]/usr/bin/git remote add origin https://github.com/wakairo/NewLang_Compiler
+2026-11-03T10:25:44.8111400Z ##[endgroup]
+2026-11-03T10:25:44.8113649Z ##[group]Disabling automatic garbage collection
+2026-11-03T10:25:44.8115765Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-03T10:25:44.8155549Z ##[endgroup]
+2026-11-03T10:25:44.8157720Z ##[group]Setting up auth
+2026-11-03T10:25:44.8166849Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T10:25:44.8210619Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T10:25:44.8630647Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T10:25:44.8683645Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T10:25:44.8947302Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-03T10:25:44.9000051Z ##[endgroup]
+2026-11-03T10:25:44.9002012Z ##[group]Fetching the repository
+2026-11-03T10:25:44.9013465Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +9f1d1375079eccc34a9cd0eae7853bdc24b04a50:refs/remotes/pull/1121/merge
+2026-11-03T10:25:46.8653105Z From https://github.com/wakairo/NewLang_Compiler
+2026-11-03T10:25:46.8654166Z  * [new ref]         9f1d1375079eccc34a9cd0eae7853bdc24b04a50 -> pull/1121/merge
+2026-11-03T10:25:46.8659938Z ##[endgroup]
+2026-11-03T10:25:46.8660548Z ##[group]Determining the checkout info
+2026-11-03T10:25:46.8661355Z ##[endgroup]
+2026-11-03T10:25:46.8667279Z [command]/usr/bin/git sparse-checkout disable
+2026-11-03T10:25:46.8733862Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-03T10:25:46.8823330Z ##[group]Checking out the ref
+2026-11-03T10:25:46.8824184Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/1121/merge
+2026-11-03T10:25:47.3420167Z Note: switching to 'refs/remotes/pull/1121/merge'.
+2026-11-03T10:25:47.3420540Z 
+2026-11-03T10:25:47.3420776Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-03T10:25:47.3421334Z changes and commit them, and you can discard any commits you make in this
+2026-11-03T10:25:47.3421837Z state without impacting any branches by switching back to a branch.
+2026-11-03T10:25:47.3422133Z 
+2026-11-03T10:25:47.3422371Z If you want to create a new branch to retain commits you create, you may
+2026-11-03T10:25:47.3423082Z do so (now or later) by using -c with the switch command. Example:
+2026-11-03T10:25:47.3423470Z 
+2026-11-03T10:25:47.3423599Z   git switch -c <new-branch-name>
+2026-11-03T10:25:47.3424277Z 
+2026-11-03T10:25:47.3424404Z Or undo this operation with:
+2026-11-03T10:25:47.3424577Z 
+2026-11-03T10:25:47.3424697Z   git switch -
+2026-11-03T10:25:47.3424886Z 
+2026-11-03T10:25:47.3425575Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-03T10:25:47.3426093Z 
+2026-11-03T10:25:47.3426579Z HEAD is now at 9f1d137 Merge 83d114ea40a3bff452e1660d4c255f4262348bd0 into 65055be55934416c911453463b5f26fa461e8d6a
+2026-11-03T10:25:47.3478806Z ##[endgroup]
+2026-11-03T10:25:47.3536673Z [command]/usr/bin/git log -1 --format=%H
+2026-11-03T10:25:47.3574611Z 9f1d1375079eccc34a9cd0eae7853bdc24b04a50
+2026-11-03T10:25:47.3584499Z ##[group]Removing auth
+2026-11-03T10:25:47.3588090Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T10:25:47.3630825Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T10:25:47.3896184Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T10:25:47.3934288Z http.https://github.com/.extraheader
+2026-11-03T10:25:47.3943488Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-03T10:25:47.3988854Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T10:25:47.4248480Z ##[endgroup]
+2026-11-03T10:25:47.4476875Z ##[group]Run set -euo pipefail
+2026-11-03T10:25:47.4477322Z [36;1mset -euo pipefail[0m
+2026-11-03T10:25:47.4477715Z [36;1mecho "T757 Stage A1: preinstalled tools before signed apt"[0m
+2026-11-03T10:25:47.4478280Z [36;1mecho "T757 ImageOS=${ImageOS:-unset} ImageVersion=${ImageVersion:-unset} PATH=$PATH"[0m
+2026-11-03T10:25:47.4478810Z [36;1mfor tool in cmake gcc-13 g++-13 make python3 zstd; do[0m
+2026-11-03T10:25:47.4479238Z [36;1m  echo "T757 tool $tool=$(command -v "$tool")"[0m
+2026-11-03T10:25:47.4479567Z [36;1mdone[0m
+2026-11-03T10:25:47.4479808Z [36;1mcmake_before=$(command -v cmake)[0m
+2026-11-03T10:25:47.4480208Z [36;1mcmake_version=$(cmake --version | sed -n '1s/^cmake version //p')[0m
+2026-11-03T10:25:47.4480695Z [36;1mecho "T757 cmake_before=$cmake_before version=$cmake_version"[0m
+2026-11-03T10:25:47.4481102Z [36;1mpython3 - "$cmake_version" <<'PY'[0m
+2026-11-03T10:25:47.4481401Z [36;1mimport re[0m
+2026-11-03T10:25:47.4481636Z [36;1mimport sys[0m
+2026-11-03T10:25:47.4481983Z [36;1mmatch = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", sys.argv[1])[0m
+2026-11-03T10:25:47.4482345Z [36;1mif not match:[0m
+2026-11-03T10:25:47.4482659Z [36;1m    sys.exit("STOP: unknown preinstalled CMake version")[0m
+2026-11-03T10:25:47.4483246Z [36;1mmajor, minor, patch = map(int, match.groups())[0m
+2026-11-03T10:25:47.4483610Z [36;1mif not ((3, 28) <= (major, minor) < (4, 0)):[0m
+2026-11-03T10:25:47.4484044Z [36;1m    sys.exit("STOP: preinstalled CMake outside project policy [3.28,4.0)")[0m
+2026-11-03T10:25:47.4484442Z [36;1mPY[0m
+2026-11-03T10:25:47.4484885Z [36;1mfor pkg in gcc-13 g++-13 make python3 zstd libstdc++6 zlib1g-dev libzstd-dev libtinfo-dev libxml2-dev; do[0m
+2026-11-03T10:25:47.4485515Z [36;1m  dpkg-query -W -f='${binary:Package}=${Status} ${Version}\n' "$pkg" || true[0m
+2026-11-03T10:25:47.4485926Z [36;1mdone[0m
+2026-11-03T10:25:47.4486160Z [36;1mapt_started=$(date +%s)[0m
+2026-11-03T10:25:47.4486438Z [36;1msudo apt-get update[0m
+2026-11-03T10:25:47.4486769Z [36;1msudo apt-get install --no-install-recommends -y \[0m
+2026-11-03T10:25:47.4487132Z [36;1m  gcc-13 g++-13 make python3 zstd \[0m
+2026-11-03T10:25:47.4487524Z [36;1m  libstdc++6 zlib1g-dev libzstd-dev libtinfo-dev libxml2-dev[0m
+2026-11-03T10:25:47.4487968Z [36;1mecho "T757 A1 apt_seconds=$(( $(date +%s) - apt_started ))"[0m
+2026-11-03T10:25:47.4488364Z [36;1mtest "$(command -v cmake)" = "$cmake_before"[0m
+2026-11-03T10:25:47.4489091Z [36;1mecho "T757 cmake_after=$(command -v cmake) version=$(cmake --version | sed -n '1s/^cmake version //p')"[0m
+2026-11-03T10:25:47.4489700Z [36;1mtest "$(cmake --version | sed -n '1s/^cmake version //p')" = "$cmake_version"[0m
+2026-11-03T10:25:47.4516040Z shell: /usr/bin/bash -e {0}
+2026-11-03T10:25:47.4516353Z ##[endgroup]
+2026-11-03T10:25:47.4582091Z T757 Stage A1: preinstalled tools before signed apt
+2026-11-03T10:25:47.4583908Z T757 ImageOS=ubuntu24 ImageVersion=20261026.354.1 PATH=/snap/bin:/home/runner/.local/bin:/opt/pipx_bin:/home/runner/.cargo/bin:/home/runner/.config/composer/vendor/bin:/usr/local/.ghcup/bin:/home/runner/.dotnet/tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+2026-11-03T10:25:47.4588705Z T757 tool cmake=/usr/local/bin/cmake
+2026-11-03T10:25:47.4594848Z T757 tool gcc-13=/usr/bin/gcc-13
+2026-11-03T10:25:47.4600718Z T757 tool g++-13=/usr/bin/g++-13
+2026-11-03T10:25:47.4606856Z T757 tool make=/usr/bin/make
+2026-11-03T10:25:47.4613611Z T757 tool python3=/usr/bin/python3
+2026-11-03T10:25:47.4619306Z T757 tool zstd=/usr/local/bin/zstd
+2026-11-03T10:25:47.4973364Z T757 cmake_before=/usr/local/bin/cmake version=3.31.6
+2026-11-03T10:25:47.5308822Z gcc-13=install ok installed 13.3.0-6ubuntu2~24.04.1
+2026-11-03T10:25:47.5416427Z g++-13=install ok installed 13.3.0-6ubuntu2~24.04.1
+2026-11-03T10:25:47.5521859Z make=install ok installed 4.3-4.1build2
+2026-11-03T10:25:47.5626230Z python3=install ok installed 3.12.3-0ubuntu2.1
+2026-11-03T10:25:47.5731761Z zstd=install ok installed 1.5.5+dfsg2-2build1.1
+2026-11-03T10:25:47.5836124Z libstdc++6:amd64=install ok installed 14.2.0-4ubuntu2~24.04.1
+2026-11-03T10:25:47.5943267Z zlib1g-dev:amd64=install ok installed 1:1.3.dfsg-3.1ubuntu2.3
+2026-11-03T10:25:47.6050818Z libzstd-dev:amd64=install ok installed 1.5.5+dfsg2-2build1.1
+2026-11-03T10:25:47.6156950Z libtinfo-dev=unknown ok not-installed 
+2026-11-03T10:25:47.6263498Z libxml2-dev:amd64=install ok installed 2.9.14+dfsg-1.3ubuntu3.10
+2026-11-03T10:25:47.7022627Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-03T10:25:47.7387346Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-11-03T10:25:47.8184215Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [685 kB]
+2026-11-03T10:25:47.8322415Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-11-03T10:25:47.8335144Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-11-03T10:25:47.8443951Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-11-03T10:25:47.8473726Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-11-03T10:25:47.8484356Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [617 kB]
+2026-11-03T10:25:47.9564883Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1408 kB]
+2026-11-03T10:25:47.9643928Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [311 kB]
+2026-11-03T10:25:47.9676947Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1707 kB]
+2026-11-03T10:25:47.9775433Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [343 kB]
+2026-11-03T10:25:47.9803756Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1813 kB]
+2026-11-03T10:25:47.9904007Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [412 kB]
+2026-11-03T10:25:47.9944290Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [14.3 kB]
+2026-11-03T10:25:48.1023815Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1153 kB]
+2026-11-03T10:25:48.1093633Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [232 kB]
+2026-11-03T10:25:48.1118014Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1224 kB]
+2026-11-03T10:25:48.1621816Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [246 kB]
+2026-11-03T10:25:48.1646146Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1721 kB]
+2026-11-03T10:25:48.1740692Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [394 kB]
+2026-11-03T10:25:48.1771464Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [12.4 kB]
+2026-11-03T10:25:51.3642592Z Fetched 12.7 MB in 1s (9066 kB/s)
+2026-11-03T10:25:52.4160866Z Reading package lists...
+2026-11-03T10:25:52.4582802Z Reading package lists...
+2026-11-03T10:25:52.7107557Z Building dependency tree...
+2026-11-03T10:25:52.7114638Z Reading state information...
+2026-11-03T10:25:52.9163378Z gcc-13 is already the newest version (13.3.0-6ubuntu2~24.04.1).
+2026-11-03T10:25:52.9164035Z gcc-13 set to manually installed.
+2026-11-03T10:25:52.9164614Z g++-13 is already the newest version (13.3.0-6ubuntu2~24.04.1).
+2026-11-03T10:25:52.9165209Z make is already the newest version (4.3-4.1build2).
+2026-11-03T10:25:52.9165820Z python3 is already the newest version (3.12.3-0ubuntu2.1).
+2026-11-03T10:25:52.9166438Z zstd is already the newest version (1.5.5+dfsg2-2build1.1).
+2026-11-03T10:25:52.9166950Z zstd set to manually installed.
+2026-11-03T10:25:52.9167466Z libstdc++6 is already the newest version (14.2.0-4ubuntu2~24.04.1).
+2026-11-03T10:25:52.9168118Z zlib1g-dev is already the newest version (1:1.3.dfsg-3.1ubuntu2.3).
+2026-11-03T10:25:52.9169246Z libzstd-dev is already the newest version (1.5.5+dfsg2-2build1.1).
+2026-11-03T10:25:52.9169867Z libzstd-dev set to manually installed.
+2026-11-03T10:25:52.9170479Z libncurses-dev is already the newest version (6.4+20240113-1ubuntu2.2).
+2026-11-03T10:25:52.9171162Z libncurses-dev set to manually installed.
+2026-11-03T10:25:52.9171735Z libxml2-dev is already the newest version (2.9.14+dfsg-1.3ubuntu3.10).
+2026-11-03T10:25:52.9172351Z libxml2-dev set to manually installed.
+2026-11-03T10:25:52.9172723Z 0 upgraded, 0 newly installed, 0 to remove and 6 not upgraded.
+2026-11-03T10:25:52.9203704Z T757 A1 apt_seconds=5
+2026-11-03T10:25:52.9250595Z T757 cmake_after=/usr/local/bin/cmake version=3.31.6
+2026-11-03T10:25:52.9345279Z ##[group]Run actions/cache/restore@3edfce9056124e459a23f683a21433670d47daca
+2026-11-03T10:25:52.9345694Z with:
+2026-11-03T10:25:52.9346016Z   path: .deps/downloads/newlang-llvm-23.1.3-linux-x64-final.tar.zst
+2026-11-03T10:25:52.9346574Z   key: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-03T10:25:52.9347046Z   enableCrossOsArchive: false
+2026-11-03T10:25:52.9347321Z   fail-on-cache-miss: false
+2026-11-03T10:25:52.9347578Z   lookup-only: false
+2026-11-03T10:25:52.9347812Z ##[endgroup]
+2026-11-03T10:25:53.1899008Z Cache hit for: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-03T10:25:54.2606903Z Received 126417585 of 126417585 (100.0%), 124.9 MBs/sec
+2026-11-03T10:25:54.2609509Z Cache Size: ~121 MB (126417585 B)
+2026-11-03T10:25:54.2651752Z [command]/usr/bin/tar -xf /home/runner/work/_temp/2497a981-98e3-404e-afb5-1cbd861f2149/cache.tzst -P -C /home/runner/work/NewLang_Compiler/NewLang_Compiler --use-compress-program unzstd
+2026-11-03T10:25:54.4422812Z Cache restored successfully
+2026-11-03T10:25:54.4665474Z Cache restored from key: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-03T10:25:54.4934858Z ##[group]Run python3 scripts/bootstrap.py
+2026-11-03T10:25:54.4935244Z [36;1mpython3 scripts/bootstrap.py[0m
+2026-11-03T10:25:54.4956862Z shell: /usr/bin/bash -e {0}
+2026-11-03T10:25:54.4957157Z ##[endgroup]
+2026-11-03T10:25:54.5569816Z SDK cache candidate: verify exact SHA and size
+2026-11-03T10:25:54.6603436Z SDK archive independently SHA256 verified (126520077 bytes) in 0.10s
+2026-11-03T10:25:55.2596207Z SDK authenticated decompression 448040960 bytes in 0.60s
+2026-11-03T10:25:55.6935936Z SDK fail-closed tar inspection and rootless extraction 570 members
+2026-11-03T10:25:55.7671787Z LLVM 23.1.3 exact curated SDK ready at /home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64; total 1.21s
+2026-11-03T10:25:55.7840547Z ##[group]Run . .deps/activate.sh
+2026-11-03T10:25:55.7840902Z [36;1m. .deps/activate.sh[0m
+2026-11-03T10:25:55.7841308Z [36;1mecho "Actions commit: $GITHUB_SHA; checked HEAD: $(git rev-parse HEAD)"[0m
+2026-11-03T10:25:55.7841806Z [36;1mecho "PR head: 83d114ea40a3bff452e1660d4c255f4262348bd0"[0m
+2026-11-03T10:25:55.7842394Z [36;1mFORMAT_SUGGESTIONS_PATCH="$RUNNER_TEMP/format-suggestions.patch" bash scripts/check-format.sh[0m
+2026-11-03T10:25:55.7864131Z shell: /usr/bin/bash -e {0}
+2026-11-03T10:25:55.7864431Z ##[endgroup]
+2026-11-03T10:25:55.7926917Z Actions commit: 9f1d1375079eccc34a9cd0eae7853bdc24b04a50; checked HEAD: 9f1d1375079eccc34a9cd0eae7853bdc24b04a50
+2026-11-03T10:25:55.7927577Z PR head: 83d114ea40a3bff452e1660d4c255f4262348bd0
+2026-11-03T10:25:57.2734176Z tests/p1117/lineage.c:6:48: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2735034Z                     const NLSemanticContext *c) {
+2026-11-03T10:25:57.2735598Z                                                ^
+2026-11-03T10:25:57.2736309Z tests/p1117/lineage.c:6:50: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2737048Z                     const NLSemanticContext *c) {
+2026-11-03T10:25:57.2737505Z                                                  ^
+2026-11-03T10:25:57.2738188Z tests/p1117/lineage.c:7:51: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2738947Z   V0Program p = {.unit = nl_semantic_unit_type(c),
+2026-11-03T10:25:57.2739439Z                                                   ^
+2026-11-03T10:25:57.2740156Z tests/p1117/lineage.c:8:62: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2740943Z                  .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
+2026-11-03T10:25:57.2741464Z                                                              ^
+2026-11-03T10:25:57.2742175Z tests/p1117/lineage.c:11:32: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2743021Z int main(int argc, char **argv) {
+2026-11-03T10:25:57.2743433Z                                ^
+2026-11-03T10:25:57.2744094Z tests/p1117/lineage.c:11:34: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2744790Z int main(int argc, char **argv) {
+2026-11-03T10:25:57.2745175Z                                  ^
+2026-11-03T10:25:57.2745851Z tests/p1117/lineage.c:12:21: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2746533Z   assert(argc == 2);
+2026-11-03T10:25:57.2746862Z                     ^
+2026-11-03T10:25:57.2747439Z tests/p1117/lineage.c:13:49: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2748187Z   NLSource *source = NULL, *entry_source = NULL;
+2026-11-03T10:25:57.2748666Z                                                 ^
+2026-11-03T10:25:57.2749337Z tests/p1117/lineage.c:14:49: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2750077Z   NLParser *parser = NULL, *entry_parser = NULL;
+2026-11-03T10:25:57.2750549Z                                                 ^
+2026-11-03T10:25:57.2751211Z tests/p1117/lineage.c:15:43: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2751919Z   NLSyntaxTree *unit = NULL, *tree = NULL;
+2026-11-03T10:25:57.2752360Z                                           ^
+2026-11-03T10:25:57.2753165Z tests/p1117/lineage.c:16:31: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2753894Z   NLSemanticContext *c = NULL;
+2026-11-03T10:25:57.2754272Z                               ^
+2026-11-03T10:25:57.2755309Z tests/p1117/lineage.c:17:35: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2756096Z   NLCheckedFragment *owned = NULL;
+2026-11-03T10:25:57.2756498Z                                   ^
+2026-11-03T10:25:57.2757397Z tests/p1117/lineage.c:18:60: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2758191Z   assert(nl_source_load(argv[1], &source) == NL_SOURCE_OK);
+2026-11-03T10:25:57.2758730Z                                                            ^
+2026-11-03T10:25:57.2759425Z tests/p1117/lineage.c:19:60: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2760199Z   assert(nl_parser_create(source, &parser) == NL_PARSE_OK);
+2026-11-03T10:25:57.2760740Z                                                            ^
+2026-11-03T10:25:57.2761426Z tests/p1117/lineage.c:20:77: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2762294Z   assert(nl_parser_parse_function_unit(parser, &unit, NULL) == NL_PARSE_OK);
+2026-11-03T10:25:57.2763099Z                                                                             ^
+2026-11-03T10:25:57.2763850Z tests/p1117/lineage.c:21:49: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2764585Z   assert(nl_semantic_create(&c) == NL_CHECK_OK);
+2026-11-03T10:25:57.2765056Z                                                 ^
+2026-11-03T10:25:57.2765730Z tests/p1117/lineage.c:22:40: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2766444Z   const NLSyntaxTree *units[] = {unit};
+2026-11-03T10:25:57.2766870Z                                        ^
+2026-11-03T10:25:57.2767526Z tests/p1117/lineage.c:23:66: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2768408Z   assert(nl_semantic_register_function_unit(c, units, 1, NULL) == NL_CHECK_OK);
+2026-11-03T10:25:57.2769080Z                                                                  ^
+2026-11-03T10:25:57.2769803Z tests/p1117/lineage.c:23:80: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2770669Z   assert(nl_semantic_register_function_unit(c, units, 1, NULL) == NL_CHECK_OK);
+2026-11-03T10:25:57.2771385Z                                                                                ^
+2026-11-03T10:25:57.2772121Z tests/p1117/lineage.c:24:76: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2773145Z   assert(nl_source_create("main()", 6, "<P1117-lineage>", &entry_source) ==
+2026-11-03T10:25:57.2773816Z                                                                            ^
+2026-11-03T10:25:57.2774630Z tests/p1117/lineage.c:25:24: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2775374Z          NL_SOURCE_OK);
+2026-11-03T10:25:57.2775754Z                        ^
+2026-11-03T10:25:57.2776406Z tests/p1117/lineage.c:26:72: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2777343Z   assert(nl_parser_create(entry_source, &entry_parser) == NL_PARSE_OK);
+2026-11-03T10:25:57.2778085Z                                                                        ^
+2026-11-03T10:25:57.2778919Z tests/p1117/lineage.c:27:75: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2779868Z   assert(nl_parser_parse_expression_fragment(entry_parser, &tree, NULL) ==
+2026-11-03T10:25:57.2780579Z                                                                           ^
+2026-11-03T10:25:57.2781404Z tests/p1117/lineage.c:28:23: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2782147Z          NL_PARSE_OK);
+2026-11-03T10:25:57.2782505Z                       ^
+2026-11-03T10:25:57.2783456Z tests/p1117/lineage.c:29:78: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2784406Z   assert(nl_semantic_check_expression(c, tree, &owned, NULL) == NL_CHECK_OK);
+2026-11-03T10:25:57.2785392Z                                                                              ^
+2026-11-03T10:25:57.2786206Z tests/p1117/lineage.c:30:28: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2786978Z   NLCheckedFragment *body =
+2026-11-03T10:25:57.2787389Z                            ^
+2026-11-03T10:25:57.2788265Z tests/p1117/lineage.c:31:49: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2789206Z       (NLCheckedFragment *)nl_checked_call_body(owned, nl_checked_root(owned));
+2026-11-03T10:25:57.2790027Z                                                 ^
+2026-11-03T10:25:57.2790738Z tests/p1117/lineage.c:31:80: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2791858Z       (NLCheckedFragment *)nl_checked_call_body(owned, nl_checked_root(owned));
+2026-11-03T10:25:57.2821309Z                                                                                ^
+2026-11-03T10:25:57.2822220Z tests/p1117/lineage.c:32:16: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2823179Z   assert(body);
+2026-11-03T10:25:57.2823518Z                ^
+2026-11-03T10:25:57.2824153Z tests/p1117/lineage.c:33:34: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2824932Z   NLCheckedNodeId calls[2] = {0};
+2026-11-03T10:25:57.2825376Z                                  ^
+2026-11-03T10:25:57.2826064Z tests/p1117/lineage.c:34:20: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2826801Z   size_t count = 0;
+2026-11-03T10:25:57.2827152Z                    ^
+2026-11-03T10:25:57.2827773Z tests/p1117/lineage.c:35:57: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2828602Z   for (size_t n = 1; n <= body->count && count < 2; ++n)
+2026-11-03T10:25:57.2829145Z                                                         ^
+2026-11-03T10:25:57.2829890Z tests/p1117/lineage.c:36:63: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2830770Z     if (body->nodes[n - 1].kind == NL_CHECKED_REGISTERED_CALL)
+2026-11-03T10:25:57.2831362Z                                                               ^
+2026-11-03T10:25:57.2832146Z tests/p1117/lineage.c:37:26: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2833034Z       calls[count++] = n;
+2026-11-03T10:25:57.2833435Z                          ^
+2026-11-03T10:25:57.2834083Z tests/p1117/lineage.c:38:52: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2834887Z   assert(count == 2 && accepts(body, calls[0], c));
+2026-11-03T10:25:57.2835406Z                                                    ^
+2026-11-03T10:25:57.2836196Z tests/p1117/lineage.c:39:56: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2837055Z   NLCheckedNodeView *call = &body->nodes[calls[0] - 1];
+2026-11-03T10:25:57.2837565Z                                                        ^
+2026-11-03T10:25:57.2838287Z tests/p1117/lineage.c:40:63: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2839178Z   const NLCheckedNodeView *other = &body->nodes[calls[1] - 1];
+2026-11-03T10:25:57.2839794Z                                                               ^
+2026-11-03T10:25:57.2840560Z tests/p1117/lineage.c:41:30: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2841323Z   NLCheckedFragment *callee =
+2026-11-03T10:25:57.2841746Z                              ^
+2026-11-03T10:25:57.2842421Z tests/p1117/lineage.c:42:65: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2843485Z       (NLCheckedFragment *)nl_checked_call_body(body, calls[0]);
+2026-11-03T10:25:57.2844103Z                                                                 ^
+2026-11-03T10:25:57.2844888Z tests/p1117/lineage.c:43:71: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2846068Z   assert(callee && call->results[0].value != other->results[0].value);
+2026-11-03T10:25:57.2846733Z                                                                       ^
+2026-11-03T10:25:57.2847529Z tests/p1117/lineage.c:44:62: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2848616Z   NLCheckedNodeView *root = &callee->nodes[callee->root - 1];
+2026-11-03T10:25:57.2849241Z                                                              ^
+2026-11-03T10:25:57.2850000Z tests/p1117/lineage.c:45:75: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2850915Z   printf("P1117 actual result call=%zu body_returned=%zu body_normal=%zu "
+2026-11-03T10:25:57.2851597Z                                                                           ^
+2026-11-03T10:25:57.2852384Z tests/p1117/lineage.c:46:24: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2853282Z          "other=%zu\n",
+2026-11-03T10:25:57.2853659Z                        ^
+2026-11-03T10:25:57.2854308Z tests/p1117/lineage.c:47:79: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2855231Z          call->results[0].value, root->returned.value, root->results[0].value,
+2026-11-03T10:25:57.2855937Z                                                                               ^
+2026-11-03T10:25:57.2856755Z tests/p1117/lineage.c:48:35: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2857500Z          other->results[0].value);
+2026-11-03T10:25:57.2857910Z                                   ^
+2026-11-03T10:25:57.2858589Z tests/p1117/lineage.c:49:66: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2859473Z   const NLCheckedNodeView saved_call = *call, saved_root = *root;
+2026-11-03T10:25:57.2860104Z                                                                  ^
+2026-11-03T10:25:57.2860869Z tests/p1117/lineage.c:50:40: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2861639Z   call->results[0] = other->results[0];
+2026-11-03T10:25:57.2862094Z                                        ^
+2026-11-03T10:25:57.2862796Z tests/p1117/lineage.c:51:51: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2863776Z   const bool foreign = accepts(body, calls[0], c);
+2026-11-03T10:25:57.2864320Z                                                   ^
+2026-11-03T10:25:57.2864993Z tests/p1117/lineage.c:52:38: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2865703Z   root->returned = other->results[0];
+2026-11-03T10:25:57.2866155Z                                      ^
+2026-11-03T10:25:57.2866870Z tests/p1117/lineage.c:53:60: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2867742Z   const bool coherent_foreign = accepts(body, calls[0], c);
+2026-11-03T10:25:57.2868342Z                                                            ^
+2026-11-03T10:25:57.2869125Z tests/p1117/lineage.c:54:22: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2869872Z   *call = saved_call;
+2026-11-03T10:25:57.2870232Z                      ^
+2026-11-03T10:25:57.2870880Z tests/p1117/lineage.c:55:22: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2871630Z   *root = saved_root;
+2026-11-03T10:25:57.2871980Z                      ^
+2026-11-03T10:25:57.2872620Z tests/p1117/lineage.c:56:38: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2873553Z   assert(accepts(body, calls[0], c));
+2026-11-03T10:25:57.2874007Z                                      ^
+2026-11-03T10:25:57.2874728Z tests/p1117/lineage.c:57:10: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2875469Z   printf(
+2026-11-03T10:25:57.2875781Z          ^
+2026-11-03T10:25:57.2876387Z tests/p1117/lineage.c:58:65: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2877580Z       "P1117 foreign result accepted=%d coherent_foreign_return accepted=%d\n",
+2026-11-03T10:25:57.2878271Z                                                                 ^
+2026-11-03T10:25:57.2879193Z tests/p1117/lineage.c:58:80: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2880134Z       "P1117 foreign result accepted=%d coherent_foreign_return accepted=%d\n",
+2026-11-03T10:25:57.2880835Z                                                                                ^
+2026-11-03T10:25:57.2881627Z tests/p1117/lineage.c:59:34: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2882376Z       foreign, coherent_foreign);
+2026-11-03T10:25:57.2882799Z                                  ^
+2026-11-03T10:25:57.2883628Z tests/p1117/lineage.c:60:61: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2884467Z   /* No emission or execution of either altered artifact. */
+2026-11-03T10:25:57.2885051Z                                                             ^
+2026-11-03T10:25:57.2885825Z tests/p1117/lineage.c:61:29: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2886567Z   nl_checked_destroy(owned);
+2026-11-03T10:25:57.2886973Z                             ^
+2026-11-03T10:25:57.2887638Z tests/p1117/lineage.c:62:26: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2888396Z   nl_semantic_destroy(c);
+2026-11-03T10:25:57.2888793Z                          ^
+2026-11-03T10:25:57.2889458Z tests/p1117/lineage.c:63:32: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2890206Z   nl_syntax_tree_destroy(tree);
+2026-11-03T10:25:57.2890634Z                                ^
+2026-11-03T10:25:57.2891315Z tests/p1117/lineage.c:64:35: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2892074Z   nl_parser_destroy(entry_parser);
+2026-11-03T10:25:57.2892509Z                                   ^
+2026-11-03T10:25:57.2893399Z tests/p1117/lineage.c:65:35: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2894157Z   nl_source_destroy(entry_source);
+2026-11-03T10:25:57.2894586Z                                   ^
+2026-11-03T10:25:57.2895291Z tests/p1117/lineage.c:66:32: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2896049Z   nl_syntax_tree_destroy(unit);
+2026-11-03T10:25:57.2896463Z                                ^
+2026-11-03T10:25:57.2897139Z tests/p1117/lineage.c:67:29: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2897916Z   nl_parser_destroy(parser);
+2026-11-03T10:25:57.2898410Z                             ^
+2026-11-03T10:25:57.2899086Z tests/p1117/lineage.c:68:29: error: code should be clang-formatted [-Wclang-format-violations]
+2026-11-03T10:25:57.2899840Z   nl_source_destroy(source);
+2026-11-03T10:25:57.2900227Z                             ^
+2026-11-03T10:25:58.4335197Z clang-format failed (exit 1); generating exact suggestions with /home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-format-23
+2026-11-03T10:25:58.4357512Z Checked checkout: 9f1d1375079eccc34a9cd0eae7853bdc24b04a50
+2026-11-03T10:25:58.4383294Z clang-format version: clang-format version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)
+2026-11-03T10:26:02.8795852Z Suggested patch for 1 C/H file(s): /home/runner/work/_temp/format-suggestions.patch
+2026-11-03T10:26:02.8798085Z Review the complete patch, then: git apply --check '/home/runner/work/_temp/format-suggestions.patch' && git apply '/home/runner/work/_temp/format-suggestions.patch'
+2026-11-03T10:26:02.8799277Z Alternative after review: bash scripts/format.sh
+2026-11-03T10:26:02.8799986Z ----- BEGIN EXACT clang-format SUGGESTIONS -----
+2026-11-03T10:26:02.8808153Z --- a/tests/p1117/lineage.c
+2026-11-03T10:26:02.8808940Z +++ b/tests/p1117/lineage.c
+2026-11-03T10:26:02.8809321Z @@ -3,68 +3,71 @@
+2026-11-03T10:26:02.8809646Z  #undef main
+2026-11-03T10:26:02.8809962Z  #include <assert.h>
+2026-11-03T10:26:02.8810498Z  static bool accepts(const NLCheckedFragment *f, NLCheckedNodeId call,
+2026-11-03T10:26:02.8811333Z -                    const NLSemanticContext *c) {
+2026-11-03T10:26:02.8811910Z -  V0Program p = {.unit = nl_semantic_unit_type(c),
+2026-11-03T10:26:02.8812670Z -                 .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
+2026-11-03T10:26:02.8813584Z -  return predicate_call(f, call, &p);
+2026-11-03T10:26:02.8814115Z +                    const NLSemanticContext *c)
+2026-11-03T10:26:02.8814551Z +{
+2026-11-03T10:26:02.8814913Z +    V0Program p = {.unit = nl_semantic_unit_type(c),
+2026-11-03T10:26:02.8815344Z +                   .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
+2026-11-03T10:26:02.8815690Z +    return predicate_call(f, call, &p);
+2026-11-03T10:26:02.8815972Z  }
+2026-11-03T10:26:02.8816190Z -int main(int argc, char **argv) {
+2026-11-03T10:26:02.8816480Z -  assert(argc == 2);
+2026-11-03T10:26:02.8816767Z -  NLSource *source = NULL, *entry_source = NULL;
+2026-11-03T10:26:02.8817122Z -  NLParser *parser = NULL, *entry_parser = NULL;
+2026-11-03T10:26:02.8817443Z -  NLSyntaxTree *unit = NULL, *tree = NULL;
+2026-11-03T10:26:02.8817759Z -  NLSemanticContext *c = NULL;
+2026-11-03T10:26:02.8818056Z -  NLCheckedFragment *owned = NULL;
+2026-11-03T10:26:02.8818402Z -  assert(nl_source_load(argv[1], &source) == NL_SOURCE_OK);
+2026-11-03T10:26:02.8818802Z -  assert(nl_parser_create(source, &parser) == NL_PARSE_OK);
+2026-11-03T10:26:02.8819255Z -  assert(nl_parser_parse_function_unit(parser, &unit, NULL) == NL_PARSE_OK);
+2026-11-03T10:26:02.8819703Z -  assert(nl_semantic_create(&c) == NL_CHECK_OK);
+2026-11-03T10:26:02.8820034Z -  const NLSyntaxTree *units[] = {unit};
+2026-11-03T10:26:02.8820439Z -  assert(nl_semantic_register_function_unit(c, units, 1, NULL) == NL_CHECK_OK);
+2026-11-03T10:26:02.8820954Z -  assert(nl_source_create("main()", 6, "<P1117-lineage>", &entry_source) ==
+2026-11-03T10:26:02.8821341Z -         NL_SOURCE_OK);
+2026-11-03T10:26:02.8821682Z -  assert(nl_parser_create(entry_source, &entry_parser) == NL_PARSE_OK);
+2026-11-03T10:26:02.8822173Z -  assert(nl_parser_parse_expression_fragment(entry_parser, &tree, NULL) ==
+2026-11-03T10:26:02.8822567Z -         NL_PARSE_OK);
+2026-11-03T10:26:02.8823498Z -  assert(nl_semantic_check_expression(c, tree, &owned, NULL) == NL_CHECK_OK);
+2026-11-03T10:26:02.8823920Z -  NLCheckedFragment *body =
+2026-11-03T10:26:02.8824305Z -      (NLCheckedFragment *)nl_checked_call_body(owned, nl_checked_root(owned));
+2026-11-03T10:26:02.8824708Z -  assert(body);
+2026-11-03T10:26:02.8824964Z -  NLCheckedNodeId calls[2] = {0};
+2026-11-03T10:26:02.8825247Z -  size_t count = 0;
+2026-11-03T10:26:02.8825529Z -  for (size_t n = 1; n <= body->count && count < 2; ++n)
+2026-11-03T10:26:02.8825924Z -    if (body->nodes[n - 1].kind == NL_CHECKED_REGISTERED_CALL)
+2026-11-03T10:26:02.8826291Z -      calls[count++] = n;
+2026-11-03T10:26:02.8826618Z -  assert(count == 2 && accepts(body, calls[0], c));
+2026-11-03T10:26:02.8826996Z -  NLCheckedNodeView *call = &body->nodes[calls[0] - 1];
+2026-11-03T10:26:02.8827439Z -  const NLCheckedNodeView *other = &body->nodes[calls[1] - 1];
+2026-11-03T10:26:02.8828002Z -  NLCheckedFragment *callee =
+2026-11-03T10:26:02.8828509Z -      (NLCheckedFragment *)nl_checked_call_body(body, calls[0]);
+2026-11-03T10:26:02.8829219Z -  assert(callee && call->results[0].value != other->results[0].value);
+2026-11-03T10:26:02.8829940Z -  NLCheckedNodeView *root = &callee->nodes[callee->root - 1];
+2026-11-03T10:26:02.8830670Z -  printf("P1117 actual result call=%zu body_returned=%zu body_normal=%zu "
+2026-11-03T10:26:02.8831280Z -         "other=%zu\n",
+2026-11-03T10:26:02.8831765Z -         call->results[0].value, root->returned.value, root->results[0].value,
+2026-11-03T10:26:02.8832278Z -         other->results[0].value);
+2026-11-03T10:26:02.8833041Z -  const NLCheckedNodeView saved_call = *call, saved_root = *root;
+2026-11-03T10:26:02.8833478Z -  call->results[0] = other->results[0];
+2026-11-03T10:26:02.8833808Z -  const bool foreign = accepts(body, calls[0], c);
+2026-11-03T10:26:02.8834144Z -  root->returned = other->results[0];
+2026-11-03T10:26:02.8834705Z -  const bool coherent_foreign = accepts(body, calls[0], c);
+2026-11-03T10:26:02.8835053Z -  *call = saved_call;
+2026-11-03T10:26:02.8835291Z -  *root = saved_root;
+2026-11-03T10:26:02.8835531Z -  assert(accepts(body, calls[0], c));
+2026-11-03T10:26:02.8835809Z -  printf(
+2026-11-03T10:26:02.8836143Z -      "P1117 foreign result accepted=%d coherent_foreign_return accepted=%d\n",
+2026-11-03T10:26:02.8836549Z -      foreign, coherent_foreign);
+2026-11-03T10:26:02.8836886Z -  /* No emission or execution of either altered artifact. */
+2026-11-03T10:26:02.8837240Z -  nl_checked_destroy(owned);
+2026-11-03T10:26:02.8837509Z -  nl_semantic_destroy(c);
+2026-11-03T10:26:02.8837772Z -  nl_syntax_tree_destroy(tree);
+2026-11-03T10:26:02.8838063Z -  nl_parser_destroy(entry_parser);
+2026-11-03T10:26:02.8838348Z -  nl_source_destroy(entry_source);
+2026-11-03T10:26:02.8838625Z -  nl_syntax_tree_destroy(unit);
+2026-11-03T10:26:02.8838890Z -  nl_parser_destroy(parser);
+2026-11-03T10:26:02.8839146Z -  nl_source_destroy(source);
+2026-11-03T10:26:02.8839429Z -  return foreign || coherent_foreign ? 1 : 0;
+2026-11-03T10:26:02.8839738Z +int main(int argc, char **argv)
+2026-11-03T10:26:02.8839989Z +{
+2026-11-03T10:26:02.8840192Z +    assert(argc == 2);
+2026-11-03T10:26:02.8840465Z +    NLSource *source = NULL, *entry_source = NULL;
+2026-11-03T10:26:02.8840805Z +    NLParser *parser = NULL, *entry_parser = NULL;
+2026-11-03T10:26:02.8841143Z +    NLSyntaxTree *unit = NULL, *tree = NULL;
+2026-11-03T10:26:02.8841455Z +    NLSemanticContext *c = NULL;
+2026-11-03T10:26:02.8841737Z +    NLCheckedFragment *owned = NULL;
+2026-11-03T10:26:02.8842077Z +    assert(nl_source_load(argv[1], &source) == NL_SOURCE_OK);
+2026-11-03T10:26:02.8842480Z +    assert(nl_parser_create(source, &parser) == NL_PARSE_OK);
+2026-11-03T10:26:02.8843351Z +    assert(nl_parser_parse_function_unit(parser, &unit, NULL) == NL_PARSE_OK);
+2026-11-03T10:26:02.8843787Z +    assert(nl_semantic_create(&c) == NL_CHECK_OK);
+2026-11-03T10:26:02.8844109Z +    const NLSyntaxTree *units[] = {unit};
+2026-11-03T10:26:02.8844487Z +    assert(nl_semantic_register_function_unit(c, units, 1, NULL) ==
+2026-11-03T10:26:02.8844869Z +           NL_CHECK_OK);
+2026-11-03T10:26:02.8845224Z +    assert(nl_source_create("main()", 6, "<P1117-lineage>", &entry_source) ==
+2026-11-03T10:26:02.8845607Z +           NL_SOURCE_OK);
+2026-11-03T10:26:02.8845946Z +    assert(nl_parser_create(entry_source, &entry_parser) == NL_PARSE_OK);
+2026-11-03T10:26:02.8846429Z +    assert(nl_parser_parse_expression_fragment(entry_parser, &tree, NULL) ==
+2026-11-03T10:26:02.8846810Z +           NL_PARSE_OK);
+2026-11-03T10:26:02.8847163Z +    assert(nl_semantic_check_expression(c, tree, &owned, NULL) == NL_CHECK_OK);
+2026-11-03T10:26:02.8847667Z +    NLCheckedFragment *body = (NLCheckedFragment *)nl_checked_call_body(
+2026-11-03T10:26:02.8848061Z +        owned, nl_checked_root(owned));
+2026-11-03T10:26:02.8848338Z +    assert(body);
+2026-11-03T10:26:02.8848577Z +    NLCheckedNodeId calls[2] = {0};
+2026-11-03T10:26:02.8848858Z +    size_t count = 0;
+2026-11-03T10:26:02.8849147Z +    for (size_t n = 1; n <= body->count && count < 2; ++n)
+2026-11-03T10:26:02.8849535Z +        if (body->nodes[n - 1].kind == NL_CHECKED_REGISTERED_CALL)
+2026-11-03T10:26:02.8849880Z +            calls[count++] = n;
+2026-11-03T10:26:02.8850183Z +    assert(count == 2 && accepts(body, calls[0], c));
+2026-11-03T10:26:02.8850548Z +    NLCheckedNodeView *call = &body->nodes[calls[0] - 1];
+2026-11-03T10:26:02.8850953Z +    const NLCheckedNodeView *other = &body->nodes[calls[1] - 1];
+2026-11-03T10:26:02.8851307Z +    NLCheckedFragment *callee =
+2026-11-03T10:26:02.8851652Z +        (NLCheckedFragment *)nl_checked_call_body(body, calls[0]);
+2026-11-03T10:26:02.8852409Z +    assert(callee && call->results[0].value != other->results[0].value);
+2026-11-03T10:26:02.8853024Z +    NLCheckedNodeView *root = &callee->nodes[callee->root - 1];
+2026-11-03T10:26:02.8853573Z +    printf("P1117 actual result call=%zu body_returned=%zu body_normal=%zu "
+2026-11-03T10:26:02.8854095Z +           "other=%zu\n",
+2026-11-03T10:26:02.8854450Z +           call->results[0].value, root->returned.value, root->results[0].value,
+2026-11-03T10:26:02.8854840Z +           other->results[0].value);
+2026-11-03T10:26:02.8855191Z +    const NLCheckedNodeView saved_call = *call, saved_root = *root;
+2026-11-03T10:26:02.8855571Z +    call->results[0] = other->results[0];
+2026-11-03T10:26:02.8855895Z +    const bool foreign = accepts(body, calls[0], c);
+2026-11-03T10:26:02.8856227Z +    root->returned = other->results[0];
+2026-11-03T10:26:02.8856585Z +    const bool coherent_foreign = accepts(body, calls[0], c);
+2026-11-03T10:26:02.8856937Z +    *call = saved_call;
+2026-11-03T10:26:02.8857187Z +    *root = saved_root;
+2026-11-03T10:26:02.8857439Z +    assert(accepts(body, calls[0], c));
+2026-11-03T10:26:02.8857810Z +    printf("P1117 foreign result accepted=%d coherent_foreign_return "
+2026-11-03T10:26:02.8858188Z +           "accepted=%d\n",
+2026-11-03T10:26:02.8858459Z +           foreign, coherent_foreign);
+2026-11-03T10:26:02.8858803Z +    /* No emission or execution of either altered artifact. */
+2026-11-03T10:26:02.8859146Z +    nl_checked_destroy(owned);
+2026-11-03T10:26:02.8859401Z +    nl_semantic_destroy(c);
+2026-11-03T10:26:02.8859677Z +    nl_syntax_tree_destroy(tree);
+2026-11-03T10:26:02.8859969Z +    nl_parser_destroy(entry_parser);
+2026-11-03T10:26:02.8860256Z +    nl_source_destroy(entry_source);
+2026-11-03T10:26:02.8860531Z +    nl_syntax_tree_destroy(unit);
+2026-11-03T10:26:02.8860806Z +    nl_parser_destroy(parser);
+2026-11-03T10:26:02.8861060Z +    nl_source_destroy(source);
+2026-11-03T10:26:02.8861342Z +    return foreign || coherent_foreign ? 1 : 0;
+2026-11-03T10:26:02.8861643Z  }
+2026-11-03T10:26:02.8861900Z ----- END EXACT clang-format SUGGESTIONS -----
+2026-11-03T10:26:02.8871905Z ##[error]Process completed with exit code 1.
+2026-11-03T10:26:02.8958017Z ##[group]Run actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+2026-11-03T10:26:02.8958460Z with:
+2026-11-03T10:26:02.8958867Z   name: clang-format-suggestions-9f1d1375079eccc34a9cd0eae7853bdc24b04a50-attempt1
+2026-11-03T10:26:02.8959396Z   path: /home/runner/work/_temp/format-suggestions.patch
+2026-11-03T10:26:02.8959745Z   if-no-files-found: ignore
+2026-11-03T10:26:02.8960005Z   retention-days: 7
+2026-11-03T10:26:02.8960243Z   compression-level: 6
+2026-11-03T10:26:02.8960497Z   overwrite: false
+2026-11-03T10:26:02.8960738Z   include-hidden-files: false
+2026-11-03T10:26:02.8961005Z ##[endgroup]
+2026-11-03T10:26:03.0658187Z (node:3472) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+2026-11-03T10:26:03.0659086Z (Use `node --trace-deprecation ...` to show where the warning was created)
+2026-11-03T10:26:03.0719769Z With the provided path, there will be 1 file uploaded
+2026-11-03T10:26:03.0720680Z Artifact name is valid!
+2026-11-03T10:26:03.0721089Z Root directory input is valid!
+2026-11-03T10:26:03.3416403Z Beginning upload of artifact content to blob storage
+2026-11-03T10:26:03.3594985Z (node:3472) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+2026-11-03T10:26:03.4775145Z Uploaded bytes 1549
+2026-11-03T10:26:03.5205207Z Finished uploading artifact content to blob storage!
+2026-11-03T10:26:03.5206202Z SHA256 digest of uploaded artifact zip is 055c2976e39bfbec87331c94526066ecea9caa51184a8c806cb285b025f98e2c
+2026-11-03T10:26:03.5207831Z Finalizing artifact upload
+2026-11-03T10:26:04.0140328Z Artifact clang-format-suggestions-9f1d1375079eccc34a9cd0eae7853bdc24b04a50-attempt1.zip successfully finalized. Artifact ID 13223081374
+2026-11-03T10:26:04.0142249Z Artifact clang-format-suggestions-9f1d1375079eccc34a9cd0eae7853bdc24b04a50-attempt1 has been successfully uploaded! Final size is 1549 bytes. Artifact ID is 13223081374
+2026-11-03T10:26:04.0148329Z Artifact download URL: https://github.com/wakairo/NewLang_Compiler/actions/runs/41619166518/artifacts/13223081374
+2026-11-03T10:26:04.0392653Z Post job cleanup.
+2026-11-03T10:26:04.1278924Z [command]/usr/bin/git version
+2026-11-03T10:26:04.1326070Z git version 2.56.0
+2026-11-03T10:26:04.1363159Z Temporarily overriding HOME='/home/runner/work/_temp/78da0ec1-8c84-4f08-a7b3-0ab9799ea232' before making global git config changes
+2026-11-03T10:26:04.1364586Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-03T10:26:04.1368036Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-03T10:26:04.1412101Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T10:26:04.1454332Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T10:26:04.1732157Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T10:26:04.1781598Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T10:26:04.2221322Z Cleaning up orphan processes
+2026-11-03T10:26:04.2590018Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683, actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+

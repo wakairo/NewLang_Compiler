@@ -1,0 +1,14 @@
+{
+  "lineage_original_sha256": "d4614473cb0bd5d4cfd673bea9ea994b5e22ffc08e608734604214e8b52d7c13",
+  "lineage_successor_sha256": "5af0b0c5c7ca37b5a02f7e7a532f83db0f8b52b7a15ed967b657086c13137c07",
+  "expected": {
+    "genuine": true,
+    "foreign_call_result": false,
+    "coherent_foreign_root_return": false,
+    "all_source_restored_before_destroy": true,
+    "no_emission_or_native_from_altered_graph": true,
+    "production_delta": false,
+    "all_live_tracked_C_format_success": true
+  },
+  "retained": "Every old source/oracle/freeze, initial CI RED and raw-v1 archive remain exact; immutable original lineage.c only is noncompiled historical input."
+}

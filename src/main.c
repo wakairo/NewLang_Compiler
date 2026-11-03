@@ -61,6 +61,7 @@ typedef struct {
     NLSymbolId
         parameter; /* representative body-local C formal, not caller ID */
     NLSymbolId ref_parameter; /* authenticated explicit scoped write formal */
+    bool quantity_parameter;  /* private pure-predicate size_t carrier */
 } V0Function;
 
 typedef struct {
@@ -1979,8 +1980,9 @@ static bool copy_if_two_pair_frame(const NLCheckedFragment *f,
  * this exact registration. Copy arguments retain package identity when bound
  * to the fresh formal. Names locate that binding in the immutable registry;
  * neither source tokens nor scalar_known can supply runtime arguments. */
-static bool v1_call_parameter(const NLCheckedFragment *f, NLCheckedNodeId id,
-                              const V0Program *p, NLSymbolId *parameter)
+static bool v1_call_parameter_kind(const NLCheckedFragment *f,
+                                   NLCheckedNodeId id, const V0Program *p,
+                                   NLSymbolId *parameter, bool allow_quantity)
 {
     const NLCheckedNodeView *call = nl_checked_node_view(f, id);
     const NLSemanticContext *c = nl_checked_context(f);
@@ -2019,14 +2021,23 @@ static bool v1_call_parameter(const NLCheckedFragment *f, NLCheckedNodeId id,
     }
     const NLCheckedNodeView *arg =
         nl_checked_node_view(f, call->first_argument);
-    if (fn->parameters[0] != p->u8 || call->type != p->u8 || arg == NULL ||
-        arg->next_argument != 0 || arg->parameter_type != p->u8 ||
-        !v1_scalar(f, call->first_argument, p))
+    const NLTypeId type = fn->parameters[0];
+    const bool quantity =
+        allow_quantity && type == nl_semantic_core_type(c, NL_TYPE_USIZE);
+    if ((!quantity && type != p->u8) || call->type != p->u8 || arg == NULL ||
+        arg->next_argument != 0 || arg->parameter_type != type ||
+        fn->body->parameter_names[0] == NULL)
+        return false;
+    if (quantity) {
+        V0Program operands = *p;
+        if (!quantity_scalar(f, call->first_argument, &operands))
+            return false;
+    } else if (!v1_scalar(f, call->first_argument, p))
         return false;
     for (size_t i = 0; i < c->binding_count; ++i) {
         const NLBindingEntry *binding = &c->bindings[i];
         if (binding->view.value == arg->results[0].value &&
-            binding->view.type == p->u8 && binding->hidden &&
+            binding->view.type == type && binding->hidden && binding->name &&
             strcmp(binding->name, fn->body->parameter_names[0]) == 0) {
             if (*parameter != 0)
                 return false;
@@ -2035,6 +2046,14 @@ static bool v1_call_parameter(const NLCheckedFragment *f, NLCheckedNodeId id,
     }
     return *parameter != 0;
 }
+
+static bool v1_call_parameter(const NLCheckedFragment *f, NLCheckedNodeId id,
+                              const V0Program *p, NLSymbolId *parameter)
+{
+    return v1_call_parameter_kind(f, id, p, parameter, false);
+}
+
+#include "c17_predicate_internal.h"
 
 /* Finite scalar callee: Copy locals and a scalar tail/return. Only the tail
  * may additionally be one authenticated u8 call, within two scalar frames.
@@ -2116,6 +2135,8 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
         !call->body_backed || call->owner_call.definition.definition_checked ||
         call->terminates)
         return false;
+    if (predicate_call(fragment, id, program))
+        return true;
     NLSymbolId parameter = 0;
     if (!v1_call_parameter(fragment, id, program, &parameter))
         return false;
@@ -2208,7 +2229,7 @@ static bool v0_validate_call(const NLCheckedFragment *fragment,
     if (program->count == NL_SEMANTIC_MAX_FUNCTION_DECLARATIONS)
         return false;
     program->functions[program->count++] = (V0Function){
-        call->function, body, call->type, parameter, ref_parameter};
+        call->function, body, call->type, parameter, ref_parameter, false};
     return scalar || unit_formals ||
            v0_validate_node(body, nl_checked_root(body), program);
 }
@@ -3104,6 +3125,32 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
     }
 }
 
+/* The pure predicate consumer validated both literal arms and the real Bool
+ * producer. Emit that guest condition exactly once, including direct IF
+ * RETURN/tail forms; never emit the checker's cached truth. */
+static bool predicate_emit_return(FILE *stream, const NLCheckedFragment *f,
+                                  const NLCheckedNodeView *value)
+{
+    const NLCheckedNodeView *condition =
+        nl_checked_node_view(f, value->initializer);
+    if (!emit_less_operands(stream, f, condition, 1) ||
+        fputs("    return (", stream) < 0 ||
+        !emit_quantity_bool(stream, f, condition) || fputs(" ? ", stream) < 0)
+        return false;
+    for (size_t a = 0; a < 2; ++a) {
+        const NLCheckedNodeId id = (NLCheckedNodeId)(value - f->nodes) + 1;
+        const NLCheckedFragment *arm = nl_checked_if_arm(f, id, a);
+        const NLCheckedNodeView *root =
+            nl_checked_node_view(arm, nl_checked_root(arm));
+        const NLCheckedNodeView *block =
+            nl_checked_node_view(arm, root->initializer);
+        if (!v1_emit_scalar(stream, nl_checked_node_view(arm, block->tail)) ||
+            (a == 0 && fputs(" : ", stream) < 0))
+            return false;
+    }
+    return fputs(");\n", stream) >= 0;
+}
+
 static bool v1_emit_body(FILE *stream, const V0Function *fn)
 {
     const NLCheckedFragment *f = fn->body;
@@ -3120,6 +3167,12 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
         if (v->kind == NL_CHECKED_RETURN) {
             const NLCheckedNodeView *returned =
                 nl_checked_node_view(f, v->initializer);
+            if (fn->quantity_parameter && returned->kind == NL_CHECKED_IF) {
+                if (!predicate_emit_return(stream, f, returned))
+                    return false;
+                i = v->next_item;
+                continue;
+            }
             if (returned->kind == NL_CHECKED_REPLACE) {
                 if (!gate_emit_replace(stream, f, v->initializer, 1, false) ||
                     fprintf(stream, "    return nl_replace_old_%zu;\n",
@@ -3133,14 +3186,25 @@ static bool v1_emit_body(FILE *stream, const V0Function *fn)
                                 nl_checked_node_view(f, v->initializer)) ||
                 fputs(";\n", stream) < 0)
                 return false;
-        } else if (!v0_emit_node(stream, f, i, 1)) {
-            return false;
+        } else {
+            const NLCheckedNodeView *init =
+                nl_checked_node_view(f, v->initializer);
+            if (fn->quantity_parameter && v->kind == NL_CHECKED_BINDING &&
+                init && init->kind == NL_CHECKED_IF &&
+                !emit_less_operands(
+                    stream, f, nl_checked_node_view(f, init->initializer), 1))
+                return false;
+            if (!v0_emit_node(stream, f, i, 1))
+                return false;
         }
         i = v->next_item;
     }
     if (root->tail != 0) {
         const NLCheckedNodeView *tail = nl_checked_node_view(f, root->tail);
-        if (tail->kind == NL_CHECKED_REPLACE) {
+        if (fn->quantity_parameter && tail->kind == NL_CHECKED_IF) {
+            if (!predicate_emit_return(stream, f, tail))
+                return false;
+        } else if (tail->kind == NL_CHECKED_REPLACE) {
             if (!gate_emit_replace(stream, f, root->tail, 1, false) ||
                 fprintf(stream, "    return nl_replace_old_%zu;\n",
                         root->tail) < 0)
@@ -3166,8 +3230,10 @@ static bool v0_emit_signature(FILE *stream, const V0Function *fn, NLTypeId u8)
                        fn->result == u8 ? "uint8_t" : "void", fn->function,
                        fn->ref_parameter, fn->parameter) >= 0;
     if (fn->parameter != 0)
-        return fprintf(stream, "static uint8_t nl_fn_%zu(uint8_t nl_local_%zu)",
-                       fn->function, fn->parameter) >= 0;
+        return fprintf(stream, "static uint8_t nl_fn_%zu(%s nl_local_%zu)",
+                       fn->function,
+                       fn->quantity_parameter ? "size_t" : "uint8_t",
+                       fn->parameter) >= 0;
     return fprintf(stream,
                    fn->result == u8 ? "static uint8_t nl_fn_%zu(void)"
                                     : "static void nl_fn_%zu(void)",

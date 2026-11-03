@@ -1,0 +1,11 @@
+{
+  "version": 10,
+  "previous_manifest_sha256": "1a90c13b239f2029290ffb460f99ed6c22c66f73e97087f05885a346ffabe432",
+  "archive_sha256": "97a77f9fb2f231763f5c85ea391c5349baa4fcc5cb64b698a8b1badace6da2e6",
+  "files": {
+    "CURRENT-v10.md": "ac8ec417f70306144339b3f663e67bc282a56e077bbde3b620ef4a9aeb24a047",
+    "legacy_native_current_v2.py": "ab6686ae20c3840975ce307017ce490acd898398f300b964a1faf723f4e6f52d",
+    "legacy-native-oracle-v10.json": "399a455277949408bef42aac0b92e22d382bf41b87f7d0db46e21d438bd8c314",
+    "evidence/legacy-less-integration-v8-first-RED.log": "4edfcd42a4bd3e78802f04f82d5e64fde8a745cec38bac030165c6cc85901dde"
+  }
+}

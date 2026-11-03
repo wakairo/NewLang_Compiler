@@ -1,0 +1,199 @@
+{
+  "version": 3,
+  "authority": {
+    "main": "65055be55934416c911453463b5f26fa461e8d6a",
+    "tree": "468bcea0ab46ad530c08bcdbb17e3e6ec05e4c13",
+    "canonical": "Draft17.34",
+    "release": "C212"
+  },
+  "rules": [
+    "P-authored ordinary one-usize-formal known-direct pure u8 selection, two normal arms, real source arguments. Source definition CHECK sees unknown formal; no host seed supplies runtime authority.",
+    "== and < compare numeric values only; preserve true Bool Unknown without pretending either operand is known or conflating equal bits with package/world identity.",
+    "Both IF arms must be source-checked; runtime evaluates exactly one arm. No ownership/current proof may be inferred from a Bool or initial loop value.",
+    "Dependency-bearing/unknown-dependency operands, wrong type, foreign source/owner/caller signatures and unsafe effects must remain fail-closed. A bounded dependency-free subset is allowed; never silently erase dependencies.",
+    "Runtime results are canonical oracle, not fabricated proof or observed results. Preserve old FIRST/RED. Further negative/OOM instrumentation must be frozen as a new prospective version before running."
+  ],
+  "cases": {
+    "01-equality": {
+      "legal": true,
+      "baseline": {
+        "check": 3,
+        "emit": 3
+      },
+      "candidate": {
+        "check": 0,
+        "emit": 0
+      },
+      "runtime": [
+        [
+          77,
+          129
+        ],
+        [
+          76,
+          222
+        ],
+        [
+          78,
+          222
+        ]
+      ],
+      "unknown": "quantity formal at definition; let selected Bool; pure binding IF then explicit RETURN",
+      "oracle": "equality true at77, false below/above; exact source order, one helper call per actual, same function instance mapping, no effects"
+    },
+    "02-less-than": {
+      "legal": true,
+      "baseline": {
+        "check": 3,
+        "emit": 3
+      },
+      "candidate": {
+        "check": 0,
+        "emit": 0
+      },
+      "runtime": [
+        [
+          23,
+          113
+        ],
+        [
+          24,
+          247
+        ],
+        [
+          26,
+          247
+        ]
+      ],
+      "unknown": "measurement formal at definition; direct IF predicate with binding-tail u8 return",
+      "oracle": "strict ordering true below24, false at24 and above; no inferred range precondition or arithmetic"
+    },
+    "03-known-control": {
+      "legal": true,
+      "baseline": {
+        "check": 0,
+        "emit": 4
+      },
+      "candidate": {
+        "check": 0,
+        "emit": 4
+      },
+      "oracle": "Canonical legal known Bool/IF CHECK0; existing root-only C17 profile refuses main callable context with exit4. Keep bounded new usize callee capability distinct from generic IF lowering."
+    },
+    "04-wrong-operand": {
+      "legal": false,
+      "baseline": {
+        "check": 3,
+        "emit": 3
+      },
+      "candidate": {
+        "check": 3,
+        "emit": 3
+      },
+      "oracle": "u8 is not usize; reject comparison; no C17 or output replacement"
+    },
+    "05-wrong-arms": {
+      "legal": false,
+      "baseline": {
+        "check": 3,
+        "emit": 3
+      },
+      "candidate": {
+        "check": 3,
+        "emit": 3
+      },
+      "oracle": "normal IF arms must agree on one result type; no chosen-convenient-arm acceptance"
+    },
+    "06-wrong-actual": {
+      "legal": false,
+      "baseline": {
+        "check": 3,
+        "emit": 3
+      },
+      "candidate": {
+        "check": 3,
+        "emit": 3
+      },
+      "oracle": "actual u8 cannot substitute declared usize formal; no scalar bits/type guessing"
+    },
+    "07-p1115-loop-control": {
+      "legal": true,
+      "baseline": {
+        "check": 3,
+        "emit": 3
+      },
+      "candidate": {
+        "check": 3,
+        "emit": 3
+      },
+      "source_sha256": "7d71183a846f28e378974aa4c38013bb87caf86a24778d9f5872da1ced3841b7",
+      "oracle": "immutable P1115 source02 is integration control; predicate progress must not imply H_loop closure or iterative C17. Expect header precision still blocked; preserve old first comparator RED separately."
+    },
+    "08-known-bool-control": {
+      "legal": true,
+      "baseline": {
+        "check": 0,
+        "emit": 0
+      },
+      "candidate": {
+        "check": 0,
+        "emit": 0
+      },
+      "oracle": "existing known equality/Bool/Copy staging without IF; generated C must remain byte-identical after predicate extension"
+    },
+    "09-wide-equality": {
+      "legal": true,
+      "baseline": {
+        "check": 3,
+        "emit": 3
+      },
+      "candidate": {
+        "check": 0,
+        "emit": 0
+      },
+      "runtime": [
+        [
+          1,
+          211
+        ],
+        [
+          257,
+          134
+        ],
+        [
+          258,
+          211
+        ]
+      ],
+      "oracle": "real size_t quantity through formal/Copy alias; distinguish values equal modulo256; same source function, true/false runtime outcomes"
+    },
+    "10-unsupported-effect": {
+      "legal": true,
+      "baseline": {
+        "check": 3,
+        "emit": 3
+      },
+      "candidate": {
+        "check": 0,
+        "emit": 4
+      },
+      "oracle": "source legal local scalar Change; pure numeric consumer must not import effects or old/current issuer; refuse C17/no-clobber"
+    },
+    "11-unsupported-two-arguments": {
+      "legal": true,
+      "baseline": {
+        "check": 3,
+        "emit": 3
+      },
+      "candidate": {
+        "check": 0,
+        "emit": 4
+      },
+      "oracle": "legal comparison, two formal call ABI outside bounded one-formal consumer; no accidental write-u8 proof substitution"
+    }
+  },
+  "error_no_clobber": "All rejecting C17 paths stdout empty; named bytes/inode/mtime unchanged; positive named matches stdout. OOM requires later prospective failure-injection test.",
+  "stop": "New public issuer, semantic change, forged predicate fact, erased hidden dep, unsafe world/owner mapping, broad abstract Bool/effects architecture or main drift before publication => stop Production and return exact dependency.",
+  "previous_manifest_sha256": "c103d1f7f5ae8d082a61a0fd37d29f7af9a1443ff8f0b1b8d6cb8662dedd769a",
+  "calibration": "Preserve v1 source/oracle/FIRST. Only v2 separates CHECK and emit expectations for known IF outside current C17 profile; add independent known-Bool C17 control."
+}
