@@ -1,0 +1,55 @@
+{
+  "authority": {
+    "main": "1de346f545afd638cacbe7589909cbeda3bf4e71",
+    "spec": "docs/reference/NewLang_v0_spec_Draft17_34.md",
+    "pr_head": "6ee04e0eaef593e151641da2bf5dda50f9fcb47e"
+  },
+  "classification": "INDEPENDENT SOURCE FREEZE; no compile/check/native execution, not PASS",
+  "cases": {
+    "r1101_p01_break_old_index0": {
+      "check": "ACCEPT expected at canonical source/semantic level, not implementation coverage",
+      "old_from_break": 37,
+      "current_after_break": 91,
+      "untouched_sibling": 148,
+      "displaced_receiver": 209,
+      "receiver_after": 37,
+      "receiver_sibling": 6,
+      "original_physical": "The lexical original Ledger root `original` and its field-0 incarnation remain the same across replace, loop BREAK, and later reads; do NOT substitute a copied/proxy root or rebuild the old value from the current field.",
+      "receiver_physical": "`receiver` is a distinct original root, its field-1 update consumes the BREAK-returned old Copy only, not the original root/child authority."
+    },
+    "r1101_p02_break_old_known_call_index1": {
+      "check": "ACCEPT expected at canonical source/semantic level, not implementation coverage",
+      "returned": 173,
+      "current": 28,
+      "untouched_low": 12,
+      "displaced_mirror": 57,
+      "mirror_current": 173,
+      "mirror_untouched_high": 4,
+      "original_physical": "The lexical original Beacons root `origin` and its field-1 incarnation remain the same through known direct call, replace, BREAK, and later reads; `mirror` is a separate original.",
+      "call_effect": "`previous` returns pre-Change Copy 173, caller-visible postcurrent on `origin@high` is 28; do not restore entry/old state on BREAK."
+    },
+    "r1101_n01_bare_break": {
+      "check": "REJECT: missing mandatory BREAK expression (section 27.7/19.1)",
+      "reject_layer": "source syntax / eligibility; zero C17"
+    },
+    "r1101_n02_loan_ref_escape_break": {
+      "check": "REJECT: loan-generated ref escaping its scope, then a break edge out of the local lifetime (sections 13.8/13.5a/27.7)",
+      "reject_layer": "semantic dependency/scope; zero C17"
+    },
+    "r1101_n03_unknown_field_break": {
+      "check": "REJECT: `original@absent` is not a declared field of the exact nominal (section 17.1)",
+      "reject_layer": "source name resolution / semantic eligibility; zero C17"
+    },
+    "r1101_n04_break_type_mismatch": {
+      "check": "REJECT: reachable BREAK exits return `u8` and `unit`, cannot form a single loop result type (section 27.7)",
+      "reject_layer": "semantic typing; zero C17"
+    }
+  },
+  "requirements": [
+    "Evidence must be source-issued for original/child/current ValueFact and Change; numeric equality does not establish identity.",
+    "If a source is rejected only because of current implementation coverage, report UNSUPPORTED/NOT TESTED, not canonical unsoundness.",
+    "Later independent R run must observe physical original from authentic compiled source and prove BREAK old Copy/current, not inject values into C17/harness.",
+    "All FIRST/RED, raw artifacts and earlier R evidence remain immutable.",
+    "No ready/merge/Product GO. Next Coordination authorization required before any R branch/push/Actions/CI/compiler/native."
+  ]
+}
