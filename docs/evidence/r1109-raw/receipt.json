@@ -1,0 +1,1479 @@
+{
+  "format": "R1112 C207 original R1109 V1 RED / V2 native byte-custody receipt v1",
+  "issue": "https://github.com/wakairo/NewLang_Compiler/issues/1112",
+  "scope": "ARCHIVE-ONLY; binary retrieval/hash/ZIP inspection/Git transfer only. No Actions, CI, compiler/native, Lean, test or build execution. No P-equivalent compiler environment.",
+  "branch": "r-archive/r1109-v1red-v2native",
+  "parent_V2_commit": "aee088e2852329494f92412112bc72e70a391bbe",
+  "parent_V2_tree": "8e971174d4bc60520207d34e59ea29c1bfcd185e",
+  "V1_commit": "efeb958104ccf53b72fe4f72bb06478b6a65a4a2",
+  "V1_tree": "ce7dc51cf438aa6442ec68cfecd7704350522155",
+  "P_fixed_HEAD": "9fddff29074b07201165b113a581f7dda780598f",
+  "P_tree": "72f04b1595401753f8212c51a6d476a4c66959b8",
+  "adopted_main": "ac70b407de7c037faa1285485243e56317f78045",
+  "main_tree": "13918fa68d14751b3d5a0266b1789bd57402900f",
+  "canonical": "docs/reference/CURRENT_SPEC.md -> Draft17.34",
+  "history_classification": {
+    "V1": "Initial independent BLIND V1: BLIND-INCONCLUSIVE. Two positive CHECK rc3 USIZE-EQUALITY-SOURCE-PRECISION; C17/native NOT REACHED. Ten R-owned CMake historical freeze regressions are R integration failure, not P product failure. Preserve FIRST RED.",
+    "V2": "Independently authored NON-BLIND V2 after P emitter read; finite source->C17/native PASS only. Independent published checked-owned/current validator on these exact sources NOT TESTED. No retrospective BLIND relabeling."
+  },
+  "historical_comments_immutable": [
+    {
+      "id": 6596206484,
+      "url": "https://github.com/wakairo/NewLang_Compiler/issues/1109#issuecomment-6596206484",
+      "body_sha256": "fb256976f99a31f8aece1c01a74a9ac5e59ab76b3749038cc924c3e92e0c7bce",
+      "updated_at": "2026-11-03T05:26:57Z"
+    },
+    {
+      "id": 6596497895,
+      "url": "https://github.com/wakairo/NewLang_Compiler/issues/1109#issuecomment-6596497895",
+      "body_sha256": "965afc3d3d981d59ca4600ba574ac23cefbda194e421765e6487ba0ac1320443",
+      "updated_at": "2026-11-03T05:49:30Z"
+    },
+    {
+      "id": 6596728475,
+      "url": "https://github.com/wakairo/NewLang_Compiler/issues/1109#issuecomment-6596728475",
+      "body_sha256": "1c8a874b9799ab5a9c1a3be270e62b7da2df8d118bcac4f6e01e8efc1f1a921e",
+      "updated_at": "2026-11-03T06:06:25Z"
+    }
+  ],
+  "archive_bytes": [
+    {
+      "type": "GitHub original job-upload artifact ZIP",
+      "classification": "NON-BLIND V2 finite native evidence; independent published checked-owned/current validator NOT TESTED",
+      "artifact_id": 13209416256,
+      "artifact_name": "r1109-c205-v2-raw-aee088e2852329494f92412112bc72e70a391bbe-attempt1",
+      "endpoint": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/artifacts/13209416256/zip",
+      "provider_size": 44411,
+      "provider_digest": "sha256:1c678a79f02c55343cc86c82ac6a382605ebe5274fed82e945a24da4dffa8a39",
+      "provider_expires_at": "2026-12-03T06:15:25Z",
+      "run_id": 41588695402,
+      "head_sha": "aee088e2852329494f92412112bc72e70a391bbe",
+      "event": "pull_request",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "job_id": 125760108774,
+      "capture": {
+        "API_GET_start_UTC": "2026-11-03T06:45:46+00:00",
+        "API_GET_end_UTC": "2026-11-03T06:45:49+00:00",
+        "binary_file_GET_start_UTC": "2026-11-03T06:46:01+00:00",
+        "binary_file_GET_end_UTC": "2026-11-03T06:46:03+00:00"
+      },
+      "size": 44411,
+      "sha256": "1c678a79f02c55343cc86c82ac6a382605ebe5274fed82e945a24da4dffa8a39",
+      "git_blob_sha": "cc58b40baab9d06993ed250953f187ae6a393b6a",
+      "entry_count": 76,
+      "zip_entries": [
+        {
+          "name": "r1109-raw/v1_negative_loan_escape/input-sha256.txt",
+          "uncompressed_bytes": 93,
+          "compressed_bytes": 82,
+          "crc32": "2eff0c43",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v1_negative_loan_escape/negative-emit.json",
+          "uncompressed_bytes": 453,
+          "compressed_bytes": 231,
+          "crc32": "fffb42fc",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v1_negative_loan_escape/negative-check.json",
+          "uncompressed_bytes": 468,
+          "compressed_bytes": 240,
+          "crc32": "7b764768",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v1_negative_nonlocal_break/input-sha256.txt",
+          "uncompressed_bytes": 96,
+          "compressed_bytes": 85,
+          "crc32": "fb85af8d",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v1_negative_nonlocal_break/negative-check.json",
+          "uncompressed_bytes": 480,
+          "compressed_bytes": 243,
+          "crc32": "a9477c2f",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v1_negative_nonlocal_break/negative-emit.json",
+          "uncompressed_bytes": 465,
+          "compressed_bytes": 233,
+          "crc32": "9f8bbafc",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v1_negative_unknown_field/input-sha256.txt",
+          "uncompressed_bytes": 95,
+          "compressed_bytes": 85,
+          "crc32": "5a95898b",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v1_negative_unknown_field/negative-check.json",
+          "uncompressed_bytes": 471,
+          "compressed_bytes": 239,
+          "crc32": "57d92d35",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v1_negative_unknown_field/negative-emit.json",
+          "uncompressed_bytes": 456,
+          "compressed_bytes": 230,
+          "crc32": "43bd3645",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v1_negative_wrong_argument/input-sha256.txt",
+          "uncompressed_bytes": 96,
+          "compressed_bytes": 87,
+          "crc32": "a794e5ca",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v1_negative_wrong_argument/negative-check.json",
+          "uncompressed_bytes": 481,
+          "compressed_bytes": 242,
+          "crc32": "02e1dc71",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v1_negative_wrong_argument/negative-emit.json",
+          "uncompressed_bytes": 466,
+          "compressed_bytes": 232,
+          "crc32": "1d0d93d9",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/check.json",
+          "uncompressed_bytes": 269,
+          "compressed_bytes": 157,
+          "crc32": "fb2d7196",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/clang_O0_address_compile.json",
+          "uncompressed_bytes": 594,
+          "compressed_bytes": 316,
+          "crc32": "32cb52b7",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/clang_O0_address_native.json",
+          "uncompressed_bytes": 816,
+          "compressed_bytes": 500,
+          "crc32": "44873307",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/clang_O0_none_compile.json",
+          "uncompressed_bytes": 534,
+          "compressed_bytes": 289,
+          "crc32": "39250bfc",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/clang_O0_none_native.json",
+          "uncompressed_bytes": 813,
+          "compressed_bytes": 501,
+          "crc32": "1b4a9894",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/clang_O0_undefined_compile.json",
+          "uncompressed_bytes": 600,
+          "compressed_bytes": 316,
+          "crc32": "dfef6085",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/clang_O0_undefined_native.json",
+          "uncompressed_bytes": 818,
+          "compressed_bytes": 504,
+          "crc32": "defaf44e",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/clang_O2_address_compile.json",
+          "uncompressed_bytes": 594,
+          "compressed_bytes": 316,
+          "crc32": "ebb79518",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/clang_O2_none_compile.json",
+          "uncompressed_bytes": 534,
+          "compressed_bytes": 289,
+          "crc32": "ebda3b86",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/clang_O2_address_native.json",
+          "uncompressed_bytes": 816,
+          "compressed_bytes": 502,
+          "crc32": "4155a1ab",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/clang_O2_none_native.json",
+          "uncompressed_bytes": 813,
+          "compressed_bytes": 502,
+          "crc32": "8d3738d8",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/clang_O2_undefined_compile.json",
+          "uncompressed_bytes": 600,
+          "compressed_bytes": 316,
+          "crc32": "ebb47a71",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/clang_O2_undefined_native.json",
+          "uncompressed_bytes": 818,
+          "compressed_bytes": 505,
+          "crc32": "100db562",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/emit.json",
+          "uncompressed_bytes": 343,
+          "compressed_bytes": 217,
+          "crc32": "0c4a3860",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/emitted-raw.c",
+          "uncompressed_bytes": 2076,
+          "compressed_bytes": 617,
+          "crc32": "dab756fb",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/gcc_O0_address_compile.json",
+          "uncompressed_bytes": 459,
+          "compressed_bytes": 252,
+          "crc32": "987da2be",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/gcc_O0_address_native.json",
+          "uncompressed_bytes": 760,
+          "compressed_bytes": 464,
+          "crc32": "9b212b07",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/gcc_O0_none_compile.json",
+          "uncompressed_bytes": 399,
+          "compressed_bytes": 225,
+          "crc32": "b375e07d",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/gcc_O0_none_native.json",
+          "uncompressed_bytes": 757,
+          "compressed_bytes": 463,
+          "crc32": "3a36fffd",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/gcc_O0_undefined_compile.json",
+          "uncompressed_bytes": 465,
+          "compressed_bytes": 252,
+          "crc32": "d6d16694",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/gcc_O0_undefined_native.json",
+          "uncompressed_bytes": 762,
+          "compressed_bytes": 466,
+          "crc32": "2a5d2d87",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/gcc_O2_address_compile.json",
+          "uncompressed_bytes": 459,
+          "compressed_bytes": 252,
+          "crc32": "d41a10a9",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/gcc_O2_address_native.json",
+          "uncompressed_bytes": 760,
+          "compressed_bytes": 463,
+          "crc32": "dcfeeb95",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/gcc_O2_none_compile.json",
+          "uncompressed_bytes": 399,
+          "compressed_bytes": 225,
+          "crc32": "11a04ac6",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/gcc_O2_none_native.json",
+          "uncompressed_bytes": 757,
+          "compressed_bytes": 463,
+          "crc32": "70f55d93",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/gcc_O2_undefined_compile.json",
+          "uncompressed_bytes": 465,
+          "compressed_bytes": 252,
+          "crc32": "59e12842",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/gcc_O2_undefined_native.json",
+          "uncompressed_bytes": 762,
+          "compressed_bytes": 467,
+          "crc32": "203c94b6",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/input-sha256.txt",
+          "uncompressed_bytes": 90,
+          "compressed_bytes": 81,
+          "crc32": "fd276b62",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/native-full-index.json",
+          "uncompressed_bytes": 2827,
+          "compressed_bytes": 795,
+          "crc32": "eddb6f86",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_distinct/wrapped-observer.c",
+          "uncompressed_bytes": 2298,
+          "compressed_bytes": 706,
+          "crc32": "16cb2076",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/check.json",
+          "uncompressed_bytes": 271,
+          "compressed_bytes": 159,
+          "crc32": "a150c32f",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/clang_O0_address_compile.json",
+          "uncompressed_bytes": 596,
+          "compressed_bytes": 319,
+          "crc32": "cec726e5",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/clang_O0_address_native.json",
+          "uncompressed_bytes": 818,
+          "compressed_bytes": 496,
+          "crc32": "8f862f56",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/clang_O0_none_compile.json",
+          "uncompressed_bytes": 536,
+          "compressed_bytes": 291,
+          "crc32": "d1bc6bff",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/clang_O0_none_native.json",
+          "uncompressed_bytes": 815,
+          "compressed_bytes": 496,
+          "crc32": "5e042a59",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/clang_O0_undefined_compile.json",
+          "uncompressed_bytes": 602,
+          "compressed_bytes": 319,
+          "crc32": "d421613c",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/clang_O0_undefined_native.json",
+          "uncompressed_bytes": 820,
+          "compressed_bytes": 499,
+          "crc32": "c42b030e",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/clang_O2_address_compile.json",
+          "uncompressed_bytes": 596,
+          "compressed_bytes": 319,
+          "crc32": "1bc8d552",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/clang_O2_address_native.json",
+          "uncompressed_bytes": 818,
+          "compressed_bytes": 496,
+          "crc32": "5b7b0a15",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/clang_O2_none_compile.json",
+          "uncompressed_bytes": 536,
+          "compressed_bytes": 291,
+          "crc32": "c178b7fa",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/clang_O2_none_native.json",
+          "uncompressed_bytes": 815,
+          "compressed_bytes": 497,
+          "crc32": "9e729152",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/clang_O2_undefined_compile.json",
+          "uncompressed_bytes": 602,
+          "compressed_bytes": 319,
+          "crc32": "2bce136e",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/clang_O2_undefined_native.json",
+          "uncompressed_bytes": 820,
+          "compressed_bytes": 502,
+          "crc32": "91a12b4b",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/emit.json",
+          "uncompressed_bytes": 345,
+          "compressed_bytes": 219,
+          "crc32": "4119214e",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/emitted-raw.c",
+          "uncompressed_bytes": 2077,
+          "compressed_bytes": 614,
+          "crc32": "93e63b55",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/gcc_O0_address_compile.json",
+          "uncompressed_bytes": 461,
+          "compressed_bytes": 256,
+          "crc32": "54cefd9b",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/gcc_O0_address_native.json",
+          "uncompressed_bytes": 762,
+          "compressed_bytes": 459,
+          "crc32": "5dc6eb1a",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/gcc_O0_none_compile.json",
+          "uncompressed_bytes": 401,
+          "compressed_bytes": 228,
+          "crc32": "46742833",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/gcc_O0_none_native.json",
+          "uncompressed_bytes": 759,
+          "compressed_bytes": 459,
+          "crc32": "9292f728",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/gcc_O0_undefined_compile.json",
+          "uncompressed_bytes": 467,
+          "compressed_bytes": 255,
+          "crc32": "82765498",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/gcc_O0_undefined_native.json",
+          "uncompressed_bytes": 764,
+          "compressed_bytes": 461,
+          "crc32": "253639fa",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/gcc_O2_address_compile.json",
+          "uncompressed_bytes": 461,
+          "compressed_bytes": 256,
+          "crc32": "8db23a34",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/gcc_O2_address_native.json",
+          "uncompressed_bytes": 762,
+          "compressed_bytes": 460,
+          "crc32": "50a3c45f",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/gcc_O2_none_compile.json",
+          "uncompressed_bytes": 401,
+          "compressed_bytes": 229,
+          "crc32": "948b1849",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/gcc_O2_none_native.json",
+          "uncompressed_bytes": 759,
+          "compressed_bytes": 459,
+          "crc32": "21677b4b",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/gcc_O2_undefined_compile.json",
+          "uncompressed_bytes": 467,
+          "compressed_bytes": 256,
+          "crc32": "b62d4e6c",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/gcc_O2_undefined_native.json",
+          "uncompressed_bytes": 764,
+          "compressed_bytes": 462,
+          "crc32": "44c32da3",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/input-sha256.txt",
+          "uncompressed_bytes": 92,
+          "compressed_bytes": 83,
+          "crc32": "48cdfe3c",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/native-full-index.json",
+          "uncompressed_bytes": 2829,
+          "compressed_bytes": 794,
+          "crc32": "1ee99e5a",
+          "compression": 8
+        },
+        {
+          "name": "r1109-raw/v2_positive_equal_bits/wrapped-observer.c",
+          "uncompressed_bytes": 2299,
+          "compressed_bytes": 702,
+          "crc32": "1340b429",
+          "compression": 8
+        },
+        {
+          "name": "r1109-c205-full-raw-ctest.log",
+          "uncompressed_bytes": 19635,
+          "compressed_bytes": 2698,
+          "crc32": "3d618fac",
+          "compression": 8
+        },
+        {
+          "name": "r1109-ctest-register.txt",
+          "uncompressed_bytes": 543,
+          "compressed_bytes": 216,
+          "crc32": "1c6561ff",
+          "compression": 8
+        },
+        {
+          "name": "r1109-v1-frozen.sha256",
+          "uncompressed_bytes": 867,
+          "compressed_bytes": 447,
+          "crc32": "4f4c61d4",
+          "compression": 8
+        },
+        {
+          "name": "r1109-v2-frozen.sha256",
+          "uncompressed_bytes": 315,
+          "compressed_bytes": 197,
+          "crc32": "8d9f7706",
+          "compression": 8
+        }
+      ],
+      "CRC": "all OK",
+      "payload_roundtrip_byte_equal": true,
+      "path": "docs/evidence/r1109-raw/v2-native/artifact-13209416256.zip",
+      "local_file": "artifact-13209416256.zip",
+      "payload_file": "artifact-13209416256.blob-payload.json",
+      "jobs": [
+        {
+          "id": 125760108774,
+          "name": "R1109 NON-BLIND V2 genuine source/C17/native evidence",
+          "head_sha": "aee088e2852329494f92412112bc72e70a391bbe",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-03T06:15:04Z",
+          "completed_at": "2026-11-03T06:15:28Z"
+        }
+      ]
+    },
+    {
+      "type": "GitHub-produced whole-run log ZIP at GET time",
+      "classification": "BLIND V1 FIRST RED; BLIND-INCONCLUSIVE; C17/native NOT REACHED; R CMake history integration failures, not P product regression",
+      "mandatory": true,
+      "run_id": 41585294203,
+      "endpoint": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/runs/41585294203/logs",
+      "head_sha": "efeb958104ccf53b72fe4f72bb06478b6a65a4a2",
+      "event": "pull_request",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "jobs": [
+        {
+          "id": 125749242493,
+          "name": "UBSan",
+          "head_sha": "efeb958104ccf53b72fe4f72bb06478b6a65a4a2",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T05:40:44Z",
+          "completed_at": "2026-11-03T05:45:51Z"
+        },
+        {
+          "id": 125749242638,
+          "name": "GCC Release",
+          "head_sha": "efeb958104ccf53b72fe4f72bb06478b6a65a4a2",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T05:40:43Z",
+          "completed_at": "2026-11-03T05:43:26Z"
+        },
+        {
+          "id": 125749242645,
+          "name": "ASan",
+          "head_sha": "efeb958104ccf53b72fe4f72bb06478b6a65a4a2",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T05:40:44Z",
+          "completed_at": "2026-11-03T05:48:14Z"
+        },
+        {
+          "id": 125749242674,
+          "name": "Clang",
+          "head_sha": "efeb958104ccf53b72fe4f72bb06478b6a65a4a2",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T05:40:43Z",
+          "completed_at": "2026-11-03T05:43:56Z"
+        },
+        {
+          "id": 125749242759,
+          "name": "GCC",
+          "head_sha": "efeb958104ccf53b72fe4f72bb06478b6a65a4a2",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T05:40:48Z",
+          "completed_at": "2026-11-03T05:43:42Z"
+        }
+      ],
+      "capture": {
+        "API_GET_start_UTC": "2026-11-03T06:46:49+00:00",
+        "API_GET_end_UTC": "2026-11-03T06:46:51+00:00"
+      },
+      "size": 864182,
+      "sha256": "61e59e66661de043ad1fe17944e355735f17bedcb4101e7d1a358bf5184abcbb",
+      "git_blob_sha": "da598c13cd2c4ad9910fd5321b363bb76f0fd1fb",
+      "entry_count": 18,
+      "zip_entries": [
+        {
+          "name": "0_GCC.txt",
+          "uncompressed_bytes": 1561357,
+          "compressed_bytes": 141534,
+          "crc32": "c9dfb417",
+          "compression": 8
+        },
+        {
+          "name": "GCC/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 296,
+          "crc32": "cebb92f2",
+          "compression": 8
+        },
+        {
+          "name": "1_UBSan.txt",
+          "uncompressed_bytes": 1581526,
+          "compressed_bytes": 143404,
+          "crc32": "a611d3f6",
+          "compression": 8
+        },
+        {
+          "name": "UBSan/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 286,
+          "crc32": "08ce7cc8",
+          "compression": 8
+        },
+        {
+          "name": "2_ASan.txt",
+          "uncompressed_bytes": 1581294,
+          "compressed_bytes": 143578,
+          "crc32": "54fc0084",
+          "compression": 8
+        },
+        {
+          "name": "ASan/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 289,
+          "crc32": "6fad9c5a",
+          "compression": 8
+        },
+        {
+          "name": "ASan/1_Set up job.txt",
+          "uncompressed_bytes": 2264,
+          "compressed_bytes": 858,
+          "crc32": "7cd98e8f",
+          "compression": 8
+        },
+        {
+          "name": "ASan/2_Run actions_checkout@11bd71901bbe5b1630ceea73d27597364c9af683.txt",
+          "uncompressed_bytes": 7622,
+          "compressed_bytes": 2205,
+          "crc32": "933d5bab",
+          "compression": 8
+        },
+        {
+          "name": "ASan/3_Host prerequisites from signed Ubuntu repositories.txt",
+          "uncompressed_bytes": 8894,
+          "compressed_bytes": 2243,
+          "crc32": "42aaea02",
+          "compression": 8
+        },
+        {
+          "name": "ASan/4_Restore untrusted fixed-SHA curated SDK archive cache.txt",
+          "uncompressed_bytes": 1505,
+          "compressed_bytes": 636,
+          "crc32": "88a4cf0e",
+          "compression": 8
+        },
+        {
+          "name": "ASan/5_Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release).txt",
+          "uncompressed_bytes": 815,
+          "compressed_bytes": 459,
+          "crc32": "49cfaf3f",
+          "compression": 8
+        },
+        {
+          "name": "ASan/8_Configure, build, and test.txt",
+          "uncompressed_bytes": 1558551,
+          "compressed_bytes": 137699,
+          "crc32": "06bd4130",
+          "compression": 8
+        },
+        {
+          "name": "ASan/18_Post Run actions_checkout@11bd71901bbe5b1630ceea73d27597364c9af683.txt",
+          "uncompressed_bytes": 1278,
+          "compressed_bytes": 485,
+          "crc32": "fa6f7149",
+          "compression": 8
+        },
+        {
+          "name": "ASan/19_Complete job.txt",
+          "uncompressed_bytes": 386,
+          "compressed_bytes": 273,
+          "crc32": "b5998a5b",
+          "compression": 8
+        },
+        {
+          "name": "3_Clang.txt",
+          "uncompressed_bytes": 1582779,
+          "compressed_bytes": 144733,
+          "crc32": "8fdc0c7e",
+          "compression": 8
+        },
+        {
+          "name": "Clang/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 293,
+          "crc32": "2404a713",
+          "compression": 8
+        },
+        {
+          "name": "4_GCC Release.txt",
+          "uncompressed_bytes": 1565088,
+          "compressed_bytes": 141796,
+          "crc32": "ab76a129",
+          "compression": 8
+        },
+        {
+          "name": "GCC Release/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 285,
+          "crc32": "ba4a8fd7",
+          "compression": 8
+        }
+      ],
+      "CRC": "all OK",
+      "payload_roundtrip_byte_equal": true,
+      "path": "docs/evidence/r1109-raw/v1-first-red/run-41585294203-attempt1-logs.zip",
+      "local_file": "run-41585294203-attempt1-logs.zip",
+      "payload_file": "run-41585294203.blob-payload.json",
+      "origin_digest_authority": "Measured on bytes received at the recorded GET time; no immutable historical run-time packaging digest claimed."
+    },
+    {
+      "type": "GitHub-produced whole-run log ZIP at GET time",
+      "classification": "BLIND V1 FIRST RED; BLIND-INCONCLUSIVE; C17/native NOT REACHED; R CMake history integration failures, not P product regression",
+      "mandatory": true,
+      "run_id": 41585294285,
+      "endpoint": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/runs/41585294285/logs",
+      "head_sha": "efeb958104ccf53b72fe4f72bb06478b6a65a4a2",
+      "event": "pull_request",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "jobs": [
+        {
+          "id": 125749242763,
+          "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+          "head_sha": "efeb958104ccf53b72fe4f72bb06478b6a65a4a2",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T05:40:48Z",
+          "completed_at": "2026-11-03T05:43:20Z"
+        }
+      ],
+      "capture": {
+        "API_GET_start_UTC": "2026-11-03T06:46:51+00:00",
+        "API_GET_end_UTC": "2026-11-03T06:46:51+00:00"
+      },
+      "size": 149480,
+      "sha256": "814d581e70e1f638816509bbd6e1cc4b985f764e6618567a64144d9b840addfa",
+      "git_blob_sha": "2a2271df5ab42e54709da6bcf6ebffc4f8a2503e",
+      "entry_count": 2,
+      "zip_entries": [
+        {
+          "name": "0_Production CHECK + C17_native reference (NO LLVM; PARTIAL).txt",
+          "uncompressed_bytes": 1598300,
+          "compressed_bytes": 148712,
+          "crc32": "63299894",
+          "compression": 8
+        },
+        {
+          "name": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/system.txt",
+          "uncompressed_bytes": 610,
+          "compressed_bytes": 296,
+          "crc32": "43f86e01",
+          "compression": 8
+        }
+      ],
+      "CRC": "all OK",
+      "payload_roundtrip_byte_equal": true,
+      "path": "docs/evidence/r1109-raw/v1-first-red/run-41585294285-attempt1-logs.zip",
+      "local_file": "run-41585294285-attempt1-logs.zip",
+      "payload_file": "run-41585294285.blob-payload.json",
+      "origin_digest_authority": "Measured on bytes received at the recorded GET time; no immutable historical run-time packaging digest claimed."
+    },
+    {
+      "type": "GitHub-produced whole-run log ZIP at GET time",
+      "classification": "NON-BLIND V2 successful natural CI provenance; finite native PASS only; independent public checked-owned/current validator NOT TESTED",
+      "mandatory": false,
+      "run_id": 41588695407,
+      "endpoint": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/runs/41588695407/logs",
+      "head_sha": "aee088e2852329494f92412112bc72e70a391bbe",
+      "event": "pull_request",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 125760109036,
+          "name": "GCC Release",
+          "head_sha": "aee088e2852329494f92412112bc72e70a391bbe",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-03T06:15:04Z",
+          "completed_at": "2026-11-03T06:18:21Z"
+        },
+        {
+          "id": 125760109339,
+          "name": "Clang",
+          "head_sha": "aee088e2852329494f92412112bc72e70a391bbe",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-03T06:15:04Z",
+          "completed_at": "2026-11-03T06:18:25Z"
+        },
+        {
+          "id": 125760109371,
+          "name": "GCC",
+          "head_sha": "aee088e2852329494f92412112bc72e70a391bbe",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-03T06:15:09Z",
+          "completed_at": "2026-11-03T06:18:12Z"
+        },
+        {
+          "id": 125760109404,
+          "name": "ASan",
+          "head_sha": "aee088e2852329494f92412112bc72e70a391bbe",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-03T06:15:04Z",
+          "completed_at": "2026-11-03T06:23:43Z"
+        },
+        {
+          "id": 125760109516,
+          "name": "UBSan",
+          "head_sha": "aee088e2852329494f92412112bc72e70a391bbe",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-03T06:15:11Z",
+          "completed_at": "2026-11-03T06:20:48Z"
+        }
+      ],
+      "capture": {
+        "API_GET_start_UTC": "2026-11-03T06:46:51+00:00",
+        "API_GET_end_UTC": "2026-11-03T06:46:53+00:00"
+      },
+      "size": 389542,
+      "sha256": "c29a95ea59cb512bd3a27fb54bc19c7206da5fc5ee3f284191bedaf421933434",
+      "git_blob_sha": "80baa11bdf36709a57dcd268eed11462cf085ffd",
+      "entry_count": 52,
+      "zip_entries": [
+        {
+          "name": "0_UBSan.txt",
+          "uncompressed_bytes": 208514,
+          "compressed_bytes": 37471,
+          "crc32": "b77c31c3",
+          "compression": 8
+        },
+        {
+          "name": "UBSan/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 289,
+          "crc32": "51462667",
+          "compression": 8
+        },
+        {
+          "name": "UBSan/1_Set up job.txt",
+          "uncompressed_bytes": 2267,
+          "compressed_bytes": 867,
+          "crc32": "6e62683a",
+          "compression": 8
+        },
+        {
+          "name": "UBSan/2_Run actions_checkout@11bd71901bbe5b1630ceea73d27597364c9af683.txt",
+          "uncompressed_bytes": 7622,
+          "compressed_bytes": 2225,
+          "crc32": "dc8be3f5",
+          "compression": 8
+        },
+        {
+          "name": "UBSan/3_Host prerequisites from signed Ubuntu repositories.txt",
+          "uncompressed_bytes": 8894,
+          "compressed_bytes": 2252,
+          "crc32": "67953586",
+          "compression": 8
+        },
+        {
+          "name": "UBSan/4_Restore untrusted fixed-SHA curated SDK archive cache.txt",
+          "uncompressed_bytes": 1356,
+          "compressed_bytes": 595,
+          "crc32": "0e3eaad6",
+          "compression": 8
+        },
+        {
+          "name": "UBSan/5_Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release).txt",
+          "uncompressed_bytes": 815,
+          "compressed_bytes": 464,
+          "crc32": "c90684fc",
+          "compression": 8
+        },
+        {
+          "name": "UBSan/8_Configure, build, and test.txt",
+          "uncompressed_bytes": 185917,
+          "compressed_bytes": 31095,
+          "crc32": "862d99d8",
+          "compression": 8
+        },
+        {
+          "name": "UBSan/18_Post Run actions_checkout@11bd71901bbe5b1630ceea73d27597364c9af683.txt",
+          "uncompressed_bytes": 1278,
+          "compressed_bytes": 482,
+          "crc32": "7cebf61e",
+          "compression": 8
+        },
+        {
+          "name": "UBSan/19_Complete job.txt",
+          "uncompressed_bytes": 386,
+          "compressed_bytes": 271,
+          "crc32": "6c572836",
+          "compression": 8
+        },
+        {
+          "name": "1_ASan.txt",
+          "uncompressed_bytes": 208417,
+          "compressed_bytes": 38129,
+          "crc32": "292a98be",
+          "compression": 8
+        },
+        {
+          "name": "ASan/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 290,
+          "crc32": "f5c7d0a7",
+          "compression": 8
+        },
+        {
+          "name": "ASan/1_Set up job.txt",
+          "uncompressed_bytes": 2258,
+          "compressed_bytes": 857,
+          "crc32": "df0012c4",
+          "compression": 8
+        },
+        {
+          "name": "ASan/2_Run actions_checkout@11bd71901bbe5b1630ceea73d27597364c9af683.txt",
+          "uncompressed_bytes": 7622,
+          "compressed_bytes": 2206,
+          "crc32": "7a0c20b6",
+          "compression": 8
+        },
+        {
+          "name": "ASan/3_Host prerequisites from signed Ubuntu repositories.txt",
+          "uncompressed_bytes": 8894,
+          "compressed_bytes": 2238,
+          "crc32": "66766b3f",
+          "compression": 8
+        },
+        {
+          "name": "ASan/4_Restore untrusted fixed-SHA curated SDK archive cache.txt",
+          "uncompressed_bytes": 1272,
+          "compressed_bytes": 572,
+          "crc32": "5fcc1d33",
+          "compression": 8
+        },
+        {
+          "name": "ASan/5_Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release).txt",
+          "uncompressed_bytes": 815,
+          "compressed_bytes": 463,
+          "crc32": "afb9cd9e",
+          "compression": 8
+        },
+        {
+          "name": "ASan/8_Configure, build, and test.txt",
+          "uncompressed_bytes": 185913,
+          "compressed_bytes": 31788,
+          "crc32": "d2e3769e",
+          "compression": 8
+        },
+        {
+          "name": "ASan/18_Post Run actions_checkout@11bd71901bbe5b1630ceea73d27597364c9af683.txt",
+          "uncompressed_bytes": 1278,
+          "compressed_bytes": 482,
+          "crc32": "92d01ead",
+          "compression": 8
+        },
+        {
+          "name": "ASan/19_Complete job.txt",
+          "uncompressed_bytes": 386,
+          "compressed_bytes": 273,
+          "crc32": "9b845407",
+          "compression": 8
+        },
+        {
+          "name": "2_GCC.txt",
+          "uncompressed_bytes": 208320,
+          "compressed_bytes": 36899,
+          "crc32": "2b08126b",
+          "compression": 8
+        },
+        {
+          "name": "GCC/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 290,
+          "crc32": "f7ba281b",
+          "compression": 8
+        },
+        {
+          "name": "GCC/1_Set up job.txt",
+          "uncompressed_bytes": 2258,
+          "compressed_bytes": 850,
+          "crc32": "e8f9bb90",
+          "compression": 8
+        },
+        {
+          "name": "GCC/2_Run actions_checkout@11bd71901bbe5b1630ceea73d27597364c9af683.txt",
+          "uncompressed_bytes": 7622,
+          "compressed_bytes": 2194,
+          "crc32": "ea89c7a9",
+          "compression": 8
+        },
+        {
+          "name": "GCC/3_Host prerequisites from signed Ubuntu repositories.txt",
+          "uncompressed_bytes": 8894,
+          "compressed_bytes": 2228,
+          "crc32": "e42ada6c",
+          "compression": 8
+        },
+        {
+          "name": "GCC/4_Restore untrusted fixed-SHA curated SDK archive cache.txt",
+          "uncompressed_bytes": 1353,
+          "compressed_bytes": 594,
+          "crc32": "616cbf26",
+          "compression": 8
+        },
+        {
+          "name": "GCC/5_Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release).txt",
+          "uncompressed_bytes": 815,
+          "compressed_bytes": 460,
+          "crc32": "98b885e4",
+          "compression": 8
+        },
+        {
+          "name": "GCC/8_Configure, build, and test.txt",
+          "uncompressed_bytes": 185735,
+          "compressed_bytes": 30571,
+          "crc32": "363b2ad0",
+          "compression": 8
+        },
+        {
+          "name": "GCC/18_Post Run actions_checkout@11bd71901bbe5b1630ceea73d27597364c9af683.txt",
+          "uncompressed_bytes": 1278,
+          "compressed_bytes": 488,
+          "crc32": "710304f1",
+          "compression": 8
+        },
+        {
+          "name": "GCC/19_Complete job.txt",
+          "uncompressed_bytes": 386,
+          "compressed_bytes": 273,
+          "crc32": "8afe7a56",
+          "compression": 8
+        },
+        {
+          "name": "3_Clang.txt",
+          "uncompressed_bytes": 210323,
+          "compressed_bytes": 37565,
+          "crc32": "10cba311",
+          "compression": 8
+        },
+        {
+          "name": "Clang/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 291,
+          "crc32": "b65503bf",
+          "compression": 8
+        },
+        {
+          "name": "Clang/1_Set up job.txt",
+          "uncompressed_bytes": 2259,
+          "compressed_bytes": 853,
+          "crc32": "7b46f96d",
+          "compression": 8
+        },
+        {
+          "name": "Clang/2_Run actions_checkout@11bd71901bbe5b1630ceea73d27597364c9af683.txt",
+          "uncompressed_bytes": 7622,
+          "compressed_bytes": 2214,
+          "crc32": "fe1bf16c",
+          "compression": 8
+        },
+        {
+          "name": "Clang/3_Host prerequisites from signed Ubuntu repositories.txt",
+          "uncompressed_bytes": 8894,
+          "compressed_bytes": 2229,
+          "crc32": "e9a28a39",
+          "compression": 8
+        },
+        {
+          "name": "Clang/4_Restore untrusted fixed-SHA curated SDK archive cache.txt",
+          "uncompressed_bytes": 1272,
+          "compressed_bytes": 572,
+          "crc32": "03574bf0",
+          "compression": 8
+        },
+        {
+          "name": "Clang/5_Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release).txt",
+          "uncompressed_bytes": 815,
+          "compressed_bytes": 463,
+          "crc32": "e4a21f72",
+          "compression": 8
+        },
+        {
+          "name": "Clang/6_Check C formatting and provide exact pinned-formatter correction.txt",
+          "uncompressed_bytes": 788,
+          "compressed_bytes": 387,
+          "crc32": "b128f314",
+          "compression": 8
+        },
+        {
+          "name": "Clang/7_Upload formatter suggestions (untrusted; inspect before git apply).txt",
+          "uncompressed_bytes": 1059,
+          "compressed_bytes": 522,
+          "crc32": "d7c4c501",
+          "compression": 8
+        },
+        {
+          "name": "Clang/8_Configure, build, and test.txt",
+          "uncompressed_bytes": 185911,
+          "compressed_bytes": 30720,
+          "crc32": "9fed2fac",
+          "compression": 8
+        },
+        {
+          "name": "Clang/18_Post Run actions_checkout@11bd71901bbe5b1630ceea73d27597364c9af683.txt",
+          "uncompressed_bytes": 1278,
+          "compressed_bytes": 484,
+          "crc32": "4edfa6ff",
+          "compression": 8
+        },
+        {
+          "name": "Clang/19_Complete job.txt",
+          "uncompressed_bytes": 452,
+          "compressed_bytes": 316,
+          "crc32": "6371199b",
+          "compression": 8
+        },
+        {
+          "name": "4_GCC Release.txt",
+          "uncompressed_bytes": 208267,
+          "compressed_bytes": 36922,
+          "crc32": "d5faf482",
+          "compression": 8
+        },
+        {
+          "name": "GCC Release/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 290,
+          "crc32": "294a5fa0",
+          "compression": 8
+        },
+        {
+          "name": "GCC Release/1_Set up job.txt",
+          "uncompressed_bytes": 2268,
+          "compressed_bytes": 853,
+          "crc32": "71da83fe",
+          "compression": 8
+        },
+        {
+          "name": "GCC Release/2_Run actions_checkout@11bd71901bbe5b1630ceea73d27597364c9af683.txt",
+          "uncompressed_bytes": 7622,
+          "compressed_bytes": 2201,
+          "crc32": "46ab1d03",
+          "compression": 8
+        },
+        {
+          "name": "GCC Release/3_Host prerequisites from signed Ubuntu repositories.txt",
+          "uncompressed_bytes": 8894,
+          "compressed_bytes": 2223,
+          "crc32": "516050ad",
+          "compression": 8
+        },
+        {
+          "name": "GCC Release/4_Restore untrusted fixed-SHA curated SDK archive cache.txt",
+          "uncompressed_bytes": 1272,
+          "compressed_bytes": 570,
+          "crc32": "499814f4",
+          "compression": 8
+        },
+        {
+          "name": "GCC Release/5_Bootstrap SHA-verified curated LLVM 23.1.3 (cache or fixed Release).txt",
+          "uncompressed_bytes": 815,
+          "compressed_bytes": 458,
+          "crc32": "50dbed66",
+          "compression": 8
+        },
+        {
+          "name": "GCC Release/8_Configure, build, and test.txt",
+          "uncompressed_bytes": 185753,
+          "compressed_bytes": 30620,
+          "crc32": "e80e19db",
+          "compression": 8
+        },
+        {
+          "name": "GCC Release/18_Post Run actions_checkout@11bd71901bbe5b1630ceea73d27597364c9af683.txt",
+          "uncompressed_bytes": 1278,
+          "compressed_bytes": 485,
+          "crc32": "f613e868",
+          "compression": 8
+        },
+        {
+          "name": "GCC Release/19_Complete job.txt",
+          "uncompressed_bytes": 386,
+          "compressed_bytes": 274,
+          "crc32": "90835a57",
+          "compression": 8
+        }
+      ],
+      "CRC": "all OK",
+      "payload_roundtrip_byte_equal": true,
+      "path": "docs/evidence/r1109-raw/v2-green/run-41588695407-attempt1-logs.zip",
+      "local_file": "run-41588695407-attempt1-logs.zip",
+      "payload_file": "run-41588695407.blob-payload.json",
+      "origin_digest_authority": "Measured on bytes received at the recorded GET time; no immutable historical run-time packaging digest claimed."
+    },
+    {
+      "type": "GitHub-produced whole-run log ZIP at GET time",
+      "classification": "NON-BLIND V2 successful natural CI provenance; finite native PASS only; independent public checked-owned/current validator NOT TESTED",
+      "mandatory": false,
+      "run_id": 41588695284,
+      "endpoint": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/runs/41588695284/logs",
+      "head_sha": "aee088e2852329494f92412112bc72e70a391bbe",
+      "event": "pull_request",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 125760108741,
+          "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+          "head_sha": "aee088e2852329494f92412112bc72e70a391bbe",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "success",
+          "started_at": "2026-11-03T06:15:04Z",
+          "completed_at": "2026-11-03T06:20:09Z"
+        }
+      ],
+      "capture": {
+        "API_GET_start_UTC": "2026-11-03T06:46:53+00:00",
+        "API_GET_end_UTC": "2026-11-03T06:46:54+00:00"
+      },
+      "size": 93932,
+      "sha256": "4bb510d90a67449f8a5b550ebafbfd26606b508ba7dbec24720b73123b53967a",
+      "git_blob_sha": "9d5d6000af79b343f078886fba80a985bff73011",
+      "entry_count": 11,
+      "zip_entries": [
+        {
+          "name": "0_Production CHECK + C17_native reference (NO LLVM; PARTIAL).txt",
+          "uncompressed_bytes": 246189,
+          "compressed_bytes": 44807,
+          "crc32": "baceeec7",
+          "compression": 8
+        },
+        {
+          "name": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/system.txt",
+          "uncompressed_bytes": 610,
+          "compressed_bytes": 297,
+          "crc32": "887ccab1",
+          "compression": 8
+        },
+        {
+          "name": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/1_Set up job.txt",
+          "uncompressed_bytes": 1982,
+          "compressed_bytes": 806,
+          "crc32": "d148b148",
+          "compression": 8
+        },
+        {
+          "name": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/2_Check out source without persisted credentials.txt",
+          "uncompressed_bytes": 7622,
+          "compressed_bytes": 2217,
+          "crc32": "3332d8ba",
+          "compression": 8
+        },
+        {
+          "name": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/3_Verify available Ubuntu runner tools (no LLVM install).txt",
+          "uncompressed_bytes": 1149,
+          "compressed_bytes": 409,
+          "crc32": "5bbc03c1",
+          "compression": 8
+        },
+        {
+          "name": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/4_Configure and build the actual Production frontend with GCC (no LLVM).txt",
+          "uncompressed_bytes": 56408,
+          "compressed_bytes": 9442,
+          "crc32": "74697235",
+          "compression": 8
+        },
+        {
+          "name": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/5_Inventory all CTests and assert Production CHECK, C17_native and public validators.txt",
+          "uncompressed_bytes": 46787,
+          "compressed_bytes": 9622,
+          "crc32": "be196efd",
+          "compression": 8
+        },
+        {
+          "name": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/6_Execute every registered frontend_C17 CTest (NO LLVM; PARTIAL).txt",
+          "uncompressed_bytes": 129634,
+          "compressed_bytes": 21820,
+          "crc32": "5a5ca3f8",
+          "compression": 8
+        },
+        {
+          "name": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/7_Verify real Production source_checker CLI path (NO LLVM; PARTIAL).txt",
+          "uncompressed_bytes": 967,
+          "compressed_bytes": 378,
+          "crc32": "8400fa8a",
+          "compression": 8
+        },
+        {
+          "name": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/14_Post Check out source without persisted credentials.txt",
+          "uncompressed_bytes": 1278,
+          "compressed_bytes": 485,
+          "crc32": "45870a43",
+          "compression": 8
+        },
+        {
+          "name": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/15_Complete job.txt",
+          "uncompressed_bytes": 386,
+          "compressed_bytes": 273,
+          "crc32": "672ea8f4",
+          "compression": 8
+        }
+      ],
+      "CRC": "all OK",
+      "payload_roundtrip_byte_equal": true,
+      "path": "docs/evidence/r1109-raw/v2-green/run-41588695284-attempt1-logs.zip",
+      "local_file": "run-41588695284-attempt1-logs.zip",
+      "payload_file": "run-41588695284.blob-payload.json",
+      "origin_digest_authority": "Measured on bytes received at the recorded GET time; no immutable historical run-time packaging digest claimed."
+    }
+  ],
+  "unavailable": [],
+  "artifact_digest_authority": "Artifact 13209416256 origin bytes match GitHub-provided digest and size.",
+  "run_log_digest_limit": "Whole-run log ZIPs are original GitHub API bytes captured at GET time. No immutable run-time packaging digest, or byte equality to a ZIP captured during the historical run, is asserted.",
+  "transport": "Artifact: GitHub artifact API binary download via connector and file-reference binary URL. Logs: authenticated gh api /actions/runs/{id}/logs plus redirect, binary stdout into subprocess bytes. All are write_bytes/read_bytes with no ZIP reconstruction/recompression. Payloads mechanically generated from original files with base64.b64encode and JSON serialization, then strict JSON/base64 decode whole-byte equality verified before Git POST --input. Returned Git blob SHA verified from original bytes. Actual raw Git blob GET and whole-byte SHA256/size/ZIP CRC equality checked after final ref creation. No model-transcribed base64, UI text, or decoded text treated as original bytes.",
+  "workflows_immutable": [
+    {
+      "path": ".github/workflows/compiler-ci.yml",
+      "sha": "23655288e60f0d3d08a12c9a542346bf31829a08"
+    },
+    {
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "sha": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5"
+    },
+    {
+      "path": ".github/workflows/r-preflight.yml",
+      "sha": "9fea1afeeef948127c73e9ca86c476091036116e"
+    },
+    {
+      "path": ".github/workflows/r1109-sidecar.yml",
+      "sha": "c267e80cc487de9c8ea1ddd612904109a1bfe9f4"
+    }
+  ],
+  "non_firing_triggers": "Ordinary compiler workflows: pull_request / push main; r-preflight: push r-fast/**; R1109 sidecar: pull_request only, base p1107-loop-known-copy-call-c17. New archive ref matches none. No PR.",
+  "ref_creation": "Prepare complete additive tree/commit first; create new archive ref directly at completed commit. V2->V1->fixed P ancestry preserved.",
+  "old_R1101_archive_ref_preserved": {
+    "ref": "refs/heads/r-archive/r1101-native-raw",
+    "commit": "05d1437cc843a505da8208a138e3a1f8fdf7e996"
+  },
+  "zero_execution": {
+    "Actions": 0,
+    "CI": 0,
+    "compiler_native": 0,
+    "Lean": 0,
+    "tests": 0,
+    "builds": 0,
+    "manual_dispatch_rerun": 0
+  },
+  "limits": "Custody only. No new technical validation, public owned/current proof, READY, PR, merge or Product GO. Main natural postmerge CI was not used as an archive precondition or independently graded here. Coordination alone accepts/closes Issue #1112.",
+  "value_alignment_risk": "Durable FIRST failure/native raw improves audit provenance and reproducibility; author+ordinary-safe-caller UB-prevention audit/re-audit dependency closure advantage versus well-factored C remains UNMEASURED. Product GO #624 PAUSED; H1 #268 HOLD."
+}
