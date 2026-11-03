@@ -1733,6 +1733,17 @@ if(BUILD_TESTING)
     add_test(NAME oracle.smoke COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/oracle/smoke.py"
         "$<TARGET_FILE:newlangc>")
+    # R1101 C195: R-owned independent source/CHECK/native and negative suite.
+    # Source/oracle bytes are immutably frozen in Issue #1101 comment 6591620740.
+    # These tests run via the existing natural FULL5 + NO-LLVM PARTIAL only.
+    foreach(r1101_mode IN ITEMS p01 p02 negative)
+        add_test(NAME r1101_${r1101_mode}_independent.integration
+            COMMAND "${Python3_EXECUTABLE}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1101/runner.py"
+            "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}"
+            "${NEWLANG_SANITIZER}" "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1101"
+            "${r1101_mode}")
+    endforeach()
     get_property(p0_tests DIRECTORY PROPERTY TESTS)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
