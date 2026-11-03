@@ -1,0 +1,6 @@
+C220 first strict compiler build stopped before any NewLang source execution.
+GCC13.3 / C17 / -Wall -Wextra -Wpedantic -Werror.
+src/stutter_loop_check_internal.h:69: implicit declaration of nl_source_bytes.
+The same expression also produced pointer-from-integer diagnostics at both
+memcmp arguments. The correct existing API is nl_source_view(source, span, out).
+The unmodified failed Production source is in source.tar.gz. No new API is added.

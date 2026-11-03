@@ -1,0 +1,167 @@
+{
+  "cases": {
+    "01-stutter-less": {
+      "macros": {
+        "SELECTED": 0,
+        "INDEX": 1,
+        "OLD": 193,
+        "NEXT": 224,
+        "F0": 58,
+        "F1": 193,
+        "Q0": 91,
+        "Q1": 217,
+        "ENTRY0": 58,
+        "ENTRY1": 193,
+        "INITIAL": 6,
+        "NEXT_PHASE": 7,
+        "CONTINUES": 1,
+        "PREFIX": 0
+      },
+      "oracle": "exact physical original addresses and unchanged persistent fields through every C; fresh phase value trace; one helper change on B; genuine old Copy drives exactly one caller sibling store; no ended storage read."
+    },
+    "02-stutter-equality": {
+      "macros": {
+        "SELECTED": 1,
+        "INDEX": 0,
+        "OLD": 177,
+        "NEXT": 205,
+        "F0": 177,
+        "F1": 64,
+        "Q0": 39,
+        "Q1": 241,
+        "ENTRY0": 177,
+        "ENTRY1": 64,
+        "INITIAL": 12,
+        "NEXT_PHASE": 13,
+        "CONTINUES": 1,
+        "PREFIX": 0
+      },
+      "oracle": "exact physical original addresses and unchanged persistent fields through every C; fresh phase value trace; one helper change on B; genuine old Copy drives exactly one caller sibling store; no ended storage read."
+    },
+    "11-prefix-current": {
+      "macros": {
+        "SELECTED": 0,
+        "INDEX": 1,
+        "OLD": 163,
+        "NEXT": 224,
+        "F0": 58,
+        "F1": 193,
+        "Q0": 91,
+        "Q1": 217,
+        "ENTRY0": 58,
+        "ENTRY1": 163,
+        "INITIAL": 6,
+        "NEXT_PHASE": 7,
+        "CONTINUES": 1,
+        "PREFIX": 1
+      },
+      "oracle": "exact physical original addresses and unchanged persistent fields through every C; fresh phase value trace; one helper change on B; genuine old Copy drives exactly one caller sibling store; no ended storage read."
+    },
+    "13-reversed-arms": {
+      "macros": {
+        "SELECTED": 1,
+        "INDEX": 0,
+        "OLD": 177,
+        "NEXT": 205,
+        "F0": 177,
+        "F1": 64,
+        "Q0": 39,
+        "Q1": 241,
+        "ENTRY0": 177,
+        "ENTRY1": 64,
+        "INITIAL": 12,
+        "NEXT_PHASE": 13,
+        "CONTINUES": 1,
+        "PREFIX": 0
+      },
+      "oracle": "exact physical original addresses and unchanged persistent fields through every C; fresh phase value trace; one helper change on B; genuine old Copy drives exactly one caller sibling store; no ended storage read."
+    },
+    "14-first-break": {
+      "macros": {
+        "SELECTED": 0,
+        "INDEX": 1,
+        "OLD": 193,
+        "NEXT": 224,
+        "F0": 58,
+        "F1": 193,
+        "Q0": 91,
+        "Q1": 217,
+        "ENTRY0": 58,
+        "ENTRY1": 193,
+        "INITIAL": 7,
+        "NEXT_PHASE": 7,
+        "CONTINUES": 0,
+        "PREFIX": 0
+      },
+      "oracle": "exact physical original addresses and unchanged persistent fields through every C; fresh phase value trace; one helper change on B; genuine old Copy drives exactly one caller sibling store; no ended storage read."
+    },
+    "15-legacy-p1115-control": {
+      "macros": {
+        "SELECTED": 0,
+        "INDEX": 0,
+        "OLD": 68,
+        "NEXT": 123,
+        "F0": 68,
+        "F1": 214,
+        "Q0": 13,
+        "Q1": 235,
+        "ENTRY0": 68,
+        "ENTRY1": 214,
+        "INITIAL": 0,
+        "NEXT_PHASE": 1,
+        "CONTINUES": 1,
+        "PREFIX": 0
+      },
+      "oracle": "Preserved P1115/P1117 source integration control, not new independent input. Old precision3 oracle remains unchanged; C220 adds genuine private C/B/H and physical native verification."
+    }
+  },
+  "expected": "CHECK0 -> genuine public Copy GET/current and complete private loop relation -> strict C17/native O0/O2 raw+observed for five cases. Exact physical phase/original/old/current oracle; no proof tampering emitted/native. Negative no-clobber; zero-C bytes unchanged.",
+  "prototype_head": "31c571bdc6cc637181a8927a40dfc03ac3c1ce12",
+  "negative": {
+    "05-flat-header-control": {
+      "parse": 0,
+      "check": 0,
+      "emit": 4,
+      "diagnostic": "V1-BACKEND-UNSUPPORTED"
+    },
+    "06-equal-bits-continue": {
+      "parse": 0,
+      "check": 3,
+      "emit": 3,
+      "diagnostic": "P14-LOOP-PRECISION"
+    },
+    "07-extra-source-continue": {
+      "parse": 0,
+      "check": 3,
+      "emit": 3,
+      "diagnostic": "P14-LOOP-PRECISION"
+    },
+    "08-wrong-carry-type": {
+      "parse": 0,
+      "check": 3,
+      "emit": 3,
+      "diagnostic": "P14-CONTINUE-TYPE"
+    },
+    "09-wrong-carry-arity": {
+      "parse": 0,
+      "check": 3,
+      "emit": 3,
+      "diagnostic": "P14-CONTINUE-ARITY"
+    },
+    "10-ending-loan": {
+      "check_nonzero": true,
+      "emit_nonzero": true,
+      "precise_phase": "UNMEASURED before first execution; wrong-scope/context rejection required; record actual first diagnostic"
+    },
+    "12-no-nearest-target": {
+      "check_nonzero": true,
+      "emit_nonzero": true,
+      "precise_phase": "UNMEASURED before first execution; wrong-scope/context rejection required; record actual first diagnostic"
+    }
+  },
+  "authority": {
+    "parent": "a1091b2672b0a4b1d37e2571ef97bf100882b60b",
+    "canonical": "Draft17.34",
+    "release": "C220"
+  }
+}
