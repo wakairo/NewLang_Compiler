@@ -207,7 +207,7 @@ static bool observe(const char *path, size_t index, size_t old, size_t next)
     MUTATE(bool, fn, owner_producer, true);
     MUTATE(bool, fn, custody_recipient, true);
     MUTATE(size_t, fn, count, 0);
-    const NLFunctionBody *saved_body = fn->body;
+    NLFunctionBody *saved_body = fn->body;
     fn->body = a.owner->body_owner;
     REQUIRE(nl_checked_copy_body_view(a.body,call,&wrong_view)); /* historical GET */
     bool refused = rejected(&a,"changed current callable; historical GET remains");

@@ -1,0 +1,5 @@
+/tmp/p1107/tests/p1107/probe.c: In function ‘observe’:
+/tmp/p1107/tests/p1107/probe.c:215:14: error: assignment discards ‘const’ qualifier from pointer target type [-Werror=discarded-qualifiers]
+  215 |     fn->body = saved_body;
+      |              ^
+cc1: all warnings being treated as errors
