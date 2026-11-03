@@ -1,0 +1,32 @@
+Internal ctest changing into directory: /tmp/p1107-build
+Test project /tmp/p1107-build
+    Start 366: p1107_01-bound.unit
+1/7 Test #366: p1107_01-bound.unit ..............   Passed    0.00 sec
+    Start 367: p1107_02-inline.unit
+2/7 Test #367: p1107_02-inline.unit .............   Passed    0.00 sec
+    Start 368: p1107_03-no-caller-write.unit
+3/7 Test #368: p1107_03-no-caller-write.unit ....   Passed    0.00 sec
+    Start 369: p1107_04-two-originals.unit
+4/7 Test #369: p1107_04-two-originals.unit ......   Passed    0.00 sec
+    Start 370: p1107_05-equal-bits-old.unit
+5/7 Test #370: p1107_05-equal-bits-old.unit .....   Passed    0.00 sec
+    Start 371: p1107_outside_current.unit
+6/7 Test #371: p1107_outside_current.unit .......   Passed    0.00 sec
+    Start 375: p1107_evidence_history.unit
+7/7 Test #375: p1107_evidence_history.unit ......***Failed    0.05 sec
+Traceback (most recent call last):
+  File "/tmp/p1107/tests/p1107/evidence_test.py", line 30, in <module>
+    count = verify(root,'tests/p990/current-freeze-v21.json')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/p1107/tests/p1107/history_v21.py", line 11, in verify
+    from versioned_freeze import digest, git_oid, local, manifest_data, json_data, require
+ModuleNotFoundError: No module named 'versioned_freeze'
+
+
+86% tests passed, 1 tests failed out of 7
+
+Total Test time (real) =   0.08 sec
+
+The following tests FAILED:
+	375 - p1107_evidence_history.unit (Failed)
+Errors while running CTest

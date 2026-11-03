@@ -7,6 +7,7 @@ OID = '708b89f47c4c3f9c4fdfecb84f3b4b84cb771644'
 def verify(root, current):
     root = Path(root)
     sys.path.insert(0,str(root/'tests/p1098'))
+    sys.path.insert(0,str(root/'tests/support'))
     from history_v20 import verify as previous_verify
     from versioned_freeze import digest, git_oid, local, manifest_data, json_data, require
     count = previous_verify(root,current)
