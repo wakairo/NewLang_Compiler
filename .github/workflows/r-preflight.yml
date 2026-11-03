@@ -137,6 +137,7 @@ jobs:
               "node_join_both_public_oom.unit",
               "node_join_owned_poison.unit",
               "bootstrap_retry.offline",
+              "r1120_v1_original.integration",
           )
           missing = sorted(set(required).difference(names))
           if (not total or int(total.group(1)) != len(names)
@@ -151,3 +152,15 @@ jobs:
           print("R-FAST ONLY format, host build, test registration. "
                 "SOURCE/CHECK/PROOF/C17/NATIVE/NEGATIVE/OOM/ASAN/UBSAN NOT TESTED")
           PY
+
+      - name: Preserve R1120 R-FAST preparation inventory (no tests executed)
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: r1120-v1-fast-inventory-${{ github.sha }}-${{ github.run_id }}-attempt${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/r-fast-configure.log
+            ${{ runner.temp }}/r-fast-ctest-inventory.txt
+            build-frontend/CMakeCache.txt
+          if-no-files-found: warn
+          retention-days: 90
