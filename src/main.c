@@ -2330,6 +2330,8 @@ static bool linear_break_selection(const NLCheckedFragment *f,
         p->copy_body_status = status;
     if (status != NL_CHECK_OK || !avs_shape(f, v.nominal, p))
         return false;
+    if (v.call && !v0_validate_call(v.caller, v.call, p))
+        return false;
     p->linear_break = true;
     return true;
 }
@@ -2856,6 +2858,35 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
                 return false;
             /* The old load and sole store use the SAME already declared
              * parent original. No body-world ID names a C storage object. */
+            if (proof.call) {
+                const NLCheckedNodeView *call =
+                    nl_checked_node_view(proof.caller, proof.call);
+                const NLCheckedNodeView *ref =
+                    nl_checked_node_view(proof.caller, call->first_argument);
+                const NLCheckedNodeView *incoming =
+                    nl_checked_node_view(proof.caller, ref->next_argument);
+                return v0_indent(stream, depth) &&
+                       fprintf(stream,
+                               "NL_LOOP_BEFORE(&nl_local_%zu.f0, "
+                               "&nl_local_%zu.f1, %zu);\n",
+                               proof.base, proof.base, proof.index) >= 0 &&
+                       v0_indent(stream, depth) &&
+                       fprintf(stream,
+                               "%suint8_t nl_local_%zu = "
+                               "nl_fn_%zu(&nl_local_%zu.f%zu, ",
+                               scalar_qualifier, view->symbol, call->function,
+                               proof.base, proof.index) >= 0 &&
+                       v1_emit_scalar(stream, incoming) &&
+                       fputs(");\n", stream) >= 0 && v0_indent(stream, depth) &&
+                       fprintf(stream,
+                               "NL_LOOP_AFTER(&nl_local_%zu.f0, "
+                               "&nl_local_%zu.f1, %zu, nl_local_%zu);\n",
+                               proof.base, proof.base, proof.index,
+                               view->symbol) >= 0 &&
+                       v0_indent(stream, depth) &&
+                       fprintf(stream, "(void)nl_local_%zu;\n", view->symbol) >=
+                           0;
+            }
             return v0_indent(stream, depth) &&
                    fprintf(stream,
                            "NL_LOOP_BEFORE(&nl_local_%zu.f0, &nl_local_%zu.f1, "

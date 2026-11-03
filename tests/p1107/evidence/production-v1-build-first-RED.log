@@ -1,0 +1,21 @@
+[  0%] Built target newlang_diagnostic
+[  0%] Built target newlang_source
+[ 10%] Built target newlang_syntax
+[ 10%] Built target newlang_lexer
+[ 20%] Built target newlang_checked
+[ 30%] Built target newlang_parser
+[ 30%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o
+/tmp/p1107/src/semantic_check.c: In function ‘linear_break_effect’:
+/tmp/p1107/src/semantic_check.c:5408:37: error: the comparison will always evaluate as ‘true’ for the address of ‘parameter_names’ will never be NULL [-Werror=address]
+ 5408 |         if (fn->body->count != 2 || !fn->body->parameter_names ||
+      |                                     ^
+In file included from /tmp/p1107/src/copy_body_internal.h:4,
+                 from /tmp/p1107/src/semantic_check.c:1:
+/tmp/p1107/src/semantic_internal.h:48:11: note: ‘parameter_names’ declared here
+   48 |     char *parameter_names[NL_SEMANTIC_MAX_PARAMETERS];
+      |           ^~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+gmake[3]: *** [CMakeFiles/newlang_semantic.dir/build.make:149: CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:907: CMakeFiles/newlang_semantic.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:991: CMakeFiles/newlangc.dir/rule] Error 2
+gmake: *** [Makefile:238: newlangc] Error 2
