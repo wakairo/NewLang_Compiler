@@ -397,8 +397,8 @@ int main(int argc, char **argv)
         goto cleanup;
     NLParseStatus parsed = nl_parser_create(unit_source, &unit_parser);
     if (parsed == NL_PARSE_OK) {
-        parsed = nl_parser_parse_function_unit(unit_parser, &unit_tree,
-                                               &parse_diag);
+        parsed =
+            nl_parser_parse_function_unit(unit_parser, &unit_tree, &parse_diag);
     }
     diagnostic("PARSE_UNIT", parsed, &parse_diag.diagnostic, unit_source,
                parse_diag.span);

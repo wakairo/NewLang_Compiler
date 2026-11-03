@@ -34,9 +34,9 @@
     },
     {
       "path": "evidence/r1129/harness/owned.c",
-      "bytes": 15828,
-      "sha256": "79b8dde734046e8698e53b75721188f9085bb8e39636c25010c112cb16c192e4",
-      "git_blob_sha": "0505e0b7d0be11b8d340b7ae240c90126692b9e9"
+      "bytes": 15793,
+      "sha256": "e11c9ae4c10e4151d8565300c3b91e3f7833ae34a7e461f2512bd5e436935147",
+      "git_blob_sha": "61cab24e51014c2e7847aae900273809d9b9d33a"
     },
     {
       "path": "evidence/r1129/harness/plan.md",
@@ -192,12 +192,12 @@
   ],
   "manifest_self_policy": "Excluded from files; own bytes/SHA in Issue freeze and runtime receipt.",
   "payload_file_count": 27,
-  "payload_total_bytes": 145857,
+  "payload_total_bytes": 145822,
   "execution_at_freeze": {
     "newlang": 0,
     "native": 0,
-    "actions": 0,
-    "r_refs": 0,
+    "actions": 1,
+    "r_refs": 1,
     "manual": 0
   },
   "full_sources_comments": [
@@ -207,5 +207,39 @@
     6615765509,
     6615870272
   ],
-  "value": "UNMEASURED / GO624 PAUSED / H1 HOLD"
+  "value": "UNMEASURED / GO624 PAUSED / H1 HOLD",
+  "revision": 2,
+  "previous_manifest_sha256": "d34ca836432f3e35caad82ee04d6717413c6b0daf8abd32bb5df1108a0ee678f",
+  "original_complete_freeze_comment": 6615911791,
+  "forward_mechanical_revision": {
+    "kind": "exact pinned Clang23.1.3 formatting only",
+    "source_oracle_predictions_unchanged": true,
+    "original_r_head": "6c4e5a57c37aeec8bd3c5f04014a7b7699190671",
+    "first_fast_run": 41722844617,
+    "attempt": 1,
+    "job": 126219835445,
+    "original_owned_sha256": "79b8dde734046e8698e53b75721188f9085bb8e39636c25010c112cb16c192e4",
+    "full_latest_owned_source": "enclosing Issue forward repair freeze",
+    "raw": [
+      {
+        "path": "evidence/r1129/raw/fast-41722844617-attempt1/job-126219835445-received-utf8.log",
+        "bytes": 32769,
+        "sha256": "bb3e4fa9757a6708bb8973357643ad593420beb3668b793236b5b8135c40c10c",
+        "git_blob_sha": "83ddf7a2d50b5b40fb1c71d7e05877492a26bcf3"
+      },
+      {
+        "path": "evidence/r1129/raw/fast-41722844617-attempt1/formatter-complete-received.patch",
+        "bytes": 3801,
+        "sha256": "ccecdb14707d8d9629357a95ad056e81b7dfa241b23d482e5ed1712b170c8530",
+        "git_blob_sha": "6bff2c0f2d3698ea8fdb209a0a7ad548f08f66d4"
+      },
+      {
+        "path": "evidence/r1129/raw/fast-41722844617-attempt1/formatter-r-owned-only.patch",
+        "bytes": 575,
+        "sha256": "6caf695542da2c345f904833eaaa6aaf6fcc5bd21298fbb106015a5b9abc7abf",
+        "git_blob_sha": "3bca1160e3bdd4fbd5e5c999112c2099a33d5142"
+      }
+    ],
+    "ignored_foreign_suggestion_path": "tests/p1117/lineage.c; no body used; existing bytes untouched"
+  }
 }
