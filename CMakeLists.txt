@@ -1046,7 +1046,7 @@ if(BUILD_TESTING)
     add_test(NAME p1107_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1117/history_latest.py" p1107)
     add_executable(p1117_probe tests/p1117/probe.c)
-    add_executable(p1117_lineage tests/p1117/lineage.c)
+    add_executable(p1117_lineage tests/p1117/lineage_v2.c)
     add_executable(p1117_safety tests/p1117/safety_v3.c)
     add_executable(p1117_oom tests/p1117/safety_oom_v2.c)
     foreach(target p1117_probe p1117_lineage p1117_safety p1117_oom)
