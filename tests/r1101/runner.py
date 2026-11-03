@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import pathlib
 import re
 import subprocess
@@ -16,13 +17,13 @@ import tempfile
 COMPILER, CC, SANITIZER, DATA, MODE = sys.argv[1:]
 ROOT = pathlib.Path(DATA)
 EXPECTED_SHA = {
-    "r1101_p01_break_old_index0.nl": "2c618d617dbf557f6e8dba5de35d2522613e2597d053da9882bf113627fcd1cf",
-    "r1101_p02_break_old_known_call_index1.nl": "8b49adbbdca775d92c654d61150da8c032cf7ad8ff66e92d308976d5928056e1",
-    "r1101_n01_bare_break.nl": "6b985997bcf621b57f2688d9da15b7664510ddabf946d65f3149a6fc0dba02d6",
-    "r1101_n02_loan_ref_escape_break.nl": "8c0b9c7add696498cecc8c05b93dfa67a560e24e79300cd33b295081d3dd5dfc",
-    "r1101_n03_unknown_field_break.nl": "8fbcaf00e11a771ee9ce04394481459b6b7357f3767a4b15f8ff23a93fb09735",
-    "r1101_n04_break_type_mismatch.nl": "85a3f877d701c095ebefffb4097d7c89dcb77ed3a0bf7c3578fa46a650c670fc",
-    "r1101_oracle.json": "e71e1740387bdf5e537bc2aeba64077b3a48c70640d515ccf4188e450305cd8c",
+    "r1101_p01_break_old_index0.nl": "574774848bdaf6bd0fe2f1b702c6b956ab8747c34ddbf8877156fa4328bd3f11",
+    "r1101_p02_break_old_known_call_index1.nl": "89395505eeed8e848ade296aafec5edb473206873862de0b3a646b11afd3fb22",
+    "r1101_n01_bare_break.nl": "e631da199fc07b29858fe4674e022729beb9e1dee3c2223af9aea920ab95f0bc",
+    "r1101_n02_loan_ref_escape_break.nl": "8744ec771dc61ebd64d9a5c43b40aa0db91aef48c3afff3d2b5636cbfecc0226",
+    "r1101_n03_unknown_field_break.nl": "24115dd646f39ce81aedabff7ab47776d890b3e2fe02247141d32d96fbd982b1",
+    "r1101_n04_break_type_mismatch.nl": "f19dc3802d32e5e0ccebfcc0ad8b3dbf21b8c4e1eecd2e2c2d12ebf5ee12f24c",
+    "r1101_oracle.json": "986fa4723a99f4cb2116730db696c8b4c57ac4e2ca6159b1605c56438b5f84a8",
 }
 POS = {
     "p01": "r1101_p01_break_old_index0",
@@ -45,6 +46,13 @@ def execute(command: list[str], label: str) -> subprocess.CompletedProcess:
           f"stdout_sha256={hashlib.sha256(p.stdout).hexdigest()} "
           f"stderr_sha256={hashlib.sha256(p.stderr).hexdigest()} "
           f"stdout_bytes={len(p.stdout)} stderr_bytes={len(p.stderr)}", flush=True)
+    artifact_dir = os.environ.get("R1101_ARTIFACT_DIR")
+    if artifact_dir:
+        destination = pathlib.Path(artifact_dir)
+        destination.mkdir(parents=True, exist_ok=True)
+        safe_name = re.sub(r"[^A-Za-z0-9_.-]", "_", label)
+        (destination / (safe_name + ".stdout")).write_bytes(p.stdout)
+        (destination / (safe_name + ".stderr")).write_bytes(p.stderr)
     if p.stderr:
         print(f"R1101 RAW STDERR {label}: {p.stderr.decode('utf-8', 'replace')[:3000]!r}",
               flush=True)
@@ -58,7 +66,7 @@ def freeze() -> dict:
         observed = hashlib.sha256(raw).hexdigest()
         if observed != digest or not raw.endswith(b"\n") or b"\r" in raw:
             die("FREEZE", f"{file}: expected={digest} actual={observed}")
-        print(f"R1101 V1 BYTE-FREEZE {name} bytes={len(raw)} sha256={observed}",
+        print(f"R1101 V2 FORWARD-ONLY BYTE-FREEZE {name} bytes={len(raw)} sha256={observed}",
               flush=True)
     oracle = json.loads((ROOT / "r1101_oracle.json").read_bytes())
     assert oracle["authority"] == {
