@@ -1,0 +1,168 @@
+{
+  "schema": "r1129-c221a-v2-oracle",
+  "provenance": "PROFILE-CALIBRATED / NON-BLIND to declared structural scope; implementation and fixtures unseen",
+  "canonical_main": "73ef10a97f2fab7b70d094b2114359e961acefb5",
+  "draft": "Draft17.34",
+  "execution_candidate_head": null,
+  "v1": "All nine BLIND V1 files remain unchanged and NOT RUN. V2 does not supersede their runtime-parameter/two-Continue oracle.",
+  "registration": {
+    "unit": "Each complete .nl file is a separate fresh semantic unit; never concatenate variants.",
+    "nominal": "One complete nonrecursive Mosaic: signal:u8 is declared index 0, checkpoint:u8 is index 1; derived Copy+Discardable.",
+    "functions": [
+      "exchange(ref<write,u8>,u8)->u8",
+      "main()->unit"
+    ],
+    "entry": "Ordinary source-declared main(), zero parameters and explicit unit result. No host-injected T, root, issuer fact or synthetic main.",
+    "rules": "Draft17.34 16.1-2/17.1, 18.1, 19.1, 27.1/27.4-7 and 28.1-2. Source declarations and function signatures precede ordinary body checking. Public driver/API spellings remain for the separate release."
+  },
+  "control": {
+    "loop": "L0, sole loop; phase is usize and receives a fresh iteration binding.",
+    "condition": "I0, sole IF: phase == usize(4), producing bool.",
+    "C0": "True arm: continue(usize(19)); targets L0. Positive C path has no T reads/writes, helper calls, loans, extra phase computation or nested conditions.",
+    "B0": "False arm: genuine write loan/helper replace at original@checkpoint, then break prior; targets L0.",
+    "normal": {
+      "file": "r1129/v2/normal.nl",
+      "initial": 4,
+      "phases": [
+        4,
+        19
+      ],
+      "body_entries": 2,
+      "continues": 1,
+      "breaks": 1
+    },
+    "immediate": {
+      "file": "r1129/v2/immediate_break.nl",
+      "initial": 19,
+      "phases": [
+        19
+      ],
+      "body_entries": 1,
+      "continues": 0,
+      "breaks": 1
+    },
+    "complete_edges": "C0 and B0 are all lexical Continue/BREAK sites in every file. The valid normal source has both reachable paths and no loop fall-through or RETURN. The immediate control may have C0 proven unreachable from source semantics.",
+    "induction": "Entry plus every reachable C0 successor must be subsumed by a sound inductive H. Fresh phase binding is distinct from captured T original/package identity. First-iteration-only facts must not be reused without that obligation.",
+    "limit": "Selected finite counts follow from 19 != 4, not from a general termination assumption. Finite traces do not prove all-H induction or general termination."
+  },
+  "observations": {
+    "construction": "original initializes checkpoint before signal, opposite declaration order; resolve names to the exact nominal/declared indices.",
+    "before_loop_after_C0_and_before_B0": {
+      "original": {
+        "signal": 146,
+        "checkpoint": 37
+      },
+      "bystander": {
+        "signal": 89,
+        "checkpoint": 211
+      }
+    },
+    "B0": {
+      "operation": "exchange through original@checkpoint loan replaces current with u8(58)",
+      "prior": 37,
+      "returned_old": 37,
+      "after_target": 58,
+      "stable_sibling": 146,
+      "other_target": 211,
+      "other_sibling": 89
+    },
+    "caller_order": [
+      {
+        "operation": "exchange(original@signal,returned_old)",
+        "old": "caller_old=146",
+        "original": {
+          "signal": 37,
+          "checkpoint": 58
+        },
+        "bystander": {
+          "signal": 89,
+          "checkpoint": 211
+        }
+      },
+      {
+        "operation": "exchange(bystander@checkpoint,after_target)",
+        "old": "transferred_old=211",
+        "original": {
+          "signal": 37,
+          "checkpoint": 58
+        },
+        "bystander": {
+          "signal": 89,
+          "checkpoint": 58
+        }
+      }
+    ],
+    "final_bindings": {
+      "final_target": 58,
+      "final_sibling": 37,
+      "final_other": 58,
+      "preserved_other": 89
+    },
+    "entry_result": "main returns unit; 58 is a named guest binding, not invented console output or main return.",
+    "lineage": "returned_old must come from genuine pre-Change Copy 37; after_target from postcurrent 58. Neither may be replaced by a constructor, sibling, other original, replacement mislabeled as old, or observer-supplied value.",
+    "effects": [
+      "B0 Change(original.checkpoint) plus ancestor current update",
+      "caller Change(original.signal)",
+      "caller Change(bystander.checkpoint)"
+    ],
+    "identity": "Two simultaneous independent original roots, their declared children, incarnations and physical backing survive C0/B0/caller operations until main scope ends. Loans and replace do not mint roots. Preserve disjoint siblings/other original until each named write; do not transfer root authority with an ordinary u8 Copy.",
+    "storage": "Compare actual root/child storage within an execution before loop, around Continue/BREAK and after caller writes. No fixed C ABI offsets or cross-process address requirement. Values/addresses alone do not establish authentic issuer/current/incarnation lineage."
+  },
+  "cases": [
+    {
+      "file": "r1129/v2/normal.nl",
+      "canonical": "legal",
+      "declared_scope": "C1+B1, one IF, literal initial carry, pure C",
+      "first_required_diagnostic": "none",
+      "expected": "C0 once then B0; observations above. Production acceptance is unverified."
+    },
+    {
+      "file": "r1129/v2/immediate_break.nl",
+      "canonical": "legal",
+      "declared_scope": "same shape, literal initial 19",
+      "first_required_diagnostic": "none",
+      "expected": "B0 immediately; same values and identity, zero Continue. Cannot substitute for runtime Continue evidence."
+    },
+    {
+      "file": "r1129/v2/equal_bits.nl",
+      "canonical": "legal but not T-stuttering",
+      "declared_scope": "outside pure C due write loan/helper",
+      "first_required_diagnostic": "none from canonical; declared bounded-profile refusal expected at CHECK/owned eligibility before C emission if that limit is enforced",
+      "expected": "equal_old=37; actual source Change(original.checkpoint) on C0 despite same bits. Phases [4,19] and later values unchanged; no loan escapes.",
+      "grading": "Full sound Change/header analysis may accept canonical semantics; unexpected wider coverage returns to C. Matching bytes cannot prove stuttering. Unsafe acceptance requires omitted/forged effect/dependency/issuer obligations. Optimizing away an equal C store alone is not an unsafe finding."
+    },
+    {
+      "file": "r1129/v2/loan_escape.nl",
+      "canonical": "illegal",
+      "declared_scope": "also outside pure C; earlier profile rejection may mask the target",
+      "first_required_diagnostic": "semantic CHECK scope/dependency compatibility at ending-loan result",
+      "expected": "w is loan-bound and must not be forwarded into escaped, even if unused later. Reject before Continue. This does not reach an ending-iteration/header dependency check."
+    },
+    {
+      "file": "r1129/v2/continue_type.nl",
+      "canonical": "illegal",
+      "first_required_diagnostic": "source semantic CHECK of exact Continue target argument type",
+      "expected": "u8(19) does not match usize phase; no implicit conversion."
+    },
+    {
+      "file": "r1129/v2/continue_arity.nl",
+      "canonical": "illegal",
+      "first_required_diagnostic": "source semantic CHECK of exact Continue target argument count",
+      "expected": "Two arguments target one phase slot; no partial receiving."
+    },
+    {
+      "file": "r1129/v2/continue_target.nl",
+      "canonical": "illegal",
+      "declared_scope": "outside pure C; sole Continue is inside loan_write",
+      "first_required_diagnostic": "source/control-context admissibility, during parser/context admission or frontend CHECK, before owned issuance",
+      "expected": "19.1 stops L0 context at the loan boundary; inner Continue has no target. Following return unit; is a legal main return that avoids a second Continue/BREAK or unrelated loop fall-through; it cannot legalize the bad item. This is not a positive RETURN-profile claim."
+    }
+  ],
+  "grading": {
+    "first_layer": "Record actual diagnostic/location/status and reached layer; no exact compiler diagnostic code is invented.",
+    "early_refusal": "An unrelated parser/registration or pure-C/profile refusal is not targeted-negative PASS. The intended semantic boundary is NOT REACHED; arbitrary nonzero is insufficient.",
+    "legal_refusal": "Sound CHECK precision refusal or later owned/C17 unsupported refusal is a capability boundary, not canonical illegality or native PASS.",
+    "stop": "Illegal-source acceptance, lost dependency/effect/edge, incorrect old/current/target/root identity, substituted original storage or C/native/sanitizer discrepancy returns to C without changing the oracle.",
+    "status": "Registration/CHECK, genuine owned/public, C17, native, named no-clobber and host/guest sanitizers: ALL NOT RUN."
+  }
+}

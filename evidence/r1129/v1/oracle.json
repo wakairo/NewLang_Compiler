@@ -1,0 +1,203 @@
+{
+  "schema": "r1129-c221-blind-freeze-v1",
+  "authority": {
+    "repository": "wakairo/NewLang_Compiler",
+    "main": "73ef10a97f2fab7b70d094b2114359e961acefb5",
+    "draft": "docs/reference/NewLang_v0_spec_Draft17_34.md",
+    "execution_candidate_head": null
+  },
+  "status": "SOURCE-FREEZE ONLY; ALL SEMANTIC AND NATIVE LAYERS UNEXECUTED",
+  "entry_registration": {
+    "isolation": "Each .nl file is a complete, separate physical input and a fresh semantic unit. Never concatenate variants.",
+    "nominal": "Mosaic is one complete nonrecursive ordinary nominal; exactly signal:u8 at declared index 0 and checkpoint:u8 at index 1; structurally Copy and Discardable.",
+    "functions": [
+      "exchange(ref<write,u8>,u8)->u8",
+      "probe(usize)->u8",
+      "main()->unit"
+    ],
+    "entry": "ordinary source-declared main, zero parameters, explicit unit result; no synthetic main body, pre-registered Mosaic value, or host-issued T fact.",
+    "registration_order": "Collect same-unit ordinary function signatures before definition checking under 18.1/28.2; resolve the declared T fields in this same unit under 17.1. Definition checking covers arbitrary probe.seed, not only the two main call arguments.",
+    "syntax": "Typed literals, mandatory if/else parentheses and blocks, loop(phase=seed), dedicated continue(...); and break prior;, scoped loan body and ordinary known-direct call. Not a statement-only fragment.",
+    "driver_boundary": "Canonical fixes the source/semantic registration shape, not the current CLI/API spelling or generated C ABI. Freeze the mechanically verified driver after a separate execution release; do not invent registration success now."
+  },
+  "control": {
+    "loop": "L0: sole loop expression in probe; seed is an ordinary usize parameter; phase is a fresh usize binding at each iteration.",
+    "edges": [
+      {
+        "id": "C0",
+        "guard": "phase == usize(4)",
+        "kind": "Continue",
+        "target": "L0",
+        "arguments": [
+          "usize(11)"
+        ]
+      },
+      {
+        "id": "C1",
+        "guard": "phase != usize(4) and phase == usize(11)",
+        "kind": "Continue",
+        "target": "L0",
+        "arguments": [
+          "usize(19)"
+        ]
+      },
+      {
+        "id": "B0",
+        "guard": "phase != usize(4) and phase != usize(11)",
+        "kind": "BREAK",
+        "target": "L0",
+        "result": "prior:u8",
+        "effect": "exchange through the exact original@checkpoint write loan; replace with u8(58)"
+      }
+    ],
+    "completeness": "These are all statically reachable Continue/BREAK sites in the valid baseline. Both if arms terminate recursively; no loop fall-through and no loop RETURN. Do not infer complete exit coverage from a partial producer list.",
+    "entries": [
+      {
+        "name": "delayed",
+        "seed": 4,
+        "phase_sequence": [
+          4,
+          11,
+          19
+        ],
+        "body_entries": 3,
+        "continue_sequence": [
+          "C0",
+          "C1"
+        ],
+        "break_sequence": [
+          "B0"
+        ]
+      },
+      {
+        "name": "immediate",
+        "seed": 19,
+        "phase_sequence": [
+          19
+        ],
+        "body_entries": 1,
+        "continue_sequence": [],
+        "break_sequence": [
+          "B0"
+        ]
+      }
+    ],
+    "termination_limit": "Counts follow from this finite source transition relation and selected entry inputs, assuming called total comparisons and legal field replacements complete. Native traces do not establish general loop induction or termination. No unbounded runtime input exploration is authorized.",
+    "header_obligation": "EntryState and BOTH C0/C1 successor transfers must be subsumed by an inductive header H. Fresh iteration-binding identity is distinct from carried package and captured original identity. No concrete ValueId enumeration or runtime ghost tag is required."
+  },
+  "baseline_observations": {
+    "before_loop_and_before_each_break_write": {
+      "original": {
+        "signal": 146,
+        "checkpoint": 37
+      },
+      "bystander": {
+        "signal": 89,
+        "checkpoint": 211
+      }
+    },
+    "continue": "C0 and C1 perform no T write, Reset or EndRoot. Captured original/current facts, disjoint sibling and independent bystander survive; iteration locals are ordinary dependency-free u8 Copies.",
+    "after_B0_before_caller_writes": {
+      "prior": 37,
+      "returned_old": 37,
+      "after_target": 58,
+      "stable_sibling": 146,
+      "other_target": 211,
+      "other_sibling": 89
+    },
+    "caller_order": [
+      {
+        "operation": "exchange(original@signal, returned_old)",
+        "old_result": "caller_old = 146",
+        "post_original": {
+          "signal": 37,
+          "checkpoint": 58
+        },
+        "post_bystander": {
+          "signal": 89,
+          "checkpoint": 211
+        }
+      },
+      {
+        "operation": "exchange(bystander@checkpoint, after_target)",
+        "old_result": "transferred_old = 211",
+        "post_original": {
+          "signal": 37,
+          "checkpoint": 58
+        },
+        "post_bystander": {
+          "signal": 89,
+          "checkpoint": 58
+        }
+      }
+    ],
+    "final_bindings": {
+      "final_target": 58,
+      "final_sibling": 37,
+      "final_other": 58,
+      "preserved_other": 89
+    },
+    "function_results": {
+      "probe": 58,
+      "main_delayed": 58,
+      "main_immediate": 58,
+      "main": "unit"
+    },
+    "lineage": "B0 prior/returned_old is the pre-Change child Copy (37), never replacement (58), constructor-rebuilt current (37 at checkpoint), sibling (146), or bystander (211). after_target is the post-Change current (58). The caller uses both through distinct later writes in the frozen order.",
+    "effects_per_probe": [
+      "Change(original.checkpoint) at B0",
+      "Change(original.signal) in caller continuation",
+      "Change(bystander.checkpoint) in caller continuation"
+    ],
+    "identity": "For each probe invocation, original and bystander are distinct live lexical placements with distinct root/incarnations and two declared children each. Continue and all replace operations preserve those exact root/child incarnations and their physical backing; Change updates current facts, including ancestors, while disjoint facts survive. No root/child rebinding or authority imported from equal bits, field spellings, another original or constructor. Distinct calls have distinct semantic local lifetimes; do NOT demand different numeric stack addresses across nonoverlapping calls.",
+    "storage_observation": "At original creation, each Continue boundary, after B0, after the loop and after caller writes, observe the same actual original storage and corresponding declared child placement, with a separate bystander. No ABI offset/size claim beyond the source type; public lineage proof and native address evidence have separate limits."
+  },
+  "cases": [
+    {
+      "file": "r1129/v1/stutter.nl",
+      "canonical": "legal in selected source semantics",
+      "predicted_first_required_diagnostic": "none",
+      "required_capability": "source-authentic runtime Continue, fresh phase binding, stuttering captured T, normal BREAK old/result/postcurrent and same original storage. A conservative CHECK precision refusal or later owned/C17 unsupported refusal is a capability boundary, not an illegal-source verdict; no target candidate result is predicted from the old main."
+    },
+    {
+      "file": "r1129/v1/equal_bits.nl",
+      "canonical": "legal, but C0 is NOT T-stuttering",
+      "predicted_first_required_diagnostic": "none under complete semantics; bounded-support rejection must be explicitly classified",
+      "delta": "C0 adds exchange(original@checkpoint,u8(37)); equal_old=37. delayed still has [4,11,19], immediate still [19]. Visible final values equal baseline. Delayed has one extra source Change(original.checkpoint).",
+      "obligation": "13.5b infers Change for replace. Equal bits cannot by themselves establish a no-Change/stuttering certificate. Full sound Change/header analysis may accept; conservative CHECK precision refusal or owned/C17 unsupported refusal before emission is permitted. Acceptance with missing effect/current/issuer obligations is unsafe evidence even if native bytes match. Do not make canonical rejection or a fixed diagnostic code the oracle."
+    },
+    {
+      "file": "r1129/v1/loan_escape.nl",
+      "canonical": "illegal surviving loan-bound ref",
+      "predicted_first_required_diagnostic": "semantic CHECK scope-exit/dependency compatibility at the loan normal result",
+      "first_bad_operation": "C0 returns w from loan_write(original@checkpoint) into escaped. It must fail before exposing/receiving that result, hence before Continue and C17.",
+      "limits": "This is an ending-loan dependency negative; it does NOT claim to reach a loop-header or ending-iteration dependency check."
+    },
+    {
+      "file": "r1129/v1/continue_type.nl",
+      "canonical": "illegal Continue argument type",
+      "predicted_first_required_diagnostic": "source semantic CHECK of target argument static type",
+      "first_bad_operation": "C0 carries u8(11) to the usize phase slot. No implicit conversion."
+    },
+    {
+      "file": "r1129/v1/continue_arity.nl",
+      "canonical": "illegal Continue argument count",
+      "predicted_first_required_diagnostic": "source semantic CHECK of target arity",
+      "first_bad_operation": "C0 supplies two arguments to L0's one parameter."
+    },
+    {
+      "file": "r1129/v1/continue_target.nl",
+      "canonical": "illegal cross-loan Continue target",
+      "predicted_first_required_diagnostic": "source/control-context admissibility, before owned issuance",
+      "first_bad_operation": "The added Continue inside a loan body has no active loop target. 19.1 stops outer L0 context at the loan boundary. The subsequent outer Continue has correct target/count/type and cannot legalize the inner one.",
+      "limits": "A parser may report this during syntax/context admission or the frontend may report it during semantic source checking; no fabricated exact compiler code is frozen."
+    }
+  ],
+  "grading": {
+    "source_illegal": "Only the four definite semantic/source negatives above; a rejection before their specified target layer due to unrelated source/driver limitations is NOT targeted-negative PASS.",
+    "precision_refusal": "Record first diagnostic, source location, all reached stages, and NOT REACHED stages. Legal source may be conservatively rejected under 27.5/27.11.",
+    "backend_unsupported": "A successful source CHECK followed by fail-closed owned/C17 eligibility is not source illegality and not native PASS.",
+    "unsafe_acceptance": "Illegal source accepted, dependency/effect/identity erased, wrong old/current origin, incorrect target mapping, missing reachable edge, original storage replaced, or C/native divergence triggers STOP; never calibrate the oracle to P.",
+    "initial_state": "Parser, registration, CHECK, authentic owned/public, C17, native, no-clobber and sanitizers: NOT RUN."
+  }
+}
