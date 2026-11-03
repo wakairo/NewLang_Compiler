@@ -1,0 +1,4952 @@
+{
+  "schema": "r1129-postrun-independent-raw-review-v1",
+  "review_kind": "Read-only JSON/text evidence inspection; no source/native/compiler execution",
+  "provenance": "PROFILE-CALIBRATED / NON-BLIND to declared structural scope; P implementation and fixtures unseen",
+  "frozen_v2_manifest_sha256": "3555c90c0fac9604ffe70a05450b23204e021222317292015fb9a0b6f6491a95",
+  "frozen_v2_oracle_sha256": "4679977c9b0afc941d58f1e54a03bec4b8e996d1050ccdc1268c1ded17863644",
+  "native_observations": [
+    {
+      "job": 126236388413,
+      "case": "normal",
+      "optimization": "O0",
+      "raw_path": "commands/017-normal-observed-O0-run.stdout",
+      "raw_sha256": "5c0d3596f23628e6f0619874e275d3d885e3781f9267f6d184ce4b1b768708df",
+      "phases": [
+        4,
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "continue",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe692cf4c5",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe692cf4c4",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe692cf4c7",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffe692cf4c4",
+        "original_signal": "0x7ffe692cf4c4",
+        "original_checkpoint": "0x7ffe692cf4c5",
+        "bystander": "0x7ffe692cf4c6",
+        "bystander_signal": "0x7ffe692cf4c6",
+        "bystander_checkpoint": "0x7ffe692cf4c7"
+      },
+      "sanitizer": "none",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236388413,
+      "case": "normal",
+      "optimization": "O2",
+      "raw_path": "commands/019-normal-observed-O2-run.stdout",
+      "raw_sha256": "3d00d15fbe1b4b628edd9db843899fa09dc4d2f8c84ccb72f84ad2447b3a48ae",
+      "phases": [
+        4,
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "continue",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe438e3275",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe438e3274",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe438e3277",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffe438e3274",
+        "original_signal": "0x7ffe438e3274",
+        "original_checkpoint": "0x7ffe438e3275",
+        "bystander": "0x7ffe438e3276",
+        "bystander_signal": "0x7ffe438e3276",
+        "bystander_checkpoint": "0x7ffe438e3277"
+      },
+      "sanitizer": "none",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236388413,
+      "case": "immediate_break",
+      "optimization": "O0",
+      "raw_path": "commands/030-immediate_break-observed-O0-run.stdout",
+      "raw_sha256": "5c8f63352a413096c53d2b8279e4f1ddd6f3ea3d8be0e58db0df73e71a0cd1a7",
+      "phases": [
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe55bdbe05",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe55bdbe04",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe55bdbe07",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffe55bdbe04",
+        "original_signal": "0x7ffe55bdbe04",
+        "original_checkpoint": "0x7ffe55bdbe05",
+        "bystander": "0x7ffe55bdbe06",
+        "bystander_signal": "0x7ffe55bdbe06",
+        "bystander_checkpoint": "0x7ffe55bdbe07"
+      },
+      "sanitizer": "none",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236388413,
+      "case": "immediate_break",
+      "optimization": "O2",
+      "raw_path": "commands/032-immediate_break-observed-O2-run.stdout",
+      "raw_sha256": "31177a84700f156b01bc58024aff269d07bad1cc2ff6c135bb02b6be25d71ff0",
+      "phases": [
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffcf73182e5",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffcf73182e4",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffcf73182e7",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffcf73182e4",
+        "original_signal": "0x7ffcf73182e4",
+        "original_checkpoint": "0x7ffcf73182e5",
+        "bystander": "0x7ffcf73182e6",
+        "bystander_signal": "0x7ffcf73182e6",
+        "bystander_checkpoint": "0x7ffcf73182e7"
+      },
+      "sanitizer": "none",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236388052,
+      "case": "normal",
+      "optimization": "O0",
+      "raw_path": "commands/017-normal-observed-O0-run.stdout",
+      "raw_sha256": "a43e075c2c9f1a8a0d7f1253e05a5208850ed7ce4615bd471465448022f8f01e",
+      "phases": [
+        4,
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "continue",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffce2bf9795",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffce2bf9794",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffce2bf9797",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffce2bf9794",
+        "original_signal": "0x7ffce2bf9794",
+        "original_checkpoint": "0x7ffce2bf9795",
+        "bystander": "0x7ffce2bf9796",
+        "bystander_signal": "0x7ffce2bf9796",
+        "bystander_checkpoint": "0x7ffce2bf9797"
+      },
+      "sanitizer": "none",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236388052,
+      "case": "normal",
+      "optimization": "O2",
+      "raw_path": "commands/019-normal-observed-O2-run.stdout",
+      "raw_sha256": "21990b2527788c96d9cbe6a6d3671a13a6c9982ac44e531a63597410e9614b0a",
+      "phases": [
+        4,
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "continue",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe2037d4a5",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe2037d4a4",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe2037d4a7",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffe2037d4a4",
+        "original_signal": "0x7ffe2037d4a4",
+        "original_checkpoint": "0x7ffe2037d4a5",
+        "bystander": "0x7ffe2037d4a6",
+        "bystander_signal": "0x7ffe2037d4a6",
+        "bystander_checkpoint": "0x7ffe2037d4a7"
+      },
+      "sanitizer": "none",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236388052,
+      "case": "immediate_break",
+      "optimization": "O0",
+      "raw_path": "commands/030-immediate_break-observed-O0-run.stdout",
+      "raw_sha256": "d94e7f93b66947225005c24f63e160f511ceab40ab137587013f14afead9d294",
+      "phases": [
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffcefb429d5",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffcefb429d4",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffcefb429d7",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffcefb429d4",
+        "original_signal": "0x7ffcefb429d4",
+        "original_checkpoint": "0x7ffcefb429d5",
+        "bystander": "0x7ffcefb429d6",
+        "bystander_signal": "0x7ffcefb429d6",
+        "bystander_checkpoint": "0x7ffcefb429d7"
+      },
+      "sanitizer": "none",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236388052,
+      "case": "immediate_break",
+      "optimization": "O2",
+      "raw_path": "commands/032-immediate_break-observed-O2-run.stdout",
+      "raw_sha256": "6b756376ce914cc6af89e351b62845ba494065d49dcaec398c5370c61728ed4c",
+      "phases": [
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe12373945",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe12373944",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe12373947",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffe12373944",
+        "original_signal": "0x7ffe12373944",
+        "original_checkpoint": "0x7ffe12373945",
+        "bystander": "0x7ffe12373946",
+        "bystander_signal": "0x7ffe12373946",
+        "bystander_checkpoint": "0x7ffe12373947"
+      },
+      "sanitizer": "none",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236387772,
+      "case": "normal",
+      "optimization": "O0",
+      "raw_path": "commands/017-normal-observed-O0-run.stdout",
+      "raw_sha256": "0539610726d08738abde533bce1f1cf31219db8e130023c22acb5b178891c911",
+      "phases": [
+        4,
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "continue",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffd59200d1f",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffd59200d1e",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffd59200d1d",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffd59200d1e",
+        "original_signal": "0x7ffd59200d1e",
+        "original_checkpoint": "0x7ffd59200d1f",
+        "bystander": "0x7ffd59200d1c",
+        "bystander_signal": "0x7ffd59200d1c",
+        "bystander_checkpoint": "0x7ffd59200d1d"
+      },
+      "sanitizer": "none",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236387772,
+      "case": "normal",
+      "optimization": "O2",
+      "raw_path": "commands/019-normal-observed-O2-run.stdout",
+      "raw_sha256": "a6b19ceed08538052d2691f032e15b9b3de6ff93d376c4bd122f8ffbbe774eb7",
+      "phases": [
+        4,
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "continue",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffd4fbea445",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffd4fbea444",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffd4fbea447",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffd4fbea444",
+        "original_signal": "0x7ffd4fbea444",
+        "original_checkpoint": "0x7ffd4fbea445",
+        "bystander": "0x7ffd4fbea446",
+        "bystander_signal": "0x7ffd4fbea446",
+        "bystander_checkpoint": "0x7ffd4fbea447"
+      },
+      "sanitizer": "none",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236387772,
+      "case": "immediate_break",
+      "optimization": "O0",
+      "raw_path": "commands/030-immediate_break-observed-O0-run.stdout",
+      "raw_sha256": "45d9ca702dcfbb302e340db1ee32702da579f5149a1b4628705e452172073826",
+      "phases": [
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffd1437e47f",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffd1437e47e",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffd1437e47d",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffd1437e47e",
+        "original_signal": "0x7ffd1437e47e",
+        "original_checkpoint": "0x7ffd1437e47f",
+        "bystander": "0x7ffd1437e47c",
+        "bystander_signal": "0x7ffd1437e47c",
+        "bystander_checkpoint": "0x7ffd1437e47d"
+      },
+      "sanitizer": "none",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236387772,
+      "case": "immediate_break",
+      "optimization": "O2",
+      "raw_path": "commands/032-immediate_break-observed-O2-run.stdout",
+      "raw_sha256": "2ae02a08188c63c0be9e3b91d9b467fa3381a42a6a142dfb95a5b792b454bf77",
+      "phases": [
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffc7a6c2a37",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffc7a6c2a36",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffc7a6c2a35",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffc7a6c2a36",
+        "original_signal": "0x7ffc7a6c2a36",
+        "original_checkpoint": "0x7ffc7a6c2a37",
+        "bystander": "0x7ffc7a6c2a34",
+        "bystander_signal": "0x7ffc7a6c2a34",
+        "bystander_checkpoint": "0x7ffc7a6c2a35"
+      },
+      "sanitizer": "none",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236388113,
+      "case": "normal",
+      "optimization": "O0",
+      "raw_path": "commands/017-normal-observed-O0-run.stdout",
+      "raw_sha256": "dfbcec63bd00c593699b71add4ef3c1a490d1a61eb8ac2028c456f4a819a92e6",
+      "phases": [
+        4,
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "continue",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7b34262f0021",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7b34262f0020",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7b34262f0031",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7b34262f0020",
+        "original_signal": "0x7b34262f0020",
+        "original_checkpoint": "0x7b34262f0021",
+        "bystander": "0x7b34262f0030",
+        "bystander_signal": "0x7b34262f0030",
+        "bystander_checkpoint": "0x7b34262f0031"
+      },
+      "sanitizer": "address",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236388113,
+      "case": "normal",
+      "optimization": "O2",
+      "raw_path": "commands/019-normal-observed-O2-run.stdout",
+      "raw_sha256": "0d5aef34f2396cbc639647e59208fa0b29627a3a979a4961b39bc8f95f7483d1",
+      "phases": [
+        4,
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "continue",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7b9d714f0021",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7b9d714f0020",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7b9d714f0031",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7b9d714f0020",
+        "original_signal": "0x7b9d714f0020",
+        "original_checkpoint": "0x7b9d714f0021",
+        "bystander": "0x7b9d714f0030",
+        "bystander_signal": "0x7b9d714f0030",
+        "bystander_checkpoint": "0x7b9d714f0031"
+      },
+      "sanitizer": "address",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236388113,
+      "case": "immediate_break",
+      "optimization": "O0",
+      "raw_path": "commands/030-immediate_break-observed-O0-run.stdout",
+      "raw_sha256": "5d69238f1750c2ef579cbb5a9a5a03406015edcf6a75741634b2e3aa2f72d702",
+      "phases": [
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7bb652af0021",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7bb652af0020",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7bb652af0031",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7bb652af0020",
+        "original_signal": "0x7bb652af0020",
+        "original_checkpoint": "0x7bb652af0021",
+        "bystander": "0x7bb652af0030",
+        "bystander_signal": "0x7bb652af0030",
+        "bystander_checkpoint": "0x7bb652af0031"
+      },
+      "sanitizer": "address",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236388113,
+      "case": "immediate_break",
+      "optimization": "O2",
+      "raw_path": "commands/032-immediate_break-observed-O2-run.stdout",
+      "raw_sha256": "817e2be32635a05f7f2d0bbb524948628152e0baf1197af2cf509b5dc22c8629",
+      "phases": [
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7affbc8f0021",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7affbc8f0020",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7affbc8f0031",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7affbc8f0020",
+        "original_signal": "0x7affbc8f0020",
+        "original_checkpoint": "0x7affbc8f0021",
+        "bystander": "0x7affbc8f0030",
+        "bystander_signal": "0x7affbc8f0030",
+        "bystander_checkpoint": "0x7affbc8f0031"
+      },
+      "sanitizer": "address",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236387340,
+      "case": "normal",
+      "optimization": "O0",
+      "raw_path": "commands/017-normal-observed-O0-run.stdout",
+      "raw_sha256": "1080aaa79cea277307a8451da2599f6a44b4f8f0d769da2e2e21f8bf37ae8d73",
+      "phases": [
+        4,
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "continue",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7fff93f20aaf",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7fff93f20aae",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7fff93f20aad",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7fff93f20aae",
+        "original_signal": "0x7fff93f20aae",
+        "original_checkpoint": "0x7fff93f20aaf",
+        "bystander": "0x7fff93f20aac",
+        "bystander_signal": "0x7fff93f20aac",
+        "bystander_checkpoint": "0x7fff93f20aad"
+      },
+      "sanitizer": "undefined",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236387340,
+      "case": "normal",
+      "optimization": "O2",
+      "raw_path": "commands/019-normal-observed-O2-run.stdout",
+      "raw_sha256": "076b003c40a56c6bf512cec7d022f6e1eb104e4c0de46d85a86228e4a4c660ca",
+      "phases": [
+        4,
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "continue",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe8adbcf17",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe8adbcf16",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffe8adbcf15",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffe8adbcf16",
+        "original_signal": "0x7ffe8adbcf16",
+        "original_checkpoint": "0x7ffe8adbcf17",
+        "bystander": "0x7ffe8adbcf14",
+        "bystander_signal": "0x7ffe8adbcf14",
+        "bystander_checkpoint": "0x7ffe8adbcf15"
+      },
+      "sanitizer": "undefined",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236387340,
+      "case": "immediate_break",
+      "optimization": "O0",
+      "raw_path": "commands/030-immediate_break-observed-O0-run.stdout",
+      "raw_sha256": "d805d5466806f67ac3777fbb9fdcdc4ee11f80f0ade3a32c45bc44628c9963f7",
+      "phases": [
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffc724c1ecf",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffc724c1ece",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffc724c1ecd",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffc724c1ece",
+        "original_signal": "0x7ffc724c1ece",
+        "original_checkpoint": "0x7ffc724c1ecf",
+        "bystander": "0x7ffc724c1ecc",
+        "bystander_signal": "0x7ffc724c1ecc",
+        "bystander_checkpoint": "0x7ffc724c1ecd"
+      },
+      "sanitizer": "undefined",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    },
+    {
+      "job": 126236387340,
+      "case": "immediate_break",
+      "optimization": "O2",
+      "raw_path": "commands/032-immediate_break-observed-O2-run.stdout",
+      "raw_sha256": "da1c937792ac069447f83883f67aa12fbe6b6f0e0773013b4766bd40cb4345e7",
+      "phases": [
+        19
+      ],
+      "states": [
+        {
+          "tag": "before_loop",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "header",
+          "signal": 146,
+          "checkpoint": 37,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_0",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "break",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_loop",
+          "signal": 146,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_1",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 211
+        },
+        {
+          "tag": "after_call_2",
+          "signal": 37,
+          "checkpoint": 58,
+          "other_signal": 89,
+          "other_checkpoint": 58
+        }
+      ],
+      "calls": [
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffc85628ba5",
+          "new": 58,
+          "old": 37,
+          "current": 58
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffc85628ba4",
+          "new": 37,
+          "old": 146,
+          "current": 37
+        },
+        {
+          "event": "call",
+          "function": "nl_fn_10",
+          "destination": "0x7ffc85628ba7",
+          "new": 58,
+          "old": 211,
+          "current": 58
+        }
+      ],
+      "stable_addresses": {
+        "original": "0x7ffc85628ba4",
+        "original_signal": "0x7ffc85628ba4",
+        "original_checkpoint": "0x7ffc85628ba5",
+        "bystander": "0x7ffc85628ba6",
+        "bystander_signal": "0x7ffc85628ba6",
+        "bystander_checkpoint": "0x7ffc85628ba7"
+      },
+      "sanitizer": "undefined",
+      "status": "FINITE_FROZEN_TRACE_VALUES_AND_LIVE_ADDRESSES_MATCH"
+    }
+  ],
+  "public_observations": [
+    {
+      "job": 126236388413,
+      "case": "normal",
+      "status": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+      "control_counts": {
+        "BREAK": 1,
+        "CONTINUE": 1,
+        "IF": 1,
+        "LOAN": 3,
+        "USIZE_EQUALITY": 1
+      },
+      "loop_nodes": [
+        {
+          "argument_count": 1,
+          "body_backed": false,
+          "break_edges": 1,
+          "child_fact": 0,
+          "child_incarnation": 0,
+          "child_post_fact": 0,
+          "continue_edges": 1,
+          "direct_break_validator_observation": false,
+          "end": 422,
+          "event": "node",
+          "field_base": 0,
+          "field_child": 0,
+          "field_compatible": false,
+          "field_index": 0,
+          "field_nominal": 0,
+          "field_parent": 0,
+          "field_present": false,
+          "first_argument": 16,
+          "first_item": 0,
+          "fragment": 2,
+          "function": 0,
+          "header_inductive": true,
+          "initializer": 0,
+          "kind": 40,
+          "kind_name": "LOOP",
+          "loan_forwarded": false,
+          "loan_incarnation": 0,
+          "loan_nonescape": false,
+          "loan_place": 0,
+          "loan_ref_symbol": 0,
+          "loan_scope": 0,
+          "name": "",
+          "new_value": 0,
+          "next_argument": 0,
+          "next_item": 0,
+          "node": 17,
+          "old_value": 0,
+          "parent_fact": 0,
+          "parent_incarnation": 0,
+          "parent_post_fact": 0,
+          "result_count": 1,
+          "return_edges": 0,
+          "scalar": 0,
+          "scalar_known": false,
+          "scalar_present": false,
+          "start": 160,
+          "symbol": 0,
+          "tail": 0,
+          "terminates": false,
+          "type": 6,
+          "value_use": 0,
+          "world": 1
+        }
+      ],
+      "known_named_scalars": [
+        {
+          "expected": 37,
+          "known": true,
+          "name": "prior",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 1,
+          "world": 4
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "returned_old",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 14,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "after_target",
+          "scalar": 58,
+          "symbol": 8,
+          "value": 15,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "stable_sibling",
+          "scalar": 146,
+          "symbol": 9,
+          "value": 16,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "other_target",
+          "scalar": 211,
+          "symbol": 10,
+          "value": 17,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "other_sibling",
+          "scalar": 89,
+          "symbol": 11,
+          "value": 18,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "caller_old",
+          "scalar": 146,
+          "symbol": 15,
+          "value": 2,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "transferred_old",
+          "scalar": 211,
+          "symbol": 19,
+          "value": 5,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_target",
+          "scalar": 58,
+          "symbol": 20,
+          "value": 31,
+          "world": 1
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "final_sibling",
+          "scalar": 37,
+          "symbol": 21,
+          "value": 32,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_other",
+          "scalar": 58,
+          "symbol": 22,
+          "value": 33,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "preserved_other",
+          "scalar": 89,
+          "symbol": 23,
+          "value": 34,
+          "world": 1
+        }
+      ],
+      "historical_identity": [
+        {
+          "bindings": {
+            "bystander": 4,
+            "original": 1
+          },
+          "places": {
+            "bystander": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 4,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 4,
+              "type": 10,
+              "world": 1
+            },
+            "original": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 1,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 1,
+              "type": 10,
+              "world": 1
+            }
+          },
+          "world": 1
+        }
+      ],
+      "limits": [
+        "No universal public current-valid or source-to-C storage validator exists.",
+        "Historical point-in-time field facts are not final live-place assertions.",
+        "No semantic IDs are compared across different world labels.",
+        "Public check and CLI emission use separate genuine checks of identical bytes.",
+        "Header evidence is issuer-reported; finite native traces do not prove all H."
+      ]
+    },
+    {
+      "job": 126236388413,
+      "case": "immediate_break",
+      "status": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+      "control_counts": {
+        "BREAK": 1,
+        "CONTINUE": 1,
+        "IF": 1,
+        "LOAN": 3,
+        "USIZE_EQUALITY": 1
+      },
+      "loop_nodes": [
+        {
+          "argument_count": 1,
+          "body_backed": false,
+          "break_edges": 1,
+          "child_fact": 0,
+          "child_incarnation": 0,
+          "child_post_fact": 0,
+          "continue_edges": 1,
+          "direct_break_validator_observation": false,
+          "end": 423,
+          "event": "node",
+          "field_base": 0,
+          "field_child": 0,
+          "field_compatible": false,
+          "field_index": 0,
+          "field_nominal": 0,
+          "field_parent": 0,
+          "field_present": false,
+          "first_argument": 16,
+          "first_item": 0,
+          "fragment": 2,
+          "function": 0,
+          "header_inductive": true,
+          "initializer": 0,
+          "kind": 40,
+          "kind_name": "LOOP",
+          "loan_forwarded": false,
+          "loan_incarnation": 0,
+          "loan_nonescape": false,
+          "loan_place": 0,
+          "loan_ref_symbol": 0,
+          "loan_scope": 0,
+          "name": "",
+          "new_value": 0,
+          "next_argument": 0,
+          "next_item": 0,
+          "node": 17,
+          "old_value": 0,
+          "parent_fact": 0,
+          "parent_incarnation": 0,
+          "parent_post_fact": 0,
+          "result_count": 1,
+          "return_edges": 0,
+          "scalar": 0,
+          "scalar_known": false,
+          "scalar_present": false,
+          "start": 160,
+          "symbol": 0,
+          "tail": 0,
+          "terminates": false,
+          "type": 6,
+          "value_use": 0,
+          "world": 1
+        }
+      ],
+      "known_named_scalars": [
+        {
+          "expected": 37,
+          "known": true,
+          "name": "prior",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 1,
+          "world": 4
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "returned_old",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 14,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "after_target",
+          "scalar": 58,
+          "symbol": 8,
+          "value": 15,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "stable_sibling",
+          "scalar": 146,
+          "symbol": 9,
+          "value": 16,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "other_target",
+          "scalar": 211,
+          "symbol": 10,
+          "value": 17,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "other_sibling",
+          "scalar": 89,
+          "symbol": 11,
+          "value": 18,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "caller_old",
+          "scalar": 146,
+          "symbol": 15,
+          "value": 2,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "transferred_old",
+          "scalar": 211,
+          "symbol": 19,
+          "value": 5,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_target",
+          "scalar": 58,
+          "symbol": 20,
+          "value": 31,
+          "world": 1
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "final_sibling",
+          "scalar": 37,
+          "symbol": 21,
+          "value": 32,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_other",
+          "scalar": 58,
+          "symbol": 22,
+          "value": 33,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "preserved_other",
+          "scalar": 89,
+          "symbol": 23,
+          "value": 34,
+          "world": 1
+        }
+      ],
+      "historical_identity": [
+        {
+          "bindings": {
+            "bystander": 4,
+            "original": 1
+          },
+          "places": {
+            "bystander": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 4,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 4,
+              "type": 10,
+              "world": 1
+            },
+            "original": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 1,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 1,
+              "type": 10,
+              "world": 1
+            }
+          },
+          "world": 1
+        }
+      ],
+      "limits": [
+        "No universal public current-valid or source-to-C storage validator exists.",
+        "Historical point-in-time field facts are not final live-place assertions.",
+        "No semantic IDs are compared across different world labels.",
+        "Public check and CLI emission use separate genuine checks of identical bytes.",
+        "Header evidence is issuer-reported; finite native traces do not prove all H."
+      ]
+    },
+    {
+      "job": 126236388052,
+      "case": "normal",
+      "status": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+      "control_counts": {
+        "BREAK": 1,
+        "CONTINUE": 1,
+        "IF": 1,
+        "LOAN": 3,
+        "USIZE_EQUALITY": 1
+      },
+      "loop_nodes": [
+        {
+          "argument_count": 1,
+          "body_backed": false,
+          "break_edges": 1,
+          "child_fact": 0,
+          "child_incarnation": 0,
+          "child_post_fact": 0,
+          "continue_edges": 1,
+          "direct_break_validator_observation": false,
+          "end": 422,
+          "event": "node",
+          "field_base": 0,
+          "field_child": 0,
+          "field_compatible": false,
+          "field_index": 0,
+          "field_nominal": 0,
+          "field_parent": 0,
+          "field_present": false,
+          "first_argument": 16,
+          "first_item": 0,
+          "fragment": 2,
+          "function": 0,
+          "header_inductive": true,
+          "initializer": 0,
+          "kind": 40,
+          "kind_name": "LOOP",
+          "loan_forwarded": false,
+          "loan_incarnation": 0,
+          "loan_nonescape": false,
+          "loan_place": 0,
+          "loan_ref_symbol": 0,
+          "loan_scope": 0,
+          "name": "",
+          "new_value": 0,
+          "next_argument": 0,
+          "next_item": 0,
+          "node": 17,
+          "old_value": 0,
+          "parent_fact": 0,
+          "parent_incarnation": 0,
+          "parent_post_fact": 0,
+          "result_count": 1,
+          "return_edges": 0,
+          "scalar": 0,
+          "scalar_known": false,
+          "scalar_present": false,
+          "start": 160,
+          "symbol": 0,
+          "tail": 0,
+          "terminates": false,
+          "type": 6,
+          "value_use": 0,
+          "world": 1
+        }
+      ],
+      "known_named_scalars": [
+        {
+          "expected": 37,
+          "known": true,
+          "name": "prior",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 1,
+          "world": 4
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "returned_old",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 14,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "after_target",
+          "scalar": 58,
+          "symbol": 8,
+          "value": 15,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "stable_sibling",
+          "scalar": 146,
+          "symbol": 9,
+          "value": 16,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "other_target",
+          "scalar": 211,
+          "symbol": 10,
+          "value": 17,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "other_sibling",
+          "scalar": 89,
+          "symbol": 11,
+          "value": 18,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "caller_old",
+          "scalar": 146,
+          "symbol": 15,
+          "value": 2,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "transferred_old",
+          "scalar": 211,
+          "symbol": 19,
+          "value": 5,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_target",
+          "scalar": 58,
+          "symbol": 20,
+          "value": 31,
+          "world": 1
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "final_sibling",
+          "scalar": 37,
+          "symbol": 21,
+          "value": 32,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_other",
+          "scalar": 58,
+          "symbol": 22,
+          "value": 33,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "preserved_other",
+          "scalar": 89,
+          "symbol": 23,
+          "value": 34,
+          "world": 1
+        }
+      ],
+      "historical_identity": [
+        {
+          "bindings": {
+            "bystander": 4,
+            "original": 1
+          },
+          "places": {
+            "bystander": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 4,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 4,
+              "type": 10,
+              "world": 1
+            },
+            "original": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 1,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 1,
+              "type": 10,
+              "world": 1
+            }
+          },
+          "world": 1
+        }
+      ],
+      "limits": [
+        "No universal public current-valid or source-to-C storage validator exists.",
+        "Historical point-in-time field facts are not final live-place assertions.",
+        "No semantic IDs are compared across different world labels.",
+        "Public check and CLI emission use separate genuine checks of identical bytes.",
+        "Header evidence is issuer-reported; finite native traces do not prove all H."
+      ]
+    },
+    {
+      "job": 126236388052,
+      "case": "immediate_break",
+      "status": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+      "control_counts": {
+        "BREAK": 1,
+        "CONTINUE": 1,
+        "IF": 1,
+        "LOAN": 3,
+        "USIZE_EQUALITY": 1
+      },
+      "loop_nodes": [
+        {
+          "argument_count": 1,
+          "body_backed": false,
+          "break_edges": 1,
+          "child_fact": 0,
+          "child_incarnation": 0,
+          "child_post_fact": 0,
+          "continue_edges": 1,
+          "direct_break_validator_observation": false,
+          "end": 423,
+          "event": "node",
+          "field_base": 0,
+          "field_child": 0,
+          "field_compatible": false,
+          "field_index": 0,
+          "field_nominal": 0,
+          "field_parent": 0,
+          "field_present": false,
+          "first_argument": 16,
+          "first_item": 0,
+          "fragment": 2,
+          "function": 0,
+          "header_inductive": true,
+          "initializer": 0,
+          "kind": 40,
+          "kind_name": "LOOP",
+          "loan_forwarded": false,
+          "loan_incarnation": 0,
+          "loan_nonescape": false,
+          "loan_place": 0,
+          "loan_ref_symbol": 0,
+          "loan_scope": 0,
+          "name": "",
+          "new_value": 0,
+          "next_argument": 0,
+          "next_item": 0,
+          "node": 17,
+          "old_value": 0,
+          "parent_fact": 0,
+          "parent_incarnation": 0,
+          "parent_post_fact": 0,
+          "result_count": 1,
+          "return_edges": 0,
+          "scalar": 0,
+          "scalar_known": false,
+          "scalar_present": false,
+          "start": 160,
+          "symbol": 0,
+          "tail": 0,
+          "terminates": false,
+          "type": 6,
+          "value_use": 0,
+          "world": 1
+        }
+      ],
+      "known_named_scalars": [
+        {
+          "expected": 37,
+          "known": true,
+          "name": "prior",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 1,
+          "world": 4
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "returned_old",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 14,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "after_target",
+          "scalar": 58,
+          "symbol": 8,
+          "value": 15,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "stable_sibling",
+          "scalar": 146,
+          "symbol": 9,
+          "value": 16,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "other_target",
+          "scalar": 211,
+          "symbol": 10,
+          "value": 17,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "other_sibling",
+          "scalar": 89,
+          "symbol": 11,
+          "value": 18,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "caller_old",
+          "scalar": 146,
+          "symbol": 15,
+          "value": 2,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "transferred_old",
+          "scalar": 211,
+          "symbol": 19,
+          "value": 5,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_target",
+          "scalar": 58,
+          "symbol": 20,
+          "value": 31,
+          "world": 1
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "final_sibling",
+          "scalar": 37,
+          "symbol": 21,
+          "value": 32,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_other",
+          "scalar": 58,
+          "symbol": 22,
+          "value": 33,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "preserved_other",
+          "scalar": 89,
+          "symbol": 23,
+          "value": 34,
+          "world": 1
+        }
+      ],
+      "historical_identity": [
+        {
+          "bindings": {
+            "bystander": 4,
+            "original": 1
+          },
+          "places": {
+            "bystander": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 4,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 4,
+              "type": 10,
+              "world": 1
+            },
+            "original": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 1,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 1,
+              "type": 10,
+              "world": 1
+            }
+          },
+          "world": 1
+        }
+      ],
+      "limits": [
+        "No universal public current-valid or source-to-C storage validator exists.",
+        "Historical point-in-time field facts are not final live-place assertions.",
+        "No semantic IDs are compared across different world labels.",
+        "Public check and CLI emission use separate genuine checks of identical bytes.",
+        "Header evidence is issuer-reported; finite native traces do not prove all H."
+      ]
+    },
+    {
+      "job": 126236387772,
+      "case": "normal",
+      "status": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+      "control_counts": {
+        "BREAK": 1,
+        "CONTINUE": 1,
+        "IF": 1,
+        "LOAN": 3,
+        "USIZE_EQUALITY": 1
+      },
+      "loop_nodes": [
+        {
+          "argument_count": 1,
+          "body_backed": false,
+          "break_edges": 1,
+          "child_fact": 0,
+          "child_incarnation": 0,
+          "child_post_fact": 0,
+          "continue_edges": 1,
+          "direct_break_validator_observation": false,
+          "end": 422,
+          "event": "node",
+          "field_base": 0,
+          "field_child": 0,
+          "field_compatible": false,
+          "field_index": 0,
+          "field_nominal": 0,
+          "field_parent": 0,
+          "field_present": false,
+          "first_argument": 16,
+          "first_item": 0,
+          "fragment": 2,
+          "function": 0,
+          "header_inductive": true,
+          "initializer": 0,
+          "kind": 40,
+          "kind_name": "LOOP",
+          "loan_forwarded": false,
+          "loan_incarnation": 0,
+          "loan_nonescape": false,
+          "loan_place": 0,
+          "loan_ref_symbol": 0,
+          "loan_scope": 0,
+          "name": "",
+          "new_value": 0,
+          "next_argument": 0,
+          "next_item": 0,
+          "node": 17,
+          "old_value": 0,
+          "parent_fact": 0,
+          "parent_incarnation": 0,
+          "parent_post_fact": 0,
+          "result_count": 1,
+          "return_edges": 0,
+          "scalar": 0,
+          "scalar_known": false,
+          "scalar_present": false,
+          "start": 160,
+          "symbol": 0,
+          "tail": 0,
+          "terminates": false,
+          "type": 6,
+          "value_use": 0,
+          "world": 1
+        }
+      ],
+      "known_named_scalars": [
+        {
+          "expected": 37,
+          "known": true,
+          "name": "prior",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 1,
+          "world": 4
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "returned_old",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 14,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "after_target",
+          "scalar": 58,
+          "symbol": 8,
+          "value": 15,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "stable_sibling",
+          "scalar": 146,
+          "symbol": 9,
+          "value": 16,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "other_target",
+          "scalar": 211,
+          "symbol": 10,
+          "value": 17,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "other_sibling",
+          "scalar": 89,
+          "symbol": 11,
+          "value": 18,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "caller_old",
+          "scalar": 146,
+          "symbol": 15,
+          "value": 2,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "transferred_old",
+          "scalar": 211,
+          "symbol": 19,
+          "value": 5,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_target",
+          "scalar": 58,
+          "symbol": 20,
+          "value": 31,
+          "world": 1
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "final_sibling",
+          "scalar": 37,
+          "symbol": 21,
+          "value": 32,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_other",
+          "scalar": 58,
+          "symbol": 22,
+          "value": 33,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "preserved_other",
+          "scalar": 89,
+          "symbol": 23,
+          "value": 34,
+          "world": 1
+        }
+      ],
+      "historical_identity": [
+        {
+          "bindings": {
+            "bystander": 4,
+            "original": 1
+          },
+          "places": {
+            "bystander": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 4,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 4,
+              "type": 10,
+              "world": 1
+            },
+            "original": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 1,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 1,
+              "type": 10,
+              "world": 1
+            }
+          },
+          "world": 1
+        }
+      ],
+      "limits": [
+        "No universal public current-valid or source-to-C storage validator exists.",
+        "Historical point-in-time field facts are not final live-place assertions.",
+        "No semantic IDs are compared across different world labels.",
+        "Public check and CLI emission use separate genuine checks of identical bytes.",
+        "Header evidence is issuer-reported; finite native traces do not prove all H."
+      ]
+    },
+    {
+      "job": 126236387772,
+      "case": "immediate_break",
+      "status": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+      "control_counts": {
+        "BREAK": 1,
+        "CONTINUE": 1,
+        "IF": 1,
+        "LOAN": 3,
+        "USIZE_EQUALITY": 1
+      },
+      "loop_nodes": [
+        {
+          "argument_count": 1,
+          "body_backed": false,
+          "break_edges": 1,
+          "child_fact": 0,
+          "child_incarnation": 0,
+          "child_post_fact": 0,
+          "continue_edges": 1,
+          "direct_break_validator_observation": false,
+          "end": 423,
+          "event": "node",
+          "field_base": 0,
+          "field_child": 0,
+          "field_compatible": false,
+          "field_index": 0,
+          "field_nominal": 0,
+          "field_parent": 0,
+          "field_present": false,
+          "first_argument": 16,
+          "first_item": 0,
+          "fragment": 2,
+          "function": 0,
+          "header_inductive": true,
+          "initializer": 0,
+          "kind": 40,
+          "kind_name": "LOOP",
+          "loan_forwarded": false,
+          "loan_incarnation": 0,
+          "loan_nonescape": false,
+          "loan_place": 0,
+          "loan_ref_symbol": 0,
+          "loan_scope": 0,
+          "name": "",
+          "new_value": 0,
+          "next_argument": 0,
+          "next_item": 0,
+          "node": 17,
+          "old_value": 0,
+          "parent_fact": 0,
+          "parent_incarnation": 0,
+          "parent_post_fact": 0,
+          "result_count": 1,
+          "return_edges": 0,
+          "scalar": 0,
+          "scalar_known": false,
+          "scalar_present": false,
+          "start": 160,
+          "symbol": 0,
+          "tail": 0,
+          "terminates": false,
+          "type": 6,
+          "value_use": 0,
+          "world": 1
+        }
+      ],
+      "known_named_scalars": [
+        {
+          "expected": 37,
+          "known": true,
+          "name": "prior",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 1,
+          "world": 4
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "returned_old",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 14,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "after_target",
+          "scalar": 58,
+          "symbol": 8,
+          "value": 15,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "stable_sibling",
+          "scalar": 146,
+          "symbol": 9,
+          "value": 16,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "other_target",
+          "scalar": 211,
+          "symbol": 10,
+          "value": 17,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "other_sibling",
+          "scalar": 89,
+          "symbol": 11,
+          "value": 18,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "caller_old",
+          "scalar": 146,
+          "symbol": 15,
+          "value": 2,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "transferred_old",
+          "scalar": 211,
+          "symbol": 19,
+          "value": 5,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_target",
+          "scalar": 58,
+          "symbol": 20,
+          "value": 31,
+          "world": 1
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "final_sibling",
+          "scalar": 37,
+          "symbol": 21,
+          "value": 32,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_other",
+          "scalar": 58,
+          "symbol": 22,
+          "value": 33,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "preserved_other",
+          "scalar": 89,
+          "symbol": 23,
+          "value": 34,
+          "world": 1
+        }
+      ],
+      "historical_identity": [
+        {
+          "bindings": {
+            "bystander": 4,
+            "original": 1
+          },
+          "places": {
+            "bystander": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 4,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 4,
+              "type": 10,
+              "world": 1
+            },
+            "original": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 1,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 1,
+              "type": 10,
+              "world": 1
+            }
+          },
+          "world": 1
+        }
+      ],
+      "limits": [
+        "No universal public current-valid or source-to-C storage validator exists.",
+        "Historical point-in-time field facts are not final live-place assertions.",
+        "No semantic IDs are compared across different world labels.",
+        "Public check and CLI emission use separate genuine checks of identical bytes.",
+        "Header evidence is issuer-reported; finite native traces do not prove all H."
+      ]
+    },
+    {
+      "job": 126236388113,
+      "case": "normal",
+      "status": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+      "control_counts": {
+        "BREAK": 1,
+        "CONTINUE": 1,
+        "IF": 1,
+        "LOAN": 3,
+        "USIZE_EQUALITY": 1
+      },
+      "loop_nodes": [
+        {
+          "argument_count": 1,
+          "body_backed": false,
+          "break_edges": 1,
+          "child_fact": 0,
+          "child_incarnation": 0,
+          "child_post_fact": 0,
+          "continue_edges": 1,
+          "direct_break_validator_observation": false,
+          "end": 422,
+          "event": "node",
+          "field_base": 0,
+          "field_child": 0,
+          "field_compatible": false,
+          "field_index": 0,
+          "field_nominal": 0,
+          "field_parent": 0,
+          "field_present": false,
+          "first_argument": 16,
+          "first_item": 0,
+          "fragment": 2,
+          "function": 0,
+          "header_inductive": true,
+          "initializer": 0,
+          "kind": 40,
+          "kind_name": "LOOP",
+          "loan_forwarded": false,
+          "loan_incarnation": 0,
+          "loan_nonescape": false,
+          "loan_place": 0,
+          "loan_ref_symbol": 0,
+          "loan_scope": 0,
+          "name": "",
+          "new_value": 0,
+          "next_argument": 0,
+          "next_item": 0,
+          "node": 17,
+          "old_value": 0,
+          "parent_fact": 0,
+          "parent_incarnation": 0,
+          "parent_post_fact": 0,
+          "result_count": 1,
+          "return_edges": 0,
+          "scalar": 0,
+          "scalar_known": false,
+          "scalar_present": false,
+          "start": 160,
+          "symbol": 0,
+          "tail": 0,
+          "terminates": false,
+          "type": 6,
+          "value_use": 0,
+          "world": 1
+        }
+      ],
+      "known_named_scalars": [
+        {
+          "expected": 37,
+          "known": true,
+          "name": "prior",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 1,
+          "world": 4
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "returned_old",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 14,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "after_target",
+          "scalar": 58,
+          "symbol": 8,
+          "value": 15,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "stable_sibling",
+          "scalar": 146,
+          "symbol": 9,
+          "value": 16,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "other_target",
+          "scalar": 211,
+          "symbol": 10,
+          "value": 17,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "other_sibling",
+          "scalar": 89,
+          "symbol": 11,
+          "value": 18,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "caller_old",
+          "scalar": 146,
+          "symbol": 15,
+          "value": 2,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "transferred_old",
+          "scalar": 211,
+          "symbol": 19,
+          "value": 5,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_target",
+          "scalar": 58,
+          "symbol": 20,
+          "value": 31,
+          "world": 1
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "final_sibling",
+          "scalar": 37,
+          "symbol": 21,
+          "value": 32,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_other",
+          "scalar": 58,
+          "symbol": 22,
+          "value": 33,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "preserved_other",
+          "scalar": 89,
+          "symbol": 23,
+          "value": 34,
+          "world": 1
+        }
+      ],
+      "historical_identity": [
+        {
+          "bindings": {
+            "bystander": 4,
+            "original": 1
+          },
+          "places": {
+            "bystander": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 4,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 4,
+              "type": 10,
+              "world": 1
+            },
+            "original": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 1,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 1,
+              "type": 10,
+              "world": 1
+            }
+          },
+          "world": 1
+        }
+      ],
+      "limits": [
+        "No universal public current-valid or source-to-C storage validator exists.",
+        "Historical point-in-time field facts are not final live-place assertions.",
+        "No semantic IDs are compared across different world labels.",
+        "Public check and CLI emission use separate genuine checks of identical bytes.",
+        "Header evidence is issuer-reported; finite native traces do not prove all H."
+      ]
+    },
+    {
+      "job": 126236388113,
+      "case": "immediate_break",
+      "status": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+      "control_counts": {
+        "BREAK": 1,
+        "CONTINUE": 1,
+        "IF": 1,
+        "LOAN": 3,
+        "USIZE_EQUALITY": 1
+      },
+      "loop_nodes": [
+        {
+          "argument_count": 1,
+          "body_backed": false,
+          "break_edges": 1,
+          "child_fact": 0,
+          "child_incarnation": 0,
+          "child_post_fact": 0,
+          "continue_edges": 1,
+          "direct_break_validator_observation": false,
+          "end": 423,
+          "event": "node",
+          "field_base": 0,
+          "field_child": 0,
+          "field_compatible": false,
+          "field_index": 0,
+          "field_nominal": 0,
+          "field_parent": 0,
+          "field_present": false,
+          "first_argument": 16,
+          "first_item": 0,
+          "fragment": 2,
+          "function": 0,
+          "header_inductive": true,
+          "initializer": 0,
+          "kind": 40,
+          "kind_name": "LOOP",
+          "loan_forwarded": false,
+          "loan_incarnation": 0,
+          "loan_nonescape": false,
+          "loan_place": 0,
+          "loan_ref_symbol": 0,
+          "loan_scope": 0,
+          "name": "",
+          "new_value": 0,
+          "next_argument": 0,
+          "next_item": 0,
+          "node": 17,
+          "old_value": 0,
+          "parent_fact": 0,
+          "parent_incarnation": 0,
+          "parent_post_fact": 0,
+          "result_count": 1,
+          "return_edges": 0,
+          "scalar": 0,
+          "scalar_known": false,
+          "scalar_present": false,
+          "start": 160,
+          "symbol": 0,
+          "tail": 0,
+          "terminates": false,
+          "type": 6,
+          "value_use": 0,
+          "world": 1
+        }
+      ],
+      "known_named_scalars": [
+        {
+          "expected": 37,
+          "known": true,
+          "name": "prior",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 1,
+          "world": 4
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "returned_old",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 14,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "after_target",
+          "scalar": 58,
+          "symbol": 8,
+          "value": 15,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "stable_sibling",
+          "scalar": 146,
+          "symbol": 9,
+          "value": 16,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "other_target",
+          "scalar": 211,
+          "symbol": 10,
+          "value": 17,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "other_sibling",
+          "scalar": 89,
+          "symbol": 11,
+          "value": 18,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "caller_old",
+          "scalar": 146,
+          "symbol": 15,
+          "value": 2,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "transferred_old",
+          "scalar": 211,
+          "symbol": 19,
+          "value": 5,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_target",
+          "scalar": 58,
+          "symbol": 20,
+          "value": 31,
+          "world": 1
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "final_sibling",
+          "scalar": 37,
+          "symbol": 21,
+          "value": 32,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_other",
+          "scalar": 58,
+          "symbol": 22,
+          "value": 33,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "preserved_other",
+          "scalar": 89,
+          "symbol": 23,
+          "value": 34,
+          "world": 1
+        }
+      ],
+      "historical_identity": [
+        {
+          "bindings": {
+            "bystander": 4,
+            "original": 1
+          },
+          "places": {
+            "bystander": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 4,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 4,
+              "type": 10,
+              "world": 1
+            },
+            "original": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 1,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 1,
+              "type": 10,
+              "world": 1
+            }
+          },
+          "world": 1
+        }
+      ],
+      "limits": [
+        "No universal public current-valid or source-to-C storage validator exists.",
+        "Historical point-in-time field facts are not final live-place assertions.",
+        "No semantic IDs are compared across different world labels.",
+        "Public check and CLI emission use separate genuine checks of identical bytes.",
+        "Header evidence is issuer-reported; finite native traces do not prove all H."
+      ]
+    },
+    {
+      "job": 126236387340,
+      "case": "normal",
+      "status": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+      "control_counts": {
+        "BREAK": 1,
+        "CONTINUE": 1,
+        "IF": 1,
+        "LOAN": 3,
+        "USIZE_EQUALITY": 1
+      },
+      "loop_nodes": [
+        {
+          "argument_count": 1,
+          "body_backed": false,
+          "break_edges": 1,
+          "child_fact": 0,
+          "child_incarnation": 0,
+          "child_post_fact": 0,
+          "continue_edges": 1,
+          "direct_break_validator_observation": false,
+          "end": 422,
+          "event": "node",
+          "field_base": 0,
+          "field_child": 0,
+          "field_compatible": false,
+          "field_index": 0,
+          "field_nominal": 0,
+          "field_parent": 0,
+          "field_present": false,
+          "first_argument": 16,
+          "first_item": 0,
+          "fragment": 2,
+          "function": 0,
+          "header_inductive": true,
+          "initializer": 0,
+          "kind": 40,
+          "kind_name": "LOOP",
+          "loan_forwarded": false,
+          "loan_incarnation": 0,
+          "loan_nonescape": false,
+          "loan_place": 0,
+          "loan_ref_symbol": 0,
+          "loan_scope": 0,
+          "name": "",
+          "new_value": 0,
+          "next_argument": 0,
+          "next_item": 0,
+          "node": 17,
+          "old_value": 0,
+          "parent_fact": 0,
+          "parent_incarnation": 0,
+          "parent_post_fact": 0,
+          "result_count": 1,
+          "return_edges": 0,
+          "scalar": 0,
+          "scalar_known": false,
+          "scalar_present": false,
+          "start": 160,
+          "symbol": 0,
+          "tail": 0,
+          "terminates": false,
+          "type": 6,
+          "value_use": 0,
+          "world": 1
+        }
+      ],
+      "known_named_scalars": [
+        {
+          "expected": 37,
+          "known": true,
+          "name": "prior",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 1,
+          "world": 4
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "returned_old",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 14,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "after_target",
+          "scalar": 58,
+          "symbol": 8,
+          "value": 15,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "stable_sibling",
+          "scalar": 146,
+          "symbol": 9,
+          "value": 16,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "other_target",
+          "scalar": 211,
+          "symbol": 10,
+          "value": 17,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "other_sibling",
+          "scalar": 89,
+          "symbol": 11,
+          "value": 18,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "caller_old",
+          "scalar": 146,
+          "symbol": 15,
+          "value": 2,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "transferred_old",
+          "scalar": 211,
+          "symbol": 19,
+          "value": 5,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_target",
+          "scalar": 58,
+          "symbol": 20,
+          "value": 31,
+          "world": 1
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "final_sibling",
+          "scalar": 37,
+          "symbol": 21,
+          "value": 32,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_other",
+          "scalar": 58,
+          "symbol": 22,
+          "value": 33,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "preserved_other",
+          "scalar": 89,
+          "symbol": 23,
+          "value": 34,
+          "world": 1
+        }
+      ],
+      "historical_identity": [
+        {
+          "bindings": {
+            "bystander": 4,
+            "original": 1
+          },
+          "places": {
+            "bystander": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 4,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 4,
+              "type": 10,
+              "world": 1
+            },
+            "original": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 1,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 1,
+              "type": 10,
+              "world": 1
+            }
+          },
+          "world": 1
+        }
+      ],
+      "limits": [
+        "No universal public current-valid or source-to-C storage validator exists.",
+        "Historical point-in-time field facts are not final live-place assertions.",
+        "No semantic IDs are compared across different world labels.",
+        "Public check and CLI emission use separate genuine checks of identical bytes.",
+        "Header evidence is issuer-reported; finite native traces do not prove all H."
+      ]
+    },
+    {
+      "job": 126236387340,
+      "case": "immediate_break",
+      "status": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+      "control_counts": {
+        "BREAK": 1,
+        "CONTINUE": 1,
+        "IF": 1,
+        "LOAN": 3,
+        "USIZE_EQUALITY": 1
+      },
+      "loop_nodes": [
+        {
+          "argument_count": 1,
+          "body_backed": false,
+          "break_edges": 1,
+          "child_fact": 0,
+          "child_incarnation": 0,
+          "child_post_fact": 0,
+          "continue_edges": 1,
+          "direct_break_validator_observation": false,
+          "end": 423,
+          "event": "node",
+          "field_base": 0,
+          "field_child": 0,
+          "field_compatible": false,
+          "field_index": 0,
+          "field_nominal": 0,
+          "field_parent": 0,
+          "field_present": false,
+          "first_argument": 16,
+          "first_item": 0,
+          "fragment": 2,
+          "function": 0,
+          "header_inductive": true,
+          "initializer": 0,
+          "kind": 40,
+          "kind_name": "LOOP",
+          "loan_forwarded": false,
+          "loan_incarnation": 0,
+          "loan_nonescape": false,
+          "loan_place": 0,
+          "loan_ref_symbol": 0,
+          "loan_scope": 0,
+          "name": "",
+          "new_value": 0,
+          "next_argument": 0,
+          "next_item": 0,
+          "node": 17,
+          "old_value": 0,
+          "parent_fact": 0,
+          "parent_incarnation": 0,
+          "parent_post_fact": 0,
+          "result_count": 1,
+          "return_edges": 0,
+          "scalar": 0,
+          "scalar_known": false,
+          "scalar_present": false,
+          "start": 160,
+          "symbol": 0,
+          "tail": 0,
+          "terminates": false,
+          "type": 6,
+          "value_use": 0,
+          "world": 1
+        }
+      ],
+      "known_named_scalars": [
+        {
+          "expected": 37,
+          "known": true,
+          "name": "prior",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 1,
+          "world": 4
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "returned_old",
+          "scalar": 37,
+          "symbol": 7,
+          "value": 14,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "after_target",
+          "scalar": 58,
+          "symbol": 8,
+          "value": 15,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "stable_sibling",
+          "scalar": 146,
+          "symbol": 9,
+          "value": 16,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "other_target",
+          "scalar": 211,
+          "symbol": 10,
+          "value": 17,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "other_sibling",
+          "scalar": 89,
+          "symbol": 11,
+          "value": 18,
+          "world": 1
+        },
+        {
+          "expected": 146,
+          "known": true,
+          "name": "caller_old",
+          "scalar": 146,
+          "symbol": 15,
+          "value": 2,
+          "world": 1
+        },
+        {
+          "expected": 211,
+          "known": true,
+          "name": "transferred_old",
+          "scalar": 211,
+          "symbol": 19,
+          "value": 5,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_target",
+          "scalar": 58,
+          "symbol": 20,
+          "value": 31,
+          "world": 1
+        },
+        {
+          "expected": 37,
+          "known": true,
+          "name": "final_sibling",
+          "scalar": 37,
+          "symbol": 21,
+          "value": 32,
+          "world": 1
+        },
+        {
+          "expected": 58,
+          "known": true,
+          "name": "final_other",
+          "scalar": 58,
+          "symbol": 22,
+          "value": 33,
+          "world": 1
+        },
+        {
+          "expected": 89,
+          "known": true,
+          "name": "preserved_other",
+          "scalar": 89,
+          "symbol": 23,
+          "value": 34,
+          "world": 1
+        }
+      ],
+      "historical_identity": [
+        {
+          "bindings": {
+            "bystander": 4,
+            "original": 1
+          },
+          "places": {
+            "bystander": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 4,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 4,
+              "type": 10,
+              "world": 1
+            },
+            "original": {
+              "backing_length": 0,
+              "backing_region": 0,
+              "backing_start": 0,
+              "current_fact": 0,
+              "current_value": 0,
+              "event": "place",
+              "field_count": 0,
+              "field_index": 0,
+              "implicit_local": true,
+              "incarnation": 1,
+              "independent_root": true,
+              "live": false,
+              "parent": 0,
+              "parent_incarnation": 0,
+              "place": 1,
+              "type": 10,
+              "world": 1
+            }
+          },
+          "world": 1
+        }
+      ],
+      "limits": [
+        "No universal public current-valid or source-to-C storage validator exists.",
+        "Historical point-in-time field facts are not final live-place assertions.",
+        "No semantic IDs are compared across different world labels.",
+        "Public check and CLI emission use separate genuine checks of identical bytes.",
+        "Header evidence is issuer-reported; finite native traces do not prove all H."
+      ]
+    }
+  ],
+  "negative_layer_review": [
+    {
+      "job": 126236388413,
+      "case": "equal_bits",
+      "first_public_refusal": {
+        "code": "P14-LOOP-PRECISION",
+        "end": 695,
+        "event": "status",
+        "message": "cyclic identity/dependency or memory correlation is not representable",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 316,
+        "status": 3
+      },
+      "spanned_source": "loop (phase = usize(4)) {\n        if (phase == usize(4)) {\n            let equal_old = loan_write(original@checkpoint) { |w|\n                exchange(w, u8(37))\n            };\n            continue(usize(19));\n        } else {\n            let prior = loan_write(original@checkpoint) { |w|\n                exchange(w, u8(58))\n            };\n            break prior;\n        }\n    }",
+      "source_sha256": "9c797703d8a6fdfc4485075b5f6029670cfafc0a7f465fe18ba9a35c17f605ef",
+      "classification": "LEGAL_NON_STUTTERING_C_PATH_PRECISION_REFUSAL; NO POSITIVE CHANGE-C TRANSFER CLAIM",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236388413,
+      "case": "loan_escape",
+      "first_public_refusal": {
+        "code": "P8-EXIT-DEPENDENCY",
+        "end": 470,
+        "event": "status",
+        "message": "surviving state depends on the ending loan scope",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 401,
+        "status": 1
+      },
+      "spanned_source": "loan_write(original@checkpoint) { |w|\n                w\n            }",
+      "source_sha256": "779e30f6b628cdc2b5c434f15fed919b5479f93f874c67d16be75a620dea70f0",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236388413,
+      "case": "continue_type",
+      "first_public_refusal": {
+        "code": "P14-CONTINUE-TYPE",
+        "end": 404,
+        "event": "status",
+        "message": "continue value must have the exact parameter static type",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 387,
+        "status": 1
+      },
+      "spanned_source": "continue(u8(19));",
+      "source_sha256": "ffbd6aaa0e8f2d84af09fc128696c9157fd4285f3ba34febe5258c9f48c979d4",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236388413,
+      "case": "continue_arity",
+      "first_public_refusal": {
+        "code": "P14-CONTINUE-ARITY",
+        "end": 417,
+        "event": "status",
+        "message": "continue arguments must match the loop parameter count",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 387,
+        "status": 1
+      },
+      "spanned_source": "continue(usize(19), usize(4));",
+      "source_sha256": "c480aac1bc61259546d4f14fd0f10191b3be21909f9eef25a314f4f07a4af292",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236388413,
+      "case": "continue_target",
+      "first_public_refusal": {
+        "code": "P14-CONTROL-CONTEXT",
+        "end": 461,
+        "event": "status",
+        "message": "continue/break requires an active lexical loop target",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 441,
+        "status": 1
+      },
+      "spanned_source": "continue(usize(19));",
+      "source_sha256": "77e0534c799a5355e75a07ea98e43d9dffffd1416e0a32ba1aaad9f0d98466a4",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236388052,
+      "case": "equal_bits",
+      "first_public_refusal": {
+        "code": "P14-LOOP-PRECISION",
+        "end": 695,
+        "event": "status",
+        "message": "cyclic identity/dependency or memory correlation is not representable",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 316,
+        "status": 3
+      },
+      "spanned_source": "loop (phase = usize(4)) {\n        if (phase == usize(4)) {\n            let equal_old = loan_write(original@checkpoint) { |w|\n                exchange(w, u8(37))\n            };\n            continue(usize(19));\n        } else {\n            let prior = loan_write(original@checkpoint) { |w|\n                exchange(w, u8(58))\n            };\n            break prior;\n        }\n    }",
+      "source_sha256": "9c797703d8a6fdfc4485075b5f6029670cfafc0a7f465fe18ba9a35c17f605ef",
+      "classification": "LEGAL_NON_STUTTERING_C_PATH_PRECISION_REFUSAL; NO POSITIVE CHANGE-C TRANSFER CLAIM",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236388052,
+      "case": "loan_escape",
+      "first_public_refusal": {
+        "code": "P8-EXIT-DEPENDENCY",
+        "end": 470,
+        "event": "status",
+        "message": "surviving state depends on the ending loan scope",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 401,
+        "status": 1
+      },
+      "spanned_source": "loan_write(original@checkpoint) { |w|\n                w\n            }",
+      "source_sha256": "779e30f6b628cdc2b5c434f15fed919b5479f93f874c67d16be75a620dea70f0",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236388052,
+      "case": "continue_type",
+      "first_public_refusal": {
+        "code": "P14-CONTINUE-TYPE",
+        "end": 404,
+        "event": "status",
+        "message": "continue value must have the exact parameter static type",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 387,
+        "status": 1
+      },
+      "spanned_source": "continue(u8(19));",
+      "source_sha256": "ffbd6aaa0e8f2d84af09fc128696c9157fd4285f3ba34febe5258c9f48c979d4",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236388052,
+      "case": "continue_arity",
+      "first_public_refusal": {
+        "code": "P14-CONTINUE-ARITY",
+        "end": 417,
+        "event": "status",
+        "message": "continue arguments must match the loop parameter count",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 387,
+        "status": 1
+      },
+      "spanned_source": "continue(usize(19), usize(4));",
+      "source_sha256": "c480aac1bc61259546d4f14fd0f10191b3be21909f9eef25a314f4f07a4af292",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236388052,
+      "case": "continue_target",
+      "first_public_refusal": {
+        "code": "P14-CONTROL-CONTEXT",
+        "end": 461,
+        "event": "status",
+        "message": "continue/break requires an active lexical loop target",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 441,
+        "status": 1
+      },
+      "spanned_source": "continue(usize(19));",
+      "source_sha256": "77e0534c799a5355e75a07ea98e43d9dffffd1416e0a32ba1aaad9f0d98466a4",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236387772,
+      "case": "equal_bits",
+      "first_public_refusal": {
+        "code": "P14-LOOP-PRECISION",
+        "end": 695,
+        "event": "status",
+        "message": "cyclic identity/dependency or memory correlation is not representable",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 316,
+        "status": 3
+      },
+      "spanned_source": "loop (phase = usize(4)) {\n        if (phase == usize(4)) {\n            let equal_old = loan_write(original@checkpoint) { |w|\n                exchange(w, u8(37))\n            };\n            continue(usize(19));\n        } else {\n            let prior = loan_write(original@checkpoint) { |w|\n                exchange(w, u8(58))\n            };\n            break prior;\n        }\n    }",
+      "source_sha256": "9c797703d8a6fdfc4485075b5f6029670cfafc0a7f465fe18ba9a35c17f605ef",
+      "classification": "LEGAL_NON_STUTTERING_C_PATH_PRECISION_REFUSAL; NO POSITIVE CHANGE-C TRANSFER CLAIM",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236387772,
+      "case": "loan_escape",
+      "first_public_refusal": {
+        "code": "P8-EXIT-DEPENDENCY",
+        "end": 470,
+        "event": "status",
+        "message": "surviving state depends on the ending loan scope",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 401,
+        "status": 1
+      },
+      "spanned_source": "loan_write(original@checkpoint) { |w|\n                w\n            }",
+      "source_sha256": "779e30f6b628cdc2b5c434f15fed919b5479f93f874c67d16be75a620dea70f0",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236387772,
+      "case": "continue_type",
+      "first_public_refusal": {
+        "code": "P14-CONTINUE-TYPE",
+        "end": 404,
+        "event": "status",
+        "message": "continue value must have the exact parameter static type",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 387,
+        "status": 1
+      },
+      "spanned_source": "continue(u8(19));",
+      "source_sha256": "ffbd6aaa0e8f2d84af09fc128696c9157fd4285f3ba34febe5258c9f48c979d4",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236387772,
+      "case": "continue_arity",
+      "first_public_refusal": {
+        "code": "P14-CONTINUE-ARITY",
+        "end": 417,
+        "event": "status",
+        "message": "continue arguments must match the loop parameter count",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 387,
+        "status": 1
+      },
+      "spanned_source": "continue(usize(19), usize(4));",
+      "source_sha256": "c480aac1bc61259546d4f14fd0f10191b3be21909f9eef25a314f4f07a4af292",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236387772,
+      "case": "continue_target",
+      "first_public_refusal": {
+        "code": "P14-CONTROL-CONTEXT",
+        "end": 461,
+        "event": "status",
+        "message": "continue/break requires an active lexical loop target",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 441,
+        "status": 1
+      },
+      "spanned_source": "continue(usize(19));",
+      "source_sha256": "77e0534c799a5355e75a07ea98e43d9dffffd1416e0a32ba1aaad9f0d98466a4",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236388113,
+      "case": "equal_bits",
+      "first_public_refusal": {
+        "code": "P14-LOOP-PRECISION",
+        "end": 695,
+        "event": "status",
+        "message": "cyclic identity/dependency or memory correlation is not representable",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 316,
+        "status": 3
+      },
+      "spanned_source": "loop (phase = usize(4)) {\n        if (phase == usize(4)) {\n            let equal_old = loan_write(original@checkpoint) { |w|\n                exchange(w, u8(37))\n            };\n            continue(usize(19));\n        } else {\n            let prior = loan_write(original@checkpoint) { |w|\n                exchange(w, u8(58))\n            };\n            break prior;\n        }\n    }",
+      "source_sha256": "9c797703d8a6fdfc4485075b5f6029670cfafc0a7f465fe18ba9a35c17f605ef",
+      "classification": "LEGAL_NON_STUTTERING_C_PATH_PRECISION_REFUSAL; NO POSITIVE CHANGE-C TRANSFER CLAIM",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236388113,
+      "case": "loan_escape",
+      "first_public_refusal": {
+        "code": "P8-EXIT-DEPENDENCY",
+        "end": 470,
+        "event": "status",
+        "message": "surviving state depends on the ending loan scope",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 401,
+        "status": 1
+      },
+      "spanned_source": "loan_write(original@checkpoint) { |w|\n                w\n            }",
+      "source_sha256": "779e30f6b628cdc2b5c434f15fed919b5479f93f874c67d16be75a620dea70f0",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236388113,
+      "case": "continue_type",
+      "first_public_refusal": {
+        "code": "P14-CONTINUE-TYPE",
+        "end": 404,
+        "event": "status",
+        "message": "continue value must have the exact parameter static type",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 387,
+        "status": 1
+      },
+      "spanned_source": "continue(u8(19));",
+      "source_sha256": "ffbd6aaa0e8f2d84af09fc128696c9157fd4285f3ba34febe5258c9f48c979d4",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236388113,
+      "case": "continue_arity",
+      "first_public_refusal": {
+        "code": "P14-CONTINUE-ARITY",
+        "end": 417,
+        "event": "status",
+        "message": "continue arguments must match the loop parameter count",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 387,
+        "status": 1
+      },
+      "spanned_source": "continue(usize(19), usize(4));",
+      "source_sha256": "c480aac1bc61259546d4f14fd0f10191b3be21909f9eef25a314f4f07a4af292",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236388113,
+      "case": "continue_target",
+      "first_public_refusal": {
+        "code": "P14-CONTROL-CONTEXT",
+        "end": 461,
+        "event": "status",
+        "message": "continue/break requires an active lexical loop target",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 441,
+        "status": 1
+      },
+      "spanned_source": "continue(usize(19));",
+      "source_sha256": "77e0534c799a5355e75a07ea98e43d9dffffd1416e0a32ba1aaad9f0d98466a4",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236387340,
+      "case": "equal_bits",
+      "first_public_refusal": {
+        "code": "P14-LOOP-PRECISION",
+        "end": 695,
+        "event": "status",
+        "message": "cyclic identity/dependency or memory correlation is not representable",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 316,
+        "status": 3
+      },
+      "spanned_source": "loop (phase = usize(4)) {\n        if (phase == usize(4)) {\n            let equal_old = loan_write(original@checkpoint) { |w|\n                exchange(w, u8(37))\n            };\n            continue(usize(19));\n        } else {\n            let prior = loan_write(original@checkpoint) { |w|\n                exchange(w, u8(58))\n            };\n            break prior;\n        }\n    }",
+      "source_sha256": "9c797703d8a6fdfc4485075b5f6029670cfafc0a7f465fe18ba9a35c17f605ef",
+      "classification": "LEGAL_NON_STUTTERING_C_PATH_PRECISION_REFUSAL; NO POSITIVE CHANGE-C TRANSFER CLAIM",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236387340,
+      "case": "loan_escape",
+      "first_public_refusal": {
+        "code": "P8-EXIT-DEPENDENCY",
+        "end": 470,
+        "event": "status",
+        "message": "surviving state depends on the ending loan scope",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 401,
+        "status": 1
+      },
+      "spanned_source": "loan_write(original@checkpoint) { |w|\n                w\n            }",
+      "source_sha256": "779e30f6b628cdc2b5c434f15fed919b5479f93f874c67d16be75a620dea70f0",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236387340,
+      "case": "continue_type",
+      "first_public_refusal": {
+        "code": "P14-CONTINUE-TYPE",
+        "end": 404,
+        "event": "status",
+        "message": "continue value must have the exact parameter static type",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 387,
+        "status": 1
+      },
+      "spanned_source": "continue(u8(19));",
+      "source_sha256": "ffbd6aaa0e8f2d84af09fc128696c9157fd4285f3ba34febe5258c9f48c979d4",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236387340,
+      "case": "continue_arity",
+      "first_public_refusal": {
+        "code": "P14-CONTINUE-ARITY",
+        "end": 417,
+        "event": "status",
+        "message": "continue arguments must match the loop parameter count",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 387,
+        "status": 1
+      },
+      "spanned_source": "continue(usize(19), usize(4));",
+      "source_sha256": "c480aac1bc61259546d4f14fd0f10191b3be21909f9eef25a314f4f07a4af292",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    },
+    {
+      "job": 126236387340,
+      "case": "continue_target",
+      "first_public_refusal": {
+        "code": "P14-CONTROL-CONTEXT",
+        "end": 461,
+        "event": "status",
+        "message": "continue/break requires an active lexical loop target",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 441,
+        "status": 1
+      },
+      "spanned_source": "continue(usize(19));",
+      "source_sha256": "77e0534c799a5355e75a07ea98e43d9dffffd1416e0a32ba1aaad9f0d98466a4",
+      "classification": "FOCUSED_ILLEGAL_BOUNDARY_DIAGNOSTIC_REACHED_DURING_REGISTRATION; FINITE_CASE_ONLY",
+      "no_clobber": "EXACT_BYTES_PRESERVED",
+      "raw_targeted_negative_pass": false,
+      "raw_target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW"
+    }
+  ],
+  "limitations": [
+    "This review supplements immutable raw; it does not modify driver UNCLASSIFIED_PENDING_RAW_REVIEW records.",
+    "All native addresses refer to each separate passive variant process only.",
+    "Stable live snapshots and finite phase traces do not prove all-H induction, general termination or arbitrary profiles.",
+    "Public historical places after main are ended; no universal current-valid or source-to-C issuer validator is available.",
+    "Unmodified native exit/sanitizer outcomes and passive value/storage observations are distinct.",
+    "Final PARTIAL stops before AST/passive/control/negative/V1 stages; FULL outcomes do not fill those stages.",
+    "No Product PASS, READY or merge decision is made. Value UNMEASURED / GO624 PAUSED / H1 HOLD."
+  ]
+}

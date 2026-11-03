@@ -1,0 +1,987 @@
+﻿2026-11-03T22:05:08.5582390Z Current runner version: '2.338.2'
+2026-11-03T22:05:08.5608571Z ##[group]Runner Image Provisioner
+2026-11-03T22:05:08.5609474Z Hosted Compute Agent
+2026-11-03T22:05:08.5610016Z Version: 20261021.618
+2026-11-03T22:05:08.5610598Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+2026-11-03T22:05:08.5611277Z Build Date: 2026-10-21T00:45:21Z
+2026-11-03T22:05:08.5611901Z Worker ID: {1aa18c1a-8a5c-483c-a886-cb50d5209a74}
+2026-11-03T22:05:08.5612855Z Region: eastus3
+2026-11-03T22:05:08.5613407Z Cloud: Azure
+2026-11-03T22:05:08.5613932Z ##[endgroup]
+2026-11-03T22:05:08.5616057Z ##[group]Operating System
+2026-11-03T22:05:08.5616654Z Ubuntu
+2026-11-03T22:05:08.5617138Z 24.04.5
+2026-11-03T22:05:08.5617657Z LTS
+2026-11-03T22:05:08.5618114Z ##[endgroup]
+2026-11-03T22:05:08.5618622Z ##[group]Runner Image
+2026-11-03T22:05:08.5619171Z Image: ubuntu-24.04
+2026-11-03T22:05:08.5619695Z Version: 20261025.353.1
+2026-11-03T22:05:08.5620907Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261025.353/images/ubuntu/Ubuntu2404-Readme.md
+2026-11-03T22:05:08.5622296Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261025.353
+2026-11-03T22:05:08.5623166Z ##[endgroup]
+2026-11-03T22:05:08.5624266Z ##[group]GITHUB_TOKEN Permissions
+2026-11-03T22:05:08.5626989Z Contents: read
+2026-11-03T22:05:08.5627535Z Metadata: read
+2026-11-03T22:05:08.5628121Z ##[endgroup]
+2026-11-03T22:05:08.5630333Z Secret source: Actions
+2026-11-03T22:05:08.5631246Z Cache mode: write
+2026-11-03T22:05:08.5632175Z Prepare workflow directory
+2026-11-03T22:05:08.6055450Z Prepare all required actions
+2026-11-03T22:05:08.6133987Z Getting action download info
+2026-11-03T22:05:08.8654924Z Download action repository 'actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683' (SHA:11bd71901bbe5b1630ceea73d27597364c9af683)
+2026-11-03T22:05:08.9716964Z Download action repository 'actions/cache@3edfce9056124e459a23f683a21433670d47daca' (SHA:3edfce9056124e459a23f683a21433670d47daca)
+2026-11-03T22:05:09.1393944Z Download action repository 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+2026-11-03T22:05:09.3196433Z Complete job name: R-FAST pinned format + GCC build + CTest registration only
+2026-11-03T22:05:09.4161612Z ##[group]Run actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+2026-11-03T22:05:09.4163259Z with:
+2026-11-03T22:05:09.4163944Z   ref: bc3386f1b710f262e51ebea9a3d05db6064f398b
+2026-11-03T22:05:09.4164476Z   fetch-depth: 3
+2026-11-03T22:05:09.4164893Z   persist-credentials: false
+2026-11-03T22:05:09.4165679Z   repository: wakairo/NewLang_Compiler
+2026-11-03T22:05:09.4169338Z   token: ***
+2026-11-03T22:05:09.4169721Z   ssh-strict: true
+2026-11-03T22:05:09.4170116Z   ssh-user: git
+2026-11-03T22:05:09.4170516Z   clean: true
+2026-11-03T22:05:09.4170939Z   sparse-checkout-cone-mode: true
+2026-11-03T22:05:09.4171410Z   fetch-tags: false
+2026-11-03T22:05:09.4171812Z   show-progress: true
+2026-11-03T22:05:09.4172205Z   lfs: false
+2026-11-03T22:05:09.4172609Z   submodules: false
+2026-11-03T22:05:09.4173006Z   set-safe-directory: true
+2026-11-03T22:05:09.4173916Z ##[endgroup]
+2026-11-03T22:05:09.6885604Z Syncing repository: wakairo/NewLang_Compiler
+2026-11-03T22:05:09.6888183Z ##[group]Getting Git version info
+2026-11-03T22:05:09.6889490Z Working directory is '/home/runner/work/NewLang_Compiler/NewLang_Compiler'
+2026-11-03T22:05:09.6891274Z [command]/usr/bin/git version
+2026-11-03T22:05:09.6974171Z git version 2.56.0
+2026-11-03T22:05:09.6994193Z ##[endgroup]
+2026-11-03T22:05:09.7010140Z Temporarily overriding HOME='/home/runner/work/_temp/d92e64d8-8eda-41a6-8930-d18363a06968' before making global git config changes
+2026-11-03T22:05:09.7012518Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-03T22:05:09.7014606Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-03T22:05:09.7066585Z Deleting the contents of '/home/runner/work/NewLang_Compiler/NewLang_Compiler'
+2026-11-03T22:05:09.7071315Z ##[group]Initializing the repository
+2026-11-03T22:05:09.7076897Z [command]/usr/bin/git init /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-03T22:05:09.7203123Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-03T22:05:09.7204334Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-03T22:05:09.7205491Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-03T22:05:09.7206622Z hint: call:
+2026-11-03T22:05:09.7207060Z hint:
+2026-11-03T22:05:09.7207601Z hint: 	git config --global init.defaultBranch <name>
+2026-11-03T22:05:09.7208223Z hint:
+2026-11-03T22:05:09.7208813Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-03T22:05:09.7209964Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-03T22:05:09.7210817Z hint:
+2026-11-03T22:05:09.7211267Z hint: 	git branch -m <name>
+2026-11-03T22:05:09.7211781Z hint:
+2026-11-03T22:05:09.7212407Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-03T22:05:09.7227159Z Initialized empty Git repository in /home/runner/work/NewLang_Compiler/NewLang_Compiler/.git/
+2026-11-03T22:05:09.7242808Z [command]/usr/bin/git remote add origin https://github.com/wakairo/NewLang_Compiler
+2026-11-03T22:05:09.7292941Z ##[endgroup]
+2026-11-03T22:05:09.7294320Z ##[group]Disabling automatic garbage collection
+2026-11-03T22:05:09.7296598Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-03T22:05:09.7330210Z ##[endgroup]
+2026-11-03T22:05:09.7331676Z ##[group]Setting up auth
+2026-11-03T22:05:09.7335397Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T22:05:09.7375471Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T22:05:09.7754717Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T22:05:09.7791201Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T22:05:09.8009975Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-03T22:05:09.8052526Z ##[endgroup]
+2026-11-03T22:05:09.8053308Z ##[group]Fetching the repository
+2026-11-03T22:05:09.8066635Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=3 origin bc3386f1b710f262e51ebea9a3d05db6064f398b
+2026-11-03T22:05:26.9817050Z From https://github.com/wakairo/NewLang_Compiler
+2026-11-03T22:05:26.9819614Z  * branch            bc3386f1b710f262e51ebea9a3d05db6064f398b -> FETCH_HEAD
+2026-11-03T22:05:26.9825321Z ##[endgroup]
+2026-11-03T22:05:26.9826785Z ##[group]Determining the checkout info
+2026-11-03T22:05:26.9828612Z ##[endgroup]
+2026-11-03T22:05:26.9829883Z [command]/usr/bin/git sparse-checkout disable
+2026-11-03T22:05:26.9880526Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-03T22:05:26.9910520Z ##[group]Checking out the ref
+2026-11-03T22:05:26.9914887Z [command]/usr/bin/git checkout --progress --force bc3386f1b710f262e51ebea9a3d05db6064f398b
+2026-11-03T22:05:27.3564539Z Note: switching to 'bc3386f1b710f262e51ebea9a3d05db6064f398b'.
+2026-11-03T22:05:27.3565552Z 
+2026-11-03T22:05:27.3566087Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-03T22:05:27.3567109Z changes and commit them, and you can discard any commits you make in this
+2026-11-03T22:05:27.3568238Z state without impacting any branches by switching back to a branch.
+2026-11-03T22:05:27.3568922Z 
+2026-11-03T22:05:27.3569452Z If you want to create a new branch to retain commits you create, you may
+2026-11-03T22:05:27.3570599Z do so (now or later) by using -c with the switch command. Example:
+2026-11-03T22:05:27.3571614Z 
+2026-11-03T22:05:27.3571928Z   git switch -c <new-branch-name>
+2026-11-03T22:05:27.3572414Z 
+2026-11-03T22:05:27.3572701Z Or undo this operation with:
+2026-11-03T22:05:27.3573098Z 
+2026-11-03T22:05:27.3573352Z   git switch -
+2026-11-03T22:05:27.3573689Z 
+2026-11-03T22:05:27.3574242Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-03T22:05:27.3574927Z 
+2026-11-03T22:05:27.3614696Z HEAD is now at bc3386f R1129: use direct source starts for passive phase ordering
+2026-11-03T22:05:27.3616758Z ##[endgroup]
+2026-11-03T22:05:27.3666861Z [command]/usr/bin/git log -1 --format=%H
+2026-11-03T22:05:27.3691245Z bc3386f1b710f262e51ebea9a3d05db6064f398b
+2026-11-03T22:05:27.3698827Z ##[group]Removing auth
+2026-11-03T22:05:27.3702369Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T22:05:27.3730904Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T22:05:27.3924222Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T22:05:27.3949876Z http.https://github.com/.extraheader
+2026-11-03T22:05:27.3957653Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-11-03T22:05:27.3994573Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T22:05:27.4181679Z ##[endgroup]
+2026-11-03T22:05:27.4400085Z ##[group]Run set -euo pipefail
+2026-11-03T22:05:27.4400562Z [36;1mset -euo pipefail[0m
+2026-11-03T22:05:27.4400872Z [36;1mtest "$GITHUB_EVENT_NAME" = "push"[0m
+2026-11-03T22:05:27.4401204Z [36;1mcase "$GITHUB_REF" in[0m
+2026-11-03T22:05:27.4401503Z [36;1m  refs/heads/r-fast/*) ;;[0m
+2026-11-03T22:05:27.4401879Z [36;1m  *) echo "STOP: not an opt-in R-FAST ref"; exit 1 ;;[0m
+2026-11-03T22:05:27.4402225Z [36;1mesac[0m
+2026-11-03T22:05:27.4402521Z [36;1mtest "$GITHUB_REF_TYPE" = "branch"[0m
+2026-11-03T22:05:27.4402880Z [36;1mtest "$(git rev-parse HEAD)" = "$GITHUB_SHA"[0m
+2026-11-03T22:05:27.4403250Z [36;1mtest "$(git status --porcelain)" = ""[0m
+2026-11-03T22:05:27.4403647Z [36;1mtest "wakairo/NewLang_Compiler" = "$GITHUB_REPOSITORY"[0m
+2026-11-03T22:05:27.4404327Z [36;1mecho "R-FAST event=$GITHUB_EVENT_NAME repository=$GITHUB_REPOSITORY branch=$GITHUB_REF"[0m
+2026-11-03T22:05:27.4405248Z [36;1mecho "R-FAST immutable_HEAD=$(git rev-parse HEAD) event_SHA=$GITHUB_SHA attempt=$GITHUB_RUN_ATTEMPT"[0m
+2026-11-03T22:05:27.4406163Z [36;1mecho "R-FAST preparation only: semantic CHECK execution, source-issued owned proof, native/C17, negative/OOM, ASan and UBSan NOT TESTED"[0m
+2026-11-03T22:05:27.4423589Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-03T22:05:27.4424028Z ##[endgroup]
+2026-11-03T22:05:27.9055580Z R-FAST event=push repository=wakairo/NewLang_Compiler branch=refs/heads/r-fast/r1129-c221-stutter
+2026-11-03T22:05:27.9073899Z R-FAST immutable_HEAD=bc3386f1b710f262e51ebea9a3d05db6064f398b event_SHA=bc3386f1b710f262e51ebea9a3d05db6064f398b attempt=1
+2026-11-03T22:05:27.9075856Z R-FAST preparation only: semantic CHECK execution, source-issued owned proof, native/C17, negative/OOM, ASan and UBSan NOT TESTED
+2026-11-03T22:05:27.9119661Z ##[group]Run set -euo pipefail
+2026-11-03T22:05:27.9119988Z [36;1mset -euo pipefail[0m
+2026-11-03T22:05:27.9120244Z [36;1mcmake_before=$(command -v cmake)[0m
+2026-11-03T22:05:27.9120637Z [36;1mcmake_version=$(cmake --version | sed -n '1s/^cmake version //p')[0m
+2026-11-03T22:05:27.9121032Z [36;1mpython3 - "$cmake_version" <<'PY'[0m
+2026-11-03T22:05:27.9121301Z [36;1mimport re[0m
+2026-11-03T22:05:27.9121510Z [36;1mimport sys[0m
+2026-11-03T22:05:27.9121789Z [36;1mmatch = re.fullmatch(r"(\d+)\.(\d+)\.(\d+)", sys.argv[1])[0m
+2026-11-03T22:05:27.9122243Z [36;1mif not match:[0m
+2026-11-03T22:05:27.9122511Z [36;1m    sys.exit("STOP: unexpected CMake version")[0m
+2026-11-03T22:05:27.9122871Z [36;1mmajor, minor, patch = map(int, match.groups())[0m
+2026-11-03T22:05:27.9123217Z [36;1mif not ((3, 28) <= (major, minor) < (4, 0)):[0m
+2026-11-03T22:05:27.9123586Z [36;1m    sys.exit("STOP: CMake outside reviewed interval")[0m
+2026-11-03T22:05:27.9123892Z [36;1mPY[0m
+2026-11-03T22:05:27.9124145Z [36;1msudo apt-get update[0m
+2026-11-03T22:05:27.9124445Z [36;1msudo apt-get install --no-install-recommends -y \[0m
+2026-11-03T22:05:27.9124781Z [36;1m  gcc-13 g++-13 make python3 zstd \[0m
+2026-11-03T22:05:27.9125400Z [36;1m  libstdc++6 zlib1g-dev libzstd-dev libtinfo-dev libxml2-dev[0m
+2026-11-03T22:05:27.9125801Z [36;1mtest "$(command -v cmake)" = "$cmake_before"[0m
+2026-11-03T22:05:27.9126219Z [36;1mtest "$(cmake --version | sed -n '1s/^cmake version //p')" = "$cmake_version"[0m
+2026-11-03T22:05:27.9140070Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-03T22:05:27.9140464Z ##[endgroup]
+2026-11-03T22:05:28.0363363Z Get:1 file:/etc/apt/apt-mirrors.txt Mirrorlist [144 B]
+2026-11-03T22:05:28.0738753Z Get:6 https://packages.microsoft.com/ubuntu/24.04/prod noble InRelease [3600 B]
+2026-11-03T22:05:28.0865995Z Hit:2 http://azure.archive.ubuntu.com/ubuntu noble InRelease
+2026-11-03T22:05:28.0982670Z Get:3 http://azure.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+2026-11-03T22:05:28.1429519Z Get:4 http://azure.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+2026-11-03T22:05:28.1532280Z Get:5 http://azure.archive.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+2026-11-03T22:05:28.1579755Z Get:7 https://packages.microsoft.com/ubuntu/24.04/prod noble/main arm64 Packages [643 kB]
+2026-11-03T22:05:28.1822863Z Get:8 https://packages.microsoft.com/ubuntu/24.04/prod noble/main amd64 Packages [711 kB]
+2026-11-03T22:05:28.2689797Z Get:9 http://azure.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1408 kB]
+2026-11-03T22:05:28.3052064Z Get:10 http://azure.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [311 kB]
+2026-11-03T22:05:28.3154376Z Get:11 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1707 kB]
+2026-11-03T22:05:28.3382495Z Get:12 http://azure.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [343 kB]
+2026-11-03T22:05:28.3496910Z Get:13 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [1813 kB]
+2026-11-03T22:05:28.3746754Z Get:14 http://azure.archive.ubuntu.com/ubuntu noble-updates/restricted Translation-en [412 kB]
+2026-11-03T22:05:28.3869323Z Get:15 http://azure.archive.ubuntu.com/ubuntu noble-updates/multiverse Translation-en [14.3 kB]
+2026-11-03T22:05:28.3975818Z Get:16 http://azure.archive.ubuntu.com/ubuntu noble-security/main amd64 Packages [1155 kB]
+2026-11-03T22:05:28.4147456Z Get:17 http://azure.archive.ubuntu.com/ubuntu noble-security/main Translation-en [233 kB]
+2026-11-03T22:05:28.4276975Z Get:18 http://azure.archive.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1224 kB]
+2026-11-03T22:05:28.4971288Z Get:19 http://azure.archive.ubuntu.com/ubuntu noble-security/universe Translation-en [247 kB]
+2026-11-03T22:05:28.5081644Z Get:20 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [1721 kB]
+2026-11-03T22:05:28.5285880Z Get:21 http://azure.archive.ubuntu.com/ubuntu noble-security/restricted Translation-en [394 kB]
+2026-11-03T22:05:28.5393290Z Get:22 http://azure.archive.ubuntu.com/ubuntu noble-security/multiverse Translation-en [12.4 kB]
+2026-11-03T22:05:31.8591703Z Fetched 12.7 MB in 1s (9504 kB/s)
+2026-11-03T22:05:32.9789803Z Reading package lists...
+2026-11-03T22:05:33.0166103Z Reading package lists...
+2026-11-03T22:05:33.2634134Z Building dependency tree...
+2026-11-03T22:05:33.2640172Z Reading state information...
+2026-11-03T22:05:33.5028488Z gcc-13 is already the newest version (13.3.0-6ubuntu2~24.04.1).
+2026-11-03T22:05:33.5029833Z gcc-13 set to manually installed.
+2026-11-03T22:05:33.5030888Z g++-13 is already the newest version (13.3.0-6ubuntu2~24.04.1).
+2026-11-03T22:05:33.5031569Z make is already the newest version (4.3-4.1build2).
+2026-11-03T22:05:33.5032188Z python3 is already the newest version (3.12.3-0ubuntu2.1).
+2026-11-03T22:05:33.5032828Z zstd is already the newest version (1.5.5+dfsg2-2build1.1).
+2026-11-03T22:05:33.5033327Z zstd set to manually installed.
+2026-11-03T22:05:33.5033793Z libstdc++6 is already the newest version (14.2.0-4ubuntu2~24.04.1).
+2026-11-03T22:05:33.5034269Z zlib1g-dev is already the newest version (1:1.3.dfsg-3.1ubuntu2.3).
+2026-11-03T22:05:33.5034668Z libzstd-dev is already the newest version (1.5.5+dfsg2-2build1.1).
+2026-11-03T22:05:33.5035007Z libzstd-dev set to manually installed.
+2026-11-03T22:05:33.5035600Z libncurses-dev is already the newest version (6.4+20240113-1ubuntu2.2).
+2026-11-03T22:05:33.5036118Z libncurses-dev set to manually installed.
+2026-11-03T22:05:33.5036611Z libxml2-dev is already the newest version (2.9.14+dfsg-1.3ubuntu3.10).
+2026-11-03T22:05:33.5037161Z libxml2-dev set to manually installed.
+2026-11-03T22:05:33.5037539Z 0 upgraded, 0 newly installed, 0 to remove and 16 not upgraded.
+2026-11-03T22:05:33.5134936Z ##[group]Run actions/cache/restore@3edfce9056124e459a23f683a21433670d47daca
+2026-11-03T22:05:33.5135586Z with:
+2026-11-03T22:05:33.5135876Z   path: .deps/downloads/newlang-llvm-23.1.3-linux-x64-final.tar.zst
+2026-11-03T22:05:33.5136544Z   key: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-03T22:05:33.5137176Z   enableCrossOsArchive: false
+2026-11-03T22:05:33.5137426Z   fail-on-cache-miss: false
+2026-11-03T22:05:33.5137657Z   lookup-only: false
+2026-11-03T22:05:33.5137871Z ##[endgroup]
+2026-11-03T22:05:33.7521900Z Cache hit for: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-03T22:05:34.6459968Z Received 126417585 of 126417585 (100.0%), 153.2 MBs/sec
+2026-11-03T22:05:34.6460573Z Cache Size: ~121 MB (126417585 B)
+2026-11-03T22:05:34.6501197Z [command]/usr/bin/tar -xf /home/runner/work/_temp/0df03691-6a42-40f8-8083-255acad0396d/cache.tzst -P -C /home/runner/work/NewLang_Compiler/NewLang_Compiler --use-compress-program unzstd
+2026-11-03T22:05:34.7747111Z Cache restored successfully
+2026-11-03T22:05:34.7971451Z Cache restored from key: t449-ubuntu-24.04-x86_64-5369d292ef513d32758634f98ec7cf62c52f82a0a333eb330ecf9a325648b133
+2026-11-03T22:05:34.8183321Z ##[group]Run set -euo pipefail
+2026-11-03T22:05:34.8183641Z [36;1mset -euo pipefail[0m
+2026-11-03T22:05:34.8183918Z [36;1mpython3 scripts/bootstrap.py[0m
+2026-11-03T22:05:34.8184198Z [36;1m. .deps/activate.sh[0m
+2026-11-03T22:05:34.8184492Z [36;1mclang-format-23 --version | grep -F '23.1.3'[0m
+2026-11-03T22:05:34.8198606Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-03T22:05:34.8198953Z ##[endgroup]
+2026-11-03T22:05:34.9028477Z SDK cache candidate: verify exact SHA and size
+2026-11-03T22:05:35.0175563Z SDK archive independently SHA256 verified (126520077 bytes) in 0.11s
+2026-11-03T22:05:35.5897411Z SDK authenticated decompression 448040960 bytes in 0.57s
+2026-11-03T22:05:35.8994687Z SDK fail-closed tar inspection and rootless extraction 570 members
+2026-11-03T22:05:35.9650113Z LLVM 23.1.3 exact curated SDK ready at /home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64; total 1.06s
+2026-11-03T22:05:35.9752739Z clang-format version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)
+2026-11-03T22:05:35.9798670Z ##[group]Run set -euo pipefail
+2026-11-03T22:05:35.9798983Z [36;1mset -euo pipefail[0m
+2026-11-03T22:05:35.9799231Z [36;1m. .deps/activate.sh[0m
+2026-11-03T22:05:35.9799486Z [36;1mbash scripts/check-format.sh[0m
+2026-11-03T22:05:35.9799800Z [36;1mecho 'R-FAST FORMAT PASS (not semantics)'[0m
+2026-11-03T22:05:35.9812830Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-03T22:05:35.9813285Z env:
+2026-11-03T22:05:35.9813626Z   FORMAT_SUGGESTIONS_PATCH: /home/runner/work/_temp/r-fast-format-suggestions.patch
+2026-11-03T22:05:35.9814028Z ##[endgroup]
+2026-11-03T22:05:38.6865810Z R-FAST FORMAT PASS (not semantics)
+2026-11-03T22:05:38.6905518Z ##[group]Run set -euo pipefail
+2026-11-03T22:05:38.6905887Z [36;1mset -euo pipefail[0m
+2026-11-03T22:05:38.6906132Z [36;1m. .deps/activate.sh[0m
+2026-11-03T22:05:38.6906418Z [36;1mCC=gcc cmake -S . -B build-frontend \[0m
+2026-11-03T22:05:38.6906783Z [36;1m  -DCMAKE_BUILD_TYPE=Debug -DNEWLANG_FRONTEND_ONLY=ON \[0m
+2026-11-03T22:05:38.6907159Z [36;1m  | tee "$RUNNER_TEMP/r-fast-configure.log"[0m
+2026-11-03T22:05:38.6907679Z [36;1mgrep -F "Frontend-only: LLVM discovery and llvm.c_api smoke omitted" "$RUNNER_TEMP/r-fast-configure.log"[0m
+2026-11-03T22:05:38.6908293Z [36;1mgrep -Fx "NEWLANG_FRONTEND_ONLY:BOOL=ON" build-frontend/CMakeCache.txt[0m
+2026-11-03T22:05:38.6908757Z [36;1mgrep -Fx "BUILD_TESTING:BOOL=ON" build-frontend/CMakeCache.txt[0m
+2026-11-03T22:05:38.6909121Z [36;1mn=$(nproc)[0m
+2026-11-03T22:05:38.6909336Z [36;1mcase "$n" in[0m
+2026-11-03T22:05:38.6909601Z [36;1m  ""|*[!0-9]*) echo "STOP invalid nproc: $n"; exit 1 ;;[0m
+2026-11-03T22:05:38.6909944Z [36;1mesac[0m
+2026-11-03T22:05:38.6910211Z [36;1mif test "$n" -lt 1; then echo "STOP zero nproc"; exit 1; fi[0m
+2026-11-03T22:05:38.6910541Z [36;1mbuild_start=$SECONDS[0m
+2026-11-03T22:05:38.6910831Z [36;1mcmake --build build-frontend --parallel "$n"[0m
+2026-11-03T22:05:38.6911235Z [36;1mecho "R-FAST build_wall_seconds=$((SECONDS - build_start)) workers=$n"[0m
+2026-11-03T22:05:38.6911744Z [36;1mctest --test-dir build-frontend -N > "$RUNNER_TEMP/r-fast-ctest-inventory.txt"[0m
+2026-11-03T22:05:38.6912227Z [36;1mpython3 - "$RUNNER_TEMP/r-fast-ctest-inventory.txt" <<'PY'[0m
+2026-11-03T22:05:38.6912582Z [36;1mimport pathlib[0m
+2026-11-03T22:05:38.6912807Z [36;1mimport re[0m
+2026-11-03T22:05:38.6913022Z [36;1mimport sys[0m
+2026-11-03T22:05:38.6913337Z [36;1mreport = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8")[0m
+2026-11-03T22:05:38.6913776Z [36;1mnames = re.findall(r"(?m)^\s*Test\s+#\d+:\s*(\S+)\s*$", report)[0m
+2026-11-03T22:05:38.6914177Z [36;1mtotal = re.search(r"(?m)^Total Tests:\s*(\d+)\s*$", report)[0m
+2026-11-03T22:05:38.6914571Z [36;1mrequired = ([0m
+2026-11-03T22:05:38.6914793Z [36;1m    "cli.check_source",[0m
+2026-11-03T22:05:38.6915274Z [36;1m    "frontend_build_policy.integration",[0m
+2026-11-03T22:05:38.6915648Z [36;1m    "nested_u8_checked_c.integration",[0m
+2026-11-03T22:05:38.6915955Z [36;1m    "u8_call_checked_c.integration",[0m
+2026-11-03T22:05:38.6916267Z [36;1m    "north_star_v0_checked_c.integration",[0m
+2026-11-03T22:05:38.6916608Z [36;1m    "node_join_same_locator_public_proof.unit",[0m
+2026-11-03T22:05:38.6916943Z [36;1m    "node_two_normal_join_public_proof.unit",[0m
+2026-11-03T22:05:38.6917256Z [36;1m    "node_join_public_negative.unit",[0m
+2026-11-03T22:05:38.6917553Z [36;1m    "node_join_public_oom.unit",[0m
+2026-11-03T22:05:38.6917861Z [36;1m    "node_join_both_public_oom.unit",[0m
+2026-11-03T22:05:38.6918156Z [36;1m    "node_join_owned_poison.unit",[0m
+2026-11-03T22:05:38.6918442Z [36;1m    "bootstrap_retry.offline",[0m
+2026-11-03T22:05:38.6918702Z [36;1m)[0m
+2026-11-03T22:05:38.6918961Z [36;1mmissing = sorted(set(required).difference(names))[0m
+2026-11-03T22:05:38.6919324Z [36;1mif (not total or int(total.group(1)) != len(names)[0m
+2026-11-03T22:05:38.6919692Z [36;1m        or len(set(names)) != len(names) or len(names) < 275[0m
+2026-11-03T22:05:38.6920051Z [36;1m        or "llvm.c_api" in names or missing):[0m
+2026-11-03T22:05:38.6920343Z [36;1m    raise SystemExit([0m
+2026-11-03T22:05:38.6920839Z [36;1m        f"STOP: R-FAST CTest inventory invalid: reported={total.group(1) if total else 'missing'} "[0m
+2026-11-03T22:05:38.6921381Z [36;1m        f"parsed={len(names)} unique={len(set(names))} missing={missing}"[0m
+2026-11-03T22:05:38.6921738Z [36;1m    )[0m
+2026-11-03T22:05:38.6922252Z [36;1mprint(f"R-FAST REGISTRATION PASS: {len(names)} distinct CTests; "[0m
+2026-11-03T22:05:38.6922721Z [36;1m      f"required {len(required)}/{len(required)}; NOT EXECUTED")[0m
+2026-11-03T22:05:38.6923263Z [36;1mprint("R-FAST ONLY format, host build, test registration. "[0m
+2026-11-03T22:05:38.6923732Z [36;1m      "SOURCE/CHECK/PROOF/C17/NATIVE/NEGATIVE/OOM/ASAN/UBSAN NOT TESTED")[0m
+2026-11-03T22:05:38.6924101Z [36;1mPY[0m
+2026-11-03T22:05:38.6936490Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-03T22:05:38.6936829Z ##[endgroup]
+2026-11-03T22:05:38.8490696Z -- The C compiler identification is GNU 13.3.0
+2026-11-03T22:05:38.8656597Z -- Detecting C compiler ABI info
+2026-11-03T22:05:38.9334166Z -- Detecting C compiler ABI info - done
+2026-11-03T22:05:38.9491954Z -- Check for working C compiler: /usr/bin/gcc - skipped
+2026-11-03T22:05:38.9499354Z -- Detecting C compile features
+2026-11-03T22:05:38.9507798Z -- Detecting C compile features - done
+2026-11-03T22:05:38.9592549Z -- Frontend-only: LLVM discovery and llvm.c_api smoke omitted
+2026-11-03T22:05:39.1048344Z -- Found Python3: /usr/bin/python3.12 (found suitable version "3.12.3", minimum required is "3.12") found components: Interpreter
+2026-11-03T22:05:39.1317917Z P1117 current oracle preserves original p504 6fc73c22f544e4d66d1eaf8d6526868cf7bb15d76ea2ab93f1bae880987e4e79
+2026-11-03T22:05:39.1318758Z P1117 current oracle preserves original p603 dba648f261a0ae2415c0ccb0e0bc0070399b9ee1dcb52fad5c97fe1b7fa0e040
+2026-11-03T22:05:39.1476666Z -- Configuring done (0.4s)
+2026-11-03T22:05:39.3759871Z -- Generating done (0.2s)
+2026-11-03T22:05:39.3762791Z -- Build files have been written to: /home/runner/work/NewLang_Compiler/NewLang_Compiler/build-frontend
+2026-11-03T22:05:39.3866196Z -- Frontend-only: LLVM discovery and llvm.c_api smoke omitted
+2026-11-03T22:05:39.3877905Z NEWLANG_FRONTEND_ONLY:BOOL=ON
+2026-11-03T22:05:39.3890769Z BUILD_TESTING:BOOL=ON
+2026-11-03T22:05:39.4440002Z [  0%] Building C object CMakeFiles/newlang_source.dir/src/source.c.o
+2026-11-03T22:05:39.4542252Z [  0%] Building C object CMakeFiles/newlang_diagnostic.dir/src/diagnostic.c.o
+2026-11-03T22:05:39.4844294Z [  0%] Linking C static library libnewlang_diagnostic.a
+2026-11-03T22:05:39.4931571Z [  0%] Linking C static library libnewlang_source.a
+2026-11-03T22:05:40.4514924Z [  0%] Built target newlang_source
+2026-11-03T22:05:40.4515927Z [  0%] Built target newlang_diagnostic
+2026-11-03T22:05:40.4597420Z [  0%] Building C object CMakeFiles/newlang_lexer.dir/src/lexer.c.o
+2026-11-03T22:05:40.4615450Z [  0%] Building C object CMakeFiles/newlang_syntax.dir/src/syntax.c.o
+2026-11-03T22:05:40.4636334Z [  0%] Building C object CMakeFiles/source_test.dir/tests/unit/source_test.c.o
+2026-11-03T22:05:40.4666127Z [  0%] Building C object CMakeFiles/diagnostic_test.dir/tests/unit/diagnostic_test.c.o
+2026-11-03T22:05:40.4914759Z [  0%] Linking C static library libnewlang_syntax.a
+2026-11-03T22:05:40.4919383Z [  0%] Linking C executable diagnostic_test
+2026-11-03T22:05:40.4923544Z [  1%] Linking C static library libnewlang_lexer.a
+2026-11-03T22:05:40.5096384Z [  1%] Linking C executable source_test
+2026-11-03T22:05:40.5256649Z [  1%] Built target diagnostic_test
+2026-11-03T22:05:40.5367735Z [  1%] Built target source_test
+2026-11-03T22:05:40.5780599Z [  1%] Built target newlang_syntax
+2026-11-03T22:05:40.5781758Z [  1%] Built target newlang_lexer
+2026-11-03T22:05:40.5862406Z [  1%] Building C object CMakeFiles/newlang_checked.dir/src/checked.c.o
+2026-11-03T22:05:40.5881192Z [  1%] Building C object CMakeFiles/newlang_parser.dir/src/parser.c.o
+2026-11-03T22:05:40.5906134Z [  2%] Building C object CMakeFiles/newlang_parser_p534.dir/src/parser.c.o
+2026-11-03T22:05:40.5932176Z [  2%] Building C object CMakeFiles/lexer_test.dir/tests/unit/lexer_test.c.o
+2026-11-03T22:05:40.6436120Z [  2%] Linking C static library libnewlang_checked.a
+2026-11-03T22:05:40.6586230Z [  2%] Linking C executable lexer_test
+2026-11-03T22:05:40.6843415Z [  2%] Built target lexer_test
+2026-11-03T22:05:40.6946546Z [  2%] Building C object CMakeFiles/lexical_frontend_test.dir/tests/integration/lexical_frontend_test.c.o
+2026-11-03T22:05:40.7496164Z [  2%] Built target newlang_checked
+2026-11-03T22:05:40.7516441Z [  2%] Linking C executable lexical_frontend_test
+2026-11-03T22:05:40.7785240Z [  2%] Built target lexical_frontend_test
+2026-11-03T22:05:40.7875919Z [  2%] Linking C static library libnewlang_parser.a
+2026-11-03T22:05:40.7931377Z [  3%] Linking C static library libnewlang_parser_p534.a
+2026-11-03T22:05:40.8586322Z [  3%] Built target newlang_parser
+2026-11-03T22:05:40.8625563Z [  3%] Built target newlang_parser_p534
+2026-11-03T22:05:40.8676465Z [  3%] Building C object CMakeFiles/parser_test.dir/tests/unit/parser_test.c.o
+2026-11-03T22:05:40.8683119Z [  3%] Building C object CMakeFiles/syntax_frontend_test.dir/tests/integration/syntax_frontend_test.c.o
+2026-11-03T22:05:40.8685755Z [  3%] Building C object CMakeFiles/newlang_semantic.dir/src/copy_body.c.o
+2026-11-03T22:05:40.8686791Z [  3%] Building C object CMakeFiles/newlang_semantic.dir/src/if_field.c.o
+2026-11-03T22:05:40.9466148Z [  3%] Linking C executable syntax_frontend_test
+2026-11-03T22:05:40.9746349Z [  3%] Built target syntax_frontend_test
+2026-11-03T22:05:40.9784476Z [  3%] Building C object CMakeFiles/newlang_semantic.dir/src/array4.c.o
+2026-11-03T22:05:41.0116110Z [  3%] Linking C executable parser_test
+2026-11-03T22:05:41.0416263Z [  3%] Built target parser_test
+2026-11-03T22:05:41.0466310Z [  3%] Building C object CMakeFiles/newlang_semantic.dir/src/usize_addition.c.o
+2026-11-03T22:05:41.1076383Z [  4%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic.c.o
+2026-11-03T22:05:41.1176247Z [  4%] Building C object CMakeFiles/newlang_semantic.dir/src/semantic_check.c.o
+2026-11-03T22:05:41.1346566Z [  4%] Building C object CMakeFiles/newlang_semantic.dir/src/h_origin_internal.c.o
+2026-11-03T22:05:41.1386264Z [  4%] Building C object CMakeFiles/newlang_semantic.dir/src/recursive_type.c.o
+2026-11-03T22:05:41.1956479Z [  5%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_node.c.o
+2026-11-03T22:05:41.2456471Z [  5%] Building C object CMakeFiles/newlang_semantic.dir/src/allocated_join.c.o
+2026-11-03T22:05:41.2726511Z [  5%] Building C object CMakeFiles/newlang_semantic.dir/src/captured_closure.c.o
+2026-11-03T22:05:41.2727869Z [  5%] Building C object CMakeFiles/newlang_semantic.dir/src/node_join.c.o
+2026-11-03T22:05:41.2904807Z [  6%] Building C object CMakeFiles/newlang_semantic.dir/src/node_links.c.o
+2026-11-03T22:05:41.3806677Z [  6%] Building C object CMakeFiles/newlang_semantic.dir/src/packet_fork.c.o
+2026-11-03T22:05:41.3850740Z [  6%] Building C object CMakeFiles/newlang_semantic.dir/src/fixed_field.c.o
+2026-11-03T22:05:41.4596343Z [  6%] Building C object CMakeFiles/newlang_semantic.dir/src/sum.c.o
+2026-11-03T22:05:41.4736432Z [  6%] Building C object CMakeFiles/newlang_semantic.dir/src/raw_storage.c.o
+2026-11-03T22:05:41.4826309Z [  7%] Building C object CMakeFiles/newlang_semantic.dir/src/function_body.c.o
+2026-11-03T22:05:41.5256458Z [  7%] Building C object CMakeFiles/newlang_semantic.dir/src/typed_owner.c.o
+2026-11-03T22:05:41.5346419Z [  7%] Building C object CMakeFiles/newlang_semantic.dir/src/custody.c.o
+2026-11-03T22:05:41.5905417Z [  7%] Building C object CMakeFiles/newlang_semantic.dir/src/control.c.o
+2026-11-03T22:05:42.4632574Z [  8%] Linking C static library libnewlang_semantic.a
+2026-11-03T22:05:42.5557726Z [  8%] Built target newlang_semantic
+2026-11-03T22:05:42.5642866Z [  8%] Building C object CMakeFiles/p930_oom.dir/tests/p930/observe.c.o
+2026-11-03T22:05:42.5649483Z [  8%] Building C object CMakeFiles/newlang_checked_c_node.dir/src/checked_c_node.c.o
+2026-11-03T22:05:42.5676416Z [  8%] Building C object CMakeFiles/p728_public_probe.dir/tests/p728/public_probe.c.o
+2026-11-03T22:05:42.5677410Z [  8%] Building C object CMakeFiles/p930_observe.dir/tests/p930/observe.c.o
+2026-11-03T22:05:42.6326071Z [  8%] Linking C executable p728_public_probe
+2026-11-03T22:05:42.6746066Z [  8%] Built target p728_public_probe
+2026-11-03T22:05:42.6836372Z [  8%] Building C object CMakeFiles/p722_public_probe.dir/tests/p722/public_probe.c.o
+2026-11-03T22:05:42.7142411Z [  8%] Linking C executable p930_observe
+2026-11-03T22:05:42.7149324Z [  9%] Linking C executable p930_oom
+2026-11-03T22:05:42.7463114Z [  9%] Linking C executable p722_public_probe
+2026-11-03T22:05:42.7586115Z [  9%] Built target p930_observe
+2026-11-03T22:05:42.7636898Z [  9%] Built target p930_oom
+2026-11-03T22:05:42.7692514Z [  9%] Building C object CMakeFiles/p713_public_probe.dir/tests/p713/public_probe.c.o
+2026-11-03T22:05:42.7706500Z [  9%] Building C object CMakeFiles/p718_public_probe.dir/tests/p718/public_probe.c.o
+2026-11-03T22:05:42.7896251Z [  9%] Built target p722_public_probe
+2026-11-03T22:05:42.7936482Z [  9%] Building C object CMakeFiles/newlang_checked_c_node.dir/src/checked_c_five.c.o
+2026-11-03T22:05:42.8326436Z [  9%] Linking C executable p718_public_probe
+2026-11-03T22:05:42.8362205Z [  9%] Linking C executable p713_public_probe
+2026-11-03T22:05:42.8766594Z [  9%] Built target p718_public_probe
+2026-11-03T22:05:42.8820380Z [  9%] Built target p713_public_probe
+2026-11-03T22:05:42.8851108Z [  9%] Building C object CMakeFiles/p706_public_probe.dir/tests/p706/public_probe.c.o
+2026-11-03T22:05:42.8943372Z [  9%] Building C object CMakeFiles/p701_public_probe.dir/tests/p701/public_probe.c.o
+2026-11-03T22:05:42.9159117Z [  9%] Building C object CMakeFiles/p572_public_probe.dir/tests/p572/public_probe.c.o
+2026-11-03T22:05:42.9436272Z [  9%] Linking C executable p706_public_probe
+2026-11-03T22:05:42.9506748Z [ 10%] Linking C executable p701_public_probe
+2026-11-03T22:05:42.9823246Z [ 10%] Built target p706_public_probe
+2026-11-03T22:05:42.9918172Z [ 10%] Linking C executable p572_public_probe
+2026-11-03T22:05:42.9919142Z [ 10%] Building C object CMakeFiles/p534_public_probe.dir/tests/p534/public_probe.c.o
+2026-11-03T22:05:42.9961839Z [ 10%] Built target p701_public_probe
+2026-11-03T22:05:43.0093630Z [ 10%] Building C object CMakeFiles/p534_fault_test.dir/tests/p534/fault_test.c.o
+2026-11-03T22:05:43.0316283Z [ 10%] Built target p572_public_probe
+2026-11-03T22:05:43.0416401Z [ 10%] Building C object CMakeFiles/p541_public_probe.dir/tests/p541/public_probe.c.o
+2026-11-03T22:05:43.0630862Z [ 10%] Linking C executable p534_public_probe
+2026-11-03T22:05:43.1059519Z [ 11%] Linking C executable p534_fault_test
+2026-11-03T22:05:43.1083805Z [ 11%] Built target p534_public_probe
+2026-11-03T22:05:43.1206344Z [ 11%] Building C object CMakeFiles/p541_fault_test.dir/tests/p541/fault_test.c.o
+2026-11-03T22:05:43.1296204Z [ 11%] Linking C executable p541_public_probe
+2026-11-03T22:05:43.1536152Z [ 11%] Built target p534_fault_test
+2026-11-03T22:05:43.1625336Z [ 11%] Building C object CMakeFiles/p633_public_probe.dir/tests/p633/public_probe.c.o
+2026-11-03T22:05:43.1726306Z [ 11%] Built target p541_public_probe
+2026-11-03T22:05:43.1816352Z [ 12%] Building C object CMakeFiles/p628_public_probe.dir/tests/p628/public_probe.c.o
+2026-11-03T22:05:43.2101736Z [ 12%] Linking C executable p541_fault_test
+2026-11-03T22:05:43.2181629Z [ 13%] Linking C executable p633_public_probe
+2026-11-03T22:05:43.2536101Z [ 13%] Built target p541_fault_test
+2026-11-03T22:05:43.2572494Z [ 13%] Linking C executable p628_public_probe
+2026-11-03T22:05:43.2595839Z [ 13%] Built target p633_public_probe
+2026-11-03T22:05:43.2626062Z [ 13%] Building C object CMakeFiles/p626_public_probe.dir/tests/p626/public_probe.c.o
+2026-11-03T22:05:43.2686183Z [ 13%] Building C object CMakeFiles/p605_public_probe.dir/tests/p605/public_probe.c.o
+2026-11-03T22:05:43.2896265Z [ 14%] Linking C static library libnewlang_checked_c_node.a
+2026-11-03T22:05:43.2934346Z [ 14%] Built target p628_public_probe
+2026-11-03T22:05:43.3046611Z [ 14%] Building C object CMakeFiles/p603_public_probe.dir/tests/p603/public_probe.c.o
+2026-11-03T22:05:43.3315824Z [ 14%] Linking C executable p605_public_probe
+2026-11-03T22:05:43.3320438Z [ 14%] Linking C executable p626_public_probe
+2026-11-03T22:05:43.3672331Z [ 14%] Linking C executable p603_public_probe
+2026-11-03T22:05:43.3745010Z [ 14%] Built target p626_public_probe
+2026-11-03T22:05:43.3749759Z [ 14%] Built target p605_public_probe
+2026-11-03T22:05:43.3831963Z [ 14%] Building C object CMakeFiles/p603_comparison_test.dir/p1117-current/p603_current.c.o
+2026-11-03T22:05:43.3856627Z [ 14%] Building C object CMakeFiles/p504_public_probe.dir/tests/p504/public_probe.c.o
+2026-11-03T22:05:43.3976083Z [ 14%] Built target newlang_checked_c_node
+2026-11-03T22:05:43.4066568Z [ 14%] Building C object CMakeFiles/p504_equality_test.dir/p1117-current/p504_current.c.o
+2026-11-03T22:05:43.4080690Z [ 14%] Built target p603_public_probe
+2026-11-03T22:05:43.4186316Z [ 14%] Building C object CMakeFiles/p508_public_probe.dir/tests/p508/public_probe.c.o
+2026-11-03T22:05:43.4506261Z [ 15%] Linking C executable p504_public_probe
+2026-11-03T22:05:43.4783212Z [ 15%] Linking C executable p508_public_probe
+2026-11-03T22:05:43.4976090Z [ 15%] Built target p504_public_probe
+2026-11-03T22:05:43.5006070Z [ 15%] Linking C executable p603_comparison_test
+2026-11-03T22:05:43.5056866Z [ 15%] Building C object CMakeFiles/p508_gate_test.dir/tests/p508/gate_test.c.o
+2026-11-03T22:05:43.5236275Z [ 15%] Built target p508_public_probe
+2026-11-03T22:05:43.5282860Z [ 16%] Linking C executable p504_equality_test
+2026-11-03T22:05:43.5303047Z [ 16%] Building C object CMakeFiles/p514_public_probe.dir/tests/p514/public_probe.c.o
+2026-11-03T22:05:43.5383600Z [ 16%] Built target p603_comparison_test
+2026-11-03T22:05:43.5476591Z [ 16%] Building C object CMakeFiles/r675_public_probe.dir/tests/r675/public_probe.c.o
+2026-11-03T22:05:43.5716193Z [ 16%] Built target p504_equality_test
+2026-11-03T22:05:43.5816360Z [ 17%] Building C object CMakeFiles/p671_public_probe.dir/tests/p671/public_probe.c.o
+2026-11-03T22:05:43.5958872Z [ 17%] Linking C executable p514_public_probe
+2026-11-03T22:05:43.6076605Z [ 17%] Linking C executable r675_public_probe
+2026-11-03T22:05:43.6396321Z [ 17%] Built target p514_public_probe
+2026-11-03T22:05:43.6454518Z [ 17%] Linking C executable p671_public_probe
+2026-11-03T22:05:43.6484554Z [ 17%] Building C object CMakeFiles/p671_fragment_probe.dir/tests/p671/fragment_probe.c.o
+2026-11-03T22:05:43.6532994Z [ 17%] Built target r675_public_probe
+2026-11-03T22:05:43.6636371Z [ 17%] Building C object CMakeFiles/p694_fault_test.dir/tests/p694/fault_test.c.o
+2026-11-03T22:05:43.6866467Z [ 17%] Built target p671_public_probe
+2026-11-03T22:05:43.6976388Z [ 17%] Building C object CMakeFiles/p688_public_probe.dir/tests/p688/public_probe.c.o
+2026-11-03T22:05:43.7477355Z [ 17%] Linking C executable p688_public_probe
+2026-11-03T22:05:43.7502381Z [ 17%] Linking C executable p671_fragment_probe
+2026-11-03T22:05:43.7935910Z [ 17%] Built target p688_public_probe
+2026-11-03T22:05:43.7938280Z [ 17%] Built target p671_fragment_probe
+2026-11-03T22:05:43.8043506Z [ 17%] Building C object CMakeFiles/p688_gate_test.dir/tests/p688/gate_test.c.o
+2026-11-03T22:05:43.8044556Z [ 17%] Building C object CMakeFiles/p685_public_probe.dir/tests/p685/public_probe.c.o
+2026-11-03T22:05:43.8718724Z [ 17%] Linking C executable p685_public_probe
+2026-11-03T22:05:43.9136309Z [ 17%] Built target p685_public_probe
+2026-11-03T22:05:43.9256866Z [ 18%] Building C object CMakeFiles/p685_gate_test.dir/tests/p685/gate_test.c.o
+2026-11-03T22:05:44.2546324Z [ 18%] Linking C executable p508_gate_test
+2026-11-03T22:05:44.2783085Z [ 19%] Linking C executable p694_fault_test
+2026-11-03T22:05:44.3005431Z [ 19%] Built target p508_gate_test
+2026-11-03T22:05:44.3126416Z [ 19%] Building C object CMakeFiles/p679_public_probe.dir/tests/p679/public_probe.c.o
+2026-11-03T22:05:44.3276277Z [ 19%] Built target p694_fault_test
+2026-11-03T22:05:44.3364681Z [ 20%] Building C object CMakeFiles/p514_gate_test.dir/tests/p514/gate_test.c.o
+2026-11-03T22:05:44.3826256Z [ 20%] Linking C executable p679_public_probe
+2026-11-03T22:05:44.4246304Z [ 20%] Built target p679_public_probe
+2026-11-03T22:05:44.4336490Z [ 20%] Building C object CMakeFiles/p517_public_probe.dir/tests/p517/public_probe.c.o
+2026-11-03T22:05:44.4666498Z [ 21%] Linking C executable p688_gate_test
+2026-11-03T22:05:44.4996210Z [ 21%] Linking C executable p517_public_probe
+2026-11-03T22:05:44.5119357Z [ 21%] Built target p688_gate_test
+2026-11-03T22:05:44.5254552Z [ 22%] Building C object CMakeFiles/p517_gate_test.dir/tests/p517/gate_test.c.o
+2026-11-03T22:05:44.5416260Z [ 22%] Built target p517_public_probe
+2026-11-03T22:05:44.5502856Z [ 22%] Building C object CMakeFiles/p521_owned_probe.dir/tests/p521/owned_probe.c.o
+2026-11-03T22:05:44.5906187Z [ 22%] Linking C executable p685_gate_test
+2026-11-03T22:05:44.6424677Z [ 22%] Built target p685_gate_test
+2026-11-03T22:05:44.6511701Z [ 23%] Building C object CMakeFiles/p521_call_gate.dir/tests/p521/call_gate.c.o
+2026-11-03T22:05:45.1366317Z [ 23%] Linking C executable p514_gate_test
+2026-11-03T22:05:45.1826009Z [ 23%] Built target p514_gate_test
+2026-11-03T22:05:45.1916306Z [ 23%] Building C object CMakeFiles/semantic_test.dir/tests/unit/semantic_test.c.o
+2026-11-03T22:05:45.2136247Z [ 23%] Linking C executable p521_owned_probe
+2026-11-03T22:05:45.2496043Z [ 23%] Linking C executable p517_gate_test
+2026-11-03T22:05:45.2616072Z [ 23%] Built target p521_owned_probe
+2026-11-03T22:05:45.2706535Z [ 23%] Building C object CMakeFiles/semantic_frontend_test.dir/tests/integration/semantic_frontend_test.c.o
+2026-11-03T22:05:45.2933389Z [ 23%] Built target p517_gate_test
+2026-11-03T22:05:45.2974732Z [ 23%] Linking C executable p521_call_gate
+2026-11-03T22:05:45.3036114Z [ 23%] Building C object CMakeFiles/raw_storage_test.dir/tests/unit/raw_storage_test.c.o
+2026-11-03T22:05:45.3486194Z [ 23%] Built target p521_call_gate
+2026-11-03T22:05:45.3576550Z [ 24%] Building C object CMakeFiles/raw_storage_cycle_test.dir/tests/integration/raw_storage_cycle_test.c.o
+2026-11-03T22:05:45.3656114Z [ 25%] Linking C executable semantic_frontend_test
+2026-11-03T22:05:45.4059199Z [ 25%] Built target semantic_frontend_test
+2026-11-03T22:05:45.4153242Z [ 25%] Building C object CMakeFiles/source_slice_test.dir/tests/unit/source_slice_test.c.o
+2026-11-03T22:05:45.4575327Z [ 25%] Linking C executable semantic_test
+2026-11-03T22:05:45.4986409Z [ 25%] Linking C executable raw_storage_cycle_test
+2026-11-03T22:05:45.4997552Z [ 25%] Built target semantic_test
+2026-11-03T22:05:45.5096471Z [ 25%] Building C object CMakeFiles/source_slice_frontend_test.dir/tests/integration/source_slice_frontend_test.c.o
+2026-11-03T22:05:45.5394071Z [ 25%] Built target raw_storage_cycle_test
+2026-11-03T22:05:45.5502423Z [ 26%] Building C object CMakeFiles/sum_slice_test.dir/tests/unit/sum_slice_test.c.o
+2026-11-03T22:05:45.5976283Z [ 26%] Linking C executable source_slice_test
+2026-11-03T22:05:45.6206241Z [ 26%] Linking C executable raw_storage_test
+2026-11-03T22:05:45.6333864Z [ 27%] Linking C executable source_slice_frontend_test
+2026-11-03T22:05:45.6358376Z [ 27%] Built target source_slice_test
+2026-11-03T22:05:45.6500498Z [ 27%] Building C object CMakeFiles/sum_frontend_test.dir/tests/integration/sum_frontend_test.c.o
+2026-11-03T22:05:45.6646065Z [ 27%] Built target raw_storage_test
+2026-11-03T22:05:45.6726442Z [ 28%] Building C object CMakeFiles/ref_join_test.dir/tests/unit/ref_join_test.c.o
+2026-11-03T22:05:45.6794262Z [ 28%] Built target source_slice_frontend_test
+2026-11-03T22:05:45.6886396Z [ 28%] Building C object CMakeFiles/ref_join_frontend_test.dir/tests/integration/ref_join_frontend_test.c.o
+2026-11-03T22:05:45.7196380Z [ 28%] Linking C executable sum_frontend_test
+2026-11-03T22:05:45.7516232Z [ 28%] Linking C executable sum_slice_test
+2026-11-03T22:05:45.7576202Z [ 28%] Built target sum_frontend_test
+2026-11-03T22:05:45.7666541Z [ 28%] Building C object CMakeFiles/function_body_test.dir/tests/unit/function_body_test.c.o
+2026-11-03T22:05:45.7936085Z [ 28%] Built target sum_slice_test
+2026-11-03T22:05:45.8046432Z [ 28%] Building C object CMakeFiles/function_body_frontend_test.dir/tests/integration/function_body_frontend_test.c.o
+2026-11-03T22:05:45.8196209Z [ 28%] Linking C executable ref_join_frontend_test
+2026-11-03T22:05:45.8210877Z [ 28%] Linking C executable ref_join_test
+2026-11-03T22:05:45.8661903Z [ 28%] Built target ref_join_test
+2026-11-03T22:05:45.8672110Z [ 28%] Built target ref_join_frontend_test
+2026-11-03T22:05:45.8775614Z [ 28%] Building C object CMakeFiles/return_test.dir/tests/unit/return_test.c.o
+2026-11-03T22:05:45.8816484Z [ 28%] Building C object CMakeFiles/function_source_test.dir/tests/unit/function_source_test.c.o
+2026-11-03T22:05:45.9195666Z [ 29%] Linking C executable function_body_test
+2026-11-03T22:05:45.9456637Z [ 29%] Linking C executable function_body_frontend_test
+2026-11-03T22:05:45.9745697Z [ 29%] Built target function_body_test
+2026-11-03T22:05:45.9899006Z [ 30%] Building C object CMakeFiles/structural_name_test.dir/tests/unit/structural_name_test.c.o
+2026-11-03T22:05:46.0006126Z [ 30%] Built target function_body_frontend_test
+2026-11-03T22:05:46.0096323Z [ 30%] Building C object CMakeFiles/control_test.dir/tests/unit/control_test.c.o
+2026-11-03T22:05:46.0636242Z [ 30%] Linking C executable return_test
+2026-11-03T22:05:46.0644730Z [ 30%] Linking C executable function_source_test
+2026-11-03T22:05:46.1061753Z [ 30%] Built target return_test
+2026-11-03T22:05:46.1075978Z [ 30%] Built target function_source_test
+2026-11-03T22:05:46.1164803Z [ 30%] Building C object CMakeFiles/loop_test.dir/tests/unit/loop_test.c.o
+2026-11-03T22:05:46.1196392Z [ 31%] Building C object CMakeFiles/p1088_provenance_test.dir/tests/p1088/provenance_test.c.o
+2026-11-03T22:05:46.1703975Z [ 31%] Linking C executable structural_name_test
+2026-11-03T22:05:46.2026279Z [ 32%] Linking C executable control_test
+2026-11-03T22:05:46.2134987Z [ 32%] Built target structural_name_test
+2026-11-03T22:05:46.2226050Z [ 32%] Building C object CMakeFiles/p1088_oom_probe.dir/tests/p1088/oom_probe.c.o
+2026-11-03T22:05:46.2460678Z [ 32%] Built target control_test
+2026-11-03T22:05:46.2546619Z [ 32%] Building C object CMakeFiles/p1088_break_add_oom.dir/tests/p1088/break_add_oom.c.o
+2026-11-03T22:05:46.3056101Z [ 32%] Linking C executable loop_test
+2026-11-03T22:05:46.3206272Z [ 32%] Linking C executable p1088_provenance_test
+2026-11-03T22:05:46.3476116Z [ 32%] Built target loop_test
+2026-11-03T22:05:46.3566275Z [ 32%] Building C object CMakeFiles/if_test.dir/tests/unit/if_test.c.o
+2026-11-03T22:05:46.3626176Z [ 32%] Built target p1088_provenance_test
+2026-11-03T22:05:46.3716422Z [ 32%] Building C object CMakeFiles/unit_name_test.dir/tests/unit/unit_name_test.c.o
+2026-11-03T22:05:46.4176361Z [ 32%] Linking C executable p1088_oom_probe
+2026-11-03T22:05:46.4506571Z [ 32%] Linking C executable p1088_break_add_oom
+2026-11-03T22:05:46.4596533Z [ 32%] Built target p1088_oom_probe
+2026-11-03T22:05:46.4706529Z [ 33%] Building C object CMakeFiles/argument_compatibility_test.dir/tests/unit/argument_compatibility_test.c.o
+2026-11-03T22:05:46.4966389Z [ 33%] Built target p1088_break_add_oom
+2026-11-03T22:05:46.5056368Z [ 33%] Building C object CMakeFiles/local_root_test.dir/tests/unit/local_root_test.c.o
+2026-11-03T22:05:46.5205977Z [ 34%] Linking C executable unit_name_test
+2026-11-03T22:05:46.5675366Z [ 34%] Built target unit_name_test
+2026-11-03T22:05:46.5786391Z [ 34%] Building C object CMakeFiles/p866_public.dir/tests/p866/public.c.o
+2026-11-03T22:05:46.5816345Z [ 34%] Linking C executable if_test
+2026-11-03T22:05:46.5837864Z [ 34%] Linking C executable argument_compatibility_test
+2026-11-03T22:05:46.6253352Z [ 34%] Built target if_test
+2026-11-03T22:05:46.6258735Z [ 34%] Built target argument_compatibility_test
+2026-11-03T22:05:46.6341450Z [ 34%] Building C object CMakeFiles/p866_integrity.dir/tests/p866/integrity.c.o
+2026-11-03T22:05:46.6346694Z [ 35%] Building C object CMakeFiles/p866_oom.dir/tests/p866/oom.c.o
+2026-11-03T22:05:46.6375805Z [ 35%] Linking C executable p866_public
+2026-11-03T22:05:46.6816030Z [ 35%] Built target p866_public
+2026-11-03T22:05:46.6876148Z [ 36%] Linking C executable local_root_test
+2026-11-03T22:05:46.6927453Z [ 37%] Building C object CMakeFiles/p878_guard.dir/tests/p878/guard.c.o
+2026-11-03T22:05:46.7307005Z [ 37%] Built target local_root_test
+2026-11-03T22:05:46.7400950Z [ 37%] Building C object CMakeFiles/p817_public.dir/tests/p817/public.c.o
+2026-11-03T22:05:46.8166047Z [ 37%] Linking C executable p817_public
+2026-11-03T22:05:46.8606292Z [ 37%] Built target p817_public
+2026-11-03T22:05:46.8696770Z [ 37%] Building C object CMakeFiles/p817_integrity.dir/tests/p817/integrity.c.o
+2026-11-03T22:05:46.9416980Z [ 37%] Linking C executable p866_integrity
+2026-11-03T22:05:46.9623641Z [ 37%] Linking C executable p866_oom
+2026-11-03T22:05:46.9706339Z [ 37%] Linking C executable p817_integrity
+2026-11-03T22:05:46.9856087Z [ 37%] Built target p866_integrity
+2026-11-03T22:05:46.9946344Z [ 37%] Building C object CMakeFiles/p817_oom.dir/tests/p817/oom.c.o
+2026-11-03T22:05:47.0066126Z [ 37%] Built target p866_oom
+2026-11-03T22:05:47.0126198Z [ 37%] Built target p817_integrity
+2026-11-03T22:05:47.0156187Z [ 38%] Building C object CMakeFiles/p785_public.dir/tests/p785/public.c.o
+2026-11-03T22:05:47.0219498Z [ 39%] Building C object CMakeFiles/p785_integrity.dir/tests/p785/integrity.c.o
+2026-11-03T22:05:47.0895029Z [ 39%] Linking C executable p785_public
+2026-11-03T22:05:47.0943605Z [ 40%] Linking C executable p817_oom
+2026-11-03T22:05:47.1158126Z [ 40%] Linking C executable p785_integrity
+2026-11-03T22:05:47.1358493Z [ 40%] Built target p785_public
+2026-11-03T22:05:47.1364000Z [ 40%] Built target p817_oom
+2026-11-03T22:05:47.1465694Z [ 40%] Building C object CMakeFiles/p785_oom.dir/tests/p785/oom.c.o
+2026-11-03T22:05:47.1468535Z [ 40%] Building C object CMakeFiles/p965_ownership.dir/tests/p965/ownership.c.o
+2026-11-03T22:05:47.1575003Z [ 40%] Built target p785_integrity
+2026-11-03T22:05:47.1706353Z [ 40%] Building C object CMakeFiles/p965_oom.dir/tests/p965/oom.c.o
+2026-11-03T22:05:47.2346144Z [ 40%] Linking C executable p965_ownership
+2026-11-03T22:05:47.2465593Z [ 40%] Linking C executable p785_oom
+2026-11-03T22:05:47.2506238Z [ 40%] Linking C executable p965_oom
+2026-11-03T22:05:47.2804273Z [ 40%] Built target p965_ownership
+2026-11-03T22:05:47.2896750Z [ 40%] Built target p785_oom
+2026-11-03T22:05:47.2920206Z [ 41%] Building C object CMakeFiles/p965_output.dir/tests/p965/output.c.o
+2026-11-03T22:05:47.2936543Z [ 41%] Built target p965_oom
+2026-11-03T22:05:47.2994337Z [ 41%] Building C object CMakeFiles/p965_c89_guard.dir/tests/p965/c89/guard.c.o
+2026-11-03T22:05:47.3043590Z [ 42%] Building C object CMakeFiles/p965_c89_observer.dir/tests/p965/c89/observer.c.o
+2026-11-03T22:05:47.3295009Z [ 42%] Linking C executable p878_guard
+2026-11-03T22:05:47.3776040Z [ 42%] Built target p878_guard
+2026-11-03T22:05:47.3866364Z [ 43%] Building C object CMakeFiles/p965_c89_entry_source.dir/tests/p965/c89/entry_source.c.o
+2026-11-03T22:05:47.3926170Z [ 43%] Linking C executable p965_c89_observer
+2026-11-03T22:05:47.4076064Z [ 43%] Linking C executable p965_c89_guard
+2026-11-03T22:05:47.4341425Z [ 43%] Built target p965_c89_observer
+2026-11-03T22:05:47.4456278Z [ 43%] Building C object CMakeFiles/p974_entry_auth.dir/tests/p974/entry.c.o
+2026-11-03T22:05:47.4506187Z [ 43%] Linking C executable p965_c89_entry_source
+2026-11-03T22:05:47.4546175Z [ 43%] Built target p965_c89_guard
+2026-11-03T22:05:47.4663142Z [ 43%] Building C object CMakeFiles/p974_driver.dir/tests/p974/driver.c.o
+2026-11-03T22:05:47.4936261Z [ 43%] Built target p965_c89_entry_source
+2026-11-03T22:05:47.5026308Z [ 43%] Building C object CMakeFiles/p982_probe.dir/tests/p982/probe.c.o
+2026-11-03T22:05:47.5269553Z [ 43%] Linking C executable p974_entry_auth
+2026-11-03T22:05:47.5706035Z [ 43%] Built target p974_entry_auth
+2026-11-03T22:05:47.5796181Z [ 43%] Building C object CMakeFiles/p982_oom.dir/tests/p982/oom.c.o
+2026-11-03T22:05:47.6026248Z [ 43%] Linking C executable p982_probe
+2026-11-03T22:05:47.6456122Z [ 43%] Built target p982_probe
+2026-11-03T22:05:47.6556222Z [ 44%] Building C object CMakeFiles/p990_probe.dir/tests/p990/probe.c.o
+2026-11-03T22:05:47.6596055Z [ 45%] Linking C executable p982_oom
+2026-11-03T22:05:47.7066058Z [ 45%] Built target p982_oom
+2026-11-03T22:05:47.7156266Z [ 45%] Building C object CMakeFiles/p990_oom.dir/tests/p990/oom.c.o
+2026-11-03T22:05:47.7576251Z [ 45%] Linking C executable p990_probe
+2026-11-03T22:05:47.7946286Z [ 45%] Linking C executable p990_oom
+2026-11-03T22:05:47.8046126Z [ 45%] Built target p990_probe
+2026-11-03T22:05:47.8126676Z [ 45%] Building C object CMakeFiles/p1107_probe.dir/tests/p1107/probe.c.o
+2026-11-03T22:05:47.8405530Z [ 45%] Built target p990_oom
+2026-11-03T22:05:47.8496381Z [ 45%] Building C object CMakeFiles/p1107_oom.dir/tests/p1107/probe.c.o
+2026-11-03T22:05:47.9185828Z [ 45%] Linking C executable p965_output
+2026-11-03T22:05:47.9676359Z [ 45%] Built target p965_output
+2026-11-03T22:05:47.9776429Z [ 45%] Building C object CMakeFiles/p1117_probe.dir/tests/p1117/probe.c.o
+2026-11-03T22:05:48.1126075Z [ 46%] Linking C executable p974_driver
+2026-11-03T22:05:48.1596122Z [ 46%] Built target p974_driver
+2026-11-03T22:05:48.1686305Z [ 46%] Building C object CMakeFiles/p1117_lineage.dir/tests/p1117/lineage_v2.c.o
+2026-11-03T22:05:48.5006336Z [ 47%] Linking C executable p1107_probe
+2026-11-03T22:05:48.5086440Z [ 47%] Linking C executable p1107_oom
+2026-11-03T22:05:48.5451855Z [ 47%] Built target p1107_probe
+2026-11-03T22:05:48.5561234Z [ 47%] Building C object CMakeFiles/p1117_safety.dir/tests/p1117/safety_v3.c.o
+2026-11-03T22:05:48.5856438Z [ 47%] Built target p1107_oom
+2026-11-03T22:05:48.5916097Z [ 48%] Linking C executable p1117_probe
+2026-11-03T22:05:48.5946369Z [ 48%] Building C object CMakeFiles/p1117_oom.dir/tests/p1117/safety_oom_v2.c.o
+2026-11-03T22:05:48.6396115Z [ 48%] Built target p1117_probe
+2026-11-03T22:05:48.6486325Z [ 48%] Building C object CMakeFiles/p1117_c217_lineage.dir/tests/p1117/c217/probe.c.o
+2026-11-03T22:05:48.7856064Z [ 49%] Linking C executable p1117_lineage
+2026-11-03T22:05:48.8346410Z [ 49%] Built target p1117_lineage
+2026-11-03T22:05:48.8476426Z [ 50%] Building C object CMakeFiles/p1123_safety.dir/tests/p1123/safety.c.o
+2026-11-03T22:05:49.1954489Z [ 50%] Linking C executable p1117_safety
+2026-11-03T22:05:49.2320526Z [ 50%] Linking C executable p1117_oom
+2026-11-03T22:05:49.2458243Z [ 50%] Built target p1117_safety
+2026-11-03T22:05:49.2576327Z [ 50%] Building C object CMakeFiles/p1123_oom.dir/tests/p1123/safety.c.o
+2026-11-03T22:05:49.2816711Z [ 50%] Built target p1117_oom
+2026-11-03T22:05:49.2898297Z [ 51%] Building C object CMakeFiles/p1098_probe.dir/tests/p1098/probe.c.o
+2026-11-03T22:05:49.3006183Z [ 51%] Linking C executable p1117_c217_lineage
+2026-11-03T22:05:49.3476090Z [ 51%] Built target p1117_c217_lineage
+2026-11-03T22:05:49.3566237Z [ 51%] Building C object CMakeFiles/p1098_oom.dir/tests/p1098/probe.c.o
+2026-11-03T22:05:49.4900078Z [ 51%] Linking C executable p1123_safety
+2026-11-03T22:05:49.5375669Z [ 51%] Built target p1123_safety
+2026-11-03T22:05:49.5526363Z [ 51%] Building C object CMakeFiles/p1092_observe.dir/tests/p1092/observe.c.o
+2026-11-03T22:05:49.6726258Z [ 51%] Linking C executable p1092_observe
+2026-11-03T22:05:49.7176138Z [ 51%] Built target p1092_observe
+2026-11-03T22:05:49.7266612Z [ 52%] Building C object CMakeFiles/p1092_oom.dir/tests/p1092/observe.c.o
+2026-11-03T22:05:49.8496311Z [ 52%] Linking C executable p1092_oom
+2026-11-03T22:05:49.8956125Z [ 52%] Built target p1092_oom
+2026-11-03T22:05:49.9016056Z [ 52%] Linking C executable p1123_oom
+2026-11-03T22:05:49.9051249Z [ 52%] Building C object CMakeFiles/p961_oom.dir/tests/p961/oom.c.o
+2026-11-03T22:05:49.9483455Z [ 52%] Built target p1123_oom
+2026-11-03T22:05:49.9596722Z [ 52%] Building C object CMakeFiles/p961_output.dir/tests/p961/output.c.o
+2026-11-03T22:05:49.9808626Z [ 52%] Linking C executable p961_oom
+2026-11-03T22:05:49.9838751Z [ 52%] Linking C executable p1098_probe
+2026-11-03T22:05:50.0000886Z [ 52%] Linking C executable p1098_oom
+2026-11-03T22:05:50.0323307Z [ 52%] Built target p961_oom
+2026-11-03T22:05:50.0325870Z [ 52%] Built target p1098_probe
+2026-11-03T22:05:50.0420042Z [ 52%] Building C object CMakeFiles/p961_origin.dir/tests/p961/origin.c.o
+2026-11-03T22:05:50.0423291Z [ 52%] Building C object CMakeFiles/p961_original.dir/tests/p961/original.c.o
+2026-11-03T22:05:50.0461851Z [ 52%] Built target p1098_oom
+2026-11-03T22:05:50.0576504Z [ 52%] Building C object CMakeFiles/p953_integrity.dir/tests/p953/integrity.c.o
+2026-11-03T22:05:50.1072057Z [ 52%] Linking C executable p961_original
+2026-11-03T22:05:50.1186684Z [ 53%] Linking C executable p961_origin
+2026-11-03T22:05:50.1436439Z [ 54%] Linking C executable p953_integrity
+2026-11-03T22:05:50.1536795Z [ 54%] Built target p961_original
+2026-11-03T22:05:50.1626271Z [ 54%] Built target p961_origin
+2026-11-03T22:05:50.1646588Z [ 54%] Building C object CMakeFiles/p945_integrity.dir/tests/p945/integrity.c.o
+2026-11-03T22:05:50.1706216Z [ 54%] Building C object CMakeFiles/p778_probe.dir/tests/p778/probe.c.o
+2026-11-03T22:05:50.1955515Z [ 54%] Built target p953_integrity
+2026-11-03T22:05:50.2085285Z [ 54%] Building C object CMakeFiles/p778_gate_test.dir/tests/p778/gate_test.c.o
+2026-11-03T22:05:50.2409140Z [ 54%] Linking C executable p778_probe
+2026-11-03T22:05:50.2546315Z [ 54%] Linking C executable p945_integrity
+2026-11-03T22:05:50.2876002Z [ 54%] Built target p778_probe
+2026-11-03T22:05:50.2966313Z [ 54%] Building C object CMakeFiles/p774_probe.dir/tests/p774/gate0_probe.c.o
+2026-11-03T22:05:50.3066104Z [ 54%] Built target p945_integrity
+2026-11-03T22:05:50.3156326Z [ 54%] Building C object CMakeFiles/p774_gate_test.dir/tests/p774/gate_test.c.o
+2026-11-03T22:05:50.3626197Z [ 55%] Linking C executable p774_probe
+2026-11-03T22:05:50.3875936Z [ 55%] Linking C executable p778_gate_test
+2026-11-03T22:05:50.4084718Z [ 55%] Built target p774_probe
+2026-11-03T22:05:50.4186537Z [ 55%] Building C object CMakeFiles/p774_driver_oom.dir/tests/p774/driver_oom.c.o
+2026-11-03T22:05:50.4406296Z [ 55%] Built target p778_gate_test
+2026-11-03T22:05:50.4568326Z [ 55%] Building C object CMakeFiles/p761_probe.dir/tests/p761/probe.c.o
+2026-11-03T22:05:50.4592238Z [ 55%] Linking C executable p774_gate_test
+2026-11-03T22:05:50.5206217Z [ 55%] Built target p774_gate_test
+2026-11-03T22:05:50.5288309Z [ 55%] Building C object CMakeFiles/p761_metadata_test.dir/tests/p761/metadata_test.c.o
+2026-11-03T22:05:50.5436038Z [ 55%] Linking C executable p761_probe
+2026-11-03T22:05:50.5731883Z [ 55%] Linking C executable p761_metadata_test
+2026-11-03T22:05:50.5755939Z [ 55%] Linking C executable p961_output
+2026-11-03T22:05:50.5863095Z [ 55%] Built target p761_probe
+2026-11-03T22:05:50.5964489Z [ 56%] Building C object CMakeFiles/p761_gate_test.dir/tests/p761/gate_test.c.o
+2026-11-03T22:05:50.6176124Z [ 56%] Built target p761_metadata_test
+2026-11-03T22:05:50.6206002Z [ 56%] Built target p961_output
+2026-11-03T22:05:50.6266401Z [ 56%] Building C object CMakeFiles/p761_oom_test.dir/tests/p761/oom_test.c.o
+2026-11-03T22:05:50.6326469Z [ 57%] Building C object CMakeFiles/p752_driver_test.dir/tests/p752/driver_test.c.o
+2026-11-03T22:05:50.7346320Z [ 57%] Linking C executable p761_gate_test
+2026-11-03T22:05:50.7736325Z [ 58%] Linking C executable p761_oom_test
+2026-11-03T22:05:50.7766173Z [ 58%] Built target p761_gate_test
+2026-11-03T22:05:50.7886319Z [ 58%] Building C object CMakeFiles/p752_unit_test.dir/tests/p752/unit_test.c.o
+2026-11-03T22:05:50.8180355Z [ 58%] Built target p761_oom_test
+2026-11-03T22:05:50.8267800Z [ 58%] Building C object CMakeFiles/avs_test.dir/tests/unit/avs_test.c.o
+2026-11-03T22:05:50.9306401Z [ 58%] Linking C executable p752_unit_test
+2026-11-03T22:05:50.9746222Z [ 58%] Linking C executable avs_test
+2026-11-03T22:05:50.9756103Z [ 58%] Built target p752_unit_test
+2026-11-03T22:05:50.9836504Z [ 58%] Building C object CMakeFiles/u8_literal_test.dir/tests/unit/u8_literal_test.c.o
+2026-11-03T22:05:51.0206471Z [ 58%] Built target avs_test
+2026-11-03T22:05:51.0366704Z [ 58%] Building C object CMakeFiles/p497_literal_test.dir/tests/p497/literal_test.c.o
+2026-11-03T22:05:51.0506524Z [ 59%] Linking C executable p774_driver_oom
+2026-11-03T22:05:51.0991642Z [ 59%] Linking C executable u8_literal_test
+2026-11-03T22:05:51.1023010Z [ 59%] Built target p774_driver_oom
+2026-11-03T22:05:51.1126824Z [ 59%] Building C object CMakeFiles/p497_public_probe.dir/tests/p497/public_probe.c.o
+2026-11-03T22:05:51.1466069Z [ 59%] Built target u8_literal_test
+2026-11-03T22:05:51.1553100Z [ 60%] Linking C executable p497_literal_test
+2026-11-03T22:05:51.1555642Z [ 61%] Building C object CMakeFiles/fixed_field_test.dir/tests/unit/fixed_field_test.c.o
+2026-11-03T22:05:51.1637460Z [ 61%] Linking C executable p497_public_probe
+2026-11-03T22:05:51.1986354Z [ 61%] Built target p497_literal_test
+2026-11-03T22:05:51.2086733Z [ 62%] Building C object CMakeFiles/recursive_type_test.dir/tests/unit/recursive_type_test.c.o
+2026-11-03T22:05:51.2116068Z [ 62%] Built target p497_public_probe
+2026-11-03T22:05:51.2176284Z [ 63%] Building C object CMakeFiles/heap_link_test.dir/tests/unit/heap_link_test.c.o
+2026-11-03T22:05:51.2566279Z [ 63%] Linking C executable p752_driver_test
+2026-11-03T22:05:51.3034444Z [ 63%] Built target p752_driver_test
+2026-11-03T22:05:51.3138998Z [ 63%] Building C object CMakeFiles/heap_link_support_test.dir/tests/unit/heap_link_support_test.c.o
+2026-11-03T22:05:51.3386289Z [ 63%] Linking C executable heap_link_test
+2026-11-03T22:05:51.3652051Z [ 63%] Linking C executable fixed_field_test
+2026-11-03T22:05:51.3653091Z [ 63%] Linking C executable recursive_type_test
+2026-11-03T22:05:51.3854423Z [ 63%] Built target heap_link_test
+2026-11-03T22:05:51.3945367Z [ 63%] Building C object CMakeFiles/heap_link_checked_probe.dir/tests/integration/heap_link_checked_probe.c.o
+2026-11-03T22:05:51.3983790Z [ 63%] Linking C executable heap_link_support_test
+2026-11-03T22:05:51.4096370Z [ 63%] Built target recursive_type_test
+2026-11-03T22:05:51.4097013Z [ 63%] Built target fixed_field_test
+2026-11-03T22:05:51.4194492Z [ 63%] Building C object CMakeFiles/heap_link_backend_test.dir/tests/unit/heap_link_backend_test.c.o
+2026-11-03T22:05:51.4197858Z [ 63%] Building C object CMakeFiles/allocated_backend_test.dir/tests/unit/allocated_backend_test.c.o
+2026-11-03T22:05:51.4446706Z [ 63%] Built target heap_link_support_test
+2026-11-03T22:05:51.4516395Z [ 63%] Linking C executable heap_link_checked_probe
+2026-11-03T22:05:51.4526239Z [ 63%] Building C object CMakeFiles/allocated_checked_probe.dir/tests/integration/allocated_checked_probe.c.o
+2026-11-03T22:05:51.4756440Z [ 63%] Linking C executable allocated_backend_test
+2026-11-03T22:05:51.4877138Z [ 64%] Linking C executable heap_link_backend_test
+2026-11-03T22:05:51.4936478Z [ 64%] Built target heap_link_checked_probe
+2026-11-03T22:05:51.5016405Z [ 64%] Building C object CMakeFiles/handoff_backend_test.dir/tests/unit/handoff_backend_test.c.o
+2026-11-03T22:05:51.5066667Z [ 64%] Linking C executable allocated_checked_probe
+2026-11-03T22:05:51.5196417Z [ 64%] Built target allocated_backend_test
+2026-11-03T22:05:51.5295430Z [ 64%] Building C object CMakeFiles/handoff_checked_probe.dir/tests/integration/handoff_checked_probe.c.o
+2026-11-03T22:05:51.5376780Z [ 64%] Built target heap_link_backend_test
+2026-11-03T22:05:51.5485941Z [ 64%] Built target allocated_checked_probe
+2026-11-03T22:05:51.5490644Z [ 64%] Building C object CMakeFiles/p738_gate_test.dir/tests/p738/gate_test.c.o
+2026-11-03T22:05:51.5596497Z [ 64%] Building C object CMakeFiles/p733_gate_test.dir/tests/p733/gate_test.c.o
+2026-11-03T22:05:51.5774998Z [ 65%] Linking C executable handoff_backend_test
+2026-11-03T22:05:51.5856340Z [ 65%] Linking C executable handoff_checked_probe
+2026-11-03T22:05:51.6206302Z [ 65%] Built target handoff_backend_test
+2026-11-03T22:05:51.6304044Z [ 65%] Built target handoff_checked_probe
+2026-11-03T22:05:51.6346318Z [ 65%] Building C object CMakeFiles/p733_history_test.dir/tests/p733/history_test.c.o
+2026-11-03T22:05:51.6395729Z [ 66%] Building C object CMakeFiles/p733_public_probe.dir/tests/p733/public_probe.c.o
+2026-11-03T22:05:51.6836184Z [ 66%] Linking C executable p738_gate_test
+2026-11-03T22:05:51.7066143Z [ 66%] Linking C executable p733_public_probe
+2026-11-03T22:05:51.7287996Z [ 66%] Built target p738_gate_test
+2026-11-03T22:05:51.7382958Z [ 66%] Building C object CMakeFiles/p733_driver_test.dir/tests/p733/driver_test.c.o
+2026-11-03T22:05:51.7409948Z [ 66%] Linking C executable p733_history_test
+2026-11-03T22:05:51.7426098Z [ 66%] Linking C executable p733_gate_test
+2026-11-03T22:05:51.7506327Z [ 66%] Built target p733_public_probe
+2026-11-03T22:05:51.7627053Z [ 67%] Building C object CMakeFiles/live_return_backend_test.dir/tests/unit/live_return_backend_test.c.o
+2026-11-03T22:05:51.7886400Z [ 67%] Built target p733_history_test
+2026-11-03T22:05:51.7906790Z [ 67%] Built target p733_gate_test
+2026-11-03T22:05:51.7956892Z [ 67%] Building C object CMakeFiles/live_tail_return_test.dir/tests/unit/live_tail_return_test.c.o
+2026-11-03T22:05:51.7981931Z [ 67%] Building C object CMakeFiles/packet_fork_test.dir/tests/unit/packet_fork_test.c.o
+2026-11-03T22:05:51.8413536Z [ 67%] Linking C executable live_return_backend_test
+2026-11-03T22:05:51.8886102Z [ 67%] Built target live_return_backend_test
+2026-11-03T22:05:51.9006688Z [ 68%] Building C object CMakeFiles/packet_retention_test.dir/tests/unit/packet_retention_test.c.o
+2026-11-03T22:05:51.9114421Z [ 68%] Linking C executable live_tail_return_test
+2026-11-03T22:05:51.9314265Z [ 68%] Linking C executable packet_fork_test
+2026-11-03T22:05:51.9624971Z [ 68%] Built target live_tail_return_test
+2026-11-03T22:05:51.9745668Z [ 68%] Building C object CMakeFiles/custody_source_test.dir/tests/unit/custody_source_test.c.o
+2026-11-03T22:05:51.9806406Z [ 68%] Built target packet_fork_test
+2026-11-03T22:05:51.9896604Z [ 68%] Building C object CMakeFiles/custody_checked_probe.dir/tests/integration/custody_checked_probe.c.o
+2026-11-03T22:05:52.0195225Z [ 68%] Linking C executable packet_retention_test
+2026-11-03T22:05:52.0446433Z [ 68%] Linking C executable custody_checked_probe
+2026-11-03T22:05:52.0676133Z [ 68%] Built target packet_retention_test
+2026-11-03T22:05:52.0786481Z [ 68%] Building C object CMakeFiles/custody_definition_test.dir/tests/unit/custody_definition_test.c.o
+2026-11-03T22:05:52.0886344Z [ 68%] Built target custody_checked_probe
+2026-11-03T22:05:52.0969193Z [ 68%] Building C object CMakeFiles/typed_owner_test.dir/tests/unit/typed_owner_test.c.o
+2026-11-03T22:05:52.1196094Z [ 68%] Linking C executable custody_source_test
+2026-11-03T22:05:52.1635636Z [ 68%] Built target custody_source_test
+2026-11-03T22:05:52.1676905Z [ 69%] Linking C executable custody_definition_test
+2026-11-03T22:05:52.1722708Z [ 69%] Building C object CMakeFiles/two_heap_checked_probe.dir/tests/integration/two_heap_checked_probe.c.o
+2026-11-03T22:05:52.2078289Z [ 69%] Built target custody_definition_test
+2026-11-03T22:05:52.2100583Z [ 69%] Linking C executable typed_owner_test
+2026-11-03T22:05:52.2177227Z [ 70%] Building C object CMakeFiles/two_heap_backend_test.dir/tests/unit/two_heap_backend_test.c.o
+2026-11-03T22:05:52.2246318Z [ 70%] Linking C executable two_heap_checked_probe
+2026-11-03T22:05:52.2586505Z [ 70%] Built target typed_owner_test
+2026-11-03T22:05:52.2638814Z [ 70%] Built target two_heap_checked_probe
+2026-11-03T22:05:52.2684486Z [ 70%] Building C object CMakeFiles/two_heap_test.dir/tests/unit/two_heap_test.c.o
+2026-11-03T22:05:52.2756804Z [ 70%] Building C object CMakeFiles/captured_closure_test.dir/tests/unit/captured_closure_test.c.o
+2026-11-03T22:05:52.2921160Z [ 70%] Linking C executable two_heap_backend_test
+2026-11-03T22:05:52.3406369Z [ 70%] Built target two_heap_backend_test
+2026-11-03T22:05:52.3506389Z [ 70%] Building C object CMakeFiles/five_checked_probe.dir/tests/integration/five_checked_probe.c.o
+2026-11-03T22:05:52.3914159Z [ 71%] Linking C executable p733_driver_test
+2026-11-03T22:05:52.4016091Z [ 71%] Linking C executable five_checked_probe
+2026-11-03T22:05:52.4306338Z [ 72%] Linking C executable captured_closure_test
+2026-11-03T22:05:52.4338172Z [ 73%] Linking C executable two_heap_test
+2026-11-03T22:05:52.4408199Z [ 73%] Built target p733_driver_test
+2026-11-03T22:05:52.4448194Z [ 73%] Built target five_checked_probe
+2026-11-03T22:05:52.4508733Z [ 74%] Building C object CMakeFiles/five_backend_test.dir/tests/unit/five_backend_test.c.o
+2026-11-03T22:05:52.4536161Z [ 75%] Building C object CMakeFiles/allocated_join_test.dir/tests/unit/allocated_join_test.c.o
+2026-11-03T22:05:52.4756390Z [ 75%] Built target captured_closure_test
+2026-11-03T22:05:52.4806196Z [ 75%] Built target two_heap_test
+2026-11-03T22:05:52.4836420Z [ 75%] Building C object CMakeFiles/allocated_node_test.dir/tests/unit/allocated_node_test.c.o
+2026-11-03T22:05:52.4896836Z [ 75%] Building C object CMakeFiles/p466_public_probe.dir/tests/p466/public_probe.c.o
+2026-11-03T22:05:52.5234543Z [ 75%] Linking C executable five_backend_test
+2026-11-03T22:05:52.5366105Z [ 75%] Linking C executable allocated_join_test
+2026-11-03T22:05:52.5704022Z [ 75%] Linking C executable p466_public_probe
+2026-11-03T22:05:52.5729047Z [ 75%] Built target five_backend_test
+2026-11-03T22:05:52.5824084Z [ 75%] Built target allocated_join_test
+2026-11-03T22:05:52.5836777Z [ 76%] Building C object CMakeFiles/p471_public_probe.dir/tests/p471/public_probe.c.o
+2026-11-03T22:05:52.5838798Z [ 76%] Linking C executable allocated_node_test
+2026-11-03T22:05:52.5946222Z [ 76%] Building C object CMakeFiles/p490_public_probe.dir/tests/p490/public_probe.c.o
+2026-11-03T22:05:52.6176118Z [ 76%] Built target p466_public_probe
+2026-11-03T22:05:52.6266362Z [ 76%] Building C object CMakeFiles/node_link_test.dir/tests/unit/node_link_test.c.o
+2026-11-03T22:05:52.6296132Z [ 76%] Built target allocated_node_test
+2026-11-03T22:05:52.6356342Z [ 76%] Building C object CMakeFiles/node_initial_test.dir/tests/unit/node_initial_test.c.o
+2026-11-03T22:05:52.6526572Z [ 76%] Linking C executable p471_public_probe
+2026-11-03T22:05:52.6706390Z [ 76%] Linking C executable p490_public_probe
+2026-11-03T22:05:52.6986278Z [ 76%] Built target p471_public_probe
+2026-11-03T22:05:52.7106558Z [ 76%] Building C object CMakeFiles/node_join_native_test.dir/tests/unit/node_join_native_test.c.o
+2026-11-03T22:05:52.7154836Z [ 76%] Built target p490_public_probe
+2026-11-03T22:05:52.7278093Z [ 77%] Building C object CMakeFiles/node_join_native_probe.dir/tests/integration/node_join_native_probe.c.o
+2026-11-03T22:05:52.7516327Z [ 77%] Linking C executable node_initial_test
+2026-11-03T22:05:52.7954344Z [ 77%] Linking C executable node_join_native_probe
+2026-11-03T22:05:52.7974058Z [ 77%] Built target node_initial_test
+2026-11-03T22:05:52.8090763Z [ 78%] Building C object CMakeFiles/node_checked_probe.dir/tests/integration/node_checked_probe.c.o
+2026-11-03T22:05:52.8123360Z [ 78%] Linking C executable node_join_native_test
+2026-11-03T22:05:52.8396264Z [ 79%] Linking C executable node_link_test
+2026-11-03T22:05:52.8406755Z [ 79%] Built target node_join_native_probe
+2026-11-03T22:05:52.8486551Z [ 79%] Building C object CMakeFiles/checked_c_node_test.dir/tests/unit/checked_c_node_test.c.o
+2026-11-03T22:05:52.8606126Z [ 79%] Built target node_join_native_test
+2026-11-03T22:05:52.8706599Z [ 79%] Building C object CMakeFiles/node_join_proof_test.dir/tests/unit/node_join_proof_test.c.o
+2026-11-03T22:05:52.8756304Z [ 79%] Linking C executable node_checked_probe
+2026-11-03T22:05:52.8806181Z [ 79%] Built target node_link_test
+2026-11-03T22:05:52.8946518Z [ 79%] Building C object CMakeFiles/node_join_test.dir/tests/unit/node_join_test.c.o
+2026-11-03T22:05:52.9156194Z [ 79%] Linking C executable checked_c_node_test
+2026-11-03T22:05:52.9216165Z [ 79%] Built target node_checked_probe
+2026-11-03T22:05:52.9306657Z [ 79%] Building C object CMakeFiles/nested_u8_checked_probe.dir/tests/integration/nested_u8_checked_probe.c.o
+2026-11-03T22:05:52.9636122Z [ 79%] Built target checked_c_node_test
+2026-11-03T22:05:52.9726929Z [ 79%] Building C object CMakeFiles/u8_call_checked_probe.dir/tests/integration/u8_call_checked_probe.c.o
+2026-11-03T22:05:52.9976361Z [ 80%] Linking C executable node_join_proof_test
+2026-11-03T22:05:53.0446438Z [ 80%] Built target node_join_proof_test
+2026-11-03T22:05:53.0556300Z [ 81%] Building C object CMakeFiles/p589_public_probe.dir/tests/p589/public_probe.c.o
+2026-11-03T22:05:53.0851784Z [ 81%] Linking C executable node_join_test
+2026-11-03T22:05:53.1135950Z [ 81%] Linking C executable p589_public_probe
+2026-11-03T22:05:53.1315219Z [ 81%] Built target node_join_test
+2026-11-03T22:05:53.1456351Z [ 82%] Building C object CMakeFiles/p589_gate_test.dir/tests/p589/gate_test.c.o
+2026-11-03T22:05:53.1606217Z [ 82%] Built target p589_public_probe
+2026-11-03T22:05:53.1696825Z [ 82%] Building C object CMakeFiles/p589_parser_oom_test.dir/tests/p589/parser_oom_test.c.o
+2026-11-03T22:05:53.2266140Z [ 82%] Linking C executable p589_parser_oom_test
+2026-11-03T22:05:53.2686130Z [ 82%] Built target p589_parser_oom_test
+2026-11-03T22:05:53.2796413Z [ 82%] Building C object CMakeFiles/p596_public_probe.dir/tests/p596/public_probe.c.o
+2026-11-03T22:05:53.3356173Z [ 83%] Linking C executable p596_public_probe
+2026-11-03T22:05:53.3806117Z [ 83%] Built target p596_public_probe
+2026-11-03T22:05:53.3896409Z [ 83%] Building C object CMakeFiles/p596_gate_test.dir/tests/p596/gate_test.c.o
+2026-11-03T22:05:53.5816338Z [ 84%] Linking C executable nested_u8_checked_probe
+2026-11-03T22:05:53.6052269Z [ 85%] Linking C executable u8_call_checked_probe
+2026-11-03T22:05:53.6356547Z [ 85%] Built target nested_u8_checked_probe
+2026-11-03T22:05:53.6446387Z [ 85%] Building C object CMakeFiles/p596_parser_oom_test.dir/tests/p596/parser_oom_test.c.o
+2026-11-03T22:05:53.6544761Z [ 85%] Built target u8_call_checked_probe
+2026-11-03T22:05:53.6694969Z [ 85%] Building C object CMakeFiles/p596_proof_core_test.dir/tests/p596/proof_core_test.c.o
+2026-11-03T22:05:53.7016191Z [ 86%] Linking C executable p596_parser_oom_test
+2026-11-03T22:05:53.7436081Z [ 86%] Built target p596_parser_oom_test
+2026-11-03T22:05:53.7526428Z [ 87%] Building C object CMakeFiles/r1129_owned.dir/evidence/r1129/harness/owned.c.o
+2026-11-03T22:05:53.8156400Z [ 87%] Linking C executable p596_proof_core_test
+2026-11-03T22:05:53.8276385Z [ 87%] Linking C executable r1129_owned
+2026-11-03T22:05:53.8636163Z [ 87%] Built target p596_proof_core_test
+2026-11-03T22:05:53.8696099Z [ 87%] Built target r1129_owned
+2026-11-03T22:05:53.8746688Z [ 88%] Building C object CMakeFiles/newlangc.dir/src/main.c.o
+2026-11-03T22:05:53.8786332Z [ 89%] Building C object CMakeFiles/p718_gate_test.dir/tests/p718/gate_test.c.o
+2026-11-03T22:05:53.9066367Z [ 89%] Linking C executable p589_gate_test
+2026-11-03T22:05:53.9636207Z [ 89%] Built target p589_gate_test
+2026-11-03T22:05:53.9726476Z [ 89%] Building C object CMakeFiles/p728_gate_test.dir/tests/p728/gate_test.c.o
+2026-11-03T22:05:54.1436314Z [ 89%] Linking C executable p596_gate_test
+2026-11-03T22:05:54.1916233Z [ 89%] Built target p596_gate_test
+2026-11-03T22:05:54.2006313Z [ 90%] Building C object CMakeFiles/p722_gate_test.dir/tests/p722/gate_test.c.o
+2026-11-03T22:05:54.4966326Z [ 90%] Linking C executable newlangc
+2026-11-03T22:05:54.5415999Z [ 90%] Built target newlangc
+2026-11-03T22:05:54.5506455Z [ 91%] Building C object CMakeFiles/p713_gate_test.dir/tests/p713/gate_test.c.o
+2026-11-03T22:05:54.6566332Z [ 91%] Linking C executable p718_gate_test
+2026-11-03T22:05:54.6845506Z [ 92%] Linking C executable p728_gate_test
+2026-11-03T22:05:54.7126123Z [ 92%] Built target p718_gate_test
+2026-11-03T22:05:54.7216354Z [ 92%] Building C object CMakeFiles/p706_gate_test.dir/tests/p706/gate_test.c.o
+2026-11-03T22:05:54.7392358Z [ 92%] Built target p728_gate_test
+2026-11-03T22:05:54.7496538Z [ 92%] Building C object CMakeFiles/p701_gate_test.dir/tests/p701/gate_test.c.o
+2026-11-03T22:05:55.0046375Z [ 92%] Linking C executable p722_gate_test
+2026-11-03T22:05:55.0546155Z [ 92%] Built target p722_gate_test
+2026-11-03T22:05:55.0646326Z [ 92%] Building C object CMakeFiles/newlangc_p534.dir/src/main.c.o
+2026-11-03T22:05:55.3314357Z [ 92%] Linking C executable p713_gate_test
+2026-11-03T22:05:55.3816335Z [ 92%] Built target p713_gate_test
+2026-11-03T22:05:55.3906494Z [ 93%] Building C object CMakeFiles/p572_fault_test.dir/tests/p572/fault_test.c.o
+2026-11-03T22:05:55.4752148Z [ 93%] Linking C executable p572_fault_test
+2026-11-03T22:05:55.4866259Z [ 93%] Linking C executable p701_gate_test
+2026-11-03T22:05:55.5226094Z [ 93%] Built target p572_fault_test
+2026-11-03T22:05:55.5280104Z [ 93%] Linking C executable p706_gate_test
+2026-11-03T22:05:55.5303281Z [ 93%] Built target p701_gate_test
+2026-11-03T22:05:55.5322339Z [ 93%] Building C object CMakeFiles/p791_one_probe.dir/tests/p534/public_probe.c.o
+2026-11-03T22:05:55.5424076Z [ 93%] Building C object CMakeFiles/p791_two_probe.dir/tests/p541/public_probe.c.o
+2026-11-03T22:05:55.5766753Z [ 93%] Built target p706_gate_test
+2026-11-03T22:05:55.5878000Z [ 93%] Building C object CMakeFiles/p791_issuer_oom.dir/tests/p514/gate_test.c.o
+2026-11-03T22:05:55.6017953Z [ 94%] Linking C executable p791_one_probe
+2026-11-03T22:05:55.6346083Z [ 95%] Linking C executable p791_two_probe
+2026-11-03T22:05:55.6476311Z [ 95%] Built target p791_one_probe
+2026-11-03T22:05:55.6566593Z [ 95%] Building C object CMakeFiles/p791_parser_oom.dir/tests/p791/parser_oom.c.o
+2026-11-03T22:05:55.6676128Z [ 95%] Linking C executable newlangc_p534
+2026-11-03T22:05:55.6776221Z [ 95%] Built target p791_two_probe
+2026-11-03T22:05:55.6856264Z [ 95%] Building C object CMakeFiles/p534_semantic_gate.dir/tests/p514/gate_test.c.o
+2026-11-03T22:05:55.7046435Z [ 95%] Linking C executable p791_parser_oom
+2026-11-03T22:05:55.7138541Z [ 95%] Built target newlangc_p534
+2026-11-03T22:05:55.7240337Z [ 95%] Building C object CMakeFiles/p636_index_gate.dir/tests/p636/index_gate.c.o
+2026-11-03T22:05:55.7385476Z [ 95%] Built target p791_parser_oom
+2026-11-03T22:05:55.7483406Z [ 95%] Building C object CMakeFiles/p634_ended_root_gate.dir/tests/p634/ended_root_gate.c.o
+2026-11-03T22:05:56.3896265Z [ 95%] Linking C executable p791_issuer_oom
+2026-11-03T22:05:56.4006142Z [ 95%] Linking C executable p634_ended_root_gate
+2026-11-03T22:05:56.4366090Z [ 95%] Built target p791_issuer_oom
+2026-11-03T22:05:56.4454022Z [ 95%] Built target p634_ended_root_gate
+2026-11-03T22:05:56.4458412Z [ 95%] Building C object CMakeFiles/p633_derivation_gate.dir/tests/p633/derivation_gate.c.o
+2026-11-03T22:05:56.4459458Z [ 96%] Linking C executable p636_index_gate
+2026-11-03T22:05:56.4576560Z [ 96%] Building C object CMakeFiles/p633_local_gate.dir/tests/p633/local_gate.c.o
+2026-11-03T22:05:56.4759126Z [ 97%] Linking C executable p534_semantic_gate
+2026-11-03T22:05:56.4920956Z [ 97%] Built target p636_index_gate
+2026-11-03T22:05:56.5036379Z [ 97%] Building C object CMakeFiles/p651_gate.dir/tests/p651/gate.c.o
+2026-11-03T22:05:56.5266109Z [ 97%] Built target p534_semantic_gate
+2026-11-03T22:05:56.5356339Z [ 97%] Building C object CMakeFiles/p633_origin_gate.dir/tests/p633/origin_gate.c.o
+2026-11-03T22:05:57.0704863Z [ 97%] Linking C executable p633_derivation_gate
+2026-11-03T22:05:57.1216462Z [ 97%] Built target p633_derivation_gate
+2026-11-03T22:05:57.1268807Z [ 98%] Linking C executable p633_local_gate
+2026-11-03T22:05:57.1316279Z [ 99%] Building C object CMakeFiles/p626_comparison_gate.dir/tests/p626/comparison_gate.c.o
+2026-11-03T22:05:57.1556002Z [ 99%] Linking C executable p651_gate
+2026-11-03T22:05:57.1723556Z [ 99%] Built target p633_local_gate
+2026-11-03T22:05:57.1836446Z [ 99%] Building C object CMakeFiles/p603_gate_probe.dir/tests/p603/gate_probe.c.o
+2026-11-03T22:05:57.1862192Z [ 99%] Linking C executable p633_origin_gate
+2026-11-03T22:05:57.2073399Z [ 99%] Built target p651_gate
+2026-11-03T22:05:57.2211765Z [ 99%] Building C object CMakeFiles/p504_gate_probe.dir/tests/p504/gate_probe.c.o
+2026-11-03T22:05:57.2296855Z [ 99%] Built target p633_origin_gate
+2026-11-03T22:05:57.2396323Z [ 99%] R1129 actual CTest registration inventory; no test execution
+2026-11-03T22:05:57.2951414Z Test project /home/runner/work/NewLang_Compiler/NewLang_Compiler/build-frontend
+2026-11-03T22:05:57.3186392Z   Test #660: r1129_c221_stutter.integration
+2026-11-03T22:05:57.3187838Z 
+2026-11-03T22:05:57.3188155Z Total Tests: 1
+2026-11-03T22:05:57.3611992Z R1129_TRANSPORT_STATUS {"root":"/home/runner/work/NewLang_Compiler/NewLang_Compiler/build-frontend/r1129-raw","status":"NOT_EXECUTED"}
+2026-11-03T22:05:57.3739903Z [ 99%] Built target r1129_registration_inventory
+2026-11-03T22:05:57.5964164Z [ 99%] Linking C executable p626_comparison_gate
+2026-11-03T22:05:57.6277087Z [ 99%] Built target p626_comparison_gate
+2026-11-03T22:05:57.7486446Z [100%] Linking C executable p603_gate_probe
+2026-11-03T22:05:57.7717072Z [100%] Linking C executable p504_gate_probe
+2026-11-03T22:05:57.7803376Z [100%] Built target p603_gate_probe
+2026-11-03T22:05:57.8107350Z [100%] Built target p504_gate_probe
+2026-11-03T22:05:57.8282541Z R-FAST build_wall_seconds=18 workers=4
+2026-11-03T22:05:57.9094714Z R-FAST REGISTRATION PASS: 660 distinct CTests; required 12/12; NOT EXECUTED
+2026-11-03T22:05:57.9095971Z R-FAST ONLY format, host build, test registration. SOURCE/CHECK/PROOF/C17/NATIVE/NEGATIVE/OOM/ASAN/UBSAN NOT TESTED
+2026-11-03T22:05:57.9256524Z Post job cleanup.
+2026-11-03T22:05:58.0114087Z [command]/usr/bin/git version
+2026-11-03T22:05:58.0156261Z git version 2.56.0
+2026-11-03T22:05:58.0193315Z Temporarily overriding HOME='/home/runner/work/_temp/d7e8b031-8953-408b-8962-0d9485d5d22c' before making global git config changes
+2026-11-03T22:05:58.0194606Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-03T22:05:58.0199886Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/NewLang_Compiler/NewLang_Compiler
+2026-11-03T22:05:58.0242702Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-03T22:05:58.0279542Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-03T22:05:58.0510934Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-03T22:05:58.0554945Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-03T22:05:58.0951177Z Cleaning up orphan processes
+2026-11-03T22:05:58.1333895Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

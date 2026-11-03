@@ -1,0 +1,4 @@
+{
+  "message": "AST tool version: {\"argv\": [\"/usr/bin/clang\", \"--version\"], \"cwd\": \"/home/runner/work/NewLang_Compiler/NewLang_Compiler/build-frontend/r1129-raw\", \"exit\": null, \"label\": \"normal-ast-version\", \"seconds\": 30.029573534999997, \"sequence\": 14, \"started\": \"2026-11-03T22:11:28.715034+00:00\", \"stderr_bytes\": 0, \"stderr_sha256\": \"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855\", \"stdout_bytes\": 110, \"stdout_sha256\": \"3635b8631d4ebcd8ed7586f4e01e7a6b44407de9d38db6e01daca9c242ed7a53\", \"timed_out\": true, \"timeout_seconds\": 30}",
+  "type": "MechanicalFailure"
+}

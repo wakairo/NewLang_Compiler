@@ -1,0 +1,108 @@
+{
+  "authority_comment": 6614995406,
+  "canonical_main": "73ef10a97f2fab7b70d094b2114359e961acefb5",
+  "cases": {
+    "continue_arity": {
+      "status": "NOT_RUN"
+    },
+    "continue_target": {
+      "status": "NOT_RUN"
+    },
+    "continue_type": {
+      "status": "NOT_RUN"
+    },
+    "equal_bits": {
+      "status": "NOT_RUN"
+    },
+    "immediate_break": {
+      "status": "NOT_RUN"
+    },
+    "loan_escape": {
+      "status": "NOT_RUN"
+    },
+    "normal": {
+      "check": "ACCEPTED",
+      "owned": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+      "status": "CHECK_STARTED",
+      "unmodified_native": [
+        "O0",
+        "O2"
+      ]
+    },
+    "v1_stutter": {
+      "status": "NOT_RUN"
+    }
+  },
+  "environment": {
+    "ASAN_OPTIONS": null,
+    "CFLAGS": null,
+    "GITHUB_ACTIONS": "true",
+    "GITHUB_BASE_REF": "p1123-c219-stuttering-loop-continue",
+    "GITHUB_EVENT_NAME": "pull_request",
+    "GITHUB_HEAD_REF": "r-fast/r1129-c221-stutter",
+    "GITHUB_JOB": "frontend-c17-partial",
+    "GITHUB_REF": "refs/pull/1132/merge",
+    "GITHUB_REPOSITORY": "wakairo/NewLang_Compiler",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_RUN_ID": "41724783037",
+    "GITHUB_SHA": "c0ab95f09986d32699c862bee4417fe0c1f0437a",
+    "UBSAN_OPTIONS": null
+  },
+  "finished": "2026-11-03T21:52:47.816114+00:00",
+  "first_stop": {
+    "message": "no unique phase-comparison IF",
+    "type": "ObservationLimit"
+  },
+  "guest_flags": [
+    "-std=c17",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Werror"
+  ],
+  "harness_manifest_sha256": "a4be9faa7aeef19ccedeb9d48aca6b85b5e500ae8b38c586a61944a906e33d1c",
+  "host": {
+    "build_type": "Debug",
+    "cli": {
+      "bytes": 1854768,
+      "path": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build-frontend/newlangc",
+      "sha256": "66604bfec04a00fcc3fcebff3e4eba5334a8fcc9817896ee693fb8f42332c0ac"
+    },
+    "cmake_c_flags": "",
+    "compiler": "/usr/bin/gcc",
+    "compiler_id": "GNU",
+    "compiler_version": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0\nCopyright (C) 2023 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.\n\n",
+    "executable": "/usr/bin/python3.12",
+    "frontend_only": "ON",
+    "head": "c0ab95f09986d32699c862bee4417fe0c1f0437a",
+    "newlang_sanitizer": "none",
+    "owned": {
+      "bytes": 1375272,
+      "path": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build-frontend/r1129_owned",
+      "sha256": "9a98a70c95319e72b4b6809294215537608b360792d3a208f30f91277b96eb09"
+    },
+    "parents": [
+      "dc21cf33105a7dba832e197f24e153ad87862a0f",
+      "3908666af7cf58041732294827c60b538090b272"
+    ],
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "tree": "ea5b44a72527f01aa327e2fd045fb5f1094e06a1"
+  },
+  "limitations": [
+    "Finite selected source/control observations do not prove all-H, general termination or Product PASS.",
+    "No universal public current-valid or source-to-C storage-map API is available.",
+    "Owned public check and CLI emission are separate source-issued checks of exactly the same bytes.",
+    "Unmodified C execution and passive live-storage instrumentation are distinct evidence.",
+    "No P OOM/heap/CFG campaign is reproduced."
+  ],
+  "local_executor_runs": 0,
+  "manual_runs": 0,
+  "provenance": "PROFILE-CALIBRATED / NON-BLIND to declared structural scope; implementation and fixtures unseen",
+  "schema": "r1129-c221c-execution-receipt-v1",
+  "seconds": 3.491045409000037,
+  "started": "2026-11-03T21:52:44.325102+00:00",
+  "status": "MECHANICAL_OR_OBSERVATION_LIMIT",
+  "target_p_head": "dc21cf33105a7dba832e197f24e153ad87862a0f",
+  "target_p_tree": "34c85ebdebb0fe601d20856ad3f5f3a5446362e0",
+  "value": "UNMEASURED / GO624 PAUSED / H1 HOLD"
+}

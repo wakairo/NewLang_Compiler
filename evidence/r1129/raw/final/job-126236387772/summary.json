@@ -1,0 +1,249 @@
+{
+  "authority_comment": 6614995406,
+  "canonical_main": "73ef10a97f2fab7b70d094b2114359e961acefb5",
+  "cases": {
+    "continue_arity": {
+      "canonical": "illegal",
+      "cli_exit": 3,
+      "first_public_refusal": {
+        "code": "P14-CONTINUE-ARITY",
+        "end": 417,
+        "event": "status",
+        "message": "continue arguments must match the loop parameter count",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 387,
+        "status": 1
+      },
+      "grading": "A profile/parser/registration refusal is not an unvisited loan/type/arity/target boundary PASS.",
+      "named_emit_exit": 3,
+      "named_no_clobber": "EXACT_BYTES_PRESERVED",
+      "owned_exit": 3,
+      "sentinel_bytes": 41,
+      "sentinel_sha256": "3c79a63605c7aef8195ea9e745bded4998fd8208a54447faf162e671d8cf356d",
+      "status": "REJECTED_AT_RECORDED_LAYER",
+      "target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW",
+      "targeted_negative_pass": false
+    },
+    "continue_target": {
+      "canonical": "illegal",
+      "cli_exit": 3,
+      "first_public_refusal": {
+        "code": "P14-CONTROL-CONTEXT",
+        "end": 461,
+        "event": "status",
+        "message": "continue/break requires an active lexical loop target",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 441,
+        "status": 1
+      },
+      "grading": "A profile/parser/registration refusal is not an unvisited loan/type/arity/target boundary PASS.",
+      "named_emit_exit": 3,
+      "named_no_clobber": "EXACT_BYTES_PRESERVED",
+      "owned_exit": 3,
+      "sentinel_bytes": 42,
+      "sentinel_sha256": "3d00073fbd1c093e1cdd38c5b29e45c795b1d0f307206f4c7fb2d084c204ff50",
+      "status": "REJECTED_AT_RECORDED_LAYER",
+      "target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW",
+      "targeted_negative_pass": false
+    },
+    "continue_type": {
+      "canonical": "illegal",
+      "cli_exit": 3,
+      "first_public_refusal": {
+        "code": "P14-CONTINUE-TYPE",
+        "end": 404,
+        "event": "status",
+        "message": "continue value must have the exact parameter static type",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 387,
+        "status": 1
+      },
+      "grading": "A profile/parser/registration refusal is not an unvisited loan/type/arity/target boundary PASS.",
+      "named_emit_exit": 3,
+      "named_no_clobber": "EXACT_BYTES_PRESERVED",
+      "owned_exit": 3,
+      "sentinel_bytes": 40,
+      "sentinel_sha256": "5b8c16b2c4ab726538bc7ffed2f4192bdac8b7084e9beb0ebff4a204dc46a4b4",
+      "status": "REJECTED_AT_RECORDED_LAYER",
+      "target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW",
+      "targeted_negative_pass": false
+    },
+    "equal_bits": {
+      "canonical": "legal but non-stuttering",
+      "cli_exit": 3,
+      "first_public_refusal": {
+        "code": "P14-LOOP-PRECISION",
+        "end": 695,
+        "event": "status",
+        "message": "cyclic identity/dependency or memory correlation is not representable",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 316,
+        "status": 3
+      },
+      "grading": "A profile/parser/registration refusal is not an unvisited loan/type/arity/target boundary PASS.",
+      "named_emit_exit": 3,
+      "named_no_clobber": "EXACT_BYTES_PRESERVED",
+      "owned_exit": 3,
+      "sentinel_bytes": 37,
+      "sentinel_sha256": "ebcdb0860a065f0d454d9599bbd5dabce4e6dbcd885734f5821164740d896315",
+      "status": "REJECTED_AT_RECORDED_LAYER",
+      "target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW",
+      "targeted_negative_pass": false
+    },
+    "immediate_break": {
+      "check": "ACCEPTED",
+      "observed_native": [
+        "O0",
+        "O2"
+      ],
+      "owned": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+      "public_limits": [
+        "No universal public current-valid or source-to-C storage validator exists.",
+        "Historical point-in-time field facts are not final live-place assertions.",
+        "No semantic IDs are compared across different world labels.",
+        "Public check and CLI emission use separate genuine checks of identical bytes.",
+        "Header evidence is issuer-reported; finite native traces do not prove all H."
+      ],
+      "status": "FINITE_PRIMARY_OBSERVATIONS_MATCH",
+      "storage_map_limits": [
+        "Mapping follows actual write arguments and pre-loop storage, not values.",
+        "No source-to-C public storage-map validator is claimed.",
+        "Instrumented addresses are separate from unmodified-C execution.",
+        "Unsupported syntax fails before instrumented compilation; no guessed mapping."
+      ],
+      "unmodified_native": [
+        "O0",
+        "O2"
+      ]
+    },
+    "loan_escape": {
+      "canonical": "illegal",
+      "cli_exit": 3,
+      "first_public_refusal": {
+        "code": "P8-EXIT-DEPENDENCY",
+        "end": 470,
+        "event": "status",
+        "message": "surviving state depends on the ending loan scope",
+        "span_valid_for_input": true,
+        "stage": "REGISTER",
+        "start": 401,
+        "status": 1
+      },
+      "grading": "A profile/parser/registration refusal is not an unvisited loan/type/arity/target boundary PASS.",
+      "named_emit_exit": 3,
+      "named_no_clobber": "EXACT_BYTES_PRESERVED",
+      "owned_exit": 3,
+      "sentinel_bytes": 38,
+      "sentinel_sha256": "9cf2eef5e595d8ae07007bf3db581208aa768f608f88cb20f5d7fcad71f9f20f",
+      "status": "REJECTED_AT_RECORDED_LAYER",
+      "target_boundary": "UNCLASSIFIED_PENDING_RAW_REVIEW",
+      "targeted_negative_pass": false
+    },
+    "normal": {
+      "check": "ACCEPTED",
+      "observed_native": [
+        "O0",
+        "O2"
+      ],
+      "owned": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+      "public_limits": [
+        "No universal public current-valid or source-to-C storage validator exists.",
+        "Historical point-in-time field facts are not final live-place assertions.",
+        "No semantic IDs are compared across different world labels.",
+        "Public check and CLI emission use separate genuine checks of identical bytes.",
+        "Header evidence is issuer-reported; finite native traces do not prove all H."
+      ],
+      "status": "FINITE_PRIMARY_OBSERVATIONS_MATCH",
+      "storage_map_limits": [
+        "Mapping follows actual write arguments and pre-loop storage, not values.",
+        "No source-to-C public storage-map validator is claimed.",
+        "Instrumented addresses are separate from unmodified-C execution.",
+        "Unsupported syntax fails before instrumented compilation; no guessed mapping."
+      ],
+      "unmodified_native": [
+        "O0",
+        "O2"
+      ]
+    },
+    "v1_stutter": {
+      "coverage": "Separate wider two-Continue/nested-IF question, outside declared C1+B1 profile.",
+      "exit": 3,
+      "grading": "Scope refusal is not a primary V2 failure; acceptance is not native PASS.",
+      "owned_c17_native": "NOT_RUN",
+      "status": "CHECK_ONLY"
+    }
+  },
+  "environment": {
+    "ASAN_OPTIONS": null,
+    "CFLAGS": "-Wno-error=gcc-install-dir-libstdcxx",
+    "GITHUB_ACTIONS": "true",
+    "GITHUB_BASE_REF": "p1123-c219-stuttering-loop-continue",
+    "GITHUB_EVENT_NAME": "pull_request",
+    "GITHUB_HEAD_REF": "r-fast/r1129-c221-stutter",
+    "GITHUB_JOB": "validate",
+    "GITHUB_REF": "refs/pull/1132/merge",
+    "GITHUB_REPOSITORY": "wakairo/NewLang_Compiler",
+    "GITHUB_RUN_ATTEMPT": "1",
+    "GITHUB_RUN_ID": "41727605147",
+    "GITHUB_SHA": "c04eb5f1487056f928db597f49d2c776d5455dd9",
+    "UBSAN_OPTIONS": null
+  },
+  "finished": "2026-11-03T22:10:46.568479+00:00",
+  "guest_flags": [
+    "-std=c17",
+    "-Wall",
+    "-Wextra",
+    "-Wpedantic",
+    "-Werror",
+    "-Wno-error=gcc-install-dir-libstdcxx"
+  ],
+  "harness_manifest_sha256": "68ef2e5ecb6469fed5a8d4812eef05c1a07f0dfc2b18d29bf08f721f9ac75807",
+  "host": {
+    "build_type": "Debug",
+    "cli": {
+      "bytes": 1715960,
+      "path": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build/newlangc",
+      "sha256": "03610fcf0ea704c2a10777aa01006cd199f718c799de02157bb8b97f823e37e3"
+    },
+    "cmake_c_flags": "-Wno-error=gcc-install-dir-libstdcxx",
+    "compiler": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin/clang-23",
+    "compiler_id": "Clang",
+    "compiler_version": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)\nTarget: x86_64-unknown-linux-gnu\nThread model: posix\nInstalledDir: /home/runner/work/NewLang_Compiler/NewLang_Compiler/.deps/toolchains/ubuntu-24.04-x86_64-7c9921be7919a10d/newlang-llvm-23.1.3-linux-x64/bin\n",
+    "executable": "/usr/bin/python3.12",
+    "frontend_only": "OFF",
+    "head": "c04eb5f1487056f928db597f49d2c776d5455dd9",
+    "newlang_sanitizer": "none",
+    "owned": {
+      "bytes": 1274832,
+      "path": "/home/runner/work/NewLang_Compiler/NewLang_Compiler/build/r1129_owned",
+      "sha256": "ffb8f27b6b96c2eeb996a6734cfa3a0f7e2228e36cd7c68aff78f83590cb8d7d"
+    },
+    "parents": [
+      "dc21cf33105a7dba832e197f24e153ad87862a0f",
+      "bc3386f1b710f262e51ebea9a3d05db6064f398b"
+    ],
+    "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+    "tree": "df05451c46ebe95e696ca61157ba50100a30f066"
+  },
+  "limitations": [
+    "Finite selected source/control observations do not prove all-H, general termination or Product PASS.",
+    "No universal public current-valid or source-to-C storage-map API is available.",
+    "Owned public check and CLI emission are separate source-issued checks of exactly the same bytes.",
+    "Unmodified C execution and passive live-storage instrumentation are distinct evidence.",
+    "No P OOM/heap/CFG campaign is reproduced."
+  ],
+  "local_executor_runs": 0,
+  "manual_runs": 0,
+  "provenance": "PROFILE-CALIBRATED / NON-BLIND to declared structural scope; implementation and fixtures unseen",
+  "schema": "r1129-c221c-execution-receipt-v1",
+  "seconds": 0.5304678520000152,
+  "started": "2026-11-03T22:10:46.038027+00:00",
+  "status": "FINITE_R_OBSERVATIONS_COMPLETE",
+  "target_p_head": "dc21cf33105a7dba832e197f24e153ad87862a0f",
+  "target_p_tree": "34c85ebdebb0fe601d20856ad3f5f3a5446362e0",
+  "value": "UNMEASURED / GO624 PAUSED / H1 HOLD"
+}

@@ -1,0 +1,630 @@
+{
+  "schema": "r1129-c221c-initial-six-receipt-v1",
+  "tested_r_head": "3908666af7cf58041732294827c60b538090b272",
+  "synthetic": "c0ab95f09986d32699c862bee4417fe0c1f0437a",
+  "tree": "ea5b44a72527f01aa327e2fd045fb5f1094e06a1",
+  "all_natural_jobs": 6,
+  "manual": 0,
+  "fast_used": 2,
+  "remaining_pr_sets": 1,
+  "rows": [
+    {
+      "job": 126226592887,
+      "run": 41724783037,
+      "name": "PARTIAL",
+      "attempt": 1,
+      "finished": "2026-11-03T21:52:47.816114+00:00",
+      "status": "MECHANICAL_OR_OBSERVATION_LIMIT",
+      "first_stop": {
+        "message": "no unique phase-comparison IF",
+        "type": "ObservationLimit"
+      },
+      "normal": {
+        "check": "ACCEPTED",
+        "owned": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+        "status": "CHECK_STARTED",
+        "unmodified_native": [
+          "O0",
+          "O2"
+        ]
+      },
+      "other_cases": {
+        "continue_arity": {
+          "status": "NOT_RUN"
+        },
+        "continue_target": {
+          "status": "NOT_RUN"
+        },
+        "continue_type": {
+          "status": "NOT_RUN"
+        },
+        "equal_bits": {
+          "status": "NOT_RUN"
+        },
+        "immediate_break": {
+          "status": "NOT_RUN"
+        },
+        "loan_escape": {
+          "status": "NOT_RUN"
+        },
+        "v1_stutter": {
+          "status": "NOT_RUN"
+        }
+      },
+      "actual_checkout": "c0ab95f09986d32699c862bee4417fe0c1f0437a",
+      "tree": "ea5b44a72527f01aa327e2fd045fb5f1094e06a1",
+      "parents": [
+        "dc21cf33105a7dba832e197f24e153ad87862a0f",
+        "3908666af7cf58041732294827c60b538090b272"
+      ],
+      "host_compiler": "gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "host_sanitizer": "none",
+      "guest_flags": [
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror"
+      ],
+      "frontend_only": "ON",
+      "c17": {
+        "bytes": 3924,
+        "chunks": 2,
+        "codec": "base64",
+        "path": "normal/unmodified.c",
+        "sha256": "fa8f57fd2abaf4939a200aaba1445dd55e0b0da3d70737858053fdfdf1caa04d",
+        "wire_bytes": 3924,
+        "wire_sha256": "fa8f57fd2abaf4939a200aaba1445dd55e0b0da3d70737858053fdfdf1caa04d",
+        "wire_base64": "LyogTm9ydGggU3RhciBWMC9WMS9BVlMgQ2hlY2tlZC1DIHJlZmVyZW5jZSBvdXRwdXQuICovCiNpbmNsdWRlIDxzdGRpbnQuaD4KCiNpbmNsdWRlIDxsaW1pdHMuaD4KX1N0YXRpY19hc3NlcnQoQ0hBUl9CSVQgPT0gOCwgIk5ld0xhbmcgQzE3IHJlcXVpcmVzIDgtYml0IGJ5dGVzIik7Cl9TdGF0aWNfYXNzZXJ0KFVJTlQ4X01BWCA9PSAyNTUgJiYgc2l6ZW9mKHVpbnQ4X3QpID09IDEgJiYgKCh1aW50OF90KS0xKSA9PSAyNTUsICJOZXdMYW5nIEMxNyByZXF1aXJlcyBleGFjdCA4LWJpdCB1aW50OF90Iik7CiNpbmNsdWRlIDxzdGRkZWYuaD4KX1N0YXRpY19hc3NlcnQoU0laRV9NQVggPT0gVUlOVE1BWF9DKDE4NDQ2NzQ0MDczNzA5NTUxNjE1KSwgIk5ld0xhbmcgdXNpemUgdGFyZ2V0IG1pc21hdGNoIik7Cgp0eXBlZGVmIHN0cnVjdCB7IHVpbnQ4X3QgZjA7IHVpbnQ4X3QgZjE7IH0gbmxfdHlwZV8xMDsKCiNpZmRlZiBORVdMQU5HX0xPT1BfT0JTRVJWRVIKI2luY2x1ZGUgTkVXTEFOR19MT09QX09CU0VSVkVSCiNlbmRpZgojaWZuZGVmIE5MX0xPT1BfQklORAojZGVmaW5lIE5MX0xPT1BfQklORCguLi4pICgodm9pZCkwKQojZW5kaWYKI2lmbmRlZiBOTF9MT09QX1JFQUQKI2RlZmluZSBOTF9MT09QX1JFQUQoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCiNpZm5kZWYgTkxfTE9PUF9CRUZPUkUKI2RlZmluZSBOTF9MT09QX0JFRk9SRSguLi4pICgodm9pZCkwKQojZW5kaWYKI2lmbmRlZiBOTF9MT09QX0FGVEVSCiNkZWZpbmUgTkxfTE9PUF9BRlRFUiguLi4pICgodm9pZCkwKQojZW5kaWYKCiNpZm5kZWYgTkxfTE9PUF9QSEFTRQojZGVmaW5lIE5MX0xPT1BfUEhBU0UoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCiNpZm5kZWYgTkxfTE9PUF9DT05USU5VRQojZGVmaW5lIE5MX0xPT1BfQ09OVElOVUUoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCgpzdGF0aWMgdm9pZCBubF9mbl8xMSh2b2lkKTsKc3RhdGljIHVpbnQ4X3QgbmxfZm5fMTAodWludDhfdCAqbmxfbG9jYWxfNCwgdWludDhfdCBubF9sb2NhbF81KTsKCnN0YXRpYyB2b2lkIG5sX2ZuXzExKHZvaWQpCnsKICAgIG5sX3R5cGVfMTAgbmxfbG9jYWxfMSA9IHsgLmYxID0gMzcsIC5mMCA9IDE0NiwgfTsKICAgICh2b2lkKW5sX2xvY2FsXzE7CiAgICBOTF9MT09QX0JJTkQoJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxKTsKICAgIG5sX3R5cGVfMTAgbmxfbG9jYWxfMiA9IHsgLmYwID0gODksIC5mMSA9IDIxMSwgfTsKICAgICh2b2lkKW5sX2xvY2FsXzI7CiAgICBOTF9MT09QX0JJTkQoJm5sX2xvY2FsXzIuZjAsICZubF9sb2NhbF8yLmYxKTsKICAgIHVpbnQ4X3QgbmxfbG9jYWxfNzsKICAgIHNpemVfdCBubF9sb29wX2NhcnJ5XzE3ID0gKHNpemVfdClVSU5UTUFYX0MoNCk7CiAgICBmb3IgKDs7KSB7CiAgICAgICAgY29uc3Qgc2l6ZV90IG5sX2xvb3BfcGhhc2VfMTcgPSBubF9sb29wX2NhcnJ5XzE3OwogICAgICAgIE5MX0xPT1BfUEhBU0UobmxfbG9vcF9waGFzZV8xNywgJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxKTsKICAgICAgICBpZiAobmxfbG9vcF9waGFzZV8xNyA9PSAoc2l6ZV90KVVJTlRNQVhfQyg0KSkgewogICAgICAgICAgICBubF9sb29wX2NhcnJ5XzE3ID0gKHNpemVfdClVSU5UTUFYX0MoMTkpOwogICAgICAgICAgICBOTF9MT09QX0NPTlRJTlVFKG5sX2xvb3BfcGhhc2VfMTcsIG5sX2xvb3BfY2FycnlfMTcsICZubF9sb2NhbF8xLmYwLCAmbmxfbG9jYWxfMS5mMSk7CiAgICAgICAgICAgIGNvbnRpbnVlOwogICAgICAgIH0KICAgICAgICBOTF9MT09QX0JFRk9SRSgmbmxfbG9jYWxfMS5mMCwgJm5sX2xvY2FsXzEuZjEsIDEpOwogICAgICAgIG5sX2xvY2FsXzcgPSBubF9mbl8xMCgmbmxfbG9jYWxfMS5mMSwgNTgpOwogICAgICAgIE5MX0xPT1BfQUZURVIoJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxLCAxLCBubF9sb2NhbF83KTsKICAgICAgICBicmVhazsKICAgIH0KICAgICh2b2lkKW5sX2xvY2FsXzc7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzggPSBubF9sb2NhbF8xLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfODsKICAgIE5MX0xPT1BfUkVBRCgmbmxfbG9jYWxfMS5mMSwgbmxfbG9jYWxfOCk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzkgPSBubF9sb2NhbF8xLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfOTsKICAgIE5MX0xPT1BfUkVBRCgmbmxfbG9jYWxfMS5mMCwgbmxfbG9jYWxfOSk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzEwID0gbmxfbG9jYWxfMi5mMTsKICAgICh2b2lkKW5sX2xvY2FsXzEwOwogICAgTkxfTE9PUF9SRUFEKCZubF9sb2NhbF8yLmYxLCBubF9sb2NhbF8xMCk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzExID0gbmxfbG9jYWxfMi5mMDsKICAgICh2b2lkKW5sX2xvY2FsXzExOwogICAgTkxfTE9PUF9SRUFEKCZubF9sb2NhbF8yLmYwLCBubF9sb2NhbF8xMSk7CiAgICB1aW50OF90IG5sX2xvYW5fcmVzdWx0XzI7CiAgICB7CiAgICAgICAgdWludDhfdCAqY29uc3QgbmxfbG9jYWxfMTIgPSAmbmxfbG9jYWxfMS5mMDsKICAgICAgICAodm9pZClubF9sb2NhbF8xMjsKICAgICAgICBjb25zdCB1aW50OF90IG5sX2NhbGxfMzQgPSBubF9mbl8xMChubF9sb2NhbF8xMiwgbmxfbG9jYWxfNyk7CiAgICAgICAgKHZvaWQpbmxfY2FsbF8zNDsKICAgICAgICBubF9sb2FuX3Jlc3VsdF8yID0gbmxfY2FsbF8zNDsKICAgIH0KICAgICh2b2lkKW5sX2xvYW5fcmVzdWx0XzI7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzE1ID0gbmxfbG9hbl9yZXN1bHRfMjsKICAgICh2b2lkKW5sX2xvY2FsXzE1OwogICAgdWludDhfdCBubF9sb2FuX3Jlc3VsdF8zOwogICAgewogICAgICAgIHVpbnQ4X3QgKmNvbnN0IG5sX2xvY2FsXzE2ID0gJm5sX2xvY2FsXzIuZjE7CiAgICAgICAgKHZvaWQpbmxfbG9jYWxfMTY7CiAgICAgICAgY29uc3QgdWludDhfdCBubF9jYWxsXzQxID0gbmxfZm5fMTAobmxfbG9jYWxfMTYsIG5sX2xvY2FsXzgpOwogICAgICAgICh2b2lkKW5sX2NhbGxfNDE7CiAgICAgICAgbmxfbG9hbl9yZXN1bHRfMyA9IG5sX2NhbGxfNDE7CiAgICB9CiAgICAodm9pZClubF9sb2FuX3Jlc3VsdF8zOwogICAgY29uc3QgdWludDhfdCBubF9sb2NhbF8xOSA9IG5sX2xvYW5fcmVzdWx0XzM7CiAgICAodm9pZClubF9sb2NhbF8xOTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjAgPSBubF9sb2NhbF8xLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfMjA7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzEuZjEsIG5sX2xvY2FsXzIwKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjEgPSBubF9sb2NhbF8xLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfMjE7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzEuZjAsIG5sX2xvY2FsXzIxKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjIgPSBubF9sb2NhbF8yLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfMjI7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzIuZjEsIG5sX2xvY2FsXzIyKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjMgPSBubF9sb2NhbF8yLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfMjM7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzIuZjAsIG5sX2xvY2FsXzIzKTsKICAgICh2b2lkKTA7Cn0KCnN0YXRpYyB1aW50OF90IG5sX2ZuXzEwKHVpbnQ4X3QgKm5sX2xvY2FsXzQsIHVpbnQ4X3QgbmxfbG9jYWxfNSkKewogICAgKHZvaWQpbmxfbG9jYWxfNTsKICAgICh2b2lkKW5sX2xvY2FsXzQ7CiAgICBjb25zdCB1aW50OF90IG5sX3JlcGxhY2Vfb2xkXzIgPSAqbmxfbG9jYWxfNDsKICAgICpubF9sb2NhbF80ID0gbmxfbG9jYWxfNTsKICAgIHJldHVybiBubF9yZXBsYWNlX29sZF8yOwp9CgppbnQgbWFpbih2b2lkKQp7CiAgICBubF9mbl8xMSgpOwogICAgcmV0dXJuIDA7Cn0K"
+      },
+      "raw_transport": {
+        "binary_policy": "Executables retained in build only; exact size/SHA and command receipt transported.",
+        "file_count": 71,
+        "manifest_format": "UTF-8 compact sorted-key JSON array of FILE records, in log order, final LF",
+        "manifest_sha256": "3e8339c6203ed2ea5b52b9cc7d6089fd19824a0b33482d01fc7eb35f24e34d1a",
+        "raw_bytes": 746143,
+        "status": "COMPLETE"
+      },
+      "ctest_lines": [
+        "  Test #662: r1129_c221_stutter.integration",
+        "  Test #662: r1129_c221_stutter.integration",
+        "662/662 Test #662: r1129_c221_stutter.integration ........................***Failed    3.58 sec",
+        "99% tests passed, 1 tests failed out of 662",
+        "Total Test time (real) = 343.52 sec",
+        "The following tests FAILED:"
+      ],
+      "raw_receipts": [
+        {
+          "path": "evidence/r1129/raw/initial/job-126226592887/complete-raw-bundle.json",
+          "bytes": 127729,
+          "sha256": "0c4d192ee5ab88f6eada8b82550d5e782d2c3c8374f804e2ceb2bd557fb62e6c",
+          "git_blob_sha": "512a2dabf9111bbebe7a35ade2985e76d1b39827"
+        },
+        {
+          "path": "evidence/r1129/raw/initial/job-126226592887/summary.json",
+          "bytes": 3835,
+          "sha256": "f5c7f8d5297519aa2f93101312b2535961821f6a1d8f8c4522cf1c13aa330e5f",
+          "git_blob_sha": "4a001d974f1d7dc07e06b801a21ede50d16211ca"
+        }
+      ]
+    },
+    {
+      "job": 126226593426,
+      "run": 41724783042,
+      "name": "GCC",
+      "attempt": 1,
+      "finished": "2026-11-03T21:52:07.739314+00:00",
+      "status": "MECHANICAL_OR_OBSERVATION_LIMIT",
+      "first_stop": {
+        "message": "no unique phase-comparison IF",
+        "type": "ObservationLimit"
+      },
+      "normal": {
+        "check": "ACCEPTED",
+        "owned": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+        "status": "CHECK_STARTED",
+        "unmodified_native": [
+          "O0",
+          "O2"
+        ]
+      },
+      "other_cases": {
+        "continue_arity": {
+          "status": "NOT_RUN"
+        },
+        "continue_target": {
+          "status": "NOT_RUN"
+        },
+        "continue_type": {
+          "status": "NOT_RUN"
+        },
+        "equal_bits": {
+          "status": "NOT_RUN"
+        },
+        "immediate_break": {
+          "status": "NOT_RUN"
+        },
+        "loan_escape": {
+          "status": "NOT_RUN"
+        },
+        "v1_stutter": {
+          "status": "NOT_RUN"
+        }
+      },
+      "actual_checkout": "c0ab95f09986d32699c862bee4417fe0c1f0437a",
+      "tree": "ea5b44a72527f01aa327e2fd045fb5f1094e06a1",
+      "parents": [
+        "dc21cf33105a7dba832e197f24e153ad87862a0f",
+        "3908666af7cf58041732294827c60b538090b272"
+      ],
+      "host_compiler": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "host_sanitizer": "none",
+      "guest_flags": [
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror"
+      ],
+      "frontend_only": "OFF",
+      "c17": {
+        "bytes": 3924,
+        "chunks": 2,
+        "codec": "base64",
+        "path": "normal/unmodified.c",
+        "sha256": "fa8f57fd2abaf4939a200aaba1445dd55e0b0da3d70737858053fdfdf1caa04d",
+        "wire_bytes": 3924,
+        "wire_sha256": "fa8f57fd2abaf4939a200aaba1445dd55e0b0da3d70737858053fdfdf1caa04d",
+        "wire_base64": "LyogTm9ydGggU3RhciBWMC9WMS9BVlMgQ2hlY2tlZC1DIHJlZmVyZW5jZSBvdXRwdXQuICovCiNpbmNsdWRlIDxzdGRpbnQuaD4KCiNpbmNsdWRlIDxsaW1pdHMuaD4KX1N0YXRpY19hc3NlcnQoQ0hBUl9CSVQgPT0gOCwgIk5ld0xhbmcgQzE3IHJlcXVpcmVzIDgtYml0IGJ5dGVzIik7Cl9TdGF0aWNfYXNzZXJ0KFVJTlQ4X01BWCA9PSAyNTUgJiYgc2l6ZW9mKHVpbnQ4X3QpID09IDEgJiYgKCh1aW50OF90KS0xKSA9PSAyNTUsICJOZXdMYW5nIEMxNyByZXF1aXJlcyBleGFjdCA4LWJpdCB1aW50OF90Iik7CiNpbmNsdWRlIDxzdGRkZWYuaD4KX1N0YXRpY19hc3NlcnQoU0laRV9NQVggPT0gVUlOVE1BWF9DKDE4NDQ2NzQ0MDczNzA5NTUxNjE1KSwgIk5ld0xhbmcgdXNpemUgdGFyZ2V0IG1pc21hdGNoIik7Cgp0eXBlZGVmIHN0cnVjdCB7IHVpbnQ4X3QgZjA7IHVpbnQ4X3QgZjE7IH0gbmxfdHlwZV8xMDsKCiNpZmRlZiBORVdMQU5HX0xPT1BfT0JTRVJWRVIKI2luY2x1ZGUgTkVXTEFOR19MT09QX09CU0VSVkVSCiNlbmRpZgojaWZuZGVmIE5MX0xPT1BfQklORAojZGVmaW5lIE5MX0xPT1BfQklORCguLi4pICgodm9pZCkwKQojZW5kaWYKI2lmbmRlZiBOTF9MT09QX1JFQUQKI2RlZmluZSBOTF9MT09QX1JFQUQoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCiNpZm5kZWYgTkxfTE9PUF9CRUZPUkUKI2RlZmluZSBOTF9MT09QX0JFRk9SRSguLi4pICgodm9pZCkwKQojZW5kaWYKI2lmbmRlZiBOTF9MT09QX0FGVEVSCiNkZWZpbmUgTkxfTE9PUF9BRlRFUiguLi4pICgodm9pZCkwKQojZW5kaWYKCiNpZm5kZWYgTkxfTE9PUF9QSEFTRQojZGVmaW5lIE5MX0xPT1BfUEhBU0UoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCiNpZm5kZWYgTkxfTE9PUF9DT05USU5VRQojZGVmaW5lIE5MX0xPT1BfQ09OVElOVUUoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCgpzdGF0aWMgdm9pZCBubF9mbl8xMSh2b2lkKTsKc3RhdGljIHVpbnQ4X3QgbmxfZm5fMTAodWludDhfdCAqbmxfbG9jYWxfNCwgdWludDhfdCBubF9sb2NhbF81KTsKCnN0YXRpYyB2b2lkIG5sX2ZuXzExKHZvaWQpCnsKICAgIG5sX3R5cGVfMTAgbmxfbG9jYWxfMSA9IHsgLmYxID0gMzcsIC5mMCA9IDE0NiwgfTsKICAgICh2b2lkKW5sX2xvY2FsXzE7CiAgICBOTF9MT09QX0JJTkQoJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxKTsKICAgIG5sX3R5cGVfMTAgbmxfbG9jYWxfMiA9IHsgLmYwID0gODksIC5mMSA9IDIxMSwgfTsKICAgICh2b2lkKW5sX2xvY2FsXzI7CiAgICBOTF9MT09QX0JJTkQoJm5sX2xvY2FsXzIuZjAsICZubF9sb2NhbF8yLmYxKTsKICAgIHVpbnQ4X3QgbmxfbG9jYWxfNzsKICAgIHNpemVfdCBubF9sb29wX2NhcnJ5XzE3ID0gKHNpemVfdClVSU5UTUFYX0MoNCk7CiAgICBmb3IgKDs7KSB7CiAgICAgICAgY29uc3Qgc2l6ZV90IG5sX2xvb3BfcGhhc2VfMTcgPSBubF9sb29wX2NhcnJ5XzE3OwogICAgICAgIE5MX0xPT1BfUEhBU0UobmxfbG9vcF9waGFzZV8xNywgJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxKTsKICAgICAgICBpZiAobmxfbG9vcF9waGFzZV8xNyA9PSAoc2l6ZV90KVVJTlRNQVhfQyg0KSkgewogICAgICAgICAgICBubF9sb29wX2NhcnJ5XzE3ID0gKHNpemVfdClVSU5UTUFYX0MoMTkpOwogICAgICAgICAgICBOTF9MT09QX0NPTlRJTlVFKG5sX2xvb3BfcGhhc2VfMTcsIG5sX2xvb3BfY2FycnlfMTcsICZubF9sb2NhbF8xLmYwLCAmbmxfbG9jYWxfMS5mMSk7CiAgICAgICAgICAgIGNvbnRpbnVlOwogICAgICAgIH0KICAgICAgICBOTF9MT09QX0JFRk9SRSgmbmxfbG9jYWxfMS5mMCwgJm5sX2xvY2FsXzEuZjEsIDEpOwogICAgICAgIG5sX2xvY2FsXzcgPSBubF9mbl8xMCgmbmxfbG9jYWxfMS5mMSwgNTgpOwogICAgICAgIE5MX0xPT1BfQUZURVIoJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxLCAxLCBubF9sb2NhbF83KTsKICAgICAgICBicmVhazsKICAgIH0KICAgICh2b2lkKW5sX2xvY2FsXzc7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzggPSBubF9sb2NhbF8xLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfODsKICAgIE5MX0xPT1BfUkVBRCgmbmxfbG9jYWxfMS5mMSwgbmxfbG9jYWxfOCk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzkgPSBubF9sb2NhbF8xLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfOTsKICAgIE5MX0xPT1BfUkVBRCgmbmxfbG9jYWxfMS5mMCwgbmxfbG9jYWxfOSk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzEwID0gbmxfbG9jYWxfMi5mMTsKICAgICh2b2lkKW5sX2xvY2FsXzEwOwogICAgTkxfTE9PUF9SRUFEKCZubF9sb2NhbF8yLmYxLCBubF9sb2NhbF8xMCk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzExID0gbmxfbG9jYWxfMi5mMDsKICAgICh2b2lkKW5sX2xvY2FsXzExOwogICAgTkxfTE9PUF9SRUFEKCZubF9sb2NhbF8yLmYwLCBubF9sb2NhbF8xMSk7CiAgICB1aW50OF90IG5sX2xvYW5fcmVzdWx0XzI7CiAgICB7CiAgICAgICAgdWludDhfdCAqY29uc3QgbmxfbG9jYWxfMTIgPSAmbmxfbG9jYWxfMS5mMDsKICAgICAgICAodm9pZClubF9sb2NhbF8xMjsKICAgICAgICBjb25zdCB1aW50OF90IG5sX2NhbGxfMzQgPSBubF9mbl8xMChubF9sb2NhbF8xMiwgbmxfbG9jYWxfNyk7CiAgICAgICAgKHZvaWQpbmxfY2FsbF8zNDsKICAgICAgICBubF9sb2FuX3Jlc3VsdF8yID0gbmxfY2FsbF8zNDsKICAgIH0KICAgICh2b2lkKW5sX2xvYW5fcmVzdWx0XzI7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzE1ID0gbmxfbG9hbl9yZXN1bHRfMjsKICAgICh2b2lkKW5sX2xvY2FsXzE1OwogICAgdWludDhfdCBubF9sb2FuX3Jlc3VsdF8zOwogICAgewogICAgICAgIHVpbnQ4X3QgKmNvbnN0IG5sX2xvY2FsXzE2ID0gJm5sX2xvY2FsXzIuZjE7CiAgICAgICAgKHZvaWQpbmxfbG9jYWxfMTY7CiAgICAgICAgY29uc3QgdWludDhfdCBubF9jYWxsXzQxID0gbmxfZm5fMTAobmxfbG9jYWxfMTYsIG5sX2xvY2FsXzgpOwogICAgICAgICh2b2lkKW5sX2NhbGxfNDE7CiAgICAgICAgbmxfbG9hbl9yZXN1bHRfMyA9IG5sX2NhbGxfNDE7CiAgICB9CiAgICAodm9pZClubF9sb2FuX3Jlc3VsdF8zOwogICAgY29uc3QgdWludDhfdCBubF9sb2NhbF8xOSA9IG5sX2xvYW5fcmVzdWx0XzM7CiAgICAodm9pZClubF9sb2NhbF8xOTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjAgPSBubF9sb2NhbF8xLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfMjA7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzEuZjEsIG5sX2xvY2FsXzIwKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjEgPSBubF9sb2NhbF8xLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfMjE7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzEuZjAsIG5sX2xvY2FsXzIxKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjIgPSBubF9sb2NhbF8yLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfMjI7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzIuZjEsIG5sX2xvY2FsXzIyKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjMgPSBubF9sb2NhbF8yLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfMjM7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzIuZjAsIG5sX2xvY2FsXzIzKTsKICAgICh2b2lkKTA7Cn0KCnN0YXRpYyB1aW50OF90IG5sX2ZuXzEwKHVpbnQ4X3QgKm5sX2xvY2FsXzQsIHVpbnQ4X3QgbmxfbG9jYWxfNSkKewogICAgKHZvaWQpbmxfbG9jYWxfNTsKICAgICh2b2lkKW5sX2xvY2FsXzQ7CiAgICBjb25zdCB1aW50OF90IG5sX3JlcGxhY2Vfb2xkXzIgPSAqbmxfbG9jYWxfNDsKICAgICpubF9sb2NhbF80ID0gbmxfbG9jYWxfNTsKICAgIHJldHVybiBubF9yZXBsYWNlX29sZF8yOwp9CgppbnQgbWFpbih2b2lkKQp7CiAgICBubF9mbl8xMSgpOwogICAgcmV0dXJuIDA7Cn0K"
+      },
+      "raw_transport": {
+        "binary_policy": "Executables retained in build only; exact size/SHA and command receipt transported.",
+        "file_count": 71,
+        "manifest_format": "UTF-8 compact sorted-key JSON array of FILE records, in log order, final LF",
+        "manifest_sha256": "f1720e06643341041d6e3af1796df896fa1498b0e46a6658df45679a8f3b99de",
+        "raw_bytes": 747170,
+        "status": "COMPLETE"
+      },
+      "ctest_lines": [
+        "  Test #663: r1129_c221_stutter.integration",
+        "663/663 Test #663: r1129_c221_stutter.integration ........................***Failed    0.42 sec",
+        "99% tests passed, 1 tests failed out of 663",
+        "Total Test time (real) = 295.50 sec",
+        "The following tests FAILED:"
+      ],
+      "raw_receipts": [
+        {
+          "path": "evidence/r1129/raw/initial/job-126226593426/unmodified.c",
+          "bytes": 3924,
+          "sha256": "fa8f57fd2abaf4939a200aaba1445dd55e0b0da3d70737858053fdfdf1caa04d",
+          "git_blob_sha": "275588bec80e9563e7edc80e31312423babc66ad"
+        },
+        {
+          "path": "evidence/r1129/raw/initial/job-126226593426/clang-ast.json",
+          "bytes": 477506,
+          "sha256": "fd3f7be6563e69bf4edd842583252d50c9e4eeb2d1aa9c0aeaa747986be1912e",
+          "git_blob_sha": "e67e2754e6db76c7dca3a0e6eaeea1782cedbd2d"
+        },
+        {
+          "path": "evidence/r1129/raw/initial/job-126226593426/summary.json",
+          "bytes": 3812,
+          "sha256": "1993c920d25a048bea88194173f7efe6e8e7f475367ead2a0acd4852cb30f183",
+          "git_blob_sha": "75883b0eb1ab022f0c719222cd50c2a7b7bf3c6a"
+        },
+        {
+          "path": "evidence/r1129/raw/initial/job-126226593426/complete-raw-bundle.json",
+          "bytes": 127781,
+          "sha256": "202a8cfc53b0fcab0b7ca3edf60833da06d42248f0cbd68f47d3600cb6f078f0",
+          "git_blob_sha": "c191c35f03010cc060ffd258764bf388eb147724"
+        }
+      ]
+    },
+    {
+      "job": 126226593440,
+      "run": 41724783042,
+      "name": "GCC Release",
+      "attempt": 1,
+      "finished": "2026-11-03T21:52:37.863072+00:00",
+      "status": "MECHANICAL_OR_OBSERVATION_LIMIT",
+      "first_stop": {
+        "message": "no unique phase-comparison IF",
+        "type": "ObservationLimit"
+      },
+      "normal": {
+        "check": "ACCEPTED",
+        "owned": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+        "status": "CHECK_STARTED",
+        "unmodified_native": [
+          "O0",
+          "O2"
+        ]
+      },
+      "other_cases": {
+        "continue_arity": {
+          "status": "NOT_RUN"
+        },
+        "continue_target": {
+          "status": "NOT_RUN"
+        },
+        "continue_type": {
+          "status": "NOT_RUN"
+        },
+        "equal_bits": {
+          "status": "NOT_RUN"
+        },
+        "immediate_break": {
+          "status": "NOT_RUN"
+        },
+        "loan_escape": {
+          "status": "NOT_RUN"
+        },
+        "v1_stutter": {
+          "status": "NOT_RUN"
+        }
+      },
+      "actual_checkout": "c0ab95f09986d32699c862bee4417fe0c1f0437a",
+      "tree": "ea5b44a72527f01aa327e2fd045fb5f1094e06a1",
+      "parents": [
+        "dc21cf33105a7dba832e197f24e153ad87862a0f",
+        "3908666af7cf58041732294827c60b538090b272"
+      ],
+      "host_compiler": "gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0",
+      "host_sanitizer": "none",
+      "guest_flags": [
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror"
+      ],
+      "frontend_only": "OFF",
+      "c17": {
+        "bytes": 3924,
+        "chunks": 2,
+        "codec": "base64",
+        "path": "normal/unmodified.c",
+        "sha256": "fa8f57fd2abaf4939a200aaba1445dd55e0b0da3d70737858053fdfdf1caa04d",
+        "wire_bytes": 3924,
+        "wire_sha256": "fa8f57fd2abaf4939a200aaba1445dd55e0b0da3d70737858053fdfdf1caa04d",
+        "wire_base64": "LyogTm9ydGggU3RhciBWMC9WMS9BVlMgQ2hlY2tlZC1DIHJlZmVyZW5jZSBvdXRwdXQuICovCiNpbmNsdWRlIDxzdGRpbnQuaD4KCiNpbmNsdWRlIDxsaW1pdHMuaD4KX1N0YXRpY19hc3NlcnQoQ0hBUl9CSVQgPT0gOCwgIk5ld0xhbmcgQzE3IHJlcXVpcmVzIDgtYml0IGJ5dGVzIik7Cl9TdGF0aWNfYXNzZXJ0KFVJTlQ4X01BWCA9PSAyNTUgJiYgc2l6ZW9mKHVpbnQ4X3QpID09IDEgJiYgKCh1aW50OF90KS0xKSA9PSAyNTUsICJOZXdMYW5nIEMxNyByZXF1aXJlcyBleGFjdCA4LWJpdCB1aW50OF90Iik7CiNpbmNsdWRlIDxzdGRkZWYuaD4KX1N0YXRpY19hc3NlcnQoU0laRV9NQVggPT0gVUlOVE1BWF9DKDE4NDQ2NzQ0MDczNzA5NTUxNjE1KSwgIk5ld0xhbmcgdXNpemUgdGFyZ2V0IG1pc21hdGNoIik7Cgp0eXBlZGVmIHN0cnVjdCB7IHVpbnQ4X3QgZjA7IHVpbnQ4X3QgZjE7IH0gbmxfdHlwZV8xMDsKCiNpZmRlZiBORVdMQU5HX0xPT1BfT0JTRVJWRVIKI2luY2x1ZGUgTkVXTEFOR19MT09QX09CU0VSVkVSCiNlbmRpZgojaWZuZGVmIE5MX0xPT1BfQklORAojZGVmaW5lIE5MX0xPT1BfQklORCguLi4pICgodm9pZCkwKQojZW5kaWYKI2lmbmRlZiBOTF9MT09QX1JFQUQKI2RlZmluZSBOTF9MT09QX1JFQUQoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCiNpZm5kZWYgTkxfTE9PUF9CRUZPUkUKI2RlZmluZSBOTF9MT09QX0JFRk9SRSguLi4pICgodm9pZCkwKQojZW5kaWYKI2lmbmRlZiBOTF9MT09QX0FGVEVSCiNkZWZpbmUgTkxfTE9PUF9BRlRFUiguLi4pICgodm9pZCkwKQojZW5kaWYKCiNpZm5kZWYgTkxfTE9PUF9QSEFTRQojZGVmaW5lIE5MX0xPT1BfUEhBU0UoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCiNpZm5kZWYgTkxfTE9PUF9DT05USU5VRQojZGVmaW5lIE5MX0xPT1BfQ09OVElOVUUoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCgpzdGF0aWMgdm9pZCBubF9mbl8xMSh2b2lkKTsKc3RhdGljIHVpbnQ4X3QgbmxfZm5fMTAodWludDhfdCAqbmxfbG9jYWxfNCwgdWludDhfdCBubF9sb2NhbF81KTsKCnN0YXRpYyB2b2lkIG5sX2ZuXzExKHZvaWQpCnsKICAgIG5sX3R5cGVfMTAgbmxfbG9jYWxfMSA9IHsgLmYxID0gMzcsIC5mMCA9IDE0NiwgfTsKICAgICh2b2lkKW5sX2xvY2FsXzE7CiAgICBOTF9MT09QX0JJTkQoJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxKTsKICAgIG5sX3R5cGVfMTAgbmxfbG9jYWxfMiA9IHsgLmYwID0gODksIC5mMSA9IDIxMSwgfTsKICAgICh2b2lkKW5sX2xvY2FsXzI7CiAgICBOTF9MT09QX0JJTkQoJm5sX2xvY2FsXzIuZjAsICZubF9sb2NhbF8yLmYxKTsKICAgIHVpbnQ4X3QgbmxfbG9jYWxfNzsKICAgIHNpemVfdCBubF9sb29wX2NhcnJ5XzE3ID0gKHNpemVfdClVSU5UTUFYX0MoNCk7CiAgICBmb3IgKDs7KSB7CiAgICAgICAgY29uc3Qgc2l6ZV90IG5sX2xvb3BfcGhhc2VfMTcgPSBubF9sb29wX2NhcnJ5XzE3OwogICAgICAgIE5MX0xPT1BfUEhBU0UobmxfbG9vcF9waGFzZV8xNywgJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxKTsKICAgICAgICBpZiAobmxfbG9vcF9waGFzZV8xNyA9PSAoc2l6ZV90KVVJTlRNQVhfQyg0KSkgewogICAgICAgICAgICBubF9sb29wX2NhcnJ5XzE3ID0gKHNpemVfdClVSU5UTUFYX0MoMTkpOwogICAgICAgICAgICBOTF9MT09QX0NPTlRJTlVFKG5sX2xvb3BfcGhhc2VfMTcsIG5sX2xvb3BfY2FycnlfMTcsICZubF9sb2NhbF8xLmYwLCAmbmxfbG9jYWxfMS5mMSk7CiAgICAgICAgICAgIGNvbnRpbnVlOwogICAgICAgIH0KICAgICAgICBOTF9MT09QX0JFRk9SRSgmbmxfbG9jYWxfMS5mMCwgJm5sX2xvY2FsXzEuZjEsIDEpOwogICAgICAgIG5sX2xvY2FsXzcgPSBubF9mbl8xMCgmbmxfbG9jYWxfMS5mMSwgNTgpOwogICAgICAgIE5MX0xPT1BfQUZURVIoJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxLCAxLCBubF9sb2NhbF83KTsKICAgICAgICBicmVhazsKICAgIH0KICAgICh2b2lkKW5sX2xvY2FsXzc7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzggPSBubF9sb2NhbF8xLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfODsKICAgIE5MX0xPT1BfUkVBRCgmbmxfbG9jYWxfMS5mMSwgbmxfbG9jYWxfOCk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzkgPSBubF9sb2NhbF8xLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfOTsKICAgIE5MX0xPT1BfUkVBRCgmbmxfbG9jYWxfMS5mMCwgbmxfbG9jYWxfOSk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzEwID0gbmxfbG9jYWxfMi5mMTsKICAgICh2b2lkKW5sX2xvY2FsXzEwOwogICAgTkxfTE9PUF9SRUFEKCZubF9sb2NhbF8yLmYxLCBubF9sb2NhbF8xMCk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzExID0gbmxfbG9jYWxfMi5mMDsKICAgICh2b2lkKW5sX2xvY2FsXzExOwogICAgTkxfTE9PUF9SRUFEKCZubF9sb2NhbF8yLmYwLCBubF9sb2NhbF8xMSk7CiAgICB1aW50OF90IG5sX2xvYW5fcmVzdWx0XzI7CiAgICB7CiAgICAgICAgdWludDhfdCAqY29uc3QgbmxfbG9jYWxfMTIgPSAmbmxfbG9jYWxfMS5mMDsKICAgICAgICAodm9pZClubF9sb2NhbF8xMjsKICAgICAgICBjb25zdCB1aW50OF90IG5sX2NhbGxfMzQgPSBubF9mbl8xMChubF9sb2NhbF8xMiwgbmxfbG9jYWxfNyk7CiAgICAgICAgKHZvaWQpbmxfY2FsbF8zNDsKICAgICAgICBubF9sb2FuX3Jlc3VsdF8yID0gbmxfY2FsbF8zNDsKICAgIH0KICAgICh2b2lkKW5sX2xvYW5fcmVzdWx0XzI7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzE1ID0gbmxfbG9hbl9yZXN1bHRfMjsKICAgICh2b2lkKW5sX2xvY2FsXzE1OwogICAgdWludDhfdCBubF9sb2FuX3Jlc3VsdF8zOwogICAgewogICAgICAgIHVpbnQ4X3QgKmNvbnN0IG5sX2xvY2FsXzE2ID0gJm5sX2xvY2FsXzIuZjE7CiAgICAgICAgKHZvaWQpbmxfbG9jYWxfMTY7CiAgICAgICAgY29uc3QgdWludDhfdCBubF9jYWxsXzQxID0gbmxfZm5fMTAobmxfbG9jYWxfMTYsIG5sX2xvY2FsXzgpOwogICAgICAgICh2b2lkKW5sX2NhbGxfNDE7CiAgICAgICAgbmxfbG9hbl9yZXN1bHRfMyA9IG5sX2NhbGxfNDE7CiAgICB9CiAgICAodm9pZClubF9sb2FuX3Jlc3VsdF8zOwogICAgY29uc3QgdWludDhfdCBubF9sb2NhbF8xOSA9IG5sX2xvYW5fcmVzdWx0XzM7CiAgICAodm9pZClubF9sb2NhbF8xOTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjAgPSBubF9sb2NhbF8xLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfMjA7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzEuZjEsIG5sX2xvY2FsXzIwKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjEgPSBubF9sb2NhbF8xLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfMjE7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzEuZjAsIG5sX2xvY2FsXzIxKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjIgPSBubF9sb2NhbF8yLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfMjI7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzIuZjEsIG5sX2xvY2FsXzIyKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjMgPSBubF9sb2NhbF8yLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfMjM7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzIuZjAsIG5sX2xvY2FsXzIzKTsKICAgICh2b2lkKTA7Cn0KCnN0YXRpYyB1aW50OF90IG5sX2ZuXzEwKHVpbnQ4X3QgKm5sX2xvY2FsXzQsIHVpbnQ4X3QgbmxfbG9jYWxfNSkKewogICAgKHZvaWQpbmxfbG9jYWxfNTsKICAgICh2b2lkKW5sX2xvY2FsXzQ7CiAgICBjb25zdCB1aW50OF90IG5sX3JlcGxhY2Vfb2xkXzIgPSAqbmxfbG9jYWxfNDsKICAgICpubF9sb2NhbF80ID0gbmxfbG9jYWxfNTsKICAgIHJldHVybiBubF9yZXBsYWNlX29sZF8yOwp9CgppbnQgbWFpbih2b2lkKQp7CiAgICBubF9mbl8xMSgpOwogICAgcmV0dXJuIDA7Cn0K"
+      },
+      "raw_transport": {
+        "binary_policy": "Executables retained in build only; exact size/SHA and command receipt transported.",
+        "file_count": 71,
+        "manifest_format": "UTF-8 compact sorted-key JSON array of FILE records, in log order, final LF",
+        "manifest_sha256": "85524a24390a3c366837e84f37a2f647effbadf8aec277553eac79466cd25f10",
+        "raw_bytes": 747165,
+        "status": "COMPLETE"
+      },
+      "ctest_lines": [
+        "  Test #663: r1129_c221_stutter.integration",
+        "663/663 Test #663: r1129_c221_stutter.integration ........................***Failed    0.35 sec",
+        "99% tests passed, 1 tests failed out of 663",
+        "Total Test time (real) = 280.19 sec",
+        "The following tests FAILED:"
+      ],
+      "raw_receipts": [
+        {
+          "path": "evidence/r1129/raw/initial/job-126226593440/complete-raw-bundle.json",
+          "bytes": 127757,
+          "sha256": "820d50369eeca28ade28b15732d319e7a9032a44b56d2dc57f98b11d9a212454",
+          "git_blob_sha": "8f58ec577f342c87367d622bd41976641102232b"
+        },
+        {
+          "path": "evidence/r1129/raw/initial/job-126226593440/summary.json",
+          "bytes": 3811,
+          "sha256": "786f160a7cb93be520dfb6c5f9d6749cef6558fe65d58bed784bc4276b7d3b7c",
+          "git_blob_sha": "41c5523c21d2f1022cb6d96f3d891428037eef11"
+        }
+      ]
+    },
+    {
+      "job": 126226593489,
+      "run": 41724783042,
+      "name": "Clang",
+      "attempt": 1,
+      "finished": "2026-11-03T21:52:16.028297+00:00",
+      "status": "MECHANICAL_OR_OBSERVATION_LIMIT",
+      "first_stop": {
+        "message": "no unique phase-comparison IF",
+        "type": "ObservationLimit"
+      },
+      "normal": {
+        "check": "ACCEPTED",
+        "owned": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+        "status": "CHECK_STARTED",
+        "unmodified_native": [
+          "O0",
+          "O2"
+        ]
+      },
+      "other_cases": {
+        "continue_arity": {
+          "status": "NOT_RUN"
+        },
+        "continue_target": {
+          "status": "NOT_RUN"
+        },
+        "continue_type": {
+          "status": "NOT_RUN"
+        },
+        "equal_bits": {
+          "status": "NOT_RUN"
+        },
+        "immediate_break": {
+          "status": "NOT_RUN"
+        },
+        "loan_escape": {
+          "status": "NOT_RUN"
+        },
+        "v1_stutter": {
+          "status": "NOT_RUN"
+        }
+      },
+      "actual_checkout": "c0ab95f09986d32699c862bee4417fe0c1f0437a",
+      "tree": "ea5b44a72527f01aa327e2fd045fb5f1094e06a1",
+      "parents": [
+        "dc21cf33105a7dba832e197f24e153ad87862a0f",
+        "3908666af7cf58041732294827c60b538090b272"
+      ],
+      "host_compiler": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)",
+      "host_sanitizer": "none",
+      "guest_flags": [
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-Wno-error=gcc-install-dir-libstdcxx"
+      ],
+      "frontend_only": "OFF",
+      "c17": {
+        "bytes": 3924,
+        "chunks": 2,
+        "codec": "base64",
+        "path": "normal/unmodified.c",
+        "sha256": "fa8f57fd2abaf4939a200aaba1445dd55e0b0da3d70737858053fdfdf1caa04d",
+        "wire_bytes": 3924,
+        "wire_sha256": "fa8f57fd2abaf4939a200aaba1445dd55e0b0da3d70737858053fdfdf1caa04d",
+        "wire_base64": "LyogTm9ydGggU3RhciBWMC9WMS9BVlMgQ2hlY2tlZC1DIHJlZmVyZW5jZSBvdXRwdXQuICovCiNpbmNsdWRlIDxzdGRpbnQuaD4KCiNpbmNsdWRlIDxsaW1pdHMuaD4KX1N0YXRpY19hc3NlcnQoQ0hBUl9CSVQgPT0gOCwgIk5ld0xhbmcgQzE3IHJlcXVpcmVzIDgtYml0IGJ5dGVzIik7Cl9TdGF0aWNfYXNzZXJ0KFVJTlQ4X01BWCA9PSAyNTUgJiYgc2l6ZW9mKHVpbnQ4X3QpID09IDEgJiYgKCh1aW50OF90KS0xKSA9PSAyNTUsICJOZXdMYW5nIEMxNyByZXF1aXJlcyBleGFjdCA4LWJpdCB1aW50OF90Iik7CiNpbmNsdWRlIDxzdGRkZWYuaD4KX1N0YXRpY19hc3NlcnQoU0laRV9NQVggPT0gVUlOVE1BWF9DKDE4NDQ2NzQ0MDczNzA5NTUxNjE1KSwgIk5ld0xhbmcgdXNpemUgdGFyZ2V0IG1pc21hdGNoIik7Cgp0eXBlZGVmIHN0cnVjdCB7IHVpbnQ4X3QgZjA7IHVpbnQ4X3QgZjE7IH0gbmxfdHlwZV8xMDsKCiNpZmRlZiBORVdMQU5HX0xPT1BfT0JTRVJWRVIKI2luY2x1ZGUgTkVXTEFOR19MT09QX09CU0VSVkVSCiNlbmRpZgojaWZuZGVmIE5MX0xPT1BfQklORAojZGVmaW5lIE5MX0xPT1BfQklORCguLi4pICgodm9pZCkwKQojZW5kaWYKI2lmbmRlZiBOTF9MT09QX1JFQUQKI2RlZmluZSBOTF9MT09QX1JFQUQoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCiNpZm5kZWYgTkxfTE9PUF9CRUZPUkUKI2RlZmluZSBOTF9MT09QX0JFRk9SRSguLi4pICgodm9pZCkwKQojZW5kaWYKI2lmbmRlZiBOTF9MT09QX0FGVEVSCiNkZWZpbmUgTkxfTE9PUF9BRlRFUiguLi4pICgodm9pZCkwKQojZW5kaWYKCiNpZm5kZWYgTkxfTE9PUF9QSEFTRQojZGVmaW5lIE5MX0xPT1BfUEhBU0UoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCiNpZm5kZWYgTkxfTE9PUF9DT05USU5VRQojZGVmaW5lIE5MX0xPT1BfQ09OVElOVUUoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCgpzdGF0aWMgdm9pZCBubF9mbl8xMSh2b2lkKTsKc3RhdGljIHVpbnQ4X3QgbmxfZm5fMTAodWludDhfdCAqbmxfbG9jYWxfNCwgdWludDhfdCBubF9sb2NhbF81KTsKCnN0YXRpYyB2b2lkIG5sX2ZuXzExKHZvaWQpCnsKICAgIG5sX3R5cGVfMTAgbmxfbG9jYWxfMSA9IHsgLmYxID0gMzcsIC5mMCA9IDE0NiwgfTsKICAgICh2b2lkKW5sX2xvY2FsXzE7CiAgICBOTF9MT09QX0JJTkQoJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxKTsKICAgIG5sX3R5cGVfMTAgbmxfbG9jYWxfMiA9IHsgLmYwID0gODksIC5mMSA9IDIxMSwgfTsKICAgICh2b2lkKW5sX2xvY2FsXzI7CiAgICBOTF9MT09QX0JJTkQoJm5sX2xvY2FsXzIuZjAsICZubF9sb2NhbF8yLmYxKTsKICAgIHVpbnQ4X3QgbmxfbG9jYWxfNzsKICAgIHNpemVfdCBubF9sb29wX2NhcnJ5XzE3ID0gKHNpemVfdClVSU5UTUFYX0MoNCk7CiAgICBmb3IgKDs7KSB7CiAgICAgICAgY29uc3Qgc2l6ZV90IG5sX2xvb3BfcGhhc2VfMTcgPSBubF9sb29wX2NhcnJ5XzE3OwogICAgICAgIE5MX0xPT1BfUEhBU0UobmxfbG9vcF9waGFzZV8xNywgJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxKTsKICAgICAgICBpZiAobmxfbG9vcF9waGFzZV8xNyA9PSAoc2l6ZV90KVVJTlRNQVhfQyg0KSkgewogICAgICAgICAgICBubF9sb29wX2NhcnJ5XzE3ID0gKHNpemVfdClVSU5UTUFYX0MoMTkpOwogICAgICAgICAgICBOTF9MT09QX0NPTlRJTlVFKG5sX2xvb3BfcGhhc2VfMTcsIG5sX2xvb3BfY2FycnlfMTcsICZubF9sb2NhbF8xLmYwLCAmbmxfbG9jYWxfMS5mMSk7CiAgICAgICAgICAgIGNvbnRpbnVlOwogICAgICAgIH0KICAgICAgICBOTF9MT09QX0JFRk9SRSgmbmxfbG9jYWxfMS5mMCwgJm5sX2xvY2FsXzEuZjEsIDEpOwogICAgICAgIG5sX2xvY2FsXzcgPSBubF9mbl8xMCgmbmxfbG9jYWxfMS5mMSwgNTgpOwogICAgICAgIE5MX0xPT1BfQUZURVIoJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxLCAxLCBubF9sb2NhbF83KTsKICAgICAgICBicmVhazsKICAgIH0KICAgICh2b2lkKW5sX2xvY2FsXzc7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzggPSBubF9sb2NhbF8xLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfODsKICAgIE5MX0xPT1BfUkVBRCgmbmxfbG9jYWxfMS5mMSwgbmxfbG9jYWxfOCk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzkgPSBubF9sb2NhbF8xLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfOTsKICAgIE5MX0xPT1BfUkVBRCgmbmxfbG9jYWxfMS5mMCwgbmxfbG9jYWxfOSk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzEwID0gbmxfbG9jYWxfMi5mMTsKICAgICh2b2lkKW5sX2xvY2FsXzEwOwogICAgTkxfTE9PUF9SRUFEKCZubF9sb2NhbF8yLmYxLCBubF9sb2NhbF8xMCk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzExID0gbmxfbG9jYWxfMi5mMDsKICAgICh2b2lkKW5sX2xvY2FsXzExOwogICAgTkxfTE9PUF9SRUFEKCZubF9sb2NhbF8yLmYwLCBubF9sb2NhbF8xMSk7CiAgICB1aW50OF90IG5sX2xvYW5fcmVzdWx0XzI7CiAgICB7CiAgICAgICAgdWludDhfdCAqY29uc3QgbmxfbG9jYWxfMTIgPSAmbmxfbG9jYWxfMS5mMDsKICAgICAgICAodm9pZClubF9sb2NhbF8xMjsKICAgICAgICBjb25zdCB1aW50OF90IG5sX2NhbGxfMzQgPSBubF9mbl8xMChubF9sb2NhbF8xMiwgbmxfbG9jYWxfNyk7CiAgICAgICAgKHZvaWQpbmxfY2FsbF8zNDsKICAgICAgICBubF9sb2FuX3Jlc3VsdF8yID0gbmxfY2FsbF8zNDsKICAgIH0KICAgICh2b2lkKW5sX2xvYW5fcmVzdWx0XzI7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzE1ID0gbmxfbG9hbl9yZXN1bHRfMjsKICAgICh2b2lkKW5sX2xvY2FsXzE1OwogICAgdWludDhfdCBubF9sb2FuX3Jlc3VsdF8zOwogICAgewogICAgICAgIHVpbnQ4X3QgKmNvbnN0IG5sX2xvY2FsXzE2ID0gJm5sX2xvY2FsXzIuZjE7CiAgICAgICAgKHZvaWQpbmxfbG9jYWxfMTY7CiAgICAgICAgY29uc3QgdWludDhfdCBubF9jYWxsXzQxID0gbmxfZm5fMTAobmxfbG9jYWxfMTYsIG5sX2xvY2FsXzgpOwogICAgICAgICh2b2lkKW5sX2NhbGxfNDE7CiAgICAgICAgbmxfbG9hbl9yZXN1bHRfMyA9IG5sX2NhbGxfNDE7CiAgICB9CiAgICAodm9pZClubF9sb2FuX3Jlc3VsdF8zOwogICAgY29uc3QgdWludDhfdCBubF9sb2NhbF8xOSA9IG5sX2xvYW5fcmVzdWx0XzM7CiAgICAodm9pZClubF9sb2NhbF8xOTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjAgPSBubF9sb2NhbF8xLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfMjA7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzEuZjEsIG5sX2xvY2FsXzIwKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjEgPSBubF9sb2NhbF8xLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfMjE7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzEuZjAsIG5sX2xvY2FsXzIxKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjIgPSBubF9sb2NhbF8yLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfMjI7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzIuZjEsIG5sX2xvY2FsXzIyKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjMgPSBubF9sb2NhbF8yLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfMjM7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzIuZjAsIG5sX2xvY2FsXzIzKTsKICAgICh2b2lkKTA7Cn0KCnN0YXRpYyB1aW50OF90IG5sX2ZuXzEwKHVpbnQ4X3QgKm5sX2xvY2FsXzQsIHVpbnQ4X3QgbmxfbG9jYWxfNSkKewogICAgKHZvaWQpbmxfbG9jYWxfNTsKICAgICh2b2lkKW5sX2xvY2FsXzQ7CiAgICBjb25zdCB1aW50OF90IG5sX3JlcGxhY2Vfb2xkXzIgPSAqbmxfbG9jYWxfNDsKICAgICpubF9sb2NhbF80ID0gbmxfbG9jYWxfNTsKICAgIHJldHVybiBubF9yZXBsYWNlX29sZF8yOwp9CgppbnQgbWFpbih2b2lkKQp7CiAgICBubF9mbl8xMSgpOwogICAgcmV0dXJuIDA7Cn0K"
+      },
+      "raw_transport": {
+        "binary_policy": "Executables retained in build only; exact size/SHA and command receipt transported.",
+        "file_count": 71,
+        "manifest_format": "UTF-8 compact sorted-key JSON array of FILE records, in log order, final LF",
+        "manifest_sha256": "132bf36baf4bcb5b38167035d3a58f9b255bb2b5f8d876a217b686c165b124cc",
+        "raw_bytes": 749153,
+        "status": "COMPLETE"
+      },
+      "ctest_lines": [
+        "  Test #663: r1129_c221_stutter.integration",
+        "663/663 Test #663: r1129_c221_stutter.integration ........................***Failed    0.62 sec",
+        "99% tests passed, 1 tests failed out of 663",
+        "Total Test time (real) = 303.48 sec",
+        "The following tests FAILED:"
+      ],
+      "raw_receipts": [
+        {
+          "path": "evidence/r1129/raw/initial/job-126226593489/complete-raw-bundle.json",
+          "bytes": 130413,
+          "sha256": "3430db6a3e787492a01d93c40e8ca7a96e1bc0ae1c4f3cba7c9a34bc445a47cc",
+          "git_blob_sha": "6c6161348042f1e04184e83147d729aa1117cba3"
+        },
+        {
+          "path": "evidence/r1129/raw/initial/job-126226593489/summary.json",
+          "bytes": 4120,
+          "sha256": "163bd4e78e9e7cd482df8e2dba38b2f9d0ae373e2c1008ea1e65bcaf3ac6ecf5",
+          "git_blob_sha": "18cee1447ed9aa1e570da7eb8fc15b9997f95c65"
+        }
+      ]
+    },
+    {
+      "job": 126226593585,
+      "run": 41724783042,
+      "name": "ASan",
+      "attempt": 1,
+      "finished": "2026-11-03T21:58:33.486580+00:00",
+      "status": "MECHANICAL_OR_OBSERVATION_LIMIT",
+      "first_stop": {
+        "message": "no unique phase-comparison IF",
+        "type": "ObservationLimit"
+      },
+      "normal": {
+        "check": "ACCEPTED",
+        "owned": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+        "status": "CHECK_STARTED",
+        "unmodified_native": [
+          "O0",
+          "O2"
+        ]
+      },
+      "other_cases": {
+        "continue_arity": {
+          "status": "NOT_RUN"
+        },
+        "continue_target": {
+          "status": "NOT_RUN"
+        },
+        "continue_type": {
+          "status": "NOT_RUN"
+        },
+        "equal_bits": {
+          "status": "NOT_RUN"
+        },
+        "immediate_break": {
+          "status": "NOT_RUN"
+        },
+        "loan_escape": {
+          "status": "NOT_RUN"
+        },
+        "v1_stutter": {
+          "status": "NOT_RUN"
+        }
+      },
+      "actual_checkout": "c0ab95f09986d32699c862bee4417fe0c1f0437a",
+      "tree": "ea5b44a72527f01aa327e2fd045fb5f1094e06a1",
+      "parents": [
+        "dc21cf33105a7dba832e197f24e153ad87862a0f",
+        "3908666af7cf58041732294827c60b538090b272"
+      ],
+      "host_compiler": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)",
+      "host_sanitizer": "address",
+      "guest_flags": [
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-Wno-error=gcc-install-dir-libstdcxx",
+        "-fsanitize=address",
+        "-fno-omit-frame-pointer",
+        "-fno-sanitize-recover=all"
+      ],
+      "frontend_only": "OFF",
+      "c17": {
+        "bytes": 3924,
+        "chunks": 2,
+        "codec": "base64",
+        "path": "normal/unmodified.c",
+        "sha256": "fa8f57fd2abaf4939a200aaba1445dd55e0b0da3d70737858053fdfdf1caa04d",
+        "wire_bytes": 3924,
+        "wire_sha256": "fa8f57fd2abaf4939a200aaba1445dd55e0b0da3d70737858053fdfdf1caa04d",
+        "wire_base64": "LyogTm9ydGggU3RhciBWMC9WMS9BVlMgQ2hlY2tlZC1DIHJlZmVyZW5jZSBvdXRwdXQuICovCiNpbmNsdWRlIDxzdGRpbnQuaD4KCiNpbmNsdWRlIDxsaW1pdHMuaD4KX1N0YXRpY19hc3NlcnQoQ0hBUl9CSVQgPT0gOCwgIk5ld0xhbmcgQzE3IHJlcXVpcmVzIDgtYml0IGJ5dGVzIik7Cl9TdGF0aWNfYXNzZXJ0KFVJTlQ4X01BWCA9PSAyNTUgJiYgc2l6ZW9mKHVpbnQ4X3QpID09IDEgJiYgKCh1aW50OF90KS0xKSA9PSAyNTUsICJOZXdMYW5nIEMxNyByZXF1aXJlcyBleGFjdCA4LWJpdCB1aW50OF90Iik7CiNpbmNsdWRlIDxzdGRkZWYuaD4KX1N0YXRpY19hc3NlcnQoU0laRV9NQVggPT0gVUlOVE1BWF9DKDE4NDQ2NzQ0MDczNzA5NTUxNjE1KSwgIk5ld0xhbmcgdXNpemUgdGFyZ2V0IG1pc21hdGNoIik7Cgp0eXBlZGVmIHN0cnVjdCB7IHVpbnQ4X3QgZjA7IHVpbnQ4X3QgZjE7IH0gbmxfdHlwZV8xMDsKCiNpZmRlZiBORVdMQU5HX0xPT1BfT0JTRVJWRVIKI2luY2x1ZGUgTkVXTEFOR19MT09QX09CU0VSVkVSCiNlbmRpZgojaWZuZGVmIE5MX0xPT1BfQklORAojZGVmaW5lIE5MX0xPT1BfQklORCguLi4pICgodm9pZCkwKQojZW5kaWYKI2lmbmRlZiBOTF9MT09QX1JFQUQKI2RlZmluZSBOTF9MT09QX1JFQUQoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCiNpZm5kZWYgTkxfTE9PUF9CRUZPUkUKI2RlZmluZSBOTF9MT09QX0JFRk9SRSguLi4pICgodm9pZCkwKQojZW5kaWYKI2lmbmRlZiBOTF9MT09QX0FGVEVSCiNkZWZpbmUgTkxfTE9PUF9BRlRFUiguLi4pICgodm9pZCkwKQojZW5kaWYKCiNpZm5kZWYgTkxfTE9PUF9QSEFTRQojZGVmaW5lIE5MX0xPT1BfUEhBU0UoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCiNpZm5kZWYgTkxfTE9PUF9DT05USU5VRQojZGVmaW5lIE5MX0xPT1BfQ09OVElOVUUoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCgpzdGF0aWMgdm9pZCBubF9mbl8xMSh2b2lkKTsKc3RhdGljIHVpbnQ4X3QgbmxfZm5fMTAodWludDhfdCAqbmxfbG9jYWxfNCwgdWludDhfdCBubF9sb2NhbF81KTsKCnN0YXRpYyB2b2lkIG5sX2ZuXzExKHZvaWQpCnsKICAgIG5sX3R5cGVfMTAgbmxfbG9jYWxfMSA9IHsgLmYxID0gMzcsIC5mMCA9IDE0NiwgfTsKICAgICh2b2lkKW5sX2xvY2FsXzE7CiAgICBOTF9MT09QX0JJTkQoJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxKTsKICAgIG5sX3R5cGVfMTAgbmxfbG9jYWxfMiA9IHsgLmYwID0gODksIC5mMSA9IDIxMSwgfTsKICAgICh2b2lkKW5sX2xvY2FsXzI7CiAgICBOTF9MT09QX0JJTkQoJm5sX2xvY2FsXzIuZjAsICZubF9sb2NhbF8yLmYxKTsKICAgIHVpbnQ4X3QgbmxfbG9jYWxfNzsKICAgIHNpemVfdCBubF9sb29wX2NhcnJ5XzE3ID0gKHNpemVfdClVSU5UTUFYX0MoNCk7CiAgICBmb3IgKDs7KSB7CiAgICAgICAgY29uc3Qgc2l6ZV90IG5sX2xvb3BfcGhhc2VfMTcgPSBubF9sb29wX2NhcnJ5XzE3OwogICAgICAgIE5MX0xPT1BfUEhBU0UobmxfbG9vcF9waGFzZV8xNywgJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxKTsKICAgICAgICBpZiAobmxfbG9vcF9waGFzZV8xNyA9PSAoc2l6ZV90KVVJTlRNQVhfQyg0KSkgewogICAgICAgICAgICBubF9sb29wX2NhcnJ5XzE3ID0gKHNpemVfdClVSU5UTUFYX0MoMTkpOwogICAgICAgICAgICBOTF9MT09QX0NPTlRJTlVFKG5sX2xvb3BfcGhhc2VfMTcsIG5sX2xvb3BfY2FycnlfMTcsICZubF9sb2NhbF8xLmYwLCAmbmxfbG9jYWxfMS5mMSk7CiAgICAgICAgICAgIGNvbnRpbnVlOwogICAgICAgIH0KICAgICAgICBOTF9MT09QX0JFRk9SRSgmbmxfbG9jYWxfMS5mMCwgJm5sX2xvY2FsXzEuZjEsIDEpOwogICAgICAgIG5sX2xvY2FsXzcgPSBubF9mbl8xMCgmbmxfbG9jYWxfMS5mMSwgNTgpOwogICAgICAgIE5MX0xPT1BfQUZURVIoJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxLCAxLCBubF9sb2NhbF83KTsKICAgICAgICBicmVhazsKICAgIH0KICAgICh2b2lkKW5sX2xvY2FsXzc7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzggPSBubF9sb2NhbF8xLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfODsKICAgIE5MX0xPT1BfUkVBRCgmbmxfbG9jYWxfMS5mMSwgbmxfbG9jYWxfOCk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzkgPSBubF9sb2NhbF8xLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfOTsKICAgIE5MX0xPT1BfUkVBRCgmbmxfbG9jYWxfMS5mMCwgbmxfbG9jYWxfOSk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzEwID0gbmxfbG9jYWxfMi5mMTsKICAgICh2b2lkKW5sX2xvY2FsXzEwOwogICAgTkxfTE9PUF9SRUFEKCZubF9sb2NhbF8yLmYxLCBubF9sb2NhbF8xMCk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzExID0gbmxfbG9jYWxfMi5mMDsKICAgICh2b2lkKW5sX2xvY2FsXzExOwogICAgTkxfTE9PUF9SRUFEKCZubF9sb2NhbF8yLmYwLCBubF9sb2NhbF8xMSk7CiAgICB1aW50OF90IG5sX2xvYW5fcmVzdWx0XzI7CiAgICB7CiAgICAgICAgdWludDhfdCAqY29uc3QgbmxfbG9jYWxfMTIgPSAmbmxfbG9jYWxfMS5mMDsKICAgICAgICAodm9pZClubF9sb2NhbF8xMjsKICAgICAgICBjb25zdCB1aW50OF90IG5sX2NhbGxfMzQgPSBubF9mbl8xMChubF9sb2NhbF8xMiwgbmxfbG9jYWxfNyk7CiAgICAgICAgKHZvaWQpbmxfY2FsbF8zNDsKICAgICAgICBubF9sb2FuX3Jlc3VsdF8yID0gbmxfY2FsbF8zNDsKICAgIH0KICAgICh2b2lkKW5sX2xvYW5fcmVzdWx0XzI7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzE1ID0gbmxfbG9hbl9yZXN1bHRfMjsKICAgICh2b2lkKW5sX2xvY2FsXzE1OwogICAgdWludDhfdCBubF9sb2FuX3Jlc3VsdF8zOwogICAgewogICAgICAgIHVpbnQ4X3QgKmNvbnN0IG5sX2xvY2FsXzE2ID0gJm5sX2xvY2FsXzIuZjE7CiAgICAgICAgKHZvaWQpbmxfbG9jYWxfMTY7CiAgICAgICAgY29uc3QgdWludDhfdCBubF9jYWxsXzQxID0gbmxfZm5fMTAobmxfbG9jYWxfMTYsIG5sX2xvY2FsXzgpOwogICAgICAgICh2b2lkKW5sX2NhbGxfNDE7CiAgICAgICAgbmxfbG9hbl9yZXN1bHRfMyA9IG5sX2NhbGxfNDE7CiAgICB9CiAgICAodm9pZClubF9sb2FuX3Jlc3VsdF8zOwogICAgY29uc3QgdWludDhfdCBubF9sb2NhbF8xOSA9IG5sX2xvYW5fcmVzdWx0XzM7CiAgICAodm9pZClubF9sb2NhbF8xOTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjAgPSBubF9sb2NhbF8xLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfMjA7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzEuZjEsIG5sX2xvY2FsXzIwKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjEgPSBubF9sb2NhbF8xLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfMjE7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzEuZjAsIG5sX2xvY2FsXzIxKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjIgPSBubF9sb2NhbF8yLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfMjI7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzIuZjEsIG5sX2xvY2FsXzIyKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjMgPSBubF9sb2NhbF8yLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfMjM7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzIuZjAsIG5sX2xvY2FsXzIzKTsKICAgICh2b2lkKTA7Cn0KCnN0YXRpYyB1aW50OF90IG5sX2ZuXzEwKHVpbnQ4X3QgKm5sX2xvY2FsXzQsIHVpbnQ4X3QgbmxfbG9jYWxfNSkKewogICAgKHZvaWQpbmxfbG9jYWxfNTsKICAgICh2b2lkKW5sX2xvY2FsXzQ7CiAgICBjb25zdCB1aW50OF90IG5sX3JlcGxhY2Vfb2xkXzIgPSAqbmxfbG9jYWxfNDsKICAgICpubF9sb2NhbF80ID0gbmxfbG9jYWxfNTsKICAgIHJldHVybiBubF9yZXBsYWNlX29sZF8yOwp9CgppbnQgbWFpbih2b2lkKQp7CiAgICBubF9mbl8xMSgpOwogICAgcmV0dXJuIDA7Cn0K"
+      },
+      "raw_transport": {
+        "binary_policy": "Executables retained in build only; exact size/SHA and command receipt transported.",
+        "file_count": 71,
+        "manifest_format": "UTF-8 compact sorted-key JSON array of FILE records, in log order, final LF",
+        "manifest_sha256": "a5761e7faad5caed20e7af4ffd1bec8abbaa9c727df6e4914e55356097562a98",
+        "raw_bytes": 7090799,
+        "status": "COMPLETE"
+      },
+      "ctest_lines": [
+        "  Test #663: r1129_c221_stutter.integration",
+        "663/663 Test #663: r1129_c221_stutter.integration ........................***Failed    0.93 sec",
+        "99% tests passed, 1 tests failed out of 663",
+        "Total Test time (real) = 670.39 sec",
+        "The following tests FAILED:"
+      ],
+      "raw_receipts": [
+        {
+          "path": "evidence/r1129/raw/initial/job-126226593585/complete-raw-bundle.json",
+          "bytes": 131414,
+          "sha256": "b47c90016db9e108ec1fe0a7dd5aacf686059175d0707f0221ae25ecca699e25",
+          "git_blob_sha": "41f485f950102913818d5de689ca85a3fc397cb8"
+        },
+        {
+          "path": "evidence/r1129/raw/initial/job-126226593585/summary.json",
+          "bytes": 4212,
+          "sha256": "769f7e82c86c595fd6da1c4aabec098e7efdca7cea925838fb38493c7632db21",
+          "git_blob_sha": "bc604f5cb31aca449f2ff75330027605e84e915f"
+        }
+      ]
+    },
+    {
+      "job": 126226593065,
+      "run": 41724783042,
+      "name": "UBSan",
+      "attempt": 1,
+      "finished": "2026-11-03T21:52:18.376121+00:00",
+      "status": "MECHANICAL_OR_OBSERVATION_LIMIT",
+      "first_stop": {
+        "message": "no unique phase-comparison IF",
+        "type": "ObservationLimit"
+      },
+      "normal": {
+        "check": "ACCEPTED",
+        "owned": "SOURCE_ISSUED_PUBLIC_OBSERVATIONS",
+        "status": "CHECK_STARTED",
+        "unmodified_native": [
+          "O0",
+          "O2"
+        ]
+      },
+      "other_cases": {
+        "continue_arity": {
+          "status": "NOT_RUN"
+        },
+        "continue_target": {
+          "status": "NOT_RUN"
+        },
+        "continue_type": {
+          "status": "NOT_RUN"
+        },
+        "equal_bits": {
+          "status": "NOT_RUN"
+        },
+        "immediate_break": {
+          "status": "NOT_RUN"
+        },
+        "loan_escape": {
+          "status": "NOT_RUN"
+        },
+        "v1_stutter": {
+          "status": "NOT_RUN"
+        }
+      },
+      "actual_checkout": "c0ab95f09986d32699c862bee4417fe0c1f0437a",
+      "tree": "ea5b44a72527f01aa327e2fd045fb5f1094e06a1",
+      "parents": [
+        "dc21cf33105a7dba832e197f24e153ad87862a0f",
+        "3908666af7cf58041732294827c60b538090b272"
+      ],
+      "host_compiler": "clang version 23.1.3 (https://github.com/llvm/llvm-project 0d261d1ca552c95a8f007e061c787ac7132fbcbc)",
+      "host_sanitizer": "undefined",
+      "guest_flags": [
+        "-std=c17",
+        "-Wall",
+        "-Wextra",
+        "-Wpedantic",
+        "-Werror",
+        "-Wno-error=gcc-install-dir-libstdcxx",
+        "-fsanitize=undefined",
+        "-fno-omit-frame-pointer",
+        "-fno-sanitize-recover=all"
+      ],
+      "frontend_only": "OFF",
+      "c17": {
+        "bytes": 3924,
+        "chunks": 2,
+        "codec": "base64",
+        "path": "normal/unmodified.c",
+        "sha256": "fa8f57fd2abaf4939a200aaba1445dd55e0b0da3d70737858053fdfdf1caa04d",
+        "wire_bytes": 3924,
+        "wire_sha256": "fa8f57fd2abaf4939a200aaba1445dd55e0b0da3d70737858053fdfdf1caa04d",
+        "wire_base64": "LyogTm9ydGggU3RhciBWMC9WMS9BVlMgQ2hlY2tlZC1DIHJlZmVyZW5jZSBvdXRwdXQuICovCiNpbmNsdWRlIDxzdGRpbnQuaD4KCiNpbmNsdWRlIDxsaW1pdHMuaD4KX1N0YXRpY19hc3NlcnQoQ0hBUl9CSVQgPT0gOCwgIk5ld0xhbmcgQzE3IHJlcXVpcmVzIDgtYml0IGJ5dGVzIik7Cl9TdGF0aWNfYXNzZXJ0KFVJTlQ4X01BWCA9PSAyNTUgJiYgc2l6ZW9mKHVpbnQ4X3QpID09IDEgJiYgKCh1aW50OF90KS0xKSA9PSAyNTUsICJOZXdMYW5nIEMxNyByZXF1aXJlcyBleGFjdCA4LWJpdCB1aW50OF90Iik7CiNpbmNsdWRlIDxzdGRkZWYuaD4KX1N0YXRpY19hc3NlcnQoU0laRV9NQVggPT0gVUlOVE1BWF9DKDE4NDQ2NzQ0MDczNzA5NTUxNjE1KSwgIk5ld0xhbmcgdXNpemUgdGFyZ2V0IG1pc21hdGNoIik7Cgp0eXBlZGVmIHN0cnVjdCB7IHVpbnQ4X3QgZjA7IHVpbnQ4X3QgZjE7IH0gbmxfdHlwZV8xMDsKCiNpZmRlZiBORVdMQU5HX0xPT1BfT0JTRVJWRVIKI2luY2x1ZGUgTkVXTEFOR19MT09QX09CU0VSVkVSCiNlbmRpZgojaWZuZGVmIE5MX0xPT1BfQklORAojZGVmaW5lIE5MX0xPT1BfQklORCguLi4pICgodm9pZCkwKQojZW5kaWYKI2lmbmRlZiBOTF9MT09QX1JFQUQKI2RlZmluZSBOTF9MT09QX1JFQUQoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCiNpZm5kZWYgTkxfTE9PUF9CRUZPUkUKI2RlZmluZSBOTF9MT09QX0JFRk9SRSguLi4pICgodm9pZCkwKQojZW5kaWYKI2lmbmRlZiBOTF9MT09QX0FGVEVSCiNkZWZpbmUgTkxfTE9PUF9BRlRFUiguLi4pICgodm9pZCkwKQojZW5kaWYKCiNpZm5kZWYgTkxfTE9PUF9QSEFTRQojZGVmaW5lIE5MX0xPT1BfUEhBU0UoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCiNpZm5kZWYgTkxfTE9PUF9DT05USU5VRQojZGVmaW5lIE5MX0xPT1BfQ09OVElOVUUoLi4uKSAoKHZvaWQpMCkKI2VuZGlmCgpzdGF0aWMgdm9pZCBubF9mbl8xMSh2b2lkKTsKc3RhdGljIHVpbnQ4X3QgbmxfZm5fMTAodWludDhfdCAqbmxfbG9jYWxfNCwgdWludDhfdCBubF9sb2NhbF81KTsKCnN0YXRpYyB2b2lkIG5sX2ZuXzExKHZvaWQpCnsKICAgIG5sX3R5cGVfMTAgbmxfbG9jYWxfMSA9IHsgLmYxID0gMzcsIC5mMCA9IDE0NiwgfTsKICAgICh2b2lkKW5sX2xvY2FsXzE7CiAgICBOTF9MT09QX0JJTkQoJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxKTsKICAgIG5sX3R5cGVfMTAgbmxfbG9jYWxfMiA9IHsgLmYwID0gODksIC5mMSA9IDIxMSwgfTsKICAgICh2b2lkKW5sX2xvY2FsXzI7CiAgICBOTF9MT09QX0JJTkQoJm5sX2xvY2FsXzIuZjAsICZubF9sb2NhbF8yLmYxKTsKICAgIHVpbnQ4X3QgbmxfbG9jYWxfNzsKICAgIHNpemVfdCBubF9sb29wX2NhcnJ5XzE3ID0gKHNpemVfdClVSU5UTUFYX0MoNCk7CiAgICBmb3IgKDs7KSB7CiAgICAgICAgY29uc3Qgc2l6ZV90IG5sX2xvb3BfcGhhc2VfMTcgPSBubF9sb29wX2NhcnJ5XzE3OwogICAgICAgIE5MX0xPT1BfUEhBU0UobmxfbG9vcF9waGFzZV8xNywgJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxKTsKICAgICAgICBpZiAobmxfbG9vcF9waGFzZV8xNyA9PSAoc2l6ZV90KVVJTlRNQVhfQyg0KSkgewogICAgICAgICAgICBubF9sb29wX2NhcnJ5XzE3ID0gKHNpemVfdClVSU5UTUFYX0MoMTkpOwogICAgICAgICAgICBOTF9MT09QX0NPTlRJTlVFKG5sX2xvb3BfcGhhc2VfMTcsIG5sX2xvb3BfY2FycnlfMTcsICZubF9sb2NhbF8xLmYwLCAmbmxfbG9jYWxfMS5mMSk7CiAgICAgICAgICAgIGNvbnRpbnVlOwogICAgICAgIH0KICAgICAgICBOTF9MT09QX0JFRk9SRSgmbmxfbG9jYWxfMS5mMCwgJm5sX2xvY2FsXzEuZjEsIDEpOwogICAgICAgIG5sX2xvY2FsXzcgPSBubF9mbl8xMCgmbmxfbG9jYWxfMS5mMSwgNTgpOwogICAgICAgIE5MX0xPT1BfQUZURVIoJm5sX2xvY2FsXzEuZjAsICZubF9sb2NhbF8xLmYxLCAxLCBubF9sb2NhbF83KTsKICAgICAgICBicmVhazsKICAgIH0KICAgICh2b2lkKW5sX2xvY2FsXzc7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzggPSBubF9sb2NhbF8xLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfODsKICAgIE5MX0xPT1BfUkVBRCgmbmxfbG9jYWxfMS5mMSwgbmxfbG9jYWxfOCk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzkgPSBubF9sb2NhbF8xLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfOTsKICAgIE5MX0xPT1BfUkVBRCgmbmxfbG9jYWxfMS5mMCwgbmxfbG9jYWxfOSk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzEwID0gbmxfbG9jYWxfMi5mMTsKICAgICh2b2lkKW5sX2xvY2FsXzEwOwogICAgTkxfTE9PUF9SRUFEKCZubF9sb2NhbF8yLmYxLCBubF9sb2NhbF8xMCk7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzExID0gbmxfbG9jYWxfMi5mMDsKICAgICh2b2lkKW5sX2xvY2FsXzExOwogICAgTkxfTE9PUF9SRUFEKCZubF9sb2NhbF8yLmYwLCBubF9sb2NhbF8xMSk7CiAgICB1aW50OF90IG5sX2xvYW5fcmVzdWx0XzI7CiAgICB7CiAgICAgICAgdWludDhfdCAqY29uc3QgbmxfbG9jYWxfMTIgPSAmbmxfbG9jYWxfMS5mMDsKICAgICAgICAodm9pZClubF9sb2NhbF8xMjsKICAgICAgICBjb25zdCB1aW50OF90IG5sX2NhbGxfMzQgPSBubF9mbl8xMChubF9sb2NhbF8xMiwgbmxfbG9jYWxfNyk7CiAgICAgICAgKHZvaWQpbmxfY2FsbF8zNDsKICAgICAgICBubF9sb2FuX3Jlc3VsdF8yID0gbmxfY2FsbF8zNDsKICAgIH0KICAgICh2b2lkKW5sX2xvYW5fcmVzdWx0XzI7CiAgICBjb25zdCB1aW50OF90IG5sX2xvY2FsXzE1ID0gbmxfbG9hbl9yZXN1bHRfMjsKICAgICh2b2lkKW5sX2xvY2FsXzE1OwogICAgdWludDhfdCBubF9sb2FuX3Jlc3VsdF8zOwogICAgewogICAgICAgIHVpbnQ4X3QgKmNvbnN0IG5sX2xvY2FsXzE2ID0gJm5sX2xvY2FsXzIuZjE7CiAgICAgICAgKHZvaWQpbmxfbG9jYWxfMTY7CiAgICAgICAgY29uc3QgdWludDhfdCBubF9jYWxsXzQxID0gbmxfZm5fMTAobmxfbG9jYWxfMTYsIG5sX2xvY2FsXzgpOwogICAgICAgICh2b2lkKW5sX2NhbGxfNDE7CiAgICAgICAgbmxfbG9hbl9yZXN1bHRfMyA9IG5sX2NhbGxfNDE7CiAgICB9CiAgICAodm9pZClubF9sb2FuX3Jlc3VsdF8zOwogICAgY29uc3QgdWludDhfdCBubF9sb2NhbF8xOSA9IG5sX2xvYW5fcmVzdWx0XzM7CiAgICAodm9pZClubF9sb2NhbF8xOTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjAgPSBubF9sb2NhbF8xLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfMjA7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzEuZjEsIG5sX2xvY2FsXzIwKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjEgPSBubF9sb2NhbF8xLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfMjE7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzEuZjAsIG5sX2xvY2FsXzIxKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjIgPSBubF9sb2NhbF8yLmYxOwogICAgKHZvaWQpbmxfbG9jYWxfMjI7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzIuZjEsIG5sX2xvY2FsXzIyKTsKICAgIGNvbnN0IHVpbnQ4X3QgbmxfbG9jYWxfMjMgPSBubF9sb2NhbF8yLmYwOwogICAgKHZvaWQpbmxfbG9jYWxfMjM7CiAgICBOTF9MT09QX1JFQUQoJm5sX2xvY2FsXzIuZjAsIG5sX2xvY2FsXzIzKTsKICAgICh2b2lkKTA7Cn0KCnN0YXRpYyB1aW50OF90IG5sX2ZuXzEwKHVpbnQ4X3QgKm5sX2xvY2FsXzQsIHVpbnQ4X3QgbmxfbG9jYWxfNSkKewogICAgKHZvaWQpbmxfbG9jYWxfNTsKICAgICh2b2lkKW5sX2xvY2FsXzQ7CiAgICBjb25zdCB1aW50OF90IG5sX3JlcGxhY2Vfb2xkXzIgPSAqbmxfbG9jYWxfNDsKICAgICpubF9sb2NhbF80ID0gbmxfbG9jYWxfNTsKICAgIHJldHVybiBubF9yZXBsYWNlX29sZF8yOwp9CgppbnQgbWFpbih2b2lkKQp7CiAgICBubF9mbl8xMSgpOwogICAgcmV0dXJuIDA7Cn0K"
+      },
+      "raw_transport": {
+        "binary_policy": "Executables retained in build only; exact size/SHA and command receipt transported.",
+        "file_count": 71,
+        "manifest_format": "UTF-8 compact sorted-key JSON array of FILE records, in log order, final LF",
+        "manifest_sha256": "14188aa5d10cb14d37c3ac5c5e0027e1196c022a80330cb18dca37a7ac43e2bc",
+        "raw_bytes": 2286167,
+        "status": "COMPLETE"
+      },
+      "ctest_lines": [
+        "  Test #663: r1129_c221_stutter.integration",
+        "663/663 Test #663: r1129_c221_stutter.integration ........................***Failed    0.51 sec",
+        "99% tests passed, 1 tests failed out of 663",
+        "Total Test time (real) = 272.77 sec",
+        "The following tests FAILED:"
+      ],
+      "raw_receipts": [
+        {
+          "path": "evidence/r1129/raw/initial/job-126226593065/complete-raw-bundle.json",
+          "bytes": 131408,
+          "sha256": "784516f298c506a8f81b8641117fb1e88fc839b6fd23e8b1c9f320eb03690118",
+          "git_blob_sha": "57fe8a9cfaa22e119b95529074b5a1d1aef39c08"
+        },
+        {
+          "path": "evidence/r1129/raw/initial/job-126226593065/summary.json",
+          "bytes": 4218,
+          "sha256": "eb92e30f626e290ce8d252168e6604f8e40708f1481a1b81b2690a69ef382f59",
+          "git_blob_sha": "062e36295bb469a1865ba423604827363f35db85"
+        }
+      ]
+    }
+  ],
+  "classification": "R mechanical phase-location mapping limit; no passive native observations; seven later cases NOT_RUN",
+  "earliest_actual_r_finish": "2026-11-03T21:52:07.739314+00:00"
+}
