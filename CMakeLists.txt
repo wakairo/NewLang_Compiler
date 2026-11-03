@@ -1774,3 +1774,50 @@ if(BUILD_TESTING)
     set_tests_properties(${p0_tests} PROPERTIES TIMEOUT 90
         ENVIRONMENT "PYTHONDONTWRITEBYTECODE=1;PYTHONHASHSEED=0;LC_ALL=C;ASAN_OPTIONS=detect_leaks=1:halt_on_error=1;UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1")
 endif()
+
+# Track R C203 — tests-only addition. V1 source hashes frozen in Issue #1109.
+# Registered on normal FULL5/PARTIAL and independently visible in R-FAST ctest -N.
+if(BUILD_TESTING)
+    add_test(NAME r1109_old_break_native.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1109/r1109_native.py"
+        "$<TARGET_FILE:newlangc>" positive1
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1109/sources/v1_positive_old_break.nl"
+        "d69d45adc62e2ea57bb7ed2220d51d37e1bda5c571a359225cec31a617ff9bfe" "${NEWLANG_SANITIZER}")
+    set_tests_properties(r1109_old_break_native.integration PROPERTIES TIMEOUT 90)
+    add_test(NAME r1109_same_bits_native.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1109/r1109_native.py"
+        "$<TARGET_FILE:newlangc>" positive2
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1109/sources/v1_positive_same_bits.nl"
+        "38f50db877a26044684af6e9a9f1e9bcfdcbd00ff4f5462c39b1ae06303fef36" "${NEWLANG_SANITIZER}")
+    set_tests_properties(r1109_same_bits_native.integration PROPERTIES TIMEOUT 90)
+    add_test(NAME r1109_unknown_field_reject.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1109/r1109_native.py"
+        "$<TARGET_FILE:newlangc>" negative
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1109/sources/v1_negative_unknown_field.nl"
+        "bf0e3b16656ea677e5319aaecd073fb11295081df57b74d7edb1de69b699e850" "${NEWLANG_SANITIZER}")
+    set_tests_properties(r1109_unknown_field_reject.integration PROPERTIES TIMEOUT 90)
+    add_test(NAME r1109_loan_escape_reject.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1109/r1109_native.py"
+        "$<TARGET_FILE:newlangc>" negative
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1109/sources/v1_negative_loan_escape.nl"
+        "0e3c610baf59f4e94d76f0f26fc9c95a423972d183ba2abc02fcb121512b44e3" "${NEWLANG_SANITIZER}")
+    set_tests_properties(r1109_loan_escape_reject.integration PROPERTIES TIMEOUT 90)
+    add_test(NAME r1109_nonlocal_break_reject.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1109/r1109_native.py"
+        "$<TARGET_FILE:newlangc>" negative
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1109/sources/v1_negative_nonlocal_break.nl"
+        "4eb77187c62d89f0ba5fe2c03d24aa0277f098713a48442a9b2ebd880f0ba2ce" "${NEWLANG_SANITIZER}")
+    set_tests_properties(r1109_nonlocal_break_reject.integration PROPERTIES TIMEOUT 90)
+    add_test(NAME r1109_wrong_argument_reject.integration
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1109/r1109_native.py"
+        "$<TARGET_FILE:newlangc>" negative
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1109/sources/v1_negative_wrong_argument.nl"
+        "b04b610d171b8b3a243e8e99634cea9b5171041855d62f06c0c4fcf7d4a962e0" "${NEWLANG_SANITIZER}")
+    set_tests_properties(r1109_wrong_argument_reject.integration PROPERTIES TIMEOUT 90)
+endif()

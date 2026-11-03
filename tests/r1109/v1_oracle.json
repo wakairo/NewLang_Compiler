@@ -1,0 +1,67 @@
+{
+  "canonical": "Draft17.34",
+  "target_sha": "9fddff29074b07201165b113a581f7dda780598f",
+  "positive": {
+    "v1_positive_old_break.nl": {
+      "result": 1,
+      "old": 19,
+      "original_before": [
+        19,
+        7
+      ],
+      "original_after": [
+        61,
+        7
+      ],
+      "other_before": [
+        91,
+        23
+      ],
+      "other_after": [
+        91,
+        23
+      ],
+      "helper_calls": 1,
+      "changes": 1,
+      "root_address_stable": true,
+      "other_root_distinct": true
+    },
+    "v1_positive_same_bits.nl": {
+      "result": 1,
+      "old": 31,
+      "untouched_before": [
+        31,
+        13
+      ],
+      "untouched_after": [
+        31,
+        13
+      ],
+      "altered_before": [
+        31,
+        13
+      ],
+      "altered_after": [
+        55,
+        13
+      ],
+      "helper_calls": 1,
+      "changes": 1,
+      "root_address_stable": true,
+      "other_root_distinct": true
+    }
+  },
+  "reject": {
+    "v1_negative_unknown_field.nl": "unknown field not source eligible",
+    "v1_negative_loan_escape.nl": "write ref must not escape loan scope",
+    "v1_negative_nonlocal_break.nl": "break outside active loop",
+    "v1_negative_wrong_argument.nl": "u8 Copy not ref<write,u8>; no implicit authority escalation"
+  },
+  "unexecuted_issuer_negatives": [
+    "stale current ValueFact",
+    "foreign root / wrong ProjectionId",
+    "same-bits counterfeit source issuer",
+    "illegal owner or loan authority"
+  ],
+  "observation_contract": "Real source-issued CHECK/owned, strict C17 gcc/clang O0/O2, native original root/field addresses pre/post, helper exactly once, negative no-C17; independent actual witness required, never oracle-manufactured evidence"
+}
