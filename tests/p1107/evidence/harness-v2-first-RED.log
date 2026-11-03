@@ -1,0 +1,6 @@
+01-bound CHECK 0 C17 0 
+Traceback (most recent call last):
+  File "/tmp/p1107/tests/p1107/run.py", line 74, in <module>
+    assert count==1
+           ^^^^^^^^
+AssertionError

@@ -67,10 +67,12 @@ for name, case in oracle['cases'].items():
         header.write_text('#include <stdbool.h>\n'+''.join(f'#define EXPECT_{k} {x}\n' for k,x in config.items())+(data/'observer.h').read_text())
         passive = emit.stdout.decode()
         if case['helper']:
-            pattern = r'(static uint8_t nl_fn_\d+\(uint8_t \*(nl_local_\d+), uint8_t (nl_local_\d+)\)\n\{\n)'
-            passive, count = re.subn(pattern,lambda m:m[1]+f'    p1107_helper_enter({m[2]}, {m[3]});\n',passive)
-            assert count==1
-            passive, count = re.subn(r'(^\s*\*(nl_local_\d+) = [^;]+;)$',lambda m:m[1]+f'\n    p1107_helper_changed({m[2]});',passive,flags=re.M)
+            pattern = r'(static uint8_t nl_fn_\d+\(uint8_t \*(nl_local_\d+), uint8_t (nl_local_\d+)\)\n\{\n)(.*?)(\n\})'
+            def observe_helper(m):
+                body, stores = re.subn(r'(^\s*\*(nl_local_\d+) = [^;]+;)$',lambda n:n[1]+f'\n    p1107_helper_changed({n[2]});',m[4],flags=re.M)
+                assert stores==1
+                return m[1]+f'    p1107_helper_enter({m[2]}, {m[3]});\n'+body+m[5]
+            passive, count = re.subn(pattern,observe_helper,passive,flags=re.S)
             assert count==1
         for variant, content in [('raw',emit.stdout),('passive',passive.encode())]:
             c = temp/(variant+'.c')
