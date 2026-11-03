@@ -1,0 +1,19 @@
+[ 10%] Built target newlang_source
+[ 20%] Built target newlang_diagnostic
+[ 20%] Built target newlang_syntax
+[ 20%] Built target newlang_lexer
+[ 20%] Built target newlang_checked
+[ 30%] Built target newlang_parser
+[ 80%] Built target newlang_semantic
+[ 90%] Built target newlang_checked_c_node
+[100%] Building C object CMakeFiles/p1117_safety.dir/tests/p1117/safety_v2.c.o
+/tmp/p1117/tests/p1117/safety_v2.c: In function ‘dependencies’:
+/tmp/p1117/tests/p1117/safety_v2.c:118:31: error: implicit declaration of function ‘nl_semantic_check_source’; did you mean ‘nl_semantic_check_type’? [-Werror=implicit-function-declaration]
+  118 |             NLCheckStatus s = nl_semantic_check_source(c, tree, &out, NULL);
+      |                               ^~~~~~~~~~~~~~~~~~~~~~~~
+      |                               nl_semantic_check_type
+cc1: all warnings being treated as errors
+gmake[3]: *** [CMakeFiles/p1117_safety.dir/build.make:79: CMakeFiles/p1117_safety.dir/tests/p1117/safety_v2.c.o] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:6371: CMakeFiles/p1117_safety.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:6378: CMakeFiles/p1117_safety.dir/rule] Error 2
+gmake: *** [Makefile:2123: p1117_safety] Error 2
