@@ -11,6 +11,9 @@ import tempfile
 compiler, cc, sanitizer, mode = sys.argv[1:]
 data = Path(__file__).parent
 oracle = json.loads((data / 'oracle-v1.json').read_bytes())
+extension = json.loads((data / 'oracle-extension-v2.json').read_bytes())
+assert not (oracle['cases'].keys() & extension.keys())
+oracle['cases'].update(extension)
 rows = []
 raw = Path(os.environ['P1107_RAW']) if 'P1107_RAW' in os.environ else None
 if raw:

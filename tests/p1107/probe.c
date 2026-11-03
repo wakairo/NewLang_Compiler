@@ -102,6 +102,10 @@ static bool public_copy(const NLCheckedFragment *f, NLCheckedNodeId call)
             NL_CHECK_OK);
     REQUIRE(event.field.parent == a.field.parent &&
             event.field.child == a.field.child);
+    printf("P1107 graph seal nodes=%zu node_bytes=%zu snapshot_bytes=%zu "
+           "private_view_bytes=%zu\n",
+           f->count, sizeof(NLCheckedNodeView),
+           f->count * sizeof(NLCheckedNodeView), sizeof(NLLinearBreakView));
     printf("P1107 genuine public GET/current call=%zu root=%zu child=%zu "
            "event=%zu\n",
            call, a.field.parent, a.field.child, event.node);
@@ -210,6 +214,26 @@ static bool observe(const char *path, size_t index, size_t old, size_t next)
     MUTATE(size_t, a.owner, arm_count, a.owner->arm_count + 1);
     MUTATE(const NLSource *, a.body, source, b.spelling);
     MUTATE(const NLSemanticContext *, a.body, context, b.body->context);
+    NLCheckedNodeView *loan = &a.body->nodes[params.loan - 1];
+    MUTATE(size_t, loan, loan.scope, loan->loan.scope + 1);
+    MUTATE(bool, loan, loan.body_nonescape_proved, false);
+    MUTATE(bool, loan, loan.normal_result_forwarded, false);
+    NLFunctionEntry *outer_fn = &a.context->functions[node->function - 1];
+    MUTATE(NLFunctionBody *, outer_fn, body, a.owner->body_owner);
+    MUTATE(size_t, outer_fn, result, 1);
+    MUTATE(NLCheckedKind, outer_fn, kind, NL_CHECKED_REPLACE);
+    MUTATE(bool, outer_fn, caller_effects, true);
+    MUTATE(bool, outer_fn, hidden_dependencies, true);
+    MUTATE(bool, outer_fn, owner_receiver, true);
+    MUTATE(bool, outer_fn, owner_producer, true);
+    MUTATE(bool, outer_fn, custody_recipient, true);
+    MUTATE(size_t, outer_fn, count, 0);
+    MUTATE(NLTypeId *, outer_fn, parameters, NULL);
+    NLFunctionBody *plan = outer_fn->body;
+    MUTATE(NLSyntaxTree *, plan, syntax, b.tree);
+    MUTATE(NLSource *, plan, source, b.spelling);
+    MUTATE(size_t, plan, count, 0);
+    MUTATE(char *, plan, parameter_names[0], NULL);
     NLSemanticContext *world = (NLSemanticContext *)a.body->context;
     REQUIRE(world->functions && node->function &&
             node->function <= world->function_count);

@@ -5575,6 +5575,11 @@ typedef struct NLLinearBreakProof {
     const NLSource *source;
     NLFunctionBody *plan;
     NLSyntaxTree *syntax;
+    /* Borrowed from the actual canonical call child, never a new issuer. */
+    const NLFunctionBody *callee_plan;
+    const NLSyntaxTree *callee_syntax;
+    const NLSource *callee_source;
+    const char *callee_names[2];
     NLCheckedNodeId loop, call, parent_root, body_root, root_root;
     size_t function;
     NLControlState *entry;
@@ -5675,6 +5680,23 @@ static NLCheckStatus retain_linear_break(Check *check, LoopControl *loop,
     loop->entry = NULL; /* private record now owns the genuine E checkpoint */
     if (!p->plan || !linear_callable(p, check->context))
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    for (size_t i = 1; i <= body->count; ++i) {
+        const NLCheckedNodeView *call = nl_checked_node_view(body, i);
+        if (call->kind != NL_CHECKED_REGISTERED_CALL)
+            continue;
+        const NLCheckedFragment *callee = nl_checked_call_body(body, i);
+        if (p->callee_plan || !callee || !callee->body_owner ||
+            callee->body_owner->count != 2)
+            return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        p->callee_plan = callee->body_owner;
+        p->callee_syntax = p->callee_plan->syntax;
+        p->callee_source = callee->source;
+        for (size_t j = 0; j < 2; ++j) {
+            p->callee_names[j] = p->callee_plan->parameter_names[j];
+            if (!p->callee_names[j])
+                return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+        }
+    }
     NLCheckStatus status = nl_sem_clone(check->context, &p->post);
     if (status == NL_CHECK_OK)
         status = nl_copy_state_anchor(p->post, &p->post_anchor);
@@ -5799,6 +5821,25 @@ static bool linear_world_matches(const NLSemanticContext *c,
             !c->bindings[i].name || !reference->bindings[i].name ||
             strcmp(c->bindings[i].name, reference->bindings[i].name))
             return false;
+    /* The enclosing current registry must still select the callable used by
+     * the retained inner call. A historical LOOP world alone is insufficient.
+     */
+    for (size_t i = 0; i < c->function_count; ++i) {
+        const NLFunctionEntry *a = &c->functions[i],
+                              *b = &reference->functions[i];
+        if (a->kind != b->kind || a->body != b->body || a->count != b->count ||
+            a->result != b->result || a->caller_effects != b->caller_effects ||
+            a->hidden_dependencies != b->hidden_dependencies ||
+            a->owner_receiver != b->owner_receiver ||
+            a->owner_producer != b->owner_producer ||
+            a->custody_recipient != b->custody_recipient ||
+            ((a->name == NULL) != (b->name == NULL)) ||
+            (a->name && strcmp(a->name, b->name)) ||
+            (a->count && (!a->parameters || !b->parameters ||
+                          memcmp(a->parameters, b->parameters,
+                                 a->count * sizeof(*a->parameters)))))
+            return false;
+    }
     return true;
 }
 
@@ -5830,6 +5871,13 @@ NLCheckStatus nl_linear_break_validate(const NLCheckedFragment *f,
         f->context->region_count || f->context->domain_count ||
         f->context->occurrence_count ||
         f->context->function_count != p->final->function_count)
+        return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
+    if (p->callee_plan &&
+        (p->callee_plan->syntax != p->callee_syntax ||
+         p->callee_plan->source != p->callee_source ||
+         p->callee_plan->count != 2 ||
+         p->callee_plan->parameter_names[0] != p->callee_names[0] ||
+         p->callee_plan->parameter_names[1] != p->callee_names[1]))
         return NL_CHECK_ANALYSIS_PRECISION_LIMIT;
     const NLCheckedNodeView *call = nl_checked_node_view(p->root, p->call),
                             *n = nl_checked_node_view(f, id);

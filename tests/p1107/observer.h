@@ -37,16 +37,22 @@ static void p1107_before(const uint8_t *a, const uint8_t *b, size_t index)
     assert(b == p1107_roots[EXPECT_SELECTED - 1][1]);
     assert((index ? *b : *a) == EXPECT_OLD);
     assert((index ? *a : *b) == EXPECT_SIBLING);
+    printf("P1107 live loop index=%zu fields=%u,%u addresses=%p,%p\n", index,
+           (unsigned)*a, (unsigned)*b, (const void *)a, (const void *)b);
 }
 static void p1107_after(const uint8_t *a, const uint8_t *b, size_t index,
                         uint8_t old)
 {
     assert(p1107_before_count == 1 && p1107_after_count++ == 0);
     assert(index == EXPECT_INDEX && old == EXPECT_OLD);
+    printf("P1107 actual BREAK old=%u current=%u,%u\n", (unsigned)old,
+           (unsigned)*a, (unsigned)*b);
     assert(a == p1107_roots[EXPECT_SELECTED - 1][0]);
     assert(b == p1107_roots[EXPECT_SELECTED - 1][1]);
     assert((index ? *b : *a) == EXPECT_NEW);
     assert((index ? *a : *b) == EXPECT_SIBLING);
+    printf("P1107 live loop index=%zu fields=%u,%u addresses=%p,%p\n", index,
+           (unsigned)*a, (unsigned)*b, (const void *)a, (const void *)b);
 }
 static void p1107_read(const uint8_t *p, uint8_t value)
 {
@@ -63,6 +69,7 @@ static void p1107_read(const uint8_t *p, uint8_t value)
                 ++p1107_seen[r][i];
             }
     assert(found);
+    printf("P1107 caller read=%p value=%u\n", (const void *)p, (unsigned)value);
     ++p1107_read_count;
 }
 #define NL_LOOP_BIND(a, b) p1107_bind(a, b)
@@ -77,6 +84,8 @@ static void p1107_helper_enter(const uint8_t *p, uint8_t incoming)
     assert(p1107_calls++ == 0 && p1107_changes == 0);
     assert(p == p1107_roots[EXPECT_SELECTED - 1][EXPECT_INDEX]);
     assert(*p == EXPECT_OLD && incoming == EXPECT_NEW);
+    printf("P1107 actual helper entry=%p old=%u incoming=%u\n", (const void *)p,
+           (unsigned)*p, (unsigned)incoming);
 }
 static void p1107_helper_changed(const uint8_t *p)
 {
