@@ -1,0 +1,480 @@
+{
+  "format": "R1103 C199 second-phase original RED run-log ZIP provenance receipt v1",
+  "issue": "https://github.com/wakairo/NewLang_Compiler/issues/1103",
+  "release": "https://github.com/wakairo/NewLang_Compiler/issues/1103#issuecomment-6593797521",
+  "mode": "GitHub専用ブランチ＋Actions; GitHub archive operations only; Actions/CI/compiler/native/Lean/test execution 0; P-equivalent build/runtime prohibited and unused.",
+  "canonical_main": "c6fe0b3493fb4012b07bfd8c2c17f79566b67ad4",
+  "canonical": "CURRENT_SPEC -> Draft17.34",
+  "branch": "r-archive/r1101-native-raw",
+  "parent_commit": "3d3a03a1dd54878478bbb01317b436d2d594a784",
+  "parent_tree": "990dfe8d721d6a9b89234d9885d4f29e371f4b49",
+  "archive_type": "Original GitHub-produced whole-run log ZIP returned by authenticated GET /actions/runs/{id}/logs and its redirect at capture time; distinct from original job-upload artifact ZIPs and distinct from a historical-run-time byte capture.",
+  "digest_limit": "No immutable API-published run-log ZIP digest is asserted. SHA256 values were measured on bytes received at the recorded timestamps; equality is asserted only between that capture and the saved raw Git blob.",
+  "transport": "Authenticated gh api binary stdout -> subprocess bytes -> write_bytes/read_bytes; base64.b64encode + JSON serializer to payload file, strict base64 decode verifies whole-byte equality before Git POST --input; raw Git blob GET and bytewise SHA256/length/entry/CRC comparison after final ref update. No model transcription, ZIP reconstruction, recompression or decoded-text log substitution.",
+  "triggers": "Preserved three parent workflows: compiler-ci and compiler-frontend-ci on pull_request / push main; r-preflight on push r-fast/**. Archive branch matches none. No PR, dispatch or rerun.",
+  "existing_native_artifacts_and_receipts_immutable": [
+    {
+      "path": "docs/evidence/r1101-native-raw/receipt.json",
+      "mode": "100644",
+      "sha": "4692c4cbc215c85ec2d42433a7daa62498ba3bd9",
+      "size": 34851
+    },
+    {
+      "path": "docs/evidence/r1101-native-raw/run-41556384720/artifact-13194677078-UBSan.zip",
+      "mode": "100644",
+      "sha": "062e471e8d8fb1dbeb737ab368ea380a52c71c0b",
+      "size": 12195
+    },
+    {
+      "path": "docs/evidence/r1101-native-raw/run-41556384720/artifact-13194752130-Clang.zip",
+      "mode": "100644",
+      "sha": "cd532c64c46d969ed01b487a20645fc3316abc8d",
+      "size": 12150
+    },
+    {
+      "path": "docs/evidence/r1101-native-raw/run-41556384720/artifact-13194832012-GCC.zip",
+      "mode": "100644",
+      "sha": "5d54b8a1a5d4a83f2e5ac13b51742087eda39b67",
+      "size": 12123
+    },
+    {
+      "path": "docs/evidence/r1101-native-raw/run-41556384720/artifact-13194866999-ASan.zip",
+      "mode": "100644",
+      "sha": "8b129bdc926688fbc94b1dea833074644ac77b6b",
+      "size": 12195
+    },
+    {
+      "path": "docs/evidence/r1101-native-raw/run-41556384720/receipt.json",
+      "mode": "100644",
+      "sha": "2d95a2d82c0d304c28a6265296df97c190e9aed1",
+      "size": 34184
+    },
+    {
+      "path": "docs/evidence/r1101-native-raw/run-41557456384/artifact-13194189664-ASan.zip",
+      "mode": "100644",
+      "sha": "65dd7ae892944e94c6ef8cd51d0c1c3b08fb9378",
+      "size": 12192
+    },
+    {
+      "path": "docs/evidence/r1101-native-raw/run-41557456384/artifact-13194858375-Clang.zip",
+      "mode": "100644",
+      "sha": "d343e32c68c84886109e5f2aa5ba6d392f0fcf70",
+      "size": 12149
+    },
+    {
+      "path": "docs/evidence/r1101-native-raw/run-41557456384/artifact-13195417532-GCC.zip",
+      "mode": "100644",
+      "sha": "fad7a5a3c906d82ce5265af8a01ae596f4a0f071",
+      "size": 12121
+    },
+    {
+      "path": "docs/evidence/r1101-native-raw/run-41557456384/artifact-13195447450-UBSan.zip",
+      "mode": "100644",
+      "sha": "e14a05c1f41e36b198f6b84bae0b4b496cda3524",
+      "size": 12191
+    }
+  ],
+  "run_log_archives": [
+    {
+      "run_id": 41553194373,
+      "endpoint": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/runs/41553194373/logs",
+      "GET_started_UTC": "2026-11-03T02:28:45+00:00",
+      "GET_ended_UTC": "2026-11-03T02:28:46+00:00",
+      "size": 711153,
+      "sha256": "b7904f07d989af5a11c8515f74c7d2d5863e80c8d90c1384f367a68280513a9d",
+      "git_blob_sha": "7de3ba0d465b9e19b145d5fa563663af1667ea65",
+      "zip_entries": [
+        {
+          "name": "0_UBSan.txt",
+          "uncompressed_bytes": 1574617,
+          "compressed_bytes": 141808,
+          "crc32": "5748f6e9",
+          "compression": 8
+        },
+        {
+          "name": "UBSan/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 288,
+          "crc32": "bff736d6",
+          "compression": 8
+        },
+        {
+          "name": "1_GCC Release.txt",
+          "uncompressed_bytes": 1554559,
+          "compressed_bytes": 139683,
+          "crc32": "73fc5a67",
+          "compression": 8
+        },
+        {
+          "name": "GCC Release/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 292,
+          "crc32": "4609906a",
+          "compression": 8
+        },
+        {
+          "name": "2_Clang.txt",
+          "uncompressed_bytes": 1576032,
+          "compressed_bytes": 142904,
+          "crc32": "fae4540f",
+          "compression": 8
+        },
+        {
+          "name": "Clang/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 289,
+          "crc32": "f83dbe73",
+          "compression": 8
+        },
+        {
+          "name": "3_GCC.txt",
+          "uncompressed_bytes": 1554529,
+          "compressed_bytes": 141704,
+          "crc32": "7f024568",
+          "compression": 8
+        },
+        {
+          "name": "GCC/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 291,
+          "crc32": "c533ee07",
+          "compression": 8
+        },
+        {
+          "name": "4_ASan.txt",
+          "uncompressed_bytes": 1574392,
+          "compressed_bytes": 142385,
+          "crc32": "79b4d2f4",
+          "compression": 8
+        },
+        {
+          "name": "ASan/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 285,
+          "crc32": "0f7baa3c",
+          "compression": 8
+        }
+      ],
+      "CRC": "all OK",
+      "payload_roundtrip_byte_equal": true,
+      "valid_original_ZIP_received": true,
+      "path": "docs/evidence/r1101-native-raw/red-run-logs/run-41553194373-attempt1-logs.zip",
+      "event": "pull_request",
+      "attempt": 1,
+      "head_sha": "cb353fcc0f08c0bdd58c8745240c6aa727143249",
+      "head_branch": "r-fast/r1101-loop-break-native",
+      "run_status": "completed",
+      "run_conclusion": "failure",
+      "run_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41553194373",
+      "workflow_path": ".github/workflows/compiler-ci.yml",
+      "jobs": [
+        {
+          "id": 125645621309,
+          "name": "Clang",
+          "head_sha": "cb353fcc0f08c0bdd58c8745240c6aa727143249",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T00:29:21Z",
+          "completed_at": "2026-11-03T00:32:16Z"
+        },
+        {
+          "id": 125645621482,
+          "name": "ASan",
+          "head_sha": "cb353fcc0f08c0bdd58c8745240c6aa727143249",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T00:29:21Z",
+          "completed_at": "2026-11-03T00:36:55Z"
+        },
+        {
+          "id": 125645621554,
+          "name": "GCC",
+          "head_sha": "cb353fcc0f08c0bdd58c8745240c6aa727143249",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T00:29:21Z",
+          "completed_at": "2026-11-03T00:32:38Z"
+        },
+        {
+          "id": 125645621563,
+          "name": "GCC Release",
+          "head_sha": "cb353fcc0f08c0bdd58c8745240c6aa727143249",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T00:29:21Z",
+          "completed_at": "2026-11-03T00:31:51Z"
+        },
+        {
+          "id": 125645621595,
+          "name": "UBSan",
+          "head_sha": "cb353fcc0f08c0bdd58c8745240c6aa727143249",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T00:29:21Z",
+          "completed_at": "2026-11-03T00:34:32Z"
+        }
+      ],
+      "origin_digest_authority": "Locally measured SHA256 of GitHub-produced binary ZIP received at the recorded GET timestamp. No immutable API-published ZIP digest asserted."
+    },
+    {
+      "run_id": 41553194008,
+      "endpoint": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/runs/41553194008/logs",
+      "GET_started_UTC": "2026-11-03T02:28:46+00:00",
+      "GET_ended_UTC": "2026-11-03T02:28:47+00:00",
+      "size": 150117,
+      "sha256": "3877c5f7543e3d3d4903dffaac622b25f298e4adc25c8a5f143b9ec4c406e18e",
+      "git_blob_sha": "5d2fc49cf6d1415c0b3a1050cbc7380e814d76b2",
+      "zip_entries": [
+        {
+          "name": "0_Production CHECK + C17_native reference (NO LLVM; PARTIAL).txt",
+          "uncompressed_bytes": 1590558,
+          "compressed_bytes": 149339,
+          "crc32": "73190a63",
+          "compression": 8
+        },
+        {
+          "name": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/system.txt",
+          "uncompressed_bytes": 610,
+          "compressed_bytes": 306,
+          "crc32": "d7abc97e",
+          "compression": 8
+        }
+      ],
+      "CRC": "all OK",
+      "payload_roundtrip_byte_equal": true,
+      "valid_original_ZIP_received": true,
+      "path": "docs/evidence/r1101-native-raw/red-run-logs/run-41553194008-attempt1-logs.zip",
+      "event": "pull_request",
+      "attempt": 1,
+      "head_sha": "cb353fcc0f08c0bdd58c8745240c6aa727143249",
+      "head_branch": "r-fast/r1101-loop-break-native",
+      "run_status": "completed",
+      "run_conclusion": "failure",
+      "run_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41553194008",
+      "workflow_path": ".github/workflows/compiler-frontend-ci.yml",
+      "jobs": [
+        {
+          "id": 125645619130,
+          "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+          "head_sha": "cb353fcc0f08c0bdd58c8745240c6aa727143249",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T00:29:20Z",
+          "completed_at": "2026-11-03T00:32:33Z"
+        }
+      ],
+      "origin_digest_authority": "Locally measured SHA256 of GitHub-produced binary ZIP received at the recorded GET timestamp. No immutable API-published ZIP digest asserted."
+    },
+    {
+      "run_id": 41556392239,
+      "endpoint": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/runs/41556392239/logs",
+      "GET_started_UTC": "2026-11-03T02:28:47+00:00",
+      "GET_ended_UTC": "2026-11-03T02:28:48+00:00",
+      "size": 190350,
+      "sha256": "c25e592b8f919350685354539b98d62385688fe0b441701ffde52a19100ad0f3",
+      "git_blob_sha": "7f1378bc2a4c79cc76dc34e76ee40e2a634453de",
+      "zip_entries": [
+        {
+          "name": "0_GCC.txt",
+          "uncompressed_bytes": 207547,
+          "compressed_bytes": 37215,
+          "crc32": "51e00618",
+          "compression": 8
+        },
+        {
+          "name": "GCC/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 292,
+          "crc32": "de21fc5a",
+          "compression": 8
+        },
+        {
+          "name": "1_ASan.txt",
+          "uncompressed_bytes": 207645,
+          "compressed_bytes": 38280,
+          "crc32": "6ab4353b",
+          "compression": 8
+        },
+        {
+          "name": "ASan/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 289,
+          "crc32": "7a33654a",
+          "compression": 8
+        },
+        {
+          "name": "2_UBSan.txt",
+          "uncompressed_bytes": 207652,
+          "compressed_bytes": 37237,
+          "crc32": "0f282f31",
+          "compression": 8
+        },
+        {
+          "name": "UBSan/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 293,
+          "crc32": "7a2c5f64",
+          "compression": 8
+        },
+        {
+          "name": "3_Clang.txt",
+          "uncompressed_bytes": 209551,
+          "compressed_bytes": 37871,
+          "crc32": "ee40d09c",
+          "compression": 8
+        },
+        {
+          "name": "Clang/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 288,
+          "crc32": "3c50eb42",
+          "compression": 8
+        },
+        {
+          "name": "4_GCC Release.txt",
+          "uncompressed_bytes": 207494,
+          "compressed_bytes": 37077,
+          "crc32": "2b7dffe0",
+          "compression": 8
+        },
+        {
+          "name": "GCC Release/system.txt",
+          "uncompressed_bytes": 589,
+          "compressed_bytes": 284,
+          "crc32": "9817efe6",
+          "compression": 8
+        }
+      ],
+      "CRC": "all OK",
+      "payload_roundtrip_byte_equal": true,
+      "valid_original_ZIP_received": true,
+      "path": "docs/evidence/r1101-native-raw/red-run-logs/run-41556392239-attempt1-logs.zip",
+      "event": "pull_request",
+      "attempt": 1,
+      "head_sha": "f457c0d5a4861adc67ee11252d765ab351bba898",
+      "head_branch": "r-fast/r1101-loop-break-native",
+      "run_status": "completed",
+      "run_conclusion": "failure",
+      "run_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41556392239",
+      "workflow_path": ".github/workflows/compiler-ci.yml",
+      "jobs": [
+        {
+          "id": 125656199844,
+          "name": "Clang",
+          "head_sha": "f457c0d5a4861adc67ee11252d765ab351bba898",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T00:56:51Z",
+          "completed_at": "2026-11-03T01:00:56Z"
+        },
+        {
+          "id": 125656200002,
+          "name": "GCC Release",
+          "head_sha": "f457c0d5a4861adc67ee11252d765ab351bba898",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T00:56:51Z",
+          "completed_at": "2026-11-03T00:59:54Z"
+        },
+        {
+          "id": 125656200029,
+          "name": "UBSan",
+          "head_sha": "f457c0d5a4861adc67ee11252d765ab351bba898",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T00:56:41Z",
+          "completed_at": "2026-11-03T01:00:34Z"
+        },
+        {
+          "id": 125656200150,
+          "name": "ASan",
+          "head_sha": "f457c0d5a4861adc67ee11252d765ab351bba898",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T00:56:41Z",
+          "completed_at": "2026-11-03T01:05:05Z"
+        },
+        {
+          "id": 125656200289,
+          "name": "GCC",
+          "head_sha": "f457c0d5a4861adc67ee11252d765ab351bba898",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T00:56:41Z",
+          "completed_at": "2026-11-03T01:00:24Z"
+        }
+      ],
+      "origin_digest_authority": "Locally measured SHA256 of GitHub-produced binary ZIP received at the recorded GET timestamp. No immutable API-published ZIP digest asserted."
+    },
+    {
+      "run_id": 41556392219,
+      "endpoint": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/runs/41556392219/logs",
+      "GET_started_UTC": "2026-11-03T02:28:48+00:00",
+      "GET_ended_UTC": "2026-11-03T02:28:49+00:00",
+      "size": 45233,
+      "sha256": "4d0223023241903a0a3300c0d1f41d89645d0508115047ddd4fa6293c8254d5e",
+      "git_blob_sha": "896dee886a20a081ed2b5917f733f44e47277ce3",
+      "zip_entries": [
+        {
+          "name": "0_Production CHECK + C17_native reference (NO LLVM; PARTIAL).txt",
+          "uncompressed_bytes": 244191,
+          "compressed_bytes": 44467,
+          "crc32": "3afe290b",
+          "compression": 8
+        },
+        {
+          "name": "Production CHECK + C17_native reference (NO LLVM; PARTIAL)/system.txt",
+          "uncompressed_bytes": 610,
+          "compressed_bytes": 294,
+          "crc32": "312e3eeb",
+          "compression": 8
+        }
+      ],
+      "CRC": "all OK",
+      "payload_roundtrip_byte_equal": true,
+      "valid_original_ZIP_received": true,
+      "path": "docs/evidence/r1101-native-raw/red-run-logs/run-41556392219-attempt1-logs.zip",
+      "event": "pull_request",
+      "attempt": 1,
+      "head_sha": "f457c0d5a4861adc67ee11252d765ab351bba898",
+      "head_branch": "r-fast/r1101-loop-break-native",
+      "run_status": "completed",
+      "run_conclusion": "failure",
+      "run_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41556392219",
+      "workflow_path": ".github/workflows/compiler-frontend-ci.yml",
+      "jobs": [
+        {
+          "id": 125656199748,
+          "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+          "head_sha": "f457c0d5a4861adc67ee11252d765ab351bba898",
+          "run_attempt": 1,
+          "status": "completed",
+          "conclusion": "failure",
+          "started_at": "2026-11-03T00:56:41Z",
+          "completed_at": "2026-11-03T01:01:32Z"
+        }
+      ],
+      "origin_digest_authority": "Locally measured SHA256 of GitHub-produced binary ZIP received at the recorded GET timestamp. No immutable API-published ZIP digest asserted."
+    }
+  ],
+  "execution_counts": {
+    "Actions": 0,
+    "CI": 0,
+    "compiler_native": 0,
+    "Lean": 0,
+    "tests": 0
+  },
+  "acceptance_boundary": "Single append-only commit, no source/fixture/oracle/canonical/previous archive file modifications. Post-ref raw equality result is reported to Issue #1103; Coordination alone accepts/closes residual scope.",
+  "value_alignment_risk": "Raw RED provenance preservation is audit support only; author+ordinary-safe-caller UB-prevention audit/re-audit locality versus well-factored C is UNMEASURED. Product GO #624 PAUSED, H1 #268 HOLD. No READY/PR/merge/Product GO."
+}
