@@ -324,12 +324,26 @@ static bool bool_quantity_origin(const NLCheckedFragment *f, NLCheckedNodeId id,
  * the cached static truth. Copy locals must lead back to that same operation.
  * An optional checked IF initializer admits only that scalar expression
  * position; it supplies no effect/ABI or root-identity evidence. */
-static bool boolean_scalar_at(const NLCheckedFragment *f, NLCheckedNodeId id,
-                              V0Program *p, NLCheckedNodeId condition_of)
+static bool bool_loop_quantity_origin(const NLCheckedFragment *f,
+                                      NLCheckedNodeId id, V0Program *p)
+{
+    V0Program operands = *p;
+    NLCheckedNodeId loop = 0;
+    if (!quantity_scalar_impl(f, id, &operands, true, &loop) || !loop)
+        return false;
+    while (id && id != loop)
+        id = bool_source_origin(f, id);
+    return id == loop && bool_root_value(f, loop);
+}
+
+static bool boolean_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
+                                V0Program *p, NLCheckedNodeId condition_of,
+                                bool allow_loop)
 {
     const NLSemanticContext *c = nl_checked_context(f);
     const NLTypeId boolean = nl_semantic_core_type(c, NL_TYPE_BOOL);
     bool first = true;
+    bool known = true;
     size_t expected = 0;
     while (id != 0) {
         const NLCheckedNodeView *v = nl_checked_node_view(f, id);
@@ -347,16 +361,18 @@ static bool boolean_scalar_at(const NLCheckedFragment *f, NLCheckedNodeId id,
             v->type != boolean || v->terminates || v->result_count != 1 ||
             v->results[0].type != boolean ||
             !nl_semantic_value_view(c, v->results[0].value, &value) ||
-            value.type != boolean || !value.scalar_known ||
-            value.scalar_value > 1 ||
+            value.type != boolean || (!value.scalar_known && !allow_loop) ||
+            (value.scalar_known && value.scalar_value > 1) ||
             value.dependencies != NL_DEPENDENCY_FREE ||
             value.value_dependency_count != 0 || value.domain != 0 ||
             value.allocation_region != 0 || value.reference.place != 0 ||
             value.reference_count != 0 || value.slot_place != 0 ||
             value.field_count != 0 || value.sum_owner != 0 ||
-            (!first && value.scalar_value != expected))
+            (!first && (value.scalar_known != known ||
+                        (known && value.scalar_value != expected))))
             return false;
-        expected = value.scalar_value;
+        known = value.scalar_known;
+        expected = known ? value.scalar_value : 0;
         first = false;
         if (v->kind == NL_CHECKED_USIZE_EQUALITY ||
             v->kind == NL_CHECKED_USIZE_LESS_THAN) {
@@ -380,15 +396,26 @@ static bool boolean_scalar_at(const NLCheckedFragment *f, NLCheckedNodeId id,
                 memcmp(op.bytes, less ? "<" : "==", op.length) != 0 ||
                 left->span.end_byte > v->name.start_byte ||
                 v->name.end_byte > right->span.start_byte ||
-                !bool_quantity_origin(f, v->first_argument, p) ||
-                !bool_quantity_origin(f, left->next_argument, p) ||
                 !nl_semantic_value_view(c, left->results[0].value, &a) ||
                 !nl_semantic_value_view(c, right->results[0].value, &b) ||
                 v->results[0].value <= left->results[0].value ||
                 v->results[0].value <= right->results[0].value ||
-                !v->has_scalar_result || !v->scalar_result.known ||
+                !v->has_scalar_result || v->scalar_result.known != known ||
                 v->scalar_result.type != boolean ||
-                v->scalar_result.value != expected)
+                (known && v->scalar_result.value != expected))
+                return false;
+            if (!known) {
+                /* A real same-caller loop result against a source literal;
+                 * cached Unknown bits never choose an arm or grant rights. */
+                return (left->kind == NL_CHECKED_USIZE_LITERAL &&
+                        bool_quantity_origin(f, v->first_argument, p) &&
+                        bool_loop_quantity_origin(f, left->next_argument, p)) ||
+                       (right->kind == NL_CHECKED_USIZE_LITERAL &&
+                        bool_quantity_origin(f, left->next_argument, p) &&
+                        bool_loop_quantity_origin(f, v->first_argument, p));
+            }
+            if (!bool_quantity_origin(f, v->first_argument, p) ||
+                !bool_quantity_origin(f, left->next_argument, p))
                 return false;
             /* Consistency only; emit the original guest operands below. */
             const bool truth = less ? a.scalar_value < b.scalar_value
@@ -401,6 +428,26 @@ static bool boolean_scalar_at(const NLCheckedFragment *f, NLCheckedNodeId id,
         id = bool_source_origin(f, id);
     }
     return false;
+}
+
+static bool boolean_scalar_at(const NLCheckedFragment *f, NLCheckedNodeId id,
+                              V0Program *p, NLCheckedNodeId condition_of)
+{
+    return boolean_scalar_impl(f, id, p, condition_of, false);
+}
+
+/* Explicit ordinary root consumer; the known-only entry above remains used
+ * by the other profiles. Both-normal field IFs additionally require their
+ * existing public current/join validator before this condition is consumed. */
+static bool runtime_boolean_scalar_at(const NLCheckedFragment *f,
+                                      NLCheckedNodeId id, V0Program *p,
+                                      NLCheckedNodeId condition_of)
+{
+    if (boolean_scalar_at(f, id, p, condition_of))
+        return true;
+    return !p->u8_export && !p->scalar_depth && !p->formal_body &&
+           !p->unit_parameters &&
+           boolean_scalar_impl(f, id, p, condition_of, true);
 }
 
 static bool boolean_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
@@ -2285,11 +2332,14 @@ static bool v0_validate_block(const NLCheckedFragment *fragment,
 }
 
 static bool if_original_carrier(const NLCheckedFragment *f, NLCheckedNodeId id,
-                                const NLIfFieldView *proof, V0Program *p)
+                                const NLIfFieldView *proof, V0Program *p,
+                                bool runtime_condition)
 {
     const NLIfFieldView view = *proof;
     if (p->u8_export || p->scalar_depth || !avs_shape(f, view.nominal, p) ||
-        !boolean_scalar_at(f, view.condition, p, id))
+        !(runtime_condition
+              ? runtime_boolean_scalar_at(f, view.condition, p, id)
+              : boolean_scalar_at(f, view.condition, p, id)))
         return false;
     /* The formal pointer maps to the caller original only through a validated
      * actual->formal handoff. No callee constructor or copied byte is a
@@ -2334,7 +2384,7 @@ static bool if_field_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
     NLCheckStatus status = nl_checked_if_field_validate(f, id, &v);
     if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
         p->copy_body_status = status;
-    return status == NL_CHECK_OK && if_original_carrier(f, id, &v, p);
+    return status == NL_CHECK_OK && if_original_carrier(f, id, &v, p, true);
 }
 static bool if_return_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
                                 V0Program *p)
@@ -2345,7 +2395,8 @@ static bool if_return_selection(const NLCheckedFragment *f, NLCheckedNodeId id,
     NLCheckStatus status = nl_checked_if_return_validate(f, id, &v);
     if (status == NL_CHECK_OUT_OF_MEMORY || status == NL_CHECK_RESOURCE_LIMIT)
         p->copy_body_status = status;
-    return status == NL_CHECK_OK && if_original_carrier(f, id, &v.field, p);
+    return status == NL_CHECK_OK &&
+           if_original_carrier(f, id, &v.field, p, false);
 }
 static bool copy_or_field_if(const NLCheckedFragment *f, NLCheckedNodeId id,
                              V0Program *p)
@@ -2446,7 +2497,8 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                ((v0_unit_loan_binding(fragment, view) &&
                  v0_validate_node(fragment, view->initializer, program)) ||
                 loop_quantity_scalar(fragment, view->initializer, program) ||
-                boolean_scalar(fragment, view->initializer, program) ||
+                runtime_boolean_scalar_at(fragment, view->initializer, program,
+                                          0) ||
                 (receiver->type == program->u8 &&
                  ((initializer->kind == NL_CHECKED_IF &&
                    copy_or_field_if(fragment, view->initializer, program)) ||
