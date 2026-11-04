@@ -13,7 +13,7 @@ import traceback
 CLI, PROBE, CC, CC_ID, SAN, ROOT, OUT, BUILD_TYPE, FRONTEND = sys.argv[1:]
 ROOT = Path(ROOT).resolve()
 OUT = Path(OUT).resolve()
-OUT.mkdir(parents=True, exist_ok=True)
+OUT.mkdir(parents=True, exist_ok=False)
 P_HEAD = "773643d2709a5e5db24650069d67c0d9032fefb0"
 ORACLE_SHA = "2e29cceb34c9e6fa323bbcb45629a076253aeb48241b0fad3d5259ef3f0e8176"
 records = []
@@ -22,7 +22,9 @@ summary = {
     "schema": "r1144-observation-v1",
     "status": "NOT_RUN",
     "v1": "NOT_RUN; original oracle retained; known CLI/source-profile boundary",
-    "v2": "post-freeze interface-calibrated; not fresh blind",
+    "v2": ("pre-execution frozen independent cohort / "
+           "post-freeze interface-calibrated V2 / "
+           "incidental old-P formatter exposure after freeze"),
     "first_red": None,
     "cases": [],
     "compiler": CC,
@@ -61,7 +63,8 @@ def save(name, raw):
         raw = raw.encode()
     path = OUT / name
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_bytes(raw)
+    with path.open("xb") as stream:
+        stream.write(raw)
     files[name] = {"sha256": sha(raw), "bytes": len(raw),
                    "base64": base64.b64encode(raw).decode()}
     return path
@@ -249,14 +252,18 @@ def negative(row, state):
                     "HOST_ERROR"),
                 row["id"] + ": resource failure is not semantic rejection")
     else:
-        require(observed["accepted"] or
-                (observed["stage"] in ("registration", "CHECK") and
-                 observed["status"] in (
-                     "SEMANTIC_ERROR", "ANALYSIS_PRECISION_LIMIT")),
-                row["id"] + ": legal precision witness rejected outside CHECK")
+        precision_codes = {
+            "USIZE-SUBTRACTION-PRECISION", "P14-LOOP-PRECISION"}
+        precision = (observed["stage"] in ("registration", "CHECK") and
+                     observed["status"] == "ANALYSIS_PRECISION_LIMIT" and
+                     observed.get("code") in precision_codes)
+        require(observed["accepted"] or precision,
+                row["id"] + ": refusal is not the frozen quantity/cyclic precision boundary")
         state["interpretation"] = (
-            "Canonical legal [2,0]; rejection is a finite precision boundary, "
-            "not an invalid-program result. Raw diagnostic retained.")
+            "Canonical legal [2,0]; accepted by CHECK; native deliberately NOT_RUN."
+            if observed["accepted"] else
+            "Canonical legal [2,0]; exact quantity/cyclic precision refusal; "
+            "not an invalid-program result. Raw status/code retained.")
     state.update(status="PASS", stage="complete")
 
 
@@ -265,7 +272,8 @@ def emit_bundle():
     serialized = json.dumps({"summary": summary, "commands": records,
                              "files": files}, sort_keys=True,
                             separators=(",", ":")).encode()
-    (OUT / "raw-evidence.json").write_bytes(serialized)
+    with (OUT / "raw-evidence.json").open("xb") as stream:
+        stream.write(serialized)
     encoded = base64.b64encode(serialized).decode()
     digest = sha(serialized)
     token = str(os.environ.get("GITHUB_RUN_ID", "unknown"))

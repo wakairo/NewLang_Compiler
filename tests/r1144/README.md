@@ -96,3 +96,21 @@ conservative quantity-proof rejection is a precision boundary, not evidence
 that the program is invalid. No later loan/barrier observation is inferred
 from an earlier rejection. Audit locality remains UNMEASURED, GO624 PAUSED,
 H1 HOLD, and P1036-PR1050 STOP.
+
+## Pre-execution apparatus receipts
+
+C adjudication of the incidental formatter output:
+https://github.com/wakairo/NewLang_Compiler/issues/1144#issuecomment-6622971928 .
+The exact V2 evidence label is: **pre-execution frozen independent cohort /
+post-freeze interface-calibrated V2 / incidental old-P formatter exposure after
+freeze**. The exposure occurred after both freezes and the initial R apparatus
+commit. It is not retroactively described as approved before it occurred.
+
+Before any semantic execution, the binding-unit/typed-receiver probe contract
+was corrected, independently confirming the existing fixed API. N6 admits
+either CHECK acceptance or ANALYSIS_PRECISION_LIMIT in registration/CHECK with
+the fixed quantity/cyclic diagnostic USIZE-SUBTRACTION-PRECISION or
+P14-LOOP-PRECISION. An arbitrary SEMANTIC_ERROR is not classified as precision.
+All actual status/code fields are preserved. The evidence directory is created
+exclusively, and evidence files use exclusive creation to prevent overwriting a
+FIRST record. These are R apparatus repairs; the frozen oracles are unchanged.

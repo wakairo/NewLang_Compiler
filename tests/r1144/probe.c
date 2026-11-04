@@ -131,8 +131,8 @@ static bool inspect(const NLCheckedFragment *entry)
         loop->break_edges != 1 || loop->return_edges != 0 ||
         nl_checked_loop_body(body, after->initializer) == NULL ||
         !typed_binding(body, after, quantity) ||
-        !typed_binding(body, copy, quantity) ||
-        copy_value == NULL || copy_value->kind != NL_CHECKED_IDENTIFIER ||
+        !typed_binding(body, copy, quantity) || copy_value == NULL ||
+        copy_value->kind != NL_CHECKED_IDENTIFIER ||
         copy_value->symbol != after->symbol ||
         copy_value->value_use != NL_VALUE_COPIED || call == NULL ||
         call->kind != NL_CHECKED_REGISTERED_CALL || call->argument_count != 1 ||
