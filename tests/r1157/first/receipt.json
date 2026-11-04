@@ -1,0 +1,318 @@
+{
+  "capsules": [
+    {
+      "job": 126550677578,
+      "label": "Clang",
+      "run": 41823033053,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "sha256": "4a6a62e9d434f14dcf67572bb0ccd2e2136c62854da31a0cee983f66ff877dd6",
+      "bytes": 9236,
+      "actual_checkout": "e48455af4f08d4a2be5aa74ef54adcc65bc5ba63",
+      "first_failure": {
+        "layer": "unclassified; inspect raw command/evidence before repair",
+        "error": "STOP negative read_mode_write: expected structured rejection"
+      },
+      "negative_result": {
+        "non_bool_condition": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-CONDITION",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "comparison_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "USIZE-LESS-THAN-TYPE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "replacement_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P3-TYPE-MISMATCH",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "read_mode_write": {
+          "status": 3,
+          "actual_layer": "unclassified",
+          "diagnostic": null,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "positives": "NOT_REACHED"
+    },
+    {
+      "job": 126550677780,
+      "label": "GCC-Release",
+      "run": 41823033053,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "sha256": "55b94abdf7bd11510cc41346329cd70b866bf49c6788a78cb0855093b6399476",
+      "bytes": 9274,
+      "actual_checkout": "e48455af4f08d4a2be5aa74ef54adcc65bc5ba63",
+      "first_failure": {
+        "layer": "unclassified; inspect raw command/evidence before repair",
+        "error": "STOP negative read_mode_write: expected structured rejection"
+      },
+      "negative_result": {
+        "non_bool_condition": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-CONDITION",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "comparison_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "USIZE-LESS-THAN-TYPE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "replacement_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P3-TYPE-MISMATCH",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "read_mode_write": {
+          "status": 3,
+          "actual_layer": "unclassified",
+          "diagnostic": null,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "positives": "NOT_REACHED"
+    },
+    {
+      "job": 126550677850,
+      "label": "UBSan",
+      "run": 41823033053,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "sha256": "368a084e1cb6d08c323e5e1cefcd276b6ead08b1f5afcd277fcde5b9f82ea840",
+      "bytes": 9247,
+      "actual_checkout": "e48455af4f08d4a2be5aa74ef54adcc65bc5ba63",
+      "first_failure": {
+        "layer": "unclassified; inspect raw command/evidence before repair",
+        "error": "STOP negative read_mode_write: expected structured rejection"
+      },
+      "negative_result": {
+        "non_bool_condition": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-CONDITION",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "comparison_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "USIZE-LESS-THAN-TYPE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "replacement_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P3-TYPE-MISMATCH",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "read_mode_write": {
+          "status": 3,
+          "actual_layer": "unclassified",
+          "diagnostic": null,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "positives": "NOT_REACHED"
+    },
+    {
+      "job": 126550677909,
+      "label": "ASan",
+      "run": 41823033053,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "sha256": "8218e214b2c37b649318b627cbd011a0ff0959a08a36e933ac929d66bd24dfe8",
+      "bytes": 9260,
+      "actual_checkout": "e48455af4f08d4a2be5aa74ef54adcc65bc5ba63",
+      "first_failure": {
+        "layer": "unclassified; inspect raw command/evidence before repair",
+        "error": "STOP negative read_mode_write: expected structured rejection"
+      },
+      "negative_result": {
+        "non_bool_condition": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-CONDITION",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "comparison_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "USIZE-LESS-THAN-TYPE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "replacement_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P3-TYPE-MISMATCH",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "read_mode_write": {
+          "status": 3,
+          "actual_layer": "unclassified",
+          "diagnostic": null,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "positives": "NOT_REACHED"
+    },
+    {
+      "job": 126550677915,
+      "label": "GCC",
+      "run": 41823033053,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "sha256": "397b9293fc5e5b9c24519d9f7c99252be4f42a8fd51595f7546cd4ef8bfc7cb4",
+      "bytes": 9234,
+      "actual_checkout": "e48455af4f08d4a2be5aa74ef54adcc65bc5ba63",
+      "first_failure": {
+        "layer": "unclassified; inspect raw command/evidence before repair",
+        "error": "STOP negative read_mode_write: expected structured rejection"
+      },
+      "negative_result": {
+        "non_bool_condition": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-CONDITION",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "comparison_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "USIZE-LESS-THAN-TYPE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "replacement_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P3-TYPE-MISMATCH",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "read_mode_write": {
+          "status": 3,
+          "actual_layer": "unclassified",
+          "diagnostic": null,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "positives": "NOT_REACHED"
+    },
+    {
+      "job": 126550677630,
+      "label": "PARTIAL",
+      "run": 41823032979,
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "sha256": "5ec1b7549d5ee7796585989a5326a2d19d38b1bc5c1345d0ec7ad05d0b52d71b",
+      "bytes": 9266,
+      "actual_checkout": "e48455af4f08d4a2be5aa74ef54adcc65bc5ba63",
+      "first_failure": {
+        "layer": "unclassified; inspect raw command/evidence before repair",
+        "error": "STOP negative read_mode_write: expected structured rejection"
+      },
+      "negative_result": {
+        "non_bool_condition": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P13-IF-CONDITION",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "comparison_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "USIZE-LESS-THAN-TYPE",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "replacement_type_mismatch": {
+          "status": 3,
+          "actual_layer": "semantic",
+          "diagnostic": "P3-TYPE-MISMATCH",
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        },
+        "read_mode_write": {
+          "status": 3,
+          "actual_layer": "unclassified",
+          "diagnostic": null,
+          "owned": "NOT_REACHED",
+          "C17": "NOT_REACHED",
+          "native": "NOT_REACHED"
+        }
+      },
+      "positives": "NOT_REACHED"
+    }
+  ],
+  "failures": [
+    "p1088_evidence.unit",
+    "p982_freeze.unit",
+    "p990_new_native.integration",
+    "p1107_evidence_history.unit",
+    "p1117_evidence_history.unit",
+    "p1098_evidence_history.unit",
+    "p990_freeze_protocol.unit",
+    "p1045_two_original_native.integration",
+    "p1055_old_origin_0.integration",
+    "p1058_closed_h_0.integration",
+    "p1062_h_body_0.integration",
+    "r1157_runtime_if.independent"
+  ]
+}

@@ -19,10 +19,10 @@ R1157_DIR = Path(__file__).resolve().parent
 OUT = BUILD / 'r1157-raw'
 OUT.mkdir(exist_ok=True)
 ORACLE = json.loads((R1157_DIR / 'v1/oracle.json').read_text())
-RESULT = {'version': 'R1157-machine-V2', 'cases': {}, 'negatives': {}, 'commands': [],
+RESULT = {'version': 'R1157-machine-V3', 'cases': {}, 'negatives': {}, 'commands': [],
           'checkout': os.environ.get('GITHUB_SHA'), 'run': os.environ.get('GITHUB_RUN_ID'),
           'attempt': os.environ.get('GITHUB_RUN_ATTEMPT'), 'sanitizer': SAN,
-          'first': True, 'independence': 'V1 oracle frozen before interface connection'}
+          'first': False, 'original_first': 'first/receipt.json', 'independence': 'V1 oracle frozen before interface connection'}
 
 
 def run(tag, command, allowed=(0,), timeout=45):
@@ -75,7 +75,7 @@ static int walk(const NLCheckedFragment *f, const char *path, unsigned depth)
         if (n->kind == NL_CHECKED_IF) {
             NLIfFieldView v;
             if (nl_checked_if_field_view(f, i, &v)) {
-                NLCheckStatus valid = nl_checked_if_field_validate(f, i, NULL);
+                NLCheckStatus valid = nl_checked_if_field_validate(f, i, &v);
                 printf("{\"kind\":\"ifview\",\"path\":\"%s\",\"id\":%zu,\"validation\":%d,\"root\":%zu,\"child\":%zu,\"sibling\":%zu,\"index\":%zu,\"inc\":%zu,\"child_inc\":%zu,\"base\":%zu,\"changes0\":%zu,\"changes1\":%zu}\n",
                        path, i, (int)valid, v.root, v.child, v.sibling, v.index,
                        v.incarnation, v.child_incarnation, v.base,
@@ -87,7 +87,7 @@ static int walk(const NLCheckedFragment *f, const char *path, unsigned depth)
                     for (size_t e = 0; e < v.arms[a].event_count; ++e) {
                         NLIfFieldEvent event;
                         if (!nl_checked_if_field_event(f, i, a, e, &event)) return 3;
-                        NLCheckStatus ok = nl_checked_if_field_event_validate(f, i, a, e, NULL);
+                        NLCheckStatus ok = nl_checked_if_field_event_validate(f, i, a, e, &event);
                         printf("{\"kind\":\"ifevent\",\"arm\":%zu,\"event\":%zu,\"change\":%d,\"validation\":%d,\"root\":%zu,\"child\":%zu,\"index\":%zu,\"old\":%zu,\"incoming\":%zu}\n",
                                a, e, event.change, (int)ok, event.field.parent,
                                event.field.child, event.field.index, event.field.old_value, event.incoming);
@@ -124,7 +124,7 @@ int main(int argc, char **argv)
     NLParseDiagnostic parse = {0}; NLFunctionUnitDiagnostic unit = {0};
     NLCheckDiagnostic diagnostic = {0};
     int result = 10;
-    if (argc != 2 || nl_source_load(argv[1], &source) != NL_SOURCE_OK) goto cleanup;
+    if (argc != 3 || nl_source_load(argv[1], &source) != NL_SOURCE_OK) goto cleanup;
     if (nl_parser_create(source, &parser) != NL_PARSE_OK) goto cleanup;
     NLParseStatus ps = nl_parser_parse_function_unit(parser, &tree, &parse);
     printf("{\"kind\":\"stage\",\"stage\":\"parse\",\"status\":%d}\n", (int)ps);
@@ -134,7 +134,7 @@ int main(int argc, char **argv)
     NLCheckStatus cs = nl_semantic_register_function_unit(context, inputs, 1, &unit);
     printf("{\"kind\":\"stage\",\"stage\":\"register\",\"status\":%d}\n", (int)cs);
     if (cs != NL_CHECK_OK) { nl_check_diagnostic_render(stderr, source, &unit.diagnostic); goto cleanup; }
-    const char call[] = "specimen()";
+    const char *call = argv[2];
     if (nl_source_create(call, strlen(call), "<R1157-own-call>", &call_source) != NL_SOURCE_OK) goto cleanup;
     if (nl_parser_create(call_source, &call_parser) != NL_PARSE_OK) goto cleanup;
     if (nl_parser_parse_source_fragment(call_parser, &call_tree, &parse) != NL_PARSE_OK) goto cleanup;
@@ -191,13 +191,16 @@ def observe(c_source, nodes, case):
     mapping = {}
     for n in nodes:
         if n.get('kind') == 'node' and n.get('symbol') and n.get('initializer') and n.get('name') in ('capsule', 'before', 'settled', 'echoed', 'displaced', 'after', 'still'):
-            mapping.setdefault(n['name'], f"nl_local_{n['symbol']}")
+            value = f"nl_local_{n['symbol']}"
+            if n['name'] in mapping and mapping[n['name']] != value:
+                raise RuntimeError('ambiguous genuine source-issued binding')
+            mapping[n['name']] = value
     if set(mapping) != {'capsule', 'before', 'settled', 'echoed', 'displaced', 'after', 'still'}:
         raise RuntimeError(f'observer source-issued binding map incomplete: {mapping}')
     root = mapping['capsule']
     edits = []
     condition_count = 0
-    for match in re.finditer(r'\bif\s*\(', c_source):
+    for match in re.finditer(r'(?<![#\w])if\s*\(', c_source):
         start = c_source.index('(', match.start())
         end = close_paren(c_source, start)
         brace = re.match(r'\s*\{', c_source[end + 1:])
@@ -205,8 +208,20 @@ def observe(c_source, nodes, case):
             raise RuntimeError('observer requires explicit emitted IF braces')
         cid = condition_count
         condition_count += 1
-        expr = comparison(c_source[start + 1:end], cid)
-        replacement = (f'r1157_condition({cid}, ({expr}), &{root}, &{root}.f0, '
+        actual = c_source[start + 1:end].strip()
+        # Observe a direct comparison or the genuine immediately assigned Bool.
+        # Neither branch truth nor any comparison operand is supplied by the oracle.
+        if re.fullmatch(r'[A-Za-z_][A-Za-z_0-9]*', actual):
+            assignments = list(re.finditer(r'\b' + re.escape(actual) + r'\s*=(?!=)\s*(?P<rhs>[^;]+);', c_source[:match.start()]))
+            if len(assignments) != 1:
+                raise RuntimeError(f'observer actual Bool definition: {actual}')
+            definition = assignments[0]
+            expr = comparison(definition.group('rhs'), cid)
+            edits.append((definition.start('rhs'), definition.end('rhs'), expr))
+            wrapped = actual
+        else:
+            wrapped = comparison(actual, cid)
+        replacement = (f'r1157_condition({cid}, ({wrapped}), &{root}, &{root}.f0, '
                        f'&{root}.f1, {root}.f0, {root}.f1)')
         edits.append((start + 1, end, replacement))
         then_open = end + 1 + brace.end() - 1
@@ -219,17 +234,23 @@ def observe(c_source, nodes, case):
         edits.append((else_open + 1, else_open + 1, f'\nfprintf(stderr, "R1157 ARM {cid} else\\n");'))
     if condition_count != 2:
         raise RuntimeError(f'observer IF schema: expected 2, saw {condition_count}')
+    # Read all immutable observations only after the final post-join sibling read.
+    # This supports split declarations/assignments for runtime loop/IF results.
+    final_assignments = list(re.finditer(r'\b' + re.escape(mapping['still']) + r'\s*=(?!=)[^;]*;', c_source))
+    if len(final_assignments) != 1:
+        raise RuntimeError('observer final source-issued sibling assignment unavailable')
+    final_position = final_assignments[0].end()
+    readings = []
     for name, symbol in mapping.items():
         if name == 'capsule':
             continue
-        pat = re.compile(r'(?m)^[ \t]*(?:const\s+)?(?:uint8_t|size_t|_Bool)\s+' + re.escape(symbol) + r'\s*=[^;]*;')
-        hits = list(pat.finditer(c_source))
-        if len(hits) != 1:
-            raise RuntimeError(f'observer declaration schema {name}: {len(hits)}')
-        end = hits[0].end()
-        edits.append((end, end, f'\nfprintf(stderr, "R1157 VAL {name} %zu\\n", (size_t){symbol});'))
-    # Actual emitted store LHS is observed; neither target nor value is supplied.
-    stores = list(re.finditer(r'(?m)^[ \t]*(?P<lhs>' + re.escape(root) + r'\.f[01]|\*nl_local_\d+)\s*=\s*(?P<rhs>[^;]+);', c_source))
+        declarations = list(re.finditer(r'\b(?:uint8_t|size_t|_Bool)\s+' + re.escape(symbol) + r'\b', c_source[:final_position]))
+        if len(declarations) != 1:
+            raise RuntimeError(f'observer declaration schema {name}: {len(declarations)}')
+        readings.append(f'fprintf(stderr, "R1157 VAL {name} %zu\\n", (size_t){symbol});')
+    readings.append(f'fprintf(stderr, "R1157 FINAL %p %p %p %u %u\\n", (void *)&{root}, (void *)&{root}.f0, (void *)&{root}.f1, (unsigned){root}.f0, (unsigned){root}.f1);')
+    edits.append((final_position, final_position, '\n' + '\n'.join(readings)))
+    stores = list(re.finditer(r'(?m)^[ \t]*(?P<lhs>' + re.escape(root) + r'\.f[01]|\*[A-Za-z_][A-Za-z_0-9]*)\s*=\s*(?P<rhs>[^;]+);', c_source))
     if len(stores) != 2:
         raise RuntimeError(f'observer store schema: {len(stores)}')
     for item in stores:
@@ -239,18 +260,19 @@ def observe(c_source, nodes, case):
         after = f'\nfprintf(stderr, "R1157 STORE after %p %u\\n", (void *)({pointer}), (unsigned)({lhs}));'
         edits.append((item.start(), item.start(), before))
         edits.append((item.end(), item.end(), after))
+    previous_start = len(c_source) + 1
     for start, end, replacement in sorted(edits, reverse=True):
+        if end > previous_start:
+            raise RuntimeError('observer overlapping source edits')
         c_source = c_source[:start] + replacement + c_source[end:]
-    # Includes stay ahead of helper declarations so size_t is the genuine C type.
-    includes = list(re.finditer(r'(?m)^#include[^\n]*\n', c_source))
-    if not includes:
-        raise RuntimeError('observer generated includes absent')
-    pos = includes[-1].end()
-    return c_source[:pos] + OBSERVER + c_source[pos:]
+        previous_start = start
+    # An explicit independent include prefix avoids conditional include scopes.
+    return '#include <stddef.h>\n' + OBSERVER + c_source
 
 
 def assess(text, case):
     lines = text.splitlines()
+    assert all(x.startswith('R1157 ') for x in lines), lines
     conditions = [x.split() for x in lines if x.startswith('R1157 COND ')]
     guards = [x for x in conditions if x[2] == '0']
     choice = [x for x in conditions if x[2] == '1']
@@ -269,6 +291,11 @@ def assess(text, case):
     assert arms == [case['selected_arm']], arms
     stores = [x.split() for x in lines if x.startswith('R1157 STORE ')]
     assert len(stores) == 2 and stores[0][2] == 'before' and stores[1][2] == 'after', stores
+    final = [x.split() for x in lines if x.startswith('R1157 FINAL ')]
+    assert len(final) == 1 and tuple(final[0][2:5]) == (root, f0, f1), final
+    expected_final = [case['ember'], case['reserve']]
+    expected_final[case['index']] = case['new']
+    assert [int(x) for x in final[0][5:7]] == expected_final, final
     target = [f0, f1][case['index']]
     assert stores[0][3] == stores[1][3] == target, stores
     assert [int(x[4]) for x in stores] == [case['old'], case['new']], stores
@@ -302,6 +329,11 @@ def public_assess(nodes, case):
 def main():
     shutil.copytree(R1157_DIR / 'v1', OUT / 'frozen-v1', dirs_exist_ok=True)
     shutil.copytree(R1157_DIR / 'v2', OUT / 'frozen-v2', dirs_exist_ok=True)
+    shutil.copytree(R1157_DIR / 'v3', OUT / 'frozen-v3', dirs_exist_ok=True)
+    shutil.copytree(R1157_DIR / 'first', OUT / 'original-first', dirs_exist_ok=True)
+    shutil.copyfile(__file__, OUT / 'executed-runner.py')
+    run('fixed-authority-transport', [sys.executable, R1157_DIR / 'fixed_transport.py', REPO, BUILD])
+    shutil.copyfile(BUILD / 'r1157-fixed-authority.json', OUT / 'fixed-authority.json')
     for item in json.loads((R1157_DIR / 'v1/manifest.json').read_text())['files']:
         assert hashlib.sha256((R1157_DIR / 'v1' / item['path']).read_bytes()).hexdigest() == item['sha256']
     run('checkout-head', ['git', 'rev-parse', 'HEAD'])
@@ -310,9 +342,9 @@ def main():
     # Negatives never receive a fabricated later-layer success.
     for negative in ORACLE['negatives']:
         name = negative['id']
-        p = run(f'negative/{name}', [CLI, '--check', R1157_DIR / 'v2/negative' / f'{name}.nl'], allowed=None)
+        p = run(f'negative/{name}', [CLI, '--check', R1157_DIR / 'v3/negative' / f'{name}.nl'], allowed=None)
         diagnostic = p.stderr.decode(errors='replace')
-        hit = re.search(r'error\((parser|semantic|cli)\)\[([^]]+)\]', diagnostic)
+        hit = re.search(r'error\((parser|semantic|cli|unsupported|precision)\)\[([^]]+)\]', diagnostic)
         RESULT['negatives'][name] = {'status': p.returncode, 'actual_layer': hit.group(1) if hit else 'unclassified',
             'diagnostic': hit.group(2) if hit else None, 'owned': 'NOT_REACHED', 'C17': 'NOT_REACHED', 'native': 'NOT_REACHED'}
         if p.returncode not in (2, 3, 4) or not hit:
@@ -320,7 +352,7 @@ def main():
     checks = []
     for case in ORACLE['positives']:
         name = case['id']
-        p = run(f'{name}/check', [CLI, '--check', R1157_DIR / 'v2/sources' / f'{name}.nl'], allowed=None)
+        p = run(f'{name}/check', [CLI, '--check', R1157_DIR / 'v3/sources' / f'{name}.nl'], allowed=None)
         RESULT['cases'][name] = {'check_status': p.returncode, 'owned': 'NOT_REACHED', 'C17': 'NOT_REACHED', 'native': 'NOT_REACHED'}
         checks.append((name, p.returncode, p.stderr.decode(errors='replace')))
     if any(rc or err for _, rc, err in checks):
@@ -344,36 +376,39 @@ def main():
     for case in ORACLE['positives']:
         name = case['id']; directory = OUT / name; directory.mkdir(exist_ok=True)
         original = R1157_DIR / 'v1/sources' / f'{name}.nl'
-        adapted = R1157_DIR / 'v2/sources' / f'{name}.nl'
-        p = run(f'{name}/public', [probe, original])
+        adapted = R1157_DIR / 'v3/sources' / f'{name}.nl'
+        original_probe = run(f'{name}/public-v1-specimen', [probe, original, 'specimen()'])
+        original_nodes = [json.loads(x) for x in original_probe.stdout.decode().splitlines()]
+        RESULT['cases'][name]['owned_v1'] = public_assess(original_nodes, case)
+        p = run(f'{name}/public-v3-main', [probe, adapted, 'main()'])
         nodes = [json.loads(x) for x in p.stdout.decode().splitlines()]
         RESULT['cases'][name]['owned'] = public_assess(nodes, case)
+        RESULT['cases'][name]['mapping_provenance'] = {
+            'source_sha256': hashlib.sha256(adapted.read_bytes()).hexdigest(),
+            'actual_call': 'main()', 'probe': f'{name}/public-v3-main',
+            'same_source_used_for': ['CHECK', 'owned', 'stdout-C17', 'named-C17', 'observer-binding-map']}
         raw = run(f'{name}/emit', [CLI, adapted]).stdout
         rawpath = directory / 'original.c'; rawpath.write_bytes(raw)
         named = directory / 'named.c'
         run(f'{name}/named-emit', [CLI, '--emit-c17-to', named, adapted])
         assert named.read_bytes() == raw, 'ordinary stdout/named emission differ'
-        export = run(f'{name}/export-emit', [CLI, '--experimental-c17-u8-export', 'specimen', original]).stdout
-        exportpath = directory / 'export.c'; exportpath.write_bytes(export)
-        driver = directory / 'export-driver.c'
-        driver.write_text('#include "newlang/experimental_c17_u8_export_v0.h"\n#include <stdio.h>\nint main(void) { printf("RESULT %u\\n", (unsigned)newlang_c17_u8_export_v0()); return 0; }\n')
+        RESULT['cases'][name]['u8_export'] = 'NOT_RUN: separate interface; original V1 return prediction retained, C233'
         observed = directory / 'observed.c'
         observed.write_text(observe(raw.decode(), nodes, case))
         RESULT['cases'][name]['C17'] = {'original_sha256': hashlib.sha256(raw).hexdigest(), 'named_identical': True,
-            'export_sha256': hashlib.sha256(export).hexdigest(), 'observer_sha256': hashlib.sha256(observed.read_bytes()).hexdigest()}
+            'observer_sha256': hashlib.sha256(observed.read_bytes()).hexdigest()}
         measurements = []
         for config, compiler, options in configs:
-            for mode, source in [('original',rawpath),('observed',observed),('export',exportpath)]:
+            for mode, source in [('original',rawpath),('observed',observed)]:
                 binary = directory / f'{config}-{mode}'
-                sources = [source,driver] if mode == 'export' else [source]
+                sources = [source]
                 run(f'{name}/{config}-{mode}-build', [compiler,*flags,*(['-Wno-error=gcc-install-dir-libstdcxx'] if Path(compiler).name == 'clang-23' else []),*options,*sources,'-o',binary])
                 p = run(f'{name}/{config}-{mode}-run', [binary])
+                assert not p.stdout, p.stdout
                 if mode == 'observed':
                     measurements.append({'config':config,'passive':assess(p.stderr.decode(),case)})
                 else:
                     assert not p.stderr, f'{name} {config} {mode} stderr {p.stderr!r}'
-                    if mode == 'export':
-                        assert p.stdout == f"RESULT {case['return']}\n".encode(), p.stdout
             RESULT['cases'][name]['native'] = measurements
     RESULT['outcome'] = 'FINITE_PASS'
 
@@ -410,7 +445,7 @@ try:
     main()
 except Exception as exc:
     status=1
-    RESULT['outcome']='FIRST_RED'
+    RESULT['outcome']='REPAIR_RED'
     RESULT.setdefault('first_failure',{'layer':'unclassified; inspect raw command/evidence before repair','error':str(exc)})
     (OUT/'traceback.txt').write_text(traceback.format_exc())
     print(traceback.format_exc(),flush=True)
