@@ -6,7 +6,7 @@ root = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(root / "tests/support"))
 from versioned_freeze import verify
 
-CURRENT = "tests/p990/current-freeze-v34.json"
+CURRENT = "tests/p990/current-freeze-v35.json"
 # Prospective v9 pins the externally fixed original v9 after the unchanged
 # v1-v8 historical algorithms/literals; predecessor source/data stay intact.
 sys.path.insert(0, str(root / "tests/p1062"))
@@ -32,5 +32,7 @@ from history_v32 import verify as verify_v32
 from history_v33 import verify as verify_v33
 sys.path.insert(0, str(root / "tests/p1133"))
 from history_v34 import verify as verify_v34
-count = verify_v34(root, CURRENT)
+sys.path.insert(0, str(root / "tests/p1139"))
+from history_v35 import verify as verify_v35
+count = verify_v35(root, CURRENT)
 print("P982 original Git/source/oracle lineage and current versioned hashes PASS", count)

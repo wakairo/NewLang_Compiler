@@ -73,6 +73,7 @@ typedef struct {
     bool u8_export;    /* opt-in target wrapper, never source authority */
     bool linear_break; /* independently validated private CHECK consumer */
     bool stuttering_loop;
+    bool scalar_loop;
     bool two_normal_unit; /* validated new profile; passive C hooks only */
     const NLCopyBodyParameters *unit_parameters;
     const NLCheckedFragment *formal_body; /* current validation only */
@@ -155,12 +156,13 @@ static bool v1_scalar(const NLCheckedFragment *fragment, NLCheckedNodeId id,
 
 /* Native target §6 quantity staging only. A source-connected Copy binding is
  * required; no usize call ABI, ref, arithmetic or inferred owner authority. */
-static bool quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
-                            V0Program *p)
+static bool quantity_scalar_impl(const NLCheckedFragment *f, NLCheckedNodeId id,
+                                 V0Program *p, bool allow_loop)
 {
     const NLTypeId type =
         nl_semantic_core_type(nl_checked_context(f), NL_TYPE_USIZE);
     bool first = true;
+    bool known = true;
     size_t expected = 0;
     /* Follow decreasing source IDs iteratively: long Copy chains cannot
      * consume the C stack or introduce a source-less scalar seed. */
@@ -171,15 +173,27 @@ static bool quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
             v->result_count != 1 || v->results[0].type != type ||
             !nl_semantic_value_view(nl_checked_context(f), v->results[0].value,
                                     &value) ||
-            value.type != type || !value.scalar_known ||
+            value.type != type || (!allow_loop && !value.scalar_known) ||
             value.dependencies != NL_DEPENDENCY_FREE ||
             value.value_dependency_count != 0 ||
-            (!first && value.scalar_value != expected))
+            (!first &&
+             (value.scalar_known != known || value.scalar_value != expected)))
             return false;
+        known = value.scalar_known;
         expected = value.scalar_value;
         first = false;
+        if (v->kind == NL_CHECKED_LOOP && !known) {
+            NLLinearBreakView loop;
+            if (nl_linear_break_validate(f, id, &loop) != NL_CHECK_OK ||
+                !loop.scalar_loop || loop.result.value != v->results[0].value)
+                return false;
+            p->uses_usize = p->scalar_loop = true;
+            return true;
+        }
         if (v->kind == NL_CHECKED_USIZE_ADDITION ||
             v->kind == NL_CHECKED_USIZE_SUBTRACTION) {
+            if (!known)
+                return false;
             if (!(v->kind == NL_CHECKED_USIZE_ADDITION
                       ? nl_checked_usize_addition_valid(f, id, NULL)
                       : nl_checked_usize_subtraction_valid(f, id, NULL)))
@@ -189,7 +203,7 @@ static bool quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
         }
         if (v->kind == NL_CHECKED_USIZE_LITERAL) {
             p->uses_usize = true;
-            return v->has_scalar_result && v->scalar_result.known &&
+            return known && v->has_scalar_result && v->scalar_result.known &&
                    v->scalar_result.type == type &&
                    v->scalar_result.value == expected;
         }
@@ -208,6 +222,20 @@ static bool quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
         id = origin;
     }
     return false;
+}
+
+/* Existing size/offset consumers keep their known-number contract. The
+ * unknown route is explicit and used only by ordinary Copy bindings and
+ * the existing pure numeric predicate actual. */
+static bool quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
+                            V0Program *p)
+{
+    return quantity_scalar_impl(f, id, p, false);
+}
+static bool loop_quantity_scalar(const NLCheckedFragment *f, NLCheckedNodeId id,
+                                 V0Program *p)
+{
+    return quantity_scalar_impl(f, id, p, true);
 }
 
 /* New bool lowering is restricted to the function's straight-line root block.
@@ -2031,7 +2059,7 @@ static bool v1_call_parameter_kind(const NLCheckedFragment *f,
         return false;
     if (quantity) {
         V0Program operands = *p;
-        if (!quantity_scalar(f, call->first_argument, &operands))
+        if (!loop_quantity_scalar(f, call->first_argument, &operands))
             return false;
     } else if (!v1_scalar(f, call->first_argument, p))
         return false;
@@ -2385,7 +2413,7 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
     case NL_CHECKED_USIZE_LESS_THAN:
     case NL_CHECKED_IDENTIFIER:
         return v1_scalar(fragment, id, program) ||
-               quantity_scalar(fragment, id, program) ||
+               loop_quantity_scalar(fragment, id, program) ||
                boolean_scalar(fragment, id, program) ||
                gate_ptr(fragment, id, program);
     case NL_CHECKED_IF: {
@@ -2414,7 +2442,7 @@ static bool v0_validate_node(const NLCheckedFragment *fragment,
                receiver->type == initializer->type &&
                ((v0_unit_loan_binding(fragment, view) &&
                  v0_validate_node(fragment, view->initializer, program)) ||
-                quantity_scalar(fragment, view->initializer, program) ||
+                loop_quantity_scalar(fragment, view->initializer, program) ||
                 boolean_scalar(fragment, view->initializer, program) ||
                 (receiver->type == program->u8 &&
                  ((initializer->kind == NL_CHECKED_IF &&
@@ -2840,6 +2868,51 @@ static bool emit_if_field(FILE *stream, const NLCheckedFragment *f,
             fprintf(stream, "(void)nl_if_result_%zu;\n", id) >= 0);
 }
 
+static bool emit_scalar_loop(FILE *stream, const NLLinearBreakView *p,
+                             NLCheckedNodeId id, NLSymbolId result,
+                             size_t depth)
+{
+    return v0_indent(stream, depth) &&
+           fprintf(stream, "size_t nl_local_%zu;\n", result) >= 0 &&
+           v0_indent(stream, depth) &&
+           fprintf(stream,
+                   "size_t nl_loop_carry_%zu = (size_t)UINTMAX_C(%zu);\n", id,
+                   p->initial_phase) >= 0 &&
+           v0_indent(stream, depth) && fputs("for (;;) {\n", stream) >= 0 &&
+           v0_indent(stream, depth + 1) &&
+           fprintf(stream,
+                   "const size_t nl_loop_phase_%zu = nl_loop_carry_%zu;\n", id,
+                   id) >= 0 &&
+           v0_indent(stream, depth + 1) &&
+           fprintf(stream, "NL_SCALAR_PHASE(nl_loop_phase_%zu);\n", id) >= 0 &&
+           v0_indent(stream, depth + 1) &&
+           fprintf(stream,
+                   "if (%snl_loop_phase_%zu %s (size_t)UINTMAX_C(%zu)%s) {\n",
+                   p->continue_on_true ? "" : "!(", id,
+                   p->less ? "<" : "==", p->limit,
+                   p->continue_on_true ? "" : ")") >= 0 &&
+           v0_indent(stream, depth + 2) &&
+           (p->computed_carry
+                ? fprintf(stream,
+                          "nl_loop_carry_%zu = nl_loop_phase_%zu %c "
+                          "(size_t)UINTMAX_C(%zu);\n",
+                          id, id, p->subtract_carry ? '-' : '+', p->next_phase)
+                : fprintf(stream,
+                          "nl_loop_carry_%zu = (size_t)UINTMAX_C(%zu);\n", id,
+                          p->next_phase)) >= 0 &&
+           v0_indent(stream, depth + 2) && fputs("continue;\n", stream) >= 0 &&
+           v0_indent(stream, depth + 1) && fputs("}\n", stream) >= 0 &&
+           v0_indent(stream, depth + 1) &&
+           fprintf(stream, "nl_local_%zu = nl_loop_phase_%zu;\n", result, id) >=
+               0 &&
+           v0_indent(stream, depth + 1) &&
+           fprintf(stream, "NL_SCALAR_RESULT(nl_local_%zu);\n", result) >= 0 &&
+           v0_indent(stream, depth + 1) && fputs("break;\n", stream) >= 0 &&
+           v0_indent(stream, depth) && fputs("}\n", stream) >= 0 &&
+           v0_indent(stream, depth) &&
+           fprintf(stream, "(void)nl_local_%zu;\n", result) >= 0;
+}
+
 static bool emit_stuttering_loop(FILE *stream, const NLLinearBreakView *p,
                                  NLCheckedNodeId id, NLSymbolId result,
                                  size_t depth)
@@ -2980,6 +3053,9 @@ static bool v0_emit_node(FILE *stream, const NLCheckedFragment *fragment,
             if (nl_linear_break_validate(fragment, view->initializer, &proof) !=
                 NL_CHECK_OK)
                 return false;
+            if (proof.scalar_loop)
+                return emit_scalar_loop(stream, &proof, view->initializer,
+                                        view->symbol, depth);
             if (proof.stuttering)
                 return emit_stuttering_loop(stream, &proof, view->initializer,
                                             view->symbol, depth);
@@ -3364,6 +3440,15 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
               stream) < 0)
         return false;
 
+    if (program->scalar_loop &&
+        fputs("#ifdef NEWLANG_SCALAR_LOOP_OBSERVER\n"
+              "#include NEWLANG_SCALAR_LOOP_OBSERVER\n#endif\n"
+              "#ifndef NL_SCALAR_PHASE\n#define NL_SCALAR_PHASE(...) "
+              "((void)0)\n#endif\n"
+              "#ifndef NL_SCALAR_RESULT\n#define NL_SCALAR_RESULT(...) "
+              "((void)0)\n#endif\n\n",
+              stream) < 0)
+        return false;
     if (program->stuttering_loop &&
         fputs("#ifndef NL_LOOP_PHASE\n#define NL_LOOP_PHASE(...) "
               "((void)0)\n#endif\n"

@@ -1,0 +1,73 @@
+{
+  "cases": {
+    "01-add-many": {
+      "trace": [
+        2,
+        5,
+        8,
+        11
+      ],
+      "result": 11,
+      "tag": 43,
+      "threshold": 12,
+      "check": 0,
+      "emit": 0
+    },
+    "02-add-zero": {
+      "trace": [
+        11
+      ],
+      "result": 11,
+      "tag": 207,
+      "threshold": 11,
+      "check": 0,
+      "emit": 0
+    },
+    "03-add-one": {
+      "trace": [
+        8,
+        11
+      ],
+      "result": 11,
+      "tag": 43,
+      "threshold": 12,
+      "check": 0,
+      "emit": 0
+    },
+    "04-add-overshoot": {
+      "trace": [
+        3,
+        7,
+        11
+      ],
+      "result": 11,
+      "tag": 207,
+      "threshold": 11,
+      "check": 0,
+      "emit": 0
+    },
+    "05-sub-many": {
+      "trace": [
+        17,
+        12,
+        7,
+        2
+      ],
+      "result": 2,
+      "tag": 53,
+      "threshold": 3,
+      "check": 0,
+      "emit": 0
+    }
+  },
+  "negative": {
+    "90-unsafe-step": "reject CHECK/precision; no C/named clobber",
+    "91-sub-underflow": "reject CHECK/precision; no C/named clobber",
+    "92-arity": "reject CHECK/precision; no C/named clobber",
+    "93-wrong-type": "reject CHECK/precision; no C/named clobber",
+    "94-ending-loan": "reject CHECK/precision; no C/named clobber"
+  },
+  "baseline_prediction": "Unknown arithmetic precision first; later Unknown loop-result/quantity consumer expected",
+  "contract": "Actual normal Break result remains Unknown. Ordinary outer Copy and named predicate consume it at runtime; source chooses u8 tag. No observer input or expected literal supplies authority.",
+  "scope": "one usize slot, guard plus/minus constant; free scalar B; no T-changing/nested/multiple C/B/general range/H/ABI"
+}
