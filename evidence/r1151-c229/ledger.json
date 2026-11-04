@@ -1,0 +1,1354 @@
+{
+  "schema": "r1151-c229-custody-ledger-v1",
+  "track": "R",
+  "issue": 1151,
+  "pr": 1153,
+  "pr_state": "DRAFT / NEVERMERGE",
+  "fixed_p": "d66fdf751aa5823b5775cbaf346a6c02aba38182",
+  "fixed_p_tree": "6ebba6e90fc9e7a4db441663873a7780614647be",
+  "authority_main": "c120dd1accfefd3e8d3d7ae7a2f7f17b54e3f89a",
+  "spec": "Draft17.34",
+  "measurement": {
+    "branch": "r-fast/r1151-original-t-write",
+    "head": "8a124b4aaa2ba9f3f22ab4fa5e9b586c6d12073c",
+    "tree": "d6bf6e116dfa4a0c2381d09220068955c29ee7b8",
+    "stopped": true,
+    "last_job_completed_at": "2026-11-04T09:47:16Z",
+    "reason": "first reliable all-green after one historical-connection repair",
+    "first_checkout": "286a71c66b5d9f099be6d10dabea273593b2e810",
+    "final_checkout": "152540e962e60a691f9fa0854f04c5e8264f5ce1"
+  },
+  "custody": {
+    "branch": "r-archive/r1151-c229-evidence",
+    "parent": "8a124b4aaa2ba9f3f22ab4fa5e9b586c6d12073c",
+    "prefix": "evidence/r1151-c229/",
+    "added_paths": 30,
+    "binary_logs": 15,
+    "original_r_archives": 12,
+    "metadata_files": 3,
+    "preexisting_leaves": 5954,
+    "additional_prs": 0,
+    "additional_actions_required": 0,
+    "readback_receipt": "Issue #1151; external receipt records commit/tree and manifest self-excluded digest"
+  },
+  "budget": {
+    "fast_runs_used": 3,
+    "fast_runs_max": 6,
+    "normal_jobs_used": 12,
+    "normal_jobs_max": 12,
+    "normal_first_jobs": 6,
+    "normal_final_jobs": 6,
+    "manual_reruns": 0,
+    "manual_dispatches": 0
+  },
+  "history": [
+    {
+      "commit": "71cc570c7c48040f989b6cf17927025811d53804",
+      "tree": "dd59d640a690b54b9fac3c5f4be5e50e22fadb3a",
+      "parent": "d66fdf751aa5823b5775cbaf346a6c02aba38182",
+      "meaning": "complete source/apparatus before first branch ref; FIRST FAST formatting RED"
+    },
+    {
+      "commit": "b40261caec943b4b26d22566f5d4f1b3dd81696e",
+      "tree": "a4e93fb5bfdeea01a3461087f271731474827378",
+      "parent": "71cc570c7c48040f989b6cf17927025811d53804",
+      "meaning": "R-owned exact whitespace forward repair; FAST PASS; FIRST normal 6 RED on nine historical CMake digest connections, R cohort PASS"
+    },
+    {
+      "commit": "8a124b4aaa2ba9f3f22ab4fa5e9b586c6d12073c",
+      "tree": "d6bf6e116dfa4a0c2381d09220068955c29ee7b8",
+      "parent": "b40261caec943b4b26d22566f5d4f1b3dd81696e",
+      "meaning": "one normal forward repair, only CMakeLists.txt and tests/r1151/freeze_bridge.py; FINAL normal 6 PASS"
+    }
+  ],
+  "independence_labels": [
+    "pre-execution frozen independent cohort",
+    "post-freeze interface-calibrated V3",
+    "incidental legacy registration exposure after freeze",
+    "incidental old-P formatter exposure after freeze",
+    "incidental legacy native-report exposure after FIRST execution"
+  ],
+  "source_versions": {
+    "v1_positive_status": "NOT_RUN",
+    "v2_positive_status": "NOT_RUN",
+    "v3_positive_status": "PASS finite cohort, FIRST and FINAL",
+    "v1_negative_status": "CHECK rejects in FIRST and FINAL; public owned/C17/native NOT_RUN",
+    "manifest_rows": [
+      {
+        "path": "tests/r1151/p01_add_zero_first.nl",
+        "bytes": 599,
+        "sha256": "78436756cf1b080396347682bea391d5a199fb5c8f58bcc95bef0eab88a8716f",
+        "encoding": "UTF-8 ASCII",
+        "newlines": "LF; final LF present"
+      },
+      {
+        "path": "tests/r1151/p02_add_one_second.nl",
+        "bytes": 603,
+        "sha256": "0392c301804ef11d0c0230043bd67b332b5457514665cc290415218a15109b9d",
+        "encoding": "UTF-8 ASCII",
+        "newlines": "LF; final LF present"
+      },
+      {
+        "path": "tests/r1151/p03_add_many_first.nl",
+        "bytes": 603,
+        "sha256": "9486940c52971fe34802d3242b93d641c7405d55383c2176c8d6d3566cab62c8",
+        "encoding": "UTF-8 ASCII",
+        "newlines": "LF; final LF present"
+      },
+      {
+        "path": "tests/r1151/p04_sub_zero_second.nl",
+        "bytes": 603,
+        "sha256": "68f122f7fb1e82921ffdf5cc201387e93d38f07a619690c1436e158083c49a4b",
+        "encoding": "UTF-8 ASCII",
+        "newlines": "LF; final LF present"
+      },
+      {
+        "path": "tests/r1151/p05_sub_one_first.nl",
+        "bytes": 604,
+        "sha256": "cfec1a35f25e104aa3cd486cbd08974ed2b39f9f2bf0c99487eb4e8b0979ed26",
+        "encoding": "UTF-8 ASCII",
+        "newlines": "LF; final LF present"
+      },
+      {
+        "path": "tests/r1151/p06_sub_many_second.nl",
+        "bytes": 600,
+        "sha256": "9147685e07e3d911fa2a3d9a56f49f838cd30b510cc81f982a06ff42b312f37a",
+        "encoding": "UTF-8 ASCII",
+        "newlines": "LF; final LF present"
+      },
+      {
+        "path": "tests/r1151/n01_nonbool_guard.nl",
+        "bytes": 505,
+        "sha256": "269465ded0553ef40ae6407e4b6585344205989d0b26a5be38556888c90ced43",
+        "encoding": "UTF-8 ASCII",
+        "newlines": "LF; final LF present"
+      },
+      {
+        "path": "tests/r1151/n02_wrong_continue_type.nl",
+        "bytes": 502,
+        "sha256": "19c7b7779c2ffd02e21e1a2def854f23b29796985ec09edf5c82fa7dc052ed52",
+        "encoding": "UTF-8 ASCII",
+        "newlines": "LF; final LF present"
+      },
+      {
+        "path": "tests/r1151/n03_foreign_field.nl",
+        "bytes": 510,
+        "sha256": "348dbfca3cab013a6e68e469f9522bfca3f35a52de934fbc46e8c91f064b7301",
+        "encoding": "UTF-8 ASCII",
+        "newlines": "LF; final LF present"
+      },
+      {
+        "path": "tests/r1151/n04_read_to_write.nl",
+        "bytes": 503,
+        "sha256": "80a1b8ab78d1c381fe42bf6ca797c61d88658a1a5e9ed934c7e7b95be6dc7571",
+        "encoding": "UTF-8 ASCII",
+        "newlines": "LF; final LF present"
+      },
+      {
+        "path": "tests/r1151/n05_ref_escape.nl",
+        "bytes": 506,
+        "sha256": "d9e1717a24809e81868c43b45c2f9b21f12d7e5f99b8eed17bad6faef05c0e97",
+        "encoding": "UTF-8 ASCII",
+        "newlines": "LF; final LF present"
+      },
+      {
+        "path": "tests/r1151/n06_ended_root.nl",
+        "bytes": 589,
+        "sha256": "1e0e9c39b8504d9ca18e49f2ed9af108575517d16c01ccb45537d9192acefe01",
+        "encoding": "UTF-8 ASCII",
+        "newlines": "LF; final LF present"
+      },
+      {
+        "path": "tests/r1151/oracle-v1.json",
+        "bytes": 7165,
+        "sha256": "c80e40960242c9d4beb4738701564c4c353ff7add90f9130ce41d2231384611a",
+        "encoding": "UTF-8 ASCII",
+        "newlines": "LF; final LF present"
+      },
+      {
+        "path": "tests/r1151/v2/p01_add_zero_first.nl",
+        "bytes": 677,
+        "sha256": "0a2974c749a33e933554c27457359d5008b6b45c7e0c68a2c1210a8d37da0500"
+      },
+      {
+        "path": "tests/r1151/v2/p02_add_one_second.nl",
+        "bytes": 681,
+        "sha256": "ade38b51c5e262509a76cec9282d11e1b617584b269f6d461e38cde98e6a3c91"
+      },
+      {
+        "path": "tests/r1151/v2/p03_add_many_first.nl",
+        "bytes": 681,
+        "sha256": "683ca6e46bfb35506cf2cdccb7c45b1d115dc5bc76a779d481b2676e03c683c6"
+      },
+      {
+        "path": "tests/r1151/v2/p04_sub_zero_second.nl",
+        "bytes": 681,
+        "sha256": "16b48405657d80942b6dc02d66bceb82ff95f205e46868cc9c14dd94ce5b09d0"
+      },
+      {
+        "path": "tests/r1151/v2/p05_sub_one_first.nl",
+        "bytes": 682,
+        "sha256": "0c4bf699bd85a4df96921da2f834a6ceae3c972e771a5692439f3dd0e3582624"
+      },
+      {
+        "path": "tests/r1151/v2/p06_sub_many_second.nl",
+        "bytes": 678,
+        "sha256": "4d4dd9ddc4cfcd3182a74df64505909564bb4c8cee20a87e0670f0695add559c"
+      },
+      {
+        "path": "tests/r1151/v3/p01_add_zero_first.nl",
+        "bytes": 631,
+        "sha256": "42f8808552e8f62ef01eecf437a122bcff3f7f7aa82ebcf3cdcebddbda415eb3",
+        "encoding": "ASCII",
+        "newlines": "LF, final LF"
+      },
+      {
+        "path": "tests/r1151/v3/p02_add_one_second.nl",
+        "bytes": 635,
+        "sha256": "23035ee5d35849bf628639637db4823cea69c6291f57611432df1e11e2fdfe8a",
+        "encoding": "ASCII",
+        "newlines": "LF, final LF"
+      },
+      {
+        "path": "tests/r1151/v3/p03_add_many_first.nl",
+        "bytes": 635,
+        "sha256": "141fa15d5afeb7df039a6d2a43c4af56138e6f95684c4e2061eaf273d6bccf77",
+        "encoding": "ASCII",
+        "newlines": "LF, final LF"
+      },
+      {
+        "path": "tests/r1151/v3/p04_sub_zero_second.nl",
+        "bytes": 636,
+        "sha256": "efed70d9414d1b37de5d79b13f0b03bb0a1ea8ecdec65d1a33170e1328f55c57",
+        "encoding": "ASCII",
+        "newlines": "LF, final LF"
+      },
+      {
+        "path": "tests/r1151/v3/p05_sub_one_first.nl",
+        "bytes": 636,
+        "sha256": "35441ff7203a589428f847cbb47d793ce72d7d4844f0a2bb331ed16c44641349",
+        "encoding": "ASCII",
+        "newlines": "LF, final LF"
+      },
+      {
+        "path": "tests/r1151/v3/p06_sub_many_second.nl",
+        "bytes": 632,
+        "sha256": "1d643a9d6dd0b880983818f5be720d90d389215f050f64cd254c76c62be14d2b",
+        "encoding": "ASCII",
+        "newlines": "LF, final LF"
+      },
+      {
+        "path": "tests/r1151/v3/oracle-v3.json",
+        "bytes": 8521,
+        "sha256": "461d148d13a0c3b0a04dd8665bf801f685a43c34418de4e0163b9ac564cfe5b2",
+        "encoding": "ASCII",
+        "newlines": "LF, final LF"
+      }
+    ],
+    "all_26_rows_unchanged": true
+  },
+  "receipts": {
+    "v1_freeze": 6626465949,
+    "v2_freeze": 6626554487,
+    "v3_freeze": 6626698575,
+    "complete_commit_before_first_ref": 6626881727,
+    "first_fast_red": 6626933349,
+    "first_fast_complete_raw": 6626954857,
+    "legacy_formatter_correction": 6626976000,
+    "c229_resume": 6627050683,
+    "actual_resume": 6627066763,
+    "first_post_execution_exposure": 6627342358,
+    "c229a_resume": 6627370351,
+    "p990_directory_mapping": 6627385710,
+    "single_forward_repair": 6627472340,
+    "custody_release": 6627552258,
+    "final_technical_result": 6627899703,
+    "first_complete_log_parts": [
+      {
+        "label": "GCC",
+        "job": 126491941303,
+        "run": 41805670734,
+        "part": 1,
+        "parts": 5,
+        "comment": 6627417133,
+        "raw_sha256": "7a4c09f661534381e15635961d603a178af2cb9963afbd4a2d403766a68833e4",
+        "gzip_sha256": "1787646f2f07026b5fed560a19c3e80ea2d8b09a03e6b043d43f9232ff86a568"
+      },
+      {
+        "label": "GCC",
+        "job": 126491941303,
+        "run": 41805670734,
+        "part": 2,
+        "parts": 5,
+        "comment": 6627417552,
+        "raw_sha256": "7a4c09f661534381e15635961d603a178af2cb9963afbd4a2d403766a68833e4",
+        "gzip_sha256": "1787646f2f07026b5fed560a19c3e80ea2d8b09a03e6b043d43f9232ff86a568"
+      },
+      {
+        "label": "GCC",
+        "job": 126491941303,
+        "run": 41805670734,
+        "part": 3,
+        "parts": 5,
+        "comment": 6627418158,
+        "raw_sha256": "7a4c09f661534381e15635961d603a178af2cb9963afbd4a2d403766a68833e4",
+        "gzip_sha256": "1787646f2f07026b5fed560a19c3e80ea2d8b09a03e6b043d43f9232ff86a568"
+      },
+      {
+        "label": "GCC",
+        "job": 126491941303,
+        "run": 41805670734,
+        "part": 4,
+        "parts": 5,
+        "comment": 6627418709,
+        "raw_sha256": "7a4c09f661534381e15635961d603a178af2cb9963afbd4a2d403766a68833e4",
+        "gzip_sha256": "1787646f2f07026b5fed560a19c3e80ea2d8b09a03e6b043d43f9232ff86a568"
+      },
+      {
+        "label": "GCC",
+        "job": 126491941303,
+        "run": 41805670734,
+        "part": 5,
+        "parts": 5,
+        "comment": 6627419154,
+        "raw_sha256": "7a4c09f661534381e15635961d603a178af2cb9963afbd4a2d403766a68833e4",
+        "gzip_sha256": "1787646f2f07026b5fed560a19c3e80ea2d8b09a03e6b043d43f9232ff86a568"
+      },
+      {
+        "label": "GCC_Release",
+        "job": 126491941774,
+        "run": 41805670734,
+        "part": 1,
+        "parts": 5,
+        "comment": 6627419672,
+        "raw_sha256": "085ab1f9dff4b14d8f7354d8e400e3ecdd4a2908d874efecf0f02bea9822ee14",
+        "gzip_sha256": "3a8fea9983e86d1e2b52c92eca54804ac02e3c6c04f2d64f23d1cdba7f8a3fa7"
+      },
+      {
+        "label": "GCC_Release",
+        "job": 126491941774,
+        "run": 41805670734,
+        "part": 2,
+        "parts": 5,
+        "comment": 6627420078,
+        "raw_sha256": "085ab1f9dff4b14d8f7354d8e400e3ecdd4a2908d874efecf0f02bea9822ee14",
+        "gzip_sha256": "3a8fea9983e86d1e2b52c92eca54804ac02e3c6c04f2d64f23d1cdba7f8a3fa7"
+      },
+      {
+        "label": "GCC_Release",
+        "job": 126491941774,
+        "run": 41805670734,
+        "part": 3,
+        "parts": 5,
+        "comment": 6627420657,
+        "raw_sha256": "085ab1f9dff4b14d8f7354d8e400e3ecdd4a2908d874efecf0f02bea9822ee14",
+        "gzip_sha256": "3a8fea9983e86d1e2b52c92eca54804ac02e3c6c04f2d64f23d1cdba7f8a3fa7"
+      },
+      {
+        "label": "GCC_Release",
+        "job": 126491941774,
+        "run": 41805670734,
+        "part": 4,
+        "parts": 5,
+        "comment": 6627421330,
+        "raw_sha256": "085ab1f9dff4b14d8f7354d8e400e3ecdd4a2908d874efecf0f02bea9822ee14",
+        "gzip_sha256": "3a8fea9983e86d1e2b52c92eca54804ac02e3c6c04f2d64f23d1cdba7f8a3fa7"
+      },
+      {
+        "label": "GCC_Release",
+        "job": 126491941774,
+        "run": 41805670734,
+        "part": 5,
+        "parts": 5,
+        "comment": 6627421765,
+        "raw_sha256": "085ab1f9dff4b14d8f7354d8e400e3ecdd4a2908d874efecf0f02bea9822ee14",
+        "gzip_sha256": "3a8fea9983e86d1e2b52c92eca54804ac02e3c6c04f2d64f23d1cdba7f8a3fa7"
+      },
+      {
+        "label": "Clang",
+        "job": 126491941557,
+        "run": 41805670734,
+        "part": 1,
+        "parts": 5,
+        "comment": 6627422475,
+        "raw_sha256": "968238835fe5f1d017b072960571af5259432ffa1e2df5e216766e408faa3211",
+        "gzip_sha256": "71e91acc91b5ef64b7541334456bdc8cc1e3e2ef6bd15d6a0ed51687b6e8b9ac"
+      },
+      {
+        "label": "Clang",
+        "job": 126491941557,
+        "run": 41805670734,
+        "part": 2,
+        "parts": 5,
+        "comment": 6627422965,
+        "raw_sha256": "968238835fe5f1d017b072960571af5259432ffa1e2df5e216766e408faa3211",
+        "gzip_sha256": "71e91acc91b5ef64b7541334456bdc8cc1e3e2ef6bd15d6a0ed51687b6e8b9ac"
+      },
+      {
+        "label": "Clang",
+        "job": 126491941557,
+        "run": 41805670734,
+        "part": 3,
+        "parts": 5,
+        "comment": 6627423538,
+        "raw_sha256": "968238835fe5f1d017b072960571af5259432ffa1e2df5e216766e408faa3211",
+        "gzip_sha256": "71e91acc91b5ef64b7541334456bdc8cc1e3e2ef6bd15d6a0ed51687b6e8b9ac"
+      },
+      {
+        "label": "Clang",
+        "job": 126491941557,
+        "run": 41805670734,
+        "part": 4,
+        "parts": 5,
+        "comment": 6627424169,
+        "raw_sha256": "968238835fe5f1d017b072960571af5259432ffa1e2df5e216766e408faa3211",
+        "gzip_sha256": "71e91acc91b5ef64b7541334456bdc8cc1e3e2ef6bd15d6a0ed51687b6e8b9ac"
+      },
+      {
+        "label": "Clang",
+        "job": 126491941557,
+        "run": 41805670734,
+        "part": 5,
+        "parts": 5,
+        "comment": 6627424676,
+        "raw_sha256": "968238835fe5f1d017b072960571af5259432ffa1e2df5e216766e408faa3211",
+        "gzip_sha256": "71e91acc91b5ef64b7541334456bdc8cc1e3e2ef6bd15d6a0ed51687b6e8b9ac"
+      },
+      {
+        "label": "ASan",
+        "job": 126491941034,
+        "run": 41805670734,
+        "part": 1,
+        "parts": 5,
+        "comment": 6627425260,
+        "raw_sha256": "343446952792398cd55d76f3efbd03bdc6e8dd9f83535154d5920e7245192732",
+        "gzip_sha256": "e2001c54ef97a7ace50ff55379e62b970d8843839ab5ef2e5b2bb4c4131f5f63"
+      },
+      {
+        "label": "ASan",
+        "job": 126491941034,
+        "run": 41805670734,
+        "part": 2,
+        "parts": 5,
+        "comment": 6627425875,
+        "raw_sha256": "343446952792398cd55d76f3efbd03bdc6e8dd9f83535154d5920e7245192732",
+        "gzip_sha256": "e2001c54ef97a7ace50ff55379e62b970d8843839ab5ef2e5b2bb4c4131f5f63"
+      },
+      {
+        "label": "ASan",
+        "job": 126491941034,
+        "run": 41805670734,
+        "part": 3,
+        "parts": 5,
+        "comment": 6627426383,
+        "raw_sha256": "343446952792398cd55d76f3efbd03bdc6e8dd9f83535154d5920e7245192732",
+        "gzip_sha256": "e2001c54ef97a7ace50ff55379e62b970d8843839ab5ef2e5b2bb4c4131f5f63"
+      },
+      {
+        "label": "ASan",
+        "job": 126491941034,
+        "run": 41805670734,
+        "part": 4,
+        "parts": 5,
+        "comment": 6627426910,
+        "raw_sha256": "343446952792398cd55d76f3efbd03bdc6e8dd9f83535154d5920e7245192732",
+        "gzip_sha256": "e2001c54ef97a7ace50ff55379e62b970d8843839ab5ef2e5b2bb4c4131f5f63"
+      },
+      {
+        "label": "ASan",
+        "job": 126491941034,
+        "run": 41805670734,
+        "part": 5,
+        "parts": 5,
+        "comment": 6627427439,
+        "raw_sha256": "343446952792398cd55d76f3efbd03bdc6e8dd9f83535154d5920e7245192732",
+        "gzip_sha256": "e2001c54ef97a7ace50ff55379e62b970d8843839ab5ef2e5b2bb4c4131f5f63"
+      },
+      {
+        "label": "UBSan",
+        "job": 126491941378,
+        "run": 41805670734,
+        "part": 1,
+        "parts": 5,
+        "comment": 6627427906,
+        "raw_sha256": "e2733eef9aeff6c0b398210b487ef9e93feb82a617c467656a915c7ad53b46a1",
+        "gzip_sha256": "efead5b2b82d4671f8145af3fe6eae023582988ac85d9b586e74cf93b043ad6f"
+      },
+      {
+        "label": "UBSan",
+        "job": 126491941378,
+        "run": 41805670734,
+        "part": 2,
+        "parts": 5,
+        "comment": 6627428599,
+        "raw_sha256": "e2733eef9aeff6c0b398210b487ef9e93feb82a617c467656a915c7ad53b46a1",
+        "gzip_sha256": "efead5b2b82d4671f8145af3fe6eae023582988ac85d9b586e74cf93b043ad6f"
+      },
+      {
+        "label": "UBSan",
+        "job": 126491941378,
+        "run": 41805670734,
+        "part": 3,
+        "parts": 5,
+        "comment": 6627429139,
+        "raw_sha256": "e2733eef9aeff6c0b398210b487ef9e93feb82a617c467656a915c7ad53b46a1",
+        "gzip_sha256": "efead5b2b82d4671f8145af3fe6eae023582988ac85d9b586e74cf93b043ad6f"
+      },
+      {
+        "label": "UBSan",
+        "job": 126491941378,
+        "run": 41805670734,
+        "part": 4,
+        "parts": 5,
+        "comment": 6627429632,
+        "raw_sha256": "e2733eef9aeff6c0b398210b487ef9e93feb82a617c467656a915c7ad53b46a1",
+        "gzip_sha256": "efead5b2b82d4671f8145af3fe6eae023582988ac85d9b586e74cf93b043ad6f"
+      },
+      {
+        "label": "UBSan",
+        "job": 126491941378,
+        "run": 41805670734,
+        "part": 5,
+        "parts": 5,
+        "comment": 6627430240,
+        "raw_sha256": "e2733eef9aeff6c0b398210b487ef9e93feb82a617c467656a915c7ad53b46a1",
+        "gzip_sha256": "efead5b2b82d4671f8145af3fe6eae023582988ac85d9b586e74cf93b043ad6f"
+      },
+      {
+        "label": "PARTIAL",
+        "job": 126491941798,
+        "run": 41805671104,
+        "part": 1,
+        "parts": 5,
+        "comment": 6627430922,
+        "raw_sha256": "f14e1655eae4ce5aaf9235cfcde94606ec3a2fd9404df0f421eb5a63f946d97b",
+        "gzip_sha256": "4fbe43e723b9a43567e6b7ed923c5a4bbe9fb3c84fd53c7e1b56d9ba90d22123"
+      },
+      {
+        "label": "PARTIAL",
+        "job": 126491941798,
+        "run": 41805671104,
+        "part": 2,
+        "parts": 5,
+        "comment": 6627431488,
+        "raw_sha256": "f14e1655eae4ce5aaf9235cfcde94606ec3a2fd9404df0f421eb5a63f946d97b",
+        "gzip_sha256": "4fbe43e723b9a43567e6b7ed923c5a4bbe9fb3c84fd53c7e1b56d9ba90d22123"
+      },
+      {
+        "label": "PARTIAL",
+        "job": 126491941798,
+        "run": 41805671104,
+        "part": 3,
+        "parts": 5,
+        "comment": 6627431899,
+        "raw_sha256": "f14e1655eae4ce5aaf9235cfcde94606ec3a2fd9404df0f421eb5a63f946d97b",
+        "gzip_sha256": "4fbe43e723b9a43567e6b7ed923c5a4bbe9fb3c84fd53c7e1b56d9ba90d22123"
+      },
+      {
+        "label": "PARTIAL",
+        "job": 126491941798,
+        "run": 41805671104,
+        "part": 4,
+        "parts": 5,
+        "comment": 6627432428,
+        "raw_sha256": "f14e1655eae4ce5aaf9235cfcde94606ec3a2fd9404df0f421eb5a63f946d97b",
+        "gzip_sha256": "4fbe43e723b9a43567e6b7ed923c5a4bbe9fb3c84fd53c7e1b56d9ba90d22123"
+      },
+      {
+        "label": "PARTIAL",
+        "job": 126491941798,
+        "run": 41805671104,
+        "part": 5,
+        "parts": 5,
+        "comment": 6627432928,
+        "raw_sha256": "f14e1655eae4ce5aaf9235cfcde94606ec3a2fd9404df0f421eb5a63f946d97b",
+        "gzip_sha256": "4fbe43e723b9a43567e6b7ed923c5a4bbe9fb3c84fd53c7e1b56d9ba90d22123"
+      }
+    ]
+  },
+  "workflows": [
+    {
+      "path": ".github/workflows/compiler-ci.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "23655288e60f0d3d08a12c9a542346bf31829a08"
+    },
+    {
+      "path": ".github/workflows/compiler-frontend-ci.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5"
+    },
+    {
+      "path": ".github/workflows/r-preflight.yml",
+      "mode": "100644",
+      "type": "blob",
+      "sha": "9fea1afeeef948127c73e9ca86c476091036116e"
+    }
+  ],
+  "first_failure_diagnostic": "current freeze digest: CMakeLists.txt",
+  "first_failure_registrations": [
+    "p1088_evidence.unit",
+    "p990_new_native.integration",
+    "p1107_evidence_history.unit",
+    "p1117_evidence_history.unit",
+    "p1098_evidence_history.unit",
+    "p1045_two_original_native.integration",
+    "p1055_old_origin_0.integration",
+    "p1058_closed_h_0.integration",
+    "p1062_h_body_0.integration"
+  ],
+  "overall_native": {
+    "first": {
+      "guest": 72,
+      "observer": 72,
+      "total": 144
+    },
+    "final": {
+      "guest": 72,
+      "observer": 72,
+      "total": 144
+    },
+    "all": {
+      "guest": 144,
+      "observer": 144,
+      "total": 288
+    },
+    "negative": 0
+  },
+  "actual_negative_diagnostics": {
+    "n01_nonbool_guard": "P13-IF-CONDITION",
+    "n02_wrong_continue_type": "P14-CONTINUE-TYPE",
+    "n03_foreign_field": "FIELD-UNKNOWN-FIELD",
+    "n04_read_to_write": "P3-TYPE-MISMATCH",
+    "n05_ref_escape": "P8-EXIT-DEPENDENCY",
+    "n06_ended_root": "P3-STALE-POINTER"
+  },
+  "totals": {
+    "log_files": 15,
+    "raw_utf8_bytes": 12155815,
+    "stored_log_bytes": 1755890,
+    "archive_files": 12,
+    "original_archive_bytes": 622046,
+    "archive_payload_hashes_verified": 2460
+  },
+  "formatter_zip": {
+    "artifact_id": 13308946813,
+    "reported_bytes": 1972,
+    "github_reported_sha256": "75b91a6c4ac32c71aadba0280174893e2f85bca8511d1755006f5e5f10c2f990",
+    "binary_acquired": false,
+    "binary_hash_independently_verified": false,
+    "note": "Complete decoded FIRST FAST log retained; legacy deletion suggestion was never applied."
+  },
+  "holds": {
+    "audit_locality": "UNMEASURED",
+    "GO624": "PAUSED",
+    "H1": "HOLD",
+    "P1036-PR1050": "STOP"
+  },
+  "runs": [
+    {
+      "id": 41804041756,
+      "name": "R-FAST self-service pre-PR preparation (NOT R validation)",
+      "event": "push",
+      "branch": "r-fast/r1151-original-t-write",
+      "head_sha": "71cc570c7c48040f989b6cf17927025811d53804",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-04T09:01:29Z",
+      "started_at": "2026-11-04T09:01:29Z",
+      "updated_at": "2026-11-04T09:02:01Z",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41804041756"
+    },
+    {
+      "id": 41805323896,
+      "name": "R-FAST self-service pre-PR preparation (NOT R validation)",
+      "event": "push",
+      "branch": "r-fast/r1151-original-t-write",
+      "head_sha": "b40261caec943b4b26d22566f5d4f1b3dd81696e",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-04T09:10:50Z",
+      "started_at": "2026-11-04T09:10:50Z",
+      "updated_at": "2026-11-04T09:11:36Z",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41805323896"
+    },
+    {
+      "id": 41808173874,
+      "name": "R-FAST self-service pre-PR preparation (NOT R validation)",
+      "event": "push",
+      "branch": "r-fast/r1151-original-t-write",
+      "head_sha": "8a124b4aaa2ba9f3f22ab4fa5e9b586c6d12073c",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-04T09:31:13Z",
+      "started_at": "2026-11-04T09:31:13Z",
+      "updated_at": "2026-11-04T09:31:55Z",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41808173874"
+    },
+    {
+      "id": 41805670734,
+      "name": "Compiler validation",
+      "event": "pull_request",
+      "branch": "r-fast/r1151-original-t-write",
+      "head_sha": "b40261caec943b4b26d22566f5d4f1b3dd81696e",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-04T09:13:21Z",
+      "started_at": "2026-11-04T09:13:21Z",
+      "updated_at": "2026-11-04T09:24:28Z",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41805670734"
+    },
+    {
+      "id": 41805671104,
+      "name": "Compiler frontend/C17 reference (NO LLVM; PARTIAL)",
+      "event": "pull_request",
+      "branch": "r-fast/r1151-original-t-write",
+      "head_sha": "b40261caec943b4b26d22566f5d4f1b3dd81696e",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-04T09:13:21Z",
+      "started_at": "2026-11-04T09:13:21Z",
+      "updated_at": "2026-11-04T09:19:56Z",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41805671104"
+    },
+    {
+      "id": 41808183650,
+      "name": "Compiler validation",
+      "event": "pull_request",
+      "branch": "r-fast/r1151-original-t-write",
+      "head_sha": "8a124b4aaa2ba9f3f22ab4fa5e9b586c6d12073c",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-04T09:31:17Z",
+      "started_at": "2026-11-04T09:31:17Z",
+      "updated_at": "2026-11-04T09:47:17Z",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41808183650"
+    },
+    {
+      "id": 41808184014,
+      "name": "Compiler frontend/C17 reference (NO LLVM; PARTIAL)",
+      "event": "pull_request",
+      "branch": "r-fast/r1151-original-t-write",
+      "head_sha": "8a124b4aaa2ba9f3f22ab4fa5e9b586c6d12073c",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-04T09:31:17Z",
+      "started_at": "2026-11-04T09:31:17Z",
+      "updated_at": "2026-11-04T09:39:12Z",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41808184014"
+    }
+  ],
+  "jobs": [
+    {
+      "stage": "fast1",
+      "run_id": 41804041756,
+      "job_id": 126486538066,
+      "attempt": 1,
+      "head_sha": "71cc570c7c48040f989b6cf17927025811d53804",
+      "event": "push",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41804041756/job/126486538066",
+      "overall": "failure",
+      "r_cohort": "NOT_RUN",
+      "ctest_executed": 0,
+      "registered_only": "NOT_RUN",
+      "ctest_failed": null,
+      "native": {
+        "guest": 0,
+        "observer": 0,
+        "total": 0
+      },
+      "positive_cases": 0,
+      "negative_check_rejects": 0,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/fast1-run41804041756-job126486538066.log.gz",
+        "stored_bytes": 9688,
+        "stored_sha256": "19be61ba570da768b68e9a3bea823ab74e319e0a7349a38112d3a8cb28aa6613",
+        "decoded_utf8_bytes": 37354,
+        "decoded_utf8_sha256": "d9c180c5368fc0233cdd0037a93a63f4bb204a1904efbeb517a2b33107925792"
+      }
+    },
+    {
+      "stage": "fast2",
+      "run_id": 41805323896,
+      "job_id": 126490778370,
+      "attempt": 1,
+      "head_sha": "b40261caec943b4b26d22566f5d4f1b3dd81696e",
+      "event": "push",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41805323896/job/126490778370",
+      "overall": "success",
+      "r_cohort": "NOT_RUN",
+      "ctest_executed": 0,
+      "registered_only": 679,
+      "ctest_failed": null,
+      "native": {
+        "guest": 0,
+        "observer": 0,
+        "total": 0
+      },
+      "positive_cases": 0,
+      "negative_check_rejects": 0,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/fast2-run41805323896-job126490778370.log.gz",
+        "stored_bytes": 17198,
+        "stored_sha256": "794997c18a2c55d540596b67d57db06c2d0b7d6e798bc8ae483a18751e88dba9",
+        "decoded_utf8_bytes": 85167,
+        "decoded_utf8_sha256": "ead09b531f4e2dae0410e8b5d923fefae880dbd356321d15b8bc2a05505f4856"
+      }
+    },
+    {
+      "stage": "fast3",
+      "run_id": 41808173874,
+      "job_id": 126500352088,
+      "attempt": 1,
+      "head_sha": "8a124b4aaa2ba9f3f22ab4fa5e9b586c6d12073c",
+      "event": "push",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41808173874/job/126500352088",
+      "overall": "success",
+      "r_cohort": "NOT_RUN",
+      "ctest_executed": 0,
+      "registered_only": 679,
+      "ctest_failed": null,
+      "native": {
+        "guest": 0,
+        "observer": 0,
+        "total": 0
+      },
+      "positive_cases": 0,
+      "negative_check_rejects": 0,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/fast3-run41808173874-job126500352088.log.gz",
+        "stored_bytes": 17150,
+        "stored_sha256": "82fa9dd323b92e901e2860c1bd291cb1732b5b7136128dafd1028cf99c8f059b",
+        "decoded_utf8_bytes": 85085,
+        "decoded_utf8_sha256": "e465c942f8fcca6b38beeb3e5aa9cdf09c587d705ade068fc9b522bf953721cf"
+      }
+    },
+    {
+      "stage": "first-GCC",
+      "run_id": 41805670734,
+      "job_id": 126491941303,
+      "attempt": 1,
+      "head_sha": "b40261caec943b4b26d22566f5d4f1b3dd81696e",
+      "event": "pull_request",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41805670734/job/126491941303",
+      "overall": "failure",
+      "r_cohort": "PASS",
+      "ctest_executed": 682,
+      "registered_only": null,
+      "ctest_failed": [
+        "p1088_evidence.unit",
+        "p990_new_native.integration",
+        "p1107_evidence_history.unit",
+        "p1117_evidence_history.unit",
+        "p1098_evidence_history.unit",
+        "p1045_two_original_native.integration",
+        "p1055_old_origin_0.integration",
+        "p1058_closed_h_0.integration",
+        "p1062_h_body_0.integration"
+      ],
+      "native": {
+        "guest": 12,
+        "observer": 12,
+        "total": 24
+      },
+      "positive_cases": 6,
+      "negative_check_rejects": 6,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/first-GCC-run41805670734-job126491941303.log.gz",
+        "stored_bytes": 189607,
+        "stored_sha256": "1787646f2f07026b5fed560a19c3e80ea2d8b09a03e6b043d43f9232ff86a568",
+        "decoded_utf8_bytes": 1674236,
+        "decoded_utf8_sha256": "7a4c09f661534381e15635961d603a178af2cb9963afbd4a2d403766a68833e4"
+      },
+      "r_archive": {
+        "path": "evidence/r1151-c229/archives/first-GCC-run41805670734-job126491941303.tar.gz",
+        "bytes": 51809,
+        "sha256": "9dc2381fe6f8e8bd009ef04dac895f0a32dc2e28e369053e8b0a7284101fd5f4",
+        "internal_identity": "41805670734-1-gcc-13-none",
+        "manifest_members": 206,
+        "payload_members": 205,
+        "all_payload_hashes_verified": true
+      }
+    },
+    {
+      "stage": "final-GCC",
+      "run_id": 41808183650,
+      "job_id": 126500384607,
+      "attempt": 1,
+      "head_sha": "8a124b4aaa2ba9f3f22ab4fa5e9b586c6d12073c",
+      "event": "pull_request",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41808183650/job/126500384607",
+      "overall": "success",
+      "r_cohort": "PASS",
+      "ctest_executed": 682,
+      "registered_only": null,
+      "ctest_failed": [],
+      "native": {
+        "guest": 12,
+        "observer": 12,
+        "total": 24
+      },
+      "positive_cases": 6,
+      "negative_check_rejects": 6,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/final-GCC-run41808183650-job126500384607.log.gz",
+        "stored_bytes": 92258,
+        "stored_sha256": "4dedcbf35d16e59415d518d6513b36193788e9ea5860e5b88e19f9d319b5b14f",
+        "decoded_utf8_bytes": 292994,
+        "decoded_utf8_sha256": "36fc8b4e10b5bf75fb9c56dc52976cb3d9cbc238252eeedccc67f883cd745e1d"
+      },
+      "r_archive": {
+        "path": "evidence/r1151-c229/archives/final-GCC-run41808183650-job126500384607.tar.gz",
+        "bytes": 51817,
+        "sha256": "ffcdeb01186758f2dc662f73d16c1617e6bd255d810436b9cdb851b7483e8835",
+        "internal_identity": "41808183650-1-gcc-13-none",
+        "manifest_members": 206,
+        "payload_members": 205,
+        "all_payload_hashes_verified": true
+      }
+    },
+    {
+      "stage": "first-GCC_Release",
+      "run_id": 41805670734,
+      "job_id": 126491941774,
+      "attempt": 1,
+      "head_sha": "b40261caec943b4b26d22566f5d4f1b3dd81696e",
+      "event": "pull_request",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41805670734/job/126491941774",
+      "overall": "failure",
+      "r_cohort": "PASS",
+      "ctest_executed": 682,
+      "registered_only": null,
+      "ctest_failed": [
+        "p1088_evidence.unit",
+        "p990_new_native.integration",
+        "p1107_evidence_history.unit",
+        "p1117_evidence_history.unit",
+        "p1098_evidence_history.unit",
+        "p1045_two_original_native.integration",
+        "p1055_old_origin_0.integration",
+        "p1058_closed_h_0.integration",
+        "p1062_h_body_0.integration"
+      ],
+      "native": {
+        "guest": 12,
+        "observer": 12,
+        "total": 24
+      },
+      "positive_cases": 6,
+      "negative_check_rejects": 6,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/first-GCC_Release-run41805670734-job126491941774.log.gz",
+        "stored_bytes": 191370,
+        "stored_sha256": "3a8fea9983e86d1e2b52c92eca54804ac02e3c6c04f2d64f23d1cdba7f8a3fa7",
+        "decoded_utf8_bytes": 1674257,
+        "decoded_utf8_sha256": "085ab1f9dff4b14d8f7354d8e400e3ecdd4a2908d874efecf0f02bea9822ee14"
+      },
+      "r_archive": {
+        "path": "evidence/r1151-c229/archives/first-GCC_Release-run41805670734-job126491941774.tar.gz",
+        "bytes": 51807,
+        "sha256": "96b4af909832e03871ac7b4f0dfd1208216f4526fdb3e508057f4ec5a887c4f5",
+        "internal_identity": "41805670734-1-gcc-13-none",
+        "manifest_members": 206,
+        "payload_members": 205,
+        "all_payload_hashes_verified": true
+      }
+    },
+    {
+      "stage": "final-GCC_Release",
+      "run_id": 41808183650,
+      "job_id": 126500384583,
+      "attempt": 1,
+      "head_sha": "8a124b4aaa2ba9f3f22ab4fa5e9b586c6d12073c",
+      "event": "pull_request",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41808183650/job/126500384583",
+      "overall": "success",
+      "r_cohort": "PASS",
+      "ctest_executed": 682,
+      "registered_only": null,
+      "ctest_failed": [],
+      "native": {
+        "guest": 12,
+        "observer": 12,
+        "total": 24
+      },
+      "positive_cases": 6,
+      "negative_check_rejects": 6,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/final-GCC_Release-run41808183650-job126500384583.log.gz",
+        "stored_bytes": 92222,
+        "stored_sha256": "a7031c5bc497cac764b72e5a830d0bf4af0958007d7d2ceccb5d3564f0d05258",
+        "decoded_utf8_bytes": 293006,
+        "decoded_utf8_sha256": "568a23a5b49d28d31c43b209f2b59ae8d450e23f1d5b99f5deef5b4b974bf344"
+      },
+      "r_archive": {
+        "path": "evidence/r1151-c229/archives/final-GCC_Release-run41808183650-job126500384583.tar.gz",
+        "bytes": 51802,
+        "sha256": "aa60486c9440e0f57f1799a75c6597b3f28755b5dc9a34ae779260c31c1c8bad",
+        "internal_identity": "41808183650-1-gcc-13-none",
+        "manifest_members": 206,
+        "payload_members": 205,
+        "all_payload_hashes_verified": true
+      }
+    },
+    {
+      "stage": "first-Clang",
+      "run_id": 41805670734,
+      "job_id": 126491941557,
+      "attempt": 1,
+      "head_sha": "b40261caec943b4b26d22566f5d4f1b3dd81696e",
+      "event": "pull_request",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41805670734/job/126491941557",
+      "overall": "failure",
+      "r_cohort": "PASS",
+      "ctest_executed": 682,
+      "registered_only": null,
+      "ctest_failed": [
+        "p1088_evidence.unit",
+        "p990_new_native.integration",
+        "p1107_evidence_history.unit",
+        "p1117_evidence_history.unit",
+        "p1098_evidence_history.unit",
+        "p1045_two_original_native.integration",
+        "p1055_old_origin_0.integration",
+        "p1058_closed_h_0.integration",
+        "p1062_h_body_0.integration"
+      ],
+      "native": {
+        "guest": 12,
+        "observer": 12,
+        "total": 24
+      },
+      "positive_cases": 6,
+      "negative_check_rejects": 6,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/first-Clang-run41805670734-job126491941557.log.gz",
+        "stored_bytes": 190243,
+        "stored_sha256": "71e91acc91b5ef64b7541334456bdc8cc1e3e2ef6bd15d6a0ed51687b6e8b9ac",
+        "decoded_utf8_bytes": 1695886,
+        "decoded_utf8_sha256": "968238835fe5f1d017b072960571af5259432ffa1e2df5e216766e408faa3211"
+      },
+      "r_archive": {
+        "path": "evidence/r1151-c229/archives/first-Clang-run41805670734-job126491941557.tar.gz",
+        "bytes": 51804,
+        "sha256": "a7a0b117e181226352b605b6ad670d686f78827e3d56ebaadab53e7b1819705d",
+        "internal_identity": "41805670734-1-clang-23-none",
+        "manifest_members": 206,
+        "payload_members": 205,
+        "all_payload_hashes_verified": true
+      }
+    },
+    {
+      "stage": "final-Clang",
+      "run_id": 41808183650,
+      "job_id": 126500384331,
+      "attempt": 1,
+      "head_sha": "8a124b4aaa2ba9f3f22ab4fa5e9b586c6d12073c",
+      "event": "pull_request",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41808183650/job/126500384331",
+      "overall": "success",
+      "r_cohort": "PASS",
+      "ctest_executed": 682,
+      "registered_only": null,
+      "ctest_failed": [],
+      "native": {
+        "guest": 12,
+        "observer": 12,
+        "total": 24
+      },
+      "positive_cases": 6,
+      "negative_check_rejects": 6,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/final-Clang-run41808183650-job126500384331.log.gz",
+        "stored_bytes": 92452,
+        "stored_sha256": "f5b7bdb08dce044ca04e027e15e86f8d781a6b938f7cf882da3c91f500cc2261",
+        "decoded_utf8_bytes": 295020,
+        "decoded_utf8_sha256": "bf7802c24eba4c0491b6a12c888f21669cee0700f7d6687781dc8049e722bf68"
+      },
+      "r_archive": {
+        "path": "evidence/r1151-c229/archives/final-Clang-run41808183650-job126500384331.tar.gz",
+        "bytes": 51784,
+        "sha256": "a920f959dd45c0a45ebada360481aa28160b40b94579ba20e95e75e276fdcc53",
+        "internal_identity": "41808183650-1-clang-23-none",
+        "manifest_members": 206,
+        "payload_members": 205,
+        "all_payload_hashes_verified": true
+      }
+    },
+    {
+      "stage": "first-ASan",
+      "run_id": 41805670734,
+      "job_id": 126491941034,
+      "attempt": 1,
+      "head_sha": "b40261caec943b4b26d22566f5d4f1b3dd81696e",
+      "event": "pull_request",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41805670734/job/126491941034",
+      "overall": "failure",
+      "r_cohort": "PASS",
+      "ctest_executed": 682,
+      "registered_only": null,
+      "ctest_failed": [
+        "p1088_evidence.unit",
+        "p990_new_native.integration",
+        "p1107_evidence_history.unit",
+        "p1117_evidence_history.unit",
+        "p1098_evidence_history.unit",
+        "p1045_two_original_native.integration",
+        "p1055_old_origin_0.integration",
+        "p1058_closed_h_0.integration",
+        "p1062_h_body_0.integration"
+      ],
+      "native": {
+        "guest": 12,
+        "observer": 12,
+        "total": 24
+      },
+      "positive_cases": 6,
+      "negative_check_rejects": 6,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/first-ASan-run41805670734-job126491941034.log.gz",
+        "stored_bytes": 190229,
+        "stored_sha256": "e2001c54ef97a7ace50ff55379e62b970d8843839ab5ef2e5b2bb4c4131f5f63",
+        "decoded_utf8_bytes": 1694363,
+        "decoded_utf8_sha256": "343446952792398cd55d76f3efbd03bdc6e8dd9f83535154d5920e7245192732"
+      },
+      "r_archive": {
+        "path": "evidence/r1151-c229/archives/first-ASan-run41805670734-job126491941034.tar.gz",
+        "bytes": 51888,
+        "sha256": "4edca6f7f15b67e94f796af19d08389ea0fb7fe041115275d182c33e28dd359e",
+        "internal_identity": "41805670734-1-clang-23-address",
+        "manifest_members": 206,
+        "payload_members": 205,
+        "all_payload_hashes_verified": true
+      }
+    },
+    {
+      "stage": "first-UBSan",
+      "run_id": 41805670734,
+      "job_id": 126491941378,
+      "attempt": 1,
+      "head_sha": "b40261caec943b4b26d22566f5d4f1b3dd81696e",
+      "event": "pull_request",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41805670734/job/126491941378",
+      "overall": "failure",
+      "r_cohort": "PASS",
+      "ctest_executed": 682,
+      "registered_only": null,
+      "ctest_failed": [
+        "p1088_evidence.unit",
+        "p990_new_native.integration",
+        "p1107_evidence_history.unit",
+        "p1117_evidence_history.unit",
+        "p1098_evidence_history.unit",
+        "p1045_two_original_native.integration",
+        "p1055_old_origin_0.integration",
+        "p1058_closed_h_0.integration",
+        "p1062_h_body_0.integration"
+      ],
+      "native": {
+        "guest": 12,
+        "observer": 12,
+        "total": 24
+      },
+      "positive_cases": 6,
+      "negative_check_rejects": 6,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/first-UBSan-run41805670734-job126491941378.log.gz",
+        "stored_bytes": 189399,
+        "stored_sha256": "efead5b2b82d4671f8145af3fe6eae023582988ac85d9b586e74cf93b043ad6f",
+        "decoded_utf8_bytes": 1694113,
+        "decoded_utf8_sha256": "e2733eef9aeff6c0b398210b487ef9e93feb82a617c467656a915c7ad53b46a1"
+      },
+      "r_archive": {
+        "path": "evidence/r1151-c229/archives/first-UBSan-run41805670734-job126491941378.tar.gz",
+        "bytes": 51881,
+        "sha256": "a0b993f2013b88ff06e5da0325654e5a87248b1bd1906d7918bae0ef784c2f31",
+        "internal_identity": "41805670734-1-clang-23-undefined",
+        "manifest_members": 206,
+        "payload_members": 205,
+        "all_payload_hashes_verified": true
+      }
+    },
+    {
+      "stage": "final-UBSan",
+      "run_id": 41808183650,
+      "job_id": 126500384805,
+      "attempt": 1,
+      "head_sha": "8a124b4aaa2ba9f3f22ab4fa5e9b586c6d12073c",
+      "event": "pull_request",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41808183650/job/126500384805",
+      "overall": "success",
+      "r_cohort": "PASS",
+      "ctest_executed": 682,
+      "registered_only": null,
+      "ctest_failed": [],
+      "native": {
+        "guest": 12,
+        "observer": 12,
+        "total": 24
+      },
+      "positive_cases": 6,
+      "negative_check_rejects": 6,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/final-UBSan-run41808183650-job126500384805.log.gz",
+        "stored_bytes": 92951,
+        "stored_sha256": "e27f6fc253f95d84b950877417ca4285f846dd82ef340d3e378d7427acee7b00",
+        "decoded_utf8_bytes": 293408,
+        "decoded_utf8_sha256": "839a31aeed3584d23d3c612d98e9b133c84ca7d34f32b45eb0cf654cc1fa94f5"
+      },
+      "r_archive": {
+        "path": "evidence/r1151-c229/archives/final-UBSan-run41808183650-job126500384805.tar.gz",
+        "bytes": 51883,
+        "sha256": "816a65dbb1f61aeec402b7c20deafa13e17336f6013fbd4607062b3dd199abf0",
+        "internal_identity": "41808183650-1-clang-23-undefined",
+        "manifest_members": 206,
+        "payload_members": 205,
+        "all_payload_hashes_verified": true
+      }
+    },
+    {
+      "stage": "first-PARTIAL",
+      "run_id": 41805671104,
+      "job_id": 126491941798,
+      "attempt": 1,
+      "head_sha": "b40261caec943b4b26d22566f5d4f1b3dd81696e",
+      "event": "pull_request",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41805671104/job/126491941798",
+      "overall": "failure",
+      "r_cohort": "PASS",
+      "ctest_executed": 681,
+      "registered_only": null,
+      "ctest_failed": [
+        "p1088_evidence.unit",
+        "p990_new_native.integration",
+        "p1107_evidence_history.unit",
+        "p1117_evidence_history.unit",
+        "p1098_evidence_history.unit",
+        "p1045_two_original_native.integration",
+        "p1055_old_origin_0.integration",
+        "p1058_closed_h_0.integration",
+        "p1062_h_body_0.integration"
+      ],
+      "native": {
+        "guest": 12,
+        "observer": 12,
+        "total": 24
+      },
+      "positive_cases": 6,
+      "negative_check_rejects": 6,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/first-PARTIAL-run41805671104-job126491941798.log.gz",
+        "stored_bytes": 198223,
+        "stored_sha256": "4fbe43e723b9a43567e6b7ed923c5a4bbe9fb3c84fd53c7e1b56d9ba90d22123",
+        "decoded_utf8_bytes": 1714065,
+        "decoded_utf8_sha256": "f14e1655eae4ce5aaf9235cfcde94606ec3a2fd9404df0f421eb5a63f946d97b"
+      },
+      "r_archive": {
+        "path": "evidence/r1151-c229/archives/first-PARTIAL-run41805671104-job126491941798.tar.gz",
+        "bytes": 51841,
+        "sha256": "4667c3cde2da78f5b0fd72c4346acb21b7c6160b4ec2e3c9410809c540e96a65",
+        "internal_identity": "41805671104-1-gcc-none",
+        "manifest_members": 206,
+        "payload_members": 205,
+        "all_payload_hashes_verified": true
+      }
+    },
+    {
+      "stage": "final-PARTIAL",
+      "run_id": 41808184014,
+      "job_id": 126500385124,
+      "attempt": 1,
+      "head_sha": "8a124b4aaa2ba9f3f22ab4fa5e9b586c6d12073c",
+      "event": "pull_request",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41808184014/job/126500385124",
+      "overall": "success",
+      "r_cohort": "PASS",
+      "ctest_executed": 681,
+      "registered_only": null,
+      "ctest_failed": [],
+      "native": {
+        "guest": 12,
+        "observer": 12,
+        "total": 24
+      },
+      "positive_cases": 6,
+      "negative_check_rejects": 6,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/final-PARTIAL-run41808184014-job126500385124.log.gz",
+        "stored_bytes": 99915,
+        "stored_sha256": "c845f273f6e4920716afe752ec75cb47056547b122ee38a7620d0cb782c2bd62",
+        "decoded_utf8_bytes": 334136,
+        "decoded_utf8_sha256": "8f3afe12b4d01b7ee8f8eac484723a180ef9457bdb06b221fe5a5ec26435e3b9"
+      },
+      "r_archive": {
+        "path": "evidence/r1151-c229/archives/final-PARTIAL-run41808184014-job126500385124.tar.gz",
+        "bytes": 51845,
+        "sha256": "1acb3c6470c2e1a5d154aa2143ef1da73f07ca2179d514ad60ae916ca29ed2a1",
+        "internal_identity": "41808184014-1-gcc-none",
+        "manifest_members": 206,
+        "payload_members": 205,
+        "all_payload_hashes_verified": true
+      }
+    },
+    {
+      "stage": "final-ASan",
+      "run_id": 41808183650,
+      "job_id": 126500384679,
+      "attempt": 1,
+      "head_sha": "8a124b4aaa2ba9f3f22ab4fa5e9b586c6d12073c",
+      "event": "pull_request",
+      "url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41808183650/job/126500384679",
+      "overall": "success",
+      "r_cohort": "PASS",
+      "ctest_executed": 682,
+      "registered_only": null,
+      "ctest_failed": [],
+      "native": {
+        "guest": 12,
+        "observer": 12,
+        "total": 24
+      },
+      "positive_cases": 6,
+      "negative_check_rejects": 6,
+      "negative_native": 0,
+      "raw": {
+        "path": "evidence/r1151-c229/logs/final-ASan-run41808183650-job126500384679.log.gz",
+        "stored_bytes": 92985,
+        "stored_sha256": "850dca9c2d70f1d43a42c60e3157951bf973e4d708ed97f43d17d44aec39c44e",
+        "decoded_utf8_bytes": 292725,
+        "decoded_utf8_sha256": "353bb4998d2e0c7c65c4d2cc1a6213c47137e6c18143590c5dacf030d80991d8"
+      },
+      "r_archive": {
+        "path": "evidence/r1151-c229/archives/final-ASan-run41808183650-job126500384679.tar.gz",
+        "bytes": 51885,
+        "sha256": "4c1cd67cbf7d75d04b5a690bd53897d9dff2eab9d128d736e6669fdc47b6922f",
+        "internal_identity": "41808183650-1-clang-23-address",
+        "manifest_members": 206,
+        "payload_members": 205,
+        "all_payload_hashes_verified": true
+      }
+    }
+  ]
+}
