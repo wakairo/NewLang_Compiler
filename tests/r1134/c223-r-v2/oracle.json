@@ -1,0 +1,460 @@
+{
+  "schema": "newlang.r1134.c223.scope-calibrated.oracle.v2",
+  "fixed_main": "28726f933ff4885c000e0247cf4fd9ac1859c5b1",
+  "fixed_p_head": "0caf94894560d2f9a0b1f9404ca87055b0a21ee7",
+  "fixed_p_tree": "f18fb0c1e89dd0c63d2200a6c89f36206a6acfb8",
+  "canonical": "Draft17.34",
+  "independence": "SCOPE-CALIBRATED / implementation-fixture-blind; not fresh PRE-REF BLIND",
+  "public_profile_source": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620268814",
+  "canonical_entry_correction": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620316795",
+  "v1": {
+    "manifest_sha256": "3f047b8690c99331a8787762a3d44c5a7c54b4658be3fefcce70d30305659843",
+    "payloads": 15,
+    "total_bytes": 51021,
+    "status": "PRESERVED_UNCHANGED_NOT_TESTED",
+    "original_prediction_unchanged": true
+  },
+  "pre_execution": true,
+  "observation_contract": {
+    "headers": "Observe the actual current carry at each generated loop header, including the terminating header. Expected trace is an exact ordered sequence; no synthetic carry or count is permitted.",
+    "exact_frame": "Each header has original fields equal to initial[] and remote fields equal to other[]. Continue changes only the quantity carry. All current, sibling and remote reads must come from actual guest lvalues.",
+    "break": "Exactly one normal Break. The helper's actual ref destination aliases the selected field of the original; it returns the old Copy. The actual post-B state and loop result must match expected_locals.",
+    "caller": "The subsequent independent helper call aliases the same selected original field and returns B's installed current value. Preserve the earlier old Copy, sibling and separate original.",
+    "identity": "Within each execution the original root and both field addresses persist across headers, B, helper calls and caller; remote root and fields are distinct objects. Absolute addresses and cross-run addresses are not predicted. Guest state and authority must never be created by the observer.",
+    "unmodified": "Compile and execute the unmodified generated translation unit separately from a passive instrumented copy. Keep both exact byte streams and hashes.",
+    "passive": "Instrumentation may read actual guest locals/lvalues and emit traces. It must not change guest operands, control flow, arithmetic, state, or permissions. Compare observations with this frozen oracle; do not emit expected trace values as observations.",
+    "scope": "Public owned/source authority observations and C17 behavior do not prove private inference or general soundness.",
+    "stages": [
+      "CHECK",
+      "SOURCE_ISSUED_PUBLIC_OWNED_WHEN_REQUIRED",
+      "C17_EMIT",
+      "STRICT_C17_COMPILE",
+      "UNMODIFIED_NATIVE",
+      "PASSIVE_NATIVE_TRACE",
+      "NEGATIVE_CHECK",
+      "APPLICABLE_HOST_GUEST_SANITIZERS"
+    ],
+    "first_failure": "Preserve every initial diagnostic and raw artifact. Report later stages as NOT_RUN for the affected case; never execute checked-rejected, unsafe or divergent input."
+  },
+  "cases": [
+    {
+      "id": "p01-rise-three",
+      "family": "rise",
+      "init": 2,
+      "bound": 9,
+      "step": 3,
+      "trace": [
+        2,
+        5,
+        8,
+        11
+      ],
+      "nominal": "Cinder",
+      "fields": [
+        "ash",
+        "ice"
+      ],
+      "field": 0,
+      "helper": "renew_ash",
+      "initial": [
+        43,
+        167
+      ],
+      "other": [
+        81,
+        214
+      ],
+      "change": 96,
+      "caller": 201,
+      "v1": "p01-rise-three",
+      "path": "c223-r-v2/sources/p01-rise-three.nl",
+      "bytes": 1089,
+      "sha256": "e937ef758072c41d811089cb0be90c9aeb0631a91c198798841c6ed2c932e9f2",
+      "canonical": "LEGAL",
+      "profile_prediction": "ACCEPT",
+      "native_allowed": true,
+      "continue_count": 3,
+      "break_count": 1,
+      "normal_entry_result": "unit",
+      "expected_locals": {
+        "old_copy": 43,
+        "sibling_copy": 167,
+        "loop_old": 43,
+        "break_current": 96,
+        "break_sibling": 167,
+        "break_remote_first": 81,
+        "break_remote_second": 214,
+        "caller_old": 96,
+        "caller_current": 201,
+        "caller_sibling": 167,
+        "caller_remote_first": 81,
+        "caller_remote_second": 214,
+        "preserved_old": 43
+      },
+      "arithmetic_proof": "true arm: 0 <= phase <= 8; phase + 3 <= 11; Break arm has no arithmetic"
+    },
+    {
+      "id": "p02-rise-zero",
+      "family": "rise",
+      "init": 12,
+      "bound": 9,
+      "step": 3,
+      "trace": [
+        12
+      ],
+      "nominal": "Cinder",
+      "fields": [
+        "ash",
+        "ice"
+      ],
+      "field": 0,
+      "helper": "renew_ash",
+      "initial": [
+        52,
+        173
+      ],
+      "other": [
+        88,
+        222
+      ],
+      "change": 107,
+      "caller": 209,
+      "v1": "p02-rise-zero",
+      "path": "c223-r-v2/sources/p02-rise-zero.nl",
+      "bytes": 1091,
+      "sha256": "d9d83924d42b7be37d89e5f09540ea4c42c276e286b760166e0cf015b23c2d9b",
+      "canonical": "LEGAL",
+      "profile_prediction": "ACCEPT",
+      "native_allowed": true,
+      "continue_count": 0,
+      "break_count": 1,
+      "normal_entry_result": "unit",
+      "expected_locals": {
+        "old_copy": 52,
+        "sibling_copy": 173,
+        "loop_old": 52,
+        "break_current": 107,
+        "break_sibling": 173,
+        "break_remote_first": 88,
+        "break_remote_second": 222,
+        "caller_old": 107,
+        "caller_current": 209,
+        "caller_sibling": 173,
+        "caller_remote_first": 88,
+        "caller_remote_second": 222,
+        "preserved_old": 52
+      },
+      "arithmetic_proof": "true arm: 0 <= phase <= 8; phase + 3 <= 11; Break arm has no arithmetic"
+    },
+    {
+      "id": "p03-rise-one",
+      "family": "rise",
+      "init": 7,
+      "bound": 9,
+      "step": 3,
+      "trace": [
+        7,
+        10
+      ],
+      "nominal": "Cinder",
+      "fields": [
+        "ash",
+        "ice"
+      ],
+      "field": 0,
+      "helper": "renew_ash",
+      "initial": [
+        61,
+        181
+      ],
+      "other": [
+        93,
+        231
+      ],
+      "change": 118,
+      "caller": 217,
+      "v1": "p03-rise-one",
+      "path": "c223-r-v2/sources/p03-rise-one.nl",
+      "bytes": 1090,
+      "sha256": "603a3aa9cd825f219e46490cb39990939430b479892a29651c0ce2fe91a8df1e",
+      "canonical": "LEGAL",
+      "profile_prediction": "ACCEPT",
+      "native_allowed": true,
+      "continue_count": 1,
+      "break_count": 1,
+      "normal_entry_result": "unit",
+      "expected_locals": {
+        "old_copy": 61,
+        "sibling_copy": 181,
+        "loop_old": 61,
+        "break_current": 118,
+        "break_sibling": 181,
+        "break_remote_first": 93,
+        "break_remote_second": 231,
+        "caller_old": 118,
+        "caller_current": 217,
+        "caller_sibling": 181,
+        "caller_remote_first": 93,
+        "caller_remote_second": 231,
+        "preserved_old": 61
+      },
+      "arithmetic_proof": "true arm: 0 <= phase <= 8; phase + 3 <= 11; Break arm has no arithmetic"
+    },
+    {
+      "id": "p04-fall-three",
+      "family": "fall",
+      "init": 14,
+      "bound": 5,
+      "step": 4,
+      "trace": [
+        14,
+        10,
+        6,
+        2
+      ],
+      "nominal": "Harbor",
+      "fields": [
+        "sand",
+        "tide"
+      ],
+      "field": 1,
+      "helper": "renew_tide",
+      "initial": [
+        73,
+        139
+      ],
+      "other": [
+        159,
+        226
+      ],
+      "change": 87,
+      "caller": 193,
+      "v1": "p04-fall-three",
+      "path": "c223-r-v2/sources/p04-fall-three.nl",
+      "bytes": 1112,
+      "sha256": "448edef669b1af3d41c19051e793aaff7ff2300a27cc7abae4595a45effe8927",
+      "canonical": "LEGAL",
+      "profile_prediction": "ACCEPT",
+      "native_allowed": true,
+      "continue_count": 3,
+      "break_count": 1,
+      "normal_entry_result": "unit",
+      "expected_locals": {
+        "old_copy": 139,
+        "sibling_copy": 73,
+        "loop_old": 139,
+        "break_current": 87,
+        "break_sibling": 73,
+        "break_remote_first": 159,
+        "break_remote_second": 226,
+        "caller_old": 87,
+        "caller_current": 193,
+        "caller_sibling": 73,
+        "caller_remote_first": 159,
+        "caller_remote_second": 226,
+        "preserved_old": 139
+      },
+      "arithmetic_proof": "false arm: phase >= 5 >= 4; 0 <= phase - 4 <= phase; Break arm has no arithmetic"
+    },
+    {
+      "id": "p05-fall-zero",
+      "family": "fall",
+      "init": 3,
+      "bound": 5,
+      "step": 4,
+      "trace": [
+        3
+      ],
+      "nominal": "Harbor",
+      "fields": [
+        "sand",
+        "tide"
+      ],
+      "field": 1,
+      "helper": "renew_tide",
+      "initial": [
+        79,
+        148
+      ],
+      "other": [
+        166,
+        233
+      ],
+      "change": 99,
+      "caller": 202,
+      "v1": "new-zero-fall",
+      "path": "c223-r-v2/sources/p05-fall-zero.nl",
+      "bytes": 1111,
+      "sha256": "6ee435288123c566087e0961a43e4658ed471f0982c84677f32b99ad14157857",
+      "canonical": "LEGAL",
+      "profile_prediction": "ACCEPT",
+      "native_allowed": true,
+      "continue_count": 0,
+      "break_count": 1,
+      "normal_entry_result": "unit",
+      "expected_locals": {
+        "old_copy": 148,
+        "sibling_copy": 79,
+        "loop_old": 148,
+        "break_current": 99,
+        "break_sibling": 79,
+        "break_remote_first": 166,
+        "break_remote_second": 233,
+        "caller_old": 99,
+        "caller_current": 202,
+        "caller_sibling": 79,
+        "caller_remote_first": 166,
+        "caller_remote_second": 233,
+        "preserved_old": 148
+      },
+      "arithmetic_proof": "false arm: phase >= 5 >= 4; 0 <= phase - 4 <= phase; Break arm has no arithmetic"
+    },
+    {
+      "id": "p06-fall-one",
+      "family": "fall",
+      "init": 6,
+      "bound": 5,
+      "step": 4,
+      "trace": [
+        6,
+        2
+      ],
+      "nominal": "Harbor",
+      "fields": [
+        "sand",
+        "tide"
+      ],
+      "field": 1,
+      "helper": "renew_tide",
+      "initial": [
+        84,
+        156
+      ],
+      "other": [
+        172,
+        241
+      ],
+      "change": 111,
+      "caller": 211,
+      "v1": "new-one-fall",
+      "path": "c223-r-v2/sources/p06-fall-one.nl",
+      "bytes": 1112,
+      "sha256": "aebb64dabdcc8a1e95ca357ee476e9cef0df5e4a55e3ebc279b17c9345138e79",
+      "canonical": "LEGAL",
+      "profile_prediction": "ACCEPT",
+      "native_allowed": true,
+      "continue_count": 1,
+      "break_count": 1,
+      "normal_entry_result": "unit",
+      "expected_locals": {
+        "old_copy": 156,
+        "sibling_copy": 84,
+        "loop_old": 156,
+        "break_current": 111,
+        "break_sibling": 84,
+        "break_remote_first": 172,
+        "break_remote_second": 241,
+        "caller_old": 111,
+        "caller_current": 211,
+        "caller_sibling": 84,
+        "caller_remote_first": 172,
+        "caller_remote_second": 241,
+        "preserved_old": 156
+      },
+      "arithmetic_proof": "false arm: phase >= 5 >= 4; 0 <= phase - 4 <= phase; Break arm has no arithmetic"
+    },
+    {
+      "id": "n07-late-underflow",
+      "path": "c223-r-v2/sources/n07-late-underflow.nl",
+      "bytes": 181,
+      "sha256": "0542437e06daaaefec549a2407f67f3d45b6235f9599e0be10cd9af1917ec001",
+      "canonical": "REJECT_CHECKED",
+      "profile_prediction": "REJECT",
+      "native_allowed": false,
+      "reason": "8 -> 5 -> 2; false arm at 2 evaluates 2 - 3. Entry safety cannot justify all later states.",
+      "basis": "5.2 / 27.5"
+    },
+    {
+      "id": "n08-inverted-overflow",
+      "path": "c223-r-v2/sources/n08-inverted-overflow.nl",
+      "bytes": 181,
+      "sha256": "0ca8fee9c34443e4161d0bd7b15bc3708eb80d46f2c9652de25588e5fbdb73dc",
+      "canonical": "REJECT_CHECKED",
+      "profile_prediction": "REJECT",
+      "native_allowed": false,
+      "reason": "false arm provides a lower bound only; the increasing carry eventually exceeds finite USIZE_MAX.",
+      "basis": "5.2 / 27.5"
+    },
+    {
+      "id": "n09-wrong-arm-underflow",
+      "path": "c223-r-v2/sources/n09-wrong-arm-underflow.nl",
+      "bytes": 181,
+      "sha256": "22ab15710a10a462ca3340c44c0706e6cc9f7d9c51ad94bf2131c933aea25f60",
+      "canonical": "REJECT_CHECKED",
+      "profile_prediction": "REJECT",
+      "native_allowed": false,
+      "reason": "1 -> 0; true arm at 0 evaluates 0 - 1. An upper-bound guard is insufficient.",
+      "basis": "5.2 / 27.5"
+    },
+    {
+      "id": "n10-operand-type",
+      "path": "c223-r-v2/sources/n10-operand-type.nl",
+      "bytes": 178,
+      "sha256": "4b52bfda8fb8dafd8037357599059d2d6f72817506e604800fcf8b4d8b77c417",
+      "canonical": "REJECT_CHECKED",
+      "profile_prediction": "REJECT",
+      "native_allowed": false,
+      "reason": "quantity addition requires usize operands; u8 does not match usize.",
+      "basis": "5.2"
+    },
+    {
+      "id": "n11-carry-type",
+      "path": "c223-r-v2/sources/n11-carry-type.nl",
+      "bytes": 170,
+      "sha256": "deb3534fa269be290486ea088d2eb2e5b50a472baf159279e8440405ef93c04e",
+      "canonical": "REJECT_CHECKED",
+      "profile_prediction": "REJECT",
+      "native_allowed": false,
+      "reason": "Continue u8 argument cannot enter a usize parameter slot.",
+      "basis": "27.6"
+    },
+    {
+      "id": "n12-nearest-arity",
+      "path": "c223-r-v2/sources/n12-nearest-arity.nl",
+      "bytes": 177,
+      "sha256": "fdd6c37b642b3451d576de0912d2b7b99a7138165cdf0f58344c247e2a0c8909",
+      "canonical": "REJECT_CHECKED",
+      "profile_prediction": "REJECT",
+      "native_allowed": false,
+      "reason": "The nearest active loop has exactly one parameter and receives two arguments.",
+      "basis": "27.6"
+    },
+    {
+      "id": "n13-ending-loan",
+      "path": "c223-r-v2/sources/n13-ending-loan.nl",
+      "bytes": 292,
+      "sha256": "dfb01eef3bcb76aab5d6e157d94e79392db96345e7edf6a5227d64f1b162590b",
+      "canonical": "REJECT_CHECKED",
+      "profile_prediction": "REJECT",
+      "native_allowed": false,
+      "reason": "Arithmetic is safe, but loop result forwards the ref dependent on the ending loan scope.",
+      "basis": "13.8 / 13.5a / 27.7"
+    },
+    {
+      "id": "c14-commuted-precision",
+      "path": "c223-r-v2/sources/c14-commuted-precision.nl",
+      "bytes": 181,
+      "sha256": "87809534f52d3b2a3175fd9c04a14cec59810f44cf621e4aa578517dd545d2ce",
+      "canonical": "LEGAL",
+      "profile_prediction": "CONSERVATIVE_REJECTION_ALLOWED",
+      "native_allowed": false,
+      "trace": [
+        1,
+        3,
+        5,
+        7
+      ],
+      "reason": "Commuted addition is mathematically safe in the true arm, but is outside C223 public finite profile. Only CHECK is observed; no native claim."
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+# R1134 only: transport already collected raw after CTest, including success.
+list(APPEND CTEST_CUSTOM_POST_TEST
+    "\"@Python3_EXECUTABLE@\" \"@R1134_HARNESS@/report.py\" \"@CMAKE_BINARY_DIR@/r1134-raw\"")

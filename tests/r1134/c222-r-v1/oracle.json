@@ -1,0 +1,892 @@
+{
+  "schema": "newlang.c222.r.freeze.oracle.v1",
+  "authority": {
+    "repository": "wakairo/NewLang_Compiler",
+    "compiler_main": "28726f933ff4885c000e0247cf4fd9ac1859c5b1",
+    "canonical_pointer": "docs/reference/CURRENT_SPEC.md",
+    "canonical_file": "docs/reference/NewLang_v0_spec_Draft17_34.md",
+    "canonical_draft": "17.34",
+    "p_candidate_head": null,
+    "issue": "https://github.com/wakairo/NewLang_Compiler/issues/1134"
+  },
+  "evidence_kind": "INDEPENDENT_PRE_EXECUTION_SEMANTIC_PREDICTIONS",
+  "target_precondition": "u8 literals are within 0..255; the selected target must represent usize(11). No usize bit width or address absolute value is assumed.",
+  "execution_status": {
+    "branch_ref_creation": 0,
+    "published_git_objects": 0,
+    "push": 0,
+    "pull_requests": 0,
+    "actions_runs": 0,
+    "local_shell_executor": 0,
+    "compiler_check": 0,
+    "public_owned": 0,
+    "c17_build": 0,
+    "native": 0,
+    "tests": 0,
+    "lean": 0
+  },
+  "observation_contract": {
+    "values": "Names in expected_bindings identify source lexical bindings at their evaluation point; this is not a claim that a compiler exposes them via any existing public ABI.",
+    "counts": "Continue counts and ordered header traces are semantic predictions, not a runtime counter injected into source.",
+    "originals": "Two Pebble locals are created before the loop and remain the same live originals through Continue, Break Change, and the subsequent caller Change.",
+    "measurement": "Only the main function result is an explicit normal result in primary source. Collecting local traces or original-address relations requires a separately authorized observation method that neither writes guest state nor replaces source facts.",
+    "no_harness": "No runner, compiler API adapter, build registration, address primitive, or privileged observer is supplied in this freeze.",
+    "grading": "Record actual rejection layer and declared P scope. Unsupported or sound precision rejection of legal source alone is not a P bug. Invalid inputs must not be advanced to native."
+  },
+  "identity_relations": {
+    "PRIMARY_IDENTITY_RELATIONS": {
+      "phases": [
+        "after_initialization",
+        "at_each_continue",
+        "before_break_change",
+        "after_break_change",
+        "after_loop",
+        "after_caller_change"
+      ],
+      "same_original_root_incarnation_across_phases": true,
+      "same_other_root_incarnation_across_phases": true,
+      "same_fixed_field_incarnations_across_phases": true,
+      "same_original_address_across_phases": true,
+      "same_other_address_across_phases": true,
+      "same_each_fixed_field_address_across_phases": true,
+      "original_and_other_addresses_distinct_while_both_live": true,
+      "field_declaration_indices": {
+        "clay": 0,
+        "glow": 1
+      },
+      "changed_field_value_fact": "changes at each of the two Change operations",
+      "original_ancestor_value_fact": "changes compositionally at each of the two Change operations",
+      "sibling_value_fact": "preserved",
+      "other_root_and_field_value_facts": "preserved",
+      "absolute_addresses": null,
+      "layout_offsets": null,
+      "no_root_rebinding_or_copied_proxy_authority": true
+    }
+  },
+  "cases": [
+    {
+      "id": "p01-rise-three",
+      "source": {
+        "path": "c222-r-v1/sources/p01-rise-three.nl",
+        "bytes": 1591,
+        "sha256": "28640d32a05c648a152cd4bbb06388e7c0d11370eeaee342ac341d1e6066f1f1"
+      },
+      "family": "primary",
+      "implementation_acceptance": "NOT_TESTED",
+      "public_owned": "NOT_TESTED",
+      "c17_native": "NOT_TESTED",
+      "source_eligibility": "CANONICAL_LEGAL_BY_INDEPENDENT_READING",
+      "authority_sections": [
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33 T profile",
+        "17.4",
+        "18.1-18.5",
+        "18.7-18.8",
+        "19.1",
+        "27.4-27.8"
+      ],
+      "entry_function": "main",
+      "function_result_type": "u8",
+      "arithmetic": {
+        "evaluated_arm": "if_true_only",
+        "guard": "quantity <= usize(6)",
+        "expression": "quantity + usize(2)",
+        "proof": "0 <= quantity <= 6 implies 2 <= quantity + 2 <= 8; usize(8) is representable.",
+        "break_arm_arithmetic": "none"
+      },
+      "expected_flow": {
+        "header_quantity_trace": [
+          2,
+          4,
+          6,
+          8
+        ],
+        "continue_count": 3,
+        "body_entry_count": 4,
+        "break_count": 1,
+        "final_quantity": 8,
+        "refresh_chip_call_count": 2,
+        "mutation_count_during_continue": 0
+      },
+      "expected_bindings": {
+        "old_copy": 37,
+        "sibling_copy": 142,
+        "other_clay_copy": 83,
+        "other_glow_copy": 219,
+        "old_at_change": 37,
+        "final_quantity": 8,
+        "current_at_break": 91,
+        "sibling_at_break": 142,
+        "other_clay_at_break": 83,
+        "other_glow_at_break": 219,
+        "old_through_loop": 37,
+        "old_copy_after": 37,
+        "current_after_loop": 91,
+        "sibling_after_loop": 142,
+        "other_clay_after_loop": 83,
+        "other_glow_after_loop": 219,
+        "caller_old": 91,
+        "current_after_caller": 205,
+        "sibling_after_caller": 142,
+        "other_clay_after_caller": 83,
+        "other_glow_after_caller": 219,
+        "old_copy_final": 37
+      },
+      "expected_function_result": 37,
+      "expected_state": {
+        "entry": {
+          "original": {
+            "clay": 37,
+            "glow": 142
+          },
+          "other": {
+            "clay": 83,
+            "glow": 219
+          }
+        },
+        "after_each_continue": {
+          "original": {
+            "clay": 37,
+            "glow": 142
+          },
+          "other": {
+            "clay": 83,
+            "glow": 219
+          }
+        },
+        "after_break": {
+          "original": {
+            "clay": 91,
+            "glow": 142
+          },
+          "other": {
+            "clay": 83,
+            "glow": 219
+          }
+        },
+        "after_caller": {
+          "original": {
+            "clay": 205,
+            "glow": 142
+          },
+          "other": {
+            "clay": 83,
+            "glow": 219
+          }
+        }
+      },
+      "changed_field": "clay",
+      "changed_field_declaration_index": 0,
+      "sibling_field": "glow",
+      "address_and_incarnation_contract": "PRIMARY_IDENTITY_RELATIONS",
+      "future_execution_policy": {
+        "authorization": "NONE",
+        "finite_body_entry_budget": 4,
+        "native_only_after_all_required_source_and_owned_gates": true
+      }
+    },
+    {
+      "id": "p02-rise-zero",
+      "source": {
+        "path": "c222-r-v1/sources/p02-rise-zero.nl",
+        "bytes": 1592,
+        "sha256": "2fb4bb9e03119f0577b8d2e6fe3cf0ffe7367f18991d4d8c2f88fe274904e8a4"
+      },
+      "family": "primary",
+      "implementation_acceptance": "NOT_TESTED",
+      "public_owned": "NOT_TESTED",
+      "c17_native": "NOT_TESTED",
+      "source_eligibility": "CANONICAL_LEGAL_BY_INDEPENDENT_READING",
+      "authority_sections": [
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33 T profile",
+        "17.4",
+        "18.1-18.5",
+        "18.7-18.8",
+        "19.1",
+        "27.4-27.8"
+      ],
+      "entry_function": "main",
+      "function_result_type": "u8",
+      "arithmetic": {
+        "evaluated_arm": "if_true_only",
+        "guard": "quantity <= usize(6)",
+        "expression": "quantity + usize(2)",
+        "proof": "0 <= quantity <= 6 implies 2 <= quantity + 2 <= 8; usize(8) is representable.",
+        "break_arm_arithmetic": "none"
+      },
+      "expected_flow": {
+        "header_quantity_trace": [
+          8
+        ],
+        "continue_count": 0,
+        "body_entry_count": 1,
+        "break_count": 1,
+        "final_quantity": 8,
+        "refresh_chip_call_count": 2,
+        "mutation_count_during_continue": 0
+      },
+      "expected_bindings": {
+        "old_copy": 44,
+        "sibling_copy": 171,
+        "other_clay_copy": 68,
+        "other_glow_copy": 232,
+        "old_at_change": 44,
+        "final_quantity": 8,
+        "current_at_break": 121,
+        "sibling_at_break": 171,
+        "other_clay_at_break": 68,
+        "other_glow_at_break": 232,
+        "old_through_loop": 44,
+        "old_copy_after": 44,
+        "current_after_loop": 121,
+        "sibling_after_loop": 171,
+        "other_clay_after_loop": 68,
+        "other_glow_after_loop": 232,
+        "caller_old": 121,
+        "current_after_caller": 207,
+        "sibling_after_caller": 171,
+        "other_clay_after_caller": 68,
+        "other_glow_after_caller": 232,
+        "old_copy_final": 44
+      },
+      "expected_function_result": 44,
+      "expected_state": {
+        "entry": {
+          "original": {
+            "clay": 44,
+            "glow": 171
+          },
+          "other": {
+            "clay": 68,
+            "glow": 232
+          }
+        },
+        "after_each_continue": {
+          "original": {
+            "clay": 44,
+            "glow": 171
+          },
+          "other": {
+            "clay": 68,
+            "glow": 232
+          }
+        },
+        "after_break": {
+          "original": {
+            "clay": 121,
+            "glow": 171
+          },
+          "other": {
+            "clay": 68,
+            "glow": 232
+          }
+        },
+        "after_caller": {
+          "original": {
+            "clay": 207,
+            "glow": 171
+          },
+          "other": {
+            "clay": 68,
+            "glow": 232
+          }
+        }
+      },
+      "changed_field": "clay",
+      "changed_field_declaration_index": 0,
+      "sibling_field": "glow",
+      "address_and_incarnation_contract": "PRIMARY_IDENTITY_RELATIONS",
+      "future_execution_policy": {
+        "authorization": "NONE",
+        "finite_body_entry_budget": 1,
+        "native_only_after_all_required_source_and_owned_gates": true
+      }
+    },
+    {
+      "id": "p03-rise-one",
+      "source": {
+        "path": "c222-r-v1/sources/p03-rise-one.nl",
+        "bytes": 1592,
+        "sha256": "5ff8776553df4814e1b265c6865d56af6d88ae927ea45c5255c11fd130eef56b"
+      },
+      "family": "primary",
+      "implementation_acceptance": "NOT_TESTED",
+      "public_owned": "NOT_TESTED",
+      "c17_native": "NOT_TESTED",
+      "source_eligibility": "CANONICAL_LEGAL_BY_INDEPENDENT_READING",
+      "authority_sections": [
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33 T profile",
+        "17.4",
+        "18.1-18.5",
+        "18.7-18.8",
+        "19.1",
+        "27.4-27.8"
+      ],
+      "entry_function": "main",
+      "function_result_type": "u8",
+      "arithmetic": {
+        "evaluated_arm": "if_true_only",
+        "guard": "quantity <= usize(6)",
+        "expression": "quantity + usize(2)",
+        "proof": "0 <= quantity <= 6 implies 2 <= quantity + 2 <= 8; usize(8) is representable.",
+        "break_arm_arithmetic": "none"
+      },
+      "expected_flow": {
+        "header_quantity_trace": [
+          6,
+          8
+        ],
+        "continue_count": 1,
+        "body_entry_count": 2,
+        "break_count": 1,
+        "final_quantity": 8,
+        "refresh_chip_call_count": 2,
+        "mutation_count_during_continue": 0
+      },
+      "expected_bindings": {
+        "old_copy": 59,
+        "sibling_copy": 184,
+        "other_clay_copy": 72,
+        "other_glow_copy": 216,
+        "old_at_change": 59,
+        "final_quantity": 8,
+        "current_at_break": 133,
+        "sibling_at_break": 184,
+        "other_clay_at_break": 72,
+        "other_glow_at_break": 216,
+        "old_through_loop": 59,
+        "old_copy_after": 59,
+        "current_after_loop": 133,
+        "sibling_after_loop": 184,
+        "other_clay_after_loop": 72,
+        "other_glow_after_loop": 216,
+        "caller_old": 133,
+        "current_after_caller": 209,
+        "sibling_after_caller": 184,
+        "other_clay_after_caller": 72,
+        "other_glow_after_caller": 216,
+        "old_copy_final": 59
+      },
+      "expected_function_result": 59,
+      "expected_state": {
+        "entry": {
+          "original": {
+            "clay": 59,
+            "glow": 184
+          },
+          "other": {
+            "clay": 72,
+            "glow": 216
+          }
+        },
+        "after_each_continue": {
+          "original": {
+            "clay": 59,
+            "glow": 184
+          },
+          "other": {
+            "clay": 72,
+            "glow": 216
+          }
+        },
+        "after_break": {
+          "original": {
+            "clay": 133,
+            "glow": 184
+          },
+          "other": {
+            "clay": 72,
+            "glow": 216
+          }
+        },
+        "after_caller": {
+          "original": {
+            "clay": 209,
+            "glow": 184
+          },
+          "other": {
+            "clay": 72,
+            "glow": 216
+          }
+        }
+      },
+      "changed_field": "clay",
+      "changed_field_declaration_index": 0,
+      "sibling_field": "glow",
+      "address_and_incarnation_contract": "PRIMARY_IDENTITY_RELATIONS",
+      "future_execution_policy": {
+        "authorization": "NONE",
+        "finite_body_entry_budget": 2,
+        "native_only_after_all_required_source_and_owned_gates": true
+      }
+    },
+    {
+      "id": "p04-fall-three",
+      "source": {
+        "path": "c222-r-v1/sources/p04-fall-three.nl",
+        "bytes": 1591,
+        "sha256": "3d61d272276753caf09054518c13f04d014c90b0d95ee774ad38d8c15ae362ef"
+      },
+      "family": "primary",
+      "implementation_acceptance": "NOT_TESTED",
+      "public_owned": "NOT_TESTED",
+      "c17_native": "NOT_TESTED",
+      "source_eligibility": "CANONICAL_LEGAL_BY_INDEPENDENT_READING",
+      "authority_sections": [
+        "5.2",
+        "6",
+        "13.5a",
+        "13.8",
+        "16.2",
+        "17.1 Draft17.33 T profile",
+        "17.4",
+        "18.1-18.5",
+        "18.7-18.8",
+        "19.1",
+        "27.4-27.8"
+      ],
+      "entry_function": "main",
+      "function_result_type": "u8",
+      "arithmetic": {
+        "evaluated_arm": "if_true_only",
+        "guard": "quantity > usize(2)",
+        "expression": "quantity - usize(3)",
+        "proof": "quantity > 2 implies quantity >= 3; 0 <= quantity - 3 <= quantity <= USIZE_MAX.",
+        "break_arm_arithmetic": "none"
+      },
+      "expected_flow": {
+        "header_quantity_trace": [
+          11,
+          8,
+          5,
+          2
+        ],
+        "continue_count": 3,
+        "body_entry_count": 4,
+        "break_count": 1,
+        "final_quantity": 2,
+        "refresh_chip_call_count": 2,
+        "mutation_count_during_continue": 0
+      },
+      "expected_bindings": {
+        "old_copy": 28,
+        "sibling_copy": 154,
+        "other_clay_copy": 67,
+        "other_glow_copy": 211,
+        "old_at_change": 28,
+        "final_quantity": 2,
+        "current_at_break": 96,
+        "sibling_at_break": 154,
+        "other_clay_at_break": 67,
+        "other_glow_at_break": 211,
+        "old_through_loop": 28,
+        "old_copy_after": 28,
+        "current_after_loop": 96,
+        "sibling_after_loop": 154,
+        "other_clay_after_loop": 67,
+        "other_glow_after_loop": 211,
+        "caller_old": 96,
+        "current_after_caller": 203,
+        "sibling_after_caller": 154,
+        "other_clay_after_caller": 67,
+        "other_glow_after_caller": 211,
+        "old_copy_final": 28
+      },
+      "expected_function_result": 28,
+      "expected_state": {
+        "entry": {
+          "original": {
+            "clay": 154,
+            "glow": 28
+          },
+          "other": {
+            "clay": 67,
+            "glow": 211
+          }
+        },
+        "after_each_continue": {
+          "original": {
+            "clay": 154,
+            "glow": 28
+          },
+          "other": {
+            "clay": 67,
+            "glow": 211
+          }
+        },
+        "after_break": {
+          "original": {
+            "clay": 154,
+            "glow": 96
+          },
+          "other": {
+            "clay": 67,
+            "glow": 211
+          }
+        },
+        "after_caller": {
+          "original": {
+            "clay": 154,
+            "glow": 203
+          },
+          "other": {
+            "clay": 67,
+            "glow": 211
+          }
+        }
+      },
+      "changed_field": "glow",
+      "changed_field_declaration_index": 1,
+      "sibling_field": "clay",
+      "address_and_incarnation_contract": "PRIMARY_IDENTITY_RELATIONS",
+      "future_execution_policy": {
+        "authorization": "NONE",
+        "finite_body_entry_budget": 4,
+        "native_only_after_all_required_source_and_owned_gates": true
+      }
+    },
+    {
+      "id": "p05-helper-precision",
+      "source": {
+        "path": "c222-r-v1/sources/p05-helper-precision.nl",
+        "bytes": 377,
+        "sha256": "196d46d078afb2cf314371be3b46ecc898ee1d0e62430adeaeecdf33f8491be2"
+      },
+      "family": "positive_precision_control",
+      "implementation_acceptance": "NOT_TESTED",
+      "public_owned": "NOT_TESTED",
+      "c17_native": "NOT_TESTED",
+      "source_eligibility": "CANONICAL_LEGAL_PRECISION_REJECTION_ALLOWED",
+      "authority_sections": [
+        "5.2",
+        "6",
+        "18.1-18.5",
+        "19.1",
+        "27.4-27.8"
+      ],
+      "entry_function": "main",
+      "function_result_type": "usize",
+      "arithmetic": {
+        "evaluated_arm": "advance_clamped if_true only",
+        "proof": "value < 9 implies 0 <= value <= 8 and 1 <= value + 1 <= 9; the false arm returns the unchanged value. The helper is safe for every representable usize input."
+      },
+      "expected_flow": {
+        "header_quantity_trace": [
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "helper_return_trace": [
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "helper_call_count": 5,
+        "continue_count": 4,
+        "body_entry_count": 5,
+        "break_count": 1,
+        "final_quantity": 7
+      },
+      "expected_function_result": 7,
+      "precision_boundary": "A sound implementation may reject unsupported body-sensitive calls or cyclic facts. Such refusal is not by itself a source-invalid result or a P defect; compare a separately frozen future P declaration of scope.",
+      "future_execution_policy": {
+        "authorization": "NONE",
+        "finite_body_entry_budget": 5,
+        "native_only_after_all_required_source_and_owned_gates": true
+      }
+    },
+    {
+      "id": "c06-divergent-identity",
+      "source": {
+        "path": "c222-r-v1/sources/c06-divergent-identity.nl",
+        "bytes": 143,
+        "sha256": "fce7d99527f521f08d6d3163bf1a7ff811918f804cf3d8ac704ead5ecb7efd94"
+      },
+      "family": "legal_divergence_control",
+      "implementation_acceptance": "NOT_TESTED",
+      "public_owned": "NOT_TESTED",
+      "c17_native": "NOT_TESTED",
+      "source_eligibility": "CANONICAL_LEGAL_NO_NORMAL_EXIT",
+      "authority_sections": [
+        "5.2",
+        "19.1",
+        "27.5",
+        "27.6",
+        "27.8"
+      ],
+      "entry_function": "main",
+      "function_result_type": "unit",
+      "arithmetic": {
+        "proof": "For every representable quantity q, the mathematical result q * 1 equals q and is representable."
+      },
+      "expected_flow": {
+        "header_quantity_prefix": [
+          1,
+          1,
+          1
+        ],
+        "continue_count": "UNBOUNDED",
+        "break_count": 0,
+        "normal_function_exit": false
+      },
+      "expected_function_result": null,
+      "result_note": "No normal outgoing edge exists. The declaration does not manufacture a synthetic unit result and does not prove termination.",
+      "future_execution_policy": {
+        "authorization": "NONE",
+        "unrestricted_execution_forbidden": true,
+        "native_allowed_under_this_freeze": false,
+        "separate_release_must_define_finite_interruption_budget": true
+      }
+    },
+    {
+      "id": "n07-late-underflow",
+      "source": {
+        "path": "c222-r-v1/sources/n07-late-underflow.nl",
+        "bytes": 242,
+        "sha256": "5f24044e7d4b8eded031b770dc5562cb6c99f3d00111a98bd9ece8d7f96db972"
+      },
+      "family": "negative",
+      "implementation_acceptance": "NOT_TESTED",
+      "public_owned": "NOT_TESTED",
+      "c17_native": "NOT_TESTED",
+      "source_eligibility": "SOURCE_INVALID_ORDINARY_ARITHMETIC",
+      "authority_sections": [
+        "5.2",
+        "27.5 first iteration/later iterations",
+        "27.6"
+      ],
+      "required_outcome": "REJECT_BEFORE_NATIVE",
+      "reason": "The guard quantity > 0 is insufficient for subtraction by 3.",
+      "counterexample": {
+        "header_prefix": [
+          7,
+          4,
+          1
+        ],
+        "initial_subtraction": "7 - 3 = 4 (representable)",
+        "second_subtraction": "4 - 3 = 1 (representable)",
+        "failing_subtraction": "1 - 3 = -2 (not representable by usize)",
+        "completed_safe_continues_before_failure": 2
+      },
+      "expected_function_result": null,
+      "future_execution_policy": {
+        "authorization": "NONE",
+        "native_allowed": false
+      }
+    },
+    {
+      "id": "n08-inverted-overflow-guard",
+      "source": {
+        "path": "c222-r-v1/sources/n08-inverted-overflow-guard.nl",
+        "bytes": 259,
+        "sha256": "b06d28eeb97e9d2fbc389902242d12e59f4787cc4bc4bd56239f11c2da86dc81"
+      },
+      "family": "negative",
+      "implementation_acceptance": "NOT_TESTED",
+      "public_owned": "NOT_TESTED",
+      "c17_native": "NOT_TESTED",
+      "source_eligibility": "SOURCE_INVALID_ORDINARY_ARITHMETIC",
+      "authority_sections": [
+        "5.2",
+        "18.1 definition-time checking",
+        "27.5",
+        "27.6"
+      ],
+      "required_outcome": "REJECT_BEFORE_NATIVE",
+      "reason": "The true arm provides a lower bound, not the upper bound needed for addition by 2; an unrestricted seed is checked as an ordinary function parameter.",
+      "counterexample": {
+        "symbolic_seed": "USIZE_MAX",
+        "assumption": "USIZE_MAX >= 11 as required by the corpus target precondition",
+        "guard": "USIZE_MAX > 6 is true",
+        "failing_sum": "USIZE_MAX + 2 is not representable"
+      },
+      "expected_function_result": null,
+      "future_execution_policy": {
+        "authorization": "NONE",
+        "native_allowed": false
+      }
+    },
+    {
+      "id": "n09-carry-type",
+      "source": {
+        "path": "c222-r-v1/sources/n09-carry-type.nl",
+        "bytes": 87,
+        "sha256": "1f681763ad4c63a8bbd7eee5f3ef0513f92a12a8d937c15cc774b59a431faa4e"
+      },
+      "family": "negative",
+      "implementation_acceptance": "NOT_TESTED",
+      "public_owned": "NOT_TESTED",
+      "c17_native": "NOT_TESTED",
+      "source_eligibility": "SOURCE_INVALID_CONTINUE_TYPE",
+      "authority_sections": [
+        "5.1",
+        "27.5",
+        "27.6"
+      ],
+      "required_outcome": "REJECT_BEFORE_NATIVE",
+      "reason": "The loop parameter is usize; the sole continue argument is u8. No implicit numeric conversion repairs exact static-type disagreement.",
+      "expected_target": {
+        "loop": "quantity",
+        "arity": 1,
+        "type": "usize"
+      },
+      "supplied_arguments": {
+        "arity": 1,
+        "types": [
+          "u8"
+        ]
+      },
+      "expected_function_result": null,
+      "future_execution_policy": {
+        "authorization": "NONE",
+        "native_allowed": false
+      }
+    },
+    {
+      "id": "n10-nearest-target-arity",
+      "source": {
+        "path": "c222-r-v1/sources/n10-nearest-target-arity.nl",
+        "bytes": 171,
+        "sha256": "e8237e1fe9bf14b18058bde30e85a62c382735fc22a7bf91d93bfdc90b30954b"
+      },
+      "family": "negative",
+      "implementation_acceptance": "NOT_TESTED",
+      "public_owned": "NOT_TESTED",
+      "c17_native": "NOT_TESTED",
+      "source_eligibility": "SOURCE_INVALID_CONTINUE_ARITY",
+      "authority_sections": [
+        "19.1 loop-control source context",
+        "27.5",
+        "27.6",
+        "27.8"
+      ],
+      "required_outcome": "REJECT_BEFORE_NATIVE",
+      "reason": "The continue targets the nearest inner loop, which has two parameters. Using the outer binding as an argument does not target the outer loop.",
+      "expected_target": {
+        "loop": "inner, mark",
+        "arity": 2,
+        "types": [
+          "usize",
+          "usize"
+        ]
+      },
+      "supplied_arguments": {
+        "arity": 1,
+        "types": [
+          "usize"
+        ]
+      },
+      "expected_function_result": null,
+      "future_execution_policy": {
+        "authorization": "NONE",
+        "native_allowed": false
+      }
+    },
+    {
+      "id": "n11-loan-control-boundary",
+      "source": {
+        "path": "c222-r-v1/sources/n11-loan-control-boundary.nl",
+        "bytes": 181,
+        "sha256": "99e74b046d9fed2932b9e359fbbef7a2ae28d7322998d2314b547457edb88969"
+      },
+      "family": "negative",
+      "implementation_acceptance": "NOT_TESTED",
+      "public_owned": "NOT_TESTED",
+      "c17_native": "NOT_TESTED",
+      "source_eligibility": "SOURCE_INVALID_CONTROL_TARGET",
+      "authority_sections": [
+        "13.8",
+        "19.1 loop-control source context",
+        "27.6"
+      ],
+      "required_outcome": "REJECT_BEFORE_NATIVE",
+      "reason": "Entering the loan body stops inheritance of the outer loop-control target. There is no new loop inside that loan, so continue(quantity) has no active target.",
+      "expected_function_result": null,
+      "future_execution_policy": {
+        "authorization": "NONE",
+        "native_allowed": false
+      }
+    },
+    {
+      "id": "n12-ending-loan-result",
+      "source": {
+        "path": "c222-r-v1/sources/n12-ending-loan-result.nl",
+        "bytes": 352,
+        "sha256": "b3e8fe58999ee4cbbc480212f3e7af038f21c053fe6679d8bb3bf1670037fe95"
+      },
+      "family": "negative",
+      "implementation_acceptance": "NOT_TESTED",
+      "public_owned": "NOT_TESTED",
+      "c17_native": "NOT_TESTED",
+      "source_eligibility": "SOURCE_INVALID_ENDING_LOAN_DEPENDENCY",
+      "authority_sections": [
+        "13.5a scope-exit compatibility",
+        "13.8 loan normal-result forwarding",
+        "19.1",
+        "27.5-27.7"
+      ],
+      "required_outcome": "REJECT_BEFORE_NATIVE",
+      "reason": "The inner loop may carry the quantity safely, but its Break result is the loan-bound ref slot. Returning that unchanged ref package as the enclosing loan result would cross the ending scope into escaped; a loop and a let binding cannot erase the dependency.",
+      "safe_arithmetic_proof": "quantity > 0 implies quantity >= 1, hence quantity - 1 is representable.",
+      "diagnostic_counterfactual": {
+        "header_quantity_trace": [
+          2,
+          1,
+          0
+        ],
+        "continue_count": 2,
+        "break_result": "slot : ref<write,u8>",
+        "not_an_execution_result": true
+      },
+      "expected_function_result": null,
+      "future_execution_policy": {
+        "authorization": "NONE",
+        "native_allowed": false
+      }
+    }
+  ],
+  "unresolved": [
+    "Actual parser, semantic checker, public-owned validation, C17 lowering, and native behavior are untested.",
+    "A future P candidate and its declared support boundary do not yet exist in this freeze; neither acceptance nor defect classification is predicted from implementation.",
+    "The local binding and address observation adapter is intentionally absent and needs a separate C release; source bytes and predictions must remain frozen.",
+    "No additional syntax or semantic ambiguity was identified in the selected cases on this independent canonical reading. If C finds one, hold the affected case and preserve V1 rather than declaring it legal by convenience.",
+    "Value Strategy author-plus-ordinary-safe-caller UB audit locality and human burden are unmeasured."
+  ],
+  "value_status": {
+    "GO624": "PAUSED",
+    "H1": "HOLD",
+    "general_soundness": "NOT_ESTABLISHED",
+    "product_value": "NOT_MEASURED"
+  },
+  "references": {
+    "quantity": "https://github.com/wakairo/NewLang_Compiler/blob/28726f933ff4885c000e0247cf4fd9ac1859c5b1/docs/reference/NewLang_v0_spec_Draft17_34.md#L3471",
+    "literals": "https://github.com/wakairo/NewLang_Compiler/blob/28726f933ff4885c000e0247cf4fd9ac1859c5b1/docs/reference/NewLang_v0_spec_Draft17_34.md#L3621",
+    "dependency": "https://github.com/wakairo/NewLang_Compiler/blob/28726f933ff4885c000e0247cf4fd9ac1859c5b1/docs/reference/NewLang_v0_spec_Draft17_34.md#L4455",
+    "fields": "https://github.com/wakairo/NewLang_Compiler/blob/28726f933ff4885c000e0247cf4fd9ac1859c5b1/docs/reference/NewLang_v0_spec_Draft17_34.md#L7265",
+    "functions": "https://github.com/wakairo/NewLang_Compiler/blob/28726f933ff4885c000e0247cf4fd9ac1859c5b1/docs/reference/NewLang_v0_spec_Draft17_34.md#L7713",
+    "caller_state": "https://github.com/wakairo/NewLang_Compiler/blob/28726f933ff4885c000e0247cf4fd9ac1859c5b1/docs/reference/NewLang_v0_spec_Draft17_34.md#L8944",
+    "scope": "https://github.com/wakairo/NewLang_Compiler/blob/28726f933ff4885c000e0247cf4fd9ac1859c5b1/docs/reference/NewLang_v0_spec_Draft17_34.md#L9009",
+    "loop": "https://github.com/wakairo/NewLang_Compiler/blob/28726f933ff4885c000e0247cf4fd9ac1859c5b1/docs/reference/NewLang_v0_spec_Draft17_34.md#L11951",
+    "continue": "https://github.com/wakairo/NewLang_Compiler/blob/28726f933ff4885c000e0247cf4fd9ac1859c5b1/docs/reference/NewLang_v0_spec_Draft17_34.md#L12167",
+    "break": "https://github.com/wakairo/NewLang_Compiler/blob/28726f933ff4885c000e0247cf4fd9ac1859c5b1/docs/reference/NewLang_v0_spec_Draft17_34.md#L12239",
+    "no_exit": "https://github.com/wakairo/NewLang_Compiler/blob/28726f933ff4885c000e0247cf4fd9ac1859c5b1/docs/reference/NewLang_v0_spec_Draft17_34.md#L12294"
+  }
+}
