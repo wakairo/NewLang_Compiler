@@ -1138,6 +1138,39 @@ if(BUILD_TESTING)
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
     add_test(NAME p1123_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1123/evidence_test.py")
+    add_executable(p1133_safety tests/p1133/safety.c)
+    add_executable(p1133_oom tests/p1133/safety.c)
+    foreach(target p1133_safety p1133_oom)
+        target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+        target_link_libraries(${target} PRIVATE newlang_checked_c_node newlang_semantic)
+        target_compile_options(${target} PRIVATE -UNDEBUG)
+    endforeach()
+    target_compile_definitions(p1133_oom PRIVATE P1133_OOM)
+    target_compile_options(p1133_oom PRIVATE -fno-pie)
+    target_link_options(p1133_oom PRIVATE -no-pie -Wl,--wrap=malloc
+        -Wl,--wrap=calloc -Wl,--wrap=realloc
+        -Wl,--wrap=nl_parser_parse_function_unit
+        -Wl,--wrap=nl_parser_parse_expression_fragment
+        -Wl,--wrap=nl_semantic_register_function_unit
+        -Wl,--wrap=nl_semantic_check_expression)
+    foreach(profile 01-add-three 02-sub-three)
+        add_test(NAME p1133_${profile}_current.unit COMMAND p1133_safety
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1133/sources/${profile}.nl")
+        add_test(NAME p1133_${profile}_oom.unit COMMAND p1133_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1133/sources/${profile}.nl")
+        set_tests_properties(p1133_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE)
+    endforeach()
+    add_test(NAME p1133_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1133/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1133_safety>"
+        "${CMAKE_CURRENT_BINARY_DIR}/p1133-native"
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}")
+    add_test(NAME p1133_evidence.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1133/evidence_test.py")
+    add_test(NAME p1133_guard_bounds.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1133/bounds/run.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}"
+        "${CMAKE_CURRENT_BINARY_DIR}/p1133-bounds")
     add_executable(p1098_probe tests/p1098/probe.c)
     add_executable(p1098_oom tests/p1098/probe.c)
     target_compile_definitions(p1098_oom PRIVATE P1098_OOM)
@@ -1877,5 +1910,10 @@ if(BUILD_TESTING)
     # assertion; give only this finite cohort its measured sanitizer budget.
     foreach(profile 01-stutter-less 02-stutter-equality 11-prefix-current)
         set_tests_properties(p1123_${profile}_oom.unit PROPERTIES TIMEOUT 300)
+    endforeach()
+    foreach(profile 01-add-three 02-sub-three)
+        # Same exhaustive retry/no-clobber protocol as the measured P1123
+        # cohort above; only these new guarded-carry cohorts get this budget.
+        set_tests_properties(p1133_${profile}_oom.unit PROPERTIES TIMEOUT 300)
     endforeach()
 endif()

@@ -1,0 +1,277 @@
+{
+  "authority": "28726f933ff4885c000e0247cf4fd9ac1859c5b1",
+  "canonical": "Draft17.34",
+  "target": "64-bit size_t model must be verified; boundary case is target-specific",
+  "cases": {
+    "01-add-three": {
+      "trace": [
+        2,
+        5,
+        8,
+        11
+      ],
+      "initial": 2,
+      "limit": 11,
+      "step": 3,
+      "operation": "add",
+      "selected": 0,
+      "index": 0,
+      "entry": [
+        60,
+        219
+      ],
+      "ambient": [
+        97,
+        148
+      ],
+      "old": 60,
+      "incoming": 171,
+      "after": [
+        171,
+        60
+      ]
+    },
+    "02-sub-three": {
+      "trace": [
+        14,
+        10,
+        6,
+        2
+      ],
+      "initial": 14,
+      "limit": 4,
+      "step": 4,
+      "operation": "subtract",
+      "selected": 1,
+      "index": 1,
+      "entry": [
+        47,
+        201
+      ],
+      "ambient": [
+        68,
+        152
+      ],
+      "old": 201,
+      "incoming": 137,
+      "after": [
+        201,
+        137
+      ]
+    },
+    "03-add-zero": {
+      "trace": [
+        11
+      ],
+      "initial": 11,
+      "limit": 11,
+      "step": 3,
+      "operation": "add",
+      "selected": 0,
+      "index": 0,
+      "entry": [
+        60,
+        219
+      ],
+      "ambient": [
+        97,
+        148
+      ],
+      "old": 60,
+      "incoming": 171,
+      "after": [
+        171,
+        60
+      ]
+    },
+    "04-add-one": {
+      "trace": [
+        8,
+        11
+      ],
+      "initial": 8,
+      "limit": 11,
+      "step": 3,
+      "operation": "add",
+      "selected": 0,
+      "index": 0,
+      "entry": [
+        60,
+        219
+      ],
+      "ambient": [
+        97,
+        148
+      ],
+      "old": 60,
+      "incoming": 171,
+      "after": [
+        171,
+        60
+      ]
+    },
+    "05-sub-zero": {
+      "trace": [
+        3
+      ],
+      "initial": 3,
+      "limit": 4,
+      "step": 4,
+      "operation": "subtract",
+      "selected": 1,
+      "index": 1,
+      "entry": [
+        47,
+        201
+      ],
+      "ambient": [
+        68,
+        152
+      ],
+      "old": 201,
+      "incoming": 137,
+      "after": [
+        201,
+        137
+      ]
+    },
+    "06-sub-one": {
+      "trace": [
+        7,
+        3
+      ],
+      "initial": 7,
+      "limit": 4,
+      "step": 4,
+      "operation": "subtract",
+      "selected": 1,
+      "index": 1,
+      "entry": [
+        47,
+        201
+      ],
+      "ambient": [
+        68,
+        152
+      ],
+      "old": 201,
+      "incoming": 137,
+      "after": [
+        201,
+        137
+      ]
+    },
+    "07-add-target-boundary": {
+      "trace": [
+        18446744073709551613,
+        18446744073709551614,
+        18446744073709551615
+      ],
+      "initial": 18446744073709551613,
+      "limit": 18446744073709551615,
+      "step": 1,
+      "operation": "add",
+      "selected": 0,
+      "index": 0,
+      "entry": [
+        60,
+        219
+      ],
+      "ambient": [
+        97,
+        148
+      ],
+      "old": 60,
+      "incoming": 171,
+      "after": [
+        171,
+        60
+      ]
+    },
+    "08-sub-varied": {
+      "trace": [
+        17,
+        12,
+        7,
+        2
+      ],
+      "initial": 17,
+      "limit": 6,
+      "step": 5,
+      "operation": "subtract",
+      "selected": 1,
+      "index": 1,
+      "entry": [
+        47,
+        201
+      ],
+      "ambient": [
+        68,
+        152
+      ],
+      "old": 201,
+      "incoming": 137,
+      "after": [
+        201,
+        137
+      ]
+    }
+  },
+  "negative": {
+    "90-overflow-all-H": {
+      "reason": "guard permits phase=MAX-1, so +2 is not representable; must refuse even if entry/finite trace seems safe",
+      "required": "CHECK rejection or precision refusal; no C17/named-output clobber"
+    },
+    "91-underflow-all-H": {
+      "reason": "false guard permits phase=4, so -5 is unsafe for H; finite entry does not justify it",
+      "required": "CHECK rejection or precision refusal; no C17/named-output clobber"
+    },
+    "92-wrong-guard-arm": {
+      "reason": "true phase<11 admits zero; subtraction lacks a lower bound",
+      "required": "CHECK rejection or precision refusal; no C17/named-output clobber"
+    },
+    "93-wrong-type": {
+      "reason": "exact usize operand typing",
+      "required": "CHECK rejection or precision refusal; no C17/named-output clobber"
+    },
+    "94-arity-zero": {
+      "reason": "target has exactly one carried slot",
+      "required": "CHECK rejection or precision refusal; no C17/named-output clobber"
+    },
+    "95-arity-two": {
+      "reason": "target has exactly one carried slot",
+      "required": "CHECK rejection or precision refusal; no C17/named-output clobber"
+    },
+    "96-foreign-operand": {
+      "reason": "legal source outside selected actual guarded-slot relation; must fail closed without borrowing guard facts",
+      "required": "CHECK rejection or precision refusal; no C17/named-output clobber"
+    },
+    "97-equality-insufficient": {
+      "reason": "false equality admits zero, so -4 lacks a lower bound",
+      "required": "CHECK rejection or precision refusal; no C17/named-output clobber"
+    },
+    "98-unguarded-result": {
+      "reason": "legal commuted operand order outside the selected relation; do not transplant RHS guard",
+      "required": "CHECK rejection or precision refusal; no C17/named-output clobber"
+    },
+    "99-iteration-reference": {
+      "reason": "ref/type/dependency cannot become a free usize carry",
+      "required": "CHECK rejection or precision refusal; no C17/named-output clobber"
+    }
+  },
+  "baseline_prediction": "Unknown arithmetic/literal-only Continue precision refusal; prediction is not a measured result",
+  "final_contract": "ordinary CLI CHECK and C17, genuine public Copy GET/current/parameters, private inductive H transfer, strict unmodified and passively observed GCC/Clang O0/O2, exact trace and original storage/fields/sibling/ambient, one B helper old/postcurrent and caller reuse, no authority injection",
+  "safety": "ADD true phase<limit: limit>0 and step<=MAX-(limit-1). SUB false phase<limit: step<=limit. E exact, slot any representable dependency-free usize. No known-number receipt for Unknown. Never infer safety from initial numeric value.",
+  "baseline_runs": [
+    "01-add-three",
+    "02-sub-three"
+  ],
+  "exclusions": [
+    "T mutation on C",
+    "multiple/nested C/B",
+    "general solver",
+    "general termination",
+    "new issuer/API/ABI",
+    "R fixtures"
+  ]
+}
