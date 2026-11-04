@@ -1,0 +1,32 @@
+{
+  "01-static-infinite": {
+    "check": 0,
+    "emit": 0,
+    "native": false,
+    "reason": "mathematically safe +0; actual runtime would not terminate; static C17 compilation only"
+  },
+  "02-zero-bound": {
+    "check": 3,
+    "emit": 3,
+    "native": false,
+    "reason": "legal source outside selected L>0 precision profile"
+  },
+  "03-unsafe-add-first-break": {
+    "check": 3,
+    "emit": 3,
+    "native": false,
+    "reason": "entry takes B but all-H C includes MAX-1; never justify unsafe +2 from first iteration"
+  },
+  "04-unsafe-sub-first-break": {
+    "check": 3,
+    "emit": 3,
+    "native": false,
+    "reason": "entry takes B but C permits phase=4, so -5 must refuse"
+  },
+  "05-ending-loan": {
+    "check": 3,
+    "emit": 3,
+    "native": false,
+    "reason": "genuine ending lexical loan/reference cannot escape as free usize carry"
+  }
+}

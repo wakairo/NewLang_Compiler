@@ -2864,8 +2864,13 @@ static bool emit_stuttering_loop(FILE *stream, const NLLinearBreakView *p,
             p->continue_on_true ? "" : "!(", id, p->less ? "<" : "==", p->limit,
             p->continue_on_true ? "" : ")") < 0 ||
         !v0_indent(stream, depth + 2) ||
-        fprintf(stream, "nl_loop_carry_%zu = (size_t)UINTMAX_C(%zu);\n", id,
-                p->next_phase) < 0 ||
+        (p->computed_carry
+             ? fprintf(stream,
+                       "nl_loop_carry_%zu = nl_loop_phase_%zu %c "
+                       "(size_t)UINTMAX_C(%zu);\n",
+                       id, id, p->subtract_carry ? '-' : '+', p->next_phase)
+             : fprintf(stream, "nl_loop_carry_%zu = (size_t)UINTMAX_C(%zu);\n",
+                       id, p->next_phase)) < 0 ||
         !v0_indent(stream, depth + 2) ||
         fprintf(stream,
                 "NL_LOOP_CONTINUE(nl_loop_phase_%zu, nl_loop_carry_%zu, "

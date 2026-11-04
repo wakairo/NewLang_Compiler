@@ -22,6 +22,7 @@ typedef struct LoopControl {
     NLControlState *entry;
     NLLoopHeader *header;
     bool stuttering; /* private whole-source relation, not generic closure */
+    struct NLStutterProof *stutter; /* borrowed during this whole-source walk */
     /* Non-recurrent source execution only. This is the actual working world,
      * never the separate owned Break snapshot's numeric namespace. */
     NLSemanticContext *normal_context;
@@ -2533,6 +2534,10 @@ static NLCheckedNodeId usize_comparison(Check *check,
                                    .scalar_result = {type, known, truth}});
 }
 
+static bool stutter_quantity(Check *, const NLSyntaxNode *, NLCheckedNodeId,
+                             NLCheckedNodeId);
+static void stutter_quantity_record(Check *, NLCheckedNodeId);
+
 static NLCheckedNodeId usize_arithmetic(Check *check,
                                         const NLSyntaxNode *source)
 {
@@ -2560,10 +2565,11 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
     }
     const NLSemanticValueView a = c->values[lhs.results[0].value - 1];
     const NLSemanticValueView b = c->values[rhs.results[0].value - 1];
-    if (!a.scalar_known || !b.scalar_known ||
-        a.dependencies != NL_DEPENDENCY_FREE ||
+    const bool known = a.scalar_known && b.scalar_known;
+    if (a.dependencies != NL_DEPENDENCY_FREE ||
         b.dependencies != NL_DEPENDENCY_FREE || a.value_dependency_count != 0 ||
-        b.value_dependency_count != 0) {
+        b.value_dependency_count != 0 ||
+        (!known && !stutter_quantity(check, source, left, right))) {
         fail(check, NL_CHECK_ANALYSIS_PRECISION_LIMIT,
              syntax->data.equality.operator_span,
              subtraction ? "USIZE-SUBTRACTION-PRECISION"
@@ -2574,8 +2580,8 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
                            "operands in this profile");
         return 0;
     }
-    if (subtraction ? a.scalar_value < b.scalar_value
-                    : b.scalar_value > SIZE_MAX - a.scalar_value) {
+    if (known && (subtraction ? a.scalar_value < b.scalar_value
+                              : b.scalar_value > SIZE_MAX - a.scalar_value)) {
         fail(check, NL_CHECK_SEMANTIC_ERROR,
              syntax->data.equality.operator_span,
              subtraction ? "USIZE-SUBTRACTION-UNDERFLOW"
@@ -2586,12 +2592,13 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
         return 0;
     }
     const NLTypeId type = quantity;
-    const size_t answer = subtraction ? a.scalar_value - b.scalar_value
-                                      : a.scalar_value + b.scalar_value;
+    const size_t answer = !known        ? 0
+                          : subtraction ? a.scalar_value - b.scalar_value
+                                        : a.scalar_value + b.scalar_value;
     const NLValueId value = new_value(
         check,
         (NLSemanticValueView){
-            .type = type, .scalar_known = true, .scalar_value = answer},
+            .type = type, .scalar_known = known, .scalar_value = answer},
         syntax->span);
     if (value == 0)
         return 0;
@@ -2610,11 +2617,14 @@ static NLCheckedNodeId usize_arithmetic(Check *check,
                             .result_count = 1,
                             .results = {{type, value}},
                             .has_scalar_result = true,
-                            .scalar_result = {type, true, answer}});
-    if (id && !host(check,
-                    nl_usize_arithmetic_capture(check->artifact, id, source, c),
-                    syntax->span))
+                            .scalar_result = {type, known, answer}});
+    if (id && known &&
+        !host(check,
+              nl_usize_arithmetic_capture(check->artifact, id, source, c),
+              syntax->span))
         return 0;
+    if (id && !known)
+        stutter_quantity_record(check, id);
     return id;
 }
 

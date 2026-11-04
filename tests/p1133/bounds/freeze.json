@@ -1,0 +1,9 @@
+{
+  "01-static-infinite.nl": "545de367928980b003077ea403c1236aa0c97525181af42499de41c247c83cba",
+  "02-zero-bound.nl": "94e7b3783637c1917a4791960a56eb3ae4a7b8f8d4e07af21d844494e2d9fe39",
+  "03-unsafe-add-first-break.nl": "98425f756cbffe7cefe97e0751e5267b322ad944febbadcacf03c108c5e2a1a3",
+  "04-unsafe-sub-first-break.nl": "59ecc4455b2bcb256ade89586acf295b0cd04e4ef13f11a488650726478b35af",
+  "05-ending-loan.nl": "0c9b73e7cd237002226c1f91049ddd5d8788c27f35c7a9c180ae17f63778a09c",
+  "oracle.json": "c3f43c1a5fe1284beb3c7721bf81f257e210b516a33cec70529eb1417831cb8f",
+  "run.py": "251133d35930ba7b6db4dfe1979bfd5c6dfaa9047d60337903d7f37320ae8ead"
+}

@@ -1,0 +1,8 @@
+{
+  "observation": "pre-commit manual invocation of tests/p1107/evidence_test.py, not its registered CTest forward wrapper",
+  "first_diagnostic": "versioned_freeze.FreezeError: current freeze digest: CMakeLists.txt",
+  "raw_location": "Codex tool transcript: write_stdin session 12295; stderr was not redirected to a local file",
+  "cause": "historical entrypoint selects immutable v21 against current CMake; registered history_latest.py selects the trusted prospective current manifest",
+  "resolution": "No historical script/oracle changed. Validate the existing registered wrapper for the current generation.",
+  "production_change": false
+}
