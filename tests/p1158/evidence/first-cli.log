@@ -1,0 +1,44 @@
+01-add-return-left check 0 stdout 0 
+01-add-return-left emit 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1158-input-v1/sources/01-add-return-left.nl
+01-add-return-left named 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1158-input-v1/sources/01-add-return-left.nl
+02-zero-normal-right check 0 stdout 0 
+02-zero-normal-right emit 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1158-input-v1/sources/02-zero-normal-right.nl
+02-zero-normal-right named 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1158-input-v1/sources/02-zero-normal-right.nl
+03-sub-return-right check 0 stdout 0 
+03-sub-return-right emit 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1158-input-v1/sources/03-sub-return-right.nl
+03-sub-return-right named 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1158-input-v1/sources/03-sub-return-right.nl
+04-one-normal-left check 0 stdout 0 
+04-one-normal-left emit 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1158-input-v1/sources/04-one-normal-left.nl
+04-one-normal-left named 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1158-input-v1/sources/04-one-normal-left.nl
+80-known-return-control check 0 stdout 0 
+80-known-return-control emit 0 stdout 1723 
+80-known-return-control named 0 stdout 0 
+81-two-normal-control check 0 stdout 0 
+81-two-normal-control emit 0 stdout 3136 
+81-two-normal-control named 0 stdout 0 
+82-extra-return-control check 0 stdout 0 
+82-extra-return-control emit 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1158-input-v1/sources/82-extra-return-control.nl
+82-extra-return-control named 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1158-input-v1/sources/82-extra-return-control.nl
+90-overflow check 3 stdout 0 /tmp/p1158-input-v1/sources/90-overflow.nl:5:42-5:43: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile
+90-overflow emit 3 stdout 0 /tmp/p1158-input-v1/sources/90-overflow.nl:5:42-5:43: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile
+90-overflow named 3 stdout 0 /tmp/p1158-input-v1/sources/90-overflow.nl:5:42-5:43: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile
+91-read-mode check 3 stdout 0 /tmp/p1158-input-v1/sources/91-read-mode.nl:12:21-12:22: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field
+91-read-mode emit 3 stdout 0 /tmp/p1158-input-v1/sources/91-read-mode.nl:12:21-12:22: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field
+91-read-mode named 3 stdout 0 /tmp/p1158-input-v1/sources/91-read-mode.nl:12:21-12:22: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field
+92-ending-reference check 3 stdout 0 /tmp/p1158-input-v1/sources/92-ending-reference.nl:12:3-12:45: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope
+92-ending-reference emit 3 stdout 0 /tmp/p1158-input-v1/sources/92-ending-reference.nl:12:3-12:45: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope
+92-ending-reference named 3 stdout 0 /tmp/p1158-input-v1/sources/92-ending-reference.nl:12:3-12:45: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope
+93-incoming-type check 3 stdout 0 /tmp/p1158-input-v1/sources/93-incoming-type.nl:12:53-12:59: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type
+93-incoming-type emit 3 stdout 0 /tmp/p1158-input-v1/sources/93-incoming-type.nl:12:53-12:59: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type
+93-incoming-type named 3 stdout 0 /tmp/p1158-input-v1/sources/93-incoming-type.nl:12:53-12:59: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type
+C232 fixed-af16 FIRST observations preserved 33

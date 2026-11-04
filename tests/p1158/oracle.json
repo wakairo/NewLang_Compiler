@@ -1,0 +1,213 @@
+{
+  "authority": "C232 / fixed PR1155 af16bba / maincdf23f6 / Draft17.34",
+  "positive": {
+    "01-add-return-left": {
+      "name": "01-add-return-left",
+      "nominal": "LatchPair",
+      "fields": [
+        "latch",
+        "stamp"
+      ],
+      "values": [
+        83,
+        151
+      ],
+      "index": 0,
+      "start": 2,
+      "limit": 14,
+      "step": 5,
+      "direction": "add",
+      "trace": [
+        2,
+        7,
+        12,
+        17
+      ],
+      "result": 17,
+      "operator": "<",
+      "compare": 18,
+      "truth": true,
+      "return_arm": 0,
+      "incoming": 204,
+      "check": 0,
+      "emit": 0,
+      "named": 0,
+      "selected_arm": 0,
+      "early_return": true,
+      "condition_evaluations": 1,
+      "stores": 0,
+      "post_reads": 0,
+      "old": 83,
+      "sibling": 151
+    },
+    "02-zero-normal-right": {
+      "name": "02-zero-normal-right",
+      "nominal": "LevelPair",
+      "fields": [
+        "peer",
+        "level"
+      ],
+      "values": [
+        37,
+        109
+      ],
+      "index": 1,
+      "start": 16,
+      "limit": 16,
+      "step": 5,
+      "direction": "add",
+      "trace": [
+        16
+      ],
+      "result": 16,
+      "operator": "<",
+      "compare": 16,
+      "truth": false,
+      "return_arm": 0,
+      "incoming": 182,
+      "check": 0,
+      "emit": 0,
+      "named": 0,
+      "selected_arm": 1,
+      "early_return": false,
+      "condition_evaluations": 1,
+      "stores": 1,
+      "post_reads": 2,
+      "old": 109,
+      "sibling": 37
+    },
+    "03-sub-return-right": {
+      "name": "03-sub-return-right",
+      "nominal": "GatePair",
+      "fields": [
+        "tag",
+        "gate"
+      ],
+      "values": [
+        174,
+        61
+      ],
+      "index": 1,
+      "start": 27,
+      "limit": 9,
+      "step": 7,
+      "direction": "sub",
+      "trace": [
+        27,
+        20,
+        13,
+        6
+      ],
+      "result": 6,
+      "operator": "==",
+      "compare": 8,
+      "truth": false,
+      "return_arm": 1,
+      "incoming": 211,
+      "check": 0,
+      "emit": 0,
+      "named": 0,
+      "selected_arm": 1,
+      "early_return": true,
+      "condition_evaluations": 1,
+      "stores": 0,
+      "post_reads": 0,
+      "old": 61,
+      "sibling": 174
+    },
+    "04-one-normal-left": {
+      "name": "04-one-normal-left",
+      "nominal": "TonePair",
+      "fields": [
+        "tone",
+        "echo"
+      ],
+      "values": [
+        94,
+        206
+      ],
+      "index": 0,
+      "start": 9,
+      "limit": 12,
+      "step": 4,
+      "direction": "add",
+      "trace": [
+        9,
+        13
+      ],
+      "result": 13,
+      "operator": "==",
+      "compare": 13,
+      "truth": true,
+      "return_arm": 1,
+      "incoming": 129,
+      "check": 0,
+      "emit": 0,
+      "named": 0,
+      "selected_arm": 0,
+      "early_return": false,
+      "condition_evaluations": 1,
+      "stores": 1,
+      "post_reads": 2,
+      "old": 94,
+      "sibling": 206
+    }
+  },
+  "controls": {
+    "80-known-return-control": {
+      "check": 0,
+      "emit": 0,
+      "named": 0
+    },
+    "81-two-normal-control": {
+      "check": 0,
+      "emit": 0,
+      "named": 0
+    },
+    "82-extra-return-control": {
+      "check": 0,
+      "emit": 4,
+      "named": 4,
+      "classification": "outside existing single-RETURN profile; preserve actual earlier refusal if any"
+    }
+  },
+  "negative": {
+    "90-overflow": {
+      "check": 3,
+      "emit": 3,
+      "named": 3
+    },
+    "91-read-mode": {
+      "check": 3,
+      "emit": 3,
+      "named": 3
+    },
+    "92-ending-reference": {
+      "check": 3,
+      "emit": 3,
+      "named": 3
+    },
+    "93-incoming-type": {
+      "check": 3,
+      "emit": 3,
+      "named": 3
+    }
+  },
+  "prediction": "CHECK and actual source-issued scalar-loop/one-normal-RETURN current proof may succeed; known-only private IF-return consumer should first refuse emission. Earlier refusal/unexpected acceptance remains FIRST.",
+  "native": {
+    "compilers": [
+      "GCC13",
+      "Clang23"
+    ],
+    "opts": [
+      "O0",
+      "O2"
+    ],
+    "variants": [
+      "raw unchanged C",
+      "read-only passive observation"
+    ],
+    "expected_exit": 0
+  },
+  "scope": "One main/T/loop/unit-RETURN, normal tail unit, original T unchanged during loop; no new authority/bridge/semantics."
+}

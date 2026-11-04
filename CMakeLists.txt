@@ -1227,6 +1227,27 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1146_safety>"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_BINARY_DIR}/p1146-native")
+    add_test(NAME p1158_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1158/evidence_test.py")
+    add_executable(p1158_safety tests/p1158/safety.c)
+    target_include_directories(p1158_safety PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+    target_link_libraries(p1158_safety PRIVATE newlang_checked_c_node newlang_semantic)
+    target_compile_options(p1158_safety PRIVATE -UNDEBUG)
+    foreach(profile 01-add-return-left 02-zero-normal-right 03-sub-return-right 04-one-normal-left)
+        add_test(NAME p1158_${profile}_current.unit COMMAND p1158_safety
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1158/sources/${profile}.nl")
+    endforeach()
+    # Reuse the unchanged P-owned allocator/rollback/named-output machinery.
+    foreach(profile 02-zero-normal-right 03-sub-return-right)
+        add_test(NAME p1158_${profile}_oom.unit COMMAND p1152_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1158/sources/${profile}.nl")
+        set_tests_properties(p1158_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE TIMEOUT 300)
+    endforeach()
+    add_test(NAME p1158_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1158/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1158_safety>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_BINARY_DIR}/p1158-native")
     add_test(NAME p1152_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
         "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1152/evidence_test.py")
     add_executable(p1152_safety tests/p1152/safety.c)
