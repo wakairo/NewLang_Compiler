@@ -25,11 +25,37 @@ def git(*args, env=None, data=None):
 
 
 def main():
-    assert len(sys.argv) == 2
-    original = sys.argv[1]
-    assert original in {
-        "tests/p982/freeze_test.py", "tests/p990/freeze_selftest.py"
+    assert len(sys.argv) >= 2
+    original, arguments = sys.argv[1], sys.argv[2:]
+    historical = {
+        ("tests/p982/freeze_test.py", ()),
+        ("tests/p990/freeze_selftest.py", ()),
+        ("tests/p1088/evidence_test.py", ()),
+        ("tests/p1117/history_latest.py", ("p1107",)),
+        ("tests/p1117/history_latest.py", ("p1117",)),
+        ("tests/p1117/history_latest.py", ("p1098",)),
     }
+    native = {
+        "tests/p990/run.py": 5,
+        "tests/p1055/p1045_forward.py": 3,
+        "tests/p1055/run.py": 4,
+        "tests/p1058/run.py": 4,
+        "tests/p1062/run.py": 4,
+    }
+    if original in native:
+        assert len(arguments) == native[original]
+        assert arguments[2] in {"none", "address", "undefined"}
+        if original == "tests/p990/run.py":
+            assert Path(arguments[3]) == ROOT / "tests/p990"
+            assert arguments[4] == "new"
+        else:
+            assert len(arguments) == 3 or arguments[3] == "0"
+        # Keep the actual R checkout's compiled CLI. Only historical source
+        # paths are transported; no baseline compiler or guest is substituted.
+        compiler = Path(arguments[0])
+        assert compiler.is_absolute() and compiler.is_file()
+    else:
+        assert (original, tuple(arguments)) in historical
     baseline = (ROOT / "tests/r1151/CMakeLists.fixed.data").read_bytes()
     assert hashlib.sha256(baseline).hexdigest() == CMAKE_SHA
     with tempfile.TemporaryDirectory(prefix="r1151-freeze-") as tmp:
@@ -72,8 +98,13 @@ def main():
         environment["GIT_WORK_TREE"] = str(snapshot)
         print("R1151 fixed-P snapshot tree", actual, "original guard", original,
               flush=True)
+        forwarded = list(arguments)
+        if original == "tests/p990/run.py":
+            # Transport only the explicit source-data root. CLI, CC,
+            # sanitizer and group are the original actual-R arguments.
+            forwarded[3] = str(snapshot / "tests/p990")
         completed = subprocess.run(
-            [sys.executable, str(snapshot / original)],
+            [sys.executable, str(snapshot / original), *forwarded],
             cwd=snapshot, env=environment, check=False
         )
         return completed.returncode
