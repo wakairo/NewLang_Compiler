@@ -1,0 +1,42 @@
+01-add-less-true check 0 stdout 0 
+01-add-less-true emit 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1152-input-v1/sources/01-add-less-true.nl
+01-add-less-true named 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1152-input-v1/sources/01-add-less-true.nl
+02-zero-less-false check 0 stdout 0 
+02-zero-less-false emit 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1152-input-v1/sources/02-zero-less-false.nl
+02-zero-less-false named 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1152-input-v1/sources/02-zero-less-false.nl
+03-sub-equal-true check 0 stdout 0 
+03-sub-equal-true emit 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1152-input-v1/sources/03-sub-equal-true.nl
+03-sub-equal-true named 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1152-input-v1/sources/03-sub-equal-true.nl
+04-one-equal-false check 0 stdout 0 
+04-one-equal-false emit 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1152-input-v1/sources/04-one-equal-false.nl
+04-one-equal-false named 4 stdout 0 error(cli)[V1-BACKEND-UNSUPPORTED]: accepted program uses a construct outside the V0/V1 Checked-C spine
+note: /tmp/p1152-input-v1/sources/04-one-equal-false.nl
+80-known-condition check 0 stdout 0 
+80-known-condition emit 0 stdout 1991 
+80-known-condition named 0 stdout 0 
+81-existing-loop-consumer check 0 stdout 0 
+81-existing-loop-consumer emit 0 stdout 2450 
+81-existing-loop-consumer named 0 stdout 0 
+82-different-child-control check 3 stdout 0 /tmp/p1152-input-v1/sources/82-different-child-control.nl:13:15-17:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports
+82-different-child-control emit 3 stdout 0 /tmp/p1152-input-v1/sources/82-different-child-control.nl:13:15-17:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports
+82-different-child-control named 3 stdout 0 /tmp/p1152-input-v1/sources/82-different-child-control.nl:13:15-17:6: error(precision)[P6-JOIN-PRECISION]: branch post-state/result needs a richer relational join than P6 supports
+90-overflow check 3 stdout 0 /tmp/p1152-input-v1/sources/90-overflow.nl:6:29-6:30: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile
+90-overflow emit 3 stdout 0 /tmp/p1152-input-v1/sources/90-overflow.nl:6:29-6:30: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile
+90-overflow named 3 stdout 0 /tmp/p1152-input-v1/sources/90-overflow.nl:6:29-6:30: error(precision)[USIZE-ADDITION-PRECISION]: addition needs known dependency-free quantity operands in this profile
+91-read-mode check 3 stdout 0 /tmp/p1152-input-v1/sources/91-read-mode.nl:14:27-14:28: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field
+91-read-mode emit 3 stdout 0 /tmp/p1152-input-v1/sources/91-read-mode.nl:14:27-14:28: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field
+91-read-mode named 3 stdout 0 /tmp/p1152-input-v1/sources/91-read-mode.nl:14:27-14:28: error(unsupported)[LOCAL-LOAN-PROFILE]: loan operand must be a simple local or bounded local@field
+92-ending-reference check 3 stdout 0 /tmp/p1152-input-v1/sources/92-ending-reference.nl:14:9-14:48: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope
+92-ending-reference emit 3 stdout 0 /tmp/p1152-input-v1/sources/92-ending-reference.nl:14:9-14:48: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope
+92-ending-reference named 3 stdout 0 /tmp/p1152-input-v1/sources/92-ending-reference.nl:14:9-14:48: error(semantic)[P8-EXIT-DEPENDENCY]: surviving state depends on the ending loan scope
+93-incoming-type check 3 stdout 0 /tmp/p1152-input-v1/sources/93-incoming-type.nl:14:56-14:62: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type
+93-incoming-type emit 3 stdout 0 /tmp/p1152-input-v1/sources/93-incoming-type.nl:14:56-14:62: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type
+93-incoming-type named 3 stdout 0 /tmp/p1152-input-v1/sources/93-incoming-type.nl:14:56-14:62: error(semantic)[P3-TYPE-MISMATCH]: new value type differs from fixed field type
+C228 fixed-main FIRST observations preserved 33

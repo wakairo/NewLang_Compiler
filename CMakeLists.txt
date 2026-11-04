@@ -1227,6 +1227,37 @@ if(BUILD_TESTING)
         "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1146_safety>"
         "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
         "${CMAKE_CURRENT_BINARY_DIR}/p1146-native")
+    add_test(NAME p1152_evidence_history.unit COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1152/evidence_test.py")
+    add_executable(p1152_safety tests/p1152/safety.c)
+    add_executable(p1152_oom tests/p1152/safety.c)
+    foreach(target p1152_safety p1152_oom)
+        target_include_directories(${target} PRIVATE "${CMAKE_CURRENT_SOURCE_DIR}/src")
+        target_link_libraries(${target} PRIVATE newlang_checked_c_node newlang_semantic)
+        target_compile_options(${target} PRIVATE -UNDEBUG)
+    endforeach()
+    target_compile_definitions(p1152_oom PRIVATE P1152_OOM)
+    target_compile_options(p1152_oom PRIVATE -fno-pie)
+    target_link_options(p1152_oom PRIVATE -no-pie -Wl,--wrap=malloc
+        -Wl,--wrap=calloc -Wl,--wrap=realloc
+        -Wl,--wrap=nl_parser_parse_function_unit
+        -Wl,--wrap=nl_parser_parse_expression_fragment
+        -Wl,--wrap=nl_semantic_register_function_unit
+        -Wl,--wrap=nl_semantic_check_expression)
+    foreach(profile 01-add-less-true 02-zero-less-false 03-sub-equal-true 04-one-equal-false)
+        add_test(NAME p1152_${profile}_current.unit COMMAND p1152_safety
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1152/sources/${profile}.nl")
+    endforeach()
+    foreach(profile 01-add-less-true 03-sub-equal-true)
+        add_test(NAME p1152_${profile}_oom.unit COMMAND p1152_oom
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1152/sources/${profile}.nl")
+        set_tests_properties(p1152_${profile}_oom.unit PROPERTIES RUN_SERIAL TRUE TIMEOUT 300)
+    endforeach()
+    add_test(NAME p1152_native.integration COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/p1152/run.py"
+        "$<TARGET_FILE:newlangc>" "$<TARGET_FILE:p1152_safety>"
+        "${CMAKE_C_COMPILER}" "${CMAKE_C_COMPILER}" "${NEWLANG_SANITIZER}"
+        "${CMAKE_CURRENT_BINARY_DIR}/p1152-native")
     add_executable(p1098_probe tests/p1098/probe.c)
     add_executable(p1098_oom tests/p1098/probe.c)
     target_compile_definitions(p1098_oom PRIVATE P1098_OOM)

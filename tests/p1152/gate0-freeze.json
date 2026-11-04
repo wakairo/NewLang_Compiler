@@ -1,0 +1,22 @@
+{
+  "fixed_candidate": "d66fdf751aa5823b5775cbaf346a6c02aba38182",
+  "candidate_tree": "6ebba6e90fc9e7a4db441663873a7780614647be",
+  "normative_main": "c120dd1accfefd3e8d3d7ae7a2f7f17b54e3f89a",
+  "compiler_sha256": "015a95f3341beea99da59299719bd21a8415a58cbb256bc40096fd2286d842d9",
+  "files": {
+    "gate0.py": "5cab96d2147813efdb277304cba9c986548d344ba4514b976ed197d1dfcdd045",
+    "oracle.json": "8a1d242a3f3fda06640e72ca55e4b0b63bd681cfc063dd2706bd82720df6b455",
+    "source-generator.py": "2e48ac0d67c96db9fd5381f2a84470ea5d7b7bed0c2a7913cf48a893434072ef",
+    "sources/01-add-less-true.nl": "d980e7cbdf9ff7d06ae3c8abdfe9e0468ff0225d194c5fbe41123260c23f3fd7",
+    "sources/02-zero-less-false.nl": "04375d35c445ff406930cf731835186c28bf09c4422f48526b6a178a3b86fa4c",
+    "sources/03-sub-equal-true.nl": "dbe95cc6f99bff363644b7512253e9f9a599e1f025a386c4116a20d35655c212",
+    "sources/04-one-equal-false.nl": "03758ee81229f3b831e4ba0a8bdbada6174cb1acf56bc3d6842abbd0bc1d0ea2",
+    "sources/80-known-condition.nl": "a9cc18e8ff3b3b3e1a0a70ea2bee39289ee75d6f7f36851bd725c8403d076e69",
+    "sources/81-existing-loop-consumer.nl": "a60187454b28c06da6025cf613e7ea455c548109dc0679b34bd64e8de11a6f98",
+    "sources/82-different-child-control.nl": "62876379bc87d5f7fa75a0ad6307d300b23e974ee3b444cab8fa4735c3c8f02f",
+    "sources/90-overflow.nl": "c9a1dbc0bf3caea1da75c3c0221d9769b6eb15d8f73fc5aa43e681c262ebea93",
+    "sources/91-read-mode.nl": "cc92f429ad73a2e0308dead1329d40410e3ea814d72c959086eeaf34fa57ab3e",
+    "sources/92-ending-reference.nl": "b0602f9ab54a136c996dd5646f4d146e3b6db21515ffc76e39da58f9887606f0",
+    "sources/93-incoming-type.nl": "91f84b13576b7f8a0ca1b24383af522a91f8034404c8b6b899e45574ee550984"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "classification": "diagnostic invocation mismatch; not a compiler finding",
+  "command": [
+    "python3",
+    "-B",
+    "tests/p1107/evidence_test.py"
+  ],
+  "inner_status": 1,
+  "observation": "Terminal traceback: versioned_freeze.FreezeError: current freeze digest: CMakeLists.txt",
+  "raw_capture": "Original terminal transcript only; no dedicated stdout/stderr files were created for this direct invocation.",
+  "cause": "Invoked the immutable old v21 entry directly after adding CMake targets, instead of its already-registered history_latest.py p1107 successor.",
+  "repair": "Use the existing registered CTest entry; do not change old assertions or old evidence.",
+  "old_entry_sha256": "e778afc9fd22da945f00eed50dc93bde3b86c1d34bb743c03d641b204e58831d",
+  "candidate_production": "b4134741ebaddca33b947bc1b196ca910c9642ca"
+}

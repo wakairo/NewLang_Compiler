@@ -1,0 +1,42 @@
+{
+  "original_oracle": "oracle.json unchanged; 82 backend prediction was not reached",
+  "controls": {
+    "80-known-condition": {
+      "check": 0,
+      "emit": 0
+    },
+    "81-existing-loop-consumer": {
+      "check": 0,
+      "emit": 0
+    },
+    "82-different-child-control": {
+      "check": 3,
+      "emit": 3,
+      "named": 3,
+      "diagnostic": "P6-JOIN-PRECISION",
+      "backend": "NOT_REACHED; preserved earlier FIRST"
+    }
+  },
+  "negative": {
+    "90-overflow": {
+      "check": 3,
+      "emit": 3,
+      "named": 3
+    },
+    "91-read-mode": {
+      "check": 3,
+      "emit": 3,
+      "named": 3
+    },
+    "92-ending-reference": {
+      "check": 3,
+      "emit": 3,
+      "named": 3
+    },
+    "93-incoming-type": {
+      "check": 3,
+      "emit": 3,
+      "named": 3
+    }
+  }
+}
