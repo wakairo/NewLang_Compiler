@@ -1,0 +1,534 @@
+{
+  "fixed_p": "773643d2709a5e5db24650069d67c0d9032fefb0",
+  "fixed_p_tree": "3d230802ca275bd963101c9b575f1567927f5c7a",
+  "canonical_main_at_release": "acdbf91944a3bac99671d71c6ae23134b56d6c32",
+  "canonical_spec": "Draft17.34",
+  "first_testmerge": {
+    "sha": "632225766d01587d73467e7f7612086b1e3af7e5",
+    "node_id": "C_kwDOU7KX29oAKDYzMjIyNTc2NmQwMTU4N2Q3MzQ2N2U3Zjc2MTIwODZiMWUzYWY3ZTU",
+    "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/commits/632225766d01587d73467e7f7612086b1e3af7e5",
+    "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/632225766d01587d73467e7f7612086b1e3af7e5",
+    "author": {
+      "name": "Joji Wakairo",
+      "email": "jw1@ninegw.sakura.ne.jp",
+      "date": "2026-11-04T05:03:35Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-11-04T05:03:35Z"
+    },
+    "tree": {
+      "sha": "a4d4cfdbd56e5093b33bee9017b5b3dcdfb0b2e2",
+      "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/trees/a4d4cfdbd56e5093b33bee9017b5b3dcdfb0b2e2"
+    },
+    "message": "Merge a835122ead5285cb4496d216814180e58fde48b0 into 773643d2709a5e5db24650069d67c0d9032fefb0",
+    "parents": [
+      {
+        "sha": "773643d2709a5e5db24650069d67c0d9032fefb0",
+        "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/commits/773643d2709a5e5db24650069d67c0d9032fefb0",
+        "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/773643d2709a5e5db24650069d67c0d9032fefb0"
+      },
+      {
+        "sha": "a835122ead5285cb4496d216814180e58fde48b0",
+        "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/commits/a835122ead5285cb4496d216814180e58fde48b0",
+        "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/a835122ead5285cb4496d216814180e58fde48b0"
+      }
+    ],
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJq6rynCRC1aQ7uu5UhlAAAuPUQAATgfFhScsgvO705R1gN1/K1\nBNYSIEo11syGz0AtOPNUAHivO14RqyuGVcbqwG8XePDxxok4s8da2UicLvrEAOO/\n4n46s4QzjvqoW4W4CEGyM/iWiEh8Afd424/1MlK7jTMS1RwZBg20Va9LCJ4H5J5B\n1BAZXjQKDd9uxOrzbOCh0Pm3DbqIzItuWX38di6neMYsKy9XLfBJVY/NMNqNhOjs\nMaFazwDo6rOa+hsATqPqw1ivbgY8O85bf0kdtIwdab6uUKBjAIBoHUY1CaXO7W+t\nO0lv/uKEP18QJ8YScy2Zx8mPkhJYvb+VIh8yJQUvUg4qRuyNiEaz8b1jPd8GFBYP\n42V/7xroOPYyDdgW51b8Pxh1PGy5QlzIFLsnjGcPmjqRVTodm1dBmpUs0NJFP2si\n4XqWDR12ImK5yAz9k/clIo/d4/jhqJUV47zfNQz+2Twqpo+US8Bdr8fPNMcpMWv8\nAV1LU7aGL7aPbl3KQGuua/jtDkvz/1IwDT90bCVdgC+mbLjPcgYc6rgV6Yb86ZeM\nUHkaaxGhUzeRcLPfqqW3M98TKjtmKQp+daRH8ImxZBMPvmrEiN7Jami4uDIVyxsk\npjWSQ83BCh2jdXkYB1+B5hEOU9/Z27xgSNX7HeHviNbe0B5q/0ynozw5xikoe+Wu\nl3h4khwdggKCi3pksBjk\n=urud\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree a4d4cfdbd56e5093b33bee9017b5b3dcdfb0b2e2\nparent 773643d2709a5e5db24650069d67c0d9032fefb0\nparent a835122ead5285cb4496d216814180e58fde48b0\nauthor Joji Wakairo <jw1@ninegw.sakura.ne.jp> 1793768615 +0900\ncommitter GitHub <noreply@github.com> 1793768615 +0900\n\nMerge a835122ead5285cb4496d216814180e58fde48b0 into 773643d2709a5e5db24650069d67c0d9032fefb0\n",
+      "verified_at": "2026-11-04T05:03:36Z"
+    }
+  },
+  "final_testmerge": {
+    "sha": "18055bb1a64d82787d0a86118976ac97f1358f9f",
+    "node_id": "C_kwDOU7KX29oAKDE4MDU1YmIxYTY0ZDgyNzg3ZDBhODYxMTg5NzZhYzk3ZjEzNThmOWY",
+    "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/commits/18055bb1a64d82787d0a86118976ac97f1358f9f",
+    "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/18055bb1a64d82787d0a86118976ac97f1358f9f",
+    "author": {
+      "name": "Joji Wakairo",
+      "email": "jw1@ninegw.sakura.ne.jp",
+      "date": "2026-11-04T05:20:52Z"
+    },
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com",
+      "date": "2026-11-04T05:20:52Z"
+    },
+    "tree": {
+      "sha": "809b189db90e2b4b6ddceb40eeba65b9baa7996e",
+      "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/trees/809b189db90e2b4b6ddceb40eeba65b9baa7996e"
+    },
+    "message": "Merge 5f4bde2f74ffe55c90c5c2f64220ecd634daf658 into 773643d2709a5e5db24650069d67c0d9032fefb0",
+    "parents": [
+      {
+        "sha": "773643d2709a5e5db24650069d67c0d9032fefb0",
+        "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/commits/773643d2709a5e5db24650069d67c0d9032fefb0",
+        "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/773643d2709a5e5db24650069d67c0d9032fefb0"
+      },
+      {
+        "sha": "5f4bde2f74ffe55c90c5c2f64220ecd634daf658",
+        "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/commits/5f4bde2f74ffe55c90c5c2f64220ecd634daf658",
+        "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/5f4bde2f74ffe55c90c5c2f64220ecd634daf658"
+      }
+    ],
+    "verification": {
+      "verified": true,
+      "reason": "valid",
+      "signature": "-----BEGIN PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJq6sC0CRC1aQ7uu5UhlAAA5zwQAG2Gkgd/mAvTX5aoyX0Cgv8x\nrXCCXql5dJfmN19PQmtfvd7gJmyfMzDous2aCwgpT3Gn+PzKXx8PBnd0v4DCn/Pn\nBKdFKhEVkXicT6uFez71C4IqHqqnN9ze+W9xHxnRqZlhyGL0JC0R98P7CHGrRU1f\nMq+a+BhXCY2WpY7bg1WvKRCL5v0A+/SBj/e6zz7/R1I/ixpOBn8OV5qrP4spGKis\nnI/gubYYbaGEfjLZB7yrJYvA/9RsneLMaGjm5GtMnVsS5fVh8Dk1YfdHsPzSQ9iZ\nLiM2Ht72pywEbxz4oAiUyPmZJUBcWhlyMqscH2lFfWTptKmFb/fZAdn8mjzam5WH\n4F+6LItPeTWnZhqrncxPy6FNOpvAWSwiVCOYUQfPL2wU3w6vbYQe6fUsqi0YalMP\nrMRgFYrUxS4F3QOgQxYgStVOfgSXVDIxILd+pphxFglhRTWPbUU4irT7IJF4Y+yk\nQ0jmkGe0tXUmKjwjxKtvSzrByEhHWZ/ibahEuF3CNp2HrEKUngZSExXTiCfD5k0h\nBC/BE57TIRpD72a/od/KAx5SpN4puYGoYR5axnHnh6Nmf5hIMcKQKMYYDIb61efc\nQWrfBWD38wgUYUYfA+BDdZdPZ5rUt0d9I+yKiJ+hDVbNK/csVmmkeO8qxrUKZFRV\nkwU/+9X+TjPH5RKAClHQ\n=GxUu\n-----END PGP SIGNATURE-----\n",
+      "payload": "tree 809b189db90e2b4b6ddceb40eeba65b9baa7996e\nparent 773643d2709a5e5db24650069d67c0d9032fefb0\nparent 5f4bde2f74ffe55c90c5c2f64220ecd634daf658\nauthor Joji Wakairo <jw1@ninegw.sakura.ne.jp> 1793769652 +0000\ncommitter GitHub <noreply@github.com> 1793769652 +0000\n\nMerge 5f4bde2f74ffe55c90c5c2f64220ecd634daf658 into 773643d2709a5e5db24650069d67c0d9032fefb0\n",
+      "verified_at": "2026-11-04T05:20:52Z"
+    }
+  },
+  "final_r_commit": {
+    "sha": "5f4bde2f74ffe55c90c5c2f64220ecd634daf658",
+    "node_id": "C_kwDOU7KX29oAKDVmNGJkZTJmNzRmZmU1NWM5MGM1YzJmNjQyMjBlY2Q2MzRkYWY2NTg",
+    "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/commits/5f4bde2f74ffe55c90c5c2f64220ecd634daf658",
+    "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/5f4bde2f74ffe55c90c5c2f64220ecd634daf658",
+    "author": {
+      "name": "Joji Wakairo",
+      "email": "jw1@ninegw.sakura.ne.jp",
+      "date": "2026-11-04T05:18:58Z"
+    },
+    "committer": {
+      "name": "Joji Wakairo",
+      "email": "jw1@ninegw.sakura.ne.jp",
+      "date": "2026-11-04T05:18:58Z"
+    },
+    "tree": {
+      "sha": "809b189db90e2b4b6ddceb40eeba65b9baa7996e",
+      "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/trees/809b189db90e2b4b6ddceb40eeba65b9baa7996e"
+    },
+    "message": "test(r1144): project indirect freeze callers with authenticated index",
+    "parents": [
+      {
+        "sha": "a835122ead5285cb4496d216814180e58fde48b0",
+        "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/commits/a835122ead5285cb4496d216814180e58fde48b0",
+        "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/a835122ead5285cb4496d216814180e58fde48b0"
+      }
+    ],
+    "verification": {
+      "verified": false,
+      "reason": "unsigned",
+      "signature": null,
+      "payload": null,
+      "verified_at": null
+    }
+  },
+  "r_commits": [
+    {
+      "sha": "786d0d9ec638ffad7150f88515ed436cf979392e",
+      "node_id": "C_kwDOU7KX29oAKDc4NmQwZDllYzYzOGZmYWQ3MTUwZjg4NTE1ZWQ0MzZjZjk3OTM5MmU",
+      "commit": {
+        "author": {
+          "name": "Joji Wakairo",
+          "email": "jw1@ninegw.sakura.ne.jp",
+          "date": "2026-11-04T04:53:09Z"
+        },
+        "committer": {
+          "name": "Joji Wakairo",
+          "email": "jw1@ninegw.sakura.ne.jp",
+          "date": "2026-11-04T04:53:09Z"
+        },
+        "message": "R1144: preserve independent freezes and add bounded scalar observations\n\nC225 DRAFT/NEVERMERGE. V1 remains NOT_RUN; V2 is separately frozen\npost-freeze interface calibration. Source/oracle predictions are unchanged.\nR-owned probe, passive observer, CTest inventory and freeze adapter only.",
+        "tree": {
+          "sha": "0d59406b727dad225cd56eb4e5b1d3c5757f9c3a",
+          "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/trees/0d59406b727dad225cd56eb4e5b1d3c5757f9c3a"
+        },
+        "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/commits/786d0d9ec638ffad7150f88515ed436cf979392e",
+        "comment_count": 0,
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null,
+          "verified_at": null
+        }
+      },
+      "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/786d0d9ec638ffad7150f88515ed436cf979392e",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/786d0d9ec638ffad7150f88515ed436cf979392e",
+      "comments_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/786d0d9ec638ffad7150f88515ed436cf979392e/comments",
+      "author": {
+        "login": "wakairo",
+        "id": 6393110,
+        "node_id": "MDQ6VXNlcjYzOTMxMTA=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6393110?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/wakairo",
+        "html_url": "https://github.com/wakairo",
+        "followers_url": "https://api.github.com/users/wakairo/followers",
+        "following_url": "https://api.github.com/users/wakairo/following{/other_user}",
+        "gists_url": "https://api.github.com/users/wakairo/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/wakairo/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/wakairo/subscriptions",
+        "organizations_url": "https://api.github.com/users/wakairo/orgs",
+        "repos_url": "https://api.github.com/users/wakairo/repos",
+        "events_url": "https://api.github.com/users/wakairo/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/wakairo/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "wakairo",
+        "id": 6393110,
+        "node_id": "MDQ6VXNlcjYzOTMxMTA=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6393110?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/wakairo",
+        "html_url": "https://github.com/wakairo",
+        "followers_url": "https://api.github.com/users/wakairo/followers",
+        "following_url": "https://api.github.com/users/wakairo/following{/other_user}",
+        "gists_url": "https://api.github.com/users/wakairo/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/wakairo/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/wakairo/subscriptions",
+        "organizations_url": "https://api.github.com/users/wakairo/orgs",
+        "repos_url": "https://api.github.com/users/wakairo/repos",
+        "events_url": "https://api.github.com/users/wakairo/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/wakairo/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "773643d2709a5e5db24650069d67c0d9032fefb0",
+          "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/773643d2709a5e5db24650069d67c0d9032fefb0",
+          "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/773643d2709a5e5db24650069d67c0d9032fefb0"
+        }
+      ]
+    },
+    {
+      "sha": "e8b51186d54c7781ff954dc4a8c20e326c3def6c",
+      "node_id": "C_kwDOU7KX29oAKGU4YjUxMTg2ZDU0Yzc3ODFmZjk1NGRjNGE4YzIwZTMyNmMzZGVmNmM",
+      "commit": {
+        "author": {
+          "name": "Joji Wakairo",
+          "email": "jw1@ninegw.sakura.ne.jp",
+          "date": "2026-11-04T04:55:39Z"
+        },
+        "committer": {
+          "name": "Joji Wakairo",
+          "email": "jw1@ninegw.sakura.ne.jp",
+          "date": "2026-11-04T04:55:39Z"
+        },
+        "message": "R1144: apply pinned format and public cleanup API wiring\n\nPreserve FIRST FAST failure 41775881087. Only R probe whitespace and\nsyntax-tree destructor spelling change; V1/V2 sources and oracles unchanged.",
+        "tree": {
+          "sha": "e36edbd7022d8ab3da39cf564a2f1432b1fd6f46",
+          "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/trees/e36edbd7022d8ab3da39cf564a2f1432b1fd6f46"
+        },
+        "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/commits/e8b51186d54c7781ff954dc4a8c20e326c3def6c",
+        "comment_count": 0,
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null,
+          "verified_at": null
+        }
+      },
+      "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/e8b51186d54c7781ff954dc4a8c20e326c3def6c",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/e8b51186d54c7781ff954dc4a8c20e326c3def6c",
+      "comments_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/e8b51186d54c7781ff954dc4a8c20e326c3def6c/comments",
+      "author": {
+        "login": "wakairo",
+        "id": 6393110,
+        "node_id": "MDQ6VXNlcjYzOTMxMTA=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6393110?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/wakairo",
+        "html_url": "https://github.com/wakairo",
+        "followers_url": "https://api.github.com/users/wakairo/followers",
+        "following_url": "https://api.github.com/users/wakairo/following{/other_user}",
+        "gists_url": "https://api.github.com/users/wakairo/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/wakairo/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/wakairo/subscriptions",
+        "organizations_url": "https://api.github.com/users/wakairo/orgs",
+        "repos_url": "https://api.github.com/users/wakairo/repos",
+        "events_url": "https://api.github.com/users/wakairo/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/wakairo/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "wakairo",
+        "id": 6393110,
+        "node_id": "MDQ6VXNlcjYzOTMxMTA=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6393110?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/wakairo",
+        "html_url": "https://github.com/wakairo",
+        "followers_url": "https://api.github.com/users/wakairo/followers",
+        "following_url": "https://api.github.com/users/wakairo/following{/other_user}",
+        "gists_url": "https://api.github.com/users/wakairo/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/wakairo/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/wakairo/subscriptions",
+        "organizations_url": "https://api.github.com/users/wakairo/orgs",
+        "repos_url": "https://api.github.com/users/wakairo/repos",
+        "events_url": "https://api.github.com/users/wakairo/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/wakairo/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "786d0d9ec638ffad7150f88515ed436cf979392e",
+          "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/786d0d9ec638ffad7150f88515ed436cf979392e",
+          "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/786d0d9ec638ffad7150f88515ed436cf979392e"
+        }
+      ]
+    },
+    {
+      "sha": "f8d700bfe98683330fb3c88e8acb6ba197594794",
+      "node_id": "C_kwDOU7KX29oAKGY4ZDcwMGJmZTk4NjgzMzMwZmIzYzg4ZThhY2I2YmExOTc1OTQ3OTQ",
+      "commit": {
+        "author": {
+          "name": "Joji Wakairo",
+          "email": "jw1@ninegw.sakura.ne.jp",
+          "date": "2026-11-04T04:58:07Z"
+        },
+        "committer": {
+          "name": "Joji Wakairo",
+          "email": "jw1@ninegw.sakura.ne.jp",
+          "date": "2026-11-04T04:58:07Z"
+        },
+        "message": "R1144: validate typed receivers of unit-typed bindings\n\nPre-execution apparatus correction from C static review, independently\nconfirmed against the fixed binding contract. Preserve all FIRST records\nand both source/oracle freezes; no Production or prediction change.",
+        "tree": {
+          "sha": "58afc449181438c38cb2a28f5a0494eafd792d8e",
+          "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/trees/58afc449181438c38cb2a28f5a0494eafd792d8e"
+        },
+        "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/commits/f8d700bfe98683330fb3c88e8acb6ba197594794",
+        "comment_count": 0,
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null,
+          "verified_at": null
+        }
+      },
+      "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/f8d700bfe98683330fb3c88e8acb6ba197594794",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/f8d700bfe98683330fb3c88e8acb6ba197594794",
+      "comments_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/f8d700bfe98683330fb3c88e8acb6ba197594794/comments",
+      "author": {
+        "login": "wakairo",
+        "id": 6393110,
+        "node_id": "MDQ6VXNlcjYzOTMxMTA=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6393110?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/wakairo",
+        "html_url": "https://github.com/wakairo",
+        "followers_url": "https://api.github.com/users/wakairo/followers",
+        "following_url": "https://api.github.com/users/wakairo/following{/other_user}",
+        "gists_url": "https://api.github.com/users/wakairo/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/wakairo/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/wakairo/subscriptions",
+        "organizations_url": "https://api.github.com/users/wakairo/orgs",
+        "repos_url": "https://api.github.com/users/wakairo/repos",
+        "events_url": "https://api.github.com/users/wakairo/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/wakairo/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "wakairo",
+        "id": 6393110,
+        "node_id": "MDQ6VXNlcjYzOTMxMTA=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6393110?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/wakairo",
+        "html_url": "https://github.com/wakairo",
+        "followers_url": "https://api.github.com/users/wakairo/followers",
+        "following_url": "https://api.github.com/users/wakairo/following{/other_user}",
+        "gists_url": "https://api.github.com/users/wakairo/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/wakairo/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/wakairo/subscriptions",
+        "organizations_url": "https://api.github.com/users/wakairo/orgs",
+        "repos_url": "https://api.github.com/users/wakairo/repos",
+        "events_url": "https://api.github.com/users/wakairo/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/wakairo/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "e8b51186d54c7781ff954dc4a8c20e326c3def6c",
+          "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/e8b51186d54c7781ff954dc4a8c20e326c3def6c",
+          "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/e8b51186d54c7781ff954dc4a8c20e326c3def6c"
+        }
+      ]
+    },
+    {
+      "sha": "a835122ead5285cb4496d216814180e58fde48b0",
+      "node_id": "C_kwDOU7KX29oAKGE4MzUxMjJlYWQ1Mjg1Y2I0NDk2ZDIxNjgxNDE4MGU1OGZkZTQ4YjA",
+      "commit": {
+        "author": {
+          "name": "Joji Wakairo",
+          "email": "jw1@ninegw.sakura.ne.jp",
+          "date": "2026-11-04T05:00:47Z"
+        },
+        "committer": {
+          "name": "Joji Wakairo",
+          "email": "jw1@ninegw.sakura.ne.jp",
+          "date": "2026-11-04T05:00:47Z"
+        },
+        "message": "R1144: finish apparatus formatting and exact precision classification\n\nPreserve FIRST FAST1/FAST3 and all frozen source/oracle bytes. Require\nexplicit quantity/cyclic precision diagnostics for legal N6 refusal,\ncreate evidence exclusively, and retain C's post-freeze exposure label.",
+        "tree": {
+          "sha": "a4d4cfdbd56e5093b33bee9017b5b3dcdfb0b2e2",
+          "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/trees/a4d4cfdbd56e5093b33bee9017b5b3dcdfb0b2e2"
+        },
+        "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/commits/a835122ead5285cb4496d216814180e58fde48b0",
+        "comment_count": 0,
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null,
+          "verified_at": null
+        }
+      },
+      "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/a835122ead5285cb4496d216814180e58fde48b0",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/a835122ead5285cb4496d216814180e58fde48b0",
+      "comments_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/a835122ead5285cb4496d216814180e58fde48b0/comments",
+      "author": {
+        "login": "wakairo",
+        "id": 6393110,
+        "node_id": "MDQ6VXNlcjYzOTMxMTA=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6393110?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/wakairo",
+        "html_url": "https://github.com/wakairo",
+        "followers_url": "https://api.github.com/users/wakairo/followers",
+        "following_url": "https://api.github.com/users/wakairo/following{/other_user}",
+        "gists_url": "https://api.github.com/users/wakairo/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/wakairo/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/wakairo/subscriptions",
+        "organizations_url": "https://api.github.com/users/wakairo/orgs",
+        "repos_url": "https://api.github.com/users/wakairo/repos",
+        "events_url": "https://api.github.com/users/wakairo/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/wakairo/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "wakairo",
+        "id": 6393110,
+        "node_id": "MDQ6VXNlcjYzOTMxMTA=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6393110?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/wakairo",
+        "html_url": "https://github.com/wakairo",
+        "followers_url": "https://api.github.com/users/wakairo/followers",
+        "following_url": "https://api.github.com/users/wakairo/following{/other_user}",
+        "gists_url": "https://api.github.com/users/wakairo/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/wakairo/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/wakairo/subscriptions",
+        "organizations_url": "https://api.github.com/users/wakairo/orgs",
+        "repos_url": "https://api.github.com/users/wakairo/repos",
+        "events_url": "https://api.github.com/users/wakairo/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/wakairo/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "f8d700bfe98683330fb3c88e8acb6ba197594794",
+          "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/f8d700bfe98683330fb3c88e8acb6ba197594794",
+          "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/f8d700bfe98683330fb3c88e8acb6ba197594794"
+        }
+      ]
+    },
+    {
+      "sha": "5f4bde2f74ffe55c90c5c2f64220ecd634daf658",
+      "node_id": "C_kwDOU7KX29oAKDVmNGJkZTJmNzRmZmU1NWM5MGM1YzJmNjQyMjBlY2Q2MzRkYWY2NTg",
+      "commit": {
+        "author": {
+          "name": "Joji Wakairo",
+          "email": "jw1@ninegw.sakura.ne.jp",
+          "date": "2026-11-04T05:18:58Z"
+        },
+        "committer": {
+          "name": "Joji Wakairo",
+          "email": "jw1@ninegw.sakura.ne.jp",
+          "date": "2026-11-04T05:18:58Z"
+        },
+        "message": "test(r1144): project indirect freeze callers with authenticated index",
+        "tree": {
+          "sha": "809b189db90e2b4b6ddceb40eeba65b9baa7996e",
+          "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/trees/809b189db90e2b4b6ddceb40eeba65b9baa7996e"
+        },
+        "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/git/commits/5f4bde2f74ffe55c90c5c2f64220ecd634daf658",
+        "comment_count": 0,
+        "verification": {
+          "verified": false,
+          "reason": "unsigned",
+          "signature": null,
+          "payload": null,
+          "verified_at": null
+        }
+      },
+      "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/5f4bde2f74ffe55c90c5c2f64220ecd634daf658",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/5f4bde2f74ffe55c90c5c2f64220ecd634daf658",
+      "comments_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/5f4bde2f74ffe55c90c5c2f64220ecd634daf658/comments",
+      "author": {
+        "login": "wakairo",
+        "id": 6393110,
+        "node_id": "MDQ6VXNlcjYzOTMxMTA=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6393110?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/wakairo",
+        "html_url": "https://github.com/wakairo",
+        "followers_url": "https://api.github.com/users/wakairo/followers",
+        "following_url": "https://api.github.com/users/wakairo/following{/other_user}",
+        "gists_url": "https://api.github.com/users/wakairo/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/wakairo/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/wakairo/subscriptions",
+        "organizations_url": "https://api.github.com/users/wakairo/orgs",
+        "repos_url": "https://api.github.com/users/wakairo/repos",
+        "events_url": "https://api.github.com/users/wakairo/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/wakairo/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "committer": {
+        "login": "wakairo",
+        "id": 6393110,
+        "node_id": "MDQ6VXNlcjYzOTMxMTA=",
+        "avatar_url": "https://avatars.githubusercontent.com/u/6393110?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/wakairo",
+        "html_url": "https://github.com/wakairo",
+        "followers_url": "https://api.github.com/users/wakairo/followers",
+        "following_url": "https://api.github.com/users/wakairo/following{/other_user}",
+        "gists_url": "https://api.github.com/users/wakairo/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/wakairo/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/wakairo/subscriptions",
+        "organizations_url": "https://api.github.com/users/wakairo/orgs",
+        "repos_url": "https://api.github.com/users/wakairo/repos",
+        "events_url": "https://api.github.com/users/wakairo/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/wakairo/received_events",
+        "type": "User",
+        "user_view_type": "public",
+        "site_admin": false
+      },
+      "parents": [
+        {
+          "sha": "a835122ead5285cb4496d216814180e58fde48b0",
+          "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/commits/a835122ead5285cb4496d216814180e58fde48b0",
+          "html_url": "https://github.com/wakairo/NewLang_Compiler/commit/a835122ead5285cb4496d216814180e58fde48b0"
+        }
+      ]
+    }
+  ],
+  "archive_start": 6623489784
+}

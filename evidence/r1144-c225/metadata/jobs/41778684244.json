@@ -1,0 +1,121 @@
+{
+  "total_count": 1,
+  "jobs": [
+    {
+      "id": 126404929776,
+      "run_id": 41778684244,
+      "workflow_name": "R-FAST self-service pre-PR preparation (NOT R validation)",
+      "head_branch": "r-fast/r1144-loop-result-consumer",
+      "run_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/runs/41778684244",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU7KX288AAAAdblIo8A",
+      "head_sha": "5f4bde2f74ffe55c90c5c2f64220ecd634daf658",
+      "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/jobs/126404929776",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41778684244/job/126404929776",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-04T05:20:51Z",
+      "started_at": "2026-11-04T05:20:53Z",
+      "completed_at": "2026-11-04T05:21:42Z",
+      "name": "R-FAST pinned format + GCC build + CTest registration only",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-04T05:20:54Z",
+          "completed_at": "2026-11-04T05:20:55Z"
+        },
+        {
+          "name": "Checkout immutable push SHA without persisted credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-04T05:20:55Z",
+          "completed_at": "2026-11-04T05:20:58Z"
+        },
+        {
+          "name": "Verify opt-in R-FAST push and exact immutable checkout",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-04T05:20:58Z",
+          "completed_at": "2026-11-04T05:20:58Z"
+        },
+        {
+          "name": "Signed Ubuntu prerequisites (unchanged trust)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-04T05:20:58Z",
+          "completed_at": "2026-11-04T05:21:05Z"
+        },
+        {
+          "name": "Restore untrusted fixed-SHA curated SDK archive cache",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-04T05:21:05Z",
+          "completed_at": "2026-11-04T05:21:06Z"
+        },
+        {
+          "name": "Bootstrap SHA-verified pinned LLVM 23.1.3",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-04T05:21:06Z",
+          "completed_at": "2026-11-04T05:21:07Z"
+        },
+        {
+          "name": "Strict pinned formatting (fail closed; never alter source)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-04T05:21:07Z",
+          "completed_at": "2026-11-04T05:21:10Z"
+        },
+        {
+          "name": "Upload review-only formatter suggestions on failure",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8,
+          "started_at": "2026-11-04T05:21:10Z",
+          "completed_at": "2026-11-04T05:21:10Z"
+        },
+        {
+          "name": "GCC frontend-only host build and CTest registration inventory (NO tests executed)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9,
+          "started_at": "2026-11-04T05:21:10Z",
+          "completed_at": "2026-11-04T05:21:41Z"
+        },
+        {
+          "name": "Post Checkout immutable push SHA without persisted credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18,
+          "started_at": "2026-11-04T05:21:41Z",
+          "completed_at": "2026-11-04T05:21:41Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19,
+          "started_at": "2026-11-04T05:21:41Z",
+          "completed_at": "2026-11-04T05:21:42Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/check-runs/126404929776",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000006987,
+      "runner_name": "GitHub Actions 1000006987",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "total_count": 1,
+  "artifacts": [
+    {
+      "id": 13297371515,
+      "node_id": "MDg6QXJ0aWZhY3QxMzI5NzM3MTUxNQ==",
+      "name": "r-fast-format-suggestions-f8d700bfe98683330fb3c88e8acb6ba197594794-attempt1",
+      "size_in_bytes": 1488,
+      "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/artifacts/13297371515",
+      "archive_download_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/artifacts/13297371515/zip",
+      "expired": false,
+      "digest": "sha256:e160dbe78cadb404b870595d96c399222b0fa2b1b34342a47b95fe800d759269",
+      "created_at": "2026-11-04T04:58:36Z",
+      "updated_at": "2026-11-04T04:58:36Z",
+      "expires_at": "2026-11-11T04:58:35Z",
+      "workflow_run": {
+        "id": 41776347672,
+        "repository_id": 1404213211,
+        "head_repository_id": 1404213211,
+        "head_branch": "r-fast/r1144-loop-result-consumer",
+        "head_sha": "f8d700bfe98683330fb3c88e8acb6ba197594794"
+      }
+    }
+  ]
+}

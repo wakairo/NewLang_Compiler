@@ -1,0 +1,88 @@
+2026-11-04T04:58:35.7006116Z ----- BEGIN EXACT clang-format SUGGESTIONS -----
+2026-11-04T04:58:35.7012264Z --- a/tests/p1117/lineage.c
+2026-11-04T04:58:35.7012636Z +++ b/tests/p1117/lineage.c
+2026-11-04T04:58:35.7013006Z @@ -1,70 +0,0 @@
+2026-11-04T04:58:35.7013265Z -#define main p1117_driver_main
+2026-11-04T04:58:35.7013509Z -#include "main.c"
+2026-11-04T04:58:35.7013775Z -#undef main
+2026-11-04T04:58:35.7014086Z -#include <assert.h>
+2026-11-04T04:58:35.7014566Z -static bool accepts(const NLCheckedFragment *f, NLCheckedNodeId call,
+2026-11-04T04:58:35.7015146Z -                    const NLSemanticContext *c) {
+2026-11-04T04:58:35.7015680Z -  V0Program p = {.unit = nl_semantic_unit_type(c),
+2026-11-04T04:58:35.7016256Z -                 .u8 = nl_semantic_core_type(c, NL_TYPE_U8)};
+2026-11-04T04:58:35.7016813Z -  return predicate_call(f, call, &p);
+2026-11-04T04:58:35.7017247Z -}
+2026-11-04T04:58:35.7017572Z -int main(int argc, char **argv) {
+2026-11-04T04:58:35.7017875Z -  assert(argc == 2);
+2026-11-04T04:58:35.7018127Z -  NLSource *source = NULL, *entry_source = NULL;
+2026-11-04T04:58:35.7018447Z -  NLParser *parser = NULL, *entry_parser = NULL;
+2026-11-04T04:58:35.7018751Z -  NLSyntaxTree *unit = NULL, *tree = NULL;
+2026-11-04T04:58:35.7019043Z -  NLSemanticContext *c = NULL;
+2026-11-04T04:58:35.7019297Z -  NLCheckedFragment *owned = NULL;
+2026-11-04T04:58:35.7019617Z -  assert(nl_source_load(argv[1], &source) == NL_SOURCE_OK);
+2026-11-04T04:58:35.7020000Z -  assert(nl_parser_create(source, &parser) == NL_PARSE_OK);
+2026-11-04T04:58:35.7020422Z -  assert(nl_parser_parse_function_unit(parser, &unit, NULL) == NL_PARSE_OK);
+2026-11-04T04:58:35.7020819Z -  assert(nl_semantic_create(&c) == NL_CHECK_OK);
+2026-11-04T04:58:35.7021117Z -  const NLSyntaxTree *units[] = {unit};
+2026-11-04T04:58:35.7021490Z -  assert(nl_semantic_register_function_unit(c, units, 1, NULL) == NL_CHECK_OK);
+2026-11-04T04:58:35.7022181Z -  assert(nl_source_create("main()", 6, "<P1117-lineage>", &entry_source) ==
+2026-11-04T04:58:35.7022772Z -         NL_SOURCE_OK);
+2026-11-04T04:58:35.7023123Z -  assert(nl_parser_create(entry_source, &entry_parser) == NL_PARSE_OK);
+2026-11-04T04:58:35.7023578Z -  assert(nl_parser_parse_expression_fragment(entry_parser, &tree, NULL) ==
+2026-11-04T04:58:35.7023949Z -         NL_PARSE_OK);
+2026-11-04T04:58:35.7024286Z -  assert(nl_semantic_check_expression(c, tree, &owned, NULL) == NL_CHECK_OK);
+2026-11-04T04:58:35.7024783Z -  NLCheckedFragment *body =
+2026-11-04T04:58:35.7025226Z -      (NLCheckedFragment *)nl_checked_call_body(owned, nl_checked_root(owned));
+2026-11-04T04:58:35.7025600Z -  assert(body);
+2026-11-04T04:58:35.7025820Z -  NLCheckedNodeId calls[2] = {0};
+2026-11-04T04:58:35.7026068Z -  size_t count = 0;
+2026-11-04T04:58:35.7026325Z -  for (size_t n = 1; n <= body->count && count < 2; ++n)
+2026-11-04T04:58:35.7026709Z -    if (body->nodes[n - 1].kind == NL_CHECKED_REGISTERED_CALL)
+2026-11-04T04:58:35.7027034Z -      calls[count++] = n;
+2026-11-04T04:58:35.7027307Z -  assert(count == 2 && accepts(body, calls[0], c));
+2026-11-04T04:58:35.7027654Z -  NLCheckedNodeView *call = &body->nodes[calls[0] - 1];
+2026-11-04T04:58:35.7028040Z -  const NLCheckedNodeView *other = &body->nodes[calls[1] - 1];
+2026-11-04T04:58:35.7028520Z -  NLCheckedFragment *callee =
+2026-11-04T04:58:35.7028995Z -      (NLCheckedFragment *)nl_checked_call_body(body, calls[0]);
+2026-11-04T04:58:35.7029719Z -  assert(callee && call->results[0].value != other->results[0].value);
+2026-11-04T04:58:35.7030433Z -  NLCheckedNodeView *root = &callee->nodes[callee->root - 1];
+2026-11-04T04:58:35.7031113Z -  printf("P1117 actual result call=%zu body_returned=%zu body_normal=%zu "
+2026-11-04T04:58:35.7031580Z -         "other=%zu\n",
+2026-11-04T04:58:35.7032167Z -         call->results[0].value, root->returned.value, root->results[0].value,
+2026-11-04T04:58:35.7032678Z -         other->results[0].value);
+2026-11-04T04:58:35.7033020Z -  const NLCheckedNodeView saved_call = *call, saved_root = *root;
+2026-11-04T04:58:35.7033385Z -  call->results[0] = other->results[0];
+2026-11-04T04:58:35.7033695Z -  const bool foreign = accepts(body, calls[0], c);
+2026-11-04T04:58:35.7034002Z -  root->returned = other->results[0];
+2026-11-04T04:58:35.7034324Z -  const bool coherent_foreign = accepts(body, calls[0], c);
+2026-11-04T04:58:35.7034636Z -  *call = saved_call;
+2026-11-04T04:58:35.7034849Z -  *root = saved_root;
+2026-11-04T04:58:35.7035164Z -  assert(accepts(body, calls[0], c));
+2026-11-04T04:58:35.7035428Z -  printf(
+2026-11-04T04:58:35.7035739Z -      "P1117 foreign result accepted=%d coherent_foreign_return accepted=%d\n",
+2026-11-04T04:58:35.7036266Z -      foreign, coherent_foreign);
+2026-11-04T04:58:35.7036596Z -  /* No emission or execution of either altered artifact. */
+2026-11-04T04:58:35.7036927Z -  nl_checked_destroy(owned);
+2026-11-04T04:58:35.7037180Z -  nl_semantic_destroy(c);
+2026-11-04T04:58:35.7037430Z -  nl_syntax_tree_destroy(tree);
+2026-11-04T04:58:35.7037694Z -  nl_parser_destroy(entry_parser);
+2026-11-04T04:58:35.7037963Z -  nl_source_destroy(entry_source);
+2026-11-04T04:58:35.7038226Z -  nl_syntax_tree_destroy(unit);
+2026-11-04T04:58:35.7038483Z -  nl_parser_destroy(parser);
+2026-11-04T04:58:35.7038723Z -  nl_source_destroy(source);
+2026-11-04T04:58:35.7039012Z -  return foreign || coherent_foreign ? 1 : 0;
+2026-11-04T04:58:35.7039289Z -}
+2026-11-04T04:58:35.7039485Z --- a/tests/r1144/probe.c
+2026-11-04T04:58:35.7039726Z +++ b/tests/r1144/probe.c
+2026-11-04T04:58:35.7039942Z @@ -131,8 +131,8 @@
+2026-11-04T04:58:35.7040204Z          loop->break_edges != 1 || loop->return_edges != 0 ||
+2026-11-04T04:58:35.7040587Z          nl_checked_loop_body(body, after->initializer) == NULL ||
+2026-11-04T04:58:35.7040947Z          !typed_binding(body, after, quantity) ||
+2026-11-04T04:58:35.7041263Z -        !typed_binding(body, copy, quantity) ||
+2026-11-04T04:58:35.7041633Z -        copy_value == NULL || copy_value->kind != NL_CHECKED_IDENTIFIER ||
+2026-11-04T04:58:35.7042541Z +        !typed_binding(body, copy, quantity) || copy_value == NULL ||
+2026-11-04T04:58:35.7042952Z +        copy_value->kind != NL_CHECKED_IDENTIFIER ||
+2026-11-04T04:58:35.7043270Z          copy_value->symbol != after->symbol ||
+2026-11-04T04:58:35.7043617Z          copy_value->value_use != NL_VALUE_COPIED || call == NULL ||
+2026-11-04T04:58:35.7044038Z          call->kind != NL_CHECKED_REGISTERED_CALL || call->argument_count != 1 ||
+2026-11-04T04:58:35.7044549Z ----- END EXACT clang-format SUGGESTIONS -----

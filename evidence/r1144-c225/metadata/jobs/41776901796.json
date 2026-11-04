@@ -1,0 +1,105 @@
+{
+  "total_count": 1,
+  "jobs": [
+    {
+      "id": 126399253663,
+      "run_id": 41776901796,
+      "workflow_name": "Compiler frontend/C17 reference (NO LLVM; PARTIAL)",
+      "head_branch": "r-fast/r1144-loop-result-consumer",
+      "run_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/runs/41776901796",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOU7KX288AAAAdbfuMnw",
+      "head_sha": "a835122ead5285cb4496d216814180e58fde48b0",
+      "url": "https://api.github.com/repos/wakairo/NewLang_Compiler/actions/jobs/126399253663",
+      "html_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41776901796/job/126399253663",
+      "status": "completed",
+      "conclusion": "failure",
+      "created_at": "2026-11-04T05:03:38Z",
+      "started_at": "2026-11-04T05:03:41Z",
+      "completed_at": "2026-11-04T05:09:38Z",
+      "name": "Production CHECK + C17/native reference (NO LLVM; PARTIAL)",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-04T05:03:42Z",
+          "completed_at": "2026-11-04T05:03:42Z"
+        },
+        {
+          "name": "Check out source without persisted credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-04T05:03:42Z",
+          "completed_at": "2026-11-04T05:03:45Z"
+        },
+        {
+          "name": "Verify available Ubuntu runner tools (no LLVM install)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-04T05:03:45Z",
+          "completed_at": "2026-11-04T05:03:45Z"
+        },
+        {
+          "name": "Configure and build the actual Production frontend with GCC (no LLVM)",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-04T05:03:45Z",
+          "completed_at": "2026-11-04T05:04:05Z"
+        },
+        {
+          "name": "Inventory all CTests and assert Production CHECK, C17/native and public validators",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-04T05:04:05Z",
+          "completed_at": "2026-11-04T05:04:05Z"
+        },
+        {
+          "name": "Execute every registered frontend/C17 CTest (NO LLVM; PARTIAL)",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 6,
+          "started_at": "2026-11-04T05:04:05Z",
+          "completed_at": "2026-11-04T05:09:36Z"
+        },
+        {
+          "name": "Verify real Production source/checker CLI path (NO LLVM; PARTIAL)",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7,
+          "started_at": "2026-11-04T05:09:36Z",
+          "completed_at": "2026-11-04T05:09:36Z"
+        },
+        {
+          "name": "Post Check out source without persisted credentials",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14,
+          "started_at": "2026-11-04T05:09:36Z",
+          "completed_at": "2026-11-04T05:09:37Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15,
+          "started_at": "2026-11-04T05:09:37Z",
+          "completed_at": "2026-11-04T05:09:37Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/wakairo/NewLang_Compiler/check-runs/126399253663",
+      "labels": [
+        "ubuntu-24.04"
+      ],
+      "runner_id": 1000006986,
+      "runner_name": "GitHub Actions 1000006986",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    }
+  ]
+}
