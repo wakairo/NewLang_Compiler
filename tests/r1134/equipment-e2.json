@@ -1,0 +1,34 @@
+{
+  "schema": "newlang.r1134.c223.equipment.forward.v2",
+  "authority": "https://github.com/wakairo/NewLang_Compiler/issues/1134#issuecomment-6620652006",
+  "prior_head": "48c74e5535691cf3e07da94d7e409b98cc57c3f3",
+  "change": "R-only formatter whitespace; identical non-whitespace character stream",
+  "path": "tests/r1134/public_probe.c",
+  "bytes": 5270,
+  "sha256": "71b30f615e2037b91334b6828c65c8aa95d67505cf1672de11dc7d1512eac1b5",
+  "v1_v2_and_e1": "UNCHANGED",
+  "independence": "pre-execution frozen independent cohort / scope-calibrated V2 / incidental old-P formatter exposure after freeze",
+  "first_red": {
+    "run": 41758217232,
+    "job": 126339286595,
+    "attempt": 1,
+    "event": "push",
+    "head": "48c74e5535691cf3e07da94d7e409b98cc57c3f3",
+    "stage": "pinned format",
+    "host_build": "NOT_RUN",
+    "semantic_native": "NOT_RUN",
+    "raw_utf8_bytes": 37866,
+    "raw_sha256": "476e07eb4d3963ad9e9d79ec1e6f400b2b0e889271e76581180340f211fbb0a8",
+    "formatter_artifact": 13289016887,
+    "artifact_zip_sha256": "8f4a1d364bf9f818f8ef1b5759bc96d3381acc17b29a61d32926df7630d1ff21"
+  },
+  "foreign_hunk": "NOT_APPLIED; no guest source/oracle/expectation or observation-purpose changes",
+  "forward_prevention": "Filter suggestions/diagnostics to R paths before display; preserve full raw opaquely",
+  "budgets_before_ref": {
+    "rfast": 1,
+    "normal_jobs": 0,
+    "normal_pairs": 0,
+    "manual": 0
+  },
+  "scope_limits": "No new blind cohort claim. Private inference/general soundness/audit locality unmeasured; GO624 PAUSED/H1 HOLD."
+}

@@ -20,8 +20,8 @@ static bool inspect(const NLCheckedFragment *fragment, const char *path,
             NLSourceView name = {0};
             if (!nl_source_view(source, view->name, &name))
                 return false;
-            printf("R1134 NAME %s %zu %zu %d ", path, i,
-                   (size_t)view->symbol, (int)view->kind);
+            printf("R1134 NAME %s %zu %zu %d ", path, i, (size_t)view->symbol,
+                   (int)view->kind);
             if (fwrite(name.bytes, 1, name.length, stdout) != name.length)
                 return false;
             putchar('\n');
@@ -32,12 +32,12 @@ static bool inspect(const NLCheckedFragment *fragment, const char *path,
                 field->parent == field->child || field->index > 1 ||
                 field->parent_incarnation == 0 || field->child_incarnation == 0)
                 return false;
-            printf("R1134 FIELD %s %zu %zu %zu %zu %zu %zu %zu %zu %zu\n",
-                   path, i, (size_t)field->base, (size_t)field->parent,
+            printf("R1134 FIELD %s %zu %zu %zu %zu %zu %zu %zu %zu %zu\n", path,
+                   i, (size_t)field->base, (size_t)field->parent,
                    (size_t)field->child, field->index,
                    (size_t)field->parent_incarnation,
-                   (size_t)field->child_incarnation,
-                   (size_t)field->parent_fact, (size_t)field->child_fact);
+                   (size_t)field->child_incarnation, (size_t)field->parent_fact,
+                   (size_t)field->child_fact);
         }
         char child[256];
         if (view->kind == NL_CHECKED_LOOP) {
@@ -58,13 +58,14 @@ static bool inspect(const NLCheckedFragment *fragment, const char *path,
                     nl_checked_if_arm(fragment, i, arm);
                 if (owned_arm == NULL)
                     continue;
-                int length =
-                    snprintf(child, sizeof(child), "%s/if%zu/%zu", path, i, arm);
+                int length = snprintf(child, sizeof(child), "%s/if%zu/%zu",
+                                      path, i, arm);
                 if (length < 0 || (size_t)length >= sizeof(child) ||
                     !inspect(owned_arm, child, depth + 1, loops))
                     return false;
             }
-        } else if (view->kind == NL_CHECKED_REGISTERED_CALL && view->body_backed) {
+        } else if (view->kind == NL_CHECKED_REGISTERED_CALL &&
+                   view->body_backed) {
             int length = snprintf(child, sizeof(child), "%s/call%zu", path, i);
             if (length < 0 || (size_t)length >= sizeof(child) ||
                 !inspect(nl_checked_call_body(fragment, i), child, depth + 1,
