@@ -1,0 +1,71 @@
+{
+  "reason": "CLI interface name-only variant specimen -> main; V1 original bytes/oracle preserved; no guest values or operations changed",
+  "oracle_sha256": "a0b8b83bfec3a873f8b82b1036f013517bfff8a35d698930cd039623f72955ad",
+  "files": [
+    {
+      "path": "negative/comparison_type_mismatch.nl",
+      "bytes": 644,
+      "sha256": "9fe7a6e30f854d38471c69268dc631b05e80a9d8820f73805889545df36835a3"
+    },
+    {
+      "path": "negative/non_bool_condition.nl",
+      "bytes": 635,
+      "sha256": "db43514df722b05e802f32c89dc3523a586fd31d752d37628f124f2e6226cc23"
+    },
+    {
+      "path": "negative/normal_join_mismatch.nl",
+      "bytes": 653,
+      "sha256": "a30f172b763704e9306f70ca8c630640d0be8d1010f4d289d0498354c9dcbdf6"
+    },
+    {
+      "path": "negative/read_mode_write.nl",
+      "bytes": 646,
+      "sha256": "9471567927f63e24ea8f575b7e77e5de5e6c277f0435b0ecd8354da38de67fdc"
+    },
+    {
+      "path": "negative/replacement_type_mismatch.nl",
+      "bytes": 650,
+      "sha256": "ca6cac365ccc24f8bcd1b655da3bbd3e073f061b581c7f5437c3ef0409ed1c93"
+    },
+    {
+      "path": "negative/scoped_ref_escape.nl",
+      "bytes": 619,
+      "sha256": "63af5f60a701dc7106b42ffb0f9b8241f39ad804f5b0197fe64cd2928c94cdc6"
+    },
+    {
+      "path": "negative/unknown_child.nl",
+      "bytes": 648,
+      "sha256": "e87046a703bbfa732279c2fb77482e70cb472bbd504fe05ad00886e490ed377b"
+    },
+    {
+      "path": "sources/add_four.nl",
+      "bytes": 647,
+      "sha256": "be5f07622213e05644d1014213058bcac7071b21d46f6c9ecc270ac69982c087"
+    },
+    {
+      "path": "sources/add_one.nl",
+      "bytes": 656,
+      "sha256": "41d4c9ea4ae55820ee89b59f26c4fd94cc23619ce81860cfab679d5288cb10ba"
+    },
+    {
+      "path": "sources/add_zero.nl",
+      "bytes": 647,
+      "sha256": "f49b6f8f75549b06166ba8da491d1e3fe9caa9e78a68eecda8dfe5e2ecf3e3d5"
+    },
+    {
+      "path": "sources/sub_four.nl",
+      "bytes": 654,
+      "sha256": "d7181ab9eb020b44545b978c513b5c31b6d8d1842d02ccd9c08ff7843062003b"
+    },
+    {
+      "path": "sources/sub_one.nl",
+      "bytes": 648,
+      "sha256": "e9b1e17293cfc28ec1af8684bcb671fd817b856e2353689fd49497b0529485ed"
+    },
+    {
+      "path": "sources/sub_zero.nl",
+      "bytes": 654,
+      "sha256": "268651cff25ad124fc5c8016f326204c46db1d01188a2e5d29c1a0198c3ba360"
+    }
+  ]
+}

@@ -2007,3 +2007,25 @@ if(BUILD_TESTING)
         set_tests_properties(p1139_${profile}_oom.unit PROPERTIES TIMEOUT 300)
     endforeach()
 endif()
+
+# R1157: independent frozen runtime IF/original-T observations (NEVERMERGE).
+if(BUILD_TESTING)
+    add_test(NAME r1157_runtime_if.independent
+        COMMAND "${Python3_EXECUTABLE}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/r1157/runner.py"
+        "$<TARGET_FILE:newlangc>" "${CMAKE_CURRENT_SOURCE_DIR}"
+        "${CMAKE_CURRENT_BINARY_DIR}" "${CMAKE_C_COMPILER}"
+        "${NEWLANG_SANITIZER}")
+    set_tests_properties(r1157_runtime_if.independent PROPERTIES TIMEOUT 240)
+    get_property(r1157_names DIRECTORY PROPERTY TESTS)
+    set(r1157_count 0)
+    foreach(r1157_name IN LISTS r1157_names)
+        if(r1157_name STREQUAL "r1157_runtime_if.independent")
+            math(EXPR r1157_count "${r1157_count} + 1")
+        endif()
+    endforeach()
+    if(NOT r1157_count EQUAL 1)
+        message(FATAL_ERROR "R1157 test registration is not unique")
+    endif()
+    message(STATUS "R1157 unique CTest registered: r1157_runtime_if.independent (not executed at configure/build)")
+endif()

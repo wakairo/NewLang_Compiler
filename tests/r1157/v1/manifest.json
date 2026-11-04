@@ -1,0 +1,80 @@
+{
+  "version": "R1157-V1",
+  "files": [
+    {
+      "path": "PLAN.md",
+      "bytes": 3452,
+      "sha256": "4a2b5c86963d76b00d3381e2273228635b67ac70cf9daee2b86827a26d8f6366"
+    },
+    {
+      "path": "negative/comparison_type_mismatch.nl",
+      "bytes": 648,
+      "sha256": "17fb216219557cc19fec10445c899ed717e173e9f590c929f2b5a2464d48ba2d"
+    },
+    {
+      "path": "negative/non_bool_condition.nl",
+      "bytes": 639,
+      "sha256": "d86402f4eb52f4763b917dd0b5fd5399607a023db99327e34e3475d81a8bffdf"
+    },
+    {
+      "path": "negative/normal_join_mismatch.nl",
+      "bytes": 657,
+      "sha256": "370f97daf8dae6be0a6bfd06b964272a3f71b18fdde47240fec13cddb888e2b0"
+    },
+    {
+      "path": "negative/read_mode_write.nl",
+      "bytes": 650,
+      "sha256": "2d52dbb963dbbc52d6097eb75f270f242c2e3590ed71c3402a5fe179bb8d665a"
+    },
+    {
+      "path": "negative/replacement_type_mismatch.nl",
+      "bytes": 654,
+      "sha256": "fe90527a1ec24ccd35deb08a8cfdde7ee5c06f00bd059758e176fa0ac04cf43d"
+    },
+    {
+      "path": "negative/scoped_ref_escape.nl",
+      "bytes": 623,
+      "sha256": "4328b86f76e965e018f4da4cf4c374e1b4581e5fa15dc73c3658b8cc500a03b8"
+    },
+    {
+      "path": "negative/unknown_child.nl",
+      "bytes": 652,
+      "sha256": "11405c4b66e2529a071d962c2d304fb9a30e706f98a54fd5bada40ca81ae2986"
+    },
+    {
+      "path": "oracle.json",
+      "bytes": 9719,
+      "sha256": "a0b8b83bfec3a873f8b82b1036f013517bfff8a35d698930cd039623f72955ad"
+    },
+    {
+      "path": "sources/add_four.nl",
+      "bytes": 651,
+      "sha256": "07ba2450f7d3f7d9400ffb99eda39110fba7fd7109158c888a888fc88abb267c"
+    },
+    {
+      "path": "sources/add_one.nl",
+      "bytes": 660,
+      "sha256": "4e3dbfcfe288019a8ea810ba869b8b2800d2f235e31db0fae1d250a29c6df43c"
+    },
+    {
+      "path": "sources/add_zero.nl",
+      "bytes": 651,
+      "sha256": "4eae2d9b587ee9eecdc38ae5d2ab9fcf256f745ce1e9650f3eab8528cfd2653d"
+    },
+    {
+      "path": "sources/sub_four.nl",
+      "bytes": 658,
+      "sha256": "fd0adfde13e5a301f3ce75f72577590d55a04dd8c14f6d338b7a35b9a116cb94"
+    },
+    {
+      "path": "sources/sub_one.nl",
+      "bytes": 652,
+      "sha256": "b6131ae17a64a3a33f1239e7d168eb977c95b76e070d193ce73f41763529231b"
+    },
+    {
+      "path": "sources/sub_zero.nl",
+      "bytes": 658,
+      "sha256": "983412a553bd874cfdfa60061589b1c8b058f34de6a104dc29502e4f182b9522"
+    }
+  ]
+}
