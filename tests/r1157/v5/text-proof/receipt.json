@@ -1,0 +1,52 @@
+{
+  "version": "R1157-V5-textproof",
+  "actual_source": "V4 GCC raw capsule 0e0f1dfc5d6950436f03b6eb617478f443f31e272780704ecf4f133aea09ebea add_zero/original.c",
+  "public_nodes": "same actual V4 source/main invocation",
+  "synthetic_scope": "one unary ! layout only; not a new source fixture, oracle, semantic prediction or guest execution",
+  "records": [
+    {
+      "label": "actual-add_zero",
+      "input_sha256": "b45cd6f1a90979383d943e7dc335e56c75361dc968d9440e6c1bfd5aa1b81512",
+      "output_sha256": "6d2a9030e4467b94b7f774da23c2e9ba1a8958caf57541fe574ad76fbccef7be",
+      "observer_schema": {
+        "loop_condition_negated": false,
+        "loop_layout": "conditional-continue/fallthrough-break"
+      },
+      "condition_lines": [
+        "if (r1157_branch(0, (r1157_condition(0, (r1157_operand(0, 0, (nl_loop_phase_13)) < r1157_operand(0, 1, ((size_t)UINTMAX_C(9)))), &nl_local_1, &nl_local_1.f0, &nl_local_1.f1, nl_local_1.f0, nl_local_1.f1)))) {",
+        "if ((r1157_condition(1, (r1157_operand(1, 0, (nl_less_left_19)) < r1157_operand(1, 1, (nl_less_right_19))), &nl_local_1, &nl_local_1.f0, &nl_local_1.f1, nl_local_1.f0, nl_local_1.f1))) {"
+      ],
+      "if_count": 2,
+      "explicit_else_count": 1,
+      "continue_count": 1,
+      "break_count": 1,
+      "actual_store_statements_unchanged": [
+        "*nl_local_5 = 43;",
+        "*nl_local_5 = 83;"
+      ],
+      "execution": "TEXT_ONLY; no native execution or semantic validation"
+    },
+    {
+      "label": "synthetic-negated-guard-schema-NOT_GUEST",
+      "input_sha256": "abd003cd276ba715282b8ff5b502cab616fd4b8de410f95a3bcdc85a90208401",
+      "output_sha256": "a83da494f0b9ebb4a0e359e7c94aef23f37dca8708c6321f8e1aff8504f65115",
+      "observer_schema": {
+        "loop_condition_negated": true,
+        "loop_layout": "conditional-continue/fallthrough-break"
+      },
+      "condition_lines": [
+        "if (r1157_branch(0, (!(r1157_condition(0, (r1157_operand(0, 0, (nl_loop_phase_13)) < r1157_operand(0, 1, ((size_t)UINTMAX_C(9)))), &nl_local_1, &nl_local_1.f0, &nl_local_1.f1, nl_local_1.f0, nl_local_1.f1))))) {",
+        "if ((r1157_condition(1, (r1157_operand(1, 0, (nl_less_left_19)) < r1157_operand(1, 1, (nl_less_right_19))), &nl_local_1, &nl_local_1.f0, &nl_local_1.f1, nl_local_1.f0, nl_local_1.f1))) {"
+      ],
+      "if_count": 2,
+      "explicit_else_count": 1,
+      "continue_count": 1,
+      "break_count": 1,
+      "actual_store_statements_unchanged": [
+        "*nl_local_5 = 43;",
+        "*nl_local_5 = 83;"
+      ],
+      "execution": "TEXT_ONLY; no native execution or semantic validation"
+    }
+  ]
+}

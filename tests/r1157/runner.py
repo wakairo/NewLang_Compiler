@@ -19,11 +19,11 @@ R1157_DIR = Path(__file__).resolve().parent
 OUT = BUILD / 'r1157-raw'
 OUT.mkdir(exist_ok=True)
 ORACLE = json.loads((R1157_DIR / 'v4/oracle.json').read_text())
-RESULT = {'version': 'R1157-machine-V4-C234', 'cases': {}, 'negatives': {}, 'commands': [],
+RESULT = {'version': 'R1157-machine-V5-mechanical', 'cases': {}, 'negatives': {}, 'commands': [],
           'checkout': os.environ.get('GITHUB_SHA'), 'run': os.environ.get('GITHUB_RUN_ID'),
           'attempt': os.environ.get('GITHUB_RUN_ATTEMPT'), 'sanitizer': SAN,
-          'first': False, 'scope_first': True, 'original_first': 'first/receipt.json',
-          'previous_red': 'v3_results/receipt.json',
+          'first': False, 'scope_first': False, 'mechanical_repair': True, 'original_first': 'first/receipt.json',
+          'previous_red': 'v3_results/receipt.json', 'scope_first_red': 'v4_results/receipt.json',
           'independence': 'V1 frozen independent; V4 scope-calibrated after C234 public profile disclosure'}
 
 
@@ -157,6 +157,8 @@ OBSERVER = r'''
 #include <stdio.h>
 static size_t r1157_operand(unsigned c, unsigned side, size_t v)
 { fprintf(stderr, "R1157 OP %u %u %zu\n", c, side, v); return v; }
+static _Bool r1157_branch(unsigned c, _Bool v)
+{ fprintf(stderr, "R1157 BRANCH %u %u\n", c, (unsigned)v); return v; }
 static _Bool r1157_condition(unsigned c, _Bool v, const void *root,
                              const void *f0, const void *f1,
                              unsigned v0, unsigned v1)
@@ -177,16 +179,37 @@ def close_paren(text, start, opener='(', closer=')'):
     raise RuntimeError('observer unmatched delimiter')
 
 
+def expression_bounds(text, start, end):
+    while True:
+        while start < end and text[start].isspace():
+            start += 1
+        while start < end and text[end - 1].isspace():
+            end -= 1
+        if start < end and text[start] == '(' and close_paren(text, start) == end - 1:
+            start += 1
+            end -= 1
+        else:
+            return start, end
+
+
 def comparison(expression, cid):
+    # Preserve the actual unary ! outside the source comparison.
+    # Prefix/suffix come from emitted C, never from the oracle.
     value = expression.strip()
-    while value.startswith('(') and close_paren(value, 0) == len(value) - 1:
-        value = value[1:-1].strip()
-    found = list(re.finditer(r'==|(?<![<>=])<(?![=<>])', value))
+    start, end = expression_bounds(value, 0, len(value))
+    negated = start < end and value[start] == '!'
+    if negated:
+        start, end = expression_bounds(value, start + 1, end)
+    core = value[start:end]
+    found = list(re.finditer(r'==|(?<![<>=])<(?![=<>])', core))
     if len(found) != 1:
         raise RuntimeError(f'observer needs actual comparison operands: {expression}')
     item = found[0]
-    left, right = value[:item.start()].strip(), value[item.end():].strip()
-    return f'r1157_operand({cid}, 0, ({left})) {item.group()} r1157_operand({cid}, 1, ({right}))'
+    left, right = core[:item.start()].strip(), core[item.end():].strip()
+    if not left or not right or '!' in left or '!' in right:
+        raise RuntimeError('observer unsupported comparison operand schema')
+    inner = f'r1157_operand({cid}, 0, ({left})) {item.group()} r1157_operand({cid}, 1, ({right}))'
+    return value[:start], inner, value[end:], negated
 
 
 def observe(c_source, nodes, case):
@@ -202,6 +225,7 @@ def observe(c_source, nodes, case):
     root = mapping['capsule']
     edits = []
     condition_count = 0
+    schema = {'loop_condition_negated': None, 'loop_layout': 'conditional-continue/fallthrough-break'}
     for match in re.finditer(r'(?<![#\w])if\s*\(', c_source):
         start = c_source.index('(', match.start())
         end = close_paren(c_source, start)
@@ -211,29 +235,53 @@ def observe(c_source, nodes, case):
         cid = condition_count
         condition_count += 1
         actual = c_source[start + 1:end].strip()
-        # Observe a direct comparison or the genuine immediately assigned Bool.
-        # Neither branch truth nor any comparison operand is supplied by the oracle.
+        # Log the genuine source comparison before any existing unary !.
+        # Separately log the actual Bool used by the emitted loop branch.
         if re.fullmatch(r'[A-Za-z_][A-Za-z_0-9]*', actual):
             assignments = list(re.finditer(r'\b' + re.escape(actual) + r'\s*=(?!=)\s*(?P<rhs>[^;]+);', c_source[:match.start()]))
             if len(assignments) != 1:
                 raise RuntimeError(f'observer actual Bool definition: {actual}')
             definition = assignments[0]
-            expr = comparison(definition.group('rhs'), cid)
-            edits.append((definition.start('rhs'), definition.end('rhs'), expr))
-            wrapped = actual
+            prefix, inner, suffix, negated = comparison(definition.group('rhs'), cid)
+            if negated:
+                raise RuntimeError('observer indirect negated comparison schema')
+            edits.append((definition.start('rhs'), definition.end('rhs'), prefix + inner + suffix))
+            core = actual
+            prefix = suffix = ''
         else:
-            wrapped = comparison(actual, cid)
-        replacement = (f'r1157_condition({cid}, ({wrapped}), &{root}, &{root}.f0, '
-                       f'&{root}.f1, {root}.f0, {root}.f1)')
+            prefix, core, suffix, negated = comparison(actual, cid)
+        if cid != 0 and negated:
+            raise RuntimeError('observer unexpected root field IF orientation')
+        source_condition = (f'r1157_condition({cid}, ({core}), &{root}, &{root}.f0, '
+                            f'&{root}.f1, {root}.f0, {root}.f1)')
+        replacement = prefix + source_condition + suffix
+        if cid == 0:
+            schema['loop_condition_negated'] = negated
+            replacement = f'r1157_branch(0, ({replacement}))'
         edits.append((start + 1, end, replacement))
         then_open = end + 1 + brace.end() - 1
         then_close = close_paren(c_source, then_open, '{', '}')
         else_match = re.match(r'\s*else\s*\{', c_source[then_close + 1:])
-        if not else_match:
-            raise RuntimeError('observer requires both emitted arms')
-        else_open = then_close + else_match.end()
         edits.append((then_open + 1, then_open + 1, f'\nfprintf(stderr, "R1157 ARM {cid} then\\n");'))
-        edits.append((else_open + 1, else_open + 1, f'\nfprintf(stderr, "R1157 ARM {cid} else\\n");'))
+        if cid == 0:
+            if else_match or not re.search(r'\bcontinue\s*;\s*$', c_source[then_open + 1:then_close]):
+                raise RuntimeError('observer loop must have terminal conditional continue')
+            enclosing = []
+            for loop in re.finditer(r'\bfor\s*\(\s*;\s*;\s*\)\s*\{', c_source[:match.start()]):
+                opening = loop.end() - 1
+                closing = close_paren(c_source, opening, '{', '}')
+                if opening < match.start() < closing:
+                    enclosing.append((opening, closing))
+            if len(enclosing) != 1 or not re.search(r'\bbreak\s*;\s*$', c_source[then_close + 1:enclosing[0][1]]):
+                raise RuntimeError('observer loop must have terminal fallthrough break')
+            # No else/control flow is added. This log is reached only after
+            # the existing conditional continue falls through.
+            edits.append((then_close + 1, then_close + 1, '\nfprintf(stderr, "R1157 ARM 0 else\\n");'))
+        else:
+            if not else_match:
+                raise RuntimeError('observer requires both root field IF arms')
+            else_open = then_close + else_match.end()
+            edits.append((else_open + 1, else_open + 1, f'\nfprintf(stderr, "R1157 ARM {cid} else\\n");'))
     if condition_count != 2:
         raise RuntimeError(f'observer IF schema: expected 2, saw {condition_count}')
     # Read all immutable observations only after the final post-join sibling read.
@@ -269,10 +317,10 @@ def observe(c_source, nodes, case):
         c_source = c_source[:start] + replacement + c_source[end:]
         previous_start = start
     # An explicit independent include prefix avoids conditional include scopes.
-    return '#include <stddef.h>\n' + OBSERVER + c_source
+    return '#include <stddef.h>\n' + OBSERVER + c_source, schema
 
 
-def assess(text, case):
+def assess(text, case, schema):
     lines = text.splitlines()
     assert all(x.startswith('R1157 ') for x in lines), lines
     conditions = [x.split() for x in lines if x.startswith('R1157 COND ')]
@@ -280,6 +328,12 @@ def assess(text, case):
     choice = [x for x in conditions if x[2] == '1']
     assert [int(x[3]) for x in guards] == [int(x) for x in case['guard']], guards
     assert len(choice) == 1 and int(choice[0][3]) == int(case['truth']), choice
+    branches = [int(x.split()[3]) for x in lines if x.startswith('R1157 BRANCH 0 ')]
+    expected_branches = [1 - int(x) if schema['loop_condition_negated'] else int(x) for x in case['guard']]
+    assert branches == expected_branches and sum(branches) == case['backedges'], branches
+    assert branches[-1] == 0, branches
+    loop_arms = [x.split()[3] for x in lines if x.startswith('R1157 ARM 0 ')]
+    assert loop_arms == ['then' if x else 'else' for x in branches], loop_arms
     addresses = {tuple(x[4:7]) for x in conditions}
     assert len(addresses) == 1, addresses
     root, f0, f1 = next(iter(addresses))
@@ -307,6 +361,8 @@ def assess(text, case):
     wanted.update(settled=case['loop_result'], echoed=case['copy_result'])
     assert vals == wanted, (vals, wanted)
     return {'conditions': len(choice), 'loop_headers': len(guards), 'stores': 1,
+            'source_guard_truths': [int(x[3]) for x in guards], 'emitted_branch_truths': branches,
+            'backedges': sum(branches),
             'selected': arms[0], 'root': root, 'f0': f0, 'f1': f1, 'values': vals}
 
 
@@ -334,6 +390,8 @@ def main():
     shutil.copytree(R1157_DIR / 'v2', OUT / 'frozen-v2', dirs_exist_ok=True)
     shutil.copytree(R1157_DIR / 'v3', OUT / 'frozen-v3', dirs_exist_ok=True)
     shutil.copytree(R1157_DIR / 'v4', OUT / 'frozen-v4', dirs_exist_ok=True)
+    shutil.copytree(R1157_DIR / 'v5', OUT / 'frozen-v5', dirs_exist_ok=True)
+    shutil.copyfile(R1157_DIR / 'v4_results/receipt.json', OUT / 'original-v4-first.json')
     shutil.copytree(R1157_DIR / 'v3_results', OUT / 'original-v3-red', dirs_exist_ok=True)
     shutil.copytree(R1157_DIR / 'first', OUT / 'original-first', dirs_exist_ok=True)
     shutil.copyfile(__file__, OUT / 'executed-runner.py')
@@ -395,20 +453,27 @@ def main():
         run(f'{name}/named-emit', [CLI, '--emit-c17-to', named, adapted])
         assert named.read_bytes() == raw, 'ordinary stdout/named emission differ'
         RESULT['cases'][name]['u8_export'] = 'NOT_RUN: separate interface; original V1 return prediction retained, C233'
+        RESULT['cases'][name]['C17'] = {'original_sha256': hashlib.sha256(raw).hexdigest(),
+            'named_identical': True, 'observer': 'STARTED'}
         observed = directory / 'observed.c'
-        observed.write_text(observe(raw.decode(), nodes, case))
-        RESULT['cases'][name]['C17'] = {'original_sha256': hashlib.sha256(raw).hexdigest(), 'named_identical': True,
-            'observer_sha256': hashlib.sha256(observed.read_bytes()).hexdigest()}
+        observed_text, observer_schema = observe(raw.decode(), nodes, case)
+        observed.write_text(observed_text)
+        (directory / 'observer-schema.json').write_text(json.dumps(observer_schema, indent=2) + '\n')
+        RESULT['cases'][name]['C17'].update({'observer': 'GENERATED', 'observer_schema': observer_schema,
+            'observer_sha256': hashlib.sha256(observed.read_bytes()).hexdigest()})
         measurements = []
+        RESULT['cases'][name]['native'] = measurements
+        RESULT['cases'][name]['native_executed'] = []
         for config, compiler, options in configs:
             for mode, source in [('original',rawpath),('observed',observed)]:
                 binary = directory / f'{config}-{mode}'
                 sources = [source]
                 run(f'{name}/{config}-{mode}-build', [compiler,*flags,*(['-Wno-error=gcc-install-dir-libstdcxx'] if Path(compiler).name == 'clang-23' else []),*options,*sources,'-o',binary])
                 p = run(f'{name}/{config}-{mode}-run', [binary])
+                RESULT['cases'][name]['native_executed'].append({'config': config, 'mode': mode, 'status': p.returncode})
                 assert not p.stdout, p.stdout
                 if mode == 'observed':
-                    measurements.append({'config':config,'passive':assess(p.stderr.decode(),case)})
+                    measurements.append({'config':config,'passive':assess(p.stderr.decode(),case,observer_schema)})
                 else:
                     assert not p.stderr, f'{name} {config} {mode} stderr {p.stderr!r}'
             RESULT['cases'][name]['native'] = measurements
