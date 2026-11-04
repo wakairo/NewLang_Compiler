@@ -1,0 +1,320 @@
+{
+  "schema": 1,
+  "classification": "canonical-first / declared-profile-scoped / pre-execution independently frozen cohort",
+  "authority": "449ccf0dc567c05f3fd6dc4430b265759e22d571",
+  "compiler": "9030055314600b804fafde64adebb03c4d6315a1",
+  "positive": [
+    {
+      "id": "a_add_zero_left_early",
+      "op": "+",
+      "start": 4,
+      "bound": 4,
+      "compare": 4,
+      "return_arm": 0,
+      "index": 1,
+      "initial": [
+        37,
+        109
+      ],
+      "new": 211,
+      "backedges": 0,
+      "result": 4,
+      "file": "sources/a_add_zero_left_early.nl",
+      "sha256": "0820927ca420dcc54de8852a81d02aecaf39b2a4f6feef54ee93306da972f409",
+      "condition": true,
+      "selected_arm": 0,
+      "early": true,
+      "trace": [
+        4
+      ],
+      "expected_old": null,
+      "expected_current": null,
+      "expected_sibling": null,
+      "expected_counts": {
+        "condition": 1,
+        "selected_arm": 1,
+        "return": 1,
+        "replace": 0,
+        "post_old": 0,
+        "post_current": 0,
+        "post_sibling": 0
+      }
+    },
+    {
+      "id": "b_add_one_right_early",
+      "op": "+",
+      "start": 12,
+      "bound": 13,
+      "compare": 14,
+      "return_arm": 1,
+      "index": 0,
+      "initial": [
+        61,
+        173
+      ],
+      "new": 229,
+      "backedges": 1,
+      "result": 13,
+      "file": "sources/b_add_one_right_early.nl",
+      "sha256": "eeaab1510f76db1c4d3da86c1b594a943ec57f6ac16a109cf8a8a00da4792b55",
+      "condition": false,
+      "selected_arm": 1,
+      "early": true,
+      "trace": [
+        12,
+        13
+      ],
+      "expected_old": null,
+      "expected_current": null,
+      "expected_sibling": null,
+      "expected_counts": {
+        "condition": 1,
+        "selected_arm": 1,
+        "return": 1,
+        "replace": 0,
+        "post_old": 0,
+        "post_current": 0,
+        "post_sibling": 0
+      }
+    },
+    {
+      "id": "c_add_three_left_normal",
+      "op": "+",
+      "start": 20,
+      "bound": 23,
+      "compare": 24,
+      "return_arm": 0,
+      "index": 0,
+      "initial": [
+        43,
+        157
+      ],
+      "new": 197,
+      "backedges": 3,
+      "result": 23,
+      "file": "sources/c_add_three_left_normal.nl",
+      "sha256": "1bbbb882109ad1c96733b0d6c65894e8c89f131b972dedc50dd2b5ac8f10b0bd",
+      "condition": false,
+      "selected_arm": 1,
+      "early": false,
+      "trace": [
+        20,
+        21,
+        22,
+        23
+      ],
+      "expected_old": 43,
+      "expected_current": 197,
+      "expected_sibling": 157,
+      "expected_counts": {
+        "condition": 1,
+        "selected_arm": 1,
+        "return": 0,
+        "replace": 1,
+        "post_old": 1,
+        "post_current": 1,
+        "post_sibling": 1
+      }
+    },
+    {
+      "id": "d_sub_zero_right_normal",
+      "op": "-",
+      "start": 8,
+      "bound": 8,
+      "compare": 8,
+      "return_arm": 1,
+      "index": 1,
+      "initial": [
+        71,
+        131
+      ],
+      "new": 223,
+      "backedges": 0,
+      "result": 8,
+      "file": "sources/d_sub_zero_right_normal.nl",
+      "sha256": "85e02264fdea158eeb119eb70ef8427ef643eb81cb3e2a47469db7dfb1a0ad8e",
+      "condition": true,
+      "selected_arm": 0,
+      "early": false,
+      "trace": [
+        8
+      ],
+      "expected_old": 131,
+      "expected_current": 223,
+      "expected_sibling": 71,
+      "expected_counts": {
+        "condition": 1,
+        "selected_arm": 1,
+        "return": 0,
+        "replace": 1,
+        "post_old": 1,
+        "post_current": 1,
+        "post_sibling": 1
+      }
+    },
+    {
+      "id": "e_sub_one_left_early",
+      "op": "-",
+      "start": 19,
+      "bound": 18,
+      "compare": 18,
+      "return_arm": 0,
+      "index": 0,
+      "initial": [
+        83,
+        149
+      ],
+      "new": 227,
+      "backedges": 1,
+      "result": 18,
+      "file": "sources/e_sub_one_left_early.nl",
+      "sha256": "1cbadef0560de58262139f8014071a842036c4ebeb5c3598c392ada939c7d68e",
+      "condition": true,
+      "selected_arm": 0,
+      "early": true,
+      "trace": [
+        19,
+        18
+      ],
+      "expected_old": null,
+      "expected_current": null,
+      "expected_sibling": null,
+      "expected_counts": {
+        "condition": 1,
+        "selected_arm": 1,
+        "return": 1,
+        "replace": 0,
+        "post_old": 0,
+        "post_current": 0,
+        "post_sibling": 0
+      }
+    },
+    {
+      "id": "f_sub_three_right_normal",
+      "op": "-",
+      "start": 31,
+      "bound": 28,
+      "compare": 28,
+      "return_arm": 1,
+      "index": 1,
+      "initial": [
+        97,
+        163
+      ],
+      "new": 239,
+      "backedges": 3,
+      "result": 28,
+      "file": "sources/f_sub_three_right_normal.nl",
+      "sha256": "c9a72dfa6dac9daf69f819f96f4a30cfd33acee048bae5f134adeb4176165662",
+      "condition": true,
+      "selected_arm": 0,
+      "early": false,
+      "trace": [
+        31,
+        30,
+        29,
+        28
+      ],
+      "expected_old": 163,
+      "expected_current": 239,
+      "expected_sibling": 97,
+      "expected_counts": {
+        "condition": 1,
+        "selected_arm": 1,
+        "return": 0,
+        "replace": 1,
+        "post_old": 1,
+        "post_current": 1,
+        "post_sibling": 1
+      }
+    }
+  ],
+  "negative": [
+    {
+      "id": "n_condition_usize",
+      "file": "sources/n_condition_usize.nl",
+      "sha256": "f548a5a74a3cf792b3cebda3507cbf1a929ded785d2ac53ff5ebb9051e6c5a23",
+      "expected": "REJECT_PARSE_OR_SEMANTIC",
+      "reason": "if condition is usize rather than bool",
+      "owned": "NOT_REACHED_ON_REJECTION",
+      "c17": "NOT_REACHED_ON_REJECTION",
+      "native": "NOT_RUN_ON_REJECTION"
+    },
+    {
+      "id": "n_return_payload",
+      "file": "sources/n_return_payload.nl",
+      "sha256": "c02193f5e4199de23b2703f472b9cf6a7747d01503e980239be8c93b0711cb2c",
+      "expected": "REJECT_PARSE_OR_SEMANTIC",
+      "reason": "main unit RETURN payload is u8",
+      "owned": "NOT_REACHED_ON_REJECTION",
+      "c17": "NOT_REACHED_ON_REJECTION",
+      "native": "NOT_RUN_ON_REJECTION"
+    },
+    {
+      "id": "n_loan_escape",
+      "file": "sources/n_loan_escape.nl",
+      "sha256": "a05c9481e1251d2fc67b4acdcb2512181f184586d79fa21fae2a07cbdd93218e",
+      "expected": "REJECT_PARSE_OR_SEMANTIC",
+      "reason": "scoped write ref escapes loan as normal result",
+      "owned": "NOT_REACHED_ON_REJECTION",
+      "c17": "NOT_REACHED_ON_REJECTION",
+      "native": "NOT_RUN_ON_REJECTION"
+    },
+    {
+      "id": "n_return_in_loan",
+      "file": "sources/n_return_in_loan.nl",
+      "sha256": "0bce4532e1b3ac2ba0d357be379d47a618861f0fa1d4bee430ab65e4144ab988",
+      "expected": "REJECT_PARSE_OR_SEMANTIC",
+      "reason": "RETURN crosses loan source boundary",
+      "owned": "NOT_REACHED_ON_REJECTION",
+      "c17": "NOT_REACHED_ON_REJECTION",
+      "native": "NOT_RUN_ON_REJECTION"
+    },
+    {
+      "id": "n_unknown_child",
+      "file": "sources/n_unknown_child.nl",
+      "sha256": "dbf77f34a6421a734f5b89680817488bf11f9ea56b692c8eb796807ab4d7f413",
+      "expected": "REJECT_PARSE_OR_SEMANTIC",
+      "reason": "unknown nominal field cannot mint child authority",
+      "owned": "NOT_REACHED_ON_REJECTION",
+      "c17": "NOT_REACHED_ON_REJECTION",
+      "native": "NOT_RUN_ON_REJECTION"
+    },
+    {
+      "id": "n_sub_underflow",
+      "file": "sources/n_sub_underflow.nl",
+      "sha256": "0847ca2b92faee1a24449691856f160243cf0b322101ac06e51f9d2761d864fa",
+      "expected": "REJECT_PARSE_OR_SEMANTIC",
+      "reason": "guaranteed usize underflow must not reach emission",
+      "owned": "NOT_REACHED_ON_REJECTION",
+      "c17": "NOT_REACHED_ON_REJECTION",
+      "native": "NOT_RUN_ON_REJECTION"
+    },
+    {
+      "id": "n_loop_fallthrough",
+      "file": "sources/n_loop_fallthrough.nl",
+      "sha256": "52ed77b5b4348459ad48b2375bc24d626e085f469643c65283ecd7f593c17471",
+      "expected": "REJECT_PARSE_OR_SEMANTIC",
+      "reason": "loop iteration has a normal fallthrough path",
+      "owned": "NOT_REACHED_ON_REJECTION",
+      "c17": "NOT_REACHED_ON_REJECTION",
+      "native": "NOT_RUN_ON_REJECTION"
+    }
+  ],
+  "positive_expected_layers": [
+    "CHECK_SILENT_SUCCESS",
+    "GENUINE_SOURCE_ISSUED_OWNED_VALIDATORS",
+    "STDOUT_NAMED_C17_IDENTICAL",
+    "UNMODIFIED_NATIVE_GCC_CLANG_O0_O2",
+    "PASSIVE_OBSERVER_NATIVE_GCC_CLANG_O0_O2",
+    "GUEST_ASAN_UBSAN_IN_SANITIZER_LANES"
+  ],
+  "identity_requirements": [
+    "same original vessel root throughout loop and normal continuation",
+    "same field addresses before and after normal replace",
+    "old Copy remains initial targeted field",
+    "current child becomes replacement, sibling remains initial",
+    "no observation of root or loan after terminating function exit"
+  ],
+  "stop": "Unexpected semantic/owned/C17/native/sanitizer or identity difference: preserve FIRST/RED and affected STOP; never adjust expected values to output."
+}
