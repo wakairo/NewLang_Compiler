@@ -1,0 +1,1051 @@
+{
+  "schema": "R1157-C234-evidence-custody-v1",
+  "authority": "https://github.com/wakairo/NewLang_Compiler/issues/1157#issuecomment-6631707594",
+  "actual_start": "https://github.com/wakairo/NewLang_Compiler/issues/1157#issuecomment-6631801244",
+  "finite_result": "https://github.com/wakairo/NewLang_Compiler/issues/1157#issuecomment-6631709037",
+  "repository": "wakairo/NewLang_Compiler",
+  "archive_branch": "r-archive/r1157-c234-evidence",
+  "sole_parent": "5be4b8ef6f8ab4f109841939e75632859090a1d1",
+  "base_tree": "5a0fd7c42fc2b1e2662714be14865addd6dd1492",
+  "compiler_commit": "af16bbaebcaada68ff45afdf236d1debfc90b565",
+  "compiler_authority_tree": "74a1bdc728398eb85bb690a9eaff34194f316b50",
+  "base_leaves": {
+    "count": 6059,
+    "sorted_path_mode_type_sha_json_sha256": "c60580c47245b3a08b0a4ba08c6e341a100e822e8b43d0e54cfec72776a3ccc8",
+    "workflows": [
+      {
+        "path": ".github/workflows/compiler-ci.yml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "23655288e60f0d3d08a12c9a542346bf31829a08"
+      },
+      {
+        "path": ".github/workflows/compiler-frontend-ci.yml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "0c2fac71ee2d67d4f3009b4031946d0dec3560b5"
+      },
+      {
+        "path": ".github/workflows/r-preflight.yml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "9fea1afeeef948127c73e9ca86c476091036116e"
+      }
+    ]
+  },
+  "scope": {
+    "added_prefix": "evidence/r1157-c234/",
+    "raw_files": 52,
+    "total_added_paths": 54,
+    "chunked_files": 0,
+    "new_actions": 0,
+    "new_compiler_native_CTest_formatter": 0,
+    "new_PR": 0,
+    "r_fast_ref_unchanged": true
+  },
+  "totals": {
+    "job_logs": 28,
+    "log_utf8_bytes": 26552105,
+    "compressed_capsules": 24,
+    "capsule_bytes": 9088833,
+    "normal_jobs": 24,
+    "FAST_jobs": 4,
+    "manual_rerun_dispatch": 0,
+    "normal_RED": 18,
+    "normal_final_PASS": 6
+  },
+  "exact_bytes": {
+    "logs": "Complete decoded UTF-8 bytes, including any BOM and original line endings; no truncation, redaction, normalization or annotation added.",
+    "capsules": "Original compressed gzip bytes decoded from R1157_RAW base64; no repacking; .tar.gz files stored as binary Git blobs.",
+    "chunks": "None. Each complete payload occupies one path.",
+    "indexes": "The manifest indexes all 52 raw payloads. README and manifest identities are reported by the final custody receipt and bound by the Git tree; no recursive self-hash."
+  },
+  "interpretation": {
+    "initial": "FIRST RED preserved; four negatives reached, later phases NOT_REACHED; no retrospective status change.",
+    "V3": "Original equality-SUB positive predictions remain precision RED; owned/C17/native NOT_REACHED.",
+    "V4": "Original missing-else observer RED and stale machine C17 NOT_REACHED are preserved. Actual emitted stdout/named C17 preceded that bookkeeping field.",
+    "V5": "Finite PASS for unchanged V4 sources/oracle and repaired passive observer. Unit-main coverage; original u8 return/export NOT_RUN.",
+    "calibration": "Independent V1 freeze preceded producer exposure; V4 explicitly calibrated after public finite-profile disclosure, V5 after minimal emitter-interface shape disclosure.",
+    "PARTIAL": "PARTIAL's captured guest Clang is Ubuntu clang 18.1.3, not the FULL pinned Clang23.1.3; original tool/version output is retained.",
+    "limits": "Audit locality UNMEASURED; general soundness, equality/range/termination, T-changing/nested/general loops, private forgery and R-owned reached OOM not established."
+  },
+  "workflow_trigger_check": {
+    "compiler_ci": "pull_request; push branches [main]",
+    "compiler_frontend_ci": "pull_request; push branches [main]",
+    "r_preflight": "push branches r-fast/**",
+    "archive_branch_matches_push": false,
+    "no_archive_PR": true
+  },
+  "source_workflow_runs": [
+    {
+      "id": 41822681978,
+      "head_sha": "eb64e7e0ad713b903894a615e10db3b96ab92469",
+      "event": "push",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 41823032979,
+      "head_sha": "eb64e7e0ad713b903894a615e10db3b96ab92469",
+      "event": "pull_request",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 41823033053,
+      "head_sha": "eb64e7e0ad713b903894a615e10db3b96ab92469",
+      "event": "pull_request",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 41827233897,
+      "head_sha": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "event": "push",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 41827242676,
+      "head_sha": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "event": "pull_request",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 41827242681,
+      "head_sha": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "event": "pull_request",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 41830655799,
+      "head_sha": "dd2493fd64199810fb28642a91b9be7c11f1a35f",
+      "event": "push",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 41830659939,
+      "head_sha": "dd2493fd64199810fb28642a91b9be7c11f1a35f",
+      "event": "pull_request",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 41830660083,
+      "head_sha": "dd2493fd64199810fb28642a91b9be7c11f1a35f",
+      "event": "pull_request",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "failure"
+    },
+    {
+      "id": 41833835989,
+      "head_sha": "5be4b8ef6f8ab4f109841939e75632859090a1d1",
+      "event": "push",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 41833847990,
+      "head_sha": "5be4b8ef6f8ab4f109841939e75632859090a1d1",
+      "event": "pull_request",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 41833848025,
+      "head_sha": "5be4b8ef6f8ab4f109841939e75632859090a1d1",
+      "event": "pull_request",
+      "attempt": 1,
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "jobs": [
+    {
+      "version": "initial",
+      "kind": "FAST",
+      "label": "FAST1",
+      "run_id": 41822681978,
+      "job_id": 126549481356,
+      "attempt": 1,
+      "event": "push",
+      "head_sha": "eb64e7e0ad713b903894a615e10db3b96ab92469",
+      "actual_checkout_sha": "eb64e7e0ad713b903894a615e10db3b96ab92469",
+      "tree_sha": "67f4a0f08d5d10a6033863de43f2b9a08a090ea0",
+      "status": "completed",
+      "conclusion": "success",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41822681978/job/126549481356",
+      "log": {
+        "path": "evidence/r1157-c234/logs/initial/FAST1-126549481356.log",
+        "byte_size": 85413,
+        "sha256": "99f59fba744e0c57340aae133148aeb0da29579e733efc129b3e654b9a43cc20",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "da3e98bd9cb75a48067398b6f7e856e11b521311"
+      },
+      "capsule": null,
+      "coverage": "preparation only; no semantic/native validation"
+    },
+    {
+      "version": "initial",
+      "kind": "FULL",
+      "label": "Clang",
+      "run_id": 41823033053,
+      "job_id": 126550677578,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "eb64e7e0ad713b903894a615e10db3b96ab92469",
+      "actual_checkout_sha": "e48455af4f08d4a2be5aa74ef54adcc65bc5ba63",
+      "tree_sha": "67f4a0f08d5d10a6033863de43f2b9a08a090ea0",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41823033053/job/126550677578",
+      "log": {
+        "path": "evidence/r1157-c234/logs/initial/Clang-126550677578.log",
+        "byte_size": 1657591,
+        "sha256": "086c012dd6ba6dfd1b870a896010ea51050a58bf16b434107f7eb8c91d31a0dd",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "b4d7c31e8adc297df1358366b7115af8a58b72eb"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/initial/Clang-126550677578.tar.gz",
+        "byte_size": 9236,
+        "sha256": "4a6a62e9d434f14dcf67572bb0ccd2e2136c62854da31a0cee983f66ff877dd6",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "a6224aabb1ee186f643727c39a4636c56061a2a6"
+      }
+    },
+    {
+      "version": "initial",
+      "kind": "PARTIAL",
+      "label": "PARTIAL",
+      "run_id": 41823032979,
+      "job_id": 126550677630,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "eb64e7e0ad713b903894a615e10db3b96ab92469",
+      "actual_checkout_sha": "e48455af4f08d4a2be5aa74ef54adcc65bc5ba63",
+      "tree_sha": "67f4a0f08d5d10a6033863de43f2b9a08a090ea0",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41823032979/job/126550677630",
+      "log": {
+        "path": "evidence/r1157-c234/logs/initial/PARTIAL-126550677630.log",
+        "byte_size": 1676605,
+        "sha256": "37fe7160d768aeaa0374751506bb66d74a976d54104b6e3587513dd23b425376",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "e4557e8b6c824ae0afc90e00ef3d0cb359cdeb65"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/initial/PARTIAL-126550677630.tar.gz",
+        "byte_size": 9266,
+        "sha256": "5ec1b7549d5ee7796585989a5326a2d19d38b1bc5c1345d0ec7ad05d0b52d71b",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "7d1b15f5db467f6c5ec77227cd1d50f469c8fc7a"
+      }
+    },
+    {
+      "version": "initial",
+      "kind": "FULL",
+      "label": "GCC-Release",
+      "run_id": 41823033053,
+      "job_id": 126550677780,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "eb64e7e0ad713b903894a615e10db3b96ab92469",
+      "actual_checkout_sha": "e48455af4f08d4a2be5aa74ef54adcc65bc5ba63",
+      "tree_sha": "67f4a0f08d5d10a6033863de43f2b9a08a090ea0",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41823033053/job/126550677780",
+      "log": {
+        "path": "evidence/r1157-c234/logs/initial/GCC-Release-126550677780.log",
+        "byte_size": 1635551,
+        "sha256": "c14bead0bd8bd2147ba39b698b54381f77683872eb64478a2c5979df9ed96fc3",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "7e161b1568b987299d3f8531d7b64400dcff8970"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/initial/GCC-Release-126550677780.tar.gz",
+        "byte_size": 9274,
+        "sha256": "55b94abdf7bd11510cc41346329cd70b866bf49c6788a78cb0855093b6399476",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "e08d474fba9a3a8e6b69d18855733b4a84c34680"
+      }
+    },
+    {
+      "version": "initial",
+      "kind": "FULL",
+      "label": "UBSan",
+      "run_id": 41823033053,
+      "job_id": 126550677850,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "eb64e7e0ad713b903894a615e10db3b96ab92469",
+      "actual_checkout_sha": "e48455af4f08d4a2be5aa74ef54adcc65bc5ba63",
+      "tree_sha": "67f4a0f08d5d10a6033863de43f2b9a08a090ea0",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41823033053/job/126550677850",
+      "log": {
+        "path": "evidence/r1157-c234/logs/initial/UBSan-126550677850.log",
+        "byte_size": 1656354,
+        "sha256": "01437f5254928881f269442d1e2a3f44786fe18fbd04c0e14ffda504427ca5ea",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "3669e50486b2ebcda649f133861a891d609faacb"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/initial/UBSan-126550677850.tar.gz",
+        "byte_size": 9247,
+        "sha256": "368a084e1cb6d08c323e5e1cefcd276b6ead08b1f5afcd277fcde5b9f82ea840",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "8b69e59f297b6ae8fe3b6b0940ba5f5d36cf9835"
+      }
+    },
+    {
+      "version": "initial",
+      "kind": "FULL",
+      "label": "ASan",
+      "run_id": 41823033053,
+      "job_id": 126550677909,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "eb64e7e0ad713b903894a615e10db3b96ab92469",
+      "actual_checkout_sha": "e48455af4f08d4a2be5aa74ef54adcc65bc5ba63",
+      "tree_sha": "67f4a0f08d5d10a6033863de43f2b9a08a090ea0",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41823033053/job/126550677909",
+      "log": {
+        "path": "evidence/r1157-c234/logs/initial/ASan-126550677909.log",
+        "byte_size": 1655899,
+        "sha256": "54aad35ba2ecb85cbd7488ae4e2f84d42d6ed0fa23ce61b892494770a5566d99",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "1a1bbeaf6fa81d2d142c3706a1ee79d4a69d3850"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/initial/ASan-126550677909.tar.gz",
+        "byte_size": 9260,
+        "sha256": "8218e214b2c37b649318b627cbd011a0ff0959a08a36e933ac929d66bd24dfe8",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "b91f5d7458dca8f1281f32ea3d86f004cf8d272a"
+      }
+    },
+    {
+      "version": "initial",
+      "kind": "FULL",
+      "label": "GCC",
+      "run_id": 41823033053,
+      "job_id": 126550677915,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "eb64e7e0ad713b903894a615e10db3b96ab92469",
+      "actual_checkout_sha": "e48455af4f08d4a2be5aa74ef54adcc65bc5ba63",
+      "tree_sha": "67f4a0f08d5d10a6033863de43f2b9a08a090ea0",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41823033053/job/126550677915",
+      "log": {
+        "path": "evidence/r1157-c234/logs/initial/GCC-126550677915.log",
+        "byte_size": 1635551,
+        "sha256": "44fd2f68cc0a75e4ca2651cdf1289cfe9ea9ac13ab4c1308b5e0dfa4e9d6942a",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "efd685b38ec0bcccc5827f38e2e8ea7078238338"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/initial/GCC-126550677915.tar.gz",
+        "byte_size": 9234,
+        "sha256": "397b9293fc5e5b9c24519d9f7c99252be4f42a8fd51595f7546cd4ef8bfc7cb4",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "92c026cf5d28c6c54c288a1ac2192551b1de6b8a"
+      }
+    },
+    {
+      "version": "V3",
+      "kind": "FAST",
+      "label": "FAST2",
+      "run_id": 41827233897,
+      "job_id": 126564975602,
+      "attempt": 1,
+      "event": "push",
+      "head_sha": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "actual_checkout_sha": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "tree_sha": "08dbe8398a85fc82329c043b04bab13aa428669c",
+      "status": "completed",
+      "conclusion": "success",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41827233897/job/126564975602",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V3/FAST2-126564975602.log",
+        "byte_size": 84879,
+        "sha256": "17e1894da5d1474d19c87d42dbaa3f4fa8dbeed3f00a07fff37a5a6b6e018944",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "ad36653564502949009b770858e06108127b4969"
+      },
+      "capsule": null,
+      "coverage": "preparation only; no semantic/native validation"
+    },
+    {
+      "version": "V3",
+      "kind": "FULL",
+      "label": "GCC-Release",
+      "run_id": 41827242681,
+      "job_id": 126565003270,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "actual_checkout_sha": "27c0ca34b9cad064e2aa33688c7f991fd454f839",
+      "tree_sha": "08dbe8398a85fc82329c043b04bab13aa428669c",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41827242681/job/126565003270",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V3/GCC-Release-126565003270.log",
+        "byte_size": 346309,
+        "sha256": "da98f3cf7fe7517f507d880ff3bd0a339a655157cfdf40d0ca760cdef5a2f2e3",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "e690c64a8fa7609aa53ab02916ce6d2e4663fac0"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V3/GCC-Release-126565003270.tar.gz",
+        "byte_size": 90183,
+        "sha256": "3dd6c53aaecf38babe24493cb100808a15b0dc08ccfeae4d29ede5ae6e90d0cb",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "5ce41ea41b693370f790d760301825b3f9ac270a"
+      }
+    },
+    {
+      "version": "V3",
+      "kind": "PARTIAL",
+      "label": "PARTIAL",
+      "run_id": 41827242676,
+      "job_id": 126565003279,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "actual_checkout_sha": "27c0ca34b9cad064e2aa33688c7f991fd454f839",
+      "tree_sha": "08dbe8398a85fc82329c043b04bab13aa428669c",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41827242676/job/126565003279",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V3/PARTIAL-126565003279.log",
+        "byte_size": 387268,
+        "sha256": "3177b27fea2bb1a802a4e4f5b83a9cd02ea4e7f4eec428b879156758dc269b5f",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "6b2beda8c12e0ad62a86073601ed15ebecccad63"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V3/PARTIAL-126565003279.tar.gz",
+        "byte_size": 90238,
+        "sha256": "34a354eee7c5bb633853647fe471d73f65261377f89d63bebbe92f329f39c12f",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "14286199885fd667b92ca8a3857ac047182e89cc"
+      }
+    },
+    {
+      "version": "V3",
+      "kind": "FULL",
+      "label": "Clang",
+      "run_id": 41827242681,
+      "job_id": 126565003539,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "actual_checkout_sha": "27c0ca34b9cad064e2aa33688c7f991fd454f839",
+      "tree_sha": "08dbe8398a85fc82329c043b04bab13aa428669c",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41827242681/job/126565003539",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V3/Clang-126565003539.log",
+        "byte_size": 348493,
+        "sha256": "ceb5f3274051f7534dec411b39f95f6e0a060784f1a3cd4688db02dab319f93a",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "4bd6ff925c3456c7c5702371130f4b87a2801f17"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V3/Clang-126565003539.tar.gz",
+        "byte_size": 90209,
+        "sha256": "c7a75b233f789fa799aec42a97350a99e150ebfe6538a3cf583815db901baacc",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "c5243c4a0c6d64763b6f8e185c79c2d7a47c8f45"
+      }
+    },
+    {
+      "version": "V3",
+      "kind": "FULL",
+      "label": "GCC",
+      "run_id": 41827242681,
+      "job_id": 126565003647,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "actual_checkout_sha": "27c0ca34b9cad064e2aa33688c7f991fd454f839",
+      "tree_sha": "08dbe8398a85fc82329c043b04bab13aa428669c",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41827242681/job/126565003647",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V3/GCC-126565003647.log",
+        "byte_size": 345788,
+        "sha256": "4564035a037d5cb13beddf18347c25a21ce1b09090b11138921af36cccea26f1",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "2943abadcd207631d3733d6946d79217d5411118"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V3/GCC-126565003647.tar.gz",
+        "byte_size": 90213,
+        "sha256": "68d43d86bd387e74fdceac1cafabefbd39030b2a58887e5d84756a6c44bcdd0a",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "41d6a0b0bffa9500a44509bef3377ebac315ebc6"
+      }
+    },
+    {
+      "version": "V3",
+      "kind": "FULL",
+      "label": "UBSan",
+      "run_id": 41827242681,
+      "job_id": 126565003747,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "actual_checkout_sha": "27c0ca34b9cad064e2aa33688c7f991fd454f839",
+      "tree_sha": "08dbe8398a85fc82329c043b04bab13aa428669c",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41827242681/job/126565003747",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V3/UBSan-126565003747.log",
+        "byte_size": 345930,
+        "sha256": "e648509151425fd27a0aad53af5ecafcc5575b7cadc5afb94dafe28238d07754",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "f2ab92d8aad0ac24c855cf1215fe2a33ef7dc43a"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V3/UBSan-126565003747.tar.gz",
+        "byte_size": 90243,
+        "sha256": "8541183d8fda6bf2ced1d6f54c8a789e32f5d9eb4728eaf6f57d8009bf29fba9",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "ffaf82fbd16a2e71e3f809697779e75a0025cb29"
+      }
+    },
+    {
+      "version": "V3",
+      "kind": "FULL",
+      "label": "ASan",
+      "run_id": 41827242681,
+      "job_id": 126565003779,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "8bd8823600d81b4f823faa7668781f52aec368f9",
+      "actual_checkout_sha": "27c0ca34b9cad064e2aa33688c7f991fd454f839",
+      "tree_sha": "08dbe8398a85fc82329c043b04bab13aa428669c",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41827242681/job/126565003779",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V3/ASan-126565003779.log",
+        "byte_size": 346016,
+        "sha256": "236dfb59b2e32194cc326fb00a95a33d2ecbea409bddaaef8d8a473703283a5a",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "ad2504bb3f6df1136ed2762c8a4d18cab593a97a"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V3/ASan-126565003779.tar.gz",
+        "byte_size": 90242,
+        "sha256": "9289c420762e24fbcdecef0e8163319bb403fcb47a5f4ffaad7dc480f590c2a7",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "f449fa5e9c909acb396e973d66301941e7c2c801"
+      }
+    },
+    {
+      "version": "V4",
+      "kind": "FAST",
+      "label": "FAST3",
+      "run_id": 41830655799,
+      "job_id": 126576680282,
+      "attempt": 1,
+      "event": "push",
+      "head_sha": "dd2493fd64199810fb28642a91b9be7c11f1a35f",
+      "actual_checkout_sha": "dd2493fd64199810fb28642a91b9be7c11f1a35f",
+      "tree_sha": "b62f80d4bf4348c8cd9906858c405efc97116c31",
+      "status": "completed",
+      "conclusion": "success",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41830655799/job/126576680282",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V4/FAST3-126576680282.log",
+        "byte_size": 85324,
+        "sha256": "ad1afd7e6f5458e0c9d8de58de29717d185a562f40c4938284e3c87f5916ae60",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "2c35a35a77a36545af1ee54a8c19b28185412044"
+      },
+      "capsule": null,
+      "coverage": "preparation only; no semantic/native validation"
+    },
+    {
+      "version": "V4",
+      "kind": "FULL",
+      "label": "UBSan",
+      "run_id": 41830659939,
+      "job_id": 126576693816,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "dd2493fd64199810fb28642a91b9be7c11f1a35f",
+      "actual_checkout_sha": "512442f634e4dc9200b725bc27e1c7b13a6452eb",
+      "tree_sha": "b62f80d4bf4348c8cd9906858c405efc97116c31",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41830659939/job/126576693816",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V4/UBSan-126576693816.log",
+        "byte_size": 1141709,
+        "sha256": "c2235b996635e275fc8ee9f12834c5de168a5e9cfa18a1eb4f08ea0f9e52866d",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "cf62127f87e2a519b4b6d24b17191d1166d7acc1"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V4/UBSan-126576693816.tar.gz",
+        "byte_size": 682993,
+        "sha256": "3749467bb790ee1077a13061fe35b0db8f8c3b34e38391e47e57bd4c2bf6a6a0",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "5bbf6fb48e5b38f6a69179f05f084de57252402d"
+      }
+    },
+    {
+      "version": "V4",
+      "kind": "FULL",
+      "label": "GCC",
+      "run_id": 41830659939,
+      "job_id": 126576694158,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "dd2493fd64199810fb28642a91b9be7c11f1a35f",
+      "actual_checkout_sha": "512442f634e4dc9200b725bc27e1c7b13a6452eb",
+      "tree_sha": "b62f80d4bf4348c8cd9906858c405efc97116c31",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41830659939/job/126576694158",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V4/GCC-126576694158.log",
+        "byte_size": 1141482,
+        "sha256": "4fc955baf2655b32b01e3fb777df202c88e83f7c7b9b2f11f7948102007d7fac",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "6e7a52ce382f5015b1fc4c09576b23053c906d32"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V4/GCC-126576694158.tar.gz",
+        "byte_size": 682955,
+        "sha256": "0e0f1dfc5d6950436f03b6eb617478f443f31e272780704ecf4f133aea09ebea",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "b1b9f6b9a7393449c24615999dadbc3811e6a468"
+      }
+    },
+    {
+      "version": "V4",
+      "kind": "FULL",
+      "label": "ASan",
+      "run_id": 41830659939,
+      "job_id": 126576694218,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "dd2493fd64199810fb28642a91b9be7c11f1a35f",
+      "actual_checkout_sha": "512442f634e4dc9200b725bc27e1c7b13a6452eb",
+      "tree_sha": "b62f80d4bf4348c8cd9906858c405efc97116c31",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41830659939/job/126576694218",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V4/ASan-126576694218.log",
+        "byte_size": 1141712,
+        "sha256": "762cdfb343a36b8508c38a83b53b7829f441895119b1fb8ed30296a2c4b83522",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "77ed596c44d19a84e1c9cece3ab21c2754f919d3"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V4/ASan-126576694218.tar.gz",
+        "byte_size": 682999,
+        "sha256": "bd6acf50d4a1759fad013181d5e795d1e743b03eb44bad61dc746e3e0fc36fc8",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "4ec5851782f378f4f611a37ab9f53bb8f5e844a1"
+      }
+    },
+    {
+      "version": "V4",
+      "kind": "FULL",
+      "label": "GCC-Release",
+      "run_id": 41830659939,
+      "job_id": 126576694234,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "dd2493fd64199810fb28642a91b9be7c11f1a35f",
+      "actual_checkout_sha": "512442f634e4dc9200b725bc27e1c7b13a6452eb",
+      "tree_sha": "b62f80d4bf4348c8cd9906858c405efc97116c31",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41830659939/job/126576694234",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V4/GCC-Release-126576694234.log",
+        "byte_size": 1141479,
+        "sha256": "3a39c92bac2a9977d6640b55cdbf91f1e98d6ac27417ef328ef93f10088a32ec",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "78a35460a5caa249c74e5d8e24fe4b139af512bb"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V4/GCC-Release-126576694234.tar.gz",
+        "byte_size": 682941,
+        "sha256": "8f4778eb19388a9df1596837f3cc6fa9a0ed0c900f0f6f9ddb34ac26a9d3377d",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "414de0333679d64a0638b6b6a4c02ae10fb55006"
+      }
+    },
+    {
+      "version": "V4",
+      "kind": "FULL",
+      "label": "Clang",
+      "run_id": 41830659939,
+      "job_id": 126576694314,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "dd2493fd64199810fb28642a91b9be7c11f1a35f",
+      "actual_checkout_sha": "512442f634e4dc9200b725bc27e1c7b13a6452eb",
+      "tree_sha": "b62f80d4bf4348c8cd9906858c405efc97116c31",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41830659939/job/126576694314",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V4/Clang-126576694314.log",
+        "byte_size": 1142863,
+        "sha256": "59d9fe9b25bfc959e733b65c823b336a4b554c7923015ec6627b91eeaac8b992",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "f4eb027b105e3eb7e16bf4107895adb319541b03"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V4/Clang-126576694314.tar.gz",
+        "byte_size": 682956,
+        "sha256": "b7da91a7de5a2a127dbd2f92d3582f587e437b98c2b5e00ec5bbb03ec116fc84",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "d97e6b9ff597815871c2b9a8e414aa98325c49dd"
+      }
+    },
+    {
+      "version": "V4",
+      "kind": "PARTIAL",
+      "label": "PARTIAL",
+      "run_id": 41830660083,
+      "job_id": 126576694442,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "dd2493fd64199810fb28642a91b9be7c11f1a35f",
+      "actual_checkout_sha": "512442f634e4dc9200b725bc27e1c7b13a6452eb",
+      "tree_sha": "b62f80d4bf4348c8cd9906858c405efc97116c31",
+      "status": "completed",
+      "conclusion": "failure",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41830660083/job/126576694442",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V4/PARTIAL-126576694442.log",
+        "byte_size": 1182185,
+        "sha256": "9db63f351387dd8c06d2b1adb29ecfb47092f2681c48e874411138bbd1b4aa3d",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "da1674f9b4ae9920fa4b16c0038f47970a286ba3"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V4/PARTIAL-126576694442.tar.gz",
+        "byte_size": 682868,
+        "sha256": "e8f1654e07772cd6a49c1249f7d7c4cf1e4ea22157aca508dda90fc4de5b65c6",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "a372b44b2ec7ce00150b034f5d670011033f2678"
+      }
+    },
+    {
+      "version": "V5",
+      "kind": "FAST",
+      "label": "FAST4",
+      "run_id": 41833835989,
+      "job_id": 126587539668,
+      "attempt": 1,
+      "event": "push",
+      "head_sha": "5be4b8ef6f8ab4f109841939e75632859090a1d1",
+      "actual_checkout_sha": "5be4b8ef6f8ab4f109841939e75632859090a1d1",
+      "tree_sha": "5a0fd7c42fc2b1e2662714be14865addd6dd1492",
+      "status": "completed",
+      "conclusion": "success",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41833835989/job/126587539668",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V5/FAST4-126587539668.log",
+        "byte_size": 84807,
+        "sha256": "abc91360380bc4c8322d91ce5f301de2e9a87803ae808088ef6a968ba9cc5691",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "527e95c7e8f2b2fb60f1bffa625bb5ee49380b9b"
+      },
+      "capsule": null,
+      "coverage": "preparation only; no semantic/native validation"
+    },
+    {
+      "version": "V5",
+      "kind": "PARTIAL",
+      "label": "PARTIAL",
+      "run_id": 41833848025,
+      "job_id": 126587579640,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "5be4b8ef6f8ab4f109841939e75632859090a1d1",
+      "actual_checkout_sha": "cbf29562a94024567e10d4dd9bfd0333bfab7c20",
+      "tree_sha": "5a0fd7c42fc2b1e2662714be14865addd6dd1492",
+      "status": "completed",
+      "conclusion": "success",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41833848025/job/126587579640",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V5/PARTIAL-126587579640.log",
+        "byte_size": 1247976,
+        "sha256": "f1c3c842d461398122cd0dc5618c18b56842ccf352cac911052901c5f6453aa7",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "2b7c04b3d2a0d3c76869696a822d35bbbba8fb8c"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V5/PARTIAL-126587579640.tar.gz",
+        "byte_size": 732143,
+        "sha256": "ee7a51a0991d087f2e39fc973ae4d83bd2a71e4bcabefd127ebfd790c0131d52",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "49bd99b948cfe7b95eec8234f8ee998592591bb5"
+      }
+    },
+    {
+      "version": "V5",
+      "kind": "FULL",
+      "label": "ASan",
+      "run_id": 41833847990,
+      "job_id": 126587579816,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "5be4b8ef6f8ab4f109841939e75632859090a1d1",
+      "actual_checkout_sha": "cbf29562a94024567e10d4dd9bfd0333bfab7c20",
+      "tree_sha": "5a0fd7c42fc2b1e2662714be14865addd6dd1492",
+      "status": "completed",
+      "conclusion": "success",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41833847990/job/126587579816",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V5/ASan-126587579816.log",
+        "byte_size": 1206890,
+        "sha256": "397e53c860f29065403a4ff72491ac3802673cf42203075ced4f34e5ce01561c",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "05f2b12bb373f9923da22023221f868e50dba3fa"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V5/ASan-126587579816.tar.gz",
+        "byte_size": 732535,
+        "sha256": "0e9667bb3bc4f7a1096eeef78cada5ea10e9a250e6bb439b14478fd7fac66a10",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "8faab29a30371b19d20dea35c87bc00627e15427"
+      }
+    },
+    {
+      "version": "V5",
+      "kind": "FULL",
+      "label": "Clang",
+      "run_id": 41833847990,
+      "job_id": 126587580217,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "5be4b8ef6f8ab4f109841939e75632859090a1d1",
+      "actual_checkout_sha": "cbf29562a94024567e10d4dd9bfd0333bfab7c20",
+      "tree_sha": "5a0fd7c42fc2b1e2662714be14865addd6dd1492",
+      "status": "completed",
+      "conclusion": "success",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41833847990/job/126587580217",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V5/Clang-126587580217.log",
+        "byte_size": 1208414,
+        "sha256": "64a5d74fa7c4c6f51bfd385ef804d2528903d01162ca766f5dad5642cfd69aa3",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "0c6daedaaee5b316c74a1ac92bab297f7effce3b"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V5/Clang-126587580217.tar.gz",
+        "byte_size": 732252,
+        "sha256": "865bc8a8bd411809cfa27eb763cf66dcbc5ec963df9317f7a4a89b446aa48a36",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "622c5842d1d71326c774f954610ad3cefab13061"
+      }
+    },
+    {
+      "version": "V5",
+      "kind": "FULL",
+      "label": "GCC",
+      "run_id": 41833847990,
+      "job_id": 126587580468,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "5be4b8ef6f8ab4f109841939e75632859090a1d1",
+      "actual_checkout_sha": "cbf29562a94024567e10d4dd9bfd0333bfab7c20",
+      "tree_sha": "5a0fd7c42fc2b1e2662714be14865addd6dd1492",
+      "status": "completed",
+      "conclusion": "success",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41833847990/job/126587580468",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V5/GCC-126587580468.log",
+        "byte_size": 1206507,
+        "sha256": "9c78b65d99b65fe56c2e210ff2a7073fc394b9e9e552303a5640ba2d1344d683",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "a09b13ada4ea5a8eb80dc822519522f17aadd4a4"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V5/GCC-126587580468.tar.gz",
+        "byte_size": 732386,
+        "sha256": "e56cfd615c02a0d9fa2e111ce5857ad4a145b6d7a2ab6de9799f9974d1603b49",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "d81f25e17aefb5d4bd43fd6e6b8f2c6bdfb02a8f"
+      }
+    },
+    {
+      "version": "V5",
+      "kind": "FULL",
+      "label": "GCC-Release",
+      "run_id": 41833847990,
+      "job_id": 126587580532,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "5be4b8ef6f8ab4f109841939e75632859090a1d1",
+      "actual_checkout_sha": "cbf29562a94024567e10d4dd9bfd0333bfab7c20",
+      "tree_sha": "5a0fd7c42fc2b1e2662714be14865addd6dd1492",
+      "status": "completed",
+      "conclusion": "success",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41833847990/job/126587580532",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V5/GCC-Release-126587580532.log",
+        "byte_size": 1206624,
+        "sha256": "bf1214bc6b58d93030d173f256fb7ceb0fc193e1eee2c9e8ad8d733c1fceb9a1",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "df3b85843c37860f4494b255af1a1dcc7ecf6e6d"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V5/GCC-Release-126587580532.tar.gz",
+        "byte_size": 732449,
+        "sha256": "c6fea32dfcf806bb0e3cd124dc7707daf8faaa36a202d136e58ad56492409846",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "f6d566cbd8a802362668314542999fd097402b05"
+      }
+    },
+    {
+      "version": "V5",
+      "kind": "FULL",
+      "label": "UBSan",
+      "run_id": 41833847990,
+      "job_id": 126587580970,
+      "attempt": 1,
+      "event": "pull_request",
+      "head_sha": "5be4b8ef6f8ab4f109841939e75632859090a1d1",
+      "actual_checkout_sha": "cbf29562a94024567e10d4dd9bfd0333bfab7c20",
+      "tree_sha": "5a0fd7c42fc2b1e2662714be14865addd6dd1492",
+      "status": "completed",
+      "conclusion": "success",
+      "source_url": "https://github.com/wakairo/NewLang_Compiler/actions/runs/41833847990/job/126587580970",
+      "log": {
+        "path": "evidence/r1157-c234/logs/V5/UBSan-126587580970.log",
+        "byte_size": 1206486,
+        "sha256": "9f1a260351634eba2412f5bf240096e352886f1e427d570466781fc154dc89e8",
+        "encoding": "utf-8",
+        "bom_utf8": true,
+        "chunked": false,
+        "git_blob_sha": "ee84e099293892209cf1dce3c6f77199cb2fe27d"
+      },
+      "capsule": {
+        "path": "evidence/r1157-c234/capsules/V5/UBSan-126587580970.tar.gz",
+        "byte_size": 732511,
+        "sha256": "9972e0736681271ac5c469b57276e79377fc9b2dce056bbec49e627f21b46b70",
+        "encoding": "binary gzip",
+        "chunked": false,
+        "git_blob_sha": "187aa098f6eca2b0bcb0e12f952e32e0f322b4c1"
+      }
+    }
+  ]
+}
