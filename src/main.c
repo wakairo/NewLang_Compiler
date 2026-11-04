@@ -3429,7 +3429,8 @@ static bool v0_emit_c(FILE *stream, const V0Program *program)
                 program->aggregate) < 0)
         return false;
 
-    if (program->linear_break &&
+    if ((program->linear_break ||
+         (program->scalar_loop && program->aggregate)) &&
         fputs("#ifdef NEWLANG_LOOP_OBSERVER\n"
               "#include NEWLANG_LOOP_OBSERVER\n#endif\n"
               "#ifndef NL_LOOP_BIND\n#define NL_LOOP_BIND(...) "
