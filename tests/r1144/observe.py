@@ -24,7 +24,8 @@ summary = {
     "v1": "NOT_RUN; original oracle retained; known CLI/source-profile boundary",
     "v2": ("pre-execution frozen independent cohort / "
            "post-freeze interface-calibrated V2 / "
-           "incidental old-P formatter exposure after freeze"),
+           "incidental old-P formatter exposure after freeze / "
+           "incidental old-P registration exposure after FIRST execution"),
     "first_red": None,
     "cases": [],
     "compiler": CC,

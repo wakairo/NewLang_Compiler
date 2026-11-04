@@ -114,3 +114,9 @@ P14-LOOP-PRECISION. An arbitrary SEMANTIC_ERROR is not classified as precision.
 All actual status/code fields are preserved. The evidence directory is created
 exclusively, and evidence files use exclusive creation to prevent overwriting a
 FIRST record. These are R apparatus repairs; the frozen oracles are unchanged.
+
+## Initial normal group and bounded mechanical repair
+
+Initial normal FULL/PARTIAL jobs retain FIRST RED from nine indirect original-script CMake freeze checks. Retrieved R-owned raw observations remain PASS and are not overwritten. The authenticated projection now covers those exact nine commands, preserving original scripts, assertions, argument values and all original protected bytes. A private Git index derives from actual tracked records, with only the authenticated parent CMake blob substituted, preserving the original untracked-ambient negative control. Real compiler/probe/build/toolchain paths remain actual; only p990's explicit protected source root is mapped into the snapshot. No original validator is edited.
+
+Additional chronology: incidental old-P registration exposure after FIRST execution. C accepted bounded mechanical continuation in Issue #1144 comment 6623173239. FIRST raw retains its as-issued label; later reports include this additional qualification. The source/oracle cohort is unchanged.
